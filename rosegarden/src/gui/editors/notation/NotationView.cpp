@@ -48,6 +48,7 @@
 #include "base/NotationTypes.h"
 #include "base/Profiler.h"
 #include "base/PropertyName.h"
+#include "base/Quantizer.h"
 #include "base/RealTime.h"
 #include "base/RulerScale.h"
 #include "base/Segment.h"
@@ -130,6 +131,7 @@
 #include "gui/dialogs/UseOrnamentDialog.h"
 #include "gui/editors/guitar/Chord.h"
 #include "gui/editors/segment/BarButtons.h"
+#include "gui/general/ActiveItem.h"
 #include "gui/general/EditViewBase.h"
 #include "gui/general/EditView.h"
 #include "gui/general/GUIPalette.h"
@@ -144,7 +146,7 @@
 #include "gui/rulers/TempoRuler.h"
 #include "gui/rulers/LoopRuler.h"
 #include "gui/studio/StudioControl.h"
-#include "gui/widgets/EventFilterDialog.h"
+#include "gui/dialogs/EventFilterDialog.h"
 #include "gui/widgets/ProgressBar.h"
 #include "gui/widgets/ProgressDialog.h"
 #include "gui/widgets/ScrollBoxDialog.h"
@@ -175,6 +177,7 @@
 #include <kmessagebox.h>
 #include <kprinter.h>
 #include <kprogress.h>
+#include <kstatusbar.h>
 #include <kstdaction.h>
 #include <ktoolbar.h>
 #include <kxmlguiclient.h>
@@ -200,6 +203,7 @@
 #include <qstring.h>
 #include <qtimer.h>
 #include <qwidget.h>
+#include <qvalidator.h>
 
 
 namespace Rosegarden
@@ -3121,7 +3125,7 @@ NotationView::getInsertionTime()
 
 timeT
 NotationView::getInsertionTime(Clef &clef,
-                               Key &key)
+                               Rosegarden::Key &key)
 {
     // This fuss is solely to recover the clef and key: we already
     // set m_insertionTime to the right value when we first placed
@@ -3141,9 +3145,9 @@ NotationView::getInsertionTime(Clef &clef,
         clef = Clef();
 
     if (keyEvt)
-        key = Key(*keyEvt);
+        key = Rosegarden::Key(*keyEvt);
     else
-        key = Key();
+        key = Rosegarden::Key();
 
     return m_insertionTime;
 }
@@ -3545,6 +3549,13 @@ void NotationView::setMenuStates()
     }
 }
 
+#define UPDATE_PROGRESS(n) \
+	progressCount += (n); \
+	if (progressTotal > 0) { \
+	    emit setProgress(progressCount * 100 / progressTotal); \
+	    ProgressDialog::processEvents(); \
+	}
+
 void NotationView::readjustCanvasSize()
 {
     Profiler profiler("NotationView::readjustCanvasSize");
@@ -3722,9 +3733,9 @@ void NotationView::initActionDataMaps()
                     keycode = 0;
 
                 m_noteActionDataMap->insert
-                    new NoteActionData(shortName, NoteActionData
-                                       (titleName, shortName, refName, keycode,
-                                        rest > 0, type, dots));
+                    (shortName, new NoteActionData
+                     (titleName, shortName, refName, keycode,
+                      rest > 0, type, dots));
             }
         }
     }
@@ -3753,9 +3764,9 @@ void NotationView::initActionDataMaps()
                 keycode += ALT;
 
             m_noteChangeActionDataMap->insert
-            new NoteChangeActionData(shortName, NoteChangeActionData
-                                     (titleName, shortName, refName, keycode,
-                                      notationOnly ? true : false, type));
+                (shortName, new NoteChangeActionData
+                 (titleName, shortName, refName, keycode,
+                  notationOnly ? true : false, type));
         }
     }
 
@@ -3769,9 +3780,9 @@ void NotationView::initActionDataMaps()
         QString actionName = QString("add_%1").arg(markName);
 
         m_markActionDataMap->insert
-            new MarkActionData(actionName, MarkActionData
-                               (AddMarkCommand::getGlobalName(mark),
-                                actionName, 0, mark));
+            (actionName, new MarkActionData
+             (AddMarkCommand::getGlobalName(mark),
+              actionName, 0, mark));
     }
 
 }
@@ -3901,6 +3912,7 @@ const char* const NotationView::ConfigGroup = NotationViewConfigGroup;
 /// SLOTS
 
 
+void
 NotationView::slotUpdateInsertModeStatus()
 {
     QString message;
@@ -4362,842 +4374,786 @@ static const QString RESTRICTED_PASTE_FAILED_DESCRIPTION = i18n(
                       "you wish."
     );
 
-    void NotationView::slotEditPaste()
-    {
-        Clipboard * clipboard = getDocument()->getClipboard();
+void NotationView::slotEditPaste()
+{
+    Clipboard * clipboard = getDocument()->getClipboard();
 
-        if (clipboard->isEmpty()) {
-            slotStatusHelpMsg(i18n("Clipboard is empty"));
-            return ;
+    if (clipboard->isEmpty()) {
+        slotStatusHelpMsg(i18n("Clipboard is empty"));
+        return ;
+    }
+    if (!clipboard->isSingleSegment()) {
+        slotStatusHelpMsg(i18n("Can't paste multiple Segments into one"));
+        return ;
+    }
+
+    slotStatusHelpMsg(i18n("Inserting clipboard contents..."));
+
+    LinedStaff *staff = getCurrentLinedStaff();
+    Segment &segment = staff->getSegment();
+
+    // Paste at cursor position
+    //
+    timeT insertionTime = getInsertionTime();
+    timeT endTime = insertionTime +
+        (clipboard->getSingleSegment()->getEndTime() -
+         clipboard->getSingleSegment()->getStartTime());
+
+    KConfig *config = kapp->config();
+    config->setGroup(NotationView::ConfigGroup);
+    PasteEventsCommand::PasteType defaultType = (PasteEventsCommand::PasteType)
+        config->readUnsignedNumEntry("pastetype",
+                                     PasteEventsCommand::Restricted);
+
+    PasteEventsCommand *command = new PasteEventsCommand
+        (segment, clipboard, insertionTime, defaultType);
+
+    if (!command->isPossible()) {
+        KMessageBox::detailedError
+            (this,
+             i18n("Couldn't paste at this point."), RESTRICTED_PASTE_FAILED_DESCRIPTION);
+    } else {
+        addCommandToHistory(command);
+        //!!! well, we really just want to select the events
+        // we just pasted
+        setCurrentSelection(new EventSelection
+                            (segment, insertionTime, endTime));
+        slotSetInsertCursorPosition(endTime, true, false);
+    }
+}
+
+void NotationView::slotEditGeneralPaste()
+{
+    Clipboard *clipboard = getDocument()->getClipboard();
+
+    if (clipboard->isEmpty()) {
+        slotStatusHelpMsg(i18n("Clipboard is empty"));
+        return ;
+    }
+
+    slotStatusHelpMsg(i18n("Inserting clipboard contents..."));
+
+    LinedStaff *staff = getCurrentLinedStaff();
+    Segment &segment = staff->getSegment();
+
+    KConfig *config = kapp->config();
+    config->setGroup(NotationView::ConfigGroup);
+    PasteEventsCommand::PasteType defaultType = (PasteEventsCommand::PasteType)
+        config->readUnsignedNumEntry("pastetype",
+                                     PasteEventsCommand::Restricted);
+
+    PasteNotationDialog dialog(this, defaultType);
+
+    if (dialog.exec() == QDialog::Accepted) {
+
+        PasteEventsCommand::PasteType type = dialog.getPasteType();
+        if (dialog.setAsDefault()) {
+            config->setGroup(NotationView::ConfigGroup);
+            config->writeEntry("pastetype", type);
         }
-        if (!clipboard->isSingleSegment()) {
-            slotStatusHelpMsg(i18n("Can't paste multiple Segments into one"));
-            return ;
-        }
 
-        slotStatusHelpMsg(i18n("Inserting clipboard contents..."));
-
-        LinedStaff *staff = getCurrentLinedStaff();
-        Segment &segment = staff->getSegment();
-
-        // Paste at cursor position
-        //
         timeT insertionTime = getInsertionTime();
         timeT endTime = insertionTime +
             (clipboard->getSingleSegment()->getEndTime() -
              clipboard->getSingleSegment()->getStartTime());
 
-        KConfig *config = kapp->config();
-        config->setGroup(NotationView::ConfigGroup);
-        PasteEventsCommand::PasteType defaultType = (PasteEventsCommand::PasteType)
-            config->readUnsignedNumEntry("pastetype",
-                                         PasteEventsCommand::Restricted);
-
         PasteEventsCommand *command = new PasteEventsCommand
-            (segment, clipboard, insertionTime, defaultType);
+            (segment, clipboard, insertionTime, type);
 
         if (!command->isPossible()) {
             KMessageBox::detailedError
                 (this,
-                 i18n("Couldn't paste at this point."), RESTRICTED_PASTE_FAILED_DESCRIPTION);
+                 i18n("Couldn't paste at this point."),
+                 i18n(RESTRICTED_PASTE_FAILED_DESCRIPTION));
         } else {
             addCommandToHistory(command);
-            //!!! well, we really just want to select the events
-            // we just pasted
             setCurrentSelection(new EventSelection
                                 (segment, insertionTime, endTime));
             slotSetInsertCursorPosition(endTime, true, false);
         }
     }
+}
 
-    void NotationView::slotEditGeneralPaste()
-    {
-        Clipboard *clipboard = getDocument()->getClipboard();
+void NotationView::slotPreviewSelection()
+{
+    if (!m_currentEventSelection)
+        return ;
 
-        if (clipboard->isEmpty()) {
-            slotStatusHelpMsg(i18n("Clipboard is empty"));
-            return ;
+    getDocument()->slotSetLoop(m_currentEventSelection->getStartTime(),
+                               m_currentEventSelection->getEndTime());
+}
+
+void NotationView::slotClearLoop()
+{
+    getDocument()->slotSetLoop(0, 0);
+}
+
+void NotationView::slotClearSelection()
+{
+    // Actually we don't clear the selection immediately: if we're
+    // using some tool other than the select tool, then the first
+    // press switches us back to the select tool.
+
+    NotationSelector *selector = dynamic_cast<NotationSelector *>(m_tool);
+
+    if (!selector) {
+        slotSelectSelected();
+    } else {
+        setCurrentSelection(0);
+    }
+}
+
+void NotationView::slotEditSelectFromStart()
+{
+    timeT t = getInsertionTime();
+    Segment &segment = m_staffs[m_currentStaff]->getSegment();
+    setCurrentSelection(new EventSelection(segment,
+                                           segment.getStartTime(),
+                                           t));
+}
+
+void NotationView::slotEditSelectToEnd()
+{
+    timeT t = getInsertionTime();
+    Segment &segment = m_staffs[m_currentStaff]->getSegment();
+    setCurrentSelection(new EventSelection(segment,
+                                           t,
+                                           segment.getEndMarkerTime()));
+}
+
+void NotationView::slotEditSelectWholeStaff()
+{
+    Segment &segment = m_staffs[m_currentStaff]->getSegment();
+    setCurrentSelection(new EventSelection(segment,
+                                           segment.getStartTime(),
+                                           segment.getEndMarkerTime()));
+}
+
+void NotationView::slotFilterSelection()
+{
+    NOTATION_DEBUG << "NotationView::slotFilterSelection" << endl;
+
+    Segment *segment = getCurrentSegment();
+    EventSelection *existingSelection = m_currentEventSelection;
+    if (!segment || !existingSelection)
+        return ;
+
+    EventFilterDialog dialog(this);
+    if (dialog.exec() == QDialog::Accepted) {
+        NOTATION_DEBUG << "slotFilterSelection- accepted" << endl;
+
+        bool haveEvent = false;
+
+        EventSelection *newSelection = new EventSelection(*segment);
+        EventSelection::eventcontainer &ec =
+            existingSelection->getSegmentEvents();
+        for (EventSelection::eventcontainer::iterator i =
+                 ec.begin(); i != ec.end(); ++i) {
+            if (dialog.keepEvent(*i)) {
+                haveEvent = true;
+                newSelection->addEvent(*i);
+            }
         }
 
-        slotStatusHelpMsg(i18n("Inserting clipboard contents..."));
-
-        LinedStaff *staff = getCurrentLinedStaff();
-        Segment &segment = staff->getSegment();
-
-        KConfig *config = kapp->config();
-        config->setGroup(NotationView::ConfigGroup);
-        PasteEventsCommand::PasteType defaultType = (PasteEventsCommand::PasteType)
-            config->readUnsignedNumEntry("pastetype",
-                                         PasteEventsCommand::Restricted);
-
-        PasteNotationDialog dialog(this, defaultType);
-
-        if (dialog.exec() == QDialog::Accepted) {
-
-            PasteEventsCommand::PasteType type = dialog.getPasteType();
-            if (dialog.setAsDefault()) {
-                config->setGroup(NotationView::ConfigGroup);
-                config->writeEntry("pastetype", type);
-            }
-
-            timeT insertionTime = getInsertionTime();
-            timeT endTime = insertionTime +
-                (clipboard->getSingleSegment()->getEndTime() -
-                 clipboard->getSingleSegment()->getStartTime());
-
-            PasteEventsCommand *command = new PasteEventsCommand
-                (segment, clipboard, insertionTime, type);
-
-            if (!command->isPossible()) {
-                KMessageBox::detailedError
-                    (this,
-                     i18n("Couldn't paste at this point."),
-                     i18n(RESTRICTED_PASTE_FAILED_DESCRIPTION));
-            } else {
-                addCommandToHistory(command);
-                setCurrentSelection(new EventSelection
-                                    (segment, insertionTime, endTime));
-                slotSetInsertCursorPosition(endTime, true, false);
-            }
-        }
-    }
-
-    void NotationView::slotPreviewSelection()
-    {
-        if (!m_currentEventSelection)
-            return ;
-
-        getDocument()->slotSetLoop(m_currentEventSelection->getStartTime(),
-                                   m_currentEventSelection->getEndTime());
-    }
-
-    void NotationView::slotClearLoop()
-    {
-        getDocument()->slotSetLoop(0, 0);
-    }
-
-    void NotationView::slotClearSelection()
-    {
-        // Actually we don't clear the selection immediately: if we're
-        // using some tool other than the select tool, then the first
-        // press switches us back to the select tool.
-
-        NotationSelector *selector = dynamic_cast<NotationSelector *>(m_tool);
-
-        if (!selector) {
-            slotSelectSelected();
-        } else {
+        if (haveEvent)
+            setCurrentSelection(newSelection);
+        else
             setCurrentSelection(0);
-        }
+    }
+}
+
+void NotationView::slotFinePositionLeft()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Pushing selection left..."), this);
+
+    // half a note body width
+    addCommandToHistory(new IncrementDisplacementsCommand
+                        (*m_currentEventSelection, -500, 0));
+}
+
+void NotationView::slotFinePositionRight()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Pushing selection right..."), this);
+
+    // half a note body width
+    addCommandToHistory(new IncrementDisplacementsCommand
+                        (*m_currentEventSelection, 500, 0));
+}
+
+void NotationView::slotFinePositionUp()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Pushing selection up..."), this);
+
+    // half line height
+    addCommandToHistory(new IncrementDisplacementsCommand
+                        (*m_currentEventSelection, 0, -500));
+}
+
+void NotationView::slotFinePositionDown()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Pushing selection down..."), this);
+
+    // half line height
+    addCommandToHistory(new IncrementDisplacementsCommand
+                        (*m_currentEventSelection, 0, 500));
+}
+
+void NotationView::slotFinePositionRestore()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Restoring computed positions..."), this);
+
+    addCommandToHistory(new ResetDisplacementsCommand(*m_currentEventSelection));
+}
+
+void NotationView::slotMakeVisible()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Making visible..."), this);
+
+    addCommandToHistory(new SetVisibilityCommand(*m_currentEventSelection, true));
+}
+
+void NotationView::slotMakeInvisible()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Making invisible..."), this);
+
+    addCommandToHistory(new SetVisibilityCommand(*m_currentEventSelection, false));
+}
+
+void NotationView::slotToggleToolsToolBar()
+{
+    toggleNamedToolBar("Tools Toolbar");
+}
+
+void NotationView::slotToggleNotesToolBar()
+{
+    toggleNamedToolBar("Notes Toolbar");
+}
+
+void NotationView::slotToggleRestsToolBar()
+{
+    toggleNamedToolBar("Rests Toolbar");
+}
+
+void NotationView::slotToggleAccidentalsToolBar()
+{
+    toggleNamedToolBar("Accidentals Toolbar");
+}
+
+void NotationView::slotToggleClefsToolBar()
+{
+    toggleNamedToolBar("Clefs Toolbar");
+}
+
+void NotationView::slotToggleMetaToolBar()
+{
+    toggleNamedToolBar("Meta Toolbar");
+}
+
+void NotationView::slotToggleMarksToolBar()
+{
+    toggleNamedToolBar("Marks Toolbar");
+}
+
+void NotationView::slotToggleGroupToolBar()
+{
+    toggleNamedToolBar("Group Toolbar");
+}
+
+void NotationView::slotToggleLayoutToolBar()
+{
+    toggleNamedToolBar("Layout Toolbar");
+}
+
+void NotationView::slotToggleTransportToolBar()
+{
+    toggleNamedToolBar("Transport Toolbar");
+}
+
+void NotationView::toggleNamedToolBar(const QString& toolBarName, bool* force)
+{
+    KToolBar *namedToolBar = toolBar(toolBarName);
+
+    if (!namedToolBar) {
+        NOTATION_DEBUG << "NotationView::toggleNamedToolBar() : toolBar "
+                       << toolBarName << " not found" << endl;
+        return ;
     }
 
-    void NotationView::slotEditSelectFromStart()
-    {
-        timeT t = getInsertionTime();
-        Segment &segment = m_staffs[m_currentStaff]->getSegment();
-        setCurrentSelection(new EventSelection(segment,
-                                               segment.getStartTime(),
-                                               t));
+    if (!force) {
+
+        if (namedToolBar->isVisible())
+            namedToolBar->hide();
+        else
+            namedToolBar->show();
+    } else {
+
+        if (*force)
+            namedToolBar->show();
+        else
+            namedToolBar->hide();
     }
 
-    void NotationView::slotEditSelectToEnd()
-    {
-        timeT t = getInsertionTime();
-        Segment &segment = m_staffs[m_currentStaff]->getSegment();
-        setCurrentSelection(new EventSelection(segment,
-                                               t,
-                                               segment.getEndMarkerTime()));
-    }
-
-    void NotationView::slotEditSelectWholeStaff()
-    {
-        Segment &segment = m_staffs[m_currentStaff]->getSegment();
-        setCurrentSelection(new EventSelection(segment,
-                                               segment.getStartTime(),
-                                               segment.getEndMarkerTime()));
-    }
-
-    void NotationView::slotFilterSelection()
-    {
-        NOTATION_DEBUG << "NotationView::slotFilterSelection" << endl;
-
-        Segment *segment = getCurrentSegment();
-        EventSelection *existingSelection = m_currentEventSelection;
-        if (!segment || !existingSelection)
-            return ;
-
-        EventFilterDialog dialog(this);
-        if (dialog.exec() == QDialog::Accepted) {
-            NOTATION_DEBUG << "slotFilterSelection- accepted" << endl;
-
-            bool haveEvent = false;
-
-            EventSelection *newSelection = new EventSelection(*segment);
-            EventSelection::eventcontainer &ec =
-                existingSelection->getSegmentEvents();
-            for (EventSelection::eventcontainer::iterator i =
-                     ec.begin(); i != ec.end(); ++i) {
-                if (dialog.keepEvent(*i)) {
-                    haveEvent = true;
-                    newSelection->addEvent(*i);
-                }
-            }
-
-            if (haveEvent)
-                setCurrentSelection(newSelection);
-            else
-                setCurrentSelection(0);
-        }
-    }
-
-    void NotationView::slotFinePositionLeft()
-    {
-        if (!m_currentEventSelection)
-            return ;
-        KTmpStatusMsg msg(i18n("Pushing selection left..."), this);
-
-        // half a note body width
-        addCommandToHistory(new IncrementDisplacementsCommand
-                            (*m_currentEventSelection, -500, 0));
-    }
-
-    void NotationView::slotFinePositionRight()
-    {
-        if (!m_currentEventSelection)
-            return ;
-        KTmpStatusMsg msg(i18n("Pushing selection right..."), this);
-
-        // half a note body width
-        addCommandToHistory(new IncrementDisplacementsCommand
-                            (*m_currentEventSelection, 500, 0));
-    }
-
-    void NotationView::slotFinePositionUp()
-    {
-        if (!m_currentEventSelection)
-            return ;
-        KTmpStatusMsg msg(i18n("Pushing selection up..."), this);
-
-        // half line height
-        addCommandToHistory(new IncrementDisplacementsCommand
-                            (*m_currentEventSelection, 0, -500));
-    }
-
-    void NotationView::slotFinePositionDown()
-    {
-        if (!m_currentEventSelection)
-            return ;
-        KTmpStatusMsg msg(i18n("Pushing selection down..."), this);
-
-        // half line height
-        addCommandToHistory(new IncrementDisplacementsCommand
-                            (*m_currentEventSelection, 0, 500));
-    }
-
-    void NotationView::slotFinePositionRestore()
-    {
-        if (!m_currentEventSelection)
-            return ;
-        KTmpStatusMsg msg(i18n("Restoring computed positions..."), this);
-
-        addCommandToHistory(new ResetDisplacementsCommand(*m_currentEventSelection));
-    }
-
-    void NotationView::slotMakeVisible()
-    {
-        if (!m_currentEventSelection)
-            return ;
-        KTmpStatusMsg msg(i18n("Making visible..."), this);
-
-        addCommandToHistory(new SetVisibilityCommand(*m_currentEventSelection, true));
-    }
-
-    void NotationView::slotMakeInvisible()
-    {
-        if (!m_currentEventSelection)
-            return ;
-        KTmpStatusMsg msg(i18n("Making invisible..."), this);
-
-        addCommandToHistory(new SetVisibilityCommand(*m_currentEventSelection, false));
-    }
-
-    void NotationView::slotToggleToolsToolBar()
-    {
-        toggleNamedToolBar("Tools Toolbar");
-    }
-
-    void NotationView::slotToggleNotesToolBar()
-    {
-        toggleNamedToolBar("Notes Toolbar");
-    }
-
-    void NotationView::slotToggleRestsToolBar()
-    {
-        toggleNamedToolBar("Rests Toolbar");
-    }
-
-    void NotationView::slotToggleAccidentalsToolBar()
-    {
-        toggleNamedToolBar("Accidentals Toolbar");
-    }
-
-    void NotationView::slotToggleClefsToolBar()
-    {
-        toggleNamedToolBar("Clefs Toolbar");
-    }
-
-    void NotationView::slotToggleMetaToolBar()
-    {
-        toggleNamedToolBar("Meta Toolbar");
-    }
-
-    void NotationView::slotToggleMarksToolBar()
-    {
-        toggleNamedToolBar("Marks Toolbar");
-    }
-
-    void NotationView::slotToggleGroupToolBar()
-    {
-        toggleNamedToolBar("Group Toolbar");
-    }
-
-    void NotationView::slotToggleLayoutToolBar()
-    {
-        toggleNamedToolBar("Layout Toolbar");
-    }
-
-    void NotationView::slotToggleTransportToolBar()
-    {
-        toggleNamedToolBar("Transport Toolbar");
-    }
-
-    void NotationView::toggleNamedToolBar(const QString& toolBarName, bool* force)
-    {
-        KToolBar *namedToolBar = toolBar(toolBarName);
-
-        if (!namedToolBar) {
-            NOTATION_DEBUG << "NotationView::toggleNamedToolBar() : toolBar "
-                           << toolBarName << " not found" << endl;
-            return ;
-        }
-
-        if (!force) {
-
-            if (namedToolBar->isVisible())
-                namedToolBar->hide();
-            else
-                namedToolBar->show();
-        } else {
-
-            if (*force)
-                namedToolBar->show();
-            else
-                namedToolBar->hide();
-        }
-
-        setSettingsDirty();
-
-    }
-
-    void NotationView::slotGroupBeam()
-    {
-        if (!m_currentEventSelection)
-            return ;
-        KTmpStatusMsg msg(i18n("Beaming group..."), this);
-
-        addCommandToHistory(new BeamCommand
-                            (*m_currentEventSelection));
-    }
-
-    void NotationView::slotGroupAutoBeam()
-    {
-        if (!m_currentEventSelection)
-            return ;
-        KTmpStatusMsg msg(i18n("Auto-beaming selection..."), this);
-
-        addCommandToHistory(new AutoBeamCommand
-                            (*m_currentEventSelection));
-    }
-
-    void NotationView::slotGroupBreak()
-    {
-        if (!m_currentEventSelection)
-            return ;
-        KTmpStatusMsg msg(i18n("Breaking groups..."), this);
-
-        addCommandToHistory(new BreakCommand
-                            (*m_currentEventSelection));
-    }
-
-    void NotationView::slotGroupSimpleTuplet()
-    {
-        slotGroupTuplet(true);
-    }
-
-    void NotationView::slotGroupGeneralTuplet()
-    {
-        slotGroupTuplet(false);
-    }
-
-    void NotationView::slotGroupTuplet(bool simple)
-    {
-        timeT t = 0;
-        timeT unit = 0;
-        int tupled = 2;
-        int untupled = 3;
-        Segment *segment = 0;
-        bool hasTimingAlready = false;
-
-        if (m_currentEventSelection) {
-
-            t = m_currentEventSelection->getStartTime();
-
-            timeT duration = m_currentEventSelection->getTotalDuration();
-            Note::Type unitType =
-                Note::getNearestNote(duration / 3, 0).getNoteType();
-            unit = Note(unitType).getDuration();
-
-            if (!simple) {
-                TupletDialog dialog(this, unitType, duration);
-                if (dialog.exec() != QDialog::Accepted)
-                    return ;
-                unit = Note(dialog.getUnitType()).getDuration();
-                tupled = dialog.getTupledCount();
-                untupled = dialog.getUntupledCount();
-                hasTimingAlready = dialog.hasTimingAlready();
-            }
-
-            segment = &m_currentEventSelection->getSegment();
-
-        } else {
-
-            t = getInsertionTime();
-
-            NoteInserter *currentInserter = dynamic_cast<NoteInserter *>
-                (m_toolBox->getTool(NoteInserter::ToolName));
-
-            Note::Type unitType;
-
-            if (currentInserter) {
-                unitType = currentInserter->getCurrentNote().getNoteType();
-            } else {
-                unitType = Note::Quaver;
-            }
-
-            unit = Note(unitType).getDuration();
-
-            if (!simple) {
-                TupletDialog dialog(this, unitType);
-                if (dialog.exec() != QDialog::Accepted)
-                    return ;
-                unit = Note(dialog.getUnitType()).getDuration();
-                tupled = dialog.getTupledCount();
-                untupled = dialog.getUntupledCount();
-                hasTimingAlready = dialog.hasTimingAlready();
-            }
-
-            segment = &m_staffs[m_currentStaff]->getSegment();
-        }
-
-        addCommandToHistory(new TupletCommand
-                            (*segment, t, unit, untupled, tupled, hasTimingAlready));
-
-        if (!hasTimingAlready) {
-            slotSetInsertCursorPosition(t + (unit * tupled), true, false);
-        }
-    }
-
-    void NotationView::slotGroupUnTuplet()
-    {
-        if (!m_currentEventSelection)
-            return ;
-        KTmpStatusMsg msg(i18n("Untupleting..."), this);
-
-        addCommandToHistory(new UnTupletCommand
-                            (*m_currentEventSelection));
-    }
-
-    void NotationView::slotGroupGrace()
-    {
-        if (!m_currentEventSelection)
-            return ;
-        KTmpStatusMsg msg(i18n("Making grace notes..."), this);
-
-        addCommandToHistory(new GraceCommand(*m_currentEventSelection));
-    }
-
-    void NotationView::slotGroupUnGrace()
-    {
-        if (!m_currentEventSelection)
-            return ;
-        KTmpStatusMsg msg(i18n("Making non-grace notes..."), this);
-
-        addCommandToHistory(new UnGraceCommand(*m_currentEventSelection));
-    }
-
-    void NotationView::slotGroupSlur()
-    {
-        KTmpStatusMsg msg(i18n("Adding slur..."), this);
-        slotAddIndication(Indication::Slur, i18n("slur"));
-    }
-
-    void NotationView::slotGroupPhrasingSlur()
-    {
-        KTmpStatusMsg msg(i18n("Adding phrasing slur..."), this);
-        slotAddIndication(Indication::PhrasingSlur, i18n("phrasing slur"));
-    }
-
-    void NotationView::slotGroupGlissando()
-    {
-        KTmpStatusMsg msg(i18n("Adding glissando..."), this);
-        slotAddIndication(Indication::Glissando, i18n("glissando"));
-    }
-
-    void NotationView::slotGroupCrescendo()
-    {
-        KTmpStatusMsg msg(i18n("Adding crescendo..."), this);
-        slotAddIndication(Indication::Crescendo, i18n("dynamic"));
-    }
-
-    void NotationView::slotGroupDecrescendo()
-    {
-        KTmpStatusMsg msg(i18n("Adding decrescendo..."), this);
-        slotAddIndication(Indication::Decrescendo, i18n("dynamic"));
-    }
-
-    void NotationView::slotGroupOctave2Up()
-    {
-        KTmpStatusMsg msg(i18n("Adding octave..."), this);
-        slotAddIndication(Indication::QuindicesimaUp, i18n("ottava"));
-    }
-
-    void NotationView::slotGroupOctaveUp()
-    {
-        KTmpStatusMsg msg(i18n("Adding octave..."), this);
-        slotAddIndication(Indication::OttavaUp, i18n("ottava"));
-    }
-
-    void NotationView::slotGroupOctaveDown()
-    {
-        KTmpStatusMsg msg(i18n("Adding octave..."), this);
-        slotAddIndication(Indication::OttavaDown, i18n("ottava"));
-    }
-
-    void NotationView::slotGroupOctave2Down()
-    {
-        KTmpStatusMsg msg(i18n("Adding octave..."), this);
-        slotAddIndication(Indication::QuindicesimaDown, i18n("ottava"));
-    }
-
-    void NotationView::slotAddIndication(std::string type, QString desc)
-    {
-        if (!m_currentEventSelection)
-            return ;
-
-        AddIndicationCommand *command =
-            new AddIndicationCommand(type, *m_currentEventSelection);
-
-        if (command->canExecute()) {
-            addCommandToHistory(command);
-            setSingleSelectedEvent(m_currentEventSelection->getSegment(),
-                                   command->getLastInsertedEvent());
-        } else {
-            KMessageBox::sorry(this, i18n("Can't add overlapping %1 indications").arg(desc)); // TODO PLURAL - how many 'indications' ?
-            delete command;
-        }
-    }
-
-    void NotationView::slotGroupMakeChord()
-    {
-        if (!m_currentEventSelection)
-            return ;
-        KTmpStatusMsg msg(i18n("Making chord..."), this);
-
-        MakeChordCommand *command =
-            new MakeChordCommand(*m_currentEventSelection);
-
-        addCommandToHistory(command);
-    }
-
-    void NotationView::slotTransformsNormalizeRests()
-    {
-        if (!m_currentEventSelection)
-            return ;
-        KTmpStatusMsg msg(i18n("Normalizing rests..."), this);
-
-        addCommandToHistory(new NormalizeRestsCommand
-                            (*m_currentEventSelection));
-    }
-
-    void NotationView::slotTransformsCollapseRests()
-    {
-        if (!m_currentEventSelection)
-            return ;
-        KTmpStatusMsg msg(i18n("Collapsing rests..."), this);
-
-        addCommandToHistory(new CollapseRestsCommand
-                            (*m_currentEventSelection));
-    }
-
-    void NotationView::slotTransformsCollapseNotes()
-    {
-        if (!m_currentEventSelection)
-            return ;
-        KTmpStatusMsg msg(i18n("Collapsing notes..."), this);
-
-        addCommandToHistory(new CollapseNotesCommand
-                            (*m_currentEventSelection));
-    }
-
-    void NotationView::slotTransformsTieNotes()
-    {
-        if (!m_currentEventSelection)
-            return ;
-        KTmpStatusMsg msg(i18n("Tying notes..."), this);
-
-        addCommandToHistory(new TieNotesCommand
-                            (*m_currentEventSelection));
-    }
-
-    void NotationView::slotTransformsUntieNotes()
-    {
-        if (!m_currentEventSelection)
-            return ;
-        KTmpStatusMsg msg(i18n("Untying notes..."), this);
-
-        addCommandToHistory(new UntieNotesCommand
-                            (*m_currentEventSelection));
-    }
-
-    void NotationView::slotTransformsMakeNotesViable()
-    {
-        if (!m_currentEventSelection)
-            return ;
-        KTmpStatusMsg msg(i18n("Making notes viable..."), this);
-
-        addCommandToHistory(new MakeNotesViableCommand
-                            (*m_currentEventSelection));
-    }
-
-    void NotationView::slotTransformsDeCounterpoint()
-    {
-        if (!m_currentEventSelection)
-            return ;
-        KTmpStatusMsg msg(i18n("Removing counterpoint..."), this);
-
-        addCommandToHistory(new DeCounterpointCommand
-                            (*m_currentEventSelection));
-    }
-
-    void NotationView::slotTransformsStemsUp()
-    {
-        if (!m_currentEventSelection)
-            return ;
-        KTmpStatusMsg msg(i18n("Pointing stems up..."), this);
-
-        addCommandToHistory(new ChangeStemsCommand
-                            (true, *m_currentEventSelection));
-    }
-
-    void NotationView::slotTransformsStemsDown()
-    {
-        if (!m_currentEventSelection)
-            return ;
-        KTmpStatusMsg msg(i18n("Pointing stems down..."), this);
-
-        addCommandToHistory(new ChangeStemsCommand
-                            (false, *m_currentEventSelection));
-
-    }
-
-    void NotationView::slotTransformsRestoreStems()
-    {
-        if (!m_currentEventSelection)
-            return ;
-        KTmpStatusMsg msg(i18n("Restoring computed stem directions..."), this);
-
-        addCommandToHistory(new RestoreStemsCommand
-                            (*m_currentEventSelection));
-    }
-
-    void NotationView::slotTransformsSlursAbove()
-    {
-        if (!m_currentEventSelection)
-            return ;
-        KTmpStatusMsg msg(i18n("Positioning slurs..."), this);
-
-        addCommandToHistory(new ChangeSlurPositionCommand
-                            (true, *m_currentEventSelection));
-    }
-
-    void NotationView::slotTransformsSlursBelow()
-    {
-        if (!m_currentEventSelection)
-            return ;
-        KTmpStatusMsg msg(i18n("Positioning slurs..."), this);
-
-        addCommandToHistory(new ChangeSlurPositionCommand
-                            (false, *m_currentEventSelection));
-
-    }
-
-    void NotationView::slotTransformsRestoreSlurs()
-    {
-        if (!m_currentEventSelection)
-            return ;
-        KTmpStatusMsg msg(i18n("Restoring slur positions..."), this);
-
-        addCommandToHistory(new RestoreSlursCommand
-                            (*m_currentEventSelection));
-    }
-
-    void NotationView::slotTransformsFixQuantization()
-    {
-        if (!m_currentEventSelection)
-            return ;
-        KTmpStatusMsg msg(i18n("Fixing notation quantization..."), this);
-
-        addCommandToHistory(new FixNotationQuantizeCommand
-                            (*m_currentEventSelection));
-    }
-
-    void NotationView::slotTransformsRemoveQuantization()
-    {
-        if (!m_currentEventSelection)
-            return ;
-        KTmpStatusMsg msg(i18n("Removing notation quantization..."), this);
-
-        addCommandToHistory(new RemoveNotationQuantizeCommand
-                            (*m_currentEventSelection));
-    }
-
-    void NotationView::slotSetStyleFromAction()
-    {
-        const QObject *s = sender();
-        QString name = s->name();
-
-        if (!m_currentEventSelection)
-            return ;
-
-        if (name.left(6) == "style_") {
-            name = name.right(name.length() - 6);
-
-            KTmpStatusMsg msg(i18n("Changing to %1 style...").arg(name),
-                              this);
-
-            addCommandToHistory(new ChangeStyleCommand
-                                (NoteStyleName(qstrtostr(name)),
-                                 *m_currentEventSelection));
-        } else {
-            KMessageBox::sorry
-                (this, i18n("Unknown style action %1").arg(name));
-        }
-    }
-
-    void NotationView::slotInsertNoteFromAction()
-    {
-        const QObject *s = sender();
-        QString name = s->name();
-
-        Segment &segment = m_staffs[m_currentStaff]->getSegment();
-
-        NoteInserter *noteInserter = dynamic_cast<NoteInserter *>(m_tool);
-        if (!noteInserter) {
-            KMessageBox::sorry(this, i18n("No note duration selected"));
-            return ;
-        }
-
-        int pitch = 0;
-        Accidental accidental =
-            Accidentals::NoAccidental;
-
-        timeT time(getInsertionTime());
-        Key key = segment.getKeyAtTime(time);
-        Clef clef = segment.getClefAtTime(time);
-
-        try {
-
-            pitch = getPitchFromNoteInsertAction(name, accidental, clef, key);
-
-        } catch (...) {
-
-            KMessageBox::sorry
-                (this, i18n("Unknown note insert action %1").arg(name));
-            return ;
-        }
-
-        KTmpStatusMsg msg(i18n("Inserting note"), this);
-
-        NOTATION_DEBUG << "Inserting note at pitch " << pitch << endl;
-
-        noteInserter->insertNote(segment, time, pitch, accidental);
-    }
-
-    void NotationView::slotInsertRest()
-    {
-        Segment &segment = m_staffs[m_currentStaff]->getSegment();
-        timeT time = getInsertionTime();
-
-        RestInserter *restInserter = dynamic_cast<RestInserter *>(m_tool);
-
-        if (!restInserter) {
-
-            NoteInserter *noteInserter = dynamic_cast<NoteInserter *>(m_tool);
-            if (!noteInserter) {
-                KMessageBox::sorry(this, i18n("No note duration selected"));
+    setSettingsDirty();
+
+}
+
+void NotationView::slotGroupBeam()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Beaming group..."), this);
+
+    addCommandToHistory(new BeamCommand
+                        (*m_currentEventSelection));
+}
+
+void NotationView::slotGroupAutoBeam()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Auto-beaming selection..."), this);
+
+    addCommandToHistory(new AutoBeamCommand
+                        (*m_currentEventSelection));
+}
+
+void NotationView::slotGroupBreak()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Breaking groups..."), this);
+
+    addCommandToHistory(new BreakCommand
+                        (*m_currentEventSelection));
+}
+
+void NotationView::slotGroupSimpleTuplet()
+{
+    slotGroupTuplet(true);
+}
+
+void NotationView::slotGroupGeneralTuplet()
+{
+    slotGroupTuplet(false);
+}
+
+void NotationView::slotGroupTuplet(bool simple)
+{
+    timeT t = 0;
+    timeT unit = 0;
+    int tupled = 2;
+    int untupled = 3;
+    Segment *segment = 0;
+    bool hasTimingAlready = false;
+
+    if (m_currentEventSelection) {
+
+        t = m_currentEventSelection->getStartTime();
+
+        timeT duration = m_currentEventSelection->getTotalDuration();
+        Note::Type unitType =
+            Note::getNearestNote(duration / 3, 0).getNoteType();
+        unit = Note(unitType).getDuration();
+
+        if (!simple) {
+            TupletDialog dialog(this, unitType, duration);
+            if (dialog.exec() != QDialog::Accepted)
                 return ;
-            }
-
-            Note note(noteInserter->getCurrentNote());
-
-            restInserter = dynamic_cast<RestInserter*>
-                (m_toolBox->getTool(RestInserter::ToolName));
-
-            restInserter->slotSetNote(note.getNoteType());
-            restInserter->slotSetDots(note.getDots());
+            unit = Note(dialog.getUnitType()).getDuration();
+            tupled = dialog.getTupledCount();
+            untupled = dialog.getUntupledCount();
+            hasTimingAlready = dialog.hasTimingAlready();
         }
 
-        restInserter->insertNote(segment, time,
-                                 0, Accidentals::NoAccidental, true);
-    }
+        segment = &m_currentEventSelection->getSegment();
 
-    void NotationView::slotSwitchFromRestToNote()
-    {
-        RestInserter *restInserter = dynamic_cast<RestInserter *>(m_tool);
-        if (!restInserter) {
-            KMessageBox::sorry(this, i18n("No rest duration selected"));
-            return ;
-        }
+    } else {
 
-        Note note(restInserter->getCurrentNote());
+        t = getInsertionTime();
 
-        QString actionName = NotationStrings::getReferenceName(note, false);
-        actionName = actionName.replace("-", "_");
-
-        KRadioAction *action = dynamic_cast<KRadioAction *>
-            (actionCollection()->action(actionName));
-
-        if (!action) {
-            std::cerr << "WARNING: Failed to find note action \""
-                      << actionName << "\"" << std::endl;
-        } else {
-            action->activate();
-        }
-
-        NoteInserter *noteInserter = dynamic_cast<NoteInserter*>
+        NoteInserter *currentInserter = dynamic_cast<NoteInserter *>
             (m_toolBox->getTool(NoteInserter::ToolName));
 
-        if (noteInserter) {
-            noteInserter->slotSetNote(note.getNoteType());
-            noteInserter->slotSetDots(note.getDots());
-            setTool(noteInserter);
+        Note::Type unitType;
+
+        if (currentInserter) {
+            unitType = currentInserter->getCurrentNote().getNoteType();
+        } else {
+            unitType = Note::Quaver;
         }
 
-        setMenuStates();
+        unit = Note(unitType).getDuration();
+
+        if (!simple) {
+            TupletDialog dialog(this, unitType);
+            if (dialog.exec() != QDialog::Accepted)
+                return ;
+            unit = Note(dialog.getUnitType()).getDuration();
+            tupled = dialog.getTupledCount();
+            untupled = dialog.getUntupledCount();
+            hasTimingAlready = dialog.hasTimingAlready();
+        }
+
+        segment = &m_staffs[m_currentStaff]->getSegment();
     }
 
-    void NotationView::slotSwitchFromNoteToRest()
-    {
+    addCommandToHistory(new TupletCommand
+                        (*segment, t, unit, untupled, tupled, hasTimingAlready));
+
+    if (!hasTimingAlready) {
+        slotSetInsertCursorPosition(t + (unit * tupled), true, false);
+    }
+}
+
+void NotationView::slotGroupUnTuplet()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Untupleting..."), this);
+
+    addCommandToHistory(new UnTupletCommand
+                        (*m_currentEventSelection));
+}
+
+void NotationView::slotGroupGrace()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Making grace notes..."), this);
+
+    addCommandToHistory(new GraceCommand(*m_currentEventSelection));
+}
+
+void NotationView::slotGroupUnGrace()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Making non-grace notes..."), this);
+
+    addCommandToHistory(new UnGraceCommand(*m_currentEventSelection));
+}
+
+void NotationView::slotGroupSlur()
+{
+    KTmpStatusMsg msg(i18n("Adding slur..."), this);
+    slotAddIndication(Indication::Slur, i18n("slur"));
+}
+
+void NotationView::slotGroupPhrasingSlur()
+{
+    KTmpStatusMsg msg(i18n("Adding phrasing slur..."), this);
+    slotAddIndication(Indication::PhrasingSlur, i18n("phrasing slur"));
+}
+
+void NotationView::slotGroupGlissando()
+{
+    KTmpStatusMsg msg(i18n("Adding glissando..."), this);
+    slotAddIndication(Indication::Glissando, i18n("glissando"));
+}
+
+void NotationView::slotGroupCrescendo()
+{
+    KTmpStatusMsg msg(i18n("Adding crescendo..."), this);
+    slotAddIndication(Indication::Crescendo, i18n("dynamic"));
+}
+
+void NotationView::slotGroupDecrescendo()
+{
+    KTmpStatusMsg msg(i18n("Adding decrescendo..."), this);
+    slotAddIndication(Indication::Decrescendo, i18n("dynamic"));
+}
+
+void NotationView::slotGroupOctave2Up()
+{
+    KTmpStatusMsg msg(i18n("Adding octave..."), this);
+    slotAddIndication(Indication::QuindicesimaUp, i18n("ottava"));
+}
+
+void NotationView::slotGroupOctaveUp()
+{
+    KTmpStatusMsg msg(i18n("Adding octave..."), this);
+    slotAddIndication(Indication::OttavaUp, i18n("ottava"));
+}
+
+void NotationView::slotGroupOctaveDown()
+{
+    KTmpStatusMsg msg(i18n("Adding octave..."), this);
+    slotAddIndication(Indication::OttavaDown, i18n("ottava"));
+}
+
+void NotationView::slotGroupOctave2Down()
+{
+    KTmpStatusMsg msg(i18n("Adding octave..."), this);
+    slotAddIndication(Indication::QuindicesimaDown, i18n("ottava"));
+}
+
+void NotationView::slotAddIndication(std::string type, QString desc)
+{
+    if (!m_currentEventSelection)
+        return ;
+
+    AddIndicationCommand *command =
+        new AddIndicationCommand(type, *m_currentEventSelection);
+
+    if (command->canExecute()) {
+        addCommandToHistory(command);
+        setSingleSelectedEvent(m_currentEventSelection->getSegment(),
+                               command->getLastInsertedEvent());
+    } else {
+        KMessageBox::sorry(this, i18n("Can't add overlapping %1 indications").arg(desc)); // TODO PLURAL - how many 'indications' ?
+        delete command;
+    }
+}
+
+void NotationView::slotGroupMakeChord()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Making chord..."), this);
+
+    MakeChordCommand *command =
+        new MakeChordCommand(*m_currentEventSelection);
+
+    addCommandToHistory(command);
+}
+
+void NotationView::slotTransformsNormalizeRests()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Normalizing rests..."), this);
+
+    addCommandToHistory(new NormalizeRestsCommand
+                        (*m_currentEventSelection));
+}
+
+void NotationView::slotTransformsCollapseRests()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Collapsing rests..."), this);
+
+    addCommandToHistory(new CollapseRestsCommand
+                        (*m_currentEventSelection));
+}
+
+void NotationView::slotTransformsCollapseNotes()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Collapsing notes..."), this);
+
+    addCommandToHistory(new CollapseNotesCommand
+                        (*m_currentEventSelection));
+}
+
+void NotationView::slotTransformsTieNotes()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Tying notes..."), this);
+
+    addCommandToHistory(new TieNotesCommand
+                        (*m_currentEventSelection));
+}
+
+void NotationView::slotTransformsUntieNotes()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Untying notes..."), this);
+
+    addCommandToHistory(new UntieNotesCommand
+                        (*m_currentEventSelection));
+}
+
+void NotationView::slotTransformsMakeNotesViable()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Making notes viable..."), this);
+
+    addCommandToHistory(new MakeNotesViableCommand
+                        (*m_currentEventSelection));
+}
+
+void NotationView::slotTransformsDeCounterpoint()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Removing counterpoint..."), this);
+
+    addCommandToHistory(new DeCounterpointCommand
+                        (*m_currentEventSelection));
+}
+
+void NotationView::slotTransformsStemsUp()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Pointing stems up..."), this);
+
+    addCommandToHistory(new ChangeStemsCommand
+                        (true, *m_currentEventSelection));
+}
+
+void NotationView::slotTransformsStemsDown()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Pointing stems down..."), this);
+
+    addCommandToHistory(new ChangeStemsCommand
+                        (false, *m_currentEventSelection));
+
+}
+
+void NotationView::slotTransformsRestoreStems()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Restoring computed stem directions..."), this);
+
+    addCommandToHistory(new RestoreStemsCommand
+                        (*m_currentEventSelection));
+}
+
+void NotationView::slotTransformsSlursAbove()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Positioning slurs..."), this);
+
+    addCommandToHistory(new ChangeSlurPositionCommand
+                        (true, *m_currentEventSelection));
+}
+
+void NotationView::slotTransformsSlursBelow()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Positioning slurs..."), this);
+
+    addCommandToHistory(new ChangeSlurPositionCommand
+                        (false, *m_currentEventSelection));
+
+}
+
+void NotationView::slotTransformsRestoreSlurs()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Restoring slur positions..."), this);
+
+    addCommandToHistory(new RestoreSlursCommand
+                        (*m_currentEventSelection));
+}
+
+void NotationView::slotTransformsFixQuantization()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Fixing notation quantization..."), this);
+
+    addCommandToHistory(new FixNotationQuantizeCommand
+                        (*m_currentEventSelection));
+}
+
+void NotationView::slotTransformsRemoveQuantization()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Removing notation quantization..."), this);
+
+    addCommandToHistory(new RemoveNotationQuantizeCommand
+                        (*m_currentEventSelection));
+}
+
+void NotationView::slotSetStyleFromAction()
+{
+    const QObject *s = sender();
+    QString name = s->name();
+
+    if (!m_currentEventSelection)
+        return ;
+
+    if (name.left(6) == "style_") {
+        name = name.right(name.length() - 6);
+
+        KTmpStatusMsg msg(i18n("Changing to %1 style...").arg(name),
+                          this);
+
+        addCommandToHistory(new ChangeStyleCommand
+                            (NoteStyleName(qstrtostr(name)),
+                             *m_currentEventSelection));
+    } else {
+        KMessageBox::sorry
+            (this, i18n("Unknown style action %1").arg(name));
+    }
+}
+
+void NotationView::slotInsertNoteFromAction()
+{
+    const QObject *s = sender();
+    QString name = s->name();
+
+    Segment &segment = m_staffs[m_currentStaff]->getSegment();
+
+    NoteInserter *noteInserter = dynamic_cast<NoteInserter *>(m_tool);
+    if (!noteInserter) {
+        KMessageBox::sorry(this, i18n("No note duration selected"));
+        return ;
+    }
+
+    int pitch = 0;
+    Accidental accidental =
+        Accidentals::NoAccidental;
+
+    timeT time(getInsertionTime());
+    Rosegarden::Key key = segment.getKeyAtTime(time);
+    Clef clef = segment.getClefAtTime(time);
+
+    try {
+
+        pitch = getPitchFromNoteInsertAction(name, accidental, clef, key);
+
+    } catch (...) {
+
+        KMessageBox::sorry
+            (this, i18n("Unknown note insert action %1").arg(name));
+        return ;
+    }
+
+    KTmpStatusMsg msg(i18n("Inserting note"), this);
+
+    NOTATION_DEBUG << "Inserting note at pitch " << pitch << endl;
+
+    noteInserter->insertNote(segment, time, pitch, accidental);
+}
+
+void NotationView::slotInsertRest()
+{
+    Segment &segment = m_staffs[m_currentStaff]->getSegment();
+    timeT time = getInsertionTime();
+
+    RestInserter *restInserter = dynamic_cast<RestInserter *>(m_tool);
+
+    if (!restInserter) {
+
         NoteInserter *noteInserter = dynamic_cast<NoteInserter *>(m_tool);
         if (!noteInserter) {
             KMessageBox::sorry(this, i18n("No note duration selected"));
@@ -5206,1649 +5162,1705 @@ static const QString RESTRICTED_PASTE_FAILED_DESCRIPTION = i18n(
 
         Note note(noteInserter->getCurrentNote());
 
-        QString actionName = NotationStrings::getReferenceName(note, true);
-        actionName = actionName.replace("-", "_");
-
-        KRadioAction *action = dynamic_cast<KRadioAction *>
-            (actionCollection()->action(actionName));
-
-        if (!action) {
-            std::cerr << "WARNING: Failed to find rest action \""
-                      << actionName << "\"" << std::endl;
-        } else {
-            action->activate();
-        }
-
-        RestInserter *restInserter = dynamic_cast<RestInserter*>
+        restInserter = dynamic_cast<RestInserter*>
             (m_toolBox->getTool(RestInserter::ToolName));
 
-        if (restInserter) {
-            restInserter->slotSetNote(note.getNoteType());
-            restInserter->slotSetDots(note.getDots());
-            setTool(restInserter);
-        }
-
-        setMenuStates();
+        restInserter->slotSetNote(note.getNoteType());
+        restInserter->slotSetDots(note.getDots());
     }
 
-    void NotationView::slotToggleDot()
-    {
-        NoteInserter *noteInserter = dynamic_cast<NoteInserter *>(m_tool);
-        if (noteInserter) {
-            Note note(noteInserter->getCurrentNote());
+    restInserter->insertNote(segment, time,
+                             0, Accidentals::NoAccidental, true);
+}
+
+void NotationView::slotSwitchFromRestToNote()
+{
+    RestInserter *restInserter = dynamic_cast<RestInserter *>(m_tool);
+    if (!restInserter) {
+        KMessageBox::sorry(this, i18n("No rest duration selected"));
+        return ;
+    }
+
+    Note note(restInserter->getCurrentNote());
+
+    QString actionName = NotationStrings::getReferenceName(note, false);
+    actionName = actionName.replace("-", "_");
+
+    KRadioAction *action = dynamic_cast<KRadioAction *>
+        (actionCollection()->action(actionName));
+
+    if (!action) {
+        std::cerr << "WARNING: Failed to find note action \""
+                  << actionName << "\"" << std::endl;
+    } else {
+        action->activate();
+    }
+
+    NoteInserter *noteInserter = dynamic_cast<NoteInserter*>
+        (m_toolBox->getTool(NoteInserter::ToolName));
+
+    if (noteInserter) {
+        noteInserter->slotSetNote(note.getNoteType());
+        noteInserter->slotSetDots(note.getDots());
+        setTool(noteInserter);
+    }
+
+    setMenuStates();
+}
+
+void NotationView::slotSwitchFromNoteToRest()
+{
+    NoteInserter *noteInserter = dynamic_cast<NoteInserter *>(m_tool);
+    if (!noteInserter) {
+        KMessageBox::sorry(this, i18n("No note duration selected"));
+        return ;
+    }
+
+    Note note(noteInserter->getCurrentNote());
+
+    QString actionName = NotationStrings::getReferenceName(note, true);
+    actionName = actionName.replace("-", "_");
+
+    KRadioAction *action = dynamic_cast<KRadioAction *>
+        (actionCollection()->action(actionName));
+
+    if (!action) {
+        std::cerr << "WARNING: Failed to find rest action \""
+                  << actionName << "\"" << std::endl;
+    } else {
+        action->activate();
+    }
+
+    RestInserter *restInserter = dynamic_cast<RestInserter*>
+        (m_toolBox->getTool(RestInserter::ToolName));
+
+    if (restInserter) {
+        restInserter->slotSetNote(note.getNoteType());
+        restInserter->slotSetDots(note.getDots());
+        setTool(restInserter);
+    }
+
+    setMenuStates();
+}
+
+void NotationView::slotToggleDot()
+{
+    NoteInserter *noteInserter = dynamic_cast<NoteInserter *>(m_tool);
+    if (noteInserter) {
+        Note note(noteInserter->getCurrentNote());
+        if (note.getNoteType() == Note::Shortest ||
+            note.getNoteType() == Note::Longest)
+            return ;
+        noteInserter->slotSetDots(note.getDots() ? 0 : 1);
+        setTool(noteInserter);
+    } else {
+        RestInserter *restInserter = dynamic_cast<RestInserter *>(m_tool);
+        if (restInserter) {
+            Note note(restInserter->getCurrentNote());
             if (note.getNoteType() == Note::Shortest ||
                 note.getNoteType() == Note::Longest)
                 return ;
-            noteInserter->slotSetDots(note.getDots() ? 0 : 1);
-            setTool(noteInserter);
+            restInserter->slotSetDots(note.getDots() ? 0 : 1);
+            setTool(restInserter);
         } else {
-            RestInserter *restInserter = dynamic_cast<RestInserter *>(m_tool);
-            if (restInserter) {
-                Note note(restInserter->getCurrentNote());
-                if (note.getNoteType() == Note::Shortest ||
-                    note.getNoteType() == Note::Longest)
-                    return ;
-                restInserter->slotSetDots(note.getDots() ? 0 : 1);
-                setTool(restInserter);
-            } else {
-                KMessageBox::sorry(this, i18n("No note or rest duration selected"));
-            }
-        }
-
-        setMenuStates();
-    }
-
-    void NotationView::slotRespellDoubleFlat()
-    {
-        if (!m_currentEventSelection)
-            return ;
-        KTmpStatusMsg msg(i18n("Forcing accidentals..."), this);
-
-        addCommandToHistory(new RespellCommand(RespellCommand::Set,
-                                               Accidentals::DoubleFlat,
-                                               *m_currentEventSelection));
-    }
-
-    void NotationView::slotRespellFlat()
-    {
-        if (!m_currentEventSelection)
-            return ;
-        KTmpStatusMsg msg(i18n("Forcing accidentals..."), this);
-
-        addCommandToHistory(new RespellCommand(RespellCommand::Set,
-                                               Accidentals::Flat,
-                                               *m_currentEventSelection));
-    }
-
-    void NotationView::slotRespellNatural()
-    {
-        if (!m_currentEventSelection)
-            return ;
-        KTmpStatusMsg msg(i18n("Forcing accidentals..."), this);
-
-        addCommandToHistory(new RespellCommand(RespellCommand::Set,
-                                               Accidentals::Natural,
-                                               *m_currentEventSelection));
-    }
-
-    void NotationView::slotRespellSharp()
-    {
-        if (!m_currentEventSelection)
-            return ;
-        KTmpStatusMsg msg(i18n("Forcing accidentals..."), this);
-
-        addCommandToHistory(new RespellCommand(RespellCommand::Set,
-                                               Accidentals::Sharp,
-                                               *m_currentEventSelection));
-    }
-
-    void NotationView::slotRespellDoubleSharp()
-    {
-        if (!m_currentEventSelection)
-            return ;
-        KTmpStatusMsg msg(i18n("Forcing accidentals..."), this);
-
-        addCommandToHistory(new RespellCommand(RespellCommand::Set,
-                                               Accidentals::DoubleSharp,
-                                               *m_currentEventSelection));
-    }
-
-    void NotationView::slotRespellUp()
-    {
-        if (!m_currentEventSelection)
-            return ;
-        KTmpStatusMsg msg(i18n("Forcing accidentals..."), this);
-
-        addCommandToHistory(new RespellCommand(RespellCommand::Up,
-                                               Accidentals::NoAccidental,
-                                               *m_currentEventSelection));
-    }
-
-    void NotationView::slotRespellDown()
-    {
-        if (!m_currentEventSelection)
-            return ;
-        KTmpStatusMsg msg(i18n("Forcing accidentals..."), this);
-
-        addCommandToHistory(new RespellCommand(RespellCommand::Down,
-                                               Accidentals::NoAccidental,
-                                               *m_currentEventSelection));
-    }
-
-    void NotationView::slotRespellRestore()
-    {
-        if (!m_currentEventSelection)
-            return ;
-        KTmpStatusMsg msg(i18n("Restoring accidentals..."), this);
-
-        addCommandToHistory(new RespellCommand(RespellCommand::Restore,
-                                               Accidentals::NoAccidental,
-                                               *m_currentEventSelection));
-    }
-
-    void NotationView::slotShowCautionary()
-    {
-        if (!m_currentEventSelection)
-            return ;
-        KTmpStatusMsg msg(i18n("Showing cautionary accidentals..."), this);
-
-        addCommandToHistory(new MakeAccidentalsCautionaryCommand
-                            (true, *m_currentEventSelection));
-    }
-
-    void NotationView::slotCancelCautionary()
-    {
-        if (!m_currentEventSelection)
-            return ;
-        KTmpStatusMsg msg(i18n("Cancelling cautionary accidentals..."), this);
-
-        addCommandToHistory(new MakeAccidentalsCautionaryCommand
-                            (false, *m_currentEventSelection));
-    }
-
-    void NotationView::slotTransformsQuantize()
-    {
-        if (!m_currentEventSelection)
-            return ;
-
-        QuantizeDialog dialog(this, true);
-
-        if (dialog.exec() == QDialog::Accepted) {
-            KTmpStatusMsg msg(i18n("Quantizing..."), this);
-            addCommandToHistory(new EventQuantizeCommand
-                                (*m_currentEventSelection,
-                                 dialog.getQuantizer()));
+            KMessageBox::sorry(this, i18n("No note or rest duration selected"));
         }
     }
 
-    void NotationView::slotTransformsInterpret()
-    {
-        if (!m_currentEventSelection)
-            return ;
+    setMenuStates();
+}
 
-        InterpretDialog dialog(this);
+void NotationView::slotRespellDoubleFlat()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Forcing accidentals..."), this);
 
-        if (dialog.exec() == QDialog::Accepted) {
-            KTmpStatusMsg msg(i18n("Interpreting selection..."), this);
-            addCommandToHistory(new InterpretCommand
-                                (*m_currentEventSelection,
-                                 getDocument()->getComposition().getNotationQuantizer(),
-                                 dialog.getInterpretations()));
-        }
-    }
+    addCommandToHistory(new RespellCommand(RespellCommand::Set,
+                                           Accidentals::DoubleFlat,
+                                           *m_currentEventSelection));
+}
 
-    void NotationView::slotSetNoteDurations(Note::Type type, bool notationOnly)
-    {
-        if (!m_currentEventSelection)
-            return ;
-        KTmpStatusMsg msg(i18n("Setting note durations..."), this);
-        addCommandToHistory(new SetNoteTypeCommand(*m_currentEventSelection, type, notationOnly));
-    }
+void NotationView::slotRespellFlat()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Forcing accidentals..."), this);
 
-    void NotationView::slotAddDot()
-    {
-        if (!m_currentEventSelection)
-            return ;
-        KTmpStatusMsg msg(i18n("Adding dot..."), this);
-        addCommandToHistory(new AddDotCommand(*m_currentEventSelection, false));
-    }
+    addCommandToHistory(new RespellCommand(RespellCommand::Set,
+                                           Accidentals::Flat,
+                                           *m_currentEventSelection));
+}
 
-    void NotationView::slotAddDotNotationOnly()
-    {
-        if (!m_currentEventSelection)
-            return ;
-        KTmpStatusMsg msg(i18n("Adding dot..."), this);
-        addCommandToHistory(new AddDotCommand(*m_currentEventSelection, true));
-    }
+void NotationView::slotRespellNatural()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Forcing accidentals..."), this);
 
-    void NotationView::slotAddSlashes()
-    {
-        const QObject *s = sender();
-        if (!m_currentEventSelection)
-            return ;
+    addCommandToHistory(new RespellCommand(RespellCommand::Set,
+                                           Accidentals::Natural,
+                                           *m_currentEventSelection));
+}
 
-        QString name = s->name();
-        int slashes = name.right(1).toInt();
+void NotationView::slotRespellSharp()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Forcing accidentals..."), this);
 
-        addCommandToHistory(new AddSlashesCommand
-                            (slashes, *m_currentEventSelection));
-    }
+    addCommandToHistory(new RespellCommand(RespellCommand::Set,
+                                           Accidentals::Sharp,
+                                           *m_currentEventSelection));
+}
 
-    void NotationView::slotMarksAddTextMark()
-    {
-        if (m_currentEventSelection) {
-            bool pressedOK = false;
+void NotationView::slotRespellDoubleSharp()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Forcing accidentals..."), this);
 
-            QString txt = KLineEditDlg::getText(i18n("Text: "), "", &pressedOK, this);
+    addCommandToHistory(new RespellCommand(RespellCommand::Set,
+                                           Accidentals::DoubleSharp,
+                                           *m_currentEventSelection));
+}
 
-            if (pressedOK) {
-                addCommandToHistory(new AddTextMarkCommand
-                                    (qstrtostr(txt), *m_currentEventSelection));
-            }
-        }
-    }
+void NotationView::slotRespellUp()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Forcing accidentals..."), this);
 
-    void NotationView::slotMarksAddFingeringMark()
-    {
-        if (m_currentEventSelection) {
-            bool pressedOK = false;
+    addCommandToHistory(new RespellCommand(RespellCommand::Up,
+                                           Accidentals::NoAccidental,
+                                           *m_currentEventSelection));
+}
 
-            QString txt = KLineEditDlg::getText(i18n("Fingering: "), "", &pressedOK, this);
+void NotationView::slotRespellDown()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Forcing accidentals..."), this);
 
-            if (pressedOK) {
-                addCommandToHistory(new AddFingeringMarkCommand
-                                    (qstrtostr(txt), *m_currentEventSelection));
-            }
-        }
-    }
+    addCommandToHistory(new RespellCommand(RespellCommand::Down,
+                                           Accidentals::NoAccidental,
+                                           *m_currentEventSelection));
+}
 
-    void NotationView::slotMarksAddFingeringMarkFromAction()
-    {
-        const QObject *s = sender();
-        QString name = s->name();
+void NotationView::slotRespellRestore()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Restoring accidentals..."), this);
 
-        if (name.left(14) == "add_fingering_") {
+    addCommandToHistory(new RespellCommand(RespellCommand::Restore,
+                                           Accidentals::NoAccidental,
+                                           *m_currentEventSelection));
+}
 
-            QString fingering = name.right(name.length() - 14);
+void NotationView::slotShowCautionary()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Showing cautionary accidentals..."), this);
 
-            if (fingering == "plus")
-                fingering = "+";
+    addCommandToHistory(new MakeAccidentalsCautionaryCommand
+                        (true, *m_currentEventSelection));
+}
 
-            if (m_currentEventSelection) {
-                addCommandToHistory(new AddFingeringMarkCommand
-                                    (qstrtostr(fingering), *m_currentEventSelection));
-            }
-        }
-    }
+void NotationView::slotCancelCautionary()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Cancelling cautionary accidentals..."), this);
 
-    void NotationView::slotMarksRemoveMarks()
-    {
-        if (m_currentEventSelection)
-            addCommandToHistory(new RemoveMarksCommand
-                                (*m_currentEventSelection));
-    }
+    addCommandToHistory(new MakeAccidentalsCautionaryCommand
+                        (false, *m_currentEventSelection));
+}
 
-    void NotationView::slotMarksRemoveFingeringMarks()
-    {
-        if (m_currentEventSelection)
-            addCommandToHistory(new RemoveFingeringMarksCommand
-                                (*m_currentEventSelection));
-    }
+void NotationView::slotTransformsQuantize()
+{
+    if (!m_currentEventSelection)
+        return ;
 
-    void
-    NotationView::slotMakeOrnament()
-    {
-        if (!m_currentEventSelection)
-            return ;
+    QuantizeDialog dialog(this, true);
 
-        EventSelection::eventcontainer &ec =
-            m_currentEventSelection->getSegmentEvents();
-
-        int basePitch = -1;
-        int baseVelocity = -1;
-        NoteStyle *style = NoteStyleFactory::getStyle(NoteStyleFactory::DefaultStyle);
-
-        for (EventSelection::eventcontainer::iterator i =
-                 ec.begin(); i != ec.end(); ++i) {
-            if ((*i)->isa(Note::EventType)) {
-                if ((*i)->has(BaseProperties::PITCH)) {
-                    basePitch = (*i)->get
-                        <Int>
-                        (BaseProperties::PITCH);
-                    style = NoteStyleFactory::getStyleForEvent(*i);
-                    if (baseVelocity != -1)
-                        break;
-                }
-                if ((*i)->has(BaseProperties::VELOCITY)) {
-                    baseVelocity = (*i)->get
-                        <Int>
-                        (BaseProperties::VELOCITY);
-                    if (basePitch != -1)
-                        break;
-                }
-            }
-        }
-
-        Staff *staff = getCurrentStaff();
-        Segment &segment = staff->getSegment();
-
-        timeT absTime = m_currentEventSelection->getStartTime();
-        timeT duration = m_currentEventSelection->getTotalDuration();
-        Note note(Note::getNearestNote(duration));
-
-        Track *track =
-            segment.getComposition()->getTrackById(segment.getTrack());
-        QString name;
-        int barNo = segment.getComposition()->getBarNumber(absTime);
-        if (track) {
-            name = QString(i18n("Ornament track %1 bar %2").arg(track->getPosition() + 1).arg(barNo + 1));
-        } else {
-            name = QString(i18n("Ornament bar %1").arg(barNo + 1));
-        }
-
-        MakeOrnamentDialog dialog(this, name, basePitch);
-        if (dialog.exec() != QDialog::Accepted)
-            return ;
-
-        name = dialog.getName();
-        basePitch = dialog.getBasePitch();
-
-        KMacroCommand *command = new KMacroCommand(i18n("Make Ornament"));
-
-        command->addCommand(new CutCommand
+    if (dialog.exec() == QDialog::Accepted) {
+        KTmpStatusMsg msg(i18n("Quantizing..."), this);
+        addCommandToHistory(new EventQuantizeCommand
                             (*m_currentEventSelection,
-                             getDocument()->getClipboard()));
-
-        command->addCommand(new PasteToTriggerSegmentCommand
-                            (&getDocument()->getComposition(),
-                             getDocument()->getClipboard(),
-                             name, basePitch));
-
-        command->addCommand(new InsertTriggerNoteCommand
-                            (segment, absTime, note, basePitch, baseVelocity,
-                             style->getName(),
-                             getDocument()->getComposition().getNextTriggerSegmentId(),
-                             true,
-                             BaseProperties::TRIGGER_SEGMENT_ADJUST_SQUISH,
-                             Marks::NoMark)); //!!!
-
-        addCommandToHistory(command);
+                             dialog.getQuantizer()));
     }
+}
 
-    void
-    NotationView::slotUseOrnament()
-    {
-        // Take an existing note and match an ornament to it.
+void NotationView::slotTransformsInterpret()
+{
+    if (!m_currentEventSelection)
+        return ;
 
-        if (!m_currentEventSelection)
-            return ;
+    InterpretDialog dialog(this);
 
-        UseOrnamentDialog dialog(this, &getDocument()->getComposition());
-        if (dialog.exec() != QDialog::Accepted)
-            return ;
-
-        addCommandToHistory(new SetTriggerCommand(*m_currentEventSelection,
-                                                  dialog.getId(),
-                                                  true,
-                                                  dialog.getRetune(),
-                                                  dialog.getTimeAdjust(),
-                                                  dialog.getMark(),
-                                                  i18n("Use Ornament")));
+    if (dialog.exec() == QDialog::Accepted) {
+        KTmpStatusMsg msg(i18n("Interpreting selection..."), this);
+        addCommandToHistory(new InterpretCommand
+                            (*m_currentEventSelection,
+                             getDocument()->getComposition().getNotationQuantizer(),
+                             dialog.getInterpretations()));
     }
+}
 
-    void
-    NotationView::slotRemoveOrnament()
-    {
-        if (!m_currentEventSelection)
-            return ;
+void NotationView::slotSetNoteDurations(Note::Type type, bool notationOnly)
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Setting note durations..."), this);
+    addCommandToHistory(new SetNoteTypeCommand(*m_currentEventSelection, type, notationOnly));
+}
 
-        addCommandToHistory(new ClearTriggersCommand(*m_currentEventSelection,
-                                                     i18n("Remove Ornaments")));
+void NotationView::slotAddDot()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Adding dot..."), this);
+    addCommandToHistory(new AddDotCommand(*m_currentEventSelection, false));
+}
+
+void NotationView::slotAddDotNotationOnly()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Adding dot..."), this);
+    addCommandToHistory(new AddDotCommand(*m_currentEventSelection, true));
+}
+
+void NotationView::slotAddSlashes()
+{
+    const QObject *s = sender();
+    if (!m_currentEventSelection)
+        return ;
+
+    QString name = s->name();
+    int slashes = name.right(1).toInt();
+
+    addCommandToHistory(new AddSlashesCommand
+                        (slashes, *m_currentEventSelection));
+}
+
+void NotationView::slotMarksAddTextMark()
+{
+    if (m_currentEventSelection) {
+        bool pressedOK = false;
+
+        QString txt = KLineEditDlg::getText(i18n("Text: "), "", &pressedOK, this);
+
+        if (pressedOK) {
+            addCommandToHistory(new AddTextMarkCommand
+                                (qstrtostr(txt), *m_currentEventSelection));
+        }
     }
+}
 
-    void NotationView::slotEditAddClef()
-    {
-        Staff *staff = getCurrentStaff();
-        Segment &segment = staff->getSegment();
-        static Clef lastClef;
-        Clef clef;
-        Key key;
-        timeT insertionTime = getInsertionTime(clef, key);
+void NotationView::slotMarksAddFingeringMark()
+{
+    if (m_currentEventSelection) {
+        bool pressedOK = false;
 
-        ClefDialog dialog(this, m_notePixmapFactory, lastClef);
+        QString txt = KLineEditDlg::getText(i18n("Fingering: "), "", &pressedOK, this);
 
-        if (dialog.exec() == QDialog::Accepted) {
+        if (pressedOK) {
+            addCommandToHistory(new AddFingeringMarkCommand
+                                (qstrtostr(txt), *m_currentEventSelection));
+        }
+    }
+}
 
-            ClefDialog::ConversionType conversion = dialog.getConversionType();
+void NotationView::slotMarksAddFingeringMarkFromAction()
+{
+    const QObject *s = sender();
+    QString name = s->name();
 
-            bool shouldChangeOctave = (conversion != ClefDialog::NoConversion);
-            bool shouldTranspose = (conversion == ClefDialog::Transpose);
+    if (name.left(14) == "add_fingering_") {
 
-            addCommandToHistory
-                (new ClefInsertionCommand
-                 (segment, insertionTime, dialog.getClef(),
-                  shouldChangeOctave, shouldTranspose));
+        QString fingering = name.right(name.length() - 14);
 
-            lastClef = dialog.getClef();
+        if (fingering == "plus")
+            fingering = "+";
+
+        if (m_currentEventSelection) {
+            addCommandToHistory(new AddFingeringMarkCommand
+                                (qstrtostr(fingering), *m_currentEventSelection));
+        }
+    }
+}
+
+void NotationView::slotMarksRemoveMarks()
+{
+    if (m_currentEventSelection)
+        addCommandToHistory(new RemoveMarksCommand
+                            (*m_currentEventSelection));
+}
+
+void NotationView::slotMarksRemoveFingeringMarks()
+{
+    if (m_currentEventSelection)
+        addCommandToHistory(new RemoveFingeringMarksCommand
+                            (*m_currentEventSelection));
+}
+
+void
+NotationView::slotMakeOrnament()
+{
+    if (!m_currentEventSelection)
+        return ;
+
+    EventSelection::eventcontainer &ec =
+        m_currentEventSelection->getSegmentEvents();
+
+    int basePitch = -1;
+    int baseVelocity = -1;
+    NoteStyle *style = NoteStyleFactory::getStyle(NoteStyleFactory::DefaultStyle);
+
+    for (EventSelection::eventcontainer::iterator i =
+             ec.begin(); i != ec.end(); ++i) {
+        if ((*i)->isa(Note::EventType)) {
+            if ((*i)->has(BaseProperties::PITCH)) {
+                basePitch = (*i)->get
+                    <Int>
+                    (BaseProperties::PITCH);
+                style = NoteStyleFactory::getStyleForEvent(*i);
+                if (baseVelocity != -1)
+                    break;
+            }
+            if ((*i)->has(BaseProperties::VELOCITY)) {
+                baseVelocity = (*i)->get
+                    <Int>
+                    (BaseProperties::VELOCITY);
+                if (basePitch != -1)
+                    break;
+            }
         }
     }
 
-    void NotationView::slotEditAddKeySignature()
-    {
-        Staff *staff = getCurrentStaff();
-        Segment &segment = staff->getSegment();
-        Clef clef;
-        Key key;
-        timeT insertionTime = getInsertionTime(clef, key);
+    Staff *staff = getCurrentStaff();
+    Segment &segment = staff->getSegment();
 
-        //!!! experimental:
-        CompositionTimeSliceAdapter adapter
-            (&getDocument()->getComposition(), insertionTime,
-             getDocument()->getComposition().getDuration());
-        AnalysisHelper helper;
-        key = helper.guessKey(adapter);
+    timeT absTime = m_currentEventSelection->getStartTime();
+    timeT duration = m_currentEventSelection->getTotalDuration();
+    Note note(Note::getNearestNote(duration));
 
-        KeySignatureDialog dialog
-            (this, m_notePixmapFactory, clef, key, true, true,
-             i18n("Estimated key signature shown"));
+    Track *track =
+        segment.getComposition()->getTrackById(segment.getTrack());
+    QString name;
+    int barNo = segment.getComposition()->getBarNumber(absTime);
+    if (track) {
+        name = QString(i18n("Ornament track %1 bar %2").arg(track->getPosition() + 1).arg(barNo + 1));
+    } else {
+        name = QString(i18n("Ornament bar %1").arg(barNo + 1));
+    }
+
+    MakeOrnamentDialog dialog(this, name, basePitch);
+    if (dialog.exec() != QDialog::Accepted)
+        return ;
+
+    name = dialog.getName();
+    basePitch = dialog.getBasePitch();
+
+    KMacroCommand *command = new KMacroCommand(i18n("Make Ornament"));
+
+    command->addCommand(new CutCommand
+                        (*m_currentEventSelection,
+                         getDocument()->getClipboard()));
+
+    command->addCommand(new PasteToTriggerSegmentCommand
+                        (&getDocument()->getComposition(),
+                         getDocument()->getClipboard(),
+                         name, basePitch));
+
+    command->addCommand(new InsertTriggerNoteCommand
+                        (segment, absTime, note, basePitch, baseVelocity,
+                         style->getName(),
+                         getDocument()->getComposition().getNextTriggerSegmentId(),
+                         true,
+                         BaseProperties::TRIGGER_SEGMENT_ADJUST_SQUISH,
+                         Marks::NoMark)); //!!!
+
+    addCommandToHistory(command);
+}
+
+void
+NotationView::slotUseOrnament()
+{
+    // Take an existing note and match an ornament to it.
+
+    if (!m_currentEventSelection)
+        return ;
+
+    UseOrnamentDialog dialog(this, &getDocument()->getComposition());
+    if (dialog.exec() != QDialog::Accepted)
+        return ;
+
+    addCommandToHistory(new SetTriggerCommand(*m_currentEventSelection,
+                                              dialog.getId(),
+                                              true,
+                                              dialog.getRetune(),
+                                              dialog.getTimeAdjust(),
+                                              dialog.getMark(),
+                                              i18n("Use Ornament")));
+}
+
+void
+NotationView::slotRemoveOrnament()
+{
+    if (!m_currentEventSelection)
+        return ;
+
+    addCommandToHistory(new ClearTriggersCommand(*m_currentEventSelection,
+                                                 i18n("Remove Ornaments")));
+}
+
+void NotationView::slotEditAddClef()
+{
+    Staff *staff = getCurrentStaff();
+    Segment &segment = staff->getSegment();
+    static Clef lastClef;
+    Clef clef;
+    Rosegarden::Key key;
+    timeT insertionTime = getInsertionTime(clef, key);
+
+    ClefDialog dialog(this, m_notePixmapFactory, lastClef);
+
+    if (dialog.exec() == QDialog::Accepted) {
+
+        ClefDialog::ConversionType conversion = dialog.getConversionType();
+
+        bool shouldChangeOctave = (conversion != ClefDialog::NoConversion);
+        bool shouldTranspose = (conversion == ClefDialog::Transpose);
+
+        addCommandToHistory
+            (new ClefInsertionCommand
+             (segment, insertionTime, dialog.getClef(),
+              shouldChangeOctave, shouldTranspose));
+
+        lastClef = dialog.getClef();
+    }
+}
+
+void NotationView::slotEditAddKeySignature()
+{
+    Staff *staff = getCurrentStaff();
+    Segment &segment = staff->getSegment();
+    Clef clef;
+    Rosegarden::Key key;
+    timeT insertionTime = getInsertionTime(clef, key);
+
+    //!!! experimental:
+    CompositionTimeSliceAdapter adapter
+        (&getDocument()->getComposition(), insertionTime,
+         getDocument()->getComposition().getDuration());
+    AnalysisHelper helper;
+    key = helper.guessKey(adapter);
+
+    KeySignatureDialog dialog
+        (this, m_notePixmapFactory, clef, key, true, true,
+         i18n("Estimated key signature shown"));
+
+    if (dialog.exec() == QDialog::Accepted &&
+        dialog.isValid()) {
+
+        KeySignatureDialog::ConversionType conversion =
+            dialog.getConversionType();
+
+        bool transposeKey = dialog.shouldBeTransposed();
+        bool applyToAll = dialog.shouldApplyToAll();
+
+        if (applyToAll) {
+            addCommandToHistory
+                (new MultiKeyInsertionCommand
+                 (getDocument()->getComposition(),
+                  insertionTime, dialog.getKey(),
+                  conversion == KeySignatureDialog::Convert,
+                  conversion == KeySignatureDialog::Transpose,
+                  transposeKey));
+        } else {
+            addCommandToHistory
+                (new KeyInsertionCommand
+                 (segment,
+                  insertionTime, dialog.getKey(),
+                  conversion == KeySignatureDialog::Convert,
+                  conversion == KeySignatureDialog::Transpose,
+                  transposeKey));
+        }
+    }
+}
+
+void NotationView::slotEditAddSustain(bool down)
+{
+    Staff *staff = getCurrentStaff();
+    Segment &segment = staff->getSegment();
+    timeT insertionTime = getInsertionTime();
+
+    Studio *studio = &getDocument()->getStudio();
+    Track *track = segment.getComposition()->getTrackById(segment.getTrack());
+
+    if (track) {
+
+        Instrument *instrument = studio->getInstrumentById
+            (track->getInstrument());
+        if (instrument) {
+            MidiDevice *device = dynamic_cast<MidiDevice *>
+                (instrument->getDevice());
+            if (device) {
+                for (ControlList::const_iterator i =
+                         device->getControlParameters().begin();
+                     i != device->getControlParameters().end(); ++i) {
+
+                    if (i->getType() == Controller::EventType &&
+                        (i->getName() == "Sustain" ||
+                         strtoqstr(i->getName()) == i18n("Sustain"))) {
+
+                        addCommandToHistory
+                            (new SustainInsertionCommand(segment, insertionTime, down,
+                                                         i->getControllerValue()));
+                        return ;
+                    }
+                }
+            } else if (instrument->getDevice() &&
+                       instrument->getDevice()->getType() == Device::SoftSynth) {
+                addCommandToHistory
+                    (new SustainInsertionCommand(segment, insertionTime, down, 64));
+            }
+        }
+    }
+
+    KMessageBox::sorry(this, i18n("There is no sustain controller defined for this device.\nPlease ensure the device is configured correctly in the Manage MIDI Devices dialog in the main window."));
+}
+
+void NotationView::slotEditAddSustainDown()
+{
+    slotEditAddSustain(true);
+}
+
+void NotationView::slotEditAddSustainUp()
+{
+    slotEditAddSustain(false);
+}
+
+void NotationView::slotEditElement(NotationStaff *staff,
+                                   NotationElement *element, bool advanced)
+{
+    if (advanced) {
+
+        EventEditDialog dialog(this, *element->event(), true);
 
         if (dialog.exec() == QDialog::Accepted &&
-            dialog.isValid()) {
+            dialog.isModified()) {
 
-            KeySignatureDialog::ConversionType conversion =
-                dialog.getConversionType();
+            EventEditCommand *command = new EventEditCommand
+                (staff->getSegment(),
+                 element->event(),
+                 dialog.getEvent());
 
-            bool transposeKey = dialog.shouldBeTransposed();
-            bool applyToAll = dialog.shouldApplyToAll();
+            addCommandToHistory(command);
+        }
 
-            if (applyToAll) {
+    } else if (element->event()->isa(Clef::EventType)) {
+
+        try {
+            ClefDialog dialog(this, m_notePixmapFactory,
+                              Clef(*element->event()));
+
+            if (dialog.exec() == QDialog::Accepted) {
+
+                ClefDialog::ConversionType conversion = dialog.getConversionType();
+                bool shouldChangeOctave = (conversion != ClefDialog::NoConversion);
+                bool shouldTranspose = (conversion == ClefDialog::Transpose);
                 addCommandToHistory
-                    (new MultiKeyInsertionCommand
-                     (getDocument()->getComposition(),
-                      insertionTime, dialog.getKey(),
-                      conversion == KeySignatureDialog::Convert,
-                      conversion == KeySignatureDialog::Transpose,
-                      transposeKey));
-            } else {
+                    (new ClefInsertionCommand
+                     (staff->getSegment(), element->event()->getAbsoluteTime(),
+                      dialog.getClef(), shouldChangeOctave, shouldTranspose));
+            }
+        } catch (Exception e) {
+            std::cerr << e.getMessage() << std::endl;
+        }
+
+        return ;
+
+    } else if (element->event()->isa(Rosegarden::Key::EventType)) {
+
+        try {
+            Clef clef(staff->getSegment().getClefAtTime
+                      (element->event()->getAbsoluteTime()));
+            KeySignatureDialog dialog
+                (this, m_notePixmapFactory, clef, Rosegarden::Key(*element->event()),
+                 false, true);
+
+            if (dialog.exec() == QDialog::Accepted &&
+                dialog.isValid()) {
+
+                KeySignatureDialog::ConversionType conversion =
+                    dialog.getConversionType();
+
                 addCommandToHistory
                     (new KeyInsertionCommand
-                     (segment,
-                      insertionTime, dialog.getKey(),
+                     (staff->getSegment(),
+                      element->event()->getAbsoluteTime(), dialog.getKey(),
                       conversion == KeySignatureDialog::Convert,
                       conversion == KeySignatureDialog::Transpose,
-                      transposeKey));
+                      dialog.shouldBeTransposed()));
             }
-        }
-    }
 
-    void NotationView::slotEditAddSustain(bool down)
-    {
-        Staff *staff = getCurrentStaff();
-        Segment &segment = staff->getSegment();
-        timeT insertionTime = getInsertionTime();
-
-        Studio *studio = &getDocument()->getStudio();
-        Track *track = segment.getComposition()->getTrackById(segment.getTrack());
-
-        if (track) {
-
-            Instrument *instrument = studio->getInstrumentById
-                (track->getInstrument());
-            if (instrument) {
-                MidiDevice *device = dynamic_cast<MidiDevice *>
-                    (instrument->getDevice());
-                if (device) {
-                    for (ControlList::const_iterator i =
-                             device->getControlParameters().begin();
-                         i != device->getControlParameters().end(); ++i) {
-
-                        if (i->getType() == Controller::EventType &&
-                            (i->getName() == "Sustain" ||
-                             strtoqstr(i->getName()) == i18n("Sustain"))) {
-
-                            addCommandToHistory
-                                (new SustainInsertionCommand(segment, insertionTime, down,
-                                                             i->getControllerValue()));
-                            return ;
-                        }
-                    }
-                } else if (instrument->getDevice() &&
-                           instrument->getDevice()->getType() == Device::SoftSynth) {
-                    addCommandToHistory
-                        (new SustainInsertionCommand(segment, insertionTime, down, 64));
-                }
-            }
+        } catch (Exception e) {
+            std::cerr << e.getMessage() << std::endl;
         }
 
-        KMessageBox::sorry(this, i18n("There is no sustain controller defined for this device.\nPlease ensure the device is configured correctly in the Manage MIDI Devices dialog in the main window."));
-    }
+        return ;
 
-    void NotationView::slotEditAddSustainDown()
-    {
-        slotEditAddSustain(true);
-    }
+    } else if (element->event()->isa(Text::EventType)) {
 
-    void NotationView::slotEditAddSustainUp()
-    {
-        slotEditAddSustain(false);
-    }
-
-    void NotationView::slotEditElement(NotationStaff *staff,
-                                       NotationElement *element, bool advanced)
-    {
-        if (advanced) {
-
-            EventEditDialog dialog(this, *element->event(), true);
-
-            if (dialog.exec() == QDialog::Accepted &&
-                dialog.isModified()) {
-
-                EventEditCommand *command = new EventEditCommand
+        try {
+            TextEventDialog dialog
+                (this, m_notePixmapFactory, Text(*element->event()));
+            if (dialog.exec() == QDialog::Accepted) {
+                TextInsertionCommand *command = new TextInsertionCommand
                     (staff->getSegment(),
-                     element->event(),
-                     dialog.getEvent());
-
-                addCommandToHistory(command);
+                     element->event()->getAbsoluteTime(),
+                     dialog.getText());
+                KMacroCommand *macroCommand = new KMacroCommand(command->name());
+                macroCommand->addCommand(new EraseEventCommand(staff->getSegment(),
+                                                               element->event(), false));
+                macroCommand->addCommand(command);
+                addCommandToHistory(macroCommand);
             }
-
-        } else if (element->event()->isa(Clef::EventType)) {
-
-            try {
-                ClefDialog dialog(this, m_notePixmapFactory,
-                                  Clef(*element->event()));
-
-                if (dialog.exec() == QDialog::Accepted) {
-
-                    ClefDialog::ConversionType conversion = dialog.getConversionType();
-                    bool shouldChangeOctave = (conversion != ClefDialog::NoConversion);
-                    bool shouldTranspose = (conversion == ClefDialog::Transpose);
-                    addCommandToHistory
-                        (new ClefInsertionCommand
-                         (staff->getSegment(), element->event()->getAbsoluteTime(),
-                          dialog.getClef(), shouldChangeOctave, shouldTranspose));
-                }
-            } catch (Exception e) {
-                std::cerr << e.getMessage() << std::endl;
-            }
-
-            return ;
-
-        } else if (element->event()->isa(Key::EventType)) {
-
-            try {
-                Clef clef(staff->getSegment().getClefAtTime
-                          (element->event()->getAbsoluteTime()));
-                KeySignatureDialog dialog
-                    (this, m_notePixmapFactory, clef, Key(*element->event()),
-                     false, true);
-
-                if (dialog.exec() == QDialog::Accepted &&
-                    dialog.isValid()) {
-
-                    KeySignatureDialog::ConversionType conversion =
-                        dialog.getConversionType();
-
-                    addCommandToHistory
-                        (new KeyInsertionCommand
-                         (staff->getSegment(),
-                          element->event()->getAbsoluteTime(), dialog.getKey(),
-                          conversion == KeySignatureDialog::Convert,
-                          conversion == KeySignatureDialog::Transpose,
-                          dialog.shouldBeTransposed()));
-                }
-
-            } catch (Exception e) {
-                std::cerr << e.getMessage() << std::endl;
-            }
-
-            return ;
-
-        } else if (element->event()->isa(Text::EventType)) {
-
-            try {
-                TextEventDialog dialog
-                    (this, m_notePixmapFactory, Text(*element->event()));
-                if (dialog.exec() == QDialog::Accepted) {
-                    TextInsertionCommand *command = new TextInsertionCommand
-                        (staff->getSegment(),
-                         element->event()->getAbsoluteTime(),
-                         dialog.getText());
-                    KMacroCommand *macroCommand = new KMacroCommand(command->name());
-                    macroCommand->addCommand(new EraseEventCommand(staff->getSegment(),
-                                                                   element->event(), false));
-                    macroCommand->addCommand(command);
-                    addCommandToHistory(macroCommand);
-                }
-            } catch (Exception e) {
-                std::cerr << e.getMessage() << std::endl;
-            }
-
-            return ;
-
-        } else if (element->isNote() &&
-                   element->event()->has(BaseProperties::TRIGGER_SEGMENT_ID)) {
-
-            int id = element->event()->get
-                <Int>
-                (BaseProperties::TRIGGER_SEGMENT_ID);
-            emit editTriggerSegment(id);
-            return ;
-
-        } else {
-
-            SimpleEventEditDialog dialog(this, getDocument(), *element->event(), false);
-
-            if (dialog.exec() == QDialog::Accepted &&
-                dialog.isModified()) {
-
-                EventEditCommand *command = new EventEditCommand
-                    (staff->getSegment(),
-                     element->event(),
-                     dialog.getEvent());
-
-                addCommandToHistory(command);
-            }
-        }
-    }
-
-    void NotationView::slotBeginLilypondRepeat()
-    {}
-
-    void NotationView::slotDebugDump()
-    {
-        if (m_currentEventSelection) {
-            EventSelection::eventcontainer &ec =
-                m_currentEventSelection->getSegmentEvents();
-            int n = 0;
-            for (EventSelection::eventcontainer::iterator i =
-                     ec.begin();
-                 i != ec.end(); ++i) {
-                std::cerr << "\n" << n++ << " [" << (*i) << "]" << std::endl;
-                (*i)->dump(std::cerr);
-            }
-        }
-    }
-
-    void
-    NotationView::slotSetPointerPosition(timeT time)
-    {
-        slotSetPointerPosition(time, m_playTracking);
-    }
-
-    void
-    NotationView::slotSetPointerPosition(timeT time, bool scroll)
-    {
-        Composition &comp = getDocument()->getComposition();
-        int barNo = comp.getBarNumber(time);
-
-        int minCy = 0;
-        double cx = 0;
-        bool haveMinCy = false;
-
-        for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-
-            double layoutX = m_hlayout->getXForTimeByEvent(time);
-            Segment &seg = m_staffs[i]->getSegment();
-
-            bool good = true;
-
-            if (barNo >= m_hlayout->getLastVisibleBarOnStaff(*m_staffs[i])) {
-                if (seg.isRepeating() && time < seg.getRepeatEndTime()) {
-                    timeT mappedTime =
-                        seg.getStartTime() +
-                        ((time - seg.getStartTime()) %
-                         (seg.getEndMarkerTime() - seg.getStartTime()));
-                    layoutX = m_hlayout->getXForTimeByEvent(mappedTime);
-                } else {
-                    good = false;
-                }
-            } else if (barNo < m_hlayout->getFirstVisibleBarOnStaff(*m_staffs[i])) {
-                good = false;
-            }
-
-            if (!good) {
-
-                m_staffs[i]->hidePointer();
-
-            } else {
-
-                m_staffs[i]->setPointerPosition(layoutX);
-
-                int cy;
-                m_staffs[i]->getPointerPosition(cx, cy);
-
-                if (!haveMinCy || cy < minCy) {
-                    minCy = cy;
-                    haveMinCy = true;
-                }
-            }
+        } catch (Exception e) {
+            std::cerr << e.getMessage() << std::endl;
         }
 
-        if (m_pageMode == LinedStaff::LinearMode) {
-            // be careful not to prevent user from scrolling up and down
-            haveMinCy = false;
-        }
+        return ;
 
-        if (scroll) {
-            getCanvasView()->slotScrollHoriz(int(cx));
-            if (haveMinCy) {
-                getCanvasView()->slotScrollVertToTop(minCy);
-            }
-        }
+    } else if (element->isNote() &&
+               element->event()->has(BaseProperties::TRIGGER_SEGMENT_ID)) {
 
-        updateView();
-    }
+        int id = element->event()->get
+            <Int>
+            (BaseProperties::TRIGGER_SEGMENT_ID);
+        emit editTriggerSegment(id);
+        return ;
 
-    void
-    NotationView::slotUpdateRecordingSegment(Segment *segment,
-                                             timeT updateFrom)
-    {
-        NOTATION_DEBUG << "NotationView::slotUpdateRecordingSegment: segment " << segment << ", updateFrom " << updateFrom << ", end time " << segment->getEndMarkerTime() << endl;
-        if (updateFrom >= segment->getEndMarkerTime())
-            return ;
-        for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-            if (&m_staffs[i]->getSegment() == segment) {
-                //	    refreshSegment(segment, updateFrom, segment->getEndMarkerTime());
-                refreshSegment(segment, 0, 0);
-            }
-        }
-        NOTATION_DEBUG << "NotationView::slotUpdateRecordingSegment: don't have segment " << segment << endl;
-    }
+    } else {
 
-    void
-    NotationView::slotSetCurrentStaff(double x, int y)
-    {
-        unsigned int staffNo;
-        for (staffNo = 0; staffNo < m_staffs.size(); ++staffNo) {
-            if (m_staffs[staffNo]->containsCanvasCoords(x, y))
-                break;
-        }
+        SimpleEventEditDialog dialog(this, getDocument(), *element->event(), false);
 
-        if (staffNo < m_staffs.size()) {
-            slotSetCurrentStaff(staffNo);
-        }
-    }
+        if (dialog.exec() == QDialog::Accepted &&
+            dialog.isModified()) {
 
-    void
-    NotationView::slotSetCurrentStaff(int staffNo)
-    {
-        NOTATION_DEBUG << "NotationView::slotSetCurrentStaff(" << staffNo << ")" << endl;
-
-        if (m_currentStaff != staffNo) {
-
-            m_staffs[m_currentStaff]->setCurrent(false);
-
-            m_currentStaff = staffNo;
-
-            m_staffs[m_currentStaff]->setCurrent(true);
-
-            Segment *segment = &m_staffs[m_currentStaff]->getSegment();
-
-            m_chordNameRuler->setCurrentSegment(segment);
-            m_rawNoteRuler->setCurrentSegment(segment);
-            m_rawNoteRuler->repaint();
-            setControlRulersCurrentSegment();
-
-            updateView();
-
-            slotSetInsertCursorPosition(getInsertionTime(), false, false);
-        }
-    }
-
-    void
-    NotationView::slotCurrentStaffUp()
-    {
-        if (m_staffs.size() < 2)
-            return ;
-
-        Composition *composition =
-            m_staffs[m_currentStaff]->getSegment().getComposition();
-
-        Track *track = composition->
-            getTrackById(m_staffs[m_currentStaff]->getSegment().getTrack());
-        if (!track)
-            return ;
-
-        int position = track->getPosition();
-        Track *newTrack = 0;
-
-        while ((newTrack = composition->getTrackByPosition(--position))) {
-            for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-                if (m_staffs[i]->getSegment().getTrack() == newTrack->getId()) {
-                    slotSetCurrentStaff(i);
-                    return ;
-                }
-            }
-        }
-    }
-
-    void
-    NotationView::slotCurrentStaffDown()
-    {
-        if (m_staffs.size() < 2)
-            return ;
-
-        Composition *composition =
-            m_staffs[m_currentStaff]->getSegment().getComposition();
-
-        Track *track = composition->
-            getTrackById(m_staffs[m_currentStaff]->getSegment().getTrack());
-        if (!track)
-            return ;
-
-        int position = track->getPosition();
-        Track *newTrack = 0;
-
-        while ((newTrack = composition->getTrackByPosition(++position))) {
-            for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-                if (m_staffs[i]->getSegment().getTrack() == newTrack->getId()) {
-                    slotSetCurrentStaff(i);
-                    return ;
-                }
-            }
-        }
-    }
-
-    void
-    NotationView::slotSetInsertCursorPosition(double x, int y, bool scroll,
-                                              bool updateNow)
-    {
-        NOTATION_DEBUG << "NotationView::slotSetInsertCursorPosition: x " << x << ", y " << y << ", scroll " << scroll << ", now " << updateNow << endl;
-
-        slotSetCurrentStaff(x, y);
-
-        LinedStaff *staff = getLinedStaff(m_currentStaff);
-        Event *clefEvt, *keyEvt;
-        NotationElementList::iterator i =
-            staff->getElementUnderCanvasCoords(x, y, clefEvt, keyEvt);
-
-        if (i == staff->getViewElementList()->end()) {
-            slotSetInsertCursorPosition(staff->getSegment().getEndTime(), scroll,
-                                        updateNow);
-        } else {
-            slotSetInsertCursorPosition((*i)->getViewAbsoluteTime(), scroll,
-                                        updateNow);
-        }
-    }
-
-    void
-    NotationView::slotSetInsertCursorPosition(timeT t, bool scroll, bool updateNow)
-    {
-        NOTATION_DEBUG << "NotationView::slotSetInsertCursorPosition: time " << t << ", scroll " << scroll << ", now " << updateNow << endl;
-
-        m_insertionTime = t;
-        if (scroll) {
-            m_deferredCursorMove = CursorMoveAndMakeVisible;
-        } else {
-            m_deferredCursorMove = CursorMoveOnly;
-        }
-        if (updateNow)
-            doDeferredCursorMove();
-    }
-
-    void
-    NotationView::slotSetInsertCursorAndRecentre(timeT t, double cx, int,
-                                                 bool updateNow)
-    {
-        NOTATION_DEBUG << "NotationView::slotSetInsertCursorAndRecentre: time " << t << ", cx " << cx << ", now " << updateNow << ", contentsx" << getCanvasView()->contentsX() << ", w " << getCanvasView()->visibleWidth() << endl;
-
-        m_insertionTime = t;
-
-        // We only do the scroll bit if cx is in the right two-thirds of
-        // the window
-
-        if (cx < (getCanvasView()->contentsX() +
-                  getCanvasView()->visibleWidth() / 3)) {
-
-            m_deferredCursorMove = CursorMoveOnly;
-        } else {
-            m_deferredCursorMove = CursorMoveAndScrollToPosition;
-            m_deferredCursorScrollToX = cx;
-        }
-
-        if (updateNow)
-            doDeferredCursorMove();
-    }
-
-    void
-    NotationView::doDeferredCursorMove()
-    {
-        NOTATION_DEBUG << "NotationView::doDeferredCursorMove: m_deferredCursorMove == " << m_deferredCursorMove << endl;
-
-        if (m_deferredCursorMove == NoCursorMoveNeeded) {
-            return ;
-        }
-
-        DeferredCursorMoveType type = m_deferredCursorMove;
-        m_deferredCursorMove = NoCursorMoveNeeded;
-
-        timeT t = m_insertionTime;
-
-        if (m_staffs.size() == 0)
-            return ;
-        LinedStaff *staff = getCurrentLinedStaff();
-        Segment &segment = staff->getSegment();
-
-        if (t < segment.getStartTime()) {
-            t = segment.getStartTime();
-        }
-        if (t > segment.getEndTime()) {
-            t = segment.getEndTime();
-        }
-
-        NotationElementList::iterator i =
-            staff->getViewElementList()->findNearestTime(t);
-
-        while (i != staff->getViewElementList()->end() &&
-               !static_cast<NotationElement*>(*i)->getCanvasItem())
-            ++i;
-
-        if (i == staff->getViewElementList()->end()) {
-            //!!! ???
-            if (m_insertionTime >= staff->getSegment().getStartTime()) {
-                i = staff->getViewElementList()->begin();
-            }
-            m_insertionTime = staff->getSegment().getStartTime();
-        } else {
-            m_insertionTime = static_cast<NotationElement*>(*i)->getViewAbsoluteTime();
-        }
-
-        if (i == staff->getViewElementList()->end() ||
-            t == segment.getEndTime() ||
-            t == segment.getBarStartForTime(t)) {
-
-            staff->setInsertCursorPosition(*m_hlayout, t);
-
-            if (type == CursorMoveAndMakeVisible) {
-                double cx;
-                int cy;
-                staff->getInsertCursorPosition(cx, cy);
-                getCanvasView()->slotScrollHoriz(int(cx));
-                getCanvasView()->slotScrollVertSmallSteps(cy);
-            }
-
-        } else {
-
-            // prefer a note or rest, if there is one, to a non-spacing event
-            if (!static_cast<NotationElement*>(*i)->isNote() &&
-                !static_cast<NotationElement*>(*i)->isRest()) {
-                NotationElementList::iterator j = i;
-                while (j != staff->getViewElementList()->end()) {
-                    if (static_cast<NotationElement*>(*j)->getViewAbsoluteTime() !=
-                        static_cast<NotationElement*>(*i)->getViewAbsoluteTime())
-                        break;
-                    if (static_cast<NotationElement*>(*j)->getCanvasItem()) {
-                        if (static_cast<NotationElement*>(*j)->isNote() ||
-                            static_cast<NotationElement*>(*j)->isRest()) {
-                            i = j;
-                            break;
-                        }
-                    }
-                    ++j;
-                }
-            }
-
-            if (static_cast<NotationElement*>(*i)->getCanvasItem()) {
-
-                staff->setInsertCursorPosition
-                    (static_cast<NotationElement*>(*i)->getCanvasX() - 2,
-                     int(static_cast<NotationElement*>(*i)->getCanvasY()));
-
-                if (type == CursorMoveAndMakeVisible) {
-                    getCanvasView()->slotScrollHoriz
-                        (int(static_cast<NotationElement*>(*i)->getCanvasX()) - 4);
-                }
-            } else {
-                std::cerr << "WARNING: No canvas item for this notation element:";
-                (*i)->event()->dump(std::cerr);
-            }
-        }
-
-        if (type == CursorMoveAndScrollToPosition) {
-
-            // get current canvas x of insert cursor, which might not be
-            // what we just set
-
-            double ccx = 0.0;
-
-            NotationElementList::iterator i =
-                staff->getViewElementList()->findTime(t);
-
-            if (i == staff->getViewElementList()->end()) {
-                if (i == staff->getViewElementList()->begin())
-                    return ;
-                double lx, lwidth;
-                --i;
-                if (static_cast<NotationElement*>(*i)->getCanvasItem()) {
-                    ccx = static_cast<NotationElement*>(*i)->getCanvasX();
-                    static_cast<NotationElement*>(*i)->getLayoutAirspace(lx, lwidth);
-                } else {
-                    std::cerr << "WARNING: No canvas item for this notation element*:";
-                    (*i)->event()->dump(std::cerr);
-                }
-                ccx += lwidth;
-            } else {
-                if (static_cast<NotationElement*>(*i)->getCanvasItem()) {
-                    ccx = static_cast<NotationElement*>(*i)->getCanvasX();
-                } else {
-                    std::cerr << "WARNING: No canvas item for this notation element*:";
-                    (*i)->event()->dump(std::cerr);
-                }
-            }
-
-            QScrollBar* hbar = getCanvasView()->horizontalScrollBar();
-            hbar->setValue(int(hbar->value() - (m_deferredCursorScrollToX - ccx)));
-        }
-
-        updateView();
-    }
-
-    void
-    NotationView::slotJumpCursorToPlayback()
-    {
-        slotSetInsertCursorPosition(getDocument()->getComposition().getPosition());
-    }
-
-    void
-    NotationView::slotJumpPlaybackToCursor()
-    {
-        emit jumpPlaybackTo(getInsertionTime());
-    }
-
-    void
-    NotationView::slotToggleTracking()
-    {
-        m_playTracking = !m_playTracking;
-    }
-
-    void NotationView::slotNoAccidental()
-    {
-        emit changeAccidental(Accidentals::NoAccidental, false);
-    }
-
-    void NotationView::slotFollowAccidental()
-    {
-        emit changeAccidental(Accidentals::NoAccidental, true);
-    }
-
-    void NotationView::slotSharp()
-    {
-        emit changeAccidental(Accidentals::Sharp, false);
-    }
-
-    void NotationView::slotFlat()
-    {
-        emit changeAccidental(Accidentals::Flat, false);
-    }
-
-    void NotationView::slotNatural()
-    {
-        emit changeAccidental(Accidentals::Natural, false);
-    }
-
-    void NotationView::slotDoubleSharp()
-    {
-        emit changeAccidental(Accidentals::DoubleSharp, false);
-    }
-
-    void NotationView::slotDoubleFlat()
-    {
-        emit changeAccidental(Accidentals::DoubleFlat, false);
-    }
-
-    void NotationView::slotTrebleClef()
-    {
-        m_currentNotePixmap->setPixmap
-            (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("clef-treble")));
-        setTool(m_toolBox->getTool(ClefInserter::ToolName));
-
-        dynamic_cast<ClefInserter*>(m_tool)->setClef(Clef::Treble);
-        setMenuStates();
-    }
-
-    void NotationView::slotTenorClef()
-    {
-        m_currentNotePixmap->setPixmap
-            (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("clef-tenor")));
-        setTool(m_toolBox->getTool(ClefInserter::ToolName));
-
-        dynamic_cast<ClefInserter*>(m_tool)->setClef(Clef::Tenor);
-        setMenuStates();
-    }
-
-    void NotationView::slotAltoClef()
-    {
-        m_currentNotePixmap->setPixmap
-            (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("clef-alto")));
-        setTool(m_toolBox->getTool(ClefInserter::ToolName));
-
-        dynamic_cast<ClefInserter*>(m_tool)->setClef(Clef::Alto);
-        setMenuStates();
-    }
-
-    void NotationView::slotBassClef()
-    {
-        m_currentNotePixmap->setPixmap
-            (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("clef-bass")));
-        setTool(m_toolBox->getTool(ClefInserter::ToolName));
-
-        dynamic_cast<ClefInserter*>(m_tool)->setClef(Clef::Bass);
-        setMenuStates();
-    }
-
-    void NotationView::slotText()
-    {
-        m_currentNotePixmap->setPixmap
-            (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("text")));
-        setTool(m_toolBox->getTool(TextInserter::ToolName));
-        setMenuStates();
-    }
-
-    void NotationView::slotFretboard()
-    {
-        m_currentNotePixmap->setPixmap
-            (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("text")));
-        setTool(m_toolBox->getTool(FretboardInserter::ToolName));
-        setMenuStates();
-    }
-
-    void NotationView::slotEraseSelected()
-    {
-        NOTATION_DEBUG << "NotationView::slotEraseSelected()" << endl;
-        setTool(m_toolBox->getTool(NotationEraser::ToolName));
-        setMenuStates();
-    }
-
-    void NotationView::slotSelectSelected()
-    {
-        NOTATION_DEBUG << "NotationView::slotSelectSelected()" << endl;
-        setTool(m_toolBox->getTool(NotationSelector::ToolName));
-        setMenuStates();
-    }
-
-    void NotationView::slotLinearMode()
-    {
-        setPageMode(LinedStaff::LinearMode);
-    }
-
-    void NotationView::slotContinuousPageMode()
-    {
-        setPageMode(LinedStaff::ContinuousPageMode);
-    }
-
-    void NotationView::slotMultiPageMode()
-    {
-        setPageMode(LinedStaff::MultiPageMode);
-    }
-
-    void NotationView::slotToggleChordsRuler()
-    {
-        if (m_hlayout->isPageMode())
-            return ;
-        toggleWidget(m_chordNameRuler, "show_chords_ruler");
-    }
-
-    void NotationView::slotToggleRawNoteRuler()
-    {
-        if (m_hlayout->isPageMode())
-            return ;
-        toggleWidget(m_rawNoteRuler, "show_raw_note_ruler");
-    }
-
-    void NotationView::slotToggleTempoRuler()
-    {
-        if (m_hlayout->isPageMode())
-            return ;
-        toggleWidget(m_tempoRuler, "show_tempo_ruler");
-    }
-
-    void NotationView::slotToggleAnnotations()
-    {
-        m_annotationsVisible = !m_annotationsVisible;
-        slotUpdateAnnotationsStatus();
-        //!!! use refresh mechanism
-        refreshSegment(0, 0, 0);
-    }
-
-    void NotationView::slotToggleLilyPondDirectives()
-    {
-        m_lilypondDirectivesVisible = !m_lilypondDirectivesVisible;
-        slotUpdateLilyPondDirectivesStatus();
-        //!!! use refresh mechanism
-        refreshSegment(0, 0, 0);
-    }
-
-    void NotationView::slotEditLyrics()
-    {
-        Staff *staff = getCurrentStaff();
-        Segment &segment = staff->getSegment();
-
-        LyricEditDialog dialog(this, &segment);
-
-        if (dialog.exec() == QDialog::Accepted) {
-
-            SetLyricsCommand *command = new SetLyricsCommand
-                (&segment, dialog.getLyricData());
+            EventEditCommand *command = new EventEditCommand
+                (staff->getSegment(),
+                 element->event(),
+                 dialog.getEvent());
 
             addCommandToHistory(command);
         }
     }
+}
 
-    void NotationView::slotItemPressed(int height, int staffNo,
-                                       QMouseEvent* e,
-                                       NotationElement* el)
-    {
-        NOTATION_DEBUG << "NotationView::slotItemPressed(height = "
-                       << height << ", staffNo = " << staffNo
-                       << ")" << endl;
+void NotationView::slotBeginLilypondRepeat()
+{}
 
-        if (staffNo < 0 && el != 0) {
-            // We have an element but no staff -- that's because the
-            // element extended outside the staff region.  But we need
-            // to handle it properly, so we rather laboriously need to
-            // find out which staff it was.
-            for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-                if (m_staffs[i]->getViewElementList()->findSingle(el) !=
-                    m_staffs[i]->getViewElementList()->end()) {
-                    staffNo = m_staffs[i]->getId();
-                    break;
-                }
-            }
+void NotationView::slotDebugDump()
+{
+    if (m_currentEventSelection) {
+        EventSelection::eventcontainer &ec =
+            m_currentEventSelection->getSegmentEvents();
+        int n = 0;
+        for (EventSelection::eventcontainer::iterator i =
+                 ec.begin();
+             i != ec.end(); ++i) {
+            std::cerr << "\n" << n++ << " [" << (*i) << "]" << std::endl;
+            (*i)->dump(std::cerr);
         }
+    }
+}
 
-        ButtonState btnState = e->state();
+void
+NotationView::slotSetPointerPosition(timeT time)
+{
+    slotSetPointerPosition(time, m_playTracking);
+}
 
-        if (btnState & ControlButton) { // on ctrl-click, set cursor position
+void
+NotationView::slotSetPointerPosition(timeT time, bool scroll)
+{
+    Composition &comp = getDocument()->getComposition();
+    int barNo = comp.getBarNumber(time);
 
-            slotSetInsertCursorPosition(e->x(), (int)e->y());
+    int minCy = 0;
+    double cx = 0;
+    bool haveMinCy = false;
 
-        } else {
+    for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 
-            setActiveItem(0);
+        double layoutX = m_hlayout->getXForTimeByEvent(time);
+        Segment &seg = m_staffs[i]->getSegment();
 
-            timeT unknownTime = 0;
+        bool good = true;
 
-            if (e->type() == QEvent::MouseButtonDblClick) {
-                m_tool->handleMouseDoubleClick(unknownTime, height,
-                                               staffNo, e, el);
+        if (barNo >= m_hlayout->getLastVisibleBarOnStaff(*m_staffs[i])) {
+            if (seg.isRepeating() && time < seg.getRepeatEndTime()) {
+                timeT mappedTime =
+                    seg.getStartTime() +
+                    ((time - seg.getStartTime()) %
+                     (seg.getEndMarkerTime() - seg.getStartTime()));
+                layoutX = m_hlayout->getXForTimeByEvent(mappedTime);
             } else {
-                m_tool->handleMousePress(unknownTime, height,
-                                         staffNo, e, el);
+                good = false;
             }
+        } else if (barNo < m_hlayout->getFirstVisibleBarOnStaff(*m_staffs[i])) {
+            good = false;
         }
-    }
 
-    void NotationView::slotNonNotationItemPressed(QMouseEvent *e, QCanvasItem *it)
-    {
-        if (e->type() != QEvent::MouseButtonDblClick)
-            return ;
+        if (!good) {
 
-        Staff *staff = getStaffForCanvasCoords(e->x(), e->y());
-        if (!staff)
-            return ;
+            m_staffs[i]->hidePointer();
 
-        NOTATION_DEBUG << "NotationView::slotNonNotationItemPressed(doubly)" << endl;
-
-        if (dynamic_cast<QCanvasStaffNameSprite *>(it)) {
-
-            std::string name =
-                staff->getSegment().getComposition()->
-                getTrackById(staff->getSegment().getTrack())->getLabel();
-
-            bool ok = false;
-            QRegExpValidator validator(QRegExp(".*"), this); // empty is OK
-
-            QString newText = KLineEditDlg::getText(QString("Change staff name"),
-                                                    QString("Enter new staff name"),
-                                                    strtoqstr(name),
-                                                    &ok,
-                                                    this,
-                                                    &validator);
-
-            if (ok) {
-                addCommandToHistory(new RenameTrackCommand
-                                    (staff->getSegment().getComposition(),
-                                     staff->getSegment().getTrack(),
-                                     qstrtostr(newText)));
-
-                emit staffLabelChanged(staff->getSegment().getTrack(), newText);
-            }
-
-        } else if (dynamic_cast<QCanvasTimeSigSprite *>(it)) {
-
-            double layoutX = (dynamic_cast<QCanvasTimeSigSprite *>(it))->getLayoutX();
-            emit editTimeSignature(m_hlayout->getTimeForX(layoutX));
-        }
-    }
-
-    void NotationView::slotTextItemPressed(QMouseEvent *e, QCanvasItem *it)
-    {
-        if (e->type() != QEvent::MouseButtonDblClick)
-            return ;
-
-        if (it == m_title) {
-            emit editMetadata(strtoqstr(CompositionMetadataKeys::Title.getName()));
-        } else if (it == m_subtitle) {
-            emit editMetadata(strtoqstr(CompositionMetadataKeys::Subtitle.getName()));
-        } else if (it == m_composer) {
-            emit editMetadata(strtoqstr(CompositionMetadataKeys::Composer.getName()));
-        } else if (it == m_copyright) {
-            emit editMetadata(strtoqstr(CompositionMetadataKeys::Copyright.getName()));
         } else {
-            return ;
-        }
 
-        positionStaffs();
+            m_staffs[i]->setPointerPosition(layoutX);
+
+            int cy;
+            m_staffs[i]->getPointerPosition(cx, cy);
+
+            if (!haveMinCy || cy < minCy) {
+                minCy = cy;
+                haveMinCy = true;
+            }
+        }
     }
 
-    void NotationView::slotMouseMoved(QMouseEvent *e)
-    {
-        if (activeItem()) {
-            activeItem()->handleMouseMove(e);
-            updateView();
+    if (m_pageMode == LinedStaff::LinearMode) {
+        // be careful not to prevent user from scrolling up and down
+        haveMinCy = false;
+    }
+
+    if (scroll) {
+        getCanvasView()->slotScrollHoriz(int(cx));
+        if (haveMinCy) {
+            getCanvasView()->slotScrollVertToTop(minCy);
+        }
+    }
+
+    updateView();
+}
+
+void
+NotationView::slotUpdateRecordingSegment(Segment *segment,
+                                         timeT updateFrom)
+{
+    NOTATION_DEBUG << "NotationView::slotUpdateRecordingSegment: segment " << segment << ", updateFrom " << updateFrom << ", end time " << segment->getEndMarkerTime() << endl;
+    if (updateFrom >= segment->getEndMarkerTime())
+        return ;
+    for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+        if (&m_staffs[i]->getSegment() == segment) {
+            //	    refreshSegment(segment, updateFrom, segment->getEndMarkerTime());
+            refreshSegment(segment, 0, 0);
+        }
+    }
+    NOTATION_DEBUG << "NotationView::slotUpdateRecordingSegment: don't have segment " << segment << endl;
+}
+
+void
+NotationView::slotSetCurrentStaff(double x, int y)
+{
+    unsigned int staffNo;
+    for (staffNo = 0; staffNo < m_staffs.size(); ++staffNo) {
+        if (m_staffs[staffNo]->containsCanvasCoords(x, y))
+            break;
+    }
+
+    if (staffNo < m_staffs.size()) {
+        slotSetCurrentStaff(staffNo);
+    }
+}
+
+void
+NotationView::slotSetCurrentStaff(int staffNo)
+{
+    NOTATION_DEBUG << "NotationView::slotSetCurrentStaff(" << staffNo << ")" << endl;
+
+    if (m_currentStaff != staffNo) {
+
+        m_staffs[m_currentStaff]->setCurrent(false);
+
+        m_currentStaff = staffNo;
+
+        m_staffs[m_currentStaff]->setCurrent(true);
+
+        Segment *segment = &m_staffs[m_currentStaff]->getSegment();
+
+        m_chordNameRuler->setCurrentSegment(segment);
+        m_rawNoteRuler->setCurrentSegment(segment);
+        m_rawNoteRuler->repaint();
+        setControlRulersCurrentSegment();
+
+        updateView();
+
+        slotSetInsertCursorPosition(getInsertionTime(), false, false);
+    }
+}
+
+void
+NotationView::slotCurrentStaffUp()
+{
+    if (m_staffs.size() < 2)
+        return ;
+
+    Composition *composition =
+        m_staffs[m_currentStaff]->getSegment().getComposition();
+
+    Track *track = composition->
+        getTrackById(m_staffs[m_currentStaff]->getSegment().getTrack());
+    if (!track)
+        return ;
+
+    int position = track->getPosition();
+    Track *newTrack = 0;
+
+    while ((newTrack = composition->getTrackByPosition(--position))) {
+        for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+            if (m_staffs[i]->getSegment().getTrack() == newTrack->getId()) {
+                slotSetCurrentStaff(i);
+                return ;
+            }
+        }
+    }
+}
+
+void
+NotationView::slotCurrentStaffDown()
+{
+    if (m_staffs.size() < 2)
+        return ;
+
+    Composition *composition =
+        m_staffs[m_currentStaff]->getSegment().getComposition();
+
+    Track *track = composition->
+        getTrackById(m_staffs[m_currentStaff]->getSegment().getTrack());
+    if (!track)
+        return ;
+
+    int position = track->getPosition();
+    Track *newTrack = 0;
+
+    while ((newTrack = composition->getTrackByPosition(++position))) {
+        for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+            if (m_staffs[i]->getSegment().getTrack() == newTrack->getId()) {
+                slotSetCurrentStaff(i);
+                return ;
+            }
+        }
+    }
+}
+
+void
+NotationView::slotSetInsertCursorPosition(double x, int y, bool scroll,
+                                          bool updateNow)
+{
+    NOTATION_DEBUG << "NotationView::slotSetInsertCursorPosition: x " << x << ", y " << y << ", scroll " << scroll << ", now " << updateNow << endl;
+
+    slotSetCurrentStaff(x, y);
+
+    LinedStaff *staff = getLinedStaff(m_currentStaff);
+    Event *clefEvt, *keyEvt;
+    NotationElementList::iterator i =
+        staff->getElementUnderCanvasCoords(x, y, clefEvt, keyEvt);
+
+    if (i == staff->getViewElementList()->end()) {
+        slotSetInsertCursorPosition(staff->getSegment().getEndTime(), scroll,
+                                    updateNow);
+    } else {
+        slotSetInsertCursorPosition((*i)->getViewAbsoluteTime(), scroll,
+                                    updateNow);
+    }
+}
+
+void
+NotationView::slotSetInsertCursorPosition(timeT t, bool scroll, bool updateNow)
+{
+    NOTATION_DEBUG << "NotationView::slotSetInsertCursorPosition: time " << t << ", scroll " << scroll << ", now " << updateNow << endl;
+
+    m_insertionTime = t;
+    if (scroll) {
+        m_deferredCursorMove = CursorMoveAndMakeVisible;
+    } else {
+        m_deferredCursorMove = CursorMoveOnly;
+    }
+    if (updateNow)
+        doDeferredCursorMove();
+}
+
+void
+NotationView::slotSetInsertCursorAndRecentre(timeT t, double cx, int,
+                                             bool updateNow)
+{
+    NOTATION_DEBUG << "NotationView::slotSetInsertCursorAndRecentre: time " << t << ", cx " << cx << ", now " << updateNow << ", contentsx" << getCanvasView()->contentsX() << ", w " << getCanvasView()->visibleWidth() << endl;
+
+    m_insertionTime = t;
+
+    // We only do the scroll bit if cx is in the right two-thirds of
+    // the window
+
+    if (cx < (getCanvasView()->contentsX() +
+              getCanvasView()->visibleWidth() / 3)) {
+
+        m_deferredCursorMove = CursorMoveOnly;
+    } else {
+        m_deferredCursorMove = CursorMoveAndScrollToPosition;
+        m_deferredCursorScrollToX = cx;
+    }
+
+    if (updateNow)
+        doDeferredCursorMove();
+}
+
+void
+NotationView::doDeferredCursorMove()
+{
+    NOTATION_DEBUG << "NotationView::doDeferredCursorMove: m_deferredCursorMove == " << m_deferredCursorMove << endl;
+
+    if (m_deferredCursorMove == NoCursorMoveNeeded) {
+        return ;
+    }
+
+    DeferredCursorMoveType type = m_deferredCursorMove;
+    m_deferredCursorMove = NoCursorMoveNeeded;
+
+    timeT t = m_insertionTime;
+
+    if (m_staffs.size() == 0)
+        return ;
+    LinedStaff *staff = getCurrentLinedStaff();
+    Segment &segment = staff->getSegment();
+
+    if (t < segment.getStartTime()) {
+        t = segment.getStartTime();
+    }
+    if (t > segment.getEndTime()) {
+        t = segment.getEndTime();
+    }
+
+    NotationElementList::iterator i =
+        staff->getViewElementList()->findNearestTime(t);
+
+    while (i != staff->getViewElementList()->end() &&
+           !static_cast<NotationElement*>(*i)->getCanvasItem())
+        ++i;
+
+    if (i == staff->getViewElementList()->end()) {
+        //!!! ???
+        if (m_insertionTime >= staff->getSegment().getStartTime()) {
+            i = staff->getViewElementList()->begin();
+        }
+        m_insertionTime = staff->getSegment().getStartTime();
+    } else {
+        m_insertionTime = static_cast<NotationElement*>(*i)->getViewAbsoluteTime();
+    }
+
+    if (i == staff->getViewElementList()->end() ||
+        t == segment.getEndTime() ||
+        t == segment.getBarStartForTime(t)) {
+
+        staff->setInsertCursorPosition(*m_hlayout, t);
+
+        if (type == CursorMoveAndMakeVisible) {
+            double cx;
+            int cy;
+            staff->getInsertCursorPosition(cx, cy);
+            getCanvasView()->slotScrollHoriz(int(cx));
+            getCanvasView()->slotScrollVertSmallSteps(cy);
+        }
+
+    } else {
+
+        // prefer a note or rest, if there is one, to a non-spacing event
+        if (!static_cast<NotationElement*>(*i)->isNote() &&
+            !static_cast<NotationElement*>(*i)->isRest()) {
+            NotationElementList::iterator j = i;
+            while (j != staff->getViewElementList()->end()) {
+                if (static_cast<NotationElement*>(*j)->getViewAbsoluteTime() !=
+                    static_cast<NotationElement*>(*i)->getViewAbsoluteTime())
+                    break;
+                if (static_cast<NotationElement*>(*j)->getCanvasItem()) {
+                    if (static_cast<NotationElement*>(*j)->isNote() ||
+                        static_cast<NotationElement*>(*j)->isRest()) {
+                        i = j;
+                        break;
+                    }
+                }
+                ++j;
+            }
+        }
+
+        if (static_cast<NotationElement*>(*i)->getCanvasItem()) {
+
+            staff->setInsertCursorPosition
+                (static_cast<NotationElement*>(*i)->getCanvasX() - 2,
+                 int(static_cast<NotationElement*>(*i)->getCanvasY()));
+
+            if (type == CursorMoveAndMakeVisible) {
+                getCanvasView()->slotScrollHoriz
+                    (int(static_cast<NotationElement*>(*i)->getCanvasX()) - 4);
+            }
         } else {
-            int follow = m_tool->handleMouseMove(0, 0,  // unknown time and height
-                                                 e);
+            std::cerr << "WARNING: No canvas item for this notation element:";
+            (*i)->event()->dump(std::cerr);
+        }
+    }
 
-            if (getCanvasView()->isTimeForSmoothScroll()) {
+    if (type == CursorMoveAndScrollToPosition) {
 
-                if (follow & RosegardenCanvasView::FollowHorizontal) {
-                    getCanvasView()->slotScrollHorizSmallSteps(e->x());
-                }
+        // get current canvas x of insert cursor, which might not be
+        // what we just set
 
-                if (follow & RosegardenCanvasView::FollowVertical) {
-                    getCanvasView()->slotScrollVertSmallSteps(e->y());
-                }
+        double ccx = 0.0;
 
+        NotationElementList::iterator i =
+            staff->getViewElementList()->findTime(t);
+
+        if (i == staff->getViewElementList()->end()) {
+            if (i == staff->getViewElementList()->begin())
+                return ;
+            double lx, lwidth;
+            --i;
+            if (static_cast<NotationElement*>(*i)->getCanvasItem()) {
+                ccx = static_cast<NotationElement*>(*i)->getCanvasX();
+                static_cast<NotationElement*>(*i)->getLayoutAirspace(lx, lwidth);
+            } else {
+                std::cerr << "WARNING: No canvas item for this notation element*:";
+                (*i)->event()->dump(std::cerr);
+            }
+            ccx += lwidth;
+        } else {
+            if (static_cast<NotationElement*>(*i)->getCanvasItem()) {
+                ccx = static_cast<NotationElement*>(*i)->getCanvasX();
+            } else {
+                std::cerr << "WARNING: No canvas item for this notation element*:";
+                (*i)->event()->dump(std::cerr);
+            }
+        }
+
+        QScrollBar* hbar = getCanvasView()->horizontalScrollBar();
+        hbar->setValue(int(hbar->value() - (m_deferredCursorScrollToX - ccx)));
+    }
+
+    updateView();
+}
+
+void
+NotationView::slotJumpCursorToPlayback()
+{
+    slotSetInsertCursorPosition(getDocument()->getComposition().getPosition());
+}
+
+void
+NotationView::slotJumpPlaybackToCursor()
+{
+    emit jumpPlaybackTo(getInsertionTime());
+}
+
+void
+NotationView::slotToggleTracking()
+{
+    m_playTracking = !m_playTracking;
+}
+
+void NotationView::slotNoAccidental()
+{
+    emit changeAccidental(Accidentals::NoAccidental, false);
+}
+
+void NotationView::slotFollowAccidental()
+{
+    emit changeAccidental(Accidentals::NoAccidental, true);
+}
+
+void NotationView::slotSharp()
+{
+    emit changeAccidental(Accidentals::Sharp, false);
+}
+
+void NotationView::slotFlat()
+{
+    emit changeAccidental(Accidentals::Flat, false);
+}
+
+void NotationView::slotNatural()
+{
+    emit changeAccidental(Accidentals::Natural, false);
+}
+
+void NotationView::slotDoubleSharp()
+{
+    emit changeAccidental(Accidentals::DoubleSharp, false);
+}
+
+void NotationView::slotDoubleFlat()
+{
+    emit changeAccidental(Accidentals::DoubleFlat, false);
+}
+
+void NotationView::slotTrebleClef()
+{
+    m_currentNotePixmap->setPixmap
+        (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("clef-treble")));
+    setTool(m_toolBox->getTool(ClefInserter::ToolName));
+
+    dynamic_cast<ClefInserter*>(m_tool)->setClef(Clef::Treble);
+    setMenuStates();
+}
+
+void NotationView::slotTenorClef()
+{
+    m_currentNotePixmap->setPixmap
+        (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("clef-tenor")));
+    setTool(m_toolBox->getTool(ClefInserter::ToolName));
+
+    dynamic_cast<ClefInserter*>(m_tool)->setClef(Clef::Tenor);
+    setMenuStates();
+}
+
+void NotationView::slotAltoClef()
+{
+    m_currentNotePixmap->setPixmap
+        (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("clef-alto")));
+    setTool(m_toolBox->getTool(ClefInserter::ToolName));
+
+    dynamic_cast<ClefInserter*>(m_tool)->setClef(Clef::Alto);
+    setMenuStates();
+}
+
+void NotationView::slotBassClef()
+{
+    m_currentNotePixmap->setPixmap
+        (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("clef-bass")));
+    setTool(m_toolBox->getTool(ClefInserter::ToolName));
+
+    dynamic_cast<ClefInserter*>(m_tool)->setClef(Clef::Bass);
+    setMenuStates();
+}
+
+void NotationView::slotText()
+{
+    m_currentNotePixmap->setPixmap
+        (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("text")));
+    setTool(m_toolBox->getTool(TextInserter::ToolName));
+    setMenuStates();
+}
+
+void NotationView::slotFretboard()
+{
+    m_currentNotePixmap->setPixmap
+        (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("text")));
+    setTool(m_toolBox->getTool(FretboardInserter::ToolName));
+    setMenuStates();
+}
+
+void NotationView::slotEraseSelected()
+{
+    NOTATION_DEBUG << "NotationView::slotEraseSelected()" << endl;
+    setTool(m_toolBox->getTool(NotationEraser::ToolName));
+    setMenuStates();
+}
+
+void NotationView::slotSelectSelected()
+{
+    NOTATION_DEBUG << "NotationView::slotSelectSelected()" << endl;
+    setTool(m_toolBox->getTool(NotationSelector::ToolName));
+    setMenuStates();
+}
+
+void NotationView::slotLinearMode()
+{
+    setPageMode(LinedStaff::LinearMode);
+}
+
+void NotationView::slotContinuousPageMode()
+{
+    setPageMode(LinedStaff::ContinuousPageMode);
+}
+
+void NotationView::slotMultiPageMode()
+{
+    setPageMode(LinedStaff::MultiPageMode);
+}
+
+void NotationView::slotToggleChordsRuler()
+{
+    if (m_hlayout->isPageMode())
+        return ;
+    toggleWidget(m_chordNameRuler, "show_chords_ruler");
+}
+
+void NotationView::slotToggleRawNoteRuler()
+{
+    if (m_hlayout->isPageMode())
+        return ;
+    toggleWidget(m_rawNoteRuler, "show_raw_note_ruler");
+}
+
+void NotationView::slotToggleTempoRuler()
+{
+    if (m_hlayout->isPageMode())
+        return ;
+    toggleWidget(m_tempoRuler, "show_tempo_ruler");
+}
+
+void NotationView::slotToggleAnnotations()
+{
+    m_annotationsVisible = !m_annotationsVisible;
+    slotUpdateAnnotationsStatus();
+    //!!! use refresh mechanism
+    refreshSegment(0, 0, 0);
+}
+
+void NotationView::slotToggleLilyPondDirectives()
+{
+    m_lilypondDirectivesVisible = !m_lilypondDirectivesVisible;
+    slotUpdateLilyPondDirectivesStatus();
+    //!!! use refresh mechanism
+    refreshSegment(0, 0, 0);
+}
+
+void NotationView::slotEditLyrics()
+{
+    Staff *staff = getCurrentStaff();
+    Segment &segment = staff->getSegment();
+
+    LyricEditDialog dialog(this, &segment);
+
+    if (dialog.exec() == QDialog::Accepted) {
+
+        SetLyricsCommand *command = new SetLyricsCommand
+            (&segment, dialog.getLyricData());
+
+        addCommandToHistory(command);
+    }
+}
+
+void NotationView::slotItemPressed(int height, int staffNo,
+                                   QMouseEvent* e,
+                                   NotationElement* el)
+{
+    NOTATION_DEBUG << "NotationView::slotItemPressed(height = "
+                   << height << ", staffNo = " << staffNo
+                   << ")" << endl;
+
+    if (staffNo < 0 && el != 0) {
+        // We have an element but no staff -- that's because the
+        // element extended outside the staff region.  But we need
+        // to handle it properly, so we rather laboriously need to
+        // find out which staff it was.
+        for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+            if (m_staffs[i]->getViewElementList()->findSingle(el) !=
+                m_staffs[i]->getViewElementList()->end()) {
+                staffNo = m_staffs[i]->getId();
+                break;
             }
         }
     }
 
-    void NotationView::slotMouseReleased(QMouseEvent *e)
-    {
-        if (activeItem()) {
-            activeItem()->handleMouseRelease(e);
-            setActiveItem(0);
-            updateView();
-        } else
-            m_tool->handleMouseRelease(0, 0,  // unknown time and height
-                                       e);
-    }
+    ButtonState btnState = e->state();
 
-    void
-    NotationView::slotHoveredOverNoteChanged(const QString &noteName)
-    {
-        m_hoveredOverNoteName->setText(QString(" ") + noteName);
-    }
+    if (btnState & ControlButton) { // on ctrl-click, set cursor position
 
-    void
-    NotationView::slotHoveredOverAbsoluteTimeChanged(unsigned int time)
-    {
-        timeT t = time;
-        RealTime rt =
-            getDocument()->getComposition().getElapsedRealTime(t);
-        long ms = rt.msec();
+        slotSetInsertCursorPosition(e->x(), (int)e->y());
 
-        int bar, beat, fraction, remainder;
-        getDocument()->getComposition().getMusicalTimeForAbsoluteTime
-            (t, bar, beat, fraction, remainder);
+    } else {
 
-        //    QString message;
-        //    QString format("%ld (%ld.%03lds)");
-        //    format = i18n("Time: %1").arg(format);
-        //    message.sprintf(format, t, rt.sec, ms);
+        setActiveItem(0);
 
-        QString message = i18n("Time: %1 (%2.%3s)")
-            .arg(QString("%1-%2-%3-%4")
-                 .arg(QString("%1").arg(bar + 1).rightJustify(3, '0'))
-                 .arg(QString("%1").arg(beat).rightJustify(2, '0'))
-                 .arg(QString("%1").arg(fraction).rightJustify(2, '0'))
-                 .arg(QString("%1").arg(remainder).rightJustify(2, '0')))
-            .arg(rt.sec)
-            .arg(QString("%1").arg(ms).rightJustify(3, '0'));
+        timeT unknownTime = 0;
 
-        m_hoveredOverAbsoluteTime->setText(message);
-    }
-
-    void
-    NotationView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn)
-    {
-        //!!! Problematic.  Ideally we wouldn't insert events into windows
-        //that weren't actually visible, otherwise all hell could break
-        //loose (metaphorically speaking, I should probably add).  I did
-        //think of checking isActiveWindow() and returning if the current
-        //window wasn't active, but that will prevent anyone from
-        //step-recording from e.g. vkeybd, which cannot be used without
-        //losing focus (and thus active-ness) from the Rosegarden window.
-
-        //!!! I know -- we'll keep track of which edit view (or main view,
-        //or mixer, etc) is active, and we'll only allow insertion into
-        //the most recently activated.  How about that?
-
-        KToggleAction *action = dynamic_cast<KToggleAction *>
-            (actionCollection()->action("toggle_step_by_step"));
-        if (!action) {
-            NOTATION_DEBUG << "WARNING: No toggle_step_by_step action" << endl;
-            return ;
+        if (e->type() == QEvent::MouseButtonDblClick) {
+            m_tool->handleMouseDoubleClick(unknownTime, height,
+                                           staffNo, e, el);
+        } else {
+            m_tool->handleMousePress(unknownTime, height,
+                                     staffNo, e, el);
         }
-        if (!action->isChecked())
-            return ;
+    }
+}
 
-        Segment &segment = m_staffs[m_currentStaff]->getSegment();
+void NotationView::slotNonNotationItemPressed(QMouseEvent *e, QCanvasItem *it)
+{
+    if (e->type() != QEvent::MouseButtonDblClick)
+        return ;
 
-        NoteInserter *noteInserter = dynamic_cast<NoteInserter *>(m_tool);
-        if (!noteInserter) {
-            static bool showingError = false;
-            if (showingError)
-                return ;
-            showingError = true;
-            KMessageBox::sorry(this, i18n("Can't insert note: No note duration selected"));
-            showingError = false;
-            return ;
+    Staff *staff = getStaffForCanvasCoords(e->x(), e->y());
+    if (!staff)
+        return ;
+
+    NOTATION_DEBUG << "NotationView::slotNonNotationItemPressed(doubly)" << endl;
+
+    if (dynamic_cast<QCanvasStaffNameSprite *>(it)) {
+
+        std::string name =
+            staff->getSegment().getComposition()->
+            getTrackById(staff->getSegment().getTrack())->getLabel();
+
+        bool ok = false;
+        QRegExpValidator validator(QRegExp(".*"), this); // empty is OK
+
+        QString newText = KLineEditDlg::getText(QString("Change staff name"),
+                                                QString("Enter new staff name"),
+                                                strtoqstr(name),
+                                                &ok,
+                                                this,
+                                                &validator);
+
+        if (ok) {
+            addCommandToHistory(new RenameTrackCommand
+                                (staff->getSegment().getComposition(),
+                                 staff->getSegment().getTrack(),
+                                 qstrtostr(newText)));
+
+            emit staffLabelChanged(staff->getSegment().getTrack(), newText);
         }
 
-        if (m_inPaintEvent) {
-            NOTATION_DEBUG << "NotationView::slotInsertableNoteEventReceived: in paint event already" << endl;
-            if (noteOn) {
-                m_pendingInsertableNotes.push_back(std::pair<int, int>(pitch, velocity));
+    } else if (dynamic_cast<QCanvasTimeSigSprite *>(it)) {
+
+        double layoutX = (dynamic_cast<QCanvasTimeSigSprite *>(it))->getLayoutX();
+        emit editTimeSignature(m_hlayout->getTimeForX(layoutX));
+    }
+}
+
+void NotationView::slotTextItemPressed(QMouseEvent *e, QCanvasItem *it)
+{
+    if (e->type() != QEvent::MouseButtonDblClick)
+        return ;
+
+    if (it == m_title) {
+        emit editMetadata(strtoqstr(CompositionMetadataKeys::Title.getName()));
+    } else if (it == m_subtitle) {
+        emit editMetadata(strtoqstr(CompositionMetadataKeys::Subtitle.getName()));
+    } else if (it == m_composer) {
+        emit editMetadata(strtoqstr(CompositionMetadataKeys::Composer.getName()));
+    } else if (it == m_copyright) {
+        emit editMetadata(strtoqstr(CompositionMetadataKeys::Copyright.getName()));
+    } else {
+        return ;
+    }
+
+    positionStaffs();
+}
+
+void NotationView::slotMouseMoved(QMouseEvent *e)
+{
+    if (activeItem()) {
+        activeItem()->handleMouseMove(e);
+        updateView();
+    } else {
+        int follow = m_tool->handleMouseMove(0, 0,  // unknown time and height
+                                             e);
+
+        if (getCanvasView()->isTimeForSmoothScroll()) {
+
+            if (follow & RosegardenCanvasView::FollowHorizontal) {
+                getCanvasView()->slotScrollHorizSmallSteps(e->x());
             }
-            return ;
+
+            if (follow & RosegardenCanvasView::FollowVertical) {
+                getCanvasView()->slotScrollVertSmallSteps(e->y());
+            }
+
         }
+    }
+}
 
-        // If the segment is transposed, we want to take that into
-        // account.  But the note has already been played back to the user
-        // at its untransposed pitch, because that's done by the MIDI THRU
-        // code in the sequencer which has no way to know whether a note
-        // was intended for step recording.  So rather than adjust the
-        // pitch for playback according to the transpose setting, we have
-        // to adjust the stored pitch in the opposite direction.
+void NotationView::slotMouseReleased(QMouseEvent *e)
+{
+    if (activeItem()) {
+        activeItem()->handleMouseRelease(e);
+        setActiveItem(0);
+        updateView();
+    } else
+        m_tool->handleMouseRelease(0, 0,  // unknown time and height
+                                   e);
+}
 
-        pitch -= segment.getTranspose();
+void
+NotationView::slotHoveredOverNoteChanged(const QString &noteName)
+{
+    m_hoveredOverNoteName->setText(QString(" ") + noteName);
+}
 
-        //    KTmpStatusMsg msg(i18n("Inserting note"), this);
+void
+NotationView::slotHoveredOverAbsoluteTimeChanged(unsigned int time)
+{
+    timeT t = time;
+    RealTime rt =
+        getDocument()->getComposition().getElapsedRealTime(t);
+    long ms = rt.msec();
 
-        // We need to ensure that multiple notes hit at once come out as
-        // chords, without imposing the interpretation that overlapping
-        // notes are always chords and without getting too involved with
-        // the actual absolute times of the notes (this is still step
-        // editing, not proper recording).
+    int bar, beat, fraction, remainder;
+    getDocument()->getComposition().getMusicalTimeForAbsoluteTime
+        (t, bar, beat, fraction, remainder);
 
-        // First, if we're in chord mode, there's no problem.
+    //    QString message;
+    //    QString format("%ld (%ld.%03lds)");
+    //    format = i18n("Time: %1").arg(format);
+    //    message.sprintf(format, t, rt.sec, ms);
 
-        static int numberOfNotesOn = 0;
-        static timeT insertionTime = getInsertionTime();
-        static time_t lastInsertionTime = 0;
+    QString message = i18n("Time: %1 (%2.%3s)")
+        .arg(QString("%1-%2-%3-%4")
+             .arg(QString("%1").arg(bar + 1).rightJustify(3, '0'))
+             .arg(QString("%1").arg(beat).rightJustify(2, '0'))
+             .arg(QString("%1").arg(fraction).rightJustify(2, '0'))
+             .arg(QString("%1").arg(remainder).rightJustify(2, '0')))
+        .arg(rt.sec)
+        .arg(QString("%1").arg(ms).rightJustify(3, '0'));
 
-        if (isInChordMode()) {
-            if (!noteOn)
-                return ;
-            NOTATION_DEBUG << "Inserting note in chord at pitch " << pitch << endl;
-            noteInserter->insertNote(segment, getInsertionTime(), pitch,
+    m_hoveredOverAbsoluteTime->setText(message);
+}
+
+void
+NotationView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn)
+{
+    //!!! Problematic.  Ideally we wouldn't insert events into windows
+    //that weren't actually visible, otherwise all hell could break
+    //loose (metaphorically speaking, I should probably add).  I did
+    //think of checking isActiveWindow() and returning if the current
+    //window wasn't active, but that will prevent anyone from
+    //step-recording from e.g. vkeybd, which cannot be used without
+    //losing focus (and thus active-ness) from the Rosegarden window.
+
+    //!!! I know -- we'll keep track of which edit view (or main view,
+    //or mixer, etc) is active, and we'll only allow insertion into
+    //the most recently activated.  How about that?
+
+    KToggleAction *action = dynamic_cast<KToggleAction *>
+        (actionCollection()->action("toggle_step_by_step"));
+    if (!action) {
+        NOTATION_DEBUG << "WARNING: No toggle_step_by_step action" << endl;
+        return ;
+    }
+    if (!action->isChecked())
+        return ;
+
+    Segment &segment = m_staffs[m_currentStaff]->getSegment();
+
+    NoteInserter *noteInserter = dynamic_cast<NoteInserter *>(m_tool);
+    if (!noteInserter) {
+        static bool showingError = false;
+        if (showingError)
+            return ;
+        showingError = true;
+        KMessageBox::sorry(this, i18n("Can't insert note: No note duration selected"));
+        showingError = false;
+        return ;
+    }
+
+    if (m_inPaintEvent) {
+        NOTATION_DEBUG << "NotationView::slotInsertableNoteEventReceived: in paint event already" << endl;
+        if (noteOn) {
+            m_pendingInsertableNotes.push_back(std::pair<int, int>(pitch, velocity));
+        }
+        return ;
+    }
+
+    // If the segment is transposed, we want to take that into
+    // account.  But the note has already been played back to the user
+    // at its untransposed pitch, because that's done by the MIDI THRU
+    // code in the sequencer which has no way to know whether a note
+    // was intended for step recording.  So rather than adjust the
+    // pitch for playback according to the transpose setting, we have
+    // to adjust the stored pitch in the opposite direction.
+
+    pitch -= segment.getTranspose();
+
+    //    KTmpStatusMsg msg(i18n("Inserting note"), this);
+
+    // We need to ensure that multiple notes hit at once come out as
+    // chords, without imposing the interpretation that overlapping
+    // notes are always chords and without getting too involved with
+    // the actual absolute times of the notes (this is still step
+    // editing, not proper recording).
+
+    // First, if we're in chord mode, there's no problem.
+
+    static int numberOfNotesOn = 0;
+    static timeT insertionTime = getInsertionTime();
+    static time_t lastInsertionTime = 0;
+
+    if (isInChordMode()) {
+        if (!noteOn)
+            return ;
+        NOTATION_DEBUG << "Inserting note in chord at pitch " << pitch << endl;
+        noteInserter->insertNote(segment, getInsertionTime(), pitch,
+                                 Accidentals::NoAccidental,
+                                 true);
+
+    } else {
+
+        if (!noteOn) {
+            numberOfNotesOn--;
+        } else if (noteOn) {
+            // Rules:
+            //
+            // * If no other note event has turned up within half a
+            //   second, insert this note and advance.
+            //
+            // * Relatedly, if this note is within half a second of
+            //   the previous one, they're chords.  Insert the previous
+            //   one, don't advance, and use the same rules for this.
+            //
+            // * If a note event turns up before that time has elapsed,
+            //   we need to wait for the note-off events: if the second
+            //   note happened less than half way through the first,
+            //   it's a chord.
+            //
+            // We haven't implemented these yet... For now:
+            //
+            // Rules (hjj):
+            //
+            // * The overlapping notes are always included in to a chord.
+            //   This is the most convenient for step inserting of chords.
+            //
+            // * The timer resets the numberOfNotesOn, if noteOff signals were
+            //   drop out for some reason (which has not been encountered yet).
+
+            time_t now;
+            time (&now);
+            double elapsed = difftime(now, lastInsertionTime);
+            time (&lastInsertionTime);
+
+            if (numberOfNotesOn <= 0 || elapsed > 10.0 ) {
+                numberOfNotesOn = 0;
+                insertionTime = getInsertionTime();
+            }
+            numberOfNotesOn++;
+
+            noteInserter->insertNote(segment, insertionTime, pitch,
                                      Accidentals::NoAccidental,
                                      true);
+        }
+    }
+}
 
-        } else {
+void
+NotationView::slotInsertableNoteOnReceived(int pitch, int velocity)
+{
+    NOTATION_DEBUG << "NotationView::slotInsertableNoteOnReceived: " << pitch << endl;
+    slotInsertableNoteEventReceived(pitch, velocity, true);
+}
 
-            if (!noteOn) {
-                numberOfNotesOn--;
-            } else if (noteOn) {
-                // Rules:
-                //
-                // * If no other note event has turned up within half a
-                //   second, insert this note and advance.
-                //
-                // * Relatedly, if this note is within half a second of
-                //   the previous one, they're chords.  Insert the previous
-                //   one, don't advance, and use the same rules for this.
-                //
-                // * If a note event turns up before that time has elapsed,
-                //   we need to wait for the note-off events: if the second
-                //   note happened less than half way through the first,
-                //   it's a chord.
-                //
-                // We haven't implemented these yet... For now:
-                //
-                // Rules (hjj):
-                //
-                // * The overlapping notes are always included in to a chord.
-                //   This is the most convenient for step inserting of chords.
-                //
-                // * The timer resets the numberOfNotesOn, if noteOff signals were
-                //   drop out for some reason (which has not been encountered yet).
+void
+NotationView::slotInsertableNoteOffReceived(int pitch, int velocity)
+{
+    NOTATION_DEBUG << "NotationView::slotInsertableNoteOffReceived: " << pitch << endl;
+    slotInsertableNoteEventReceived(pitch, velocity, false);
+}
 
-                time_t now;
-                time (&now);
-                double elapsed = difftime(now, lastInsertionTime);
-                time (&lastInsertionTime);
+void
+NotationView::slotInsertableTimerElapsed()
+{}
 
-                if (numberOfNotesOn <= 0 || elapsed > 10.0 ) {
-                    numberOfNotesOn = 0;
-                    insertionTime = getInsertionTime();
-                }
-                numberOfNotesOn++;
+void
+NotationView::slotToggleStepByStep()
+{
+    KToggleAction *action = dynamic_cast<KToggleAction *>
+        (actionCollection()->action("toggle_step_by_step"));
+    if (!action) {
+        NOTATION_DEBUG << "WARNING: No toggle_step_by_step action" << endl;
+        return ;
+    }
+    if (action->isChecked()) { // after toggling, that is
+        emit stepByStepTargetRequested(this);
+    } else {
+        emit stepByStepTargetRequested(0);
+    }
+}
 
-                noteInserter->insertNote(segment, insertionTime, pitch,
-                                         Accidentals::NoAccidental,
-                                         true);
-            }
+void
+NotationView::slotStepByStepTargetRequested(QObject *obj)
+{
+    KToggleAction *action = dynamic_cast<KToggleAction *>
+        (actionCollection()->action("toggle_step_by_step"));
+    if (!action) {
+        NOTATION_DEBUG << "WARNING: No toggle_step_by_step action" << endl;
+        return ;
+    }
+    action->setChecked(obj == this);
+}
+
+void
+NotationView::slotCheckRendered(double cx0, double cx1)
+{
+    //    NOTATION_DEBUG << "slotCheckRendered(" << cx0 << "," << cx1 << ")" << endl;
+
+    bool something = false;
+
+    for (size_t i = 0; i < m_staffs.size(); ++i) {
+
+        LinedStaff *staff = m_staffs[i];
+
+        LinedStaff::LinedStaffCoords cc0 = staff->getLayoutCoordsForCanvasCoords
+            (cx0, 0);
+
+        LinedStaff::LinedStaffCoords cc1 = staff->getLayoutCoordsForCanvasCoords
+            (cx1, staff->getTotalHeight() + staff->getY());
+
+        timeT t0 = m_hlayout->getTimeForX(cc0.first);
+        timeT t1 = m_hlayout->getTimeForX(cc1.first);
+
+        if (dynamic_cast<NotationStaff *>(staff)->checkRendered(t0, t1)) {
+            something = true; //!!!
         }
     }
 
-    void
-    NotationView::slotInsertableNoteOnReceived(int pitch, int velocity)
-    {
-        NOTATION_DEBUG << "NotationView::slotInsertableNoteOnReceived: " << pitch << endl;
-        slotInsertableNoteEventReceived(pitch, velocity, true);
+    if (something) {
+        emit renderComplete();
+        if (m_renderTimer)
+            delete m_renderTimer;
+        m_renderTimer = new QTimer(this);
+        connect(m_renderTimer, SIGNAL(timeout()), SLOT(slotRenderSomething()));
+        m_renderTimer->start(0, true);
     }
 
-    void
-    NotationView::slotInsertableNoteOffReceived(int pitch, int velocity)
-    {
-        NOTATION_DEBUG << "NotationView::slotInsertableNoteOffReceived: " << pitch << endl;
-        slotInsertableNoteEventReceived(pitch, velocity, false);
+    if (m_deferredCursorMove != NoCursorMoveNeeded)
+        doDeferredCursorMove();
+}
+
+void
+NotationView::slotRenderSomething()
+{
+    delete m_renderTimer;
+    m_renderTimer = 0;
+    static clock_t lastWork = 0;
+
+    clock_t now = clock();
+    long elapsed = ((now - lastWork) * 1000 / CLOCKS_PER_SEC);
+    if (elapsed < 70) {
+        m_renderTimer = new QTimer(this);
+        connect(m_renderTimer, SIGNAL(timeout()), SLOT(slotRenderSomething()));
+        m_renderTimer->start(0, true);
+        return ;
     }
+    lastWork = now;
 
-    void
-    NotationView::slotInsertableTimerElapsed()
-    {}
+    for (size_t i = 0; i < m_staffs.size(); ++i) {
 
-    void
-    NotationView::slotToggleStepByStep()
-    {
-        KToggleAction *action = dynamic_cast<KToggleAction *>
-            (actionCollection()->action("toggle_step_by_step"));
-        if (!action) {
-            NOTATION_DEBUG << "WARNING: No toggle_step_by_step action" << endl;
-            return ;
-        }
-        if (action->isChecked()) { // after toggling, that is
-            emit stepByStepTargetRequested(this);
-        } else {
-            emit stepByStepTargetRequested(0);
-        }
-    }
-
-    void
-    NotationView::slotStepByStepTargetRequested(QObject *obj)
-    {
-        KToggleAction *action = dynamic_cast<KToggleAction *>
-            (actionCollection()->action("toggle_step_by_step"));
-        if (!action) {
-            NOTATION_DEBUG << "WARNING: No toggle_step_by_step action" << endl;
-            return ;
-        }
-        action->setChecked(obj == this);
-    }
-
-    void
-    NotationView::slotCheckRendered(double cx0, double cx1)
-    {
-        //    NOTATION_DEBUG << "slotCheckRendered(" << cx0 << "," << cx1 << ")" << endl;
-
-        bool something = false;
-
-        for (size_t i = 0; i < m_staffs.size(); ++i) {
-
-            LinedStaff *staff = m_staffs[i];
-
-            LinedStaff::LinedStaffCoords cc0 = staff->getLayoutCoordsForCanvasCoords
-                (cx0, 0);
-
-            LinedStaff::LinedStaffCoords cc1 = staff->getLayoutCoordsForCanvasCoords
-                (cx1, staff->getTotalHeight() + staff->getY());
-
-            timeT t0 = m_hlayout->getTimeForX(cc0.first);
-            timeT t1 = m_hlayout->getTimeForX(cc1.first);
-
-            if (dynamic_cast<NotationStaff *>(staff)->checkRendered(t0, t1)) {
-                something = true; //!!!
-            }
-        }
-
-        if (something) {
-            emit renderComplete();
-            if (m_renderTimer)
-                delete m_renderTimer;
-            m_renderTimer = new QTimer(this);
-            connect(m_renderTimer, SIGNAL(timeout()), SLOT(slotRenderSomething()));
-            m_renderTimer->start(0, true);
-        }
-
-        if (m_deferredCursorMove != NoCursorMoveNeeded)
-            doDeferredCursorMove();
-    }
-
-    void
-    NotationView::slotRenderSomething()
-    {
-        delete m_renderTimer;
-        m_renderTimer = 0;
-        static clock_t lastWork = 0;
-
-        clock_t now = clock();
-        long elapsed = ((now - lastWork) * 1000 / CLOCKS_PER_SEC);
-        if (elapsed < 70) {
+        if (m_staffs[i]->doRenderWork(m_staffs[i]->getSegment().getStartTime(),
+                                      m_staffs[i]->getSegment().getEndTime())) {
             m_renderTimer = new QTimer(this);
             connect(m_renderTimer, SIGNAL(timeout()), SLOT(slotRenderSomething()));
             m_renderTimer->start(0, true);
             return ;
         }
-        lastWork = now;
-
-        for (size_t i = 0; i < m_staffs.size(); ++i) {
-
-            if (m_staffs[i]->doRenderWork(m_staffs[i]->getSegment().getStartTime(),
-                                          m_staffs[i]->getSegment().getEndTime())) {
-                m_renderTimer = new QTimer(this);
-                connect(m_renderTimer, SIGNAL(timeout()), SLOT(slotRenderSomething()));
-                m_renderTimer->start(0, true);
-                return ;
-            }
-        }
-
-        PixmapArrayGC::deleteAll();
-        NOTATION_DEBUG << "NotationView::slotRenderSomething: updating thumbnails" << endl;
-        updateThumbnails(true);
     }
+
+    PixmapArrayGC::deleteAll();
+    NOTATION_DEBUG << "NotationView::slotRenderSomething: updating thumbnails" << endl;
+    updateThumbnails(true);
+}
 
 }

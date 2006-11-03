@@ -921,7 +921,7 @@ protected:
      * and the time signature, clef and key at that time.
      */
     virtual timeT getInsertionTime(Clef &clef,
-                                               Key &key);
+                                   Rosegarden::Key &key);
 
     void doDeferredCursorMove();
 
