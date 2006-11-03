@@ -33,4 +33,34 @@
 
 namespace Rosegarden
 {
+    
+BasicSelectionCommand::BasicSelectionCommand(const QString &name,
+                         EventSelection &selection,
+                         bool bruteForceRedo) :
+    BasicCommand(name,
+         selection.getSegment(),
+         selection.getStartTime(),
+         selection.getEndTime(),
+         bruteForceRedo)
+{
+    // nothing
+}
+
+BasicSelectionCommand::BasicSelectionCommand(const QString &name,
+                         Segment &segment,
+                         bool bruteForceRedo) :
+    BasicCommand(name,
+         segment,
+         segment.getStartTime(),
+         segment.getEndMarkerTime(),
+         bruteForceRedo)
+{
+    // nothing
+}
+
+BasicSelectionCommand::~BasicSelectionCommand()
+{
+    // nothing
+}
+    
 }

@@ -179,4 +179,116 @@ GUIPalette::GUIPalette()
     m_defaultsMap[RecordFaderOutline] = QColor(0, 250, 225, QColor::Hsv);
 }
 
+const char* const GUIPalette::ColoursConfigGroup = "coloursconfiggroup";
+
+const char* const GUIPalette::ActiveRecordTrack = "activerecordtrack";
+
+
+const char* const GUIPalette::SegmentCanvas = "segmentcanvas";
+const char* const GUIPalette::SegmentBorder = "segmentborder";
+const char* const GUIPalette::RecordingInternalSegmentBlock = "recordinginternalsegmentblock";
+const char* const GUIPalette::RecordingAudioSegmentBlock = "recordingaudiosegmentblock";
+const char* const GUIPalette::RecordingSegmentBorder = "recordingsegmentborder";
+
+const char* const GUIPalette::RepeatSegmentBorder = "repeatsegmentborder";
+
+const char* const GUIPalette::SegmentAudioPreview = "segmentaudiopreview";
+const char* const GUIPalette::SegmentInternalPreview = "segmentinternalpreview";
+const char* const GUIPalette::SegmentLabel = "segmentlabel";
+const char* const GUIPalette::SegmentSplitLine = "segmentsplitline";
+
+const char* const GUIPalette::MatrixElementBorder = "matrixelementborder";
+const char* const GUIPalette::MatrixElementBlock = "matrixelementblock";
+
+const char* const GUIPalette::LoopRulerBackground = "looprulerbackground";
+const char* const GUIPalette::LoopRulerForeground = "looprulerforeground";
+const char* const GUIPalette::LoopHighlight = "loophighlight";
+
+const char* const GUIPalette::TempoBase = "tempobase";
+
+const char* const GUIPalette::TextRulerBackground = "textrulerbackground";
+const char* const GUIPalette::TextRulerForeground = "textrulerforeground";
+
+const char* const GUIPalette::ChordNameRulerBackground = "chordnamerulerbackground";
+const char* const GUIPalette::ChordNameRulerForeground = "chordnamerulerforeground";
+
+const char* const GUIPalette::RawNoteRulerBackground = "rawnoterulerbackground";
+const char* const GUIPalette::RawNoteRulerForeground = "rawnoterulerforeground";
+
+const char* const GUIPalette::LevelMeterGreen = "levelmetergreen";
+const char* const GUIPalette::LevelMeterOrange = "levelmeterorange";
+const char* const GUIPalette::LevelMeterRed = "levelmeterred";
+
+const char* const GUIPalette::LevelMeterSolidGreen = "levelmetersolidgreen";
+const char* const GUIPalette::LevelMeterSolidOrange = "levelmetersolidorange";
+const char* const GUIPalette::LevelMeterSolidRed = "levelmetersolidred";
+
+const char* const GUIPalette::BarLine = "barline";
+const char* const GUIPalette::BarLineIncorrect = "barlineincorrect";
+const char* const GUIPalette::BeatLine = "beatline";
+const char* const GUIPalette::SubBeatLine = "subbeatline";
+const char* const GUIPalette::StaffConnectingLine = "staffconnectingline";
+const char* const GUIPalette::StaffConnectingTerminatingLine = "staffconnectingterminatingline";
+
+const char* const GUIPalette::Pointer = "pointer";
+const char* const GUIPalette::PointerRuler = "pointerruler";
+
+const char* const GUIPalette::InsertCursor = "insertcursor";
+const char* const GUIPalette::InsertCursorRuler = "insertcursorruler";
+
+const char* const GUIPalette::MovementGuide = "movementguide";
+const char* const GUIPalette::SelectionRectangle = "selectionrectangle";
+const char* const GUIPalette::SelectedElement = "selectedelement";
+
+const int GUIPalette::SelectedElementHue = 225;
+const int GUIPalette::SelectedElementMinValue = 220;
+const int GUIPalette::HighlightedElementHue = 25;
+const int GUIPalette::HighlightedElementMinValue = 220;
+const int GUIPalette::QuantizedNoteHue = 69;
+const int GUIPalette::QuantizedNoteMinValue = 140;
+const int GUIPalette::TriggerNoteHue = 4;
+const int GUIPalette::TriggerNoteMinValue = 140;
+const int GUIPalette::OutRangeNoteHue = 0;
+const int GUIPalette::OutRangeNoteMinValue = 200;
+
+const char* const GUIPalette::TextAnnotationBackground = "textannotationbackground";
+
+const char* const GUIPalette::TextLilypondDirectiveBackground = "textlilyponddirectivebackground";
+
+const char* const GUIPalette::AudioCountdownBackground = "audiocountdownbackground";
+const char* const GUIPalette::AudioCountdownForeground = "audiocountdownforeground";
+
+const char* const GUIPalette::RotaryFloatBackground = "rotaryfloatbackground";
+const char* const GUIPalette::RotaryFloatForeground = "rotaryfloatforeground";
+
+const char* const GUIPalette::RotaryPastelBlue = "rotarypastelblue";
+const char* const GUIPalette::RotaryPastelRed = "rotarypastelred";
+const char* const GUIPalette::RotaryPastelGreen = "rotarypastelgreen";
+const char* const GUIPalette::RotaryPastelOrange = "rotarypastelorange";
+const char* const GUIPalette::RotaryPastelYellow = "rotarypastelyellow";
+
+const char* const GUIPalette::MatrixKeyboardFocus = "matrixkeyboardfocus";
+
+const char* const GUIPalette::RotaryPlugin = "rotaryplugin";
+
+const char* const GUIPalette::RotaryMeter = "rotarymeter";
+
+const char* const GUIPalette::MarkerBackground = "markerbackground";
+
+const char* const GUIPalette::MuteTrackLED = "mutetrackled";
+const char* const GUIPalette::RecordMIDITrackLED = "recordmiditrackled";
+const char* const GUIPalette::RecordAudioTrackLED = "recordaudiotrackled";
+
+const char* const GUIPalette::PlaybackFaderOutline = "playbackfaderoutline";
+const char* const GUIPalette::RecordFaderOutline = "recordfaderoutline";
+
+ 
+GUIPalette* GUIPalette::m_instance = 0;
+
+// defines which index in the document's colourmap should be used as the color
+// when creating new audio segments from recordings, or inserting from the
+// audio file manager (presumes a file derived from the updated autoload.rg
+// that shipped along with this change)
+const int GUIPalette::AudioDefaultIndex = 1;
+
 }

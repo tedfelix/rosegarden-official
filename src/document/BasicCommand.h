@@ -29,7 +29,7 @@
 #include "base/Segment.h"
 #include <kcommand.h>
 #include "base/Event.h"
-
+#include "misc/Debug.h"
 
 class QString;
 

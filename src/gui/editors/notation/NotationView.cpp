@@ -6864,3 +6864,4 @@ NotationView::slotRenderSomething()
 }
 
 }
+#include "NotationView.moc"

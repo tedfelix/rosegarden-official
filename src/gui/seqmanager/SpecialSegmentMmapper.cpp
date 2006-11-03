@@ -49,3 +49,4 @@ QString SpecialSegmentMmapper::createFileName(QString baseFileName)
 }
 
 }
+#include "SpecialSegmentMmapper.moc"

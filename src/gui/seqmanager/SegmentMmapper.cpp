@@ -528,3 +528,4 @@ SegmentMmapper::mergeTriggerSegment(Segment **target,
 }
 
 }
+#include "SegmentMmapper.moc"

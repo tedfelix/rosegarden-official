@@ -40,3 +40,4 @@ MatrixToolBox::MatrixToolBox(MatrixView* parent)
 {}
 
 }
+#include "MatrixToolBox.moc"

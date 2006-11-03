@@ -42,3 +42,4 @@ NotationToolBox::NotationToolBox(NotationView *parent)
 }
 
 }
+#include "NotationToolBox.moc"

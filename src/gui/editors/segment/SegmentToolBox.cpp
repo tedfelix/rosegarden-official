@@ -42,3 +42,4 @@ SegmentToolBox::SegmentToolBox(CompositionView* parent, RosegardenGUIDoc* doc)
 {}
 
 }
+#include "SegmentToolBox.moc"

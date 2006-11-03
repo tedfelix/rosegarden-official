@@ -40,25 +40,6 @@
 namespace Rosegarden
 {
 
-SystemFont::Strategy
-NoteFontMap::getStrategy(int, CharName charName)
-const
-{
-    SymbolDataMap::const_iterator i = m_data.find(charName);
-    if (i == m_data.end())
-        return SystemFont::PreferGlyphs;
-
-    int fontId = i->second.getFontId();
-    SystemFontStrategyMap::const_iterator si =
-        m_systemFontStrategies.find(fontId);
-
-    if (si != m_systemFontStrategies.end()) {
-        return si->second;
-    }
-
-    return SystemFont::PreferGlyphs;
-}
-
 SystemFont *
 SystemFont::loadSystemFont(const SystemFontSpec &spec)
 {

@@ -47,6 +47,7 @@ class BaseTool;
  */
 class BaseToolBox : public QObject
 {
+    Q_OBJECT
 public:
     BaseToolBox(QWidget* parent);
 

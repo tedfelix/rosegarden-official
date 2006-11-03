@@ -43,3 +43,4 @@ BaseToolBox::BaseToolBox(QWidget* parent)
 }
 
 }
+#include "BaseToolBox.moc"
