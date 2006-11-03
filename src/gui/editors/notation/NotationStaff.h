@@ -259,7 +259,7 @@ public:
      */
     virtual void getClefAndKeyAtCanvasCoords(double x, int y,
                                              Clef &clef,
-                                             Key &key) const;
+                                             ::Rosegarden::Key &key) const;
 
     /**
      * Return the note name (C4, Bb3, whatever) corresponding to the
@@ -350,7 +350,7 @@ protected:
      */
     virtual void renderSingleElement(ViewElementList::iterator &,
                                      const Clef &,
-                                     const Key &,
+                                     const ::Rosegarden::Key &,
                                      bool selected);
 
     bool isDirectlyPrintable(ViewElement *elt);
@@ -442,7 +442,7 @@ protected:
     typedef std::pair<int, Clef> ClefChange;
     FastVector<ClefChange> m_clefChanges;
 
-    typedef std::pair<int, Key> KeyChange;
+    typedef std::pair<int, ::Rosegarden::Key> KeyChange;
     FastVector<KeyChange> m_keyChanges;
 
     void truncateClefsAndKeysAt(int);

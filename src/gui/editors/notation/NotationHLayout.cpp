@@ -37,6 +37,7 @@
 #include "base/SegmentNotationHelper.h"
 #include "base/Staff.h"
 #include "base/ViewElement.h"
+#include "gui/editors/guitar/Fingering.h"
 #include "gui/general/ProgressReporter.h"
 #include "gui/widgets/ProgressDialog.h"
 #include "NotationChord.h"
@@ -47,7 +48,7 @@
 #include "NotePixmapFactory.h"
 #include <kconfig.h>
 #include <qobject.h>
-
+#include <cmath>
 
 namespace Rosegarden
 {
@@ -519,7 +520,7 @@ void
 NotationHLayout::scanChord(NotationElementList *notes,
                            NotationElementList::iterator &itr,
                            const Clef &clef,
-                           const Key &key,
+                           const ::Rosegarden::Key &key,
                            AccidentalTable &accTable,
                            float &lyricWidth,
                            ChunkList &chunks,
@@ -528,7 +529,7 @@ NotationHLayout::scanChord(NotationElementList *notes,
                            NotationElementList::iterator &to)
 {
     NotationChord chord(*notes, itr, m_notationQuantizer, m_properties);
-    Accidental someAccidental = NoAccidental;
+    Accidental someAccidental = Accidentals::NoAccidental;
     bool someCautionary = false;
     bool barEndsInChord = false;
     bool grace = false;
@@ -568,14 +569,14 @@ NotationHLayout::scanChord(NotationElementList *notes,
 
         long pitch = 64;
         if (!el->event()->get
-                <Int>(PITCH, pitch)) {
+                <Int>(BaseProperties::PITCH, pitch)) {
             NOTATION_DEBUG <<
             "WARNING: NotationHLayout::scanChord: couldn't get pitch for element, using default pitch of " << pitch << endl;
         }
 
-        Accidental explicitAccidental = NoAccidental;
+        Accidental explicitAccidental = Accidentals::NoAccidental;
         (void)el->event()->get
-        <String>(ACCIDENTAL, explicitAccidental);
+        <String>(BaseProperties::ACCIDENTAL, explicitAccidental);
 
         Pitch p(pitch, explicitAccidental);
         int h = p.getHeightOnStaff(clef, key);
@@ -604,7 +605,7 @@ NotationHLayout::scanChord(NotationElementList *notes,
             someCautionary = true;
         }
 
-        if (someAccidental == NoAccidental)
+        if (someAccidental == Accidentals::NoAccidental)
             someAccidental = dacc;
 
         if (i == to)
@@ -622,12 +623,12 @@ NotationHLayout::scanChord(NotationElementList *notes,
 
     float extraWidth = 0;
 
-    if (someAccidental != NoAccidental) {
+    if (someAccidental != Accidentals::NoAccidental) {
         bool extraShift = false;
         int shift = chord.getMaxAccidentalShift(extraShift);
         int e = m_npf->getAccidentalWidth(someAccidental, shift, extraShift);
-        if (someAccidental != Sharp) {
-            e = std::max(e, m_npf->getAccidentalWidth(Sharp, shift, extraShift));
+        if (someAccidental != Accidentals::Sharp) {
+            e = std::max(e, m_npf->getAccidentalWidth(Accidentals::Sharp, shift, extraShift));
         }
         if (someCautionary) {
             e += m_npf->getNoteBodyWidth();
@@ -677,6 +678,19 @@ NotationHLayout::scanChord(NotationElementList *notes,
     }
     return ;
 }
+
+struct ChunkLocation {
+    timeT time;
+    short subordering;
+    ChunkLocation(timeT t, short s) : time(t), subordering(s) { }
+};
+
+bool operator<(const ChunkLocation &l0, const ChunkLocation &l1) {
+    return ((l0.time < l1.time) ||
+            ((l0.time == l1.time) && (l0.subordering < l1.subordering)));
+}
+
+
 
 void
 NotationHLayout::preSquishBar(int barNo)
@@ -865,7 +879,7 @@ NotationHLayout::getMaxRepeatedClefAndKeyWidth(int barNo)
         if (t < barStart)
             w += m_npf->getClefWidth(clef);
 
-        Key key = staff->getSegment().getKeyAtTime(barStart, t);
+        ::Rosegarden::Key key = staff->getSegment().getKeyAtTime(barStart, t);
         if (t < barStart)
             w += m_npf->getKeyWidth(key);
 
@@ -1221,7 +1235,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
         (isFullLayout && (notes->begin() != notes->end())) ?
         (*notes->begin())->getViewAbsoluteTime() : startTime;
 
-    Key key = notationStaff.getSegment().getKeyAtTime(lastIncrement);
+    ::Rosegarden::Key key = notationStaff.getSegment().getKeyAtTime(lastIncrement);
     Clef clef = notationStaff.getSegment().getClefAtTime(lastIncrement);
     TimeSignature timeSignature;
 
@@ -1352,7 +1366,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
         if (el->event()->isa(Note::EventType)) {
                 long pitch = 0;
                 el->event()->get
-                <Int>(PITCH, pitch);
+                <Int>(BaseProperties::PITCH, pitch);
                 NOTATION_DEBUG << "element is a " << el->event()->getType() << " (pitch " << pitch << ")" << endl;
             } else {
                 NOTATION_DEBUG << "element is a " << el->event()->getType() << endl;
@@ -1360,7 +1374,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
             bool invisible = false;
             if (el->event()->get
-                    <Bool>(INVISIBLE, invisible) && invisible) {
+                    <Bool>(BaseProperties::INVISIBLE, invisible) && invisible) {
                 if (!showInvisibles)
                     continue;
             }
@@ -1387,7 +1401,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
             if (timeSigToPlace &&
                     !el->event()->isa(Clef::EventType) &&
-                    !el->event()->isa(Key::EventType)) {
+                    !el->event()->isa(::Rosegarden::Key::EventType)) {
                 NOTATION_DEBUG << "Placing timesig at " << x << endl;
                 bdi->second.layoutData.timeSigX = (int)(x - fixed )
                                                       ;
@@ -1401,7 +1415,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
             if (barInset >= 1.0) {
                 if (el->event()->isa(Clef::EventType) ||
-                        el->event()->isa(Key::EventType)) {
+                        el->event()->isa(::Rosegarden::Key::EventType)) {
                     NOTATION_DEBUG << "Pulling clef/key back by " << getPreBarMargin() << endl;
                     x -= getPostBarMargin() * 2 / 3;
                 } else {
@@ -1414,7 +1428,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
             double displacedX = 0.0;
             long dxRaw = 0;
             el->event()->get
-            <Int>(DISPLACED_X, dxRaw);
+            <Int>(BaseProperties::DISPLACED_X, dxRaw);
             displacedX = double(dxRaw * m_npf->getNoteBodyWidth()) / 1000.0;
 
             el->setLayoutX(x + displacedX);
@@ -1440,9 +1454,9 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
                 clef = Clef(*el->event());
 
-            } else if (el->event()->isa(Key::EventType)) {
+            } else if (el->event()->isa(::Rosegarden::Key::EventType)) {
 
-                key = Key(*el->event());
+                key = ::Rosegarden::Key(*el->event());
 
             } else if (el->event()->isa(Text::EventType)) {
 
@@ -1531,12 +1545,12 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 void
 NotationHLayout::sampleGroupElement(Staff &staff,
                                     const Clef &clef,
-                                    const Key &key,
+                                    const ::Rosegarden::Key &key,
                                     const NotationElementList::iterator &itr)
 {
     NotationElement *el = static_cast<NotationElement *>(*itr);
 
-    if (el->event()->has(BEAMED_GROUP_ID)) {
+    if (el->event()->has(BaseProperties::BEAMED_GROUP_ID)) {
 
         //!!! Gosh.  We need some clever logic to establish whether
         // one group is happening while another has not yet ended --
@@ -1548,7 +1562,7 @@ NotationHLayout::sampleGroupElement(Staff &staff,
         // to determine this, as if that doesn't work, nothing will
 
         long groupId = el->event()->get
-                       <Int>(BEAMED_GROUP_ID);
+                       <Int>(BaseProperties::BEAMED_GROUP_ID);
         NOTATION_DEBUG << "group id: " << groupId << endl;
         if (m_groupsExtant.find(groupId) == m_groupsExtant.end()) {
             NOTATION_DEBUG << "(new group)" << endl;
@@ -1603,7 +1617,7 @@ NotationHLayout::getSpacingDuration(Staff &staff,
 void
 NotationHLayout::positionChord(Staff &staff,
                                NotationElementList::iterator &itr,
-                               const Clef &clef, const Key &key,
+                               const Clef &clef, const ::Rosegarden::Key &key,
                                TieMap &tieMap,
                                NotationElementList::iterator &to)
 {
@@ -1639,7 +1653,7 @@ NotationHLayout::positionChord(Staff &staff,
         double displacedX = 0.0;
         long dxRaw = 0;
         elt->event()->get
-        <Int>(DISPLACED_X, dxRaw);
+        <Int>(BaseProperties::DISPLACED_X, dxRaw);
         displacedX = double(dxRaw * m_npf->getNoteBodyWidth()) / 1000.0;
 
         elt->setLayoutX(baseX + displacedX);
@@ -1668,14 +1682,14 @@ NotationHLayout::positionChord(Staff &staff,
         bool tiedBack = false;
 
         note->event()->get
-        <Bool>(TIED_FORWARD, tiedForwards);
+        <Bool>(BaseProperties::TIED_FORWARD, tiedForwards);
         note->event()->get
-        <Bool>(TIED_BACKWARD, tiedBack);
+        <Bool>(BaseProperties::TIED_BACKWARD, tiedBack);
 
-        if (!note->event()->has(PITCH))
+        if (!note->event()->has(BaseProperties::PITCH))
             continue;
         int pitch = note->event()->get
-                    <Int>(PITCH);
+                    <Int>(BaseProperties::PITCH);
 
         if (tiedBack) {
             TieMap::iterator ti(tieMap.find(pitch));
@@ -1763,22 +1777,22 @@ NotationHLayout::getLayoutWidth(ViewElement &ve,
 
             w += m_npf->getClefWidth(Clef(*e.event()));
 
-        } else if (e.event()->isa(Key::EventType)) {
+        } else if (e.event()->isa(::Rosegarden::Key::EventType)) {
 
-            Key key(*e.event());
+            ::Rosegarden::Key key(*e.event());
 
-            Key cancelKey = previousKey;
+            ::Rosegarden::Key cancelKey = previousKey;
 
             if (m_keySigCancelMode == 0) { // only when entering C maj / A min
 
                 if (key.getAccidentalCount() != 0)
-                    cancelKey = Key();
+                    cancelKey = ::Rosegarden::Key();
 
             } else if (m_keySigCancelMode == 1) { // only when reducing acc count
 
                 if (!(key.isSharp() == cancelKey.isSharp() &&
                         key.getAccidentalCount() < cancelKey.getAccidentalCount())) {
-                    cancelKey = Key();
+                    cancelKey = ::Rosegarden::Key();
                 }
             }
 

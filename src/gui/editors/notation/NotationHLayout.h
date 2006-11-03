@@ -369,7 +369,7 @@ protected:
 
     void scanChord
     (NotationElementList *notes, NotationElementList::iterator &i,
-     const Clef &, const Key &,
+     const Clef &, const ::Rosegarden::Key &,
      AccidentalTable &, float &lyricWidth, ChunkList &chunks,
      int &graceCount, int ottavaShift,
      NotationElementList::iterator &to);
@@ -383,11 +383,11 @@ protected:
     void positionChord
     (Staff &staff, 
      NotationElementList::iterator &, const Clef &clef,
-     const Key &key, TieMap &, NotationElementList::iterator &to);
+     const ::Rosegarden::Key &key, TieMap &, NotationElementList::iterator &to);
 
     void sampleGroupElement
     (Staff &staff, const Clef &clef,
-     const Key &key, const NotationElementList::iterator &);
+     const ::Rosegarden::Key &key, const NotationElementList::iterator &);
 
     /// Difference between absolute time of next event and of this
     timeT getSpacingDuration

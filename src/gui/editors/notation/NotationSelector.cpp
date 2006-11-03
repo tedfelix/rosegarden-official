@@ -411,7 +411,7 @@ void NotationSelector::drag(int x, int y, bool final)
 
     Event *clefEvt = 0, *keyEvt = 0;
     Clef clef;
-    Key key;
+    ::Rosegarden::Key key;
 
     timeT dragTime = clickedTime;
     double layoutX = m_clickedElement->getLayoutX();
@@ -453,7 +453,7 @@ void NotationSelector::drag(int x, int y, bool final)
     if (clefEvt)
         clef = Clef(*clefEvt);
     if (keyEvt)
-        key = Key(*keyEvt);
+        key = ::Rosegarden::Key(*keyEvt);
 
     int height = targetStaff->getHeightAtCanvasCoords(x, y);
     int pitch = clickedPitch;
