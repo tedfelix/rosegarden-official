@@ -41,6 +41,7 @@ class MatrixStaff;
 
 class MatrixToolBox : public EditToolBox
 {
+    Q_OBJECT
 public:
     MatrixToolBox(MatrixView* parent);
 

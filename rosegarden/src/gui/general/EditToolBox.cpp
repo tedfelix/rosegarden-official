@@ -42,3 +42,4 @@ EditToolBox::EditToolBox(EditView *parent)
 }
 
 }
+#include "EditToolBox.moc"

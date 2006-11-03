@@ -46,6 +46,7 @@ class EditTool;
  */
 class NotationToolBox : public EditToolBox
 {
+    Q_OBJECT
 public:
     NotationToolBox(NotationView* parent);
 

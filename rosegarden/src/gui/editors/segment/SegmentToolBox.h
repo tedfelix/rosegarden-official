@@ -42,6 +42,7 @@ class CompositionView;
 
 class SegmentToolBox : public BaseToolBox
 {
+    Q_OBJECT
 public:
     SegmentToolBox(CompositionView* parent, RosegardenGUIDoc*);
 

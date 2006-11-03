@@ -45,6 +45,7 @@ class EditView;
  */
 class EditToolBox : public BaseToolBox
 {
+    Q_OBJECT
 public:
     EditToolBox(EditView* parent);
 

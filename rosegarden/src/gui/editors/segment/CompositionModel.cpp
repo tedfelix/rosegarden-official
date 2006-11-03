@@ -193,38 +193,5 @@ bool CompositionModel::CompositionItemCompare::operator()(const CompositionItem 
     return CompositionItemHelper::getSegment(c1) < CompositionItemHelper::getSegment(c2);
 }
 
-CompositionModel::itemcontainer CompositionModelImpl::getItemsAt(const QPoint& point)
-{
-    itemcontainer res;
-
-    const Composition::segmentcontainer& segments = m_composition.getSegments();
-
-    for (Composition::segmentcontainer::iterator i = segments.begin();
-            i != segments.end(); ++i) {
-
-        Segment* s = *i;
-
-        CompositionRect sr = computeSegmentRect(*s);
-        if (sr.contains(point)) {
-            //            RG_DEBUG << "CompositionModelImpl::getItemsAt() adding " << sr << " for segment " << s << endl;
-            CompositionItem item(new CompositionItemImpl(*s, sr));
-            unsigned int z = computeZForSegment(s);
-            //            RG_DEBUG << "CompositionModelImpl::getItemsAt() z = " << z << endl;
-            item->setZ(z);
-            res.insert(item);
-        } else {
-            //             RG_DEBUG << "CompositionModelImpl::getItemsAt() skiping " << sr << endl;
-        }
-
-    }
-
-    if (res.size() == 1) { // only one segment under click point
-        Segment* s = CompositionItemHelper::getSegment(*(res.begin()));
-        m_segmentOrderer.segmentClicked(s);
-    }
-
-    return res;
-}
-
 }
 #include "CompositionModel.moc"

@@ -120,3 +120,5 @@ void AudioSegmentMmapper::dump()
 }
 
 }
+#include "AudioSegmentMmapper.moc"
+

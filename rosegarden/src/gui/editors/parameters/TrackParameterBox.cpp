@@ -49,7 +49,7 @@
 #include "base/Studio.h"
 #include "base/Track.h"
 #include "document/RosegardenGUIDoc.h"
-#include "gui/dialogs/PitchPickerDialog.h"
+#include "gui/widgets/PitchPickerDialog.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/PresetHandlerDialog.h"
 #include "gui/widgets/CollapsingFrame.h"
