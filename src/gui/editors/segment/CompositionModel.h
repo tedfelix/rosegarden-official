@@ -38,6 +38,7 @@
 #include <vector>
 #include "base/Event.h"
 #include "CompositionRect.h"
+#include "CompositionItem.h"
 
 
 class RectRanges;

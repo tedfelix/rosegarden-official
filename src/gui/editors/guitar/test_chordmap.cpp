@@ -1,16 +1,9 @@
-//
-// C++ Implementation: test_chordmap
-//
-// Description:
-//
-//
-// Author: Chris Cannam <cannam@all-day-breakfast.com>, (C) 2005
-//
-// Copyright: See COPYING file that comes with this distribution
-//
-//
-#include "chordmap.h"
-#include "guitarxmlhandler.h"
+
+
+#ifdef COMPILE_GUITAR_TESTS
+
+#include "ChordMap.h"
+#include "GuitarXmlHandler.h"
 
 using namespace Guitar;
 
@@ -141,3 +134,5 @@ int main ( int, char** )
 
     return 0;
 }
+
+#endif

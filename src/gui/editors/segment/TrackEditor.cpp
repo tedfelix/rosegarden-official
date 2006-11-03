@@ -33,6 +33,7 @@
 #include "misc/Debug.h"
 #include "document/ConfigGroups.h"
 #include "gui/application/RosegardenDCOP.h"
+#include "gui/seqmanager/SequenceManager.h"
 #include "BarButtons.h"
 #include "base/Composition.h"
 #include "base/MidiProgram.h"
@@ -53,6 +54,7 @@
 #include "gui/application/RosegardenGUIApp.h"
 #include "gui/rulers/ChordNameRuler.h"
 #include "gui/rulers/TempoRuler.h"
+#include "gui/rulers/LoopRuler.h"
 #include "gui/widgets/ProgressDialog.h"
 #include "gui/widgets/QDeferScrollView.h"
 #include "sound/AudioFile.h"
@@ -73,6 +75,8 @@
 #include <qstrlist.h>
 #include <qwidget.h>
 #include <qvalidator.h>
+#include <qdragobject.h>
+#include <qtextstream.h>
 
 
 namespace Rosegarden
@@ -451,12 +455,11 @@ TrackEditor::slotCanvasScrolled(int x, int y)
 {
     // update the pointer position if the user is dragging it from the loop ruler
     if ((m_topBarButtons && m_topBarButtons->getLoopRuler() &&
-            m_topBarButtons->getLoopRuler()->hasActiveMousePress() &&
-            !m_topBarButtons->getLoopRuler()->getLoopingMode()) ||
-            (m_bottomBarButtons && m_bottomBarButtons->getLoopRuler() &&
-             m_bottomBarButtons->getLoopRuler()->hasActiveMousePress() &&
-             !m_bottomBarButtons->getLoopRuler()->getLoopingMode()
-            )) {
+         m_topBarButtons->getLoopRuler()->hasActiveMousePress() &&
+         !m_topBarButtons->getLoopRuler()->getLoopingMode()) ||
+        (m_bottomBarButtons && m_bottomBarButtons->getLoopRuler() &&
+         m_bottomBarButtons->getLoopRuler()->hasActiveMousePress() &&
+         !m_bottomBarButtons->getLoopRuler()->getLoopingMode())) {
 
         int mx = m_segmentCanvas->viewport()->mapFromGlobal(QCursor::pos()).x();
         m_segmentCanvas->setPointerPos(x + mx);
@@ -487,8 +490,8 @@ TrackEditor::slotSetPointerPosition(timeT position)
     if (distance >= 1.0) {
 
         if (m_doc && m_doc->getSequenceManager() &&
-                (m_doc->getSequenceManager()->getTransportStatus() != STOPPED)) {
-
+            (m_doc->getSequenceManager()->getTransportStatus() != STOPPED)) {
+            
             if (m_playTracking) {
                 getSegmentCanvas()->slotScrollHoriz(int(double(position) / ruler->getUnitsPerPixel()));
             }

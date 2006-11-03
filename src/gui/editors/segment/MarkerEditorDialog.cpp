@@ -30,6 +30,8 @@
 
 #include <klocale.h>
 #include <kstddirs.h>
+#include <kstdaccel.h>
+#include <kconfig.h>
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "base/Composition.h"
@@ -62,6 +64,7 @@
 #include <qtooltip.h>
 #include <qvbox.h>
 #include <qwidget.h>
+#include <qcanvas.h>
 
 
 namespace Rosegarden

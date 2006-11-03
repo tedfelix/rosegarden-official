@@ -1,3 +1,6 @@
+
+#ifdef COMPILE_GUITAR_TESTS
+
 #include "guitar.h"
 #include "note.h"
 #include <iostream>
@@ -242,3 +245,5 @@ int main ( int, char* [] )
 
     return 0;
 }
+
+#endif

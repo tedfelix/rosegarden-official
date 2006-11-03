@@ -1,7 +1,9 @@
+#ifdef COMPILE_GUITAR_TESTS
+
 // Boost.Test
 #include <boost/test/unit_test.hpp>
 
-#include "chordname.h"
+#include "ChordName.h"
 
 using boost::unit_test::test_suite;
 
@@ -25,3 +27,5 @@ init_unit_test_suite( int, char* [] )
 
     return test;
 }
+
+#endif

@@ -40,6 +40,7 @@
 #include <qstrlist.h>
 #include <qvbox.h>
 #include <qwidget.h>
+#include <qdragobject.h>
 
 
 namespace Rosegarden

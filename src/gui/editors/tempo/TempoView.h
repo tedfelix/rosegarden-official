@@ -60,11 +60,6 @@ class Composition;
  * should prove considerably simpler, anyway.
  */
 
-class QListViewItem;
-class KListView;
-class QButtonGroup;
-class QCheckBox;
-
 class TempoView : public EditViewBase, public CompositionObserver
 {
     Q_OBJECT

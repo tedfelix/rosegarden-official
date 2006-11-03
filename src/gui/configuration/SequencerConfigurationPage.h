@@ -29,13 +29,13 @@
 #include "TabbedConfigurationPage.h"
 #include <qstring.h>
 #include <klocale.h>
+#include <qlineedit.h>
 
 
 class QWidget;
 class QSpinBox;
 class QSlider;
 class QPushButton;
-class QLineEdit;
 class QLabel;
 class QComboBox;
 class QCheckBox;

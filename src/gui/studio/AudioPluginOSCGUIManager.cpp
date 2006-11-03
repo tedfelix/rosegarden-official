@@ -24,6 +24,8 @@
 
 #ifdef HAVE_LIBLO
 
+#include <lo/lo.h>
+
 #include "AudioPluginOSCGUIManager.h"
 
 #include "sound/Midi.h"
@@ -48,6 +50,40 @@
 
 namespace Rosegarden
 {
+
+static void osc_error(int num, const char *msg, const char *path)
+{
+    std::cerr << "Rosegarden: ERROR: liblo server error " << num
+	      << " in path " << path << ": " << msg << std::endl;
+}
+
+static int osc_message_handler(const char *path, const char *types, lo_arg **argv,
+			       int argc, lo_message, void *user_data)
+{
+    AudioPluginOSCGUIManager *manager = (AudioPluginOSCGUIManager *)user_data;
+
+    InstrumentId instrument;
+    int position;
+    QString method;
+
+    if (!manager->parseOSCPath(path, instrument, position, method)) {
+	return 1;
+    }
+
+    OSCMessage *message = new OSCMessage();
+    message->setTarget(instrument);
+    message->setTargetData(position);
+    message->setMethod(qstrtostr(method));
+
+    int arg = 0;
+    while (types && arg < argc && types[arg]) {
+	message->addArg(types[arg], argv[arg]);
+	++arg;
+    }
+
+    manager->postMessage(message);
+    return 0;
+}
 
 AudioPluginOSCGUIManager::AudioPluginOSCGUIManager(RosegardenGUIApp *app) :
         m_app(app),

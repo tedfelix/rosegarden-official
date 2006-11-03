@@ -39,7 +39,7 @@
 #include "MappedInstrument.h"
 #include "Midi.h"
 #include "MappedStudio.h"
-#include "rosestrings.h"
+#include "misc/Strings.h"
 #include "MappedCommon.h"
 #include "MappedEvent.h"
 #include "Audit.h"

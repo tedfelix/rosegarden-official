@@ -69,6 +69,8 @@
 namespace Rosegarden
 {
 
+const QString notShowing(i18n("<not showing>"));
+
 ControlEditorDialog::ControlEditorDialog(QWidget *parent,
         RosegardenGUIDoc *doc,
         DeviceId device):
@@ -274,6 +276,7 @@ ControlEditorDialog::slotUpdate()
 
 }
 
+/*
 void
 ControlEditorDialog::slotEditCopy()
 {
@@ -285,6 +288,7 @@ ControlEditorDialog::slotEditPaste()
 {
     RG_DEBUG << "ControlEditorDialog::slotEditPaste" << endl;
 }
+*/
 
 void
 ControlEditorDialog::slotAdd()

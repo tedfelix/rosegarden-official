@@ -22,24 +22,49 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_PLAYLISTVIEWITEM_H_
-#define _RG_PLAYLISTVIEWITEM_H_
+#ifndef _RG_TEMPOLISTITEM_H_
+#define _RG_TEMPOLISTITEM_H_
 
 #include <klistview.h>
-#include <kurl.h>
+
+#include "base/Event.h"
 
 namespace Rosegarden {
 
-class PlayListViewItem : public KListViewItem
+class Composition;
+
+class TempoListItem : public KListViewItem
 {
 public:
-    PlayListViewItem(KListView* parent, KURL);
-    PlayListViewItem(KListView* parent, QListViewItem*, KURL);
+    enum Type { TimeSignature, Tempo };
 
-    const KURL& getURL() { return m_kurl; }
+    TempoListItem(Composition *composition,
+		  Type type,
+		  timeT time,
+		  int index,
+		  KListView *parent,
+		  QString label1,
+		  QString label2,
+		  QString label3,
+		  QString label4 = QString::null) :
+	KListViewItem(parent, label1, label2, label3, label4),
+	m_composition(composition),
+	m_type(type),
+	m_time(time),
+	m_index(index) { }
+
+    Rosegarden::Composition *getComposition() { return m_composition; }
+    Type getType() const { return m_type; }
+    Rosegarden::timeT getTime() const { return m_time; }
+    int getIndex() const { return m_index; }
+
+    virtual int compare(QListViewItem *i, int col, bool ascending) const;
 
 protected:
-    KURL m_kurl;
+    Rosegarden::Composition *m_composition;
+    Type m_type;
+    Rosegarden::timeT m_time;
+    int m_index;
 };
 
 }

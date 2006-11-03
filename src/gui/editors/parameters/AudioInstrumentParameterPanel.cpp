@@ -38,6 +38,10 @@
 #include "gui/studio/AudioPlugin.h"
 #include "gui/studio/StudioControl.h"
 #include "gui/widgets/AudioFaderBox.h"
+#include "gui/widgets/AudioVUMeter.h"
+#include "gui/widgets/Fader.h"
+#include "gui/widgets/Rotary.h"
+#include "gui/widgets/AudioRouteMenu.h"
 #include "InstrumentParameterPanel.h"
 #include "sound/MappedCommon.h"
 #include "sound/MappedStudio.h"
@@ -50,6 +54,7 @@
 #include <qstring.h>
 #include <qtooltip.h>
 #include <qwidget.h>
+#include <qsignalmapper.h>
 
 
 namespace Rosegarden

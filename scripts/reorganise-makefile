@@ -4,10 +4,12 @@
 KDEDIR		= /usr
 QTDIR		= /usr
 
-KDEINC		= $(KDEDIR)/include
+#KDEINC		= $(KDEDIR)/include
+KDEINC		= $(KDEDIR)/include/kde
 KDELIB		= $(KDEDIR)/lib
 
-QTINC		= $(QTDIR)/include
+#QTINC		= $(QTDIR)/include
+QTINC		= $(QTDIR)/include/qt3
 QTLIB		= $(QTDIR)/lib
 
 CCDIR		= /usr
@@ -17,10 +19,11 @@ CC		= $(CCACHE) $(CCDIR)/bin/cc
 CXX		= $(CCACHE) $(CCDIR)/bin/c++
 LD		= $(CXX)
 MOC		= $(QTDIR)/bin/moc
+DCOPIDL		= $(KDEDIR)/bin/dcopidl
+DCOPIDL2CPP	= $(KDEDIR)/bin/dcopidl2cpp
 UIC		= $(QTDIR)/bin/uic
 
-#CXXFLAGS	= -w1 -wr748 -D_XOPEN_SOURCE=500 -D_BSD_SOURCE -O0 -g 
-CXXFLAGS	= -Wall -O0 -g -DHAVE_XFT -DQT_THREAD_SUPPORT -D'VERSION="1.5.0-reorg"'
+CXXFLAGS	= -Wall -O0 -g -DHAVE_ALSA -DHAVE_LIBJACK -DHAVE_DSSI -DHAVE_LADSPA -DHAVE_LIBLO -DHAVE_LIBLRDF -DHAVE_XFT -DQT_THREAD_SUPPORT -DDEBUG -D'VERSION="1.5.0-reorg"'
 LDFLAGS		= 
 
 INCLUDES	= \
@@ -39,8 +42,10 @@ LDLIBS		= \
 		-lkdeprint -lkdeui -lkdecore -lqt-mt \
 		-ljack -lasound -llo -llrdf -lraptor -lmad -llirc_client
 
-HEADERS		= $(filter-out gui/editors/guitar/%.h, $(wildcard */*.h */*/*.h */*/*/*.h))
-SOURCES		= $(filter-out gui/editors/guitar/%.cpp, $(wildcard */*.cpp */*/*.cpp */*/*/*.cpp))
+#HEADERS		= $(filter-out gui/editors/guitar/%.h, $(wildcard */*.h */*/*.h */*/*/*.h))
+#SOURCES		= $(filter-out gui/editors/guitar/%.cpp, $(wildcard */*.cpp */*/*.cpp */*/*/*.cpp))
+HEADERS		= $(wildcard */*.h */*/*.h */*/*/*.h)
+SOURCES		= $(wildcard */*.cpp */*/*.cpp */*/*/*.cpp)
 QHEADERS	= $(shell fgrep -l Q_OBJECT $(HEADERS))
 OBJECTS		= $(patsubst %.cpp,%.o,$(SOURCES))
 QSOURCES	= $(patsubst %.h,%.moc,$(QHEADERS))
@@ -49,7 +54,18 @@ UIHEADERS	= $(patsubst %.ui,%.h,$(UI))
 UISOURCES	= $(patsubst %.ui,%.cpp,$(UI))
 UIMOC		= $(patsubst %.ui,%.moc,$(UI))
 
-all:	$(QSOURCES) $(UIHEADERS) $(UISOURCES) $(UIMOC) $(OBJECTS) $(LIBRARIES) $(EXECUTABLES)
+GUISOURCES	= $(filter-out sequencer/%.cpp, $(SOURCES)) gui/application/RosegardenIface_skel.cpp
+GUIOBJECTS	= $(patsubst %.cpp,%.o,$(GUISOURCES))
+SEQSOURCES	= $(wildcard base/*.cpp sound/*.cpp sequencer/*.cpp) sequencer/RosegardenSequencerIface_skel.cpp
+SEQOBJECTS	= $(patsubst %.cpp,%.o,$(SEQSOURCES))
+
+all:	$(QSOURCES) $(UIHEADERS) $(UISOURCES) $(UIMOC) $(OBJECTS) $(LIBRARIES) $(EXECUTABLES) rosegardensequencer rosegarden
+
+rosegarden:	$(GUIOBJECTS)
+		$(CXX) -o $@ $^ $(LDLIBS)
+
+rosegardensequencer:	$(SEQOBJECTS)
+		$(CXX) -o $@ $^ $(LDLIBS)
 
 %.h: %.ui
 	$(UIC) $< > $@
@@ -59,6 +75,12 @@ all:	$(QSOURCES) $(UIHEADERS) $(UISOURCES) $(UIMOC) $(OBJECTS) $(LIBRARIES) $(EX
 
 %.moc: %.h
 	$(MOC) $< -o $@
+
+%.kidl: %.h
+	$(DCOPIDL) $< > $@
+
+%_skel.cpp: %.kidl
+	$(DCOPIDL2CPP) --c++-suffix cpp --no-signals --no-stub $<
 
 %.o: %.cpp
 	$(CXX) -c $(CXXFLAGS) $(INCLUDES) $< -o $@

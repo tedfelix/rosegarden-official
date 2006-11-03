@@ -19,7 +19,9 @@
     COPYING included with this distribution for more information.
 */
 
-#include "fingering.h"
+#ifdef COMPILE_GUITAR_TESTS
+
+#include "Fingering.h"
 #include <iostream>
 
 using namespace Guitar;
@@ -376,3 +378,6 @@ int main ( int, char * [] )
     */ 
     return 0;
 }
+
+#endif
+

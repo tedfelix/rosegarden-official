@@ -18,6 +18,9 @@
     License, or (at your option) any later version.  See the file
     COPYING included with this distribution for more information.
 */ 
+
+#ifdef COMPILE_GUITAR_TESTS
+
 // Boost.Test
 #include "guitar.h"
 #include <iostream>
@@ -150,3 +153,5 @@ int main ( int, char* [] )
 
     return 0;
 }
+
+#endif

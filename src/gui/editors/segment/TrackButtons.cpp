@@ -39,6 +39,7 @@
 #include "base/Track.h"
 #include "commands/segment/RenameTrackCommand.h"
 #include "document/RosegardenGUIDoc.h"
+#include "document/MultiViewCommandHistory.h"
 #include "gui/application/RosegardenGUIApp.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/kdeext/KLedButton.h"
@@ -500,9 +501,9 @@ void
 TrackButtons::slotRenameTrack(QString newName, TrackId trackId)
 {
     m_doc->getCommandHistory()->addCommand
-    (new RenameTrackCommand(&m_doc->getComposition(),
-                            trackId,
-                            qstrtostr(newName)));
+        (new RenameTrackCommand(&m_doc->getComposition(),
+                                trackId,
+                                qstrtostr(newName)));
 
     changeTrackLabel(trackId, newName);
 }

@@ -45,6 +45,7 @@
 #include "CompositionItemImpl.h"
 #include "CompositionModel.h"
 #include "CompositionRect.h"
+#include "AudioPreviewPainter.h"
 #include "gui/general/GUIPalette.h"
 #include "SegmentOrderer.h"
 #include <qbrush.h>
@@ -112,6 +113,12 @@ CompositionModelImpl::~CompositionModelImpl()
         }
     }
 }
+
+struct RectCompare {
+    bool operator()(const QRect &r1, const QRect &r2) const {
+        return r1.x() < r2.x();
+    }
+};
 
 void CompositionModelImpl::makeNotationPreviewRects(RectRanges* npRects, QPoint basePoint,
         const Segment* segment, const QRect& clipRect)

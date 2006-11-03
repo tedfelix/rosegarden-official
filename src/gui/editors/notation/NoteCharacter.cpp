@@ -29,6 +29,7 @@
 #include <qpixmap.h>
 #include <qpoint.h>
 #include <qcanvas.h>
+#include <qbitmap.h>
 
 
 namespace Rosegarden

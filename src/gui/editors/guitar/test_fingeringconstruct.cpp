@@ -19,6 +19,8 @@
     COPYING included with this distribution for more information.
 */
 
+#ifdef COMPILE_GUITAR_TESTS
+
 #include "GuitarNeck.h"
 #include "Fingering.h"
 #include "FingeringConstructor.h"
@@ -389,3 +391,5 @@ int main ( int, char * [] )
     */ 
     return 0;
 }
+
+#endif
