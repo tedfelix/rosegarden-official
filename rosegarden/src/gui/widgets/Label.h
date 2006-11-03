@@ -37,11 +37,9 @@ class QMouseEvent;
 namespace Rosegarden
 {
 
-
-
 class Label : public QLabel
 {
-Q_OBJECT
+    Q_OBJECT
 public:
     Label(QWidget *parent = 0, const char *name=0):
         QLabel(parent, name) {;}
