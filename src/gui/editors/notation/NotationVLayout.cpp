@@ -349,7 +349,7 @@ NotationVLayout::scanStaff(Staff &staffBase, timeT, timeT)
                 el->setLayoutY(staff.getLayoutYForHeight
                                (Clef(*el->event()).getAxisHeight()));
 
-            } else if (el->event()->isa(Key::EventType)) {
+            } else if (el->event()->isa(Rosegarden::Key::EventType)) {
 
                 el->setLayoutY(staff.getLayoutYForHeight(12));
 
