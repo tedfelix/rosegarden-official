@@ -22,7 +22,7 @@
     COPYING included with this distribution for more information.
 */
 
-
+#include <cmath>
 #include "CompositionModelImpl.h"
 
 #include "base/BaseProperties.h"
