@@ -46,6 +46,8 @@
 #include "base/Studio.h"
 #include "base/Track.h"
 #include "base/ViewElement.h"
+#include "document/RosegardenGUIDoc.h"
+#include "gui/editors/guitar/Fingering.h"
 #include "gui/general/LinedStaff.h"
 #include "gui/general/PixmapFunctions.h"
 #include "gui/general/ProgressReporter.h"
@@ -72,7 +74,7 @@ namespace Rosegarden
 NotationStaff::NotationStaff(QCanvas *canvas, Segment *segment,
                              SnapGrid *snapGrid, int id,
                              NotationView *view,
-                             string fontName, int resolution) :
+                             std::string fontName, int resolution) :
         ProgressReporter(0),
         LinedStaff(canvas, segment, snapGrid, id, resolution,
                    resolution / 16 + 1,  // line thickness
@@ -112,7 +114,7 @@ NotationStaff::~NotationStaff()
 }
 
 void
-NotationStaff::changeFont(string fontName, int size)
+NotationStaff::changeFont(std::string fontName, int size)
 {
     setResolution(size);
 
@@ -177,7 +179,7 @@ NotationStaff::insertRepeatedClefAndKey(double layoutX, int barNo)
     if (t < barStart)
         needClef = true;
 
-    Key key = getSegment().getKeyAtTime(barStart, t);
+    ::Rosegarden::Key key = getSegment().getKeyAtTime(barStart, t);
     if (t < barStart)
         needKey = true;
 
@@ -292,7 +294,7 @@ NotationStaff::isStaffNameUpToDate()
 void
 NotationStaff::getClefAndKeyAtCanvasCoords(double cx, int cy,
         Clef &clef,
-        Key &key) const
+        ::Rosegarden::Key &key) const
 {
     LinedStaffCoords layoutCoords = getLayoutCoordsForCanvasCoords(cx, cy);
     int i;
@@ -335,7 +337,7 @@ NotationStaff::getClosestElementToLayoutX(double x,
             if (before) {
                 if ((*it)->event()->isa(Clef::EventType)) {
                     clef = (*it)->event();
-                } else if ((*it)->event()->isa(Key::EventType)) {
+                } else if ((*it)->event()->isa(::Rosegarden::Key::EventType)) {
                     key = (*it)->event();
                 }
             }
@@ -389,7 +391,7 @@ NotationStaff::getElementUnderLayoutX(double x,
             if (before) {
                 if ((*it)->event()->isa(Clef::EventType)) {
                     clef = (*it)->event();
-                } else if ((*it)->event()->isa(Key::EventType)) {
+                } else if ((*it)->event()->isa(::Rosegarden::Key::EventType)) {
                     key = (*it)->event();
                 }
             }
@@ -409,12 +411,12 @@ NotationStaff::getElementUnderLayoutX(double x,
     return notes->end();
 }
 
-string
+std::string
 NotationStaff::getNoteNameAtCanvasCoords(double x, int y,
         Accidental) const
 {
     Clef clef;
-    Key key;
+    ::Rosegarden::Key key;
     getClefAndKeyAtCanvasCoords(x, y, clef, key);
 
     KConfig *config = kapp->config();
@@ -443,7 +445,7 @@ NotationStaff::renderElements(NotationElementList::iterator from,
     // this method (see below) so that we can pass bogus clef and key
     // data to renderSingleElement
     Clef currentClef;
-    Key currentKey;
+    ::Rosegarden::Key currentKey;
 
     int elementCount = 0;
     timeT endTime =
@@ -462,7 +464,7 @@ NotationStaff::renderElements(NotationElementList::iterator from,
             continue;
         }
 
-        if ((*it)->event()->isa(Key::EventType)) {
+        if ((*it)->event()->isa(::Rosegarden::Key::EventType)) {
             // force rendering in positionElements instead
             NotationElement* el = static_cast<NotationElement*>(*it);
             el->removeCanvasItem();
@@ -504,7 +506,7 @@ NotationStaff::renderPrintable(timeT from, timeT to)
     // These are only used when rendering keys, and we don't do that
     // here, so we don't care what they are
     Clef currentClef;
-    Key currentKey;
+    ::Rosegarden::Key currentKey;
 
     Composition *composition = getSegment().getComposition();
     NotationElementList::iterator beginAt =
@@ -581,7 +583,7 @@ NotationStaff::positionElements(timeT from, timeT to)
     Clef currentClef; // used for rendering key sigs
     bool haveCurrentClef = false;
 
-    Key currentKey;
+    ::Rosegarden::Key currentKey;
     bool haveCurrentKey = false;
 
     for (NotationElementList::iterator it = beginAt, nextIt = beginAt;
@@ -598,11 +600,11 @@ NotationStaff::positionElements(timeT from, timeT to)
                                                currentClef));
             haveCurrentClef = true;
 
-        } else if (el->event()->isa(Key::EventType)) {
+        } else if (el->event()->isa(::Rosegarden::Key::EventType)) {
 
             m_keyChanges.push_back
             (KeyChange(int(el->getLayoutX()),
-                       Key(*el->event())));
+                       ::Rosegarden::Key(*el->event())));
 
             if (!haveCurrentClef) { // need this to know how to present the key
                 currentClef = getSegment().getClefAtTime
@@ -651,7 +653,7 @@ NotationStaff::positionElements(timeT from, timeT to)
                        (properties.BEAMED, spanning));
                 if (!spanning) {
                     (void)(el->event()->get
-                           <Bool>(TIED_FORWARD, spanning));
+                           <Bool>(BaseProperties::TIED_FORWARD, spanning));
                 }
 
                 if (spanning) {
@@ -671,9 +673,9 @@ NotationStaff::positionElements(timeT from, timeT to)
             ++elementsRendered;
         }
 
-        if (el->event()->isa(Key::EventType)) {
+        if (el->event()->isa(::Rosegarden::Key::EventType)) {
             // update currentKey after rendering, not before
-            currentKey = Key(*el->event());
+            currentKey = ::Rosegarden::Key(*el->event());
         }
 
         if (!needNewSprite) {
@@ -721,6 +723,7 @@ NotationStaff::truncateClefsAndKeysAt(int x)
     }
 }
 
+NotationElementList::iterator
 NotationStaff::findUnchangedBarStart(timeT from)
 {
     NotationElementList *nel = (NotationElementList *)getViewElementList();
@@ -738,6 +741,7 @@ NotationStaff::findUnchangedBarStart(timeT from)
     return beginAt;
 }
 
+NotationElementList::iterator
 NotationStaff::findUnchangedBarEnd(timeT to)
 {
     NotationElementList *nel = (NotationElementList *)getViewElementList();
@@ -876,7 +880,7 @@ NotationStaff::isDirectlyPrintable(ViewElement *velt)
 void
 NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
                                    const Clef &currentClef,
-                                   const Key &currentKey,
+                                   const ::Rosegarden::Key &currentKey,
                                    bool selected)
 {
     const NotationProperties &properties(getProperties());
@@ -886,7 +890,7 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
 
     bool invisible = false;
     if (elt->event()->get
-            <Bool>(INVISIBLE, invisible) && invisible) {
+            <Bool>(BaseProperties::INVISIBLE, invisible) && invisible) {
         if (m_printPainter)
             return ;
         KConfig *config = kapp->config();
@@ -944,9 +948,9 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
             if (!ignoreRest) {
 
                 Note::Type note = elt->event()->get
-                                  <Int>(NOTE_TYPE);
+                                  <Int>(BaseProperties::NOTE_TYPE);
                 int dots = elt->event()->get
-                           <Int>(NOTE_DOTS);
+                           <Int>(BaseProperties::NOTE_DOTS);
                 restParams.setNoteType(note);
                 restParams.setDots(dots);
                 setTuplingParameters(elt, restParams);
@@ -978,21 +982,21 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
             pixmap = m_notePixmapFactory->makeClefPixmap
                      (Clef(*elt->event()));
 
-        } else if (elt->event()->isa(Key::EventType)) {
+        } else if (elt->event()->isa(::Rosegarden::Key::EventType)) {
 
-            Key key(*elt->event());
-            Key cancelKey = currentKey;
+            ::Rosegarden::Key key(*elt->event());
+            ::Rosegarden::Key cancelKey = currentKey;
 
             if (m_keySigCancelMode == 0) { // only when entering C maj / A min
 
                 if (key.getAccidentalCount() != 0)
-                    cancelKey = Key();
+                    cancelKey = ::Rosegarden::Key();
 
             } else if (m_keySigCancelMode == 1) { // only when reducing acc count
 
                 if (!(key.isSharp() == cancelKey.isSharp() &&
                         key.getAccidentalCount() < cancelKey.getAccidentalCount())) {
-                    cancelKey = Key();
+                    cancelKey = ::Rosegarden::Key();
                 }
             }
 
@@ -1062,7 +1066,7 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
                 NotationElementList::iterator indicationEnd =
                     getViewElementList()->findTime(indicationEndTime);
 
-                string indicationType = indication.getIndicationType();
+                std::string indicationType = indication.getIndicationType();
 
                 int length, y1;
 
@@ -1459,16 +1463,16 @@ NotationStaff::renderNote(ViewElementList::iterator &vli)
     static NotePixmapParameters params(Note::Crotchet, 0);
 
     Note::Type note = elt->event()->get
-                      <Int>(NOTE_TYPE);
+                      <Int>(BaseProperties::NOTE_TYPE);
     int dots = elt->event()->get
-               <Int>(NOTE_DOTS);
+               <Int>(BaseProperties::NOTE_DOTS);
 
-    Accidental accidental = NoAccidental;
+    Accidental accidental = Accidentals::NoAccidental;
     (void)elt->event()->get
     <String>(properties.DISPLAY_ACCIDENTAL, accidental);
 
     bool cautionary = false;
-    if (accidental != NoAccidental) {
+    if (accidental != Accidentals::NoAccidental) {
         (void)elt->event()->get
         <Bool>(properties.DISPLAY_ACCIDENTAL_IS_CAUTIONARY,
                cautionary);
@@ -1523,7 +1527,7 @@ NotationStaff::renderNote(ViewElementList::iterator &vli)
     params.setQuantized(quantized);
 
     bool trigger = false;
-    if (elt->event()->has(TRIGGER_SEGMENT_ID))
+    if (elt->event()->has(BaseProperties::TRIGGER_SEGMENT_ID))
         trigger = true;
     params.setTrigger(trigger);
 
@@ -1746,7 +1750,7 @@ NotationStaff::setTuplingParameters(NotationElement *elt,
 
         long tupletCount;
         if (elt->event()->get
-                <Int>(BEAMED_GROUP_UNTUPLED_COUNT, tupletCount)) {
+                <Int>(BaseProperties::BEAMED_GROUP_UNTUPLED_COUNT, tupletCount)) {
 
             params.setTupletCount(tupletCount);
             params.setTuplingLineY(tuplingLineY - (int)elt->getLayoutY());
@@ -1771,7 +1775,7 @@ NotationStaff::showPreviewNote(double layoutX, int heightOnStaff,
 {
     NotePixmapParameters params(note.getNoteType(), note.getDots());
 
-    params.setAccidental(NoAccidental);
+    params.setAccidental(Accidentals::NoAccidental);
     params.setNoteHeadShifted(false);
     params.setDrawFlag(true);
     params.setDrawStem(true);
@@ -2016,6 +2020,7 @@ NotationStaff::doRenderWork(timeT from, timeT to)
     return false;
 }
 
+LinedStaff::BarStyle
 NotationStaff::getBarStyle(int barNo) const
 {
     const Segment *s = &getSegment();
@@ -2081,8 +2086,8 @@ NotationStaff::getBarInset(int barNo, bool isFirstBarInRow) const
 
     bool haveKey = false, haveClef = false;
 
-    Key key;
-    Key cancelKey;
+    ::Rosegarden::Key key;
+    ::Rosegarden::Key cancelKey;
     Clef clef;
 
     for (Segment::iterator i = s.findTime(barStart);
@@ -2091,10 +2096,10 @@ NotationStaff::getBarInset(int barNo, bool isFirstBarInRow) const
 
         NOTATION_DEBUG << "type " << (*i)->getType() << " at " << (*i)->getNotationAbsoluteTime() << endl;
 
-        if ((*i)->isa(Key::EventType)) {
+        if ((*i)->isa(::Rosegarden::Key::EventType)) {
 
             try {
-                key = Key(**i);
+                key = ::Rosegarden::Key(**i);
 
                 if (barNo > composition->getBarNumber(s.getStartTime())) {
                     cancelKey = s.getKeyAtTime(barStart - 1);
@@ -2103,13 +2108,13 @@ NotationStaff::getBarInset(int barNo, bool isFirstBarInRow) const
                 if (m_keySigCancelMode == 0) { // only when entering C maj / A min
 
                     if (key.getAccidentalCount() != 0)
-                        cancelKey = Key();
+                        cancelKey = ::Rosegarden::Key();
 
                 } else if (m_keySigCancelMode == 1) { // only when reducing acc count
 
                     if (!(key.isSharp() == cancelKey.isSharp() &&
                             key.getAccidentalCount() < cancelKey.getAccidentalCount())) {
-                        cancelKey = Key();
+                        cancelKey = ::Rosegarden::Key();
                     }
                 }
 
