@@ -27,7 +27,8 @@
 #define _RG_INSTRUMENTPARAMETERPANEL_H_
 
 #include <qframe.h>
-
+#include <vector>
+#include <utility>
 
 class QWidget;
 class QLabel;

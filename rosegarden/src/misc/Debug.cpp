@@ -40,6 +40,8 @@
 #include "base/RealTime.h"
 #include "base/Colour.h"
 
+#ifndef NDEBUG
+
 kdbgstream&
 operator<<(kdbgstream &dbg, const std::string &s)
 {
@@ -100,7 +102,6 @@ operator<<(kdbgstream &dbg, const Rosegarden::Colour &c)
     dbg << "Colour : rgb = " << c.getRed() << "," << c.getGreen() << "," << c.getBlue();
     return dbg;
 }
-
 
 #ifdef NOT_DEFINED
 
@@ -365,3 +366,6 @@ operator<<(kdbgstream &dbg, const QBrush& b)
     return dbg;
 }
 #endif
+
+#endif
+

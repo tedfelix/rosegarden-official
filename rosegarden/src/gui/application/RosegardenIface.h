@@ -36,8 +36,8 @@
 #include <qstring.h>
 #include <qvaluevector.h>
 
-#include <base/Instrument.h>
-
+#include "base/Instrument.h"
+#include "sound/MappedComposition.h"
 
 class QCString;
 class KMainWindow;
@@ -46,8 +46,6 @@ class KDCOPActionProxy;
 
 namespace Rosegarden
 {
-
-class MappedComposition;
 
 
 /**
