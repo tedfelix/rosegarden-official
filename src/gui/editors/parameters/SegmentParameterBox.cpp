@@ -47,7 +47,7 @@
 #include "commands/segment/SegmentLabelCommand.h"
 #include "document/MultiViewCommandHistory.h"
 #include "document/RosegardenGUIDoc.h"
-#include "gui/widgets/PitchPickerDialog.h"
+#include "gui/dialogs/PitchPickerDialog.h"
 #include "gui/editors/notation/NotationStrings.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include "gui/general/GUIPalette.h"
