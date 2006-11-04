@@ -66,5 +66,7 @@ void
 SegmentJoiner::contentsMouseDoubleClickEvent(QMouseEvent*)
 {}
 
+const QString SegmentJoiner::ToolName   = "segmentjoiner";
+
 }
 #include "SegmentJoiner.moc"

@@ -1596,8 +1596,6 @@ private:
     AudioPluginOSCGUIManager *m_pluginGUIManager;
 #endif
 
-    static const char* const MainWindowConfigGroup;
-
     static RosegardenGUIApp *m_myself;
 
     static std::map<KProcess *, KTempFile *> m_lilyTempFileMap;

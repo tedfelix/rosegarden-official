@@ -51,6 +51,7 @@
 #include "commands/segment/SetTriggerSegmentDefaultRetuneCommand.h"
 #include "commands/segment/SetTriggerSegmentDefaultTimeAdjustCommand.h"
 #include "document/RosegardenGUIDoc.h"
+#include "document/ConfigGroups.h"
 #include "gui/dialogs/EventEditDialog.h"
 #include "gui/dialogs/PitchDialog.h"
 #include "gui/dialogs/SimpleEventEditDialog.h"
@@ -314,7 +315,7 @@ EventView::applyLayout(int /*staffNo*/)
     //
     m_eventList->clear();
 
-    m_config->setGroup(ConfigGroup);
+    m_config->setGroup(EventViewConfigGroup);
     int timeMode = m_config->readNumEntry("timemode", 0);
 
     for (unsigned int i = 0; i < m_segments.size(); i++) {
@@ -1156,7 +1157,7 @@ EventView::setupActions()
                 SLOT(slotClearSelection()), actionCollection(),
                 "clear_selection");
 
-    m_config->setGroup(ConfigGroup);
+    m_config->setGroup(EventViewConfigGroup);
     int timeMode = m_config->readNumEntry("timemode", 0);
 
     KRadioAction *action;
@@ -1243,18 +1244,18 @@ EventView::setViewSize(QSize s)
 void
 EventView::readOptions()
 {
-    m_config->setGroup(ConfigGroup);
+    m_config->setGroup(EventViewConfigGroup);
     EditViewBase::readOptions();
     m_eventFilter = m_config->readNumEntry("eventfilter", m_eventFilter);
-    m_eventList->restoreLayout(m_config, LayoutConfigGroupName);
+    m_eventList->restoreLayout(m_config, EventViewLayoutConfigGroupName);
 }
 
 void
 EventView::slotSaveOptions()
 {
-    m_config->setGroup(ConfigGroup);
+    m_config->setGroup(EventViewConfigGroup);
     m_config->writeEntry("eventfilter", m_eventFilter);
-    m_eventList->saveLayout(m_config, LayoutConfigGroupName);
+    m_eventList->saveLayout(m_config, EventViewLayoutConfigGroupName);
 }
 
 Segment *
@@ -1444,7 +1445,7 @@ EventView::setButtonsToFilter()
 void
 EventView::slotMusicalTime()
 {
-    m_config->setGroup(ConfigGroup);
+    m_config->setGroup(EventViewConfigGroup);
     m_config->writeEntry("timemode", 0);
     applyLayout();
 }
@@ -1452,7 +1453,7 @@ EventView::slotMusicalTime()
 void
 EventView::slotRealTime()
 {
-    m_config->setGroup(ConfigGroup);
+    m_config->setGroup(EventViewConfigGroup);
     m_config->writeEntry("timemode", 1);
     applyLayout();
 }
@@ -1460,7 +1461,7 @@ EventView::slotRealTime()
 void
 EventView::slotRawTime()
 {
-    m_config->setGroup(ConfigGroup);
+    m_config->setGroup(EventViewConfigGroup);
     m_config->writeEntry("timemode", 2);
     applyLayout();
 }

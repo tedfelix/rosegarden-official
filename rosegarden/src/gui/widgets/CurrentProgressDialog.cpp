@@ -32,16 +32,23 @@
 namespace Rosegarden
 {
 
+CurrentProgressDialog* CurrentProgressDialog::getInstance()
+{
+    if (!m_instance)
+        m_instance = new CurrentProgressDialog(0);
+
+    return m_instance;
+}
+
+
 ProgressDialog*
-CurrentProgressDialog::get
-    ()
+CurrentProgressDialog::get()
 {
     return m_currentProgressDialog;
 }
 
 void
-CurrentProgressDialog::set
-    (ProgressDialog* d)
+CurrentProgressDialog::set(ProgressDialog* d)
 {
     if (m_currentProgressDialog)
         m_currentProgressDialog->disconnect(getInstance());
@@ -69,6 +76,9 @@ void CurrentProgressDialog::slotCurrentProgressDialogDestroyed()
 {
     m_currentProgressDialog = 0;
 }
+
+CurrentProgressDialog* CurrentProgressDialog::m_instance = 0;
+ProgressDialog* CurrentProgressDialog::m_currentProgressDialog = 0;
 
 }
 #include "CurrentProgressDialog.moc"

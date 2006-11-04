@@ -108,8 +108,6 @@ protected:
 
     bool                     m_modified;
 
-    static const char* const TriggerManagerConfigGroup;
-
     QAccel *m_accelerators;
 };
 

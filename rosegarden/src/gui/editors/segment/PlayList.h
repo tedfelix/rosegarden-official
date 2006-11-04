@@ -56,7 +56,6 @@ public:
 
     void enableButtons(QListViewItem*);
 
-    static const char* const PlayListConfigGroup;
 
 signals:
     void play(QString);

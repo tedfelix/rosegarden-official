@@ -60,6 +60,7 @@
 #include "commands/edit/SetTriggerCommand.h"
 #include "commands/matrix/MatrixInsertionCommand.h"
 #include "document/RosegardenGUIDoc.h"
+#include "document/ConfigGroups.h"
 #include "gui/application/RosegardenGUIApp.h"
 #include "gui/dialogs/EventFilterDialog.h"
 #include "gui/dialogs/EventParameterDialog.h"
@@ -198,7 +199,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
         }
     }
 
-    m_config->setGroup(ConfigGroup);
+    m_config->setGroup(MatrixViewConfigGroup);
 
     MATRIX_DEBUG << "MatrixView : creating staff\n";
 
@@ -564,7 +565,7 @@ MatrixView::~MatrixView()
 
 void MatrixView::slotSaveOptions()
 {
-    m_config->setGroup(ConfigGroup);
+    m_config->setGroup(MatrixViewConfigGroup);
 
     m_config->writeEntry("Show Chord Name Ruler", getToggleAction("show_chords_ruler")->isChecked());
     m_config->writeEntry("Show Tempo Ruler", getToggleAction("show_tempo_ruler")->isChecked());
@@ -577,7 +578,7 @@ void MatrixView::slotSaveOptions()
 void MatrixView::readOptions()
 {
     EditView::readOptions();
-    m_config->setGroup(ConfigGroup);
+    m_config->setGroup(MatrixViewConfigGroup);
 
     bool opt = false;
 

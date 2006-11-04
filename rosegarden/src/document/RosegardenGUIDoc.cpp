@@ -210,6 +210,16 @@ void RosegardenGUIDoc::setTitle(const QString &_t)
     m_title = _t;
 }
 
+const QString &RosegardenGUIDoc::getAbsFilePath() const
+{
+    return m_absFilePath;
+}
+
+const QString& RosegardenGUIDoc::getTitle() const
+{
+    return m_title;
+}
+
 void RosegardenGUIDoc::slotUpdateAllViews(RosegardenGUIView *sender)
 {
     RosegardenGUIView *w;

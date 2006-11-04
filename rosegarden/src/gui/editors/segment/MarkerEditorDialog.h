@@ -116,8 +116,6 @@ protected:
 
     bool                     m_modified;
 
-    static const char* const MarkerEditorConfigGroup;
-
     QAccel *m_accelerators;
 };
 

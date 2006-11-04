@@ -74,5 +74,7 @@ int SegmentEraser::handleMouseMove(QMouseEvent*)
     return RosegardenCanvasView::NoFollow;
 }
 
+const QString SegmentEraser::ToolName   = "segmenteraser";
+
 }
 #include "SegmentEraser.moc"

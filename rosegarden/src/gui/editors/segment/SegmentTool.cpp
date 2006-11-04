@@ -107,4 +107,9 @@ SegmentTool::addCommandToHistory(KCommand *command)
     m_doc->getCommandHistory()->addCommand(command);
 }
 
+SegmentToolBox* SegmentTool::getToolBox()
+{
+    return m_canvas->getToolBox();
+}
+
 }

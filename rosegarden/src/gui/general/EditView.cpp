@@ -101,6 +101,12 @@
 namespace Rosegarden
 {
 
+const unsigned int EditView::CONTROLS_ROW         = 0;
+const unsigned int EditView::RULERS_ROW           = CONTROLS_ROW + 1;
+const unsigned int EditView::TOPBARBUTTONS_ROW    = RULERS_ROW + 1;
+const unsigned int EditView::CANVASVIEW_ROW       = TOPBARBUTTONS_ROW + 1;
+const unsigned int EditView::CONTROLRULER_ROW     = CANVASVIEW_ROW + 1;
+
 // Just some simple features we might want to show - make them bit maskable
 //
 static int FeatureShowVelocity = 0x00001; // show the velocity ruler
@@ -1557,6 +1563,21 @@ EditView::slotFlipBackwards()
 {
     RG_DEBUG << "EditView::slotFlipBackwards" << endl;
     getCurrentControlRuler()->flipBackwards();
+}
+
+ControlRuler* EditView::getCurrentControlRuler()
+{
+    return dynamic_cast<ControlRuler*>(m_controlRulers->currentPage());
+}
+
+ControlRuler* EditView::findRuler(const ControlParameter& controller, int &index)
+{
+    for(index = 0; index < m_controlRulers->count(); ++index) {
+        ControllerEventsRuler* ruler = dynamic_cast<ControllerEventsRuler*>(m_controlRulers->page(index));
+        if (ruler && *(ruler->getControlParameter()) == controller) return ruler;
+    }
+
+    return 0;
 }
 
 }

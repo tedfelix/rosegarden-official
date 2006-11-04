@@ -28,6 +28,7 @@
 #include "document/ConfigGroups.h"
 #include "ConfigurationPage.h"
 #include "document/RosegardenGUIDoc.h"
+#include "document/ConfigGroups.h"
 #include "gui/editors/matrix/MatrixView.h"
 #include "TabbedConfigurationPage.h"
 #include <kconfig.h>
@@ -46,7 +47,7 @@ MatrixConfigurationPage::MatrixConfigurationPage(KConfig *cfg,
         const char *name) :
         TabbedConfigurationPage(cfg, parent, name)
 {
-    m_cfg->setGroup(MatrixView::ConfigGroup);
+    m_cfg->setGroup(MatrixViewConfigGroup);
 
     QFrame *frame = new QFrame(m_tabWidget);
     QGridLayout *layout = new QGridLayout(frame,
@@ -60,7 +61,7 @@ MatrixConfigurationPage::MatrixConfigurationPage(KConfig *cfg,
 
 void MatrixConfigurationPage::apply()
 {
-    m_cfg->setGroup(MatrixView::ConfigGroup);
+    m_cfg->setGroup(MatrixViewConfigGroup);
 }
 
 }

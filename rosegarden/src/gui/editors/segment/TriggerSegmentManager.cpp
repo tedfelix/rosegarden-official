@@ -44,6 +44,7 @@
 #include "commands/segment/PasteToTriggerSegmentCommand.h"
 #include "document/MultiViewCommandHistory.h"
 #include "document/RosegardenGUIDoc.h"
+#include "document/ConfigGroups.h"
 #include "gui/dialogs/TimeDialog.h"
 #include "gui/general/MidiPitchLabel.h"
 #include <kaction.h>
