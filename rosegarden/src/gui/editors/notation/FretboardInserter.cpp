@@ -175,5 +175,7 @@ void FretboardInserter::createNewFretboard (ViewElement* element, Staff *staff, 
     processDialog( staff, insertionTime );
 }
 
+const QString FretboardInserter::ToolName = "fretboardinserter";
+
 }
 #include "FretboardInserter.moc"

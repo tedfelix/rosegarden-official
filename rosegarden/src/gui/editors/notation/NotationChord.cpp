@@ -25,6 +25,7 @@
 
 #include "NotationChord.h"
 
+#include "base/Sets.h"
 #include "base/Event.h"
 #include "base/NotationTypes.h"
 #include "base/Quantizer.h"

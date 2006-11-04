@@ -64,4 +64,10 @@ void TimeSigSegmentMmapper::dump()
     *(size_t *)m_mmappedRegion = (bufPos - m_mmappedEventBuffer);
 }
 
+size_t TimeSigSegmentMmapper::computeMmappedSize()
+{
+    return m_doc->getComposition().getTimeSignatureCount() * sizeof(MappedEvent);
 }
+
+}
+#include "TimeSigSegmentMmapper.moc"

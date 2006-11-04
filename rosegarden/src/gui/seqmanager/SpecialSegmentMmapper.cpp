@@ -48,5 +48,10 @@ QString SpecialSegmentMmapper::createFileName(QString baseFileName)
     return KGlobal::dirs()->resourceDirs("tmp").last() + "/" + baseFileName;
 }
 
+unsigned int SpecialSegmentMmapper::getSegmentRepeatCount()
+{
+    return 1;
+}
+
 }
 #include "SpecialSegmentMmapper.moc"

@@ -119,6 +119,16 @@ void AudioSegmentMmapper::dump()
     *(size_t *)m_mmappedRegion = repeatCount + 1;
 }
 
+size_t AudioSegmentMmapper::computeMmappedSize()
+{
+    if (!m_segment) return 0;
+
+    int repeatCount = getSegmentRepeatCount();
+
+    return (repeatCount + 1) * 1 * sizeof(MappedEvent);
+    // audio segments don't have events, we just need room for 1 MappedEvent
+}
+
 }
 #include "AudioSegmentMmapper.moc"
 

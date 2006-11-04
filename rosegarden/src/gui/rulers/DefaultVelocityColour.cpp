@@ -43,6 +43,13 @@ DefaultVelocityColour::DefaultVelocityColour()
                          25)  // green knee
 {}
 
+DefaultVelocityColour* DefaultVelocityColour::getInstance()
+{
+    if (!m_instance) m_instance = new DefaultVelocityColour;
+    
+    return m_instance;
+}
+
 DefaultVelocityColour* DefaultVelocityColour::m_instance = 0;
 
 }

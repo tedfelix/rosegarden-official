@@ -74,4 +74,9 @@ QCStringList RosegardenIface::actions()
     return res;
 }
 
+QMap<QCString,DCOPRef> RosegardenIface::actionMap()
+{
+  return m_dcopActionProxy->actionMap();
+}
+
 }

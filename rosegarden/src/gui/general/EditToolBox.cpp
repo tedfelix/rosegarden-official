@@ -30,7 +30,7 @@
 #include "EditView.h"
 #include <qobject.h>
 #include <qstring.h>
-
+#include <kmessagebox.h>
 
 namespace Rosegarden
 {
@@ -39,6 +39,17 @@ EditToolBox::EditToolBox(EditView *parent)
         : BaseToolBox(parent),
         m_parentView(parent)
 {
+}
+
+EditTool* EditToolBox::getTool(const QString& toolName)
+{
+    return dynamic_cast<EditTool*>(BaseToolBox::getTool(toolName));
+}
+
+EditTool* EditToolBox::createTool(const QString&)
+{
+    KMessageBox::error(0, "EditToolBox::createTool called - this should never happen");
+    return 0;
 }
 
 }

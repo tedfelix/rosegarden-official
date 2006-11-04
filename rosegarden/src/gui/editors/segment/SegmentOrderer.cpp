@@ -39,4 +39,9 @@ void SegmentOrderer::segmentClicked(const Segment* s)
     RG_DEBUG << "SegmentOrderer::segmentClicked() s = " << s << " - max Z = " << m_currentMaxZ << endl;
 }
 
+unsigned int SegmentOrderer::getZForSegment(const Rosegarden::Segment* s)
+{
+    return m_segmentZs[s];
+}
+
 }

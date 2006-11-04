@@ -654,6 +654,7 @@ const char* NoteInserter::m_actionsAccidental[][4] =
       "accidental-doubleflat" }
 };
 
+const QString NoteInserter::ToolName     = "noteinserter";
 
 }
 #include "NoteInserter.moc"

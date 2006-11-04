@@ -83,6 +83,9 @@ class NotePixmapCache : public std::map<CharName, QCanvasPixmap*>
     // nothing to add -- just so we can predeclare it in the header
 };
 
+const char* const NotePixmapFactory::defaultSerifFontFamily = "Times New Roman";
+const char* const NotePixmapFactory::defaultTimeSigFontFamily = "Century Schoolbook";
+
 NotePixmapFactory::NotePixmapFactory(std::string fontName, int size) :
         m_selected(false),
         m_shaded(false),
@@ -2966,7 +2969,7 @@ NotePixmapFactory::drawTextAux(const Text &text,
 QCanvasPixmap*
 NotePixmapFactory::makeAnnotationPixmap(const Text &text)
 {
-    makeAnnotationPixmap(text, false);
+    return makeAnnotationPixmap(text, false);
 }
 
 QCanvasPixmap*
@@ -3264,8 +3267,8 @@ int NotePixmapFactory::getKeyWidth(const Key &key,
         cancelCharacter = m_font->getCharacter(NoteCharacterNames::NATURAL);
     }
 
-    int x = 0;
-    int lw = getLineSpacing();
+    //int x = 0;
+    //int lw = getLineSpacing();
     int keyDelta = keyCharacter.getWidth() - keyCharacter.getHotspot().x();
 
     int cancelDelta = 0;

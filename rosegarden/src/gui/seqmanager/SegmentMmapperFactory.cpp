@@ -27,8 +27,10 @@
 
 #include "base/Segment.h"
 #include "document/RosegardenGUIDoc.h"
+#include "misc/Debug.h"
 #include "MetronomeMmapper.h"
 #include "SegmentMmapper.h"
+#include "AudioSegmentMmapper.h"
 #include "TempoSegmentMmapper.h"
 #include "TimeSigSegmentMmapper.h"
 #include <qstring.h>
@@ -36,4 +38,59 @@
 
 namespace Rosegarden
 {
+    
+SegmentMmapper* SegmentMmapperFactory::makeMmapperForSegment(RosegardenGUIDoc* doc,
+                                                             Rosegarden::Segment* segment,
+                                                             const QString& fileName)
+{
+    SegmentMmapper* mmapper = 0;
+
+    if (segment == 0) {
+        SEQMAN_DEBUG << "SegmentMmapperFactory::makeMmapperForSegment() segment == 0\n";
+        return 0;
+    }
+    
+    switch (segment->getType()) {
+    case Segment::Internal :
+        mmapper = new SegmentMmapper(doc, segment, fileName);
+        break;
+    case Segment::Audio :
+        mmapper = new AudioSegmentMmapper(doc, segment, fileName);
+        break;
+    default:
+        SEQMAN_DEBUG << "SegmentMmapperFactory::makeMmapperForSegment(" << segment
+                     << ") : can't map, unknown segment type " << segment->getType() << endl;
+        mmapper = 0;
+    }
+    
+    if (mmapper)
+        mmapper->init();
+
+    return mmapper;
+}
+
+MetronomeMmapper* SegmentMmapperFactory::makeMetronome(RosegardenGUIDoc* doc)
+{
+    MetronomeMmapper* mmapper = new MetronomeMmapper(doc);
+    mmapper->init();
+    
+    return mmapper;
+}
+
+TimeSigSegmentMmapper* SegmentMmapperFactory::makeTimeSig(RosegardenGUIDoc* doc)
+{
+    TimeSigSegmentMmapper* mmapper = new TimeSigSegmentMmapper(doc, "rosegarden_timesig");
+    
+    mmapper->init();
+    return mmapper;
+}
+
+TempoSegmentMmapper* SegmentMmapperFactory::makeTempo(RosegardenGUIDoc* doc)
+{
+    TempoSegmentMmapper* mmapper = new TempoSegmentMmapper(doc, "rosegarden_tempo");
+    
+    mmapper->init();
+    return mmapper;
+}
+    
 }

@@ -31,6 +31,16 @@
 namespace Rosegarden
 {
 
+const PropertyName NotationProperties::NOTE_STYLE         = "NoteStyle";
+const PropertyName NotationProperties::HEIGHT_ON_STAFF = "HeightOnStaff";
+const PropertyName NotationProperties::BEAMED         = "Beamed";
+const PropertyName NotationProperties::BEAM_ABOVE         = "BeamAbove";
+const PropertyName NotationProperties::SLASHES        = "Slashes";
+const PropertyName NotationProperties::STEM_UP        = "NoteStemUp";
+const PropertyName NotationProperties::USE_CAUTIONARY_ACCIDENTAL = "UseCautionaryAccidental";
+const PropertyName NotationProperties::OTTAVA_SHIFT       = "OttavaShift";
+const PropertyName NotationProperties::SLUR_ABOVE         = "SlurAbove";
+
 NotationProperties::NotationProperties(const std::string &prefix) :
 
         VIEW_LOCAL_STEM_UP (prefix + "StemUp"),

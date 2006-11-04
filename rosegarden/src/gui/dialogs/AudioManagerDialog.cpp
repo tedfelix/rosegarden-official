@@ -88,6 +88,10 @@
 namespace Rosegarden
 {
 
+const int AudioManagerDialog::m_maxPreviewWidth            = 100;
+const int AudioManagerDialog::m_previewHeight              = 30;
+const char* const AudioManagerDialog::m_listViewLayoutName = "AudioManagerDialog Layout";
+
 AudioManagerDialog::AudioManagerDialog(QWidget *parent,
                                        RosegardenGUIDoc *doc):
         KMainWindow(parent, "audioManagerDialog"),

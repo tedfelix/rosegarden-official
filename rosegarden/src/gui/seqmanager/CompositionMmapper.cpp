@@ -161,4 +161,14 @@ QString CompositionMmapper::getSegmentFileName(Segment* s)
         return QString::null;
 }
 
+size_t CompositionMmapper::getSegmentFileSize(Segment* s)
+{
+    SegmentMmapper* mmapper = m_segmentMmappers[s];
+    
+    if (mmapper)
+        return mmapper->getFileSize();
+    else
+        return 0;
+}
+
 }

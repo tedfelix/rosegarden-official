@@ -54,6 +54,11 @@
 namespace Rosegarden
 {
 
+const int ControlRuler::DefaultRulerHeight = 75;
+const int ControlRuler::MinItemHeight = 5;
+const int ControlRuler::MaxItemHeight = 64 + 5;
+const int ControlRuler::ItemHeightRange = 64;
+
 ControlRuler::ControlRuler(Segment *segment,
                            RulerScale* rulerScale,
                            EditViewBase* parentView,
@@ -506,6 +511,27 @@ void ControlRuler::flipBackwards()
     }
 
     canvas()->update();
+}
+
+std::pair<int, int> ControlRuler::getZMinMax()
+{
+    QCanvasItemList l = canvas()->allItems();
+    std::vector<int> zList;
+    for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it) {
+
+        // skip all but rectangles
+        if ((*it)->rtti() != QCanvasItem::Rtti_Rectangle) continue;
+        zList.push_back(int((*it)->z()));
+    }
+
+    std::sort(zList.begin(), zList.end());
+
+    return std::pair<int, int>(zList[0], zList[zList.size() - 1]);
+}
+
+QScrollBar* ControlRuler::getMainHorizontalScrollBar()
+{
+    return m_mainHorizontalScrollBar ? m_mainHorizontalScrollBar : horizontalScrollBar();
 }
 
 }

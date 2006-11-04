@@ -77,6 +77,9 @@ namespace Rosegarden
 
 using namespace BaseProperties;
 
+const Rosegarden::PropertyName LilypondExporter::SKIP_PROPERTY
+    = "LilypondExportSkipThisEvent";
+
 LilypondExporter::LilypondExporter(QObject *parent,
                                    RosegardenGUIDoc *doc,
                                    std::string fileName) :

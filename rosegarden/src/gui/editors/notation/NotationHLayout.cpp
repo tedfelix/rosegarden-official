@@ -2044,4 +2044,7 @@ NotationHLayout::getXForTimeByEvent(timeT time) const
     return RulerScale::getXForTime(time);
 }
 
+std::vector<int> NotationHLayout::m_availableSpacings;
+std::vector<int> NotationHLayout::m_availableProportions;
+
 }

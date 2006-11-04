@@ -44,6 +44,14 @@ namespace Rosegarden
 
 using namespace BaseProperties;
 
+const int InterpretCommand::NoInterpretation  = 0;
+const int InterpretCommand::GuessDirections   = (1<<0);
+const int InterpretCommand::ApplyTextDynamics = (1<<1);
+const int InterpretCommand::ApplyHairpins     = (1<<2);
+const int InterpretCommand::StressBeats       = (1<<3);
+const int InterpretCommand::Articulate        = (1<<4);
+const int InterpretCommand::AllInterpretations= (1<<5) - 1;
+
 InterpretCommand::~InterpretCommand()
 {
     for (IndicationMap::iterator i = m_indications.begin();
