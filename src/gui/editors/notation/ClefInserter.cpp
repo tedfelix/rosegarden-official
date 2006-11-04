@@ -126,5 +126,7 @@ void ClefInserter::handleLeftButtonPress(timeT,
         m_nParentView->setSingleSelectedEvent(staffNo, event);
 }
 
+const QString ClefInserter::ToolName     = "clefinserter";
+
 }
 #include "ClefInserter.moc"

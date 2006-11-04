@@ -42,6 +42,8 @@
 namespace Rosegarden
 {
 
+const NoteStyleName NoteStyleFactory::DefaultStyle = "Classical";
+
 std::vector<NoteStyleName>
 NoteStyleFactory::getAvailableStyleNames()
 {

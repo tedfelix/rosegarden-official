@@ -2932,5 +2932,10 @@ MatrixView::slotCanvasBottomWidgetHeightChanged(int newHeight)
                                  m_canvasView->horizontalScrollBar()->height());
 }
 
+MatrixCanvasView* MatrixView::getCanvasView()
+{
+    return dynamic_cast<MatrixCanvasView *>(m_canvasView);
+}
+
 }
 #include "MatrixView.moc"

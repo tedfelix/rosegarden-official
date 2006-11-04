@@ -28,8 +28,14 @@
 #include "gui/general/EditToolBox.h"
 #include "gui/general/EditTool.h"
 #include "MatrixView.h"
-#include <qstring.h>
+#include "MatrixPainter.h"
+#include "MatrixEraser.h"
+#include "MatrixSelector.h"
+#include "MatrixMover.h"
+#include "MatrixResizer.h"
 
+#include <qstring.h>
+#include <kmessagebox.h>
 
 namespace Rosegarden
 {
@@ -38,6 +44,44 @@ MatrixToolBox::MatrixToolBox(MatrixView* parent)
         : EditToolBox(parent),
         m_mParentView(parent)
 {}
+
+EditTool* MatrixToolBox::createTool(const QString& toolName)
+{
+    MatrixTool* tool = 0;
+
+    QString toolNamelc = toolName.lower();
+
+    if (toolNamelc == MatrixPainter::ToolName)
+
+        tool = new MatrixPainter(m_mParentView);
+
+    else if (toolNamelc == MatrixEraser::ToolName)
+
+        tool = new MatrixEraser(m_mParentView);
+
+    else if (toolNamelc == MatrixSelector::ToolName)
+
+        tool = new MatrixSelector(m_mParentView);
+
+    else if (toolNamelc == MatrixMover::ToolName)
+
+        tool = new MatrixMover(m_mParentView);
+
+    else if (toolNamelc == MatrixResizer::ToolName)
+
+        tool = new MatrixResizer(m_mParentView);
+
+    else {
+        KMessageBox::error(0, QString("MatrixToolBox::createTool : unrecognised toolname %1 (%2)")
+                           .arg(toolName).arg(toolNamelc));
+        return 0;
+    }
+
+    m_tools.insert(toolName, tool);
+
+    return tool;
+    
+}
 
 }
 #include "MatrixToolBox.moc"

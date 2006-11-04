@@ -55,6 +55,7 @@ namespace Rosegarden
 
 using namespace BaseProperties;
 using namespace Accidentals;
+using namespace Marks;
 
 RG21Loader::RG21Loader(Studio *studio,
                        QObject *parent, const char* name)
@@ -774,6 +775,23 @@ bool RG21Loader::load(const QString &fileName, Composition &comp)
     m_stream = 0;
 
     return true;
+}
+
+vector<string> RG21Loader::convertRG21ChordMods(int chordMods)
+{
+    vector<string> marks;
+
+    // bit laborious!
+    if (chordMods & ModDot)    marks.push_back(Staccato);
+    if (chordMods & ModLegato) marks.push_back(Tenuto);
+    if (chordMods & ModAccent) marks.push_back(Accent);
+    if (chordMods & ModSfz)    marks.push_back(Sforzando);
+    if (chordMods & ModRfz)    marks.push_back(Rinforzando);
+    if (chordMods & ModTrill)  marks.push_back(Trill);
+    if (chordMods & ModTurn)   marks.push_back(Turn);
+    if (chordMods & ModPause)  marks.push_back(Pause);
+
+    return marks;
 }
 
 }

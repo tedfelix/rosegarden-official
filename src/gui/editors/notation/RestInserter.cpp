@@ -144,5 +144,7 @@ void RestInserter::slotNotesSelected()
     m_parentView->actionCollection()->action(actionName)->activate();
 }
 
+const QString RestInserter::ToolName     = "restinserter";
+
 }
 #include "RestInserter.moc"

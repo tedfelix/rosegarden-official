@@ -59,4 +59,6 @@ void CanvasItemGC::flush()
     m_garbage.clear();
 }
 
+std::vector<QCanvasItem*> CanvasItemGC::m_garbage;
+
 }

@@ -527,5 +527,37 @@ SegmentMmapper::mergeTriggerSegment(Segment **target,
     }
 }
 
+unsigned int SegmentMmapper::getSegmentRepeatCount()
+{
+    int repeatCount = 0;
+
+    timeT segmentStartTime = m_segment->getStartTime();
+    timeT segmentEndTime = m_segment->getEndMarkerTime();
+    timeT segmentDuration = segmentEndTime - segmentStartTime;
+    timeT repeatEndTime = segmentEndTime;
+
+    if (m_segment->isRepeating() && segmentDuration > 0) {
+    repeatEndTime = m_segment->getRepeatEndTime();
+    repeatCount = 1 + (repeatEndTime - segmentEndTime) / segmentDuration;
+    }
+
+    return repeatCount;
+}
+
+size_t SegmentMmapper::addMmappedSize(Segment *s)
+{
+    int repeatCount = getSegmentRepeatCount();
+    return m_mmappedSize + (repeatCount + 1) * s->size() * sizeof(MappedEvent);
+}
+
+size_t SegmentMmapper::computeMmappedSize()
+{
+    if (!m_segment) return 0;
+
+    int repeatCount = getSegmentRepeatCount();
+
+    return (repeatCount + 1) * m_segment->size() * sizeof(MappedEvent);
+}
+
 }
 #include "SegmentMmapper.moc"

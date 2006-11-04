@@ -28,8 +28,16 @@
 #include "gui/general/EditToolBox.h"
 #include "gui/general/EditTool.h"
 #include "NotationView.h"
-#include <qstring.h>
+#include "NoteInserter.h"
+#include "RestInserter.h"
+#include "ClefInserter.h"
+#include "TextInserter.h"
+#include "FretboardInserter.h"
+#include "NotationEraser.h"
+#include "NotationSelector.h"
 
+#include <qstring.h>
+#include <kmessagebox.h>
 
 namespace Rosegarden
 {
@@ -39,6 +47,55 @@ NotationToolBox::NotationToolBox(NotationView *parent)
         m_nParentView(parent)
 {
     //m_tools.setAutoDelete(true);
+}
+
+EditTool* NotationToolBox::createTool(const QString& toolName)
+{
+    NotationTool* tool = 0;
+
+    QString toolNamelc = toolName.lower();
+    
+    if (toolNamelc == NoteInserter::ToolName)
+
+        tool = new NoteInserter(m_nParentView);
+
+    else if (toolNamelc == RestInserter::ToolName)
+
+        tool = new RestInserter(m_nParentView);
+
+    else if (toolNamelc == ClefInserter::ToolName)
+
+        tool = new ClefInserter(m_nParentView);
+
+    else if (toolNamelc == TextInserter::ToolName)
+
+        tool = new TextInserter(m_nParentView);
+
+    else if (toolNamelc == FretboardInserter::ToolName)
+
+        tool = new FretboardInserter(m_nParentView);
+
+/*    else if (toolNamelc == LilypondDirectiveInserter::ToolName)
+
+        tool = new LilypondDirectiveInserter(m_nParentView);*/
+
+    else if (toolNamelc == NotationEraser::ToolName)
+
+        tool = new NotationEraser(m_nParentView);
+
+    else if (toolNamelc == NotationSelector::ToolName)
+
+        tool = new NotationSelector(m_nParentView);
+
+    else {
+        KMessageBox::error(0, QString("NotationToolBox::createTool : unrecognised toolname %1 (%2)")
+                           .arg(toolName).arg(toolNamelc));
+        return 0;
+    }
+
+    m_tools.insert(toolName, tool);
+
+    return tool;
 }
 
 }

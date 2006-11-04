@@ -493,5 +493,36 @@ void MatrixSelector::setViewCurrentSelection()
 
 }
 
+EventSelection* MatrixSelector::getSelection()
+{
+    if (!m_selectionRect->visible()) return 0;
+
+    Segment& originalSegment = m_currentStaff->getSegment();
+    EventSelection* selection = new EventSelection(originalSegment);
+
+    // get the selections
+    //
+    QCanvasItemList l = m_selectionRect->collisions(true);
+
+    if (l.count())
+    {
+        for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
+        {
+            QCanvasItem *item = *it;
+            QCanvasMatrixRectangle *matrixRect = 0;
+
+            if ((matrixRect = dynamic_cast<QCanvasMatrixRectangle*>(item)))
+            {
+                MatrixElement *mE = &matrixRect->getMatrixElement();
+                selection->addEvent(mE->event());
+            }
+        }
+    }
+
+    return (selection->getAddedEvents() > 0) ? selection : 0;
+}
+
+const QString MatrixSelector::ToolName  = "selector";
+
 }
 #include "MatrixSelector.moc"

@@ -6863,5 +6863,10 @@ NotationView::slotRenderSomething()
     updateThumbnails(true);
 }
 
+NotationCanvasView* NotationView::getCanvasView()
+{
+    return dynamic_cast<NotationCanvasView *>(m_canvasView);
+}
+
 }
 #include "NotationView.moc"

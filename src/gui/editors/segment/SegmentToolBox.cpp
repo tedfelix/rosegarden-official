@@ -29,8 +29,15 @@
 #include "document/RosegardenGUIDoc.h"
 #include "gui/general/BaseToolBox.h"
 #include "SegmentTool.h"
+#include "SegmentSelector.h"
+#include "SegmentEraser.h"
+#include "SegmentJoiner.h"
+#include "SegmentMover.h"
+#include "SegmentPencil.h"
+#include "SegmentResizer.h"
+#include "SegmentSplitter.h"
 #include <qstring.h>
-
+#include <kmessagebox.h>
 
 namespace Rosegarden
 {
@@ -40,6 +47,56 @@ SegmentToolBox::SegmentToolBox(CompositionView* parent, RosegardenGUIDoc* doc)
         m_canvas(parent),
         m_doc(doc)
 {}
+
+SegmentTool* SegmentToolBox::createTool(const QString& toolName)
+{
+    SegmentTool* tool = 0;
+
+    QString toolNamelc = toolName.lower();
+    
+    if (toolNamelc == SegmentPencil::ToolName)
+
+        tool = new SegmentPencil(m_canvas, m_doc);
+
+    else if (toolNamelc == SegmentEraser::ToolName)
+
+        tool = new SegmentEraser(m_canvas, m_doc);
+
+    else if (toolNamelc == SegmentMover::ToolName)
+
+        tool = new SegmentMover(m_canvas, m_doc);
+
+    else if (toolNamelc == SegmentResizer::ToolName)
+
+        tool = new SegmentResizer(m_canvas, m_doc);
+
+    else if (toolNamelc == SegmentSelector::ToolName)
+
+        tool = new SegmentSelector(m_canvas, m_doc);
+
+    else if (toolNamelc == SegmentSplitter::ToolName)
+
+        tool = new SegmentSplitter(m_canvas, m_doc);
+
+    else if (toolNamelc == SegmentJoiner::ToolName)
+
+        tool = new SegmentJoiner(m_canvas, m_doc);
+
+    else {
+        KMessageBox::error(0, QString("SegmentToolBox::createTool : unrecognised toolname %1 (%2)")
+                           .arg(toolName).arg(toolNamelc));
+        return 0;
+    }
+
+    m_tools.insert(toolName, tool);
+
+    return tool;
+}
+
+SegmentTool* SegmentToolBox::getTool(const QString& toolName)
+{
+    return dynamic_cast<SegmentTool*>(BaseToolBox::getTool(toolName));
+}
 
 }
 #include "SegmentToolBox.moc"

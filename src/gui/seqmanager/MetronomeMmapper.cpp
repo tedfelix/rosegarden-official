@@ -223,4 +223,45 @@ void MetronomeMmapper::sortTicks()
     sort(m_ticks.begin(), m_ticks.end());
 }
 
+size_t MetronomeMmapper::computeMmappedSize()
+{
+    KConfig *config = kapp->config();
+    config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
+    int midiClock = config->readNumEntry("midiclock", 0);
+    int mtcMode = config->readNumEntry("mtcmode", 0);
+
+    // base size for Metronome ticks
+    size_t size = m_ticks.size() * sizeof(MappedEvent);
+    Composition& comp = m_doc->getComposition();
+
+    if (midiClock == 1)
+    {
+        using Rosegarden::Note;
+
+        // Allow room for MIDI clocks
+        int clocks = ( 24 * ( comp.getEndMarker() - comp.getStartMarker() ) ) / 
+            Note(Note::Crotchet).getDuration();
+
+        /*
+        SEQMAN_DEBUG << "MetronomeMmapper::computeMmappedSize - " 
+                     << "Number of clock events catered for = " << clocks
+                     << endl;
+        */
+
+        size += clocks * sizeof(MappedEvent);
+    }
+
+    if (mtcMode > 0)
+    {
+        // Allow room for MTC timing messages (how?)
+    }
+
+    return size;
+}
+
+unsigned int MetronomeMmapper::getSegmentRepeatCount()
+{
+    return 1;
+}
+
 }

@@ -40,6 +40,15 @@
 namespace Rosegarden
 {
 
+// Smooth scroll checks
+//
+
+const int RosegardenScrollView::AutoscrollMargin = 16;
+const int RosegardenScrollView::InitialScrollTime = 30;
+const int RosegardenScrollView::InitialScrollAccel = 5;
+const int RosegardenScrollView::MaxScrollDelta = 100;      // max a.scroll speed
+const double RosegardenScrollView::ScrollAccelValue = 1.04;// acceleration rate
+
 RosegardenScrollView::RosegardenScrollView(QWidget* parent,
         const char* name, WFlags f)
         : QScrollView(parent, name, f),
@@ -169,6 +178,9 @@ void RosegardenScrollView::doAutoScroll()
     }
 
 }
+
+const int RosegardenScrollView::DefaultSmoothScrollTimeInterval = 10;
+const double RosegardenScrollView::DefaultMinDeltaScroll = 1.2;
 
 bool RosegardenScrollView::isTimeForSmoothScroll()
 {

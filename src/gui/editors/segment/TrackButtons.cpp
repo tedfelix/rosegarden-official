@@ -62,7 +62,7 @@
 #include <qtimer.h>
 #include <qwidget.h>
 #include <qwidgetstack.h>
-
+#include <qtooltip.h>
 
 namespace Rosegarden
 {
@@ -940,6 +940,157 @@ TrackButtons::slotTrackInstrumentSelection(TrackId trackId, int item)
     int position = comp.getTrackById(trackId)->getPosition();
     m_popupItem = position;
     slotInstrumentPopupActivated( item );
+}
+
+QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
+{
+    // The buttonGap sets up the sizes of the buttons
+    //
+    static const int buttonGap = 8;
+
+    QFrame *trackHBox = 0;
+
+    KLedButton *mute = 0;
+    KLedButton *record = 0;
+
+    TrackVUMeter *vuMeter = 0;
+    TrackLabel *trackLabel = 0;
+
+    int vuWidth = 20;
+    int vuSpacing = 2;
+    int labelWidth = m_trackLabelWidth - ( (m_cellSize - buttonGap) * 2 +
+                                            vuSpacing * 2 + vuWidth );
+
+    // Set the label from the Track object on the Composition
+    //
+    Rosegarden::Track *track = m_doc->getComposition().getTrackById(trackId);
+
+    if (track == 0) return 0;
+
+    // Create a horizontal box for each track
+    //
+    trackHBox = new QFrame(this);
+    QHBoxLayout *hblayout = new QHBoxLayout(trackHBox);
+        
+    trackHBox->setMinimumSize(labelWidth, m_cellSize - m_borderGap);
+    trackHBox->setFixedHeight(m_cellSize - m_borderGap);
+
+    // Try a style for the box
+    //
+    trackHBox->setFrameStyle(StyledPanel);
+    trackHBox->setFrameShape(StyledPanel);
+    trackHBox->setFrameShadow(Raised);
+
+    // Insert a little gap
+    hblayout->addSpacing(vuSpacing);
+
+    // Create a VU meter
+    vuMeter = new TrackVUMeter(trackHBox,
+                               VUMeter::PeakHold,
+                               vuWidth,
+                               buttonGap,
+                               track->getPosition());
+
+    m_trackMeters.push_back(vuMeter);
+
+    hblayout->addWidget(vuMeter);
+
+    // Create another little gap
+    hblayout->addSpacing(vuSpacing);
+
+    //
+    // 'mute' and 'record' leds
+    //
+
+    mute = new KLedButton(Rosegarden::GUIPalette::getColour
+              (Rosegarden::GUIPalette::MuteTrackLED), trackHBox);
+    QToolTip::add(mute, i18n("Mute track"));
+    hblayout->addWidget(mute);
+
+    record = new KLedButton(Rosegarden::GUIPalette::getColour
+                (Rosegarden::GUIPalette::RecordMIDITrackLED), trackHBox);
+    QToolTip::add(record, i18n("Record on this track"));
+    hblayout->addWidget(record);
+
+    record->setLook(KLed::Sunken);
+    mute->setLook(KLed::Sunken);
+    record->off();
+
+    // Connect them to their sigmappers
+    connect(record, SIGNAL(stateChanged(bool)),
+            m_recordSigMapper, SLOT(map()));
+    connect(mute, SIGNAL(stateChanged(bool)),
+            m_muteSigMapper, SLOT(map()));
+    m_recordSigMapper->setMapping(record, track->getPosition());
+    m_muteSigMapper->setMapping(mute, track->getPosition());
+
+    // Store the KLedButton
+    //
+    m_muteLeds.push_back(mute);
+    m_recordLeds.push_back(record);
+
+    //
+    // Track label
+    //
+    trackLabel = new TrackLabel(trackId, track->getPosition(), trackHBox);
+    hblayout->addWidget(trackLabel);
+
+    if (track->getLabel() == std::string("")) {
+    Rosegarden::Instrument *ins =
+        m_doc->getStudio().getInstrumentById(track->getInstrument());
+    if (ins && ins->getType() == Rosegarden::Instrument::Audio) {
+        trackLabel->getTrackLabel()->setText(i18n("<untitled audio>"));
+    } else {
+        trackLabel->getTrackLabel()->setText(i18n("<untitled>"));
+    }
+    }
+    else
+        trackLabel->getTrackLabel()->setText(strtoqstr(track->getLabel()));
+
+    trackLabel->setFixedSize(labelWidth, m_cellSize - buttonGap);
+    trackLabel->setFixedHeight(m_cellSize - buttonGap);
+    trackLabel->setIndent(7);
+
+    connect(trackLabel, SIGNAL(renameTrack(QString, Rosegarden::TrackId)),
+            SLOT(slotRenameTrack(QString, Rosegarden::TrackId)));
+
+    // Store the TrackLabel pointer
+    //
+    m_trackLabels.push_back(trackLabel);
+
+    // Connect it
+    setButtonMapping(trackLabel, trackId);
+
+    connect(trackLabel, SIGNAL(changeToInstrumentList()),
+            m_instListSigMapper, SLOT(map()));
+    connect(trackLabel, SIGNAL(clicked()),
+            m_clickedSigMapper, SLOT(map()));
+
+    //
+    // instrument label
+    //
+    Rosegarden::Instrument *ins =
+        m_doc->getStudio().getInstrumentById(track->getInstrument());
+
+    QString instrumentName(i18n("<no instrument>"));
+    if (ins) instrumentName = strtoqstr(ins->getPresentationName());
+
+    // Set label to program change if it's being sent
+    //
+    if (ins != 0 && ins->sendsProgramChange())
+        trackLabel->setAlternativeLabel(strtoqstr(ins->getProgramName()));
+
+    trackLabel->showLabel(m_trackInstrumentLabels);
+
+    mute->setFixedSize(m_cellSize - buttonGap, m_cellSize - buttonGap);
+    record->setFixedSize(m_cellSize - buttonGap, m_cellSize - buttonGap);
+
+    // set the mute button
+    //
+    if (track->isMuted())
+        mute->off();
+
+    return trackHBox;
 }
 
 }

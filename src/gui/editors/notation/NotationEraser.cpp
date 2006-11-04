@@ -109,5 +109,7 @@ void NotationEraser::slotSelectSelected()
     m_parentView->actionCollection()->action("select")->activate();
 }
 
+const QString NotationEraser::ToolName   = "notationeraser";
+
 }
 #include "NotationEraser.moc"

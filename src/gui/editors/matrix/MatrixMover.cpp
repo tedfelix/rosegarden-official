@@ -420,5 +420,7 @@ void MatrixMover::slotMatrixScrolled(int newX, int newY)
     handleMouseMove(newTime, newPitch, 0);
 }
 
+const QString MatrixMover::ToolName     = "mover";
+
 }
 #include "MatrixMover.moc"

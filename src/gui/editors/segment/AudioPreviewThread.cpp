@@ -92,7 +92,7 @@ AudioPreviewThread::process()
 
         int failed = 0;
         int inQueue = 0;
-        int count = 0;
+        //int count = 0;
 
         m_mutex.lock();
 
@@ -260,5 +260,8 @@ AudioPreviewThread::getPreview(int token, unsigned int &channels,
 
     return ;
 }
+
+const QEvent::Type AudioPreviewThread::AudioPreviewReady       = QEvent::Type(QEvent::User + 1);
+const QEvent::Type AudioPreviewThread::AudioPreviewQueueEmpty  = QEvent::Type(QEvent::User + 2);
 
 }

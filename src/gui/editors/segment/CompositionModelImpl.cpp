@@ -1042,5 +1042,21 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s, bool 
     return cr;
 }
 
+unsigned int CompositionModelImpl::computeZForSegment(const Rosegarden::Segment* s)
+{
+    return m_segmentOrderer.getZForSegment(s);
+}
+
+const CompositionRect& CompositionModelImpl::getFromCache(const Rosegarden::Segment* s, timeT& endTime)
+{
+    endTime = m_segmentEndTimeMap[s];
+    return m_segmentRectMap[s];
+}
+
+unsigned int CompositionModelImpl::getNbRows()
+{
+    return m_composition.getNbTracks();
+}
+
 }
 #include "CompositionModelImpl.moc"

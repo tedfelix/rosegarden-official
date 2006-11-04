@@ -179,6 +179,12 @@ GUIPalette::GUIPalette()
     m_defaultsMap[RecordFaderOutline] = QColor(0, 250, 225, QColor::Hsv);
 }
 
+GUIPalette* GUIPalette::getInstance() 
+{
+    if (!m_instance) m_instance = new GUIPalette();
+    return m_instance;
+}
+
 const char* const GUIPalette::ColoursConfigGroup = "coloursconfiggroup";
 
 const char* const GUIPalette::ActiveRecordTrack = "activerecordtrack";

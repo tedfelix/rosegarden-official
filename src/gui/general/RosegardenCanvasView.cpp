@@ -95,6 +95,18 @@ void RosegardenCanvasView::slotUpdate()
     canvas()->update();
 }
 
+// Smooth scroll checks
+//
+
+const int RosegardenCanvasView::AutoscrollMargin = 16;
+const int RosegardenCanvasView::InitialScrollTime = 30;
+const int RosegardenCanvasView::InitialScrollAccel = 5;
+const int RosegardenCanvasView::MaxScrollDelta = 100;      // max a.scroll speed
+const double RosegardenCanvasView::ScrollAccelValue = 1.04;// acceleration rate
+
+const int RosegardenCanvasView::DefaultSmoothScrollTimeInterval = 10;
+const double RosegardenCanvasView::DefaultMinDeltaScroll = 1.2;
+
 void RosegardenCanvasView::startAutoScroll()
 {
     //    RG_DEBUG << "RosegardenCanvasView::startAutoScroll()\n";

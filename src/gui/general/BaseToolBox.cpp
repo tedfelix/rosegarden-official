@@ -42,5 +42,14 @@ BaseToolBox::BaseToolBox(QWidget* parent)
     //m_tools.setAutoDelete(true);
 }
 
+BaseTool* BaseToolBox::getTool(const QString& toolName)
+{
+    BaseTool* tool = m_tools[toolName];
+
+    if (!tool) tool = createTool(toolName);
+    
+    return tool;
+}
+
 }
 #include "BaseToolBox.moc"

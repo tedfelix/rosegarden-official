@@ -24,6 +24,7 @@
 
 
 #include "CompositionRect.h"
+#include "base/ColourMap.h"
 
 #include <qbrush.h>
 #include <qcolor.h>
@@ -36,4 +37,6 @@
 
 namespace Rosegarden
 {
+    const QColor CompositionRect::DefaultPenColor = Qt::black;
+    const QColor CompositionRect::DefaultBrushColor = QColor(COLOUR_DEF_R, COLOUR_DEF_G, COLOUR_DEF_B);
 }

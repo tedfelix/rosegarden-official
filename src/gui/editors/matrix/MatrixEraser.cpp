@@ -94,4 +94,6 @@ void MatrixEraser::handleLeftButtonPress(timeT,
     m_mParentView->update();
 }
 
+const QString MatrixEraser::ToolName    = "eraser";
+
 }

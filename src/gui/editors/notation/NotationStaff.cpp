@@ -2165,4 +2165,9 @@ NotationStaff::getBarInset(int barNo, bool isFirstBarInRow) const
     return inset;
 }
 
+Rosegarden::ViewElement* NotationStaff::makeViewElement(Rosegarden::Event* e)
+{
+    return new NotationElement(e);
+}
+
 }

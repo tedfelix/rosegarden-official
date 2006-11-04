@@ -1570,6 +1570,16 @@ ControlRuler* EditView::getCurrentControlRuler()
     return dynamic_cast<ControlRuler*>(m_controlRulers->currentPage());
 }
 
+ControlRuler* EditView::findRuler(PropertyName propertyName, int &index)
+{
+    for(index = 0; index < m_controlRulers->count(); ++index) {
+        PropertyControlRuler* ruler = dynamic_cast<PropertyControlRuler*>(m_controlRulers->page(index));
+        if (ruler && ruler->getPropertyName() == propertyName) return ruler;
+    }
+
+    return 0;
+}
+
 ControlRuler* EditView::findRuler(const ControlParameter& controller, int &index)
 {
     for(index = 0; index < m_controlRulers->count(); ++index) {
@@ -1578,6 +1588,47 @@ ControlRuler* EditView::findRuler(const ControlParameter& controller, int &index
     }
 
     return 0;
+}
+
+PropertyControlRuler* EditView::makePropertyControlRuler(PropertyName propertyName)
+{
+    QCanvas* controlRulerCanvas = new QCanvas(this);
+    QSize viewSize = getViewSize();
+    controlRulerCanvas->resize(viewSize.width(), ControlRuler::DefaultRulerHeight); // TODO - keep it in sync with main canvas size
+
+//     QCanvas* controlRulerCanvas = ControlRulerCanvasRepository::getCanvas(getCurrentSegment(), propertyName,
+//                                                                           getViewSize());
+
+    PropertyControlRuler* controlRuler = new PropertyControlRuler
+    (propertyName, getCurrentStaff(), getHLayout(), this,
+     controlRulerCanvas, m_controlRulers);
+
+    controlRuler->setMainHorizontalScrollBar(m_canvasView->horizontalScrollBar());
+
+    return controlRuler;
+}
+
+ControllerEventsRuler* EditView::makeControllerEventRuler(const ControlParameter *controller)
+{
+    QCanvas* controlRulerCanvas = new QCanvas(this);
+    QSize viewSize = getViewSize();
+    controlRulerCanvas->resize(viewSize.width(), ControlRuler::DefaultRulerHeight); // TODO - keep it in sync with main canvas size
+//     QCanvas* controlRulerCanvas = ControlRulerCanvasRepository::getCanvas(getCurrentSegment(), controller,
+//                                                                           getViewSize());
+    
+
+    ControllerEventsRuler* controlRuler = new ControllerEventsRuler
+    (getCurrentSegment(), getHLayout(), this,
+     controlRulerCanvas, m_controlRulers, controller);
+
+    controlRuler->setMainHorizontalScrollBar(m_canvasView->horizontalScrollBar());
+
+    return controlRuler;
+}
+
+RosegardenCanvasView* EditView::getCanvasView()
+{
+    return m_canvasView;
 }
 
 }

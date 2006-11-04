@@ -69,4 +69,10 @@ void TempoSegmentMmapper::dump()
     *(size_t *)m_mmappedRegion = (bufPos - m_mmappedEventBuffer);
 }
 
+size_t TempoSegmentMmapper::computeMmappedSize()
+{
+    return m_doc->getComposition().getTempoChangeCount() * sizeof(MappedEvent);
 }
+
+}
+#include "TempoSegmentMmapper.moc"

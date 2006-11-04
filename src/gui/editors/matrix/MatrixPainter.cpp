@@ -299,5 +299,7 @@ void MatrixPainter::slotMatrixScrolled(int newX, int newY)
     handleMouseMove(newTime, newPitch, 0);
 }
 
+const QString MatrixPainter::ToolName   = "painter";
+
 }
 #include "MatrixPainter.moc"

@@ -163,5 +163,7 @@ void TextInserter::handleLeftButtonPress(timeT,
     delete dialog;
 }
 
+const QString TextInserter::ToolName     = "textinserter";
+
 }
 #include "TextInserter.moc"

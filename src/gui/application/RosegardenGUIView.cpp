@@ -1891,5 +1891,49 @@ RosegardenGUIView::initChordNameRuler()
     getTrackEditor()->getChordNameRuler()->setReady();
 }
 
+EventView *
+RosegardenGUIView::createEventView(std::vector<Rosegarden::Segment *> segmentsToEdit)
+{
+    EventView *eventView = new EventView(getDocument(),
+                                         segmentsToEdit,
+                                         this);
+
+    connect(eventView, SIGNAL(windowActivated()),
+        this, SLOT(slotActiveMainWindowChanged()));
+
+    connect(eventView, SIGNAL(selectTrack(int)),
+            this, SLOT(slotSelectTrackSegments(int)));
+
+    connect(eventView, SIGNAL(saveFile()),
+        RosegardenGUIApp::self(), SLOT(slotFileSave()));
+
+    connect(eventView, SIGNAL(openInNotation(std::vector<Rosegarden::Segment *>)),
+        this, SLOT(slotEditSegmentsNotation(std::vector<Rosegarden::Segment *>)));
+    connect(eventView, SIGNAL(openInMatrix(std::vector<Rosegarden::Segment *>)),
+        this, SLOT(slotEditSegmentsMatrix(std::vector<Rosegarden::Segment *>)));
+    connect(eventView, SIGNAL(openInPercussionMatrix(std::vector<Rosegarden::Segment *>)),
+        this, SLOT(slotEditSegmentsPercussionMatrix(std::vector<Rosegarden::Segment *>)));
+    connect(eventView, SIGNAL(openInEventList(std::vector<Rosegarden::Segment *>)),
+        this, SLOT(slotEditSegmentsEventList(std::vector<Rosegarden::Segment *>)));
+    connect(eventView, SIGNAL(editTriggerSegment(int)),
+        this, SLOT(slotEditTriggerSegment(int)));
+    connect(this, SIGNAL(compositionStateUpdate()),
+        eventView, SLOT(slotCompositionStateUpdate()));
+    connect(RosegardenGUIApp::self(), SIGNAL(compositionStateUpdate()),
+        eventView, SLOT(slotCompositionStateUpdate()));
+    connect(eventView, SIGNAL(toggleSolo(bool)),
+            RosegardenGUIApp::self(), SLOT(slotToggleSolo(bool)));
+
+    // create keyboard accelerators on view
+    //
+    RosegardenGUIApp *par = dynamic_cast<RosegardenGUIApp*>(parent());
+
+    if (par) {
+        par->plugAccelerators(eventView, eventView->getAccelerators());
+    }
+
+    return eventView;
+}
+
 }
 #include "RosegardenGUIView.moc"

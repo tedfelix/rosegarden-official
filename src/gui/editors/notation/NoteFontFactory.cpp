@@ -229,4 +229,7 @@ NoteFontFactory::isAvailableInSize(std::string fontName, int size)
     return false;
 }
 
+std::set<std::string> NoteFontFactory::m_fontNames;
+std::map<std::pair<std::string, int>, NoteFont *> NoteFontFactory::m_fonts;
+
 }

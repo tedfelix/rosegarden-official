@@ -291,5 +291,7 @@ void MatrixResizer::slotMatrixScrolled(int newX, int newY)
     handleMouseMove(newTime, 0, 0);
 }
 
+const QString MatrixResizer::ToolName   = "resizer";
+
 }
 #include "MatrixResizer.moc"
