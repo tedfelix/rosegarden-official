@@ -130,5 +130,4 @@ size_t AudioSegmentMmapper::computeMmappedSize()
 }
 
 }
-#include "AudioSegmentMmapper.moc"
 

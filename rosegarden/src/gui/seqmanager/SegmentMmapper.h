@@ -26,7 +26,6 @@
 #ifndef _RG_SEGMENTMMAPPER_H_
 #define _RG_SEGMENTMMAPPER_H_
 
-#include <qobject.h>
 #include <qstring.h>
 #include "base/Event.h"
 
@@ -43,9 +42,8 @@ class MappedEvent;
 class Event;
 
 
-class SegmentMmapper : public QObject
+class SegmentMmapper
 {
-    Q_OBJECT;
     friend class SegmentMmapperFactory;
 public:
     virtual ~SegmentMmapper();

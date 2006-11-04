@@ -41,7 +41,6 @@ class RosegardenGUIDoc;
 
 class AudioSegmentMmapper : public SegmentMmapper
 {
-    Q_OBJECT
     friend class SegmentMmapperFactory;
 
 protected:

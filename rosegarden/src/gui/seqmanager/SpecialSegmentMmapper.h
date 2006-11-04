@@ -40,7 +40,6 @@ class RosegardenGUIDoc;
 
 class SpecialSegmentMmapper : public SegmentMmapper
 {
-    Q_OBJECT
 public:
     // overrides from SegmentMmapper
     virtual unsigned int getSegmentRepeatCount();

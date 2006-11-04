@@ -27,7 +27,6 @@
 #define _RG_TIMESIGSEGMENTMMAPPER_H_
 
 #include "SpecialSegmentMmapper.h"
-#include <qobject.h>
 #include <qstring.h>
 
 
@@ -39,8 +38,6 @@ class RosegardenGUIDoc;
 
 class TimeSigSegmentMmapper : public SpecialSegmentMmapper
 {
-    Q_OBJECT
-    
     friend class SegmentMmapperFactory;
 
 public:
