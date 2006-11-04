@@ -289,5 +289,7 @@ int SegmentPencil::handleMouseMove(QMouseEvent *e)
     return RosegardenCanvasView::FollowHorizontal;
 }
 
+const QString SegmentPencil::ToolName   = "segmentpencil";
+
 }
 #include "SegmentPencil.moc"

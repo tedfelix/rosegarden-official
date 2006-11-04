@@ -39,6 +39,7 @@
 #include "commands/studio/ModifyDeviceCommand.h"
 #include "document/MultiViewCommandHistory.h"
 #include "document/RosegardenGUIDoc.h"
+#include "document/ConfigGroups.h"
 #include "gui/dialogs/ExportDeviceDialog.h"
 #include "gui/dialogs/ImportDeviceDialog.h"
 #include "MidiBankListViewItem.h"

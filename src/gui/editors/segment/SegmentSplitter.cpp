@@ -153,5 +153,7 @@ SegmentSplitter::contentsMouseDoubleClickEvent(QMouseEvent*)
     // DO NOTHING
 }
 
+const QString SegmentSplitter::ToolName = "segmentsplitter";
+
 }
 #include "SegmentSplitter.moc"

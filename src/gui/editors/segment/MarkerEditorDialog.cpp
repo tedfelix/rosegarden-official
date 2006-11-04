@@ -42,6 +42,7 @@
 #include "commands/edit/RemoveMarkerCommand.h"
 #include "document/MultiViewCommandHistory.h"
 #include "document/RosegardenGUIDoc.h"
+#include "document/ConfigGroups.h"
 #include "MarkerModifyDialog.h"
 #include <kaction.h>
 #include <kcommand.h>

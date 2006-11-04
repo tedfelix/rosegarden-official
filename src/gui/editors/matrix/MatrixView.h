@@ -92,8 +92,6 @@ public:
 
     virtual ~MatrixView();
 
-    static const char* const ConfigGroup;
-
     virtual bool applyLayout(int staffNo = -1,
                              timeT startTime = 0,
                              timeT endTime = 0);

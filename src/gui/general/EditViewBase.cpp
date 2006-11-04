@@ -71,7 +71,8 @@ namespace Rosegarden
 {
 
 bool EditViewBase::m_inPaintEvent = false;
-
+const unsigned int EditViewBase::ID_STATUS_MSG = 1;
+const unsigned int EditViewBase::NbLayoutRows = 6;
 
 EditViewBase::EditViewBase(RosegardenGUIDoc *doc,
                            std::vector<Segment *> segments,
@@ -694,6 +695,16 @@ EditViewBase::handleEventRemoved(Event *event)
 {
     if (m_tool)
         m_tool->handleEventRemoved(event);
+}
+
+MultiViewCommandHistory* EditViewBase::getCommandHistory()
+{
+    return getDocument()->getCommandHistory();
+}
+
+KToggleAction* EditViewBase::getToggleAction(const QString& actionName)
+{
+    return dynamic_cast<KToggleAction*>(actionCollection()->action(actionName));
 }
 
 }

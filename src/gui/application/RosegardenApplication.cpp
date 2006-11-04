@@ -133,8 +133,12 @@ void RosegardenApplication::saveState(QSessionManager& sm)
     KUniqueApplication::saveState(sm);
 }
 
-QByteArray RosegardenApplication::Empty;
+RosegardenApplication* RosegardenApplication::rgApp()
+{
+    return dynamic_cast<RosegardenApplication*>(kApplication());
+}
 
+QByteArray RosegardenApplication::Empty;
 
 }
 

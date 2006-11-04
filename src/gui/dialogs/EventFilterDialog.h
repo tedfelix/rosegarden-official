@@ -182,8 +182,6 @@ protected slots:
 
     //---------[ data members ]-----------------------------
 
-    static const char * const ConfigGroup;
-    
     QGridLayout* layout;
 
 #ifdef COMPILE_DEPRECATED    

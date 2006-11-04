@@ -291,5 +291,7 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
     return RosegardenCanvasView::NoFollow;
 }
 
+const QString SegmentMover::ToolName    = "segmentmover";
+
 }
 #include "SegmentMover.moc"

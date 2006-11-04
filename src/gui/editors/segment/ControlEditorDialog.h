@@ -115,8 +115,6 @@ protected:
 
     ControlList  m_clipboard; // local clipboard only
 
-    static const char* const ControlEditorConfigGroup;
-
 };
 
 

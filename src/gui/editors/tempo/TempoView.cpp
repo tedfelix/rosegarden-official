@@ -38,6 +38,7 @@
 #include "commands/segment/RemoveTempoChangeCommand.h"
 #include "commands/segment/RemoveTimeSignatureCommand.h"
 #include "document/RosegardenGUIDoc.h"
+#include "document/ConfigGroups.h"
 #include "gui/dialogs/TempoDialog.h"
 #include "gui/dialogs/TimeSignatureDialog.h"
 #include "gui/general/EditViewBase.h"
@@ -192,7 +193,7 @@ TempoView::applyLayout(int /*staffNo*/)
 
     Composition *comp = &getDocument()->getComposition();
 
-    m_config->setGroup(ConfigGroup);
+    m_config->setGroup(TempoViewConfigGroup);
     int timeMode = m_config->readNumEntry("timemode", 0);
 
     if (m_filter & TimeSignature) {
@@ -610,7 +611,7 @@ TempoView::setupActions()
                 SLOT(slotClearSelection()), actionCollection(),
                 "clear_selection");
 
-    m_config->setGroup(ConfigGroup);
+    m_config->setGroup(TempoViewConfigGroup);
     int timeMode = m_config->readNumEntry("timemode", 0);
 
     KRadioAction *action;
@@ -674,18 +675,18 @@ TempoView::setViewSize(QSize s)
 void
 TempoView::readOptions()
 {
-    m_config->setGroup(ConfigGroup);
+    m_config->setGroup(TempoViewConfigGroup);
     EditViewBase::readOptions();
     m_filter = m_config->readNumEntry("filter", m_filter);
-    m_list->restoreLayout(m_config, LayoutConfigGroupName);
+    m_list->restoreLayout(m_config, TempoViewLayoutConfigGroupName);
 }
 
 void
 TempoView::slotSaveOptions()
 {
-    m_config->setGroup(ConfigGroup);
+    m_config->setGroup(TempoViewConfigGroup);
     m_config->writeEntry("filter", m_filter);
-    m_list->saveLayout(m_config, LayoutConfigGroupName);
+    m_list->saveLayout(m_config, TempoViewLayoutConfigGroupName);
 }
 
 void
@@ -747,7 +748,7 @@ TempoView::setButtonsToFilter()
 void
 TempoView::slotMusicalTime()
 {
-    m_config->setGroup(ConfigGroup);
+    m_config->setGroup(TempoViewConfigGroup);
     m_config->writeEntry("timemode", 0);
     applyLayout();
 }
@@ -755,7 +756,7 @@ TempoView::slotMusicalTime()
 void
 TempoView::slotRealTime()
 {
-    m_config->setGroup(ConfigGroup);
+    m_config->setGroup(TempoViewConfigGroup);
     m_config->writeEntry("timemode", 1);
     applyLayout();
 }
@@ -763,7 +764,7 @@ TempoView::slotRealTime()
 void
 TempoView::slotRawTime()
 {
-    m_config->setGroup(ConfigGroup);
+    m_config->setGroup(TempoViewConfigGroup);
     m_config->writeEntry("timemode", 2);
     applyLayout();
 }

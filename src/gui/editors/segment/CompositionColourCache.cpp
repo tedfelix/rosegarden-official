@@ -48,4 +48,15 @@ void CompositionColourCache::init()
 
 }
 
+CompositionColourCache* CompositionColourCache::getInstance()
+{
+    if (!m_instance) {
+        m_instance = new CompositionColourCache();
+    }
+
+    return m_instance;
+}
+
+CompositionColourCache* CompositionColourCache::m_instance = 0;
+
 }

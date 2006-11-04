@@ -50,12 +50,12 @@ PlayListDialog::PlayListDialog(QString caption,
 
 void PlayListDialog::save()
 {
-    saveDialogSize(PlayList::PlayListConfigGroup);
+    saveDialogSize(PlayListConfigGroup);
 }
 
 void PlayListDialog::restore()
 {
-    setInitialSize(configDialogSize(PlayList::PlayListConfigGroup));
+    setInitialSize(configDialogSize(PlayListConfigGroup));
 }
 
 void PlayListDialog::closeEvent(QCloseEvent *e)

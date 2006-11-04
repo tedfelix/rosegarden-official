@@ -286,5 +286,7 @@ bool SegmentResizer::cursorIsCloseEnoughToEdge(const CompositionItem& p, const Q
     }
 }
 
+const QString SegmentResizer::ToolName  = "segmentresizer";
+
 }
 #include "SegmentResizer.moc"

@@ -199,8 +199,6 @@ protected:
     DeviceId     m_lastDevice;
     MidiBank     m_lastBank;
 
-    static const char* const BankEditorConfigGroup;
-
     bool                     m_updateDeviceList;
 };
 

@@ -85,6 +85,7 @@
 #include "document/io/MupExporter.h"
 #include "document/io/MusicXmlExporter.h"
 #include "document/RosegardenGUIDoc.h"
+#include "document/ConfigGroups.h"
 #include "gui/application/RosegardenApplication.h"
 #include "gui/dialogs/AudioManagerDialog.h"
 #include "gui/dialogs/AudioPluginDialog.h"
@@ -473,7 +474,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     readOptions();
 
     // All toolbars should be created before this is called
-    setAutoSaveSettings(RosegardenGUIApp::MainWindowConfigGroup, true);
+    setAutoSaveSettings(MainWindowConfigGroup, true);
 
 #ifdef HAVE_LIRC
 
@@ -1084,14 +1085,14 @@ void RosegardenGUIApp::setupActions()
     m_playTransport = new KAction(i18n("&Play"), icon, Key_Enter, this,
                                   SLOT(slotPlay()), actionCollection(),
                                   "play");
-    m_playTransport->setGroup(TransportDialog::ConfigGroup);
+    m_playTransport->setGroup(TransportDialogConfigGroup);
 
     pixmap.load(pixmapDir + "/toolbar/transport-stop.png");
     icon = QIconSet(pixmap);
     m_stopTransport = new KAction(i18n("&Stop"), icon, Key_Insert, this,
                                   SLOT(slotStop()), actionCollection(),
                                   "stop");
-    m_stopTransport->setGroup(TransportDialog::ConfigGroup);
+    m_stopTransport->setGroup(TransportDialogConfigGroup);
 
     pixmap.load(pixmapDir + "/toolbar/transport-ffwd.png");
     icon = QIconSet(pixmap);
@@ -1099,42 +1100,42 @@ void RosegardenGUIApp::setupActions()
                                   this,
                                   SLOT(slotFastforward()), actionCollection(),
                                   "fast_forward");
-    m_ffwdTransport->setGroup(TransportDialog::ConfigGroup);
+    m_ffwdTransport->setGroup(TransportDialogConfigGroup);
 
     pixmap.load(pixmapDir + "/toolbar/transport-rewind.png");
     icon = QIconSet(pixmap);
     m_rewindTransport = new KAction(i18n("Re&wind"), icon, Key_End, this,
                                     SLOT(slotRewind()), actionCollection(),
                                     "rewind");
-    m_rewindTransport->setGroup(TransportDialog::ConfigGroup);
+    m_rewindTransport->setGroup(TransportDialogConfigGroup);
 
     pixmap.load(pixmapDir + "/toolbar/transport-record.png");
     icon = QIconSet(pixmap);
     m_recordTransport = new KAction(i18n("P&unch in Record"), icon, Key_Space, this,
                                     SLOT(slotToggleRecord()), actionCollection(),
                                     "recordtoggle");
-    m_recordTransport->setGroup(TransportDialog::ConfigGroup);
+    m_recordTransport->setGroup(TransportDialogConfigGroup);
 
     pixmap.load(pixmapDir + "/toolbar/transport-record.png");
     icon = QIconSet(pixmap);
     m_recordTransport = new KAction(i18n("&Record"), icon, 0, this,
                                     SLOT(slotRecord()), actionCollection(),
                                     "record");
-    m_recordTransport->setGroup(TransportDialog::ConfigGroup);
+    m_recordTransport->setGroup(TransportDialogConfigGroup);
 
     pixmap.load(pixmapDir + "/toolbar/transport-rewind-end.png");
     icon = QIconSet(pixmap);
     m_rewindEndTransport = new KAction(i18n("Rewind to &Beginning"), icon, 0, this,
                                        SLOT(slotRewindToBeginning()), actionCollection(),
                                        "rewindtobeginning");
-    m_rewindEndTransport->setGroup(TransportDialog::ConfigGroup);
+    m_rewindEndTransport->setGroup(TransportDialogConfigGroup);
 
     pixmap.load(pixmapDir + "/toolbar/transport-ffwd-end.png");
     icon = QIconSet(pixmap);
     m_ffwdEndTransport = new KAction(i18n("Fast Forward to &End"), icon, 0, this,
                                      SLOT(slotFastForwardToEnd()), actionCollection(),
                                      "fastforwardtoend");
-    m_ffwdEndTransport->setGroup(TransportDialog::ConfigGroup);
+    m_ffwdEndTransport->setGroup(TransportDialogConfigGroup);
 
     pixmap.load(pixmapDir + "/toolbar/transport-tracking.png");
     icon = QIconSet(pixmap);
@@ -1830,8 +1831,7 @@ void RosegardenGUIApp::setupFileDialogSpeedbar()
 
 void RosegardenGUIApp::readOptions()
 {
-    applyMainWindowSettings(kapp->config(),
-                            RosegardenGUIApp::MainWindowConfigGroup);
+    applyMainWindowSettings(kapp->config(), MainWindowConfigGroup);
 
     kapp->config()->reparseConfiguration();
 
@@ -7575,6 +7575,22 @@ RosegardenGUIApp::slotEnableMIDIThruRouting()
 {
     m_seqManager->enableMIDIThruRouting(m_enableMIDIrouting->isChecked());
 }
+
+TransportDialog* RosegardenGUIApp::getTransport() 
+{
+    if (m_transport == 0)
+        createAndSetupTransport();
+    
+    return m_transport;
+}
+
+RosegardenGUIDoc *RosegardenGUIApp::getDocument() const
+{
+    return m_doc;
+}
+
+const void* RosegardenGUIApp::SequencerExternal = (void*)-1;
+RosegardenGUIApp *RosegardenGUIApp::m_myself = 0;
 
 }
 #include "RosegardenGUIApp.moc"

@@ -433,5 +433,7 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
     return RosegardenCanvasView::FollowHorizontal | RosegardenCanvasView::FollowVertical;
 }
 
+const QString SegmentSelector::ToolName = "segmentselector";
+
 }
 #include "SegmentSelector.moc"

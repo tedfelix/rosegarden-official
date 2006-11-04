@@ -45,6 +45,7 @@
 #include "ControlParameterItem.h"
 #include "document/MultiViewCommandHistory.h"
 #include "document/RosegardenGUIDoc.h"
+#include "document/ConfigGroups.h"
 #include <kaction.h>
 #include <kcommand.h>
 #include <klistview.h>
