@@ -41,8 +41,8 @@ class NotationProperties;
 
 
 class NotationChord : public GenericChord<NotationElement,
-                                                      NotationElementList,
-                                                      true>
+                                          NotationElementList,
+                                          true>
 {
 public:
     NotationChord(NotationElementList &c,

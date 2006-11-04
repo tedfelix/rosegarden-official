@@ -35,6 +35,13 @@
 namespace Rosegarden
 {
 
+template <>
+Event *
+AbstractSet<NotationElement, NotationElementList>::getAsEvent(const NotationElementList::iterator &i)
+{
+    return (*i)->event();
+}
+
 NotationChord::NotationChord(NotationElementList &c,
                              NotationElementList::iterator i,
                              const Quantizer *quantizer,
