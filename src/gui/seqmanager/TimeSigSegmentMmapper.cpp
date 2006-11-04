@@ -70,4 +70,3 @@ size_t TimeSigSegmentMmapper::computeMmappedSize()
 }
 
 }
-#include "TimeSigSegmentMmapper.moc"

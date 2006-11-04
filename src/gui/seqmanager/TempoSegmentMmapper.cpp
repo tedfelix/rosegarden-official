@@ -75,4 +75,3 @@ size_t TempoSegmentMmapper::computeMmappedSize()
 }
 
 }
-#include "TempoSegmentMmapper.moc"

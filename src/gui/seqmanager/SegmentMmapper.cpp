@@ -560,4 +560,3 @@ size_t SegmentMmapper::computeMmappedSize()
 }
 
 }
-#include "SegmentMmapper.moc"

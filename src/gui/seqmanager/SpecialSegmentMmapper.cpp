@@ -54,4 +54,3 @@ unsigned int SpecialSegmentMmapper::getSegmentRepeatCount()
 }
 
 }
-#include "SpecialSegmentMmapper.moc"
