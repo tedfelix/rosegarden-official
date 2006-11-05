@@ -727,5 +727,3 @@ KLed::minimumSizeHint() const
 void KLed::virtual_hook( int, void* )
 { /*BASE::virtual_hook( id, data );*/
 }
-
-//#include "kled.moc"
