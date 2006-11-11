@@ -1,7 +1,7 @@
 // -*- c-basic-offset: 4 -*-
 
 /*
-    Rosegarden-4
+    Rosegarden
     A sequencer and musical notation editor.
  
     This program is Copyright 2000-2006
@@ -46,7 +46,7 @@
 
 using namespace Rosegarden;
 
-/*! \mainpage Rosegarden-4 global design
+/*! \mainpage Rosegarden global design
  
 Rosegarden is split into 3 main parts:
  

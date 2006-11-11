@@ -9,7 +9,7 @@
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
  
-    This file is Copyright 2003
+    This file is Copyright 2003-2006
         D. Michael McIntyre <dmmcintyr@users.sourceforge.net>
 
     The moral rights of Guillaume Laurent, Chris Cannam, and Richard

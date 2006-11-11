@@ -2282,7 +2282,7 @@ bool RosegardenGUIApp::slotFileSaveAs()
 
     KTmpStatusMsg msg(i18n("Saving file with a new filename..."), this);
 
-    QString newName = getValidWriteFile("*.rg|" + i18n("Rosegarden-4 files") +
+    QString newName = getValidWriteFile("*.rg|" + i18n("Rosegarden files") +
                                         "\n*|" + i18n("All files"),
                                         i18n("Save as..."));
     if (newName.isEmpty())

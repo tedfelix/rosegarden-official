@@ -70,7 +70,7 @@ CsoundExporter::write()
         return false;
     }
 
-    str << ";; Csound score file written by Rosegarden-4\n\n";
+    str << ";; Csound score file written by Rosegarden\n\n";
     if (m_composition->getCopyrightNote() != "") {
         str << ";; Copyright note:\n;; "
         //!!! really need to remove newlines from copyright note

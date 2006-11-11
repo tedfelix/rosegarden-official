@@ -271,7 +271,7 @@ MusicXmlExporter::write()
     str << "\t\t<encoding>" << std::endl;
     // Incomplete: Insert date!
     //    str << "\t\t\t<encoding-date>" << << "</encoding-date>" << std::endl;
-    str << "\t\t\t<software>Rosegarden-4</software>" << std::endl;
+    str << "\t\t\t<software>Rosegarden</software>" << std::endl;
     str << "\t\t</encoding>" << std::endl;
     str << "\t</identification> " << std::endl;
 
