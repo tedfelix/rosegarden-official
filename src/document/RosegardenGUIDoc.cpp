@@ -541,7 +541,7 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
     KFilterDev* fileCompressedDevice = static_cast<KFilterDev*>(KFilterDev::deviceForFile(filename, "application/x-gzip"));
     if (fileCompressedDevice == 0) {
 
-        errMsg = i18n("Could not open Rosegarden-4 file");
+        errMsg = i18n("Could not open Rosegarden file");
 
     } else {
         fileCompressedDevice->open(IO_ReadOnly);
