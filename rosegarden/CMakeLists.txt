@@ -209,7 +209,7 @@ ADD_SUBDIRECTORY(src RGbuild)
 
 # Build and install the translations directory
 IF(MSGFMT_FOUND)
-    ADD_SUBDIRECTORY(po RGbuild)
+    ADD_SUBDIRECTORY(po RGbuild/po)
 ENDIF(MSGFMT_FOUND)
 
 # More directories. Some need a build process, and all have an INSTALL target.
