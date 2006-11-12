@@ -34,7 +34,7 @@
 #include "base/Exception.h"
 #include <qobject.h>
 #include <qsocketnotifier.h>
-
+#include <fcntl.h>
 
 namespace Rosegarden
 {
