@@ -49,11 +49,12 @@
 </profile>
 </item>
 <item id="org.eclipse.cdt.core.pathentry">
+<pathentry excluding="cache/|.sconf_temp/|po/|RGbuild/|scons_admin/|scripts/|cmake_admin" kind="src" path=""/>
+<pathentry excluding=".sconf_temp/|cache/" kind="out" path=""/>
+<pathentry kind="out" path="RGbuild"/>
+<pathentry kind="con" path="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO"/>
 <pathentry kind="mac" name="slots" path="" value=""/>
 <pathentry kind="mac" name="signals" path="" value="protected"/>
-<pathentry excluding="base/old/|base/test/|cache/|.sconf_temp/|po/|RGbuild/|scons_admin/|scripts/" kind="src" path=""/>
-<pathentry excluding=".sconf_temp/|cache/" kind="out" path=""/>
-<pathentry kind="con" path="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO"/>
 </item>
 </data>
 </cdtproject>
