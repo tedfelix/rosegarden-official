@@ -1,5 +1,0 @@
-RGbuild
-src/*/*.o
-src/*/*/*.o
-src/*/*.moc
-src/*/*/*.moc
