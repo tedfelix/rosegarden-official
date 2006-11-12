@@ -8,7 +8,7 @@ MESSAGE("\n"
 "Xft notation font support     : ${HAVE_XFT}")
 IF(WANT_LIRC)
 MESSAGE(
-"LIRC infared remote support   : ${HAVE_LIRC}")
+"LIRC infrared remote support  : ${HAVE_LIRC}")
 ENDIF(WANT_LIRC)
 MESSAGE("")
 IF(NOT WANT_SOUND)
