@@ -1,7 +1,0 @@
-#|/bin/sh
-rm -rf build
-rm -rf {,src/,src/base/,src/sound/,src/sequencer,src/gui}CMakeFiles
-rm -f  {,src/,src/base/,src/sound/,src/sequencer,src/gui}cmake_install.cmake
-rm -f  {,src/,src/base/,src/sound/,src/sequencer,src/gui}progress.make
-rm -f  {,src/,src/base/,src/sound/,src/sequencer,src/gui}Makefile
-rm -f  CMakeCache.txt
