@@ -31,10 +31,6 @@ SET (VERSION_SUFFIX "reorg")
 SET (VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}-${VERSION_SUFFIX})
 ADD_DEFINITIONS(-D'VERSION="${VERSION}"')
 
-SET(BASE_NAME "rosegarden")
-SET(VERSIONED_NAME "${BASE_NAME}-${VERSION}")
-SET(DOCDIR "share/docs/${VERSIONED_NAME}")
-
 # User options
 OPTION(WANT_DEBUG "Include debug support" OFF)
 OPTION(WANT_SOUND "Include Sound support" ON)
@@ -119,16 +115,16 @@ IF(WANT_SOUND)
         ENDIF(DSSI_FOUND)
     ENDIF(WANT_DSSI)
     
-    FIND_PACKAGE(LO)
-    IF(LO_FOUND)
+    FIND_PACKAGE(LIBLO)
+    IF(LIBLO_FOUND)
         ADD_DEFINITIONS(-DHAVE_LIBLO)
         SET(HAVE_LIBLO TRUE)
-        MESSAGE(STATUS "Found liblo (version ${LO_VERSION})")
-        #MESSAGE("LO_LIBRARY: ${LO_LIBRARY}")
-        #MESSAGE("LO_LIBS: ${LO_LIBS}")
-        #MESSAGE("LO_LIB_DIR: ${LO_LIB_DIR}")
-        #MESSAGE("LO_INC_DIR: ${LO_INC_DIR}")
-    ENDIF(LO_FOUND)
+        MESSAGE(STATUS "Found liblo (version ${LIBLO_VERSION})")
+        #MESSAGE("LIBLO_LIBRARY: ${LIBLO_LIBRARY}")
+        #MESSAGE("LIBLO_LIBS: ${LIBLO_LIBS}")
+        #MESSAGE("LIBLO_LIB_DIR: ${LIBLO_LIB_DIR}")
+        #MESSAGE("LIBLO_INC_DIR: ${LIBLO_INC_DIR}")
+    ENDIF(LIBLO_FOUND)
     
     FIND_PACKAGE(LADSPA)
     IF(LADSPA_FOUND)
@@ -161,12 +157,15 @@ IF(WANT_LIRC)
     ENDIF(LIRC_FOUND)
 ENDIF(WANT_LIRC)
 
-FIND_PACKAGE(Msgfmt)
+FIND_PACKAGE(MSGFMT REQUIRED)
 IF(MSGFMT_FOUND)
-    MESSAGE(STATUS "Found msgfmt")
-ELSE(MSGFMT_FOUND)
-    MESSAGE(STATUS "WARNING: msgfmt program not found. PO files processing disabled.")
+    MESSAGE(STATUS "Program msgfmt found (${MSGFMT_EXECUTABLE})")
 ENDIF(MSGFMT_FOUND)
+
+FIND_PACKAGE(MEINPROC REQUIRED)
+IF(MEINPROC_FOUND)
+    MESSAGE(STATUS "Program meinproc found (${MEINPROC_EXECUTABLE})")
+ENDIF(MEINPROC_FOUND)
 
 SET(CMAKE_CXX_FLAGS_RELEASE "-O2 -w -fexceptions")
 SET(CMAKE_CXX_FLAGS_DEBUG "-O0 -g3 -Wall -fexceptions")
@@ -208,14 +207,19 @@ ADD_CUSTOM_TARGET(uninstall
 ADD_SUBDIRECTORY(src RGbuild)
 
 # Build and install the translations directory
-IF(MSGFMT_FOUND)
-    ADD_SUBDIRECTORY(po RGbuild/po)
-ENDIF(MSGFMT_FOUND)
+ADD_SUBDIRECTORY(po RGbuild/po)
 
-# More directories. Some need a build process, and all have an INSTALL target.
-#ADD_SUBDIRECTORY(docs)
+# Build and install the documentation directory
+ADD_SUBDIRECTORY(docs RGbuild/docs)
+
+# Install data files
 #ADD_SUBDIRECTORY(data)
 
 # install some documents...
 INSTALL( FILES AUTHORS COPYING README TRANSLATORS
-         DESTINATION ${DOCDIR} )
+         DESTINATION share/doc/rosegarden-${VERSION} )
+         
+# create and install the version file
+FILE(WRITE version.txt "${VERSION}\n")
+INSTALL( FILES version.txt
+		 DESTINATION share/apps/rosegarden )
