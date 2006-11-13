@@ -53,7 +53,7 @@ TARGET_LINK_LIBRARIES(rosegardensequencer
 	${QT_AND_KDECORE_LIBS} 
 	${ALSA_LIBS} 
 	${JACK_LIBS}
-	${LO_LIBS}
+	${LIBLO_LIBS}
 	${LRDF_LIBS}
 	kdeui
 )
@@ -79,7 +79,7 @@ KDE3_ADD_EXECUTABLE(rosegarden
 
 TARGET_LINK_LIBRARIES(rosegarden
 	${QT_AND_KDECORE_LIBS} 
-	${LO_LIBS}
+	${LIBLO_LIBS}
 	${LRDF_LIBS}
 	${XFT_LIBS}
 	${LIRC_LIBS}
