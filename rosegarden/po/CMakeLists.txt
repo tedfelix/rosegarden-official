@@ -1,24 +1,25 @@
-# .po to .mo
 
-FILE(GLOB _pofiles *.po)
+# Automatic discovery of sources
+FILE(GLOB PO_FILES *.po)
 
-FOREACH(_file ${_pofiles})
-	GET_FILENAME_COMPONENT(_file_we ${_file} NAME_WE)
-	SET(_out "${CMAKE_CURRENT_BINARY_DIR}/${_file_we}.gmo")
-	SET(_in  "${CMAKE_CURRENT_SOURCE_DIR}/${_file_we}.po")
-	ADD_CUSTOM_COMMAND(
-		OUTPUT ${_out}
-		COMMAND ${MSGFMT_EXECUTABLE} -o ${_out} ${_in}
-		DEPENDS ${_in}
-	)
-	INSTALL(FILES ${_out}
-		DESTINATION share/locale/${_file_we}/LC_MESSAGES/
-		RENAME ${BASE_NAME}.mo
-	)
-	SET(_outputs ${_outputs} ${_out})
-ENDFOREACH(_file)
+# DISABLED: explicit set of source files
+# SET(PO_FILES
+#    ca.po
+#    cs.po
+#    cy.po
+#    de.po
+#    en_GB.po
+#    en.po
+#    es.po
+#    et.po
+#    fi.po
+#    fr.po
+#    it.po
+#    ja.po
+#    nl.po
+#    ru.po
+#    sv.po
+#    zh_CN.po
+# )
 
-ADD_CUSTOM_TARGET(
-	pofiles ALL
-	DEPENDS ${_outputs}
-)
+ADD_TRANSLATIONS(rosegarden ${PO_FILES})
