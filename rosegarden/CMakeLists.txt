@@ -61,7 +61,10 @@ ENDIF(KDE3_FOUND)
 
 # This FindKDE3 module sets stupid flags, and forgets to set KDE install prefix
 SET(CMAKE_CXX_FLAGS "")
-INCLUDE(KDE3Prefix)
+
+# Disable automatic KDE prefix for now
+# INCLUDE(KDE3Prefix)
+
 MESSAGE(STATUS "Rosegarden ${VERSION} will be built for install into ${CMAKE_INSTALL_PREFIX}")
     
 # Check for Xft
