@@ -28,6 +28,7 @@
 #include "RingBuffer.h"
 #include "RunnablePluginInstance.h"
 #include "AudioPlayQueue.h"
+#include "RecordableAudioFile.h"
 
 namespace Rosegarden
 {

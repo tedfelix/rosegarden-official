@@ -23,6 +23,7 @@
 
 #include "RunnablePluginInstance.h"
 #include "PlayableAudioFile.h"
+#include "RecordableAudioFile.h"
 #include "WAVAudioFile.h"
 #include "MappedStudio.h"
 #include "Profiler.h"

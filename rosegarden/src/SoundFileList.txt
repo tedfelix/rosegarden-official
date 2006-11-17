@@ -54,6 +54,8 @@ SET(common_sound_SRCS
 	sound/PluginFactory.h
 	sound/PluginIdentifier.cpp
 	sound/PluginIdentifier.h
+	sound/RecordableAudioFile.cpp
+	sound/RecordableAudioFile.h
 	sound/RIFFAudioFile.cpp
 	sound/RIFFAudioFile.h
 	sound/RingBuffer.h
