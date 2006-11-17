@@ -179,7 +179,7 @@ protected slots:
     void slotPitchFromChooser();
     void slotPitchToChooser();
     
-
+private:
     //---------[ data members ]-----------------------------
 
     QGridLayout* layout;
