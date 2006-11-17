@@ -213,40 +213,6 @@ private:
     PlayableAudioFile(const PlayableAudioFile &pAF); // not provided
 };
 
-
-// A wrapper class for writing out a recording file.  We assume the
-// data is provided by a process thread and the writes are requested
-// by a disk thread.
-//
-class RecordableAudioFile
-{
-public:
-    typedef float sample_t;
-
-    typedef enum
-    {
-        IDLE,
-        RECORDING,
-        DEFUNCT
-    } RecordStatus;
-
-    RecordableAudioFile(AudioFile *audioFile, // should be already open for writing
-                        size_t bufferSize);
-    ~RecordableAudioFile();
-
-    void setStatus(const RecordStatus &status) { m_status = status; }
-    RecordStatus getStatus() const { return m_status; }
-
-    size_t buffer(const sample_t *data, int channel, size_t frames);
-    void write();
-
-protected:
-    AudioFile            *m_audioFile;
-    RecordStatus          m_status;
-
-    std::vector<RingBuffer<sample_t> *> m_ringBuffers; // one per channel
-};
-
 }
 
 #endif
