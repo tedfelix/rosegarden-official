@@ -32,9 +32,9 @@
 #define _BASE_COLOURMAP_H_
 
 // These are the default, default colour
-#define COLOUR_DEF_R 197
-#define COLOUR_DEF_G 211
-#define COLOUR_DEF_B 125 
+#define COLOUR_DEF_R 255
+#define COLOUR_DEF_G 234
+#define COLOUR_DEF_B 182 
 
 namespace Rosegarden 
 {
