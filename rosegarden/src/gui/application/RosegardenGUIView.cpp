@@ -937,8 +937,9 @@ void RosegardenGUIView::slotSetSelectedSegments(
     // on the toolbar so that we have a SegmentSelector object
     // to write the Segments into
     //
-    if (segments.size() > 0)
+    if (!segments.empty()) {
         emit activateTool(SegmentSelector::ToolName);
+    }
 
     // Send the segment list even if it's empty as we
     // use that to clear any current selection
@@ -948,9 +949,14 @@ void RosegardenGUIView::slotSetSelectedSegments(
     // update the segment parameter box
     m_segmentParameterBox->useSegments(segments);
 
-    emit stateChange("have_selection", true);
-    if (!segments.hasNonAudioSegment())
-        emit stateChange("audio_segment_selected", true);
+    if (!segments.empty()) {
+        emit stateChange("have_selection", true);
+        if (!segments.hasNonAudioSegment()) {
+            emit stateChange("audio_segment_selected", true);
+        }
+    } else {
+        emit stateChange("have_selection", false);
+    }
 }
 
 void RosegardenGUIView::slotSelectAllSegments()
@@ -984,8 +990,9 @@ void RosegardenGUIView::slotSelectAllSegments()
     // on the toolbar so that we have a SegmentSelector object
     // to write the Segments into
     //
-    if (segments.size() > 0)
+    if (!segments.empty()) {
         emit activateTool(SegmentSelector::ToolName);
+    }
 
     // Send the segment list even if it's empty as we
     // use that to clear any current selection
@@ -1005,10 +1012,14 @@ void RosegardenGUIView::slotSelectAllSegments()
     //!!! similarly, how to set no selected track?
     //comp.setSelectedTrack(trackId);
 
-    emit stateChange("have_selection", true);
-
-    if (!segments.hasNonAudioSegment())
-        emit stateChange("audio_segment_selected", true);
+    if (!segments.empty()) {
+        emit stateChange("have_selection", true);
+        if (!segments.hasNonAudioSegment()) {
+            emit stateChange("audio_segment_selected", true);
+        }
+    } else {
+        emit stateChange("have_selection", false);
+    }
 
     // inform
     //!!! inform what? is this signal actually used?
@@ -1238,12 +1249,13 @@ RosegardenGUIView::slotSelectedSegments(const SegmentSelection &segments)
     // update the segment parameter box
     m_segmentParameterBox->useSegments(segments);
 
-    if (segments.size()) {
+    if (!segments.empty()) {
         emit stateChange("have_selection", true);
         if (!segments.hasNonAudioSegment())
             emit stateChange("audio_segment_selected", true);
-    } else
+    } else {
         emit stateChange("have_selection", false);
+    }
 
     emit segmentsSelected(segments);
 }
