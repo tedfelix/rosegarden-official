@@ -9,7 +9,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.4.2)
 # Show full commands and messages. It generates a lot of console output.
 # It is necessary for Eclipse warning/error parser, 
 # but it can be enabled anyway with "make VERBOSE=1"
-SET(CMAKE_VERBOSE_MAKEFILE ON)
+SET(CMAKE_VERBOSE_MAKEFILE OFF)
 
 # Seems that relative paths break the link scripts. Don't set it ON
 SET(CMAKE_USE_RELATIVE_PATHS OFF)
@@ -235,7 +235,7 @@ ADD_SUBDIRECTORY(po RGbuild/po)
 ADD_SUBDIRECTORY(docs RGbuild/docs)
 
 # Install data files
-#ADD_SUBDIRECTORY(data)
+ADD_SUBDIRECTORY(data)
 
 # install some documents...
 INSTALL( FILES AUTHORS COPYING README TRANSLATORS

@@ -26,25 +26,32 @@ SET(CMAKE_INCLUDE_PATH ".")
 # Common sources
 INCLUDE(BaseFileList.txt)
 INCLUDE(MiscFileList.txt)
+
+# Sound sources
 INCLUDE(SoundFileList.txt)
+
+KDE3_AUTOMOC(${common_sound_SRCS})
+
+ADD_LIBRARY(RosegardenCommon STATIC
+	${misc_SRCS}
+	${base_SRCS}
+	${common_sound_SRCS}
+)
 
 # sequencer executable
 INCLUDE(SequencerFileList.txt)
 
 IF(WANT_SOUND)
-	SET(snd_SRCS ${common_sound_SRCS} ${sound_SRCS})
+	SET(snd_SRCS ${sound_SRCS})
 ELSE(WANT_SOUND)
-	SET(snd_SRCS ${common_sound_SRCS} ${nosound_SRCS})
+	SET(snd_SRCS ${nosound_SRCS})
 ENDIF(WANT_SOUND)
 
 KDE3_ADD_DCOP_SKELS(sequencer_SRCS ${seq_dcop_SRCS})
 KDE3_ADD_DCOP_STUBS(sequencer_SRCS ${seq_dcop_SRCS}) 
-KDE3_AUTOMOC(${common_sound_SRCS})
 KDE3_AUTOMOC(${sequencer_SRCS})
 
 KDE3_ADD_EXECUTABLE(rosegardensequencer 
-	${misc_SRCS}
-	${base_SRCS}
 	${snd_SRCS}
 	${sequencer_SRCS}
 )
@@ -56,6 +63,7 @@ TARGET_LINK_LIBRARIES(rosegardensequencer
 	${LIBLO_LIBS}
 	${LRDF_LIBS}
 	kdeui
+	RosegardenCommon
 )
 
 # gui executable
@@ -69,9 +77,6 @@ KDE3_AUTOMOC(${commands_SRCS})
 KDE3_AUTOMOC(${document_SRCS})
 
 KDE3_ADD_EXECUTABLE(rosegarden 
-	${misc_SRCS}
-	${base_SRCS}
-	${common_sound_SRCS}
 	${commands_SRCS}
 	${document_SRCS}
 	${gui_SRCS}
@@ -87,6 +92,7 @@ TARGET_LINK_LIBRARIES(rosegarden
 	kio
 	kdeui
 	kdeprint
+	RosegardenCommon
 )
 
 # Install targets
@@ -101,3 +107,8 @@ INSTALL(PROGRAMS
 			helpers/rosegarden-lilypondview
 			helpers/rosegarden-project-package
 		DESTINATION bin )
+
+# Install GUI resource files
+FILE(GLOB RC_FILES gui/ui/*.rc)
+INSTALL(FILES ${RC_FILES}
+		DESTINATION share/apps/rosegarden )
