@@ -34,13 +34,13 @@ ADD_DEFINITIONS(-D'VERSION="${VERSION}"')
 # User options
 OPTION(WANT_DEBUG "Include debug support" OFF)
 OPTION(WANT_SOUND "Include Sound support" ON)
-OPTION(WANT_ALSA  "Include ALSA support" ON)
-OPTION(WANT_JACK  "Include Jack support" ON)
-OPTION(WANT_DSSI  "Include DSSI support" ON)
-OPTION(WANT_LIRC  "Include LIRC support" ON)
+#OPTION(WANT_ALSA "Include ALSA (Advanced Linux Sound Architecture) support" ON)
+OPTION(WANT_JACK  "Include Jack (Jack Audio Connection Kit) support" ON)
+OPTION(WANT_DSSI  "Include DSSI" ON)
+OPTION(WANT_LIRC  "Include LIRC (Linux Infrared Remote Control) support" ON)
 
 IF(NOT WANT_SOUND)
-    SET(WANT_ALSA OFF)
+    #SET(WANT_ALSA OFF)
     SET(WANT_JACK OFF)
     SET(WANT_DSSI OFF)
     ADD_DEFINITIONS(-DNO_SOUND)
@@ -53,20 +53,20 @@ IF(QT_FOUND)
     MESSAGE(STATUS "Found Qt3 (version ${qt_version_str})")
     #MESSAGE("QT_LIBRARIES: ${QT_LIBRARIES}")
 ELSE(QT_FOUND)
-	MESSAGE(FATAL_ERROR "Qt3 package not found")
+    MESSAGE(FATAL_ERROR "Qt3 package not found")
 ENDIF(QT_FOUND)
 IF(KDE3_FOUND)
     ADD_DEFINITIONS(${KDE3_DEFINITIONS})
     KDE3_PRINT_RESULTS()
     #MESSAGE("QT_AND_KDECORE_LIBS: ${QT_AND_KDECORE_LIBS}")
 ELSE(KDE3_FOUND)    
-	MESSAGE(FATAL_ERROR "KDE3 Not found")
+    MESSAGE(FATAL_ERROR "KDE3 Not found")
 ENDIF(KDE3_FOUND)
 
-# This FindKDE3 module sets stupid flags, and forgets to set KDE install prefix
+# Clear the flags set by FindKDE3 
 SET(CMAKE_CXX_FLAGS "")
 
-# Disable automatic KDE prefix for now
+# It would be great to provide KDE prefix as a default but overridable prefix...
 # INCLUDE(KDE3Prefix)
 
 # Check for PKG-CONFIG
@@ -74,7 +74,7 @@ FIND_PACKAGE(PkgConfig REQUIRED)
 IF(PKG_CONFIG_FOUND)
     MESSAGE(STATUS "Program pkg-config found (${PKG_CONFIG_EXECUTABLE})")
 ELSE(PKG_CONFIG_FOUND)
-	MESSAGE(FATAL_ERROR "Program pkg-config not found")
+    MESSAGE(FATAL_ERROR "Program pkg-config not found")
 ENDIF(PKG_CONFIG_FOUND)
 
 # Check for Xft
@@ -93,8 +93,8 @@ ENDIF(XFT_FOUND)
 IF(WANT_SOUND)
 
     # Check for ALSA 1.0
-    IF(WANT_ALSA)
-    	PKG_CHECK_MODULES(ALSA alsa>=1.0)
+    #IF(WANT_ALSA)
+        PKG_CHECK_MODULES(ALSA REQUIRED alsa>=1.0)
         IF(ALSA_FOUND)
             SET(HAVE_ALSA TRUE)
             ADD_DEFINITIONS(-DHAVE_ALSA)
@@ -105,7 +105,7 @@ IF(WANT_SOUND)
             LIST(APPEND ALSA_INC_DIR ${ALSA_INCLUDE_DIRS} ${ALSA_INCLUDEDIR})
             #MESSAGE("ALSA_INC_DIR: ${ALSA_INC_DIR}")
         ENDIF(ALSA_FOUND)
-    ENDIF(WANT_ALSA)
+    #ENDIF(WANT_ALSA)
     
     IF(WANT_JACK)
         PKG_CHECK_MODULES(JACK jack>=0.77)
@@ -235,7 +235,7 @@ ADD_SUBDIRECTORY(po RGbuild/po)
 ADD_SUBDIRECTORY(docs RGbuild/docs)
 
 # Install data files
-ADD_SUBDIRECTORY(data)
+ADD_SUBDIRECTORY(data RGbuild/data)
 
 # install some documents...
 INSTALL( FILES AUTHORS COPYING README TRANSLATORS
@@ -244,4 +244,4 @@ INSTALL( FILES AUTHORS COPYING README TRANSLATORS
 # create and install the version file
 FILE(WRITE version.txt "${VERSION}\n")
 INSTALL( FILES version.txt
-		 DESTINATION share/apps/rosegarden )
+         DESTINATION share/apps/rosegarden )
