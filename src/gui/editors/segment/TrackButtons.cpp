@@ -1051,8 +1051,8 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
     trackLabel->setFixedHeight(m_cellSize - buttonGap);
     trackLabel->setIndent(7);
 
-    connect(trackLabel, SIGNAL(renameTrack(QString, Rosegarden::TrackId)),
-            SLOT(slotRenameTrack(QString, Rosegarden::TrackId)));
+    connect(trackLabel, SIGNAL(renameTrack(QString, TrackId)),
+            SLOT(slotRenameTrack(QString, TrackId)));
 
     // Store the TrackLabel pointer
     //
