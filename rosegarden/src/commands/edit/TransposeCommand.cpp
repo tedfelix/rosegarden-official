@@ -47,12 +47,12 @@ TransposeCommand::modifySegment()
 
         if ((*i)->isa(Note::EventType)) {
             try {
-                long pitch = (*i)->get
-                             <Int>(PITCH);
+                long pitch = (*i)->get<Int>(PITCH);
                 pitch += m_semitones;
-                (*i)->set
-                <Int>(PITCH, pitch);
-                (*i)->unset(ACCIDENTAL);
+                (*i)->set<Int>(PITCH, pitch);
+                if ((m_semitones % 12) != 0) {
+                    (*i)->unset(ACCIDENTAL);
+                }
             } catch (...) { }
         }
     }
