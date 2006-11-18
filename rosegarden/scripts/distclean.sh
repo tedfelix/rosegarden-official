@@ -1,5 +1,5 @@
 #!/bin/sh
-rm -f  CMakeCache.txt
+rm -f  {,src/,po/,docs/,data/}CMakeCache.txt
 rm -f  {,src/,po/,docs/,data/}cmake_install.cmake
 rm -f  {,src/,po/,docs/,data/}cmake_uninstall.cmake
 rm -f  {,src/,po/,docs/,data/}install_manifest.txt

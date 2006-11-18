@@ -1,23 +1,26 @@
+IF(NOT ROSEGARDEN_SOURCE_DIR)
+    MESSAGE(FATAL_ERROR "You need to run cmake or ccmake at the root directory")
+ENDIF(NOT ROSEGARDEN_SOURCE_DIR)
 
 LINK_DIRECTORIES(
-	${KDE3_LIB_DIR} 
-	${ALSA_LIB_DIR}
-	${JACK_LIB_DIR}
-	${XFT_LIB_DIR}
-	${LIBLO_LIB_DIR}
+    ${KDE3_LIB_DIR} 
+    ${ALSA_LIB_DIR}
+    ${JACK_LIB_DIR}
+    ${XFT_LIB_DIR}
+    ${LIBLO_LIB_DIR}
 )
 
 INCLUDE_DIRECTORIES( 
-	${QT_INCLUDE_DIR} 
-	${KDE3_INCLUDE_DIR} 
-	${ALSA_INC_DIR}
-	${JACK_INC_DIR}
-	${XFT_INC_DIR}
-	${DSSI_INC_DIR}
-	${LIBLO_INC_DIR}
-	${LADSPA_INC_DIR}
-	${LRDF_INC_DIR}
-	${LIRC_INC_DIR}
+    ${QT_INCLUDE_DIR} 
+    ${KDE3_INCLUDE_DIR} 
+    ${ALSA_INC_DIR}
+    ${JACK_INC_DIR}
+    ${XFT_INC_DIR}
+    ${DSSI_INC_DIR}
+    ${LIBLO_INC_DIR}
+    ${LADSPA_INC_DIR}
+    ${LRDF_INC_DIR}
+    ${LIRC_INC_DIR}
     base
 )
 
@@ -33,18 +36,18 @@ INCLUDE(SoundFileList.txt)
 KDE3_AUTOMOC(${common_sound_SRCS})
 
 ADD_LIBRARY(RosegardenCommon STATIC
-	${misc_SRCS}
-	${base_SRCS}
-	${common_sound_SRCS}
+    ${misc_SRCS}
+    ${base_SRCS}
+    ${common_sound_SRCS}
 )
 
 # sequencer executable
 INCLUDE(SequencerFileList.txt)
 
 IF(WANT_SOUND)
-	SET(snd_SRCS ${sound_SRCS})
+    SET(snd_SRCS ${sound_SRCS})
 ELSE(WANT_SOUND)
-	SET(snd_SRCS ${nosound_SRCS})
+    SET(snd_SRCS ${nosnd_SRCS})
 ENDIF(WANT_SOUND)
 
 KDE3_ADD_DCOP_SKELS(sequencer_SRCS ${seq_dcop_SRCS})
@@ -52,18 +55,18 @@ KDE3_ADD_DCOP_STUBS(sequencer_SRCS ${seq_dcop_SRCS})
 KDE3_AUTOMOC(${sequencer_SRCS})
 
 KDE3_ADD_EXECUTABLE(rosegardensequencer 
-	${snd_SRCS}
-	${sequencer_SRCS}
+    ${snd_SRCS}
+    ${sequencer_SRCS}
 )
 
 TARGET_LINK_LIBRARIES(rosegardensequencer 
-	${QT_AND_KDECORE_LIBS} 
-	${ALSA_LIBS} 
-	${JACK_LIBS}
-	${LIBLO_LIBS}
-	${LRDF_LIBS}
-	kdeui
-	RosegardenCommon
+    ${QT_AND_KDECORE_LIBS} 
+    ${ALSA_LIBS} 
+    ${JACK_LIBS}
+    ${LIBLO_LIBS}
+    ${LRDF_LIBS}
+    kdeui
+    RosegardenCommon
 )
 
 # gui executable
@@ -77,38 +80,35 @@ KDE3_AUTOMOC(${commands_SRCS})
 KDE3_AUTOMOC(${document_SRCS})
 
 KDE3_ADD_EXECUTABLE(rosegarden 
-	${commands_SRCS}
-	${document_SRCS}
-	${gui_SRCS}
+    ${commands_SRCS}
+    ${document_SRCS}
+    ${gui_SRCS}
 )
 
 TARGET_LINK_LIBRARIES(rosegarden
-	${QT_AND_KDECORE_LIBS} 
-	${LIBLO_LIBS}
-	${LRDF_LIBS}
-	${XFT_LIBS}
-	${LIRC_LIBS}
-	${JACK_LIBS}
-	kio
-	kdeui
-	kdeprint
-	RosegardenCommon
+    ${QT_AND_KDECORE_LIBS} 
+    ${LIBLO_LIBS}
+    ${LRDF_LIBS}
+    ${XFT_LIBS}
+    ${LIRC_LIBS}
+    ${JACK_LIBS}
+    kio
+    kdeui
+    kdeprint
+    RosegardenCommon
 )
 
 # Install targets
-INSTALL(TARGETS 
-			rosegarden 
-			rosegardensequencer
-		RUNTIME DESTINATION bin
-)
+INSTALL(TARGETS rosegarden rosegardensequencer
+        RUNTIME DESTINATION bin)
 
 # Install helper scripts
 INSTALL(PROGRAMS
-			helpers/rosegarden-lilypondview
-			helpers/rosegarden-project-package
-		DESTINATION bin )
+            helpers/rosegarden-lilypondview
+            helpers/rosegarden-project-package
+        DESTINATION bin )
 
 # Install GUI resource files
 FILE(GLOB RC_FILES gui/ui/*.rc)
 INSTALL(FILES ${RC_FILES}
-		DESTINATION share/apps/rosegarden )
+        DESTINATION share/apps/rosegarden )
