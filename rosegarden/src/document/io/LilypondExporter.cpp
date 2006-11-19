@@ -489,7 +489,7 @@ LilypondExporter::write()
         // default tagline/footer
         if (!userTagline) {
             str << indent(col) << "tagline = \""
-            << "Exported by Rosegarden " << protectIllegalChars(VERSION)
+            << "Created using Rosegarden " << protectIllegalChars(VERSION) << " and LilyPond"
             << "\"" << std::endl;
         }
 

@@ -80,17 +80,6 @@ public:
     filterRange getVelocity();
     filterRange getDuration();
 
-    filterRange getController();
-    filterRange getValue();
-
-    filterRange getWheel();
-
-    bool filterNote()       { return m_noteCheckBox->isChecked();       }
-#ifdef COMPILE_DEPRECATED
-    bool filterController() { return m_controllerCheckBox->isChecked(); }
-    bool filterWheel()      { return m_wheelCheckBox->isChecked();      }
-#endif
-    
     // returns TRUE if the property value falls with in the filterRange 
     bool eventInRange(filterRange foo, long property) {
         if (foo.first > foo.second)
@@ -126,18 +115,6 @@ protected:
     bool velocityIsInclusive() { return (m_noteVelocityIncludeComboBox->currentItem() == 0); }
     bool durationIsInclusive() { return (m_noteDurationIncludeComboBox->currentItem() == 0); }
 
-#ifdef COMPILE_DEPRECATED    
-    bool controllerNumberIsInclusive() {
-                                 return (m_controllerNumberIncludeComboBox->currentItem()
-                                                                                      == 0); }
-
-    bool controllerValueIsInclusive()  {
-                                 return (m_controllerValueIncludeComboBox->currentItem()
-                                                                                      == 0); }
-
-    bool wheelIsInclusive()    { return (m_wheelAmountIncludeComboBox->currentItem()  == 0); }
-#endif
-
 protected slots:
 
     // set widget values to include everything
@@ -149,13 +126,6 @@ protected slots:
     // write out settings to kconfig data for next time and call accept()
     virtual void slotOk();
 
-    // hooked up to disable their associated widgets
-    void slotNoteCheckBoxToggle(int);
-// DEPRECATED
-    void slotControllerCheckBoxToggle(int);
-    void slotWheelCheckBoxToggle(int);
-// END DEPRECATED
-    
     // update note name text display and ensure From <= To
     void slotPitchFromChanged(int pitch);
     void slotPitchToChanged(int pitch);
@@ -166,15 +136,6 @@ protected slots:
     void slotDurationFromChanged(int index);
     void slotDurationToChanged(int index);
 
-// DEPRECATED
-    void slotControllerFromChanged(int controller);
-    void slotControllerToChanged(int controller);
-    void slotValueFromChanged(int value);
-    void slotValueToChanged(int value);
-    void slotWheelFromChanged(int value);
-    void slotWheelToChanged(int value);
-// END DEPRECATED
-
     // create a pitch chooser widget sub-dialog to show pitch on staff
     void slotPitchFromChooser();
     void slotPitchToChooser();
@@ -184,21 +145,6 @@ private:
 
     QGridLayout* layout;
 
-#ifdef COMPILE_DEPRECATED    
-    QCheckBox*   m_controllerCheckBox;
-    QCheckBox*   m_wheelCheckBox;
-    QComboBox*   m_controllerNumberIncludeComboBox;
-    QComboBox*   m_controllerValueIncludeComboBox;
-    QComboBox*   m_wheelAmountIncludeComboBox;
-    QSpinBox*    m_controllerNumberFromSpinBox;
-    QSpinBox*    m_controllerNumberToSpinBox;
-    QSpinBox*    m_controllerValueFromSpinBox;
-    QSpinBox*    m_controllerValueToSpinBox;
-    QSpinBox*    m_wheelAmountFromSpinBox;
-    QSpinBox*    m_wheelAmountToSpinBox;
-#endif
-    
-    QCheckBox*   m_noteCheckBox;
     QComboBox*   m_noteDurationFromComboBox;
     QComboBox*   m_noteDurationIncludeComboBox;
     QComboBox*   m_noteDurationToComboBox;
