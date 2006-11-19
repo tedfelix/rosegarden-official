@@ -4,6 +4,7 @@ MESSAGE("\n"
 "\n"
 "Install Directory             : ${CMAKE_INSTALL_PREFIX}\n"
 "Build type                    : ${CMAKE_BUILD_TYPE}\n"
+"Use Qt/KDE precompiled headers: ${USE_PCH}\n"
 "\n"
 "Xft notation font support     : ${HAVE_XFT}")
 IF(WANT_LIRC)

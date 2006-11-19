@@ -2,6 +2,12 @@ IF(NOT ROSEGARDEN_SOURCE_DIR)
     MESSAGE(FATAL_ERROR "You need to run cmake or ccmake at the root directory")
 ENDIF(NOT ROSEGARDEN_SOURCE_DIR)
 
+IF(USE_PCH)
+	#INCLUDE(QTKDEPCHsplit)
+	INCLUDE(QTKDEPCHjoin)
+	ADD_QTKDE_PRECOMPILED_HEADERS(${CMAKE_CURRENT_BINARY_DIR}/pch)
+ENDIF(USE_PCH)
+
 LINK_DIRECTORIES(
     ${KDE3_LIB_DIR} 
     ${ALSA_LIB_DIR}
@@ -10,7 +16,7 @@ LINK_DIRECTORIES(
     ${LIBLO_LIB_DIR}
 )
 
-INCLUDE_DIRECTORIES( 
+INCLUDE_DIRECTORIES(AFTER
     ${QT_INCLUDE_DIR} 
     ${KDE3_INCLUDE_DIR} 
     ${ALSA_INC_DIR}
@@ -41,6 +47,10 @@ ADD_LIBRARY(RosegardenCommon STATIC
     ${common_sound_SRCS}
 )
 
+IF(USE_PCH)
+    ADD_DEPENDENCIES(RosegardenCommon precompiled_headers)
+ENDIF(USE_PCH)
+
 # sequencer executable
 INCLUDE(SequencerFileList.txt)
 
@@ -58,6 +68,10 @@ KDE3_ADD_EXECUTABLE(rosegardensequencer
     ${snd_SRCS}
     ${sequencer_SRCS}
 )
+
+IF(USE_PCH)
+    ADD_DEPENDENCIES(rosegardensequencer precompiled_headers)
+ENDIF(USE_PCH)
 
 TARGET_LINK_LIBRARIES(rosegardensequencer 
     ${QT_AND_KDECORE_LIBS} 
@@ -84,6 +98,10 @@ KDE3_ADD_EXECUTABLE(rosegarden
     ${document_SRCS}
     ${gui_SRCS}
 )
+
+IF(USE_PCH)
+    ADD_DEPENDENCIES(rosegarden precompiled_headers)
+ENDIF(USE_PCH)
 
 TARGET_LINK_LIBRARIES(rosegarden
     ${QT_AND_KDECORE_LIBS} 
