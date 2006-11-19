@@ -32,12 +32,13 @@ SET (VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}-${VERSION_SUFFIX
 ADD_DEFINITIONS(-D'VERSION="${VERSION}"')
 
 # User options
-OPTION(WANT_DEBUG "Include debug support" OFF)
-OPTION(WANT_SOUND "Include Sound support" ON)
-#OPTION(WANT_ALSA "Include ALSA (Advanced Linux Sound Architecture) support" ON)
-OPTION(WANT_JACK  "Include Jack (Jack Audio Connection Kit) support" ON)
-OPTION(WANT_DSSI  "Include DSSI" ON)
-OPTION(WANT_LIRC  "Include LIRC (Linux Infrared Remote Control) support" ON)
+OPTION(WANT_DEBUG   "Include debug support" OFF)
+OPTION(WANT_FULLDBG "Full debug support (BIG executables!)" OFF)
+OPTION(WANT_SOUND   "Include Sound support" ON)
+OPTION(WANT_JACK    "Include Jack (Jack Audio Connection Kit) support" ON)
+OPTION(WANT_DSSI    "Include DSSI support" ON)
+OPTION(WANT_LIRC    "Include LIRC (Linux Infrared Remote Control) support" ON)
+OPTION(WANT_PCH     "Use precompiled headers" OFF)
 
 IF(NOT WANT_SOUND)
     #SET(WANT_ALSA OFF)
@@ -77,6 +78,16 @@ ELSE(PKG_CONFIG_FOUND)
     MESSAGE(FATAL_ERROR "Program pkg-config not found")
 ENDIF(PKG_CONFIG_FOUND)
 
+# Initialize some variables
+SET(HAVE_XFT FALSE)
+SET(HAVE_ALSA FALSE)
+SET(HAVE_JACK FALSE)
+SET(HAVE_DSSI FALSE)
+SET(HAVE_LIBLO FALSE)
+SET(HAVE_LRDF FALSE)
+SET(HAVE_LADSPA FALSE)
+SET(HAVE_LIRC FALSE)
+
 # Check for Xft
 PKG_CHECK_MODULES(XFT xft>=2.1.0)
 IF(XFT_FOUND)
@@ -93,19 +104,17 @@ ENDIF(XFT_FOUND)
 IF(WANT_SOUND)
 
     # Check for ALSA 1.0
-    #IF(WANT_ALSA)
-        PKG_CHECK_MODULES(ALSA REQUIRED alsa>=1.0)
-        IF(ALSA_FOUND)
-            SET(HAVE_ALSA TRUE)
-            ADD_DEFINITIONS(-DHAVE_ALSA)
-            SET(ALSA_LIBS ${ALSA_LIBRARIES})
-            #MESSAGE("ALSA_LIBS: ${ALSA_LIBS}")
-            LIST(APPEND ALSA_LIB_DIR ${ALSA_LIBRARY_DIRS} ${ALSA_LIBDIR} )
-            #MESSAGE("ALSA_LIB_DIR: ${ALSA_LIB_DIR}")
-            LIST(APPEND ALSA_INC_DIR ${ALSA_INCLUDE_DIRS} ${ALSA_INCLUDEDIR})
-            #MESSAGE("ALSA_INC_DIR: ${ALSA_INC_DIR}")
-        ENDIF(ALSA_FOUND)
-    #ENDIF(WANT_ALSA)
+    PKG_CHECK_MODULES(ALSA REQUIRED alsa>=1.0)
+    IF(ALSA_FOUND)
+        SET(HAVE_ALSA TRUE)
+        ADD_DEFINITIONS(-DHAVE_ALSA)
+        SET(ALSA_LIBS ${ALSA_LIBRARIES})
+        #MESSAGE("ALSA_LIBS: ${ALSA_LIBS}")
+        LIST(APPEND ALSA_LIB_DIR ${ALSA_LIBRARY_DIRS} ${ALSA_LIBDIR} )
+        #MESSAGE("ALSA_LIB_DIR: ${ALSA_LIB_DIR}")
+        LIST(APPEND ALSA_INC_DIR ${ALSA_INCLUDE_DIRS} ${ALSA_INCLUDEDIR})
+        #MESSAGE("ALSA_INC_DIR: ${ALSA_INC_DIR}")
+    ENDIF(ALSA_FOUND)
     
     IF(WANT_JACK)
         PKG_CHECK_MODULES(JACK jack>=0.77)
@@ -187,22 +196,39 @@ IF(MEINPROC_FOUND)
     MESSAGE(STATUS "Program meinproc found (${MEINPROC_EXECUTABLE})")
 ENDIF(MEINPROC_FOUND)
 
-SET(CMAKE_CXX_FLAGS_RELEASE "-O2 -w -fexceptions")
-SET(CMAKE_CXX_FLAGS_DEBUG "-O0 -g3 -Wall -fexceptions")
+SET(CMAKE_CXX_FLAGS_RELEASE         "-O2 -w -fexceptions")
+SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO  "-O2 -g -Wall -fexceptions")
+SET(CMAKE_CXX_FLAGS_DEBUG           "-O0 -g3 -Wall -fexceptions")
 
 MESSAGE(STATUS "Rosegarden ${VERSION} will be built for install into ${CMAKE_INSTALL_PREFIX}")
 
 IF(WANT_DEBUG)
-    MESSAGE(STATUS "Configured to compile including debug information in the executables")
-    SET(CMAKE_BUILD_TYPE Debug CACHE STRING
-        "Choose the type of build, options are: Debug Release" FORCE)
-    ADD_DEFINITIONS(-DDEBUG)
+	IF(WANT_FULLDBG)
+	    MESSAGE(STATUS "Configured to compile including full debug information in the executables")
+	    SET(CMAKE_BUILD_TYPE Debug CACHE STRING
+	        "Choose the type of build, options are: Debug Release RelWithDebInfo" FORCE)
+	    ADD_DEFINITIONS(-DDEBUG)
+	ELSE(WANT_FULLDBG)
+	    MESSAGE(STATUS "Configured to compile including debug information in the executables")
+	    SET(CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING
+	        "Choose the type of build, options are: Debug Release RelWithDebInfo" FORCE)
+	    ADD_DEFINITIONS(-DDEBUG)
+    ENDIF(WANT_FULLDBG)
 ELSE(WANT_DEBUG)
     MESSAGE(STATUS "Configured to compile for release without debug information")
     SET(CMAKE_BUILD_TYPE Release CACHE STRING
-        "Choose the type of build, options are: Debug Release" FORCE)
+        "Choose the type of build, options are: Debug Release RelWithDebInfo" FORCE)
     ADD_DEFINITIONS(-DNDEBUG)
 ENDIF(WANT_DEBUG)
+
+# Check GCC version, use PCH only for GCC 4.x
+SET(USE_PCH FALSE)
+IF(WANT_PCH)
+	EXEC_PROGRAM(gcc ARGS --version OUTPUT_VARIABLE GCC_VERSION)
+	IF(GCC_VERSION MATCHES ".*4\\.[0-9]\\.[0-9].*")
+        SET(USE_PCH TRUE)
+    ENDIF(GCC_VERSION MATCHES ".*4\\.[0-9]\\.[0-9].*")
+ENDIF(WANT_PCH)
 
 # Warn the user if important libraries are missing
 INCLUDE(UserWarnings)
@@ -238,7 +264,7 @@ ADD_SUBDIRECTORY(docs RGbuild/docs)
 ADD_SUBDIRECTORY(data RGbuild/data)
 
 # install some documents...
-INSTALL( FILES AUTHORS COPYING README TRANSLATORS
+INSTALL( FILES AUTHORS COPYING README TRANSLATORS INSTALL
          DESTINATION share/doc/rosegarden-${VERSION} )
          
 # create and install the version file
