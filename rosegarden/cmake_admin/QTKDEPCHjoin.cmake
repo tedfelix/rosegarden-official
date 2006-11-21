@@ -34,11 +34,6 @@ MACRO(ADD_QTKDE_PRECOMPILED_HEADERS _output_dir)
     STRING(TOUPPER "CMAKE_CXX_FLAGS_${CMAKE_BUILD_TYPE}" _flags_var_name)
     SET(_compiler_FLAGS ${${_flags_var_name}})
     SEPARATE_ARGUMENTS(_compiler_FLAGS)
-    IF(CMAKE_BUILD_TYPE STREQUAL "Release")
-        LIST(APPEND _compiler_FLAGS -DNDEBUG)
-    ELSE(CMAKE_BUILD_TYPE STREQUAL "Release")
-        LIST(APPEND _compiler_FLAGS -DDEBUG)
-    ENDIF(CMAKE_BUILD_TYPE STREQUAL "Release")
     #MESSAGE("_compiler_FLAGS: ${_compiler_FLAGS}")
 	ADD_CUSTOM_COMMAND(
 	    OUTPUT ${_output}
