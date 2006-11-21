@@ -196,9 +196,9 @@ IF(MEINPROC_FOUND)
     MESSAGE(STATUS "Program meinproc found (${MEINPROC_EXECUTABLE})")
 ENDIF(MEINPROC_FOUND)
 
-SET(CMAKE_CXX_FLAGS_RELEASE         "-O2 -w -fexceptions")
-SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO  "-O2 -g -Wall -fexceptions")
-SET(CMAKE_CXX_FLAGS_DEBUG           "-O0 -g3 -Wall -fexceptions")
+SET(CMAKE_CXX_FLAGS_RELEASE         "-O2 -w -fexceptions -DNDEBUG")
+SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO  "-O2 -g -Wall -fexceptions -DDEBUG")
+SET(CMAKE_CXX_FLAGS_DEBUG           "-O0 -g3 -Wall -fexceptions -DDEBUG")
 
 MESSAGE(STATUS "Rosegarden ${VERSION} will be built for install into ${CMAKE_INSTALL_PREFIX}")
 
@@ -207,18 +207,15 @@ IF(WANT_DEBUG)
 	    MESSAGE(STATUS "Configured to compile including full debug information in the executables")
 	    SET(CMAKE_BUILD_TYPE Debug CACHE STRING
 	        "Choose the type of build, options are: Debug Release RelWithDebInfo" FORCE)
-	    ADD_DEFINITIONS(-DDEBUG)
 	ELSE(WANT_FULLDBG)
 	    MESSAGE(STATUS "Configured to compile including debug information in the executables")
 	    SET(CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING
 	        "Choose the type of build, options are: Debug Release RelWithDebInfo" FORCE)
-	    ADD_DEFINITIONS(-DDEBUG)
     ENDIF(WANT_FULLDBG)
 ELSE(WANT_DEBUG)
     MESSAGE(STATUS "Configured to compile for release without debug information")
     SET(CMAKE_BUILD_TYPE Release CACHE STRING
         "Choose the type of build, options are: Debug Release RelWithDebInfo" FORCE)
-    ADD_DEFINITIONS(-DNDEBUG)
 ENDIF(WANT_DEBUG)
 
 # Check GCC version, use PCH only for GCC 4.x
