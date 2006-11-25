@@ -18,7 +18,6 @@ ENDIF(WANT_LIRC)
 MESSAGE("")
 
 IF(WANT_SOUND)
-
 MESSAGE(
 "ALSA MIDI support             : ${HAVE_ALSA}\n"
 "JACK audio support            : ${HAVE_JACK}\n"
@@ -26,6 +25,9 @@ MESSAGE(
 "DSSI synth plugin support     : ${HAVE_DSSI}\n"
 "Custom OSC plugin GUI support : ${HAVE_LIBLO}\n"
 "LRDF plugin metadata support  : ${HAVE_LRDF}")
+ELSE(WANT_SOUND)
+MESSAGE("No sound support configured.")
+ENDIF(WANT_SOUND)
 
 IF(NOT HAVE_XFT)
 MESSAGE("\n* Score rendering quality and performance may be\n"
@@ -34,6 +36,8 @@ MESSAGE("\n* Score rendering quality and performance may be\n"
 "may not be worth trying to install them if they aren't already\n"
 "present in your distribution though.")
 ENDIF(NOT HAVE_XFT)
+
+IF(WANT_SOUND)
 
 IF(NOT HAVE_ALSA)
 MESSAGE("\n* Rosegarden requires the ALSA (Advanced Linux Sound Architecture) drivers\n"
@@ -77,8 +81,6 @@ MESSAGE("\n* Rosegarden supports the LRDF metadata format for classification\n"
 "http://www.plugin.org.uk/lrdf/.")
 ENDIF(NOT HAVE_LRDF)
 
-ELSE(WANT_SOUND)
-MESSAGE("No sound support configured.")
 ENDIF(WANT_SOUND)
 
 MESSAGE("")
