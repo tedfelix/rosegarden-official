@@ -7,14 +7,18 @@ MESSAGE("\n"
 "Use Qt/KDE precompiled headers: ${USE_PCH}\n"
 "\n"
 "Xft notation font support     : ${HAVE_XFT}")
+
 IF(WANT_LIRC)
 MESSAGE(
 "LIRC infrared remote support  : ${HAVE_LIRC}")
+ELSE(WANT_LIRC)
+MESSAGE("No LIRC support configured.")
 ENDIF(WANT_LIRC)
+
 MESSAGE("")
-IF(NOT WANT_SOUND)
-MESSAGE("No sound support configured.")
-ELSE(NOT WANT_SOUND)
+
+IF(WANT_SOUND)
+
 MESSAGE(
 "ALSA MIDI support             : ${HAVE_ALSA}\n"
 "JACK audio support            : ${HAVE_JACK}\n"
@@ -22,7 +26,6 @@ MESSAGE(
 "DSSI synth plugin support     : ${HAVE_DSSI}\n"
 "Custom OSC plugin GUI support : ${HAVE_LIBLO}\n"
 "LRDF plugin metadata support  : ${HAVE_LRDF}")
-ENDIF(NOT WANT_SOUND)
 
 IF(NOT HAVE_XFT)
 MESSAGE("\n* Score rendering quality and performance may be\n"
@@ -73,4 +76,9 @@ MESSAGE("\n* Rosegarden supports the LRDF metadata format for classification\n"
 "plugin selection dialogs.  You can obtain LRDF from\n"
 "http://www.plugin.org.uk/lrdf/.")
 ENDIF(NOT HAVE_LRDF)
+
+ELSE(WANT_SOUND)
+MESSAGE("No sound support configured.")
+ENDIF(WANT_SOUND)
+
 MESSAGE("")
