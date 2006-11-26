@@ -174,8 +174,6 @@ void MatrixCanvasView::contentsMouseMoveEvent(QMouseEvent* e)
         m_previousEvTime = evTime;
     }
 
-    MATRIX_DEBUG << "moved thingy" << endl;
-
     QCanvasItemList itemList = canvas()->collisions(p);
     MatrixElement* mel = 0;
 
