@@ -1683,34 +1683,37 @@ void MatrixView::slotKeySelected(unsigned int y, bool repeating)
 void MatrixView::slotKeyReleased(unsigned int y, bool repeating)
 {
     MatrixStaff& staff = *(m_staffs[0]);
-    MidiByte evPitch = staff.getHeightAtCanvasCoords( -1, y);
+    int evPitch = staff.getHeightAtCanvasCoords(-1, y);
 
     if (m_lastNote == evPitch && repeating)
-        return ;
+        return;
 
-    Segment &segment(staff.getSegment());
+    Rosegarden::Segment &segment(staff.getSegment());
 
     // send note off (note on at zero velocity)
 
-    Composition &comp = getDocument()->getComposition();
-    Studio &studio = getDocument()->getStudio();
-    Track *track = comp.getTrackById(segment.getTrack());
-    Instrument *ins =
+    Rosegarden::Composition &comp = getDocument()->getComposition();
+    Rosegarden::Studio &studio = getDocument()->getStudio();
+    Rosegarden::Track *track = comp.getTrackById(segment.getTrack());
+    Rosegarden::Instrument *ins =
         studio.getInstrumentById(track->getInstrument());
 
     // check for null instrument
     //
     if (ins == 0)
-        return ;
+        return;
 
-    MappedEvent mE(ins->getId(),
-                   MappedEvent::MidiNote,
-                   evPitch + segment.getTranspose(),
-                   0,
-                   RealTime::zeroTime,
-                   RealTime::zeroTime,
-                   RealTime::zeroTime);
-    StudioControl::sendMappedEvent(mE);
+    evPitch = evPitch + segment.getTranspose();
+    if (evPitch < 0 || evPitch > 127) return;
+
+    Rosegarden::MappedEvent mE(ins->getId(),
+                               Rosegarden::MappedEvent::MidiNote,
+                               evPitch,
+                               0,
+                               Rosegarden::RealTime::zeroTime,
+                               Rosegarden::RealTime::zeroTime,
+                               Rosegarden::RealTime::zeroTime);
+    Rosegarden::StudioControl::sendMappedEvent(mE);
 }
 
 void MatrixView::slotVerticalScrollPianoKeyboard(int y)
