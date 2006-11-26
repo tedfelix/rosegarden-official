@@ -1,0 +1,152 @@
+
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
+
+/*
+    Rosegarden
+    A MIDI and audio sequencer and musical notation editor.
+
+    This program is Copyright 2000-2006
+        Guillaume Laurent   <glaurent@telegraph-road.org>,
+        Chris Cannam        <cannam@all-day-breakfast.com>,
+        Richard Bown        <richard.bown@ferventsoftware.com>
+
+    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
+    Bown to claim authorship of this work have been asserted.
+
+    Other copyrights also apply to some parts of this work.  Please
+    see the AUTHORS file and individual file headers for details.
+
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License as
+    published by the Free Software Foundation; either version 2 of the
+    License, or (at your option) any later version.  See the file
+    COPYING included with this distribution for more information.
+*/
+
+#ifndef _RG_STUDIOCONTROL_H_
+#define _RG_STUDIOCONTROL_H_
+
+#include "base/MidiProgram.h"
+#include "sound/MappedCommon.h"
+#include "sound/MappedStudio.h"
+#include <qstring.h>
+
+
+class MappedObjectValueList;
+class MappedObjectIdList;
+
+
+namespace Rosegarden
+{
+
+class RealTime;
+class MappedInstrument;
+class MappedEvent;
+class MappedComposition;
+
+typedef std::pair<Rosegarden::MidiByte, Rosegarden::MidiByte> MidiControlPair;
+
+class StudioControl
+{
+public:
+
+    // Object management
+    //
+    static MappedObjectId
+        createStudioObject(MappedObject::MappedObjectType type);
+    static MappedObjectId
+        getStudioObjectByType(MappedObject::MappedObjectType type);
+    static bool destroyStudioObject(MappedObjectId id);
+
+    // Properties
+    //
+    static MappedObjectPropertyList
+                  getStudioObjectProperty(MappedObjectId id,
+                                          const MappedObjectProperty &property);
+
+    // Set a value to a value
+    //
+    static bool setStudioObjectProperty(MappedObjectId id,
+                                        const MappedObjectProperty &property,
+                                        MappedObjectValue value);
+
+    // Set many values to values
+    //
+    static bool setStudioObjectProperties(const MappedObjectIdList &ids,
+                                          const MappedObjectPropertyList &properties,
+                                          const MappedObjectValueList &values);
+
+    // Set a value to a string 
+    //
+    static bool setStudioObjectProperty(MappedObjectId id,
+                                        const MappedObjectProperty &property,
+                                        const QString &value);
+
+    // Set a value to a string list
+    //
+    static bool setStudioObjectPropertyList(MappedObjectId id,
+                                            const MappedObjectProperty &property,
+                                            const MappedObjectPropertyList &values);
+
+    static void setStudioPluginPort(MappedObjectId pluginId,
+                                    unsigned long portId,
+                                    MappedObjectValue value);
+
+    static MappedObjectValue getStudioPluginPort(MappedObjectId pluginId,
+                                                 unsigned long portId);
+
+    // Get all plugin information
+    //
+    static MappedObjectPropertyList getPluginInformation();
+
+    // Get program name for a given program
+    // 
+    static QString getPluginProgram(MappedObjectId, int bank, int program);
+
+    // Get program numbers for a given name (rv is bank << 16 + program)
+    // This is one of the nastiest hacks in the whole application
+    // 
+    static unsigned long getPluginProgram(MappedObjectId, QString name);
+
+    // Connection
+    //
+    static void connectStudioObjects(MappedObjectId id1,
+                                     MappedObjectId id2);
+    static void disconnectStudioObjects(MappedObjectId id1,
+                                        MappedObjectId id2);
+    static void disconnectStudioObject(MappedObjectId id);
+
+    // Send controllers and other one off MIDI events using these
+    // interfaces.
+    //
+    static void sendMappedEvent(const MappedEvent& mE);
+    static void sendMappedComposition(const MappedComposition &mC);
+
+    // MappedInstrument
+    //
+    static void sendMappedInstrument(const MappedInstrument &mI);
+
+    // Send the Quarter Note Length has changed to the sequencer
+    //
+    static void sendQuarterNoteLength(const RealTime &length);
+
+    // Convenience wrappers for RPNs and NRPNs
+    //
+    static void sendRPN(InstrumentId instrumentId,
+                        MidiByte paramMSB,
+                        MidiByte paramLSB,
+                        MidiByte controller,
+                        MidiByte value);
+
+    static void sendNRPN(InstrumentId instrumentId,
+                         MidiByte paramMSB,
+                         MidiByte paramLSB,
+                         MidiByte controller,
+                         MidiByte value);
+};
+
+
+
+}
+
+#endif

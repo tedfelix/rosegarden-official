@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>rosegarden</name>
+	<name>rosegarden-reorg</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -11,22 +11,18 @@
 			<arguments>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.build.arguments</key>
-					<value></value>
+					<value>VERBOSE=1</value>
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.core.errorOutputParser</key>
-					<value>org.eclipse.cdt.core.MakeErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GASErrorParser;org.eclipse.cdt.core.GLDErrorParser;</value>
-				</dictionary>
-				<dictionary>
-					<key>org.eclipse.cdt.make.core.environment</key>
-					<value>KDE=${env_var:KDEDIR}|QT=${env_var:QTDIR}|</value>
+					<value>org.eclipse.cdt.core.MakeErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GASErrorParser;org.eclipse.cdt.core.GLDErrorParser;org.eclipse.cdt.core.VCErrorParser;</value>
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.enableAutoBuild</key>
 					<value>false</value>
 				</dictionary>
 				<dictionary>
-					<key>org.eclipse.cdt.make.core.build.target.inc</key>
+					<key>org.eclipse.cdt.make.core.environment</key>
 					<value></value>
 				</dictionary>
 				<dictionary>
@@ -34,20 +30,24 @@
 					<value>true</value>
 				</dictionary>
 				<dictionary>
+					<key>org.eclipse.cdt.make.core.build.target.inc</key>
+					<value>all</value>
+				</dictionary>
+				<dictionary>
 					<key>org.eclipse.cdt.make.core.enabledIncrementalBuild</key>
 					<value>true</value>
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.build.location</key>
-					<value>/rosegarden</value>
-				</dictionary>
-				<dictionary>
-					<key>org.eclipse.cdt.make.core.build.command</key>
-					<value>scons</value>
+					<value></value>
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.build.target.clean</key>
-					<value>-c</value>
+					<value>clean</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.build.command</key>
+					<value>make</value>
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.enableCleanBuild</key>

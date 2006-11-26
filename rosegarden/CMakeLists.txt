@@ -1,0 +1,270 @@
+# The name of our project is "ROSEGARDEN". CMakeLists files in this project can
+# refer to the root source directory of the project as ${ROSEGARDEN_SOURCE_DIR} 
+# and to the root binary directory of the project as ${ROSEGARDEN_BINARY_DIR}
+PROJECT(ROSEGARDEN)
+
+# CMake supports KDE checks since this version number
+CMAKE_MINIMUM_REQUIRED(VERSION 2.4.2)
+
+# Show full commands and messages. It generates a lot of console output.
+# It is necessary for Eclipse warning/error parser, 
+# but it can be enabled anyway with "make VERBOSE=1"
+SET(CMAKE_VERBOSE_MAKEFILE OFF)
+
+# Seems that relative paths break the link scripts. Don't set it ON
+SET(CMAKE_USE_RELATIVE_PATHS OFF)
+
+# Misc settings
+SET(CMAKE_COLOR_MAKEFILE ON)
+SET(CMAKE_INCLUDE_CURRENT_DIR ON)
+SET(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
+SET(CMAKE_SKIP_RULE_DEPENDENCY ON)
+
+# Additional CMake modules for 3rd party library checks reside here
+SET(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_admin")
+
+# Rosegarden version string
+SET (VERSION_MAJOR "1")
+SET (VERSION_MINOR "5")
+SET (VERSION_PATCH "0")
+SET (VERSION_SUFFIX "reorg")
+SET (VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}-${VERSION_SUFFIX})
+ADD_DEFINITIONS(-D'VERSION="${VERSION}"')
+
+# User options
+OPTION(WANT_DEBUG   "Include debug support" OFF)
+OPTION(WANT_FULLDBG "Full debug support (BIG executables!)" OFF)
+OPTION(WANT_SOUND   "Include Sound support" ON)
+OPTION(WANT_JACK    "Include Jack (Jack Audio Connection Kit) support" ON)
+OPTION(WANT_DSSI    "Include DSSI support" ON)
+OPTION(WANT_LIRC    "Include LIRC (Linux Infrared Remote Control) support" ON)
+OPTION(WANT_PCH     "Use precompiled headers" OFF)
+
+IF(NOT WANT_SOUND)
+    #SET(WANT_ALSA OFF)
+    SET(WANT_JACK OFF)
+    SET(WANT_DSSI OFF)
+    ADD_DEFINITIONS(-DNO_SOUND)
+ENDIF(NOT WANT_SOUND)
+
+# Check for KDE3
+FIND_PACKAGE(KDE3 REQUIRED QUIET)
+IF(QT_FOUND)
+    ADD_DEFINITIONS(${QT_DEFINITIONS})
+    MESSAGE(STATUS "Found Qt3 (version ${qt_version_str})")
+    #MESSAGE("QT_LIBRARIES: ${QT_LIBRARIES}")
+ELSE(QT_FOUND)
+    MESSAGE(FATAL_ERROR "Qt3 package not found")
+ENDIF(QT_FOUND)
+IF(KDE3_FOUND)
+    ADD_DEFINITIONS(${KDE3_DEFINITIONS})
+    KDE3_PRINT_RESULTS()
+    #MESSAGE("QT_AND_KDECORE_LIBS: ${QT_AND_KDECORE_LIBS}")
+ELSE(KDE3_FOUND)    
+    MESSAGE(FATAL_ERROR "KDE3 Not found")
+ENDIF(KDE3_FOUND)
+
+# Clear the flags set by FindKDE3 
+SET(CMAKE_CXX_FLAGS "")
+
+# It would be great to provide KDE prefix as a default but overridable prefix...
+# INCLUDE(KDE3Prefix)
+
+# Check for PKG-CONFIG
+FIND_PACKAGE(PkgConfig REQUIRED)
+IF(PKG_CONFIG_FOUND)
+    MESSAGE(STATUS "Program pkg-config found (${PKG_CONFIG_EXECUTABLE})")
+ELSE(PKG_CONFIG_FOUND)
+    MESSAGE(FATAL_ERROR "Program pkg-config not found")
+ENDIF(PKG_CONFIG_FOUND)
+
+# Initialize some variables
+SET(HAVE_XFT FALSE)
+SET(HAVE_ALSA FALSE)
+SET(HAVE_JACK FALSE)
+SET(HAVE_DSSI FALSE)
+SET(HAVE_LIBLO FALSE)
+SET(HAVE_LRDF FALSE)
+SET(HAVE_LADSPA FALSE)
+SET(HAVE_LIRC FALSE)
+
+# Check for Xft
+PKG_CHECK_MODULES(XFT xft>=2.1.0)
+IF(XFT_FOUND)
+    ADD_DEFINITIONS(-DHAVE_XFT)
+    SET(HAVE_XFT TRUE)
+    SET(XFT_LIBS ${XFT_LIBRARIES})
+    #MESSAGE("XFT_LIBS: ${XFT_LIBS}")
+    LIST(APPEND XFT_LIB_DIR ${XFT_LIBRARY_DIRS} ${XFT_LIBDIR})
+    #MESSAGE("XFT_LIB_DIR: ${XFT_LIB_DIR}")
+    LIST(APPEND XFT_INC_DIR ${XFT_INCLUDE_DIRS} ${XFT_INCLUDEDIR})
+    #MESSAGE("XFT_INC_DIR: ${XFT_INC_DIR}")    
+ENDIF(XFT_FOUND)
+
+IF(WANT_SOUND)
+
+    # Check for ALSA 1.0
+    PKG_CHECK_MODULES(ALSA REQUIRED alsa>=1.0)
+    IF(ALSA_FOUND)
+        SET(HAVE_ALSA TRUE)
+        ADD_DEFINITIONS(-DHAVE_ALSA)
+        SET(ALSA_LIBS ${ALSA_LIBRARIES})
+        #MESSAGE("ALSA_LIBS: ${ALSA_LIBS}")
+        LIST(APPEND ALSA_LIB_DIR ${ALSA_LIBRARY_DIRS} ${ALSA_LIBDIR} )
+        #MESSAGE("ALSA_LIB_DIR: ${ALSA_LIB_DIR}")
+        LIST(APPEND ALSA_INC_DIR ${ALSA_INCLUDE_DIRS} ${ALSA_INCLUDEDIR})
+        #MESSAGE("ALSA_INC_DIR: ${ALSA_INC_DIR}")
+    ENDIF(ALSA_FOUND)
+    
+    IF(WANT_JACK)
+        PKG_CHECK_MODULES(JACK jack>=0.77)
+        IF(JACK_FOUND)
+            ADD_DEFINITIONS(-DHAVE_LIBJACK)
+            SET(HAVE_JACK TRUE)
+            SET(JACK_LIBS ${JACK_LIBRARIES})
+            #MESSAGE("JACK_LIBS: ${JACK_LIBS}")
+            LIST(APPEND JACK_LIB_DIR ${JACK_LIBDIR} ${JACK_LIBRARY_DIRS})
+            #MESSAGE("JACK_LIB_DIR: ${JACK_LIB_DIR}")
+            LIST(APPEND JACK_INC_DIR ${JACK_INCLUDEDIR} ${JACK_INCLUDE_DIRS})
+            #MESSAGE("JACK_INC_DIR: ${JACK_INC_DIR}")
+        ENDIF(JACK_FOUND)
+    ENDIF(WANT_JACK)
+    
+    IF(WANT_DSSI)
+        PKG_CHECK_MODULES(DSSI dssi>=0.4)
+        IF(DSSI_FOUND)
+            ADD_DEFINITIONS(-DHAVE_DSSI)
+            SET(HAVE_DSSI TRUE)
+            LIST(APPEND DSSI_INC_DIR ${DSSI_INCLUDE_DIRS} ${DSSI_INCLUDEDIR})
+            #MESSAGE("DSSI_INC_DIR: ${DSSI_INC_DIR}")
+        ENDIF(DSSI_FOUND)
+    ENDIF(WANT_DSSI)
+    
+    PKG_CHECK_MODULES(LIBLO liblo>=0.7)
+    IF(LIBLO_FOUND)
+        ADD_DEFINITIONS(-DHAVE_LIBLO)
+        SET(HAVE_LIBLO TRUE)
+        SET(LIBLO_LIBS ${LIBLO_LIBRARIES})
+        #MESSAGE("LIBLO_LIBS: ${LIBLO_LIBS}")
+        LIST(APPEND LIBLO_LIB_DIR ${LIBLO_LIBDIR} ${LIBLO_LIBRARY_DIRS})
+        #MESSAGE("LIBLO_LIB_DIR: ${LIBLO_LIB_DIR}")
+        LIST(APPEND LIBLO_INC_DIR ${LIBLO_INCLUDEDIR} ${LIBLO_INCLUDE_DIRS})
+        #MESSAGE("LIBLO_INC_DIR: ${LIBLO_INC_DIR}")
+    ENDIF(LIBLO_FOUND)
+    
+    PKG_CHECK_MODULES(LRDF lrdf>=0.3)
+    IF(LRDF_FOUND)
+        SET(HAVE_LRDF TRUE)
+        ADD_DEFINITIONS(-DHAVE_LRDF)
+        SET(LRDF_LIBS ${LRDF_LIBRARIES})
+        #MESSAGE("LRDF_LIBS: ${LRDF_LIBS}")
+        LIST(APPEND LRDF_LIB_DIR ${LRDF_LIBDIR} ${LRDF_LIBRARY_DIRS})
+        #MESSAGE("LRDF_LIB_DIR: ${LRDF_LIB_DIR}")
+        LIST(APPEND LRDF_INC_DIR ${LRDF_INCLUDEDIR} ${LRDF_INCLUDE_DIRS})
+        #MESSAGE("LRDF_INC_DIR: ${LRDF_INC_DIR}")
+    ENDIF(LRDF_FOUND)
+
+    FIND_PACKAGE(LADSPA)
+    IF(LADSPA_FOUND)
+        SET(HAVE_LADSPA TRUE)
+        ADD_DEFINITIONS(-DHAVE_LADSPA)
+        MESSAGE(STATUS "Found LADSPA")
+        #MESSAGE("LADSPA_INC_DIR: ${LADSPA_INC_DIR}")    
+    ENDIF(LADSPA_FOUND)
+    
+ENDIF(WANT_SOUND)
+
+IF(WANT_LIRC)
+    FIND_PACKAGE(LIRC)
+    IF(LIRC_FOUND)
+        SET(HAVE_LIRC TRUE)
+        ADD_DEFINITIONS(-DHAVE_LIRC)
+        MESSAGE(STATUS "Found LIRC")
+        #MESSAGE("LIRC_LIBS: ${LIRC_LIBS}")
+        #MESSAGE("LIRC_LIB_DIR: ${LIRC_LIB_DIR}")
+        #MESSAGE("LIRC_INC_DIR: ${LIRC_INC_DIR}")    
+    ENDIF(LIRC_FOUND)
+ENDIF(WANT_LIRC)
+
+FIND_PACKAGE(MSGFMT REQUIRED)
+IF(MSGFMT_FOUND)
+    MESSAGE(STATUS "Program msgfmt found (${MSGFMT_EXECUTABLE})")
+ENDIF(MSGFMT_FOUND)
+
+FIND_PACKAGE(MEINPROC REQUIRED)
+IF(MEINPROC_FOUND)
+    MESSAGE(STATUS "Program meinproc found (${MEINPROC_EXECUTABLE})")
+ENDIF(MEINPROC_FOUND)
+
+SET(CMAKE_CXX_FLAGS_RELEASE         "-O2 -w -fexceptions -DNDEBUG")
+SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO  "-O2 -g -Wall -fexceptions -DDEBUG")
+SET(CMAKE_CXX_FLAGS_DEBUG           "-O0 -g3 -Wall -fexceptions -DDEBUG")
+
+MESSAGE(STATUS "Rosegarden ${VERSION} will be built for install into ${CMAKE_INSTALL_PREFIX}")
+
+IF(WANT_DEBUG)
+	IF(WANT_FULLDBG)
+	    MESSAGE(STATUS "Configured to compile including full debug information in the executables")
+	    SET(CMAKE_BUILD_TYPE Debug CACHE STRING
+	        "Choose the type of build, options are: Debug Release RelWithDebInfo" FORCE)
+	ELSE(WANT_FULLDBG)
+	    MESSAGE(STATUS "Configured to compile including debug information in the executables")
+	    SET(CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING
+	        "Choose the type of build, options are: Debug Release RelWithDebInfo" FORCE)
+    ENDIF(WANT_FULLDBG)
+ELSE(WANT_DEBUG)
+    MESSAGE(STATUS "Configured to compile for release without debug information")
+    SET(CMAKE_BUILD_TYPE Release CACHE STRING
+        "Choose the type of build, options are: Debug Release RelWithDebInfo" FORCE)
+ENDIF(WANT_DEBUG)
+
+# Check GCC version, use PCH only for GCC 4.x
+SET(USE_PCH FALSE)
+IF(WANT_PCH)
+	EXEC_PROGRAM(gcc ARGS --version OUTPUT_VARIABLE GCC_VERSION)
+	IF(GCC_VERSION MATCHES ".*4\\.[0-9]\\.[0-9].*")
+        SET(USE_PCH TRUE)
+    ENDIF(GCC_VERSION MATCHES ".*4\\.[0-9]\\.[0-9].*")
+ENDIF(WANT_PCH)
+
+# Warn the user if important libraries are missing
+INCLUDE(UserWarnings)
+
+# Custom target trying to clean the CMake generated files
+ADD_CUSTOM_TARGET(distclean
+    COMMAND sh scripts/distclean.sh
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+)
+ADD_DEPENDENCIES(distclean clean)
+
+# uninstall custom target
+CONFIGURE_FILE(
+    "${CMAKE_SOURCE_DIR}/cmake_admin/cmake_uninstall.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
+    IMMEDIATE @ONLY)
+ADD_CUSTOM_TARGET(uninstall
+    "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
+
+# Recurse into the "src" subdirectory. This does not actually
+# cause another cmake executable to run. The same process will walk through
+# the project's entire directory structure.
+# Output directory will be "RGbuild/"
+ADD_SUBDIRECTORY(src RGbuild)
+
+# Build and install the translations directory
+ADD_SUBDIRECTORY(po RGbuild/po)
+
+# Build and install the documentation directory
+ADD_SUBDIRECTORY(docs RGbuild/docs)
+
+# Install data files
+ADD_SUBDIRECTORY(data RGbuild/data)
+
+# install some documents...
+INSTALL( FILES AUTHORS COPYING README TRANSLATORS INSTALL
+         DESTINATION share/doc/rosegarden-${VERSION} )
+         
+# create and install the version file
+FILE(WRITE version.txt "${VERSION}\n")
+INSTALL( FILES version.txt
+         DESTINATION share/apps/rosegarden )
