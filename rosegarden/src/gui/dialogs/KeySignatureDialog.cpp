@@ -353,7 +353,7 @@ KeySignatureDialog::slotMajorMinorChanged(const QString &s)
     if (m_ignoreComboChanges)
         return ;
 
-    std::string name(getKeyName(m_keyCombo->currentText(), s == "Minor"));
+    std::string name(getKeyName(m_keyCombo->currentText(), s == i18n("Minor")));
 
     try {
         m_key = Rosegarden::Key(name);
