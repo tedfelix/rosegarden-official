@@ -16,29 +16,11 @@ has been released yet; if not, please continue on to:
   http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html
 
 
-About this release
-------------------
-
-Rosegarden 1.4.0 is a major feature release.
-
-This is a particularly exciting release for the Rosegarden project.
-It includes a number of interesting new features, many of which we
-expect to build upon further in future releases.  It also contains
-significant code contributions from a greater number of people than
-any previous Rosegarden release, including D. Michael McIntyre, Pedro
-Lopez-Cabanillas, Heikki Junes, Stephen Torri, Magnus Johansson, Vince
-Negri and Martin Shepherd as well as Chris Cannam, Guillaume Laurent,
-and a number of active translators.
-
-Please see the release notes for details of new features in this
-release.
-
-
 Build requirements
 ------------------
 
-The big requirement is KDE 3.1, or later, or more specifically the KDE 3.1+
-development libraries (you don't need the whole KDE environment).
+The big requirement is KDE 3.1, or later, or more specifically the KDE
+3.1+ development libraries (you don't need the whole KDE environment).
 
 Our code compiles with gcc-3.x and gcc-4.x.
 
@@ -46,56 +28,10 @@ For MIDI support on Linux, you need ALSA 0.9.x or 1.0; for audio you
 need JACK 0.77 or newer; for synth plugins you need DSSI 0.9.x or
 newer; for synth plugin GUI support you need liblo 0.7 or newer.
 
-We have recently switched from automake/autoconf/scons to cmake for
-building.  Please see the section on Compiling from Source below for
-details.
-
-
-Compiling from source
----------------------
-
-You will need to obtain and install CMake version 2.4.2 or newer:
-
-  http://cmake.org/HTML/Download.html
-
-If you are not familiar with CMake, it's a more modern alternative to 
-autotools / configure. See this page:
-
-  http://cmake.org/HTML/Index.html
-
-For a typical end-user installation with no unusual requirements, simply run
-
-  cmake .
-  make
-  make install
-
-By default, the install prefix will be /usr/local. If your KDE is installed
-at some other prefix, you may want to override this setting using:
-
-  cmake . -DCMAKE_INSTALL_PREFIX=`kde-config --prefix`
-
-The build system should automatically detect various optional installed 
-libraries with no further effort on your part. It will tell you if something 
-it needs does not appear to be available.
-
-For special requirements, a few options are supported.  These take the
-format -DWANT_XXXX=[0|1|NO|YES|OFF|ON], for example
-
-  cmake . -DWANT_DEBUG=YES
-
-To see a list of available options, use the interactive version of cmake
-
-  ccmake .
-
-To uninstall, use
-
-  make uninstall
-
-NOTE: The installation prefix should be the same as the one of your
-KDE installation. However you can install to another directory, but
-then you'll have to append it to your KDEDIRS variable. For instance :
-
-KDEDIRS=/usr:/home/glaurent/rosegarden
+We have recently switched to CMake for building (having previously
+started out with autotools and then switched to scons -- sorry!).
+Please read the INSTALL file for details of how to build and install
+Rosegarden using CMake.
 
 
 Running Rosegarden
@@ -104,15 +40,15 @@ Running Rosegarden
 Just run the "rosegarden" application (found in the KDE bin directory
 after installation).  The sequencer process is started automatically
 when the gui is started, provided it has been correctly installed (by
-"make install") in the global KDE directories.  If you have any
-problems running the application, consult the FAQ:
+"make install") in the global KDE directories.
+
+If you have any problems running the application, review the
+instructions in the INSTALL file and consult the FAQ:
 
   http://www.rosegardenmusic.com/resources/faq/
 
-or if that doesn't answer your question then use the rosegarden-user
-mailing list on SourceForge.
-
-You can also "scons -c install" if you decide it's a waste of your time.
+If that doesn't answer your question, use the rosegarden-user mailing
+list on SourceForge.
 
 
 User documentation
