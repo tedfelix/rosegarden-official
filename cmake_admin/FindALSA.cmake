@@ -1,0 +1,46 @@
+# - Try to find ALSA 1.0
+# Once done this will define:
+#
+#  ALSA_FOUND - system has ALSA
+#  ALSA_LIBRARY - ALSA library name
+#  ALSA_CFLAGS - Compiler switches required for using ALSA
+#  ALSA_LIBS - Linker flags
+#  ALSA_LIB_DIR - Library directory
+#  ALSA_INC_DIR - Include diretory
+#  ALSA_VERSION - ALSA version found
+
+SET(CMAKE_INCLUDE_PATH ".")
+INCLUDE(PkgConfigV)
+
+PKGCONFIGV(alsa 1.0 _ALSAVersion _ALSAIncDir _ALSALinkDir _ALSALinkFlags _ALSACflags) 
+
+SET(ALSA_CFLAGS ${_ALSACflags})
+SET(ALSA_LIBS ${_ALSALinkFlags})
+SET(ALSA_LIB_DIR ${_ALSALinkDir})
+SET(ALSA_INC_DIR ${_ALSAIncDir})
+SET(ALSA_VERSION ${_ALSAVersion})
+
+EXEC_PROGRAM(${PKGCONFIG_EXECUTABLE} ARGS alsa --cflags-only-I OUTPUT_VARIABLE AUX_FLAGS )
+STRING(REPLACE "-I" "" AUX_FLAGS ${AUX_FLAGS})
+SEPARATE_ARGUMENTS(AUX_FLAGS)
+SET(ALSA_INC_DIR ${ALSA_INC_DIR} ${AUX_FLAGS})
+
+SEPARATE_ARGUMENTS(ALSA_LIBS)
+
+FIND_LIBRARY(ALSA_LIBRARY
+  NAMES asound
+  PATHS ${_ALSALinkDir} /usr/lib /usr/local/lib
+)
+
+IF(ALSA_LIBRARY)
+    SET(ALSA_FOUND TRUE)
+ENDIF(ALSA_LIBRARY)
+
+IF(NOT ALSA_FOUND)
+    IF(ALSA_FIND_REQUIRED)
+	MESSAGE(FATAL_ERROR "Could not find ALSA 1.0")
+    ENDIF(ALSA_FIND_REQUIRED)
+ENDIF(NOT ALSA_FOUND)
+
+# show some variables only in the advanced view
+MARK_AS_ADVANCED(ALSA_LIBRARY ALSA_CFLAGS ALSA_LIBS)

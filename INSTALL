@@ -1,0 +1,166 @@
+How to compile Rosegarden
+=========================
+
+Rosegarden has switched its build system to CMake.  We hope this is the last
+time we change build systems.
+
+You will need CMake 2.4.2 or later.  If your Linux distribution doesn't provide
+CMake, or if it provides an older version, you can get it here:
+
+  http://cmake.org/HTML/Download.html
+
+There are ready to use binary packages for Linux-i386, and we suggest you use
+those if possible, and only resort to building from source if absolutely
+necessary.  (Please read the instructions supplied with the CMake tarball, and
+remember that it will install to /usr/local by default.)
+
+
+A Typical Build with CMake
+---------------------------
+
+If you are a typical end user wanting to play with the latest Rosegarden, and to
+install it in the same place the distro package you are replacing came from,
+then the the following simple instructions are probably all you need to do in
+order to get up and running:
+
+First, unpack the tarball or check out SVN.  We'll assume you have the source in
+~/src/rosegarden and need to change to that directory:
+
+$ cd ~/src/rosegarden
+
+Now run CMake to generate the build files, and specify the location where your
+system's KDE libraries are installed:
+
+$ cmake . -DCMAKE_INSTALL-PREFIX=`kde-config --prefix`
+
+Finally, run make, and then (sudo) make install, and you're all set:
+
+$ make
+$ make install
+
+To uninstall, use:
+
+$ make uninstall
+
+
+Advanced Build Options
+----------------------
+
+By default, make will output brief details for each building step with. If you 
+prefer to see full command lines, then use:
+
+$ make VERBOSE=1
+
+By default, the install prefix will be /usr/local. If your KDE is installed at 
+some other prefix, you probably want to override this setting, as suggested in
+"A Typical Build with CMake."  You may install to /usr/local or anywhere else,
+but if you do so, you must add that location to your KDEDIRS environment
+variable before running Rosegarden.  For example:
+
+$ export KDEDIRS=/usr/local:$KDEDIRS
+$ rosegarden
+
+Another option, useful for packagers, is setting DESTDIR at install time. The 
+DESTDIR directory will be prepended to the prefix when copying the files:
+
+$ make install DESTDIR=~/rpmroot
+
+Some variables you may want to set:
+
+    * CMAKE_INSTALL_PREFIX: cmake . -DCMAKE_INSTALL_PREFIX=/opt/kde is the 
+      equivalent to ./configure --prefix=/opt/kde
+    * WANT_XXXX: there are several options, e.g. WANT_JACK or WANT_DSSI. 
+      If you disable them, cmake will not even try to find the packages. 
+
+    WANT_DEBUG   Include debug support (default OFF)
+    WANT_FULLDBG Full debug support (BIG executables!) (default OFF)
+    WANT_SOUND   Include Sound support (default ON)
+    WANT_JACK    Include Jack (Jack Audio Connection Kit) support (default ON)
+    WANT_DSSI    Include DSSI support (default ON)
+    WANT_LIRC    Include LIRC (Linux Infrared Remote Control) support (def. ON)
+    WANT_PCH     Use precompiled headers (default OFF)
+
+The above options can take any of the following values: 0, 1, OFF, ON, TRUE, 
+FALSE, YES, NO (case insensitive). For example:
+
+$ cmake . -DWANT_DEBUG=YES -DWANT_LIRC=NO -DCMAKE_INSTALL_PREFIX=/opt/kde
+
+Disabling SOUND (eg. WANT_SOUND=OFF) also disables JACK and DSSI. To enable 
+FULLDBG you also need to enable DEBUG.
+
+If you would prefer to avoid all this typing, you can use ccmake to change these
+options around using a more friendly curses-based interface:
+
+$ccmake .
+
+
+Dealing with Configuration Problems
+-----------------------------------
+
+To locate Qt, CMake searches for qmake in your execute path ($PATH). CMake does 
+not use the QTDIR environment variable. So make sure that the first qmake found 
+in the execution path is the one you like to use.
+
+When CMake has finished, it will have created a file called "CMakeCache.txt". 
+This file contains all the settings CMake has detected on your system. If you 
+want to run CMake with another generator or you want CMake to detect everything 
+again, delete this file.
+
+If CMake didn't find something, but you know it is somewhere on your box, you can 
+tell CMake where to find it manually. CMake uses variables to store this 
+information. These variables are cached in the aforementioned file 
+CMakeCache.txt. You have three options to adjust these variables manually:
+
+    * tell CMake the correct value via the command line: 
+      $ cmake . -DNAME_OF_THE_VARIABLE=value
+    * use ccmake, which provides a curses based GUI to adjust the 
+      CMake variables (run: ccmake .)
+    * edit the file CMakeCache.txt directly (not recommended) 
+
+You should run "ccmake ." at least once so that you get an idea which 
+variables CMake uses. Press "T" to see also the "advanced" variables. So, if 
+CMake didn't find something, start ccmake and adjust it manually.
+
+
+Some other environment variables you may want to set
+----------------------------------------------------
+
+If you have headers and libraries installed in non-standard locations that cmake 
+cannot find (e.g., on /sw), then set the following as environment variables. 
+Despite the similar naming convention, these will not work as arguments on the 
+cmake command line:
+
+    * CMAKE_INCLUDE_PATH: directory where headers reside
+    * CMAKE_LIBRARY_PATH: directory where shared libraries reside
+
+Example:
+$ export CMAKE_INCLUDE_PATH=/sw/include
+$ export CMAKE_LIBRARY_PATH=/sw/lib 
+
+For more information on variables, see this cmake.org wiki page: 
+
+    http://www.cmake.org/Wiki/CMake_Useful_Variables
+
+
+
+How to proceed if something fails?
+----------------------------------
+
+If cmake finishes with "Generating done" then there was no errors, but if it 
+finishes with "Configuring done" then there was errors that you have to fix. 
+If you got a failure that says something like
+
+CMake Error: This project requires some variables to be set,
+and cmake can not find them.
+Please set the following variables:
+X11_XTest_LIB (ADVANCED)
+
+So the missing library is Xtst. Perhaps you need to install a libXtst-devel 
+library.
+
+If you can't solve the problem, please subscribe and ask your question in the 
+Rosegarden-user mailing list:
+
+http://lists.sourceforge.net/lists/listinfo/rosegarden-user
+http://www.rosegardenmusic.com/support/
+

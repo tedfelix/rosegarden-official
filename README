@@ -1,6 +1,6 @@
 
-Rosegarden v1.4.0
-=================
+Rosegarden v1.5.0-svn
+=====================
 
 Rosegarden is a MIDI and audio sequencer and musical notation editor.
 
@@ -46,7 +46,7 @@ For MIDI support on Linux, you need ALSA 0.9.x or 1.0; for audio you
 need JACK 0.77 or newer; for synth plugins you need DSSI 0.9.x or
 newer; for synth plugin GUI support you need liblo 0.7 or newer.
 
-We have recently switched from automake/autoconf/make to scons for
+We have recently switched from automake/autoconf/scons to cmake for
 building.  Please see the section on Compiling from Source below for
 details.
 
@@ -54,38 +54,42 @@ details.
 Compiling from source
 ---------------------
 
-You will need to obtain and install scons.  If you are not familiar with
-scons, it's a more modern alternative to "make".  See this page:
+You will need to obtain and install CMake version 2.4.2 or newer:
 
-  http://scons.sourceforge.net/
+  http://cmake.org/HTML/Download.html
+
+If you are not familiar with CMake, it's a more modern alternative to 
+autotools / configure. See this page:
+
+  http://cmake.org/HTML/Index.html
 
 For a typical end-user installation with no unusual requirements, simply run
 
-  scons configure
-  scons
-  scons install
+  cmake .
+  make
+  make install
 
-The build system should automatically detect your installation prefix
-and various optional installed libraries with no further effort on
-your part.  It will tell you if something it needs does not appear to
-be available.
+By default, the install prefix will be /usr/local. If your KDE is installed
+at some other prefix, you may want to override this setting using:
+
+  cmake . -DCMAKE_INSTALL_PREFIX=`kde-config --prefix`
+
+The build system should automatically detect various optional installed 
+libraries with no further effort on your part. It will tell you if something 
+it needs does not appear to be available.
 
 For special requirements, a few options are supported.  These take the
-format scons configure option=[0|1], for example
+format -DWANT_XXXX=[0|1|NO|YES|OFF|ON], for example
 
-  scons configure debug=1
+  cmake . -DWANT_DEBUG=YES
 
-To see a list of available options, use
+To see a list of available options, use the interactive version of cmake
 
-  scons configure --help
-
-To perform the equivalent of a "make clean" or "make distclean" use
-
-  scons -c
+  ccmake .
 
 To uninstall, use
 
-  scons -c install
+  make uninstall
 
 NOTE: The installation prefix should be the same as the one of your
 KDE installation. However you can install to another directory, but
