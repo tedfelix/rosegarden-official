@@ -276,6 +276,7 @@ MarkerEditorDialog::slotUpdate()
     if (m_listView->childCount() == 0) {
         QListViewItem *item =
             new MarkerEditorViewItem(m_listView, i18n("<none>"));
+        ((MarkerEditorViewItem *)item)->setFake(true);
         m_listView->insertItem(item);
 
         m_listView->setSelectionMode(QListView::NoSelection);
@@ -298,7 +299,7 @@ MarkerEditorDialog::slotDeleteAll()
     do {
         MarkerEditorViewItem *ei =
             dynamic_cast<MarkerEditorViewItem *>(item);
-        if (!ei)
+        if (!ei || ei->isFake())
             continue;
 
         RemoveMarkerCommand *rc =
@@ -335,7 +336,7 @@ MarkerEditorDialog::slotDelete()
     MarkerEditorViewItem *ei =
         dynamic_cast<MarkerEditorViewItem *>(item);
 
-    if (!ei)
+    if (!ei || ei->isFake())
         return ;
 
     RemoveMarkerCommand *command =
@@ -470,7 +471,7 @@ MarkerEditorDialog::slotEdit(QListViewItem *i)
     MarkerEditorViewItem *item =
         dynamic_cast<MarkerEditorViewItem*>(i);
 
-    if (!item)
+    if (!item || item->isFake())
         return ;
 
     MarkerModifyDialog dialog(this,
@@ -517,7 +518,7 @@ MarkerEditorDialog::slotItemClicked(QListViewItem *item)
     MarkerEditorViewItem *ei =
         dynamic_cast<MarkerEditorViewItem *>(item);
 
-    if (ei) {
+    if (ei && !ei->isFake()) {
         RG_DEBUG << "MarkerEditorDialog::slotItemClicked - "
         << "jump to marker at " << ei->getRawTime() << endl;
 
