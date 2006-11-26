@@ -111,6 +111,9 @@ Heikki Johannes Junes <hjunes@cc.hut.fi>
     * LilyPond 2.x export
     * LilyPond bug fixes/enhancements
 
+Piotr Sawicki <pelle@plusnet.pl>
+    * Polish translation
+
 ##
 ## Names in here should also be credited in gui/main.cpp, with aboutData.addCredit()
 ##
