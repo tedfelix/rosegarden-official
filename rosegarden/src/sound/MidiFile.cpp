@@ -1464,10 +1464,6 @@ MidiFile::convertToMidi(Composition &comp)
         Track *track =
             comp.getTrackById((*segment)->getTrack());
 
-	// Fix #1602023, map Rosegarden tracks to MIDI tracks, instead of
-	// putting each segment out on a new track
-	trackNumber = track->getId();
-
         if (track->isMuted())
             continue;
 
@@ -1806,7 +1802,7 @@ MidiFile::convertToMidi(Composition &comp)
             }
         }
 
-//        trackNumber++;
+        trackNumber++;
     }
 
     // Setup number of tracks in the daddy object
