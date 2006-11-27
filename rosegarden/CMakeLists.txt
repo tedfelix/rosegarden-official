@@ -67,8 +67,8 @@ ENDIF(KDE3_FOUND)
 # Clear the flags set by FindKDE3 
 SET(CMAKE_CXX_FLAGS "")
 
-# It would be great to provide KDE prefix as a default but overridable prefix...
-# INCLUDE(KDE3Prefix)
+# Provide the KDE3 prefix as a default prefix (if the user has CMake 2.4.4)
+INCLUDE(KDE3Prefix)
 
 # Check for PKG-CONFIG
 FIND_PACKAGE(PkgConfig REQUIRED)
