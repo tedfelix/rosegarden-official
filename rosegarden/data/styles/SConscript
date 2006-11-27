@@ -1,4 +1,0 @@
-Import('*')
-
-# styles
-env.KDEinstall('KDEDATA','/rosegarden/styles', env.KDEglob('*.xml'))
