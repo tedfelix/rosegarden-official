@@ -316,10 +316,15 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     MATRIX_DEBUG << "MatrixView : Snap Grid Size = " << snapGridSize << endl;
 
-    if (snapGridSize != -1)
+    if (snapGridSize != -1) {
         m_snapGrid->setSnapTime(snapGridSize);
-    else
-        m_snapGrid->setSnapTime(SnapGrid::SnapToBeat);
+    } else {
+        m_config->setGroup(MatrixViewConfigGroup);
+        snapGridSize = m_config->readNumEntry
+            ("Snap Grid Size", SnapGrid::SnapToBeat);
+        m_snapGrid->setSnapTime(snapGridSize);
+        m_staffs[0]->getSegment().setSnapGridSize(snapGridSize);
+    }
 
     m_canvasView = new MatrixCanvasView(*m_staffs[0],
                                         m_snapGrid,
@@ -514,7 +519,11 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     setConfigDialogPageIndex(2);
 
     // default zoom
-    slotChangeHorizontalZoom( -1);
+//    slotChangeHorizontalZoom( -1);
+    m_config->setGroup(MatrixViewConfigGroup);
+    double zoom = m_config->readDoubleNumEntry("Zoom Level",
+                                               m_hZoomSlider->getCurrentSize());
+    m_hZoomSlider->setSize(zoom);
 
     // All toolbars should be created before this is called
     setAutoSaveSettings("MatrixView", true);
@@ -823,35 +832,61 @@ void MatrixView::setupActions()
                 SLOT(slotFilterSelection()), actionCollection(),
                 "filter_selection");
 
-    //!!! should be using NotationStrings::makeNoteMenuLabel for these
-    new KAction(i18n("Snap to 1/64"), Key_0, this,
-                SLOT(slotSetSnapFromAction()), actionCollection(), "snap_64");
-    new KAction(i18n("Snap to 1/48"), 0, this,
-                SLOT(slotSetSnapFromAction()), actionCollection(), "snap_48");
-    new KAction(i18n("Snap to 1/32"), Key_3, this,
-                SLOT(slotSetSnapFromAction()), actionCollection(), "snap_32");
-    new KAction(i18n("Snap to 1/24"), 0, this,
-                SLOT(slotSetSnapFromAction()), actionCollection(), "snap_24");
-    new KAction(i18n("Snap to 1/16"), Key_6, this,
-                SLOT(slotSetSnapFromAction()), actionCollection(), "snap_16");
-    new KAction(i18n("Snap to 1/12"), 0, this,
-                SLOT(slotSetSnapFromAction()), actionCollection(), "snap_12");
-    new KAction(i18n("Snap to 1/8"), Key_8, this,
-                SLOT(slotSetSnapFromAction()), actionCollection(), "snap_8");
-    new KAction(i18n("Snap to 1/6"), 0, this,
-                SLOT(slotSetSnapFromAction()), actionCollection(), "snap_6");
-    new KAction(i18n("Snap to 1/4"), Key_4, this,
-                SLOT(slotSetSnapFromAction()), actionCollection(), "snap_4");
-    new KAction(i18n("Snap to 1/2"), Key_2, this,
-                SLOT(slotSetSnapFromAction()), actionCollection(), "snap_2");
-    new KAction(i18n("Snap to &Unit"), 0, this,
-                SLOT(slotSetSnapFromAction()), actionCollection(), "snap_unit");
-    new KAction(i18n("Snap to Bea&t"), Key_1, this,
-                SLOT(slotSetSnapFromAction()), actionCollection(), "snap_beat");
-    new KAction(i18n("Snap to &Bar"), Key_5, this,
-                SLOT(slotSetSnapFromAction()), actionCollection(), "snap_bar");
-    new KAction(i18n("&No Snap"), 0, this,
-                SLOT(slotSetSnapFromAction()), actionCollection(), "snap_none");
+    timeT crotchetDuration = Note(Note::Crotchet).getDuration();
+    m_snapValues.push_back(SnapGrid::NoSnap);
+    m_snapValues.push_back(SnapGrid::SnapToUnit);
+    m_snapValues.push_back(crotchetDuration / 16);
+    m_snapValues.push_back(crotchetDuration / 12);
+    m_snapValues.push_back(crotchetDuration / 8);
+    m_snapValues.push_back(crotchetDuration / 6);
+    m_snapValues.push_back(crotchetDuration / 4);
+    m_snapValues.push_back(crotchetDuration / 3);
+    m_snapValues.push_back(crotchetDuration / 2);
+    m_snapValues.push_back(crotchetDuration);
+    m_snapValues.push_back((crotchetDuration * 3) / 2);
+    m_snapValues.push_back(crotchetDuration * 2);
+    m_snapValues.push_back(SnapGrid::SnapToBeat);
+    m_snapValues.push_back(SnapGrid::SnapToBar);
+
+    for (unsigned int i = 0; i < m_snapValues.size(); i++) {
+
+        timeT d = m_snapValues[i];
+
+        if (d == SnapGrid::NoSnap) {
+            new KAction(i18n("&No Snap"), 0, this,
+                        SLOT(slotSetSnapFromAction()),
+                        actionCollection(), "snap_none");
+        } else if (d == SnapGrid::SnapToUnit) {
+        } else if (d == SnapGrid::SnapToBeat) {
+            new KAction(i18n("Snap to Bea&t"), Key_1, this,
+                        SLOT(slotSetSnapFromAction()),
+                        actionCollection(), "snap_beat");
+        } else if (d == SnapGrid::SnapToBar) {
+            new KAction(i18n("Snap to &Bar"), Key_5, this,
+                        SLOT(slotSetSnapFromAction()),
+                        actionCollection(), "snap_bar");
+        } else {
+
+            timeT err = 0;
+            QString label = NotationStrings::makeNoteMenuLabel(d, true, err);
+            QPixmap pixmap = NotePixmapFactory::toQPixmap
+                (NotePixmapFactory::makeNoteMenuPixmap(d, err));
+
+            KShortcut cut = 0;
+            if (d == crotchetDuration / 16) cut = Key_0;
+            else if (d == crotchetDuration / 8) cut = Key_3;
+            else if (d == crotchetDuration / 4) cut = Key_6;
+            else if (d == crotchetDuration / 2) cut = Key_8;
+            else if (d == crotchetDuration) cut = Key_4;
+            else if (d == crotchetDuration * 2) cut = Key_2;
+
+            QString actionName = QString("snap_%1").arg(int((crotchetDuration * 4) / d));
+            if (d == (crotchetDuration * 3) / 2) actionName = "snap_3";
+            new KAction(i18n("Snap to %1").arg(label), pixmap, cut, this,
+                        SLOT(slotSetSnapFromAction()), actionCollection(),
+                        actionName);
+        }
+    }
 
     //
     // Settings menu
@@ -1938,9 +1973,7 @@ MatrixView::slotSetSnapFromAction()
     if (name.left(5) == "snap_") {
         int snap = name.right(name.length() - 5).toInt();
         if (snap > 0) {
-            slotSetSnap
-            (Note(Note::Semibreve).getDuration() /
-             snap);
+            slotSetSnap(Note(Note::Semibreve).getDuration() / snap);
         } else if (name == "snap_none") {
             slotSetSnap(SnapGrid::NoSnap);
         } else if (name == "snap_beat") {
@@ -1972,6 +2005,9 @@ MatrixView::slotSetSnap(timeT t)
         m_staffs[i]->sizeStaff(m_hlayout);
 
     m_segments[0]->setSnapGridSize(t);
+
+    m_config->setGroup(MatrixViewConfigGroup);
+    m_config->writeEntry("Snap Grid Size", t);
 
     updateView();
 }
@@ -2029,7 +2065,7 @@ MatrixView::initActionsToolbar()
         return ;
     }
 
-    // The SnapGrid combo
+    // The SnapGrid combo and Snap To... menu items
     //
     QLabel *sLabel = new QLabel(i18n(" Grid: "), actionsToolbar, "kde toolbar widget");
     sLabel->setIndent(10);
@@ -2038,40 +2074,27 @@ MatrixView::initActionsToolbar()
 
     m_snapGridCombo = new KComboBox(actionsToolbar);
 
-    timeT crotchetDuration = Note(Note::Crotchet).getDuration();
-    m_snapValues.push_back(SnapGrid::NoSnap);
-    m_snapValues.push_back(SnapGrid::SnapToUnit);
-    m_snapValues.push_back(crotchetDuration / 16);
-    m_snapValues.push_back(crotchetDuration / 12);
-    m_snapValues.push_back(crotchetDuration / 8);
-    m_snapValues.push_back(crotchetDuration / 6);
-    m_snapValues.push_back(crotchetDuration / 4);
-    m_snapValues.push_back(crotchetDuration / 3);
-    m_snapValues.push_back(crotchetDuration / 2);
-    m_snapValues.push_back(crotchetDuration * 3 / 2);
-    m_snapValues.push_back(crotchetDuration);
-    m_snapValues.push_back(crotchetDuration * 2);
-    m_snapValues.push_back(SnapGrid::SnapToBeat);
-    m_snapValues.push_back(SnapGrid::SnapToBar);
-
     for (unsigned int i = 0; i < m_snapValues.size(); i++) {
-        if (m_snapValues[i] == SnapGrid::NoSnap) {
+
+        timeT d = m_snapValues[i];
+
+        if (d == SnapGrid::NoSnap) {
             m_snapGridCombo->insertItem(i18n("None"));
-        } else if (m_snapValues[i] == SnapGrid::SnapToUnit) {
+        } else if (d == SnapGrid::SnapToUnit) {
             m_snapGridCombo->insertItem(i18n("Unit"));
-        } else if (m_snapValues[i] == SnapGrid::SnapToBeat) {
+        } else if (d == SnapGrid::SnapToBeat) {
             m_snapGridCombo->insertItem(i18n("Beat"));
-        } else if (m_snapValues[i] == SnapGrid::SnapToBar) {
+        } else if (d == SnapGrid::SnapToBar) {
             m_snapGridCombo->insertItem(i18n("Bar"));
         } else {
-
             timeT err = 0;
-            QString label = NotationStrings::makeNoteMenuLabel(m_snapValues[i], true, err);
-            QPixmap pixmap = NotePixmapFactory::toQPixmap(NotePixmapFactory::makeNoteMenuPixmap(m_snapValues[i], err));
+            QString label = NotationStrings::makeNoteMenuLabel(d, true, err);
+            QPixmap pixmap = NotePixmapFactory::toQPixmap
+                (NotePixmapFactory::makeNoteMenuPixmap(d, err));
             m_snapGridCombo->insertItem((err ? noMap : pixmap), label);
         }
 
-        if (m_snapValues[i] == m_snapGrid->getSnapSetting()) {
+        if (d == m_snapGrid->getSnapSetting()) {
             m_snapGridCombo->setCurrentItem(m_snapGridCombo->count() - 1);
         }
     }
@@ -2180,6 +2203,9 @@ MatrixView::slotChangeHorizontalZoom(int)
         m_topBarButtons->update();
     if (m_bottomBarButtons)
         m_bottomBarButtons->update();
+
+    m_config->setGroup(MatrixViewConfigGroup);
+    m_config->writeEntry("Zoom Level", zoomValue);
 
     // If you do adjust the viewsize then please remember to
     // either re-center() or remember old scrollbar position

@@ -48,5 +48,6 @@ namespace Rosegarden
     const char* const TempoViewLayoutConfigGroupName = "TempoView Layout";
     const char* const TempoViewConfigGroup = "TempoView Options";
     const char* const TriggerManagerConfigGroup = "Trigger Editor";
+    const char* const EditViewConfigGroup = "Edit View";
 
 }

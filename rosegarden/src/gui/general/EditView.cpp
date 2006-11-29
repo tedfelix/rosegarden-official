@@ -28,6 +28,7 @@
 
 #include "base/BaseProperties.h"
 #include <klocale.h>
+#include <kconfig.h>
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "ActiveItem.h"
@@ -1436,13 +1437,18 @@ void EditView::slotTranspose()
     if (!m_currentEventSelection)
         return ;
 
+    m_config->setGroup(EditViewConfigGroup);
+    int dialogDefault = m_config->readNumEntry("lasttransposition", 0);
+
     bool ok = false;
     int semitones = QInputDialog::getInteger
                     (i18n("Transpose"),
                      i18n("Enter the number of semitones to transpose by:"),
-                     0, -127, 127, 1, &ok, this);
-    if (!ok || semitones == 0)
-        return ;
+                     dialogDefault, -127, 127, 1, &ok, this);
+    if (!ok || semitones == 0) return;
+
+    m_config->setGroup(EditViewConfigGroup);
+    m_config->writeEntry("lasttransposition", semitones);
 
     KTmpStatusMsg msg(i18n("Transposing..."), this);
     addCommandToHistory(new TransposeCommand

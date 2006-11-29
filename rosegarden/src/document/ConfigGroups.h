@@ -50,6 +50,7 @@ namespace Rosegarden
     extern const char* const TempoViewLayoutConfigGroupName;
     extern const char* const TempoViewConfigGroup;
     extern const char* const TriggerManagerConfigGroup;
+    extern const char* const EditViewConfigGroup;
 }
 
 #endif
