@@ -63,7 +63,7 @@
 #include "commands/segment/CreateTempoMapFromSegmentCommand.h"
 #include "commands/segment/CutRangeCommand.h"
 #include "commands/segment/DeleteRangeCommand.h"
-#include "commands/segment/OpenOrCloseRangeCommand.h"
+#include "commands/segment/InsertRangeCommand.h"
 #include "commands/segment/ModifyDefaultTempoCommand.h"
 #include "commands/segment/MoveTracksCommand.h"
 #include "commands/segment/PasteRangeCommand.h"
@@ -2482,9 +2482,9 @@ void RosegardenGUIApp::slotInsertRange()
     TimeDialog dialog(m_view, i18n("Duration of empty range to insert"),
                       &m_doc->getComposition(), t0, r.second - r.first);
     if (dialog.exec() == QDialog::Accepted) {
-        timeT t1 = t0 + dialog.getTime();
         m_doc->getCommandHistory()->addCommand
-            (new OpenOrCloseRangeCommand(&m_doc->getComposition(), t0, t1, true));
+            (new InsertRangeCommand(&m_doc->getComposition(), t0, dialog.getTime()));
+        m_doc->setLoop(0, 0);
     }
 }
 

@@ -23,61 +23,24 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_OPENORCLOSERANGECOMMAND_H_
-#define _RG_OPENORCLOSERANGECOMMAND_H_
+#ifndef _RG_INSERTRANGECOMMAND_H_
+#define _RG_INSERTRANGECOMMAND_H_
 
-#include "base/Selection.h"
-#include <kcommand.h>
-#include <vector>
 #include "base/Event.h"
-
-
-
+#include <kcommand.h>
 
 namespace Rosegarden
 {
 
-class Segment;
 class Composition;
 
-
-/**
- * Pull all segments, time sigs, tempos etc starting after the end of
- * a given range back by the duration of that range, so as to fill in
- * the (presumably empty) range itself.
- *
- * This does not actually split any segments etc, it just moves them.
- */
-class OpenOrCloseRangeCommand : public KNamedCommand
+class InsertRangeCommand : public KMacroCommand
 {
 public:
-    OpenOrCloseRangeCommand(Composition *composition,
-                            timeT rangeBegin,
-                            timeT rangeEnd,
-                            bool open);
-    virtual ~OpenOrCloseRangeCommand();
-
-    virtual void execute();
-    virtual void unexecute();
-
-private:
-    Composition *m_composition;
-    timeT m_beginTime;
-    timeT m_endTime;
-
-    bool m_prepared;
-    bool m_opening;
-
-    std::vector<Segment *> m_moving;
-
-    TimeSignatureSelection m_timesigsPre;
-    TimeSignatureSelection m_timesigsPost;
-
-    TempoSelection m_temposPre;
-    TempoSelection m_temposPost;
+    InsertRangeCommand(Composition *composition,
+		       timeT startTime, timeT duration);
 };
-
-
+    
 
 }
 

@@ -54,6 +54,7 @@
 #include "base/Staff.h"
 #include "base/Studio.h"
 #include "base/Track.h"
+#include "base/NotationQuantizer.h"
 #include "document/RosegardenGUIDoc.h"
 #include "gui/application/RosegardenApplication.h"
 #include "gui/editors/guitar/Chord.h"

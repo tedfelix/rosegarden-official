@@ -31,7 +31,7 @@
 #include "base/LayoutEngine.h"
 #include "base/NotationTypes.h"
 #include "base/Profiler.h"
-#include "base/Quantizer.h"
+#include "base/NotationQuantizer.h"
 #include "base/RulerScale.h"
 #include "base/Segment.h"
 #include "base/SegmentNotationHelper.h"

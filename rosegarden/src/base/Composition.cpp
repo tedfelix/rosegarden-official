@@ -24,7 +24,8 @@
 #include "Segment.h"
 #include "FastVector.h"
 #include "BaseProperties.h"
-#include "Quantizer.h"
+#include "BasicQuantizer.h"
+#include "NotationQuantizer.h"
 
 #include <iostream>
 #include <iomanip>

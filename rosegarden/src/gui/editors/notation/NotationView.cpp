@@ -48,7 +48,7 @@
 #include "base/NotationTypes.h"
 #include "base/Profiler.h"
 #include "base/PropertyName.h"
-#include "base/Quantizer.h"
+#include "base/NotationQuantizer.h"
 #include "base/RealTime.h"
 #include "base/RulerScale.h"
 #include "base/Segment.h"

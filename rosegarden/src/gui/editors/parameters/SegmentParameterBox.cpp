@@ -36,7 +36,7 @@
 #include "base/Composition.h"
 #include "base/MidiProgram.h"
 #include "base/NotationTypes.h"
-#include "base/Quantizer.h"
+#include "base/BasicQuantizer.h"
 #include "base/RealTime.h"
 #include "base/Segment.h"
 #include "base/Selection.h"

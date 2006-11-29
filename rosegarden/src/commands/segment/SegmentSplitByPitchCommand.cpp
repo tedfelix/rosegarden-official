@@ -31,7 +31,7 @@
 #include "base/Composition.h"
 #include "base/Event.h"
 #include "base/NotationTypes.h"
-#include "base/Quantizer.h"
+#include "base/NotationQuantizer.h"
 #include "base/Segment.h"
 #include "base/SegmentNotationHelper.h"
 #include "gui/editors/guitar/Chord.h"
@@ -192,10 +192,8 @@ int
 SegmentSplitByPitchCommand::getSplitPitchAt(Segment::iterator i,
         int lastSplitPitch)
 {
-    typedef std::set
-        <int>::iterator PitchItr;
-    std::set
-        <int> pitches;
+    typedef std::set<int>::iterator PitchItr;
+    std::set<int> pitches;
 
     // when this algorithm appears to be working ok, we should be
     // able to make it much quicker

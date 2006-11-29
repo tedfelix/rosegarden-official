@@ -22,6 +22,8 @@
 #include "SegmentNotationHelper.h"
 #include "NotationTypes.h"
 #include "Quantizer.h"
+#include "BasicQuantizer.h"
+#include "NotationQuantizer.h"
 #include "BaseProperties.h"
 #include "Composition.h"
 
