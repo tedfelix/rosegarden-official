@@ -73,7 +73,7 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc,
     connect(m_tempoValueSpinBox, SIGNAL(valueChanged(const QString &)),
             SLOT(slotTempoChanged(const QString &)));
 
-    m_tempoTap= new QPushButton("Tap", frame);
+    m_tempoTap= new QPushButton(i18n("Tap"), frame);
     layout->addWidget(m_tempoTap, 0, 4);
     connect(m_tempoTap, SIGNAL(clicked()), SLOT(slotTapClicked()));
 
