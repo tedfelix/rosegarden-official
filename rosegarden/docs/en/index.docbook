@@ -943,7 +943,7 @@
 	time signature editor.</para>
       </sect2>
 
-      <!-- !!! tidy this up -->
+      <!-- !!! tidy this up, add Tap Tempo and Get Tempos From Beat Segment -->
 
       <sect2 id="tempo-edit">
 	<title>Tempo Editor</title>
@@ -1086,6 +1086,21 @@
 	  the current playback pointer position.</para>
 
 	</sect3>
+
+	<sect3 id="range-insert">
+	  <title>Inserting a range</title>
+
+          <para>You can also insert an empty range at the current
+          playback position using the <menuchoice> <guimenu
+          lang="en">Edit</guimenu> <guimenuitem>Insert
+          Range</guimenuitem> </menuchoice> menu function.  You can
+          specify how much space you want to insert, and then all of
+          the segment content, tempos and time signatures following
+          the playback position will be pushed along in time by that
+          duration to leave an empty space.
+          </para>
+        </sect3>
+
       </sect2>
     </sect1>
 
@@ -1242,11 +1257,23 @@
     </para>
     
     <para>The Transport shows the time reached by the playback
-      pointer, in seconds by default.  You can switch it to show
+      pointer, in seconds by default.</para>
+
+    <para>You can switch it to show
       musical time (bar and beat counts), musical time with a flashing
       visual metronome, or audio sample frame times, using the topmost
-      of the small buttons on the left of the transport window.  The
-      button immediately below that toggles the display so as to show
+      of the small buttons <inlinemediaobject>
+	    <imageobject>
+	      <imagedata fileref="rg-button-bar-time.png"/>
+	</imageobject>
+	</inlinemediaobject> on the left of the transport window.</para>
+
+    <para>The
+      button immediately below that <inlinemediaobject>
+	    <imageobject>
+	      <imagedata fileref="rg-button-from-end.png"/>
+	</imageobject>
+	</inlinemediaobject> toggles the display so as to show
       time remaining to the end of the composition instead of from the
       start.</para>
 
@@ -1256,12 +1283,28 @@
       it or jump to beginning or end of composition.
     </para>
 
-    <para>Additional controls and a &MIDI; event display are hidden
-      on the bottom flap on the transport, which can be toggled on or
-      off using the arrow button next to it at the left.  Also on this
-      extra portion there are buttons for recording, setting loops,
-      soloing individual tracks, turning on or off the metronome, and
-      silencing your MIDI devices (panic button).  </para>
+    <para>
+      The transport display also shows the tempo and time signature in
+      effect at the current playback position.  Double-click on either
+      of these to insert a new tempo or time signature change.  See
+      <link linkend="segment-view-tempo-timesig">Tempo and Time
+      Signature</link> for more ways to adjust these elsewhere in Rosegarden.
+    </para>
+
+    <para>
+      You can also double-click anywhere on the main time display on
+      the transport window, to enter a precise time that you want the
+      playback position to be set to.
+    </para>
+
+    <para>Additional controls and a &MIDI; event display are hidden on
+    the bottom flap on the transport, which can be toggled on or off
+    using the arrow button next to it at the left.  Also on this extra
+    portion there are buttons for recording, setting the loop start
+    and end (see <link linkend="ranges-loops">Ranges and loops</link>),
+    soloing individual tracks, turning on or off the metronome (see
+    <link linkend="studio-metronome">Metronomes</link>), and silencing
+    your MIDI devices (the panic button).  </para>
 
     </sect1>
     <sect1 id="recording">
