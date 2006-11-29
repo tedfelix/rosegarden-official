@@ -29,6 +29,8 @@
 #include <kdialogbase.h>
 #include "base/Event.h"
 #include "base/Composition.h"
+#include <qpushbutton.h>
+#include <qdatetime.h>
 
 
 class QWidget;
@@ -74,6 +76,7 @@ public slots:
     void slotTempoRampToNextClicked();
     void slotTempoRampToTargetClicked();
     void slotTargetChanged(const QString &);
+    void slotTapClicked();
 
 signals:
     // Return results in this signal
@@ -90,8 +93,10 @@ protected:
     //--------------- Data members ---------------------------------
 
     RosegardenGUIDoc     *m_doc;
-    timeT     m_tempoTime;
+    timeT                m_tempoTime;
     HSpinBox             *m_tempoValueSpinBox;
+    QPushButton          *m_tempoTap;
+    QTime                m_timeMetronePrev;
 
     QRadioButton         *m_tempoConstant;
     QRadioButton         *m_tempoRampToNext;
