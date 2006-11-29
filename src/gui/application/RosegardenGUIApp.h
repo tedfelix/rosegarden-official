@@ -705,6 +705,11 @@ public slots:
      * Delete a time range.
      */
     void slotDeleteRange();
+    
+    /**
+     * Insert a time range (asking the user for a duration).
+     */
+    void slotInsertRange();
 
     /**
      * select all segments on all tracks
@@ -840,6 +845,12 @@ public slots:
     void slotEditTimeSignature(timeT atTime);
     void slotEditTimeSignature(QWidget *parent);
     void slotEditTimeSignature(QWidget *parent, timeT atTime);
+
+    /**
+     * Edit the playback pointer position - called from a Transport signal
+     */
+    void slotEditTransportTime();
+    void slotEditTransportTime(QWidget *parent);
 
     /**
      * Change the length of the composition

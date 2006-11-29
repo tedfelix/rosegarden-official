@@ -427,14 +427,33 @@ TempoDialog::slotOk()
 void
 TempoDialog::slotTapClicked()
 {
-    QTime t_Now=QTime::currentTime ();
-    int msec=m_timeMetronePrev.msecsTo(t_Now);
-    int bpm=60000/msec;
-    m_tempoValueSpinBox->setValue(bpm*100000);
-    m_timeMetronePrev=t_Now;
+    QTime now = QTime::currentTime();
+
+    if (m_tapMinusOne != QTime()) {
+
+        int ms1 = m_tapMinusOne.msecsTo(now);
+
+        if (ms1 < 10000) {
+
+            int msec = ms1;
+
+            if (m_tapMinusTwo != QTime()) {
+                int ms2 = m_tapMinusTwo.msecsTo(m_tapMinusOne);
+                if (ms2 < 10000) {
+                    msec = (ms1 + ms2) / 2;
+                }
+            }
+
+            int bpm = 60000 / msec;
+            m_tempoValueSpinBox->setValue(bpm * 100000);
+        }
+    }
+
+    m_tapMinusTwo = m_tapMinusOne;
+    m_tapMinusOne = now;
 }
 
 
-
 }
+
 #include "TempoDialog.moc"

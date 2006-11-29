@@ -93,10 +93,11 @@ protected:
     //--------------- Data members ---------------------------------
 
     RosegardenGUIDoc     *m_doc;
-    timeT                m_tempoTime;
+    timeT                 m_tempoTime;
     HSpinBox             *m_tempoValueSpinBox;
     QPushButton          *m_tempoTap;
-    QTime                m_timeMetronePrev;
+    QTime                 m_tapMinusTwo;
+    QTime                 m_tapMinusOne;
 
     QRadioButton         *m_tempoConstant;
     QRadioButton         *m_tempoRampToNext;
@@ -107,7 +108,7 @@ protected:
     QLabel               *m_tempoBeat;
     QLabel               *m_tempoBeatsPerMinute;
 
-    TimeWidget *m_timeEditor;
+    TimeWidget           *m_timeEditor;
 
     QLabel               *m_tempoTimeLabel;
     QLabel               *m_tempoBarLabel;
