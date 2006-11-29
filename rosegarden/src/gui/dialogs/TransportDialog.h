@@ -126,6 +126,7 @@ public slots:
 
     void slotEditTempo();
     void slotEditTimeSignature();
+    void slotEditTime();
 
     void slotSetBackground(QColor);
     void slotResetBackground();
@@ -144,8 +145,9 @@ signals:
     void setLoopStopTime();
 
     void editTempo(QWidget *);
-    void scrollTempo(int);
     void editTimeSignature(QWidget *);
+    void editTransportTime(QWidget *);
+    void scrollTempo(int);
     void panic();
 
 private:

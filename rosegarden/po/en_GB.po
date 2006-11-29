@@ -8873,7 +8873,7 @@ msgstr "in the middle of bar %1."
 
 #: ../gui/tempodialog.cpp:259
 msgid "        (at %1.%2 s, in measure %3)"
-msgstr ""
+msgstr "        (at %1.%2 s, in bar %3)"
 
 #: ../gui/tempodialog.cpp:276
 msgid "There are no preceding tempo changes."

@@ -63,6 +63,7 @@
 #include "commands/segment/CreateTempoMapFromSegmentCommand.h"
 #include "commands/segment/CutRangeCommand.h"
 #include "commands/segment/DeleteRangeCommand.h"
+#include "commands/segment/OpenOrCloseRangeCommand.h"
 #include "commands/segment/ModifyDefaultTempoCommand.h"
 #include "commands/segment/MoveTracksCommand.h"
 #include "commands/segment/PasteRangeCommand.h"
@@ -807,10 +808,14 @@ void RosegardenGUIApp::setupActions()
     new KAction(i18n("Paste Range"), Key_V + CTRL + SHIFT, this,
                 SLOT(slotPasteRange()), actionCollection(),
                 "paste_range");
-
+/*
     new KAction(i18n("Delete Range"), Key_Delete + SHIFT, this,
                 SLOT(slotDeleteRange()), actionCollection(),
                 "delete_range");
+*/
+    new KAction(i18n("Insert Range..."), Key_Insert + SHIFT, this,
+                SLOT(slotInsertRange()), actionCollection(),
+                "insert_range");
 
     new KAction(i18n("De&lete"), Key_Delete, this,
                 SLOT(slotDeleteSelectedSegments()), actionCollection(),
@@ -2470,6 +2475,19 @@ void RosegardenGUIApp::slotDeleteRange()
     m_doc->setLoop(0, 0);
 }
 
+void RosegardenGUIApp::slotInsertRange()
+{
+    timeT t0 = m_doc->getComposition().getPosition();
+    std::pair<timeT, timeT> r = m_doc->getComposition().getBarRangeForTime(t0);
+    TimeDialog dialog(m_view, i18n("Duration of empty range to insert"),
+                      &m_doc->getComposition(), t0, r.second - r.first);
+    if (dialog.exec() == QDialog::Accepted) {
+        timeT t1 = t0 + dialog.getTime();
+        m_doc->getCommandHistory()->addCommand
+            (new OpenOrCloseRangeCommand(&m_doc->getComposition(), t0, t1, true));
+    }
+}
+
 void RosegardenGUIApp::slotSelectAll()
 {
     m_view->slotSelectAllSegments();
@@ -2705,6 +2723,8 @@ void RosegardenGUIApp::createAndSetupTransport()
     connect(m_transport, SIGNAL(editTimeSignature(QWidget*)),
             SLOT(slotEditTimeSignature(QWidget*)));
 
+    connect(m_transport, SIGNAL(editTransportTime(QWidget*)),
+            SLOT(slotEditTransportTime(QWidget*)));
 
     // Handle set loop start/stop time buttons.
     //
@@ -5447,6 +5467,21 @@ void RosegardenGUIApp::slotEditTimeSignature(QWidget *parent,
             (new AddTimeSignatureCommand
              (&composition, time, dialog.getTimeSignature()));
         }
+    }
+}
+
+void RosegardenGUIApp::slotEditTransportTime()
+{
+    slotEditTransportTime(this);
+}
+
+void RosegardenGUIApp::slotEditTransportTime(QWidget *parent)
+{
+    TimeDialog dialog(parent, i18n("Move playback pointer to time"),
+                      &m_doc->getComposition(),
+                      m_doc->getComposition().getPosition());
+    if (dialog.exec() == QDialog::Accepted) {
+        m_doc->slotSetPointerPosition(dialog.getTime());
     }
 }
 

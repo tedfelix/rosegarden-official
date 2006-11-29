@@ -42,7 +42,7 @@
         <Action name="cut_range"/>
         <Action name="copy_range"/>
         <Action name="paste_range"/>
-<!--        <Action name="delete_range"/>  -->
+        <Action name="insert_range"/>
         <Separator/>
         <Action name="select_all"/>
   </Menu>
@@ -429,7 +429,6 @@
     <enable>
 	 <Action name="cut_range"/>
 	 <Action name="copy_range"/>
-<!-- 	 <Action name="delete_range"/> -->
     </enable>
 </State>
 

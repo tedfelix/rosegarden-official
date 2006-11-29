@@ -1955,7 +1955,7 @@
             <property name="frameShadow">
                 <enum>Sunken</enum>
             </property>
-            <widget class="QLabel">
+            <widget class="Rosegarden::Label">
                 <property name="name">
                     <cstring>UnitHoursPixmap</cstring>
                 </property>
@@ -1977,7 +1977,7 @@
                     <cstring></cstring>
                 </property>
             </widget>
-            <widget class="QLabel">
+            <widget class="Rosegarden::Label">
                 <property name="name">
                     <cstring>HourColonPixmap</cstring>
                 </property>
@@ -1999,7 +1999,7 @@
                     <cstring></cstring>
                 </property>
             </widget>
-            <widget class="QLabel">
+            <widget class="Rosegarden::Label">
                 <property name="name">
                     <cstring>TenMinutesPixmap</cstring>
                 </property>
@@ -2021,7 +2021,7 @@
                     <cstring></cstring>
                 </property>
             </widget>
-            <widget class="QLabel">
+            <widget class="Rosegarden::Label">
                 <property name="name">
                     <cstring>UnitMinutesPixmap</cstring>
                 </property>
@@ -2043,7 +2043,7 @@
                     <cstring></cstring>
                 </property>
             </widget>
-            <widget class="QLabel">
+            <widget class="Rosegarden::Label">
                 <property name="name">
                     <cstring>TenSecondsPixmap</cstring>
                 </property>
@@ -2065,7 +2065,7 @@
                     <cstring></cstring>
                 </property>
             </widget>
-            <widget class="QLabel">
+            <widget class="Rosegarden::Label">
                 <property name="name">
                     <cstring>UnitSecondsPixmap</cstring>
                 </property>
@@ -2087,7 +2087,7 @@
                     <cstring></cstring>
                 </property>
             </widget>
-            <widget class="QLabel">
+            <widget class="Rosegarden::Label">
                 <property name="name">
                     <cstring>HundredthsPixmap</cstring>
                 </property>
@@ -2109,7 +2109,7 @@
                     <cstring></cstring>
                 </property>
             </widget>
-            <widget class="QLabel">
+            <widget class="Rosegarden::Label">
                 <property name="name">
                     <cstring>NegativePixmap</cstring>
                 </property>
@@ -2131,7 +2131,7 @@
                     <cstring></cstring>
                 </property>
             </widget>
-            <widget class="QLabel">
+            <widget class="Rosegarden::Label">
                 <property name="name">
                     <cstring>TenHoursPixmap</cstring>
                 </property>
@@ -3813,7 +3813,7 @@
                 <property name="hAlign" stdset="0">
                 </property>
             </widget>
-            <widget class="QLabel">
+            <widget class="Rosegarden::Label">
                 <property name="name">
                     <cstring>TenThousandthsPixmap</cstring>
                 </property>
@@ -3835,7 +3835,7 @@
                     <cstring></cstring>
                 </property>
             </widget>
-            <widget class="QLabel">
+            <widget class="Rosegarden::Label">
                 <property name="name">
                     <cstring>MinuteColonPixmap</cstring>
                 </property>
@@ -3857,7 +3857,7 @@
                     <cstring></cstring>
                 </property>
             </widget>
-            <widget class="QLabel">
+            <widget class="Rosegarden::Label">
                 <property name="name">
                     <cstring>SecondColonPixmap</cstring>
                 </property>
@@ -3879,7 +3879,7 @@
                     <cstring></cstring>
                 </property>
             </widget>
-            <widget class="QLabel">
+            <widget class="Rosegarden::Label">
                 <property name="name">
                     <cstring>HundredthColonPixmap</cstring>
                 </property>
@@ -3901,7 +3901,7 @@
                     <cstring></cstring>
                 </property>
             </widget>
-            <widget class="QLabel">
+            <widget class="Rosegarden::Label">
                 <property name="name">
                     <cstring>TenthsPixmap</cstring>
                 </property>
@@ -3923,7 +3923,7 @@
                     <cstring></cstring>
                 </property>
             </widget>
-            <widget class="QLabel">
+            <widget class="Rosegarden::Label">
                 <property name="name">
                     <cstring>ThousandthsPixmap</cstring>
                 </property>
