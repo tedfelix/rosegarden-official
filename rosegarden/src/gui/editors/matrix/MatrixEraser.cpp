@@ -94,6 +94,12 @@ void MatrixEraser::handleLeftButtonPress(timeT,
     m_mParentView->update();
 }
 
+void MatrixEraser::ready()
+{
+    m_mParentView->setCanvasCursor(Qt::pointingHandCursor);
+}
+
+
 const QString MatrixEraser::ToolName    = "eraser";
 
 }
