@@ -141,7 +141,14 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
 
 
         m_canvas->getModel()->startChange(item, CompositionModel::ChangeMove);
-        m_canvas->getModel()->setSelected(item);
+
+        bool selecting = true;
+// cc - doesn't appear to work
+//        if (m_segmentAddMode && m_canvas->getModel()->isSelected(item)) {
+//            selecting = false;
+//        }
+
+        m_canvas->getModel()->setSelected(item, selecting);
 
         // Moving
         //
