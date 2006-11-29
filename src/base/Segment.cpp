@@ -23,7 +23,7 @@
 #include "NotationTypes.h"
 #include "BaseProperties.h"
 #include "Composition.h"
-#include "Quantizer.h"
+#include "BasicQuantizer.h"
 #include "Profiler.h"
 
 #include <iostream>

@@ -31,7 +31,7 @@
 #include "base/Event.h"
 #include "base/LayoutEngine.h"
 #include "base/NotationTypes.h"
-#include "base/Quantizer.h"
+#include "base/NotationQuantizer.h"
 #include "base/Staff.h"
 #include "gui/general/ProgressReporter.h"
 #include "gui/editors/guitar/Fingering.h"

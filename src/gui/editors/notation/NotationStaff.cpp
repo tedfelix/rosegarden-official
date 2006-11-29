@@ -37,6 +37,7 @@
 #include "base/Instrument.h"
 #include "base/MidiDevice.h"
 #include "base/MidiTypes.h"
+#include "base/NotationQuantizer.h"
 #include "base/NotationTypes.h"
 #include "base/Profiler.h"
 #include "base/Segment.h"

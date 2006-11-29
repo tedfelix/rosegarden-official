@@ -32,7 +32,7 @@
 #include "base/BaseProperties.h"
 #include "base/Event.h"
 #include "base/NotationTypes.h"
-#include "base/Quantizer.h"
+#include "base/BasicQuantizer.h"
 #include "gui/dialogs/PitchPickerDialog.h"
 #include "gui/editors/notation/NotationStrings.h"
 #include "gui/editors/notation/NotePixmapFactory.h"

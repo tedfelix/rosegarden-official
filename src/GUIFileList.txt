@@ -201,6 +201,8 @@ SET(commands_SRCS
 	commands/segment/DeleteTriggerSegmentCommand.h
 	commands/segment/EraseSegmentsStartingInRangeCommand.cpp
 	commands/segment/EraseSegmentsStartingInRangeCommand.h
+	commands/segment/InsertRangeCommand.cpp
+	commands/segment/InsertRangeCommand.h
 	commands/segment/ModifyDefaultTempoCommand.cpp
 	commands/segment/ModifyDefaultTempoCommand.h
 	commands/segment/MoveTracksCommand.cpp

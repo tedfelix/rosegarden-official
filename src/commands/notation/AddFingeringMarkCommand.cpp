@@ -27,6 +27,7 @@
 
 #include <klocale.h>
 #include "base/NotationTypes.h"
+#include "base/NotationQuantizer.h"
 #include "base/Segment.h"
 #include "base/Selection.h"
 #include "base/Sets.h"

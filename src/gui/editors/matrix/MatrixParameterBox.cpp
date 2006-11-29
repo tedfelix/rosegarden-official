@@ -26,7 +26,7 @@
 #include "MatrixParameterBox.h"
 
 #include "base/Instrument.h"
-#include "base/Quantizer.h"
+#include "base/BasicQuantizer.h"
 #include "base/Selection.h"
 #include "document/RosegardenGUIDoc.h"
 #include "gui/editors/parameters/InstrumentParameterBox.h"
