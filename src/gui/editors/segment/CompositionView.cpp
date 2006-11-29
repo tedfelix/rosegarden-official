@@ -1346,6 +1346,9 @@ void CompositionView::contentsMouseMoveEvent(QMouseEvent* e)
     if (!m_tool)
         return ;
 
+    Qt::ButtonState bs = e->state();
+    slotSetFineGrain((bs & Qt::ShiftButton) != 0);
+
     int follow = m_tool->handleMouseMove(e);
     setScrollDirectionConstraint(follow);
 
