@@ -54,6 +54,8 @@ public:
 
     static const QString ToolName;
 
+    virtual void ready();
+
 protected:
     MatrixEraser(MatrixView*);
 

@@ -270,6 +270,8 @@ void MatrixPainter::ready()
 {
     connect(m_parentView->getCanvasView(), SIGNAL(contentsMoving (int, int)),
             this, SLOT(slotMatrixScrolled(int, int)));
+
+    m_mParentView->setCanvasCursor(Qt::crossCursor);
 }
 
 void MatrixPainter::stow()
