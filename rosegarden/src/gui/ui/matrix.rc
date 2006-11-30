@@ -97,9 +97,7 @@
   <Menu name="Convert">
     <text>Convert</text>
     <Action name="invert"/>
-    <Separator/>
     <Action name="retrograde"/>
-    <Separator/>
     <Action name="retrograde_invert"/>
   </Menu>
   <Action name="trigger_segment"/>

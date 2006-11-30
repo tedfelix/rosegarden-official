@@ -2057,7 +2057,14 @@ void NotationView::setupActions()
                     SLOT(slotAddSlashes()), actionCollection(),
                     QString("slashes_%1").arg(i));
     }
-
+/*
+    new KAction(i18n("Add Fretboard"),
+                0,
+                this,
+                SLOT(slotAddFretboard()),
+                actionCollection(),
+                "add_fretboard");
+*/
     new KAction(ClefInsertionCommand::getGlobalName(), 0, this,
                 SLOT(slotEditAddClef()), actionCollection(),
                 "add_clef");

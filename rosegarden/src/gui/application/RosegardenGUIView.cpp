@@ -1904,7 +1904,7 @@ RosegardenGUIView::initChordNameRuler()
 }
 
 EventView *
-RosegardenGUIView::createEventView(std::vector<Rosegarden::Segment *> segmentsToEdit)
+RosegardenGUIView::createEventView(std::vector<Segment *> segmentsToEdit)
 {
     EventView *eventView = new EventView(getDocument(),
                                          segmentsToEdit,
@@ -1919,14 +1919,14 @@ RosegardenGUIView::createEventView(std::vector<Rosegarden::Segment *> segmentsTo
     connect(eventView, SIGNAL(saveFile()),
         RosegardenGUIApp::self(), SLOT(slotFileSave()));
 
-    connect(eventView, SIGNAL(openInNotation(std::vector<Rosegarden::Segment *>)),
-        this, SLOT(slotEditSegmentsNotation(std::vector<Rosegarden::Segment *>)));
-    connect(eventView, SIGNAL(openInMatrix(std::vector<Rosegarden::Segment *>)),
-        this, SLOT(slotEditSegmentsMatrix(std::vector<Rosegarden::Segment *>)));
-    connect(eventView, SIGNAL(openInPercussionMatrix(std::vector<Rosegarden::Segment *>)),
-        this, SLOT(slotEditSegmentsPercussionMatrix(std::vector<Rosegarden::Segment *>)));
-    connect(eventView, SIGNAL(openInEventList(std::vector<Rosegarden::Segment *>)),
-        this, SLOT(slotEditSegmentsEventList(std::vector<Rosegarden::Segment *>)));
+    connect(eventView, SIGNAL(openInNotation(std::vector<Segment *>)),
+        this, SLOT(slotEditSegmentsNotation(std::vector<Segment *>)));
+    connect(eventView, SIGNAL(openInMatrix(std::vector<Segment *>)),
+        this, SLOT(slotEditSegmentsMatrix(std::vector<Segment *>)));
+    connect(eventView, SIGNAL(openInPercussionMatrix(std::vector<Segment *>)),
+        this, SLOT(slotEditSegmentsPercussionMatrix(std::vector<Segment *>)));
+    connect(eventView, SIGNAL(openInEventList(std::vector<Segment *>)),
+        this, SLOT(slotEditSegmentsEventList(std::vector<Segment *>)));
     connect(eventView, SIGNAL(editTriggerSegment(int)),
         this, SLOT(slotEditTriggerSegment(int)));
     connect(this, SIGNAL(compositionStateUpdate()),
