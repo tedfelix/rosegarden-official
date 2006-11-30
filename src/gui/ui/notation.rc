@@ -217,8 +217,6 @@
 	        <Action name="collapse_notes"/>
 	        <Action name="make_notes_viable"/>
 	        <Action name="de_counterpoint"/>
-		<Separator/>
-	        <Action name="interpret"/>
 	</Menu>
 	<Separator/>
 	<Menu name="quantize_notes">
@@ -227,6 +225,7 @@
   	        <Action name="fix_quantization"/>
 	        <Action name="remove_quantization"/>
 	</Menu>
+ 	<Action name="interpret"/>
         <Separator/>
 	<Menu name="Rescale">
 	      <text>Rescale</text>
@@ -247,11 +246,8 @@
 	</Menu>
         <Menu name="Convert">
 	      <text>Convert</text>
-	      <Separator/>
 	      <Action name="invert"/>
-	      <Separator/>
  	      <Action name="retrograde"/>
-	      <Separator/>
 	      <Action name="retrograde_invert"/>
 	</Menu>
 	<Menu name="fine_positioning">
