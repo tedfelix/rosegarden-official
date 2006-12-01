@@ -94,6 +94,9 @@ protected:
     MatrixElement* m_currentElement;
     MatrixStaff* m_currentStaff;
 
+    std::vector<MatrixElement *> m_duplicateElements;
+    bool m_quickCopy;
+
     int m_lastPlayedPitch;
     int m_clickX;
 };
