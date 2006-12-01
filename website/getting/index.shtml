@@ -24,7 +24,7 @@
     downloadable package repositories.  Please consult your
     distribution's documentation for more details, and check that your
     distribution provides the latest available version (currently
-    Rosegarden-1.2.4) before downloading.  RedHat/Fedora users may
+    Rosegarden-1.4.0) before downloading.  RedHat/Fedora users may
     wish to consider the excellent <a
     href="http://www-ccrma.stanford.edu/planetccrma/software/">PlanetCCRMA</a>
     audio software package set.</p>
@@ -61,9 +61,9 @@
     <ul><li><a href="http://sourceforge.net/"><img align="right"
 src="http://sourceforge.net/sflogo.php?group_id=4932&type=1"
 width="88" height="31" border="0" alt="SourceForge.net Logo"/></a><a
-href="http://sourceforge.net/project/showfiles.php?group_id=4932&release_id=431923">Rosegarden
-release 1.2.4 source code</a>, 14th July 2006, for download from the
-SourceForge page.</li></ul>
+href="http://sourceforge.net/project/showfiles.php?group_id=4932&release_id=448654">Rosegarden
+release 1.4.0 source code</a>, 19th September 2006, for download from the
+SourceForge page. <i>(<a href="http://sourceforge.net/project/shownotes.php?release_id=448654&group_id=4932">release note</a>)</i></li></ul>
 
     <h3>Development code from Subversion</h3>
 
@@ -75,7 +75,7 @@ SourceForge page.</li></ul>
     a work in progress, that might not build or run.</p>
 
     <p>You can also browse the source code in Subversion <a
-    href="http://svn.sourceforge.net/viewcvs.cgi/rosegarden/trunk/rosegarden/">here</a>.</p>
+    href="http://rosegarden.svn.sourceforge.net/viewcvs.cgi/rosegarden/trunk/rosegarden/">here</a>.</p>
 
     <h3>Subversion branches available</h3>
 
@@ -84,9 +84,9 @@ SourceForge page.</li></ul>
     or other interested parties.  These branches are accessible in the
     <code>branches/</code> directory of the svn repository, with the
     following command :</p>
-    <p><code>svn co https://svn.sourceforge.net/svnroot/rosegarden/branches/&lt;BRANCH&gt;/rosegarden rosegarden</code></p>
+    <p><code>svn co https://rosegarden.svn.sourceforge.net/svnroot/rosegarden/branches/&lt;BRANCH&gt;/rosegarden rosegarden</code></p>
     <p>replacing <code>&lt;BRANCH&gt;</code> with the name of the branch you want.</p><p>The main branch (trunk) is accessible with</p>
-    <p><code>svn co https://svn.sourceforge.net/svnroot/rosegarden/trunk/rosegarden rosegarden</code></p>
+    <p><code>svn co https://rosegarden.svn.sourceforge.net/svnroot/rosegarden/trunk/rosegarden rosegarden</code></p>
 
     <p>Note that the above commands will check out only the Rosegarden
     source code part of the Subversion repository.  If you want to get
@@ -95,7 +95,7 @@ SourceForge page.</li></ul>
     you can remove the "/rosegarden" from the end of the URL part of
     the above, e.g.:</p>
 
-    <p><code>svn co https://svn.sourceforge.net/svnroot/rosegarden/trunk rosegarden</code></p>
+    <p><code>svn co https://rosegarden.svn.sourceforge.net/svnroot/rosegarden/trunk rosegarden</code></p>
 
     <p>The current
     active branches are:

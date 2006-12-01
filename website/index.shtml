@@ -25,16 +25,16 @@
       for composers, musicians, music students, and small studio or
       home recording environments.
 
-	<p><b>Release 1.2.4 now available!</b> This is a bug-fix
-	release, with no new features over the previous 1.2.3.  Get it
+	<p><b>Release 1.4.0 now available!</b> This is a substantial
+	feature release.  Get it
 	<a href="/getting/">here</a>!</p>
 
       <p><a href="tour/">Take our tour</a> &ndash; and see what Rosegarden can
-      do for you!</p>
+      do for you!</p><p/>
 
       <div align="center" valign="center">
-      <a href="/images/rg4-0.9.9.png">
-      <img src="/images/rg4-0.9.9-thumb.png" border="0" vspace="20"
+      <a href="images/rosegarden-1.4.0-2.png">
+      <img src="images/rosegarden-1.4.0-2-thumb.png" border="0" vspace="20"
       alt="Rosegarden screenshot"/>
       </a>
       </div>

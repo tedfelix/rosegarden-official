@@ -38,7 +38,7 @@
 
 .newsheadline { 
   color: #34340c;
-  background-color: #e4f2da;
+  background-color: #ffffff;
   float: left;
   clear: left;
   width: 120px;
@@ -64,8 +64,12 @@
 }
 
 .rightbox { 
+/*
   color: #64684f;
   background-color: #eff1e2;
+*/
+  color: #34340c;
+  background-color: #ffffff;
   float: right;
   clear: right;
   width: 90px;
@@ -89,6 +93,7 @@
 .rightbox>i { 
   font-family: georgia, "bitstream vera serif", "book antiqua", palatino, garamond, serif; 
 }
+
 
 #left {
   position: absolute;
