@@ -1114,17 +1114,11 @@ void MatrixView::setCurrentSelection(EventSelection* s, bool preview,
 
             if (preview) {
                 long pitch;
-                if ((*i)->get
-                        <Int>
-                        (BaseProperties::PITCH, pitch)) {
+                if ((*i)->get<Int>(BaseProperties::PITCH, pitch)) {
                     long velocity = -1;
-                    (void)((*i)->get
-                           <Int>
-                           (BaseProperties::VELOCITY, velocity));
+                    (void)((*i)->get<Int>(BaseProperties::VELOCITY, velocity));
                     if (!((*i)->has(BaseProperties::TIED_BACKWARD) &&
-                            (*i)->get
-                            <Bool>
-                            (BaseProperties::TIED_BACKWARD)))
+                          (*i)->get<Bool>(BaseProperties::TIED_BACKWARD)))
                         playNote(s->getSegment(), pitch, velocity);
                 }
             }
