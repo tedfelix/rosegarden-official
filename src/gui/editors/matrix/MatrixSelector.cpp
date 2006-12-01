@@ -487,8 +487,8 @@ void MatrixSelector::setViewCurrentSelection()
     EventSelection* selection = getSelection();
 
     if (m_selectionToMerge && selection &&
-            m_selectionToMerge->getSegment() == selection->getSegment()) {
-
+        m_selectionToMerge->getSegment() == selection->getSegment()) {
+        
         selection->addFromSelection(m_selectionToMerge);
         m_mParentView->setCurrentSelection(selection, true, true);
 
@@ -526,7 +526,12 @@ EventSelection* MatrixSelector::getSelection()
         }
     }
 
-    return (selection->getAddedEvents() > 0) ? selection : 0;
+    if (selection->getAddedEvents() > 0) {
+        return selection;
+    } else {
+        delete selection;
+        return 0;
+    }
 }
 
 const QString MatrixSelector::ToolName  = "selector";

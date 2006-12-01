@@ -133,17 +133,44 @@ void MatrixMover::handleLeftButtonPress(timeT time,
         m_mParentView->playNote(m_currentStaff->getSegment(), pitch, velocity);
         m_lastPlayedPitch = pitch;
     }
+    
+    m_clickX = m_mParentView->inverseMapPoint(e->pos()).x();
+}
+
+timeT
+MatrixMover::getDragTime(QMouseEvent *e, timeT candidate)
+{
+    int x = m_mParentView->inverseMapPoint(e->pos()).x();
+    int xdiff = x - m_clickX;
+
+    const SnapGrid &grid = getSnapGrid();
+    const RulerScale &scale = *grid.getRulerScale();
+    
+    timeT eventTime = m_currentElement->getViewAbsoluteTime();
+    int eventX = scale.getXForTime(eventTime);
+    timeT preSnapTarget = scale.getTimeForX(eventX + xdiff);
+    
+    candidate = grid.snapTime(preSnapTarget, SnapGrid::SnapEither);
+    
+    if (xdiff == 0 ||
+        (abs(eventTime - preSnapTarget) < abs(candidate - preSnapTarget))) {
+        candidate = eventTime;
+    }
+
+    return candidate;
 }
 
 int MatrixMover::handleMouseMove(timeT newTime,
                                  int newPitch,
-                                 QMouseEvent*)
+                                 QMouseEvent *e)
 {
     MATRIX_DEBUG << "MatrixMover::handleMouseMove() time = "
     << newTime << endl;
 
     if (!m_currentElement || !m_currentStaff)
         return RosegardenCanvasView::NoFollow;
+
+    if (e) newTime = getDragTime(e, newTime);
 
     using BaseProperties::PITCH;
     int diffPitch = 0;
@@ -202,7 +229,7 @@ int MatrixMover::handleMouseMove(timeT newTime,
 
 void MatrixMover::handleMouseRelease(timeT newTime,
                                      int newPitch,
-                                     QMouseEvent*)
+                                     QMouseEvent *e)
 {
     MATRIX_DEBUG << "MatrixMover::handleMouseRelease() - newPitch = "
     << newPitch << endl;
@@ -214,6 +241,8 @@ void MatrixMover::handleMouseRelease(timeT newTime,
         newPitch = MatrixVLayout::maxMIDIPitch;
     if (newPitch < 0)
         newPitch = 0;
+
+    if (e) newTime = getDragTime(e, newTime);
 
     using BaseProperties::PITCH;
     timeT diffTime = newTime - m_currentElement->getViewAbsoluteTime();
