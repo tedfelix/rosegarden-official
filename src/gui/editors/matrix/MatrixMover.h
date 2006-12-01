@@ -82,8 +82,10 @@ public:
     virtual void ready();
     virtual void stow();
 
-protected slots:
+signals:
+    void hoveredOverNoteChanged(int evPitch, bool haveEvent, timeT evTime);
 
+protected slots:
     void slotMatrixScrolled(int x, int y);
 
 protected:

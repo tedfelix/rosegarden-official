@@ -140,7 +140,7 @@ void MatrixMover::handleLeftButtonPress(timeT time,
             m_mParentView->canvas()->update();
         }
 
-        long velocity = 100;
+        long velocity = m_mParentView->getCurrentVelocity();
         m_currentElement->event()->get<Int>(BaseProperties::VELOCITY, velocity);
         m_mParentView->playNote(m_currentStaff->getSegment(), pitch, velocity);
         m_lastPlayedPitch = pitch;
@@ -204,6 +204,8 @@ int MatrixMover::handleMouseMove(timeT newTime,
 
     if (e) newTime = getDragTime(e, newTime);
 
+    emit hoveredOverNoteChanged(newPitch, true, newTime);
+
     using BaseProperties::PITCH;
     int diffPitch = 0;
     if (m_currentElement->event()->has(PITCH)) {
@@ -248,7 +250,7 @@ int MatrixMover::handleMouseMove(timeT newTime,
     }
 
     if (newPitch != m_lastPlayedPitch) {
-        long velocity = 100;
+        long velocity = m_mParentView->getCurrentVelocity();
         m_currentElement->event()->get<Int>(BaseProperties::VELOCITY, velocity);
         m_mParentView->playNote(m_currentStaff->getSegment(), newPitch, velocity);
         m_lastPlayedPitch = newPitch;
@@ -297,7 +299,7 @@ void MatrixMover::handleMouseRelease(timeT newTime,
     }
 
     if (newPitch != m_lastPlayedPitch) {
-        long velocity = 100;
+        long velocity = m_mParentView->getCurrentVelocity();
         m_currentElement->event()->get<Int>(BaseProperties::VELOCITY, velocity);
         m_mParentView->playNote(m_currentStaff->getSegment(), newPitch, velocity);
         m_lastPlayedPitch = newPitch;
@@ -362,11 +364,11 @@ void MatrixMover::handleMouseRelease(timeT newTime,
         }
 
         if (newTime + (*it)->getDuration() >= segment.getEndMarkerTime()) {
-            newTime = getSnapGrid().snapTime
+            timeT limit = getSnapGrid().snapTime
                 (segment.getEndMarkerTime() - 1, SnapGrid::SnapLeft);
+            if (newTime > limit) newTime = limit;
             timeT newDuration = std::min
-                ((*it)->getDuration(),
-                 segment.getEndMarkerTime() - newTime);
+                ((*it)->getDuration(), segment.getEndMarkerTime() - newTime);
             newEvent = new Event(**it, newTime, newDuration);
         } else {
             newEvent = new Event(**it, newTime);
@@ -401,6 +403,8 @@ void MatrixMover::ready()
 {
     connect(m_parentView->getCanvasView(), SIGNAL(contentsMoving (int, int)),
             this, SLOT(slotMatrixScrolled(int, int)));
+    connect(this, SIGNAL(hoveredOverNoteChanged(int, bool, timeT)),
+            m_mParentView, SLOT(slotHoveredOverNoteChanged(int, bool, timeT)));
     m_mParentView->setCanvasCursor(Qt::sizeAllCursor);
 }
 
@@ -408,6 +412,8 @@ void MatrixMover::stow()
 {
     disconnect(m_parentView->getCanvasView(), SIGNAL(contentsMoving (int, int)),
                this, SLOT(slotMatrixScrolled(int, int)));
+    disconnect(this, SIGNAL(hoveredOverNoteChanged(int, bool, timeT)),
+               m_mParentView, SLOT(hoveredOverNoteChanged(int, bool, timeT)));
 }
 
 void MatrixMover::slotMatrixScrolled(int newX, int newY)

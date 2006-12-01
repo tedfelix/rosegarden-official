@@ -192,7 +192,8 @@ void MatrixCanvasView::contentsMouseMoveEvent(QMouseEvent* e)
         }
     }
 
-    if (evPitch != m_previousEvPitch || mel) {
+    if (!m_mouseWasPressed && // if mouse pressed, leave this to the tool
+        (evPitch != m_previousEvPitch || mel)) {
         MidiPitchLabel label(evPitch);
         if (mel) {
             emit hoveredOverNoteChanged(evPitch, true,

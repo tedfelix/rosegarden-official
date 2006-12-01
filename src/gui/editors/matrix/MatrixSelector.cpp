@@ -424,7 +424,7 @@ void MatrixSelector::ready()
     if (m_mParentView) {
         m_selectionRect = new QCanvasRectangle(m_mParentView->canvas());
         m_selectionRect->hide();
-        m_selectionRect->setPen(GUIPalette::getColour(GUIPalette::SelectionRectangle));
+        m_selectionRect->setPen(QPen(GUIPalette::getColour(GUIPalette::SelectionRectangle), 2));
 
         m_mParentView->setCanvasCursor(Qt::arrowCursor);
         //m_mParentView->setPositionTracking(false);
