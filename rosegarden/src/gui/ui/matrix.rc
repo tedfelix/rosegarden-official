@@ -70,13 +70,11 @@
   <Action name="jog_left"/>
   <Action name="jog_right"/>
   <Separator/>
-  <Menu name="Velocity">
-    <text>&amp;Velocity</text>
-    <Action name="velocity_up"/>
-    <Action name="velocity_down"/>
-    <Separator/>
-    <Action name="set_velocities"/>
-  </Menu>
+  <Action name="velocity_up"/>
+  <Action name="velocity_down"/>
+  <Action name="set_to_current_velocity"/>
+  <Action name="set_velocities"/>
+  <Separator/>
   <Menu name="Rescale">
     <text>Rescale</text>
     <Action name="half_speed"/>
@@ -100,6 +98,7 @@
     <Action name="retrograde"/>
     <Action name="retrograde_invert"/>
   </Menu>
+  <Separator/>
   <Action name="trigger_segment"/>
   <Action name="remove_trigger"/>
 </Menu>
@@ -247,6 +246,7 @@
     <Action name="velocity_down"/>
     <Action name="jog_left"/>
     <Action name="jog_right"/>
+    <Action name="set_to_current_velocity"/>
     <Action name="set_velocities"/>
     <Action name="trigger_segment"/>
     <Action name="remove_trigger"/>

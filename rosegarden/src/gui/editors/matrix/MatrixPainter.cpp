@@ -120,7 +120,7 @@ void MatrixPainter::handleLeftButtonPress(timeT time,
     Event *ev = new Event(Note::EventType, time,
                           grid.getSnapTime(double(p.x())));
     ev->set<Int>(BaseProperties::PITCH, pitch);
-    ev->set<Int>(BaseProperties::VELOCITY, 100);
+    ev->set<Int>(BaseProperties::VELOCITY, m_mParentView->getCurrentVelocity());
 
     m_currentElement = new MatrixElement(ev, m_mParentView->isDrumMode());
 

@@ -244,8 +244,6 @@ void MatrixResizer::handleMouseRelease(timeT newTime,
             }
 
             if (eventTime + eventDuration >= segment.getEndMarkerTime()) {
-                eventTime = getSnapGrid().snapTime
-                            (segment.getEndMarkerTime() - 1, SnapGrid::SnapLeft);
                 eventDuration = std::min(eventDuration,
                                          segment.getEndMarkerTime() - eventTime);
             }

@@ -498,12 +498,6 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     static_cast<TempoRuler *>(m_tempoRuler)->connectSignals();
     addRuler(m_tempoRuler);
 
-    // Scroll view to centre middle-C and warp to pointer position
-    //
-    m_canvasView->scrollBy(0, m_staffs[0]->getCanvasYForHeight(60) / 2);
-
-    slotSetPointerPosition(comp.getPosition());
-
     stateChanged("have_selection", KXMLGUIClient::StateReverse);
     slotTestClipboard();
 
@@ -519,11 +513,16 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     setConfigDialogPageIndex(2);
 
     // default zoom
-//    slotChangeHorizontalZoom( -1);
     m_config->setGroup(MatrixViewConfigGroup);
     double zoom = m_config->readDoubleNumEntry("Zoom Level",
                                                m_hZoomSlider->getCurrentSize());
     m_hZoomSlider->setSize(zoom);
+
+    // Scroll view to centre middle-C and warp to pointer position
+    //
+    m_canvasView->scrollBy(0, m_staffs[0]->getCanvasYForHeight(60) / 2);
+
+    slotSetPointerPosition(comp.getPosition());
 
     // All toolbars should be created before this is called
     setAutoSaveSettings("MatrixView", true);
@@ -689,6 +688,10 @@ void MatrixView::setupActions()
                 Key_Down + SHIFT, this,
                 SLOT(slotVelocityDown()), actionCollection(),
                 "velocity_down");
+
+    new KAction(i18n("Set to Current Velocity"), 0, this,
+                SLOT(slotSetVelocitiesToCurrent()), actionCollection(),
+                "set_to_current_velocity");
 
     new KAction(i18n("Set Event &Velocities..."), 0, this,
                 SLOT(slotSetVelocities()), actionCollection(),
@@ -1180,16 +1183,21 @@ void MatrixView::setCurrentSelection(EventSelection* s, bool preview,
     }
 
     delete oldSelection;
+
     if (s) {
+
         int eventsSelected = s->getSegmentEvents().size();
         m_selectionCounter->setText
         (i18n("  1 event selected ",
               "  %n events selected ", eventsSelected));
+
     } else {
         m_selectionCounter->setText(i18n("  No selection "));
     }
+
     m_selectionCounter->update();
 
+    slotSetCurrentVelocityFromSelection();
 
     // Clear states first, then enter only those ones that apply
     // (so as to avoid ever clearing one after entering another, in
@@ -1893,7 +1901,7 @@ void MatrixView::playNote(const Segment &segment, int pitch,
         return ;
 
     if (velocity < 0)
-        velocity = MidiMaxValue;
+        velocity = getCurrentVelocity();
 
     MappedEvent mE(ins->getId(),
                    MappedEvent::MidiNoteOneShot,
@@ -2096,6 +2104,19 @@ MatrixView::initActionsToolbar()
     connect(m_snapGridCombo, SIGNAL(activated(int)),
             this, SLOT(slotSetSnapFromIndex(int)));
 
+    // Velocity combo.  Not a spin box, because the spin box is too
+    // slow to use unless we make it typeable into, and then it takes
+    // focus away from our more important widgets
+
+    QLabel *vlabel = new QLabel(i18n(" Velocity: "), actionsToolbar, "kde toolbar widget");
+    vlabel->setIndent(10);
+    
+    m_velocityCombo = new KComboBox(actionsToolbar);
+    for (int i = 0; i <= 127; ++i) {
+        m_velocityCombo->insertItem(QString("%1").arg(i));
+    }
+    m_velocityCombo->setCurrentItem(100); //!!! associate with segment
+
     // Quantize combo
     //
     QLabel *qLabel = new QLabel(i18n(" Quantize: "), actionsToolbar, "kde toolbar widget");
@@ -2218,6 +2239,9 @@ MatrixView::slotChangeHorizontalZoom(int)
     // hasn't changed
     //
     getCanvasView()->polish();
+
+    getCanvasView()->slotScrollHoriz
+        (getXbyWorldMatrix(m_staffs[0]->getLayoutXOfInsertCursor()));
 }
 
 void
@@ -2237,6 +2261,42 @@ MatrixView::scrollToTime(timeT t)
 {
     double layoutCoord = m_hlayout.getXForTime(t);
     getCanvasView()->slotScrollHoriz(int(layoutCoord));
+}
+
+int
+MatrixView::getCurrentVelocity() const
+{
+    return m_velocityCombo->currentItem();
+}
+
+void
+MatrixView::slotSetCurrentVelocity(int value)
+{
+    m_velocityCombo->setCurrentItem(value);
+}
+
+
+void
+MatrixView::slotSetCurrentVelocityFromSelection()
+{
+    if (!m_currentEventSelection) return;
+
+    float totalVelocity = 0;
+    int count = 0;
+
+    for (EventSelection::eventcontainer::iterator i =
+             m_currentEventSelection->getSegmentEvents().begin();
+         i != m_currentEventSelection->getSegmentEvents().end(); ++i) {
+
+        if ((*i)->has(BaseProperties::VELOCITY)) {
+            totalVelocity += (*i)->get<Int>(BaseProperties::VELOCITY);
+            ++count;
+        }
+    }
+
+    if (count > 0) {
+        slotSetCurrentVelocity((totalVelocity / count) + 0.5);
+    }
 }
 
 unsigned int
@@ -2471,6 +2531,8 @@ void MatrixView::slotVelocityUp()
 
     addCommandToHistory
     (new ChangeVelocityCommand(10, *m_currentEventSelection));
+
+    slotSetCurrentVelocityFromSelection();
 }
 
 void MatrixView::slotVelocityDown()
@@ -2481,6 +2543,8 @@ void MatrixView::slotVelocityDown()
 
     addCommandToHistory
     (new ChangeVelocityCommand( -10, *m_currentEventSelection));
+
+    slotSetCurrentVelocityFromSelection();
 }
 
 void
@@ -2489,30 +2553,10 @@ MatrixView::slotSetVelocities()
     if (!m_currentEventSelection)
         return ;
 
-    int avVely = 0;
-    int count = 0;
-
-    for (EventSelection::eventcontainer::iterator i =
-                m_currentEventSelection->getSegmentEvents().begin();
-            i != m_currentEventSelection->getSegmentEvents().end(); ++i) {
-
-        if ((*i)->has(BaseProperties::VELOCITY)) {
-            avVely += (*i)->
-                      get
-                          <Int>(BaseProperties::VELOCITY);
-            count++;
-        }
-    }
-
-    if (count > 0)
-        avVely = int(double(avVely) / double(count));
-    else
-        avVely = 100;
-
     EventParameterDialog dialog(this,
                                 i18n("Set Event Velocities"),
                                 BaseProperties::VELOCITY,
-                                avVely);
+                                getCurrentVelocity());
 
     if (dialog.exec() == QDialog::Accepted) {
         KTmpStatusMsg msg(i18n("Setting Velocities..."), this);
@@ -2523,6 +2567,19 @@ MatrixView::slotSetVelocities()
                              dialog.getValue1(),
                              dialog.getValue2()));
     }
+}
+
+void
+MatrixView::slotSetVelocitiesToCurrent()
+{
+    if (!m_currentEventSelection) return;
+
+    addCommandToHistory(new SelectionPropertyCommand
+                        (m_currentEventSelection,
+                         BaseProperties::VELOCITY,
+                         FlatPattern,
+                         getCurrentVelocity(),
+                         getCurrentVelocity()));
 }
 
 void
