@@ -102,6 +102,7 @@ void MatrixResizer::handleLeftButtonPress(timeT,
     m_currentStaff = m_mParentView->getStaff(staffNo);
 
     if (m_currentElement) {
+
         // Add this element and allow movement
         //
         EventSelection* selection = m_mParentView->getCurrentSelection();
@@ -129,27 +130,34 @@ void MatrixResizer::handleLeftButtonPress(timeT,
 
 int MatrixResizer::handleMouseMove(timeT newTime,
                                    int,
-                                   QMouseEvent *)
+                                   QMouseEvent *e)
 {
     if (!m_currentElement || !m_currentStaff)
         return RosegardenCanvasView::NoFollow;
+
+    // For the resizer we normally don't want to use the official
+    // time, because it's snapped to the left and we want to snap in
+    // the closest direction instead
+
+    if (e) {
+        QPoint p = m_mParentView->inverseMapPoint(e->pos());
+        newTime = getSnapGrid().snapX(p.x(), SnapGrid::SnapEither);
+    }
+
     timeT newDuration = newTime - m_currentElement->getViewAbsoluteTime();
 
     if (newDuration == 0) {
-        newDuration += m_mParentView->getSnapGrid().getSnapTime
+        newDuration += getSnapGrid().getSnapTime
                        (m_currentElement->getViewAbsoluteTime());
     }
 
+    int width = getSnapGrid().getRulerScale()->getXForTime
+        (m_currentElement->getViewAbsoluteTime() + newDuration)
+        - m_currentElement->getLayoutX();
+
     int initialWidth = m_currentElement->getWidth();
-    double width = newDuration * m_currentStaff->getTimeScaleFactor();
 
-    // Don't allow zero width here - always at least _fiddleFactor wide
-    if (width > 0)
-        width += fiddleFactor;
-    else if (width < 0)
-        width -= fiddleFactor;
-
-    int diffWidth = initialWidth - int(width);
+    int diffWidth = initialWidth - width;
 
     EventSelection* selection = m_mParentView->getCurrentSelection();
     EventSelection::eventcontainer::iterator it =
@@ -175,10 +183,20 @@ int MatrixResizer::handleMouseMove(timeT newTime,
 }
 
 void MatrixResizer::handleMouseRelease(timeT newTime,
-                                       int, QMouseEvent*)
+                                       int,
+                                       QMouseEvent *e)
 {
     if (!m_currentElement || !m_currentStaff)
         return ;
+
+    // For the resizer we don't want to use the time passed in,
+    // because it's snapped to the left and we want to snap in the
+    // closest direction instead
+
+    if (e) {
+        QPoint p = m_mParentView->inverseMapPoint(e->pos());
+        newTime = getSnapGrid().snapX(p.x(), SnapGrid::SnapEither);
+    }
 
     timeT diffDuration =
         newTime - m_currentElement->getViewAbsoluteTime() -
@@ -222,12 +240,11 @@ void MatrixResizer::handleMouseRelease(timeT newTime,
             }
 
             if (eventDuration == 0) {
-                eventDuration += m_mParentView->getSnapGrid().getSnapTime
-                                 (eventTime);
+                eventDuration += getSnapGrid().getSnapTime(eventTime);
             }
 
             if (eventTime + eventDuration >= segment.getEndMarkerTime()) {
-                eventTime = m_mParentView->getSnapGrid().snapTime
+                eventTime = getSnapGrid().snapTime
                             (segment.getEndMarkerTime() - 1, SnapGrid::SnapLeft);
                 eventDuration = std::min(eventDuration,
                                          segment.getEndMarkerTime() - eventTime);
@@ -288,7 +305,7 @@ void MatrixResizer::slotMatrixScrolled(int newX, int newY)
     }
 
     p = m_mParentView->inverseMapPoint(p);
-    int newTime = m_mParentView->getSnapGrid().snapX(p.x());
+    int newTime = getSnapGrid().snapX(p.x());
     handleMouseMove(newTime, 0, 0);
 }
 

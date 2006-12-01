@@ -113,16 +113,14 @@ void MatrixPainter::handleLeftButtonPress(timeT time,
     }
 
     // This is needed for the event duration rounding
-    SnapGrid grid(m_mParentView->getSnapGrid());
+    SnapGrid grid(getSnapGrid());
 
     m_currentStaff = m_mParentView->getStaff(staffNo);
 
     Event *ev = new Event(Note::EventType, time,
                           grid.getSnapTime(double(p.x())));
-    ev->set
-    <Int>(BaseProperties::PITCH, pitch);
-    ev->set
-    <Int>(BaseProperties::VELOCITY, 100);
+    ev->set<Int>(BaseProperties::PITCH, pitch);
+    ev->set<Int>(BaseProperties::VELOCITY, 100);
 
     m_currentElement = new MatrixElement(ev, m_mParentView->isDrumMode());
 
@@ -133,8 +131,10 @@ void MatrixPainter::handleLeftButtonPress(timeT time,
     m_currentElement->setLayoutX(grid.getRulerScale()->getXForTime(time));
     m_currentElement->setHeight(m_currentStaff->getElementHeight());
 
-    double width = ev->getDuration() * m_currentStaff->getTimeScaleFactor();
-    m_currentElement->setWidth(int(width + fiddleFactor)); // fiddle factor
+    int width = grid.getRulerScale()->getXForTime(time + ev->getDuration())
+        - m_currentElement->getLayoutX();
+
+    m_currentElement->setWidth(width);
 
     m_currentStaff->positionElement(m_currentElement);
     m_mParentView->update();
@@ -145,57 +145,80 @@ void MatrixPainter::handleLeftButtonPress(timeT time,
 
 int MatrixPainter::handleMouseMove(timeT time,
                                    int pitch,
-                                   QMouseEvent *)
+                                   QMouseEvent *e)
 {
     // sanity check
     if (!m_currentElement)
         return RosegardenCanvasView::NoFollow;
+
+    // We don't want to use the time passed in, because it's snapped
+    // to the left and we want a more particular policy
+
+    if (e) {
+        QPoint p = m_mParentView->inverseMapPoint(e->pos());
+        time = getSnapGrid().snapX(p.x(), SnapGrid::SnapEither);
+        if (time >= m_currentElement->getViewAbsoluteTime()) {
+            time = getSnapGrid().snapX(p.x(), SnapGrid::SnapRight);
+        } else {
+            time = getSnapGrid().snapX(p.x(), SnapGrid::SnapLeft);
+        }            
+    }
 
     MATRIX_DEBUG << "MatrixPainter::handleMouseMove : pitch = "
     << pitch << ", time : " << time << endl;
 
     using BaseProperties::PITCH;
 
-    int initialWidth = m_currentElement->getWidth();
+    int width = getSnapGrid().getRulerScale()->getXForTime(time)
+        - getSnapGrid().getRulerScale()->getXForTime
+        (m_currentElement->getViewAbsoluteTime());
 
-    double width = (time - m_currentElement->getViewAbsoluteTime())
-                   * m_currentStaff->getTimeScaleFactor();
-
-    // ensure we don't have a zero width preview
-    if (width == 0)
-        width = initialWidth;
-    else
-        width += fiddleFactor; // fiddle factor
-
-    m_currentElement->setWidth(int(width));
+    m_currentElement->setWidth(width);
 
     if (m_currentElement->event()->has(PITCH) &&
-            pitch != m_currentElement->event()->get
-            <Int>(PITCH)) {
-        m_currentElement->event()->set
-        <Int>(PITCH, pitch);
+        pitch != m_currentElement->event()->get<Int>(PITCH)) {
+
+        m_currentElement->event()->set<Int>(PITCH, pitch);
+
         int y = m_currentStaff->getLayoutYForHeight(pitch) -
                 m_currentStaff->getElementHeight() / 2;
+
         m_currentElement->setLayoutY(y);
+
         m_currentStaff->positionElement(m_currentElement);
 
         // preview
         m_mParentView->playNote(m_currentElement->event());
     }
+
     m_mParentView->update();
 
-    return RosegardenCanvasView::FollowHorizontal | RosegardenCanvasView::FollowVertical;
+    return RosegardenCanvasView::FollowHorizontal |
+           RosegardenCanvasView::FollowVertical;
 }
 
 void MatrixPainter::handleMouseRelease(timeT endTime,
                                        int,
-                                       QMouseEvent *)
+                                       QMouseEvent *e)
 {
     // This can happen in case of screen/window capture -
     // we only get a mouse release, the window snapshot tool
     // got the mouse down
     if (!m_currentElement)
         return ;
+
+    // We don't want to use the time passed in, because it's snapped
+    // to the left and we want a more particular policy
+
+    if (e) {
+        QPoint p = m_mParentView->inverseMapPoint(e->pos());
+        endTime = getSnapGrid().snapX(p.x(), SnapGrid::SnapEither);
+        if (endTime >= m_currentElement->getViewAbsoluteTime()) {
+            endTime = getSnapGrid().snapX(p.x(), SnapGrid::SnapRight);
+        } else {
+            endTime = getSnapGrid().snapX(p.x(), SnapGrid::SnapLeft);
+        }            
+    }
 
     timeT time = m_currentElement->getViewAbsoluteTime();
     timeT segmentEndTime = m_currentStaff->getSegment().getEndMarkerTime();
@@ -295,7 +318,7 @@ void MatrixPainter::slotMatrixScrolled(int newX, int newY)
     QPoint p(m_currentElement->getCanvasX() + m_currentElement->getWidth(), m_currentElement->getCanvasY());
     p += offset;
 
-    timeT newTime = m_mParentView->getSnapGrid().snapX(p.x());
+    timeT newTime = getSnapGrid().snapX(p.x());
     int newPitch = m_currentStaff->getHeightAtCanvasCoords(p.x(), p.y());
 
     handleMouseMove(newTime, newPitch, 0);
