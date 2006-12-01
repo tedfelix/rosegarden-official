@@ -567,7 +567,7 @@ SequencerConfigurationPage::SequencerConfigurationPage(
     m_midiSyncAuto = new QCheckBox(frame);
     layout->addWidget(m_midiSyncAuto, 5, 1);
 
-    m_midiSyncAuto->setChecked(m_cfg->readBoolEntry("midisyncautoconnect", true));
+    m_midiSyncAuto->setChecked(m_cfg->readBoolEntry("midisyncautoconnect", false));
 
     addTab(frame, i18n("Synchronisation"));
 }
