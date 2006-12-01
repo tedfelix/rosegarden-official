@@ -34,6 +34,7 @@
 #include "base/SnapGrid.h"
 #include "base/ViewElement.h"
 #include "commands/matrix/MatrixModifyCommand.h"
+#include "commands/matrix/MatrixInsertionCommand.h"
 #include "commands/notation/NormalizeRestsCommand.h"
 #include "gui/general/EditTool.h"
 #include "gui/general/RosegardenCanvasView.h"
@@ -100,6 +101,16 @@ void MatrixMover::handleLeftButtonPress(timeT time,
     MATRIX_DEBUG << "MatrixMover::handleLeftButtonPress() : time = " << time << ", el = " << el << endl;
     if (!el) return;
 
+    m_quickCopy = (e->state() & Qt::ControlButton);
+
+    if (!m_duplicateElements.empty()) {
+        for (size_t i = 0; i < m_duplicateElements.size(); ++i) {
+            delete m_duplicateElements[i]->event();
+            delete m_duplicateElements[i];
+        }
+        m_duplicateElements.clear();
+    }
+
     m_currentElement = dynamic_cast<MatrixElement*>(el);
     m_currentStaff = m_mParentView->getStaff(staffNo);
 
@@ -121,6 +132,7 @@ void MatrixMover::handleLeftButtonPress(timeT time,
             newSelection->addEvent(m_currentElement->event());
             m_mParentView->setCurrentSelection(newSelection, true, true);
             m_mParentView->canvas()->update();
+            selection = newSelection;
         } else {
             m_mParentView->setSingleSelectedEvent(m_currentStaff->getSegment(),
                                                   m_currentElement->event(),
@@ -132,6 +144,26 @@ void MatrixMover::handleLeftButtonPress(timeT time,
         m_currentElement->event()->get<Int>(BaseProperties::VELOCITY, velocity);
         m_mParentView->playNote(m_currentStaff->getSegment(), pitch, velocity);
         m_lastPlayedPitch = pitch;
+
+        if (m_quickCopy && selection) {
+            for (EventSelection::eventcontainer::iterator i =
+                     selection->getSegmentEvents().begin();
+                 i != selection->getSegmentEvents().end(); ++i) {
+
+                MatrixElement *element = m_currentStaff->getElement(*i);
+                if (!element) continue;
+
+                MatrixElement *duplicate = new MatrixElement
+                    (new Event(**i), m_mParentView->isDrumMode());
+                duplicate->setLayoutY(element->getLayoutY());
+                duplicate->setLayoutX(element->getLayoutX());
+                duplicate->setWidth(element->getWidth());
+                duplicate->setHeight(element->getHeight());
+                duplicate->setCanvasZ(-1);
+                m_currentStaff->positionElement(duplicate);
+                m_duplicateElements.push_back(duplicate);
+            }
+        }
     }
     
     m_clickX = m_mParentView->inverseMapPoint(e->pos()).x();
@@ -235,7 +267,7 @@ void MatrixMover::handleMouseRelease(timeT newTime,
     << newPitch << endl;
 
     if (!m_currentElement || !m_currentStaff)
-        return ;
+        return;
 
     if (newPitch > MatrixVLayout::maxMIDIPitch)
         newPitch = MatrixVLayout::maxMIDIPitch;
@@ -251,13 +283,18 @@ void MatrixMover::handleMouseRelease(timeT newTime,
         diffPitch = newPitch - m_currentElement->event()->get<Int>(PITCH);
     }
 
-    if (diffTime == 0 && diffPitch == 0) {
+    EventSelection *selection = m_mParentView->getCurrentSelection();
+
+    if ((diffTime == 0 && diffPitch == 0) || selection->getAddedEvents() == 0) {
+        for (size_t i = 0; i < m_duplicateElements.size(); ++i) {
+            delete m_duplicateElements[i]->event();
+            delete m_duplicateElements[i];
+        }
+        m_duplicateElements.clear();
         m_mParentView->canvas()->update();
         m_currentElement = 0;
         return;
     }
-
-    EventSelection *selection = m_mParentView->getCurrentSelection();
 
     if (newPitch != m_lastPlayedPitch) {
         long velocity = 100;
@@ -266,10 +303,20 @@ void MatrixMover::handleMouseRelease(timeT newTime,
         m_lastPlayedPitch = newPitch;
     }
 
-    if (selection->getAddedEvents() == 0) return;
-
-    QString commandLabel = i18n("Move Event");
-    if (selection->getAddedEvents() > 1) commandLabel = i18n("Move Events");
+    QString commandLabel;
+    if (m_quickCopy) {
+        if (selection->getAddedEvents() < 2) {
+            commandLabel = i18n("Copy and Move Event");
+        } else {
+            commandLabel = i18n("Copy and Move Events");
+        }
+    } else {
+        if (selection->getAddedEvents() < 2) {
+            commandLabel = i18n("Move Event");
+        } else {
+            commandLabel = i18n("Move Events");
+        }
+    }
 
     KMacroCommand *macro = new KMacroCommand(commandLabel);
 
@@ -282,6 +329,22 @@ void MatrixMover::handleMouseRelease(timeT newTime,
 
     timeT normalizeStart = selection->getStartTime();
     timeT normalizeEnd = selection->getEndTime();
+
+    if (m_quickCopy) {
+        for (size_t i = 0; i < m_duplicateElements.size(); ++i) {
+            timeT time = m_duplicateElements[i]->getViewAbsoluteTime();
+            timeT endTime = time + m_duplicateElements[i]->getViewDuration();
+            if (time < normalizeStart) normalizeStart = time;
+            if (endTime > normalizeEnd) normalizeEnd = endTime;
+            macro->addCommand(new MatrixInsertionCommand
+                              (segment, time, endTime, 
+                               m_duplicateElements[i]->event()));
+            delete m_duplicateElements[i]->event();
+            delete m_duplicateElements[i];
+        }
+        m_duplicateElements.clear();
+        m_quickCopy = false;
+    }
         
     for (; it != selection->getSegmentEvents().end(); it++) {
 

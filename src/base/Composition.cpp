@@ -211,6 +211,7 @@ Composition::~Composition()
 	for (ObserverSet::const_iterator i = m_observers.begin();
 	     i != m_observers.end(); ++i) {
 	    cerr << " " << (void *)(*i);
+	    cerr << " [" << typeid(**i).name() << "]";
 	}
 	cerr << endl;
     }

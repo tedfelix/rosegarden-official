@@ -58,6 +58,8 @@ public:
      */
     double getCanvasY() const { return m_canvasRect->y(); }
 
+    double getCanvasZ() const { return m_canvasRect->z(); }
+
     /**
      * Sets the x coordinate of the element on the canvas
      */
@@ -67,6 +69,8 @@ public:
      * Sets the y coordinate of the element on the canvas
      */
     void setCanvasY(double y) { m_canvasRect->setY(y); }
+
+    void setCanvasZ(double z) { m_canvasRect->setZ(z); }
 
     /**
      * Sets the width of the rectangle on the canvas
