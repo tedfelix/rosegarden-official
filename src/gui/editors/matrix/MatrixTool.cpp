@@ -69,8 +69,11 @@ MatrixTool::slotDrawSelected()
     m_parentView->actionCollection()->action("draw")->activate();
 }
 
-const double
-MatrixTool::fiddleFactor = 1.0;
+const SnapGrid &
+MatrixTool::getSnapGrid() const
+{
+    return m_mParentView->getSnapGrid();
+}
 
 }
 #include "MatrixTool.moc"

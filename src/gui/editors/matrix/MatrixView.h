@@ -171,7 +171,7 @@ public:
     /**
      * Get the SnapGrid
      */
-    SnapGrid getSnapGrid() { return *m_snapGrid; }
+    const SnapGrid &getSnapGrid() const { return *m_snapGrid; }
 
     /**
      * Add a ruler that allows control of a single property -

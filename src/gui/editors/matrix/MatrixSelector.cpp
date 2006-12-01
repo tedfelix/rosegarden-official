@@ -158,6 +158,8 @@ void MatrixSelector::handleLeftButtonPress(timeT time,
                              getToolBox()->getTool(MatrixMover::ToolName);
         }
 
+        m_dispatchTool->ready();
+
         m_dispatchTool->handleLeftButtonPress(time,
                                               height,
                                               staffNo,
@@ -220,6 +222,8 @@ void MatrixSelector::handleMidButtonPress(timeT time,
 
     m_dispatchTool = m_parentView->
                      getToolBox()->getTool(MatrixPainter::ToolName);
+
+    m_dispatchTool->ready();
 
     m_dispatchTool->handleLeftButtonPress(time, height, staffNo, e, element);
 }
@@ -386,6 +390,9 @@ void MatrixSelector::handleMouseRelease(timeT time, int height, QMouseEvent *e)
 
     if (m_dispatchTool) {
         m_dispatchTool->handleMouseRelease(time, height, e);
+
+        m_dispatchTool->stow();
+        ready();
 
         // don't delete the tool as it's still part of the toolbox
         m_dispatchTool = 0;

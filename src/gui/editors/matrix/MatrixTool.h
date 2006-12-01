@@ -36,6 +36,7 @@ namespace Rosegarden
 {
 
 class MatrixView;
+class SnapGrid;
 
 
 //////////////////////////////////////////////////////////////////////
@@ -57,18 +58,14 @@ protected slots:
     void slotResizeSelected();
     void slotDrawSelected();
 
+    const SnapGrid &getSnapGrid() const;
+
 protected:
     MatrixTool(const QString& menuName, MatrixView*);
 
     //--------------- Data members ---------------------------------
 
     MatrixView* m_mParentView;
-    
-    // Use this to make sure that Matrix events butt up to the grid
-    // lines in a pleasing fashion,
-    //
-    static const double fiddleFactor;
-    
 };
 
 
