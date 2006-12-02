@@ -3,13 +3,7 @@ IF(NOT ROSEGARDEN_SOURCE_DIR)
 ENDIF(NOT ROSEGARDEN_SOURCE_DIR)
 
 IF(USE_PCH)
-	#INCLUDE(QTKDEPCHsplit)
-	#INCLUDE(QTKDEPCHjoin)
-	#ADD_QTKDE_PRECOMPILED_HEADERS(${CMAKE_CURRENT_BINARY_DIR}/pch)
-	
-	# 3er try. This allows to use a hand made, fine tuned header
-	INCLUDE(UsePCH)
-	ADD_PRECOMPILED_HEADER(misc/stableheaders.h)
+    ADD_PRECOMPILED_HEADER(precompiled_headers misc/stableheaders.h)
 ENDIF(USE_PCH)
 
 LINK_DIRECTORIES(
