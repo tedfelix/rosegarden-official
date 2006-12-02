@@ -11,14 +11,17 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.4.2)
 # but it can be enabled anyway with "make VERBOSE=1"
 SET(CMAKE_VERBOSE_MAKEFILE OFF)
 
-# Seems that relative paths break the link scripts. Don't set it ON
+# Seems that relative paths break some scripts. Don't set it ON
 SET(CMAKE_USE_RELATIVE_PATHS OFF)
+
+# Rebuild the object files if the rules have changed, but not the actual source 
+# files or headers (e.g. if you changed the some compiler switches)
+SET(CMAKE_SKIP_RULE_DEPENDENCY OFF)
 
 # Misc settings
 SET(CMAKE_COLOR_MAKEFILE ON)
 SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 SET(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
-SET(CMAKE_SKIP_RULE_DEPENDENCY ON)
 
 # Additional CMake modules for 3rd party library checks reside here
 SET(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_admin")
@@ -58,6 +61,7 @@ ELSE(QT_FOUND)
 ENDIF(QT_FOUND)
 IF(KDE3_FOUND)
     ADD_DEFINITIONS(${KDE3_DEFINITIONS})
+    #MESSAGE("KDE3PREFIX: ${KDE3PREFIX}")
     KDE3_PRINT_RESULTS()
     #MESSAGE("QT_AND_KDECORE_LIBS: ${QT_AND_KDECORE_LIBS}")
 ELSE(KDE3_FOUND)    
@@ -68,7 +72,10 @@ ENDIF(KDE3_FOUND)
 SET(CMAKE_CXX_FLAGS "")
 
 # Provide the KDE3 prefix as a default prefix (if the user has CMake 2.4.4)
-INCLUDE(KDE3Prefix)
+IF(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+    SET(CMAKE_INSTALL_PREFIX ${KDE3PREFIX} CACHE PATH
+        "Install path prefix, prepended onto install directories." FORCE)
+ENDIF(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT) 
 
 # Check for PKG-CONFIG
 FIND_PACKAGE(PkgConfig REQUIRED)
@@ -168,7 +175,7 @@ IF(WANT_SOUND)
     IF(LADSPA_FOUND)
         SET(HAVE_LADSPA TRUE)
         ADD_DEFINITIONS(-DHAVE_LADSPA)
-        MESSAGE(STATUS "Found LADSPA")
+        MESSAGE(STATUS "Found LADSPA (${LADSPA_INC_DIR})")
         #MESSAGE("LADSPA_INC_DIR: ${LADSPA_INC_DIR}")    
     ENDIF(LADSPA_FOUND)
     
@@ -179,7 +186,7 @@ IF(WANT_LIRC)
     IF(LIRC_FOUND)
         SET(HAVE_LIRC TRUE)
         ADD_DEFINITIONS(-DHAVE_LIRC)
-        MESSAGE(STATUS "Found LIRC")
+        MESSAGE(STATUS "Found LIRC (${LIRC_LIBRARY})")
         #MESSAGE("LIRC_LIBS: ${LIRC_LIBS}")
         #MESSAGE("LIRC_LIB_DIR: ${LIRC_LIB_DIR}")
         #MESSAGE("LIRC_INC_DIR: ${LIRC_INC_DIR}")    
@@ -196,6 +203,16 @@ IF(MEINPROC_FOUND)
     MESSAGE(STATUS "Program meinproc found (${MEINPROC_EXECUTABLE})")
 ENDIF(MEINPROC_FOUND)
 
+# Check GCC for PCH support
+SET(USE_PCH FALSE)
+IF(WANT_PCH)
+    FIND_PACKAGE(PCHSupport)
+    IF(PCHSupport_FOUND)
+        SET(USE_PCH TRUE)
+        MESSAGE(STATUS "Enabling precompiled headers for GCC ${gcc_compiler_version}") 
+    ENDIF(PCHSupport_FOUND)
+ENDIF(WANT_PCH)
+
 SET(CMAKE_CXX_FLAGS_RELEASE         "-O2 -w -fexceptions -DNDEBUG")
 SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO  "-O2 -g -Wall -fexceptions -DDEBUG")
 SET(CMAKE_CXX_FLAGS_DEBUG           "-O0 -g3 -Wall -fexceptions -DDEBUG")
@@ -203,29 +220,20 @@ SET(CMAKE_CXX_FLAGS_DEBUG           "-O0 -g3 -Wall -fexceptions -DDEBUG")
 MESSAGE(STATUS "Rosegarden ${VERSION} will be built for install into ${CMAKE_INSTALL_PREFIX}")
 
 IF(WANT_DEBUG)
-	IF(WANT_FULLDBG)
-	    MESSAGE(STATUS "Configured to compile including full debug information in the executables")
-	    SET(CMAKE_BUILD_TYPE Debug CACHE STRING
-	        "Choose the type of build, options are: Debug Release RelWithDebInfo" FORCE)
-	ELSE(WANT_FULLDBG)
-	    MESSAGE(STATUS "Configured to compile including debug information in the executables")
-	    SET(CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING
-	        "Choose the type of build, options are: Debug Release RelWithDebInfo" FORCE)
+    IF(WANT_FULLDBG)
+        MESSAGE(STATUS "Configured to compile including full debug information in the executables")
+        SET(CMAKE_BUILD_TYPE Debug CACHE STRING
+            "Choose the type of build, options are: Debug Release RelWithDebInfo" FORCE)
+    ELSE(WANT_FULLDBG)
+        MESSAGE(STATUS "Configured to compile including debug information in the executables")
+        SET(CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING
+            "Choose the type of build, options are: Debug Release RelWithDebInfo" FORCE)
     ENDIF(WANT_FULLDBG)
 ELSE(WANT_DEBUG)
     MESSAGE(STATUS "Configured to compile for release without debug information")
     SET(CMAKE_BUILD_TYPE Release CACHE STRING
         "Choose the type of build, options are: Debug Release RelWithDebInfo" FORCE)
 ENDIF(WANT_DEBUG)
-
-# Check GCC version, use PCH only for GCC 4.x
-SET(USE_PCH FALSE)
-IF(WANT_PCH)
-	EXEC_PROGRAM(gcc ARGS --version OUTPUT_VARIABLE GCC_VERSION)
-	IF(GCC_VERSION MATCHES ".*4\\.[0-9]\\.[0-9].*")
-        SET(USE_PCH TRUE)
-    ENDIF(GCC_VERSION MATCHES ".*4\\.[0-9]\\.[0-9].*")
-ENDIF(WANT_PCH)
 
 # Warn the user if important libraries are missing
 INCLUDE(UserWarnings)
