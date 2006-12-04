@@ -7615,8 +7615,10 @@ RosegardenGUIApp::slotShowTip()
 
 void RosegardenGUIApp::slotShowToolHelp(const QString &s)
 {
-    if (s == "") KTmpStatusMsg::setDefaultMsg(i18n("  Ready."));
-    else KTmpStatusMsg::setDefaultMsg(s);
+    QString msg = s;
+    if (msg == "") msg = i18n("  Ready.");
+    KTmpStatusMsg::setDefaultMsg(msg);
+    slotStatusMsg(msg);
 }
 
 void
