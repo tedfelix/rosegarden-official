@@ -107,6 +107,7 @@ CompositionView::CompositionView(RosegardenGUIDoc* doc,
         m_pointerWidth(4),
         m_pointerPen(QPen(m_pointerColor, m_pointerWidth)),
         m_tmpRect(QRect(QPoint(0, 0), QPoint( -1, -1))),
+        m_tmpRectFill(CompositionRect::DefaultBrushColor),
         m_drawGuides(false),
         m_guideColor(GUIPalette::getColour(GUIPalette::MovementGuide)),
         m_topGuidePos(0),
@@ -843,7 +844,7 @@ void CompositionView::drawAreaArtifacts(QPainter * p, const QRect& clipRect)
     // Tmp rect (rect displayed while drawing a new segment)
     //
     if (m_tmpRect.isValid() && m_tmpRect.intersects(clipRect)) {
-        p->setBrush(CompositionRect::DefaultBrushColor);
+        p->setBrush(m_tmpRectFill);
         p->setPen(CompositionColourCache::getInstance()->SegmentBorder);
         drawRect(m_tmpRect, p, clipRect);
     }
@@ -1451,8 +1452,14 @@ void CompositionView::setDrawGuides(bool d)
 
 void CompositionView::setTmpRect(const QRect& r)
 {
+    setTmpRect(r, m_tmpRectFill);
+}
+
+void CompositionView::setTmpRect(const QRect& r, const QColor &c)
+{
     QRect pRect = m_tmpRect;
     m_tmpRect = r;
+    m_tmpRectFill = c;
     slotUpdateSegmentsDrawBuffer(m_tmpRect | pRect);
 }
 
