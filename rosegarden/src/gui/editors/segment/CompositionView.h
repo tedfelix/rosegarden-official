@@ -94,6 +94,7 @@ public:
     CompositionModel* getModel() { return m_model; }
 
     void setTmpRect(const QRect& r);
+    void setTmpRect(const QRect& r, const QColor &c);
     const QRect& getTmpRect() const { return m_tmpRect; }
 
     /**
@@ -304,6 +305,7 @@ protected:
     QPen         m_pointerPen;
 
     QRect        m_tmpRect;
+    QColor       m_tmpRectFill;
     QPoint       m_splitLinePos;
 
     bool         m_drawGuides;

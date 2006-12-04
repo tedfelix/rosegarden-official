@@ -37,6 +37,7 @@
 #include "CompositionView.h"
 #include "document/RosegardenGUIDoc.h"
 #include "gui/general/BaseTool.h"
+#include "gui/general/GUIPalette.h"
 #include "gui/general/RosegardenCanvasView.h"
 #include "SegmentTool.h"
 #include <kcommand.h>
@@ -124,7 +125,11 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
     tmpRect.setHeight(m_canvas->grid().getYSnap());
     tmpRect.setWidth(int(nearbyint(m_canvas->grid().getRulerScale()->getWidthForDuration(time, duration))));
 
-    m_canvas->setTmpRect(tmpRect);
+    m_canvas->setTmpRect(tmpRect,
+                         GUIPalette::convertColour
+                         (m_doc->getComposition().getSegmentColourMap().
+                          getColourByIndex(t->getColor())));
+
     m_newRect = true;
     m_origPos = e->pos();
 
