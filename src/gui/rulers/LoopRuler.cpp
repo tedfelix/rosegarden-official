@@ -71,8 +71,13 @@ LoopRuler::~LoopRuler()
 
 void LoopRuler::scrollHoriz(int x)
 {
+    if (getHScaleFactor() != 1.0) {
+        m_currentXOffset = static_cast<int>( -x / getHScaleFactor());
+        repaint();
+        return;
+    }
+
     int w = width(), h = height();
-    x = int(double(x) / getHScaleFactor());
     int dx = x - ( -m_currentXOffset);
     m_currentXOffset = -x;
 
