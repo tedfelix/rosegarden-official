@@ -56,6 +56,8 @@ public:
                               const RealTime &audioEndTime);
     virtual ~AudioSegmentInsertCommand();
 
+    Segment *getNewSegment() { return m_segment; }
+
     virtual void execute();
     virtual void unexecute();
     

@@ -618,7 +618,7 @@ EditViewBase::slotSetSegmentStartTime()
 
     TimeDialog dialog(this, i18n("Segment Start Time"),
                       &getDocument()->getComposition(),
-                      s->getStartTime());
+                      s->getStartTime(), false);
 
     if (dialog.exec() == QDialog::Accepted) {
 
@@ -644,7 +644,7 @@ EditViewBase::slotSetSegmentDuration()
     TimeDialog dialog(this, i18n("Segment Duration"),
                       &getDocument()->getComposition(),
                       s->getStartTime(),
-                      s->getEndMarkerTime() - s->getStartTime());
+                      s->getEndMarkerTime() - s->getStartTime(), false);
 
     if (dialog.exec() == QDialog::Accepted) {
 

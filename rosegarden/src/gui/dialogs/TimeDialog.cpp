@@ -39,12 +39,14 @@ namespace Rosegarden
 
 TimeDialog::TimeDialog(QWidget *parent, QString title,
                        Composition *composition,
-                       timeT defaultTime) :
+                       timeT defaultTime,
+                       bool constrainToCompositionDuration) :
         KDialogBase(parent, 0, true, title, User1 | Ok | Cancel)
 {
     QVBox *vbox = makeVBoxMainWidget();
     m_timeWidget = new TimeWidget
-                   (title, vbox, composition, defaultTime);
+        (title, vbox, composition, defaultTime, true,
+         constrainToCompositionDuration);
 
     setButtonText(User1, i18n("Reset"));
     connect(this, SIGNAL(user1Clicked()),
@@ -54,12 +56,14 @@ TimeDialog::TimeDialog(QWidget *parent, QString title,
 TimeDialog::TimeDialog(QWidget *parent, QString title,
                        Composition *composition,
                        timeT startTime,
-                       timeT defaultTime) :
+                       timeT defaultTime,
+                       bool constrainToCompositionDuration) :
         KDialogBase(parent, 0, true, title, User1 | Ok | Cancel)
 {
     QVBox *vbox = makeVBoxMainWidget();
     m_timeWidget = new TimeWidget
-                   (title, vbox, composition, startTime, defaultTime);
+        (title, vbox, composition, startTime, defaultTime, true,
+         constrainToCompositionDuration);
 
     setButtonText(User1, i18n("Reset"));
     connect(this, SIGNAL(user1Clicked()),

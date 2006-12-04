@@ -101,6 +101,10 @@ AudioSegmentInsertCommand::execute()
 
         m_segment->setEndTime(endTimeT);
 
+        if (endTimeT > m_composition->getEndMarker()) {
+            m_composition->setEndMarker(m_composition->getBarEndForTime(endTimeT));
+        }
+
         // Label by audio file name
         //
         std::string label = "";

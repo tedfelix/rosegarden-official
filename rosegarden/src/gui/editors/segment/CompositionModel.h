@@ -136,6 +136,7 @@ public:
     virtual void setSelected(const itemcontainer&) = 0;
     virtual void clearSelected() = 0;
     virtual bool haveSelection() const = 0;
+    virtual bool haveMultipleSelection() const = 0;
     virtual void signalSelection() = 0;
     virtual void setSelectionRect(const QRect&) = 0;
     virtual void finalizeSelectionRect() = 0;

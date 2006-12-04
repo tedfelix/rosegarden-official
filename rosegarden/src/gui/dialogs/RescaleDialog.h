@@ -50,7 +50,8 @@ public:
                   Composition *composition, // for TimeWidget calculations
                   timeT startTime,
                   timeT originalDuration,
-                  bool showCloseGapOption);
+                  bool showCloseGapOption,
+                  bool constrainToCompositionDuration);
 
     timeT getNewDuration();
     bool shouldCloseGap();

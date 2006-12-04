@@ -85,6 +85,7 @@ public:
     virtual void setSelected(const itemcontainer&);
     virtual void clearSelected();
     virtual bool haveSelection() const { return !m_selectedSegments.empty(); }
+    virtual bool haveMultipleSelection() const { return m_selectedSegments.size() > 1; }
     virtual void signalSelection();
     virtual void setSelectionRect(const QRect&);
     virtual void finalizeSelectionRect();

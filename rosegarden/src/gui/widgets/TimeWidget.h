@@ -54,10 +54,11 @@ public:
      * Constructor for absolute time widget
      */
     TimeWidget(QString title,
-                         QWidget *parent,
-                         Composition *composition, // for bar/beat/msec
-                         timeT initialTime,
-                         bool editable = true);
+               QWidget *parent,
+               Composition *composition, // for bar/beat/msec
+               timeT initialTime,
+               bool editable = true,
+               bool constrainToCompositionDuration = true);
 
     /**
      * Constructor for duration widget.  startTime is the absolute time
@@ -65,11 +66,12 @@ public:
      * correct real-time (based on tempo at startTime) etc.
      */
     TimeWidget(QString title,
-                         QWidget *parent,
-                         Composition *composition, // for bar/beat/msec
-                         timeT startTime,
-                         timeT initialDuration,
-                         bool editable = true);
+               QWidget *parent,
+               Composition *composition, // for bar/beat/msec
+               timeT startTime,
+               timeT initialDuration,
+               bool editable = true,
+               bool constrainToCompositionDuration = true);
 
     timeT getTime();
     RealTime getRealTime();
@@ -91,6 +93,7 @@ public slots:
 private:
     Composition *m_composition;
     bool m_isDuration;
+    bool m_constrain;
     timeT m_time;
     timeT m_startTime;
     timeT m_defaultTime;

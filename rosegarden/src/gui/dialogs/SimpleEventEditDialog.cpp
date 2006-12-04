@@ -930,7 +930,8 @@ SimpleEventEditDialog::slotEditAbsoluteTime()
 {
     TimeDialog dialog(this, i18n("Edit Event Time"),
                       &m_doc->getComposition(),
-                      m_timeSpinBox->value());
+                      m_timeSpinBox->value(),
+                      true);
     if (dialog.exec() == QDialog::Accepted) {
         m_timeSpinBox->setValue(dialog.getTime());
     }
@@ -941,7 +942,8 @@ SimpleEventEditDialog::slotEditNotationAbsoluteTime()
 {
     TimeDialog dialog(this, i18n("Edit Event Notation Time"),
                       &m_doc->getComposition(),
-                      m_notationTimeSpinBox->value());
+                      m_notationTimeSpinBox->value(),
+                      true);
     if (dialog.exec() == QDialog::Accepted) {
         m_notationTimeSpinBox->setValue(dialog.getTime());
     }
@@ -953,7 +955,8 @@ SimpleEventEditDialog::slotEditDuration()
     TimeDialog dialog(this, i18n("Edit Duration"),
                       &m_doc->getComposition(),
                       m_timeSpinBox->value(),
-                      m_durationSpinBox->value());
+                      m_durationSpinBox->value(),
+                      true);
     if (dialog.exec() == QDialog::Accepted) {
         m_durationSpinBox->setValue(dialog.getTime());
     }
@@ -965,7 +968,8 @@ SimpleEventEditDialog::slotEditNotationDuration()
     TimeDialog dialog(this, i18n("Edit Notation Duration"),
                       &m_doc->getComposition(),
                       m_notationTimeSpinBox->value(),
-                      m_notationDurationSpinBox->value());
+                      m_notationDurationSpinBox->value(),
+                      true);
     if (dialog.exec() == QDialog::Accepted) {
         m_notationDurationSpinBox->setValue(dialog.getTime());
     }
