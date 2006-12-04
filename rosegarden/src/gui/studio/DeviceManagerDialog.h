@@ -27,7 +27,6 @@
 #define _RG_DEVICEMANAGERDIALOG_H_
 
 #include "base/Device.h"
-#include "document/ConfigGroups.h"
 #include <kmainwindow.h>
 #include <qstring.h>
 #include <qstringlist.h>
@@ -114,7 +113,6 @@ private:
     DeviceId getRecordDeviceIdAt(int row); // NO_DEVICE = not found
 
     QString m_noConnectionString;
-    static const char* const DeviceManagerConfigGroup;
 };
 
 

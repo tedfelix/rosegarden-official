@@ -32,7 +32,6 @@
 #include <string>
 #include <kmainwindow.h>
 #include <utility>
-#include "document/ConfigGroups.h"
 
 
 class QWidget;

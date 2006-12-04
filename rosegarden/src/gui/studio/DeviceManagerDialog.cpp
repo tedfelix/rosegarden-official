@@ -40,6 +40,7 @@
 #include "commands/studio/RenameDeviceCommand.h"
 #include "document/MultiViewCommandHistory.h"
 #include "document/RosegardenGUIDoc.h"
+#include "document/ConfigGroups.h"
 #include "gui/application/RosegardenApplication.h"
 #include "gui/dialogs/ExportDeviceDialog.h"
 #include "gui/dialogs/ImportDeviceDialog.h"
@@ -80,9 +81,6 @@ static const int PLAY_CONNECTION_COL = 1;
 static const int RECORD_NAME_COL = 0;
 static const int RECORD_CURRENT_COL = 1;
 static const int RECORD_CONNECTION_COL = 2;
-
-const char *const DeviceManagerDialog::DeviceManagerConfigGroup =
-"Device Manager";
 
 
 DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,

@@ -29,7 +29,6 @@
 #include <kmainwindow.h>
 #include <qstring.h>
 #include "base/Event.h"
-#include "document/ConfigGroups.h"
 
 
 class QWidget;

@@ -40,7 +40,6 @@
 #include <vector>
 #include "base/Event.h"
 #include "gui/general/ClefIndex.h"
-#include "document/ConfigGroups.h"
 
 
 class QWidget;
@@ -126,8 +125,6 @@ public:
 
     ~NotationView();
 
-    static const char* const ConfigGroup;
-    
 //     void initialLayout();
 
     /// constructed successfully? (main reason it might not is user hit Cancel)

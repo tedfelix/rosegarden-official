@@ -71,7 +71,7 @@ NoteInserter::NoteInserter(NotationView* view)
     QIconSet icon;
 
     KConfig *config = kapp->config();
-    config->setGroup(NotationView::ConfigGroup);
+    config->setGroup(NotationViewConfigGroup);
     m_autoBeam = config->readBoolEntry("autobeam", true);
     m_matrixInsertType = (config->readNumEntry("inserttype", 0) > 0);
     m_defaultStyle = qstrtostr(config->readEntry

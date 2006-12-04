@@ -34,7 +34,6 @@
 #include <qstring.h>
 #include <vector>
 #include "base/Event.h"
-#include "document/ConfigGroups.h"
 
 
 class QWidget;
@@ -74,8 +73,6 @@ class TempoView : public EditViewBase, public CompositionObserver
 public:
     TempoView(RosegardenGUIDoc *doc, QWidget *parent, timeT);
     virtual ~TempoView();
-
-    static const char* const ConfigGroup;
 
     virtual bool applyLayout(int staffNo = -1);
 
@@ -162,8 +159,6 @@ protected:
     QButtonGroup   *m_filterGroup;
     QCheckBox      *m_tempoCheckBox;
     QCheckBox      *m_timeSigCheckBox;
-
-    static const char* const LayoutConfigGroupName;
 
     std::vector<int> m_listSelection;
 

@@ -29,7 +29,6 @@
 #include <klocale.h>
 #include "document/ConfigGroups.h"
 #include "commands/notation/InterpretCommand.h"
-#include "gui/editors/notation/NotationView.h"
 #include <kconfig.h>
 #include <kdialogbase.h>
 #include <qcheckbox.h>
@@ -62,7 +61,7 @@ InterpretDialog::InterpretDialog(QWidget *parent) :
                            (i18n("All available interpretations"), groupBox);
 
     KConfig *config = kapp->config();
-    config->setGroup(NotationView::ConfigGroup);
+    config->setGroup(NotationViewConfigGroup);
 
     m_allInterpretations->setChecked
     (config->readBoolEntry("interpretall", true));
@@ -95,7 +94,7 @@ int
 InterpretDialog::getInterpretations()
 {
     KConfig *config = kapp->config();
-    config->setGroup(NotationView::ConfigGroup);
+    config->setGroup(NotationViewConfigGroup);
 
     config->writeEntry("interpretall", m_allInterpretations->isChecked());
     config->writeEntry("interprettextdynamics", m_applyTextDynamics->isChecked());

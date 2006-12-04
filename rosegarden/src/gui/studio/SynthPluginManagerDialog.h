@@ -29,7 +29,6 @@
 #include "base/MidiProgram.h"
 #include <kmainwindow.h>
 #include <vector>
-#include "document/ConfigGroups.h"
 
 
 class QWidget;
@@ -90,8 +89,6 @@ protected:
 #ifdef HAVE_LIBLO
     AudioPluginOSCGUIManager *m_guiManager;
 #endif
-
-    static const char* const SynthPluginManagerConfigGroup;
 };
 
 

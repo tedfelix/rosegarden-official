@@ -27,6 +27,7 @@
 #include <kapplication.h>
 
 #include "base/Colour.h"
+#include "document/ConfigGroups.h"
 #include <kconfig.h>
 #include <qcolor.h>
 
@@ -184,8 +185,6 @@ GUIPalette* GUIPalette::getInstance()
     if (!m_instance) m_instance = new GUIPalette();
     return m_instance;
 }
-
-const char* const GUIPalette::ColoursConfigGroup = "coloursconfiggroup";
 
 const char* const GUIPalette::ActiveRecordTrack = "activerecordtrack";
 

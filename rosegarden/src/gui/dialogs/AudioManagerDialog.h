@@ -198,8 +198,6 @@ protected:
 
     bool                     m_audiblePreview;
     int                      m_sampleRate;
-    
-    static const char* const AudioManagerDialogConfigGroup;
 };
 
 

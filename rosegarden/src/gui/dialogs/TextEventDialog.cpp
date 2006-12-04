@@ -30,7 +30,6 @@
 #include "misc/Strings.h"
 #include "document/ConfigGroups.h"
 #include "base/NotationTypes.h"
-#include "gui/editors/notation/NotationView.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include <kcombobox.h>
 #include <kconfig.h>
@@ -308,7 +307,7 @@ TextEventDialog::TextEventDialog(QWidget *parent,
 
     // restore last setting for shortcut combos
     KConfig *config = kapp->config();
-    config->setGroup(NotationView::ConfigGroup);
+    config->setGroup(NotationViewConfigGroup);
 
     m_dynamicShortcutCombo->setCurrentItem(config->readNumEntry("dynamic_shortcut", 0));
     m_directionShortcutCombo->setCurrentItem(config->readNumEntry("direction_shortcut", 0));
@@ -491,7 +490,7 @@ TextEventDialog::slotOK()
 {
     // store last setting for shortcut combos
     KConfig *config = kapp->config();
-    config->setGroup(NotationView::ConfigGroup);
+    config->setGroup(NotationViewConfigGroup);
 
     config->writeEntry("dynamic_shortcut", m_dynamicShortcutCombo->currentItem());
     config->writeEntry("direction_shortcut", m_directionShortcutCombo->currentItem());

@@ -96,7 +96,7 @@ NotationStaff::NotationStaff(QCanvas *canvas, Segment *segment,
         m_ready(false)
 {
     KConfig *config = kapp->config();
-    config->setGroup(NotationView::ConfigGroup);
+    config->setGroup(NotationViewConfigGroup);
     m_colourQuantize = config->readBoolEntry("colourquantize", false);
 
     // Shouldn't change these  during the lifetime of the staff, really:

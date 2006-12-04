@@ -32,6 +32,7 @@
 
 #include <klocale.h>
 #include "misc/Debug.h"
+#include "document/ConfigGroups.h"
 #include "CategoryElement.h"
 #include "PresetElement.h"
 #include "PresetGroup.h"
