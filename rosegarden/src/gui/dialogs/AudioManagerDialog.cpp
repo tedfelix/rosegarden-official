@@ -167,13 +167,13 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     new KAction(i18n("&Export Audio File..."), "fileexport", 0, this,
                 SLOT(slotExportAudio()),
                 actionCollection(), "export_audio");
-
+/*
     new KAction(i18n("Distribute Audio on &MIDI"),
                 0, 0, this,
                 SLOT(slotDistributeOnMidiSegment()),
                 actionCollection(),
                 "distribute_audio");
-
+*/
     // Set the column names
     //
     m_fileList->addColumn(i18n("Name"));           // 0

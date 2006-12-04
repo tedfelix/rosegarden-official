@@ -72,4 +72,18 @@ void BaseTool::showMenu()
         RG_DEBUG << "BaseTool::showMenu() : no menu to show\n";
 }
 
+QString BaseTool::getCurrentContextHelp() const
+{
+    return m_contextHelp;
 }
+
+void BaseTool::setContextHelp(const QString &help)
+{
+    m_contextHelp = help;
+    emit showContextHelp(m_contextHelp);
+}
+
+}
+
+#include "BaseTool.moc"
+

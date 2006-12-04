@@ -104,6 +104,15 @@ public:
     void setSnapGrain(bool fine);
 
     /**
+     * Find out whether the user is requesting extra-fine resolution
+     * (e.g. by holding Shift key).  This is seldom necessary -- most
+     * client code will only need to query the snap grid that is
+     * adjusted appropriately by the view when interactions take
+     * place.
+     */
+    bool isFineGrain() const { return m_fineGrain; }
+
+    /**
      * Set whether the segment items contain previews or not
      */
     void setShowPreviews(bool previews) { m_showPreviews = previews; }

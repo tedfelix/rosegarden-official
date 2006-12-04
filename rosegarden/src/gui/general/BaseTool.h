@@ -46,6 +46,8 @@ namespace Rosegarden
  */
 class BaseTool : public QObject
 {
+    Q_OBJECT
+    
     friend class BaseToolBox;
 
 public:
@@ -55,7 +57,7 @@ public:
     /**
      * Is called by the parent View (EditView or SegmentCanvas) when
      * the tool is set as current.
-     * Add any setup here
+     * Add any setup here (e.g. setting the mouse cursor shape)
      */
     virtual void ready();
 
@@ -71,6 +73,14 @@ public:
      */
     virtual void showMenu();
 
+    /**
+     * Retrieve current status-line type help for the tool, if any
+     */
+    virtual QString getCurrentContextHelp() const;
+
+signals:
+    void showContextHelp(const QString &);
+
 protected:
     /**
      * Create a new BaseTool
@@ -82,12 +92,16 @@ protected:
     virtual void createMenu() = 0;
     virtual bool hasMenu() { return false; }
 
+    virtual void setContextHelp(const QString &help);
+
     //--------------- Data members ---------------------------------
 
     QString m_menuName;
     QPopupMenu* m_menu;
 
     KXMLGUIFactory* m_parentFactory;
+
+    QString m_contextHelp;
 };
 
 

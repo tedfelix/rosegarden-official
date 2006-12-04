@@ -48,10 +48,14 @@ class BaseTool;
 class BaseToolBox : public QObject
 {
     Q_OBJECT
+
 public:
     BaseToolBox(QWidget* parent);
 
     virtual BaseTool* getTool(const QString& toolName);
+
+signals:
+    void showContextHelp(const QString &);
 
 protected:
     virtual BaseTool* createTool(const QString& toolName) = 0;
