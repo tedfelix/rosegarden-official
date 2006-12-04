@@ -29,7 +29,6 @@
 
 #include <klocale.h>
 #include "document/ConfigGroups.h"
-#include "gui/editors/notation/NotationView.h"
 #include <kcombobox.h>
 #include <kconfig.h>
 #include <kdialogbase.h>
@@ -60,7 +59,7 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
                             (heading == "" ? i18n("LilyPond export/preview options") : heading), vbox);
 
     KConfig *config = kapp->config();
-    config->setGroup(NotationView::ConfigGroup);
+    config->setGroup(NotationViewConfigGroup);
 
     QFrame *frame = new QFrame(optionBox);
     QGridLayout *layout = new QGridLayout(frame, 9, 2, 10, 5);
@@ -169,7 +168,7 @@ void
 LilypondOptionsDialog::slotOk()
 {
     KConfig *config = kapp->config();
-    config->setGroup(NotationView::ConfigGroup);
+    config->setGroup(NotationViewConfigGroup);
 
     config->writeEntry("lilylanguage", m_lilyLanguage->currentItem());
     config->writeEntry("lilypapersize", m_lilyPaperSize->currentItem());

@@ -32,7 +32,6 @@
 #include <utility>
 #include <vector>
 #include "base/Event.h"
-#include "document/ConfigGroups.h"
 #include <qcheckbox.h>
 #include <qcombobox.h>
 

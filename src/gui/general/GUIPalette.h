@@ -29,7 +29,6 @@
 #include "base/Colour.h"
 #include <map>
 #include <qcolor.h>
-#include "document/ConfigGroups.h"
 
 
 
@@ -55,8 +54,6 @@ public:
 
     static Colour convertColour(const QColor &input);
     static QColor convertColour(const Colour &input);
-
-    static const char* const ColoursConfigGroup;
 
     static const char* const ActiveRecordTrack;
 

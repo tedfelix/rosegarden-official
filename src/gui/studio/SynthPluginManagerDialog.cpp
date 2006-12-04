@@ -36,6 +36,7 @@
 #include "base/MidiProgram.h"
 #include "base/Studio.h"
 #include "document/RosegardenGUIDoc.h"
+#include "document/ConfigGroups.h"
 #include <kaction.h>
 #include <kcombobox.h>
 #include <kmainwindow.h>
@@ -52,8 +53,6 @@
 
 namespace Rosegarden
 {
-
-const char *const SynthPluginManagerDialog::SynthPluginManagerConfigGroup = "Synth Plugin Manager";
 
 SynthPluginManagerDialog::SynthPluginManagerDialog(QWidget *parent,
             RosegardenGUIDoc *doc

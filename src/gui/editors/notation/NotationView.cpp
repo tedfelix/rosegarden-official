@@ -114,6 +114,7 @@
 #include "commands/segment/PasteToTriggerSegmentCommand.h"
 #include "commands/segment/RenameTrackCommand.h"
 #include "document/RosegardenGUIDoc.h"
+#include "document/ConfigGroups.h"
 #include "FretboardInserter.h"
 #include "gui/application/SetWaitCursor.h"
 #include "gui/application/RosegardenGUIView.h"
@@ -390,7 +391,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     // Initialise the display-related defaults that will be needed
     // by both the actions and the layout toolbar
 
-    m_config->setGroup(NotationView::ConfigGroup);
+    m_config->setGroup(NotationViewConfigGroup);
 
     m_fontName = qstrtostr(m_config->readEntry
                            ("notefont",
@@ -505,7 +506,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_currentStaff = 0;
     m_staffs[0]->setCurrent(true);
 
-    m_config->setGroup(NotationView::ConfigGroup);
+    m_config->setGroup(NotationViewConfigGroup);
     int layoutMode = m_config->readNumEntry("layoutmode", 0);
 
     try
@@ -754,7 +755,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     // Initialise the display-related defaults that will be needed
     // by both the actions and the layout toolbar
 
-    m_config->setGroup(NotationView::ConfigGroup);
+    m_config->setGroup(NotationViewConfigGroup);
 
     if (referenceView)
     {
@@ -789,7 +790,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_vlayout->setNotePixmapFactory(m_notePixmapFactory);
 
     setBackgroundMode(PaletteBase);
-    m_config->setGroup(NotationView::ConfigGroup);
+    m_config->setGroup(NotationViewConfigGroup);
 
     QCanvas *tCanvas = new QCanvas(this);
     tCanvas->resize(width() * 2, height() * 2); //!!!
@@ -906,7 +907,7 @@ void NotationView::positionStaffs()
 {
     NOTATION_DEBUG << "NotationView::positionStaffs" << endl;
 
-    m_config->setGroup(NotationView::ConfigGroup);
+    m_config->setGroup(NotationViewConfigGroup);
     m_printSize = m_config->readUnsignedNumEntry("printingnotesize", 5);
 
     int minTrack = 0, maxTrack = 0;
@@ -949,7 +950,7 @@ void NotationView::positionStaffs()
             getDocument()->getComposition().getMetadata();
 
         QFont defaultFont(NotePixmapFactory::defaultSerifFontFamily);
-        m_config->setGroup(NotationView::ConfigGroup);
+        m_config->setGroup(NotationViewConfigGroup);
         QFont font = m_config->readFontEntry("textfont", &defaultFont);
         font.setPixelSize(m_fontSize * 5);
         QFontMetrics metrics(font);
@@ -1188,7 +1189,7 @@ void NotationView::positionPages()
     QPixmap deskBackground;
     bool haveBackground = false;
 
-    m_config->setGroup(GeneralOptionsConfigGroup);
+    m_config->setGroup(NotationViewConfigGroup);
     if (m_config->readBoolEntry("backgroundtextures", true)) {
         QString pixmapDir =
             KGlobal::dirs()->findResource("appdata", "pixmaps/");
@@ -1265,7 +1266,7 @@ void NotationView::positionPages()
         updateThumbnails(false);
     }
 
-    m_config->setGroup(NotationView::ConfigGroup);
+    m_config->setGroup(NotationViewConfigGroup);
 }
 
 void NotationView::slotUpdateStaffName()
@@ -1276,7 +1277,7 @@ void NotationView::slotUpdateStaffName()
 
 void NotationView::slotSaveOptions()
 {
-    m_config->setGroup(NotationView::ConfigGroup);
+    m_config->setGroup(NotationViewConfigGroup);
 
     m_config->writeEntry("Show Chord Name Ruler", getToggleAction("show_chords_ruler")->isChecked());
     m_config->writeEntry("Show Raw Note Ruler", getToggleAction("show_raw_note_ruler")->isChecked());
@@ -1318,7 +1319,7 @@ void NotationView::readOptions()
     setOneToolbar("show_accidentals_toolbar", "Accidentals Toolbar");
     setOneToolbar("show_meta_toolbar", "Meta Toolbar");
 
-    m_config->setGroup(NotationView::ConfigGroup);
+    m_config->setGroup(NotationViewConfigGroup);
 
     bool opt;
 
@@ -3283,7 +3284,7 @@ void NotationView::print(bool previewOnly)
         // mishandling of pixmap masks?) in qt-3.0.  Let's permit
         // it as a "hidden" option.
 
-        m_config->setGroup(NotationView::ConfigGroup);
+        m_config->setGroup(NotationViewConfigGroup);
 
         NOTATION_DEBUG << "NotationView::print: calling QCanvas::drawArea" << endl;
 
@@ -3906,7 +3907,6 @@ NotationView::NoteActionDataMap* NotationView::m_noteActionDataMap = 0;
 NotationView::NoteChangeActionDataMap* NotationView::m_noteChangeActionDataMap = 0;
 
 NotationView::MarkActionDataMap* NotationView::m_markActionDataMap = 0;
-const char* const NotationView::ConfigGroup = NotationViewConfigGroup;
 
 
 /// SLOTS
@@ -4400,7 +4400,7 @@ void NotationView::slotEditPaste()
          clipboard->getSingleSegment()->getStartTime());
 
     KConfig *config = kapp->config();
-    config->setGroup(NotationView::ConfigGroup);
+    config->setGroup(NotationViewConfigGroup);
     PasteEventsCommand::PasteType defaultType = (PasteEventsCommand::PasteType)
         config->readUnsignedNumEntry("pastetype",
                                      PasteEventsCommand::Restricted);
@@ -4437,7 +4437,7 @@ void NotationView::slotEditGeneralPaste()
     Segment &segment = staff->getSegment();
 
     KConfig *config = kapp->config();
-    config->setGroup(NotationView::ConfigGroup);
+    config->setGroup(NotationViewConfigGroup);
     PasteEventsCommand::PasteType defaultType = (PasteEventsCommand::PasteType)
         config->readUnsignedNumEntry("pastetype",
                                      PasteEventsCommand::Restricted);
@@ -4448,7 +4448,7 @@ void NotationView::slotEditGeneralPaste()
 
         PasteEventsCommand::PasteType type = dialog.getPasteType();
         if (dialog.setAsDefault()) {
-            config->setGroup(NotationView::ConfigGroup);
+            config->setGroup(NotationViewConfigGroup);
             config->writeEntry("pastetype", type);
         }
 

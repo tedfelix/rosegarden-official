@@ -34,7 +34,6 @@
 #include "ConfigurationPage.h"
 #include "document/RosegardenGUIDoc.h"
 #include "gui/editors/notation/NotationHLayout.h"
-#include "gui/editors/notation/NotationView.h"
 #include "gui/editors/notation/NoteFontFactory.h"
 #include "gui/editors/notation/NoteFont.h"
 #include "gui/editors/notation/NoteFontMap.h"
@@ -70,7 +69,7 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
         const char *name) :
         TabbedConfigurationPage(cfg, parent, name)
 {
-    m_cfg->setGroup(NotationView::ConfigGroup);
+    m_cfg->setGroup(NotationViewConfigGroup);
 
     QFrame *mainFrame = new QFrame(m_tabWidget);
     QGridLayout *mainLayout = new QGridLayout(mainFrame, 2, 2, 10, 5);
@@ -566,7 +565,7 @@ NotationConfigurationPage::populateSizeCombo(QComboBox *combo,
 void
 NotationConfigurationPage::apply()
 {
-    m_cfg->setGroup(NotationView::ConfigGroup);
+    m_cfg->setGroup(NotationViewConfigGroup);
 
     m_cfg->writeEntry("notefont", m_untranslatedFont[m_font->currentItem()]);
     m_cfg->writeEntry("singlestaffnotesize",

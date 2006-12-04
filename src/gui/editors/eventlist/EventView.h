@@ -35,7 +35,6 @@
 #include <qstring.h>
 #include <vector>
 #include "base/Event.h"
-#include "document/ConfigGroups.h"
 
 
 class QWidget;
@@ -84,8 +83,6 @@ public:
               QWidget *parent);
 
     virtual ~EventView();
-
-    static const char* const ConfigGroup;
 
     virtual bool applyLayout(int staffNo = -1);
 
@@ -194,8 +191,6 @@ protected:
     QCheckBox      *m_channelPressureCheckBox;
     QCheckBox      *m_indicationCheckBox;
     QCheckBox      *m_otherCheckBox;
-
-    static const char* const LayoutConfigGroupName;
 
     std::vector<int> m_listSelection;
     std::set<Event *> m_deletedEvents; // deleted since last refresh

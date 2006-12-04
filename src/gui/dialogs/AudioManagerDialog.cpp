@@ -42,6 +42,7 @@
 #include "base/Track.h"
 #include "document/MultiViewCommandHistory.h"
 #include "document/RosegardenGUIDoc.h"
+#include "document/ConfigGroups.h"
 #include "gui/application/RosegardenGUIView.h"
 #include "gui/application/RosegardenApplication.h"
 #include "gui/widgets/AudioListItem.h"

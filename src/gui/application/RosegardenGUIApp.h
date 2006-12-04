@@ -33,7 +33,6 @@
 #include "gui/widgets/ZoomSlider.h"
 #include "RosegardenIface.h"
 #include "base/Event.h"
-#include "document/ConfigGroups.h"
 #include "sound/AudioFile.h"
 #include "sound/Midi.h"
 #include <kdockwidget.h>

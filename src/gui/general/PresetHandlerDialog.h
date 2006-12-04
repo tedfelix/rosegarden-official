@@ -31,7 +31,6 @@
 
 #include <kdialogbase.h>
 #include <qstring.h>
-#include "document/ConfigGroups.h"
 #include "CategoryElement.h"
 
 class QWidget;
@@ -81,8 +80,6 @@ protected:
 
     //---------[ data members ]-----------------------------
 
-    static const char * const ConfigGroup;
-    
     KComboBox   *m_categoryCombo;
     KComboBox   *m_instrumentCombo;
     KComboBox   *m_playerCombo;

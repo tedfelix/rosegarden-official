@@ -413,7 +413,7 @@ void MatrixMover::stow()
     disconnect(m_parentView->getCanvasView(), SIGNAL(contentsMoving (int, int)),
                this, SLOT(slotMatrixScrolled(int, int)));
     disconnect(this, SIGNAL(hoveredOverNoteChanged(int, bool, timeT)),
-               m_mParentView, SLOT(hoveredOverNoteChanged(int, bool, timeT)));
+               m_mParentView, SLOT(slotHoveredOverNoteChanged(int, bool, timeT)));
 }
 
 void MatrixMover::slotMatrixScrolled(int newX, int newY)

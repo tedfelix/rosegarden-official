@@ -34,7 +34,6 @@
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
 #include "base/TriggerSegment.h"
-#include "gui/editors/notation/NotationView.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include <kcombobox.h>
 #include <kconfig.h>
@@ -144,7 +143,7 @@ void
 UseOrnamentDialog::setupFromConfig()
 {
     KConfig *config = kapp->config();
-    config->setGroup(NotationView::ConfigGroup);
+    config->setGroup(NotationViewConfigGroup);
 
     Mark mark = qstrtostr(config->readEntry("useornamentmark", "trill"));
     int seg = config->readNumEntry("useornamentlastornament", 0);
@@ -251,7 +250,7 @@ void
 UseOrnamentDialog::slotOk()
 {
     KConfig *config = kapp->config();
-    config->setGroup(NotationView::ConfigGroup);
+    config->setGroup(NotationViewConfigGroup);
 
     config->writeEntry("useornamentmark", strtoqstr(getMark()));
     config->writeEntry("useornamenttiming", strtoqstr(getTimeAdjust()));

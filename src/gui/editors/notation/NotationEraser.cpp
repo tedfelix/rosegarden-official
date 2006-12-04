@@ -48,7 +48,7 @@ NotationEraser::NotationEraser(NotationView* view)
         m_collapseRest(false)
 {
     KConfig *config = kapp->config();
-    config->setGroup(NotationView::ConfigGroup);
+    config->setGroup(NotationViewConfigGroup);
     m_collapseRest = config->readBoolEntry("collapse", false);
 
     new KToggleAction(i18n("Collapse rests after erase"), 0, this,

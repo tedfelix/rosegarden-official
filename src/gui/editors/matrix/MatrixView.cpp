@@ -189,8 +189,8 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     QCanvas *tCanvas = new QCanvas(this);
 
-    m_config->setGroup(GeneralOptionsConfigGroup);
-    if (m_config->readBoolEntry("backgroundtextures", true)) {
+    m_config->setGroup(MatrixViewConfigGroup);
+    if (m_config->readBoolEntry("backgroundtextures", false)) {
         QPixmap background;
         QString pixmapDir =
             KGlobal::dirs()->findResource("appdata", "pixmaps/");
@@ -199,8 +199,6 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
             tCanvas->setBackgroundPixmap(background);
         }
     }
-
-    m_config->setGroup(MatrixViewConfigGroup);
 
     MATRIX_DEBUG << "MatrixView : creating staff\n";
 

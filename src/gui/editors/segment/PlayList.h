@@ -27,7 +27,6 @@
 #define _RG_PLAYLIST_H_
 
 #include <qvbox.h>
-#include "document/ConfigGroups.h"
 
 
 class QWidget;

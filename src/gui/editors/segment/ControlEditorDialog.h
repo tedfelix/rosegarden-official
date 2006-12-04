@@ -29,7 +29,6 @@
 #include "base/Device.h"
 #include "base/MidiDevice.h"
 #include <kmainwindow.h>
-#include "document/ConfigGroups.h"
 
 
 class QWidget;

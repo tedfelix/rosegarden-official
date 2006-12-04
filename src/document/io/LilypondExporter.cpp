@@ -59,7 +59,6 @@
 #include "gui/application/RosegardenApplication.h"
 #include "gui/editors/guitar/Chord.h"
 #include "gui/editors/notation/NotationProperties.h"
-#include "gui/editors/notation/NotationView.h"
 #include "gui/general/ProgressReporter.h"
 #include "gui/widgets/CurrentProgressDialog.h"
 #include <kconfig.h>
@@ -92,7 +91,7 @@ LilypondExporter::LilypondExporter(QObject *parent,
 
     // grab config info
     KConfig *cfg = kapp->config();
-    cfg->setGroup(NotationView::ConfigGroup);
+    cfg->setGroup(NotationViewConfigGroup);
 
     m_composition = &m_doc->getComposition();
     m_studio = &m_doc->getStudio();
