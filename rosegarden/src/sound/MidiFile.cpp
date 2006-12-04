@@ -1302,7 +1302,7 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
         }
     }
 
-    if (maxTime > composition.getEndMarker()) {
+    if (type == CONVERT_REPLACE || maxTime > composition.getEndMarker()) {
         composition.setEndMarker(composition.getBarEndForTime(maxTime));
     }
 
