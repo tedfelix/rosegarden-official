@@ -34,7 +34,7 @@
 #include "document/ConfigGroups.h"
 #include "gui/application/RosegardenDCOP.h"
 #include "gui/seqmanager/SequenceManager.h"
-#include "BarButtons.h"
+#include "gui/rulers/StandardRuler.h"
 #include "base/Composition.h"
 #include "base/MidiProgram.h"
 #include "base/RealTime.h"
@@ -93,8 +93,8 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
         QWidget(parent, name),
         m_doc(doc),
         m_rulerScale(rulerScale),
-        m_topBarButtons(0),
-        m_bottomBarButtons(0),
+        m_topStandardRuler(0),
+        m_bottomStandardRuler(0),
         m_trackButtons(0),
         m_segmentCanvas(0),
         m_trackButtonScroll(0),
@@ -147,15 +147,15 @@ TrackEditor::init(QWidget* rosegardenguiview)
     //
     // Top Bar Buttons
     //
-    m_topBarButtons = new BarButtons(m_doc,
+    m_topStandardRuler = new StandardRuler(m_doc,
                                      m_rulerScale,
                                      0,
                                      barButtonsHeight,
                                      false,
                                      this, "topbarbuttons");
-    m_topBarButtons->connectRulerToDocPointer(m_doc);
+    m_topStandardRuler->connectRulerToDocPointer(m_doc);
 
-    grid->addWidget(m_topBarButtons, 2, 1);
+    grid->addWidget(m_topStandardRuler, 2, 1);
 
     //
     // Segment Canvas
@@ -185,15 +185,15 @@ TrackEditor::init(QWidget* rosegardenguiview)
     //
     // Bottom Bar Buttons
     //
-    m_bottomBarButtons = new BarButtons(m_doc,
+    m_bottomStandardRuler = new StandardRuler(m_doc,
                                         m_rulerScale,
                                         0,
                                         barButtonsHeight,
                                         true,
                                         m_segmentCanvas, "bottombarbuttons");
-    m_bottomBarButtons->connectRulerToDocPointer(m_doc);
+    m_bottomStandardRuler->connectRulerToDocPointer(m_doc);
 
-    m_segmentCanvas->setBottomFixedWidget(m_bottomBarButtons);
+    m_segmentCanvas->setBottomFixedWidget(m_bottomStandardRuler);
 
     grid->addWidget(m_segmentCanvas, 3, 1);
 
@@ -220,7 +220,7 @@ TrackEditor::init(QWidget* rosegardenguiview)
     m_trackButtonScroll->setHScrollBarMode(QScrollView::AlwaysOff);
     m_trackButtonScroll->setVScrollBarMode(QScrollView::AlwaysOff);
     m_trackButtonScroll->setResizePolicy(QScrollView::AutoOneFit);
-    m_trackButtonScroll->setBottomMargin(m_bottomBarButtons->height() +
+    m_trackButtonScroll->setBottomMargin(m_bottomStandardRuler->height() +
                                          m_segmentCanvas->horizontalScrollBar()->height());
 
     connect(m_trackButtons, SIGNAL(widthChanged()),
@@ -242,13 +242,13 @@ TrackEditor::init(QWidget* rosegardenguiview)
             rosegardenguiview, SLOT(slotSetMuteButton(TrackId, bool)));
 
     // connect loop rulers' follow-scroll signals
-    connect(m_topBarButtons->getLoopRuler(), SIGNAL(startMouseMove(int)),
+    connect(m_topStandardRuler->getLoopRuler(), SIGNAL(startMouseMove(int)),
             m_segmentCanvas, SLOT(startAutoScroll(int)));
-    connect(m_topBarButtons->getLoopRuler(), SIGNAL(stopMouseMove()),
+    connect(m_topStandardRuler->getLoopRuler(), SIGNAL(stopMouseMove()),
             m_segmentCanvas, SLOT(stopAutoScroll()));
-    connect(m_bottomBarButtons->getLoopRuler(), SIGNAL(startMouseMove(int)),
+    connect(m_bottomStandardRuler->getLoopRuler(), SIGNAL(startMouseMove(int)),
             m_segmentCanvas, SLOT(startAutoScroll(int)));
-    connect(m_bottomBarButtons->getLoopRuler(), SIGNAL(stopMouseMove()),
+    connect(m_bottomStandardRuler->getLoopRuler(), SIGNAL(stopMouseMove()),
             m_segmentCanvas, SLOT(stopAutoScroll()));
 
     connect(m_segmentCanvas, SIGNAL(contentsMoving(int, int)),
@@ -269,14 +269,14 @@ TrackEditor::init(QWidget* rosegardenguiview)
     // Connect horizontal scrollbar
     //
     connect(m_segmentCanvas->horizontalScrollBar(), SIGNAL(valueChanged(int)),
-            m_topBarButtons, SLOT(slotScrollHoriz(int)));
+            m_topStandardRuler, SLOT(slotScrollHoriz(int)));
     connect(m_segmentCanvas->horizontalScrollBar(), SIGNAL(sliderMoved(int)),
-            m_topBarButtons, SLOT(slotScrollHoriz(int)));
+            m_topStandardRuler, SLOT(slotScrollHoriz(int)));
 
     connect(m_segmentCanvas->horizontalScrollBar(), SIGNAL(valueChanged(int)),
-            m_bottomBarButtons, SLOT(slotScrollHoriz(int)));
+            m_bottomStandardRuler, SLOT(slotScrollHoriz(int)));
     connect(m_segmentCanvas->horizontalScrollBar(), SIGNAL(sliderMoved(int)),
-            m_bottomBarButtons, SLOT(slotScrollHoriz(int)));
+            m_bottomStandardRuler, SLOT(slotScrollHoriz(int)));
 
     connect(m_segmentCanvas->horizontalScrollBar(), SIGNAL(valueChanged(int)),
             m_tempoRuler, SLOT(slotScrollHoriz(int)));
@@ -309,14 +309,14 @@ TrackEditor::init(QWidget* rosegardenguiview)
     //
     // pointer and loop drag signals from top and bottom bar buttons (loop rulers actually)
     //
-    connect(m_topBarButtons, SIGNAL(dragPointerToPosition(timeT)),
+    connect(m_topStandardRuler, SIGNAL(dragPointerToPosition(timeT)),
             this, SLOT(slotPointerDraggedToPosition(timeT)));
-    connect(m_bottomBarButtons, SIGNAL(dragPointerToPosition(timeT)),
+    connect(m_bottomStandardRuler, SIGNAL(dragPointerToPosition(timeT)),
             this, SLOT(slotPointerDraggedToPosition(timeT)));
 
-    connect(m_topBarButtons, SIGNAL(dragLoopToPosition(timeT)),
+    connect(m_topStandardRuler, SIGNAL(dragLoopToPosition(timeT)),
             this, SLOT(slotLoopDraggedToPosition(timeT)));
-    connect(m_bottomBarButtons, SIGNAL(dragLoopToPosition(timeT)),
+    connect(m_bottomStandardRuler, SIGNAL(dragLoopToPosition(timeT)),
             this, SLOT(slotLoopDraggedToPosition(timeT)));
 
     connect(m_doc, SIGNAL(loopChanged(timeT,
@@ -378,8 +378,8 @@ void TrackEditor::updateRulers()
     if (getChordNameRuler() != 0)
         getChordNameRuler()->update();
 
-    getTopBarButtons()->update();
-    getBottomBarButtons()->update();
+    getTopStandardRuler()->update();
+    getBottomStandardRuler()->update();
 }
 
 void TrackEditor::paintEvent(QPaintEvent* e)
@@ -454,12 +454,12 @@ void
 TrackEditor::slotCanvasScrolled(int x, int y)
 {
     // update the pointer position if the user is dragging it from the loop ruler
-    if ((m_topBarButtons && m_topBarButtons->getLoopRuler() &&
-         m_topBarButtons->getLoopRuler()->hasActiveMousePress() &&
-         !m_topBarButtons->getLoopRuler()->getLoopingMode()) ||
-        (m_bottomBarButtons && m_bottomBarButtons->getLoopRuler() &&
-         m_bottomBarButtons->getLoopRuler()->hasActiveMousePress() &&
-         !m_bottomBarButtons->getLoopRuler()->getLoopingMode())) {
+    if ((m_topStandardRuler && m_topStandardRuler->getLoopRuler() &&
+         m_topStandardRuler->getLoopRuler()->hasActiveMousePress() &&
+         !m_topStandardRuler->getLoopRuler()->getLoopingMode()) ||
+        (m_bottomStandardRuler && m_bottomStandardRuler->getLoopRuler() &&
+         m_bottomStandardRuler->getLoopRuler()->hasActiveMousePress() &&
+         !m_bottomStandardRuler->getLoopRuler()->getLoopingMode())) {
 
         int mx = m_segmentCanvas->viewport()->mapFromGlobal(QCursor::pos()).x();
         m_segmentCanvas->setPointerPos(x + mx);
@@ -572,8 +572,8 @@ TrackEditor::slotToggleTracking()
 void
 TrackEditor::slotSetLoop(timeT start, timeT end)
 {
-    getTopBarButtons()->getLoopRuler()->slotSetLoopMarker(start, end);
-    getBottomBarButtons()->getLoopRuler()->slotSetLoopMarker(start, end);
+    getTopStandardRuler()->getLoopRuler()->slotSetLoopMarker(start, end);
+    getBottomStandardRuler()->getLoopRuler()->slotSetLoopMarker(start, end);
 }
 
 MultiViewCommandHistory*
@@ -684,8 +684,8 @@ void TrackEditor::dropEvent(QDropEvent* event)
 
     // Adjust any drop event height position by visible rulers
     //
-    if (m_topBarButtons && m_topBarButtons->isVisible())
-        heightAdjust += m_topBarButtons->height();
+    if (m_topStandardRuler && m_topStandardRuler->isVisible())
+        heightAdjust += m_topStandardRuler->height();
 
     if (m_tempoRuler && m_tempoRuler->isVisible())
         heightAdjust += m_tempoRuler->height();

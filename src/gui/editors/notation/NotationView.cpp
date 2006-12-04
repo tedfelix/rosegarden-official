@@ -131,7 +131,7 @@
 #include "gui/dialogs/TupletDialog.h"
 #include "gui/dialogs/UseOrnamentDialog.h"
 #include "gui/editors/guitar/Chord.h"
-#include "gui/editors/segment/BarButtons.h"
+#include "gui/rulers/StandardRuler.h"
 #include "gui/general/ActiveItem.h"
 #include "gui/general/EditViewBase.h"
 #include "gui/general/EditView.h"
@@ -436,11 +436,11 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     updateViewCaption();
 
-    setTopBarButtons(new BarButtons(getDocument(),
+    setTopStandardRuler(new StandardRuler(getDocument(),
                                     m_hlayout, m_leftGutter, 25,
                                     false, getCentralWidget()));
 
-    m_topBarButtons->getLoopRuler()->setBackgroundColor
+    m_topStandardRuler->getLoopRuler()->setBackgroundColor
         (GUIPalette::getColour(GUIPalette::InsertCursorRuler));
 
     m_chordNameRuler = new ChordNameRuler
@@ -468,7 +468,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     readOptions();
 
 
-    setBottomBarButtons(new BarButtons(getDocument(), m_hlayout, m_leftGutter, 25,
+    setBottomStandardRuler(new StandardRuler(getDocument(), m_hlayout, m_leftGutter, 25,
                                        true, getBottomWidget()));
 
     for (unsigned int i = 0; i < segments.size(); ++i)
@@ -556,27 +556,27 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     (getCanvasView(), SIGNAL(renderRequired(double, double)),
      this, SLOT(slotCheckRendered(double, double)));
 
-    m_topBarButtons->connectRulerToDocPointer(doc);
-    m_bottomBarButtons->connectRulerToDocPointer(doc);
+    m_topStandardRuler->connectRulerToDocPointer(doc);
+    m_bottomStandardRuler->connectRulerToDocPointer(doc);
 
     // Disconnect the default connection for this signal from the
     // top ruler, and connect our own instead
 
     QObject::disconnect
-    (m_topBarButtons->getLoopRuler(),
+    (m_topStandardRuler->getLoopRuler(),
      SIGNAL(setPointerPosition(timeT)), 0, 0);
 
     QObject::connect
-    (m_topBarButtons->getLoopRuler(),
+    (m_topStandardRuler->getLoopRuler(),
      SIGNAL(setPointerPosition(timeT)),
      this, SLOT(slotSetInsertCursorPosition(timeT)));
 
     QObject::connect
-    (m_topBarButtons,
+    (m_topStandardRuler,
      SIGNAL(dragPointerToPosition(timeT)),
      this, SLOT(slotSetInsertCursorPosition(timeT)));
 
-    connect(m_bottomBarButtons, SIGNAL(dragPointerToPosition(timeT)),
+    connect(m_bottomStandardRuler, SIGNAL(dragPointerToPosition(timeT)),
             this, SLOT(slotSetPointerPosition(timeT)));
 
     QObject::connect
@@ -656,8 +656,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     timeT start = doc->getComposition().getLoopStart();
     timeT end = doc->getComposition().getLoopEnd();
-    m_topBarButtons->getLoopRuler()->slotSetLoopMarker(start, end);
-    m_bottomBarButtons->getLoopRuler()->slotSetLoopMarker(start, end);
+    m_topStandardRuler->getLoopRuler()->slotSetLoopMarker(start, end);
+    m_bottomStandardRuler->getLoopRuler()->slotSetLoopMarker(start, end);
 
     slotSetInsertCursorPosition(0);
     slotSetPointerPosition(doc->getComposition().getPosition());
@@ -2515,10 +2515,10 @@ NotationView::setPageMode(LinedStaff::PageMode pageMode)
     m_pageMode = pageMode;
 
     if (pageMode != LinedStaff::LinearMode) {
-        if (m_topBarButtons)
-            m_topBarButtons->hide();
-        if (m_bottomBarButtons)
-            m_bottomBarButtons->hide();
+        if (m_topStandardRuler)
+            m_topStandardRuler->hide();
+        if (m_bottomStandardRuler)
+            m_bottomStandardRuler->hide();
         if (m_chordNameRuler)
             m_chordNameRuler->hide();
         if (m_rawNoteRuler)
@@ -2526,10 +2526,10 @@ NotationView::setPageMode(LinedStaff::PageMode pageMode)
         if (m_tempoRuler)
             m_tempoRuler->hide();
     } else {
-        if (m_topBarButtons)
-            m_topBarButtons->show();
-        if (m_bottomBarButtons)
-            m_bottomBarButtons->show();
+        if (m_topStandardRuler)
+            m_topStandardRuler->show();
+        if (m_bottomStandardRuler)
+            m_bottomStandardRuler->show();
         if (m_chordNameRuler && getToggleAction("show_chords_ruler")->isChecked())
             m_chordNameRuler->show();
         if (m_rawNoteRuler && getToggleAction("show_raw_note_ruler")->isChecked())
@@ -2805,11 +2805,11 @@ bool NotationView::applyLayout(int staffNo, timeT startTime, timeT endTime)
     }
 
     readjustCanvasSize();
-    if (m_topBarButtons) {
-        m_topBarButtons->update();
+    if (m_topStandardRuler) {
+        m_topStandardRuler->update();
     }
-    if (m_bottomBarButtons) {
-        m_bottomBarButtons->update();
+    if (m_bottomStandardRuler) {
+        m_bottomStandardRuler->update();
     }
     if (m_rawNoteRuler && m_rawNoteRuler->isVisible()) {
         m_rawNoteRuler->update();

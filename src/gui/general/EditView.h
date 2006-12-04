@@ -62,7 +62,7 @@ class ControlRuler;
 class ControlParameter;
 class ControllerEventsRuler;
 class Clef;
-class BarButtons;
+class StandardRuler;
 class ActiveItem;
 
 
@@ -219,13 +219,13 @@ protected:
      * Locate the given widget in the top bar-buttons position and
      * connect up its scrolling signals.
      */
-    void setTopBarButtons(BarButtons*);
+    void setTopStandardRuler(StandardRuler*);
 
     /**
      * Locate the given widget in the bottom bar-buttons position and
      * connect up its scrolling signals.
      */
-    void setBottomBarButtons(BarButtons*);
+    void setBottomStandardRuler(StandardRuler*);
 
     /**
      * Set the 'Rewind' and 'Fast Forward' buttons in the transport
@@ -384,8 +384,8 @@ protected:
     QVBoxLayout  *m_rulerBox;
     QVBoxLayout  *m_controlBox;
     QVBox        *m_bottomBox;
-    BarButtons   *m_topBarButtons;
-    BarButtons   *m_bottomBarButtons;
+    StandardRuler   *m_topStandardRuler;
+    StandardRuler   *m_bottomStandardRuler;
     ControlRuler *m_controlRuler;
     KTabWidget   *m_controlRulers;
     QWMatrix      m_currentRulerZoomMatrix;

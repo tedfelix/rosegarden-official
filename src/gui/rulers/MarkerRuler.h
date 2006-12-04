@@ -23,8 +23,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_BARBUTTONSWIDGET_H_
-#define _RG_BARBUTTONSWIDGET_H_
+#ifndef _RG_MARKERRULER_H_
+#define _RG_MARKERRULER_H_
 
 #include "gui/general/HZoomable.h"
 #include <qsize.h>
@@ -44,12 +44,12 @@ class RulerScale;
 class RosegardenGUIDoc;
 
 
-class BarButtonsWidget : public QWidget, public HZoomable
+class MarkerRuler : public QWidget, public HZoomable
 {
     Q_OBJECT
 
 public:
-    BarButtonsWidget(RosegardenGUIDoc *doc,
+    MarkerRuler(RosegardenGUIDoc *doc,
                      RulerScale *rulerScale,
                      int buttonHeight,
                      double xorigin = 0.0,
@@ -57,7 +57,7 @@ public:
                      const char* name = 0,
                      WFlags f=0);
 
-    virtual ~BarButtonsWidget();
+    virtual ~MarkerRuler();
     
     virtual QSize sizeHint() const;
     virtual QSize minimumSizeHint() const;

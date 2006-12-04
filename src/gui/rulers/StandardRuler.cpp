@@ -23,11 +23,11 @@
 */
 
 
-#include "BarButtons.h"
+#include "StandardRuler.h"
 
 #include <klocale.h>
 #include "misc/Debug.h"
-#include "BarButtonsWidget.h"
+#include "MarkerRuler.h"
 #include "base/RulerScale.h"
 #include "document/RosegardenGUIDoc.h"
 #include "document/MultiViewCommandHistory.h"
@@ -44,7 +44,7 @@
 namespace Rosegarden
 {
 
-BarButtons::BarButtons(RosegardenGUIDoc *doc,
+StandardRuler::StandardRuler(RosegardenGUIDoc *doc,
                        RulerScale *rulerScale,
                        double xorigin,
                        int barHeight,
@@ -64,7 +64,7 @@ BarButtons::BarButtons(RosegardenGUIDoc *doc,
     setSpacing(0);
 
     if (!m_invert) {
-        m_hButtonBar = new BarButtonsWidget
+        m_hButtonBar = new MarkerRuler
                        (m_doc, m_rulerScale, barHeight - m_loopRulerHeight, xorigin, this);
     }
 
@@ -72,7 +72,7 @@ BarButtons::BarButtons(RosegardenGUIDoc *doc,
                   (m_rulerScale, m_loopRulerHeight, xorigin, m_invert, this);
 
     if (m_invert) {
-        m_hButtonBar = new BarButtonsWidget
+        m_hButtonBar = new MarkerRuler
                        (m_doc, m_rulerScale, barHeight - m_loopRulerHeight, xorigin, this);
     }
 
@@ -84,10 +84,10 @@ BarButtons::BarButtons(RosegardenGUIDoc *doc,
         (this, i18n("Left Click to position the playback pointer.\nShift + Left Click + Drag to select a range for looping or editing.\nShift + Left Click to clear the loop or range."));
 }
 
-void BarButtons::connectRulerToDocPointer(RosegardenGUIDoc *doc)
+void StandardRuler::connectRulerToDocPointer(RosegardenGUIDoc *doc)
 {
 
-    RG_DEBUG << "BarButtons::connectRulerToDocPointer" << endl;
+    RG_DEBUG << "StandardRuler::connectRulerToDocPointer" << endl;
 
     // use the document as a hub for pointer and loop set related signals
     // pointer and loop drag signals are specific to the current view,
@@ -133,25 +133,25 @@ void BarButtons::connectRulerToDocPointer(RosegardenGUIDoc *doc)
     m_loopRuler->setBackgroundColor(GUIPalette::getColour(GUIPalette::PointerRuler));
 }
 
-void BarButtons::slotScrollHoriz(int x)
+void StandardRuler::slotScrollHoriz(int x)
 {
     m_loopRuler->scrollHoriz(x);
     m_hButtonBar->scrollHoriz(x);
 }
 
-void BarButtons::setMinimumWidth(int width)
+void StandardRuler::setMinimumWidth(int width)
 {
     m_hButtonBar->setMinimumWidth(width);
     m_loopRuler->setMinimumWidth(width);
 }
 
-void BarButtons::setHScaleFactor(double dy)
+void StandardRuler::setHScaleFactor(double dy)
 {
     m_hButtonBar->setHScaleFactor(dy);
     m_loopRuler->setHScaleFactor(dy);
 }
 
-void BarButtons::paintEvent(QPaintEvent *e)
+void StandardRuler::paintEvent(QPaintEvent *e)
 {
     m_hButtonBar->update();
     m_loopRuler->update();
@@ -159,4 +159,4 @@ void BarButtons::paintEvent(QPaintEvent *e)
 }
 
 }
-#include "BarButtons.moc"
+#include "StandardRuler.moc"
