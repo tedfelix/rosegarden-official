@@ -23,8 +23,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_BARBUTTONS_H_
-#define _RG_BARBUTTONS_H_
+#ifndef _RG_STANDARDRULER_H_
+#define _RG_STANDARDRULER_H_
 
 #include <qvbox.h>
 #include "base/Event.h"
@@ -40,15 +40,15 @@ namespace Rosegarden
 class RulerScale;
 class RosegardenGUIDoc;
 class LoopRuler;
-class BarButtonsWidget;
+class MarkerRuler;
 
 
-class BarButtons : public QVBox
+class StandardRuler : public QVBox
 {
     Q_OBJECT
 
 public:
-    BarButtons(RosegardenGUIDoc *doc,
+    StandardRuler(RosegardenGUIDoc *doc,
                RulerScale *rulerScale,
                double xorigin,
                int buttonHeight,
@@ -94,7 +94,7 @@ private:
     RosegardenGUIDoc       *m_doc;
     RulerScale *m_rulerScale;
 
-    BarButtonsWidget *m_hButtonBar;
+    MarkerRuler *m_hButtonBar;
     LoopRuler *m_loopRuler;
 };
 

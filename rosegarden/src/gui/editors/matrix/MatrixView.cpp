@@ -72,7 +72,7 @@
 #include "gui/editors/notation/NotationStrings.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include "gui/editors/parameters/InstrumentParameterBox.h"
-#include "gui/editors/segment/BarButtons.h"
+#include "gui/rulers/StandardRuler.h"
 #include "gui/general/ActiveItem.h"
 #include "gui/general/EditViewBase.h"
 #include "gui/general/EditView.h"
@@ -430,49 +430,49 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
         }
     }
 
-    BarButtons *topBarButtons = new BarButtons(getDocument(),
+    StandardRuler *topStandardRuler = new StandardRuler(getDocument(),
                                 &m_hlayout, int(xorigin), 25,
                                 false, getCentralWidget());
-    setTopBarButtons(topBarButtons);
+    setTopStandardRuler(topStandardRuler);
 
-    BarButtons *bottomBarButtons = new BarButtons(getDocument(),
+    StandardRuler *bottomStandardRuler = new StandardRuler(getDocument(),
                                    &m_hlayout, 0, 25,
                                    true, getBottomWidget());
-    setBottomBarButtons(bottomBarButtons);
+    setBottomStandardRuler(bottomStandardRuler);
 
-    topBarButtons->connectRulerToDocPointer(doc);
-    bottomBarButtons->connectRulerToDocPointer(doc);
+    topStandardRuler->connectRulerToDocPointer(doc);
+    bottomStandardRuler->connectRulerToDocPointer(doc);
 
     // Disconnect the default connections for this signal from the
     // top ruler, and connect our own instead
 
     QObject::disconnect
-    (topBarButtons->getLoopRuler(),
+    (topStandardRuler->getLoopRuler(),
      SIGNAL(setPointerPosition(timeT)), 0, 0);
 
     QObject::connect
-    (topBarButtons->getLoopRuler(),
+    (topStandardRuler->getLoopRuler(),
      SIGNAL(setPointerPosition(timeT)),
      this, SLOT(slotSetInsertCursorPosition(timeT)));
 
     QObject::connect
-    (topBarButtons,
+    (topStandardRuler,
      SIGNAL(dragPointerToPosition(timeT)),
      this, SLOT(slotSetInsertCursorPosition(timeT)));
 
-    topBarButtons->getLoopRuler()->setBackgroundColor
+    topStandardRuler->getLoopRuler()->setBackgroundColor
     (GUIPalette::getColour(GUIPalette::InsertCursorRuler));
 
-    connect(topBarButtons->getLoopRuler(), SIGNAL(startMouseMove(int)),
+    connect(topStandardRuler->getLoopRuler(), SIGNAL(startMouseMove(int)),
             m_canvasView, SLOT(startAutoScroll(int)));
-    connect(topBarButtons->getLoopRuler(), SIGNAL(stopMouseMove()),
+    connect(topStandardRuler->getLoopRuler(), SIGNAL(stopMouseMove()),
             m_canvasView, SLOT(stopAutoScroll()));
 
-    connect(bottomBarButtons->getLoopRuler(), SIGNAL(startMouseMove(int)),
+    connect(bottomStandardRuler->getLoopRuler(), SIGNAL(startMouseMove(int)),
             m_canvasView, SLOT(startAutoScroll(int)));
-    connect(bottomBarButtons->getLoopRuler(), SIGNAL(stopMouseMove()),
+    connect(bottomStandardRuler->getLoopRuler(), SIGNAL(stopMouseMove()),
             m_canvasView, SLOT(stopAutoScroll()));
-    connect(m_bottomBarButtons, SIGNAL(dragPointerToPosition(timeT)),
+    connect(m_bottomStandardRuler, SIGNAL(dragPointerToPosition(timeT)),
             this, SLOT(slotSetPointerPosition(timeT)));
 
     // Force height for the moment
@@ -501,8 +501,8 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     timeT start = doc->getComposition().getLoopStart();
     timeT end = doc->getComposition().getLoopEnd();
-    m_topBarButtons->getLoopRuler()->slotSetLoopMarker(start, end);
-    m_bottomBarButtons->getLoopRuler()->slotSetLoopMarker(start, end);
+    m_topStandardRuler->getLoopRuler()->slotSetLoopMarker(start, end);
+    m_bottomStandardRuler->getLoopRuler()->slotSetLoopMarker(start, end);
 
     setCurrentSelection(0, false);
 
@@ -2202,20 +2202,20 @@ MatrixView::slotChangeHorizontalZoom(int)
     //
     setControlRulersZoom(zoomMatrix);
 
-    if (m_topBarButtons)
-        m_topBarButtons->setHScaleFactor(zoomValue);
-    if (m_bottomBarButtons)
-        m_bottomBarButtons->setHScaleFactor(zoomValue);
+    if (m_topStandardRuler)
+        m_topStandardRuler->setHScaleFactor(zoomValue);
+    if (m_bottomStandardRuler)
+        m_bottomStandardRuler->setHScaleFactor(zoomValue);
 
     for (unsigned int i = 0; i < m_propertyViewRulers.size(); ++i) {
         m_propertyViewRulers[i].first->setHScaleFactor(zoomValue);
         m_propertyViewRulers[i].first->repaint();
     }
 
-    if (m_topBarButtons)
-        m_topBarButtons->update();
-    if (m_bottomBarButtons)
-        m_bottomBarButtons->update();
+    if (m_topStandardRuler)
+        m_topStandardRuler->update();
+    if (m_bottomStandardRuler)
+        m_bottomStandardRuler->update();
 
     m_config->setGroup(MatrixViewConfigGroup);
     m_config->writeEntry("Zoom Level", zoomValue);

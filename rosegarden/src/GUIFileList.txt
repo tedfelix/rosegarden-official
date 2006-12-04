@@ -623,10 +623,6 @@ SET(gui_SRCS
 	gui/editors/segment/AudioPreviewThread.h
 	gui/editors/segment/AudioPreviewUpdater.cpp
 	gui/editors/segment/AudioPreviewUpdater.h
-	gui/editors/segment/BarButtons.cpp
-	gui/editors/segment/BarButtons.h
-	gui/editors/segment/BarButtonsWidget.cpp
-	gui/editors/segment/BarButtonsWidget.h
 	gui/editors/segment/CompositionColourCache.cpp
 	gui/editors/segment/CompositionColourCache.h
 	gui/editors/segment/CompositionItem.cpp
@@ -794,6 +790,8 @@ SET(gui_SRCS
 	gui/rulers/ElementAdapter.h
 	gui/rulers/LoopRuler.cpp
 	gui/rulers/LoopRuler.h
+	gui/rulers/MarkerRuler.cpp
+	gui/rulers/MarkerRuler.h
 	gui/rulers/PercussionPitchRuler.cpp
 	gui/rulers/PercussionPitchRuler.h
 	gui/rulers/PitchRuler.cpp
@@ -806,6 +804,8 @@ SET(gui_SRCS
 	gui/rulers/PropertyViewRuler.h
 	gui/rulers/RawNoteRuler.cpp
 	gui/rulers/RawNoteRuler.h
+	gui/rulers/StandardRuler.cpp
+	gui/rulers/StandardRuler.h
 	gui/rulers/TempoColour.cpp
 	gui/rulers/TempoColour.h
 	gui/rulers/TempoRuler.cpp

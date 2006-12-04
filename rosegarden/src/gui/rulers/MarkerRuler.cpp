@@ -23,7 +23,7 @@
 */
 
 
-#include "BarButtonsWidget.h"
+#include "MarkerRuler.h"
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"
@@ -47,7 +47,7 @@
 namespace Rosegarden
 {
 
-BarButtonsWidget::BarButtonsWidget(RosegardenGUIDoc *doc,
+MarkerRuler::MarkerRuler(RosegardenGUIDoc *doc,
                                    RulerScale *rulerScale,
                                    int barHeight,
                                    double xorigin,
@@ -68,18 +68,18 @@ BarButtonsWidget::BarButtonsWidget(RosegardenGUIDoc *doc,
     m_barFont->setPointSize(10);
 }
 
-BarButtonsWidget::~BarButtonsWidget()
+MarkerRuler::~MarkerRuler()
 {
     delete m_barFont;
 }
 
-void BarButtonsWidget::scrollHoriz(int x)
+void MarkerRuler::scrollHoriz(int x)
 {
     m_currentXOffset = static_cast<int>( -x / getHScaleFactor());
     repaint();
 }
 
-QSize BarButtonsWidget::sizeHint() const
+QSize MarkerRuler::sizeHint() const
 {
     int lastBar =
         m_rulerScale->getLastVisibleBar();
@@ -90,14 +90,14 @@ QSize BarButtonsWidget::sizeHint() const
     return QSize(std::max(int(width), m_width), m_barHeight);
 }
 
-QSize BarButtonsWidget::minimumSizeHint() const
+QSize MarkerRuler::minimumSizeHint() const
 {
     double firstBarWidth = m_rulerScale->getBarWidth(0) + m_xorigin;
 
     return QSize(static_cast<int>(firstBarWidth), m_barHeight);
 }
 
-void BarButtonsWidget::paintEvent(QPaintEvent*)
+void MarkerRuler::paintEvent(QPaintEvent*)
 {
     QPainter painter(this);
     painter.setFont(*m_barFont);
@@ -218,9 +218,9 @@ void BarButtonsWidget::paintEvent(QPaintEvent*)
 }
 
 void
-BarButtonsWidget::mousePressEvent(QMouseEvent *e)
+MarkerRuler::mousePressEvent(QMouseEvent *e)
 {
-    RG_DEBUG << "BarButtonsWidget::mousePressEvent: x = " << e->x() << endl;
+    RG_DEBUG << "MarkerRuler::mousePressEvent: x = " << e->x() << endl;
 
     if (!m_doc || !e)
         return ;
@@ -297,7 +297,7 @@ BarButtonsWidget::mousePressEvent(QMouseEvent *e)
 
                 if (nextX < x || e->x() <= nextX) {
 
-                    RG_DEBUG << "BarButtonsWidget::mousePressEvent: setting pointer to " << (*i)->getTime() << endl;
+                    RG_DEBUG << "MarkerRuler::mousePressEvent: setting pointer to " << (*i)->getTime() << endl;
 
                     emit setPointerPosition((*i)->getTime());
                     return ;
@@ -308,12 +308,12 @@ BarButtonsWidget::mousePressEvent(QMouseEvent *e)
 }
 
 void
-BarButtonsWidget::mouseDoubleClickEvent(QMouseEvent *)
+MarkerRuler::mouseDoubleClickEvent(QMouseEvent *)
 {
-    RG_DEBUG << "BarButtonsWidget::mouseDoubleClickEvent" << endl;
+    RG_DEBUG << "MarkerRuler::mouseDoubleClickEvent" << endl;
 
     emit editMarkers();
 }
 
 }
-#include "BarButtonsWidget.moc"
+#include "MarkerRuler.moc"

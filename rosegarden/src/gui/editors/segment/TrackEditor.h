@@ -54,7 +54,7 @@ class MultiViewCommandHistory;
 class CompositionView;
 class CompositionModel;
 class ChordNameRuler;
-class BarButtons;
+class StandardRuler;
 
 
 /**
@@ -85,8 +85,8 @@ public:
     CompositionView* getSegmentCanvas()       { return m_segmentCanvas; }
     TempoRuler*    getTempoRuler()          { return m_tempoRuler; }
     ChordNameRuler*getChordNameRuler()      { return m_chordNameRuler; }
-    BarButtons*    getTopBarButtons()       { return m_topBarButtons; }
-    BarButtons*    getBottomBarButtons()    { return m_bottomBarButtons; }
+    StandardRuler*    getTopStandardRuler()       { return m_topStandardRuler; }
+    StandardRuler*    getBottomStandardRuler()    { return m_bottomStandardRuler; }
     TrackButtons*  getTrackButtons()        { return m_trackButtons; }
     RulerScale*    getRulerScale() { return m_rulerScale; }
 
@@ -223,8 +223,8 @@ protected:
     RulerScale  *m_rulerScale;
     TempoRuler              *m_tempoRuler;
     ChordNameRuler          *m_chordNameRuler;
-    BarButtons              *m_topBarButtons;
-    BarButtons              *m_bottomBarButtons;
+    StandardRuler              *m_topStandardRuler;
+    StandardRuler              *m_bottomStandardRuler;
     TrackButtons            *m_trackButtons;
     CompositionView         *m_segmentCanvas;
     CompositionModel        *m_compositionModel;
