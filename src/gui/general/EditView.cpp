@@ -1422,6 +1422,7 @@ EditView::slotRescale()
      m_currentEventSelection->getStartTime(),
      m_currentEventSelection->getEndTime() -
      m_currentEventSelection->getStartTime(),
+     true,
      true);
 
     if (dialog.exec() == QDialog::Accepted) {

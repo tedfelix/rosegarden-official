@@ -51,10 +51,12 @@ TimeWidget::TimeWidget(QString title,
                        QWidget *parent,
                        Composition *composition,
                        timeT absTime,
-                       bool editable) :
+                       bool editable,
+                       bool constrainToCompositionDuration) :
         QGroupBox(1, Horizontal, title, parent),
         m_composition(composition),
         m_isDuration(false),
+        m_constrain(constrainToCompositionDuration),
         m_time(absTime),
         m_startTime(0),
         m_defaultTime(absTime)
@@ -67,10 +69,12 @@ TimeWidget::TimeWidget(QString title,
                        Composition *composition,
                        timeT startTime,
                        timeT duration,
-                       bool editable) :
+                       bool editable,
+                       bool constrainToCompositionDuration) :
         QGroupBox(1, Horizontal, title, parent),
         m_composition(composition),
         m_isDuration(true),
+        m_constrain(constrainToCompositionDuration),
         m_time(duration),
         m_startTime(startTime),
         m_defaultTime(duration)
@@ -340,7 +344,11 @@ TimeWidget::populate()
 
         if (m_timeT) {
             m_timeT->setMinValue(0);
-            m_timeT->setMaxValue(m_composition->getEndMarker() - m_startTime);
+            if (m_constrain) {
+                m_timeT->setMaxValue(m_composition->getEndMarker() - m_startTime);
+            } else {
+                m_timeT->setMaxValue(INT_MAX);
+            }
             m_timeT->setValue(m_time);
         }
 
@@ -366,9 +374,13 @@ TimeWidget::populate()
 
         if (m_bar) {
             m_bar->setMinValue(0);
-            m_bar->setMaxValue
-            (m_composition->getBarNumber(m_composition->getEndMarker()) -
-             m_composition->getBarNumber(m_startTime));
+            if (m_constrain) {
+                m_bar->setMaxValue
+                    (m_composition->getBarNumber(m_composition->getEndMarker()) -
+                     m_composition->getBarNumber(m_startTime));
+            } else {
+                m_bar->setMaxValue(9999);
+            }
             m_bar->setValue(bars);
         } else {
             m_barLabel->setText(QString("%1").arg(bars));
@@ -402,8 +414,12 @@ TimeWidget::populate()
 
         if (m_sec) {
             m_sec->setMinValue(0);
-            m_sec->setMaxValue(m_composition->getRealTimeDifference
-                               (m_startTime, m_composition->getEndMarker()).sec);
+            if (m_constrain) {
+                m_sec->setMaxValue(m_composition->getRealTimeDifference
+                                   (m_startTime, m_composition->getEndMarker()).sec);
+            } else {
+                m_sec->setMaxValue(9999);
+            }
             m_sec->setValue(rt.sec);
         } else {
             m_secLabel->setText(QString("%1").arg(rt.sec));
@@ -464,8 +480,13 @@ TimeWidget::populate()
         }
 
         if (m_timeT) {
-            m_timeT->setMinValue(INT_MIN);
-            m_timeT->setMaxValue(m_composition->getEndMarker());
+            if (m_constrain) {
+                m_timeT->setMinValue(m_composition->getStartMarker());
+                m_timeT->setMaxValue(m_composition->getEndMarker());
+            } else {
+                m_timeT->setMinValue(INT_MIN);
+                m_timeT->setMaxValue(INT_MAX);
+            }
             m_timeT->setValue(m_time);
         }
 
@@ -478,8 +499,12 @@ TimeWidget::populate()
 
         if (m_bar) {
             m_bar->setMinValue(INT_MIN);
-            m_bar->setMaxValue(m_composition->getBarNumber
-                               (m_composition->getEndMarker()));
+            if (m_constrain) {
+                m_bar->setMaxValue(m_composition->getBarNumber
+                                   (m_composition->getEndMarker()));
+            } else {
+                m_bar->setMaxValue(9999);
+            }
             m_bar->setValue(bar + 1);
         } else {
             m_barLabel->setText(QString("%1").arg(bar + 1));
@@ -510,8 +535,12 @@ TimeWidget::populate()
 
         if (m_sec) {
             m_sec->setMinValue(INT_MIN);
-            m_sec->setMaxValue(m_composition->getElapsedRealTime
-                               (m_composition->getEndMarker()).sec);
+            if (m_constrain) {
+                m_sec->setMaxValue(m_composition->getElapsedRealTime
+                                   (m_composition->getEndMarker()).sec);
+            } else {
+                m_sec->setMaxValue(9999);
+            }
             m_sec->setValue(rt.sec);
         } else {
             m_secLabel->setText(QString("%1").arg(rt.sec));

@@ -2480,7 +2480,7 @@ void RosegardenGUIApp::slotInsertRange()
     timeT t0 = m_doc->getComposition().getPosition();
     std::pair<timeT, timeT> r = m_doc->getComposition().getBarRangeForTime(t0);
     TimeDialog dialog(m_view, i18n("Duration of empty range to insert"),
-                      &m_doc->getComposition(), t0, r.second - r.first);
+                      &m_doc->getComposition(), t0, r.second - r.first, false);
     if (dialog.exec() == QDialog::Accepted) {
         m_doc->getCommandHistory()->addCommand
             (new InsertRangeCommand(&m_doc->getComposition(), t0, dialog.getTime()));
@@ -2609,7 +2609,7 @@ void RosegardenGUIApp::slotRescaleSelection()
 
     RescaleDialog dialog(m_view, &m_doc->getComposition(),
                          startTime, endTime - startTime,
-                         false);
+                         false, false);
     if (dialog.exec() != QDialog::Accepted)
         return ;
 
@@ -2827,7 +2827,7 @@ RosegardenGUIApp::slotSplitSelectionAtTime()
 
     TimeDialog dialog(m_view, title,
                       &m_doc->getComposition(),
-                      now);
+                      now, true);
 
     KMacroCommand *command = new KMacroCommand( title );
 
@@ -2859,7 +2859,7 @@ RosegardenGUIApp::slotSetSegmentStartTimes()
 
     TimeDialog dialog(m_view, i18n("Segment Start Time"),
                       &m_doc->getComposition(),
-                      someTime);
+                      someTime, false);
 
     if (dialog.exec() == QDialog::Accepted) {
 
@@ -2903,7 +2903,8 @@ RosegardenGUIApp::slotSetSegmentDurations()
     TimeDialog dialog(m_view, i18n("Segment Duration"),
                       &m_doc->getComposition(),
                       someTime,
-                      someDuration);
+                      someDuration,
+                      false);
 
     if (dialog.exec() == QDialog::Accepted) {
 
@@ -5479,7 +5480,8 @@ void RosegardenGUIApp::slotEditTransportTime(QWidget *parent)
 {
     TimeDialog dialog(parent, i18n("Move playback pointer to time"),
                       &m_doc->getComposition(),
-                      m_doc->getComposition().getPosition());
+                      m_doc->getComposition().getPosition(),
+                      true);
     if (dialog.exec() == QDialog::Accepted) {
         m_doc->slotSetPointerPosition(dialog.getTime());
     }

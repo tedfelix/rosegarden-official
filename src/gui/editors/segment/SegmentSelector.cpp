@@ -119,8 +119,15 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
 
         bool start = false;
 
-        if (!m_segmentAddMode &&
-                SegmentResizer::cursorIsCloseEnoughToEdge(item, e->pos(), threshold, start)) {
+        // Resize if we're dragging from the edge, provided we aren't
+        // in segment-add mode with at least one segment already
+        // selected -- as we aren't able to resize multiple segments
+        // at once, we should assume the segment-add aspect takes
+        // priority
+
+        if ((!m_segmentAddMode ||
+             !m_canvas->getModel()->haveSelection()) &&
+            SegmentResizer::cursorIsCloseEnoughToEdge(item, e->pos(), threshold, start)) {
 
             SegmentResizer* resizer =
                 dynamic_cast<SegmentResizer*>(getToolBox()->getTool(SegmentResizer::ToolName));
@@ -230,8 +237,6 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
                 new SegmentReconfigureCommand
                 (m_selectedItems.size() == 1 ? i18n("Move Segment") :
                  i18n("Move Segments"));
-
-            SegmentSelection newSelection;
 
             for (it = changingItems.begin();
                     it != changingItems.end();

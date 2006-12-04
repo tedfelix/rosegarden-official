@@ -84,11 +84,6 @@ public:
 
     CompositionItem getFirstItemAt(QPoint pos);
 
-    /**
-     * Add the given Segment to the selection, if we know anything about it
-     */
-    void addToSelection(Segment *);
-
     SegmentToolBox* getToolBox() { return m_toolBox; }
 
     CompositionModel* getModel() { return m_model; }

@@ -46,14 +46,16 @@ RescaleDialog::RescaleDialog(QWidget *parent,
                              Composition *composition,
                              timeT startTime,
                              timeT originalDuration,
-                             bool showCloseGapOption) :
+                             bool showCloseGapOption,
+                             bool constrainToCompositionDuration) :
         KDialogBase(parent, 0, true, i18n("Rescale"), User1 | Ok | Cancel)
 {
     QVBox *vbox = makeVBoxMainWidget();
 
     m_newDuration = new TimeWidget
                     (i18n("Duration of selection"), vbox, composition,
-                     startTime, originalDuration, true);
+                     startTime, originalDuration, true,
+                     constrainToCompositionDuration);
 
     if (showCloseGapOption) {
         QGroupBox *optionBox = new QGroupBox(1, Horizontal, i18n("Options"), vbox);

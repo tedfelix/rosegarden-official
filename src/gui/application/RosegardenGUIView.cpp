@@ -1360,6 +1360,14 @@ RosegardenGUIView::slotAddAudioSegment(AudioFileId audioId,
                                       startTime,
                                       endTime);
     slotAddCommandToHistory(command);
+
+    Segment *newSegment = command->getNewSegment();
+    if (newSegment) {
+        SegmentSelection selection;
+        selection.insert(newSegment);
+        slotSetSelectedSegments(selection);
+        emit segmentsSelected(selection);
+    }
 }
 
 void
@@ -1377,6 +1385,14 @@ RosegardenGUIView::slotAddAudioSegmentCurrentPosition(AudioFileId audioFileId,
                                       startTime,
                                       endTime);
     slotAddCommandToHistory(command);
+
+    Segment *newSegment = command->getNewSegment();
+    if (newSegment) {
+        SegmentSelection selection;
+        selection.insert(newSegment);
+        slotSetSelectedSegments(selection);
+        emit segmentsSelected(selection);
+    }
 }
 
 void
