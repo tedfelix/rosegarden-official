@@ -125,6 +125,7 @@
 #include "gui/editors/segment/SegmentResizer.h"
 #include "gui/editors/segment/SegmentSelector.h"
 #include "gui/editors/segment/SegmentSplitter.h"
+#include "gui/editors/segment/SegmentToolBox.h"
 #include "gui/editors/segment/TrackLabel.h"
 #include "gui/editors/segment/TriggerSegmentManager.h"
 #include "gui/editors/tempo/TempoView.h"
@@ -1424,6 +1425,11 @@ void RosegardenGUIApp::initView()
     }
 
     m_view->show();
+
+    connect(m_view->getTrackEditor()->getSegmentCanvas()->getToolBox(),
+            SIGNAL(showContextHelp(const QString &)),
+            this,
+            SLOT(slotShowToolHelp(const QString &)));
 
     // We have to do this to make sure that the 2nd call ("select")
     // actually has any effect. Activating the same radio action
@@ -7605,6 +7611,12 @@ RosegardenGUIApp::slotShowTip()
 {
     RG_DEBUG << "RosegardenGUIApp::slotShowTip" << endl;
     KTipDialog::showTip(this, locate("data", "rosegarden/tips"), true);
+}
+
+void RosegardenGUIApp::slotShowToolHelp(const QString &s)
+{
+    if (s == "") KTmpStatusMsg::setDefaultMsg(i18n("  Ready."));
+    else KTmpStatusMsg::setDefaultMsg(s);
 }
 
 void

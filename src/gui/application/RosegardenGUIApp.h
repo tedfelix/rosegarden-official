@@ -1488,6 +1488,8 @@ public slots:
      */
     void slotEnableMIDIThruRouting();
 
+    void slotShowToolHelp(const QString &);
+
 private:
 
 

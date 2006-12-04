@@ -47,6 +47,9 @@ BaseTool* BaseToolBox::getTool(const QString& toolName)
     BaseTool* tool = m_tools[toolName];
 
     if (!tool) tool = createTool(toolName);
+
+    connect(tool, SIGNAL(showContextHelp(const QString &)),
+            this, SIGNAL(showContextHelp(const QString &)));
     
     return tool;
 }

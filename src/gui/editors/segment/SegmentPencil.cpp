@@ -41,6 +41,7 @@
 #include "gui/general/RosegardenCanvasView.h"
 #include "SegmentTool.h"
 #include <kcommand.h>
+#include <klocale.h>
 #include <qcursor.h>
 #include <qevent.h>
 #include <qpoint.h>
@@ -66,7 +67,7 @@ void SegmentPencil::ready()
     m_canvas->viewport()->setCursor(Qt::ibeamCursor);
     connect(m_canvas, SIGNAL(contentsMoving (int, int)),
             this, SLOT(slotCanvasScrolled(int, int)));
-
+    setContextHelp(i18n("Click and drag to draw new segments"));
 }
 
 void SegmentPencil::stow()
@@ -249,6 +250,13 @@ int SegmentPencil::handleMouseMove(QMouseEvent *e)
 {
     if (!m_newRect)
         return RosegardenCanvasView::NoFollow;
+
+    if (m_canvas->isFineGrain()) {
+        setContextHelp("");
+    } else {
+        std::cerr << "Setting mouse-move context help" << std::endl;
+        setContextHelp(i18n("Hold Shift to avoid snapping to bar lines"));
+    }
 
     QRect tmpRect = m_canvas->getTmpRect();
     QRect oldTmpRect = tmpRect;
