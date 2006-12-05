@@ -237,21 +237,6 @@ ENDIF(WANT_DEBUG)
 # Warn the user if important libraries are missing
 INCLUDE(UserWarnings)
 
-# Custom target trying to clean the CMake generated files
-ADD_CUSTOM_TARGET(distclean
-    COMMAND sh scripts/distclean.sh
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-)
-ADD_DEPENDENCIES(distclean clean)
-
-# uninstall custom target
-CONFIGURE_FILE(
-    "${CMAKE_SOURCE_DIR}/cmake_admin/cmake_uninstall.cmake.in"
-    "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
-    IMMEDIATE @ONLY)
-ADD_CUSTOM_TARGET(uninstall
-    "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
-
 # Recurse into the "src" subdirectory. This does not actually
 # cause another cmake executable to run. The same process will walk through
 # the project's entire directory structure.
@@ -268,10 +253,57 @@ ADD_SUBDIRECTORY(docs RGbuild/docs)
 ADD_SUBDIRECTORY(data RGbuild/data)
 
 # install some documents...
-INSTALL( FILES AUTHORS COPYING README TRANSLATORS INSTALL
-         DESTINATION share/doc/rosegarden-${VERSION} )
-         
+# INSTALL( FILES AUTHORS COPYING README TRANSLATORS INSTALL rosegarden.lsm
+#         DESTINATION share/doc/rosegarden-${VERSION} )
+
 # create and install the version file
 FILE(WRITE version.txt "${VERSION}\n")
 INSTALL( FILES version.txt
          DESTINATION share/apps/rosegarden )
+
+# uninstall custom target
+CONFIGURE_FILE(
+    "${CMAKE_SOURCE_DIR}/cmake_admin/cmake_uninstall.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
+    IMMEDIATE @ONLY)
+
+ADD_CUSTOM_TARGET(uninstall
+    "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
+
+# Custom target trying to clean the CMake generated files
+ADD_CUSTOM_TARGET ( distclean
+    COMMAND rm -f  {,src/,po/,docs/,data/}CMakeCache.txt
+    COMMAND rm -f  {,src/,po/,docs/,data/}cmake_install.cmake
+    COMMAND rm -f  {,src/,po/,docs/,data/}cmake_uninstall.cmake
+    COMMAND rm -f  {,src/,po/,docs/,data/}CPackConfig.cmake
+    COMMAND rm -f  {,src/,po/,docs/,data/}CPackSourceConfig.cmake
+    COMMAND rm -f  {,src/,po/,docs/,data/}install_manifest.txt
+    COMMAND rm -f  {,src/,po/,docs/,data/}progress.make
+    COMMAND rm -f  {,src/,po/,docs/,data/}rosegarden.spec
+    COMMAND rm -f  {,src/,po/,docs/,data/}Makefile
+    COMMAND rm -rf {,src/,po/,docs/,data/}CMakeFiles
+    COMMAND rm -rf {,src/,po/,docs/,data/}_CPack_Packages
+    COMMAND rm -rf RGbuild/*
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+)
+ADD_DEPENDENCIES(distclean clean)
+
+# configure the RPM spec
+CONFIGURE_FILE(
+    "${CMAKE_SOURCE_DIR}/rosegarden.spec.in"
+    "${CMAKE_SOURCE_DIR}/rosegarden.spec"
+    IMMEDIATE @ONLY)
+
+# tarball target
+ADD_CUSTOM_TARGET ( tarball
+    COMMAND mkdir -p rosegarden-${VERSION}
+    COMMAND cp -r cmake_admin rosegarden-${VERSION}
+    COMMAND cp -r data rosegarden-${VERSION}
+    COMMAND cp -r docs rosegarden-${VERSION}
+    COMMAND cp -r po rosegarden-${VERSION}
+    COMMAND cp -r src rosegarden-${VERSION}
+    COMMAND cp CMakeLists.txt AUTHORS COPYING Doxyfile INSTALL README rosegarden.* TRANSLATORS rosegarden-${VERSION}
+    COMMAND tar -cj --exclude .svn --exclude gettext-0.10.35-kde -f rosegarden-${VERSION}.tar.bz2 rosegarden-${VERSION}
+    COMMAND rm -rf rosegarden-${VERSION}
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+)

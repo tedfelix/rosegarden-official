@@ -1,0 +1,209 @@
+%define name    rosegarden
+%define version @VERSION_MAJOR@.@VERSION_MINOR@.@VERSION_PATCH@
+%define release @VERSION_SUFFIX@
+
+Summary:        Midi, audio and notation editor
+Name:           %name
+Version:        %version
+Release:        %release
+URL:            http://www.rosegardenmusic.com/
+Source0:        %name-@VERSION@.tar.bz2
+License:        GPL
+Group:          Sound
+BuildRequires:  python
+BuildRequires:  qt3-devel
+BuildRequires:  kdemultimedia-devel 
+BuildRequires:  jackit-devel
+BuildRequires:  ladspa-devel
+BuildRequires:  dssi-devel
+BuildRequires:  liblrdf-devel
+BuildRequires:  ImageMagick
+BuildRequires:  libxml2-utils
+
+BuildRoot:      %{_tmppath}/%{name}-buildroot
+
+%description
+Rosegarden is an attractive, user-friendly MIDI and audio sequencer,
+notation editor, and general-purpose music composition and editing
+application for Unix and Linux
+
+%prep
+rm -rf $RPM_BUILD_ROOT
+%setup -q -n %{name}-@VERSION@
+
+%build
+cmake . -DCMAKE_INSTALL_PREFIX=%{_prefix} -DWANT_PCH=YES
+%make
+
+%install
+rm -rf $RPM_BUILD_ROOT
+%make DESTDIR=$RPM_BUILD_ROOT install
+
+#rm 0 byte fonts----why were they kept Lenny?
+rm -rf  `find $RPM_BUILD_ROOT -name accordion*.xpm`
+rm -rf  `find $RPM_BUILD_ROOT -name custodes*.xpm`
+
+#menu
+mkdir -p %{buildroot}%{_menudir}
+kdedesktop2mdkmenu.pl %{name} "Multimedia/Sound" $RPM_BUILD_ROOT%{_datadir}/applnk/Applications/rosegarden.desktop $RPM_BUILD_ROOT%{_menudir}/%{name}
+
+%find_lang %name
+
+%post
+%update_menus
+
+%postun
+%clean_menus
+
+%clean
+rm -rf $RPM_BUILD_ROOT
+
+%files -n %name -f %name.lang
+%defattr(-,root,root)
+%defattr(-, root,root)
+%doc AUTHORS COPYING Doxyfile INSTALL README TRANSLATORS
+%{_bindir}/* 
+
+%{_datadir}/applnk/Applications/rosegarden.desktop
+%{_datadir}/apps/%name
+
+%dir %_docdir/HTML/en/%name/
+%doc %_docdir/HTML/en/%name/*
+
+%dir %_docdir/HTML/ja/%name/
+%doc %_docdir/HTML/ja/%name/*.bz2
+%doc %_docdir/HTML/ja/%name/*.docbook
+
+%dir %_docdir/HTML/sv/%name/
+%doc %_docdir/HTML/sv/%name/*.bz2
+%doc %_docdir/HTML/sv/%name/*.docbook
+%doc %_docdir/HTML/sv/%name/*.png
+
+%doc %_docdir/HTML/es/%name/*.bz2
+%doc %_docdir/HTML/es/%name/*.docbook
+
+%{_datadir}/mimelnk/audio/*
+
+%_menudir/*
+
+%{_iconsdir}/hicolor/*/apps/*
+%{_iconsdir}/locolor/*/apps/*
+%{_iconsdir}/hicolor/16x16/mimetypes/x-rosegarden.png
+%{_iconsdir}/hicolor/32x32/mimetypes/x-rosegarden.png
+%{_iconsdir}/locolor/16x16/mimetypes/x-rosegarden.png
+%{_iconsdir}/locolor/32x32/mimetypes/x-rosegarden.png
+
+%changelog
+* Mon Dec 4 2006 Pedro Lopez-Cabanillas <plcl@users.sf.net> 1.5.0
+- Using CMake
+
+* Mon Sep 25 2006 Pedro Lopez-Cabanillas <plcl@users.sf.net> 1.4.0-1mdk
+- 1.4.0
+
+* Fri Jul 14 2006 Pedro Lopez-Cabanillas <plcl@users.sf.net> 1.2.4-1mdk
+- New release
+- Include DSSI support
+- Use the internal scons-mini to avoid broken SCons versions
+
+* Sun Feb 19 2006 Christiaan Welvaart <cjw@daneel.dyndns.org> 1.2.3-1mdk
+- 1.2.3
+- drop patches 1,2,3,4 - don't apply + not needed
+- scons...
+- no shared libraries built, drop lib packages
+
+* Wed Aug 24 2005 Gwenole Beauchesne <gbeauchesne@mandriva.com> 1.0-5mdk
+- harmless 64-bit fixes
+
+* Sat Aug 20 2005 Christiaan Welvaart <cjw@daneel.dyndns.org> 1.0-4mdk
+- patch3: fix build (for gcc 4.0?)
+
+* Mon Jun 13 2005 Pascal Terjan <pterjan@mandriva.org> 1.0-3mdk
+- fix build with gcc4 (patch2)
+
+* Mon Mar 21 2005 Gwenole Beauchesne <gbeauchesne@mandrakesoft.com> 1.0-2mdk
+- fix build on lib64 platforms
+
+* Tue Feb 15 2005 Laurent MONTEL <lmontel@mandrakesoft.com> 1.0-1mdk
+- 1.0
+
+* Mon Dec 20 2004 Laurent MONTEL <lmontel@mandrakesoft.com> 0.9.91-1mdk
+- 0.9.91
+
+* Tue Oct 19 2004 Gwenole Beauchesne <gbeauchesne@mandrakesoft.com> 0.9.9-2mdk
+- -Wmissing-prototypes is only valid for the C front-end
+
+* Tue Aug 17 2004 Pascal Terjan <pterjan@mandrake.org> 0.9.9-1mdk
+- 0.9.9
+- update patch0
+
+* Fri Jul 16 2004 Michael Scherer <misc@mandrake.org> 0.9.8-2mdk 
+- rebuild for new gcc ( patch 0 )
+
+* Tue May 26 2004 Austin Acton <austin@mandrake.org> 0.9.8-1mdk
+- 0.9.8
+
+* Tue Apr 20 2004 Laurent MONTEL <lmontel@mandrakesoft.com> 0.9.7-2mdk
+- Fix menu
+
+* Thu Apr 1 2004 Austin Acton <austin@mandrake.org> 0.9.7-1mdk
+- 0.9.7
+
+* Tue Feb 17 2004 Austin Acton <austin@mandrake.org> 0.9.6-4mdk
+- rebuild for liblrdf2
+
+* Wed Jan 14 2004 Charles A Edwards <eslrahc@mandrake.org> 0.9.6-3mdk 
+- put back correct changelog entry for Austin's 0.9.6-1mdk--don't
+  know how I screwed that
+ 
+* Wed Jan 14 2004 Charles A Edwards <eslrahc@mandrake.org> 0.9.6-2mdk 
+- use libtoolize /bin/true
+- define iconname
+- build with liblrdf
+- buildrequire liblrdf0-devel and ImageMagick
+- use source xpm to create icons
+- fix rpath for _libdir  and _bindir
+- use marcos configure2_5x and makeinstall_std
+- rm 0 byte fonts
+- add docand doc/howtos
+
+* Mon Jan 12 2004 Austin Acton <austin@mandrake.org> 0.9.6-1mdk 
+- 0.9.6
+- does not require "jack" or libname
+- buildrequires jackit and ladspa libs
+- mklibname
+- lib64 fix buildrequires
+
+* Thu Dec 04 2003 Lenny Cartier <lenny@mandrakesoft.com> 0.9.5-1mdk
+- 0.9.5
+
+* Thu Jun 5 2003 Austin Acton <aacton@yorku.ca> 0.9.1-1mdk
+- 0.9.1
+- pretty-up spec
+- tie bin and lib package versions
+
+* Sun May 11 2003 Laurent Culioli <laurent@pschit.net> 0.9-1mdk
+- 0.9
+- frop patch0
+
+* Tue May 06 2003 Lenny Cartier <lenny@mandrakesoft.com> 0.8.5-2mdk
+- buildrequires
+
+* Fri Dec 20 2002 Lenny Cartier <lenny@mandrakesoft.com> 0.8.5-1mdk
+- add mandrake menu
+- add libraries rpm
+- keep zero length xpm icons...
+- from ccrma package
+
+* Wed Dec 18 2002 Fernando Lopez Lezcano <nando@ccrma.stanford.edu> 0.8.5-1
+- changed name to rosegarden, anaconda does not like the current name
+  (anaconda should be fixed, name is legal)
+- update to 0.8.5
+
+* Sun Nov 10 2002 Fernando Lopez Lezcano <nando@ccrma.stanford.edu> 0.8-2
+- changed name of package to rosegarden-4 (what was I thinking?...)
+- added patch to rename jack alsa ports for jack >= 0.40
+- added explicit dependency to jack
+- added redhat menu entry
+
+* Fri Oct 18 2002 Fernando Lopez Lezcano <nando@ccrma.stanford.edu>
+- Initial build.
