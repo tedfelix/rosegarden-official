@@ -8,25 +8,25 @@ SET(LINKDIR share/applnk/Applications)
 # Guitar chord files
 FILE(GLOB CHORD_FILES chords/*.xml)
 INSTALL(FILES ${CHORD_FILES}
-		DESTINATION ${DATADIR}/default_chords)
+                DESTINATION ${DATADIR}/default_chords)
 INSTALL(FILES chords/guitar.dtd
-		DESTINATION ${DATADIR}/default_chords)
+                DESTINATION ${DATADIR}/default_chords)
 
 # Desktop file
 INSTALL(FILES desktop/rosegarden.desktop
-		DESTINATION ${LINKDIR})
+                DESTINATION ${LINKDIR})
 
 # MIME files
 SET(MIME_FILES
-	desktop/x-rosegarden21.desktop
-	desktop/x-rosegarden.desktop
-	desktop/x-rosegarden-device.desktop
-	desktop/x-soundfont.desktop)
+        desktop/x-rosegarden21.desktop
+        desktop/x-rosegarden.desktop
+        desktop/x-rosegarden-device.desktop
+        desktop/x-soundfont.desktop)
 INSTALL(FILES ${MIME_FILES} DESTINATION ${MIMEDIR})
 
 # Icons
-INSTALL(FILES pixmaps/icons/cc-hi16-rosegarden.xpm      DESTINATION ${ICONDIR}/locolor/16x16/apps   RENAME x-rosegarden.xpm)
-INSTALL(FILES pixmaps/icons/rg-rwb-rose3-16x16.png      DESTINATION ${ICONDIR}/hicolor/16x16/apps   RENAME x-rosegarden.png)
+INSTALL(FILES pixmaps/icons/cc-hi16-rosegarden.xpm      DESTINATION ${ICONDIR}/locolor/16x16/apps   RENAME rosegarden.xpm)
+INSTALL(FILES pixmaps/icons/rg-rwb-rose3-16x16.png      DESTINATION ${ICONDIR}/hicolor/16x16/apps   RENAME rosegarden.png)
 INSTALL(FILES pixmaps/icons/cc-hi32-rosegarden.xpm      DESTINATION ${ICONDIR}/locolor/32x32/apps   RENAME rosegarden.xpm)
 INSTALL(FILES pixmaps/icons/rg-rwb-rose3-32x32.png      DESTINATION ${ICONDIR}/hicolor/32x32/apps   RENAME rosegarden.png)
 INSTALL(FILES pixmaps/icons/rg-rwb-rose3-48x48.png      DESTINATION ${ICONDIR}/hicolor/48x48/apps   RENAME rosegarden.png)
