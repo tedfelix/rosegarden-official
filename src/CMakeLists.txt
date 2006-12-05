@@ -125,6 +125,7 @@ INSTALL(TARGETS rosegarden rosegardensequencer
 INSTALL(PROGRAMS
             helpers/rosegarden-lilypondview
             helpers/rosegarden-project-package
+            helpers/rosegarden-audiofile-importer
         DESTINATION bin )
 
 # Install GUI resource files
