@@ -23,7 +23,7 @@
 */
 
 
-#include "DistributeAudioCommand.h"
+#include "AudioSegmentDistributeCommand.h"
 
 #include "base/Event.h"
 #include "base/Composition.h"
@@ -38,7 +38,7 @@
 namespace Rosegarden
 {
 
-DistributeAudioCommand::DistributeAudioCommand(
+AudioSegmentDistributeCommand::AudioSegmentDistributeCommand(
     Composition *comp,
     SegmentSelection &inputSelection,
     Segment *audioSegment):
@@ -50,7 +50,7 @@ DistributeAudioCommand::DistributeAudioCommand(
         m_executed(false)
 {}
 
-DistributeAudioCommand::DistributeAudioCommand(
+AudioSegmentDistributeCommand::AudioSegmentDistributeCommand(
     Composition *comp,
     SegmentSelection &inputSelection,
     AudioFile *audioFile):
@@ -62,7 +62,7 @@ DistributeAudioCommand::DistributeAudioCommand(
         m_executed(false)
 {}
 
-DistributeAudioCommand::~DistributeAudioCommand()
+AudioSegmentDistributeCommand::~AudioSegmentDistributeCommand()
 {
     if (m_executed) {
         for (SegmentSelection::iterator i = m_selection.begin();
@@ -76,7 +76,7 @@ DistributeAudioCommand::~DistributeAudioCommand()
 }
 
 void
-DistributeAudioCommand::execute()
+AudioSegmentDistributeCommand::execute()
 {
     // Store the insert times in a local vector
     //
@@ -141,7 +141,7 @@ DistributeAudioCommand::execute()
 }
 
 void
-DistributeAudioCommand::unexecute()
+AudioSegmentDistributeCommand::unexecute()
 {
     for (unsigned int i = 0; i < m_newSegments.size(); ++i)
         m_composition->detachSegment(m_newSegments[i]);

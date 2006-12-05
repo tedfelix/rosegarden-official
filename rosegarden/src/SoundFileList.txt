@@ -9,6 +9,10 @@ SET(common_sound_SRCS
 	sound/AudioPlayQueue.h
 	sound/AudioProcess.cpp
 	sound/AudioProcess.h
+	sound/AudioFileTimeStretcher.cpp
+	sound/AudioFileTimeStretcher.h
+	sound/AudioTimeStretcher.cpp
+	sound/AudioTimeStretcher.h
 	sound/Audit.cpp
 	sound/Audit.h
 	sound/BWFAudioFile.cpp
@@ -61,6 +65,7 @@ SET(common_sound_SRCS
 	sound/RingBuffer.h
 	sound/RunnablePluginInstance.cpp
 	sound/RunnablePluginInstance.h
+	sound/SampleWindow.h
 	sound/Scavenger.h
 	sound/SequencerDataBlock.cpp
 	sound/SequencerDataBlock.h

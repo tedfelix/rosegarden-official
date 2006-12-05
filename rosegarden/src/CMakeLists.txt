@@ -25,6 +25,7 @@ INCLUDE_DIRECTORIES(AFTER
     ${LADSPA_INC_DIR}
     ${LRDF_INC_DIR}
     ${LIRC_INC_DIR}
+    ${FFTW3F_INC_DIR}
     base
 )
 
@@ -77,6 +78,7 @@ TARGET_LINK_LIBRARIES(rosegardensequencer
     ${JACK_LIBS}
     ${LIBLO_LIBS}
     ${LRDF_LIBS}
+    ${FFTW3F_LIBS}
     kdeui
     RosegardenCommon
 )
@@ -105,6 +107,7 @@ TARGET_LINK_LIBRARIES(rosegarden
     ${QT_AND_KDECORE_LIBS} 
     ${LIBLO_LIBS}
     ${LRDF_LIBS}
+    ${FFTW3F_LIBS}
     ${XFT_LIBS}
     ${LIRC_LIBS}
     ${JACK_LIBS}

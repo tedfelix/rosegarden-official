@@ -58,6 +58,7 @@
 #include "commands/segment/AddTimeSignatureAndNormalizeCommand.h"
 #include "commands/segment/AddTimeSignatureCommand.h"
 #include "commands/segment/AudioSegmentAutoSplitCommand.h"
+#include "commands/segment/AudioSegmentRescaleCommand.h"
 #include "commands/segment/AudioSegmentSplitCommand.h"
 #include "commands/segment/ChangeCompositionLengthCommand.h"
 #include "commands/segment/CreateTempoMapFromSegmentCommand.h"
@@ -2619,17 +2620,70 @@ void RosegardenGUIApp::slotRescaleSelection()
     if (dialog.exec() != QDialog::Accepted)
         return ;
 
+    std::vector<AudioSegmentRescaleCommand *> asrcs;
+
+    int mult = dialog.getNewDuration();
+    int div = endTime - startTime;
+    float ratio = float(mult) / float(div);
+
+    std::cerr << "slotRescaleSelection: mult = " << mult << ", div = " << div << ", ratio = " << ratio << std::endl;
+
     KMacroCommand *command = new KMacroCommand
                              (SegmentRescaleCommand::getGlobalName());
 
     for (SegmentSelection::iterator i = selection.begin();
             i != selection.end(); ++i) {
-        command->addCommand(new SegmentRescaleCommand(*i,
-                            dialog.getNewDuration(),
-                            endTime - startTime));
+        if ((*i)->getType() == Segment::Audio) {
+            //!!! this command should take an extra arg for intended
+            // end time so it can set that afterwards to avoid rounding error
+            AudioSegmentRescaleCommand *asrc = new AudioSegmentRescaleCommand
+                (m_doc, *i, ratio);
+            command->addCommand(asrc);
+            asrcs.push_back(asrc);
+        } else {
+            command->addCommand(new SegmentRescaleCommand
+                                (*i, mult, div));
+        }
+    }
+
+    ProgressDialog *progressDlg = 0;
+
+    if (!asrcs.empty()) {
+        progressDlg = new ProgressDialog
+            (i18n("Rescaling audio file..."), 100, this);
+        progressDlg->setAutoClose(false);
+        progressDlg->setAutoReset(false);
+        progressDlg->show();
+        for (size_t i = 0; i < asrcs.size(); ++i) {
+            asrcs[i]->connectProgressDialog(progressDlg);
+        }
     }
 
     m_view->slotAddCommandToHistory(command);
+
+    if (!asrcs.empty()) {
+
+        progressDlg->setLabel(i18n("Generating audio preview..."));
+
+        for (size_t i = 0; i < asrcs.size(); ++i) {
+            asrcs[i]->disconnectProgressDialog(progressDlg);
+        }
+
+        connect(&m_doc->getAudioFileManager(), SIGNAL(setProgress(int)),
+                progressDlg->progressBar(), SLOT(setValue(int)));
+        connect(progressDlg, SIGNAL(cancelClicked()),
+                &m_doc->getAudioFileManager(), SLOT(slotStopPreview()));
+
+        for (size_t i = 0; i < asrcs.size(); ++i) {
+            int fid = asrcs[i]->getNewAudioFileId();
+            if (fid >= 0) {
+                slotAddAudioFile(fid);
+                m_doc->getAudioFileManager().generatePreview(fid);
+            }
+        }
+    }
+
+    if (progressDlg) delete progressDlg;
 }
 
 void RosegardenGUIApp::slotAutoSplitSelection()

@@ -1822,6 +1822,7 @@ void SequenceManager::timeSignatureChanged(const Composition *)
 
 void SequenceManager::trackChanged(const Composition *, Track* t)
 {
+    SEQMAN_DEBUG << "SequenceManager::trackChanged(" << t << ", " << (t ? t->getPosition() : -1) << ")\n";
     m_controlBlockMmapper->updateTrackData(t);
 
     if (m_transportStatus == PLAYING) {

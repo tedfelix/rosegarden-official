@@ -29,6 +29,7 @@
 #endif
 
 #include "RealTime.h"
+#include "sys/time.h"
 
 namespace Rosegarden {
 
@@ -58,6 +59,23 @@ RealTime::RealTime(int s, int n) :
     }
 }
 
+RealTime
+RealTime::fromSeconds(double sec)
+{
+    return RealTime(int(sec), int((sec - int(sec)) * ONE_BILLION + 0.5));
+}
+
+RealTime
+RealTime::fromMilliseconds(int msec)
+{
+    return RealTime(msec / 1000, (msec % 1000) * 1000000);
+}
+
+RealTime
+RealTime::fromTimeval(const struct timeval &tv)
+{
+    return RealTime(tv.tv_sec, tv.tv_usec * 1000);
+}
 
 std::ostream &operator<<(std::ostream &out, const RealTime &rt)
 {
@@ -156,6 +174,14 @@ RealTime::toText(bool fixedDp) const
 }
 
 RealTime
+RealTime::operator*(double m) const
+{
+    double t = (double(nsec) / ONE_BILLION) * m;
+    t += sec * m;
+    return fromSeconds(t);
+}
+
+RealTime
 RealTime::operator/(int d) const
 {
     int secdiv = sec / d;
@@ -179,6 +205,8 @@ RealTime::operator/(const RealTime &r) const
 long
 RealTime::realTime2Frame(const RealTime &time, unsigned int sampleRate)
 {
+    if (time < zeroTime) return -realTime2Frame(-time, sampleRate);
+
     // We like integers.  The last term is always zero unless the
     // sample rate is greater than 1MHz, but hell, you never know...
 
@@ -194,6 +222,8 @@ RealTime::realTime2Frame(const RealTime &time, unsigned int sampleRate)
 RealTime
 RealTime::frame2RealTime(long frame, unsigned int sampleRate)
 {
+    if (frame < 0) return -frame2RealTime(-frame, sampleRate);
+
     RealTime rt;
     rt.sec = frame / sampleRate;
     frame -= rt.sec * sampleRate;

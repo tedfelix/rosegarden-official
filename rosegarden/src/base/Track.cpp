@@ -80,6 +80,8 @@ Track::~Track()
 
 void Track::setMuted(bool muted)
 {
+    if (m_muted == muted) return;
+
     m_muted = muted;
 
     if (m_owningComposition)
@@ -88,6 +90,8 @@ void Track::setMuted(bool muted)
 
 void Track::setLabel(const std::string &label)
 {
+    if (m_label == label) return;
+
     m_label = label;
 
     if (m_owningComposition)
@@ -96,6 +100,8 @@ void Track::setLabel(const std::string &label)
 
 void Track::setPresetLabel(const std::string &label)
 {
+    if (m_presetLabel == label) return;
+
     m_presetLabel = label;
 
     if (m_owningComposition)
@@ -104,6 +110,8 @@ void Track::setPresetLabel(const std::string &label)
 
 void Track::setInstrument(InstrumentId instrument)
 {
+    if (m_instrument == instrument) return;
+
     m_instrument = instrument;
 
     if (m_owningComposition)
@@ -113,6 +121,8 @@ void Track::setInstrument(InstrumentId instrument)
 
 void Track::setArmed(bool armed) 
 { 
+    if (m_armed == armed) return;
+
     m_armed = armed; 
     
     if (m_owningComposition)
@@ -121,6 +131,8 @@ void Track::setArmed(bool armed)
 
 void Track::setMidiInputDevice(DeviceId id) 
 { 
+    if (m_input_device == id) return;
+
     m_input_device = id; 
 
     if (m_owningComposition)
@@ -129,6 +141,8 @@ void Track::setMidiInputDevice(DeviceId id)
 
 void Track::setMidiInputChannel(char ic) 
 { 
+    if (m_input_channel == ic) return;
+
     m_input_channel = ic; 
 
     if (m_owningComposition)

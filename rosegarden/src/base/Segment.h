@@ -502,6 +502,12 @@ public:
     unsigned int getAudioFileId() const { return m_audioFileId; }
     void setAudioFileId(unsigned int id);
 
+    unsigned int getUnstretchedFileId() const { return m_unstretchedFileId; }
+    void setUnstretchedFileId(unsigned int id);
+
+    float getStretchRatio() const { return m_stretchRatio; }
+    void setStretchRatio(float ratio);
+
     // The audio start and end times tell us how far into
     // audio file "m_audioFileId" this Segment starts and
     // how far into the sample the Segment finishes.
@@ -621,6 +627,8 @@ private:
     mutable int m_id; // not id of Segment, but a value for return by getNextId
 
     unsigned int m_audioFileId; // audio file ID (see AudioFileManager)
+    unsigned int m_unstretchedFileId;
+    float m_stretchRatio;
     RealTime m_audioStartTime;   // start time relative to start of audio file
     RealTime m_audioEndTime;     // end time relative to start of audio file
 

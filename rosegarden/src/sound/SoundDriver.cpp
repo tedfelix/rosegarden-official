@@ -170,7 +170,7 @@ SoundDriver::initialiseAudioQueue(const std::vector<MappedEvent> &events)
             newQueue->addScheduled(paf);
         } else {
             std::cerr << "SoundDriver::initialiseAudioQueue - "
-            << "can't find audio file reference"
+            << "can't find audio file reference for id " << i->getAudioID()
             << std::endl;
 
             std::cerr << "SoundDriver::initialiseAudioQueue - "

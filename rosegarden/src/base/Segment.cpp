@@ -52,6 +52,8 @@ Segment::Segment(SegmentType segmentType, timeT startTime) :
     m_colourIndex(0),
     m_id(0),
     m_audioFileId(0),
+    m_unstretchedFileId(0),
+    m_stretchRatio(1.0),
     m_audioStartTime(0, 0),
     m_audioEndTime(0, 0),
     m_repeating(false),
@@ -85,6 +87,8 @@ Segment::Segment(const Segment &segment):
     m_colourIndex(segment.getColourIndex()),
     m_id(0),
     m_audioFileId(segment.getAudioFileId()),
+    m_unstretchedFileId(segment.getUnstretchedFileId()),
+    m_stretchRatio(segment.getStretchRatio()),
     m_audioStartTime(segment.getAudioStartTime()),
     m_audioEndTime(segment.getAudioEndTime()),
     m_repeating(segment.isRepeating()),
@@ -916,6 +920,18 @@ Segment::setAudioFileId(unsigned int id)
 {
     m_audioFileId = id;
     updateRefreshStatuses(getStartTime(), getEndTime());
+}
+
+void
+Segment::setUnstretchedFileId(unsigned int id)
+{
+    m_unstretchedFileId = id;
+}
+
+void
+Segment::setStretchRatio(float ratio)
+{
+    m_stretchRatio = ratio;
 }
 
 void

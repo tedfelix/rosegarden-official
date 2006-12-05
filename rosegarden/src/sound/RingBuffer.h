@@ -134,6 +134,15 @@ public:
     T readOne(int R = 0);
 
     /**
+     * Read n samples from the buffer, if available, for reader R,
+     * without advancing the read pointer -- i.e. a subsequent read()
+     * or skip() will be necessary to empty the buffer.  If fewer than
+     * n are available, the remainder will be zeroed out.  Returns the
+     * number of samples actually read.
+     */
+    size_t peek(T *destination, size_t n, int R = 0) const;
+
+    /**
      * Read one sample from the buffer, if available, without
      * advancing the read pointer -- i.e. a subsequent read() or
      * skip() will be necessary to empty the buffer.  Returns zero if
@@ -415,6 +424,40 @@ RingBuffer<T, N>::readOne(int R)
     T value = m_buffer[m_readers[R]];
     if (++m_readers[R] == m_size) m_readers[R] = 0;
     return value;
+}
+
+template <typename T, int N>
+size_t
+RingBuffer<T, N>::peek(T *destination, size_t n, int R) const
+{
+#ifdef DEBUG_RINGBUFFER
+    std::cerr << "RingBuffer<T," << N << ">[" << this << "]::peek(dest, " << n << ", " << R << ")" << std::endl;
+#endif
+
+    size_t available = getReadSpace(R);
+    if (n > available) {
+#ifdef DEBUG_RINGBUFFER
+	std::cerr << "WARNING: Only " << available << " samples available"
+		  << std::endl;
+#endif
+	memset(destination + available, 0, (n - available) * sizeof(T));
+	n = available;
+    }
+    if (n == 0) return n;
+
+    size_t here = m_size - m_readers[R];
+    if (here >= n) {
+	memcpy(destination, m_buffer + m_readers[R], n * sizeof(T));
+    } else {
+	memcpy(destination, m_buffer + m_readers[R], here * sizeof(T));
+	memcpy(destination + here, m_buffer, (n - here) * sizeof(T));
+    }
+
+#ifdef DEBUG_RINGBUFFER
+    std::cerr << "RingBuffer<T," << N << ">[" << this << "]::peek: read " << n << std::endl;
+#endif
+
+    return n;
 }
 
 template <typename T, int N>

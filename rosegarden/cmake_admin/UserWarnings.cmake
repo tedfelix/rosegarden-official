@@ -24,6 +24,7 @@ MESSAGE(
 "LADSPA plugin support         : ${HAVE_LADSPA}\n"
 "DSSI synth plugin support     : ${HAVE_DSSI}\n"
 "Custom OSC plugin GUI support : ${HAVE_LIBLO}\n"
+"Audio timestretching          : ${HAVE_FFTW3F}\n"
 "LRDF plugin metadata support  : ${HAVE_LRDF}")
 ELSE(WANT_SOUND)
 MESSAGE("No sound support configured.")

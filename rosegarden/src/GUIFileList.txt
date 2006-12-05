@@ -11,8 +11,6 @@ SET(ui_SRCS
 )
 
 SET(commands_SRCS
-	commands/audio/DistributeAudioCommand.cpp
-	commands/audio/DistributeAudioCommand.h
 	commands/edit/AddDotCommand.cpp
 	commands/edit/AddDotCommand.h
 	commands/edit/AddMarkerCommand.cpp
@@ -181,10 +179,14 @@ SET(commands_SRCS
 	commands/segment/AddTriggerSegmentCommand.h
 	commands/segment/AudioSegmentAutoSplitCommand.cpp
 	commands/segment/AudioSegmentAutoSplitCommand.h
+	commands/segment/AudioSegmentDistributeCommand.cpp
+	commands/segment/AudioSegmentDistributeCommand.h
 	commands/segment/AudioSegmentInsertCommand.cpp
 	commands/segment/AudioSegmentInsertCommand.h
 	commands/segment/AudioSegmentResizeFromStartCommand.cpp
 	commands/segment/AudioSegmentResizeFromStartCommand.h
+	commands/segment/AudioSegmentRescaleCommand.cpp
+	commands/segment/AudioSegmentRescaleCommand.h
 	commands/segment/AudioSegmentSplitCommand.cpp
 	commands/segment/AudioSegmentSplitCommand.h
 	commands/segment/ChangeCompositionLengthCommand.cpp
