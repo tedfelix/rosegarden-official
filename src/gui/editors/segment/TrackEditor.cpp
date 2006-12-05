@@ -701,8 +701,9 @@ void TrackEditor::dropEvent(QDropEvent* event)
     int trackPos = m_segmentCanvas->grid().getYBin(posInSegmentCanvas.y());
 
     timeT time =
-        m_segmentCanvas->grid().getRulerScale()->
-        getTimeForX(posInSegmentCanvas.x());
+//        m_segmentCanvas->grid().getRulerScale()->
+//        getTimeForX(posInSegmentCanvas.x());
+        m_segmentCanvas->grid().snapX(posInSegmentCanvas.x());
 
 
     if (QUriDrag::decode(event, uri)) {

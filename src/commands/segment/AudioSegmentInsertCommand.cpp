@@ -42,24 +42,22 @@
 namespace Rosegarden
 {
 
-AudioSegmentInsertCommand::AudioSegmentInsertCommand(
-    RosegardenGUIDoc *doc,
-    TrackId track,
-    timeT startTime,
-    AudioFileId audioFileId,
-    const RealTime &audioStartTime,
-    const RealTime &audioEndTime):
-        KNamedCommand(i18n("Create Segment")),
-        m_composition(&(doc->getComposition())),
-        m_studio(&(doc->getStudio())),
-        m_audioFileManager(&(doc->getAudioFileManager())),
-        m_segment(0),
-        m_track(track),
-        m_startTime(startTime),
-        m_audioFileId(audioFileId),
-        m_audioStartTime(audioStartTime),
-        m_audioEndTime(audioEndTime),
-        m_detached(false)
+AudioSegmentInsertCommand::AudioSegmentInsertCommand(RosegardenGUIDoc *doc,
+                                                     TrackId track,
+                                                     timeT startTime,
+                                                     AudioFileId audioFileId,
+                                                     const RealTime &audioStartTime,
+                                                     const RealTime &audioEndTime):
+    KNamedCommand(i18n("Create Segment")),
+    m_composition(&(doc->getComposition())),
+    m_audioFileManager(&(doc->getAudioFileManager())),
+    m_segment(0),
+    m_track(track),
+    m_startTime(startTime),
+    m_audioFileId(audioFileId),
+    m_audioStartTime(audioStartTime),
+    m_audioEndTime(audioEndTime),
+    m_detached(false)
 {}
 
 AudioSegmentInsertCommand::~AudioSegmentInsertCommand()

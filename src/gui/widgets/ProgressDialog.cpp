@@ -139,6 +139,7 @@ void ProgressDialog::slotCancel()
 {
     RG_DEBUG << "ProgressDialog::slotCancel()\n";
     KProgressDialog::slotCancel();
+    slotFreeze();
 }
 
 void ProgressDialog::slotCheckShow(int)

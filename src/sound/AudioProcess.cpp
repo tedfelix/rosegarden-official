@@ -2247,9 +2247,9 @@ AudioFileWriter::openRecordFile(InstrumentId id,
                                  channels,             // channels
                                  m_sampleRate,         // samples per second
                                  m_sampleRate *
-                                 bytesPerSample,   // bytes per second
-                                 bytesPerSample,       // bytes per sample
-                                 bitsPerSample);      // bits per sample
+                                 bytesPerSample,       // bytes per second
+                                 bytesPerSample,       // bytes per frame
+                                 bitsPerSample);       // bits per sample
 
             // open the file for writing
             //

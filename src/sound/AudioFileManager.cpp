@@ -298,6 +298,7 @@ AudioFileManager::removeFile(AudioFileId id)
         if ((*it)->getId() == id) {
             m_peakManager.removeAudioFile(*it);
             m_recordedAudioFiles.erase(*it);
+	    m_derivedAudioFiles.erase(*it);
             delete(*it);
             m_audioFiles.erase(it);
             return true;
@@ -504,6 +505,7 @@ AudioFileManager::clear()
             it != m_audioFiles.end();
             ++it) {
         m_recordedAudioFiles.erase(*it);
+	m_derivedAudioFiles.erase(*it);
         delete(*it);
     }
 
@@ -573,10 +575,70 @@ AudioFileManager::wasAudioFileRecentlyRecorded(AudioFileId id)
     return false;
 }
 
+bool
+AudioFileManager::wasAudioFileRecentlyDerived(AudioFileId id)
+{
+    AudioFile *file = getAudioFile(id);
+    if (file)
+        return (m_derivedAudioFiles.find(file) !=
+                m_derivedAudioFiles.end());
+    return false;
+}
+
 void
-AudioFileManager::resetRecentlyRecordedFiles()
+AudioFileManager::resetRecentlyCreatedFiles()
 {
     m_recordedAudioFiles.clear();
+    m_derivedAudioFiles.clear();
+}
+
+AudioFile *
+AudioFileManager::createDerivedAudioFile(AudioFileId source,
+					 const char *prefix)
+{
+    MutexLock lock (&_audioFileManagerLock);
+
+    AudioFile *sourceFile = getAudioFile(source);
+    if (!sourceFile) return 0;
+
+    AudioFileId newId = getFirstUnusedID();
+    QString fileName = "";
+
+    std::string sourceBase = sourceFile->getShortFilename();
+    if (sourceBase.length() > 4 && sourceBase.substr(0, 3) == "rg-") {
+	sourceBase = sourceBase.substr(3);
+    }
+    if (sourceBase.length() > 15) sourceBase = sourceBase.substr(0, 15);
+
+    while (fileName == "") {
+
+        fileName = QString("%1-%2-%3-%4.wav")
+	    .arg(prefix)
+	    .arg(sourceBase)
+	    .arg(QDateTime::currentDateTime().toString("yyyyMMdd-hhmmss"))
+	    .arg(newId + 1);
+
+        if (QFile(m_audioPath.c_str() + fileName).exists()) {
+            fileName = "";
+            ++newId;
+        }
+    }
+
+    // insert file into vector
+    WAVAudioFile *aF = 0;
+
+    try {
+        aF = new WAVAudioFile(newId,
+			      fileName.data(),
+			      m_audioPath + fileName.data());
+        m_audioFiles.push_back(aF);
+	m_derivedAudioFiles.insert(aF);
+    } catch (SoundFile::BadSoundFileException e) {
+        delete aF;
+        throw BadAudioPathException(e);
+    }
+
+    return aF;
 }
 
 AudioFile*
@@ -723,14 +785,11 @@ AudioFileManager::generatePreviews()
 // Attempt to stop a preview
 //
 void
-AudioFileManager::stopPreview()
+AudioFileManager::slotStopPreview()
 {
-    MutexLock lock (&_audioFileManagerLock)
-        ;
-
+    MutexLock lock (&_audioFileManagerLock);
     m_peakManager.stopPreview();
 }
-
 
 
 // Generate a preview for a specific audio file - say if

@@ -100,7 +100,6 @@ public:
 
 public slots:
     void slotAdd();
-    void slotAddCancel();
     void slotPlayPreview();
     void slotRename();
     void slotInsert();

@@ -377,7 +377,7 @@
         <Action name="edit_event_list"/>
         <Action name="quantize_selection"/>
         <Action name="repeat_quantize"/>
-        <Action name="rescale"/>
+<!--        <Action name="rescale"/> -->
         <Action name="split_by_pitch"/>
         <Action name="split_by_recording"/>
         <Action name="join_segments"/>

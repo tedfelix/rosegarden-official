@@ -23,8 +23,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_DISTRIBUTEAUDIOCOMMAND_H_
-#define _RG_DISTRIBUTEAUDIOCOMMAND_H_
+#ifndef _RG_AUDIOSEGMENTDISTRIBUTECOMMAND_H_
+#define _RG_AUDIOSEGMENTDISTRIBUTECOMMAND_H_
 
 #include "base/Selection.h"
 #include <kcommand.h>
@@ -44,23 +44,23 @@ class AudioFile;
 
 
 /**
- *
- * DistributeAudioCommand - Distribute an Audio Segment triggered
+ * AudioSegmentDistributeCommand - Distribute an Audio Segment triggered
  * against the MIDI Note ons in a SegmentSelection.
  *
+ * (I think this is actually unused --cc)
  */
-class DistributeAudioCommand : public KNamedCommand
+class AudioSegmentDistributeCommand : public KNamedCommand
 {
 public:
-    DistributeAudioCommand(Composition *comp,
-                           SegmentSelection &inputSelection,
-                           Segment *audioSegment);
+    AudioSegmentDistributeCommand(Composition *comp,
+                                  SegmentSelection &inputSelection,
+                                  Segment *audioSegment);
 
-    DistributeAudioCommand(Composition *comp,
-                           SegmentSelection &inputSelection,
-                           AudioFile *audioFile);
+    AudioSegmentDistributeCommand(Composition *comp,
+                                  SegmentSelection &inputSelection,
+                                  AudioFile *audioFile);
 
-    virtual ~DistributeAudioCommand();
+    virtual ~AudioSegmentDistributeCommand();
 
     static QString getGlobalName() 
         { return i18n("Distribute Audio Segments over MIDI"); }

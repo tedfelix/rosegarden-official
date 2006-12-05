@@ -623,9 +623,7 @@ AudioManagerDialog::slotRemove()
     }
     emit deleteSegments(selection);
 
-    if (m_doc->getAudioFileManager().wasAudioFileRecentlyRecorded(audioFile->getId())) {
-        m_doc->addOrphanedAudioFile(strtoqstr(audioFile->getFilename()));
-    }
+    m_doc->notifyAudioFileRemoval(id);
 
     m_doc->getAudioFileManager().removeFile(id);
 
@@ -774,9 +772,7 @@ AudioManagerDialog::slotRemoveAll()
     for (std::vector<AudioFile*>::const_iterator
             aIt = m_doc->getAudioFileManager().begin();
             aIt != m_doc->getAudioFileManager().end(); ++aIt) {
-        if (m_doc->getAudioFileManager().wasAudioFileRecentlyRecorded((*aIt)->getId())) {
-            m_doc->addOrphanedAudioFile(strtoqstr((*aIt)->getFilename()));
-        }
+        m_doc->notifyAudioFileRemoval((*aIt)->getId());
     }
 
     m_doc->getAudioFileManager().clear();
@@ -821,14 +817,8 @@ AudioManagerDialog::slotRemoveAllUnused()
     //
     for (std::vector<AudioFileId>::iterator dIt = toDelete.begin();
             dIt != toDelete.end(); ++dIt) {
-
-        if (m_doc->getAudioFileManager().wasAudioFileRecentlyRecorded(*dIt)) {
-            AudioFile *file = m_doc->getAudioFileManager().getAudioFile(*dIt);
-            if (file) {
-                m_doc->addOrphanedAudioFile(strtoqstr(file->getFilename()));
-            }
-        }
-
+        
+        m_doc->notifyAudioFileRemoval(*dIt);
         m_doc->getAudioFileManager().removeFile(*dIt);
         emit deleteAudioFile(*dIt);
     }
@@ -1084,10 +1074,9 @@ AudioManagerDialog::addFile(const KURL& kurl)
                                100,
                                this);
     connect(&progressDlg, SIGNAL(cancelClicked()),
-            this, SLOT(slotAddCancel()));
+            &m_doc->getAudioFileManager(), SLOT(slotStopPreview()));
 
-    CurrentProgressDialog::set
-        (&progressDlg);
+    CurrentProgressDialog::set(&progressDlg);
 
     QString newFilePath;
 
@@ -1139,7 +1128,7 @@ AudioManagerDialog::addFile(const KURL& kurl)
     }
 
     disconnect(&progressDlg, SIGNAL(cancelClicked()),
-               this, SLOT(slotAddCancel()));
+               &m_doc->getAudioFileManager(), SLOT(slotStopPreview()));
 
     slotPopulateFileList();
 
@@ -1147,14 +1136,6 @@ AudioManagerDialog::addFile(const KURL& kurl)
     emit addAudioFile(id);
 
     return true;
-}
-
-void
-AudioManagerDialog::slotAddCancel()
-{
-    RG_DEBUG << "AudioManagerDialog::slotAddCancel" << endl;
-    m_doc->getAudioFileManager().stopPreview();
-    CurrentProgressDialog::freeze();
 }
 
 void

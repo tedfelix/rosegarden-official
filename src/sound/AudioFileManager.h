@@ -156,10 +156,20 @@ public:
     //
     bool wasAudioFileRecentlyRecorded(AudioFileId id);
 
-    // Indicate that a new "session" has started from the point of view of
-    // recorded audio files (e.g. that the document has been saved)
+    // Return whether a file was created by derivation within this "session"
     //
-    void resetRecentlyRecordedFiles();
+    bool wasAudioFileRecentlyDerived(AudioFileId id);
+
+    // Indicate that a new "session" has started from the point of
+    // view of recorded and derived audio files (e.g. that the
+    // document has been saved)
+    //
+    void resetRecentlyCreatedFiles();
+    
+    // Create an empty file "derived from" the source (used by e.g. stretcher)
+    // 
+    AudioFile *createDerivedAudioFile(AudioFileId source,
+				      const char *prefix);
 
     // return the last file in the vector - the last created
     //
@@ -248,30 +258,31 @@ public:
     //
     PeakFileManager& getPeakFileManager() { return m_peakManager; }
 
-    // Cancel a running preview
-    //
-    void stopPreview();
-
 signals:
     void setProgress(int);
+
+public slots:
+    // Cancel a running preview
+    //
+    void slotStopPreview();
 
 private:
     std::string getFileInPath(const std::string &file);
 
     AudioFileId getFirstUnusedID();
 
-    std::vector<AudioFile*>                       m_audioFiles;
-    std::string                                   m_audioPath;
+    std::vector<AudioFile*> m_audioFiles;
+    std::string m_audioPath;
 
-    PeakFileManager                               m_peakManager;
+    PeakFileManager m_peakManager;
 
-    // All audio files are stored in m_audioFiles.  This additional
-    // set of pointers just refers to those that have been created by
-    // recording within the current session, and thus that the user
-    // may wish to remove at the end of the session if the document is
-    // not saved.
-    std::set<AudioFile*>                          m_recordedAudioFiles;
-
+    // All audio files are stored in m_audioFiles.  These additional
+    // sets of pointers just refer to those that have been created by
+    // recording or derivations within the current session, and thus
+    // that the user may wish to remove at the end of the session if
+    // the document is not saved.
+    std::set<AudioFile *> m_recordedAudioFiles;
+    std::set<AudioFile *> m_derivedAudioFiles;
 };
 
 }

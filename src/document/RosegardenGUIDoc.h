@@ -382,7 +382,13 @@ public:
     // doesn't want to keep it.  We can offer to delete these files
     // permanently when the document is saved.
     //
-    void addOrphanedAudioFile(QString fileName);
+    void addOrphanedRecordedAudioFile(QString fileName);
+    void addOrphanedDerivedAudioFile(QString fileName);
+
+    // Consider whether to orphan the given audio file which is about
+    // to be removed from the audio file manager.
+    //
+    void notifyAudioFileRemoval(AudioFileId id);
 
     /*
     void setAudioRecordLatency(const RealTime &latency)
@@ -462,10 +468,6 @@ public slots:
     void slotSetLoop(timeT s, timeT e) {setLoop(s,e);}
 
     void slotDocColoursChanged();
-
-    // Cancelling an audio preview
-    //
-    void slotPreviewCancel();
 
 signals:
     /**
@@ -696,7 +698,8 @@ protected:
 
     timeT m_recordStartTime;
 
-    std::vector<QString> m_orphanedAudioFiles;
+    std::vector<QString> m_orphanedRecordedAudioFiles;
+    std::vector<QString> m_orphanedDerivedAudioFiles;
 
     // Autosave period for this document in seconds
     //

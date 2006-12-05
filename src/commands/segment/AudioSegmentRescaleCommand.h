@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -23,53 +22,51 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_AUDIOSEGMENTINSERTCOMMAND_H_
-#define _RG_AUDIOSEGMENTINSERTCOMMAND_H_
+#ifndef _RG_AUDIOSEGMENTRESCALECOMMAND_H_
+#define _RG_AUDIOSEGMENTRESCALECOMMAND_H_
 
-#include "base/RealTime.h"
-#include "base/Track.h"
-#include "sound/AudioFile.h"
 #include <kcommand.h>
+#include <qstring.h>
 #include "base/Event.h"
-
+#include <klocale.h>
 
 namespace Rosegarden
 {
 
-class Studio;
 class Segment;
-class RosegardenGUIDoc;
-class Composition;
 class AudioFileManager;
+class AudioFileTimeStretcher;
+class RosegardenGUIDoc;
+class ProgressDialog;
 
-
-class AudioSegmentInsertCommand : public KNamedCommand
+class AudioSegmentRescaleCommand : public KNamedCommand
 {
 public:
-    AudioSegmentInsertCommand(RosegardenGUIDoc *doc,
-                              TrackId track,
-                              timeT startTime,
-                              AudioFileId audioFileId,
-                              const RealTime &audioStartTime,
-                              const RealTime &audioEndTime);
-    virtual ~AudioSegmentInsertCommand();
-
-    Segment *getNewSegment() { return m_segment; }
+    AudioSegmentRescaleCommand(RosegardenGUIDoc *doc,
+                               Segment *segment, float ratio);
+    virtual ~AudioSegmentRescaleCommand();
 
     virtual void execute();
     virtual void unexecute();
+
+    AudioFileTimeStretcher *getStretcher() { return m_stretcher; }
+    int getNewAudioFileId() const { return m_fid; }
+
+    void connectProgressDialog(ProgressDialog *dlg);
+    void disconnectProgressDialog(ProgressDialog *dlg);
     
+    static QString getGlobalName() { return i18n("Stretch or S&quash..."); }
+
 private:
-    Composition      *m_composition;
-    AudioFileManager *m_audioFileManager;
-    Segment          *m_segment;
-    int               m_track;
-    timeT             m_startTime;
-    AudioFileId       m_audioFileId;
-    RealTime          m_audioStartTime;
-    RealTime          m_audioEndTime;
-    bool              m_detached;
+    AudioFileManager *m_afm;
+    AudioFileTimeStretcher *m_stretcher;
+    Segment *m_segment;
+    Segment *m_newSegment;
+    int m_fid;
+    float m_ratio;
+    bool m_detached;
 };
+
 
 
 }

@@ -34,6 +34,7 @@
 #include "base/Track.h"
 #include "base/SnapGrid.h"
 #include "commands/segment/AudioSegmentResizeFromStartCommand.h"
+#include "commands/segment/AudioSegmentRescaleCommand.h"
 #include "commands/segment/SegmentReconfigureCommand.h"
 #include "commands/segment/SegmentResizeFromStartCommand.h"
 #include "CompositionItemHelper.h"
@@ -42,6 +43,7 @@
 #include "document/RosegardenGUIDoc.h"
 #include "gui/general/BaseTool.h"
 #include "gui/general/RosegardenCanvasView.h"
+#include "gui/widgets/ProgressDialog.h"
 #include "SegmentTool.h"
 #include <kcommand.h>
 #include <kmessagebox.h>
@@ -108,9 +110,11 @@ void SegmentResizer::handleMouseButtonPress(QMouseEvent *e)
     }
 }
 
-void SegmentResizer::handleMouseButtonRelease(QMouseEvent*)
+void SegmentResizer::handleMouseButtonRelease(QMouseEvent *e)
 {
     RG_DEBUG << "SegmentResizer::handleMouseButtonRelease" << endl;
+
+    bool rescale = (e->state() & Qt::ControlButton);
 
     if (m_currentItem) {
 
@@ -118,26 +122,76 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent*)
 
         // We only want to snap the end that we were actually resizing.
 
+        timeT oldStartTime, oldEndTime;
+        
+        oldStartTime = segment->getStartTime();
+        oldEndTime = segment->getEndMarkerTime();
+
         timeT newStartTime, newEndTime;
 
         if (m_resizeStart) {
             newStartTime = CompositionItemHelper::getStartTime
                            (m_currentItem, m_canvas->grid());
-            newEndTime = segment->getEndMarkerTime();
+            newEndTime = oldEndTime;
         } else {
             newEndTime = CompositionItemHelper::getEndTime
                          (m_currentItem, m_canvas->grid());
-            newStartTime = segment->getStartTime();
+            newStartTime = oldStartTime;
         }
 
         if (changeMade()) {
 
             if (m_resizeStart && (newStartTime < newEndTime)) {
 
+                //!!! deal with rescale
+
                 if (segment->getType() == Segment::Audio) {
                     addCommandToHistory(new AudioSegmentResizeFromStartCommand(segment, newStartTime));
                 } else {
                     addCommandToHistory(new SegmentResizeFromStartCommand(segment, newStartTime));
+                }
+
+            } else if (rescale) {
+
+                if (segment->getType() == Segment::Audio) {
+
+                    //!!! too much stuff to be here
+
+                    float ratio = float(newEndTime - newStartTime) /
+                        float(oldEndTime - oldStartTime);
+
+                    AudioSegmentRescaleCommand *command =
+                        new AudioSegmentRescaleCommand(m_doc, segment, ratio);
+
+                    ProgressDialog progressDlg
+                        (i18n("Rescaling audio file..."), 100, 0);
+                    progressDlg.setAutoClose(false);
+                    progressDlg.setAutoReset(false);
+                    progressDlg.show();
+
+                    command->connectProgressDialog(&progressDlg);
+                    
+                    addCommandToHistory(command);
+
+                    progressDlg.setLabel(i18n("Generating audio preview..."));
+
+                    command->disconnectProgressDialog(&progressDlg);
+
+                    connect(&m_doc->getAudioFileManager(), SIGNAL(setProgress(int)),
+                            progressDlg.progressBar(), SLOT(setValue(int)));
+                    connect(&progressDlg, SIGNAL(cancelClicked()),
+                            &m_doc->getAudioFileManager(), SLOT(slotStopPreview()));
+
+                    int fid = command->getNewAudioFileId();
+                    if (fid >= 0) {
+                        RosegardenGUIApp::self()->slotAddAudioFile(fid);
+                        m_doc->getAudioFileManager().generatePreview(fid);
+                    }
+
+                } else {
+                    
+                    //!!! handle non-audio rescale
+
                 }
 
             } else {
