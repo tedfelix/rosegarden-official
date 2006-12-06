@@ -97,8 +97,13 @@ void MatrixEraser::handleLeftButtonPress(timeT,
 void MatrixEraser::ready()
 {
     m_mParentView->setCanvasCursor(Qt::pointingHandCursor);
+    setBasicContextHelp();
 }
 
+void MatrixEraser::setBasicContextHelp()
+{
+    setContextHelp(i18n("Click on a note to delete it"));
+}
 
 const QString MatrixEraser::ToolName    = "eraser";
 

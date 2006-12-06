@@ -91,6 +91,8 @@ protected slots:
 protected:
     MatrixMover(MatrixView*);
 
+    void setBasicContextHelp();
+
     timeT getDragTime(QMouseEvent *e, timeT candidate);
 
     MatrixElement* m_currentElement;
