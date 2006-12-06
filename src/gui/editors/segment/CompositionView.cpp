@@ -144,8 +144,6 @@ CompositionView::CompositionView(RosegardenGUIDoc* doc,
 
     //     connect(this, SIGNAL(contentsMoving(int, int)),
     //             this, SLOT(slotContentsMoving(int, int)));
-    connect(model, SIGNAL(selectedSegments(const SegmentSelection &)),
-            this, SIGNAL(selectedSegments(const SegmentSelection &)));
 
     connect(model, SIGNAL(needContentUpdate()),
             this, SLOT(slotUpdateSegmentsDrawBuffer()));

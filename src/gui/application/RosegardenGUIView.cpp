@@ -923,15 +923,14 @@ void RosegardenGUIView::slotSelectTrackSegments(int trackId)
                                      getInstrument());
 
 
-    slotSetSelectedSegments(segments);
+    slotPropagateSegmentSelection(segments);
 
     // inform
     emit segmentsSelected(segments);
     emit compositionStateUpdate();
 }
 
-void RosegardenGUIView::slotSetSelectedSegments(
-    const SegmentSelection &segments)
+void RosegardenGUIView::slotPropagateSegmentSelection(const SegmentSelection &segments)
 {
     // Send this signal to the GUI to activate the correct tool
     // on the toolbar so that we have a SegmentSelector object
@@ -1365,7 +1364,7 @@ RosegardenGUIView::slotAddAudioSegment(AudioFileId audioId,
     if (newSegment) {
         SegmentSelection selection;
         selection.insert(newSegment);
-        slotSetSelectedSegments(selection);
+        slotPropagateSegmentSelection(selection);
         emit segmentsSelected(selection);
     }
 }
@@ -1390,7 +1389,7 @@ RosegardenGUIView::slotAddAudioSegmentCurrentPosition(AudioFileId audioFileId,
     if (newSegment) {
         SegmentSelection selection;
         selection.insert(newSegment);
-        slotSetSelectedSegments(selection);
+        slotPropagateSegmentSelection(selection);
         emit segmentsSelected(selection);
     }
 }

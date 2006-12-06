@@ -205,8 +205,6 @@ signals:
     void audioSegmentAutoSplit(Segment*);
     void editRepeat(Segment*, timeT);
 
-    void selectedSegments(const SegmentSelection &);
-    
 protected:
     virtual bool event(QEvent *);
 

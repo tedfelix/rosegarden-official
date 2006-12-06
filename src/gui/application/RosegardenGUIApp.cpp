@@ -3451,7 +3451,7 @@ void RosegardenGUIApp::slotDeleteTrack()
         SegmentSelection selection = m_view->getSelection();
         m_view->slotSelectTrackSegments(trackId);
         m_view->getTrackEditor()->slotDeleteSelectedSegments();
-        m_view->slotSetSelectedSegments(selection);
+        m_view->slotPropagateSegmentSelection(selection);
 
     } else {
 
@@ -5992,7 +5992,7 @@ RosegardenGUIApp::slotAudioManager()
     connect(m_audioManagerDialog,
             SIGNAL(segmentsSelected(const SegmentSelection&)),
             m_view,
-            SLOT(slotSetSelectedSegments(const SegmentSelection&)));
+            SLOT(slotPropagateSegmentSelection(const SegmentSelection&)));
 
     // and from us to dialog
     connect(this, SIGNAL(segmentsSelected(const SegmentSelection&)),
@@ -6117,7 +6117,7 @@ RosegardenGUIApp::slotDeleteAudioFile(unsigned int id)
 void
 RosegardenGUIApp::slotDeleteSegments(const SegmentSelection &selection)
 {
-    m_view->slotSetSelectedSegments(selection);
+    m_view->slotPropagateSegmentSelection(selection);
     slotDeleteSelectedSegments();
 }
 
