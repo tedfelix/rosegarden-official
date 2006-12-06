@@ -290,7 +290,7 @@ TrackEditor::init(QWidget* rosegardenguiview)
 
     connect(this, SIGNAL(needUpdate()), m_segmentCanvas, SLOT(slotUpdateSegmentsDrawBuffer()));
 
-    connect(m_segmentCanvas,
+    connect(m_segmentCanvas->getModel(),
             SIGNAL(selectedSegments(const SegmentSelection &)),
             rosegardenguiview,
             SLOT(slotSelectedSegments(const SegmentSelection &)));

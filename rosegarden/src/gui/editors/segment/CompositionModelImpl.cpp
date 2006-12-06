@@ -787,7 +787,7 @@ void CompositionModelImpl::setSelected(const itemcontainer& items)
 
 void CompositionModelImpl::setSelected(const Segment* segment, bool selected)
 {
-    RG_DEBUG << "CompositionModelImpl::setSelected" << endl;
+    RG_DEBUG << "CompositionModelImpl::setSelected " << segment << " - " << selected << endl;
     if (selected) {
         if (!isSelected(segment))
             m_selectedSegments.insert(const_cast<Segment*>(segment));

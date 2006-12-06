@@ -183,7 +183,7 @@ public slots:
 
     // And this one from the user interface going down
     //
-    void slotSetSelectedSegments(const SegmentSelection &segments);
+    void slotPropagateSegmentSelection(const SegmentSelection &segments);
 
     void slotShowRulers(bool);
 

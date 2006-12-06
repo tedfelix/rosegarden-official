@@ -72,8 +72,11 @@ const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(con
 
         if (sr.intersects(rect)) {
             bool tmpSelected = isTmpSelected(s),
-                               pTmpSelected = wasTmpSelected(s);
+                 pTmpSelected = wasTmpSelected(s);
 
+//            RG_DEBUG << "CompositionModelImpl::getRectanglesIn: segment " << s 
+//                     << " selected : " << isSelected(s) << " - tmpSelected : " << isTmpSelected(s) << endl;
+                       
             if (isSelected(s) || isTmpSelected(s) || sr.intersects(m_selectionRect)) {
                 sr.setSelected(true);
             }
