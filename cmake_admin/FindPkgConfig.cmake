@@ -193,9 +193,9 @@ macro(_pkg_check_modules_internal _is_required _is_silent _prefix)
     # give out status message telling checked module
     if (NOT ${_is_silent})
       if (_pkg_check_modules_cnt EQUAL 1)
-	message(STATUS "checking for module '${_pkg_check_modules_list}'")
+        message(STATUS "checking for module '${_pkg_check_modules_list}'")
       else(_pkg_check_modules_cnt EQUAL 1)
-	message(STATUS "checking for modules '${_pkg_check_modules_list}'")
+        message(STATUS "checking for modules '${_pkg_check_modules_list}'")
       endif(_pkg_check_modules_cnt EQUAL 1)
     endif(NOT ${_is_silent})
     
@@ -208,26 +208,26 @@ macro(_pkg_check_modules_internal _is_required _is_silent _prefix)
 
       # check whether version is given
       if (_pkg_check_modules_pkg MATCHES ".*(>=|=|<=).*")
-	string(REGEX REPLACE "(.*[^><])(>=|=|<=)(.*)" "\\1" _pkg_check_modules_pkg_name "${_pkg_check_modules_pkg}")
-	string(REGEX REPLACE "(.*[^><])(>=|=|<=)(.*)" "\\2" _pkg_check_modules_pkg_op   "${_pkg_check_modules_pkg}")
-	string(REGEX REPLACE "(.*[^><])(>=|=|<=)(.*)" "\\3" _pkg_check_modules_pkg_ver  "${_pkg_check_modules_pkg}")
+        string(REGEX REPLACE "(.*[^><])(>=|=|<=)(.*)" "\\1" _pkg_check_modules_pkg_name "${_pkg_check_modules_pkg}")
+        string(REGEX REPLACE "(.*[^><])(>=|=|<=)(.*)" "\\2" _pkg_check_modules_pkg_op   "${_pkg_check_modules_pkg}")
+        string(REGEX REPLACE "(.*[^><])(>=|=|<=)(.*)" "\\3" _pkg_check_modules_pkg_ver  "${_pkg_check_modules_pkg}")
       else(_pkg_check_modules_pkg MATCHES ".*(>=|=|<=).*")
-	set(_pkg_check_modules_pkg_name "${_pkg_check_modules_pkg}")
-	set(_pkg_check_modules_pkg_op)
-	set(_pkg_check_modules_pkg_ver)
+        set(_pkg_check_modules_pkg_name "${_pkg_check_modules_pkg}")
+        set(_pkg_check_modules_pkg_op)
+        set(_pkg_check_modules_pkg_ver)
       endif(_pkg_check_modules_pkg MATCHES ".*(>=|=|<=).*")
 
       # handle the operands
       if (_pkg_check_modules_pkg_op STREQUAL ">=")
-	list(APPEND _pkg_check_modules_exist_query --atleast-version)
+        list(APPEND _pkg_check_modules_exist_query --atleast-version)
       endif(_pkg_check_modules_pkg_op STREQUAL ">=")
 
       if (_pkg_check_modules_pkg_op STREQUAL "=")
-	list(APPEND _pkg_check_modules_exist_query --exact-version)
+        list(APPEND _pkg_check_modules_exist_query --exact-version)
       endif(_pkg_check_modules_pkg_op STREQUAL "=")
       
       if (_pkg_check_modules_pkg_op STREQUAL "<=")
-	list(APPEND _pkg_check_modules_exist_query --max-version)
+        list(APPEND _pkg_check_modules_exist_query --max-version)
       endif(_pkg_check_modules_pkg_op STREQUAL "<=")
 
       # create the final query which is of the format:
@@ -236,9 +236,9 @@ macro(_pkg_check_modules_internal _is_required _is_silent _prefix)
       # * --max-version <version> <pkg-name>
       # * --exists <pkg-name>
       if (_pkg_check_modules_pkg_op)
-	list(APPEND _pkg_check_modules_exist_query "${_pkg_check_modules_pkg_ver}")
+        list(APPEND _pkg_check_modules_exist_query "${_pkg_check_modules_pkg_ver}")
       else(_pkg_check_modules_pkg_op)
-	list(APPEND _pkg_check_modules_exist_query --exists)
+        list(APPEND _pkg_check_modules_exist_query --exists)
       endif(_pkg_check_modules_pkg_op)
 
       _pkgconfig_unset(${_prefix}_${_pkg_check_modules_pkg_name}_VERSION)
@@ -251,23 +251,23 @@ macro(_pkg_check_modules_internal _is_required _is_silent _prefix)
 
       # execute the query
       execute_process(
-	COMMAND ${PKG_CONFIG_EXECUTABLE} ${_pkg_check_modules_exist_query}
-	RESULT_VARIABLE _pkgconfig_retval)
+        COMMAND ${PKG_CONFIG_EXECUTABLE} ${_pkg_check_modules_exist_query}
+        RESULT_VARIABLE _pkgconfig_retval)
 
       # evaluate result and tell failures
       if (_pkgconfig_retval)
-	if(NOT ${_is_silent})
-	  message(STATUS "  package '${_pkg_check_modules_pkg}' not found")
-	endif(NOT ${_is_silent})
+        if(NOT ${_is_silent})
+          message(STATUS "  package '${_pkg_check_modules_pkg}' not found")
+        endif(NOT ${_is_silent})
 
-	set(_pkg_check_modules_failed 1)
+        set(_pkg_check_modules_failed 1)
       endif(_pkgconfig_retval)
     endforeach(_pkg_check_modules_pkg)
 
     if(_pkg_check_modules_failed)
       # fail when requested
       if (${_is_required})
-	message(SEND_ERROR "A required package was not found")
+        message(SEND_ERROR "A required package was not found")
       endif (${_is_required})
     else(_pkg_check_modules_failed)
       # when we are here, we checked whether requested modules
@@ -278,19 +278,19 @@ macro(_pkg_check_modules_internal _is_required _is_silent _prefix)
 
       # iterate through all modules again and set individual variables
       foreach (_pkg_check_modules_pkg ${_pkg_check_modules_packages})
-	# handle case when there is only one package required
-	if (pkg_count EQUAL 1)
-	  set(_pkg_check_prefix "${_prefix}")
-	else(pkg_count EQUAL 1)
-	  set(_pkg_check_prefix "${_prefix}_${_pkg_check_modules_pkg}")
-	endif(pkg_count EQUAL 1)
-	
-	_pkgconfig_invoke(${_pkg_check_modules_pkg} "${_pkg_check_prefix}" VERSION    ""   --modversion )
-	_pkgconfig_invoke(${_pkg_check_modules_pkg} "${_pkg_check_prefix}" PREFIX     ""   --variable=prefix )
-	_pkgconfig_invoke(${_pkg_check_modules_pkg} "${_pkg_check_prefix}" INCLUDEDIR ""   --variable=includedir )
-	_pkgconfig_invoke(${_pkg_check_modules_pkg} "${_pkg_check_prefix}" LIBDIR     ""   --variable=libdir )
+        # handle case when there is only one package required
+        if (pkg_count EQUAL 1)
+          set(_pkg_check_prefix "${_prefix}")
+        else(pkg_count EQUAL 1)
+          set(_pkg_check_prefix "${_prefix}_${_pkg_check_modules_pkg}")
+        endif(pkg_count EQUAL 1)
+        
+        _pkgconfig_invoke(${_pkg_check_modules_pkg} "${_pkg_check_prefix}" VERSION    ""   --modversion )
+        _pkgconfig_invoke(${_pkg_check_modules_pkg} "${_pkg_check_prefix}" PREFIX     ""   --variable=prefix )
+        _pkgconfig_invoke(${_pkg_check_modules_pkg} "${_pkg_check_prefix}" INCLUDEDIR ""   --variable=includedir )
+        _pkgconfig_invoke(${_pkg_check_modules_pkg} "${_pkg_check_prefix}" LIBDIR     ""   --variable=libdir )
 
-	message(STATUS "  found ${_pkg_check_modules_pkg}, version ${_pkgconfig_VERSION}")
+        message(STATUS "  found ${_pkg_check_modules_pkg}, version ${_pkgconfig_VERSION}")
       endforeach(_pkg_check_modules_pkg)
 
       # set variables which are combined for multiple modules
@@ -321,7 +321,9 @@ macro(pkg_check_modules _prefix _module0)
     _pkgconfig_parse_options   (_pkg_modules _pkg_is_required "${_module0}" ${ARGN})
     _pkg_check_modules_internal("${_pkg_is_required}" 0 "${_prefix}" ${_pkg_modules})
 
-    _pkgconfig_set(__pkg_config_checked_${_prefix} ${PKG_CONFIG_VERSION})
+    if(${_prefix}_FOUND)
+      _pkgconfig_set(__pkg_config_checked_${_prefix} ${PKG_CONFIG_VERSION})
+    endif(${_prefix}_FOUND)
   endif(NOT DEFINED __pkg_config_checked_${_prefix} OR __pkg_config_checked_${_prefix} LESS ${PKG_CONFIG_VERSION})
 endmacro(pkg_check_modules)
 
@@ -337,21 +339,22 @@ macro(pkg_search_module _prefix _module0)
     # iterate through all modules and stop at the first working one.
     foreach(_pkg_alt ${_pkg_modules_alt})
       if(NOT _pkg_modules_found)
-	_pkg_check_modules_internal(0 1 "${_prefix}" "${_pkg_alt}")
+        _pkg_check_modules_internal(0 1 "${_prefix}" "${_pkg_alt}")
       endif(NOT _pkg_modules_found)
 
       if (${_prefix}_FOUND)
-	set(_pkg_modules_found 1)
+        set(_pkg_modules_found 1)
       endif(${_prefix}_FOUND)
     endforeach(_pkg_alt)
 
     if (NOT ${_prefix}_FOUND)
       if(${_pkg_is_required})
-	message(SEND_ERROR "None of the required '${_pkg_modules_alt}' found")
+        message(SEND_ERROR "None of the required '${_pkg_modules_alt}' found")
       endif(${_pkg_is_required})
+    else (NOT ${_prefix}_FOUND)
+      _pkgconfig_set(__pkg_config_checked_${_prefix} ${PKG_CONFIG_VERSION})
     endif(NOT ${_prefix}_FOUND)
-    
-    _pkgconfig_set(__pkg_config_checked_${_prefix} ${PKG_CONFIG_VERSION})
+
   endif(NOT DEFINED __pkg_config_checked_${_prefix} OR __pkg_config_checked_${_prefix} LESS ${PKG_CONFIG_VERSION})  
 endmacro(pkg_search_module)
 
