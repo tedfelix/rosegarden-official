@@ -59,6 +59,8 @@ public:
 protected:
     MatrixEraser(MatrixView*);
 
+    void setBasicContextHelp();
+
     MatrixStaff* m_currentStaff;
 };
 

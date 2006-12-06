@@ -437,6 +437,18 @@ void MatrixMover::slotMatrixScrolled(int newX, int newY)
     handleMouseMove(newTime, newPitch, 0);
 }
 
+void MatrixMover::setBasicContextHelp()
+{
+    EventSelection *selection = m_mParentView->getCurrentSelection();
+    if (!selection) {
+        setContextHelp(i18n("Click and drag to move a note; hold Ctrl as well to copy it"));
+    } else if (selection->getAddedEvents() > 1) {
+        setContextHelp(i18n("Click and drag to move selected notes; hold Ctrl as well to copy them"));
+    } else {
+        setContextHelp(i18n("Click and drag to move selected note; hold Ctrl as well to copy it"));
+    }
+}
+
 const QString MatrixMover::ToolName = "mover";
 
 }

@@ -146,6 +146,8 @@ signals:
 protected:
     MatrixSelector(MatrixView*);
 
+    void setBasicContextHelp();
+
     void setViewCurrentSelection();
     
     //--------------- Data members ---------------------------------
