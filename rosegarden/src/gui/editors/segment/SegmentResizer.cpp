@@ -70,7 +70,7 @@ void SegmentResizer::ready()
     m_canvas->viewport()->setCursor(Qt::sizeHorCursor);
     connect(m_canvas, SIGNAL(contentsMoving (int, int)),
             this, SLOT(slotCanvasScrolled(int, int)));
-
+    setBasicContextHelp();
 }
 
 void SegmentResizer::stow()
@@ -217,14 +217,25 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent *e)
     m_canvas->updateContents();
     setChangeMade(false);
     m_currentItem = CompositionItem();
+    setBasicContextHelp();
 }
 
 int SegmentResizer::handleMouseMove(QMouseEvent *e)
 {
     //     RG_DEBUG << "SegmentResizer::handleMouseMove" << endl;
 
-    if (!m_currentItem)
+    if (!m_currentItem) {
+        setBasicContextHelp();
         return RosegardenCanvasView::NoFollow;
+    }
+
+    bool rescale = (e->state() & Qt::ControlButton);
+
+    if (rescale) {
+        setContextHelp(i18n("Hold Shift to avoid snapping to beat grid"));
+    } else {
+        setContextHelp(i18n("Hold Shift to avoid snapping to beat grid; hold Ctrl as well to rescale contents"));
+    }
 
     Segment* segment = CompositionItemHelper::getSegment(m_currentItem);
 
@@ -339,6 +350,11 @@ bool SegmentResizer::cursorIsCloseEnoughToEdge(const CompositionItem& p, const Q
         return false;
     }
 }
+
+void SegmentResizer::setBasicContextHelp()
+{
+    setContextHelp(i18n("Click and drag to resize a segment; hold Ctrl as well to rescale its contents"));
+}    
 
 const QString SegmentResizer::ToolName  = "segmentresizer";
 

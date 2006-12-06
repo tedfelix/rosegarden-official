@@ -76,7 +76,7 @@ void SegmentSelector::ready()
     m_canvas->viewport()->setCursor(Qt::arrowCursor);
     connect(m_canvas, SIGNAL(contentsMoving (int, int)),
             this, SLOT(slotCanvasScrolled(int, int)));
-
+    setContextHelp(i18n("Click and drag to select segments"));
 }
 
 void SegmentSelector::stow()
@@ -109,13 +109,11 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
 
     if (item) {
 
-        // Ten percent of the width of the SegmentItem
+        // Fifteen percent of the width of the SegmentItem, up to 10px
         //
         int threshold = int(float(item->rect().width()) * 0.15);
-        if (threshold == 0)
-            threshold = 1;
-        if (threshold > 10)
-            threshold = 10;
+        if (threshold == 0) threshold = 1;
+        if (threshold > 10) threshold = 10;
 
         bool start = false;
 
@@ -281,15 +279,17 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
     m_selectionMoveStarted = false;
 
     m_currentItem = CompositionItem();
+
+    setContextHelpFor(e->pos());
 }
 
 int
 SegmentSelector::handleMouseMove(QMouseEvent *e)
 {
-    //     RG_DEBUG << "SegmentSelector::handleMouseMove\n";
-
-    if (!m_buttonPressed)
-        return RosegardenCanvasView::FollowHorizontal | RosegardenCanvasView::FollowVertical;
+    if (!m_buttonPressed) {
+        setContextHelpFor(e->pos());
+        return RosegardenCanvasView::NoFollow;
+    }
 
     if (m_dispatchTool) {
         return m_dispatchTool->handleMouseMove(e);
@@ -352,6 +352,9 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
     m_canvas->setSnapGrain(true);
 
     if (m_canvas->getModel()->isSelected(m_currentItem)) {
+
+        setContextHelp(i18n("Hold Shift to avoid snapping to beat grid"));
+
         // 	RG_DEBUG << "SegmentSelector::handleMouseMove: current item is selected\n";
 
         if (!m_selectionMoveStarted) { // start move on selected items only once
@@ -443,6 +446,38 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
     }
 
     return RosegardenCanvasView::FollowHorizontal | RosegardenCanvasView::FollowVertical;
+}
+
+void SegmentSelector::setContextHelpFor(QPoint p)
+{
+    CompositionItem item = m_canvas->getFirstItemAt(p);
+
+    if (!item) {
+        setContextHelp(i18n("Click and drag to select segments; middle-click and drag to draw an empty segment"));
+
+    } else {
+
+        // Same logic as in handleMouseButtonPress to establish
+        // whether we'd be moving or resizing
+
+        int threshold = int(float(item->rect().width()) * 0.15);
+        if (threshold == 0) threshold = 1;
+        if (threshold > 10) threshold = 10;
+        bool start = false;
+
+        if ((!m_segmentAddMode ||
+             !m_canvas->getModel()->haveSelection()) &&
+            SegmentResizer::cursorIsCloseEnoughToEdge(item, p,
+                                                      threshold, start)) {
+            setContextHelp(i18n("Click and drag to resize a segment; hold Ctrl as well to rescale its contents"));
+        } else {
+            if (m_canvas->getModel()->haveMultipleSelection()) {
+                setContextHelp(i18n("Click and drag to move segments; hold Ctrl as well to copy them"));
+            } else {
+                setContextHelp(i18n("Click and drag to move segment; hold Ctrl as well to copy it"));
+            }
+        }
+    }
 }
 
 const QString SegmentSelector::ToolName = "segmentselector";

@@ -34,6 +34,7 @@
 #include <kcommand.h>
 #include <qpoint.h>
 #include <qstring.h>
+#include <klocale.h>
 
 
 namespace Rosegarden

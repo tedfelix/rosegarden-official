@@ -48,6 +48,7 @@
 #include <qpoint.h>
 #include <qrect.h>
 #include <qstring.h>
+#include <klocale.h>
 
 
 namespace Rosegarden
@@ -64,7 +65,7 @@ void SegmentMover::ready()
     m_canvas->viewport()->setCursor(Qt::sizeAllCursor);
     connect(m_canvas, SIGNAL(contentsMoving (int, int)),
             this, SLOT(slotCanvasScrolled(int, int)));
-
+    setBasicContextHelp();
 }
 
 void SegmentMover::stow()
@@ -192,103 +193,114 @@ void SegmentMover::handleMouseButtonRelease(QMouseEvent*)
 
     setChangeMade(false);
     m_currentItem = CompositionItem();
+
+    setBasicContextHelp();
 }
 
 int SegmentMover::handleMouseMove(QMouseEvent *e)
 {
     m_canvas->setSnapGrain(true);
-    if (m_currentItem) {
-        CompositionModel::itemcontainer& changingItems = m_canvas->getModel()->getChangingItems();
 
-        //         RG_DEBUG << "SegmentMover::handleMouseMove : nb changingItems = "
-        //                  << changingItems.size() << endl;
-
-        CompositionModel::itemcontainer::iterator it;
-        int guideX = 0;
-        int guideY = 0;
-        QRect updateRect;
-
-        for (it = changingItems.begin();
-                it != changingItems.end();
-                it++) {
-            //             it->second->showRepeatRect(false);
-
-            int dx = e->pos().x() - m_clickPoint.x(),
-                     dy = e->pos().y() - m_clickPoint.y();
-
-            const int inertiaDistance = m_canvas->grid().getYSnap() / 3;
-            if (!m_passedInertiaEdge &&
-                    (dx < inertiaDistance && dx > -inertiaDistance) &&
-                    (dy < inertiaDistance && dy > -inertiaDistance)) {
-                return RosegardenCanvasView::NoFollow;
-            } else {
-                m_passedInertiaEdge = true;
-            }
-
-            timeT newStartTime = m_canvas->grid().snapX((*it)->savedRect().x() + dx);
-
-            int newX = int(m_canvas->grid().getRulerScale()->getXForTime(newStartTime));
-            int newY = m_canvas->grid().snapY((*it)->savedRect().y() + dy);
-            // Make sure we don't set a non-existing track
-            if (newY < 0) {
-                newY = 0;
-            }
-            int trackPos = m_canvas->grid().getYBin(newY);
-
-            //             RG_DEBUG << "SegmentMover::handleMouseMove: orig y "
-            //                      << (*it)->savedRect().y()
-            //                      << ", dy " << dy << ", newY " << newY
-            //                      << ", track " << track << endl;
-
-            // Make sure we don't set a non-existing track (c'td)
-            // TODO: make this suck less. Either the tool should
-            // not allow it in the first place, or we automatically
-            // create new tracks - might make undo very tricky though
-            //
-            if (trackPos >= m_doc->getComposition().getNbTracks())
-                trackPos = m_doc->getComposition().getNbTracks() - 1;
-
-            newY = m_canvas->grid().getYBinCoordinate(trackPos);
-
-            //             RG_DEBUG << "SegmentMover::handleMouseMove: moving to "
-            //                      << newX << "," << newY << endl;
-
-            updateRect |= (*it)->rect();
-            (*it)->moveTo(newX, newY);
-            updateRect |= (*it)->rect();
-            setChangeMade(true);
-        }
-
-        if (changeMade())
-            m_canvas->getModel()->signalContentChange();
-
-        guideX = m_currentItem->rect().x();
-        guideY = m_currentItem->rect().y();
-
-        m_canvas->setGuidesPos(guideX, guideY);
-
-        timeT currentItemStartTime = m_canvas->grid().snapX(m_currentItem->rect().x());
-
-        Composition &comp = m_doc->getComposition();
-        RealTime time =
-            comp.getElapsedRealTime(currentItemStartTime);
-        QString ms;
-        ms.sprintf("%03d", time.msec());
-
-        int bar, beat, fraction, remainder;
-        comp.getMusicalTimeForAbsoluteTime(currentItemStartTime, bar, beat, fraction, remainder);
-
-        QString posString = QString("%1.%2s (%3, %4, %5)")
-                            .arg(time.sec).arg(ms)
-                            .arg(bar + 1).arg(beat).arg(fraction);
-
-        m_canvas->setTextFloat(guideX + 10, guideY - 30, posString);
-        m_canvas->updateContents();
-
-        return RosegardenCanvasView::FollowHorizontal | RosegardenCanvasView::FollowVertical;
+    if (!m_currentItem) {
+        setBasicContextHelp();
+        return RosegardenCanvasView::NoFollow;
     }
 
-    return RosegardenCanvasView::NoFollow;
+    setContextHelp(i18n("Hold Shift to avoid snapping to beat grid"));
+
+    CompositionModel::itemcontainer& changingItems = m_canvas->getModel()->getChangingItems();
+
+    //         RG_DEBUG << "SegmentMover::handleMouseMove : nb changingItems = "
+    //                  << changingItems.size() << endl;
+
+    CompositionModel::itemcontainer::iterator it;
+    int guideX = 0;
+    int guideY = 0;
+    QRect updateRect;
+
+    for (it = changingItems.begin();
+         it != changingItems.end();
+         it++) {
+        //             it->second->showRepeatRect(false);
+
+        int dx = e->pos().x() - m_clickPoint.x(),
+            dy = e->pos().y() - m_clickPoint.y();
+
+        const int inertiaDistance = m_canvas->grid().getYSnap() / 3;
+        if (!m_passedInertiaEdge &&
+            (dx < inertiaDistance && dx > -inertiaDistance) &&
+            (dy < inertiaDistance && dy > -inertiaDistance)) {
+            return RosegardenCanvasView::NoFollow;
+        } else {
+            m_passedInertiaEdge = true;
+        }
+
+        timeT newStartTime = m_canvas->grid().snapX((*it)->savedRect().x() + dx);
+
+        int newX = int(m_canvas->grid().getRulerScale()->getXForTime(newStartTime));
+        int newY = m_canvas->grid().snapY((*it)->savedRect().y() + dy);
+        // Make sure we don't set a non-existing track
+        if (newY < 0) {
+            newY = 0;
+        }
+        int trackPos = m_canvas->grid().getYBin(newY);
+
+        //             RG_DEBUG << "SegmentMover::handleMouseMove: orig y "
+        //                      << (*it)->savedRect().y()
+        //                      << ", dy " << dy << ", newY " << newY
+        //                      << ", track " << track << endl;
+
+        // Make sure we don't set a non-existing track (c'td)
+        // TODO: make this suck less. Either the tool should
+        // not allow it in the first place, or we automatically
+        // create new tracks - might make undo very tricky though
+        //
+        if (trackPos >= m_doc->getComposition().getNbTracks())
+            trackPos = m_doc->getComposition().getNbTracks() - 1;
+
+        newY = m_canvas->grid().getYBinCoordinate(trackPos);
+
+        //             RG_DEBUG << "SegmentMover::handleMouseMove: moving to "
+        //                      << newX << "," << newY << endl;
+
+        updateRect |= (*it)->rect();
+        (*it)->moveTo(newX, newY);
+        updateRect |= (*it)->rect();
+        setChangeMade(true);
+    }
+
+    if (changeMade())
+        m_canvas->getModel()->signalContentChange();
+
+    guideX = m_currentItem->rect().x();
+    guideY = m_currentItem->rect().y();
+
+    m_canvas->setGuidesPos(guideX, guideY);
+
+    timeT currentItemStartTime = m_canvas->grid().snapX(m_currentItem->rect().x());
+
+    Composition &comp = m_doc->getComposition();
+    RealTime time =
+        comp.getElapsedRealTime(currentItemStartTime);
+    QString ms;
+    ms.sprintf("%03d", time.msec());
+
+    int bar, beat, fraction, remainder;
+    comp.getMusicalTimeForAbsoluteTime(currentItemStartTime, bar, beat, fraction, remainder);
+
+    QString posString = QString("%1.%2s (%3, %4, %5)")
+        .arg(time.sec).arg(ms)
+        .arg(bar + 1).arg(beat).arg(fraction);
+
+    m_canvas->setTextFloat(guideX + 10, guideY - 30, posString);
+    m_canvas->updateContents();
+
+    return RosegardenCanvasView::FollowHorizontal | RosegardenCanvasView::FollowVertical;
+}
+
+void SegmentMover::setBasicContextHelp()
+{
+    setContextHelp(i18n("Click and drag to move a segment"));
 }
 
 const QString SegmentMover::ToolName    = "segmentmover";

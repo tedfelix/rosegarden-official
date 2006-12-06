@@ -63,7 +63,7 @@ class StandardRuler;
  * Shows a global overview of the composition, and lets the user
  * manipulate the segments
  *
- * @see SegmentCanvas
+ * @see CompositionView
  */
 class TrackEditor : public QWidget, virtual public TrackEditorIface
 {

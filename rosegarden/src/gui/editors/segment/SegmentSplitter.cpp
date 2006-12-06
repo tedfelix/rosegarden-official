@@ -40,6 +40,7 @@
 #include <qpoint.h>
 #include <qrect.h>
 #include <qstring.h>
+#include <klocale.h>
 
 
 namespace Rosegarden
@@ -59,6 +60,7 @@ SegmentSplitter::~SegmentSplitter()
 void SegmentSplitter::ready()
 {
     m_canvas->viewport()->setCursor(Qt::splitHCursor);
+    setBasicContextHelp();
 }
 
 void
@@ -81,6 +83,8 @@ SegmentSplitter::handleMouseButtonPress(QMouseEvent *e)
 void
 SegmentSplitter::handleMouseButtonRelease(QMouseEvent *e)
 {
+    setBasicContextHelp();
+
     CompositionItem item = m_canvas->getFirstItemAt(e->pos());
 
     if (item) {
@@ -109,10 +113,12 @@ SegmentSplitter::handleMouseButtonRelease(QMouseEvent *e)
 int
 SegmentSplitter::handleMouseMove(QMouseEvent *e)
 {
+    setBasicContextHelp();
+
     CompositionItem item = m_canvas->getFirstItemAt(e->pos());
 
     if (item) {
-        m_canvas->viewport()->setCursor(Qt::blankCursor);
+//        m_canvas->viewport()->setCursor(Qt::blankCursor);
         drawSplitLine(e);
         delete item;
         return RosegardenCanvasView::FollowHorizontal;
@@ -151,6 +157,12 @@ void
 SegmentSplitter::contentsMouseDoubleClickEvent(QMouseEvent*)
 {
     // DO NOTHING
+}
+
+void
+SegmentSplitter::setBasicContextHelp()
+{
+    setContextHelp(i18n("Click on a segment to split it in two; hold Shift to avoid snapping to beat grid"));
 }
 
 const QString SegmentSplitter::ToolName = "segmentsplitter";

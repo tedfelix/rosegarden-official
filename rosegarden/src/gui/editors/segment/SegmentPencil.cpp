@@ -67,7 +67,7 @@ void SegmentPencil::ready()
     m_canvas->viewport()->setCursor(Qt::ibeamCursor);
     connect(m_canvas, SIGNAL(contentsMoving (int, int)),
             this, SLOT(slotCanvasScrolled(int, int)));
-    setContextHelp(i18n("Click and drag to draw new segments"));
+    setBasicContextHelp();
 }
 
 void SegmentPencil::stow()
@@ -141,6 +141,8 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent* e)
 {
     if (e->button() == RightButton)
         return ;
+
+    setBasicContextHelp();
 
     if (m_newRect) {
 
@@ -248,13 +250,14 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent* e)
 
 int SegmentPencil::handleMouseMove(QMouseEvent *e)
 {
-    if (!m_newRect)
+    if (!m_newRect) {
+        setBasicContextHelp();
         return RosegardenCanvasView::NoFollow;
+    }
 
     if (m_canvas->isFineGrain()) {
-        setContextHelp("");
+        clearContextHelp();
     } else {
-        std::cerr << "Setting mouse-move context help" << std::endl;
         setContextHelp(i18n("Hold Shift to avoid snapping to bar lines"));
     }
 
@@ -300,6 +303,11 @@ int SegmentPencil::handleMouseMove(QMouseEvent *e)
 
     m_canvas->setTmpRect(tmpRect);
     return RosegardenCanvasView::FollowHorizontal;
+}
+
+void SegmentPencil::setBasicContextHelp()
+{
+    setContextHelp(i18n("Click and drag to draw an empty segment"));
 }
 
 const QString SegmentPencil::ToolName   = "segmentpencil";

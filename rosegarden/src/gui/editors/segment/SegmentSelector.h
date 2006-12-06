@@ -85,6 +85,8 @@ protected slots:
 protected:
     SegmentSelector(CompositionView*, RosegardenGUIDoc*);
 
+    void setContextHelpFor(QPoint p);
+
     //--------------- Data members ---------------------------------
 
     SegmentItemList m_selectedItems;

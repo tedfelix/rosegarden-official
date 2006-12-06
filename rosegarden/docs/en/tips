@@ -307,3 +307,15 @@ with LilyPond.<br><br>
 <p>You can use the mouse wheel to scroll up and down, or to scroll left and right (by holding the Alt key at the same time), or to zoom in and out (by holding the Control key).</p> 	 
 </html> 	 
 </tip>
+<tip category="Rosegarden|General"> 	 
+<html> 	 
+<p>You can time-stretch an audio segment -- stretching or squashing a
+sample to a different duration without changing its pitch -- just by
+dragging its right edge with the Ctrl key pressed.</p>
+</html>
+</tip>
+<tip category="Rosegarden|General"> 	 
+<html> 	 
+<p>You can add audio to your Rosegarden composition just by dragging an audio file from your file manager and dropping it on the Rosegarden segment canvas.  Make sure you drop it on an audio track!<br><br>You can also drop audio files from Rosegarden's audio file manager window onto the segment canvas, and from other programs onto the audio file manager.</p>
+</html>
+</tip>

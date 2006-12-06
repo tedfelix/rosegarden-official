@@ -93,6 +93,7 @@ protected:
     virtual bool hasMenu() { return false; }
 
     virtual void setContextHelp(const QString &help);
+    virtual void clearContextHelp() { setContextHelp(""); }
 
     //--------------- Data members ---------------------------------
 

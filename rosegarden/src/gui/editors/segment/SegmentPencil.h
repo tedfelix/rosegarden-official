@@ -67,6 +67,7 @@ protected slots:
     
 protected:
     SegmentPencil(CompositionView*, RosegardenGUIDoc*);
+    void setBasicContextHelp();
 
     //--------------- Data members ---------------------------------
 

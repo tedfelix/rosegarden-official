@@ -120,9 +120,13 @@ CompositionView::CompositionView(RosegardenGUIDoc* doc,
         m_artifactsDrawBufferRefresh(0, 0, visibleWidth(), visibleHeight()),
         m_lastBufferRefreshX(0),
         m_lastBufferRefreshY(0),
-        m_lastPointerRefreshX(0)
+        m_lastPointerRefreshX(0),
+        m_contextHelpShown(false)
 {
     m_toolBox = new SegmentToolBox(this, doc);
+
+    connect(m_toolBox, SIGNAL(showContextHelp(const QString &)),
+            this, SLOT(slotToolHelpChanged(const QString &)));
 
     setDragAutoScroll(true);
     setBackgroundMode(NoBackground);
@@ -181,7 +185,7 @@ CompositionView::CompositionView(RosegardenGUIDoc* doc,
     m_segmentsDrawBuffer.setOptimization(QPixmap::BestOptim);
     m_artifactsDrawBuffer.setOptimization(QPixmap::BestOptim);
 
-
+    viewport()->setMouseTracking(true);
 }
 
 void CompositionView::endAudioPreviewGeneration()
@@ -303,6 +307,8 @@ void CompositionView::slotSetTool(const QString& toolName)
 
     if (m_tool)
         m_tool->stow();
+
+    m_toolContextHelp = "";
 
     m_tool = m_toolBox->getTool(toolName);
 
@@ -1266,6 +1272,24 @@ bool CompositionView::event(QEvent* e)
     }
 
     return RosegardenScrollView::event(e);
+}
+
+void CompositionView::enterEvent(QEvent *e)
+{
+    emit showContextHelp(m_toolContextHelp);
+    m_contextHelpShown = true;
+}
+
+void CompositionView::leaveEvent(QEvent *e)
+{
+    emit showContextHelp("");
+    m_contextHelpShown = false;
+}
+
+void CompositionView::slotToolHelpChanged(const QString &text)
+{
+    m_toolContextHelp = text;
+    if (m_contextHelpShown) emit showContextHelp(text);
 }
 
 void CompositionView::contentsMousePressEvent(QMouseEvent* e)
