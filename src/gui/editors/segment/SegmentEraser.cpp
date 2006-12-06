@@ -36,6 +36,7 @@
 #include <kcommand.h>
 #include <qpoint.h>
 #include <qstring.h>
+#include <klocale.h>
 
 
 namespace Rosegarden
@@ -50,6 +51,7 @@ SegmentEraser::SegmentEraser(CompositionView *c, RosegardenGUIDoc *d)
 void SegmentEraser::ready()
 {
     m_canvas->viewport()->setCursor(Qt::pointingHandCursor);
+    setBasicContextHelp();
 }
 
 void SegmentEraser::handleMouseButtonPress(QMouseEvent *e)
@@ -71,8 +73,14 @@ void SegmentEraser::handleMouseButtonRelease(QMouseEvent*)
 
 int SegmentEraser::handleMouseMove(QMouseEvent*)
 {
+    setBasicContextHelp();
     return RosegardenCanvasView::NoFollow;
 }
+
+void SegmentEraser::setBasicContextHelp()
+{
+    setContextHelp(i18n("Click on a segment to delete it"));
+}    
 
 const QString SegmentEraser::ToolName   = "segmenteraser";
 

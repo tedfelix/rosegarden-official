@@ -64,6 +64,8 @@ protected slots:
 protected:
     SegmentMover(CompositionView*, RosegardenGUIDoc*);
 
+    void setBasicContextHelp();
+
     //--------------- Data members ---------------------------------
 
     QPoint            m_clickPoint;

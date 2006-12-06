@@ -66,6 +66,8 @@ public:
 protected:
     SegmentSplitter(CompositionView*, RosegardenGUIDoc*);
     
+    void setBasicContextHelp();
+
     void drawSplitLine(QMouseEvent*);
     void splitSegment(Segment *segment,
                       timeT &splitTime);

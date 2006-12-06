@@ -1259,7 +1259,7 @@ void RosegardenGUIApp::initZoomToolbar()
 
 void RosegardenGUIApp::initStatusBar()
 {
-    KTmpStatusMsg::setDefaultMsg(i18n("  Ready."));
+    KTmpStatusMsg::setDefaultMsg("");
     statusBar()->insertItem(KTmpStatusMsg::getDefaultMsg(),
                             KTmpStatusMsg::getDefaultId(), 1);
     statusBar()->setItemAlignment(KTmpStatusMsg::getDefaultId(),
@@ -1427,7 +1427,7 @@ void RosegardenGUIApp::initView()
 
     m_view->show();
 
-    connect(m_view->getTrackEditor()->getSegmentCanvas()->getToolBox(),
+    connect(m_view->getTrackEditor()->getSegmentCanvas(),
             SIGNAL(showContextHelp(const QString &)),
             this,
             SLOT(slotShowToolHelp(const QString &)));
@@ -7670,7 +7670,7 @@ RosegardenGUIApp::slotShowTip()
 void RosegardenGUIApp::slotShowToolHelp(const QString &s)
 {
     QString msg = s;
-    if (msg == "") msg = i18n("  Ready.");
+    if (msg != "") msg = " " + msg;
     KTmpStatusMsg::setDefaultMsg(msg);
     slotStatusMsg(msg);
 }

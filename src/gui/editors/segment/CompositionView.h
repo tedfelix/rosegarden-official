@@ -205,6 +205,8 @@ signals:
     void audioSegmentAutoSplit(Segment*);
     void editRepeat(Segment*, timeT);
 
+    void showContextHelp(const QString &);
+
 protected:
     virtual bool event(QEvent *);
 
@@ -215,6 +217,9 @@ protected:
 
     virtual void viewportPaintEvent(QPaintEvent*);
     virtual void resizeEvent(QResizeEvent*);
+
+    virtual void enterEvent(QEvent *);
+    virtual void leaveEvent(QEvent *);
 
     virtual void viewportPaintRect(QRect);
     
@@ -281,6 +286,8 @@ protected slots:
         slotArtifactsDrawBufferNeedsRefresh(r);
     }
 
+    void slotToolHelpChanged(const QString &);
+
 protected:         
 
     //--------------- Data members ---------------------------------
@@ -330,6 +337,9 @@ protected:
     int          m_lastBufferRefreshY;
     int          m_lastPointerRefreshX;
     QPixmap      m_backgroundPixmap;
+
+    QString      m_toolContextHelp;
+    bool         m_contextHelpShown;
 
     mutable CompositionModel::AudioPreviewDrawData m_audioPreviewRects;
     mutable CompositionModel::RectRanges m_notationPreviewRects;
