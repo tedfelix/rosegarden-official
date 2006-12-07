@@ -35,6 +35,7 @@
 #include "base/SnapGrid.h"
 #include "commands/segment/AudioSegmentResizeFromStartCommand.h"
 #include "commands/segment/AudioSegmentRescaleCommand.h"
+#include "commands/segment/SegmentRescaleCommand.h"
 #include "commands/segment/SegmentReconfigureCommand.h"
 #include "commands/segment/SegmentResizeFromStartCommand.h"
 #include "CompositionItemHelper.h"
@@ -140,43 +141,31 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent *e)
         }
 
         if (changeMade()) {
+                
+            if (newStartTime > newEndTime) std::swap(newStartTime, newEndTime);
 
-            if (m_resizeStart && (newStartTime < newEndTime)) {
-
-                //!!! deal with rescale
-
-                if (segment->getType() == Segment::Audio) {
-                    addCommandToHistory(new AudioSegmentResizeFromStartCommand(segment, newStartTime));
-                } else {
-                    addCommandToHistory(new SegmentResizeFromStartCommand(segment, newStartTime));
-                }
-
-            } else if (rescale) {
+            if (rescale) {
 
                 if (segment->getType() == Segment::Audio) {
-
-                    //!!! too much stuff to be here
 
                     float ratio = float(newEndTime - newStartTime) /
                         float(oldEndTime - oldStartTime);
 
                     AudioSegmentRescaleCommand *command =
-                        new AudioSegmentRescaleCommand(m_doc, segment, ratio);
+                        new AudioSegmentRescaleCommand(m_doc, segment, ratio,
+                                                       newStartTime, newEndTime);
 
                     ProgressDialog progressDlg
                         (i18n("Rescaling audio file..."), 100, 0);
                     progressDlg.setAutoClose(false);
                     progressDlg.setAutoReset(false);
                     progressDlg.show();
-
                     command->connectProgressDialog(&progressDlg);
                     
                     addCommandToHistory(command);
 
                     progressDlg.setLabel(i18n("Generating audio preview..."));
-
                     command->disconnectProgressDialog(&progressDlg);
-
                     connect(&m_doc->getAudioFileManager(), SIGNAL(setProgress(int)),
                             progressDlg.progressBar(), SLOT(setValue(int)));
                     connect(&progressDlg, SIGNAL(cancelClicked()),
@@ -187,28 +176,45 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent *e)
                         RosegardenGUIApp::self()->slotAddAudioFile(fid);
                         m_doc->getAudioFileManager().generatePreview(fid);
                     }
-
+                
                 } else {
                     
-                    //!!! handle non-audio rescale
-
+                    SegmentRescaleCommand *command =
+                        new SegmentRescaleCommand(segment,
+                                                  newEndTime - newStartTime,
+                                                  oldEndTime - oldStartTime,
+                                                  newStartTime);
+                    addCommandToHistory(command);
                 }
-
             } else {
 
-                SegmentReconfigureCommand *command =
-                    new SegmentReconfigureCommand("Resize Segment");
+                if (m_resizeStart) {
 
-                int trackPos = CompositionItemHelper::getTrackPos(m_currentItem, m_canvas->grid());
+                    if (segment->getType() == Segment::Audio) {
+                        addCommandToHistory(new AudioSegmentResizeFromStartCommand
+                                            (segment, newStartTime));
+                    } else {
+                        addCommandToHistory(new SegmentResizeFromStartCommand
+                                            (segment, newStartTime));
+                    }
 
-                Composition &comp = m_doc->getComposition();
-                Track *track = comp.getTrackByPosition(trackPos);
+                } else {
 
-                command->addSegment(segment,
-                                    newStartTime,
-                                    newEndTime,
-                                    track->getId());
-                addCommandToHistory(command);
+                    SegmentReconfigureCommand *command =
+                        new SegmentReconfigureCommand("Resize Segment");
+
+                    int trackPos = CompositionItemHelper::getTrackPos
+                        (m_currentItem, m_canvas->grid());
+
+                    Composition &comp = m_doc->getComposition();
+                    Track *track = comp.getTrackByPosition(trackPos);
+
+                    command->addSegment(segment,
+                                        newStartTime,
+                                        newEndTime,
+                                        track->getId());
+                    addCommandToHistory(command);
+                }
             }
         }
     }

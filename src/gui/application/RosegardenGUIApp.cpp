@@ -2634,15 +2634,12 @@ void RosegardenGUIApp::slotRescaleSelection()
     for (SegmentSelection::iterator i = selection.begin();
             i != selection.end(); ++i) {
         if ((*i)->getType() == Segment::Audio) {
-            //!!! this command should take an extra arg for intended
-            // end time so it can set that afterwards to avoid rounding error
             AudioSegmentRescaleCommand *asrc = new AudioSegmentRescaleCommand
                 (m_doc, *i, ratio);
             command->addCommand(asrc);
             asrcs.push_back(asrc);
         } else {
-            command->addCommand(new SegmentRescaleCommand
-                                (*i, mult, div));
+            command->addCommand(new SegmentRescaleCommand(*i, mult, div));
         }
     }
 
