@@ -274,5 +274,15 @@ void MatrixCanvasView::updateGridSnap(QMouseEvent *e)
     }
 }
 
+void MatrixCanvasView::enterEvent(QEvent *e)
+{
+    emit mouseEntered();
+}
+
+void MatrixCanvasView::leaveEvent(QEvent *e)
+{
+    emit mouseLeft();
+}
+
 }
 #include "MatrixCanvasView.moc"

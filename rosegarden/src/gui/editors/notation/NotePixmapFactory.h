@@ -120,7 +120,8 @@ public:
 
     // Other support methods for producing pixmaps for other contexts:
 
-    static QCanvasPixmap *makeToolbarPixmap(const char *name);
+    static QCanvasPixmap *makeToolbarPixmap(const char *name,
+                                            bool menuSize = false);
     static QCanvasPixmap *makeNoteMenuPixmap(timeT duration,
                                              timeT &errorReturn);
     static QCanvasPixmap *makeMarkMenuPixmap(Mark);

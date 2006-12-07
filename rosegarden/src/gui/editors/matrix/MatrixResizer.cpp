@@ -132,8 +132,16 @@ int MatrixResizer::handleMouseMove(timeT newTime,
                                    int,
                                    QMouseEvent *e)
 {
+    setBasicContextHelp();
+
     if (!m_currentElement || !m_currentStaff)
         return RosegardenCanvasView::NoFollow;
+
+    if (getSnapGrid().getSnapSetting() != SnapGrid::NoSnap) {
+        setContextHelp(i18n("Hold Shift to avoid snapping to beat grid"));
+    } else {
+        clearContextHelp();
+    }
 
     // For the resizer we normally don't want to use the official
     // time, because it's snapped to the left and we want to snap in
@@ -276,6 +284,7 @@ void MatrixResizer::handleMouseRelease(timeT newTime,
 
     m_mParentView->update();
     m_currentElement = 0;
+    setBasicContextHelp();
 }
 
 void MatrixResizer::ready()
@@ -283,6 +292,7 @@ void MatrixResizer::ready()
     connect(m_parentView->getCanvasView(), SIGNAL(contentsMoving (int, int)),
             this, SLOT(slotMatrixScrolled(int, int)));
     m_mParentView->setCanvasCursor(Qt::sizeHorCursor);
+    setBasicContextHelp();
 }
 
 void MatrixResizer::stow()
@@ -305,6 +315,16 @@ void MatrixResizer::slotMatrixScrolled(int newX, int newY)
     p = m_mParentView->inverseMapPoint(p);
     int newTime = getSnapGrid().snapX(p.x());
     handleMouseMove(newTime, 0, 0);
+}
+
+void MatrixResizer::setBasicContextHelp()
+{
+    EventSelection *selection = m_mParentView->getCurrentSelection();
+    if (selection && selection->getAddedEvents() > 1) {
+        setContextHelp(i18n("Click and drag to resize selected notes"));
+    } else {
+        setContextHelp(i18n("Click and drag to resize a note"));
+    }
 }
 
 const QString MatrixResizer::ToolName   = "resizer";

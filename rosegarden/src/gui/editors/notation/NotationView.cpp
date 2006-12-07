@@ -2819,7 +2819,7 @@ bool NotationView::applyLayout(int staffNo, timeT startTime, timeT endTime)
 }
 
 void NotationView::setCurrentSelectedNote(const char *pixmapName,
-        bool rest, Note::Type n, int dots)
+                                          bool rest, Note::Type n, int dots)
 {
     NoteInserter* inserter = 0;
 
@@ -2834,7 +2834,8 @@ void NotationView::setCurrentSelectedNote(const char *pixmapName,
     setTool(inserter);
 
     m_currentNotePixmap->setPixmap
-    (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap(pixmapName)));
+        (NotePixmapFactory::toQPixmap
+         (NotePixmapFactory::makeToolbarPixmap(pixmapName, true)));
 
     emit changeCurrentNote(rest, n);
 }

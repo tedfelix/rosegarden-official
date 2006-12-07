@@ -85,7 +85,7 @@ protected slots:
 protected:
     SegmentSelector(CompositionView*, RosegardenGUIDoc*);
 
-    void setContextHelpFor(QPoint p);
+    void setContextHelpFor(QPoint p, bool ctrlPressed = false);
 
     //--------------- Data members ---------------------------------
 

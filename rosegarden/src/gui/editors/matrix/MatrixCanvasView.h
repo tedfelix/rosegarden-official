@@ -94,6 +94,9 @@ signals:
 
     void mouseReleased(timeT time, int pitch, QMouseEvent*);
 
+    void mouseEntered();
+    void mouseLeft();
+
 public slots:
     void slotExternalWheelEvent(QWheelEvent*);
 
@@ -120,6 +123,9 @@ protected:
      * event
      */
     virtual void contentsMouseDoubleClickEvent(QMouseEvent*);
+
+    virtual void enterEvent(QEvent *);
+    virtual void leaveEvent(QEvent *);
 
     /**
      * Update the value of snap grid according to the button's state
