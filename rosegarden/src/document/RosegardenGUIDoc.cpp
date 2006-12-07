@@ -1329,10 +1329,21 @@ void RosegardenGUIDoc::saveSegment(QTextStream& outStream, Segment *segment,
     }
 
     if (segment->getType() == Segment::Audio) {
+
         outStream << "\" type=\"audio\" "
-        << "file=\""
-        << segment->getAudioFileId()
-        << "\">\n";
+                  << "file=\""
+                  << segment->getAudioFileId();
+
+        if (segment->getStretchRatio() != 1.f &&
+            segment->getStretchRatio() != 0.f) {
+
+            outStream << "\" unstretched=\""
+                      << segment->getUnstretchedFileId()
+                      << "\" stretch=\""
+                      << segment->getStretchRatio();
+        }
+        
+        outStream << "\">\n";
 
         // convert out - should do this as XmlExportable really
         // once all this code is centralised

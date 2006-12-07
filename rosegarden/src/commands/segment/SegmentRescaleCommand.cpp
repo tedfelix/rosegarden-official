@@ -37,14 +37,32 @@ namespace Rosegarden
 {
 
 SegmentRescaleCommand::SegmentRescaleCommand(Segment *s,
-        int multiplier,
-        int divisor) :
-        KNamedCommand(getGlobalName()),
-        m_segment(s),
-        m_newSegment(0),
-        m_multiplier(multiplier),
-        m_divisor(divisor),
-        m_detached(false)
+                                             int multiplier,
+                                             int divisor) :
+    KNamedCommand(getGlobalName()),
+    m_segment(s),
+    m_newSegment(0),
+    m_startTimeGiven(false),
+    m_startTime(s->getStartTime()),
+    m_multiplier(multiplier),
+    m_divisor(divisor),
+    m_detached(false)
+{
+    // nothing
+}
+
+SegmentRescaleCommand::SegmentRescaleCommand(Segment *s,
+                                             int multiplier,
+                                             int divisor,
+                                             timeT st) :
+    KNamedCommand(getGlobalName()),
+    m_segment(s),
+    m_newSegment(0),
+    m_startTimeGiven(true),
+    m_startTime(st),
+    m_multiplier(multiplier),
+    m_divisor(divisor),
+    m_detached(false)
 {
     // nothing
 }
@@ -73,6 +91,8 @@ void
 SegmentRescaleCommand::execute()
 {
     timeT startTime = m_segment->getStartTime();
+
+    if (m_startTimeGiven) startTime = m_startTime;
 
     if (!m_newSegment) {
 
@@ -106,7 +126,8 @@ SegmentRescaleCommand::execute()
                                  m_newSegment->getEndTime());
 
     m_newSegment->setEndMarkerTime
-    (startTime + rescale(m_segment->getEndMarkerTime() - startTime));
+    (startTime + rescale(m_segment->getEndMarkerTime() - 
+                         m_segment->getStartTime()));
 
     m_detached = true;
 }

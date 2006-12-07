@@ -835,6 +835,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         QString segmentType = (atts.value("type")).lower();
         if (segmentType) {
             if (segmentType == "audio") {
+
                 int audioFileId = atts.value("file").toInt();
 
                 // check this file id exists on the AudioFileManager
@@ -852,6 +853,16 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                 m_currentSegment = new Segment(Segment::Audio);
                 m_currentSegment->setAudioFileId(audioFileId);
                 m_currentSegment->setStartTime(startTime);
+
+                QString unstretchedStr = atts.value("unstretched");
+
+                if (unstretchedStr) {
+                    int unstretchedFileId = unstretchedStr.toInt();
+                    m_currentSegment->setUnstretchedFileId(unstretchedFileId);
+                    double ratio = atts.value("stretch").toDouble();
+                    m_currentSegment->setStretchRatio(ratio);
+                }
+
             } else {
                 // Create a (normal) internal Segment
                 m_currentSegment = new Segment(Segment::Internal);
