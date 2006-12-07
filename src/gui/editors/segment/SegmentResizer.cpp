@@ -71,7 +71,7 @@ void SegmentResizer::ready()
     m_canvas->viewport()->setCursor(Qt::sizeHorCursor);
     connect(m_canvas, SIGNAL(contentsMoving (int, int)),
             this, SLOT(slotCanvasScrolled(int, int)));
-    setBasicContextHelp();
+    setBasicContextHelp(false);
 }
 
 void SegmentResizer::stow()
@@ -230,17 +230,25 @@ int SegmentResizer::handleMouseMove(QMouseEvent *e)
 {
     //     RG_DEBUG << "SegmentResizer::handleMouseMove" << endl;
 
+    bool rescale = (e->state() & Qt::ControlButton);
+
     if (!m_currentItem) {
-        setBasicContextHelp();
+        setBasicContextHelp(rescale);
         return RosegardenCanvasView::NoFollow;
     }
 
-    bool rescale = (e->state() & Qt::ControlButton);
-
     if (rescale) {
-        setContextHelp(i18n("Hold Shift to avoid snapping to beat grid"));
+        if (!m_canvas->isFineGrain()) {
+            setContextHelp(i18n("Hold Shift to avoid snapping to beat grid"));
+        } else {
+            clearContextHelp();
+        }
     } else {
-        setContextHelp(i18n("Hold Shift to avoid snapping to beat grid; hold Ctrl as well to rescale contents"));
+        if (!m_canvas->isFineGrain()) {
+            setContextHelp(i18n("Hold Shift to avoid snapping to beat grid; hold Ctrl as well to rescale contents"));
+        } else {
+            setContextHelp("Hold Ctrl to rescale contents");
+        }
     }
 
     Segment* segment = CompositionItemHelper::getSegment(m_currentItem);
@@ -357,9 +365,13 @@ bool SegmentResizer::cursorIsCloseEnoughToEdge(const CompositionItem& p, const Q
     }
 }
 
-void SegmentResizer::setBasicContextHelp()
+void SegmentResizer::setBasicContextHelp(bool ctrlPressed)
 {
-    setContextHelp(i18n("Click and drag to resize a segment; hold Ctrl as well to rescale its contents"));
+    if (ctrlPressed) {
+        setContextHelp(i18n("Click and drag to resize a segment; hold Ctrl as well to rescale its contents"));
+    } else {
+        setContextHelp(i18n("Click and drag to rescale segment"));
+    }        
 }    
 
 const QString SegmentResizer::ToolName  = "segmentresizer";

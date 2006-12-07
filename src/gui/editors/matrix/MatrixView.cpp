@@ -159,7 +159,8 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
         m_tempoRuler(0),
         m_playTracking(true),
         m_dockVisible(true),
-        m_drumMode(drumMode)
+        m_drumMode(drumMode),
+        m_mouseInCanvasView(false)
 {
     RG_DEBUG << "MatrixView ctor: drumMode " << drumMode << "\n";
 
@@ -186,6 +187,9 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     m_toolBox = new MatrixToolBox(this);
 
     initStatusBar();
+
+    connect(m_toolBox, SIGNAL(showContextHelp(const QString &)),
+            this, SLOT(slotToolHelpChanged(const QString &)));
 
     QCanvas *tCanvas = new QCanvas(this);
 
@@ -360,6 +364,12 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     //
     connect(m_canvasView, SIGNAL(bottomWidgetHeightChanged(int)),
             this, SLOT(slotCanvasBottomWidgetHeightChanged(int)));
+
+    connect(m_canvasView, SIGNAL(mouseEntered()),
+            this, SLOT(slotMouseEnteredCanvasView()));
+
+    connect(m_canvasView, SIGNAL(mouseLeft()),
+            this, SLOT(slotMouseLeftCanvasView()));
 
     /*
     QObject::connect
@@ -958,13 +968,14 @@ void MatrixView::initStatusBar()
     m_hoveredOverNoteName = new QLabel(sb);
     m_hoveredOverAbsoluteTime = new QLabel(sb);
 
-    m_hoveredOverNoteName->setMinimumWidth(32);
-    m_hoveredOverAbsoluteTime->setMinimumWidth(160);
+    m_hoveredOverNoteName->setMinimumWidth(180);
+    m_hoveredOverAbsoluteTime->setMinimumWidth(180);
 
     sb->addWidget(m_hoveredOverAbsoluteTime);
     sb->addWidget(m_hoveredOverNoteName);
 
     m_insertModeLabel = new QLabel(sb);
+    m_insertModeLabel->setMinimumWidth(20);
     sb->addWidget(m_insertModeLabel);
 
     sb->insertItem(KTmpStatusMsg::getDefaultMsg(),
@@ -974,6 +985,26 @@ void MatrixView::initStatusBar()
 
     m_selectionCounter = new QLabel(sb);
     sb->addWidget(m_selectionCounter);
+}
+
+void MatrixView::slotToolHelpChanged(const QString &s)
+{
+    QString msg = " " + s;
+    if (m_toolContextHelp == msg) return;
+    m_toolContextHelp = msg;
+    if (m_mouseInCanvasView) statusBar()->changeItem(m_toolContextHelp, 1);
+}
+
+void MatrixView::slotMouseEnteredCanvasView()
+{
+    m_mouseInCanvasView = true;
+    statusBar()->changeItem(m_toolContextHelp, 1);
+}
+
+void MatrixView::slotMouseLeftCanvasView()
+{
+    m_mouseInCanvasView = false;
+    statusBar()->changeItem(KTmpStatusMsg::getDefaultMsg(), 1);
 }
 
 bool MatrixView::applyLayout(int staffNo,
@@ -2876,7 +2907,7 @@ MatrixView::slotUpdateInsertModeStatus()
 {
     QString message;
     if (isInChordMode()) {
-        message = i18n(" Chord");
+        message = i18n(" Chord ");
     } else {
         message = "";
     }

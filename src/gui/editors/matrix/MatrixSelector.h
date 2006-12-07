@@ -146,7 +146,7 @@ signals:
 protected:
     MatrixSelector(MatrixView*);
 
-    void setBasicContextHelp();
+    void setContextHelpFor(QPoint p, bool ctrlPressed = false);
 
     void setViewCurrentSelection();
     

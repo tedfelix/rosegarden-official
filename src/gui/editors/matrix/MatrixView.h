@@ -505,6 +505,10 @@ protected slots:
      * The instrument for this track may have changed
      */
     void slotCheckTrackAssignments();
+
+    void slotToolHelpChanged(const QString &);
+    void slotMouseEnteredCanvasView();
+    void slotMouseLeftCanvasView();
     
 protected:
     virtual RulerScale* getHLayout();
@@ -654,6 +658,9 @@ protected:
     bool m_playTracking;
     bool m_dockVisible;
     bool m_drumMode;
+
+    bool m_mouseInCanvasView;
+    QString m_toolContextHelp;
 };
 
 // Commented this out - was a MatrixView inner class, but we get a warning

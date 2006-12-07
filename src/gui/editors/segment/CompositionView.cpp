@@ -1288,6 +1288,7 @@ void CompositionView::leaveEvent(QEvent *e)
 
 void CompositionView::slotToolHelpChanged(const QString &text)
 {
+    if (m_toolContextHelp == text) return;
     m_toolContextHelp = text;
     if (m_contextHelpShown) emit showContextHelp(text);
 }

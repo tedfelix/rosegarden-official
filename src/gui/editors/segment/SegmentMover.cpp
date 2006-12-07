@@ -206,7 +206,11 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
         return RosegardenCanvasView::NoFollow;
     }
 
-    setContextHelp(i18n("Hold Shift to avoid snapping to beat grid"));
+    if (!m_canvas->isFineGrain()) {
+        setContextHelp(i18n("Hold Shift to avoid snapping to beat grid"));
+    } else {
+        clearContextHelp();
+    }
 
     CompositionModel::itemcontainer& changingItems = m_canvas->getModel()->getChangingItems();
 

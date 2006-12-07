@@ -354,8 +354,14 @@ int MatrixSelector::handleMouseMove(timeT time, int height,
         return m_dispatchTool->handleMouseMove(time, height, e);
     }
 
-    if (!m_updateRect)
+
+    if (!m_updateRect) {
+        setContextHelpFor(e->pos(), 
+                          getSnapGrid().getSnapSetting() == SnapGrid::NoSnap);
         return RosegardenCanvasView::NoFollow;
+    } else {
+        clearContextHelp();
+    }
 
     int w = int(p.x() - m_selectionRect->x());
     int h = int(p.y() - m_selectionRect->y());
@@ -417,6 +423,8 @@ void MatrixSelector::handleMouseRelease(timeT time, int height, QMouseEvent *e)
 
     // Tell anyone who's interested that the selection has changed
     emit gotSelection();
+
+    setContextHelpFor(e->pos());
 }
 
 void MatrixSelector::ready()
@@ -433,6 +441,7 @@ void MatrixSelector::ready()
     connect(m_parentView->getCanvasView(), SIGNAL(contentsMoving (int, int)),
             this, SLOT(slotMatrixScrolled(int, int)));
 
+    setContextHelp(i18n("Click and drag to select notes; middle-click and drag to draw a new note"));
 }
 
 void MatrixSelector::stow()
@@ -531,6 +540,68 @@ EventSelection* MatrixSelector::getSelection()
     } else {
         delete selection;
         return 0;
+    }
+}
+
+void MatrixSelector::setContextHelpFor(QPoint p, bool ctrlPressed)
+{
+    // same logic as in MatrixCanvasView::contentsMousePressEvent
+
+    QCanvasItemList itemList = m_mParentView->canvas()->collisions(p);
+    QCanvasItemList::Iterator it;
+    MatrixElement* mel = 0;
+    QCanvasItem* activeItem = 0;
+
+    for (it = itemList.begin(); it != itemList.end(); ++it) {
+
+        QCanvasItem *item = *it;
+        QCanvasMatrixRectangle *mRect = 0;
+
+        if (item->active()) {
+            break;
+        }
+
+        if ((mRect = dynamic_cast<QCanvasMatrixRectangle*>(item))) {
+            if (! mRect->rect().contains(p, true)) continue;
+            mel = &(mRect->getMatrixElement());
+            break;
+        }
+    }
+
+    p = m_mParentView->inverseMapPoint(p);
+
+    if (!mel) {
+        setContextHelp(i18n("Click and drag to select notes; middle-click and drag to draw a new note"));
+
+    } else {
+        
+        // same logic as in handleMouseButtonPress
+        
+        int x = int(mel->getLayoutX());
+        int width = mel->getWidth();
+        int resizeStart = int(double(width) * 0.85) + x;
+
+        // max size of 10
+        if ((x + width ) - resizeStart > 10)
+            resizeStart = x + width - 10;
+
+        EventSelection *s = m_mParentView->getCurrentSelection();
+
+        if (p.x() > resizeStart) {
+            if (s && s->getAddedEvents() > 1) {
+                setContextHelp(i18n("Click and drag to resize selected notes"));
+            } else {
+                setContextHelp(i18n("Click and drag to resize a note"));
+            }
+        } else {
+            if (s && s->getAddedEvents() > 1) {
+                if (!ctrlPressed) {
+                    setContextHelp(i18n("Click and drag to move selected notes; hold Ctrl as well to copy them"));
+                } else {
+                    setContextHelp(i18n("Click and drag to move selected notes"));
+                }
+            }
+        }
     }
 }
 

@@ -162,7 +162,11 @@ SegmentSplitter::contentsMouseDoubleClickEvent(QMouseEvent*)
 void
 SegmentSplitter::setBasicContextHelp()
 {
-    setContextHelp(i18n("Click on a segment to split it in two; hold Shift to avoid snapping to beat grid"));
+    if (!m_canvas->isFineGrain()) {
+        setContextHelp(i18n("Click on a segment to split it in two; hold Shift to avoid snapping to beat grid"));
+    } else {
+        setContextHelp(i18n("Click on a segment to split it in two"));
+    }
 }
 
 const QString SegmentSplitter::ToolName = "segmentsplitter";

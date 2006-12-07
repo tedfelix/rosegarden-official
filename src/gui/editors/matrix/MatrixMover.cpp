@@ -199,8 +199,16 @@ int MatrixMover::handleMouseMove(timeT newTime,
     MATRIX_DEBUG << "MatrixMover::handleMouseMove() time = "
     << newTime << endl;
 
+    setBasicContextHelp(e->state() & Qt::ControlButton);
+
     if (!m_currentElement || !m_currentStaff)
         return RosegardenCanvasView::NoFollow;
+
+    if (getSnapGrid().getSnapSetting() != SnapGrid::NoSnap) {
+        setContextHelp(i18n("Hold Shift to avoid snapping to beat grid"));
+    } else {
+        clearContextHelp();
+    }
 
     if (e) newTime = getDragTime(e, newTime);
 
@@ -397,6 +405,8 @@ void MatrixMover::handleMouseRelease(timeT newTime,
 
     m_mParentView->canvas()->update();
     m_currentElement = 0;
+
+    setBasicContextHelp();
 }
 
 void MatrixMover::ready()
@@ -406,6 +416,7 @@ void MatrixMover::ready()
     connect(this, SIGNAL(hoveredOverNoteChanged(int, bool, timeT)),
             m_mParentView, SLOT(slotHoveredOverNoteChanged(int, bool, timeT)));
     m_mParentView->setCanvasCursor(Qt::sizeAllCursor);
+    setBasicContextHelp();
 }
 
 void MatrixMover::stow()
@@ -437,15 +448,21 @@ void MatrixMover::slotMatrixScrolled(int newX, int newY)
     handleMouseMove(newTime, newPitch, 0);
 }
 
-void MatrixMover::setBasicContextHelp()
+void MatrixMover::setBasicContextHelp(bool ctrlPressed)
 {
     EventSelection *selection = m_mParentView->getCurrentSelection();
-    if (!selection) {
-        setContextHelp(i18n("Click and drag to move a note; hold Ctrl as well to copy it"));
-    } else if (selection->getAddedEvents() > 1) {
-        setContextHelp(i18n("Click and drag to move selected notes; hold Ctrl as well to copy them"));
+    if (!selection || selection->getAddedEvents() < 2) {
+        if (!ctrlPressed) {
+            setContextHelp(i18n("Click and drag to move a note; hold Ctrl as well to copy it"));
+        } else {
+            setContextHelp(i18n("Click and drag to copy a note"));
+        }
     } else {
-        setContextHelp(i18n("Click and drag to move selected note; hold Ctrl as well to copy it"));
+        if (!ctrlPressed) {
+            setContextHelp(i18n("Click and drag to move selected notes; hold Ctrl as well to copy them"));
+        } else {
+            setContextHelp(i18n("Click and drag to copy selected notes"));
+        }
     }
 }
 

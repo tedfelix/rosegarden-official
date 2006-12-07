@@ -73,7 +73,7 @@ protected slots:
 
 protected:
     SegmentResizer(CompositionView*, RosegardenGUIDoc*, int edgeThreshold = 10);
-    void setBasicContextHelp();
+    void setBasicContextHelp(bool ctrlPressed = false);
 
     //--------------- Data members ---------------------------------
 

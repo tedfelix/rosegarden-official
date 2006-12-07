@@ -255,10 +255,10 @@ int SegmentPencil::handleMouseMove(QMouseEvent *e)
         return RosegardenCanvasView::NoFollow;
     }
 
-    if (m_canvas->isFineGrain()) {
-        clearContextHelp();
-    } else {
+    if (!m_canvas->isFineGrain()) {
         setContextHelp(i18n("Hold Shift to avoid snapping to bar lines"));
+    } else {
+        clearContextHelp();
     }
 
     QRect tmpRect = m_canvas->getTmpRect();

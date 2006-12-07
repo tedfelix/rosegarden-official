@@ -287,7 +287,7 @@ int
 SegmentSelector::handleMouseMove(QMouseEvent *e)
 {
     if (!m_buttonPressed) {
-        setContextHelpFor(e->pos());
+        setContextHelpFor(e->pos(), (e->state() & Qt::ControlButton));
         return RosegardenCanvasView::NoFollow;
     }
 
@@ -353,7 +353,11 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 
     if (m_canvas->getModel()->isSelected(m_currentItem)) {
 
-        setContextHelp(i18n("Hold Shift to avoid snapping to beat grid"));
+        if (!m_canvas->isFineGrain()) {
+            setContextHelp(i18n("Hold Shift to avoid snapping to beat grid"));
+        } else {
+            clearContextHelp();
+        }
 
         // 	RG_DEBUG << "SegmentSelector::handleMouseMove: current item is selected\n";
 
@@ -448,7 +452,7 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
     return RosegardenCanvasView::FollowHorizontal | RosegardenCanvasView::FollowVertical;
 }
 
-void SegmentSelector::setContextHelpFor(QPoint p)
+void SegmentSelector::setContextHelpFor(QPoint p, bool ctrlPressed)
 {
     CompositionItem item = m_canvas->getFirstItemAt(p);
 
@@ -469,12 +473,24 @@ void SegmentSelector::setContextHelpFor(QPoint p)
              !m_canvas->getModel()->haveSelection()) &&
             SegmentResizer::cursorIsCloseEnoughToEdge(item, p,
                                                       threshold, start)) {
-            setContextHelp(i18n("Click and drag to resize a segment; hold Ctrl as well to rescale its contents"));
+            if (!ctrlPressed) {
+                setContextHelp(i18n("Click and drag to resize a segment; hold Ctrl as well to rescale its contents"));
+            } else {
+                setContextHelp(i18n("Click and drag to rescale segment"));
+            }
         } else {
             if (m_canvas->getModel()->haveMultipleSelection()) {
-                setContextHelp(i18n("Click and drag to move segments; hold Ctrl as well to copy them"));
+                if (!ctrlPressed) {
+                    setContextHelp(i18n("Click and drag to move segments; hold Ctrl as well to copy them"));
+                } else {
+                    setContextHelp(i18n("Click and drag to copy segments"));
+                }
             } else {
-                setContextHelp(i18n("Click and drag to move segment; hold Ctrl as well to copy it"));
+                if (!ctrlPressed) {
+                    setContextHelp(i18n("Click and drag to move segment; hold Ctrl as well to copy it"));
+                } else {
+                    setContextHelp(i18n("Click and drag to copy segment"));
+                }
             }
         }
     }

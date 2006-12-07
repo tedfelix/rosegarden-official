@@ -91,6 +91,8 @@ protected:
     MatrixPainter(MatrixView*);
     MatrixPainter(QString name, MatrixView*);
 
+    void setBasicContextHelp();
+
     MatrixElement* m_currentElement;
     MatrixStaff*   m_currentStaff;
 };

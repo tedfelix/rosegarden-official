@@ -89,6 +89,8 @@ protected slots:
 protected:
     MatrixResizer(MatrixView*);
 
+    void setBasicContextHelp();
+
     MatrixElement* m_currentElement;
     MatrixStaff* m_currentStaff;
 };
