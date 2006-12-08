@@ -1509,20 +1509,45 @@ RosegardenGUIView::slotDroppedNewAudio(QString audioDesc)
             *proc << "-r";
             *proc << sampleRate;
         }
-        *proc << "-c";
+        *proc << "-w";
         *proc << audioFile;
-        *proc << newFile->getFilename();
-    
+
         proc->start(KProcess::Block, KProcess::All);
-        if (!proc->normalExit() || proc->exitStatus()) {
-            std::cerr << "audio file importer failed" << std::endl;
+        int es = proc->exitStatus();
+        QString message;
+        if (es == 0) {
+            aFM.removeFile(newFile->getId());
         } else {
-            std::cerr << "audio file importer succeeded" << std::endl;
-            audioFile = newFile->getFilename();
-        }
+            if (es == 1 || es == 3) message = i18n("Converting audio file...");
+            else if (es == 2) message = i18n("Resampling audio file...");
+
+            //!!! show in dialog
+
+            std::cerr << message << std::endl;
+
+            delete proc;
+            proc = new KProcess;
+
+            *proc << "rosegarden-audiofile-importer";
+            if (sampleRate > 0) {
+                *proc << "-r";
+                *proc << sampleRate;
+            }
+            *proc << "-c";
+            *proc << audioFile;
+            *proc << newFile->getFilename();
+    
+            proc->start(KProcess::Block, KProcess::All);
+            if (!proc->normalExit() || proc->exitStatus()) {
+                std::cerr << "audio file importer failed" << std::endl;
+            } else {
+                std::cerr << "audio file importer succeeded" << std::endl;
+                audioFile = newFile->getFilename();
+            }
  
-        aFM.removeFile(newFile->getId());
-        delete proc;
+            aFM.removeFile(newFile->getId());
+            delete proc;
+        }
     }
 
     if (app->getAudioManagerDialog()) {
