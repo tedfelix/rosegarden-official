@@ -71,7 +71,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
     //
     QFrame *frame = new QFrame(m_tabWidget);
     QGridLayout *layout = new QGridLayout(frame,
-                                          6, 4,  // nbrow, nbcol -- one extra row improves layout
+                                          7, 4,  // nbrow, nbcol -- one extra row improves layout
                                           10, 5);
 
     layout->addWidget(new QLabel(i18n("Note name style"),
@@ -81,13 +81,12 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
     layout->addWidget(new QLabel(i18n("Base octave number for MIDI pitch display"),
                                  frame), 2, 0);
 
-    QVBox *box = new QVBox(frame);
-    new QLabel(i18n("Use textured backgrounds on canvas areas"), box);
-    new QLabel(i18n("    (takes effect only from next restart)"), box);
-    layout->addWidget(box, 3, 0);
+    layout->addWidget(new QLabel(i18n("Show tool context help in status bar"), frame), 3, 0);
+
+    layout->addWidget(new QLabel(i18n("Use textured backgrounds on canvas areas"), frame), 4, 0);
 
     layout->addWidget(new QLabel(i18n("Side-bar parameter box layout"),
-                                 frame), 4, 0);
+                                 frame), 5, 0);
 
     m_nameStyle = new KComboBox(frame);
     m_nameStyle->insertItem(i18n("Always use US names (e.g. quarter, 8th)"));
@@ -107,14 +106,19 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
     m_midiPitchOctave->setValue(m_cfg->readNumEntry("midipitchoctave", -2));
     layout->addWidget(m_midiPitchOctave, 2, 1);
 
+    m_toolContextHelp = new QCheckBox(frame);
+    layout->addWidget(m_toolContextHelp, 3, 1);
+    m_toolContextHelp->setChecked(m_cfg->readBoolEntry
+                                  ("toolcontexthelp", true));
+
     m_backgroundTextures = new QCheckBox(i18n("Main window"), frame);
-    layout->addWidget(m_backgroundTextures, 3, 1);
+    layout->addWidget(m_backgroundTextures, 4, 1);
 
     m_matrixBackgroundTextures = new QCheckBox(i18n("Matrix"), frame);
-    layout->addWidget(m_matrixBackgroundTextures, 3, 2);
+    layout->addWidget(m_matrixBackgroundTextures, 4, 2);
 
     m_notationBackgroundTextures = new QCheckBox(i18n("Notation"), frame);
-    layout->addWidget(m_notationBackgroundTextures, 3, 3);
+    layout->addWidget(m_notationBackgroundTextures, 4, 3);
 
     m_backgroundTextures->setChecked(m_cfg->readBoolEntry
                                      ("backgroundtextures", true));
@@ -135,7 +139,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
 
     m_sidebarStyle->setCurrentItem(m_cfg->readUnsignedNumEntry("sidebarstyle",
                                    0));
-    layout->addMultiCellWidget(m_sidebarStyle, 4, 4, 1, 3);
+    layout->addMultiCellWidget(m_sidebarStyle, 5, 5, 1, 3);
 
     addTab(frame, i18n("Presentation"));
 
@@ -163,7 +167,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
     layout->addWidget(m_client, 0, 1);
 
     m_countIn = new QSpinBox(frame);
-    m_countIn->setValue(m_cfg->readUnsignedNumEntry("countinbars", 2));
+    m_countIn->setValue(m_cfg->readUnsignedNumEntry("countinbars", 0));
     m_countIn->setMaxValue(10);
     m_countIn->setMinValue(0);
     layout->addWidget(m_countIn, 1, 1);
@@ -252,11 +256,39 @@ void GeneralConfigurationPage::apply()
     int previewstyle = m_previewStyle->currentItem();
     m_cfg->writeEntry("audiopreviewstyle", previewstyle);
 
+    m_cfg->writeEntry("toolcontexthelp", m_toolContextHelp->isChecked());
+
+    bool texturesChanged = false;
+    bool mainTextureChanged = false;
+    m_cfg->setGroup(GeneralOptionsConfigGroup);
+
+    if (m_cfg->readBoolEntry("backgroundtextures", true) !=
+        m_backgroundTextures->isChecked()) {
+        texturesChanged = true;
+        mainTextureChanged = true;
+    } else {
+        m_cfg->setGroup(MatrixViewConfigGroup);
+        if (m_cfg->readBoolEntry("backgroundtextures", false) !=
+            m_matrixBackgroundTextures->isChecked()) {
+            texturesChanged = true;
+        } else {
+            m_cfg->setGroup(NotationViewConfigGroup);
+            if (m_cfg->readBoolEntry("backgroundtextures", true) !=
+                m_notationBackgroundTextures->isChecked()) {
+                texturesChanged = true;
+            }
+        }
+    }
+
+    m_cfg->setGroup(GeneralOptionsConfigGroup);
     m_cfg->writeEntry("backgroundtextures", m_backgroundTextures->isChecked());
+
     m_cfg->setGroup(MatrixViewConfigGroup);
     m_cfg->writeEntry("backgroundtextures", m_matrixBackgroundTextures->isChecked());
+
     m_cfg->setGroup(NotationViewConfigGroup);
     m_cfg->writeEntry("backgroundtextures", m_notationBackgroundTextures->isChecked());
+
     m_cfg->setGroup(GeneralOptionsConfigGroup);
 
     int sidebarStyle = m_sidebarStyle->currentItem();
@@ -287,6 +319,10 @@ void GeneralConfigurationPage::apply()
     } else
         m_cfg->writeEntry("externalaudioeditor", externalAudioEditor);
 
+
+    if (mainTextureChanged) {
+        KMessageBox::information(this, i18n("Changes to the textured background in the main window will not take effect until you restart Rosegarden."));
+    }
 
 }
 

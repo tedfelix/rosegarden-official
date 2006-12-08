@@ -604,6 +604,7 @@ protected:
     QLabel* m_hoveredOverNoteName;
     QLabel *m_selectionCounter;
     QLabel *m_insertModeLabel;
+    bool m_haveHoveredOverNote;
 
     /**
      * used in slotHoveredOverKeyChanged to track moves over the piano

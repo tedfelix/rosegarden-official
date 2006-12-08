@@ -199,6 +199,7 @@ SegmentParameterBox::initBox()
     m_colourValue->setFont(font);
     //m_colourValue->setFixedHeight(comboHeight);
     //    m_colourValue->setMaximumWidth(width);
+    m_colourValue->setSizeLimit(20);
 
     // handle colour combo changes
     connect(m_colourValue, SIGNAL(activated(int)),

@@ -148,6 +148,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
         m_hoveredOverNoteName(0),
         m_selectionCounter(0),
         m_insertModeLabel(0),
+        m_haveHoveredOverNote(false),
         m_previousEvPitch(0),
         m_dockLeft(0),
         m_canvasView(0),
@@ -965,11 +966,11 @@ void MatrixView::initStatusBar()
 {
     KStatusBar* sb = statusBar();
 
-    m_hoveredOverNoteName = new QLabel(sb);
     m_hoveredOverAbsoluteTime = new QLabel(sb);
+    m_hoveredOverNoteName = new QLabel(sb);
 
-    m_hoveredOverNoteName->setMinimumWidth(180);
-    m_hoveredOverAbsoluteTime->setMinimumWidth(180);
+    m_hoveredOverAbsoluteTime->setMinimumWidth(175);
+    m_hoveredOverNoteName->setMinimumWidth(65);
 
     sb->addWidget(m_hoveredOverAbsoluteTime);
     sb->addWidget(m_hoveredOverNoteName);
@@ -992,11 +993,18 @@ void MatrixView::slotToolHelpChanged(const QString &s)
     QString msg = " " + s;
     if (m_toolContextHelp == msg) return;
     m_toolContextHelp = msg;
+
+    m_config->setGroup(GeneralOptionsConfigGroup);
+    if (!m_config->readBoolEntry("toolcontexthelp", true)) return;
+
     if (m_mouseInCanvasView) statusBar()->changeItem(m_toolContextHelp, 1);
 }
 
 void MatrixView::slotMouseEnteredCanvasView()
 {
+    m_config->setGroup(GeneralOptionsConfigGroup);
+    if (!m_config->readBoolEntry("toolcontexthelp", true)) return;
+
     m_mouseInCanvasView = true;
     statusBar()->changeItem(m_toolContextHelp, 1);
 }
@@ -1438,14 +1446,15 @@ void MatrixView::slotMouseReleased(timeT time, int pitch, QMouseEvent* e)
 }
 
 void
-MatrixView::slotHoveredOverNoteChanged(int evPitch, bool haveEvent,
+MatrixView::slotHoveredOverNoteChanged(int evPitch,
+                                       bool haveEvent,
                                        timeT evTime)
 {
     MidiPitchLabel label(evPitch);
 
-    QString timeStr;
-
     if (haveEvent) {
+
+        m_haveHoveredOverNote = true;
 
         int bar, beat, fraction, remainder;
         getDocument()->getComposition().getMusicalTimeForAbsoluteTime
@@ -1455,7 +1464,7 @@ MatrixView::slotHoveredOverNoteChanged(int evPitch, bool haveEvent,
             getDocument()->getComposition().getElapsedRealTime(evTime);
         long ms = rt.msec();
 
-        timeStr = i18n("%1 (%2.%3s)")
+        QString msg = i18n("Note: %1 (%2.%3s)")
                   .arg(QString("%1-%2-%3-%4")
                        .arg(QString("%1").arg(bar + 1).rightJustify(3, '0'))
                        .arg(QString("%1").arg(beat).rightJustify(2, '0'))
@@ -1463,18 +1472,15 @@ MatrixView::slotHoveredOverNoteChanged(int evPitch, bool haveEvent,
                        .arg(QString("%1").arg(remainder).rightJustify(2, '0')))
                   .arg(rt.sec)
                   .arg(QString("%1").arg(ms).rightJustify(3, '0'));
+
+        m_hoveredOverAbsoluteTime->setText(msg);
     }
 
-    if (timeStr != "") {
-        m_hoveredOverNoteName->setText(i18n("%1 (%2): %3")
-                                       .arg(label.getQString())
-                                       .arg(evPitch)
-                                       .arg(timeStr));
-    } else {
-        m_hoveredOverNoteName->setText(i18n("%1 (%2)")
-                                       .arg(label.getQString())
-                                       .arg(evPitch));
-    }
+    m_haveHoveredOverNote = false;
+
+    m_hoveredOverNoteName->setText(i18n("%1 (%2)")
+                                   .arg(label.getQString())
+                                   .arg(evPitch));
 
     m_pitchRuler->drawHoverNote(evPitch);
 }
@@ -1497,6 +1503,8 @@ MatrixView::slotHoveredOverKeyChanged(unsigned int y)
 void
 MatrixView::slotHoveredOverAbsoluteTimeChanged(unsigned int time)
 {
+    if (m_haveHoveredOverNote) return;
+
     timeT t = time;
 
     int bar, beat, fraction, remainder;

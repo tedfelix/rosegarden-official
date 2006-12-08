@@ -337,9 +337,9 @@ void MatrixPainter::slotMatrixScrolled(int newX, int newY)
 void MatrixPainter::setBasicContextHelp()
 {
     if (getSnapGrid().getSnapSetting() != SnapGrid::NoSnap) {
-        setContextHelp(i18n("Click and drag to draw a new note; hold Shift to avoid snapping to beat grid"));
+        setContextHelp(i18n("Click and drag to draw a note; Shift to avoid snapping to grid"));
     } else {
-        setContextHelp(i18n("Click and drag to draw a new note"));
+        setContextHelp(i18n("Click and drag to draw a note"));
     }        
 }
 

@@ -459,7 +459,7 @@ void MatrixMover::setBasicContextHelp(bool ctrlPressed)
         }
     } else {
         if (!ctrlPressed) {
-            setContextHelp(i18n("Click and drag to move selected notes; hold Ctrl as well to copy them"));
+            setContextHelp(i18n("Click and drag to move selected notes; hold Ctrl as well to copy"));
         } else {
             setContextHelp(i18n("Click and drag to copy selected notes"));
         }
