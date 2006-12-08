@@ -36,7 +36,10 @@ namespace Rosegarden
 RIFFAudioFile::RIFFAudioFile(unsigned int id,
                              const std::string &name,
                              const std::string &fileName):
-        AudioFile(id, name, fileName)
+    AudioFile(id, name, fileName),
+    m_subFormat(PCM),
+    m_bytesPerSecond(0),
+    m_bytesPerFrame(0)
 {}
 
 RIFFAudioFile::RIFFAudioFile(const std::string &fileName,
@@ -315,6 +318,8 @@ RIFFAudioFile::getLength()
         m_inFile->seekg(headerLength, std::ios::cur);
         headerLength += (16 + 8);
     }
+
+    if (!m_bytesPerFrame || !m_sampleRate) return RealTime::zeroTime;
 
     double frames = (m_fileSize - headerLength) / m_bytesPerFrame;
     double seconds = frames / ((double)m_sampleRate);
