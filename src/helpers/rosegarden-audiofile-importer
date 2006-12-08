@@ -25,6 +25,7 @@
 #     its samplerate differs from <rate>.  Exit successfully if no
 #     work is required; return error code 1 if conversion required,
 #     2 if resampling required, 3 if both required, 4 for other error.
+#!!! change this -- should be 1 other error, 2 conversion, 3 resampling etc
 #
 # rosegarden-audiofile-importer [-r <rate>] -c <inputfile> <outputfile>
 #  -- Convert <inputfile> [and resample if necessary] and write to
