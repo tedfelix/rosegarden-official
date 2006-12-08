@@ -35,9 +35,10 @@ namespace Rosegarden
 {
 
 StartupTester::StartupTester() :
-        m_ready(false),
-        m_haveProjectPackager(false),
-        m_haveLilypondView(false)
+    m_ready(false),
+    m_haveProjectPackager(false),
+    m_haveLilypondView(false),
+    m_haveAudioFileImporter(false)
 {}
 
 void
@@ -45,9 +46,24 @@ StartupTester::run()
 {
     m_projectPackagerMutex.lock();
     m_lilypondViewMutex.lock();
+    m_audioFileImporterMutex.lock();
     m_ready = true;
 
-    KProcess *proc = new KProcess;
+    KProcess *proc = new KProcess();
+    *proc << "rosegarden-audiofile-importer";
+    *proc << "-t";
+    proc->start(KProcess::Block, KProcess::All);
+    if (!proc->normalExit() || proc->exitStatus()) {
+        RG_DEBUG << "StartupTester - No audio file importer available" << endl;
+        m_haveAudioFileImporter = false;
+    } else {
+        RG_DEBUG << "StartupTester - Audio file importer OK" << endl;
+        m_haveAudioFileImporter = true;
+    }
+    delete proc;
+    m_audioFileImporterMutex.unlock();
+
+    proc = new KProcess;
     *proc << "rosegarden-project-package";
     *proc << "--conftest";
     proc->start(KProcess::Block, KProcess::All);
@@ -110,6 +126,15 @@ StartupTester::haveLilypondView()
         usleep(10000);
     QMutexLocker locker(&m_lilypondViewMutex);
     return m_haveLilypondView;
+}
+
+bool
+StartupTester::haveAudioFileImporter()
+{
+    while (!m_ready)
+        usleep(10000);
+    QMutexLocker locker(&m_audioFileImporterMutex);
+    return m_haveAudioFileImporter;
 }
 
 }

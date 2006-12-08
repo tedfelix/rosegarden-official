@@ -51,13 +51,16 @@ public:
     
     bool haveProjectPackager();
     bool haveLilypondView();
+    bool haveAudioFileImporter();
     
 protected:
     bool m_ready;
     QMutex m_projectPackagerMutex;
     QMutex m_lilypondViewMutex;
+    QMutex m_audioFileImporterMutex;
     bool m_haveProjectPackager;
     bool m_haveLilypondView;
+    bool m_haveAudioFileImporter;
 };
 
 

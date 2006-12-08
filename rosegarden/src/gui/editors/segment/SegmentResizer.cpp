@@ -43,6 +43,7 @@
 #include "CompositionView.h"
 #include "document/RosegardenGUIDoc.h"
 #include "gui/general/BaseTool.h"
+#include "gui/application/RosegardenGUIApp.h"
 #include "gui/general/RosegardenCanvasView.h"
 #include "gui/widgets/ProgressDialog.h"
 #include "SegmentTool.h"
@@ -147,6 +148,18 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent *e)
             if (rescale) {
 
                 if (segment->getType() == Segment::Audio) {
+
+                    try {
+                        m_doc->getAudioFileManager().testAudioPath();
+                    } catch (AudioFileManager::BadAudioPathException) {
+                        if (KMessageBox::warningContinueCancel
+                            (0,
+                             i18n("The audio file path does not exist or is not writable.\nYou must set the audio file path to a valid directory in Document Properties before rescaling an audio file.\nWould you like to set it now?"),
+                             i18n("Warning"),
+                             i18n("Set audio file path")) == KMessageBox::Continue) {
+                            RosegardenGUIApp::self()->slotOpenAudioPathSettings();
+                        }
+                    }
 
                     float ratio = float(newEndTime - newStartTime) /
                         float(oldEndTime - oldStartTime);
