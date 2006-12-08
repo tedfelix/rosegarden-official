@@ -67,7 +67,7 @@ void SegmentPencil::ready()
     m_canvas->viewport()->setCursor(Qt::ibeamCursor);
     connect(m_canvas, SIGNAL(contentsMoving (int, int)),
             this, SLOT(slotCanvasScrolled(int, int)));
-    setBasicContextHelp();
+    setContextHelpFor(QPoint(0, 0));
 }
 
 void SegmentPencil::stow()
@@ -142,7 +142,7 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent* e)
     if (e->button() == RightButton)
         return ;
 
-    setBasicContextHelp();
+    setContextHelpFor(e->pos());
 
     if (m_newRect) {
 
@@ -251,7 +251,7 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent* e)
 int SegmentPencil::handleMouseMove(QMouseEvent *e)
 {
     if (!m_newRect) {
-        setBasicContextHelp();
+        setContextHelpFor(e->pos());
         return RosegardenCanvasView::NoFollow;
     }
 
@@ -305,8 +305,21 @@ int SegmentPencil::handleMouseMove(QMouseEvent *e)
     return RosegardenCanvasView::FollowHorizontal;
 }
 
-void SegmentPencil::setBasicContextHelp()
+void SegmentPencil::setContextHelpFor(QPoint p)
 {
+    int trackPosition = m_canvas->grid().getYBin(p.y());
+
+    if (trackPosition < m_doc->getComposition().getNbTracks()) {
+        Track *t = m_doc->getComposition().getTrackByPosition(trackPosition);
+        if (t) {
+            InstrumentId id = t->getInstrument();
+            if (id >= AudioInstrumentBase && id < MidiInstrumentBase) {
+                setContextHelp(i18n("Record or drop audio here"));
+                return;
+            }
+        }
+    }
+
     setContextHelp(i18n("Click and drag to draw an empty segment"));
 }
 

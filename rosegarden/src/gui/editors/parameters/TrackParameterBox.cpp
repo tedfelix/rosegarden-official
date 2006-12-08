@@ -301,6 +301,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     m_colorLbl = new QLabel(i18n("Color"), m_defaultsGroup);
     groupLayout->addWidget(m_colorLbl, row, 0, AlignLeft);
     m_defColor = new KComboBox(false, m_defaultsGroup);
+    m_defColor->setSizeLimit(20);
     groupLayout->addMultiCellWidget(m_defColor, row, row, 1, 5, AlignRight);
 
     // populate combo from doc colors

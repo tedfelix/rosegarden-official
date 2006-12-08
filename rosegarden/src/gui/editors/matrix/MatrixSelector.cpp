@@ -48,6 +48,8 @@
 #include "MatrixView.h"
 #include <kaction.h>
 #include <kglobal.h>
+#include <kapplication.h>
+#include <kconfig.h>
 #include <qdialog.h>
 #include <qiconset.h>
 #include <qpoint.h>
@@ -441,7 +443,7 @@ void MatrixSelector::ready()
     connect(m_parentView->getCanvasView(), SIGNAL(contentsMoving (int, int)),
             this, SLOT(slotMatrixScrolled(int, int)));
 
-    setContextHelp(i18n("Click and drag to select notes; middle-click and drag to draw a new note"));
+    setContextHelp(i18n("Click and drag to select; middle-click and drag to draw new note"));
 }
 
 void MatrixSelector::stow()
@@ -545,6 +547,11 @@ EventSelection* MatrixSelector::getSelection()
 
 void MatrixSelector::setContextHelpFor(QPoint p, bool ctrlPressed)
 {
+    kapp->config()->setGroup(GeneralOptionsConfigGroup);
+    if (!kapp->config()->readBoolEntry("toolcontexthelp", true)) return;
+
+    p = m_mParentView->inverseMapPoint(p);
+
     // same logic as in MatrixCanvasView::contentsMousePressEvent
 
     QCanvasItemList itemList = m_mParentView->canvas()->collisions(p);
@@ -568,10 +575,8 @@ void MatrixSelector::setContextHelpFor(QPoint p, bool ctrlPressed)
         }
     }
 
-    p = m_mParentView->inverseMapPoint(p);
-
     if (!mel) {
-        setContextHelp(i18n("Click and drag to select notes; middle-click and drag to draw a new note"));
+        setContextHelp(i18n("Click and drag to select; middle-click and drag to draw new note"));
 
     } else {
         
@@ -596,9 +601,9 @@ void MatrixSelector::setContextHelpFor(QPoint p, bool ctrlPressed)
         } else {
             if (s && s->getAddedEvents() > 1) {
                 if (!ctrlPressed) {
-                    setContextHelp(i18n("Click and drag to move selected notes; hold Ctrl as well to copy them"));
+                    setContextHelp(i18n("Click and drag to move selected notes; hold Ctrl as well to copy"));
                 } else {
-                    setContextHelp(i18n("Click and drag to move selected notes"));
+                    setContextHelp(i18n("Click and drag to copy selected notes"));
                 }
             }
         }

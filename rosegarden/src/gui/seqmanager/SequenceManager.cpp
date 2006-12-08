@@ -734,7 +734,7 @@ punchin:
         else {
             if (m_transportStatus != RECORDING_ARMED && punchIn == false) {
                 int startBar = comp.getBarNumber(comp.getPosition());
-                startBar -= config->readUnsignedNumEntry("countinbars", 2);
+                startBar -= config->readUnsignedNumEntry("countinbars", 0);
                 m_doc->slotSetPointerPosition(comp.getBarRange(startBar).first);
             }
         }

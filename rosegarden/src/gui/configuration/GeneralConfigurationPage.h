@@ -103,6 +103,7 @@ protected:
     QCheckBox* m_studio;
     QSpinBox*  m_midiPitchOctave;
     QLineEdit* m_externalAudioEditorPath;
+    QCheckBox* m_toolContextHelp;
     QCheckBox* m_backgroundTextures;
     QCheckBox* m_notationBackgroundTextures;
     QCheckBox* m_matrixBackgroundTextures;

@@ -39,13 +39,15 @@
 #include "CompositionModel.h"
 #include "CompositionView.h"
 #include "document/RosegardenGUIDoc.h"
+#include "document/ConfigGroups.h"
 #include "gui/general/BaseTool.h"
 #include "gui/general/RosegardenCanvasView.h"
 #include "SegmentPencil.h"
 #include "SegmentResizer.h"
 #include "SegmentTool.h"
 #include "SegmentToolBox.h"
-#include <kcommand.h>
+#include <kapplication.h>
+#include <kconfig.h>
 #include <qcursor.h>
 #include <qevent.h>
 #include <qpoint.h>
@@ -454,6 +456,9 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 
 void SegmentSelector::setContextHelpFor(QPoint p, bool ctrlPressed)
 {
+    kapp->config()->setGroup(GeneralOptionsConfigGroup);
+    if (!kapp->config()->readBoolEntry("toolcontexthelp", true)) return;
+
     CompositionItem item = m_canvas->getFirstItemAt(p);
 
     if (!item) {
@@ -487,7 +492,7 @@ void SegmentSelector::setContextHelpFor(QPoint p, bool ctrlPressed)
                 }
             } else {
                 if (!ctrlPressed) {
-                    setContextHelp(i18n("Click and drag to move segment; hold Ctrl as well to copy it"));
+                    setContextHelp(i18n("Click and drag to move segment; hold Ctrl as well to copy it; double-click to edit"));
                 } else {
                     setContextHelp(i18n("Click and drag to copy segment"));
                 }

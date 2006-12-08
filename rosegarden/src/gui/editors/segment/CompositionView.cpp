@@ -39,6 +39,7 @@
 #include "CompositionRect.h"
 #include "AudioPreviewPainter.h"
 #include "document/RosegardenGUIDoc.h"
+#include "document/ConfigGroups.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/RosegardenCanvasView.h"
 #include "gui/general/RosegardenScrollView.h"
@@ -62,6 +63,8 @@
 #include <qsize.h>
 #include <qstring.h>
 #include <qwidget.h>
+#include <kapplication.h>
+#include <kconfig.h>
 
 
 namespace Rosegarden
@@ -1276,6 +1279,9 @@ bool CompositionView::event(QEvent* e)
 
 void CompositionView::enterEvent(QEvent *e)
 {
+    kapp->config()->setGroup(GeneralOptionsConfigGroup);
+    if (!kapp->config()->readBoolEntry("toolcontexthelp", true)) return;
+
     emit showContextHelp(m_toolContextHelp);
     m_contextHelpShown = true;
 }
@@ -1290,6 +1296,10 @@ void CompositionView::slotToolHelpChanged(const QString &text)
 {
     if (m_toolContextHelp == text) return;
     m_toolContextHelp = text;
+
+    kapp->config()->setGroup(GeneralOptionsConfigGroup);
+    if (!kapp->config()->readBoolEntry("toolcontexthelp", true)) return;
+
     if (m_contextHelpShown) emit showContextHelp(text);
 }
 
