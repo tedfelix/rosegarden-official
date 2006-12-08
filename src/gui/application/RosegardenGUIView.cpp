@@ -50,6 +50,7 @@
 #include "commands/segment/SegmentSingleRepeatToCopyCommand.h"
 #include "document/MultiViewCommandHistory.h"
 #include "document/RosegardenGUIDoc.h"
+#include "RosegardenApplication.h"
 #include "gui/configuration/GeneralConfigurationPage.h"
 #include "gui/dialogs/AudioSplitDialog.h"
 #include "gui/dialogs/AudioManagerDialog.h"
@@ -1484,6 +1485,46 @@ RosegardenGUIView::slotDroppedNewAudio(QString audioDesc)
 
     AudioFileId audioFileId = 0;
 
+    //!!! test whether startup tester has found the importer rather
+    //than just trying to run it
+
+    int sampleRate = 0;
+
+    QCString replyType;
+    QByteArray replyData;
+    if (rgapp->sequencerCall("getSampleRate()", replyType, replyData)) {
+        QDataStream streamIn(replyData, IO_ReadOnly);
+        unsigned int result;
+        streamIn >> sampleRate;
+    }
+
+    //!!! wrong -- want a derived audio file with no source -- check it out
+    AudioFile *newFile = aFM.createRecordingAudioFile();
+
+    if (newFile) {
+
+        KProcess *proc = new KProcess();
+        *proc << "rosegarden-audiofile-importer";
+        if (sampleRate > 0) {
+            *proc << "-r";
+            *proc << sampleRate;
+        }
+        *proc << "-c";
+        *proc << audioFile;
+        *proc << newFile->getFilename();
+    
+        proc->start(KProcess::Block, KProcess::All);
+        if (!proc->normalExit() || proc->exitStatus()) {
+            std::cerr << "audio file importer failed" << std::endl;
+        } else {
+            std::cerr << "audio file importer succeeded" << std::endl;
+            audioFile = newFile->getFilename();
+        }
+ 
+        aFM.removeFile(newFile->getId());
+        delete proc;
+    }
+
     if (app->getAudioManagerDialog()) {
 
         // Add audio file through manager dialog
@@ -1496,7 +1537,7 @@ RosegardenGUIView::slotDroppedNewAudio(QString audioDesc)
         audioFileId = aFM.getLastAudioFile()->getId();
 
     } else {
-
+            
         try {
             audioFileId = aFM.addFile(qstrtostr(audioFile));
         } catch (AudioFileManager::BadAudioPathException e) {
@@ -1508,7 +1549,7 @@ RosegardenGUIView::slotDroppedNewAudio(QString audioDesc)
             KMessageBox::sorry(this, errorString);
             return ;
         }
-
+            
         // add the file at the sequencer
         emit addAudioFile(audioFileId);
     }

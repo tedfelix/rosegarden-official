@@ -2631,9 +2631,25 @@ void RosegardenGUIApp::slotRescaleSelection()
     KMacroCommand *command = new KMacroCommand
                              (SegmentRescaleCommand::getGlobalName());
 
+    bool pathTested = false;
+
     for (SegmentSelection::iterator i = selection.begin();
             i != selection.end(); ++i) {
         if ((*i)->getType() == Segment::Audio) {
+            if (!pathTested) {
+                try {
+                    m_doc->getAudioFileManager().testAudioPath();
+                } catch (AudioFileManager::BadAudioPathException) {
+                    if (KMessageBox::warningContinueCancel
+                        (this,
+                         i18n("The audio file path does not exist or is not writable.\nYou must set the audio file path to a valid directory in Document Properties before rescaling an audio file.\nWould you like to set it now?"),
+                         i18n("Warning"),
+                         i18n("Set audio file path")) == KMessageBox::Continue) {
+                        slotOpenAudioPathSettings();
+                    }
+                }
+                pathTested = true;
+            }
             AudioSegmentRescaleCommand *asrc = new AudioSegmentRescaleCommand
                 (m_doc, *i, ratio);
             command->addCommand(asrc);

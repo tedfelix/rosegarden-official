@@ -33,7 +33,11 @@
 # N.B. <outputfile> must not already exist -- this program will not
 # overwrite it, but will fail instead if it does
 
+#!!! todo: tidy up on unsuccessful exit
+
 version=1
+
+echo "rosegarden-audiofile-importer: $@" 1>&2
 
 conftest() {
     if [ -x "`type -path sndfile-resample`" ]; then
