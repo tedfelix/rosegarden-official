@@ -102,12 +102,21 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
 	    
     AudioTimeStretcher stretcher(sr, ch, ratio, true, obs);
 
+    // We'll first prime the timestretcher with half its window size
+    // of silence, an amount which we then discard at the start of the
+    // output (as well as its own processing latency).  Really the
+    // timestretcher should handle this itself and report it in its
+    // own latency calculation
+
+    size_t padding = stretcher.getWindowSize()/2;
+
     char *ebf = (char *)alloca
         (ch * ibs * sourceFile->getBytesPerFrame());
     
     std::vector<float *> dbfs;
     for (int c = 0; c < ch; ++c) {
-        dbfs.push_back((float *)alloca(ibs * sizeof(float)));
+        dbfs.push_back((float *)alloca((ibs > padding ? ibs : padding)
+                                       * sizeof(float)));
     }
     
     float **ibfs = (float **)alloca(ch * sizeof(float *));
@@ -125,6 +134,13 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
         
     int totalIn = 0, totalOut = 0;
         
+    for (int c = 0; c < ch; ++c) {
+        for (size_t i = 0; i < padding; ++i) {
+            ibfs[c][i] = 0.f;
+        }
+    }
+    stretcher.putInput(ibfs, padding);
+
     RealTime totalTime = sourceFile->getLength();
     long fileTotalIn = RealTime::realTime2Frame
         (totalTime, sourceFile->getSampleRate());
@@ -180,6 +196,20 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
                 
             unsigned int count = available;
             if (count > obs) count = obs;
+
+            if (padding > 0) {
+                if (count <= padding) {
+                    stretcher.getOutput(obfs, count);
+                    padding -= count;
+                    available -= count;
+                    continue;
+                } else {
+                    stretcher.getOutput(obfs, padding);
+                    count -= padding;
+                    available -= padding;
+                    padding = 0;
+                }
+            }
                 
             stretcher.getOutput(obfs, count);
                 
