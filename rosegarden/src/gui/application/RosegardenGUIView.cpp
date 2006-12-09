@@ -1485,99 +1485,25 @@ RosegardenGUIView::slotDroppedNewAudio(QString audioDesc)
 
     AudioFileId audioFileId = 0;
 
-    //!!! test whether startup tester has found the importer rather
-    //than just trying to run it
-
     int sampleRate = 0;
-
-    QCString replyType;
-    QByteArray replyData;
-    if (rgapp->sequencerCall("getSampleRate()", replyType, replyData)) {
-        QDataStream streamIn(replyData, IO_ReadOnly);
-        unsigned int result;
-        streamIn >> sampleRate;
+    if (getDocument()->getSequenceManager()) {
+        sampleRate = getDocument()->getSequenceManager()->getSampleRate();
     }
 
-    //!!! wrong -- want a derived audio file with no source -- check it out
-    AudioFile *newFile = aFM.createRecordingAudioFile();
-
-    if (newFile) {
-
-        KProcess *proc = new KProcess();
-        *proc << "rosegarden-audiofile-importer";
-        if (sampleRate > 0) {
-            *proc << "-r";
-            *proc << sampleRate;
-        }
-        *proc << "-w";
-        *proc << audioFile;
-
-        proc->start(KProcess::Block, KProcess::All);
-        int es = proc->exitStatus();
-        QString message;
-        if (es == 0) {
-            aFM.removeFile(newFile->getId());
-        } else {
-            if (es == 1 || es == 3) message = i18n("Converting audio file...");
-            else if (es == 2) message = i18n("Resampling audio file...");
-
-            //!!! show in dialog
-
-            std::cerr << message << std::endl;
-
-            delete proc;
-            proc = new KProcess;
-
-            *proc << "rosegarden-audiofile-importer";
-            if (sampleRate > 0) {
-                *proc << "-r";
-                *proc << sampleRate;
-            }
-            *proc << "-c";
-            *proc << audioFile;
-            *proc << newFile->getFilename();
-    
-            proc->start(KProcess::Block, KProcess::All);
-            if (!proc->normalExit() || proc->exitStatus()) {
-                std::cerr << "audio file importer failed" << std::endl;
-            } else {
-                std::cerr << "audio file importer succeeded" << std::endl;
-                audioFile = newFile->getFilename();
-            }
- 
-            aFM.removeFile(newFile->getId());
-            delete proc;
-        }
+    try {
+        audioFileId = aFM.importFile(qstrtostr(audioFile), sampleRate);
+    } catch (AudioFileManager::BadAudioPathException e) {
+        QString errorString = i18n("Can't add dropped file. ") + strtoqstr(e.getMessage());
+        KMessageBox::sorry(this, errorString);
+        return ;
+    } catch (QString e) {
+        QString errorString = i18n("Can't add dropped file. ") + e;
+        KMessageBox::sorry(this, errorString);
+        return ;
     }
-
-    if (app->getAudioManagerDialog()) {
-
-        // Add audio file through manager dialog
-        //
-        if (app->getAudioManagerDialog()->addAudioFile(audioFile) == false)
-            return ;
-
-        // get the last added audio file id and insert the segment
-        //
-        audioFileId = aFM.getLastAudioFile()->getId();
-
-    } else {
             
-        try {
-            audioFileId = aFM.addFile(qstrtostr(audioFile));
-        } catch (AudioFileManager::BadAudioPathException e) {
-            QString errorString = i18n("Can't add dropped file. ") + strtoqstr(e.getMessage());
-            KMessageBox::sorry(this, errorString);
-            return ;
-        } catch (QString e) {
-            QString errorString = i18n("Can't add dropped file. ") + e;
-            KMessageBox::sorry(this, errorString);
-            return ;
-        }
-            
-        // add the file at the sequencer
-        emit addAudioFile(audioFileId);
-    }
+    // add the file at the sequencer
+    emit addAudioFile(audioFileId);
 
     // Now fetch file details
     //
@@ -1591,8 +1517,9 @@ RosegardenGUIView::slotDroppedNewAudio(QString audioDesc)
         << "filename = " << audioFile
         << ", trackid = " << trackId
         << ", time = " << time << endl;
-
     }
+
+    //!!! and preview
 }
 
 void

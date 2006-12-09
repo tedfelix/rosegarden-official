@@ -36,6 +36,9 @@
 
 #include <kapp.h>
 #include <klocale.h>
+#include <kprocess.h>
+#include <kio/netaccess.h>
+#include <kmessagebox.h>
 
 #include <qpixmap.h>
 #include <qpainter.h>
@@ -639,6 +642,117 @@ AudioFileManager::createDerivedAudioFile(AudioFileId source,
     }
 
     return aF;
+}
+
+AudioFileId
+AudioFileManager::importURL(const KURL &url, int sampleRate)
+{
+    if (url.isLocalFile()) return importFile(url.path());
+
+    QString localPath = "";
+    if (!KIO::NetAccess::download(url, localPath)) {
+	KMessageBox::error(0, i18n("Cannot download file %1").arg(url.prettyURL()));
+	throw SoundFile::BadSoundFileException(url.prettyURL());
+    }
+    
+    AudioFileId id = 0;
+
+    try {
+	id = importFile(localPath.data(), sampleRate);
+    } catch (BadAudioPathException ape) {
+	KIO::NetAccess::removeTempFile(localPath);
+	throw ape;
+    } catch (SoundFile::BadSoundFileException bse) {
+	KIO::NetAccess::removeTempFile(localPath);
+	throw bse;
+    }
+    
+    return id;
+}
+
+AudioFileId
+AudioFileManager::importFile(const std::string &fileName, int sampleRate)
+{
+    MutexLock lock (&_audioFileManagerLock);
+
+    std::cerr << "AudioFileManager::importFile("<< fileName << ", " << sampleRate << ")" << std::endl;
+
+    KProcess *proc = new KProcess();
+    *proc << "rosegarden-audiofile-importer";
+    if (sampleRate > 0) {
+	*proc << "-r";
+	*proc << QString("%1").arg(sampleRate);
+    }
+    *proc << "-w";
+    *proc << fileName.c_str();
+
+    proc->start(KProcess::Block, KProcess::All);
+    int es = proc->exitStatus();
+    delete proc;
+
+    if (es == 0) {
+	return addFile(fileName);
+    }
+
+    AudioFileId newId = getFirstUnusedID();
+    QString targetName = "";
+
+    QString sourceBase = QFileInfo(fileName.c_str()).baseName();
+    if (sourceBase.length() > 3 && sourceBase.startsWith("rg-")) {
+	sourceBase = sourceBase.right(sourceBase.length() - 3);
+    }
+    if (sourceBase.length() > 15) sourceBase = sourceBase.left(15);
+
+    while (targetName == "") {
+
+        targetName = QString("conv-%2-%3-%4.wav")
+	    .arg(sourceBase)
+	    .arg(QDateTime::currentDateTime().toString("yyyyMMdd-hhmmss"))
+	    .arg(newId + 1);
+
+        if (QFile(m_audioPath.c_str() + targetName).exists()) {
+            targetName = "";
+            ++newId;
+        }
+    }
+
+    proc = new KProcess;
+
+    *proc << "rosegarden-audiofile-importer";
+    if (sampleRate > 0) {
+	*proc << "-r";
+	*proc << QString("%1").arg(sampleRate);
+    }
+    *proc << "-c";
+    *proc << fileName.c_str();
+    *proc << (m_audioPath.c_str() + targetName);
+    
+    proc->start(KProcess::Block, KProcess::All);
+    es = proc->exitStatus();
+    delete proc;
+
+    if (es) {
+	std::cerr << "audio file importer failed" << std::endl;
+	return addFile(fileName);
+    } else {
+	std::cerr << "audio file importer succeeded" << std::endl;
+    }
+
+    // insert file into vector
+    WAVAudioFile *aF = 0;
+
+    try {
+        aF = new WAVAudioFile(newId,
+			      targetName.data(),
+			      m_audioPath + targetName.data());
+        m_audioFiles.push_back(aF);
+	m_derivedAudioFiles.insert(aF);
+    } catch (SoundFile::BadSoundFileException e) {
+        delete aF;
+	return addFile(fileName);
+    }
+
+    return aF->getId();
 }
 
 AudioFile*

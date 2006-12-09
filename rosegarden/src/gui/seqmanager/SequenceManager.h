@@ -208,6 +208,8 @@ public:
     
     void enableMIDIThruRouting(bool state);
     
+    int getSampleRate(); // may return 0 if sequencer uncontactable
+
 public slots:
 
     void update();
@@ -305,7 +307,9 @@ protected:
 
     bool                       m_lastLowLatencySwitchSent;
 
-    timeT          m_lastTransportStartPosition;
+    timeT                      m_lastTransportStartPosition;
+
+    int                        m_sampleRate;
 };
 
 

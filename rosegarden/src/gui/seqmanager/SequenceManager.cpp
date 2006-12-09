@@ -103,7 +103,8 @@ SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
             m_reportTimer(new QTimer(m_doc)),
             m_canReport(true),
             m_lastLowLatencySwitchSent(false),
-            m_lastTransportStartPosition(0)
+            m_lastTransportStartPosition(0),
+            m_sampleRate(0)
 {
 // Replaced this with a call to cleanup() from composition mmapper ctor:
 // if done here, this removes the mmapped versions of any segments stored
@@ -2029,6 +2030,23 @@ SequenceManager::enableMIDIThruRouting(bool state)
 {
     m_controlBlockMmapper->enableMIDIThruRouting(state);
 }
+
+int
+SequenceManager::getSampleRate() 
+{
+    if (m_sampleRate != 0) return m_sampleRate;
+
+    QCString replyType;
+    QByteArray replyData;
+    if (rgapp->sequencerCall("getSampleRate()", replyType, replyData)) {
+        QDataStream streamIn(replyData, IO_ReadOnly);
+        unsigned int result;
+        streamIn >> m_sampleRate;
+    }
+
+    return m_sampleRate;
+}
+
 
 }
 #include "SequenceManager.moc"

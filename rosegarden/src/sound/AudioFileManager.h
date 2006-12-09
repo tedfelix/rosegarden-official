@@ -35,6 +35,8 @@
 #include "PeakFile.h"
 #include "Exception.h"
 
+#include <kurl.h>
+
 // AudioFileManager loads and maps audio files to their
 // internal references (ids).  A point of contact for
 // AudioFile information - loading a Composition should
@@ -90,6 +92,20 @@ public:
     //
     AudioFileId addFile(const std::string &filePath);
     // throw BadAudioPathException
+
+    // Create an audio file by importing (i.e. converting and/or
+    // resampling) an existing file using the external conversion
+    // utility
+    //
+    AudioFileId importFile(const std::string &filePath,
+			   int targetSampleRate = 0);
+    // throw BadAudioPathException, BadSoundFileException
+
+    // Create an audio file by importing from a URL
+    //
+    AudioFileId importURL(const KURL &filePath,
+			  int targetSampleRate = 0);
+    // throw BadAudioPathException, BadSoundFileException
 
     // Insert an audio file into the AudioFileManager and get the
     // first allocated id for it.  Used from the RG file as we already
