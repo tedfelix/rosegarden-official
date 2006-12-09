@@ -454,30 +454,30 @@ LilypondExporter::write()
         str << "\\header {" << std::endl;
         col++;  // indent+
 
+        const std::string headerDedication = "dedication";
         const std::string headerTitle = "title";
         const std::string headerSubtitle = "subtitle";
+        const std::string headerSubsubtitle = "subsubtitle";
         const std::string headerPoet = "poet";
         const std::string headerComposer = "composer";
         const std::string headerMeter = "meter";
+        const std::string headerOpus = "opus";
         const std::string headerArranger = "arranger";
         const std::string headerInstrument = "instrument";
-        const std::string headerDedication = "dedication";
         const std::string headerPiece = "piece";
-        const std::string headerHead = "head";
         const std::string headerCopyright = "copyright";
-        const std::string headerFooter = "footer";
         const std::string headerTagline = "tagline";
 
-        bool userTagline = false, userFooter = false;
+        bool userTagline = false;
 
         for (unsigned int index = 0; index < propertyNames.size(); ++index) {
             std::string property = propertyNames [index];
-            if (property == headerTitle || property == headerSubtitle ||
+            if (property == headerDedication || property == headerTitle ||
+                    property == headerSubtitle || property == headerSubsubtitle ||
                     property == headerPoet || property == headerComposer ||
-                    property == headerMeter || property == headerArranger ||
-                    property == headerInstrument || property == headerDedication ||
-                    property == headerPiece || property == headerHead ||
-                    property == headerCopyright || property == headerFooter ||
+                    property == headerMeter || property == headerOpus ||
+                    property == headerArranger || property == headerInstrument ||
+                    property == headerPiece || property == headerCopyright ||
                     property == headerTagline) {
                 std::string header = protectIllegalChars(metadata.get<String>(property));
                 if (header != "") {
@@ -486,22 +486,14 @@ LilypondExporter::write()
                     // defaults if they don't:
                     if (property == headerTagline)
                         userTagline = true;
-                    if (property == headerFooter)
-                        userFooter = true;
                 }
             }
         }
 
-        // default tagline/footer
+        // default tagline
         if (!userTagline) {
             str << indent(col) << "tagline = \""
             << "Created using Rosegarden " << protectIllegalChars(VERSION) << " and LilyPond"
-            << "\"" << std::endl;
-        }
-
-        if (!userFooter) {
-            str << indent(col) << "footer = \"" << "Rosegarden "
-            << protectIllegalChars(VERSION)
             << "\"" << std::endl;
         }
 
