@@ -27,7 +27,7 @@ if [ "$?" != "0" ]; then
 else
     lilypond_version="`lilypond --version | grep LilyPond | head -1 | sed 's/^.* //'`"
     case "$lilypond_version" in
-	1.*|2.0.*)
+	1.*|2.0.*|2.2.*|2.4.*)
 	    echo "rosegarden-lilypondview: Unsupported LilyPond version ($lilypond_version)" 1>&2;;
 	*)
 	    prog_lilypond=lilypond;;
