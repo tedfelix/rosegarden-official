@@ -163,7 +163,7 @@ fi
 
 target="$outfile"
 if [ -n "$intermediate" ]; then
-    target="$outfile.tmp"
+    target="$outfile.tmp.wav"
     if [ -f "$target" ]; then
 	echo "rosegarden-audiofile-importer: ERROR: intermediate file \"$target\" already exists, not overwriting" 1>&2
 	exit $OTHER_ERROR
