@@ -51,6 +51,8 @@
 // is not (and should not be) used elsewhere within the
 // sound or sequencer libraries.
 
+class KProcess;
+
 namespace Rosegarden
 {
 
@@ -276,11 +278,14 @@ public:
 
 signals:
     void setProgress(int);
+    void setOperationName(QString);
 
 public slots:
     // Cancel a running preview
     //
     void slotStopPreview();
+
+    void slotStopImport();
 
 private:
     std::string getFileInPath(const std::string &file);
@@ -299,6 +304,8 @@ private:
     // the document is not saved.
     std::set<AudioFile *> m_recordedAudioFiles;
     std::set<AudioFile *> m_derivedAudioFiles;
+
+    KProcess *m_importProcess;
 };
 
 }

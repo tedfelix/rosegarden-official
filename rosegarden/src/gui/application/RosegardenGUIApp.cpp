@@ -271,6 +271,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
         m_lircClient(0),
         m_lircCommander(0),
 #endif
+        m_haveAudioImporter(false),
         m_parameterArea(0)
 {
     m_myself = this;
@@ -4410,6 +4411,8 @@ void RosegardenGUIApp::slotTestStartupTester()
     stateChanged("have_lilypondview",
                  m_startupTester->haveLilypondView() ?
                  KXMLGUIClient::StateNoReverse : KXMLGUIClient::StateReverse);
+
+    m_haveAudioImporter = m_startupTester->haveAudioFileImporter();
 
     delete m_startupTester;
     m_startupTester = 0;

@@ -72,7 +72,8 @@ private:
     pthread_mutex_t *m_mutex;
 };
 
-AudioFileManager::AudioFileManager()
+AudioFileManager::AudioFileManager() :
+    m_importProcess(0)
 {
     pthread_mutexattr_t attr;
     pthread_mutexattr_init(&attr);
@@ -115,8 +116,11 @@ AudioFileManager::addFile(const std::string &filePath)
     MutexLock lock (&_audioFileManagerLock)
         ;
 
-    QString ext =
-        QString(filePath.substr(filePath.length() - 3, 3).c_str()).lower();
+    QString ext;
+
+    if (filePath.length() > 3) {
+	ext = QString(filePath.substr(filePath.length() - 3, 3).c_str()).lower();
+    }
 
     // Check for file existing already in manager by path
     //
@@ -647,7 +651,11 @@ AudioFileManager::createDerivedAudioFile(AudioFileId source,
 AudioFileId
 AudioFileManager::importURL(const KURL &url, int sampleRate)
 {
-    if (url.isLocalFile()) return importFile(url.path());
+    if (url.isLocalFile()) return importFile(url.path(), sampleRate);
+
+    std::cerr << "AudioFileManager::importURL("<< url.prettyURL() << ", " << sampleRate << ")" << std::endl;
+
+    emit setOperationName(i18n("Downloading file %1").arg(url.prettyURL()));
 
     QString localPath = "";
     if (!KIO::NetAccess::download(url, localPath)) {
@@ -686,12 +694,23 @@ AudioFileManager::importFile(const std::string &fileName, int sampleRate)
     *proc << "-w";
     *proc << fileName.c_str();
 
-    proc->start(KProcess::Block, KProcess::All);
+    proc->start(KProcess::Block, KProcess::NoCommunication);
+
     int es = proc->exitStatus();
     delete proc;
 
     if (es == 0) {
 	return addFile(fileName);
+    }
+
+    if (es == 2) {
+	emit setOperationName(i18n("Converting audio file..."));
+    } else if (es == 3) {
+	emit setOperationName(i18n("Resampling audio file..."));
+    } else if (es == 4) {
+	emit setOperationName(i18n("Converting and resampling audio file..."));
+    } else {
+	emit setOperationName(i18n("Importing audio file..."));
     }
 
     AudioFileId newId = getFirstUnusedID();
@@ -716,20 +735,31 @@ AudioFileManager::importFile(const std::string &fileName, int sampleRate)
         }
     }
 
-    proc = new KProcess;
+    m_importProcess = new KProcess;
 
-    *proc << "rosegarden-audiofile-importer";
+    *m_importProcess << "rosegarden-audiofile-importer";
     if (sampleRate > 0) {
-	*proc << "-r";
-	*proc << QString("%1").arg(sampleRate);
+	*m_importProcess << "-r";
+	*m_importProcess << QString("%1").arg(sampleRate);
     }
-    *proc << "-c";
-    *proc << fileName.c_str();
-    *proc << (m_audioPath.c_str() + targetName);
+    *m_importProcess << "-c";
+    *m_importProcess << fileName.c_str();
+    *m_importProcess << (m_audioPath.c_str() + targetName);
     
-    proc->start(KProcess::Block, KProcess::All);
-    es = proc->exitStatus();
-    delete proc;
+    m_importProcess->start(KProcess::NotifyOnExit, KProcess::NoCommunication);
+
+    while (m_importProcess->isRunning()) {
+	kapp->processEvents(100);
+    }
+
+    if (!m_importProcess->normalExit()) {
+	// interrupted
+	throw SoundFile::BadSoundFileException(fileName, "Import cancelled");
+    }
+
+    es = m_importProcess->exitStatus();
+    delete m_importProcess;
+    m_importProcess = 0;
 
     if (es) {
 	std::cerr << "audio file importer failed" << std::endl;
@@ -753,6 +783,12 @@ AudioFileManager::importFile(const std::string &fileName, int sampleRate)
     }
 
     return aF->getId();
+}
+
+void
+AudioFileManager::slotStopImport()
+{
+    if (m_importProcess) m_importProcess->kill(SIGKILL);
 }
 
 AudioFile*

@@ -313,6 +313,8 @@ public:
 
     bool isTrackEditorPlayTracking() const;
 
+    bool haveAudioImporter() const { return m_haveAudioImporter; }
+
 protected:
 
     /**** File handling code that we don't want the outside world to use ****/
@@ -1618,6 +1620,8 @@ private:
     QTimer *m_stopTimer;
 
     StartupTester *m_startupTester;
+
+    bool m_haveAudioImporter;
 
     RosegardenParameterArea *m_parameterArea;
 

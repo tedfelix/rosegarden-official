@@ -715,12 +715,14 @@ void TrackEditor::dropEvent(QDropEvent* event)
             emit droppedDocument(uriPath);
         } else {
 
-            QStringList files;
-            QUriDrag::decodeLocalFiles(event, files);
-            QString filePath = files.first();
+            QStrList uris;
+            QString uri;
+            if (QUriDrag::decode(event, uris)) uri = uris.first();
+//            QUriDrag::decodeLocalFiles(event, files);
+//            QString filePath = files.first();
 
-            RG_DEBUG << "TrackEditor::dropEvent() : got filename: "
-            << filePath << endl;
+            RG_DEBUG << "TrackEditor::dropEvent() : got URI: "
+            << uri << endl;
 
             RG_DEBUG << "TrackEditor::dropEvent() : dropping at track pos = "
             << trackPos
@@ -737,7 +739,7 @@ void TrackEditor::dropEvent(QDropEvent* event)
                 QString audioText;
                 QTextOStream t(&audioText);
 
-                t << filePath << "\n";
+                t << uri << "\n";
                 t << track->getId() << "\n";
                 t << time << "\n";
 
