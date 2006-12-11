@@ -108,7 +108,7 @@ LilypondExporter::LilypondExporter(QObject *parent,
     m_exportStaffGroup = cfg->readBoolEntry("lilyexportstaffgroup", false);
     m_exportStaffMerge = cfg->readBoolEntry("lilyexportstaffmerge", false);
 
-    m_languageLevel = cfg->readUnsignedNumEntry("lilylanguage", 2);
+    m_languageLevel = cfg->readUnsignedNumEntry("lilylanguage", 0);
 
 }
 
@@ -326,25 +326,10 @@ LilypondExporter::protectIllegalChars(std::string inStr)
     tmpStr.replace(QRegExp("\\{"), "");
     tmpStr.replace(QRegExp("\\}"), "");
 
-    // [cc] Convert to latin1, which is what Lilypond expects.
-    // I have no idea whether, or how, non-latin1 characters can be
-    // handled by Lilypond; I just know if you feed it utf8 you get
-    // garbage.
     //
-    // DMM - we should see if this is still true, because current (2.6)
-    // Lilypond docs speak of using utf8 to achieve special results
+    // LilyPond uses utf8 encoding.
     //
-    // [plcl] - I can confirm that 2.6 requires all text encoded as utf8,
-    // I've opened a bug report (1466805) about this issue.
-    // if lilypond version < 2.6, text output is encoded as latin1
-    // as before, but when it is 2.6, text output is encoded as utf8.
-
-    if (m_languageLevel < 2) {
-        static QTextCodec *codec(QTextCodec::codecForName("ISO8859-1"));
-        return codec->fromUnicode(tmpStr).data();
-    } else {
-        return tmpStr.utf8().data();
-    }
+    return tmpStr.utf8().data();
 }
 
 bool
@@ -389,53 +374,37 @@ LilypondExporter::write()
 
     switch (m_languageLevel) {
 
-        // 0 -> Lilypond 2.2
-        // 1 -> Lilypond 2.4
-        // 2 -> Lilypond 2.6
-        // 3 -> Lilypond 2.8
-        // 4 -> Lilypond 2.10
+        // 0 -> Lilypond 2.6
+        // 1 -> Lilypond 2.8
+        // 2 -> Lilypond 2.10
 
     case 0:
-        str << "\\version \"2.2.0\"" << std::endl;
-        break;
-
-    case 1:
-        str << "\\version \"2.4.0\"" << std::endl;
-        break;
-
-    case 2:
         str << "\\version \"2.6.0\"" << std::endl;
         break;
 
-    case 3:
+    case 1:
         str << "\\version \"2.8.0\"" << std::endl;
         break;
 
-    case 4:
+    case 2:
         str << "\\version \"2.10.0\"" << std::endl;
         break;
 
     default:
         // force the default version if there was an error
         std::cerr << "ERROR: Unknown language level " << m_languageLevel
-        << ", using \\version \"2.6.0\" instead" << std::endl;
+	    << ", using \\version \"2.6.0\" instead" << std::endl;
         str << "\\version \"2.6.0\"" << std::endl;
-        m_languageLevel = 2;
+        m_languageLevel = 0;
     }
 
     // enable "point and click" debugging via pdf to make finding the
     // unfortunately inevitable errors easier
     if (m_exportPointAndClick) {
         str << "% point and click debugging is enabled" << std::endl;
-        // in newer versions line-column point-and-click is set by default
-        if (m_languageLevel <= 1) {
-            str << "#(ly:set-point-and-click 'line-column)" << std::endl;
-        }
     } else {
         str << "% point and click debugging is disabled" << std::endl;
-        if (m_languageLevel >= 2) {
-            str << "#(ly:set-option 'point-and-click #f)" << std::endl;
-        }
+        str << "#(ly:set-option 'point-and-click #f)" << std::endl;
     }
 
     // Lilypond \header block
@@ -560,12 +529,8 @@ LilypondExporter::write()
         str << indent(++col) << "% no segments found" << std::endl;
         // bind staffs with or without staff group bracket
         str << indent(col) // indent
-        << (m_languageLevel == 0 ? "\\notes <<" : "<<") << " s4 " << ">>" << std::endl;
-        if (m_languageLevel == 0) {
-            str << indent(col) << "\\paper { }" << std::endl;
-        } else {
-            str << indent(col) << "\\layout { }" << std::endl;
-        }
+	    << "<<" << " s4 " << ">>" << std::endl;
+        str << indent(col) << "\\layout { }" << std::endl;
         str << indent(--col) << "}" << std::endl;
         return true;
     }
@@ -702,8 +667,8 @@ LilypondExporter::write()
 
     // bind staffs with or without staff group bracket
     str << indent(++col) // indent+
-    << (m_exportStaffGroup == true ? "\\new StaffGroup " : "")
-    << (m_languageLevel == 0 ? "\\notes <<" : "<<") << std::endl;
+	<< (m_exportStaffGroup == true ? "\\new StaffGroup " : "")
+	<< "<<" << std::endl;
 
     // Make chords offset colliding notes by default
     str << indent(++col) << "% force offset of colliding notes in chords:" << std::endl;
@@ -945,12 +910,8 @@ LilypondExporter::write()
     // close \notes section
     str << std::endl << indent(--col) << ">> % notes" << std::endl << std::endl; // indent-
 
-    // write \\paper or \layout block
-    if (m_languageLevel == 0) {
-        str << indent(col) << "\\paper { }" << std::endl;
-    } else {
-        str << indent(col) << "\\layout { }" << std::endl;
-    }
+    // write \layout block
+    str << indent(col) << "\\layout { }" << std::endl;
 
     // write initial tempo in Midi block, if user wishes (added per user request...
     // makes debugging the .ly file easier because fewer "noisy" errors are
@@ -1256,11 +1217,7 @@ LilypondExporter::writeBar(Segment *s,
                 }
             } else {
                 if (lastStem != 0) {
-                    if (m_languageLevel == 0) {
-                        str << "\\stemBoth ";
-                    } else {
-                        str << "\\stemNeutral ";
-                    }
+                    str << "\\stemNeutral ";
                     lastStem = 0;
                 }
             }
@@ -1281,17 +1238,15 @@ LilypondExporter::writeBar(Segment *s,
 
                 } else if ((*i)->isa(Note::EventType)) {
 
-                    if (m_languageLevel >= 3) {
+                    if (m_languageLevel >= 1) {
                         // one \tweak per each chord note
                         if (chord.size() > 1)
                             writeStyle(*i, prevStyle, col, str, true);
                         else
                             writeStyle(*i, prevStyle, col, str, false);
-                    } else if (m_languageLevel >= 1) {
+                    } else {
                         // only one override per chord, and that outside the <>
                         stylei = i;
-                    } else {
-                        writeStyle(*i, prevStyle, col, str, false);
                     }
                     writePitch(*i, key, str);
 
@@ -1326,7 +1281,7 @@ LilypondExporter::writeBar(Segment *s,
                 prevDuration = duration;
             }
 
-            if (m_languageLevel >= 1 && m_languageLevel < 3) {
+            if (m_languageLevel == 0) {
                 // only one override per chord, and that outside the <>
                 if (stylei != s->end()) {
                     writeStyle(*stylei, prevStyle, col, str, false);
@@ -1529,11 +1484,7 @@ LilypondExporter::writeBar(Segment *s,
     }
 
     if (lastStem != 0) {
-        if (m_languageLevel == 0) {
-            str << "\\stemBoth ";
-        } else {
-            str << "\\stemNeutral ";
-        }
+        str << "\\stemNeutral ";
     }
 
     if (overlong) {
