@@ -68,16 +68,14 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
                           i18n("LilyPond compatibility level"), frame), 0, 0);
 
     m_lilyLanguage = new KComboBox(frame);
-    m_lilyLanguage->insertItem(i18n("LilyPond 2.2"));
-    m_lilyLanguage->insertItem(i18n("LilyPond 2.4"));
     m_lilyLanguage->insertItem(i18n("LilyPond 2.6"));
     m_lilyLanguage->insertItem(i18n("LilyPond 2.8"));
     m_lilyLanguage->insertItem(i18n("LilyPond 2.10"));
-    m_lilyLanguage->setCurrentItem(config->readUnsignedNumEntry("lilylanguage", 1));
+    m_lilyLanguage->setCurrentItem(config->readUnsignedNumEntry("lilylanguage", 0));
     layout->addWidget(m_lilyLanguage, 0, 1);
 
     layout->addWidget(new QLabel(
-                          i18n("Paper size to use in \\paper block"), frame), 1, 0);
+                          i18n("Paper size"), frame), 1, 0);
 
     m_lilyPaperSize = new KComboBox(frame);
     m_lilyPaperSize->insertItem(i18n("US Letter"));
