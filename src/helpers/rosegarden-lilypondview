@@ -17,7 +17,7 @@ prog_terminal=""
 prog_ghostview=""
 
 if [ "$1" == "-v" ]; then
-    echo "rosegarden-lilypondview v1.4" 1>&2
+    echo "rosegarden-lilypondview v1.5" 1>&2
     shift
 fi
 
@@ -27,7 +27,7 @@ if [ "$?" != "0" ]; then
 else
     lilypond_version="`lilypond --version | grep LilyPond | head -1 | sed 's/^.* //'`"
     case "$lilypond_version" in
-	1.*|2.0.*|2.2.*|2.4.*)
+	1.*|2.[0-5].*)
 	    echo "rosegarden-lilypondview: Unsupported LilyPond version ($lilypond_version)" 1>&2;;
 	*)
 	    prog_lilypond=lilypond;;
@@ -123,15 +123,20 @@ cp "$input" "$tmpdir/" || exit 1
 	convert=""
 echo "LilyPond version is $lilypond_version, file version is $fileversion"
 	case "$lilypond_version" in
-	    2.2.*)
-		args="--no-pdf"
-		case "$fileversion" in
-		    1.*) convert=true;;
-		esac;;
 	    2.6.*)
 		args="--format=ps"
 		case "$fileversion" in
-		    1.*|2.[012].*) convert=true;;
+		    1.*|2.[0-5].*) convert=true;;
+		esac;;
+	    2.8.*)
+		args="--format=ps"
+		case "$fileversion" in
+		    1.*|2.[0-7].*) convert=true;;
+		esac;;
+	    2.10.*)
+		args="--format=ps"
+		case "$fileversion" in
+		    1.*|2.[0-9].*) convert=true;;
 		esac;;
 	esac
 
