@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 tmpdir=/tmp/$$_lilypondview
 mkdir "$tmpdir" || exit 1
@@ -17,7 +17,7 @@ prog_terminal=""
 prog_ghostview=""
 
 if [ "$1" == "-v" ]; then
-    echo "rosegarden-lilypondview v1.2" 1>&2
+    echo "rosegarden-lilypondview v1.4" 1>&2
     shift
 fi
 
@@ -129,7 +129,7 @@ echo "LilyPond version is $lilypond_version, file version is $fileversion"
 		    1.*) convert=true;;
 		esac;;
 	    2.6.*)
-		args="--formats=ps"
+		args="--format=ps"
 		case "$fileversion" in
 		    1.*|2.[012].*) convert=true;;
 		esac;;
