@@ -2638,17 +2638,7 @@ void RosegardenGUIApp::slotRescaleSelection()
             i != selection.end(); ++i) {
         if ((*i)->getType() == Segment::Audio) {
             if (!pathTested) {
-                try {
-                    m_doc->getAudioFileManager().testAudioPath();
-                } catch (AudioFileManager::BadAudioPathException) {
-                    if (KMessageBox::warningContinueCancel
-                        (this,
-                         i18n("The audio file path does not exist or is not writable.\nYou must set the audio file path to a valid directory in Document Properties before rescaling an audio file.\nWould you like to set it now?"),
-                         i18n("Warning"),
-                         i18n("Set audio file path")) == KMessageBox::Continue) {
-                        slotOpenAudioPathSettings();
-                    }
-                }
+	        testAudioPath(i18n("rescaling an audio file"));
                 pathTested = true;
             }
             AudioSegmentRescaleCommand *asrc = new AudioSegmentRescaleCommand
@@ -2698,6 +2688,24 @@ void RosegardenGUIApp::slotRescaleSelection()
     }
 
     if (progressDlg) delete progressDlg;
+}
+
+bool
+RosegardenGUIApp::testAudioPath(QString op)
+{
+    try {
+        m_doc->getAudioFileManager().testAudioPath();
+    } catch (AudioFileManager::BadAudioPathException) {
+        if (KMessageBox::warningContinueCancel
+            (this,
+	     i18n("The audio file path does not exist or is not writable.\nYou must set the audio file path to a valid directory in Document Properties before %1.\nWould you like to set it now?").arg(op),
+             i18n("Warning"),
+             i18n("Set audio file path")) == KMessageBox::Continue) {
+            slotOpenAudioPathSettings();
+        }
+	return false;
+    }
+    return true;
 }
 
 void RosegardenGUIApp::slotAutoSplitSelection()

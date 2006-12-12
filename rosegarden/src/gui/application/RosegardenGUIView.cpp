@@ -1492,6 +1492,13 @@ RosegardenGUIView::slotDroppedNewAudio(QString audioDesc)
         sampleRate = getDocument()->getSequenceManager()->getSampleRate();
     }
 
+    KURL kurl(url);
+    if (!kurl.isLocalFile()) {
+        if (!RosegardenGUIApp::self()->testAudioPath("importing a remote audio file")) return;
+    } else if (aFM.fileNeedsConversion(qstrtostr(kurl.path()), sampleRate)) {
+	if (!RosegardenGUIApp::self()->testAudioPath("importing an audio file that needs to be converted or resampled")) return;
+    }
+
     ProgressDialog progressDlg(i18n("Adding audio file..."),
                                100,
                                this);
@@ -1510,7 +1517,7 @@ RosegardenGUIView::slotDroppedNewAudio(QString audioDesc)
             &aFM, SLOT(slotStopImport()));
 
     try {
-        audioFileId = aFM.importURL(KURL(url), sampleRate);
+        audioFileId = aFM.importURL(kurl, sampleRate);
     } catch (AudioFileManager::BadAudioPathException e) {
         CurrentProgressDialog::freeze();
         QString errorString = i18n("Can't add dropped file. ") + strtoqstr(e.getMessage());

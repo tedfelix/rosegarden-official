@@ -95,6 +95,13 @@ public:
     AudioFileId addFile(const std::string &filePath);
     // throw BadAudioPathException
 
+    // Return true if a file would require importFile to import it, rather
+    // than a simple addFile.  You can use importFile even when a file
+    // doesn't need conversion, but this tells you whether it's necessary
+    //
+    bool fileNeedsConversion(const std::string &filePath,
+                             int targetSampleRate = 0);
+
     // Create an audio file by importing (i.e. converting and/or
     // resampling) an existing file using the external conversion
     // utility

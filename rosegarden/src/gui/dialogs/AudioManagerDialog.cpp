@@ -1073,9 +1073,14 @@ AudioManagerDialog::addFile(const KURL& kurl)
 {
     AudioFileId id = 0;
 
-    // Now set the "last add" path so that next time we use "file add"
-    // we start looking in the same place.
-    //
+    AudioFileManager &aFM = m_doc->getAudioFileManager();
+
+    if (!kurl.isLocalFile()) {
+	if (!RosegardenGUIApp::self()->testAudioPath("importing a remote audio file")) return false;
+    } else if (aFM.fileNeedsConversion(qstrtostr(kurl.path()), m_sampleRate)) {
+        if (!RosegardenGUIApp::self()->testAudioPath("importing an audio file that needs to be converted or resampled")) return false;
+    }
+
     ProgressDialog progressDlg(i18n("Adding audio file..."),
                                100,
                                this);
@@ -1083,8 +1088,6 @@ AudioManagerDialog::addFile(const KURL& kurl)
     CurrentProgressDialog::set(&progressDlg);
     progressDlg.progressBar()->hide();
     progressDlg.show();
-
-    AudioFileManager &aFM = m_doc->getAudioFileManager();
 
     // Connect the progress dialog
     //

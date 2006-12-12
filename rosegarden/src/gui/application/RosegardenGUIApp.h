@@ -313,6 +313,7 @@ public:
 
     bool isTrackEditorPlayTracking() const;
 
+    bool testAudioPath(QString op); // and open the dialog to set it if unset
     bool haveAudioImporter() const { return m_haveAudioImporter; }
 
 protected:

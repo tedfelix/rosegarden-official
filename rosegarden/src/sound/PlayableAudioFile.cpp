@@ -327,6 +327,7 @@ PlayableAudioFile::PlayableAudioFile(InstrumentId instrumentId,
     m_runtimeSegmentId( -1),
     m_isSmallFile(false),
     m_currentScanPoint(RealTime::zeroTime),
+    m_smallFileScanFrame(0),
     m_autoFade(false),
     m_fadeInTime(RealTime::zeroTime),
     m_fadeOutTime(RealTime::zeroTime)
@@ -394,6 +395,8 @@ PlayableAudioFile::initialise(size_t bufferSize, size_t smallFileSize)
     } else {
         m_fileEnded = false;
         m_currentScanPoint = m_startIndex;
+	m_smallFileScanFrame = RealTime::realTime2Frame
+	    (m_currentScanPoint, m_audioFile->getSampleRate());
     }
 
 #ifdef DEBUG_PLAYABLE
@@ -457,13 +460,16 @@ PlayableAudioFile::scanTo(const RealTime &time)
     if (m_isSmallFile) {
 
 	m_currentScanPoint = time;
+	m_smallFileScanFrame = RealTime::realTime2Frame
+	    (time, m_audioFile->getSampleRate());
 	ok = true;
 
     } else {
 
 	ok = m_audioFile->scanTo(m_file, time);
-	if (ok)
+	if (ok) {
 	    m_currentScanPoint = time;
+	}
     }
 
 #ifdef DEBUG_PLAYABLE_READ
@@ -485,13 +491,10 @@ PlayableAudioFile::getSampleFramesAvailable()
 	size_t cchannels;
 	size_t cframes;
 	(void)m_smallFileCache.getData(m_audioFile, cchannels, cframes);
-	size_t offset = RealTime::realTime2Frame(m_currentScanPoint,
-                                                 m_targetSampleRate);
-	if (cframes > offset)
-	    return cframes - offset;
+	if (cframes > m_smallFileScanFrame)
+	    return cframes - m_smallFileScanFrame;
 	else
 	    return 0;
-	//	return cframes - m_currentFrameOffset;
     }
 
     for (int ch = 0; ch < m_targetChannels; ++ch) {
@@ -561,8 +564,7 @@ PlayableAudioFile::addSamples(std::vector<sample_t *> &destination,
 	    m_isSmallFile = false;
 	} else {
 
-	    size_t scanFrame = RealTime::realTime2Frame(m_currentScanPoint,
-                                                        m_targetSampleRate);
+	    size_t scanFrame = m_smallFileScanFrame;
 
 	    if (scanFrame >= cframes) {
 		m_fileEnded = true;
@@ -591,10 +593,10 @@ PlayableAudioFile::addSamples(std::vector<sample_t *> &destination,
 		    sample_t v =
 			cached[0][scanFrame + i] +
 			cached[1][scanFrame + i];
-		    if ((i + 1) < xfadeIn)
-			v = (v * (i + 1)) / xfadeIn;
-		    if ((n - i) < xfadeOut)
-			v = (v * (n - i)) / xfadeOut;
+		    //		    if ((i + 1) < xfadeIn)
+		    //	v = (v * (i + 1)) / xfadeIn;
+		    //if ((n - i) < xfadeOut)
+		    //	v = (v * (n - i)) / xfadeOut;
 		    destination[0][i + offset] += v;
 		}
 	    } else {
@@ -608,16 +610,17 @@ PlayableAudioFile::addSamples(std::vector<sample_t *> &destination,
 		    } else {
 			for (size_t i = 0; i < n; ++i) {
 			    sample_t v = cached[sch][scanFrame + i];
-			    if ((i + 1) < xfadeIn)
-				v = (v * (i + 1)) / xfadeIn;
-			    if ((n - i) < xfadeOut)
-				v = (v * (n - i)) / xfadeOut;
+			    //	    if ((i + 1) < xfadeIn)
+			    //	v = (v * (i + 1)) / xfadeIn;
+			    //if ((n - i) < xfadeOut)
+			    //	v = (v * (n - i)) / xfadeOut;
 			    destination[ch][i + offset] += v;
 			}
 		    }
 		}
 	    }
 
+	    m_smallFileScanFrame += nframes;
 	    m_currentScanPoint = m_currentScanPoint +
 		RealTime::frame2RealTime(nframes, m_targetSampleRate);
 	    return nframes;
@@ -659,12 +662,19 @@ PlayableAudioFile::checkSmallFileCache(size_t smallFileSize)
 	// rate, not their original one.
 
 	m_audioFile->scanTo(&file, RealTime::zeroTime);
-	std::string contents = m_audioFile->getSampleFrames
-	    (&file, m_audioFile->getSize() / m_audioFile->getBytesPerFrame());
+
+	size_t reqd = m_audioFile->getSize() / m_audioFile->getBytesPerFrame();
+	unsigned char *buffer = new unsigned char[m_audioFile->getSize()];
+	size_t obtained = m_audioFile->getSampleFrames(&file, (char *)buffer, reqd);
+
+	std::cerr <<"obtained=" << obtained << std::endl;
 
 	size_t nch = getSourceChannels();
-	size_t nframes = contents.length() / getBytesPerFrame();
+	size_t nframes = obtained;
 	if (int(getSourceSampleRate()) != m_targetSampleRate) {
+#ifdef DEBUG_PLAYABLE
+	    std::cerr << "PlayableAudioFile::checkSmallFileCache: Resampling badly from " << getSourceSampleRate() << " to " << m_targetSampleRate << std::endl;
+#endif
 	    nframes = size_t(float(nframes) * float(m_targetSampleRate) /
 			     float(getSourceSampleRate()));
 	}
@@ -674,8 +684,8 @@ PlayableAudioFile::checkSmallFileCache(size_t smallFileSize)
 	    samples.push_back(new sample_t[nframes]);
 	}
 
-	if (!m_audioFile->decode((const unsigned char *)contents.c_str(),
-				 contents.length(),
+	if (!m_audioFile->decode(buffer,
+				 obtained * m_audioFile->getBytesPerFrame(),
 				 m_targetSampleRate,
 				 nch,
 				 nframes,
@@ -689,6 +699,8 @@ PlayableAudioFile::checkSmallFileCache(size_t smallFileSize)
 	    m_smallFileCache.addData(m_audioFile, nch, nframes, toCache);
 	    m_isSmallFile = true;
 	}
+
+	delete[] buffer;
 
 	file.close();
     }
