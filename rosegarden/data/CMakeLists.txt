@@ -3,7 +3,7 @@
 SET(DATADIR share/apps/rosegarden)
 SET(ICONDIR share/icons)
 SET(MIMEDIR share/mimelnk/audio)
-SET(LINKDIR share/applnk/Applications)
+SET(LINKDIR share/Applications)
 
 # Guitar chord files
 FILE(GLOB CHORD_FILES chords/*.xml)
