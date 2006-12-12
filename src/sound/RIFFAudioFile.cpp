@@ -61,7 +61,7 @@ RIFFAudioFile::RIFFAudioFile(const std::string &fileName,
     else if (bitsPerSample == 32)
         m_subFormat = FLOAT;
     else
-        throw(BadSoundFileException(m_fileName, "Rosegarden currently only supports 16-bit PCM or IEEE floating-point RIFF files for writing"));
+        throw(BadSoundFileException(m_fileName, "Rosegarden currently only supports 16 or 32-bit PCM or IEEE floating-point RIFF files for writing"));
 
 }
 
@@ -500,7 +500,7 @@ RIFFAudioFile::readFormatChunk()
         }
     }
 
-    //printStats();
+   // printStats();
 
 }
 

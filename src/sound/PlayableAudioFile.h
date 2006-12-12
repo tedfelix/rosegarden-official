@@ -204,6 +204,7 @@ protected:
     static RingBufferPool  *m_ringBufferPool;
 
     RealTime              m_currentScanPoint;
+    size_t                m_smallFileScanFrame;
 
     bool                  m_autoFade;
     RealTime  m_fadeInTime;

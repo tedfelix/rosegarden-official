@@ -33,6 +33,7 @@ using std::cout;
 using std::cerr;
 using std::endl;
 
+#define DEBUG_DECODE 1
 
 namespace Rosegarden
 {

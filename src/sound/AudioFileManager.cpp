@@ -678,6 +678,30 @@ AudioFileManager::importURL(const KURL &url, int sampleRate)
     return id;
 }
 
+bool
+AudioFileManager::fileNeedsConversion(const std::string &fileName,
+                                      int sampleRate)
+{
+    KProcess *proc = new KProcess();
+    *proc << "rosegarden-audiofile-importer";
+    if (sampleRate > 0) {
+        *proc << "-r";
+        *proc << QString("%1").arg(sampleRate);
+    }
+    *proc << "-w";
+    *proc << fileName.c_str();
+
+    proc->start(KProcess::Block, KProcess::NoCommunication);
+
+    int es = proc->exitStatus();
+    delete proc;
+
+    if (es == 0 || es == 1) { // 1 == "other error" -- wouldn't be able to convert
+        return false;
+    }
+    return true;
+}
+
 AudioFileId
 AudioFileManager::importFile(const std::string &fileName, int sampleRate)
 {
