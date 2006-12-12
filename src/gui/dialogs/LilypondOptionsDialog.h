@@ -57,12 +57,11 @@ protected:
     QComboBox *m_lilyPaperSize;
     QComboBox *m_lilyFontSize;
     QComboBox *m_lilyTempoMarks;
+    QComboBox *m_lilyExportSelection;
     QCheckBox *m_lilyExportHeaders;
     QCheckBox *m_lilyExportLyrics;
     QCheckBox *m_lilyExportMidi;
-    QCheckBox *m_lilyExportUnmuted;
     QCheckBox *m_lilyExportPointAndClick;
-    QCheckBox *m_lilyExportBarChecks;
     QCheckBox *m_lilyExportBeams;
     QCheckBox *m_lilyExportStaffGroup;
     QCheckBox *m_lilyExportStaffMerge;

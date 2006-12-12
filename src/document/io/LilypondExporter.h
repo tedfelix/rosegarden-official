@@ -150,9 +150,13 @@ private:
         // 1 -> first
         // 2 -> all
     unsigned int m_exportTempoMarks;
-    bool m_exportUnmuted;
+    
+    	// exportSelection meaning:
+    	// 0 -> All tracks
+    	// 1 -> Non-muted tracks
+    	// 2 -> Selected segments
+    unsigned int m_exportSelection;
     bool m_exportPointAndClick;
-    bool m_exportBarChecks;
     bool m_exportBeams;
     bool m_exportStaffGroup;
     bool m_exportStaffMerge;

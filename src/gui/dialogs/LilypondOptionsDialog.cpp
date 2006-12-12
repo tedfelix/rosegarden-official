@@ -99,49 +99,48 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
     m_lilyFontSize->setCurrentItem(config->readUnsignedNumEntry("lilyfontsize", 4));
     layout->addWidget(m_lilyFontSize, 2, 1);
 
+    layout->addWidget(new QLabel(
+                          i18n("Export content"), frame), 3, 0);
+                          
+    m_lilyExportSelection = new KComboBox(frame);
+    m_lilyExportSelection->insertItem(i18n("All tracks"));
+    m_lilyExportSelection->insertItem(i18n("Non-muted tracks"));
+    // m_lilyExportSelectionPaperSize->insertItem(i18n("Selected segments"));
+    m_lilyExportSelection->setCurrentItem(config->readUnsignedNumEntry("lilyexportselection", 1));
+    layout->addWidget(m_lilyExportSelection, 3, 1);
+  
     m_lilyExportHeaders = new QCheckBox(
                               i18n("Export Document Properties as \\header block"), frame);
     m_lilyExportHeaders->setChecked(config->readBoolEntry("lilyexportheaders", true));
-    layout->addWidget(m_lilyExportHeaders, 3, 0);
+    layout->addWidget(m_lilyExportHeaders, 4, 0);
 
-    m_lilyExportLyrics = new QCheckBox(
-                             i18n("Export \\lyric blocks"), frame);
-
-    // default to lyric export == false because if you export the default
-    // empty "- - -" lyrics, crap results ensue, and people will know if they
-    // do need to export the lyrics - DMM
-    m_lilyExportLyrics->setChecked(config->readBoolEntry("lilyexportlyrics", false));
-    layout->addWidget(m_lilyExportLyrics, 3, 1);
-
-    m_lilyExportUnmuted = new QCheckBox(
-                              i18n("Do not export muted tracks"), frame);
-    m_lilyExportUnmuted->setChecked(config->readBoolEntry("lilyexportunmuted", false));
-    layout->addWidget(m_lilyExportUnmuted, 4, 0);
-
-    m_lilyExportMidi = new QCheckBox(
-                           i18n("Export \\midi block"), frame);
-    m_lilyExportMidi->setChecked(config->readBoolEntry("lilyexportmidi", false));
-    layout->addWidget(m_lilyExportMidi, 4, 1);
+    m_lilyExportBeams = new QCheckBox(
+                            i18n("Export beamings"), frame);
+    m_lilyExportBeams->setChecked(config->readBoolEntry("lilyexportbeamings", false));
+    layout->addWidget(m_lilyExportBeams, 4, 1);
 
     m_lilyExportPointAndClick = new QCheckBox(
                                     i18n("Enable \"point and click\" debugging"), frame);
     m_lilyExportPointAndClick->setChecked(config->readBoolEntry("lilyexportpointandclick", false));
     layout->addWidget(m_lilyExportPointAndClick, 5, 0);
 
-    m_lilyExportBarChecks = new QCheckBox(
-                                i18n("Write bar checks at end of measures"), frame);
-    m_lilyExportBarChecks->setChecked(config->readBoolEntry("lilyexportbarchecks", false));
-    layout->addWidget(m_lilyExportBarChecks, 6, 0);
-
-    m_lilyExportBeams = new QCheckBox(
-                            i18n("Export beamings"), frame);
-    m_lilyExportBeams->setChecked(config->readBoolEntry("lilyexportbeamings", false));
-    layout->addWidget(m_lilyExportBeams, 5, 1);
-
+    m_lilyExportLyrics = new QCheckBox(
+                             i18n("Export \\lyric blocks"), frame);
+    // default to lyric export == false because if you export the default
+    // empty "- - -" lyrics, crap results ensue, and people will know if they
+    // do need to export the lyrics - DMM
+    m_lilyExportLyrics->setChecked(config->readBoolEntry("lilyexportlyrics", false));
+    layout->addWidget(m_lilyExportLyrics, 5, 1);
+  
     m_lilyExportStaffGroup = new QCheckBox(
                                  i18n("Add staff group bracket"), frame);
     m_lilyExportStaffGroup->setChecked(config->readBoolEntry("lilyexportstaffgroup", false));
-    layout->addWidget(m_lilyExportStaffGroup, 6, 1);
+    layout->addWidget(m_lilyExportStaffGroup, 6, 0);
+
+    m_lilyExportMidi = new QCheckBox(
+                           i18n("Export \\midi block"), frame);
+    m_lilyExportMidi->setChecked(config->readBoolEntry("lilyexportmidi", false));
+    layout->addWidget(m_lilyExportMidi, 6, 1);
 
     m_lilyExportStaffMerge = new QCheckBox(
                                  i18n("Merge tracks that have the same name"), frame);
@@ -175,9 +174,8 @@ LilypondOptionsDialog::slotOk()
     config->writeEntry("lilyexportheader", m_lilyExportHeaders->isChecked());
     config->writeEntry("lilyexportmidi", m_lilyExportMidi->isChecked());
     config->writeEntry("lilyexporttempomarks", m_lilyTempoMarks->currentItem());
-    config->writeEntry("lilyexportunmuted", m_lilyExportUnmuted->isChecked());
+    config->writeEntry("lilyexportselection", m_lilyExportSelection->currentItem());
     config->writeEntry("lilyexportpointandclick", m_lilyExportPointAndClick->isChecked());
-    config->writeEntry("lilyexportbarchecks", m_lilyExportBarChecks->isChecked());
     config->writeEntry("lilyexportbeamings", m_lilyExportBeams->isChecked());
     config->writeEntry("lilyexportstaffgroup", m_lilyExportStaffGroup->isChecked());
     config->writeEntry("lilyexportstaffmerge", m_lilyExportStaffMerge->isChecked());
