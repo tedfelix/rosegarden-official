@@ -97,13 +97,12 @@ LilypondExporter::LilypondExporter(QObject *parent,
     m_studio = &m_doc->getStudio();
     m_paperSize = cfg->readUnsignedNumEntry("lilypapersize", 1);
     m_fontSize = cfg->readUnsignedNumEntry("lilyfontsize", 4);
+    m_exportSelection = cfg->readUnsignedNumEntry("lilyexportselection", 1);
     m_exportLyrics = cfg->readBoolEntry("lilyexportlyrics", true);
     m_exportHeaders = cfg->readBoolEntry("lilyexportheaders", true);
     m_exportMidi = cfg->readBoolEntry("lilyexportmidi", false);
     m_exportTempoMarks = cfg->readUnsignedNumEntry("lilyexporttempomarks", 0);
-    m_exportUnmuted = cfg->readBoolEntry("lilyexportunmuted", false);
     m_exportPointAndClick = cfg->readBoolEntry("lilyexportpointandclick", false);
-    m_exportBarChecks = cfg->readBoolEntry("lilyexportbarchecks", false);
     m_exportBeams = cfg->readBoolEntry("lilyexportbeamings", false);
     m_exportStaffGroup = cfg->readBoolEntry("lilyexportstaffgroup", false);
     m_exportStaffMerge = cfg->readBoolEntry("lilyexportstaffmerge", false);
@@ -701,7 +700,8 @@ LilypondExporter::write()
             // do nothing if track is muted...  this provides a crude
             // but easily implemented method for users to selectively
             // export tracks...
-            if (!m_exportUnmuted || (!track->isMuted())) {
+            if ((m_exportSelection == 0) || 
+                ((m_exportSelection == 1) && (!track->isMuted()))) {
                 if ((int) (*i)->getTrack() != lastTrackIndex) {
                     if (lastTrackIndex != -1) {
                         // close the old track (Staff context)
@@ -1500,10 +1500,11 @@ LilypondExporter::writeBar(Segment *s,
         writeSkip(timeSignature, writtenDuration,
                   (barEnd - barStart) - writtenDuration, true, str);
     }
-    if (m_exportBarChecks) {
-        if (!nextBarIsDouble && !nextBarIsEnd && !nextBarIsDot) {
-            str << " |";
-        }
+    //
+    // Export bar checks.
+    //
+    if (!nextBarIsDouble && !nextBarIsEnd && !nextBarIsDot) {
+        str << " |";
     }
     if (nextBarIsDouble) {
         str << "\\bar \"||\" ";
