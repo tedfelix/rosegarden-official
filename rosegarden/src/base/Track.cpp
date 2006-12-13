@@ -171,6 +171,7 @@ std::string Track::toXmlString()
 
     track << " instrument=\"" << m_instrument << "\"";
 
+    track << " defaultLabel=\"" << m_presetLabel << "\"";
     track << " defaultClef=\"" << m_clef << "\"";
     track << " defaultTranspose=\"" << m_transpose << "\"";
     track << " defaultColour=\"" << m_color << "\"";

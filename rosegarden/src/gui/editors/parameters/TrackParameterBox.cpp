@@ -838,7 +838,8 @@ TrackParameterBox::slotColorChanged(int index)
     //!!! Tentative fix for #1527462.  I haven't worked out where the -1
     // comes from, but it is consistent.  I'm going to try a +1 here to see if
     // it cures this, though I don't quite understand why it would.
-    trk->setColor(index + 1);
+//    trk->setColor(index + 1);
+    trk->setColor(index);
 
     if (index == m_addColourPos) {
         ColourMap newMap = m_doc->getComposition().getSegmentColourMap();
