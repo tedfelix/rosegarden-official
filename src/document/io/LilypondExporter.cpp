@@ -57,6 +57,7 @@
 #include "base/NotationQuantizer.h"
 #include "document/RosegardenGUIDoc.h"
 #include "gui/application/RosegardenApplication.h"
+#include "gui/application/RosegardenGUIView.h"
 #include "gui/editors/guitar/Chord.h"
 #include "gui/editors/notation/NotationProperties.h"
 #include "gui/general/ProgressReporter.h"
@@ -93,6 +94,7 @@ LilypondExporter::LilypondExporter(QObject *parent,
     KConfig *cfg = kapp->config();
     cfg->setGroup(NotationViewConfigGroup);
 
+    m_view = ((RosegardenGUIApp *)parent)->getView();
     m_composition = &m_doc->getComposition();
     m_studio = &m_doc->getStudio();
     m_paperSize = cfg->readUnsignedNumEntry("lilypapersize", 1);
@@ -696,12 +698,24 @@ LilypondExporter::write()
             emit setProgress(int(double(trackPos) /
                                  double(m_composition->getNbTracks()) * 100.0));
             rgapp->refreshGUI(50);
+            
+            bool segmentSelected = false;
+            if ((m_exportSelection == 2) && (m_view->haveSelection())) {
+            	//
+            	// Check whether the current segment is in the list of selected segments.
+            	//
+            	SegmentSelection selection = m_view->getSelection();
+                for (SegmentSelection::iterator it = selection.begin(); it != selection.end(); it++) {
+                    if ((*it) == (*i)) segmentSelected = true;
+                }
+            }
 
             // do nothing if track is muted...  this provides a crude
             // but easily implemented method for users to selectively
             // export tracks...
             if ((m_exportSelection == 0) || 
-                ((m_exportSelection == 1) && (!track->isMuted()))) {
+                ((m_exportSelection == 1) && (!track->isMuted())) ||
+                ((m_exportSelection == 2) && (m_view->haveSelection()) && segmentSelected)) {
                 if ((int) (*i)->getTrack() != lastTrackIndex) {
                     if (lastTrackIndex != -1) {
                         // close the old track (Staff context)

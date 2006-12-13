@@ -65,7 +65,7 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
     QGridLayout *layout = new QGridLayout(frame, 9, 2, 10, 5);
 
     layout->addWidget(new QLabel(
-                          i18n("LilyPond compatibility level"), frame), 0, 0);
+                          i18n("Compatibility level"), frame), 0, 0);
 
     m_lilyLanguage = new KComboBox(frame);
     m_lilyLanguage->insertItem(i18n("LilyPond 2.6"));
@@ -86,7 +86,7 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
     layout->addWidget(m_lilyPaperSize, 1, 1);
 
     layout->addWidget(new QLabel(
-                          i18n("LilyPond font size"), frame), 2, 0);
+                          i18n("Font size"), frame), 2, 0);
 
     m_lilyFontSize = new KComboBox(frame);
     m_lilyFontSize->insertItem("11");
@@ -105,7 +105,7 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
     m_lilyExportSelection = new KComboBox(frame);
     m_lilyExportSelection->insertItem(i18n("All tracks"));
     m_lilyExportSelection->insertItem(i18n("Non-muted tracks"));
-    // m_lilyExportSelectionPaperSize->insertItem(i18n("Selected segments"));
+    m_lilyExportSelection->insertItem(i18n("Selected segments"));
     m_lilyExportSelection->setCurrentItem(config->readUnsignedNumEntry("lilyexportselection", 1));
     layout->addWidget(m_lilyExportSelection, 3, 1);
   
