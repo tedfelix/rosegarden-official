@@ -55,6 +55,7 @@ namespace Rosegarden
 
 class TimeSignature;
 class Studio;
+class RosegardenGUIView;
 class RosegardenGUIDoc;
 class Key;
 class Composition;
@@ -77,6 +78,7 @@ public:
     bool write();
 
 protected:
+    RosegardenGUIView *m_view;
     RosegardenGUIDoc *m_doc;
     Composition *m_composition;
     Studio *m_studio;
