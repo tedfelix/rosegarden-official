@@ -833,13 +833,56 @@
 	      <imagedata fileref="rg-resize.png"/>
 	</imageobject>
 	</inlinemediaobject>
-           and click
-	  and drag on the right-hand end of the segment.</para>
+           and click and drag on the right-hand end of the segment.
+           Resizing a segment has the effect of extending or
+           shortening it, by subtracting some of its contents or adding
+           silence at the start or end.  If you hold down the Ctrl
+           key, the segment will be <link
+           linkend="segment-view-rescale">rescaled</link> (stretched
+           or squashed) instead of extended or shortened.</para>
 
 	<para>For both move and resize you can hold Shift for fine
 	positioning, to avoid snapping to a particular grid position.
 	</para>
 
+      </sect2>
+
+      <sect2 id="segment-view-rescale">
+        <title>Stretching and squashing segments</title>
+        <para>Resizing a segment normally makes it shorter or longer
+        by subtracting content or adding some extra space.  However,
+        by holding the Ctrl key while resizing, you can instead
+        stretch or squash the contents of the segment.  You can also do this by selecting the segment and then using <menuchoice><guimenu lang="en">Segments</guimenu>
+      <guimenuitem>Stretch or Squash...</guimenuitem></menuchoice>.</para>
+        <para>
+          For segments that contain MIDI events, this re-spaces the
+          events so that they are spread across the new segment's
+          duration, playing back faster or slower than before but in
+          the same relative proportions.
+        </para>
+        <para>
+          For audio segments, this time-stretches the audio, altering
+          its played speed without altering its pitch (as would happen
+          if the audio was simply played back faster or slower).
+          Time-stretching usually adds some audible artifacts as well,
+          so the quality of your results may vary.
+        </para>
+        <para>
+          &rosegarden; does not alter the original audio file when
+          time-stretching an audio segment, and if you rescale the same
+          segment repeatedly it will always work from the original
+          file instead of accumulating timestretching artifacts with
+          each rescale.  You can rescale both mono and stereo audio.
+        </para>
+        <para>
+          (For reference, &rosegarden; uses a frequency-domain
+          time-stretcher based on a phase vocoder with phase-locking
+          at percussive transients.  This usually produces good
+          results with stable harmonic sounds such as pads and basses
+          as well as purely percussive sounds such as drum loops, but
+          is less effective for composite material or music with soft
+          or breathy note onsets.)
+        </para>
       </sect2>
 
       <sect2 id="segment-view-split-join">
