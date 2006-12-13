@@ -149,7 +149,7 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
 
     // a layout on a widget
     QHBoxLayout *hbox = new QHBoxLayout( frame );
-    QLabel *label = new QLabel( i18n("Export tempo marks"), frame );
+    QLabel *label = new QLabel( i18n("Export tempo marks "), frame );
     hbox->addWidget( label );
 
     m_lilyTempoMarks = new KComboBox( frame );
