@@ -508,15 +508,27 @@ LilypondExporter::write()
     std::string paper = "";
     switch (m_paperSize) {
     case 0 :
-        paper += "letter";
+        paper += "a3";
         break;
     case 1 :
         paper += "a4";
         break;
     case 2 :
-        paper += "legal";
+        paper += "a5";
         break;
     case 3 :
+        paper += "a6";
+        break;
+    case 4 :
+        paper += "legal";
+        break;
+    case 5 :
+        paper += "letter";
+        break;
+    case 6 :
+        paper += "tabloid";
+        break;
+    case 7 :
         paper = "";
         break; // "do not specify"
     }
