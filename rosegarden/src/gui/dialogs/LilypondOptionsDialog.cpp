@@ -78,9 +78,13 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
                           i18n("Paper size"), frame), 1, 0);
 
     m_lilyPaperSize = new KComboBox(frame);
-    m_lilyPaperSize->insertItem(i18n("US Letter"));
+    m_lilyPaperSize->insertItem(i18n("A3"));
     m_lilyPaperSize->insertItem(i18n("A4"));
+    m_lilyPaperSize->insertItem(i18n("A5"));
+    m_lilyPaperSize->insertItem(i18n("A6"));
     m_lilyPaperSize->insertItem(i18n("Legal"));
+    m_lilyPaperSize->insertItem(i18n("US Letter"));
+    m_lilyPaperSize->insertItem(i18n("Tabloid"));
     m_lilyPaperSize->insertItem(i18n("do not specify"));
     m_lilyPaperSize->setCurrentItem(config->readUnsignedNumEntry("lilypapersize", 1));
     layout->addWidget(m_lilyPaperSize, 1, 1);
