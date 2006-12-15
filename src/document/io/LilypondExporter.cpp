@@ -98,6 +98,7 @@ LilypondExporter::LilypondExporter(QObject *parent,
     m_composition = &m_doc->getComposition();
     m_studio = &m_doc->getStudio();
     m_paperSize = cfg->readUnsignedNumEntry("lilypapersize", 1);
+    m_paperLandscape = cfg->readBoolEntry("lilypaperlandscape", false);
     m_fontSize = cfg->readUnsignedNumEntry("lilyfontsize", 4);
     m_exportSelection = cfg->readUnsignedNumEntry("lilyexportselection", 1);
     m_exportLyrics = cfg->readBoolEntry("lilyexportlyrics", true);
@@ -532,8 +533,11 @@ LilypondExporter::write()
         paper = "";
         break; // "do not specify"
     }
-    if (paper != "")
-        str << indent(col) << "#(set-default-paper-size \"" << paper << "\")" << std::endl;
+    if (paper != "") {
+        str << indent(col) << "#(set-default-paper-size \"" << paper << "\"" 
+	    << (m_paperLandscape ? " 'landscape" : "") << ")"
+	    << std::endl;
+    }
 
     // Find out the printed length of the composition
     Composition::iterator i = m_composition->begin();

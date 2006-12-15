@@ -77,6 +77,7 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
     layout->addWidget(new QLabel(
                           i18n("Paper size"), frame), 1, 0);
 
+    QHBoxLayout *hboxPaper = new QHBoxLayout( frame );
     m_lilyPaperSize = new KComboBox(frame);
     m_lilyPaperSize->insertItem(i18n("A3"));
     m_lilyPaperSize->insertItem(i18n("A4"));
@@ -87,7 +88,15 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
     m_lilyPaperSize->insertItem(i18n("Tabloid"));
     m_lilyPaperSize->insertItem(i18n("do not specify"));
     m_lilyPaperSize->setCurrentItem(config->readUnsignedNumEntry("lilypapersize", 1));
-    layout->addWidget(m_lilyPaperSize, 1, 1);
+    m_lilyPaperLandscape = new QCheckBox(
+                              i18n("Landscape"), frame);
+    m_lilyPaperLandscape->setChecked(config->readBoolEntry("lilypaperlandscape", false));
+
+    hboxPaper->addWidget( m_lilyPaperSize );
+    hboxPaper->addItem( new QSpacerItem( 2, 9, QSizePolicy::Minimum, 
+			    QSizePolicy::Expanding ) );
+    hboxPaper->addWidget( m_lilyPaperLandscape );
+    layout->addLayout(hboxPaper, 1, 1);
 
     layout->addWidget(new QLabel(
                           i18n("Font size"), frame), 2, 0);
@@ -151,16 +160,17 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
     m_lilyExportStaffMerge->setChecked(config->readBoolEntry("lilyexportstaffmerge", false));
     layout->addWidget(m_lilyExportStaffMerge, 7, 0);
 
-    // a layout on a widget
     QHBoxLayout *hbox = new QHBoxLayout( frame );
-    QLabel *label = new QLabel( i18n("Export tempo marks "), frame );
-    hbox->addWidget( label );
-
     m_lilyTempoMarks = new KComboBox( frame );
     m_lilyTempoMarks->insertItem(i18n("None"));
     m_lilyTempoMarks->insertItem(i18n("First"));
     m_lilyTempoMarks->insertItem(i18n("All"));
     m_lilyTempoMarks->setCurrentItem(config->readUnsignedNumEntry("lilyexporttempomarks", 0));
+
+    hbox->addWidget( new QLabel( 
+			 i18n("Export tempo marks "), frame ) );
+    hbox->addItem( new QSpacerItem( 2, 9, QSizePolicy::Minimum, 
+		       QSizePolicy::Expanding ) );
     hbox->addWidget(m_lilyTempoMarks);
     layout->addLayout(hbox, 7, 1);
 }
@@ -173,6 +183,7 @@ LilypondOptionsDialog::slotOk()
 
     config->writeEntry("lilylanguage", m_lilyLanguage->currentItem());
     config->writeEntry("lilypapersize", m_lilyPaperSize->currentItem());
+    config->writeEntry("lilypaperlandscape", m_lilyPaperLandscape->isChecked());
     config->writeEntry("lilyfontsize", m_lilyFontSize->currentItem());
     config->writeEntry("lilyexportlyrics", m_lilyExportLyrics->isChecked());
     config->writeEntry("lilyexportheader", m_lilyExportHeaders->isChecked());
