@@ -199,7 +199,9 @@ int MatrixMover::handleMouseMove(timeT newTime,
     MATRIX_DEBUG << "MatrixMover::handleMouseMove() time = "
     << newTime << endl;
 
-    setBasicContextHelp(e->state() & Qt::ControlButton);
+    if (e) {
+        setBasicContextHelp(e->state() & Qt::ControlButton);
+    }
 
     if (!m_currentElement || !m_currentStaff)
         return RosegardenCanvasView::NoFollow;
