@@ -25,7 +25,7 @@ MESSAGE(
 "DSSI synth plugin support     : ${HAVE_DSSI}\n"
 "Custom OSC plugin GUI support : ${HAVE_LIBLO}\n"
 "Audio timestretching          : ${HAVE_FFTW3F}\n"
-"LRDF plugin metadata support  : ${HAVE_LRDF}")
+"LRDF plugin metadata support  : ${HAVE_LIBLRDF}")
 ELSE(WANT_SOUND)
 MESSAGE("No sound support configured.")
 ENDIF(WANT_SOUND)
@@ -75,12 +75,12 @@ MESSAGE("\n* Rosegarden supports custom GUIs for DSSI (and LADSPA) plugins using
 "and http://dssi.sf.net/ for more information about DSSI GUIs.")
 ENDIF(NOT HAVE_LIBLO)
 
-IF(NOT HAVE_LRDF)
+IF(NOT HAVE_LIBLRDF)
 MESSAGE("\n* Rosegarden supports the LRDF metadata format for classification\n"
 "of LADSPA and DSSI plugins.  This will improve the usability of\n"
 "plugin selection dialogs.  You can obtain LRDF from\n"
 "http://www.plugin.org.uk/lrdf/.")
-ENDIF(NOT HAVE_LRDF)
+ENDIF(NOT HAVE_LIBLRDF)
 
 ENDIF(WANT_SOUND)
 
