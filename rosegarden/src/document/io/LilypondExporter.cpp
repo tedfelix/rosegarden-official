@@ -715,23 +715,27 @@ LilypondExporter::write()
                                  double(m_composition->getNbTracks()) * 100.0));
             rgapp->refreshGUI(50);
             
-            bool segmentSelected = false;
-            if ((m_exportSelection == 2) && (m_view->haveSelection())) {
+            bool currentSegmentSelected = false;
+            if ((m_exportSelection == 3) && (m_view->haveSelection())) {
             	//
             	// Check whether the current segment is in the list of selected segments.
             	//
             	SegmentSelection selection = m_view->getSelection();
                 for (SegmentSelection::iterator it = selection.begin(); it != selection.end(); it++) {
-                    if ((*it) == (*i)) segmentSelected = true;
+                    if ((*it) == (*i)) currentSegmentSelected = true;
                 }
             }
 
-            // do nothing if track is muted...  this provides a crude
-            // but easily implemented method for users to selectively
-            // export tracks...
+    
+    	    // The meaning of exportSelection meaning is to export:
+    	    // 0 -> All tracks
+    	    // 1 -> Non-muted tracks
+    	    // 2 -> Selected track
+    	    // 3 -> Selected segments
             if ((m_exportSelection == 0) || 
                 ((m_exportSelection == 1) && (!track->isMuted())) ||
-                ((m_exportSelection == 2) && (m_view->haveSelection()) && segmentSelected)) {
+                ((m_exportSelection == 2) && (track->getId() == m_composition->getSelectedTrack())) ||
+                ((m_exportSelection == 3) && (currentSegmentSelected))) {
                 if ((int) (*i)->getTrack() != lastTrackIndex) {
                     if (lastTrackIndex != -1) {
                         // close the old track (Staff context)

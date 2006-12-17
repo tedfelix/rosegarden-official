@@ -157,7 +157,8 @@ private:
     	// exportSelection meaning:
     	// 0 -> All tracks
     	// 1 -> Non-muted tracks
-    	// 2 -> Selected segments
+    	// 2 -> Selected tracks
+    	// 3 -> Selected segments
     unsigned int m_exportSelection;
     bool m_exportPointAndClick;
     bool m_exportBeams;
@@ -176,3 +177,4 @@ private:
 }
 
 #endif
+
