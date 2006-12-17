@@ -118,6 +118,7 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
     m_lilyExportSelection = new KComboBox(frame);
     m_lilyExportSelection->insertItem(i18n("All tracks"));
     m_lilyExportSelection->insertItem(i18n("Non-muted tracks"));
+    m_lilyExportSelection->insertItem(i18n("Selected track"));
     m_lilyExportSelection->insertItem(i18n("Selected segments"));
     m_lilyExportSelection->setCurrentItem(config->readUnsignedNumEntry("lilyexportselection", 1));
     layout->addWidget(m_lilyExportSelection, 3, 1);
