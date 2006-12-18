@@ -692,7 +692,9 @@ AudioManagerDialog::slotAdd()
     QString extensionList = i18n("*.wav|WAV files (*.wav)\n*.*|All files");
     
     if (RosegardenGUIApp::self()->haveAudioImporter()) {
-        extensionList = i18n("*.wav|WAV files (*.wav)\n*.flac|FLAC files (*.flac)\n*.ogg|Ogg files (*.ogg)\n*.mp3|MP3 files (*.mp3)\n*.*|All files");
+	//!!! This list really needs to come from the importer helper program
+	// (which has an option to supply it -- we just haven't recorded it)
+        extensionList = i18n("*.wav *.flac *.ogg *.mp3|Audio files (*.wav *.flac *.ogg *.mp3)\n*.wav|WAV files (*.wav)\n*.flac|FLAC files (*.flac)\n*.ogg|Ogg files (*.ogg)\n*.mp3|MP3 files (*.mp3)\n*.*|All files");
     }
 
     KURL::List kurlList =

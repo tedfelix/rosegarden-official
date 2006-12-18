@@ -812,7 +812,11 @@ AudioFileManager::importFile(const std::string &fileName, int sampleRate)
 void
 AudioFileManager::slotStopImport()
 {
-    if (m_importProcess) m_importProcess->kill(SIGKILL);
+    if (m_importProcess) {
+	m_importProcess->kill(SIGTERM);
+	sleep(1);
+	m_importProcess->kill(SIGKILL);
+    }
 }
 
 AudioFile*
