@@ -33,7 +33,7 @@ using std::cout;
 using std::cerr;
 using std::endl;
 
-#define DEBUG_DECODE 1
+//#define DEBUG_DECODE 1
 
 namespace Rosegarden
 {
@@ -222,8 +222,10 @@ WAVAudioFile::decode(const unsigned char *ubuf,
             if (j >= fileFrames)
                 j = fileFrames - 1;
 
-            target[tch][i] += convertBytesToSample
-                              (&ubuf[(bitsPerSample / 8) * (ch + j * sourceChannels)]);
+	    float sample = convertBytesToSample
+		(&ubuf[(bitsPerSample / 8) * (ch + j * sourceChannels)]);
+
+            target[tch][i] += sample;
         }
     }
 
