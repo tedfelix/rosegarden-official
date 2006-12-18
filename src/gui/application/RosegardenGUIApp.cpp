@@ -6697,8 +6697,10 @@ RosegardenGUIApp::slotShowPluginDialog(QWidget *parent,
     connect(dialog, SIGNAL(windowActivated()),
             m_view, SLOT(slotActiveMainWindowChanged()));
 
+/* This feature isn't provided by the plugin dialog
     connect(m_view, SIGNAL(controllerDeviceEventReceived(MappedEvent *, const void *)),
             dialog, SLOT(slotControllerDeviceEventReceived(MappedEvent *, const void *)));
+*/
 
     // Plug the new dialog into the standard keyboard accelerators so
     // that we can use them still while the plugin has focus.
