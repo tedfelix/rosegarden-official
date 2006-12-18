@@ -172,21 +172,34 @@ RIFFAudioFile::scanTo(std::ifstream *file, const RealTime &time)
         file->seekg(lengthOfFormat, std::ios::cur);
 
         // check we've got data chunk start
-        if (getBytes(file, 4) != "data") {
-#ifdef DEBUG_RIFF
-            std::cerr << "RIFFAudioFile::scanTo() - can't find data chunk where "
-            << "it was expected" << std::endl;
-#endif
+	std::string chunkName;
+	int chunkLength = 0;
 
-            return false;
+        while ((chunkName = getBytes(file, 4)) != "data") {
+	    if (file->eof()) {
+		std::cerr << "RIFFAudioFile::scanTo(): failed to find data "
+			  << std::endl;
+		return false;
+	    }
+//#ifdef DEBUG_RIFF
+	    std::cerr << "RIFFAudioFile::scanTo(): skipping chunk: "
+		      << chunkName << std::endl;
+//#endif
+	    chunkLength = getIntegerFromLittleEndian(getBytes(file, 4));
+	    if (chunkLength < 0) {
+		std::cerr << "RIFFAudioFile::scanTo(): negative chunk length "
+			  << chunkLength << " for chunk " << chunkName << std::endl;
+		return false;
+	    }
+	    file->seekg(chunkLength, std::ios::cur);
         }
 
         // get the length of the data chunk, and scan past it as a side-effect
-        int dataChunkLength = getIntegerFromLittleEndian(getBytes(file, 4));
+	chunkLength = getIntegerFromLittleEndian(getBytes(file, 4));
 #ifdef DEBUG_RIFF
 
         std::cout << "RIFFAudioFile::scanTo() - data chunk size = "
-        << dataChunkLength << std::endl;
+        << chunkLength << std::endl;
 #endif
 
     } catch (BadSoundFileException s) {

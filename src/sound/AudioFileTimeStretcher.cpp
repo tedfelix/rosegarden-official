@@ -151,6 +151,8 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
     m_timestretchCancelled = false;
     bool inputExhausted = false;
 
+    sourceFile->scanTo(&streamIn, RealTime::zeroTime);
+
     while (1) {
             
         if (m_timestretchCancelled) {
