@@ -168,21 +168,21 @@ EventView::EventView(RosegardenGUIDoc *doc,
             label = i18n("<no label>");
         m_triggerName = new QLabel(label, frame);
         layout->addWidget(m_triggerName, 0, 1);
-        QPushButton *editButton = new QPushButton(i18n("..."), frame);
+        QPushButton *editButton = new QPushButton(i18n("edit"), frame);
         layout->addWidget(editButton, 0, 2);
         connect(editButton, SIGNAL(clicked()), this, SLOT(slotEditTriggerName()));
 
         layout->addWidget(new QLabel(i18n("Base pitch:  "), frame), 1, 0);
         m_triggerPitch = new QLabel(QString("%1").arg(rec->getBasePitch()), frame);
         layout->addWidget(m_triggerPitch, 1, 1);
-        editButton = new QPushButton(i18n("..."), frame);
+        editButton = new QPushButton(i18n("edit"), frame);
         layout->addWidget(editButton, 1, 2);
         connect(editButton, SIGNAL(clicked()), this, SLOT(slotEditTriggerPitch()));
 
         layout->addWidget(new QLabel(i18n("Base velocity:  "), frame), 2, 0);
         m_triggerVelocity = new QLabel(QString("%1").arg(rec->getBaseVelocity()), frame);
         layout->addWidget(m_triggerVelocity, 2, 1);
-        editButton = new QPushButton(i18n("..."), frame);
+        editButton = new QPushButton(i18n("edit"), frame);
         layout->addWidget(editButton, 2, 2);
         connect(editButton, SIGNAL(clicked()), this, SLOT(slotEditTriggerVelocity()));
 
