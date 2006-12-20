@@ -117,7 +117,7 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
     m_timeLabel = new QLabel(i18n("Absolute time:"), frame);
     layout->addWidget(m_timeLabel, 1, 0);
     m_timeSpinBox = new QSpinBox(INT_MIN, INT_MAX, Note(Note::Shortest).getDuration(), frame);
-    m_timeEditButton = new QPushButton("...", frame);
+    m_timeEditButton = new QPushButton("edit", frame);
     layout->addWidget(m_timeSpinBox, 1, 1);
     layout->addWidget(m_timeEditButton, 1, 2);
 
@@ -129,7 +129,7 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
     m_durationLabel = new QLabel(i18n("Duration:"), frame);
     layout->addWidget(m_durationLabel, 2, 0);
     m_durationSpinBox = new QSpinBox(0, INT_MAX, Note(Note::Shortest).getDuration(), frame);
-    m_durationEditButton = new QPushButton("...", frame);
+    m_durationEditButton = new QPushButton("edit", frame);
     layout->addWidget(m_durationSpinBox, 2, 1);
     layout->addWidget(m_durationEditButton, 2, 2);
 
@@ -141,7 +141,7 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
     m_pitchLabel = new QLabel(i18n("Pitch:"), frame);
     layout->addWidget(m_pitchLabel, 3, 0);
     m_pitchSpinBox = new QSpinBox(frame);
-    m_pitchEditButton = new QPushButton("...", frame);
+    m_pitchEditButton = new QPushButton("edit", frame);
     layout->addWidget(m_pitchSpinBox, 3, 1);
     layout->addWidget(m_pitchEditButton, 3, 2);
 
@@ -205,7 +205,7 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
     m_notationTimeLabel = new QLabel(i18n("Notation time:"), frame);
     layout->addWidget(m_notationTimeLabel, 1, 0);
     m_notationTimeSpinBox = new QSpinBox(INT_MIN, INT_MAX, Note(Note::Shortest).getDuration(), frame);
-    m_notationTimeEditButton = new QPushButton("...", frame);
+    m_notationTimeEditButton = new QPushButton("edit", frame);
     layout->addWidget(m_notationTimeSpinBox, 1, 1);
     layout->addWidget(m_notationTimeEditButton, 1, 2);
 
@@ -217,7 +217,7 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
     m_notationDurationLabel = new QLabel(i18n("Notation duration:"), frame);
     layout->addWidget(m_notationDurationLabel, 2, 0);
     m_notationDurationSpinBox = new QSpinBox(0, INT_MAX, Note(Note::Shortest).getDuration(), frame);
-    m_notationDurationEditButton = new QPushButton("...", frame);
+    m_notationDurationEditButton = new QPushButton("edit", frame);
     layout->addWidget(m_notationDurationSpinBox, 2, 1);
     layout->addWidget(m_notationDurationEditButton, 2, 2);
 

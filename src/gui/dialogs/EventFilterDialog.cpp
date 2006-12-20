@@ -133,7 +133,7 @@ EventFilterDialog::initDialog()
     connect(m_pitchFromSpinBox, SIGNAL(valueChanged(int)),
             SLOT(slotPitchFromChanged(int)));
 
-    m_pitchFromChooserButton = new QPushButton(i18n("..."), noteFrame);
+    m_pitchFromChooserButton = new QPushButton(i18n("edit"), noteFrame);
     m_pitchFromChooserButton->setSizePolicy(QSizePolicy((QSizePolicy::SizeType)0,
                                             (QSizePolicy::SizeType)0, 0, 0, m_pitchFromChooserButton->
                                             sizePolicy().hasHeightForWidth()));
@@ -152,7 +152,7 @@ EventFilterDialog::initDialog()
     connect(m_pitchToSpinBox, SIGNAL(valueChanged(int)),
             SLOT(slotPitchToChanged(int)));
 
-    m_pitchToChooserButton = new QPushButton(i18n("..."), noteFrame);
+    m_pitchToChooserButton = new QPushButton(i18n("edit"), noteFrame);
     QToolTip::add
         (m_pitchToChooserButton, i18n("choose a pitch using a staff"));
     noteFrameLayout->addWidget(m_pitchToChooserButton, 1, 5);
