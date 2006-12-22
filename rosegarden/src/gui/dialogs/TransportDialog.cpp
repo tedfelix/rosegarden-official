@@ -35,6 +35,7 @@
 #include "gui/studio/StudioControl.h"
 #include "gui/widgets/Label.h"
 #include "sound/MappedEvent.h"
+#include "document/ConfigGroups.h"
 #include <kconfig.h>
 #include <kglobal.h>
 #include <qaccel.h>
@@ -258,12 +259,67 @@ TransportDialog::TransportDialog(QWidget *parent,
     // accelerator object
     //
     m_accelerators = new QAccel(this);
-
-
 }
 
 TransportDialog::~TransportDialog()
-{}
+{
+}
+
+void
+TransportDialog::show()
+{
+    static bool nested = false;
+    if (nested) {
+        KDockMainWindow::show();
+        return;
+    }
+
+    KConfig* config = rgapp->config();
+    config->setGroup(GeneralOptionsConfigGroup);
+    int x = config->readNumEntry("transportx", -1);
+    int y = config->readNumEntry("transporty", -1);
+    if (x >= 0 && y >= 0) {
+        int dw = QApplication::desktop()->availableGeometry(QPoint(x, y)).width();
+        int dh = QApplication::desktop()->availableGeometry(QPoint(x, y)).height();
+        if (x + m_transport->width() > dw) x = dw - m_transport->width();
+        if (y + m_transport->height() > dh) y = dh - m_transport->height();
+        nested = true;
+        showMinimized();
+        nested = false;
+        move(x, y);
+        KDockMainWindow::show();
+        std::cerr << "TransportDialog::show(): moved to " << x << "," << y << std::endl;
+    } else {
+        KDockMainWindow::show();
+    }
+}
+
+void
+TransportDialog::showEvent(QShowEvent *e)
+{
+    KConfig* config = rgapp->config();
+    config->setGroup(GeneralOptionsConfigGroup);
+    int x = config->readNumEntry("transportx", -1);
+    int y = config->readNumEntry("transporty", -1);
+    if (x >= 0 && y >= 0) {
+        int dw = QApplication::desktop()->availableGeometry(QPoint(x, y)).width();
+        int dh = QApplication::desktop()->availableGeometry(QPoint(x, y)).height();
+        if (x + m_transport->width() > dw) x = dw - m_transport->width();
+        if (y + m_transport->height() > dh) y = dh - m_transport->height();
+        move(x, y);
+    std::cerr << "TransportDialog::showEvent(): moved to " << x << "," << y << std::endl;
+    }
+}
+
+void
+TransportDialog::hide()
+{
+    KConfig* config = rgapp->config();
+    config->setGroup(GeneralOptionsConfigGroup);
+    config->writeEntry("transportx", x());
+    config->writeEntry("transporty", y());
+    KDockMainWindow::hide();
+}
 
 void
 TransportDialog::loadPixmaps()
