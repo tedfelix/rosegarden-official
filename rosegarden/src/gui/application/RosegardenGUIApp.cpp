@@ -5788,6 +5788,11 @@ RosegardenGUIApp::plugAccelerators(QWidget *widget, QAccel *acc)
                      this,
                      SLOT(slotToggleRecord()));
 
+/* doesn't work
+    acc->connectItem(acc->insertItem(Key_T),
+                     this,
+                     SLOT(slotToggleTransport()));
+*/
     TransportDialog *transport =
         dynamic_cast<TransportDialog*>(widget);
 
