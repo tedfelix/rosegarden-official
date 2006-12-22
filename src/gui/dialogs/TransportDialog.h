@@ -105,7 +105,6 @@ public:
 
 protected:
     virtual void closeEvent(QCloseEvent * e);
-    virtual void showEvent(QShowEvent *e);
 
 public slots:
 
