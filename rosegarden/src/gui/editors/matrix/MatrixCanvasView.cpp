@@ -204,7 +204,7 @@ void MatrixCanvasView::contentsMouseMoveEvent(QMouseEvent* e)
         m_previousEvPitch = evPitch;
     }
 
-    if (m_mouseWasPressed)
+//    if (m_mouseWasPressed)
         emit mouseMoved(evTime, evPitch, e);
 
 }

@@ -631,7 +631,7 @@ void MatrixView::setupActions()
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
     QIconSet icon(QPixmap(pixmapDir + "/toolbar/select.xpm"));
 
-    toolAction = new KRadioAction(i18n("&Select"), icon, Key_F2,
+    toolAction = new KRadioAction(i18n("&Select and Edit"), icon, Key_F2,
                                   this, SLOT(slotSelectSelected()),
                                   actionCollection(), "select");
     toolAction->setExclusiveGroup("tools");

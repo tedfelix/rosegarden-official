@@ -741,7 +741,7 @@ void RosegardenGUIApp::setupActions()
     QIconSet icon = QIconSet(pixmap);
 
     // TODO : add some shortcuts here
-    action = new KRadioAction(i18n("&Select"), icon, Key_F2,
+    action = new KRadioAction(i18n("&Select and Edit"), icon, Key_F2,
                               this, SLOT(slotPointerSelected()),
                               actionCollection(), "select");
     action->setExclusiveGroup("segmenttools");
