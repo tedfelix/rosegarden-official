@@ -100,8 +100,12 @@ public:
     QPushButton* TimeDisplayButton() { return m_transport->TimeDisplayButton; }
     QPushButton* ToEndButton()       { return m_transport->ToEndButton; }
 
+    virtual void show();
+    virtual void hide();
+
 protected:
     virtual void closeEvent(QCloseEvent * e);
+    virtual void showEvent(QShowEvent *e);
 
 public slots:
 
