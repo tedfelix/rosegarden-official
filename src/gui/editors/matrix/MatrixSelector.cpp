@@ -596,7 +596,7 @@ void MatrixSelector::setContextHelpFor(QPoint p, bool ctrlPressed)
             if (s && s->getAddedEvents() > 1) {
                 setContextHelp(i18n("Click and drag to resize selected notes"));
             } else {
-                setContextHelp(i18n("Click and drag to resize a note"));
+                setContextHelp(i18n("Click and drag to resize note"));
             }
         } else {
             if (s && s->getAddedEvents() > 1) {
@@ -605,7 +605,13 @@ void MatrixSelector::setContextHelpFor(QPoint p, bool ctrlPressed)
                 } else {
                     setContextHelp(i18n("Click and drag to copy selected notes"));
                 }
-            }
+            } else {
+                if (!ctrlPressed) {
+                    setContextHelp(i18n("Click and drag to move note; hold Ctrl as well to copy"));
+                } else {
+                    setContextHelp(i18n("Click and drag to copy note"));
+                }
+            }                
         }
     }
 }
