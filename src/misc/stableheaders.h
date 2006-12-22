@@ -81,7 +81,6 @@
 #include <qlayout.h>
 #include <qlineedit.h>
 #include <qlistbox.h>
-#include <qlist.h>
 #include <qlistview.h>
 #include <qmemarray.h>
 #include <qmutex.h>
