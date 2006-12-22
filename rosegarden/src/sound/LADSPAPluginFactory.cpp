@@ -569,13 +569,13 @@ LADSPAPluginFactory::discoverPlugins()
 {
     std::vector<QString> pathList = getPluginPath();
 
-    //    std::cerr << "LADSPAPluginFactory::discoverPlugins - "
-    //	      << "discovering plugins; path is ";
-//    for (std::vector<QString>::iterator i = pathList.begin();
-//            i != pathList.end(); ++i) {
-//        std::cerr << "[" << *i << "] ";
-//    }
-//    std::cerr << std::endl;
+    std::cerr << "LADSPAPluginFactory::discoverPlugins - "
+    	      << "discovering plugins; path is ";
+    for (std::vector<QString>::iterator i = pathList.begin();
+            i != pathList.end(); ++i) {
+        std::cerr << "[" << *i << "] ";
+    }
+    std::cerr << std::endl;
 
 #ifdef HAVE_LIBLRDF
     // Initialise liblrdf and read the description files
@@ -619,6 +619,8 @@ LADSPAPluginFactory::discoverPlugins()
     //
     lrdf_cleanup();
 #endif // HAVE_LIBLRDF
+
+    std::cerr << "LADSPAPluginFactory::discoverPlugins - done" << std::endl;
 }
 
 void
