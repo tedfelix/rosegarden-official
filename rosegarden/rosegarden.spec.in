@@ -10,15 +10,14 @@ URL:            http://www.rosegardenmusic.com/
 Source0:        %name-@VERSION@.tar.bz2
 License:        GPL
 Group:          Sound
-BuildRequires:  python
 BuildRequires:  qt3-devel
 BuildRequires:  kdemultimedia-devel 
 BuildRequires:  jackit-devel
 BuildRequires:  ladspa-devel
 BuildRequires:  dssi-devel
 BuildRequires:  liblrdf-devel
-BuildRequires:  ImageMagick
 BuildRequires:  libxml2-utils
+BuildRequires:  libfftw3-devel
 
 BuildRoot:      %{_tmppath}/%{name}-buildroot
 
