@@ -1,6 +1,6 @@
 #!/bin/sh
 
-cd /home/glaurent/rosegarden/trunk/rosegarden
+cd /home/glaurent/rgworkspace/rosegarden
 
 if ! [ -r "Doxyfile" ]
 then
@@ -14,7 +14,7 @@ rm -rf $DOCDIR/code_doc
 
 # (cd $DOCDIR/tutorial && cvs -z3 -q update -d -P) &
 echo "Running doxygen..."
-doxygen Doxyfile > /dev/null 2>&1
+doxygen Doxyfile > /dev/null
 echo "doxygen done"
 
 mv $DOCDIR/html $DOCDIR/code_doc
