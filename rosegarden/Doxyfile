@@ -23,14 +23,14 @@ PROJECT_NAME           = Rosegarden
 # This could be handy for archiving the generated documentation or
 # if some version control system is used.
 
-PROJECT_NUMBER         = 1.2.3
+PROJECT_NUMBER         = 1.4.0
 
 # The OUTPUT_DIRECTORY tag is used to specify the (relative or absolute)
 # base path where the generated documentation will be put.
 # If a relative path is entered, it will be relative to the location
 # where doxygen was started. If left blank the current directory will be used.
 
-OUTPUT_DIRECTORY       = ../docs/doxygen
+OUTPUT_DIRECTORY       = /home/glaurent/tmp/rg_doxygen
 
 # If the CREATE_SUBDIRS tag is set to YES, then doxygen will create
 # 4096 sub-directories (in 2 levels) under the output directory of each output
@@ -450,10 +450,7 @@ WARN_LOGFILE           = docs/doxygen/warning.log
 # directories like "/usr/src/myproject". Separate the files or directories
 # with spaces.
 
-INPUT                  = base \
-                         sound \
-                         sequencer \
-                         gui
+INPUT                  = src/base/ src/commands/ src/document/ src/gui/ src/helpers/ src/misc/ src/sequencer/ src/sound/
 
 # If the value of the INPUT tag contains directories, you can use the
 # FILE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp
