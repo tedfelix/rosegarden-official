@@ -21,8 +21,8 @@ option to load the autosaved version, or the unmodified original.</p>
 <tip category="Rosegarden|General">
 <html>
 <p>
-You can save the current document as your default studio by using
-<b>Composition -> Studio -> Save Current Document as Default Studio</b>.</p>
+...that you can save the current document as your default studio by using
+<b>Composition -> Studio -> Save Current Document as Default Studio</b>?</p>
 </html>
 </tip>
 <tip category="Rosegarden|General">
@@ -33,24 +33,22 @@ loaded every time you create a new document or import a MIDI file?</p>
 </tip>
 <tip category="Rosegarden|General">
 <html>
-<p>Because your default studio is a complete Rosegarden composition, it can
-contain default instrument assignments, document properties, LilyPond headers,
-and many other things that you may wish to have available by default in each
+<p>...that your default studio can contain instrument assignments, document properties, LilyPond headers,
+and many other things?<br><br>The default studio is a complete Rosegarden composition, so it can contain anything that you may wish to have available in each
 new document you create.</p>
 </html>
 </tip>
 <tip category="Rosegarden|General">
 <html>
 <p>...that Rosegarden will detect and create a default connection for ALSA soft
-synths that are started after Rosegarden is already running?</p>
+synth applications that are started after Rosegarden is already running?</p>
 </html>
 </tip>
 <tip category="Rosegarden|General">
 <html>
-<p>If your studio setup does not change very often, and  you would prefer for
-the settings in your <b>autoload.rg</b> to take precedence over whatever
-studio is saved with any files you happen to load, you can make your autoload
-the default studio for everything using <b>Settings -> Configure Rosegarden ->
+<p>...that you can make your default studio override that in every Rosegarden composition you load?<br><br>If your studio setup does not change very often, and you would prefer for
+the settings in your default studio to take precedence over whatever
+studio is saved with any files you happen to load, you can make your studio the default for everything using <b>Settings -> Configure Rosegarden ->
 Behaviour -> Always use default studio when loading files</b>.</p>
 </html>
 </tip>
@@ -152,7 +150,7 @@ label must be visible for this to work.)</p>
 </tip>
 <tip category="Rosegarden|General">
 <html>
-<p>...that you can configure what happens when you double-click on a segment?  Go to <b>Settings -> Configure Rosegarden</b> and choose your preferred editing window under the <b>Behaviour</b> tab.</p>
+<p>...that you can configure what happens when you double-click on a segment?<br><br>Go to <b>Settings -> Configure Rosegarden</b> and choose your preferred editing window under the <b>Behaviour</b> tab.</p>
 </html>
 </tip>
 <tip category="Rosegarden|General">
@@ -196,23 +194,23 @@ feature.<br><br>
 </tip>
 <tip category="Rosegarden|General">
 <html>
-<p>...that the transport window can display musical time, sample frame count, and a visual metronome as well as real time?  Just click on the small button at the extreme top left of the window.</p>
+<p>...that the transport window can display musical time, sample frame count, and a visual metronome as well as real time?<br><br>Just click on the small button at the extreme top left of the window.</p>
 </html>
 </tip>
 <tip category="Rosegarden|General">
 <html>
-<p>...that you can select all notes of a particular pitch in the matrix view, by shift-clicking on that pitch on the piano keyboard at the left?  If you shift-click-drag, you can select whole ranges too.</p>
+<p>...that you can select all notes of a particular pitch in the matrix view, by shift-clicking on that pitch on the piano keyboard at the left?<br><br>If you shift-click-drag, you can select whole ranges too.</p>
 </html>
 </tip>
 <tip category="Rosegarden|General">
 <html>
-<p>...that you can set a loop in the main window by clicking-and-dragging on the time ruler with Shift pressed?  (If the ruler isn't visible, use <b>Settings -> Show Rulers</b>.)</p>
+<p>...that you can set a loop in the main window by clicking-and-dragging on the time ruler with Shift pressed?<br><br>(If the ruler isn't visible, use <b>Settings -> Show Rulers</b>.)</p>
 </html>
 </tip>
 <tip category="Rosegarden|General">
 <html>
 <p>...that if you're editing a section in the matrix or notation view, you can
-set that section to loop while you edit it?  Select it and use <b>Tools ->
+set that section to loop while you edit it?<br><br>Select it and use <b>Tools ->
 Local Cursor -> Set Loop to Selection</b>, then hit Play.</p><br><br>
 <i>This feature does not work quite as well for compositions that include sampled
 audio.</i>
@@ -228,12 +226,13 @@ focus.</p>
 </tip>
 <tip category="Rosegarden|General">
 <html>
-<p>The notation view shows you notes using their display duration, while the
-matrix allows you to edit their performance duration.</p><br><br>
+<p>...that the notation view shows you notes using their display duration, while the
+matrix allows you to edit their performance duration?<br><br>
 <i>Be careful with tied notes in the matrix.  It is not apparent that they are
 tied, and if you split up a pair of tied notes, subsequent notation views will
 be confused and unhappy.  This is an old bug that has been on our TODO list
 for years.  Sorry about that, folks.  Patches welcome.</i>
+</p>
 </html>
 </tip>
 <tip category="Rosegarden|General">
@@ -247,16 +246,8 @@ durations to something less mechanical.</p>
 </tip>
 <tip category="Rosegarden|General">
 <html>
-<p>When exporting to LilyPond, you will see extra empty bars if the Rosegarden
-composition is longer than the notation it contains.  To cure this, navigate
-to <b>Composition -> Change Composition Start and End...</b> then set <b>End
-Bar</b> to the end of your notation.</p>
-</html>
-</tip>
-<tip category="Rosegarden|General">
-<html>
-<p>Rosegarden can now export certain things to LilyPond that it cannot yet
-display within its own native interface.  These new directives can be inserted
+<p>...that Rosegarden can export certain things to LilyPond that it cannot yet
+display within its own native interface?<br><br>These new directives can be inserted
 via the <b>T</b> text insert tool in the notation view.<br><br>
 Load the example files
 <b>lilypond-alternative-endings.rg</b> and <b>lilypond-directives.rg</b> for a
@@ -270,8 +261,8 @@ the notation view.</i></p>
 </tip>
 <tip category="Rosegarden|General">
 <html>
-<p>Rosegarden now has track parameters to <b>Create segments with:</b> certain
-properties.  You can pre-select the clef, transposition, colour, and specify
+<p>...that Rosegarden has track parameters allowing you to <b>Create segments with:</b> certain
+properties by default?<br><br>You can pre-select the clef, transposition, colour, and specify
 the highest and lowest playable notes (notes outside this range display in
 red by default).  Then draw a segment with the pencil, or record one, and any
 new segments created on this track will take these properties as segment
@@ -281,9 +272,9 @@ parameters.<br><br>
 </tip>
 <tip category="Rosegarden|General">
 <html>
-<p>Rosegarden now has a database of preset parameters describing more than 300
+<p>...that Rosegarden has a database of preset parameters describing more than 300
 musical instruments from the real world, grouped into several convenient
-categories.  Each preset contains a clef, transposition, and playable range
+categories?<br><br>Each preset contains a clef, transposition, and playable range
 suggestions for both amateur and professional players.<br><br>Click the
 <b>Load</b> button in the new track parameters box to get started! <i>(If you
 do not see a <b>Load</b> button, be sure your parameter panel is set for
@@ -293,8 +284,7 @@ Johansson for assembling this extraordinary database.)</i></p>
 </tip>
 <tip category="Rosegarden|General">
 <html>
-<p>You can export tracks that have the same name onto a single, merged staff in
-LilyPond.  For example, if there are three voices in a single part, write each
+<p>...that when exporting to Lilypond, you can merge tracks that have the same name onto a single staff?<br><br>For example, if there are three voices in a single part, write each
 voice as an independent segment/staff, each on a separate track.   Give all
 three tracks the same name, and select <b>[x] Merge tracks that have the same
 name</b> from the options dialog that appears when you export to, or preview
@@ -304,18 +294,23 @@ with LilyPond.<br><br>
 </tip>
 <tip category="Rosegarden|General"> 	 
 <html> 	 
-<p>You can use the mouse wheel to scroll up and down, or to scroll left and right (by holding the Alt key at the same time), or to zoom in and out (by holding the Control key).</p> 	 
+<p>...that you can use the mouse wheel to scroll up and down, scroll left and right, and zoom in and out?<br><br>Just roll the wheel to scroll up or down.  Hold Alt as well to scroll left or right, or hold Ctrl to zoom in and out.</p> 	 
 </html> 	 
 </tip>
 <tip category="Rosegarden|General"> 	 
 <html> 	 
-<p>You can time-stretch an audio segment -- stretching or squashing a
+<p>...that you can time-stretch an audio segment -- stretching or squashing a
 sample to a different duration without changing its pitch -- just by
-dragging its right edge with the Ctrl key pressed.</p>
+dragging its right edge with the Ctrl key pressed?</p>
 </html>
 </tip>
 <tip category="Rosegarden|General"> 	 
 <html> 	 
-<p>You can add audio to your Rosegarden composition just by dragging an audio file from your file manager and dropping it on the Rosegarden segment canvas.  Make sure you drop it on an audio track!<br><br>You can also drop audio files from Rosegarden's audio file manager window onto the segment canvas, and from other programs onto the audio file manager.</p>
+<p>...that you can add audio to your Rosegarden composition just by dragging an audio file from your file manager and dropping it on the Rosegarden segment canvas?  (Make sure you drop it on an audio track!)<br><br>You can also drop audio files from Rosegarden's audio file manager window onto the segment canvas, and from other programs onto the audio file manager.</p>
+</html>
+</tip>
+<tip category="Rosegarden|General"> 	 
+<html> 	 
+<p>...that you can set the tempo to match the duration of an audio segment if you know it's an exact number of bars or beats long?<br><br>Just select the audio segment and use <b>Composition -> Tempo and Time Signature -> Set Tempo to Audio Segment Duration</b>.</p>
 </html>
 </tip>
