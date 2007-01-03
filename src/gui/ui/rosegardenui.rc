@@ -356,6 +356,7 @@
         <Action name="collapse"/>
         <Action name="set_tempo_to_segment_length"/>
         <Action name="repeats_to_real_copies"/>
+        <Action name="groove_quantize"/>
      </enable>
 </State>
 
@@ -383,6 +384,7 @@
         <Action name="join_segments"/>
         <Action name="collapse"/>
         <Action name="repeats_to_real_copies"/>
+        <Action name="groove_quantize"/>
      </disable>
 </State>
 
