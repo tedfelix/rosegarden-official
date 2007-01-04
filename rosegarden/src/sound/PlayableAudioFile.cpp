@@ -462,6 +462,9 @@ PlayableAudioFile::scanTo(const RealTime &time)
 	m_currentScanPoint = time;
 	m_smallFileScanFrame = RealTime::realTime2Frame
 	    (time, m_audioFile->getSampleRate());
+#ifdef DEBUG_PLAYABLE_READ
+	std::cerr << "... maps to frame " << m_smallFileScanFrame << std::endl;
+#endif
 	ok = true;
 
     } else {
@@ -667,7 +670,7 @@ PlayableAudioFile::checkSmallFileCache(size_t smallFileSize)
 	unsigned char *buffer = new unsigned char[m_audioFile->getSize()];
 	size_t obtained = m_audioFile->getSampleFrames(&file, (char *)buffer, reqd);
 
-	std::cerr <<"obtained=" << obtained << std::endl;
+//	std::cerr <<"obtained=" << obtained << std::endl;
 
 	size_t nch = getSourceChannels();
 	size_t nframes = obtained;
