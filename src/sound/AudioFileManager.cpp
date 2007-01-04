@@ -787,7 +787,7 @@ AudioFileManager::importFile(const std::string &fileName, int sampleRate)
 
     if (es) {
 	std::cerr << "audio file importer failed" << std::endl;
-	return addFile(fileName);
+	throw SoundFile::BadSoundFileException(fileName, i18n("Failed to convert or resample audio file on import"));
     } else {
 	std::cerr << "audio file importer succeeded" << std::endl;
     }
@@ -795,16 +795,12 @@ AudioFileManager::importFile(const std::string &fileName, int sampleRate)
     // insert file into vector
     WAVAudioFile *aF = 0;
 
-    try {
-        aF = new WAVAudioFile(newId,
-			      targetName.data(),
-			      m_audioPath + targetName.data());
-        m_audioFiles.push_back(aF);
-	m_derivedAudioFiles.insert(aF);
-    } catch (SoundFile::BadSoundFileException e) {
-        delete aF;
-	return addFile(fileName);
-    }
+    aF = new WAVAudioFile(newId,
+			  targetName.data(),
+			  m_audioPath + targetName.data());
+    m_audioFiles.push_back(aF);
+    m_derivedAudioFiles.insert(aF);
+    // Don't catch SoundFile::BadSoundFileException
 
     return aF->getId();
 }
