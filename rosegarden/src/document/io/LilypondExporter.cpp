@@ -592,7 +592,7 @@ LilypondExporter::write()
             //    this justifies the printed staffs
             str << indent(col);
             timeT leftTime = m_composition->getBarStart(leftBar);
-            timeT rightTime = m_composition->getBarStart(rightBar);
+            timeT rightTime = m_composition->getBarStart(rightBar + 1);
             if (leftTime < compositionStartTime) {
                 leftTime = compositionStartTime;
             }
@@ -784,6 +784,9 @@ LilypondExporter::write()
                         str << indent(col) << "\\set Staff.midiInstrument = \"" << staffMidiName.str() << "\"" << std::endl;
                     }
 
+		    // multi measure rests are used by default
+                    str << indent(col) << "\\set Score.skipBars = ##t" << std::endl;
+
                     // turn off the stupid accidental cancelling business,
                     // because we don't do that ourselves, and because my 11
                     // year old son pointed out to me that it "Looks really
@@ -813,6 +816,7 @@ LilypondExporter::write()
                 << "\" {"; // indent+
 
                 str << std::endl << indent(col) << "\\override Voice.TextScript #'padding = #2.0";
+                str << indent(col) << "\\override MultiMeasureRest #'expand-limit = 1" << std::endl;
 
                 SegmentNotationHelper helper(**i);
                 helper.setNotationProperties();
@@ -843,6 +847,8 @@ LilypondExporter::write()
                 bool nextBarIsAlt1 = false;
                 bool nextBarIsAlt2 = false;
                 bool prevBarWasAlt2 = false;
+
+                int MultiMeasureRestCount = 0;
 
                 bool nextBarIsDouble = false;
                 bool nextBarIsEnd = false;
@@ -897,6 +903,7 @@ LilypondExporter::write()
                     writeBar(*i, barNo, barStart, barEnd, col, key,
                              lilyText, lilyLyrics,
                              prevStyle, eventsInProgress, str,
+                             MultiMeasureRestCount, 
                              nextBarIsAlt1, nextBarIsAlt2, nextBarIsDouble, nextBarIsEnd, nextBarIsDot);
 
                 }
@@ -1073,6 +1080,7 @@ LilypondExporter::writeBar(Segment *s,
                            std::string &prevStyle,
                            eventendlist &eventsInProgress,
                            std::ofstream &str,
+                           int &MultiMeasureRestCount,
                            bool &nextBarIsAlt1, bool &nextBarIsAlt2,
                            bool &nextBarIsDouble, bool &nextBarIsEnd, bool &nextBarIsDot)
 {
@@ -1082,12 +1090,14 @@ LilypondExporter::writeBar(Segment *s,
     if (!s->isBeforeEndMarker(i))
         return ;
 
-    str << std::endl;
+    if (MultiMeasureRestCount == 0) {
+	str << std::endl;
 
-    if ((barNo + 1) % 5 == 0) {
-        str << "%% " << barNo + 1 << std::endl << indent(col);
-    } else {
-        str << indent(col);
+	if ((barNo + 1) % 5 == 0) {
+	    str << "%% " << barNo + 1 << std::endl << indent(col);
+	} else {
+	    str << indent(col);
+	}
     }
 
     bool isNew = false;
@@ -1360,31 +1370,51 @@ LilypondExporter::writeBar(Segment *s,
                 }
             }
 
-	    if (hiddenRest)
-		str << "s";
-	    else if (duration == timeSignature.getBarDuration())
-		str << "R";
-	    else
-		str << "r";
-                                 
-            if (duration != prevDuration) {
-                writeDuration(duration, str);
-                prevDuration = duration;
-            }
-            writtenDuration += soundingDuration;
+	    if (MultiMeasureRestCount == 0) {
+		if (hiddenRest) {
+		    str << "s";
+		} else if (duration == timeSignature.getBarDuration()) {
+		    // Look ahead the segment in order to detect
+		    // the number of measures in the multi measure rest.
+		    Segment::iterator mm_i = i;
+		    while (s->isBeforeEndMarker(++mm_i)) {
+			if ((*mm_i)->isa(Note::EventRestType) &&
+			    (*mm_i)->getNotationDuration() == (*i)->getNotationDuration() &&
+			    timeSignature == m_composition->getTimeSignatureAt((*mm_i)->getNotationAbsoluteTime())) {
+			    MultiMeasureRestCount++;
+			} else {
+			    break;
+			}
+		    }
+		    str << "R";
+		} else {
+		    str << "r";
+		}
+	    
+		if (duration != prevDuration) {
+		    writeDuration(duration, str);
+		    if (MultiMeasureRestCount > 0) {
+			str << "*" << (1 + MultiMeasureRestCount);
+		    }
+		    prevDuration = duration;
+		}
 
-            if (lilyText != "") {
-                str << lilyText;
-                lilyText = "";
-            }
+		if (lilyText != "") {
+		    str << lilyText;
+		    lilyText = "";
+		}
 
-            str << " ";
+		str << " ";
+	    
+		handleEndingEvents(eventsInProgress, i, str);
+		handleStartingEvents(eventsToStart, str);
 
-            handleEndingEvents(eventsInProgress, i, str);
-            handleStartingEvents(eventsToStart, str);
-
-            if (newBeamedGroup)
-                notesInBeamedGroup++;
+		if (newBeamedGroup)
+		    notesInBeamedGroup++;
+	    } else {
+		MultiMeasureRestCount--;
+	    }
+	    writtenDuration += soundingDuration;
         } else if ((*i)->isa(Clef::EventType)) {
 
             try {
@@ -1543,7 +1573,7 @@ LilypondExporter::writeBar(Segment *s,
     //
     // Export bar checks.
     //
-    if (!nextBarIsDouble && !nextBarIsEnd && !nextBarIsDot) {
+    if (MultiMeasureRestCount == 0 && !nextBarIsDouble && !nextBarIsEnd && !nextBarIsDot) {
         str << " |";
     }
     if (nextBarIsDouble) {
