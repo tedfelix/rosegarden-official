@@ -88,7 +88,8 @@ protected:
     void writeBar(Segment *, int barNo, int barStart, int barEnd, int col,
                   Rosegarden::Key &key, std::string &lilyText, std::string &lilyLyrics,
                   std::string &prevStyle, eventendlist &eventsInProgress,
-                  std::ofstream &str, bool &nextBarIsAlt1, bool &nextBarIsAlt2,
+                  std::ofstream &str, int &MultiMeasureRestCount,
+                  bool &nextBarIsAlt1, bool &nextBarIsAlt2,
                   bool &nextBarIsDouble, bool &nextBarIsEnd, bool &nextBarIsDot);
     
     timeT calculateDuration(Segment *s,
