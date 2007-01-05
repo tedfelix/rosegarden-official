@@ -1360,7 +1360,13 @@ LilypondExporter::writeBar(Segment *s,
                 }
             }
 
-            str << (hiddenRest ? "s" : "r");
+	    if (hiddenRest)
+		str << "s";
+	    else if (duration == timeSignature.getBarDuration())
+		str << "R";
+	    else
+		str << "r";
+                                 
             if (duration != prevDuration) {
                 writeDuration(duration, str);
                 prevDuration = duration;
@@ -1570,10 +1576,12 @@ LilypondExporter::writeSkip(const TimeSignature &timeSig,
 
             if (count > 0) {
 
-                if (useRests)
-                    str << "r";
-                else
+                if (!useRests)
                     str << "\\skip ";
+                else if (t == timeSig.getBarDuration())
+                    str << "R";
+                else
+                    str << "r";
 
                 writeDuration(t, str);
 
