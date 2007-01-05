@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-09-16 11:44+0100\n"
-"PO-Revision-Date: 2006-12-29 09:48+0900\n"
+"PO-Revision-Date: 2006-12-31 12:34+0900\n"
 "Last-Translator: oota toshiya <ribbon@users.sourceforge.net>\n"
 "Language-Team: Japanese\n"
 "MIME-Version: 1.0\n"
@@ -184,9 +184,9 @@ msgid ""
 "you'll be given the\n"
 "option to load the autosaved version, or the unmodified original.</p>\n"
 msgstr ""
-"<p>...Rosegardeは自動保存機能を持っているか?<br><br>\n"
+"<p>...Rosegardeは自動保存機能を持っていますか?<br><br>\n"
 "自動保存間隔を<b>設定->Rosegardenの構成\n"
-"</b>で構成可能<br><br>\n"
+"</b>で構成可能です<br><br>\n"
 "When something goes awry, such as a power outage or a Rosegarden crash\n"
 "(unfortunately, it happens...) simply load the file you were working on, and "
 "you'll be given the\n"
@@ -561,7 +561,7 @@ msgid ""
 "<p>You can use the mouse wheel to scroll up and down, or to scroll left and "
 "right (by holding the Alt key at the same time), or to zoom in and out (by "
 "holding the Control key).</p>\n"
-msgstr ""
+msgstr "<p>マウスホイールを、スクロールアップ/ダウンに、また、(同じ時にAltキーを押すことで)左右スクロールに、(コントロールキーを押しながら)ズームイン/アウトに使うことができます。</p>\n"
 
 #: ../gui/styles/styles.cpp:1
 msgid "Classical"
@@ -1823,7 +1823,7 @@ msgstr ""
 
 #: ../gui/dialogs.cpp:4292
 msgid "Recording Source"
-msgstr ""
+msgstr "録音ソース"
 
 #: ../gui/dialogs.cpp:4296
 msgid "Channel:"
@@ -1916,7 +1916,7 @@ msgstr "メトロノーム"
 
 #: ../gui/dialogs.cpp:4636
 msgid "Metronome Instrument"
-msgstr ""
+msgstr "メトロノームインスツルメント"
 
 #: ../gui/bankeditor.cpp:2737 ../gui/deviceeditor.cpp:61
 #: ../gui/devicemanager.cpp:89 ../gui/devicemanager.cpp:141
@@ -3088,11 +3088,11 @@ msgstr "送り元と送り先を指定"
 
 #: ../gui/bankeditor.cpp:2748
 msgid "From"
-msgstr ""
+msgstr "送り元"
 
 #: ../gui/bankeditor.cpp:2749
 msgid "To"
-msgstr ""
+msgstr "送り先"
 
 #: ../gui/bankeditor.cpp:2794 ../gui/bankeditor.cpp:2795
 msgid "<no devices>"
@@ -3409,7 +3409,7 @@ msgstr ""
 
 #: ../gui/segmentcommands.h:774
 msgid "Split by &Recording Source..."
-msgstr ""
+msgstr "録音ソースで分割(&R)"
 
 #: ../gui/segmentcommands.h:797
 msgid "Re&label..."
@@ -4271,7 +4271,7 @@ msgstr "複数のイベントのリサイズ"
 
 #: ../gui/instrumentparameterbox.cpp:74 ../gui/matrixview.cpp:137
 msgid "Instrument Parameters"
-msgstr ""
+msgstr "インスツルメントパラメータ"
 
 #: ../gui/instrumentparameterbox.cpp:189
 #: ../gui/rosegardenconfigurationpage.cpp:2055 ../gui/trackparameterbox.cpp:66
@@ -4313,7 +4313,7 @@ msgstr "プラグインを読み込み中..."
 
 #: ../gui/audioplugindialog.cpp:66
 msgid "Audio Plugin"
-msgstr "音プラグイン"
+msgstr "オーディオプラグイン"
 
 #: ../gui/audioplugindialog.cpp:95
 msgid "Plugin"
@@ -4357,11 +4357,11 @@ msgstr ""
 
 #: ../gui/audioplugindialog.cpp:139
 msgid "Copy plugin parameters"
-msgstr ""
+msgstr "プラグインパラメータの複写"
 
 #: ../gui/audioplugindialog.cpp:144
 msgid "Paste plugin parameters"
-msgstr ""
+msgstr "プラグインパラメータの貼り付け"
 
 #: ../gui/audioplugindialog.cpp:149
 msgid "Set to defaults"
@@ -4806,11 +4806,11 @@ msgstr "新しい名前を入力"
 
 #: ../gui/segmentparameterbox.cpp:1039 ../gui/trackparameterbox.cpp:823
 msgid "Highest playable note"
-msgstr ""
+msgstr "再生可能な最高の音符"
 
 #: ../gui/segmentparameterbox.cpp:1059 ../gui/trackparameterbox.cpp:842
 msgid "Lowest playable note"
-msgstr ""
+msgstr "再生可能な最低の音符"
 
 #: ../gui/rosegardengui.cpp:6174 ../gui/segmentparameterbox.cpp:1092
 msgid "Modify Segment label"
@@ -6167,7 +6167,7 @@ msgstr ""
 
 #: ../gui/matrixview.cpp:840
 msgid "Show Instrument Parameters"
-msgstr ""
+msgstr "インスツルメントパラメータの表示"
 
 #: ../gui/matrixview.cpp:845 ../gui/notationview.cpp:1529
 msgid "Show Ch&ord Name Ruler"
@@ -7128,7 +7128,7 @@ msgstr "トラックラベルの表示(&L)"
 
 #: ../gui/rosegardengui.cpp:684
 msgid "Show Playback Position R&uler"
-msgstr ""
+msgstr "再生位置ルーラの表示(&u)"
 
 #: ../gui/rosegardengui.cpp:689
 msgid "Show Te&mpo Ruler"
@@ -7579,7 +7579,7 @@ msgid ""
 "The Rosegarden sequencer process has exited unexpectedly.  Sound and "
 "recording will no longer be available for this session.\n"
 "Please exit and restart Rosegarden to restore sound capability."
-msgstr ""
+msgstr "Rosegardenシーケンサプロセスは異常終了した。サウンドと録音はもはやこのセッションでは無効である。Rosegardenを再起動して、サウンドcapabilityをリストアすること。"
 
 #: ../gui/rosegardengui.cpp:4578
 msgid ""
@@ -8277,11 +8277,11 @@ msgstr ""
 
 #: ../gui/audiomanagerdialog.cpp:230
 msgid "Unload &all Audio Files"
-msgstr ""
+msgstr "すべてのオーディオファイルのアンロード(&a)"
 
 #: ../gui/audiomanagerdialog.cpp:234
 msgid "Unload all &Unused Audio Files"
-msgstr ""
+msgstr "すべての未使用のオーディオファイルのアンロード(&U)"
 
 #: ../gui/audiomanagerdialog.cpp:238
 msgid "&Delete Unused Audio Files..."
@@ -8757,19 +8757,16 @@ msgid "<no instrument>"
 msgstr "<楽器無し>"
 
 #: ../gui/trackparameterbox.cpp:67
-#, fuzzy
 msgid "Track Parameters"
-msgstr "グリッドパラメータ"
+msgstr "トラックパラメータ"
 
 #: ../gui/trackparameterbox.cpp:112
-#, fuzzy
 msgid "Playback parameters"
-msgstr "再生レベル"
+msgstr "再生パラメータ"
 
 #: ../gui/trackparameterbox.cpp:159
-#, fuzzy
 msgid "Recording filters"
-msgstr "録音デバイス"
+msgstr "録音フィルタ"
 
 #: ../gui/trackparameterbox.cpp:183
 msgid "Channel"
@@ -8781,14 +8778,12 @@ msgid "Create segments with:"
 msgstr "セグメントの作成"
 
 #: ../gui/trackparameterbox.cpp:221
-#, fuzzy
 msgid "Preset"
-msgstr "休符"
+msgstr "プリセット"
 
 #: ../gui/trackparameterbox.cpp:229
-#, fuzzy
 msgid "Load"
-msgstr "データのロード"
+msgstr "ロード"
 
 #: ../gui/trackparameterbox.cpp:239
 msgid "treble"
@@ -8854,7 +8849,7 @@ msgstr "[ トラック#%1 - %2 ]"
 
 #: ../gui/trackparameterbox.cpp:888
 msgid "The instrument preset database is corrupt.  Check your installation."
-msgstr ""
+msgstr "インスツルメントプリセットデータベースが壊れている。インストール状況を確認せよ。"
 
 #: ../gui/presethandler.cpp:173
 #, c-format
