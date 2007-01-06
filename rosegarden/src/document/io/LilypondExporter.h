@@ -86,7 +86,7 @@ protected:
     bool m_pitchBorked;
 
     void writeBar(Segment *, int barNo, int barStart, int barEnd, int col,
-                  Rosegarden::Key &key, std::string &lilyText, std::string &lilyLyrics,
+                  Rosegarden::Key &key, std::string &lilyText,
                   std::string &prevStyle, eventendlist &eventsInProgress,
                   std::ofstream &str, int &MultiMeasureRestCount,
                   bool &nextBarIsAlt1, bool &nextBarIsAlt2,
@@ -132,7 +132,7 @@ protected:
                          bool &nextBarIsAlt1, bool &nextBarIsAlt2,
                          bool &nextBarIsDouble, bool &nextBarIsEnd, bool &nextBarIsDot);
 
-    void handleText(const Event *, std::string &lilyText, std::string &lilyLyrics);
+    void handleText(const Event *, std::string &lilyText);
     void writePitch(const Event *note, const Rosegarden::Key &key, std::ofstream &);
     void writeStyle(const Event *note, std::string &prevStyle, int col, std::ofstream &, bool isInChord);
     void writeDuration(timeT duration, std::ofstream &);
