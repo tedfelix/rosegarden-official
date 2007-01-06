@@ -836,7 +836,6 @@ LilypondExporter::write()
                 }
 
                 std::string lilyText = "";      // text events
-                std::string lilyLyrics = "";    // lyric events
                 std::string prevStyle = "";     // track note styles
 
                 Rosegarden::Key key;
@@ -901,7 +900,7 @@ LilypondExporter::write()
 
                     // write out a bar's worth of events
                     writeBar(*i, barNo, barStart, barEnd, col, key,
-                             lilyText, lilyLyrics,
+                             lilyText,
                              prevStyle, eventsInProgress, str,
                              MultiMeasureRestCount, 
                              nextBarIsAlt1, nextBarIsAlt2, nextBarIsDouble, nextBarIsEnd, nextBarIsDot);
@@ -929,14 +928,77 @@ LilypondExporter::write()
                 // close Voice context
                 str << std::endl << indent(--col) << "} % Voice" << std::endl;  // indent-
 
-                // Write accumulated lyric events to the Lyric context, if user desires.
-                // If no lyrics is found, do not reserve empty vertical space for lyrics.
-                if (m_exportLyrics && lilyLyrics != "") {
-                    str << indent(col) << "\\lyricsto \"" << voiceNumber.str() << "\""
-                    << " \\new Lyrics \\lyricmode { " << std::endl;
-                    str << indent(++col) << lilyLyrics << " " << std::endl;
-                    str << indent(--col) << "} % Lyrics" << std::endl; // close Lyric context
-                }
+		//
+                // Write accumulated lyric events to the Lyric context, if desired.
+                //
+		// Sync the code below with LyricEditDialog::unparse() !!
+		//
+                if (m_exportLyrics) {
+		    QString text;
+		
+		    timeT lastTime = (*i)->getStartTime();
+		    int lastBarNo = m_composition->getBarNumber(lastTime);
+		    bool haveLyric = false;
+		
+		    for (Segment::iterator j = (*i)->begin();
+		            (*i)->isBeforeEndMarker(j); ++j) {
+		
+		        bool isNote = (*j)->isa(Note::EventType);
+		        bool isLyric = false;
+		
+		        if (!isNote) {
+		            if ((*j)->isa(Text::EventType)) {
+		                std::string textType;
+		                if ((*j)->get
+		                        <String>(Text::TextTypePropertyName, textType) &&
+		                        textType == Text::Lyric) {
+		                    isLyric = true;
+		                }
+		            }
+		        } else {
+		            if ((*j)->has(BaseProperties::TIED_BACKWARD) &&
+		                    (*j)->get
+		                    <Bool>(BaseProperties::TIED_BACKWARD))
+		                continue;
+		        }
+		
+		        if (!isNote && !isLyric)
+		            continue;
+		
+		        timeT myTime = (*j)->getNotationAbsoluteTime();
+		        int myBarNo = m_composition->getBarNumber(myTime);
+		
+		        if (myTime > lastTime && isNote) {
+		            if (!haveLyric)
+		                text += " _";
+		            lastTime = myTime;
+		            haveLyric = false;
+		        }
+		
+		        if (isLyric) {
+		            std::string ssyllable;
+		            (*j)->get
+		            <String>(Text::TextPropertyName, ssyllable);
+		            QString syllable(strtoqstr(ssyllable));
+		            syllable.replace(QRegExp("\\s+"), "");
+		            text += " \"" + syllable + "\"";
+		            haveLyric = true;
+		        }
+		    }
+		
+		    // Do not create empty context for lyrics.
+		    // Does this save some vertical space, as was written
+		    // in earlier comment?
+		    QRegExp rx( "\"" );
+		    if ( rx.search( text ) ) {
+		    
+			str << indent(col) << "\\lyricsto \"" << voiceNumber.str() << "\""
+			    << " \\new Lyrics \\lyricmode {" << std::endl;
+			str << indent(++col) << text << " " << std::endl;
+			str << indent(--col) << " } % Lyrics" << std::endl;
+			// close the Lyrics context
+		    }
+		}
             }
         }
     }
@@ -1076,7 +1138,6 @@ LilypondExporter::writeBar(Segment *s,
                            int barNo, int barStart, int barEnd, int col,
                            Rosegarden::Key &key,
                            std::string &lilyText,
-                           std::string &lilyLyrics,
                            std::string &prevStyle,
                            eventendlist &eventsInProgress,
                            std::ofstream &str,
@@ -1277,7 +1338,7 @@ LilypondExporter::writeBar(Segment *s,
                     if (!handleDirective(*i, lilyText, nextBarIsAlt1, nextBarIsAlt2,
                                          nextBarIsDouble, nextBarIsEnd, nextBarIsDot)) {
 
-                        handleText(*i, lilyText, lilyLyrics);
+                        handleText(*i, lilyText);
                     }
 
                 } else if ((*i)->isa(Note::EventType)) {
@@ -1476,7 +1537,7 @@ LilypondExporter::writeBar(Segment *s,
 
             if (!handleDirective(*i, lilyText, nextBarIsAlt1, nextBarIsAlt2,
                                  nextBarIsDouble, nextBarIsEnd, nextBarIsDot)) {
-                handleText(*i, lilyText, lilyLyrics);
+                handleText(*i, lilyText);
             }
         } else if ((*i)->isa(Guitar::Fingering::EventType)) {
             Rosegarden::Guitar::Fingering::Fingering arrangement =
@@ -1673,7 +1734,7 @@ LilypondExporter::handleDirective(const Event *textEvent,
 
 void
 LilypondExporter::handleText(const Event *textEvent,
-                             std::string &lilyText, std::string &lilyLyrics)
+                             std::string &lilyText)
 {
     try {
 
@@ -1695,16 +1756,6 @@ LilypondExporter::handleText(const Event *textEvent,
 
             // print above staff, bold, small
             lilyText += "^\\markup { \\bold \"" + s + "\" } ";
-
-        } else if (text.getTextType() == Text::Lyric) {
-
-            // convert Rosegarden's lyric skip character to LilyPond's one
-            if (s == ".") {
-                // is this point really reached?
-                lilyLyrics += "_ ";
-            } else {
-                lilyLyrics += "\"" + s + "\" ";
-            }
 
         } else if (text.getTextType() == Text::Dynamic) {
 
