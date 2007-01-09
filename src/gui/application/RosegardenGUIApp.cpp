@@ -4416,11 +4416,44 @@ void RosegardenGUIApp::slotTestStartupTester()
                  m_startupTester->haveProjectPackager() ?
                  KXMLGUIClient::StateNoReverse : KXMLGUIClient::StateReverse);
 
+    if (!m_startupTester->haveProjectPackager()) {
+        //!!! need to get a list of the missing parts from the project
+        //packager script, and display them using
+        //KMessageBox::informationList
+        KMessageBox::information
+            (m_view,
+             i18n("Rosegarden could not find one or more of the additional programs needed to support the Rosegarden Project Packager.\nExport and import of Rosegarden Project files will not be available."),
+             i18n("Rosegarden Project Packager not available"),
+             "startup-project-packager");
+    }
+
     stateChanged("have_lilypondview",
                  m_startupTester->haveLilypondView() ?
                  KXMLGUIClient::StateNoReverse : KXMLGUIClient::StateReverse);
 
+    if (!m_startupTester->haveLilypondView()) {
+        //!!! need to get a list of the missing parts from
+        //lilypondview and display them using
+        //KMessageBox::informationList
+        KMessageBox::information
+            (m_view,
+             i18n("Rosegarden could not find one or more of the additional programs needed to support the LilyPond previewer.\nNotation previews through LilyPond will not be available."),
+             i18n("LilyPond previews not available"),
+             "startup-lilypondview");
+    }
+
     m_haveAudioImporter = m_startupTester->haveAudioFileImporter();
+
+    if (!m_startupTester->haveAudioFileImporter()) {
+        //!!! need to get a list of the missing parts from
+        //audiofile importer and display them using
+        //KMessageBox::informationList
+        KMessageBox::information
+            (m_view,
+             i18n("Rosegarden could not find one or more of the additional programs needed to support the audio file importer and conversion helper.\nSupport for importing multiple audio file types and sample rate conversion will not be available."),
+             i18n("Audio file importer not available"),
+             "startup-audiofile-importer");
+    }
 
     delete m_startupTester;
     m_startupTester = 0;
