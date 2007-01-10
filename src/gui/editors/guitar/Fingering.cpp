@@ -84,17 +84,22 @@ Fingering::Fingering ( Event const& e_ref )
 
 
     // Restore GuitarNeck pointer
-    unsigned int max_strings;
-    unsigned int max_frets;
+    unsigned int max_strings = 0;
+    unsigned int max_frets = 0;
 
     e_ref.get<UInt>( PropertyName( "GUITAR_MAXFRETS" ),
                      max_frets );
     e_ref.get<UInt>( PropertyName( "GUITAR_MAXSTRINGS" ),
                      max_strings );
+
+    if (max_strings == 0 || max_frets == 0) {
+        throw Exception("Zero-size fretboard");
+    }
+
     m_guitar = new GuitarNeck( max_strings, max_frets );
 
     // Resotre start fret
-    unsigned int startFret;
+    unsigned int startFret = 0;
     e_ref.get<UInt>( PropertyName( "STARTFRET" ),
                      startFret );
     m_startFret = startFret;
@@ -142,7 +147,7 @@ Fingering::Fingering ( Event const& e_ref )
     }
 
     // - Add number of Barres to event
-    unsigned int barre_size;
+    unsigned int barre_size = 0;
     e_ref.get<UInt>( PropertyName( "BARRE_NUM" ), barre_size );
 
     if ( barre_size > 0 ) {
