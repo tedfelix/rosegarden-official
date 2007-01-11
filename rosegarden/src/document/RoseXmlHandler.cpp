@@ -799,7 +799,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         QString colorStr = atts.value("defaultColour");
         if (colorStr) {
-            track->setColor(transposeStr.toInt());
+            track->setColor(colorStr.toInt());
         }
 
         QString highplayStr = atts.value("highestPlayable");
