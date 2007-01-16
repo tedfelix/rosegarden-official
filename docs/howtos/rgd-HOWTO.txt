@@ -13,7 +13,7 @@ This mini-howto explains how to create a device definition file (in
 Rosegarden speak). Please refer to the Rosegarden tutorial paying
 particular attention to sections 2.4 to 2.10:
 
-<URL:http://rosegarden.sourceforge.net/tutorial/using-rosegarden/using-rosegarden.html>
+<URL:http://rosegarden.sourceforge.net/tutorial/>
 
 
 The Beginner Section
@@ -144,7 +144,7 @@ Step Two: Convert To *.rgd
 The next step involves converting the text file to the *.rgd format.
 Use the provided txt2rgd.py script (in the docs/howtos directory of
 the Rosegarden source distribution, or from
-<URL:http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/rosegarden/docs/howtos/txt2rgd.py>) as follows:
+<URL:http://rosegarden.svn.sourceforge.net/viewvc/*checkout*/rosegarden/trunk/docs/howtos/txt2rgd.py>) as follows:
 
     txt2rgd.py <input file> <output file>
 

@@ -139,8 +139,12 @@ while (<>)
     s, &lt; URL: ( [^&:\"]* ) .txt &gt; ,<A HREF="$1.html">$1.html</A>,xg;
     s, &lt; URL: ( [^&\"]*  )      &gt; ,<A HREF="$1">$1</A>,xg;
 
+    s,/\*,<SLASHSTAR>,g;
+
     s,    \*( \w[\w\s0-9-]* )\*    ,<B>$1</B>,xg;
     s, \b  _( \w[\w\s0-9-]* )_  \b ,<I>$1</I>,xg;
+
+    s,<SLASHSTAR>,/*,g;
 
     s, \\([\[\]]) ,$1,xg or s, \[( .*? )\] ,<CODE>$1</CODE>,xg;
 
