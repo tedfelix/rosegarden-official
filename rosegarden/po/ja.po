@@ -1,14 +1,14 @@
 # translation of ja.po to Japanese
 # This file is distributed under the same license as the PACKAGE package.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER.
-# oota toshiya <ribbon@users.sourceforge.net>, 2006.
+# oota toshiya <ribbon@users.sourceforge.net>, 2006, 2007.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2006-09-16 11:44+0100\n"
-"PO-Revision-Date: 2006-12-31 12:34+0900\n"
+"PO-Revision-Date: 2007-01-21 19:00+0900\n"
 "Last-Translator: oota toshiya <ribbon@users.sourceforge.net>\n"
 "Language-Team: Japanese\n"
 "MIME-Version: 1.0\n"
@@ -5707,7 +5707,7 @@ msgstr ""
 #: ../gui/rosegardenconfigurationpage.cpp:1290
 #: ../gui/rosegardenconfigurationpage.cpp:1604
 msgid "per file"
-msgstr ""
+msgstr "ファイル単位"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1343
 msgid "32KB"
@@ -5727,7 +5727,7 @@ msgstr "低レイテンシ"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1369
 msgid "Buffered"
-msgstr ""
+msgstr "バッファされた"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1375
 msgid "Create post-fader outputs for audio instruments"
@@ -5744,11 +5744,11 @@ msgstr "オーディオファイルパス:"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1394
 msgid "16-bit PCM WAV format (smaller files)"
-msgstr ""
+msgstr "16ビット PCM WAV形式(より小さいファイル)"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1395
 msgid "32-bit float WAV format (higher quality)"
-msgstr ""
+msgstr "32ビット浮動小数点 WAV形式(高品位)"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1418
 msgid "Record and Mix"
@@ -5768,7 +5768,7 @@ msgstr "MIDIクロック、開始、終了を送信"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1451
 msgid "Accept Start, Stop and Continue"
-msgstr ""
+msgstr "開始、終了と継続を許可"
 
 #: ../gui/rosegardenconfigurationpage.cpp:1459
 msgid "JACK transport mode"
@@ -5984,7 +5984,7 @@ msgstr "色マップ"
 
 #: ../gui/matrixview.cpp:387 ../gui/matrixview.cpp:2957
 msgid "Couldn't apply piano roll layout"
-msgstr ""
+msgstr "pianoロールレイアウトが適用できない"
 
 #: ../gui/matrixview.cpp:586 ../gui/notationview.cpp:1462
 #: ../gui/rosegardengui.cpp:739
@@ -6029,11 +6029,11 @@ msgstr ""
 
 #: ../gui/matrixview.cpp:665
 msgid "Set Event &Velocities..."
-msgstr ""
+msgstr "イベントベロシティの設定(&V)"
 
 #: ../gui/matrixview.cpp:669
 msgid "Trigger Se&gment..."
-msgstr ""
+msgstr "セグメントのトリガ(&g)"
 
 #: ../gui/matrixview.cpp:673
 msgid "Remove Triggers..."
@@ -6102,7 +6102,7 @@ msgstr ""
 
 #: ../gui/matrixview.cpp:794 ../gui/notationview.cpp:2082
 msgid "Clear L&oop"
-msgstr ""
+msgstr "ループのクリヤ(&o)"
 
 #: ../gui/eventview.cpp:1243 ../gui/matrixview.cpp:803
 #: ../gui/notationview.cpp:2093
@@ -6250,23 +6250,23 @@ msgstr ""
 
 #: ../gui/matrixview.cpp:2540
 msgid "Set Event Velocities"
-msgstr ""
+msgstr "イベントベロシティの設定"
 
 #: ../gui/matrixview.cpp:2545
 msgid "Setting Velocities..."
-msgstr ""
+msgstr "ベロシティの設定..."
 
 #: ../gui/matrixview.cpp:2578
 msgid "Remove Triggers"
-msgstr ""
+msgstr "トリガの削除"
 
 #: ../gui/matrixview.cpp:2635
 msgid "%1 - Segment Track #%2 - %3"
-msgstr ""
+msgstr "%1 - セグメントトラック #%2 - %3"
 
 #: ../gui/matrixview.cpp:2642
 msgid "%1 - All Segments - %2"
-msgstr ""
+msgstr "%1 - すべてのセグメント - %2"
 
 #: ../gui/matrixview.cpp:2649
 msgid ""
@@ -6322,7 +6322,7 @@ msgstr "デバイス %1"
 
 #: ../gui/deviceeditor.cpp:244
 msgid "Apply pending changes?"
-msgstr ""
+msgstr "保留中の変更を適用するか?"
 
 #: ../gui/deviceeditor.cpp:348 ../gui/deviceeditor.cpp:366
 msgid "<new device>"
@@ -6501,23 +6501,23 @@ msgstr "ソースデバイス"
 
 #: ../gui/importdevicedialog.cpp:114
 msgid "Import from: "
-msgstr ""
+msgstr "インポート元"
 
 #: ../gui/importdevicedialog.cpp:151
 msgid "Import banks"
-msgstr ""
+msgstr "バンクのインポート"
 
 #: ../gui/importdevicedialog.cpp:152
 msgid "Import key mappings"
-msgstr ""
+msgstr "キーマッピングのインポート"
 
 #: ../gui/importdevicedialog.cpp:153
 msgid "Import controllers"
-msgstr ""
+msgstr "コントローラのインポート"
 
 #: ../gui/importdevicedialog.cpp:156
 msgid "Import device name"
-msgstr ""
+msgstr "デバイス名のインポート"
 
 #: ../gui/importdevicedialog.cpp:162
 msgid "Bank import behavior"
@@ -6525,15 +6525,15 @@ msgstr ""
 
 #: ../gui/importdevicedialog.cpp:164
 msgid "Merge banks"
-msgstr ""
+msgstr "バンクの併合"
 
 #: ../gui/importdevicedialog.cpp:165
 msgid "Overwrite banks"
-msgstr ""
+msgstr "バンクの上書き"
 
 #: ../gui/importdevicedialog.cpp:365
 msgid "Bank %1:%2"
-msgstr ""
+msgstr "バンク %1:%2"
 
 #: ../gui/rosegardenguiview.cpp:229
 msgid "No non-audio segments in composition"
@@ -6546,7 +6546,7 @@ msgstr ""
 #: ../gui/rosegardenguiview.cpp:386 ../gui/rosegardenguiview.cpp:527
 #: ../gui/rosegardenguiview.cpp:562 ../gui/rosegardenguiview.cpp:723
 msgid "No non-audio segments selected"
-msgstr ""
+msgstr "非音声セグメントが1つも選択されていない"
 
 #: ../gui/rosegardenguiview.cpp:837
 msgid ""
@@ -6609,7 +6609,7 @@ msgstr ""
 
 #: ../gui/editcommands.cpp:1565
 msgid "&Move Events to Other Segment"
-msgstr ""
+msgstr "イベントを他のセグメントに移動(&M)"
 
 #: ../gui/editcommands.cpp:1798
 msgid "Insert Trigger Note"
@@ -6809,7 +6809,7 @@ msgstr ""
 
 #: ../gui/notationview.cpp:1545
 msgid "Show Lily&Pond Directives"
-msgstr ""
+msgstr "LilyPondディレクティブの表示(&P)"
 
 #: ../gui/notationview.cpp:1549
 msgid "Open L&yric Editor"
@@ -7132,7 +7132,7 @@ msgstr "再生位置ルーラの表示(&u)"
 
 #: ../gui/rosegardengui.cpp:689
 msgid "Show Te&mpo Ruler"
-msgstr ""
+msgstr "テンポメモリの表示(&m)"
 
 #: ../gui/rosegardengui.cpp:694
 msgid "Show Cho&rd Name Ruler"
@@ -7309,7 +7309,7 @@ msgstr ""
 
 #: ../gui/rosegardengui.cpp:1151
 msgid "Segment Debug Dump "
-msgstr ""
+msgstr "セグメントデバッグダンプ"
 
 #: ../gui/rosegardengui.cpp:1221
 msgid "  Zoom:  "
@@ -7415,11 +7415,11 @@ msgstr ""
 
 #: ../gui/rosegardengui.cpp:2793
 msgid "Split Segments at Time"
-msgstr ""
+msgstr "時間でセグメントを分割"
 
 #: ../gui/rosegardengui.cpp:2794
 msgid "Split Segment at Time"
-msgstr ""
+msgstr "時間でセグメントを分割"
 
 #: ../gui/rosegardengui.cpp:2836
 msgid "Set Segment Start Times"
@@ -7471,12 +7471,11 @@ msgstr "結合ツールはまだ実装されていない"
 
 #: ../gui/rosegardengui.cpp:3367
 msgid "Add Multiple Tracks"
-msgstr ""
+msgstr "複数のトラックを追加"
 
 #: ../gui/rosegardengui.cpp:3368
-#, fuzzy
 msgid "How many tracks do you want to add?"
-msgstr "幾つトラックを追加したいか(最大は24)?"
+msgstr "幾つトラックを追加したいか?"
 
 #: ../gui/rosegardengui.cpp:3512
 msgid "Revert modified document to previous saved version?"
@@ -7496,7 +7495,7 @@ msgstr "Rosegardenプロジェクトファイルのインポート"
 
 #: ../gui/rosegardengui.cpp:3550
 msgid "Failed to import project file \"%1\""
-msgstr ""
+msgstr "プロジェクトファイル \"%1\"のインポートに失敗"
 
 #: ../gui/rosegardengui.cpp:3571
 msgid "Open MIDI File"
@@ -7588,6 +7587,8 @@ msgid ""
 "For assistance with correct audio and MIDI configuration, go to http://"
 "rosegardenmusic.com."
 msgstr ""
+"Rosegardenシーケンサが起動できなかったため、サウンドと録音はこのセッションでは無効である。音声とMIDI構成の修正の支援のためにhttp://"
+"rosegardenmusic.comを参照。 "
 
 #: ../gui/rosegardengui.cpp:4589
 msgid "Exporting Rosegarden Project file..."
@@ -7610,7 +7611,7 @@ msgstr ""
 
 #: ../gui/rosegardengui.cpp:4621
 msgid "Failed to export to project file \"%1\""
-msgstr ""
+msgstr "プロジェクトファイル \"%1\"のエクスポートに失敗"
 
 #: ../gui/rosegardengui.cpp:4632 ../gui/rosegardengui.cpp:4646
 msgid "Exporting MIDI file..."
@@ -7652,7 +7653,7 @@ msgstr "Lilypondファイルをプレビュー..."
 
 #: ../gui/rosegardengui.cpp:4756
 msgid "Failed to open a temporary file for Lilypond export."
-msgstr ""
+msgstr "Lilypondエクスポートのための一時ファイルのオープンに失敗"
 
 #: ../gui/rosegardengui.cpp:4783
 msgid "Lilypond Preview Options"
@@ -7771,11 +7772,11 @@ msgstr "エラー:最適のフォント%1をオープンできない"
 #: ../gui/notefontviewer.cpp:289
 #, c-format
 msgid "Note Font Viewer: %1"
-msgstr ""
+msgstr "音符フォントビューワ: %1"
 
 #: ../gui/notefontviewer.cpp:295
 msgid "  Component: "
-msgstr ""
+msgstr "  コンポーネント: "
 
 #: ../gui/notefontviewer.cpp:303
 msgid "  View: "
@@ -8120,9 +8121,8 @@ msgid "Fine Reposition"
 msgstr "高解像度"
 
 #: ../gui/notationcommands.h:896
-#, fuzzy
 msgid "Restore Computed Positions"
-msgstr "計算した位置を復帰(&C)"
+msgstr "計算した位置を復帰"
 
 #: ../gui/notationcommands.h:913
 msgid "Set Visibility"
@@ -8182,15 +8182,15 @@ msgstr ""
 
 #: ../gui/controleditor.cpp:102
 msgid "Add a Control Parameter to the Studio"
-msgstr ""
+msgstr "スタジオに対するコントロールパラメータの追加"
 
 #: ../gui/controleditor.cpp:105
 msgid "Delete a Control Parameter from the Studio"
-msgstr ""
+msgstr "スタジオからコントロールパラメータの削除"
 
 #: ../gui/controleditor.cpp:108
 msgid "Close the Control Parameter editor"
-msgstr ""
+msgstr "コントロールパラメータエディタのクローズ"
 
 #: ../gui/controleditor.cpp:185
 msgid "<default>"
@@ -8234,7 +8234,7 @@ msgstr "不明なエラー"
 
 #: ../gui/notefont.cpp:98
 msgid "Can't open font mapping file %1 or %2"
-msgstr ""
+msgstr "フォントマッピングファイル %1 又は %2が開けない"
 
 #: ../gui/notefont.cpp:102
 #, c-format
@@ -8247,7 +8247,7 @@ msgstr ""
 
 #: ../gui/audiomanagerdialog.cpp:180
 msgid "Audio File Manager"
-msgstr ""
+msgstr "音声ファイルマネージャ"
 
 #: ../gui/audiomanagerdialog.cpp:201
 msgid ""
@@ -8269,7 +8269,7 @@ msgstr "オーディオファイルをアンロード(&U)"
 
 #: ../gui/audiomanagerdialog.cpp:215
 msgid "&Play Preview"
-msgstr ""
+msgstr "再生プレビュー(&P)"
 
 #: ../gui/audiomanagerdialog.cpp:226
 msgid "&Insert into Selected Audio Track"
@@ -8285,7 +8285,7 @@ msgstr "すべての未使用のオーディオファイルのアンロード(&U
 
 #: ../gui/audiomanagerdialog.cpp:238
 msgid "&Delete Unused Audio Files..."
-msgstr ""
+msgstr "未使用の音声ファイルの削除(&D)..."
 
 #: ../gui/audiomanagerdialog.cpp:242
 msgid "&Export Audio File..."
@@ -8390,7 +8390,7 @@ msgstr ""
 
 #: ../gui/audiomanagerdialog.cpp:1077
 msgid "Change Audio File label"
-msgstr ""
+msgstr "音声ファイルラベルの変更"
 
 #: ../gui/audiomanagerdialog.cpp:1292 ../gui/audiomanagerdialog.cpp:1301
 msgid "Cannot add file %1: %2"
@@ -8773,9 +8773,8 @@ msgid "Channel"
 msgstr "チャネル"
 
 #: ../gui/trackparameterbox.cpp:205
-#, fuzzy
 msgid "Create segments with:"
-msgstr "セグメントの作成"
+msgstr "右記でセグメントの作成:"
 
 #: ../gui/trackparameterbox.cpp:221
 msgid "Preset"
@@ -9219,9 +9218,9 @@ msgid "Clefs Toolbar"
 msgstr "音部記号ツールバー"
 
 #: rc.cpp:144
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Accidentals Toolbar"
-msgstr "臨時記号ツールバーを表示(&A)"
+msgstr "臨時記号ツールバー"
 
 #: rc.cpp:146
 #, no-c-format
@@ -9229,9 +9228,9 @@ msgid "Group Toolbar"
 msgstr "グループツールバー"
 
 #: rc.cpp:148
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Marks Toolbar"
-msgstr "トラックツールバー"
+msgstr "ツールバーのマーク"
 
 #: rc.cpp:150
 #, no-c-format
@@ -9399,9 +9398,9 @@ msgid "Rewind"
 msgstr "巻き戻し"
 
 #: rc.cpp:311
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Moves the current pointer position back one bar."
-msgstr "現在のポインタ一から再生かすでに再生中ならば再生を一時停止"
+msgstr ""
 
 #: rc.cpp:314
 #, no-c-format
