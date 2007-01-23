@@ -88,6 +88,7 @@
 #include "sound/MappedRealTime.h"
 #include "sound/MappedStudio.h"
 #include "sound/PluginIdentifier.h"
+#include "sound/SoundDriver.h"
 #include <kcommand.h>
 #include <kconfig.h>
 #include <kfilterdev.h>
@@ -1510,43 +1511,118 @@ RosegardenGUIDoc::xmlParse(QString fileContents, QString &errMsg,
             KMessageBox::information(0, i18n("File load cancelled"));
             cancelled = true;
             return true;
-        } else
+        } else {
             errMsg = handler.errorString();
+        }
 
-    } else if (handler.isDeprecated()) {
+    } else {
 
-        QString msg(i18n("This file contains one or more old element types that are now deprecated.\nSupport for these elements may disappear in future versions of Rosegarden.\nWe recommend you re-save this file from this version of Rosegarden to ensure that it can still be re-loaded in future versions."));
-        slotDocumentModified(); // so file can be re-saved immediately
+        if (getSequenceManager() &&
+            !(getSequenceManager()->getSoundDriverStatus() & AUDIO_OK)) {
 
-        KStartupLogo::hideIfStillThere();
-        CurrentProgressDialog::freeze();
-        KMessageBox::information(0, msg);
-        CurrentProgressDialog::thaw();
-    }
+            KStartupLogo::hideIfStillThere();
+            CurrentProgressDialog::freeze();
 
-    if (m_pluginManager) {
-        // We only warn if a plugin manager is present, so as to avoid
-        // warnings when importing a studio from another file (which is
-        // the normal case in which we have no plugin manager).
+            if (handler.hasActiveAudio() ||
+                (m_pluginManager && !handler.pluginsNotFound().empty())) {
 
-        if (!handler.pluginsNotFound().empty()) {
+#ifdef HAVE_LIBJACK
+                KMessageBox::information
+                    (0, i18n("<h3>Audio and plugins not available</h3><p>This composition uses audio files or plugins, but Rosegarden is currently running without audio because the JACK audio server was not available on startup.</p><p>Please exit Rosegarden, start the JACK audio server and re-start Rosegarden if you wish to load this complete composition.</p><p><b>WARNING:</b> If you re-save this composition, all audio and plugin data and settings in it will be lost.</p>"));
+#else
+                KMessageBox::information
+                    (0, i18n("<h3>Audio and plugins not available</h3><p>This composition uses audio files or plugins, but you are running a version of Rosegarden that was compiled without audio support.</p><p><b>WARNING:</b> If you re-save this composition from this version of Rosegarden, all audio and plugin data and settings in it will be lost.</p>"));
+#endif
+            }
+            CurrentProgressDialog::thaw();
 
-            QString msg(i18n("The following plugins could not be loaded:\n\n"));
+        } else {
+           
+            bool shownWarning = false;
 
-            for (std::set
-                        <QString>::iterator i = handler.pluginsNotFound().begin();
-                        i != handler.pluginsNotFound().end(); ++i) {
+            int sr = 0;
+            if (getSequenceManager()) {
+                sr = getSequenceManager()->getSampleRate();
+            }
+
+            int er = m_audioFileManager.getExpectedSampleRate();
+
+            std::set<int> rates = m_audioFileManager.getActualSampleRates();
+            bool other = false;
+            bool mixed = (rates.size() > 1);
+            for (std::set<int>::iterator i = rates.begin();
+                 i != rates.end(); ++i) {
+                if (*i != sr) {
+                    other = true;
+                    break;
+                }
+            }
+                
+            if (sr != 0 &&
+                handler.hasActiveAudio() &&
+                ((er != 0 && er != sr) ||
+                 (other && !mixed))) {
+
+                if (er == 0) er = *rates.begin();
+
+                KStartupLogo::hideIfStillThere();
+                CurrentProgressDialog::freeze();
+
+                KMessageBox::information(0, i18n("<h3>Incorrect audio sample rate</h3><p>This composition contains audio files that were recorded or imported with the audio server running at a different sample rate (%1 Hz) from the current JACK server sample rate (%2 Hz).</p><p>Rosegarden will play this composition at the correct speed, but any audio files in it will probably sound awful.</p><p>Please consider re-starting the JACK server at the correct rate (%3 Hz) and re-loading this composition before you do any more work with it.</p>").arg(er).arg(sr).arg(er));
+
+                CurrentProgressDialog::thaw();
+                shownWarning = true;
+ 
+            } else if (sr != 0 && mixed) {
+                    
+                KStartupLogo::hideIfStillThere();
+                CurrentProgressDialog::freeze();
+                
+                KMessageBox::information(0, i18n("<h3>Inconsistent audio sample rates</h3><p>This composition contains audio files at more than one sample rate.</p><p>Rosegarden will play them at the correct speed, but any audio files that were recorded or imported at rates different from the current JACK server sample rate (%1 Hz) will probably sound awful.</p><p>Please see the audio file manager dialog for more details, and consider resampling any files that are at the wrong rate.</p>").arg(sr),
+                                         i18n("Inconsistent sample rates"),
+                                         "file-load-inconsistent-samplerates");
+                    
+                CurrentProgressDialog::thaw();
+                shownWarning = true;
+            }
+ 
+            if (m_pluginManager && !handler.pluginsNotFound().empty()) {
+
+                // We only warn if a plugin manager is present, so as
+                // to avoid warnings when importing a studio from
+                // another file (which is the normal case in which we
+                // have no plugin manager).
+
+                QString msg(i18n("<h3>Plugins not found</h3><p>The following audio plugins could not be loaded:</p><ul>"));
+
+                for (std::set<QString>::iterator i = handler.pluginsNotFound().begin();
+                     i != handler.pluginsNotFound().end(); ++i) {
                     QString ident = *i;
                     QString type, soName, label;
                     PluginIdentifier::parseIdentifier(ident, type, soName, label);
                     QString pluginFileName = QFileInfo(soName).fileName();
-                    msg += i18n("--  %1 (from %2)\n").arg(label).arg(pluginFileName);
+                    msg += i18n("<li>%1 (from %2)</li>").arg(label).arg(pluginFileName);
                 }
+                msg += "</ul>";
+                
+                KStartupLogo::hideIfStillThere();
+                CurrentProgressDialog::freeze();
+                KMessageBox::information(0, msg);
+                CurrentProgressDialog::thaw();
+                shownWarning = true;
+                
+            }
 
-            KStartupLogo::hideIfStillThere();
-            CurrentProgressDialog::freeze();
-            KMessageBox::information(0, msg);
-            CurrentProgressDialog::thaw();
+            if (handler.isDeprecated() && !shownWarning) {
+                
+                QString msg(i18n("This file contains one or more old element types that are now deprecated.\nSupport for these elements may disappear in future versions of Rosegarden.\nWe recommend you re-save this file from this version of Rosegarden to ensure that it can still be re-loaded in future versions."));
+                slotDocumentModified(); // so file can be re-saved immediately
+                
+                KStartupLogo::hideIfStillThere();
+                CurrentProgressDialog::freeze();
+                KMessageBox::information(0, msg);
+                CurrentProgressDialog::thaw();
+            }
         }
     }
 

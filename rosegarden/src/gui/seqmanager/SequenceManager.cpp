@@ -49,6 +49,7 @@
 #include "gui/dialogs/TransportDialog.h"
 #include "gui/kdeext/KStartupLogo.h"
 #include "gui/studio/StudioControl.h"
+#include "gui/widgets/CurrentProgressDialog.h"
 #include "MetronomeMmapper.h"
 #include "SegmentMmapperFactory.h"
 #include "SequencerMapper.h"
@@ -261,7 +262,7 @@ SequenceManager::play()
     }
 
     // This check may throw an exception
-    checkSoundDriverStatus();
+    checkSoundDriverStatus(false);
 
     // Align Instrument lists and send initial program changes
     //
@@ -715,7 +716,7 @@ punchin:
         }
 
         // may throw an exception
-        checkSoundDriverStatus();
+        checkSoundDriverStatus(false);
 
         // toggle the Metronome button if it's in use
         m_transport->MetronomeButton()->setOn(comp.useRecordMetronome());
@@ -1151,7 +1152,8 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                             dynamic_cast<QWidget*>(m_doc->parent())->parentWidget(),
                             i18n("The JACK Audio subsystem has stopped Rosegarden from processing audio, probably because of a processing overload.\nAn attempt to restart the audio service has been made, but some problems may remain.\nQuitting other running applications may improve Rosegarden's performance."));
 
-                    } else if ((*i)->getData1() == MappedEvent::WarningImpreciseTimer) {
+                    } else if ((*i)->getData1() == MappedEvent::WarningImpreciseTimer &&
+                               shouldWarnForImpreciseTimer()) {
 
                         std::cerr << "Rosegarden: WARNING: No accurate sequencer timer available" << std::endl;
 
@@ -1237,7 +1239,7 @@ SequenceManager::setLoop(const timeT &lhs, const timeT &rhs)
 }
 
 void
-SequenceManager::checkSoundDriverStatus()
+SequenceManager::checkSoundDriverStatus(bool warnUser)
 {
     QByteArray data;
     QCString replyType;
@@ -1248,31 +1250,56 @@ SequenceManager::checkSoundDriverStatus()
 
     if (! rgapp->sequencerCall("getSoundDriverStatus(QString)",
                                replyType, replyData, data)) {
-        m_soundDriverStatus = NO_DRIVER;
-        throw(Exception("Failed to query sound driver status from sequencer"));
-    }
 
-    QDataStream streamIn(replyData, IO_ReadOnly);
-    unsigned int result;
-    streamIn >> result;
-    m_soundDriverStatus = result;
+        m_soundDriverStatus = NO_DRIVER;
+
+    } else {
+
+        QDataStream streamIn(replyData, IO_ReadOnly);
+        unsigned int result;
+        streamIn >> result;
+        m_soundDriverStatus = result;
+    }
 
     SEQMAN_DEBUG << "Sound driver status is: " << m_soundDriverStatus << endl;
 
-    if (m_soundDriverStatus == NO_DRIVER)
-        throw(Exception("MIDI and Audio subsystems have failed to initialize.  You may continue without the sequencer, but we suggest closing Rosegarden, running \"alsaconf\" as root, and starting Rosegarden again.  If you wish to run with no sequencer by design, then use \"rosegarden --nosequencer\" to avoid seeing this error in the future."));
+    if (!warnUser) return;
 
-    if (!(m_soundDriverStatus & MIDI_OK))
-        throw(Exception("MIDI subsystem has failed to initialize.  You may continue without the sequencer, but we suggest closing Rosegarden, running \"modprobe snd-seq-midi\" as root, and starting Rosegarden again.  If you wish to run with no sequencer by design, then use \"rosegarden --nosequencer\" to avoid seeing this error in the future."));
+#ifdef HAVE_LIBJACK
+    if ((m_soundDriverStatus & (AUDIO_OK | MIDI_OK | VERSION_OK)) ==
+        (AUDIO_OK | MIDI_OK | VERSION_OK)) return;
+#else
+    if ((m_soundDriverStatus & (MIDI_OK | VERSION_OK)) ==
+        (MIDI_OK | VERSION_OK)) return;
+#endif
 
-    if (!(m_soundDriverStatus & VERSION_OK)) {
-        throw(Exception("Sequencer module version does not match GUI module version.  You have probably mixed up different builds of Rosegarden.  Please check your installation."));
+    KStartupLogo::hideIfStillThere();
+    CurrentProgressDialog::freeze();
+
+    QString text = "";
+
+    if (m_soundDriverStatus == NO_DRIVER) {
+        text = i18n("<p>Both MIDI and Audio subsystems have failed to initialize.</p><p>You may continue without the sequencer, but we suggest closing Rosegarden, running \"alsaconf\" as root, and starting Rosegarden again.  If you wish to run with no sequencer by design, then use \"rosegarden --nosequencer\" to avoid seeing this error in the future.</p>");
+    } else if (!(m_soundDriverStatus & MIDI_OK)) {
+        text = i18n("<p>The MIDI subsystem has failed to initialize.</p><p>You may continue without the sequencer, but we suggest closing Rosegarden, running \"modprobe snd-seq-midi\" as root, and starting Rosegarden again.  If you wish to run with no sequencer by design, then use \"rosegarden --nosequencer\" to avoid seeing this error in the future.</p>");
+    } else if (!(m_soundDriverStatus & VERSION_OK)) {
+        text = i18n("<p>The Rosegarden sequencer module version does not match the GUI module version.</p><p>You have probably mixed up files from two different versions of Rosegarden.  Please check your installation.</p>");
     }
 
-    /*
-      if (!(m_soundDriverStatus & AUDIO_OK))
-      throw(Exception("Audio subsystem has failed to initialise"));
-    */
+    if (text != "") {
+        KMessageBox::error(dynamic_cast<QWidget*>(m_doc->parent())->parentWidget(), i18n("<h3>Sequencer startup failed</h3>%1").arg(text));
+        CurrentProgressDialog::thaw();
+        return;
+    }
+
+#ifdef HAVE_LIBJACK
+    if (!(m_soundDriverStatus & AUDIO_OK)) {
+        KMessageBox::information(dynamic_cast<QWidget*>(m_doc->parent())->parentWidget(), i18n("<h3>Failed to connect to JACK audio server.</h3><p>Rosegarden could not connect to the JACK audio server.  This probably means the JACK server is not running.</p><p>If you want to be able to play or record audio files or use plugins, you should exit Rosegarden and start the JACK server before running Rosegarden again.</p>"),
+                                 i18n("Failed to connect to JACK"),
+                                 "startup-jack-failed");
+    }
+#endif
+    CurrentProgressDialog::thaw();
 }
 
 void
@@ -2047,6 +2074,14 @@ SequenceManager::getSampleRate()
     return m_sampleRate;
 }
 
+bool
+SequenceManager::shouldWarnForImpreciseTimer()
+{
+    kapp->config()->setGroup(SequencerOptionsConfigGroup);
+    QString timer = kapp->config()->readEntry("timer");
+    if (timer == "(auto)" || timer == "") return true;
+    else return false; // if the user has chosen the timer, leave them alone
+}
 
 }
 #include "SequenceManager.moc"

@@ -40,15 +40,15 @@ use File::Copy;
 use File::Basename;
 use Getopt::Long;
 
-print "Rosegarden Project Packager v0.19 (c) Fervent Software Ltd 2005-2006\n";
-print "This is Free Software under the GNU General Public License.\n";
+print STDERR "Rosegarden Project Packager v0.20 (c) Fervent Software Ltd 2005-2007\n";
+print STDERR "This program is Free Software under the GNU General Public License.\n";
 
 my $dcop = undef;
 sub usage {
-    print "Usage: rgproject [--quiet] [--pack] file.rg [file.rgp]\n";
-    print "       rgproject [--quiet] --unpack file.rgp\n";
-    print "       rgproject [--quiet] --rg file.rgp\n";
-    print "       rgproject --conftest\n";
+    print STDERR "Usage: rgproject [--quiet] [--pack] file.rg [file.rgp]\n";
+    print STDERR "       rgproject [--quiet] --unpack file.rgp\n";
+    print STDERR "       rgproject [--quiet] --rg file.rgp\n";
+    print STDERR "       rgproject --conftest\n";
     if (defined $dcop) {
 	`dcop "$dcop" close`;
     }
@@ -88,7 +88,7 @@ $SIG{__DIE__} = sub {
 
 sub conftest {
     my @required = ();
-    system "$kdialog -v >/dev/null" and push @required, "kdialog";
+    system "kdialog -v >/dev/null" and push @required, "kdialog";
     system "flac --help >/dev/null" and push @required, "flac";
     # sndfile-convert --help always returns 1
     system "which sndfile-convert >/dev/null" and push @required, "sndfile-convert";
@@ -186,15 +186,15 @@ sub locate {
 sub convert {
     my $source = shift;
     my $target = shift;
-    print "$source -> $target\n";
+    print STDERR "$source -> $target\n";
     $source = locate $source;
     return if ($source eq "");
     my $d = dirname $target;
-    print "Creating directory $d\n";
+    print STDERR "Creating directory $d\n";
     system qq{mkdir -p "$d"} and die "Failed to create directory $d: $!";
-    print "Convert type is " . convertType($source) . "\n";
+    print STDERR "Convert type is " . convertType($source) . "\n";
     if (convertType($source) eq 'flac') {
-	print "Running flac -o $target.rgp.flac $source\n";
+	print STDERR "Running flac -o $target.rgp.flac $source\n";
 	system qq{flac -s -o "$target.rgp.flac" "$source"} and do {
 	    # Conversion failed.  First let's assume that's because the
 	    # input is a type of WAV file flac doesn't like.
@@ -210,11 +210,11 @@ sub convert {
 	    system qq{rm -f "$target.rgp.wav"};
 	};
     } elsif (convertType($source) eq 'ogg') {
-	print "Running oggenc -o $target $source\n";
+	print STDERR "Running oggenc -o $target $source\n";
 	system qq{oggenc -o "$target.rgp.ogg" "$source"} and
 	  die "Failed to convert $source to $target.rgp.ogg"; # warn via dialog & recover
     } else {
-	print "Copying $source to $target\n";
+	print STDERR "Copying $source to $target\n";
 	copy $source, $target or die "Failed to copy $source to $target: $!";
     }
     return 1;
@@ -269,7 +269,7 @@ sub rgPack {
 
     $dir =~ s,/\.?/,/,g;
 
-    print "dir is $dir\n";
+    print STDERR "dir is $dir\n";
 
     my $twig = XML::Twig->new();
 
@@ -386,7 +386,7 @@ sub rgPack {
 
     `dcop "$dcop" setProgress 5`;
 
-    print "Possibles: @possibles\n";
+    print STDERR "Possibles: @possibles\n";
 
     if (@possibles) {
 	print STDERR "$#possibles possibles\n";
@@ -429,7 +429,7 @@ sub rgPack {
     push @sourceFiles, @peakFiles;
     map { push @sourceFiles, $possibles[$_] } @indices;
 
-    print "Source files: @sourceFiles\n";
+    print STDERR "Source files: @sourceFiles\n";
 
     `dcop "$dcop" setProgress 10`;
 
@@ -443,7 +443,7 @@ sub rgPack {
 
     my $contribCount = 0.0;
 
-    print "Total contribution: $totalContrib\n";
+    print STDERR "Total contribution: $totalContrib\n";
 
     my $newProjectDir = basename $rgFile;
     $newProjectDir =~ s/.rg$//i;
@@ -460,10 +460,10 @@ sub rgPack {
 	}
 	my $sourceFile = canonicalise $projectDir, $sourceRelative;
 	my $targetFile = canonicalise($targetDir . "/" . $newProjectDir, $renamedRelative);
-	print "first guess: $sourceFile -> $targetFile (renamedRelative is $renamedRelative)\n";
+	print STDERR "first guess: $sourceFile -> $targetFile (renamedRelative is $renamedRelative)\n";
 	my $count = 1;
 	while (-f $targetFile or -d $targetFile) {
-	    print "$targetFile exists... ";
+	    print STDERR "$targetFile exists... ";
 	    if ($renamedRelative =~ m,\.([^.]+)$,) {
 		$renamedRelative =~ s,^(.*)\.([^.]+)$,$1_$count.$2,;
 	    } else {
@@ -471,7 +471,7 @@ sub rgPack {
 	    }
 	    $targetFile = canonicalise($targetDir . "/" . $newProjectDir, $renamedRelative);
 	    ++$count;
-	    print "trying $targetFile\n";
+	    print STDERR "trying $targetFile\n";
 	}
 	if (convertType($sourceFile) eq 'flac' or
 	    convertType($sourceFile) eq 'ogg') {
@@ -503,7 +503,7 @@ sub rgPack {
 	    if (exists $fileMap{$audioNode->att('file')}) {
 		my $before = $audioNode->att('file');
 		my $after = $fileMap{$before};
-		print "Renaming $before to $after in XML\n";
+		print STDERR "Renaming $before to $after in XML\n";
 		$audioNode->set_att('file', $after);
 	    }
 	} else {
@@ -522,7 +522,7 @@ sub rgPack {
 		if (exists $fileMap{$configureNode->att('value')}) {
 		    my $before = $configureNode->att('value');
 		    my $after = $fileMap{$before};
-		    print "Renaming $before to $after in configure XML\n";
+		    print STDERR "Renaming $before to $after in configure XML\n";
 		    $configureNode->set_att('value', $after);
 		}
 	    }
@@ -532,7 +532,7 @@ sub rgPack {
     my $targetRgFile = $targetDir . "/" . basename $rgFile;
     my $targetRgXml = $targetRgFile . ".xml";
 
-    print "out is $targetRgFile\n";
+    print STDERR "out is $targetRgFile\n";
 
     open OUT, "| gzip -c > $targetRgFile" or die "Failed to open $targetRgFile for writing via gzip";
 
@@ -548,7 +548,7 @@ sub rgPack {
     my $baseTarget = basename $targetDir;
     my $baseRg = basename $targetRgFile;
     my $baseProject = basename $projectFile;
-    print "dir is $targetDir\nbaseTarget is $baseTarget\nbaseRg is $baseRg\nnewProjectDir is $newProjectDir\n";
+    print STDERR "dir is $targetDir\nbaseTarget is $baseTarget\nbaseRg is $baseRg\nnewProjectDir is $newProjectDir\n";
     system qq{mkdir -p "$targetDir/$newProjectDir"};
     system qq{cd "$targetDir"; tar cf - "$baseRg" "$newProjectDir" | gzip --fast -c > "$baseProject" ; mv "$baseProject" ..} and die "Making tarball failed";
 
@@ -739,10 +739,13 @@ if (!$pack && !$unpack && !$conftest && !$rg) {
 
 my @required = conftest;
 if (@required) {
-    print "The following additional packages are required but not available in the PATH:\n";
-    print join ' ', @required;
-    print "\n";
+    print STDERR "The following additional packages are required but not available in the PATH:\n";
+    print STDERR join ' ', @required;
+    print STDERR "\n";
     if ($conftest) {
+	print "Required: ";
+	print join ', ', @required;
+	print "\n";
 	exit 1;
     } else {
 	die "Configuration requirements not met\nThe following helper applications were not found: " . join(', ', @required);

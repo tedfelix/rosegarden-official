@@ -73,7 +73,8 @@ private:
 };
 
 AudioFileManager::AudioFileManager() :
-    m_importProcess(0)
+    m_importProcess(0),
+    m_expectedSampleRate(0)
 {
     pthread_mutexattr_t attr;
     pthread_mutexattr_init(&attr);
@@ -724,7 +725,9 @@ AudioFileManager::importFile(const std::string &fileName, int sampleRate)
     delete proc;
 
     if (es == 0) {
-	return addFile(fileName);
+	AudioFileId id = addFile(fileName);
+	m_expectedSampleRate = sampleRate;
+	return id;
     }
 
     if (es == 2) {
@@ -801,6 +804,8 @@ AudioFileManager::importFile(const std::string &fileName, int sampleRate)
     m_audioFiles.push_back(aF);
     m_derivedAudioFiles.insert(aF);
     // Don't catch SoundFile::BadSoundFileException
+
+    m_expectedSampleRate = sampleRate;
 
     return aF->getId();
 }
@@ -881,7 +886,11 @@ AudioFileManager::toXmlString()
     std::stringstream audioFiles;
     std::string audioPath = substituteHomeForTilde(m_audioPath);
 
-    audioFiles << "<audiofiles>" << std::endl;
+    audioFiles << "<audiofiles";
+    if (m_expectedSampleRate != 0) {
+	audioFiles << " expectedRate=\"" << m_expectedSampleRate << "\"";
+    }
+    audioFiles << ">" << std::endl;
     audioFiles << "    <audioPath value=\""
     << audioPath << "\"/>" << std::endl;
 
@@ -1224,6 +1233,21 @@ AudioFileManager::getSplitPoints(AudioFileId id,
                                         endTime,
                                         threshold,
                                         minTime);
+}
+
+std::set<int>
+AudioFileManager::getActualSampleRates() const
+{
+    std::set<int> rates;
+
+    for (std::vector<AudioFile *>::const_iterator i = m_audioFiles.begin();
+	 i != m_audioFiles.end(); ++i) {
+
+	unsigned int sr = (*i)->getSampleRate();
+	if (sr != 0) rates.insert(int(sr));
+    }
+
+    return rates;
 }
 
 }

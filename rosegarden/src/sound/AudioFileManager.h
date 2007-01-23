@@ -283,6 +283,11 @@ public:
     //
     PeakFileManager& getPeakFileManager() { return m_peakManager; }
 
+    int getExpectedSampleRate() const { return m_expectedSampleRate; }
+    void setExpectedSampleRate(int rate) { m_expectedSampleRate = rate; }
+
+    std::set<int> getActualSampleRates() const;
+
 signals:
     void setProgress(int);
     void setOperationName(QString);
@@ -313,6 +318,8 @@ private:
     std::set<AudioFile *> m_derivedAudioFiles;
 
     KProcess *m_importProcess;
+
+    int m_expectedSampleRate;
 };
 
 }

@@ -423,27 +423,18 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     // transport is created by setupActions()
     m_seqManager = new SequenceManager(m_doc, getTransport());
 
-    try {
-        if (m_useSequencer) {
-            m_seqManager->checkSoundDriverStatus();
-        }
-    } catch (Exception e) {
-        KStartupLogo::hideIfStillThere();
-        CurrentProgressDialog::freeze();
-        KMessageBox::error(this, i18n("Sequencer startup failed: %1")
-                           .arg(strtoqstr(e.getMessage())));
-        CurrentProgressDialog::thaw();
+    if (m_useSequencer) {
+        // Check the sound driver status and warn the user of any
+        // problems.  This warning has to happen early, in case it
+        // affects the ability to load plugins etc from a file on the
+        // command line.
+        m_seqManager->checkSoundDriverStatus(true);
     }
 
     if (m_view) {
         connect(m_seqManager, SIGNAL(controllerDeviceEventReceived(MappedEvent *)),
                 m_view, SLOT(slotControllerDeviceEventReceived(MappedEvent *)));
     }
-
-    // Make sure we get the sequencer status now
-    //
-    emit startupStatusMessage(i18n("Getting sound driver status..."));
-    (void)m_seqManager->getSoundDriverStatus();
 
     if (m_seqManager->getSoundDriverStatus() & AUDIO_OK) {
         slotStateChanged("got_audio", true);
@@ -4412,48 +4403,52 @@ void RosegardenGUIApp::slotTestStartupTester()
         return ;
     }
 
+    QStringList missing;
+    bool have = m_startupTester->haveProjectPackager(&missing);
+
     stateChanged("have_project_packager",
-                 m_startupTester->haveProjectPackager() ?
+                 have ?
                  KXMLGUIClient::StateNoReverse : KXMLGUIClient::StateReverse);
 
-    if (!m_startupTester->haveProjectPackager()) {
-        //!!! need to get a list of the missing parts from the project
-        //packager script, and display them using
-        //KMessageBox::informationList
-        KMessageBox::information
+    if (!have) {
+        KMessageBox::informationList
             (m_view,
-             i18n("Rosegarden could not find one or more of the additional programs needed to support the Rosegarden Project Packager.\nExport and import of Rosegarden Project files will not be available."),
+             i18n("<h3>Project Packager not available</h3><p>Rosegarden could not find one or more of the additional programs needed to support the Rosegarden Project Packager.</p><p>Export and import of Rosegarden Project files will not be available.<p><p>To fix this, you should install the following additional programs:</p>"),
+             missing,
              i18n("Rosegarden Project Packager not available"),
              "startup-project-packager");
     }
 
+    have = m_startupTester->haveLilypondView(&missing);
+
     stateChanged("have_lilypondview",
-                 m_startupTester->haveLilypondView() ?
+                 have ?
                  KXMLGUIClient::StateNoReverse : KXMLGUIClient::StateReverse);
 
-    if (!m_startupTester->haveLilypondView()) {
-        //!!! need to get a list of the missing parts from
-        //lilypondview and display them using
-        //KMessageBox::informationList
-        KMessageBox::information
+    if (!have) {
+        KMessageBox::informationList
             (m_view,
-             i18n("Rosegarden could not find one or more of the additional programs needed to support the LilyPond previewer.\nNotation previews through LilyPond will not be available."),
+             i18n("<h3>LilyPond Preview not available</h3><p>Rosegarden could not find one or more of the additional programs needed to support the LilyPond previewer.</p><p>Notation previews through LilyPond will not be available.</p><p>To fix this, you should install the following additional programs:</p>"),
+             missing,
              i18n("LilyPond previews not available"),
              "startup-lilypondview");
     }
 
-    m_haveAudioImporter = m_startupTester->haveAudioFileImporter();
+#ifdef HAVE_LIBJACK
+    if (m_seqManager && (m_seqManager->getSoundDriverStatus() & AUDIO_OK)) {
 
-    if (!m_startupTester->haveAudioFileImporter()) {
-        //!!! need to get a list of the missing parts from
-        //audiofile importer and display them using
-        //KMessageBox::informationList
-        KMessageBox::information
-            (m_view,
-             i18n("Rosegarden could not find one or more of the additional programs needed to support the audio file importer and conversion helper.\nSupport for importing multiple audio file types and sample rate conversion will not be available."),
-             i18n("Audio file importer not available"),
-             "startup-audiofile-importer");
+        m_haveAudioImporter = m_startupTester->haveAudioFileImporter(&missing);
+
+        if (!m_haveAudioImporter) {
+            KMessageBox::informationList
+                (m_view,
+                 i18n("<h3>General audio file import not available</h3><p>Rosegarden could not find one or more of the additional programs needed to support its audio file conversion helper.</p><p>Support for importing additional audio file types, and sample rate conversion, will not be available.</p><p>To fix this, you should install the following additional programs:</p>"),
+                 missing,
+                 i18n("Audio file importer not available"),
+                 "startup-audiofile-importer");
+        }
     }
+#endif
 
     delete m_startupTester;
     m_startupTester = 0;
@@ -4474,15 +4469,7 @@ bool RosegardenGUIApp::launchSequencer(bool useExisting)
 
     if (isSequencerRunning()) {
         RG_DEBUG << "RosegardenGUIApp::launchSequencer() - sequencer already running - returning\n";
-        try {
-            if (m_seqManager)
-                m_seqManager->checkSoundDriverStatus();
-        } catch (...) {
-            // checkSoundDriverStatus can throw an exception, but the sequence
-            // manager should have reported that to the user on startup, or
-            // else we'll have had a failure report in the mean time.  No
-            // benefit in duplicating that report here
-        }
+        if (m_seqManager) m_seqManager->checkSoundDriverStatus(false);
         return true;
     }
 
@@ -4498,12 +4485,7 @@ bool RosegardenGUIApp::launchSequencer(bool useExisting)
         << "existing DCOP registered sequencer found\n";
 
         if (useExisting) {
-            try {
-                if (m_seqManager)
-                    m_seqManager->checkSoundDriverStatus();
-            } catch (...) {
-                // as above
-            }
+            if (m_seqManager) m_seqManager->checkSoundDriverStatus(false);
             m_sequencerProcess = (KProcess*)SequencerExternal;
             return true;
         }
