@@ -78,7 +78,7 @@ namespace Rosegarden
 
 using namespace BaseProperties;
 
-const Rosegarden::PropertyName LilypondExporter::SKIP_PROPERTY
+const PropertyName LilypondExporter::SKIP_PROPERTY
     = "LilypondExportSkipThisEvent";
 
 LilypondExporter::LilypondExporter(QObject *parent,
@@ -1539,52 +1539,60 @@ LilypondExporter::writeBar(Segment *s,
                                  nextBarIsDouble, nextBarIsEnd, nextBarIsDot)) {
                 handleText(*i, lilyText);
             }
+
         } else if ((*i)->isa(Guitar::Fingering::EventType)) {
-            Rosegarden::Guitar::Fingering::Fingering arrangement =
-              Rosegarden::Guitar::Fingering::Fingering(**i);
-            int firstFret = arrangement.getFirstFret();
-            int barre_start = 0, barre_end = 0, barre_fret = 0;
 
-            // 
-            // Check if there is a barre.
-            //
-            for (int fret_num = firstFret; fret_num <= firstFret + 5; fret_num++) {
-                if (arrangement.hasBarre(fret_num)) {
-                    barre_start = (arrangement.getBarre(fret_num))->getStart();
-                    barre_end = (arrangement.getBarre(fret_num))->getEnd();
-                    barre_fret = (arrangement.getBarre(fret_num))->getFret();
-                }
-            }
+            try {
+                Guitar::Fingering::Fingering arrangement =
+                    Guitar::Fingering::Fingering(**i);
 
-            if (barre_start == 0) {
-		str << " s4*0^\\markup \\fret-diagram #\"";
-	    } else {
-		str << " s4*0^\\markup \\override #'(barre-type . straight) \\fret-diagram #\"";
-	    }
-            //
-            // Check each string individually.
-            //
-            for (int string_num = 6; string_num >= 1; string_num--) {
-		if (barre_start == string_num) {
-		    str << "c:" << barre_start << "-" << barre_end << "-" << barre_fret << ";";
-                }
+                int firstFret = arrangement.getFirstFret();
+                int barre_start = 0, barre_end = 0, barre_fret = 0;
 
-                if (arrangement.getStringStatus( string_num ) == Rosegarden::Guitar::GuitarString::MUTED) {
-		    str << string_num << "-x;";
-                } else if (arrangement.getStringStatus( string_num ) == Rosegarden::Guitar::GuitarString::OPEN) {
-		    str << string_num << "-o;";
-                } else {
-                    if (arrangement.hasNote(string_num)) {
-		        str << string_num << "-" << (arrangement.getNote(string_num))->getFret() << ";";
-                    } else if ((string_num <= barre_start) && (string_num >= barre_end)) {
-		        str << string_num << "-" << barre_fret << ";";
-                    } else {
-                        // This else-else stage should not be ever reached.
-                        str << string_num << "-" << "o;";
+                // 
+                // Check if there is a barre.
+                //
+                for (int fret_num = firstFret; fret_num <= firstFret + 5; fret_num++) {
+                    if (arrangement.hasBarre(fret_num)) {
+                        barre_start = (arrangement.getBarre(fret_num))->getStart();
+                        barre_end = (arrangement.getBarre(fret_num))->getEnd();
+                        barre_fret = (arrangement.getBarre(fret_num))->getFret();
                     }
                 }
+
+                if (barre_start == 0) {
+                    str << " s4*0^\\markup \\fret-diagram #\"";
+                } else {
+                    str << " s4*0^\\markup \\override #'(barre-type . straight) \\fret-diagram #\"";
+                }
+                //
+                // Check each string individually.
+                //
+                for (int string_num = 6; string_num >= 1; string_num--) {
+                    if (barre_start == string_num) {
+                        str << "c:" << barre_start << "-" << barre_end << "-" << barre_fret << ";";
+                    }
+
+                    if (arrangement.getStringStatus( string_num ) == Guitar::GuitarString::MUTED) {
+                        str << string_num << "-x;";
+                    } else if (arrangement.getStringStatus( string_num ) == Guitar::GuitarString::OPEN) {
+                        str << string_num << "-o;";
+                    } else {
+                        if (arrangement.hasNote(string_num)) {
+                            str << string_num << "-" << (arrangement.getNote(string_num))->getFret() << ";";
+                        } else if ((string_num <= barre_start) && (string_num >= barre_end)) {
+                            str << string_num << "-" << barre_fret << ";";
+                        } else {
+                            // This else-else stage should not be ever reached.
+                            str << string_num << "-" << "o;";
+                        }
+                    }
+                }
+                str << "\" ";
+
+            } catch (Exception e) { // Fretboard ctor failed
+                RG_DEBUG << "Bad fretboard event in Lilypond export" << endl;
             }
-            str << "\" ";
         }
 
         // LilyPond 2.0 introduces required postfix syntax for beaming
