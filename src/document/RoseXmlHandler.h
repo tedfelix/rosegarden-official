@@ -114,6 +114,7 @@ public:
     /// Return the error string set during the parsing (if any)
     QString errorString();
 
+    bool hasActiveAudio() const { return m_hasActiveAudio; }
     std::set<QString> &pluginsNotFound() { return m_pluginsNotFound; }
 
     bool error(const QXmlParseException& exception);
@@ -184,6 +185,7 @@ protected:
     bool                              m_haveControls;
     bool                              m_cancelled;
     bool                              m_skipAllAudio;
+    bool                              m_hasActiveAudio;
 };
 
 

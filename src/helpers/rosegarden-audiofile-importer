@@ -12,8 +12,12 @@
 # Usage:
 #
 # rosegarden-audiofile-importer -t [<version>]
+# rosegarden-audiofile-importer --conftest [<version>]
 #  -- Exit successfully if the importer is available and working
-#     [and is of at least version <version>]
+#     [and is of at least version <version>].  If some of the
+#     required helper applications are missing, also print to
+#     stdout a line saying "Required: application1, application2",
+#     listing the missing programs.
 #
 # rosegarden-audiofile-importer -l [<version>]
 #  -- List known file extensions (e.g. ogg wav flac).  Return code
@@ -51,6 +55,7 @@ conftest() {
     if [ -x "`type -path sox`" ] && sox -h 2>&1 | grep -q polyphase; then
 	return 0
     fi
+    echo "Required: sox OR sndfile-resample"
     echo "rosegarden-audiofile-importer: ERROR: No resampler available, failing configuration test" 1>&2
     return 1
 }
@@ -67,7 +72,7 @@ if [ -n "$have_mpg321" ]; then
 fi
 
 case "$1" in
-    -t) conftest; exit $?;;
+    -t|--conftest) conftest; exit $?;;
     -l) conftest || exit $?
 	{
 	[ -n "$have_oggdec" ] && echo ogg

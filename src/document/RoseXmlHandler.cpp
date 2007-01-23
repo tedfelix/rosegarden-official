@@ -268,7 +268,8 @@ RoseXmlHandler::RoseXmlHandler(RosegardenGUIDoc *doc,
         m_createDevices(createNewDevicesWhenNeeded),
         m_haveControls(false),
         m_cancelled(false),
-        m_skipAllAudio(false)
+        m_skipAllAudio(false),
+        m_hasActiveAudio(false)
 {}
 
 RoseXmlHandler::~RoseXmlHandler()
@@ -1032,6 +1033,8 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             m_errorString = "Audio object has empty parameters";
             return false;
         }
+
+        m_hasActiveAudio = true;
 
         // attempt to insert file into AudioFileManager
         // (this checks the integrity of the file at the
@@ -1932,6 +1935,10 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         m_section = InAudioFiles;
 
+        int rate = atts.value("expectedRate").toInt();
+        if (rate) {
+            getAudioFileManager().setExpectedSampleRate(rate);
+        }
 
     } else if (lcName == "configuration") {
 

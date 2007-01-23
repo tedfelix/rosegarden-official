@@ -108,9 +108,10 @@ public:
     void processAsynchronousMidi(const MappedComposition &mC,
                                  AudioManagerDialog *aMD);
 
-    // Before playing and recording (throws exceptions)
+    // Before playing and recording.  If warnUser is true, show the
+    // user a warning dialog if there is a problem with the setup.
     //
-    void checkSoundDriverStatus();
+    void checkSoundDriverStatus(bool warnUser);
 
     /**
      * Send program changes and align Instrument lists before playback
@@ -248,6 +249,7 @@ protected:
     void checkRefreshStatus();
     void sendMIDIRecordingDevice(const QString recordDeviceStr);
     void restoreRecordSubscriptions();
+    bool shouldWarnForImpreciseTimer();
     
     //--------------- Data members ---------------------------------
 

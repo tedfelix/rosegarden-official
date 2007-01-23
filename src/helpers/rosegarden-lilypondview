@@ -41,7 +41,10 @@ for x in kghostview ggv ghostview; do
     fi
 done
 
+reqd=
+
 if [ -z "$prog_ghostview" ]; then
+    reqd="kghostview OR ggv OR ghostview, $reqd"
     echo "rosegarden-lilypondview: No PostScript viewer found" 1>&2
 fi
 
@@ -54,7 +57,14 @@ if [ -x "`type -path xterm`" ]; then
 fi
 
 if [ -z "$prog_terminal" ]; then
+    reqd="xterm, $reqd"
     echo "rosegarden-lilypondview: No terminal emulator found" 1>&2
+fi
+
+if [ "$1" == "--conftest" ]; then
+    if [ -n "$reqd" ]; then
+	echo "Required: "${reqd%%, }
+    fi
 fi
 
 [ -z "$prog_lilypond" ] && exit 1
