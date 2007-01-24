@@ -64,7 +64,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
         m_rotaryFrame(0),
         m_rotaryMapper(new QSignalMapper(this))
 {
-    m_mainGrid = new QGridLayout(this, 10, 4, 2, 1);
+    m_mainGrid = new QGridLayout(this, 10, 3, 2, 1);
 
     m_connectionLabel = new KSqueezedTextLabel(this);
     m_bankValue = new KComboBox(this);
@@ -92,9 +92,9 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     int width22 = metrics.width("1234567890123456789012");
     int width25 = metrics.width("1234567890123456789012345");
 
-    m_bankValue->setFixedWidth(width22);
-    m_programValue->setFixedWidth(width22);
-    m_variationValue->setFixedWidth(width22);
+    m_bankValue->setMinimumWidth(width22);
+    m_programValue->setMinimumWidth(width22);
+    m_variationValue->setMinimumWidth(width22);
 
     m_connectionLabel->setFixedWidth(width25);
     m_connectionLabel->setAlignment(Qt::AlignCenter);
@@ -103,10 +103,8 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
 
     m_mainGrid->setRowStretch(m_mainGrid->numRows() - 1, 1);
 
-    // Configure the empty final column to accomodate any extra horizontal
-    // space.
 
-    m_mainGrid->setColStretch(m_mainGrid->numCols() - 1, 1);
+    m_mainGrid->setColStretch(2, 1);
 
     m_mainGrid->addMultiCellWidget(m_instrumentLabel, 0, 0, 0, 2, AlignCenter);
     m_mainGrid->addMultiCellWidget(m_connectionLabel, 1, 1, 0, 2, AlignCenter);
@@ -118,11 +116,11 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     m_mainGrid->addWidget(m_percussionCheckBox, 3, 2, AlignRight);
 
     m_mainGrid->addWidget(m_bankLabel, 4, 0, AlignLeft);
-    m_mainGrid->addWidget(m_bankCheckBox, 4, 1);
+    m_mainGrid->addWidget(m_bankCheckBox, 4, 1, AlignRight);
     m_mainGrid->addWidget(m_bankValue, 4, 2, AlignRight);
 
-    m_mainGrid->addWidget(m_programLabel, 5, 0);
-    m_mainGrid->addWidget(m_programCheckBox, 5, 1);
+    m_mainGrid->addWidget(m_programLabel, 5, 0, AlignLeft);
+    m_mainGrid->addWidget(m_programCheckBox, 5, 1, AlignRight);
     m_mainGrid->addWidget(m_programValue, 5, 2, AlignRight);
 
     m_mainGrid->addWidget(m_variationLabel, 6, 0);

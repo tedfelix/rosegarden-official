@@ -42,7 +42,7 @@ class PitchPickerDialog : public KDialogBase
 
 public:
 
-    PitchPickerDialog(QWidget* parent, int initialPitch, bool isFrom);
+    PitchPickerDialog(QWidget* parent, int initialPitch, QString text);
     ~PitchPickerDialog();
 
     int getPitch() { return m_pitch->getPitch(); }

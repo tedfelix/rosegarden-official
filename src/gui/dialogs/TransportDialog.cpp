@@ -59,8 +59,7 @@ namespace Rosegarden
 TransportDialog::TransportDialog(QWidget *parent,
                                  const char *name,
                                  WFlags flags):
-    KDockMainWindow(parent, name, flags | WType_TopLevel | WDestructiveClose |
-                    WStyle_StaysOnTop),
+    QWidget(parent, name, WType_TopLevel | WStyle_DialogBorder | WStyle_Minimize | WStyle_SysMenu | WDestructiveClose),
     m_transport(0),
     m_lastTenHours(0),
     m_lastUnitHours(0),
@@ -285,10 +284,11 @@ TransportDialog::show()
         if (x + m_transport->width() > dw) x = dw - m_transport->width();
         if (y + m_transport->height() > dh) y = dh - m_transport->height();
         move(x, y);
-        KDockMainWindow::show();
-    std::cerr << "TransportDialog::show(): moved to " << x << "," << y << std::endl;
+//        std::cerr << "TransportDialog::show(): moved to " << x << "," << y << std::endl;
+        QWidget::show();
+//        std::cerr << "TransportDialog::show(): now at " << this->x() << "," << this->y() << std::endl;
     } else {
-        KDockMainWindow::show();
+        QWidget::show();
     }
 }
 
@@ -301,7 +301,7 @@ TransportDialog::hide()
         config->writeEntry("transportx", x());
         config->writeEntry("transporty", y());
     }
-    KDockMainWindow::hide();
+    QWidget::hide();
 }
 
 void

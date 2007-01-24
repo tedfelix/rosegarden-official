@@ -123,7 +123,6 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
         m_modified(false),
         m_autoSaved(false),
         m_audioPreviewThread(&m_audioFileManager),
-        //m_recordMIDISegment(0),
         m_commandHistory(new MultiViewCommandHistory()),
         m_pluginManager(pluginManager),
         m_audioRecordLatency(0, 0),
@@ -1655,7 +1654,6 @@ RosegardenGUIDoc::insertRecordedMidi(const MappedComposition &mC)
                 m_studio.getInstrumentById(track->getInstrument());
             if (instrument->getType() == Instrument::Midi ||
                     instrument->getType() == Instrument::SoftSynth) {
-                //midiRecordTrack = track;
                 haveMIDIRecordTrack = true;
                 if (!m_recordMIDISegments[track->getInstrument()]) {
                     addRecordMIDISegment(track->getId());
@@ -1668,16 +1666,11 @@ RosegardenGUIDoc::insertRecordedMidi(const MappedComposition &mC)
     if (!haveMIDIRecordTrack)
         return ;
 
-    //if (m_recordMIDISegment == 0) {
-    //    addRecordMIDISegment(midiRecordTrack->getId());
-    //}
-
-    //if (mC.size() > 0 && m_recordMIDISegment)
     if (mC.size() > 0) {
         MappedComposition::const_iterator i;
         Event *rEvent = 0;
         timeT duration, absTime;
-        timeT updateFrom = m_composition.getDuration(); // = m_recordMIDISegment->getEndTime();
+        timeT updateFrom = m_composition.getDuration();
         bool haveNotes = false;
 
         // process all the incoming MappedEvents
@@ -1995,98 +1988,139 @@ RosegardenGUIDoc::stopRecordingMidi()
 {
     RG_DEBUG << "RosegardenGUIDoc::stopRecordingMidi" << endl;
 
-    // If we've created nothing then do nothing with it
-    //
-    if (m_recordMIDISegments.size() == 0)
-        return ;
+    Composition &c = getComposition();
 
     bool haveSegments = false;
-    timeT endTime = 0;
+    timeT endTime = c.getBarEnd(0);
 
-    for ( RecordingSegmentMap::iterator it = m_recordMIDISegments.begin();
-            it != m_recordMIDISegments.end(); ++it) {
-        Segment *recordMIDISegment = it->second;
-        if (recordMIDISegment->size() == 0) {
-            if (recordMIDISegment->getComposition()) {
-                recordMIDISegment->getComposition()->deleteSegment(recordMIDISegment);
-            } else {
-                delete recordMIDISegment;
+    bool haveMeaning = false;
+    timeT earliestMeaning = 0;
+
+    std::vector<RecordingSegmentMap::iterator> toErase;
+
+    for (RecordingSegmentMap::iterator i = m_recordMIDISegments.begin();
+         i != m_recordMIDISegments.end();
+         ++i) {
+
+        Segment *s = i->second;
+
+        bool meaningless = true;
+
+        for (Segment::iterator i = s->begin(); i != s->end(); ++i) {
+
+            if ((*i)->isa(Clef::EventType)) continue;
+
+            // no rests in the segment yet, so anything else is meaningful
+            meaningless = false;
+
+            if (!haveMeaning || (*i)->getAbsoluteTime() < earliestMeaning) {
+                earliestMeaning = (*i)->getAbsoluteTime();
             }
-            m_recordMIDISegments.erase(it);
+
+            haveMeaning = true;
+            break;
+        }
+
+        if (meaningless) {
+            if (!c.deleteSegment(s)) delete s;
+            toErase.push_back(i);
         } else {
-            haveSegments = true;
-            if (endTime < recordMIDISegment->getEndTime()) {
-                endTime = recordMIDISegment->getEndTime();
+            if (endTime < s->getEndTime()) {
+                endTime = s->getEndTime();
             }
         }
     }
 
-    if (!haveSegments)
-        return ;
+    for (int i = 0; i < toErase.size(); ++i) {
+        m_recordMIDISegments.erase(toErase[i]);
+    }
 
-    //RG_DEBUG << "RosegardenGUIDoc::stopRecordingMidi: have record MIDI segment" << endl;
+    if (!haveMeaning) return;
 
-    // otherwise do something with it
-    //
+    RG_DEBUG << "RosegardenGUIDoc::stopRecordingMidi: have something" << endl;
+
+    // adjust the clef timings so as not to leave a clef stranded at
+    // the start of an otherwise empty count-in
+
+    timeT meaningfulBarStart = c.getBarStartForTime(earliestMeaning);
+    
+    for (RecordingSegmentMap::iterator i = m_recordMIDISegments.begin();
+         i != m_recordMIDISegments.end();
+         ++i) {
+
+        Segment *s = i->second;
+        Segment::iterator i = s->begin();
+
+        if (i == s->end() || !(*i)->isa(Clef::EventType)) continue;
+
+        if ((*i)->getAbsoluteTime() < meaningfulBarStart) {
+            Event *e = new Event(**i, meaningfulBarStart);
+            s->erase(i);
+            s->insert(e);
+        }
+    }
+
     for (NoteOnMap::iterator mi = m_noteOnEvents.begin();
-            mi != m_noteOnEvents.end(); ++mi)
+         mi != m_noteOnEvents.end(); ++mi) {
+
         for (ChanMap::iterator cm = mi->second.begin();
-                cm != mi->second.end(); ++cm)
+             cm != mi->second.end(); ++cm) {
+
             for (PitchMap::iterator pm = cm->second.begin();
-                    pm != cm->second.end(); ++pm) {
-                // anything remaining in the note-on map should be made to end at
-                // the end of the segment
+                 pm != cm->second.end(); ++pm) {
+
+                // anything remaining in the note-on map should be
+                // made to end at the end of the segment
+
                 NoteOnRecSet rec_vec = pm->second;
+
                 if (rec_vec.size() > 0) {
                     Event *oldEv = *rec_vec[0].m_segmentIterator;
                     Event *newEv = new Event
-                                   (*oldEv, oldEv->getAbsoluteTime(),
-                                    endTime - oldEv->getAbsoluteTime());
+                        (*oldEv, oldEv->getAbsoluteTime(),
+                         endTime - oldEv->getAbsoluteTime());
                     NoteOnRecSet *replaced =
                         replaceRecordedEvent(rec_vec, newEv);
                     delete newEv;
                     delete replaced;
                 }
             }
+        }
+    }
     m_noteOnEvents.clear();
 
-    for ( RecordingSegmentMap::iterator it = m_recordMIDISegments.begin();
-            it != m_recordMIDISegments.end(); ++it) {
+    while (!m_recordMIDISegments.empty()) {
 
-        Segment *recordMIDISegment = it->second;
+        Segment *s = m_recordMIDISegments.begin()->second;
+        m_recordMIDISegments.erase(m_recordMIDISegments.begin());
 
         // the record segment will have already been added to the
-        // composition if there was anything in it; otherwise we
-        // don't need to do so
-        if (recordMIDISegment->getComposition() != 0) {
+        // composition if there was anything in it; otherwise we don't
+        // need to do so
 
-            // Quantize for notation only -- doesn't affect performance timings.
-            KMacroCommand *command = new KMacroCommand(i18n("Insert Recorded MIDI"));
-
-            command->addCommand
-            (new EventQuantizeCommand
-             (*recordMIDISegment,
-              recordMIDISegment->getStartTime(),
-              recordMIDISegment->getEndTime(),
-              "Notation Options",
-              true));
-
-            command->addCommand
-            (new NormalizeRestsCommand
-             (*recordMIDISegment,
-              recordMIDISegment->getComposition()->getBarStartForTime
-              (recordMIDISegment->getStartTime()),
-              recordMIDISegment->getComposition()->getBarEndForTime
-              (recordMIDISegment->getEndTime())));
-
-            command->addCommand
-            (new SegmentRecordCommand
-             (recordMIDISegment));
-
-            m_commandHistory->addCommand(command);
+        if (s->getComposition() == 0) {
+            delete s;
+            continue;
         }
 
-        m_recordMIDISegments.erase(it);
+        // Quantize for notation only -- doesn't affect performance timings.
+        KMacroCommand *command = new KMacroCommand(i18n("Insert Recorded MIDI"));
+
+        command->addCommand(new EventQuantizeCommand
+                            (*s,
+                             s->getStartTime(),
+                             s->getEndTime(),
+                             "Notation Options",
+                             true));
+
+        command->addCommand(new NormalizeRestsCommand
+                            (*s,
+                             c.getBarStartForTime(s->getStartTime()),
+                             c.getBarEndForTime(s->getEndTime())));
+
+        command->addCommand(new SegmentRecordCommand(s));
+
+        m_commandHistory->addCommand(command);
     }
 
     emit stoppedMIDIRecording();
@@ -2399,7 +2433,6 @@ RosegardenGUIDoc::addRecordMIDISegment(TrackId tid)
 {
     RG_DEBUG << "RosegardenGUIDoc::addRecordMIDISegment(" << tid << ")" << endl;
 
-    //delete m_recordMIDISegment;
     Segment *recordMIDISegment;
 
     recordMIDISegment = new Segment();
@@ -2428,56 +2461,26 @@ RosegardenGUIDoc::addRecordMIDISegment(TrackId tid)
 
     recordMIDISegment->setLabel(label);
 
+    Clef clef;
+
     // insert an intial clef from track parameters
     switch (track->getClef()) {
-    case TrebleClef:
-        recordMIDISegment->insert(Clef(Clef::Treble).getAsEvent
-                                  (recordMIDISegment->getStartTime()));
-        break;
-    case BassClef:
-        recordMIDISegment->insert(Clef(Clef::Bass).getAsEvent
-                                  (recordMIDISegment->getStartTime()));
-        break;
-    case CrotalesClef:
-        recordMIDISegment->insert(Clef(Clef::Treble, 2).getAsEvent
-                                  (recordMIDISegment->getStartTime()));
-        break;
-    case XylophoneClef:
-        recordMIDISegment->insert(Clef(Clef::Treble, 1).getAsEvent
-                                  (recordMIDISegment->getStartTime()));
-        break;
-    case GuitarClef:
-        recordMIDISegment->insert(Clef(Clef::Treble, -2).getAsEvent
-                                  (recordMIDISegment->getStartTime()));
-        break;
-    case ContrabassClef:
-        recordMIDISegment->insert(Clef(Clef::Bass, -1).getAsEvent
-                                  (recordMIDISegment->getStartTime()));
-        break;
-    case CelestaClef:
-        recordMIDISegment->insert(Clef(Clef::Bass, 2).getAsEvent
-                                  (recordMIDISegment->getStartTime()));
-        break;
-    case OldCelestaClef:
-        recordMIDISegment->insert(Clef(Clef::Bass, 1).getAsEvent
-                                  (recordMIDISegment->getStartTime()));
-        break;
-    case SopranoClef:
-        recordMIDISegment->insert(Clef(Clef::Soprano).getAsEvent
-                                  (recordMIDISegment->getStartTime()));
-        break;
-    case AltoClef:
-        recordMIDISegment->insert(Clef(Clef::Alto).getAsEvent
-                                  (recordMIDISegment->getStartTime()));
-        break;
-    case TenorClef:
-        recordMIDISegment->insert(Clef(Clef::Tenor).getAsEvent
-                                  (recordMIDISegment->getStartTime()));
-        break;
-    default:
-        recordMIDISegment->insert(Clef(Clef::Treble).getAsEvent
-                                  (recordMIDISegment->getStartTime()));
+    case TrebleClef:     clef = Clef(Clef::Treble);      break;
+    case BassClef:       clef = Clef(Clef::Bass);        break;
+    case CrotalesClef:   clef = Clef(Clef::Treble, 2);   break;
+    case XylophoneClef:  clef = Clef(Clef::Treble, 1);   break;
+    case GuitarClef:     clef = Clef(Clef::Treble, -2);  break;
+    case ContrabassClef: clef = Clef(Clef::Bass, -1);    break;
+    case CelestaClef:    clef = Clef(Clef::Bass, 2);     break;
+    case OldCelestaClef: clef = Clef(Clef::Bass, 1);     break;
+    case SopranoClef:    clef = Clef(Clef::Soprano);     break;
+    case AltoClef:       clef = Clef(Clef::Alto);        break;
+    case TenorClef:      clef = Clef(Clef::Tenor);       break;
+    default:             clef = Clef(Clef::Treble);      break;
     }
+
+    recordMIDISegment->insert(clef.getAsEvent
+                              (recordMIDISegment->getStartTime()));
 
     // set segment transpose, color, highest/lowest playable from track parameters
     recordMIDISegment->setTranspose(track->getTranspose());

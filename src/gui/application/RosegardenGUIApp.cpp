@@ -2778,6 +2778,11 @@ void RosegardenGUIApp::createAndSetupTransport()
         new TransportDialog(this);
     plugAccelerators(m_transport, m_transport->getAccelerators());
 
+    m_transport->getAccelerators()->connectItem
+        (m_transport->getAccelerators()->insertItem(Key_T),
+         this,
+         SLOT(slotHideTransport()));
+
     // Ensure that the checkbox is unchecked if the dialog
     // is closed
     connect(m_transport, SIGNAL(closed()),
@@ -3222,6 +3227,17 @@ void RosegardenGUIApp::slotToggleTransport()
         getTransport()->blockSignals(true);
     }
 }
+
+void RosegardenGUIApp::slotHideTransport()
+{
+    if (m_viewTransport->isChecked()) {
+        m_viewTransport->blockSignals(true);
+        m_viewTransport->setChecked(false);
+        m_viewTransport->blockSignals(false);
+    }
+    getTransport()->hide();
+    getTransport()->blockSignals(true);
+}        
 
 void RosegardenGUIApp::slotToggleTrackLabels()
 {
@@ -5803,11 +5819,6 @@ RosegardenGUIApp::plugAccelerators(QWidget *widget, QAccel *acc)
                      this,
                      SLOT(slotToggleRecord()));
 
-/* doesn't work
-    acc->connectItem(acc->insertItem(Key_T),
-                     this,
-                     SLOT(slotToggleTransport()));
-*/
     TransportDialog *transport =
         dynamic_cast<TransportDialog*>(widget);
 

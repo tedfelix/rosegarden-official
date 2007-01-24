@@ -120,7 +120,7 @@ SegmentParameterBox::initBox()
     int width = fontMetrics.width("12345678901234567890");
 
     //    QFrame *frame = new QFrame(this);
-    QGridLayout *gridLayout = new QGridLayout(this, 8, 7, 4, 2);
+    QGridLayout *gridLayout = new QGridLayout(this, 8, 6, 4, 2);
 
     QLabel *label	= new QLabel(i18n("Label"), this);
     QLabel *repeatLabel = new QLabel(i18n("Repeat"), this);
@@ -141,7 +141,7 @@ SegmentParameterBox::initBox()
     m_label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
 
     // .. and edit button
-    m_labelButton = new QPushButton(i18n("edit"), this);
+    m_labelButton = new QPushButton(i18n("Edit"), this);
     m_labelButton->setFont(font);
     //    m_labelButton->setFixedWidth(50);
 
@@ -272,7 +272,7 @@ SegmentParameterBox::initBox()
     gridLayout->addWidget(repeatLabel, 2, 0); //, AlignRight);
     gridLayout->addWidget(m_repeatValue, 2, 1); //, AlignLeft);
 
-    gridLayout->addMultiCellWidget(transposeLabel, 2, 2, 2, 3); //, AlignRight);
+    gridLayout->addMultiCellWidget(transposeLabel, 2, 2, 2, 3, AlignRight);
     gridLayout->addMultiCellWidget(m_transposeValue, 2, 2, 4, 5);
 
     gridLayout->addWidget(quantizeLabel, 3, 0); //, AlignRight);
@@ -304,7 +304,7 @@ SegmentParameterBox::initBox()
     // Configure the empty final column to accomodate any extra horizontal
     // space.
 
-    gridLayout->setColStretch(gridLayout->numCols() - 1, 1);
+//    gridLayout->setColStretch(gridLayout->numCols() - 1, 1);
 
     // populate the quantize combo
     //
