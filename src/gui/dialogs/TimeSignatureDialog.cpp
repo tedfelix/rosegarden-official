@@ -156,7 +156,7 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
 
             if (!atStartOfBar) {
                 m_startOfBarButton = new QRadioButton
-                                     (i18n("Change time from start of bar %1")
+                                     (i18n("Change time from start of measure %1")
                                       .arg(barNo + 1), groupBox);
                 m_startOfBarButton->setChecked(true);
             } else {
