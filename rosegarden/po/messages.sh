@@ -1,18 +1,14 @@
 #!/bin/sh
 
+# Based on KDE messages.sh by Thomas Nagy
 # Inspired by Makefile.common from coolo
-# this script is used to update the .po files
+# This script is used to update the .po files.
 
 # To update the translations, you will need a specific gettext 
 # patched for kde and a lot of patience, tenacity, luck, time ..
 
-
 # I guess one should only update the .po files when all .cpp files 
 # are generated (after a make or scons)
-
-# If you have a better way to do this, do not keep that info 
-# for yourself and help me to improve this script, thanks
-# (tnagyemail-mail tat yahoo d0tt fr)
 
 if [ -z "$KDE_GETTEXT_BIN" ]; then
     if [ -f ./xgettext ] && ./xgettext --help 2>&1 | grep -q extract; then
@@ -36,8 +32,9 @@ else
     KDE_GETTEXT_PATH=${KDE_GETTEXT_BIN}/
 fi
 
-SRCDIR=../gui # srcdir is the directory containing the source code
-TIPSDIR=$SRCDIR/docs/en # tipsdir is the directory containing the tips
+SRCDIR=../src # srcdir is the directory containing the source code
+TIPSDIR=../docs/en # tipsdir is the directory containing the tips
+DATADIR=../data # datadir is the directory containing fonts/mappings & styles
 
 KDEDIR=`kde-config --prefix`
 EXTRACTRC=extractrc # from kdesdk-scripts (on Debian Sarge)
@@ -67,19 +64,19 @@ echo -e 'i18n("_: NAME OF TRANSLATORS\\n"\n"Your names")\ni18n("_: EMAIL OF TRAN
 pushd $TIPSDIR; preparetips >tips.cpp; popd
 
 # process the fonts mapping attributes
-FONTSDIR=$SRCDIR/fonts/mappings
+FONTSDIR=$DATADIR/fonts/mappings
 pushd $FONTSDIR
 cat *.xml | perl -e 'while (<STDIN>) { if(/(encoding name|origin|copyright|mapped-by|type)\s*=\s*\"(.*)\"/) { print "i18n(\"$2\")\;\n";} }' > fonts.cpp
 popd
 
 # process the note head style names
-STYLEDIR=$SRCDIR/styles
+STYLEDIR=$DATADIR/styles
 pushd $STYLEDIR
 ls *.xml | perl -e 'while (<STDIN>) { if(/(.*)\.xml/) { print "i18n(\"$1\")\;\n";} }' > styles.cpp
 popd
 
 # extract the strings
-$XGETTEXT `find $SRCDIR -name "*.cpp" -o -name "*.h"` rc.cpp $TIPSDIR/tips.cpp $FONTSDIR/fonts.cpp $STYLEDIR/styles.cpp -o tmp.pot
+$XGETTEXT `find $SRCDIR \( -name "*.cpp" -o -name "*.h" \)` rc.cpp $TIPSDIR/tips.cpp $FONTSDIR/fonts.cpp $STYLEDIR/styles.cpp -o tmp.pot
 
 # remove the intermediate files
 rm -f $TIPSDIR/tips.cpp 
