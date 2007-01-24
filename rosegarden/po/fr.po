@@ -181,7 +181,7 @@ msgstr ""
 "instant<br>\n"
 "&nbsp;&nbsp;* sélectionnez un péripérique de sortie<br>\n"
 "&nbsp;&nbsp;* sélectionnez un instrument disponible (#1 - #16)<br>\n"
-"&nbsp;&nbsp;* ajuster le canal de sortie, le programme, le banc, et\n"
+"&nbsp;&nbsp;* ajuster le canal de sortie, le programme, la banque, et\n"
 "le contrôleur via la boîte de dialogue des paramètres d'instrument\n"
 
 #: ../gui/docs/en/tips.cpp:12
@@ -2269,7 +2269,7 @@ msgstr "Exporter \\bloques des paroles"
 
 #: ../gui/dialogs.cpp:5144
 msgid "Do not export muted tracks"
-msgstr "Ne pas exporter les pistes mutées"
+msgstr "Ne pas exporter les pistes assourdies"
 
 #: ../gui/dialogs.cpp:5149
 msgid "Export \\midi block"
@@ -3109,15 +3109,15 @@ msgid ""
 "benefit\n"
 "of others."
 msgstr ""
-"Le bibliothécaire assure la maintenance des informations sur les bancs et "
+"Le bibliothécaire assure la maintenance des informations sur les banques et "
 "programmes pour ce périphérique.\n"
-"Si vous avez changé un banc pour pouvoir faire fonctionner votre propre\n"
+"Si vous avez changé une banque pour pouvoir faire fonctionner votre propre\n"
 "périphérique, une bonne idée serait de contacter le bibliothécaire afin que\n"
 "d'autres puissent profiter de vos modifications."
 
 #: ../gui/bankeditor.cpp:361 ../gui/bankeditor.cpp:465
 msgid "Bank and Program details"
-msgstr "Détails des bancs et programmes"
+msgstr "Détails des banques et programmes"
 
 #: ../gui/bankeditor.cpp:362
 #, fuzzy
@@ -3138,7 +3138,7 @@ msgid ""
 "Selects a MSB controller Bank number (MSB/LSB pairs are always unique for "
 "any Device)"
 msgstr ""
-"Sélectionne le numéro MSB de banc d'un contrôleur (les paires MSB/LSB sont "
+"Sélectionne le numéro MSB de banque d'un contrôleur (les paires MSB/LSB sont "
 "toujours uniques pour tout périphérique)"
 
 #: ../gui/bankeditor.cpp:404
@@ -3146,7 +3146,7 @@ msgid ""
 "Selects a LSB controller Bank number (MSB/LSB pairs are always unique for "
 "any Device)"
 msgstr ""
-"Sélectionne un numéro LSB de banc d'un contrôleur (les paires MSB/LSB sont "
+"Sélectionne un numéro LSB de banque d'un contrôleur (les paires MSB/LSB sont "
 "toujours uniques pour tout périphérique)"
 
 #: ../gui/bankeditor.cpp:409
@@ -3173,7 +3173,7 @@ msgstr "Ton"
 
 #: ../gui/bankeditor.cpp:1095
 msgid "Manage MIDI Banks and Programs"
-msgstr "Gestion des programmes et bancs MIDI"
+msgstr "Gestion des programmes et banques MIDI"
 
 #: ../gui/bankeditor.cpp:1126
 msgid "MIDI Device"
@@ -3199,7 +3199,7 @@ msgstr "Ajouter un changement de &tonalité"
 
 #: ../gui/bankeditor.cpp:1150
 msgid "Add a Bank to the current device"
-msgstr "Ajouter un banc au périphérique courant"
+msgstr "Ajouter une banque au périphérique courant"
 
 #: ../gui/bankeditor.cpp:1153
 #, fuzzy
@@ -3228,7 +3228,7 @@ msgstr "Exporter..."
 msgid ""
 "Import Bank and Program data from a Rosegarden file to the current Device"
 msgstr ""
-"Importer les bancs et programmes d'un fichier Rosegarden vers le "
+"Importer les banques et programmes d'un fichier Rosegarden vers le "
 "périphérique courant"
 
 #: ../gui/bankeditor.cpp:1171
@@ -3236,16 +3236,16 @@ msgid ""
 "Export all Device and Bank information to a Rosegarden format  interchange "
 "file"
 msgstr ""
-"Exporter les informations des bancs et des périphériques vers un fichier "
+"Exporter les informations des banques et des périphériques vers un fichier "
 "d'échange Rosegarden"
 
 #: ../gui/bankeditor.cpp:1181
 msgid "Copy all Program names from current Bank to clipboard"
-msgstr "Copier les noms des programmes du banc courant vers le presse-papiers"
+msgstr "Copier les noms des programmes de la banque courante vers le presse-papiers"
 
 #: ../gui/bankeditor.cpp:1184
 msgid "Paste Program names from clipboard to current Bank"
-msgstr "Coller les noms de programmes du presse-papiers vers le banc courant"
+msgstr "Coller les noms de programmes du presse-papiers vers la banque courante"
 
 #: ../gui/bankeditor.cpp:1206
 msgid "Show Variation list based on "
@@ -3253,7 +3253,7 @@ msgstr "Montrer la liste de variation basée sur "
 
 #: ../gui/bankeditor.cpp:2002
 msgid "<new bank>"
-msgstr "<nouveau banc>"
+msgstr "<nouvelle banque>"
 
 #: ../gui/bankeditor.cpp:2036
 #, fuzzy
@@ -3267,7 +3267,7 @@ msgstr "<nouveau banc>"
 
 #: ../gui/bankeditor.cpp:2078
 msgid "Really delete this bank?"
-msgstr "Confirmez-vous l'effacement de ce banc ?"
+msgstr "Confirmez-vous l'effacement de cette banque ?"
 
 #: ../gui/bankeditor.cpp:2128
 #, fuzzy
@@ -3276,11 +3276,11 @@ msgstr "Confirmez-vous l'effacement de ce banc ?"
 
 #: ../gui/bankeditor.cpp:2177
 msgid "Really delete all banks for "
-msgstr "Confirmez-vous l'effacement de tous les bancs pour "
+msgstr "Confirmez-vous l'effacement de toutes les banques pour "
 
 #: ../gui/bankeditor.cpp:2477
 msgid "Import Banks from Device in File"
-msgstr "Importer les bancs d'un périphérique défini dans un fichier"
+msgstr "Importer les banques d'un périphérique défini dans un fichier"
 
 #: ../gui/bankeditor.cpp:2630 ../gui/devicemanager.cpp:786
 msgid "Export Device as..."
@@ -3303,7 +3303,7 @@ msgid ""
 "the changes ?"
 msgstr ""
 "Les modifications ne sont actuellement pas sauvegardées.\n"
-"Voulez-vous appliquer les changements avant de quitter l'éditeur de banc ?"
+"Voulez-vous appliquer les changements avant de quitter l'éditeur de banque ?"
 
 #: ../gui/bankeditor.cpp:2705
 msgid "Unsaved Changes"
@@ -3430,17 +3430,17 @@ msgid ""
 "Import Bank, Program and Controller data from a Rosegarden file to the "
 "selected device"
 msgstr ""
-"Importer les bancs, programmes et contrôleurs depuis un fichier d'échange "
+"Importer les banques, programmes et contrôleurs depuis un fichier d'échange "
 "Rosegarden vers le périphérique sélectionné"
 
 #: ../gui/devicemanager.cpp:115
 msgid "Export Bank and Controller data to a Rosegarden interchange file"
 msgstr ""
-"Exporter les bancs et les contrôleurs vers un fichier d'échange Rosegarden"
+"Exporter les banques et les contrôleurs vers un fichier d'échange Rosegarden"
 
 #: ../gui/devicemanager.cpp:117
 msgid "View and edit Banks and Programs for the selected device"
-msgstr "Voir et éditer des bancs et programmes du périphérique sélectionné"
+msgstr "Voir et éditer des banques et programmes du périphérique sélectionné"
 
 #: ../gui/devicemanager.cpp:119
 msgid ""
@@ -3904,7 +3904,7 @@ msgstr "Mono ou stereo"
 
 #: ../gui/mixer.cpp:350 ../gui/mixer.cpp:491
 msgid "Mute"
-msgstr "Muter"
+msgstr "Assourdir"
 
 #: ../gui/mixer.cpp:358 rc.cpp:280
 #, no-c-format
@@ -6839,7 +6839,7 @@ msgstr "Importer depuis:"
 
 #: ../gui/importdevicedialog.cpp:151
 msgid "Import banks"
-msgstr "Importer les bancs"
+msgstr "Importer les banques"
 
 #: ../gui/importdevicedialog.cpp:152
 #, fuzzy
@@ -6861,11 +6861,11 @@ msgstr "Paramètres d'importation de banc"
 
 #: ../gui/importdevicedialog.cpp:164
 msgid "Merge banks"
-msgstr "Fusionner les bancs"
+msgstr "Fusionner les banques"
 
 #: ../gui/importdevicedialog.cpp:165
 msgid "Overwrite banks"
-msgstr "Écraser les bancs"
+msgstr "Écraser les banques"
 
 #: ../gui/importdevicedialog.cpp:365
 msgid "Bank %1:%2"
@@ -7605,11 +7605,11 @@ msgstr "Sélectionner piste &précédente"
 
 #: ../gui/rosegardengui.cpp:1001
 msgid "&Mute all Tracks"
-msgstr "&Muter toutes les pistes"
+msgstr "&Assourdir toutes les pistes"
 
 #: ../gui/rosegardengui.cpp:1007
 msgid "&Unmute all Tracks"
-msgstr "&Dé-muter les pistes"
+msgstr "&Rendre sonore les pistes"
 
 #: ../gui/rosegardengui.cpp:1011
 msgid "&Remap Instruments..."
@@ -8330,7 +8330,7 @@ msgstr "Insérer un événement"
 
 #: ../gui/studiocommands.h:60
 msgid "Modify &MIDI Bank"
-msgstr "Modifier banc &Midi"
+msgstr "Modifier la banque &Midi"
 
 #: ../gui/studiocommands.h:105
 msgid "Modify &Device Mapping"
@@ -9142,7 +9142,7 @@ msgstr "Plugin slot %1"
 
 #: ../gui/trackbuttons.cpp:283
 msgid "Mute track"
-msgstr "Muter la piste"
+msgstr "Assourdir la piste"
 
 #: ../gui/trackbuttons.cpp:288
 msgid "Record on this track"
@@ -9441,7 +9441,7 @@ msgstr "Se&gments"
 #: rc.cpp:26 rc.cpp:70 rc.cpp:172 rc.cpp:232
 #, no-c-format
 msgid "Edit &With"
-msgstr "Éditer Paroles"
+msgstr "Éditer"
 
 #: rc.cpp:28
 #, fuzzy, no-c-format
@@ -9767,7 +9767,7 @@ msgstr "Activer ou non les marqueurs de boucle (si existants)"
 #: rc.cpp:282
 #, no-c-format
 msgid "Mutes all but the currently selected track"
-msgstr "Muter les autres pistes"
+msgstr "Assourdir les autres pistes"
 
 #: rc.cpp:285
 #, no-c-format
