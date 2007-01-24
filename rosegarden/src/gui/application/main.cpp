@@ -425,6 +425,7 @@ int main(int argc, char *argv[])
     aboutData.addCredit("Eckhard Jokisch", I18N_NOOP("German translation"), "e.jokisch@u-code.de");
     aboutData.addCredit("Kevin Donnelly", I18N_NOOP("Welsh translation"));
     aboutData.addCredit("Didier Burli", I18N_NOOP("French translation"), "didierburli@bluewin.ch");
+    aboutData.addCredit("Yves Guillemot", I18N_NOOP("French translation"), "yc.guillemot@wanadoo.fr");
     aboutData.addCredit("Daniele Medri", I18N_NOOP("Italian translation"), "madrid@linuxmeeting.net");
     aboutData.addCredit("Alessandro Musesti", I18N_NOOP("Italian translation"), "a.musesti@dmf.unicatt.it");
     aboutData.addCredit("Stefan Asserhäll", I18N_NOOP("Swedish translation"), "stefan.asserhall@comhem.se");
