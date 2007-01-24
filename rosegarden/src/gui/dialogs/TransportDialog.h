@@ -49,7 +49,7 @@ class RealTime;
 class MappedEvent;
 
 
-class TransportDialog : public KDockMainWindow
+class TransportDialog : public QWidget
 {
 Q_OBJECT
 public:

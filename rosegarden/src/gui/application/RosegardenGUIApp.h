@@ -956,6 +956,11 @@ public slots:
     void slotToggleTransport();
 
     /**
+     * hides the transport window
+     */
+    void slotHideTransport();
+
+    /**
      * toggles the tools toolbar
      */
     void slotToggleToolsToolBar();

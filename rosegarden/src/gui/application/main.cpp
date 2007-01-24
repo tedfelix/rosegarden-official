@@ -412,7 +412,7 @@ int main(int argc, char *argv[])
 
     aboutData.addAuthor("Guillaume Laurent (lead)", 0, "glaurent@telegraph-road.org", "http://telegraph-road.org");
     aboutData.addAuthor("Chris Cannam (lead)", 0, "cannam@all-day-breakfast.com", "http://all-day-breakfast.com");
-    aboutData.addAuthor("Richard Bown (lead)", 0, "bownie@bownie.com", "http://bownie.com");
+    aboutData.addAuthor("Richard Bown (lead)", 0, "richard.bown@ferventsoftware.com");
     aboutData.addAuthor("D. Michael McIntyre", 0, "dmmcintyr@users.sourceforge.net");
     aboutData.addAuthor("Pedro Lopez-Cabanillas", 0, "plcl@users.sourceforge.net");
 

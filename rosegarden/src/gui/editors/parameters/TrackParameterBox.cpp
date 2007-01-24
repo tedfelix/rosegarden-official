@@ -116,11 +116,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     config->writeEntry("trackparametersdefaults", expanded);
     config->setGroup(groupTemp);
 
-    // Size of the layout grid:
-    //  number of rows = 17
-    //  number of columns = 7
-    //QGridLayout *mainLayout = new Q(this, 17, 7, 4, 2);
-    QGridLayout *mainLayout = new QGridLayout(this, 5, 2, 2, 2);
+    QGridLayout *mainLayout = new QGridLayout(this, 5, 1, 2, 1);
 
     int row = 0;
 
@@ -142,9 +138,6 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     // playback group title
     //
     row = 0;
-    //    QLabel *plyHeader = new QLabel(i18n("Playback parameters"), m_playbackGroup);
-    //    plyHeader->setFont(title_font);
-    //    groupLayout->addMultiCellWidget(plyHeader, row, row, 0, 2);
 
     // playback device
     //
@@ -165,18 +158,9 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     m_instrument->setMinimumWidth(width22);
     groupLayout->addWidget(m_instrument, row, 2);
 
-    mainLayout->addWidget(cframe, 1, 0);
+    groupLayout->setColStretch(groupLayout->numCols() - 1, 1);
 
-    // group separator 1
-    //
-    /*row++;
-    QFrame *separator1 = new QFrame( this );
-    separator1->setFrameShape( QFrame::HLine );
-    separator1->setLineWidth( 1 );
-    separator1->setMidLineWidth( 2 );
-    separator1->setFrameShadow( QFrame::Raised );
-    separator1->setMinimumHeight( 4 );
-    groupLayout->addMultiCellWidget( separator1, row, row, 0, 5 );*/
+    mainLayout->addWidget(cframe, 1, 0);
 
     // record group
     //
@@ -189,13 +173,8 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     // recording group title
     //
     row = 0;
-    //    QLabel *recHeader = new QLabel(i18n("Recording filters"), m_recordGroup);
-    //    recHeader->setFont(title_font);
-    //    groupLayout->addMultiCellWidget(recHeader, row, row, 0, 2);
 
     // recording device
-    //
-    //    row++;
     groupLayout->addWidget(new QLabel(i18n("Device"), m_recordGroup), row, 0);
     m_recDevice = new KComboBox(m_recordGroup);
     m_recDevice->setMinimumWidth(width25);
@@ -210,19 +189,10 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     m_recChannel->setMinimumWidth(width11);
     groupLayout->addWidget(m_recChannel, row, 2);
 
+    groupLayout->setColStretch(groupLayout->numCols() - 1, 1);
+
     mainLayout->addWidget(cframe, 2, 0);
 
-
-    // group separator 2
-    //
-    /*row++;
-    m_separator2 = new QFrame( this );
-    m_separator2->setFrameShape( QFrame::HLine );
-    m_separator2->setLineWidth( 1 );
-    m_separator2->setMidLineWidth( 2 );
-    m_separator2->setFrameShadow( QFrame::Raised );
-    m_separator2->setMinimumHeight( 4 ); 
-    groupLayout->addMultiCellWidget( m_separator2, row, row, 0, 5 );*/
 
     // default segment group
     //
@@ -232,26 +202,21 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     cframe->setWidget(m_defaultsGroup);
     groupLayout = new QGridLayout(m_defaultsGroup, 6, 6, 3, 2);
 
-    // default segment segment parameters group title
-    //
+    groupLayout->setColStretch(1, 1);
+
     row = 0;
-    //    m_segHeader = new QLabel(i18n("Create segments with:"), m_defaultsGroup);
-    //    m_segHeader->setFont(title_font);
-    //    groupLayout->addMultiCellWidget( m_segHeader, row, row, 0, 5);
 
     // preset picker
-    //
-    //    row++;
     m_psetLbl = new QLabel(i18n("Preset"), m_defaultsGroup);
     groupLayout->addWidget(m_psetLbl, row, 0, AlignLeft);
 
     m_presetLbl = new QLabel(i18n("<none>"), m_defaultsGroup);
     m_presetLbl->setFrameStyle(QFrame::Panel | QFrame::Sunken);
     m_presetLbl->setFixedWidth(width20);
-    groupLayout->addMultiCellWidget(m_presetLbl, row, row, 1, 4);
+    groupLayout->addMultiCellWidget(m_presetLbl, row, row, 1, 3);
 
     m_presetButton = new QPushButton(i18n("Load"), m_defaultsGroup);
-    groupLayout->addMultiCellWidget(m_presetButton, row, row, 5, 5, AlignRight);
+    groupLayout->addMultiCellWidget(m_presetButton, row, row, 4, 5);
 
     // default clef
     //
@@ -274,13 +239,12 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     /*  clef types in the datbase that are not yet supported must be ignored for
      *  now:
         m_defClef->insertItem(i18n("two bar"), TwoBarClef); */
-    groupLayout->addMultiCellWidget(m_defClef, row, row, 1, 5, AlignRight);
+    groupLayout->addMultiCellWidget(m_defClef, row, row, 1, 2);
 
     // default transpose
     //
-    row++;
     m_transpLbl = new QLabel(i18n("Transpose"), m_defaultsGroup);
-    groupLayout->addMultiCellWidget(m_transpLbl, row, row, 0, 1);
+    groupLayout->addMultiCellWidget(m_transpLbl, row, row, 3, 4, AlignRight);
     m_defTranspose = new KComboBox(m_defaultsGroup);
 
     connect(m_defTranspose, SIGNAL(activated(int)),
@@ -293,7 +257,29 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
             m_defTranspose->setCurrentItem(m_defTranspose->count() - 1);
     }
 
-    groupLayout->addMultiCellWidget(m_defTranspose, row, row, 2, 5, AlignRight);
+    groupLayout->addMultiCellWidget(m_defTranspose, row, row, 5, 5);
+
+    // highest/lowest playable note
+    //
+    row++;
+    m_rangeLbl = new QLabel(i18n("Pitch"), m_defaultsGroup);
+    groupLayout->addMultiCellWidget(m_rangeLbl, row, row, 0, 0);
+
+    groupLayout->addWidget(new QLabel(i18n("Lowest"), m_defaultsGroup), row, 1, AlignRight);
+
+    m_lowButton = new QPushButton(i18n("---"), m_defaultsGroup);
+    QToolTip::add
+        (m_lowButton, i18n("Choose the lowest suggested playable note, using a staff"));
+    groupLayout->addMultiCellWidget(m_lowButton, row, row, 2, 2);
+
+    groupLayout->addWidget(new QLabel(i18n("Highest"), m_defaultsGroup), row, 3, AlignRight);
+
+    m_highButton = new QPushButton(i18n("---"), m_defaultsGroup);
+    QToolTip::add
+        (m_highButton, i18n("Choose the highest suggested playable note, using a staff"));
+    groupLayout->addMultiCellWidget(m_highButton, row, row, 4, 5);
+
+    updateHighLow();
 
     // default color
     //
@@ -302,38 +288,17 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     groupLayout->addWidget(m_colorLbl, row, 0, AlignLeft);
     m_defColor = new KComboBox(false, m_defaultsGroup);
     m_defColor->setSizeLimit(20);
-    groupLayout->addMultiCellWidget(m_defColor, row, row, 1, 5, AlignRight);
+    groupLayout->addMultiCellWidget(m_defColor, row, row, 1, 5);
 
     // populate combo from doc colors
     slotDocColoursChanged();
-
-    // highest/lowest playable note
-    //
-    row++;
-    m_rangeLbl = new QLabel(i18n("Range"), m_defaultsGroup);
-    groupLayout->addWidget(m_rangeLbl, row, 0);
-
-    m_lowButton = new QPushButton(i18n("Low: ----"), m_defaultsGroup);
-    QToolTip::add
-        (m_lowButton, i18n("Choose the lowest suggested playable note, using a staff"));
-    groupLayout->addMultiCellWidget(m_lowButton, row, row, 1, 3, AlignRight);
-
-    m_highButton = new QPushButton(i18n("High: ---"), m_defaultsGroup);
-    QToolTip::add
-        (m_highButton, i18n("Choose the highest suggested playable note, using a staff"));
-    groupLayout->addMultiCellWidget(m_highButton, row, row, 4, 5, AlignLeft);
-
-    updateHighLow();
 
     mainLayout->addWidget(cframe, 3, 0);
 
     // Configure the empty final row to accomodate any extra vertical space.
     //
+//    mainLayout->setColStretch(mainLayout->numCols() - 1, 1);
     mainLayout->setRowStretch(mainLayout->numRows() - 1, 1);
-
-    // Configure the empty final column to accomodate any extra horizontal
-    // space.
-    mainLayout->setColStretch(mainLayout->numCols() - 1, 1);
 
     // Connections
     connect( m_playDevice, SIGNAL(activated(int)),
@@ -570,8 +535,10 @@ TrackParameterBox::updateHighLow()
     bool useSharps = true;
     bool includeOctave = true;
 
-    m_highButton->setText(i18n("High: %1").arg(highest.getAsString(useSharps, includeOctave, base)));
-    m_lowButton->setText(i18n("Low: %1").arg(lowest.getAsString(useSharps, includeOctave, base)));
+//    m_highButton->setText(i18n("High: %1").arg(highest.getAsString(useSharps, includeOctave, base)));
+//    m_lowButton->setText(i18n("Low: %1").arg(lowest.getAsString(useSharps, includeOctave, base)));
+    m_highButton->setText(QString("%1").arg(highest.getAsString(useSharps, includeOctave, base)));
+    m_lowButton->setText(QString("%1").arg(lowest.getAsString(useSharps, includeOctave, base)));
 
     m_presetLbl->setEnabled(false);
 }
@@ -625,7 +592,7 @@ TrackParameterBox::slotSelectedTrackNameChanged()
     else
         m_trackName.truncate(20);
     int m_trackNum = m_selectedTrackId + 1;
-    m_trackLabel->setText(i18n("[ Track#%1 - %2 ]").arg(m_trackNum).arg(m_trackName));
+    m_trackLabel->setText(i18n("[ Track %1 - %2 ]").arg(m_trackNum).arg(m_trackName));
 }
 
 void
