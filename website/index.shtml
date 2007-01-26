@@ -17,6 +17,13 @@
       Cubase<small>&reg;</small> for Linux" &ndash; <a
       href="http://www.soundonsound.com/sos/Feb03/articles/linuxaudio.asp"
       target="_new">Sound on Sound</a></i></p>
+
+      <div style="float:left">
+      <a href="images/snap-1.5-1.png">
+      <img src="images/snap-1.5-1-thumb.png" border="0" vspace="10" hspace="10"
+      alt=""/>
+      </a>
+      </div>
       
       <p>Rosegarden is a professional <b>audio and MIDI sequencer</b>,
       <b>score editor</b>, and general-purpose <b>music composition
@@ -24,20 +31,26 @@
       easy-to-learn, attractive application that runs on Linux, ideal
       for composers, musicians, music students, and small studio or
       home recording environments.
-
 	<p><b>Release 1.4.0 now available!</b> This is a substantial
 	feature release.  Get it
-	<a href="/getting/">here</a>!</p>
+	<a href="getting/">here</a>!</p>
 
-      <p><a href="tour/">Take our tour</a> &ndash; and see what Rosegarden can
-      do for you!</p><p/>
-
-      <div align="center" valign="center">
-      <a href="images/rosegarden-1.4.0-2.png">
-      <img src="images/rosegarden-1.4.0-2-thumb.png" border="0" vspace="20"
-      alt="Rosegarden screenshot"/>
+      <div style="float:right">
+      <a href="images/snap-1.5-3.png">
+      <img src="images/snap-1.5-3-thumb.png" border="0" vspace="10" hspace="20"
+      alt=""/>
       </a>
       </div>
+
+	<p style="clear:left"><b>Learn more</b> about Rosegarden...</p>
+	<ul>
+	<li><a href="tour/">Take our tour</a> and see what Rosegarden can
+	      do for you!</li><p>
+	<li>Find <a href="resources/">documentation and other information</a> about Rosegarden, including <a href="resources/faq/">Frequently-Asked Questions</a>.</li><p>
+	<li>Join the Rosegarden <a href="support/">community</a> and get informal support from our mailing lists.</li><p>
+	<li>Find out <a href="resources/authors/">who wrote Rosegarden</a>.</li><p>
+	<li>And last but not least, <a href="getting/">get it</a>!</li><p>
+	</ul>
 
       </div>
     </div>

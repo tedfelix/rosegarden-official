@@ -15,36 +15,42 @@
     <br>
     <h2>How to get Rosegarden</h2>
 
-    <p>The Rosegarden development team currently only makes Rosegarden
-    available in <a href="#source">source code form</a>, to be compiled after download.</p>
+    <p>The Rosegarden development team makes Rosegarden available in
+    <a href="#source">source code form</a>, to be compiled after
+    download.  We don't make ready-to-run binaries; you should get
+    those as packages tailored for a particular Linux distribution.</p>
+
+    <p>Rosegarden is a complex program that requires numerous other C
+    and C++ libraries and services that vary from one distribution to
+    another.  It is also advisable to run Rosegarden on a Linux system
+    that is well tuned for interactive and audio applications.  For
+    these reasons, it is not practical at this time for the Rosegarden
+    team to provide installable packages for the many Linux
+    distributions available.  Here's where you should look
+    instead:</p>
+
+    <h2>Distribution packages</h2>
 
     <p>Installable binary packages for many major Linux distributions
-    including Mandriva, Debian (package "rosegarden4"), Ubuntu,
-    ALT Linux and PCLinuxOS are available from those distributions'
-    downloadable package repositories.  Please consult your
-    distribution's documentation for more details, and check that your
-    distribution provides the latest available version (currently
-    Rosegarden-1.4.0) before downloading.  RedHat/Fedora users may
-    wish to consider the excellent <a
-    href="http://www-ccrma.stanford.edu/planetccrma/software/">PlanetCCRMA</a>
-    audio software package set.</p>
+    including Mandriva, Debian, Ubuntu, SuSE, ALT Linux and PCLinuxOS
+    are available via these distributions' standard downloadable package
+    repositories.</p>
 
-    <p>Because of the complexity of Rosegarden and its dependency on
-    numerous other C and C++ libraries and services that vary from one
-    distribution to another, it is sadly not practical at this time
-    for the Rosegarden team to provide installable packages for the
-    many Linux distributions available.</p>
+    <p>Please consult your distribution's documentation for more
+    details, and check that your distribution provides the latest
+    available version (currently Rosegarden-1.4.0) before installing.</p>
 
-    <h2>Fervent Software's Studio to Go!</h2>
+    <h3>Studio to Go!</h3>
 
     <p><b>Studio..<i>to go!</i></b> is a commercial package of music
-    software with a Linux distribution on a single bootable Live CD,
-    with support, produced by Rosegarden developers.  Rosegarden is of
-    course included, along with a wide selection of other software all
-    configured and ready to go.  This is almost certainly the easiest
-    way to get a complete Rosegarden configuration, particularly if
-    you aren't a Linux user already.  <a
-    href="http://www.ferventsoftware.com/">Find out more here!</a></p>
+    software with a Linux distribution on a single bootable Live CD.
+    It's produced by Fervent Software, a small company founded and run
+    by Rosegarden developers, and comes with support.  Rosegarden is
+    of course included, along with a wide selection of other software
+    all configured and ready to go.  This is almost certainly the
+    easiest way to get a complete Rosegarden configuration,
+    particularly if you aren't a Linux user already.  <a
+    href="http://www.studio-to-go.com/">Find out more here.</a></p>
 
     <br>
     <hr>

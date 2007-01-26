@@ -10,13 +10,14 @@
   float: left;
   clear: left;
   width: 100%;
-  background: #d6f2c2;
+  background: #e3e8c7;
+/*  background: #d6f2c2; */
 }
 
 #nav { 
   padding-left: 200px;
   font-family: verdana, sans-serif;
-  font-size: 0.95em;
+  font-size: 0.9em;
   font-weight: bold;
   color: #3c421a;
 }
@@ -25,13 +26,14 @@
   float: left;
   clear: left;
   width: 100%;
-  background: #d6f2c2;
+  background: #e3e8c7;
+/*  background: #d6f2c2; */
 }
 
 #subnav { 
   padding-left: 200px;
   font-family: verdana, sans-serif;
-  font-size: 0.95em;
+  font-size: 0.9em;
   font-weight: normal;
   color: #32421a;
 }
@@ -162,7 +164,7 @@ body {
 }
 
 body,p,td,ul,ol,li,blockquote { 
-    font-size: 1em;
+    font-size: 0.95em;
     font-style: normal;
     font-family: georgia, "bitstream vera serif", "book antiqua", palatino, garamond, serif; 
 }
@@ -182,7 +184,7 @@ h4,h5,h6,h7 {
 }
 
 code {
-    font-size: 0.9em;
+    font-size: 0.87em;
     font-style: normal;
     font-family: "andale mono", "monotype.com", lucidatypewriter, monospaced;
 }
