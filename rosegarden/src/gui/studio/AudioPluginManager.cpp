@@ -46,16 +46,21 @@ AudioPluginManager::AudioPluginManager() :
             m_sampleRate(0),
             m_enumerator(this)
 {
-// fetch from sequencer
-fetchSampleRate();
+//    std::cerr << "AudioPluginManager[" << this << "]::AudioPluginManager - "
+//    	      << "trace is ";
+//    std::cerr << kdBacktrace() << std::endl;
 
-// Clear the plugin clipboard
-//
-m_pluginClipboard.m_pluginNumber = -1;
-m_pluginClipboard.m_program = "";
-m_pluginClipboard.m_controlValues.clear();
 
-m_enumerator.start();
+    // fetch from sequencer
+    fetchSampleRate();
+
+    // Clear the plugin clipboard
+    //
+    m_pluginClipboard.m_pluginNumber = -1;
+    m_pluginClipboard.m_program = "";
+    m_pluginClipboard.m_controlValues.clear();
+    
+    m_enumerator.start();
 }
 
 AudioPluginManager::Enumerator::Enumerator(AudioPluginManager *manager) :
@@ -278,9 +283,9 @@ AudioPluginManager::awaitEnumeration()
 {
     while (!m_enumerator.isDone()) {
         RG_DEBUG << "\n\nAudioPluginManager::awaitEnumeration() - waiting\n\n" << endl;
-        m_mutex.lock();
+//        m_mutex.lock();
         usleep(100000);
-        m_mutex.unlock();
+//        m_mutex.unlock();
     }
 }
 
