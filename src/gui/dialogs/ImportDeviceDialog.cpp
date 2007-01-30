@@ -285,7 +285,7 @@ ImportDeviceDialog::shouldRename() const
 bool
 ImportDeviceDialog::importFromRG(QString fileName)
 {
-    m_fileDoc = new RosegardenGUIDoc(this, 0, true); // skipAutoload
+    m_fileDoc = new RosegardenGUIDoc(RosegardenGUIApp::self(), 0, true); // skipAutoload
 
     // Add some dummy devices for bank population when we open the document.
     // We guess that the file won't have more than 32 devices.
