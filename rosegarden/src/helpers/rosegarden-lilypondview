@@ -21,9 +21,10 @@ if [ "$1" == "-v" ]; then
     shift
 fi
 
-lilypond_version="`lilypond --version`"
+type -path lilypond
 if [ "$?" != "0" ]; then
     echo "rosegarden-lilypondview: LilyPond unavailable" 1>&2
+    echo "Required: lilypond"
 else
     lilypond_version="`lilypond --version | grep LilyPond | head -1 | sed 's/^.* //'`"
     case "$lilypond_version" in
