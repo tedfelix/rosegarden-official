@@ -4427,12 +4427,20 @@ void RosegardenGUIApp::slotTestStartupTester()
                  KXMLGUIClient::StateNoReverse : KXMLGUIClient::StateReverse);
 
     if (!have) {
-        KMessageBox::informationList
-            (m_view,
-             i18n("<h3>Project Packager not available</h3><p>Rosegarden could not find one or more of the additional programs needed to support the Rosegarden Project Packager.</p><p>Export and import of Rosegarden Project files will not be available.<p><p>To fix this, you should install the following additional programs:</p>"),
-             missing,
-             i18n("Rosegarden Project Packager not available"),
-             "startup-project-packager");
+        if (missing.count() == 0) {
+            KMessageBox::information
+                (m_view,
+                 i18n("<h3>Project Packager not available</h3><p>Rosegarden could not run the Project Packager.</p><p>Export and import of Rosegarden Project files will not be available.</p>"),
+                 i18n("Rosegarden Project Packager not available"),
+                 "startup-project-packager");            
+        } else {
+            KMessageBox::informationList
+                (m_view,
+                 i18n("<h3>Project Packager not available</h3><p>Rosegarden could not find one or more of the additional programs needed to support the Rosegarden Project Packager.</p><p>Export and import of Rosegarden Project files will not be available.<p><p>To fix this, you should install the following additional programs:</p>"),
+                 missing,
+                 i18n("Rosegarden Project Packager not available"),
+                 "startup-project-packager");
+        }
     }
 
     have = m_startupTester->haveLilypondView(&missing);
