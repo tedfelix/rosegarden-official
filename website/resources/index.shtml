@@ -12,8 +12,12 @@
     <div id="maincontainer">
       <div id="main">
 	<br>
-	<h2>Resources</h2>
-	<p>This is where you can find many of the extra documents and links that are relevant to users of Rosegarden.  Some things that may be of interest include:
+	<h2>Help</h2>
+
+	<p>Here you can find documentation and useful links for users
+	of Rosegarden.</p>
+	<p>Some things that may be of interest include:
+
 	<ul>
 	<li><a href="/resources/faq/">Frequently asked questions</a> about Rosegarden.  If you have any problems installing or using Rosegarden, please read these first.</li>
 	<li>Rosegarden <a href="http://rosegarden.sourceforge.net/tutorial">books</a> and a free online <a href="http://rosegarden.sourceforge.net/tutorial/">tutorial</a> by D. Michael McIntyre.</li>
@@ -25,8 +29,8 @@
 	for suggestions about how to improve the chances that someone will
 	implement your idea.</li>
 	<li><a href="/resources/links/">Links to other sites</a> including composers who use Rosegarden, other software, and Linux audio community sites.</li>
-	<li><a href="/resources/documents/">Various other documents</a> for users.</li>
-	<li><a href="/resources/authors/">About the authors.</a></li>
+	<li><a href="/resources/documents/">Various other documents</a> for users and tweakers.</li>
+<!--	<li><a href="/resources/authors/">About the authors.</a></li> -->
 	</ul>
 	</p>
 	<br><br><br><br>

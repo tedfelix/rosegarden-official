@@ -20,8 +20,8 @@
     download.  We don't make ready-to-run binaries; you should get
     those as packages tailored for a particular Linux distribution.</p>
 
-    <p>Rosegarden is a complex program that requires numerous other C
-    and C++ libraries and services that vary from one distribution to
+    <p>Rosegarden is a complex program that requires numerous
+    libraries and services that vary from one Linux distribution to
     another.  It is also advisable to run Rosegarden on a Linux system
     that is well tuned for interactive and audio applications.  For
     these reasons, it is not practical at this time for the Rosegarden

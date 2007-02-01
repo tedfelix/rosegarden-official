@@ -5,27 +5,29 @@
 
     <!--#include virtual="/title.html" -->
     <!--#include virtual="/nav.html" -->
+
+      <a href="images/snap-1.5-1.png">
+      <img src="images/snap-1.5-1-thumb.png" style="float: right; position: relative; top: 30px; left: 0px; border-width: 2px; border-color: #315e13; border-style: solid; margin-top: 0px; margin-bottom: 40px; margin-left: 30px; margin-right: 10px" alt=""/>
+      </a>
+
     <!--#include virtual="/subleft.html" -->
+
+      <a href="images/snap-1.5-3.png">
+      <img src="images/snap-1.5-3-thumb.png" style="float: right; clear: right; position: relative; top: 0px; left: 0px; border-width: 2px; border-color: #315e13; border-style: solid; margin-top: 10px; margin-left: 30px; margin-right: 10px" alt=""/>
+      </a>
     <!--#include virtual="/subright.html" -->
 
-    <div id="maincontainer">
     <div id="main">
 
       <h2>What is Rosegarden?</h2>
-
-      <p><i>"the closest native equivalent to
+      <p>
+      <i>"the closest native equivalent to
       Cubase<small>&reg;</small> for Linux" &ndash; <a
       href="http://www.soundonsound.com/sos/Feb03/articles/linuxaudio.asp"
       target="_new">Sound on Sound</a></i></p>
 
-      <div style="float:left">
-      <a href="images/snap-1.5-1.png">
-      <img src="images/snap-1.5-1-thumb.png" border="0" vspace="10" hspace="10"
-      alt=""/>
-      </a>
-      </div>
-      
-      <p>Rosegarden is a professional <b>audio and MIDI sequencer</b>,
+      <p>
+      Rosegarden is a professional <b>audio and MIDI sequencer</b>,
       <b>score editor</b>, and general-purpose <b>music composition
       and editing environment</b>.</p><p>Rosegarden is an
       easy-to-learn, attractive application that runs on Linux, ideal
@@ -35,24 +37,15 @@
 	feature release.  Get it
 	<a href="getting/">here</a>!</p>
 
-      <div style="float:right">
-      <a href="images/snap-1.5-3.png">
-      <img src="images/snap-1.5-3-thumb.png" border="0" vspace="10" hspace="20"
-      alt=""/>
-      </a>
-      </div>
-
-	<p style="clear:left"><b>Learn more</b> about Rosegarden...</p>
+	<p><b>Learn more</b> about Rosegarden:</p>
 	<ul>
-	<li><a href="tour/">Take our tour</a> and see what Rosegarden can
-	      do for you!</li><p>
-	<li>Find <a href="resources/">documentation and other information</a> about Rosegarden, including <a href="resources/faq/">Frequently-Asked Questions</a>.</li><p>
-	<li>Join the Rosegarden <a href="support/">community</a> and get informal support from our mailing lists.</li><p>
+	<li><a href="tour/">Take our tour</a>!</li><p>
+	<li>Find <a href="resources/">documentation</a>, including <a href="resources/faq/">Frequently-Asked Questions</a>.</li><p>
+	<li>Join the Rosegarden <a href="support/">community</a>.</li><p>
 	<li>Find out <a href="resources/authors/">who wrote Rosegarden</a>.</li><p>
 	<li>And last but not least, <a href="getting/">get it</a>!</li><p>
 	</ul>
 
-      </div>
     </div>
 
   </body>
