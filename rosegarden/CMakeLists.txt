@@ -26,6 +26,11 @@ SET(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
 # Additional CMake modules for 3rd party library checks reside here
 SET(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_admin")
 
+# Mark as advanced
+MARK_AS_ADVANCED(EXECUTABLE_OUTPUT_PATH 
+                 LIBRARY_OUTPUT_PATH
+		 CMAKE_BACKWARDS_COMPATIBILITY)
+
 # Rosegarden version string
 SET (VERSION_MAJOR "1")
 SET (VERSION_MINOR "5")
@@ -69,6 +74,14 @@ ENDIF(KDE3_FOUND)
 
 # Clear the flags set by FindKDE3 
 SET(CMAKE_CXX_FLAGS "")
+MARK_AS_ADVANCED(KDE3_BUILD_TESTS
+                 KDE3_ENABLE_FINAL
+		 KDE3_DCOPIDL_EXECUTABLE
+		 KDE3_DCOPIDL2CPP_EXECUTABLE
+		 KDE3_INCLUDE_DIR
+		 KDE3_KCFGC_EXECUTABLE
+		 KDE3_KDECORE_LIBRARY
+		 KDECONFIG_EXECUTABLE )
 
 # Provide the KDE3 prefix as a default prefix (if the user has CMake 2.4.4)
 IF(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
@@ -253,6 +266,7 @@ ELSE(WANT_DEBUG)
     SET(CMAKE_BUILD_TYPE Release CACHE STRING
         "Choose the type of build, options are: Debug Release RelWithDebInfo" FORCE)
 ENDIF(WANT_DEBUG)
+MARK_AS_ADVANCED(CMAKE_BUILD_TYPE)
 
 # Warn the user if important libraries are missing
 INCLUDE(UserWarnings)
