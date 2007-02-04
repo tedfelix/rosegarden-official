@@ -32,10 +32,6 @@ ENDIF (MEINPROC_EXECUTABLE)
 
 MACRO(ADD_DOCS _baseName)
     SET(_outputs)
-    EXECUTE_PROCESS(COMMAND ${KDECONFIG_EXECUTABLE} --expandvars --install html
-        OUTPUT_VARIABLE _htmlinstalldir)
-    STRING(REGEX REPLACE "\n" "" _htmlinstalldir "${_htmlinstalldir}")
-    STRING(REPLACE "${KDE3PREFIX}/" "" HTML_INSTALL_DIR "${_htmlinstalldir}")
     FOREACH(_dir ${ARGN})
 	SET(_out "${CMAKE_CURRENT_BINARY_DIR}/${_dir}_index.cache.bz2")
 	SET(_in  "${CMAKE_CURRENT_SOURCE_DIR}/${_dir}/index.docbook")
@@ -45,10 +41,10 @@ MACRO(ADD_DOCS _baseName)
 	    ARGS --check --cache ${_out} ${_in}
     	    DEPENDS ${_in} )
 	INSTALL(FILES ${_out}
-    	    DESTINATION ${HTML_INSTALL_DIR}/${_dir}/${_baseName}
+    	    DESTINATION ${KDE3HTMLDIR}/${_dir}/${_baseName}
 	    RENAME index.cache.bz2)
 	INSTALL(FILES ${_in} ${_images}
-    	    DESTINATION ${HTML_INSTALL_DIR}/${_dir}/${_baseName})
+    	    DESTINATION ${KDE3HTMLDIR}/${_dir}/${_baseName})
 	SET(_outputs ${_outputs} ${_out})
     ENDFOREACH(_dir)
     ADD_CUSTOM_TARGET(documentation ALL DEPENDS ${_outputs})
