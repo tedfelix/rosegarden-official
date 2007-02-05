@@ -10,9 +10,9 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-01-24 14:50+0000\n"
-"PO-Revision-Date: 2007-02-04 14:29+0900\n"
-"Last-Translator: oota toshiya <ribbon@users.sourceforge.net>\n"
-"Language-Team:  <ribbon@users.sourceforge.net>\n"
+"PO-Revision-Date: 2007-02-05 13:08+0900\n"
+"Last-Translator: \n"
+"Language-Team:  <ja@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -147,11 +147,11 @@ msgstr "ピッチで分割"
 
 #: ../src/commands/segment/SegmentSplitByPitchCommand.cpp:171
 msgid "%1 (upper)"
-msgstr ""
+msgstr "%1 (上側)"
 
 #: ../src/commands/segment/SegmentSplitByPitchCommand.cpp:173
 msgid "%1 (lower)"
-msgstr ""
+msgstr "%1 (下側)"
 
 #: ../src/commands/segment/SegmentSingleRepeatToCopyCommand.cpp:39
 msgid "Turn Single Repeat into Copy"
@@ -614,7 +614,7 @@ msgstr ""
 
 #: ../src/commands/notation/ChangeStyleCommand.h:53
 msgid "Change &Note Style"
-msgstr ""
+msgstr "音符スタイルの変更(&N)"
 
 #: ../src/commands/notation/TextInsertionCommand.cpp:41
 msgid "Insert Text"
@@ -690,7 +690,7 @@ msgstr "和音化(&C)"
 
 #: ../src/commands/notation/MultiKeyInsertionCommand.h:60
 msgid "Change all to &Key %1..."
-msgstr ""
+msgstr "すべてをキー%1に変更(&K)..."
 
 #: ../src/commands/notation/KeyInsertionCommand.h:62
 #: ../src/commands/notation/MultiKeyInsertionCommand.h:62
@@ -923,7 +923,7 @@ msgstr "ステータスが無効"
 
 #: ../src/gui/dialogs/ShowSequencerStatusDialog.cpp:57
 msgid "Sequencer is not running or is not responding."
-msgstr ""
+msgstr "シーケンサは動いていないか反応しない。"
 
 #: ../src/gui/dialogs/ShowSequencerStatusDialog.cpp:64
 msgid "Sequencer is not returning a valid status report."
@@ -1100,7 +1100,7 @@ msgstr ""
 
 #: ../src/gui/dialogs/TextEventDialog.cpp:171
 msgid "Coda"
-msgstr ""
+msgstr "Coda"
 
 #: ../src/gui/dialogs/TextEventDialog.cpp:175
 msgid "Local Direction:  "
@@ -1108,76 +1108,76 @@ msgstr ""
 
 #: ../src/gui/dialogs/TextEventDialog.cpp:179
 msgid "accel."
-msgstr ""
+msgstr "accel."
 
 #: ../src/gui/dialogs/TextEventDialog.cpp:180
 msgid "ritard."
-msgstr ""
+msgstr "ritard."
 
 #: ../src/gui/dialogs/TextEventDialog.cpp:181
 msgid "ralletando"
-msgstr ""
+msgstr "ralletando"
 
 #: ../src/gui/dialogs/TextEventDialog.cpp:182
 msgid "a tempo"
-msgstr ""
+msgstr "a tempo"
 
 #: ../src/gui/dialogs/TextEventDialog.cpp:183
 msgid "legato"
-msgstr ""
+msgstr "legato"
 
 #: ../src/gui/dialogs/TextEventDialog.cpp:184
 msgid "simile"
-msgstr ""
+msgstr "simile"
 
 #: ../src/gui/dialogs/TextEventDialog.cpp:185
 msgid "pizz."
-msgstr ""
+msgstr "pizz."
 
 #: ../src/gui/dialogs/TextEventDialog.cpp:186
 msgid "arco"
-msgstr ""
+msgstr "arco"
 
 #: ../src/gui/dialogs/TextEventDialog.cpp:187
 msgid "non vib."
-msgstr ""
+msgstr "non vib."
 
 #: ../src/gui/dialogs/TextEventDialog.cpp:188
 msgid "sul pont."
-msgstr ""
+msgstr "sul pont."
 
 #: ../src/gui/dialogs/TextEventDialog.cpp:189
 #: ../src/gui/dialogs/TextEventDialog.cpp:191
 msgid "sul tasto"
-msgstr ""
+msgstr "sul tasto"
 
 #: ../src/gui/dialogs/TextEventDialog.cpp:190
 msgid "con legno"
-msgstr ""
+msgstr "con legno"
 
 #: ../src/gui/dialogs/TextEventDialog.cpp:192
 msgid "sul G"
-msgstr ""
+msgstr "sul G"
 
 #: ../src/gui/dialogs/TextEventDialog.cpp:193
 msgid "ordinario"
-msgstr ""
+msgstr "ordinario"
 
 #: ../src/gui/dialogs/TextEventDialog.cpp:194
 msgid "Muta in "
-msgstr ""
+msgstr "Muta in "
 
 #: ../src/gui/dialogs/TextEventDialog.cpp:195
 msgid "volti subito "
-msgstr ""
+msgstr "volti subito "
 
 #: ../src/gui/dialogs/TextEventDialog.cpp:196
 msgid "soli"
-msgstr ""
+msgstr "soli"
 
 #: ../src/gui/dialogs/TextEventDialog.cpp:197
 msgid "div."
-msgstr ""
+msgstr "div."
 
 #: ../src/gui/dialogs/TextEventDialog.cpp:201
 msgid "Tempo:  "
@@ -1191,42 +1191,42 @@ msgstr ""
 #: ../src/gui/dialogs/TextEventDialog.cpp:206
 #: ../src/gui/dialogs/TextEventDialog.cpp:230
 msgid "Adagio"
-msgstr ""
+msgstr "Adagio"
 
 #: ../src/gui/dialogs/TextEventDialog.cpp:207
 #: ../src/gui/dialogs/TextEventDialog.cpp:231
 msgid "Largo"
-msgstr ""
+msgstr "Largo"
 
 #: ../src/gui/dialogs/TextEventDialog.cpp:208
 #: ../src/gui/dialogs/TextEventDialog.cpp:232
 msgid "Lento"
-msgstr ""
+msgstr "Lento"
 
 #: ../src/gui/dialogs/TextEventDialog.cpp:209
 #: ../src/gui/dialogs/TextEventDialog.cpp:233
 msgid "Andante"
-msgstr ""
+msgstr "Andante"
 
 #: ../src/gui/dialogs/TextEventDialog.cpp:210
 #: ../src/gui/dialogs/TextEventDialog.cpp:234
 msgid "Moderato"
-msgstr ""
+msgstr "Moderato"
 
 #: ../src/gui/dialogs/TextEventDialog.cpp:211
 #: ../src/gui/dialogs/TextEventDialog.cpp:235
 msgid "Allegretto"
-msgstr ""
+msgstr "Allegretto"
 
 #: ../src/gui/dialogs/TextEventDialog.cpp:212
 #: ../src/gui/dialogs/TextEventDialog.cpp:236
 msgid "Allegro"
-msgstr ""
+msgstr "Allegro"
 
 #: ../src/gui/dialogs/TextEventDialog.cpp:213
 #: ../src/gui/dialogs/TextEventDialog.cpp:237
 msgid "Vivace"
-msgstr ""
+msgstr "Vivace"
 
 #: ../src/gui/dialogs/TextEventDialog.cpp:214
 #: ../src/gui/dialogs/TextEventDialog.cpp:238
@@ -9447,7 +9447,7 @@ msgstr "移調(&p)"
 #: rc.cpp:140 rc.cpp:222
 #, no-c-format
 msgid "Convert"
-msgstr ""
+msgstr "変換"
 
 #: rc.cpp:142
 #, no-c-format
@@ -9622,32 +9622,32 @@ msgstr ""
 #: rc.cpp:296
 #, no-c-format
 msgid "SIG"
-msgstr ""
+msgstr "SIG"
 
 #: rc.cpp:298
 #, no-c-format
 msgid "DIV"
-msgstr ""
+msgstr "DIV"
 
 #: rc.cpp:300
 #, no-c-format
 msgid "/16"
-msgstr ""
+msgstr "/16"
 
 #: rc.cpp:302
 #, no-c-format
 msgid "TEMPO"
-msgstr ""
+msgstr "TEMPO"
 
 #: rc.cpp:304
 #, no-c-format
 msgid "END"
-msgstr ""
+msgstr "END"
 
 #: rc.cpp:306
 #, no-c-format
 msgid "BAR"
-msgstr ""
+msgstr "BAR"
 
 #: rc.cpp:309
 #, no-c-format
