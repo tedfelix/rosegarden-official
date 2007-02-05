@@ -19,8 +19,8 @@ has been released yet; if not, please continue on to:
 Build requirements
 ------------------
 
-The big requirement is KDE 3.1, or later, or more specifically the KDE
-3.1+ development libraries (you don't need the whole KDE environment).
+The big requirement is KDE 3.3, or later, or more specifically the KDE
+3.3+ development libraries (you don't need the whole KDE environment).
 
 Our code compiles with gcc-3.x and gcc-4.x.
 
