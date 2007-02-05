@@ -36,7 +36,7 @@ else
     esac
 fi
 
-for x in kghostview ggv ghostview; do
+for x in kghostview evince ggv ghostview; do
     if [ -x "`type -path $x`" ]; then
 	prog_ghostview=$x
 	break;
@@ -46,7 +46,7 @@ done
 reqd=
 
 if [ -z "$prog_ghostview" ]; then
-    reqd="kghostview OR ggv OR ghostview, $reqd"
+    reqd="kghostview OR ghostview OR ggv OR evince, $reqd"
     echo "rosegarden-lilypondview: No PostScript viewer found" 1>&2
 fi
 
