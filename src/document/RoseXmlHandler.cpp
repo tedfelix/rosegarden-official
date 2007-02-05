@@ -463,6 +463,8 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         QString smajor = atts.value("format-version-major");
         QString sminor = atts.value("format-version-minor");
 
+//        std::cerr << "\n\n\nRosegarden file version = \"" << version << "\"\n\n\n" << std::endl;
+
         if (smajor) {
 
             int major = smajor.toInt();
