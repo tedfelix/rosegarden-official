@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-01-24 14:50+0000\n"
-"PO-Revision-Date: 2007-02-05 13:08+0900\n"
+"PO-Revision-Date: 2007-02-06 12:52+0900\n"
 "Last-Translator: \n"
 "Language-Team:  <ja@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -2642,7 +2642,7 @@ msgstr ""
 #: ../src/gui/dialogs/TransportDialog.cpp:89 rc.cpp:250
 #, no-c-format
 msgid "Rosegarden Transport"
-msgstr ""
+msgstr "Rosegarden Transport"
 
 #: ../src/gui/dialogs/TransportDialog.cpp:846
 #: ../src/gui/dialogs/TransportDialog.cpp:906
@@ -3282,7 +3282,7 @@ msgstr "エディタを表示(&E)"
 #: ../src/gui/application/RosegardenGUIApp.cpp:659
 #: ../src/gui/editors/notation/NotationView.cpp:2100
 msgid "Show Trans&port Toolbar"
-msgstr "移調ツールバーを表示(&p)"
+msgstr "録音再生ツールバーを表示(&p)"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:663
 msgid "Show &Zoom Toolbar"
@@ -3856,7 +3856,7 @@ msgstr "エディタツールバーをON/OFF..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:3199
 msgid "Toggle the transport toolbar..."
-msgstr "移調ツールバーをON/OFF..."
+msgstr "録音再生ツールバーをON/OFF..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:3209
 msgid "Toggle the zoom toolbar..."
@@ -3864,7 +3864,7 @@ msgstr "ズームツールバーをON/OFF..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:3219
 msgid "Toggle the Transport"
-msgstr ""
+msgstr "録音再生のトグル"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:3302
 #: ../src/gui/general/EditViewBase.cpp:487
@@ -6203,7 +6203,7 @@ msgid ""
 "_n: 1 Input\n"
 "%n Inputs"
 msgstr ""
-"1 入力\n"
+"_n:1 入力\n"
 "%n 入力"
 
 #: ../src/gui/studio/AudioMixerWindow.cpp:190
@@ -6216,7 +6216,7 @@ msgid ""
 "_n: 1 Submaster\n"
 "%n Submasters"
 msgstr ""
-"1 サブマスタ\n"
+"_n:1 サブマスタ\n"
 "%n サブマスタ"
 
 #: ../src/gui/studio/AudioMixerWindow.cpp:275
@@ -6486,7 +6486,7 @@ msgid ""
 "_n: %1 on 1 track\n"
 "%1 on %n tracks"
 msgstr ""
-"%1 上の 1 トラック\n"
+"_n:%1 上の 1 トラック\n"
 "%1 上の %n トラック"
 
 #: ../src/gui/editors/segment/TriggerSegmentManager.cpp:284
@@ -7309,8 +7309,6 @@ msgid ""
 "_n:   1 event selected \n"
 "  %n events selected "
 msgstr ""
-"  1イベントを選択\n"
-"  %nイベントを選択 "
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:1232
 #: ../src/gui/editors/notation/NotationView.cpp:2998
@@ -7852,7 +7850,7 @@ msgid ""
 "_n: 1 pixel\n"
 "%n pixels"
 msgstr ""
-"1 ピクセル\n"
+"_n:1 ピクセル\n"
 "%n ピクセル"
 
 #: ../src/gui/editors/notation/NotationView.cpp:2386
@@ -9103,11 +9101,11 @@ msgstr "Rosegardenファイルがオープンできない"
 
 #: ../src/document/RosegardenGUIDoc.cpp:621
 msgid "Error when parsing file '%1': \"%2\""
-msgstr ""
+msgstr "'%1': \"%2\"を解釈中にエラー"
 
 #: ../src/document/RosegardenGUIDoc.cpp:669
 msgid "Generating audio previews..."
-msgstr ""
+msgstr "オーディオプレビューを生成中..."
 
 #: ../src/document/RosegardenGUIDoc.cpp:701
 msgid "Merge"
@@ -9126,6 +9124,10 @@ msgid ""
 "to load this complete composition.</p><p><b>WARNING:</b> If you re-save this "
 "composition, all audio and plugin data and settings in it will be lost.</p>"
 msgstr ""
+"<h3>オーディオとプラグインが無効 </h3><p>このcompositionはオーディオファイルかプラグインを使うが、Rosegardenは、起動時にJACKオーディオサーバが無効だったため、現在オーディオ機能なしで動いている。</p> "
+"<p>この完全なcompositionをロードしたいならば、Rosegardenをいったん終了し、JACKオーディオサーバ "
+"を開始し、Rosegardenを再起動する。</p> "
+"<p><b>警告:</b>もしもこのcompositionを再セーブするならば、すべてのオーディオとプラグインデータと設定はなくなる。</p>"
 
 #: ../src/document/RosegardenGUIDoc.cpp:1533
 msgid ""
@@ -9135,6 +9137,9 @@ msgid ""
 "from this version of Rosegarden, all audio and plugin data and settings in "
 "it will be lost.</p>"
 msgstr ""
+"<h3>オーディオとプラグインが無効</h3><p>この compositionはオーディオファイルかプラグインを使うが、オーディオサポートなしでコンパイルされたバージョンのRosegardenを動作させている。</p> "
+"<p><b>警告:</b>もしもこのcompositionをこのバージョンの "
+"Rosegardenから再セーブするなら、すべてのオーディオとプラグインデータはなくなる。</p>"
 
 #: ../src/document/RosegardenGUIDoc.cpp:1570
 msgid ""
@@ -9166,10 +9171,12 @@ msgid ""
 "<h3>Plugins not found</h3><p>The following audio plugins could not be loaded:"
 "</p><ul>"
 msgstr ""
+"<h3>プラグインが見つからない</h3><p>以下のオーディオプラグインがロードできなかった:"
+"</p><ul>"
 
 #: ../src/document/RosegardenGUIDoc.cpp:1603
 msgid "<li>%1 (from %2)</li>"
-msgstr ""
+msgstr "<li>%1 (%2から)</li>"
 
 #: ../src/document/RosegardenGUIDoc.cpp:1617
 msgid ""
@@ -9247,7 +9254,7 @@ msgstr "時間ツールバー"
 #: rc.cpp:12 rc.cpp:24 rc.cpp:38 rc.cpp:42 rc.cpp:84 rc.cpp:172 rc.cpp:240
 #, no-c-format
 msgid "Transport Toolbar"
-msgstr "移調ツールバー"
+msgstr "録音再生ツールバー"
 
 #: rc.cpp:16 rc.cpp:28 rc.cpp:86 rc.cpp:244
 #, no-c-format
@@ -9257,17 +9264,17 @@ msgstr "ズームツールバー"
 #: rc.cpp:30 rc.cpp:40 rc.cpp:70 rc.cpp:162 rc.cpp:230
 #, no-c-format
 msgid "T&ransport"
-msgstr "移調(&r)"
+msgstr "録音と再生(&r)"
 
 #: rc.cpp:34
 #, no-c-format
 msgid "Number of Stereo &Inputs"
-msgstr ""
+msgstr "ステレオ入力の数(&I)"
 
 #: rc.cpp:36
 #, no-c-format
 msgid "&Number of Submasters"
-msgstr ""
+msgstr "サブマスタの数(&N)"
 
 #: rc.cpp:44
 #, no-c-format
@@ -9317,7 +9324,7 @@ msgstr "トラック(&k)"
 #: rc.cpp:64
 #, no-c-format
 msgid "Set &Instrument"
-msgstr ""
+msgstr "インスツルメントの設定(&I)"
 
 #: rc.cpp:68 rc.cpp:150 rc.cpp:226
 #, no-c-format
@@ -9602,7 +9609,7 @@ msgstr "ループ"
 #: rc.cpp:283
 #, no-c-format
 msgid "Turn on and off the loop markers (if set)"
-msgstr ""
+msgstr "ループマーカのON/OFF(設定されているならば)"
 
 #: rc.cpp:288
 #, no-c-format
@@ -9612,12 +9619,12 @@ msgstr "現在選択されたトラック以外をミュート"
 #: rc.cpp:291
 #, no-c-format
 msgid "Start loop or range here"
-msgstr ""
+msgstr "ここからループまたはレンジの開始"
 
 #: rc.cpp:294
 #, no-c-format
 msgid "End loop or range here"
-msgstr ""
+msgstr "ここでループまたはレンジの終了"
 
 #: rc.cpp:296
 #, no-c-format
