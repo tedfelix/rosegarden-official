@@ -38,7 +38,7 @@
 
     <p>Please consult your distribution's documentation for more
     details, and check that your distribution provides the latest
-    available version (currently Rosegarden-1.4.0) before installing.</p>
+    available version (currently Rosegarden-1.5.0) before installing.</p>
 
     <h3>Studio to Go!</h3>
 
@@ -67,9 +67,9 @@
     <ul><li><a href="http://sourceforge.net/"><img align="right"
 src="http://sourceforge.net/sflogo.php?group_id=4932&type=1"
 width="88" height="31" border="0" alt="SourceForge.net Logo"/></a><a
-href="http://sourceforge.net/project/showfiles.php?group_id=4932&release_id=448654">Rosegarden
-release 1.4.0 source code</a>, 19th September 2006, for download from the
-SourceForge page. <i>(<a href="http://sourceforge.net/project/shownotes.php?release_id=448654&group_id=4932">release note</a>)</i></li></ul>
+href="http://sourceforge.net/project/showfiles.php?group_id=4932&package_id=4959&release_id=484262">Rosegarden
+release 1.5.0 source code</a>, 6th February 2007, for download from the
+SourceForge page. <i>(<a href="http://sourceforge.net/project/shownotes.php?release_id=484262&group_id=4932">release note</a>)</i></li></ul>
 
     <h3>Development code from Subversion</h3>
 
