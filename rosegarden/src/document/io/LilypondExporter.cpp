@@ -376,10 +376,6 @@ LilypondExporter::write()
 
     switch (m_languageLevel) {
 
-        // 0 -> Lilypond 2.6
-        // 1 -> Lilypond 2.8
-        // 2 -> Lilypond 2.10
-
     case 0:
         str << "\\version \"2.6.0\"" << std::endl;
         break;
@@ -390,6 +386,10 @@ LilypondExporter::write()
 
     case 2:
         str << "\\version \"2.10.0\"" << std::endl;
+        break;
+
+    case 3:
+        str << "\\version \"2.12.0\"" << std::endl;
         break;
 
     default:
