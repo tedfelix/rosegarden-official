@@ -156,8 +156,15 @@ echo "LilyPond version is $lilypond_version, file version is $fileversion"
 	cat </dev/null >"$logfile"
 
 	if [ -n "$convert" ]; then
-	    echo "File version is $fileversion against LilyPond version $version -- converting..." 1>&2
+	    echo "File version is $fileversion against LilyPond version $lilypond_version -- converting..." 1>&2
 	    for srcfile in "$base" $includes; do
+	        if [ ! -f "$srcfile" ]; then continue; fi
+		case "$fileversion" in
+		    1.*|2.[012345].*)
+		    	grep -v override-auto-beam-setting "$srcfile" > "${srcfile}_tmp"
+			mv "${srcfile}_tmp" "$srcfile"
+			;;
+		esac
 		if [ -n "$graphical" ]; then
 		    convert-ly "$srcfile" > "${srcfile}_converted" 2> "$logfile" && mv "${srcfile}_converted" "$srcfile"
 		else
