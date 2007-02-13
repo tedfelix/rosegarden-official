@@ -81,8 +81,19 @@ JackDriver::~JackDriver()
 
     m_ok = false; // prevent any more work in process()
 
+    if (m_client) {
 #ifdef DEBUG_JACK_DRIVER
+        std::cerr << "JackDriver::shutdown - deactivating JACK client"
+        << std::endl;
+#endif
 
+        if (jack_deactivate(m_client)) {
+            std::cerr << "JackDriver::shutdown - deactivation failed"
+            << std::endl;
+        }
+    }
+
+#ifdef DEBUG_JACK_DRIVER
     std::cerr << "JackDriver::~JackDriver: terminating buss mixer" << std::endl;
 #endif
 
@@ -92,7 +103,6 @@ JackDriver::~JackDriver()
         bussMixer->terminate();
 
 #ifdef DEBUG_JACK_DRIVER
-
     std::cerr << "JackDriver::~JackDriver: terminating instrument mixer" << std::endl;
 #endif
 
@@ -113,7 +123,6 @@ JackDriver::~JackDriver()
         reader->terminate();
 
 #ifdef DEBUG_JACK_DRIVER
-
     std::cerr << "JackDriver::~JackDriver: terminating file writer" << std::endl;
 #endif
 
@@ -123,15 +132,12 @@ JackDriver::~JackDriver()
         writer->terminate();
 
     if (m_client) {
+
 #ifdef DEBUG_JACK_DRIVER
-        std::cerr << "JackDriver::shutdown - closing JACK client"
+        std::cerr << "JackDriver::shutdown - tearing down JACK client"
         << std::endl;
 #endif
 
-        if (jack_deactivate(m_client)) {
-            std::cerr << "JackDriver::shutdown - deactivation failed"
-            << std::endl;
-        }
         for (unsigned int i = 0; i < m_inputPorts.size(); ++i) {
 #ifdef DEBUG_JACK_DRIVER
             std::cerr << "unregistering input " << i << std::endl;
