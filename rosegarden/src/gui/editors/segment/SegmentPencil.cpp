@@ -193,7 +193,7 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent* e)
                             (segment->getStartTime()));
             break;
         case GuitarClef:
-            segment->insert(Clef(Clef::Treble, -2).getAsEvent
+            segment->insert(Clef(Clef::Treble, -1).getAsEvent
                             (segment->getStartTime()));
             break;
         case ContrabassClef:

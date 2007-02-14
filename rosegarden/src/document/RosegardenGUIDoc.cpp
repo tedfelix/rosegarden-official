@@ -2469,7 +2469,7 @@ RosegardenGUIDoc::addRecordMIDISegment(TrackId tid)
     case BassClef:       clef = Clef(Clef::Bass);        break;
     case CrotalesClef:   clef = Clef(Clef::Treble, 2);   break;
     case XylophoneClef:  clef = Clef(Clef::Treble, 1);   break;
-    case GuitarClef:     clef = Clef(Clef::Treble, -2);  break;
+    case GuitarClef:     clef = Clef(Clef::Treble, -1);  break;
     case ContrabassClef: clef = Clef(Clef::Bass, -1);    break;
     case CelestaClef:    clef = Clef(Clef::Bass, 2);     break;
     case OldCelestaClef: clef = Clef(Clef::Bass, 1);     break;
