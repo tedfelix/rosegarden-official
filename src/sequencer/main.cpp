@@ -55,30 +55,14 @@ static KCmdLineOptions options[] =
         { 0, 0, 0 }
     };
 
-static void
-cleanup()
-{
-    RosegardenSequencerApp *tmpRoseSeq = roseSeq;
-
-    if (roseSeq) {
-        roseSeq = 0;
-        delete tmpRoseSeq;
-    }
-}
-
-static bool _mainThread = false; // set true later
 static bool _exiting = false;
 static sigset_t _signals;
 
 static void
 signalHandler(int /*sig*/)
 {
-    if (_mainThread) {
-        _exiting = true;
-        cleanup();
-        SEQUENCER_DEBUG << "Is that the time!?" << endl;
-        exit(0);
-    }
+    _exiting = true;
+    std::cerr << "Is that the time!?" << endl;
 }
 
 int main(int argc, char *argv[])
@@ -149,11 +133,10 @@ int main(int argc, char *argv[])
     //
     TransportStatus lastSeqStatus = roseSeq->getStatus();
 
-    _mainThread = true;
-
     RealTime sleepTime = RealTime(0, 10000000);
 
     while (!_exiting && roseSeq && roseSeq->getStatus() != QUIT) {
+
         bool atLeisure = true;
 
         switch (roseSeq->getStatus()) {
@@ -255,9 +238,9 @@ int main(int argc, char *argv[])
             roseSeq->sleep(sleepTime);
     }
 
-    int rv = app.exec();
-    cleanup();
-    SEQUENCER_DEBUG << "Toodle-pip." << endl;
-    return rv;
+    delete roseSeq;
+
+    std::cerr << "Toodle-pip." << endl;
+    return 0;
 }
 

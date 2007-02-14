@@ -90,7 +90,7 @@ JackDriver::~JackDriver()
         if (jack_deactivate(m_client)) {
             std::cerr << "JackDriver::shutdown - deactivation failed"
             << std::endl;
-        }
+	}
     }
 
 #ifdef DEBUG_JACK_DRIVER

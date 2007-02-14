@@ -145,7 +145,6 @@ AlsaDriver::shutdown()
 #endif
 
 #ifdef HAVE_LIBJACK
-
     delete m_jackDriver;
     m_jackDriver = 0;
 #endif

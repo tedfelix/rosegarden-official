@@ -138,6 +138,8 @@ RosegardenSequencerApp::~RosegardenSequencerApp()
 void
 RosegardenSequencerApp::quit()
 {
+    std::cerr << "RosegardenSequencerApp::quit()" << std::endl;
+
     close();
 
     // and break out of the loop next time around
