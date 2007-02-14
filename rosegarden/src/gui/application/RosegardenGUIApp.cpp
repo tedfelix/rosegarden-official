@@ -506,6 +506,8 @@ RosegardenGUIApp::~RosegardenGUIApp()
 
     if (isSequencerRunning() && !isSequencerExternal()) {
         m_sequencerProcess->blockSignals(true);
+        rgapp->sequencerSend("quit()");
+        usleep(300000);
         delete m_sequencerProcess;
     }
 
