@@ -934,7 +934,7 @@ LilypondExporter::write()
 		// Sync the code below with LyricEditDialog::unparse() !!
 		//
                 if (m_exportLyrics) {
-		    QString text;
+		    QString text = "";
 		
 		    timeT lastTime = (*i)->getStartTime();
 		    int lastBarNo = m_composition->getBarNumber(lastTime);
