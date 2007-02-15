@@ -1563,6 +1563,13 @@ void NotationView::setupActions()
                                   actionCollection(), "treble_clef");
     noteAction->setExclusiveGroup("notes");
 
+    // Mezzosoprano
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("clef-mezzosoprano")));
+    noteAction = new KRadioAction(i18n("&Mezzosoprano Clef"), icon, 0, this,
+                                  SLOT(slotMezzosopranoClef()),
+                                  actionCollection(), "mezzosoprano_clef");
+    noteAction->setExclusiveGroup("notes");
+
     // Alto
     icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("clef-alto")));
     noteAction = new KRadioAction(i18n("&Alto Clef"), icon, 0, this,
@@ -6323,6 +6330,16 @@ void NotationView::slotTrebleClef()
     setTool(m_toolBox->getTool(ClefInserter::ToolName));
 
     dynamic_cast<ClefInserter*>(m_tool)->setClef(Clef::Treble);
+    setMenuStates();
+}
+
+void NotationView::slotMezzosopranoClef()
+{
+    m_currentNotePixmap->setPixmap
+        (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("clef-mezzosoprano")));
+    setTool(m_toolBox->getTool(ClefInserter::ToolName));
+
+    dynamic_cast<ClefInserter*>(m_tool)->setClef(Clef::Mezzosoprano);
     setMenuStates();
 }
 

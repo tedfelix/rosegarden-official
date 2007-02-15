@@ -34,6 +34,7 @@ enum { TrebleClef,                      // G clef, line 2
        CelestaClef,                     // F clef, line 4, 15 above
        OldCelestaClef,                  // F clef, line 4,  8 above
        SopranoClef,                     // C clef, line 1            
+       MezzosopranoClef,                // C clef, line 2            
        AltoClef,                        // C clef, line 3
        TenorClef,                       // C clef, line 4
        BaritoneClef,                    // C clef, line 5

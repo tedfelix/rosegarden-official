@@ -249,6 +249,8 @@ ClefDialog::redrawClefPixmap()
         name = name.arg(i18n("Treble"));
     else if (type == Clef::Soprano)
         name = name.arg(i18n("Soprano"));
+    else if (type == Clef::Mezzosoprano)
+        name = name.arg(i18n("Mezzosoprano"));
     else if (type == Clef::Alto)
         name = name.arg(i18n("Alto"));
     else if (type == Clef::Tenor)

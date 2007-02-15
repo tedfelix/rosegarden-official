@@ -212,6 +212,10 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent* e)
             segment->insert(Clef(Clef::Soprano).getAsEvent
                             (segment->getStartTime()));
             break;
+        case MezzosopranoClef:
+            segment->insert(Clef(Clef::Mezzosoprano).getAsEvent
+                            (segment->getStartTime()));
+            break;
         case AltoClef:
             segment->insert(Clef(Clef::Alto).getAsEvent
                             (segment->getStartTime()));
