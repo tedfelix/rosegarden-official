@@ -338,8 +338,9 @@
       <Menu noMerge="1" name="Clefs">
 	    <text>&amp;Clefs</text>
 	    <Action name="treble_clef" />
-	    <Action name="tenor_clef" />
 	    <Action name="alto_clef" />
+	    <Action name="tenor_clef" />
+	    <Action name="baritone_clef" />
 	    <Action name="bass_clef" />
       </Menu>
   </Menu>
@@ -514,8 +515,9 @@
   <text>Clefs Toolbar</text>
 
   <Action name="treble_clef" />
-  <Action name="tenor_clef" />
   <Action name="alto_clef" />
+  <Action name="tenor_clef" />
+  <Action name="baritone_clef" />
   <Action name="bass_clef" />
 </ToolBar>
 

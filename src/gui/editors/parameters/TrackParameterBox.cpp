@@ -236,6 +236,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     m_defClef->insertItem(i18n("soprano"), SopranoClef);
     m_defClef->insertItem(i18n("alto"), AltoClef);
     m_defClef->insertItem(i18n("tenor"), TenorClef);
+    m_defClef->insertItem(i18n("baritone"), BaritoneClef);
     /*  clef types in the datbase that are not yet supported must be ignored for
      *  now:
         m_defClef->insertItem(i18n("two bar"), TwoBarClef); */

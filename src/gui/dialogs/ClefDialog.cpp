@@ -253,6 +253,8 @@ ClefDialog::redrawClefPixmap()
         name = name.arg(i18n("Alto"));
     else if (type == Clef::Tenor)
         name = name.arg(i18n("Tenor"));
+    else if (type == Clef::Baritone)
+        name = name.arg(i18n("Baritone"));
     else if (type == Clef::Bass)
         name = name.arg(i18n("Bass"));
 

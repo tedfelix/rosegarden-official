@@ -185,6 +185,8 @@ PresetGroup::startElement(const QString &, const QString &,
                 m_elClef = AltoClef;
             else if (s == "tenor")
                 m_elClef = TenorClef;
+            else if (s == "baritone")
+                m_elClef = BaritoneClef;
             else if (s == "two-bar")
                 m_elClef = TwoBarClef;
             else {

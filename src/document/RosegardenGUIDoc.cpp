@@ -2476,6 +2476,7 @@ RosegardenGUIDoc::addRecordMIDISegment(TrackId tid)
     case SopranoClef:    clef = Clef(Clef::Soprano);     break;
     case AltoClef:       clef = Clef(Clef::Alto);        break;
     case TenorClef:      clef = Clef(Clef::Tenor);       break;
+    case BaritoneClef:   clef = Clef(Clef::Baritone);    break;
     default:             clef = Clef(Clef::Treble);      break;
     }
 
