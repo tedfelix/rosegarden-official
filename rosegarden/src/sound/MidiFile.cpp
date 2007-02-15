@@ -1466,7 +1466,7 @@ MidiFile::convertToMidi(Composition &comp)
 
 	// Fix #1602023, map Rosegarden tracks to MIDI tracks, instead of
 	// putting each segment out on a new track
-	trackNumber = track->getPosition();
+	trackNumber = track->getPosition() + 1;
 
         if (track->isMuted())
             continue;
@@ -1811,7 +1811,7 @@ MidiFile::convertToMidi(Composition &comp)
 
     // Setup number of tracks in the daddy object
     //
-    m_numberOfTracks = trackNumber;
+    m_numberOfTracks = trackNumber + 1;
 
 
     // Now gnash through the MIDI events and turn the absolute times
