@@ -1563,6 +1563,13 @@ void NotationView::setupActions()
                                   actionCollection(), "treble_clef");
     noteAction->setExclusiveGroup("notes");
 
+    // Alto
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("clef-alto")));
+    noteAction = new KRadioAction(i18n("&Alto Clef"), icon, 0, this,
+                                  SLOT(slotAltoClef()),
+                                  actionCollection(), "alto_clef");
+    noteAction->setExclusiveGroup("notes");
+
     // Tenor
     icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("clef-tenor")));
     noteAction = new KRadioAction(i18n("Te&nor Clef"), icon, 0, this,
@@ -1570,11 +1577,11 @@ void NotationView::setupActions()
                                   actionCollection(), "tenor_clef");
     noteAction->setExclusiveGroup("notes");
 
-    // Alto
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("clef-alto")));
-    noteAction = new KRadioAction(i18n("&Alto Clef"), icon, 0, this,
-                                  SLOT(slotAltoClef()),
-                                  actionCollection(), "alto_clef");
+    // Baritone
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("clef-baritone")));
+    noteAction = new KRadioAction(i18n("Ba&ritone Clef"), icon, 0, this,
+                                  SLOT(slotBaritoneClef()),
+                                  actionCollection(), "baritone_clef");
     noteAction->setExclusiveGroup("notes");
 
     // Bass
@@ -6319,6 +6326,16 @@ void NotationView::slotTrebleClef()
     setMenuStates();
 }
 
+void NotationView::slotAltoClef()
+{
+    m_currentNotePixmap->setPixmap
+        (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("clef-alto")));
+    setTool(m_toolBox->getTool(ClefInserter::ToolName));
+
+    dynamic_cast<ClefInserter*>(m_tool)->setClef(Clef::Alto);
+    setMenuStates();
+}
+
 void NotationView::slotTenorClef()
 {
     m_currentNotePixmap->setPixmap
@@ -6329,13 +6346,13 @@ void NotationView::slotTenorClef()
     setMenuStates();
 }
 
-void NotationView::slotAltoClef()
+void NotationView::slotBaritoneClef()
 {
     m_currentNotePixmap->setPixmap
-        (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("clef-alto")));
+        (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("clef-baritone")));
     setTool(m_toolBox->getTool(ClefInserter::ToolName));
 
-    dynamic_cast<ClefInserter*>(m_tool)->setClef(Clef::Alto);
+    dynamic_cast<ClefInserter*>(m_tool)->setClef(Clef::Baritone);
     setMenuStates();
 }
 

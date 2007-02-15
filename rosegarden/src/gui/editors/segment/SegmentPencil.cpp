@@ -220,6 +220,10 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent* e)
             segment->insert(Clef(Clef::Tenor).getAsEvent
                             (segment->getStartTime()));
             break;
+        case BaritoneClef:
+            segment->insert(Clef(Clef::Baritone).getAsEvent
+                            (segment->getStartTime()));
+            break;
         default:
             segment->insert(Clef(Clef::Treble).getAsEvent
                             (segment->getStartTime()));

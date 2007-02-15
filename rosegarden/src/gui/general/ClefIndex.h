@@ -36,6 +36,7 @@ enum { TrebleClef,                      // G clef, line 2
        SopranoClef,                     // C clef, line 1            
        AltoClef,                        // C clef, line 3
        TenorClef,                       // C clef, line 4
+       BaritoneClef,                    // C clef, line 5
        TwoBarClef                       // percussion clef  //!!! doesn't exist yet!
      };
 

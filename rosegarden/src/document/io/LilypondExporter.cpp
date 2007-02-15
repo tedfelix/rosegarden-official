@@ -1489,10 +1489,12 @@ LilypondExporter::writeBar(Segment *s,
                     str << "treble";
                 } else if (clef.getClefType() == Clef::Soprano) {
                     str << "soprano";
-                } else if (clef.getClefType() == Clef::Tenor) {
-                    str << "tenor";
                 } else if (clef.getClefType() == Clef::Alto) {
                     str << "alto";
+                } else if (clef.getClefType() == Clef::Tenor) {
+                    str << "tenor";
+                } else if (clef.getClefType() == Clef::Baritone) {
+                    str << "baritone";
                 } else if (clef.getClefType() == Clef::Bass) {
                     str << "bass";
                 }
