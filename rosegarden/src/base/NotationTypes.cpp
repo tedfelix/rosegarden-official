@@ -260,6 +260,7 @@ const PropertyName Clef::ClefPropertyName = "clef";
 const PropertyName Clef::OctaveOffsetPropertyName = "octaveoffset";
 const string Clef::Treble = "treble";
 const string Clef::Soprano = "soprano";
+const string Clef::Mezzosoprano = "mezzosoprano";
 const string Clef::Alto = "alto";
 const string Clef::Tenor = "tenor";
 const string Clef::Baritone = "baritone";
@@ -281,7 +282,7 @@ Clef::Clef(const Event &e) :
     std::string s;
     e.get<String>(ClefPropertyName, s);
 
-    if (s != Treble && s != Soprano && s != Alto && s != Tenor && s != Baritone && s != Bass) {
+    if (s != Treble && s != Soprano && s != Mezzosoprano && s != Alto && s != Tenor && s != Baritone && s != Bass) {
 	std::cerr << BadClefName("No such clef as \"" + s + "\"").getMessage()
 		  << std::endl;
 	    return;
@@ -297,7 +298,7 @@ Clef::Clef(const Event &e) :
 Clef::Clef(const std::string &s, int octaveOffset)
     // throw (BadClefName)
 {
-    if (s != Treble && s != Soprano && s != Alto && s != Tenor && s != Baritone && s != Bass) {
+    if (s != Treble && s != Soprano && s != Mezzosoprano && s != Alto && s != Tenor && s != Baritone && s != Bass) {
         throw BadClefName("No such clef as \"" + s + "\"");
     }
     m_clef = s;
@@ -319,7 +320,7 @@ bool Clef::isValid(const Event &e)
 
     std::string s;
     e.get<String>(ClefPropertyName, s);
-    if (s != Treble && s != Soprano && s != Alto && s != Tenor && s != Baritone && s != Bass) return false;
+    if (s != Treble && s != Soprano && s != Mezzosoprano && s != Alto && s != Tenor && s != Baritone && s != Bass) return false;
 
     return true;
 }
@@ -341,6 +342,7 @@ int Clef::getPitchOffset() const
 {
     if (m_clef == Treble) return 0;
     else if (m_clef == Soprano) return -5;
+    else if (m_clef == Mezzosoprano) return -3;
     else if (m_clef == Alto) return -1;
     else if (m_clef == Tenor) return 1;
     else if (m_clef == Baritone) return 3;
@@ -351,6 +353,7 @@ int Clef::getAxisHeight() const
 {
     if (m_clef == Treble) return 2;		
     else if (m_clef == Soprano) return 0;	
+    else if (m_clef == Mezzosoprano) return 2;	
     else if (m_clef == Alto) return 4;		
     else if (m_clef == Tenor) return 6;		
     else if (m_clef == Baritone) return 8;		
@@ -365,6 +368,7 @@ Clef::getClefs()
     clefs.push_back(Clef(Baritone));
     clefs.push_back(Clef(Tenor));
     clefs.push_back(Clef(Alto));
+    clefs.push_back(Clef(Mezzosoprano));
     clefs.push_back(Clef(Soprano));
     clefs.push_back(Clef(Treble));
     return clefs;

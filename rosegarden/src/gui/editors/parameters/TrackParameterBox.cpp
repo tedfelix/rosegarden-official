@@ -234,6 +234,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     m_defClef->insertItem(i18n("celesta"), CelestaClef);
     m_defClef->insertItem(i18n("old celesta"), OldCelestaClef);
     m_defClef->insertItem(i18n("soprano"), SopranoClef);
+    m_defClef->insertItem(i18n("mezzosoprano"), MezzosopranoClef);
     m_defClef->insertItem(i18n("alto"), AltoClef);
     m_defClef->insertItem(i18n("tenor"), TenorClef);
     m_defClef->insertItem(i18n("baritone"), BaritoneClef);

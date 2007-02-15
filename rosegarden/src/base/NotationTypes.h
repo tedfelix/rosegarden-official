@@ -237,6 +237,7 @@ public:
 
     static const std::string Treble;
     static const std::string Soprano;
+    static const std::string Mezzosoprano;
     static const std::string Alto;
     static const std::string Tenor;
     static const std::string Baritone;
@@ -283,7 +284,7 @@ public:
     static bool isValid(const Event &e);
 
     /**
-     * Return the basic clef type (Treble, Soprano, Alto, Tenor, Baritone, Bass)
+     * Return the basic clef type (Treble, Soprano, Mezzosoprano, Alto, Tenor, Baritone, Bass)
      */
     std::string getClefType() const { return m_clef; }
 

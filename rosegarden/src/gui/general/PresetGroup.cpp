@@ -181,6 +181,8 @@ PresetGroup::startElement(const QString &, const QString &,
                 m_elClef = OldCelestaClef;
             else if (s == "soprano")
                 m_elClef = SopranoClef;
+            else if (s == "mezzosoprano")
+                m_elClef = MezzosopranoClef;
             else if (s == "alto")
                 m_elClef = AltoClef;
             else if (s == "tenor")
