@@ -81,15 +81,10 @@ StartupTester::run()
     proc->start(KProcess::Block, KProcess::All);
     if (!proc->normalExit() || proc->exitStatus()) {
         m_haveProjectPackager = false;
-        if (proc->exitStatus() == 255) {
-            // rosegarden-project-package ran but exited with an error code
-            RG_DEBUG << "StartupTester - No project packager available" << endl;
-            m_haveProjectPackager = false;
-            parseStdoutBuffer(m_projectPackagerMissing);
-        } else {
-            // rosegarden-project-package didn't run at all, most likely because of a Perl-related problem
-            // don't do anything
-        }
+        // rosegarden-project-package ran but exited with an error code
+        RG_DEBUG << "StartupTester - No project packager available" << endl;
+        m_haveProjectPackager = false;
+        parseStdoutBuffer(m_projectPackagerMissing);
     } else {
         RG_DEBUG << "StartupTester - Project packager OK" << endl;
         m_haveProjectPackager = true;
