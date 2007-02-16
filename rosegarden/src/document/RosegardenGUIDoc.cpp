@@ -2465,20 +2465,20 @@ RosegardenGUIDoc::addRecordMIDISegment(TrackId tid)
 
     // insert an intial clef from track parameters
     switch (track->getClef()) {
-    case TrebleClef:     clef = Clef(Clef::Treble);      break;
-    case BassClef:       clef = Clef(Clef::Bass);        break;
-    case CrotalesClef:   clef = Clef(Clef::Treble, 2);   break;
-    case XylophoneClef:  clef = Clef(Clef::Treble, 1);   break;
-    case GuitarClef:     clef = Clef(Clef::Treble, -1);  break;
-    case ContrabassClef: clef = Clef(Clef::Bass, -1);    break;
-    case CelestaClef:    clef = Clef(Clef::Bass, 2);     break;
-    case OldCelestaClef: clef = Clef(Clef::Bass, 1);     break;
-    case SopranoClef:    clef = Clef(Clef::Soprano);     break;
+    case TrebleClef:       clef = Clef(Clef::Treble);       break;
+    case BassClef:         clef = Clef(Clef::Bass);         break;
+    case CrotalesClef:     clef = Clef(Clef::Treble, 2);    break;
+    case XylophoneClef:    clef = Clef(Clef::Treble, 1);    break;
+    case GuitarClef:       clef = Clef(Clef::Treble, -1);   break;
+    case ContrabassClef:   clef = Clef(Clef::Bass, -1);     break;
+    case CelestaClef:      clef = Clef(Clef::Bass, 2);      break;
+    case OldCelestaClef:   clef = Clef(Clef::Bass, 1);      break;
+    case SopranoClef:      clef = Clef(Clef::Soprano);      break;
     case MezzosopranoClef: clef = Clef(Clef::Mezzosoprano); break;
-    case AltoClef:       clef = Clef(Clef::Alto);        break;
-    case TenorClef:      clef = Clef(Clef::Tenor);       break;
-    case BaritoneClef:   clef = Clef(Clef::Baritone);    break;
-    default:             clef = Clef(Clef::Treble);      break;
+    case AltoClef:         clef = Clef(Clef::Alto);         break;
+    case TenorClef:        clef = Clef(Clef::Tenor);        break;
+    case BaritoneClef:     clef = Clef(Clef::Baritone);     break;
+    default:               clef = Clef(Clef::Treble);       break;
     }
 
     recordMIDISegment->insert(clef.getAsEvent
