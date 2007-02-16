@@ -4,7 +4,7 @@
 if [ "$1" = "--conftest" ]; then
   reqd=
   if ! type -path perl >/dev/null; then
-    reqd="Perl"
+    reqd="Perl 5"
   else
     for x in Getopt::Long File::Copy File::Basename XML::Twig; do
       if ! perl -e "require $x" 2>/dev/null; then
