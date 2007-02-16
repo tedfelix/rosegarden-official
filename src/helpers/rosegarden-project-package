@@ -1,3 +1,24 @@
+#!/bin/bash
+#
+# Check Perl requirements before executing the program proper
+if [ "$1" = "--conftest" ]; then
+  reqd=
+  if ! type -path perl >/dev/null; then
+    reqd="Perl"
+  else
+    for x in Getopt::Long File::Copy File::Basename XML::Twig; do
+      if ! perl -e "require $x" 2>/dev/null; then
+        reqd="$reqd, Perl module $x"
+      fi
+    done
+  fi
+  if [ -n "$reqd" ]; then
+    echo "Required: ${reqd#, }"
+    exit 1
+  fi
+fi
+exec perl -x "$0" "$@"
+
 #!/usr/bin/perl -w
 # -*- cperl-indent-level: 4 -*-
 #
@@ -40,7 +61,7 @@ use File::Copy;
 use File::Basename;
 use Getopt::Long;
 
-print STDERR "Rosegarden Project Packager v0.20 (c) Fervent Software Ltd 2005-2007\n";
+print STDERR "Rosegarden Project Packager v0.25 (c) Fervent Software Ltd 2005-2007\n";
 print STDERR "This program is Free Software under the GNU General Public License.\n";
 
 my $dcop = undef;
