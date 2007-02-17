@@ -259,12 +259,15 @@ const int Clef::EventSubOrdering = -250;
 const PropertyName Clef::ClefPropertyName = "clef";
 const PropertyName Clef::OctaveOffsetPropertyName = "octaveoffset";
 const string Clef::Treble = "treble";
+const string Clef::French = "french";
 const string Clef::Soprano = "soprano";
 const string Clef::Mezzosoprano = "mezzosoprano";
 const string Clef::Alto = "alto";
 const string Clef::Tenor = "tenor";
 const string Clef::Baritone = "baritone";
+const string Clef::Varbaritone = "varbaritone";
 const string Clef::Bass = "bass";
+const string Clef::Subbass = "subbass";
 
 const Clef Clef::DefaultClef = Clef("treble");
 
@@ -282,7 +285,7 @@ Clef::Clef(const Event &e) :
     std::string s;
     e.get<String>(ClefPropertyName, s);
 
-    if (s != Treble && s != Soprano && s != Mezzosoprano && s != Alto && s != Tenor && s != Baritone && s != Bass) {
+    if (s != Treble && s != Soprano && s != French && s != Mezzosoprano && s != Alto && s != Tenor && s != Baritone && s != Bass && s != Varbaritone && s != Subbass) {
 	std::cerr << BadClefName("No such clef as \"" + s + "\"").getMessage()
 		  << std::endl;
 	    return;
@@ -298,7 +301,7 @@ Clef::Clef(const Event &e) :
 Clef::Clef(const std::string &s, int octaveOffset)
     // throw (BadClefName)
 {
-    if (s != Treble && s != Soprano && s != Mezzosoprano && s != Alto && s != Tenor && s != Baritone && s != Bass) {
+    if (s != Treble && s != Soprano && s != French && s != Mezzosoprano && s != Alto && s != Tenor && s != Baritone && s != Bass && s != Varbaritone && s != Subbass) {
         throw BadClefName("No such clef as \"" + s + "\"");
     }
     m_clef = s;
@@ -320,7 +323,7 @@ bool Clef::isValid(const Event &e)
 
     std::string s;
     e.get<String>(ClefPropertyName, s);
-    if (s != Treble && s != Soprano && s != Mezzosoprano && s != Alto && s != Tenor && s != Baritone && s != Bass) return false;
+    if (s != Treble && s != Soprano && s != French && s != Mezzosoprano && s != Alto && s != Tenor && s != Baritone && s != Bass && s != Varbaritone && s != Subbass) return false;
 
     return true;
 }
@@ -333,30 +336,38 @@ int Clef::getTranspose() const
 
 int Clef::getOctave() const
 {
-    if (m_clef == Treble) return 0 + m_octaveOffset;
-    else if (m_clef == Bass) return -2 + m_octaveOffset;
+    if (m_clef == Treble || m_clef == French) return 0 + m_octaveOffset;
+    else if (m_clef == Bass || m_clef == Varbaritone || m_clef == Subbass) return -2 + m_octaveOffset;
     else return -1 + m_octaveOffset;
 }
 
 int Clef::getPitchOffset() const
 {
     if (m_clef == Treble) return 0;
+    else if (m_clef == French) return -2;
     else if (m_clef == Soprano) return -5;
     else if (m_clef == Mezzosoprano) return -3;
     else if (m_clef == Alto) return -1;
     else if (m_clef == Tenor) return 1;
     else if (m_clef == Baritone) return 3;
+    else if (m_clef == Varbaritone) return -4;
+    else if (m_clef == Bass) return -2;
+    else if (m_clef == Subbass) return 0;
     else return -2;
 }
 
 int Clef::getAxisHeight() const
 {
-    if (m_clef == Treble) return 2;		
-    else if (m_clef == Soprano) return 0;	
-    else if (m_clef == Mezzosoprano) return 2;	
-    else if (m_clef == Alto) return 4;		
-    else if (m_clef == Tenor) return 6;		
-    else if (m_clef == Baritone) return 8;		
+    if (m_clef == Treble) return 2;
+    else if (m_clef == French) return 0;
+    else if (m_clef == Soprano) return 0;
+    else if (m_clef == Mezzosoprano) return 2;
+    else if (m_clef == Alto) return 4;
+    else if (m_clef == Tenor) return 6;
+    else if (m_clef == Baritone) return 8;
+    else if (m_clef == Varbaritone) return 4;
+    else if (m_clef == Bass) return 6;		
+    else if (m_clef == Subbass) return 8;		
     else return 6;
 }
 
@@ -365,11 +376,14 @@ Clef::getClefs()
 {
     ClefList clefs;
     clefs.push_back(Clef(Bass));
+    clefs.push_back(Clef(Varbaritone));
+    clefs.push_back(Clef(Subbass));
     clefs.push_back(Clef(Baritone));
     clefs.push_back(Clef(Tenor));
     clefs.push_back(Clef(Alto));
     clefs.push_back(Clef(Mezzosoprano));
     clefs.push_back(Clef(Soprano));
+    clefs.push_back(Clef(French));
     clefs.push_back(Clef(Treble));
     return clefs;
 }

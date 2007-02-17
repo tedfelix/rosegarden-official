@@ -2463,7 +2463,7 @@ RosegardenGUIDoc::addRecordMIDISegment(TrackId tid)
 
     Clef clef;
 
-    // insert an intial clef from track parameters
+    // insert an initial clef from track parameters
     switch (track->getClef()) {
     case TrebleClef:       clef = Clef(Clef::Treble);       break;
     case BassClef:         clef = Clef(Clef::Bass);         break;
@@ -2473,11 +2473,14 @@ RosegardenGUIDoc::addRecordMIDISegment(TrackId tid)
     case ContrabassClef:   clef = Clef(Clef::Bass, -1);     break;
     case CelestaClef:      clef = Clef(Clef::Bass, 2);      break;
     case OldCelestaClef:   clef = Clef(Clef::Bass, 1);      break;
+    case FrenchClef:       clef = Clef(Clef::French);       break;
     case SopranoClef:      clef = Clef(Clef::Soprano);      break;
     case MezzosopranoClef: clef = Clef(Clef::Mezzosoprano); break;
     case AltoClef:         clef = Clef(Clef::Alto);         break;
     case TenorClef:        clef = Clef(Clef::Tenor);        break;
     case BaritoneClef:     clef = Clef(Clef::Baritone);     break;
+    case VarbaritoneClef:  clef = Clef(Clef::Varbaritone);  break;
+    case SubbassClef:      clef = Clef(Clef::Subbass);      break;
     default:               clef = Clef(Clef::Treble);       break;
     }
 

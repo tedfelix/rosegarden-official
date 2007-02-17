@@ -1487,6 +1487,8 @@ LilypondExporter::writeBar(Segment *s,
 
                 if (clef.getClefType() == Clef::Treble) {
                     str << "treble";
+                } else if (clef.getClefType() == Clef::French) {
+                    str << "french";
                 } else if (clef.getClefType() == Clef::Soprano) {
                     str << "soprano";
                 } else if (clef.getClefType() == Clef::Mezzosoprano) {
@@ -1497,8 +1499,12 @@ LilypondExporter::writeBar(Segment *s,
                     str << "tenor";
                 } else if (clef.getClefType() == Clef::Baritone) {
                     str << "baritone";
+                } else if (clef.getClefType() == Clef::Varbaritone) {
+                    str << "varbaritone";
                 } else if (clef.getClefType() == Clef::Bass) {
                     str << "bass";
+                } else if (clef.getClefType() == Clef::Subbass) {
+                    str << "subbass";
                 }
 
                 // Transpose the clef one or two octaves up or down, if specified.

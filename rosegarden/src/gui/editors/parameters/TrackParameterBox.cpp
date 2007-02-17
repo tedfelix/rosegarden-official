@@ -233,11 +233,14 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     m_defClef->insertItem(i18n("contrabass"), ContrabassClef);
     m_defClef->insertItem(i18n("celesta"), CelestaClef);
     m_defClef->insertItem(i18n("old celesta"), OldCelestaClef);
+    m_defClef->insertItem(i18n("french"), FrenchClef);
     m_defClef->insertItem(i18n("soprano"), SopranoClef);
     m_defClef->insertItem(i18n("mezzosoprano"), MezzosopranoClef);
     m_defClef->insertItem(i18n("alto"), AltoClef);
     m_defClef->insertItem(i18n("tenor"), TenorClef);
     m_defClef->insertItem(i18n("baritone"), BaritoneClef);
+    m_defClef->insertItem(i18n("varbaritone"), VarbaritoneClef);
+    m_defClef->insertItem(i18n("subbass"), SubbassClef);
     /*  clef types in the datbase that are not yet supported must be ignored for
      *  now:
         m_defClef->insertItem(i18n("two bar"), TwoBarClef); */
