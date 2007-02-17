@@ -422,10 +422,8 @@ public slots:
 
     /// clef switch slots
     void slotTrebleClef();
-    void slotMezzosopranoClef();
     void slotAltoClef();
     void slotTenorClef();
-    void slotBaritoneClef();
     void slotBassClef();
     
     /// text tool

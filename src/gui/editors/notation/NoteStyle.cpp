@@ -305,9 +305,9 @@ NoteStyle::getClefCharName(const Clef &clef)
 {
     std::string clefType(clef.getClefType());
 
-    if (clefType == Clef::Bass) {
+    if (clefType == Clef::Bass || clefType == Clef::Varbaritone || clefType == Clef::Subbass) {
         return NoteCharacterNames::F_CLEF;
-    } else if (clefType == Clef::Treble) {
+    } else if (clefType == Clef::Treble || clefType == Clef::French) {
         return NoteCharacterNames::G_CLEF;
     } else {
         return NoteCharacterNames::C_CLEF;

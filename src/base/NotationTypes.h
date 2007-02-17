@@ -236,12 +236,15 @@ public:
     typedef Exception BadClefName;
 
     static const std::string Treble;
+    static const std::string French;
     static const std::string Soprano;
     static const std::string Mezzosoprano;
     static const std::string Alto;
     static const std::string Tenor;
     static const std::string Baritone;
+    static const std::string Varbaritone;
     static const std::string Bass;
+    static const std::string Subbass;
 
     /**
      * Construct the default clef (treble).
@@ -284,7 +287,7 @@ public:
     static bool isValid(const Event &e);
 
     /**
-     * Return the basic clef type (Treble, Soprano, Mezzosoprano, Alto, Tenor, Baritone, Bass)
+     * Return the basic clef type (Treble, French, Soprano, Mezzosoprano, Alto, Tenor, Baritone, Varbaritone, Bass, Subbass)
      */
     std::string getClefType() const { return m_clef; }
 

@@ -179,6 +179,8 @@ PresetGroup::startElement(const QString &, const QString &,
                 m_elClef = CelestaClef;
             else if (s == "oldCelesta")
                 m_elClef = OldCelestaClef;
+            else if (s == "french")
+                m_elClef = FrenchClef;
             else if (s == "soprano")
                 m_elClef = SopranoClef;
             else if (s == "mezzosoprano")
@@ -189,6 +191,10 @@ PresetGroup::startElement(const QString &, const QString &,
                 m_elClef = TenorClef;
             else if (s == "baritone")
                 m_elClef = BaritoneClef;
+            else if (s == "varbaritone")
+                m_elClef = VarbaritoneClef;
+            else if (s == "subbass")
+                m_elClef = SubbassClef;
             else if (s == "two-bar")
                 m_elClef = TwoBarClef;
             else {

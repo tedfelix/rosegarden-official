@@ -33,11 +33,14 @@ enum { TrebleClef,                      // G clef, line 2
        ContrabassClef,                  // F clef, line 4,  8 below
        CelestaClef,                     // F clef, line 4, 15 above
        OldCelestaClef,                  // F clef, line 4,  8 above
+       FrenchClef,                      // G clef, line 1
        SopranoClef,                     // C clef, line 1            
        MezzosopranoClef,                // C clef, line 2            
        AltoClef,                        // C clef, line 3
        TenorClef,                       // C clef, line 4
        BaritoneClef,                    // C clef, line 5
+       VarbaritoneClef,                 // F clef, line 3
+       SubbassClef,                     // F clef, line 5
        TwoBarClef                       // percussion clef  //!!! doesn't exist yet!
      };
 
