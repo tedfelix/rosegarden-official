@@ -1060,6 +1060,8 @@ LilypondExporter::calculateDuration(Segment *s,
     RG_DEBUG << "LilypondExporter::calculateDuration: first duration, absTime: "
     << duration << ", " << absTime << endl;
 
+    timeT durationCorrection = 0;
+
     if ((*i)->isa(Note::EventType) || (*i)->isa(Note::EventRestType)) {
         try {
             // tuplet compensation, etc
@@ -1067,13 +1069,15 @@ LilypondExporter::calculateDuration(Segment *s,
                               <Int>(NOTE_TYPE);
             int dots = (*i)->get
                        <Int>(NOTE_DOTS);
-            duration = Note(type, dots).getDuration();
+            durationCorrection = Note(type, dots).getDuration() - duration;
         } catch (Exception e) { // no properties
         }
     }
 
+    duration += durationCorrection;
+
     RG_DEBUG << "LilypondExporter::calculateDuration: now duration is "
-    << duration << endl;
+    << duration << " after correction of " << durationCorrection << endl;
 
     soundingDuration = duration * tupletRatio.first / tupletRatio.second;
 
@@ -1084,7 +1088,7 @@ LilypondExporter::calculateDuration(Segment *s,
         overlong = true;
     }
 
-    RG_DEBUG << "LilypondExporter::calculateDuration: first toNext is "
+    RG_DEBUG << "LilypondExporter::calculateDuration: time to barEnd is "
     << toNext << endl;
 
     // Examine the following event, and truncate our duration
@@ -1118,7 +1122,14 @@ LilypondExporter::calculateDuration(Segment *s,
     }
 
     if (s->isBeforeEndMarker(nextElt)) {
+	RG_DEBUG << "LilypondExporter::calculateDuration: inside conditional " << endl;
         toNext = (*nextElt)->getNotationAbsoluteTime() - absTime;
+	// if the note was lengthened, assume it was lengthened to the left
+	// when truncating to the beginning of the next note
+	if (durationCorrection > 0)
+	{
+	    toNext += durationCorrection;
+	}
         if (soundingDuration > toNext) {
             soundingDuration = toNext;
             duration = soundingDuration * tupletRatio.second / tupletRatio.first;
