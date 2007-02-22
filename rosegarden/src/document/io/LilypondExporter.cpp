@@ -726,16 +726,20 @@ LilypondExporter::write()
                 }
             }
 
+	    // Check whether the track is a non-midi track.
+	    InstrumentId instrumentId = track->getInstrument();
+	    bool isMidiTrack = (instrumentId >= MidiInstrumentBase && instrumentId < SoftSynthInstrumentBase);
     
     	    // The meaning of exportSelection meaning is to export:
     	    // 0 -> All tracks
     	    // 1 -> Non-muted tracks
     	    // 2 -> Selected track
     	    // 3 -> Selected segments
-            if ((m_exportSelection == 0) || 
+            if (isMidiTrack && ( // Skip non-midi tracks.
+		(m_exportSelection == 0) || 
                 ((m_exportSelection == 1) && (!track->isMuted())) ||
                 ((m_exportSelection == 2) && (track->getId() == m_composition->getSelectedTrack())) ||
-                ((m_exportSelection == 3) && (currentSegmentSelected))) {
+                ((m_exportSelection == 3) && (currentSegmentSelected)))) {
                 if ((int) (*i)->getTrack() != lastTrackIndex) {
                     if (lastTrackIndex != -1) {
                         // close the old track (Staff context)
