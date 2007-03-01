@@ -208,8 +208,14 @@ DSSIPluginInstance::getLatency()
 #endif
 
     if (m_latencyPort) {
-        if (!m_run)
+        if (!m_run) {
+            for (int i = 0; i < getAudioInputCount(); ++i) {
+                for (int j = 0; j < m_blockSize; ++j) {
+                    m_inputBuffers[i][j] = 0.f;
+                }
+            }
             run(RealTime::zeroTime);
+	}
 #ifdef DEBUG_DSSI
 
         std::cerr << "DSSIPluginInstance::getLatency(): latency is " << (size_t)(*m_latencyPort + 0.1) << std::endl;

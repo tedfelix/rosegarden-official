@@ -180,8 +180,14 @@ size_t
 LADSPAPluginInstance::getLatency()
 {
     if (m_latencyPort) {
-        if (!m_run)
+        if (!m_run) {
+            for (int i = 0; i < getAudioInputCount(); ++i) {
+                for (int j = 0; j < m_blockSize; ++j) {
+                    m_inputBuffers[i][j] = 0.f;
+                }
+            }
             run(RealTime::zeroTime);
+	}
         return *m_latencyPort;
     }
     return 0;
