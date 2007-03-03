@@ -112,6 +112,8 @@ Heikki Johannes Junes <hjunes@cc.hut.fi>
     * Finnish translation
     * LilyPond 2.x export
     * LilyPond bug fixes/enhancements
+    * Invert, retrograde and retrograde invert functions
+    * Soprano, French violin, etc. clefs in Notation View
 
 Piotr Sawicki <pelle@plusnet.pl>
     * Polish translation
