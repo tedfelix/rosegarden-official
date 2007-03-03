@@ -2164,6 +2164,71 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
 }
 
 QCanvasPixmap*
+NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
+        int octave, int step)
+{
+    Pitch pitch(step, octave, p, 0);
+    Accidental accidental = pitch.getDisplayAccidental(Key("C major"));
+    NotePixmapParameters params(Note::Crotchet, 0, accidental);
+
+    QCanvasPixmap* clefPixmap = makeClefPixmap(clef);
+
+    int lw = getLineSpacing();
+    int width = getClefWidth(Clef::Bass) + 10 * getNoteBodyWidth();
+
+    int h = pitch.getHeightOnStaff
+            (clef,
+             Key("C major"));
+    params.setStemGoesUp(h <= 4);
+
+    if (h < -1)
+        params.setStemLength(lw * (4 - h) / 2);
+    else if (h > 9)
+        params.setStemLength(lw * (h - 4) / 2);
+    if (h > 8)
+        params.setLegerLines(h - 8);
+    else if (h < 0)
+        params.setLegerLines(h);
+
+    params.setIsOnLine(h % 2 == 0);
+    params.setSelected(m_selected);
+
+    QCanvasPixmap *notePixmap = makeNotePixmap(params);
+
+    int pixmapHeight = lw * 12 + 1;
+    int yoffset = lw * 3;
+    if (h > 12) {
+        pixmapHeight += 6 * lw;
+        yoffset += 6 * lw;
+    } else if (h < -4) {
+        pixmapHeight += 6 * lw;
+    }
+
+    createPixmapAndMask(width, pixmapHeight);
+
+    int x =
+        getClefWidth(Clef::Bass) + 5 * getNoteBodyWidth() -
+        getAccidentalWidth(accidental);
+    int y = yoffset + ((8 - h) * lw) / 2 - notePixmap->offsetY();
+    m_p->drawPixmap(x, y, *notePixmap);
+
+    h = clef.getAxisHeight();
+    x = 3 * getNoteBodyWidth();
+    y = yoffset + ((8 - h) * lw) / 2;
+    m_p->drawPixmap(x, y - clefPixmap->offsetY(), *clefPixmap);
+
+    for (h = 0; h <= 8; h += 2) {
+        y = yoffset + ((8 - h) * lw) / 2;
+        m_p->drawLine(x / 2, y, m_generatedWidth - x / 2, y);
+    }
+
+    delete clefPixmap;
+    delete notePixmap;
+
+    return makeCanvasPixmap(m_pointZero);
+}
+
+QCanvasPixmap*
 NotePixmapFactory::makeHairpinPixmap(int length, bool isCrescendo)
 {
     Profiler profiler("NotePixmapFactory::makeHairpinPixmap");

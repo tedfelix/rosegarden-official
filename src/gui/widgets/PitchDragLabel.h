@@ -56,11 +56,16 @@ public:
 
 signals:
     void pitchDragged(int);
+    // pitch, octave, step
+    void pitchDragged(int,int,int);
     void pitchChanged(int); // mouse release
+    // pitch, octave, step
+    void pitchChanged(int,int,int); // mouse release
     void preview(int);
 
 public slots:
     void slotSetPitch(int);
+    void slotSetPitch(int,int,int);
     
 protected:
     virtual void paintEvent(QPaintEvent *);
@@ -70,6 +75,7 @@ protected:
     virtual void wheelEvent(QWheelEvent *e);
 
     void calculatePixmap(bool useSharps) const;
+    void calculatePixmap(int pitch, int octave, int step) const;
 
     mutable QPixmap m_pixmap;
 

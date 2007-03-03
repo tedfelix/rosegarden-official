@@ -44,7 +44,17 @@ class TransposeCommand : public BasicSelectionCommand
 public:
     TransposeCommand(int semitones, EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(semitones), selection, true),
-        m_selection(&selection), m_semitones(semitones) { }
+        m_selection(&selection), m_semitones(semitones), m_diatonic(false) { }
+
+    TransposeCommand(int semitones, int steps, EventSelection &selection) :
+        BasicSelectionCommand(getDiatonicGlobalName(semitones, steps), selection, true),
+        m_selection(&selection), m_semitones(semitones), m_steps(steps), m_diatonic(true) { }
+
+    static QString getDiatonicGlobalName(int semitones = 0, int step = 0) {
+        switch (semitones) {
+        default:  return i18n("&Diatonic transpose...");
+        }
+    }
 
     static QString getGlobalName(int semitones = 0) {
         switch (semitones) {
@@ -62,6 +72,8 @@ protected:
 private:
     EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
     int m_semitones;
+    int m_steps;
+    bool m_diatonic;
 };
 
 

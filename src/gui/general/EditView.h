@@ -173,11 +173,12 @@ public slots:
     void slotRescale();
 
     // transpose
-    void slotTranspose();
     void slotTransposeUp();
     void slotTransposeUpOctave();
     void slotTransposeDown();
     void slotTransposeDownOctave();
+    void slotTranspose();
+    void slotDiatonicTranspose();
 
     // invert
     void slotInvert();

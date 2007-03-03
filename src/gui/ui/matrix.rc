@@ -91,6 +91,7 @@
     <Action name="transpose_down_octave"/>
     <Separator/>
     <Action name="general_transpose"/>
+    <Action name="general_diatonic_transpose"/>
   </Menu>
   <Menu name="Convert">
     <text>Convert</text>
@@ -255,6 +256,7 @@
     <Action name="transpose_up_octave"/>
     <Action name="transpose_down_octave"/>
     <Action name="general_transpose"/>
+    <Action name="general_diatonic_transpose"/>
     <Action name="invert"/>
     <Action name="retrograde"/>
     <Action name="retrograde_invert"/>
