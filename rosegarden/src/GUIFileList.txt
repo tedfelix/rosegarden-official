@@ -415,6 +415,8 @@ SET(gui_SRCS
 	gui/dialogs/ImportDeviceDialog.h
 	gui/dialogs/InterpretDialog.cpp
 	gui/dialogs/InterpretDialog.h
+	gui/dialogs/IntervalDialog.cpp
+	gui/dialogs/IntervalDialog.h
 	gui/dialogs/KeySignatureDialog.cpp
 	gui/dialogs/KeySignatureDialog.h
 	gui/dialogs/LilypondOptionsDialog.cpp
@@ -908,6 +910,8 @@ SET(gui_SRCS
 	gui/widgets/ColourTableItem.h
 	gui/widgets/CurrentProgressDialog.cpp
 	gui/widgets/CurrentProgressDialog.h
+	gui/widgets/DiatonicPitchChooser.cpp
+	gui/widgets/DiatonicPitchChooser.h
 	gui/widgets/Fader.cpp
 	gui/widgets/Fader.h
 	gui/widgets/HSpinBox.cpp

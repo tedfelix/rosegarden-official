@@ -59,6 +59,7 @@ namespace Accidentals
     const Accidental Natural = "natural";
     const Accidental DoubleSharp = "double-sharp";
     const Accidental DoubleFlat = "double-flat";
+    const Accidental UnsupportedAccidental = "(unsupported)";
 
     AccidentalList getStandardAccidentals() {
 
@@ -80,6 +81,16 @@ namespace Accidentals
 	else if (acc == Flat) return -1;
 	else if (acc == DoubleFlat) return -2;
 	else return 0;
+    }
+
+    Accidental getAccidental(int pitchChange) {
+        if (pitchChange == -2) return DoubleFlat;
+        if (pitchChange == -1) return Flat;
+        if (pitchChange == 0) return NoAccidental;
+        if (pitchChange == 1) return Sharp;
+        if (pitchChange == 2) return DoubleSharp;
+
+	return UnsupportedAccidental;
     }
 }
 
@@ -1333,6 +1344,17 @@ Pitch::Pitch(int noteInScale, int octave, const Key &key,
 
     m_pitch += Accidentals::getPitchOffset(m_accidental);
 }
+
+Pitch::Pitch(int noteInCMajor, int octave, int pitch,
+	     int octaveBase) :
+    m_pitch(pitch)
+{
+    static int Cmajor[] = { 0, 2, 4, 5, 7, 9, 11 };
+    
+    int natural = (octave - octaveBase) * 12 + Cmajor[noteInCMajor];
+    m_accidental = Accidentals::getAccidental(pitch - natural);
+}
+
 
 Pitch::Pitch(char noteName, int octave, const Key &key,
 	     const Accidental &explicitAccidental, int octaveBase) :

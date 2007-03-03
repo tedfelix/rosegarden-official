@@ -129,6 +129,10 @@ public:
     QCanvasPixmap* makePitchDisplayPixmap(int pitch,
                                           const Clef &clef,
                                           bool useSharps);
+    QCanvasPixmap* makePitchDisplayPixmap(int pitch,
+                                          const Clef &clef,
+                                          int octave,
+                                          int step);
     QCanvasPixmap* makeClefDisplayPixmap(const Clef &clef);
     QCanvasPixmap* makeKeyDisplayPixmap(const Key &key,
                                        const Clef &clef);

@@ -70,6 +70,7 @@
 #include "EditViewBase.h"
 #include "gui/dialogs/RescaleDialog.h"
 #include "gui/dialogs/TempoDialog.h"
+#include "gui/dialogs/IntervalDialog.h"
 #include "gui/dialogs/TimeSignatureDialog.h"
 #include "gui/rulers/StandardRuler.h"
 #include "gui/kdeext/KTmpStatusMsg.h"
@@ -740,6 +741,10 @@ EditView::setupActions()
     new KAction(TransposeCommand::getGlobalName(0), 0, this,
                 SLOT(slotTranspose()), actionCollection(),
                 "general_transpose");
+
+    new KAction(TransposeCommand::getDiatonicGlobalName(0,0), 0, this,
+                SLOT(slotDiatonicTranspose()), actionCollection(),
+                "general_diatonic_transpose");
 
     new KAction(InvertCommand::getGlobalName(0), 0, this,
                 SLOT(slotInvert()), actionCollection(),
@@ -1440,12 +1445,13 @@ void EditView::slotTranspose()
         return ;
 
     m_config->setGroup(EditViewConfigGroup);
+
     int dialogDefault = m_config->readNumEntry("lasttransposition", 0);
 
     bool ok = false;
     int semitones = QInputDialog::getInteger
                     (i18n("Transpose"),
-                     i18n("Enter the number of semitones to transpose by:"),
+                     i18n("By number of semitones: "),
                      dialogDefault, -127, 127, 1, &ok, this);
     if (!ok || semitones == 0) return;
 
@@ -1455,6 +1461,37 @@ void EditView::slotTranspose()
     KTmpStatusMsg msg(i18n("Transposing..."), this);
     addCommandToHistory(new TransposeCommand
                         (semitones, *m_currentEventSelection));
+}
+
+void EditView::slotDiatonicTranspose()
+{
+    if (!m_currentEventSelection)
+        return ;
+
+    m_config->setGroup(EditViewConfigGroup);
+
+    IntervalDialog intervalDialog(this);
+    int ok = intervalDialog.exec();
+	//int dialogDefault = m_config->readNumEntry("lasttransposition", 0);
+    int semitones = intervalDialog.getChromaticDistance();
+    int steps = intervalDialog.getDiatonicDistance();
+
+    if (!ok || (semitones == 0 && steps == 0)) return;
+
+    m_config->setGroup(EditViewConfigGroup);
+
+    KTmpStatusMsg msg(i18n("Transposing..."), this);
+    if (intervalDialog.getChangeKey())
+    {
+		std::cout << "Transposing changing keys is not currently supported on selections" << std::endl;
+    }
+    else
+    {
+	// Transpose within key
+		//std::cout << "Transposing semitones, steps: " << semitones << ", " << steps << std::endl;
+		addCommandToHistory(new TransposeCommand
+                        (semitones, steps, *m_currentEventSelection));
+    }
 }
 
 void EditView::slotTransposeUp()
