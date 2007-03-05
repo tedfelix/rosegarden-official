@@ -1,0 +1,893 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE rosegarden-data>
+<rosegarden-data>
+<studio thrufilter="0" recordfilter="0">
+<device id="0" name="Casio WK3K" direction="play" variation="" type="midi">
+	<librarian name="Created using ins2rgd.pl" email="rosegarden-devel@lists.sourceforge.net"/>
+	<metronome instrument="0" msb="0" lsb="0" program="0" pitch="37" />
+	<bank name="Advanced Tones-6144" percussion="false" msb="48" lsb="0">
+		<program id="0" name="GRAND PIANO"/>
+		<program id="1" name="BRIGHT PIANO"/>
+		<program id="2" name="ELEC. GRAND PIANO"/>
+		<program id="3" name="HONKY-TONK 1"/>
+		<program id="4" name="ELEC. PIANO 1"/>
+		<program id="5" name="MODERN EP 1"/>
+		<program id="7" name="CLAVI"/>
+		<program id="8" name="CELESTA"/>
+		<program id="9" name="GLOCKENSPIEL"/>
+		<program id="11" name="TREMOLO VIBRAPHONE"/>
+		<program id="12" name="MARIMBA"/>
+		<program id="16" name="DRAWBAR ORGAN 1"/>
+		<program id="17" name="PERC. ORGAN 1"/>
+		<program id="18" name="ROCK ORGAN"/>
+		<program id="19" name="CHURCH ORGAN 1"/>
+		<program id="21" name="ACCORDION"/>
+		<program id="22" name="HARMONICA"/>
+		<program id="23" name="BANDONEON"/>
+		<program id="24" name="NYLON GUITAR"/>
+		<program id="25" name="STEEL GUITAR"/>
+		<program id="26" name="JAZZ GUITAR"/>
+		<program id="27" name="CLEAN GUITAR"/>
+		<program id="28" name="MUTED GUITAR"/>
+		<program id="29" name="OVERDRIVE GUITAR"/>
+		<program id="30" name="DISTORTION GUITAR"/>
+		<program id="32" name="ACOUSTIC BASS"/>
+		<program id="33" name="FINGERED BASS"/>
+		<program id="34" name="PICKED BASS"/>
+		<program id="35" name="FRETLESS BASS"/>
+		<program id="37" name="SLAP BASS"/>
+		<program id="38" name="SAW SYNTH-BASS 1"/>
+		<program id="39" name="SQR SYNTH-BASS 1"/>
+		<program id="40" name="VIOLIN"/>
+		<program id="41" name="VIOLA"/>
+		<program id="42" name="CELLO"/>
+		<program id="45" name="PIZZICATO"/>
+		<program id="46" name="HARP"/>
+		<program id="48" name="STRING ENSEMBLE"/>
+		<program id="49" name="SLOW STRINGS"/>
+		<program id="50" name="SYNTH-STRINGS 1"/>
+		<program id="51" name="RESO SYNTH-STRINGS"/>
+		<program id="53" name="VOICE DOO"/>
+		<program id="54" name="SYNTH-VOICE 1"/>
+		<program id="55" name="ORCHESTRA HIT 1"/>
+		<program id="56" name="TRUMPET 1"/>
+		<program id="57" name="TROMBONE"/>
+		<program id="58" name="TUBA"/>
+		<program id="59" name="MUTE TRUMPET"/>
+		<program id="60" name="FRENCH HORN"/>
+		<program id="61" name="BRASS"/>
+		<program id="62" name="ANALOG BRASS 1"/>
+		<program id="63" name="VINTAGE SYNTH-BRASS"/>
+		<program id="64" name="SOPRANO SAX"/>
+		<program id="65" name="ALTO SAX"/>
+		<program id="66" name="TENOR SAX"/>
+		<program id="67" name="BARITONE SAX"/>
+		<program id="68" name="OBOE"/>
+		<program id="71" name="CLARINET"/>
+		<program id="72" name="PICCOLO"/>
+		<program id="73" name="FLUTE"/>
+		<program id="74" name="RECORDER"/>
+		<program id="75" name="PAN FLUTE"/>
+		<program id="76" name="BOTTLE BLOW"/>
+		<program id="78" name="WHISTLE"/>
+		<program id="80" name="SQUARE LEAD 1"/>
+		<program id="81" name="SAW TOOTH LEAD"/>
+		<program id="82" name="CALLIOPE LEAD"/>
+		<program id="83" name="CHIFF LEAD 1"/>
+		<program id="84" name="CHARANG LEAD"/>
+		<program id="85" name="SOLO VOX"/>
+		<program id="86" name="FIFTH LEAD"/>
+		<program id="87" name="BASS LEAD 1"/>
+		<program id="88" name="FANTASY PAD"/>
+		<program id="89" name="WARM PAD"/>
+		<program id="90" name="POLYSYNTH PAD"/>
+		<program id="91" name="SPACE VOICE 1"/>
+		<program id="92" name="BOWED PAD"/>
+		<program id="93" name="METAL PAD 1"/>
+		<program id="94" name="HALO PAD"/>
+		<program id="95" name="SWEEP PAD"/>
+		<program id="96" name="RAIN PAD"/>
+		<program id="97" name="MOVIE SOUND"/>
+		<program id="98" name="CRYSTAL PAD 1"/>
+		<program id="99" name="ATMOSPHERE PAD"/>
+		<program id="100" name="BRIGHTNESS PAD"/>
+		<program id="101" name="GOBLIN PAD"/>
+		<program id="103" name="STAR THEME"/>
+		<program id="105" name="BANJO"/>
+	</bank>
+
+	<bank name="Advanced Tones-6272" percussion="false" msb="49" lsb="0">
+		<program id="0" name="GRAND PIANO WIDE"/>
+		<program id="5" name="MODERN EP 2"/>
+		<program id="6" name="COUPLED HARPSICHORD"/>
+		<program id="7" name="PULSE CLAVI"/>
+		<program id="8" name="DELAY CELESTA"/>
+		<program id="9" name="DELAY GLOCKENSPIEL"/>
+		<program id="16" name="TREMOLO ORGAN"/>
+		<program id="17" name="70&apos;S ORGAN"/>
+		<program id="18" name="OVD ROCK ORGAN"/>
+		<program id="19" name="CHURCH ORGAN 2"/>
+		<program id="21" name="OCTAVE ACCORDION"/>
+		<program id="22" name="SLOW HARMONICA"/>
+		<program id="23" name="NEO BANDONEON"/>
+		<program id="24" name="UKULELE"/>
+		<program id="25" name="12 STRING GUITAR"/>
+		<program id="27" name="CHORUS CLEAN GUITAR"/>
+		<program id="28" name="MUTED DIST. GUITAR"/>
+		<program id="29" name="OVD FRONT GUITAR"/>
+		<program id="30" name="FEEDBACK GUITAR"/>
+		<program id="32" name="RIDE BASS"/>
+		<program id="33" name="CHORUS FINGERED BASS"/>
+		<program id="34" name="COMP. PICKED BASS"/>
+		<program id="35" name="FLAN. FRETLESS BASS"/>
+		<program id="37" name="MORE SLAP BASS"/>
+		<program id="38" name="RESO. SAW BASS 2"/>
+		<program id="40" name="SLOW VIOLIN"/>
+		<program id="42" name="SLOW CELLO"/>
+		<program id="45" name="PIZZICATO ENSEMBLE"/>
+		<program id="46" name="HARPS"/>
+		<program id="48" name="BRIGHT STRINGS"/>
+		<program id="49" name="CHAMBER"/>
+		<program id="51" name="PHASER SYNTH-STRINGS"/>
+		<program id="53" name="VOICE UUH"/>
+		<program id="54" name="SYNTH-VOICE 2"/>
+		<program id="55" name="BASS HIT"/>
+		<program id="57" name="TROMBONE F"/>
+		<program id="58" name="STACK TUBA"/>
+		<program id="59" name="WAH MUTE TRUMPET"/>
+		<program id="63" name="SLOW SYNTH-BRASS"/>
+		<program id="64" name="MELLOW SOPRANO SAX"/>
+		<program id="65" name="BREATHY ALTO SAX"/>
+		<program id="66" name="BREATHY TENOR SAX"/>
+		<program id="67" name="STACK BARITONE SAX"/>
+		<program id="68" name="SYNTH-OBOE"/>
+		<program id="71" name="VELO. CLARINET"/>
+		<program id="72" name="PICCOLO ENSEMBLE"/>
+		<program id="73" name="VELO. FLUTE"/>
+		<program id="74" name="SYNTH-RECORDER"/>
+		<program id="75" name="SYNTH-PAN FLUTE"/>
+		<program id="78" name="WHISTLES"/>
+		<program id="80" name="SQUARE WAVE 1"/>
+		<program id="82" name="ADVANCED CALLIOPE"/>
+		<program id="83" name="PERC. CHIFF 1"/>
+		<program id="84" name="GT SYNTH-LEAD 1"/>
+		<program id="86" name="HUSKY SAW"/>
+		<program id="88" name="NEW FANTASY"/>
+		<program id="89" name="SINE PAD"/>
+		<program id="90" name="NOISY SAW"/>
+		<program id="91" name="SPACE VOICE 2"/>
+		<program id="92" name="BOTTLE PAD"/>
+		<program id="93" name="METAL VOICE"/>
+		<program id="94" name="BOUNCE PAD"/>
+		<program id="95" name="SLOW SWEEP"/>
+		<program id="96" name="VIBE PAD"/>
+		<program id="99" name="STEEL PAD"/>
+		<program id="100" name="BRIGHTER"/>
+	</bank>
+
+	<bank name="Advanced Tones-6400" percussion="false" msb="50" lsb="0">
+		<program id="0" name="MELLOW PIANO"/>
+		<program id="1" name="STEREO BRIGHT PIANO"/>
+		<program id="2" name="MODERN E.G.PIANO"/>
+		<program id="3" name="2 OCTAVE PIANO"/>
+		<program id="4" name="GLASS E.PIANO"/>
+		<program id="5" name="SOFT E.PIANO"/>
+		<program id="7" name="RESONANCE CLAVI"/>
+		<program id="11" name="VIBRAPHONE"/>
+		<program id="12" name="PHASER MARIMBA"/>
+		<program id="16" name="DRAWBAR ORGAN 2"/>
+		<program id="17" name="JAZZ ORGAN"/>
+		<program id="25" name="CHORUS STEEL GUITAR"/>
+		<program id="26" name="OCT JAZZ GUITAR"/>
+		<program id="27" name="ELEC. GUITAR REAR"/>
+		<program id="29" name="OVD REAR GUITAR"/>
+		<program id="30" name="DISTORTION FRONT GT"/>
+		<program id="38" name="ACID BASS"/>
+		<program id="39" name="RESO. SQR BASS 1"/>
+		<program id="49" name="MELLOW STRINGS"/>
+		<program id="50" name="PURE SYNTH-STRINGS 1"/>
+		<program id="52" name="STEREO CHOIR"/>
+		<program id="53" name="SYNTH-DOO"/>
+		<program id="56" name="TRUMPET P"/>
+		<program id="57" name="VELO. TROMBONE"/>
+		<program id="60" name="OCTAVE FRENCH HORN"/>
+		<program id="61" name="STEREO BRASS"/>
+		<program id="65" name="ALTO SAX FF"/>
+		<program id="66" name="VELO. TENOR SAX"/>
+		<program id="73" name="MELLOW FLUTE"/>
+		<program id="82" name="PIPE LEAD"/>
+		<program id="83" name="CHIFF LEAD 2"/>
+		<program id="84" name="PLUCK LEAD 1"/>
+		<program id="85" name="VOX LEAD 1"/>
+		<program id="86" name="5TH MELLOW"/>
+		<program id="87" name="BASS LEAD 2"/>
+		<program id="89" name="WARM VOX"/>
+		<program id="90" name="ATTACK POLYSYNTH"/>
+		<program id="91" name="COSMIC VOICE"/>
+		<program id="92" name="GLASS PAD"/>
+		<program id="98" name="CRYSTAL PAD 2"/>
+	</bank>
+
+	<bank name="Advanced Tones-6528" percussion="false" msb="51" lsb="0">
+		<program id="0" name="STEREO GRAND PIANO"/>
+		<program id="1" name="MODERN PIANO"/>
+		<program id="3" name="1 OCTAVE PIANO"/>
+		<program id="4" name="60&apos;S E.PIANO"/>
+		<program id="6" name="HARPSICHORD"/>
+		<program id="16" name="ELEC. ORGAN"/>
+		<program id="17" name="PERC. ORGAN 2"/>
+		<program id="19" name="CHAPEL ORGAN"/>
+		<program id="24" name="MELLOW NYLON GUITAR"/>
+		<program id="25" name="ENHANCED STEEL GUITAR"/>
+		<program id="27" name="ELEC. GUITAR FRONT"/>
+		<program id="29" name="AUTO WAH OVERDRIVE GT"/>
+		<program id="30" name="MORE DISTORTION GT"/>
+		<program id="39" name="DISTORTION SQR BASS"/>
+		<program id="48" name="STEREO STRINGS"/>
+		<program id="49" name="ORCHESTRA STRINGS 1"/>
+		<program id="50" name="PURE SYNTH-STRINGS 2"/>
+		<program id="52" name="SYNTH-CHOIR"/>
+		<program id="54" name="BLOW VOICE"/>
+		<program id="56" name="VELO. TRUMPET"/>
+		<program id="57" name="TROMBONE SECTION"/>
+		<program id="61" name="BRASS + SYNTH"/>
+		<program id="62" name="DEEP SYNTH-BRASS 1"/>
+		<program id="63" name="SOFT SYNTH-BRASS"/>
+		<program id="65" name="VELO. ALTO SAX"/>
+		<program id="66" name="TENOR SAXYS"/>
+		<program id="73" name="OCTAVE FLUTE"/>
+		<program id="80" name="SQUARE LEAD 2"/>
+		<program id="81" name="DETUNED SAW"/>
+		<program id="84" name="PLUCK LEAD 2"/>
+		<program id="86" name="4TH LEAD"/>
+		<program id="87" name="REED LEAD"/>
+		<program id="89" name="FLUTE PAD"/>
+		<program id="90" name="POLY SAW"/>
+		<program id="91" name="CHIFF CHOIR"/>
+	</bank>
+
+	<bank name="Advanced Tones-6656" percussion="false" msb="52" lsb="0">
+		<program id="0" name="STEREO MELLOW PIANO"/>
+		<program id="1" name="STRINGS PIANO"/>
+		<program id="4" name="MELLOW E.PIANO"/>
+		<program id="5" name="SYNTH-STR. E.PIANO 2"/>
+		<program id="16" name="ROTARY DRAWBAR"/>
+		<program id="17" name="ROTARY PERC. ORGAN 1"/>
+		<program id="27" name="CRUNCH ELEC. GUITAR"/>
+		<program id="30" name="FEEDBACK DIST. GT"/>
+		<program id="38" name="ANALOG SYNTH-BASS"/>
+		<program id="39" name="DIGITAL BASS 1"/>
+		<program id="48" name="WIDE STRINGS"/>
+		<program id="49" name="ORCHESTRA STRINGS 2"/>
+		<program id="54" name="SYNTH-VOICE 3"/>
+		<program id="55" name="POP HIT 1"/>
+		<program id="61" name="BRASS + TRUMPET"/>
+		<program id="62" name="SQR SYNTH-BRASS"/>
+		<program id="63" name="WARM SYNTH-BRASS"/>
+		<program id="65" name="ALTO SAXYS"/>
+		<program id="73" name="FLUTE + REED"/>
+		<program id="80" name="VOX SQR LEAD"/>
+		<program id="86" name="TECH POLYSYNTH 1"/>
+		<program id="87" name="FRET LEAD"/>
+		<program id="91" name="STAR VOICE"/>
+	</bank>
+
+	<bank name="Advanced Tones-6784" percussion="false" msb="53" lsb="0">
+		<program id="0" name="VOICE PIANO"/>
+		<program id="1" name="DANCE PIANO"/>
+		<program id="4" name="E.PIANO PAD"/>
+		<program id="5" name="STRINGS E.PIANO"/>
+		<program id="16" name="ROTARY ELEC. ORGAN"/>
+		<program id="17" name="JAZZ DRAWBAR"/>
+		<program id="27" name="ROTARY GUITAR"/>
+		<program id="30" name="DISTORTION CLEAN GT"/>
+		<program id="38" name="RESO. SAW BASS 1"/>
+		<program id="39" name="TRI SYNTH-BASS 1"/>
+		<program id="48" name="CHOIR STRINGS"/>
+		<program id="54" name="VOICE PAD"/>
+		<program id="55" name="POP HIT 2"/>
+		<program id="61" name="BRASS SFZ"/>
+		<program id="62" name="DEEP SYNTH-BRASS 2"/>
+		<program id="80" name="SQUARE LEAD 3"/>
+		<program id="81" name="MELLOW SAW LEAD"/>
+		<program id="86" name="RESO LEAD"/>
+	</bank>
+
+	<bank name="Advanced Tones-6912" percussion="false" msb="54" lsb="0">
+		<program id="0" name="SYNTH-STR PIANO"/>
+		<program id="4" name="SYNTH-STR. E.PIANO 1"/>
+		<program id="16" name="OVD ROTARY ORGAN"/>
+		<program id="17" name="ROTARY PERC. ORGAN 2"/>
+		<program id="38" name="SAW SYNTH-BASS 2"/>
+		<program id="39" name="SINE BASS"/>
+		<program id="54" name="NOISY SYNTH-VOICE"/>
+		<program id="55" name="PIANO HIT"/>
+		<program id="61" name="OCTAVE BRASS"/>
+		<program id="62" name="ANALOG BRASS 2"/>
+		<program id="80" name="MELLOW SQR LEAD"/>
+		<program id="81" name="GR LEAD 1"/>
+		<program id="86" name="TECH POLYSYNTH 2"/>
+	</bank>
+
+	<bank name="Advanced Tones-7040" percussion="false" msb="55" lsb="0">
+		<program id="4" name="TREMOLO E.PIANO"/>
+		<program id="38" name="ORGAN BASS 1"/>
+		<program id="39" name="DIGITAL BASS 2"/>
+		<program id="55" name="ORGAN HIT"/>
+		<program id="61" name="BRASS + FRENCH HORN"/>
+		<program id="80" name="ATTACK SQR 1"/>
+		<program id="81" name="SEQ SAW 1"/>
+		<program id="86" name="7TH SEQ"/>
+	</bank>
+
+	<bank name="Advanced Tones-7168" percussion="false" msb="56" lsb="0">
+		<program id="4" name="AUTO WAH E.PIANO"/>
+		<program id="55" name="TECHNO HIT"/>
+		<program id="80" name="ATTACK SQR 2"/>
+		<program id="81" name="REED SAW"/>
+	</bank>
+
+	<bank name="Advanced Tones-7296" percussion="false" msb="57" lsb="0">
+		<program id="4" name="PHASER E.PIANO"/>
+		<program id="80" name="SQUARE WAVE 2"/>
+		<program id="81" name="VOX SAW LEAD"/>
+	</bank>
+
+	<bank name="Advanced Tones-7424" percussion="false" msb="58" lsb="0">
+		<program id="81" name="RESO. SAW LEAD"/>
+	</bank>
+
+	<bank name="Advanced Tones-7552" percussion="false" msb="59" lsb="0">
+		<program id="81" name="GR LEAD 2"/>
+	</bank>
+
+	<bank name="General MIDI Tones" percussion="false" msb="64" lsb="0">
+		<program id="0" name="PIANO 1"/>
+		<program id="1" name="PIANO 2"/>
+		<program id="2" name="PIANO 3"/>
+		<program id="3" name="HONKY-TONK GM"/>
+		<program id="4" name="ELEC. PIANO 1 GM"/>
+		<program id="5" name="MODERN EP 1 GM"/>
+		<program id="6" name="HARPSICHORD GM"/>
+		<program id="7" name="CLAVI GM"/>
+		<program id="8" name="CELESTA GM"/>
+		<program id="9" name="GLOCKENSPIEL GM"/>
+		<program id="10" name="MUSIC BOX"/>
+		<program id="11" name="VIBRAPHONE GM"/>
+		<program id="12" name="MARIMBA GM"/>
+		<program id="13" name="XYLOPHONE"/>
+		<program id="14" name="TUBULAR BELL"/>
+		<program id="15" name="DULCIMER"/>
+		<program id="16" name="DRAWBAR ORGAN 1 GM"/>
+		<program id="17" name="PERC. ORGAN 1 GM"/>
+		<program id="18" name="ROCK ORGAN GM"/>
+		<program id="19" name="CHURCH ORGAN 1 GM"/>
+		<program id="20" name="REED ORGAN"/>
+		<program id="21" name="ACCORDION GM"/>
+		<program id="22" name="HARMONICA GM"/>
+		<program id="23" name="BANDONEON GM"/>
+		<program id="24" name="NYLON GUITAR GM"/>
+		<program id="25" name="STEEL GUITAR GM"/>
+		<program id="26" name="JAZZ GUITAR GM"/>
+		<program id="27" name="CLEAN GUITAR GM"/>
+		<program id="28" name="MUTED GUITAR GM"/>
+		<program id="29" name="OVERDRIVE GT GM"/>
+		<program id="30" name="DISTORTION GT GM"/>
+		<program id="31" name="GUITAR HARMONICS"/>
+		<program id="32" name="ACOUSTIC BASS GM"/>
+		<program id="33" name="FINGERED BASS GM"/>
+		<program id="34" name="PICKED BASS GM"/>
+		<program id="35" name="FRETLESS BASS GM"/>
+		<program id="36" name="SLAP BASS 1 GM"/>
+		<program id="37" name="SLAP BASS 2 GM"/>
+		<program id="38" name="SAW SYNTH-BASS 1 GM"/>
+		<program id="39" name="SQR SYNTH-BASS 1 GM"/>
+		<program id="40" name="VIOLIN GM"/>
+		<program id="41" name="VIOLA GM"/>
+		<program id="42" name="CELLO GM"/>
+		<program id="43" name="CONTRABASS"/>
+		<program id="44" name="TREMOLO STRINGS"/>
+		<program id="45" name="PIZZICATO GM"/>
+		<program id="46" name="HARP GM"/>
+		<program id="47" name="TIMPANI"/>
+		<program id="48" name="STRINGS 1"/>
+		<program id="49" name="STRINGS 2"/>
+		<program id="50" name="SYNTH-STRINGS 1 GM"/>
+		<program id="51" name="RESO SYNTH-STRINGS GM"/>
+		<program id="52" name="CHOIR"/>
+		<program id="53" name="VOICE DOO GM"/>
+		<program id="54" name="SYNTH-VOICE 1 GM"/>
+		<program id="55" name="ORCHESTRA HIT 1 GM"/>
+		<program id="56" name="TRUMPET 1 GM"/>
+		<program id="57" name="TROMBONE GM"/>
+		<program id="58" name="TUBA GM"/>
+		<program id="59" name="MUTE TRUMPET GM"/>
+		<program id="60" name="FRENCH HORN GM"/>
+		<program id="61" name="BRASS GM"/>
+		<program id="62" name="SYNTH-BRASS 1"/>
+		<program id="63" name="SYNTH-BRASS 2"/>
+		<program id="64" name="SOPRANO SAX GM"/>
+		<program id="65" name="ALTO SAX GM"/>
+		<program id="66" name="TENOR SAX GM"/>
+		<program id="67" name="BARITONE SAX GM"/>
+		<program id="68" name="OBOE GM"/>
+		<program id="69" name="ENGLISH HORN"/>
+		<program id="70" name="BASSOON"/>
+		<program id="71" name="CLARINET GM"/>
+		<program id="72" name="PICCOLO GM"/>
+		<program id="73" name="FLUTE GM"/>
+		<program id="74" name="RECORDER GM"/>
+		<program id="75" name="PAN FLUTE GM"/>
+		<program id="76" name="BOTTLE BLOW GM"/>
+		<program id="77" name="SHAKUHACHI"/>
+		<program id="78" name="WHISTLE GM"/>
+		<program id="79" name="OCARINA"/>
+		<program id="80" name="SQUARE LEAD"/>
+		<program id="81" name="PLAIN SAW LEAD"/>
+		<program id="82" name="CALLIOPE"/>
+		<program id="83" name="CHIFF"/>
+		<program id="84" name="CHARANG"/>
+		<program id="85" name="PLAIN SOLO VOX"/>
+		<program id="86" name="FIFTH SAW"/>
+		<program id="87" name="BASS LEAD"/>
+		<program id="88" name="FANTASY"/>
+		<program id="89" name="WARM SYNTH"/>
+		<program id="90" name="POLYSYNTH"/>
+		<program id="91" name="SPACE VOX"/>
+		<program id="92" name="BOWED GLASS"/>
+		<program id="93" name="METAL SYNTH"/>
+		<program id="94" name="HALO SYNTH"/>
+		<program id="95" name="SWEEP"/>
+		<program id="96" name="RAIN DROP"/>
+		<program id="97" name="SOUND TRACK"/>
+		<program id="98" name="CRYSTAL"/>
+		<program id="99" name="ATMOSPHERE"/>
+		<program id="100" name="BRIGHTNESS"/>
+		<program id="101" name="GOBLIN"/>
+		<program id="102" name="ECHOES"/>
+		<program id="103" name="SF"/>
+		<program id="104" name="SITAR"/>
+		<program id="105" name="BANJO GM"/>
+		<program id="106" name="SHAMISEN"/>
+		<program id="107" name="KOTO"/>
+		<program id="108" name="THUMB PIANO"/>
+		<program id="109" name="BAG PIPE"/>
+		<program id="110" name="FIDDLE"/>
+		<program id="111" name="SHANAI"/>
+		<program id="112" name="TINKLE BELL"/>
+		<program id="113" name="AGOGO"/>
+		<program id="114" name="STEEL DRUMS"/>
+		<program id="115" name="WOOD BLOCK"/>
+		<program id="116" name="TAIKO"/>
+		<program id="117" name="MELODIC TOM"/>
+		<program id="118" name="SYNTH-DRUM"/>
+		<program id="119" name="REVERSE CYMBAL"/>
+		<program id="120" name="GT FRET NOISE"/>
+		<program id="121" name="BREATH NOISE"/>
+		<program id="122" name="SEASHORE"/>
+		<program id="123" name="BIRD"/>
+		<program id="124" name="TELEPHONE"/>
+		<program id="125" name="HELICOPTER"/>
+		<program id="126" name="APPLAUSE"/>
+		<program id="127" name="GUNSHOT"/>
+	</bank>
+
+	<bank name="Preset Tones-8320" percussion="false" msb="65" lsb="0">
+		<program id="0" name="PIANO 1 WIDE"/>
+		<program id="1" name="PIANO 2 WIDE"/>
+		<program id="2" name="MODERN E.G.PIANO WIDE 2"/>
+		<program id="3" name="HONKY-TONK 2"/>
+		<program id="4" name="ELEC. PIANO 2"/>
+		<program id="5" name="MODERN EP + E.G.PIANO"/>
+		<program id="7" name="PULSE CLAVI GM"/>
+		<program id="11" name="VIBRAPHONE WIDE"/>
+		<program id="12" name="MARIMBA WIDE"/>
+		<program id="16" name="TREMOLO ORGAN GM"/>
+		<program id="17" name="70&apos;S ORGAN GM"/>
+		<program id="19" name="CHURCH ORGAN 2 GM"/>
+		<program id="20" name="PUFF ORGAN"/>
+		<program id="25" name="12 STRING GUITAR GM"/>
+		<program id="26" name="PEDAL STEEL"/>
+		<program id="27" name="DETUNED CLEAN GT"/>
+		<program id="30" name="FEEDBACK GUITAR GM"/>
+		<program id="31" name="GUITAR FEEDBACK"/>
+		<program id="39" name="SQR SYNTH-BASS 2"/>
+		<program id="48" name="BRIGHT STRINGS GM"/>
+		<program id="50" name="SYNTH-STRINGS 2"/>
+		<program id="52" name="CHOIR + UUH"/>
+		<program id="53" name="VOICE UUH GM"/>
+		<program id="54" name="SYNTH-VOICE 2 GM"/>
+		<program id="55" name="BASS HIT GM"/>
+		<program id="56" name="TRUMPET 2"/>
+		<program id="57" name="TROMBONE F GM"/>
+		<program id="60" name="MELLOW FRENCH HORN"/>
+		<program id="61" name="BRASS + TROMBONE"/>
+		<program id="62" name="SYNTH-BRASS 3"/>
+		<program id="63" name="SYNTH-BRASS SFZ"/>
+		<program id="80" name="SQUARE WAVE"/>
+		<program id="81" name="SAW WAVE"/>
+		<program id="85" name="VOX LEAD 2"/>
+		<program id="87" name="BASS LEAD 3"/>
+		<program id="89" name="SINE SYNTH"/>
+		<program id="98" name="SYNTH-MALLET"/>
+	</bank>
+
+	<bank name="Preset Tones-8448" percussion="false" msb="66" lsb="0">
+		<program id="0" name="MELLOW PIANO GM"/>
+		<program id="6" name="HARPSICHORD WIDE"/>
+		<program id="16" name="DRAWBAR ORGAN 2 GM"/>
+		<program id="17" name="JAZZ ORGAN GM"/>
+		<program id="19" name="CHURCH ORGAN 3"/>
+		<program id="24" name="NYLON GUITAR RLS"/>
+		<program id="27" name="PLAIN ELEC. GUITAR REAR"/>
+		<program id="48" name="OCTAVE STRINGS"/>
+		<program id="50" name="PURE SYNTH-STRING"/>
+		<program id="54" name="SEQ VOX"/>
+		<program id="55" name="POP HIT 3"/>
+		<program id="62" name="OCTAVE SYNTH-BRASS"/>
+		<program id="63" name="BS SYNTH-BRASS"/>
+		<program id="80" name="TRIANGLE WAVE"/>
+		<program id="81" name="SAW + SQR"/>
+		<program id="95" name="FAST SWEEP"/>
+		<program id="96" name="WOOD PAD"/>
+	</bank>
+
+	<bank name="Preset Tones-8576" percussion="false" msb="67" lsb="0">
+		<program id="4" name="60&apos;S E.PIANO GM"/>
+		<program id="5" name="MODERN EP 3"/>
+		<program id="27" name="PLAIN ELEC. GUITAR FRONT"/>
+		<program id="38" name="SAW SYNTH-BASS 3"/>
+		<program id="55" name="ORCHESTRA HIT 2"/>
+		<program id="83" name="PERC. CHIFF 2"/>
+	</bank>
+
+	<bank name="Preset Tones-8704" percussion="false" msb="68" lsb="0">
+		<program id="81" name="SEQ SAW 2"/>
+		<program id="84" name="GT SYNTH-LEAD 2"/>
+		<program id="89" name="SOPRANO PAD"/>
+	</bank>
+
+	<bank name="Preset Tones-8960" percussion="false" msb="70" lsb="0">
+		<program id="1" name="TECHNO PIANO"/>
+	</bank>
+
+	<bank name="Preset Tones-9216" percussion="false" msb="72" lsb="0">
+		<program id="38" name="RESO. SAW BASS 3"/>
+		<program id="39" name="KICK BASS 1"/>
+	</bank>
+
+	<bank name="Preset Tones-9344" percussion="false" msb="73" lsb="0">
+		<program id="38" name="SAW SYNTH-BASS 4"/>
+		<program id="39" name="SQR SYNTH-BASS 3"/>
+		<program id="55" name="TIMPANI HIT"/>
+	</bank>
+
+	<bank name="Preset Tones-9472" percussion="false" msb="74" lsb="0">
+		<program id="38" name="ORGAN BASS 2"/>
+		<program id="39" name="ATTACK SQR BASS"/>
+		<program id="80" name="SQUARE WAVE 3"/>
+	</bank>
+
+	<bank name="User Tone Wave-11264" percussion="false" msb="88" lsb="0">
+		<program id="0" name="USER TONE WAVE 1"/>
+		<program id="1" name="USER TONE WAVE 2"/>
+		<program id="2" name="USER TONE WAVE 3"/>
+		<program id="3" name="USER TONE WAVE 4"/>
+		<program id="4" name="USER TONE WAVE 5"/>
+		<program id="5" name="USER TONE WAVE 6"/>
+		<program id="6" name="USER TONE WAVE 7"/>
+		<program id="7" name="USER TONE WAVE 8"/>
+		<program id="8" name="USER TONE WAVE 9"/>
+		<program id="9" name="USER TONE WAVE 10"/>
+		<program id="10" name="USER TONE WAVE 11"/>
+		<program id="11" name="USER TONE WAVE 12"/>
+		<program id="12" name="USER TONE WAVE 13"/>
+		<program id="13" name="USER TONE WAVE 14"/>
+		<program id="14" name="USER TONE WAVE 15"/>
+		<program id="15" name="USER TONE WAVE 16"/>
+		<program id="16" name="USER TONE WAVE 17"/>
+		<program id="17" name="USER TONE WAVE 18"/>
+		<program id="18" name="USER TONE WAVE 19"/>
+		<program id="19" name="USER TONE WAVE 20"/>
+	</bank>
+
+	<bank name="User Tones-12032" percussion="false" msb="94" lsb="0">
+		<program id="0" name="USER TONE 1"/>
+		<program id="1" name="USER TONE 2"/>
+		<program id="2" name="USER TONE 3"/>
+		<program id="3" name="USER TONE 4"/>
+		<program id="4" name="USER TONE 5"/>
+		<program id="5" name="USER TONE 6"/>
+		<program id="6" name="USER TONE 7"/>
+		<program id="7" name="USER TONE 8"/>
+		<program id="8" name="USER TONE 9"/>
+		<program id="9" name="USER TONE 10"/>
+		<program id="10" name="USER TONE 11"/>
+		<program id="11" name="USER TONE 12"/>
+		<program id="12" name="USER TONE 13"/>
+		<program id="13" name="USER TONE 14"/>
+		<program id="14" name="USER TONE 15"/>
+		<program id="15" name="USER TONE 16"/>
+		<program id="16" name="USER TONE 17"/>
+		<program id="17" name="USER TONE 18"/>
+		<program id="18" name="USER TONE 19"/>
+		<program id="19" name="USER TONE 20"/>
+		<program id="20" name="USER TONE 21"/>
+		<program id="21" name="USER TONE 22"/>
+		<program id="22" name="USER TONE 23"/>
+		<program id="23" name="USER TONE 24"/>
+		<program id="24" name="USER TONE 25"/>
+		<program id="25" name="USER TONE 26"/>
+		<program id="26" name="USER TONE 27"/>
+		<program id="27" name="USER TONE 28"/>
+		<program id="28" name="USER TONE 29"/>
+		<program id="29" name="USER TONE 30"/>
+		<program id="30" name="USER TONE 31"/>
+		<program id="31" name="USER TONE 32"/>
+		<program id="32" name="USER TONE 33"/>
+		<program id="33" name="USER TONE 34"/>
+		<program id="34" name="USER TONE 35"/>
+		<program id="35" name="USER TONE 36"/>
+		<program id="36" name="USER TONE 37"/>
+		<program id="37" name="USER TONE 38"/>
+		<program id="38" name="USER TONE 39"/>
+		<program id="39" name="USER TONE 40"/>
+		<program id="40" name="USER TONE 41"/>
+		<program id="41" name="USER TONE 42"/>
+		<program id="42" name="USER TONE 43"/>
+		<program id="43" name="USER TONE 44"/>
+		<program id="44" name="USER TONE 45"/>
+		<program id="45" name="USER TONE 46"/>
+		<program id="46" name="USER TONE 47"/>
+		<program id="47" name="USER TONE 48"/>
+		<program id="48" name="USER TONE 49"/>
+		<program id="49" name="USER TONE 50"/>
+		<program id="50" name="USER TONE 51"/>
+		<program id="51" name="USER TONE 52"/>
+		<program id="52" name="USER TONE 53"/>
+		<program id="53" name="USER TONE 54"/>
+		<program id="54" name="USER TONE 55"/>
+		<program id="55" name="USER TONE 56"/>
+		<program id="56" name="USER TONE 57"/>
+		<program id="57" name="USER TONE 58"/>
+		<program id="58" name="USER TONE 59"/>
+		<program id="59" name="USER TONE 60"/>
+		<program id="60" name="USER TONE 61"/>
+		<program id="61" name="USER TONE 62"/>
+		<program id="62" name="USER TONE 63"/>
+		<program id="63" name="USER TONE 64"/>
+		<program id="64" name="USER TONE 65"/>
+		<program id="65" name="USER TONE 66"/>
+		<program id="66" name="USER TONE 67"/>
+		<program id="67" name="USER TONE 68"/>
+		<program id="68" name="USER TONE 69"/>
+		<program id="69" name="USER TONE 70"/>
+		<program id="70" name="USER TONE 71"/>
+		<program id="71" name="USER TONE 72"/>
+		<program id="72" name="USER TONE 73"/>
+		<program id="73" name="USER TONE 74"/>
+		<program id="74" name="USER TONE 75"/>
+		<program id="75" name="USER TONE 76"/>
+		<program id="76" name="USER TONE 77"/>
+		<program id="77" name="USER TONE 78"/>
+		<program id="78" name="USER TONE 79"/>
+		<program id="79" name="USER TONE 80"/>
+		<program id="80" name="USER TONE 81"/>
+		<program id="81" name="USER TONE 82"/>
+		<program id="82" name="USER TONE 83"/>
+		<program id="83" name="USER TONE 84"/>
+		<program id="84" name="USER TONE 85"/>
+		<program id="85" name="USER TONE 86"/>
+		<program id="86" name="USER TONE 87"/>
+		<program id="87" name="USER TONE 88"/>
+		<program id="88" name="USER TONE 89"/>
+		<program id="89" name="USER TONE 90"/>
+		<program id="90" name="USER TONE 91"/>
+		<program id="91" name="USER TONE 92"/>
+		<program id="92" name="USER TONE 93"/>
+		<program id="93" name="USER TONE 94"/>
+		<program id="94" name="USER TONE 95"/>
+		<program id="95" name="USER TONE 96"/>
+		<program id="96" name="USER TONE 97"/>
+		<program id="97" name="USER TONE 98"/>
+		<program id="98" name="USER TONE 99"/>
+		<program id="99" name="USER TONE 100"/>
+	</bank>
+
+	<bank name="Drawbar Organ-12288" percussion="false" msb="96" lsb="0">
+		<program id="0" name="Drawbar Organ 1"/>
+		<program id="1" name="Jazz Organ 1"/>
+		<program id="2" name="Full DRAWBAR"/>
+		<program id="3" name="Perc. Organ 1"/>
+		<program id="4" name="16&apos;+1&apos; Organ"/>
+		<program id="5" name="Soul Organ 1"/>
+		<program id="6" name="Overdrive Organ 1"/>
+		<program id="7" name="Drawbar Organ 2"/>
+		<program id="8" name="Block Organ 1"/>
+		<program id="9" name="Theater Organ 1"/>
+		<program id="10" name="Jazz Organ 2"/>
+		<program id="11" name="Soul Organ 2"/>
+		<program id="12" name="Gospel Organ 1"/>
+		<program id="13" name="Chorus Organ 1"/>
+		<program id="14" name="Overdrive Organ 2"/>
+		<program id="15" name="Block Organ 2"/>
+		<program id="16" name="Drawbar Organ 3"/>
+		<program id="17" name="Perc. Organ 2"/>
+		<program id="18" name="Theater Organ 2"/>
+		<program id="19" name="Gospel Organ 2"/>
+		<program id="20" name="Even Organ"/>
+		<program id="21" name="Flute Organ 1"/>
+		<program id="22" name="Chorus Organ 2"/>
+		<program id="23" name="Overdrive Organ 3"/>
+		<program id="24" name="16&apos; Organ"/>
+		<program id="25" name="Soul Organ 3"/>
+		<program id="26" name="Perc. Organ 3"/>
+		<program id="27" name="Drawbar Organ 4"/>
+		<program id="28" name="Perc. Organ 4"/>
+		<program id="29" name="Odd Organ"/>
+		<program id="30" name="Reed Organ 1"/>
+		<program id="31" name="Block Organ 3"/>
+		<program id="32" name="Overdrive Organ 4"/>
+		<program id="33" name="Drawbar Organ 5"/>
+		<program id="34" name="Gospel Organ 3"/>
+		<program id="35" name="8&apos; + 4&apos; Organ"/>
+		<program id="36" name="Block Organ 4"/>
+		<program id="37" name="String Organ 2"/>
+		<program id="38" name="Pure Organ 1"/>
+		<program id="39" name="Drawbar Organ 6"/>
+		<program id="40" name="Delay Organ 1"/>
+		<program id="41" name="Deep Chorus Organ"/>
+		<program id="42" name="Tremolo Organ"/>
+		<program id="43" name="Delay Organ 2"/>
+		<program id="44" name="LFO Wah Organ"/>
+		<program id="45" name="Dist. Organ Lead"/>
+		<program id="46" name="Ring Organ"/>
+		<program id="47" name="Mad Rotary Organ"/>
+		<program id="48" name="Old Organ"/>
+		<program id="49" name="Dist. Ring Organ"/>
+	</bank>
+
+	<bank name="User Draw Organ-13312" percussion="false" msb="104" lsb="0">
+		<program id="0" name="USER DRAW ORGAN 1"/>
+		<program id="1" name="USER DRAW ORGAN 2"/>
+		<program id="2" name="USER DRAW ORGAN 3"/>
+		<program id="3" name="USER DRAW ORGAN 4"/>
+		<program id="4" name="USER DRAW ORGAN 5"/>
+		<program id="5" name="USER DRAW ORGAN 6"/>
+		<program id="6" name="USER DRAW ORGAN 7"/>
+		<program id="7" name="USER DRAW ORGAN 8"/>
+		<program id="8" name="USER DRAW ORGAN 9"/>
+		<program id="9" name="USER DRAW ORGAN 10"/>
+		<program id="10" name="USER DRAW ORGAN 11"/>
+		<program id="11" name="USER DRAW ORGAN 12"/>
+		<program id="12" name="USER DRAW ORGAN 13"/>
+		<program id="13" name="USER DRAW ORGAN 14"/>
+		<program id="14" name="USER DRAW ORGAN 15"/>
+		<program id="15" name="USER DRAW ORGAN 16"/>
+		<program id="16" name="USER DRAW ORGAN 17"/>
+		<program id="17" name="USER DRAW ORGAN 18"/>
+		<program id="18" name="USER DRAW ORGAN 19"/>
+		<program id="19" name="USER DRAW ORGAN 20"/>
+		<program id="20" name="USER DRAW ORGAN 21"/>
+		<program id="21" name="USER DRAW ORGAN 22"/>
+		<program id="22" name="USER DRAW ORGAN 23"/>
+		<program id="23" name="USER DRAW ORGAN 24"/>
+		<program id="24" name="USER DRAW ORGAN 25"/>
+		<program id="25" name="USER DRAW ORGAN 26"/>
+		<program id="26" name="USER DRAW ORGAN 27"/>
+		<program id="27" name="USER DRAW ORGAN 28"/>
+		<program id="28" name="USER DRAW ORGAN 29"/>
+		<program id="29" name="USER DRAW ORGAN 30"/>
+		<program id="30" name="USER DRAW ORGAN 31"/>
+		<program id="31" name="USER DRAW ORGAN 32"/>
+		<program id="32" name="USER DRAW ORGAN 33"/>
+		<program id="33" name="USER DRAW ORGAN 34"/>
+		<program id="34" name="USER DRAW ORGAN 35"/>
+		<program id="35" name="USER DRAW ORGAN 36"/>
+		<program id="36" name="USER DRAW ORGAN 37"/>
+		<program id="37" name="USER DRAW ORGAN 38"/>
+		<program id="38" name="USER DRAW ORGAN 39"/>
+		<program id="39" name="USER DRAW ORGAN 40"/>
+		<program id="40" name="USER DRAW ORGAN 41"/>
+		<program id="41" name="USER DRAW ORGAN 42"/>
+		<program id="42" name="USER DRAW ORGAN 43"/>
+		<program id="43" name="USER DRAW ORGAN 44"/>
+		<program id="44" name="USER DRAW ORGAN 45"/>
+		<program id="45" name="USER DRAW ORGAN 46"/>
+		<program id="46" name="USER DRAW ORGAN 47"/>
+		<program id="47" name="USER DRAW ORGAN 48"/>
+		<program id="48" name="USER DRAW ORGAN 49"/>
+		<program id="49" name="USER DRAW ORGAN 50"/>
+		<program id="50" name="USER DRAW ORGAN 51"/>
+		<program id="51" name="USER DRAW ORGAN 52"/>
+		<program id="52" name="USER DRAW ORGAN 53"/>
+		<program id="53" name="USER DRAW ORGAN 54"/>
+		<program id="54" name="USER DRAW ORGAN 55"/>
+		<program id="55" name="USER DRAW ORGAN 56"/>
+		<program id="56" name="USER DRAW ORGAN 57"/>
+		<program id="57" name="USER DRAW ORGAN 58"/>
+		<program id="58" name="USER DRAW ORGAN 59"/>
+		<program id="59" name="USER DRAW ORGAN 60"/>
+		<program id="60" name="USER DRAW ORGAN 61"/>
+		<program id="61" name="USER DRAW ORGAN 62"/>
+		<program id="62" name="USER DRAW ORGAN 63"/>
+		<program id="63" name="USER DRAW ORGAN 64"/>
+		<program id="64" name="USER DRAW ORGAN 65"/>
+		<program id="65" name="USER DRAW ORGAN 66"/>
+		<program id="66" name="USER DRAW ORGAN 67"/>
+		<program id="67" name="USER DRAW ORGAN 68"/>
+		<program id="68" name="USER DRAW ORGAN 69"/>
+		<program id="69" name="USER DRAW ORGAN 70"/>
+		<program id="70" name="USER DRAW ORGAN 71"/>
+		<program id="71" name="USER DRAW ORGAN 72"/>
+		<program id="72" name="USER DRAW ORGAN 73"/>
+		<program id="73" name="USER DRAW ORGAN 74"/>
+		<program id="74" name="USER DRAW ORGAN 75"/>
+		<program id="75" name="USER DRAW ORGAN 76"/>
+		<program id="76" name="USER DRAW ORGAN 77"/>
+		<program id="77" name="USER DRAW ORGAN 78"/>
+		<program id="78" name="USER DRAW ORGAN 79"/>
+		<program id="79" name="USER DRAW ORGAN 80"/>
+		<program id="80" name="USER DRAW ORGAN 81"/>
+		<program id="81" name="USER DRAW ORGAN 82"/>
+		<program id="82" name="USER DRAW ORGAN 83"/>
+		<program id="83" name="USER DRAW ORGAN 84"/>
+		<program id="84" name="USER DRAW ORGAN 85"/>
+		<program id="85" name="USER DRAW ORGAN 86"/>
+		<program id="86" name="USER DRAW ORGAN 87"/>
+		<program id="87" name="USER DRAW ORGAN 88"/>
+		<program id="88" name="USER DRAW ORGAN 89"/>
+		<program id="89" name="USER DRAW ORGAN 90"/>
+		<program id="90" name="USER DRAW ORGAN 91"/>
+		<program id="91" name="USER DRAW ORGAN 92"/>
+		<program id="92" name="USER DRAW ORGAN 93"/>
+		<program id="93" name="USER DRAW ORGAN 94"/>
+		<program id="94" name="USER DRAW ORGAN 95"/>
+		<program id="95" name="USER DRAW ORGAN 96"/>
+		<program id="96" name="USER DRAW ORGAN 97"/>
+		<program id="97" name="USER DRAW ORGAN 98"/>
+		<program id="98" name="USER DRAW ORGAN 99"/>
+		<program id="99" name="USER DRAW ORGAN 100"/>
+	</bank>
+
+	<bank name="Drum Sets-15360" percussion="true" msb="120" lsb="0">
+		<program id="0" name="STANDARD SET 1"/>
+		<program id="1" name="STANDARD SET 2"/>
+		<program id="8" name="ROOM SET"/>
+		<program id="16" name="POWER SET"/>
+		<program id="24" name="ELEC. SET"/>
+		<program id="25" name="SYNTH SET 1"/>
+		<program id="30" name="SYNTH SET 2"/>
+		<program id="32" name="JAZZ SET"/>
+		<program id="40" name="BRUSH SET"/>
+		<program id="48" name="ORCHESTRA SET"/>
+		<program id="64" name="HIP-HOP SET 1"/>
+		<program id="65" name="HIP-HOP SET 2"/>
+		<program id="66" name="TECHNO SET 1"/>
+		<program id="67" name="TECHNO SET 2"/>
+		<program id="68" name="DANCE SET 1"/>
+		<program id="69" name="DANCE SET 2"/>
+	</bank>
+
+	<bank name="User Drums Wave-16000" percussion="true" msb="125" lsb="0">
+		<program id="0" name="USER SET 1"/>
+		<program id="1" name="USER SET 2"/>
+		<program id="2" name="USER SET 3"/>
+		<program id="3" name="USER SET 4"/>
+	</bank>
+
+ 
+	<controls>
+		<control name="Pan" type="controller" description="&lt;none&gt;" min="0" max="127" default="64" controllervalue="10" colourindex="2" ipbposition="0"/>
+		<control name="Chorus" type="controller" description="&lt;none&gt;" min="0" max="127" default="0" controllervalue="93" colourindex="3" ipbposition="1"/>
+		<control name="Volume" type="controller" description="&lt;none&gt;" min="0" max="127" default="0" controllervalue="7" colourindex="1" ipbposition="2"/>
+		<control name="Reverb" type="controller" description="&lt;none&gt;" min="0" max="127" default="0" controllervalue="91" colourindex="3" ipbposition="3"/>
+		<control name="Sustain" type="controller" description="&lt;none&gt;" min="0" max="127" default="0" controllervalue="64" colourindex="4" ipbposition="4"/>
+		<control name="Expression" type="controller" description="&lt;none&gt;" min="0" max="127" default="100" controllervalue="11" colourindex="2" ipbposition="5"/>
+		<control name="Modulation" type="controller" description="&lt;none&gt;" min="0" max="127" default="0" controllervalue="1" colourindex="4" ipbposition="-1"/>
+		<control name="PitchBend" type="pitchbend" description="&lt;none&gt;" min="0" max="16383" default="8192" controllervalue="1" colourindex="4" ipbposition="-1"/>
+	</controls>
+
+</device>
+</studio>
+</rosegarden-data>
