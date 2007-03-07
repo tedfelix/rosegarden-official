@@ -52,7 +52,7 @@ public:
 
     static QString getDiatonicGlobalName(int semitones = 0, int step = 0) {
         switch (semitones) {
-        default:  return i18n("&Diatonic transpose...");
+        default:  return i18n("Transpose by &Interval...");
         }
     }
 
@@ -62,7 +62,7 @@ public:
         case  -1: return i18n("&Down a Semitone");
         case  12: return i18n("Up an &Octave");
         case -12: return i18n("Down an Octa&ve");
-        default:  return i18n("&Transpose...");
+        default:  return i18n("&Transpose by Semitones...");
         }
     }
 
