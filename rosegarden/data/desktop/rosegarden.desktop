@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Application
+Categories=AudioVideo;Audio;Midi;Sequencer;X-SuSE-Sequencer;X-Red-Hat-Base;
+Exec=rosegarden -caption "%c" %i %m
+MimeType=audio/x-rosegarden;audio/x-rosegarden-device
+X-KDE-NativeMimeType=audio/x-rosegarden
+Icon=rosegarden.png
+DocPath=rosegarden/index.html
+Comment=MIDI and Audio Sequencer and Editor
+Terminal=false
+Name=Rosegarden
+Name[de]=Rosegarden

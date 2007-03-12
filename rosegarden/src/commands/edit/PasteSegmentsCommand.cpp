@@ -1,0 +1,153 @@
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
+
+/*
+    Rosegarden
+    A MIDI and audio sequencer and musical notation editor.
+ 
+    This program is Copyright 2000-2007
+        Guillaume Laurent   <glaurent@telegraph-road.org>,
+        Chris Cannam        <cannam@all-day-breakfast.com>,
+        Richard Bown        <richard.bown@ferventsoftware.com>
+ 
+    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
+    Bown to claim authorship of this work have been asserted.
+ 
+    Other copyrights also apply to some parts of this work.  Please
+    see the AUTHORS file and individual file headers for details.
+ 
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License as
+    published by the Free Software Foundation; either version 2 of the
+    License, or (at your option) any later version.  See the file
+    COPYING included with this distribution for more information.
+*/
+
+
+#include "PasteSegmentsCommand.h"
+
+#include "base/Clipboard.h"
+#include "base/Composition.h"
+#include "base/Segment.h"
+#include "base/Track.h"
+#include <qstring.h>
+
+
+namespace Rosegarden
+{
+
+PasteSegmentsCommand::PasteSegmentsCommand(Composition *composition,
+        Clipboard *clipboard,
+        timeT pasteTime,
+        TrackId baseTrack,
+        bool useExactTracks) :
+        KNamedCommand(getGlobalName()),
+        m_composition(composition),
+        m_clipboard(new Clipboard(*clipboard)),
+        m_pasteTime(pasteTime),
+        m_baseTrack(baseTrack),
+        m_exactTracks(useExactTracks),
+        m_detached(false)
+{
+    // nothing else
+}
+
+PasteSegmentsCommand::~PasteSegmentsCommand()
+{
+    if (m_detached) {
+        for (unsigned int i = 0; i < m_addedSegments.size(); ++i) {
+            delete m_addedSegments[i];
+        }
+    }
+
+    delete m_clipboard;
+}
+
+void
+PasteSegmentsCommand::execute()
+{
+    if (m_addedSegments.size() > 0) {
+        // been here before
+        for (unsigned int i = 0; i < m_addedSegments.size(); ++i) {
+            m_composition->addSegment(m_addedSegments[i]);
+        }
+        return ;
+    }
+
+    if (m_clipboard->isEmpty())
+        return ;
+
+    // We want to paste such that the earliest Segment starts at
+    // m_pasteTime and the others start at the same times relative to
+    // that as they did before.  Likewise for track, unless
+    // m_exactTracks is set.
+
+    timeT earliestStartTime = m_clipboard->getBaseTime();
+    timeT latestEndTime = 0;
+    int lowestTrackPos = -1;
+
+    for (Clipboard::iterator i = m_clipboard->begin();
+            i != m_clipboard->end(); ++i) {
+
+        int trackPos = m_composition->getTrackPositionById((*i)->getTrack());
+        if (trackPos >= 0 &&
+                (lowestTrackPos < 0 || trackPos < lowestTrackPos)) {
+            lowestTrackPos = trackPos;
+        }
+
+        if ((*i)->getEndMarkerTime() > latestEndTime) {
+            latestEndTime = (*i)->getEndMarkerTime();
+        }
+    }
+
+    if (m_exactTracks)
+        lowestTrackPos = 0;
+    if (lowestTrackPos < 0)
+        lowestTrackPos = 0;
+    timeT offset = m_pasteTime - earliestStartTime;
+    int baseTrackPos = m_composition->getTrackPositionById(m_baseTrack);
+    int trackOffset = baseTrackPos - lowestTrackPos;
+
+    for (Clipboard::iterator i = m_clipboard->begin();
+            i != m_clipboard->end(); ++i) {
+
+        int newTrackPos = trackOffset +
+                          m_composition->getTrackPositionById((*i)->getTrack());
+
+        Track *track = m_composition->getTrackByPosition(newTrackPos);
+
+        if (!track) {
+            newTrackPos = 0;
+            track = m_composition->getTrackByPosition(newTrackPos);
+        }
+
+        TrackId newTrackId = track->getId();
+
+        Segment *segment = new Segment(**i);
+        segment->setStartTime(segment->getStartTime() + offset);
+        segment->setTrack(newTrackId);
+        m_composition->addSegment(segment);
+        if (m_clipboard->isPartial()) {
+            segment->normalizeRests(segment->getStartTime(),
+                                    segment->getEndMarkerTime());
+        }
+        m_addedSegments.push_back(segment);
+    }
+
+    // User preference? Update song pointer position on paste
+    m_composition->setPosition(latestEndTime
+                               + m_pasteTime
+                               - earliestStartTime);
+
+    m_detached = false;
+}
+
+void
+PasteSegmentsCommand::unexecute()
+{
+    for (unsigned int i = 0; i < m_addedSegments.size(); ++i) {
+        m_composition->detachSegment(m_addedSegments[i]);
+    }
+    m_detached = true;
+}
+
+}

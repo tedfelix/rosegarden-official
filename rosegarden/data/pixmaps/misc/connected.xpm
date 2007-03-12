@@ -1,0 +1,20 @@
+/* XPM */
+static char *someicon[] = {
+/* columns rows colors chars-per-pixel */
+"12 12 2 1",
+"x c white",
+"  c none",
+/* pixels */
+"            "
+"            "
+"  xxxxxxxx  "
+"  xxxxxxxx  "
+"  xxxxxxxx  "
+"  xxxxxxxx  "
+"  xxxxxxxx  "
+"  xxxxxxxx  "
+"  xxxxxxxx  "
+"  xxxxxxxx  "
+"            "
+"            "
+};

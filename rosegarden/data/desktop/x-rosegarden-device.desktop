@@ -1,0 +1,8 @@
+[Desktop Entry]
+Comment=Rosegarden device file
+Comment[fr]=Fichier de description de peripherique Rosegarden
+Hidden=false
+Icon=midi
+MimeType=audio/x-rosegarden-device
+Patterns=*.rgd;*.RGD
+Type=MimeType

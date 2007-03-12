@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# Usage : find_ctor_usage Foobar
+#
+# Returns all the lines where the ctor is called
+#
+
+grep -n -w $1 *.cpp | grep -v $1:: | fgrep -v .moc.

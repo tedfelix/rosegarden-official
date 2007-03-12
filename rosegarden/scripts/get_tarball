@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# NO LONGER RELEVANT see https://sourceforge.net/docs/E09/#backup for svn backup
+
+cd /home/glaurent/tmp
+
+# Keep yesterday's copy just in case
+mv rosegarden-cvsroot.tar.bz2 rosegarden-cvsroot.tar.bz2.bk
+
+wget http://cvs.sourceforge.net/cvstarballs/rosegarden-cvsroot.tar.bz2

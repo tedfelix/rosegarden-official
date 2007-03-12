@@ -1,0 +1,123 @@
+Lead developers:
+
+Chris Cannam <cannam@all-day-breakfast.com>
+Richard Bown <richard.bown@ferventsoftware.com>
+Guillaume Laurent <glaurent@telegraph-road.org>
+
+Developers:
+
+D. Michael McIntyre <dmmcintyr@users.sourceforge.net>
+Pedro Lopez-Cabanillas <plcl@users.sourceforge.net>
+
+
+Contributors:
+
+Ron Kuris <rk@prefer.net>
+    * cleanups
+    
+Randall Farmer <rfarme@simons-rock.edu>
+    * chord labelling code
+    
+Hans Kieserman <hkieserman@mail.com> 
+    * Lilypond output
+    * assorted other patches
+    * i18n-ization
+    
+Levi Burton <donburton@sbcglobal.net> 
+    * UI improvements
+    * other bug fixes
+
+Mark Hymers <markh@linuxfromscratch.org>
+    * Segment colours
+    * Other UI and bug fixes
+
+Alexandre Prokoudine <alexandre.prokoudine@gmail.com>
+    * Russian translation
+    * i18n-ization
+    
+Jörg Schumann <jrschumann@gmx.de>
+Eckhard Jokisch <e.jokisch@u-code.de>
+    * German translation
+
+Kevin Donnelly
+    * Welsh translation
+
+Didier Burli
+Yves Guillemot
+    * French translation
+
+Daniele Medri
+Alessandro Musesti
+    * Italian translation
+
+Stefan Asserh�l
+Erik Magnus Johansson
+    * Swedish translation
+
+Hasso Tepper
+    * Estonian translation
+
+Jelmer Vernooij
+Jasper Stein
+    * Dutch translation
+
+Oota Toshiya
+    * Japanese translation
+
+Kevin Liang
+    * HSpinBox class
+
+Thorsten Wilms
+    * Original designs on which the Rosegarden rotary controllers are based
+
+William <rosegarden4c AT orthoset.com>
+    * auto-scroll deceleration
+    * glyphs for rests outside staves and other bug fixes 
+
+Liu Songhe <jackliu9999 AT msn.com>
+    * Simplified Chinese translation
+
+Thomas Nagy <tnagy256@yahoo.fr>
+    * SCons/bksys building system
+
+Vince Negri <vince.negri@gmail.com>
+    * Initial MTC slave implementation (the bits without the bugs)
+
+Toni Arnold <toni__arnold@bluewin.ch>
+    * LIRC infrared remote-controller support
+
+Jan B�a <jbina@sky.cz>
+    * Czech translation
+
+Vladimir Savic <vladimir@vladimirsavic.net> 
+    * icons, icons, icons
+
+Lisandro Damián Nicanor Pérez Meyer <perezmeyer@infovia.com.ar>
+Javier Castrillo <riverplatense@gmail.com>
+Lucas Godoy <godoy.lucas@gmail.com>
+Marcos Guglielmetti <marcospcmusica@yahoo.com.ar>
+    * Spanish translation
+
+Feliu Ferrer <mverge2@pie.xtec.es>
+Quim Perez i Noguer <noguer@osona.com>
+    * Catalan translation
+
+Carolyn McIntyre <catma@adelphia.net>
+    * 1.2.3 splash screen photo (of Michael McIntyre's rose garden)
+    * new splash screen photo (of Michael McIntyre's instruments along with a
+      rose from the garden of Hassell Arnold Hale, 1916-2006, may he rest in
+      peace)
+
+Heikki Johannes Junes <hjunes@cc.hut.fi>
+    * Finnish translation
+    * LilyPond 2.x export
+    * LilyPond bug fixes/enhancements
+    * Invert, retrograde and retrograde invert functions
+    * Soprano, French violin, etc. clefs in Notation View
+
+Piotr Sawicki <pelle@plusnet.pl>
+    * Polish translation
+
+##
+## Names in here should also be credited in gui/main.cpp, with aboutData.addCredit()
+##

@@ -1,0 +1,26 @@
+#!/bin/bash
+#
+# regenerate-presets
+#
+# Copyright (c) 2006  D. Michael McIntyre <rosegarden.trumpeter@gmail.com>
+# Released under the GPL
+#
+# REQUIRES: ../scripts/preset-xmlify ../scripts/dehumanize
+#
+#
+# PURPOSE: to run the above scripts without a lot of bothersome typing
+#
+#
+#
+
+rm -f presets*.xml
+
+for x in presets-editable*.conf; do
+    xmlfile=presets`echo $x | sed 's/^presets-editable\(.*\)\.conf$/\1/'`.xml
+    ../../scripts/preset-xmlify < "$x" > "$xmlfile" && \
+    ../../scripts/dehumanize "$xmlfile" || \
+    echo "Something went wrong.  $xmlfile is probably mangled."
+    chmod -w "$xmlfile"
+    echo $xmlfile updated successfully
+done
+

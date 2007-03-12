@@ -1,0 +1,5 @@
+Interface=RosegardenMidiRecord, Arts::MidiPort, Arts::Object
+Library=libRosegardenSequencer.la
+Language=C++
+Author="Richard Bown <bownie@bownie.com>", "Guillaume Laurent <glaurent@telegraph-road.org>", "Chris Cannam <cannam@all-day-breakfast.com>"
+URL="http://home"

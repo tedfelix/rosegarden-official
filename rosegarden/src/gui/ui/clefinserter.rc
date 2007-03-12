@@ -1,0 +1,11 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+
+<kpartgui name="Rosegarden::NotationTool" version="1230">
+
+<Menu noMerge="1" name="ClefInserter">
+  <Action name="select" />
+  <Action name="notes" />
+  <Action name="erase" />
+</Menu>
+
+</kpartgui>
