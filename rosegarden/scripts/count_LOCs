@@ -1,0 +1,3 @@
+#!/bin/sh
+
+find . \( -name \*.C -o -name \*.h -o -name \*.cpp \) -a \! -name \*.moc.cpp | xargs wc -l

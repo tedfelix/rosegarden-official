@@ -1,0 +1,93 @@
+#!/bin/bash
+#
+# dehumanize
+#
+# Copyright (c) 2006  D. Michael McIntyre <rosegarden.trumpeter@gmail.com>
+# Released under the GPL
+#
+# REQUIRES: sed
+#
+#
+# PURPOSE: replace strings like F#3 with the equivalent MIDI pitch, by crude
+# brute force
+#
+# This should be run on the XML after preset-xmlify.
+#
+# There are acres (or hectares) of room to make this more elegant.  Take the
+# ASCII value of the letter and offset it to get a base pitch, add or subtract
+# 1 for the accidental, then multiply by the octave.  But parsing the string
+# in order to get into a position to do that required more effort to figure
+# out than seemed worthwhile.
+#
+#
+# C = 0
+# C# = 1 Db = 1
+# D = 2
+# D# = 3 Eb = 3
+# E = 4
+# F = 5
+# F# = 6 Gb = 6
+# G = 7
+# G# = 8 Ab = 8
+# A = 9
+# A# = 10 Bb = 10
+# B = 11
+
+# This function imported from some old script I wrote years ago, provided here
+# since it won't be on anyone else's system to use.  It isn't elegant at all,
+# but who cares?
+replace () {
+    tmp=/tmp/$RANDOM.$RANDOM.$RANDOM
+    if (sed "s@$1@$2@g" $3 > $tmp 2> /dev/null); then
+	if (mv -f $tmp $3); then
+#	    echo "success: replaced $1 with $2 in $3 and updated file"
+            echo "replaced $1 with $2"
+	    return 0
+	else
+	    echo "error executing: mv -f $tmp $3"
+	    exit 1
+	fi
+    else
+	echo "error executing: sed \"$1/$2/g\ $3"
+	exit 1
+    fi
+
+    echo "unexpected failure."
+    exit 1
+}
+
+# respell any flats as sharps
+for ((i = 0; i <= 11; i++)); do
+
+    # fix octave divide
+    #!!! no, I think this was stupid; near as I can figure this morning the
+    # divide problem is at B#/Cb which probably doesn't apply here I hope
+#    ((y = i + 1))
+#    replace Db$i C\#$y $1
+
+    replace Db$i C\#$i $1
+    replace Eb$i D\#$i $1
+    replace Gb$i A\#$i $1
+    replace Ab$i G\#$i $1
+    replace Bb$i A\#$i $1
+done
+
+# get rid of the + on +3, and only keep the - on -3
+replace + "" $1
+
+# piano middle C is MIDI pitch 60
+# A0 is MIDI pitch 43
+# 
+pitch=-12
+for ((octave = -2; octave < 20; octave++)); do
+    for note in C C\# D D\# E F F\# G G\# A A\# B; do
+	if [ $pitch -gt 127 ]; then
+	    continue
+	fi
+	replace $note$octave $pitch $1
+	((pitch++))
+    done
+done
+
+exit 0
+

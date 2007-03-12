@@ -1,0 +1,74 @@
+#!/bin/bash
+#
+# ly2ps
+#
+# Copyright 2002
+#
+# D. Michael McIntyre <dmmcintyr@users.sourceforge.net> 
+#
+# A utility to make quicker work of rendering Lilypond files in .ps format
+
+# edit this string to specify the viewer you wish to use to view/print .ps
+# files:
+psviewer="kghostview"
+
+if ! (which $psviewer > /dev/null); then
+    echo "Could not execute $psviewer...  Please specify a valid .ps viewer."
+    line=$(grep -n "psviewer=" `which ly2ps`|cut -d : -f 1)
+    script=$(which $0)
+    for c in $line;do
+        echo "Please edit line $c of this script:"
+        echo "    $script"
+        exit 1
+    done
+fi
+
+if [ $# -eq 0 ]; then
+    echo "usage:  ly2ps [filename]"
+    echo "(.ly extension is assumed, and may be omitted)"
+    exit 1
+fi
+
+logfile="/tmp/$(basename $1).lilypond.errors"
+
+wd=$(dirname $1)
+[ "$wd" == "." ]&&wd=$PWD||cd $wd
+if [ "$PWD" != "$wd" ]; then
+    echo "Unable to change into directory $wd...  Aborting..."
+    exit 1
+fi
+
+random="$RANDOM.$RANDOM.$RANDOM"
+touch $random > /dev/null 2>&1
+if ! [ -f "$random" ]; then
+    echo "You do not have write permissions in $wd...  Aborting..."
+    exit 1
+fi
+rm -f $random > /dev/null 2>&1
+
+[ -f "$1" ]       &&  filename=$1
+[ -f "$1.ly" ]    &&  filename="$1.ly"
+filename=$(basename $filename)
+
+if [ -z "$filename" ]; then
+    echo "Input file $filename doesn't exit..."
+    exit 1
+fi
+
+base=$(echo $filename|cut -d \. -f 1)
+
+echo "Rendering $filename into $base.ps..."
+rm -f $base.ps > /dev/null 2>&1
+
+if (ly2dvi -P $base > $logfile 2>&1)&&[ -f "$base.ps" ]; then
+    rm -f  $base.tex $base.dvi
+    $psviewer $base.ps
+    echo "Success."
+else
+    echo "Fatal errors encountered!"
+    cat $logfile
+#    rm -fq $logfile
+    echo "Error log saved to $logfile..."
+fi
+
+

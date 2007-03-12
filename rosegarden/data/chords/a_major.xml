@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Chord_Group SYSTEM "guitar.dtd">
+<Chord_Group>
+	<!-- A Major -->
+	<Chord>
+		<ChordName scale="A"/>
+		<StartFret number="1"/>
+		<Note string="5" action="open"/>
+		<Note string="4" fret="2"/>
+		<Note string="3" fret="2"/>
+		<Note string="2" fret="2"/>
+		<Note string="1" action="open"/>
+	</Chord>
+	<Chord>
+		<ChordName scale="A" suffix="+"/>
+		<StartFret number="1"/>
+		<Note string="5" action="open"/>
+		<Note string="4" fret="3"/>
+		<Note string="3" fret="2"/>
+		<Note string="2" fret="2"/>
+		<Note string="1" fret="1"/>
+	</Chord>
+	<Chord>
+		<ChordName scale="A"/>
+		<StartFret number="2"/>
+		<Note string="6" action="open"/>
+		<Note string="5" fret="4"/>
+		<Note string="4" action="muted"/>
+		<Note string="3" fret="2"/>
+		<Note string="2" fret="5"/>
+		<Note string="1" action="open"/>
+	</Chord>
+	<Chord>
+		<ChordName scale="A"/>
+		<StartFret number="5"/>
+		<Barre fret="5" start="6" end="1"/>
+		<Note string="5" fret="7"/>
+		<Note string="4" fret="7"/>
+		<Note string="3" fret="6"/>
+	</Chord>
+	<Chord>
+		<ChordName scale="A"/>
+		<StartFret number="4"/>
+		<Note string="5" fret="4"/>
+		<Note string="4" fret="7"/>
+		<Note string="1" fret="5"/>
+	</Chord>
+	<Chord>
+		<ChordName scale="A" suffix="/Ab"/>
+		<StartFret number="1"/>
+		<Note string="5" action="open"/>
+		<Note string="4" fret="2"/>
+		<Note string="3" fret="1"/>
+		<Note string="2" fret="2"/>
+		<Note string="1" action="open"/>
+	</Chord>
+	<Chord>
+		<ChordName scale="A" suffix="/B"/>
+		<StartFret number="1"/>
+		<Note string="6" action="open"/>
+		<Note string="5" action="open"/>
+		<Note string="4" fret="2"/>
+		<Note string="3" fret="4"/>
+		<Note string="2" fret="2"/>
+		<Note string="1" action="open"/>
+	</Chord>
+	<Chord>
+		<ChordName scale="A" suffix="/B"/>
+		<StartFret number="5"/>
+		<Note string="5" action="open"/>
+		<Note string="4" fret="7"/>
+		<Note string="3" fret="6"/>
+		<Note string="2" action="open"/>
+		<Note string="1" action="open"/>
+	</Chord>
+	<Chord>
+		<ChordName scale="A" suffix="/D"/>
+		<StartFret number="1"/>
+		<Note string="4" action="open"/>
+		<Note string="3" fret="2"/>
+		<Note string="2" fret="2"/>
+		<Note string="1" action="open"/>
+	</Chord>
+	<Chord>
+		<ChordName scale="A" suffix="/D"/>
+		<StartFret number="5"/>
+		<Note string="4" action="open"/>
+		<Note string="3" fret="6"/>
+		<Note string="2" fret="5"/>
+		<Note string="1" fret="5"/>
+	</Chord>
+	<Chord>
+		<ChordName scale="A" suffix="/D"/>
+		<StartFret number="1"/>
+		<Note string="4" action="open"/>
+		<Note string="3" action="open"/>
+		<Note string="2" fret="2"/>
+		<Note string="1" fret="2"/>
+	</Chord>
+	<Chord>
+		<ChordName scale="A" suffix="/D"/>
+		<StartFret number="9"/>
+		<Note string="4" action="open"/>
+		<Note string="3" fret="9"/>
+		<Note string="2" fret="10"/>
+		<Note string="1" fret="9"/>
+	</Chord>
+	<Chord>
+		<ChordName scale="A" suffix="/F#"/>
+		<StartFret number="1"/>
+		<Note string="6" fret="2"/>
+		<Note string="5" action="open"/>
+		<Note string="4" fret="2"/>
+		<Note string="3" fret="2"/>
+		<Note string="2" fret="2"/>
+		<Note string="1" action="open"/>
+	</Chord>
+	<Chord>
+		<ChordName scale="A" suffix="/G#"/>
+		<StartFret number="1"/>
+		<Note string="6" fret="4"/>
+		<Note string="5" action="open"/>
+		<Note string="4" fret="2"/>
+		<Note string="3" fret="2"/>
+		<Note string="2" fret="2"/>
+		<Note string="1" action="open"/>
+	</Chord>
+	<Chord>
+		<ChordName scale="A" suffix="/G"/>
+		<StartFret number="1"/>
+		<Note string="6" fret="3"/>
+		<Note string="5" action="open"/>
+		<Note string="4" fret="2"/>
+		<Note string="3" fret="2"/>
+		<Note string="2" fret="2"/>
+		<Note string="1" action="open"/>
+	</Chord>
+	<Chord>
+		<ChordName scale="A" suffix="/G"/>
+		<StartFret number="1"/>
+		<Note string="5" action="open"/>
+		<Note string="4" fret="2"/>
+		<Note string="3" action="open"/>
+		<Note string="2" fret="2"/>
+		<Note string="1" action="open"/>
+	</Chord>
+	<Chord>
+		<ChordName scale="A" suffix="/G"/>
+		<StartFret number="1"/>
+		<Note string="5" action="open"/>
+		<Note string="4" fret="2"/>
+		<Note string="3" fret="2"/>
+		<Note string="2" fret="2"/>
+		<Note string="1" fret="3"/>
+	</Chord>
+	<Chord>
+		<ChordName scale="A" suffix="/Gb"/>
+		<StartFret number="1"/>
+		<Note string="6" action="open"/>
+		<Note string="5" action="open"/>
+		<Note string="4" fret="2"/>
+		<Note string="3" fret="2"/>
+		<Note string="2" fret="2"/>
+		<Note string="1" fret="2"/>
+	</Chord>
+	<Chord>
+		<ChordName scale="A" suffix="/Gb"/>
+		<StartFret number="1"/>
+		<Note string="6" action="open"/>
+		<Note string="4" fret="4"/>
+		<Note string="3" fret="2"/>
+		<Note string="2" fret="2"/>
+		<Note string="1" action="open"/>
+	</Chord>
+	<Chord>
+		<ChordName scale="A" suffix="/Gb"/>
+		<StartFret number="1"/>
+		<Note string="6" fret="2"/>
+		<Note string="4" fret="2"/>
+		<Note string="3" fret="2"/>
+		<Note string="2" fret="2"/>
+		<Note string="1" action="open"/>
+	</Chord>
+	<Chord>
+		<ChordName scale="A" suffix="/Gb"/>
+		<StartFret number="1"/>
+		<Note string="5" action="open"/>
+		<Note string="4" fret="4"/>
+		<Note string="3" fret="2"/>
+		<Note string="2" fret="2"/>
+		<Note string="1" action="open"/>
+	</Chord>
+	<Chord>
+		<ChordName scale="A" suffix="/Gb"/>
+		<StartFret number="1"/>
+		<Barre fret="2" start="4" end="1"/>
+	</Chord>
+	<Chord>
+		<ChordName scale="A" suffix="/Gb"/>
+		<StartFret number="1"/>
+		<Note string="4" fret="2"/>
+		<Note string="3" fret="2"/>
+		<Note string="2" fret="2"/>
+		<Note string="1" fret="2"/>
+	</Chord>
+</Chord_Group>

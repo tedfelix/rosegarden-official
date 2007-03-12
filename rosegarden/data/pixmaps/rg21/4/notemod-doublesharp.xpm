@@ -1,0 +1,14 @@
+/* XPM */
+static char * notemod_doublesharp_xpm[] = {
+"5 8 2 1",
+" 	c None",
+"x	c black",
+"     ",
+"     ",
+"x   x",
+" x x ",
+"  x  ",
+" x x ",
+"x   x",
+"     "
+};

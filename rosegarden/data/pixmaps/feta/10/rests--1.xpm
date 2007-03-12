@@ -1,0 +1,22 @@
+/* XPM */
+static char *magick[] = {
+/* columns rows colors chars-per-pixel */
+"7 11 5 1",
+"  c Gray1",
+". c Gray47",
+"X c #808080",
+"o c #bbbbbb",
+"O c None",
+/* pixels */
+"OOOOOOO",
+"Oo.X..o",
+"O.    .",
+"O.    .",
+"O.    .",
+"O.    .",
+"O.    .",
+"O.    .",
+"O.    .",
+"O.    .",
+"Oo.XX.o"
+};

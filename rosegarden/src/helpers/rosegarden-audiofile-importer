@@ -1,0 +1,268 @@
+#!/bin/sh
+#
+# Helper application to convert and import audio files for Rosegarden.
+#
+# Can take audio files of various kinds as input, always produces WAV
+# files that are compatible with Rosegarden as output.
+#
+# Not actually specific to Rosegarden in any way, except that
+# Rosegarden needs to know it can rely on its presence and calling
+# interface.
+#
+# Usage:
+#
+# rosegarden-audiofile-importer -t [<version>]
+# rosegarden-audiofile-importer --conftest [<version>]
+#  -- Exit successfully if the importer is available and working
+#     [and is of at least version <version>].  If some of the
+#     required helper applications are missing, also print to
+#     stdout a line saying "Required: application1, application2",
+#     listing the missing programs.
+#
+# rosegarden-audiofile-importer -l [<version>]
+#  -- List known file extensions (e.g. ogg wav flac).  Return code
+#     is same as for -t (so can combine two calls into one)
+#
+# rosegarden-audiofile-importer [-r <rate>] -w <inputfile>
+#  -- Test whether any work is needed to convert <inputfile>, either
+#     because it isn't in a Rosegarden-compatible format or because
+#     its samplerate differs from <rate>.  Exit successfully if no
+#     work is required; return error code 2 if conversion required,
+#     3 if resampling required, 4 if both required, 1 for other error.
+#
+# rosegarden-audiofile-importer [-r <rate>] -c <inputfile> <outputfile>
+#  -- Convert <inputfile> [and resample if necessary] and write to
+#     <outputfile> as a WAV file
+#
+# N.B. <outputfile> must not already exist -- this program will not
+# overwrite it, but will fail instead if it does
+
+version=1
+
+OTHER_ERROR=1
+CONVERSION_REQD=2
+RESAMPLE_REQD=3
+BOTH_REQD=4
+
+echo "rosegarden-audiofile-importer: $@" 1>&2
+
+conftest() {
+    # ssrc is our favourite resampler, but it only works for certain
+    # samplerates, so we have to have at least one other just in case
+    if [ -x "`type -path sndfile-resample`" ]; then
+	return 0
+    fi
+    if [ -x "`type -path sox`" ] && sox -h 2>&1 | grep -q polyphase; then
+	return 0
+    fi
+    echo "Required: sox OR sndfile-resample"
+    echo "rosegarden-audiofile-importer: ERROR: No resampler available, failing configuration test" 1>&2
+    return 1
+}
+
+[ -x "`type -path oggdec`" ] && have_oggdec=1
+[ -x "`type -path flac`" ] && have_flac=1
+[ -x "`type -path mpg321`" ] && have_mpg321=1
+[ -x "`type -path sndfile-convert`" -a -x "`type -path sndfile-info`" ] && have_sndfile=1
+
+if [ -n "$have_mpg321" ]; then
+    if ! mpg321 --help 2>&1 | grep -q 'wav N'; then
+	have_mpg321=
+    fi
+fi
+
+case "$1" in
+    -t|--conftest) conftest; exit $?;;
+    -l) conftest || exit $?
+	{
+	[ -n "$have_oggdec" ] && echo ogg
+	[ -n "$have_flac" ] && echo flac
+	[ -n "$have_mpg321" ] && echo mp3
+	[ -n "$have_sndfile" ] && sndfile-convert --help 2>&1 | \
+	    grep '^ *[a-z][a-z]* *: ' | awk '{ print $1; }'
+	} | sort | uniq | fmt -1000
+	exit 0;;
+    -r) rate="$2"; shift; shift;;
+esac
+
+case "$1" in
+    -w) test_work=1;;
+    -c) convert=1;;
+     *) exit 2;;
+esac
+
+conftest || exit $OTHER_ERROR
+
+infile="$2"
+if [ ! -r "$infile" ]; then
+    echo "rosegarden-audiofile-importer: ERROR: input file \"$infile\" cannot be opened" 1>&2
+    exit $OTHER_ERROR
+fi
+
+if [ -n "$convert" ]; then
+    outfile="$3"
+    if [ -z "$outfile" ]; then
+	echo "rosegarden-audiofile-importer: ERROR: output file not specified" 1>&2
+	exit $OTHER_ERROR
+    fi
+    if [ -f "$outfile" ]; then
+	echo "rosegarden-audiofile-importer: ERROR: output file \"$outfile\" already exists, not overwriting" 1>&2
+	exit $OTHER_ERROR
+    fi
+fi
+
+base=`basename "$infile"`
+stem=${base%.*}
+extension=${base##*.}
+
+extension=`echo $extension | tr '[A-Z]' '[a-z]'`
+
+# If the file ends in ogg, mp3, wav or flac, we believe it.  Otherwise
+# use file to see whether it's actually something else
+
+case "$extension" in
+    ogg|mp3|wav|flac) ;;
+    *) case "`file $infile`" in
+ 	   *Ogg*Vorbis*) extension=ogg;;
+	   *MP3*) extension=mp3;;
+	   *FLAC*) extension=flac;;
+       esac;;
+esac
+
+case "$extension" in
+    ogg) converter=oggdec
+	 [ -x "`type -path ogginfo`" ] && filerate=`ogginfo "$infile" | grep '^Rate: ' | awk '{ print $2; }'`;;
+    mp3) converter=mpg321
+	 # don't have a helper program to work out rate
+	;;
+      *) filerate=`sndfile-info "$infile" | grep '^Sample Rate :' | awk '{ print $4; }'`;;
+esac
+
+case "$extension" in
+    wav) ;;
+   flac) converter=flac; convert_reqd=1;;
+ogg|mp3) convert_reqd=1;;
+      *) converter=sndfile-convert; convert_reqd=1;;
+esac
+
+echo "Extension is $extension, converter is $converter, reqd is $convert_reqd"
+
+case "$filerate" in [0-9]*);; *) filerate=; intermediate=1;; esac
+
+[ -n "$filerate" ] && echo "File samplerate is $filerate (requested: $rate)"
+
+[ -n "$filerate" -a -n "$rate" ] && [ "$filerate" -ne "$rate" ] && resample_reqd=1
+[ -n "$resample_reqd" -a -n "$convert_reqd" ] && intermediate=1
+
+[ -n "$intermediate" ] && echo "Using intermediate file"
+
+if [ -z "$convert" ]; then # -w option
+    if [ -n "$convert_reqd" ]; then
+	[ -n "$intermediate" -o -n "$resample_reqd" ] && exit $BOTH_REQD
+	exit $CONVERSION_REQD;
+    else
+	[ -n "$intermediate" -o -n "$resample_reqd" ] && exit $RESAMPLE_REQD
+	exit 0;
+    fi
+fi
+
+target="$outfile"
+if [ -n "$intermediate" ]; then
+    target="$outfile.tmp.wav"
+    if [ -f "$target" ]; then
+	echo "rosegarden-audiofile-importer: ERROR: intermediate file \"$target\" already exists, not overwriting" 1>&2
+	exit $OTHER_ERROR
+    fi
+    trap "rm -f \"$target\"" 0
+    trap "rm -f \"$target\" \"$outfile\"" 1 2 9 11 15
+else
+    trap "rm -f \"$outfile\"" 1 2 9 11 15
+fi
+
+resample() {
+    _source=$1; shift
+    _target=$1; shift
+    simple=""
+    case "$filerate" in
+        192000|176400|96000|88200|48000|44100|24000|22050|12000|11025)
+	case "$rate" in
+	    192000|176400|96000|88200|48000|44100|24000|22050|12000|11025)
+	    simple=1;;
+	esac
+    esac
+    done=""
+    if [ -x "`type -path ssrc`" -a -n "$simple" ]; then
+	echo "Resampling using ssrc..." 1>&2
+	ssrc --rate "$rate" --twopass --dither 4 --profile standard "$_source" "$_target" && done=1
+    fi
+    if [ -z "$done" ]; then
+	if [ -x "`type -path sndfile-resample`" ]; then
+	    echo "Resampling using sndfile-resample..." 1>&2
+	    sndfile-resample -to "$rate" -c 0 "$_source" "$_target" || return 4
+	else
+	    echo "Resampling using sox..." 1>&2
+	    sox "$_source" -r "$rate" "$_target" polyphase || return 4
+	fi
+    fi
+    return 0
+}    
+
+if [ -n "$convert_reqd" ]; then
+    case "$converter" in
+	flac) [ -z "$have_flac" -a -n "$have_sndfile" ] && converter=sndfile-convert;;
+    esac
+    case "$converter" in
+	oggdec)
+	    [ -n "$have_oggdec" ] || exit $OTHER_ERROR
+	    oggdec --output "$target" "$infile" || exit $OTHER_ERROR
+	    ;;
+	mpg321)
+	    [ -n "$have_mpg321" ] || exit $OTHER_ERROR
+	    mpg321 --wav "$target" "$infile" || exit $OTHER_ERROR
+	    ;;
+	flac)
+	    [ -n "$have_flac" ] || exit $OTHER_ERROR
+	    flac --decode --output-name="$target" "$infile" || exit $OTHER_ERROR
+	    ;;
+	   *)
+	    [ -n "$have_sndfile" ] || exit $OTHER_ERROR
+	    sndfile-convert -pcm16 "$infile" "$target" || exit $OTHER_ERROR
+	    ;;
+    esac
+elif [ -n "$resample_reqd" ]; then
+    resample "$infile" "$target" || exit $OTHER_ERROR
+    resample_reqd=
+fi
+
+if [ ! -f "$target" ]; then
+    echo "rosegarden-audiofile-importer: ERROR: target file not found" 1>&2
+    exit $OTHER_ERROR
+fi
+
+if [ -z "$intermediate" ]; then
+    echo "rosegarden-audiofile-importer: Done" 1>&2
+    exit 0
+fi
+
+if [ -n "$intermediate" -a -n "$rate" -a -z "$filerate" ]; then
+    filerate=`sndfile-info "$target" | grep '^Sample Rate :' | awk '{ print $4; }'`
+    case "$filerate" in
+   [0-9]*) if [ "$filerate" -ne "$rate" ]; then
+	       resample_reqd=1
+	   fi;;
+	*) echo "rosegarden-audiofile-importer: ERROR: failed to extract samplerate of intermediate file" 1>&2
+	   rm "$target"
+	   exit $OTHER_ERROR
+	   ;;
+    esac
+fi
+
+if [ -n "$resample_reqd" ]; then
+    resample "$target" "$outfile" || exit $OTHER_ERROR
+    rm "$target"
+else
+    mv "$target" "$outfile"
+fi
+
+echo "rosegarden-audiofile-importer: Done" 1>&2
+exit 0

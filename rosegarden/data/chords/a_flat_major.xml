@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Chord_Group SYSTEM "guitar.dtd">
+<Chord_Group>
+	<!-- A Major -->
+	<Chord>
+		<ChordName scale="A_Flat">
+			<Alias scale="G_Sharp"/>
+		</ChordName>
+		<StartFret number="4"/>
+		<Barre fret="4" start="6" end="1"/>
+		<Note string="5" fret="5"/>
+		<Note string="4" fret="5"/>
+	</Chord>
+	<Chord>
+		<ChordName scale="A_Flat" modifier="Plus">
+			<Alias scale="G_Sharp" modifier="Plus"/>
+			<Alias scale="G_Sharp" modifier="Aug"/>
+			<Alias scale="A_Flat" modifier="Aug"/>
+		</ChordName>
+		<StartFret number="1"/>
+		<Note string="4" fret="2"/>
+		<Note string="3" fret="1"/>
+		<Note string="2" fret="1"/>
+	</Chord>
+	<Chord>
+		<!-- A flat / G flat -->
+		<ChordName scale="A_Flat"/>
+		<StartFret number="1"/>
+		<Note string="4" fret="1"/>
+		<Note string="3" fret="1"/>
+		<Note string="2" fret="1"/>
+		<Note string="1" fret="2"/>
+	</Chord>
+	<Chord>
+		<!-- A flat 11 -->
+		<ChordName scale="A_Flat"/>
+		<StartFret number="4"/>
+		<Barre fret="4" start="6" end="1"/>
+		<Note string="5" fret="6"/>
+		<Note string="3" fret="6"/>
+	</Chord>
+	<Chord>
+		<!-- A flat / A -->
+		<ChordName scale="A_Flat" suffix="/A">
+			<!-- A dim / A Flat -->
+			<Alias scale="A_Flat" modifier="Dim"/>
+		</ChordName>
+		<StartFret number="1"/>
+		<Barre fret="1" start="4" end="1"/>
+		<Note string="3" fret="2"/>
+		<Note string="1" fret="4"/>
+	</Chord>
+	<Chord>
+		<!-- Ab6 -->
+		<ChordName scale="A_Flat" suffix="6"/>
+		<StartFret number="8"/>
+		<Barre fret="8" start="5" end="1"/>
+		<Note string="4" fret="10"/>
+		<Note string="2" fret="9"/>
+	</Chord>
+	<Chord>
+		<!-- Ab6 -->
+		<ChordName scale="A_Flat" suffix="6">
+			<Alias scale="A_Flat" suffix="/F"/>
+		</ChordName>
+		<StartFret number="1"/>
+		<Barre fret="1" start="4" end="1"/>
+	</Chord>
+	<Chord>
+		<ChordName scale="A_Flat" suffix="/Gb">
+			<Alias scale="G_Sharp" suffix="7"/>
+		</ChordName>
+		<StartFret number="1"/>
+		<Barre fret="1" start="4" end="1"/>
+		<Note string="1" fret="2"/>
+	</Chord>
+	<Chord>
+		<ChordName scale="A_Flat" suffix="/Gb">
+			<Alias scale="A_Flat" suffix="7"/>
+		</ChordName>
+		<StartFret number="4"/>
+		<Barre fret="4" start="4" end="1"/>
+		<Note string="3" fret="5"/>
+	</Chord>
+	<Chord>
+		<ChordName scale="A_Flat" modifier="Dim">
+			<Alias scale="A_Flat" modifier="Dim" suffix="/F"/>
+			<Alias scale="A_Flat" modifier="Dim" suffix="7"/>
+			<Alias scale="G_Sharp" modifier="Dim"/>
+		</ChordName>
+		<StartFret number="1"/>
+		<Note string="4" action="open"/>
+		<Note string="3" fret="1"/>
+		<Note string="2" action="open"/>
+		<Note string="1" fret="1"/>
+	</Chord>
+	<Chord>
+		<ChordName scale="A_Flat" modifier="Dim" suffix="/E"/>
+		<StartFret number="1"/>
+		<Note string="6" action="open"/>
+		<Note string="5" fret="2"/>
+		<Note string="4" action="open"/>
+		<Note string="3" fret="1"/>
+		<Note string="2" action="open"/>
+		<Note string="1" action="open"/>
+	</Chord>
+	<Chord>
+		<ChordName scale="A_Flat" modifier="Dim" suffix="/E"/>
+		<StartFret number="1"/>
+		<Note string="6" action="open"/>
+		<Note string="5" fret="2"/>
+		<Note string="4" fret="2"/>
+		<Note string="3" fret="1"/>
+		<Note string="2" fret="3"/>
+		<Note string="1" action="open"/>
+	</Chord>
+	<Chord>
+		<ChordName scale="A_Flat" modifier="Dim" suffix="/E"/>
+		<StartFret number="1"/>
+		<Note string="5" fret="2"/>
+		<Note string="4" action="open"/>
+		<Note string="3" fret="1"/>
+		<Note string="2" fret="3"/>
+		<Note string="1" action="open"/>
+	</Chord>
+	<Chord>
+		<ChordName scale="A_Flat" modifier="Dim" suffix="/Eb"/>
+		<StartFret number="1"/>
+		<Note string="4" action="open"/>
+		<Note string="3" fret="4"/>
+		<Note string="2" fret="4"/>
+		<Note string="1" fret="4"/>
+	</Chord>
+	<Chord>
+		<ChordName scale="A_Flat" modifier="Dim" suffix="/F">
+			<Alias scale="A_Flat" modifier="Dim" suffix="7"/>
+		</ChordName>
+		<StartFret number="1"/>
+		<Note string="5" fret="2"/>
+		<Note string="4" action="open"/>
+		<Note string="3" fret="1"/>
+		<Note string="2" action="open"/>
+		<Note string="1" fret="1"/>
+	</Chord>
+	<Chord>
+		<ChordName scale="A_Flat" modifier="Dim" suffix="/F">
+			<Alias scale="A_Flat" modifier="Dim" suffix="7"/>
+		</ChordName>
+		<StartFret number="1"/>
+		<Note string="4" fret="3"/>
+		<Note string="3" fret="4"/>
+		<Note string="2" fret="3"/>
+		<Note string="1" fret="4"/>
+	</Chord>
+	<Chord>
+		<ChordName scale="A_Flat" modifier="Sus">
+			<Alias scale="G_Sharp" modifier="Sus"/>
+			<Alias scale="G_Sharp" modifier="Sus" suffix="4"/>
+			<Alias scale="A_Flat" modifier="Sus" suffix="4"/>
+		</ChordName>
+		<StartFret number="1"/>
+		<Barre fret="1" start="4" end="1"/>
+		<Note string="2" fret="2"/>
+		<Note string="1" fret="4"/>
+	</Chord>
+	<Chord>
+		<ChordName scale="A_Flat" modifier="Sus"/>
+		<StartFret number="4"/>
+		<Note string="4" fret="6"/>
+		<Note string="3" fret="6"/>
+		<Barre fret="4" start="4" end="1"/>
+	</Chord>
+	<Chord>
+		<ChordName scale="A_Flat" modifier="Sus" suffix="2/F"/>
+		<StartFret number="1"/>
+		<Barre fret="1" start="5" end="1"/>
+		<Note string="4" fret="3"/>
+		<Note string="2" fret="4"/>
+	</Chord>
+	<Chord>
+		<ChordName scale="A_Flat" modifier="Minor"/>
+		<StartFret number="4"/>
+		<Barre fret="4" start="6" end="1"/>
+		<Note string="5" fret="5"/>
+		<Note string="4" fret="4"/>
+	</Chord>
+	<Chord>
+		<ChordName scale="A_Flat" modifier="Minor" suffix="/D"/>
+		<StartFret number="1"/>
+		<Note string="4" action="open"/>
+		<Barre fret="4" start="3" end="1"/>
+	</Chord>
+	<Chord>
+		<ChordName scale="A_Flat" modifier="Minor" suffix="/E">
+			<Alias scale="E"/>
+		</ChordName>
+		<StartFret number="1"/>
+		<Note string="6" action="open"/>
+		<Note string="5" fret="2"/>
+		<Note string="4" fret="1"/>
+		<Note string="3" fret="1"/>
+		<Note string="2" action="open"/>
+		<Note string="1" action="open"/>
+	</Chord>
+	<Chord>
+		<ChordName scale="A_Flat" modifier="Minor" suffix="/E"/>
+		<StartFret number="4"/>
+		<Note string="6" action="open"/>
+		<Note string="4" fret="6"/>
+		<Note string="3" fret="4"/>
+		<Note string="2" fret="4"/>
+		<Note string="1" action="open"/>
+	</Chord>
+	<Chord>
+		<ChordName scale="A_Flat" modifier="Minor" suffix="/E"/>
+		<StartFret number="1"/>
+		<Note string="4" fret="1"/>
+		<Note string="3" fret="1"/>
+		<Note string="2" action="open"/>
+		<Note string="1" action="open"/>
+	</Chord>
+	<Chord>
+		<ChordName scale="A_Flat" modifier="Minor" suffix="/Gb">
+			<Alias scale="A_Flat" modifier="Minor" suffix="7"/>
+		</ChordName>
+		<StartFret number="1"/>
+		<Barre fret="4" start="4" end="1"/>
+	</Chord>
+	<Chord>
+		<ChordName scale="A_Flat"/>
+		<StartFret number="4"/>
+		<Barre fret="4" start="6" end="1"/>
+		<Note string="5" fret="6"/>
+		<Note string="4" fret="6"/>
+		<Note string="3" fret="5"/>
+	</Chord>
+	<Chord>
+		<ChordName scale="A_Flat" suffix="7"/>
+		<StartFret number="1"/>
+		<Barre fret="4" start="4" end="1"/>
+		<Note string="1" fret="3"/>
+	</Chord>
+	<Chord>
+		<ChordName scale="A_Flat" suffix="#5"/>
+		<StartFret number="1"/>
+		<Note string="5" fret="3"/>
+		<Note string="4" fret="2"/>
+		<Note string="3" fret="1"/>
+		<Note string="2" fret="1"/>
+		<Note string="1" action="open"/>
+	</Chord>
+</Chord_Group>

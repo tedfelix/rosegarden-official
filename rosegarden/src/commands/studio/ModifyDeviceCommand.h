@@ -1,0 +1,109 @@
+
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
+
+/*
+    Rosegarden
+    A MIDI and audio sequencer and musical notation editor.
+
+    This program is Copyright 2000-2007
+        Guillaume Laurent   <glaurent@telegraph-road.org>,
+        Chris Cannam        <cannam@all-day-breakfast.com>,
+        Richard Bown        <richard.bown@ferventsoftware.com>
+
+    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
+    Bown to claim authorship of this work have been asserted.
+
+    Other copyrights also apply to some parts of this work.  Please
+    see the AUTHORS file and individual file headers for details.
+
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License as
+    published by the Free Software Foundation; either version 2 of the
+    License, or (at your option) any later version.  See the file
+    COPYING included with this distribution for more information.
+*/
+
+#ifndef _RG_MODIFYDEVICECOMMAND_H_
+#define _RG_MODIFYDEVICECOMMAND_H_
+
+#include "base/Device.h"
+#include "base/MidiDevice.h"
+#include <string>
+#include <kcommand.h>
+#include <qstring.h>
+#include <klocale.h>
+
+
+class Modify;
+
+
+namespace Rosegarden
+{
+
+class Studio;
+
+
+class ModifyDeviceCommand : public KNamedCommand
+{
+public:
+    // Any of the arguments passed by pointer may be null (except for
+    // the Studio) -- in which case they will not be changed in the device.
+    ModifyDeviceCommand(Studio *studio,
+                        DeviceId device,
+                        const std::string &name,
+                        const std::string &librarianName,
+                        const std::string &librarianEmail);
+    
+    void setVariation  (MidiDevice::VariationType variationType);
+    void setBankList   (const BankList    &bankList);
+    void setProgramList(const ProgramList &programList);
+    void setControlList(const ControlList &controlList);
+    void setKeyMappingList(const KeyMappingList &keyMappingList);
+    void setOverwrite  (bool overwrite) { m_overwrite = overwrite; }
+    void setRename     (bool rename)    { m_rename = rename; }
+
+    /// supersedes setBankList() and setProgramList()
+    void clearBankAndProgramList() { m_clearBankAndProgramList = true; }
+
+    static QString getGlobalName() { return i18n("Modify &MIDI Bank"); }
+
+    virtual void execute();
+    virtual void unexecute();
+
+protected:
+
+    Studio                    *m_studio;
+    int                                    m_device;
+    std::string                            m_name;
+    std::string                            m_librarianName;
+    std::string                            m_librarianEmail;
+    MidiDevice::VariationType  m_variationType;
+    BankList                   m_bankList;
+    ProgramList                m_programList;
+    ControlList                m_controlList;
+    KeyMappingList             m_keyMappingList;
+
+    std::string                            m_oldName;
+    std::string                            m_oldLibrarianName;
+    std::string                            m_oldLibrarianEmail;
+    MidiDevice::VariationType  m_oldVariationType;
+    BankList                   m_oldBankList;
+    ProgramList                m_oldProgramList;
+    ControlList                m_oldControlList;
+    KeyMappingList             m_oldKeyMappingList;
+
+    bool                                   m_overwrite;
+    bool                                   m_rename;
+    bool                                   m_changeVariation;
+    bool                                   m_changeBanks;
+    bool                                   m_changePrograms;
+    bool                                   m_changeControls;
+    bool                                   m_changeKeyMappings;
+    bool                                   m_clearBankAndProgramList;
+
+};
+
+
+}
+
+#endif

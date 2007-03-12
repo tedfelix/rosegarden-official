@@ -1,0 +1,38 @@
+<!-- Each Chord Group must have at least one Chord -->
+<!ELEMENT Chord_Group (Chord)+>
+
+<!-- Each Chord is composed of 0-2 Barres and 0-6 Notes (6 string guitar) in some combination -->
+<!ELEMENT Chord (ChordName,StartFret,(Barre|Note)+)>
+
+<!ELEMENT StartFret EMPTY>
+<!ATTLIST StartFret
+	number CDATA #REQUIRED
+>
+
+<!ELEMENT ChordName (Alias)*>
+<!ATTLIST ChordName
+	scale (C|C_Sharp|D_Flat|D|D_Sharp|E_Flat|E|E_Sharp|F|F_Sharp|G_Flat|G|G_Sharp|A_Flat|A|A_Sharp|B_Flat|B) "C"
+	modifier (Major|Minor|Perfect|Aug|Plus|Dim|Sus) "Major"
+	suffix CDATA "None"
+>
+
+<!ELEMENT Alias EMPTY>
+<!ATTLIST Alias
+	  scale (C|C_Sharp|D_Flat|D|D_Sharp|E_Flat|E|E_Sharp|F|F_Sharp|G_Flat|G|G_Sharp|A_Flat|A|A_Sharp|B_Flat|B) "C"
+	  modifier (Major|Minor|Perfect|Aug|Plus|Dim|Sus) "Major"
+	  suffix CDATA "None"
+>
+
+<!ELEMENT Barre EMPTY>
+<!ATTLIST Barre
+	  fret	CDATA	#REQUIRED
+	  start	CDATA	#REQUIRED
+	  end	CDATA	#REQUIRED
+>
+
+<!ELEMENT Note EMPTY>
+<!ATTLIST Note
+	string	CDATA	#REQUIRED
+	fret	CDATA	#IMPLIED
+	action (pressed|open|muted) "pressed"
+>

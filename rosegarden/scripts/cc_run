@@ -1,0 +1,46 @@
+#!/bin/sh
+prefix=/opt/rosegarden-install
+if [ -d "$HOME/rosegarden/install" ]; then
+    prefix=$HOME/rosegarden/install
+elif [ -d "/opt/rosegarden/install" ]; then
+    prefix=/opt/rosegarden/install
+elif [ -d "/work/rosegarden/install" ]; then
+    prefix=/work/rosegarden/install
+fi
+debug=""
+tag=""
+
+prog="rosegarden"
+
+if [ "$1" = "-d" ]; then
+    debug="gdb"
+    shift
+fi
+if [ "$1" = "-v" ]; then
+    debug="valgrind"
+    shift
+fi
+if [ "$1" = "-t" ]; then
+    debug="strace"
+    shift
+fi
+if [ "$1" = "-s" ]; then
+    prog="rosegardensequencer"
+    shift
+fi
+
+case "$1" in
+    [a-z0-9_]*) tag="$1"; shift;;
+	 *) tag=`basename \`pwd\``;
+	    echo "No tag supplied: trying implied tag from path \"$tag\"";;
+esac
+
+if [ ! -d "$prefix/$tag" ]; then
+    echo "No such tag as $tag (directory $prefix/$tag not found)"
+    exit 1
+fi
+
+PATH="$prefix/$tag/bin:$PATH" \
+    KDEDIRS="$prefix/$tag" \
+    $debug "$prefix/$tag/bin/$prog" "$@"
+

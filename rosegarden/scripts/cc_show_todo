@@ -1,0 +1,2 @@
+#!/bin/sh
+find ./base ./gui ./sound ./sequencer -print | egrep '.([Ch]|cpp)$' | xargs perl ./scripts/find-todo.pl

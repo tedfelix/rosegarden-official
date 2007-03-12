@@ -1,0 +1,50 @@
+/* XPM */
+static char *0[] = {
+/* width height num_colors chars_per_pixel */
+"    20    34        4            1",
+/* colors */
+"# c #c0d8ff",
+"  c #000000",
+"a c #404c80",
+"b c #808fc0",
+/* pixels */
+"                    ",
+"                    ",
+"     a############ba",
+"     b##########ba  ",
+"    a a           b ",
+"   a#a           a#b",
+"   a##b          a#b",
+"   a##b         a##b",
+"   b##a         b##a",
+"   b##a         b##a",
+"   b##a         b##a",
+"  a##b         a##b ",
+"  a##b         a##b ",
+"  a##b         a##b ",
+"  b##a         b##a ",
+"  b#a          ab#a ",
+"  ba  aabbbbba  aba ",
+"     ##########     ",
+" aba  abbbbbaa  ab  ",
+" a#ba          a#b  ",
+" a##b         a##b  ",
+" b##a         b##a  ",
+" b##a         b##a  ",
+" b##a         b##a  ",
+"a##b         a##b   ",
+"a##b         a##b   ",
+"a##b         a##b   ",
+"b##a         b##a   ",
+"b#a          b##a   ",
+"b#a           a#a   ",
+" b           a a    ",
+"  ab##########b     ",
+"ab############ba    ",
+"                    "
+};
+
+--------------040202080106060504000906--
+
+
+

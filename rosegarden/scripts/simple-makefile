@@ -1,0 +1,87 @@
+
+# This Makefile builds the code only, it doesn't do translations,
+# installations or anything else.  It builds everything it can find,
+# not just the files specified in Makefile.am.  Not recommended except
+# for occasional developer use or troubleshooting.
+
+# This doesn't use configure -- edit the Makefile itself for your own
+# needs -- but you will still need to have a correct config.h, so you
+# must run configure first.  This Makefile runs moc itself but will
+# currently get confused if there are already .moc.cpp files in the
+# various subdirectories -- delete them first.
+
+# Builds into a separate subdirectory so as not to confuse the proper
+# build mechanism.
+
+#KDEDIR		= /opt/kde32-icc80
+KDEDIR		= /opt/kde3.2
+QTDIR		= $(KDEDIR)
+
+#KDEDIR		= /opt/kde3
+#QTDIR		= /usr/lib/qt3
+
+CCDIR		= /opt/intel_cc_80
+
+CCACHE		= ccache
+CC		= $(CCACHE) $(CCDIR)/bin/icc
+CXX		= $(CCACHE) $(CCDIR)/bin/icpc
+LD		= $(CXX)
+MOC		= $(QTDIR)/bin/moc
+
+CXXFLAGS	= -w1 -wr748 -D_XOPEN_SOURCE=500 -D_BSD_SOURCE -O0 -g 
+LDFLAGS		= 
+
+INCLUDES	= \
+		-I$(CCDIR)/include/c++ \
+		-I$(CCDIR)/include \
+		-I/usr/local/include \
+		-I$(QTDIR)/include \
+		-I$(KDEDIR)/include \
+		-I/usr/include/freetype2 \
+		-I. -Ibase -Igui -Isound -Isequencer
+
+LDLIBS		= \
+		-L$(CCDIR)/lib \
+		-L$(KDEDIR)/lib \
+		-L$(QTDIR)/lib \
+		-lkdeprint -lkdeui -lkdecore -lqt-mt \
+		-ljack -lasound -llo -llrdf -lraptor -lmad \
+		-lcprts -lcxa -lunwind
+
+BUILD_DIR	= simple-build
+
+QHEADERS	= $(shell fgrep -l Q_OBJECT */*.h)
+QSOURCES	= $(patsubst %,$(BUILD_DIR)/%.moc.cpp,$(QHEADERS))
+QOBJECTS	= $(addsuffix .o,$(QSOURCES))
+
+SOURCES		= $(wildcard base/*.C sound/*.cpp sound/*.cc sequencer/*.cpp gui/*.cpp)
+OBJECTS		= $(addprefix $(BUILD_DIR)/,$(addsuffix .o,$(SOURCES)))
+LIBRARIES	= $(addprefix $(BUILD_DIR)/lib/,base.a gui.a sound.a sequencer.a)
+EXECUTABLES	= $(addprefix $(BUILD_DIR)/,rosegardensequencer rosegarden)
+
+all:	directories $(OBJECTS) $(QOBJECTS) $(LIBRARIES) $(EXECUTABLES)
+
+clean:
+	rm -rf $(BUILD_DIR)/base $(BUILD_DIR)/gui $(BUILD_DIR)/sound $(BUILD_DIR)/sequencer $(BUILD_DIR)/lib
+
+directories:
+	@mkdir -p $(BUILD_DIR) $(addprefix $(BUILD_DIR)/,base gui sound sequencer lib)
+
+$(BUILD_DIR)/%.moc.cpp: %
+	$(MOC) $< -o $@
+
+$(BUILD_DIR)/%.o: %
+	$(CXX) -c $(CXXFLAGS) $(INCLUDES) $< -o $@
+
+$(BUILD_DIR)/%.o: $(BUILD_DIR)/%
+	$(CXX) -c $(CXXFLAGS) $(INCLUDES) $< -o $@
+
+$(BUILD_DIR)/lib/%.a: $(OBJECTS) $(QOBJECTS)
+	$(AR) r $@ $(BUILD_DIR)/$*/*.o
+
+$(BUILD_DIR)/rosegarden: $(BUILD_DIR)/lib/gui.a $(BUILD_DIR)/lib/sound.a $(BUILD_DIR)/lib/base.a
+	$(LD) $(LDFLAGS) $^ $(LDLIBS) -o $@
+
+$(BUILD_DIR)/rosegardensequencer: $(BUILD_DIR)/lib/sequencer.a $(BUILD_DIR)/lib/sound.a $(BUILD_DIR)/lib/base.a
+	$(LD) $(LDFLAGS) $^ $(LDLIBS) -o $@
+

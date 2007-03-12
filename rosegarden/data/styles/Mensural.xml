@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE rosegarden-note-style>
+
+<rosegarden-note-style base-style="Classical">
+
+  <global shape="diamond" filled="false" stem="true" flags="0"
+	  hfixpoint="central" vfixpoint="near"/>
+  
+  <!-- Mapping from mensural to classical picked up from
+         http://listen.to/early.music
+       I know nothing about mensural notation myself.
+       The white mensural note names are in comments.
+  -->
+
+  <note type="hemidemisemiquaver" flags="3"/>
+  <note type="demisemiquaver" flags="2"/>
+  <note type="semiquaver" flags="1"/> <!-- fusa (flag shouldn't be curved) -->
+  <note type="quaver" filled="true"/> <!-- semiminim -->
+  <note type="crotchet"/> <!-- minim -->
+  <note type="minim" stem="false"/> <!-- semibreve -->
+  <note type="semibreve" charname="MUSICAL SYMBOL BREVIS" stem="false"/> <!-- breve -->
+  <note type="breve" charname="MUSICAL SYMBOL BREVIS" stem="true" hfixpoint="reversed"/> <!-- long -->
+
+  <!-- and we can't deal with the maxima... perhaps we should have
+       mapped semibreve to quarter -->
+
+</rosegarden-note-style>
+

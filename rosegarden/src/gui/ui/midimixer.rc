@@ -1,0 +1,34 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+
+<kpartgui name="Rosegarden::MidiMixer" version="1230">
+  
+<MenuBar>
+
+  <Menu name="Transport">
+        <text>T&amp;ransport</text>
+  <Action name="play" />
+  <Action name="stop" />
+  <Action name="playback_pointer_back_bar" />
+  <Action name="playback_pointer_forward_bar" />
+  <Action name="playback_pointer_start" />
+  <Action name="playback_pointer_end" />
+  <Action name="record" />
+  <Action name="panic" />
+  </Menu>
+
+</MenuBar>
+
+<ToolBar name="Transport Toolbar">
+  <text>Transport Toolbar</text>
+  <Action name="playback_pointer_start" />
+  <Action name="playback_pointer_back_bar" />
+  <Action name="play" />
+  <Action name="playback_pointer_forward_bar" />
+  <Action name="playback_pointer_end" />
+  <Action name="stop" />
+  <Action name="record" />
+  <Action name="panic" />
+</ToolBar>
+
+</kpartgui>
+ 

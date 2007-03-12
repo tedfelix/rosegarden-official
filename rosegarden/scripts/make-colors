@@ -1,0 +1,63 @@
+#!/bin/bash
+#
+# Copyright (c) 2005  D. Michael McIntyre <dmmcintyr@users.sourceforge.net>
+# Released under the GPL
+#
+# make-colors
+#
+# little hacky script to make colors for autoload.rg
+#
+# takes scripts/color-list as input (which was originally created from the
+# output of a showrgb command, pared down to eliminate duplicate numerical
+# entries and colors that were so close to white they were probably useless)
+#
+# the first entry in color-list is the default "Rosegarden green" color
+# the second entry is the default audio segment color
+# the remaining entries can be changed at will.
+#
+# format of color-list is:
+# R,G,B,ColorName
+#
+# No spaces!  This crappy bash script uses cut to parse the file, and spaces
+# will break it.
+#
+# the results are written to gui/testfiles/colourmap-fragment.xml file which can be
+# manually imported into autoload.rg or any other .rg file
+#
+#
+
+CVS=~/CVS
+
+ifile=$CVS/rosegarden/scripts/color-list
+ofile=$CVS/rosegarden/gui/testfiles/colourmap-fragment.xml
+
+[ -f $ofile ]&&rm -f $ofile
+   
+# write block header
+cat << EOF >> $ofile
+        <colourmap name="segmentmap">
+EOF
+
+ID=0
+for f in `cat $ifile`; do
+    r=`echo $f|cut -d , -f 1`
+    g=`echo $f|cut -d , -f 2`
+    b=`echo $f|cut -d , -f 3`
+    name=`echo $f|cut -d , -f 4`
+    
+    #special override to void name for first entry, which should be ""
+    [ $ID == 0 ] && name=
+    cat << EOF >> $ofile
+	    <colourpair id="$ID" name="$name" red="$r" green="$g" blue="$b"/>
+EOF
+    ((ID++))
+done
+
+# write block close
+cat << EOF >> $ofile
+        </colourmap>
+EOF
+
+echo Done...  Reminder, output went to $ofile...
+
+exit 0
