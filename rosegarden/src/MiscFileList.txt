@@ -1,6 +1,0 @@
-SET(misc_SRCS
-	misc/Debug.cpp
-	misc/Debug.h
-	misc/Strings.cpp
-	misc/Strings.h
-)

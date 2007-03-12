@@ -1,9 +1,0 @@
-[Desktop Entry]
-Comment=Rosegarden file
-Comment[fr]=Fichier Rosegarden
-Hidden=false
-Icon=x-rosegarden.png
-MimeType=audio/x-rosegarden
-Patterns=*.rg;*.RG
-Type=MimeType
-X-KDE-AutoEmbed=false
