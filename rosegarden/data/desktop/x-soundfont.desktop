@@ -1,8 +1,0 @@
-[Desktop Entry]
-Comment=Soundfont
-Comment[fr]=Echantillons
-Hidden=false
-Icon=sound
-MimeType=audio/x-soundfont
-Patterns=*.sf2;*.SF2
-Type=MimeType

@@ -1,9 +1,0 @@
-/* XPM */
-static char * note_bodyfilled_xpm[] = {
-"6 4 2 1",
-" 	c None",
-".	c black",
-" ...  ",
-"..... ",
-"..... ",
-" ...  "};

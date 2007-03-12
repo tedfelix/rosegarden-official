@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE rosegarden-note-style>
-
-<rosegarden-note-style base-style="Classical">
-
-  <global shape="cross" vfixpoint="near"/>
-
-</rosegarden-note-style>
