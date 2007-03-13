@@ -73,16 +73,23 @@ ChordMap::getChords(const QString& root, const QString& ext) const
 QStringList
 ChordMap::getRootList() const
 {
-    QStringList rootNotes;
-    QString currentRoot;
+    static QStringList rootNotes;
     
-    for(chordset::const_iterator i = m_map.begin(); i != m_map.end(); ++i) {
-        const Chord& chord = *i;
-        if (chord.getRoot() != currentRoot) {
-            rootNotes.push_back(chord.getRoot());
-            currentRoot = chord.getRoot();
-        } 
+    if (rootNotes.count() == 0) {
+        rootNotes = QStringList::split(QString(","), "A,A#/Bb,B,C,C#/Db,D,D#/Eb,E,F,F#/Gb,G,G#/Ab");
     }
+    
+    // extract roots from map itself - not a very good idea
+    //
+//    QString currentRoot;
+//    
+//    for(chordset::const_iterator i = m_map.begin(); i != m_map.end(); ++i) {
+//        const Chord& chord = *i;
+//        if (chord.getRoot() != currentRoot) {
+//            rootNotes.push_back(chord.getRoot());
+//            currentRoot = chord.getRoot();
+//        } 
+//    }
 
     return rootNotes;
 }
