@@ -58,8 +58,8 @@
 #include "document/RosegardenGUIDoc.h"
 #include "gui/application/RosegardenApplication.h"
 #include "gui/application/RosegardenGUIView.h"
-#include "gui/editors/guitar/Chord.h"
 #include "gui/editors/notation/NotationProperties.h"
+#include "gui/editors/guitar/Chord.h"
 #include "gui/general/ProgressReporter.h"
 #include "gui/widgets/CurrentProgressDialog.h"
 #include <kconfig.h>
@@ -1565,27 +1565,26 @@ LilypondExporter::writeBar(Segment *s,
                 handleText(*i, lilyText);
             }
 
-        } else if ((*i)->isa(Guitar::Fingering::EventType)) {
+        } else if ((*i)->isa(Guitar::Chord::EventType)) {
 
             try {
-                Guitar::Fingering::Fingering arrangement =
-                    Guitar::Fingering::Fingering(**i);
-
-                int firstFret = arrangement.getFirstFret();
-                int barre_start = 0, barre_end = 0, barre_fret = 0;
+                Guitar::Chord chord = Guitar::Chord(**i);
+                const Guitar::Fingering& fingering = chord.getFingering();
+                
+                int firstFret = fingering.getStartFret();
+                int barreStart = 0, barreEnd = 0, barreFret = 0;
 
                 // 
                 // Check if there is a barre.
                 //
-                for (int fret_num = firstFret; fret_num <= firstFret + 5; fret_num++) {
-                    if (arrangement.hasBarre(fret_num)) {
-                        barre_start = (arrangement.getBarre(fret_num))->getStart();
-                        barre_end = (arrangement.getBarre(fret_num))->getEnd();
-                        barre_fret = (arrangement.getBarre(fret_num))->getFret();
-                    }
+                if (fingering.hasBarre()) {
+                    Guitar::Fingering::Barre barre = fingering.getBarre();
+                    barreStart = barre.start;
+                    barreEnd = barre.end;
+                    barreFret = barre.fret;
                 }
 
-                if (barre_start == 0) {
+                if (barreStart == 0) {
                     str << " s4*0^\\markup \\fret-diagram #\"";
                 } else {
                     str << " s4*0^\\markup \\override #'(barre-type . straight) \\fret-diagram #\"";
@@ -1593,23 +1592,21 @@ LilypondExporter::writeBar(Segment *s,
                 //
                 // Check each string individually.
                 //
-                for (int string_num = 6; string_num >= 1; string_num--) {
-                    if (barre_start == string_num) {
-                        str << "c:" << barre_start << "-" << barre_end << "-" << barre_fret << ";";
+                for (int stringNum = 6; stringNum >= 1; --stringNum) {
+                    if (barreStart == stringNum) {
+                        str << "c:" << barreStart << "-" << barreEnd << "-" << barreFret << ";";
                     }
 
-                    if (arrangement.getStringStatus( string_num ) == Guitar::GuitarString::MUTED) {
-                        str << string_num << "-x;";
-                    } else if (arrangement.getStringStatus( string_num ) == Guitar::GuitarString::OPEN) {
-                        str << string_num << "-o;";
+                    if (fingering.getStringStatus( stringNum ) == Guitar::Fingering::MUTED) {
+                        str << stringNum << "-x;";
+                    } else if (fingering.getStringStatus( stringNum ) == Guitar::Fingering::OPEN) {
+                        str << stringNum << "-o;";
                     } else {
-                        if (arrangement.hasNote(string_num)) {
-                            str << string_num << "-" << (arrangement.getNote(string_num))->getFret() << ";";
-                        } else if ((string_num <= barre_start) && (string_num >= barre_end)) {
-                            str << string_num << "-" << barre_fret << ";";
+                        int stringStatus = fingering.getStringStatus(stringNum);
+                        if ((stringNum <= barreStart) && (stringNum >= barreEnd)) {
+                            str << stringNum << "-" << barreFret << ";";
                         } else {
-                            // This else-else stage should not be ever reached.
-                            str << string_num << "-" << "o;";
+                            str << stringNum << "-" << stringStatus << ";";
                         }
                     }
                 }

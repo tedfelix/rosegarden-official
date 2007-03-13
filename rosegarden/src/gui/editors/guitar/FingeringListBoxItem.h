@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -23,39 +22,25 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_FRETBOARDINSERTIONCOMMAND_H_
-#define _RG_FRETBOARDINSERTIONCOMMAND_H_
 
-#include "document/BasicCommand.h"
-#include "base/Event.h"
-#include "gui/editors/guitar/Chord.h"
+#ifndef _RG_FINGERINGLISTBOXITEM_H_
+#define _RG_FINGERINGLISTBOXITEM_H_
 
+#include <qlistbox.h>
+#include "Chord.h"
 
-namespace Rosegarden
-{
+namespace Rosegarden {
 
-class Segment;
-class Event;
-
-
-class FretboardInsertionCommand : public BasicCommand
+class FingeringListBoxItem : public QListBoxPixmap
 {
 public:
-    FretboardInsertionCommand(Segment &segment,
-                              timeT time,
-                              const Guitar::Chord& chord);
-    virtual ~FretboardInsertionCommand();
-
-    Event *getLastInsertedEvent() { return m_lastInsertedEvent; }
-
+    FingeringListBoxItem(const Guitar::Chord& chord, QListBox* parent, QPixmap pixmap, QString fingeringString);
+    
+    const Guitar::Chord& getChord() { return m_chord; }
 protected:
-    virtual void modifySegment();
-
     Guitar::Chord m_chord;
-    Event *m_lastInsertedEvent;
 };
-
 
 }
 
-#endif
+#endif /*_RG_FINGERINGLISTBOXITEM_H_*/

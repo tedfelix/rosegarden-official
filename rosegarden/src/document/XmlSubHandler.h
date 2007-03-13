@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -23,39 +22,37 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_FRETBOARDINSERTIONCOMMAND_H_
-#define _RG_FRETBOARDINSERTIONCOMMAND_H_
+#ifndef _RG_XMLSUBHANDLER_H_
+#define _RG_XMLSUBHANDLER_H_
 
-#include "document/BasicCommand.h"
-#include "base/Event.h"
-#include "gui/editors/guitar/Chord.h"
+#include <qstring.h>
+#include <qxml.h>
 
-
-namespace Rosegarden
-{
-
-class Segment;
-class Event;
-
-
-class FretboardInsertionCommand : public BasicCommand
+namespace Rosegarden {
+    
+class XmlSubHandler
 {
 public:
-    FretboardInsertionCommand(Segment &segment,
-                              timeT time,
-                              const Guitar::Chord& chord);
-    virtual ~FretboardInsertionCommand();
+    XmlSubHandler();
+    virtual ~XmlSubHandler();
+    
+    virtual bool startElement(const QString& namespaceURI,
+                              const QString& localName,
+                              const QString& qName,
+                              const QXmlAttributes& atts) = 0;
 
-    Event *getLastInsertedEvent() { return m_lastInsertedEvent; }
+    /**
+     * @param finished : if set to true on return, means that
+     * the handler should be deleted
+     */
+    virtual bool endElement(const QString& namespaceURI,
+                            const QString& localName,
+                            const QString& qName,
+                            bool& finished) = 0;
 
-protected:
-    virtual void modifySegment();
-
-    Guitar::Chord m_chord;
-    Event *m_lastInsertedEvent;
+    virtual bool characters(const QString& ch) = 0;
 };
-
 
 }
 
-#endif
+#endif /*_RG_XMLSUBHANDLER_H_*/

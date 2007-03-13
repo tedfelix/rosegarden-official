@@ -31,7 +31,7 @@
 #include "base/MidiTypes.h"
 #include "base/NotationTypes.h"
 #include "document/RosegardenGUIDoc.h"
-#include "gui/editors/guitar/Fingering.h"
+#include "gui/editors/guitar/Chord.h"
 #include "misc/Strings.h"
 #include "PitchDialog.h"
 #include "TimeDialog.h"
@@ -99,7 +99,7 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
         m_typeCombo->insertItem(strtoqstr(Note::EventRestType));
         m_typeCombo->insertItem(strtoqstr(Clef::EventType));
         m_typeCombo->insertItem(strtoqstr(::Rosegarden::Key::EventType));
-        m_typeCombo->insertItem(strtoqstr(Guitar::Fingering::EventType));
+        m_typeCombo->insertItem(strtoqstr(Guitar::Chord::EventType));
 
         // Connect up the combos
         //
@@ -639,7 +639,7 @@ SimpleEventEditDialog::setupForEvent()
 
         if (m_typeCombo)
             m_typeCombo->setCurrentItem(11);
-    } else if (m_type == Guitar::Fingering::EventType) {
+    } else if (m_type == Guitar::Chord::EventType) {
         m_durationLabel->hide();
         m_durationSpinBox->hide();
         m_durationEditButton->hide();
@@ -662,7 +662,7 @@ SimpleEventEditDialog::setupForEvent()
 
         // get the fingering event
         try {
-            Guitar::Fingering chord( m_event );
+            Guitar::Chord chord( m_event );
         } catch (...) {
             // m_controllerLabelValue->setText(i18n("<none>"));
             // m_metaEdit->setText(i18n("<none>"));

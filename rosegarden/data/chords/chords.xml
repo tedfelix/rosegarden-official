@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE rosegarden-chord-data>
+<rosegarden-chord-data version="1.0" format-version-major="1" format-version-minor="0" format-version-point="0">
+<chords>
+	<chordset root="C">
+
+		<chord ext="AA">
+			<fingering>1 1 1 1 1 1</fingering>
+		</chord>
+
+		<chord>
+			<fingering>x 3 2 0 1 0</fingering>
+			<fingering>x 3 5 5 5 0</fingering>
+			<fingering>x 3 5 5 5 3</fingering>
+			<fingering>8 10 10 9 8 8</fingering>
+		</chord>
+
+		<chord ext="/G">
+			<fingering>3 3 2 0 1 0</fingering>
+			<fingering>3 3 5 5 5 0</fingering>
+			<fingering>3 3 5 5 5 3</fingering>
+		</chord>
+
+		<chord ext="/E">
+			<fingering>0 3 2 0 1 0</fingering>
+			<fingering>0 3 5 5 5 0</fingering>
+			<fingering>0 3 5 5 5 3</fingering>
+		</chord>
+
+
+		<chord ext="m">
+			<fingering>x 3 1 0 1 x</fingering>
+			<fingering>x 3 5 5 4 3</fingering>
+			<fingering>8 10 10 8 8 8</fingering>
+		</chord>
+
+		<chord ext="m/G">
+			<fingering>3 3 1 0 1 x</fingering>
+			<fingering>3 3 5 5 4 3</fingering>
+		</chord>
+
+		<chord ext="m/E">
+			<fingering>0 3 1 0 1 x</fingering>
+			<fingering>0 3 5 5 4 3</fingering>
+		</chord>
+
+
+		<chord ext="7">
+			<fingering>x 3 2 3 1 0</fingering>
+			<fingering>x 3 5 3 5 3</fingering>
+			<fingering>8 10 8 9 11 8</fingering>
+			<fingering>8 10 10 9 11 8</fingering>
+		</chord>
+
+		<chord ext="7/G">
+			<fingering>3 3 2 3 1 0</fingering>
+			<fingering>3 3 5 3 5 3</fingering>
+		</chord>
+
+		<chord ext="7/E">
+			<fingering>0 3 2 3 1 0</fingering>
+			<fingering>0 3 5 3 5 3</fingering>
+		</chord>
+
+
+		<chord ext="m7">
+			<fingering>x 3 1 3 1 x</fingering>
+			<fingering>x 3 5 3 4 3|6</fingering>
+			<fingering>8 10 8 8 11 8</fingering>
+			<fingering>8 10 10 8 11 8</fingering>
+		</chord>
+
+		<chord ext="m7/G">
+			<fingering>3 3 1 3 1 x</fingering>
+			<fingering>3 3 5 3 4 3</fingering>
+			<fingering>3 3 5 3 4 6</fingering>
+		</chord>
+
+		<chord ext="m7/E">
+			<fingering>0 3 1 3 1 x</fingering>
+			<fingering>0 3 5 3 4 3</fingering>
+			<fingering>0 3 5 3 4 6</fingering>
+		</chord>
+
+
+		<chord ext="maj7">
+			<fingering>x 3 2 0 0 0</fingering>
+			<fingering>x 3 5 4 5 3</fingering>
+			<fingering>x x 10 9 8 7</fingering>
+		</chord>
+
+		<chord ext="maj7/G">
+			<fingering>3 3 2 0 0 0</fingering>
+			<fingering>3 1 5 4 5 1</fingering>
+		</chord>
+
+		<chord ext="maj7/E">
+			<fingering>0 3 2 0 0 0</fingering>
+			<fingering>0 3 5 4 5 1</fingering>
+		</chord>
+
+	</chordset>
+</chords>
+</rosegarden-chord-data>

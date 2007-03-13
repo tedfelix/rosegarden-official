@@ -130,7 +130,6 @@
 #include "gui/dialogs/TextEventDialog.h"
 #include "gui/dialogs/TupletDialog.h"
 #include "gui/dialogs/UseOrnamentDialog.h"
-#include "gui/editors/guitar/Chord.h"
 #include "gui/rulers/StandardRuler.h"
 #include "gui/general/ActiveItem.h"
 #include "gui/general/EditViewBase.h"

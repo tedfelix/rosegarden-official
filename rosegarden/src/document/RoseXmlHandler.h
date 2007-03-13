@@ -89,9 +89,6 @@ public:
 
     virtual ~RoseXmlHandler();
 
-    /// return the error protocol if parsing failed
-    QString errorProtocol();
-
     /// overloaded handler functions
     virtual bool startDocument();
     virtual bool startElement(const QString& namespaceURI,

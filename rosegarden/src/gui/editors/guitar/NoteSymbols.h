@@ -1,14 +1,34 @@
-#ifndef SYMBOLS_H_
-#define SYMBOLS_H_
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
+
+/*
+    Rosegarden
+    A MIDI and audio sequencer and musical notation editor.
+
+    This program is Copyright 2000-2007
+        Guillaume Laurent   <glaurent@telegraph-road.org>,
+        Chris Cannam        <cannam@all-day-breakfast.com>,
+        Richard Bown        <richard.bown@ferventsoftware.com>
+
+    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
+    Bown to claim authorship of this work have been asserted.
+
+    This file contains code from 
+    Other copyrights also apply to some parts of this work.  Please
+    see the AUTHORS file and individual file headers for details.
+
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License as
+    published by the Free Software Foundation; either version 2 of the
+    License, or (at your option) any later version.  See the file
+    COPYING included with this distribution for more information.
+*/
+
+
+#ifndef _RG_SYMBOLS_H_
+#define _RG_SYMBOLS_H_
 
 #include <qbrush.h>
 #include <qpainter.h>
-
-#include <iostream>
-
-#include "GuitarNeck.h"
-#include "Fingering.h"
-#include "FingeringConstructor.h"
 
 namespace Rosegarden
 {
@@ -61,10 +81,12 @@ namespace Rosegarden
 namespace Guitar
 {
 
+class Fingering;
+
+
 class NoteSymbols
 {
 private:
-    typedef FingeringConstructor FC;
     typedef std::pair<unsigned int, unsigned int> posPair;
 
     static float const LEFT_BORDER_PERCENTAGE;
@@ -73,30 +95,32 @@ private:
     static float const TOP_BORDER_PERCENTAGE;
     static float const BOTTOM_BORDER_PERCENTAGE;
     static float const FRETBOARD_HEIGHT_PERCENTAGE;
-
+    static int   const TOP_FRETBOARD_MARGIN;
+    static int   const FRET_PEN_WIDTH;
+    static int   const STRING_PEN_WIDTH;
+    
 public:
+
+    NoteSymbols(unsigned int nbOfStrings, unsigned int nbOfFrets) :
+        m_nbOfStrings(nbOfStrings), 
+        m_nbOfFrets(nbOfFrets) {};
 
     //! Display a mute symbol in the QPainter object
     void
     drawMuteSymbol ( QPainter* p,
-                     unsigned int position,
-                     unsigned int fretDisplayed,
-                     unsigned int string_num );
+                     unsigned int position ) const;
 
     /* This code borrowed from KGuitar 0.5 */
     //! Display a open symbol in the QPainter object (KGuitar)
     void drawOpenSymbol ( QPainter* p,
-                          unsigned int position,
-                          unsigned int fretDisplayed,
-                          unsigned int string_num );
+                          unsigned int position ) const;
 
     /* This code borrowed from KGuitar 0.5 */
     //! Display a note symbol in the QPainter object (KGuitar)
     void drawNoteSymbol ( QPainter* p,
-                          unsigned int position,
-                          int fret,
-                          unsigned int string_num,
-                          unsigned int fretDisplayed );
+                          unsigned int stringNb,
+                          int fretNb,
+                          bool transient = false ) const;
 
     /* This code borrowed from KGuitar 0.5 */
     /**
@@ -105,55 +129,56 @@ public:
      * available in that project
      */
     void drawBarreSymbol ( QPainter* p,
-                           int fret,
+                           int fretNb,
                            unsigned int start,
-                           unsigned int end,
-                           unsigned int string_num,
-                           unsigned int fretDisplayed );
+                           unsigned int end ) const;
 
     void drawFretNumber ( QPainter* p,
-                          unsigned int fret_num,
-                          unsigned int fretsDisplayed );
+                          unsigned int fret_num ) const;
 
-    void drawFretHorizontalLines ( QPainter* p,
-                                   unsigned int fretsDisplayed,
-                                   unsigned int maxStringNum );
+    void drawFrets ( QPainter* p ) const;
 
-    void drawFretVerticalLines ( QPainter* p,
-                                 unsigned int maxFretsDisplayed,
-                                 unsigned int string_num );
+    void drawStrings ( QPainter* p ) const;
 
-    unsigned int getTopBorder ( unsigned int imgHeight );
+    unsigned int getTopBorder ( unsigned int imgHeight ) const;
 
-    unsigned int getBottomBorder ( unsigned int imgHeight );
+    unsigned int getBottomBorder ( unsigned int imgHeight ) const;
 
-    unsigned int getLeftBorder ( unsigned int imgWidth );
+    unsigned int getLeftBorder ( unsigned int imgWidth ) const;
 
-    unsigned int getRightBorder ( unsigned int imgWidth );
+    unsigned int getRightBorder ( unsigned int imgWidth ) const;
 
-    unsigned int getFretboardWidth ( int imgWidth );
+    unsigned int getFretboardWidth ( int imgWidth ) const;
 
-    unsigned int getFretboardHeight ( int imgHeight );
+    unsigned int getFretboardHeight ( int imgHeight ) const;
 
     std::pair<bool, unsigned int>
     getStringNumber ( int imgWidth,
                       unsigned int x_pos,
-                      unsigned int string_num );
+                      unsigned int string_num ) const;
 
     std::pair<bool, unsigned int>
     getFretNumber ( int imgHeight,
                     unsigned int y_pos,
-                    unsigned int maxFretNum );
+                    unsigned int maxFretNum ) const;
 
+    QRect getTransientNoteSymbolRect(QSize fretboardSize,
+                                     unsigned int stringNb,
+                                     int fretNb) const;
+
+    static void drawFingeringPixmap(const Fingering& fingering, const NoteSymbols& noteSymbols, QPainter *p);
+    
 private:
 
     posPair
-    getX ( int imgWidth, unsigned int position, unsigned int string_num );
+    getX ( int imgWidth, unsigned int stringNb, unsigned int nbOfStrings ) const;
 
     posPair
-    getY ( int imgHeight, unsigned int position, unsigned int fret_num );
+    getY ( int imgHeight, unsigned int fretNb, unsigned int nbOfFrets ) const;
 
 
+    unsigned int m_nbOfStrings;
+    unsigned int m_nbOfFrets;
 
 };
 

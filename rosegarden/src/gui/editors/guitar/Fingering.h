@@ -1,17 +1,20 @@
-// -*- c-basic-offset: 4 -*-
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
     Rosegarden
-    A sequencer and musical notation editor.
- 
+    A MIDI and audio sequencer and musical notation editor.
+
     This program is Copyright 2000-2007
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <bownie@bownie.com>
- 
-    The moral right of the authors to claim authorship of this work
-    has been asserted.
- 
+        Richard Bown        <richard.bown@ferventsoftware.com>
+
+    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
+    Bown to claim authorship of this work have been asserted.
+
+    Other copyrights also apply to some parts of this work.  Please
+    see the AUTHORS file and individual file headers for details.
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -19,15 +22,11 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef GUITAR_FINGERING_H_
-#define GUITAR_FINGERING_H_
+#ifndef _RG_FINGERING_H_
+#define _RG_FINGERING_H_
 
-#include <qdom.h>
-
-#include "GuitarNeck.h"
-#include "Note.h"
-#include "Barre.h"
-#include "BarreList.h"
+#include <vector>
+#include <qstring.h>
 #include "base/Event.h"
 
 namespace Rosegarden
@@ -35,110 +34,59 @@ namespace Rosegarden
 
 namespace Guitar
 {
+
 class Fingering
 {
 public:
-    static const std::string EventType;
-    static const short EventSubOrdering;
+    friend bool operator<(const Fingering&, const Fingering&);    
 
-    //! Constructor
-    Fingering ();
+    typedef std::vector<int>::iterator iterator;
+    typedef std::vector<int>::const_iterator const_iterator;
+    
+    struct Barre {
+        unsigned int fret;
+        unsigned int start;
+        unsigned int end;
+    };
+    
+    static const unsigned int DEFAULT_NB_STRINGS = 6;
+    
+	Fingering(unsigned int nbStrings = DEFAULT_NB_STRINGS);
 
-    Fingering ( GuitarNeck* gPtr );
+    enum { MUTED = -1, OPEN = 0 };
+    
+    /**
+     * returns the fret number on which the string is pressed, or one of MUTED and OPEN  
+     * 
+     */
+    int  getStringStatus(int stringNb) const       { return m_strings[stringNb]; } 
+    void setStringStatus(int stringNb, int status) { m_strings[stringNb] = status; } 
+    unsigned int getStartFret() const;
+    unsigned int getNbStrings() const { return m_strings.size(); }
+        
+    bool hasBarre() const;
+    Barre getBarre() const;
+    
+    int operator[](int i) const { return m_strings[i]; }
+    int& operator[](int i) { return m_strings[i]; }
+    
+    iterator begin() { return m_strings.begin(); }
+    iterator end()   { return m_strings.end();   }
+    const_iterator begin() const { return m_strings.begin(); }
+    const_iterator end()   const { return m_strings.end(); }
+    
+    static Fingering parseFingering(const QString&, QString& errorString);
+    std::string toString() const;
+    
+protected:
 
-    //! Constructor
-    virtual ~Fingering ();
-
-    //! Constructor - create from Event
-    Fingering ( Event const& e_ref );
-
-    //! Copy Constructor
-    Fingering ( Fingering const& rhs );
-
-    //! Add Note object to fingering (deep copy)
-    bool addNote ( Note* notePtr );
-
-    //! Add Barre object to fingering (deep copy)
-    void addBarre ( Barre* barrePtr );
-
-    //! Remove Note object from fingering
-    void removeNote ( unsigned int string_num );
-
-    //! Remove Barre object to fingering
-    void removeBarre ( unsigned int fret_num );
-
-    //! Set action for Guitar string
-    void setStringStatus ( unsigned int stringPos, GuitarString::Action action );
-
-    //! Get action for Guitar string
-    GuitarString::Action const& getStringStatus ( unsigned int stringPos ) const;
-
-    //! Set the base fret for Fingering object
-    void setFirstFret ( unsigned int const& fret );
-
-    //! Return the base fret
-    unsigned int const& getFirstFret ( void ) const;
-
-    //! Retrieve a Note object for a given string
-    Note* getNote ( unsigned int const& string_num );
-
-    //! Retrieve a Barre object for a given fret
-    Barre* getBarre ( unsigned int const& fret_num );
-
-    //! Display Fingering object using QPainter object
-    //  frets_displayed: The maximum number of frets to be displayed
-    //  p: The QPainter object where the Notes and Barres are displayed
-    void drawContents ( QPainter* p,
-                        unsigned int frets_displayed ) const;
-
-    //! Display Fingering object data as a text string
-    std::string toString ( void ) const;
-
-    //! Load Barre and Note objects from a XML file
-    void load ( QDomNode const& obj );
-
-    //! Save the Barre and Note objects to an XML file
-    void save ( QDomNode& obj );
-
-    bool operator== ( Fingering const& rhs ) const;
-
-    Event* getAsEvent ( timeT absoluteTime );
-
-    //! Determine if a Note object exists for a particular string
-    bool hasNote ( unsigned int stringPos );
-
-    //! Determine if a Barre object exists for a particular fret
-    bool hasBarre ( unsigned int const& fret_num );
-
-private:
-
-    //! Create Barre object from fingering information
-    void setBarre ( unsigned int fretPos, unsigned int start, unsigned int end );
-
-    //! Handle to Guitar object upon the fingering applies
-    GuitarNeck* m_guitar;
-
-    //! Base fret number for fingering
-    unsigned int m_startFret;
-
-    //! Map of Index (Fret position number) and Data (Barre played)
-    typedef std::map<unsigned int, Barre*> BarreMap;
-    typedef std::pair<unsigned int, Barre*> BarreMapPair;
-    BarreMap m_barreFretMap;
-
-    //! Map of Index (String number) and Data (List of Barres that use the string)
-    typedef std::map< unsigned int, BarreList* > BarreStringMap;
-    typedef std::pair<unsigned int, BarreList*> BarreStringMapPair;
-    BarreStringMap m_barreStringMap;
-
-    //! Map of Index (String number) and Data (Note played)
-    typedef std::map<unsigned int, Note*> NoteMap;
-    typedef std::pair<unsigned int, Note*> NoteMapPair;
-    NoteMap m_notes;
+    std::vector<int> m_strings;
 };
 
-}
+bool operator<(const Fingering&, const Fingering&);    
 
 }
 
-#endif /* GUITAR_FINGERING_H_ */
+}
+
+#endif /*_RG_FINGERING2_H_*/

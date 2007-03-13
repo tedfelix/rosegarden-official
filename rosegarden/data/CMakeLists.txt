@@ -8,9 +8,7 @@ SET(LINKDIR share/applications)
 # Guitar chord files
 FILE(GLOB CHORD_FILES chords/*.xml)
 INSTALL(FILES ${CHORD_FILES}
-                DESTINATION ${DATADIR}/default_chords)
-INSTALL(FILES chords/guitar.dtd
-                DESTINATION ${DATADIR}/default_chords)
+                DESTINATION ${DATADIR}/chords)
 
 # Desktop file
 INSTALL(FILES desktop/rosegarden.desktop

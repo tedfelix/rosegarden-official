@@ -42,7 +42,7 @@ class QPen;
 class QBrush;
 #endif
 
-namespace Rosegarden { class Event; class Segment; class RealTime; class Colour; }
+namespace Rosegarden { class Event; class Segment; class RealTime; class Colour; namespace Guitar { class Chord; } }
 
 #define KDEBUG_AREA                 200000
 #define KDEBUG_AREA_NOTATION        200001
@@ -73,43 +73,8 @@ operator<<(kdbgstream&, const Rosegarden::RealTime&);
 kdbgstream&
 operator<<(kdbgstream&, const Rosegarden::Colour&);
 
-#if KDE_VERSION < KDE_MAKE_VERSION(3,2,0)
-kdbgstream& 
-operator << (kdbgstream&, const QDateTime& dateTime );
-
-kdbgstream& 
-operator << (kdbgstream&, const QDate& date );
-
-kdbgstream& 
-operator << (kdbgstream&, const QTime& time );
-
-kdbgstream& 
-operator << (kdbgstream&, const QPoint& point );
-
-kdbgstream& 
-operator << (kdbgstream&, const QSize& size );
-
-kdbgstream& 
-operator << (kdbgstream&, const QRect& rect);
-
-kdbgstream& 
-operator << (kdbgstream&, const QRegion& region);
-
-kdbgstream& 
-operator << (kdbgstream&, const KURL& url );
-
-kdbgstream& 
-operator << (kdbgstream&, const QStringList& list);
-
-kdbgstream& 
-operator << (kdbgstream&, const QColor& color);
-
-kdbgstream& 
-operator << (kdbgstream&, const QPen& pen );
-
-kdbgstream& 
-operator << (kdbgstream&, const QBrush& brush );
-#endif
+kdbgstream&
+operator<<(kdbgstream&, const Rosegarden::Guitar::Chord&);
 
 #else
 
@@ -128,44 +93,8 @@ operator<<(kndbgstream &s, const Rosegarden::RealTime&) { return s; }
 inline kndbgstream&
 operator<<(kndbgstream &s, const Rosegarden::Colour&) { return s; }
 
-#if KDE_VERSION < KDE_MAKE_VERSION(3,2,0)
-inline kndbgstream& 
-operator << (kndbgstream& s, const QDateTime&  ) { return s; }
-
-inline kndbgstream& 
-operator << (kndbgstream& s, const QDate&  ) { return s; }
-
-inline kndbgstream& 
-operator << (kndbgstream& s, const QTime& ) { return s; }
-
-inline kndbgstream& 
-operator << (kndbgstream& s, const QPoint& ) { return s; }
-
-inline kndbgstream& 
-operator << (kndbgstream& s, const QSize& ) { return s; }
-
-inline kndbgstream& 
-operator << (kndbgstream& s, const QRect& ) { return s; }
-
-inline kndbgstream& 
-operator << (kndbgstream& s, const QRegion& ) { return s; }
-
-inline kndbgstream& 
-operator << (kndbgstream& s, const KURL& ) { return s; }
-
-inline kndbgstream& 
-operator << (kndbgstream& s, const QStringList& ) { return s; }
-
-inline kndbgstream& 
-operator << (kndbgstream& s, const QColor& ) { return s; }
-
-inline kndbgstream& 
-operator << (kndbgstream& s, const QPen& ) { return s; }
-
-inline kndbgstream& 
-operator << (kndbgstream& s, const QBrush& ) { return s; }
-
-#endif
+inline kndbgstream&
+operator<<(kndbgstream &s, const Rosegarden::Guitar::Chord&) { return s; }
 
 #endif
 

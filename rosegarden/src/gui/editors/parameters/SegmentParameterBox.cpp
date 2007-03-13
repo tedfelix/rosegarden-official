@@ -986,7 +986,7 @@ SegmentParameterBox::slotColourSelected(int value)
                 slotDocColoursChanged();
             }
         }
-        // Else we don't do anything as they either didn't give a name·
+        // Else we don't do anything as they either didn't give a nameÂ·
         //  or didn't give a colour
     }
 
