@@ -5,6 +5,7 @@
 using namespace Rosegarden;
 using std::cout;
 using std::endl;
+using std::string;
 
 static const int verbose = 0;
 

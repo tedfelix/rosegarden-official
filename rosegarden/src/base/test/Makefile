@@ -3,31 +3,35 @@
 #CPPFLAGS = -O2 
 CPPFLAGS = -g 
 
-LIBBASE  = ../.libs/libbase.a
+LIBBASE  = ../../../RGbuild/libRosegardenCommon.a
 
 INCPATH  = -I..
 
 SRCS	:= test.C pitch.C
 
-default: test utf8 colour
+default: test utf8 colour transpose
 
 clean:
-	rm -f test test.o pitch pitch.o utf8 utf8.o colour colour.o
+	rm -f test test.o pitch pitch.o utf8 utf8.o colour colour.o transpose.o transpose
 
-%.o: %.C
-	$(CC) $(CPPFLAGS) -c $< $(INCPATH) -o $@
+%.o: %.cpp
+	$(CXX) $(CPPFLAGS) -c $< $(INCPATH) -o $@
 
 test: test.o
-	$(CC) $< $(LIBBASE) -o $@
+	$(CXX) $< $(LIBBASE) -o $@
 
 pitch: pitch.o
-	$(CC) $< $(LIBBASE) -o $@
+	$(CXX) $< $(LIBBASE) -o $@
 
 utf8: utf8.o
-	$(CC) $< $(LIBBASE) -o $@
+	$(CXX) $< $(LIBBASE) -o $@
 
 colour: colour.o
-	$(CC) $< $(LIBBASE) -o $@
+	$(CXX) $< $(LIBBASE) -o $@
+
+transpose: transpose.o
+	$(CXX) $< $(LIBBASE) -o $@
+
 
 depend:
 	makedepend $(INCPATH) -- $(CPPFLAGS) -- $(SRCS)
@@ -36,11 +40,14 @@ depend:
 
 test.o: ../Event.h ../PropertyMap.h ../Property.h ../RealTime.h
 test.o: ../PropertyName.h ../Exception.h ../Segment.h ../Track.h
-test.o: ../XmlExportable.h ../Instrument.h ../NotationTypes.h ../StringHash.h
+test.o: ../XmlExportable.h ../Instrument.h ../NotationTypes.h #../StringHash.h
+test.o: ../XmlExportable.h ../Instrument.h ../NotationTypes.h 
 test.o: ../RefreshStatus.h ../Composition.h ../FastVector.h
 test.o: ../Configuration.h ../ColourMap.h ../Colour.h
 test.o: ../SegmentNotationHelper.h ../SegmentPerformanceHelper.h
 test.o: ../MidiTypes.h
 pitch.o: ../NotationTypes.h ../Event.h ../PropertyMap.h ../Property.h
 pitch.o: ../RealTime.h ../PropertyName.h ../Exception.h ../Instrument.h
-pitch.o: ../XmlExportable.h ../StringHash.h
+pitch.o: ../XmlExportable.h #../StringHash.h
+
+transpose.o: ../NotationTypes.h 
