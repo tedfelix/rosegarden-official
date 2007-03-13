@@ -1,6 +1,8 @@
 // -*- c-basic-offset: 4 -*-
 // -*- c-file-style:  "bsd" -*-
 
+#define NDEBUG
+
 // This does some rather shoddy tests on a small selection of core classes.
 
 #include "Event.h"
