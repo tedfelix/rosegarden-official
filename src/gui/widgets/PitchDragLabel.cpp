@@ -61,7 +61,7 @@ PitchDragLabel::slotSetPitch(int p)
         return ;
     m_pitch = p;
     calculatePixmap(up);
-    emit pitchChanged(m_pitch);
+    emitPitchChange();
     paintEvent(0);
 }
 
@@ -72,6 +72,7 @@ PitchDragLabel::slotSetPitch(int pitch, int octave, int step)
         return ;
     m_pitch = pitch;
     calculatePixmap(pitch, octave, step);
+    emit pitchChanged(pitch);
     emit pitchChanged(pitch, octave, step);
     paintEvent(0);
 }
@@ -130,8 +131,27 @@ void
 PitchDragLabel::mouseReleaseEvent(QMouseEvent *e)
 {
     mouseMoveEvent(e);
-    emit pitchChanged(m_pitch);
+    emitPitchChange();
     m_clicked = false;
+}
+
+void
+PitchDragLabel::emitPitchChange(bool useSharps)
+{
+    emit pitchChanged(m_pitch);
+    
+	Pitch newPitch(m_pitch);
+	
+	if (useSharps)
+	{
+		Rosegarden::Key key = Rosegarden::Key("C major");
+    	emit pitchDragged(m_pitch, newPitch.getOctave(0), newPitch.getNoteInScale(key));
+	}
+	else
+	{
+		Rosegarden::Key key = Rosegarden::Key("A minor");
+		emit pitchDragged(m_pitch, newPitch.getOctave(0), (newPitch.getNoteInScale(key) + 2) % 7);
+	}
 }
 
 void
@@ -141,7 +161,7 @@ PitchDragLabel::wheelEvent(QWheelEvent *e)
         if (m_pitch < 127) {
             ++m_pitch;
             calculatePixmap(true);
-            emit pitchChanged(m_pitch);
+			emitPitchChange(true);
             emit preview(m_pitch);
             paintEvent(0);
         }
@@ -149,7 +169,7 @@ PitchDragLabel::wheelEvent(QWheelEvent *e)
         if (m_pitch > 0) {
             --m_pitch;
             calculatePixmap(false);
-            emit pitchChanged(m_pitch);
+            emitPitchChange(false);
             emit preview(m_pitch);
             paintEvent(0);
         }
