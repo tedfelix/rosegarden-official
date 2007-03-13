@@ -200,7 +200,7 @@ TrackButtons::populateButtons()
 
         if (ins) {
             m_trackLabels[i]->getInstrumentLabel()->setText
-            (strtoqstr(ins->getPresentationName()));
+                (strtoqstr(ins->getPresentationName()));
             if (ins->sendsProgramChange()) {
                 m_trackLabels[i]->setAlternativeLabel(strtoqstr(ins->getProgramName()));
             }
@@ -583,6 +583,22 @@ TrackButtons::slotInstrumentSelection(int trackId)
 
     // Restore the label back to what it was showing
     m_trackLabels[position]->showLabel(m_trackInstrumentLabels);
+
+    // Do this here as well as in slotInstrumentPopupActivated, so as
+    // to restore the correct alternative label even if no other
+    // program was selected from the menu
+    if (track != 0) {
+        instrument = studio.getInstrumentById(track->getInstrument());
+        if (instrument) {
+            m_trackLabels[position]->getInstrumentLabel()->
+                setText(strtoqstr(instrument->getPresentationName()));
+            m_trackLabels[position]->clearAlternativeLabel();
+            if (instrument->sendsProgramChange()) {
+                m_trackLabels[position]->setAlternativeLabel
+                    (strtoqstr(instrument->getProgramName()));
+            }
+        }
+    }
 }
 
 void
@@ -778,7 +794,7 @@ TrackButtons::slotInstrumentPopupActivated(int item)
             emit instrumentSelected((int)inst->getId());
 
             m_trackLabels[m_popupItem]->getInstrumentLabel()->
-            setText(strtoqstr(inst->getPresentationName()));
+                setText(strtoqstr(inst->getPresentationName()));
 
             // reset the alternative label
             m_trackLabels[m_popupItem]->clearAlternativeLabel();
