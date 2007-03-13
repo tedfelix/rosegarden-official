@@ -67,6 +67,9 @@ Oota Toshiya
 Kevin Liang
     * HSpinBox class
 
+Arnout Engelen
+	* Transposition by interval
+
 Thorsten Wilms
     * Original designs on which the Rosegarden rotary controllers are based
 
@@ -119,5 +122,5 @@ Piotr Sawicki <pelle@plusnet.pl>
     * Polish translation
 
 ##
-## Names in here should also be credited in gui/main.cpp, with aboutData.addCredit()
+## Names in here should also be credited in gui/application/main.cpp, with aboutData.addCredit()
 ##
