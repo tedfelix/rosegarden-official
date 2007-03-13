@@ -77,6 +77,9 @@ protected:
     void calculatePixmap(bool useSharps) const;
     void calculatePixmap(int pitch, int octave, int step) const;
 
+	/** emits 'pitchChanged' events, both diatonic and chromatic */
+	void emitPitchChange(bool useSharps = true);
+
     mutable QPixmap m_pixmap;
 
     int m_pitch;
