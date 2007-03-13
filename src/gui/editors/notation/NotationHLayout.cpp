@@ -37,7 +37,7 @@
 #include "base/SegmentNotationHelper.h"
 #include "base/Staff.h"
 #include "base/ViewElement.h"
-#include "gui/editors/guitar/Fingering.h"
+#include "gui/editors/guitar/Chord.h"
 #include "gui/general/ProgressReporter.h"
 #include "gui/widgets/ProgressDialog.h"
 #include "NotationChord.h"
@@ -1489,7 +1489,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
                 el->setLayoutX(ix + displacedX);
                 el->setLayoutAirspace(ix, delta - (ix - x));
 
-            } else if (el->event()->isa(Guitar::Fingering::EventType)) {
+            } else if (el->event()->isa(Guitar::Chord::EventType)) {
 
                 int fretboardWidth = m_npf->getLineSpacing() * 6;
                 el->setLayoutX(x - (fretboardWidth / 2));

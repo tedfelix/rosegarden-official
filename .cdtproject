@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?eclipse-cdt version="2.0"?>
 
 <cdtproject id="org.eclipse.cdt.make.core.make">
-<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
 <extension id="org.eclipse.cdt.core.domsourceindexer" point="org.eclipse.cdt.core.CIndexer"/>
+<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
 <data>
 <item id="scannerConfiguration">
 <autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile"/>
@@ -49,8 +49,8 @@
 </profile>
 </item>
 <item id="org.eclipse.cdt.core.pathentry">
-<pathentry excluding="cache/|.sconf_temp/|po/|RGbuild/|scons_admin/|scripts/|cmake_admin" kind="src" path=""/>
-<pathentry excluding=".sconf_temp/|cache/" kind="out" path=""/>
+<pathentry excluding="cache/|po/|RGbuild/|scripts/|cmake_admin" kind="src" path=""/>
+<pathentry excluding="cache/" kind="out" path=""/>
 <pathentry kind="out" path="RGbuild"/>
 <pathentry kind="con" path="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO"/>
 <pathentry kind="mac" name="slots" path="" value=""/>

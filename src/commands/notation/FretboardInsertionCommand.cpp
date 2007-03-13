@@ -36,7 +36,7 @@ namespace Rosegarden
 
 FretboardInsertionCommand::FretboardInsertionCommand(Segment &segment,
         timeT time,
-        Guitar::Fingering chord) :
+        const Guitar::Chord& chord) :
         BasicCommand(i18n("Insert Fretboard"), segment, time, time + 1, true),
         m_chord(chord)
 {

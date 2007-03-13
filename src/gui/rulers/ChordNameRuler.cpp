@@ -44,7 +44,6 @@
 #include "base/Track.h"
 #include "document/RosegardenGUIDoc.h"
 #include "document/MultiViewCommandHistory.h"
-#include "gui/editors/guitar/Chord.h"
 #include "gui/general/GUIPalette.h"
 #include <qfont.h>
 #include <qfontmetrics.h>

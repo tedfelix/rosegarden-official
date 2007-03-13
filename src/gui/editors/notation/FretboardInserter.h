@@ -26,7 +26,6 @@
 #ifndef _RG_FRETBOARDINSERTER_H_
 #define _RG_FRETBOARDINSERTER_H_
 
-#include "gui/editors/guitar/GuitarTabSelectorDialog.h"
 #include "NotationTool.h"
 #include <qstring.h>
 #include "base/Event.h"
@@ -41,7 +40,7 @@ namespace Rosegarden
 class ViewElement;
 class Staff;
 class NotationView;
-
+class GuitarChordSelectorDialog;
 
 /**
  * This tool will insert fretboard on mouse click events
@@ -75,7 +74,7 @@ protected slots:
     void slotSelectSelected();
 
 protected:
-    GuitarTabSelectorDialog m_guitarChord_ref;
+    GuitarChordSelectorDialog* m_guitarChordSelector;
 
     FretboardInserter(NotationView*);
 

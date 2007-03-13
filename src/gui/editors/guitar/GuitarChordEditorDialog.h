@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -23,39 +22,46 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_FRETBOARDINSERTIONCOMMAND_H_
-#define _RG_FRETBOARDINSERTIONCOMMAND_H_
+#ifndef _RG_GUITARCHORDEDITOR2_H_
+#define _RG_GUITARCHORDEDITOR2_H_
 
-#include "document/BasicCommand.h"
-#include "base/Event.h"
-#include "gui/editors/guitar/Chord.h"
+#include <kdialogbase.h>
 
+#include "Chord.h"
+#include "ChordMap.h"
+
+class QComboBox;
+class QSpinBox;
 
 namespace Rosegarden
 {
 
-class Segment;
-class Event;
+class FingeringBox;
 
 
-class FretboardInsertionCommand : public BasicCommand
+class GuitarChordEditorDialog : public KDialogBase
 {
+    Q_OBJECT
+    
 public:
-    FretboardInsertionCommand(Segment &segment,
-                              timeT time,
-                              const Guitar::Chord& chord);
-    virtual ~FretboardInsertionCommand();
+	GuitarChordEditorDialog(Guitar::Chord&, const Guitar::ChordMap& chordMap, QWidget *parent=0);
 
-    Event *getLastInsertedEvent() { return m_lastInsertedEvent; }
-
+protected slots:
+    void slotStartFretChanged(int);
+    virtual void slotOk();
+    
 protected:
-    virtual void modifySegment();
 
-    Guitar::Chord m_chord;
-    Event *m_lastInsertedEvent;
+    void populateExtensions(const QStringList&);
+
+    FingeringBox* m_fingeringBox;
+    QComboBox* m_rootNotesList;
+    QSpinBox* m_startFret;
+    QComboBox* m_ext;
+    Guitar::Chord& m_chord;
+    const Guitar::ChordMap& m_chordMap;    
 };
-
 
 }
 
-#endif
+#endif /*_RG_GUITARCHORDEDITOR2_H_*/

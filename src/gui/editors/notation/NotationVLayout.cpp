@@ -34,7 +34,7 @@
 #include "base/NotationQuantizer.h"
 #include "base/Staff.h"
 #include "gui/general/ProgressReporter.h"
-#include "gui/editors/guitar/Fingering.h"
+#include "gui/editors/guitar/Chord.h"
 #include "NotationChord.h"
 #include "NotationElement.h"
 #include "NotationProperties.h"
@@ -393,7 +393,7 @@ NotationVLayout::scanStaff(Staff &staffBase, timeT, timeT)
                     el->setLayoutY(staff.getLayoutYForHeight( -9) + displacedY);
                 }
 
-            } else if (el->event()->isa(Guitar::Fingering::EventType)) {
+            } else if (el->event()->isa(Guitar::Chord::EventType)) {
 
                 el->setLayoutY(staff.getLayoutYForHeight(22));
             }

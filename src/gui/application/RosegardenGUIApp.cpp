@@ -109,7 +109,6 @@
 #include "gui/dialogs/TimeDialog.h"
 #include "gui/dialogs/TimeSignatureDialog.h"
 #include "gui/dialogs/TransportDialog.h"
-#include "gui/editors/guitar/Chord.h"
 #include "gui/editors/parameters/InstrumentParameterBox.h"
 #include "gui/editors/parameters/RosegardenParameterArea.h"
 #include "gui/editors/parameters/SegmentParameterBox.h"

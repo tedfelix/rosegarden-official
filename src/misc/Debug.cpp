@@ -39,6 +39,8 @@
 #include "base/Segment.h"
 #include "base/RealTime.h"
 #include "base/Colour.h"
+#include "gui/editors/guitar/Chord.h"
+#include "gui/editors/guitar/Fingering.h"
 
 #ifndef NDEBUG
 
@@ -100,6 +102,29 @@ kdbgstream&
 operator<<(kdbgstream &dbg, const Rosegarden::Colour &c)
 {
     dbg << "Colour : rgb = " << c.getRed() << "," << c.getGreen() << "," << c.getBlue();
+    return dbg;
+}
+
+kdbgstream&
+operator<<(kdbgstream &dbg, const Rosegarden::Guitar::Chord &c)
+{
+    dbg << "Chord root = " << c.getRoot() << ", ext = '" << c.getExt() << "'";
+
+//    for(unsigned int i = 0; i < c.getNbFingerings(); ++i) {
+//        dbg << "\nFingering " << i << " : " << c.getFingering(i).toString().c_str();
+//    }
+    
+     Rosegarden::Guitar::Fingering f = c.getFingering();
+
+     dbg << "\nFingering : ";
+
+     for(unsigned int j = 0; j < 6; ++j) {
+         int pos = f[j];
+         if (pos >= 0)
+             dbg << pos << ' ';
+         else
+             dbg << "x ";
+    }        
     return dbg;
 }
 

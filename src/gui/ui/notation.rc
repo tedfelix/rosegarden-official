@@ -275,7 +275,7 @@
 <Menu name="Tools">
   <text>&amp;Tools</text>
   <Action name="text" />
-<!--  <Action name="fretboard" /> -->
+  <Action name="fretboard" />
   <Separator/>
   <Menu name="edit_tools">
   	<text>&amp;Editor Tools</text>

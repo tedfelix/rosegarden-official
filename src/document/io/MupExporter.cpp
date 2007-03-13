@@ -36,7 +36,6 @@
 #include "base/SegmentNotationHelper.h"
 #include "base/Sets.h"
 #include "base/Track.h"
-#include "gui/editors/guitar/Chord.h"
 #include "gui/general/ProgressReporter.h"
 #include <qobject.h>
 

@@ -320,6 +320,8 @@ SET(document_SRCS
 	document/RoseXmlHandler.h
 	document/XmlStorableEvent.cpp
 	document/XmlStorableEvent.h
+	document/XmlSubHandler.cpp
+	document/XmlSubHandler.h
 )
 
 SET(guitar_test_SRCS
@@ -469,37 +471,24 @@ SET(gui_SRCS
 	gui/editors/eventlist/EventViewItem.h
 	gui/editors/eventlist/TrivialVelocityDialog.cpp
 	gui/editors/eventlist/TrivialVelocityDialog.h
-	gui/editors/guitar/Barre.cpp
-	gui/editors/guitar/Barre.h
-	gui/editors/guitar/BarreList.cpp
-	gui/editors/guitar/BarreList.h
-	gui/editors/guitar/Chord.cpp
-	gui/editors/guitar/Chord.h
-	gui/editors/guitar/ChordMap.cpp
-	gui/editors/guitar/ChordMap.h
-	gui/editors/guitar/ChordName.cpp
-	gui/editors/guitar/ChordName.h
-	gui/editors/guitar/DuplicateException.cpp
-	gui/editors/guitar/DuplicateException.h
-	gui/editors/guitar/FingeringConstructor.cpp
-	gui/editors/guitar/FingeringConstructor.h
-	gui/editors/guitar/Fingering.cpp
-	gui/editors/guitar/Fingering.h
-	gui/editors/guitar/GuitarChordEditor.cpp
-	gui/editors/guitar/GuitarChordEditor.h
-	gui/editors/guitar/GuitarNeck.cpp
-	gui/editors/guitar/GuitarNeck.h
-	gui/editors/guitar/GuitarString.h
-	gui/editors/guitar/GuitarTabEditorWindow.cpp
-	gui/editors/guitar/GuitarTabEditorWindow.h
-	gui/editors/guitar/GuitarTabSelectorDialog.cpp
-	gui/editors/guitar/GuitarTabSelectorDialog.h
-	gui/editors/guitar/GuitarXmlHandler.cpp
-	gui/editors/guitar/GuitarXmlHandler.h
-	gui/editors/guitar/Note.cpp
-	gui/editors/guitar/Note.h
 	gui/editors/guitar/NoteSymbols.cpp
 	gui/editors/guitar/NoteSymbols.h
+	gui/editors/guitar/Chord.h
+	gui/editors/guitar/Chord.cpp
+	gui/editors/guitar/Fingering.h
+	gui/editors/guitar/Fingering.cpp
+	gui/editors/guitar/FingeringBox.h
+	gui/editors/guitar/FingeringBox.cpp
+	gui/editors/guitar/FingeringListBoxItem.h
+	gui/editors/guitar/FingeringListBoxItem.cpp
+	gui/editors/guitar/ChordXmlHandler.h
+	gui/editors/guitar/ChordXmlHandler.cpp
+	gui/editors/guitar/ChordMap.h
+	gui/editors/guitar/ChordMap.cpp
+	gui/editors/guitar/GuitarChordSelectorDialog.h
+	gui/editors/guitar/GuitarChordSelectorDialog.cpp
+	gui/editors/guitar/GuitarChordEditorDialog.h
+	gui/editors/guitar/GuitarChordEditorDialog.cpp
 	gui/editors/matrix/MatrixCanvasView.cpp
 	gui/editors/matrix/MatrixCanvasView.h
 	gui/editors/matrix/MatrixElement.cpp

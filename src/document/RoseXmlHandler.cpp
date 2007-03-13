@@ -68,45 +68,12 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include "XmlStorableEvent.h"
-
+#include "XmlSubHandler.h"
 
 namespace Rosegarden
 {
 
 using namespace BaseProperties;
-
-class XmlSubHandler
-{
-public:
-    XmlSubHandler();
-    virtual ~XmlSubHandler();
-    
-    virtual bool startElement(const QString& namespaceURI,
-                              const QString& localName,
-                              const QString& qName,
-                              const QXmlAttributes& atts) = 0;
-
-    /**
-     * @param finished : if set to true on return, means that
-     * the handler should be deleted
-     */
-    virtual bool endElement(const QString& namespaceURI,
-                            const QString& localName,
-                            const QString& qName,
-                            bool& finished) = 0;
-
-    virtual bool characters(const QString& ch) = 0;
-};
-
-XmlSubHandler::XmlSubHandler()
-{
-}
-
-XmlSubHandler::~XmlSubHandler()
-{
-}
-
-//----------------------------------------
 
 class ConfigurationXmlSubHandler : public XmlSubHandler
 {
@@ -843,7 +810,6 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         QString segmentType = (atts.value("type")).lower();
         if (segmentType) {
             if (segmentType == "audio") {
-
                 int audioFileId = atts.value("file").toInt();
 
                 // check this file id exists on the AudioFileManager
@@ -861,16 +827,6 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                 m_currentSegment = new Segment(Segment::Audio);
                 m_currentSegment->setAudioFileId(audioFileId);
                 m_currentSegment->setStartTime(startTime);
-
-                QString unstretchedStr = atts.value("unstretched");
-
-                if (unstretchedStr) {
-                    int unstretchedFileId = unstretchedStr.toInt();
-                    m_currentSegment->setUnstretchedFileId(unstretchedFileId);
-                    double ratio = atts.value("stretch").toDouble();
-                    m_currentSegment->setStretchRatio(ratio);
-                }
-
             } else {
                 // Create a (normal) internal Segment
                 m_currentSegment = new Segment(Segment::Internal);
