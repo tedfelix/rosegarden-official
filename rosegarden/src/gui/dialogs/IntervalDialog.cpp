@@ -155,8 +155,8 @@ IntervalDialog::slotSetTargetNote(int pitch, int octave, int step)
     //m_intervalStepsLabel->setText( i18n("Step: %1").arg(intervalDiatonic % 7) );
     
     static QString stepName[] = {
-       i18n("prime"), i18n("second"), i18n("triad"),  i18n("quart"),
-       i18n("quint"), i18n("sext"),  i18n("sept")
+       i18n("unison"), i18n("second"), i18n("third"), i18n("fourth"),
+       i18n("fifth"),  i18n("sixth"),  i18n("seventh")
     };
 
     int displayInterval = intervalDiatonic;
@@ -181,7 +181,9 @@ IntervalDialog::slotSetTargetNote(int pitch, int octave, int step)
            text += "diminished ";
        else if (deviation == 1)
            text += "augmented ";
-       else if (deviation != 0)
+       else if (deviation == 0)
+           text += "perfect ";
+       else
            text += "(unknown) ";
        break;
     case 2:

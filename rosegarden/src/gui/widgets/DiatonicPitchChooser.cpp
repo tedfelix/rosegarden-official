@@ -27,6 +27,7 @@
 
 #include <iostream>
 #include <klocale.h>
+#include "base/NotationTypes.h"
 #include "gui/general/MidiPitchLabel.h"
 #include "PitchDragLabel.h"
 #include <kcombobox.h>
@@ -80,15 +81,19 @@ DiatonicPitchChooser::DiatonicPitchChooser(QString title,
     m_octave->insertItem(i18n("7"));
     m_octave->setCurrentItem(defaultOctave);
 
-    m_accidental = new QSpinBox(hbox);
-    m_accidental->setMinValue(-127);
-    m_accidental->setValue(0);
+    m_accidental = new KComboBox( hbox );
+    m_accidental->insertItem(Accidentals::DoubleFlat);
+    m_accidental->insertItem(Accidentals::Flat);
+    m_accidental->insertItem(Accidentals::Natural);
+    m_accidental->insertItem(Accidentals::Sharp);
+    m_accidental->insertItem(Accidentals::DoubleSharp);
+    m_accidental->setCurrentItem(2);
 
     m_pitchLabel = new QLabel(QString("%1").arg(getPitch()), hbox);
     
     m_pitchLabel->setMinimumWidth(40);
 
-    connect(m_accidental, SIGNAL(valueChanged(int)),
+    connect(m_accidental, SIGNAL(activated(int)),
             this, SLOT(slotSetAccidental(int)));
 
     connect(m_octave, SIGNAL(activated(int)),
@@ -129,31 +134,32 @@ DiatonicPitchChooser::DiatonicPitchChooser(QString title,
 int
 DiatonicPitchChooser::getPitch() const
 {
-    return 12 * m_octave->currentItem() + stepIntervals[m_step->currentItem()] + m_accidental->value();
+    return 12 * m_octave->currentItem() + stepIntervals[m_step->currentItem()] + 
+    	(m_accidental->currentItem() - 2);
 }
 
 int 
 DiatonicPitchChooser::getAccidental()
 {
-    //return m_currentPitch - 
-    return m_accidental->value();
+    return m_accidental->currentItem() - 2;
 }
 
 void
 DiatonicPitchChooser::slotSetPitch(int pitch)
 {
-    //if (m_pitch->value() != p)
-    //    m_pitch->setValue(p);
     if (m_pitchDragLabel->getPitch() != pitch)
         m_pitchDragLabel->slotSetPitch(pitch);
 
     m_octave->setCurrentItem((int)(((long) pitch) / 12));
     int step = steps[pitch % 12];
     m_step->setCurrentItem(step);
-    m_accidental->setValue((pitch % 12) - stepIntervals[step]);
+    
+    Accidental accidental = Accidentals::getAccidental((pitch % 12) - stepIntervals[step]);
+    
+    m_accidental->setCurrentItem(Accidentals::getPitchOffset(accidental) + 2);
 
-    //MidiPitchLabel pl(p);
     m_pitchLabel->setText(QString("%1").arg(pitch));
+    
     update();
 }
 
@@ -176,11 +182,12 @@ DiatonicPitchChooser::slotSetOctave(int octave)
     update();
 }
 
+/** input 0..5: doubleflat .. doublesharp */
 void
 DiatonicPitchChooser::slotSetAccidental(int accidental)
 {
-    if (m_accidental->value() != accidental)
-       m_accidental->setValue(accidental);
+    if (m_accidental->currentItem() != accidental)
+       m_accidental->setCurrentItem(accidental);
     setLabelsIfNeeded();
     update();
 }
@@ -206,7 +213,9 @@ DiatonicPitchChooser::slotSetNote(int pitch, int octave, int step)
 
     m_octave->setCurrentItem(octave);
     m_step->setCurrentItem(step);
-    m_accidental->setValue(pitch - (octave * 12 + stepIntervals[step]));
+    
+    Accidental accidental = Accidentals::getAccidental(pitch - (octave * 12 + stepIntervals[step]));
+    m_accidental->setCurrentItem(Accidentals::getPitchOffset(accidental) + 2);
 
     //MidiPitchLabel pl(p);
     m_pitchLabel->setText(QString("%1").arg(pitch));
