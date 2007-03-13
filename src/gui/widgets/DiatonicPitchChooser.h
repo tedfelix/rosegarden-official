@@ -83,11 +83,13 @@ public slots:
 
 protected:
     int m_defaultPitch;
+    
     PitchDragLabel *m_pitchDragLabel;
+    
     QComboBox *m_step;
-    QSpinBox *m_accidental;
+    QComboBox *m_accidental;
     QComboBox *m_octave;
-    //QSpinBox *m_pitch;
+    
     QLabel *m_pitchLabel;
 
 private:
