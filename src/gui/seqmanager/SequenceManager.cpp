@@ -1310,16 +1310,37 @@ SequenceManager::preparePlayback(bool forceProgramChanges)
     MappedComposition mC;
     MappedEvent *mE;
 
+    std::set<InstrumentId> activeInstruments;
+
+    Composition &composition = m_doc->getComposition();
+
+    for (Composition::trackcontainer::const_iterator i =
+             composition.getTracks().begin();
+         i != composition.getTracks().end(); ++i) {
+
+        Track *track = i->second;
+        if (track) activeInstruments.insert(track->getInstrument());
+    }
+
     // Send the MappedInstruments (minimal Instrument information
     // required for Performance) to the Sequencer
     //
     InstrumentList::iterator it = list.begin();
     for (; it != list.end(); it++) {
+
         StudioControl::sendMappedInstrument(MappedInstrument(*it));
 
         // Send program changes for MIDI Instruments
         //
         if ((*it)->getType() == Instrument::Midi) {
+
+            if (activeInstruments.find((*it)->getId()) ==
+                activeInstruments.end()) {
+//                std::cerr << "SequenceManager::preparePlayback: instrument "
+//                          << (*it)->getId() << " is not in use" << std::endl;
+                continue;
+            }            
+
             // send bank select always before program change
             //
             if ((*it)->sendsBankSelect()) {
@@ -1349,8 +1370,8 @@ SequenceManager::preparePlayback(bool forceProgramChanges)
             }
 
         } else if ((*it)->getType() == Instrument::Audio ||
-               (*it)->getType() == Instrument::SoftSynth) {}
-        else {
+                   (*it)->getType() == Instrument::SoftSynth) {
+        } else {
             RG_DEBUG << "SequenceManager::preparePlayback - "
             << "unrecognised instrument type" << endl;
         }
