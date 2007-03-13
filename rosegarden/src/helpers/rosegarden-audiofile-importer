@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # Helper application to convert and import audio files for Rosegarden.
 #
