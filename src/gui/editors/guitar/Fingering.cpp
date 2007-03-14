@@ -23,6 +23,9 @@
 */
 
 #include "Fingering.h"
+
+#include "misc/Debug.h"
+
 #include <qstringlist.h>
 #include <sstream>
 #include <algorithm>
@@ -35,8 +38,15 @@ namespace Guitar
 {
     
 Fingering::Fingering(unsigned int nbStrings) :
-    m_strings(nbStrings)
+    m_strings(nbStrings, MUTED)
 {
+}
+
+Fingering::Fingering(QString s)
+{
+    QString errString;
+    Fingering t = parseFingering(s, errString);
+    m_strings = t.m_strings;
 }
 
 unsigned int
@@ -91,13 +101,15 @@ Fingering::parseFingering(const QString& ch, QString& errorString)
     
     for(QStringList::iterator i = tokens.begin(); i != tokens.end() && idx < fingering.getNbStrings(); ++i, ++idx) {
         QString t = *i;
-        bool b;
+        bool b = false;
         unsigned int fn = t.toUInt(&b);
-        if (b)
+        if (b) {
+//            NOTATION_DEBUG << "Fingering::parseFingering : '" << t << "' = " << fn << endl;  
             fingering[idx] = fn;
-        else if (t.lower() == 'x')
+        } else if (t.lower() == "x") {
+//            NOTATION_DEBUG << "Fingering::parseFingering : '" << t << "' = MUTED\n";  
             fingering[idx] = MUTED;
-        else {
+        } else {
             errorString = i18n("couldn't parse fingering '%1' in '%2'").arg(t).arg(ch);            
         }
     }

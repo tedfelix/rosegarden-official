@@ -75,6 +75,8 @@ bool ChordXmlHandler::endElement(const QString& namespaceURI,
     if (lcName == "fingering") {
 
         m_inFingering = false;
+        m_chordMap.insert(m_currentChord);
+        NOTATION_DEBUG << "ChordXmlHandler::endElement (fingering) : adding chord " << m_currentChord << endl;            
 
     } else if (lcName == "chord") {
         
@@ -92,10 +94,7 @@ bool ChordXmlHandler::characters(const QString& ch)
     QString ch2 = ch.simplifyWhiteSpace();
     
     if (!ch2.isEmpty() && m_inFingering) {
-        if (parseFingering(ch2)) {
-            m_chordMap.insert(m_currentChord);
-            NOTATION_DEBUG << "ChordXmlHandler::endElement : adding chord " << m_currentChord << endl;            
-        } else
+        if (!parseFingering(ch2))
             return false;        
     }
 
