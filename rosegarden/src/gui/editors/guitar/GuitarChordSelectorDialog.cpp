@@ -122,8 +122,6 @@ GuitarChordSelectorDialog::populate()
     m_rootNotesList->sort();
     
     m_rootNotesList->setCurrentItem(0);
-    m_chordExtList->setCurrentItem(0);
-    m_fingeringsList->setCurrentItem(0);
 }
 
 void
@@ -149,7 +147,8 @@ GuitarChordSelectorDialog::slotRootHighlighted(int i)
     m_chord.setRoot(m_rootNotesList->text(i));
 
     QStringList extList = m_chordMap.getExtList(m_chord.getRoot());
-    populateExtensions(extList);    
+    populateExtensions(extList);
+    m_chordExtList->setCurrentItem(0);    
 }
 
 void
