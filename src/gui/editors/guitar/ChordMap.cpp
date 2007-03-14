@@ -194,7 +194,7 @@ bool ChordMap::saveDocument(const QString& filename, QString& errMsg)
     outStream << "</chords>\n";    
     outStream << "</rosegarden-chord-data>\n";
   
-    return outStream.status() == IO_Ok;
+    return outStream.device()->status() == IO_Ok;
 }
 
 int ChordMap::FILE_FORMAT_VERSION_MAJOR = 1;

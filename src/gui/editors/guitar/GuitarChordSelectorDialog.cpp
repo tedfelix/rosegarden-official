@@ -294,7 +294,6 @@ GuitarChordSelectorDialog::populateExtensions(const QStringList& extList)
 {
     m_chordExtList->clear();
     m_chordExtList->insertStringList(extList);
-    m_chordExtList->sort();
 } 
 
 void
