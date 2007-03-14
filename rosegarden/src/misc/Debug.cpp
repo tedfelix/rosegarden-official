@@ -116,7 +116,7 @@ operator<<(kdbgstream &dbg, const Rosegarden::Guitar::Chord &c)
     
      Rosegarden::Guitar::Fingering f = c.getFingering();
 
-     dbg << "\nFingering : ";
+     dbg << ", fingering : ";
 
      for(unsigned int j = 0; j < 6; ++j) {
          int pos = f[j];

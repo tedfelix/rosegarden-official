@@ -179,7 +179,10 @@ bool ChordMap::saveDocument(const QString& filename, QString& errMsg)
                 outStream << "</chord>\n";
             // open new chord
             
-            outStream << "<chord ext=\"" << chord.getExt() << "\">\n";
+            if (!chord.getExt().isEmpty())
+                outStream << "<chord ext=\"" << chord.getExt() << "\">\n";
+            else
+                outStream << "<chord>\n";
         }
         
         outStream << "<fingering>" << chord.getFingering().toString() << "</fingering>\n";
@@ -190,7 +193,8 @@ bool ChordMap::saveDocument(const QString& filename, QString& errMsg)
         
     outStream << "</chords>\n";    
     outStream << "</rosegarden-chord-data>\n";
-     
+  
+    return outStream.status() == IO_Ok;
 }
 
 int ChordMap::FILE_FORMAT_VERSION_MAJOR = 1;
