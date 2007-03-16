@@ -52,11 +52,16 @@ Fingering::Fingering(QString s)
 unsigned int
 Fingering::getStartFret() const
 {
-    int min = 999;
+    int min = 999, max = 0;
     for(std::vector<int>::const_iterator i = m_strings.begin(); i != m_strings.end(); ++i) {
         if (*i < min && *i > 0)
             min = *i;
+        if (*i > max)
+            max = *i;
     }
+    
+    if (max < 4)
+        min = 1;
     
     return min == 999 ? 1 : min;
 }

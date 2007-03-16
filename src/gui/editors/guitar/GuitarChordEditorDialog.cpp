@@ -98,7 +98,7 @@ GuitarChordEditorDialog::slotOk()
     m_chord.setFingering(m_fingeringBox->getFingering());
     m_chord.setExt(m_ext->currentText());
     m_chord.setRoot(m_rootNotesList->currentText());
-            
+    m_chord.setUserChord(true);            
     KDialogBase::slotOk();
 }
 

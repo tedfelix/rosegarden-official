@@ -148,7 +148,10 @@ GuitarChordSelectorDialog::slotRootHighlighted(int i)
 
     QStringList extList = m_chordMap.getExtList(m_chord.getRoot());
     populateExtensions(extList);
-    m_chordExtList->setCurrentItem(0);    
+    if (m_chordExtList->count() > 0)
+        m_chordExtList->setCurrentItem(0);
+    else
+        m_fingeringsList->clear(); // clear any previous fingerings    
 }
 
 void
@@ -171,6 +174,7 @@ GuitarChordSelectorDialog::slotFingeringHighlighted(QListBoxItem* listBoxItem)
     if (fingeringItem) {
         m_chord = fingeringItem->getChord();
         m_fingeringBox->setFingering(m_chord.getFingering());
+        setEditionEnabled(m_chord.isUserChord());
     }
 }
 
@@ -206,8 +210,10 @@ GuitarChordSelectorDialog::slotNewFingering()
 void
 GuitarChordSelectorDialog::slotDeleteFingering()
 {
-    m_chordMap.remove(m_chord);
-    delete m_fingeringsList->selectedItem();
+    if (m_chord.isUserChord()) {
+        m_chordMap.remove(m_chord);
+        delete m_fingeringsList->selectedItem();
+    }
 }
 
 void
@@ -323,6 +329,13 @@ GuitarChordSelectorDialog::parseChordFile(const QString& chordFileName)
     
 }
 
+void
+GuitarChordSelectorDialog::setEditionEnabled(bool enabled)
+{
+    m_deleteFingeringButton->setEnabled(enabled);
+    m_editFingeringButton->setEnabled(enabled);
+}
+
 std::vector<QString>
 GuitarChordSelectorDialog::getAvailableChordFiles()
 {
@@ -345,12 +358,12 @@ GuitarChordSelectorDialog::saveUserChordMap()
     // Read config for user directory
     QString userDir = KGlobal::dirs()->saveLocation("appdata", "chords/");
 
-    QString userChordDictPath = userDir + "/chords.xml";
+    QString userChordDictPath = userDir + "/user_chords.xml";
     
     NOTATION_DEBUG << "GuitarChordSelectorDialog::saveUserChordMap() : saving user chord map to " << userChordDictPath << endl;
     QString errMsg;
     
-    m_chordMap.saveDocument(userChordDictPath, errMsg);
+    m_chordMap.saveDocument(userChordDictPath, true, errMsg);
     
     return errMsg.isEmpty();    
 }
