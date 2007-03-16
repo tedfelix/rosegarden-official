@@ -31,6 +31,7 @@
 
 #include <vector>
 #include <qstring.h>
+#include <qregexp.h>
 
 namespace Rosegarden
 {
@@ -60,13 +61,16 @@ public:
     bool isEmpty() const   { return m_root.isEmpty(); }
     bool operator!() const { return !m_root; }
     
+    bool isUserChord() const { return m_isUserChord; }
+    void setUserChord(bool c) { m_isUserChord = c; }
+     
     QString getRoot() const { return m_root; }
     void setRoot(QString r) { m_root = r; } 
 
     QString getExt() const { return m_ext; }
     void setExt(QString r) { m_ext = r.isEmpty() ? QString::null : r; } 
     
-    bool hasAltBass() const { return m_ext.contains('/'); } 
+    bool hasAltBass() const { return m_ext.contains(ALT_BASS_REGEXP); } 
 
     Fingering getFingering() const { return m_fingering; }
     void setFingering(Fingering f) { m_fingering = f; }
@@ -83,10 +87,14 @@ public:
         
 protected:
 
+    static const QRegExp ALT_BASS_REGEXP;
+    
     QString m_root;
     QString m_ext;
     
     Fingering m_fingering;
+    
+    bool m_isUserChord;
 };
 
 bool operator<(const Chord&, const Chord&);    

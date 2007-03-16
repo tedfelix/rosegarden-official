@@ -59,6 +59,14 @@ bool ChordXmlHandler::startElement(const QString& namespaceURI,
         if (atts.index("ext") >= 0)
             m_currentChord.setExt(atts.value("ext").stripWhiteSpace());
 
+        if (atts.index("user") >= 0) {
+            QString userVal = atts.value("user").stripWhiteSpace().lower();
+            bool res = (userVal == "yes" || userVal == "1" || userVal == "true");
+            m_currentChord.setUserChord(res);
+        } else {
+            m_currentChord.setUserChord(false);
+        }
+
     } else if (lcName == "fingering") {
         m_inFingering = true;
     }

@@ -133,7 +133,7 @@ ChordMap::remove(const Chord& c)
     m_needSave = true;    
 }
 
-bool ChordMap::saveDocument(const QString& filename, QString& errMsg)
+bool ChordMap::saveDocument(const QString& filename, bool userChordsOnly, QString& errMsg)
 {
     QFile file(filename);
     file.open(IO_WriteOnly);
@@ -157,6 +157,9 @@ bool ChordMap::saveDocument(const QString& filename, QString& errMsg)
     for(iterator i = begin(); i != end(); ++i) {
         const Chord& chord = *i;
     
+        if (userChordsOnly && !chord.isUserChord())
+            continue; // skip non-user chords
+            
         if (chord.getRoot() != currentRoot) {
 
             currentRoot = chord.getRoot();
@@ -166,7 +169,7 @@ bool ChordMap::saveDocument(const QString& filename, QString& errMsg)
                 outStream << "\n</chordset>\n";
 
             // open new chordset            
-            outStream << "<chordset root=\"" << chord.getRoot() << "\">";
+            outStream << "<chordset root=\"" << chord.getRoot() << "\">\n";
             currentExt = "NEWEXT"; // to make sure we open a new chord right after that
         }
     
@@ -177,12 +180,15 @@ bool ChordMap::saveDocument(const QString& filename, QString& errMsg)
             // close current chord (if there was one)
             if (i != begin())
                 outStream << "</chord>\n";
-            // open new chord
-            
+
+            // open new chord            
+            outStream << "<chord";
             if (!chord.getExt().isEmpty())
-                outStream << "<chord ext=\"" << chord.getExt() << "\">\n";
-            else
-                outStream << "<chord>\n";
+                outStream << " ext=\"" << chord.getExt() << "\"";
+            if (chord.isUserChord())
+                outStream << " user=\"true\"";
+                
+            outStream << ">\n";
         }
         
         outStream << "<fingering>" << chord.getFingering().toString() << "</fingering>\n";

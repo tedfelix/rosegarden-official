@@ -73,6 +73,9 @@ protected:
     void populateFingerings(const Guitar::ChordMap::chordarray&);
     void populateExtensions(const QStringList& extList);
 
+    /// set enabled state of edit/delete buttons
+    void setEditionEnabled(bool);
+    
     void populate();
     void clear();
     void refresh();
@@ -81,13 +84,12 @@ protected:
     
     QPixmap getFingeringPixmap(const Guitar::Fingering& fingering) const;
          
-    //! Find all chord list files on the system
+    /// Find all chord list files on the system
     std::vector<QString> getAvailableChordFiles();
 
-    //! List of Chords
     Guitar::ChordMap m_chordMap;
 
-    /// selected chord
+    /// current selected chord
     Guitar::Chord m_chord;
     
     // Chord data

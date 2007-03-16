@@ -40,16 +40,19 @@ const PropertyName Chord::FingeringPropertyName = "fingering";
 
 
 Chord::Chord()
+    : m_isUserChord(false)
 {
 }
 
 Chord::Chord(const QString& root, const QString& ext)
     : m_root(root),
-      m_ext(ext)
+      m_ext(ext),
+      m_isUserChord(false)
 {
 }
 
 Chord::Chord(const Event& e)
+    : m_isUserChord(false)
 {
     std::string f;
     bool ok;
@@ -80,6 +83,8 @@ Event* Chord::getAsEvent(timeT absoluteTime) const
     e->set<String>(FingeringPropertyName, getFingering().toString());
     return e;
 }
+
+const QRegExp Chord::ALT_BASS_REGEXP("/[A-G]");
 
 bool operator<(const Chord& a, const Chord& b)
 {

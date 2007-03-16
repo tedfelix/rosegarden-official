@@ -66,7 +66,7 @@ public:
     bool needSave() const { return m_needSave; }
     void clearNeedSave() { m_needSave = false; }
 
-    bool saveDocument(const QString& filename, QString& errMsg);
+    bool saveDocument(const QString& filename, bool userChordsOnly, QString& errMsg);
 
     iterator begin() { return m_map.begin(); }
     iterator end()   { return m_map.end();   }
