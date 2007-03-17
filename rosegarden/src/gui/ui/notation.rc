@@ -68,6 +68,8 @@
   <Separator/>
   <Action name="set_segment_start"/>
   <Action name="set_segment_duration"/>
+  <Separator/>
+  <Action name="transpose_segment"/>
 </Menu>
 
 

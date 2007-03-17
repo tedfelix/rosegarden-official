@@ -440,7 +440,7 @@ public:
     int getTonicPitch() const {
         return m_keyDetailMap[m_name].m_tonicPitch;
     }
-
+    
     /**
      * Return the number of sharps or flats in the key's signature.
      */
@@ -523,6 +523,14 @@ public:
 
     /// Returned event is on heap; caller takes responsibility for ownership
     Event *getAsEvent(timeT absoluteTime) const;
+
+	/**
+	 * Transpose this key by the specified interval given in pitch and steps
+	 * 
+	 * For example: transposing F major by a major triad (4,2) yields
+	 *  A major.
+	 */
+	Key transpose(int pitchDelta, int heightDelta);
 
 private:
     std::string m_name;
@@ -904,6 +912,13 @@ public:
                                                 const Accidental &accidental,
                                                 const Clef &clef,
                                                 const Key &key);
+
+	/**
+	 * return the result of transposing the given pitch by the
+	 * specified interval in the given key. The key is left unchanged,
+	 * only the pitch is transposed.
+	 */
+	Pitch transpose(Key key, int pitchDelta, int heightDelta);
 
 private:
     int m_pitch;

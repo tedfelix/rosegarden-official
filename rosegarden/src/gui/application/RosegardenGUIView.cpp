@@ -1150,6 +1150,8 @@ RosegardenGUIView::updateMeters(SequencerMapper *mapper)
         if (!instrument)
             continue;
 
+		// This records the level of this instrument, not neccessarily
+		//  caused by notes on this particular track.
         LevelInfo &info = levels[instrumentId];
         LevelInfo &recInfo = recLevels[instrumentId];
 
@@ -1202,15 +1204,19 @@ RosegardenGUIView::updateMeters(SequencerMapper *mapper)
             }
 
         } else {
-
+			// Not audio or softsynth
             if (info.level == 0)
                 continue;
 
             if (getDocument()->getSequenceManager()->getTransportStatus()
                     != STOPPED) {
 
+				// The information in 'info' is specific for this instrument, not
+				//  for this track.
+				//m_trackEditor->getTrackButtons()->slotSetTrackMeter
+				//	(info.level / 127.0, track->getPosition());
                 m_trackEditor->getTrackButtons()->slotSetMetersByInstrument
-                (info.level / 127.0, instrumentId);
+                	(info.level / 127.0, instrumentId);
             }
         }
     }

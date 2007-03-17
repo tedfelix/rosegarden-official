@@ -544,6 +544,7 @@ public slots:
     void slotEditAddSustainDown();
     void slotEditAddSustainUp();
     void slotEditAddSustain(bool down);
+    void slotEditTranspose();
     void slotEditElement(NotationStaff *, NotationElement *, bool advanced);
 
     void slotFinePositionLeft();

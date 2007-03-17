@@ -50,33 +50,16 @@ TransposeCommand::modifySegment()
         if ((*i)->isa(Note::EventType)) {
 	    if (m_diatonic)
 	    { 
-		// Finding out the new pitch and accidental:
-		// - find out the old accidental and pitch
-		// - calculate the old step from that
-		// - calculate the new step and pitch using m_semitones and m_steps
-		// - calculate the new accidental by step and pitch
+	    	
+		Pitch oldPitch(**i);
 		
-		// - find out the old accidental and pitch
-		//Accidental oldAccidental = (*i)->get<String>(ACCIDENTAL, Accidentals::NoAccidental);
-		Accidental oldAccidental = NoAccidental;
-		(*i)->get<String>(ACCIDENTAL, oldAccidental);
-		long oldPitch = (*i)->get<Int>(PITCH);
-
-		// - calculate the old step from that
-		int oldAccidentalPitchOffset = Accidentals::getPitchOffset(oldAccidental);
-		int oldStepNaturalPitch = oldPitch - oldAccidentalPitchOffset;
-		static int steps[] = { 0,0,1,2,2,3,3,4,4,5,6,6 };
-		int oldStep = steps[oldStepNaturalPitch % 12] + (oldStepNaturalPitch / 12) * 7;
-
-		// - calculate the new step and pitch using m_semitones and m_steps
-		long newPitch = oldPitch + m_semitones;
-		int newStep   = oldStep  + m_steps;
-		(*i)->set<Int>(PITCH,newPitch);
-
-		// - calculate the new accidental by step and pitch
-		static int stepIntervals[] = { 0,2,4,5,7,9,11 };
-		int newAccidentalOffset = newPitch - ((newStep / 7) * 12 + stepIntervals[newStep % 7]);
-		(*i)->set<String>(ACCIDENTAL,Accidentals::getAccidental(newAccidentalOffset));
+		timeT noteTime = (*i)->getAbsoluteTime();
+		Key key = m_selection->getSegment().getKeyAtTime(noteTime);
+		std::cout << "Transposing " << oldPitch.getPerformancePitch() << oldPitch.getAccidental(key) << " by " << m_semitones << "." << m_steps << std::endl;
+		Pitch newPitch = oldPitch.transpose(key, m_semitones, m_steps);
+		
+		(*i)->set<Int>(PITCH, newPitch.getPerformancePitch());
+		(*i)->set<String>(ACCIDENTAL, newPitch.getAccidental(key));
 	    }
 	    else
 	    {
@@ -89,6 +72,7 @@ TransposeCommand::modifySegment()
 		    }
 		} catch (...) { }
 	    }
+
         }
     }
 }
