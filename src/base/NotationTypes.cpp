@@ -53,14 +53,19 @@ const int MIN_SUBORDERING = SHRT_MIN;
 
 namespace Accidentals
 {
+    /** 
+     * NoAccidental means the accidental will be inferred
+     * based on the performance pitch and current key at the
+     * location of the note.
+     */ 
     const Accidental NoAccidental = "no-accidental";
+    
     const Accidental Sharp = "sharp";
     const Accidental Flat = "flat";
     const Accidental Natural = "natural";
     const Accidental DoubleSharp = "double-sharp";
     const Accidental DoubleFlat = "double-flat";
-    const Accidental UnsupportedAccidental = "(unsupported)";
-
+    
     AccidentalList getStandardAccidentals() {
 
         static Accidental a[] = {
@@ -86,11 +91,15 @@ namespace Accidentals
     Accidental getAccidental(int pitchChange) {
         if (pitchChange == -2) return DoubleFlat;
         if (pitchChange == -1) return Flat;
+        // Yielding 'Natural' will add a natural-sign even if not needed, so for now
+        //  just return NoAccidental
         if (pitchChange == 0) return NoAccidental;
         if (pitchChange == 1) return Sharp;
         if (pitchChange == 2) return DoubleSharp;
 
-	return UnsupportedAccidental;
+	// if we're getting into triple flats/sharps, we're probably atonal
+	// and don't case if the accidental is simplified
+	return NoAccidental;
     }
 }
 
@@ -494,7 +503,7 @@ Key::Key(int accidentalCount, bool isSharp, bool isMinor) :
 Key::Key(int tonicPitch, bool isMinor) :
     m_accidentalHeights(0)
 {
-    checkMap();
+	checkMap();
     for (KeyDetailMap::const_iterator i = m_keyDetailMap.begin();
          i != m_keyDetailMap.end(); ++i) {
         if ((*i).second.m_tonicPitch == tonicPitch &&
@@ -503,7 +512,7 @@ Key::Key(int tonicPitch, bool isMinor) :
             return;
         }
     }
-
+	
 #if (__GNUC__ < 3)
     std::ostrstream os;
 #else
@@ -554,6 +563,14 @@ Key::KeyList Key::getKeys(bool minor)
         }
     }
     return result;
+}
+
+Key::Key Key::transpose(int pitchDelta, int heightDelta)
+{
+	Pitch tonic(getTonicPitch());
+	Pitch newTonic = tonic.transpose(*this, pitchDelta, heightDelta);
+	int newTonicPitch = (newTonic.getPerformancePitch() % 12 + 12) % 12;
+	return Key (newTonicPitch, isMinor());
 }
 
 Accidental Key::getAccidentalAtHeight(int height, const Clef &clef) const
@@ -1568,6 +1585,36 @@ Pitch::getPerformancePitchFromRG21Pitch(int heightOnStaff,
     return p;
 }
 
+Pitch Pitch::transpose(const Key key, int pitchDelta, int heightDelta)
+{
+	// get old accidental
+	Accidental oldAccidental = getAccidental(&key);
+
+	// get old step
+	// TODO: maybe we should write an oldPitchObj.getOctave(0, key) that takes into account accidentals	
+	//  properly (e.g. yielding '0' instead of '1' for B#0). For now workaround here.	
+	Pitch oldPitchWithoutAccidental(getPerformancePitch() - Accidentals::getPitchOffset(oldAccidental), Natural);
+	Key cmaj = Key();
+	int oldStep = getNoteInScale(cmaj) + oldPitchWithoutAccidental.getOctave(0) * 7;
+	
+	std::cout << "Old pitch, step and accidental: " << getPerformancePitch() << ", " << oldStep << oldAccidental << std::endl;
+	
+	// calculate new pitch and step
+	int newPitch = getPerformancePitch() + pitchDelta;
+	int newStep  = oldStep  + heightDelta;
+		
+	std::cout << "New pitch and step: " << newPitch << ", " << newStep << std::endl;
+	
+	// calculate new accidental for step
+	static int stepIntervals[] = { 0,2,4,5,7,9,11 };
+	int pitchWithoutAccidental = ((newStep / 7) * 12 + stepIntervals[newStep % 7]);
+	std::cout << "new pitch without taking into account accidental" << pitchWithoutAccidental << std::endl;
+	int newAccidentalOffset = newPitch - pitchWithoutAccidental;
+	std::cout << "accidental offset: " << newAccidentalOffset << std::endl;
+	// construct pitch-object to return
+	Pitch newPitchObj(newPitch, Accidentals::getAccidental(newAccidentalOffset));
+	return newPitchObj;
+}
 
 //////////////////////////////////////////////////////////////////////
 // Note

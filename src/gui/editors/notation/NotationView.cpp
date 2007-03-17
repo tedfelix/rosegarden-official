@@ -24,6 +24,7 @@
 
 
 #include "NotationView.h"
+#include <list>
 #include <qlayout.h>
 #include "misc/Debug.h"
 #include <kapplication.h>
@@ -71,6 +72,7 @@
 #include "commands/edit/SetLyricsCommand.h"
 #include "commands/edit/SetNoteTypeCommand.h"
 #include "commands/edit/SetTriggerCommand.h"
+#include "commands/edit/TransposeCommand.h"
 #include "commands/notation/AddFingeringMarkCommand.h"
 #include "commands/notation/AddIndicationCommand.h"
 #include "commands/notation/AddMarkCommand.h"
@@ -121,6 +123,7 @@
 #include "gui/dialogs/ClefDialog.h"
 #include "gui/dialogs/EventEditDialog.h"
 #include "gui/dialogs/InterpretDialog.h"
+#include "gui/dialogs/IntervalDialog.h"
 #include "gui/dialogs/KeySignatureDialog.h"
 #include "gui/dialogs/LyricEditDialog.h"
 #include "gui/dialogs/MakeOrnamentDialog.h"
@@ -2080,6 +2083,11 @@ void NotationView::setupActions()
     new KAction(SustainInsertionCommand::getGlobalName(false), 0, this,
                 SLOT(slotEditAddSustainUp()), actionCollection(),
                 "add_sustain_up");
+
+	new KAction(TransposeCommand::getDiatonicGlobalName(false), 0, this,
+                SLOT(slotEditTranspose()), actionCollection(),
+                "transpose_segment");
+
 
     // setup Settings menu
     static QString actionsToolbars[][4] =
@@ -5743,6 +5751,64 @@ void NotationView::slotEditAddSustainDown()
 void NotationView::slotEditAddSustainUp()
 {
     slotEditAddSustain(false);
+}
+
+void NotationView::slotEditTranspose()
+{
+	IntervalDialog intervalDialog(this, true);
+    int ok = intervalDialog.exec();
+    
+    int semitones = intervalDialog.getChromaticDistance();
+    int steps = intervalDialog.getDiatonicDistance();
+	
+	if (!ok || (semitones == 0 && steps == 0)) return;
+    
+    Segment &segment = m_staffs[m_currentStaff]->getSegment();
+	EventSelection wholeSegment(segment, segment.getStartTime(), segment.getEndMarkerTime());
+    
+    //TODO who cleans this up?
+    KMacroCommand *macro = new KMacroCommand("Transpose Segment by Interval");
+    
+    // Key insertion can do transposition, but a C4 to D becomes a D4, while
+	//  a C4 to G becomes a G3. Because we let the user specify an explicit number
+	//  of octaves to move the notes up/down, we add the keys without transposing
+	//  and handle the transposition ourselves:
+	if (intervalDialog.getChangeKey())
+	{
+		Rosegarden::Key key = segment.getKeyAtTime(segment.getStartTime());
+		Rosegarden::Key newKey = key.transpose(semitones, steps);
+		
+		macro->addCommand
+			(new KeyInsertionCommand
+			 (segment,
+			  segment.getStartTime(),
+			  newKey,
+			  false,
+			  false,
+			  true));
+		
+		EventSelection::eventcontainer::iterator i;
+		std::list<KeyInsertionCommand*> commands;
+		
+		for (i = wholeSegment.getSegmentEvents().begin();
+            i != wholeSegment.getSegmentEvents().end(); ++i) {
+        		// transpose key
+				if ((*i)->isa(Rosegarden::Key::EventType)) {
+        			macro->addCommand
+						(new KeyInsertionCommand
+						 (segment,
+			  			 (*i)->getAbsoluteTime(),
+			  			 (Rosegarden::Key (**i)).transpose(semitones, steps),
+			 			 false,
+			 			 false,
+					 	 true));
+        		}
+        		
+        }
+	}
+	macro->addCommand(new TransposeCommand
+		(semitones, steps, wholeSegment));
+	addCommandToHistory(macro);
 }
 
 void NotationView::slotEditElement(NotationStaff *staff,
