@@ -43,11 +43,12 @@ void
 TransposeCommand::modifySegment()
 {
     EventSelection::eventcontainer::iterator i;
-
+	
     for (i = m_selection->getSegmentEvents().begin();
             i != m_selection->getSegmentEvents().end(); ++i) {
-
+		
         if ((*i)->isa(Note::EventType)) {
+        	
 	    if (m_diatonic)
 	    { 
 	    	
@@ -55,7 +56,6 @@ TransposeCommand::modifySegment()
 		
 		timeT noteTime = (*i)->getAbsoluteTime();
 		Key key = m_selection->getSegment().getKeyAtTime(noteTime);
-		std::cout << "Transposing " << oldPitch.getPerformancePitch() << oldPitch.getAccidental(key) << " by " << m_semitones << "." << m_steps << std::endl;
 		Pitch newPitch = oldPitch.transpose(key, m_semitones, m_steps);
 		
 		(*i)->set<Int>(PITCH, newPitch.getPerformancePitch());

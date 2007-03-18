@@ -1339,7 +1339,8 @@ public slots:
 
     void slotRepeatingSegments();
     void slotRelabelSegments();
-
+	void slotTransposeSegments();
+	
     /// Panic button pressed
     void slotPanic();
 

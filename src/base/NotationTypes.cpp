@@ -1472,7 +1472,7 @@ Pitch::getNoteInScale(const Key &key) const
 {
     int p = m_pitch;
     p -= key.getTonicPitch();
-    p -= Accidentals::getPitchOffset(m_accidental);
+    p -= Accidentals::getPitchOffset(getDisplayAccidental(key));
     p += 24; // in case these calculations made it -ve
     p %= 12;
 
@@ -1597,20 +1597,14 @@ Pitch Pitch::transpose(const Key key, int pitchDelta, int heightDelta)
 	Key cmaj = Key();
 	int oldStep = getNoteInScale(cmaj) + oldPitchWithoutAccidental.getOctave(0) * 7;
 	
-	std::cout << "Old pitch, step and accidental: " << getPerformancePitch() << ", " << oldStep << oldAccidental << std::endl;
-	
 	// calculate new pitch and step
 	int newPitch = getPerformancePitch() + pitchDelta;
 	int newStep  = oldStep  + heightDelta;
 		
-	std::cout << "New pitch and step: " << newPitch << ", " << newStep << std::endl;
-	
 	// calculate new accidental for step
 	static int stepIntervals[] = { 0,2,4,5,7,9,11 };
 	int pitchWithoutAccidental = ((newStep / 7) * 12 + stepIntervals[newStep % 7]);
-	std::cout << "new pitch without taking into account accidental" << pitchWithoutAccidental << std::endl;
 	int newAccidentalOffset = newPitch - pitchWithoutAccidental;
-	std::cout << "accidental offset: " << newAccidentalOffset << std::endl;
 	// construct pitch-object to return
 	Pitch newPitchObj(newPitch, Accidentals::getAccidental(newAccidentalOffset));
 	return newPitchObj;

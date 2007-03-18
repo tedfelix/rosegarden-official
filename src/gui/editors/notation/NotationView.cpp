@@ -114,6 +114,7 @@
 #include "commands/notation/UntieNotesCommand.h"
 #include "commands/notation/UnTupletCommand.h"
 #include "commands/segment/PasteToTriggerSegmentCommand.h"
+#include "commands/segment/SegmentChangeTransposeCommand.h"
 #include "commands/segment/RenameTrackCommand.h"
 #include "document/RosegardenGUIDoc.h"
 #include "document/ConfigGroups.h"
@@ -5755,7 +5756,7 @@ void NotationView::slotEditAddSustainUp()
 
 void NotationView::slotEditTranspose()
 {
-	IntervalDialog intervalDialog(this, true);
+	IntervalDialog intervalDialog(this, true, true);
     int ok = intervalDialog.exec();
     
     int semitones = intervalDialog.getChromaticDistance();
@@ -5806,8 +5807,17 @@ void NotationView::slotEditTranspose()
         		
         }
 	}
+	
 	macro->addCommand(new TransposeCommand
 		(semitones, steps, wholeSegment));
+	
+	if (intervalDialog.getTransposeSegmentBack())
+	{
+		// Transpose segment in opposite direction
+		int newTranspose = segment.getTranspose() - semitones;
+		macro->addCommand(new SegmentChangeTransposeCommand(newTranspose, &segment));
+	}
+	
 	addCommandToHistory(macro);
 }
 

@@ -225,6 +225,8 @@ SET(commands_SRCS
 	commands/segment/RenameTrackCommand.h
 	commands/segment/SegmentAutoSplitCommand.cpp
 	commands/segment/SegmentAutoSplitCommand.h
+	commands/segment/SegmentChangeTransposeCommand.cpp
+	commands/segment/SegmentChangeTransposeCommand.h
 	commands/segment/SegmentChangeQuantizationCommand.cpp
 	commands/segment/SegmentChangeQuantizationCommand.h
 	commands/segment/SegmentColourCommand.cpp
