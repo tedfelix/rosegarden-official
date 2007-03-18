@@ -35,6 +35,7 @@
 class QWidget;
 class KComboBox;
 class QRadioButton;
+class QCheckBox;
 
 
 namespace Rosegarden
@@ -47,7 +48,7 @@ class IntervalDialog : public KDialogBase
 {
     Q_OBJECT
 public:
-    IntervalDialog(QWidget *parent, bool mayChangeKey = false);
+    IntervalDialog(QWidget *parent, bool askChangeKey = false, bool askTransposeSegmentBack = false);
     
     // Distance in semitones
     int getChromaticDistance();
@@ -57,6 +58,9 @@ public:
 
     // Transpose within key or change the key?
     bool getChangeKey();
+    
+    // Transpose the segment itself in the opposite direction?
+    bool getTransposeSegmentBack();
     
 public slots:
     void slotSetReferenceNote(int,int,int);
@@ -73,6 +77,8 @@ private:
     QRadioButton *m_transposeWithinKey;
     QRadioButton *m_transposeChangingKey;
     bool changeKey;
+
+	QCheckBox *m_transposeSegmentBack;
 
     int intervalChromatic;
     int intervalDiatonic;

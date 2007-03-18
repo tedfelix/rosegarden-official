@@ -94,7 +94,8 @@
         <Separator/>
         <Action name="relabel_segment"/>
         <Action name="quantize_selection"/>
-	<Action name="repeat_quantize"/>
+		<Action name="repeat_quantize"/>
+		<Action name="transpose"/>
         <Separator/>
         <Action name="rescale"/>
 <!--    <Action name="harmonize_selection"/> -->
@@ -272,6 +273,7 @@
    <Action name="quantize_selection"/>
    <Action name="repeat_quantize"/>
    <Action name="relabel_segment"/>
+   <Action name="transpose"/>
    <Separator/>
    <Action name="select"/>
    <Action name="move"/>
@@ -351,6 +353,7 @@
         <Action name="split_at_time"/>
         <Action name="join_segments"/>
         <Action name="relabel_segment"/>
+        <Action name="transpose"/>
         <Action name="set_segment_start"/>
         <Action name="set_segment_duration"/>
         <Action name="collapse"/>

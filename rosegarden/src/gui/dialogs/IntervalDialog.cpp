@@ -34,6 +34,7 @@
 #include <kdialogbase.h>
 #include <qframe.h>
 #include <qgroupbox.h>
+#include <qcheckbox.h>
 #include <qlabel.h>
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
@@ -46,7 +47,7 @@
 namespace Rosegarden
 {
 
-IntervalDialog::IntervalDialog(QWidget *parent, bool mayChangeKey) :
+IntervalDialog::IntervalDialog(QWidget *parent, bool askChangeKey, bool askTransposeSegmentBack) :
         KDialogBase(parent, 0, true, i18n("Specify Interval"), Ok | Cancel )
 {
     QVBox *vBox = makeVBoxMainWidget();
@@ -64,7 +65,7 @@ IntervalDialog::IntervalDialog(QWidget *parent, bool mayChangeKey) :
     //m_intervalStepsLabel = new QLabel( i18n("Steps: %1").arg(intervalDiatonic % 7), hBox);
     m_intervalLabel = new QLabel( i18n("prime"), vBox);
 
-    if (mayChangeKey)
+    if (askChangeKey)
     {
                QButtonGroup *affectKeyGroup = new QButtonGroup(1, Horizontal, i18n("Affect key?"), vBox);
                m_transposeWithinKey = new QRadioButton(i18n("Transpose within key"), affectKeyGroup);
@@ -75,6 +76,17 @@ IntervalDialog::IntervalDialog(QWidget *parent, bool mayChangeKey) :
     {
        m_transposeChangingKey = NULL;
        m_transposeWithinKey = NULL;
+    }
+    
+    if (askTransposeSegmentBack)
+    {
+    	m_transposeSegmentBack = new QCheckBox( "Adjust segment transposition in opposite direction (maintain audible pitch)", vBox );
+    	m_transposeSegmentBack->setTristate(false);
+    	m_transposeSegmentBack->setChecked(false);
+    }
+    else
+    {
+    	m_transposeSegmentBack = NULL;
     }
 
     connect(m_referencenote, SIGNAL(noteChanged(int,int,int)),
@@ -243,14 +255,26 @@ IntervalDialog::getChangeKey()
 {
     if (m_transposeChangingKey == NULL)
     {
-               return false;
+        return false;
     }
     else
     {
-               return m_transposeChangingKey->isChecked();
+        return m_transposeChangingKey->isChecked();
     }
 }
 
+bool
+IntervalDialog::getTransposeSegmentBack()
+{
+	if (m_transposeSegmentBack == NULL)
+	{
+		return false;
+	}
+	else
+	{
+		return m_transposeSegmentBack->isChecked();	
+	}
+}
 
 }
 #include "IntervalDialog.moc"

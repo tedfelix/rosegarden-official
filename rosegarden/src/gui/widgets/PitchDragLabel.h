@@ -47,7 +47,7 @@ class PitchDragLabel : public QWidget
     Q_OBJECT
 public:
     PitchDragLabel(QWidget *parent,
-                             int defaultPitch = 60);
+    	int defaultPitch = 60, bool defaultSharps = true);
     ~PitchDragLabel();
 
     int getPitch() const { return m_pitch; }
@@ -74,11 +74,11 @@ protected:
     virtual void mouseMoveEvent(QMouseEvent *e);
     virtual void wheelEvent(QWheelEvent *e);
 
-    void calculatePixmap(bool useSharps) const;
+    void calculatePixmap() const;
     void calculatePixmap(int pitch, int octave, int step) const;
 
 	/** emits 'pitchChanged' events, both diatonic and chromatic */
-	void emitPitchChange(bool useSharps = true);
+	void emitPitchChange();
 
     mutable QPixmap m_pixmap;
 
@@ -86,6 +86,8 @@ protected:
     int m_clickedY;
     int m_clickedPitch;
     bool m_clicked;
+    
+    bool m_usingSharps;
 
     NotePixmapFactory *m_npf;
 };

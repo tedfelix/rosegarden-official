@@ -38,14 +38,16 @@ namespace Rosegarden
 {
 
 PitchDragLabel::PitchDragLabel(QWidget *parent,
-                               int defaultPitch) :
+                               int defaultPitch,
+                               bool defaultSharps) :
         QWidget(parent),
         m_pitch(defaultPitch),
+        m_usingSharps(defaultSharps),
         m_clickedY(0),
         m_clicked(false),
         m_npf(new NotePixmapFactory())
 {
-    calculatePixmap(true);
+    calculatePixmap();
 }
 
 PitchDragLabel::~PitchDragLabel()
@@ -57,10 +59,11 @@ void
 PitchDragLabel::slotSetPitch(int p)
 {
     bool up = (p > m_pitch);
+    m_usingSharps = up;
     if (m_pitch == p)
         return ;
     m_pitch = p;
-    calculatePixmap(up);
+    calculatePixmap();
     emitPitchChange();
     paintEvent(0);
 }
@@ -109,7 +112,8 @@ PitchDragLabel::mouseMoveEvent(QMouseEvent *e)
         if (m_pitch != newPitch) {
             bool up = (newPitch > m_pitch);
             m_pitch = newPitch;
-            calculatePixmap(up);
+            m_usingSharps = up;
+            calculatePixmap();
             emit pitchDragged(m_pitch);
 	    if (up)
 	    {
@@ -136,13 +140,13 @@ PitchDragLabel::mouseReleaseEvent(QMouseEvent *e)
 }
 
 void
-PitchDragLabel::emitPitchChange(bool useSharps)
+PitchDragLabel::emitPitchChange()
 {
     emit pitchChanged(m_pitch);
     
 	Pitch newPitch(m_pitch);
 	
-	if (useSharps)
+	if (m_usingSharps)
 	{
 		Rosegarden::Key key = Rosegarden::Key("C major");
     	emit pitchDragged(m_pitch, newPitch.getOctave(0), newPitch.getNoteInScale(key));
@@ -150,7 +154,7 @@ PitchDragLabel::emitPitchChange(bool useSharps)
 	else
 	{
 		Rosegarden::Key key = Rosegarden::Key("A minor");
-		emit pitchDragged(m_pitch, newPitch.getOctave(0), (newPitch.getNoteInScale(key) + 2) % 7);
+		emit pitchDragged(m_pitch, newPitch.getOctave(0), (newPitch.getNoteInScale(key) + 5) % 7);
 	}
 }
 
@@ -160,16 +164,18 @@ PitchDragLabel::wheelEvent(QWheelEvent *e)
     if (e->delta() > 0) {
         if (m_pitch < 127) {
             ++m_pitch;
-            calculatePixmap(true);
-			emitPitchChange(true);
+            m_usingSharps = true;
+            calculatePixmap();
+			emitPitchChange();
             emit preview(m_pitch);
             paintEvent(0);
         }
     } else {
         if (m_pitch > 0) {
             --m_pitch;
-            calculatePixmap(false);
-            emitPitchChange(false);
+            m_usingSharps = false;
+            calculatePixmap();
+            emitPitchChange();
             emit preview(m_pitch);
             paintEvent(0);
         }
@@ -231,7 +237,7 @@ PitchDragLabel::calculatePixmap(int pitch, int octave, int step) const
 }
 
 void
-PitchDragLabel::calculatePixmap(bool useSharps) const
+PitchDragLabel::calculatePixmap() const
 {
     std::string clefType = Clef::Treble;
     int octaveOffset = 0;
@@ -252,7 +258,7 @@ PitchDragLabel::calculatePixmap(bool useSharps) const
     QCanvasPixmap *pmap = m_npf->makePitchDisplayPixmap
                           (m_pitch,
                            Clef(clefType, octaveOffset),
-                           useSharps);
+                           m_usingSharps);
 
     m_pixmap = *pmap;
 

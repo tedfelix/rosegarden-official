@@ -54,6 +54,8 @@
 #include "commands/edit/CutCommand.h"
 #include "commands/edit/EventQuantizeCommand.h"
 #include "commands/edit/PasteSegmentsCommand.h"
+#include "commands/edit/TransposeCommand.h"
+#include "commands/notation/KeyInsertionCommand.h"
 #include "commands/segment/AddTempoChangeCommand.h"
 #include "commands/segment/AddTimeSignatureAndNormalizeCommand.h"
 #include "commands/segment/AddTimeSignatureCommand.h"
@@ -70,6 +72,7 @@
 #include "commands/segment/PasteRangeCommand.h"
 #include "commands/segment/RemoveTempoChangeCommand.h"
 #include "commands/segment/SegmentAutoSplitCommand.h"
+#include "commands/segment/SegmentChangeTransposeCommand.h"
 #include "commands/segment/SegmentJoinCommand.h"
 #include "commands/segment/SegmentLabelCommand.h"
 #include "commands/segment/SegmentReconfigureCommand.h"
@@ -99,6 +102,7 @@
 #include "gui/dialogs/DocumentConfigureDialog.h"
 #include "gui/dialogs/FileMergeDialog.h"
 #include "gui/dialogs/IdentifyTextCodecDialog.h"
+#include "gui/dialogs/IntervalDialog.h"
 #include "gui/dialogs/LilypondOptionsDialog.h"
 #include "gui/dialogs/ManageMetronomeDialog.h"
 #include "gui/dialogs/QuantizeDialog.h"
@@ -872,16 +876,21 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotEditInEventList()), actionCollection(),
                 "edit_event_list");
 
-    new KAction(SegmentLabelCommand::getGlobalName(),
-                0,
-                this, SLOT(slotRelabelSegments()),
-                actionCollection(), "relabel_segment");
-
     pixmap.load(pixmapDir + "/toolbar/quantize.png");
     icon = QIconSet(pixmap);
     new KAction(i18n("&Quantize..."), icon, Key_Equal, this,
                 SLOT(slotQuantizeSelection()), actionCollection(),
                 "quantize_selection");
+
+	new KAction(SegmentLabelCommand::getGlobalName(),
+                0,
+                this, SLOT(slotRelabelSegments()),
+                actionCollection(), "relabel_segment");
+
+	new KAction(i18n("Transpose by Interval"),
+                0,
+                this, SLOT(slotTransposeSegments()),
+                actionCollection(), "transpose");
 
     new KAction(i18n("Repeat Last Quantize"), Key_Plus, this,
                 SLOT(slotRepeatQuantizeSelection()), actionCollection(),
@@ -6261,6 +6270,85 @@ RosegardenGUIApp::slotRelabelSegments()
         (new SegmentLabelCommand(selection, newLabel));
         m_view->getTrackEditor()->getSegmentCanvas()->slotUpdateSegmentsDrawBuffer();
     }
+}
+
+void
+RosegardenGUIApp::slotTransposeSegments()
+{
+    if (!m_view->haveSelection())
+        return ;
+
+	IntervalDialog intervalDialog(this, true, true);
+    int ok = intervalDialog.exec();
+    
+    int semitones = intervalDialog.getChromaticDistance();
+    int steps = intervalDialog.getDiatonicDistance();
+	
+	if (!ok || (semitones == 0 && steps == 0)) return;
+    
+    //TODO who cleans this up?
+	KMacroCommand *macro = new KMacroCommand("Transpose Segments by Interval");
+	
+	SegmentSelection selection(m_view->getSelection());
+    for (SegmentSelection::iterator i = selection.begin();
+            i != selection.end(); ++i) 
+    {
+    	Segment &segment = **i;	
+     
+     	// TODO delete it somewhere...
+	    EventSelection * wholeSegment = new EventSelection(segment, segment.getStartTime(), segment.getEndMarkerTime());
+	    
+	    // Key insertion can do transposition, but a C4 to D becomes a D4, while
+		//  a C4 to G becomes a G3. Because we let the user specify an explicit number
+		//  of octaves to move the notes up/down, we add the keys without transposing
+		//  and handle the transposition ourselves:
+		if (intervalDialog.getChangeKey())
+		{
+			Rosegarden::Key key = segment.getKeyAtTime(segment.getStartTime());
+			Rosegarden::Key newKey = key.transpose(semitones, steps);
+			
+			macro->addCommand
+				(new KeyInsertionCommand
+				 (segment,
+				  segment.getStartTime(),
+				  newKey,
+				  false,
+				  false,
+				  true));
+			
+			EventSelection::eventcontainer::iterator i;
+			std::list<KeyInsertionCommand*> commands;
+			
+			for (i = wholeSegment->getSegmentEvents().begin();
+	            i != wholeSegment->getSegmentEvents().end(); ++i) {
+	        		// transpose key
+					if ((*i)->isa(Rosegarden::Key::EventType)) {
+	        			macro->addCommand
+							(new KeyInsertionCommand
+							 (segment,
+				  			 (*i)->getAbsoluteTime(),
+				  			 (Rosegarden::Key (**i)).transpose(semitones, steps),
+				 			 false,
+				 			 false,
+						 	 true));
+	        		}
+	        		
+	        }
+		}
+		
+		macro->addCommand(new TransposeCommand
+			(semitones, steps, *wholeSegment));
+		
+		if (intervalDialog.getTransposeSegmentBack())
+		{
+			// Transpose segment in opposite direction
+			int newTranspose = segment.getTranspose() - semitones;
+			macro->addCommand(new SegmentChangeTransposeCommand(newTranspose, &segment));
+		}
+    }
+    std::cout << "Done iterating, adding command to history" << std::endl;    
+    
+    m_doc->getCommandHistory()->addCommand(macro);
 }
 
 void
