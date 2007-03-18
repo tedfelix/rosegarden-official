@@ -1257,7 +1257,10 @@ LilypondExporter::writeBar(Segment *s,
                         } else {
                             str << "\\times " << numerator << "/" << denominator << " { ";
                             tupletRatio = std::pair<int, int>(numerator, denominator);
-                            newBeamedGroup = true;
+			    // Require explicit beamed groups,
+			    // fixes bug #1683205.
+			    // HJJ: Why line below was originally present?
+                            // newBeamedGroup = true;
                             notesInBeamedGroup = 0;
                         }
                     } else if (groupType == GROUP_TYPE_BEAMED) {
@@ -1265,7 +1268,10 @@ LilypondExporter::writeBar(Segment *s,
                         notesInBeamedGroup = 0;
                     } else if (groupType == GROUP_TYPE_GRACE) {
                         str << "\\grace { ";
-                        newBeamedGroup = true;
+			// Require explicit beamed group,
+			// fixes bug #1683205.
+		        // HJJ: Why line below was originally present?
+                        // newBeamedGroup = true;
                         notesInBeamedGroup = 0;
                     }
                 }
