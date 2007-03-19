@@ -1760,7 +1760,7 @@ std::string Composition::toXmlString()
 	composition << "  <tempo time=\"" << (*i)->getAbsoluteTime()
 		    << "\" bph=\"" << ((tempo * 6) / 10000)
 		    << "\" tempo=\"" << tempo;
-	if (target > 0) {
+	if (target >= 0) {
 	    composition << "\" target=\"" << target;
 	}
 	composition << "\"/>" << endl;
