@@ -35,6 +35,7 @@
 
 class QListBox;
 class QListBoxItem;
+class QComboBox;
 class QPushButton;
 
 namespace Rosegarden
@@ -45,6 +46,8 @@ class FingeringBox;
 class GuitarChordSelectorDialog : public KDialogBase
 {
      Q_OBJECT
+    
+    enum { COMPLEXITY_BEGINNER, COMPLEXITY_COMMON, COMPLEXITY_ALL };
     
 public:
 	GuitarChordSelectorDialog(QWidget *parent=0);
@@ -59,6 +62,7 @@ protected slots:
     void slotRootHighlighted(int);
     void slotChordExtHighlighted(int);
     void slotFingeringHighlighted(QListBoxItem*);
+    void slotComplexityChanged(int);
     
     void slotNewFingering();
     void slotDeleteFingering();
@@ -81,6 +85,7 @@ protected:
     void refresh();
     
     bool saveUserChordMap();
+    int evaluateChordComplexity(const QString& ext);
     
     QPixmap getFingeringPixmap(const Guitar::Fingering& fingering) const;
          
@@ -98,6 +103,7 @@ protected:
     QListBox* m_fingeringsList;
     FingeringBox* m_fingeringBox;
 
+    QComboBox*   m_chordComplexityCombo;
     QPushButton* m_newFingeringButton;
     QPushButton* m_deleteFingeringButton;
     QPushButton* m_editFingeringButton;    

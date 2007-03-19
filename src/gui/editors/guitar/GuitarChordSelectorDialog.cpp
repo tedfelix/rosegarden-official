@@ -31,6 +31,7 @@
 #include "misc/Debug.h"
 #include <qlistbox.h>
 #include <qlayout.h>
+#include <qcombobox.h>
 #include <qpushbutton.h>
 #include <qlabel.h>
 #include <klocale.h>
@@ -59,8 +60,17 @@ GuitarChordSelectorDialog::GuitarChordSelectorDialog(QWidget *parent)
     m_deleteFingeringButton = new QPushButton(i18n("Delete"), page);
     m_editFingeringButton = new QPushButton(i18n("Edit"), page);
     
+    m_chordComplexityCombo = new QComboBox(page);
+    m_chordComplexityCombo->insertItem(i18n("beginner"));
+    m_chordComplexityCombo->insertItem(i18n("common"));
+    m_chordComplexityCombo->insertItem(i18n("all"));
+    
+    connect(m_chordComplexityCombo, SIGNAL(activated(int)),
+            this, SLOT(slotComplexityChanged(int)));
+    
     QVBoxLayout* vboxLayout = new QVBoxLayout(page, 5);
-    topLayout->addLayout(vboxLayout, 2, 2);
+    topLayout->addMultiCellLayout(vboxLayout, 1, 3, 2, 2);
+    vboxLayout->addWidget(m_chordComplexityCombo);    
     vboxLayout->addStretch(10);
     vboxLayout->addWidget(m_newFingeringButton); 
     vboxLayout->addWidget(m_deleteFingeringButton); 
@@ -176,6 +186,19 @@ GuitarChordSelectorDialog::slotFingeringHighlighted(QListBoxItem* listBoxItem)
         m_fingeringBox->setFingering(m_chord.getFingering());
         setEditionEnabled(m_chord.isUserChord());
     }
+}
+
+void
+GuitarChordSelectorDialog::slotComplexityChanged(int)
+{
+    // simply repopulate the extension list box
+    // 
+    QStringList extList = m_chordMap.getExtList(m_chord.getRoot());
+    populateExtensions(extList);
+    if (m_chordExtList->count() > 0)
+        m_chordExtList->setCurrentItem(0);
+    else
+        m_fingeringsList->clear(); // clear any previous fingerings    
 }
 
 void
@@ -298,8 +321,48 @@ void
 GuitarChordSelectorDialog::populateExtensions(const QStringList& extList)
 {
     m_chordExtList->clear();
-    m_chordExtList->insertStringList(extList);
-} 
+
+    if (m_chordComplexityCombo->currentItem() != COMPLEXITY_ALL) {
+        // some filtering needs to be done
+        int complexityLevel = m_chordComplexityCombo->currentItem();
+        
+        QStringList filteredList;
+        for(QStringList::const_iterator i = extList.constBegin(); i != extList.constEnd(); ++i) {
+            if (evaluateChordComplexity((*i).lower().stripWhiteSpace()) <= complexityLevel)
+                filteredList.append(*i); 
+        }
+        
+        m_chordExtList->insertStringList(filteredList);
+        
+    } else {
+        m_chordExtList->insertStringList(extList);
+    }
+}
+
+int
+GuitarChordSelectorDialog::evaluateChordComplexity(const QString& ext)
+{
+    if (ext.isEmpty() ||
+        ext == "7" ||
+        ext == "m" ||
+        ext == "5")
+        return COMPLEXITY_BEGINNER;
+    
+    if (ext == "dim" ||
+        ext == "dim7" ||
+        ext == "aug" ||
+        ext == "sus2" ||
+        ext == "sus4" ||
+        ext == "maj7" ||
+        ext == "m7" ||
+        ext == "mmaj7" ||
+        ext == "m7b5" ||
+        ext == "7sus4")
+        
+        return COMPLEXITY_COMMON;
+        
+     return COMPLEXITY_ALL; 
+}
 
 void
 GuitarChordSelectorDialog::parseChordFiles(const std::vector<QString>& chordFiles)
