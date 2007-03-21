@@ -1,104 +1,1733 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE rosegarden-chord-data>
-<rosegarden-chord-data version="1.0" format-version-major="1" format-version-minor="0" format-version-point="0">
-<chords>
-	<chordset root="C">
+<rosegarden-chord-data version="1.0" format-version-major="1"
+	format-version-minor="0" format-version-point="0">
+	<chords>
+		<chordset root="C">
+			<chord>
+				<fingering>x 3 2 0 1 0</fingering>
+				<fingering>x 3 5 5 5 0</fingering>
+				<fingering>x 3 5 5 5 3</fingering>
+				<fingering>8 10 10 9 8 8</fingering>
+			</chord>
+			<chord ext="/G">
+				<fingering>3 3 2 0 1 0</fingering>
+				<fingering>3 3 5 5 5 0</fingering>
+				<fingering>3 3 5 5 5 3</fingering>
+			</chord>
+			<chord ext="/E">
+				<fingering>0 3 2 0 1 0</fingering>
+				<fingering>0 3 5 5 5 0</fingering>
+				<fingering>0 3 5 5 5 3</fingering>
+			</chord>
+			<chord ext="m">
+				<fingering>x 3 1 0 1 x</fingering>
+				<fingering>x 3 5 5 4 3</fingering>
+				<fingering>8 10 10 8 8 8</fingering>
+			</chord>
+			<chord ext="m/G">
+				<fingering>3 3 1 0 1 x</fingering>
+				<fingering>3 3 5 5 4 3</fingering>
+			</chord>
+			<chord ext="m/E">
+				<fingering>0 3 1 0 1 x</fingering>
+				<fingering>0 3 5 5 4 3</fingering>
+			</chord>
+			<chord ext="7">
+				<fingering>x 3 2 3 1 0</fingering>
+				<fingering>x 3 5 3 5 3</fingering>
+				<fingering>8 10 8 9 11 8</fingering>
+				<fingering>8 10 10 9 11 8</fingering>
+			</chord>
+			<chord ext="7/G">
+				<fingering>3 3 2 3 1 0</fingering>
+				<fingering>3 3 5 3 5 3</fingering>
+			</chord>
+			<chord ext="7/E">
+				<fingering>0 3 2 3 1 0</fingering>
+				<fingering>0 3 5 3 5 3</fingering>
+			</chord>
+			<chord ext="m7">
+				<fingering>x 3 1 3 1 x</fingering>
+				<fingering>3 3 1 3 1 x</fingering>
+				<fingering>x 3 5 3 4 3</fingering>
+				<fingering>3 3 5 3 4 6</fingering>
+				<fingering>8 10 8 8 11 8</fingering>
+				<fingering>8 10 10 8 11 8</fingering>
+				<fingering>8 x 8 8 8 8</fingering>
+			</chord>
+			<chord ext="m7/G">
+				<fingering>3 3 1 3 1 x</fingering>
+				<fingering>3 3 5 3 4 3</fingering>
+				<fingering>3 3 5 3 4 6</fingering>
+			</chord>
+			<chord ext="m7/E">
+				<fingering>0 3 1 3 1 x</fingering>
+				<fingering>0 3 5 3 4 3</fingering>
+				<fingering>0 3 5 3 4 6</fingering>
+			</chord>
+			<chord ext="maj7">
+				<fingering>x 3 2 0 0 0</fingering>
+				<fingering>x 3 5 4 5 3</fingering>
+				<fingering>x x 10 9 8 7</fingering>
+				<fingering>8 x 9 9 8 x</fingering>
+			</chord>
+			<chord ext="maj7/G">
+				<fingering>3 3 2 0 0 0</fingering>
+				<fingering>3 1 5 4 5 1</fingering>
+			</chord>
+			<chord ext="maj7/E">
+				<fingering>0 3 2 0 0 0</fingering>
+				<fingering>0 3 5 4 5 1</fingering>
+			</chord>
+			<chord ext="m7-5">
+				<fingering>8 x 8 8 7 x</fingering>
+			</chord>
+			<chord ext="sus4">
+				<fingering>x 3 3 0 1 x</fingering>
+				<fingering>3 3 3 0 1 1</fingering>
+				<fingering>0 3 5 5 6 1</fingering>
+				<fingering>3 3 5 5 6 3</fingering>
+				<fingering>8 8 10 10 8 8</fingering>
+			</chord>
+			<chord ext="7sus4">
+				<fingering>x 3 3 3 1 x</fingering>
+				<fingering>3 3 3 3 1 x</fingering>
+				<fingering>x 3 5 3 6 1</fingering>
+				<fingering>3 3 5 3 6 1</fingering>
+				<fingering>8 10 8 10 8 8</fingering>
+			</chord>
+			<chord ext="6">
+				<fingering>0 3 2 2 1 0</fingering>
+				<fingering>3 3 2 2 1 0</fingering>
+				<fingering>x 3 5 5 5 5</fingering>
+				<fingering>3 3 5 5 5 5</fingering>
+				<fingering>8 x 10 9 10 8</fingering>
+			</chord>
+			<chord ext="m6">
+				<fingering>x 3 1 2 1 x</fingering>
+				<fingering>3 3 1 2 1 x</fingering>
+				<fingering>x 3 x 5 4 5</fingering>
+				<fingering>3 3 x 5 4 5</fingering>
+				<fingering>x 3 5 5 4 5</fingering>
+				<fingering>3 3 5 5 4 5</fingering>
+				<fingering>8 x 10 8 10 8</fingering>
+				<fingering>8 10 10 8 10 8</fingering>
+			</chord>
+			<chord ext="9">
+				<fingering>x 3 2 3 3 x</fingering>
+				<fingering>3 3 2 3 3 3</fingering>
+				<fingering>x 7 8 7 8 x</fingering>
+				<fingering>x x 8 7 8 8</fingering>
+			</chord>
+			<chord ext="m9">
+				<fingering>x 3 1 3 3 x</fingering>
+				<fingering>3 3 1 3 3 3</fingering>
+				<fingering>8 6 8 7 x x</fingering>
+				<fingering>8 10 8 8 8 10</fingering>
+			</chord>
+			<chord ext="maj9">
+				<fingering>x 3 2 4 3 x</fingering>
+				<fingering>8 7 9 7 x x</fingering>
+				<fingering>x x 10 7 8 7</fingering>
+			</chord>
+			<chord ext="6/9">
+				<fingering>0 3 2 2 3 3</fingering>
+				<fingering>3 3 2 2 3 3</fingering>
+				<fingering>8 7 7 7 8 8</fingering>
+				<fingering>x x 10 9 10 10</fingering>
+			</chord>
+			<chord ext="7+9">
+				<fingering>x 3 2 3 4 x</fingering>
+				<fingering>8 7 8 8 8 x</fingering>
+				<fingering>8 10 8 9 8 11</fingering>
+			</chord>
+			<chord ext="7-9">
+				<fingering>x 3 2 3 2 x</fingering>
+				<fingering>8 7 8 6 x x</fingering>
+				<fingering>8 x 8 9 8 9</fingering>
+			</chord>
+			<chord ext="aug">
+				<fingering>x 3 2 1 1 x</fingering>
+				<fingering>4 3 2 1 x x</fingering>
+				<fingering>x x 6 5 5 4</fingering>
+			</chord>
+			<chord ext="7+5">
+				<fingering>x 1 2 1 1 x</fingering>
+				<fingering>x 3 6 3 5 4</fingering>
+				<fingering>8 x 8 9 9 8</fingering>
+			</chord>
+			<chord ext="dim">
+				<fingering>2 3 1 2 x x</fingering>
+				<fingering>x 3 4 2 4 x</fingering>
+				<fingering>x x 1 2 1 2</fingering>
+			</chord>
+			<chord ext="-5">
+				<fingering>x 3 4 5 5 x</fingering>
+				<fingering>x x 10 9 7 8</fingering>
+				<fingering>8 9 10 9 x x</fingering>
+			</chord>
+			<chord ext="7-5">
+				<fingering>x 3 4 3 5 x</fingering>
+				<fingering>x x 8 9 7 8</fingering>
+				<fingering>8 9 8 9 x x</fingering>
+			</chord>
+			<chord ext="9-5">
+				<fingering>2 3 2 3 3 2</fingering>
+				<fingering>8 7 8 7 7 8</fingering>
+				<fingering>x x 10 11 11 10</fingering>
+			</chord>
+			<chord ext="11">
+				<fingering>0 3 3 3 3 3</fingering>
+				<fingering>3 3 3 3 3 3</fingering>
+				<fingering>8 x 8 7 6 6</fingering>
+				<fingering>x 0 10 10 11 10</fingering>
+				<fingering>x 10 10 10 11 10</fingering>
+			</chord>
+			<chord ext="13">
+				<fingering>x 3 2 3 3 5</fingering>
+				<fingering>3 3 2 3 3 5</fingering>
+				<fingering>8 x 8 7 5 5</fingering>
+				<fingering>8 x 8 9 10 10</fingering>
+			</chord>
+		</chordset>
+		<chordset root="A">
+			<chord>
+				<fingering>x 0 2 2 2 0</fingering>
+				<fingering>5 7 7 6 5 5</fingering>
+				<fingering>12 12 11 9 10 9</fingering>
+				<fingering>x 12 11 9 10 9</fingering>
+			</chord>
+			<chord ext="7">
+				<fingering>x 0 2 0 2 0</fingering>
+				<fingering>5 7 5 6 8 5</fingering>
+				<fingering>5 7 7 6 8 5</fingering>
+				<fingering>x 12 11 12 10 0</fingering>
+				<fingering>12 12 11 12 10 0</fingering>
+				<fingering>5 x 5 6 5 x</fingering>
+			</chord>
+			<chord ext="m">
+				<fingering>x 0 2 2 1 0</fingering>
+				<fingering>5 7 7 5 5 5</fingering>
+				<fingering>x 0 7 9 10 8</fingering>
+			</chord>
+			<chord ext="m7">
+				<fingering>x 0 2 0 1 3</fingering>
+				<fingering>x 0 2 0 1 0</fingering>
+				<fingering>5 7 7 5 8 5</fingering>
+				<fingering>5 7 5 5 8 5</fingering>
+				<fingering>x 0 7 9 8 8</fingering>
+				<fingering>5 x 5 5 5 x</fingering>
+			</chord>
+			<chord ext="maj7">
+				<fingering>x 0 2 1 2 0</fingering>
+				<fingering>x 0 7 6 5 4</fingering>
+				<fingering>x 12 11 9 9 9</fingering>
+				<fingering>12 12 11 9 9 9</fingering>
+				<fingering>5 x 6 6 5 x</fingering>
+			</chord>
+			<chord ext="sus4">
+				<fingering>x 0 2 2 3 0</fingering>
+				<fingering>x 0 7 7 5 5</fingering>
+				<fingering>x 0 7 9 10 10</fingering>
+			</chord>
+			<chord ext="7sus4">
+				<fingering>x 0 2 0 3 0</fingering>
+				<fingering>x 0 2 0 3 3</fingering>
+				<fingering>5 7 5 7 5 5</fingering>
+				<fingering>x 0 7 7 8 10</fingering>
+			</chord>
+			<chord ext="6">
+				<fingering>x 0 2 2 2 2</fingering>
+				<fingering>5 x 7 6 7 5</fingering>
+				<fingering>x 0 11 11 10 0</fingering>
+			</chord>
+			<chord ext="m6">
+				<fingering>x 0 2 2 1 2</fingering>
+				<fingering>5 7 7 5 7 5</fingering>
+				<fingering>x 0 10 11 10 0</fingering>
+			</chord>
+			<chord ext="9">
+				<fingering>x 0 2 4 2 3</fingering>
+				<fingering>x 0 5 4 5 5</fingering>
+				<fingering>x 0 5 6 5 7</fingering>
+			</chord>
+			<chord ext="m9">
+				<fingering>x 0 2 4 1 3</fingering>
+				<fingering>x 0 5 5 5 7</fingering>
+				<fingering>x 12 10 12 12 0</fingering>
+			</chord>
+			<chord ext="maj9">
+				<fingering>x 0 2 1 0 0</fingering>
+				<fingering>5 4 6 4 5 x</fingering>
+				<fingering>x 12 11 13 12 0</fingering>
+			</chord>
+			<chord ext="6/9">
+				<fingering>x 0 4 2 0 0</fingering>
+				<fingering>x 0 4 4 5 5</fingering>
+				<fingering>x 0 7 6 7 7</fingering>
+			</chord>
+			<chord ext="7+9">
+				<fingering>x 0 2 5 2 3</fingering>
+				<fingering>x 0 5 6 5 8</fingering>
+				<fingering>x 12 11 12 13 0</fingering>
+			</chord>
+			<chord ext="7-9">
+				<fingering>5 4 5 3 x x</fingering>
+				<fingering>5 x 5 6 5 6</fingering>
+				<fingering>x 0 11 12 11 0</fingering>
+			</chord>
+			<chord ext="aug">
+				<fingering>x 4 3 2 2 x</fingering>
+				<fingering>5 4 3 2 x x</fingering>
+				<fingering>x x 3 2 2 1</fingering>
+			</chord>
+			<chord ext="7+5">
+				<fingering>x 0 3 0 2 1</fingering>
+				<fingering>5 x 5 6 6 5</fingering>
+				<fingering>x 10 11 10 10 x</fingering>
+			</chord>
+			<chord ext="dim">
+				<fingering>2 3 1 2 x x</fingering>
+				<fingering>x 3 4 2 4 x</fingering>
+				<fingering>x x 1 2 1 2</fingering>
+			</chord>
+			<chord ext="-5">
+				<fingering>x 0 1 2 2 x</fingering>
+				<fingering>x 0 7 6 4 5</fingering>
+				<fingering>x 0 7 8 10 9</fingering>
+			</chord>
+			<chord ext="7-5">
+				<fingering>x 0 1 0 2 x</fingering>
+				<fingering>x 0 5 6 4 5</fingering>
+				<fingering>x 0 7 8 8 9</fingering>
+			</chord>
+			<chord ext="9-5">
+				<fingering>x 0 1 0 0 x</fingering>
+				<fingering>5 4 5 4 4 5</fingering>
+				<fingering>x 0 7 8 8 7</fingering>
+			</chord>
+			<chord ext="11">
+				<fingering>x 0 0 0 0 0</fingering>
+				<fingering>x 0 5 4 3 3</fingering>
+				<fingering>x 0 7 7 8 7</fingering>
+			</chord>
+			<chord ext="13">
+				<fingering>x 0 5 4 2 2</fingering>
+				<fingering>5 x 5 6 7 7</fingering>
+				<fingering>x 0 11 12 12 14</fingering>
+			</chord>
+		</chordset>
+		<chordset root="A#/Bb">
+			<chord>
+				<fingering>x 1 3 3 3 x</fingering>
+				<fingering>1 1 3 3 3 1</fingering>
+				<fingering>6 8 8 7 6 6</fingering>
+				<fingering>x 13 12 10 11 10</fingering>
+				<fingering>13 13 12 10 11 10</fingering>
+			</chord>
+			<chord ext="7">
+				<fingering>x 1 3 1 3 1</fingering>
+				<fingering>1 1 3 1 3 1</fingering>
+				<fingering>6 8 8 7 9 6</fingering>
+				<fingering>6 8 6 7 9 6</fingering>
+				<fingering>x x 8 10 9 10</fingering>
+				<fingering>6 x 6 7 6 x</fingering>
+			</chord>
+			<chord ext="m">
+				<fingering>1 1 3 3 2 1</fingering>
+				<fingering>x 1 3 3 2 1</fingering>
+				<fingering>6 8 8 6 6 6</fingering>
+				<fingering>x x 8 10 11 9</fingering>
+			</chord>
+			<chord ext="m7">
+				<fingering>1 1 3 1 2 4</fingering>
+				<fingering>x 1 3 1 2 1</fingering>
+				<fingering>6 8 8 6 9 6</fingering>
+				<fingering>6 8 6 6 9 6</fingering>
+				<fingering>x x 8 10 9 9</fingering>
+				<fingering>6 x 6 6 6 x</fingering>
+			</chord>
+			<chord ext="maj7">
+				<fingering>1 1 3 2 3 1</fingering>
+				<fingering>x 1 3 2 3 1</fingering>
+				<fingering>6 8 7 7 6 x</fingering>
+				<fingering>13 13 12 10 10 10</fingering>
+				<fingering>x 13 12 10 10 10</fingering>
+				<fingering>6 x 7 7 6 x</fingering>
+			</chord>
+			<chord ext="sus4">
+				<fingering>1 1 3 3 4 1</fingering>
+				<fingering>x 1 3 3 4 1</fingering>
+				<fingering>x x 3 3 4 6</fingering>
+				<fingering>6 6 8 8 6 6</fingering>
+				<fingering>6 6 8 8 6 6</fingering>
+			</chord>
+			<chord ext="7sus4">
+				<fingering>1 1 3 1 4 1</fingering>
+				<fingering>x 1 3 1 4 1</fingering>
+				<fingering>6 8 6 8 6 6</fingering>
+				<fingering>x x 8 10 9 11</fingering>
+			</chord>
+			<chord ext="6">
+				<fingering>1 1 3 3 3 3</fingering>
+				<fingering>x 1 3 3 3 3</fingering>
+				<fingering>6 x 8 7 8 6</fingering>
+				<fingering>x x 8 10 8 10</fingering>
+			</chord>
+			<chord ext="m6">
+				<fingering>1 1 3 0 2 3</fingering>
+				<fingering>x 1 3 0 2 3</fingering>
+				<fingering>6 8 8 6 8 6</fingering>
+				<fingering>6 x 8 6 8 6</fingering>
+				<fingering>x x 8 10 8 9</fingering>
+			</chord>
+			<chord ext="9">
+				<fingering>1 1 0 1 1 1</fingering>
+				<fingering>x 1 0 1 1 x</fingering>
+				<fingering>x 5 6 5 6 x</fingering>
+				<fingering>6 x 6 7 6 8</fingering>
+			</chord>
+			<chord ext="m9">
+				<fingering>6 4 6 5 x x</fingering>
+				<fingering>6 8 6 6 6 8</fingering>
+				<fingering>13 13 11 13 13 13</fingering>
+				<fingering>x 13 11 13 13 x</fingering>
+			</chord>
+			<chord ext="maj9">
+				<fingering>1 1 0 2 1 1</fingering>
+				<fingering>x 1 0 2 1 1</fingering>
+				<fingering>6 5 7 5 x x</fingering>
+				<fingering>x x 8 5 6 5</fingering>
+			</chord>
+			<chord ext="6/9">
+				<fingering>1 1 0 0 1 1</fingering>
+				<fingering>x 1 0 0 1 1</fingering>
+				<fingering>6 5 5 5 6 6</fingering>
+				<fingering>x x 8 7 8 8</fingering>
+			</chord>
+			<chord ext="7+9">
+				<fingering>1 1 0 1 2 1</fingering>
+				<fingering>x 1 0 1 2 1</fingering>
+				<fingering>6 5 6 6 6 x</fingering>
+				<fingering>6 8 6 7 6 9</fingering>
+			</chord>
+			<chord ext="7-9">
+				<fingering>1 1 0 1 0 1</fingering>
+				<fingering>x 1 0 1 0 1</fingering>
+				<fingering>6 5 6 4 x x</fingering>
+				<fingering>6 x 6 7 6 7</fingering>
+			</chord>
+			<chord ext="aug">
+				<fingering>x 5 4 3 3 x</fingering>
+				<fingering>6 5 4 3 x x</fingering>
+				<fingering>x x 4 3 3 2</fingering>
+			</chord>
+			<chord ext="7+5">
+				<fingering>x 1 4 1 3 2</fingering>
+				<fingering>6 x 6 7 7 6</fingering>
+				<fingering>x 11 12 11 11 x</fingering>
+			</chord>
+			<chord ext="dim">
+				<fingering>3 4 2 3 x x</fingering>
+				<fingering>x 1 2 0 2 x</fingering>
+				<fingering>x x 2 3 2 3</fingering>
+			</chord>
+			<chord ext="-5">
+				<fingering>x 1 2 3 3 x</fingering>
+				<fingering>x x 8 7 5 6</fingering>
+				<fingering>6 7 8 7 x x</fingering>
+			</chord>
+			<chord ext="7-5">
+				<fingering>x 1 2 1 3 x</fingering>
+				<fingering>x x 6 7 5 6</fingering>
+				<fingering>x x 8 9 9 10</fingering>
+			</chord>
+			<chord ext="9-5">
+				<fingering>0 1 0 1 1 0</fingering>
+				<fingering>6 5 6 5 5 4</fingering>
+				<fingering>x x 8 9 9 8</fingering>
+			</chord>
+			<chord ext="11">
+				<fingering>1 1 1 1 1 1</fingering>
+				<fingering>x 1 1 1 1 1</fingering>
+				<fingering>6 x 6 5 1 1</fingering>
+				<fingering>x 8 8 8 9 8</fingering>
+				<fingering>x x 8 8 9 8</fingering>
+			</chord>
+			<chord ext="13">
+				<fingering>1 1 0 1 1 3</fingering>
+				<fingering>x 1 0 1 1 3</fingering>
+				<fingering>6 x 6 5 3 3</fingering>
+				<fingering>6 x 6 7 8 8</fingering>
+			</chord>
+		</chordset>
+		<chordset root="B">
+			<chord>
+				<fingering>2 2 4 4 4 2</fingering>
+				<fingering>x 2 4 4 4 x</fingering>
+				<fingering>7 9 9 8 7 7</fingering>
+				<fingering>x x 9 11 12 11</fingering>
+			</chord>
+			<chord ext="7">
+				<fingering>2 2 1 2 0 2</fingering>
+				<fingering>x 2 1 2 0 2</fingering>
+				<fingering>2 2 4 2 4 2</fingering>
+				<fingering>x 2 4 2 4 2</fingering>
+				<fingering>7 9 9 8 10 7</fingering>
+				<fingering>7 9 7 8 10 7</fingering>
+				<fingering>7 x 7 8 7 x</fingering>
+			</chord>
+			<chord ext="m">
+				<fingering>2 2 4 4 3 2</fingering>
+				<fingering>x 2 4 4 3 2</fingering>
+				<fingering>7 9 9 7 7 7</fingering>
+				<fingering>x x 9 11 12 10</fingering>
+			</chord>
+			<chord ext="m7">
+				<fingering>2 2 0 2 0 2</fingering>
+				<fingering>x 2 0 2 0 2</fingering>
+				<fingering>2 2 4 2 3 5</fingering>
+				<fingering>x 2 4 2 3 2</fingering>
+				<fingering>7 9 9 7 10 7</fingering>
+				<fingering>7 9 7 7 10 7</fingering>
+				<fingering>7 x 7 7 7 x</fingering>
+			</chord>
+			<chord ext="maj7">
+				<fingering>2 2 4 3 4 2</fingering>
+				<fingering>x 2 4 3 4 2</fingering>
+				<fingering>7 9 8 8 7 x</fingering>
+				<fingering>x x 9 8 7 6</fingering>
+				<fingering>7 x 8 8 7 x</fingering>
+			</chord>
+			<chord ext="sus4">
+				<fingering>2 2 4 4 5 2</fingering>
+				<fingering>x 2 4 4 5 2</fingering>
+				<fingering>x x 4 4 5 7</fingering>
+				<fingering>7 7 9 9 7 7</fingering>
+			</chord>
+			<chord ext="7sus4">
+				<fingering>2 2 2 2 0 0</fingering>
+				<fingering>x 2 2 2 0 0</fingering>
+				<fingering>2 2 4 2 5 2</fingering>
+				<fingering>x 2 4 2 5 2</fingering>
+				<fingering>7 9 7 9 7 7</fingering>
+			</chord>
+			<chord ext="6">
+				<fingering>2 2 1 1 0 x</fingering>
+				<fingering>x 2 1 1 0 x</fingering>
+				<fingering>2 2 4 4 4 4</fingering>
+				<fingering>x 2 4 4 4 4</fingering>
+				<fingering>7 x 9 8 9 7</fingering>
+			</chord>
+			<chord ext="m6">
+				<fingering>2 2 0 1 0 2</fingering>
+				<fingering>x 2 0 1 0 2</fingering>
+				<fingering>2 2 4 4 3 4</fingering>
+				<fingering>x 2 x 4 3 4</fingering>
+				<fingering>7 9 9 7 9 7</fingering>
+				<fingering>7 x 9 7 9 7</fingering>
+			</chord>
+			<chord ext="9">
+				<fingering>2 2 1 2 2 2</fingering>
+				<fingering>x 2 1 2 2 x</fingering>
+				<fingering>x 6 7 6 7 x</fingering>
+				<fingering>x x 7 6 7 7</fingering>
+			</chord>
+			<chord ext="m9">
+				<fingering>2 2 0 2 2 2</fingering>
+				<fingering>x 2 0 2 2 x</fingering>
+				<fingering>7 5 7 6 x x</fingering>
+				<fingering>7 9 7 7 7 9</fingering>
+			</chord>
+			<chord ext="maj9">
+				<fingering>x 2 1 3 2 x</fingering>
+				<fingering>7 6 8 6 x x</fingering>
+				<fingering>x x 9 6 7 6</fingering>
+			</chord>
+			<chord ext="6/9">
+				<fingering>2 2 1 1 2 2</fingering>
+				<fingering>x 2 1 1 2 2</fingering>
+				<fingering>7 6 6 6 7 7</fingering>
+				<fingering>x x 9 8 9 9</fingering>
+			</chord>
+			<chord ext="7+9">
+				<fingering>x 2 1 2 3 x</fingering>
+				<fingering>7 6 7 7 7 x</fingering>
+				<fingering>7 9 7 8 7 10</fingering>
+			</chord>
+			<chord ext="7-9">
+				<fingering>x 2 1 2 1 x</fingering>
+				<fingering>7 6 7 5 x x</fingering>
+				<fingering>7 x 7 8 7 8</fingering>
+			</chord>
+			<chord ext="aug">
+				<fingering>x 2 1 0 0 x</fingering>
+				<fingering>3 2 1 0 x x</fingering>
+				<fingering>x x 5 4 4 3</fingering>
+			</chord>
+			<chord ext="7+5">
+				<fingering>x 0 1 0 0 3</fingering>
+				<fingering>x 2 5 2 4 3</fingering>
+				<fingering>7 x 7 8 8 7</fingering>
+			</chord>
+			<chord ext="dim">
+				<fingering>1 2 0 1 x x</fingering>
+				<fingering>x 2 3 1 3 x</fingering>
+				<fingering>x x 0 1 0 1</fingering>
+			</chord>
+			<chord ext="-5">
+				<fingering>x 2 3 4 4 x</fingering>
+				<fingering>x x 9 8 6 7</fingering>
+				<fingering>x x 9 10 12 11</fingering>
+			</chord>
+			<chord ext="7-5">
+				<fingering>x 2 3 2 4 x</fingering>
+				<fingering>x x 7 8 6 7</fingering>
+				<fingering>x x 9 10 10 11</fingering>
+			</chord>
+			<chord ext="9-5">
+				<fingering>1 2 1 2 2 1</fingering>
+				<fingering>7 6 7 6 6 7</fingering>
+				<fingering>x x 9 10 10 9</fingering>
+			</chord>
+			<chord ext="11">
+				<fingering>2 2 2 2 2 2</fingering>
+				<fingering>x 2 2 2 2 2</fingering>
+				<fingering>7 x 7 6 5 5</fingering>
+				<fingering>x 9 9 9 10 9</fingering>
+				<fingering>x x 9 9 10 9</fingering>
+			</chord>
+			<chord ext="13">
+				<fingering>2 2 1 2 2 4</fingering>
+				<fingering>x 2 1 2 2 4</fingering>
+				<fingering>7 X 7 6 4 4</fingering>
+				<fingering>7 X 7 8 9 9</fingering>
+			</chord>
+		</chordset>
+		<chordset root="C#/Db">
+			<chord>
+				<fingering>4 4 3 1 2 1</fingering>
+				<fingering>x 4 3 1 2 1</fingering>
+				<fingering>4 4 6 6 6 4</fingering>
+				<fingering>x 4 6 6 6 x</fingering>
+				<fingering>9 11 11 10 9 9</fingering>
+			</chord>
+			<chord ext="7">
+				<fingering>4 4 3 4 2 x</fingering>
+				<fingering>x 4 3 4 2 x</fingering>
+				<fingering>4 4 6 4 6 4</fingering>
+				<fingering>x 4 6 4 6 4</fingering>
+				<fingering>9 11 11 10 12 9</fingering>
+				<fingering>9 11 9 10 12 9</fingering>
+				<fingering>9 x 9 10 9 x</fingering>
+			</chord>
+			<chord ext="m">
+				<fingering>4 4 6 6 5 4</fingering>
+				<fingering>x 4 6 6 5 4</fingering>
+				<fingering>9 11 11 9 9 9</fingering>
+				<fingering>x 11 11 13 14 12</fingering>
+				<fingering>x x 11 13 14 12</fingering>
+			</chord>
+			<chord ext="m7">
+				<fingering>4 4 2 4 2 x</fingering>
+				<fingering>x 4 2 4 2 x</fingering>
+				<fingering>4 4 6 4 5 7</fingering>
+				<fingering>x 4 6 4 5 4</fingering>
+				<fingering>9 11 11 9 12 9</fingering>
+				<fingering>9 11 9 9 12 9</fingering>
+				<fingering>9 x 9 9 9 x</fingering>
+			</chord>
+			<chord ext="maj7">
+				<fingering>4 4 3 1 1 1</fingering>
+				<fingering>x 4 3 1 1 1</fingering>
+				<fingering>4 4 6 5 6 4</fingering>
+				<fingering>x 4 6 5 6 4</fingering>
+				<fingering>x x 11 10 9 8</fingering>
+				<fingering>9 x 10 10 9 x</fingering>
+			</chord>
+			<chord ext="sus4">
+				<fingering>4 4 6 6 7 4</fingering>
+				<fingering>x 4 6 6 7 4</fingering>
+				<fingering>x x 6 6 7 9</fingering>
+				<fingering>9 9 11 11 9 9</fingering>
+			</chord>
+			<chord ext="7sus4">
+				<fingering>4 4 4 4 2 x</fingering>
+				<fingering>x 4 4 4 2 x</fingering>
+				<fingering>4 4 6 4 7 4</fingering>
+				<fingering>x 4 6 4 7 4</fingering>
+				<fingering>9 11 9 11 9 9</fingering>
+			</chord>
+			<chord ext="6">
+				<fingering>x 4 3 3 2 x</fingering>
+				<fingering>4 4 6 6 6 6</fingering>
+				<fingering>x 4 6 6 6 6</fingering>
+				<fingering>9 x 11 10 11 9</fingering>
+			</chord>
+			<chord ext="m6">
+				<fingering>4 4 2 3 2 x</fingering>
+				<fingering>x 4 2 3 2 x</fingering>
+				<fingering>4 4 6 6 5 6</fingering>
+				<fingering>x 4 x 6 5 6</fingering>
+				<fingering>9 11 11 9 11 9</fingering>
+				<fingering>9 x 11 9 11 9</fingering>
+			</chord>
+			<chord ext="9">
+				<fingering>4 4 3 4 4 4</fingering>
+				<fingering>x 4 3 4 4 x</fingering>
+				<fingering>x 8 9 8 9 x</fingering>
+				<fingering>x x 9 8 9 9</fingering>
+			</chord>
+			<chord ext="m9">
+				<fingering>4 4 2 4 4 4</fingering>
+				<fingering>x 4 2 4 4 x</fingering>
+				<fingering>9 7 9 8 x x</fingering>
+				<fingering>9 11 9 9 9 11</fingering>
+			</chord>
+			<chord ext="maj9">
+				<fingering>x 4 3 5 4 x</fingering>
+				<fingering>9 8 10 8 x x</fingering>
+				<fingering>x x 11 8 9 8</fingering>
+			</chord>
+			<chord ext="6/9">
+				<fingering>4 4 3 3 4 4</fingering>
+				<fingering>x 4 3 3 4 4</fingering>
+				<fingering>9 8 8 8 9 9</fingering>
+				<fingering>x x 11 10 11 11</fingering>
+			</chord>
+			<chord ext="7+9">
+				<fingering>x 4 3 4 5 x</fingering>
+				<fingering>9 8 9 9 9 x</fingering>
+				<fingering>9 11 9 10 9 12</fingering>
+			</chord>
+			<chord ext="7-9">
+				<fingering>x 4 3 4 3 x</fingering>
+				<fingering>9 8 9 7 x x</fingering>
+				<fingering>9 x 9 10 9 10</fingering>
+			</chord>
+			<chord ext="aug">
+				<fingering>x 4 3 2 2 x</fingering>
+				<fingering>5 4 3 2 x x</fingering>
+				<fingering>x x 3 2 2 1</fingering>
+			</chord>
+			<chord ext="7+5">
+				<fingering>x 2 3 2 2 x</fingering>
+				<fingering>x 4 7 4 6 5</fingering>
+				<fingering>9 x 9 10 10 9</fingering>
+			</chord>
+			<chord ext="dim">
+				<fingering>3 4 2 3 x x</fingering>
+				<fingering>x 1 2 0 2 x</fingering>
+				<fingering>x x 2 3 2 3</fingering>
+			</chord>
+			<chord ext="-5">
+				<fingering>x 4 5 6 6 x</fingering>
+				<fingering>x x 11 10 8 9</fingering>
+				<fingering>9 10 11 10 x x</fingering>
+			</chord>
+			<chord ext="7-5">
+				<fingering>x 4 5 4 6 x</fingering>
+				<fingering>x x 9 10 8 9</fingering>
+				<fingering>9 10 9 10 x x</fingering>
+			</chord>
+			<chord ext="9-5">
+				<fingering>3 4 3 4 4 3</fingering>
+				<fingering>9 8 9 8 8 9</fingering>
+				<fingering>x x 11 12 12 11</fingering>
+			</chord>
+			<chord ext="11">
+				<fingering>4 4 4 4 4 4</fingering>
+				<fingering>x 4 4 4 4 4</fingering>
+				<fingering>9 x 9 8 7 7</fingering>
+				<fingering>x 11 11 11 12 11</fingering>
+				<fingering>x x 11 11 12 11</fingering>
+			</chord>
+			<chord ext="13">
+				<fingering>4 4 3 4 4 6</fingering>
+				<fingering>x 4 3 4 4 6</fingering>
+				<fingering>9 x 9 8 7 7</fingering>
+				<fingering>9 x 9 10 11 11</fingering>
+			</chord>
+		</chordset>
+		<chordset root="D">
+			<chord>
+				<fingering>x 0 0 2 3 2</fingering>
+				<fingering>5 5 7 7 7 5</fingering>
+				<fingering>x 5 7 7 7 x</fingering>
+				<fingering>10 12 12 11 10 10</fingering>
+			</chord>
+			<chord ext="7">
+				<fingering>x 0 0 2 1 2</fingering>
+				<fingering>5 5 7 5 7 5</fingering>
+				<fingering>x 5 7 5 7 5</fingering>
+				<fingering>10 12 12 11 13 10</fingering>
+				<fingering>10 12 10 11 13 10</fingering>
+				<fingering>10 x 10 11 10 x</fingering>
+			</chord>
+			<chord ext="m">
+				<fingering>x 0 0 2 3 1</fingering>
+				<fingering>5 5 7 7 6 5</fingering>
+				<fingering>x 5 7 7 6 5</fingering>
+				<fingering>10 12 12 10 10 10</fingering>
+			</chord>
+			<chord ext="m7">
+				<fingering>x 0 0 2 1 1</fingering>
+				<fingering>5 5 7 5 6 8</fingering>
+				<fingering>x 5 7 5 6 5</fingering>
+				<fingering>10 12 12 10 13 10</fingering>
+				<fingering>10 12 10 10 13 10</fingering>
+				<fingering>10 x 10 10 10 x</fingering>
+			</chord>
+			<chord ext="maj7">
+				<fingering>x 0 0 2 2 2</fingering>
+				<fingering>5 5 7 6 7 5</fingering>
+				<fingering>x 5 7 6 7 5</fingering>
+				<fingering>x x 12 11 10 9</fingering>
+				<fingering>10 x 11 11 10 x</fingering>
+			</chord>
+			<chord ext="sus4">
+				<fingering>x 0 0 2 3 3</fingering>
+				<fingering>5 5 7 7 8 5</fingering>
+				<fingering>x 5 7 7 8 5</fingering>
+				<fingering>10 10 12 12 10 10</fingering>
+			</chord>
+			<chord ext="7sus4">
+				<fingering>x 0 0 2 1 3</fingering>
+				<fingering>5 5 7 5 8 5</fingering>
+				<fingering>x 5 7 5 8 5</fingering>
+				<fingering>10 12 10 12 10 10</fingering>
+			</chord>
+			<chord ext="6">
+				<fingering>x 0 0 2 0 2</fingering>
+				<fingering>5 5 7 7 7 7</fingering>
+				<fingering>x 5 7 7 7 7</fingering>
+				<fingering>10 x 12 11 12 10</fingering>
+			</chord>
+			<chord ext="m6">
+				<fingering>x 0 0 2 0 1</fingering>
+				<fingering>5 5 7 7 6 7</fingering>
+				<fingering>x 5 x 7 6 7</fingering>
+				<fingering>10 12 12 10 12 10</fingering>
+				<fingering>10 x 12 10 12 10</fingering>
+			</chord>
+			<chord ext="9">
+				<fingering>x 0 4 2 1 0</fingering>
+				<fingering>x 0 0 2 1 0</fingering>
+				<fingering>5 5 4 5 5 5</fingering>
+				<fingering>x 5 4 5 5 x</fingering>
+				<fingering>x 9 10 9 10 0</fingering>
+			</chord>
+			<chord ext="m9">
+				<fingering>x 0 3 2 1 0</fingering>
+				<fingering>5 5 3 5 5 5</fingering>
+				<fingering>x 5 3 5 5 x</fingering>
+				<fingering>10 12 10 10 10 12</fingering>
+			</chord>
+			<chord ext="maj9">
+				<fingering>x 0 4 2 2 0</fingering>
+				<fingering>x 5 4 6 5 x</fingering>
+				<fingering>x 0 12 9 10 9</fingering>
+			</chord>
+			<chord ext="6/9">
+				<fingering>5 5 4 4 5 5</fingering>
+				<fingering>x 5 4 4 5 5</fingering>
+				<fingering>10 9 9 9 10 10</fingering>
+				<fingering>x x 12 11 12 12</fingering>
+			</chord>
+			<chord ext="7+9">
+				<fingering>x 5 4 5 6 x</fingering>
+				<fingering>10 9 10 10 10 x</fingering>
+				<fingering>10 12 10 11 10 13</fingering>
+			</chord>
+			<chord ext="7-9">
+				<fingering>x 5 4 5 4 x</fingering>
+				<fingering>10 9 10 8 x x</fingering>
+				<fingering>10 x 10 11 10 11</fingering>
+			</chord>
+			<chord ext="aug">
+				<fingering>x 5 4 3 3 x</fingering>
+				<fingering>6 5 4 3 x x</fingering>
+				<fingering>x x 4 3 3 2</fingering>
+			</chord>
+			<chord ext="7+5">
+				<fingering>x 3 4 3 3 x</fingering>
+				<fingering>x 5 8 5 7 6</fingering>
+				<fingering>10 x 10 11 11 10</fingering>
+			</chord>
+			<chord ext="dim">
+				<fingering>10 11 9 10 x x</fingering>
+				<fingering>x 2 3 1 3 x</fingering>
+				<fingering>x x 0 1 0 1</fingering>
+			</chord>
+			<chord ext="-5">
+				<fingering>x 5 6 7 7 x</fingering>
+				<fingering>x x 12 11 9 10</fingering>
+				<fingering>10 11 12 11 x x</fingering>
+			</chord>
+			<chord ext="7-5">
+				<fingering>x 5 6 5 7 x</fingering>
+				<fingering>x x 10 11 9 10</fingering>
+				<fingering>10 11 10 11 x x</fingering>
+			</chord>
+			<chord ext="9-5">
+				<fingering>x x 0 1 1 0</fingering>
+				<fingering>4 5 4 5 5 4</fingering>
+				<fingering>10 9 10 9 9 10</fingering>
+			</chord>
+			<chord ext="11">
+				<fingering>x 0 0 0 1 0</fingering>
+				<fingering>5 5 5 5 5 5</fingering>
+				<fingering>x 5 5 5 5 5</fingering>
+				<fingering>10 x 10 9 8 8</fingering>
+			</chord>
+			<chord ext="13">
+				<fingering>5 5 4 5 5 7</fingering>
+				<fingering>x 5 4 5 5 7</fingering>
+				<fingering>10 x 10 9 7 7</fingering>
+				<fingering>10 x 10 11 12 12</fingering>
+			</chord>
+		</chordset>
+		<chordset root="D#/Eb">
+			<chord>
+				<fingering>6 6 5 3 4 3</fingering>
+				<fingering>x 6 5 3 4 3</fingering>
+				<fingering>6 6 8 8 8 6</fingering>
+				<fingering>x 6 8 8 8 x</fingering>
+				<fingering>11 13 13 12 11 11</fingering>
+			</chord>
+			<chord ext="7">
+				<fingering>6 6 5 6 4 x</fingering>
+				<fingering>x 6 5 6 4 x</fingering>
+				<fingering>6 6 8 6 8 6</fingering>
+				<fingering>x 6 8 6 8 6</fingering>
+				<fingering>11 13 13 12 14 11</fingering>
+				<fingering>11 13 11 12 14 11</fingering>
+				<fingering>11 x 11 12 11 x</fingering>
+			</chord>
+			<chord ext="m">
+				<fingering>x x 4 3 4 2</fingering>
+				<fingering>6 6 8 8 7 6</fingering>
+				<fingering>x 6 8 8 7 6</fingering>
+				<fingering>11 13 13 11 11 11</fingering>
+			</chord>
+			<chord ext="m7">
+				<fingering>6 6 4 6 4 x</fingering>
+				<fingering>x 6 4 6 4 x</fingering>
+				<fingering>6 6 8 6 7 9</fingering>
+				<fingering>x 6 8 6 7 6</fingering>
+				<fingering>11 13 13 11 14 11</fingering>
+				<fingering>11 13 11 11 14 11</fingering>
+				<fingering>11 x 11 11 11 x</fingering>
+			</chord>
+			<chord ext="maj7">
+				<fingering>6 6 5 3 3 3</fingering>
+				<fingering>x 6 5 3 3 3</fingering>
+				<fingering>6 6 8 7 8 6</fingering>
+				<fingering>x 6 8 7 8 6</fingering>
+				<fingering>x x 13 12 11 10</fingering>
+				<fingering>11 x 11 12 11 x</fingering>
+			</chord>
+			<chord ext="sus4">
+				<fingering>x 6 6 3 4 x</fingering>
+				<fingering>6 6 8 8 9 6</fingering>
+				<fingering>x 6 8 8 9 6</fingering>
+				<fingering>11 11 13 13 11 11</fingering>
+			</chord>
+			<chord ext="7sus4">
+				<fingering>6 6 6 6 4 x</fingering>
+				<fingering>x 6 6 6 4 x</fingering>
+				<fingering>6 6 8 6 9 6</fingering>
+				<fingering>x 6 8 6 9 6</fingering>
+				<fingering>11 13 11 13 11 11</fingering>
+			</chord>
+			<chord ext="6">
+				<fingering>x 6 5 5 4 x</fingering>
+				<fingering>6 6 8 8 8 8</fingering>
+				<fingering>x 6 8 8 8 8</fingering>
+				<fingering>11 x 13 12 13 11</fingering>
+			</chord>
+			<chord ext="m6">
+				<fingering>6 6 4 5 4 x</fingering>
+				<fingering>x 6 4 5 4 x</fingering>
+				<fingering>6 6 8 8 7 8</fingering>
+				<fingering>x 6 x 8 7 8</fingering>
+				<fingering>11 13 13 11 13 11</fingering>
+				<fingering>11 x 13 11 13 11</fingering>
+			</chord>
+			<chord ext="9">
+				<fingering>6 6 5 6 6 6</fingering>
+				<fingering>x 6 5 6 6 x</fingering>
+				<fingering>x 10 11 10 11 x</fingering>
+				<fingering>x x 11 10 11 11</fingering>
+			</chord>
+			<chord ext="m9">
+				<fingering>6 6 4 6 6 6</fingering>
+				<fingering>x 6 4 6 6 x</fingering>
+				<fingering>11 9 11 10 x x</fingering>
+				<fingering>11 13 11 11 11 13</fingering>
+			</chord>
+			<chord ext="maj9">
+				<fingering>x x 1 0 3 1</fingering>
+				<fingering>x 6 5 7 6 x</fingering>
+				<fingering>x x 13 10 11 10</fingering>
+			</chord>
+			<chord ext="6/9">
+				<fingering>x x 1 0 1 1</fingering>
+				<fingering>6 6 5 5 6 6</fingering>
+				<fingering>x 6 5 5 6 6</fingering>
+				<fingering>11 10 10 10 11 11</fingering>
+			</chord>
+			<chord ext="7+9">
+				<fingering>x x 1 0 2 2</fingering>
+				<fingering>x 6 5 6 7 x</fingering>
+				<fingering>11 13 11 12 11 14</fingering>
+			</chord>
+			<chord ext="7-9">
+				<fingering>x x 1 0 2 0</fingering>
+				<fingering>x 6 5 6 5 x</fingering>
+				<fingering>11 x 11 12 11 12</fingering>
+			</chord>
+			<chord ext="aug">
+				<fingering>x 2 1 0 0 x</fingering>
+				<fingering>3 2 1 0 x x</fingering>
+				<fingering>x x 3 2 2 1</fingering>
+			</chord>
+			<chord ext="7+5">
+				<fingering>x 4 5 4 4 x</fingering>
+				<fingering>x 6 9 6 8 7</fingering>
+				<fingering>11 x 11 12 12 11</fingering>
+			</chord>
+			<chord ext="dim">
+				<fingering>2 3 1 2 x x</fingering>
+				<fingering>x 3 4 2 4 x</fingering>
+				<fingering>x x 2 3 2 3</fingering>
+			</chord>
+			<chord ext="-5">
+				<fingering>x x 1 2 4 3</fingering>
+				<fingering>x 6 7 8 8 x</fingering>
+				<fingering>x x 13 12 10 11</fingering>
+			</chord>
+			<chord ext="7-5">
+				<fingering>x x 1 2 2 3</fingering>
+				<fingering>x 6 7 6 8 x</fingering>
+				<fingering>x x 11 12 10 11</fingering>
+			</chord>
+			<chord ext="9-5">
+				<fingering>x x 1 2 2 1</fingering>
+				<fingering>5 6 5 6 6 5</fingering>
+				<fingering>11 10 11 10 10 11</fingering>
+			</chord>
+			<chord ext="11">
+				<fingering>x 1 1 1 2 1</fingering>
+				<fingering>x x 1 1 2 1</fingering>
+				<fingering>6 6 6 6 6 6</fingering>
+				<fingering>x 6 6 6 6 6</fingering>
+				<fingering>11 x 11 10 9 9</fingering>
+			</chord>
+			<chord ext="13">
+				<fingering>6 6 5 6 6 8</fingering>
+				<fingering>x 6 5 6 6 8</fingering>
+				<fingering>11 x 11 10 8 8</fingering>
+				<fingering>11 x 11 12 13 13</fingering>
+			</chord>
+		</chordset>
+		<chordset root="E">
+			<chord>
+				<fingering>2 2 1 0 0 0</fingering>
+				<fingering>0 7 6 4 5 4</fingering>
+				<fingering>0 7 9 9 9 7</fingering>
+				<fingering>0 7 9 9 9 0</fingering>
+			</chord>
+			<chord ext="7">
+				<fingering>0 2 2 1 3 0</fingering>
+				<fingering>0 2 x 1 3 0</fingering>
+				<fingering>0 7 6 7 5 0</fingering>
+				<fingering>0 7 9 7 9 7</fingering>
+				<fingering>12 x 12 13 12 0</fingering>
+			</chord>
+			<chord ext="m">
+				<fingering>0 2 2 0 0 0</fingering>
+				<fingering>0 x 5 4 5 3</fingering>
+				<fingering>0 7 9 9 8 7</fingering>
+			</chord>
+			<chord ext="m7">
+				<fingering>0 2 2 0 3 0</fingering>
+				<fingering>0 2 0 0 3 0</fingering>
+				<fingering>0 x 5 4 3 0</fingering>
+				<fingering>0 7 9 7 8 10</fingering>
+				<fingering>0 7 9 7 8 7</fingering>
+				<fingering>12 x 12 12 12 x</fingering>
+			</chord>
+			<chord ext="maj7">
+				<fingering>0 2 1 1 0 0</fingering>
+				<fingering>0 7 6 4 4 4</fingering>
+				<fingering>0 7 9 8 9 7</fingering>
+				<fingering>12 x 13 13 12 x</fingering>
+			</chord>
+			<chord ext="sus4">
+				<fingering>0 2 2 2 0 0</fingering>
+				<fingering>0 7 7 4 5 0</fingering>
+				<fingering>0 x 9 9 10 12</fingering>
+			</chord>
+			<chord ext="7sus4">
+				<fingering>0 2 0 2 0 0</fingering>
+				<fingering>0 x 2 4 3 5</fingering>
+				<fingering>0 7 9 7 10 7</fingering>
+			</chord>
+			<chord ext="6">
+				<fingering>0 2 2 1 2 0</fingering>
+				<fingering>0 7 6 6 5 0</fingering>
+				<fingering>0 7 9 9 9 9</fingering>
+			</chord>
+			<chord ext="m6">
+				<fingering>0 2 2 0 2 0</fingering>
+				<fingering>0 7 5 6 5 x</fingering>
+				<fingering>0 7 9 9 8 9</fingering>
+				<fingering>0 7 x 9 8 9</fingering>
+			</chord>
+			<chord ext="9">
+				<fingering>0 2 0 1 3 2</fingering>
+				<fingering>0 7 6 7 7 0</fingering>
+				<fingering>0 11 12 11 12 0</fingering>
+			</chord>
+			<chord ext="m9">
+				<fingering>0 2 2 0 3 2</fingering>
+				<fingering>0 7 5 7 7 0</fingering>
+				<fingering>0 10 12 11 12 0</fingering>
+			</chord>
+			<chord ext="maj9">
+				<fingering>0 2 1 1 0 2</fingering>
+				<fingering>0 7 4 4 4 4</fingering>
+				<fingering>0 7 6 8 7 0</fingering>
+			</chord>
+			<chord ext="6/9">
+				<fingering>0 2 2 1 2 2</fingering>
+				<fingering>0 x 2 1 2 2</fingering>
+				<fingering>0 7 6 6 7 7</fingering>
+				<fingering>0 11 11 11 12 12</fingering>
+			</chord>
+			<chord ext="7+9">
+				<fingering>0 2 2 1 3 3</fingering>
+				<fingering>0 x 2 1 3 3</fingering>
+				<fingering>0 7 6 7 8 0</fingering>
+				<fingering>0 11 12 12 12 x</fingering>
+			</chord>
+			<chord ext="7-9">
+				<fingering>0 x 0 1 0 1</fingering>
+				<fingering>0 7 6 7 6 x</fingering>
+				<fingering>0 11 12 10 0 0</fingering>
+			</chord>
+			<chord ext="aug">
+				<fingering>0 3 2 1 1 x</fingering>
+				<fingering>4 3 2 1 x x</fingering>
+				<fingering>0 x 6 5 5 4</fingering>
+			</chord>
+			<chord ext="7+5">
+				<fingering>0 x 0 1 1 0</fingering>
+				<fingering>0 5 6 5 5 x</fingering>
+				<fingering>0 7 10 7 9 8</fingering>
+			</chord>
+			<chord ext="dim">
+				<fingering>3 4 2 3 x x</fingering>
+				<fingering>x 1 2 0 2 x</fingering>
+				<fingering>0 x 2 3 2 3</fingering>
+			</chord>
+			<chord ext="-5">
+				<fingering>0 1 2 1 x 0</fingering>
+				<fingering>2 x 2 3 5 4</fingering>
+				<fingering>0 7 8 9 9 0</fingering>
+			</chord>
+			<chord ext="7-5">
+				<fingering>0 1 0 1 x 0</fingering>
+				<fingering>0 7 8 7 9 x</fingering>
+				<fingering>11 x 12 13 11 12</fingering>
+			</chord>
+			<chord ext="9-5">
+				<fingering>0 x 2 3 3 2</fingering>
+				<fingering>6 7 6 7 7 6</fingering>
+				<fingering>0 11 12 11 11 12</fingering>
+			</chord>
+			<chord ext="11">
+				<fingering>0 2 2 2 3 2</fingering>
+				<fingering>0 7 7 7 7 7</fingering>
+				<fingering>0 x 12 11 10 0</fingering>
+			</chord>
+			<chord ext="13">
+				<fingering>0 x 0 1 2 2</fingering>
+				<fingering>0 x 6 7 7 9</fingering>
+				<fingering>0 x 12 11 9 9</fingering>
+			</chord>
+		</chordset>
+		<chordset root="F">
+			<chord>
+				<fingering>1 3 3 2 1 1</fingering>
+				<fingering>8 8 7 5 6 5</fingering>
+				<fingering>x 8 7 5 6 5</fingering>
+				<fingering>8 8 10 10 10 8</fingering>
+				<fingering>x 8 10 10 10 x</fingering>
+			</chord>
+			<chord ext="7">
+				<fingering>1 3 3 2 4 1</fingering>
+				<fingering>1 3 1 2 4 1</fingering>
+				<fingering>8 8 7 8 6 x</fingering>
+				<fingering>x 8 7 8 6 x</fingering>
+				<fingering>8 8 10 8 10 8</fingering>
+				<fingering>x 8 10 8 10 8</fingering>
+				<fingering>1 x 1 2 1 x</fingering>
+			</chord>
+			<chord ext="m">
+				<fingering>1 3 3 1 1 1</fingering>
+				<fingering>x 3 3 5 6 4</fingering>
+				<fingering>x x 3 5 6 4</fingering>
+				<fingering>8 8 10 10 9 8</fingering>
+				<fingering>x 8 10 10 9 8</fingering>
+			</chord>
+			<chord ext="m7">
+				<fingering>1 3 3 1 4 1</fingering>
+				<fingering>1 3 1 1 4 1</fingering>
+				<fingering>x 3 3 5 4 4</fingering>
+				<fingering>x x 3 5 4 4</fingering>
+				<fingering>8 8 10 8 9 11</fingering>
+				<fingering>x 8 10 8 9 8</fingering>
+				<fingering>1 x 1 1 1 x</fingering>
+			</chord>
+			<chord ext="maj7">
+				<fingering>1 3 3 2 1 0</fingering>
+				<fingering>1 x 3 2 1 0</fingering>
+				<fingering>0 8 7 5 5 5</fingering>
+				<fingering>0 8 10 9 10 8</fingering>
+				<fingering>1 x 2 2 1 x</fingering>
+			</chord>
+			<chord ext="sus4">
+				<fingering>1 1 3 3 1 1</fingering>
+				<fingering>x 8 8 5 6 x</fingering>
+				<fingering>8 8 10 10 11 8</fingering>
+				<fingering>x 8 10 10 11 8</fingering>
+			</chord>
+			<chord ext="7sus4">
+				<fingering>1 3 1 3 1 1</fingering>
+				<fingering>8 8 8 8 6 x</fingering>
+				<fingering>x 8 8 8 6 x</fingering>
+				<fingering>8 x 10 8 11 8</fingering>
+				<fingering>x x 10 8 11 8</fingering>
+			</chord>
+			<chord ext="6">
+				<fingering>1 x 3 2 3 1</fingering>
+				<fingering>x 8 7 7 6 x</fingering>
+				<fingering>8 8 10 10 10 10</fingering>
+				<fingering>x 8 10 10 10 10</fingering>
+			</chord>
+			<chord ext="m6">
+				<fingering>1 3 3 1 3 1</fingering>
+				<fingering>1 x 3 1 3 1</fingering>
+				<fingering>8 8 6 7 6 x</fingering>
+				<fingering>x 8 6 7 6 x</fingering>
+				<fingering>8 8 10 10 9 10</fingering>
+				<fingering>x 8 x 10 9 10</fingering>
+			</chord>
+			<chord ext="9">
+				<fingering>1 0 1 0 1 1</fingering>
+				<fingering>x x 3 5 4 3</fingering>
+				<fingering>8 8 7 8 8 8</fingering>
+				<fingering>x 8 7 8 8 x</fingering>
+			</chord>
+			<chord ext="m9">
+				<fingering>1 3 1 1 1 3</fingering>
+				<fingering>x x 6 5 4 3</fingering>
+				<fingering>x x 3 5 4 3</fingering>
+				<fingering>8 8 6 8 8 8</fingering>
+				<fingering>x 8 6 8 8 x</fingering>
+			</chord>
+			<chord ext="maj9">
+				<fingering>1 0 3 0 1 0</fingering>
+				<fingering>x 8 5 5 5 5</fingering>
+				<fingering>x 8 7 9 8 x</fingering>
+			</chord>
+			<chord ext="6/9">
+				<fingering>1 0 0 0 1 1</fingering>
+				<fingering>x x 3 2 3 3</fingering>
+				<fingering>8 8 7 7 8 8</fingering>
+				<fingering>x 8 7 7 8 8</fingering>
+			</chord>
+			<chord ext="7+9">
+				<fingering>1 3 1 2 1 4</fingering>
+				<fingering>x x 3 2 4 4</fingering>
+				<fingering>x 8 7 8 9 x</fingering>
+			</chord>
+			<chord ext="7-9">
+				<fingering>1 x 1 2 1 2</fingering>
+				<fingering>x x 3 2 4 2</fingering>
+				<fingering>x 8 7 8 7 x</fingering>
+			</chord>
+			<chord ext="aug">
+				<fingering>x 4 3 2 2 x</fingering>
+				<fingering>5 4 3 2 x x</fingering>
+				<fingering>x x 3 2 2 1</fingering>
+			</chord>
+			<chord ext="7+5">
+				<fingering>1 x 1 2 2 1</fingering>
+				<fingering>x 6 7 6 6 x</fingering>
+				<fingering>x 8 11 8 10 9</fingering>
+			</chord>
+			<chord ext="dim">
+				<fingering>1 2 0 1 x x</fingering>
+				<fingering>x 2 3 1 3 x</fingering>
+				<fingering>x x 0 1 0 1</fingering>
+			</chord>
+			<chord ext="-5">
+				<fingering>1 2 3 2 0 x</fingering>
+				<fingering>x x 3 4 6 5</fingering>
+				<fingering>x 8 9 10 10 x</fingering>
+			</chord>
+			<chord ext="7-5">
+				<fingering>1 2 1 2 0 x</fingering>
+				<fingering>x x 3 4 4 5</fingering>
+				<fingering>x 8 9 8 10 x</fingering>
+			</chord>
+			<chord ext="9-5">
+				<fingering>1 0 1 0 0 1</fingering>
+				<fingering>x x 3 4 4 3</fingering>
+				<fingering>7 8 7 8 8 7</fingering>
+			</chord>
+			<chord ext="11">
+				<fingering>x 3 3 3 4 3</fingering>
+				<fingering>x x 3 3 4 3</fingering>
+				<fingering>8 8 8 8 8 8</fingering>
+				<fingering>x 8 8 8 8 8</fingering>
+				<fingering>13 11 13 12 11 11</fingering>
+			</chord>
+			<chord ext="13">
+				<fingering>1 x 1 2 3 3</fingering>
+				<fingering>8 8 7 8 8 10</fingering>
+				<fingering>x 8 7 8 8 10</fingering>
+				<fingering>13 x 13 12 10 10</fingering>
+			</chord>
+		</chordset>
+		<chordset root="F#/Gb">
+			<chord>
+				<fingering>2 4 4 3 2 2</fingering>
+				<fingering>9 9 8 6 7 6</fingering>
+				<fingering>x 9 8 6 7 6</fingering>
+				<fingering>9 9 11 11 11 9</fingering>
+				<fingering>x 9 11 11 11 x</fingering>
+			</chord>
+			<chord ext="7">
+				<fingering>2 4 4 3 5 2</fingering>
+				<fingering>2 4 2 3 5 2</fingering>
+				<fingering>9 9 8 9 7 x</fingering>
+				<fingering>x 9 8 9 7 x</fingering>
+				<fingering>9 9 11 9 11 9</fingering>
+				<fingering>x 9 11 9 11 9</fingering>
+				<fingering>2 x 2 3 2 x</fingering>
+			</chord>
+			<chord ext="m">
+				<fingering>2 4 4 2 2 2</fingering>
+				<fingering>x 4 4 6 7 5</fingering>
+				<fingering>x x 4 6 7 5</fingering>
+				<fingering>9 9 11 11 10 9</fingering>
+				<fingering>x 9 11 11 10 9</fingering>
+			</chord>
+			<chord ext="m7">
+				<fingering>2 4 4 2 5 1</fingering>
+				<fingering>2 4 2 2 5 1</fingering>
+				<fingering>x 4 4 6 5 5</fingering>
+				<fingering>x x 4 6 5 5</fingering>
+				<fingering>9 9 11 9 10 12</fingering>
+				<fingering>x 9 11 9 10 9</fingering>
+				<fingering>2 x 2 2 2 x</fingering>
+			</chord>
+			<chord ext="maj7">
+				<fingering>2 4 3 3 2 x</fingering>
+				<fingering>9 9 8 6 6 6</fingering>
+				<fingering>x 9 8 6 6 6</fingering>
+				<fingering>9 9 11 10 11 9</fingering>
+				<fingering>x 9 11 10 11 9</fingering>
+				<fingering>2 x 3 3 2 x</fingering>
+			</chord>
+			<chord ext="sus4">
+				<fingering>2 2 4 4 2 2</fingering>
+				<fingering>x 9 9 6 7 x</fingering>
+				<fingering>9 9 11 11 12 9</fingering>
+				<fingering>x 9 11 11 12 9</fingering>
+			</chord>
+			<chord ext="7sus4">
+				<fingering>2 4 2 4 2 2</fingering>
+				<fingering>9 9 9 9 7 x</fingering>
+				<fingering>x 9 9 9 7 x</fingering>
+				<fingering>9 9 11 9 12 9</fingering>
+				<fingering>x 9 11 9 12 9</fingering>
+			</chord>
+			<chord ext="6">
+				<fingering>2 x 4 3 4 2</fingering>
+				<fingering>x 9 8 8 7 x</fingering>
+				<fingering>9 9 11 11 11 11</fingering>
+				<fingering>x 9 11 11 11 11</fingering>
+			</chord>
+			<chord ext="m6">
+				<fingering>2 4 4 2 4 2</fingering>
+				<fingering>2 x 4 2 4 2</fingering>
+				<fingering>9 9 7 8 7 x</fingering>
+				<fingering>x 9 7 8 7 x</fingering>
+				<fingering>9 9 11 11 10 11</fingering>
+				<fingering>x 9 x 11 10 11</fingering>
+			</chord>
+			<chord ext="9">
+				<fingering>x x 2 1 2 2</fingering>
+				<fingering>x x 4 6 5 4</fingering>
+				<fingering>9 9 8 9 9 9</fingering>
+				<fingering>x 9 8 9 9 x</fingering>
+			</chord>
+			<chord ext="m9">
+				<fingering>2 4 2 2 2 4</fingering>
+				<fingering>x x 4 2 5 4</fingering>
+				<fingering>9 9 7 9 9 9</fingering>
+				<fingering>x 9 7 9 9 x</fingering>
+			</chord>
+			<chord ext="maj9">
+				<fingering>x x 4 1 2 1</fingering>
+				<fingering>x 9 6 6 6 6</fingering>
+				<fingering>x 9 8 10 9 x</fingering>
+			</chord>
+			<chord ext="6/9">
+				<fingering>2 1 1 1 2 2</fingering>
+				<fingering>x x 4 3 4 4</fingering>
+				<fingering>9 9 8 8 9 9</fingering>
+				<fingering>x 9 8 8 9 9</fingering>
+			</chord>
+			<chord ext="7+9">
+				<fingering>2 1 2 2 2 x</fingering>
+				<fingering>2 4 2 3 2 5</fingering>
+				<fingering>x 9 8 9 10 x</fingering>
+			</chord>
+			<chord ext="7-9">
+				<fingering>2 x 2 3 2 3</fingering>
+				<fingering>x x 4 3 5 3</fingering>
+				<fingering>x 9 8 9 8 x</fingering>
+			</chord>
+			<chord ext="aug">
+				<fingering>x 5 4 3 3 x</fingering>
+				<fingering>6 5 4 3 x x</fingering>
+				<fingering>x x 4 3 3 2</fingering>
+			</chord>
+			<chord ext="7+5">
+				<fingering>2 x 2 3 3 2</fingering>
+				<fingering>x 7 8 7 7 x</fingering>
+				<fingering>x 9 12 9 11 10</fingering>
+			</chord>
+			<chord ext="dim">
+				<fingering>2 3 1 2 x x</fingering>
+				<fingering>x 3 4 2 4 x</fingering>
+				<fingering>x x 1 2 1 2</fingering>
+			</chord>
+			<chord ext="-5">
+				<fingering>2 3 4 3 x x</fingering>
+				<fingering>x x 4 5 7 6</fingering>
+				<fingering>x 9 10 11 11 x</fingering>
+			</chord>
+			<chord ext="7-5">
+				<fingering>2 3 2 3 x x</fingering>
+				<fingering>x x 4 5 5 6</fingering>
+				<fingering>x 9 10 9 11 x</fingering>
+			</chord>
+			<chord ext="9-5">
+				<fingering>2 1 2 1 1 2</fingering>
+				<fingering>x x 4 5 5 4</fingering>
+				<fingering>8 9 8 9 9 8</fingering>
+			</chord>
+			<chord ext="11">
+				<fingering>2 x 2 1 0 0</fingering>
+				<fingering>x 4 4 4 5 4</fingering>
+				<fingering>x x 4 4 5 4</fingering>
+				<fingering>9 9 9 9 9 9</fingering>
+				<fingering>x 9 9 9 9 9</fingering>
+			</chord>
+			<chord ext="13">
+				<fingering>2 x 2 3 4 4</fingering>
+				<fingering>9 9 8 9 9 11</fingering>
+				<fingering>x 9 8 9 9 11</fingering>
+				<fingering>9 9 11 9 9 11</fingering>
+				<fingering>x 9 11 9 9 11</fingering>
+			</chord>
+		</chordset>
+		<chordset root="G">
+			<chord>
+				<fingering>3 2 0 0 0 2</fingering>
+				<fingering>3 5 5 4 3 3</fingering>
+				<fingering>10 10 9 7 8 7</fingering>
+				<fingering>x 10 9 7 8 7</fingering>
+			</chord>
+			<chord ext="7">
+				<fingering>3 2 0 0 0 1</fingering>
+				<fingering>3 5 5 4 6 3</fingering>
+				<fingering>3 5 3 4 6 3</fingering>
+				<fingering>10 10 9 10 8 x</fingering>
+				<fingering>x 10 9 10 8 x</fingering>
+				<fingering>3 x 3 4 3 x</fingering>
+			</chord>
+			<chord ext="m">
+				<fingering>3 5 5 3 3 3</fingering>
+				<fingering>x 5 5 7 8 6</fingering>
+				<fingering>x x 5 7 8 6</fingering>
+				<fingering>10 10 12 12 11 10</fingering>
+				<fingering>x 10 12 12 11 10</fingering>
+			</chord>
+			<chord ext="m7">
+				<fingering>3 5 5 3 6 3</fingering>
+				<fingering>3 5 3 3 6 3</fingering>
+				<fingering>x 5 5 7 6 6</fingering>
+				<fingering>x x 5 7 6 6</fingering>
+				<fingering>10 10 12 10 11 13</fingering>
+				<fingering>x 10 12 10 11 10</fingering>
+				<fingering>3 x 3 3 3 x</fingering>
+			</chord>
+			<chord ext="maj7">
+				<fingering>x x 5 4 3 2</fingering>
+				<fingering>3 5 4 4 3 x</fingering>
+				<fingering>10 10 9 7 7 7</fingering>
+				<fingering>x 10 9 7 7 7</fingering>
+				<fingering>3 x 4 4 3 x</fingering>
+			</chord>
+			<chord ext="sus4">
+				<fingering>3 x 0 0 1 3</fingering>
+				<fingering>3 3 5 5 3 3</fingering>
+				<fingering>10 10 12 12 13 10</fingering>
+				<fingering>x 10 12 12 13 10</fingering>
+			</chord>
+			<chord ext="7sus4">
+				<fingering>3 x 3 0 1 x</fingering>
+				<fingering>3 5 3 5 3 3</fingering>
+				<fingering>10 10 10 10 8 x</fingering>
+				<fingering>x 10 10 10 8 x</fingering>
+			</chord>
+			<chord ext="6">
+				<fingering>3 2 0 0 0 0</fingering>
+				<fingering>3 x 5 4 5 3</fingering>
+				<fingering>x 10 9 9 8 x</fingering>
+			</chord>
+			<chord ext="m6">
+				<fingering>3 5 5 3 5 3</fingering>
+				<fingering>3 x 5 3 5 3</fingering>
+				<fingering>10 10 8 9 8 x</fingering>
+				<fingering>x 10 8 9 8 x</fingering>
+				<fingering>10 10 12 12 11 12</fingering>
+				<fingering>x 10 x 12 11 12</fingering>
+			</chord>
+			<chord ext="9">
+				<fingering>x 2 3 2 3 x</fingering>
+				<fingering>x x 3 2 3 3</fingering>
+				<fingering>10 10 9 10 10 10</fingering>
+				<fingering>x 10 9 10 10 x</fingering>
+			</chord>
+			<chord ext="m9">
+				<fingering>3 1 3 2 x x</fingering>
+				<fingering>3 5 3 3 3 5</fingering>
+				<fingering>10 10 8 10 10 10</fingering>
+				<fingering>x 10 8 10 10 x</fingering>
+			</chord>
+			<chord ext="maj9">
+				<fingering>3 2 4 2 3 x</fingering>
+				<fingering>x x 5 2 3 2</fingering>
+				<fingering>x 10 9 11 10 x</fingering>
+			</chord>
+			<chord ext="6/9">
+				<fingering>3 2 2 2 3 3</fingering>
+				<fingering>x x 5 4 5 5</fingering>
+				<fingering>10 10 9 9 10 10</fingering>
+				<fingering>x 10 9 9 10 10</fingering>
+			</chord>
+			<chord ext="7+9">
+				<fingering>3 2 3 3 3 x</fingering>
+				<fingering>3 5 3 4 3 6</fingering>
+				<fingering>x 10 9 10 11 x</fingering>
+			</chord>
+			<chord ext="7-9">
+				<fingering>3 2 3 1 0 x</fingering>
+				<fingering>3 x 3 4 3 4</fingering>
+				<fingering>x 10 9 10 9 x</fingering>
+			</chord>
+			<chord ext="aug">
+				<fingering>x 2 1 0 0 x</fingering>
+				<fingering>3 2 1 0 x x</fingering>
+				<fingering>x x 5 4 4 3</fingering>
+			</chord>
+			<chord ext="7+5">
+				<fingering>3 x 3 4 4 3</fingering>
+				<fingering>x 8 9 8 8 x</fingering>
+				<fingering>x 10 13 10 12 11</fingering>
+			</chord>
+			<chord ext="dim">
+				<fingering>3 4 2 3 x x</fingering>
+				<fingering>x 1 2 0 2 x</fingering>
+				<fingering>x x 2 3 2 3</fingering>
+			</chord>
+			<chord ext="-5">
+				<fingering>x x 5 4 2 3</fingering>
+				<fingering>x x 5 6 8 7</fingering>
+				<fingering>x 10 11 12 12 x</fingering>
+			</chord>
+			<chord ext="7-5">
+				<fingering>3 4 3 4 0 x</fingering>
+				<fingering>x x 5 6 6 7</fingering>
+				<fingering>x 10 11 10 12 x</fingering>
+			</chord>
+			<chord ext="9-5">
+				<fingering>3 2 3 2 2 3</fingering>
+				<fingering>x x 5 6 6 5</fingering>
+				<fingering>9 10 9 10 10 9</fingering>
+			</chord>
+			<chord ext="11">
+				<fingering>3 x 3 2 1 1</fingering>
+				<fingering>x 5 5 5 6 5</fingering>
+				<fingering>x x 5 5 6 5</fingering>
+				<fingering>10 10 10 10 10 10</fingering>
+				<fingering>x 10 10 10 10 10</fingering>
+			</chord>
+			<chord ext="13">
+				<fingering>3 x 3 2 0 0</fingering>
+				<fingering>3 x 3 4 5 5</fingering>
+				<fingering>10 10 9 10 10 12</fingering>
+				<fingering>x 10 9 10 10 12</fingering>
+			</chord>
+		</chordset>
+		<chordset root="G#/Ab">
+			<chord>
+				<fingering>x x 1 1 1 4</fingering>
+				<fingering>4 6 6 5 4 4</fingering>
+				<fingering>11 11 10 8 9 8</fingering>
+				<fingering>x 11 10 8 9 8</fingering>
+			</chord>
+			<chord ext="7">
+				<fingering>x x 1 1 1 2</fingering>
+				<fingering>4 6 6 5 7 4</fingering>
+				<fingering>4 6 4 5 7 4</fingering>
+				<fingering>11 11 13 11 13 11</fingering>
+				<fingering>x 11 13 11 13 11</fingering>
+				<fingering>4 x 4 5 4 x</fingering>
+			</chord>
+			<chord ext="m">
+				<fingering>4 6 6 4 4 4</fingering>
+				<fingering>x 6 6 8 9 7</fingering>
+				<fingering>x x 6 8 9 7</fingering>
+				<fingering>11 11 13 13 12 11</fingering>
+				<fingering>x 11 13 13 12 11</fingering>
+			</chord>
+			<chord ext="m7">
+				<fingering>4 6 6 4 7 4</fingering>
+				<fingering>4 6 4 4 7 4</fingering>
+				<fingering>x 6 6 8 7 7</fingering>
+				<fingering>x x 6 8 7 7</fingering>
+				<fingering>11 11 13 11 12 14</fingering>
+				<fingering>x 11 13 11 12 11</fingering>
+				<fingering>4 x 4 4 4 x</fingering>
+			</chord>
+			<chord ext="maj7">
+				<fingering>x x 6 5 4 3</fingering>
+				<fingering>4 6 5 5 4 x</fingering>
+				<fingering>11 11 10 8 8 8</fingering>
+				<fingering>x 11 10 8 8 8</fingering>
+				<fingering>4 x 4 5 4 x</fingering>
+			</chord>
+			<chord ext="sus4">
+				<fingering>x x 1 1 2 4</fingering>
+				<fingering>4 4 6 6 4 4</fingering>
+				<fingering>x x 6 8 9 9</fingering>
+			</chord>
+			<chord ext="7sus4">
+				<fingering>x x 1 1 2 2</fingering>
+				<fingering>4 6 4 6 4 4</fingering>
+				<fingering>x x 6 8 7 9</fingering>
+			</chord>
+			<chord ext="6">
+				<fingering>x x 1 1 1 1</fingering>
+				<fingering>4 x 6 5 6 4</fingering>
+				<fingering>x 11 10 10 9 x</fingering>
+			</chord>
+			<chord ext="m6">
+				<fingering>x x 1 1 0 1</fingering>
+				<fingering>4 6 6 4 6 4</fingering>
+				<fingering>4 x 6 4 6 4</fingering>
+				<fingering>11 11 9 10 9 x</fingering>
+				<fingering>x 11 9 10 9 x</fingering>
+			</chord>
+			<chord ext="9">
+				<fingering>x 3 4 3 4 x</fingering>
+				<fingering>x x 4 3 4 4</fingering>
+				<fingering>11 11 10 11 11 11</fingering>
+				<fingering>x 11 10 11 11 x</fingering>
+			</chord>
+			<chord ext="m9">
+				<fingering>4 6 4 4 4 6</fingering>
+				<fingering>x x 6 4 7 6</fingering>
+				<fingering>11 11 9 11 11 11</fingering>
+				<fingering>x 11 9 11 11 x</fingering>
+			</chord>
+			<chord ext="maj9">
+				<fingering>4 3 5 3 4 x</fingering>
+				<fingering>x x 6 3 4 3</fingering>
+				<fingering>x 11 10 12 11 x</fingering>
+			</chord>
+			<chord ext="6/9">
+				<fingering>4 3 3 3 4 4</fingering>
+				<fingering>x x 6 5 6 6</fingering>
+				<fingering>11 11 10 10 11 11</fingering>
+				<fingering>x 11 10 10 11 11</fingering>
+			</chord>
+			<chord ext="7+9">
+				<fingering>4 3 4 4 4 x</fingering>
+				<fingering>4 6 4 5 4 7</fingering>
+				<fingering>x 11 10 11 12 x</fingering>
+			</chord>
+			<chord ext="7-9">
+				<fingering>4 3 4 2 x x</fingering>
+				<fingering>4 x 4 5 4 5</fingering>
+				<fingering>x 11 10 11 10 x</fingering>
+			</chord>
+			<chord ext="aug">
+				<fingering>x 3 2 1 1 x</fingering>
+				<fingering>4 3 2 1 x x</fingering>
+				<fingering>x x 6 5 5 4</fingering>
+			</chord>
+			<chord ext="7+5">
+				<fingering>4 x 4 5 5 4</fingering>
+				<fingering>x 9 10 9 9 x</fingering>
+				<fingering>x 11 14 11 13 12</fingering>
+			</chord>
+			<chord ext="dim">
+				<fingering>1 2 0 1 x x</fingering>
+				<fingering>x 2 3 1 3 x</fingering>
+				<fingering>x x 0 1 0 1</fingering>
+			</chord>
+			<chord ext="-5">
+				<fingering>x x 6 5 3 4</fingering>
+				<fingering>4 5 6 5 x x</fingering>
+				<fingering>x 11 12 13 13 x</fingering>
+			</chord>
+			<chord ext="7-5">
+				<fingering>x x 4 5 3 4</fingering>
+				<fingering>4 5 4 5 x x</fingering>
+				<fingering>x x 6 7 7 8</fingering>
+			</chord>
+			<chord ext="9-5">
+				<fingering>4 3 4 3 3 4</fingering>
+				<fingering>x x 6 7 7 6</fingering>
+				<fingering>10 11 10 11 11 10</fingering>
+			</chord>
+			<chord ext="11">
+				<fingering>4 x 4 3 2 2</fingering>
+				<fingering>x 6 6 6 7 6</fingering>
+				<fingering>x x 6 6 7 6</fingering>
+				<fingering>11 11 11 11 11 11</fingering>
+				<fingering>x 11 11 11 11 11</fingering>
+			</chord>
+			<chord ext="13">
+				<fingering>4 x 4 3 1 1</fingering>
+				<fingering>4 x 4 5 6 6</fingering>
+				<fingering>11 11 10 11 11 13</fingering>
+				<fingering>x 11 10 11 11 13</fingering>
+			</chord>
+		</chordset>
 
-		<chord ext="AA">
-			<fingering>1 1 1 1 1 1</fingering>
-		</chord>
 
-		<chord>
-			<fingering>x 3 2 0 1 0</fingering>
-			<fingering>x 3 5 5 5 0</fingering>
-			<fingering>x 3 5 5 5 3</fingering>
-			<fingering>8 10 10 9 8 8</fingering>
-		</chord>
-
-		<chord ext="/G">
-			<fingering>3 3 2 0 1 0</fingering>
-			<fingering>3 3 5 5 5 0</fingering>
-			<fingering>3 3 5 5 5 3</fingering>
-		</chord>
-
-		<chord ext="/E">
-			<fingering>0 3 2 0 1 0</fingering>
-			<fingering>0 3 5 5 5 0</fingering>
-			<fingering>0 3 5 5 5 3</fingering>
-		</chord>
-
-
-		<chord ext="m">
-			<fingering>x 3 1 0 1 x</fingering>
-			<fingering>x 3 5 5 4 3</fingering>
-			<fingering>8 10 10 8 8 8</fingering>
-		</chord>
-
-		<chord ext="m/G">
-			<fingering>3 3 1 0 1 x</fingering>
-			<fingering>3 3 5 5 4 3</fingering>
-		</chord>
-
-		<chord ext="m/E">
-			<fingering>0 3 1 0 1 x</fingering>
-			<fingering>0 3 5 5 4 3</fingering>
-		</chord>
-
-
-		<chord ext="7">
-			<fingering>x 3 2 3 1 0</fingering>
-			<fingering>x 3 5 3 5 3</fingering>
-			<fingering>8 10 8 9 11 8</fingering>
-			<fingering>8 10 10 9 11 8</fingering>
-		</chord>
-
-		<chord ext="7/G">
-			<fingering>3 3 2 3 1 0</fingering>
-			<fingering>3 3 5 3 5 3</fingering>
-		</chord>
-
-		<chord ext="7/E">
-			<fingering>0 3 2 3 1 0</fingering>
-			<fingering>0 3 5 3 5 3</fingering>
-		</chord>
-
-
-		<chord ext="m7">
-			<fingering>x 3 1 3 1 x</fingering>
-			<fingering>x 3 5 3 4 3|6</fingering>
-			<fingering>8 10 8 8 11 8</fingering>
-			<fingering>8 10 10 8 11 8</fingering>
-		</chord>
-
-		<chord ext="m7/G">
-			<fingering>3 3 1 3 1 x</fingering>
-			<fingering>3 3 5 3 4 3</fingering>
-			<fingering>3 3 5 3 4 6</fingering>
-		</chord>
-
-		<chord ext="m7/E">
-			<fingering>0 3 1 3 1 x</fingering>
-			<fingering>0 3 5 3 4 3</fingering>
-			<fingering>0 3 5 3 4 6</fingering>
-		</chord>
-
-
-		<chord ext="maj7">
-			<fingering>x 3 2 0 0 0</fingering>
-			<fingering>x 3 5 4 5 3</fingering>
-			<fingering>x x 10 9 8 7</fingering>
-		</chord>
-
-		<chord ext="maj7/G">
-			<fingering>3 3 2 0 0 0</fingering>
-			<fingering>3 1 5 4 5 1</fingering>
-		</chord>
-
-		<chord ext="maj7/E">
-			<fingering>0 3 2 0 0 0</fingering>
-			<fingering>0 3 5 4 5 1</fingering>
-		</chord>
-
-	</chordset>
-</chords>
+	</chords>
 </rosegarden-chord-data>
