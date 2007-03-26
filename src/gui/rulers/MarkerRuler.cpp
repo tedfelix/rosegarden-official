@@ -32,12 +32,14 @@
 #include "document/RosegardenGUIDoc.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/HZoomable.h"
+#include <kxmlguifactory.h>
 #include <qbrush.h>
 #include <qfont.h>
 #include <qfontmetrics.h>
 #include <qpainter.h>
 #include <qpen.h>
 #include <qpoint.h>
+#include <qpopupmenu.h>
 #include <qrect.h>
 #include <qsize.h>
 #include <qstring.h>
@@ -48,24 +50,40 @@ namespace Rosegarden
 {
 
 MarkerRuler::MarkerRuler(RosegardenGUIDoc *doc,
-                                   RulerScale *rulerScale,
-                                   int barHeight,
-                                   double xorigin,
-                                   QWidget* parent,
-                                   const char* name,
-                                   WFlags f)
+                         RulerScale *rulerScale,
+                         int barHeight,
+                         double xorigin,
+                         QWidget* parent,
+                         const char* name,
+                         WFlags f)
         : QWidget(parent, name, f),
         m_barHeight(barHeight),
         m_xorigin(xorigin),
         m_currentXOffset(0),
-        m_width( -1),
+        m_width(-1),
+        m_clickX(0),
+        m_menu(0),
         m_doc(doc),
-        m_rulerScale(rulerScale)
+        m_rulerScale(rulerScale),
+        m_parentMainWindow(dynamic_cast<KMainWindow*>(doc->parent()))
 {
     //    m_barFont = new QFont("helvetica", 12);
     //    m_barFont->setPixelSize(12);
     m_barFont = new QFont();
     m_barFont->setPointSize(10);
+
+    new KAction(i18n("Insert Marker"), 0, this,
+             SLOT(slotInsertMarkerHere()), actionCollection(),
+             "insert_marker_here");
+    
+    new KAction(i18n("Insert Marker at Playback Position"), 0, this,
+             SLOT(slotInsertMarkerAtPointer()), actionCollection(),
+             "insert_marker_at_pointer");
+
+    new KAction(i18n("Delete Marker"), 0, this,
+             SLOT(slotDeleteMarker()), actionCollection(),
+             "delete_marker");
+    
 }
 
 MarkerRuler::~MarkerRuler()
@@ -73,13 +91,38 @@ MarkerRuler::~MarkerRuler()
     delete m_barFont;
 }
 
-void MarkerRuler::scrollHoriz(int x)
+void
+MarkerRuler::createMenu()
+{             
+    setXMLFile("markerruler.rc");
+    
+    KXMLGUIFactory* factory = m_parentMainWindow->factory();
+    factory->addClient(this);
+
+    QWidget* tmp = factory->container("marker_ruler_menu", this);
+
+    if (!tmp) {
+        RG_DEBUG << "MarkerRuler::createMenu() menu not found\n"
+                 << domDocument().toString(4) << endl;
+    }
+    
+    m_menu = dynamic_cast<QPopupMenu*>(tmp);
+    
+    if (!m_menu) {
+        RG_DEBUG << "MarkerRuler::createMenu() failed\n";
+    }
+}
+
+
+void 
+MarkerRuler::scrollHoriz(int x)
 {
     m_currentXOffset = static_cast<int>( -x / getHScaleFactor());
     repaint();
 }
 
-QSize MarkerRuler::sizeHint() const
+QSize 
+MarkerRuler::sizeHint() const
 {
     int lastBar =
         m_rulerScale->getLastVisibleBar();
@@ -90,14 +133,47 @@ QSize MarkerRuler::sizeHint() const
     return QSize(std::max(int(width), m_width), m_barHeight);
 }
 
-QSize MarkerRuler::minimumSizeHint() const
+QSize 
+MarkerRuler::minimumSizeHint() const
 {
     double firstBarWidth = m_rulerScale->getBarWidth(0) + m_xorigin;
 
     return QSize(static_cast<int>(firstBarWidth), m_barHeight);
 }
 
-void MarkerRuler::paintEvent(QPaintEvent*)
+void
+MarkerRuler::slotInsertMarkerHere()
+{
+    emit addMarker(getClickPosition());    
+}
+
+void
+MarkerRuler::slotInsertMarkerAtPointer()
+{
+    emit addMarker(m_doc->getComposition().getPosition());
+}
+
+void
+MarkerRuler::slotDeleteMarker()
+{
+    RG_DEBUG << "MarkerRuler::slotDeleteMarker()\n";
+    
+//    timeT t = getClickPosition();
+//    
+//    emit deleteMarker();
+}
+
+timeT
+MarkerRuler::getClickPosition()
+{
+    timeT t = m_rulerScale->getTimeForX
+              (m_clickX - m_xorigin - m_currentXOffset);
+
+    return t;
+}
+
+void
+MarkerRuler::paintEvent(QPaintEvent*)
 {
     QPainter painter(this);
     painter.setFont(*m_barFont);
@@ -223,13 +299,26 @@ MarkerRuler::mousePressEvent(QMouseEvent *e)
     RG_DEBUG << "MarkerRuler::mousePressEvent: x = " << e->x() << endl;
 
     if (!m_doc || !e)
-        return ;
+        return;
+
+    // if right-click, show popup menu
+    //
+    if (e->button() == RightButton) {
+        m_clickX = e->x();
+        if (!m_menu)
+            createMenu();
+        if (m_menu)
+            m_menu->exec(QCursor::pos());
+            
+        return;       
+    }
+            
     bool shiftPressed = ((e->state() & Qt::ShiftButton) != 0);
 
     Composition &comp = m_doc->getComposition();
     Composition::markercontainer markers = comp.getMarkers();
 
-    if (shiftPressed) {
+    if (shiftPressed) { // set loop
 
         timeT t = m_rulerScale->getTimeForX
                   (e->x() - m_xorigin - m_currentXOffset);
@@ -252,55 +341,55 @@ MarkerRuler::mousePressEvent(QMouseEvent *e)
         if (prev > 0)
             emit setLoop(prev, comp.getEndMarker());
 
-        return ;
-    }
+    } else { // set pointer to clicked marker
 
-    QRect clipRect = visibleRect();
-
-    int firstBar = m_rulerScale->getBarForX(clipRect.x() -
-                                            m_currentXOffset -
-                                            m_xorigin);
-    int lastBar = m_rulerScale->getLastVisibleBar();
-    if (firstBar < m_rulerScale->getFirstVisibleBar()) {
-        firstBar = m_rulerScale->getFirstVisibleBar();
-    }
-
-    timeT start = comp.getBarStart(firstBar);
-    timeT end = comp.getBarEnd(lastBar);
-
-    // need these to calculate the visible extents of a marker tag
-    QPainter painter(this);
-    painter.setFont(*m_barFont);
-    QFontMetrics metrics = painter.fontMetrics();
-
-    for (Composition::markerconstiterator i = markers.begin();
-            i != markers.end(); ++i) {
-
-        if ((*i)->getTime() >= start && (*i)->getTime() < end) {
-
-            QString name(strtoqstr((*i)->getName()));
-
-            int x = m_rulerScale->getXForTime((*i)->getTime())
-                    + m_xorigin + m_currentXOffset;
-
-            int width = metrics.width(name) + 5;
-
-            int nextX = -1;
-            Composition::markerconstiterator j = i;
-            ++j;
-            if (j != markers.end()) {
-                nextX = m_rulerScale->getXForTime((*j)->getTime())
+        QRect clipRect = visibleRect();
+    
+        int firstBar = m_rulerScale->getBarForX(clipRect.x() -
+                                                m_currentXOffset -
+                                                m_xorigin);
+        int lastBar = m_rulerScale->getLastVisibleBar();
+        if (firstBar < m_rulerScale->getFirstVisibleBar()) {
+            firstBar = m_rulerScale->getFirstVisibleBar();
+        }
+    
+        timeT start = comp.getBarStart(firstBar);
+        timeT end = comp.getBarEnd(lastBar);
+    
+        // need these to calculate the visible extents of a marker tag
+        QPainter painter(this);
+        painter.setFont(*m_barFont);
+        QFontMetrics metrics = painter.fontMetrics();
+    
+        for (Composition::markerconstiterator i = markers.begin();
+                i != markers.end(); ++i) {
+    
+            if ((*i)->getTime() >= start && (*i)->getTime() < end) {
+    
+                QString name(strtoqstr((*i)->getName()));
+    
+                int x = m_rulerScale->getXForTime((*i)->getTime())
                         + m_xorigin + m_currentXOffset;
-            }
-
-            if (e->x() >= x && e->x() <= x + width) {
-
-                if (nextX < x || e->x() <= nextX) {
-
-                    RG_DEBUG << "MarkerRuler::mousePressEvent: setting pointer to " << (*i)->getTime() << endl;
-
-                    emit setPointerPosition((*i)->getTime());
-                    return ;
+    
+                int width = metrics.width(name) + 5;
+    
+                int nextX = -1;
+                Composition::markerconstiterator j = i;
+                ++j;
+                if (j != markers.end()) {
+                    nextX = m_rulerScale->getXForTime((*j)->getTime())
+                            + m_xorigin + m_currentXOffset;
+                }
+    
+                if (e->x() >= x && e->x() <= x + width) {
+    
+                    if (nextX < x || e->x() <= nextX) {
+    
+                        RG_DEBUG << "MarkerRuler::mousePressEvent: setting pointer to " << (*i)->getTime() << endl;
+    
+                        emit setPointerPosition((*i)->getTime());
+                        return ;
+                    }
                 }
             }
         }

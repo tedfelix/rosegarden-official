@@ -1,0 +1,11 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+
+<kpartgui name="Rosegarden::MarkerRuler" version="1230">
+
+<Menu name="marker_ruler_menu">
+	<Action name="insert_marker_here" />
+	<Action name="insert_marker_at_pointer" />
+	<Action name="delete_marker" />
+</Menu>
+
+</kpartgui>

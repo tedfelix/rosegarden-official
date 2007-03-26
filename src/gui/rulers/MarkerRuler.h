@@ -29,13 +29,15 @@
 #include "gui/general/HZoomable.h"
 #include <qsize.h>
 #include <qwidget.h>
+#include <kxmlguiclient.h>
 #include "base/Event.h"
 
 
 class QPaintEvent;
 class QMouseEvent;
 class QFont;
-
+class QPopupMenu;
+class KMainWindow;
 
 namespace Rosegarden
 {
@@ -44,7 +46,7 @@ class RulerScale;
 class RosegardenGUIDoc;
 
 
-class MarkerRuler : public QWidget, public HZoomable
+class MarkerRuler : public QWidget, public HZoomable, public KXMLGUIClient
 {
     Q_OBJECT
 
@@ -73,24 +75,40 @@ signals:
     /// Open the marker editor window on double click
     void editMarkers();
 
+    /// add a marker
+    void addMarker(timeT);
+    
+    void deleteMaker(timeT, QString name, QString description);
+     
     /// Set a loop range
     void setLoop(timeT, timeT);
 
+protected slots:
+    void slotInsertMarkerHere();
+    void slotInsertMarkerAtPointer();
+    void slotDeleteMarker();
+    
 protected:
     virtual void paintEvent(QPaintEvent*);
     virtual void mousePressEvent(QMouseEvent *e);
     virtual void mouseDoubleClickEvent(QMouseEvent *e);
 
+    void createMenu();
+    timeT getClickPosition();
+    
     //--------------- Data members ---------------------------------
     int m_barHeight;
     double m_xorigin;
     int m_currentXOffset;
     int m_width;
-
+    int m_clickX;
+    
     QFont *m_barFont;
-
-    RosegardenGUIDoc       *m_doc;
+    QPopupMenu *m_menu;
+    
+    RosegardenGUIDoc *m_doc;
     RulerScale *m_rulerScale;
+    KMainWindow* m_parentMainWindow;
 
 };
 
