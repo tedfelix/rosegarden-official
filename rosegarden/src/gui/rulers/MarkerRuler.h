@@ -42,6 +42,7 @@ class KMainWindow;
 namespace Rosegarden
 {
 
+class Marker;
 class RulerScale;
 class RosegardenGUIDoc;
 
