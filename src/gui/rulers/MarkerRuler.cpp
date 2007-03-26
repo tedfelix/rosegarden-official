@@ -101,10 +101,10 @@ MarkerRuler::createMenu()
 
     QWidget* tmp = factory->container("marker_ruler_menu", this);
 
-    if (!tmp) {
-        RG_DEBUG << "MarkerRuler::createMenu() menu not found\n"
-                 << domDocument().toString(4) << endl;
-    }
+//    if (!tmp) {
+//        RG_DEBUG << "MarkerRuler::createMenu() menu not found\n"
+//                 << domDocument().toString(4) << endl;
+//    }
     
     m_menu = dynamic_cast<QPopupMenu*>(tmp);
     
