@@ -158,9 +158,12 @@ MarkerRuler::slotDeleteMarker()
 {
     RG_DEBUG << "MarkerRuler::slotDeleteMarker()\n";
     
-//    timeT t = getClickPosition();
-//    
-//    emit deleteMarker();
+    Rosegarden::Marker* marker = getMarkerAtClickPosition();
+    
+    if (marker)
+        emit deleteMarker(marker->getTime(),
+                          marker->getName(),
+                          marker->getDescription());                          
 }
 
 timeT
@@ -172,6 +175,63 @@ MarkerRuler::getClickPosition()
     return t;
 }
 
+Rosegarden::Marker*
+MarkerRuler::getMarkerAtClickPosition()
+{
+    QRect clipRect = visibleRect();
+
+    int firstBar = m_rulerScale->getBarForX(clipRect.x() -
+                                            m_currentXOffset -
+                                            m_xorigin);
+    int lastBar = m_rulerScale->getLastVisibleBar();
+    if (firstBar < m_rulerScale->getFirstVisibleBar()) {
+        firstBar = m_rulerScale->getFirstVisibleBar();
+    }
+
+    Composition &comp = m_doc->getComposition();
+    Composition::markercontainer markers = comp.getMarkers();
+
+    timeT start = comp.getBarStart(firstBar);
+    timeT end = comp.getBarEnd(lastBar);
+
+    // need these to calculate the visible extents of a marker tag
+    QPainter painter(this);
+    painter.setFont(*m_barFont);
+    QFontMetrics metrics = painter.fontMetrics();
+
+    for (Composition::markerconstiterator i = markers.begin();
+            i != markers.end(); ++i) {
+
+        if ((*i)->getTime() >= start && (*i)->getTime() < end) {
+
+            QString name(strtoqstr((*i)->getName()));
+
+            int x = m_rulerScale->getXForTime((*i)->getTime())
+                    + m_xorigin + m_currentXOffset;
+
+            int width = metrics.width(name) + 5;
+
+            int nextX = -1;
+            Composition::markerconstiterator j = i;
+            ++j;
+            if (j != markers.end()) {
+                nextX = m_rulerScale->getXForTime((*j)->getTime())
+                        + m_xorigin + m_currentXOffset;
+            }
+
+            if (m_clickX >= x && m_clickX <= x + width) {
+
+                if (nextX < x || m_clickX <= nextX) {
+
+                    return *i;
+                }
+            }
+        }
+    }
+
+    return 0L;
+}
+    
 void
 MarkerRuler::paintEvent(QPaintEvent*)
 {
@@ -301,15 +361,18 @@ MarkerRuler::mousePressEvent(QMouseEvent *e)
     if (!m_doc || !e)
         return;
 
+    m_clickX = e->x();
+    Rosegarden::Marker* clickedMarker = getMarkerAtClickPosition();
+    
     // if right-click, show popup menu
     //
     if (e->button() == RightButton) {
-        m_clickX = e->x();
         if (!m_menu)
             createMenu();
-        if (m_menu)
+        if (m_menu) {
+            actionCollection()->action("delete_marker")->setEnabled(clickedMarker != 0);
             m_menu->exec(QCursor::pos());
-            
+        }
         return;       
     }
             
@@ -343,56 +406,8 @@ MarkerRuler::mousePressEvent(QMouseEvent *e)
 
     } else { // set pointer to clicked marker
 
-        QRect clipRect = visibleRect();
-    
-        int firstBar = m_rulerScale->getBarForX(clipRect.x() -
-                                                m_currentXOffset -
-                                                m_xorigin);
-        int lastBar = m_rulerScale->getLastVisibleBar();
-        if (firstBar < m_rulerScale->getFirstVisibleBar()) {
-            firstBar = m_rulerScale->getFirstVisibleBar();
-        }
-    
-        timeT start = comp.getBarStart(firstBar);
-        timeT end = comp.getBarEnd(lastBar);
-    
-        // need these to calculate the visible extents of a marker tag
-        QPainter painter(this);
-        painter.setFont(*m_barFont);
-        QFontMetrics metrics = painter.fontMetrics();
-    
-        for (Composition::markerconstiterator i = markers.begin();
-                i != markers.end(); ++i) {
-    
-            if ((*i)->getTime() >= start && (*i)->getTime() < end) {
-    
-                QString name(strtoqstr((*i)->getName()));
-    
-                int x = m_rulerScale->getXForTime((*i)->getTime())
-                        + m_xorigin + m_currentXOffset;
-    
-                int width = metrics.width(name) + 5;
-    
-                int nextX = -1;
-                Composition::markerconstiterator j = i;
-                ++j;
-                if (j != markers.end()) {
-                    nextX = m_rulerScale->getXForTime((*j)->getTime())
-                            + m_xorigin + m_currentXOffset;
-                }
-    
-                if (e->x() >= x && e->x() <= x + width) {
-    
-                    if (nextX < x || e->x() <= nextX) {
-    
-                        RG_DEBUG << "MarkerRuler::mousePressEvent: setting pointer to " << (*i)->getTime() << endl;
-    
-                        emit setPointerPosition((*i)->getTime());
-                        return ;
-                    }
-                }
-            }
-        }
+        if (clickedMarker)
+            emit setPointerPosition(clickedMarker->getTime());
     }
 }
 
