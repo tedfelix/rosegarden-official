@@ -120,7 +120,7 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
     (doc->getCommandHistory(), SIGNAL(commandExecuted()),
      this, SLOT(update()));
 
-    m_menu = new QPopupMenu;
+    m_menu = new QPopupMenu(this);
 
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
     QIconSet icon;
@@ -171,7 +171,6 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
 
 TempoRuler::~TempoRuler()
 {
-    delete m_menu;
 }
 
 void

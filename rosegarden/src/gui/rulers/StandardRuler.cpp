@@ -106,6 +106,14 @@ void StandardRuler::connectRulerToDocPointer(RosegardenGUIDoc *doc)
      RosegardenGUIApp::self(), SLOT(slotEditMarkers()));
 
     QObject::connect
+    (m_hButtonBar, SIGNAL(addMarker(timeT)),
+     RosegardenGUIApp::self(), SLOT(slotAddMarker(timeT)));
+
+    QObject::connect
+    (m_hButtonBar, SIGNAL(deleteMarker(timeT, QString, QString)),
+     RosegardenGUIApp::self(), SLOT(slotDeleteMarker(timeT, QString, QString)));
+
+    QObject::connect
     (m_loopRuler, SIGNAL(dragPointerToPosition(timeT)),
      this, SIGNAL(dragPointerToPosition(timeT)));
 

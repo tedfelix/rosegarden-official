@@ -1269,6 +1269,18 @@ public slots:
     void slotDeleteTempo(timeT time);
 
     /**
+     * Add marker
+     */
+    void slotAddMarker(timeT time);
+
+    /**
+     * Remove a marker
+     */
+    void slotDeleteMarker(timeT time,
+                          QString name,
+                          QString description);
+
+    /**
      * Document modified
      */
     void slotDocumentModified(bool modified = true);

@@ -55,6 +55,9 @@
 #include "commands/edit/EventQuantizeCommand.h"
 #include "commands/edit/PasteSegmentsCommand.h"
 #include "commands/edit/TransposeCommand.h"
+#include "commands/edit/AddMarkerCommand.h"
+#include "commands/edit/ModifyMarkerCommand.h"
+#include "commands/edit/RemoveMarkerCommand.h"
 #include "commands/notation/KeyInsertionCommand.h"
 #include "commands/segment/AddTempoChangeCommand.h"
 #include "commands/segment/AddTimeSignatureAndNormalizeCommand.h"
@@ -1078,6 +1081,23 @@ void RosegardenGUIApp::setupActions()
     new KAction(i18n("&Reset MIDI Network"), 0, this,
                 SLOT(slotResetMidiNetwork()),
                 actionCollection(), "reset_midi_network");
+
+    //
+    // Marker Ruler popup menu
+    //
+//    new KAction(i18n("Insert Marker"), 0, 0, this,
+//             SLOT(slotInsertMarkerHere()), actionCollection(),
+//             "insert_marker_here");
+//    
+//    new KAction(i18n("Insert Marker at Playback Position"), 0, 0, this,
+//             SLOT(slotInsertMarkerAtPointer()), actionCollection(),
+//             "insert_marker_at_pointer");
+//
+//    new KAction(i18n("Delete Marker"), 0, 0, this,
+//             SLOT(slotDeleteMarker()), actionCollection(),
+//             "delete_marker");
+
+
 
     //
     // Transport menu
@@ -5773,6 +5793,31 @@ RosegardenGUIApp::slotDeleteTempo(timeT t)
     m_doc->getCommandHistory()->addCommand(new RemoveTempoChangeCommand
                                            (&comp, index));
 }
+
+void
+RosegardenGUIApp::slotAddMarker(timeT time)
+{
+    AddMarkerCommand *command =
+        new AddMarkerCommand(&m_doc->getComposition(),
+                             time,
+                             std::string("new marker"),
+                             std::string("no description"));
+
+    m_doc->getCommandHistory()->addCommand(command);    
+}
+
+void
+RosegardenGUIApp::slotDeleteMarker(timeT time, QString name, QString description)
+{
+    RemoveMarkerCommand *command =
+        new RemoveMarkerCommand(&m_doc->getComposition(),
+                                time,
+                                qstrtostr(name),
+                                qstrtostr(description));
+
+    m_doc->getCommandHistory()->addCommand(command);
+}
+
 
 void
 RosegardenGUIApp::slotDocumentModified(bool m)

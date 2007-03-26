@@ -52,13 +52,13 @@ class TempoDialog : public KDialogBase
 {
     Q_OBJECT
 public:
-    typedef enum{
+    enum TempoDialogAction {
         AddTempo,
         ReplaceTempo,
         AddTempoAtBarStart,
         GlobalTempo,
         GlobalTempoWithDefault
-    } TempoDialogAction;
+    };
 
     TempoDialog(QWidget *parent, RosegardenGUIDoc *doc,
                 bool timeEditable = false);
