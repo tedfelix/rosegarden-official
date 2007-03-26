@@ -78,7 +78,7 @@ signals:
     /// add a marker
     void addMarker(timeT);
     
-    void deleteMaker(timeT, QString name, QString description);
+    void deleteMarker(timeT, QString name, QString description);
      
     /// Set a loop range
     void setLoop(timeT, timeT);
@@ -95,6 +95,7 @@ protected:
 
     void createMenu();
     timeT getClickPosition();
+    Rosegarden::Marker* getMarkerAtClickPosition();
     
     //--------------- Data members ---------------------------------
     int m_barHeight;
