@@ -1064,21 +1064,15 @@ TempoRuler::slotEditTempos()
 void
 TempoRuler::createMenu()
 {
-    KXMLGUIFactory* factory = m_parentMainWindow->factory();
+    setXMLFile("temporuler.rc");
     
-    // check if menu isn't already created             
+    KXMLGUIFactory* factory = m_parentMainWindow->factory();
+    factory->addClient(this);
+
     QWidget* tmp = factory->container("tempo_ruler_menu", this);
 
-    if (!tmp) {
-        setXMLFile("temporuler.rc");
-        factory->removeClient(this);        
-        factory->addClient(this);
-    
-        tmp = factory->container("tempo_ruler_menu", this);
-    }
-    
     m_menu = dynamic_cast<QPopupMenu*>(tmp);
-    
+        
     if (!m_menu) {
         RG_DEBUG << "MarkerRuler::createMenu() failed\n";
     }

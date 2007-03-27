@@ -89,6 +89,11 @@ MarkerRuler::MarkerRuler(RosegardenGUIDoc *doc,
 MarkerRuler::~MarkerRuler()
 {
     delete m_barFont;
+    // we have to do this so that the menu is re-created properly
+    // when the main window is itself recreated (on a File->New for instance)
+    KXMLGUIFactory* factory = m_parentMainWindow->factory();
+    if (factory)
+        factory->removeClient(this);
 }
 
 void
