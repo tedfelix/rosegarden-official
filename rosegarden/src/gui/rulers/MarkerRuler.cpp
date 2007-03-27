@@ -34,6 +34,7 @@
 #include "gui/general/HZoomable.h"
 #include <kxmlguifactory.h>
 #include <qbrush.h>
+#include <qcursor.h>
 #include <qfont.h>
 #include <qfontmetrics.h>
 #include <qpainter.h>
@@ -44,6 +45,8 @@
 #include <qsize.h>
 #include <qstring.h>
 #include <qwidget.h>
+#include <klocale.h>
+#include <kaction.h>
 
 
 namespace Rosegarden
