@@ -161,6 +161,15 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
     setMouseTracking(false);
 }
 
+TempoRuler::~TempoRuler()
+{
+    // we have to do this so that the menu is re-created properly
+    // when the main window is itself recreated (on a File->New for instance)
+    KXMLGUIFactory* factory = m_parentMainWindow->factory();
+    if (factory)
+        factory->removeClient(this);
+}
+
 void
 TempoRuler::connectSignals()
 {
@@ -1054,14 +1063,20 @@ TempoRuler::slotEditTempos()
 
 void
 TempoRuler::createMenu()
-{             
-    setXMLFile("temporuler.rc");
-    
+{
     KXMLGUIFactory* factory = m_parentMainWindow->factory();
-    factory->addClient(this);
-
+    
+    // check if menu isn't already created             
     QWidget* tmp = factory->container("tempo_ruler_menu", this);
 
+    if (!tmp) {
+        setXMLFile("temporuler.rc");
+        factory->removeClient(this);        
+        factory->addClient(this);
+    
+        tmp = factory->container("tempo_ruler_menu", this);
+    }
+    
     m_menu = dynamic_cast<QPopupMenu*>(tmp);
     
     if (!m_menu) {

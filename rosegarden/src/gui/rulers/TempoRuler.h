@@ -79,6 +79,8 @@ public:
                QWidget* parent = 0,
                const char *name = 0);
 
+    ~TempoRuler();
+    
     virtual QSize sizeHint() const;
     virtual QSize minimumSizeHint() const;
 
