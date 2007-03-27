@@ -66,7 +66,7 @@ namespace Rosegarden
 
 TempoRuler::TempoRuler(RulerScale *rulerScale,
                        RosegardenGUIDoc *doc,
-                       KXMLGUIFactory *factory,
+                       KMainWindow *parentMainWindow,
                        double xorigin,
                        int height,
                        bool small,
@@ -96,7 +96,7 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
         m_composition(&doc->getComposition()),
         m_rulerScale(rulerScale),
         m_menu(0),
-        m_factory(0),
+        m_parentMainWindow(parentMainWindow),
         m_fontMetrics(m_boldFont)
 {
     //    m_font.setPointSize(m_small ? 9 : 11);
@@ -120,57 +120,45 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
     (doc->getCommandHistory(), SIGNAL(commandExecuted()),
      this, SLOT(update()));
 
-    m_menu = new QPopupMenu(this);
-
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
     QIconSet icon;
 
     icon = QIconSet(QPixmap(pixmapDir + "/toolbar/event-insert-tempo.png"));
-    (new KAction(i18n("Insert Tempo Change"), icon, 0, this,
+    new KAction(i18n("Insert Tempo Change"), icon, 0, this,
                  SLOT(slotInsertTempoHere()), actionCollection(),
-                 "insert_tempo_here"))->plug(m_menu);
+                 "insert_tempo_here");
 
-    (new KAction(i18n("Insert Tempo Change at Playback Position"), 0, 0, this,
+    new KAction(i18n("Insert Tempo Change at Playback Position"), 0, 0, this,
                  SLOT(slotInsertTempoAtPointer()), actionCollection(),
-                 "insert_tempo_at_pointer"))->plug(m_menu);
-
-    m_menu->insertSeparator();
+                 "insert_tempo_at_pointer");
 
     icon = QIconSet(QPixmap(pixmapDir + "/toolbar/event-delete.png"));
-    (new KAction(i18n("Delete Tempo Change"), icon, 0, this,
+    new KAction(i18n("Delete Tempo Change"), icon, 0, this,
                  SLOT(slotDeleteTempoChange()), actionCollection(),
-                 "delete_tempo"))->plug(m_menu);
+                 "delete_tempo");
 
-    m_menu->insertSeparator();
-
-    (new KAction(i18n("Ramp Tempo to Next Tempo"), 0, 0, this,
+    new KAction(i18n("Ramp Tempo to Next Tempo"), 0, 0, this,
                  SLOT(slotRampToNext()), actionCollection(),
-                 "ramp_to_next"))->plug(m_menu);
+                 "ramp_to_next");
 
-    (new KAction(i18n("Un-Ramp Tempo"), 0, 0, this,
+    new KAction(i18n("Un-Ramp Tempo"), 0, 0, this,
                  SLOT(slotUnramp()), actionCollection(),
-                 "unramp"))->plug(m_menu);
-
-    m_menu->insertSeparator();
+                 "unramp");
 
     icon = QIconSet(QPixmap(pixmapDir + "/toolbar/event-edit.png"));
-    (new KAction(i18n("Edit Tempo..."), icon, 0, this,
+    new KAction(i18n("Edit Tempo..."), icon, 0, this,
                  SLOT(slotEditTempo()), actionCollection(),
-                 "edit_tempo"))->plug(m_menu);
+                 "edit_tempo");
 
-    (new KAction(i18n("Edit Time Signature..."), 0, 0, this,
+    new KAction(i18n("Edit Time Signature..."), 0, 0, this,
                  SLOT(slotEditTimeSignature()), actionCollection(),
-                 "edit_time_signature"))->plug(m_menu);
+                 "edit_time_signature");
 
-    (new KAction(i18n("Open Tempo and Time Signature Editor"), 0, 0, this,
+    new KAction(i18n("Open Tempo and Time Signature Editor"), 0, 0, this,
                  SLOT(slotEditTempos()), actionCollection(),
-                 "edit_tempos"))->plug(m_menu);
+                 "edit_tempos");
 
     setMouseTracking(false);
-}
-
-TempoRuler::~TempoRuler()
-{
 }
 
 void
@@ -294,6 +282,8 @@ TempoRuler::mousePressEvent(QMouseEvent *e)
     } else if (e->button() == RightButton) {
 
         m_clickX = e->x();
+        if (!m_menu)
+            createMenu();
         if (m_menu)
             m_menu->exec(QCursor::pos());
 
@@ -1061,6 +1051,24 @@ TempoRuler::slotEditTempos()
     timeT t = m_rulerScale->getTimeForX(m_clickX - m_currentXOffset - m_xorigin);
     emit editTempos(t);
 }
+
+void
+TempoRuler::createMenu()
+{             
+    setXMLFile("temporuler.rc");
+    
+    KXMLGUIFactory* factory = m_parentMainWindow->factory();
+    factory->addClient(this);
+
+    QWidget* tmp = factory->container("tempo_ruler_menu", this);
+
+    m_menu = dynamic_cast<QPopupMenu*>(tmp);
+    
+    if (!m_menu) {
+        RG_DEBUG << "MarkerRuler::createMenu() failed\n";
+    }
+}
+
 
 }
 #include "TempoRuler.moc"

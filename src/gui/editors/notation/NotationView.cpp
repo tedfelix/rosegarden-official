@@ -453,7 +453,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
         m_chordNameRuler->show();
 
     m_tempoRuler = new TempoRuler
-                   (m_hlayout, doc, factory(), m_leftGutter, 24, false, getCentralWidget());
+                   (m_hlayout, doc, this, m_leftGutter, 24, false, getCentralWidget());
     addRuler(m_tempoRuler);
     m_tempoRuler->hide();
     static_cast<TempoRuler *>(m_tempoRuler)->connectSignals();

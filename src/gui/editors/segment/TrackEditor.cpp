@@ -134,7 +134,7 @@ TrackEditor::init(QWidget* rosegardenguiview)
 
     m_tempoRuler = new TempoRuler(m_rulerScale,
                                   m_doc,
-                                  RosegardenGUIApp::self()->factory(),
+                                  RosegardenGUIApp::self(),
                                   0.0,
                                   24,
                                   true,

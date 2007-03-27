@@ -503,7 +503,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     addRuler(m_chordNameRuler);
 
     m_tempoRuler = new TempoRuler
-                   (&m_hlayout, doc, factory(), 0, 24, false, getCentralWidget());
+                   (&m_hlayout, doc, this, 0, 24, false, getCentralWidget());
     static_cast<TempoRuler *>(m_tempoRuler)->connectSignals();
     addRuler(m_tempoRuler);
 

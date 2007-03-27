@@ -41,7 +41,7 @@ class QPopupMenu;
 class QPaintEvent;
 class QMouseEvent;
 class QEvent;
-class KXMLGUIFactory;
+class KMainWindow;
 
 
 namespace Rosegarden
@@ -72,14 +72,12 @@ public:
      */
     TempoRuler(RulerScale *rulerScale,
                RosegardenGUIDoc *doc,
-               KXMLGUIFactory *factory,
+               KMainWindow *parentMainWindow,
                double xorigin = 0.0,
                int height = 0,
                bool small = false,
                QWidget* parent = 0,
                const char *name = 0);
-
-    ~TempoRuler();
 
     virtual QSize sizeHint() const;
     virtual QSize minimumSizeHint() const;
@@ -127,6 +125,8 @@ protected:
     virtual void mouseMoveEvent(QMouseEvent *);
     virtual void wheelEvent(QWheelEvent *);
 
+    void createMenu();
+    
 private:
     double m_xorigin;
     int  m_height;
@@ -164,7 +164,7 @@ private:
     RulerScale *m_rulerScale;
     TextFloat *m_textFloat;
     QPopupMenu *m_menu;
-    KXMLGUIFactory *m_factory;
+    KMainWindow *m_parentMainWindow;
 
     QFont m_font;
     QFont m_boldFont;
