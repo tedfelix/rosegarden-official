@@ -240,8 +240,8 @@
       <holder>Chris Cannam, Richard Bown, Guillaume Laurent</holder>
     </copyright>
 
-    <date>2006-09-15</date>
-    <releaseinfo>1.3.0</releaseinfo>
+    <date>2007-03-15</date>
+    <releaseinfo>1.5.1</releaseinfo>
 
     <abstract>
       <para>
@@ -7796,7 +7796,13 @@ Changing the Time Signature
       <para>
         <itemizedlist>
 	  <listitem><para>
-              1.3 &ndash; September 2006: LilyPond export vastly improved,
+	      1.5.1 &ndash; March 2007: bug fixes
+	  </para></listitem>
+	  <listitem><para>
+	      1.5 &ndash; February 2007: audio timestretching and input format conversion, matrix usability improvements, tempo tapping, context help, some features, code reorganisation and new build system (again)
+	  </para></listitem>
+	  <listitem><para>
+              1.4 &ndash; September 2006: LilyPond export vastly improved,
 	      exportable LilyPond directives, cut/copy/paste by ranges that
 	      include tempo and time data, tempo entry and manipulation vastly
 	      improved, multi-track MIDI recording, MIDI recording filters,
