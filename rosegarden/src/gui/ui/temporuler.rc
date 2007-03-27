@@ -1,0 +1,19 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+
+<kpartgui name="Rosegarden::MarkerRuler" version="1230">
+
+<Menu name="tempo_ruler_menu">
+	<Action name="insert_tempo_here" />
+	<Action name="insert_tempo_at_pointer" />
+	<Separator/>
+	<Action name="delete_tempo" />
+	<Separator/>
+	<Action name="ramp_to_next" />
+	<Action name="unramp" />
+	<Separator/>
+	<Action name="edit_tempo" />
+	<Action name="edit_time_signature" />
+	<Action name="edit_tempos" />	
+</Menu>
+
+</kpartgui>
