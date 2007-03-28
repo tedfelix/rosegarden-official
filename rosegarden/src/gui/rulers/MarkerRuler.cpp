@@ -32,7 +32,7 @@
 #include "document/RosegardenGUIDoc.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/HZoomable.h"
-#include "gui/editors/segment/MarkerModifyDialog.h"
+#include "gui/dialogs/MarkerModifyDialog.h"
 #include "commands/edit/ModifyMarkerCommand.h"
 #include "document/MultiViewCommandHistory.h"
 #include <kxmlguifactory.h>

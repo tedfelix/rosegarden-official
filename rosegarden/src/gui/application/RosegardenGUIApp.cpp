@@ -122,7 +122,7 @@
 #include "gui/editors/parameters/TrackParameterBox.h"
 #include "gui/editors/segment/CompositionView.h"
 #include "gui/editors/segment/ControlEditorDialog.h"
-#include "gui/editors/segment/MarkerEditorDialog.h"
+#include "gui/editors/segment/MarkerEditor.h"
 #include "gui/editors/segment/PlayListDialog.h"
 #include "gui/editors/segment/PlayList.h"
 #include "gui/editors/segment/SegmentEraser.h"
@@ -6731,7 +6731,7 @@ RosegardenGUIApp::slotEditMarkers()
         return ;
     }
 
-    m_markerEditor = new MarkerEditorDialog(this, m_doc);
+    m_markerEditor = new MarkerEditor(this, m_doc);
 
     connect(m_markerEditor, SIGNAL(closing()),
             SLOT(slotMarkerEditorClosed()));
