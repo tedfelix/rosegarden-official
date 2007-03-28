@@ -604,7 +604,7 @@ void MatrixView::readOptions()
     getToggleAction("show_chords_ruler")->setChecked(opt);
     slotToggleChordsRuler();
 
-    opt = m_config->readBoolEntry("Show Tempo Ruler", false);
+    opt = m_config->readBoolEntry("Show Tempo Ruler", true);
     getToggleAction("show_tempo_ruler")->setChecked(opt);
     slotToggleTempoRuler();
 
