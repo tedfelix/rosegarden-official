@@ -431,6 +431,8 @@ SET(gui_SRCS
 	gui/dialogs/MakeOrnamentDialog.h
 	gui/dialogs/ManageMetronomeDialog.cpp
 	gui/dialogs/ManageMetronomeDialog.h
+	gui/dialogs/MarkerModifyDialog.cpp
+	gui/dialogs/MarkerModifyDialog.h
 	gui/dialogs/PasteNotationDialog.cpp
 	gui/dialogs/PasteNotationDialog.h
 	gui/dialogs/PitchDialog.cpp
@@ -640,12 +642,10 @@ SET(gui_SRCS
 	gui/editors/segment/ControlParameterEditDialog.h
 	gui/editors/segment/ControlParameterItem.cpp
 	gui/editors/segment/ControlParameterItem.h
-	gui/editors/segment/MarkerEditorDialog.cpp
-	gui/editors/segment/MarkerEditorDialog.h
+	gui/editors/segment/MarkerEditor.cpp
+	gui/editors/segment/MarkerEditor.h
 	gui/editors/segment/MarkerEditorViewItem.cpp
 	gui/editors/segment/MarkerEditorViewItem.h
-	gui/editors/segment/MarkerModifyDialog.cpp
-	gui/editors/segment/MarkerModifyDialog.h
 	gui/editors/segment/PlayList.cpp
 	gui/editors/segment/PlayListDialog.cpp
 	gui/editors/segment/PlayListDialog.h

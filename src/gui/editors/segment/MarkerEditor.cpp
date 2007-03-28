@@ -23,7 +23,7 @@
 */
 
 
-#include "MarkerEditorDialog.h"
+#include "MarkerEditor.h"
 #include "MarkerEditorViewItem.h"
 #include <qlayout.h>
 #include <kapplication.h>
@@ -43,7 +43,7 @@
 #include "document/MultiViewCommandHistory.h"
 #include "document/RosegardenGUIDoc.h"
 #include "document/ConfigGroups.h"
-#include "MarkerModifyDialog.h"
+#include "gui/dialogs/MarkerModifyDialog.h"
 #include <kaction.h>
 #include <kcommand.h>
 #include <kglobal.h>
@@ -71,7 +71,7 @@
 namespace Rosegarden
 {
 
-MarkerEditorDialog::MarkerEditorDialog(QWidget *parent,
+MarkerEditor::MarkerEditor(QWidget *parent,
                                        RosegardenGUIDoc *doc):
         KMainWindow(parent, "markereditordialog"),
         m_doc(doc),
@@ -179,7 +179,7 @@ MarkerEditorDialog::MarkerEditorDialog(QWidget *parent,
 }
 
 void
-MarkerEditorDialog::updatePosition()
+MarkerEditor::updatePosition()
 {
     timeT pos = m_doc->getComposition().getPosition();
     m_absoluteTime->setText(QString("%1").arg(pos));
@@ -221,9 +221,9 @@ MarkerEditorDialog::updatePosition()
         */
 }
 
-MarkerEditorDialog::~MarkerEditorDialog()
+MarkerEditor::~MarkerEditor()
 {
-    RG_DEBUG << "MarkerEditorDialog::~MarkerEditorDialog" << endl;
+    RG_DEBUG << "MarkerEditor::~MarkerEditor" << endl;
 
     m_listView->saveLayout(kapp->config(), MarkerEditorConfigGroup);
 
@@ -232,16 +232,16 @@ MarkerEditorDialog::~MarkerEditorDialog()
 }
 
 void
-MarkerEditorDialog::initDialog()
+MarkerEditor::initDialog()
 {
-    RG_DEBUG << "MarkerEditorDialog::initDialog" << endl;
+    RG_DEBUG << "MarkerEditor::initDialog" << endl;
     slotUpdate();
 }
 
 void
-MarkerEditorDialog::slotUpdate()
+MarkerEditor::slotUpdate()
 {
-    RG_DEBUG << "MarkerEditorDialog::slotUpdate" << endl;
+    RG_DEBUG << "MarkerEditor::slotUpdate" << endl;
 
     //QPtrList<QListViewItem> selection = m_listView->selectedItems();
 
@@ -266,7 +266,7 @@ MarkerEditorDialog::slotUpdate()
                                     strtoqstr((*it)->getName()),
                                     strtoqstr((*it)->getDescription()));
 
-        // Set this for the MarkerEditorDialog
+        // Set this for the MarkerEditor
         //
         item->setRawTime((*it)->getTime());
 
@@ -289,9 +289,9 @@ MarkerEditorDialog::slotUpdate()
 }
 
 void
-MarkerEditorDialog::slotDeleteAll()
+MarkerEditor::slotDeleteAll()
 {
-    RG_DEBUG << "MarkerEditorDialog::slotDeleteAll" << endl;
+    RG_DEBUG << "MarkerEditor::slotDeleteAll" << endl;
     KMacroCommand *command = new KMacroCommand(i18n("Remove all markers"));
 
     QListViewItem *item = m_listView->firstChild();
@@ -314,9 +314,9 @@ MarkerEditorDialog::slotDeleteAll()
 }
 
 void
-MarkerEditorDialog::slotAdd()
+MarkerEditor::slotAdd()
 {
-    RG_DEBUG << "MarkerEditorDialog::slotAdd" << endl;
+    RG_DEBUG << "MarkerEditor::slotAdd" << endl;
 
     AddMarkerCommand *command =
         new AddMarkerCommand(&m_doc->getComposition(),
@@ -328,9 +328,9 @@ MarkerEditorDialog::slotAdd()
 }
 
 void
-MarkerEditorDialog::slotDelete()
+MarkerEditor::slotDelete()
 {
-    RG_DEBUG << "MarkerEditorDialog::slotDelete" << endl;
+    RG_DEBUG << "MarkerEditor::slotDelete" << endl;
     QListViewItem *item = m_listView->currentItem();
 
     MarkerEditorViewItem *ei =
@@ -350,9 +350,9 @@ MarkerEditorDialog::slotDelete()
 }
 
 void
-MarkerEditorDialog::slotClose()
+MarkerEditor::slotClose()
 {
-    RG_DEBUG << "MarkerEditorDialog::slotClose" << endl;
+    RG_DEBUG << "MarkerEditor::slotClose" << endl;
 
     if (m_doc)
         m_doc->getCommandHistory()->detachView(actionCollection());
@@ -362,7 +362,7 @@ MarkerEditorDialog::slotClose()
 }
 
 void
-MarkerEditorDialog::setupActions()
+MarkerEditor::setupActions()
 {
     KAction* close = KStdAction::close(this,
                                        SLOT(slotClose()),
@@ -424,22 +424,22 @@ MarkerEditorDialog::setupActions()
 }
 
 void
-MarkerEditorDialog::addCommandToHistory(KCommand *command)
+MarkerEditor::addCommandToHistory(KCommand *command)
 {
     getCommandHistory()->addCommand(command);
     setModified(false);
 }
 
 MultiViewCommandHistory*
-MarkerEditorDialog::getCommandHistory()
+MarkerEditor::getCommandHistory()
 {
     return m_doc->getCommandHistory();
 }
 
 void
-MarkerEditorDialog::setModified(bool modified)
+MarkerEditor::setModified(bool modified)
 {
-    RG_DEBUG << "MarkerEditorDialog::setModified(" << modified << ")" << endl;
+    RG_DEBUG << "MarkerEditor::setModified(" << modified << ")" << endl;
 
     if (modified) {}
     else {}
@@ -448,17 +448,17 @@ MarkerEditorDialog::setModified(bool modified)
 }
 
 void
-MarkerEditorDialog::checkModified()
+MarkerEditor::checkModified()
 {
-    RG_DEBUG << "MarkerEditorDialog::checkModified(" << m_modified << ")"
+    RG_DEBUG << "MarkerEditor::checkModified(" << m_modified << ")"
     << endl;
 
 }
 
 void
-MarkerEditorDialog::slotEdit(QListViewItem *i)
+MarkerEditor::slotEdit(QListViewItem *i)
 {
-    RG_DEBUG << "MarkerEditorDialog::slotEdit" << endl;
+    RG_DEBUG << "MarkerEditor::slotEdit" << endl;
 
     if (m_listView->selectionMode() == QListView::NoSelection) {
         // The marker list is empty, so we shouldn't allow editing the
@@ -495,14 +495,14 @@ MarkerEditorDialog::slotEdit(QListViewItem *i)
 }
 
 void
-MarkerEditorDialog::closeEvent(QCloseEvent *e)
+MarkerEditor::closeEvent(QCloseEvent *e)
 {
     emit closing();
     KMainWindow::closeEvent(e);
 }
 
 void
-MarkerEditorDialog::setDocument(RosegardenGUIDoc *doc)
+MarkerEditor::setDocument(RosegardenGUIDoc *doc)
 {
     // reset our pointers
     m_doc = doc;
@@ -512,14 +512,14 @@ MarkerEditorDialog::setDocument(RosegardenGUIDoc *doc)
 }
 
 void
-MarkerEditorDialog::slotItemClicked(QListViewItem *item)
+MarkerEditor::slotItemClicked(QListViewItem *item)
 {
-    RG_DEBUG << "MarkerEditorDialog::slotItemClicked" << endl;
+    RG_DEBUG << "MarkerEditor::slotItemClicked" << endl;
     MarkerEditorViewItem *ei =
         dynamic_cast<MarkerEditorViewItem *>(item);
 
     if (ei && !ei->isFake()) {
-        RG_DEBUG << "MarkerEditorDialog::slotItemClicked - "
+        RG_DEBUG << "MarkerEditor::slotItemClicked - "
         << "jump to marker at " << ei->getRawTime() << endl;
 
         emit jumpToMarker(timeT(ei->getRawTime()));
@@ -527,7 +527,7 @@ MarkerEditorDialog::slotItemClicked(QListViewItem *item)
 }
 
 QString
-MarkerEditorDialog::makeTimeString(timeT time, int timeMode)
+MarkerEditor::makeTimeString(timeT time, int timeMode)
 {
     switch (timeMode) {
 
@@ -563,7 +563,7 @@ MarkerEditorDialog::makeTimeString(timeT time, int timeMode)
 }
 
 void
-MarkerEditorDialog::slotMusicalTime()
+MarkerEditor::slotMusicalTime()
 {
     kapp->config()->setGroup(MarkerEditorConfigGroup);
     kapp->config()->writeEntry("timemode", 0);
@@ -571,7 +571,7 @@ MarkerEditorDialog::slotMusicalTime()
 }
 
 void
-MarkerEditorDialog::slotRealTime()
+MarkerEditor::slotRealTime()
 {
     kapp->config()->setGroup(MarkerEditorConfigGroup);
     kapp->config()->writeEntry("timemode", 1);
@@ -579,7 +579,7 @@ MarkerEditorDialog::slotRealTime()
 }
 
 void
-MarkerEditorDialog::slotRawTime()
+MarkerEditor::slotRawTime()
 {
     kapp->config()->setGroup(MarkerEditorConfigGroup);
     kapp->config()->writeEntry("timemode", 2);
@@ -587,4 +587,4 @@ MarkerEditorDialog::slotRawTime()
 }
 
 }
-#include "MarkerEditorDialog.moc"
+#include "MarkerEditor.moc"

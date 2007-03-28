@@ -23,8 +23,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MARKEREDITORDIALOG_H_
-#define _RG_MARKEREDITORDIALOG_H_
+#ifndef _RG_MARKEREDITOR_H_
+#define _RG_MARKEREDITOR_H_
 
 #include <kmainwindow.h>
 #include <qstring.h>
@@ -48,14 +48,14 @@ class RosegardenGUIDoc;
 class MultiViewCommandHistory;
 
 
-class MarkerEditorDialog : public KMainWindow
+class MarkerEditor : public KMainWindow
 {
     Q_OBJECT
 
 public:
-    MarkerEditorDialog(QWidget *parent,
+    MarkerEditor(QWidget *parent,
                        RosegardenGUIDoc *doc);
-    ~MarkerEditorDialog();
+    ~MarkerEditor();
 
     void initDialog();
 

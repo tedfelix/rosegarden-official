@@ -76,7 +76,7 @@ class RealTime;
 class ProgressBar;
 class PlayListDialog;
 class MidiMixerWindow;
-class MarkerEditorDialog;
+class MarkerEditor;
 class MappedComposition;
 class LircCommander;
 class LircClient;
@@ -1620,7 +1620,7 @@ private:
     AudioMixerWindow      *m_audioMixer;
     MidiMixerWindow       *m_midiMixer;
     BankEditorDialog      *m_bankEditor;
-    MarkerEditorDialog    *m_markerEditor;
+    MarkerEditor          *m_markerEditor;
     TempoView             *m_tempoView;
     TriggerSegmentManager *m_triggerSegmentManager;
     std::set<ControlEditorDialog *> m_controlEditors;
