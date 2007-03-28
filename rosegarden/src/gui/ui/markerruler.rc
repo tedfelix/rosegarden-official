@@ -5,7 +5,10 @@
 <Menu name="marker_ruler_menu">
 	<Action name="insert_marker_here" />
 	<Action name="insert_marker_at_pointer" />
+	<Separator/>
 	<Action name="delete_marker" />
+	<Separator/>
+	<Action name="edit_marker" />
 </Menu>
 
 </kpartgui>

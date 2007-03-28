@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 
-<kpartgui name="Rosegarden::MarkerRuler" version="1230">
+<kpartgui name="Rosegarden::TempoRuler" version="1230">
 
 <Menu name="tempo_ruler_menu">
 	<Action name="insert_tempo_here" />

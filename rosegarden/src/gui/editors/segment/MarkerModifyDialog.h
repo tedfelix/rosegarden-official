@@ -30,6 +30,7 @@
 #include <qstring.h>
 #include <qlineedit.h>
 
+#include "base/Marker.h"
 #include "gui/widgets/TimeWidget.h"
 
 
@@ -51,12 +52,21 @@ public:
                        const QString &name,
                        const QString &des);
 
+    MarkerModifyDialog(QWidget *parent,
+                       Composition *composition,
+                       Marker *marker);
+
     QString getName() const { return m_nameEdit->text(); }
     QString getDescription() const { return m_desEdit->text(); }
     int getTime() const { return m_timeEdit->getTime(); }
     int getOriginalTime() const { return m_originalTime; }
 
 protected:
+    void initialise(Composition *composition,
+                    int time,
+                    const QString &name,
+                    const QString &des);
+
     RosegardenGUIDoc             *m_doc;
 
     TimeWidget         *m_timeEdit;

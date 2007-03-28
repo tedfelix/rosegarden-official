@@ -35,6 +35,8 @@
 #include <qrect.h>
 #include <qsize.h>
 #include <qwidget.h>
+#include <qtooltip.h>
+#include <klocale.h>
 
 
 namespace Rosegarden
@@ -64,6 +66,8 @@ LoopRuler::LoopRuler(RulerScale *rulerScale,
     //
     m_grid.setSnapTime(SnapGrid::SnapToBeat);
 
+    QToolTip::add
+        (this, i18n("Click and drag to move the playback pointer.\nShift-click and drag to set a range for looping or editing.\nShift-click to clear the loop or range.\nDouble-click to start playback."));
 }
 
 LoopRuler::~LoopRuler()
