@@ -80,7 +80,7 @@ signals:
     void addMarker(timeT);
     
     void deleteMarker(timeT, QString name, QString description);
-     
+
     /// Set a loop range
     void setLoop(timeT, timeT);
 
@@ -88,6 +88,7 @@ protected slots:
     void slotInsertMarkerHere();
     void slotInsertMarkerAtPointer();
     void slotDeleteMarker();
+    void slotEditMarker();
     
 protected:
     virtual void paintEvent(QPaintEvent*);

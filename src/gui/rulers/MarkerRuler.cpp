@@ -32,6 +32,9 @@
 #include "document/RosegardenGUIDoc.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/HZoomable.h"
+#include "gui/editors/segment/MarkerModifyDialog.h"
+#include "commands/edit/ModifyMarkerCommand.h"
+#include "document/MultiViewCommandHistory.h"
 #include <kxmlguifactory.h>
 #include <qbrush.h>
 #include <qcursor.h>
@@ -47,6 +50,8 @@
 #include <qwidget.h>
 #include <klocale.h>
 #include <kaction.h>
+#include <kstddirs.h>
+#include <qtooltip.h>
 
 
 namespace Rosegarden
@@ -70,12 +75,29 @@ MarkerRuler::MarkerRuler(RosegardenGUIDoc *doc,
         m_rulerScale(rulerScale),
         m_parentMainWindow(dynamic_cast<KMainWindow*>(doc->parent()))
 {
+    // If the parent window has a main window above it, we need to use
+    // that as the parent main window, not the document's parent.
+    // Otherwise we'll end up adding all actions to the same
+    // (document-level) action collection regardless of which window
+    // we're in.
+    QObject *probe = parent;
+    while (probe && !dynamic_cast<KMainWindow *>(probe)) probe = probe->parent();
+    if (probe) m_parentMainWindow = dynamic_cast<KMainWindow *>(probe);
+
     //    m_barFont = new QFont("helvetica", 12);
     //    m_barFont->setPixelSize(12);
     m_barFont = new QFont();
     m_barFont->setPointSize(10);
 
-    new KAction(i18n("Insert Marker"), 0, this,
+    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+    QIconSet icon;
+
+    // Use the event insert, delete, edit icons because they are
+    // actually generic enough to serve for anything.  Let's hope they
+    // don't become more event-specific in future...
+
+    icon = QIconSet(QPixmap(pixmapDir + "/toolbar/event-insert.png"));
+    new KAction(i18n("Insert Marker"), icon, 0, this,
              SLOT(slotInsertMarkerHere()), actionCollection(),
              "insert_marker_here");
     
@@ -83,10 +105,18 @@ MarkerRuler::MarkerRuler(RosegardenGUIDoc *doc,
              SLOT(slotInsertMarkerAtPointer()), actionCollection(),
              "insert_marker_at_pointer");
 
-    new KAction(i18n("Delete Marker"), 0, this,
+    icon = QIconSet(QPixmap(pixmapDir + "/toolbar/event-delete.png"));
+    new KAction(i18n("Delete Marker"), icon, 0, this,
              SLOT(slotDeleteMarker()), actionCollection(),
              "delete_marker");
     
+    icon = QIconSet(QPixmap(pixmapDir + "/toolbar/event-edit.png"));
+    new KAction(i18n("Edit Marker..."), icon, 0, this,
+                 SLOT(slotEditMarker()), actionCollection(),
+                 "edit_marker");
+
+    QToolTip::add
+        (this, i18n("Click on a marker to move the playback pointer.\nShift-click to set a range between markers.\nDouble-click to open the marker editor."));
 }
 
 MarkerRuler::~MarkerRuler()
@@ -172,6 +202,32 @@ MarkerRuler::slotDeleteMarker()
         emit deleteMarker(marker->getTime(),
                           marker->getName(),
                           marker->getDescription());                          
+}
+
+void
+MarkerRuler::slotEditMarker()
+{
+    Rosegarden::Marker* marker = getMarkerAtClickPosition();
+
+    if (!marker) return;
+
+    // I think the ruler should be doing all this stuff itself, or
+    // emitting signals connected to a dedicated marker model object,
+    // not just relying on the app object.  Same goes for practically
+    // everything else we do.  Hey ho.  Having this hereis
+    // inconsistent with the other methods, so if anyone wants to move
+    // it, be my guest.
+
+    MarkerModifyDialog dialog(this, &m_doc->getComposition(), marker);
+    if (dialog.exec() == QDialog::Accepted) {
+        ModifyMarkerCommand *command =
+            new ModifyMarkerCommand(&m_doc->getComposition(),
+                                    dialog.getOriginalTime(),
+                                    dialog.getTime(),
+                                    qstrtostr(dialog.getName()),
+                                    qstrtostr(dialog.getDescription()));
+        m_doc->getCommandHistory()->addCommand(command);
+    }
 }
 
 timeT
@@ -379,6 +435,7 @@ MarkerRuler::mousePressEvent(QMouseEvent *e)
             createMenu();
         if (m_menu) {
             actionCollection()->action("delete_marker")->setEnabled(clickedMarker != 0);
+            actionCollection()->action("edit_marker")->setEnabled(clickedMarker != 0);
             m_menu->exec(QCursor::pos());
         }
         return;       

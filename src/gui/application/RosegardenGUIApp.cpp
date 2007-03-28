@@ -5818,7 +5818,6 @@ RosegardenGUIApp::slotDeleteMarker(timeT time, QString name, QString description
     m_doc->getCommandHistory()->addCommand(command);
 }
 
-
 void
 RosegardenGUIApp::slotDocumentModified(bool m)
 {

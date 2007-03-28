@@ -39,6 +39,7 @@
 #include <qstring.h>
 #include <qvbox.h>
 #include <qwidget.h>
+#include "misc/Strings.h"
 
 
 namespace Rosegarden
@@ -49,9 +50,29 @@ MarkerModifyDialog::MarkerModifyDialog(QWidget *parent,
                                        int time,
                                        const QString &name,
                                        const QString &des):
-        KDialogBase(parent, 0, true, i18n("Edit Marker"), Ok | Cancel),
-        m_originalTime(time)
+    KDialogBase(parent, 0, true, i18n("Edit Marker"), Ok | Cancel)
 {
+    initialise(composition, time, name, des);
+}
+
+MarkerModifyDialog::MarkerModifyDialog(QWidget *parent,
+                                       Composition *composition,
+                                       Marker *marker) :
+    KDialogBase(parent, 0, true, i18n("Edit Marker"), Ok | Cancel)
+{
+    initialise(composition, marker->getTime(),
+               strtoqstr(marker->getName()),
+               strtoqstr(marker->getDescription()));
+}
+
+void
+MarkerModifyDialog::initialise(Composition *composition,
+                               int time,
+                               const QString &name,
+                               const QString &des)
+{
+    m_originalTime = time;
+
     QVBox *vbox = makeVBoxMainWidget();
 
     m_timeEdit = new TimeWidget(i18n("Marker Time"), vbox, composition,
@@ -83,6 +104,9 @@ MarkerModifyDialog::MarkerModifyDialog(QWidget *parent,
     layout->addWidget(new QLabel(i18n("Description:"), frame), 1, 0);
     m_desEdit = new QLineEdit(des, frame);
     layout->addWidget(m_desEdit, 1, 1);
+
+    m_nameEdit->selectAll();
+    m_nameEdit->setFocus();
 }
 
 }
