@@ -579,9 +579,9 @@ LADSPAPluginFactory::discoverPlugins()
     }
     std::cerr << std::endl;
 
-    std::cerr << "LADSPAPluginFactory::discoverPlugins - "
-    	      << "trace is ";
-    std::cerr << kdBacktrace() << std::endl;
+//    std::cerr << "LADSPAPluginFactory::discoverPlugins - "
+//    	      << "trace is ";
+//    std::cerr << kdBacktrace() << std::endl;
 
 #ifdef HAVE_LIBLRDF
     // Initialise liblrdf and read the description files

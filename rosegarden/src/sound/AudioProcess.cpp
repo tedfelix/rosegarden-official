@@ -1155,6 +1155,36 @@ AudioInstrumentMixer::configurePlugin(InstrumentId id, int position, QString key
 }
 
 void
+AudioInstrumentMixer::discardPluginEvents()
+{
+    getLock();
+    if (m_bussMixer) m_bussMixer->getLock();
+
+    for (SynthPluginMap::iterator j = m_synths.begin();
+            j != m_synths.end(); ++j) {
+
+        RunnablePluginInstance *instance = j->second;
+        if (instance) instance->discardEvents();
+    }
+
+    for (PluginMap::iterator j = m_plugins.begin();
+            j != m_plugins.end(); ++j) {
+
+        InstrumentId id = j->first;
+
+        for (PluginList::iterator i = m_plugins[id].begin();
+	     i != m_plugins[id].end(); ++i) {
+
+            RunnablePluginInstance *instance = *i;
+	    if (instance) instance->discardEvents();
+        }
+    }
+
+    if (m_bussMixer) m_bussMixer->releaseLock();
+    releaseLock();
+}
+
+void
 AudioInstrumentMixer::resetAllPlugins(bool discardEvents)
 {
     // Not RT safe
@@ -1164,6 +1194,7 @@ AudioInstrumentMixer::resetAllPlugins(bool discardEvents)
 
 #ifdef DEBUG_MIXER
     std::cerr << "AudioInstrumentMixer::resetAllPlugins!" << std::endl;
+    if (discardEvents) std::cerr << "(discardEvents true)" << std::endl;
 #endif
 
     getLock();
