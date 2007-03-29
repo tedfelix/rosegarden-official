@@ -1754,8 +1754,6 @@ JackDriver::stopTransport()
     std::cerr << "\nJackDriver::stop: frames this play: " << framesThisPlay << ", elapsed " << (endTime - startTime) << std::endl;
 #endif
 
-    //!!!    flushAudio();
-
     if (m_jackTransportEnabled) {
 
         // Where did this request come from?  Is this a result of our
@@ -1954,28 +1952,6 @@ JackDriver::prebufferAudio()
         m_bussMixer->fillBuffers(sliceStart); // also calls on m_instrumentMixer
     } else {
         m_instrumentMixer->fillBuffers(sliceStart);
-    }
-}
-
-void
-JackDriver::flushAudio()
-{
-    if (!m_instrumentMixer)
-        return ;
-
-#ifdef DEBUG_JACK_DRIVER
-
-    std::cerr << "JackDriver::flushAudio" << std::endl;
-#endif
-
-    // to get async synth events agogo:
-
-    m_fileReader->fillBuffers(RealTime::zeroTime);
-
-    if (m_bussMixer->getBussCount() > 0) {
-        m_bussMixer->fillBuffers(RealTime::zeroTime);
-    } else {
-        m_instrumentMixer->fillBuffers(RealTime::zeroTime);
     }
 }
 
@@ -2447,6 +2423,18 @@ JackDriver::getSynthPlugin(InstrumentId id)
         return m_instrumentMixer->getSynthPlugin(id);
     else
         return 0;
+}
+
+void
+JackDriver::clearSynthPluginEvents()
+{
+    if (!m_instrumentMixer) return;
+
+#ifdef DEBUG_JACK_DRIVER
+    std::cerr << "JackDriver::clearSynthPluginEvents" << std::endl;
+#endif
+
+    m_instrumentMixer->discardPluginEvents();
 }
 
 bool

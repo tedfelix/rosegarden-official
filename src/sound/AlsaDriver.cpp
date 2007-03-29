@@ -52,6 +52,7 @@
 
 //#define DEBUG_ALSA 1
 //#define DEBUG_PROCESS_MIDI_OUT 1
+//#define DEBUG_PROCESS_SOFT_SYNTH_OUT 1
 //#define MTC_DEBUG 1
 
 // This driver implements MIDI in and out via the ALSA (www.alsa-project.org)
@@ -1931,7 +1932,6 @@ AlsaDriver::stopPlayback()
     m_playing = false;
 
 #ifdef HAVE_LIBJACK
-
     if (m_jackDriver) {
         m_jackDriver->stopTransport();
         m_needJackStart = NeedNoJackStart;
@@ -2063,6 +2063,8 @@ AlsaDriver::resetPlayback(const RealTime &oldPosition, const RealTime &position)
         sendMMC(127, MIDI_MMC_LOCATE, true, std::string((const char *) locateDataArr, 7));
     }
 
+    RealTime formerStartPosition = m_playStartPosition;
+
     m_playStartPosition = position;
     m_alsaPlayStartTime = getAlsaTime();
 
@@ -2075,12 +2077,27 @@ AlsaDriver::resetPlayback(const RealTime &oldPosition, const RealTime &position)
     //
     for (NoteOffQueue::iterator i = m_noteOffQueue.begin();
             i != m_noteOffQueue.end(); ++i) {
+
         // if we're fast forwarding then we bring the note off closer
         if (jump >= RealTime::zeroTime) {
-            (*i)->setRealTime((*i)->getRealTime() - jump /* + modifyNoteOff */);
+
+	    RealTime endTime = formerStartPosition + (*i)->getRealTime();
+
+#ifdef DEBUG_PROCESS_MIDI_OUT
+	    std::cerr << "Forward jump of " << jump << ": adjusting note off from "
+		      << (*i)->getRealTime() << " (absolute " << endTime
+		      << ") to ";
+#endif
+	    (*i)->setRealTime(endTime - position);
+#ifdef DEBUG_PROCESS_MIDI_OUT
+	    std::cerr << (*i)->getRealTime() << std::endl;
+#endif
         } else // we're rewinding - kill the note immediately
         {
-            (*i)->setRealTime(m_playStartPosition);
+#ifdef DEBUG_PROCESS_MIDI_OUT
+	    std::cerr << "Rewind by " << jump << ": setting note off to zero" << std::endl;
+#endif
+	    (*i)->setRealTime(RealTime::zeroTime);
         }
     }
 
@@ -2090,7 +2107,6 @@ AlsaDriver::resetPlayback(const RealTime &oldPosition, const RealTime &position)
     //
     snd_seq_remove_events_t *info;
     snd_seq_remove_events_alloca(&info);
-    //snd_seq_remove_events_set_event_type(info,
     snd_seq_remove_events_set_condition(info, SND_SEQ_REMOVE_OUTPUT);
     snd_seq_remove_events(m_midiHandle, info);
 
@@ -2103,6 +2119,7 @@ AlsaDriver::resetPlayback(const RealTime &oldPosition, const RealTime &position)
 
 #ifdef HAVE_LIBJACK
     if (m_jackDriver) {
+	m_jackDriver->clearSynthPluginEvents();
         m_needJackStart = NeedJackReposition;
     }
 #endif
@@ -2212,8 +2229,9 @@ AlsaDriver::allNotesOff()
 void
 AlsaDriver::processNotesOff(const RealTime &time, bool now)
 {
-    if (m_noteOffQueue.empty())
-        return ;
+    if (m_noteOffQueue.empty()) {
+        return;
+    }
 
     snd_seq_event_t event;
 
@@ -2228,19 +2246,28 @@ AlsaDriver::processNotesOff(const RealTime &time, bool now)
     std::cerr << "AlsaDriver::processNotesOff(" << time << ")" << std::endl;
 #endif
 
-    while (m_noteOffQueue.begin() != m_noteOffQueue.end() &&
-            (*m_noteOffQueue.begin())->getRealTime() < time) {
+    RealTime alsaTime = getAlsaTime();
+
+    while (m_noteOffQueue.begin() != m_noteOffQueue.end()) {
 
         NoteOffEvent *ev = *m_noteOffQueue.begin();
 
+	if (ev->getRealTime() > time) {
 #ifdef DEBUG_PROCESS_MIDI_OUT
+	    std::cerr << "Note off time " << ev->getRealTime() << " is beyond current time " << time << std::endl;
+#endif
+	    break;
+	}
 
+#ifdef DEBUG_PROCESS_MIDI_OUT
         std::cerr << "AlsaDriver::processNotesOff(" << time << "): found event at " << ev->getRealTime() << ", instr " << ev->getInstrument() << ", channel " << int(ev->getChannel()) << ", pitch " << int(ev->getPitch()) << std::endl;
 #endif
 
         bool isSoftSynth = (ev->getInstrument() >= SoftSynthInstrumentBase);
 
         offTime = ev->getRealTime();
+	if (offTime < RealTime::zeroTime) offTime = RealTime::zeroTime;
+	bool scheduled = (offTime > alsaTime);
 
         snd_seq_real_time_t alsaOffTime = { offTime.sec,
                                             offTime.nsec };
@@ -2259,7 +2286,10 @@ AlsaDriver::processNotesOff(const RealTime &time, bool now)
             }
 
             snd_seq_ev_set_source(&event, src);
-            snd_seq_ev_schedule_real(&event, m_queue, 0, &alsaOffTime);
+
+	    if (scheduled) {
+		snd_seq_ev_schedule_real(&event, m_queue, 0, &alsaOffTime);
+	    }
 
         } else {
 
@@ -2275,7 +2305,11 @@ AlsaDriver::processNotesOff(const RealTime &time, bool now)
         if (isSoftSynth) {
             processSoftSynthEventOut(ev->getInstrument(), &event, now);
         } else {
-            snd_seq_event_output(m_midiHandle, &event);
+	    if (scheduled) {
+		snd_seq_event_output(m_midiHandle, &event);
+	    } else {
+		snd_seq_event_output_direct(m_midiHandle, &event);
+	    }
         }
 
         delete ev;
@@ -3658,7 +3692,7 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
 void
 AlsaDriver::processSoftSynthEventOut(InstrumentId id, const snd_seq_event_t *ev, bool now)
 {
-#ifdef DEBUG_ALSA
+#ifdef DEBUG_PROCESS_SOFT_SYNTH_OUT
     std::cerr << "AlsaDriver::processSoftSynthEventOut: instrument " << id << ", now " << now << std::endl;
 #endif
 
@@ -3677,15 +3711,15 @@ AlsaDriver::processSoftSynthEventOut(InstrumentId id, const snd_seq_event_t *ev,
         else
             t = t + m_playStartPosition - m_alsaPlayStartTime;
 
-#ifdef DEBUG_ALSA
+#ifdef DEBUG_PROCESS_SOFT_SYNTH_OUT
 
-        std::cerr << "AlsaDriver::processSoftSynthEventOut: time " << t << std::endl;
+        std::cerr << "AlsaDriver::processSoftSynthEventOut: event time " << t << std::endl;
 #endif
 
         synthPlugin->sendEvent(t, ev);
 
         if (now) {
-#ifdef DEBUG_ALSA
+#ifdef DEBUG_PROCESS_SOFT_SYNTH_OUT
             std::cerr << "AlsaDriver::processSoftSynthEventOut: setting haveAsyncAudioEvent" << std::endl;
 #endif
 
