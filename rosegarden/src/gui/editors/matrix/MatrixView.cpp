@@ -138,30 +138,32 @@ static double xorigin = 0.0;
 MatrixView::MatrixView(RosegardenGUIDoc *doc,
                        std::vector<Segment *> segments,
                        QWidget *parent,
-                       bool drumMode)
-        : EditView(doc, segments, 3, parent, "matrixview"),
-        m_hlayout(&doc->getComposition()),
-        m_vlayout(),
-        m_snapGrid(new SnapGrid(&m_hlayout)),
-        m_lastEndMarkerTime(0),
-        m_hoveredOverAbsoluteTime(0),
-        m_hoveredOverNoteName(0),
-        m_selectionCounter(0),
-        m_insertModeLabel(0),
-        m_haveHoveredOverNote(false),
-        m_previousEvPitch(0),
-        m_dockLeft(0),
-        m_canvasView(0),
-        m_pianoView(0),
-        m_localMapping(0),
-        m_lastNote(0),
-        m_quantizations(BasicQuantizer::getStandardQuantizations()),
-        m_chordNameRuler(0),
-        m_tempoRuler(0),
-        m_playTracking(true),
-        m_dockVisible(true),
-        m_drumMode(drumMode),
-        m_mouseInCanvasView(false)
+                       bool drumMode) :
+    EditView(doc, segments, 3, parent, "matrixview"),
+    m_hlayout(&doc->getComposition()),
+    m_vlayout(),
+    m_snapGrid(new SnapGrid(&m_hlayout)),
+    m_lastEndMarkerTime(0),
+    m_hoveredOverAbsoluteTime(0),
+    m_hoveredOverNoteName(0),
+    m_selectionCounter(0),
+    m_insertModeLabel(0),
+    m_haveHoveredOverNote(false),
+    m_previousEvPitch(0),
+    m_dockLeft(0),
+    m_canvasView(0),
+    m_pianoView(0),
+    m_localMapping(0),
+    m_lastNote(0),
+    m_quantizations(BasicQuantizer::getStandardQuantizations()),
+    m_chordNameRuler(0),
+    m_tempoRuler(0),
+    m_rulerRulerScale(&doc->getComposition(), 0,
+                      Note(Note::Shortest).getDuration() * 2),
+    m_playTracking(true),
+    m_dockVisible(true),
+    m_drumMode(drumMode),
+    m_mouseInCanvasView(false)
 {
     RG_DEBUG << "MatrixView ctor: drumMode " << drumMode << "\n";
 
@@ -229,8 +231,13 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
         // staff has one too many rows to avoid a half-row at the top:
         m_staffs[i]->setY( -resolution / 2);
         //!!!	if (isDrumMode()) m_staffs[i]->setX(resolution);
-        if (i == 0)
+        if (i == 0) {
             m_staffs[i]->setCurrent(true);
+            m_rulerRulerScale.setUnitsPerPixel
+                (1.0 / m_staffs[i]->getTimeScaleFactor());
+            m_rulerRulerScale.setFirstVisibleBar
+                (comp.getBarNumber(segments[i]->getStartTime()));
+        }
     }
 
     MATRIX_DEBUG << "MatrixView : creating canvas view\n";
@@ -498,12 +505,12 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     //!!!    addPropertyViewRuler(BaseProperties::VELOCITY);
 
     m_chordNameRuler = new ChordNameRuler
-                       (&m_hlayout, doc, segments, 0, 20, getCentralWidget());
+                       (&m_rulerRulerScale, doc, segments, 0, 20, getCentralWidget());
     m_chordNameRuler->setStudio(&getDocument()->getStudio());
     addRuler(m_chordNameRuler);
 
     m_tempoRuler = new TempoRuler
-                   (&m_hlayout, doc, this, 0, 24, false, getCentralWidget());
+                   (&m_rulerRulerScale, doc, this, 0, 24, false, getCentralWidget());
     static_cast<TempoRuler *>(m_tempoRuler)->connectSignals();
     addRuler(m_tempoRuler);
 
@@ -1041,6 +1048,9 @@ bool MatrixView::applyLayout(int staffNo,
             isCompositionModified()) {
         readjustCanvasSize();
         m_lastEndMarkerTime = m_staffs[0]->getSegment().getEndMarkerTime();
+        m_rulerRulerScale.setUnitsPerPixel
+            (1.0 / (m_staffs[0]->getTimeScaleFactor() *
+                    m_hZoomSlider->getCurrentSize()));
     }
 
     return true;
@@ -2240,6 +2250,13 @@ MatrixView::slotChangeHorizontalZoom(int)
     // make control rulers zoom too
     //
     setControlRulersZoom(zoomMatrix);
+
+    if (m_staffs[0]) {
+        m_rulerRulerScale.setUnitsPerPixel
+            (1.0 / (m_staffs[0]->getTimeScaleFactor() * zoomValue));
+        m_tempoRuler->update();
+        m_chordNameRuler->update();
+    }
 
     if (m_topStandardRuler)
         m_topStandardRuler->setHScaleFactor(zoomValue);

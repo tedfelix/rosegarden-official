@@ -654,6 +654,8 @@ protected:
     ChordNameRuler *m_chordNameRuler;
     QWidget        *m_tempoRuler;
 
+    SimpleRulerScale m_rulerRulerScale;
+
     std::vector<std::pair<int, int> > m_pendingInsertableNotes;
 
     bool m_playTracking;

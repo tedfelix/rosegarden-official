@@ -145,6 +145,9 @@ public:
     double getUnitsPerPixel() const { return m_ratio; }
     void   setUnitsPerPixel(double ratio) { m_ratio = ratio; }
 
+    virtual int getFirstVisibleBar() const { return m_firstBar; }
+    void setFirstVisibleBar(int fb) { m_firstBar = fb; }
+
     virtual double getBarPosition(int n) const;
     virtual double getBarWidth(int n) const;
     virtual double getBeatWidth(int n) const;
@@ -155,6 +158,7 @@ public:
 protected:
     double m_origin;
     double m_ratio;
+    int m_firstBar;
 
 private:
     SimpleRulerScale(const SimpleRulerScale &ruler);
