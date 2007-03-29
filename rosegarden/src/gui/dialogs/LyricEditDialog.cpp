@@ -29,6 +29,7 @@
 #include "base/BaseProperties.h"
 #include <klocale.h>
 #include "misc/Strings.h"
+#include "misc/Debug.h"
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
@@ -39,6 +40,9 @@
 #include <qtextedit.h>
 #include <qvbox.h>
 #include <qwidget.h>
+#include <kcombobox.h>
+#include <qlabel.h>
+#include <qpushbutton.h>
 
 
 namespace Rosegarden
@@ -46,8 +50,9 @@ namespace Rosegarden
 
 LyricEditDialog::LyricEditDialog(QWidget *parent,
                                  Segment *segment) :
-        KDialogBase(parent, 0, true, i18n("Edit Lyrics"), Ok | Cancel | Help),
-        m_segment(segment)
+    KDialogBase(parent, 0, true, i18n("Edit Lyrics"), Ok | Cancel | Help),
+    m_segment(segment),
+    m_verseCount(0)
 {
     setHelp("nv-text-lyrics");
 
@@ -56,6 +61,17 @@ LyricEditDialog::LyricEditDialog(QWidget *parent,
     QGroupBox *groupBox = new QGroupBox
                           (1, Horizontal, i18n("Lyrics for this segment"), vbox);
 
+    QHBox *hbox = new QHBox(groupBox);
+    hbox->setSpacing(5);
+//    new QLabel(i18n("Verse:"), hbox);
+    m_verseNumber = new KComboBox(hbox);
+    m_verseNumber->setEditable(false);
+    connect(m_verseNumber, SIGNAL(activated(int)), this, SLOT(slotVerseNumberChanged(int)));
+    m_verseAddButton = new QPushButton(i18n("Add Verse"), hbox);
+    connect(m_verseAddButton, SIGNAL(clicked()), this, SLOT(slotAddVerse()));
+    QFrame *f = new QFrame(hbox);
+    hbox->setStretchFactor(f, 10);
+
     m_textEdit = new QTextEdit(groupBox);
     m_textEdit->setTextFormat(Qt::PlainText);
 
@@ -63,6 +79,57 @@ LyricEditDialog::LyricEditDialog(QWidget *parent,
     m_textEdit->setMinimumHeight(200);
 
     unparse();
+    
+    for (int i = 0; i < m_verseCount; ++i) {
+        m_verseNumber->insertItem(QString("Verse %1").arg(i + 1));
+    }
+    m_currentVerse = 0;
+    if (m_verseCount == 12) m_verseAddButton->setEnabled(false);
+}
+
+void
+LyricEditDialog::slotVerseNumberChanged(int verse)
+{
+    NOTATION_DEBUG << "LyricEditDialog::slotVerseNumberChanged(" << verse << ")" << endl;
+    QString text = m_textEdit->text();
+    m_texts[m_currentVerse] = text;
+    m_textEdit->setText(m_texts[verse]);
+    m_currentVerse = verse;
+}
+
+void
+LyricEditDialog::slotAddVerse()
+{
+    NOTATION_DEBUG << "LyricEditDialog::slotAddVerse" << endl;
+    m_verseCount++;
+    m_texts.push_back(m_skeleton);
+    m_verseNumber->insertItem(QString("Verse %1").arg(m_verseCount));
+    m_verseNumber->setCurrentItem(m_verseCount - 1);
+    slotVerseNumberChanged(m_verseCount - 1);
+    if (m_verseCount == 12) m_verseAddButton->setEnabled(false);
+}
+
+void
+LyricEditDialog::countVerses()
+{
+    m_verseCount = 1;
+
+    for (Segment::iterator i = m_segment->begin();
+         m_segment->isBeforeEndMarker(i); ++i) {
+
+        if ((*i)->isa(Text::EventType)) {
+
+            std::string textType;
+            if ((*i)->get<String>(Text::TextTypePropertyName, textType) &&
+                textType == Text::Lyric) {
+
+                long verse = 0;
+                (*i)->get<Int>(Text::LyricVersePropertyName, verse);
+
+                if (verse >= m_verseCount) m_verseCount = verse + 1;
+            }
+        }
+    }
 }
 
 void
@@ -72,18 +139,26 @@ LyricEditDialog::unparse()
     // need to be kept in sync with any changes in one another.  (They
     // should really both be in a common lyric management class.)
 
+    countVerses();
+
     Composition *comp = m_segment->getComposition();
 
-    QString text;
-
+    bool firstNote = true;
     timeT lastTime = m_segment->getStartTime();
     int lastBarNo = comp->getBarNumber(lastTime);
-    bool haveLyric = false;
+    std::map<int, bool> haveLyric;
 
-    text += QString("[%1] ").arg(lastBarNo + 1);
+    QString fragment = QString("[%1] ").arg(lastBarNo + 1);
+
+    m_skeleton = fragment;
+    m_texts.clear();
+    for (size_t v = 0; v < m_verseCount; ++v) {
+        m_texts.push_back(fragment);
+        haveLyric[v] = false;
+    }
 
     for (Segment::iterator i = m_segment->begin();
-            m_segment->isBeforeEndMarker(i); ++i) {
+         m_segment->isBeforeEndMarker(i); ++i) {
 
         bool isNote = (*i)->isa(Note::EventType);
         bool isLyric = false;
@@ -91,59 +166,87 @@ LyricEditDialog::unparse()
         if (!isNote) {
             if ((*i)->isa(Text::EventType)) {
                 std::string textType;
-                if ((*i)->get
-                        <String>(Text::TextTypePropertyName, textType) &&
-                        textType == Text::Lyric) {
+                if ((*i)->get<String>(Text::TextTypePropertyName, textType) &&
+                    textType == Text::Lyric) {
                     isLyric = true;
                 }
             }
         } else {
             if ((*i)->has(BaseProperties::TIED_BACKWARD) &&
-                    (*i)->get
-                    <Bool>(BaseProperties::TIED_BACKWARD))
+                (*i)->get<Bool>(BaseProperties::TIED_BACKWARD)) {
                 continue;
+            }
         }
 
-        if (!isNote && !isLyric)
-            continue;
+        if (!isNote && !isLyric) continue;
 
         timeT myTime = (*i)->getNotationAbsoluteTime();
         int myBarNo = comp->getBarNumber(myTime);
 
         if (myBarNo > lastBarNo) {
 
+            fragment = "";
+
             while (myBarNo > lastBarNo) {
-                text += " /";
+                fragment += " /";
                 ++lastBarNo;
             }
-            text += QString("\n[%1] ").arg(myBarNo + 1);
+
+            fragment += QString("\n[%1] ").arg(myBarNo + 1);
+
+            m_skeleton += fragment;
+            for (size_t v = 0; v < m_verseCount; ++v) m_texts[v] += fragment;
         }
 
-        if (myTime > lastTime && isNote) {
-            if (!haveLyric)
-                text += " .";
-            lastTime = myTime;
-            haveLyric = false;
+        if (isNote) {
+            if ((myTime > lastTime) || firstNote) {
+                m_skeleton += " .";
+                for (size_t v = 0; v < m_verseCount; ++v) {
+                    if (!haveLyric[v]) m_texts[v] += " .";
+                    haveLyric[v] = false;
+                }
+                lastTime = myTime;
+                firstNote = false;
+            }
         }
 
         if (isLyric) {
+
             std::string ssyllable;
-            (*i)->get
-            <String>(Text::TextPropertyName, ssyllable);
+            (*i)->get<String>(Text::TextPropertyName, ssyllable);
+
+            long verse = 0;
+            (*i)->get<Int>(Text::LyricVersePropertyName, verse);
+
             QString syllable(strtoqstr(ssyllable));
             syllable.replace(QRegExp("\\s+"), "~");
-            text += " " + syllable;
-            haveLyric = true;
+
+            m_texts[verse] += " " + syllable;
+            haveLyric[verse] = true;
         }
     }
 
-    m_textEdit->setText(text);
+    if (!m_texts.empty()) {
+        m_textEdit->setText(m_texts[0]);
+    } else {
+        m_texts.push_back(m_skeleton);
+    }
+}
+
+int
+LyricEditDialog::getVerseCount() const
+{
+    return m_verseCount;
 }
 
 QString
-LyricEditDialog::getLyricData()
+LyricEditDialog::getLyricData(int verse) const
 {
-    return m_textEdit->text();
+    if (verse == m_verseNumber->currentItem()) {
+        return m_textEdit->text();
+    } else {
+        return m_texts[verse];
+    }
 }
 
 }

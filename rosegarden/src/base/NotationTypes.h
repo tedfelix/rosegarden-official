@@ -643,6 +643,7 @@ public:
     static const int EventSubOrdering;
     static const PropertyName TextPropertyName;
     static const PropertyName TextTypePropertyName;
+    static const PropertyName LyricVersePropertyName;
 
     /**
      * Text styles
@@ -690,6 +691,9 @@ public:
     std::string getText() const { return m_text; }
     std::string getTextType() const { return m_type; }
 
+    int getVerse() const { return m_verse; } // only relevant for lyrics
+    void setVerse(int verse) { m_verse = verse; }
+
     static bool isTextOfType(Event *, std::string type);
 
     /**
@@ -709,6 +713,7 @@ public:
 private:
     std::string m_text;
     std::string m_type;
+    long m_verse;
 };
 
 

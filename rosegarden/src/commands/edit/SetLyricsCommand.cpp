@@ -42,9 +42,10 @@ namespace Rosegarden
 
 using namespace BaseProperties;
 
-SetLyricsCommand::SetLyricsCommand(Segment *segment, QString newLyricData) :
+SetLyricsCommand::SetLyricsCommand(Segment *segment, int verse, QString newLyricData) :
         KNamedCommand(getGlobalName()),
         m_segment(segment),
+        m_verse(verse),
         m_newLyricData(newLyricData)
 {
     // nothing
@@ -76,11 +77,14 @@ SetLyricsCommand::execute()
 
         if ((*i)->isa(Text::EventType)) {
             std::string textType;
-            if ((*i)->get
-                    <String>(Text::TextTypePropertyName, textType) &&
-                    textType == Text::Lyric) {
-                m_oldLyricEvents.push_back(new Event(**i));
-                m_segment->erase(i);
+            if ((*i)->get<String>(Text::TextTypePropertyName, textType) &&
+                textType == Text::Lyric) {
+                long verse = 0;
+                (*i)->get<Int>(Text::LyricVersePropertyName, verse);
+                if (verse == m_verse) {
+                    m_oldLyricEvents.push_back(new Event(**i));
+                    m_segment->erase(i);
+                }
             }
         }
 
@@ -138,7 +142,9 @@ SetLyricsCommand::execute()
             NOTATION_DEBUG << "Syllable \"" << syllable << "\" at time " << time << endl;
 
             Text text(qstrtostr(syllable), Text::Lyric);
-            m_segment->insert(text.getAsEvent(time));
+            Event *event = text.getAsEvent(time);
+            event->set<Int>(Text::LyricVersePropertyName, m_verse);
+            m_segment->insert(event);
         }
     }
 }
@@ -160,10 +166,13 @@ SetLyricsCommand::unexecute()
 
         if ((*i)->isa(Text::EventType)) {
             std::string textType;
-            if ((*i)->get
-                    <String>(Text::TextTypePropertyName, textType) &&
-                    textType == Text::Lyric) {
-                m_segment->erase(i);
+            if ((*i)->get<String>(Text::TextTypePropertyName, textType) &&
+                textType == Text::Lyric) {
+                long verse = 0;
+                (*i)->get<Int>(Text::LyricVersePropertyName, verse);
+                if (verse == m_verse) {
+                    m_segment->erase(i);
+                }
             }
         }
 

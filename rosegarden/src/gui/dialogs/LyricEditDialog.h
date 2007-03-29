@@ -28,10 +28,13 @@
 
 #include <kdialogbase.h>
 #include <qstring.h>
+#include <vector>
 
 
 class QWidget;
 class QTextEdit;
+class QComboBox;
+class QPushButton;
 
 
 namespace Rosegarden
@@ -47,18 +50,28 @@ class LyricEditDialog : public KDialogBase
 public:
     LyricEditDialog(QWidget *parent, Segment *segment);
 
-    QString getLyricData();
+    int getVerseCount() const;
+    QString getLyricData(int verse) const;
+
+protected slots:
+    void slotVerseNumberChanged(int);
+    void slotAddVerse();
 
 protected:
     Segment *m_segment;
 
-    QTextEdit           *m_textEdit;
+    int m_currentVerse;
+    QComboBox *m_verseNumber;
+    QTextEdit *m_textEdit;
+    QPushButton *m_verseAddButton;
 
+    int m_verseCount;
+    std::vector<QString> m_texts;
+    QString m_skeleton;
+
+    void countVerses();
     void unparse();
 };
-
-// -------------  EventParameterDialog -------------
-//
 
 }
 

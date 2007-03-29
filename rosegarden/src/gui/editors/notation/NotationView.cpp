@@ -6515,10 +6515,16 @@ void NotationView::slotEditLyrics()
 
     if (dialog.exec() == QDialog::Accepted) {
 
-        SetLyricsCommand *command = new SetLyricsCommand
-            (&segment, dialog.getLyricData());
+        KMacroCommand *macro = new KMacroCommand
+            (SetLyricsCommand::getGlobalName());
 
-        addCommandToHistory(command);
+        for (int i = 0; i < dialog.getVerseCount(); ++i) {
+            SetLyricsCommand *command = new SetLyricsCommand
+                (&segment, i, dialog.getLyricData(i));
+            macro->addCommand(command);
+        }
+
+        addCommandToHistory(macro);
     }
 }
 

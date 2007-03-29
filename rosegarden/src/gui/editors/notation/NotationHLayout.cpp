@@ -387,7 +387,8 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
                 if (el->event()->has(Text::TextTypePropertyName) &&
                         el->event()->get<String>(Text::TextTypePropertyName) ==
                         Text::Lyric) {
-                    lyricWidth = m_npf->getTextWidth(Text(*el->event()));
+                    lyricWidth = std::max
+                        (lyricWidth, float(m_npf->getTextWidth(Text(*el->event()))));
                     NOTATION_DEBUG << "Setting lyric width to " << lyricWidth
                                    << " for text " << el->event()->get<String>(Text::TextPropertyName) << endl;
                 }
