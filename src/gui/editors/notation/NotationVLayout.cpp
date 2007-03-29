@@ -357,16 +357,18 @@ NotationVLayout::scanStaff(Staff &staffBase, timeT, timeT)
             } else if (el->event()->isa(Text::EventType)) {
 
                 std::string type = Text::UnspecifiedType;
-                el->event()->get
-                <String>(Text::TextTypePropertyName, type);
+                el->event()->get<String>(Text::TextTypePropertyName, type);
 
                 if (type == Text::Dynamic ||
                         type == Text::LocalDirection ||
                         type == Text::UnspecifiedType) {
-                    el->setLayoutY(staff.getLayoutYForHeight( -7) + displacedY);
-                } else if (type == Text::Lyric ||
-                           type == Text::Annotation) {
-                    el->setLayoutY(staff.getLayoutYForHeight( -13) + displacedY);
+                    el->setLayoutY(staff.getLayoutYForHeight(-7) + displacedY);
+                } else if (type == Text::Lyric) {
+                    long verse = 0;
+                    el->event()->get<Int>(Text::LyricVersePropertyName, verse);
+                    el->setLayoutY(staff.getLayoutYForHeight(-10 - 3 * verse) + displacedY);
+                } else if (type == Text::Annotation) {
+                    el->setLayoutY(staff.getLayoutYForHeight(-13) + displacedY);
                 } else {
                     el->setLayoutY(staff.getLayoutYForHeight(22) + displacedY);
                 }

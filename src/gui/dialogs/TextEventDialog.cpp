@@ -45,7 +45,7 @@
 #include <qstring.h>
 #include <qvbox.h>
 #include <qwidget.h>
-
+#include <qspinbox.h>
 
 namespace Rosegarden
 {
@@ -134,6 +134,15 @@ TextEventDialog::TextEventDialog(QWidget *parent,
             m_typeCombo->setCurrentItem(m_typeCombo->count() - 1);
         }
     }
+
+    m_verseLabel = new QLabel(i18n("Verse:  "), entryGrid);
+    m_verseLabel->hide();
+    m_verseSpin = new QSpinBox(entryGrid);
+    m_verseSpin->setMinValue(1);
+    m_verseSpin->setMaxValue(12);
+    m_verseSpin->setLineStep(1);
+    m_verseSpin->setValue(defaultText.getVerse() + 1);
+    m_verseSpin->hide();
 
     // dynamic shortcuts combo
     m_dynamicShortcutLabel = new QLabel(i18n("Dynamic:  "), entryGrid);
@@ -349,6 +358,14 @@ TextEventDialog::TextEventDialog(QWidget *parent,
     m_text->setText(strtoqstr(defaultText.getText()));
 }
 
+Text
+TextEventDialog::getText() const
+{
+    Text text(getTextString(), getTextType());
+    text.setVerse(m_verseSpin->value() - 1);
+    return text;
+}
+
 std::string
 TextEventDialog::getTextType() const
 {
@@ -469,10 +486,10 @@ TextEventDialog::slotTypeChanged(const QString &)
         m_text->setEnabled(true);
 
         if (type == Text::Dynamic ||
-                type == Text::LocalDirection ||
-                type == Text::UnspecifiedType ||
-                type == Text::Lyric ||
-                type == Text::Annotation) {
+            type == Text::LocalDirection ||
+            type == Text::UnspecifiedType ||
+            type == Text::Lyric ||
+            type == Text::Annotation) {
 
             m_staffAboveLabel->show();
             m_staffBelowLabel->hide();
@@ -481,6 +498,11 @@ TextEventDialog::slotTypeChanged(const QString &)
             m_staffAboveLabel->hide();
             m_staffBelowLabel->show();
 
+        }
+
+        if (type == Text::Lyric) {
+            m_verseLabel->show();
+            m_verseSpin->show();
         }
     }
 }

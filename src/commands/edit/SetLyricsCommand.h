@@ -44,7 +44,7 @@ class Event;
 class SetLyricsCommand : public KNamedCommand
 {
 public:
-    SetLyricsCommand(Segment *segment, QString newLyricData);
+    SetLyricsCommand(Segment *segment, int verse, QString newLyricData);
     ~SetLyricsCommand();
     
     static QString getGlobalName() { return i18n("Edit L&yrics"); }
@@ -54,6 +54,7 @@ public:
 
 private:
     Segment *m_segment;
+    int m_verse;
     std::vector<Event *> m_oldLyricEvents;
     QString m_newLyricData;
 };

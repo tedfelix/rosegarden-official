@@ -799,6 +799,7 @@ const std::string Text::EventType = "text";
 const int Text::EventSubOrdering = -70;
 const PropertyName Text::TextPropertyName = "text";
 const PropertyName Text::TextTypePropertyName = "type";
+const PropertyName Text::LyricVersePropertyName = "verse";
 
 // text styles
 const std::string Text::UnspecifiedType   = "unspecified";
@@ -831,7 +832,8 @@ const std::string Text::Tiny        = "tiny ->";
 const std::string Text::Small       = "small ->";
 const std::string Text::NormalSize  = "norm. ->";
 
-Text::Text(const Event &e)
+Text::Text(const Event &e) :
+    m_verse(0)
 {
     if (e.getType() != EventType) {
         throw Event::BadType("Text model event", EventType, e.getType());
@@ -842,18 +844,21 @@ Text::Text(const Event &e)
 
     e.get<String>(TextPropertyName, m_text);
     e.get<String>(TextTypePropertyName, m_type);
+    e.get<Int>(LyricVersePropertyName, m_verse);
 }
 
 Text::Text(const std::string &s, const std::string &type) :
     m_text(s),
-    m_type(type)
+    m_type(type),
+    m_verse(0)
 {
     // nothing else
 }
 
 Text::Text(const Text &t) :
     m_text(t.m_text),
-    m_type(t.m_type)
+    m_type(t.m_type),
+    m_verse(t.m_verse)
 {
     // nothing else
 }
@@ -864,6 +869,7 @@ Text::operator=(const Text &t)
     if (&t != this) {
 	m_text = t.m_text;
 	m_type = t.m_type;
+	m_verse = t.m_verse;
     }
     return *this;
 }
@@ -928,6 +934,7 @@ Text::getAsEvent(timeT absoluteTime) const
     Event *e = new Event(EventType, absoluteTime, 0, EventSubOrdering);
     e->set<String>(TextPropertyName, m_text);
     e->set<String>(TextTypePropertyName, m_type);
+    if (m_type == Lyric) e->set<Int>(LyricVersePropertyName, m_verse);
     return e;
 }
 

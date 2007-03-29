@@ -37,7 +37,7 @@ class QWidget;
 class QLineEdit;
 class QLabel;
 class KComboBox;
-
+class QSpinBox;
 
 namespace Rosegarden
 {
@@ -55,9 +55,7 @@ public:
                     Text defaultText,
                     int maxLength = -1); // for Qt default
 
-    Text getText() const {
-        return Text(getTextString(), getTextType());
-    }
+    Text getText() const;
 
 public slots:
     void slotTextChanged(const QString &);
@@ -92,6 +90,7 @@ protected:
 
     QLineEdit *m_text;
     KComboBox *m_typeCombo;
+    QSpinBox  *m_verseSpin;
     KComboBox *m_dynamicShortcutCombo;
     KComboBox *m_directionShortcutCombo;
     KComboBox *m_localDirectionShortcutCombo;
@@ -109,6 +108,7 @@ protected:
     QLabel *m_localDirectionShortcutLabel;
     QLabel *m_tempoShortcutLabel;
     QLabel *m_localTempoShortcutLabel;
+    QLabel *m_verseLabel;
     // temporary home:
     QLabel *m_directiveLabel;
 
