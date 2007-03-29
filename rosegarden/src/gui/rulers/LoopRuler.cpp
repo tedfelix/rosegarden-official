@@ -221,8 +221,12 @@ LoopRuler::mousePressEvent(QMouseEvent *mE)
         if (m_loopingMode)
             m_endLoop = m_startLoop = m_grid.snapX(x);
         else {
-            RG_DEBUG << "emitting setPointerPosition(" << m_rulerScale->getTimeForX(x) << ")" << endl;
-            emit setPointerPosition(m_rulerScale->getTimeForX(x));
+            // No -- now that we're emitting when the button is
+            // released, we _don't_ want to emit here as well --
+            // otherwise we get an irritating stutter when simply
+            // clicking on the ruler during playback
+//            RG_DEBUG << "emitting setPointerPosition(" << m_rulerScale->getTimeForX(x) << ")" << endl;
+//            emit setPointerPosition(m_rulerScale->getTimeForX(x));
         }
 
         m_activeMousePress = true;
