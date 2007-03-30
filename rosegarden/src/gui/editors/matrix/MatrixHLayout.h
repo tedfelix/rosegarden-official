@@ -31,6 +31,7 @@
 #include <utility>
 #include "base/Event.h"
 
+#include "gui/general/HZoomable.h"
 
 
 
@@ -125,6 +126,24 @@ protected:
     int m_firstBar;
 };
 
+/**
+ * "zoomable" version of the above, used in the MatrixView
+ * to properly scale Tempo and Chord rulers. 
+ * 
+ */
+class ZoomableMatrixHLayoutRulerScale : public RulerScale, public HZoomable {
+public:
+    ZoomableMatrixHLayoutRulerScale(MatrixHLayout& layout) : RulerScale(layout.getComposition()), m_referenceHLayout(layout) {};
+    
+    virtual double getBarPosition(int n)   const { return m_referenceHLayout.getBarPosition(n) * getHScaleFactor(); }
+    virtual double getXForTime(timeT time) const { return m_referenceHLayout.getXForTime(time) * getHScaleFactor(); }
+    virtual timeT getTimeForX(double x)    const { return m_referenceHLayout.getTimeForX(x / getHScaleFactor()); }
+    virtual double getBarWidth(int n)      const { return m_referenceHLayout.getBarWidth(n) * getHScaleFactor(); }
+    virtual int getLastVisibleBar()        const { return m_referenceHLayout.getLastVisibleBar(); }
+
+protected:
+    MatrixHLayout& m_referenceHLayout;    
+};
 
 }
 
