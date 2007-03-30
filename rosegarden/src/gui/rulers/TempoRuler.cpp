@@ -197,6 +197,11 @@ TempoRuler::connectSignals()
                                timeT)));
 
     connect(this,
+            SIGNAL(deleteTempo(timeT)),
+            RosegardenGUIApp::self(),
+            SLOT(slotDeleteTempo(timeT)));
+
+    connect(this,
             SIGNAL(editTempo(timeT)),
             RosegardenGUIApp::self(),
             SLOT(slotEditTempo(timeT)));
@@ -293,8 +298,11 @@ TempoRuler::mousePressEvent(QMouseEvent *e)
         m_clickX = e->x();
         if (!m_menu)
             createMenu();
-        if (m_menu)
+        if (m_menu) {
+            // enable 'delete' action only if cursor is actually over a tempo change            
+            actionCollection()->action("delete_tempo")->setEnabled(m_illuminatePoint);
             m_menu->exec(QCursor::pos());
+        }
 
     }
 }
