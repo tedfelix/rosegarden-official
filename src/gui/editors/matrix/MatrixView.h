@@ -654,7 +654,8 @@ protected:
     ChordNameRuler *m_chordNameRuler;
     QWidget        *m_tempoRuler;
 
-    SimpleRulerScale m_rulerRulerScale;
+    // ruler used to scale tempo and chord name ruler
+    ZoomableMatrixHLayoutRulerScale* m_referenceRuler;
 
     std::vector<std::pair<int, int> > m_pendingInsertableNotes;
 
