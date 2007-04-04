@@ -31,6 +31,7 @@
 #include "MatrixElement.h"
 #include "MatrixStaff.h"
 #include "QCanvasMatrixRectangle.h"
+#include "QCanvasMatrixDiamond.h"
 #include <qcanvas.h>
 #include <qpoint.h>
 #include <qwidget.h>
@@ -91,8 +92,8 @@ void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
     if (evTime < esTime)
         evTime = esTime;
 
-    //     MATRIX_DEBUG << "MatrixCanvasView::contentsMousePressEvent() at pitch "
-    //                          << evPitch << ", time " << evTime << endl;
+//    std::cerr << "MatrixCanvasView::contentsMousePressEvent() at pitch "
+//              << evPitch << ", time " << evTime << std::endl;
 
     QCanvasItemList itemList = canvas()->collisions(p);
     QCanvasItemList::Iterator it;
@@ -112,14 +113,27 @@ void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
 
         if ((mRect = dynamic_cast<QCanvasMatrixRectangle*>(item))) {
 
+//            std::cerr << "MatrixCanvasView: looking at element with rect " << mRect->rect().x() << "," << mRect->rect().y() << " (" << mRect->rect().width() << "x" << mRect->rect().height() << ")" << std::endl;
+
+//            std::cerr << "MatrixCanvasView: point is " << p.x() << "," << p.y()<< std::endl;
+
+            QRect rect = mRect->rect();
+            if (dynamic_cast<QCanvasMatrixDiamond*>(mRect)) {
+                rect = QRect(rect.x() - rect.height()/2,
+                             rect.y(),
+                             rect.width(),
+                             rect.height());
+            }
+
+//            std::cerr << "MatrixCanvasView: adjusted rect " << rect.x() << "," << rect.y() << " (" << rect.width() << "x" << rect.height() << ")" << std::endl;
+
             // QCanvas::collisions() can be a bit optimistic and report
             // items which are close to the point but not actually under it.
             // So a little sanity check helps.
-            if (! mRect->rect().contains(p, true))
-                continue;
+            if (!rect.contains(p, true)) continue;
 
             mel = &(mRect->getMatrixElement());
-            MATRIX_DEBUG << "MatrixCanvasView::contentsMousePressEvent: collision with an existing matrix element" << endl;
+//            std::cerr << "MatrixCanvasView::contentsMousePressEvent: collision with an existing matrix element" << std::endl;
             break;
         }
     }

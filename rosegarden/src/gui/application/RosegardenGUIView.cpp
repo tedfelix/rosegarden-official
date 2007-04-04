@@ -349,7 +349,23 @@ void RosegardenGUIView::slotEditSegment(Segment* segment)
                                           (unsigned int)GeneralConfigurationPage::NotationView));
 
         if (client == GeneralConfigurationPage::MatrixView) {
-            slotEditSegmentMatrix(segment);
+
+            bool isPercussion = false;
+            Track *track = getDocument()->getComposition().getTrackById
+                (segment->getTrack());
+            if (track) {
+                InstrumentId iid = track->getInstrument();
+                Instrument *instrument =
+                    getDocument()->getStudio().getInstrumentById(iid);
+                if (instrument && instrument->isPercussion()) isPercussion = true;
+            }
+
+            if (isPercussion) {
+                slotEditSegmentPercussionMatrix(segment);
+            } else {
+                slotEditSegmentMatrix(segment);
+            }
+
         } else if (client == GeneralConfigurationPage::EventView) {
             slotEditSegmentEventList(segment);
         } else {

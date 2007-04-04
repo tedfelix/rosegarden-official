@@ -34,6 +34,7 @@
 #include "base/SnapGrid.h"
 #include "base/ViewElement.h"
 #include "commands/matrix/MatrixInsertionCommand.h"
+#include "commands/matrix/MatrixEraseCommand.h"
 #include "commands/matrix/MatrixPercussionInsertionCommand.h"
 #include "gui/general/EditTool.h"
 #include "gui/general/RosegardenCanvasView.h"
@@ -102,20 +103,33 @@ void MatrixPainter::handleLeftButtonPress(timeT time,
         ViewElement *element)
 {
     MATRIX_DEBUG << "MatrixPainter::handleLeftButtonPress : pitch = "
-    << pitch << ", time : " << time << endl;
+                 << pitch << ", time : " << time << endl;
 
     QPoint p = m_mParentView->inverseMapPoint(e->pos());
 
+    m_currentStaff = m_mParentView->getStaff(staffNo);
+
     // Don't create an overlapping event on the same note on the same channel
     if (dynamic_cast<MatrixElement*>(element)) {
-        MATRIX_DEBUG << "MatrixPainter::handleLeftButtonPress : overlap with an other matrix element" << endl;
+        std::cerr << "MatrixPainter::handleLeftButtonPress : overlap with an other matrix element" << std::endl;
+        // In percussion matrix, we delete the existing event rather
+        // than just ignoring it -- this is reasonable as the event
+        // has no meaningful duration, so we can just toggle it on and
+        // off with repeated clicks
+        if (m_mParentView->isDrumMode()) {
+            if (element->event()) {
+                MatrixEraseCommand *command =
+                    new MatrixEraseCommand(m_currentStaff->getSegment(),
+                                           element->event());
+                m_mParentView->addCommandToHistory(command);
+            }
+        }
+        m_currentElement = 0;
         return ;
     }
 
     // This is needed for the event duration rounding
     SnapGrid grid(getSnapGrid());
-
-    m_currentStaff = m_mParentView->getStaff(staffNo);
 
     Event *ev = new Event(Note::EventType, time,
                           grid.getSnapTime(double(p.x())));
@@ -132,7 +146,7 @@ void MatrixPainter::handleLeftButtonPress(timeT time,
     m_currentElement->setHeight(m_currentStaff->getElementHeight());
 
     int width = grid.getRulerScale()->getXForTime(time + ev->getDuration())
-        - m_currentElement->getLayoutX();
+        - m_currentElement->getLayoutX() + 1;
 
     m_currentElement->setWidth(width);
 
@@ -171,15 +185,22 @@ int MatrixPainter::handleMouseMove(timeT time,
     }
 
     MATRIX_DEBUG << "MatrixPainter::handleMouseMove : pitch = "
-    << pitch << ", time : " << time << endl;
+                 << pitch << ", time : " << time << endl;
 
     using BaseProperties::PITCH;
 
+    if (time == m_currentElement->getViewAbsoluteTime()) {
+        time =
+            m_currentElement->getViewAbsoluteTime() +
+            m_currentElement->getViewDuration();
+    }
+
     int width = getSnapGrid().getRulerScale()->getXForTime(time)
         - getSnapGrid().getRulerScale()->getXForTime
-        (m_currentElement->getViewAbsoluteTime());
+        (m_currentElement->getViewAbsoluteTime()) + 1;
 
     m_currentElement->setWidth(width);
+//    std::cerr << "current element width "<< width << std::endl;
 
     if (m_currentElement->event()->has(PITCH) &&
         pitch != m_currentElement->event()->get<Int>(PITCH)) {

@@ -828,6 +828,8 @@ MIDIInstrumentParameterPanel::slotTogglePercussion(bool value)
                                strtoqstr(m_selectedInstrument->
                                          getProgramName()));
     emit updateAllBoxes();
+
+    emit instrumentParametersChanged(m_selectedInstrument->getId());
 }
 
 void
@@ -853,6 +855,8 @@ MIDIInstrumentParameterPanel::slotToggleBank(bool value)
                                strtoqstr(m_selectedInstrument->
                                          getProgramName()));
     emit updateAllBoxes();
+
+    emit instrumentParametersChanged(m_selectedInstrument->getId());
 }
 
 void
@@ -877,6 +881,8 @@ MIDIInstrumentParameterPanel::slotToggleProgramChange(bool value)
                                strtoqstr(m_selectedInstrument->
                                          getProgramName()));
     emit updateAllBoxes();
+
+    emit instrumentParametersChanged(m_selectedInstrument->getId());
 }
 
 void
@@ -900,6 +906,8 @@ MIDIInstrumentParameterPanel::slotToggleVariation(bool value)
                                strtoqstr(m_selectedInstrument->
                                          getProgramName()));
     emit updateAllBoxes();
+
+    emit instrumentParametersChanged(m_selectedInstrument->getId());
 }
 
 void
@@ -939,6 +947,8 @@ MIDIInstrumentParameterPanel::slotSelectBank(int index)
         sendBankAndProgram();
         emit updateAllBoxes();
     }
+
+    emit instrumentParametersChanged(m_selectedInstrument->getId());
 }
 
 void
@@ -965,6 +975,8 @@ MIDIInstrumentParameterPanel::slotSelectProgram(int index)
                                              getProgramName()));
         emit updateAllBoxes();
     }
+
+    emit instrumentParametersChanged(m_selectedInstrument->getId());
 }
 
 void
@@ -1002,6 +1014,8 @@ MIDIInstrumentParameterPanel::slotSelectVariation(int index)
     if (change) {
         sendBankAndProgram();
     }
+
+    emit instrumentParametersChanged(m_selectedInstrument->getId());
 }
 
 void
