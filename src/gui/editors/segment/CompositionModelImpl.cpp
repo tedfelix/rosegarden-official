@@ -45,6 +45,7 @@
 #include "CompositionItemImpl.h"
 #include "CompositionModel.h"
 #include "CompositionRect.h"
+#include "CompositionColourCache.h"
 #include "AudioPreviewPainter.h"
 #include "gui/general/GUIPalette.h"
 #include "SegmentOrderer.h"
@@ -56,6 +57,7 @@
 #include <qregexp.h>
 #include <qsize.h>
 #include <qstring.h>
+
 
 
 namespace Rosegarden
@@ -334,14 +336,20 @@ void CompositionModelImpl::updatePreviewCacheForNotationSegment(const Segment* s
 
     int segStartX = int(nearbyint(m_grid.getRulerScale()->getXForTime(segment->getStartTime())));
 
+    bool isPercussion = false;
+    Track *track = m_composition.getTrackById(segment->getTrack());
+    if (track) {
+        InstrumentId iid = track->getInstrument();
+        Instrument *instrument = m_studio.getInstrumentById(iid);
+        if (instrument && instrument->isPercussion()) isPercussion = true;
+    }
+
     for (Segment::iterator i = segment->begin();
             i != segment->end(); ++i) {
 
         long pitch = 0;
         if (!(*i)->isa(Note::EventType) ||
-                !(*i)->get
-                <Int>
-                (BaseProperties::PITCH, pitch)) {
+            !(*i)->get<Int>(BaseProperties::PITCH, pitch)) {
             continue;
         }
 
@@ -368,12 +376,20 @@ void CompositionModelImpl::updatePreviewCacheForNotationSegment(const Segment* s
         double y0 = 0;
         double y1 = m_grid.getYSnap();
         double y = y1 + ((y0 - y1) * (pitch - 16)) / 96;
+
+        int height = 2;
+
+        if (isPercussion) {
+            height = 3;
+            if (width > 2) width = 2;
+        }
+
         if (y < y0)
             y = y0;
-        if (y > y1 - 1)
-            y = y1 - 1;
+        if (y > y1 - height + 1)
+            y = y1 - height + 1;
 
-        QRect r(x, (int)y, width, 2);
+        QRect r(x, (int)y, width, height);
 
         //         RG_DEBUG << "CompositionModelImpl::updatePreviewCacheForNotationSegment() : npData = "
         //                  << npData << ", preview rect = "
@@ -487,7 +503,7 @@ QRect CompositionModelImpl::postProcessAudioPreview(AudioPreviewData* apData, co
 
 void CompositionModelImpl::slotInstrumentParametersChanged(InstrumentId id)
 {
-    //     RG_DEBUG << "CompositionModelImpl::slotInstrumentParametersChanged()\n";
+    std::cerr << "CompositionModelImpl::slotInstrumentParametersChanged()\n";
     const Composition::segmentcontainer& segments = m_composition.getSegments();
     Composition::segmentcontainer::iterator segEnd = segments.end();
 
@@ -495,13 +511,18 @@ void CompositionModelImpl::slotInstrumentParametersChanged(InstrumentId id)
             i != segEnd; ++i) {
 
         Segment* s = *i;
-        if (s->getType() == Segment::Audio) {
+        TrackId trackId = s->getTrack();
+        Track *track = getComposition().getTrackById(trackId);
 
-            TrackId trackId = s->getTrack();
-            Track *track = getComposition().getTrackById(trackId);
-            if (track && track->getInstrument() == id) {
-                makeAudioPreviewDataCache(s);
-            }
+        // We need to update the cache for audio segments, because the
+        // instrument playback level is reflected in the audio
+        // preview.  And we need to update it for midi segments,
+        // because the preview style differs depending on whether the
+        // segment is on a percussion instrument or not
+
+        if (track && track->getInstrument() == id) {
+            removePreviewCache(s);
+            emit needContentUpdate(computeSegmentRect(*s));
         }
     }
 }
@@ -1056,6 +1077,153 @@ const CompositionRect& CompositionModelImpl::getFromCache(const Rosegarden::Segm
 unsigned int CompositionModelImpl::getNbRows()
 {
     return m_composition.getNbTracks();
+}
+
+const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(const QRect& rect,
+        RectRanges* npData,
+        AudioPreviewDrawData* apData)
+{
+    //    Profiler profiler("CompositionModelImpl::getRectanglesIn", true);
+
+    m_res.clear();
+
+    //     RG_DEBUG << "CompositionModelImpl::getRectanglesIn: ruler scale is "
+    // 	     << (dynamic_cast<SimpleRulerScale *>(m_grid.getRulerScale()))->getUnitsPerPixel() << endl;
+
+    const Composition::segmentcontainer& segments = m_composition.getSegments();
+    Composition::segmentcontainer::iterator segEnd = segments.end();
+
+    for (Composition::segmentcontainer::iterator i = segments.begin();
+            i != segEnd; ++i) {
+
+        // 	RG_DEBUG << "CompositionModelImpl::getRectanglesIn: Composition contains segment " << *i << " (" << (*i)->getStartTime() << "->" << (*i)->getEndTime() << ")"<<  endl;
+
+        Segment* s = *i;
+
+        if (isMoving(s))
+            continue;
+
+        CompositionRect sr = computeSegmentRect(*s);
+        //         RG_DEBUG << "CompositionModelImpl::getRectanglesIn: seg rect = " << sr << endl;
+
+        if (sr.intersects(rect)) {
+            bool tmpSelected = isTmpSelected(s),
+                 pTmpSelected = wasTmpSelected(s);
+
+//            RG_DEBUG << "CompositionModelImpl::getRectanglesIn: segment " << s 
+//                     << " selected : " << isSelected(s) << " - tmpSelected : " << isTmpSelected(s) << endl;
+                       
+            if (isSelected(s) || isTmpSelected(s) || sr.intersects(m_selectionRect)) {
+                sr.setSelected(true);
+            }
+
+            if (pTmpSelected != tmpSelected)
+                sr.setNeedsFullUpdate(true);
+
+            bool isAudio = (s && s->getType() == Segment::Audio);
+
+            if (!isRecording(s)) {
+                QColor brushColor = GUIPalette::convertColour(m_composition.
+                                    getSegmentColourMap().getColourByIndex(s->getColourIndex()));
+                sr.setBrush(brushColor);
+                sr.setPen(CompositionColourCache::getInstance()->SegmentBorder);
+            } else {
+                // border is the same for both audio and MIDI
+                sr.setPen(CompositionColourCache::getInstance()->RecordingSegmentBorder);
+                // audio color
+                if (isAudio) {
+                    sr.setBrush(CompositionColourCache::getInstance()->RecordingAudioSegmentBlock);
+                    // MIDI/default color
+                } else {
+                    sr.setBrush(CompositionColourCache::getInstance()->RecordingInternalSegmentBlock);
+                }
+            }
+
+            // Notation preview data
+            if (npData && s->getType() == Segment::Internal) {
+                makeNotationPreviewRects(npData, QPoint(0, sr.y()), s, rect);
+                // Audio preview data
+            } else if (apData && s->getType() == Segment::Audio) {
+                makeAudioPreviewRects(apData, s, sr, rect);
+            }
+
+            m_res.push_back(sr);
+        } else {
+            //             RG_DEBUG << "CompositionModelImpl::getRectanglesIn: - segment out of rect\n";
+        }
+
+    }
+
+    // changing items
+
+    itemcontainer::iterator movEnd = m_changingItems.end();
+    for (itemcontainer::iterator i = m_changingItems.begin(); i != movEnd; ++i) {
+        CompositionRect sr((*i)->rect());
+        if (sr.intersects(rect)) {
+            Segment* s = CompositionItemHelper::getSegment(*i);
+            sr.setSelected(true);
+            QColor brushColor = GUIPalette::convertColour(m_composition.getSegmentColourMap().getColourByIndex(s->getColourIndex()));
+            sr.setBrush(brushColor);
+
+            sr.setPen(CompositionColourCache::getInstance()->SegmentBorder);
+
+            // Notation preview data
+            if (npData && s->getType() == Segment::Internal) {
+                makeNotationPreviewRectsMovingSegment(npData, sr.topLeft(), s, sr);
+                // Audio preview data
+            } else if (apData && s->getType() == Segment::Audio) {
+                makeAudioPreviewRects(apData, s, sr, rect);
+            }
+
+            m_res.push_back(sr);
+        }
+    }
+
+    return m_res;
+}
+
+CompositionModel::rectlist* CompositionModelImpl::getNotationPreviewData(const Segment* s)
+{
+    rectlist* npData = m_notationPreviewDataCache[const_cast<Segment*>(s)];
+
+    if (!npData) {
+        npData = makeNotationPreviewDataCache(s);
+    }
+
+    return npData;
+}
+
+CompositionModel::AudioPreviewData* CompositionModelImpl::getAudioPreviewData(const Segment* s)
+{
+    //    Profiler profiler("CompositionModelImpl::getAudioPreviewData", true);
+    RG_DEBUG << "CompositionModelImpl::getAudioPreviewData\n";
+
+    AudioPreviewData* apData = m_audioPreviewDataCache[const_cast<Segment*>(s)];
+
+    if (!apData) {
+        apData = makeAudioPreviewDataCache(s);
+    }
+
+    RG_DEBUG << "CompositionModelImpl::getAudioPreviewData returning\n";
+    return apData;
+}
+
+CompositionModel::rectlist* CompositionModelImpl::makeNotationPreviewDataCache(const Segment *s)
+{
+    rectlist* npData = new rectlist();
+    updatePreviewCacheForNotationSegment(s, npData);
+    m_notationPreviewDataCache.insert(const_cast<Segment*>(s), npData);
+    return npData;
+}
+
+CompositionModel::AudioPreviewData* CompositionModelImpl::makeAudioPreviewDataCache(const Segment *s)
+{
+    RG_DEBUG << "CompositionModelImpl::makeAudioPreviewDataCache(" << s << ")" << endl;
+
+    AudioPreviewData* apData = new AudioPreviewData(false, 0); // 0 channels -> empty
+    updatePreviewCacheForAudioSegment(s, apData);
+    m_audioPreviewDataCache.insert(const_cast<Segment*>(s), apData);
+    return apData;
 }
 
 }

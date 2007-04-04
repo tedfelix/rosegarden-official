@@ -161,7 +161,7 @@ int MatrixResizer::handleMouseMove(timeT newTime,
 
     int width = getSnapGrid().getRulerScale()->getXForTime
         (m_currentElement->getViewAbsoluteTime() + newDuration)
-        - m_currentElement->getLayoutX();
+        - m_currentElement->getLayoutX() + 1;
 
     int initialWidth = m_currentElement->getWidth();
 
