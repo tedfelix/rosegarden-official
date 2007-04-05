@@ -38,7 +38,7 @@
 
     <p>Please consult your distribution's documentation for more
     details, and check that your distribution provides the latest
-    available version (currently Rosegarden-1.5.0) before installing.</p>
+    available version (currently Rosegarden-1.5.1) before installing.</p>
 
     <h3>Studio to Go!</h3>
 
@@ -67,9 +67,9 @@
     <ul><li><a href="http://sourceforge.net/"><img align="right"
 src="http://sourceforge.net/sflogo.php?group_id=4932&type=1"
 width="88" height="31" border="0" alt="SourceForge.net Logo"/></a><a
-href="http://sourceforge.net/project/showfiles.php?group_id=4932&package_id=4959&release_id=484262">Rosegarden
-release 1.5.0 source code</a>, 6th February 2007, for download from the
-SourceForge page. <i>(<a href="http://sourceforge.net/project/shownotes.php?release_id=484262&group_id=4932">release note</a>)</i></li></ul>
+href="http://sourceforge.net/project/showfiles.php?group_id=4932&package_id=4959&release_id=493714">Rosegarden
+release 1.5.1 source code</a>, 14th March 2007, for download from the
+SourceForge page. <i>(<a href="http://sourceforge.net/project/shownotes.php?release_id=493714&group_id=4932">release note</a>)</i></li></ul>
 
     <h3>Development code from Subversion</h3>
 
@@ -115,9 +115,11 @@ SourceForge page. <i>(<a href="http://sourceforge.net/project/shownotes.php?rele
     <li><b>stable_<i>&lt;version&gt;</i></b> - This is the branch used
     to collect bug fixes for the next stable minor release.  It is
     branched from the point where the previous major feature release
-    was completed.  The most recent stable branch was
-    <b>stable_1_2_4</b>, but use of this branch ended with the release
-    of 1.2.4 and a new stable branch has not yet been opened.</li>
+    was completed.  The current stable branch is <b>stable_1_5</b>.</li>
+
+    <li><b>trayicon</b> - This branch contains work for a possible
+    enhancement that gives the sequencer process an icon and context
+    menu in the system tray.</li>
 
     <li><b>glasgow_pitchtracker</b> - This contains extensive custom work to support the <a
     href="http://markov.music.gla.ac.uk/CMT/cmt.py/Projects/rgtracker.html">University
@@ -126,9 +128,10 @@ SourceForge page. <i>(<a href="http://sourceforge.net/project/shownotes.php?rele
     areas other than the pitch tracker support.</li>
     </ul>
     
-    <p>Note that we have changed build system (from automake to scons)
-    recently, and some of these branches may still use the old system
-    while others use the new.  Check the README for details.</p>
+    <p>Note that we have changed build systems twice (from automake to
+    scons, and then to cmake) recently, so you may find these branches
+    don't use the build system you're expecting.  Check the README
+    files for details.</p>
 
 <br>
 
