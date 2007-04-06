@@ -938,69 +938,80 @@ LilypondExporter::write()
 		// Sync the code below with LyricEditDialog::unparse() !!
 		//
                 if (m_exportLyrics) {
-		    QString text = "";
-		
-		    timeT lastTime = (*i)->getStartTime();
-		    int lastBarNo = m_composition->getBarNumber(lastTime);
-		    bool haveLyric = false;
-		
-		    for (Segment::iterator j = (*i)->begin();
+		    for (long currentVerse = 0, lastVerse = 0; 
+                         currentVerse <= lastVerse; 
+			 currentVerse++) {
+		        bool haveLyric = false;
+		        QString text = "";
+
+		        timeT lastTime = (*i)->getStartTime();
+		        int lastBarNo = m_composition->getBarNumber(lastTime);
+		        for (Segment::iterator j = (*i)->begin();
 		            (*i)->isBeforeEndMarker(j); ++j) {
 		
-		        bool isNote = (*j)->isa(Note::EventType);
-		        bool isLyric = false;
+		            bool isNote = (*j)->isa(Note::EventType);
+		            bool isLyric = false;
 		
-		        if (!isNote) {
-		            if ((*j)->isa(Text::EventType)) {
-		                std::string textType;
-		                if ((*j)->get
-		                        <String>(Text::TextTypePropertyName, textType) &&
-		                        textType == Text::Lyric) {
-		                    isLyric = true;
+		            if (!isNote) {
+		                if ((*j)->isa(Text::EventType)) {
+		                    std::string textType;
+		                    if ((*j)->get
+		                            <String>(Text::TextTypePropertyName, textType) &&
+		                            textType == Text::Lyric) {
+		                        isLyric = true;
+		                    }
 		                }
+		            } else {
+		                if ((*j)->has(BaseProperties::TIED_BACKWARD) &&
+		                        (*j)->get
+		                        <Bool>(BaseProperties::TIED_BACKWARD))
+		                    continue;
 		            }
-		        } else {
-		            if ((*j)->has(BaseProperties::TIED_BACKWARD) &&
-		                    (*j)->get
-		                    <Bool>(BaseProperties::TIED_BACKWARD))
+		
+		            if (!isNote && !isLyric)
 		                continue;
+		
+		            timeT myTime = (*j)->getNotationAbsoluteTime();
+		            int myBarNo = m_composition->getBarNumber(myTime);
+		
+		            if (myTime > lastTime && isNote) {
+		                if (!haveLyric)
+		                    text += " _";
+		                // text[verse] += " _";
+		                lastTime = myTime;
+		                haveLyric = false;
+		            }
+		
+		            if (isLyric) {
+			        long verse;
+		                (*j)->get<Int>(Text::LyricVersePropertyName, verse);
+
+				if (verse == currentVerse) {
+		                    std::string ssyllable;
+		                    (*j)->get<String>(Text::TextPropertyName, ssyllable);
+			    
+		                    QString syllable(strtoqstr(ssyllable));
+		                    syllable.replace(QRegExp("\\s+"), "");
+		                    text += " \"" + syllable + "\"";
+		                    haveLyric = true;
+				} else if (verse > lastVerse) {
+                                  lastVerse = verse;
+				}
+			    }
 		        }
 		
-		        if (!isNote && !isLyric)
-		            continue;
-		
-		        timeT myTime = (*j)->getNotationAbsoluteTime();
-		        int myBarNo = m_composition->getBarNumber(myTime);
-		
-		        if (myTime > lastTime && isNote) {
-		            if (!haveLyric)
-		                text += " _";
-		            lastTime = myTime;
-		            haveLyric = false;
-		        }
-		
-		        if (isLyric) {
-		            std::string ssyllable;
-		            (*j)->get
-		            <String>(Text::TextPropertyName, ssyllable);
-		            QString syllable(strtoqstr(ssyllable));
-		            syllable.replace(QRegExp("\\s+"), "");
-		            text += " \"" + syllable + "\"";
-		            haveLyric = true;
-		        }
-		    }
-		
-		    // Do not create empty context for lyrics.
-		    // Does this save some vertical space, as was written
-		    // in earlier comment?
-		    QRegExp rx( "\"" );
-		    if ( rx.search( text ) ) {
+		        // Do not create empty context for lyrics.
+		        // Does this save some vertical space, as was written
+		        // in earlier comment?
+		        QRegExp rx( "\"" );
+		        if ( rx.search( text ) ) {
 		    
-			str << indent(col) << "\\lyricsto \"" << voiceNumber.str() << "\""
-			    << " \\new Lyrics \\lyricmode {" << std::endl;
-			str << indent(++col) << text << " " << std::endl;
-			str << indent(--col) << " } % Lyrics" << std::endl;
-			// close the Lyrics context
+			    str << indent(col) << "\\lyricsto \"" << voiceNumber.str() << "\""
+			        << " \\new Lyrics \\lyricmode {" << std::endl;
+			    str << indent(++col) << text << " " << std::endl;
+			    str << indent(--col) << "} % Lyrics " << (currentVerse+1) << std::endl;
+			    // close the Lyrics context
+		        }
 		    }
 		}
             }
