@@ -5492,6 +5492,27 @@ void RosegardenGUIApp::slotUnmuteAllTracks()
         m_view->slotSetMute((*tit).second->getInstrument(), false);
 }
 
+void RosegardenGUIApp::slotToggleMutedCurrentTrack()
+{
+    Composition &comp = m_doc->getComposition();
+    TrackId tid = comp.getSelectedTrack();
+    Track *track = comp.getTrackById(tid);
+    // If the track exists
+    if (track) {
+    	bool isMuted = track->isMuted();
+    	m_view->slotSetMuteButton(tid, !isMuted);
+    }
+}
+
+void RosegardenGUIApp::slotToggleRecordCurrentTrack()
+{
+    Composition &comp = m_doc->getComposition();
+    TrackId tid = comp.getSelectedTrack();
+    int pos = comp.getTrackPositionById(tid);
+    m_view->getTrackEditor()->getTrackButtons()->slotToggleRecordTrack(pos);
+}
+
+
 void RosegardenGUIApp::slotConfigure()
 {
     RG_DEBUG << "RosegardenGUIApp::slotConfigure\n";

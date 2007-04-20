@@ -232,7 +232,12 @@ public:
     virtual void fastForwardToEnd()   { slotFastForwardToEnd(); }
     virtual void jumpToTime(int sec, int usec) { slotJumpToTime(sec, usec); }
     virtual void startAtTime(int sec, int usec) { slotStartAtTime(sec, usec); }
-
+    
+    virtual void trackUp()            { slotTrackUp(); }
+    virtual void trackDown()          { slotTrackDown(); }
+    virtual void toggleMutedCurrentTrack() { slotToggleMutedCurrentTrack(); }
+    virtual void toggleRecordCurrentTrack() { slotToggleRecordCurrentTrack(); }
+        
     /**
      * Start the sequencer auxiliary process
      * (built in the 'sequencer' directory)
@@ -1212,7 +1217,13 @@ public slots:
      */
     void slotMuteAllTracks();
     void slotUnmuteAllTracks();
-
+    void slotToggleMutedCurrentTrack();
+    
+    /**
+     * Toggle arm (record) current track
+     */
+    void slotToggleRecordCurrentTrack();
+    
     /**
      * save general Options like all bar positions and status as well
      * as the geometry and the recent file list to the configuration

@@ -1,0 +1,55 @@
+<?xml version="1.0" ?>
+<!DOCTYPE profile SYSTEM "profile.dtd">
+
+<profile id="rosegarden" servicename="Rosegarden">
+	<name>Rosegarden</name>
+	<author>Pedro Lopez-Cabanillas</author>
+	<action objid="RosegardenIface" prototype="void play()" class="play">
+		<name>Play/Pause</name>
+		<comment>Toggles between playing and pausing</comment>
+	</action>
+	<action objid="RosegardenIface" prototype="void stop()" class="stop">
+		<name>Stop</name>
+		<comment>Stops current playback/record session</comment>
+	</action>
+	<action objid="RosegardenIface" prototype="void rewind()" class="rewind">
+		<name>Rewind</name>
+		<comment>Rewind to the previous bar</comment>
+	</action>
+	<action objid="RosegardenIface" prototype="void rewindToBeginning()">
+		<name>Rewind to beginning</name>
+		<comment>Rewind to the start of the composition</comment>
+	</action>
+	<action objid="RosegardenIface" prototype="void fastForwardToEnd()">
+		<name>Fast Forward to end</name>
+		<comment>Forward to the end of the composition</comment>
+	</action>
+	<action objid="RosegardenIface" prototype="void fastForward()" class="forward">
+		<name>Fast Forward</name>
+		<comment>Forward to the next bar</comment>
+	</action>
+	<action objid="RosegardenIface" prototype="void record()" class="record">
+		<name>Recording Mode</name>
+		<comment>Starts recording to the armed tracks</comment>
+	</action>
+	<action objid="RosegardenIface" prototype="void trackDown()" class="next">
+		<name>Next track</name>
+		<comment>Selects the next track</comment>
+	</action>
+	<action objid="RosegardenIface" prototype="void trackUp()" class="previous">
+		<name>Previous track</name>
+		<comment>Selects the previous track</comment>
+	</action>
+	<action objid="RosegardenIface" prototype="void toggleMutedCurrentTrack()" class="mute">
+		<name>Toggle mute track</name>
+		<comment>Toggle muted state for the currently selected track</comment>
+	</action>
+	<action objid="RosegardenIface" prototype="void toggleRecordCurrentTrack()">
+		<name>Toggle arm track</name>
+		<comment>Toggle armed state for the currently selected track</comment>
+	</action>
+	<action objid="RosegardenIface" prototype="void quit()" class="off">
+		<name>Quit</name>
+		<comment>Exit Rosegarden</comment>
+	</action>
+</profile>

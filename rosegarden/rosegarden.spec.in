@@ -11,7 +11,7 @@ Source0:        %name-@VERSION@.tar.bz2
 License:        GPL
 Group:          Sound
 BuildRequires:  qt3-devel
-BuildRequires:  kdemultimedia-devel 
+BuildRequires:  kdemultimedia-devel
 BuildRequires:  jackit-devel
 BuildRequires:  ladspa-devel
 BuildRequires:  dssi-devel
@@ -31,7 +31,7 @@ rm -rf $RPM_BUILD_ROOT
 %setup -q -n %{name}-@VERSION@
 
 %build
-cmake . -DCMAKE_INSTALL_PREFIX=%{_prefix} -DWANT_PCH=YES
+cmake . -DCMAKE_INSTALL_PREFIX=%{_prefix}
 %make
 
 %install
@@ -61,10 +61,11 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root)
 %defattr(-, root,root)
 %doc AUTHORS COPYING Doxyfile INSTALL README TRANSLATORS
-%{_bindir}/* 
+%{_bindir}/*
 
-%{_datadir}/applnk/Applications/rosegarden.desktop
+%{_datadir}/applnk/Applications/kde/rosegarden.desktop
 %{_datadir}/apps/%name
+%{_datadir}/apps/profiles
 
 %dir %_docdir/HTML/en/%name/
 %doc %_docdir/HTML/en/%name/*
@@ -135,7 +136,7 @@ rm -rf $RPM_BUILD_ROOT
 - 0.9.9
 - update patch0
 
-* Fri Jul 16 2004 Michael Scherer <misc@mandrake.org> 0.9.8-2mdk 
+* Fri Jul 16 2004 Michael Scherer <misc@mandrake.org> 0.9.8-2mdk
 - rebuild for new gcc ( patch 0 )
 
 * Tue May 26 2004 Austin Acton <austin@mandrake.org> 0.9.8-1mdk
@@ -150,11 +151,11 @@ rm -rf $RPM_BUILD_ROOT
 * Tue Feb 17 2004 Austin Acton <austin@mandrake.org> 0.9.6-4mdk
 - rebuild for liblrdf2
 
-* Wed Jan 14 2004 Charles A Edwards <eslrahc@mandrake.org> 0.9.6-3mdk 
+* Wed Jan 14 2004 Charles A Edwards <eslrahc@mandrake.org> 0.9.6-3mdk
 - put back correct changelog entry for Austin's 0.9.6-1mdk--don't
   know how I screwed that
- 
-* Wed Jan 14 2004 Charles A Edwards <eslrahc@mandrake.org> 0.9.6-2mdk 
+
+* Wed Jan 14 2004 Charles A Edwards <eslrahc@mandrake.org> 0.9.6-2mdk
 - use libtoolize /bin/true
 - define iconname
 - build with liblrdf
@@ -165,7 +166,7 @@ rm -rf $RPM_BUILD_ROOT
 - rm 0 byte fonts
 - add docand doc/howtos
 
-* Mon Jan 12 2004 Austin Acton <austin@mandrake.org> 0.9.6-1mdk 
+* Mon Jan 12 2004 Austin Acton <austin@mandrake.org> 0.9.6-1mdk
 - 0.9.6
 - does not require "jack" or libname
 - buildrequires jackit and ladspa libs

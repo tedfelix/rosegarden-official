@@ -83,11 +83,9 @@ void LircClient::readButton()
     RG_DEBUG << "LircClient::readButton" << endl;
 
     if (lirc_nextcode(&code) == 0 && code != NULL) {   // no error && a string is available
-
-        while ( (ret = lirc_code2char(m_config, code, &m_command)) == 0 && m_command != NULL ) {   // handle any command attached to that button
-
-            RG_DEBUG << "LircClient::readButton: emitting command: " << m_command << endl;
-
+        // handle any command attached to that button
+        while ( (ret = lirc_code2char(m_config, code, &m_command)) == 0 && m_command != NULL ) 
+        {
             emit buttonPressed(m_command);
         }
         free(code);

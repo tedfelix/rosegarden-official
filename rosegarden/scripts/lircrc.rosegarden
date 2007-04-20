@@ -1,0 +1,79 @@
+# ----------------------------------------------------------------------------
+# lircrc.rosegarden
+#
+# Example .lircrc config file for rosegarden.
+# Adjust the "button =" lines to your remote control in your ~/.lircrc
+# ----------------------------------------------------------------------------
+
+begin rosegarden
+
+  # ------------------------------
+  # rosegarden transport
+  # ------------------------------
+
+  begin
+    prog = rosegarden
+    button = FORWARD
+    config = FORWARD
+  end
+  begin
+    prog = rosegarden
+    button = REWIND
+    config = REWIND
+  end
+  begin
+    prog = rosegarden
+    button = PLAY
+    config = PLAY
+  end
+  begin
+    prog = rosegarden
+    button = STOP
+    config = STOP
+  end
+  begin
+    prog = rosegarden
+    button = RECORD
+    config = RECORD
+  end
+
+  # (mis-)use volume up/down for jumping to beginning/end
+  begin
+    prog = rosegarden
+    button = VOLUMEUP
+    config = FORWARDTOEND
+  end
+  begin
+    prog = rosegarden
+    button = VOLUMEDOWN
+    config = REWINDTOBEGINNING
+  end
+
+  # ------------------------------
+  # track navigation
+  # ------------------------------
+
+  begin
+    prog = rosegarden
+    button = CHANNELUP
+    config = TRACK-
+  end
+  begin
+    prog = rosegarden
+    button = CHANNELDOWN
+    config = TRACK+
+  end
+
+  # track LED's
+  begin
+    prog = rosegarden
+    button = MUTE
+    config = TRACK-MUTE
+  end
+  begin
+    prog = rosegarden
+    button = MENU
+    config = TRACK-RECORD
+  end
+
+end rosegarden

@@ -77,6 +77,12 @@ k_dcop:
     virtual void fastForwardToEnd() = 0;
     virtual void jumpToTime(int sec, int usec) = 0;
     virtual void startAtTime(int sec, int usec) = 0;
+    
+    // Extra functions used by Infrared Remotes
+    virtual void trackDown() = 0;
+    virtual void trackUp() = 0;
+    virtual void toggleMutedCurrentTrack() = 0;
+    virtual void toggleRecordCurrentTrack() = 0;
 
     // Sequencer updates GUI with status
     //
