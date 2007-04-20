@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -32,13 +31,15 @@
 #ifdef HAVE_LIRC
 
 #include <qobject.h>
-
+#include "base/Track.h"
 
 
 namespace Rosegarden
 {
 
 class RosegardenGUIApp;
+class RosegardenGUIDoc;
+class TrackButtons;
 class LircClient;
 
 
@@ -47,31 +48,59 @@ class LircCommander : public QObject
     Q_OBJECT
 public:
     LircCommander(LircClient *lirc, RosegardenGUIApp *rgGUIApp);
+
+signals:
+    //for RosegardenGUIApp
+    void play();
+    void stop();
+    void record();
+    void rewind();
+    void rewindToBeginning();
+    void fastForward();
+    void fastForwardToEnd();
+    void toggleRecord();
+    void trackDown();
+    void trackUp();
+    void trackMute();
+    void trackRecord();
     
 private slots:
-    void execute(char *);
-    
+    void slotExecute(char *);
+    //void slotDocumentChanged(RosegardenGUIDoc *);
+        
 private:
     LircClient          *m_lirc;
     RosegardenGUIApp    *m_rgGUIApp;
+    //TrackButtons        *m_trackButtons;
+     
+    // commands invoked by lirc
+    enum commandCode {
+    	cmd_play,
+    	cmd_stop,
+    	cmd_record,
+    	cmd_rewind,
+    	cmd_rewindToBeginning,
+    	cmd_fastForward,
+    	cmd_fastForwardToEnd,
+    	cmd_toggleRecord,
+    	cmd_trackDown,
+    	cmd_trackUp,
+    	cmd_trackMute,
+    	cmd_trackRecord
+    };
     
+    
+    // the command -> method mapping table
+    static struct command
+    {
+        char *name;        /* command name */
+        commandCode code;  /* function to process it */
+    }
+    commands[];
+
     // utilities
     static int compareCommandName(const void *c1, const void *c2);
-    
-    // commands invoked by lirc
-    void f_play();
-    void f_stop();
-    void f_record();
-    void f_rewind();
-    void f_rewindToBeginning();
-    void f_fastForward();
-    void f_fastForwardToEnd();
 
-    // the command -> method mapping table
-    static struct command {
-            char *name;                         /* command name */
-            void (LircCommander::*function)();  /* function to process it */
-        } commands[];
 };
 
 

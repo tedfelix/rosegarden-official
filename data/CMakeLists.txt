@@ -1,18 +1,16 @@
 # Data directory
 
-SET(DATADIR share/apps/rosegarden)
-SET(ICONDIR share/icons)
-SET(MIMEDIR share/mimelnk/audio)
-SET(LINKDIR share/applications)
+SET(DATADIR ${KDE3DATADIR}/rosegarden)
+SET(ICONDIR ${KDE3ICONDIR})
+SET(MIMEDIR ${KDE3MIMEDIR}/audio)
+SET(MENUDIR ${KDE3MENUDIR})
 
 # Guitar chord files
 FILE(GLOB CHORD_FILES chords/*.xml)
-INSTALL(FILES ${CHORD_FILES}
-                DESTINATION ${DATADIR}/chords)
+INSTALL(FILES ${CHORD_FILES} DESTINATION ${DATADIR}/chords)
 
 # Desktop file
-INSTALL(FILES desktop/rosegarden.desktop
-                DESTINATION ${LINKDIR})
+INSTALL(FILES desktop/rosegarden.desktop DESTINATION ${MENUDIR})
 
 # MIME files
 SET(MIME_FILES
@@ -115,3 +113,6 @@ INSTALL(FILES examples/autoload.rg DESTINATION ${DATADIR})
 # Library 
 FILE(GLOB RGD_FILES library/*.rgd)
 INSTALL(FILES ${RGD_FILES} DESTINATION ${DATADIR}/library)
+
+# KDE LIRC Profile
+INSTALL(FILES profile/rosegarden.profile.xml DESTINATION ${KDE3DATADIR}/profiles)
