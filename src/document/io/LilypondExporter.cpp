@@ -1561,8 +1561,7 @@ LilypondExporter::writeBar(Segment *s,
                 Accidental accidental = Accidentals::NoAccidental;
 
                 std::cout << "key tonic pitch: " << key.getTonicPitch() << std::endl; //REMOVE
-                str << convertPitchToLilyNote(key.getTonicPitch(), accidental,
-                                              key.isSharp() ? Rosegarden::Key ("C major") : Rosegarden::Key ("A minor"));
+                str << convertPitchToLilyNote(key.getTonicPitch(), accidental, key);
 
                 if (key.isMinor()) {
                     str << " \\minor";

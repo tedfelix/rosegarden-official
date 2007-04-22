@@ -586,6 +586,38 @@ Accidental Key::getAccidentalAtHeight(int height, const Clef &clef) const
     return NoAccidental;
 }
 
+Accidental Key::getAccidentalForStep(int step) const
+{
+	if (isMinor())
+	{
+		step = (step + 5) % 7;
+	}
+	
+	int accidentalCount = getAccidentalCount();
+	
+	if (accidentalCount == 0)
+	{
+		return NoAccidental;
+	}
+
+	bool sharp = isSharp();
+	
+	int currentAccidentalPosition = sharp ? 6 : 3;
+
+	for (int i = 1; i <= accidentalCount; i++)
+	{
+		if (step == currentAccidentalPosition)
+		{
+			return sharp ? Sharp : Flat;
+		}
+		
+		currentAccidentalPosition = 
+			(currentAccidentalPosition + (sharp ? 3 : 4)) % 7;  
+	}
+	
+	return NoAccidental;
+}
+
 vector<int> Key::getAccidentalHeights(const Clef &clef) const
 {
     // staff positions of accidentals
@@ -938,51 +970,120 @@ Text::getAsEvent(timeT absoluteTime) const
     return e;
 }
 
+bool
+pitchInKey(int pitch, const Key& key)
+{
+	int pitchOffset = (pitch - key.getTonicPitch() + 12) % 12;
+	
+	static int pitchInMajor[] =
+		{ true, false, true, false, true, true, false, true, false, true, false, true };
+	static int pitchInMinor[] =
+		{ true, false, true, true, false, true, false, true, true, false, true, false };
+	
+	if (key.isMinor())
+	{
+		return pitchInMinor[pitchOffset];
+	}
+	else
+	{
+		return pitchInMajor[pitchOffset];
+	} 
+}
 
 /**
- * Converts performance pitch to height on staff + correct accidentals
- * for current key.
- *
- * This method takes a Clef, Key, Accidental and raw performance pitch, then
- * applies this information to return a height on staff value and an
- * accidental state.  The pitch itself contains a lot of information, but we
- * need to use the Key and user-specified Accidental to make an accurate
- * decision just where to put it on the staff, and what accidental it should
- * display for (or against) the key.
- *
- * This function originally written by Chris Cannam for Rosegarden 2.1
- * Entirely rewritten by Chris Cannam for Rosegarden 4
- * Entirely rewritten by Hans Kieserman
- * Entirely rewritten by Michael McIntyre
- * This version by Michael McIntyre <dmmcintyr@users.sourceforge.net>
+ * @param pitch in the range 0..11 (C..B)
+ * 
+ * @author Arnout Engelen
+ */
+Accidental
+resolveNoAccidental(int pitch,
+			      const Key &key,
+			      NoAccidentalStrategy noAccidentalStrategy) 
+{
+	Accidental outputAccidental = "";
+	
+	// Find out the accidental to use, based on the strategy specified
+	switch (noAccidentalStrategy)
+	{
+		case UseKeySharpness:
+			noAccidentalStrategy = 
+				key.isSharp() ? UseSharps : UseFlats;
+			// fall though
+		case UseFlats:
+			// shares code with UseSharps
+		case UseSharps:
+			if (pitchInKey(pitch, key))
+			{
+				outputAccidental = NoAccidental;
+			}
+			else
+			{
+				if (noAccidentalStrategy == UseSharps)
+				{
+					outputAccidental = Sharp;					
+				}	
+				else
+				{
+					outputAccidental = Flat;
+				}
+			}
+			break;
+		case UseKey:
+			// the distance of the pitch from the tonic of the current
+			//  key
+			int pitchOffset = (pitch - key.getTonicPitch() + 12) % 12;
+			// 0: major, 1: minor
+			int minor = key.isMinor();
+			static int pitchToHeight[2][12] =
+				{
+					{ 0, 0, 1, 2, 2, 3, 3, 4, 5, 5, 6, 6 },
+					// a ., b, c, ., d, ., e, f, ., g, . 
+					{ 0, 1, 1, 2, 2, 3, 4, 4, 5, 5, 6, 6 } //TODO
+				};
+			
+			// map pitchOffset to the extra correction, on top of any 
+			// accidentals in the key. Example: in F major, with a pitchOffset
+			// of 6, the resulting height would be 3 (Bb) and the correction
+			// would be +1, so the resulting note would be B-natural
+			static int pitchToCorrection[2][12] =
+				{
+					{ 0, +1, 0, -1, 0, 0, +1, 0, -1, 0, -1, 0 },
+					{ 0, -1, 0, 0, +1, 0, -1, 0, 0, +1, 0, +1 } //TODO
+				}; 
+			
+			int correction = pitchToCorrection[minor][pitchOffset];
+
+			// Get the accidental normally associated with this height in this
+			//  key.
+			Accidental normalAccidental = key.getAccidentalForStep(pitchToHeight[minor][pitchOffset]);
+	
+			// Apply the pitchCorrection and get the outputAccidental
+			outputAccidental = Accidentals::getAccidental(
+				getPitchOffset(normalAccidental) + correction);
+				
+	}
+	
+	return outputAccidental;
+}
+
+/**
+ * @param pitch in the range 0..11 (C..B)
+ * 
+ * @author Michael McIntyre
  */
 void
-Pitch::rawPitchToDisplayPitch(int rawpitch,
+resolveSpecifiedAccidental(int pitch,
 			      const Clef &clef,
 			      const Key &key,
 			      int &height,
-			      Accidental &accidental) 
+			      int &octave,
+			      Accidental &inputAccidental,
+			      Accidental &outputAccidental)
 {
-
-    // 1. Calculate the octave (for later):
-    int octave = rawpitch / 12;
-
-    // 2. Set initial height to 0
-    height = 0;
-
-    // 3.  Calculate raw semitone number, yielding a value between 0 (C) and
-    // 11 (B)
-    int pitch  = rawpitch % 12;
-
-    // 4.  Get info from the Key
+	// 4.  Get info from the Key
     long accidentalCount = key.getAccidentalCount();
     bool keyIsSharp = key.isSharp(), keyIsFlat = !keyIsSharp;
-    Accidental userAccidental = accidental;
-
-    // clear the in-coming accidental so we can trap any failure to re-set
-    // it on the way out:
-    accidental = "";
-
+    
     // Calculate the flags needed for resolving accidentals against the key.
     // First we initialize them false...
     bool keyHasSharpC = false, keyHasSharpD = false, keyHasSharpE = false,
@@ -1074,177 +1175,275 @@ Pitch::rawPitchToDisplayPitch(int rawpitch,
     // Here we do the actual work of making all the decisions explained above.
     switch (pitch) {
         case 0 : 
-                 if (userAccidental == Sharp ||                         // B#
-                    (userAccidental == NoAccidental && keyHasSharpB)) {
+                 if (inputAccidental == Sharp ||                         // B#
+                    (inputAccidental == NoAccidental && keyHasSharpB)) {
                      height = B;
                      octave--;
-                     accidental = (keyHasSharpB) ? NoAccidental : Sharp;
-                 } else if (userAccidental == DoubleFlat) {             // Dbb
+                     outputAccidental = (keyHasSharpB) ? NoAccidental : Sharp;
+                 } else if (inputAccidental == DoubleFlat) {             // Dbb
                      height = D;
-                     accidental = DoubleFlat;
+                     outputAccidental = DoubleFlat;
                  } else {
                      height = C;                                        // C or C-Natural
-                     accidental = (keyHasFlatC || keyHasSharpC ||
+                     outputAccidental = (keyHasFlatC || keyHasSharpC ||
                                    (keyHasSharpB &&
-                                  userAccidental == Natural)) ? Natural : NoAccidental;
+                                  inputAccidental == Natural)) ? Natural : NoAccidental;
                  }
                  break;
         case 1 : 
-                 if (userAccidental == Sharp ||                       // C#
-                    (userAccidental == NoAccidental &&  keyIsSharp)) {
+                 if (inputAccidental == Sharp ||                       // C#
+                    (inputAccidental == NoAccidental &&  keyIsSharp)) {
                      height = C;
-                     accidental = (keyHasSharpC) ?  NoAccidental : Sharp;
-                 } else if (userAccidental == Flat ||                 // Db
-                           (userAccidental == NoAccidental && keyIsFlat)) {
+                     outputAccidental = (keyHasSharpC) ?  NoAccidental : Sharp;
+                 } else if (inputAccidental == Flat ||                 // Db
+                           (inputAccidental == NoAccidental && keyIsFlat)) {
                      height = D;
-                     accidental = (keyHasFlatD) ? NoAccidental : Flat;
-                 } else if (userAccidental == DoubleSharp) {          // Bx
+                     outputAccidental = (keyHasFlatD) ? NoAccidental : Flat;
+                 } else if (inputAccidental == DoubleSharp) {          // Bx
                     height = B;
                     octave--;
-                    accidental = DoubleSharp;
+                    outputAccidental = DoubleSharp;
                  }
                  break;
         case 2 : 
-                 if (userAccidental == DoubleSharp) {                  // Cx
+                 if (inputAccidental == DoubleSharp) {                  // Cx
                      height = C;
-                     accidental = DoubleSharp;
-                 } else if (userAccidental == DoubleFlat) {            // Ebb
+                     outputAccidental = DoubleSharp;
+                 } else if (inputAccidental == DoubleFlat) {            // Ebb
                      height = E;
-                     accidental = DoubleFlat;
+                     outputAccidental = DoubleFlat;
                  } else {                                              // D or D-Natural
                      height = D;
-                     accidental = (keyHasSharpD || keyHasFlatD) ? Natural : NoAccidental;
+                     outputAccidental = (keyHasSharpD || keyHasFlatD) ? Natural : NoAccidental;
                  }
                  break;
         case 3 : 
-                 if (userAccidental == Sharp ||                        // D#
-                    (userAccidental == NoAccidental &&  keyIsSharp)) {
+                 if (inputAccidental == Sharp ||                        // D#
+                    (inputAccidental == NoAccidental &&  keyIsSharp)) {
                      height = D;
-                     accidental = (keyHasSharpD) ? NoAccidental : Sharp;
-                 } else if (userAccidental == Flat ||                  // Eb
-                           (userAccidental == NoAccidental &&  keyIsFlat)) {
+                     outputAccidental = (keyHasSharpD) ? NoAccidental : Sharp;
+                 } else if (inputAccidental == Flat ||                  // Eb
+                           (inputAccidental == NoAccidental &&  keyIsFlat)) {
                      height = E;
-                     accidental = (keyHasFlatE) ? NoAccidental : Flat;
-                 } else if (userAccidental == DoubleFlat) {            // Fbb
+                     outputAccidental = (keyHasFlatE) ? NoAccidental : Flat;
+                 } else if (inputAccidental == DoubleFlat) {            // Fbb
                      height = F;
-                     accidental = DoubleFlat;
+                     outputAccidental = DoubleFlat;
                  }
                  break;
         case 4 : 
-                 if (userAccidental == Flat ||                         // Fb
-                    (userAccidental == NoAccidental && keyHasFlatF)) {
+                 if (inputAccidental == Flat ||                         // Fb
+                    (inputAccidental == NoAccidental && keyHasFlatF)) {
                      height = F;
-                     accidental = (keyHasFlatF) ? NoAccidental : Flat;
-                 } else if (userAccidental == DoubleSharp) {           // Dx
+                     outputAccidental = (keyHasFlatF) ? NoAccidental : Flat;
+                 } else if (inputAccidental == DoubleSharp) {           // Dx
                      height = D;
-                     accidental = DoubleSharp;
+                     outputAccidental = DoubleSharp;
                  } else {                                              // E or E-Natural
                      height = E;
-                     accidental = (keyHasSharpE || keyHasFlatE ||
-                                   (keyHasFlatF && userAccidental==Natural)) ?
+                     outputAccidental = (keyHasSharpE || keyHasFlatE ||
+                                   (keyHasFlatF && inputAccidental==Natural)) ?
                                     Natural : NoAccidental;
                  }
                  break;
         case 5 : 
-                 if (userAccidental == Sharp ||                        // E#
-                    (userAccidental == NoAccidental && keyHasSharpE)) {
+                 if (inputAccidental == Sharp ||                        // E#
+                    (inputAccidental == NoAccidental && keyHasSharpE)) {
                      height = E;
-                     accidental = (keyHasSharpE) ? NoAccidental : Sharp;
-                 } else if (userAccidental == DoubleFlat) {            // Gbb
+                     outputAccidental = (keyHasSharpE) ? NoAccidental : Sharp;
+                 } else if (inputAccidental == DoubleFlat) {            // Gbb
                      height = G;
-                     accidental = DoubleFlat;
+                     outputAccidental = DoubleFlat;
                  } else {                                              // F or F-Natural
                      height = F;
-                     accidental = (keyHasSharpF || keyHasFlatF ||
-                                   (keyHasSharpE && userAccidental==Natural))?
+                     outputAccidental = (keyHasSharpF || keyHasFlatF ||
+                                   (keyHasSharpE && inputAccidental==Natural))?
                                     Natural : NoAccidental;
                  }
                  break;
         case 6 : 
-                 if (userAccidental == Sharp ||
-                    (userAccidental == NoAccidental && keyIsSharp)) {  // F#
+                 if (inputAccidental == Sharp ||
+                    (inputAccidental == NoAccidental && keyIsSharp)) {  // F#
                      height = F;
-                     accidental = (keyHasSharpF) ? NoAccidental : Sharp;
-                 } else if (userAccidental == Flat ||                  // Gb
-                           (userAccidental == NoAccidental && keyIsFlat)) {
+                     outputAccidental = (keyHasSharpF) ? NoAccidental : Sharp;
+                 } else if (inputAccidental == Flat ||                  // Gb
+                           (inputAccidental == NoAccidental && keyIsFlat)) {
                      height = G;
-                     accidental = (keyHasFlatG) ? NoAccidental : Flat;
-                 } else if (userAccidental == DoubleSharp) {           // Ex
+                     outputAccidental = (keyHasFlatG) ? NoAccidental : Flat;
+                 } else if (inputAccidental == DoubleSharp) {           // Ex
                      height = E;
-                     accidental = DoubleSharp;
+                     outputAccidental = DoubleSharp;
                  }
                  break;
         case 7 : 
-                 if (userAccidental == DoubleSharp) {                  // Fx
+                 if (inputAccidental == DoubleSharp) {                  // Fx
                      height = F;
-                     accidental = DoubleSharp;
-                 } else if (userAccidental == DoubleFlat) {            // Abb
+                     outputAccidental = DoubleSharp;
+                 } else if (inputAccidental == DoubleFlat) {            // Abb
                      height = A;
-                     accidental = DoubleFlat;
+                     outputAccidental = DoubleFlat;
                  } else {                                              // G or G-Natural
                      height = G;
-                     accidental = (keyHasSharpG || keyHasFlatG) ? Natural : NoAccidental;
+                     outputAccidental = (keyHasSharpG || keyHasFlatG) ? Natural : NoAccidental;
                  }
                  break;
         case 8 : 
-                 if (userAccidental == Sharp ||
-                    (userAccidental == NoAccidental && keyIsSharp)) {  // G#
+                 if (inputAccidental == Sharp ||
+                    (inputAccidental == NoAccidental && keyIsSharp)) {  // G#
                      height = G;
-                     accidental = (keyHasSharpG) ? NoAccidental : Sharp;
-                 } else if (userAccidental == Flat ||                  // Ab
-                           (userAccidental == NoAccidental && keyIsFlat)) {
+                     outputAccidental = (keyHasSharpG) ? NoAccidental : Sharp;
+                 } else if (inputAccidental == Flat ||                  // Ab
+                           (inputAccidental == NoAccidental && keyIsFlat)) {
                      height = A;
-                     accidental = (keyHasFlatA) ? NoAccidental : Flat;
+                     outputAccidental = (keyHasFlatA) ? NoAccidental : Flat;
                  }
                  break;
         case 9 :
-                 if (userAccidental == DoubleSharp) {                  // Gx
+                 if (inputAccidental == DoubleSharp) {                  // Gx
                      height = G;
-                     accidental = DoubleSharp;
-                 } else if (userAccidental == DoubleFlat) {            // Bbb
+                     outputAccidental = DoubleSharp;
+                 } else if (inputAccidental == DoubleFlat) {            // Bbb
                      height = B;
-                     accidental = DoubleFlat;
+                     outputAccidental = DoubleFlat;
                  } else {                                              // A or A-Natural
                      height = A;                
-                     accidental = (keyHasSharpA || keyHasFlatA) ? Natural : NoAccidental;
+                     outputAccidental = (keyHasSharpA || keyHasFlatA) ? Natural : NoAccidental;
                  }
                  break;
         case 10: 
-                 if (userAccidental == DoubleFlat) {                   // Cbb
+                 if (inputAccidental == DoubleFlat) {                   // Cbb
                      height = C;
                      octave++;  // tweak B/C divide
-                     accidental = DoubleFlat;
-                 } else if (userAccidental == Sharp ||                 // A#
-                           (userAccidental == NoAccidental && keyIsSharp)) {
+                     outputAccidental = DoubleFlat;
+                 } else if (inputAccidental == Sharp ||                 // A#
+                           (inputAccidental == NoAccidental && keyIsSharp)) {
                      height = A;
-                     accidental = (keyHasSharpA) ? NoAccidental : Sharp;
-                 } else if (userAccidental == Flat ||                  // Bb
-                           (userAccidental == NoAccidental && keyIsFlat)) {
+                     outputAccidental = (keyHasSharpA) ? NoAccidental : Sharp;
+                 } else if (inputAccidental == Flat ||                  // Bb
+                           (inputAccidental == NoAccidental && keyIsFlat)) {
                      height = B;
-                     accidental = (keyHasFlatB) ? NoAccidental : Flat;
+                     outputAccidental = (keyHasFlatB) ? NoAccidental : Flat;
                  }
                  break;
         case 11: 
-                 if (userAccidental == DoubleSharp) {                  // Ax
+                 if (inputAccidental == DoubleSharp) {                  // Ax
                      height = A;
-                     accidental = DoubleSharp;
-                 } else if (userAccidental == Flat ||                  // Cb
-                           (userAccidental == NoAccidental && keyHasFlatC)) {
+                     outputAccidental = DoubleSharp;
+                 } else if (inputAccidental == Flat ||                  // Cb
+                           (inputAccidental == NoAccidental && keyHasFlatC)) {
                      height = C;
                      octave++;  // tweak B/C divide
-                     accidental = (keyHasFlatC) ? NoAccidental : Flat;
+                     outputAccidental = (keyHasFlatC) ? NoAccidental : Flat;
                  } else {                                             // B or B-Natural
                      height = B;
-                     accidental = (keyHasSharpB || keyHasFlatB ||
-                                   (keyHasFlatC && userAccidental==Natural)) ?
+                     outputAccidental = (keyHasSharpB || keyHasFlatB ||
+                                   (keyHasFlatC && inputAccidental==Natural)) ?
                                     Natural : NoAccidental;
                  }
     }
 
-    if (accidental == NoAccidental && userAccidental == Natural) {
-	accidental = Natural;
+    if (outputAccidental == NoAccidental && inputAccidental == Natural) {
+	outputAccidental = Natural;
     }
+	
+}
 
+bool 
+Pitch::validAccidental() const
+{
+//	std::cout << "Checking whether accidental is valid " << std::endl;
+	if (m_accidental == NoAccidental)
+	{
+		return true;
+	}
+	int naturalPitch = (m_pitch - 
+		Accidentals::getPitchOffset(m_accidental) + 12) % 12;
+	switch(naturalPitch)
+	{
+		case 0: //C
+			return true;
+		case 1:
+			return false;
+		case 2: //D
+			return true;
+		case 3:
+			return false;
+		case 4: //E
+			return true;
+		case 5: //F
+			return true;
+		case 6:
+			return false;
+		case 7: //G
+			return true;
+		case 8:
+			return false;
+		case 9: //A
+			return true;
+		case 10:
+			return false;
+		case 11: //B
+			return true;
+	};
+	std::cout << "Internal error in validAccidental" << std::endl;
+	return false;
+}
+
+/**
+ * Converts performance pitch to height on staff + correct accidentals
+ * for current key.
+ *
+ * This method takes a Clef, Key, Accidental and raw performance pitch, then
+ * applies this information to return a height on staff value and an
+ * accidental state.  The pitch itself contains a lot of information, but we
+ * need to use the Key and user-specified Accidental to make an accurate
+ * decision just where to put it on the staff, and what accidental it should
+ * display for (or against) the key.
+ *
+ * This function originally written by Chris Cannam for Rosegarden 2.1
+ * Entirely rewritten by Chris Cannam for Rosegarden 4
+ * Entirely rewritten by Hans Kieserman
+ * Entirely rewritten by Michael McIntyre
+ * This version by Michael McIntyre <dmmcintyr@users.sourceforge.net>
+ * Resolving the accidental was refactored out by Arnout Engelen 
+ */
+void
+Pitch::rawPitchToDisplayPitch(int rawpitch,
+			      const Clef &clef,
+			      const Key &key,
+			      int &height,
+			      Accidental &accidental,
+			      NoAccidentalStrategy noAccidentalStrategy) 
+{
+
+    // 1. Calculate the octave (for later):
+    int octave = rawpitch / 12;
+
+    // 2. Set initial height to 0
+    height = 0;
+
+    // 3.  Calculate raw semitone number, yielding a value between 0 (C) and
+    // 11 (B)
+    int pitch  = rawpitch % 12;
+    
+    // clear the in-coming accidental so we can trap any failure to re-set
+    // it on the way out:
+    Accidental userAccidental = accidental;
+    accidental = "";
+    
+    if (userAccidental == NoAccidental || !Pitch(rawpitch, userAccidental).validAccidental())
+    {
+    	userAccidental = resolveNoAccidental(pitch, key, noAccidentalStrategy);
+    	//std::cout << "Chose accidental " << userAccidental << " for pitch " << pitch <<
+    	//	" in key " << key.getName() << std::endl;
+    }
+    //else
+    //{
+    //	std::cout << "Accidental was specified, as " << userAccidental << std::endl;
+    //}
+    
+    resolveSpecifiedAccidental(pitch, clef, key, height, octave, userAccidental, accidental);
+    
     // Failsafe...  If this ever executes, there's trouble to fix...
 // WIP - DMM - munged up to explore #937389, which is temporarily deferred,
 // owing to its non-critical nature, having been hacked around in the Lilypond
@@ -1431,46 +1630,38 @@ Pitch::getPerformancePitch() const
 Accidental
 Pitch::getAccidental(bool useSharps) const
 {
-    return getDisplayAccidental(useSharps ? Key("C major") : Key("A minor"));
+    return getDisplayAccidental(Key("C major"), 
+		useSharps ? UseSharps : UseFlats);
 }
 
 Accidental
 Pitch::getAccidental(const Key &key) const
 {
-    // C major means use sharps, A minor means use flats
-    Key testKey = (key.isSharp() ? Key("C major") : Key("A minor"));
-    
-    // compare the note name in its own key against the note name in either C
-    // major or A minor, to see if it differs
-    std::string keyNote = "", rawNote = "";
-    keyNote += getNoteName(key);
-    rawNote += getNoteName(testKey);
-    
-    // if these two notes names don't match, we might have one of the hateful
-    // E#/F E/Fb B#/C B/Cb notes, which are enharmonics that use a *different*
-    // MIDI pitch, so we check for those first, as they will resolve to
-    // different notes/heights depending on their key signature
-    if      (keyNote == "E" && rawNote == "F") // E#
-	return Sharp;
-    else if (keyNote == "F" && rawNote == "E") // Fb
-	return Flat;
-    else if (keyNote == "B" && rawNote == "C") // B#
-	return Sharp;
-    else if (keyNote == "C" && rawNote == "B") // Cb
-	return Flat;
-    else
-    // if it wasn't, we don't really care about other enharmonics, which are
-    // all two notes that share the *same* MIDI pitch, so we just return an
-    // accidental against the caller's stated useSharps preference.
-	return getDisplayAccidental(testKey);
+	if (m_accidental == NoAccidental || !validAccidental())
+	{
+		Accidental retval = resolveNoAccidental(m_pitch, key, UseKey);
+		//std::cout << "Resolved No/invalid accidental: chose " << retval << std::endl;
+		return retval; 
+	}
+	else
+	{
+		//std::cout << "Returning specified accidental" << std::endl;
+		return m_accidental;
+	}
 }
 
 Accidental
 Pitch::getDisplayAccidental(const Key &key) const
 {
+    return getDisplayAccidental(key, UseKey);
+}
+
+Accidental
+Pitch::getDisplayAccidental(const Key &key, NoAccidentalStrategy noAccidentalStrategy) const
+{
     int heightOnStaff;
     Accidental accidental(m_accidental);
-    rawPitchToDisplayPitch(m_pitch, Clef(), key, heightOnStaff, accidental);
+    rawPitchToDisplayPitch(m_pitch, Clef(), key, heightOnStaff, accidental, noAccidentalStrategy);
     return accidental;
 }
 
@@ -1482,7 +1673,7 @@ Pitch::getNoteInScale(const Key &key) const
     p -= Accidentals::getPitchOffset(getDisplayAccidental(key));
     p += 24; // in case these calculations made it -ve
     p %= 12;
-
+    
     static int major[]          = { 0, 0, 1, 1, 2, 3, 3, 4, 4, 5, 5, 6 };
     static int minor_harmonic[] = { 0, 0, 1, 2, 2, 3, 3, 4, 5, 5, 5, 6 };
 
@@ -1502,7 +1693,7 @@ Pitch::getHeightOnStaff(const Clef &clef, const Key &key) const
 {
     int heightOnStaff;
     Accidental accidental(m_accidental);
-    rawPitchToDisplayPitch(m_pitch, clef, key, heightOnStaff, accidental);
+    rawPitchToDisplayPitch(m_pitch, clef, key, heightOnStaff, accidental, UseKey);
     return heightOnStaff;
 }
 
@@ -1603,6 +1794,7 @@ Pitch Pitch::transpose(const Key key, int pitchDelta, int heightDelta)
 	Pitch oldPitchWithoutAccidental(getPerformancePitch() - Accidentals::getPitchOffset(oldAccidental), Natural);
 	Key cmaj = Key();
 	int oldStep = getNoteInScale(cmaj) + oldPitchWithoutAccidental.getOctave(0) * 7;
+	std::cout << "old step: " << oldStep % 7 << std::endl;
 	
 	// calculate new pitch and step
 	int newPitch = getPerformancePitch() + pitchDelta;
@@ -1612,6 +1804,7 @@ Pitch Pitch::transpose(const Key key, int pitchDelta, int heightDelta)
 	static int stepIntervals[] = { 0,2,4,5,7,9,11 };
 	int pitchWithoutAccidental = ((newStep / 7) * 12 + stepIntervals[newStep % 7]);
 	int newAccidentalOffset = newPitch - pitchWithoutAccidental;
+	std::cout << "new accidentalOffset: " << newAccidentalOffset << std::endl;
 	// construct pitch-object to return
 	Pitch newPitchObj(newPitch, Accidentals::getAccidental(newAccidentalOffset));
 	return newPitchObj;

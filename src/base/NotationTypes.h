@@ -92,6 +92,23 @@ namespace Accidentals
 
     typedef std::vector<Accidental> AccidentalList;
 
+	/** 
+	 * When no accidental is specified for a pitch, there are several
+	 * strategies to determine what accidental to display for an 
+	 * out-of-key pitch
+	 */
+	enum NoAccidentalStrategy {
+		/** always use sharps */
+		UseSharps,
+		/** always use flats */
+		UseFlats,
+		/** always use sharps or always use flats depending on of what
+		 * type of accidentals the current key is made up */ 
+		UseKeySharpness,
+		/** use the most likely accidental for this key */
+		UseKey
+	};
+
     /**
      * Get the predefined accidentals (i.e. the ones listed above)
      * in their defined order.
@@ -479,6 +496,13 @@ public:
     Accidental getAccidentalAtHeight(int height, const Clef &clef) const;
 
     /**
+     * Return the accidental for the the given number of steps
+     * from the tonic. For example: for F major, step '3' is the
+     * Bb, so getAccidentalForStep(3) will yield a Flat.
+     */
+    Accidental getAccidentalForStep(int steps) const;
+
+    /**
      * Return the heights-on-staff (in Pitch
      * terminology) of all accidentals in the key's signature,
      * in the given clef.
@@ -840,6 +864,13 @@ public:
      */
     Accidental getDisplayAccidental(const Key &key) const;
 
+	/**
+     * Return the accidental that should be used to display this pitch
+     * in a given key, using the given strategy to resolve pitches where
+     * an accidental is needed but not specified.
+     */
+    Accidental getDisplayAccidental(const Key &key, Accidentals::NoAccidentalStrategy) const;
+
     /**
      * Return the position in the scale for this pitch, as a number in
      * the range 0 to 6 where 0 is the root of the key.
@@ -925,12 +956,20 @@ public:
 	 */
 	Pitch transpose(Key key, int pitchDelta, int heightDelta);
 
+	/** 
+ 	 * checks whether the accidental specified for this pitch (if any)
+ 	 * is valid - for example, a Sharp for pitch 11 is invalid, as
+ 	 * it's between A# and B#.
+ 	 */  
+	bool validAccidental() const;
+
 private:
     int m_pitch;
     Accidental m_accidental;
 
     static void rawPitchToDisplayPitch
-    (int, const Clef &, const Key &, int &, Accidental &);
+    (int, const Clef &, const Key &, int &, Accidental &, 
+    Accidentals::NoAccidentalStrategy);
 
     static void displayPitchToRawPitch
     (int, Accidental, const Clef &, const Key &,
