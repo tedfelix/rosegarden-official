@@ -1451,8 +1451,26 @@ LilypondExporter::writeBar(Segment *s,
             if (tiedForward)
                 str << "~ ";
 
-            if (newBeamedGroup)
-                notesInBeamedGroup++;
+            if (newBeamedGroup) {
+                // This is a workaround for bug #1705430:
+                //   Beaming groups erroneous after merging notes
+                // There will be fewer "e4. [ ]" errors in LilyPond-compiling.
+                // HJJ: This should be fixed in notation engine,
+                //      after which the workaround below should be removed.
+                Note note(Note::getNearestNote(duration, MAX_DOTS));
+
+                switch (note.getNoteType()) {
+                case Note::SixtyFourthNote:
+                case Note::ThirtySecondNote:
+                case Note::SixteenthNote:
+                case Note::EighthNote:
+                    notesInBeamedGroup++;
+                    break;
+                }
+            }
+            // // Old version before the workaround for bug #1705430:
+            // if (newBeamedGroup)
+            //    notesInBeamedGroup++;
         } else if ((*i)->isa(Note::EventRestType)) {
 
             bool hiddenRest = false;
