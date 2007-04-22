@@ -1,0 +1,102 @@
+Using infrared remote controls with Rosegarden
+==============================================
+
+Rosegarden can use infrared remote controls for some functions like transport buttons and track navigation. At a low level, support for infrared remote controls is provided by LIRC (Linux Infrared Remote Control). There is a daemon named "lircd" that serves messages from the IR remotes to client aplications. You can find more information about LIRC in their web site at http://www.lirc.org 
+
+At a higher level, KDE applications may use an application named IRKick (the KDE LIRC Server daemon) to manage the remote control behavior when used with KDE applications. Using this program, KDE applications can receive LIRC messages without needing to be implemented  explicitly as LIRC clients. You can find this program in your Linux distribution as a package named "kdelirc", or belonging to "kdeutils".
+
+Rosegarden has both an internal LIRC client, that can be optionally compiled into the program, and also has support for IRKick. The  internal LIRC support may be useful when you don't use the KDE desktop with Rosegarden, or when you don't want to use IRKick. If you already use an infrared remote control with other KDE applications with IRKick, you may use also Rosegarden in the same way.
+
+LIRC Daemon Setup
+-----------------
+
+First, it is necessary to install and configure the LIRC daemon. See http://www.lirc.org/html documentation to find information about how to configure the lircd daemon. The details are different depending on the infrared receiver that you use, and the remote control model.
+
+As an example, here is the howto for a modern digital TV USB receiver: http://mcentral.de/wiki/index.php/LircRemote
+
+LIRC Client
+-----------
+
+If you want to use the internal LIRC client compiled into Rosegarden, you need to provide a configuration file. It is usually located in your home directory with the name ".lircrc", and here is where you define the bindings between the remote control buttons and the application functions. Here is an example of such configuration.
+
+# ----------------------------------------------------------------------------
+# lircrc.rosegarden
+#
+# Example .lircrc config file for rosegarden.
+# Adjust the "button =" lines to your remote control in your ~/.lircrc
+# ----------------------------------------------------------------------------
+begin rosegarden
+  # ------------------------------
+  # rosegarden transport
+  # ------------------------------
+  begin
+    prog = rosegarden
+    button = FORWARD
+    config = FORWARD
+  end
+  begin
+    prog = rosegarden
+    button = REWIND
+    config = REWIND
+  end
+  begin
+    prog = rosegarden
+    button = PLAY
+    config = PLAY
+  end
+  begin
+    prog = rosegarden
+    button = STOP
+    config = STOP
+  end
+  begin
+    prog = rosegarden
+    button = RECORD
+    config = RECORD
+  end
+  # (mis-)use volume up/down for jumping to beginning/end
+  begin
+    prog = rosegarden
+    button = VOLUMEUP
+    config = FORWARDTOEND
+  end
+  begin
+    prog = rosegarden
+    button = VOLUMEDOWN
+    config = REWINDTOBEGINNING
+  end
+  # ------------------------------
+  # track navigation
+  # ------------------------------
+  begin
+    prog = rosegarden
+    button = CHANNELUP
+    config = TRACK-
+  end
+  begin
+    prog = rosegarden
+    button = CHANNELDOWN
+    config = TRACK+
+  end
+  # track LED's
+  begin
+    prog = rosegarden
+    button = MUTE
+    config = TRACK-MUTE
+  end
+  begin
+    prog = rosegarden
+    button = MENU
+    config = TRACK-RECORD
+  end
+end rosegarden
+
+
+IRKick support
+--------------
+
+The IRKick profile was already installed in your system when you installed Rosegarden. You only need to start the IRKick program, and use the configuration dialog to bind the buttons of your remote control to the actions provided by Rosegarden. You may also bind a remote button to any Rosegarden function exported in a DCOP interface.
+
+You can find IRKick somewhere in your K menu. The exact place depends on your KDE distribution and version, look at System/Desktop Applet or System/Configuration.
+
+Once you have both LIRC and IRKick running, you need to bind the remote control buttons to Rosegarden actions. To do so, use the "Configure" dialog, which is also available as a KControl module. Press the "add..." button to open a wizard. The first step is to select Rosegarden in the applications list. Next, choose a remote control button name, and press next. Then, select the function which you want to perform with the remote control button. The last page allows to select some options. You can repeat the procedure for each button, but you don't need to use all of them.
