@@ -9,10 +9,10 @@ INCPATH  = -I..
 
 SRCS	:= test.C pitch.C
 
-default: test utf8 colour transpose
+default: test utf8 colour transpose accidentals 
 
 clean:
-	rm -f test test.o pitch pitch.o utf8 utf8.o colour colour.o transpose.o transpose
+	rm -f test test.o pitch pitch.o utf8 utf8.o colour colour.o transpose.o transpose accidentals.o accidentals
 
 %.o: %.cpp
 	$(CXX) $(CPPFLAGS) -c $< $(INCPATH) -o $@
@@ -30,6 +30,9 @@ colour: colour.o
 	$(CXX) $< $(LIBBASE) -o $@
 
 transpose: transpose.o
+	$(CXX) $< $(LIBBASE) -o $@
+
+accidentals: accidentals.o
 	$(CXX) $< $(LIBBASE) -o $@
 
 
@@ -51,3 +54,4 @@ pitch.o: ../RealTime.h ../PropertyName.h ../Exception.h ../Instrument.h
 pitch.o: ../XmlExportable.h #../StringHash.h
 
 transpose.o: ../NotationTypes.h 
+accidentals.o: ../NotationTypes.h 
