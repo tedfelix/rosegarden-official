@@ -1,14 +1,16 @@
-# Find the kde-config program
+# Find the kde-config program and retrieve the install dirs
 #
 # Variables:
 #       HAVE_KDECONFIG
-#	KDECONFIG_EXECUTABLE
-#	KDE3PREFIX
+#       KDECONFIG_EXECUTABLE
+#       KDE3PREFIX
 #       KDE3HTMLDIR
 #       KDE3DATADIR
 #       KDE3ICONDIR
 #       KDE3MIMEDIR
 #       KDE3MENUDIR
+#       KDE3EXECDIR
+#       KDE3L18NDIR
 
 IF(KDECONFIG_EXECUTABLE)
     SET(HAVE_KDECONFIG TRUE)
@@ -72,3 +74,19 @@ IF(NOT KDE3MENUDIR)
     STRING(REPLACE "${KDE3PREFIX}/" "" KDE3MENUDIR "${_menuinstalldir}")
     MESSAGE(STATUS "KDE3MENUDIR : ${KDE3MENUDIR}")
 ENDIF(NOT KDE3MENUDIR)
+
+IF(NOT KDE3L18NDIR)
+    EXECUTE_PROCESS(COMMAND ${KDECONFIG_EXECUTABLE} --expandvars --install locale
+        OUTPUT_VARIABLE _l18ninstalldir)
+    STRING(REGEX REPLACE "\n" "" _l18ninstalldir "${_l18ninstalldir}")
+    STRING(REPLACE "${KDE3PREFIX}/" "" KDE3L18NDIR "${_l18ninstalldir}")
+    MESSAGE(STATUS "KDE3L18NDIR : ${KDE3L18NDIR}")
+ENDIF(NOT KDE3L18NDIR)
+
+IF(NOT KDE3EXECDIR)
+    EXECUTE_PROCESS(COMMAND ${KDECONFIG_EXECUTABLE} --expandvars --install exe
+        OUTPUT_VARIABLE _execinstalldir)
+    STRING(REGEX REPLACE "\n" "" _execinstalldir "${_execinstalldir}")
+    STRING(REPLACE "${KDE3PREFIX}/" "" KDE3EXECDIR "${_execinstalldir}")
+    MESSAGE(STATUS "KDE3EXECDIR : ${KDE3EXECDIR}")
+ENDIF(NOT KDE3EXECDIR)

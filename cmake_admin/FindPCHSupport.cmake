@@ -8,11 +8,12 @@
 #   ADD_PRECOMPILED_HEADER
 
 IF(CMAKE_COMPILER_IS_GNUCXX)
-    EXEC_PROGRAM(${CMAKE_CXX_COMPILER} 
-        ARGS --version OUTPUT_VARIABLE _compiler_output)
-    STRING(REGEX REPLACE ".* ([0-9]\\.[0-9]\\.[0-9]) .*" "\\1" 
-           gcc_compiler_version ${_compiler_output})
-    #MESSAGE("GCC Version: ${_compiler_version}")
+    EXEC_PROGRAM(${CMAKE_CXX_COMPILER}
+                 ARGS -dumpversion
+                 OUTPUT_VARIABLE gcc_compiler_version)
+#   STRING(REGEX REPLACE ".* ([0-9]\\.[0-9]\\.[0-9]) .*" "\\1" 
+#          gcc_compiler_version ${_compiler_output})
+#   MESSAGE("GCC Version: ${gcc_compiler_version}")
     IF(gcc_compiler_version MATCHES "4\\.[0-9]\\.[0-9]")
         SET(PCHSupport_FOUND TRUE)
     ELSE(gcc_compiler_version MATCHES "4\\.[0-9]\\.[0-9]")
