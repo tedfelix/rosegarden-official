@@ -20,7 +20,7 @@ ELSE(MSGFMT_EXECUTABLE)
     ELSE(MSGFMT_EXECUTABLE)
 	IF(NOT MSGFMT_FIND_QUIETLY)
 	    IF(MSGFMT_FIND_REQUIRED)
-		MESSAGE(FATAL_ERROR "msgfmt program couldn't be found")
+                MESSAGE(FATAL_ERROR "msgfmt program couldn't be found")
 	    ENDIF(MSGFMT_FIND_REQUIRED)
 	ENDIF(NOT MSGFMT_FIND_QUIETLY)
     ENDIF(MSGFMT_EXECUTABLE)
@@ -30,17 +30,17 @@ ENDIF (MSGFMT_EXECUTABLE)
 MACRO(ADD_TRANSLATIONS _baseName)
     SET(_outputs)
     FOREACH(_file ${ARGN})
-		GET_FILENAME_COMPONENT(_file_we ${_file} NAME_WE)
-		SET(_out "${CMAKE_CURRENT_BINARY_DIR}/${_file_we}.gmo")
-		SET(_in  "${CMAKE_CURRENT_SOURCE_DIR}/${_file_we}.po")
-		ADD_CUSTOM_COMMAND(
-		    OUTPUT ${_out}
-		    COMMAND ${MSGFMT_EXECUTABLE} -o ${_out} ${_in}
-		    DEPENDS ${_in} )
-		INSTALL(FILES ${_out}
-		    DESTINATION share/locale/${_file_we}/LC_MESSAGES/
-		    RENAME ${_baseName}.mo )
-		SET(_outputs ${_outputs} ${_out})
+	GET_FILENAME_COMPONENT(_file_we ${_file} NAME_WE)
+	SET(_out "${CMAKE_CURRENT_BINARY_DIR}/${_file_we}.gmo")
+	SET(_in  "${CMAKE_CURRENT_SOURCE_DIR}/${_file_we}.po")
+	ADD_CUSTOM_COMMAND(
+	    OUTPUT ${_out}
+	    COMMAND ${MSGFMT_EXECUTABLE} -o ${_out} ${_in}
+	    DEPENDS ${_in} )
+	INSTALL(FILES ${_out}
+	    DESTINATION ${KDE3L18NDIR}/${_file_we}/LC_MESSAGES/
+	    RENAME ${_baseName}.mo )
+	SET(_outputs ${_outputs} ${_out})
     ENDFOREACH(_file)
     ADD_CUSTOM_TARGET(translations ALL DEPENDS ${_outputs})
 ENDMACRO(ADD_TRANSLATIONS)

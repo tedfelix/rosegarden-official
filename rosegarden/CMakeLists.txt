@@ -303,7 +303,7 @@ ADD_SUBDIRECTORY(data RGbuild/data)
 # create and install the version file
 FILE(WRITE version.txt "${VERSION}\n")
 INSTALL( FILES version.txt
-         DESTINATION share/apps/rosegarden )
+         DESTINATION ${KDE3DATADIR}/rosegarden )
 
 # uninstall custom target
 CONFIGURE_FILE(

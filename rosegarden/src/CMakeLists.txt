@@ -120,16 +120,16 @@ TARGET_LINK_LIBRARIES(rosegarden
 
 # Install targets
 INSTALL(TARGETS rosegarden rosegardensequencer
-        RUNTIME DESTINATION bin)
+        RUNTIME DESTINATION ${KDE3EXECDIR} )
 
 # Install helper scripts
 INSTALL(PROGRAMS
             helpers/rosegarden-lilypondview
             helpers/rosegarden-project-package
             helpers/rosegarden-audiofile-importer
-        DESTINATION bin )
+        DESTINATION ${KDE3EXECDIR} )
 
 # Install GUI resource files
 FILE(GLOB RC_FILES gui/ui/*.rc)
 INSTALL(FILES ${RC_FILES}
-        DESTINATION share/apps/rosegarden )
+        DESTINATION ${KDE3DATADIR}/rosegarden )
