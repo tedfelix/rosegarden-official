@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Based on KDE messages.sh by Thomas Nagy
 # Inspired by Makefile.common from coolo
