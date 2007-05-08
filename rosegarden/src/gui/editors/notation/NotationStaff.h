@@ -458,6 +458,7 @@ protected:
     bool m_colourQuantize;
     bool m_showUnknowns;
     bool m_showRanges;
+    int m_showCollisions;
     int m_keySigCancelMode;
 
     QPainter *m_printPainter;

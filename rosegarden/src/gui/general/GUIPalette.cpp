@@ -85,6 +85,7 @@ GUIPalette::GUIPalette()
 
     m_defaultsMap[MatrixElementBorder] = Qt::black;
     m_defaultsMap[MatrixElementBlock] = QColor(98, 128, 232);
+    m_defaultsMap[MatrixOverlapBlock] = Qt::black;
 
     m_defaultsMap[LoopRulerBackground] = QColor(120, 120, 120);
     m_defaultsMap[LoopRulerForeground] = Qt::white;
@@ -204,6 +205,7 @@ const char* const GUIPalette::SegmentSplitLine = "segmentsplitline";
 
 const char* const GUIPalette::MatrixElementBorder = "matrixelementborder";
 const char* const GUIPalette::MatrixElementBlock = "matrixelementblock";
+const char* const GUIPalette::MatrixOverlapBlock = "matrixoverlapblock";
 
 const char* const GUIPalette::LoopRulerBackground = "looprulerbackground";
 const char* const GUIPalette::LoopRulerForeground = "looprulerforeground";
@@ -255,6 +257,11 @@ const int GUIPalette::TriggerNoteHue = 4;
 const int GUIPalette::TriggerNoteMinValue = 140;
 const int GUIPalette::OutRangeNoteHue = 0;
 const int GUIPalette::OutRangeNoteMinValue = 200;
+
+const int GUIPalette::CollidingNoteHue = 320;
+const int GUIPalette::CollidingNoteMinValue = 255;
+const int GUIPalette::CollisionHaloHue = 42;
+const int GUIPalette::CollisionHaloSaturation = 200;
 
 const char* const GUIPalette::TextAnnotationBackground = "textannotationbackground";
 

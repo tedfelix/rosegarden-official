@@ -20,8 +20,9 @@
 */
 
 #include "SegmentMatrixHelper.h"
+#include "BaseProperties.h"
 
-namespace Rosegarden 
+namespace Rosegarden
 {
 
 Segment::iterator SegmentMatrixHelper::insertNote(Event* e)
@@ -32,5 +33,24 @@ Segment::iterator SegmentMatrixHelper::insertNote(Event* e)
     return i;
 }
 
+bool
+SegmentMatrixHelper::isDrumColliding(Event* e)
+{
+    long pitch = 0;
+    if (!e->get<Int>(BaseProperties::PITCH, pitch))
+        return false;
+
+    timeT evTime = e->getAbsoluteTime();
+
+    Segment::iterator it;
+    for (it = segment().findTime(evTime); it != end(); ++it) {
+        if ((*it) == e) continue;
+        if ((*it)->getAbsoluteTime() != evTime) break;
+        long p = 0;
+        if (!(*it)->get<Int>(BaseProperties::PITCH, p)) continue;
+        if (p == pitch) return true;
+    }
+    return false;
+}
 
 }

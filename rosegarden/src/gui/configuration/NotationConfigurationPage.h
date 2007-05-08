@@ -93,6 +93,7 @@ protected:
     QCheckBox *m_showUnknowns;
     QCheckBox *m_showInvisibles;
     QCheckBox *m_showRanges;
+    QComboBox *m_showCollisions;
     QComboBox *m_noteStyle;
     QComboBox *m_insertType;
     QCheckBox *m_autoBeam;

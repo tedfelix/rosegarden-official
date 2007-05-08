@@ -41,6 +41,10 @@ class Event;
 
 class MatrixElement : public ViewElement
 {
+
+    typedef std::vector <QCanvasRectangle *> OverlapRectangles;
+
+
 public:
     MatrixElement(Event *event, bool drum);
 
@@ -93,11 +97,36 @@ public:
     void setColour(const QColor &colour)
         { m_canvasRect->setBrush(QBrush(colour)); }
 
+    /**
+     * Draws overlap rectangles (if any)
+     * (should not be called in drum mode)
+     */
+    void drawOverlapRectangles();
+
+    /**
+     * Removes overlap rectangles if any
+     */
+    void removeOverlapRectangles();
+
+    /**
+     * If element rectangle is currently visible gets its size and returns true.
+     * Returns false if element rectangle is undefined or not visible.
+     */
+    bool getVisibleRectangle(QRect &rectangle);
+
+    /**
+     * Redraw overlap rectangles of all matrix elements colliding with rect
+     */
+    void redrawOverlaps(QRect rect);
+
 protected:
 
     //--------------- Data members ---------------------------------
 
     QCanvasMatrixRectangle *m_canvasRect;
+
+    OverlapRectangles *m_overlapRectangles;
+
 };
 
 

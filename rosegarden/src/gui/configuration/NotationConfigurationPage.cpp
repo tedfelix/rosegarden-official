@@ -296,6 +296,20 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     m_showRanges->setChecked(defaultShowRanges);
     layout->addWidget(m_showRanges, 6, 1);
 
+    layout->addWidget(new QLabel(
+                            i18n("Hilight superposed notes"), frame), 7, 0);
+    m_showCollisions = new KComboBox(frame);
+    m_showCollisions->setEditable(false);
+    m_showCollisions->insertItem(i18n("no"));
+    m_showCollisions->insertItem(i18n("with a different color"));
+    m_showCollisions->insertItem(i18n("with a halo around them"));
+    int defaultShowCollisions = m_cfg->readNumEntry("showcollisions", 2);
+    if (defaultShowCollisions >= 0 && defaultShowCollisions <= 2) {
+        m_showCollisions->setCurrentItem(defaultShowCollisions);
+    }
+    layout->addWidget(m_showCollisions, 7, 1);
+
+
     addTab(frame, i18n("Layout"));
 
 
@@ -590,6 +604,7 @@ NotationConfigurationPage::apply()
     m_cfg->writeEntry("showunknowns", m_showUnknowns->isChecked());
     m_cfg->writeEntry("showinvisibles", m_showInvisibles->isChecked());
     m_cfg->writeEntry("showranges", m_showRanges->isChecked());
+    m_cfg->writeEntry("showcollisions", m_showCollisions->currentItem());
     m_cfg->writeEntry("style", m_untranslatedNoteStyle[m_noteStyle->currentItem()]);
     m_cfg->writeEntry("inserttype", m_insertType->currentItem());
     m_cfg->writeEntry("autobeam", m_autoBeam->isChecked());

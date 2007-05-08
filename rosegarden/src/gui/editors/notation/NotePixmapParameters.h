@@ -91,10 +91,12 @@ public:
     void removeMarks();
 
     void setInRange(bool inRange)         { m_inRange          = inRange;    }
-    
+
+    void setCollision(bool collision)     { m_isColliding     = collision;  }
+
     std::vector<Mark> getNormalMarks() const;
     std::vector<Mark> getAboveMarks() const; // bowings, pause etc
-    
+
 
 private:
     friend class NotePixmapFactory;
@@ -141,9 +143,11 @@ private:
     int     m_tieLength;
 
     bool    m_inRange;
-    
+
+    bool m_isColliding;
+
     std::vector<Mark> m_marks;
-};    
+};
 
 
 class NotePixmapPainter;

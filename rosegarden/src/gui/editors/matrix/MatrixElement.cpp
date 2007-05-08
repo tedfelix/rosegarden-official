@@ -44,7 +44,8 @@ MatrixElement::MatrixElement(Event *event, bool drum) :
         ViewElement(event),
         m_canvasRect(drum ?
                      new QCanvasMatrixDiamond(*this, 0) :
-                     new QCanvasMatrixRectangle(*this, 0))
+                     new QCanvasMatrixRectangle(*this, 0)),
+        m_overlapRectangles(NULL)
 {
     //     MATRIX_DEBUG << "new MatrixElement "
     //                          << this << " wrapping " << event << endl;
@@ -57,6 +58,8 @@ MatrixElement::~MatrixElement()
 
     m_canvasRect->hide();
     delete m_canvasRect;
+
+    removeOverlapRectangles();
 }
 
 void MatrixElement::setCanvas(QCanvas* c)
@@ -78,5 +81,80 @@ bool MatrixElement::isNote() const
 {
     return event()->isa(Note::EventType);
 }
+
+void MatrixElement::drawOverlapRectangles()
+{
+    if (m_overlapRectangles) removeOverlapRectangles();
+
+    QRect elRect = m_canvasRect->rect();
+    QCanvasItemList
+          itemList = m_canvasRect->canvas()->collisions(elRect);
+    QCanvasItemList::Iterator it;
+    MatrixElement* mel = 0;
+
+
+    for (it = itemList.begin(); it != itemList.end(); ++it) {
+
+        QCanvasMatrixRectangle *mRect = 0;
+        if ((mRect = dynamic_cast<QCanvasMatrixRectangle*>(*it))) {
+
+            // Element does'nt collide with itself
+            if (mRect == m_canvasRect) continue;
+
+            QRect rect = mRect->rect() & elRect;
+            if (!rect.isEmpty()) {
+                if (!m_overlapRectangles) {
+                    m_overlapRectangles = new OverlapRectangles();
+                }
+
+                QCanvasRectangle *
+                    overlap = new QCanvasRectangle(rect, m_canvasRect->canvas());
+                overlap->setBrush(GUIPalette::getColour(GUIPalette::MatrixOverlapBlock));
+                overlap->setZ(getCanvasZ() + 1);
+                overlap->show();
+                m_overlapRectangles->push_back(overlap);
+            }
+        }
+    }
+}
+
+void MatrixElement::redrawOverlaps(QRect rect)
+{
+    QCanvasItemList
+          itemList = m_canvasRect->canvas()->collisions(rect);
+    QCanvasItemList::Iterator it;
+    MatrixElement* mel = 0;
+
+    for (it = itemList.begin(); it != itemList.end(); ++it) {
+        QCanvasMatrixRectangle *mRect = 0;
+        if ((mRect = dynamic_cast<QCanvasMatrixRectangle*>(*it))) {
+            mRect->getMatrixElement().drawOverlapRectangles();
+        }
+    }
+}
+
+void MatrixElement::removeOverlapRectangles()
+{
+    if (!m_overlapRectangles) return;
+
+    OverlapRectangles::iterator it;
+    for (it = m_overlapRectangles->begin(); it != m_overlapRectangles->end(); ++it) {
+        (*it)->hide();
+        delete *it;
+    }
+
+    delete m_overlapRectangles;
+    m_overlapRectangles = NULL;
+}
+
+bool MatrixElement::getVisibleRectangle(QRect &rectangle)
+{
+    if (m_canvasRect && m_canvasRect->isVisible()) {
+        rectangle = m_canvasRect->rect();
+        return true;
+    }
+    return false;
+}
+
 
 }
