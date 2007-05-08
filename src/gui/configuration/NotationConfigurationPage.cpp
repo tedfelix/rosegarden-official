@@ -209,7 +209,7 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
 
 
     frame = new QFrame(m_tabWidget);
-    layout = new QGridLayout(frame, 8, 2, 10, 5);
+    layout = new QGridLayout(frame, 9, 2, 10, 5);
 
     layout->addWidget(new QLabel(i18n("Default layout mode"), frame), 0, 0);
 
@@ -297,12 +297,12 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     layout->addWidget(m_showRanges, 6, 1);
 
     layout->addWidget(new QLabel(
-                            i18n("Hilight superposed notes"), frame), 7, 0);
+                            i18n("Show superimposed notes"), frame), 7, 0);
     m_showCollisions = new KComboBox(frame);
     m_showCollisions->setEditable(false);
-    m_showCollisions->insertItem(i18n("no"));
-    m_showCollisions->insertItem(i18n("with a different color"));
-    m_showCollisions->insertItem(i18n("with a halo around them"));
+    m_showCollisions->insertItem(i18n("As normal single notes"));
+    m_showCollisions->insertItem(i18n("In a different color"));
+    m_showCollisions->insertItem(i18n("High-lit with a halo effect"));
     int defaultShowCollisions = m_cfg->readNumEntry("showcollisions", 2);
     if (defaultShowCollisions >= 0 && defaultShowCollisions <= 2) {
         m_showCollisions->setCurrentItem(defaultShowCollisions);
