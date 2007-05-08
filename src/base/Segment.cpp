@@ -30,6 +30,7 @@
 #include <algorithm>
 #include <iterator>
 #include <cstdio>
+#include <typeinfo>
 
 namespace Rosegarden 
 {

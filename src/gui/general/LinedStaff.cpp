@@ -43,6 +43,7 @@
 #include <qpen.h>
 #include <qrect.h>
 #include <qstring.h>
+#include <algorithm>
 
 
 namespace Rosegarden

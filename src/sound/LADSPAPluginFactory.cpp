@@ -21,6 +21,7 @@
 
 #include "LADSPAPluginFactory.h"
 #include <iostream>
+#include <cstdlib>
 
 #ifdef HAVE_LADSPA
 

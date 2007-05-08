@@ -24,6 +24,7 @@
 #include "MidiTypes.h"
 
 #include <cstdio>
+#include <cstdlib>
 
 
 #if (__GNUC__ < 3)

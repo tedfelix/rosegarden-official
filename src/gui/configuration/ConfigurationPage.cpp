@@ -28,6 +28,7 @@
 #include "document/RosegardenGUIDoc.h"
 #include <kconfig.h>
 #include <qwidget.h>
+#include <algorithm>
 
 
 namespace Rosegarden

@@ -19,6 +19,7 @@
 */
 
 #include <cmath>
+#include <cstdlib>
 #include <kapplication.h>
 
 #include <qdatetime.h>

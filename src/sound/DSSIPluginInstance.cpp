@@ -21,6 +21,7 @@
 
 #include <iostream>
 #include <cassert>
+#include <cstdlib>
 
 #include "DSSIPluginInstance.h"
 #include "PluginIdentifier.h"

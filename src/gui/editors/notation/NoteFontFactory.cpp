@@ -41,6 +41,7 @@
 #include <qdir.h>
 #include <qstring.h>
 #include <qstringlist.h>
+#include <algorithm>
 
 
 namespace Rosegarden

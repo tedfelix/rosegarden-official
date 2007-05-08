@@ -49,6 +49,7 @@
 #include <qtable.h>
 #include <qvbox.h>
 #include <qwidget.h>
+#include <algorithm>
 
 
 namespace Rosegarden

@@ -31,6 +31,7 @@
 #include <iomanip>
 #include <algorithm>
 #include <cmath>
+#include <typeinfo>
 
 #if (__GNUC__ < 3)
 #include <strstream>

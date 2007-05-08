@@ -54,6 +54,7 @@
 #include <qtooltip.h>
 #include <qvgroupbox.h>
 #include <qwidget.h>
+#include <algorithm>
 
 namespace Rosegarden
 {
