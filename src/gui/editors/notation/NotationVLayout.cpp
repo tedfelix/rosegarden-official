@@ -248,10 +248,22 @@ NotationVLayout::scanStaff(Staff &staffBase, timeT, timeT)
 
             bool hasShifted = chord.hasNoteHeadShifted();
 
+            double y0 = -1E50;          // A very unlikely Y layout value
+
             for (unsigned int j = 0; j < chord.size(); ++j) {
 
                 el = static_cast<NotationElement*>(*chord[j]);
                 el->setLayoutY(staff.getLayoutYForHeight(h[j]));
+
+                // Look for collision
+                const double eps = 0.001;
+                Event *eel = el->event();
+                double y = el->getLayoutY();
+                if (eel->has("pitch")) {
+                    el->setIsColliding(fabs(y - y0) < eps);
+                    y0 = y;
+                }
+
 
                 // These calculations and assignments are pretty much final
                 // if the chord is not in a beamed group, but if it is then

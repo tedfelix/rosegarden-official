@@ -139,6 +139,17 @@ public:
     bool isSelected();
     void setSelected(bool selected);
 
+    /**
+     * Return true if the element is a note which lies at the exactly
+     * same place than another note.
+     * Only valid after NotationVLayout::scanStaff() call.
+     * Only a returned true is meaningful (when 2 notes are colliding, the
+     * first element returns false and the second one returns true).
+     */
+    bool isColliding() { return m_isColliding; }
+
+    void setIsColliding(bool value) { m_isColliding = value; }
+
     /// Returns the associated canvas item
     QCanvasItem* getCanvasItem() { return m_canvasItem; }
 
@@ -148,6 +159,7 @@ protected:
     double m_airX;
     double m_airWidth;
     bool m_recentlyRegenerated;
+    bool m_isColliding;
 
     QCanvasItem *m_canvasItem;
 

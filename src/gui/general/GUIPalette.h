@@ -73,6 +73,7 @@ public:
 
     static const char* const MatrixElementBorder;
     static const char* const MatrixElementBlock;
+    static const char* const MatrixOverlapBlock;
 
     static const char* const LoopRulerBackground;
     static const char* const LoopRulerForeground;
@@ -124,6 +125,11 @@ public:
     static const int TriggerNoteMinValue;
     static const int OutRangeNoteHue;
     static const int OutRangeNoteMinValue;
+
+    static const int CollidingNoteHue;
+    static const int CollidingNoteMinValue;
+    static const int CollisionHaloHue;
+    static const int CollisionHaloSaturation;
 
     static const char* const TextAnnotationBackground;
 

@@ -34,9 +34,17 @@ public:
 
     iterator insertNote(Event *);
 
+    /**
+     * Returns true if event is colliding another note in percussion
+     * matrix (ie event is a note and has the same start time and the
+     * same pitch as another note).
+     */
+    bool isDrumColliding(Event *);
+
     using SegmentHelper::segment;
     using SegmentNotationHelper::deleteEvent;
     using SegmentNotationHelper::deleteNote;
+
 };
 
 

@@ -102,6 +102,8 @@ public:
     QCanvasPixmap* makeFretboardPixmap(const Guitar::Fingering &fingering,
                                        int x, int y);
 
+    QCanvasPixmap* makeNoteHaloPixmap(const NotePixmapParameters &parameters);
+
     // Printing methods -- draw direct to a paint device:
 
     void drawNote(const NotePixmapParameters &parameters,
@@ -249,7 +251,8 @@ protected:
         QuantizedColour,
         HighlightedColour,
         TriggerColour,
-        OutRangeColour
+        OutRangeColour,
+        CollisionColour
     };
 
     /// draws selected/shaded status from m_selected/m_shaded:
@@ -257,6 +260,8 @@ protected:
 
     /// draws selected/shaded status from m_selected/m_shaded:
     bool getCharacter(CharName name, NoteCharacter &ch, ColourType type, bool inverted);
+
+    void drawNoteHalo(int x, int y, int w, int h);
 
     //--------------- Data members ---------------------------------
 

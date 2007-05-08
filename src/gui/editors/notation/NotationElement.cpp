@@ -40,6 +40,7 @@ namespace Rosegarden
 NotationElement::NotationElement(Event *event)
         : ViewElement(event),
         m_recentlyRegenerated(false),
+        m_isColliding(false),
         m_canvasItem(0),
         m_extraItems(0)
 {

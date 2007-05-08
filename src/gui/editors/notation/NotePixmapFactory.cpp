@@ -483,6 +483,7 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
     NoteCharacter body = getCharacter
                          (charName,
                           params.m_highlighted ? HighlightedColour :
+                          params.m_isColliding ? CollisionColour :
                           params.m_quantized ? QuantizedColour :
                           params.m_trigger ? TriggerColour :
                           params.m_inRange ? PlainColour : OutRangeColour,
@@ -564,6 +565,37 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
         painter->restore();
     }
 }
+
+
+QCanvasPixmap*
+NotePixmapFactory::makeNoteHaloPixmap(const NotePixmapParameters &params)
+{
+    int nbh0 = getNoteBodyHeight();
+    int nbh = getNoteBodyHeight(params.m_noteType);
+    int nbw0 = getNoteBodyHeight();
+    int nbw = getNoteBodyWidth(params.m_noteType);
+    int hOffset = 0;
+
+    createPixmapAndMask(nbw + nbw0, nbh + nbh0);
+    drawNoteHalo(0, 0, nbw + nbw0, nbh + nbh0);
+
+    return makeCanvasPixmap(QPoint(nbw0 / 2, nbh0));
+}
+
+
+void
+NotePixmapFactory::drawNoteHalo(int x, int y, int w, int h) {
+
+   m_p->painter().setPen(QPen(QColor(GUIPalette::CollisionHaloHue,
+                                     GUIPalette::CollisionHaloSaturation,
+                                     255, QColor::Hsv), 1));
+   m_p->painter().setBrush(QColor(GUIPalette::CollisionHaloHue,
+                                  GUIPalette::CollisionHaloSaturation,
+                                  255, QColor::Hsv));
+   m_p->drawEllipse(x, y, w, h);
+}
+
+
 
 int
 NotePixmapFactory::getStemLength(const NotePixmapParameters &params) const
@@ -3209,6 +3241,13 @@ NotePixmapFactory::getCharacter(CharName name, NoteCharacter &ch,
                (name,
                 GUIPalette::OutRangeNoteHue,
                 GUIPalette::OutRangeNoteMinValue,
+                ch, charType, inverted);
+
+    case CollisionColour:
+        return m_font->getCharacterColoured
+               (name,
+                GUIPalette::CollidingNoteHue,
+                GUIPalette::CollidingNoteMinValue,
                 ch, charType, inverted);
     }
 

@@ -130,6 +130,11 @@ public:
 	if (m_useMask) character.drawMask(&m_maskPainter, x, y);
     }
 
+    void drawEllipse(int x, int y, int w, int h) {
+      m_painter->drawEllipse(x, y, w, h);
+      if (m_useMask) m_maskPainter.drawEllipse(x, y, w, h);
+    }
+
 private:
     bool m_useMask;
     QPainter  m_myPainter;

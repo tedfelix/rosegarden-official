@@ -38,6 +38,7 @@
 #include "base/Staff.h"
 #include "base/Track.h"
 #include "base/ViewElement.h"
+#include "base/SegmentMatrixHelper.h"
 #include "document/RosegardenGUIDoc.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/LinedStaff.h"
@@ -140,6 +141,14 @@ void MatrixStaff::positionElement(ViewElement* vel)
 {
     MatrixElement* el = dynamic_cast<MatrixElement*>(vel);
 
+    // Memorize initial rectangle position. May be some overlap rectangles
+    // belonging to other notes are here and should be refreshed after
+    // current element is moved.
+    QRect initialRect;
+    bool rectWasVisible;
+    if (! m_view->isDrumMode())
+        rectWasVisible = el->getVisibleRectangle(initialRect);
+
     LinedStaffCoords coords = getCanvasCoordsForLayoutCoords
                               (el->getLayoutX(), int(el->getLayoutY()));
 
@@ -166,6 +175,19 @@ void MatrixStaff::positionElement(ViewElement* vel)
 
     el->setCanvasX(coords.first);
     el->setCanvasY((double)coords.second);
+
+    // Display overlaps
+    if (m_view->isDrumMode()) {
+        SegmentMatrixHelper helper(m_segment);
+        if (helper.isDrumColliding(el->event()))
+            el->setColour(GUIPalette::getColour(GUIPalette::MatrixOverlapBlock));
+    } else {
+        el->drawOverlapRectangles();
+
+        // Refresh other overlap rectangles
+        if (rectWasVisible) el->redrawOverlaps(initialRect);
+    }
+
 }
 
 MatrixElement*
@@ -205,5 +227,6 @@ MatrixStaff::getKeyMapping() const
         return 0;
     return m_view->getKeyMapping();
 }
+
 
 }
