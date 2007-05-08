@@ -27,6 +27,7 @@
 
 #include <qstring.h>
 #include <cmath>
+#include <algorithm>
 
 namespace Rosegarden
 {

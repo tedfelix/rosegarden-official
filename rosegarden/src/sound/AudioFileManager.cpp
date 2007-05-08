@@ -25,6 +25,7 @@
 #include <string>
 #include <dirent.h> // for new recording file
 #include <cstdio>   // sprintf
+#include <cstdlib>
 #include <pthread.h>
 
 #if (__GNUC__ < 3)

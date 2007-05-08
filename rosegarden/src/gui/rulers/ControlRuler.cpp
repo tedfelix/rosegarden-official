@@ -49,6 +49,7 @@
 #include <qscrollview.h>
 #include <qstring.h>
 #include <qwidget.h>
+#include <algorithm>
 
 
 namespace Rosegarden

@@ -41,6 +41,7 @@
 #define _SAMPLE_WINDOW_H_
 
 #include <cmath>
+#include <cstdlib>
 #include <iostream>
 #include <map>
 

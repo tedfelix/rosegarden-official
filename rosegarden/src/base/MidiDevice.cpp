@@ -25,6 +25,7 @@
 #include "ControlParameter.h"
 
 #include <cstdio>
+#include <cstdlib>
 #include <iostream>
 #include <set>
 

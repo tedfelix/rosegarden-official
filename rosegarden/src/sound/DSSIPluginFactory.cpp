@@ -21,6 +21,7 @@
 
 #include "DSSIPluginFactory.h"
 #include <iostream>
+#include <cstdlib>
 
 #ifdef HAVE_DSSI
 

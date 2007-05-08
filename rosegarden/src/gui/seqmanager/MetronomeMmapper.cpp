@@ -43,6 +43,7 @@
 #include <kconfig.h>
 #include <kglobal.h>
 #include <qstring.h>
+#include <algorithm>
 
 
 namespace Rosegarden

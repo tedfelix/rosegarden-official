@@ -35,6 +35,7 @@
 #include <qdir.h>
 #include <qfileinfo.h>
 #include <qstring.h>
+#include <algorithm>
 
 
 namespace Rosegarden

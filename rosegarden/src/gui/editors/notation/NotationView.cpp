@@ -208,6 +208,7 @@
 #include <qtimer.h>
 #include <qwidget.h>
 #include <qvalidator.h>
+#include <algorithm>
 
 
 namespace Rosegarden

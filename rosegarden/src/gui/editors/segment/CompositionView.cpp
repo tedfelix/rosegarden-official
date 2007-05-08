@@ -65,6 +65,7 @@
 #include <qwidget.h>
 #include <kapplication.h>
 #include <kconfig.h>
+#include <algorithm>
 
 
 namespace Rosegarden

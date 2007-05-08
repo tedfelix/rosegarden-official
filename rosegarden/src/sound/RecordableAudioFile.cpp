@@ -21,6 +21,8 @@
 
 #include "RecordableAudioFile.h"
 
+#include <cstdlib>
+
 //#define DEBUG_RECORDABLE 1
 
 namespace Rosegarden
