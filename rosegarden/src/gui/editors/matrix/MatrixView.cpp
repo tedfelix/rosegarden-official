@@ -1079,14 +1079,12 @@ QSize MatrixView::getViewSize()
 
 void MatrixView::setViewSize(QSize s)
 {
-    MATRIX_DEBUG << "MatrixView::setViewSize() w = " << s.width()
-    << endl;
+    MATRIX_DEBUG << "MatrixView::setViewSize() w = " << s.width() << endl;
 
-    canvas()->resize(s.width(), s.height());
+    canvas()->resize(getXbyInverseWorldMatrix(s.width()), s.height());
     getCanvasView()->resizeContents(s.width(), s.height());
 
-    MATRIX_DEBUG << "MatrixView::setViewSize() contentsWidth = " << getCanvasView()->contentsWidth()
-    << endl;
+    MATRIX_DEBUG << "MatrixView::setViewSize() contentsWidth = " << getCanvasView()->contentsWidth() << endl;
 }
 
 void MatrixView::repaintRulers()
