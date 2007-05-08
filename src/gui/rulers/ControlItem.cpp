@@ -74,7 +74,7 @@ void ControlItem::updateValue()
 
 void ControlItem::updateFromValue()
 {
-    RG_DEBUG << "ControlItem::updateFromValue() : " << this << endl;
+//    RG_DEBUG << "ControlItem::updateFromValue() : " << this << endl;
 
     if (m_elementAdapter->getValue(m_value)) {
 //         RG_DEBUG << "ControlItem::updateFromValue() : value = " << m_value << endl;

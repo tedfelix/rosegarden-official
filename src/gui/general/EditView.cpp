@@ -367,9 +367,9 @@ void EditView::readjustViewSize(QSize requestedSize, bool exact)
     }
 
     int requestedWidth = requestedSize.width(),
-                         requestedHeight = requestedSize.height(),
-                                           windowWidth = width(),
-                                                         windowHeight = height();
+        requestedHeight = requestedSize.height(),
+        windowWidth = width(),
+        windowHeight = height();
 
     QSize newSize;
 
