@@ -68,10 +68,10 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
                           i18n("Compatibility level"), frame), 0, 0);
 
     m_lilyLanguage = new KComboBox(frame);
-    m_lilyLanguage->insertItem(i18n("LilyPond 2.6"));
-    m_lilyLanguage->insertItem(i18n("LilyPond 2.8"));
-    m_lilyLanguage->insertItem(i18n("LilyPond 2.10"));
-    m_lilyLanguage->insertItem(i18n("LilyPond 2.12"));
+    m_lilyLanguage->insertItem(i18n("LilyPond %1").arg("2.6"));
+    m_lilyLanguage->insertItem(i18n("LilyPond %1").arg("2.8"));
+    m_lilyLanguage->insertItem(i18n("LilyPond %1").arg("2.10"));
+    m_lilyLanguage->insertItem(i18n("LilyPond %1").arg("2.12"));
     m_lilyLanguage->setCurrentItem(config->readUnsignedNumEntry("lilylanguage", 0));
     layout->addWidget(m_lilyLanguage, 0, 1);
 
