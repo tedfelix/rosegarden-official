@@ -79,9 +79,9 @@ void KStartupLogo::paintEvent(QPaintEvent*)
 
     int y = m_pixmap.height() - 12;
 
-    //    paint.setPen(QColor(206,214,163));
-    //    paint.setBrush(QColor(206,214,163));
-    QColor bg(49, 94, 19);
+    // grep me: splash color
+    //    QColor bg(49, 94, 19); // color for 2006 splash
+    QColor bg(19, 19, 19);  // color for the 2007 splash
     paint.setPen(bg);
     paint.setBrush(bg);
     paint.drawRect(QRect(m_pixmap.width() - 220, m_pixmap.height() - 43,
