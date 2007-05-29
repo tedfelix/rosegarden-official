@@ -54,32 +54,39 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
 {
     QVBox * vbox = makeVBoxMainWidget();
 
-    QGroupBox *optionBox = new QGroupBox
+    QGroupBox *basicOptionsBox = new QGroupBox
                            (1, Horizontal,
-                            (heading == "" ? i18n("LilyPond export/preview options") : heading), vbox);
+                            (heading == "" ? i18n("Basic options") : heading), vbox);
+
+    QGroupBox *advancedOptionsBox = new QGroupBox
+                           (1, Horizontal,
+                            (heading == "" ? i18n("Advanced options") : heading), vbox);
 
     KConfig *config = kapp->config();
     config->setGroup(NotationViewConfigGroup);
 
-    QFrame *frame = new QFrame(optionBox);
-    QGridLayout *layout = new QGridLayout(frame, 9, 2, 10, 5);
+    QFrame *frameBasic = new QFrame(basicOptionsBox);
+    QGridLayout *layoutBasic = new QGridLayout(frameBasic, 4, 2, 10, 5);
 
-    layout->addWidget(new QLabel(
-                          i18n("Compatibility level"), frame), 0, 0);
+    QFrame *frameAdvanced = new QFrame(advancedOptionsBox);
+    QGridLayout *layoutAdvanced = new QGridLayout(frameAdvanced, 4, 2, 10, 5);
 
-    m_lilyLanguage = new KComboBox(frame);
+    layoutBasic->addWidget(new QLabel(
+                          i18n("Compatibility level"), frameBasic), 0, 0);
+
+    m_lilyLanguage = new KComboBox(frameBasic);
     m_lilyLanguage->insertItem(i18n("LilyPond %1").arg("2.6"));
     m_lilyLanguage->insertItem(i18n("LilyPond %1").arg("2.8"));
     m_lilyLanguage->insertItem(i18n("LilyPond %1").arg("2.10"));
     m_lilyLanguage->insertItem(i18n("LilyPond %1").arg("2.12"));
     m_lilyLanguage->setCurrentItem(config->readUnsignedNumEntry("lilylanguage", 0));
-    layout->addWidget(m_lilyLanguage, 0, 1);
+    layoutBasic->addWidget(m_lilyLanguage, 0, 1);
 
-    layout->addWidget(new QLabel(
-                          i18n("Paper size"), frame), 1, 0);
+    layoutBasic->addWidget(new QLabel(
+                          i18n("Paper size"), frameBasic), 1, 0);
 
-    QHBoxLayout *hboxPaper = new QHBoxLayout( frame );
-    m_lilyPaperSize = new KComboBox(frame);
+    QHBoxLayout *hboxPaper = new QHBoxLayout( frameBasic );
+    m_lilyPaperSize = new KComboBox(frameBasic);
     m_lilyPaperSize->insertItem(i18n("A3"));
     m_lilyPaperSize->insertItem(i18n("A4"));
     m_lilyPaperSize->insertItem(i18n("A5"));
@@ -90,19 +97,19 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
     m_lilyPaperSize->insertItem(i18n("do not specify"));
     m_lilyPaperSize->setCurrentItem(config->readUnsignedNumEntry("lilypapersize", 1));
     m_lilyPaperLandscape = new QCheckBox(
-                              i18n("Landscape"), frame);
+                              i18n("Landscape"), frameBasic);
     m_lilyPaperLandscape->setChecked(config->readBoolEntry("lilypaperlandscape", false));
 
     hboxPaper->addWidget( m_lilyPaperSize );
     hboxPaper->addItem( new QSpacerItem( 2, 9, QSizePolicy::Minimum, 
 			    QSizePolicy::Expanding ) );
     hboxPaper->addWidget( m_lilyPaperLandscape );
-    layout->addLayout(hboxPaper, 1, 1);
+    layoutBasic->addLayout(hboxPaper, 1, 1);
 
-    layout->addWidget(new QLabel(
-                          i18n("Font size"), frame), 2, 0);
+    layoutBasic->addWidget(new QLabel(
+                          i18n("Font size"), frameBasic), 2, 0);
 
-    m_lilyFontSize = new KComboBox(frame);
+    m_lilyFontSize = new KComboBox(frameBasic);
     m_lilyFontSize->insertItem("11");
     m_lilyFontSize->insertItem("13");
     m_lilyFontSize->insertItem("16");
@@ -111,70 +118,70 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
     m_lilyFontSize->insertItem("23");
     m_lilyFontSize->insertItem("26");
     m_lilyFontSize->setCurrentItem(config->readUnsignedNumEntry("lilyfontsize", 4));
-    layout->addWidget(m_lilyFontSize, 2, 1);
+    layoutBasic->addWidget(m_lilyFontSize, 2, 1);
 
-    layout->addWidget(new QLabel(
-                          i18n("Export content"), frame), 3, 0);
+    layoutBasic->addWidget(new QLabel(
+                          i18n("Export content"), frameBasic), 3, 0);
                           
-    m_lilyExportSelection = new KComboBox(frame);
+    m_lilyExportSelection = new KComboBox(frameBasic);
     m_lilyExportSelection->insertItem(i18n("All tracks"));
     m_lilyExportSelection->insertItem(i18n("Non-muted tracks"));
     m_lilyExportSelection->insertItem(i18n("Selected track"));
     m_lilyExportSelection->insertItem(i18n("Selected segments"));
     m_lilyExportSelection->setCurrentItem(config->readUnsignedNumEntry("lilyexportselection", 1));
-    layout->addWidget(m_lilyExportSelection, 3, 1);
+    layoutBasic->addWidget(m_lilyExportSelection, 3, 1);
   
     m_lilyExportHeaders = new QCheckBox(
-                              i18n("Export Document Properties as \\header block"), frame);
+                              i18n("Export Document Properties as \\header block"), frameAdvanced);
     m_lilyExportHeaders->setChecked(config->readBoolEntry("lilyexportheaders", true));
-    layout->addWidget(m_lilyExportHeaders, 4, 0);
+    layoutAdvanced->addWidget(m_lilyExportHeaders, 0, 0);
 
     m_lilyExportBeams = new QCheckBox(
-                            i18n("Export beamings"), frame);
+                            i18n("Export beamings"), frameAdvanced);
     m_lilyExportBeams->setChecked(config->readBoolEntry("lilyexportbeamings", false));
-    layout->addWidget(m_lilyExportBeams, 4, 1);
+    layoutAdvanced->addWidget(m_lilyExportBeams, 0, 1);
 
     m_lilyExportPointAndClick = new QCheckBox(
-                                    i18n("Enable \"point and click\" debugging"), frame);
+                                    i18n("Enable \"point and click\" debugging"), frameAdvanced);
     m_lilyExportPointAndClick->setChecked(config->readBoolEntry("lilyexportpointandclick", false));
-    layout->addWidget(m_lilyExportPointAndClick, 5, 0);
+    layoutAdvanced->addWidget(m_lilyExportPointAndClick, 1, 0);
 
     m_lilyExportLyrics = new QCheckBox(
-                             i18n("Export \\lyric blocks"), frame);
+                             i18n("Export \\lyric blocks"), frameAdvanced);
     // default to lyric export == false because if you export the default
     // empty "- - -" lyrics, crap results ensue, and people will know if they
     // do need to export the lyrics - DMM
     m_lilyExportLyrics->setChecked(config->readBoolEntry("lilyexportlyrics", false));
-    layout->addWidget(m_lilyExportLyrics, 5, 1);
+    layoutAdvanced->addWidget(m_lilyExportLyrics, 1, 1);
   
     m_lilyExportStaffGroup = new QCheckBox(
-                                 i18n("Add staff group bracket"), frame);
+                                 i18n("Add staff group bracket"), frameAdvanced);
     m_lilyExportStaffGroup->setChecked(config->readBoolEntry("lilyexportstaffgroup", false));
-    layout->addWidget(m_lilyExportStaffGroup, 6, 0);
+    layoutAdvanced->addWidget(m_lilyExportStaffGroup, 2, 0);
 
     m_lilyExportMidi = new QCheckBox(
-                           i18n("Export \\midi block"), frame);
+                           i18n("Export \\midi block"), frameAdvanced);
     m_lilyExportMidi->setChecked(config->readBoolEntry("lilyexportmidi", false));
-    layout->addWidget(m_lilyExportMidi, 6, 1);
+    layoutAdvanced->addWidget(m_lilyExportMidi, 2, 1);
 
     m_lilyExportStaffMerge = new QCheckBox(
-                                 i18n("Merge tracks that have the same name"), frame);
+                                 i18n("Merge tracks that have the same name"), frameAdvanced);
     m_lilyExportStaffMerge->setChecked(config->readBoolEntry("lilyexportstaffmerge", false));
-    layout->addWidget(m_lilyExportStaffMerge, 7, 0);
+    layoutAdvanced->addWidget(m_lilyExportStaffMerge, 3, 0);
 
-    QHBoxLayout *hbox = new QHBoxLayout( frame );
-    m_lilyTempoMarks = new KComboBox( frame );
+    QHBoxLayout *hbox = new QHBoxLayout( frameAdvanced );
+    m_lilyTempoMarks = new KComboBox( frameAdvanced );
     m_lilyTempoMarks->insertItem(i18n("None"));
     m_lilyTempoMarks->insertItem(i18n("First"));
     m_lilyTempoMarks->insertItem(i18n("All"));
     m_lilyTempoMarks->setCurrentItem(config->readUnsignedNumEntry("lilyexporttempomarks", 0));
 
     hbox->addWidget( new QLabel( 
-			 i18n("Export tempo marks "), frame ) );
+			 i18n("Export tempo marks "), frameAdvanced ) );
     hbox->addItem( new QSpacerItem( 2, 9, QSizePolicy::Minimum, 
 		       QSizePolicy::Expanding ) );
     hbox->addWidget(m_lilyTempoMarks);
-    layout->addLayout(hbox, 7, 1);
+    layoutAdvanced->addLayout(hbox, 3, 1);
 }
 
 void
