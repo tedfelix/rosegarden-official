@@ -138,7 +138,7 @@ msgstr "Aseta tempot iskuosista"
 
 #: ../src/commands/segment/SegmentSplitByRecordingSrcCommand.h:52
 msgid "Split by &Recording Source..."
-msgstr "Jaa &Nauhoituslähteen mukaan..."
+msgstr "Jaa &nauhoituslähteen mukaan..."
 
 #: ../src/commands/segment/SegmentColourMapCommand.cpp:40
 msgid "Change Segment Color Map"
@@ -3084,7 +3084,7 @@ msgstr "Vie palkitukset"
 
 #: ../src/gui/dialogs/LilypondOptionsDialog.cpp:138
 msgid "Enable \"point and click\" debugging"
-msgstr "Salli \"osoita-ja-klikkaa\" -menetelmä virheiden korjaamiseksi"
+msgstr "Salli \"osoita-ja-klikkaa\" -korjailu"
 
 #: ../src/gui/dialogs/LilypondOptionsDialog.cpp:143
 msgid "Export \\lyric blocks"
