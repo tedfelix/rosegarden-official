@@ -102,7 +102,6 @@ LilypondExporter::LilypondExporter(QObject *parent,
     m_fontSize = cfg->readUnsignedNumEntry("lilyfontsize", 4);
     m_exportSelection = cfg->readUnsignedNumEntry("lilyexportselection", 1);
     m_exportLyrics = cfg->readBoolEntry("lilyexportlyrics", true);
-    m_exportHeaders = cfg->readBoolEntry("lilyexportheaders", true);
     m_exportMidi = cfg->readBoolEntry("lilyexportmidi", false);
     m_exportTempoMarks = cfg->readUnsignedNumEntry("lilyexporttempomarks", 0);
     m_exportPointAndClick = cfg->readBoolEntry("lilyexportpointandclick", false);
@@ -421,7 +420,7 @@ LilypondExporter::write()
 
     // open \header section if there's metadata to grab, and if the user
     // wishes it
-    if (!propertyNames.empty() && m_exportHeaders) {
+    if (!propertyNames.empty()) {
         str << "\\header {" << std::endl;
         col++;  // indent+
 
