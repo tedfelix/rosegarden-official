@@ -139,43 +139,15 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
     QFrame *frameAdvanced = new QFrame(advancedOptionsBox);
     QGridLayout *layoutAdvanced = new QGridLayout(frameAdvanced, 4, 2, 10, 5);
 
-    m_lilyExportHeaders = new QCheckBox(
-                              i18n("Export Document Properties as \\header block"), frameAdvanced);
-    m_lilyExportHeaders->setChecked(config->readBoolEntry("lilyexportheaders", true));
-    layoutAdvanced->addWidget(m_lilyExportHeaders, 0, 0);
-
-    m_lilyExportBeams = new QCheckBox(
-                            i18n("Export beamings"), frameAdvanced);
-    m_lilyExportBeams->setChecked(config->readBoolEntry("lilyexportbeamings", false));
-    layoutAdvanced->addWidget(m_lilyExportBeams, 0, 1);
-
-    m_lilyExportPointAndClick = new QCheckBox(
-                                    i18n("Enable \"point and click\" debugging"), frameAdvanced);
-    m_lilyExportPointAndClick->setChecked(config->readBoolEntry("lilyexportpointandclick", false));
-    layoutAdvanced->addWidget(m_lilyExportPointAndClick, 1, 0);
-
-    m_lilyExportLyrics = new QCheckBox(
-                             i18n("Export \\lyric blocks"), frameAdvanced);
-    // default to lyric export == false because if you export the default
-    // empty "- - -" lyrics, crap results ensue, and people will know if they
-    // do need to export the lyrics - DMM
-    m_lilyExportLyrics->setChecked(config->readBoolEntry("lilyexportlyrics", false));
-    layoutAdvanced->addWidget(m_lilyExportLyrics, 1, 1);
-  
-    m_lilyExportStaffGroup = new QCheckBox(
-                                 i18n("Add staff group bracket"), frameAdvanced);
-    m_lilyExportStaffGroup->setChecked(config->readBoolEntry("lilyexportstaffgroup", false));
-    layoutAdvanced->addWidget(m_lilyExportStaffGroup, 2, 0);
-
-    m_lilyExportMidi = new QCheckBox(
-                           i18n("Export \\midi block"), frameAdvanced);
-    m_lilyExportMidi->setChecked(config->readBoolEntry("lilyexportmidi", false));
-    layoutAdvanced->addWidget(m_lilyExportMidi, 2, 1);
-
     m_lilyExportStaffMerge = new QCheckBox(
                                  i18n("Merge tracks that have the same name"), frameAdvanced);
     m_lilyExportStaffMerge->setChecked(config->readBoolEntry("lilyexportstaffmerge", false));
-    layoutAdvanced->addWidget(m_lilyExportStaffMerge, 3, 0);
+    layoutAdvanced->addWidget(m_lilyExportStaffMerge, 0, 0);
+
+    m_lilyExportStaffGroup = new QCheckBox(
+                                 i18n("Add staff group bracket"), frameAdvanced);
+    m_lilyExportStaffGroup->setChecked(config->readBoolEntry("lilyexportstaffgroup", false));
+    layoutAdvanced->addWidget(m_lilyExportStaffGroup, 1, 0);
 
     QHBoxLayout *hbox = new QHBoxLayout( frameAdvanced );
     m_lilyTempoMarks = new KComboBox( frameAdvanced );
@@ -189,7 +161,30 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
     hbox->addItem( new QSpacerItem( 2, 9, QSizePolicy::Minimum, 
 		       QSizePolicy::Expanding ) );
     hbox->addWidget(m_lilyTempoMarks);
-    layoutAdvanced->addLayout(hbox, 3, 1);
+    layoutAdvanced->addLayout(hbox, 2, 0);
+
+    m_lilyExportPointAndClick = new QCheckBox(
+                                    i18n("Enable \"point and click\" debugging"), frameAdvanced);
+    m_lilyExportPointAndClick->setChecked(config->readBoolEntry("lilyexportpointandclick", false));
+    layoutAdvanced->addWidget(m_lilyExportPointAndClick, 3, 0);
+  
+    m_lilyExportLyrics = new QCheckBox(
+                             i18n("Export \\lyric blocks"), frameAdvanced);
+    // default to lyric export == false because if you export the default
+    // empty "- - -" lyrics, crap results ensue, and people will know if they
+    // do need to export the lyrics - DMM
+    m_lilyExportLyrics->setChecked(config->readBoolEntry("lilyexportlyrics", false));
+    layoutAdvanced->addWidget(m_lilyExportLyrics, 0, 1);
+
+    m_lilyExportBeams = new QCheckBox(
+                            i18n("Export beamings"), frameAdvanced);
+    m_lilyExportBeams->setChecked(config->readBoolEntry("lilyexportbeamings", false));
+    layoutAdvanced->addWidget(m_lilyExportBeams, 1, 1);
+
+    m_lilyExportMidi = new QCheckBox(
+                           i18n("Export \\midi block"), frameAdvanced);
+    m_lilyExportMidi->setChecked(config->readBoolEntry("lilyexportmidi", false));
+    layoutAdvanced->addWidget(m_lilyExportMidi, 2, 1);
 }
 
 void
@@ -203,7 +198,6 @@ LilypondOptionsDialog::slotOk()
     config->writeEntry("lilypaperlandscape", m_lilyPaperLandscape->isChecked());
     config->writeEntry("lilyfontsize", m_lilyFontSize->currentItem());
     config->writeEntry("lilyexportlyrics", m_lilyExportLyrics->isChecked());
-    config->writeEntry("lilyexportheader", m_lilyExportHeaders->isChecked());
     config->writeEntry("lilyexportmidi", m_lilyExportMidi->isChecked());
     config->writeEntry("lilyexporttempomarks", m_lilyTempoMarks->currentItem());
     config->writeEntry("lilyexportselection", m_lilyExportSelection->currentItem());

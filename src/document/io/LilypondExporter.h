@@ -146,7 +146,6 @@ private:
     bool m_paperLandscape;
     unsigned int m_fontSize;
     bool m_exportLyrics;
-    bool m_exportHeaders;
     bool m_exportMidi;
 
         // exportTempoMarks meaning:
