@@ -52,24 +52,21 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
                     (windowCaption = "" ? i18n("LilyPond Export/Preview") : windowCaption),
                     Ok | Cancel)
 {
+    KConfig *config = kapp->config();
+    config->setGroup(NotationViewConfigGroup);
+
     QVBox * vbox = makeVBoxMainWidget();
+
+    //
+    // LilyPond export: Basic options
+    //
 
     QGroupBox *basicOptionsBox = new QGroupBox
                            (1, Horizontal,
                             (heading == "" ? i18n("Basic options") : heading), vbox);
 
-    QGroupBox *advancedOptionsBox = new QGroupBox
-                           (1, Horizontal,
-                            (heading == "" ? i18n("Advanced options") : heading), vbox);
-
-    KConfig *config = kapp->config();
-    config->setGroup(NotationViewConfigGroup);
-
     QFrame *frameBasic = new QFrame(basicOptionsBox);
     QGridLayout *layoutBasic = new QGridLayout(frameBasic, 4, 2, 10, 5);
-
-    QFrame *frameAdvanced = new QFrame(advancedOptionsBox);
-    QGridLayout *layoutAdvanced = new QGridLayout(frameAdvanced, 4, 2, 10, 5);
 
     layoutBasic->addWidget(new QLabel(
                           i18n("Compatibility level"), frameBasic), 0, 0);
@@ -131,6 +128,17 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
     m_lilyExportSelection->setCurrentItem(config->readUnsignedNumEntry("lilyexportselection", 1));
     layoutBasic->addWidget(m_lilyExportSelection, 3, 1);
   
+    //
+    // LilyPond export: Advanced options
+    //
+
+    QGroupBox *advancedOptionsBox = new QGroupBox
+                           (1, Horizontal,
+                            (heading == "" ? i18n("Advanced options") : heading), vbox);
+
+    QFrame *frameAdvanced = new QFrame(advancedOptionsBox);
+    QGridLayout *layoutAdvanced = new QGridLayout(frameAdvanced, 4, 2, 10, 5);
+
     m_lilyExportHeaders = new QCheckBox(
                               i18n("Export Document Properties as \\header block"), frameAdvanced);
     m_lilyExportHeaders->setChecked(config->readBoolEntry("lilyexportheaders", true));
