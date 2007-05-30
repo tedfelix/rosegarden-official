@@ -66,7 +66,7 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
                             (heading == "" ? i18n("Basic options") : heading), vbox);
 
     QFrame *frameBasic = new QFrame(basicOptionsBox);
-    QGridLayout *layoutBasic = new QGridLayout(frameBasic, 4, 2, 10, 5);
+    QGridLayout *layoutBasic = new QGridLayout(frameBasic, 3, 2, 10, 5);
 
     layoutBasic->addWidget(new QLabel(
                           i18n("Compatibility level"), frameBasic), 0, 0);
@@ -117,74 +117,92 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
     m_lilyFontSize->setCurrentItem(config->readUnsignedNumEntry("lilyfontsize", 4));
     layoutBasic->addWidget(m_lilyFontSize, 2, 1);
 
-    layoutBasic->addWidget(new QLabel(
-                          i18n("Export content"), frameBasic), 3, 0);
-                          
-    m_lilyExportSelection = new KComboBox(frameBasic);
+    //
+    // LilyPond export: Staff level options
+    //
+
+    QGroupBox *staffOptionsBox = new QGroupBox
+                           (1, Horizontal,
+                            (heading == "" ? i18n("Staff level options") : heading), vbox);
+
+    QFrame *frameStaff = new QFrame(staffOptionsBox);
+    QGridLayout *layoutStaff = new QGridLayout(frameStaff, 2, 2, 10, 5);
+
+    layoutStaff->addWidget(new QLabel(
+                          i18n("Export content"), frameStaff), 0, 0);
+
+    m_lilyExportSelection = new KComboBox(frameStaff);
     m_lilyExportSelection->insertItem(i18n("All tracks"));
     m_lilyExportSelection->insertItem(i18n("Non-muted tracks"));
     m_lilyExportSelection->insertItem(i18n("Selected track"));
     m_lilyExportSelection->insertItem(i18n("Selected segments"));
     m_lilyExportSelection->setCurrentItem(config->readUnsignedNumEntry("lilyexportselection", 1));
-    layoutBasic->addWidget(m_lilyExportSelection, 3, 1);
-  
-    //
-    // LilyPond export: Advanced options
-    //
-
-    QGroupBox *advancedOptionsBox = new QGroupBox
-                           (1, Horizontal,
-                            (heading == "" ? i18n("Advanced options") : heading), vbox);
-
-    QFrame *frameAdvanced = new QFrame(advancedOptionsBox);
-    QGridLayout *layoutAdvanced = new QGridLayout(frameAdvanced, 4, 2, 10, 5);
+    layoutStaff->addWidget(m_lilyExportSelection, 0, 1);
 
     m_lilyExportStaffMerge = new QCheckBox(
-                                 i18n("Merge tracks that have the same name"), frameAdvanced);
+                                 i18n("Merge tracks that have the same name"), frameStaff);
     m_lilyExportStaffMerge->setChecked(config->readBoolEntry("lilyexportstaffmerge", false));
-    layoutAdvanced->addWidget(m_lilyExportStaffMerge, 0, 0);
+    layoutStaff->addMultiCellWidget(m_lilyExportStaffMerge, 1, 1, 0, 1);
 
-    m_lilyExportStaffGroup = new QCheckBox(
-                                 i18n("Add staff group bracket"), frameAdvanced);
-    m_lilyExportStaffGroup->setChecked(config->readBoolEntry("lilyexportstaffgroup", false));
-    layoutAdvanced->addWidget(m_lilyExportStaffGroup, 1, 0);
+    //
+    // LilyPond export: Notation options
+    //
 
-    QHBoxLayout *hbox = new QHBoxLayout( frameAdvanced );
-    m_lilyTempoMarks = new KComboBox( frameAdvanced );
+    QGroupBox *notationOptionsBox = new QGroupBox
+                           (1, Horizontal,
+                            (heading == "" ? i18n("Notation options") : heading), vbox);
+
+    QFrame *frameNotation = new QFrame(notationOptionsBox);
+    QGridLayout *layoutNotation = new QGridLayout(frameNotation, 4, 2, 10, 5);
+
+    m_lilyTempoMarks = new KComboBox( frameNotation );
     m_lilyTempoMarks->insertItem(i18n("None"));
     m_lilyTempoMarks->insertItem(i18n("First"));
     m_lilyTempoMarks->insertItem(i18n("All"));
     m_lilyTempoMarks->setCurrentItem(config->readUnsignedNumEntry("lilyexporttempomarks", 0));
 
-    hbox->addWidget( new QLabel( 
-			 i18n("Export tempo marks "), frameAdvanced ) );
-    hbox->addItem( new QSpacerItem( 2, 9, QSizePolicy::Minimum, 
-		       QSizePolicy::Expanding ) );
-    hbox->addWidget(m_lilyTempoMarks);
-    layoutAdvanced->addLayout(hbox, 2, 0);
-
-    m_lilyExportPointAndClick = new QCheckBox(
-                                    i18n("Enable \"point and click\" debugging"), frameAdvanced);
-    m_lilyExportPointAndClick->setChecked(config->readBoolEntry("lilyexportpointandclick", false));
-    layoutAdvanced->addWidget(m_lilyExportPointAndClick, 3, 0);
-  
+    layoutNotation->addWidget( new QLabel( 
+			 i18n("Export tempo marks "), frameNotation), 0, 0 );
+    layoutNotation->addWidget(m_lilyTempoMarks, 0, 1);
+ 
     m_lilyExportLyrics = new QCheckBox(
-                             i18n("Export \\lyric blocks"), frameAdvanced);
+                             i18n("Export lyrics (disabling frees some vertical space)"), frameNotation);
     // default to lyric export == false because if you export the default
     // empty "- - -" lyrics, crap results ensue, and people will know if they
     // do need to export the lyrics - DMM
     m_lilyExportLyrics->setChecked(config->readBoolEntry("lilyexportlyrics", false));
-    layoutAdvanced->addWidget(m_lilyExportLyrics, 0, 1);
+    layoutNotation->addMultiCellWidget(m_lilyExportLyrics, 1, 1, 0, 1);
 
     m_lilyExportBeams = new QCheckBox(
-                            i18n("Export beamings"), frameAdvanced);
+                            i18n("Export beamings"), frameNotation);
     m_lilyExportBeams->setChecked(config->readBoolEntry("lilyexportbeamings", false));
-    layoutAdvanced->addWidget(m_lilyExportBeams, 1, 1);
+    layoutNotation->addMultiCellWidget(m_lilyExportBeams, 2, 2, 0, 1);
+
+    m_lilyExportStaffGroup = new QCheckBox(
+                                 i18n("Add staff group bracket"), frameNotation);
+    m_lilyExportStaffGroup->setChecked(config->readBoolEntry("lilyexportstaffgroup", false));
+    layoutNotation->addMultiCellWidget(m_lilyExportStaffGroup, 3, 3, 0, 1);
+
+    //
+    // LilyPond export: Extra options
+    //
+
+    QGroupBox *extraOptionsBox = new QGroupBox
+                           (1, Horizontal,
+                            (heading == "" ? i18n("Extra options") : heading), vbox);
+
+    QFrame *frameExtra = new QFrame(extraOptionsBox);
+    QGridLayout *layoutExtra = new QGridLayout(frameExtra, 1, 2, 10, 5);
+
+    m_lilyExportPointAndClick = new QCheckBox(
+                                    i18n("Enable \"point and click\" debugging"), frameExtra);
+    m_lilyExportPointAndClick->setChecked(config->readBoolEntry("lilyexportpointandclick", false));
+    layoutExtra->addWidget(m_lilyExportPointAndClick, 0, 0);
 
     m_lilyExportMidi = new QCheckBox(
-                           i18n("Export \\midi block"), frameAdvanced);
+                           i18n("Export \\midi block"), frameExtra);
     m_lilyExportMidi->setChecked(config->readBoolEntry("lilyexportmidi", false));
-    layoutAdvanced->addWidget(m_lilyExportMidi, 2, 1);
+    layoutExtra->addWidget(m_lilyExportMidi, 0, 1);
 }
 
 void
