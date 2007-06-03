@@ -221,7 +221,7 @@ staff for a single segment based on the pitches or other properties of
 the notes (it's a possibility under consideration, but not likely in
 the near future).  So you have to split the segment onto multiple
 tracks, and then open a multi-segment notation editor (see the
-question above this one).
+question above this one). In LilyPond export dialog you have now an option to connect multiple tracks which have the same name as multiple voices in a single staff.
 
 Versions 0.9 and later include a split-by-pitch function (finally!) 
 which you can use to divide a segment into two parts.
