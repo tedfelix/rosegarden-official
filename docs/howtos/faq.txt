@@ -19,8 +19,8 @@ What are the hardware requirements like?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Reasonably demanding, because of the mixture of graphical and
-interactive GUI stuff with precisely timed audio stuff.  See
-<URL:http://www.rosegardenmusic.com/getting/requirements>) for more
+interactive GUI stuff with precisely timed audio stuff.  See requirements
+(<URL:http://www.rosegardenmusic.com/getting/requirements>) for more
 details.
 
 
@@ -49,7 +49,7 @@ If you can help out with translating musical or technical
 documentation (no programming required, but it's quite hard work),
 please let us know!
 
-See also docs/howtos/i18n.txt in CVS if you are interested in the
+See also docs/howtos/i18n.txt in SVN if you are interested in the
 technical aspects of translation.
 
 
@@ -507,7 +507,7 @@ wavetable on-board synth devices.  If you're using a soft synth, you
 should see it here too.  All of these will be available in the
 drop-down Instrument list inside Rosegarden.
 
-If you're using a recent version of Rosegarden-4 (0.9 or greater) then
+If you're using a recent version of Rosegarden (0.9 or greater) then
 you can also access this sequencer status information by using the
 application itself.  Go to:
 
