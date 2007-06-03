@@ -1,5 +1,5 @@
 
-Rosegarden-4 Translation mini-HOWTO
+Rosegarden Translation mini-HOWTO
 ===================================
 
 
@@ -18,9 +18,9 @@ you can translate musical or technical terminology, or need a
 translated version of RG.
 
 After you confirm that we support your language, the following three
-steps will get you started with Rosegarden-4 in your native language:
+steps will get you started with Rosegarden in your native language:
 
-  1) Install Rosegarden-4.  If you have KDE running in your language
+  1) Install Rosegarden.  If you have KDE running in your language
   already, that's all you need.  Otherwise, you also need to make sure
   kdebase, kde-i18n-<languageCode>, locales, and locales-<languageCode>
   are installed.
@@ -33,7 +33,7 @@ steps will get you started with Rosegarden-4 in your native language:
   Bash shell, type "export KDE_LANG=fr" (no quotes) to use RG in the
   French language.
 
-  3) Start Rosegarden-4.
+  3) Start Rosegarden.
 
 It's that easy!
 
