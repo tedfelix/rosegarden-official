@@ -39,7 +39,7 @@ Is it available in my language?
 
 Translations are included for Russian, German, Spanish, French,
 Italian, Estonian, Welsh, Swedish, Dutch, Japanese, simplified
-Chinese, Czech, and Catalan.
+Chinese, Czech, Catalan and Finnish.
 
 These translations are provided and maintained by volunteer
 contributors, and so they may not always be up to date with the
