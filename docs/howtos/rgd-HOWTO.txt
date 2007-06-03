@@ -1,4 +1,4 @@
-mini-HOWTO: Creating the Instrument and Program definitions for Rosegarden-4
+mini-HOWTO: Creating the Instrument and Program definitions for Rosegarden
 ==========================================================================
 
 
