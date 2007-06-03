@@ -369,8 +369,8 @@ sufficiently high-resolution system timers for MIDI use.
 Rosegarden uses ALSA sequencer queue scheduling (inside the Linux
 kernel) for its MIDI output.  The sequencer queue can use a variety of
 timing sources, of which the default is the kernel system timer.  The
-kernel system timer was 1000Hz in Linux 2.6 kernels up to 2.6.12, but
-as of 2.6.13 it's now 250Hz in mainline kernels.  This is not good
+kernel system timer was 1000 Hz in Linux 2.6 kernels up to 2.6.12, but
+as of 2.6.13 it's now 250 Hz in mainline kernels.  This is not good
 enough for good MIDI timing.
 
 Your options are:
@@ -383,13 +383,13 @@ Your options are:
  only work if the JACK audio server is running, and suffer jitter
  corresponding to the JACK buffer size.
 
- 2. Recompile your kernel with HZ set to 1000.  Sadly there's no way
+ 2. Recompile your kernel with system timer set to 1000 Hz.  Sadly there's no way
  to change this without a recompile.  It's the best solution though.
 
  3. Switch to a different Linux distribution that provides a kernel
  more appropriate for multimedia use.
 
- 4. Put up with the poorer timing of a 250Hz timer (if you want to get
+ 4. Put up with the poorer timing of a 250 Hz timer (if you want to get
  rid of the warning while continuing to use this timer, set the timer
  source to "system timer" rather than "(auto)").
 
@@ -427,7 +427,7 @@ unable to process audio in time) and provide reasonable latency.
 The '-r 44100' option sets the sample rate for the JACK server
 which will in turn define the rate at which WAV audio files will
 be recorded.  This is important if you want to transfer any of
-the WAVs directly to CD - 44100Hz (44.1KHz) is the sample rate
+the WAVs directly to CD - 44100 Hz (44.1 kHz) is the sample rate
 that audio CDs work at.
 
 
