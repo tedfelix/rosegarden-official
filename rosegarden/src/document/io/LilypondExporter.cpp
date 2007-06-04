@@ -1003,7 +1003,7 @@ LilypondExporter::write()
 		        // Does this save some vertical space, as was written
 		        // in earlier comment?
 		        QRegExp rx( "\"" );
-		        if ( rx.search( text ) ) {
+		        if ( rx.search( text ) != -1 ) {
 		    
 			    str << indent(col) << "\\lyricsto \"" << voiceNumber.str() << "\""
 			        << " \\new Lyrics \\lyricmode {" << std::endl;
