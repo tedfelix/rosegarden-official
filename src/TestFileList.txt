@@ -1,0 +1,3 @@
+SET(tests_SRCS
+    test/dummy.cpp
+)

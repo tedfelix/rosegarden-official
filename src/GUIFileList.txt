@@ -341,7 +341,6 @@ SET(gui_SRCS
 	gui/application/LircClient.h
 	gui/application/LircCommander.cpp
 	gui/application/LircCommander.h
-	gui/application/main.cpp
 	gui/application/RosegardenApplication.cpp
 	gui/application/RosegardenApplication.h
 	gui/application/RosegardenDCOP.h

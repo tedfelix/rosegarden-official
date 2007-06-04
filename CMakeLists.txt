@@ -51,6 +51,11 @@ OPTION(WANT_JACK    "Include Jack (Jack Audio Connection Kit) support" ON)
 OPTION(WANT_DSSI    "Include DSSI support" ON)
 OPTION(WANT_LIRC    "Include LIRC (Linux Infrared Remote Control) support" ON)
 OPTION(WANT_PCH     "Use precompiled headers" OFF)
+OPTION(WANT_TEST    "Perform unit tests" ON)
+
+IF(WANT_TEST)
+    ENABLE_TESTING()
+ENDIF(WANT_TEST)
 
 IF(NOT WANT_SOUND)
     SET(WANT_JACK OFF)
