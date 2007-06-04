@@ -81,11 +81,11 @@ namespace Accidentals
     }
 
     int getPitchOffset(const Accidental &acc) {
-	if (acc == DoubleSharp) return 2;
-	else if (acc == Sharp) return 1;
-	else if (acc == Flat) return -1;
-	else if (acc == DoubleFlat) return -2;
-	else return 0;
+        if (acc == DoubleSharp) return 2;
+        else if (acc == Sharp) return 1;
+        else if (acc == Flat) return -1;
+        else if (acc == DoubleFlat) return -2;
+        else return 0;
     }
 
     Accidental getAccidental(int pitchChange) {
@@ -97,9 +97,9 @@ namespace Accidentals
         if (pitchChange == 1) return Sharp;
         if (pitchChange == 2) return DoubleSharp;
 
-	// if we're getting into triple flats/sharps, we're probably atonal
-	// and don't case if the accidental is simplified
-	return NoAccidental;
+        // if we're getting into triple flats/sharps, we're probably atonal
+        // and don't case if the accidental is simplified
+        return NoAccidental;
     }
 }
 
@@ -156,9 +156,9 @@ namespace Marks
     }
 
     int getMarkCount(const Event &e) {
-	long markCount = 0;
-	e.get<Int>(BaseProperties::MARK_COUNT, markCount);
-	return markCount;
+        long markCount = 0;
+        e.get<Int>(BaseProperties::MARK_COUNT, markCount);
+        return markCount;
     }
 
     std::vector<Mark> getMarks(const Event &e) {
@@ -512,7 +512,7 @@ Key::Key(int tonicPitch, bool isMinor) :
             return;
         }
     }
-	
+
 #if (__GNUC__ < 3)
     std::ostrstream os;
 #else
@@ -567,10 +567,10 @@ Key::KeyList Key::getKeys(bool minor)
 
 Key::Key Key::transpose(int pitchDelta, int heightDelta)
 {
-	Pitch tonic(getTonicPitch());
-	Pitch newTonic = tonic.transpose(*this, pitchDelta, heightDelta);
-	int newTonicPitch = (newTonic.getPerformancePitch() % 12 + 12) % 12;
-	return Key (newTonicPitch, isMinor());
+    Pitch tonic(getTonicPitch());
+    Pitch newTonic = tonic.transpose(*this, pitchDelta, heightDelta);
+    int newTonicPitch = (newTonic.getPerformancePitch() % 12 + 12) % 12;
+    return Key (newTonicPitch, isMinor());
 }
 
 Accidental Key::getAccidentalAtHeight(int height, const Clef &clef) const
@@ -588,34 +588,30 @@ Accidental Key::getAccidentalAtHeight(int height, const Clef &clef) const
 
 Accidental Key::getAccidentalForStep(int step) const
 {
-	if (isMinor())
-	{
-		step = (step + 5) % 7;
-	}
-	
-	int accidentalCount = getAccidentalCount();
-	
-	if (accidentalCount == 0)
-	{
-		return NoAccidental;
-	}
+    if (isMinor()) {
+        step = (step + 5) % 7;
+    }
+    
+    int accidentalCount = getAccidentalCount();
+    
+    if (accidentalCount == 0) {
+        return NoAccidental;
+    }
 
-	bool sharp = isSharp();
-	
-	int currentAccidentalPosition = sharp ? 6 : 3;
+    bool sharp = isSharp();
+    
+    int currentAccidentalPosition = sharp ? 6 : 3;
 
-	for (int i = 1; i <= accidentalCount; i++)
-	{
-		if (step == currentAccidentalPosition)
-		{
-			return sharp ? Sharp : Flat;
-		}
-		
-		currentAccidentalPosition = 
-			(currentAccidentalPosition + (sharp ? 3 : 4)) % 7;  
-	}
-	
-	return NoAccidental;
+    for (int i = 1; i <= accidentalCount; i++) {
+        if (step == currentAccidentalPosition) {
+            return sharp ? Sharp : Flat;
+        }
+        
+        currentAccidentalPosition = 
+            (currentAccidentalPosition + (sharp ? 3 : 4)) % 7;  
+    }
+    
+    return NoAccidental;
 }
 
 vector<int> Key::getAccidentalHeights(const Clef &clef) const
@@ -627,8 +623,8 @@ vector<int> Key::getAccidentalHeights(const Clef &clef) const
 
     for (unsigned int i = 0; i < v.size(); ++i) {
         v[i] += offset;
-	if (offset > 0) 
-	    if (v[i] > 8) v[i] -= 7;
+        if (offset > 0) 
+            if (v[i] > 8) v[i] -= 7;
     }
     return v;
 }
@@ -774,7 +770,7 @@ Indication::Indication(const Event &e)
 
     m_duration = e.getDuration();
     if (m_duration == 0) {
-	e.get<Int>(IndicationDurationPropertyName, m_duration); // obsolete property
+        e.get<Int>(IndicationDurationPropertyName, m_duration); // obsolete property
     }
 }
 
@@ -973,21 +969,19 @@ Text::getAsEvent(timeT absoluteTime) const
 bool
 pitchInKey(int pitch, const Key& key)
 {
-	int pitchOffset = (pitch - key.getTonicPitch() + 12) % 12;
-	
-	static int pitchInMajor[] =
-		{ true, false, true, false, true, true, false, true, false, true, false, true };
-	static int pitchInMinor[] =
-		{ true, false, true, true, false, true, false, true, true, false, true, false };
-	
-	if (key.isMinor())
-	{
-		return pitchInMinor[pitchOffset];
-	}
-	else
-	{
-		return pitchInMajor[pitchOffset];
-	} 
+    int pitchOffset = (pitch - key.getTonicPitch() + 12) % 12;
+    
+    static int pitchInMajor[] =
+        { true, false, true, false, true, true, false, true, false, true, false, true };
+    static int pitchInMinor[] =
+        { true, false, true, true, false, true, false, true, true, false, true, false };
+    
+    if (key.isMinor()) {
+        return pitchInMinor[pitchOffset];
+    }
+    else {
+        return pitchInMajor[pitchOffset];
+    } 
 }
 
 /**
@@ -997,73 +991,68 @@ pitchInKey(int pitch, const Key& key)
  */
 Accidental
 resolveNoAccidental(int pitch,
-			      const Key &key,
-			      NoAccidentalStrategy noAccidentalStrategy) 
+                  const Key &key,
+                  NoAccidentalStrategy noAccidentalStrategy) 
 {
-	Accidental outputAccidental = "";
-	
-	// Find out the accidental to use, based on the strategy specified
-	switch (noAccidentalStrategy)
-	{
-		case UseKeySharpness:
-			noAccidentalStrategy = 
-				key.isSharp() ? UseSharps : UseFlats;
-			// fall though
-		case UseFlats:
-			// shares code with UseSharps
-		case UseSharps:
-			if (pitchInKey(pitch, key))
-			{
-				outputAccidental = NoAccidental;
-			}
-			else
-			{
-				if (noAccidentalStrategy == UseSharps)
-				{
-					outputAccidental = Sharp;					
-				}	
-				else
-				{
-					outputAccidental = Flat;
-				}
-			}
-			break;
-		case UseKey:
-			// the distance of the pitch from the tonic of the current
-			//  key
-			int pitchOffset = (pitch - key.getTonicPitch() + 12) % 12;
-			// 0: major, 1: minor
-			int minor = key.isMinor();
-			static int pitchToHeight[2][12] =
-				{
-					{ 0, 0, 1, 2, 2, 3, 3, 4, 5, 5, 6, 6 },
-					// a ., b, c, ., d, ., e, f, ., g, . 
-					{ 0, 1, 1, 2, 2, 3, 4, 4, 5, 5, 6, 6 } //TODO
-				};
-			
-			// map pitchOffset to the extra correction, on top of any 
-			// accidentals in the key. Example: in F major, with a pitchOffset
-			// of 6, the resulting height would be 3 (Bb) and the correction
-			// would be +1, so the resulting note would be B-natural
-			static int pitchToCorrection[2][12] =
-				{
-					{ 0, +1, 0, -1, 0, 0, +1, 0, -1, 0, -1, 0 },
-					{ 0, -1, 0, 0, +1, 0, -1, 0, 0, +1, 0, +1 } //TODO
-				}; 
-			
-			int correction = pitchToCorrection[minor][pitchOffset];
+    Accidental outputAccidental = "";
+    
+    // Find out the accidental to use, based on the strategy specified
+    switch (noAccidentalStrategy) {
+        case UseKeySharpness:
+            noAccidentalStrategy = 
+                key.isSharp() ? UseSharps : UseFlats;
+            // fall though
+        case UseFlats:
+            // shares code with UseSharps
+        case UseSharps:
+            if (pitchInKey(pitch, key)) {
+                outputAccidental = NoAccidental;
+            }
+            else {
+                if (noAccidentalStrategy == UseSharps) {
+                    outputAccidental = Sharp;                    
+                }    
+                else {
+                    outputAccidental = Flat;
+                }
+            }
+            break;
+        case UseKey:
+            // the distance of the pitch from the tonic of the current
+            //  key
+            int pitchOffset = (pitch - key.getTonicPitch() + 12) % 12;
+            // 0: major, 1: minor
+            int minor = key.isMinor();
+            static int pitchToHeight[2][12] =
+                {
+                    { 0, 0, 1, 2, 2, 3, 3, 4, 5, 5, 6, 6 },
+                    // a ., b, c, ., d, ., e, f, ., g, . 
+                    { 0, 1, 1, 2, 2, 3, 4, 4, 5, 5, 6, 6 } 
+                };
+            
+            // map pitchOffset to the extra correction, on top of any 
+            // accidentals in the key. Example: in F major, with a pitchOffset
+            // of 6, the resulting height would be 3 (Bb) and the correction
+            // would be +1, so the resulting note would be B-natural
+            static int pitchToCorrection[2][12] =
+                {
+                    { 0, +1, 0, -1, 0, 0, +1, 0, -1, 0, -1, 0 },
+                    { 0, -1, 0, 0, +1, 0, -1, 0, 0, +1, 0, +1 } 
+                }; 
+            
+            int correction = pitchToCorrection[minor][pitchOffset];
 
-			// Get the accidental normally associated with this height in this
-			//  key.
-			Accidental normalAccidental = key.getAccidentalForStep(pitchToHeight[minor][pitchOffset]);
-	
-			// Apply the pitchCorrection and get the outputAccidental
-			outputAccidental = Accidentals::getAccidental(
-				getPitchOffset(normalAccidental) + correction);
-				
-	}
-	
-	return outputAccidental;
+            // Get the accidental normally associated with this height in this
+            //  key.
+            Accidental normalAccidental = key.getAccidentalForStep(pitchToHeight[minor][pitchOffset]);
+    
+            // Apply the pitchCorrection and get the outputAccidental
+            outputAccidental = Accidentals::getAccidental(
+                getPitchOffset(normalAccidental) + correction);
+                
+    }
+    
+    return outputAccidental;
 }
 
 /**
@@ -1387,6 +1376,15 @@ Pitch::validAccidental() const
 	};
 	std::cout << "Internal error in validAccidental" << std::endl;
 	return false;
+}
+
+Event *
+Pitch::getAsNoteEvent(timeT absoluteTime, timeT duration) const
+{
+    Event *e = new Event(Note::EventType, absoluteTime, duration);
+    e->set<Int>(BaseProperties::PITCH, m_pitch);
+    e->set<String>(BaseProperties::ACCIDENTAL, m_accidental);
+    return e;
 }
 
 /**
@@ -1785,29 +1783,39 @@ Pitch::getPerformancePitchFromRG21Pitch(int heightOnStaff,
 
 Pitch Pitch::transpose(const Key key, int pitchDelta, int heightDelta)
 {
-	// get old accidental
-	Accidental oldAccidental = getAccidental(&key);
+    // get old accidental
+    Accidental oldAccidental = getAccidental(&key);
 
-	// get old step
-	// TODO: maybe we should write an oldPitchObj.getOctave(0, key) that takes into account accidentals	
-	//  properly (e.g. yielding '0' instead of '1' for B#0). For now workaround here.	
-	Pitch oldPitchWithoutAccidental(getPerformancePitch() - Accidentals::getPitchOffset(oldAccidental), Natural);
-	Key cmaj = Key();
-	int oldStep = getNoteInScale(cmaj) + oldPitchWithoutAccidental.getOctave(0) * 7;
-	std::cout << "old step: " << oldStep % 7 << std::endl;
-	
-	// calculate new pitch and step
-	int newPitch = getPerformancePitch() + pitchDelta;
-	int newStep  = oldStep  + heightDelta;
-		
-	// calculate new accidental for step
-	static int stepIntervals[] = { 0,2,4,5,7,9,11 };
-	int pitchWithoutAccidental = ((newStep / 7) * 12 + stepIntervals[newStep % 7]);
-	int newAccidentalOffset = newPitch - pitchWithoutAccidental;
-	std::cout << "new accidentalOffset: " << newAccidentalOffset << std::endl;
-	// construct pitch-object to return
-	Pitch newPitchObj(newPitch, Accidentals::getAccidental(newAccidentalOffset));
-	return newPitchObj;
+    // get old step
+    // TODO: maybe we should write an oldPitchObj.getOctave(0, key) that takes into account accidentals    
+    //  properly (e.g. yielding '0' instead of '1' for B#0). For now workaround here.    
+    Pitch oldPitchWithoutAccidental(getPerformancePitch() - Accidentals::getPitchOffset(oldAccidental), Natural);
+    Key cmaj = Key();
+    int oldStep = oldPitchWithoutAccidental.getNoteInScale(cmaj) + oldPitchWithoutAccidental.getOctave(0) * 7;
+    
+    // calculate new pitch and step
+    int newPitch = getPerformancePitch() + pitchDelta;
+    int newStep  = oldStep  + heightDelta;
+
+    // could happen for example when transposing the tonic of a key downwards
+    if (newStep < 0 || newPitch < 0) {
+        newStep += 7;
+        newPitch += 12;
+    }
+
+    // should not happen
+    if (newStep < 0 || newPitch < 0) {
+        std::cerr << "Internal error in NotationTypes, Pitch::transpose()" 
+            << std::endl;
+    }
+        
+    // calculate new accidental for step
+    static int stepIntervals[] = { 0,2,4,5,7,9,11 };
+    int pitchWithoutAccidental = ((newStep / 7) * 12 + stepIntervals[newStep % 7]);
+    int newAccidentalOffset = newPitch - pitchWithoutAccidental;
+    // construct pitch-object to return
+    Pitch newPitchObj(newPitch, Accidentals::getAccidental(newAccidentalOffset));
+    return newPitchObj;
 }
 
 //////////////////////////////////////////////////////////////////////
