@@ -94,10 +94,22 @@ KDE3_AUTOMOC(${gui_SRCS})
 KDE3_AUTOMOC(${commands_SRCS})
 KDE3_AUTOMOC(${document_SRCS})
 
-KDE3_ADD_EXECUTABLE(rosegarden 
+ADD_LIBRARY(RosegardenExtended STATIC
     ${commands_SRCS}
     ${document_SRCS}
     ${gui_SRCS}
+)
+
+IF(USE_PCH)
+    ADD_DEPENDENCIES(RosegardenExtended precompiled_headers)
+ENDIF(USE_PCH)
+
+
+KDE3_ADD_EXECUTABLE(rosegarden 
+    #${commands_SRCS}
+    #${document_SRCS}
+    #${gui_SRCS}
+    gui/application/main.cpp
 )
 
 IF(USE_PCH)
@@ -115,6 +127,7 @@ TARGET_LINK_LIBRARIES(rosegarden
     kio
     kdeui
     kdeprint
+    RosegardenExtended
     RosegardenCommon
 )
 
@@ -133,3 +146,39 @@ INSTALL(PROGRAMS
 FILE(GLOB RC_FILES gui/ui/*.rc)
 INSTALL(FILES ${RC_FILES}
         DESTINATION ${KDE3DATADIR}/rosegarden )
+
+IF(WANT_TEST)
+    INCLUDE(TestFileList.txt)
+
+    CREATE_TEST_SOURCELIST(RosegardenTest
+    	RosegardenTestDriver.cpp
+        ${tests_SRCS}
+#        base/test/transpose.cpp
+#        base/test/segmenttransposecommand.cpp
+    )
+
+    KDE3_ADD_EXECUTABLE(RosegardenTestDriver
+        RosegardenTestDriver.cpp
+        ${tests_SRCS}
+    )
+
+    TARGET_LINK_LIBRARIES(RosegardenTestDriver
+        ${QT_AND_KDECORE_LIBS} 
+        ${LIBLO_LIBS}
+        ${LRDF_LIBS}
+        ${FFTW3F_LIBS}
+        ${XFT_LIBS}
+        ${LIRC_LIBS}
+        ${JACK_LIBS}
+        kio
+        kdeui
+        kdeprint
+        RosegardenExtended
+        RosegardenCommon
+    )
+    FOREACH(currenttest ${tests_SRCS})
+        GET_FILENAME_COMPONENT(TestName ${currenttest} NAME_WE)
+        ADD_TEST(test/${TestName} RosegardenTestDriver test/${TestName})
+    ENDFOREACH(currenttest ${tests_SRCS})
+ENDIF(WANT_TEST)
+
