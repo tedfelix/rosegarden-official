@@ -949,19 +949,24 @@ public:
                                                 const Clef &clef,
                                                 const Key &key);
 
-	/**
-	 * return the result of transposing the given pitch by the
-	 * specified interval in the given key. The key is left unchanged,
-	 * only the pitch is transposed.
-	 */
-	Pitch transpose(Key key, int pitchDelta, int heightDelta);
+    /**
+     * return the result of transposing the given pitch by the
+     * specified interval in the given key. The key is left unchanged,
+     * only the pitch is transposed.
+     */
+    Pitch transpose(Key key, int pitchDelta, int heightDelta);
 
-	/** 
- 	 * checks whether the accidental specified for this pitch (if any)
- 	 * is valid - for example, a Sharp for pitch 11 is invalid, as
- 	 * it's between A# and B#.
- 	 */  
-	bool validAccidental() const;
+    /** 
+      * checks whether the accidental specified for this pitch (if any)
+      * is valid - for example, a Sharp for pitch 11 is invalid, as
+      * it's between A# and B#.
+      */  
+    bool validAccidental() const;
+
+    /**
+     * Returned event is on heap; caller takes responsibility for ownership
+     */
+    Event *getAsNoteEvent(timeT absoluteTime, timeT duration) const;
 
 private:
     int m_pitch;
