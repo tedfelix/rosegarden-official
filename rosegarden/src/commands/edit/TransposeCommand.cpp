@@ -43,35 +43,38 @@ void
 TransposeCommand::modifySegment()
 {
     EventSelection::eventcontainer::iterator i;
-	
+    
     for (i = m_selection->getSegmentEvents().begin();
             i != m_selection->getSegmentEvents().end(); ++i) {
-		
+        
         if ((*i)->isa(Note::EventType)) {
-        	
-	    if (m_diatonic)
-	    { 
-	    	
-		Pitch oldPitch(**i);
-		
-		timeT noteTime = (*i)->getAbsoluteTime();
-		Key key = m_selection->getSegment().getKeyAtTime(noteTime);
-		Pitch newPitch = oldPitch.transpose(key, m_semitones, m_steps);
-		
-		(*i)->set<Int>(PITCH, newPitch.getPerformancePitch());
-		(*i)->set<String>(ACCIDENTAL, newPitch.getAccidental(key));
-	    }
-	    else
-	    {
-		try {
-		    long pitch = (*i)->get<Int>(PITCH);
-		    pitch += m_semitones;
-		    (*i)->set<Int>(PITCH, pitch);
-		    if ((m_semitones % 12) != 0) {
-			(*i)->unset(ACCIDENTAL);
-		    }
-		} catch (...) { }
-	    }
+            
+            if (m_diatonic)
+            { 
+            
+                Pitch oldPitch(**i);
+        
+                timeT noteTime = (*i)->getAbsoluteTime();
+                Key key = m_selection->getSegment().getKeyAtTime(noteTime);
+                Pitch newPitch = oldPitch.transpose(key, m_semitones, m_steps);
+                Event * newNoteEvent = newPitch.getAsNoteEvent(0, 0);
+                Accidental newAccidental;
+                newNoteEvent->get<String>(BaseProperties::ACCIDENTAL, newAccidental);
+
+                (*i)->set<Int>(PITCH, newPitch.getPerformancePitch());
+                (*i)->set<String>(ACCIDENTAL, newAccidental);
+            }
+            else
+            {
+                try {
+                    long pitch = (*i)->get<Int>(PITCH);
+                    pitch += m_semitones;
+                    (*i)->set<Int>(PITCH, pitch);
+                    if ((m_semitones % 12) != 0) {
+                        (*i)->unset(ACCIDENTAL);
+                    }
+                } catch (...) { }
+            }
 
         }
     }

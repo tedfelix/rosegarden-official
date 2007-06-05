@@ -1990,7 +1990,6 @@ RosegardenGUIDoc::stopRecordingMidi()
 
     Composition &c = getComposition();
 
-    bool haveSegments = false;
     timeT endTime = c.getBarEnd(0);
 
     bool haveMeaning = false;
