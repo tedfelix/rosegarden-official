@@ -8,16 +8,16 @@ trap "rm -rf \"$tmpdir\"" 0
 # Requirements, actual or potential:
 # 
 # lilypond (that actually runs, of course)
-# kghostview OR kpdf OR xpdf OR ghostview OR gs
+# kpdf OR gpdf OR xpdf OR evince OR acroread
 # Xdialog OR konsole OR rxvt OR xterm [for graphical mode only]
 
 prog_lilypond=""
 prog_xdialog=""
 prog_terminal=""
-prog_ghostview=""
+prog_pdf_view=""
 
 if [ "$1" == "-v" ]; then
-    echo "rosegarden-lilypondview v1.5" 1>&2
+    echo "rosegarden-lilypondview v1.6" 1>&2
     shift
 fi
 
@@ -36,17 +36,17 @@ else
     esac
 fi
 
-for x in kghostview evince ggv ghostview; do
+for x in kpdf OR gpdf OR xpdf OR evince OR acroread; do
     if [ -x "`type -path $x`" ]; then
-	prog_ghostview=$x
+	prog_pdf_view=$x
 	break;
     fi
 done
 
 reqd=
 
-if [ -z "$prog_ghostview" ]; then
-    reqd="kghostview OR ghostview OR ggv OR evince, $reqd"
+if [ -z "$prog_pdf_view" ]; then
+    reqd="kpdf OR gpdf OR xpdf OR evince OR evince OR acroread, $reqd"
     echo "rosegarden-lilypondview: No PostScript viewer found" 1>&2
 fi
 
@@ -70,7 +70,7 @@ if [ "$1" == "--conftest" ]; then
 fi
 
 [ -z "$prog_lilypond" ] && exit 1
-[ -z "$prog_ghostview" ] && exit 1
+[ -z "$prog_pdf_view" ] && exit 1
 [ -z "$prog_terminal" ] && exit 1
 
 if [ "$1" == "--conftest" ]; then
@@ -136,17 +136,17 @@ cp "$input" "$tmpdir/" || exit 1
 echo "LilyPond version is $lilypond_version, file version is $fileversion"
 	case "$lilypond_version" in
 	    2.6.*)
-		args="--format=ps"
+		args="--format=pdf"
 		case "$fileversion" in
 		    1.*|2.[0-5].*) convert=true;;
 		esac;;
 	    2.8.*)
-		args="--format=ps"
+		args="--format=pdf"
 		case "$fileversion" in
 		    1.*|2.[0-7].*) convert=true;;
 		esac;;
 	    2.10.*)
-		args="--format=ps"
+		args="--format=pdf"
 		case "$fileversion" in
 		    1.*|2.[0-9].*) convert=true;;
 		esac;;
@@ -231,10 +231,10 @@ echo "LilyPond version is $lilypond_version, file version is $fileversion"
 	    $prog_lilypond $args "$base"
 	fi
 
-	target="${base%.*}.ps"
+	target="${base%.*}.pdf"
 
 	if [ -f "$target" ]; then
-	    $prog_ghostview "$target"
+	    $prog_pdf_view "$target"
 	    exit 0
 	elif [ -n "$graphical" ]; then
 	    cat $logfile 1>&2
