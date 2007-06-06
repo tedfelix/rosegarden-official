@@ -2,7 +2,7 @@
 
 test -d documents || mkdir documents
 
-for howto in rgd-HOWTO i18n; do
+for howto in rgd-HOWTO i18n infrared-remotes; do
 
   tmpfile=/tmp/faqdata$$.html
   mydir=`dirname $0`

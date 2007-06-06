@@ -295,7 +295,7 @@ Then run up fluidsynth with
   $ fluidsynth -m alsa_seq ./mustheory2.sf2
 
 or equivalent for whichever soundfont you want to use.  Alternatively
-get hold of qsynth (URL:http://qsynth.sourceforge.net/> which provides
+get hold of qsynth (<URL:http://qsynth.sourceforge.net/>) which provides
 a nice GUI for fluidsynth.
 
 If you're relatively short on CPU power, also give it "-R no" to turn
