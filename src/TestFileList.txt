@@ -2,4 +2,5 @@ SET(tests_SRCS
     test/dummy.cpp
     test/transpose.cpp
     test/segmenttransposecommand.cpp
+    test/accidentals.cpp
 )

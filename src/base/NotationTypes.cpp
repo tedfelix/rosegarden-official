@@ -1635,17 +1635,17 @@ Pitch::getAccidental(bool useSharps) const
 Accidental
 Pitch::getAccidental(const Key &key) const
 {
-	if (m_accidental == NoAccidental || !validAccidental())
-	{
-		Accidental retval = resolveNoAccidental(m_pitch, key, UseKey);
-		//std::cout << "Resolved No/invalid accidental: chose " << retval << std::endl;
-		return retval; 
-	}
-	else
-	{
-		//std::cout << "Returning specified accidental" << std::endl;
-		return m_accidental;
-	}
+    if (m_accidental == NoAccidental || !validAccidental())
+    {
+        Accidental retval = resolveNoAccidental(m_pitch, key, UseKey);
+        //std::cout << "Resolved No/invalid accidental: chose " << retval << std::endl;
+        return retval; 
+    }
+    else
+    {
+        //std::cout << "Returning specified accidental" << std::endl;
+        return m_accidental;
+    }
 }
 
 Accidental
@@ -1781,10 +1781,10 @@ Pitch::getPerformancePitchFromRG21Pitch(int heightOnStaff,
     return p;
 }
 
-Pitch Pitch::transpose(const Key key, int pitchDelta, int heightDelta)
+Pitch Pitch::transpose(const Key &key, int pitchDelta, int heightDelta)
 {
     // get old accidental
-    Accidental oldAccidental = getAccidental(&key);
+    Accidental oldAccidental = getAccidental(key);
 
     // get old step
     // TODO: maybe we should write an oldPitchObj.getOctave(0, key) that takes into account accidentals    
@@ -1813,6 +1813,7 @@ Pitch Pitch::transpose(const Key key, int pitchDelta, int heightDelta)
     static int stepIntervals[] = { 0,2,4,5,7,9,11 };
     int pitchWithoutAccidental = ((newStep / 7) * 12 + stepIntervals[newStep % 7]);
     int newAccidentalOffset = newPitch - pitchWithoutAccidental;
+
     // construct pitch-object to return
     Pitch newPitchObj(newPitch, Accidentals::getAccidental(newAccidentalOffset));
     return newPitchObj;

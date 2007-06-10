@@ -9,6 +9,43 @@ using namespace Rosegarden;
 using std::cout;
 
 /**
+ * Bb in Bb major became E# in F major, due to segment 
+ * transposition 
+ *
+ * Should be F
+ */
+int testSegmentBbtoF()
+{
+    Segment * segment1 = new Segment();
+    Note * n = new Note(Note::QuarterNote);
+    Event * bes = n->getAsNoteEvent(1, 10);
+    segment1->insert(bes);
+    segment1->insert(Key("Bb major").getAsEvent(0));
+    SegmentTransposeCommand * mockCommand = 
+        new SegmentTransposeCommand(*segment1,
+            true, -3, -5, true);
+    mockCommand->execute();
+	
+    EventSelection m_selection(*segment1, segment1->getStartTime(), segment1->getEndMarkerTime());
+    EventSelection::eventcontainer::iterator i;
+    for (i = m_selection.getSegmentEvents().begin();
+            i != m_selection.getSegmentEvents().end(); ++i) {
+	if ((*i)->isa(Note::EventType)) {
+            Pitch resultPitch(**i);
+            std::cout << "Resulting pitch is: " << resultPitch.getPerformancePitch() << std::endl;
+            std::cout << "accidental: " << resultPitch.getDisplayAccidental(Key("F major")) << std::endl;
+            std::cout << "DisplayAccidental: " << resultPitch.getDisplayAccidental(Key("F major")) << std::endl;
+            if (resultPitch.getDisplayAccidental(Key("F major")) != Accidentals::NoAccidental)
+            {
+                return -1;
+            }
+        }
+    }
+    
+    return 0;
+}
+
+/**
  * G# in E major became Bb in F major, due to segment 
  * transposition (by using the 'segment transposition' combobox)
  *
@@ -119,5 +156,6 @@ int test_segmenttransposecommand(int argc, char** argv)
     return 
     	testGistoAis() +
     	testSegmentCisToC() +
-    	testUndo();
+    	testUndo() + 
+        testSegmentBbtoF();
 }
