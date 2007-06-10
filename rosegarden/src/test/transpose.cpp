@@ -94,10 +94,27 @@ int testGToD()
     return 0;
 }
 
+int testTransposeBbToF()
+{
+    Pitch bb(70, Accidentals::Flat);
+    Key besmaj("Bb major");
+    Pitch result = bb.transpose(besmaj, -5, -3);
+
+    Accidental resultAccidental = result.getAccidental(besmaj);
+    int resultPitch = result.getPerformancePitch();
+    if (resultAccidental != Accidentals::NoAccidental || resultPitch != 65)
+    {
+        return -1;
+    }
+    return 0;
+}
+
 int test_transpose(int argc, char **argv)
 {
     return testAisDisplayAccidentalInCmaj() +
         testAisToBis() +
         testGToD() +
-        testCisToC();    
+        testCisToC() +
+        testTransposeBbToF();
+	
 }

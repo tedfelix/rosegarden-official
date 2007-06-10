@@ -548,13 +548,13 @@ public:
     /// Returned event is on heap; caller takes responsibility for ownership
     Event *getAsEvent(timeT absoluteTime) const;
 
-	/**
-	 * Transpose this key by the specified interval given in pitch and steps
-	 * 
-	 * For example: transposing F major by a major triad (4,2) yields
-	 *  A major.
-	 */
-	Key transpose(int pitchDelta, int heightDelta);
+    /**
+     * Transpose this key by the specified interval given in pitch and steps
+     * 
+     * For example: transposing F major by a major triad (4,2) yields
+     *  A major.
+     */
+    Key transpose(int pitchDelta, int heightDelta);
 
 private:
     std::string m_name;
@@ -954,7 +954,7 @@ public:
      * specified interval in the given key. The key is left unchanged,
      * only the pitch is transposed.
      */
-    Pitch transpose(Key key, int pitchDelta, int heightDelta);
+    Pitch transpose(const Key &key, int pitchDelta, int heightDelta);
 
     /** 
       * checks whether the accidental specified for this pitch (if any)
