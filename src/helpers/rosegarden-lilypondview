@@ -9,10 +9,10 @@ trap "rm -rf \"$tmpdir\"" 0
 # 
 # lilypond (that actually runs, of course)
 # kpdf OR gpdf OR xpdf OR evince OR acroread
-# Xdialog OR konsole OR rxvt OR xterm [for graphical mode only]
+# kdialog OR konsole OR rxvt OR xterm [for graphical mode only]
 
 prog_lilypond=""
-prog_xdialog=""
+prog_kdialog=""
 prog_terminal=""
 prog_pdf_view=""
 
@@ -50,8 +50,8 @@ if [ -z "$prog_pdf_view" ]; then
     echo "rosegarden-lilypondview: No PostScript viewer found" 1>&2
 fi
 
-if [ -x "`type -path Xdialog`" ]; then
-    prog_xdialog=Xdialog
+if [ -x "`type -path kdialog`" ]; then
+    prog_kdialog=kdialog
 fi
 
 if [ -x "`type -path xterm`" ]; then
@@ -81,9 +81,9 @@ graphical=""
 if [ "$1" == "-g" ]; then
     graphical=true
     shift
-    if [ -z "$prog_xdialog" ]; then
+    if [ -z "$prog_kdialog" ]; then
 	# can't do graphical mode
-	echo "rosegarden-lilypondview: Graphical progress dialog requires Xdialog utility" 1>&2
+	echo "rosegarden-lilypondview: Graphical progress dialog requires kdialog utility" 1>&2
 	graphical=""
     fi
 fi
@@ -174,7 +174,6 @@ echo "LilyPond version is $lilypond_version, file version is $fileversion"
 	fi
 
 	if [ -n "$graphical" ] ; then
-
 	    # special bar comment syntax RG exports -- hopefully benign if absent
 	    bars=`grep '^%% [0-9][0-9]*$' "$base" | sort -k 1 -n | tail -1 | awk '{ print $2; }'`
 	
@@ -191,6 +190,11 @@ echo "LilyPond version is $lilypond_version, file version is $fileversion"
 	    indev=/dev/pts/0
 	    if [ ! -c "$indev" ]; then indev=/dev/ptya0; fi
 
+	    dcopRef=`kdialog --title "Processing" --progressbar "Processing LilyPond file..." 100`
+            dcop $dcopRef showCancelButton true
+
+	    PROGRESS=`tempfile`
+
 #	    echo "Running $prog_lilypond $args \"$base\""
 	    $prog_lilypond $args "$base" <$indev 2>&1 | tee -a "$logfile" | \
 	      perl -e '
@@ -198,15 +202,11 @@ echo "LilyPond version is $lilypond_version, file version is $fileversion"
 		print "0\n";
 		$state = 0;
 		$n = "";
-		$m = "";
 		$base = 0;
 		while (defined ($key = getc)) {
-		    if ($key eq "[") {
-			if ($state == 3) {
-			    print "XXX\nProcessing LilyPond file...\n\\n\n$m\nXXX\n";
-			}
+		    if ($key eq "[") {          # bar number start mark
 			$state = 1;
-	            } elsif ($key eq "]") {
+	            } elsif ($key eq "]") {     # bar number end mark
 			$state = 2;
 			$val = int( ($base + $n) * 100 / '$count' );
 			if ($val > 100) { $val = 100; }
@@ -217,15 +217,65 @@ echo "LilyPond version is $lilypond_version, file version is $fileversion"
 			if ($state == 2) {
 			    $base = $base + '$bars'; $state = 0;
 			}
-			$m = "";
-			$state = 3;
-		    } elsif ($state == 1) {
+		    } elsif ($state == 1) {     # bar number
 			$n = $n . $key;
-		    } elsif ($state == 3) {
-			$m = $m . $key;
 	            }
-		}' |  \
-	      $prog_xdialog --title "Processing" --gauge "Processing LilyPond file..." 10 60
+		}
+                print "end\n"
+                ' >& $PROGRESS &
+
+	    PROCESSINGSTAGE=0
+            #
+	    # Stages:
+            #  0 -- Process LilyPond file
+            #  1 -- Create PDF output
+            #  2 -- Finished
+            #
+	    until [ "$PROCESSINGSTAGE" != "0" ]; do
+		sleep 0.2
+		PROGRESSVALUE=`tail -c 4 $PROGRESS`
+		## Debugging code:
+		# cat $PROGRESS
+		# echo "= $PROGRESSVALUE =="
+		if [ "$PROGRESSVALUE" == "end" ]; then
+                    #
+		    # Processing was terminated:
+                    #  - either the number of bars was not known,
+                    #  - or there appeared an error during processing.
+                    #
+                    dcop $dcopRef setProgress 100
+                    PROCESSINGSTAGE=2
+		elif [ "$PROGRESSVALUE" == "100" ]; then
+                    PROCESSINGSTAGE=1
+		    #
+		    # Note: percentage is 100 only after PDF has been created.
+		    #
+                    dcop $dcopRef setProgress 99
+	            dcop $dcopRef setLabel "Creating PDF output..."
+	        else
+                    dcop $dcopRef setProgress $PROGRESSVALUE
+		fi
+	        if [ "true" == `dcop $dcopRef wasCancelled` ]; then
+	            dcop $dcopRef close
+	            rm $PROGRESS
+                    exit 1;
+                fi
+	    done
+	    until [ "$PROCESSINGSTAGE" == "2" ]; do
+	        sleep 0.2
+	        if [ "true" == `dcop $dcopRef wasCancelled` ]; then
+	            dcop $dcopRef close
+	            rm $PROGRESS
+                    exit 1;
+                fi
+		PROGRESSVALUE=`tail -c 4 $PROGRESS`
+		if [ "$PROGRESSVALUE" == "end" ]; then
+                    PROCESSINGSTAGE=2
+                    dcop $dcopRef setProgress 100
+                fi
+            done
+	    dcop $dcopRef close
+	    rm $PROGRESS
 	else
 #	    echo "running $prog_lilypond $args \"$base\"..."
 	    $prog_lilypond $args "$base"
@@ -240,13 +290,16 @@ echo "LilyPond version is $lilypond_version, file version is $fileversion"
 	    cat $logfile 1>&2
 	    echo 1>&2
 	    echo "LilyPond failed" 1>&2
+	    LOGGINGFILE=`tempfile`
 	    if [ -n "$graphical" ]; then
 		( echo 
 		  echo "  ERROR: LilyPond processing failed."
 		  echo "  LilyPond output follows:"
 		  echo 
-		  cat "$logfile" ) | $prog_xdialog --no-cancel --fixed-font --textbox - 0 0
+		  cat "$logfile" ) > $LOGGINGFILE
+               $prog_kdialog --textbox $LOGGINGFILE 600 200
 	    fi
+	    rm $LOGGINGFILE
 	else
 	    echo 1>&2
 	    echo "LilyPond processing failed." 1>&2
