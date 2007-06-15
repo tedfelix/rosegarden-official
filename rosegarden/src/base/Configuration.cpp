@@ -128,14 +128,33 @@ namespace CompositionMetadataKeys
     const PropertyName Title = "title";
     const PropertyName Subtitle = "subtitle";
     const PropertyName Arranger = "arranger";
+    // The following are recognized only by LilyPond output
+    const PropertyName Dedication = "dedication";
+    const PropertyName Subsubtitle = "subsubtitle";
+    const PropertyName Poet = "poet";
+    const PropertyName Meter = "meter";
+    const PropertyName Opus = "opus";
+    const PropertyName Instrument = "instrument";
+    const PropertyName Piece = "piece";
+    const PropertyName Tagline = "tagline";
 
     std::vector<PropertyName> getFixedKeys() {
 	std::vector<PropertyName> keys;
 	keys.push_back(Composer);
-	keys.push_back(Title);
-	keys.push_back(Subtitle);
 	keys.push_back(Arranger);
 	keys.push_back(Copyright);
+	keys.push_back(Title);
+	keys.push_back(Subtitle);
+        // The following are recognized only by LilyPond output
+	keys.push_back(Subsubtitle);
+	keys.push_back(Dedication);
+	keys.push_back(Poet);
+	keys.push_back(Meter);
+	keys.push_back(Opus);
+	keys.push_back(Instrument);
+	keys.push_back(Piece);
+	keys.push_back(Tagline);
+
 	return keys;
     }
 }

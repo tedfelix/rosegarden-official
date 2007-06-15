@@ -144,16 +144,33 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
     for (unsigned int i = fixedKeys.size(); i > 0; --i) {
         PropertyName pn = fixedKeys[i - 1];
         QString trName;
-        if (pn == CompositionMetadataKeys::Copyright) {
-            trName = i18n("Copyright");
-        } else if (pn == CompositionMetadataKeys::Composer) {
+        if (pn == CompositionMetadataKeys::Composer) {
             trName = i18n("Composer");
+        } else if (pn == CompositionMetadataKeys::Arranger) {
+            trName = i18n("Arranger");
+        } else if (pn == CompositionMetadataKeys::Copyright) {
+            trName = i18n("Copyright");
         } else if (pn == CompositionMetadataKeys::Title) {
             trName = i18n("Title");
         } else if (pn == CompositionMetadataKeys::Subtitle) {
             trName = i18n("Subtitle");
-        } else if (pn == CompositionMetadataKeys::Arranger) {
-            trName = i18n("Arranger");
+        // The following are recognized only by LilyPond output
+        } else if (pn == CompositionMetadataKeys::Subsubtitle) {
+            trName = i18n("Subsubtitle");
+        } else if (pn == CompositionMetadataKeys::Dedication) {
+            trName = i18n("Dedication");
+        } else if (pn == CompositionMetadataKeys::Poet) {
+            trName = i18n("Poet");
+        } else if (pn == CompositionMetadataKeys::Meter) {
+            trName = i18n("Meter");
+        } else if (pn == CompositionMetadataKeys::Opus) {
+            trName = i18n("Opus");
+        } else if (pn == CompositionMetadataKeys::Instrument) {
+            trName = i18n("Instrument");
+        } else if (pn == CompositionMetadataKeys::Piece) {
+            trName = i18n("Piece");
+        } else if (pn == CompositionMetadataKeys::Tagline) {
+            trName = i18n("Tagline");
         } else {
             trName = strtoqstr(pn.getName());
             trName = trName.left(1).upper() + trName.right(trName.length() - 1);
