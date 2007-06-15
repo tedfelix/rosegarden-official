@@ -102,10 +102,20 @@ private:
 namespace CompositionMetadataKeys
 {
     extern const PropertyName Composer;
-    extern const PropertyName Title;
-    extern const PropertyName Subtitle;
     extern const PropertyName Arranger;
     extern const PropertyName Copyright;
+    extern const PropertyName Title;
+    extern const PropertyName Subtitle;
+    // The following are recognized only by LilyPond output
+    extern const PropertyName Subsubtitle;
+    extern const PropertyName Dedication;
+    extern const PropertyName Poet;
+    extern const PropertyName Meter;
+    extern const PropertyName Opus;
+    extern const PropertyName Instrument;
+    extern const PropertyName Piece;
+    extern const PropertyName Tagline;
+
 
     std::vector<PropertyName> getFixedKeys();
 }
