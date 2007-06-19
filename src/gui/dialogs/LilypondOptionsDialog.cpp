@@ -63,7 +63,7 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
 
     QGroupBox *basicOptionsBox = new QGroupBox
                            (1, Horizontal,
-                            (heading == "" ? i18n("Basic options") : heading), vbox);
+                            i18n("Basic options"), vbox);
 
     QFrame *frameBasic = new QFrame(basicOptionsBox);
     QGridLayout *layoutBasic = new QGridLayout(frameBasic, 3, 2, 10, 5);
@@ -123,7 +123,7 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
 
     QGroupBox *staffOptionsBox = new QGroupBox
                            (1, Horizontal,
-                            (heading == "" ? i18n("Staff level options") : heading), vbox);
+                            i18n("Staff level options"), vbox);
 
     QFrame *frameStaff = new QFrame(staffOptionsBox);
     QGridLayout *layoutStaff = new QGridLayout(frameStaff, 2, 2, 10, 5);
@@ -150,7 +150,7 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
 
     QGroupBox *notationOptionsBox = new QGroupBox
                            (1, Horizontal,
-                            (heading == "" ? i18n("Notation options") : heading), vbox);
+                            i18n("Notation options"), vbox);
 
     QFrame *frameNotation = new QFrame(notationOptionsBox);
     QGridLayout *layoutNotation = new QGridLayout(frameNotation, 4, 2, 10, 5);
@@ -189,7 +189,7 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
 
     QGroupBox *extraOptionsBox = new QGroupBox
                            (1, Horizontal,
-                            (heading == "" ? i18n("Extra options") : heading), vbox);
+                            i18n("Extra options"), vbox);
 
     QFrame *frameExtra = new QFrame(extraOptionsBox);
     QGridLayout *layoutExtra = new QGridLayout(frameExtra, 1, 2, 10, 5);
