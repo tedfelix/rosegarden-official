@@ -1624,18 +1624,19 @@ LilypondExporter::writeBar(Segment *s,
                 }
                 //
                 // Check each string individually.
+                // Note: LilyPond numbers strings differently.
                 //
                 for (int stringNum = 6; stringNum >= 1; --stringNum) {
                     if (barreStart == stringNum) {
                         str << "c:" << barreStart << "-" << barreEnd << "-" << barreFret << ";";
                     }
 
-                    if (fingering.getStringStatus( stringNum ) == Guitar::Fingering::MUTED) {
+                    if (fingering.getStringStatus( 6-stringNum ) == Guitar::Fingering::MUTED) {
                         str << stringNum << "-x;";
-                    } else if (fingering.getStringStatus( stringNum ) == Guitar::Fingering::OPEN) {
+                    } else if (fingering.getStringStatus( 6-stringNum ) == Guitar::Fingering::OPEN) {
                         str << stringNum << "-o;";
                     } else {
-                        int stringStatus = fingering.getStringStatus(stringNum);
+                        int stringStatus = fingering.getStringStatus(6-stringNum);
                         if ((stringNum <= barreStart) && (stringNum >= barreEnd)) {
                             str << stringNum << "-" << barreFret << ";";
                         } else {
