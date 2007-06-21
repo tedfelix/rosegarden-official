@@ -8,9 +8,11 @@ trap "rm -rf \"$tmpdir\"" 0
 # Requirements, actual or potential:
 # 
 # lilypond (that actually runs, of course)
+# mktemp OR tempfile
 # kpdf OR gpdf OR xpdf OR evince OR acroread
 # kdialog OR konsole OR rxvt OR xterm [for graphical mode only]
 
+prog_temp_file=""
 prog_lilypond=""
 prog_kdialog=""
 prog_terminal=""
@@ -36,6 +38,8 @@ else
     esac
 fi
 
+reqd=
+
 for x in kpdf OR gpdf OR xpdf OR evince OR acroread; do
     if [ -x "`type -path $x`" ]; then
 	prog_pdf_view=$x
@@ -43,11 +47,21 @@ for x in kpdf OR gpdf OR xpdf OR evince OR acroread; do
     fi
 done
 
-reqd=
-
 if [ -z "$prog_pdf_view" ]; then
     reqd="kpdf OR gpdf OR xpdf OR evince OR evince OR acroread, $reqd"
     echo "rosegarden-lilypondview: No PostScript viewer found" 1>&2
+fi
+
+for x in mktemp OR tempfile; do
+    if [ -x "`type -path $x`" ]; then
+	prog_temp_file=$x
+	break;
+    fi
+done
+
+if [ -z "$prog_temp_file" ]; then
+    reqd="mktemp OR tempfile, $reqd"
+    echo "rosegarden-lilypondview: No temporary file utility found" 1>&2
 fi
 
 if [ -x "`type -path kdialog`" ]; then
@@ -193,7 +207,7 @@ echo "LilyPond version is $lilypond_version, file version is $fileversion"
 	    dcopRef=`kdialog --title "Processing" --progressbar "Processing LilyPond file..." 100`
             dcop $dcopRef showCancelButton true
 
-	    PROGRESS=`tempfile`
+	    PROGRESS=`$prog_temp_file`
 
 #	    echo "Running $prog_lilypond $args \"$base\""
 	    $prog_lilypond $args "$base" <$indev 2>&1 | tee -a "$logfile" | \
@@ -290,7 +304,7 @@ echo "LilyPond version is $lilypond_version, file version is $fileversion"
 	    cat $logfile 1>&2
 	    echo 1>&2
 	    echo "LilyPond failed" 1>&2
-	    LOGGINGFILE=`tempfile`
+	    LOGGINGFILE=`$prog_temp_file`
 	    if [ -n "$graphical" ]; then
 		( echo 
 		  echo "  ERROR: LilyPond processing failed."
