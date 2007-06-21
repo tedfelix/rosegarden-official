@@ -20,7 +20,7 @@ prog_terminal=""
 prog_pdf_view=""
 prog_printer=""
 
-for x in $*; do
+for x in "$@"; do
     if [ "$x" == "-v" ]; then
         echo "rosegarden-lilypondview v1.6" 1>&2
     fi
@@ -91,7 +91,7 @@ if [ -z "$prog_printer" ]; then
     echo "rosegarden-lilypondview: No printing program found" 1>&2
 fi
 
-for x in $*; do
+for x in "$@"; do
     if [ "$x" == "--conftest" ]; then
         if [ -n "$reqd" ]; then
 	    echo "Required: "${reqd%%, }
@@ -104,14 +104,14 @@ done;
 [ -z "$prog_temp_file" ] && exit 1
 [ -z "$prog_terminal" ] && exit 1
 
-for x in $*; do
+for x in "$@"; do
     if [ "$x" == "--conftest" ]; then
         exit 0
     fi
 done;
 
 graphical=""
-for x in $*; do
+for x in "$@"; do
     if [ "$x" == "-g" ]; then
         graphical=true
         if [ -z "$prog_kdialog" ]; then
@@ -123,14 +123,14 @@ for x in $*; do
 done;
 
 printing=""
-for x in $*; do
+for x in "$@"; do
     if [ "$x" == "-p" ]; then
         printing=true
     fi
 done;
 
 input=""
-for x in $*; do
+for x in "$@"; do
     if [ "`expr match $x '.*.ly'`" == "`expr length $x`" ]; then
         input="$x"
         if [ ! -f "$input" ]; then
@@ -154,7 +154,7 @@ if [ -z "$input" ]; then
     exit 2
 fi
 
-for x in $*; do
+for x in "$@"; do
     if [ "`expr match $x '.*.ly'`" == "`expr length $x`" ]; then
         input="$x"
         cp "$input" "$tmpdir/" || exit 1
@@ -338,12 +338,13 @@ echo "LilyPond version is $lilypond_version, file version is $fileversion"
 	target="${base%.*}.pdf"
 
 	if [ -f "$target" ]; then
-	    if [ -n "$printing" ]; then
+	    echo \"$printing\"
+	    if [ "$printing" == "" ]; then
 	        $prog_pdf_view "$target"
-	        exit 0
             else
 	        $prog_printer "$target"
 	    fi
+	    exit 0
 	elif [ -n "$graphical" ]; then
 	    cat $logfile 1>&2
 	    echo 1>&2
