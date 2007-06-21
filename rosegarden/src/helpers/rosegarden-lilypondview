@@ -18,10 +18,11 @@ prog_kdialog=""
 prog_terminal=""
 prog_pdf_view=""
 
-if [ "$1" == "-v" ]; then
-    echo "rosegarden-lilypondview v1.6" 1>&2
-    shift
-fi
+for x in $*; do
+    if [ "$x" == "-v" ]; then
+        echo "rosegarden-lilypondview v1.6" 1>&2
+    fi
+done;
 
 type -path lilypond
 if [ "$?" != "0" ]; then
@@ -77,47 +78,57 @@ if [ -z "$prog_terminal" ]; then
     echo "rosegarden-lilypondview: No terminal emulator found" 1>&2
 fi
 
-if [ "$1" == "--conftest" ]; then
-    if [ -n "$reqd" ]; then
-	echo "Required: "${reqd%%, }
+for x in $*; do
+    if [ "$x" == "--conftest" ]; then
+        if [ -n "$reqd" ]; then
+	    echo "Required: "${reqd%%, }
+        fi
     fi
-fi
+done;
 
 [ -z "$prog_lilypond" ] && exit 1
 [ -z "$prog_pdf_view" ] && exit 1
+[ -z "$prog_temp_file" ] && exit 1
 [ -z "$prog_terminal" ] && exit 1
 
-if [ "$1" == "--conftest" ]; then
-    exit 0
-fi
+for x in $*; do
+    if [ "$x" == "--conftest" ]; then
+        exit 0
+    fi
+done;
 
 graphical=""
-if [ "$1" == "-g" ]; then
-    graphical=true
-    shift
-    if [ -z "$prog_kdialog" ]; then
-	# can't do graphical mode
-	echo "rosegarden-lilypondview: Graphical progress dialog requires kdialog utility" 1>&2
-	graphical=""
+for x in $*; do
+    if [ "$x" == "-g" ]; then
+        graphical=true
+        if [ -z "$prog_kdialog" ]; then
+	    # can't do graphical mode
+	    echo "rosegarden-lilypondview: Graphical progress dialog requires kdialog utility" 1>&2
+	    graphical=""
+        fi
     fi
-fi
+done;
 
-input="$1"
+input=""
+for x in $*; do
+    if [ "`expr match $x '.*.ly'`" == "`expr length $x`" ]; then
+        input="$x"
+        if [ ! -f "$input" ]; then
+	    echo "Error: Can't open \"$input\" for reading" 1>&2
+	    exit 1
+        fi
+    fi
+done;
 
-if [ -z "$1" ]; then
+if [ -z "$input" ]; then
     echo "Usage: rosegarden-lilypondview [-g] input.ly" 1>&2
     exit 2
 fi
 
-if [ ! -f "$input" ]; then
-    input="$input.ly"
-    if [ ! -f "$input" ]; then
-	echo "Error: Can't open \"$1\" or \"$input\" for reading" 1>&2
-	exit 1
-    fi
-fi
-
-cp "$input" "$tmpdir/" || exit 1
+for x in $*; do
+    if [ "`expr match $x '.*.ly'`" == "`expr length $x`" ]; then
+        input="$x"
+        cp "$input" "$tmpdir/" || exit 1
 
 (
 	dir=`dirname "$input"`
@@ -320,4 +331,5 @@ echo "LilyPond version is $lilypond_version, file version is $fileversion"
 	fi
 	exit 1
 )
-
+    fi
+done;
