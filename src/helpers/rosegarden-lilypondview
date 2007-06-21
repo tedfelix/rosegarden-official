@@ -11,12 +11,14 @@ trap "rm -rf \"$tmpdir\"" 0
 # mktemp OR tempfile
 # kpdf OR gpdf OR xpdf OR evince OR acroread
 # kdialog OR konsole OR rxvt OR xterm [for graphical mode only]
+# kprinter
 
-prog_temp_file=""
 prog_lilypond=""
+prog_temp_file=""
 prog_kdialog=""
 prog_terminal=""
 prog_pdf_view=""
+prog_printer=""
 
 for x in $*; do
     if [ "$x" == "-v" ]; then
@@ -24,11 +26,7 @@ for x in $*; do
     fi
 done;
 
-type -path lilypond
-if [ "$?" != "0" ]; then
-    echo "rosegarden-lilypondview: LilyPond unavailable" 1>&2
-    echo "Required: LilyPond"
-else
+if [ -x "`type -path lilypond`" ]; then
     lilypond_version="`lilypond --version | grep LilyPond | head -1 | sed 's/^.* //'`"
     case "$lilypond_version" in
 	1.*|2.[0-5].*)
@@ -37,21 +35,12 @@ else
 	*)
 	    prog_lilypond=lilypond;;
     esac
+else
+    echo "rosegarden-lilypondview: LilyPond unavailable" 1>&2
+    echo "Required: LilyPond"
 fi
 
 reqd=
-
-for x in kpdf OR gpdf OR xpdf OR evince OR acroread; do
-    if [ -x "`type -path $x`" ]; then
-	prog_pdf_view=$x
-	break;
-    fi
-done
-
-if [ -z "$prog_pdf_view" ]; then
-    reqd="kpdf OR gpdf OR xpdf OR evince OR evince OR acroread, $reqd"
-    echo "rosegarden-lilypondview: No PostScript viewer found" 1>&2
-fi
 
 for x in mktemp OR tempfile; do
     if [ -x "`type -path $x`" ]; then
@@ -76,6 +65,30 @@ fi
 if [ -z "$prog_terminal" ]; then
     reqd="xterm, $reqd"
     echo "rosegarden-lilypondview: No terminal emulator found" 1>&2
+fi
+
+for x in kpdf OR gpdf OR xpdf OR evince OR acroread; do
+    if [ -x "`type -path $x`" ]; then
+	prog_pdf_view=$x
+	break;
+    fi
+done
+
+if [ -z "$prog_pdf_view" ]; then
+    reqd="kpdf OR gpdf OR xpdf OR evince OR evince OR acroread, $reqd"
+    echo "rosegarden-lilypondview: No PostScript viewer found" 1>&2
+fi
+
+for x in kprinter; do
+    if [ -x "`type -path $x`" ]; then
+	prog_printer=$x
+	break;
+    fi
+done
+
+if [ -z "$prog_printer" ]; then
+    reqd="kprinter, $reqd"
+    echo "rosegarden-lilypondview: No printing program found" 1>&2
 fi
 
 for x in $*; do
@@ -109,6 +122,13 @@ for x in $*; do
     fi
 done;
 
+printing=""
+for x in $*; do
+    if [ "$x" == "-p" ]; then
+        printing=true
+    fi
+done;
+
 input=""
 for x in $*; do
     if [ "`expr match $x '.*.ly'`" == "`expr length $x`" ]; then
@@ -121,7 +141,16 @@ for x in $*; do
 done;
 
 if [ -z "$input" ]; then
-    echo "Usage: rosegarden-lilypondview [-g] input.ly" 1>&2
+    echo "Usage: rosegarden-lilypondview [OPTION] input.ly ..." 1>&2
+    echo ""
+    echo "Process LilyPond files to PDF files and print/view them."
+    echo ""
+    echo "Options:"
+    echo "  -g          use graphical LilyPond progress dialog"
+    echo "  -p          print progressed files instead of PDF-viewing"
+    echo "  -v          print version of rosegarden-lilypondview"
+    echo "  --conftest  check that all dependencies exist"
+    echo ""
     exit 2
 fi
 
@@ -309,8 +338,12 @@ echo "LilyPond version is $lilypond_version, file version is $fileversion"
 	target="${base%.*}.pdf"
 
 	if [ -f "$target" ]; then
-	    $prog_pdf_view "$target"
-	    exit 0
+	    if [ -n "$printing" ]; then
+	        $prog_pdf_view "$target"
+	        exit 0
+            else
+	        $prog_printer "$target"
+	    fi
 	elif [ -n "$graphical" ]; then
 	    cat $logfile 1>&2
 	    echo 1>&2
