@@ -520,6 +520,22 @@ private:
     std::vector<AlsaTimerInfo> m_timers;
     std::string m_currentTimer;
 
+    // This auxiliary queue is here as a hack, to avoid stuck notes if
+    // resetting playback while a note-off is currently in the ALSA
+    // queue.  When playback is reset by ffwd or rewind etc, we drop
+    // all the queued events (which is generally what is desired,
+    // except for note offs) and reset the queue timer (so the note
+    // offs would have the wrong time stamps even if we hadn't dropped
+    // them).  Thus, we need to re-send any recent note offs before
+    // continuing.  This queue records which note offs have been
+    // added to the ALSA queue recently.
+    //
+    NoteOffQueue m_recentNoteOffs;
+    void pushRecentNoteOffs(); // move from recent to normal queue after reset
+    void cropRecentNoteOffs(const RealTime &t); // remove old note offs
+    void weedRecentNoteOffs(unsigned int pitch, MidiByte channel,
+			    InstrumentId instrument); // on subsequent note on
+
     bool m_queueRunning;
     
     bool m_portCheckNeeded;
