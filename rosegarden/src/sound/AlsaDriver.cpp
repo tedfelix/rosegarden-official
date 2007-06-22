@@ -2030,7 +2030,7 @@ void
 AlsaDriver::resetPlayback(const RealTime &oldPosition, const RealTime &position)
 {
 #ifdef DEBUG_ALSA
-    std::cerr << "\n\nAlsaDriver - resetPlayback(" << position << ")" << std::endl;
+    std::cerr << "\n\nAlsaDriver - resetPlayback(" << oldPosition << "," << position << ")" << std::endl;
 #endif
 
     if (getMMCStatus() == TRANSPORT_MASTER) {
@@ -2072,6 +2072,10 @@ AlsaDriver::resetPlayback(const RealTime &oldPosition, const RealTime &position)
     //
     RealTime jump = position - oldPosition;
 
+#ifdef DEBUG_PROCESS_MIDI_OUT
+    std::cerr << "Currently " << m_noteOffQueue.size() << " in note off queue" << std::endl;
+#endif
+
     // modify the note offs that exist as they're relative to the
     // playStartPosition terms.
     //
@@ -2100,6 +2104,10 @@ AlsaDriver::resetPlayback(const RealTime &oldPosition, const RealTime &position)
 	    (*i)->setRealTime(RealTime::zeroTime);
         }
     }
+
+    pushRecentNoteOffs();
+    processNotesOff(getAlsaTime(), true);
+    checkAlsaError(snd_seq_drain_output(m_midiHandle), "resetPlayback(): draining");
 
     // Ensure we clear down output queue on reset - in the case of
     // MIDI clock where we might have a long queue of events already
@@ -2162,7 +2170,54 @@ AlsaDriver::setMIDIClockInterval(RealTime interval)
 }
 
 
+void
+AlsaDriver::pushRecentNoteOffs()
+{
+#ifdef DEBUG_PROCESS_MIDI_OUT
+    std::cerr << "AlsaDriver::pushRecentNoteOffs: have " << m_recentNoteOffs.size() << " in queue" << std::endl;
+#endif
 
+    for (NoteOffQueue::iterator i = m_recentNoteOffs.begin();
+	 i != m_recentNoteOffs.end(); ++i) {
+	(*i)->setRealTime(RealTime::zeroTime);
+	m_noteOffQueue.insert(*i);
+    }
+
+    m_recentNoteOffs.clear();
+}
+
+void
+AlsaDriver::cropRecentNoteOffs(const RealTime &t)
+{
+    while (!m_recentNoteOffs.empty()) {
+	NoteOffEvent *ev = *m_recentNoteOffs.begin();
+#ifdef DEBUG_PROCESS_MIDI_OUT
+	std::cerr << "AlsaDriver::cropRecentNoteOffs: " << ev->getRealTime() << " vs " << t << std::endl;
+#endif
+	if (ev->getRealTime() >= t) break;
+	delete ev;
+	m_recentNoteOffs.erase(m_recentNoteOffs.begin());
+    }
+}
+
+void
+AlsaDriver::weedRecentNoteOffs(unsigned int pitch, MidiByte channel,
+			       InstrumentId instrument)
+{
+    for (NoteOffQueue::iterator i = m_recentNoteOffs.begin();
+	 i != m_recentNoteOffs.end(); ++i) {
+	if ((*i)->getPitch() == pitch &&
+	    (*i)->getChannel() == channel && 
+	    (*i)->getInstrument() == instrument) {
+#ifdef DEBUG_PROCESS_MIDI_OUT
+	    std::cerr << "AlsaDriver::weedRecentNoteOffs: deleting one" << std::endl;
+#endif
+	    delete *i;
+	    m_recentNoteOffs.erase(i);
+	    break;
+	}
+    }
+}
 
 void
 AlsaDriver::allNotesOff()
@@ -2241,12 +2296,11 @@ AlsaDriver::processNotesOff(const RealTime &time, bool now)
     // prepare the event
     snd_seq_ev_clear(&event);
 
-#ifdef DEBUG_PROCESS_MIDI_OUT
-
-    std::cerr << "AlsaDriver::processNotesOff(" << time << ")" << std::endl;
-#endif
-
     RealTime alsaTime = getAlsaTime();
+
+#ifdef DEBUG_PROCESS_MIDI_OUT
+    std::cerr << "AlsaDriver::processNotesOff(" << time << "): alsaTime = " << alsaTime << ", now = " << now << std::endl;
+#endif
 
     while (m_noteOffQueue.begin() != m_noteOffQueue.end()) {
 
@@ -2267,7 +2321,8 @@ AlsaDriver::processNotesOff(const RealTime &time, bool now)
 
         offTime = ev->getRealTime();
 	if (offTime < RealTime::zeroTime) offTime = RealTime::zeroTime;
-	bool scheduled = (offTime > alsaTime);
+	bool scheduled = (offTime > alsaTime) && !now;
+	if (!scheduled) offTime = RealTime::zeroTime;
 
         snd_seq_real_time_t alsaOffTime = { offTime.sec,
                                             offTime.nsec };
@@ -2280,6 +2335,7 @@ AlsaDriver::processNotesOff(const RealTime &time, bool now)
             //
             int src = getOutputPortForMappedInstrument(ev->getInstrument());
             if (src < 0) {
+		std::cerr << "note off has no output port (instr = " << ev->getInstrument() << ")" << std::endl;
                 delete ev;
                 m_noteOffQueue.erase(m_noteOffQueue.begin());
                 continue;
@@ -2287,32 +2343,33 @@ AlsaDriver::processNotesOff(const RealTime &time, bool now)
 
             snd_seq_ev_set_source(&event, src);
 
-	    if (scheduled) {
-		snd_seq_ev_schedule_real(&event, m_queue, 0, &alsaOffTime);
-	    }
+            snd_seq_ev_set_subs(&event);
 
-        } else {
+	    snd_seq_ev_schedule_real(&event, m_queue, 0, &alsaOffTime);
 
-            event.time.time = alsaOffTime;
-        }
+	    snd_seq_ev_set_noteoff(&event,
+				   ev->getChannel(),
+				   ev->getPitch(),
+				   now ? 126 : 127);
 
-        snd_seq_ev_set_noteoff(&event,
-                               ev->getChannel(),
-                               ev->getPitch(),
-                               127);
-
-        // send note off
-        if (isSoftSynth) {
-            processSoftSynthEventOut(ev->getInstrument(), &event, now);
-        } else {
 	    if (scheduled) {
 		snd_seq_event_output(m_midiHandle, &event);
 	    } else {
 		snd_seq_event_output_direct(m_midiHandle, &event);
 	    }
+
+        } else {
+
+            event.time.time = alsaOffTime;
+
+            processSoftSynthEventOut(ev->getInstrument(), &event, now);
         }
 
-        delete ev;
+	if (!now) {
+	    m_recentNoteOffs.insert(ev);
+	} else {
+	    delete ev;
+	}
         m_noteOffQueue.erase(m_noteOffQueue.begin());
     }
 
@@ -2406,23 +2463,20 @@ AlsaDriver::getMappedComposition()
     snd_seq_event_t *event;
 
     while (snd_seq_event_input(m_midiHandle, &event) > 0) {
+
         unsigned int channel = (unsigned int)event->data.note.channel;
         unsigned int chanNoteKey = ( channel << 8 ) +
                                    (unsigned int) event->data.note.note;
 
         bool fromController = false;
+
         if (event->dest.client == m_client &&
-                event->dest.port == m_controllerPort) {
+	    event->dest.port == m_controllerPort) {
 #ifdef DEBUG_ALSA
             std::cerr << "Received an external controller event" << std::endl;
 #endif
 
             fromController = true;
-        } else {
-#ifdef DEBUG_ALSA
-            std::cerr << "Received non-controller event (dest=" << (int)event->dest.client << ":" << (int)event->dest.port << ", controller is " << (int)m_client << ":" << (int)m_controllerPort << ")" << std::endl;
-#endif
-
         }
 
         unsigned int deviceId = Device::NO_DEVICE;
@@ -2445,6 +2499,12 @@ AlsaDriver::getMappedComposition()
         eventTime.sec = event->time.time.tv_sec;
         eventTime.nsec = event->time.time.tv_nsec;
         eventTime = eventTime - m_alsaRecordStartTime + m_playStartPosition;
+
+#ifdef DEBUG_ALSA
+	if (!fromController) {
+            std::cerr << "Received normal event: type " << int(event->type) << ", chan " << channel << ", note " << int(event->data.note.note) << ", time " << eventTime << std::endl;
+	}
+#endif
 
         switch (event->type) {
         case SND_SEQ_EVENT_NOTE:
@@ -2481,14 +2541,22 @@ AlsaDriver::getMappedComposition()
         case SND_SEQ_EVENT_NOTEOFF:
             if (fromController)
                 continue;
+
             if (m_noteOnMap[deviceId][chanNoteKey] != 0) {
+
                 // Set duration correctly on the NOTE OFF
                 //
                 MappedEvent *mE = m_noteOnMap[deviceId][chanNoteKey];
                 RealTime duration = eventTime - mE->getEventTime();
 
-                if (duration < RealTime::zeroTime)
-                    break;
+#ifdef DEBUG_ALSA
+		std::cerr << "NOTE OFF: found NOTE ON at " << mE->getEventTime() << std::endl;
+#endif
+
+                if (duration < RealTime::zeroTime) {
+		    duration = RealTime::zeroTime;
+		    mE->setEventTime(eventTime);
+		}
 
                 // Velocity 0 - NOTE OFF.  Set duration correctly
                 // for recovery later.
@@ -3311,6 +3379,14 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
 
     // special case for unqueued events
     bool now = (sliceStart == RealTime::zeroTime && sliceEnd == RealTime::zeroTime);
+    
+    if (!now) {
+	// This 0.5 sec is arbitrary, but it must be larger than the
+	// sequencer's read-ahead
+	RealTime diff = RealTime::fromSeconds(0.5);
+	RealTime cutoff = sliceStart - diff;
+	cropRecentNoteOffs(cutoff - m_playStartPosition + m_alsaPlayStartTime);
+    }
 
     // These won't change in this slice
     //
@@ -3365,7 +3441,7 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
         std::cerr << "processMidiOut[" << now << "]: event is at " << outputTime << " (" << outputTime - alsaTimeNow << " ahead of queue time), type " << int((*i)->getType()) << ", duration " << (*i)->getDuration() << std::endl;
 #endif
 
-        if (!m_queueRunning && outputTime < alsaTimeNow) {
+	if (!m_queueRunning && outputTime < alsaTimeNow) {
             RealTime adjust = alsaTimeNow - outputTime;
             if ((*i)->getDuration() > RealTime::zeroTime) {
                 if ((*i)->getDuration() <= adjust) {
@@ -3430,8 +3506,7 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
                 src = getOutputPortForMappedInstrument((*i)->getInstrument());
             }
 
-            if (src < 0)
-                continue;
+            if (src < 0) continue;
             snd_seq_ev_set_source(&event, src);
 
             snd_seq_ev_schedule_real(&event, m_queue, 0, &time);
@@ -3470,22 +3545,26 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
         }
 
         switch ((*i)->getType()) {
-        case MappedEvent::MidiNoteOneShot: {
-                snd_seq_ev_set_noteon(&event,
-                                      channel,
-                                      (*i)->getPitch(),
-                                      (*i)->getVelocity());
-                needNoteOff = true;
 
-                if (!isSoftSynth && getSequencerDataBlock()) {
-                    LevelInfo info;
-                    info.level = (*i)->getVelocity();
-                    info.levelRight = 0;
-                    getSequencerDataBlock()->setInstrumentLevel
+        case MappedEvent::MidiNoteOneShot:
+	{
+	    snd_seq_ev_set_noteon(&event,
+				  channel,
+				  (*i)->getPitch(),
+				  (*i)->getVelocity());
+	    needNoteOff = true;
+	    
+	    if (!isSoftSynth && getSequencerDataBlock()) {
+		LevelInfo info;
+		info.level = (*i)->getVelocity();
+		info.levelRight = 0;
+		getSequencerDataBlock()->setInstrumentLevel
                     ((*i)->getInstrument(), info);
-                }
-            }
-            break;
+	    }
+
+	    weedRecentNoteOffs((*i)->getPitch(), channel, (*i)->getInstrument());
+	}
+	break;
 
         case MappedEvent::MidiNote:
             // We always use plain NOTE ON here, not ALSA
@@ -3507,6 +3586,8 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
                     getSequencerDataBlock()->setInstrumentLevel
                     ((*i)->getInstrument(), info);
                 }
+
+		weedRecentNoteOffs((*i)->getPitch(), channel, (*i)->getInstrument());
             } else {
                 snd_seq_ev_set_noteoff(&event,
                                        channel,
