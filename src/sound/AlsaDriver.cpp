@@ -2327,6 +2327,11 @@ AlsaDriver::processNotesOff(const RealTime &time, bool now)
         snd_seq_real_time_t alsaOffTime = { offTime.sec,
                                             offTime.nsec };
 
+	snd_seq_ev_set_noteoff(&event,
+			       ev->getChannel(),
+			       ev->getPitch(),
+			       127);
+
         if (!isSoftSynth) {
 
             snd_seq_ev_set_subs(&event);
@@ -2346,11 +2351,6 @@ AlsaDriver::processNotesOff(const RealTime &time, bool now)
             snd_seq_ev_set_subs(&event);
 
 	    snd_seq_ev_schedule_real(&event, m_queue, 0, &alsaOffTime);
-
-	    snd_seq_ev_set_noteoff(&event,
-				   ev->getChannel(),
-				   ev->getPitch(),
-				   now ? 126 : 127);
 
 	    if (scheduled) {
 		snd_seq_event_output(m_midiHandle, &event);
