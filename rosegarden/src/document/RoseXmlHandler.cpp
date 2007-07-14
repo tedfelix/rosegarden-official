@@ -225,6 +225,7 @@ RoseXmlHandler::RoseXmlHandler(RosegardenGUIDoc *doc,
         m_lsb(0),
         m_instrument(0),
         m_plugin(0),
+        m_pluginInBuss(false),
         m_colourMap(0),
         m_keyMapping(0),
         m_pluginId(0),
@@ -1656,9 +1657,11 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         if (m_section == InInstrument) {
 //            std::cerr << "Found plugin in instrument" << std::endl;
             container = m_instrument;
+            m_pluginInBuss = false;
         } else if (m_section == InBuss) {
 //            std::cerr << "Found plugin in buss" << std::endl;
             container = m_buss;
+            m_pluginInBuss = true;
         } else {
             m_errorString = "Found Plugin outside Instrument or Buss";
             return false;
@@ -2124,7 +2127,7 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
 
     } else if (lcName == "plugin") {
 
-        if (m_buss) {
+        if (m_pluginInBuss) {
             m_section = InBuss;
         } else {
             m_section = InInstrument;

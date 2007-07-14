@@ -169,6 +169,7 @@ protected:
     Instrument                       *m_instrument;
     Buss                             *m_buss;
     AudioPluginInstance              *m_plugin;
+    bool                              m_pluginInBuss;
     ColourMap                        *m_colourMap;
     MidiKeyMapping                   *m_keyMapping;
     MidiKeyMapping::KeyNameMap        m_keyNameMap;
