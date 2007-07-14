@@ -29,8 +29,7 @@
 #include <sys/time.h>
 #include <pthread.h> // for mutex
 
-//#define DEBUG_PLAYABLE_CONSTRUCTION 1
-//#define DEBUG_PLAYABLE 1
+//#define DEBUG_SOUND_DRIVER 1
 
 namespace Rosegarden
 {
@@ -297,6 +296,7 @@ SoundDriver::getMappedDevice(DeviceId id)
             retDevice.push_back(*it);
     }
 
+#ifdef DEBUG_SOUND_DRIVER
     std::cout << "SoundDriver::getMappedDevice(" << id << ") - "
     << "name = \"" << retDevice.getName()
     << "\" type = " << retDevice.getType()
@@ -304,6 +304,7 @@ SoundDriver::getMappedDevice(DeviceId id)
     << " connection = \"" << retDevice.getConnection() << "\""
     << " recording = " << retDevice.isRecording()
     << std::endl;
+#endif
 
     return retDevice;
 }

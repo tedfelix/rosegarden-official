@@ -1653,11 +1653,13 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         PluginContainer *container = 0;
 
-        if (m_section == InInstrument)
+        if (m_section == InInstrument) {
+//            std::cerr << "Found plugin in instrument" << std::endl;
             container = m_instrument;
-        else if (m_section == InBuss)
+        } else if (m_section == InBuss) {
+//            std::cerr << "Found plugin in buss" << std::endl;
             container = m_buss;
-        else {
+        } else {
             m_errorString = "Found Plugin outside Instrument or Buss";
             return false;
         }
@@ -1666,6 +1668,9 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         // have a valid one.
         //
         if (container) {
+
+//            std::cerr << "Have container" << std::endl;
+
             emit setOperationName(i18n("Loading plugins..."));
             ProgressDialog::processEvents();
 
@@ -1708,6 +1713,8 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                     plugin = apm->getPluginByIdentifier(identifier);
             }
 
+//            std::cerr << "Plugin identifier " << identifier << " -> plugin " << plugin << std::endl;
+
             // If we find the plugin all is well and good but if
             // we don't we just skip it.
             //
@@ -1721,6 +1728,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                     m_plugin->setAssigned(true);
                     m_plugin->setBypass(bypassed);
                     m_plugin->setIdentifier(plugin->getIdentifier().data());
+//                    std::cerr << "set identifier to plugin at position " << position << std::endl;
                     if (program != "") {
                         m_plugin->setProgram(program);
                     }
@@ -2116,7 +2124,11 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
 
     } else if (lcName == "plugin") {
 
-        m_section = InInstrument;
+        if (m_buss) {
+            m_section = InBuss;
+        } else {
+            m_section = InInstrument;
+        }
         m_plugin = 0;
         m_pluginId = 0;
 
