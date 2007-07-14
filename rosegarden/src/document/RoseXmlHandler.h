@@ -161,17 +161,17 @@ protected:
     std::set<QString> m_pluginsNotFound;
 
     RosegardenFileSection             m_section;
-    Device               *m_device;
-    DeviceId              m_deviceRunningId;
+    Device                           *m_device;
+    DeviceId                          m_deviceRunningId;
     bool                              m_percussion;
-    MidiByte              m_msb;
-    MidiByte              m_lsb;
-    Instrument           *m_instrument;
-    Buss                 *m_buss;
-    AudioPluginInstance  *m_plugin;
-    ColourMap            *m_colourMap;
-    MidiKeyMapping       *m_keyMapping;
-    MidiKeyMapping::KeyNameMap m_keyNameMap;
+    MidiByte                          m_msb;
+    MidiByte                          m_lsb;
+    Instrument                       *m_instrument;
+    Buss                             *m_buss;
+    AudioPluginInstance              *m_plugin;
+    ColourMap                        *m_colourMap;
+    MidiKeyMapping                   *m_keyMapping;
+    MidiKeyMapping::KeyNameMap        m_keyNameMap;
     unsigned int                      m_pluginId;
     unsigned int                      m_totalElements;
     unsigned int                      m_elementsSoFar;
