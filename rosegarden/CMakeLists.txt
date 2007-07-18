@@ -49,9 +49,9 @@ OPTION(WANT_FULLDBG "Full debug support (BIG executables!)" OFF)
 OPTION(WANT_SOUND   "Include Sound support" ON)
 OPTION(WANT_JACK    "Include Jack (Jack Audio Connection Kit) support" ON)
 OPTION(WANT_DSSI    "Include DSSI support" ON)
-OPTION(WANT_LIRC    "Include LIRC (Linux Infrared Remote Control) support" ON)
+OPTION(WANT_LIRC    "Include LIRC (Linux Infrared Remote Control) support" OFF)
 OPTION(WANT_PCH     "Use precompiled headers" OFF)
-OPTION(WANT_TEST    "Perform unit tests" ON)
+OPTION(WANT_TEST    "Perform unit tests" OFF)
 
 IF(WANT_TEST)
     ENABLE_TESTING()
@@ -259,6 +259,20 @@ IF(WANT_PCH)
         MESSAGE(STATUS "Enabling precompiled headers for GCC ${gcc_compiler_version}") 
     ENDIF(PCHSupport_FOUND)
 ENDIF(WANT_PCH)
+
+# Check PTHREAD_MUTEX_RECURSIVE
+INCLUDE(CheckCSourceCompiles)
+CHECK_C_SOURCE_COMPILES(
+    "#include <pthread.h>
+     int main(int argc, char **argv) {
+         pthread_mutexattr_t attr;
+         pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
+         return 0;
+     }" PTHREAD_HAS_MUTEX_RECURSIVE)
+IF(PTHREAD_HAS_MUTEX_RECURSIVE)
+    ADD_DEFINITIONS(-DHAVE_PTHREAD_MUTEX_RECURSIVE)
+ENDIF(PTHREAD_HAS_MUTEX_RECURSIVE)
+# End of PTHREAD_MUTEX_RECURSIVE Test
 
 SET(CMAKE_CXX_FLAGS_RELEASE         "-O2 -w -fexceptions -DNDEBUG")
 SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO  "-O2 -g -Wall -fexceptions -DDEBUG")
