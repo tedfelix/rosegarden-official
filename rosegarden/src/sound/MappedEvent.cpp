@@ -400,7 +400,7 @@ DataBlockFile::DataBlockFile(DataBlockRepository::blockid id)
 DataBlockFile::~DataBlockFile()
 {
     if (m_cleared) {
-        std::cerr << "~DataBlockFile : removing " << m_fileName.latin1() << std::endl;
+//        std::cerr << "~DataBlockFile : removing " << m_fileName.latin1() << std::endl;
         QFile::remove
             (m_fileName);
     }
@@ -414,7 +414,7 @@ bool DataBlockFile::exists()
 
 void DataBlockFile::setData(const std::string& s)
 {
-    std::cerr << "DataBlockFile::setData() : setting data to " << m_fileName << std::endl;
+  //  std::cerr << "DataBlockFile::setData() : setting data to " << m_fileName << std::endl;
     prepareToWrite();
 
     QDataStream stream(&m_file);
@@ -429,7 +429,7 @@ std::string DataBlockFile::getData()
     prepareToRead();
 
     QDataStream stream(&m_file);
-    std::cerr << "DataBlockFile::getData() : file size = " << m_file.size() << std::endl;
+ //   std::cerr << "DataBlockFile::getData() : file size = " << m_file.size() << std::endl;
     char* tmp = new char[m_file.size()];
     stream.readRawBytes(tmp, m_file.size());
     std::string res(tmp, m_file.size());
@@ -453,7 +453,7 @@ void DataBlockFile::addDataString(const std::string& s)
 
 void DataBlockFile::prepareToWrite()
 {
-    std::cerr << "DataBlockFile[" << m_fileName << "]: prepareToWrite" << std::endl;
+ //   std::cerr << "DataBlockFile[" << m_fileName << "]: prepareToWrite" << std::endl;
     if (!m_file.isWritable()) {
         m_file.close();
         m_file.open(IO_WriteOnly | IO_Append);
@@ -463,7 +463,7 @@ void DataBlockFile::prepareToWrite()
 
 void DataBlockFile::prepareToRead()
 {
-    std::cerr << "DataBlockFile[" << m_fileName << "]: prepareToRead" << std::endl;
+//    std::cerr << "DataBlockFile[" << m_fileName << "]: prepareToRead" << std::endl;
     if (!m_file.isReadable()) {
         m_file.close();
         m_file.open(IO_ReadOnly);
@@ -497,7 +497,7 @@ std::string DataBlockRepository::getDataBlockForEvent(MappedEvent* e)
 {
     blockid id = e->getDataBlockId();
     if (id == 0) {
-        std::cerr << "WARNING: DataBlockRepository::getDataBlockForEvent called on event with data block id 0" << std::endl;
+   //     std::cerr << "WARNING: DataBlockRepository::getDataBlockForEvent called on event with data block id 0" << std::endl;
         return "";
     }
     return getInstance()->getDataBlock(id);
@@ -507,10 +507,10 @@ void DataBlockRepository::setDataBlockForEvent(MappedEvent* e, const std::string
 {
     blockid id = e->getDataBlockId();
     if (id == 0) {
-        std::cerr << "Creating new datablock for event" << std::endl;
+  //      std::cerr << "Creating new datablock for event" << std::endl;
         getInstance()->registerDataBlockForEvent(s, e);
     } else {
-        std::cerr << "Writing " << s.length() << " chars to file for datablock " << id << std::endl;
+   //     std::cerr << "Writing " << s.length() << " chars to file for datablock " << id << std::endl;
         DataBlockFile dataBlockFile(id);
         dataBlockFile.setData(s);
     }
@@ -527,7 +527,7 @@ DataBlockRepository::blockid DataBlockRepository::registerDataBlock(const std::s
     while (id == 0 || DataBlockFile(id).exists())
         id = (blockid)random();
 
-    std::cerr << "DataBlockRepository::registerDataBlock: " << s.length() << " chars, id is " << id << std::endl;
+ //   std::cerr << "DataBlockRepository::registerDataBlock: " << s.length() << " chars, id is " << id << std::endl;
 
     DataBlockFile dataBlockFile(id);
     dataBlockFile.setData(s);

@@ -69,7 +69,7 @@ RespellCommand::getGlobalName(Type type, Accidental accidental)
         return i18n("Respell Accidentals &Downward");
 
     case Restore:
-        return i18n("&Restore Computed Accidentals");
+        return i18n("&Restore Accidentals");
     }
 
     return i18n("Respell Accidentals");
