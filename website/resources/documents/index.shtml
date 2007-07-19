@@ -66,6 +66,12 @@
     <a href="http://svn.sourceforge.net/viewcvs.cgi/rosegarden/trunk/docs/">Rosegarden SVN</a> itself.
     </p>
 
+    <p>We now have a <li><a
+    href="http://rosegarden.wiki.sourceforge.net/">Rosegarden Wiki</a>
+    at SourceForge, with (at the time of writing) a bit of
+    documentation for developers in it.</p>
+
+
     <h3>Bug and RFE Priorities on the SourceForge tracker</h3>
     <p>If you've submitted a bug report or a feature request, you can use the following tables to determine whether someone has looked at the report yet, and how soon the Rosegarden team expects to do something about the issue or request.<p>
     <p><a href="http://rosegarden.sourceforge.net/tutorial/bug-priorities.html">bug
