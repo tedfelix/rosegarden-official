@@ -74,47 +74,8 @@
 
 
 <Menu name="Notes">
-	<text>N&amp;otes</text>
-	    <Menu name="beams">
-		    <text>&amp;Beams</text>
-		    <Action name="beam"/>
-		    <Action name="auto_beam"/>
-		    <Action name="break_group"/>
-	    </Menu>
-	    <Separator/>
-	    <Menu name="octaves">
-		    <text>&amp;Octaves</text>
-		    <Action name="octave_2up"/>
-		    <Action name="octave_up"/>
-		    <Action name="octave_down"/>
-		    <Action name="octave_2down"/>
-	    </Menu>
-	    <Action name="remove_indications"/>
-	<Separator/>	
-	<Menu name="indications">
-		<text>&amp;Indications</text>
-  		<Action name="slur"/>
-		<Action name="phrasing_slur"/>
-	  <!--  <Action name="glissando"/> -->
-		<Separator/>
-	  	<Menu name="Slurs">
-			<text>Slur &amp;Position</text>
-			<Action name="restore_slurs"/>
-			<Separator/>
-	  		<Action name="slurs_above"/>
-			<Action name="slurs_below"/>
-		</Menu>
-		<Separator/>
-		<Action name="tie_notes"/>
-		<Action name="untie_notes"/>
-		<Separator/>
-		<Action name="crescendo"/>
-		<Action name="decrescendo"/>
-<!--
-		<Separator/>
-    		<Action name="remove_indications"/>
--->
-	</Menu>
+	<text>N&amp;ote</text>
+	<Separator/>
 	<Menu name="Marks">
 		<text>Mar&amp;ks</text>
 		<Action name="add_accent"/>
@@ -149,6 +110,7 @@
 		<Action name="make_ornament"/>
 		<Action name="ornament_actionmenu"/>
 	</Menu>
+		<Separator/>
 	<Menu name="Fingering">
 		<text>&amp;Fingerings</text>
 		<Action name="remove_fingering_marks"/>
@@ -171,12 +133,8 @@
 		<Action name="slashes_4"/>
 		<Action name="slashes_5"/>
 	</Menu>
-</Menu>
-
-<Menu name="Adjust">
-	<text>Ad&amp;just</text>
-	<Action name="make_chord"/>
-	<Separator/>
+	<Action name="note_style_actionmenu"/>
+		<Separator/>
 	<Menu name="Respell">
 		<text>&amp;Accidentals</text>
 		<Action name="respell_restore"/>
@@ -191,24 +149,54 @@
 		<Action name="cancel_cautionary"/>
 	</Menu>
 	<Separator/>
-	<Menu name="triplets">
-		<text>Trip&amp;lets and Tuplets</text>
+		<Action name="stems_up"/>
+		<Action name="stems_down"/>
+		<Action name="restore_stems"/>
+</Menu>
+
+<Menu name="Phrase">
+	<text>&amp;Phrase</text>
+	<Action name="make_chord"/>
+	<Separator/>
+		    <Action name="beam"/>
+		    <Action name="auto_beam"/>
+		    <Action name="break_group"/>
+	    <Action name="remove_indications"/>
+	<Separator/>
 		<Action name="tuplet"/>
 		<Action name="simple_tuplet"/>
 		<Action name="break_tuplets"/>
-	</Menu>
 	<Separator/>
 	<Action name="grace"/>
-  <!--  <Action name="ungrace"/> -->
-	<Separator/>
-	<Action name="note_style_actionmenu"/>
-	<Menu name="Stems">
-		<text>S&amp;tem Direction</text>
-		<Action name="restore_stems"/>
+	    <Separator/>
+  		<Action name="slur"/>
+		<Action name="phrasing_slur"/>
+	  <!--  <Action name="glissando"/> -->
+	  	<Menu name="Slurs">
+			<text>Slur &amp;Position</text>
+			<Action name="restore_slurs"/>
+			<Separator/>
+	  		<Action name="slurs_above"/>
+			<Action name="slurs_below"/>
+		</Menu>
 		<Separator/>
-		<Action name="stems_up"/>
-		<Action name="stems_down"/>
-	</Menu>
+		<Action name="tie_notes"/>
+		<Action name="untie_notes"/>
+		<Separator/>
+		<Action name="crescendo"/>
+		<Action name="decrescendo"/>
+		<Separator/>
+	    <Menu name="octaves">
+		    <text>&amp;Octaves</text>
+		    <Action name="octave_2up"/>
+		    <Action name="octave_up"/>
+		    <Action name="octave_down"/>
+		    <Action name="octave_2down"/>
+	    </Menu>
+</Menu>
+
+<Menu name="Adjust">
+	<text>Ad&amp;just</text>
 	<Menu name="rests">
 		<text>R&amp;ests</text>
 		<Action name="normalize_rests"/>
@@ -253,6 +241,7 @@
  	      <Action name="retrograde"/>
 	      <Action name="retrograde_invert"/>
 	</Menu>
+		<Separator/>
 	<Menu name="fine_positioning">
 		<text>&amp;Fine Positioning</text>
 		<Action name="fine_position_restore"/>
@@ -276,11 +265,6 @@
 
 <Menu name="Tools">
   <text>&amp;Tools</text>
-  <Action name="text" />
-  <Action name="fretboard" />
-  <Separator/>
-  <Menu name="edit_tools">
-  	<text>&amp;Editor Tools</text>
 	<Action name="select"/>
 	<Action name="erase"/>
       <Menu noMerge="1" name="Notes">
@@ -345,7 +329,9 @@
 	    <Action name="tenor_clef" />
 	    <Action name="bass_clef" />
       </Menu>
-  </Menu>
+  <Separator/>
+  <Action name="text" />
+  <Action name="fretboard" />
   <Separator/>
   <Menu name="Move">
   	<text>Local &amp;Cursor</text>
@@ -618,6 +604,8 @@
    <Action name="flip_control_events_back"/>
 </Menu>
 
+
+
 <State name="note_insert_tool_current">
   <enable>
     <Action name="insert_rest"/>
@@ -654,6 +642,11 @@
     <Action name="fine_position_up"/>
     <Action name="fine_position_down"/>
     <Action name="fine_position_restore"/>
+	<Action name="tuplet"/>
+	<Action name="simple_tuplet"/>
+	<Action name="break_tuplets"/>
+	<Action name="make_invisible"/>
+	<Action name="make_visible"/>
   </enable>
 </State>
 
@@ -683,7 +676,7 @@
     <Action name="beam"/>
     <Action name="auto_beam"/>
     <Action name="break_group"/>
-    <Action name="break_tuplets"/>
+<!--    <Action name="break_tuplets"/> -->
     <Action name="grace"/>
 <!--    <Action name="ungrace"/> -->
     <Action name="slur"/>
@@ -756,6 +749,9 @@
     <Action name="invert"/>
     <Action name="retrograde"/>
     <Action name="retrograde_invert"/>
+    <Action name="half_speed"/>
+    <Action name="double_speed"/>
+    <Action name="rescale"/>
     <Menu name="Stems"/>
     <Menu name="Slashes"/>
     <Menu name="Transpose"/>

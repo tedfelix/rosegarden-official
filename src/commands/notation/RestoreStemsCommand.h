@@ -46,7 +46,7 @@ public:
         BasicSelectionCommand(getGlobalName(), selection, true),
         m_selection(&selection) { }
 
-    static QString getGlobalName() { return i18n("&Restore Computed Stems"); }
+    static QString getGlobalName() { return i18n("&Restore Stems"); }
 
 protected:
     virtual void modifySegment();
