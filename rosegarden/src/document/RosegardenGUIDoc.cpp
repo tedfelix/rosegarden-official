@@ -1093,9 +1093,53 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
                                     QString& errMsg,
                                     bool autosave)
 {
-    Profiler profiler("RosegardenGUIDoc::saveDocument");
-    RG_DEBUG << "RosegardenGUIDoc::saveDocument("
-    << filename << ")\n";
+    if (!QFileInfo(filename).exists()) { // safe to write directly
+        return saveDocumentActual(filename, errMsg, autosave);
+    }
+
+    KTempFile temp(filename + ".", "", 0644); // will be umask'd
+
+    int status = temp.status();
+    if (status != 0) {
+        errMsg = i18n(QString("Could not create temporary file in directory of '%1': %2").arg(filename).arg(strerror(status)));
+        return false;
+    }
+
+    QString tempFileName = temp.name();
+
+    std::cerr << "Temporary file name is: \"" << tempFileName << "\"" << std::endl;
+
+    // KTempFile creates a temporary file that is already open: close it
+    if (!temp.close()) {
+        status = temp.status();
+        errMsg = i18n(QString("Failure in temporary file handling for file '%1': %2")
+                      .arg(tempFileName).arg(strerror(status)));
+        return false;
+    }
+
+    bool success = saveDocumentActual(tempFileName, errMsg, autosave);
+
+    if (!success) {
+        // errMsg should be already set
+        return false;
+    }
+
+    QDir dir(QFileInfo(tempFileName).dir());
+    if (!dir.rename(tempFileName, filename)) {
+        errMsg = i18n(QString("Failed to rename temporary output file '%1' to desired output file '%2'").arg(tempFileName).arg(filename));
+        return false;
+    }
+
+    return true;
+}
+
+
+bool RosegardenGUIDoc::saveDocumentActual(const QString& filename,
+                                          QString& errMsg,
+                                          bool autosave)
+{
+    Profiler profiler("RosegardenGUIDoc::saveDocumentActual");
+    RG_DEBUG << "RosegardenGUIDoc::saveDocumentActual(" << filename << ")\n";
 
     KFilterDev* fileCompressedDevice = static_cast<KFilterDev*>(KFilterDev::deviceForFile(filename, "application/x-gzip"));
     fileCompressedDevice->setOrigFileName("audio/x-rosegarden");
