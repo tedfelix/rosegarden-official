@@ -30,6 +30,8 @@
 #include <qstring.h>
 #include <klocale.h>
 
+#include "gui/general/CommandRegistry.h" //!!!
+
 
 
 
@@ -48,9 +50,15 @@ public:
 
     static QString getGlobalName() { return i18n("&Beam Group"); }
 
+    static void registerCommand(CommandRegistry *r) {
+        r->registerCommand<BeamCommand>
+            (getGlobalName(), "group-beam", "Ctrl+B", "beam");
+    }
+    
 protected:
     virtual void modifySegment();
     EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    static NotationCommandActivator<BeamCommand> m_activator;
 };
 
 

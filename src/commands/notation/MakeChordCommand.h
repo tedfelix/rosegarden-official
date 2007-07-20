@@ -31,6 +31,8 @@
 #include <klocale.h>
 
 
+#include "gui/general/CommandRegistry.h" //!!!
+
 class Make;
 
 
@@ -38,8 +40,6 @@ namespace Rosegarden
 {
 
 class EventSelection;
-class CommandRegistry;
-class RegistrarActivator;
 
 class MakeChordCommand : public BasicSelectionCommand
 {
@@ -50,14 +50,17 @@ public:
 
     static QString getGlobalName() { return i18n("Make &Chord"); }
 
-    static void registerCommand(CommandRegistry *);
+    static void registerCommand(CommandRegistry *r) {
+        r->registerCommand<MakeChordCommand>
+            (getGlobalName(), "group-chord", "", "make_chord");
+    }
     
 protected:
     virtual void modifySegment();
 
 private:
     EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
-    static RegistrarActivator *m_rac;
+    static NotationCommandActivator<MakeChordCommand> *m_activator;
 };    
 
 

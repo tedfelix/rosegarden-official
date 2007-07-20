@@ -79,7 +79,7 @@
 #include "commands/notation/AddSlashesCommand.h"
 #include "commands/notation/AddTextMarkCommand.h"
 #include "commands/notation/AutoBeamCommand.h"
-#include "commands/notation/BeamCommand.h"
+//!!!#include "commands/notation/BeamCommand.h"
 #include "commands/notation/BreakCommand.h"
 #include "commands/notation/ChangeSlurPositionCommand.h"
 #include "commands/notation/ChangeStemsCommand.h"
@@ -94,7 +94,7 @@
 #include "commands/notation/InterpretCommand.h"
 #include "commands/notation/KeyInsertionCommand.h"
 #include "commands/notation/MakeAccidentalsCautionaryCommand.h"
-#include "commands/notation/MakeChordCommand.h"
+  //!!!#include "commands/notation/MakeChordCommand.h"
 #include "commands/notation/MakeNotesViableCommand.h"
 #include "commands/notation/MultiKeyInsertionCommand.h"
 #include "commands/notation/NormalizeRestsCommand.h"
@@ -1716,9 +1716,10 @@ void NotationView::setupActions()
     icon = QIconSet
            (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                                          ("group-beam")));
-
+/*!!! kiftsgate
     new KAction(BeamCommand::getGlobalName(), icon, Key_B + CTRL, this,
                 SLOT(slotGroupBeam()), actionCollection(), "beam");
+*/
 
     new KAction(AutoBeamCommand::getGlobalName(), 0, this,
                 SLOT(slotGroupAutoBeam()), actionCollection(), "auto_beam");
@@ -4740,7 +4741,7 @@ void NotationView::toggleNamedToolBar(const QString& toolBarName, bool* force)
     setSettingsDirty();
 
 }
-
+/*!!!kiftsgate
 void NotationView::slotGroupBeam()
 {
     if (!m_currentEventSelection)
@@ -4750,7 +4751,7 @@ void NotationView::slotGroupBeam()
     addCommandToHistory(new BeamCommand
                         (*m_currentEventSelection));
 }
-
+*/
 void NotationView::slotGroupAutoBeam()
 {
     if (!m_currentEventSelection)
@@ -4948,7 +4949,7 @@ void NotationView::slotAddIndication(std::string type, QString desc)
         delete command;
     }
 }
-
+/*!!!kiftsgate
 void NotationView::slotGroupMakeChord()
 {
     if (!m_currentEventSelection)
@@ -4960,7 +4961,7 @@ void NotationView::slotGroupMakeChord()
 
     addCommandToHistory(command);
 }
-
+*/
 void NotationView::slotTransformsNormalizeRests()
 {
     if (!m_currentEventSelection)

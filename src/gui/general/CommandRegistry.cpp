@@ -67,7 +67,7 @@ CommandRegistry::addRegistrar(AbstractCommandRegistrar *registrar)
 void
 CommandRegistry::addAction(QString name,
                            QString iconName,
-                           QString shortcut,
+                           const KShortcut &shortcut,
                            QString identifier)
 {
     bool haveIcon = (iconName != "");

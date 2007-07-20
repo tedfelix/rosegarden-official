@@ -464,7 +464,7 @@ public slots:
     void slotEditLyrics();
 
     /// group slots
-    void slotGroupBeam();
+    //!!!    void slotGroupBeam();
     void slotGroupAutoBeam();
     void slotGroupBreak();
     void slotGroupSimpleTuplet();
@@ -478,7 +478,7 @@ public slots:
     void slotGroupGlissando();
     void slotGroupCrescendo();
     void slotGroupDecrescendo();
-    void slotGroupMakeChord();
+//!!!    void slotGroupMakeChord();
     void slotGroupOctave2Up();
     void slotGroupOctaveUp();
     void slotGroupOctaveDown();

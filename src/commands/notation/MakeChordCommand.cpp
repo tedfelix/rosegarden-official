@@ -37,16 +37,9 @@
 namespace Rosegarden
 {
 
-RegistrarActivator *
-MakeChordCommand::m_rac =
-    new RegistrarActivator(new NotationCommandRegistrar<MakeChordCommand>());
+NotationCommandActivator<MakeChordCommand> *
+MakeChordCommand::m_activator = new NotationCommandActivator<MakeChordCommand>();
 
-void
-MakeChordCommand::registerCommand(CommandRegistry *registry)
-{
-    registry->registerCommand<MakeChordCommand>
-        (getGlobalName(), "group-chord", "", "make_chord");
-}
 
 void
 MakeChordCommand::modifySegment()

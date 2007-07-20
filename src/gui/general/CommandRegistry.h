@@ -30,9 +30,14 @@
 
 #include <qobject.h>
 #include <qstring.h>
+#include <qnamespace.h>
+
+#include <kshortcut.h>
 
 #include <map>
 #include <vector>
+
+#include <iostream>
 
 namespace Rosegarden {
 
@@ -74,7 +79,7 @@ public:
     template <typename C>
     void registerCommand(QString name,
                          QString icon,
-                         QString shortcut,
+                         const KShortcut &shortcut,
                          QString identifier) {
         addAction(name,
                   icon,
@@ -99,7 +104,7 @@ protected:
 
     void addAction(QString name,
                    QString icon,
-                   QString shortcut, 
+                   const KShortcut &shortcut, 
                    QString identifier);
 
     EditView *m_view;
@@ -115,9 +120,20 @@ class NotationCommandRegistrar : public AbstractCommandRegistrar
 {
 public:
     virtual QString getViewName() { return "notationview"; }
-
     virtual void registerCommand(CommandRegistry *r) {
         C::registerCommand(r);
+    }
+};
+
+class CommandActivator { };
+
+template <typename C>
+class NotationCommandActivator : public CommandActivator
+{
+public:
+    NotationCommandActivator() {
+        std::cerr << "NotationCommandActivator" << std::endl;
+        CommandRegistry::addRegistrar(new NotationCommandRegistrar<C>);
     }
 };
 
@@ -140,14 +156,6 @@ public:
 
     virtual void registerCommand(CommandRegistry *r) {
         C::registerCommand(r);
-    }
-};
-
-class RegistrarActivator
-{
-public:
-    RegistrarActivator(AbstractCommandRegistrar *registrar) {
-        CommandRegistry::addRegistrar(registrar);
     }
 };
 
