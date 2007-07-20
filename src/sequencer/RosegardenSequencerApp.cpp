@@ -370,6 +370,7 @@ RosegardenSequencerApp::updateClocks()
     // Go around the loop if we've reached the end
     //
     if (isLooping() && newPosition >= m_loopEnd) {
+
         RealTime oldPosition = m_songPosition;
 
         // Remove the loop width from the song position and send
@@ -452,8 +453,7 @@ RosegardenSequencerApp::jumpTo(long posSec, long posNsec)
 
     RealTime oldPosition = m_songPosition;
 
-    m_songPosition = m_lastFetchSongPosition =
-                         RealTime(posSec, posNsec);
+    m_songPosition = m_lastFetchSongPosition = RealTime(posSec, posNsec);
 
     if (m_sequencerMapper.getSequencerDataBlock()) {
         m_sequencerMapper.getSequencerDataBlock()->setPositionPointer
