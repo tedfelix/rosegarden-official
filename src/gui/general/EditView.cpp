@@ -131,7 +131,7 @@ EditView::EditView(RosegardenGUIDoc *doc,
         m_controlRuler(0),
         m_controlRulers(new KTabWidget(getBottomWidget(), "controlrulers"))
 {
-    m_commandRegistry = new CommandRegistry(this);
+//!!!kiftsgate    m_commandRegistry = new CommandRegistry(this);
 
     m_controlRulers->setHoverCloseButton(true);
     m_controlRulers->setHoverCloseButtonDelayed(false);

@@ -211,6 +211,8 @@
 #include <algorithm>
 
 
+#include "gui/general/CommandRegistry.h" //!!!
+
 namespace Rosegarden
 {
 
@@ -428,6 +430,10 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     setupActions();
     //     setupAddControlRulerMenu(); - too early for notation, moved to end of ctor.
+
+//!!!kiftsgate
+    m_commandRegistry = new CommandRegistry(this);
+
     initLayoutToolbar();
     initStatusBar();
 
