@@ -32,6 +32,7 @@
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "ActiveItem.h"
+#include "CommandRegistry.h"
 #include "base/AnalysisTypes.h"
 #include "base/Composition.h"
 #include "base/CompositionTimeSliceAdapter.h"
@@ -130,6 +131,8 @@ EditView::EditView(RosegardenGUIDoc *doc,
         m_controlRuler(0),
         m_controlRulers(new KTabWidget(getBottomWidget(), "controlrulers"))
 {
+    m_commandRegistry = new CommandRegistry(this);
+
     m_controlRulers->setHoverCloseButton(true);
     m_controlRulers->setHoverCloseButtonDelayed(false);
     connect(m_controlRulers, SIGNAL(closeRequest(QWidget*)),
@@ -150,6 +153,8 @@ EditView::~EditView()
 {
     delete m_currentEventSelection;
     m_currentEventSelection = 0;
+
+    delete m_commandRegistry;
 }
 
 void EditView::updateBottomWidgetGeometry()

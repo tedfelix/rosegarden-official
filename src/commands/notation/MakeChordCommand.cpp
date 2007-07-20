@@ -30,11 +30,23 @@
 #include "base/Segment.h"
 #include "base/Selection.h"
 #include "document/BasicSelectionCommand.h"
+#include "gui/general/CommandRegistry.h" //!!! has to move
 #include <qstring.h>
 
 
 namespace Rosegarden
 {
+
+RegistrarActivator *
+MakeChordCommand::m_rac =
+    new RegistrarActivator(new NotationCommandRegistrar<MakeChordCommand>());
+
+void
+MakeChordCommand::registerCommand(CommandRegistry *registry)
+{
+    registry->registerCommand<MakeChordCommand>
+        (getGlobalName(), "group-chord", "", "make_chord");
+}
 
 void
 MakeChordCommand::modifySegment()

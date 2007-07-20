@@ -53,11 +53,6 @@ protected:
     Text m_text;
 };
 
-/*
- * Inserts a key change into a single segment, taking segment transpose into
- * account (fixes #1520716) if desired.
- */
-
 }
 
 #endif

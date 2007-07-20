@@ -38,7 +38,8 @@ namespace Rosegarden
 {
 
 class EventSelection;
-
+class CommandRegistry;
+class RegistrarActivator;
 
 class MakeChordCommand : public BasicSelectionCommand
 {
@@ -48,12 +49,15 @@ public:
         m_selection(&selection) { }
 
     static QString getGlobalName() { return i18n("Make &Chord"); }
+
+    static void registerCommand(CommandRegistry *);
     
 protected:
     virtual void modifySegment();
 
 private:
     EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
+    static RegistrarActivator *m_rac;
 };    
 
 

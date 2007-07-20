@@ -1824,13 +1824,13 @@ void NotationView::setupActions()
     new KAction(AddIndicationCommand::getGlobalName
                 (Indication::QuindicesimaDown), 0, 0, this,
                 SLOT(slotGroupOctave2Down()), actionCollection(), "octave_2down");
-
+/*!!! experimental for kiftsgate
     icon = QIconSet
            (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                                          ("group-chord")));
     new KAction(MakeChordCommand::getGlobalName(), icon, 0, this,
                 SLOT(slotGroupMakeChord()), actionCollection(), "make_chord");
-
+*/
     // setup Transforms menu
     new KAction(NormalizeRestsCommand::getGlobalName(), Key_N + CTRL, this,
                 SLOT(slotTransformsNormalizeRests()), actionCollection(),

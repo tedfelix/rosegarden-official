@@ -64,6 +64,7 @@ class ControllerEventsRuler;
 class Clef;
 class StandardRuler;
 class ActiveItem;
+class CommandRegistry;
 
 
 class EditView : public EditViewBase
@@ -390,6 +391,8 @@ protected:
     ControlRuler *m_controlRuler;
     KTabWidget   *m_controlRulers;
     QWMatrix      m_currentRulerZoomMatrix;
+
+    CommandRegistry *m_commandRegistry;
 
     static const unsigned int RULERS_ROW;
     static const unsigned int CONTROLS_ROW;
