@@ -819,7 +819,7 @@ LilypondExporter::write()
                 << "\" {"; // indent+
 
                 str << std::endl << indent(col) << "\\override Voice.TextScript #'padding = #2.0";
-                str << indent(col) << "\\override MultiMeasureRest #'expand-limit = 1" << std::endl;
+                str << std::endl << indent(col) << "\\override MultiMeasureRest #'expand-limit = 1" << std::endl;
 
                 SegmentNotationHelper helper(**i);
                 helper.setNotationProperties();
