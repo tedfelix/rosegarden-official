@@ -55,7 +55,7 @@ public:
 
     virtual ~AddTempoChangeCommand();
 
-    static QString getGlobalName() { return i18n("Change Te&mpo..."); }
+    static QString getGlobalName() { return i18n("Add Te&mpo Change..."); }
 
     virtual void execute();
     virtual void unexecute();

@@ -554,6 +554,16 @@ protected:
     QString getAutoSaveFileName();
 
     /**
+     * Save document to the given file.  This function does the actual
+     * save of the file to the given filename; saveDocument() wraps
+     * this, saving to a temporary file and then renaming to the
+     * required file, so as not to lose the original if a failure
+     * occurs during overwriting.
+     */
+    bool saveDocumentActual(const QString &filename, QString& errMsg,
+                            bool autosave = false);
+
+    /**
      * Save one segment to the given text stream
      */
     void saveSegment(QTextStream&, Segment*, KProgress*,

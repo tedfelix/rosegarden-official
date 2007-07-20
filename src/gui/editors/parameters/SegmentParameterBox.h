@@ -130,10 +130,10 @@ protected:
     void updateHighLow();
 
     QLabel                     *m_label;
-    QLabel                     *m_rangeLabel;
+//    QLabel                     *m_rangeLabel;
     QPushButton                *m_labelButton;
-    QPushButton                *m_highButton;
-    QPushButton                *m_lowButton;
+//    QPushButton                *m_highButton;
+//    QPushButton                *m_lowButton;
     TristateCheckBox *m_repeatValue;
     KComboBox                  *m_quantizeValue;
     KComboBox                  *m_transposeValue;
@@ -142,12 +142,12 @@ protected:
 
     // Audio autofade
     //
-    QLabel                     *m_autoFadeLabel;
-    QCheckBox                  *m_autoFadeBox;
-    QLabel                     *m_fadeInLabel;
-    QSpinBox                   *m_fadeInSpin;
-    QLabel                     *m_fadeOutLabel;
-    QSpinBox                   *m_fadeOutSpin;
+//    QLabel                     *m_autoFadeLabel;
+//    QCheckBox                  *m_autoFadeBox;
+//    QLabel                     *m_fadeInLabel;
+//    QSpinBox                   *m_fadeInSpin;
+//    QLabel                     *m_fadeOutLabel;
+//    QSpinBox                   *m_fadeOutSpin;
 
     int                        m_addColourPos;
 

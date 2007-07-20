@@ -128,10 +128,10 @@ SegmentParameterBox::initBox()
     QLabel *transposeLabel = new QLabel(i18n("Transpose"), this);
     QLabel *delayLabel = new QLabel(i18n("Delay"), this);
     QLabel *colourLabel = new QLabel(i18n("Color"), this);
-    m_autoFadeLabel = new QLabel(i18n("Audio auto-fade"), this);
-    m_fadeInLabel = new QLabel(i18n("Fade in"), this);
-    m_fadeOutLabel = new QLabel(i18n("Fade out"), this);
-    m_rangeLabel = new QLabel(i18n("Range"), this);
+//    m_autoFadeLabel = new QLabel(i18n("Audio auto-fade"), this);
+//    m_fadeInLabel = new QLabel(i18n("Fade in"), this);
+//    m_fadeOutLabel = new QLabel(i18n("Fade out"), this);
+//    m_rangeLabel = new QLabel(i18n("Range"), this);
 
     // Label ..
     m_label = new QLabel(this);
@@ -206,51 +206,51 @@ SegmentParameterBox::initBox()
             SLOT(slotColourSelected(int)));
 
     // pre-set width of buttons so they don't grow later
-    width = fontMetrics.width(i18n("used internally for spacing", "High: ----"));
+//    width = fontMetrics.width(i18n("used internally for spacing", "High: ----"));
 
     // highest playable note
     //
-    m_highButton = new QPushButton(i18n("High: ---"), this);
-    QToolTip::add
-        (m_highButton, i18n("Choose the highest suggested playable note, using a staff"));
-    m_highButton->setFont(font);
-    m_highButton->setMinimumWidth(width);
+//    m_highButton = new QPushButton(i18n("High: ---"), this);
+//    QToolTip::add
+//        (m_highButton, i18n("Choose the highest suggested playable note, using a staff"));
+//    m_highButton->setFont(font);
+//    m_highButton->setMinimumWidth(width);
 
-    connect(m_highButton, SIGNAL(released()),
-            SLOT(slotHighestPressed()));
+//    connect(m_highButton, SIGNAL(released()),
+//            SLOT(slotHighestPressed()));
 
     // lowest playable note
     //
-    m_lowButton = new QPushButton(i18n("Low: ----"), this);
-    QToolTip::add
-        (m_lowButton, i18n("Choose the lowest suggested playable note, using a staff"));
-    m_lowButton->setFont(font);
-    m_lowButton->setMinimumWidth(width);
+//    m_lowButton = new QPushButton(i18n("Low: ----"), this);
+//    QToolTip::add
+//        (m_lowButton, i18n("Choose the lowest suggested playable note, using a staff"));
+//    m_lowButton->setFont(font);
+//    m_lowButton->setMinimumWidth(width);
 
-    connect(m_lowButton, SIGNAL(released()),
-            SLOT(slotLowestPressed()));
+//    connect(m_lowButton, SIGNAL(released()),
+//            SLOT(slotLowestPressed()));
 
     // Audio autofade enabled
     //
-    m_autoFadeBox = new QCheckBox(this);
-    connect(m_autoFadeBox, SIGNAL(stateChanged(int)),
-            this, SLOT(slotAudioFadeChanged(int)));
+//    m_autoFadeBox = new QCheckBox(this);
+//    connect(m_autoFadeBox, SIGNAL(stateChanged(int)),
+//            this, SLOT(slotAudioFadeChanged(int)));
 
     // Fade in and out times
     //
-    m_fadeInSpin = new QSpinBox(this);
-    m_fadeInSpin->setMinValue(0);
-    m_fadeInSpin->setMaxValue(5000);
-    m_fadeInSpin->setSuffix(i18n(" ms"));
-    connect(m_fadeInSpin, SIGNAL(valueChanged(int)),
-            this, SLOT(slotFadeInChanged(int)));
+//    m_fadeInSpin = new QSpinBox(this);
+//    m_fadeInSpin->setMinValue(0);
+//    m_fadeInSpin->setMaxValue(5000);
+//    m_fadeInSpin->setSuffix(i18n(" ms"));
+//    connect(m_fadeInSpin, SIGNAL(valueChanged(int)),
+//            this, SLOT(slotFadeInChanged(int)));
 
-    m_fadeOutSpin = new QSpinBox(this);
-    m_fadeOutSpin->setMinValue(0);
-    m_fadeOutSpin->setMaxValue(5000);
-    m_fadeOutSpin->setSuffix(i18n(" ms"));
-    connect(m_fadeOutSpin, SIGNAL(valueChanged(int)),
-            this, SLOT(slotFadeOutChanged(int)));
+//    m_fadeOutSpin = new QSpinBox(this);
+//    m_fadeOutSpin->setMinValue(0);
+//    m_fadeOutSpin->setMaxValue(5000);
+//    m_fadeOutSpin->setSuffix(i18n(" ms"));
+//    connect(m_fadeOutSpin, SIGNAL(valueChanged(int)),
+//            this, SLOT(slotFadeOutChanged(int)));
 
     label->setFont(font);
     repeatLabel->setFont(font);
@@ -258,38 +258,45 @@ SegmentParameterBox::initBox()
     transposeLabel->setFont(font);
     delayLabel->setFont(font);
     colourLabel->setFont(font);
-    m_autoFadeLabel->setFont(font);
-    m_fadeInLabel->setFont(font);
-    m_fadeOutLabel->setFont(font);
-    m_rangeLabel->setFont(font);
+//    m_autoFadeLabel->setFont(font);
+//    m_fadeInLabel->setFont(font);
+//    m_fadeOutLabel->setFont(font);
+//    m_rangeLabel->setFont(font);
 
-    gridLayout->addRowSpacing(0, 12);
+    int row = 0;
 
-    gridLayout->addWidget(label, 1, 0); //, AlignRight);
-    gridLayout->addMultiCellWidget(m_label, 1, 1, 1, 4); //, AlignLeft);
-    gridLayout->addWidget(m_labelButton, 1, 5); //, AlignLeft);
+//    gridLayout->addRowSpacing(0, 12); // why??
 
-    gridLayout->addWidget(repeatLabel, 2, 0); //, AlignRight);
-    gridLayout->addWidget(m_repeatValue, 2, 1); //, AlignLeft);
+    gridLayout->addWidget(label, row, 0); //, AlignRight);
+    gridLayout->addMultiCellWidget(m_label, row, row, 1, 4); //, AlignLeft);
+    gridLayout->addWidget(m_labelButton, row, 5); //, AlignLeft);
+    ++row;
 
-    gridLayout->addMultiCellWidget(transposeLabel, 2, 2, 2, 3, AlignRight);
-    gridLayout->addMultiCellWidget(m_transposeValue, 2, 2, 4, 5);
+    gridLayout->addWidget(repeatLabel, row, 0); //, AlignRight);
+    gridLayout->addWidget(m_repeatValue, row, 1); //, AlignLeft);
 
-    gridLayout->addWidget(quantizeLabel, 3, 0); //, AlignRight);
-    gridLayout->addMultiCellWidget(m_quantizeValue, 3, 3, 1, 2); //, AlignLeft);
+    gridLayout->addMultiCellWidget(transposeLabel, row, row, 2, 3, AlignRight);
+    gridLayout->addMultiCellWidget(m_transposeValue, row, row, 4, 5);
+    ++row;
 
-    gridLayout->addWidget(delayLabel, 3, 3); //, AlignRight);
-    gridLayout->addMultiCellWidget(m_delayValue, 3, 3, 4, 5);
+    gridLayout->addWidget(quantizeLabel, row, 0); //, AlignRight);
+    gridLayout->addMultiCellWidget(m_quantizeValue, row, row, 1, 2); //, AlignLeft);
 
-    gridLayout->addWidget(colourLabel, 4, 0); //, AlignRight);
-    gridLayout->addMultiCellWidget(m_colourValue, 4, 4, 1, 5);
+    gridLayout->addWidget(delayLabel, row, 3, AlignRight);
+    gridLayout->addMultiCellWidget(m_delayValue, row, row, 4, 5);
+    ++row;
 
-    gridLayout->addWidget(m_rangeLabel, 5, 0); //, AlignRight);
-    gridLayout->addMultiCellWidget(m_lowButton, 5, 5, 1, 2);
-    gridLayout->addMultiCellWidget(m_highButton, 5, 5, 3, 4);
+    gridLayout->addWidget(colourLabel, row, 0); //, AlignRight);
+    gridLayout->addMultiCellWidget(m_colourValue, row, row, 1, 5);
+    ++row;
 
-    m_autoFadeLabel->hide();
-    m_autoFadeBox->hide();
+//    gridLayout->addWidget(m_rangeLabel, row, 0); //, AlignRight);
+//    gridLayout->addMultiCellWidget(m_lowButton, row, row, 1, 2);
+//    gridLayout->addMultiCellWidget(m_highButton, row, row, 3, 4);
+//    ++row;
+
+//    m_autoFadeLabel->hide();
+//    m_autoFadeBox->hide();
     /*
         gridLayout->addWidget(m_fadeInLabel,   5, 0, AlignRight);
         gridLayout->addWidget(m_fadeInSpin,  5, 1);
@@ -366,9 +373,9 @@ SegmentParameterBox::initBox()
     slotDocColoursChanged();
 
     //!!! disabled until after 1.3
-    m_highButton->hide();
-    m_lowButton->hide();
-    m_rangeLabel->hide();
+//    m_highButton->hide();
+//    m_lowButton->hide();
+//    m_rangeLabel->hide();
     //////////////////////////////
 
 }
@@ -602,7 +609,7 @@ SegmentParameterBox::populateBoxFromSegments()
             myLow = (*it)->getLowestPlayable();
         } else {
             if (myHigh != (*it)->getHighestPlayable() ||
-                    myLow != (*it)->getLowestPlayable()) {
+                myLow != (*it)->getLowestPlayable()) {
                 highlow = All;
             }
         }
@@ -727,6 +734,7 @@ SegmentParameterBox::populateBoxFromSegments()
     m_colourValue->setEnabled(diffcolours != NotApplicable);
 
     //!!! this is all borked up and useless; sort out after 1.3
+/*
     switch (highlow) {
     case All:
         updateHighLow();
@@ -743,16 +751,17 @@ SegmentParameterBox::populateBoxFromSegments()
 
     m_highButton->setEnabled(highlow != NotApplicable);
     m_lowButton->setEnabled(highlow != NotApplicable);
-
+*/
 
     // Enable or disable the fade in/out params
+/*
     if (m_segments.size() == 1 &&
             (*(m_segments.begin()))->getType() == Segment::Audio) {
         m_autoFadeBox->blockSignals(true);
         m_fadeInSpin->blockSignals(true);
         m_fadeOutSpin->blockSignals(true);
 
-        /*!!! No, not setting up autofade widgets.  The implementation's too
+        ... !!! No, not setting up autofade widgets.  The implementation's too
               incomplete to finish for this release.
          
               (Or for the next one after the one the previous comment referred to.)
@@ -766,7 +775,7 @@ SegmentParameterBox::populateBoxFromSegments()
                 m_fadeOutSpin->show();
          
         	instead:
-        */
+        
         m_fadeInLabel->hide();
         m_fadeInSpin->hide();
         m_fadeOutLabel->hide();
@@ -813,7 +822,7 @@ SegmentParameterBox::populateBoxFromSegments()
         m_fadeInSpin->setValue(0);
         m_fadeOutSpin->setValue(0);
     }
-
+*/
 
 }
 
@@ -1010,8 +1019,8 @@ SegmentParameterBox::updateHighLow()
     //!!! FIXME this code is broken, and needs to be fixed after the fashion of
     //the TPB, but I'm not bothering with that at this time, because they are
     //going to be hidden for 1.3 anyway
-    m_highButton->setText(QString("&High:   %1%2").arg(highest.getNoteName(key)).arg(highest.getOctave(base)));
-    m_lowButton->setText(QString("&Low:   %1%2").arg(lowest.getNoteName(key)).arg(lowest.getOctave(base)));
+//    m_highButton->setText(QString("&High:   %1%2").arg(highest.getNoteName(key)).arg(highest.getOctave(base)));
+//    m_lowButton->setText(QString("&Low:   %1%2").arg(lowest.getNoteName(key)).arg(lowest.getOctave(base)));
 }
 
 void
@@ -1110,7 +1119,7 @@ SegmentParameterBox::slotAudioFadeChanged(int value)
 {
     RG_DEBUG << "SegmentParameterBox::slotAudioFadeChanged - value = "
     << value << endl;
-
+/*
     if (m_segments.size() == 0)
         return ;
 
@@ -1122,7 +1131,7 @@ SegmentParameterBox::slotAudioFadeChanged(int value)
     for (it = m_segments.begin(); it != m_segments.end(); it++) {
         (*it)->setAutoFade(state);
     }
-
+*/
 }
 
 void
@@ -1130,7 +1139,7 @@ SegmentParameterBox::slotFadeInChanged(int value)
 {
     RG_DEBUG << "SegmentParameterBox::slotFadeInChanged - value = "
     << value << endl;
-
+/*
     if (m_segments.size() == 0)
         return ;
 
@@ -1149,6 +1158,7 @@ SegmentParameterBox::slotFadeInChanged(int value)
     }
 
     emit documentModified();
+*/
 }
 
 void
@@ -1156,7 +1166,7 @@ SegmentParameterBox::slotFadeOutChanged(int value)
 {
     RG_DEBUG << "SegmentParameterBox::slotFadeOutChanged - value = "
     << value << endl;
-
+/*
     if (m_segments.size() == 0)
         return ;
 
@@ -1175,6 +1185,7 @@ SegmentParameterBox::slotFadeOutChanged(int value)
     }
 
     emit documentModified();
+*/
 }
 
 void

@@ -46,7 +46,7 @@ public:
         BasicSelectionCommand(getGlobalName(), selection, true),
         m_selection(&selection) { }
 
-    static QString getGlobalName() { return i18n("&Restore Computed Slur Position"); }
+    static QString getGlobalName() { return i18n("&Restore Slur Positions"); }
 
 protected:
     virtual void modifySegment();

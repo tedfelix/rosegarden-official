@@ -107,14 +107,12 @@
 
 <Menu name="Tools">
   <text>&amp;Tools</text>
-  <Menu name="edit_tools">
-  	<text>&amp;Editor Tools</text>
 	<Action name="select" />
 	<Action name="draw" />
 	<Action name="erase" />
 	<Action name="move" />
         <Action name="resize" />
-  </Menu>
+	<Separator/>
     <Menu name="Move">
         <text>Local &amp;Cursor</text>
         <Action name="cursor_back"/>

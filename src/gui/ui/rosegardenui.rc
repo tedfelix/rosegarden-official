@@ -34,6 +34,8 @@
     </Menu>
     <Action name="file_preview_lilypond" append="print_merge" />
   <Separator/>
+        <Action name="audio_manager"/>
+  <Separator/>
   <Action name="file_show_playlist" />
   </Menu>
   <Menu name="edit">
@@ -48,37 +50,35 @@
   </Menu>
   <Menu name="document">
   	<text>&amp;Composition</text>
-	<Menu name="Studio">
-		<text>&amp;Studio</text>
-		<Action name="audio_mixer"/>
-		<Action name="midi_mixer"/>
-		<Separator/>
-		<Action name="manage_devices"/>
-		<Action name="manage_synths"/>
-		<Action name="manage_metronome"/>
-		<Separator/>
-		<Action name="modify_midi_filters"/>
-		<Action name="enable_midi_routing"/>
-		<Separator/>
-		<Action name="save_default_studio"/>
-		<Action name="load_default_studio"/>
-		<Action name="load_studio"/>
-	</Menu>
-	<Separator/>
-	<Menu name="time_and_temp">
-	    <text>&amp;Tempo and Time Signature</text>	
 	    <Action name="add_tempo"/>
 	    <Action name="add_time_signature"/>
 	    <Action name="edit_tempos"/>
 	    <Separator/>
 	    <Action name="set_tempo_to_segment_length"/>
 	    <Action name="groove_quantize"/>
-	</Menu>
         <Separator/>
         <Action name="change_composition_length"/>
         <Separator/>
         <Action name="edit_markers"/>
         <Action name="edit_doc_properties"/>
+  </Menu>
+  <Menu name="Studio">
+	<text>&amp;Studio</text>
+	<Action name="audio_mixer"/>
+	<Action name="midi_mixer"/>
+	<Separator/>
+	<Action name="manage_devices"/>
+	<Action name="manage_synths"/>
+	<Action name="manage_metronome"/>
+	<Separator/>
+	<Action name="modify_midi_filters"/>
+	<Action name="enable_midi_routing"/>
+	<Separator/>
+	      <Action name="reset_midi_network"/>
+	<Separator/>
+	<Action name="load_studio"/>
+	<Action name="load_default_studio"/>
+	<Action name="save_default_studio"/>
   </Menu>
   <Menu name="Segments">
         <text>Se&amp;gments</text>
@@ -98,7 +98,6 @@
 		<Action name="transpose"/>
         <Separator/>
         <Action name="rescale"/>
-<!--    <Action name="harmonize_selection"/> -->
         <Action name="set_segment_start"/>
         <Action name="set_segment_duration"/>
 	<Separator/>
@@ -116,7 +115,6 @@
         <Action name="repeats_to_real_copies"/>
         <Separator/>
         <Action name="manage_trigger_segments"/>
-        <Action name="audio_manager"/>
   </Menu>
   <Menu name="Tracks">
         <text>Trac&amp;ks</text>
@@ -138,16 +136,13 @@
   </Menu>
   <Menu name="Tools">
   <text>&amp;Tools</text>
-      <Menu name="Editor Tools">
-	    <text>&amp;Editor Tools</text>
 	    <Action name="select"/>
 	    <Action name="draw"/>
 	    <Action name="erase"/>
 	    <Action name="move"/>
 	    <Action name="resize"/>
 	    <Action name="split"/>
-	    <!-- <Action name="join"/> -->
-      </Menu>
+      <Separator/>
       <Menu name="Transport">
 	    <text>T&amp;ransport</text>
 	    <Action name="play"/> 
@@ -159,8 +154,6 @@
 	    <Action name="toggle_tracking"/>
 	    <Action name="panic"/>
       </Menu>
-      <Separator/>
-      <Action name="reset_midi_network"/>
   </Menu>
   <Menu  name="settings">
 	<Menu name="toolbars" append="show_merge"><text>&amp;Toolbars</text>

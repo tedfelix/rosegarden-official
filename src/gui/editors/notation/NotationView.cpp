@@ -1896,33 +1896,53 @@ void NotationView::setupActions()
                 SLOT(slotTransformsRestoreSlurs()), actionCollection(),
                 "restore_slurs");
 
+    icon = QIconSet
+           (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+                                         ("accmenu-doubleflat")));
+
     new KAction(RespellCommand::getGlobalName
                 (RespellCommand::Set, Accidentals::DoubleFlat),
-                0, this,
+                icon, 0, this,
                 SLOT(slotRespellDoubleFlat()), actionCollection(),
                 "respell_doubleflat");
 
+    icon = QIconSet
+           (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+                                         ("accmenu-flat")));
+
     new KAction(RespellCommand::getGlobalName
                 (RespellCommand::Set, Accidentals::Flat),
-                0, this,
+                icon, 0, this,
                 SLOT(slotRespellFlat()), actionCollection(),
                 "respell_flat");
 
+    icon = QIconSet
+           (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+                                         ("accmenu-natural")));
+
     new KAction(RespellCommand::getGlobalName
                 (RespellCommand::Set, Accidentals::Natural),
-                0, this,
+                icon, 0, this,
                 SLOT(slotRespellNatural()), actionCollection(),
                 "respell_natural");
 
+    icon = QIconSet
+           (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+                                         ("accmenu-sharp")));
+
     new KAction(RespellCommand::getGlobalName
                 (RespellCommand::Set, Accidentals::Sharp),
-                0, this,
+                icon, 0, this,
                 SLOT(slotRespellSharp()), actionCollection(),
                 "respell_sharp");
 
+    icon = QIconSet
+           (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+                                         ("accmenu-doublesharp")));
+
     new KAction(RespellCommand::getGlobalName
                 (RespellCommand::Set, Accidentals::DoubleSharp),
-                0, this,
+                icon, 0, this,
                 SLOT(slotRespellDoubleSharp()), actionCollection(),
                 "respell_doublesharp");
 
@@ -2276,7 +2296,7 @@ void NotationView::setupActions()
                 SLOT(slotFinePositionDown()), actionCollection(),
                 "fine_position_down");
 
-    new KAction(i18n("Restore &Computed Positions"), 0, this,
+    new KAction(i18n("&Restore Positions"), 0, this,
                 SLOT(slotFinePositionRestore()), actionCollection(),
                 "fine_position_restore");
 

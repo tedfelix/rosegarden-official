@@ -1,6 +1,8 @@
 #!/bin/sh
 prefix=/opt/rosegarden-install
-if [ -d "$HOME/rosegarden/install" ]; then
+if [ -d "$HOME/code/rosegarden/install" ]; then
+    prefix=$HOME/code/rosegarden/install
+elif [ -d "$HOME/rosegarden/install" ]; then
     prefix=$HOME/rosegarden/install
 elif [ -d "/opt/rosegarden/install" ]; then
     prefix=/opt/rosegarden/install
