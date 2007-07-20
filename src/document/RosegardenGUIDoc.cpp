@@ -96,6 +96,7 @@
 #include <kmessagebox.h>
 #include <kprocess.h>
 #include <kprogress.h>
+#include <ktempfile.h>
 #include <qcstring.h>
 #include <qdatastream.h>
 #include <qdialog.h>
