@@ -79,7 +79,7 @@ FingeringBox::drawContents(QPainter* p)
     //   display bar
     // Horizontal separator line
 
-    // draw fretboard
+    // draw guitar chord fingering
     //
     m_noteSymbols.drawFretNumber(p, m_startFret);
     m_noteSymbols.drawFrets(p);
@@ -161,7 +161,7 @@ FingeringBox::getFretNumber(const QPoint& pos)
     unsigned int fretNum = 0;
 
     if(true || pos.y() > m_noteSymbols.getTopBorder(maximumHeight())) {
-        // If fret position is below the top line of the fretboard image.
+        // If fret position is below the top line of the guitar chord image.
         PositionPair result = m_noteSymbols.getFretNumber(maximumWidth(),
                                                           pos.y(),
                                                           m_nbFretsDisplayed);

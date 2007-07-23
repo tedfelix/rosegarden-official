@@ -23,8 +23,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_FRETBOARDINSERTER_H_
-#define _RG_FRETBOARDINSERTER_H_
+#ifndef _RG_GUITAR_CHORD_INSERTER_H_
+#define _RG_GUITAR_CHORD_INSERTER_H_
 
 #include "NotationTool.h"
 #include <qstring.h>
@@ -43,9 +43,9 @@ class NotationView;
 class GuitarChordSelectorDialog;
 
 /**
- * This tool will insert fretboard on mouse click events
+ * This tool will insert guitar chord on mouse click events
 */
-class FretboardInserter : public NotationTool
+class GuitarChordInserter : public NotationTool
 {
     Q_OBJECT
 
@@ -69,20 +69,20 @@ public:
     static const QString ToolName;
 
 protected slots:
-    void slotFretboardSelected();
+    void slotGuitarChordSelected();
     void slotEraseSelected();
     void slotSelectSelected();
 
 protected:
     GuitarChordSelectorDialog* m_guitarChordSelector;
 
-    FretboardInserter(NotationView*);
+    GuitarChordInserter(NotationView*);
 
 private:
-    void handleSelectedFretboard (ViewElement* element,
+    void handleSelectedGuitarChord (ViewElement* element,
                                   Staff *staff);
 
-    void createNewFretboard (ViewElement* element,
+    void createNewGuitarChord (ViewElement* element,
                              Staff *staff,
                              QMouseEvent* e);
 

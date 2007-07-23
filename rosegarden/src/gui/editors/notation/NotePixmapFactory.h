@@ -99,7 +99,7 @@ public:
     QCanvasPixmap* makePedalUpPixmap();
     QCanvasPixmap* makeUnknownPixmap();
     QCanvasPixmap* makeTextPixmap(const Text &text);
-    QCanvasPixmap* makeFretboardPixmap(const Guitar::Fingering &fingering,
+    QCanvasPixmap* makeGuitarChordPixmap(const Guitar::Fingering &fingering,
                                        int x, int y);
 
     QCanvasPixmap* makeNoteHaloPixmap(const NotePixmapParameters &parameters);
