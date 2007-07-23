@@ -23,7 +23,7 @@
 */
 
 
-#include "FretboardInsertionCommand.h"
+#include "GuitarChordInsertionCommand.h"
 
 #include <klocale.h>
 #include "base/Event.h"
@@ -34,21 +34,21 @@
 namespace Rosegarden
 {
 
-FretboardInsertionCommand::FretboardInsertionCommand(Segment &segment,
+GuitarChordInsertionCommand::GuitarChordInsertionCommand(Segment &segment,
         timeT time,
         const Guitar::Chord& chord) :
-        BasicCommand(i18n("Insert Fretboard"), segment, time, time + 1, true),
+        BasicCommand(i18n("Insert Guitar Chord"), segment, time, time + 1, true),
         m_chord(chord)
 {
     // nothing
 }
 
-FretboardInsertionCommand::~FretboardInsertionCommand()
+GuitarChordInsertionCommand::~GuitarChordInsertionCommand()
 {}
 
 void
 
-FretboardInsertionCommand::modifySegment()
+GuitarChordInsertionCommand::modifySegment()
 {
     Segment::iterator i = getSegment().insert(m_chord.getAsEvent(getStartTime()));
     if (i != getSegment().end()) {

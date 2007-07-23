@@ -35,7 +35,7 @@ namespace Rosegarden
 
 /**
  *----------------------------------------
- * Finding X position on fretboard pixmap
+ * Finding X position on guitar chord pixmap
  *----------------------------------------
  *
  * Originally x = position * scale + FC::BORDER + FC::CIRCBORD + FC::FRETTEXT
@@ -45,19 +45,19 @@ namespace Rosegarden
  *             = 5 + 2 + 10 (see fingers.h)
  *             = 17
  *
- * The drawable fretboard space on the x-axis:
- *      XFretboard = pixmap width - XBorder
+ * The drawable guitar chord space on the x-axis:
+ *      XGuitarChord = pixmap width - XBorder
  *                = width - 17
  *
- * The fretboard x-axis is broken up into colums which represent the drawable
- * space for a fretboard component (e.g. note, barre)
- *      Column Width = XFretboard / number of strings
+ * The guitar chord x-axis is broken up into colums which represent the drawable
+ * space for a guitar chord component (e.g. note, barre)
+ *      Column Width = XGuitarChord / number of strings
  *
  * Therefore a new x can be calculated from the position and the column width
  *      x = (position * Column Width) + XBorder
  *
  *-------------------------------------------
- * Finding Y position on fretboard pixmap
+ * Finding Y position on guitar chord pixmap
  *-------------------------------------------
  *
  * Originally y = (FC::BORDER * scale) + (2 * FC::SPACER) + (fret * scale) + FC::CIRCBORD
@@ -67,12 +67,12 @@ namespace Rosegarden
  *      YBorder = (FC::BORDER*scale) + (2*FC::SPACER) + FC::CIRCBORD
  *              = 17 (If we want to use the same border as the x-axis)
  *
- * The drawable fretboard space on the y-axis:
- *      YFretboard = pixmap height - YBorder
+ * The drawable guitar chord space on the y-axis:
+ *      YGuitarChord = pixmap height - YBorder
  *
- * The fretboard y-axis is broken up into rows which represent the drawable
- * space for a fretboard component (e.g. note, barre)
- *      Row Height = YFretboard / number of frets
+ * The guitar chord y-axis is broken up into rows which represent the drawable
+ * space for a guitar chord component (e.g. note, barre)
+ *      Row Height = YGuitarChord / number of frets
  *
  * Therefore a new y can be calculated from the fret position and the row height
  *      y = fret * Row Height
@@ -91,11 +91,11 @@ private:
 
     static float const LEFT_BORDER_PERCENTAGE;
     static float const RIGHT_BORDER_PERCENTAGE;
-    static float const FRETBOARD_WIDTH_PERCENTAGE;
+    static float const GUITAR_CHORD_WIDTH_PERCENTAGE;
     static float const TOP_BORDER_PERCENTAGE;
     static float const BOTTOM_BORDER_PERCENTAGE;
-    static float const FRETBOARD_HEIGHT_PERCENTAGE;
-    static int   const TOP_FRETBOARD_MARGIN;
+    static float const GUITAR_CHORD_HEIGHT_PERCENTAGE;
+    static int   const TOP_GUITAR_CHORD_MARGIN;
     static int   const FRET_PEN_WIDTH;
     static int   const STRING_PEN_WIDTH;
     
@@ -148,9 +148,9 @@ public:
 
     unsigned int getRightBorder ( unsigned int imgWidth ) const;
 
-    unsigned int getFretboardWidth ( int imgWidth ) const;
+    unsigned int getGuitarChordWidth ( int imgWidth ) const;
 
-    unsigned int getFretboardHeight ( int imgHeight ) const;
+    unsigned int getGuitarChordHeight ( int imgHeight ) const;
 
     std::pair<bool, unsigned int>
     getStringNumber ( int imgWidth,
@@ -162,7 +162,7 @@ public:
                     unsigned int y_pos,
                     unsigned int maxFretNum ) const;
 
-    QRect getTransientNoteSymbolRect(QSize fretboardSize,
+    QRect getTransientNoteSymbolRect(QSize guitarChordSize,
                                      unsigned int stringNb,
                                      int fretNb) const;
 

@@ -32,7 +32,7 @@
 #include "RestInserter.h"
 #include "ClefInserter.h"
 #include "TextInserter.h"
-#include "FretboardInserter.h"
+#include "GuitarChordInserter.h"
 #include "NotationEraser.h"
 #include "NotationSelector.h"
 
@@ -71,9 +71,9 @@ EditTool* NotationToolBox::createTool(const QString& toolName)
 
         tool = new TextInserter(m_nParentView);
 
-    else if (toolNamelc == FretboardInserter::ToolName)
+    else if (toolNamelc == GuitarChordInserter::ToolName)
 
-        tool = new FretboardInserter(m_nParentView);
+        tool = new GuitarChordInserter(m_nParentView);
 
 /*    else if (toolNamelc == LilypondDirectiveInserter::ToolName)
 

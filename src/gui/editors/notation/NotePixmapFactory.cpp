@@ -2985,23 +2985,23 @@ NotePixmapFactory::makeTextPixmap(const Text &text)
 }
 
 QCanvasPixmap*
-NotePixmapFactory::makeFretboardPixmap(const Guitar::Fingering &fingering,
+NotePixmapFactory::makeGuitarChordPixmap(const Guitar::Fingering &fingering,
                                        int x,
                                        int y)
 {
     using namespace Guitar;
-    Profiler profiler("NotePixmapFactory::makeFretboardPixmap");
+    Profiler profiler("NotePixmapFactory::makeGuitarChordPixmap");
 
-    int fretboardWidth = getLineSpacing() * 6;
-    int fretboardHeight = getLineSpacing() * 6;
+    int guitarChordWidth = getLineSpacing() * 6;
+    int guitarChordHeight = getLineSpacing() * 6;
 
     /*
-        std::cout << "Fretboard QRect height: " << fretboardHeight
-        << ", width: " << fretboardWidth
+        std::cout << "GuitarChord QRect height: " << guitarChordHeight
+        << ", width: " << guitarChordWidth
         << std::endl;
     */
 
-    createPixmapAndMask(fretboardWidth, fretboardHeight);
+    createPixmapAndMask(guitarChordWidth, guitarChordHeight);
 
     // m_generatedPixmap
     m_p->painter().setBrush(Qt::black);

@@ -118,7 +118,7 @@
 #include "commands/segment/RenameTrackCommand.h"
 #include "document/RosegardenGUIDoc.h"
 #include "document/ConfigGroups.h"
-#include "FretboardInserter.h"
+#include "GuitarChordInserter.h"
 #include "gui/application/SetWaitCursor.h"
 #include "gui/application/RosegardenGUIView.h"
 #include "gui/dialogs/ClefDialog.h"
@@ -1595,10 +1595,10 @@ void NotationView::setupActions()
                                   actionCollection(), "text");
     noteAction->setExclusiveGroup("notes");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("fretboard")));
-    noteAction = new KRadioAction(i18n("&Fretboard"), icon, Key_F9, this,
-                                  SLOT(slotFretboard()),
-                                  actionCollection(), "fretboard");
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("guitarchord")));
+    noteAction = new KRadioAction(i18n("&Guitar Chord"), icon, Key_F9, this,
+                                  SLOT(slotGuitarChord()),
+                                  actionCollection(), "guitarchord");
     noteAction->setExclusiveGroup("notes");
 
     /*    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("lilypond")));
@@ -2082,14 +2082,7 @@ void NotationView::setupActions()
                     SLOT(slotAddSlashes()), actionCollection(),
                     QString("slashes_%1").arg(i));
     }
-/*
-    new KAction(i18n("Add Fretboard"),
-                0,
-                this,
-                SLOT(slotAddFretboard()),
-                actionCollection(),
-                "add_fretboard");
-*/
+
     new KAction(ClefInsertionCommand::getGlobalName(), 0, this,
                 SLOT(slotEditAddClef()), actionCollection(),
                 "add_clef");
@@ -6453,11 +6446,11 @@ void NotationView::slotText()
     setMenuStates();
 }
 
-void NotationView::slotFretboard()
+void NotationView::slotGuitarChord()
 {
     m_currentNotePixmap->setPixmap
         (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("text")));
-    setTool(m_toolBox->getTool(FretboardInserter::ToolName));
+    setTool(m_toolBox->getTool(GuitarChordInserter::ToolName));
     setMenuStates();
 }
 

@@ -109,8 +109,8 @@ SET(commands_SRCS
 	commands/notation/EraseEventCommand.h
 	commands/notation/FixNotationQuantizeCommand.cpp
 	commands/notation/FixNotationQuantizeCommand.h
-	commands/notation/FretboardInsertionCommand.cpp
-	commands/notation/FretboardInsertionCommand.h
+	commands/notation/GuitarChordInsertionCommand.cpp
+	commands/notation/GuitarChordInsertionCommand.h
 	commands/notation/GraceCommand.cpp
 	commands/notation/GraceCommand.h
 	commands/notation/IncrementDisplacementsCommand.cpp
@@ -532,8 +532,8 @@ SET(gui_SRCS
 	gui/editors/notation/ClefInserter.h
 	gui/editors/notation/FontViewFrame.cpp
 	gui/editors/notation/FontViewFrame.h
-	gui/editors/notation/FretboardInserter.cpp
-	gui/editors/notation/FretboardInserter.h
+	gui/editors/notation/GuitarChordInserter.cpp
+	gui/editors/notation/GuitarChordInserter.h
 	gui/editors/notation/NotationCanvasView.cpp
 	gui/editors/notation/NotationCanvasView.h
 	gui/editors/notation/NotationChord.cpp

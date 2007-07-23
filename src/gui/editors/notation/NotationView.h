@@ -429,8 +429,8 @@ public slots:
     /// text tool
     void slotText();
 
-    /// fretboard tool
-    void slotFretboard();
+    /// guitar chord tool
+    void slotGuitarChord();
 
     /// editing tools
     void slotEraseSelected();

@@ -23,8 +23,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_FRETBOARDINSERTIONCOMMAND_H_
-#define _RG_FRETBOARDINSERTIONCOMMAND_H_
+#ifndef _RG_GUITARCHORDINSERTIONCOMMAND_H_
+#define _RG_GUITARCHORDINSERTIONCOMMAND_H_
 
 #include "document/BasicCommand.h"
 #include "base/Event.h"
@@ -38,13 +38,13 @@ class Segment;
 class Event;
 
 
-class FretboardInsertionCommand : public BasicCommand
+class GuitarChordInsertionCommand : public BasicCommand
 {
 public:
-    FretboardInsertionCommand(Segment &segment,
+    GuitarChordInsertionCommand(Segment &segment,
                               timeT time,
                               const Guitar::Chord& chord);
-    virtual ~FretboardInsertionCommand();
+    virtual ~GuitarChordInsertionCommand();
 
     Event *getLastInsertedEvent() { return m_lastInsertedEvent; }
 

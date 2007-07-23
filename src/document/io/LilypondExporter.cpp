@@ -1646,8 +1646,8 @@ LilypondExporter::writeBar(Segment *s,
                 }
                 str << "\" ";
 
-            } catch (Exception e) { // Fretboard ctor failed
-                RG_DEBUG << "Bad fretboard event in Lilypond export" << endl;
+            } catch (Exception e) { // GuitarChord ctor failed
+                RG_DEBUG << "Bad GuitarChord event in Lilypond export" << endl;
             }
         }
 

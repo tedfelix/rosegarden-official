@@ -1492,8 +1492,8 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
             } else if (el->event()->isa(Guitar::Chord::EventType)) {
 
-                int fretboardWidth = m_npf->getLineSpacing() * 6;
-                el->setLayoutX(x - (fretboardWidth / 2));
+                int guitarChordWidth = m_npf->getLineSpacing() * 6;
+                el->setLayoutX(x - (guitarChordWidth / 2));
 
             } else {
 
