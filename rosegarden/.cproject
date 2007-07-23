@@ -47,14 +47,7 @@
 </scannerInfoProvider>
 </profile>
 </storageModule>
-<storageModule moduleId="org.eclipse.cdt.core.pathentry">
-<pathentry excluding="cache/|po/|RGbuild/|scripts/|cmake_admin" kind="src" path=""/>
-<pathentry excluding="cache/" kind="out" path=""/>
-<pathentry kind="out" path="RGbuild"/>
-<pathentry kind="con" path="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO"/>
-<pathentry kind="mac" name="slots" path="" value=""/>
-<pathentry kind="mac" name="signals" path="" value="protected"/>
-</storageModule>
+
 <storageModule buildSystemId="org.eclipse.cdt.core.defaultConfigDataProvider" id="converted.config.634752939" moduleId="org.eclipse.cdt.core.settings" name="convertedConfig">
 <externalSettings/>
 <extensions>
@@ -62,6 +55,15 @@
 <extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
 </extensions>
 </storageModule>
+<storageModule moduleId="org.eclipse.cdt.core.pathentry">
+<pathentry excluding="cache/|po/|RGbuild/|scripts/|cmake_admin/" kind="src" path=""/>
+<pathentry excluding="cache/" kind="out" path=""/>
+<pathentry kind="out" path="RGbuild"/>
+<pathentry kind="con" path="org.eclipse.cdt.make.core.DISCOVERED_SCANNER_INFO"/>
+<pathentry kind="mac" name="slots" path="" value=""/>
+<pathentry kind="mac" name="signals" path="" value="protected"/>
+</storageModule>
+<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
 </cconfiguration>
 </storageModule>
 </cproject>
