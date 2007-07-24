@@ -49,6 +49,8 @@ public:
                           QString windowCaption = "",
                           QString heading = "");
 
+    static void setDefaultLilypondVersion(QString version);
+
 public slots:
     void slotOk();
 
@@ -59,6 +61,7 @@ protected:
     QComboBox *m_lilyTempoMarks;
     QComboBox *m_lilyExportSelection;
     QCheckBox *m_lilyPaperLandscape;
+    QCheckBox *m_lilyRaggedBottom;
     QCheckBox *m_lilyExportLyrics;
     QCheckBox *m_lilyExportMidi;
     QCheckBox *m_lilyExportPointAndClick;

@@ -9,14 +9,13 @@ trap "rm -rf \"$tmpdir\"" 0
 # 
 # lilypond (that actually runs, of course)
 # mktemp OR tempfile
-# kpdf OR gpdf OR xpdf OR evince OR acroread
-# kdialog OR konsole OR rxvt OR xterm [for graphical mode only]
+# kpdf OR kghostview OR gpdf OR xpdf OR evince OR acroread
+# kdialog [for graphical mode only]
 # kprinter
 
 prog_lilypond=""
 prog_temp_file=""
 prog_kdialog=""
-prog_terminal=""
 prog_pdf_view=""
 prog_printer=""
 
@@ -87,16 +86,7 @@ if [ -x "`type -path kdialog`" ]; then
     prog_kdialog=kdialog
 fi
 
-if [ -x "`type -path xterm`" ]; then
-    prog_terminal=xterm
-fi
-
-if [ -z "$prog_terminal" ]; then
-    reqd="xterm, $reqd"
-    echo "rosegarden-lilypondview: No terminal emulator found" 1>&2
-fi
-
-for x in kpdf OR gpdf OR xpdf OR evince OR acroread; do
+for x in acroread OR kpdf OR kghostview OR gpdf OR xpdf OR evince; do
     if [ -x "`type -path $x`" ]; then
 	prog_pdf_view=$x
 	break;
@@ -104,7 +94,7 @@ for x in kpdf OR gpdf OR xpdf OR evince OR acroread; do
 done
 
 if [ -z "$prog_pdf_view" ]; then
-    reqd="kpdf OR gpdf OR xpdf OR evince OR evince OR acroread, $reqd"
+    reqd="kpdf OR kghostview OR gpdf OR xpdf OR evince OR acroread, $reqd"
     echo "rosegarden-lilypondview: No PDF viewer found" 1>&2
 fi
 
@@ -129,9 +119,9 @@ fi
 [ -z "$prog_lilypond" ] && exit 1
 [ -z "$prog_pdf_view" ] && exit 1
 [ -z "$prog_temp_file" ] && exit 1
-[ -z "$prog_terminal" ] && exit 1
 
 if [ -n "$conftest" ]; then
+    echo "Lilypond version: $lilypond_version"
     exit 0
 fi
 
@@ -169,6 +159,20 @@ for x in $input_files; do
 	dir=`dirname "$input"`
 	base=`basename "$input"`
 	cd "$tmpdir"
+
+	if [ -n "$graphical" ]; then
+	    dcopRef=`kdialog --title "Processing" --icon "rosegarden" --progressbar "Processing LilyPond file..." 100`
+	fi
+
+	send_dcop() {
+	    if [ -n "$graphical" ]; then
+		dcop $dcopRef "$@"
+	    fi
+	}
+
+	trap "send_dcop close" 0
+
+	send_dcop showCancelButton true
 
 	if file "$base" | grep -q gzip; then
 		gunzip "$base"
@@ -217,6 +221,7 @@ echo "LilyPond version is $lilypond_version, file version is $fileversion"
 
 	if [ -n "$convert" ]; then
 	    echo "File version is $fileversion against LilyPond version $lilypond_version -- converting..." 1>&2
+	    send_dcop setLabel "Updating LilyPond file..."
 	    for srcfile in "$base" $includes; do
 	        if [ ! -f "$srcfile" ]; then continue; fi
 		case "$fileversion" in
@@ -231,6 +236,7 @@ echo "LilyPond version is $lilypond_version, file version is $fileversion"
 		    convert-ly "$srcfile" > "${srcfile}_converted" && mv "${srcfile}_converted" "$srcfile"
 		fi
 	    done
+	    send_dcop setLabel "Processing LilyPond file..."
 	fi
 
 	if [ -n "$graphical" ] ; then
@@ -250,9 +256,6 @@ echo "LilyPond version is $lilypond_version, file version is $fileversion"
 	    indev=/dev/pts/0
 	    if [ ! -c "$indev" ]; then indev=/dev/ptya0; fi
 
-	    dcopRef=`kdialog --title "Processing" --progressbar "Processing LilyPond file..." 100`
-            dcop $dcopRef showCancelButton true
-
 	    PROGRESS=`$prog_temp_file`
 
 #	    echo "Running $prog_lilypond $args \"$base\""
@@ -270,7 +273,7 @@ echo "LilyPond version is $lilypond_version, file version is $fileversion"
 			$state = 2;
 			$val = int( ($base + $n) * 100 / '$count' );
 			if ($val > 100) { $val = 100; }
-			print "$val";
+			print " $val";
 			print "\n";
 			$n = "";
 		    } elsif ($key eq "\n") {
@@ -303,38 +306,38 @@ echo "LilyPond version is $lilypond_version, file version is $fileversion"
                     #  - either the number of bars was not known,
                     #  - or there appeared an error during processing.
                     #
-                    dcop $dcopRef setProgress 100
+                    send_dcop setProgress 100
                     PROCESSINGSTAGE=2
 		elif [ "$PROGRESSVALUE" == "100" ]; then
                     PROCESSINGSTAGE=1
 		    #
 		    # Note: percentage is 100 only after PDF has been created.
 		    #
-                    dcop $dcopRef setProgress 99
-	            dcop $dcopRef setLabel "Creating PDF output..."
+                    send_dcop setProgress 99
+	            send_dcop setLabel "Creating PDF output..."
 	        else
-                    dcop $dcopRef setProgress $PROGRESSVALUE
+                    send_dcop setProgress $PROGRESSVALUE
 		fi
-	        if [ "true" == `dcop $dcopRef wasCancelled` ]; then
-	            dcop $dcopRef close
+	        if [ "true" == `send_dcop wasCancelled` ]; then
+	            send_dcop close
 	            rm $PROGRESS
                     exit 1;
                 fi
 	    done
 	    until [ "$PROCESSINGSTAGE" == "2" ]; do
 	        sleep 0.2
-	        if [ "true" == `dcop $dcopRef wasCancelled` ]; then
-	            dcop $dcopRef close
+	        if [ "true" == `send_dcop wasCancelled` ]; then
+	            send_dcop close
 	            rm $PROGRESS
                     exit 1;
                 fi
 		PROGRESSVALUE=`tail -c 4 $PROGRESS`
 		if [ "$PROGRESSVALUE" == "end" ]; then
                     PROCESSINGSTAGE=2
-                    dcop $dcopRef setProgress 100
+                    send_dcop setProgress 100
                 fi
             done
-	    dcop $dcopRef close
+	    ( sleep 2 ; send_dcop close ) &
 	    rm $PROGRESS
 	else
 #	    echo "running $prog_lilypond $args \"$base\"..."

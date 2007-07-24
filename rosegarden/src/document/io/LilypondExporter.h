@@ -55,8 +55,10 @@ namespace Rosegarden
 
 class TimeSignature;
 class Studio;
+class RosegardenGUIApp;
 class RosegardenGUIView;
 class RosegardenGUIDoc;
+class NotationView;
 class Key;
 class Composition;
 
@@ -72,13 +74,15 @@ public:
     typedef std::multiset<Event*, Event::EventEndCmp> eventendlist;
 
 public:
-    LilypondExporter(QObject *parent, RosegardenGUIDoc *, std::string fileName);
+    LilypondExporter(RosegardenGUIApp *parent, RosegardenGUIDoc *, std::string fileName);
+    LilypondExporter(NotationView *parent, RosegardenGUIDoc *, std::string fileName);
     ~LilypondExporter();
 
     bool write();
 
 protected:
     RosegardenGUIView *m_view;
+    NotationView *m_notationView;
     RosegardenGUIDoc *m_doc;
     Composition *m_composition;
     Studio *m_studio;
@@ -164,6 +168,7 @@ private:
     bool m_exportBeams;
     bool m_exportStaffGroup;
     bool m_exportStaffMerge;
+    bool m_raggedBottom;
     int m_languageLevel;
 };
 
