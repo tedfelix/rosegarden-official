@@ -59,6 +59,7 @@
 #include "gui/application/RosegardenApplication.h"
 #include "gui/application/RosegardenGUIView.h"
 #include "gui/editors/notation/NotationProperties.h"
+#include "gui/editors/notation/NotationView.h"
 #include "gui/editors/guitar/Chord.h"
 #include "gui/general/ProgressReporter.h"
 #include "gui/widgets/CurrentProgressDialog.h"
@@ -81,10 +82,10 @@ using namespace BaseProperties;
 const PropertyName LilypondExporter::SKIP_PROPERTY
     = "LilypondExportSkipThisEvent";
 
-LilypondExporter::LilypondExporter(QObject *parent,
+LilypondExporter::LilypondExporter(RosegardenGUIApp *parent,
                                    RosegardenGUIDoc *doc,
                                    std::string fileName) :
-        ProgressReporter(parent, "lilypondExporter"),
+        ProgressReporter((QObject *)parent, "lilypondExporter"),
         m_doc(doc),
         m_fileName(fileName)
 {
@@ -95,6 +96,41 @@ LilypondExporter::LilypondExporter(QObject *parent,
     cfg->setGroup(NotationViewConfigGroup);
 
     m_view = ((RosegardenGUIApp *)parent)->getView();
+    m_notationView = NULL;
+    m_composition = &m_doc->getComposition();
+    m_studio = &m_doc->getStudio();
+    m_paperSize = cfg->readUnsignedNumEntry("lilypapersize", 1);
+    m_paperLandscape = cfg->readBoolEntry("lilypaperlandscape", false);
+    m_fontSize = cfg->readUnsignedNumEntry("lilyfontsize", 4);
+    m_raggedBottom = cfg->readBoolEntry("lilyraggedbottom", false);
+    m_exportSelection = cfg->readUnsignedNumEntry("lilyexportselection", 1);
+    m_exportLyrics = cfg->readBoolEntry("lilyexportlyrics", true);
+    m_exportMidi = cfg->readBoolEntry("lilyexportmidi", false);
+    m_exportTempoMarks = cfg->readUnsignedNumEntry("lilyexporttempomarks", 0);
+    m_exportPointAndClick = cfg->readBoolEntry("lilyexportpointandclick", false);
+    m_exportBeams = cfg->readBoolEntry("lilyexportbeamings", false);
+    m_exportStaffGroup = cfg->readBoolEntry("lilyexportstaffgroup", false);
+    m_exportStaffMerge = cfg->readBoolEntry("lilyexportstaffmerge", false);
+
+    m_languageLevel = cfg->readUnsignedNumEntry("lilylanguage", 0);
+
+}
+
+LilypondExporter::LilypondExporter(NotationView *parent,
+                                   RosegardenGUIDoc *doc,
+                                   std::string fileName) :
+        ProgressReporter((QObject *)parent, "lilypondExporter"),
+        m_doc(doc),
+        m_fileName(fileName)
+{
+    m_pitchBorked = false;
+
+    // grab config info
+    KConfig *cfg = kapp->config();
+    cfg->setGroup(NotationViewConfigGroup);
+
+    m_view = NULL;
+    m_notationView = ((NotationView *)parent);
     m_composition = &m_doc->getComposition();
     m_studio = &m_doc->getStudio();
     m_paperSize = cfg->readUnsignedNumEntry("lilypapersize", 1);
@@ -471,6 +507,13 @@ LilypondExporter::write()
         str << indent(--col) << "}" << std::endl;
     }
 
+    // Lilypond \paper block (optional)
+    if (m_raggedBottom) {
+        str << indent(col) << "\\paper {" << std::endl;
+        str << indent(++col) << "ragged-bottom=##t" << std::endl;
+        str << indent(--col) << "}" << std::endl;
+    }
+
     // Lilypond music data!   Mapping:
     // Lilypond Voice = Rosegarden Segment
     // Lilypond Staff = Rosegarden Track
@@ -715,7 +758,7 @@ LilypondExporter::write()
             rgapp->refreshGUI(50);
             
             bool currentSegmentSelected = false;
-            if ((m_exportSelection == 3) && (m_view->haveSelection())) {
+            if ((m_exportSelection == 3) && (m_view != NULL) && (m_view->haveSelection())) {
             	//
             	// Check whether the current segment is in the list of selected segments.
             	//
@@ -723,7 +766,9 @@ LilypondExporter::write()
                 for (SegmentSelection::iterator it = selection.begin(); it != selection.end(); it++) {
                     if ((*it) == (*i)) currentSegmentSelected = true;
                 }
-            }
+            } else if ((m_exportSelection == 3) && (m_notationView != NULL)) {
+		currentSegmentSelected = m_notationView->hasSegment(*i);
+	    }
 
 	    // Check whether the track is a non-midi track.
 	    InstrumentId instrumentId = track->getInstrument();
@@ -737,7 +782,8 @@ LilypondExporter::write()
             if (isMidiTrack && ( // Skip non-midi tracks.
 		(m_exportSelection == 0) || 
                 ((m_exportSelection == 1) && (!track->isMuted())) ||
-                ((m_exportSelection == 2) && (track->getId() == m_composition->getSelectedTrack())) ||
+                ((m_exportSelection == 2) && (m_view != NULL) && (track->getId() == m_composition->getSelectedTrack())) ||
+                ((m_exportSelection == 2) && (m_notationView != NULL) && (track->getId() == m_notationView->getCurrentSegment()->getTrack())) ||
                 ((m_exportSelection == 3) && (currentSegmentSelected)))) {
                 if ((int) (*i)->getTrack() != lastTrackIndex) {
                     if (lastTrackIndex != -1) {
