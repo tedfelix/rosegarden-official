@@ -51,16 +51,16 @@ public:
     static QString getGlobalName() { return i18n("Make &Chord"); }
 
     static void registerCommand(CommandRegistry *r) {
-        r->registerCommand<MakeChordCommand>
-            (getGlobalName(), "group-chord", "", "make_chord");
+        r->registerCommand // <MakeChordCommand>
+            (getGlobalName(), "group-chord", "", "make_chord",
+             new BasicSelectionCommandBuilder<MakeChordCommand>());
     }
-    
+
 protected:
     virtual void modifySegment();
 
 private:
     EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
-    static NotationCommandActivator<MakeChordCommand> *m_activator;
 };    
 
 

@@ -30,15 +30,11 @@
 #include "base/Segment.h"
 #include "base/Selection.h"
 #include "document/BasicSelectionCommand.h"
-#include "gui/general/CommandRegistry.h" //!!! has to move
 #include <qstring.h>
 
 
 namespace Rosegarden
 {
-
-NotationCommandActivator<MakeChordCommand> *
-MakeChordCommand::m_activator = new NotationCommandActivator<MakeChordCommand>();
 
 
 void

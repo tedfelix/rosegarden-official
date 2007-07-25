@@ -28,6 +28,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include <string>
+#include <vector>
 #include <qstring.h>
 
 
@@ -37,24 +38,33 @@ namespace Rosegarden
 {
 
 class EventSelection;
-
+class CommandRegistry;
 
 class AddFingeringMarkCommand : public BasicSelectionCommand
 {
 public:
-    AddFingeringMarkCommand(std::string text,
-                                     EventSelection &selection) :
+    AddFingeringMarkCommand(std::string fingering,
+                            EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(), selection, true),
-        m_selection(&selection), m_text(text) { }
+        m_selection(&selection), m_fingering(fingering) { }
 
-    static QString getGlobalName(QString fingering = "");
+    static QString getGlobalName(std::string fingering = "");
+    static QString getActionName(std::string fingering);
+    static QString getShortcut(std::string fingering);
+
+    static std::string getArgument(QString actionName);
+
+    static std::vector<std::string> getStandardFingerings();
+
+    static void registerCommand(CommandRegistry *r, std::string fingering);
+    static void registerStandardCommands(CommandRegistry *r);
 
 protected:
     virtual void modifySegment();
 
 private:
     EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
-    std::string m_text;
+    std::string m_fingering;
 };
 
 

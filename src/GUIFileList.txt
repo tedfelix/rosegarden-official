@@ -536,6 +536,8 @@ SET(gui_SRCS
 	gui/editors/notation/FretboardInserter.h
 	gui/editors/notation/NotationCanvasView.cpp
 	gui/editors/notation/NotationCanvasView.h
+	gui/editors/notation/NotationCommandRegistry.h
+	gui/editors/notation/NotationCommandRegistry.cpp
 	gui/editors/notation/NotationChord.cpp
 	gui/editors/notation/NotationChord.h
 	gui/editors/notation/NotationElement.cpp

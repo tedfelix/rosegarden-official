@@ -211,7 +211,9 @@
 #include <algorithm>
 
 
-#include "gui/general/CommandRegistry.h" //!!!
+#include "NotationCommandRegistry.h" //!!!
+//#include "commands/notation/MakeChordCommand.h" //!!!
+
 
 namespace Rosegarden
 {
@@ -428,11 +430,11 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_hlayout->setNotePixmapFactory(m_notePixmapFactory);
     m_vlayout->setNotePixmapFactory(m_notePixmapFactory);
 
+//!!!kiftsgate
+    m_commandRegistry = new NotationCommandRegistry(this);
+
     setupActions();
     //     setupAddControlRulerMenu(); - too early for notation, moved to end of ctor.
-
-//!!!kiftsgate
-    m_commandRegistry = new CommandRegistry(this);
 
     initLayoutToolbar();
     initStatusBar();
@@ -2029,6 +2031,7 @@ void NotationView::setupActions()
                 SLOT(slotMarksAddTextMark()), actionCollection(),
                 "add_text_mark");
 
+/*!!!kiftsgate
     new KAction(AddFingeringMarkCommand::getGlobalName("0"), 0, Key_0 + ALT, this,
                 SLOT(slotMarksAddFingeringMarkFromAction()), actionCollection(),
                 "add_fingering_0");
@@ -2056,7 +2059,7 @@ void NotationView::setupActions()
     new KAction(AddFingeringMarkCommand::getGlobalName("+"), 0, Key_9 + ALT, this,
                 SLOT(slotMarksAddFingeringMarkFromAction()), actionCollection(),
                 "add_fingering_plus");
-
+*/
     new KAction(AddFingeringMarkCommand::getGlobalName(), 0, 0, this,
                 SLOT(slotMarksAddFingeringMark()), actionCollection(),
                 "add_fingering_mark");

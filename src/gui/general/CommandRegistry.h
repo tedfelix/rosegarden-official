@@ -48,23 +48,25 @@ class EditView;
 class AbstractCommandBuilder
 {
 public:
-    virtual KCommand *build(EventSelection &s) = 0;
+    virtual KCommand *build(QString actionName, EventSelection &s) = 0;
 };
 
-template <typename C>
-class CommandBuilder : public AbstractCommandBuilder
+template <typename Command>
+class BasicSelectionCommandBuilder : public AbstractCommandBuilder
 {
 public:
-    virtual KCommand *build(EventSelection &s) { return new C(s); }
+    virtual KCommand *build(QString /* actionName */, EventSelection &s) {
+        return new Command(s);
+    }
 };
 
-class CommandRegistry;
-
-class AbstractCommandRegistrar
+template <typename Command>
+class ArgumentAndSelectionCommandBuilder : public AbstractCommandBuilder
 {
 public:
-    virtual QString getViewName() = 0;
-    virtual void registerCommand(CommandRegistry *) = 0;
+    virtual KCommand *build(QString actionName, EventSelection &s) {
+        return new Command(Command::getArgument(actionName), s);
+    }
 };
 
 class CommandRegistry : public QObject
@@ -76,36 +78,38 @@ public:
 
     virtual ~CommandRegistry();
 
-    template <typename C>
-    void registerCommand(QString name,
+//    template <typename Builder>
+    void registerCommand(QString title,
                          QString icon,
                          const KShortcut &shortcut,
-                         QString identifier) {
-        addAction(name,
+                         QString actionName,
+                         AbstractCommandBuilder *builder) {
+        addAction(title,
                   icon,
                   shortcut,
-                  identifier);
+                  actionName);
 
-        m_builders[identifier] = new CommandBuilder<C>();
+//        m_builders[identifier] = new Builder();
+        m_builders[actionName] = builder;
     }
 
-    static void addRegistrar(AbstractCommandRegistrar *);
+//    static void addRegistrar(AbstractCommandRegistrar *);
 
 public slots:
     void slotInvokeCommand();
 
 protected:
-    typedef std::vector<AbstractCommandRegistrar *> RegistrarList;
-    typedef std::map<QString, RegistrarList> ViewRegistrarMap;
-    static ViewRegistrarMap m_registrars;
+//    typedef std::vector<AbstractCommandRegistrar *> RegistrarList;
+//    typedef std::map<QString, RegistrarList> ViewRegistrarMap;
+//    static ViewRegistrarMap m_registrars;
 
     typedef std::map<QString, AbstractCommandBuilder *> ActionBuilderMap;
     ActionBuilderMap m_builders;
 
-    void addAction(QString name,
+    void addAction(QString title,
                    QString icon,
                    const KShortcut &shortcut, 
-                   QString identifier);
+                   QString actionName);
 
     EditView *m_view;
 
@@ -114,7 +118,7 @@ private:
     CommandRegistry &operator=(const CommandRegistry &);
     
 };
-
+/*
 template <typename C>
 class NotationCommandRegistrar : public AbstractCommandRegistrar
 {
@@ -134,7 +138,10 @@ public:
     NotationCommandActivator() {
         std::cerr << "NotationCommandActivator" << std::endl;
         CommandRegistry::addRegistrar(new NotationCommandRegistrar<C>);
+        m_identifier = 0xdeafbeef;
     }
+
+    int m_identifier;
 };
 
 template <typename C>
@@ -158,7 +165,7 @@ public:
         C::registerCommand(r);
     }
 };
-
+*/
 //!!! main view is not an EditView, but it's probably less relevant here
 
 }

@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -23,54 +22,22 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_NOTESMENUADDINDICATIONCOMMAND_H_
-#define _RG_NOTESMENUADDINDICATIONCOMMAND_H_
+#ifndef _RG_NOTATIONCOMMANDREGISTRY_H_
+#define _RG_NOTATIONCOMMANDREGISTRY_H_
 
-#include "document/BasicCommand.h"
-#include <string>
-#include <qstring.h>
-#include "base/Event.h"
+#include "gui/general/CommandRegistry.h"
 
+namespace Rosegarden {
 
 
-
-namespace Rosegarden
-{
-
-class EventSelection;
-class Event;
-
-
-class AddIndicationCommand : public BasicCommand
+class NotationCommandRegistry : public CommandRegistry
 {
 public:
-    AddIndicationCommand(std::string indicationType,
-                         EventSelection &selection);
-    virtual ~AddIndicationCommand();
-
-    // tests whether the indication can be added without overlapping
-    // another one of the same type
-    bool canExecute();
-
-    Event *getLastInsertedEvent() {
-        return m_lastInsertedEvent;
-    }
-    virtual timeT getRelayoutEndTime() {
-        return getStartTime() + m_indicationDuration;
-    }
-
-    static QString getGlobalName(std::string indicationType);
-
-protected:
-    virtual void modifySegment();
-
-    std::string m_indicationType;
-    timeT m_indicationDuration;
-    Event *m_lastInsertedEvent;
+    NotationCommandRegistry(EditView *v);
+    virtual ~NotationCommandRegistry();
 };
-    
-
 
 }
 
 #endif
+

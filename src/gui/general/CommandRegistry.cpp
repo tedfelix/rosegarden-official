@@ -33,19 +33,19 @@
 
 namespace Rosegarden {
 
-CommandRegistry::ViewRegistrarMap
-CommandRegistry::m_registrars;
+//CommandRegistry::ViewRegistrarMap
+//CommandRegistry::m_registrars;
 
 CommandRegistry::CommandRegistry(EditView *view) :
     m_view(view)
 {
     std::cerr << "CommandRegistry: view name \"" << m_view->name() << "\"" << std::endl;
-    RegistrarList &registrars = m_registrars[m_view->name()];
-    for (RegistrarList::iterator i = registrars.begin();
-         i != registrars.end(); ++i) {
-        std::cerr << "CommandRegistry: Registering command" << std::endl;
-        (*i)->registerCommand(this);
-    }
+//    RegistrarList &registrars = m_registrars[m_view->name()];
+//    for (RegistrarList::iterator i = registrars.begin();
+//         i != registrars.end(); ++i) {
+//        std::cerr << "CommandRegistry: Registering command" << std::endl;
+//        (*i)->registerCommand(this);
+//    }
 }
 
 CommandRegistry::~CommandRegistry()
@@ -56,24 +56,24 @@ CommandRegistry::~CommandRegistry()
     }
 }
 
-void
-CommandRegistry::addRegistrar(AbstractCommandRegistrar *registrar)
-{
-    std::cerr << "CommandRegistry::addRegistrar for view name \""
-              << registrar->getViewName() << "\"" << std::endl;
-    m_registrars[registrar->getViewName()].push_back(registrar);
-}
+//void
+//CommandRegistry::addRegistrar(AbstractCommandRegistrar *registrar)
+//{
+//    std::cerr << "CommandRegistry::addRegistrar for view name \""
+//              << registrar->getViewName() << "\"" << std::endl;
+//    m_registrars[registrar->getViewName()].push_back(registrar);
+//}
 
 void
-CommandRegistry::addAction(QString name,
+CommandRegistry::addAction(QString title,
                            QString iconName,
                            const KShortcut &shortcut,
-                           QString identifier)
+                           QString actionName)
 {
     bool haveIcon = (iconName != "");
     QIconSet icon;
 
-    std::cerr << "Adding action: " << name << ", " << iconName << ", " << shortcut << ", " << identifier << std::endl;
+    std::cerr << "Adding action: " << title << ", " << iconName << ", " << shortcut << ", " << actionName << std::endl;
 
     if (haveIcon) {
         QString pixmapDir =
@@ -90,20 +90,20 @@ CommandRegistry::addAction(QString name,
     }
 
     if (haveIcon) {
-        new KAction(name,
+        new KAction(title,
                     icon,
                     shortcut,
                     this,
                     SLOT(slotInvokeCommand()),
                     m_view->actionCollection(),
-                    identifier);
+                    actionName);
     } else {
-        new KAction(name,
+        new KAction(title,
                     shortcut,
                     this,
                     SLOT(slotInvokeCommand()),
                     m_view->actionCollection(),
-                    identifier);
+                    actionName);
     }
 }
 
@@ -111,11 +111,11 @@ void
 CommandRegistry::slotInvokeCommand()
 {
     const QObject *s = sender();
-    QString identifier = s->name();
+    QString actionName = s->name();
     
-    if (m_builders.find(identifier) == m_builders.end()) {
-        std::cerr << "CommandRegistry::slotInvokeCommand: Unknown command \""
-                  << identifier << "\"" << std::endl;
+    if (m_builders.find(actionName) == m_builders.end()) {
+        std::cerr << "CommandRegistry::slotInvokeCommand: Unknown actionName \""
+                  << actionName << "\"" << std::endl;
         return;
     }
 
@@ -125,7 +125,8 @@ CommandRegistry::slotInvokeCommand()
                   << std::endl;
     }
 
-    m_view->addCommandToHistory(m_builders[identifier]->build(*selection));
+    m_view->addCommandToHistory(m_builders[actionName]->build(actionName,
+                                                              *selection));
 }
 
 }

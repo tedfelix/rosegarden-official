@@ -31,22 +31,94 @@
 #include "base/Segment.h"
 #include "base/Selection.h"
 #include "base/Sets.h"
+#include "misc/Strings.h"
 #include "document/BasicSelectionCommand.h"
+#include "gui/general/CommandRegistry.h" //!!! move
 #include <qstring.h>
 
 
 namespace Rosegarden
 {
 
-QString
-AddFingeringMarkCommand::getGlobalName(QString fingering)
+void
+AddFingeringMarkCommand::registerCommand(CommandRegistry *r,
+                                         std::string fingering)
 {
-    if (fingering == "")
+    r->registerCommand
+        (getGlobalName(fingering), "",
+         getShortcut(fingering), getActionName(fingering),
+         new ArgumentAndSelectionCommandBuilder<AddFingeringMarkCommand>());
+}
+
+void
+AddFingeringMarkCommand::registerStandardCommands(CommandRegistry *r)
+{
+    std::vector<std::string> fingerings(getStandardFingerings());
+    for (int i = 0; i < fingerings.size(); ++i) {
+        registerCommand(r, fingerings[i]);
+    }
+}
+
+QString
+AddFingeringMarkCommand::getGlobalName(std::string fingering)
+{
+    if (fingering == "") {
         return i18n("Add Other &Fingering...");
-    else if (fingering == "0")
+    } else if (fingering == "0") {
         return i18n("Add Fingering &0 (Thumb)");
-    else
-        return i18n("Add Fingering &%1").arg(fingering);
+    } else {
+        return i18n("Add Fingering &%1").arg(strtoqstr(fingering));
+    }
+}
+
+QString
+AddFingeringMarkCommand::getActionName(std::string fingering)
+{
+    QString base = "add_fingering_%1";
+    if (fingering == "+") {
+        return base.arg("plus");
+    } else {
+        return base.arg(strtoqstr(fingering));
+    }
+}    
+
+QString
+AddFingeringMarkCommand::getShortcut(std::string fingering)
+{
+    QString base = "Alt+%1";
+    if (fingering == "+") {
+        return base.arg(9);
+    } else {
+        return base.arg(strtoqstr(fingering));
+    }
+}    
+
+std::string
+AddFingeringMarkCommand::getArgument(QString actionName)
+{
+    QString pfx = "add_fingering_";
+    if (actionName.startsWith(pfx)) {
+        QString remainder = actionName.right(actionName.length() - pfx.length());
+        if (remainder == "plus") {
+            return "+";
+        } else {
+            return qstrtostr(remainder);
+        }
+    }
+}
+
+std::vector<std::string>
+AddFingeringMarkCommand::getStandardFingerings()
+{
+    std::vector<std::string> fingerings;
+    fingerings.push_back("0");
+    fingerings.push_back("1");
+    fingerings.push_back("2");
+    fingerings.push_back("3");
+    fingerings.push_back("4");
+    fingerings.push_back("5");
+    fingerings.push_back("+");
+    return fingerings;
 }
 
 void
@@ -91,7 +163,7 @@ AddFingeringMarkCommand::modifySegment()
                         Marks::getFingeringMark(***ci) ==
                         Marks::NoMark) {
                     Marks::addMark
-                    (***ci, Marks::getFingeringMark(m_text), true);
+                    (***ci, Marks::getFingeringMark(m_fingering), true);
                     attempt = 2;
                 }
 

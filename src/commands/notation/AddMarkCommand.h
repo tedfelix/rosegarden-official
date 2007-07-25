@@ -42,7 +42,7 @@ class AddMarkCommand : public BasicSelectionCommand
 {
 public:
     AddMarkCommand(Mark mark,
-                            EventSelection &selection) :
+                   EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(mark), selection, true),
         m_selection(&selection), m_mark(mark) { }
 
