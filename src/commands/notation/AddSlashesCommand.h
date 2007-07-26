@@ -30,21 +30,21 @@
 #include <klocale.h>
 
 
-
-
 namespace Rosegarden
 {
 
 class EventSelection;
-
+class CommandRegistry;
 
 class AddSlashesCommand : public BasicSelectionCommand
 {
 public:
-    AddSlashesCommand(int number,
-                      EventSelection &selection) :
+    AddSlashesCommand(int number, EventSelection &selection) :
         BasicSelectionCommand(i18n("Slashes"), selection, true),
         m_selection(&selection), m_number(number) { }
+
+    static int getArgument(QString actionName, QWidget *);
+    static void registerCommand(CommandRegistry *r);
 
 protected:
     virtual void modifySegment();

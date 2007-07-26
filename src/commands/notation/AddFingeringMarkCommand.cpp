@@ -33,30 +33,28 @@
 #include "base/Sets.h"
 #include "misc/Strings.h"
 #include "document/BasicSelectionCommand.h"
-#include "gui/general/CommandRegistry.h" //!!! move
+#include "document/CommandRegistry.h"
 #include <qstring.h>
+#include <klineeditdlg.h> //!!!
 
 
 namespace Rosegarden
 {
 
 void
-AddFingeringMarkCommand::registerCommand(CommandRegistry *r,
-                                         std::string fingering)
-{
-    r->registerCommand
-        (getGlobalName(fingering), "",
-         getShortcut(fingering), getActionName(fingering),
-         new ArgumentAndSelectionCommandBuilder<AddFingeringMarkCommand>());
-}
-
-void
-AddFingeringMarkCommand::registerStandardCommands(CommandRegistry *r)
+AddFingeringMarkCommand::registerCommand(CommandRegistry *r)
 {
     std::vector<std::string> fingerings(getStandardFingerings());
     for (int i = 0; i < fingerings.size(); ++i) {
-        registerCommand(r, fingerings[i]);
+        std::string fingering = fingerings[i];
+        r->registerCommand
+            (getGlobalName(fingering), "",
+             getShortcut(fingering), getActionName(fingering),
+             new ArgumentAndSelectionCommandBuilder<AddFingeringMarkCommand>());
     }
+    r->registerCommand
+        (getGlobalName(), "", "", getActionName(),
+         new ArgumentAndSelectionCommandBuilder<AddFingeringMarkCommand>());
 }
 
 QString
@@ -74,6 +72,9 @@ AddFingeringMarkCommand::getGlobalName(std::string fingering)
 QString
 AddFingeringMarkCommand::getActionName(std::string fingering)
 {
+    if (fingering == "") {
+        return "add_fingering_mark";
+    }
     QString base = "add_fingering_%1";
     if (fingering == "+") {
         return base.arg("plus");
@@ -85,6 +86,9 @@ AddFingeringMarkCommand::getActionName(std::string fingering)
 QString
 AddFingeringMarkCommand::getShortcut(std::string fingering)
 {
+    if (fingering == "") {
+        return "";
+    }
     QString base = "Alt+%1";
     if (fingering == "+") {
         return base.arg(9);
@@ -94,12 +98,19 @@ AddFingeringMarkCommand::getShortcut(std::string fingering)
 }    
 
 std::string
-AddFingeringMarkCommand::getArgument(QString actionName)
+AddFingeringMarkCommand::getArgument(QString actionName,
+                                     QWidget *dialogParent)
 {
     QString pfx = "add_fingering_";
     if (actionName.startsWith(pfx)) {
         QString remainder = actionName.right(actionName.length() - pfx.length());
-        if (remainder == "plus") {
+        if (remainder == "mark") {
+            bool ok = false;
+            QString txt = KLineEditDlg::getText(i18n("Fingering: "), "", &ok,
+                                                dialogParent);
+            if (!ok) throw CommandCancelled();
+            else return txt;
+        } else if (remainder == "plus") {
             return "+";
         } else {
             return qstrtostr(remainder);
@@ -127,8 +138,7 @@ AddFingeringMarkCommand::modifySegment()
     EventSelection::eventcontainer::iterator i;
     Segment &segment(m_selection->getSegment());
 
-    std::set
-        <Event *> done;
+    std::set<Event *> done;
 
     for (i = m_selection->getSegmentEvents().begin();
             i != m_selection->getSegmentEvents().end(); ++i) {

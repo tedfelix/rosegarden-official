@@ -31,6 +31,7 @@
 #include <qstring.h>
 #include <vector>
 #include "base/Event.h"
+#include "document/CommandRegistry.h"
 
 
 class QWidget;
@@ -55,7 +56,7 @@ class Event;
 class EditToolBox;
 class EditTool;
 
-
+ 
 class EditViewBase : public KDockMainWindow
 {
 

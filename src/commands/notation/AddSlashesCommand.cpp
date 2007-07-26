@@ -27,11 +27,36 @@
 
 #include "base/Selection.h"
 #include "document/BasicSelectionCommand.h"
+#include "document/CommandRegistry.h"
 #include "gui/editors/notation/NotationProperties.h"
 
 
 namespace Rosegarden
 {
+
+void
+AddSlashesCommand::registerCommand(CommandRegistry *r)
+{
+    static QString slashTitles[] = {
+        i18n("&None"), "&1", "&2", "&3", "&4", "&5"
+    };
+
+    for (int i = 0; i <= 5; ++i) {
+        r->registerCommand
+            (slashTitles[i], "", "", QString("slashes_%1").arg(i),
+             new ArgumentAndSelectionCommandBuilder<AddSlashesCommand>());
+    }
+}
+
+int
+AddSlashesCommand::getArgument(QString actionName, QWidget *)
+{
+    QString pfx("slashes_");
+    if (actionName.startsWith(pfx)) {
+        return actionName.right(actionName.length() - pfx.length()).toInt();
+    }
+    return 0;
+}
 
 void
 AddSlashesCommand::modifySegment()
@@ -44,8 +69,7 @@ AddSlashesCommand::modifySegment()
         if (m_number < 1) {
             (*i)->unset(NotationProperties::SLASHES);
         } else {
-            (*i)->set
-            <Int>(NotationProperties::SLASHES, m_number);
+            (*i)->set<Int>(NotationProperties::SLASHES, m_number);
         }
     }
 }

@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -23,42 +22,44 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ADJUSTMENUMAKECHORDCOMMAND_H_
-#define _RG_ADJUSTMENUMAKECHORDCOMMAND_H_
+#include "CommandRegistry.h"
 
-#include "document/BasicSelectionCommand.h"
-#include <qstring.h>
-#include <klocale.h>
+#include <qiconset.h>
+#include <qpixmap.h>
+#include <qfile.h>
 
-namespace Rosegarden
+#include <kglobal.h>
+
+namespace Rosegarden {
+
+CommandRegistry::CommandRegistry()
 {
+}
 
-class EventSelection;
-class CommandRegistry;
-
-class MakeChordCommand : public BasicSelectionCommand
+CommandRegistry::~CommandRegistry()
 {
-public:
-    MakeChordCommand(EventSelection &selection) :
-        BasicSelectionCommand(getGlobalName(), selection, true),
-        m_selection(&selection) { }
+    for (ActionBuilderMap::iterator i = m_builders.begin();
+         i != m_builders.end(); ++i) {
+        delete i->second;
+    }
+}
 
-    static QString getGlobalName() { return i18n("Make &Chord"); }
+void
+CommandRegistry::slotInvokeCommand()
+{
+    const QObject *s = sender();
+    QString actionName = s->name();
+    
+    if (m_builders.find(actionName) == m_builders.end()) {
+        std::cerr << "CommandRegistry::slotInvokeCommand: Unknown actionName \""
+                  << actionName << "\"" << std::endl;
+        return;
+    }
 
-    static void registerCommand(CommandRegistry *r);
-
-protected:
-    virtual void modifySegment();
-
-private:
-    EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
-};    
-
-
-// Transforms menu commands
-
-
+    invokeCommand(actionName);
+}
 
 }
 
-#endif
+#include "CommandRegistry.moc"
+

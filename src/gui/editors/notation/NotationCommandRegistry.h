@@ -25,12 +25,11 @@
 #ifndef _RG_NOTATIONCOMMANDREGISTRY_H_
 #define _RG_NOTATIONCOMMANDREGISTRY_H_
 
-#include "gui/general/CommandRegistry.h"
+#include "gui/general/EditViewCommandRegistry.h"
 
 namespace Rosegarden {
 
-
-class NotationCommandRegistry : public CommandRegistry
+class NotationCommandRegistry : public EditViewCommandRegistry
 {
 public:
     NotationCommandRegistry(EditView *v);

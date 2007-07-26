@@ -25,9 +25,6 @@
 #ifndef _RG_COMMANDREGISTRY_H_
 #define _RG_COMMANDREGISTRY_H_
 
-#include "document/BasicSelectionCommand.h"
-#include "EditView.h"
-
 #include <qobject.h>
 #include <qstring.h>
 #include <qnamespace.h>
@@ -39,24 +36,51 @@
 
 #include <iostream>
 
+#include "base/Exception.h"
+
 namespace Rosegarden {
 
-class EditView;
-
 //!!! constness
+class EventSelection;
+
+class CommandCancelled : public Exception
+{
+public:
+    CommandCancelled() : Exception("") { }
+};
+
+class CommandFailed : public Exception
+{
+public:
+    CommandFailed(std::string message) : Exception(message) { }
+};
 
 class AbstractCommandBuilder
 {
 public:
-    virtual KCommand *build(QString actionName, EventSelection &s) = 0;
+    // may throw CommandCancelled
+    virtual KCommand *build(QString actionName,
+                            EventSelection &s,
+                            QWidget *dialogParent) = 0;
+
+    virtual EventSelection *getSubsequentSelection(KCommand *) { return 0; }
 };
 
 template <typename Command>
-class BasicSelectionCommandBuilder : public AbstractCommandBuilder
+class SelectionCommandBuilder : public AbstractCommandBuilder
 {
 public:
-    virtual KCommand *build(QString /* actionName */, EventSelection &s) {
+    // may throw CommandCancelled
+    virtual KCommand *build(QString /* actionName */,
+                            EventSelection &s,
+                            QWidget *dialogParent) {
         return new Command(s);
+    }
+
+    virtual EventSelection *getSubsequentSelection(KCommand *c) {
+        Command *command = dynamic_cast<Command *>(c);
+        if (command) return command->getSubsequentSelection();
+        return 0;
     }
 };
 
@@ -64,8 +88,19 @@ template <typename Command>
 class ArgumentAndSelectionCommandBuilder : public AbstractCommandBuilder
 {
 public:
-    virtual KCommand *build(QString actionName, EventSelection &s) {
-        return new Command(Command::getArgument(actionName), s);
+    // may throw CommandCancelled
+    virtual KCommand *build(QString actionName,
+                            EventSelection &s,
+                            QWidget *dialogParent) {
+        return new Command(Command::getArgument(actionName,
+                                                dialogParent),
+                           s);
+    }
+
+    virtual EventSelection *getSubsequentSelection(KCommand *c) {
+        Command *command = dynamic_cast<Command *>(c);
+        if (command) return command->getSubsequentSelection();
+        return 0;
     }
 };
 
@@ -74,11 +109,8 @@ class CommandRegistry : public QObject
     Q_OBJECT
 
 public:
-    CommandRegistry(EditView *v);
-
     virtual ~CommandRegistry();
 
-//    template <typename Builder>
     void registerCommand(QString title,
                          QString icon,
                          const KShortcut &shortcut,
@@ -89,84 +121,30 @@ public:
                   shortcut,
                   actionName);
 
-//        m_builders[identifier] = new Builder();
         m_builders[actionName] = builder;
     }
-
-//    static void addRegistrar(AbstractCommandRegistrar *);
 
 public slots:
     void slotInvokeCommand();
 
 protected:
-//    typedef std::vector<AbstractCommandRegistrar *> RegistrarList;
-//    typedef std::map<QString, RegistrarList> ViewRegistrarMap;
-//    static ViewRegistrarMap m_registrars;
+    CommandRegistry();
 
     typedef std::map<QString, AbstractCommandBuilder *> ActionBuilderMap;
     ActionBuilderMap m_builders;
 
-    void addAction(QString title,
-                   QString icon,
-                   const KShortcut &shortcut, 
-                   QString actionName);
+    virtual void addAction(QString title,
+                           QString icon,
+                           const KShortcut &shortcut, 
+                           QString actionName) = 0;
 
-    EditView *m_view;
+    virtual void invokeCommand(QString actionName) = 0;
 
 private:
     CommandRegistry(const CommandRegistry &);
     CommandRegistry &operator=(const CommandRegistry &);
     
 };
-/*
-template <typename C>
-class NotationCommandRegistrar : public AbstractCommandRegistrar
-{
-public:
-    virtual QString getViewName() { return "notationview"; }
-    virtual void registerCommand(CommandRegistry *r) {
-        C::registerCommand(r);
-    }
-};
-
-class CommandActivator { };
-
-template <typename C>
-class NotationCommandActivator : public CommandActivator
-{
-public:
-    NotationCommandActivator() {
-        std::cerr << "NotationCommandActivator" << std::endl;
-        CommandRegistry::addRegistrar(new NotationCommandRegistrar<C>);
-        m_identifier = 0xdeafbeef;
-    }
-
-    int m_identifier;
-};
-
-template <typename C>
-class MatrixCommandRegistrar : public AbstractCommandRegistrar
-{
-public:
-    virtual QString getViewName() { return "matrixview"; }
-
-    virtual void registerCommand(CommandRegistry *r) {
-        C::registerCommand(r);
-    }
-};
-
-template <typename C>
-class EventListCommandRegistrar : public AbstractCommandRegistrar
-{
-public:
-    virtual QString getViewName() { return "eventview"; }
-
-    virtual void registerCommand(CommandRegistry *r) {
-        C::registerCommand(r);
-    }
-};
-*/
-//!!! main view is not an EditView, but it's probably less relevant here
 
 }
 

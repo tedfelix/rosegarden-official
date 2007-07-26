@@ -32,6 +32,7 @@
 #include "base/SegmentNotationHelper.h"
 #include "document/BasicCommand.h"
 #include "base/BaseProperties.h"
+#include "base/Selection.h"
 #include <qstring.h>
 
 
@@ -60,6 +61,14 @@ KeyInsertionCommand::KeyInsertionCommand(Segment &segment, timeT time,
 KeyInsertionCommand::~KeyInsertionCommand()
 {
     // nothing
+}
+
+EventSelection *
+KeyInsertionCommand::getSubsequentSelection()
+{
+    EventSelection *selection = new EventSelection(getSegment());
+    selection->addEvent(getLastInsertedEvent());
+    return selection;
 }
 
 void

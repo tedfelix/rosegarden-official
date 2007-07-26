@@ -73,13 +73,9 @@
 #include "commands/edit/SetNoteTypeCommand.h"
 #include "commands/edit/SetTriggerCommand.h"
 #include "commands/edit/TransposeCommand.h"
-#include "commands/notation/AddFingeringMarkCommand.h"
-#include "commands/notation/AddIndicationCommand.h"
 #include "commands/notation/AddMarkCommand.h"
-#include "commands/notation/AddSlashesCommand.h"
 #include "commands/notation/AddTextMarkCommand.h"
 #include "commands/notation/AutoBeamCommand.h"
-//!!!#include "commands/notation/BeamCommand.h"
 #include "commands/notation/BreakCommand.h"
 #include "commands/notation/ChangeSlurPositionCommand.h"
 #include "commands/notation/ChangeStemsCommand.h"
@@ -94,7 +90,6 @@
 #include "commands/notation/InterpretCommand.h"
 #include "commands/notation/KeyInsertionCommand.h"
 #include "commands/notation/MakeAccidentalsCautionaryCommand.h"
-  //!!!#include "commands/notation/MakeChordCommand.h"
 #include "commands/notation/MakeNotesViableCommand.h"
 #include "commands/notation/MultiKeyInsertionCommand.h"
 #include "commands/notation/NormalizeRestsCommand.h"
@@ -173,6 +168,7 @@
 #include "RestInserter.h"
 #include "sound/MappedEvent.h"
 #include "TextInserter.h"
+#include "NotationCommandRegistry.h"
 #include <kaction.h>
 #include <kcombobox.h>
 #include <kconfig.h>
@@ -209,10 +205,6 @@
 #include <qwidget.h>
 #include <qvalidator.h>
 #include <algorithm>
-
-
-#include "NotationCommandRegistry.h" //!!!
-//#include "commands/notation/MakeChordCommand.h" //!!!
 
 
 namespace Rosegarden
@@ -430,7 +422,6 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_hlayout->setNotePixmapFactory(m_notePixmapFactory);
     m_vlayout->setNotePixmapFactory(m_notePixmapFactory);
 
-//!!!kiftsgate
     m_commandRegistry = new NotationCommandRegistry(this);
 
     setupActions();
@@ -1724,10 +1715,6 @@ void NotationView::setupActions()
     icon = QIconSet
            (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                                          ("group-beam")));
-/*!!! kiftsgate
-    new KAction(BeamCommand::getGlobalName(), icon, Key_B + CTRL, this,
-                SLOT(slotGroupBeam()), actionCollection(), "beam");
-*/
 
     new KAction(AutoBeamCommand::getGlobalName(), 0, this,
                 SLOT(slotGroupAutoBeam()), actionCollection(), "auto_beam");
@@ -1778,68 +1765,6 @@ void NotationView::setupActions()
     new KAction(UnGraceCommand::getGlobalName(), 0, this,
                 SLOT(slotGroupUnGrace()), actionCollection(), "ungrace");
 
-    icon = QIconSet
-           (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                                         ("group-slur")));
-
-    new KAction(AddIndicationCommand::getGlobalName
-                (Indication::Slur), icon, Key_ParenRight, this,
-                SLOT(slotGroupSlur()), actionCollection(), "slur");
-
-    new KAction(AddIndicationCommand::getGlobalName
-                (Indication::PhrasingSlur), 0, Key_ParenRight + CTRL, this,
-                SLOT(slotGroupPhrasingSlur()), actionCollection(), "phrasing_slur");
-
-    icon = QIconSet
-           (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                                         ("group-glissando")));
-
-    new KAction(AddIndicationCommand::getGlobalName
-                (Indication::Glissando), icon, 0, this,
-                SLOT(slotGroupGlissando()), actionCollection(), "glissando");
-
-    icon = QIconSet
-           (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                                         ("group-crescendo")));
-
-    new KAction(AddIndicationCommand::getGlobalName
-                (Indication::Crescendo), icon, Key_Less, this,
-                SLOT(slotGroupCrescendo()), actionCollection(), "crescendo");
-
-    icon = QIconSet
-           (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                                         ("group-decrescendo")));
-
-    new KAction(AddIndicationCommand::getGlobalName
-                (Indication::Decrescendo), icon, Key_Greater, this,
-                SLOT(slotGroupDecrescendo()), actionCollection(), "decrescendo");
-
-    new KAction(AddIndicationCommand::getGlobalName
-                (Indication::QuindicesimaUp), 0, 0, this,
-                SLOT(slotGroupOctave2Up()), actionCollection(), "octave_2up");
-
-    icon = QIconSet
-           (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                                         ("group-ottava")));
-
-    new KAction(AddIndicationCommand::getGlobalName
-                (Indication::OttavaUp), icon, 0, this,
-                SLOT(slotGroupOctaveUp()), actionCollection(), "octave_up");
-
-    new KAction(AddIndicationCommand::getGlobalName
-                (Indication::OttavaDown), 0, 0, this,
-                SLOT(slotGroupOctaveDown()), actionCollection(), "octave_down");
-
-    new KAction(AddIndicationCommand::getGlobalName
-                (Indication::QuindicesimaDown), 0, 0, this,
-                SLOT(slotGroupOctave2Down()), actionCollection(), "octave_2down");
-/*!!! experimental for kiftsgate
-    icon = QIconSet
-           (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                                         ("group-chord")));
-    new KAction(MakeChordCommand::getGlobalName(), icon, 0, this,
-                SLOT(slotGroupMakeChord()), actionCollection(), "make_chord");
-*/
     // setup Transforms menu
     new KAction(NormalizeRestsCommand::getGlobalName(), Key_N + CTRL, this,
                 SLOT(slotTransformsNormalizeRests()), actionCollection(),
@@ -2031,39 +1956,6 @@ void NotationView::setupActions()
                 SLOT(slotMarksAddTextMark()), actionCollection(),
                 "add_text_mark");
 
-/*!!!kiftsgate
-    new KAction(AddFingeringMarkCommand::getGlobalName("0"), 0, Key_0 + ALT, this,
-                SLOT(slotMarksAddFingeringMarkFromAction()), actionCollection(),
-                "add_fingering_0");
-
-    new KAction(AddFingeringMarkCommand::getGlobalName("1"), 0, Key_1 + ALT, this,
-                SLOT(slotMarksAddFingeringMarkFromAction()), actionCollection(),
-                "add_fingering_1");
-
-    new KAction(AddFingeringMarkCommand::getGlobalName("2"), 0, Key_2 + ALT, this,
-                SLOT(slotMarksAddFingeringMarkFromAction()), actionCollection(),
-                "add_fingering_2");
-
-    new KAction(AddFingeringMarkCommand::getGlobalName("3"), 0, Key_3 + ALT, this,
-                SLOT(slotMarksAddFingeringMarkFromAction()), actionCollection(),
-                "add_fingering_3");
-
-    new KAction(AddFingeringMarkCommand::getGlobalName("4"), 0, Key_4 + ALT, this,
-                SLOT(slotMarksAddFingeringMarkFromAction()), actionCollection(),
-                "add_fingering_4");
-
-    new KAction(AddFingeringMarkCommand::getGlobalName("5"), 0, Key_5 + ALT, this,
-                SLOT(slotMarksAddFingeringMarkFromAction()), actionCollection(),
-                "add_fingering_5");
-
-    new KAction(AddFingeringMarkCommand::getGlobalName("+"), 0, Key_9 + ALT, this,
-                SLOT(slotMarksAddFingeringMarkFromAction()), actionCollection(),
-                "add_fingering_plus");
-*/
-    new KAction(AddFingeringMarkCommand::getGlobalName(), 0, 0, this,
-                SLOT(slotMarksAddFingeringMark()), actionCollection(),
-                "add_fingering_mark");
-
     new KAction(RemoveMarksCommand::getGlobalName(), 0, this,
                 SLOT(slotMarksRemoveMarks()), actionCollection(),
                 "remove_marks");
@@ -2084,22 +1976,6 @@ void NotationView::setupActions()
                 SLOT(slotRemoveOrnament()), actionCollection(),
                 "remove_ornament");
 
-    static QString slashTitles[] = {
-                                       i18n("&None"), "&1", "&2", "&3", "&4", "&5"
-                                   };
-    for (int i = 0; i <= 5; ++i) {
-        new KAction(slashTitles[i], 0, this,
-                    SLOT(slotAddSlashes()), actionCollection(),
-                    QString("slashes_%1").arg(i));
-    }
-/*
-    new KAction(i18n("Add Fretboard"),
-                0,
-                this,
-                SLOT(slotAddFretboard()),
-                actionCollection(),
-                "add_fretboard");
-*/
     new KAction(ClefInsertionCommand::getGlobalName(), 0, this,
                 SLOT(slotEditAddClef()), actionCollection(),
                 "add_clef");
@@ -4750,17 +4626,7 @@ void NotationView::toggleNamedToolBar(const QString& toolBarName, bool* force)
     setSettingsDirty();
 
 }
-/*!!!kiftsgate
-void NotationView::slotGroupBeam()
-{
-    if (!m_currentEventSelection)
-        return ;
-    KTmpStatusMsg msg(i18n("Beaming group..."), this);
 
-    addCommandToHistory(new BeamCommand
-                        (*m_currentEventSelection));
-}
-*/
 void NotationView::slotGroupAutoBeam()
 {
     if (!m_currentEventSelection)
@@ -4887,90 +4753,6 @@ void NotationView::slotGroupUnGrace()
     addCommandToHistory(new UnGraceCommand(*m_currentEventSelection));
 }
 
-void NotationView::slotGroupSlur()
-{
-    KTmpStatusMsg msg(i18n("Adding slur..."), this);
-    slotAddIndication(Indication::Slur, i18n("slur"));
-}
-
-void NotationView::slotGroupPhrasingSlur()
-{
-    KTmpStatusMsg msg(i18n("Adding phrasing slur..."), this);
-    slotAddIndication(Indication::PhrasingSlur, i18n("phrasing slur"));
-}
-
-void NotationView::slotGroupGlissando()
-{
-    KTmpStatusMsg msg(i18n("Adding glissando..."), this);
-    slotAddIndication(Indication::Glissando, i18n("glissando"));
-}
-
-void NotationView::slotGroupCrescendo()
-{
-    KTmpStatusMsg msg(i18n("Adding crescendo..."), this);
-    slotAddIndication(Indication::Crescendo, i18n("dynamic"));
-}
-
-void NotationView::slotGroupDecrescendo()
-{
-    KTmpStatusMsg msg(i18n("Adding decrescendo..."), this);
-    slotAddIndication(Indication::Decrescendo, i18n("dynamic"));
-}
-
-void NotationView::slotGroupOctave2Up()
-{
-    KTmpStatusMsg msg(i18n("Adding octave..."), this);
-    slotAddIndication(Indication::QuindicesimaUp, i18n("ottava"));
-}
-
-void NotationView::slotGroupOctaveUp()
-{
-    KTmpStatusMsg msg(i18n("Adding octave..."), this);
-    slotAddIndication(Indication::OttavaUp, i18n("ottava"));
-}
-
-void NotationView::slotGroupOctaveDown()
-{
-    KTmpStatusMsg msg(i18n("Adding octave..."), this);
-    slotAddIndication(Indication::OttavaDown, i18n("ottava"));
-}
-
-void NotationView::slotGroupOctave2Down()
-{
-    KTmpStatusMsg msg(i18n("Adding octave..."), this);
-    slotAddIndication(Indication::QuindicesimaDown, i18n("ottava"));
-}
-
-void NotationView::slotAddIndication(std::string type, QString desc)
-{
-    if (!m_currentEventSelection)
-        return ;
-
-    AddIndicationCommand *command =
-        new AddIndicationCommand(type, *m_currentEventSelection);
-
-    if (command->canExecute()) {
-        addCommandToHistory(command);
-        setSingleSelectedEvent(m_currentEventSelection->getSegment(),
-                               command->getLastInsertedEvent());
-    } else {
-        KMessageBox::sorry(this, i18n("Can't add overlapping %1 indications").arg(desc)); // TODO PLURAL - how many 'indications' ?
-        delete command;
-    }
-}
-/*!!!kiftsgate
-void NotationView::slotGroupMakeChord()
-{
-    if (!m_currentEventSelection)
-        return ;
-    KTmpStatusMsg msg(i18n("Making chord..."), this);
-
-    MakeChordCommand *command =
-        new MakeChordCommand(*m_currentEventSelection);
-
-    addCommandToHistory(command);
-}
-*/
 void NotationView::slotTransformsNormalizeRests()
 {
     if (!m_currentEventSelection)
@@ -5473,19 +5255,6 @@ void NotationView::slotAddDotNotationOnly()
     addCommandToHistory(new AddDotCommand(*m_currentEventSelection, true));
 }
 
-void NotationView::slotAddSlashes()
-{
-    const QObject *s = sender();
-    if (!m_currentEventSelection)
-        return ;
-
-    QString name = s->name();
-    int slashes = name.right(1).toInt();
-
-    addCommandToHistory(new AddSlashesCommand
-                        (slashes, *m_currentEventSelection));
-}
-
 void NotationView::slotMarksAddTextMark()
 {
     if (m_currentEventSelection) {
@@ -5496,39 +5265,6 @@ void NotationView::slotMarksAddTextMark()
         if (pressedOK) {
             addCommandToHistory(new AddTextMarkCommand
                                 (qstrtostr(txt), *m_currentEventSelection));
-        }
-    }
-}
-
-void NotationView::slotMarksAddFingeringMark()
-{
-    if (m_currentEventSelection) {
-        bool pressedOK = false;
-
-        QString txt = KLineEditDlg::getText(i18n("Fingering: "), "", &pressedOK, this);
-
-        if (pressedOK) {
-            addCommandToHistory(new AddFingeringMarkCommand
-                                (qstrtostr(txt), *m_currentEventSelection));
-        }
-    }
-}
-
-void NotationView::slotMarksAddFingeringMarkFromAction()
-{
-    const QObject *s = sender();
-    QString name = s->name();
-
-    if (name.left(14) == "add_fingering_") {
-
-        QString fingering = name.right(name.length() - 14);
-
-        if (fingering == "plus")
-            fingering = "+";
-
-        if (m_currentEventSelection) {
-            addCommandToHistory(new AddFingeringMarkCommand
-                                (qstrtostr(fingering), *m_currentEventSelection));
         }
     }
 }

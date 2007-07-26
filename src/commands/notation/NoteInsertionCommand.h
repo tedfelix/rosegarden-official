@@ -54,6 +54,7 @@ public:
                          NoteStyleName noteStyle);
     virtual ~NoteInsertionCommand();
 
+    virtual EventSelection *getSubsequentSelection();
     Event *getLastInsertedEvent() { return m_lastInsertedEvent; }
 
 protected:

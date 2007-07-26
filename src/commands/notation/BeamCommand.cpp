@@ -28,6 +28,7 @@
 #include "base/NotationTypes.h"
 #include "base/Selection.h"
 #include "document/BasicSelectionCommand.h"
+#include "document/CommandRegistry.h"
 #include "base/BaseProperties.h"
 #include <qstring.h>
 
@@ -36,6 +37,14 @@ namespace Rosegarden
 {
 
 using namespace BaseProperties;
+
+void
+BeamCommand::registerCommand(CommandRegistry *r)
+{
+    r->registerCommand //<BeamCommand>
+        (getGlobalName(), "group-beam", "Ctrl+B", "beam",
+         new SelectionCommandBuilder<BeamCommand>());
+}
 
 void
 BeamCommand::modifySegment()

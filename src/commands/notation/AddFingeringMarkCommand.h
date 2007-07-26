@@ -49,15 +49,14 @@ public:
         m_selection(&selection), m_fingering(fingering) { }
 
     static QString getGlobalName(std::string fingering = "");
-    static QString getActionName(std::string fingering);
-    static QString getShortcut(std::string fingering);
+    static QString getActionName(std::string fingering = "");
+    static QString getShortcut(std::string fingering = "");
 
-    static std::string getArgument(QString actionName);
+    static std::string getArgument(QString actionName, QWidget *);
 
     static std::vector<std::string> getStandardFingerings();
 
-    static void registerCommand(CommandRegistry *r, std::string fingering);
-    static void registerStandardCommands(CommandRegistry *r);
+    static void registerCommand(CommandRegistry *r);
 
 protected:
     virtual void modifySegment();

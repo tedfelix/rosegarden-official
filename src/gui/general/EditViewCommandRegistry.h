@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -23,42 +22,33 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ADJUSTMENUMAKECHORDCOMMAND_H_
-#define _RG_ADJUSTMENUMAKECHORDCOMMAND_H_
+#ifndef _RG_EDITVIEWCOMMANDREGISTRY_H_
+#define _RG_EDITVIEWCOMMANDREGISTRY_H_
 
-#include "document/BasicSelectionCommand.h"
-#include <qstring.h>
-#include <klocale.h>
+#include "document/CommandRegistry.h"
 
-namespace Rosegarden
-{
+namespace Rosegarden {
 
-class EventSelection;
-class CommandRegistry;
+class EditView;
 
-class MakeChordCommand : public BasicSelectionCommand
+class EditViewCommandRegistry : public CommandRegistry
 {
 public:
-    MakeChordCommand(EventSelection &selection) :
-        BasicSelectionCommand(getGlobalName(), selection, true),
-        m_selection(&selection) { }
-
-    static QString getGlobalName() { return i18n("Make &Chord"); }
-
-    static void registerCommand(CommandRegistry *r);
+    EditViewCommandRegistry(EditView *v);
+    virtual ~EditViewCommandRegistry();
 
 protected:
-    virtual void modifySegment();
+    EditView *m_view;
 
-private:
-    EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
-};    
+    virtual void addAction(QString title,
+                           QString icon,
+                           const KShortcut &shortcut, 
+                           QString actionName);
 
-
-// Transforms menu commands
-
-
+    virtual void invokeCommand(QString actionName);
+};
 
 }
 
 #endif
+

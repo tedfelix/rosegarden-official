@@ -22,53 +22,30 @@
     COPYING included with this distribution for more information.
 */
 
-#include "CommandRegistry.h"
-#include "EditView.h"
+#include "EditViewCommandRegistry.h"
 
-#include <qiconset.h>
-#include <qpixmap.h>
-#include <qfile.h>
+#include "gui/general/EditView.h"
+#include "misc/Strings.h"
 
-#include <kglobal.h>
-
-namespace Rosegarden {
-
-//CommandRegistry::ViewRegistrarMap
-//CommandRegistry::m_registrars;
-
-CommandRegistry::CommandRegistry(EditView *view) :
-    m_view(view)
+namespace Rosegarden
 {
-    std::cerr << "CommandRegistry: view name \"" << m_view->name() << "\"" << std::endl;
-//    RegistrarList &registrars = m_registrars[m_view->name()];
-//    for (RegistrarList::iterator i = registrars.begin();
-//         i != registrars.end(); ++i) {
-//        std::cerr << "CommandRegistry: Registering command" << std::endl;
-//        (*i)->registerCommand(this);
-//    }
+
+EditViewCommandRegistry::EditViewCommandRegistry(EditView *v) :
+    m_view(v)
+{
 }
 
-CommandRegistry::~CommandRegistry()
+EditViewCommandRegistry::~EditViewCommandRegistry()
 {
-    for (ActionBuilderMap::iterator i = m_builders.begin();
-         i != m_builders.end(); ++i) {
-        delete i->second;
-    }
 }
 
-//void
-//CommandRegistry::addRegistrar(AbstractCommandRegistrar *registrar)
-//{
-//    std::cerr << "CommandRegistry::addRegistrar for view name \""
-//              << registrar->getViewName() << "\"" << std::endl;
-//    m_registrars[registrar->getViewName()].push_back(registrar);
-//}
 
+//!!! hoist these back up a level to a new intermediate class? EditViewCommandRegistry
 void
-CommandRegistry::addAction(QString title,
-                           QString iconName,
-                           const KShortcut &shortcut,
-                           QString actionName)
+EditViewCommandRegistry::addAction(QString title,
+                                   QString iconName,
+                                   const KShortcut &shortcut, 
+                                   QString actionName)
 {
     bool haveIcon = (iconName != "");
     QIconSet icon;
@@ -105,31 +82,36 @@ CommandRegistry::addAction(QString title,
                     m_view->actionCollection(),
                     actionName);
     }
-}
+}    
 
 void
-CommandRegistry::slotInvokeCommand()
+EditViewCommandRegistry::invokeCommand(QString actionName)
 {
-    const QObject *s = sender();
-    QString actionName = s->name();
-    
-    if (m_builders.find(actionName) == m_builders.end()) {
-        std::cerr << "CommandRegistry::slotInvokeCommand: Unknown actionName \""
-                  << actionName << "\"" << std::endl;
-        return;
-    }
-
     EventSelection *selection = m_view->getCurrentSelection();
     if (!selection) {
-        std::cerr << "CommandRegistry::slotInvokeCommand: No selection"
+        std::cerr << "EditViewCommandRegistry::slotInvokeCommand: No selection"
                   << std::endl;
     }
 
-    m_view->addCommandToHistory(m_builders[actionName]->build(actionName,
-                                                              *selection));
+    try {
+
+        KCommand *command = m_builders[actionName]->build
+            (actionName, *selection, m_view);
+
+        m_view->addCommandToHistory(command);
+
+        EventSelection *subsequentSelection = 
+            m_builders[actionName]->getSubsequentSelection(command);
+
+        if (subsequentSelection) {
+            m_view->setCurrentSelection(subsequentSelection);
+        }
+
+    } catch (CommandCancelled) {
+    } catch (CommandFailed f) {
+        KMessageBox::sorry(m_view, strtoqstr(f.getMessage()));
+    }
 }
 
 }
-
-#include "CommandRegistry.moc"
 

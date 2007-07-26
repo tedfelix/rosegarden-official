@@ -31,6 +31,7 @@
 #include "base/Segment.h"
 #include "base/SegmentNotationHelper.h"
 #include "document/BasicCommand.h"
+#include "base/Selection.h"
 
 
 namespace Rosegarden
@@ -48,6 +49,14 @@ TextInsertionCommand::TextInsertionCommand(Segment &segment, timeT time,
 TextInsertionCommand::~TextInsertionCommand()
 {
     // nothing
+}
+
+EventSelection *
+TextInsertionCommand::getSubsequentSelection()
+{
+    EventSelection *selection = new EventSelection(getSegment());
+    selection->addEvent(getLastInsertedEvent());
+    return selection;
 }
 
 void

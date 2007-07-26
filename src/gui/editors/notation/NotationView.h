@@ -464,7 +464,6 @@ public slots:
     void slotEditLyrics();
 
     /// group slots
-    //!!!    void slotGroupBeam();
     void slotGroupAutoBeam();
     void slotGroupBreak();
     void slotGroupSimpleTuplet();
@@ -473,17 +472,6 @@ public slots:
     void slotGroupUnTuplet();
     void slotGroupGrace();
     void slotGroupUnGrace();
-    void slotGroupSlur();
-    void slotGroupPhrasingSlur();
-    void slotGroupGlissando();
-    void slotGroupCrescendo();
-    void slotGroupDecrescendo();
-//!!!    void slotGroupMakeChord();
-    void slotGroupOctave2Up();
-    void slotGroupOctaveUp();
-    void slotGroupOctaveDown();
-    void slotGroupOctave2Down();
-    void slotAddIndication(std::string type, QString cat);
 
     /// transforms slots
     void slotTransformsNormalizeRests();
@@ -524,8 +512,6 @@ public slots:
 
     void slotAddMark();
     void slotMarksAddTextMark();
-    void slotMarksAddFingeringMark();
-    void slotMarksAddFingeringMarkFromAction();
     void slotMarksRemoveMarks();
     void slotMarksRemoveFingeringMarks();
     void slotMakeOrnament();
@@ -536,8 +522,6 @@ public slots:
     void slotSetNoteDurations(Note::Type, bool notationOnly);
     void slotAddDot();
     void slotAddDotNotationOnly();
-
-    void slotAddSlashes();
 
     void slotEditAddClef();
     void slotEditAddKeySignature();

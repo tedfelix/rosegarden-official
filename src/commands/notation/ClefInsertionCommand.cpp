@@ -33,6 +33,7 @@
 #include "base/SegmentNotationHelper.h"
 #include "base/BaseProperties.h"
 #include "document/BasicCommand.h"
+#include "base/Selection.h"
 #include <qstring.h>
 
 
@@ -59,6 +60,14 @@ ClefInsertionCommand::ClefInsertionCommand(Segment &segment, timeT time,
 ClefInsertionCommand::~ClefInsertionCommand()
 {
     // nothing
+}
+
+EventSelection *
+ClefInsertionCommand::getSubsequentSelection()
+{
+    EventSelection *selection = new EventSelection(getSegment());
+    selection->addEvent(getLastInsertedEvent());
+    return selection;
 }
 
 QString

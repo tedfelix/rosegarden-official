@@ -39,6 +39,7 @@ namespace Rosegarden
 
 class EventSelection;
 class Event;
+class CommandRegistry;
 
 
 class AddIndicationCommand : public BasicCommand
@@ -52,6 +53,8 @@ public:
     // another one of the same type
     bool canExecute();
 
+    EventSelection *getSubsequentSelection();
+
     Event *getLastInsertedEvent() {
         return m_lastInsertedEvent;
     }
@@ -60,6 +63,9 @@ public:
     }
 
     static QString getGlobalName(std::string indicationType);
+    static std::string getArgument(QString actionName, QWidget *);
+
+    static void registerCommand(CommandRegistry *r);
 
 protected:
     virtual void modifySegment();

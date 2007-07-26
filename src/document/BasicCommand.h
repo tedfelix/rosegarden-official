@@ -33,11 +33,10 @@
 
 class QString;
 
-
 namespace Rosegarden
 {
 
-
+class EventSelection;
 
 /**
  * BasicCommand is an abstract subclass of Command that manages undo,
@@ -60,6 +59,9 @@ public:
     timeT getStartTime() { return m_startTime; }
     timeT getEndTime() { return m_endTime; }
     virtual timeT getRelayoutEndTime();
+
+    /// events selected after command; 0 if no change / no meaningful selection
+    virtual EventSelection *getSubsequentSelection() { return 0; }
 
 protected:
     /**
@@ -85,8 +87,6 @@ protected:
     virtual void beginExecute();
 
 private:
-    //--------------- Data members ---------------------------------
-
     void copyTo(Segment *);
     void copyFrom(Segment *);
 

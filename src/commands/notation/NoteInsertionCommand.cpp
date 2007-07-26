@@ -35,6 +35,7 @@
 #include "gui/editors/notation/NotationProperties.h"
 #include "gui/editors/notation/NoteStyleFactory.h"
 #include "base/BaseProperties.h"
+#include "base/Selection.h"
 
 
 namespace Rosegarden
@@ -66,6 +67,14 @@ NoteInsertionCommand::NoteInsertionCommand(Segment &segment, timeT time,
 NoteInsertionCommand::~NoteInsertionCommand()
 {
     // nothing
+}
+
+EventSelection *
+NoteInsertionCommand::getSubsequentSelection()
+{
+    EventSelection *selection = new EventSelection(getSegment());
+    selection->addEvent(getLastInsertedEvent());
+    return selection;
 }
 
 timeT

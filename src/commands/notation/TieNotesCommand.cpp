@@ -30,6 +30,7 @@
 #include "base/Selection.h"
 #include "document/BasicSelectionCommand.h"
 #include "base/BaseProperties.h"
+#include "base/Selection.h"
 #include <qstring.h>
 
 

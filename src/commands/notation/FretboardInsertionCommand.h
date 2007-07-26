@@ -46,6 +46,7 @@ public:
                               const Guitar::Chord& chord);
     virtual ~FretboardInsertionCommand();
 
+    virtual EventSelection *getSubsequentSelection();
     Event *getLastInsertedEvent() { return m_lastInsertedEvent; }
 
 protected:

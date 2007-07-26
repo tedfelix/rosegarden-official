@@ -24,19 +24,26 @@
 
 #include "NotationCommandRegistry.h"
 
+#include "gui/general/EditView.h"
+
 #include "commands/notation/MakeChordCommand.h"
 #include "commands/notation/BeamCommand.h"
 #include "commands/notation/AddFingeringMarkCommand.h"
+#include "commands/notation/AddSlashesCommand.h"
+#include "commands/notation/AddIndicationCommand.h"
+
 
 namespace Rosegarden
 {
 
 NotationCommandRegistry::NotationCommandRegistry(EditView *v) :
-    CommandRegistry(v)
+    EditViewCommandRegistry(v)
 {
     MakeChordCommand::registerCommand(this);
     BeamCommand::registerCommand(this);
-    AddFingeringMarkCommand::registerStandardCommands(this);
+    AddFingeringMarkCommand::registerCommand(this);
+    AddSlashesCommand::registerCommand(this);
+    AddIndicationCommand::registerCommand(this);
 }
 
 NotationCommandRegistry::~NotationCommandRegistry()

@@ -33,6 +33,7 @@
 #include "base/SegmentNotationHelper.h"
 #include "base/Selection.h"
 #include "document/BasicCommand.h"
+#include "document/CommandRegistry.h"
 #include "gui/editors/notation/NotationProperties.h"
 #include <qstring.h>
 
@@ -40,22 +41,103 @@
 namespace Rosegarden
 {
 
-AddIndicationCommand::AddIndicationCommand(std::string indicationType,
-        EventSelection &selection) :
-        BasicCommand(getGlobalName(indicationType),
-                     selection.getSegment(),
-                     selection.getStartTime(),
-                     selection.getEndTime()),
-        m_indicationType(indicationType),
-        m_indicationDuration(selection.getEndTime() - selection.getStartTime()),
-        m_lastInsertedEvent(0)
+    static std::string standardIndications[] = {
+        Indication::Slur,
+        Indication::PhrasingSlur,
+        Indication::Glissando,
+        Indication::Crescendo,
+        Indication::Decrescendo,
+        Indication::QuindicesimaUp,
+        Indication::OttavaUp,
+        Indication::OttavaDown,
+        Indication::QuindicesimaDown
+    };
+    static const char *shortcuts[] = {
+        ")",
+        "Ctrl+)",
+        "",
+        "<",
+        ">",
+        "",
+        "",
+        "",
+        ""
+    };
+    static const char *icons[] = {
+        "group-slur",
+        "",
+        "group-glissando",
+        "group-crescendo",
+        "group-decrescendo",
+        "",
+        "group-ottava",
+        "",
+        ""
+    };
+    static const char *actionNames[] = {
+        "slur",
+        "phrasing_slur",
+        "glissando",
+        "crescendo",
+        "decrescendo",
+        "octave_2up",
+        "octave_up",
+        "octave_down",
+        "octave_2down"
+    };
+
+void
+AddIndicationCommand::registerCommand(CommandRegistry *r)
 {
-    // nothing else
+    for (int i = 0;
+         i < sizeof(standardIndications)/sizeof(standardIndications[0]);
+         ++i) {
+        r->registerCommand
+            (getGlobalName(standardIndications[i]), icons[i],
+             shortcuts[i], actionNames[i],
+             new ArgumentAndSelectionCommandBuilder<AddIndicationCommand>());
+    }
+}
+
+std::string
+AddIndicationCommand::getArgument(QString actionName, QWidget *)
+{
+    for (int i = 0;
+         i < sizeof(standardIndications)/sizeof(standardIndications[0]);
+         ++i) {
+        if (actionName == actionNames[i]) return standardIndications[i];
+    }
+    throw CommandCancelled();
+}
+
+AddIndicationCommand::AddIndicationCommand(std::string indicationType,
+                                           EventSelection &selection) :
+    BasicCommand(getGlobalName(indicationType),
+                 selection.getSegment(),
+                 selection.getStartTime(),
+                 selection.getEndTime()),
+    m_indicationType(indicationType),
+    m_indicationDuration(selection.getEndTime() - selection.getStartTime()),
+    m_lastInsertedEvent(0)
+{
+    if (!canExecute()) {
+        throw CommandFailed
+            //!!! need to use text from trunk/src/gui/editors/notation/NotationView.cpp (but this requires an informal human-readable version of the indication name)
+            (qstrtostr(i18n("Can't add identical overlapping indications")));
+    }
 }
 
 AddIndicationCommand::~AddIndicationCommand()
 {
     // empty
+}
+
+EventSelection *
+AddIndicationCommand::getSubsequentSelection()
+{
+    EventSelection *selection = new EventSelection(getSegment());
+    selection->addEvent(getLastInsertedEvent());
+    return selection;
 }
 
 bool

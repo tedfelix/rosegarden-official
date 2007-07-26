@@ -32,14 +32,11 @@
 #include "base/Event.h"
 
 
-
-
 namespace Rosegarden
 {
 
 class Segment;
 class Event;
-
 
 class ClefInsertionCommand : public BasicCommand
 {
@@ -54,6 +51,7 @@ public:
     static QString getGlobalName(Clef *clef = 0);
     virtual timeT getRelayoutEndTime();
 
+    virtual EventSelection *getSubsequentSelection();
     Event *getLastInsertedEvent() { return m_lastInsertedEvent; }
 
 protected:

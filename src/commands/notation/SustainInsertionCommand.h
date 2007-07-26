@@ -59,6 +59,7 @@ public:
         }
     }
 
+    virtual EventSelection *getSubsequentSelection();
     Event *getLastInsertedEvent() { return m_lastInsertedEvent; }
 
 protected:

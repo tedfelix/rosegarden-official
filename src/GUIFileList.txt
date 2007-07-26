@@ -300,6 +300,8 @@ SET(document_SRCS
 	document/BasicCommand.h
 	document/BasicSelectionCommand.cpp
 	document/BasicSelectionCommand.h
+	document/CommandRegistry.cpp
+	document/CommandRegistry.h
 	document/ConfigGroups.cpp
 	document/ConfigGroups.h
 	document/io/CsoundExporter.cpp
@@ -716,8 +718,6 @@ SET(gui_SRCS
 	gui/general/CategoryElement.cpp
 	gui/general/CategoryElement.h
 	gui/general/ClefIndex.h
-	gui/general/CommandRegistry.cpp
-	gui/general/CommandRegistry.h
 	gui/general/EditToolBox.cpp
 	gui/general/EditToolBox.h
 	gui/general/EditTool.cpp
@@ -726,6 +726,8 @@ SET(gui_SRCS
 	gui/general/EditViewBase.h
 	gui/general/EditView.cpp
 	gui/general/EditView.h
+	gui/general/EditViewCommandRegistry.cpp
+	gui/general/EditViewCommandRegistry.h
 	gui/general/EditViewTimeSigNotifier.h
 	gui/general/GUIPalette.cpp
 	gui/general/GUIPalette.h

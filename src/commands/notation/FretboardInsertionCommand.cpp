@@ -29,6 +29,7 @@
 #include "base/Event.h"
 #include "base/Segment.h"
 #include "document/BasicCommand.h"
+#include "base/Selection.h"
 
 
 namespace Rosegarden
@@ -46,8 +47,15 @@ FretboardInsertionCommand::FretboardInsertionCommand(Segment &segment,
 FretboardInsertionCommand::~FretboardInsertionCommand()
 {}
 
-void
+EventSelection *
+FretboardInsertionCommand::getSubsequentSelection()
+{
+    EventSelection *selection = new EventSelection(getSegment());
+    selection->addEvent(getLastInsertedEvent());
+    return selection;
+}
 
+void
 FretboardInsertionCommand::modifySegment()
 {
     Segment::iterator i = getSegment().insert(m_chord.getAsEvent(getStartTime()));
