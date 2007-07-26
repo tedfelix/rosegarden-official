@@ -34,10 +34,12 @@
 #include "base/Segment.h"
 #include "DefaultVelocityColour.h"
 #include "gui/general/GUIPalette.h"
+#include <klocale.h>
 #include <qcolor.h>
 #include <qpainter.h>
 #include <qrect.h>
 #include <qsize.h>
+#include <qtooltip.h>
 #include <qwidget.h>
 
 
@@ -59,11 +61,13 @@ RawNoteRuler::RawNoteRuler(RulerScale *rulerScale,
         m_rulerScale(rulerScale)
 {
     setBackgroundColor(GUIPalette::getColour(GUIPalette::RawNoteRulerBackground));
+    QToolTip::add(this,"");
 }
 
 RawNoteRuler::~RawNoteRuler()
 {
-    // nothing
+    QToolTip::remove(this);
+    // nothing else
 }
 
 void
@@ -435,6 +439,22 @@ RawNoteRuler::paintEvent(QPaintEvent* e)
 {
     if (!m_segment || !m_segment->getComposition())
         return ;
+
+    // Tooltips
+    {
+	QToolTip::remove(this);
+	TrackId trackId = m_segment->getTrack();
+	Track *track =
+	    m_segment->getComposition()->getTrackById(trackId);
+        int trackPosition = -1;
+        if (track)
+            trackPosition = track->getPosition();
+
+	QToolTip::add(this,i18n("Track #%1, Segment \"%2\" (runtime id %2)")
+		           .arg(trackPosition + 1)
+		           .arg(m_segment->getLabel())
+		           .arg(m_segment->getRuntimeId()));
+    }
 
     //    START_TIMING;
 
