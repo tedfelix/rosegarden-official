@@ -71,6 +71,8 @@ public:
     int operator[](int i) const { return m_strings[i]; }
     int& operator[](int i) { return m_strings[i]; }
     
+    bool operator==(const Fingering& o) const { return m_strings == o.m_strings; }    
+    
     iterator begin() { return m_strings.begin(); }
     iterator end()   { return m_strings.end();   }
     const_iterator begin() const { return m_strings.begin(); }

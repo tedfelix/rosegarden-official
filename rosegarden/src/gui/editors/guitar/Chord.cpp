@@ -49,6 +49,8 @@ Chord::Chord(const QString& root, const QString& ext)
       m_ext(ext),
       m_isUserChord(false)
 {
+    if (m_ext.isEmpty())
+        m_ext = QString::null;
 }
 
 Chord::Chord(const Event& e)
@@ -62,9 +64,13 @@ Chord::Chord(const Event& e)
         m_root = f;
 
     ok = e.get<String>(ExtPropertyName, f);
-    if (ok)
-        m_ext = f;
-
+    if (ok) {
+        if (f.length() == 0)
+            m_ext = QString::null;
+        else
+            m_ext = f;
+    }
+    
     ok = e.get<String>(FingeringPropertyName, f);
     if (ok) {
         QString qf(f);

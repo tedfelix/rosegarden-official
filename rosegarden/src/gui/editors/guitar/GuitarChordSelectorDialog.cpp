@@ -273,27 +273,47 @@ GuitarChordSelectorDialog::slotOk()
 void
 GuitarChordSelectorDialog::setChord(const Guitar::Chord& chord)
 {
+    NOTATION_DEBUG << "GuitarChordSelectorDialog::setChord " << chord << endl;
+    
     m_chord = chord;
     
-    m_chordExtList->clear();
+    m_rootNotesList->setCurrentItem(0);
+    QListBoxItem* correspondingRoot = m_rootNotesList->findItem(chord.getRoot(), Qt::ExactMatch);
+    if (correspondingRoot)
+        m_rootNotesList->setSelected(correspondingRoot, true);
+    
     QStringList extList = m_chordMap.getExtList(chord.getRoot());
-    m_chordExtList->insertStringList(extList);
-        
-    Guitar::ChordMap::chordarray similarChords = m_chordMap.getChords(chord.getRoot(), extList.first());
-    populateFingerings(similarChords);
+    populateExtensions(extList);
+    
+    QString chordExt = chord.getExt();
+    if (chordExt.isEmpty()) {
+        chordExt = "";
+        m_chordExtList->setSelected(0, true);
+    } else {
+        QListBoxItem* correspondingExt = m_chordExtList->findItem(chordExt, Qt::ExactMatch);
+        if (correspondingExt)
+            m_chordExtList->setSelected(correspondingExt, true);
+    }
+    
+    Guitar::ChordMap::chordarray similarChords = m_chordMap.getChords(chord.getRoot(), chord.getExt());
+    populateFingerings(similarChords, chord.getFingering());
 }
 
 void
-GuitarChordSelectorDialog::populateFingerings(const Guitar::ChordMap::chordarray& chords)
+GuitarChordSelectorDialog::populateFingerings(const Guitar::ChordMap::chordarray& chords, const Guitar::Fingering& refFingering)
 {
     m_fingeringsList->clear();
     
     for(Guitar::ChordMap::chordarray::const_iterator i = chords.begin(); i != chords.end(); ++i) {
         const Guitar::Chord& chord = *i; 
         QString fingeringString = chord.getFingering().toString();
-        NOTATION_DEBUG << "GuitarChordSelectorDialog::populateFingerings " << chord << " - fingering : " << fingeringString << endl;
+        NOTATION_DEBUG << "GuitarChordSelectorDialog::populateFingerings " << chord << endl;
         QPixmap fingeringPixmap = getFingeringPixmap(chord.getFingering());            
-        new FingeringListBoxItem(chord, m_fingeringsList, fingeringPixmap, fingeringString);
+        FingeringListBoxItem *item = new FingeringListBoxItem(chord, m_fingeringsList, fingeringPixmap, fingeringString);
+        if (refFingering == chord.getFingering()) {
+            NOTATION_DEBUG << "GuitarChordSelectorDialog::populateFingerings - fingering found " << fingeringString << endl;
+            m_fingeringsList->setSelected(item, true);
+        }
     }
 
 }
@@ -328,8 +348,10 @@ GuitarChordSelectorDialog::populateExtensions(const QStringList& extList)
         
         QStringList filteredList;
         for(QStringList::const_iterator i = extList.constBegin(); i != extList.constEnd(); ++i) {
-            if (evaluateChordComplexity((*i).lower().stripWhiteSpace()) <= complexityLevel)
+            if (evaluateChordComplexity((*i).lower().stripWhiteSpace()) <= complexityLevel) {
+                NOTATION_DEBUG << "GuitarChordSelectorDialog::populateExtensions - adding '" << *i << "'\n";
                 filteredList.append(*i); 
+            }
         }
         
         m_chordExtList->insertStringList(filteredList);
