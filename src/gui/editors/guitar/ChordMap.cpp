@@ -52,15 +52,16 @@ ChordMap::getChords(const QString& root, const QString& ext) const
     chordarray res;
     
     Chord tmp(root, ext);
+    NOTATION_DEBUG << "ChordMap::getChords : chord = " << tmp << " - ext is empty : " << ext.isEmpty() << endl;
     
     for (chordset::const_iterator i = m_map.lower_bound(tmp); i != m_map.end(); ++i) {
-        NOTATION_DEBUG << "ChordMap2::getChords : checking chord " << *i << endl;
+        NOTATION_DEBUG << "ChordMap::getChords : checking chord " << *i << endl;
         
         if (i->getRoot() != root)
             break;
 
         if (/* ext.isNull() || */ i->getExt() == ext) {
-            NOTATION_DEBUG << "ChordMap2::getChords : adding chord " << *i << endl;
+            NOTATION_DEBUG << "ChordMap::getChords : adding chord " << *i << endl;
             res.push_back(*i);
         } else {
             break;
@@ -213,7 +214,7 @@ ChordMap::debugDump() const
 {
     for(chordset::const_iterator i = m_map.begin(); i != m_map.end(); ++i) {
         Chord chord = *i;
-        NOTATION_DEBUG << "ChordMap2::debugDump " << chord << endl;
+        NOTATION_DEBUG << "ChordMap::debugDump " << chord << endl;
     } 
 }
 
