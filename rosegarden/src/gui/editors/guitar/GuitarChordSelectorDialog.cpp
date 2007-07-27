@@ -276,25 +276,40 @@ GuitarChordSelectorDialog::setChord(const Guitar::Chord& chord)
     NOTATION_DEBUG << "GuitarChordSelectorDialog::setChord " << chord << endl;
     
     m_chord = chord;
-    
+
+    // select the chord's root
+    //
     m_rootNotesList->setCurrentItem(0);
     QListBoxItem* correspondingRoot = m_rootNotesList->findItem(chord.getRoot(), Qt::ExactMatch);
     if (correspondingRoot)
         m_rootNotesList->setSelected(correspondingRoot, true);
     
+    // update the dialog's complexity setting if needed, then populate the extension list
+    //
+    QString chordExt = chord.getExt();
+    int complexityLevel = m_chordComplexityCombo->currentItem();
+    int chordComplexity = evaluateChordComplexity(chordExt);
+    
+    if (chordComplexity > complexityLevel) {
+        m_chordComplexityCombo->setCurrentItem(chordComplexity);
+    }
+
     QStringList extList = m_chordMap.getExtList(chord.getRoot());
     populateExtensions(extList);
     
-    QString chordExt = chord.getExt();
+    // select the chord's extension
+    //
     if (chordExt.isEmpty()) {
         chordExt = "";
         m_chordExtList->setSelected(0, true);
-    } else {
+    } else {                
         QListBoxItem* correspondingExt = m_chordExtList->findItem(chordExt, Qt::ExactMatch);
         if (correspondingExt)
             m_chordExtList->setSelected(correspondingExt, true);
     }
     
+    // populate fingerings and pass the current chord's fingering so it is selected
+    //
     Guitar::ChordMap::chordarray similarChords = m_chordMap.getChords(chord.getRoot(), chord.getExt());
     populateFingerings(similarChords, chord.getFingering());
 }
