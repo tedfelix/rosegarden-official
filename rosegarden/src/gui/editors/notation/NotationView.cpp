@@ -479,6 +479,16 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     setBottomStandardRuler(new StandardRuler(getDocument(), m_hlayout, m_leftGutter, 25,
                                        true, getBottomWidget()));
 
+    connect(m_topStandardRuler->getLoopRuler(), SIGNAL(startMouseMove(int)),
+            m_canvasView, SLOT(startAutoScroll(int)));
+    connect(m_topStandardRuler->getLoopRuler(), SIGNAL(stopMouseMove()),
+            m_canvasView, SLOT(stopAutoScroll()));
+
+    connect(m_bottomStandardRuler->getLoopRuler(), SIGNAL(startMouseMove(int)),
+            m_canvasView, SLOT(startAutoScroll(int)));
+    connect(m_bottomStandardRuler->getLoopRuler(), SIGNAL(stopMouseMove()),
+            m_canvasView, SLOT(stopAutoScroll()));
+
     for (unsigned int i = 0; i < segments.size(); ++i)
     {
         m_staffs.push_back(new NotationStaff
