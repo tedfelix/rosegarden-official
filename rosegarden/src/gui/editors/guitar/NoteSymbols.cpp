@@ -101,7 +101,7 @@ NoteSymbols::drawOpenSymbol ( QPainter* p,
     //std::cout << "NoteSymbols::drawOpenSymbol - drawing Open symbol at string #" << position
     //<< std::endl;
 
-    p->setBrush( Qt::NoBrush );
+    p->setBrush( QBrush(p->brush().color(), Qt::NoBrush) );
     p->drawEllipse( x_pos.first - ( radius / 2 ),
                     y_pos - ( radius / 2 ),
                     radius,
@@ -124,10 +124,10 @@ NoteSymbols::drawNoteSymbol ( QPainter* p,
 
     if (transient) {
         radius =  static_cast<unsigned int>( columnWidth /* * 0.9 */ );
-        p->setBrush( Qt::NoBrush );
+        p->setBrush( QBrush(p->brush().color(), Qt::NoBrush) );
     } else {
         radius =  static_cast<unsigned int>( columnWidth * 0.7 );
-        p->setBrush( Qt::SolidPattern );
+        p->setBrush( QBrush(p->brush().color(), Qt::SolidPattern) );
     }
 
     int x = x_pos.first - ( radius / 2 ),
@@ -216,7 +216,7 @@ NoteSymbols::drawFrets ( QPainter* p ) const
     unsigned int yGuitarChord = getGuitarChordHeight( imgHeight );
     unsigned int rowHeight = yGuitarChord / m_nbOfFrets;
 
-    QPen pen;
+    QPen pen(p->pen());
     pen.setWidth(imgHeight >= 100 ? FRET_PEN_WIDTH : FRET_PEN_WIDTH / 2);  
     p->save();
     p->setPen(pen);
@@ -259,7 +259,7 @@ NoteSymbols::drawStrings ( QPainter* p ) const
 
     unsigned int x_pos = (getX ( imgWidth, 0, m_nbOfStrings )).first;
 
-    QPen pen;
+    QPen pen(p->pen());
     pen.setWidth(imgWidth >= 100 ? STRING_PEN_WIDTH : STRING_PEN_WIDTH / 2);  
     p->save();
     p->setPen(pen);

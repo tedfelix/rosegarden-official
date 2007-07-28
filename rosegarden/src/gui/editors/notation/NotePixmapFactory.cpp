@@ -2995,17 +2995,16 @@ NotePixmapFactory::makeGuitarChordPixmap(const Guitar::Fingering &fingering,
     int guitarChordWidth = getLineSpacing() * 6;
     int guitarChordHeight = getLineSpacing() * 6;
 
-    /*
-        std::cout << "GuitarChord QRect height: " << guitarChordHeight
-        << ", width: " << guitarChordWidth
-        << std::endl;
-    */
-
     createPixmapAndMask(guitarChordWidth, guitarChordHeight);
 
-    // m_generatedPixmap
-    m_p->painter().setBrush(Qt::black);
-
+    if (m_selected) {
+        m_p->painter().setPen(GUIPalette::getColour(GUIPalette::SelectedElement));
+        m_p->painter().setBrush(GUIPalette::getColour(GUIPalette::SelectedElement));
+    } else {
+        m_p->painter().setPen(Qt::black);
+        m_p->painter().setBrush(Qt::black);
+    }
+    
     Guitar::NoteSymbols ns(Guitar::Fingering::DEFAULT_NB_STRINGS, FingeringBox::DEFAULT_NB_DISPLAYED_FRETS);
     Guitar::NoteSymbols::drawFingeringPixmap(fingering, ns, &(m_p->painter()));
 
