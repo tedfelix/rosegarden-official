@@ -4957,7 +4957,7 @@ bool RosegardenGUIApp::exportLilypondFile(QString file, bool forPreview)
         heading = i18n("Lilypond preview options");
     }
 
-    LilypondOptionsDialog dialog(this, caption, heading);
+    LilypondOptionsDialog dialog(this, m_doc, caption, heading);
     if (dialog.exec() != QDialog::Accepted) {
         return false;
     }
