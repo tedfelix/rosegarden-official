@@ -185,6 +185,11 @@ NoteSymbols::drawFretNumber ( QPainter* p,
         unsigned int imgWidth = v.width();
         unsigned int imgHeight = v.height();
 
+        p->save();
+        QFont font;
+        font.setPixelSize(getFontPixelSize(v.width(), v.height()));
+        p->setFont(font);
+
         QString tmp;
         tmp.setNum( fret_num );
 
@@ -194,6 +199,8 @@ NoteSymbols::drawFretNumber ( QPainter* p,
         p->drawText( getLeftBorder( imgWidth ) / 4,
                      y_pos.first + ( y_pos.second / 2 ),
                      tmp );
+
+        p->restore();
     }
 }
 
@@ -334,6 +341,12 @@ NoteSymbols::getGuitarChordHeight ( int imgHeight ) const
     return static_cast<unsigned int>( imgHeight * GUITAR_CHORD_HEIGHT_PERCENTAGE );
 }
 
+unsigned int
+NoteSymbols::getFontPixelSize ( int imgWidth, int imgHeight ) const
+{
+    return std::max(6, imgHeight / 10);
+}
+
 std::pair<bool, unsigned int>
 NoteSymbols::getStringNumber ( int imgWidth,
                                unsigned int x_pos,
@@ -429,6 +442,7 @@ NoteSymbols::drawFingeringPixmap(const Guitar::Fingering& fingering, const Guita
 {
     unsigned int startFret = fingering.getStartFret();
     
+    noteSymbols.drawFretNumber(p, startFret);
     noteSymbols.drawFrets(p);
     noteSymbols.drawStrings(p);
 
@@ -456,7 +470,7 @@ NoteSymbols::drawFingeringPixmap(const Guitar::Fingering& fingering, const Guita
 }
 
 
-float const NoteSymbols::LEFT_BORDER_PERCENTAGE = 0.1;
+float const NoteSymbols::LEFT_BORDER_PERCENTAGE = 0.2;
 float const NoteSymbols::RIGHT_BORDER_PERCENTAGE = 0.1;
 float const NoteSymbols::GUITAR_CHORD_WIDTH_PERCENTAGE = 0.8;
 float const NoteSymbols::TOP_BORDER_PERCENTAGE = 0.1;

@@ -152,6 +152,8 @@ public:
 
     unsigned int getGuitarChordHeight ( int imgHeight ) const;
 
+    unsigned int getFontPixelSize ( int imgWidth, int imgHeight ) const;
+    
     std::pair<bool, unsigned int>
     getStringNumber ( int imgWidth,
                       unsigned int x_pos,
@@ -165,7 +167,7 @@ public:
     QRect getTransientNoteSymbolRect(QSize guitarChordSize,
                                      unsigned int stringNb,
                                      int fretNb) const;
-
+    
     static void drawFingeringPixmap(const Fingering& fingering, const NoteSymbols& noteSymbols, QPainter *p);
     
 private:
