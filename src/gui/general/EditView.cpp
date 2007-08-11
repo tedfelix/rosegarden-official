@@ -32,7 +32,7 @@
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "ActiveItem.h"
-#include "CommandRegistry.h"
+#include "document/CommandRegistry.h"
 #include "base/AnalysisTypes.h"
 #include "base/Composition.h"
 #include "base/CompositionTimeSliceAdapter.h"
