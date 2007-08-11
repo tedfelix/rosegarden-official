@@ -66,7 +66,7 @@
 #include "gui/application/RosegardenGUIApp.h"
 #include "gui/application/RosegardenGUIView.h"
 #include "gui/dialogs/UnusedAudioSelectionDialog.h"
-#include "gui/editors/segment/AudioPreviewThread.h"
+#include "gui/editors/segment/segmentcanvas/AudioPreviewThread.h"
 #include "gui/editors/segment/TrackLabel.h"
 #include "gui/general/EditViewBase.h"
 #include "gui/general/GUIPalette.h"

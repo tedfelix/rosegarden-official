@@ -26,7 +26,7 @@
 #include "SetWaitCursor.h"
 
 #include "gui/editors/segment/TrackEditor.h"
-#include "gui/editors/segment/CompositionView.h"
+#include "gui/editors/segment/segmentcanvas/CompositionView.h"
 #include "misc/Debug.h"
 #include "RosegardenGUIApp.h"
 #include "RosegardenGUIView.h"
