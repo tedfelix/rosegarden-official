@@ -3207,6 +3207,19 @@ NotationView::getInsertionTime(Clef &clef,
 LinedStaff*
 NotationView::getStaffForCanvasCoords(int x, int y) const
 {
+    // (i)  Do not change staff, if mouse was clicked within the current staff.
+    LinedStaff *s = m_staffs[m_currentStaff];
+    if (s->containsCanvasCoords(x, y)) {
+        LinedStaff::LinedStaffCoords coords =
+            s->getLayoutCoordsForCanvasCoords(x, y);
+
+        int barNo = m_hlayout->getBarForX(coords.first);
+        if (barNo >= m_hlayout->getFirstVisibleBarOnStaff(*s) &&
+            barNo < m_hlayout->getLastVisibleBarOnStaff(*s)) {
+            return m_staffs[m_currentStaff];
+        }
+    }
+    // (ii) Change staff, if mouse was clicked outside the current staff.
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 
         LinedStaff *s = m_staffs[i];
