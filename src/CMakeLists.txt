@@ -193,6 +193,7 @@ IF(WANT_TEST)
         kio
         kdeui
         kdeprint
+        RosegardenCommands
         RosegardenExtended
         RosegardenCommon
     )
