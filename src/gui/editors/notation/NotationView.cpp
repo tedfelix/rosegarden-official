@@ -3219,7 +3219,7 @@ NotationView::getStaffForCanvasCoords(int x, int y) const
             return m_staffs[m_currentStaff];
         }
     }
-    // (ii) Change staff, if mouse was clicked outside the current staff.
+    // (ii) Find staff under cursor, if clicked outside the current staff.
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 
         LinedStaff *s = m_staffs[i];
