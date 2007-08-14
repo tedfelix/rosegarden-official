@@ -2117,7 +2117,7 @@ void NotationView::setupActions()
                 SLOT(slotEditAddSustainUp()), actionCollection(),
                 "add_sustain_up");
 
-	new KAction(TransposeCommand::getDiatonicGlobalName(false), 0, this,
+    new KAction(TransposeCommand::getDiatonicGlobalName(false), 0, this,
                 SLOT(slotEditTranspose()), actionCollection(),
                 "transpose_segment");
 
@@ -2208,6 +2208,14 @@ void NotationView::setupActions()
     new KAction(i18n("Cursor &Down Staff"), 0, Key_Down + SHIFT, this,
                 SLOT(slotCurrentStaffDown()), actionCollection(),
                 "cursor_down_staff");
+
+    new KAction(i18n("Cursor Pre&vious Segment"), 0, Key_Prior + ALT, this,
+                SLOT(slotCurrentSegmentPrior()), actionCollection(),
+                "cursor_prior_segment");
+
+    new KAction(i18n("Cursor Ne&xt Segment"), 0, Key_Next + ALT, this,
+                SLOT(slotCurrentSegmentNext()), actionCollection(),
+                "cursor_next_segment");
 
     icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-cursor-to-pointer")));
@@ -6255,6 +6263,80 @@ NotationView::slotCurrentStaffDown()
                 return ;
             }
         }
+    }
+}
+
+void
+NotationView::slotCurrentSegmentPrior()
+{
+    if (m_staffs.size() < 2)
+        return ;
+
+    Composition *composition =
+        m_staffs[m_currentStaff]->getSegment().getComposition();
+
+    Track *track = composition->
+        getTrackById(m_staffs[m_currentStaff]->getSegment().getTrack());
+    if (!track)
+        return ;
+
+    int lastStaffOnTrack = -1;
+
+    //
+    // TODO: Cycle segments through rather in time order?
+    //       Cycle only segments in the field of view?
+    //
+    for (int i = m_staffs.size()-1; i >= 0; --i) {
+        if (m_staffs[i]->getSegment().getTrack() == track->getId()) {
+	    if (lastStaffOnTrack < 0) {
+                lastStaffOnTrack = i;
+	    } 
+	    if (i < m_currentStaff) {
+		slotSetCurrentStaff(i);
+		return ;
+	    }
+        }
+    }
+    if (lastStaffOnTrack >= 0) {
+	slotSetCurrentStaff(lastStaffOnTrack);
+	return ;
+    }
+}
+
+void
+NotationView::slotCurrentSegmentNext()
+{
+    if (m_staffs.size() < 2)
+        return ;
+
+    Composition *composition =
+        m_staffs[m_currentStaff]->getSegment().getComposition();
+
+    Track *track = composition->
+        getTrackById(m_staffs[m_currentStaff]->getSegment().getTrack());
+    if (!track)
+        return ;
+
+    int firstStaffOnTrack = -1;
+
+    //
+    // TODO: Cycle segments through rather in time order?
+    //       Cycle only segments in the field of view?
+    //
+    for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+        if (m_staffs[i]->getSegment().getTrack() == track->getId()) {
+	    if (firstStaffOnTrack < 0) {
+                firstStaffOnTrack = i;
+	    } 
+	    if (i > m_currentStaff) {
+		slotSetCurrentStaff(i);
+		return ;
+	    }
+        }
+    }
+    if (firstStaffOnTrack >= 0) {
+	slotSetCurrentStaff(firstStaffOnTrack);
+	return ;
     }
 }
 
