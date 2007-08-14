@@ -359,6 +359,8 @@
 	<Separator/>
 	<Action name="cursor_up_staff"/>
 	<Action name="cursor_down_staff"/>
+  	<Action name="cursor_prior_segment"/>
+  	<Action name="cursor_next_segment"/>
   </Menu>
 
   <Menu name="Transport">
@@ -787,6 +789,8 @@
   <enable>
     <Action name="cursor_up_staff"/>
     <Action name="cursor_down_staff"/>
+    <Action name="cursor_prior_segment"/>
+    <Action name="cursor_next_segment"/>
   </enable>
 </State>
 

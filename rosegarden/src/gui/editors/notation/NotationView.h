@@ -687,6 +687,12 @@ public slots:
     /// Change the current staff to the one following the current one
     void slotCurrentStaffDown();
 
+    /// Change the current segment to the one following the current one
+    void slotCurrentSegmentPrior();
+
+    /// Change the current segment to the one preceding the current one
+    void slotCurrentSegmentNext();
+
     /// Changes the font of the staffs on the view, gets font name from sender
     void slotChangeFontFromAction();
 
