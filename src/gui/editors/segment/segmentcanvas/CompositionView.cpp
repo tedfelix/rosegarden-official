@@ -127,11 +127,13 @@ CompositionView::CompositionView(RosegardenGUIDoc* doc,
         m_lastPointerRefreshX(0),
         m_contextHelpShown(false)
 {
-    m_toolBox = new SegmentToolBox(this, doc);
+    if (doc) {
+        m_toolBox = new SegmentToolBox(this, doc);
 
-    connect(m_toolBox, SIGNAL(showContextHelp(const QString &)),
-            this, SLOT(slotToolHelpChanged(const QString &)));
-
+        connect(m_toolBox, SIGNAL(showContextHelp(const QString &)),
+                this, SLOT(slotToolHelpChanged(const QString &)));
+    }
+    
     setDragAutoScroll(true);
     setBackgroundMode(NoBackground);
     viewport()->setBackgroundMode(NoBackground);
@@ -162,30 +164,34 @@ CompositionView::CompositionView(RosegardenGUIDoc* doc,
     connect(model, SIGNAL(needSizeUpdate()),
             this, SLOT(slotUpdateSize()));
 
-    connect(doc, SIGNAL(docColoursChanged()),
-            this, SLOT(slotRefreshColourCache()));
+    if (doc) {
+        connect(doc, SIGNAL(docColoursChanged()),
+                this, SLOT(slotRefreshColourCache()));
 
-    // recording-related signals
-    connect(doc, SIGNAL(newMIDIRecordingSegment(Segment*)),
-            this, SLOT(slotNewMIDIRecordingSegment(Segment*)));
-    connect(doc, SIGNAL(newAudioRecordingSegment(Segment*)),
-            this, SLOT(slotNewAudioRecordingSegment(Segment*)));
-    //     connect(doc, SIGNAL(recordMIDISegmentUpdated(Segment*, timeT)),
-    //             this, SLOT(slotRecordMIDISegmentUpdated(Segment*, timeT)));
-    connect(doc, SIGNAL(stoppedAudioRecording()),
-            this, SLOT(slotStoppedRecording()));
-    connect(doc, SIGNAL(stoppedMIDIRecording()),
-            this, SLOT(slotStoppedRecording()));
-    connect(doc, SIGNAL(audioFileFinalized(Segment*)),
-            getModel(), SLOT(slotAudioFileFinalized(Segment*)));
-
+        // recording-related signals
+        connect(doc, SIGNAL(newMIDIRecordingSegment(Segment*)),
+                this, SLOT(slotNewMIDIRecordingSegment(Segment*)));
+        connect(doc, SIGNAL(newAudioRecordingSegment(Segment*)),
+                this, SLOT(slotNewAudioRecordingSegment(Segment*)));
+        //     connect(doc, SIGNAL(recordMIDISegmentUpdated(Segment*, timeT)),
+        //             this, SLOT(slotRecordMIDISegmentUpdated(Segment*, timeT)));
+        connect(doc, SIGNAL(stoppedAudioRecording()),
+                this, SLOT(slotStoppedRecording()));
+        connect(doc, SIGNAL(stoppedMIDIRecording()),
+                this, SLOT(slotStoppedRecording()));
+        connect(doc, SIGNAL(audioFileFinalized(Segment*)),
+                getModel(), SLOT(slotAudioFileFinalized(Segment*)));
+    }
+    
     CompositionModelImpl* cmi = dynamic_cast<CompositionModelImpl*>(model);
     if (cmi) {
         cmi->setAudioPreviewThread(&doc->getAudioPreviewThread());
     }
 
-    doc->getAudioPreviewThread().setEmptyQueueListener(this);
-
+    if (doc) {
+        doc->getAudioPreviewThread().setEmptyQueueListener(this);
+    }
+    
     m_segmentsDrawBuffer.setOptimization(QPixmap::BestOptim);
     m_artifactsDrawBuffer.setOptimization(QPixmap::BestOptim);
 
