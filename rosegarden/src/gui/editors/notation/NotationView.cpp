@@ -2859,6 +2859,9 @@ bool NotationView::applyLayout(int staffNo, timeT startTime, timeT endTime)
     if (m_bottomStandardRuler) {
         m_bottomStandardRuler->update();
     }
+    if (m_tempoRuler) {
+        m_tempoRuler->update();
+    }
     if (m_rawNoteRuler && m_rawNoteRuler->isVisible()) {
         m_rawNoteRuler->update();
     }
