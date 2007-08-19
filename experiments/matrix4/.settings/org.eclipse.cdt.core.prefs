@@ -1,0 +1,4 @@
+#Thu Aug 16 22:57:59 GMT+01:00 2007
+eclipse.preferences.version=1
+environment/project/cdt.managedbuild.config.gnu.exe.debug.2062641692=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?>\n<environment append\="true">\n<variable name\="PWD" operation\="replace" value\="${project_loc}"/>\n<variable name\="CWD" operation\="replace" value\="${project_loc}"/>\n</environment>\n
+environment/project/cdt.managedbuild.config.gnu.exe.release.1914213724=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?>\n<environment append\="true">\n<variable name\="PWD" operation\="replace" value\="${project_loc}"/>\n<variable name\="CWD" operation\="replace" value\="${project_loc}"/>\n</environment>\n
