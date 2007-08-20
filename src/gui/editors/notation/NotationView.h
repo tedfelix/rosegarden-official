@@ -75,8 +75,6 @@ class NotationHLayout;
 class NotationElement;
 class NoteActionData;
 class NoteActionDataMap;
-class MarkActionData;
-class MarkActionDataMap;
 class NoteChangeActionData;
 class NoteChangeActionDataMap;
 class Key;
@@ -510,7 +508,6 @@ public slots:
     void slotSwitchFromNoteToRest();
     void slotToggleDot();
 
-    void slotAddMark();
     void slotMarksAddTextMark();
     void slotMarksRemoveMarks();
     void slotMarksRemoveFingeringMarks();
@@ -995,9 +992,6 @@ protected:
 
     typedef QMap<QString, NoteChangeActionData *> NoteChangeActionDataMap;
     static NoteChangeActionDataMap* m_noteChangeActionDataMap;
-
-    typedef QMap<QString, MarkActionData *> MarkActionDataMap;
-    static MarkActionDataMap *m_markActionDataMap;
 
     KComboBox       *m_fontCombo;
     KComboBox       *m_fontSizeCombo;

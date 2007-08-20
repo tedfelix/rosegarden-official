@@ -36,7 +36,7 @@ namespace Rosegarden
 {
 
 class EventSelection;
-
+class CommandRegistry;
 
 class AddMarkCommand : public BasicSelectionCommand
 {
@@ -47,6 +47,12 @@ public:
         m_selection(&selection), m_mark(mark) { }
 
     static QString getGlobalName(Mark mark);
+    static QString getActionName(Mark mark);
+    static QString getShortcut(Mark mark);
+    static QString getIconName(Mark mark);
+
+    static Mark getArgument(QString actionName, QWidget *);
+    static void registerCommand(CommandRegistry *r);
 
 protected:
     virtual void modifySegment();

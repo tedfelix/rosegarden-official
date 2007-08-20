@@ -73,7 +73,6 @@
 #include "commands/edit/SetNoteTypeCommand.h"
 #include "commands/edit/SetTriggerCommand.h"
 #include "commands/edit/TransposeCommand.h"
-#include "commands/notation/AddMarkCommand.h"
 #include "commands/notation/AddTextMarkCommand.h"
 #include "commands/notation/AutoBeamCommand.h"
 #include "commands/notation/BreakCommand.h"
@@ -303,30 +302,6 @@ NoteChangeActionData::NoteChangeActionData(const QString& _title,
       noteType(_noteType)
 {
 }
-
-
-class MarkActionData
-{
-public:
-    MarkActionData() :
-	title(0),
-	actionName(0),
-	keycode(0) { }
-
-    MarkActionData(const QString &_title,
-		   QString _actionName,
-		   int _keycode,
-		   Mark _mark) :
-	title(_title),
-	actionName(_actionName),
-	keycode(_keycode),
-	mark(_mark) { }
-
-    QString title;
-    QString actionName;
-    int keycode;
-    Mark mark;
-};
 
 
 NotationView::NotationView(RosegardenGUIDoc *doc,
@@ -1931,22 +1906,6 @@ void NotationView::setupActions()
     new KAction(i18n("&Dump selected events to stderr"), 0, this,
                 SLOT(slotDebugDump()), actionCollection(), "debug_dump");
 
-    for (MarkActionDataMap::Iterator i = m_markActionDataMap->begin();
-            i != m_markActionDataMap->end(); ++i) {
-
-        const MarkActionData &markActionData = **i;
-
-        icon = QIconSet(NotePixmapFactory::toQPixmap
-                        (NotePixmapFactory::makeMarkMenuPixmap(markActionData.mark)));
-
-        new KAction(markActionData.title,
-                    icon,
-                    markActionData.keycode,
-                    this,
-                    SLOT(slotAddMark()),
-                    actionCollection(),
-                    markActionData.actionName);
-    }
 
     icon = QIconSet
            (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
@@ -3580,20 +3539,6 @@ void NotationView::slotLastNoteAction()
     }
 }
 
-void NotationView::slotAddMark()
-{
-    const QObject *s = sender();
-    if (!m_currentEventSelection)
-        return ;
-
-    MarkActionDataMap::Iterator i = m_markActionDataMap->find(s->name());
-
-    if (i != m_markActionDataMap->end()) {
-        addCommandToHistory(new AddMarkCommand
-                            ((**i).mark, *m_currentEventSelection));
-    }
-}
-
 void NotationView::slotNoteChangeAction()
 {
     const QObject* sigSender = sender();
@@ -3686,22 +3631,6 @@ void NotationView::initActionDataMaps()
                   notationOnly ? true : false, type));
         }
     }
-
-    m_markActionDataMap = new MarkActionDataMap;
-
-    std::vector<Mark> marks = Marks::getStandardMarks();
-    for (unsigned int i = 0; i < marks.size(); ++i) {
-
-        Mark mark = marks[i];
-        QString markName(strtoqstr(mark));
-        QString actionName = QString("add_%1").arg(markName);
-
-        m_markActionDataMap->insert
-            (actionName, new MarkActionData
-             (AddMarkCommand::getGlobalName(mark),
-              actionName, 0, mark));
-    }
-
 }
 
 void NotationView::setupProgress(KProgress* bar)
@@ -3821,8 +3750,6 @@ void NotationView::updateViewCaption()
 NotationView::NoteActionDataMap* NotationView::m_noteActionDataMap = 0;
 
 NotationView::NoteChangeActionDataMap* NotationView::m_noteChangeActionDataMap = 0;
-
-NotationView::MarkActionDataMap* NotationView::m_markActionDataMap = 0;
 
 
 /// SLOTS

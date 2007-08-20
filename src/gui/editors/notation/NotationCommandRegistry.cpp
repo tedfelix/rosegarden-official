@@ -31,6 +31,7 @@
 #include "commands/notation/AddFingeringMarkCommand.h"
 #include "commands/notation/AddSlashesCommand.h"
 #include "commands/notation/AddIndicationCommand.h"
+#include "commands/notation/AddMarkCommand.h"
 
 
 namespace Rosegarden
@@ -44,6 +45,7 @@ NotationCommandRegistry::NotationCommandRegistry(EditView *v) :
     AddFingeringMarkCommand::registerCommand(this);
     AddSlashesCommand::registerCommand(this);
     AddIndicationCommand::registerCommand(this);
+    AddMarkCommand::registerCommand(this);
 }
 
 NotationCommandRegistry::~NotationCommandRegistry()

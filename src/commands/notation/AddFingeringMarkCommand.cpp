@@ -105,6 +105,11 @@ AddFingeringMarkCommand::getArgument(QString actionName,
     if (actionName.startsWith(pfx)) {
         QString remainder = actionName.right(actionName.length() - pfx.length());
         if (remainder == "mark") {
+
+            //!!! this is crap -- we want to be able to call back on
+            //some abstract ptr passed in, in order to ask the user a
+            //question -- don't want Qt dependency here
+
             bool ok = false;
             QString txt = KLineEditDlg::getText(i18n("Fingering: "), "", &ok,
                                                 dialogParent);
