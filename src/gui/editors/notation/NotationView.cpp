@@ -3224,9 +3224,12 @@ NotationView::getStaffForCanvasCoords(int x, int y) const
         LinedStaff::LinedStaffCoords coords =
             s->getLayoutCoordsForCanvasCoords(x, y);
 
-        int barNo = m_hlayout->getBarForX(coords.first);
-        if (barNo >= m_hlayout->getFirstVisibleBarOnStaff(*s) &&
-            barNo < m_hlayout->getLastVisibleBarOnStaff(*s)) {
+        timeT t = m_hlayout->getTimeForX(coords.first);
+	// In order to find the correct starting and ending bar of the segment,
+	// make infinitesimal shifts (+1 and -1) towards its center.
+	timeT t0 = getDocument()->getComposition().getBarStartForTime(m_staffs[m_currentStaff]->getSegment().getStartTime()+1);
+	timeT t1 = getDocument()->getComposition().getBarEndForTime(m_staffs[m_currentStaff]->getSegment().getEndTime()-1);
+        if (t >= t0 && t < t1) {
             return m_staffs[m_currentStaff];
         }
     }
@@ -3235,24 +3238,19 @@ NotationView::getStaffForCanvasCoords(int x, int y) const
 
         LinedStaff *s = m_staffs[i];
 
-        //	NOTATION_DEBUG << "NotationView::getStaffForCanvasCoords(" << x << "," << y << "): looking at staff " << i << endl;
-
         if (s->containsCanvasCoords(x, y)) {
 
             LinedStaff::LinedStaffCoords coords =
                 s->getLayoutCoordsForCanvasCoords(x, y);
 
-            //	    NOTATION_DEBUG << "NotationView::getStaffForCanvasCoords(" << x << "," << y << "): layout coords are (" << coords.first << "," << coords.second << ")" << endl;
-
-            int barNo = m_hlayout->getBarForX(coords.first);
-            //	    NOTATION_DEBUG << "NotationView::getStaffForCanvasCoords(" << x << "," << y << "): bar number " << barNo << endl;
-            // 931067: < instead of <= in conditional:
-            if (barNo >= m_hlayout->getFirstVisibleBarOnStaff(*s) &&
-                    barNo < m_hlayout->getLastVisibleBarOnStaff(*s)) {
-                //		NOTATION_DEBUG << "NotationView::getStaffForCanvasCoords(" << x << "," << y << "): it's within range for staff " << i << m_hlayout->getFirstVisibleBarOnStaff(*s) << "->" << m_hlayout->getLastVisibleBarOnStaff(*s) << ", returning true" << endl;
+	    timeT t = m_hlayout->getTimeForX(coords.first);
+	    // In order to find the correct starting and ending bar of the segment,
+	    // make infinitesimal shifts (+1 and -1) towards its center.
+	    timeT t0 = getDocument()->getComposition().getBarStartForTime(m_staffs[i]->getSegment().getStartTime()+1);
+	    timeT t1 = getDocument()->getComposition().getBarEndForTime(m_staffs[i]->getSegment().getEndTime()-1);
+	    if (t >= t0 && t < t1) {
                 return m_staffs[i];
             }
-            //	    NOTATION_DEBUG << "NotationView::getStaffForCanvasCoords(" << x << "," << y << "): out of range for this staff " << i << " (" << m_hlayout->getFirstVisibleBarOnStaff(*s) << "->" << m_hlayout->getLastVisibleBarOnStaff(*s) << ")" << endl;
         }
     }
 
