@@ -473,6 +473,18 @@ RawNoteRuler::paintEvent(QPaintEvent* e)
     paint.setBrush(GUIPalette::getColour(GUIPalette::RawNoteRulerForeground));
     paint.drawLine(0, 0, width(), 0);
 
+    // draw the extent of the segment using its color
+
+    QColor brushColor = GUIPalette::convertColour(m_segment->getComposition()->
+                        getSegmentColourMap().getColourByIndex(m_segment->getColourIndex()));
+    paint.setPen(brushColor);
+    paint.setBrush(brushColor);
+    int x0 = int(m_rulerScale->getXForTime(m_segment->getStartTime()) + 
+		 m_currentXOffset + m_xorigin);
+    int x1 = int(m_rulerScale->getXForTime(m_segment->getEndTime()) + 
+		 m_currentXOffset + m_xorigin);
+    paint.drawRect(x0, 1, x1-x0+1, height()-1);
+
     // draw the bar divisions
 
     int firstBar = m_segment->getComposition()->getBarNumber(from);
