@@ -73,6 +73,10 @@
 #include <kapplication.h>
 #include <sstream>
 
+#define LILYPOND_VERSION_2_6	0
+#define LILYPOND_VERSION_2_8	1
+#define LILYPOND_VERSION_2_10	2
+#define LILYPOND_VERSION_2_12	3
 
 namespace Rosegarden
 {
@@ -411,19 +415,19 @@ LilypondExporter::write()
 
     switch (m_languageLevel) {
 
-    case 0:
+    case LILYPOND_VERSION_2_6:
         str << "\\version \"2.6.0\"" << std::endl;
         break;
 
-    case 1:
+    case LILYPOND_VERSION_2_8:
         str << "\\version \"2.8.0\"" << std::endl;
         break;
 
-    case 2:
+    case LILYPOND_VERSION_2_10:
         str << "\\version \"2.10.0\"" << std::endl;
         break;
 
-    case 3:
+    case LILYPOND_VERSION_2_12:
         str << "\\version \"2.12.0\"" << std::endl;
         break;
 
@@ -432,7 +436,7 @@ LilypondExporter::write()
         std::cerr << "ERROR: Unknown language level " << m_languageLevel
 	    << ", using \\version \"2.6.0\" instead" << std::endl;
         str << "\\version \"2.6.0\"" << std::endl;
-        m_languageLevel = 0;
+        m_languageLevel = LILYPOND_VERSION_2_6;
     }
 
     // enable "point and click" debugging via pdf to make finding the
@@ -822,7 +826,11 @@ LilypondExporter::write()
 
                     str << "<< " << std::endl;
 
-                    str << indent(++col) << "\\set Staff.instrument = \"" << staffName.str() << "\"" << std::endl;
+		    if (m_languageLevel < LILYPOND_VERSION_2_10) {
+			str << indent(++col) << "\\set Staff.instrument = \"" << staffName.str() << " \"" << std::endl;
+		    } else {
+			str << indent(++col) << "\\set Staff.instrumentName = \"" << staffName.str() << " \"" << std::endl;
+		    }
 
                     if (m_exportMidi) {
                         // Set midi instrument for the Staff
@@ -1423,9 +1431,9 @@ LilypondExporter::writeBar(Segment *s,
 
                 } else if ((*i)->isa(Note::EventType)) {
 
-                    if (m_languageLevel >= 1) {
+                    if (m_languageLevel >= LILYPOND_VERSION_2_8) {
                         // one \tweak per each chord note
-                        if (chord.size() > 1)
+                        if (chord.size() > LILYPOND_VERSION_2_8)
                             writeStyle(*i, prevStyle, col, str, true);
                         else
                             writeStyle(*i, prevStyle, col, str, false);
@@ -1466,7 +1474,7 @@ LilypondExporter::writeBar(Segment *s,
                 prevDuration = duration;
             }
 
-            if (m_languageLevel == 0) {
+            if (m_languageLevel == LILYPOND_VERSION_2_6) {
                 // only one override per chord, and that outside the <>
                 if (stylei != s->end()) {
                     writeStyle(*stylei, prevStyle, col, str, false);
