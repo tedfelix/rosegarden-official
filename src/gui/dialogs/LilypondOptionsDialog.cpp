@@ -264,7 +264,7 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
 	}
 
 	unsigned int row = 0, col = 0, width = 1;
-	QLineEdit *editHeader = new QLineEdit( QString( header ), frameHeaders );
+	QLineEdit *editHeader = new QLineEdit( QString( strtoqstr( header ) ), frameHeaders );
 	if (key == headerDedication) {  
 	    m_editDedication = editHeader;
 	    row = 0; col = 2; width = 2;
