@@ -996,6 +996,7 @@ LilypondExporter::write()
 		
 		            bool isNote = (*j)->isa(Note::EventType);
 		            bool isLyric = false;
+			    bool firstNote = true;
 		
 		            if (!isNote) {
 		                if ((*j)->isa(Text::EventType)) {
@@ -1013,19 +1014,21 @@ LilypondExporter::write()
 		                    continue;
 		            }
 		
-		            if (!isNote && !isLyric)
-		                continue;
+		            if (!isNote && !isLyric) continue;
 		
 		            timeT myTime = (*j)->getNotationAbsoluteTime();
 		            int myBarNo = m_composition->getBarNumber(myTime);
 		
-		            if (myTime > lastTime && isNote) {
-		                if (!haveLyric)
-		                    text += " _";
-		                // text[verse] += " _";
-		                lastTime = myTime;
-		                haveLyric = false;
-		            }
+			    if (isNote) {
+				if ((myTime > lastTime) || firstNote) {
+				    if (!haveLyric)
+					text += " _";
+				    // text[verse] += " _";
+				    lastTime = myTime;
+				    haveLyric = false;
+				    firstNote = false;
+				}
+			    }
 		
 		            if (isLyric) {
 			        long verse;
