@@ -34,7 +34,7 @@
 #include "base/Segment.h"
 #include "base/Studio.h"
 #include "gui/application/RosegardenGUIApp.h"
-#include "gui/editors/segment/AudioPreviewThread.h"
+#include "gui/editors/segment/segmentcanvas/AudioPreviewThread.h"
 #include <map>
 #include "sound/AudioFileManager.h"
 // #include <qlist.h>  (fixes problem for Adam Dingle)

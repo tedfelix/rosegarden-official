@@ -31,14 +31,28 @@
 
 
 class QWidget;
-class QComboBox;
 class QCheckBox;
+class QComboBox;
+class QLineEdit;
 
+const std::string headerDedication = "dedication";
+const std::string headerTitle = "title";
+const std::string headerSubtitle = "subtitle";
+const std::string headerSubsubtitle = "subsubtitle";
+const std::string headerPoet = "poet";
+const std::string headerComposer = "composer";
+const std::string headerMeter = "meter";
+const std::string headerOpus = "opus";
+const std::string headerArranger = "arranger";
+const std::string headerInstrument = "instrument";
+const std::string headerPiece = "piece";
+const std::string headerCopyright = "copyright";
+const std::string headerTagline = "tagline";
 
 namespace Rosegarden
 {
 
-
+class RosegardenGUIDoc;
 
 class LilypondOptionsDialog : public KDialogBase
 {
@@ -46,25 +60,47 @@ class LilypondOptionsDialog : public KDialogBase
 
 public:
     LilypondOptionsDialog(QWidget *parent,
+			  RosegardenGUIDoc *doc,
                           QString windowCaption = "",
                           QString heading = "");
 
+    static void setDefaultLilypondVersion(QString version);
+
 public slots:
+    void slotApply();
     void slotOk();
 
 protected:
+    RosegardenGUIDoc *m_doc;
     QComboBox *m_lilyLanguage;
     QComboBox *m_lilyPaperSize;
     QComboBox *m_lilyFontSize;
     QComboBox *m_lilyTempoMarks;
     QComboBox *m_lilyExportSelection;
     QCheckBox *m_lilyPaperLandscape;
+    QCheckBox *m_lilyRaggedBottom;
     QCheckBox *m_lilyExportLyrics;
     QCheckBox *m_lilyExportMidi;
     QCheckBox *m_lilyExportPointAndClick;
     QCheckBox *m_lilyExportBeams;
     QCheckBox *m_lilyExportStaffGroup;
     QCheckBox *m_lilyExportStaffMerge;
+
+    // Header fields
+    QLineEdit *m_editDedication;
+    QLineEdit *m_editTitle;
+    QLineEdit *m_editSubtitle;
+    QLineEdit *m_editSubsubtitle;
+    QLineEdit *m_editPoet;
+    QLineEdit *m_editComposer;
+    QLineEdit *m_editMeter;
+    QLineEdit *m_editOpus;
+    QLineEdit *m_editArranger;
+    QLineEdit *m_editInstrument;
+    QLineEdit *m_editPiece;
+    QLineEdit *m_editCopyright;
+    QLineEdit *m_editTagline;
+
 };
 
 

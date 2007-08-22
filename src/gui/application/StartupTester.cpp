@@ -26,6 +26,8 @@
 #include "StartupTester.h"
 
 #include "misc/Debug.h"
+#include "gui/dialogs/LilypondOptionsDialog.h"
+
 #include <kprocess.h>
 #include <qmutex.h>
 #include <qthread.h>
@@ -106,6 +108,10 @@ StartupTester::run()
     } else {
         RG_DEBUG << "StartupTester - Lilypondview OK" << endl;
         m_haveLilypondView = true;
+        QRegExp re("Lilypond version: ([^\n]*)");
+        if (re.search(m_stdoutBuffer) != -1) {
+            LilypondOptionsDialog::setDefaultLilypondVersion(re.cap(1));
+        }
     }
     delete proc;
     m_lilypondViewMutex.unlock();

@@ -5,8 +5,8 @@
 <MenuBar>
 
 <Menu name="file" append="new_merge">
+<Action name="file_preview_lilypond" append="print_merge" />
 </Menu>
-
 
 <Menu name="edit">
   <Action name="cut_and_close"/>
@@ -331,7 +331,7 @@
       </Menu>
   <Separator/>
   <Action name="text" />
-  <Action name="fretboard" />
+  <Action name="guitarchord" />
   <Separator/>
   <Menu name="Move">
   	<text>Local &amp;Cursor</text>
@@ -359,6 +359,8 @@
 	<Separator/>
 	<Action name="cursor_up_staff"/>
 	<Action name="cursor_down_staff"/>
+  	<Action name="cursor_prior_segment"/>
+  	<Action name="cursor_next_segment"/>
   </Menu>
 
   <Menu name="Transport">
@@ -429,7 +431,7 @@
   <Action name="select" />
   <Action name="erase" />
   <Action name="text" />
-  <Action name="fretboard" />
+  <Action name="guitarchord" />
   <Separator/>
   <Action name="toggle_step_by_step"/>
   <Action name="filter_selection"/>
@@ -787,6 +789,8 @@
   <enable>
     <Action name="cursor_up_staff"/>
     <Action name="cursor_down_staff"/>
+    <Action name="cursor_prior_segment"/>
+    <Action name="cursor_next_segment"/>
   </enable>
 </State>
 

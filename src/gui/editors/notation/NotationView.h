@@ -34,6 +34,8 @@
 #include "NotationProperties.h"
 #include "NotationCanvasView.h"
 #include <string>
+#include <kprocess.h>
+#include <ktempfile.h>
 #include <qmap.h>
 #include <qsize.h>
 #include <qstring.h>
@@ -101,6 +103,7 @@ class NotationView : public EditView,
     friend class ClefInserter;
     friend class NotationEraser;
     friend class NotationSelectionPaster;
+    friend class LilypondExporter;
 
     Q_OBJECT
 
@@ -322,6 +325,17 @@ public slots:
     void slotFilePrintPreview();
 
     /**
+     * export a Lilypond file
+     */
+    bool exportLilypondFile(QString url, bool forPreview = false);
+
+    /**
+     * Export to a temporary file and process
+     */
+    void slotPreviewLilypond();
+    void slotLilypondViewProcessExited(KProcess *);
+
+    /**
      * put the marked text/object into the clipboard and remove it
      * from the document
      */
@@ -427,8 +441,8 @@ public slots:
     /// text tool
     void slotText();
 
-    /// fretboard tool
-    void slotFretboard();
+    /// guitar chord tool
+    void slotGuitarChord();
 
     /// editing tools
     void slotEraseSelected();
@@ -635,6 +649,12 @@ public slots:
 
     /// Change the current staff to the one following the current one
     void slotCurrentStaffDown();
+
+    /// Change the current segment to the one following the current one
+    void slotCurrentSegmentPrior();
+
+    /// Change the current segment to the one preceding the current one
+    void slotCurrentSegmentNext();
 
     /// Changes the font of the staffs on the view, gets font name from sender
     void slotChangeFontFromAction();
@@ -871,6 +891,7 @@ protected:
     virtual Staff *getCurrentStaff() { return getCurrentLinedStaff(); }
     virtual LinedStaff *getCurrentLinedStaff();
         
+    virtual bool hasSegment(Segment *segment);
 
     /**
      * Return the time at which the insert cursor may be found.
@@ -995,6 +1016,8 @@ protected:
 
     bool m_printMode;
     int m_printSize;
+
+    static std::map<KProcess *, KTempFile *> m_lilyTempFileMap;
 };
 
 

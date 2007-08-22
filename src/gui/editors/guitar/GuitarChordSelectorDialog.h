@@ -74,7 +74,7 @@ protected:
 
     void parseChordFiles(const std::vector<QString>& chordFiles);
     void parseChordFile(const QString& chordFileName);
-    void populateFingerings(const Guitar::ChordMap::chordarray&);
+    void populateFingerings(const Guitar::ChordMap::chordarray&, const Guitar::Fingering& refFingering=Guitar::Fingering(0));
     void populateExtensions(const QStringList& extList);
 
     /// set enabled state of edit/delete buttons

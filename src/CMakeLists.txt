@@ -91,24 +91,42 @@ KDE3_ADD_DCOP_SKELS(gui_SRCS ${gui_dcop_SRCS})
 KDE3_ADD_DCOP_STUBS(gui_SRCS ${gui_dcop_SRCS}) 
 KDE3_ADD_UI_FILES(gui_SRCS ${ui_SRCS})
 KDE3_AUTOMOC(${gui_SRCS})
+KDE3_AUTOMOC(${segmentcanvas_SRCS})
 KDE3_AUTOMOC(${commands_SRCS})
 KDE3_AUTOMOC(${document_SRCS})
 
 ADD_LIBRARY(RosegardenExtended STATIC
-    ${commands_SRCS}
     ${document_SRCS}
     ${gui_SRCS}
+)
+
+ADD_LIBRARY(RosegardenCommands STATIC
+    ${commands_SRCS}
 )
 
 IF(USE_PCH)
     ADD_DEPENDENCIES(RosegardenExtended precompiled_headers)
 ENDIF(USE_PCH)
 
+IF(USE_PCH)
+    ADD_DEPENDENCIES(RosegardenCommands precompiled_headers)
+ENDIF(USE_PCH)
+
+ADD_LIBRARY(RosegardenSegmentCanvas STATIC
+    ${segmentcanvas_SRCS}
+)
+
+IF(USE_PCH)
+    ADD_DEPENDENCIES(RosegardenSegmentCanvas precompiled_headers)
+ENDIF(USE_PCH)
+
+
 
 KDE3_ADD_EXECUTABLE(rosegarden 
     #${commands_SRCS}
     #${document_SRCS}
     #${gui_SRCS}
+    #${segmentcanvas_SRCS}
     gui/application/main.cpp
 )
 
@@ -128,6 +146,8 @@ TARGET_LINK_LIBRARIES(rosegarden
     kdeui
     kdeprint
     RosegardenExtended
+    RosegardenSegmentCanvas
+    RosegardenCommands
     RosegardenCommon
 )
 
@@ -173,6 +193,7 @@ IF(WANT_TEST)
         kio
         kdeui
         kdeprint
+        RosegardenCommands
         RosegardenExtended
         RosegardenCommon
     )

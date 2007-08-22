@@ -454,6 +454,7 @@ int main(int argc, char *argv[])
     aboutData.addCredit("Heikki Johannes Junes", I18N_NOOP("Finnish translation\nLilyPond export fixes/improvements"), "hjunes@cc.hut.fi");
     aboutData.addCredit("Stephen Torri", I18N_NOOP("guitar chord editor"), "storri@torri.org");
     aboutData.addCredit("Piotr Sawicki", I18N_NOOP("Polish translation"), "pelle@plusnet.pl");
+    aboutData.addCredit("David García-Abad", I18N_NOOP("Basque translation"), "davidgarciabad@telefonica.net");
 
     aboutData.setTranslator(I18N_NOOP("_: NAME OF TRANSLATORS\nYour names") , I18N_NOOP("_: EMAIL OF TRANSLATORS\nYour emails"));
 

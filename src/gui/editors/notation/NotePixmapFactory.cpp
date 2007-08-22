@@ -2984,27 +2984,26 @@ NotePixmapFactory::makeTextPixmap(const Text &text)
 }
 
 QCanvasPixmap*
-NotePixmapFactory::makeFretboardPixmap(const Guitar::Fingering &fingering,
+NotePixmapFactory::makeGuitarChordPixmap(const Guitar::Fingering &fingering,
                                        int x,
                                        int y)
 {
     using namespace Guitar;
-    Profiler profiler("NotePixmapFactory::makeFretboardPixmap");
+    Profiler profiler("NotePixmapFactory::makeGuitarChordPixmap");
 
-    int fretboardWidth = getLineSpacing() * 6;
-    int fretboardHeight = getLineSpacing() * 6;
+    int guitarChordWidth = getLineSpacing() * 6;
+    int guitarChordHeight = getLineSpacing() * 6;
 
-    /*
-        std::cout << "Fretboard QRect height: " << fretboardHeight
-        << ", width: " << fretboardWidth
-        << std::endl;
-    */
+    createPixmapAndMask(guitarChordWidth, guitarChordHeight);
 
-    createPixmapAndMask(fretboardWidth, fretboardHeight);
-
-    // m_generatedPixmap
-    m_p->painter().setBrush(Qt::black);
-
+    if (m_selected) {
+        m_p->painter().setPen(GUIPalette::getColour(GUIPalette::SelectedElement));
+        m_p->painter().setBrush(GUIPalette::getColour(GUIPalette::SelectedElement));
+    } else {
+        m_p->painter().setPen(Qt::black);
+        m_p->painter().setBrush(Qt::black);
+    }
+    
     Guitar::NoteSymbols ns(Guitar::Fingering::DEFAULT_NB_STRINGS, FingeringBox::DEFAULT_NB_DISPLAYED_FRETS);
     Guitar::NoteSymbols::drawFingeringPixmap(fingering, ns, &(m_p->painter()));
 

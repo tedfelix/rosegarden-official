@@ -100,7 +100,8 @@
 #include "commands/segment/RenameTrackCommand.h"
 #include "document/RosegardenGUIDoc.h"
 #include "document/ConfigGroups.h"
-#include "FretboardInserter.h"
+#include "document/io/LilypondExporter.h"
+#include "GuitarChordInserter.h"
 #include "gui/application/SetWaitCursor.h"
 #include "gui/application/RosegardenGUIView.h"
 #include "gui/dialogs/ClefDialog.h"
@@ -108,6 +109,7 @@
 #include "gui/dialogs/InterpretDialog.h"
 #include "gui/dialogs/IntervalDialog.h"
 #include "gui/dialogs/KeySignatureDialog.h"
+#include "gui/dialogs/LilypondOptionsDialog.h"
 #include "gui/dialogs/LyricEditDialog.h"
 #include "gui/dialogs/MakeOrnamentDialog.h"
 #include "gui/dialogs/PasteNotationDialog.h"
@@ -163,9 +165,11 @@
 #include <klineeditdlg.h>
 #include <kmessagebox.h>
 #include <kprinter.h>
+#include <kprocess.h>
 #include <kprogress.h>
 #include <kstatusbar.h>
 #include <kstdaction.h>
+#include <ktempfile.h>
 #include <ktoolbar.h>
 #include <kxmlguiclient.h>
 #include <qbrush.h>
@@ -436,6 +440,16 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     setBottomStandardRuler(new StandardRuler(getDocument(), m_hlayout, m_leftGutter, 25,
                                        true, getBottomWidget()));
+
+    connect(m_topStandardRuler->getLoopRuler(), SIGNAL(startMouseMove(int)),
+            m_canvasView, SLOT(startAutoScroll(int)));
+    connect(m_topStandardRuler->getLoopRuler(), SIGNAL(stopMouseMove()),
+            m_canvasView, SLOT(stopAutoScroll()));
+
+    connect(m_bottomStandardRuler->getLoopRuler(), SIGNAL(startMouseMove(int)),
+            m_canvasView, SLOT(startAutoScroll(int)));
+    connect(m_bottomStandardRuler->getLoopRuler(), SIGNAL(stopMouseMove()),
+            m_canvasView, SLOT(stopAutoScroll()));
 
     for (unsigned int i = 0; i < segments.size(); ++i)
     {
@@ -1319,6 +1333,10 @@ void NotationView::setupActions()
     KStdAction::printPreview(this, SLOT(slotFilePrintPreview()),
                              actionCollection());
 
+    new KAction(i18n("Preview with Lil&yPond..."), 0, 0, this,
+                SLOT(slotPreviewLilypond()), actionCollection(),
+                "file_preview_lilypond");
+
     EditViewBase::setupActions("notation.rc");
     EditView::setupActions();
 
@@ -1536,10 +1554,10 @@ void NotationView::setupActions()
                                   actionCollection(), "text");
     noteAction->setExclusiveGroup("notes");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("fretboard")));
-    noteAction = new KRadioAction(i18n("&Fretboard"), icon, Key_F9, this,
-                                  SLOT(slotFretboard()),
-                                  actionCollection(), "fretboard");
+    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("guitarchord")));
+    noteAction = new KRadioAction(i18n("&Guitar Chord"), icon, Key_F9, this,
+                                  SLOT(slotGuitarChord()),
+                                  actionCollection(), "guitarchord");
     noteAction->setExclusiveGroup("notes");
 
     /*    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("lilypond")));
@@ -1848,7 +1866,7 @@ void NotationView::setupActions()
                 SLOT(slotEditAddSustainUp()), actionCollection(),
                 "add_sustain_up");
 
-	new KAction(TransposeCommand::getDiatonicGlobalName(false), 0, this,
+    new KAction(TransposeCommand::getDiatonicGlobalName(false), 0, this,
                 SLOT(slotEditTranspose()), actionCollection(),
                 "transpose_segment");
 
@@ -1939,6 +1957,14 @@ void NotationView::setupActions()
     new KAction(i18n("Cursor &Down Staff"), 0, Key_Down + SHIFT, this,
                 SLOT(slotCurrentStaffDown()), actionCollection(),
                 "cursor_down_staff");
+
+    new KAction(i18n("Cursor Pre&vious Segment"), 0, Key_Prior + ALT, this,
+                SLOT(slotCurrentSegmentPrior()), actionCollection(),
+                "cursor_prior_segment");
+
+    new KAction(i18n("Cursor Ne&xt Segment"), 0, Key_Next + ALT, this,
+                SLOT(slotCurrentSegmentNext()), actionCollection(),
+                "cursor_next_segment");
 
     icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-cursor-to-pointer")));
@@ -2566,6 +2592,9 @@ bool NotationView::applyLayout(int staffNo, timeT startTime, timeT endTime)
     if (m_bottomStandardRuler) {
         m_bottomStandardRuler->update();
     }
+    if (m_tempoRuler && m_tempoRuler->isVisible()) {
+        m_tempoRuler->update();
+    }
     if (m_rawNoteRuler && m_rawNoteRuler->isVisible()) {
         m_rawNoteRuler->update();
     }
@@ -2868,6 +2897,16 @@ NotationView::getCurrentSegment()
     return (staff ? &staff->getSegment() : 0);
 }
 
+bool
+NotationView::hasSegment(Segment *segment)
+{
+    for (unsigned int i = 0; i < m_segments.size(); ++i) {
+	if (segment == m_segments[i]) return true;
+    }
+    return false;
+}
+
+
 LinedStaff *
 NotationView::getCurrentLinedStaff()
 {
@@ -2912,28 +2951,39 @@ NotationView::getInsertionTime(Clef &clef,
 LinedStaff*
 NotationView::getStaffForCanvasCoords(int x, int y) const
 {
+    // (i)  Do not change staff, if mouse was clicked within the current staff.
+    LinedStaff *s = m_staffs[m_currentStaff];
+    if (s->containsCanvasCoords(x, y)) {
+        LinedStaff::LinedStaffCoords coords =
+            s->getLayoutCoordsForCanvasCoords(x, y);
+
+        timeT t = m_hlayout->getTimeForX(coords.first);
+	// In order to find the correct starting and ending bar of the segment,
+	// make infinitesimal shifts (+1 and -1) towards its center.
+	timeT t0 = getDocument()->getComposition().getBarStartForTime(m_staffs[m_currentStaff]->getSegment().getStartTime()+1);
+	timeT t1 = getDocument()->getComposition().getBarEndForTime(m_staffs[m_currentStaff]->getSegment().getEndTime()-1);
+        if (t >= t0 && t < t1) {
+            return m_staffs[m_currentStaff];
+        }
+    }
+    // (ii) Find staff under cursor, if clicked outside the current staff.
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 
         LinedStaff *s = m_staffs[i];
-
-        //	NOTATION_DEBUG << "NotationView::getStaffForCanvasCoords(" << x << "," << y << "): looking at staff " << i << endl;
 
         if (s->containsCanvasCoords(x, y)) {
 
             LinedStaff::LinedStaffCoords coords =
                 s->getLayoutCoordsForCanvasCoords(x, y);
 
-            //	    NOTATION_DEBUG << "NotationView::getStaffForCanvasCoords(" << x << "," << y << "): layout coords are (" << coords.first << "," << coords.second << ")" << endl;
-
-            int barNo = m_hlayout->getBarForX(coords.first);
-            //	    NOTATION_DEBUG << "NotationView::getStaffForCanvasCoords(" << x << "," << y << "): bar number " << barNo << endl;
-            // 931067: < instead of <= in conditional:
-            if (barNo >= m_hlayout->getFirstVisibleBarOnStaff(*s) &&
-                    barNo < m_hlayout->getLastVisibleBarOnStaff(*s)) {
-                //		NOTATION_DEBUG << "NotationView::getStaffForCanvasCoords(" << x << "," << y << "): it's within range for staff " << i << m_hlayout->getFirstVisibleBarOnStaff(*s) << "->" << m_hlayout->getLastVisibleBarOnStaff(*s) << ", returning true" << endl;
+	    timeT t = m_hlayout->getTimeForX(coords.first);
+	    // In order to find the correct starting and ending bar of the segment,
+	    // make infinitesimal shifts (+1 and -1) towards its center.
+	    timeT t0 = getDocument()->getComposition().getBarStartForTime(m_staffs[i]->getSegment().getStartTime()+1);
+	    timeT t1 = getDocument()->getComposition().getBarEndForTime(m_staffs[i]->getSegment().getEndTime()-1);
+	    if (t >= t0 && t < t1) {
                 return m_staffs[i];
             }
-            //	    NOTATION_DEBUG << "NotationView::getStaffForCanvasCoords(" << x << "," << y << "): out of range for this staff " << i << " (" << m_hlayout->getFirstVisibleBarOnStaff(*s) << "->" << m_hlayout->getLastVisibleBarOnStaff(*s) << ")" << endl;
         }
     }
 
@@ -4045,6 +4095,72 @@ NotationView::slotFilePrintPreview()
     }
 
     printingView.print(true);
+}
+
+std::map<KProcess *, KTempFile *> NotationView::m_lilyTempFileMap;
+
+void NotationView::slotPreviewLilypond()
+{
+    KTmpStatusMsg msg(i18n("Previewing Lilypond file..."), this);
+    KTempFile *file = new KTempFile(QString::null, ".ly");
+    file->setAutoDelete(true);
+    if (!file->name()) {
+        // CurrentProgressDialog::freeze();
+        KMessageBox::sorry(this, i18n("Failed to open a temporary file for Lilypond export."));
+        delete file;
+    }
+    if (!exportLilypondFile(file->name(), true)) {
+        return ;
+    }
+    KProcess *proc = new KProcess;
+    *proc << "rosegarden-lilypondview";
+    *proc << "-g";
+    *proc << file->name();
+    connect(proc, SIGNAL(processExited(KProcess *)),
+            this, SLOT(slotLilypondViewProcessExited(KProcess *)));
+    m_lilyTempFileMap[proc] = file;
+    proc->start(KProcess::NotifyOnExit);
+}
+
+void NotationView::slotLilypondViewProcessExited(KProcess *p)
+{
+    delete m_lilyTempFileMap[p];
+    m_lilyTempFileMap.erase(p);
+    delete p;
+}
+
+bool NotationView::exportLilypondFile(QString file, bool forPreview)
+{
+    QString caption = "", heading = "";
+    if (forPreview) {
+        caption = i18n("Lilypond Preview Options");
+        heading = i18n("Lilypond preview options");
+    }
+
+    LilypondOptionsDialog dialog(this, m_doc, caption, heading);
+    if (dialog.exec() != QDialog::Accepted) {
+        return false;
+    }
+
+    ProgressDialog progressDlg(i18n("Exporting Lilypond file..."),
+                               100,
+                               this);
+
+    LilypondExporter e(this, m_doc, std::string(QFile::encodeName(file)));
+
+    connect(&e, SIGNAL(setProgress(int)),
+            progressDlg.progressBar(), SLOT(setValue(int)));
+
+    connect(&e, SIGNAL(incrementProgress(int)),
+            progressDlg.progressBar(), SLOT(advance(int)));
+
+    if (!e.write()) {
+        // CurrentProgressDialog::freeze();
+        KMessageBox::sorry(this, i18n("Export failed.  The file could not be opened for writing."));
+        return false;
+    }
+
+    return true;
 }
 
 void NotationView::slotEditCut()
@@ -5505,6 +5621,84 @@ NotationView::slotCurrentStaffDown()
 }
 
 void
+NotationView::slotCurrentSegmentPrior()
+{
+    if (m_staffs.size() < 2)
+        return ;
+
+    Composition *composition =
+        m_staffs[m_currentStaff]->getSegment().getComposition();
+
+    Track *track = composition->
+        getTrackById(m_staffs[m_currentStaff]->getSegment().getTrack());
+    if (!track)
+        return ;
+
+    int lastStaffOnTrack = -1;
+
+    //
+    // TODO: Cycle segments through rather in time order?
+    //       Cycle only segments in the field of view?
+    //
+    for (int i = m_staffs.size()-1; i >= 0; --i) {
+        if (m_staffs[i]->getSegment().getTrack() == track->getId()) {
+	    if (lastStaffOnTrack < 0) {
+                lastStaffOnTrack = i;
+	    } 
+	    if (i < m_currentStaff) {
+		slotSetCurrentStaff(i);
+		slotEditSelectWholeStaff();
+		return ;
+	    }
+        }
+    }
+    if (lastStaffOnTrack >= 0) {
+	slotSetCurrentStaff(lastStaffOnTrack);
+	slotEditSelectWholeStaff();
+	return ;
+    }
+}
+
+void
+NotationView::slotCurrentSegmentNext()
+{
+    if (m_staffs.size() < 2)
+        return ;
+
+    Composition *composition =
+        m_staffs[m_currentStaff]->getSegment().getComposition();
+
+    Track *track = composition->
+        getTrackById(m_staffs[m_currentStaff]->getSegment().getTrack());
+    if (!track)
+        return ;
+
+    int firstStaffOnTrack = -1;
+
+    //
+    // TODO: Cycle segments through rather in time order?
+    //       Cycle only segments in the field of view?
+    //
+    for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+        if (m_staffs[i]->getSegment().getTrack() == track->getId()) {
+	    if (firstStaffOnTrack < 0) {
+                firstStaffOnTrack = i;
+	    } 
+	    if (i > m_currentStaff) {
+		slotSetCurrentStaff(i);
+		slotEditSelectWholeStaff();
+		return ;
+	    }
+        }
+    }
+    if (firstStaffOnTrack >= 0) {
+	slotSetCurrentStaff(firstStaffOnTrack);
+	slotEditSelectWholeStaff();
+	return ;
+    }
+}
+
+void
 NotationView::slotSetInsertCursorPosition(double x, int y, bool scroll,
                                           bool updateNow)
 {
@@ -5799,11 +5993,11 @@ void NotationView::slotText()
     setMenuStates();
 }
 
-void NotationView::slotFretboard()
+void NotationView::slotGuitarChord()
 {
     m_currentNotePixmap->setPixmap
         (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("text")));
-    setTool(m_toolBox->getTool(FretboardInserter::ToolName));
+    setTool(m_toolBox->getTool(GuitarChordInserter::ToolName));
     setMenuStates();
 }
 

@@ -29,33 +29,57 @@
 
 #include <klocale.h>
 #include "document/ConfigGroups.h"
+#include "document/RosegardenGUIDoc.h"
+#include "misc/Strings.h"
 #include <kcombobox.h>
 #include <kconfig.h>
 #include <kdialogbase.h>
+#include <kglobal.h>
+#include <klocale.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qframe.h>
 #include <qgroupbox.h>
 #include <qlabel.h>
 #include <qstring.h>
+#include <qtabwidget.h>
+#include <qtooltip.h>
 #include <qvbox.h>
 #include <qwidget.h>
+#include <iostream>
 
 
 namespace Rosegarden
 {
 
 LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
+	RosegardenGUIDoc *doc,
         QString windowCaption,
         QString heading) :
         KDialogBase(parent, 0, true,
                     (windowCaption = "" ? i18n("LilyPond Export/Preview") : windowCaption),
-                    Ok | Cancel)
+                    Apply | Ok | Cancel),
+	m_doc(doc)
 {
     KConfig *config = kapp->config();
     config->setGroup(NotationViewConfigGroup);
 
-    QVBox * vbox = makeVBoxMainWidget();
+    QVBox * mainbox = makeVBoxMainWidget();
+
+    //
+    // Arrange options in "General" and "Advanced" tabs.
+    //
+
+    QTabWidget * tabWidget = new QTabWidget(mainbox);
+
+    QVBox * vboxGeneral = new QVBox();
+    tabWidget->addTab(vboxGeneral,i18n("General options"));
+
+    QVBox * vboxAdvanced = new QVBox();
+    tabWidget->addTab(vboxAdvanced,i18n("Advanced options"));
+
+    QVBox * vboxHeaders = new QVBox();
+    tabWidget->addTab(vboxHeaders,i18n("Headers"));
 
     //
     // LilyPond export: Basic options
@@ -63,7 +87,7 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
 
     QGroupBox *basicOptionsBox = new QGroupBox
                            (1, Horizontal,
-                            i18n("Basic options"), vbox);
+                            i18n("Basic options"), vboxGeneral);
 
     QFrame *frameBasic = new QFrame(basicOptionsBox);
     QGridLayout *layoutBasic = new QGridLayout(frameBasic, 3, 2, 10, 5);
@@ -72,6 +96,7 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
                           i18n("Compatibility level"), frameBasic), 0, 0);
 
     m_lilyLanguage = new KComboBox(frameBasic);
+    // See also setDefaultLilypondVersion below
     m_lilyLanguage->insertItem(i18n("LilyPond %1").arg("2.6"));
     m_lilyLanguage->insertItem(i18n("LilyPond %1").arg("2.8"));
     m_lilyLanguage->insertItem(i18n("LilyPond %1").arg("2.10"));
@@ -92,9 +117,13 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
     m_lilyPaperSize->insertItem(i18n("US Letter"));
     m_lilyPaperSize->insertItem(i18n("Tabloid"));
     m_lilyPaperSize->insertItem(i18n("do not specify"));
-    m_lilyPaperSize->setCurrentItem(config->readUnsignedNumEntry("lilypapersize", 1));
-    m_lilyPaperLandscape = new QCheckBox(
-                              i18n("Landscape"), frameBasic);
+    int defaultPaperSize = 1; // A4
+    if (KGlobal::locale()->country() == "us" || 
+        KGlobal::locale()->country() == "US") defaultPaperSize = 5; // Letter
+    m_lilyPaperSize->setCurrentItem(config->readUnsignedNumEntry
+                                    ("lilypapersize", defaultPaperSize));
+
+    m_lilyPaperLandscape = new QCheckBox(i18n("Landscape"), frameBasic);
     m_lilyPaperLandscape->setChecked(config->readBoolEntry("lilypaperlandscape", false));
 
     hboxPaper->addWidget( m_lilyPaperSize );
@@ -107,14 +136,12 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
                           i18n("Font size"), frameBasic), 2, 0);
 
     m_lilyFontSize = new KComboBox(frameBasic);
-    m_lilyFontSize->insertItem("11");
-    m_lilyFontSize->insertItem("13");
-    m_lilyFontSize->insertItem("16");
-    m_lilyFontSize->insertItem("19");
-    m_lilyFontSize->insertItem("20");
-    m_lilyFontSize->insertItem("23");
-    m_lilyFontSize->insertItem("26");
-    m_lilyFontSize->setCurrentItem(config->readUnsignedNumEntry("lilyfontsize", 4));
+    int sizes[] = { 11, 13, 16, 19, 20, 23, 26 };
+    for (int i = 0; i < sizeof(sizes)/sizeof(sizes[0]); ++i) {
+        m_lilyFontSize->insertItem(i18n("%1 pt").arg(sizes[i]));
+    }
+    m_lilyFontSize->setCurrentItem(config->readUnsignedNumEntry
+                                   ("lilyfontsize", 4));
     layoutBasic->addWidget(m_lilyFontSize, 2, 1);
 
     //
@@ -123,7 +150,7 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
 
     QGroupBox *staffOptionsBox = new QGroupBox
                            (1, Horizontal,
-                            i18n("Staff level options"), vbox);
+                            i18n("Staff level options"), vboxGeneral);
 
     QFrame *frameStaff = new QFrame(staffOptionsBox);
     QGridLayout *layoutStaff = new QGridLayout(frameStaff, 2, 2, 10, 5);
@@ -150,7 +177,7 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
 
     QGroupBox *notationOptionsBox = new QGroupBox
                            (1, Horizontal,
-                            i18n("Notation options"), vbox);
+                            i18n("Notation options"), vboxGeneral);
 
     QFrame *frameNotation = new QFrame(notationOptionsBox);
     QGridLayout *layoutNotation = new QGridLayout(frameNotation, 4, 2, 10, 5);
@@ -166,7 +193,7 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
     layoutNotation->addWidget(m_lilyTempoMarks, 0, 1);
  
     m_lilyExportLyrics = new QCheckBox(
-                             i18n("Export lyrics (disabling frees some vertical space)"), frameNotation);
+                             i18n("Export lyrics (takes some space, even if empty)"), frameNotation);
     // default to lyric export == false because if you export the default
     // empty "- - -" lyrics, crap results ensue, and people will know if they
     // do need to export the lyrics - DMM
@@ -189,10 +216,10 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
 
     QGroupBox *extraOptionsBox = new QGroupBox
                            (1, Horizontal,
-                            i18n("Extra options"), vbox);
+                            i18n("Extra options"), vboxAdvanced);
 
     QFrame *frameExtra = new QFrame(extraOptionsBox);
-    QGridLayout *layoutExtra = new QGridLayout(frameExtra, 1, 2, 10, 5);
+    QGridLayout *layoutExtra = new QGridLayout(frameExtra, 3, 1, 10, 5);
 
     m_lilyExportPointAndClick = new QCheckBox(
                                     i18n("Enable \"point and click\" debugging"), frameExtra);
@@ -202,11 +229,112 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
     m_lilyExportMidi = new QCheckBox(
                            i18n("Export \\midi block"), frameExtra);
     m_lilyExportMidi->setChecked(config->readBoolEntry("lilyexportmidi", false));
-    layoutExtra->addWidget(m_lilyExportMidi, 0, 1);
+    layoutExtra->addWidget(m_lilyExportMidi, 1, 0);
+
+    m_lilyRaggedBottom = new QCheckBox(
+                           i18n("Ragged bottom (systems will not be spread vertically across the page)"), frameExtra);
+    m_lilyRaggedBottom->setChecked(config->readBoolEntry("lilyraggedbottom", false));
+    layoutExtra->addWidget(m_lilyRaggedBottom, 2, 0);
+
+    //
+    // LilyPond export: Headers
+    //
+
+    QGroupBox *headersBox = new QGroupBox
+                           (1, Horizontal,
+                            i18n("Printable headers"), vboxHeaders);
+
+    QFrame *frameHeaders = new QFrame(headersBox);
+    QGridLayout *layoutHeaders = new QGridLayout(frameHeaders, 10, 6, 10, 5);
+
+    // grab user headers from metadata
+    Configuration metadata = (&m_doc->getComposition())->getMetadata();
+    std::vector<std::string> propertyNames = metadata.getPropertyNames();
+    std::vector<PropertyName> fixedKeys =
+	CompositionMetadataKeys::getFixedKeys();
+
+    for (unsigned int index = 0; index < fixedKeys.size(); index++) {
+	std::string key = fixedKeys[index].getName();
+	std::string header = "";
+	for (unsigned int i = 0; i < propertyNames.size(); ++i) {
+	    std::string property = propertyNames [i];
+	    if (property == key) {
+		header = metadata.get<String>(property);
+	    }
+	}
+
+	unsigned int row = 0, col = 0, width = 1;
+	QLineEdit *editHeader = new QLineEdit( QString( header ), frameHeaders );
+	if (key == headerDedication) {  
+	    m_editDedication = editHeader;
+	    row = 0; col = 2; width = 2;
+	}
+	if (key == headerTitle) {       
+	    m_editTitle = editHeader;	
+	    row = 1; col = 1; width = 4;
+	    }
+	if (key == headerSubtitle) {
+	    m_editSubtitle = editHeader;
+	    row = 2; col = 1; width = 4;
+	}
+	if (key == headerSubsubtitle) { 
+	    m_editSubsubtitle = editHeader;
+	    row = 3; col = 2; width = 2;
+	}
+	if (key == headerPoet) {        
+	    m_editPoet = editHeader;
+	    row = 4; col = 0; width = 2;
+	}
+	if (key == headerInstrument) {  
+	    m_editInstrument = editHeader;
+	    row = 4; col = 2; width = 2;
+	}
+	if (key == headerComposer) {    
+	    m_editComposer = editHeader;
+	    row = 4; col = 4; width = 2; 
+	}
+	if (key == headerMeter) {       
+	    m_editMeter = editHeader;
+	    row = 5; col = 0; width = 3; 
+	}
+	if (key == headerArranger) {    
+	    m_editArranger = editHeader;
+	    row = 5; col = 3; width = 3; 
+	}
+	if (key == headerPiece) {       
+	    m_editPiece = editHeader;
+	    row = 6; col = 0; width = 3; 
+	}
+	if (key == headerOpus) {        
+	    m_editOpus = editHeader;
+	    row = 6; col = 3; width = 3; 
+	}
+	if (key == headerCopyright) {   
+	    m_editCopyright = editHeader;
+	    row = 8; col = 1; width = 4; 
+	}
+	if (key == headerTagline) {     
+	    m_editTagline = editHeader;
+	    row = 9; col = 1; width = 4; 
+	}
+
+	// editHeader->setReadOnly( true );
+	editHeader->setAlignment( (col == 0 ? Qt::AlignLeft : (col >= 3 ? Qt::AlignRight : Qt::AlignCenter) ));
+
+	layoutHeaders->addMultiCellWidget(editHeader, row, row, col, col+(width-1) );
+
+	//
+	// ToolTips
+	//
+	QToolTip::add( editHeader, key );
+    }
+    QLabel *separator = new QLabel(i18n("The composition comes here."), frameHeaders);
+    separator->setAlignment( Qt::AlignCenter );
+    layoutHeaders->addMultiCellWidget(separator, 7, 7, 1, 4 );
 }
 
 void
-LilypondOptionsDialog::slotOk()
+LilypondOptionsDialog::slotApply()
 {
     KConfig *config = kapp->config();
     config->setGroup(NotationViewConfigGroup);
@@ -215,6 +343,7 @@ LilypondOptionsDialog::slotOk()
     config->writeEntry("lilypapersize", m_lilyPaperSize->currentItem());
     config->writeEntry("lilypaperlandscape", m_lilyPaperLandscape->isChecked());
     config->writeEntry("lilyfontsize", m_lilyFontSize->currentItem());
+    config->writeEntry("lilyraggedbottom", m_lilyRaggedBottom->isChecked());
     config->writeEntry("lilyexportlyrics", m_lilyExportLyrics->isChecked());
     config->writeEntry("lilyexportmidi", m_lilyExportMidi->isChecked());
     config->writeEntry("lilyexporttempomarks", m_lilyTempoMarks->currentItem());
@@ -224,7 +353,66 @@ LilypondOptionsDialog::slotOk()
     config->writeEntry("lilyexportstaffgroup", m_lilyExportStaffGroup->isChecked());
     config->writeEntry("lilyexportstaffmerge", m_lilyExportStaffMerge->isChecked());
 
+    //
+    // Update header fields
+    //
+
+    Configuration &metadata = (&m_doc->getComposition())->getMetadata();
+    metadata.set<String>(CompositionMetadataKeys::Dedication, qstrtostr(m_editDedication->text()));
+    metadata.set<String>(CompositionMetadataKeys::Title, qstrtostr(m_editTitle->text()));
+    metadata.set<String>(CompositionMetadataKeys::Subtitle, qstrtostr(m_editSubtitle->text()));
+    metadata.set<String>(CompositionMetadataKeys::Subsubtitle, qstrtostr(m_editSubsubtitle->text()));
+    metadata.set<String>(CompositionMetadataKeys::Poet, qstrtostr(m_editPoet->text()));
+    metadata.set<String>(CompositionMetadataKeys::Composer, qstrtostr(m_editComposer->text()));
+    metadata.set<String>(CompositionMetadataKeys::Meter, qstrtostr(m_editMeter->text()));
+    metadata.set<String>(CompositionMetadataKeys::Opus, qstrtostr(m_editOpus->text()));
+    metadata.set<String>(CompositionMetadataKeys::Arranger, qstrtostr(m_editArranger->text()));
+    metadata.set<String>(CompositionMetadataKeys::Instrument, qstrtostr(m_editInstrument->text()));
+    metadata.set<String>(CompositionMetadataKeys::Piece, qstrtostr(m_editPiece->text()));
+    metadata.set<String>(CompositionMetadataKeys::Copyright, qstrtostr(m_editCopyright->text()));
+    metadata.set<String>(CompositionMetadataKeys::Tagline, qstrtostr(m_editTagline->text()));
+
+    m_doc->slotDocumentModified();
+}
+ 
+void
+LilypondOptionsDialog::slotOk()
+{
+    slotApply();
     accept();
+}
+
+void
+LilypondOptionsDialog::setDefaultLilypondVersion(QString version)
+{
+    KConfig *config = kapp->config();
+    config->setGroup(NotationViewConfigGroup);
+    int index = -1;
+    bool unstable = false;
+    if (version == "2.6" || version.startsWith("2.6.")) {
+        index = 0;
+    } else if (version == "2.7" || version.startsWith("2.7.")) {
+        unstable = true;
+        index = 1;
+    } else if (version == "2.8" || version.startsWith("2.8.")) {
+        index = 1;
+    } else if (version == "2.9" || version.startsWith("2.9.")) {
+        unstable = true;
+        index = 2;
+    } else if (version == "2.10" || version.startsWith("2.10.")) {
+        index = 2;
+    } else if (version == "2.11" || version.startsWith("2.11.")) {
+        unstable = true;
+        index = 3;
+    } else if (version == "2.12" || version.startsWith("2.12.")) {
+        index = 3;
+    }
+    if (unstable) {
+        std::cerr << "\nWARNING: Unstable Lilypond version detected, selecting next language version up\n" << std::endl;
+    }
+    if (index >= 0) {
+        config->writeEntry("lilylanguage", index);
+    }
 }
 
 }

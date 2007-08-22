@@ -121,6 +121,9 @@ Heikki Johannes Junes <hjunes@cc.hut.fi>
 Piotr Sawicki <pelle@plusnet.pl>
     * Polish translation
 
+David García-Abad <davidgarciabad@telefonica.net>
+    * Basque translation
+
 ##
 ## Names in here should also be credited in gui/application/main.cpp, with aboutData.addCredit()
 ##

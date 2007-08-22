@@ -1259,7 +1259,7 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
             }
         } else if (elt->event()->isa(Guitar::Chord::EventType)) {
 
-            // Create a fretboard pixmap
+            // Create a guitar chord pixmap
             try {
 
                 Guitar::Chord chord (*elt->event());
@@ -1281,12 +1281,12 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
                 		    } else {
                 			*/
 
-                pixmap = m_notePixmapFactory->makeFretboardPixmap (chord.getFingering(),
+                pixmap = m_notePixmapFactory->makeGuitarChordPixmap (chord.getFingering(),
                          int(coords.first),
                          coords.second);
                 //		    }
-            } catch (Exception e) { // Fretboard ctor failed
-                NOTATION_DEBUG << "Bad fretboard event" << endl;
+            } catch (Exception e) { // GuitarChord ctor failed
+                NOTATION_DEBUG << "Bad guitar chord event" << endl;
             }
 
         } else {
