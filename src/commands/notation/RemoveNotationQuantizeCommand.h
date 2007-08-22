@@ -23,8 +23,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ADJUSTMENUREMOVENOTATIONQUANTIZECOMMAND_H_
-#define _RG_ADJUSTMENUREMOVENOTATIONQUANTIZECOMMAND_H_
+#ifndef _RG_REMOVENOTATIONQUANTIZECOMMAND_H_
+#define _RG_REMOVENOTATIONQUANTIZECOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
 #include <qstring.h>

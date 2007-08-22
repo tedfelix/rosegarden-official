@@ -48,6 +48,7 @@ namespace Rosegarden
 {
 
 
+// Encapsulates NoteFontMap, and loads pixmaps etc on demand
 
 class NoteFont
 {

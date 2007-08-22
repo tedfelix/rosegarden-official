@@ -49,7 +49,7 @@ AddSlashesCommand::registerCommand(CommandRegistry *r)
 }
 
 int
-AddSlashesCommand::getArgument(QString actionName, QWidget *)
+AddSlashesCommand::getArgument(QString actionName, CommandArgumentQuerier &)
 {
     QString pfx("slashes_");
     if (actionName.startsWith(pfx)) {

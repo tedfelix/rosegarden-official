@@ -29,11 +29,30 @@
 #include "base/Selection.h"
 #include "document/BasicSelectionCommand.h"
 #include "gui/editors/notation/NotationProperties.h"
+#include "document/CommandRegistry.h"
 #include <qstring.h>
 
 
 namespace Rosegarden
 {
+
+void
+ChangeStemsCommand::registerCommand(CommandRegistry *r)
+{
+    r->registerCommand
+        (getGlobalName(true), "", "Ctrl+PageUp", "stems_up",
+         new ArgumentAndSelectionCommandBuilder<ChangeStemsCommand>());
+    r->registerCommand
+        (getGlobalName(false), "", "Ctrl+PageDown", "stems_down",
+         new ArgumentAndSelectionCommandBuilder<ChangeStemsCommand>());
+}
+
+bool
+ChangeStemsCommand::getArgument(QString actionName, CommandArgumentQuerier &)
+{
+    if (actionName == "stems_up") return true;
+    else return false;
+}
 
 void
 ChangeStemsCommand::modifySegment()
@@ -44,8 +63,7 @@ ChangeStemsCommand::modifySegment()
             i != m_selection->getSegmentEvents().end(); ++i) {
 
         if ((*i)->isa(Note::EventType)) {
-            (*i)->set
-            <Bool>(NotationProperties::STEM_UP, m_up);
+            (*i)->set<Bool>(NotationProperties::STEM_UP, m_up);
         }
     }
 }

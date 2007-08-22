@@ -41,50 +41,50 @@
 namespace Rosegarden
 {
 
-    static std::string standardIndications[] = {
-        Indication::Slur,
-        Indication::PhrasingSlur,
-        Indication::Glissando,
-        Indication::Crescendo,
-        Indication::Decrescendo,
-        Indication::QuindicesimaUp,
-        Indication::OttavaUp,
-        Indication::OttavaDown,
-        Indication::QuindicesimaDown
-    };
-    static const char *shortcuts[] = {
-        ")",
-        "Ctrl+)",
-        "",
-        "<",
-        ">",
-        "",
-        "",
-        "",
-        ""
-    };
-    static const char *icons[] = {
-        "group-slur",
-        "",
-        "group-glissando",
-        "group-crescendo",
-        "group-decrescendo",
-        "",
-        "group-ottava",
-        "",
-        ""
-    };
-    static const char *actionNames[] = {
-        "slur",
-        "phrasing_slur",
-        "glissando",
-        "crescendo",
-        "decrescendo",
-        "octave_2up",
-        "octave_up",
-        "octave_down",
-        "octave_2down"
-    };
+static std::string standardIndications[] = {
+    Indication::Slur,
+    Indication::PhrasingSlur,
+    Indication::Glissando,
+    Indication::Crescendo,
+    Indication::Decrescendo,
+    Indication::QuindicesimaUp,
+    Indication::OttavaUp,
+    Indication::OttavaDown,
+    Indication::QuindicesimaDown
+};
+static const char *shortcuts[] = {
+    ")",
+    "Ctrl+)",
+    "",
+    "<",
+    ">",
+    "",
+    "",
+    "",
+    ""
+};
+static const char *icons[] = {
+    "group-slur",
+    "",
+    "group-glissando",
+    "group-crescendo",
+    "group-decrescendo",
+    "",
+    "group-ottava",
+    "",
+    ""
+};
+static const char *actionNames[] = {
+    "slur",
+    "phrasing_slur",
+    "glissando",
+    "crescendo",
+    "decrescendo",
+    "octave_2up",
+    "octave_up",
+    "octave_down",
+    "octave_2down"
+};
 
 void
 AddIndicationCommand::registerCommand(CommandRegistry *r)
@@ -100,7 +100,7 @@ AddIndicationCommand::registerCommand(CommandRegistry *r)
 }
 
 std::string
-AddIndicationCommand::getArgument(QString actionName, QWidget *)
+AddIndicationCommand::getArgument(QString actionName, CommandArgumentQuerier &)
 {
     for (int i = 0;
          i < sizeof(standardIndications)/sizeof(standardIndications[0]);

@@ -35,7 +35,6 @@
 #include "document/BasicSelectionCommand.h"
 #include "document/CommandRegistry.h"
 #include <qstring.h>
-#include <klineeditdlg.h> //!!!
 
 
 namespace Rosegarden
@@ -99,20 +98,14 @@ AddFingeringMarkCommand::getShortcut(std::string fingering)
 
 std::string
 AddFingeringMarkCommand::getArgument(QString actionName,
-                                     QWidget *dialogParent)
+                                     CommandArgumentQuerier &querier)
 {
     QString pfx = "add_fingering_";
     if (actionName.startsWith(pfx)) {
         QString remainder = actionName.right(actionName.length() - pfx.length());
         if (remainder == "mark") {
-
-            //!!! this is crap -- we want to be able to call back on
-            //some abstract ptr passed in, in order to ask the user a
-            //question -- don't want Qt dependency here
-
             bool ok = false;
-            QString txt = KLineEditDlg::getText(i18n("Fingering: "), "", &ok,
-                                                dialogParent);
+            QString txt = querier.getText(i18n("Fingering: "), &ok);
             if (!ok) throw CommandCancelled();
             else return txt;
         } else if (remainder == "plus") {

@@ -85,6 +85,7 @@ public:
     CharName getMarkCharName(const Mark &);
     CharName getClefCharName(const Clef &);
     CharName getTimeSignatureDigitName(int digit);
+    CharName getSomeCharName(std::string thing);
 
     void setBaseStyle (NoteStyleName name);
     void setShape     (Note::Type, NoteHeadShape);

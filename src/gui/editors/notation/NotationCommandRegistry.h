@@ -34,6 +34,9 @@ class NotationCommandRegistry : public EditViewCommandRegistry
 public:
     NotationCommandRegistry(EditView *v);
     virtual ~NotationCommandRegistry();
+
+protected:
+    virtual bool findIcon(QString iconName, QIconSet &icon);
 };
 
 }

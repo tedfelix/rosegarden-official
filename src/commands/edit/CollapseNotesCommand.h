@@ -23,8 +23,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ADJUSTMENUCOLLAPSENOTESCOMMAND_H_
-#define _RG_ADJUSTMENUCOLLAPSENOTESCOMMAND_H_
+#ifndef _RG_COLLAPSENOTESCOMMAND_H_
+#define _RG_COLLAPSENOTESCOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
 #include <qstring.h>

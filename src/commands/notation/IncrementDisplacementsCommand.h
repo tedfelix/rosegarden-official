@@ -29,19 +29,26 @@
 #include "document/BasicSelectionCommand.h"
 #include <qstring.h>
 #include <klocale.h>
-
-
+#include <qpoint.h>
 
 
 namespace Rosegarden
 {
 
 class EventSelection;
+class CommandRegistry;
 
 
 class IncrementDisplacementsCommand : public BasicSelectionCommand
 {
 public:
+    IncrementDisplacementsCommand(QPoint relative,
+                                  EventSelection &selection) :
+        BasicSelectionCommand(getGlobalName(), selection, true),
+        m_selection(&selection),
+        m_dx(relative.x()),
+        m_dy(relative.y()) { }
+
     IncrementDisplacementsCommand(EventSelection &selection,
                                   long dx, long dy) :
         BasicSelectionCommand(getGlobalName(), selection, true),
@@ -50,6 +57,9 @@ public:
         m_dy(dy) { }
 
     static QString getGlobalName() { return i18n("Fine Reposition"); }
+
+    static void registerCommand(CommandRegistry *r);
+    static QPoint getArgument(QString actionName, CommandArgumentQuerier &);
 
 protected:
     virtual void modifySegment();

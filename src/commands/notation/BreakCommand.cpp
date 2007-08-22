@@ -27,6 +27,7 @@
 
 #include "base/Selection.h"
 #include "document/BasicSelectionCommand.h"
+#include "document/CommandRegistry.h"
 #include "gui/editors/notation/NotationProperties.h"
 #include "base/BaseProperties.h"
 #include <qstring.h>
@@ -36,6 +37,14 @@ namespace Rosegarden
 {
 
 using namespace BaseProperties;
+
+void
+BreakCommand::registerCommand(CommandRegistry *r)
+{
+    r->registerCommand
+        (getGlobalName(), "group-unbeam", "Ctrl+U", "break_group",
+         new SelectionCommandBuilder<BreakCommand>());
+}
 
 void
 BreakCommand::modifySegment()

@@ -41,7 +41,7 @@ using namespace BaseProperties;
 void
 BeamCommand::registerCommand(CommandRegistry *r)
 {
-    r->registerCommand //<BeamCommand>
+    r->registerCommand
         (getGlobalName(), "group-beam", "Ctrl+B", "beam",
          new SelectionCommandBuilder<BeamCommand>());
 }
@@ -56,10 +56,8 @@ BeamCommand::modifySegment()
             i != m_selection->getSegmentEvents().end(); ++i) {
 
         if ((*i)->isa(Note::EventType)) {
-            (*i)->set
-            <Int>(BEAMED_GROUP_ID, id);
-            (*i)->set
-            <String>(BEAMED_GROUP_TYPE, GROUP_TYPE_BEAMED);
+            (*i)->set<Int>(BEAMED_GROUP_ID, id);
+            (*i)->set<String>(BEAMED_GROUP_TYPE, GROUP_TYPE_BEAMED);
         }
     }
 }

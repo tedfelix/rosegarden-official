@@ -23,8 +23,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ADJUSTMENUNORMALIZERESTSCOMMAND_H_
-#define _RG_ADJUSTMENUNORMALIZERESTSCOMMAND_H_
+#ifndef _RG_NORMALIZERESTSCOMMAND_H_
+#define _RG_NORMALIZERESTSCOMMAND_H_
 
 #include "document/BasicCommand.h"
 #include <qstring.h>

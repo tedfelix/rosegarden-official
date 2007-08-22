@@ -23,8 +23,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ADJUSTMENUMAKECHORDCOMMAND_H_
-#define _RG_ADJUSTMENUMAKECHORDCOMMAND_H_
+#ifndef _RG_MAKECHORDCOMMAND_H_
+#define _RG_MAKECHORDCOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
 #include <qstring.h>
@@ -53,9 +53,6 @@ protected:
 private:
     EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
 };    
-
-
-// Transforms menu commands
 
 
 

@@ -1948,8 +1948,7 @@ NotePixmapFactory::makeNoteMenuPixmap(timeT duration,
 QCanvasPixmap *
 NotePixmapFactory::makeMarkMenuPixmap(Mark mark)
 {
-    if (mark == Marks::Sforzando ||
-            mark == Marks::Rinforzando) {
+    if (mark == Marks::Sforzando || mark == Marks::Rinforzando) {
         return makeToolbarPixmap(mark.c_str());
     } else {
         NoteFont *font = 0;

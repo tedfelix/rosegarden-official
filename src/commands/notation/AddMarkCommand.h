@@ -23,8 +23,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_NOTESMENUADDMARKCOMMAND_H_
-#define _RG_NOTESMENUADDMARKCOMMAND_H_
+#ifndef _RG_ADDMARKCOMMAND_H_
+#define _RG_ADDMARKCOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
 #include <qstring.h>
@@ -51,7 +51,7 @@ public:
     static QString getShortcut(Mark mark);
     static QString getIconName(Mark mark);
 
-    static Mark getArgument(QString actionName, QWidget *);
+    static Mark getArgument(QString actionName, CommandArgumentQuerier &);
     static void registerCommand(CommandRegistry *r);
 
 protected:

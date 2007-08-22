@@ -23,8 +23,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_NOTESMENUBREAKCOMMAND_H_
-#define _RG_NOTESMENUBREAKCOMMAND_H_
+#ifndef _RG_BREAKCOMMAND_H_
+#define _RG_BREAKCOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
 #include <qstring.h>
@@ -37,6 +37,7 @@ namespace Rosegarden
 {
 
 class EventSelection;
+class CommandRegistry;
 
 
 class BreakCommand : public BasicSelectionCommand
@@ -47,6 +48,8 @@ public:
         m_selection(&selection) { }
 
     static QString getGlobalName() { return i18n("&Unbeam"); }
+
+    static void registerCommand(CommandRegistry *r);
 
 protected:
     virtual void modifySegment();

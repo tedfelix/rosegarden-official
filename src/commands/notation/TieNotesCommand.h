@@ -23,8 +23,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_NOTESMENUTIENOTESCOMMAND_H_
-#define _RG_NOTESMENUTIENOTESCOMMAND_H_
+#ifndef _RG_TIENOTESCOMMAND_H_
+#define _RG_TIENOTESCOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
 #include <qstring.h>

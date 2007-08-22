@@ -120,31 +120,18 @@ AddMarkCommand::getShortcut(Mark mark)
 QString
 AddMarkCommand::getIconName(Mark mark)
 {
-    //!!!
-
-    //!!! Not sure how best to implement this at present.  We have
-    //NotePixmapFactory::makeMarkMenuPixmap which is currently used by
-    //NotationView to make the menu pixmaps for these functions; but
-    //that sometimes returns a font-based pixmap instead of a pixmap
-    //loaded directly from file.  That won't work here as we want to
-    //return a string.  We could register the command using a pixmap
-    //directly, but that would still require a perhaps unacceptable
-    //dependency on NoteFont from this class.
-
-    // NB we will want to remove NotePixmapFactory::makeMarkMenuPixmap
-    // when this is resolved, probably
-
-    return "";
+    return strtoqstr(mark);
 }    
 
 Mark
-AddMarkCommand::getArgument(QString actionName, QWidget *dialogParent)
+AddMarkCommand::getArgument(QString actionName, CommandArgumentQuerier &)
 {
     QString pfx = "add_";
     if (actionName.startsWith(pfx)) {
         QString remainder = actionName.right(actionName.length() - pfx.length());
         return qstrtostr(remainder);
     }
+    return "";
 }
 
 void

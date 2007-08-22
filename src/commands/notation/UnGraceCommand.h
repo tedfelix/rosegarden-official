@@ -23,8 +23,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ADJUSTMENUUNGRACECOMMAND_H_
-#define _RG_ADJUSTMENUUNGRACECOMMAND_H_
+#ifndef _RG_UNGRACECOMMAND_H_
+#define _RG_UNGRACECOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
 #include <qstring.h>

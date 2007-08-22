@@ -23,8 +23,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ADJUSTMENUINTERPRETCOMMAND_H_
-#define _RG_ADJUSTMENUINTERPRETCOMMAND_H_
+#ifndef _RG_INTERPRETCOMMAND_H_
+#define _RG_INTERPRETCOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
 #include <map>

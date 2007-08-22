@@ -40,8 +40,8 @@
 
 namespace Rosegarden {
 
-//!!! constness
 class EventSelection;
+class CommandArgumentQuerier;
 
 class CommandCancelled : public Exception
 {
@@ -61,7 +61,7 @@ public:
     // may throw CommandCancelled
     virtual KCommand *build(QString actionName,
                             EventSelection &s,
-                            QWidget *dialogParent) = 0;
+                            CommandArgumentQuerier &querier) = 0;
 
     virtual EventSelection *getSubsequentSelection(KCommand *) { return 0; }
 };
@@ -73,7 +73,7 @@ public:
     // may throw CommandCancelled
     virtual KCommand *build(QString /* actionName */,
                             EventSelection &s,
-                            QWidget *dialogParent) {
+                            CommandArgumentQuerier &querier) {
         return new Command(s);
     }
 
@@ -91,10 +91,8 @@ public:
     // may throw CommandCancelled
     virtual KCommand *build(QString actionName,
                             EventSelection &s,
-                            QWidget *dialogParent) {
-        return new Command(Command::getArgument(actionName,
-                                                dialogParent),
-                           s);
+                            CommandArgumentQuerier &querier) {
+        return new Command(Command::getArgument(actionName, querier), s);
     }
 
     virtual EventSelection *getSubsequentSelection(KCommand *c) {
@@ -115,11 +113,15 @@ public:
                          QString icon,
                          const KShortcut &shortcut,
                          QString actionName,
-                         AbstractCommandBuilder *builder) {
+                         AbstractCommandBuilder *builder,
+                         QString menuTitle = "",
+                         QString menuActionName = "") {
         addAction(title,
                   icon,
                   shortcut,
-                  actionName);
+                  actionName,
+                  menuTitle,
+                  menuActionName);
 
         m_builders[actionName] = builder;
     }
@@ -136,7 +138,9 @@ protected:
     virtual void addAction(QString title,
                            QString icon,
                            const KShortcut &shortcut, 
-                           QString actionName) = 0;
+                           QString actionName,
+                           QString menuTitle,
+                           QString menuActionName) = 0;
 
     virtual void invokeCommand(QString actionName) = 0;
 
@@ -144,6 +148,15 @@ private:
     CommandRegistry(const CommandRegistry &);
     CommandRegistry &operator=(const CommandRegistry &);
     
+};
+
+class CommandArgumentQuerier
+{
+public:
+    virtual QString getText(QString message, bool *ok) = 0;
+
+protected:
+    CommandArgumentQuerier() { };
 };
 
 }

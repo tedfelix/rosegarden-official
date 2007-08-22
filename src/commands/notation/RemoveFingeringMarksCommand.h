@@ -23,8 +23,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_NOTESMENUREMOVEFINGERINGMARKSCOMMAND_H_
-#define _RG_NOTESMENUREMOVEFINGERINGMARKSCOMMAND_H_
+#ifndef _RG_REMOVEFINGERINGMARKSCOMMAND_H_
+#define _RG_REMOVEFINGERINGMARKSCOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
 #include <qstring.h>

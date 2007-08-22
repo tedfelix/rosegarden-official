@@ -23,8 +23,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ADJUSTMENUUNTIENOTESCOMMAND_H_
-#define _RG_ADJUSTMENUUNTIENOTESCOMMAND_H_
+#ifndef _RG_UNTIENOTESCOMMAND_H_
+#define _RG_UNTIENOTESCOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
 #include <qstring.h>

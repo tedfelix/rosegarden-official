@@ -37,6 +37,7 @@ namespace Rosegarden
 {
 
 class EventSelection;
+class CommandArgumentQuerier; // forward declaration useful for some subclasses
 
 /**
  * BasicCommand is an abstract subclass of Command that manages undo,

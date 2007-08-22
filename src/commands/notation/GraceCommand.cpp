@@ -30,6 +30,7 @@
 #include "base/Selection.h"
 #include "document/BasicCommand.h"
 #include "base/BaseProperties.h"
+#include "document/CommandRegistry.h"
 #include <qstring.h>
 
 
@@ -37,6 +38,14 @@ namespace Rosegarden
 {
 
 using namespace BaseProperties;
+
+void
+GraceCommand::registerCommand(CommandRegistry *r)
+{
+    r->registerCommand
+        (getGlobalName(), "group-grace", "", "grace",
+         new SelectionCommandBuilder<GraceCommand>());
+}
 
 GraceCommand::GraceCommand(EventSelection &selection) :
         BasicCommand(getGlobalName(),

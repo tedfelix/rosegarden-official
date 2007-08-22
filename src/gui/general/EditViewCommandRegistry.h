@@ -27,6 +27,8 @@
 
 #include "document/CommandRegistry.h"
 
+class QIconSet;
+
 namespace Rosegarden {
 
 class EditView;
@@ -43,9 +45,13 @@ protected:
     virtual void addAction(QString title,
                            QString icon,
                            const KShortcut &shortcut, 
-                           QString actionName);
+                           QString actionName,
+                           QString menuTitle,
+                           QString menuActionName);
 
     virtual void invokeCommand(QString actionName);
+
+    virtual bool findIcon(QString iconName, QIconSet &icon) { return false; }
 };
 
 }

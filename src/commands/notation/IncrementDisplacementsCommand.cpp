@@ -27,6 +27,7 @@
 
 #include "base/Selection.h"
 #include "document/BasicSelectionCommand.h"
+#include "document/CommandRegistry.h"
 #include "base/BaseProperties.h"
 #include <qstring.h>
 
@@ -37,6 +38,42 @@ namespace Rosegarden
 using namespace BaseProperties;
 
 void
+IncrementDisplacementsCommand::registerCommand(CommandRegistry *r)
+{
+    r->registerCommand
+        (i18n("Push &Left"), "", "", "fine_position_left",
+         new ArgumentAndSelectionCommandBuilder<IncrementDisplacementsCommand>());
+    r->registerCommand
+        (i18n("Push &Right"), "", "", "fine_position_right",
+         new ArgumentAndSelectionCommandBuilder<IncrementDisplacementsCommand>());
+    r->registerCommand
+        (i18n("Push &Up"), "", "", "fine_position_up",
+         new ArgumentAndSelectionCommandBuilder<IncrementDisplacementsCommand>());
+    r->registerCommand
+        (i18n("Push &Down"), "", "", "fine_position_down",
+         new ArgumentAndSelectionCommandBuilder<IncrementDisplacementsCommand>());
+}
+
+QPoint
+IncrementDisplacementsCommand::getArgument(QString actionName, CommandArgumentQuerier &)
+{
+    if (actionName == "fine_position_left") {
+        return QPoint(-500,    0);
+    }
+    if (actionName == "fine_position_right") {
+        return QPoint( 500,    0);
+    }
+    if (actionName == "fine_position_up") {
+        return QPoint(   0, -500);
+    }
+    if (actionName == "fine_position_down") {
+        return QPoint(   0,  500);
+    }
+
+    return QPoint(0, 0);
+}
+
+void
 IncrementDisplacementsCommand::modifySegment()
 {
     EventSelection::eventcontainer::iterator i;
@@ -45,13 +82,13 @@ IncrementDisplacementsCommand::modifySegment()
             i != m_selection->getSegmentEvents().end(); ++i) {
 
         long prevX = 0, prevY = 0;
-        (*i)->get
-        <Int>(DISPLACED_X, prevX);
-        (*i)->get
-        <Int>(DISPLACED_Y, prevY);
+        (*i)->get<Int>(DISPLACED_X, prevX);
+        (*i)->get<Int>(DISPLACED_Y, prevY);
         (*i)->setMaybe<Int>(DISPLACED_X, prevX + long(m_dx));
         (*i)->setMaybe<Int>(DISPLACED_Y, prevY + long(m_dy));
     }
 }
+
+
 
 }

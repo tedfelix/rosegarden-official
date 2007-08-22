@@ -32,6 +32,25 @@
 #include "commands/notation/AddSlashesCommand.h"
 #include "commands/notation/AddIndicationCommand.h"
 #include "commands/notation/AddMarkCommand.h"
+#include "commands/notation/AddTextMarkCommand.h"
+#include "commands/notation/AutoBeamCommand.h"
+#include "commands/notation/BreakCommand.h"
+#include "commands/notation/ChangeSlurPositionCommand.h"
+#include "commands/notation/ChangeStemsCommand.h"
+#include "commands/notation/ChangeStyleCommand.h"
+#include "commands/notation/CollapseRestsCommand.h"
+#include "commands/notation/DeCounterpointCommand.h"
+#include "commands/notation/FixNotationQuantizeCommand.h"
+#include "commands/notation/GraceCommand.h"
+#include "commands/notation/IncrementDisplacementsCommand.h"
+#include "commands/notation/MakeAccidentalsCautionaryCommand.h"
+
+#include "NoteFontFactory.h"
+#include "NoteFont.h"
+#include "NoteCharacter.h"
+#include "NoteStyleFactory.h"
+
+#include <qiconset.h>
 
 
 namespace Rosegarden
@@ -40,16 +59,58 @@ namespace Rosegarden
 NotationCommandRegistry::NotationCommandRegistry(EditView *v) :
     EditViewCommandRegistry(v)
 {
-    MakeChordCommand::registerCommand(this);
-    BeamCommand::registerCommand(this);
     AddFingeringMarkCommand::registerCommand(this);
     AddSlashesCommand::registerCommand(this);
     AddIndicationCommand::registerCommand(this);
     AddMarkCommand::registerCommand(this);
+    AddTextMarkCommand::registerCommand(this);
+    BeamCommand::registerCommand(this);
+    AutoBeamCommand::registerCommand(this);
+    BreakCommand::registerCommand(this);
+    MakeChordCommand::registerCommand(this);
+    ChangeSlurPositionCommand::registerCommand(this);
+    ChangeStemsCommand::registerCommand(this);
+    ChangeStyleCommand::registerCommand(this);
+    CollapseRestsCommand::registerCommand(this);
+    DeCounterpointCommand::registerCommand(this);
+    FixNotationQuantizeCommand::registerCommand(this);
+    GraceCommand::registerCommand(this);
+    IncrementDisplacementsCommand::registerCommand(this);
+    MakeAccidentalsCautionaryCommand::registerCommand(this);
 }
 
 NotationCommandRegistry::~NotationCommandRegistry()
 {
+}
+
+bool
+NotationCommandRegistry::findIcon(QString iconName, QIconSet &icon)
+{
+    NoteFont *font = 0;
+    try {
+        font = NoteFontFactory::getFont
+            (NoteFontFactory::getDefaultFontName(), 6);
+    } catch (Exception) {
+        font = NoteFontFactory::getFont
+            (NoteFontFactory::getDefaultFontName(),
+             NoteFontFactory::getDefaultSize(NoteFontFactory::getDefaultFontName()));
+    }
+
+    if (!font) return false;
+
+    NoteCharacter character;
+    bool found = font->getCharacter
+        (NoteStyleFactory::getStyle(NoteStyleFactory::DefaultStyle)->
+         getSomeCharName(iconName),
+         character);
+
+    if (found) {
+        QPixmap *pixmap = character.getPixmap();
+        if (pixmap) icon = QIconSet(*pixmap);
+        else found = false;
+    }
+
+    return found;
 }
 
 }

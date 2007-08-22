@@ -73,22 +73,10 @@
 #include "commands/edit/SetNoteTypeCommand.h"
 #include "commands/edit/SetTriggerCommand.h"
 #include "commands/edit/TransposeCommand.h"
-#include "commands/notation/AddTextMarkCommand.h"
-#include "commands/notation/AutoBeamCommand.h"
-#include "commands/notation/BreakCommand.h"
-#include "commands/notation/ChangeSlurPositionCommand.h"
-#include "commands/notation/ChangeStemsCommand.h"
-#include "commands/notation/ChangeStyleCommand.h"
 #include "commands/notation/ClefInsertionCommand.h"
-#include "commands/notation/CollapseRestsCommand.h"
-#include "commands/notation/DeCounterpointCommand.h"
 #include "commands/notation/EraseEventCommand.h"
-#include "commands/notation/FixNotationQuantizeCommand.h"
-#include "commands/notation/GraceCommand.h"
-#include "commands/notation/IncrementDisplacementsCommand.h"
 #include "commands/notation/InterpretCommand.h"
 #include "commands/notation/KeyInsertionCommand.h"
-#include "commands/notation/MakeAccidentalsCautionaryCommand.h"
 #include "commands/notation/MakeNotesViableCommand.h"
 #include "commands/notation/MultiKeyInsertionCommand.h"
 #include "commands/notation/NormalizeRestsCommand.h"
@@ -1416,27 +1404,6 @@ void NotationView::setupActions()
 
     actionCollection()->insert(proportionActionMenu);
 
-    KActionMenu *styleActionMenu =
-        new KActionMenu(i18n("Note &Style"), this, "note_style_actionmenu");
-
-    std::vector<NoteStyleName> styles
-    (NoteStyleFactory::getAvailableStyleNames());
-
-    for (std::vector<NoteStyleName>::iterator i = styles.begin();
-            i != styles.end(); ++i) {
-
-        QString styleQName(strtoqstr(*i));
-
-        KAction *styleAction =
-            new KAction
-            (styleQName, 0, this, SLOT(slotSetStyleFromAction()),
-             actionCollection(), "style_" + styleQName);
-
-        styleActionMenu->insert(styleAction);
-    }
-
-    actionCollection()->insert(styleActionMenu);
-
     KActionMenu *ornamentActionMenu =
         new KActionMenu(i18n("Use Ornament"), this, "ornament_actionmenu");
 
@@ -1687,19 +1654,6 @@ void NotationView::setupActions()
     //
     // Group menu
     //
-    icon = QIconSet
-           (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                                         ("group-beam")));
-
-    new KAction(AutoBeamCommand::getGlobalName(), 0, this,
-                SLOT(slotGroupAutoBeam()), actionCollection(), "auto_beam");
-
-    icon = QIconSet
-           (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                                         ("group-unbeam")));
-
-    new KAction(BreakCommand::getGlobalName(), icon, Key_U + CTRL, this,
-                SLOT(slotGroupBreak()), actionCollection(), "break_group");
 
     icon = QIconSet
            (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
@@ -1730,13 +1684,6 @@ void NotationView::setupActions()
                        actionCollection(), "chord_mode"))->
     setChecked(false);
 
-    icon = QIconSet
-           (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                                         ("group-grace")));
-
-    new KAction(GraceCommand::getGlobalName(), icon, 0, this,
-                SLOT(slotGroupGrace()), actionCollection(), "grace");
-
     new KAction(UnGraceCommand::getGlobalName(), 0, this,
                 SLOT(slotGroupUnGrace()), actionCollection(), "ungrace");
 
@@ -1744,10 +1691,6 @@ void NotationView::setupActions()
     new KAction(NormalizeRestsCommand::getGlobalName(), Key_N + CTRL, this,
                 SLOT(slotTransformsNormalizeRests()), actionCollection(),
                 "normalize_rests");
-
-    new KAction(CollapseRestsCommand::getGlobalName(), 0, this,
-                SLOT(slotTransformsCollapseRests()), actionCollection(),
-                "collapse_rests_aggressively");
 
     new KAction(CollapseNotesCommand::getGlobalName(), Key_Equal + CTRL, this,
                 SLOT(slotTransformsCollapseNotes()), actionCollection(),
@@ -1769,37 +1712,9 @@ void NotationView::setupActions()
                 SLOT(slotTransformsMakeNotesViable()), actionCollection(),
                 "make_notes_viable");
 
-    icon = QIconSet
-           (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                                         ("transforms-decounterpoint")));
-
-    new KAction(DeCounterpointCommand::getGlobalName(), icon, 0, this,
-                SLOT(slotTransformsDeCounterpoint()), actionCollection(),
-                "de_counterpoint");
-
-    new KAction(ChangeStemsCommand::getGlobalName(true),
-                0, Key_PageUp + CTRL, this,
-                SLOT(slotTransformsStemsUp()), actionCollection(),
-                "stems_up");
-
-    new KAction(ChangeStemsCommand::getGlobalName(false),
-                0, Key_PageDown + CTRL, this,
-                SLOT(slotTransformsStemsDown()), actionCollection(),
-                "stems_down");
-
     new KAction(RestoreStemsCommand::getGlobalName(), 0, this,
                 SLOT(slotTransformsRestoreStems()), actionCollection(),
                 "restore_stems");
-
-    new KAction(ChangeSlurPositionCommand::getGlobalName(true),
-                0, this,
-                SLOT(slotTransformsSlursAbove()), actionCollection(),
-                "slurs_above");
-
-    new KAction(ChangeSlurPositionCommand::getGlobalName(false),
-                0, this,
-                SLOT(slotTransformsSlursBelow()), actionCollection(),
-                "slurs_below");
 
     new KAction(RestoreSlursCommand::getGlobalName(), 0, this,
                 SLOT(slotTransformsRestoreSlurs()), actionCollection(),
@@ -1873,16 +1788,6 @@ void NotationView::setupActions()
                 SLOT(slotRespellRestore()), actionCollection(),
                 "respell_restore");
 
-    new KAction(MakeAccidentalsCautionaryCommand::getGlobalName(true),
-                0, this,
-                SLOT(slotShowCautionary()), actionCollection(),
-                "show_cautionary");
-
-    new KAction(MakeAccidentalsCautionaryCommand::getGlobalName(false),
-                0, this,
-                SLOT(slotCancelCautionary()), actionCollection(),
-                "cancel_cautionary");
-
     icon = QIconSet
            (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                                          ("quantize")));
@@ -1890,10 +1795,6 @@ void NotationView::setupActions()
     new KAction(EventQuantizeCommand::getGlobalName(), icon, Key_Equal, this,
                 SLOT(slotTransformsQuantize()), actionCollection(),
                 "quantize");
-
-    new KAction(FixNotationQuantizeCommand::getGlobalName(), 0,
-                this, SLOT(slotTransformsFixQuantization()), actionCollection(),
-                "fix_quantization");
 
     new KAction(RemoveNotationQuantizeCommand::getGlobalName(), 0,
                 this, SLOT(slotTransformsRemoveQuantization()), actionCollection(),
@@ -1910,10 +1811,6 @@ void NotationView::setupActions()
     icon = QIconSet
            (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                                          ("text-mark")));
-
-    new KAction(AddTextMarkCommand::getGlobalName(), icon, 0, this,
-                SLOT(slotMarksAddTextMark()), actionCollection(),
-                "add_text_mark");
 
     new KAction(RemoveMarksCommand::getGlobalName(), 0, this,
                 SLOT(slotMarksRemoveMarks()), actionCollection(),
@@ -2124,22 +2021,6 @@ void NotationView::setupActions()
     new KAction(i18n("&Filter Selection"), "filter", Key_F + CTRL, this,
                 SLOT(slotFilterSelection()), actionCollection(),
                 "filter_selection");
-
-    new KAction(i18n("Push &Left"), 0, this,
-                SLOT(slotFinePositionLeft()), actionCollection(),
-                "fine_position_left");
-
-    new KAction(i18n("Push &Right"), 0, this,
-                SLOT(slotFinePositionRight()), actionCollection(),
-                "fine_position_right");
-
-    new KAction(i18n("Push &Up"), 0, this,
-                SLOT(slotFinePositionUp()), actionCollection(),
-                "fine_position_up");
-
-    new KAction(i18n("Push &Down"), 0, this,
-                SLOT(slotFinePositionDown()), actionCollection(),
-                "fine_position_down");
 
     new KAction(i18n("&Restore Positions"), 0, this,
                 SLOT(slotFinePositionRestore()), actionCollection(),
@@ -4405,50 +4286,6 @@ void NotationView::slotFilterSelection()
     }
 }
 
-void NotationView::slotFinePositionLeft()
-{
-    if (!m_currentEventSelection)
-        return ;
-    KTmpStatusMsg msg(i18n("Pushing selection left..."), this);
-
-    // half a note body width
-    addCommandToHistory(new IncrementDisplacementsCommand
-                        (*m_currentEventSelection, -500, 0));
-}
-
-void NotationView::slotFinePositionRight()
-{
-    if (!m_currentEventSelection)
-        return ;
-    KTmpStatusMsg msg(i18n("Pushing selection right..."), this);
-
-    // half a note body width
-    addCommandToHistory(new IncrementDisplacementsCommand
-                        (*m_currentEventSelection, 500, 0));
-}
-
-void NotationView::slotFinePositionUp()
-{
-    if (!m_currentEventSelection)
-        return ;
-    KTmpStatusMsg msg(i18n("Pushing selection up..."), this);
-
-    // half line height
-    addCommandToHistory(new IncrementDisplacementsCommand
-                        (*m_currentEventSelection, 0, -500));
-}
-
-void NotationView::slotFinePositionDown()
-{
-    if (!m_currentEventSelection)
-        return ;
-    KTmpStatusMsg msg(i18n("Pushing selection down..."), this);
-
-    // half line height
-    addCommandToHistory(new IncrementDisplacementsCommand
-                        (*m_currentEventSelection, 0, 500));
-}
-
 void NotationView::slotFinePositionRestore()
 {
     if (!m_currentEventSelection)
@@ -4554,26 +4391,6 @@ void NotationView::toggleNamedToolBar(const QString& toolBarName, bool* force)
 
 }
 
-void NotationView::slotGroupAutoBeam()
-{
-    if (!m_currentEventSelection)
-        return ;
-    KTmpStatusMsg msg(i18n("Auto-beaming selection..."), this);
-
-    addCommandToHistory(new AutoBeamCommand
-                        (*m_currentEventSelection));
-}
-
-void NotationView::slotGroupBreak()
-{
-    if (!m_currentEventSelection)
-        return ;
-    KTmpStatusMsg msg(i18n("Breaking groups..."), this);
-
-    addCommandToHistory(new BreakCommand
-                        (*m_currentEventSelection));
-}
-
 void NotationView::slotGroupSimpleTuplet()
 {
     slotGroupTuplet(true);
@@ -4662,15 +4479,6 @@ void NotationView::slotGroupUnTuplet()
                         (*m_currentEventSelection));
 }
 
-void NotationView::slotGroupGrace()
-{
-    if (!m_currentEventSelection)
-        return ;
-    KTmpStatusMsg msg(i18n("Making grace notes..."), this);
-
-    addCommandToHistory(new GraceCommand(*m_currentEventSelection));
-}
-
 void NotationView::slotGroupUnGrace()
 {
     if (!m_currentEventSelection)
@@ -4687,16 +4495,6 @@ void NotationView::slotTransformsNormalizeRests()
     KTmpStatusMsg msg(i18n("Normalizing rests..."), this);
 
     addCommandToHistory(new NormalizeRestsCommand
-                        (*m_currentEventSelection));
-}
-
-void NotationView::slotTransformsCollapseRests()
-{
-    if (!m_currentEventSelection)
-        return ;
-    KTmpStatusMsg msg(i18n("Collapsing rests..."), this);
-
-    addCommandToHistory(new CollapseRestsCommand
                         (*m_currentEventSelection));
 }
 
@@ -4740,37 +4538,6 @@ void NotationView::slotTransformsMakeNotesViable()
                         (*m_currentEventSelection));
 }
 
-void NotationView::slotTransformsDeCounterpoint()
-{
-    if (!m_currentEventSelection)
-        return ;
-    KTmpStatusMsg msg(i18n("Removing counterpoint..."), this);
-
-    addCommandToHistory(new DeCounterpointCommand
-                        (*m_currentEventSelection));
-}
-
-void NotationView::slotTransformsStemsUp()
-{
-    if (!m_currentEventSelection)
-        return ;
-    KTmpStatusMsg msg(i18n("Pointing stems up..."), this);
-
-    addCommandToHistory(new ChangeStemsCommand
-                        (true, *m_currentEventSelection));
-}
-
-void NotationView::slotTransformsStemsDown()
-{
-    if (!m_currentEventSelection)
-        return ;
-    KTmpStatusMsg msg(i18n("Pointing stems down..."), this);
-
-    addCommandToHistory(new ChangeStemsCommand
-                        (false, *m_currentEventSelection));
-
-}
-
 void NotationView::slotTransformsRestoreStems()
 {
     if (!m_currentEventSelection)
@@ -4779,27 +4546,6 @@ void NotationView::slotTransformsRestoreStems()
 
     addCommandToHistory(new RestoreStemsCommand
                         (*m_currentEventSelection));
-}
-
-void NotationView::slotTransformsSlursAbove()
-{
-    if (!m_currentEventSelection)
-        return ;
-    KTmpStatusMsg msg(i18n("Positioning slurs..."), this);
-
-    addCommandToHistory(new ChangeSlurPositionCommand
-                        (true, *m_currentEventSelection));
-}
-
-void NotationView::slotTransformsSlursBelow()
-{
-    if (!m_currentEventSelection)
-        return ;
-    KTmpStatusMsg msg(i18n("Positioning slurs..."), this);
-
-    addCommandToHistory(new ChangeSlurPositionCommand
-                        (false, *m_currentEventSelection));
-
 }
 
 void NotationView::slotTransformsRestoreSlurs()
@@ -4812,16 +4558,6 @@ void NotationView::slotTransformsRestoreSlurs()
                         (*m_currentEventSelection));
 }
 
-void NotationView::slotTransformsFixQuantization()
-{
-    if (!m_currentEventSelection)
-        return ;
-    KTmpStatusMsg msg(i18n("Fixing notation quantization..."), this);
-
-    addCommandToHistory(new FixNotationQuantizeCommand
-                        (*m_currentEventSelection));
-}
-
 void NotationView::slotTransformsRemoveQuantization()
 {
     if (!m_currentEventSelection)
@@ -4830,29 +4566,6 @@ void NotationView::slotTransformsRemoveQuantization()
 
     addCommandToHistory(new RemoveNotationQuantizeCommand
                         (*m_currentEventSelection));
-}
-
-void NotationView::slotSetStyleFromAction()
-{
-    const QObject *s = sender();
-    QString name = s->name();
-
-    if (!m_currentEventSelection)
-        return ;
-
-    if (name.left(6) == "style_") {
-        name = name.right(name.length() - 6);
-
-        KTmpStatusMsg msg(i18n("Changing to %1 style...").arg(name),
-                          this);
-
-        addCommandToHistory(new ChangeStyleCommand
-                            (NoteStyleName(qstrtostr(name)),
-                             *m_currentEventSelection));
-    } else {
-        KMessageBox::sorry
-            (this, i18n("Unknown style action %1").arg(name));
-    }
 }
 
 void NotationView::slotInsertNoteFromAction()
@@ -5107,26 +4820,6 @@ void NotationView::slotRespellRestore()
                                            *m_currentEventSelection));
 }
 
-void NotationView::slotShowCautionary()
-{
-    if (!m_currentEventSelection)
-        return ;
-    KTmpStatusMsg msg(i18n("Showing cautionary accidentals..."), this);
-
-    addCommandToHistory(new MakeAccidentalsCautionaryCommand
-                        (true, *m_currentEventSelection));
-}
-
-void NotationView::slotCancelCautionary()
-{
-    if (!m_currentEventSelection)
-        return ;
-    KTmpStatusMsg msg(i18n("Cancelling cautionary accidentals..."), this);
-
-    addCommandToHistory(new MakeAccidentalsCautionaryCommand
-                        (false, *m_currentEventSelection));
-}
-
 void NotationView::slotTransformsQuantize()
 {
     if (!m_currentEventSelection)
@@ -5182,20 +4875,6 @@ void NotationView::slotAddDotNotationOnly()
     addCommandToHistory(new AddDotCommand(*m_currentEventSelection, true));
 }
 
-void NotationView::slotMarksAddTextMark()
-{
-    if (m_currentEventSelection) {
-        bool pressedOK = false;
-
-        QString txt = KLineEditDlg::getText(i18n("Text: "), "", &pressedOK, this);
-
-        if (pressedOK) {
-            addCommandToHistory(new AddTextMarkCommand
-                                (qstrtostr(txt), *m_currentEventSelection));
-        }
-    }
-}
-
 void NotationView::slotMarksRemoveMarks()
 {
     if (m_currentEventSelection)
@@ -5227,19 +4906,13 @@ NotationView::slotMakeOrnament()
              ec.begin(); i != ec.end(); ++i) {
         if ((*i)->isa(Note::EventType)) {
             if ((*i)->has(BaseProperties::PITCH)) {
-                basePitch = (*i)->get
-                    <Int>
-                    (BaseProperties::PITCH);
+                basePitch = (*i)->get<Int>(BaseProperties::PITCH);
                 style = NoteStyleFactory::getStyleForEvent(*i);
-                if (baseVelocity != -1)
-                    break;
+                if (baseVelocity != -1) break;
             }
             if ((*i)->has(BaseProperties::VELOCITY)) {
-                baseVelocity = (*i)->get
-                    <Int>
-                    (BaseProperties::VELOCITY);
-                if (basePitch != -1)
-                    break;
+                baseVelocity = (*i)->get<Int>(BaseProperties::VELOCITY);
+                if (basePitch != -1) break;
             }
         }
     }

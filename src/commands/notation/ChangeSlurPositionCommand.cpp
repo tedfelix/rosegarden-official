@@ -29,11 +29,30 @@
 #include "base/Selection.h"
 #include "document/BasicSelectionCommand.h"
 #include "gui/editors/notation/NotationProperties.h"
+#include "document/CommandRegistry.h"
 #include <qstring.h>
 
 
 namespace Rosegarden
 {
+
+void
+ChangeSlurPositionCommand::registerCommand(CommandRegistry *r)
+{
+    r->registerCommand
+        (getGlobalName(true), "", "", "slurs_above",
+         new ArgumentAndSelectionCommandBuilder<ChangeSlurPositionCommand>());
+    r->registerCommand
+        (getGlobalName(false), "", "", "slurs_below",
+         new ArgumentAndSelectionCommandBuilder<ChangeSlurPositionCommand>());
+}
+
+bool
+ChangeSlurPositionCommand::getArgument(QString actionName, CommandArgumentQuerier &)
+{
+    if (actionName == "slurs_above") return true;
+    else return false;
+}
 
 void
 ChangeSlurPositionCommand::modifySegment()
@@ -45,12 +64,11 @@ ChangeSlurPositionCommand::modifySegment()
 
         if ((*i)->isa(Indication::EventType)) {
             std::string indicationType;
-            if ((*i)->get
-                    <String>(Indication::IndicationTypePropertyName, indicationType)
-                    && (indicationType == Indication::Slur ||
-                        indicationType == Indication::PhrasingSlur)) {
-                (*i)->set
-                <Bool>(NotationProperties::SLUR_ABOVE, m_above);
+            if ((*i)->get<String>(Indication::IndicationTypePropertyName,
+                                  indicationType)
+                && (indicationType == Indication::Slur ||
+                    indicationType == Indication::PhrasingSlur)) {
+                (*i)->set<Bool>(NotationProperties::SLUR_ABOVE, m_above);
             }
         }
     }

@@ -23,8 +23,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ADJUSTMENUCHANGESTYLECOMMAND_H_
-#define _RG_ADJUSTMENUCHANGESTYLECOMMAND_H_
+#ifndef _RG_CHANGESTYLECOMMAND_H_
+#define _RG_CHANGESTYLECOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
 #include "gui/editors/notation/NoteStyle.h"
@@ -39,6 +39,7 @@ namespace Rosegarden
 {
 
 class EventSelection;
+class CommandRegistry;
 
 
 class ChangeStyleCommand : public BasicSelectionCommand
@@ -54,6 +55,9 @@ public:
     }
 
     static QString getGlobalName(NoteStyleName style);
+
+    static Mark getArgument(QString actionName, CommandArgumentQuerier &);
+    static void registerCommand(CommandRegistry *r);
 
 protected:
     virtual void modifySegment();

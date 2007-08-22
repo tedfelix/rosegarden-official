@@ -23,8 +23,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ADJUSTMENURESTORESLURSCOMMAND_H_
-#define _RG_ADJUSTMENURESTORESLURSCOMMAND_H_
+#ifndef _RG_RESTORESLURSCOMMAND_H_
+#define _RG_RESTORESLURSCOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
 #include <qstring.h>

@@ -23,8 +23,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_NOTESMENUBEAMCOMMAND_H_
-#define _RG_NOTESMENUBEAMCOMMAND_H_
+#ifndef _RG_BEAMCOMMAND_H_
+#define _RG_BEAMCOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
 #include <qstring.h>

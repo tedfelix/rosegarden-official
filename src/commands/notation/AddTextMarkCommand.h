@@ -23,8 +23,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_NOTESMENUADDTEXTMARKCOMMAND_H_
-#define _RG_NOTESMENUADDTEXTMARKCOMMAND_H_
+#ifndef _RG_ADDTEXTMARKCOMMAND_H_
+#define _RG_ADDTEXTMARKCOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
 #include <string>
@@ -38,17 +38,20 @@ namespace Rosegarden
 {
 
 class EventSelection;
-
+class CommandRegistry;
 
 class AddTextMarkCommand : public BasicSelectionCommand
 {
 public:
     AddTextMarkCommand(std::string text,
-                                EventSelection &selection) :
+                       EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(), selection, true),
         m_selection(&selection), m_text(text) { }
 
     static QString getGlobalName() { return i18n("Add Te&xt Mark..."); }
+
+    static std::string getArgument(QString actionName, CommandArgumentQuerier &);
+    static void registerCommand(CommandRegistry *r);
 
 protected:
     virtual void modifySegment();

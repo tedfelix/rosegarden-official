@@ -23,8 +23,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ADJUSTMENUCOLLAPSERESTSCOMMAND_H_
-#define _RG_ADJUSTMENUCOLLAPSERESTSCOMMAND_H_
+#ifndef _RG_COLLAPSERESTSCOMMAND_H_
+#define _RG_COLLAPSERESTSCOMMAND_H_
 
 #include "document/BasicCommand.h"
 #include <qstring.h>
@@ -39,19 +39,22 @@ namespace Rosegarden
 
 class Segment;
 class EventSelection;
+class CommandRegistry;
 
 
 class CollapseRestsCommand : public BasicCommand
 {
 public:
     CollapseRestsCommand(Segment &s,
-                                       timeT startTime,
-                                       timeT endTime) :
+                         timeT startTime,
+                         timeT endTime) :
         BasicCommand(getGlobalName(), s, startTime, endTime) { }
 
     CollapseRestsCommand(EventSelection &selection);
 
     static QString getGlobalName() { return i18n("&Collapse Rests"); }
+
+    static void registerCommand(CommandRegistry *r);
 
 protected:
     virtual void modifySegment();

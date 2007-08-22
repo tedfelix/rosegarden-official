@@ -23,8 +23,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ADJUSTMENUCHANGESTEMSCOMMAND_H_
-#define _RG_ADJUSTMENUCHANGESTEMSCOMMAND_H_
+#ifndef _RG_CHANGESTEMSCOMMAND_H_
+#define _RG_CHANGESTEMSCOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
 #include <qstring.h>
@@ -38,6 +38,7 @@ namespace Rosegarden
 {
 
 class EventSelection;
+class CommandRegistry;
 
 
 class ChangeStemsCommand : public BasicSelectionCommand
@@ -50,6 +51,9 @@ public:
     static QString getGlobalName(bool up) {
         return up ? i18n("Stems &Up") : i18n("Stems &Down");
     }
+
+    static bool getArgument(QString actionName, CommandArgumentQuerier &);
+    static void registerCommand(CommandRegistry *r);
 
 protected:
     virtual void modifySegment();

@@ -23,8 +23,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ADJUSTMENUDECOUNTERPOINTCOMMAND_H_
-#define _RG_ADJUSTMENUDECOUNTERPOINTCOMMAND_H_
+#ifndef _RG_DECOUNTERPOINTCOMMAND_H_
+#define _RG_DECOUNTERPOINTCOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
 #include <qstring.h>
@@ -39,6 +39,7 @@ namespace Rosegarden
 
 class Segment;
 class EventSelection;
+class CommandRegistry;
 
 
 class DeCounterpointCommand : public BasicSelectionCommand
@@ -53,6 +54,8 @@ public:
         m_selection(0) { }
 
     static QString getGlobalName() { return i18n("Split-and-Tie Overlapping &Chords"); }
+
+    static void registerCommand(CommandRegistry *r);
 
 protected:
     virtual void modifySegment();

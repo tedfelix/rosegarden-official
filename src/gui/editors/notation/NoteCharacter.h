@@ -85,8 +85,6 @@ private:
 };
     
 
-// Encapsulates NoteFontMap, and loads pixmaps etc on demand
-
 
 }
 

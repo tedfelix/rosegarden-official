@@ -23,8 +23,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ADJUSTMENUMAKENOTESVIABLECOMMAND_H_
-#define _RG_ADJUSTMENUMAKENOTESVIABLECOMMAND_H_
+#ifndef _RG_MAKENOTESVIABLECOMMAND_H_
+#define _RG_MAKENOTESVIABLECOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
 #include <qstring.h>

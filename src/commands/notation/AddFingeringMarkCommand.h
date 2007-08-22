@@ -23,8 +23,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_NOTESMENUADDFINGERINGMARKCOMMAND_H_
-#define _RG_NOTESMENUADDFINGERINGMARKCOMMAND_H_
+#ifndef _RG_ADDFINGERINGMARKCOMMAND_H_
+#define _RG_ADDFINGERINGMARKCOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
 #include <string>
@@ -52,7 +52,7 @@ public:
     static QString getActionName(std::string fingering = "");
     static QString getShortcut(std::string fingering = "");
 
-    static std::string getArgument(QString actionName, QWidget *);
+    static std::string getArgument(QString actionName, CommandArgumentQuerier &);
 
     static std::vector<std::string> getStandardFingerings();
 

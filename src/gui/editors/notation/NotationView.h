@@ -462,31 +462,21 @@ public slots:
     void slotEditLyrics();
 
     /// group slots
-    void slotGroupAutoBeam();
-    void slotGroupBreak();
     void slotGroupSimpleTuplet();
     void slotGroupGeneralTuplet();
     void slotGroupTuplet(bool simple);
     void slotGroupUnTuplet();
-    void slotGroupGrace();
     void slotGroupUnGrace();
 
     /// transforms slots
     void slotTransformsNormalizeRests();
-    void slotTransformsCollapseRests();
     void slotTransformsCollapseNotes();
     void slotTransformsTieNotes();
     void slotTransformsUntieNotes();
     void slotTransformsMakeNotesViable();
-    void slotTransformsDeCounterpoint();
-    void slotTransformsStemsUp();
-    void slotTransformsStemsDown();
     void slotTransformsRestoreStems();
-    void slotTransformsSlursAbove();
-    void slotTransformsSlursBelow();
     void slotTransformsRestoreSlurs();
     void slotTransformsQuantize();
-    void slotTransformsFixQuantization();
     void slotTransformsRemoveQuantization();
     void slotTransformsInterpret();
 
@@ -498,17 +488,13 @@ public slots:
     void slotRespellUp();
     void slotRespellDown();
     void slotRespellRestore();
-    void slotShowCautionary();
-    void slotCancelCautionary();
 
-    void slotSetStyleFromAction();
     void slotInsertNoteFromAction();
     void slotInsertRest();
     void slotSwitchFromRestToNote();
     void slotSwitchFromNoteToRest();
     void slotToggleDot();
 
-    void slotMarksAddTextMark();
     void slotMarksRemoveMarks();
     void slotMarksRemoveFingeringMarks();
     void slotMakeOrnament();
@@ -528,10 +514,6 @@ public slots:
     void slotEditTranspose();
     void slotEditElement(NotationStaff *, NotationElement *, bool advanced);
 
-    void slotFinePositionLeft();
-    void slotFinePositionRight();
-    void slotFinePositionUp();
-    void slotFinePositionDown();
     void slotFinePositionRestore();
 
     void slotMakeVisible();

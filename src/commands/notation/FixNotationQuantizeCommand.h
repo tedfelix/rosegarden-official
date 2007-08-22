@@ -23,8 +23,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ADJUSTMENUFIXNOTATIONQUANTIZECOMMAND_H_
-#define _RG_ADJUSTMENUFIXNOTATIONQUANTIZECOMMAND_H_
+#ifndef _RG_FIXNOTATIONQUANTIZECOMMAND_H_
+#define _RG_FIXNOTATIONQUANTIZECOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
 #include <qstring.h>
@@ -37,6 +37,7 @@ namespace Rosegarden
 {
 
 class EventSelection;
+class CommandRegistry;
 
 
 class FixNotationQuantizeCommand : public BasicSelectionCommand
@@ -48,6 +49,8 @@ public:
     
     static QString getGlobalName() { return i18n("Fi&x Notation Quantization"); }
     
+    static void registerCommand(CommandRegistry *r);
+
 protected:
     virtual void modifySegment();
 

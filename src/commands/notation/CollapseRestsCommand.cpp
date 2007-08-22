@@ -29,11 +29,20 @@
 #include "base/SegmentNotationHelper.h"
 #include "base/Selection.h"
 #include "document/BasicCommand.h"
+#include "document/CommandRegistry.h"
 #include <qstring.h>
 
 
 namespace Rosegarden
 {
+
+void
+CollapseRestsCommand::registerCommand(CommandRegistry *r)
+{
+    r->registerCommand
+        (getGlobalName(), "", "", "collapse_rests_aggressively",
+         new SelectionCommandBuilder<CollapseRestsCommand>());
+}
 
 CollapseRestsCommand::CollapseRestsCommand
 (EventSelection &selection) :

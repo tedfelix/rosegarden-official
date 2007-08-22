@@ -23,8 +23,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_NOTESMENUADDINDICATIONCOMMAND_H_
-#define _RG_NOTESMENUADDINDICATIONCOMMAND_H_
+#ifndef _RG_ADDINDICATIONCOMMAND_H_
+#define _RG_ADDINDICATIONCOMMAND_H_
 
 #include "document/BasicCommand.h"
 #include <string>
@@ -63,7 +63,7 @@ public:
     }
 
     static QString getGlobalName(std::string indicationType);
-    static std::string getArgument(QString actionName, QWidget *);
+    static std::string getArgument(QString actionName, CommandArgumentQuerier &);
 
     static void registerCommand(CommandRegistry *r);
 

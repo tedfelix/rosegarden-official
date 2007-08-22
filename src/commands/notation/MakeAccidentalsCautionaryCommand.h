@@ -36,6 +36,7 @@ namespace Rosegarden
 {
 
 class EventSelection;
+class CommandRegistry;
 
 
 class MakeAccidentalsCautionaryCommand : public BasicSelectionCommand
@@ -48,7 +49,10 @@ public:
         m_cautionary(cautionary) { }
     
     static QString getGlobalName(bool cautionary);
-    
+        
+    static bool getArgument(QString actionName, CommandArgumentQuerier &);
+    static void registerCommand(CommandRegistry *r);
+
 protected:
     virtual void modifySegment();
 

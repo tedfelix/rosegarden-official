@@ -400,6 +400,30 @@ NoteStyle::getTimeSignatureDigitName(int digit)
     }
 }
 
+CharName
+NoteStyle::getSomeCharName(std::string thing)
+{
+    CharName name;
+
+    try {
+        name = getAccidentalCharName(Accidental(thing));
+        if (!(name == NoteCharacterNames::UNKNOWN)) return name;
+    } catch (Exception) { }
+
+    try {
+        name = getMarkCharName(Mark(thing));
+        std::cerr << thing << " -> " << name << std::endl;
+        if (!(name == NoteCharacterNames::UNKNOWN)) return name;
+    } catch (Exception) { }
+
+    try {
+        name = getClefCharName(Clef(thing));
+        if (!(name == NoteCharacterNames::UNKNOWN)) return name;
+    } catch (Exception) { }
+
+    return NoteCharacterNames::UNKNOWN;
+}
+
 void
 NoteStyle::setBaseStyle(NoteStyleName name)
 {

@@ -31,11 +31,40 @@
 #include "document/BasicSelectionCommand.h"
 #include "gui/editors/notation/NotationProperties.h"
 #include "gui/editors/notation/NoteStyleFactory.h"
+#include "document/CommandRegistry.h"
 #include <qstring.h>
 
 
 namespace Rosegarden
 {
+
+void
+ChangeStyleCommand::registerCommand(CommandRegistry *r)
+{
+    std::vector<NoteStyleName> styles =
+        NoteStyleFactory::getAvailableStyleNames();
+
+    for (std::vector<NoteStyleName>::iterator i = styles.begin();
+         i != styles.end(); ++i) {
+
+        QString styleQName(strtoqstr(*i));
+        r->registerCommand(styleQName, 0, "", "style_" + styleQName,
+                           new ArgumentAndSelectionCommandBuilder<ChangeStyleCommand>(),
+
+                           i18n("Note &Style"), "note_style_actionmenu");
+    }
+}
+
+NoteStyleName
+ChangeStyleCommand::getArgument(QString actionName, CommandArgumentQuerier &)
+{
+    QString pfx = "style_";
+    if (actionName.startsWith(pfx)) {
+        QString remainder = actionName.right(actionName.length() - pfx.length());
+        return qstrtostr(remainder);
+    }
+    return "";
+}
 
 QString
 ChangeStyleCommand::getGlobalName(NoteStyleName style)
@@ -49,15 +78,13 @@ ChangeStyleCommand::modifySegment()
     EventSelection::eventcontainer::iterator i;
 
     for (i = m_selection->getSegmentEvents().begin();
-            i != m_selection->getSegmentEvents().end(); ++i) {
+         i != m_selection->getSegmentEvents().end(); ++i) {
 
         if ((*i)->isa(Note::EventType)) {
             if (m_style == NoteStyleFactory::DefaultStyle) {
                 (*i)->unset(NotationProperties::NOTE_STYLE);
             } else {
-                (*i)->set
-                <String>
-                (NotationProperties::NOTE_STYLE, m_style);
+                (*i)->set<String>(NotationProperties::NOTE_STYLE, m_style);
             }
         }
     }

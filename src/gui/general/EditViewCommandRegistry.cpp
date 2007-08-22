@@ -24,6 +24,9 @@
 
 #include "EditViewCommandRegistry.h"
 
+#include <kinputdialog.h>
+#include <kactionclasses.h>
+
 #include "gui/general/EditView.h"
 #include "misc/Strings.h"
 
@@ -40,12 +43,13 @@ EditViewCommandRegistry::~EditViewCommandRegistry()
 }
 
 
-//!!! hoist these back up a level to a new intermediate class? EditViewCommandRegistry
 void
 EditViewCommandRegistry::addAction(QString title,
                                    QString iconName,
                                    const KShortcut &shortcut, 
-                                   QString actionName)
+                                   QString actionName,
+                                   QString menuTitle,
+                                   QString menuActionName)
 {
     bool haveIcon = (iconName != "");
     QIconSet icon;
@@ -62,27 +66,57 @@ EditViewCommandRegistry::addAction(QString title,
         } else if (QFile(fileBase + ".xpm").exists()) {
             icon = QIconSet(QPixmap(fileBase + ".xpm"));
         } else {
-            haveIcon = false;
+            haveIcon = findIcon(iconName, icon);
         }
     }
 
-    if (haveIcon) {
-        new KAction(title,
-                    icon,
-                    shortcut,
-                    this,
-                    SLOT(slotInvokeCommand()),
-                    m_view->actionCollection(),
-                    actionName);
-    } else {
-        new KAction(title,
-                    shortcut,
-                    this,
-                    SLOT(slotInvokeCommand()),
-                    m_view->actionCollection(),
-                    actionName);
+    KActionMenu *menuAction = 0;
+
+    if (menuActionName != "") {
+
+        menuAction = dynamic_cast<KActionMenu *>
+            (m_view->actionCollection()->action(menuActionName));
+
+        if (!menuAction) {
+            menuAction = new KActionMenu(menuTitle, this, menuActionName);
+            m_view->actionCollection()->insert(menuAction);
+        }
     }
+
+    KAction *action = 0;
+
+    if (haveIcon) {
+        action = new KAction(title,
+                             icon,
+                             shortcut,
+                             this,
+                             SLOT(slotInvokeCommand()),
+                             m_view->actionCollection(),
+                             actionName);
+    } else {
+        action = new KAction(title,
+                             shortcut,
+                             this,
+                             SLOT(slotInvokeCommand()),
+                             m_view->actionCollection(),
+                             actionName);
+    }
+
+    if (menuAction) menuAction->insert(action);
 }    
+
+class EditViewCommandArgumentQuerier : public CommandArgumentQuerier
+{
+public:
+    EditViewCommandArgumentQuerier(EditView *view) : m_view(view) { }
+    QString getText(QString message, bool *ok) {
+        return KInputDialog::getText(i18n("Rosegarden - Query"),
+                                     message, "", ok, m_view);
+    }
+
+protected:
+    EditView *m_view;
+};
 
 void
 EditViewCommandRegistry::invokeCommand(QString actionName)
@@ -95,8 +129,10 @@ EditViewCommandRegistry::invokeCommand(QString actionName)
 
     try {
 
+        EditViewCommandArgumentQuerier querier(m_view);
+
         KCommand *command = m_builders[actionName]->build
-            (actionName, *selection, m_view);
+            (actionName, *selection, querier);
 
         m_view->addCommandToHistory(command);
 
