@@ -1433,7 +1433,7 @@ LilypondExporter::writeBar(Segment *s,
 
                     if (m_languageLevel >= LILYPOND_VERSION_2_8) {
                         // one \tweak per each chord note
-                        if (chord.size() > LILYPOND_VERSION_2_8)
+                        if (chord.size() > 1)
                             writeStyle(*i, prevStyle, col, str, true);
                         else
                             writeStyle(*i, prevStyle, col, str, false);
