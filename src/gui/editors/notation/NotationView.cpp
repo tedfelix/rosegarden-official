@@ -6294,12 +6294,14 @@ NotationView::slotCurrentSegmentPrior()
 	    } 
 	    if (i < m_currentStaff) {
 		slotSetCurrentStaff(i);
+		slotEditSelectWholeStaff();
 		return ;
 	    }
         }
     }
     if (lastStaffOnTrack >= 0) {
 	slotSetCurrentStaff(lastStaffOnTrack);
+	slotEditSelectWholeStaff();
 	return ;
     }
 }
@@ -6331,12 +6333,14 @@ NotationView::slotCurrentSegmentNext()
 	    } 
 	    if (i > m_currentStaff) {
 		slotSetCurrentStaff(i);
+		slotEditSelectWholeStaff();
 		return ;
 	    }
         }
     }
     if (firstStaffOnTrack >= 0) {
 	slotSetCurrentStaff(firstStaffOnTrack);
+	slotEditSelectWholeStaff();
 	return ;
     }
 }
