@@ -996,6 +996,7 @@ LilypondExporter::write()
 			 currentVerse++) {
 		        bool haveLyric = false;
 		        bool haveSlur = false;
+			timeT slurEnd;
 			bool firstNote = true;
 		        QString text = "";
 
@@ -1015,8 +1016,15 @@ LilypondExporter::write()
 		                            textType == Text::Lyric) {
 		                        isLyric = true;
 		                    }
-		                } else if ((*j)->isa(Indication::Slur)) {
-				    haveSlur = true;
+		                } else {
+				    try {
+					Indication indic(**j);
+
+					if (indic.getIndicationType() == Indication::Slur) {
+					    slurEnd = (*j)->getNotationAbsoluteTime() + indic.getIndicationDuration();
+					    haveSlur = true;
+					}
+				    } catch (Exception e) { }
 				}
 		            } else {
 		                if ((*j)->has(BaseProperties::TIED_BACKWARD) &&
@@ -1034,7 +1042,14 @@ LilypondExporter::write()
 				if ((myTime > lastTime) || firstNote) {
 				    if (!haveLyric && !haveSlur)
 					text += " _";
-				    // text[verse] += " _";
+				    if (!haveLyric && haveSlur) {
+					timeT eventEnd =
+					(*j)->getNotationAbsoluteTime() + (*j)->getNotationDuration();
+					if (slurEnd < eventEnd)
+					    haveSlur = false;
+					else
+					    text += " _";
+				    }
 				    lastTime = myTime;
 				    haveLyric = false;
 				    firstNote = false;
@@ -1048,16 +1063,31 @@ LilypondExporter::write()
 				if (verse == currentVerse) {
 		                    std::string ssyllable;
 		                    (*j)->get<String>(Text::TextPropertyName, ssyllable);
+				    if (haveSlur) {
+					timeT eventEnd =
+					(*j)->getNotationAbsoluteTime() + (*j)->getNotationDuration();
+					if (slurEnd < eventEnd) {
+					    haveSlur = false;
+					    text += " ";
+					} else {
+					    text += "_";
+					}
+				    } else {
+					text += " ";
+				    }
 			    
 		                    QString syllable(strtoqstr(ssyllable));
 		                    syllable.replace(QRegExp("\\s+"), "");
-		                    text += " \"" + syllable + "\"";
+		                    text += "\"" + syllable + "\"";
 		                    haveLyric = true;
 				} else if (verse > lastVerse) {
                                   lastVerse = verse;
 				}
 			    }
 		        }
+
+			text.replace( QRegExp(" _+([^ ])") , "\\1" );
+			text.replace( "\"_\"" , "#" );
 		
 		        // Do not create empty context for lyrics.
 		        // Does this save some vertical space, as was written
