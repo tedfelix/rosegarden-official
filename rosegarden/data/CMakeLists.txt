@@ -85,6 +85,7 @@ INSTALL(FILES pixmaps/splash.png DESTINATION ${DATADIR}/pixmaps)
 
 # Examples
 SET(EXAMPLE_FILES
+    examples/aylindaamiga.rg
     examples/bogus-surf-jam.rg
     examples/bwv-1060-trumpet-duet-excerpt.rg
     examples/children.rg
@@ -92,6 +93,7 @@ SET(EXAMPLE_FILES
     examples/doodle-q.rg
     examples/exercise_notation.rg
     examples/glazunov.rg
+    examples/himno_de_riego.rg
     examples/interpretation-example.rg
     examples/let-all-mortal-flesh.rg
     examples/lilypond-alternative-endings.rg
@@ -105,7 +107,8 @@ SET(EXAMPLE_FILES
     examples/stormy-riders.rg
     examples/test_tuplets.rg
     examples/the-rose-garden.rg
-    examples/vivaldi-cs3mv2.rg )
+    examples/vivaldi-cs3mv2.rg
+    examples/vivaldi_op44_11_1.rg )
 
 INSTALL(FILES ${EXAMPLE_FILES} DESTINATION ${DATADIR}/examples) 
 INSTALL(FILES examples/autoload.rg DESTINATION ${DATADIR})
