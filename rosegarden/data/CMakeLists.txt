@@ -85,6 +85,7 @@ INSTALL(FILES pixmaps/splash.png DESTINATION ${DATADIR}/pixmaps)
 
 # Examples
 SET(EXAMPLE_FILES
+    examples/aveverum.rg
     examples/aylindaamiga.rg
     examples/bogus-surf-jam.rg
     examples/bwv-1060-trumpet-duet-excerpt.rg
