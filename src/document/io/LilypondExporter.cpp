@@ -995,6 +995,8 @@ LilypondExporter::write()
                          currentVerse <= lastVerse; 
 			 currentVerse++) {
 		        bool haveLyric = false;
+		        bool haveSlur = false;
+			bool firstNote = true;
 		        QString text = "";
 
 		        timeT lastTime = (*i)->getStartTime();
@@ -1004,7 +1006,6 @@ LilypondExporter::write()
 		
 		            bool isNote = (*j)->isa(Note::EventType);
 		            bool isLyric = false;
-			    bool firstNote = true;
 		
 		            if (!isNote) {
 		                if ((*j)->isa(Text::EventType)) {
@@ -1014,7 +1015,9 @@ LilypondExporter::write()
 		                            textType == Text::Lyric) {
 		                        isLyric = true;
 		                    }
-		                }
+		                } else if ((*j)->isa(Indication::Slur)) {
+				    haveSlur = true;
+				}
 		            } else {
 		                if ((*j)->has(BaseProperties::TIED_BACKWARD) &&
 		                        (*j)->get
@@ -1029,7 +1032,7 @@ LilypondExporter::write()
 		
 			    if (isNote) {
 				if ((myTime > lastTime) || firstNote) {
-				    if (!haveLyric)
+				    if (!haveLyric && !haveSlur)
 					text += " _";
 				    // text[verse] += " _";
 				    lastTime = myTime;
