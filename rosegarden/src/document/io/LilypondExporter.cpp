@@ -1086,7 +1086,7 @@ LilypondExporter::write()
 			    }
 		        }
 
-			text.replace( QRegExp(" _+([^ ])") , "\\1" );
+			text.replace( QRegExp(" _+([^ ])") , " \\1" );
 			text.replace( "\"_\"" , " " );
 		
 		        // Do not create empty context for lyrics.
