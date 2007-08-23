@@ -1087,7 +1087,7 @@ LilypondExporter::write()
 		        }
 
 			text.replace( QRegExp(" _+([^ ])") , "\\1" );
-			text.replace( "\"_\"" , "#" );
+			text.replace( "\"_\"" , " " );
 		
 		        // Do not create empty context for lyrics.
 		        // Does this save some vertical space, as was written
