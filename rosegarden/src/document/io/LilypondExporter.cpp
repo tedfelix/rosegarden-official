@@ -1097,7 +1097,8 @@ LilypondExporter::write()
 		    
 			    str << indent(col) << "\\lyricsto \"" << voiceNumber.str() << "\""
 			        << " \\new Lyrics \\lyricmode {" << std::endl;
-			    str << indent(++col) << text << " " << std::endl;
+			    str << indent(++col) << "\\override LyricText #'self-alignment-X = #LEFT" << std::endl;
+			    str << indent(col) << text << " " << std::endl;
 			    str << indent(--col) << "} % Lyrics " << (currentVerse+1) << std::endl;
 			    // close the Lyrics context
 		        }
