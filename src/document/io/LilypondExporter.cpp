@@ -1214,7 +1214,13 @@ LilypondExporter::calculateDuration(Segment *s,
     } else {
 
         nextElt = i;
-        ++nextElt;
+	++nextElt;
+	while (s->isBeforeEndMarker(nextElt)) {
+	    if ((*nextElt)->isa(Controller::EventType))
+		++nextElt;
+	    else
+		break;
+	}
     }
 
     if (s->isBeforeEndMarker(nextElt)) {
