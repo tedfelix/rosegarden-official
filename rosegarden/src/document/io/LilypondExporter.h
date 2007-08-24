@@ -152,24 +152,28 @@ private:
     bool m_exportLyrics;
     bool m_exportMidi;
 
-        // exportTempoMarks meaning:
-        // 0 -> none
-        // 1 -> first
-        // 2 -> all
     unsigned int m_exportTempoMarks;
+    static const int EXPORT_NONE_TEMPO_MARKS = 0;
+    static const int EXPORT_FIRST_TEMPO_MARK = 1;
+    static const int EXPORT_ALL_TEMPO_MARKS = 2;
     
-    	// exportSelection meaning:
-    	// 0 -> All tracks
-    	// 1 -> Non-muted tracks
-    	// 2 -> Selected tracks
-    	// 3 -> Selected segments
     unsigned int m_exportSelection;
+    static const int EXPORT_ALL_TRACKS = 0;
+    static const int EXPORT_NONMUTED_TRACKS = 1;
+    static const int EXPORT_SELECTED_TRACK = 2;
+    static const int EXPORT_SELECTED_SEGMENTS = 3;
+
     bool m_exportPointAndClick;
     bool m_exportBeams;
     bool m_exportStaffGroup;
     bool m_exportStaffMerge;
     bool m_raggedBottom;
+
     int m_languageLevel;
+    static const int LILYPOND_VERSION_2_6  = 0;
+    static const int LILYPOND_VERSION_2_8  = 1;
+    static const int LILYPOND_VERSION_2_10 = 2;
+    static const int LILYPOND_VERSION_2_12 = 3;
 };
 
 
