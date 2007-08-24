@@ -73,11 +73,6 @@
 #include <kapplication.h>
 #include <sstream>
 
-#define LILYPOND_VERSION_2_6	0
-#define LILYPOND_VERSION_2_8	1
-#define LILYPOND_VERSION_2_10	2
-#define LILYPOND_VERSION_2_12	3
-
 namespace Rosegarden
 {
 
@@ -107,16 +102,16 @@ LilypondExporter::LilypondExporter(RosegardenGUIApp *parent,
     m_paperLandscape = cfg->readBoolEntry("lilypaperlandscape", false);
     m_fontSize = cfg->readUnsignedNumEntry("lilyfontsize", 4);
     m_raggedBottom = cfg->readBoolEntry("lilyraggedbottom", false);
-    m_exportSelection = cfg->readUnsignedNumEntry("lilyexportselection", 1);
+    m_exportSelection = cfg->readUnsignedNumEntry("lilyexportselection", EXPORT_NONMUTED_TRACKS);
     m_exportLyrics = cfg->readBoolEntry("lilyexportlyrics", true);
     m_exportMidi = cfg->readBoolEntry("lilyexportmidi", false);
-    m_exportTempoMarks = cfg->readUnsignedNumEntry("lilyexporttempomarks", 0);
+    m_exportTempoMarks = cfg->readUnsignedNumEntry("lilyexporttempomarks", EXPORT_NONE_TEMPO_MARKS);
     m_exportPointAndClick = cfg->readBoolEntry("lilyexportpointandclick", false);
     m_exportBeams = cfg->readBoolEntry("lilyexportbeamings", false);
     m_exportStaffGroup = cfg->readBoolEntry("lilyexportstaffgroup", false);
     m_exportStaffMerge = cfg->readBoolEntry("lilyexportstaffmerge", false);
 
-    m_languageLevel = cfg->readUnsignedNumEntry("lilylanguage", 0);
+    m_languageLevel = cfg->readUnsignedNumEntry("lilylanguage", LILYPOND_VERSION_2_6);
 
 }
 
@@ -140,16 +135,16 @@ LilypondExporter::LilypondExporter(NotationView *parent,
     m_paperSize = cfg->readUnsignedNumEntry("lilypapersize", 1);
     m_paperLandscape = cfg->readBoolEntry("lilypaperlandscape", false);
     m_fontSize = cfg->readUnsignedNumEntry("lilyfontsize", 4);
-    m_exportSelection = cfg->readUnsignedNumEntry("lilyexportselection", 1);
+    m_exportSelection = cfg->readUnsignedNumEntry("lilyexportselection", EXPORT_NONMUTED_TRACKS);
     m_exportLyrics = cfg->readBoolEntry("lilyexportlyrics", true);
     m_exportMidi = cfg->readBoolEntry("lilyexportmidi", false);
-    m_exportTempoMarks = cfg->readUnsignedNumEntry("lilyexporttempomarks", 0);
+    m_exportTempoMarks = cfg->readUnsignedNumEntry("lilyexporttempomarks", EXPORT_NONE_TEMPO_MARKS);
     m_exportPointAndClick = cfg->readBoolEntry("lilyexportpointandclick", false);
     m_exportBeams = cfg->readBoolEntry("lilyexportbeamings", false);
     m_exportStaffGroup = cfg->readBoolEntry("lilyexportstaffgroup", false);
     m_exportStaffMerge = cfg->readBoolEntry("lilyexportstaffmerge", false);
 
-    m_languageLevel = cfg->readUnsignedNumEntry("lilylanguage", 0);
+    m_languageLevel = cfg->readUnsignedNumEntry("lilylanguage", LILYPOND_VERSION_2_6);
 
 }
 
@@ -670,7 +665,7 @@ LilypondExporter::write()
         bool tempoMarksInvisible = false;
 
         str << indent(col++) << "globalTempo = {" << std::endl;
-        if (m_exportTempoMarks == 0 && tempoMarksInvisible == false) {
+        if (m_exportTempoMarks == EXPORT_NONE_TEMPO_MARKS && tempoMarksInvisible == false) {
             str << indent(col) << "\\override Score.MetronomeMark #'transparent = ##t" << std::endl;
             tempoMarksInvisible = true;
         }
@@ -702,7 +697,7 @@ LilypondExporter::write()
                       tempoChangeTime, tempoChangeTime - prevTempoChangeTime, false, str);
             // add new \tempo only if tempo was changed
             if (tempo != prevTempo) {
-                if (m_exportTempoMarks == 1 && tempoMarksInvisible == false) {
+                if (m_exportTempoMarks == EXPORT_FIRST_TEMPO_MARK && tempoMarksInvisible == false) {
                     str << std::endl << indent(col) << "\\override Score.MetronomeMark #'transparent = ##t";
                     tempoMarksInvisible = true;
                 }
@@ -762,7 +757,8 @@ LilypondExporter::write()
             rgapp->refreshGUI(50);
             
             bool currentSegmentSelected = false;
-            if ((m_exportSelection == 3) && (m_view != NULL) && (m_view->haveSelection())) {
+            if ((m_exportSelection == EXPORT_SELECTED_SEGMENTS) && 
+		(m_view != NULL) && (m_view->haveSelection())) {
             	//
             	// Check whether the current segment is in the list of selected segments.
             	//
@@ -770,7 +766,7 @@ LilypondExporter::write()
                 for (SegmentSelection::iterator it = selection.begin(); it != selection.end(); it++) {
                     if ((*it) == (*i)) currentSegmentSelected = true;
                 }
-            } else if ((m_exportSelection == 3) && (m_notationView != NULL)) {
+            } else if ((m_exportSelection == EXPORT_SELECTED_SEGMENTS) && (m_notationView != NULL)) {
 		currentSegmentSelected = m_notationView->hasSegment(*i);
 	    }
 
@@ -778,17 +774,12 @@ LilypondExporter::write()
 	    InstrumentId instrumentId = track->getInstrument();
 	    bool isMidiTrack = (instrumentId >= MidiInstrumentBase && instrumentId < SoftSynthInstrumentBase);
     
-    	    // The meaning of exportSelection meaning is to export:
-    	    // 0 -> All tracks
-    	    // 1 -> Non-muted tracks
-    	    // 2 -> Selected track
-    	    // 3 -> Selected segments
             if (isMidiTrack && ( // Skip non-midi tracks.
-		(m_exportSelection == 0) || 
-                ((m_exportSelection == 1) && (!track->isMuted())) ||
-                ((m_exportSelection == 2) && (m_view != NULL) && (track->getId() == m_composition->getSelectedTrack())) ||
-                ((m_exportSelection == 2) && (m_notationView != NULL) && (track->getId() == m_notationView->getCurrentSegment()->getTrack())) ||
-                ((m_exportSelection == 3) && (currentSegmentSelected)))) {
+		(m_exportSelection == EXPORT_ALL_TRACKS) || 
+                ((m_exportSelection == EXPORT_NONMUTED_TRACKS) && (!track->isMuted())) ||
+                ((m_exportSelection == EXPORT_SELECTED_TRACK) && (m_view != NULL) && (track->getId() == m_composition->getSelectedTrack())) ||
+                ((m_exportSelection == EXPORT_SELECTED_TRACK) && (m_notationView != NULL) && (track->getId() == m_notationView->getCurrentSegment()->getTrack())) ||
+                ((m_exportSelection == EXPORT_SELECTED_SEGMENTS) && (currentSegmentSelected)))) {
                 if ((int) (*i)->getTrack() != lastTrackIndex) {
                     if (lastTrackIndex != -1) {
                         // close the old track (Staff context)
