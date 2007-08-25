@@ -1111,6 +1111,9 @@ SegmentParameterBox::slotEditSegmentLabel()
                                        SegmentLabelCommand(segments, newLabel);
 
         addCommandToHistory(command);
+
+	// fix #1776915, maybe?
+	update();
     }
 }
 
