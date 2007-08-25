@@ -220,22 +220,32 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
                             i18n("Extra options"), vboxAdvanced);
 
     QFrame *frameExtra = new QFrame(extraOptionsBox);
-    QGridLayout *layoutExtra = new QGridLayout(frameExtra, 3, 1, 10, 5);
+    QGridLayout *layoutExtra = new QGridLayout(frameExtra, 3, 2, 10, 5);
 
     m_lilyExportPointAndClick = new QCheckBox(
                                     i18n("Enable \"point and click\" debugging"), frameExtra);
     m_lilyExportPointAndClick->setChecked(config->readBoolEntry("lilyexportpointandclick", false));
-    layoutExtra->addWidget(m_lilyExportPointAndClick, 0, 0);
+    layoutExtra->addMultiCellWidget(m_lilyExportPointAndClick, 0, 0, 0, 1);
 
     m_lilyExportMidi = new QCheckBox(
                            i18n("Export \\midi block"), frameExtra);
     m_lilyExportMidi->setChecked(config->readBoolEntry("lilyexportmidi", false));
-    layoutExtra->addWidget(m_lilyExportMidi, 1, 0);
+    layoutExtra->addMultiCellWidget(m_lilyExportMidi, 1, 1, 0, 1);
 
     m_lilyRaggedBottom = new QCheckBox(
                            i18n("Ragged bottom (systems will not be spread vertically across the page)"), frameExtra);
     m_lilyRaggedBottom->setChecked(config->readBoolEntry("lilyraggedbottom", false));
-    layoutExtra->addWidget(m_lilyRaggedBottom, 2, 0);
+    layoutExtra->addMultiCellWidget(m_lilyRaggedBottom, 2, 2, 0, 1);
+
+    m_lilyLyricsHAlignment = new KComboBox( frameExtra );
+    m_lilyLyricsHAlignment->insertItem(i18n("Left"));
+    m_lilyLyricsHAlignment->insertItem(i18n("Center"));
+    m_lilyLyricsHAlignment->insertItem(i18n("Right"));
+    m_lilyLyricsHAlignment->setCurrentItem(config->readUnsignedNumEntry("lilylyricshalignment", 0));
+
+    layoutExtra->addWidget(new QLabel(
+                          i18n("Lyrics alignment"), frameExtra), 3, 0);
+    layoutExtra->addWidget(m_lilyLyricsHAlignment, 3, 1);
 
     //
     // LilyPond export: Headers
@@ -269,52 +279,40 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
 	if (key == headerDedication) {  
 	    m_editDedication = editHeader;
 	    row = 0; col = 2; width = 2;
-	}
-	if (key == headerTitle) {       
+	} else if (key == headerTitle) {       
 	    m_editTitle = editHeader;	
 	    row = 1; col = 1; width = 4;
-	    }
-	if (key == headerSubtitle) {
+	} else if (key == headerSubtitle) {
 	    m_editSubtitle = editHeader;
 	    row = 2; col = 1; width = 4;
-	}
-	if (key == headerSubsubtitle) { 
+	} else if (key == headerSubsubtitle) { 
 	    m_editSubsubtitle = editHeader;
 	    row = 3; col = 2; width = 2;
-	}
-	if (key == headerPoet) {        
+	} else if (key == headerPoet) {        
 	    m_editPoet = editHeader;
 	    row = 4; col = 0; width = 2;
-	}
-	if (key == headerInstrument) {  
+	} else if (key == headerInstrument) {  
 	    m_editInstrument = editHeader;
 	    row = 4; col = 2; width = 2;
-	}
-	if (key == headerComposer) {    
+	} else if (key == headerComposer) {    
 	    m_editComposer = editHeader;
 	    row = 4; col = 4; width = 2; 
-	}
-	if (key == headerMeter) {       
+	} else if (key == headerMeter) {       
 	    m_editMeter = editHeader;
 	    row = 5; col = 0; width = 3; 
-	}
-	if (key == headerArranger) {    
+	} else if (key == headerArranger) {    
 	    m_editArranger = editHeader;
 	    row = 5; col = 3; width = 3; 
-	}
-	if (key == headerPiece) {       
+	} else if (key == headerPiece) {       
 	    m_editPiece = editHeader;
 	    row = 6; col = 0; width = 3; 
-	}
-	if (key == headerOpus) {        
+	} else if (key == headerOpus) {        
 	    m_editOpus = editHeader;
 	    row = 6; col = 3; width = 3; 
-	}
-	if (key == headerCopyright) {   
+	} else if (key == headerCopyright) {   
 	    m_editCopyright = editHeader;
 	    row = 8; col = 1; width = 4; 
-	}
-	if (key == headerTagline) {     
+	} else if (key == headerTagline) {     
 	    m_editTagline = editHeader;
 	    row = 9; col = 1; width = 4; 
 	}
@@ -353,6 +351,7 @@ LilypondOptionsDialog::slotApply()
     config->writeEntry("lilyexportbeamings", m_lilyExportBeams->isChecked());
     config->writeEntry("lilyexportstaffgroup", m_lilyExportStaffGroup->isChecked());
     config->writeEntry("lilyexportstaffmerge", m_lilyExportStaffMerge->isChecked());
+    config->writeEntry("lilylyricshalignment", m_lilyLyricsHAlignment->currentItem());
 
     //
     // Update header fields

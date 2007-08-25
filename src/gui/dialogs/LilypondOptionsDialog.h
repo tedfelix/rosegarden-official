@@ -63,6 +63,7 @@ protected:
     QComboBox *m_lilyFontSize;
     QComboBox *m_lilyTempoMarks;
     QComboBox *m_lilyExportSelection;
+    QComboBox *m_lilyLyricsHAlignment;
     QCheckBox *m_lilyPaperLandscape;
     QCheckBox *m_lilyRaggedBottom;
     QCheckBox *m_lilyExportLyrics;

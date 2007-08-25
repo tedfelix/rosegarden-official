@@ -165,6 +165,11 @@ private:
     bool m_exportLyrics;
     bool m_exportMidi;
 
+    unsigned int m_lyricsHAlignment;
+    static const int LEFT_ALIGN   = 0;
+    static const int CENTER_ALIGN = 1;
+    static const int RIGHT_ALIGN  = 2;
+    
     unsigned int m_exportTempoMarks;
     static const int EXPORT_NONE_TEMPO_MARKS = 0;
     static const int EXPORT_FIRST_TEMPO_MARK = 1;
