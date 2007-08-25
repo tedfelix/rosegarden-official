@@ -24,6 +24,7 @@
 
 
 #include "LilypondOptionsDialog.h"
+#include "document/io/LilypondExporter.h"
 #include <qlayout.h>
 #include <kapplication.h>
 

@@ -62,6 +62,19 @@ class NotationView;
 class Key;
 class Composition;
 
+const std::string headerDedication = "dedication";
+const std::string headerTitle = "title";
+const std::string headerSubtitle = "subtitle";
+const std::string headerSubsubtitle = "subsubtitle";
+const std::string headerPoet = "poet";
+const std::string headerComposer = "composer";
+const std::string headerMeter = "meter";
+const std::string headerOpus = "opus";
+const std::string headerArranger = "arranger";
+const std::string headerInstrument = "instrument";
+const std::string headerPiece = "piece";
+const std::string headerCopyright = "copyright";
+const std::string headerTagline = "tagline";
 
 /**
  * Lilypond scorefile export
@@ -174,6 +187,7 @@ private:
     static const int LILYPOND_VERSION_2_8  = 1;
     static const int LILYPOND_VERSION_2_10 = 2;
     static const int LILYPOND_VERSION_2_12 = 3;
+
 };
 
 

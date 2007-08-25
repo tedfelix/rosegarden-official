@@ -445,20 +445,6 @@ LilypondExporter::write()
         str << "\\header {" << std::endl;
         col++;  // indent+
 
-        const std::string headerDedication = "dedication";
-        const std::string headerTitle = "title";
-        const std::string headerSubtitle = "subtitle";
-        const std::string headerSubsubtitle = "subsubtitle";
-        const std::string headerPoet = "poet";
-        const std::string headerComposer = "composer";
-        const std::string headerMeter = "meter";
-        const std::string headerOpus = "opus";
-        const std::string headerArranger = "arranger";
-        const std::string headerInstrument = "instrument";
-        const std::string headerPiece = "piece";
-        const std::string headerCopyright = "copyright";
-        const std::string headerTagline = "tagline";
-
         bool userTagline = false;
 
         for (unsigned int index = 0; index < propertyNames.size(); ++index) {
