@@ -130,6 +130,7 @@ LilypondExporter::readConfigVariables(void)
     m_exportBeams = cfg->readBoolEntry("lilyexportbeamings", false);
     m_exportStaffGroup = cfg->readBoolEntry("lilyexportstaffgroup", false);
     m_exportStaffMerge = cfg->readBoolEntry("lilyexportstaffmerge", false);
+    m_lyricsHAlignment = cfg->readBoolEntry("lilylyricshalignment", LEFT_ALIGN);
 
     m_languageLevel = cfg->readUnsignedNumEntry("lilylanguage", LILYPOND_VERSION_2_6);
 }
@@ -1060,7 +1061,13 @@ LilypondExporter::write()
 		    
 			    str << indent(col) << "\\lyricsto \"" << voiceNumber.str() << "\""
 			        << " \\new Lyrics \\lyricmode {" << std::endl;
-			    str << indent(++col) << "\\override LyricText #'self-alignment-X = #LEFT" << std::endl;
+			    if (m_lyricsHAlignment == RIGHT_ALIGN) {
+				str << indent(++col) << "\\override LyricText #'self-alignment-X = #RIGHT" << std::endl;
+			    } else if (m_lyricsHAlignment == CENTER_ALIGN) {
+				str << indent(++col) << "\\override LyricText #'self-alignment-X = #CENTER" << std::endl;
+			    } else {
+				str << indent(++col) << "\\override LyricText #'self-alignment-X = #LEFT" << std::endl;
+			    }
 			    str << indent(col) << text.utf8() << " " << std::endl;
 			    str << indent(--col) << "} % Lyrics " << (currentVerse+1) << std::endl;
 			    // close the Lyrics context
