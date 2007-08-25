@@ -88,16 +88,36 @@ LilypondExporter::LilypondExporter(RosegardenGUIApp *parent,
         m_doc(doc),
         m_fileName(fileName)
 {
-    m_pitchBorked = false;
+    m_composition = &m_doc->getComposition();
+    m_studio = &m_doc->getStudio();
+    m_view = ((RosegardenGUIApp *)parent)->getView();
+    m_notationView = NULL;
 
+    readConfigVariables();
+}
+
+LilypondExporter::LilypondExporter(NotationView *parent,
+                                   RosegardenGUIDoc *doc,
+                                   std::string fileName) :
+        ProgressReporter((QObject *)parent, "lilypondExporter"),
+        m_doc(doc),
+        m_fileName(fileName)
+{
+    m_composition = &m_doc->getComposition();
+    m_studio = &m_doc->getStudio();
+    m_view = NULL;
+    m_notationView = ((NotationView *)parent);
+
+    readConfigVariables();
+}
+
+void
+LilypondExporter::readConfigVariables(void)
+{
     // grab config info
     KConfig *cfg = kapp->config();
     cfg->setGroup(NotationViewConfigGroup);
 
-    m_view = ((RosegardenGUIApp *)parent)->getView();
-    m_notationView = NULL;
-    m_composition = &m_doc->getComposition();
-    m_studio = &m_doc->getStudio();
     m_paperSize = cfg->readUnsignedNumEntry("lilypapersize", 1);
     m_paperLandscape = cfg->readBoolEntry("lilypaperlandscape", false);
     m_fontSize = cfg->readUnsignedNumEntry("lilyfontsize", 4);
@@ -112,40 +132,6 @@ LilypondExporter::LilypondExporter(RosegardenGUIApp *parent,
     m_exportStaffMerge = cfg->readBoolEntry("lilyexportstaffmerge", false);
 
     m_languageLevel = cfg->readUnsignedNumEntry("lilylanguage", LILYPOND_VERSION_2_6);
-
-}
-
-LilypondExporter::LilypondExporter(NotationView *parent,
-                                   RosegardenGUIDoc *doc,
-                                   std::string fileName) :
-        ProgressReporter((QObject *)parent, "lilypondExporter"),
-        m_doc(doc),
-        m_fileName(fileName)
-{
-    m_pitchBorked = false;
-
-    // grab config info
-    KConfig *cfg = kapp->config();
-    cfg->setGroup(NotationViewConfigGroup);
-
-    m_view = NULL;
-    m_notationView = ((NotationView *)parent);
-    m_composition = &m_doc->getComposition();
-    m_studio = &m_doc->getStudio();
-    m_paperSize = cfg->readUnsignedNumEntry("lilypapersize", 1);
-    m_paperLandscape = cfg->readBoolEntry("lilypaperlandscape", false);
-    m_fontSize = cfg->readUnsignedNumEntry("lilyfontsize", 4);
-    m_exportSelection = cfg->readUnsignedNumEntry("lilyexportselection", EXPORT_NONMUTED_TRACKS);
-    m_exportLyrics = cfg->readBoolEntry("lilyexportlyrics", true);
-    m_exportMidi = cfg->readBoolEntry("lilyexportmidi", false);
-    m_exportTempoMarks = cfg->readUnsignedNumEntry("lilyexporttempomarks", EXPORT_NONE_TEMPO_MARKS);
-    m_exportPointAndClick = cfg->readBoolEntry("lilyexportpointandclick", false);
-    m_exportBeams = cfg->readBoolEntry("lilyexportbeamings", false);
-    m_exportStaffGroup = cfg->readBoolEntry("lilyexportstaffgroup", false);
-    m_exportStaffMerge = cfg->readBoolEntry("lilyexportstaffmerge", false);
-
-    m_languageLevel = cfg->readUnsignedNumEntry("lilylanguage", LILYPOND_VERSION_2_6);
-
 }
 
 LilypondExporter::~LilypondExporter()
@@ -1122,18 +1108,6 @@ LilypondExporter::write()
         str << indent(col++) << "\\midi {" << std::endl;
         str << indent(col) << "\\tempo 4 = " << tempo << std::endl;
         str << indent(--col) << "} " << std::endl;
-    }
-
-    // DMM - a friendly userland warning if they happen to tease out any lingering
-    // trouble with this stuff;  since users don't usually see the debug messages
-    if (m_pitchBorked) {
-        CurrentProgressDialog::freeze();
-        KMessageBox::sorry(0,
-                           i18n("You encountered an enharmonic resolution bug somewhere during this "
-                                "operation.  You may wish to save a copy of your current composition "
-                                "and email it to dmmcintyr@users.sourceforge.net for analysis.\n\n"
-                                "In the meantime, you will probably need to make manual adjustments "
-                                "to the file you've just exported."));
     }
 
     // close \score section and close out the file
