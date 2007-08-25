@@ -87,8 +87,8 @@ protected:
     Composition *m_composition;
     Studio *m_studio;
     std::string m_fileName;
-    bool m_pitchBorked;
 
+    void readConfigVariables(void);
     void writeBar(Segment *, int barNo, int barStart, int barEnd, int col,
                   Rosegarden::Key &key, std::string &lilyText,
                   std::string &prevStyle, eventendlist &eventsInProgress,
