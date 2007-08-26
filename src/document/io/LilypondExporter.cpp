@@ -1252,10 +1252,15 @@ LilypondExporter::writeBar(Segment *s,
 
     timeT absTime = (*i)->getNotationAbsoluteTime();
     timeT writtenDuration = 0;
+    std::pair<int,int> durationRatioSum(0,1);
+    static std::pair<int,int> durationRatio(0,1);
 
     if (absTime > barStart) {
-        writtenDuration = absTime - barStart;
-        writeSkip(timeSignature, 0, writtenDuration, true, str);
+        Note note(Note::getNearestNote(absTime - barStart, MAX_DOTS));
+        writtenDuration = note.getDuration();
+        durationRatio = writeSkip(timeSignature, 0, writtenDuration, true, str);
+	durationRatioSum = fractionSum(durationRatioSum,durationRatio);
+        // str << qstrtostr(QString(" %{ %1/%2 %} ").arg(durationRatio.first).arg(durationRatio.second)); // DEBUG
     }
 
     timeT prevDuration = -1;
@@ -1331,6 +1336,8 @@ LilypondExporter::writeBar(Segment *s,
                     } else if (groupType == GROUP_TYPE_BEAMED) {
                         newBeamedGroup = true;
                         notesInBeamedGroup = 0;
+			// there can currently be only on group type, reset tuplet ratio
+                        tupletRatio = std::pair<int, int>(1,1);
                     } else if (groupType == GROUP_TYPE_GRACE) {
                         str << "\\grace { ";
 			// Require explicit beamed group,
@@ -1338,6 +1345,8 @@ LilypondExporter::writeBar(Segment *s,
 		        // HJJ: Why line below was originally present?
                         // newBeamedGroup = true;
                         notesInBeamedGroup = 0;
+			// there can currently be only on group type, reset tuplet ratio
+                        tupletRatio = std::pair<int, int>(1,1);
                     }
                 }
 
@@ -1467,7 +1476,7 @@ LilypondExporter::writeBar(Segment *s,
                 str << "> ";
 
             if (duration != prevDuration) {
-                writeDuration(duration, str);
+                durationRatio = writeDuration(duration, str);
                 str << " ";
                 prevDuration = duration;
             }
@@ -1487,6 +1496,9 @@ LilypondExporter::writeBar(Segment *s,
             writeSlashes(*i, str);
 
             writtenDuration += soundingDuration;
+	    std::pair<int,int> ratio = fractionProduct(durationRatio,tupletRatio);
+	    durationRatioSum = fractionSum(durationRatioSum, ratio);
+	    // str << qstrtostr(QString(" %{ %1/%2 * %3/%4 = %5/%6 %} ").arg(durationRatio.first).arg(durationRatio.second).arg(tupletRatio.first).arg(tupletRatio.second).arg(ratio.first).arg(ratio.second)); // DEBUG
 
             std::vector<Mark> marks(chord.getMarksForChord());
             // problem here: stem direction unavailable (it's a view-local property)
@@ -1557,7 +1569,7 @@ LilypondExporter::writeBar(Segment *s,
 		}
 	    
 		if (duration != prevDuration) {
-		    writeDuration(duration, str);
+		    durationRatio = writeDuration(duration, str);
 		    if (MultiMeasureRestCount > 0) {
 			str << "*" << (1 + MultiMeasureRestCount);
 		    }
@@ -1579,7 +1591,10 @@ LilypondExporter::writeBar(Segment *s,
 	    } else {
 		MultiMeasureRestCount--;
 	    }
-	    writtenDuration += soundingDuration;
+            writtenDuration += soundingDuration;
+	    std::pair<int,int> ratio = fractionProduct(durationRatio,tupletRatio);
+	    durationRatioSum = fractionSum(durationRatioSum, ratio);
+	    // str << qstrtostr(QString(" %{ %1/%2 * %3/%4 = %5/%6 %} ").arg(durationRatio.first).arg(durationRatio.second).arg(tupletRatio.first).arg(tupletRatio.second).arg(ratio.first).arg(ratio.second)); // DEBUG
         } else if ((*i)->isa(Clef::EventType)) {
 
             try {
@@ -1742,11 +1757,19 @@ LilypondExporter::writeBar(Segment *s,
         qstrtostr(QString("% %1").
                   arg(i18n("warning: overlong bar truncated here")));
     }
-    if (writtenDuration < barEnd - barStart) {
+    //  if (writtenDuration < barEnd - barStart) {
+    std::pair<int,int> barDurationRatio(timeSignature.getNumerator(),timeSignature.getDenominator());
+    if (fractionSmaller(durationRatioSum, barDurationRatio)) {
         str << std::endl << indent(col) <<
-        qstrtostr(QString("% %1").
-                  arg(i18n("warning: bar too short, padding with rests")))
-        << std::endl << indent(col);
+	    qstrtostr(QString("% %1").
+                arg(i18n("warning: bar too short, padding with rests")));
+        str << std::endl << indent(col) <<
+        qstrtostr(QString("% %1/%2 < %3/%4").
+                  arg(durationRatioSum.first).
+                  arg(durationRatioSum.second).
+                  arg(barDurationRatio.first).
+                  arg(barDurationRatio.second))
+	    << std::endl << indent(col);
         writeSkip(timeSignature, writtenDuration,
                   (barEnd - barStart) - writtenDuration, true, str);
     }
@@ -1768,7 +1791,7 @@ LilypondExporter::writeBar(Segment *s,
     }
 }
 
-void
+std::pair<int,int>
 LilypondExporter::writeSkip(const TimeSignature &timeSig,
                             timeT offset,
                             timeT duration,
@@ -1777,6 +1800,8 @@ LilypondExporter::writeSkip(const TimeSignature &timeSig,
 {
     DurationList dlist;
     timeSig.getDurationListForInterval(dlist, duration, offset);
+    std::pair<int,int> durationRatioSum(0,1);
+    std::pair<int,int> durationRatio(0,1);
 
     int t = 0, count = 0;
 
@@ -1793,11 +1818,15 @@ LilypondExporter::writeSkip(const TimeSignature &timeSig,
                 else
                     str << "r";
 
-                writeDuration(t, str);
+                durationRatio = writeDuration(t, str);
 
-                if (count > 1)
+                if (count > 1) {
                     str << "*" << count;
+		    durationRatio = fractionProduct(durationRatio,count);
+		}
                 str << " ";
+
+		durationRatioSum = fractionSum(durationRatioSum,durationRatio);
             }
 
             if (i != dlist.end()) {
@@ -1812,6 +1841,7 @@ LilypondExporter::writeSkip(const TimeSignature &timeSig,
         if (i == dlist.end())
             break;
     }
+    return durationRatioSum;
 }
 
 bool
@@ -2022,50 +2052,54 @@ LilypondExporter::writeStyle(const Event *note, std::string &prevStyle,
     }
 }
 
-void
+std::pair<int,int>
 LilypondExporter::writeDuration(timeT duration,
                                 std::ofstream &str)
 {
     Note note(Note::getNearestNote(duration, MAX_DOTS));
+    std::pair<int,int> durationRatio(0,1);
 
     switch (note.getNoteType()) {
 
     case Note::SixtyFourthNote:
-        str << "64";
+        str << "64"; durationRatio = std::pair<int,int>(1,64);
         break;
 
     case Note::ThirtySecondNote:
-        str << "32";
+        str << "32"; durationRatio = std::pair<int,int>(1,32);
         break;
 
     case Note::SixteenthNote:
-        str << "16";
+        str << "16"; durationRatio = std::pair<int,int>(1,16);
         break;
 
     case Note::EighthNote:
-        str << "8";
+        str << "8"; durationRatio = std::pair<int,int>(1,8);
         break;
 
     case Note::QuarterNote:
-        str << "4";
+        str << "4"; durationRatio = std::pair<int,int>(1,4);
         break;
 
     case Note::HalfNote:
-        str << "2";
+        str << "2"; durationRatio = std::pair<int,int>(1,2);
         break;
 
     case Note::WholeNote:
-        str << "1";
+        str << "1"; durationRatio = std::pair<int,int>(1,1);
         break;
 
     case Note::DoubleWholeNote:
-        str << "\\breve";
+        str << "\\breve"; durationRatio = std::pair<int,int>(2,1);
         break;
     }
 
     for (int numDots = 0; numDots < note.getDots(); numDots++) {
         str << ".";
     }
+    durationRatio = fractionProduct(durationRatio,
+	    std::pair<int,int>((1<<(note.getDots()+1))-1,1<<note.getDots()));
+    return durationRatio;
 }
 
 void

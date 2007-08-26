@@ -134,11 +134,11 @@ protected:
     // return a string full of column tabs
     std::string indent(const int &column);
                   
-    void writeSkip(const TimeSignature &timeSig,
-                   timeT offset,
-                   timeT duration,
-                   bool useRests,
-                   std::ofstream &);
+    std::pair<int,int> writeSkip(const TimeSignature &timeSig,
+				 timeT offset,
+				 timeT duration,
+				 bool useRests,
+				 std::ofstream &);
 
     /*
      * Handle Lilypond directive.  Returns true if the event was a directive,
@@ -152,7 +152,7 @@ protected:
     void handleText(const Event *, std::string &lilyText);
     void writePitch(const Event *note, const Rosegarden::Key &key, std::ofstream &);
     void writeStyle(const Event *note, std::string &prevStyle, int col, std::ofstream &, bool isInChord);
-    void writeDuration(timeT duration, std::ofstream &);
+    std::pair<int,int> writeDuration(timeT duration, std::ofstream &);
     void writeSlashes(const Event *note, std::ofstream &);
        
 private:
@@ -193,6 +193,41 @@ private:
     static const int LILYPOND_VERSION_2_10 = 2;
     static const int LILYPOND_VERSION_2_12 = 3;
 
+    std::pair<int,int> fractionSum(std::pair<int,int> x,std::pair<int,int> y) {
+	std::pair<int,int> z(
+	    x.first * y.second + x.second * y.first,
+	    x.second * y.second);
+	return fractionSimplify(z);
+    }
+    std::pair<int,int> fractionProduct(std::pair<int,int> x,std::pair<int,int> y) {
+	std::pair<int,int> z(
+	    x.first * y.first,
+	    x.second * y.second);
+	return fractionSimplify(z);
+    }
+    std::pair<int,int> fractionProduct(std::pair<int,int> x,int y) {
+	std::pair<int,int> z(
+	    x.first * y,
+	    x.second);
+	return fractionSimplify(z);
+    }
+    bool fractionSmaller(std::pair<int,int> x,std::pair<int,int> y) {
+	return (x.first * y.second < x.second * y.first);
+    }
+    std::pair<int,int> fractionSimplify(std::pair<int,int> x) {
+	return std::pair<int,int>(x.first/gcd(x.first,x.second),
+				  x.second/gcd(x.first,x.second));
+    }
+    int gcd(int a, int b) {
+	// Euclid's algorithm to find the greatest common divisor
+	while ( 1 ) {
+	    int r = a % b;
+	    if ( r == 0 )
+		return (b == 0 ? 1 : b);
+	    a = b;
+	    b = r; 
+	}
+    }
 };
 
 
