@@ -1252,13 +1252,14 @@ LilypondExporter::writeBar(Segment *s,
 
     timeT absTime = (*i)->getNotationAbsoluteTime();
     timeT writtenDuration = 0;
+    std::pair<int,int> barDurationRatio(timeSignature.getNumerator(),timeSignature.getDenominator());
     std::pair<int,int> durationRatioSum(0,1);
     static std::pair<int,int> durationRatio(0,1);
 
     if (absTime > barStart) {
         Note note(Note::getNearestNote(absTime - barStart, MAX_DOTS));
-        writtenDuration = note.getDuration();
-        durationRatio = writeSkip(timeSignature, 0, writtenDuration, true, str);
+        writtenDuration += note.getDuration();
+        durationRatio = writeSkip(timeSignature, 0, note.getDuration(), true, str);
 	durationRatioSum = fractionSum(durationRatioSum,durationRatio);
         // str << qstrtostr(QString(" %{ %1/%2 %} ").arg(durationRatio.first).arg(durationRatio.second)); // DEBUG
     }
@@ -1757,8 +1758,7 @@ LilypondExporter::writeBar(Segment *s,
         qstrtostr(QString("% %1").
                   arg(i18n("warning: overlong bar truncated here")));
     }
-    //  if (writtenDuration < barEnd - barStart) {
-    std::pair<int,int> barDurationRatio(timeSignature.getNumerator(),timeSignature.getDenominator());
+
     if (fractionSmaller(durationRatioSum, barDurationRatio)) {
         str << std::endl << indent(col) <<
 	    qstrtostr(QString("% %1").
@@ -1770,15 +1770,13 @@ LilypondExporter::writeBar(Segment *s,
                   arg(barDurationRatio.first).
                   arg(barDurationRatio.second))
 	    << std::endl << indent(col);
-        writeSkip(timeSignature, writtenDuration,
-                  (barEnd - barStart) - writtenDuration, true, str);
+        durationRatio = writeSkip(timeSignature, writtenDuration,
+				  (barEnd - barStart) - writtenDuration, true, str);
+	durationRatioSum = fractionSum(durationRatioSum,durationRatio);
     }
     //
-    // Export bar checks.
+    // Export bar and bar checks.
     //
-    if (MultiMeasureRestCount == 0 && !nextBarIsDouble && !nextBarIsEnd && !nextBarIsDot) {
-        str << " |";
-    }
     if (nextBarIsDouble) {
         str << "\\bar \"||\" ";
         nextBarIsDouble = false;
@@ -1788,6 +1786,8 @@ LilypondExporter::writeBar(Segment *s,
     } else if (nextBarIsDot) {
         str << "\\bar \":\" ";
         nextBarIsDot = false;
+    } else if (MultiMeasureRestCount == 0) {
+        str << " |";
     }
 }
 
