@@ -118,9 +118,9 @@ LilypondExporter::readConfigVariables(void)
     KConfig *cfg = kapp->config();
     cfg->setGroup(NotationViewConfigGroup);
 
-    m_paperSize = cfg->readUnsignedNumEntry("lilypapersize", 1);
+    m_paperSize = cfg->readUnsignedNumEntry("lilypapersize", PAPER_A4);
     m_paperLandscape = cfg->readBoolEntry("lilypaperlandscape", false);
-    m_fontSize = cfg->readUnsignedNumEntry("lilyfontsize", 4);
+    m_fontSize = cfg->readUnsignedNumEntry("lilyfontsize", FONT_20);
     m_raggedBottom = cfg->readBoolEntry("lilyraggedbottom", false);
     m_exportSelection = cfg->readUnsignedNumEntry("lilyexportselection", EXPORT_NONMUTED_TRACKS);
     m_exportLyrics = cfg->readBoolEntry("lilyexportlyrics", true);
@@ -492,7 +492,7 @@ LilypondExporter::write()
     // (not the cleanest output but maybe the most reliable)
 
     // paper/font sizes
-    int font = 20; // default, if config problem
+    int font;
     switch (m_fontSize) {
     case 0 :
         font = 11;
@@ -515,6 +515,8 @@ LilypondExporter::write()
     case 6 :
         font = 26;
         break;
+    default :
+	font = 20; // if config problem
     }
 
     str << indent(col) << "#(set-global-staff-size " << font << ")" << std::endl;
@@ -522,28 +524,28 @@ LilypondExporter::write()
     // write user-specified paper type as default paper size
     std::string paper = "";
     switch (m_paperSize) {
-    case 0 :
+    case PAPER_A3 :
         paper += "a3";
         break;
-    case 1 :
+    case PAPER_A4 :
         paper += "a4";
         break;
-    case 2 :
+    case PAPER_A5 :
         paper += "a5";
         break;
-    case 3 :
+    case PAPER_A6 :
         paper += "a6";
         break;
-    case 4 :
+    case PAPER_LEGAL :
         paper += "legal";
         break;
-    case 5 :
+    case PAPER_LETTER :
         paper += "letter";
         break;
-    case 6 :
+    case PAPER_TABLOID :
         paper += "tabloid";
         break;
-    case 7 :
+    case PAPER_NONE :
         paper = "";
         break; // "do not specify"
     }
