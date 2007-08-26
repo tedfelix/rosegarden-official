@@ -160,8 +160,25 @@ private:
     static const PropertyName SKIP_PROPERTY;
     
     unsigned int m_paperSize;
+    static const int PAPER_A3      = 0;
+    static const int PAPER_A4      = 1;
+    static const int PAPER_A5      = 2;
+    static const int PAPER_A6      = 3;
+    static const int PAPER_LEGAL   = 4;
+    static const int PAPER_LETTER  = 5;
+    static const int PAPER_TABLOID = 6;
+    static const int PAPER_NONE    = 7;
+
     bool m_paperLandscape;
     unsigned int m_fontSize;
+    static const int FONT_11	= 0;
+    static const int FONT_13	= 1;
+    static const int FONT_16	= 2;
+    static const int FONT_19	= 3;
+    static const int FONT_20	= 4;
+    static const int FONT_23	= 5;
+    static const int FONT_26	= 6;
+
     bool m_exportLyrics;
     bool m_exportMidi;
 
