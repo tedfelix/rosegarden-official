@@ -4,13 +4,66 @@
 # -> this will cause cmake to include and link against the OpenGL module
 include(${QT_USE_FILE})
 
-# the variable "qtproject_SRCS" contains all .cpp files of this project
+
 set(matrix4_SRCS
     main.cpp
     gvtest.cpp
     GraphicsItemPin.cpp
     FadeItem.cpp
 )
+
+SET(base_SRCS
+	base/AudioLevel.cpp
+	base/AudioPluginInstance.cpp
+	base/BaseProperties.cpp
+	base/BasicQuantizer.cpp
+	base/Colour.cpp
+	base/ColourMap.cpp
+	base/ControlParameter.cpp
+	base/Composition.cpp
+	base/CompositionTimeSliceAdapter.cpp
+	base/Configuration.cpp
+	base/Device.cpp
+	base/Event.cpp
+	base/Exception.cpp
+	base/Instrument.cpp
+	base/Marker.cpp
+	base/MidiDevice.cpp
+	base/MidiProgram.cpp
+	base/MidiTypes.cpp
+	base/NotationQuantizer.cpp
+	base/NotationTypes.cpp
+	base/Profiler.cpp
+	base/Property.cpp
+	base/PropertyMap.cpp
+	base/PropertyName.cpp
+	base/Quantizer.cpp
+	base/RealTime.cpp
+	base/Segment.cpp
+	base/SegmentNotationHelper.cpp
+	base/Selection.cpp
+	base/Sets.cpp
+	base/Track.cpp
+	base/TriggerSegment.cpp
+	base/XmlExportable.cpp
+)
+
+SET(staff_SRCS
+	staff/Staff.cpp
+	staff/ViewElement.cpp
+)
+
+ADD_LIBRARY(RosegardenBase STATIC
+    ${base_SRCS}
+)
+
+ADD_LIBRARY(RosegardenStaff STATIC
+    ${staff_SRCS}
+)
+
+
+ADD_DEPENDENCIES(RosegardenBase precompiled_headers)
+ADD_DEPENDENCIES(RosegardenStaff precompiled_headers)
 
 # tell cmake to create .moc files for all files in the variable qtproject_SRCS that require such a file.
 # note: this assumes that you use #include "header.moc" in your files
