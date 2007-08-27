@@ -1111,108 +1111,108 @@ LilypondExporter::write()
     return true;
 }
 
-timeT
+timeT 
 LilypondExporter::calculateDuration(Segment *s,
-                                    const Segment::iterator &i,
-                                    timeT barEnd,
-                                    timeT &soundingDuration,
-                                    const std::pair<int, int> &tupletRatio,
-                                    bool &overlong)
+		                            const Segment::iterator &i,
+		                            timeT barEnd,
+		                            timeT &soundingDuration,
+		                            const std::pair<int, int> &tupletRatio,
+		                            bool &overlong)
 {
-    timeT duration = (*i)->getNotationDuration();
-    timeT absTime = (*i)->getNotationAbsoluteTime();
+	timeT duration = (*i)->getNotationDuration();
+	timeT absTime = (*i)->getNotationAbsoluteTime();
 
-    RG_DEBUG << "LilypondExporter::calculateDuration: first duration, absTime: "
-    << duration << ", " << absTime << endl;
+	RG_DEBUG << "LilypondExporter::calculateDuration: first duration, absTime: "
+	<< duration << ", " << absTime << endl;
 
-    timeT durationCorrection = 0;
+	timeT durationCorrection = 0;
 
-    if ((*i)->isa(Note::EventType) || (*i)->isa(Note::EventRestType)) {
-        try {
-            // tuplet compensation, etc
-            Note::Type type = (*i)->get
-                              <Int>(NOTE_TYPE);
-            int dots = (*i)->get
-                       <Int>(NOTE_DOTS);
-            durationCorrection = Note(type, dots).getDuration() - duration;
-        } catch (Exception e) { // no properties
-        }
-    }
+	if ((*i)->isa(Note::EventType) || (*i)->isa(Note::EventRestType)) {
+		try {
+			// tuplet compensation, etc
+			Note::Type type = (*i)->get<Int>(NOTE_TYPE);
+			int dots = (*i)->get<Int>(NOTE_DOTS);
+			durationCorrection = Note(type, dots).getDuration() - duration;
+		} catch (Exception e) { // no properties
+		}
+	}
 
-    duration += durationCorrection;
+	duration += durationCorrection;
 
-    RG_DEBUG << "LilypondExporter::calculateDuration: now duration is "
-    << duration << " after correction of " << durationCorrection << endl;
+	RG_DEBUG << "LilypondExporter::calculateDuration: now duration is "
+	<< duration << " after correction of " << durationCorrection << endl;
 
-    soundingDuration = duration * tupletRatio.first / tupletRatio.second;
+	soundingDuration = duration * tupletRatio.first/ tupletRatio.second;
 
-    timeT toNext = barEnd - absTime;
-    if (soundingDuration > toNext) {
-        soundingDuration = toNext;
-        duration = soundingDuration * tupletRatio.second / tupletRatio.first;
-        overlong = true;
-    }
+	timeT toNext = barEnd - absTime;
+	if (soundingDuration > toNext) {
+		soundingDuration = toNext;
+		duration = soundingDuration * tupletRatio.second/ tupletRatio.first;
+		overlong = true;
+	}
 
-    RG_DEBUG << "LilypondExporter::calculateDuration: time to barEnd is "
-    << toNext << endl;
+	RG_DEBUG << "LilypondExporter::calculateDuration: time to barEnd is "
+	<< toNext << endl;
 
-    // Examine the following event, and truncate our duration
-    // if we overlap it.
-    Segment::iterator nextElt = s->end();
-    toNext = soundingDuration;
+	// Examine the following event, and truncate our duration
+	// if we overlap it.
+	Segment::iterator nextElt = s->end();
+	toNext = soundingDuration;
 
-    if ((*i)->isa(Note::EventType)) {
+	if ((*i)->isa(Note::EventType)) {
 
-        Chord chord(*s, i, m_composition->getNotationQuantizer());
-        Segment::iterator nextElt = chord.getFinalElement();
-        ++nextElt;
-
-        if (s->isBeforeEndMarker(nextElt)) {
-            // The quantizer sometimes sticks a rest at the same time
-            // as this note -- don't use that one here, and mark it as
-            // not to be exported -- it's just a heavy-handed way of
-            // rendering counterpoint in RG
-            if ((*nextElt)->isa(Note::EventRestType) &&
-                    (*nextElt)->getNotationAbsoluteTime() == absTime) {
-                (*nextElt)->set
-                <Bool>(SKIP_PROPERTY, true);
-                ++nextElt;
-            }
-        }
-
-    } else {
-
-        nextElt = i;
-	++nextElt;
-	while (s->isBeforeEndMarker(nextElt)) {
-	    if ((*nextElt)->isa(Controller::EventType))
+		Chord chord(*s, i, m_composition->getNotationQuantizer());
+		Segment::iterator nextElt = chord.getFinalElement();
 		++nextElt;
-	    else
-		break;
+
+		if (s->isBeforeEndMarker(nextElt)) {
+			// The quantizer sometimes sticks a rest at the same time
+			// as this note -- don't use that one here, and mark it as
+			// not to be exported -- it's just a heavy-handed way of
+			// rendering counterpoint in RG
+			if ((*nextElt)->isa(Note::EventRestType) &&
+				(*nextElt)->getNotationAbsoluteTime() == absTime) {
+				(*nextElt)->set<Bool>(SKIP_PROPERTY, true);
+				++nextElt;
+			}
+		}
+
+	} else {
+		nextElt = i;
+		++nextElt;
+		while (s->isBeforeEndMarker(nextElt)) {
+			if ((*nextElt)->isa(Controller::EventType) ||
+				(*nextElt)->isa(ProgramChange::EventType) ||
+				(*nextElt)->isa(SystemExclusive::EventType) ||
+				(*nextElt)->isa(ChannelPressure::EventType) ||
+				(*nextElt)->isa(KeyPressure::EventType) ||
+				(*nextElt)->isa(PitchBend::EventType))
+				++nextElt;
+			else
+				break;
+		}
 	}
-    }
 
-    if (s->isBeforeEndMarker(nextElt)) {
-	RG_DEBUG << "LilypondExporter::calculateDuration: inside conditional " << endl;
-        toNext = (*nextElt)->getNotationAbsoluteTime() - absTime;
-	// if the note was lengthened, assume it was lengthened to the left
-	// when truncating to the beginning of the next note
-	if (durationCorrection > 0)
-	{
-	    toNext += durationCorrection;
+	if (s->isBeforeEndMarker(nextElt)) {
+		RG_DEBUG << "LilypondExporter::calculateDuration: inside conditional " << endl;
+		toNext = (*nextElt)->getNotationAbsoluteTime() - absTime;
+		// if the note was lengthened, assume it was lengthened to the left
+		// when truncating to the beginning of the next note
+		if (durationCorrection > 0) {
+			toNext += durationCorrection;
+		}
+		if (soundingDuration > toNext) {
+			soundingDuration = toNext;
+			duration = soundingDuration * tupletRatio.second/ tupletRatio.first;
+		}
 	}
-        if (soundingDuration > toNext) {
-            soundingDuration = toNext;
-            duration = soundingDuration * tupletRatio.second / tupletRatio.first;
-        }
-    }
 
-    RG_DEBUG << "LilypondExporter::calculateDuration: second toNext is "
-    << toNext << endl;
+	RG_DEBUG << "LilypondExporter::calculateDuration: second toNext is "
+	<< toNext << endl;
 
-    RG_DEBUG << "LilypondExporter::calculateDuration: final duration, soundingDuration: " << duration << ", " << soundingDuration << endl;
+	RG_DEBUG << "LilypondExporter::calculateDuration: final duration, soundingDuration: " << duration << ", " << soundingDuration << endl;
 
-    return duration;
+	return duration;
 }
 
 void
