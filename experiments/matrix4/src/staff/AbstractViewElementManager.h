@@ -31,21 +31,21 @@
 namespace Rosegarden 
 {
 
-class StaffObserver;
+class ViewElementManagerObserver;
 
 /**
- * Staff is the base class for classes which represent a Segment as an
+ * AbstractViewElementManager is the base class for classes which represent a Segment as an
  * on-screen graphic.  It manages the relationship between Segment/Event
  * and specific implementations of ViewElement.
  *
  * The template argument T must be a subclass of ViewElement.
  *
- * Staff was formerly known as ViewElementsManager.
+ * AbstractViewElementManager was formerly known as ViewElementsManager.
  */
-class Staff : public SegmentObserver
+class AbstractViewElementManager : public SegmentObserver
 {
 public: 
-    virtual ~Staff();
+    virtual ~AbstractViewElementManager();
 
     /**
      * Create a new ViewElementList wrapping all Events in the
@@ -72,7 +72,7 @@ public:
     const Segment &getSegment() const { return m_segment; }
 
     /**
-     * Return the location of the given event in this Staff
+     * Return the location of the given event in this AbstractViewElementManager
      */
     ViewElementList::iterator findEvent(Event *);
 
@@ -99,11 +99,11 @@ public:
      */
     virtual void segmentDeleted(const Segment *);
 
-    void addObserver   (StaffObserver *obs) { m_observers.push_back(obs); }
-    void removeObserver(StaffObserver *obs) { m_observers.remove(obs); }
+    void addObserver   (ViewElementManagerObserver *obs) { m_observers.push_back(obs); }
+    void removeObserver(ViewElementManagerObserver *obs) { m_observers.remove(obs); }
 
 protected:
-    Staff(Segment &);
+    AbstractViewElementManager(Segment &);
     virtual ViewElement* makeViewElement(Event*) = 0;
     
     /**
@@ -122,23 +122,23 @@ protected:
     Segment &m_segment;
     ViewElementList *m_viewElementList;
 
-    typedef std::list<StaffObserver*> ObserverSet;
+    typedef std::list<ViewElementManagerObserver*> ObserverSet;
     ObserverSet m_observers;
 
 private: // not provided
-    Staff(const Staff &);
-    Staff &operator=(const Staff &);
+    AbstractViewElementManager(const AbstractViewElementManager &);
+    AbstractViewElementManager &operator=(const AbstractViewElementManager &);
 };
 
-class StaffObserver
+class ViewElementManagerObserver
 {
 public:
-    virtual ~StaffObserver() {}
-    virtual void elementAdded(const Staff *, ViewElement *) = 0;
-    virtual void elementRemoved(const Staff *, ViewElement *) = 0;
+    virtual ~ViewElementManagerObserver() {}
+    virtual void elementAdded(const AbstractViewElementManager *, ViewElement *) = 0;
+    virtual void elementRemoved(const AbstractViewElementManager *, ViewElement *) = 0;
 
     /// called when the observed object is being deleted
-    virtual void staffDeleted(const Staff *) = 0;
+    virtual void staffDeleted(const AbstractViewElementManager *) = 0;
 };
 
 

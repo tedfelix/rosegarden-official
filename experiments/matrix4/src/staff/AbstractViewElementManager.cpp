@@ -19,19 +19,19 @@
     COPYING included with this distribution for more information.
 */
 
-#include "Staff.h"
+#include "AbstractViewElementManager.h"
 
 namespace Rosegarden 
 {
 
-Staff::Staff(Segment &t) :
+AbstractViewElementManager::AbstractViewElementManager(Segment &t) :
     m_segment(t),
     m_viewElementList(0)
 {
     // empty
 }
 
-Staff::~Staff()
+AbstractViewElementManager::~AbstractViewElementManager()
 {
     if (m_viewElementList) m_segment.removeObserver(this);
     notifySourceDeletion();
@@ -39,13 +39,13 @@ Staff::~Staff()
 }
 
 ViewElementList *
-Staff::getViewElementList()
+AbstractViewElementManager::getViewElementList()
 {
     return getViewElementList(m_segment.begin(), m_segment.end());
 }
 
 ViewElementList *
-Staff::getViewElementList(Segment::iterator from,
+AbstractViewElementManager::getViewElementList(Segment::iterator from,
                           Segment::iterator to)
 {
     if (!m_viewElementList) {
@@ -68,7 +68,7 @@ Staff::getViewElementList(Segment::iterator from,
 }
 
 bool
-Staff::wrapEvent(Event *e)
+AbstractViewElementManager::wrapEvent(Event *e)
 {
     timeT emt = m_segment.getEndMarkerTime();
     return
@@ -77,7 +77,7 @@ Staff::wrapEvent(Event *e)
 }
 
 ViewElementList::iterator
-Staff::findEvent(Event *e)
+AbstractViewElementManager::findEvent(Event *e)
 {
     // Note that we have to create this using the virtual
     // makeViewElement, because the result of equal_range depends on
@@ -88,7 +88,7 @@ Staff::findEvent(Event *e)
     // ViewElementList -- ViewElementList has no equivalent of
     // makeViewElement.  Possibly things like NotationElementList
     // should be subclasses of ViewElementList that implement
-    // makeViewElement instead of having makeViewElement in Staff, but
+    // makeViewElement instead of having makeViewElement in AbstractViewElementManager, but
     // that's for another day.)
     
     ViewElement *dummy = makeViewElement(e);
@@ -109,7 +109,7 @@ Staff::findEvent(Event *e)
 }
 
 void
-Staff::eventAdded(const Segment *t, Event *e)
+AbstractViewElementManager::eventAdded(const Segment *t, Event *e)
 {
     assert(t == &m_segment);
     (void)t; // avoid warnings
@@ -122,7 +122,7 @@ Staff::eventAdded(const Segment *t, Event *e)
 }
 
 void
-Staff::eventRemoved(const Segment *t, Event *e)
+AbstractViewElementManager::eventRemoved(const Segment *t, Event *e)
 {
     assert(t == &m_segment);
     (void)t; // avoid warnings
@@ -137,11 +137,11 @@ Staff::eventRemoved(const Segment *t, Event *e)
     }
 
 //    std::cerr << "Event at " << e->getAbsoluteTime() << ", notation time " << e->getNotationAbsoluteTime() << ", type " << e->getType()
-//	      << " not found in Staff" << std::endl;
+//	      << " not found in AbstractViewElementManager" << std::endl;
 }
 
 void
-Staff::endMarkerTimeChanged(const Segment *segment, bool shorten)
+AbstractViewElementManager::endMarkerTimeChanged(const Segment *segment, bool shorten)
 {
     Segment *s = const_cast<Segment *>(segment);
 
@@ -172,18 +172,18 @@ Staff::endMarkerTimeChanged(const Segment *segment, bool shorten)
     }
 }
 void
-Staff::segmentDeleted(const Segment *s)
+AbstractViewElementManager::segmentDeleted(const Segment *s)
 {
     assert(s == &m_segment);
     (void)s; // avoid warnings
     /*
-    std::cerr << "WARNING: Staff notified of segment deletion: this is probably a bug "
-	      << "(staff should have been deleted before segment)" << std::endl;
+    std::cerr << "WARNING: AbstractViewElementManager notified of segment deletion: this is probably a bug "
+	      << "(AbstractViewElementManager should have been deleted before segment)" << std::endl;
               */
 }
 
 void
-Staff::notifyAdd(ViewElement *e) const
+AbstractViewElementManager::notifyAdd(ViewElement *e) const
 {
     for (ObserverSet::const_iterator i = m_observers.begin();
 	 i != m_observers.end(); ++i) {
@@ -192,7 +192,7 @@ Staff::notifyAdd(ViewElement *e) const
 }
 
 void
-Staff::notifyRemove(ViewElement *e) const
+AbstractViewElementManager::notifyRemove(ViewElement *e) const
 {
     for (ObserverSet::const_iterator i = m_observers.begin();
 	 i != m_observers.end(); ++i) {
@@ -201,7 +201,7 @@ Staff::notifyRemove(ViewElement *e) const
 }
 
 void
-Staff::notifySourceDeletion() const
+AbstractViewElementManager::notifySourceDeletion() const
 {
     for (ObserverSet::const_iterator i = m_observers.begin();
 	 i != m_observers.end(); ++i) {

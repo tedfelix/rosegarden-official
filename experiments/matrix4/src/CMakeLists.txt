@@ -10,6 +10,10 @@ set(matrix4_SRCS
     gvtest.cpp
     GraphicsItemPin.cpp
     FadeItem.cpp
+    GUIPalette.cpp
+    LinedStaff.cpp
+    MatrixStaff.cpp
+    BarLine.cpp
 )
 
 SET(base_SRCS
@@ -49,8 +53,19 @@ SET(base_SRCS
 )
 
 SET(staff_SRCS
-	staff/Staff.cpp
+	staff/AbstractViewElementManager.cpp
 	staff/ViewElement.cpp
+)
+
+SET(scale_SRCS
+	scale/LayoutEngine.cpp
+	scale/RulerScale.cpp
+	scale/SnapGrid.cpp
+)
+
+SET(helpers_SRCS
+	helpers/SegmentMatrixHelper.cpp
+	helpers/SegmentNotationHelper.cpp
 )
 
 ADD_LIBRARY(RosegardenBase STATIC
@@ -59,6 +74,14 @@ ADD_LIBRARY(RosegardenBase STATIC
 
 ADD_LIBRARY(RosegardenStaff STATIC
     ${staff_SRCS}
+)
+
+ADD_LIBRARY(RosegardenScale STATIC
+    ${scale_SRCS}
+)
+
+ADD_LIBRARY(RosegardenHelpers STATIC
+    ${helpers_SRCS}
 )
 
 
