@@ -12,7 +12,9 @@ set(matrix4_SRCS
     FadeItem.cpp
     GUIPalette.cpp
     LinedStaff.cpp
+    MatrixElement.cpp
     MatrixStaff.cpp
+    MatrixViewElementManager.cpp
     BarLine.cpp
 )
 
@@ -52,9 +54,9 @@ SET(base_SRCS
 	base/XmlExportable.cpp
 )
 
-SET(staff_SRCS
-	staff/AbstractViewElementManager.cpp
-	staff/ViewElement.cpp
+SET(viewelement_SRCS
+	viewelement/AbstractViewElementManager.cpp
+	viewelement/ViewElement.cpp
 )
 
 SET(scale_SRCS
@@ -72,8 +74,8 @@ ADD_LIBRARY(RosegardenBase STATIC
     ${base_SRCS}
 )
 
-ADD_LIBRARY(RosegardenStaff STATIC
-    ${staff_SRCS}
+ADD_LIBRARY(RosegardenViewElement STATIC
+    ${viewelement_SRCS}
 )
 
 ADD_LIBRARY(RosegardenScale STATIC
@@ -85,8 +87,10 @@ ADD_LIBRARY(RosegardenHelpers STATIC
 )
 
 
-ADD_DEPENDENCIES(RosegardenBase precompiled_headers)
-ADD_DEPENDENCIES(RosegardenStaff precompiled_headers)
+ADD_DEPENDENCIES(RosegardenBase        precompiled_headers)
+ADD_DEPENDENCIES(RosegardenViewElement precompiled_headers)
+ADD_DEPENDENCIES(RosegardenScale       precompiled_headers)
+ADD_DEPENDENCIES(RosegardenHelpers     precompiled_headers)
 
 # tell cmake to create .moc files for all files in the variable qtproject_SRCS that require such a file.
 # note: this assumes that you use #include "header.moc" in your files

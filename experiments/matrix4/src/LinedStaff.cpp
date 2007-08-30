@@ -32,8 +32,8 @@
 #include "base/Profiler.h"
 #include "base/Segment.h"
 #include "scale/SnapGrid.h"
-#include "staff/AbstractViewElementManager.h"
-#include "staff/ViewElement.h"
+#include "viewelement/AbstractViewElementManager.h"
+#include "viewelement/ViewElement.h"
 #include "GUIPalette.h"
 #include "BarLine.h"
 #include <QGraphicsScene>
@@ -59,7 +59,7 @@ LinedStaff::LinedStaff(QGraphicsScene *canvas, Segment *segment,
                        int resolution, int lineThickness) :
         m_canvas(canvas),
         m_snapGrid(snapGrid),
-        m_referenceStaff(viewElementManager),
+        m_viewElementManager(viewElementManager),
         m_id(id),
         m_x(0.0),
         m_y(0),
@@ -87,7 +87,7 @@ LinedStaff::LinedStaff(QGraphicsScene *canvas, Segment *segment,
                        double pageWidth, int rowsPerPage, int rowSpacing) :
         m_canvas(canvas),
         m_snapGrid(snapGrid),
-        m_referenceStaff(viewElementManager),
+        m_viewElementManager(viewElementManager),
         m_id(id),
         m_x(0.0),
         m_y(0),
@@ -116,7 +116,7 @@ LinedStaff::LinedStaff(QGraphicsScene *canvas, Segment *segment,
                        int rowSpacing) :
                            m_canvas(canvas),
                            m_snapGrid(snapGrid),
-                           m_referenceStaff(viewElementManager),
+                           m_viewElementManager(viewElementManager),
                            m_id(id),
                            m_x(0.0),
                            m_y(0),
@@ -577,7 +577,7 @@ LinedStaff::sizeStaff(HorizontalLayoutEngine &layout)
 
     //    RG_DEBUG << "LinedStaff::sizeStaff" << endl;
 
-    int lastBar = layout.getLastVisibleBarOnStaff(*m_referenceStaff);
+    int lastBar = layout.getLastVisibleBarOnStaff(*m_viewElementManager);
 
     double xleft = 0, xright = 0;
     bool haveXLeft = false;
@@ -586,7 +586,7 @@ LinedStaff::sizeStaff(HorizontalLayoutEngine &layout)
 
     TimeSignature currentTimeSignature;
 
-    for (int barNo = layout.getFirstVisibleBarOnStaff(*m_referenceStaff);
+    for (int barNo = layout.getFirstVisibleBarOnStaff(*m_viewElementManager);
             barNo <= lastBar; ++barNo) {
 
         double x = layout.getBarPosition(barNo);
@@ -598,7 +598,7 @@ LinedStaff::sizeStaff(HorizontalLayoutEngine &layout)
 
         double timeSigX = 0;
         TimeSignature timeSig;
-        bool isNew = layout.getTimeSignaturePosition(*m_referenceStaff, barNo, timeSig, timeSigX);
+        bool isNew = layout.getTimeSignaturePosition(*m_viewElementManager, barNo, timeSig, timeSigX);
 
         if (isNew && barNo < lastBar) {
             currentTimeSignature = timeSig;
@@ -614,7 +614,7 @@ LinedStaff::sizeStaff(HorizontalLayoutEngine &layout)
         insertBar(x,
                   ((barNo == lastBar) ? 0 :
                    (layout.getBarPosition(barNo + 1) - x)),
-                  layout.isBarCorrectOnStaff(*m_referenceStaff, barNo - 1),
+                  layout.isBarCorrectOnStaff(*m_viewElementManager, barNo - 1),
                   currentTimeSignature,
                   barNo,
                   showBarNo);

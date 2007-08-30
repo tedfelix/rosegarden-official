@@ -27,8 +27,8 @@
 
 #include "base/Event.h"
 #include "base/FastVector.h"
-#include "staff/AbstractViewElementManager.h"
-#include "staff/ViewElement.h"
+#include "viewelement/AbstractViewElementManager.h"
+#include "viewelement/ViewElement.h"
 #include <QRectF>
 #include <utility>
 #include <vector>
@@ -670,6 +670,8 @@ protected:
         return m_rowsPerPage;
     }
 
+    AbstractViewElementManager* getViewElementManager() { return m_viewElementManager; }
+    
 protected:
     // Actual implementation methods.  The default implementation
     // shows staff lines, connecting lines (where appropriate) and bar
@@ -745,7 +747,7 @@ protected:
     QGraphicsLineItem *m_pointer;
     QGraphicsLineItem *m_insertCursor;
     
-    AbstractViewElementManager *m_referenceStaff;
+    AbstractViewElementManager *m_viewElementManager;
 };
 
 

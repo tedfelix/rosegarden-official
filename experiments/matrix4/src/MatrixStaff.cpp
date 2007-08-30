@@ -34,14 +34,14 @@
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
 #include "base/Selection.h"
-#include "scale/SnapGrid.h"
-#include "staff/AbstractViewElementManager.h"
 #include "base/Track.h"
-#include "staff/ViewElement.h"
+#include "scale/SnapGrid.h"
+#include "viewelement/AbstractViewElementManager.h"
+#include "viewelement/ViewElement.h"
 #include "helpers/SegmentMatrixHelper.h"
 #include "GUIPalette.h"
 #include "LinedStaff.h"
-#include "gui/rulers/DefaultVelocityColour.h"
+//#include "gui/rulers/DefaultVelocityColour.h"
 #include "MatrixElement.h"
 #include "MatrixView.h"
 #include "MatrixVLayout.h"
@@ -54,11 +54,11 @@ namespace Rosegarden
 MatrixStaff::MatrixStaff(QGraphicsScene *canvas,
                          Segment *segment,
                          SnapGrid *snapGrid,
-                         AbstractViewElementManager *staff,
+                         AbstractViewElementManager *viewElementManager,
                          int id,
                          int vResolution,
                          MatrixView *view) :
-        LinedStaff(canvas, segment, snapGrid, staff, id, vResolution, 1),
+        LinedStaff(canvas, segment, snapGrid, viewElementManager, id, vResolution, 1),
         m_scaleFactor(2.0 /
                       Note(Note::Shortest).getDuration()),
         m_view(view)
@@ -111,16 +111,6 @@ bool MatrixStaff::showBeatLines() const
     return true;
 }
 
-bool MatrixStaff::wrapEvent(Event* e)
-{
-    // Changed from "Note or Time signature" to just "Note" because
-    // there should be no time signature events in any ordinary
-    // segments, they're only in the composition's ref segment
-
-    return e->isa(Note::EventType) &&
-           Staff::wrapEvent(e);
-}
-
 void
 MatrixStaff::positionElements(timeT from, timeT to)
 {
@@ -146,8 +136,6 @@ void MatrixStaff::positionElement(ViewElement* vel)
     // current element is moved.
     QRect initialRect;
     bool rectWasVisible;
-    if (! m_view->isDrumMode())
-        rectWasVisible = el->getVisibleRectangle(initialRect);
 
     LinedStaffCoords coords = getCanvasCoordsForLayoutCoords
                               (el->getLayoutX(), int(el->getLayoutY()));
@@ -173,19 +161,8 @@ void MatrixStaff::positionElement(ViewElement* vel)
     else
         el->setColour(DefaultVelocityColour::getInstance()->getColour(velocity));
 
-    el->setCanvasX(coords.first);
-    el->setCanvasY((double)coords.second);
+    el->setCanvasPos(coords.first, (double)coords.second);
 
-    // Display overlaps
-    if (m_view->isDrumMode()) {
-        SegmentMatrixHelper helper(m_segment);
-        if (helper.isDrumColliding(el->event()))
-            el->setColour(GUIPalette::getColour(GUIPalette::MatrixOverlapBlock));
-    } else {
-        el->drawOverlapRectangles();
-
-        // Refresh other overlap rectangles
-        if (rectWasVisible) el->redrawOverlaps(initialRect);
     }
 
 }
@@ -205,12 +182,6 @@ MatrixStaff::eventRemoved(const Segment *segment,
 {
     LinedStaff::eventRemoved(segment, event);
     m_view->handleEventRemoved(event);
-}
-
-ViewElement*
-MatrixStaff::makeViewElement(Event* e)
-{
-    return new MatrixElement(e, m_view->isDrumMode());
 }
 
 const MidiKeyMapping*
