@@ -114,7 +114,7 @@ bool MatrixStaff::showBeatLines() const
 void
 MatrixStaff::positionElements(timeT from, timeT to)
 {
-    MatrixElementList *mel = getViewElementList();
+    MatrixElementList *mel = m_viewElementManager->getViewElementList();
 
     MatrixElementList::iterator beginAt = mel->findTime(from);
     if (beginAt != mel->begin())
@@ -150,39 +150,30 @@ void MatrixStaff::positionElement(ViewElement* vel)
 
     el->setCanvas(m_canvas);
 
-    // Is the event currently selected?  Colour accordingly.
+    // Is the event currently selected?  Colour accordingly. // TODO - do selection using QGraphicsItem::setSelected()
     //
-    EventSelection *selection = m_view->getCurrentSelection();
-
-    if (selection && selection->contains(el->event()))
-        el->setColour(GUIPalette::getColour(GUIPalette::SelectedElement));
-    else if (el->event()->has(BaseProperties::TRIGGER_SEGMENT_ID))
-        el->setColour(Qt::gray);
-    else
-        el->setColour(DefaultVelocityColour::getInstance()->getColour(velocity));
+//    EventSelection *selection = m_view->getCurrentSelection();
+//
+//    if (selection && selection->contains(el->event()))
+//        el->setColour(GUIPalette::getColour(GUIPalette::SelectedElement));
+//    else if (el->event()->has(BaseProperties::TRIGGER_SEGMENT_ID))
+//        el->setColour(Qt::gray);
+//    else
+//        el->setColour(DefaultVelocityColour::getInstance()->getColour(velocity));
 
     el->setCanvasPos(coords.first, (double)coords.second);
-
-    }
 
 }
 
 MatrixElement*
 MatrixStaff::getElement(Event *event)
 {
-    ViewElementList::iterator i = findEvent(event);
-    if (i == m_viewElementList->end())
+    ViewElementList::iterator i = m_viewElementManager->findEvent(event);
+    if (i == m_viewElementManager->getViewElementList()->end())
         return 0;
     return dynamic_cast<MatrixElement*>(*i);
 }
 
-void
-MatrixStaff::eventRemoved(const Segment *segment,
-                          Event *event)
-{
-    LinedStaff::eventRemoved(segment, event);
-    m_view->handleEventRemoved(event);
-}
 
 const MidiKeyMapping*
 MatrixStaff::getKeyMapping() const

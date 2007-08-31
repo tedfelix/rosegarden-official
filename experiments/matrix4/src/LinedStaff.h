@@ -471,13 +471,13 @@ public:
      * elements is slow, however, it makes sense to do it here
      * because this method may be called less often.
      */
-//    virtual void renderElements(ViewElementList::iterator from,
-//                                ViewElementList::iterator to);
+    virtual void renderElements(ViewElementList::iterator from,
+                                ViewElementList::iterator to);
 
     /**
      * Call renderElements(from, to) on the whole staff.
      */
-//    virtual void renderAllElements();
+    virtual void renderAllElements();
 
     /**
      * Assign suitable coordinates to the elements on the staff
@@ -488,13 +488,13 @@ public:
      * The implementation is free to render any elements it
      * chooses in this method as well.
      */
-//    virtual void positionElements(timeT from,
-//                                  timeT to) = 0;
+    virtual void positionElements(timeT from,
+                                  timeT to) = 0;
  
     /**
      * Call positionElements(from, to) on the whole staff.
      */
-//    virtual void positionAllElements();
+    virtual void positionAllElements();
     
 
     /* Some optional methods for the subclass. */
@@ -516,15 +516,15 @@ public:
      * The default implementation should suit for subclasses that only
      * show a single element per layout X coordinate.
      */
-//    virtual ViewElementList::iterator getClosestElementToCanvasCoords
-//    (double x, int y, 
-//     Event *&clef, Event *&key,
-//     bool notesAndRestsOnly = false, int proximityThreshold = 10) {
-//        LinedStaffCoords layoutCoords = getLayoutCoordsForCanvasCoords(x, y);
-//        return getClosestElementToLayoutX
-//            (layoutCoords.first, clef, key,
-//             notesAndRestsOnly, proximityThreshold);
-//    }
+    virtual ViewElementList::iterator getClosestElementToCanvasCoords
+    (double x, int y, 
+     Event *&clef, Event *&key,
+     bool notesAndRestsOnly = false, int proximityThreshold = 10) {
+        LinedStaffCoords layoutCoords = getLayoutCoordsForCanvasCoords(x, y);
+        return getClosestElementToLayoutX
+            (layoutCoords.first, clef, key,
+             notesAndRestsOnly, proximityThreshold);
+    }
 
     /**
      * Return an iterator pointing to the nearest view element to the
@@ -542,12 +542,12 @@ public:
      * The subclass may decide whether to implement this method or not
      * based on the semantics and intended usage of the class.
      */
-//    virtual ViewElementList::iterator getClosestElementToLayoutX
-//    (double x,
-//     Event *&clef, Event *&key,
-//     bool notesAndRestsOnly = false, int proximityThreshold = 10) {
-//        return getViewElementList()->end();
-//    }
+    virtual ViewElementList::iterator getClosestElementToLayoutX
+    (double x,
+     Event *&clef, Event *&key,
+     bool notesAndRestsOnly = false, int proximityThreshold = 10) {
+        return m_viewElementManager->getViewElementList()->end();
+    }
 
     /**
      * Return an iterator pointing to the element "under" the given
@@ -561,11 +561,11 @@ public:
      * The default implementation should suit for subclasses that only
      * show a single element per layout X coordinate.
      */
-//    virtual ViewElementList::iterator getElementUnderCanvasCoords
-//    (double x, int y, Event *&clef, Event *&key) {
-//        LinedStaffCoords layoutCoords = getLayoutCoordsForCanvasCoords(x, y);
-//        return getElementUnderLayoutX(layoutCoords.first, clef, key);
-//    }
+    virtual ViewElementList::iterator getElementUnderCanvasCoords
+    (double x, int y, Event *&clef, Event *&key) {
+        LinedStaffCoords layoutCoords = getLayoutCoordsForCanvasCoords(x, y);
+        return getElementUnderLayoutX(layoutCoords.first, clef, key);
+    }
 
     /**
      * Return an iterator pointing to the element "under" the given
@@ -578,10 +578,10 @@ public:
      * The subclass may decide whether to implement this method or not
      * based on the semantics and intended usage of the class.
      */
-//    virtual ViewElementList::iterator getElementUnderLayoutX
-//    (double x, Event *&clef, Event *&key) {
-//        return getViewElementList()->end();
-//    }
+    virtual ViewElementList::iterator getElementUnderLayoutX
+    (double x, Event *&clef, Event *&key) {
+        return m_viewElementManager->getViewElementList()->end();
+    }
 
     // The default implementation of the following is empty.  The
     // subclass is presumed to know what the staff's name is and

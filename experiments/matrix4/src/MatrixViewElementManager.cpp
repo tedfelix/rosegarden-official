@@ -24,4 +24,13 @@ MatrixViewElementManager::makeViewElement(Event* e)
     return new MatrixElement(e);
 }
 
+void
+MatrixViewElementManager::eventRemoved(const Segment *segment,
+                                        Event *event)
+{
+    AbstractViewElementManager::eventRemoved(segment, event);
+//    m_view->handleEventRemoved(event); // TODO - tell view about it
+}
+
+
 }

@@ -1177,26 +1177,26 @@ LinedStaff::hideInsertCursor()
     m_insertCursor->hide();
 }
 
-//void
-//LinedStaff::renderElements(ViewElementList::iterator,
-//                           ViewElementList::iterator)
-//{
-//    // nothing -- we assume rendering will be done by the implementation
-//    // of positionElements
-//}
+void
+LinedStaff::renderElements(ViewElementList::iterator,
+                           ViewElementList::iterator)
+{
+    // nothing -- we assume rendering will be done by the implementation
+    // of positionElements
+}
 
-//void
-//LinedStaff::renderAllElements()
-//{
-//    renderElements(getViewElementList()->begin(),
-//                   getViewElementList()->end());
-//}
+void
+LinedStaff::renderAllElements()
+{
+    renderElements(m_viewElementManager->getViewElementList()->begin(),
+                   m_viewElementManager->getViewElementList()->end());
+}
 
-//void
-//LinedStaff::positionAllElements()
-//{
-//    positionElements(getSegment().getStartTime(),
-//                     getSegment().getEndTime());
-//}
+void
+LinedStaff::positionAllElements()
+{
+    positionElements(m_viewElementManager->getSegment().getStartTime(),
+                     m_viewElementManager->getSegment().getEndTime());
+}
 
 }

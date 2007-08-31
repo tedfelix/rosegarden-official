@@ -18,6 +18,13 @@ protected:
      * Useful for piano roll where we only want to wrap notes
      */
     virtual bool wrapEvent(Event *);
+
+    /**
+     * Override from Staff<T>
+     * Let tools know if their current element has gone
+     */
+    virtual void eventRemoved(const Segment *, Event *);
+
 };
 
 }

@@ -68,20 +68,6 @@ protected:
 
     const MidiKeyMapping *getKeyMapping() const;
 
-    /**
-     * Override from Staff<T>
-     * Wrap only notes 
-     */
-    virtual bool wrapEvent(Event*);
-
-    /**
-     * Override from Staff<T>
-     * Let tools know if their current element has gone
-     */
-    virtual void eventRemoved(const Segment *, Event *);
-
-    virtual ViewElement* makeViewElement(Event*);
-
 public:
     LinedStaff::setResolution;
 
