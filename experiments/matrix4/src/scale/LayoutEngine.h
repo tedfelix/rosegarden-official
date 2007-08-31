@@ -28,7 +28,7 @@ namespace Rosegarden {
 
 class AbstractViewElementManager;
 class TimeSignature;
-
+class LinedStaff;
 
 /**
  * Base classes for layout engines.  The intention is that
@@ -53,7 +53,7 @@ public:
      * If startTime == endTime, act on the whole staff; otherwise only
      * the given section.
      */
-    virtual void resetStaff(AbstractViewElementManager &staff,
+    virtual void resetStaff(AbstractViewElementManager &viewElementManager,
                             timeT startTime = 0,
                             timeT endTime = 0) = 0;
 
@@ -66,7 +66,8 @@ public:
      * If startTime == endTime, act on the whole staff; otherwise only
      * the given section.
      */
-    virtual void scanStaff(AbstractViewElementManager &staff,
+    virtual void scanStaff(AbstractViewElementManager &viewElementManager,
+                           LinedStaff &staff,
                            timeT startTime = 0,
                            timeT endTime = 0) = 0;
 

@@ -13,9 +13,10 @@ set(matrix4_SRCS
     GUIPalette.cpp
     LinedStaff.cpp
     MatrixElement.cpp
-    MatrixStaff.cpp
     MatrixViewElementManager.cpp
+    MatrixVLayout.cpp
     BarLine.cpp
+    MatrixStaff.cpp
 )
 
 SET(base_SRCS

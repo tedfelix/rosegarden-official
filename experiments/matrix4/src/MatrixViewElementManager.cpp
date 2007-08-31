@@ -1,9 +1,8 @@
 #include "base/Event.h"
 #include "MatrixViewElementManager.h"
+#include "MatrixElement.h"
 
-MatrixViewElementManager::MatrixViewElementManager()
-{
-}
+namespace Rosegarden {
 
 MatrixViewElementManager::~MatrixViewElementManager()
 {
@@ -22,6 +21,7 @@ bool MatrixViewElementManager::wrapEvent(Event* e)
 ViewElement*
 MatrixViewElementManager::makeViewElement(Event* e)
 {
-    return new MatrixElement(e, m_view->isDrumMode());
+    return new MatrixElement(e);
 }
 
+}

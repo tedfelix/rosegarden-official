@@ -43,7 +43,7 @@ class MatrixElement : public ViewElement
 {
 
 public:
-    MatrixElement(Event *event, bool drum);
+    MatrixElement(Event *event);
 
     virtual ~MatrixElement();
 

@@ -12,7 +12,7 @@ public:
 	
 protected:
     
-    virtual ViewElement* makeViewElement(Event*)	
+    virtual ViewElement* makeViewElement(Event*);	
     /**
      * Return true if the event should be wrapped
      * Useful for piano roll where we only want to wrap notes

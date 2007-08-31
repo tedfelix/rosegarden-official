@@ -34,79 +34,80 @@ BarLine::paint(QPainter *painter, const QStyleOptionGraphicsItem * option, QWidg
     painter->save();
     painter->setPen(m_pen);
     painter->setBrush(m_brush);
+    qreal bx;
     
     switch (m_style) {
 
     case LinedStaff::PlainBar:
-        painter.drawRect(QRectF(x(), y(), m_baseBarThickness, m_barLineHeight));
+        painter->drawRect(QRectF(x(), y(), m_baseBarThickness, m_barLineHeight));
         break;
 
     case LinedStaff::DoubleBar:
-        painter.drawRect(QRectF(x(), y(), m_baseBarThickness, m_barLineHeight));
-        painter.drawRect(QRectF(x() + m_baseBarThickness * 3, y(),
+        painter->drawRect(QRectF(x(), y(), m_baseBarThickness, m_barLineHeight));
+        painter->drawRect(QRectF(x() + m_baseBarThickness * 3, y(),
                          m_baseBarThickness, m_barLineHeight));
         break;
 
     case LinedStaff::HeavyDoubleBar:
-        qreal bx = x() - m_baseBarThickness * 5;
-        painter.drawRect(QRectF(bx, y(), m_baseBarThickness, m_barLineHeight));
-        painter.drawRect(QRectF(bx + m_baseBarThickness * 3, y(),
+        bx = x() - m_baseBarThickness * 5;
+        painter->drawRect(QRectF(bx, y(), m_baseBarThickness, m_barLineHeight));
+        painter->drawRect(QRectF(bx + m_baseBarThickness * 3, y(),
                          m_baseBarThickness * 3, m_barLineHeight));
         break;
 
     case LinedStaff::RepeatEndBar:
-        qreal bx = x() - m_baseBarThickness * 5 + m_lineSpacing * 2 / 3;
-        painter.drawEllipse(QRectF(bx, y() + m_barLineHeight / 2 - (m_lineSpacing * 2 / 3),
+        bx = x() - m_baseBarThickness * 5 + m_lineSpacing * 2 / 3;
+        painter->drawEllipse(QRectF(bx, y() + m_barLineHeight / 2 - (m_lineSpacing * 2 / 3),
                             m_lineSpacing / 3, m_lineSpacing / 3));
-        painter.drawEllipse(QRectF(bx, y() + m_barLineHeight / 2 + (m_lineSpacing / 3),
+        painter->drawEllipse(QRectF(bx, y() + m_barLineHeight / 2 + (m_lineSpacing / 3),
                             m_lineSpacing / 3, m_lineSpacing / 3));
         bx += m_lineSpacing * 2 / 3;
-        painter.drawRect(QRectF(bx, y(), m_baseBarThickness, m_barLineHeight));
-        painter.drawRect(QRectF(bx + m_baseBarThickness * 3, y(),
+        painter->drawRect(QRectF(bx, y(), m_baseBarThickness, m_barLineHeight));
+        painter->drawRect(QRectF(bx + m_baseBarThickness * 3, y(),
                          m_baseBarThickness * 3, m_barLineHeight));
         break;
 
     case LinedStaff::RepeatStartBar:
 
-        qreal bx = x();
+        bx = x();
         if (m_inset > 0) {
-            painter.drawRect(QRectF(bx, y(), m_baseBarThickness, m_barLineHeight));
+            painter->drawRect(QRectF(bx, y(), m_baseBarThickness, m_barLineHeight));
             bx += m_inset;
         }
 
-        painter.drawRect(QRectF(bx, y(), m_baseBarThickness * 3, m_barLineHeight));
-        painter.drawRect(QRectF(bx + m_baseBarThickness * 5, y(),
+        painter->drawRect(QRectF(bx, y(), m_baseBarThickness * 3, m_barLineHeight));
+        painter->drawRect(QRectF(bx + m_baseBarThickness * 5, y(),
                          m_baseBarThickness, m_barLineHeight));
         bx += m_baseBarThickness * 6 + (m_lineSpacing / 3);
-        painter.drawEllipse(QRectF(bx, y() + m_barLineHeight / 2 - (m_lineSpacing * 2 / 3),
+        painter->drawEllipse(QRectF(bx, y() + m_barLineHeight / 2 - (m_lineSpacing * 2 / 3),
                             m_lineSpacing / 3, m_lineSpacing / 3));
-        painter.drawEllipse(QRectF(bx, y() + m_barLineHeight / 2 + (m_lineSpacing / 3),
+        painter->drawEllipse(QRectF(bx, y() + m_barLineHeight / 2 + (m_lineSpacing / 3),
                             m_lineSpacing / 3, m_lineSpacing / 3));
         break;
 
     case LinedStaff::RepeatBothBar:
 
-        qreal bx = x();
+        bx = x();
         if (m_inset > 0) {
-            painter.drawRect(QRectF(bx, y(), m_baseBarThickness, m_barLineHeight));
+            painter->drawRect(QRectF(bx, y(), m_baseBarThickness, m_barLineHeight));
             bx += m_inset;
         }
 
         bx -= m_baseBarThickness * 4 + m_lineSpacing * 2 / 3;
-        painter.drawEllipse(QRectF(bx, y() + m_barLineHeight / 2 - (m_lineSpacing * 2 / 3),
+        painter->drawEllipse(QRectF(bx, y() + m_barLineHeight / 2 - (m_lineSpacing * 2 / 3),
                             m_lineSpacing / 3, m_lineSpacing / 3));
-        painter.drawEllipse(QRectF(bx, y() + m_barLineHeight / 2 + (m_lineSpacing / 3),
+        painter->drawEllipse(QRectF(bx, y() + m_barLineHeight / 2 + (m_lineSpacing / 3),
                             m_lineSpacing / 3, m_lineSpacing / 3));
         bx += m_lineSpacing * 2 / 3;
-        painter.drawRect(QRectF(bx, y(), m_baseBarThickness, m_barLineHeight));
-        painter.drawRect(QRectF(bx + m_baseBarThickness * 3, y(),
+        painter->drawRect(QRectF(bx, y(), m_baseBarThickness, m_barLineHeight));
+        painter->drawRect(QRectF(bx + m_baseBarThickness * 3, y(),
                          m_baseBarThickness * 3, m_barLineHeight));
-        painter.drawRect(QRectF(bx + m_baseBarThickness * 8, y(),
+        painter->drawRect(QRectF(bx + m_baseBarThickness * 8, y(),
                          m_baseBarThickness, m_barLineHeight));
         bx += m_baseBarThickness * 9 + (m_lineSpacing / 3);
-        painter.drawEllipse(QRectF(bx, y() + m_barLineHeight / 2 - (m_lineSpacing * 2 / 3),
+        painter->drawEllipse(QRectF(bx, y() + m_barLineHeight / 2 - (m_lineSpacing * 2 / 3),
                             m_lineSpacing / 3, m_lineSpacing / 3));
-        painter.drawEllipse(QRectF(bx, y() + m_barLineHeight / 2 + (m_lineSpacing / 3),
+        painter->drawEllipse(QRectF(bx, y() + m_barLineHeight / 2 + (m_lineSpacing / 3),
                             m_lineSpacing / 3, m_lineSpacing / 3));
         
         break;
@@ -114,6 +115,8 @@ BarLine::paint(QPainter *painter, const QStyleOptionGraphicsItem * option, QWidg
     case LinedStaff::NoVisibleBar:
         break;
     }
+    
+    painter->restore();
 }
 
 QRectF

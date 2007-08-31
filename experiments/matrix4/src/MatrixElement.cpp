@@ -38,7 +38,7 @@
 namespace Rosegarden
 {
 
-MatrixElement::MatrixElement(Event *event, bool drum) :
+MatrixElement::MatrixElement(Event *event) :
         ViewElement(event),
         m_canvasRect(new QGraphicsRectItem())
 {
