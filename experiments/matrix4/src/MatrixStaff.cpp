@@ -43,7 +43,7 @@
 #include "LinedStaff.h"
 //#include "gui/rulers/DefaultVelocityColour.h"
 #include "MatrixElement.h"
-#include "MatrixView.h"
+//#include "MatrixView.h"
 #include "MatrixVLayout.h"
 #include <QGraphicsScene>
 
@@ -56,12 +56,11 @@ MatrixStaff::MatrixStaff(QGraphicsScene *canvas,
                          SnapGrid *snapGrid,
                          AbstractViewElementManager *viewElementManager,
                          int id,
-                         int vResolution,
-                         MatrixView *view) :
+                         int vResolution) :
         LinedStaff(canvas, segment, snapGrid, viewElementManager, id, vResolution, 1),
         m_scaleFactor(2.0 /
-                      Note(Note::Shortest).getDuration()),
-        m_view(view)
+                      Note(Note::Shortest).getDuration())
+//        m_view(view)
 {}
 
 MatrixStaff::~MatrixStaff()
@@ -174,7 +173,8 @@ MatrixStaff::getElement(Event *event)
     return dynamic_cast<MatrixElement*>(*i);
 }
 
-
+/* - was used for drum mode
+ 
 const MidiKeyMapping*
 MatrixStaff::getKeyMapping() const
 {
@@ -189,6 +189,6 @@ MatrixStaff::getKeyMapping() const
         return 0;
     return m_view->getKeyMapping();
 }
-
+*/
 
 }

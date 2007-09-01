@@ -101,4 +101,10 @@ qt4_automoc(${matrix4_SRCS})
 add_executable(matrix4 ${matrix4_SRCS})
 
 # link the "matrix4" target against the Qt libraries. which libraries exactly, is defined by the "include(${QT_USE_FILE})" line above, which sets up this variable.
-target_link_libraries(matrix4 ${QT_LIBRARIES})
+target_link_libraries(matrix4
+					  ${QT_LIBRARIES}
+					  RosegardenScale
+					  RosegardenViewElement
+					  RosegardenHelpers
+					  RosegardenBase
+					  )

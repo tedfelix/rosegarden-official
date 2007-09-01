@@ -41,7 +41,7 @@ class SnapGrid;
 class AbstractViewElementManager;
 class Segment;
 class MidiKeyMapping;
-class MatrixView;
+//class MatrixView;
 class MatrixElement;
 class Event;
 
@@ -54,8 +54,7 @@ public:
                 SnapGrid *snapGrid,
                 AbstractViewElementManager*,
                 int id, 
-                int vResolution,
-                MatrixView *view);
+                int vResolution);
     virtual ~MatrixStaff();
 
 protected:
@@ -66,7 +65,7 @@ protected:
     virtual bool elementsInSpaces() const;
     virtual bool showBeatLines() const;
 
-    const MidiKeyMapping *getKeyMapping() const;
+//    const MidiKeyMapping *getKeyMapping() const;
 
 public:
     LinedStaff::setResolution;
@@ -89,7 +88,7 @@ public:
 private:
     double m_scaleFactor;
 
-    MatrixView     *m_view;
+//    MatrixView     *m_view;
 };
 
 
