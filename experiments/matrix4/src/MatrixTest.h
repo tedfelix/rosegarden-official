@@ -3,7 +3,16 @@
 
 #include <QGraphicsView>
 
-namespace Rosegarden { class Composition ; class Segment; class MatrixViewElementManager; }
+namespace Rosegarden {
+
+class Composition;
+class Segment;
+class MatrixViewElementManager;
+class MatrixStaff;
+class MatrixHLayout;
+class MatrixVLayout;
+
+}
 
 
 class MatrixTest : public QGraphicsView
@@ -12,6 +21,7 @@ public:
 	MatrixTest(QWidget *parent);
 	virtual ~MatrixTest();
 	
+	void layout();
 	
 protected:
     
@@ -22,7 +32,9 @@ protected:
     Rosegarden::Segment* m_segment;
     
     Rosegarden::MatrixViewElementManager* m_viewElementManager;
-	
+	Rosegarden::MatrixStaff* m_matrixStaff;
+	Rosegarden::MatrixHLayout* m_hLayout;
+	Rosegarden::MatrixVLayout* m_vLayout;
 };
 
 #endif /*MATRIXTEST_H_*/

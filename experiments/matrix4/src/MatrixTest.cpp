@@ -7,9 +7,11 @@
 #include <base/Track.h>
 #include <base/Segment.h>
 
+#include "scale/SnapGrid.h"
 #include "MatrixViewElementManager.h"
 #include "MatrixHLayout.h"
-#include "scale/SnapGrid.h"
+#include "MatrixVLayout.h"
+#include "MatrixStaff.h"
 
 MatrixTest::MatrixTest(QWidget * parent)
     : QGraphicsView(parent)
@@ -21,6 +23,7 @@ MatrixTest::MatrixTest(QWidget * parent)
     
     buildTestComposition();
     buildMatrixStaff();
+    layout();
 }
 
 void MatrixTest::buildTestComposition() {
@@ -39,8 +42,26 @@ void MatrixTest::buildTestComposition() {
 void MatrixTest::buildMatrixStaff() {
     m_viewElementManager = new Rosegarden::MatrixViewElementManager(*m_segment);
     
-    Rosegarden::MatrixHLayout* hlayout = new Rosegarden::MatrixHLayout(m_composition, 10.0);
-    Rosegarden::SnapGrid* snapGrid = new Rosegarden::SnapGrid(hlayout); 
+    m_hLayout = new Rosegarden::MatrixHLayout(m_composition, 10.0);
+    m_vLayout = new Rosegarden::MatrixVLayout();
+    
+    Rosegarden::SnapGrid* snapGrid = new Rosegarden::SnapGrid(m_hLayout);
+    
+    int resolution = 8;
+    int id = 0;
+    
+    m_matrixStaff = new Rosegarden::MatrixStaff(scene(), m_segment, snapGrid, m_viewElementManager, id, resolution);
+    
+}
+
+void MatrixTest::layout() {
+    m_hLayout->scanStaff(*m_viewElementManager, *m_matrixStaff);
+    m_vLayout->scanStaff(*m_viewElementManager, *m_matrixStaff);
+    
+    m_hLayout->finishLayout();
+    m_vLayout->finishLayout();
+
+    m_matrixStaff->sizeStaff(*m_hLayout);
 }
 
 MatrixTest::~MatrixTest()
