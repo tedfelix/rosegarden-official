@@ -8,6 +8,7 @@ namespace Rosegarden {
 class MatrixViewElementManager : public AbstractViewElementManager
 {
 public:
+    MatrixViewElementManager(Segment& s) : AbstractViewElementManager(s) {}
 	virtual ~MatrixViewElementManager();
 	
 protected:

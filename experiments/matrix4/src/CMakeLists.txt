@@ -14,9 +14,11 @@ set(matrix4_SRCS
     LinedStaff.cpp
     MatrixElement.cpp
     MatrixViewElementManager.cpp
+    MatrixHLayout.cpp
     MatrixVLayout.cpp
     BarLine.cpp
     MatrixStaff.cpp
+    MatrixTest.cpp
 )
 
 SET(base_SRCS
@@ -61,6 +63,7 @@ SET(viewelement_SRCS
 )
 
 SET(scale_SRCS
+	scale/HZoomable.cpp
 	scale/LayoutEngine.cpp
 	scale/RulerScale.cpp
 	scale/SnapGrid.cpp
