@@ -35,6 +35,8 @@
 #include "base/Staff.h"
 #include "MatrixStaff.h"
 
+#include <cmath>
+
 
 namespace Rosegarden
 {
