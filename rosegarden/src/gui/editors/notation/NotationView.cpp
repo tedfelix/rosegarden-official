@@ -3197,20 +3197,15 @@ NotationView::getInsertionTime(Clef &clef,
 
     LinedStaff *staff = m_staffs[m_currentStaff];
     double layoutX = staff->getLayoutXOfInsertCursor();
-    if (layoutX < 0)
-        layoutX = 0;
+    if (layoutX < 0) layoutX = 0;
     Event *clefEvt = 0, *keyEvt = 0;
     (void)staff->getElementUnderLayoutX(layoutX, clefEvt, keyEvt);
 
-    if (clefEvt)
-        clef = Clef(*clefEvt);
-    else
-        clef = Clef();
+    if (clefEvt) clef = Clef(*clefEvt);
+    else clef = Clef();
 
-    if (keyEvt)
-        key = Rosegarden::Key(*keyEvt);
-    else
-        key = Rosegarden::Key();
+    if (keyEvt) key = Rosegarden::Key(*keyEvt);
+    else key = Rosegarden::Key();
 
     return m_insertionTime;
 }

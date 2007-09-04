@@ -57,26 +57,28 @@ const int pointerWidth = 3;
 LinedStaff::LinedStaff(QCanvas *canvas, Segment *segment,
                        SnapGrid *snapGrid, int id,
                        int resolution, int lineThickness) :
-        Staff(*segment),
-        m_canvas(canvas),
-        m_snapGrid(snapGrid),
-        m_id(id),
-        m_x(0.0),
-        m_y(0),
-        m_margin(0.0),
-        m_titleHeight(0),
-        m_resolution(resolution),
-        m_lineThickness(lineThickness),
-        m_pageMode(LinearMode),
-        m_pageWidth(2000.0),  // fairly arbitrary, but we need something non-zero
-        m_rowsPerPage(0),
-        m_rowSpacing(0),
-        m_connectingLineLength(0),
-        m_startLayoutX(0),
-        m_endLayoutX(0),
-        m_current(false),
-        m_pointer(new QCanvasLine(canvas)),
-        m_insertCursor(new QCanvasLine(canvas))
+    Staff(*segment),
+    m_canvas(canvas),
+    m_snapGrid(snapGrid),
+    m_id(id),
+    m_x(0.0),
+    m_y(0),
+    m_margin(0.0),
+    m_titleHeight(0),
+    m_resolution(resolution),
+    m_lineThickness(lineThickness),
+    m_pageMode(LinearMode),
+    m_pageWidth(2000.0),  // fairly arbitrary, but we need something non-zero
+    m_rowsPerPage(0),
+    m_rowSpacing(0),
+    m_connectingLineLength(0),
+    m_startLayoutX(0),
+    m_endLayoutX(0),
+    m_current(false),
+    m_pointer(new QCanvasLine(canvas)),
+    m_insertCursor(new QCanvasLine(canvas)),
+    m_insertCursorTime(segment->getStartTime()),
+    m_insertCursorTimeValid(false)
 {
     initCursors();
 }
@@ -85,26 +87,28 @@ LinedStaff::LinedStaff(QCanvas *canvas, Segment *segment,
                        SnapGrid *snapGrid,
                        int id, int resolution, int lineThickness,
                        double pageWidth, int rowsPerPage, int rowSpacing) :
-        Staff(*segment),
-        m_canvas(canvas),
-        m_snapGrid(snapGrid),
-        m_id(id),
-        m_x(0.0),
-        m_y(0),
-        m_margin(0.0),
-        m_titleHeight(0),
-        m_resolution(resolution),
-        m_lineThickness(lineThickness),
-        m_pageMode(rowsPerPage ? MultiPageMode : ContinuousPageMode),
-        m_pageWidth(pageWidth),
-        m_rowsPerPage(rowsPerPage),
-        m_rowSpacing(rowSpacing),
-        m_connectingLineLength(0),
-        m_startLayoutX(0),
-        m_endLayoutX(0),
-        m_current(false),
-        m_pointer(new QCanvasLine(canvas)),
-        m_insertCursor(new QCanvasLine(canvas))
+    Staff(*segment),
+    m_canvas(canvas),
+    m_snapGrid(snapGrid),
+    m_id(id),
+    m_x(0.0),
+    m_y(0),
+    m_margin(0.0),
+    m_titleHeight(0),
+    m_resolution(resolution),
+    m_lineThickness(lineThickness),
+    m_pageMode(rowsPerPage ? MultiPageMode : ContinuousPageMode),
+    m_pageWidth(pageWidth),
+    m_rowsPerPage(rowsPerPage),
+    m_rowSpacing(rowSpacing),
+    m_connectingLineLength(0),
+    m_startLayoutX(0),
+    m_endLayoutX(0),
+    m_current(false),
+    m_pointer(new QCanvasLine(canvas)),
+    m_insertCursor(new QCanvasLine(canvas)),
+    m_insertCursorTime(segment->getStartTime()),
+    m_insertCursorTimeValid(false)
 {
     initCursors();
 }
@@ -114,26 +118,28 @@ LinedStaff::LinedStaff(QCanvas *canvas, Segment *segment,
                        int id, int resolution, int lineThickness,
                        PageMode pageMode, double pageWidth, int rowsPerPage,
                        int rowSpacing) :
-Staff(*segment),
-m_canvas(canvas),
-m_snapGrid(snapGrid),
-m_id(id),
-m_x(0.0),
-m_y(0),
-m_margin(0.0),
-m_titleHeight(0),
-m_resolution(resolution),
-m_lineThickness(lineThickness),
-m_pageMode(pageMode),
-m_pageWidth(pageWidth),
-m_rowsPerPage(rowsPerPage),
-m_rowSpacing(rowSpacing),
-m_connectingLineLength(0),
-m_startLayoutX(0),
-m_endLayoutX(0),
-m_current(false),
-m_pointer(new QCanvasLine(canvas)),
-m_insertCursor(new QCanvasLine(canvas))
+    Staff(*segment),
+    m_canvas(canvas),
+    m_snapGrid(snapGrid),
+    m_id(id),
+    m_x(0.0),
+    m_y(0),
+    m_margin(0.0),
+    m_titleHeight(0),
+    m_resolution(resolution),
+    m_lineThickness(lineThickness),
+    m_pageMode(pageMode),
+    m_pageWidth(pageWidth),
+    m_rowsPerPage(rowsPerPage),
+    m_rowSpacing(rowSpacing),
+    m_connectingLineLength(0),
+    m_startLayoutX(0),
+    m_endLayoutX(0),
+    m_current(false),
+    m_pointer(new QCanvasLine(canvas)),
+    m_insertCursor(new QCanvasLine(canvas)),
+    m_insertCursorTime(segment->getStartTime()),
+    m_insertCursorTimeValid(false)
 {
     initCursors();
 }
@@ -1096,11 +1102,17 @@ LinedStaff::getPointerPosition(double &cx, int &cy) const
 double
 LinedStaff::getLayoutXOfInsertCursor() const
 {
-    if (!m_current)
-        return -1;
+    if (!m_current) return -1;
     double x = m_insertCursor->x();
     int row = getRowForCanvasCoords(x, int(m_insertCursor->y()));
     return getLayoutCoordsForCanvasCoords(x, getCanvasYForTopLine(row)).first;
+}
+
+timeT
+LinedStaff::getInsertCursorTime(HorizontalLayoutEngine &layout) const
+{
+    if (m_insertCursorTimeValid) return m_insertCursorTime;
+    return layout.getTimeForX(getLayoutXOfInsertCursor());
 }
 
 void
@@ -1150,8 +1162,7 @@ LinedStaff::hidePointer()
 void
 LinedStaff::setInsertCursorPosition(double canvasX, int canvasY)
 {
-    if (!m_current)
-        return ;
+    if (!m_current) return;
 
     int row = getRowForCanvasCoords(canvasX, canvasY);
     canvasY = getCanvasYForTopOfStaff(row);
@@ -1160,6 +1171,7 @@ LinedStaff::setInsertCursorPosition(double canvasX, int canvasY)
     m_insertCursor->setZ( -28); // behind everything else except playback pointer
     m_insertCursor->setPoints(0, 0, 0, getHeightOfRow() - 1);
     m_insertCursor->show();
+    m_insertCursorTimeValid = false;
 }
 
 void
@@ -1169,6 +1181,8 @@ LinedStaff::setInsertCursorPosition(HorizontalLayoutEngine &layout,
     double x = layout.getXForTime(time);
     LinedStaffCoords coords = getCanvasCoordsForLayoutCoords(x, 0);
     setInsertCursorPosition(coords.first, coords.second);
+    m_insertCursorTime = time;
+    m_insertCursorTimeValid = true;
 }
 
 void

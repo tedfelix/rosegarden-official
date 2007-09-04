@@ -1579,7 +1579,8 @@ MatrixView::slotSetInsertCursorPosition(timeT time, bool scroll)
     m_staffs[0]->setInsertCursorPosition(m_hlayout, time);
 
     if (scroll && !getCanvasView()->isAutoScrolling()) {
-        getCanvasView()->slotScrollHoriz(static_cast<int>(getXbyWorldMatrix(m_hlayout.getXForTime(time))));
+        getCanvasView()->slotScrollHoriz
+            (static_cast<int>(getXbyWorldMatrix(m_hlayout.getXForTime(time))));
     }
 
     updateView();
@@ -2418,8 +2419,7 @@ timeT
 MatrixView::getInsertionTime()
 {
     MatrixStaff *staff = m_staffs[0];
-    double ix = staff->getLayoutXOfInsertCursor();
-    return m_hlayout.getTimeForX(ix);
+    return staff->getInsertCursorTime(m_hlayout);
 }
 
 void
