@@ -125,7 +125,7 @@ MatrixStaff::positionElements(timeT from, timeT to)
 
 void MatrixStaff::positionElement(ViewElement* vel)
 {
-    qDebug("MatrixStaff::positionElement");
+//    qDebug("MatrixStaff::positionElement");
     
     MatrixElement* el = dynamic_cast<MatrixElement*>(vel);
 

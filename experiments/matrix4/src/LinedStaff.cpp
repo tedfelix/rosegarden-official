@@ -34,7 +34,7 @@
 #include "scale/SnapGrid.h"
 #include "viewelement/AbstractViewElementManager.h"
 #include "viewelement/ViewElement.h"
-#include "GUIPalette.h"
+#include "generalgui/GUIPalette.h"
 #include "BarLine.h"
 #include <QGraphicsScene>
 #include <QColor>
@@ -722,6 +722,7 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
     BarLine *line = new BarLine(layoutX,
                                 getBarLineHeight(), barThickness, getLineSpacing(),
                                 (int)inset, style);
+    m_canvas->addItem(line);
 
     line->moveBy(x, y);
 
@@ -744,7 +745,7 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
     BarLineList::iterator insertPoint = lower_bound
                                         (m_barLines.begin(), m_barLines.end(), line, compareBars);
     m_barLines.insert(insertPoint, line);
-
+    
     if (lastBarInRow) {
 
         double xe = x + width - barThickness;
@@ -829,7 +830,7 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
 
             rect->setZValue( -1);
             m_canvas->addItem(rect);
-            rect->show(); // show beat lines even if the bar lines are hidden
+//            rect->show(); // show beat lines even if the bar lines are hidden
 
             LineRec beatLine(layoutX + gridLine * dx, rect);
             m_beatLines.push_back(beatLine);

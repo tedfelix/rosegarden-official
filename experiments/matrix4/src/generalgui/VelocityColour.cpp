@@ -114,6 +114,7 @@ VelocityColour::getColour(int value)
         return m_loudColour;
     }
 
+    m_mixedColour.setAlpha(127);
     return m_mixedColour;
 }
 

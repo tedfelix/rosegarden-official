@@ -40,11 +40,10 @@ QColor GUIPalette::getColour(const char* const colourName)
 //    KConfig* config = kapp->config();
 //    config->setGroup(ColoursConfigGroup);
 //
-//    QColor res = getInstance()->m_defaultsMap[colourName];
+    QColor res = getInstance()->m_defaultsMap[colourName];
 //    config->readColorEntry(colourName, &res);
-
     
-    QColor res = Qt::blue;
+    res.setAlpha(127);
     return res;
 }
 
