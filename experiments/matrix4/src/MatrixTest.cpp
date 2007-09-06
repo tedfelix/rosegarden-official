@@ -6,6 +6,7 @@
 #include <base/Composition.h>
 #include <base/Track.h>
 #include <base/Segment.h>
+#include <base/Event.h>
 
 #include "scale/SnapGrid.h"
 #include "MatrixViewElementManager.h"
@@ -37,6 +38,9 @@ void MatrixTest::buildTestComposition() {
     m_segment->setEndTime(3840 * 50);
     m_composition->addSegment(m_segment);
     
+    Rosegarden::Event* event = new Rosegarden::Event(Rosegarden::Note::EventType, 3840 * 2, 3840);
+    event->set<Rosegarden::Int>("pitch", 61);
+    m_segment->insert(event);
 }
 
 void MatrixTest::buildMatrixStaff() {
@@ -62,6 +66,8 @@ void MatrixTest::layout() {
     m_vLayout->finishLayout();
 
     m_matrixStaff->sizeStaff(*m_hLayout);
+    
+    m_matrixStaff->positionAllElements();
 }
 
 MatrixTest::~MatrixTest()

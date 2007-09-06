@@ -39,7 +39,7 @@ namespace Rosegarden
 
 class Event;
 
-class MatrixElement : public ViewElement
+class MatrixElement : public ViewElement, public QGraphicsRectItem
 {
 
 public:
@@ -52,32 +52,32 @@ public:
     /**
      * Returns the actual x coordinate of the element on the canvas
      */
-    double getCanvasX() const { return m_canvasRect->x(); }
+    double getCanvasX() const { return x(); }
 
     /**
      * Returns the actual y coordinate of the element on the canvas
      */
-    double getCanvasY() const { return m_canvasRect->y(); }
+    double getCanvasY() const { return y(); }
 
-    double getCanvasZ() const { return m_canvasRect->zValue(); }
+    double getCanvasZ() const { return zValue(); }
 
     /**
      * Sets the x coordinate of the element on the canvas
      */
-    void setCanvasPos(double x, double y) { m_canvasRect->setPos(x, y); }
+    void setCanvasPos(double x, double y) { setPos(x, y); }
 
 
     /**
      * Sets the width of the rectangle on the canvas
      */
-    void setWidth(qreal w)   { QRectF r = m_canvasRect->rect(); r.setWidth(w); m_canvasRect->setRect(r); }
-    qreal getWidth() { return m_canvasRect->rect().width(); }
+    void setWidth(qreal w)   { QRectF r = rect(); r.setWidth(w); setRect(r); }
+    qreal getWidth() { return rect().width(); }
 
     /**
      * Sets the height of the rectangle on the canvas
      */
-    void setHeight(qreal h)   { QRectF r = m_canvasRect->rect(); r.setHeight(h); m_canvasRect->setRect(r); }
-    qreal getHeight() { return m_canvasRect->rect().height(); }
+    void setHeight(qreal h)   { QRectF r = rect(); r.setHeight(h); setRect(r); }
+    qreal getHeight() { return rect().height(); }
 
     /// Returns true if the wrapped event is a note
     bool isNote() const;
@@ -86,7 +86,7 @@ public:
      * Set the colour of the element
      */
     void setColour(const QColor &colour)
-        { m_canvasRect->setBrush(QBrush(colour)); }
+        { setBrush(QBrush(colour)); }
 
     /**
      * If element rectangle is currently visible gets its size and returns true.
@@ -94,12 +94,10 @@ public:
      */
     bool getVisibleRectangle(QRectF &rectangle);
 
-
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+    
+    
 protected:
-
-    //--------------- Data members ---------------------------------
-
-    QGraphicsRectItem *m_canvasRect;
 
 };
 

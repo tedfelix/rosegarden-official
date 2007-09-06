@@ -10,7 +10,6 @@ set(matrix4_SRCS
     gvtest.cpp
     GraphicsItemPin.cpp
     FadeItem.cpp
-    GUIPalette.cpp
     LinedStaff.cpp
     MatrixElement.cpp
     MatrixViewElementManager.cpp
@@ -74,6 +73,12 @@ SET(helpers_SRCS
 	helpers/SegmentNotationHelper.cpp
 )
 
+SET(generalgui_SRCS
+	generalgui/DefaultVelocityColour.cpp
+    generalgui/GUIPalette.cpp
+	generalgui/VelocityColour.cpp
+)
+
 ADD_LIBRARY(RosegardenBase STATIC
     ${base_SRCS}
 )
@@ -90,11 +95,16 @@ ADD_LIBRARY(RosegardenHelpers STATIC
     ${helpers_SRCS}
 )
 
+ADD_LIBRARY(RosegardenGeneralGui STATIC
+    ${generalgui_SRCS}
+)
+
 
 ADD_DEPENDENCIES(RosegardenBase        precompiled_headers)
 ADD_DEPENDENCIES(RosegardenViewElement precompiled_headers)
 ADD_DEPENDENCIES(RosegardenScale       precompiled_headers)
 ADD_DEPENDENCIES(RosegardenHelpers     precompiled_headers)
+ADD_DEPENDENCIES(RosegardenGeneralGui  precompiled_headers)
 
 # tell cmake to create .moc files for all files in the variable qtproject_SRCS that require such a file.
 # note: this assumes that you use #include "header.moc" in your files
@@ -110,4 +120,5 @@ target_link_libraries(matrix4
 					  RosegardenViewElement
 					  RosegardenHelpers
 					  RosegardenBase
+					  RosegardenGeneralGui
 					  )

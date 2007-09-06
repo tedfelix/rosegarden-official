@@ -26,12 +26,12 @@
 #include "MatrixElement.h"
 //#include "misc/Debug.h"
 
+#include "base/BaseProperties.h"
 #include "base/Event.h"
 #include "base/NotationTypes.h"
-#include "viewelement/ViewElement.h"
-#include "GUIPalette.h"
+#include "generalgui/GUIPalette.h"
+#include "generalgui/DefaultVelocityColour.h"
 #include <QBrush>
-#include <QGraphicsScene>
 #include <QColor>
 
 
@@ -39,11 +39,12 @@ namespace Rosegarden
 {
 
 MatrixElement::MatrixElement(Event *event) :
-        ViewElement(event),
-        m_canvasRect(new QGraphicsRectItem())
+        ViewElement(event)
 {
     //     MATRIX_DEBUG << "new MatrixElement "
     //                          << this << " wrapping " << event << endl;
+    setPen(GUIPalette::getColour(GUIPalette::MatrixElementBorder));
+    setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
 }
 
 MatrixElement::~MatrixElement()
@@ -51,23 +52,6 @@ MatrixElement::~MatrixElement()
     //     MATRIX_DEBUG << "MatrixElement " << this << "::~MatrixElement() wrapping "
     //                          << event() << endl;
 
-    m_canvasRect->hide();
-    delete m_canvasRect;
-}
-
-void MatrixElement::setCanvas(QGraphicsScene* c)
-{
-    if (!m_canvasRect->scene()) {
-
-        c->addItem(m_canvasRect);
-
-        // We set this by velocity now (matrixstaff.cpp)
-        //
-        //m_canvasRect->setBrush(RosegardenGUIColours::MatrixElementBlock);
-
-        m_canvasRect->setPen(GUIPalette::getColour(GUIPalette::MatrixElementBorder));
-        m_canvasRect->show();
-    }
 }
 
 bool MatrixElement::isNote() const
@@ -78,12 +62,32 @@ bool MatrixElement::isNote() const
 
 bool MatrixElement::getVisibleRectangle(QRectF &rectangle)
 {
-    if (m_canvasRect && m_canvasRect->isVisible()) {
-        rectangle = m_canvasRect->rect();
+    if (isVisible()) {
+        rectangle = rect();
         return true;
     }
     return false;
 }
 
+void MatrixElement::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+    // set brush color according to selected state or velocity
+    //
+    if (isSelected()) {
+        setBrush(QBrush(GUIPalette::getColour(GUIPalette::SelectedElement)));
+    } else {
+        // Get velocity for colouring
+        //
+        using Rosegarden::BaseProperties::VELOCITY;
+        long velocity = 127;
+        if (event()->has(VELOCITY))
+            event()->get
+            <Int>(VELOCITY, velocity);
+
+        setBrush(QBrush(DefaultVelocityColour::getInstance()->getColour(velocity)));
+    }
+    
+    QGraphicsRectItem::paint(painter, option, widget);
+}
 
 }

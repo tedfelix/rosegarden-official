@@ -26,7 +26,6 @@
 #include "MatrixStaff.h"
 //#include "misc/Debug.h"
 
-#include "base/BaseProperties.h"
 #include "base/Composition.h"
 #include "base/Event.h"
 #include "base/Instrument.h"
@@ -39,9 +38,7 @@
 #include "viewelement/AbstractViewElementManager.h"
 #include "viewelement/ViewElement.h"
 #include "helpers/SegmentMatrixHelper.h"
-#include "GUIPalette.h"
 #include "LinedStaff.h"
-//#include "gui/rulers/DefaultVelocityColour.h"
 #include "MatrixElement.h"
 //#include "MatrixView.h"
 #include "MatrixVLayout.h"
@@ -128,6 +125,8 @@ MatrixStaff::positionElements(timeT from, timeT to)
 
 void MatrixStaff::positionElement(ViewElement* vel)
 {
+    qDebug("MatrixStaff::positionElement");
+    
     MatrixElement* el = dynamic_cast<MatrixElement*>(vel);
 
     // Memorize initial rectangle position. May be some overlap rectangles
@@ -141,25 +140,19 @@ void MatrixStaff::positionElement(ViewElement* vel)
 
     // Get velocity for colouring
     //
-    using BaseProperties::VELOCITY;
-    long velocity = 127;
-    if (el->event()->has(VELOCITY))
-        el->event()->get
-        <Int>(VELOCITY, velocity);
+//    using BaseProperties::VELOCITY;
+//    long velocity = 127;
+//    if (el->event()->has(VELOCITY))
+//        el->event()->get
+//        <Int>(VELOCITY, velocity);
 
-    el->setCanvas(m_canvas);
+    m_canvas->addItem(el);
 
-    // Is the event currently selected?  Colour accordingly. // TODO - do selection using QGraphicsItem::setSelected()
+    // Is the event currently selected?
     //
 //    EventSelection *selection = m_view->getCurrentSelection();
 //
-//    if (selection && selection->contains(el->event()))
-//        el->setColour(GUIPalette::getColour(GUIPalette::SelectedElement));
-//    else if (el->event()->has(BaseProperties::TRIGGER_SEGMENT_ID))
-//        el->setColour(Qt::gray);
-//    else
-//        el->setColour(DefaultVelocityColour::getInstance()->getColour(velocity));
-
+//    el->setSelected(selection && selection->contains(el->event()));
     el->setCanvasPos(coords.first, (double)coords.second);
 
 }
