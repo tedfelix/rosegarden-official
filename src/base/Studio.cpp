@@ -26,6 +26,10 @@
 #include "AudioDevice.h"
 #include "Instrument.h"
 
+#include "Segment.h"
+#include "Track.h"
+#include "Composition.h"
+
 #if (__GNUC__ < 3)
 #include <strstream>
 #define stringstream strstream
@@ -222,6 +226,25 @@ Studio::getInstrumentFromList(int index)
 
     return 0;
 
+}
+
+Instrument *
+Studio::getInstrumentFor(Segment *segment)
+{
+    if (!segment) return 0;
+    if (!segment->getComposition()) return 0;
+    TrackId tid = segment->getTrack();
+    Track *track = segment->getComposition()->getTrackById(tid);
+    if (!track) return 0;
+    return getInstrumentFor(track);
+}
+
+Instrument *
+Studio::getInstrumentFor(Track *track)
+{
+    if (!track) return 0;
+    InstrumentId iid = track->getInstrument();
+    return getInstrumentById(iid);
 }
 
 BussList
