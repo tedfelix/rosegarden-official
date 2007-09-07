@@ -51,6 +51,9 @@ typedef std::vector<Device*>::const_iterator DeviceListConstIterator;
 
 class MidiDevice;
 
+class Segment;
+class Track;
+
 
 class Studio : public XmlExportable
 {
@@ -81,6 +84,10 @@ public:
     // Return an Instrument
     Instrument* getInstrumentById(InstrumentId id);
     Instrument* getInstrumentFromList(int index);
+
+    // Convenience functions
+    Instrument *getInstrumentFor(Segment *);
+    Instrument *getInstrumentFor(Track *);
 
     BussList getBusses();
     Buss *getBussById(BussId id);
