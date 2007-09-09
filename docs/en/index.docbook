@@ -236,12 +236,12 @@
     </authorgroup>
 
     <copyright>
-      <year>2002-2006</year>
+      <year>2002-2007</year>
       <holder>Chris Cannam, Richard Bown, Guillaume Laurent</holder>
     </copyright>
 
-    <date>2007-03-15</date>
-    <releaseinfo>1.5.1</releaseinfo>
+    <date>2007-09-09</date>
+    <releaseinfo>1.6.0</releaseinfo>
 
     <abstract>
       <para>
@@ -1462,6 +1462,30 @@
 	  Slave".
 	</para>
       </sect2>
+    </sect1>
+    
+    <sect1 id="infrared-remote-controls">
+    	<title>Infrared Remote Controls</title>
+		<para>
+			Rosegarden supports infrared remote controls for 
+			almost all transport functions. In order to use it, 
+			you need either the internal LIRC client, which is 
+			an optional feature at Rosegarden's compile time, 
+			or the KDE IRKick application (KDE LIRC daemon) 
+			that you can find in your Linux distribution's 
+			repositories. In both cases, you need to install 
+			and configure the LIRC server daemon. The exact 
+			details depend on your remote control and receiver, 
+			and you should refer to the <ulink url="http://www.lirc.org/html">
+			LIRC web site</ulink> for more information.
+		</para>
+			
+		<para>
+			You can find more details online about the internal
+			LIRC client configuration file and IRKick basics, at  
+			<ulink url="http://www.rosegardenmusic.com/resources/documents/infrared-remotes.shtml">
+			Rosegarden's web site</ulink>.
+		</para> 
     </sect1>
   </chapter>
 
