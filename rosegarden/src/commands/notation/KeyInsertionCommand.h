@@ -43,7 +43,11 @@ namespace Rosegarden
 class Segment;
 class Event;
 
-
+//!!! Note, the shouldIgnorePercussion parameter probably shouldn't have been
+// added to the individual KeyInsertionCommand in the first place, but I haven't
+// made up my mind yet for sure, and I already changed all the calls to this
+// constructor, so I'm leaving this in until after the new code is field
+// tested, and I can determine it really never will be wanted (DMM)
 class KeyInsertionCommand : public BasicCommand
 {
 public:
@@ -52,7 +56,8 @@ public:
                         Key key,
                         bool shouldConvert,
                         bool shouldTranspose,
-                        bool shouldTransposeKey);
+                        bool shouldTransposeKey,
+			bool shouldIgnorePercussion);
     virtual ~KeyInsertionCommand();
 
     static QString getGlobalName(Key *key = 0) {
@@ -73,6 +78,7 @@ protected:
     bool m_convert;
     bool m_transpose;
     bool m_transposeKey;
+    bool m_ignorePercussion;
 };
 
 /*

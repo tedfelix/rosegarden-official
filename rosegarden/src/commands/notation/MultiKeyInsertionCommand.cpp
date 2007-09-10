@@ -30,28 +30,44 @@
 #include "base/Segment.h"
 #include "KeyInsertionCommand.h"
 #include <qstring.h>
+#include "document/RosegardenGUIDoc.h"
+#include "base/Studio.h"
+#include "misc/Debug.h"
 
 
 namespace Rosegarden
 {
 
-MultiKeyInsertionCommand::MultiKeyInsertionCommand(Composition &c,
+MultiKeyInsertionCommand::MultiKeyInsertionCommand(RosegardenGUIDoc* doc,
         timeT time,
         Key key,
         bool convert,
         bool transpose,
-        bool transposeKey) :
+        bool transposeKey,
+	bool ignorePercussion) :
         KMacroCommand(getGlobalName(&key))
 {
+   Composition &c = doc->getComposition();
+   Studio &s = doc->getStudio();
+
     for (Composition::iterator i = c.begin(); i != c.end(); ++i) {
         Segment *segment = *i;
 
+	Instrument *instrument = s.getInstrumentFor(segment);
+	// if (instrument) {
+	//    RG_DEBUG << endl <<
+	//                "PERC DEBUG: instrument->isPercussion " << instrument->isPercussion() <<
+	//                " ignorePercussion " << ignorePercussion << endl << endl << endl;
+	//}
+	if (instrument) if (instrument->isPercussion() && ignorePercussion) continue;
+
         // no harm in using getEndTime instead of getEndMarkerTime here:
         if (segment->getStartTime() <= time && segment->getEndTime() > time) {
-            addCommand(new KeyInsertionCommand(*segment, time, key, convert, transpose, transposeKey));
+            addCommand(new KeyInsertionCommand(*segment, time, key, convert, transpose, transposeKey,
+	                                       ignorePercussion));
         } else if (segment->getStartTime() > time) {
             addCommand(new KeyInsertionCommand(*segment, segment->getStartTime(),
-                                               key, convert, transpose, transposeKey));
+                                               key, convert, transpose, transposeKey, ignorePercussion));
         }
     }
 }

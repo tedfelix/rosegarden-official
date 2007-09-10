@@ -30,12 +30,14 @@
 #include <string>
 #include <kdialogbase.h>
 #include <qstring.h>
+#include <qcheckbox.h>
 
 
 class QWidget;
 class QRadioButton;
 class QLabel;
 class KComboBox;
+class QCheckBox;
 
 
 namespace Rosegarden
@@ -70,6 +72,7 @@ public:
     bool shouldApplyToAll() const;
     bool shouldBeTransposed() const; 
     ConversionType getConversionType() const;
+    bool shouldIgnorePercussion() const;
 
 public slots:
     void slotKeyUp();
@@ -105,6 +108,7 @@ protected:
     QRadioButton *m_convertButton;
     QRadioButton *m_transposeButton;
 
+    QCheckBox *m_noPercussionCheckBox;
 };
 
 

@@ -30,6 +30,7 @@
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
 #include "base/SegmentNotationHelper.h"
+#include "base/Studio.h"
 #include "document/BasicCommand.h"
 #include "base/BaseProperties.h"
 #include <qstring.h>
@@ -45,13 +46,15 @@ KeyInsertionCommand::KeyInsertionCommand(Segment &segment, timeT time,
         Key key,
         bool convert,
         bool transpose,
-        bool transposeKey) :
+        bool transposeKey,
+	bool ignorePercussion) :
         BasicCommand(getGlobalName(&key), segment, time, segment.getEndTime()),
         m_key(key),
         m_lastInsertedEvent(0),
         m_convert(convert),
         m_transpose(transpose),
-        m_transposeKey(transposeKey)
+        m_transposeKey(transposeKey),
+	m_ignorePercussion(ignorePercussion)
 
 {
     // nothing

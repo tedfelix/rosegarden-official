@@ -5806,15 +5806,17 @@ void NotationView::slotEditAddKeySignature()
 
         bool transposeKey = dialog.shouldBeTransposed();
         bool applyToAll = dialog.shouldApplyToAll();
+	bool ignorePercussion = dialog.shouldIgnorePercussion();
 
         if (applyToAll) {
             addCommandToHistory
                 (new MultiKeyInsertionCommand
-                 (getDocument()->getComposition(),
+                 (getDocument(),
                   insertionTime, dialog.getKey(),
                   conversion == KeySignatureDialog::Convert,
                   conversion == KeySignatureDialog::Transpose,
-                  transposeKey));
+                  transposeKey,
+		  ignorePercussion));
         } else {
             addCommandToHistory
                 (new KeyInsertionCommand
@@ -5822,7 +5824,8 @@ void NotationView::slotEditAddKeySignature()
                   insertionTime, dialog.getKey(),
                   conversion == KeySignatureDialog::Convert,
                   conversion == KeySignatureDialog::Transpose,
-                  transposeKey));
+                  transposeKey,
+		  false));
         }
     }
 }
@@ -5911,6 +5914,7 @@ void NotationView::slotEditTranspose()
 			  newKey,
 			  false,
 			  false,
+			  true,
 			  true));
 		
 		EventSelection::eventcontainer::iterator i;
@@ -5927,7 +5931,8 @@ void NotationView::slotEditTranspose()
 			  			 (Rosegarden::Key (**i)).transpose(semitones, steps),
 			 			 false,
 			 			 false,
-					 	 true));
+					 	 true,
+						 true));
         		}
         		
         }
@@ -6007,7 +6012,8 @@ void NotationView::slotEditElement(NotationStaff *staff,
                       element->event()->getAbsoluteTime(), dialog.getKey(),
                       conversion == KeySignatureDialog::Convert,
                       conversion == KeySignatureDialog::Transpose,
-                      dialog.shouldBeTransposed()));
+                      dialog.shouldBeTransposed(),
+		      dialog.shouldIgnorePercussion()));
             }
 
         } catch (Exception e) {
