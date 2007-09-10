@@ -43,6 +43,7 @@
 #include <qtooltip.h>
 #include <qvbox.h>
 #include <qwidget.h>
+#include <qcheckbox.h>
 
 
 namespace Rosegarden
@@ -123,6 +124,10 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
         new QRadioButton(i18n("Use specified key.  Do not transpose"), transposeFrame);
     m_yesTransposeButton->setChecked(true);
 
+    QCheckBox *m_noPercussionCheckBox =
+        new QCheckBox(i18n("Exclude percussion segments"), transposeFrame);
+    m_noPercussionCheckBox->setChecked(true);
+
     // just to shut up the compiler warning about unused variable:
     noTransposeButton->setChecked(false);
 
@@ -191,6 +196,12 @@ bool
 KeySignatureDialog::shouldBeTransposed() const
 {
     return m_yesTransposeButton && m_yesTransposeButton->isChecked();
+}
+
+bool
+KeySignatureDialog::shouldIgnorePercussion() const
+{
+    return m_noPercussionCheckBox->isChecked();
 }
 
 void

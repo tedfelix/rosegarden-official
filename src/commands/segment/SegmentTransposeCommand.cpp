@@ -87,7 +87,8 @@ SegmentTransposeCommand::processSegment(Segment &segment, bool changeKey, int st
                            trKey,
                           false,
                           false,
-                          false));
+                          false,
+			  true));
                     }
             }
         std::list<KeyInsertionCommand*>::iterator ci;
@@ -102,7 +103,8 @@ SegmentTransposeCommand::processSegment(Segment &segment, bool changeKey, int st
               newInitialKey,
               false,
               false,
-              false);
+              false,
+	      true);
         //commandHistory->addCommand(firstKeyCommand);
         macroCommand->addCommand(firstKeyCommand);
         std::cout << "Done changing key" << std::endl;
