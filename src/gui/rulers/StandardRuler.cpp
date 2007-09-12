@@ -45,13 +45,13 @@ namespace Rosegarden
 {
 
 StandardRuler::StandardRuler(RosegardenGUIDoc *doc,
-                       RulerScale *rulerScale,
-                       double xorigin,
-                       int barHeight,
-                       bool invert,
-                       QWidget* parent,
-                       const char* name,
-                       WFlags f):
+                             RulerScale *rulerScale,
+                             double xorigin,
+                             int barHeight,
+                             bool invert,
+                             QWidget* parent,
+                             const char* name,
+                             WFlags f):
         QVBox(parent, name, f),
         m_invert(invert),
         m_loopRulerHeight(10),
@@ -80,6 +80,11 @@ StandardRuler::StandardRuler(RosegardenGUIDoc *doc,
         (doc->getCommandHistory(), SIGNAL(commandExecuted()),
          this, SLOT(update()));
 
+}
+
+void StandardRuler::setSnapGrid(SnapGrid *grid)
+{
+    m_loopRuler->setSnapGrid(grid);
 }
 
 void StandardRuler::connectRulerToDocPointer(RosegardenGUIDoc *doc)

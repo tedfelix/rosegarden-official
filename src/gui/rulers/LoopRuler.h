@@ -63,6 +63,8 @@ public:
 
     ~LoopRuler();
 
+    void setSnapGrid(SnapGrid *grid);
+
     virtual QSize sizeHint() const;
     virtual QSize minimumSizeHint() const;
 
@@ -126,7 +128,9 @@ protected:
     bool m_activeMousePress;
 
     RulerScale *m_rulerScale;
-    SnapGrid    m_grid;
+    SnapGrid    m_defaultGrid;
+    SnapGrid    m_loopGrid;
+    SnapGrid   *m_grid;
     
     bool m_loopingMode;
     timeT m_startLoop;
