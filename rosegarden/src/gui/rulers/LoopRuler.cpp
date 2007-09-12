@@ -47,24 +47,28 @@ LoopRuler::LoopRuler(RulerScale *rulerScale,
                      double xorigin,
                      bool invert,
                      QWidget *parent,
-                     const char *name)
-        : QWidget(parent, name),
-        m_height(height),
-        m_xorigin(xorigin),
-        m_invert(invert),
-        m_currentXOffset(0),
-        m_width( -1),
-        m_activeMousePress(false),
-        m_rulerScale(rulerScale),
-        m_grid(rulerScale),
-        m_loopingMode(false),
-        m_startLoop(0), m_endLoop(0)
+                     const char *name) : 
+    QWidget(parent, name),
+    m_height(height),
+    m_xorigin(xorigin),
+    m_invert(invert),
+    m_currentXOffset(0),
+    m_width( -1),
+    m_activeMousePress(false),
+    m_rulerScale(rulerScale),
+    m_defaultGrid(rulerScale),
+    m_loopGrid(rulerScale),
+    m_grid(&m_defaultGrid),
+    m_loopingMode(false),
+    m_startLoop(0), m_endLoop(0)
 {
     setBackgroundColor(GUIPalette::getColour(GUIPalette::LoopRulerBackground));
 
-    // Only allow loops to be snapped to Beats on this grid
+    // Always snap loop extents to beats; by default apply no snap to
+    // pointer position
     //
-    m_grid.setSnapTime(SnapGrid::SnapToBeat);
+    m_defaultGrid.setSnapTime(SnapGrid::NoSnap);
+    m_loopGrid.setSnapTime(SnapGrid::SnapToBeat);
 
     QToolTip::add
         (this, i18n("Click and drag to move the playback pointer.\nShift-click and drag to set a range for looping or editing.\nShift-click to clear the loop or range.\nDouble-click to start playback."));
@@ -72,6 +76,13 @@ LoopRuler::LoopRuler(RulerScale *rulerScale,
 
 LoopRuler::~LoopRuler()
 {}
+
+void
+LoopRuler::setSnapGrid(SnapGrid *grid)
+{
+    if (grid == 0) m_grid = &m_defaultGrid;
+    else m_grid = grid;
+}
 
 void LoopRuler::scrollHoriz(int x)
 {
@@ -218,9 +229,9 @@ LoopRuler::mousePressEvent(QMouseEvent *mE)
     if (mE->button() == LeftButton) {
         double x = mE->pos().x() / getHScaleFactor() - m_currentXOffset - m_xorigin;
 
-        if (m_loopingMode)
-            m_endLoop = m_startLoop = m_grid.snapX(x);
-        else {
+        if (m_loopingMode) {
+            m_endLoop = m_startLoop = m_loopGrid.snapX(x);
+        } else {
             // No -- now that we're emitting when the button is
             // released, we _don't_ want to emit here as well --
             // otherwise we get an irritating stutter when simply
@@ -262,7 +273,7 @@ LoopRuler::mouseReleaseEvent(QMouseEvent *mE)
             // in an edit view)
             //
             double x = mE->pos().x() / getHScaleFactor() - m_currentXOffset - m_xorigin;
-            emit setPointerPosition(m_rulerScale->getTimeForX(x));
+            emit setPointerPosition(m_grid->snapX(x));
         }
         emit stopMouseMove();
         m_activeMousePress = false;
@@ -279,7 +290,7 @@ LoopRuler::mouseDoubleClickEvent(QMouseEvent *mE)
     RG_DEBUG << "LoopRuler::mouseDoubleClickEvent: x = " << x << ", looping = " << m_loopingMode << endl;
 
     if (mE->button() == LeftButton && !m_loopingMode)
-        emit setPlayPosition(m_rulerScale->getTimeForX(x));
+        emit setPlayPosition(m_grid->snapX(x));
 }
 
 void
@@ -290,13 +301,14 @@ LoopRuler::mouseMoveEvent(QMouseEvent *mE)
         x = 0;
 
     if (m_loopingMode) {
-        if (m_grid.snapX(x) != m_endLoop) {
-            m_endLoop = m_grid.snapX(x);
-            emit dragLoopToPosition(m_rulerScale->getTimeForX(x));
+        if (m_grid->snapX(x) != m_endLoop) {
+            m_endLoop = m_loopGrid.snapX(x);
+            emit dragLoopToPosition(m_endLoop);
             update();
         }
-    } else
-        emit dragPointerToPosition(m_rulerScale->getTimeForX(x));
+    } else {
+        emit dragPointerToPosition(m_grid->snapX(x));
+    }
 
     emit mouseMove();
 }

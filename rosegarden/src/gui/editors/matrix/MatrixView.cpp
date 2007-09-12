@@ -445,11 +445,13 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     StandardRuler *topStandardRuler = new StandardRuler(getDocument(),
                                 &m_hlayout, int(xorigin), 25,
                                 false, getCentralWidget());
+    topStandardRuler->setSnapGrid(m_snapGrid);
     setTopStandardRuler(topStandardRuler);
 
     StandardRuler *bottomStandardRuler = new StandardRuler(getDocument(),
                                    &m_hlayout, 0, 25,
                                    true, getBottomWidget());
+    bottomStandardRuler->setSnapGrid(m_snapGrid);
     setBottomStandardRuler(bottomStandardRuler);
 
     topStandardRuler->connectRulerToDocPointer(doc);
