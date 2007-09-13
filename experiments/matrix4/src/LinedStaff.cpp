@@ -793,7 +793,7 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
         m_barNumbers.push_back(barNoText);
     }
 
-    QGraphicsRectItem *rect = 0;
+    QGraphicsLineItem *lineItem = 0;
 
     if (showBeatLines()) {
 
@@ -811,49 +811,45 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
 
         for (int gridLine = hidden ? 0 : 1; gridLine < gridLines; ++gridLine) {
 
-            rect = new QGraphicsRectItem
-                   (0, 0, barThickness, getBarLineHeight());
-
-            rect->moveBy(x + gridLine * dx, y);
+            lineItem = new QGraphicsLineItem
+                   (x + gridLine * dx, y, x + gridLine * dx, y + getBarLineHeight());
 
             double currentGrid = gridLines / double(timeSig.getBeatsPerBar());
 
-            rect->setPen(GUIPalette::getColour(GUIPalette::BeatLine));
-            rect->setBrush(GUIPalette::getColour(GUIPalette::BeatLine));
-
+            QPen pen(GUIPalette::getColour(GUIPalette::BeatLine));
             // Reset to SubBeatLine colour if we're not a beat line - avoid div by zero!
             //
             if (currentGrid > 1.0 && double(gridLine) / currentGrid != gridLine / int(currentGrid)) {
-                rect->setPen(GUIPalette::getColour(GUIPalette::SubBeatLine));
-                rect->setBrush(GUIPalette::getColour(GUIPalette::SubBeatLine));
+                pen.setColor(GUIPalette::getColour(GUIPalette::SubBeatLine));
             }
+            pen.setWidth(barThickness);
+            lineItem->setPen(pen);
 
-            rect->setZValue( -1);
-            m_canvas->addItem(rect);
-//            rect->show(); // show beat lines even if the bar lines are hidden
+            lineItem->setZValue( -1);
+            m_canvas->addItem(lineItem);
 
-            LineRec beatLine(layoutX + gridLine * dx, rect);
+            LineRec beatLine(layoutX + gridLine * dx, lineItem);
             m_beatLines.push_back(beatLine);
         }
     }
 
     if (m_connectingLineLength > 0) {
 
-        rect = new QGraphicsRectItem
-               (0, 0, barThickness, m_connectingLineLength);
+        lineItem = new QGraphicsLineItem
+               (x, y, x, y + m_connectingLineLength);
 
-        rect->moveBy(x, y);
-
-        rect->setPen(GUIPalette::getColour(GUIPalette::StaffConnectingLine));
-        rect->setBrush(GUIPalette::getColour(GUIPalette::StaffConnectingLine));
-        rect->setZValue( -3);
-        m_canvas->addItem(rect);
+        QPen pen(GUIPalette::getColour(GUIPalette::StaffConnectingLine));
+        pen.setWidth(barThickness);
+        
+        lineItem->setPen(pen);
+        lineItem->setZValue( -3);
+        m_canvas->addItem(lineItem);
         if (hidden)
-            rect->hide();
+            lineItem->hide();
         else
-            rect->show();
+            lineItem->show();
 
-        LineRec connectingLine(layoutX, rect);
+        LineRec connectingLine(layoutX, lineItem);
         m_barConnectingLines.push_back(connectingLine);
     }
 }
