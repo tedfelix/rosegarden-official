@@ -961,8 +961,6 @@ LilypondExporter::write()
                          currentVerse <= lastVerse; 
 			 currentVerse++) {
 		        bool haveLyric = false;
-		        bool haveSlur = false;
-			timeT slurEnd;
 			bool firstNote = true;
 		        QString text = "";
 
@@ -982,21 +980,7 @@ LilypondExporter::write()
 		                            textType == Text::Lyric) {
 		                        isLyric = true;
 		                    }
-		                } else {
-				    try {
-					Indication indic(**j);
-
-					if (indic.getIndicationType() == Indication::Slur) {
-					    slurEnd = (*j)->getNotationAbsoluteTime() + indic.getIndicationDuration();
-					    haveSlur = true;
-					}
-				    } catch (Exception e) { }
-				}
-		            } else {
-		                if ((*j)->has(BaseProperties::TIED_BACKWARD) &&
-		                        (*j)->get
-		                        <Bool>(BaseProperties::TIED_BACKWARD))
-		                    continue;
+		                }
 		            }
 		
 		            if (!isNote && !isLyric) continue;
@@ -1006,16 +990,8 @@ LilypondExporter::write()
 		
 			    if (isNote) {
 				if ((myTime > lastTime) || firstNote) {
-				    if (!haveLyric && !haveSlur)
+				    if (!haveLyric)
 					text += " _";
-				    if (!haveLyric && haveSlur) {
-					timeT eventEnd =
-					(*j)->getNotationAbsoluteTime() + (*j)->getNotationDuration();
-					if (slurEnd < eventEnd)
-					    haveSlur = false;
-					else
-					    text += " _";
-				    }
 				    lastTime = myTime;
 				    haveLyric = false;
 				    firstNote = false;
@@ -1029,18 +1005,7 @@ LilypondExporter::write()
 				if (verse == currentVerse) {
 		                    std::string ssyllable;
 		                    (*j)->get<String>(Text::TextPropertyName, ssyllable);
-				    if (haveSlur) {
-					timeT eventEnd =
-					(*j)->getNotationAbsoluteTime() + (*j)->getNotationDuration();
-					if (slurEnd < eventEnd) {
-					    haveSlur = false;
-					    text += " ";
-					} else {
-					    text += "_";
-					}
-				    } else {
-					text += " ";
-				    }
+				    text += " ";
 			    
 		                    QString syllable(strtoqstr(ssyllable));
 		                    syllable.replace(QRegExp("\\s+"), "");
@@ -1070,7 +1035,9 @@ LilypondExporter::write()
 			    } else {
 				str << indent(++col) << "\\override LyricText #'self-alignment-X = #LEFT" << std::endl;
 			    }
+			    str << indent(col) << "\\set ignoreMelismata = ##t" << std::endl;
 			    str << indent(col) << text.utf8() << " " << std::endl;
+			    str << indent(col) << "\\unset ignoreMelismata" << std::endl;
 			    str << indent(--col) << "} % Lyrics " << (currentVerse+1) << std::endl;
 			    // close the Lyrics context
 		        }
