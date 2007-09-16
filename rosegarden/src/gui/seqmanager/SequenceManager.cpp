@@ -1160,7 +1160,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 
                         KMessageBox::information(
                             dynamic_cast<QWidget*>(m_doc->parent())->parentWidget(),
-                            i18n("<h3>System timer resolution is too low</h3><p>Rosegarden was unable to find a high-resolution timing source for MIDI performance.</p><p>This may mean you are using a Linux system with the kernel timer resolution set too low.  Please contact your Linux distributor for more information.  Some Linux distributors have already low latency kernels, see http://rosegarden.wiki.sourceforge.net/Low+latency+kernels for more instructions.</p>"));
+                            i18n("<h3>System timer resolution is too low</h3><p>Rosegarden was unable to find a high-resolution timing source for MIDI performance.</p><p>This may mean you are using a Linux system with the kernel timer resolution set too low.  Please contact your Linux distributor for more information.</p><p>Some Linux distributors already provide low latency kernels, see http://rosegarden.wiki.sourceforge.net/Low+latency+kernels for instructions.</p>"));
                     }
                 }
             }
