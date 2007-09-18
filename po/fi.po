@@ -291,11 +291,11 @@ msgstr "Hajauta ääniosat MIDI:lle"
 #: ../src/commands/segment/SegmentTransposeCommand.cpp:36
 #: ../src/commands/segment/SegmentTransposeCommand.cpp:42
 msgid "Change segment transposition"
-msgstr "Vaihda osan sävelkorkeusmuutosta"
+msgstr "Vaihda osan sävelkorkeutta"
 
 #: ../src/commands/segment/SegmentTransposeCommand.h:54
 msgid "Transpose by &Interval (EXPERIMENTAL)..."
-msgstr "Transponoi &intervallilla (KOKEELLINEN)..."
+msgstr "Siirrä &intervallilla (KOKEELLINEN)..."
 
 #: ../src/commands/matrix/MatrixInsertionCommand.cpp:46
 #: ../src/commands/notation/NoteInsertionCommand.cpp:51
@@ -393,7 +393,7 @@ msgstr "Kasaa &nuotit, joilla on sama sävelkorkeus"
 
 #: ../src/commands/edit/TransposeCommand.h:55
 msgid "Transpose by &Interval..."
-msgstr "Transponoi &intervallilla..."
+msgstr "Siirrä &intervallilla..."
 
 #: ../src/commands/edit/TransposeCommand.h:61
 msgid "&Up a Semitone"
@@ -413,7 +413,7 @@ msgstr "Oktaa&vi alas"
 
 #: ../src/commands/edit/TransposeCommand.h:65
 msgid "&Transpose by Semitones..."
-msgstr "Transponoi &puolisävelaskelilla..."
+msgstr "Siirrä &puolisävelaskelilla..."
 
 #: ../src/commands/edit/SetNoteTypeCommand.h:56
 msgid "&Set Note Type"
@@ -1908,7 +1908,7 @@ msgstr "Täysi aika:"
 #: ../src/gui/dialogs/SimpleEventEditDialog.cpp:156
 #: ../src/gui/dialogs/SimpleEventEditDialog.cpp:323
 msgid "Controller name:"
-msgstr "Kontrollerin nimi:"
+msgstr "Ohjaimen nimi:"
 
 #: ../src/gui/dialogs/SimpleEventEditDialog.cpp:157
 #: ../src/gui/dialogs/SimpleEventEditDialog.cpp:530
@@ -1967,11 +1967,11 @@ msgstr "Nuotin nopeus:"
 
 #: ../src/gui/dialogs/SimpleEventEditDialog.cpp:317
 msgid "Controller number:"
-msgstr "Kontrollerin numero:"
+msgstr "Ohjaimen numero:"
 
 #: ../src/gui/dialogs/SimpleEventEditDialog.cpp:326
 msgid "Controller value:"
-msgstr "Kontrollerin arvo:"
+msgstr "Ohjaimen arvo:"
 
 #: ../src/gui/dialogs/SimpleEventEditDialog.cpp:354
 msgid "Key pitch:"
@@ -2131,7 +2131,7 @@ msgstr "Säilytä nykyiset äänenkorkeudet"
 
 #: ../src/gui/dialogs/ClefDialog.cpp:99
 msgid "Transpose into appropriate octave"
-msgstr "Transponoi sopivaan oktaaviin"
+msgstr "Siirrä sopivaan oktaaviin"
 
 #: ../src/gui/dialogs/ClefDialog.cpp:231
 msgid "%1 down an octave"
@@ -2370,7 +2370,7 @@ msgstr "Tuo näppäimistökartoitukset"
 
 #: ../src/gui/dialogs/ImportDeviceDialog.cpp:157
 msgid "Import controllers"
-msgstr "Tuo kontrollerit"
+msgstr "Tuo ohjaimet"
 
 #: ../src/gui/dialogs/ImportDeviceDialog.cpp:160
 msgid "Import device name"
@@ -2719,7 +2719,7 @@ msgstr ""
 #: ../src/gui/dialogs/TransportDialog.cpp:89 rc.cpp:375
 #, no-c-format
 msgid "Rosegarden Transport"
-msgstr "Rosegarden Siirto"
+msgstr "Rosegarden Kuljetin"
 
 #: ../src/gui/dialogs/TransportDialog.cpp:846
 #: ../src/gui/dialogs/TransportDialog.cpp:906
@@ -2729,7 +2729,7 @@ msgstr "SÄVELKORKEUDEN RULLA"
 #: ../src/gui/dialogs/TransportDialog.cpp:850
 #: ../src/gui/dialogs/TransportDialog.cpp:910
 msgid "CONTROLLER"
-msgstr "KONTROLLERI"
+msgstr "OHJAIN"
 
 #: ../src/gui/dialogs/TransportDialog.cpp:854
 #: ../src/gui/dialogs/TransportDialog.cpp:914
@@ -3169,7 +3169,7 @@ msgstr "Muuta avain osan sävelkorkeusmuutoksen mukaan"
 
 #: ../src/gui/dialogs/KeySignatureDialog.cpp:123
 msgid "Use specified key.  Do not transpose"
-msgstr "Käytä tiettyä avainta.  Älä aseta sävelkorkeusmuutosta"
+msgstr "Käytä tiettyä avainta.  Älä muuta avainta"
 
 #: ../src/gui/dialogs/KeySignatureDialog.cpp:131
 msgid "Apply to current segment only"
@@ -3185,7 +3185,7 @@ msgstr "Säilytä nykyiset korotusmerkit"
 
 #: ../src/gui/dialogs/KeySignatureDialog.cpp:151
 msgid "Transpose into this key"
-msgstr "Transponoi tähän sävellajiin"
+msgstr "Siirrä tähän sävellajiin"
 
 #: ../src/gui/dialogs/KeySignatureDialog.cpp:318
 msgid "No such key"
@@ -3242,7 +3242,7 @@ msgstr "Vaikuta sävellajiin?"
 
 #: ../src/gui/dialogs/IntervalDialog.cpp:71
 msgid "Transpose within key"
-msgstr "Transponoi sävellajin sisällä"
+msgstr "Siirrä sävellajin sisällä"
 
 #: ../src/gui/dialogs/IntervalDialog.cpp:73
 msgid "Change key for selection"
@@ -3465,7 +3465,7 @@ msgstr "Näytä &Editorit -työkalupalkki"
 #: ../src/gui/application/RosegardenGUIApp.cpp:668
 #: ../src/gui/editors/notation/NotationView.cpp:2109
 msgid "Show Trans&port Toolbar"
-msgstr "Näytä &Siirto -työkalupalkki"
+msgstr "Näytä &Kuljetin -työkalupalkki"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:672
 msgid "Show &Zoom Toolbar"
@@ -4040,7 +4040,7 @@ msgstr "Kytke Muokkain -työkalupalkki..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:3230
 msgid "Toggle the transport toolbar..."
-msgstr "Kytke Siirto -työkalupalkki..."
+msgstr "Kytke Kuljetin -työkalupalkki..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:3240
 msgid "Toggle the zoom toolbar..."
@@ -4048,7 +4048,7 @@ msgstr "Kytke Suurennos -työkalupalkki..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:3250
 msgid "Toggle the Transport"
-msgstr "Kytke Siirto"
+msgstr "Kytke Kuljetin"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:3333
 #: ../src/gui/general/EditViewBase.cpp:487
@@ -4662,7 +4662,7 @@ msgstr "HSpinBox-luokka"
 
 #: ../src/gui/application/main.cpp:437
 msgid "Transposition by interval"
-msgstr "Transponointi intervallilla"
+msgstr "Siirrä intervallilla"
 
 #: ../src/gui/application/main.cpp:438
 msgid "Original designs for rotary controllers"
@@ -4686,7 +4686,7 @@ msgstr "Yksinkertaistettu kiinalainen käännös"
 
 #: ../src/gui/application/main.cpp:442
 msgid "LIRC infrared remote-controller support"
-msgstr "LIRC-infrapunakaukosäädintuki"
+msgstr "LIRC-infrapuna-kaukosäätimen tuki"
 
 #: ../src/gui/application/main.cpp:443
 msgid "MTC slave timing implementation"
@@ -4814,7 +4814,7 @@ msgstr ""
 #: ../src/gui/seqmanager/SequenceManager.cpp:1029
 msgid "Run out of processor power for real-time audio processing.  Cannot continue."
 msgstr ""
-"Prosessorin teho ei riittänyt tosiaikaiseen äänen prosessointiin.  Ei voitu "
+"Prosessorin teho ei riittänyt reaaliaikaiseen äänenkäsittelyyn.  Ei voida "
 "jatkaa."
 
 #: ../src/gui/seqmanager/SequenceManager.cpp:1055
@@ -4939,7 +4939,7 @@ msgstr "Muuta MIDI-suodattimia..."
 
 #: ../src/gui/seqmanager/MidiFilterDialog.cpp:58
 msgid "THRU events to ignore"
-msgstr "Sivuutettavat THRU tapahtumat"
+msgstr "Sivuutettavat THRU-tapahtumat"
 
 #: ../src/gui/editors/eventlist/EventView.cpp:131
 #: ../src/gui/seqmanager/MidiFilterDialog.cpp:60
@@ -5537,7 +5537,7 @@ msgstr "Sovittaja"
 
 #: ../src/gui/configuration/DocumentMetaConfigurationPage.cpp:152
 msgid "Copyright"
-msgstr "Copyright"
+msgstr "Tekijänoikeus"
 
 #: ../src/gui/configuration/DocumentMetaConfigurationPage.cpp:154
 #: ../src/gui/editors/segment/PlayListView.cpp:35
@@ -5656,7 +5656,7 @@ msgstr "Kertaus"
 #: ../src/gui/editors/parameters/TrackParameterBox.cpp:251
 #: ../src/gui/general/EditView.cpp:1453
 msgid "Transpose"
-msgstr "Transponoi"
+msgstr "Siirrä"
 
 #: ../src/gui/configuration/DocumentMetaConfigurationPage.cpp:284
 #: ../src/gui/editors/parameters/SegmentParameterBox.cpp:129
@@ -5719,7 +5719,7 @@ msgid ""
 "Send all MIDI Controllers at start of playback\n"
 "     (will incur noticeable delay)"
 msgstr ""
-"Lähetä kaikki MIDI-kontrollerit toiston alussa\n"
+"Lähetä kaikki MIDI-ohjaimet toiston alussa\n"
 "     (aiheuttaa huomattavan viiveen)"
 
 #: ../src/gui/configuration/SequencerConfigurationPage.cpp:117
@@ -5730,7 +5730,7 @@ msgid ""
 "incur a\n"
 "delay at the start of playback due to the amount of data being transmitted."
 msgstr ""
-"Rosegarden voi lähettää kaikki MIDI-kontrollerit (Jako, kaiku jne.) kaikkiin "
+"Rosegarden voi lähettää kaikki MIDI-ohjaimet (Jako, kaiku jne.) kaikkiin "
 "MIDI-laitteisiin joka\n"
 "kerta kun toista, jos niin haluat.   Huomaa, että tämä valinta aiheuttaa "
 "tavallisesti viiveen\n"
@@ -5904,11 +5904,11 @@ msgstr "Hyväksy Aloita, Lopeta ja Jatka"
 
 #: ../src/gui/configuration/SequencerConfigurationPage.cpp:510
 msgid "JACK transport mode"
-msgstr "JACK siirtymätila"
+msgstr "JACK kuljetintila"
 
 #: ../src/gui/configuration/SequencerConfigurationPage.cpp:516
 msgid "Ignore JACK transport"
-msgstr "Sivuuta JACK siirtymä"
+msgstr "Sivuuta JACK kuljetin"
 
 #: ../src/gui/configuration/SequencerConfigurationPage.cpp:517
 msgid "Sync"
@@ -6524,7 +6524,7 @@ msgstr ""
 
 #: ../src/gui/studio/DeviceManagerDialog.cpp:135
 msgid "Export Bank and Controller data to a Rosegarden interchange file"
-msgstr "Vie pankki- ja kontrolleritiedot Rosegradenin vaihtotiedostoon"
+msgstr "Vie pankki- ja ohjaintiedot Rosegradenin vaihtotiedostoon"
 
 #: ../src/gui/studio/DeviceManagerDialog.cpp:138
 msgid "View and edit Banks and Programs for the selected device"
@@ -6748,7 +6748,7 @@ msgid ""
 "Selects a MSB controller Bank number (MSB/LSB pairs are always unique for "
 "any Device)"
 msgstr ""
-"Valitsee MSB-kontrollerin pankkiluvun (MSB/LSB -parit ovat aina "
+"Valitsee MSB-ohjaimen pankkiluvun (MSB/LSB -parit ovat aina "
 "ainutkertaisia kullekin laitteelle)"
 
 #: ../src/gui/studio/MidiProgramsEditor.cpp:111
@@ -6756,7 +6756,7 @@ msgid ""
 "Selects a LSB controller Bank number (MSB/LSB pairs are always unique for "
 "any Device)"
 msgstr ""
-"Valitsee LSB-kontrollerin pankkiluvun (MSB/LSB -parit ovat aina "
+"Valitsee LSB-ohjaimen pankkiluvun (MSB/LSB -parit ovat aina "
 "ainutkertaisia kullekin laitteelle)"
 
 #: ../src/gui/studio/MidiProgramsEditor.cpp:116
@@ -8688,7 +8688,7 @@ msgid ""
 "Please ensure the device is configured correctly in the Manage MIDI Devices "
 "dialog in the main window."
 msgstr ""
-"Tälle laitteelle ei oltu määritelty pedaalin hallitsijaa.\n"
+"Tälle laitteelle ei oltu määritelty pedaalin ohjainta.\n"
 "Ole hyvä, ja varmista että laite on määritetty oikein pääikkunan Hallitse "
 "MIDI-laitteita -valikossa."
 
@@ -9130,11 +9130,11 @@ msgstr "%1 - %2.%3%4"
 
 #: ../src/gui/rulers/ControlRulerEventInsertCommand.cpp:36
 msgid "Insert Controller Event"
-msgstr "Syötä kontrolleritapahtuma"
+msgstr "Syötä ohjaintapahtuma"
 
 #: ../src/gui/rulers/ControlChangeCommand.cpp:35
 msgid "Control Change"
-msgstr "Kontrollimuutos"
+msgstr "Hallintamuutos"
 
 #: ../src/gui/general/EditView.cpp:866
 #: ../src/gui/rulers/ControllerEventsRuler.cpp:188
@@ -9143,19 +9143,19 @@ msgstr "Tukematon tapahtumatyyppi"
 
 #: ../src/gui/rulers/ControllerEventsRuler.cpp:203
 msgid "Controller Events"
-msgstr "Kontrolleritapahtumia"
+msgstr "Ohjaintapahtumia"
 
 #: ../src/gui/rulers/ControllerEventsRuler.cpp:278
 msgid "Controller Event Number"
-msgstr "Kontrolleritapahtumien määrä"
+msgstr "Ohjaintapahtumien määrä"
 
 #: ../src/gui/rulers/ControllerEventsRuler.cpp:471
 msgid "Add line of controllers"
-msgstr "Lisää kontrolleririvi"
+msgstr "Lisää ohjainrivi"
 
 #: ../src/gui/rulers/PropertyViewRuler.cpp:72
 msgid "%1 controller"
-msgstr "%1 -kontrolleri"
+msgstr "%1 -ohjain"
 
 #: ../src/gui/rulers/ChordNameRuler.cpp:97
 msgid ""
@@ -9167,7 +9167,7 @@ msgstr ""
 
 #: ../src/gui/rulers/ControlRulerEventEraseCommand.cpp:37
 msgid "Erase Controller Event(s)"
-msgstr "Poista kontrolleritapahtum(i)a"
+msgstr "Poista ohjaintapahtum(i)a"
 
 #: ../src/gui/rulers/LoopRuler.cpp:70
 msgid ""
@@ -9325,7 +9325,7 @@ msgstr "Tyhjää viivain"
 
 #: ../src/gui/general/EditView.cpp:804
 msgid "Insert line of controllers"
-msgstr "Lisää kontrolleririvi"
+msgstr "Lisää ohjainrivi"
 
 #: ../src/gui/general/EditView.cpp:808
 msgid "Flip forward"
@@ -9345,7 +9345,7 @@ msgstr "Valitse kaikki ominaisuuksien arvot"
 
 #: ../src/gui/general/EditView.cpp:859
 msgid "%1 Controller %2 %3"
-msgstr "%1 -kontrolleri %2 %3"
+msgstr "%1 -ohjain %2 %3"
 
 #: ../src/gui/general/EditView.cpp:1031
 msgid "I"
@@ -9421,23 +9421,23 @@ msgstr "Puolisävelten määrällä: "
 
 #: ../src/gui/general/EditView.cpp:1461 ../src/gui/general/EditView.cpp:1483
 msgid "Transposing..."
-msgstr "Transponoidaan..."
+msgstr "Siirretään..."
 
 #: ../src/gui/general/EditView.cpp:1501
 msgid "Transposing up one semitone..."
-msgstr "Transponoidaan ylös yksi puolisävelaskel..."
+msgstr "Siirrä ylös yksi puolisävelaskel..."
 
 #: ../src/gui/general/EditView.cpp:1510
 msgid "Transposing up one octave..."
-msgstr "Transponoidaan ylös yksi oktaavi..."
+msgstr "Siirrä ylös yksi oktaavi..."
 
 #: ../src/gui/general/EditView.cpp:1519
 msgid "Transposing down one semitone..."
-msgstr "Transponoidaan alas yksi puolisävelaskel..."
+msgstr "Siirrä alas yksi puolisävelaskel..."
 
 #: ../src/gui/general/EditView.cpp:1528
 msgid "Transposing down one octave..."
-msgstr "Transponoidaan alas yksi oktaavi..."
+msgstr "Siirretään alas yksi oktaavi..."
 
 #: ../src/gui/general/EditView.cpp:1540
 msgid "Inverting..."
@@ -9798,7 +9798,7 @@ msgstr "Aika -työkalupalkki"
 #: rc.cpp:18 rc.cpp:36 rc.cpp:57 rc.cpp:63 rc.cpp:126 rc.cpp:258 rc.cpp:354
 #, no-c-format
 msgid "Transport Toolbar"
-msgstr "Siirto -työkalupalkki"
+msgstr "Kuljetin -työkalupalkki"
 
 #: rc.cpp:24 rc.cpp:42 rc.cpp:129 rc.cpp:360
 #, no-c-format
@@ -9808,7 +9808,7 @@ msgstr "Suurennos -työkalupalkki"
 #: rc.cpp:45 rc.cpp:60 rc.cpp:105 rc.cpp:243 rc.cpp:339
 #, no-c-format
 msgid "T&ransport"
-msgstr "&Siirto"
+msgstr "&Kuljetin"
 
 #: rc.cpp:51
 #, no-c-format
@@ -10297,7 +10297,7 @@ msgstr ""
 "&nbsp;&nbsp;* valitse ulostulolaite<br>\n"
 "&nbsp;&nbsp;* valitse yksi laitteen vapaista instrumenteista (#1 - #16)<br>\n"
 "&nbsp;&nbsp;* aseta instrumentin ulostulokanava, ohjelma, pankki, ja \n"
-"kontrollerit instrumentin ominaisuuslaatikosta\n"
+"ohjaimet instrumentin ominaisuuslaatikosta\n"
 
 #: ../docs/en/tips.cpp:13
 msgid ""
@@ -10453,7 +10453,7 @@ msgstr ""
 "<br><br>Piirrä osa tai tapahtumalohko siirtääksesi sitä, vedä lohkon "
 "oikeasta reunasta mitoittaaksesi sen koon uudelleen, ja vedä keskimmäinen "
 "nappi pohjaan painettuna piirtääksesi uuden osan tai tapahtuman.<br><br> "
-"(Varsinaisten piirto-, siirto- ja uudelleenmitoitustyökalujen käyttö on "
+"(Varsinaisten piirto-, kuljetin- ja uudelleenmitoitustyökalujen käyttö on "
 "tietyssti yhä nopeampaa toistuvissa operaatioissa.)</p>\n"
 
 #: ../docs/en/tips.cpp:99
@@ -10639,7 +10639,7 @@ msgid ""
 "on the values displayed in the transport window or tempo rulers?</p>\n"
 msgstr ""
 "<p>...että voit lisätä tempo- ja tahtilajimerkintämuutokset "
-"kaksoisklikkaamalla näytettyjä arvoja siirtymäikkunassa tai tempoviivaimessa?"
+"kaksoisklikkaamalla näytettyjä arvoja kuljetinikkunassa tai tempoviivaimessa?"
 "</p>\n"
 
 #: ../docs/en/tips.cpp:197
@@ -10648,7 +10648,7 @@ msgid ""
 "count, and a visual metronome as well as real time?<br><br>Just click on the "
 "small button at the extreme top left of the window.</p>\n"
 msgstr ""
-"<p>...että siirtymäikkuna voi näyttää musiikin ajan, näytteen kehysluvun, ja "
+"<p>...että kuljetinikkuna voi näyttää musiikin ajan, näytteen kehysluvun, ja "
 "näkyvän metronomin, kuten myös oikean ajan? <br><br>Klikkaan vain pientä "
 "painiketta, joka on äärimmäisenä ikkunan vasemmassa yläkulmassa.</p>\n"
 
@@ -10700,9 +10700,9 @@ msgid ""
 "and velocity rulers in order to bring the item you wish to adjust into\n"
 "focus.</p>\n"
 msgstr ""
-"<p>...että jos sinulla on enemmän kuin yksi nuotti tai kontrolleritapahtuma "
+"<p>...että jos sinulla on enemmän kuin yksi nuotti tai ohjaintapahtuma "
 "samanaikaisesti, voit\n"
-"käyttää myös näppäimiä käydessäsi läpi kontrollerilla olevan tapahtumapinon "
+"käyttää myös näppäimiä käydessäsi läpi ohjaimella olevan tapahtumapinon "
 "ja nopeusviivainta tuodessasi esiin haluamasi osion.</p>\n"
 
 #: ../docs/en/tips.cpp:229
@@ -10796,7 +10796,7 @@ msgid ""
 msgstr ""
 "<p>...että Rosegardenissa on nyt raidan ominaisuudet kun <b>Luodaan osa:</b> "
 "tietyillä\n"
-"ominaisuuksilla.<br><br>Voita esivalita avaimen, sävellajisiirron, värin, ja "
+"ominaisuuksilla.<br><br>Voita esivalita avaimen, sävelkorkeuden, värin, ja "
 "määritellä\n"
 "korkeimmat ja alimmat soitettavat nuotit (nuotit tämän alueen ulkopuolella "
 "näkyvät\n"
@@ -10824,7 +10824,7 @@ msgstr ""
 "ominaisuuksista, jotka kuvaavat yli 300\n"
 "maailmalta löytyvää musiikki-instrumenttia, ryhmiteltyinä muutamaan "
 "sopivaan\n"
-"luokkaan.<br><br>Kukin esiasetus sisältää avaimen, sävellajisiirron, ja "
+"luokkaan.<br><br>Kukin esiasetus sisältää avaimen, sävelkorkeuden, ja "
 "soittoääniala-\n"
 "ehdotuksen sekä harrastelija- että ammattilaissoittajille.<br><br>Napauta \n"
 "<b>Lataa</b>-painiketta uuden raidan ominaisuuslaatikossa aloittaaksesi! <i> "
