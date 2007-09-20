@@ -45,6 +45,7 @@ MatrixElement::MatrixElement(Event *event) :
     //                          << this << " wrapping " << event << endl;
     setPen(GUIPalette::getColour(GUIPalette::MatrixElementBorder));
     setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
+    colorFromVelocity();
 }
 
 MatrixElement::~MatrixElement()
@@ -69,25 +70,31 @@ bool MatrixElement::getVisibleRectangle(QRectF &rectangle)
     return false;
 }
 
-void MatrixElement::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+QVariant MatrixElement::itemChange(GraphicsItemChange change, const QVariant &value)
 {
-    // set brush color according to selected state or velocity
-    //
-    if (isSelected()) {
-        setBrush(QBrush(GUIPalette::getColour(GUIPalette::SelectedElement)));
-    } else {
-        // Get velocity for colouring
+    if (change == ItemSelectedChange && scene()) {
+        // set brush color according to selected state or velocity
         //
-        using Rosegarden::BaseProperties::VELOCITY;
-        long velocity = 127;
-        if (event()->has(VELOCITY))
-            event()->get
-            <Int>(VELOCITY, velocity);
-
-        setBrush(QBrush(DefaultVelocityColour::getInstance()->getColour(velocity)));
+        if (value.toBool() == true) {
+            setBrush(QBrush(GUIPalette::getColour(GUIPalette::SelectedElement)));
+        } else {
+            colorFromVelocity();
+        }
     }
-    
-    QGraphicsRectItem::paint(painter, option, widget);
+    return QGraphicsRectItem::itemChange(change, value);
+}
+
+void MatrixElement::colorFromVelocity()
+{
+    // Get velocity for colouring
+    //
+    using Rosegarden::BaseProperties::VELOCITY;
+    long velocity = 127;
+    if (event()->has(VELOCITY))
+        event()->get
+        <Int>(VELOCITY, velocity);
+
+    setBrush(QBrush(DefaultVelocityColour::getInstance()->getColour(velocity)));    
 }
 
 }
