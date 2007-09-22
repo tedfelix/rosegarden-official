@@ -258,8 +258,6 @@ const int GUIPalette::TriggerNoteMinValue = 140;
 const int GUIPalette::OutRangeNoteHue = 0;
 const int GUIPalette::OutRangeNoteMinValue = 200;
 
-const int GUIPalette::CollidingNoteHue = 320;
-const int GUIPalette::CollidingNoteMinValue = 255;
 const int GUIPalette::CollisionHaloHue = 42;
 const int GUIPalette::CollisionHaloSaturation = 200;
 

@@ -92,7 +92,7 @@ NotationStaff::NotationStaff(QCanvas *canvas, Segment *segment,
         m_colourQuantize(true),
         m_showUnknowns(true),
         m_showRanges(true),
-        m_showCollisions(0),
+        m_showCollisions(true),
         m_printPainter(0),
         m_ready(false)
 {
@@ -103,7 +103,7 @@ NotationStaff::NotationStaff(QCanvas *canvas, Segment *segment,
     // Shouldn't change these  during the lifetime of the staff, really:
     m_showUnknowns = config->readBoolEntry("showunknowns", false);
     m_showRanges = config->readBoolEntry("showranges", true);
-    m_showCollisions = config->readNumEntry("showcollisions", 2);
+    m_showCollisions = config->readBoolEntry("showcollisions", true);
 
     m_keySigCancelMode = config->readNumEntry("keysigcancelmode", 1);
 
@@ -1710,21 +1710,15 @@ NotationStaff::renderNote(ViewElementList::iterator &vli)
 
         // The normal on-screen case
 
-        params.setCollision(false);
         bool collision = false;
         QCanvasItem * haloItem = 0;
-        if (m_showCollisions != 0) {
+        if (m_showCollisions) {
             collision = elt->isColliding();
             if (collision) {
-                if (m_showCollisions == 2) {
-                    // Make collision halo
-                    QCanvasPixmap *haloPixmap = factory->makeNoteHaloPixmap(params);
-                    haloItem = new QCanvasNotationSprite(*elt, haloPixmap, m_canvas);
-                    haloItem->setZ(-1);
-                } else {
-                    // Ask notePixmapFactory for collision color
-                    params.setCollision(true);
-                }
+                // Make collision halo
+                QCanvasPixmap *haloPixmap = factory->makeNoteHaloPixmap(params);
+                haloItem = new QCanvasNotationSprite(*elt, haloPixmap, m_canvas);
+                haloItem->setZ(-1);
             }
         }
 
@@ -1732,15 +1726,13 @@ NotationStaff::renderNote(ViewElementList::iterator &vli)
 
         int z = 0;
         if (factory->isSelected())
-            z = 4;
-        else if (collision)
             z = 3;
         else if (quantized)
             z = 2;
 
         setPixmap(elt, pixmap, z, SplitToFit);
 
-        if ((collision) && (m_showCollisions == 2)) {
+        if (collision) {
             // Display collision halo
             LinedStaffCoords coords =
                 getCanvasCoordsForLayoutCoords(elt->getLayoutX(),

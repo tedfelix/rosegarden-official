@@ -296,19 +296,11 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     m_showRanges->setChecked(defaultShowRanges);
     layout->addWidget(m_showRanges, 6, 1);
 
-    layout->addWidget(new QLabel(
-                            i18n("Show superimposed notes"), frame), 7, 0);
-    m_showCollisions = new KComboBox(frame);
-    m_showCollisions->setEditable(false);
-    m_showCollisions->insertItem(i18n("As normal single notes"));
-    m_showCollisions->insertItem(i18n("In a different color"));
-    m_showCollisions->insertItem(i18n("High-lit with a halo effect"));
-    int defaultShowCollisions = m_cfg->readNumEntry("showcollisions", 2);
-    if (defaultShowCollisions >= 0 && defaultShowCollisions <= 2) {
-        m_showCollisions->setCurrentItem(defaultShowCollisions);
-    }
+    m_showCollisions = new QCheckBox
+                   (i18n("High-lit superimposed notes with a halo effect"), frame);
+    bool defaultShowCollisions = m_cfg->readBoolEntry("showcollisions", true);
+    m_showCollisions->setChecked(defaultShowCollisions);
     layout->addWidget(m_showCollisions, 7, 1);
-
 
     addTab(frame, i18n("Layout"));
 
@@ -604,7 +596,7 @@ NotationConfigurationPage::apply()
     m_cfg->writeEntry("showunknowns", m_showUnknowns->isChecked());
     m_cfg->writeEntry("showinvisibles", m_showInvisibles->isChecked());
     m_cfg->writeEntry("showranges", m_showRanges->isChecked());
-    m_cfg->writeEntry("showcollisions", m_showCollisions->currentItem());
+    m_cfg->writeEntry("showcollisions", m_showCollisions->isChecked());
     m_cfg->writeEntry("style", m_untranslatedNoteStyle[m_noteStyle->currentItem()]);
     m_cfg->writeEntry("inserttype", m_insertType->currentItem());
     m_cfg->writeEntry("autobeam", m_autoBeam->isChecked());
