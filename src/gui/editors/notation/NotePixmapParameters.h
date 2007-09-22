@@ -92,8 +92,6 @@ public:
 
     void setInRange(bool inRange)         { m_inRange          = inRange;    }
 
-    void setCollision(bool collision)     { m_isColliding     = collision;  }
-
     std::vector<Mark> getNormalMarks() const;
     std::vector<Mark> getAboveMarks() const; // bowings, pause etc
 
@@ -143,8 +141,6 @@ private:
     int     m_tieLength;
 
     bool    m_inRange;
-
-    bool m_isColliding;
 
     std::vector<Mark> m_marks;
 };

@@ -66,8 +66,7 @@ NotePixmapParameters::NotePixmapParameters(Note::Type noteType,
         m_tuplingLineGradient(0.0),
         m_tied(false),
         m_tieLength(0),
-        m_inRange(true),
-        m_isColliding(false)
+        m_inRange(true)
 {
     // nothing else
 }

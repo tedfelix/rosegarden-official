@@ -251,8 +251,7 @@ protected:
         QuantizedColour,
         HighlightedColour,
         TriggerColour,
-        OutRangeColour,
-        CollisionColour
+        OutRangeColour
     };
 
     /// draws selected/shaded status from m_selected/m_shaded:

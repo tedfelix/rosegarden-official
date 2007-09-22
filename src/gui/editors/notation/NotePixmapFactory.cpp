@@ -483,7 +483,6 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
     NoteCharacter body = getCharacter
                          (charName,
                           params.m_highlighted ? HighlightedColour :
-                          params.m_isColliding ? CollisionColour :
                           params.m_quantized ? QuantizedColour :
                           params.m_trigger ? TriggerColour :
                           params.m_inRange ? PlainColour : OutRangeColour,
@@ -3240,13 +3239,6 @@ NotePixmapFactory::getCharacter(CharName name, NoteCharacter &ch,
                (name,
                 GUIPalette::OutRangeNoteHue,
                 GUIPalette::OutRangeNoteMinValue,
-                ch, charType, inverted);
-
-    case CollisionColour:
-        return m_font->getCharacterColoured
-               (name,
-                GUIPalette::CollidingNoteHue,
-                GUIPalette::CollidingNoteMinValue,
                 ch, charType, inverted);
     }
 

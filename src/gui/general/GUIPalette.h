@@ -126,8 +126,6 @@ public:
     static const int OutRangeNoteHue;
     static const int OutRangeNoteMinValue;
 
-    static const int CollidingNoteHue;
-    static const int CollidingNoteMinValue;
     static const int CollisionHaloHue;
     static const int CollisionHaloSaturation;
 
