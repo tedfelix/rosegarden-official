@@ -1,5 +1,6 @@
 #include <QApplication>
 #include <QToolBar>
+#include <QSlider>
 #include <QMainWindow>
 #include "gvtest.h"
 #include "MatrixTest.h"
@@ -28,6 +29,14 @@ int main(int argc, char **argv)
   MatrixTest* matrixTest = new MatrixTest(&mainWindow);
   
   mainWindow.setCentralWidget(matrixTest);
+  
+  QToolBar *toolbar = mainWindow.addToolBar("mainToolBar");
+  
+  QSlider* zoomSlider = new QSlider(Qt::Horizontal, toolbar);
+  zoomSlider->setRange(1, +100);
+  zoomSlider->setValue(10);
+  toolbar->addWidget(zoomSlider);
+  QObject::connect(zoomSlider, SIGNAL(valueChanged(int)), matrixTest, SLOT(zoomChanged(int)));
   
 #endif
   mainWindow.show();

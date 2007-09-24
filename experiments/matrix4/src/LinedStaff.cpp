@@ -826,6 +826,7 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
             lineItem->setPen(pen);
 
             lineItem->setZValue( -1);
+            lineItem->setFlag(QGraphicsItem::ItemIgnoresTransformations);
             m_canvas->addItem(lineItem);
 
             LineRec beatLine(layoutX + gridLine * dx, lineItem);
@@ -843,6 +844,7 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
         
         lineItem->setPen(pen);
         lineItem->setZValue( -3);
+        lineItem->setFlag(QGraphicsItem::ItemIgnoresTransformations);
         m_canvas->addItem(lineItem);
         if (hidden)
             lineItem->hide();
@@ -1011,6 +1013,7 @@ LinedStaff::resizeStaffLineRow(int row, double x, double length)
         pen.setWidth(barThickness);
         line->setPen(pen);
         line->setZValue( -2);
+        line->setFlag(QGraphicsItem::ItemIgnoresTransformations);
         m_canvas->addItem(line);
         line->show();
         m_staffConnectingLines[row] = line;
@@ -1052,6 +1055,7 @@ LinedStaff::resizeStaffLineRow(int row, double x, double length)
         //      if (j > 0) line->setSignificant(false);
 
         line->setZValue(z);
+        line->setFlag(QGraphicsItem::ItemIgnoresTransformations);
         m_staffLines[row][lineIndex] = line;
         m_canvas->addItem(line);
         line->show();

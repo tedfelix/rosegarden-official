@@ -70,6 +70,15 @@ void MatrixTest::layout() {
     m_matrixStaff->positionAllElements();
 }
 
+void MatrixTest::zoomChanged(int val)
+{
+    
+    scale(qreal(val) / 10.0, 1);
+//    update();
+}
+
 MatrixTest::~MatrixTest()
 {
 }
+
+#include "MatrixTest.moc"

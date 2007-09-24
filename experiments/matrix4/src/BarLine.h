@@ -46,7 +46,7 @@ public:
         m_baseBarThickness(baseBarThickness),
         m_lineSpacing(lineSpacing),
         m_inset(inset),
-        m_style(style) { }
+        m_style(style) { setFlag(QGraphicsItem::ItemIgnoresTransformations); }
 
     double getLayoutX() const { return m_layoutX; }
     

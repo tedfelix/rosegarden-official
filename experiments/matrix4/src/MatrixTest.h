@@ -17,12 +17,16 @@ class MatrixVLayout;
 
 class MatrixTest : public QGraphicsView
 {
+    Q_OBJECT
 public:
 	MatrixTest(QWidget *parent);
 	virtual ~MatrixTest();
 	
 	void layout();
-	
+
+public slots:
+    void zoomChanged(int);
+    
 protected:
     
     void buildTestComposition();
