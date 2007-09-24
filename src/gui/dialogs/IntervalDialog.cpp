@@ -214,15 +214,9 @@ IntervalDialog::slotSetTargetNote(int pitch, int octave, int step)
     
     text += stepName[displayInterval % 7];
     int octaves = displayInterval / 7;
-    if (octaves == 1)
-    {
-       text += i18n(" and 1 octave");
-    }
-    else if (octaves > 1)
-    {
-       text += i18n(" and %1 octaves").arg(octaves);
-    }
-
+    text += i18n( " and 1 octave",
+                  " and %n octaves",
+                  octaves );
     if (displayInterval != 0)
     {
         if (!down)
