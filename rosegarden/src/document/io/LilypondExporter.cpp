@@ -792,6 +792,9 @@ LilypondExporter::write()
 
                     str << "<< " << std::endl;
 
+		    // The octavation is omitted in the instrument name.
+		    // HJJ: Should it be automatically added to the clef: G^8 ?
+		    // What if two segments have different transpose in a track?
                     std::ostringstream staffNameWithTranspose;
 		    staffNameWithTranspose << "\\markup { \\column { \"" << staffName.str() << " \"";
 		    if (((*i)->getTranspose() % 12) != 0) {
