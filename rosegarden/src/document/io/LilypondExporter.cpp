@@ -792,10 +792,30 @@ LilypondExporter::write()
 
                     str << "<< " << std::endl;
 
+                    std::ostringstream staffNameWithTranspose;
+		    staffNameWithTranspose << "\\markup { \\column { \"" << staffName.str() << " \"";
+		    if (((*i)->getTranspose() % 12) != 0) {
+			staffNameWithTranspose << " \\line { ";
+			switch ((*i)->getTranspose() % 12) {
+			case 1 : staffNameWithTranspose << "\"in D\" \\smaller \\flat"; break;
+			case 2 : staffNameWithTranspose << "\"in D\""; break;
+			case 3 : staffNameWithTranspose << "\"in E\" \\smaller \\flat"; break;
+			case 4 : staffNameWithTranspose << "\"in E\""; break;
+			case 5 : staffNameWithTranspose << "\"in F\""; break;
+			case 6 : staffNameWithTranspose << "\"in G\" \\smaller \\flat"; break;
+			case 7 : staffNameWithTranspose << "\"in G\""; break;
+			case 8 : staffNameWithTranspose << "\"in A\" \\smaller \\flat"; break;
+			case 9 : staffNameWithTranspose << "\"in A\""; break;
+			case 10 : staffNameWithTranspose << "\"in B\" \\smaller \\flat"; break;
+			case 11 : staffNameWithTranspose << "\"in B\""; break;
+			}
+			staffNameWithTranspose << " }";
+		    }
+		    staffNameWithTranspose << " } }";
 		    if (m_languageLevel < LILYPOND_VERSION_2_10) {
-			str << indent(++col) << "\\set Staff.instrument = \"" << staffName.str() << " \"" << std::endl;
+			str << indent(++col) << "\\set Staff.instrument = " << staffNameWithTranspose.str() << std::endl;
 		    } else {
-			str << indent(++col) << "\\set Staff.instrumentName = \"" << staffName.str() << " \"" << std::endl;
+			str << indent(++col) << "\\set Staff.instrumentName = " << staffNameWithTranspose.str() << std::endl;
 		    }
 
                     if (m_exportMidi) {
