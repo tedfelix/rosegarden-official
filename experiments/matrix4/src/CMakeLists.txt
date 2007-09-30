@@ -77,6 +77,7 @@ SET(generalgui_SRCS
 	generalgui/DefaultVelocityColour.cpp
     generalgui/GUIPalette.cpp
 	generalgui/VelocityColour.cpp
+	generalgui/ZoomSlider.cpp
 )
 
 ADD_LIBRARY(RosegardenBase STATIC

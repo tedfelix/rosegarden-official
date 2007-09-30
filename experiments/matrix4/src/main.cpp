@@ -9,9 +9,9 @@ int main(int argc, char **argv)
 {
   QApplication app(argc, argv);
 
+#if 0
   QMainWindow mainWindow;
 
-#if 0
   QToolBar* toolbar = new QToolBar(&mainWindow);
   
   
@@ -24,22 +24,16 @@ int main(int argc, char **argv)
   mainWindow.setCentralWidget(gvtest);
   
   gvtest->setup();
+
+  mainWindow.show();
+
 #else
 
-  MatrixTest* matrixTest = new MatrixTest(&mainWindow);
-  
-  mainWindow.setCentralWidget(matrixTest);
-  
-  QToolBar *toolbar = mainWindow.addToolBar("mainToolBar");
-  
-  QSlider* zoomSlider = new QSlider(Qt::Horizontal, toolbar);
-  zoomSlider->setRange(1, +100);
-  zoomSlider->setValue(10);
-  toolbar->addWidget(zoomSlider);
-  QObject::connect(zoomSlider, SIGNAL(valueChanged(int)), matrixTest, SLOT(zoomChanged(int)));
+  MatrixTest* matrixTest = new MatrixTest();
+    
+  matrixTest->show();
   
 #endif
-  mainWindow.show();
   
   return app.exec();
 }

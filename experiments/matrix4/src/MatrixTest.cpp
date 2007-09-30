@@ -3,6 +3,8 @@
 #include "MatrixStaff.h"
 
 #include <QGraphicsScene>
+#include <QGraphicsView>
+#include <QToolBar>
 #include <base/Composition.h>
 #include <base/Track.h>
 #include <base/Segment.h>
@@ -14,17 +16,44 @@
 #include "MatrixVLayout.h"
 #include "MatrixStaff.h"
 
-MatrixTest::MatrixTest(QWidget * parent)
-    : QGraphicsView(parent)
+MatrixTest::MatrixTest(QWidget * parent, Qt::WindowFlags flags)
+    : QMainWindow(parent, flags)
 {
-    QGraphicsScene *scene = new QGraphicsScene(this);
-    setScene(scene);
-
-    setDragMode(RubberBandDrag);
+    m_view = new QGraphicsView(this);
     
+    setCentralWidget(m_view);
+    
+    QGraphicsScene *scene = new QGraphicsScene(m_view);
+    m_view->setScene(scene);
+
+    m_view->setDragMode(QGraphicsView::RubberBandDrag);
+    
+    buildToolBar();
     buildTestComposition();
     buildMatrixStaff();
     layout();
+}
+
+void MatrixTest::buildToolBar() {
+    QToolBar *toolbar = addToolBar("mainToolBar");
+
+    
+    std::vector<double> zoomSizes; // in units-per-pixel
+    
+    static double factors[] = { 0.025, 0.05, 0.1, 0.2, 0.5,
+                                1.0, 1.5, 2.5, 5.0, 10.0, 20.0 };
+    for (unsigned int i = 0; i < sizeof(factors) / sizeof(factors[0]); ++i) {
+        zoomSizes.push_back(factors[i]);
+    }
+
+    m_zoomSlider = new Rosegarden::ZoomSlider<double>
+                    (zoomSizes, -1, Qt::Horizontal, toolbar);
+    m_zoomSlider->setTracking(true);
+    m_zoomSlider->setFocusPolicy(Qt::NoFocus);
+    
+    toolbar->addWidget(m_zoomSlider);
+    QObject::connect(m_zoomSlider, SIGNAL(valueChanged(int)), this, SLOT(zoomChanged(int)));
+
 }
 
 void MatrixTest::buildTestComposition() {
@@ -54,7 +83,7 @@ void MatrixTest::buildMatrixStaff() {
     int resolution = 8;
     int id = 0;
     
-    m_matrixStaff = new Rosegarden::MatrixStaff(scene(), m_segment, snapGrid, m_viewElementManager, id, resolution);
+    m_matrixStaff = new Rosegarden::MatrixStaff(m_view->scene(), m_segment, snapGrid, m_viewElementManager, id, resolution);
     
 }
 
@@ -72,8 +101,10 @@ void MatrixTest::layout() {
 
 void MatrixTest::zoomChanged(int val)
 {
+    double zoomValue = m_zoomSlider->getCurrentSize();
     
-    scale(qreal(val) / 10.0, 1);
+    qDebug("MatrixTest::zoomChanged : %f\n", zoomValue);
+    m_view->scale(zoomValue, 1.0);
 //    update();
 }
 
