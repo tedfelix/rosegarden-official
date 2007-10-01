@@ -104,6 +104,7 @@ void MatrixTest::zoomChanged(int val)
     double zoomValue = m_zoomSlider->getCurrentSize();
     
     qDebug("MatrixTest::zoomChanged : %f\n", zoomValue);
+    m_view->resetTransform();
     m_view->scale(zoomValue, 1.0);
 //    update();
 }
