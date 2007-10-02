@@ -63,30 +63,30 @@ IntervalDialog::IntervalDialog(QWidget *parent, bool askChangeKey, bool askTrans
     //m_intervalPitchLabel = new QLabel( i18n("Pitch: %1").arg(intervalChromatic), hBox);
     //m_intervalOctavesLabel = new QLabel( i18n("Octaves: %1").arg(intervalDiatonic / 7), hBox);
     //m_intervalStepsLabel = new QLabel( i18n("Steps: %1").arg(intervalDiatonic % 7), hBox);
-    m_intervalLabel = new QLabel( i18n("prime"), vBox);
+    m_intervalLabel = new QLabel( i18n("perfect unison"), vBox);
 
     if (askChangeKey)
     {
-               QButtonGroup *affectKeyGroup = new QButtonGroup(1, Horizontal, i18n("Affect key?"), vBox);
-               m_transposeWithinKey = new QRadioButton(i18n("Transpose within key"), affectKeyGroup);
-               m_transposeWithinKey->setChecked(true);
-               m_transposeChangingKey = new QRadioButton(i18n("Change key for selection"), affectKeyGroup);
+        QButtonGroup *affectKeyGroup = new QButtonGroup(1, Horizontal, i18n("Affect key?"), vBox);
+        m_transposeWithinKey = new QRadioButton(i18n("Transpose within key"), affectKeyGroup);
+        m_transposeWithinKey->setChecked(true);
+        m_transposeChangingKey = new QRadioButton(i18n("Change key for selection"), affectKeyGroup);
     }
     else
     {
-       m_transposeChangingKey = NULL;
-       m_transposeWithinKey = NULL;
+        m_transposeChangingKey = NULL;
+        m_transposeWithinKey = NULL;
     }
     
     if (askTransposeSegmentBack)
     {
-    	m_transposeSegmentBack = new QCheckBox( "Adjust segment transposition in opposite direction (maintain audible pitch)", vBox );
-    	m_transposeSegmentBack->setTristate(false);
-    	m_transposeSegmentBack->setChecked(false);
+        m_transposeSegmentBack = new QCheckBox( "Adjust segment transposition in opposite direction (maintain audible pitch)", vBox );
+        m_transposeSegmentBack->setTristate(false);
+        m_transposeSegmentBack->setChecked(false);
     }
     else
     {
-    	m_transposeSegmentBack = NULL;
+        m_transposeSegmentBack = NULL;
     }
 
     connect(m_referencenote, SIGNAL(noteChanged(int,int,int)),
@@ -156,80 +156,109 @@ IntervalDialog::getChromaticDistance()
     return getOctaveDistance() * 12 + getStepDistanceChromatic() + getAccidentalCorrectionChromatic();
 }
 
+QString
+IntervalDialog::getIntervalName(int intervalDiatonic, int intervalChromatic)
+{
+    // displayInterval: an intervalDiatonic of -3 will yield a displayInterval of 3 and
+    // set the boolean 'down' to true.
+    int displayIntervalDiatonic = intervalDiatonic;
+    int displayIntervalChromatic = intervalChromatic;
+    bool down = intervalDiatonic < 0;
+    if (down)
+    {
+        displayIntervalDiatonic = -displayIntervalDiatonic;
+        displayIntervalChromatic = -displayIntervalChromatic;
+    }
+    
+    // the 'natural' (perfect / major) chromatic intervals associated 
+    // with each diatonic step
+    static int stepIntervals[] = { 0,2,4,5,7,9,11 };
+        
+        
+    int octaves = displayIntervalDiatonic / 7;
+    int deviation = displayIntervalChromatic % 12 - stepIntervals[displayIntervalDiatonic % 7];
+    
+    // show the step for an unison only if the octave doesn't change, any other interval 
+    //  always, and augmented/dimnished unisons (modulo octaves) always.
+    // Note that this will yield 'up 3 octaves and a dimnished unison' rather than 'up
+    //  2 octaves and a dimnished octave', due to the fact that the logic largely works 
+    //  % 7... 
+    bool showStep = displayIntervalDiatonic == 0 || 
+        displayIntervalDiatonic % 7 != 0 || deviation != 0;
+    
+    QString text = "";
+    if (displayIntervalChromatic != 0 || displayIntervalDiatonic != 0)
+    {
+        if (!down)
+        {
+            text += i18n("up ");
+        }
+        else
+        {
+            text += i18n("down ");
+        }
+    }
+    
+    if (octaves != 0)
+    {
+        text += i18n( "1 octave",
+                      "%n octaves",
+                      octaves );
+        if (showStep)
+        {
+            text += " and ";
+        }
+    }
+    
+    if (showStep)
+    {
+        switch (displayIntervalDiatonic % 7)
+        {
+        // First the dimnished/perfect/augmented:
+        case 0: // unison or octaves
+        case 3: // fourth
+        case 4: // fifth
+           if (deviation == -1)
+               text += "a diminished ";
+               else if (deviation == 1)
+               text += "an augmented ";
+           else if (deviation == 0)
+               text += "a perfect ";
+           else
+               text += "an (unknown) ";
+           break;
+        // Then the major/minor:
+        case 1: // second
+        case 2: // third
+        case 5: // sixth
+        case 6: // seventh
+           if (deviation == -1)
+               text += "a minor ";
+           else if (deviation == 0)
+               text += "a major ";
+           else
+               text += "an (unknown) ";
+           break;
+        default:
+           text += "an (unknown) ";
+        }
+    
+        static QString stepName[] = {
+            i18n("unison"), i18n("second"), i18n("third"), i18n("fourth"),
+            i18n("fifth"),  i18n("sixth"),  i18n("seventh")
+        };
+        text += stepName[displayIntervalDiatonic % 7];
+    }
+    return text;
+}
+
 void
 IntervalDialog::slotSetTargetNote(int pitch, int octave, int step)
 {
     intervalChromatic = pitch - m_referencenote->getPitch();
     intervalDiatonic = (octave * 7 + step) - (m_referencenote->getOctave() * 7 + m_referencenote->getStep());
 
-    //m_intervalPitchLabel->setText( i18n("Pitch: %1").arg(intervalChromatic) );
-    //m_intervalOctavesLabel->setText( i18n("Octaves: %1").arg(intervalDiatonic / 7) );
-    //m_intervalStepsLabel->setText( i18n("Step: %1").arg(intervalDiatonic % 7) );
-    
-    static QString stepName[] = {
-       i18n("unison"), i18n("second"), i18n("third"), i18n("fourth"),
-       i18n("fifth"),  i18n("sixth"),  i18n("seventh")
-    };
-
-    int displayInterval = intervalDiatonic;
-    int displayIntervalChromatic = intervalChromatic;
-    bool down = intervalDiatonic < 0;
-    if (down)
-    {
-       displayInterval = -displayInterval;
-       displayIntervalChromatic = -displayIntervalChromatic;
-    }
-    QString text = "";
-    // diminished / small / / large / augmented / unknown
-    static int stepIntervals[] = { 0,2,4,5,7,9,11 };
-    int deviation = displayIntervalChromatic % 12 - stepIntervals[displayInterval % 7];
-    switch (displayInterval % 7)
-    {
-    case 0:
-    case 1:
-    case 4:
-    case 5:
-       if (deviation == -1)
-           text += "diminished ";
-       else if (deviation == 1)
-           text += "augmented ";
-       else if (deviation == 0)
-           text += "perfect ";
-       else
-           text += "(unknown) ";
-       break;
-    case 2:
-    case 3:
-    case 6:
-       if (deviation == -1)
-           text += "small ";
-       else if (deviation == 0)
-           text += "large ";
-       else
-           text += "(unknown) ";
-       break;
-    default:
-       text += "(unknown) ";
-    }
-    
-    text += stepName[displayInterval % 7];
-    int octaves = displayInterval / 7;
-    text += i18n( " and 1 octave",
-                  " and %n octaves",
-                  octaves );
-    if (displayInterval != 0)
-    {
-        if (!down)
-        {
-            text += i18n(" up");
-        }
-        else
-        {
-            text += i18n(" down");
-       }
-    }
-
-    m_intervalLabel->setText( text );
+    m_intervalLabel->setText( getIntervalName( intervalDiatonic, intervalChromatic ) );
 }
 
 void
@@ -260,14 +289,14 @@ IntervalDialog::getChangeKey()
 bool
 IntervalDialog::getTransposeSegmentBack()
 {
-	if (m_transposeSegmentBack == NULL)
-	{
-		return false;
-	}
-	else
-	{
-		return m_transposeSegmentBack->isChecked();	
-	}
+    if (m_transposeSegmentBack == NULL)
+    {
+        return false;
+    }
+    else
+    {
+        return m_transposeSegmentBack->isChecked();	
+    }
 }
 
 }
