@@ -62,6 +62,8 @@ public:
     // Transpose the segment itself in the opposite direction?
     bool getTransposeSegmentBack();
     
+    static QString getIntervalName(int intervalDiatonic, int intervalChromatic);
+    
 public slots:
     void slotSetReferenceNote(int,int,int);
     void slotSetTargetNote(int,int,int);
