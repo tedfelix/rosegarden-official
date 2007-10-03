@@ -163,7 +163,9 @@ IntervalDialog::getIntervalName(int intervalDiatonic, int intervalChromatic)
     // set the boolean 'down' to true.
     int displayIntervalDiatonic = intervalDiatonic;
     int displayIntervalChromatic = intervalChromatic;
-    bool down = intervalDiatonic < 0;
+    bool down = (intervalDiatonic < 0 || 
+                 (intervalDiatonic == 0 &&
+                  intervalChromatic < 0));
     if (down)
     {
         displayIntervalDiatonic = -displayIntervalDiatonic;
@@ -248,6 +250,22 @@ IntervalDialog::getIntervalName(int intervalDiatonic, int intervalChromatic)
                text += "a minor ";
            else if (deviation == 0)
                text += "a major ";
+           else if (deviation == -2)
+               text += "a diminished ";
+           else if (deviation == 1)
+               text += "an augmented ";
+           else if (deviation == -3)
+               text += "a doubly-diminished ";
+           else if (deviation == 2)
+               text += "a doubly-augmented ";
+           else if (deviation == -4)
+               text += "a triply-diminished ";
+           else if (deviation == 3)
+               text += "a triply-augmented ";
+           else if (deviation == 4)
+               text += "a quadruply-augmented ";
+           else if (deviation == 0)
+               text += "a perfect ";
            else
                text += "an (unknown) ";
            break;
