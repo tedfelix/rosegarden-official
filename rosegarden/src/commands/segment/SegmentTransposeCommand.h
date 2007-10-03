@@ -51,7 +51,7 @@ public:
 
     static QString getGlobalName(int semitones = 0, int step = 0) {
         switch (semitones) {
-        default:  return i18n("Transpose by &Interval (EXPERIMENTAL)...");
+        default:  return i18n("Transpose by &Interval...");
         }
     }
 
