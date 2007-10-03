@@ -80,7 +80,7 @@ IntervalDialog::IntervalDialog(QWidget *parent, bool askChangeKey, bool askTrans
     
     if (askTransposeSegmentBack)
     {
-        m_transposeSegmentBack = new QCheckBox( "Adjust segment transposition in opposite direction (maintain audible pitch)", vBox );
+        m_transposeSegmentBack = new QCheckBox( i18n("Adjust segment transposition in opposite direction (maintain audible pitch)"), vBox );
         m_transposeSegmentBack->setTristate(false);
         m_transposeSegmentBack->setChecked(false);
     }
@@ -181,7 +181,7 @@ IntervalDialog::getIntervalName(int intervalDiatonic, int intervalChromatic)
     // show the step for an unison only if the octave doesn't change, any other interval 
     //  always, and augmented/dimnished unisons (modulo octaves) always.
     // Note that this will yield 'up 3 octaves and a dimnished unison' rather than 'up
-    //  2 octaves and a dimnished octave', due to the fact that the logic largely works 
+    //  2 octaves and a diminished octave', due to the fact that the logic largely works 
     //  % 7... 
     bool showStep = displayIntervalDiatonic == 0 || 
         displayIntervalDiatonic % 7 != 0 || deviation != 0;
@@ -230,6 +230,10 @@ IntervalDialog::getIntervalName(int intervalDiatonic, int intervalChromatic)
                text += "a triply-diminished ";
            else if (deviation == 3)
                text += "a triply-augmented ";
+           else if (deviation == -4)
+               text += "a quadruply-diminished ";
+           else if (deviation == 4)
+               text += "a quadruply-augmented ";
            else if (deviation == 0)
                text += "a perfect ";
            else
