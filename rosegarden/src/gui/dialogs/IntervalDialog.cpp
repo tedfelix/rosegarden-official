@@ -67,7 +67,7 @@ IntervalDialog::IntervalDialog(QWidget *parent, bool askChangeKey, bool askTrans
 
     if (askChangeKey)
     {
-        QButtonGroup *affectKeyGroup = new QButtonGroup(1, Horizontal, i18n("Affect key?"), vBox);
+        QButtonGroup *affectKeyGroup = new QButtonGroup(1, Horizontal, i18n("Effect to key"), vBox);
         m_transposeWithinKey = new QRadioButton(i18n("Transpose within key"), affectKeyGroup);
         m_transposeWithinKey->setChecked(true);
         m_transposeChangingKey = new QRadioButton(i18n("Change key for selection"), affectKeyGroup);
@@ -208,7 +208,7 @@ IntervalDialog::getIntervalName(int intervalDiatonic, int intervalChromatic)
                       octaves );
         if (showStep)
         {
-            text += " and ";
+            text += i18n(" and ");
         }
     }
     
@@ -221,25 +221,25 @@ IntervalDialog::getIntervalName(int intervalDiatonic, int intervalChromatic)
         case 3: // fourth
         case 4: // fifth
            if (deviation == -1)
-               text += "a diminished ";
+               text += i18n("a diminished ");
            else if (deviation == 1)
-               text += "an augmented ";
+               text += i18n("an augmented ");
            else if (deviation == -2)
-               text += "a doubly-diminished ";
+               text += i18n("a doubly-diminished ");
            else if (deviation == 2)
-               text += "a doubly-augmented ";
+               text += i18n("a doubly-augmented ");
            else if (deviation == -3)
-               text += "a triply-diminished ";
+               text += i18n("a triply-diminished ");
            else if (deviation == 3)
-               text += "a triply-augmented ";
+               text += i18n("a triply-augmented ");
            else if (deviation == -4)
-               text += "a quadruply-diminished ";
+               text += i18n("a quadruply-diminished ");
            else if (deviation == 4)
-               text += "a quadruply-augmented ";
+               text += i18n("a quadruply-augmented ");
            else if (deviation == 0)
-               text += "a perfect ";
+               text += i18n("a perfect ");
            else
-               text += "an (unknown) ";
+               text += i18n("an (unknown) ");
            break;
         // Then the major/minor:
         case 1: // second
@@ -247,30 +247,30 @@ IntervalDialog::getIntervalName(int intervalDiatonic, int intervalChromatic)
         case 5: // sixth
         case 6: // seventh
            if (deviation == -1)
-               text += "a minor ";
+               text += i18n("a minor ");
            else if (deviation == 0)
-               text += "a major ";
+               text += i18n("a major ");
            else if (deviation == -2)
-               text += "a diminished ";
+               text += i18n("a diminished ");
            else if (deviation == 1)
-               text += "an augmented ";
+               text += i18n("an augmented ");
            else if (deviation == -3)
-               text += "a doubly-diminished ";
+               text += i18n("a doubly-diminished ");
            else if (deviation == 2)
-               text += "a doubly-augmented ";
+               text += i18n("a doubly-augmented ");
            else if (deviation == -4)
-               text += "a triply-diminished ";
+               text += i18n("a triply-diminished ");
            else if (deviation == 3)
-               text += "a triply-augmented ";
+               text += i18n("a triply-augmented ");
            else if (deviation == 4)
-               text += "a quadruply-augmented ";
+               text += i18n("a quadruply-augmented ");
            else if (deviation == 0)
-               text += "a perfect ";
+               text += i18n("a perfect ");
            else
-               text += "an (unknown) ";
+               text += i18n("an (unknown) ");
            break;
         default:
-           text += "an (unknown) ";
+           text += i18n("an (unknown) ");
         }
     
         static QString stepName[] = {
