@@ -220,8 +220,16 @@ IntervalDialog::getIntervalName(int intervalDiatonic, int intervalChromatic)
         case 4: // fifth
            if (deviation == -1)
                text += "a diminished ";
-               else if (deviation == 1)
+           else if (deviation == 1)
                text += "an augmented ";
+           else if (deviation == -2)
+               text += "a doubly-diminished ";
+           else if (deviation == 2)
+               text += "a doubly-augmented ";
+           else if (deviation == -3)
+               text += "a triply-diminished ";
+           else if (deviation == 3)
+               text += "a triply-augmented ";
            else if (deviation == 0)
                text += "a perfect ";
            else
