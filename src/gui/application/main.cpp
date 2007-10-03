@@ -44,6 +44,8 @@
 #include "gui/application/RosegardenApplication.h"
 #include "gui/application/RosegardenDCOP.h"
 
+#include "gui/kdeext/klearlook.h"
+
 using namespace Rosegarden;
 
 /*! \mainpage Rosegarden global design
@@ -455,6 +457,7 @@ int main(int argc, char *argv[])
     aboutData.addCredit("Stephen Torri", I18N_NOOP("guitar chord editor"), "storri@torri.org");
     aboutData.addCredit("Piotr Sawicki", I18N_NOOP("Polish translation"), "pelle@plusnet.pl");
     aboutData.addCredit("David García-Abad", I18N_NOOP("Basque translation"), "davidgarciabad@telefonica.net");
+    aboutData.addCredit("Joerg C. Koenig, Craig Drummond, Bernhard Rosenkränzer, Preston Brown, Than Ngo", I18N_NOOP("Klearlook theme"), "jck@gmx.org");
 
     aboutData.setTranslator(I18N_NOOP("_: NAME OF TRANSLATORS\nYour names") , I18N_NOOP("_: EMAIL OF TRANSLATORS\nYour emails"));
 
@@ -490,11 +493,16 @@ int main(int argc, char *argv[])
     config->setGroup("KDE Action Restrictions");
     config->writeEntry("action/help_report_bug", false);
 
+    config->setGroup(GeneralOptionsConfigGroup);
+    int install = config->readNumEntry("Install Own Theme", 1);
+    if (install == 2 || (install == 1 && !getenv("KDE_FULL_SESSION"))) {
+	kapp->setStyle(new KlearlookStyle);
+    }
+
     // Show Startup logo
     // (this code borrowed from KDevelop 2.0,
     // (c) The KDevelop Development Team
     //
-    config = kapp->config();
     config->setGroup(GeneralOptionsConfigGroup);
     KStartupLogo* startLogo = 0L;
 
@@ -563,7 +571,6 @@ int main(int argc, char *argv[])
 
     QObject::connect(&app, SIGNAL(aboutToSaveState()),
                      rosegardengui, SLOT(slotDeleteTransport()));
-
 
     // Now that we've started up, raise start logo
     //

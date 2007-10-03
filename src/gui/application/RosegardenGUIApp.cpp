@@ -311,7 +311,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
             // try to launch JACK - if the configuration wants us to.
             if (!launchJack()) {
                 KStartupLogo::hideIfStillThere();
-                KMessageBox::error(this, i18n("Attempted to launch JACK audio daemon failed.  Audio will be disabled.\nPlease check configuration (Settings->Configure Rosegarden->Sequencer->JACK control)\n and restart."));
+                KMessageBox::error(this, i18n("Attempted to launch JACK audio daemon failed.  Audio will be disabled.\nPlease check configuration (Settings -> Configure Rosegarden -> Audio -> Startup)\n and restart."));
             }
         } else {
             //this client was just for testing
@@ -7791,8 +7791,8 @@ void
 RosegardenGUIApp::slotAutoSave()
 {
     if (!m_seqManager ||
-            m_seqManager->getTransportStatus() == PLAYING ||
-            m_seqManager->getTransportStatus() == RECORDING)
+        m_seqManager->getTransportStatus() == PLAYING ||
+        m_seqManager->getTransportStatus() == RECORDING)
         return ;
 
     KConfig* config = kapp->config();

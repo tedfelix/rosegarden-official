@@ -38,7 +38,8 @@ do
 
     # Check and list the listed LilyPond input files
     # getopt adds quotation marks ('): "'input.ly'"
-    if [ "`expr match $1 '.*.ly'`" == "`expr length $1 - 1`" ]; then
+    if [ "`expr match $1 '.*.ly'`" == "`expr length $1 - 1`" -o \
+	 "`expr match $1 '.*.ly.gz'`" == "`expr length $1 - 1`" ]; then
         input="${1:1:`expr length "$1" - 2`}"
         if [ ! -f "$input" ]; then
 	    echo "Error: Can't open \"$input\" for reading" 1>&2
@@ -49,6 +50,8 @@ $input"
     fi
     shift
 done
+
+echo "input files: $input_files"
 
 if [ -n "$print_version" ]; then
     echo "rosegarden-lilypondview v1.6" 1>&2
@@ -151,7 +154,8 @@ End-of-Usage-message
 fi
 
 for x in $input_files; do
-    if [ "`expr match $x '.*.ly'`" == "`expr length $x`" ]; then
+    case "$x" in
+	*.ly|*.ly.gz)
         input="$x"
         cp "$input" "$tmpdir/" || exit 1
 
@@ -378,5 +382,7 @@ echo "LilyPond version is $lilypond_version, file version is $fileversion"
 	fi
 	exit 1
 )
-    fi
+    ;;
+    *) ;;
+    esac
 done;

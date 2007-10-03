@@ -49,7 +49,7 @@ synth applications that are started after Rosegarden is already running?</p>
 <p>...that you can make your default studio override that in every Rosegarden composition you load?<br><br>If your studio setup does not change very often, and you would prefer for
 the settings in your default studio to take precedence over whatever
 studio is saved with any files you happen to load, you can make your studio the default for everything using <b>Settings -> Configure Rosegarden ->
-Behaviour -> Always use default studio when loading files</b>.</p>
+MIDI -> Always use default studio when loading files</b>.</p>
 </html>
 </tip>
 <tip category="Rosegarden|General">

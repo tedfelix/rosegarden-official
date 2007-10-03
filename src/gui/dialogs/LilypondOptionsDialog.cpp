@@ -82,6 +82,15 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
     QVBox * vboxHeaders = new QVBox();
     tabWidget->addTab(vboxHeaders,i18n("Headers"));
 
+    vboxGeneral->setSpacing(5);
+    vboxGeneral->setMargin(5);
+
+    vboxAdvanced->setSpacing(5);
+    vboxAdvanced->setMargin(5);
+
+    vboxHeaders->setSpacing(5);
+    vboxHeaders->setMargin(5);
+
     //
     // LilyPond export: Basic options
     //

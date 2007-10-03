@@ -52,6 +52,7 @@
 #include "document/RosegardenGUIDoc.h"
 #include "RosegardenApplication.h"
 #include "gui/configuration/GeneralConfigurationPage.h"
+#include "gui/configuration/AudioConfigurationPage.h"
 #include "gui/dialogs/AudioSplitDialog.h"
 #include "gui/dialogs/AudioManagerDialog.h"
 #include "gui/dialogs/DocumentConfigureDialog.h"
@@ -826,24 +827,30 @@ void RosegardenGUIView::slotEditSegmentAudio(Segment *segment)
 
     QString application = config->readEntry("externalaudioeditor", "");
 
-    if (application.isEmpty()) {
+    if (application == "") {
+        application = AudioConfigurationPage::getBestAvailableAudioEditor();
+    }
+
+    QStringList splitCommand = QStringList::split(" ", application);
+
+    if (splitCommand.size() == 0) {
+
         std::cerr << "RosegardenGUIView::slotEditSegmentAudio() - "
         << "external editor \"" << application.data()
         << "\" not found" << std::endl;
 
-
         KMessageBox::sorry(this,
-                           i18n("You've not yet defined an audio editor for Rosegarden to use.\nSee Settings -> Configure Rosegarden -> General -> External Editors."));
+                           i18n("You've not yet defined an audio editor for Rosegarden to use.\nSee Settings -> Configure Rosegarden -> Audio."));
 
         return ;
     }
 
-    QFileInfo *appInfo = new QFileInfo(application);
+    QFileInfo *appInfo = new QFileInfo(splitCommand[0]);
     if (appInfo->exists() == false || appInfo->isExecutable() == false) {
         std::cerr << "RosegardenGUIView::slotEditSegmentAudio() - "
-        << "can't execute \"" << application << "\""
-        << std::endl;
-        return ;
+                  << "can't execute \"" << splitCommand[0] << "\""
+                  << std::endl;
+        return;
     }
 
     AudioFile *aF = getDocument()->getAudioFileManager().
@@ -854,14 +861,13 @@ void RosegardenGUIView::slotEditSegmentAudio(Segment *segment)
         return ;
     }
 
-
     // wait cursor
     QApplication::setOverrideCursor(QCursor(Qt::waitCursor));
 
     // Prepare the process
     //
     KProcess *process = new KProcess();
-    (*process) << application;
+    (*process) << splitCommand;
     (*process) << QString(aF->getFilename().c_str());
 
     // Start it

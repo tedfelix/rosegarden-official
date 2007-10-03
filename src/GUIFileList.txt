@@ -358,6 +358,8 @@ SET(gui_SRCS
 	gui/application/StartupTester.h
 	gui/configuration/AudioConfigurationPage.cpp
 	gui/configuration/AudioConfigurationPage.h
+	gui/configuration/AudioPropertiesPage.cpp
+	gui/configuration/AudioPropertiesPage.h
 	gui/configuration/ColourConfigurationPage.cpp
 	gui/configuration/ColourConfigurationPage.h
 	gui/configuration/ConfigurationPage.cpp
@@ -370,10 +372,10 @@ SET(gui_SRCS
 	gui/configuration/LatencyConfigurationPage.h
 	gui/configuration/MatrixConfigurationPage.cpp
 	gui/configuration/MatrixConfigurationPage.h
+	gui/configuration/MIDIConfigurationPage.cpp
+	gui/configuration/MIDIConfigurationPage.h
 	gui/configuration/NotationConfigurationPage.cpp
 	gui/configuration/NotationConfigurationPage.h
-	gui/configuration/SequencerConfigurationPage.cpp
-	gui/configuration/SequencerConfigurationPage.h
 	gui/configuration/TabbedConfigurationPage.cpp
 	gui/configuration/TabbedConfigurationPage.h
 	gui/dialogs/AudioManagerDialog.cpp
@@ -716,6 +718,7 @@ SET(gui_SRCS
 	gui/kdeext/QCanvasSimpleSprite.cpp
 	gui/kdeext/QCanvasSimpleSprite.h
 	gui/kdeext/RGLed.cpp
+	gui/kdeext/klearlook.cpp
 	gui/rulers/ChordNameRuler.cpp
 	gui/rulers/ChordNameRuler.h
 	gui/rulers/ControlChangeCommand.cpp

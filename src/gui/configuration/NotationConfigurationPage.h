@@ -63,11 +63,10 @@ public:
 
     static QString iconLabel() { return i18n("Notation"); }
     static QString title()     { return i18n("Notation"); }
-    static QString iconName()  { return "music_eightnote"; }
+    static QString iconName()  { return "configure-notation"; }
 
 protected slots:
     void slotFontComboChanged(int);
-    void slotRescanFonts();
     void slotPopulateFontCombo(bool rescan);
     void slotViewButtonPressed();
 
@@ -102,6 +101,7 @@ protected:
     QComboBox *m_accOctavePolicy;
     QComboBox *m_accBarPolicy;
     QComboBox *m_keySigCancelMode;
+    QCheckBox *m_splitAndTie;
     QuantizeParameters *m_quantizeFrame;
     QStringList m_untranslatedFont;
     QStringList m_untranslatedNoteStyle;

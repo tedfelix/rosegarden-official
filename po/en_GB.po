@@ -4572,18 +4572,6 @@ msgstr ""
 msgid "Polish translation"
 msgstr ""
 
-#: ../src/_translatorinfo.cpp:1 ../src/gui/application/main.cpp:458
-msgid ""
-"_: NAME OF TRANSLATORS\n"
-"Your names"
-msgstr ""
-
-#: ../src/_translatorinfo.cpp:3 ../src/gui/application/main.cpp:458
-msgid ""
-"_: EMAIL OF TRANSLATORS\n"
-"Your emails"
-msgstr ""
-
 #: ../src/gui/application/RosegardenGUIView.cpp:252
 msgid "No non-audio segments in composition"
 msgstr ""
@@ -10394,6 +10382,18 @@ msgstr ""
 #: ../data/styles/styles.cpp:4
 msgid "Triangle"
 msgstr ""
+
+#: ../src/_translatorinfo.cpp:1 ../src/gui/application/main.cpp:458
+msgid ""
+"_: NAME OF TRANSLATORS\n"
+"Your names"
+msgstr "Chris Cannam"
+
+#: ../src/_translatorinfo.cpp:3 ../src/gui/application/main.cpp:458
+msgid ""
+"_: EMAIL OF TRANSLATORS\n"
+"Your emails"
+msgstr "cannam@all-day-breakfast.com"
 
 #~ msgid "Write bar checks at end of measures"
 #~ msgstr "Write bar check at the end of each bar"

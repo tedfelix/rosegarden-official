@@ -77,49 +77,34 @@ public:
 
     static QString iconLabel() { return i18n("General"); }
     static QString title()     { return i18n("General Configuration"); }
-    static QString iconName()  { return "configure"; }
-
-    int getCountInSpin()            { return m_countIn->value(); }
-    int getDblClickClient()         { return m_client->currentItem(); }
-    bool getUseDefaultStudio()      { return m_studio->isChecked(); }
-    QString getExternalAudioEditor() { return m_externalAudioEditorPath->text(); }
-    int getNoteNameStyle() { return m_nameStyle->currentItem(); }
+    static QString iconName()  { return "configure-general"; }
 
 signals:
     void updateAutoSaveInterval(unsigned int);
     void updateSidebarStyle(unsigned int);
 
-protected slots:
-    void slotFileDialog();
-
 
 protected:
+    int getCountInSpin()            { return m_countIn->value(); }
+    int getDblClickClient()         { return m_client->currentItem(); }
+    int getNoteNameStyle() { return m_nameStyle->currentItem(); }
 
     //--------------- Data members ---------------------------------
     RosegardenGUIDoc* m_doc;
 
     QComboBox* m_client;
     QSpinBox*  m_countIn;
-    QCheckBox* m_studio;
-    QSpinBox*  m_midiPitchOctave;
-    QLineEdit* m_externalAudioEditorPath;
     QCheckBox* m_toolContextHelp;
     QCheckBox* m_backgroundTextures;
     QCheckBox* m_notationBackgroundTextures;
     QCheckBox* m_matrixBackgroundTextures;
-    QCheckBox *m_autosave;
-    QSpinBox*  m_autosaveInterval;
+    QComboBox *m_autoSave;
     QComboBox* m_nameStyle;
-    QComboBox* m_previewStyle;
     QComboBox* m_sidebarStyle;
+    QComboBox* m_globalStyle;
+    QCheckBox *m_jackTransport;
 
 };
-
-static inline QPixmap loadIcon(const char *name)
-{
-  return KGlobal::instance()->iconLoader()
-    ->loadIcon(QString::fromLatin1(name), KIcon::NoGroup, KIcon::SizeMedium);
-}
 
 
 

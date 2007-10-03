@@ -124,6 +124,11 @@ Piotr Sawicki <pelle@plusnet.pl>
 David García-Abad <davidgarciabad@telefonica.net>
     * Basque translation
 
+Joerg C. Koenig <jck@gmx.org>
+Craig Drummond, Bernhard Rosenkränzer, Preston Brown, Than Ngo
+    * Klearlook theme
+ 
+
 ##
 ## Names in here should also be credited in gui/application/main.cpp, with aboutData.addCredit()
 ##

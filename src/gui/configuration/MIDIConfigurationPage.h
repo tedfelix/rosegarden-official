@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -23,13 +22,14 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SEQUENCERCONFIGURATIONPAGE_H_
-#define _RG_SEQUENCERCONFIGURATIONPAGE_H_
+#ifndef _RG_MIDICONFIGURATIONPAGE_H_
+#define _RG_MIDICONFIGURATIONPAGE_H_
 
 #include "TabbedConfigurationPage.h"
 #include <qstring.h>
 #include <klocale.h>
 #include <qlineedit.h>
+#include <qcheckbox.h>
 
 
 class QWidget;
@@ -38,7 +38,6 @@ class QSlider;
 class QPushButton;
 class QLabel;
 class QComboBox;
-class QCheckBox;
 class KConfig;
 class KComboBox;
 
@@ -49,49 +48,32 @@ namespace Rosegarden
 class RosegardenGUIDoc;
 
 
-class SequencerConfigurationPage : public TabbedConfigurationPage
+class MIDIConfigurationPage : public TabbedConfigurationPage
 {
     Q_OBJECT
 public:
-    SequencerConfigurationPage(RosegardenGUIDoc *doc,
+    MIDIConfigurationPage(RosegardenGUIDoc *doc,
                                KConfig *cfg,
                                QWidget *parent=0,
                                const char *name=0);
 
     virtual void apply();
 
-    static QString iconLabel() { return i18n("Sequencer"); }
-    static QString title()     { return i18n("Sequencer Settings"); }
-    static QString iconName()  { return "player_play"; }
-
-#ifdef HAVE_LIBJACK
-    QString getJackPath() { return m_jackPath->text(); }
-#endif // HAVE_LIBJACK
+    static QString iconLabel() { return i18n("MIDI"); }
+    static QString title()     { return i18n("MIDI Settings"); }
+    static QString iconName()  { return "configure-midi"; }
 
 protected slots:
-
-    void slotReadAheadChanged(int);
-    void slotAudioMixChanged(int);
-    void slotAudioReadChanged(int);
-    void slotAudioWriteChanged(int);
-    void slotSmallFileChanged(int);
-
-    void slotShowStatus();
-    void slotJackToggled();
-
     void slotSoundFontToggled(bool);
     void slotSfxLoadPathChoose();
     void slotSoundFontChoose();
 
 protected:
-
-    int updateTimeSlider(int msec, int minPower, int maxPower, int multiplier,
-                         QSlider *slider, QLabel *label, QString klabel);
+    bool getUseDefaultStudio()      { return m_studio->isChecked(); }
 
     //--------------- Data members ---------------------------------
 
     // General
-    QLineEdit *m_sequencerArguments;
     QCheckBox *m_sendControllersAtPlay;
 
     QCheckBox   *m_sfxLoadEnabled;
@@ -100,54 +82,18 @@ protected:
     QLineEdit   *m_soundFontPath;
     QPushButton *m_soundFontChoose;
 
-
-#ifdef HAVE_LIBJACK
-    QCheckBox *m_startJack;
-    QLineEdit *m_jackPath;
-#endif // HAVE_LIBJACK
-
     // Sync and timing
     //
     //QCheckBox *m_midiClockEnabled;
     QComboBox *m_midiSync;
     QString    m_origTimer;
     QComboBox *m_timer;
-    QComboBox *m_jackTransport;
     QComboBox *m_mmcTransport;
     QComboBox *m_mtcTransport;
     QCheckBox *m_midiSyncAuto;
 
-    int      m_sampleRate;
-    QSlider* m_readAhead;
-    QSlider* m_audioMix;
-    QSlider* m_audioRead;
-    QSlider* m_audioWrite;
-    QSlider* m_smallFile;
-    QLabel*  m_readAheadLabel;
-    QLabel*  m_audioMixLabel;
-    QLabel*  m_audioReadLabel;
-    QLabel*  m_audioWriteLabel;
-    QLabel*  m_smallFileLabel;
-
-#ifdef HAVE_LIBJACK
-    // Number of JACK input ports our RG client creates - 
-    // this decides how many audio input destinations
-    // we have.
-    //
-    QCheckBox    *m_createFaderOuts;
-    QCheckBox    *m_createSubmasterOuts;
-
-    QComboBox    *m_audioRecFormat;
-
-    KComboBox    *m_lowLatencyMode;
-
-#endif // HAVE_LIBJACK
-
-    // How many minutes of audio recording should we allow?
-    //
-/*  #1045380 ("minutes of audio recording" just insanely confusing) -- remove
-    QSpinBox     *m_audioRecordMinutes;
-*/
+    QCheckBox* m_studio;
+    QSpinBox*  m_midiPitchOctave;
 
 };
  
