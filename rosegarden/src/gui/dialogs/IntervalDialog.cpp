@@ -188,58 +188,36 @@ IntervalDialog::getIntervalName(int intervalDiatonic, int intervalChromatic)
     bool showStep = displayIntervalDiatonic == 0 || 
         displayIntervalDiatonic % 7 != 0 || deviation != 0;
     
-    QString text = "";
-    if (displayIntervalChromatic != 0 || displayIntervalDiatonic != 0)
-    {
-        if (!down)
-        {
-            text += i18n("up ");
-        }
-        else
-        {
-            text += i18n("down ");
-        }
-    }
-    
-    if (octaves != 0)
-    {
-        text += i18n( "1 octave",
-                      "%n octaves",
-                      octaves );
-        if (showStep)
-        {
-            text += i18n(" and ");
-        }
-    }
-    
+    QString textIntervalDeviation = "";
+    QString textInterval = "";
     if (showStep)
     {
         switch (displayIntervalDiatonic % 7)
         {
-        // First the dimnished/perfect/augmented:
+        // First the diminished/perfect/augmented:
         case 0: // unison or octaves
         case 3: // fourth
         case 4: // fifth
            if (deviation == -1)
-               text += i18n("a diminished ");
+               textIntervalDeviation += i18n("a diminished ");
            else if (deviation == 1)
-               text += i18n("an augmented ");
+               textIntervalDeviation += i18n("an augmented ");
            else if (deviation == -2)
-               text += i18n("a doubly-diminished ");
+               textIntervalDeviation += i18n("a doubly diminished ");
            else if (deviation == 2)
-               text += i18n("a doubly-augmented ");
+               textIntervalDeviation += i18n("a doubly augmented ");
            else if (deviation == -3)
-               text += i18n("a triply-diminished ");
+               textIntervalDeviation += i18n("a triply diminished ");
            else if (deviation == 3)
-               text += i18n("a triply-augmented ");
+               textIntervalDeviation += i18n("a triply augmented ");
            else if (deviation == -4)
-               text += i18n("a quadruply-diminished ");
+               textIntervalDeviation += i18n("a quadruply diminished ");
            else if (deviation == 4)
-               text += i18n("a quadruply-augmented ");
+               textIntervalDeviation += i18n("a quadruply augmented ");
            else if (deviation == 0)
-               text += i18n("a perfect ");
+               textIntervalDeviation += i18n("a perfect ");
            else
-               text += i18n("an (unknown) ");
+               textIntervalDeviation += i18n("an (unknown) ");
            break;
         // Then the major/minor:
         case 1: // second
@@ -247,39 +225,76 @@ IntervalDialog::getIntervalName(int intervalDiatonic, int intervalChromatic)
         case 5: // sixth
         case 6: // seventh
            if (deviation == -1)
-               text += i18n("a minor ");
+               textIntervalDeviation += i18n("a minor ");
            else if (deviation == 0)
-               text += i18n("a major ");
+               textIntervalDeviation += i18n("a major ");
            else if (deviation == -2)
-               text += i18n("a diminished ");
+               textIntervalDeviation += i18n("a diminished ");
            else if (deviation == 1)
-               text += i18n("an augmented ");
+               textIntervalDeviation += i18n("an augmented ");
            else if (deviation == -3)
-               text += i18n("a doubly-diminished ");
+               textIntervalDeviation += i18n("a doubly diminished ");
            else if (deviation == 2)
-               text += i18n("a doubly-augmented ");
+               textIntervalDeviation += i18n("a doubly augmented ");
            else if (deviation == -4)
-               text += i18n("a triply-diminished ");
+               textIntervalDeviation += i18n("a triply diminished ");
            else if (deviation == 3)
-               text += i18n("a triply-augmented ");
+               textIntervalDeviation += i18n("a triply augmented ");
            else if (deviation == 4)
-               text += i18n("a quadruply-augmented ");
+               textIntervalDeviation += i18n("a quadruply augmented ");
            else if (deviation == 0)
-               text += i18n("a perfect ");
+               textIntervalDeviation += i18n("a perfect ");
            else
-               text += i18n("an (unknown) ");
+               textIntervalDeviation += i18n("an (unknown) ");
            break;
         default:
-           text += i18n("an (unknown) ");
+           textIntervalDeviation += i18n("an (unknown) ");
         }
     
         static QString stepName[] = {
             i18n("unison"), i18n("second"), i18n("third"), i18n("fourth"),
             i18n("fifth"),  i18n("sixth"),  i18n("seventh")
         };
-        text += stepName[displayIntervalDiatonic % 7];
+        textInterval += stepName[displayIntervalDiatonic % 7];
     }
-    return text;
+    
+    if (displayIntervalChromatic != 0 || displayIntervalDiatonic != 0)
+    {
+        if (!down)
+        {
+	    if (octaves != 0) {
+		if (showStep) {
+		    return i18n("up 1 octave and %1%2",
+		           "up %n octaves and %1%2",
+			   octaves).arg(textIntervalDeviation).arg(textInterval);
+		} else {
+		    return i18n("up 1 octave",
+		           "up %n octaves",
+			   octaves);
+		}
+	    } else {
+		return i18n("up %1%2").arg(textIntervalDeviation).arg(textInterval);
+	    }
+        }
+        else
+        {
+	    if (octaves != 0) {
+		if (showStep) {
+		    return i18n("down 1 octave and %1%2",
+		           "down %n octaves and %1%2",
+			   octaves).arg(textIntervalDeviation).arg(textInterval);
+		} else {
+		    return i18n("down 1 octave",
+		           "down %n octaves",
+			   octaves);
+		}
+	    } else {
+		return i18n("down %1%2").arg(textIntervalDeviation).arg(textInterval);
+	    }
+        }
+    } else {
+	return i18n("a perfect unison");
+    }
 }
 
 void
