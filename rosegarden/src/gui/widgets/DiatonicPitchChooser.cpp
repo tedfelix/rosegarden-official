@@ -82,12 +82,12 @@ DiatonicPitchChooser::DiatonicPitchChooser(QString title,
     m_octave->setCurrentItem(defaultOctave);
 
     m_accidental = new KComboBox( hbox );
-    m_accidental->insertItem(Accidentals::DoubleFlat);
-    m_accidental->insertItem(Accidentals::Flat);
-    m_accidental->insertItem(Accidentals::Natural);
-    m_accidental->insertItem(Accidentals::Sharp);
-    m_accidental->insertItem(Accidentals::DoubleSharp);
-    m_accidental->setCurrentItem(2);
+    m_accidental->insertItem(i18n("double flat"));
+    m_accidental->insertItem(i18n("flat"));
+    m_accidental->insertItem(i18n("natural"));
+    m_accidental->insertItem(i18n("sharp"));
+    m_accidental->insertItem(i18n("double sharp"));
+    m_accidental->setCurrentItem(2); // default: natural
 
     m_pitchLabel = new QLabel(QString("%1").arg(getPitch()), hbox);
     
