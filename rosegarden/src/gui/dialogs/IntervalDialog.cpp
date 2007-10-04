@@ -179,12 +179,23 @@ IntervalDialog::getIntervalName(int intervalDiatonic, int intervalChromatic)
         
     int octaves = displayIntervalDiatonic / 7;
     int deviation = displayIntervalChromatic % 12 - stepIntervals[displayIntervalDiatonic % 7];
+    // Note (hjj):
+    // "1 octave and a diminished octave" is better than
+    // "2 octaves and a diminished unison"
+    if (displayIntervalDiatonic % 7 == 0) {
+        if (octaves > 0) {
+            deviation = (deviation < 5 ? deviation : deviation - 12);
+        } else if (octaves < 0) {
+            deviation = (deviation < 5 ? -deviation : 12 - deviation);
+        }
+    } else if (down) {
+	// Note (hjj):
+	// an augmented prime down, NOT a diminished prime down
+	deviation = -deviation;
+    }
     
     // show the step for an unison only if the octave doesn't change, any other interval 
     //  always, and augmented/dimnished unisons (modulo octaves) always.
-    // Note that this will yield 'up 3 octaves and a diminished unison' rather than 'up
-    //  2 octaves and a diminished octave', due to the fact that the logic largely works 
-    //  % 7... 
     bool showStep = displayIntervalDiatonic == 0 || 
         displayIntervalDiatonic % 7 != 0 || deviation != 0;
     
@@ -217,7 +228,7 @@ IntervalDialog::getIntervalName(int intervalDiatonic, int intervalChromatic)
            else if (deviation == 0)
                textIntervalDeviated += i18n("a perfect");
            else
-               textIntervalDeviated += i18n("an (unknown)");
+               textIntervalDeviated += i18n("an (unknown, %1)").arg(deviation);
            break;
         // Then the major/minor:
         case 1: // second
@@ -245,7 +256,7 @@ IntervalDialog::getIntervalName(int intervalDiatonic, int intervalChromatic)
            else if (deviation == 0)
                textIntervalDeviated += i18n("a perfect");
            else
-               textIntervalDeviated += i18n("an (unknown)");
+               textIntervalDeviated += i18n("an (unknown, %1)").arg(deviation);
            break;
         default:
            textIntervalDeviated += i18n("an (unknown)");
@@ -253,7 +264,18 @@ IntervalDialog::getIntervalName(int intervalDiatonic, int intervalChromatic)
         switch (displayIntervalDiatonic % 7)
 	{
 	case 0:
-	    textInterval += i18n("%1 unison").arg(textIntervalDeviated);
+	    // Note (hjj):
+	    // "1 octave and a diminished octave" is better than
+	    // "2 octaves and a diminished unison"
+	    if (octaves > 0) {
+	      textInterval += i18n("%1 octave").arg(textIntervalDeviated);
+	      octaves--;
+	    } else if (octaves < 0) {
+	      textInterval += i18n("%1 octave").arg(textIntervalDeviated);
+	      octaves++;
+	    } else {
+	      textInterval += i18n("%1 unison").arg(textIntervalDeviated);
+	    }
 	    break;
 	case 1:
 	    textInterval += i18n("%1 second").arg(textIntervalDeviated);
