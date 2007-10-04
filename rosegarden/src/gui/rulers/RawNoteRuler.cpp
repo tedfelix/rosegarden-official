@@ -450,7 +450,7 @@ RawNoteRuler::paintEvent(QPaintEvent* e)
         if (track)
             trackPosition = track->getPosition();
 
-	QToolTip::add(this,i18n("Track #%1, Segment \"%2\" (runtime id %2)")
+	QToolTip::add(this,i18n("Track #%1, Segment \"%2\" (runtime id %3)")
 		           .arg(trackPosition + 1)
 		           .arg(m_segment->getLabel())
 		           .arg(m_segment->getRuntimeId()));
