@@ -203,11 +203,13 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
     layoutNotation->addWidget(m_lilyTempoMarks, 0, 1);
  
     m_lilyExportLyrics = new QCheckBox(
-                             i18n("Export lyrics (takes some space, even if empty)"), frameNotation);
+                             i18n("Export lyrics"), frameNotation);
     // default to lyric export == false because if you export the default
     // empty "- - -" lyrics, crap results ensue, and people will know if they
     // do need to export the lyrics - DMM
-    m_lilyExportLyrics->setChecked(config->readBoolEntry("lilyexportlyrics", false));
+    // fixed, no "- - -" lyrics is generated for an empty lyrics
+    // default again into lyrics - HJJ
+    m_lilyExportLyrics->setChecked(config->readBoolEntry("lilyexportlyrics", true));
     layoutNotation->addMultiCellWidget(m_lilyExportLyrics, 1, 1, 0, 1);
 
     m_lilyExportBeams = new QCheckBox(
