@@ -142,7 +142,7 @@ Usage: rosegarden-lilypondview [OPTION] file.ly ...
 
 Options:
   -g, --graphical : show Lilypond progress in a graphical dialog
-  -P, --pdf       : view created PDF files (DEFAUlT)
+  -P, --pdf       : view created PDF files (DEFAULT)
   -p, --print     : print created PDF files; together with '--pdf', viewing starts first
   -v, --version   : print version of rosegarden-lilypondview
       --conftest  : check that all dependencies are present
