@@ -604,6 +604,10 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotExportMup()), actionCollection(),
                 "file_export_mup");
 
+    new KAction(i18n("Print &with LilyPond..."), 0, 0, this,
+                SLOT(slotPrintLilypond()), actionCollection(),
+                "file_print_lilypond");
+
     new KAction(i18n("Preview with Lil&yPond..."), 0, 0, this,
                 SLOT(slotPreviewLilypond()), actionCollection(),
                 "file_preview_lilypond");
@@ -4919,6 +4923,30 @@ void RosegardenGUIApp::slotExportLilypond()
 std::map<KProcess *, KTempFile *> RosegardenGUIApp::m_lilyTempFileMap;
 
 
+void RosegardenGUIApp::slotPrintLilypond()
+{
+    KTmpStatusMsg msg(i18n("Printing Lilypond file..."), this);
+    KTempFile *file = new KTempFile(QString::null, ".ly");
+    file->setAutoDelete(true);
+    if (!file->name()) {
+        CurrentProgressDialog::freeze();
+        KMessageBox::sorry(this, i18n("Failed to open a temporary file for Lilypond export."));
+        delete file;
+    }
+    if (!exportLilypondFile(file->name(), true)) {
+        return ;
+    }
+    KProcess *proc = new KProcess;
+    *proc << "rosegarden-lilypondview";
+    *proc << "--graphical";
+    *proc << "--print";
+    *proc << file->name();
+    connect(proc, SIGNAL(processExited(KProcess *)),
+            this, SLOT(slotLilypondViewProcessExited(KProcess *)));
+    m_lilyTempFileMap[proc] = file;
+    proc->start(KProcess::NotifyOnExit);
+}
+
 void RosegardenGUIApp::slotPreviewLilypond()
 {
     KTmpStatusMsg msg(i18n("Previewing Lilypond file..."), this);
@@ -4934,7 +4962,8 @@ void RosegardenGUIApp::slotPreviewLilypond()
     }
     KProcess *proc = new KProcess;
     *proc << "rosegarden-lilypondview";
-    *proc << "-g";
+    *proc << "--graphical";
+    *proc << "--pdf";
     *proc << file->name();
     connect(proc, SIGNAL(processExited(KProcess *)),
             this, SLOT(slotLilypondViewProcessExited(KProcess *)));

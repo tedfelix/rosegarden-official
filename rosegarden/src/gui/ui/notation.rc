@@ -5,6 +5,7 @@
 <MenuBar>
 
 <Menu name="file" append="new_merge">
+<Action name="file_print_lilypond" append="print_merge" />
 <Action name="file_preview_lilypond" append="print_merge" />
 </Menu>
 

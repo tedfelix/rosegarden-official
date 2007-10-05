@@ -32,6 +32,7 @@
       <Action name="file_export_mup" />
       <Action name="file_export_musicxml" />
     </Menu>
+    <Action name="file_print_lilypond" append="print_merge" />
     <Action name="file_preview_lilypond" append="print_merge" />
   <Separator/>
         <Action name="audio_manager"/>

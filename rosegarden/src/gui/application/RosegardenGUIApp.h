@@ -659,6 +659,7 @@ public slots:
     /**
      * Export to a temporary file and process
      */
+    void slotPrintLilypond();
     void slotPreviewLilypond();
     void slotLilypondViewProcessExited(KProcess *);
 
