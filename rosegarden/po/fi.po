@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-10-04 18:06+0300\n"
-"PO-Revision-Date: 2007-10-04 18:08+0300\n"
+"POT-Creation-Date: 2007-10-05 09:19+0300\n"
+"PO-Revision-Date: 2007-10-05 09:21+0300\n"
 "Last-Translator: \n"
 "Language-Team:  <en@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -5584,6 +5584,26 @@ msgstr "6"
 msgid "7"
 msgstr "7"
 
+#: ../src/gui/widgets/DiatonicPitchChooser.cpp:85
+msgid "double flat"
+msgstr "kaksoisalennettu"
+
+#: ../src/gui/widgets/DiatonicPitchChooser.cpp:86
+msgid "flat"
+msgstr "alennettu"
+
+#: ../src/gui/widgets/DiatonicPitchChooser.cpp:87
+msgid "natural"
+msgstr "palautettu"
+
+#: ../src/gui/widgets/DiatonicPitchChooser.cpp:88
+msgid "sharp"
+msgstr "ylennetty"
+
+#: ../src/gui/widgets/DiatonicPitchChooser.cpp:89
+msgid "double sharp"
+msgstr "kaksoisylennetty"
+
 #: ../src/gui/widgets/ColourTable.cpp:68
 msgid "Modify Color Name"
 msgstr "Muuta värin nimeä"
@@ -6440,10 +6460,10 @@ msgstr "Viittausnuotti:"
 
 #: ../src/gui/dialogs/IntervalDialog.cpp:58
 msgid "Target note:"
-msgstr "Kohdenuotti"
+msgstr "Kohdenuotti:"
 
 #: ../src/gui/dialogs/IntervalDialog.cpp:66
-#: ../src/gui/dialogs/IntervalDialog.cpp:316
+#: ../src/gui/dialogs/IntervalDialog.cpp:338
 msgid "a perfect unison"
 msgstr "puhdas priimi"
 
@@ -6463,100 +6483,108 @@ msgstr "Vaihda sävellajia valinnalle"
 msgid "Adjust segment transposition in opposite direction (maintain audible pitch)"
 msgstr "Tee osan siirrot vastakkaiseen suuntaan (säilyttäen nuottien soittokorkeudet)"
 
-#: ../src/gui/dialogs/IntervalDialog.cpp:202
-#: ../src/gui/dialogs/IntervalDialog.cpp:232
+#: ../src/gui/dialogs/IntervalDialog.cpp:213
+#: ../src/gui/dialogs/IntervalDialog.cpp:243
 msgid "a diminished"
 msgstr "vähennetty"
 
-#: ../src/gui/dialogs/IntervalDialog.cpp:204
-#: ../src/gui/dialogs/IntervalDialog.cpp:234
+#: ../src/gui/dialogs/IntervalDialog.cpp:215
+#: ../src/gui/dialogs/IntervalDialog.cpp:245
 msgid "an augmented"
 msgstr "ylinouseva"
 
-#: ../src/gui/dialogs/IntervalDialog.cpp:206
-#: ../src/gui/dialogs/IntervalDialog.cpp:236
+#: ../src/gui/dialogs/IntervalDialog.cpp:217
+#: ../src/gui/dialogs/IntervalDialog.cpp:247
 msgid "a doubly diminished"
 msgstr "kaksoisvähennetty"
 
-#: ../src/gui/dialogs/IntervalDialog.cpp:208
-#: ../src/gui/dialogs/IntervalDialog.cpp:238
+#: ../src/gui/dialogs/IntervalDialog.cpp:219
+#: ../src/gui/dialogs/IntervalDialog.cpp:249
 msgid "a doubly augmented"
 msgstr "kaksoisylinouseva"
 
-#: ../src/gui/dialogs/IntervalDialog.cpp:210
-#: ../src/gui/dialogs/IntervalDialog.cpp:240
+#: ../src/gui/dialogs/IntervalDialog.cpp:221
+#: ../src/gui/dialogs/IntervalDialog.cpp:251
 msgid "a triply diminished"
 msgstr "kolmoisvähennetty"
 
-#: ../src/gui/dialogs/IntervalDialog.cpp:212
-#: ../src/gui/dialogs/IntervalDialog.cpp:242
+#: ../src/gui/dialogs/IntervalDialog.cpp:223
+#: ../src/gui/dialogs/IntervalDialog.cpp:253
 msgid "a triply augmented"
 msgstr "kolmoisvähennetty"
 
-#: ../src/gui/dialogs/IntervalDialog.cpp:214
+#: ../src/gui/dialogs/IntervalDialog.cpp:225
 msgid "a quadruply diminished"
 msgstr "neloisvähennetty"
 
-#: ../src/gui/dialogs/IntervalDialog.cpp:216
-#: ../src/gui/dialogs/IntervalDialog.cpp:244
+#: ../src/gui/dialogs/IntervalDialog.cpp:227
+#: ../src/gui/dialogs/IntervalDialog.cpp:255
 msgid "a quadruply augmented"
 msgstr "neloisylinouseva"
 
-#: ../src/gui/dialogs/IntervalDialog.cpp:218
-#: ../src/gui/dialogs/IntervalDialog.cpp:246
+#: ../src/gui/dialogs/IntervalDialog.cpp:229
+#: ../src/gui/dialogs/IntervalDialog.cpp:257
 msgid "a perfect"
 msgstr "puhdas"
 
-#: ../src/gui/dialogs/IntervalDialog.cpp:220
-#: ../src/gui/dialogs/IntervalDialog.cpp:248
-#: ../src/gui/dialogs/IntervalDialog.cpp:251
-msgid "an (unknown)"
-msgstr "(tuntematon)"
+#: ../src/gui/dialogs/IntervalDialog.cpp:231
+#: ../src/gui/dialogs/IntervalDialog.cpp:259
+msgid "an (unknown, %1)"
+msgstr "(tuntematon, %1)"
 
-#: ../src/gui/dialogs/IntervalDialog.cpp:228
+#: ../src/gui/dialogs/IntervalDialog.cpp:239
 msgid "a minor"
 msgstr "pieni"
 
-#: ../src/gui/dialogs/IntervalDialog.cpp:230
+#: ../src/gui/dialogs/IntervalDialog.cpp:241
 msgid "a major"
 msgstr "suuri"
 
-#: ../src/gui/dialogs/IntervalDialog.cpp:256
+#: ../src/gui/dialogs/IntervalDialog.cpp:262
+msgid "an (unknown)"
+msgstr "(tuntematon)"
+
+#: ../src/gui/dialogs/IntervalDialog.cpp:271
+#: ../src/gui/dialogs/IntervalDialog.cpp:274
+msgid "%1 octave"
+msgstr "%1 oktaavi"
+
+#: ../src/gui/dialogs/IntervalDialog.cpp:277
 msgid "%1 unison"
 msgstr "%1 priimi"
 
-#: ../src/gui/dialogs/IntervalDialog.cpp:259
+#: ../src/gui/dialogs/IntervalDialog.cpp:281
 msgid "%1 second"
 msgstr "%1 sekunti"
 
-#: ../src/gui/dialogs/IntervalDialog.cpp:262
+#: ../src/gui/dialogs/IntervalDialog.cpp:284
 msgid "%1 third"
 msgstr "%1 terssi"
 
-#: ../src/gui/dialogs/IntervalDialog.cpp:265
+#: ../src/gui/dialogs/IntervalDialog.cpp:287
 msgid "%1 fourth"
 msgstr "%1 kvartti"
 
-#: ../src/gui/dialogs/IntervalDialog.cpp:268
+#: ../src/gui/dialogs/IntervalDialog.cpp:290
 msgid "%1 fifth"
 msgstr "%1 kvintti"
 
-#: ../src/gui/dialogs/IntervalDialog.cpp:271
+#: ../src/gui/dialogs/IntervalDialog.cpp:293
 msgid "%1 sixth"
 msgstr "%1 seksti"
 
-#: ../src/gui/dialogs/IntervalDialog.cpp:274
+#: ../src/gui/dialogs/IntervalDialog.cpp:296
 msgid "%1 seventh"
 msgstr "%1 septimi"
 
-#: ../src/gui/dialogs/IntervalDialog.cpp:277
+#: ../src/gui/dialogs/IntervalDialog.cpp:299
 #: ../src/gui/studio/DeviceManagerDialog.cpp:329
 #: ../src/gui/studio/DeviceManagerDialog.cpp:363
 #, c-format
 msgid "%1"
 msgstr "%1"
 
-#: ../src/gui/dialogs/IntervalDialog.cpp:288
+#: ../src/gui/dialogs/IntervalDialog.cpp:310
 msgid ""
 "_n: up 1 octave and %1\n"
 "up %n octaves and %1"
@@ -6564,7 +6592,7 @@ msgstr ""
 "1 oktaavi ja %1 ylös\n"
 "%n oktaavia ja %1 ylös"
 
-#: ../src/gui/dialogs/IntervalDialog.cpp:292
+#: ../src/gui/dialogs/IntervalDialog.cpp:314
 #, c-format
 msgid ""
 "_n: up 1 octave\n"
@@ -6573,12 +6601,12 @@ msgstr ""
 "1 oktaavi ylös\n"
 "%n oktaavia ylös"
 
-#: ../src/gui/dialogs/IntervalDialog.cpp:296
+#: ../src/gui/dialogs/IntervalDialog.cpp:318
 #, c-format
 msgid "up %1"
 msgstr "%1 ylös"
 
-#: ../src/gui/dialogs/IntervalDialog.cpp:304
+#: ../src/gui/dialogs/IntervalDialog.cpp:326
 msgid ""
 "_n: down 1 octave and %1\n"
 "down %n octaves and %1"
@@ -6586,7 +6614,7 @@ msgstr ""
 "1 oktaavi ja %1 alas\n"
 "%n oktaavia ja %1 alas"
 
-#: ../src/gui/dialogs/IntervalDialog.cpp:308
+#: ../src/gui/dialogs/IntervalDialog.cpp:330
 #, c-format
 msgid ""
 "_n: down 1 octave\n"
@@ -6595,7 +6623,7 @@ msgstr ""
 "1 oktaavi alas\n"
 "%n oktaavia alas"
 
-#: ../src/gui/dialogs/IntervalDialog.cpp:312
+#: ../src/gui/dialogs/IntervalDialog.cpp:334
 #, c-format
 msgid "down %1"
 msgstr "%1 alas"
