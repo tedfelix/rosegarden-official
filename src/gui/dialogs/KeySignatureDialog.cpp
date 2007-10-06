@@ -124,10 +124,6 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
         new QRadioButton(i18n("Use specified key.  Do not transpose"), transposeFrame);
     m_yesTransposeButton->setChecked(true);
 
-    m_noPercussionCheckBox =
-        new QCheckBox(i18n("Exclude percussion segments"), transposeFrame);
-    m_noPercussionCheckBox->setChecked(true);
-
     // just to shut up the compiler warning about unused variable:
     noTransposeButton->setChecked(false);
 
@@ -139,6 +135,9 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
             new QRadioButton(i18n("Apply to all segments at this time"),
                              buttonFrame);
         applyToOneButton->setChecked(true);
+	m_noPercussionCheckBox =
+	    new QCheckBox(i18n("Exclude percussion segments"), buttonFrame);
+	m_noPercussionCheckBox->setChecked(true);
     } else {
         m_applyToAllButton = 0;
         buttonFrame->hide();
