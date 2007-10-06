@@ -427,7 +427,7 @@ int main(int argc, char *argv[])
     aboutData.addCredit("Eckhard Jokisch", I18N_NOOP("German translation"), "e.jokisch@u-code.de");
     aboutData.addCredit("Kevin Donnelly", I18N_NOOP("Welsh translation"));
     aboutData.addCredit("Didier Burli", I18N_NOOP("French translation"), "didierburli@bluewin.ch");
-    aboutData.addCredit("Yves Guillemot", I18N_NOOP("French translation"), "yc.guillemot@wanadoo.fr");
+    aboutData.addCredit("Yves Guillemot", I18N_NOOP("French translation\nBug fixes"), "yc.guillemot@wanadoo.fr");
     aboutData.addCredit("Daniele Medri", I18N_NOOP("Italian translation"), "madrid@linuxmeeting.net");
     aboutData.addCredit("Alessandro Musesti", I18N_NOOP("Italian translation"), "a.musesti@dmf.unicatt.it");
     aboutData.addCredit("Stefan Asserhäll", I18N_NOOP("Swedish translation"), "stefan.asserhall@comhem.se");
@@ -452,7 +452,7 @@ int main(int argc, char *argv[])
     aboutData.addCredit("Lucas Godoy", I18N_NOOP("Spanish translation"), "godoy.lucas@gmail.com");
     aboutData.addCredit("Feliu Ferrer", I18N_NOOP("Catalan translation"), "mverge2@pie.xtec.es");
     aboutData.addCredit("Quim Perez i Noguer", I18N_NOOP("Catalan translation"), "noguer@osona.com");
-    aboutData.addCredit("Carolyn McIntyre", I18N_NOOP("1.2.3 splash screen photo (of Michael's rose garden)\nnew splash screen photo (of Michael McIntyre's\ninstruments along with a rose from the garden of Hassell Arnold Hale, 1916-2006,\nmay he rest in peace)"), "catma@adelphia.net");
+    aboutData.addCredit("Carolyn McIntyre", I18N_NOOP("1.2.3 splash screen photo\nGave birth to D. Michael McIntyre, bought him a good flute once\nupon a time, and always humored him when he came over to play her\nsome new instrument, even though she really hated his playing.\nBorn October 19, 1951, died September 21, 2007, R. I. P."), "DECEASED");
     aboutData.addCredit("Heikki Johannes Junes", I18N_NOOP("Finnish translation\nLilyPond export fixes/improvements"), "hjunes@cc.hut.fi");
     aboutData.addCredit("Stephen Torri", I18N_NOOP("guitar chord editor"), "storri@torri.org");
     aboutData.addCredit("Piotr Sawicki", I18N_NOOP("Polish translation"), "pelle@plusnet.pl");
