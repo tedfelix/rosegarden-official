@@ -89,9 +89,13 @@ public:
     Instrument *getInstrumentFor(Segment *);
     Instrument *getInstrumentFor(Track *);
 
+    // Return a Buss
     BussList getBusses();
     Buss *getBussById(BussId id);
     void addBuss(Buss *buss);
+
+    // Return an Instrument or a Buss
+    PluginContainer *getContainerById(InstrumentId id);
 
     RecordInList getRecordIns() { return m_recordIns; }
     RecordIn *getRecordIn(int number);

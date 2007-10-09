@@ -99,7 +99,7 @@ AudioPluginOSCGUIManager::~AudioPluginOSCGUIManager()
 
     for (TargetGUIMap::iterator i = m_guis.begin(); i != m_guis.end(); ++i) {
         for (IntGUIMap::iterator j = i->second.begin(); j != i->second.end();
-                ++j) {
+             ++j) {
             delete j->second;
         }
     }
@@ -136,13 +136,12 @@ AudioPluginOSCGUIManager::checkOSCThread()
 bool
 AudioPluginOSCGUIManager::hasGUI(InstrumentId instrument, int position)
 {
-    Instrument *i = m_studio->getInstrumentById(instrument);
-    if (!i)
-        return false;
+    PluginContainer *container = 0;
+    container = m_studio->getContainerById(instrument);
+    if (!container) return false;
 
-    AudioPluginInstance *pluginInstance = i->getPlugin(position);
-    if (!pluginInstance)
-        return false;
+    AudioPluginInstance *pluginInstance = container->getPlugin(position);
+    if (!pluginInstance) return false;
 
     try {
         QString filePath = AudioPluginOSCGUI::getGUIFilePath
@@ -168,14 +167,15 @@ AudioPluginOSCGUIManager::startGUI(InstrumentId instrument, int position)
     }
 
     // check the label
-    Instrument *i = m_studio->getInstrumentById(instrument);
-    if (!i) {
-        RG_DEBUG << "AudioPluginOSCGUIManager::startGUI: no such instrument as "
-        << instrument << endl;
-        return ;
+    PluginContainer *container = 0;
+    container = m_studio->getContainerById(instrument);
+    if (!container) {
+        RG_DEBUG << "AudioPluginOSCGUIManager::startGUI: no such instrument or buss as "
+                 << instrument << endl;
+        return;
     }
 
-    AudioPluginInstance *pluginInstance = i->getPlugin(position);
+    AudioPluginInstance *pluginInstance = container->getPlugin(position);
     if (!pluginInstance) {
         RG_DEBUG << "AudioPluginOSCGUIManager::startGUI: no plugin at position "
         << position << " for instrument " << instrument << endl;
@@ -207,7 +207,7 @@ AudioPluginOSCGUIManager::showGUI(InstrumentId instrument, int position)
     << endl;
 
     if (m_guis.find(instrument) != m_guis.end() &&
-            m_guis[instrument].find(position) != m_guis[instrument].end()) {
+        m_guis[instrument].find(position) != m_guis[instrument].end()) {
         m_guis[instrument][position]->show();
     } else {
         startGUI(instrument, position);
@@ -218,7 +218,7 @@ void
 AudioPluginOSCGUIManager::stopGUI(InstrumentId instrument, int position)
 {
     if (m_guis.find(instrument) != m_guis.end() &&
-            m_guis[instrument].find(position) != m_guis[instrument].end()) {
+        m_guis[instrument].find(position) != m_guis[instrument].end()) {
         delete m_guis[instrument][position];
         m_guis[instrument].erase(position);
         if (m_guis[instrument].empty())
@@ -252,19 +252,19 @@ AudioPluginOSCGUIManager::updateProgram(InstrumentId instrument, int position)
     << position << ")" << endl;
 
     if (m_guis.find(instrument) == m_guis.end() ||
-            m_guis[instrument].find(position) == m_guis[instrument].end())
+        m_guis[instrument].find(position) == m_guis[instrument].end())
         return ;
 
-    Instrument *i = m_studio->getInstrumentById(instrument);
-    if (!i)
-        return ;
+    PluginContainer *container = 0;
+    container = m_studio->getContainerById(instrument);
+    if (!container) return;
 
-    AudioPluginInstance *pluginInstance = i->getPlugin(position);
-    if (!pluginInstance)
-        return ;
+    AudioPluginInstance *pluginInstance = container->getPlugin(position);
+    if (!pluginInstance) return;
 
     unsigned long rv = StudioControl::getPluginProgram
-                       (pluginInstance->getMappedId(), strtoqstr(pluginInstance->getProgram()));
+                       (pluginInstance->getMappedId(),
+                        strtoqstr(pluginInstance->getProgram()));
 
     int bank = rv >> 16;
     int program = rv - (bank << 16);
@@ -283,14 +283,14 @@ AudioPluginOSCGUIManager::updatePort(InstrumentId instrument, int position,
     << position << "," << port << ")" << endl;
 
     if (m_guis.find(instrument) == m_guis.end() ||
-            m_guis[instrument].find(position) == m_guis[instrument].end())
+        m_guis[instrument].find(position) == m_guis[instrument].end())
         return ;
 
-    Instrument *i = m_studio->getInstrumentById(instrument);
-    if (!i)
-        return ;
+    PluginContainer *container = 0;
+    container = m_studio->getContainerById(instrument);
+    if (!container) return;
 
-    AudioPluginInstance *pluginInstance = i->getPlugin(position);
+    AudioPluginInstance *pluginInstance = container->getPlugin(position);
     if (!pluginInstance)
         return ;
 
@@ -315,13 +315,11 @@ AudioPluginOSCGUIManager::updateConfiguration(InstrumentId instrument, int posit
             m_guis[instrument].find(position) == m_guis[instrument].end())
         return ;
 
-    Instrument *i = m_studio->getInstrumentById(instrument);
-    if (!i)
-        return ;
+    PluginContainer *container = m_studio->getContainerById(instrument);
+    if (!container) return;
 
-    AudioPluginInstance *pluginInstance = i->getPlugin(position);
-    if (!pluginInstance)
-        return ;
+    AudioPluginInstance *pluginInstance = container->getPlugin(position);
+    if (!pluginInstance) return;
 
     QString value = strtoqstr(pluginInstance->getConfigurationValue(qstrtostr(key)));
 
@@ -405,14 +403,14 @@ AudioPluginOSCGUIManager::parseOSCPath(QString path, InstrumentId &instrument,
     }
 
     // check the label
-    Instrument *i = m_studio->getInstrumentById(instrument);
-    if (!i) {
-        RG_DEBUG << "AudioPluginOSCGUIManager::parseOSCPath: no such instrument as "
+    PluginContainer *container = m_studio->getContainerById(instrument);
+    if (!container) {
+        RG_DEBUG << "AudioPluginOSCGUIManager::parseOSCPath: no such instrument or buss as "
         << instrument << " in path " << path << endl;
         return false;
     }
 
-    AudioPluginInstance *pluginInstance = i->getPlugin(position);
+    AudioPluginInstance *pluginInstance = container->getPlugin(position);
     if (!pluginInstance) {
         RG_DEBUG << "AudioPluginOSCGUIManager::parseOSCPath: no plugin at position "
         << position << " for instrument " << instrument << " in path "
@@ -441,14 +439,14 @@ QString
 AudioPluginOSCGUIManager::getFriendlyName(InstrumentId instrument, int position,
         QString)
 {
-    Instrument *i = m_studio->getInstrumentById(instrument);
-    if (!i)
+    PluginContainer *container = m_studio->getContainerById(instrument);
+    if (!container)
         return i18n("Rosegarden Plugin");
     else {
         if (position == int(Instrument::SYNTH_PLUGIN_POSITION)) {
-            return i18n("Rosegarden: %1").arg(strtoqstr(i->getPresentationName()));
+            return i18n("Rosegarden: %1").arg(strtoqstr(container->getPresentationName()));
         } else {
-            return i18n("Rosegarden: %1: %2").arg(strtoqstr(i->getPresentationName()))
+            return i18n("Rosegarden: %1: %2").arg(strtoqstr(container->getPresentationName()))
                    .arg(i18n("Plugin slot %1").arg(position));
         }
     }
@@ -475,13 +473,11 @@ AudioPluginOSCGUIManager::dispatch()
         int instrument = message->getTarget();
         int position = message->getTargetData();
 
-        Instrument *i = m_studio->getInstrumentById(instrument);
-        if (!i)
-            continue;
+        PluginContainer *container = m_studio->getContainerById(instrument);
+        if (!container) continue;
 
-        AudioPluginInstance *pluginInstance = i->getPlugin(position);
-        if (!pluginInstance)
-            continue;
+        AudioPluginInstance *pluginInstance = container->getPlugin(position);
+        if (!pluginInstance) continue;
 
         AudioPluginOSCGUI *gui = 0;
 
