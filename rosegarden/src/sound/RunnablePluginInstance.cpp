@@ -29,10 +29,10 @@ namespace Rosegarden
 
 RunnablePluginInstance::~RunnablePluginInstance()
 {
-    std::cerr << "RunnablePluginInstance::~RunnablePluginInstance" << std::endl;
+//    std::cerr << "RunnablePluginInstance::~RunnablePluginInstance" << std::endl;
 
     if (m_factory) {
-        std::cerr << "Asking factory to release " << m_identifier << std::endl;
+//        std::cerr << "Asking factory to release " << m_identifier << std::endl;
 
         m_factory->releasePlugin(this, m_identifier);
     }
