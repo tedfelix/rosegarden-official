@@ -346,7 +346,7 @@ DSSIPluginInstance::initialiseGroupMembership()
 
 DSSIPluginInstance::~DSSIPluginInstance()
 {
-    std::cerr << "DSSIPluginInstance::~DSSIPluginInstance" << std::endl;
+//    std::cerr << "DSSIPluginInstance::~DSSIPluginInstance" << std::endl;
 
     detachFromGroup();
 
