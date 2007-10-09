@@ -11,7 +11,7 @@ trap "rm -rf \"$tmpdir\"" 0
 # mktemp OR tempfile
 # kpdf OR kghostview OR gpdf OR xpdf OR evince OR acroread
 # kdialog [for graphical mode only]
-# kprinter
+# kprinter OR gtklp
 
 prog_lilypond=""
 prog_temp_file=""
@@ -101,7 +101,7 @@ if [ -z "$prog_pdf_view" ]; then
     echo "rosegarden-lilypondview: No PDF viewer found" 1>&2
 fi
 
-for x in kprinter; do
+for x in kprinter gtklp; do
     if [ -x "`type -path $x`" ]; then
 	prog_printer=$x
 	break;
@@ -109,7 +109,7 @@ for x in kprinter; do
 done
 
 if [ -z "$prog_printer" ]; then
-    reqd="kprinter, $reqd"
+    reqd="kprinter OR gtklp, $reqd"
     echo "rosegarden-lilypondview: No printing program found" 1>&2
 fi
 
