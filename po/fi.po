@@ -4240,7 +4240,7 @@ msgstr ""
 "voi tarkoittaa, että käytät Linux-järjestelmää, jossa ytimen "
 "aikaerottelukyky on asetettu liian alhaiseksi.  Ole hyvä ja ota yhteyttä "
 "Linux-jakelijaasi saadaksesi lisää informaatiota.</p><p>Jotkut Linux-"
-"distribuutiot tukevat jo pienen viiven kerneleitä, katso lisäohjeita sivulta "
+"distribuutiot tukevat jo pienen viiveen kerneleitä, katso lisäohjeita sivulta "
 "<a href=\"http://rosegarden.wiki.sourceforge.net/Low+latency+kernels\">http://rosegarden.wiki.sourceforge.net/Low+latency+kernels</a>.</p>"
 
 #: ../src/gui/seqmanager/SequenceManager.cpp:1288
