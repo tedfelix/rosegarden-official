@@ -63,11 +63,16 @@ IntervalDialog::IntervalDialog(QWidget *parent, bool askChangeKey, bool askTrans
     //m_intervalPitchLabel = new QLabel( i18n("Pitch: %1").arg(intervalChromatic), hBox);
     //m_intervalOctavesLabel = new QLabel( i18n("Octaves: %1").arg(intervalDiatonic / 7), hBox);
     //m_intervalStepsLabel = new QLabel( i18n("Steps: %1").arg(intervalDiatonic % 7), hBox);
+
     m_intervalLabel = new QLabel( i18n("a perfect unison"), vBox);
+    m_intervalLabel->setAlignment(Qt::AlignCenter);
+    QFont font(m_intervalLabel->font());
+    font.setItalic(true);
+    m_intervalLabel->setFont(font);
 
     if (askChangeKey)
     {
-        QButtonGroup *affectKeyGroup = new QButtonGroup(1, Horizontal, i18n("Effect to key"), vBox);
+        QButtonGroup *affectKeyGroup = new QButtonGroup(1, Horizontal, i18n("Effect on Key"), vBox);
         m_transposeWithinKey = new QRadioButton(i18n("Transpose within key"), affectKeyGroup);
         m_transposeWithinKey->setChecked(true);
         m_transposeChangingKey = new QRadioButton(i18n("Change key for selection"), affectKeyGroup);
