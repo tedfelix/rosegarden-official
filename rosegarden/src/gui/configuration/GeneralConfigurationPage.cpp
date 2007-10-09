@@ -31,6 +31,9 @@
 #include "gui/editors/eventlist/EventView.h"
 #include "gui/editors/parameters/RosegardenParameterArea.h"
 #include "gui/studio/StudioControl.h"
+#include "gui/dialogs/ShowSequencerStatusDialog.h"
+#include "gui/seqmanager/SequenceManager.h"
+#include "sound/SoundDriver.h"
 #include "TabbedConfigurationPage.h"
 #include <kcombobox.h>
 #include <kconfig.h>
@@ -90,7 +93,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
     m_client->insertItem(i18n("Event List editor"));
     m_client->setCurrentItem(m_cfg->readUnsignedNumEntry("doubleclickclient", NotationView));
 
-    layout->addWidget(m_client, row, 1);
+    layout->addMultiCellWidget(m_client, row, row, 1, 2);
     ++row;
 
     layout->addWidget(new QLabel(i18n("Number of count-in measures when recording"),
@@ -100,7 +103,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
     m_countIn->setValue(m_cfg->readUnsignedNumEntry("countinbars", 0));
     m_countIn->setMaxValue(10);
     m_countIn->setMinValue(0);
-    layout->addWidget(m_countIn, row, 1);
+    layout->addMultiCellWidget(m_countIn, row, row, 1, 2);
     ++row;
 
     layout->addWidget(new QLabel(i18n("Auto-save interval"), frame), row, 0);
@@ -126,7 +129,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
         m_autoSave->setCurrentItem(3);
     }
 
-    layout->addWidget(m_autoSave, row, 1);
+    layout->addMultiCellWidget(m_autoSave, row, row, 1, 2);
     ++row;
 
     // JACK Transport
@@ -138,7 +141,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
     layout->addWidget(label, row, 0);
 
     m_jackTransport = new QCheckBox(frame);
-    layout->addWidget(m_jackTransport, row, 1);
+    layout->addMultiCellWidget(m_jackTransport, row, row, 1, 2);
 
 //    m_jackTransport->insertItem(i18n("Ignore JACK transport"));
 //    m_jackTransport->insertItem(i18n("Sync"));
@@ -161,6 +164,40 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
 
     m_cfg->setGroup(GeneralOptionsConfigGroup);
 #endif
+
+    layout->setRowSpacing(row, 20);
+    ++row;
+
+    layout->addWidget(new QLabel(i18n("Sequencer status"), frame), row, 0);
+
+    QString status(i18n("Unknown"));
+    SequenceManager *mgr = doc->getSequenceManager();
+    if (mgr) {
+        int driverStatus = mgr->getSoundDriverStatus() & (AUDIO_OK | MIDI_OK);
+        switch (driverStatus) {
+        case AUDIO_OK:
+            status = i18n("No MIDI, audio OK");
+            break;
+        case MIDI_OK:
+            status = i18n("MIDI OK, no audio");
+            break;
+        case AUDIO_OK | MIDI_OK:
+            status = i18n("MIDI OK, audio OK");
+            break;
+        default:
+            status = i18n("No driver");
+            break;
+        }
+    }
+
+    layout->addWidget(new QLabel(status, frame), row, 1);
+
+    QPushButton *showStatusButton = new QPushButton(i18n("Details..."),
+                                    frame);
+    QObject::connect(showStatusButton, SIGNAL(clicked()),
+                     this, SLOT(slotShowStatus()));
+    layout->addWidget(showStatusButton, row, 2, Qt::AlignRight);
+    ++row;
 
     layout->setRowStretch(row, 10);
 
@@ -249,6 +286,13 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
 
     addTab(frame, i18n("Presentation"));
 
+}
+
+void
+GeneralConfigurationPage::slotShowStatus()
+{
+    ShowSequencerStatusDialog dialog(this);
+    dialog.exec();
 }
 
 void GeneralConfigurationPage::apply()

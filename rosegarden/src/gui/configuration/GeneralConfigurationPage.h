@@ -83,6 +83,8 @@ signals:
     void updateAutoSaveInterval(unsigned int);
     void updateSidebarStyle(unsigned int);
 
+protected slots:
+    void slotShowStatus();
 
 protected:
     int getCountInSpin()            { return m_countIn->value(); }
