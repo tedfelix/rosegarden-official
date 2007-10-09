@@ -268,6 +268,14 @@ Studio::addBuss(Buss *buss)
     m_busses.push_back(buss);
 }
 
+PluginContainer *
+Studio::getContainerById(InstrumentId id)
+{
+    PluginContainer *pc = getInstrumentById(id);
+    if (pc) return pc;
+    else return getBussById(id);
+}
+
 RecordIn *
 Studio::getRecordIn(int number)
 {

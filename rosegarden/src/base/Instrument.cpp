@@ -608,6 +608,12 @@ Buss::getName() const
     return buffer;
 }
 
+std::string
+Buss::getPresentationName() const
+{
+    return getName();
+}
+
 RecordIn::RecordIn() :
     m_mappedId(0)
 {

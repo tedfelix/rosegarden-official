@@ -6825,9 +6825,7 @@ RosegardenGUIApp::slotShowPluginDialog(QWidget *parent,
 
     PluginContainer *container = 0;
 
-    container = m_doc->getStudio().getInstrumentById(instrumentId);
-    if (!container)
-        container = m_doc->getStudio().getBussById(instrumentId);
+    container = m_doc->getStudio().getContainerById(instrumentId);
     if (!container) {
         RG_DEBUG << "RosegardenGUIApp::slotShowPluginDialog - "
         << "no instrument or buss of id " << instrumentId << endl;
@@ -6931,9 +6929,7 @@ RosegardenGUIApp::slotPluginSelected(InstrumentId instrumentId,
 
     PluginContainer *container = 0;
 
-    container = m_doc->getStudio().getInstrumentById(instrumentId);
-    if (!container)
-        container = m_doc->getStudio().getBussById(instrumentId);
+    container = m_doc->getStudio().getContainerById(instrumentId);
     if (!container) {
         RG_DEBUG << "RosegardenGUIApp::slotPluginSelected - "
         << "no instrument or buss of id " << instrumentId << endl;
@@ -7081,9 +7077,7 @@ RosegardenGUIApp::slotChangePluginPort(InstrumentId instrumentId,
 {
     PluginContainer *container = 0;
 
-    container = m_doc->getStudio().getInstrumentById(instrumentId);
-    if (!container)
-        container = m_doc->getStudio().getBussById(instrumentId);
+    container = m_doc->getStudio().getContainerById(instrumentId);
     if (!container) {
         RG_DEBUG << "RosegardenGUIApp::slotChangePluginPort - "
         << "no instrument or buss of id " << instrumentId << endl;
@@ -7130,9 +7124,7 @@ RosegardenGUIApp::slotPluginPortChanged(InstrumentId instrumentId,
 {
     PluginContainer *container = 0;
 
-    container = m_doc->getStudio().getInstrumentById(instrumentId);
-    if (!container)
-        container = m_doc->getStudio().getBussById(instrumentId);
+    container = m_doc->getStudio().getContainerById(instrumentId);
     if (!container) {
         RG_DEBUG << "RosegardenGUIApp::slotPluginPortChanged - "
         << "no instrument or buss of id " << instrumentId << endl;
@@ -7180,9 +7172,7 @@ RosegardenGUIApp::slotChangePluginProgram(InstrumentId instrumentId,
 {
     PluginContainer *container = 0;
 
-    container = m_doc->getStudio().getInstrumentById(instrumentId);
-    if (!container)
-        container = m_doc->getStudio().getBussById(instrumentId);
+    container = m_doc->getStudio().getContainerById(instrumentId);
     if (!container) {
         RG_DEBUG << "RosegardenGUIApp::slotChangePluginProgram - "
         << "no instrument or buss of id " << instrumentId << endl;
@@ -7233,9 +7223,7 @@ RosegardenGUIApp::slotPluginProgramChanged(InstrumentId instrumentId,
 {
     PluginContainer *container = 0;
 
-    container = m_doc->getStudio().getInstrumentById(instrumentId);
-    if (!container)
-        container = m_doc->getStudio().getBussById(instrumentId);
+    container = m_doc->getStudio().getContainerById(instrumentId);
     if (!container) {
         RG_DEBUG << "RosegardenGUIApp::slotPluginProgramChanged - "
         << "no instrument or buss of id " << instrumentId << endl;
@@ -7290,9 +7278,7 @@ RosegardenGUIApp::slotChangePluginConfiguration(InstrumentId instrumentId,
 {
     PluginContainer *container = 0;
 
-    container = m_doc->getStudio().getInstrumentById(instrumentId);
-    if (!container)
-        container = m_doc->getStudio().getBussById(instrumentId);
+    container = m_doc->getStudio().getContainerById(instrumentId);
     if (!container) {
         RG_DEBUG << "RosegardenGUIApp::slotChangePluginConfiguration - "
         << "no instrument or buss of id " << instrumentId << endl;
@@ -7384,9 +7370,7 @@ RosegardenGUIApp::slotPluginBypassed(InstrumentId instrumentId,
 {
     PluginContainer *container = 0;
 
-    container = m_doc->getStudio().getInstrumentById(instrumentId);
-    if (!container)
-        container = m_doc->getStudio().getBussById(instrumentId);
+    container = m_doc->getStudio().getContainerById(instrumentId);
     if (!container) {
         RG_DEBUG << "RosegardenGUIApp::slotPluginBypassed - "
         << "no instrument or buss of id " << instrumentId << endl;
