@@ -44,7 +44,6 @@ class HeadersConfigurationPage : public QVBox
 public:
     HeadersConfigurationPage(QWidget *parent = 0,
 	       RosegardenGUIDoc *doc = 0);
-    ~HeadersConfigurationPage();
 
 public slots:
     void apply();
