@@ -25,10 +25,11 @@
 
 #include "LilypondOptionsDialog.h"
 #include "document/io/LilypondExporter.h"
+#include "gui/configuration/HeadersConfigurationPage.h"
+
 #include <qlayout.h>
 #include <kapplication.h>
 
-#include <klocale.h>
 #include "document/ConfigGroups.h"
 #include "document/RosegardenGUIDoc.h"
 #include "misc/Strings.h"
@@ -48,7 +49,6 @@
 #include <qvbox.h>
 #include <qwidget.h>
 #include <iostream>
-
 
 namespace Rosegarden
 {
@@ -79,17 +79,23 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
     QVBox * vboxAdvanced = new QVBox();
     tabWidget->addTab(vboxAdvanced,i18n("Advanced options"));
 
+/*
     QVBox * vboxHeaders = new QVBox();
     tabWidget->addTab(vboxHeaders,i18n("Headers"));
+*/
+
+    m_headersPage = new HeadersConfigurationPage(this,m_doc);
+    tabWidget->addTab(m_headersPage,"Headers");
 
     vboxGeneral->setSpacing(5);
     vboxGeneral->setMargin(5);
 
     vboxAdvanced->setSpacing(5);
     vboxAdvanced->setMargin(5);
-
+/*
     vboxHeaders->setSpacing(5);
     vboxHeaders->setMargin(5);
+*/
 
     //
     // LilyPond export: Basic options
@@ -261,7 +267,7 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
     //
     // LilyPond export: Headers
     //
-
+/*
     QGroupBox *headersBox = new QGroupBox
                            (1, Horizontal,
                             i18n("Printable headers"), vboxHeaders);
@@ -341,6 +347,7 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
     QLabel *separator = new QLabel(i18n("The composition comes here."), frameHeaders);
     separator->setAlignment( Qt::AlignCenter );
     layoutHeaders->addMultiCellWidget(separator, 7, 7, 1, 4 );
+*/
 }
 
 void
@@ -364,6 +371,7 @@ LilypondOptionsDialog::slotApply()
     config->writeEntry("lilyexportstaffmerge", m_lilyExportStaffMerge->isChecked());
     config->writeEntry("lilylyricshalignment", m_lilyLyricsHAlignment->currentItem());
 
+/*
     //
     // Update header fields
     //
@@ -384,6 +392,8 @@ LilypondOptionsDialog::slotApply()
     metadata.set<String>(CompositionMetadataKeys::Tagline, qstrtostr(m_editTagline->text()));
 
     m_doc->slotDocumentModified();
+*/
+    m_headersPage->apply();
 }
  
 void
