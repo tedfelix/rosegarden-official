@@ -45,11 +45,12 @@ PasteEventsCommand::PasteEventsCommand(Segment &segment,
                                        Clipboard *clipboard,
                                        timeT pasteTime,
                                        PasteType pasteType) :
-        BasicCommand(getGlobalName(), segment, pasteTime,
-                     getEffectiveEndTime(segment, clipboard, pasteTime)),
-        m_relayoutEndTime(getEndTime()),
-        m_clipboard(new Clipboard(*clipboard)),
-        m_pasteType(pasteType)
+    BasicCommand(getGlobalName(), segment, pasteTime,
+                 getEffectiveEndTime(segment, clipboard, pasteTime)),
+    m_relayoutEndTime(getEndTime()),
+    m_clipboard(new Clipboard(*clipboard)),
+    m_pasteType(pasteType),
+    m_pastedEvents(segment)
 {
     if (pasteType != OpenAndPaste) {
 
@@ -74,10 +75,11 @@ PasteEventsCommand::PasteEventsCommand(Segment &segment,
                                        timeT pasteTime,
                                        timeT pasteEndTime,
                                        PasteType pasteType) :
-        BasicCommand(getGlobalName(), segment, pasteTime, pasteEndTime),
-        m_relayoutEndTime(getEndTime()),
-        m_clipboard(new Clipboard(*clipboard)),
-        m_pasteType(pasteType)
+    BasicCommand(getGlobalName(), segment, pasteTime, pasteEndTime),
+    m_relayoutEndTime(getEndTime()),
+    m_clipboard(new Clipboard(*clipboard)),
+    m_pasteType(pasteType),
+    m_pastedEvents(segment)
 {}
 
 PasteEventsCommand::~PasteEventsCommand()
@@ -233,6 +235,7 @@ PasteEventsCommand::modifySegment()
 
             for (unsigned int i = 0; i < copies.size(); ++i) {
                 destination->insert(copies[i]);
+                m_pastedEvents.addEvent(copies[i]);
             }
 
             break;
@@ -250,10 +253,13 @@ PasteEventsCommand::modifySegment()
                                  <Int>(BEAMED_GROUP_ID)]);
             }
             if ((*i)->isa(Note::EventType)) {
-                helper.insertNote(e); // e is model event: we retain ownership of it
+                // e is model event: we retain ownership of it
+                Segment::iterator i = helper.insertNote(e);
                 delete e;
+                if (i != destination->end()) m_pastedEvents.addEvent(*i);
             } else {
                 destination->insert(e);
+                m_pastedEvents.addEvent(e);
             }
         }
 
@@ -282,6 +288,7 @@ PasteEventsCommand::modifySegment()
             }
 
             destination->insert(e);
+            m_pastedEvents.addEvent(e);
         }
 
         destination->normalizeRests
@@ -300,10 +307,17 @@ PasteEventsCommand::modifySegment()
                                               <Int>(BEAMED_GROUP_ID)]);
         }
         destination->insert(e);
+        m_pastedEvents.addEvent(e);
     }
 
     destination->normalizeRests
     (source->getStartTime(), source->getEndTime());
+}
+
+EventSelection
+PasteEventsCommand::getPastedEvents()
+{
+    return m_pastedEvents;
 }
 
 }

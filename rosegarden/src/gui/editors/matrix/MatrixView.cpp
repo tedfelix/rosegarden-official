@@ -1629,6 +1629,7 @@ void MatrixView::slotEditPaste()
         slotStatusHelpMsg(i18n("Couldn't paste at this point"));
     } else {
         addCommandToHistory(command);
+        setCurrentSelection(new EventSelection(command->getPastedEvents()));
     }
 }
 
