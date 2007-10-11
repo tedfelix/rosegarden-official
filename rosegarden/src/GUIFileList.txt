@@ -31,6 +31,8 @@ SET(commands_SRCS
 	commands/edit/EraseCommand.h
 	commands/edit/EventEditCommand.cpp
 	commands/edit/EventEditCommand.h
+	commands/edit/EventInsertionCommand.cpp
+	commands/edit/EventInsertionCommand.h
 	commands/edit/EventQuantizeCommand.cpp
 	commands/edit/EventQuantizeCommand.h
 	commands/edit/EventUnquantizeCommand.cpp
@@ -67,8 +69,6 @@ SET(commands_SRCS
 	commands/edit/SetTriggerCommand.h
 	commands/edit/TransposeCommand.cpp
 	commands/edit/TransposeCommand.h
-	commands/event/EventInsertionCommand.cpp
-	commands/event/EventInsertionCommand.h
 	commands/matrix/MatrixEraseCommand.cpp
 	commands/matrix/MatrixEraseCommand.h
 	commands/matrix/MatrixInsertionCommand.cpp

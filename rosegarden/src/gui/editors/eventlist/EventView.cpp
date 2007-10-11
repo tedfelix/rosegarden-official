@@ -44,7 +44,7 @@
 #include "commands/edit/EraseCommand.h"
 #include "commands/edit/EventEditCommand.h"
 #include "commands/edit/PasteEventsCommand.h"
-#include "commands/event/EventInsertionCommand.h"
+#include "commands/edit/EventInsertionCommand.h"
 #include "commands/segment/SegmentLabelCommand.h"
 #include "commands/segment/SetTriggerSegmentBasePitchCommand.h"
 #include "commands/segment/SetTriggerSegmentBaseVelocityCommand.h"
