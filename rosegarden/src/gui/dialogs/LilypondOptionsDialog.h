@@ -29,6 +29,7 @@
 #include <kdialogbase.h>
 #include <qstring.h>
 
+#include "gui/configuration/HeadersConfigurationPage.h"
 
 class QWidget;
 class QCheckBox;
@@ -75,23 +76,6 @@ protected:
     QCheckBox *m_lilyExportStaffMerge;
 
     HeadersConfigurationPage *m_headersPage;
-
-/*
-    // Header fields
-    QLineEdit *m_editDedication;
-    QLineEdit *m_editTitle;
-    QLineEdit *m_editSubtitle;
-    QLineEdit *m_editSubsubtitle;
-    QLineEdit *m_editPoet;
-    QLineEdit *m_editComposer;
-    QLineEdit *m_editMeter;
-    QLineEdit *m_editOpus;
-    QLineEdit *m_editArranger;
-    QLineEdit *m_editInstrument;
-    QLineEdit *m_editPiece;
-    QLineEdit *m_editCopyright;
-    QLineEdit *m_editTagline;
-*/
 
 };
 

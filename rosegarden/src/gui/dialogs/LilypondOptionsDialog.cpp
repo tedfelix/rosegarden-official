@@ -79,23 +79,14 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
     QVBox * vboxAdvanced = new QVBox();
     tabWidget->addTab(vboxAdvanced,i18n("Advanced options"));
 
-/*
-    QVBox * vboxHeaders = new QVBox();
-    tabWidget->addTab(vboxHeaders,i18n("Headers"));
-*/
-
     m_headersPage = new HeadersConfigurationPage(this,m_doc);
-    tabWidget->addTab(m_headersPage,"Headers");
+    tabWidget->addTab(m_headersPage,i18n("Headers"));
 
     vboxGeneral->setSpacing(5);
     vboxGeneral->setMargin(5);
 
     vboxAdvanced->setSpacing(5);
     vboxAdvanced->setMargin(5);
-/*
-    vboxHeaders->setSpacing(5);
-    vboxHeaders->setMargin(5);
-*/
 
     //
     // LilyPond export: Basic options
@@ -263,91 +254,6 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
     layoutExtra->addWidget(new QLabel(
                           i18n("Lyrics alignment"), frameExtra), 3, 0);
     layoutExtra->addWidget(m_lilyLyricsHAlignment, 3, 1);
-
-    //
-    // LilyPond export: Headers
-    //
-/*
-    QGroupBox *headersBox = new QGroupBox
-                           (1, Horizontal,
-                            i18n("Printable headers"), vboxHeaders);
-
-    QFrame *frameHeaders = new QFrame(headersBox);
-    QGridLayout *layoutHeaders = new QGridLayout(frameHeaders, 10, 6, 10, 5);
-
-    // grab user headers from metadata
-    Configuration metadata = (&m_doc->getComposition())->getMetadata();
-    std::vector<std::string> propertyNames = metadata.getPropertyNames();
-    std::vector<PropertyName> fixedKeys =
-	CompositionMetadataKeys::getFixedKeys();
-
-    for (unsigned int index = 0; index < fixedKeys.size(); index++) {
-	std::string key = fixedKeys[index].getName();
-	std::string header = "";
-	for (unsigned int i = 0; i < propertyNames.size(); ++i) {
-	    std::string property = propertyNames [i];
-	    if (property == key) {
-		header = metadata.get<String>(property);
-	    }
-	}
-
-	unsigned int row = 0, col = 0, width = 1;
-	QLineEdit *editHeader = new QLineEdit( QString( strtoqstr( header ) ), frameHeaders );
-	if (key == headerDedication) {  
-	    m_editDedication = editHeader;
-	    row = 0; col = 2; width = 2;
-	} else if (key == headerTitle) {       
-	    m_editTitle = editHeader;	
-	    row = 1; col = 1; width = 4;
-	} else if (key == headerSubtitle) {
-	    m_editSubtitle = editHeader;
-	    row = 2; col = 1; width = 4;
-	} else if (key == headerSubsubtitle) { 
-	    m_editSubsubtitle = editHeader;
-	    row = 3; col = 2; width = 2;
-	} else if (key == headerPoet) {        
-	    m_editPoet = editHeader;
-	    row = 4; col = 0; width = 2;
-	} else if (key == headerInstrument) {  
-	    m_editInstrument = editHeader;
-	    row = 4; col = 2; width = 2;
-	} else if (key == headerComposer) {    
-	    m_editComposer = editHeader;
-	    row = 4; col = 4; width = 2; 
-	} else if (key == headerMeter) {       
-	    m_editMeter = editHeader;
-	    row = 5; col = 0; width = 3; 
-	} else if (key == headerArranger) {    
-	    m_editArranger = editHeader;
-	    row = 5; col = 3; width = 3; 
-	} else if (key == headerPiece) {       
-	    m_editPiece = editHeader;
-	    row = 6; col = 0; width = 3; 
-	} else if (key == headerOpus) {        
-	    m_editOpus = editHeader;
-	    row = 6; col = 3; width = 3; 
-	} else if (key == headerCopyright) {   
-	    m_editCopyright = editHeader;
-	    row = 8; col = 1; width = 4; 
-	} else if (key == headerTagline) {     
-	    m_editTagline = editHeader;
-	    row = 9; col = 1; width = 4; 
-	}
-
-	// editHeader->setReadOnly( true );
-	editHeader->setAlignment( (col == 0 ? Qt::AlignLeft : (col >= 3 ? Qt::AlignRight : Qt::AlignCenter) ));
-
-	layoutHeaders->addMultiCellWidget(editHeader, row, row, col, col+(width-1) );
-
-	//
-	// ToolTips
-	//
-	QToolTip::add( editHeader, key );
-    }
-    QLabel *separator = new QLabel(i18n("The composition comes here."), frameHeaders);
-    separator->setAlignment( Qt::AlignCenter );
-    layoutHeaders->addMultiCellWidget(separator, 7, 7, 1, 4 );
-*/
 }
 
 void
@@ -371,28 +277,6 @@ LilypondOptionsDialog::slotApply()
     config->writeEntry("lilyexportstaffmerge", m_lilyExportStaffMerge->isChecked());
     config->writeEntry("lilylyricshalignment", m_lilyLyricsHAlignment->currentItem());
 
-/*
-    //
-    // Update header fields
-    //
-
-    Configuration &metadata = (&m_doc->getComposition())->getMetadata();
-    metadata.set<String>(CompositionMetadataKeys::Dedication, qstrtostr(m_editDedication->text()));
-    metadata.set<String>(CompositionMetadataKeys::Title, qstrtostr(m_editTitle->text()));
-    metadata.set<String>(CompositionMetadataKeys::Subtitle, qstrtostr(m_editSubtitle->text()));
-    metadata.set<String>(CompositionMetadataKeys::Subsubtitle, qstrtostr(m_editSubsubtitle->text()));
-    metadata.set<String>(CompositionMetadataKeys::Poet, qstrtostr(m_editPoet->text()));
-    metadata.set<String>(CompositionMetadataKeys::Composer, qstrtostr(m_editComposer->text()));
-    metadata.set<String>(CompositionMetadataKeys::Meter, qstrtostr(m_editMeter->text()));
-    metadata.set<String>(CompositionMetadataKeys::Opus, qstrtostr(m_editOpus->text()));
-    metadata.set<String>(CompositionMetadataKeys::Arranger, qstrtostr(m_editArranger->text()));
-    metadata.set<String>(CompositionMetadataKeys::Instrument, qstrtostr(m_editInstrument->text()));
-    metadata.set<String>(CompositionMetadataKeys::Piece, qstrtostr(m_editPiece->text()));
-    metadata.set<String>(CompositionMetadataKeys::Copyright, qstrtostr(m_editCopyright->text()));
-    metadata.set<String>(CompositionMetadataKeys::Tagline, qstrtostr(m_editTagline->text()));
-
-    m_doc->slotDocumentModified();
-*/
     m_headersPage->apply();
 }
  
