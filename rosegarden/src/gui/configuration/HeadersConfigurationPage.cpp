@@ -27,6 +27,8 @@
 
 #include "document/ConfigGroups.h"
 #include "document/RosegardenGUIDoc.h"
+#include "document/io/LilypondExporter.h"
+#include "misc/Strings.h"
 
 #include <kconfig.h>
 #include <klocale.h>
@@ -74,7 +76,7 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
 	}
 
 	unsigned int row = 0, col = 0, width = 1;
-	QLineEdit *editHeader = new QLineEdit( QString( strtoqstr( header ) ), frameHeaders );
+	QLineEdit *editHeader = new QLineEdit(strtoqstr( header ), frameHeaders);
 	if (key == headerDedication) {  
 	    m_editDedication = editHeader;
 	    row = 0; col = 2; width = 2;
