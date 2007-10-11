@@ -653,21 +653,24 @@ SequenceManager::record(bool toggled)
             QByteArray replyData;
 
             // Send Record to the Sequencer to signal it to drop out of record mode
-            //
-            //!!! huh? this doesn't look very plausible
-            //            if (!rgapp->sequencerCall("play(long int, long int, long int, long int, long int, long int, long int, long int, long int, long int, long int)",
-            //                                  replyType, replyData, data))
             if (!rgapp->sequencerCall("punchOut()", replyType, replyData, data)) {
                 SEQMAN_DEBUG << "SequenceManager::record - the \"not very plausible\" code executed\n";
+                // #1797873 - set new transport status first, so that
+                // if we're stopping recording we don't risk the
+                // record segment being restored by a timer while the
+                // document is busy trying to do away with it
+                m_transportStatus = STOPPED;
+
                 m_doc->stopRecordingMidi();
                 m_doc->stopRecordingAudio();
-                m_transportStatus = STOPPED;
                 return ;
             }
 
+            // #1797873 - as above
+            m_transportStatus = PLAYING;
+
             m_doc->stopRecordingMidi();
             m_doc->stopRecordingAudio();
-            m_transportStatus = PLAYING;
 
             return ;
         }
@@ -908,8 +911,7 @@ punchin:
 
 void
 SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
-        AudioManagerDialog
-        *audioManagerDialog)
+                                         AudioManagerDialog *audioManagerDialog)
 {
     static bool boolShowingWarning = false;
     static bool boolShowingALSAWarning = false;
@@ -976,7 +978,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
             }
 
             if ((*i)->getType() ==
-                    MappedEvent::SystemUpdateInstruments) {
+                MappedEvent::SystemUpdateInstruments) {
                 // resync Devices and Instruments
                 //
                 m_doc->syncDevices();
@@ -989,7 +991,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
             }
 
             if (m_transportStatus == PLAYING ||
-                    m_transportStatus == RECORDING) {
+                m_transportStatus == RECORDING) {
                 if ((*i)->getType() == MappedEvent::SystemFailure) {
 
                     SEQMAN_DEBUG << "Failure of some sort..." << endl;
@@ -1178,7 +1180,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 
     for (i = mC.begin(); i != mC.end(); ++i ) {
         if (m_transportStatus == STOPPED ||
-                m_transportStatus == RECORDING_ARMED) {
+            m_transportStatus == RECORDING_ARMED) {
             if ((*i)->getType() == MappedEvent::MidiNote) {
                 if ((*i)->getVelocity() == 0) {
                     emit insertableNoteOffReceived((*i)->getPitch(), (*i)->getVelocity());

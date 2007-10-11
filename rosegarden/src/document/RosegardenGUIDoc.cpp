@@ -1110,7 +1110,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 
     QString tempFileName = temp.name();
 
-    std::cerr << "Temporary file name is: \"" << tempFileName << "\"" << std::endl;
+    RG_DEBUG << "Temporary file name is: \"" << tempFileName << "\"" << endl;
 
     // KTempFile creates a temporary file that is already open: close it
     if (!temp.close()) {
@@ -1678,7 +1678,7 @@ RosegardenGUIDoc::xmlParse(QString fileContents, QString &errMsg,
 void
 RosegardenGUIDoc::insertRecordedMidi(const MappedComposition &mC)
 {
-    //     RG_DEBUG << "RosegardenGUIDoc::insertRecordedMidi" << endl;
+    RG_DEBUG << "RosegardenGUIDoc::insertRecordedMidi: " << mC.size() << " events" << endl;
 
     // Just create a new record Segment if we don't have one already.
     // Make sure we don't recreate the record segment if it's already
@@ -2478,6 +2478,7 @@ void
 RosegardenGUIDoc::addRecordMIDISegment(TrackId tid)
 {
     RG_DEBUG << "RosegardenGUIDoc::addRecordMIDISegment(" << tid << ")" << endl;
+//    std::cerr << kdBacktrace() << std::endl;
 
     Segment *recordMIDISegment;
 
