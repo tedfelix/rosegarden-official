@@ -60,7 +60,7 @@ AddTracksDialog::AddTracksDialog(QWidget *parent, int currentTrack) :
     QHBox *posBox = new QHBox(vBox);
     posBox->setSpacing(4);
     new QLabel(i18n("Add tracks"), posBox);
-    m_position = new KComboBox(posBox);
+    m_position = new QComboBox(posBox);
     m_position->insertItem(tr("At the top"));
     m_position->insertItem(tr("Above the current selected track"));
     m_position->insertItem(tr("Below the current selected track"));
