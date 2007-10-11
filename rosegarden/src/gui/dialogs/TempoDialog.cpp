@@ -74,7 +74,7 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc,
             SLOT(slotTempoChanged(const QString &)));
 
     m_tempoTap= new QPushButton(i18n("Tap"), frame);
-    layout->addWidget(m_tempoTap, 0, 4);
+    layout->addWidget(m_tempoTap, 0, 3);
     connect(m_tempoTap, SIGNAL(clicked()), SLOT(slotTapClicked()));
 
 
@@ -105,13 +105,13 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc,
             SLOT(slotTargetChanged(const QString &)));
 
     m_tempoBeatLabel = new QLabel(frame);
-    layout->addWidget(m_tempoBeatLabel, 0, 3);
+    layout->addWidget(m_tempoBeatLabel, 0, 4);
 
     m_tempoBeat = new QLabel(frame);
-    layout->addWidget(m_tempoBeat, 0, 4);
+    layout->addWidget(m_tempoBeat, 0, 5);
 
     m_tempoBeatsPerMinute = new QLabel(frame);
-    layout->addWidget(m_tempoBeatsPerMinute, 0, 5);
+    layout->addWidget(m_tempoBeatsPerMinute, 0, 6);
 
     m_timeEditor = 0;
 
