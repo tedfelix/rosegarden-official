@@ -32,11 +32,13 @@
 
 #include <kapplication.h>
 #include <kconfig.h>
+#include <klistview.h>
 #include <klocale.h>
 #include <qgroupbox.h>
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qlineedit.h>
+#include <qpushbutton.h>
 #include <qstring.h>
 #include <qtabwidget.h>
 #include <qtooltip.h>
@@ -52,13 +54,12 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
 	m_doc(doc)
 {
     //
-    // LilyPond export: Headers
+    // LilyPond export: Printable headers
     //
 
     QGroupBox *headersBox = new QGroupBox
                            (1, Horizontal,
                             i18n("Printable headers"), this);
-
     QFrame *frameHeaders = new QFrame(headersBox);
     QGridLayout *layoutHeaders = new QGridLayout(frameHeaders, 10, 6, 10, 5);
 
@@ -67,6 +68,9 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
     std::vector<std::string> propertyNames = metadata.getPropertyNames();
     std::vector<PropertyName> fixedKeys =
 	CompositionMetadataKeys::getFixedKeys();
+
+    std::set
+        <std::string> shown;
 
     for (unsigned int index = 0; index < fixedKeys.size(); index++) {
 	std::string key = fixedKeys[index].getName();
@@ -130,12 +134,92 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
 	// ToolTips
 	//
 	QToolTip::add( editHeader, key );
+
+	shown.insert(key);
     }
     QLabel *separator = new QLabel(i18n("The composition comes here."), frameHeaders);
     separator->setAlignment( Qt::AlignCenter );
     layoutHeaders->addMultiCellWidget(separator, 7, 7, 1, 4 );
+
+    //
+    // LilyPond export: Non-printable headers
+    //
+
+    QGroupBox *otherHeadersBox = new QGroupBox
+                           (1, Horizontal,
+                            i18n("Non-printable headers"), this);
+    QFrame *frameOtherHeaders = new QFrame(otherHeadersBox);
+    QGridLayout *layoutOtherHeaders = new QGridLayout(frameOtherHeaders, 2, 2, 10, 5);
+
+    m_metadata = new KListView(frameOtherHeaders);
+    m_metadata->addColumn(i18n("Name"));
+    m_metadata->addColumn(i18n("Value"));
+    m_metadata->setFullWidth(true);
+    m_metadata->setItemsRenameable(true);
+    m_metadata->setRenameable(0);
+    m_metadata->setRenameable(1);
+    m_metadata->setItemMargin(5);
+    m_metadata->setDefaultRenameAction(QListView::Accept);
+    m_metadata->setShowSortIndicator(true);
+
+    std::vector<std::string> names(metadata.getPropertyNames());
+
+    for (unsigned int i = 0; i < names.size(); ++i) {
+
+        if (shown.find(names[i]) != shown.end())
+            continue;
+
+        QString name(strtoqstr(names[i]));
+
+        // property names stored in lower case
+        name = name.left(1).upper() + name.right(name.length() - 1);
+
+        new KListViewItem(m_metadata, name,
+                          strtoqstr(metadata.get<String>(names[i])));
+
+        shown.insert(names[i]);
+    }
+
+    layoutOtherHeaders->addMultiCellWidget(m_metadata, 0, 0, 0, 1);
+
+    QPushButton* addPropButton = new QPushButton(i18n("Add New Property"),
+                                 frameOtherHeaders);
+    layoutOtherHeaders->addWidget(addPropButton, 1, 0, Qt::AlignHCenter);
+
+    QPushButton* deletePropButton = new QPushButton(i18n("Delete Property"),
+                                    frameOtherHeaders);
+    layoutOtherHeaders->addWidget(deletePropButton, 1, 1, Qt::AlignHCenter);
+
+    connect(addPropButton, SIGNAL(clicked()),
+            this, SLOT(slotAddNewProperty()));
+
+    connect(deletePropButton, SIGNAL(clicked()),
+            this, SLOT(slotDeleteProperty()));
+
 }
 
+void
+HeadersConfigurationPage::slotAddNewProperty()
+{
+    QString propertyName;
+    int i = 0;
+
+    while (1) {
+        propertyName =
+            (i > 0 ? i18n("{new property %1}").arg(i) : i18n("{new property}"));
+        if (!m_doc->getComposition().getMetadata().has(qstrtostr(propertyName)))
+            break;
+        ++i;
+    }
+
+    new KListViewItem(m_metadata, propertyName, i18n("{undefined}"));
+}
+
+void
+HeadersConfigurationPage::slotDeleteProperty()
+{
+    delete m_metadata->currentItem();
+}
 
 void HeadersConfigurationPage::apply()
 {
@@ -160,6 +244,13 @@ void HeadersConfigurationPage::apply()
     metadata.set<String>(CompositionMetadataKeys::Piece, qstrtostr(m_editPiece->text()));
     metadata.set<String>(CompositionMetadataKeys::Copyright, qstrtostr(m_editCopyright->text()));
     metadata.set<String>(CompositionMetadataKeys::Tagline, qstrtostr(m_editTagline->text()));
+
+    for (QListViewItem *item = m_metadata->firstChild();
+            item != 0; item = item->nextSibling()) {
+
+        metadata.set<String>(qstrtostr(item->text(0).lower()),
+                             qstrtostr(item->text(1)));
+    }
 
     m_doc->slotDocumentModified();
 }

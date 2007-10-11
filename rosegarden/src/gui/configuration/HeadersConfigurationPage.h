@@ -31,6 +31,7 @@
 class QVBox;
 class QWidget;
 class QLineEdit;
+class KListView;
 
 namespace Rosegarden
 {
@@ -48,6 +49,10 @@ public:
 public slots:
     void apply();
 
+protected slots:
+    void slotAddNewProperty();
+    void slotDeleteProperty();
+ 
 protected:
     RosegardenGUIDoc *m_doc;
  
@@ -66,6 +71,7 @@ protected:
     QLineEdit *m_editCopyright;
     QLineEdit *m_editTagline;
 
+    KListView *m_metadata;
 };
 
 
