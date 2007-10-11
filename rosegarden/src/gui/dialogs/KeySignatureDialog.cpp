@@ -62,7 +62,9 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
         m_clef(clef),
         m_valid(true),
         m_ignoreComboChanges(false),
-        m_explanatoryLabel(0)
+        m_explanatoryLabel(0),
+        m_applyToAllButton(0),
+        m_noPercussionCheckBox(0)
 {
     setHelp("nv-signatures-key");
 
@@ -135,9 +137,10 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
             new QRadioButton(i18n("Apply to all segments at this time"),
                              buttonFrame);
         applyToOneButton->setChecked(true);
-	m_noPercussionCheckBox =
-	    new QCheckBox(i18n("Exclude percussion segments"), buttonFrame);
-	m_noPercussionCheckBox->setChecked(true);
+        m_noPercussionCheckBox =
+            new QCheckBox(i18n("Exclude percussion segments"), buttonFrame);
+        m_noPercussionCheckBox->setChecked(true);
+        
     } else {
         m_applyToAllButton = 0;
         buttonFrame->hide();
