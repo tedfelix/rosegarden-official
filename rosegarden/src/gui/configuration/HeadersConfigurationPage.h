@@ -23,60 +23,35 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_LILYPONDOPTIONSDIALOG_H_
-#define _RG_LILYPONDOPTIONSDIALOG_H_
+#ifndef _RG_HEADERSCONFIGURATIONPAGE_H_
+#define _RG_HEADERSCONFIGURATIONPAGE_H_
 
-#include <kdialogbase.h>
-#include <qstring.h>
+#include <qvbox.h>
 
-
+class QVBox;
 class QWidget;
-class QCheckBox;
-class QComboBox;
 class QLineEdit;
 
 namespace Rosegarden
 {
 
 class RosegardenGUIDoc;
-class HeadersConfigurationPage;
 
-class LilypondOptionsDialog : public KDialogBase
+class HeadersConfigurationPage : public QVBox
 {
     Q_OBJECT
 
 public:
-    LilypondOptionsDialog(QWidget *parent,
-			  RosegardenGUIDoc *doc,
-                          QString windowCaption = "",
-                          QString heading = "");
-
-    static void setDefaultLilypondVersion(QString version);
+    HeadersConfigurationPage(QWidget *parent = 0,
+	       RosegardenGUIDoc *doc = 0);
+    ~HeadersConfigurationPage();
 
 public slots:
-    void slotApply();
-    void slotOk();
+    void apply();
 
 protected:
     RosegardenGUIDoc *m_doc;
-    QComboBox *m_lilyLanguage;
-    QComboBox *m_lilyPaperSize;
-    QComboBox *m_lilyFontSize;
-    QComboBox *m_lilyTempoMarks;
-    QComboBox *m_lilyExportSelection;
-    QComboBox *m_lilyLyricsHAlignment;
-    QCheckBox *m_lilyPaperLandscape;
-    QCheckBox *m_lilyRaggedBottom;
-    QCheckBox *m_lilyExportLyrics;
-    QCheckBox *m_lilyExportMidi;
-    QCheckBox *m_lilyExportPointAndClick;
-    QCheckBox *m_lilyExportBeams;
-    QCheckBox *m_lilyExportStaffGroup;
-    QCheckBox *m_lilyExportStaffMerge;
-
-    HeadersConfigurationPage *m_headersPage;
-
-/*
+ 
     // Header fields
     QLineEdit *m_editDedication;
     QLineEdit *m_editTitle;
@@ -91,10 +66,8 @@ protected:
     QLineEdit *m_editPiece;
     QLineEdit *m_editCopyright;
     QLineEdit *m_editTagline;
-*/
 
 };
-
 
 
 }
