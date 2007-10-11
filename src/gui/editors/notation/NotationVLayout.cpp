@@ -409,7 +409,7 @@ NotationVLayout::scanStaff(Staff &staffBase, timeT, timeT)
 
             } else if (el->event()->isa(Guitar::Chord::EventType)) {
 
-                el->setLayoutY(staff.getLayoutYForHeight(22));
+                el->setLayoutY(staff.getLayoutYForHeight(22) + displacedY);
             }
         }
     }
