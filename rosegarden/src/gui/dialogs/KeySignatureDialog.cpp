@@ -200,7 +200,7 @@ KeySignatureDialog::shouldBeTransposed() const
 bool
 KeySignatureDialog::shouldIgnorePercussion() const
 {
-    return m_noPercussionCheckBox->isChecked();
+    return m_noPercussionCheckBox && m_noPercussionCheckBox->isChecked();
 }
 
 void
