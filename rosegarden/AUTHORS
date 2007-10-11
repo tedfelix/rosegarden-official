@@ -90,6 +90,9 @@ Vince Negri <vince.negri@gmail.com>
 Toni Arnold <toni__arnold@bluewin.ch>
     * LIRC infrared remote-controller support
 
+Stephen Torri <storri@torri.org>
+    * Initial guitar chord editing code
+
 Jan B�a <jbina@sky.cz>
     * Czech translation
 
@@ -125,6 +128,9 @@ Piotr Sawicki <pelle@plusnet.pl>
 
 David García-Abad <davidgarciabad@telefonica.net>
     * Basque translation
+
+Mikhail Yakshin <greycat@users.sourceforge.net>
+    * Author of KGuitar, source of inspiration and bits of code for fretboards
 
 Joerg C. Koenig <jck@gmx.org>
 Craig Drummond, Bernhard Rosenkränzer, Preston Brown, Than Ngo

@@ -6670,7 +6670,7 @@ void NotationView::slotText()
 void NotationView::slotGuitarChord()
 {
     m_currentNotePixmap->setPixmap
-        (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("text")));
+        (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("guitarchord")));
     setTool(m_toolBox->getTool(GuitarChordInserter::ToolName));
     setMenuStates();
 }

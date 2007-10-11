@@ -370,8 +370,8 @@ protected:
     void scanChord
     (NotationElementList *notes, NotationElementList::iterator &i,
      const Clef &, const ::Rosegarden::Key &,
-     AccidentalTable &, float &lyricWidth, ChunkList &chunks,
-     int &graceCount, int ottavaShift,
+     AccidentalTable &, float &lyricWidth,
+     ChunkList &chunks, int &graceCount, int ottavaShift,
      NotationElementList::iterator &to);
 
     typedef std::map<int, NotationElementList::iterator> TieMap;

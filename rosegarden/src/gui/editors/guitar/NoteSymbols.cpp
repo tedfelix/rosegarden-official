@@ -344,7 +344,7 @@ NoteSymbols::getGuitarChordHeight ( int imgHeight ) const
 unsigned int
 NoteSymbols::getFontPixelSize ( int imgWidth, int imgHeight ) const
 {
-    return std::max(6, imgHeight / 10);
+    return std::max(8, imgHeight / 10);
 }
 
 std::pair<bool, unsigned int>

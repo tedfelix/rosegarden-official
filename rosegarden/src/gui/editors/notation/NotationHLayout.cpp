@@ -385,8 +385,8 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
                 // contribute to a fixed area following the next chord
 
                 if (el->event()->has(Text::TextTypePropertyName) &&
-                        el->event()->get<String>(Text::TextTypePropertyName) ==
-                        Text::Lyric) {
+                    el->event()->get<String>(Text::TextTypePropertyName) ==
+                    Text::Lyric) {
                     lyricWidth = std::max
                         (lyricWidth, float(m_npf->getTextWidth(Text(*el->event()))));
                     NOTATION_DEBUG << "Setting lyric width to " << lyricWidth
@@ -426,7 +426,7 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 
             } else {
 
-                NOTATION_DEBUG << "Found something I don't know about (type is " << el->event()->getType() << ")" << endl;
+//                NOTATION_DEBUG << "Found something I don't know about (type is " << el->event()->getType() << ")" << endl;
                 chunks.push_back(Chunk(el->event()->getSubOrdering(),
                                        getLayoutWidth(*el, key)));
             }
@@ -1328,6 +1328,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
         double barInset = notationStaff.getBarInset(barNo, repeatClefAndKey);
 
         NotationElement *lastDynamicText = 0;
+        int fretboardCount = 0;
         int count = 0;
 
         double offset = 0.0;
@@ -1360,7 +1361,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
             delta = 0;
             float fixed = 0;
 
-        if (el->event()->isa(Note::EventType)) {
+            if (el->event()->isa(Note::EventType)) {
                 long pitch = 0;
                 el->event()->get<Int>(PITCH, pitch);
                 NOTATION_DEBUG << "element is a " << el->event()->getType() << " (pitch " << pitch << ")" << endl;
@@ -1493,7 +1494,11 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
             } else if (el->event()->isa(Guitar::Chord::EventType)) {
 
                 int guitarChordWidth = m_npf->getLineSpacing() * 6;
-                el->setLayoutX(x - (guitarChordWidth / 2));
+                el->setLayoutX(x - (guitarChordWidth / 2)
+                               + fretboardCount * (guitarChordWidth +
+                                                   m_npf->getNoteBodyWidth()/2)
+                               + displacedX);
+                ++fretboardCount;
 
             } else {
 
