@@ -4526,14 +4526,14 @@ void NotationView::slotEditCutAndClose()
 }
 
 static const QString RESTRICTED_PASTE_FAILED_DESCRIPTION = i18n(
-                      "The Restricted paste type requires enough empty\n" \
-                      "space (containing only rests) at the paste position\n" \
-                      "to hold all of the events to be pasted.\n" \
+                      "The Restricted paste type requires enough empty " \
+                      "space (containing only rests) at the paste position " \
+                      "to hold all of the events to be pasted.\n" \ 
                       "Not enough space was found.\n" \
-                      "If you want to paste anyway, consider using one of\n" \
-                      "the other paste types from the \"Paste...\" option\n" \
-                      "on the Edit menu.  You can also change the default\n" \
-                      "paste type to something other than Restricted if\n" \
+                      "If you want to paste anyway, consider using one of " \
+                      "the other paste types from the \"Paste...\" option " \
+                      "on the Edit menu.  You can also change the default " \
+                      "paste type to something other than Restricted if " \
                       "you wish."
     );
 
@@ -4577,10 +4577,7 @@ void NotationView::slotEditPaste()
              i18n("Couldn't paste at this point."), RESTRICTED_PASTE_FAILED_DESCRIPTION);
     } else {
         addCommandToHistory(command);
-        //!!! well, we really just want to select the events
-        // we just pasted
-        setCurrentSelection(new EventSelection
-                            (segment, insertionTime, endTime));
+        setCurrentSelection(new EventSelection(command->getPastedEvents()));
         slotSetInsertCursorPosition(endTime, true, false);
     }
 }

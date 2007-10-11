@@ -27,6 +27,7 @@
 #define _RG_PASTEEVENTSCOMMAND_H_
 
 #include "document/BasicCommand.h"
+#include "base/Selection.h"
 #include <map>
 #include <qstring.h>
 #include "base/Event.h"
@@ -84,6 +85,8 @@ public:
 
     virtual ~PasteEventsCommand();
 
+    EventSelection getPastedEvents();
+
     static QString getGlobalName() { return i18n("&Paste"); }
 
     /// Determine whether this paste will succeed (without executing it yet)
@@ -99,6 +102,7 @@ protected:
     timeT m_relayoutEndTime;
     Clipboard *m_clipboard;
     PasteType m_pasteType;
+    EventSelection m_pastedEvents;
 };
 
 
