@@ -368,6 +368,8 @@ SET(gui_SRCS
 	gui/configuration/DocumentMetaConfigurationPage.h
 	gui/configuration/GeneralConfigurationPage.cpp
 	gui/configuration/GeneralConfigurationPage.h
+	gui/configuration/HeadersConfigurationPage.cpp
+	gui/configuration/HeadersConfigurationPage.h
 	gui/configuration/LatencyConfigurationPage.cpp
 	gui/configuration/LatencyConfigurationPage.h
 	gui/configuration/MatrixConfigurationPage.cpp
