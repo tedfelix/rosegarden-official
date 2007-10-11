@@ -44,9 +44,8 @@ namespace Rosegarden
 HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
 	RosegardenGUIDoc *doc) :
 	QVBox(parent),
-	m_doc(doc);
+	m_doc(doc)
 {
-/*
     //
     // LilyPond export: Headers
     //
@@ -130,13 +129,11 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
     QLabel *separator = new QLabel(i18n("The composition comes here."), frameHeaders);
     separator->setAlignment( Qt::AlignCenter );
     layoutHeaders->addMultiCellWidget(separator, 7, 7, 1, 4 );
-*/
 }
 
 
 void HeadersConfigurationPage::apply()
 {
-/*
     KConfig *config = kapp->config();
     config->setGroup(NotationViewConfigGroup);
 
@@ -160,7 +157,6 @@ void HeadersConfigurationPage::apply()
     metadata.set<String>(CompositionMetadataKeys::Tagline, qstrtostr(m_editTagline->text()));
 
     m_doc->slotDocumentModified();
-*/
 }
 
 }
