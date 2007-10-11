@@ -195,7 +195,7 @@ public slots:
 
     void slotShowSegmentLabels(bool);
 
-    void slotAddTracks(unsigned int, InstrumentId);
+    void slotAddTracks(unsigned int count, InstrumentId instrument, int position);
 
     void slotDeleteTracks(std::vector<TrackId> tracks);
 

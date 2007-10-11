@@ -717,14 +717,16 @@ RosegardenGUIDoc::mergeDocument(RosegardenGUIDoc *doc,
         command->addCommand(new AddTracksCommand
                             (&getComposition(),
                              yrNrTracks,
-                             MidiInstrumentBase));
+                             MidiInstrumentBase,
+                             -1));
 
     } else if (yrMaxTrack > myMaxTrack) {
 
         command->addCommand(new AddTracksCommand
                             (&getComposition(),
                              yrMaxTrack - myMaxTrack,
-                             MidiInstrumentBase));
+                             MidiInstrumentBase,
+                             -1));
     }
 
     for (Composition::iterator i = doc->getComposition().begin(), j = i;

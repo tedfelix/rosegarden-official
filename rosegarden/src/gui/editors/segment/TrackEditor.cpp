@@ -413,11 +413,13 @@ void TrackEditor::paintEvent(QPaintEvent* e)
 }
 
 void TrackEditor::slotAddTracks(unsigned int nbNewTracks,
-                                InstrumentId id)
+                                InstrumentId id,
+                                int position)
 {
     Composition &comp = m_doc->getComposition();
 
-    AddTracksCommand* command = new AddTracksCommand(&comp, nbNewTracks, id);
+    AddTracksCommand* command = new AddTracksCommand(&comp, nbNewTracks, id,
+                                                     position);
     addCommandToHistory(command);
     slotReadjustCanvasSize();
 }

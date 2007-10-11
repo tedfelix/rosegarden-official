@@ -378,6 +378,8 @@ SET(gui_SRCS
 	gui/configuration/NotationConfigurationPage.h
 	gui/configuration/TabbedConfigurationPage.cpp
 	gui/configuration/TabbedConfigurationPage.h
+	gui/dialogs/AddTracksDialog.cpp
+	gui/dialogs/AddTracksDialog.h
 	gui/dialogs/AudioManagerDialog.cpp
 	gui/dialogs/AudioManagerDialog.h
 	gui/dialogs/AudioPlayingDialog.cpp
