@@ -30,10 +30,13 @@
 #include "document/io/LilypondExporter.h"
 #include "misc/Strings.h"
 
+#include <kapplication.h>
 #include <kconfig.h>
 #include <klocale.h>
 #include <qgroupbox.h>
 #include <qlabel.h>
+#include <qlayout.h>
+#include <qlineedit.h>
 #include <qstring.h>
 #include <qtabwidget.h>
 #include <qtooltip.h>
