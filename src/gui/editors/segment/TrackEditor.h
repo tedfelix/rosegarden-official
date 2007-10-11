@@ -149,7 +149,7 @@ public slots:
     /**
      * Add given number of tracks
      */
-    void slotAddTracks(unsigned int nbTracks, InstrumentId id);
+    void slotAddTracks(unsigned int nbTracks, InstrumentId id, int position);
 
     /*
      * Delete a given track

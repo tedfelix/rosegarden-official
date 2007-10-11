@@ -1333,10 +1333,10 @@ void RosegardenGUIView::slotShowSegmentLabels(bool v)
 }
 
 void RosegardenGUIView::slotAddTracks(unsigned int nbTracks,
-                                      InstrumentId id)
+                                      InstrumentId id, int pos)
 {
-    RG_DEBUG << "RosegardenGUIView::slotAddTracks(" << nbTracks << ")" << endl;
-    m_trackEditor->slotAddTracks(nbTracks, id);
+    RG_DEBUG << "RosegardenGUIView::slotAddTracks(" << nbTracks << ", " << pos << ")" << endl;
+    m_trackEditor->slotAddTracks(nbTracks, id, pos);
 }
 
 void RosegardenGUIView::slotDeleteTracks(

@@ -96,6 +96,7 @@
 #include "document/RosegardenGUIDoc.h"
 #include "document/ConfigGroups.h"
 #include "gui/application/RosegardenApplication.h"
+#include "gui/dialogs/AddTracksDialog.h"
 #include "gui/dialogs/AudioManagerDialog.h"
 #include "gui/dialogs/AudioPluginDialog.h"
 #include "gui/dialogs/AudioSplitDialog.h"
@@ -890,12 +891,12 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotQuantizeSelection()), actionCollection(),
                 "quantize_selection");
 
-	new KAction(SegmentLabelCommand::getGlobalName(),
+    new KAction(SegmentLabelCommand::getGlobalName(),
                 0,
                 this, SLOT(slotRelabelSegments()),
                 actionCollection(), "relabel_segment");
 
-	new KAction(SegmentTransposeCommand::getGlobalName(),
+    new KAction(SegmentTransposeCommand::getGlobalName(),
                 0,
                 this, SLOT(slotTransposeSegments()),
                 actionCollection(), "transpose");
@@ -982,7 +983,7 @@ void RosegardenGUIApp::setupActions()
                 this, SLOT(slotAddTrack()),
                 actionCollection(), "add_track");
 
-    new KAction(i18n("&Add Multiple Tracks..."), 0,
+    new KAction(i18n("&Add Tracks..."), 0,
                 this, SLOT(slotAddTracks()),
                 actionCollection(), "add_tracks");
 
@@ -1013,6 +1014,16 @@ void RosegardenGUIApp::setupActions()
                 Key_Up,
                 this, SLOT(slotTrackUp()),
                 actionCollection(), "select_previous_track");
+
+    new KAction(i18n("Mute or Unmute Track"),
+                Key_U,
+                this, SLOT(slotToggleMutedCurrentTrack()),
+                actionCollection(), "toggle_mute_track");
+
+    new KAction(i18n("Arm or Un-arm Track for Record"),
+                Key_R,
+                this, SLOT(slotToggleRecordCurrentTrack()),
+                actionCollection(), "toggle_arm_track");
 
     pixmap.load(pixmapDir + "/toolbar/mute-all.png");
     icon = QIconSet(pixmap);
@@ -3436,7 +3447,14 @@ void RosegardenGUIApp::slotAddTrack()
         }
     }
 
-    m_view->slotAddTracks(1, id);
+    Composition &comp = m_doc->getComposition();
+    TrackId trackId = comp.getSelectedTrack();
+    Track *track = comp.getTrackById(trackId);
+
+    int pos = -1;
+    if (track) pos = track->getPosition() + 1;
+
+    m_view->slotAddTracks(1, id, pos);
 }
 
 void RosegardenGUIApp::slotAddTracks()
@@ -3471,22 +3489,21 @@ void RosegardenGUIApp::slotAddTracks()
         }
     }
 
+    Composition &comp = m_doc->getComposition();
+    TrackId trackId = comp.getSelectedTrack();
+    Track *track = comp.getTrackById(trackId);
+
+    int pos = 0;
+    if (track) pos = track->getPosition();
+
     bool ok = false;
 
-    int tracks = QInputDialog::getInteger(
-                     i18n("Add Multiple Tracks"),
-                     i18n("How many tracks do you want to add?"),
-                     1,
-                     1,
-                     32,
-                     1,
-                     &ok,
-                     this);
+    AddTracksDialog dialog(this, pos);
 
-    // create tracks if ok
-    //
-    if (ok)
-        m_view->slotAddTracks(tracks, id);
+    if (dialog.exec() == QDialog::Accepted) {
+        m_view->slotAddTracks(dialog.getTracks(), id, 
+                              dialog.getInsertPosition());
+    }
 }
 
 void RosegardenGUIApp::slotDeleteTrack()

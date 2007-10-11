@@ -27,11 +27,12 @@
 #define _RG_ADDTRACKSCOMMAND_H_
 
 #include "base/MidiProgram.h"
+#include "base/Composition.h"
 #include <kcommand.h>
 #include <qstring.h>
 #include <vector>
+#include <map>
 #include <klocale.h>
-
 
 
 
@@ -47,7 +48,8 @@ class AddTracksCommand : public KNamedCommand
 public:
     AddTracksCommand(Composition *composition,
                      unsigned int nbTracks,
-                     InstrumentId id);
+                     InstrumentId id,
+                     int position); // -1 -> at end
     virtual ~AddTracksCommand();
 
     static QString getGlobalName() { return i18n("Add Tracks..."); }
@@ -57,12 +59,16 @@ public:
 
 protected:
     Composition           *m_composition;
-    unsigned int                       m_nbNewTracks;
+    unsigned int           m_nbNewTracks;
     InstrumentId           m_instrumentId;
+    int                    m_position;
 
-    std::vector<Track*>    m_newTracks;
+    typedef std::map<TrackId, int> TrackPositionMap;
 
-    bool                               m_detached;
+    std::vector<Track *>   m_newTracks;
+    TrackPositionMap       m_oldPositions;
+
+    bool                   m_detached;
 };
 
 

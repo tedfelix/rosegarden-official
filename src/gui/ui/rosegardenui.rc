@@ -129,6 +129,9 @@
         <Action name="select_next_track"/>
         <Action name="select_previous_track"/>
         <Separator/>
+        <Action name="toggle_mute_track"/>
+        <Action name="toggle_arm_track"/>
+        <Separator/>
         <Action name="unmute_all_tracks"/>
         <Action name="mute_all_tracks"/>
         <Separator/>
