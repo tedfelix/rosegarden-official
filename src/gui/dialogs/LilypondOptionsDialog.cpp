@@ -88,6 +88,9 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
     vboxAdvanced->setSpacing(5);
     vboxAdvanced->setMargin(5);
 
+    m_headersPage->setSpacing(5);
+    m_headersPage->setMargin(5);
+
     //
     // LilyPond export: Basic options
     //
@@ -254,6 +257,8 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
     layoutExtra->addWidget(new QLabel(
                           i18n("Lyrics alignment"), frameExtra), 3, 0);
     layoutExtra->addWidget(m_lilyLyricsHAlignment, 3, 1);
+
+    resize(minimumSize());
 }
 
 void

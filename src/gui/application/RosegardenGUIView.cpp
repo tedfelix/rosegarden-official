@@ -292,6 +292,7 @@ void RosegardenGUIView::updateSelectionContents()
     m_trackEditor->getSegmentCanvas()->updateSelectionContents();
 }
 
+/* hjj: WHAT DO DO WITH THIS ?
 void
 RosegardenGUIView::slotEditMetadata(QString name)
 {
@@ -305,6 +306,7 @@ RosegardenGUIView::slotEditMetadata(QString name)
 
     configDlg->show();
 }
+*/
 
 void RosegardenGUIView::slotEditSegment(Segment* segment)
 {
@@ -494,8 +496,10 @@ RosegardenGUIView::createNotationView(std::vector<Segment *> segmentsToEdit)
             this, SLOT(slotEditSegmentsPercussionMatrix(std::vector<Segment *>)));
     connect(notationView, SIGNAL(openInEventList(std::vector<Segment *>)),
             this, SLOT(slotEditSegmentsEventList(std::vector<Segment *>)));
+/* hjj: WHAT DO DO WITH THIS ?
     connect(notationView, SIGNAL(editMetadata(QString)),
             this, SLOT(slotEditMetadata(QString)));
+*/
     connect(notationView, SIGNAL(editTriggerSegment(int)),
             this, SLOT(slotEditTriggerSegment(int)));
     connect(notationView, SIGNAL(staffLabelChanged(TrackId, QString)),

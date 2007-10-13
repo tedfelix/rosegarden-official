@@ -84,45 +84,59 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
 
 	unsigned int row = 0, col = 0, width = 1;
 	QLineEdit *editHeader = new QLineEdit(strtoqstr( header ), frameHeaders);
+	QString trName;
 	if (key == headerDedication) {  
 	    m_editDedication = editHeader;
 	    row = 0; col = 2; width = 2;
+	    trName = i18n("Dedication");
 	} else if (key == headerTitle) {       
 	    m_editTitle = editHeader;	
 	    row = 1; col = 1; width = 4;
+	    trName = i18n("Title");
 	} else if (key == headerSubtitle) {
 	    m_editSubtitle = editHeader;
 	    row = 2; col = 1; width = 4;
+	    trName = i18n("Subtitle");
 	} else if (key == headerSubsubtitle) { 
 	    m_editSubsubtitle = editHeader;
 	    row = 3; col = 2; width = 2;
+	    trName = i18n("Subsubtitle");
 	} else if (key == headerPoet) {        
 	    m_editPoet = editHeader;
 	    row = 4; col = 0; width = 2;
+	    trName = i18n("Poet");
 	} else if (key == headerInstrument) {  
 	    m_editInstrument = editHeader;
 	    row = 4; col = 2; width = 2;
+	    trName = i18n("Instrument");
 	} else if (key == headerComposer) {    
 	    m_editComposer = editHeader;
 	    row = 4; col = 4; width = 2; 
+	    trName = i18n("Composer");
 	} else if (key == headerMeter) {       
 	    m_editMeter = editHeader;
 	    row = 5; col = 0; width = 3; 
+	    trName = i18n("Meter");
 	} else if (key == headerArranger) {    
 	    m_editArranger = editHeader;
 	    row = 5; col = 3; width = 3; 
+	    trName = i18n("Arranger");
 	} else if (key == headerPiece) {       
 	    m_editPiece = editHeader;
 	    row = 6; col = 0; width = 3; 
+	    trName = i18n("Piece");
 	} else if (key == headerOpus) {        
 	    m_editOpus = editHeader;
 	    row = 6; col = 3; width = 3; 
+	    trName = i18n("Opus");
 	} else if (key == headerCopyright) {   
 	    m_editCopyright = editHeader;
 	    row = 8; col = 1; width = 4; 
+	    trName = i18n("Copyright");
 	} else if (key == headerTagline) {     
 	    m_editTagline = editHeader;
 	    row = 9; col = 1; width = 4; 
+	    trName = i18n("Tagline");
 	}
 
 	// editHeader->setReadOnly( true );
@@ -133,7 +147,7 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
 	//
 	// ToolTips
 	//
-	QToolTip::add( editHeader, key );
+	QToolTip::add( editHeader, trName );
 
 	shown.insert(key);
     }
@@ -195,7 +209,6 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
 
     connect(deletePropButton, SIGNAL(clicked()),
             this, SLOT(slotDeleteProperty()));
-
 }
 
 void
@@ -227,11 +240,18 @@ void HeadersConfigurationPage::apply()
     KConfig *config = kapp->config();
     config->setGroup(NotationViewConfigGroup);
 
+    // If one of the items still has focus, it won't remember edits.
+    // Switch between two fields in order to lose the current focus.
+    m_editTitle->setFocus();
+    m_metadata->setFocus();
+
     //
     // Update header fields
     //
 
     Configuration &metadata = (&m_doc->getComposition())->getMetadata();
+    metadata.clear();
+
     metadata.set<String>(CompositionMetadataKeys::Dedication, qstrtostr(m_editDedication->text()));
     metadata.set<String>(CompositionMetadataKeys::Title, qstrtostr(m_editTitle->text()));
     metadata.set<String>(CompositionMetadataKeys::Subtitle, qstrtostr(m_editSubtitle->text()));

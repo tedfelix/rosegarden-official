@@ -161,7 +161,9 @@ public slots:
     void slotEditSegmentAudio(Segment*);
     void slotSegmentAutoSplit(Segment*);
     void slotEditRepeat(Segment*, timeT);
+/* hjj: WHAT DO DO WITH THIS ?
     void slotEditMetadata(QString);
+*/
 
     /**
      * Highlight all the Segments on a Track because the Track has

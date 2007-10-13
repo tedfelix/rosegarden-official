@@ -47,7 +47,9 @@ public:
 
     void showAudioPage();
 
+/* hjj: WHAT TO DO WITH THIS ?
     void selectMetadata(QString name);
+*/
 };
 
 
