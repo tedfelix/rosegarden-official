@@ -359,7 +359,7 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     layout->addWidget(m_accBarPolicy, row, 1);
     ++row;
 
-    layout->addWidget(new QLabel(i18n("Key signature cancellation style:"), frame), row, 0);
+    layout->addWidget(new QLabel(i18n("Key signature cancellation style"), frame), row, 0);
     m_keySigCancelMode = new KComboBox(frame);
     m_keySigCancelMode->insertItem(i18n("Cancel only when entering C major or A minor"));
     m_keySigCancelMode->insertItem(i18n("Cancel whenever removing sharps or flats"));
