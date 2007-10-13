@@ -124,6 +124,7 @@ DocumentConfigureDialog::showAudioPage()
     }
 }
 
+/* hjj: WHAT TO DO WITH THIS ?
 void
 DocumentConfigureDialog::selectMetadata(QString name)
 {
@@ -145,5 +146,6 @@ DocumentConfigureDialog::selectMetadata(QString name)
         return ;
     }
 }
+*/
 
 }
