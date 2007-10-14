@@ -4184,8 +4184,12 @@
       <sect2 id="nv-text-lyrics">
 	<title>Editing lyrics</title>
 	
-	<para>The Lyric editor, available from the <guimenuitem>Open Lyric
-	    Editor</guimenuitem> option of the <guimenu>View</guimenu> menu, allows you to edit all of
+	<para>The Lyric editor, available from the 
+	  <menuchoice>
+	    <guimenu lang="en">View</guimenu>
+            <guimenuitem>Open Lyric Editor</guimenuitem>
+          </menuchoice>
+	  function, allows you to edit all of
 	  the lyric events for a single staff at once, using a fairly
 	  rudimentary textual editing system.  To use it, just
 	  activate the menu option, edit the lyric text in the
@@ -4229,6 +4233,13 @@
 	  future to accommodate more advanced editing capabilities,
 	  although the event format should not change and so your
 	  saved files should continue to be compatible.</para>
+
+	<para>You may always attach one more verse into a single staff
+	  by clicking Add Verse in the lyrics editor.  All the verses
+	  are entered with the same syntax.  If you leave the last verse
+	  without syllables,  or make it empty,  it is removed from
+	  the list of verses next time you open the lyrics editor.
+	  </para>
 
       </sect2>
       <sect2 id="nv-lilypond-directives">
