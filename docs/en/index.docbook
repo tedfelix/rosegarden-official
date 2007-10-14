@@ -477,6 +477,11 @@
 	  <guimenu lang="en">File</guimenu>
 	  <guimenuitem>Print</guimenuitem>
 	</menuchoice>
+	function or the
+	<menuchoice>
+	  <guimenu lang="en">File</guimenu>
+	  <guimenuitem>Print with LilyPond</guimenuitem>
+	</menuchoice>
 	function.
       </para>
 
@@ -498,13 +503,31 @@
 	  with &rosegarden;.  LilyPond is music typesetting software that
 	  reads a specialised text file format and produces high-quality
 	  typeset output.  &rosegarden; is capable of writing LilyPond files
-	  using the <menuchoice> <guimenu lang="en">File</guimenu>
-	      <guimenuitem>Export</guimenuitem> <guimenuitem>Export
-		  LilyPond</guimenuitem> </menuchoice> function, and it
+	  using the
+	  <menuchoice>
+	    <guimenu lang="en">File</guimenu>
+	    <guimenuitem>Export</guimenuitem>
+            <guimenuitem>Export LilyPond</guimenuitem>
+          </menuchoice>
+          function, and it
 	  features special <link linkend="nv-lilypond-directives">exportable
 	      directives</link> that provide access to LilyPond features for
 	  which there is currently no parallel within &rosegarden;'s own
-	  native interface.</para>
+	  native interface.  If you use the
+	  <menuchoice>
+	    <guimenu lang="en">File</guimenu>
+            <guimenuitem>Preview with LilyPond</guimenuitem>
+          </menuchoice>
+	  function,  the file is exported into a temporary file and processed
+	  directly with LilyPond for preview with a PDF viewer.
+	  If you are happy with the preview, you may print the score from the
+	  PDF viewer,  or use the 
+	  <menuchoice>
+	    <guimenu lang="en">File</guimenu>
+            <guimenuitem>Print with LilyPond</guimenuitem>
+          </menuchoice>
+	  function.
+      </para>
       </sect1>
 
   </chapter>
