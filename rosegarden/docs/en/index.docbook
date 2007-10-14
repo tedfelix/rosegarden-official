@@ -513,15 +513,16 @@
 	  features special <link linkend="nv-lilypond-directives">exportable
 	      directives</link> that provide access to LilyPond features for
 	  which there is currently no parallel within &rosegarden;'s own
-	  native interface.  If you use the
+	  native interface.</para>
+      <para>LilyPond may be conveniently used with the
 	  <menuchoice>
 	    <guimenu lang="en">File</guimenu>
             <guimenuitem>Preview with LilyPond</guimenuitem>
           </menuchoice>
-	  function,  the file is exported into a temporary file and processed
-	  directly with LilyPond for preview with a PDF viewer.
-	  If you are happy with the preview, you may print the score from the
-	  PDF viewer,  or use the 
+	  function,  which exports the file into a temporary file and processes
+	  it directly with LilyPond for preview with a PDF viewer.
+	  If you are happy with the preview, you may print the score using the
+	  printing capability of the PDF viewer,  or use the 
 	  <menuchoice>
 	    <guimenu lang="en">File</guimenu>
             <guimenuitem>Print with LilyPond</guimenuitem>
@@ -3487,15 +3488,23 @@
 	      useful when editing <link linkend="nv-quantization">quantized
 		  notation</link> where the display duration on the page
 	      differs from the duration of the actual performance.
-	      Enabled via<menuchoice>
-	      <guimenu>Settings</guimenu> <guimenuitem>Rulers...</guimenuitem> <guimenuitem>
-		  Show Raw Note Ruler</guimenuitem></menuchoice>, it draws a small bar above
+	      Enabled via
+	      <menuchoice>
+	        <guimenu>Settings</guimenu>
+                <guimenuitem>Rulers...</guimenuitem>
+                <guimenuitem>Show Raw Note Ruler</guimenuitem>
+              </menuchoice>, it draws a small bar above
 	      each note, similar to the way notes appear in the matrix.  In this
 	      example screenshot, you can see how interpreted, quantized notes
 	      appear on this ruler.  The tenuto notes have full performance
 	      durations, while the staccato notes are considerably shorter, and
 	      the accented notes have a higher velocity (more red colour) than
 	      their neighbors.
+	  </para>
+	  <para>
+	      Raw note ruler marks only notes in the selected segment in the track.
+	      The colour of the selected segment is used in the background of
+	      the raw note ruler between the start and end time of the segment.
 	  </para>
 	  <para>
 	      <screenshot>
@@ -4236,7 +4245,8 @@
 	  although the event format should not change and so your
 	  saved files should continue to be compatible.</para>
 
-	<para>You may always attach one more verse into a single staff
+	<para>&rosegarden; supports also multiple lines of lyrics.
+	  You may always attach one more verse into a single staff
 	  by clicking Add Verse in the lyrics editor.  All the verses
 	  are entered with the same syntax.  If you leave the last verse
 	  without syllables,  or make it empty,  it is removed from
