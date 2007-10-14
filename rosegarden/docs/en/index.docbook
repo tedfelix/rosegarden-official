@@ -3203,7 +3203,9 @@
 	To copy notes, select them and then use the standard copy
 	and paste functions.  After the paste the pasted notes will
 	be selected instead, and you can then drag them wherever you
-	need them.
+	need them.  You may also copy notes by selecting them with
+	the Select tool,  then keeping Ctrl pressed click-and-drag
+	the selected notes in a new position.
       </para>
     </sect1>
 
