@@ -62,6 +62,8 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
                     Apply | Ok | Cancel),
 	m_doc(doc)
 {
+    setHelp("file-printing");
+
     KConfig *config = kapp->config();
     config->setGroup(NotationViewConfigGroup);
 
