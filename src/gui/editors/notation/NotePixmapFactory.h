@@ -138,6 +138,13 @@ public:
     QCanvasPixmap* makeKeyDisplayPixmap(const Key &key,
                                        const Clef &clef);
 
+    QCanvasPixmap* makeTrackHeaderPixmap(int height,
+                        int charWidth, int charHeight,
+                        const Key &key, const Clef &clef,
+                        QColor clefColour, bool drawClef,
+                        const QString &upperText, QColor upperTextColour,
+                        const QString &lowerText, QColor lowerTextColour);
+
     // Bounding box and other geometry methods:
 
     int getNoteBodyWidth (Note::Type =

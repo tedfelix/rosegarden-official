@@ -94,7 +94,8 @@ NotationStaff::NotationStaff(QCanvas *canvas, Segment *segment,
         m_showRanges(true),
         m_showCollisions(true),
         m_printPainter(0),
-        m_ready(false)
+        m_ready(false),
+        m_lastRenderedBar(0)
 {
     KConfig *config = kapp->config();
     config->setGroup(NotationViewConfigGroup);
@@ -293,6 +294,14 @@ NotationStaff::isStaffNameUpToDate()
     return (m_staffNameText ==
             getSegment().getComposition()->
             getTrackById(getSegment().getTrack())->getLabel());
+}
+
+timeT
+NotationStaff::getTimeAtCanvasCoords(double cx, int cy) const
+{
+    LinedStaffCoords layoutCoords = getLayoutCoordsForCanvasCoords(cx, cy);
+    RulerScale * rs = m_notationView->getHLayout();
+    return rs->getTimeForX(layoutCoords.first);
 }
 
 void
@@ -559,6 +568,16 @@ NotationStaff::positionElements(timeT from, timeT to)
     //    NOTATION_DEBUG << "NotationStaff " << this << "::positionElements()"
     //                         << from << " -> " << to << endl;
     Profiler profiler("NotationStaff::positionElements");
+
+    // Following 4 lines are a workaround to not have m_clefChanges and
+    // m_keyChanges truncated when positionElements() is called with
+    // args outside current segment.
+    // Maybe a better fix would be not to call positionElements() with
+    // such args ...
+    int startTime = getSegment().getStartTime();
+    if (from < startTime) from = startTime;
+    if (to < startTime) to = startTime;
+    if (to == from) return;
 
     emit setOperationName(i18n("Positioning staff %1...").arg(getId() + 1));
     emit setProgress(0);
@@ -1888,6 +1907,9 @@ NotationStaff::markChanged(timeT from, timeT to, bool movedOnly)
                     i != getViewElementList()->end(); ++i) {
                 static_cast<NotationElement *>(*i)->removeCanvasItem();
             }
+
+            m_clefChanges.clear();
+            m_keyChanges.clear();
         }
 
     } else {
@@ -1995,6 +2017,7 @@ NotationStaff::checkRendered(timeT from, timeT to)
             positionElements
             (composition->getBarStart(bar),
              composition->getBarEnd(bar));
+            m_lastRenderedBar = bar;
 
             something = true;
 
@@ -2038,14 +2061,76 @@ NotationStaff::doRenderWork(timeT from, timeT to)
             (composition->getBarStart(bar),
              composition->getBarEnd(bar));
             m_status[bar] = Positioned;
+            m_lastRenderedBar = bar;
             return true;
 
         case Positioned:
+            // The bars currently displayed are rendered before the others.
+            // Later, when preceding bars are rendered, truncateClefsAndKeysAt()
+            // is called and possible clefs and/or keys from the bars previously
+            // rendered may be lost. Following code should restore these clefs
+            // and keys in m_clefChanges and m_keyChanges lists.
+            if (bar > m_lastRenderedBar)
+                checkAndCompleteClefsAndKeys(bar);
             continue;
         }
     }
 
     return false;
+}
+
+void
+NotationStaff::checkAndCompleteClefsAndKeys(int bar)
+{
+    // Look for Clef or Key in current bar
+    Composition *composition = getSegment().getComposition();
+    timeT barStartTime = composition->getBarStart(bar);
+    timeT barEndTime = composition->getBarEnd(bar);
+
+    for (ViewElementList::iterator it =
+                          getViewElementList()->findTime(barStartTime);
+             (it != getViewElementList()->end()) 
+                 && ((*it)->getViewAbsoluteTime() < barEndTime); ++it) {
+        if ((*it)->event()->isa(Clef::EventType)) {
+            // Clef found
+            Clef clef = *(*it)->event();
+
+            // Is this clef already in m_clefChanges list ?
+            int xClef = int((*it)->getLayoutX());
+            bool found = false;
+            for (int i = 0; i < m_clefChanges.size(); ++i) {
+                if (    (m_clefChanges[i].first == xClef)
+                    && (m_clefChanges[i].second == clef)) {
+                    found = true;
+                    break;
+                }
+            }
+    
+            // If not, add it
+            if (!found) {
+                m_clefChanges.push_back(ClefChange(xClef, clef));
+            }
+    
+        } else if ((*it)->event()->isa(::Rosegarden::Key::EventType)) {
+            ::Rosegarden::Key key = *(*it)->event();
+    
+            // Is this key already in m_keyChanges list ?
+            int xKey = int((*it)->getLayoutX());
+            bool found = false;
+            for (int i = 0; i < m_keyChanges.size(); ++i) {
+                if (    (m_keyChanges[i].first == xKey)
+                    && (m_keyChanges[i].second == key)) {
+                    found = true;
+                    break;
+                }
+            }
+    
+            // If not, add it
+            if (!found) {
+                m_keyChanges.push_back(KeyChange(xKey, key));
+            }
+        }
+    }
 }
 
 LinedStaff::BarStyle

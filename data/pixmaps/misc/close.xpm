@@ -1,0 +1,19 @@
+/* XPM */
+static char *close_icon[] = {
+/* columns rows colors chars-per-pixel */
+"10 10 2 1",
+"x c black",
+"  c none",
+/* pixels */
+"xx      xx"
+" xx    xx "
+"  xx  xx  "
+"   x xx   "
+"    xx    "
+"    xx    "
+"   xx x   "
+"  xx  xx  "
+" xx    xx "
+"xx      xx"
+
+};

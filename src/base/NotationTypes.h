@@ -426,6 +426,10 @@ public:
         return k.m_name == m_name;
     }
 
+    bool operator!=(const Key &k) const {
+        return !(k == *this);
+    }
+
     /**
      * Test whether the given event is a valid Key event.
      */

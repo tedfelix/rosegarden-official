@@ -147,7 +147,9 @@ signals:
 
 public slots:
      void slotRenderComplete();
-    
+
+    void slotExternalWheelEvent(QWheelEvent* e);
+
 protected:
 
     virtual void viewportPaintEvent(QPaintEvent *e);

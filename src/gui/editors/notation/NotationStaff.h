@@ -330,6 +330,11 @@ public:
 
     virtual double getBarInset(int barNo, bool isFirstBarInRow) const;
 
+    /**
+     * Return the time at the given canvas coordinates
+     */
+    timeT getTimeAtCanvasCoords(double x, int y) const;
+
 protected:
 
     virtual ViewElement* makeViewElement(Event*);
@@ -447,6 +452,12 @@ protected:
 
     void truncateClefsAndKeysAt(int);
 
+    /** Verify that a possible Clef or Key in bar is already inserted
+     * in m_clefChange or m_keyChange.
+     * If not, do the insertion.
+     */
+    void checkAndCompleteClefsAndKeys(int bar);
+
     NotePixmapFactory *m_notePixmapFactory;
     NotePixmapFactory *m_graceNotePixmapFactory;
     QCanvasSimpleSprite *m_previewSprite;
@@ -468,6 +479,8 @@ protected:
     BarStatusMap m_status;
     std::pair<int, int> m_lastRenderCheck;
     bool m_ready;
+
+    int m_lastRenderedBar;
 };
 
 

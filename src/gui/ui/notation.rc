@@ -44,6 +44,8 @@
     <Action name="show_controller_events_ruler"/>
 <!--    <Action name="add_control_ruler"/> -->
     <Menu name="add_control_ruler"><text>Add Event Ruler</text></Menu>
+    <Separator/>
+    <Action name="show_track_headers"/>
 </Menu>
 
 <Menu name="document">

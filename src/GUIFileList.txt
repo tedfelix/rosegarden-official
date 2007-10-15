@@ -605,6 +605,10 @@ SET(gui_SRCS
 	gui/editors/notation/SystemFontXft.h
 	gui/editors/notation/TextInserter.cpp
 	gui/editors/notation/TextInserter.h
+	gui/editors/notation/TrackHeader.cpp
+	gui/editors/notation/TrackHeader.h
+	gui/editors/notation/HeadersGroup.cpp
+	gui/editors/notation/HeadersGroup.h
 	gui/editors/parameters/AudioInstrumentParameterPanel.cpp
 	gui/editors/parameters/AudioInstrumentParameterPanel.h
 	gui/editors/parameters/InstrumentParameterBox.cpp
