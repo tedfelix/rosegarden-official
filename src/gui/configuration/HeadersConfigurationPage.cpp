@@ -160,6 +160,14 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
     // LilyPond export: Non-printable headers
     //
 
+    // set default expansion to false for this group -- what a faff
+    KConfig *config = kapp->config();
+    QString groupTemp = config->group();
+    config->setGroup("CollapsingFrame");
+    bool expanded = config->readBoolEntry("nonprintableheaders", false);
+    config->writeEntry("nonprintableheaders", expanded);
+    config->setGroup(groupTemp);
+
     CollapsingFrame *otherHeadersBox = new CollapsingFrame
         (i18n("Non-printable headers"), this, "nonprintableheaders");
     QFrame *frameOtherHeaders = new QFrame(otherHeadersBox);
@@ -168,14 +176,6 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
     font.setBold(false);
     otherHeadersBox->setFont(font);
     otherHeadersBox->setWidget(frameOtherHeaders);
-
-    // set default expansion to false for this group -- what a faff
-    KConfig *config = kapp->config();
-    QString groupTemp = config->group();
-    config->setGroup("CollapsingFrame");
-    bool expanded = config->readBoolEntry("nonprintableheaders", false);
-    config->writeEntry("nonprintableheaders", expanded);
-    config->setGroup(groupTemp);
 
     QGridLayout *layoutOtherHeaders = new QGridLayout(frameOtherHeaders, 2, 2, 10, 5);
 
