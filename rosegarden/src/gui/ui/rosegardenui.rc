@@ -107,7 +107,7 @@
 	<Separator/>
         <Action name="join_segments"/>
 	<Menu name="split">
-	<text>&amp;Split...</text>
+	<text>&amp;Split</text>
 	    <Action name="auto_split"/>
 	    <Action name="split_by_pitch"/>
 	    <Action name="split_by_recording"/>
