@@ -451,6 +451,91 @@
       </para>
     </sect1>
 
+    <sect1 id="file-rgproject">
+      <title>Rosegarden Project files</title> <para>A Rosegarden
+      composition file (.rg) contains all of the the note information
+      for your composition, as well as other data such as MIDI
+      controller settings, plugin details, and the names of any audio
+      files referred to in your composition.  The audio files
+      themselves are not stored in the Rosegarden composition file;
+      instead you are expected to keep track of their location on disk
+      yourself (see <link linkend="segment-view-audio-segments">Audio
+      segments</link>).  When you need to transfer a project from one
+      computer to another, or to a friend or colleague, this can be
+      inconvenient.  This is where Rosegarden Project files are
+      useful.  A Project file contains your composition, all of the
+      audio files it uses, any further data files required for plugins
+      used in the composition, and any additional files you may want
+      to include, all in one big bundle.</para>
+      <para>Use <menuchoice>
+	  <guimenu>File</guimenu>
+	  <guimenu>Export</guimenu>
+	  <guimenuitem>Export Rosegarden Project file...</guimenuitem></menuchoice> to export the current composition and its associated data into a Rosegarden Project file, and  <menuchoice>
+	  <guimenu>File</guimenu>
+	  <guimenu>Import</guimenu>
+	  <guimenuitem>Import Rosegarden Project file...</guimenuitem></menuchoice> to expand a Rosegarden Project file back into a composition and load it.</para>
+
+      <para>Note that Rosegarden Project format is an interchange
+      format, not an archival format.  Although Rosegarden composition
+      files are very carefully checked for compatibility from one
+      Rosegarden version to the next, no long-term guarantees are made for the
+      Project file format.</para>
+    </sect1>
+    
+    <sect1 id="file-other">
+      <title>Other file formats</title>
+	<para>Rosegarden can export to and import from a number of other file formats.  Some of these are described here; see also <link linkend="file-printing">Printing</link> for information about LilyPond file export.</para>
+      <sect2 id="file-other-csound">
+	<title>Csound</title>
+      <para>You can export score files for the Csound synthesis system using 
+	<menuchoice>
+	  <guimenu>File</guimenu>
+	  <guimenu>Export</guimenu>
+	  <guimenuitem>Export Csound score file...</guimenuitem>
+	</menuchoice>.  Together with a suitable orchestra file (not supplied), this can be used to play the composition through <ulink url="http://www.csounds.com/">Csound</ulink>. Note that not all data in the Rosegarden composition necessarily can or will be saved in the Csound format.</para>
+	</sect2>
+      <sect2 id="file-other-mup">
+	<title>Mup</title>
+	<para>You can use <menuchoice>
+	    <guimenu>File</guimenu>
+	    <guimenu>Export</guimenu>
+	    <guimenuitem>Export Mup file...</guimenuitem>
+	  </menuchoice>
+	  to save the contents of the current composition into a new Mup file.  This can then be processed by the <ulink url="http://www.arkkra.com/">Mup</ulink> music publication system, although it is likely that the file may need some tweaking to get really good quality output.  Note that not all data in the Rosegarden composition necessarily can or will be saved in the Mup format.</para>
+      </sect2>
+
+      <sect2 id="file-other-musicxml">
+	<title>MusicXML</title>
+	<para>The <menuchoice>
+	    <guimenu>File</guimenu>
+	    <guimenu>Export</guimenu>
+	    <guimenuitem>Export MusicXML file...</guimenuitem>
+	  </menuchoice>
+	  function saves the contents of the current composition into a new MusicXML file.  This can then be used with any music software that supports the MusicXML format.  Note that MusicXML support is experimental and has not been well tested.  Not all data in the Rosegarden composition necessarily can or will be saved in the MusicXML format.</para>
+      </sect2>
+
+      <sect2 id="file-other-hydrogen">
+	<title>Hydrogen</title>
+	<para>Rosegarden can import h2song files created by the Hydrogen drum machine.  These are imported into a skeletal MIDI-style structure with one track per pattern.  The audio samples they use are not imported.  Use  <menuchoice>
+	    <guimenu>File</guimenu>
+	    <guimenu>Import</guimenu>
+	    <guimenuitem>Import Hydrogen file...</guimenuitem>
+	  </menuchoice> to import a Hydrogen file.</para>
+	</sect2>
+
+      <sect2 id="file-other-rg21">
+	<title>Rosegarden 2.1</title>
+	<para>Use the 
+	  <menuchoice>
+	    <guimenu>File</guimenu>
+	    <guimenu>Import</guimenu>
+	    <guimenuitem>Import Rosegarden 2.1 file...</guimenuitem>
+	  </menuchoice> function to create a new composition from the contents of an existing X11 Rosegarden v2.1 (.rose) file.
+	  </para>
+      </sect2>
+
+      </sect1>
+
     <sect1 id="file-merge">
       <title>Merging files</title> <para>As well as loading or
 	importing files, you can also merge them into the current
@@ -744,8 +829,7 @@
       track assigned to an audio instrument, or you can work with
       existing WAV files.  To do this, you need to use the audio
       manager dialog (reached via <menuchoice><guimenu
-      lang="en">Segments</guimenu><guimenuitem>Manage Audio
-      Segments</guimenuitem></menuchoice>).
+      lang="en">File</guimenu><guimenuitem>Manage Audio Files</guimenuitem></menuchoice>).
 	</para>
       <para>
         <screenshot>
@@ -778,9 +862,9 @@
       lang="en">Composition</guimenu><guimenuitem>Edit Document
       Properties...</guimenuitem><guimenuitem>Audio</guimenuitem></menuchoice>)
       so as to keep your audio files accessible together.  You can also export
-      your project to a &rosegarden; project package file (.rpp) via
+      your project to a &rosegarden; project package file (.rgp) via
       <menuchoice><guimenu lang="en">File</guimenu>
-      <guimenuitem>Export...</guimenuitem><guimenuitem>Export Rosegarden Project File
+      <guimenuitem>Export</guimenuitem><guimenuitem>Export Rosegarden Project File
       </guimenuitem></menuchoice> to collect any scattered audio files
       together in one place.</para>
 
@@ -927,7 +1011,64 @@
 	  cursor, but this can be prevented by holding down Shift
 	  while splitting the segment.
 	</para>
+
       </sect2>
+
+      <sect2 id="segment-view-split-by-pitch">
+	<title>Other Split functions</title>
+	<para>The Segments menu contains a number of other Split functions.</para>
+	<para>
+	  <menuchoice>
+		  <guimenu>Segments</guimenu>
+		  <guimenu>Split</guimenu>
+		  <guimenuitem>Split on Silence</guimenuitem>
+		</menuchoice>
+	  splits the selected segments on silences.		  This function works slightly differently depending
+		  on whether the selected segments contain audio or
+		  MIDI data.  For audio segments, it offers you a
+		  dialog in which you can choose a threshold below
+		  which the segment is considered "silent"; it then
+		  splits the segment whenever its amplitude falls
+		  below this threshold.  For MIDI segments, it simply
+		  splits the segment everywhere that a full bar of
+		  silence occurs.
+	</para>
+
+	<para>
+		<menuchoice>
+		  <guimenu>Segments</guimenu>
+		  <guimenu>Split</guimenu>
+		  <guimenuitem>Split by Pitch...</guimenuitem>
+		</menuchoice>
+		  splits the currently selected segments into higher and
+		    lower parts.
+
+		  This function invokes a dialog allowing you to
+		  choose a pitch as a "split point", and then splits
+		  the selected segments in half with all the notes on
+		  or above that split point in the "higher" segment
+		  and all the notes below it in the "lower".
+
+		</para>
+		<para>
+		  If the music in the segment consists of two separate
+		  parts (e.g. left and right hand piano parts) that
+		  are not always completely on either side of a single
+		  split point, you may with to select the "ranging
+		  split-point" option.  If this is selected,
+		  Rosegarden will attempt to track the two parts as
+		  they move up and down, usually doing a slightly
+		  better job of separating out notes that were
+		  intended to lie in the two separate parts.
+
+		</para>
+		<para>
+		  The resulting segments are both created on the same
+		  track, with one overlapping the other.
+		  
+		</para>
+	<!-- to do: split by recording source, and at time -->
+	</sect2>
     </sect1>
 
     <sect1 id="segment-view-tempo-timesig">
@@ -1628,8 +1769,7 @@
 	The MIDI device manager dialog shows you the MIDI devices
 	that you currently have available to you, and where they are
 	connected.  To reach this dialog, use	<menuchoice>
-	  <guimenu lang="en">Composition</guimenu>
-	  <guimenuitem>Studio</guimenuitem>
+	  <guimenu lang="en">Studio</guimenu>
 	  <guimenuitem>Manage MIDI Devices</guimenuitem>
 	</menuchoice>.
       </para>
@@ -1898,7 +2038,7 @@
       some output device and MIDI channel. This feature is known as MIDI Thru.</para>
       <para>MIDI Thru is enabled by default in &rosegarden;. You may want 
       to globally disable it using the menu option <menuchoice>
-      <guimenu lang="en">Composition</guimenu><guimenuitem>Studio</guimenuitem>
+      <guimenu lang="en">Studio</guimenu>
       <guimenuitem>MIDI Thru Routing</guimenuitem></menuchoice>, if you prefer 
       to use an external MIDI routing system. There is also a global filter by 
       MIDI event type, which you may use to ignore some event types and let other
@@ -1937,8 +2077,7 @@
       <para>
 	Rosegarden's audio mixer window, reached through 
 	<menuchoice>
-	  <guimenu lang="en">Composition</guimenu>
-	  <guimenuitem>Studio</guimenuitem> <guimenuitem>Audio
+	  <guimenu lang="en">Studio</guimenu> <guimenuitem>Audio
 	  Mixer</guimenuitem></menuchoice>, resembles a hardware audio
 	  mixer and provides a way to see and change the state of a
 	  number of audio instruments at once.  It contains many of
@@ -1991,8 +2130,7 @@
       <para>
 	Rosegarden's MIDI mixer window, reached through 
 	<menuchoice>
-	  <guimenu lang="en">Composition</guimenu>
-	  <guimenuitem>Studio</guimenuitem> <guimenuitem>MIDI
+	  <guimenu lang="en">Studio</guimenu> <guimenuitem>MIDI
 	  Mixer</guimenuitem></menuchoice>, provides a way to see and
 	  edit the <link
 	  linkend="segment-view-instrumentparameterbox-midi">instrument
@@ -2216,7 +2354,6 @@
       <para>
 	To configure the metronomes, use
 	<menuchoice>
-	  <guimenu lang="en">Composition</guimenu>
 	  <guimenu lang="en">Studio</guimenu>
 	  <guimenuitem>Manage Metronome</guimenuitem>
 	</menuchoice>
@@ -3190,6 +3327,50 @@
 	existing selection you have, so if you want a clean new
 	selection, clear the old one first.
       </para>
+
+	  <sect2 id="matrix-selectionfilter">
+          <title>Filtering the selection</title>
+		  <para>The <menuchoice>
+		  <guimenu>Edit</guimenu>
+		  <guimenuitem>Filter Selection</guimenuitem>
+		</menuchoice> function offers you the ability to filter a range of events in
+		  any of several categories out of your selection.  You can use this to refine the selection, if you want some action to apply to only certain events in it.
+	        </para>
+		<para>
+		  <screenshot>
+		    <mediaobject>
+		      <imageobject>
+			<imagedata fileref="rg-eventfilter.png" format="PNG"/>
+		</imageobject>
+		  <textobject>
+		    <phrase>The event filter dialog</phrase>
+		  </textobject>
+		</mediaobject>
+		</screenshot>
+	        </para>
+		<para>
+		  All ranges may be either inclusive or exclusive.
+		</para>
+	        <para>
+		  An inclusive range will remove events on either side of it
+		  from the selection.  You can use this, for example, to
+		  filter everything below middle C and above the A above
+		  middle C out of your selection.
+		</para>
+	        <para>
+		  An exclusive range will remove the events within the range
+		  itself, leaving everything on either side of it selected.
+		  Using the same search points as in the previous example,
+		  you would use an exclusive range to remove everything
+		  between middle C and the A above middle C from your
+		  selection, while leaving everything above and below that
+		  range selected.
+		</para>
+		<para>
+		  Once your selection has been filtered, you can manipulate
+		  it by any conventional means.
+		</para>
+ 	</sect2>
     </sect1>
 
     <sect1 id="matrix-editing">
@@ -3641,6 +3822,11 @@
 	      It is not possible to select events from more than
 	      one staff at once.
 	    </para>
+		  <para>After selecting some events, you can filter your selection further using the <menuchoice>
+		  <guimenu>Edit</guimenu>
+		  <guimenuitem>Filter Selection</guimenuitem>
+		</menuchoice> function.  For more details, refer to <link linkend="matrix-selectionfilter">the corresponding function in the matrix editor</link>.
+	        </para>
 	  </listitem>
 	</varlistentry>
 
@@ -5193,1755 +5379,6 @@ actions all of this is talking about, and bring this bit up to date.
   <!--
   **********************************
   
-  PART II:
-  Command reference
-
-  **********************************
-  -->
-<!-- NO
-
-  <chapter id="commands">
-    <title>Command Reference</title>
-
-
-    <para></para>
-
-    <sect1 id="commands-main">
-      <title>Main window</title>
-      <para></para>
-
-
-      <sect2>
-	<title>File menu</title>
-	<para>
-	  <variablelist>
-
-	    <varlistentry id="commands-main-file-new">
-	      <term><menuchoice>
-		  <shortcut>
-		    <keycombo><keycap>Ctrl</keycap><keycap>n</keycap></keycombo>
-		  </shortcut>
-		  <guimenu>File</guimenu>
-		  <guimenuitem>New</guimenuitem>
-		</menuchoice></term>
-	      <listitem><para><action>Creates a new composition.</action></para></listitem>
-	    </varlistentry>
-
-	    <varlistentry id="commands-main-file-open">
-	      <term><menuchoice>
-		  <shortcut>
-		    <keycombo><keycap>Ctrl</keycap><keycap>o</keycap></keycombo>
-		  </shortcut>
-		  <guimenu>File</guimenu>
-		  <guimenuitem>Open</guimenuitem>
-		</menuchoice></term>
-	      <listitem><para><action>Opens an existing composition from a Rosegarden (.rg) file.</action></para></listitem>
-	    </varlistentry>
-
-	    <varlistentry id="commands-main-file-import">
-	      <term><menuchoice>
-		  <guimenu>File</guimenu>
-		  <guimenuitem>Import</guimenuitem>
-		</menuchoice></term>
-	      <listitem><para>This submenu contains functions for importing compositions from other file formats.</para>
-
-		<variablelist>
-
-		  <varlistentry id="commands-main-file-import-midi">
-		    <term><menuchoice>
-			<guimenu>Import</guimenu>
-			<guimenuitem>Import &MIDI; file...</guimenuitem>
-		    </menuchoice></term>
-		    <listitem><para><action>Creates a new composition from the contents of an existing &MIDI; (.mid) file.</action></para></listitem>
-		  </varlistentry>
-
-		  <varlistentry id="commands-main-file-import-rg21">
-		    <term><menuchoice>
-			<guimenu>Import</guimenu>
-			<guimenuitem>Import Rosegarden 2.1 file...</guimenuitem>
-		      </menuchoice></term>
-		    <listitem><para><action>Creates a new composition from the contents of an existing Rosegarden 2.1 (.rose) file.</action></para></listitem>
-		  </varlistentry>
-
-		</variablelist>
-	      </listitem>
-	    </varlistentry>
-
-	    <varlistentry id="commands-main-file-merge">
-	      <term><menuchoice>
-		  <guimenu>File</guimenu>
-		  <guimenuitem>Merge</guimenuitem>
-		</menuchoice></term>
-	      <listitem><para>This submenu contains functions for merging other files into the current composition.</para>
-
-		<variablelist>
-
-		  <varlistentry id="commands-main-file-merge-file">
-		    <term><menuchoice>
-			<guimenu>Merge</guimenu>
-			<guimenuitem>Merge File...</guimenuitem>
-		      </menuchoice></term>
-		    <listitem><para><action>Merges the contents of an existing Rosegarden (.rg) file into the current composition.  You will be offered a choice of whether to merge the file in new tracks at the start of the composition, or after the end of the current composition.</action></para></listitem>
-		  </varlistentry>
-
-		  <varlistentry id="commands-main-file-merge-midi">
-		    <term><menuchoice>
-			<guimenu>Merge</guimenu>
-			<guimenuitem>Merge &MIDI; file...</guimenuitem>
-		    </menuchoice></term>
-		    <listitem><para><action>Merges the contents of an existing &MIDI; (.mid) file into the current composition.  You will be offered a choice of whether to merge the file in new tracks at the start of the composition, or after the end of the current composition.</action></para></listitem>
-		  </varlistentry>
-
-		  <varlistentry id="commands-main-file-merge-rg21">
-		    <term><menuchoice>
-			<guimenu>Merge</guimenu>
-			<guimenuitem>Merge Rosegarden 2.1 file...</guimenuitem>
-		      </menuchoice></term>
-		    <listitem><para><action>Merges the contents of an existing Rosegarden 2.1 (.rose) file into the current composition.  You will be offered a choice of whether to merge the file in new tracks at the start of the composition, or after the end of the current composition.</action></para></listitem>
-		  </varlistentry>
-
-		</variablelist>
-	      </listitem>
-	    </varlistentry>
-
-	    <varlistentry id="commands-main-file-export">
-	      <term><menuchoice>
-		  <guimenu>File</guimenu>
-		  <guimenuitem>Export</guimenuitem>
-		</menuchoice></term>
-	      <listitem><para>This submenu contains functions for exporting the contents of compositions to other file formats.</para>
-
-		<variablelist>
-
-		  <varlistentry id="commands-main-file-export-midi">
-		    <term><menuchoice>
-			<guimenu>Export</guimenu>
-			<guimenuitem>Export &MIDI; file...</guimenuitem>
-		    </menuchoice></term>
-		    <listitem><para><action>Saves the contents of the current composition into a new &MIDI; file.</action>  Note that not all data in the Rosegarden composition necessarily can or will be saved in the &MIDI; format.</para></listitem>
-		  </varlistentry>
-
-		  <varlistentry id="commands-main-file-export-csound">
-		    <term><menuchoice>
-			<guimenu>Export</guimenu>
-			<guimenuitem>Export Csound score file...</guimenuitem>
-		      </menuchoice></term>
-		    <listitem><para><action>Saves the contents of the current composition into a new Csound score file.</action>  Together with a suitable orchestra file (not supplied), this can be used to play the composition through <ulink url="http://www.csounds.com/">Csound</ulink>. Note that not all data in the Rosegarden composition necessarily can or will be saved in the Csound format.</para></listitem>
-		  </varlistentry>
-
-		  <varlistentry id="commands-main-file-export-lilypond">
-		    <term><menuchoice>
-			<guimenu>Export</guimenu>
-			<guimenuitem>Export LilyPond file...</guimenuitem>
-		      </menuchoice></term>
-		    <listitem><para><action>Saves the contents of the current composition into a new LilyPond file.</action>  This can then be processed by the <ulink url="http://www.lilypond.org/">LilyPond</ulink> system to produce typeset-quality music, although it is likely that the file may need some tweaking to get really good quality output.  Note that not all data in the Rosegarden composition necessarily can or will be saved in the LilyPond format.</para></listitem>
-		  </varlistentry>
-
-		  <varlistentry id="commands-main-file-export-mup">
-		    <term><menuchoice>
-			<guimenu>Export</guimenu>
-			<guimenuitem>Export Mup file...</guimenuitem>
-		      </menuchoice></term>
-		    <listitem><para><action>Saves the contents of the current composition into a new Mup file.</action>  This can then be processed by the <ulink url="http://www.arkkra.com/">Mup</ulink> music publication system, although it is likely that the file may need some tweaking to get really good quality output.  Note that not all data in the Rosegarden composition necessarily can or will be saved in the Mup format.</para></listitem>
-		  </varlistentry>
-
-		  <varlistentry id="commands-main-file-export-musicxml">
-		    <term><menuchoice>
-			<guimenu>Export</guimenu>
-			<guimenuitem>Export MusicXML file...</guimenuitem>
-		      </menuchoice></term>
-		    <listitem><para><action>Saves the contents of the current composition into a new MusicXML file.</action>  This can then be used with any music software that supports the MusicXML format.  Note that MusicXML support is experimental and has not been well tested.  Not all data in the Rosegarden composition necessarily can or will be saved in the MusicXML format.</para></listitem>
-		  </varlistentry>
-
-		</variablelist>
-	      </listitem>
-	    </varlistentry>
-
-	    <varlistentry id="commands-main-file-save">
-	      <term><menuchoice>
-		  <shortcut>
-		    <keycombo><keycap>Ctrl</keycap><keycap>s</keycap></keycombo>
-		  </shortcut>
-		  <guimenu>File</guimenu>
-		  <guimenuitem>Save</guimenuitem>
-		</menuchoice></term>
-	      <listitem><para><action>Saves the composition.</action></para></listitem>
-	    </varlistentry>
-
-	    <varlistentry id="commands-main-file-save-as">
-	      <term><menuchoice>
-		  <guimenu>File</guimenu>
-		  <guimenuitem>Save As...</guimenuitem>
-		</menuchoice></term>
-	      <listitem><para><action>Saves the composition with a new filename.</action></para></listitem>
-	    </varlistentry>
-
-	    <varlistentry id="commands-main-file-close">
-	      <term><menuchoice>
-		  <shortcut>
-		    <keycombo><keycap>Ctrl</keycap><keycap>w</keycap></keycombo>
-		  </shortcut>
-		  <guimenu>File</guimenu>
-		  <guimenuitem>Close</guimenuitem>
-		</menuchoice></term>
-	      <listitem><para><action>Closes the current composition.</action></para></listitem>
-	    </varlistentry>
-
-	    <varlistentry id="commands-main-file-print">
-	      <term><menuchoice>
-		  <shortcut>
-		    <keycombo><keycap>Ctrl</keycap><keycap>p</keycap></keycombo>
-		  </shortcut>
-		  <guimenu>File</guimenu>
-		  <guimenuitem>Print</guimenuitem>
-		</menuchoice></term>
-	      <listitem><para><action>Prints the current composition.</action> At the time of writing, the print function is incomplete.  We recommend using the <link linkend="commands-main-file-export-lilypond">Export LilyPond file</link> function and printing with LilyPond instead.</para></listitem>
-	    </varlistentry>
-
-	    <varlistentry id="commands-main-file-quit">
-	      <term><menuchoice>
-		  <shortcut>
-		    <keycombo><keycap>Ctrl</keycap><keycap>q</keycap></keycombo>
-		  </shortcut>
-		  <guimenu>File</guimenu>
-		  <guimenuitem>Quit</guimenuitem>
-		</menuchoice></term>
-	      <listitem><para><action>Quits &rosegarden;</action></para></listitem>
-	    </varlistentry>
-
-	  </variablelist>
-	</para>
-
-      </sect2>
-
-
-      <sect2>
-	<title>Edit menu</title>
-	<para>
-	  <variablelist>
-
-	    <varlistentry id="commands-main-edit-undo">
-	      <term>
-		<menuchoice>
-		  <shortcut>
-		    <keycombo>
-		      <keycap>Ctrl</keycap>
-		      <keycap>z</keycap>
-		    </keycombo>
-		  </shortcut>
-		  <guimenu>Edit</guimenu>
-		  <guimenuitem>Undo</guimenuitem>
-		</menuchoice>
-	      </term>
-	      <listitem>
-		<para>
-		  <action>
-		    Reverses the last command performed.
-		  </action>
-		</para>
-	      </listitem>
-	    </varlistentry>  
-
-	    <varlistentry id="commands-main-edit-redo">
-	      <term>
-		<menuchoice>
-		  <shortcut>
-		    <keycombo>
-		      <keycap>Ctrl</keycap>
-		      <keycap>Shift</keycap>
-		      <keycap>z</keycap>
-		    </keycombo>
-		  </shortcut>
-		  <guimenu>Edit</guimenu>
-		  <guimenuitem>Redo</guimenuitem>
-		</menuchoice>
-	      </term>
-	      <listitem>
-		<para>
-		  <action>
-		    Repeats the last command performed, following an undo.
-		  </action>
-		</para>
-	      </listitem>
-	    </varlistentry>  
-
-	    <varlistentry id="commands-main-edit-cut">
-	      <term>
-		<menuchoice>
-		  <shortcut>
-		    <keycombo>
-		      <keycap>Ctrl</keycap>
-		      <keycap>x</keycap>
-		    </keycombo>
-		  </shortcut>
-		  <guimenu>Edit</guimenu>
-		  <guimenuitem>Cut</guimenuitem>
-		</menuchoice>
-	      </term>
-	      <listitem>
-		<para>
-		  <action>
-		    Removes the currently selected segment from the
-		    composition view and adds it to the clipboard.  Note that
-		    when you have selected a track, all segments in that track
-		    are selected.  
-		  </action>
-		</para>
-	      </listitem>
-	    </varlistentry>  
-
-	    <varlistentry id="commands-main-edit-copy">
-	      <term>
-		<menuchoice>
-		  <shortcut>
-		    <keycombo>
-		      <keycap>Ctrl</keycap>
-		      <keycap>c</keycap>
-		    </keycombo>
-		  </shortcut>
-		  <guimenu>Edit</guimenu>
-		  <guimenuitem>Copy</guimenuitem>
-		</menuchoice>
-	      </term>
-	      <listitem>
-		<para>
-		  <action>
-		    Removes the selected segments from the composition and
-		    places them in the clipboard to replace any contents the
-		    clipboard previously had.
-		  </action> 
-		  Note that when you have selected a track, all segments in that track
-		  are selected.
-		</para>
-	      </listitem>
-	    </varlistentry>  
-
-
-	    <varlistentry id="commands-main-edit-paste">
-	      <term>
-		<menuchoice>
-		  <shortcut>
-		    <keycombo>
-		      <keycap>Ctrl</keycap>
-		      <keycap>v</keycap>
-		    </keycombo>
-		  </shortcut>
-		  <guimenu>Edit</guimenu>
-		  <guimenuitem>Paste</guimenuitem>
-		</menuchoice>
-	      </term>
-	      <listitem>
-		<para>
-		  <action>
-		    Inserts the contents of the clipboard into the composition.
-		    Verbage hear stating where the contents are inserted
-		    (current track, offset within that track etc).
-		  </action>
-		</para>
-	      </listitem>
-	    </varlistentry>  
-
-	    <varlistentry id="commands-main-edit-delete">
-	      <term>
-		<menuchoice>
-		  <shortcut>
-		    <keycombo>
-		      <keycap>Delete</keycap>
-		    </keycombo>
-		  </shortcut>
-		  <guimenu>Edit</guimenu>
-		  <guimenuitem>Delete</guimenuitem>
-		</menuchoice>
-	      </term>
-	      <listitem>
-		<para>
-		  <action>
-		    Removes the selected segments from the composition and throws them away.
-		  </action>
-		</para>
-	      </listitem>
-	    </varlistentry>  
-
-
-	    <varlistentry id="commands-main-edit-select-all-segments">
-	      <term>
-		<menuchoice>
-		  <guimenu>Edit</guimenu>
-		  <guimenuitem>Select All Segments</guimenuitem>
-		</menuchoice>
-	      </term>
-	      <listitem>
-		<para>
-		  <action>
-		    Selects all segments within the composition.
-		  </action>
-		</para>
-	      </listitem>
-	    </varlistentry>  
-
-	    <varlistentry id="commands-main-edit-add-tempo-change">
-	      <term>
-		<menuchoice>
-		  <guimenu>Edit</guimenu>
-		  <guimenuitem>Add Tempo Change...</guimenuitem>
-		</menuchoice>
-	      </term>
-	      <listitem>
-		<para>
-		  <action>
-		    Invokes a tempo change dialog.
-		  </action>
-		  This offers a
-		  selection of ways to change the tempo of the
-		  composition, including changing the tempo from the
-		  insert cursor position onwards, from the last
-		  tempo change onwards, or for the entire
-		  composition.  See 
-
-for more information.
-
-		</para>
-	      </listitem>
-	    </varlistentry>  
-
-	    <varlistentry id="commands-main-edit-add-time-signature">
-	      <term>
-		<menuchoice>
-		  <guimenu>Edit</guimenu>
-		  <guimenuitem>Add Time Signature Change...</guimenuitem>
-		</menuchoice>
-	      </term>
-	      <listitem>
-		<para>
-		  <action>
-		    Invokes a time-signature change dialog.
-		  </action>
-
-		  This offers a
-		  selection of ways to change the tempo of the
-		  composition, including changing the time signature
-		  from the insert cursor position onwards or from the
-		  start of the current bar.  See 
-
-		  for more information.
-
-		</para>
-	      </listitem>
-	    </varlistentry>  
-
-
-	    <varlistentry id="commands-main-edit-change-composition-duration">
-	      <term>
-		<menuchoice>
-		  <guimenu>Edit</guimenu>
-		  <guimenuitem>Change Composition Duration...</guimenuitem>
-		</menuchoice>
-	      </term>
-	      <listitem>
-		<para>
-		  <action>
-		    Invokes a composition duration change dialog.
-		  </action>
-
-		  This allows you to change the overall duration of
-		  the composition.  This duration sets a hard limit
-		  (as a number of bars) on the scrollable width of the
-		  main window and the length of time you can play or
-		  record before the composition is deemed to have
-		  ended.  The default is 100 bars.
-
-		</para>
-	      </listitem>
-	    </varlistentry>  
-
-
-	    <varlistentry id="commands-main-edit-document-properties">
-	      <term>
-		<menuchoice>
-		  <guimenu>Edit</guimenu>
-		  <guimenuitem>Edit Document Properties...</guimenuitem>
-		</menuchoice>
-	      </term>
-	      <listitem>
-		<para>
-		  <action>
-		    Invokes a document properties dialog.
-		  </action>
-
-		  The document properties dialog allows you to review and/or modify the current document properties. Note - explain what are properties. Note to developers - It seems kinda weird to have icons on the left for selecting, and tabs in each one.  Why not just tabs or just the things on the left?
-
-		</para>
-	      </listitem>
-	    </varlistentry>  
-
-
-	  </variablelist>
-	</para>
-      </sect2>
-
-      <sect2>
-	<title>Segments menu</title>
-	<para>
-	  <variablelist>
-	    
-	    <varlistentry id="commands-main-segments-open-default-editor">
-	      <term>
-		<menuchoice>
-		  <shortcut>
-		    <keycombo>
-		      <keycap>Return</keycap>
-		    </keycombo>
-		  </shortcut>
-		  <guimenu>Segments</guimenu>
-		  <guimenuitem>Open in Default Editor</guimenuitem>
-		</menuchoice>
-	      </term>
-	      <listitem>
-		<para>
-		  <action> Opens all of the currently
-		    selected segments together in a notation editor, or in
-		    whichever other editor you have configured as your
-		    default. 
-		  </action>
-		</para>
-	      </listitem>
-	    </varlistentry>  
-
-	    <varlistentry id="commands-main-segments-open-matrix-editor">
-	      <term>
-		<menuchoice>
-		  <guimenu>Segments</guimenu>
-		  <guimenuitem>Open in Matrix Editor</guimenuitem>
-		</menuchoice>
-	      </term>
-	      <listitem>
-		<para>
-		  <action> Opens all of the currently
-		    selected segments in a matrix editor.
-		  </action>
-		  See <link linkend="matrix-view">matrix editor</link>.
-		</para>
-	      </listitem>
-	    </varlistentry>  
-
-	    <varlistentry id="commands-main-segments-open-notation-editor">
-	      <term>
-		<menuchoice>
-		  <guimenu>Segments</guimenu>
-		  <guimenuitem>Open in Notation Editor</guimenuitem>
-		</menuchoice>
-	      </term>
-	      <listitem>
-		<para>
-		  <action> Opens all of the currently
-		    selected segments together in a notation editor.
-		  </action>
-		  See <link linkend="notation-view">notation editor</link>.
-		</para>
-	      </listitem>
-	    </varlistentry>  
-
-	    <varlistentry id="commands-main-segments-open-event-editor">
-	      <term>
-		<menuchoice>
-		  <guimenu>Segments</guimenu>
-		  <guimenuitem>Open in Event List Editor</guimenuitem>
-		</menuchoice>
-	      </term>
-	      <listitem>
-		<para>
-		  <action> Opens all of the currently
-		    selected segments together in a event-list editor.
-		  </action>
-		  See <link linkend="event-view">event-list editor</link>.
-		</para>
-	      </listitem>
-	    </varlistentry>  
-
-
-	    <varlistentry id="commands-main-segments-quantize">
-	      <term>
-		<menuchoice>
-		  <guimenu>Segments</guimenu>
-		  <guimenuitem>Quantize...</guimenuitem>
-		</menuchoice>
-	      </term>
-	      <listitem>
-		<para>
-		  <action>Invokes a quantization dialog for quantizing the current selection.
-		  </action>
-		  See <link linkend="nv-quantization">quantization</link>.
-		</para>
-	      </listitem>
-	    </varlistentry>  
-
-	    <varlistentry id="commands-main-segments-rescale">
-	      <term>
-		<menuchoice>
-		  <guimenu>Segments</guimenu>
-		  <guimenuitem>Rescale...</guimenuitem>
-		</menuchoice>
-	      </term>
-	      <listitem>
-		<para>
-		  <action>Allows you to stretch or squash segments in time.
-		  </action>
-
-		  This option invokes a rescale dialog, which allows
-		  you to specify a ratio of timings that is then
-		  applied to the selected segments.  This has the
-		  result of stretching (slowing down) or squashing
-		  (speeding up) the selected segments, changing their
-		  durations accordingly.
-
-		</para>
-		<para>
-		  This only applies to segments containing MIDI
-		  events, not to audio segments. Rosegarden does not
-		  currently provide native support for audio
-		  time-stretching.
-		</para>
-	      </listitem>
-	    </varlistentry>  
-
-	    <varlistentry id="commands-main-segments-auto-split">
-	      <term>
-		<menuchoice>
-		  <guimenu>Segments</guimenu>
-		  <guimenuitem>Auto-Split</guimenuitem>
-		</menuchoice>
-	      </term>
-	      <listitem>
-		<para>
-		  <action>
-		    Splits the selected segments on silences.
-		  </action>
-
-		  This function works slightly differently depending
-		  on whether the selected segments contain audio or
-		  MIDI data.  For audio segments, it offers you a
-		  dialog in which you can choose a threshold below
-		  which the segment is considered "silent"; it then
-		  splits the segment whenever its amplitude falls
-		  below this threshold.  For MIDI segments, it simply
-		  splits the segment everywhere that a full bar of
-		  silence occurs.
-		</para>
-	      </listitem>
-	    </varlistentry>  
-
-	    <varlistentry id="commands-main-segments-split-by-pitch">
-	      <term>
-		<menuchoice>
-		  <guimenu>Segments</guimenu>
-		  <guimenuitem>Split by Pitch...</guimenuitem>
-		</menuchoice>
-	      </term>
-	      <listitem>
-		<para>
-		  <action>Splits the currently selected segments into higher and
-		    lower parts.
-		  </action>
-
-		  This function invokes a dialog allowing you to
-		  choose a pitch as a "split point", and then splits
-		  the selected segments in half with all the notes on
-		  or above that split point in the "higher" segment
-		  and all the notes below it in the "lower".
-
-		</para>
-		<para>
-		  If the music in the segment consists of two separate
-		  parts (e.g. left and right hand piano parts) that
-		  are not always completely on either side of a single
-		  split point, you may with to select the "ranging
-		  split-point" option.  If this is selected,
-		  Rosegarden will attempt to track the two parts as
-		  they move up and down, usually doing a slightly
-		  better job of separating out notes that were
-		  intended to lie in the two separate parts.
-
-		</para>
-		<para>
-		  The resulting segments are both created on the same
-		  track, with one overlapping the other.
-		  
-		</para>
-	      </listitem>
-	    </varlistentry>  
-
-
-
-
-	  </variablelist>
-	</para>
-      </sect2>
-    </sect1>
-    
-    <sect1 id="commands-nv">
-      <title>Notation editor</title>
-      <para></para>
-
-
-      <sect2 id="commands-nv-menu-file">
-	<title>File menu</title>
-	<para>
-	  <variablelist>
-
-	    <varlistentry id="commands-nv-menu-file-close">
-	      <term><menuchoice>
-		  <shortcut>
-		    <keycombo><keycap>Ctrl</keycap><keycap>w</keycap></keycombo>
-		  </shortcut>
-		  <guimenu>File</guimenu>
-		  <guimenuitem>Close</guimenuitem>
-		</menuchoice></term>
-	      <listitem><para><action>Closes the window</action></para></listitem>
-	    </varlistentry>
-
-	  </variablelist>
-	</para>
-
-      </sect2>
-
-      <sect2 id="commands-nv-menu-edit">
-	<title>Edit menu</title>
-	<para>
-	  <variablelist>
-
-	    <varlistentry id="commands-nv-menu-edit-undo">
-	      <term><menuchoice>
-		  <shortcut>
-		    <keycombo><keycap>Ctrl</keycap><keycap>z</keycap></keycombo>
-		  </shortcut>
-		  <guimenu>Edit</guimenu>
-		  <guimenuitem>Undo</guimenuitem>
-		</menuchoice></term>
-	      <listitem>
-		<para>
-		  <action>
-
-		    Reverses the last edit.
-
-		  </action> Edits are shared across
-		  all views, so if the last edit was not made in
-		  this view, undoing it might not appear to change
-		  this view either.
-		</para>
-	      </listitem>
-	    </varlistentry>
-
-	    <varlistentry id="commands-nv-menu-edit-redo">
-	      <term><menuchoice>
-		  <shortcut>
-		    <keycombo><keycap>Ctrl</keycap><keycap>Shift</keycap><keycap>z</keycap></keycombo>
-		  </shortcut>
-		  <guimenu>Edit</guimenu>
-		  <guimenuitem>Redo</guimenuitem>
-		</menuchoice></term>
-	      <listitem>
-		<para>
-		  <action>
-
-		    Repeats the last edit, following an undo.
-
-		  </action>
-		</para>
-	      </listitem>
-	    </varlistentry>
-
-	    <varlistentry id="commands-nv-menu-edit-cut">
-	      <term><menuchoice>
-		  <shortcut>
-		    <keycombo><keycap>Ctrl</keycap><keycap>x</keycap></keycombo>
-		  </shortcut>
-		  <guimenu>Edit</guimenu>
-		  <guimenuitem>Cut</guimenuitem>
-		</menuchoice></term>
-	      <listitem>
-		<para>
-		  <action>
-
-		    Removes the selected events from the composition
-		    and places them in the clipboard to replace any
-		    contents the clipboard previously had.
-
-		  </action>
-		</para>
-	      </listitem>
-	    </varlistentry>
-
-	    <varlistentry id="commands-nv-menu-edit-copy">
-	      <term><menuchoice>
-		  <shortcut>
-		    <keycombo><keycap>Ctrl</keycap><keycap>c</keycap></keycombo>
-		  </shortcut>
-		  <guimenu>Edit</guimenu>
-		  <guimenuitem>Copy</guimenuitem>
-		</menuchoice></term>
-	      <listitem>
-		<para>
-		  <action>
-		    
-		    Copies the selected events to the clipboard
-		    to replace any contents the clipboard previously had.
-
-		  </action>
-		</para>
-	      </listitem>
-	    </varlistentry>
-
-	    <varlistentry id="commands-nv-menu-edit-paste">
-	      <term><menuchoice>
-		  <shortcut>
-		    <keycombo><keycap>Ctrl</keycap><keycap>v</keycap></keycombo>
-		  </shortcut>
-		  <guimenu>Edit</guimenu>
-		  <guimenuitem>Paste</guimenuitem>
-		</menuchoice></term>
-	      <listitem>
-		<para>
-		  <action>
-		    
-		    Copies the contents of the clipboard to the
-		    location of the insert cursor in the current
-		    composition.
-
-		  </action>
-
-		  The clipboard must not contain
-		  multiple segments, and there must be enough
-		  space (occupied only by rests) starting at
-		  the insert cursor position to accommodate the
-		  clipboard's contents.
-
-		</para>
-	      </listitem>
-	    </varlistentry>
-
-	    <varlistentry id="commands-nv-menu-edit-cut-and-close">
-	      <term><menuchoice>
-		  <shortcut>
-		    <keycombo><keycap>Ctrl</keycap><keycap>Shift</keycap><keycap>x</keycap></keycombo>
-		  </shortcut>
-		  <guimenu>Edit</guimenu>
-		  <guimenuitem>Cut and Close</guimenuitem>
-		</menuchoice></term>
-	      <listitem>
-		<para>
-		  <action>
-		    
-		    Removes the selected events from the composition
-		    and places them in the clipboard to replace any
-		    contents the clipboard previously had, and closes
-		    the gap left behind by moving all subsequent
-		    events towards the beginning of the composition.
-
-		  </action>
-		</para>
-	      </listitem>
-	    </varlistentry>
-
-	    <varlistentry id="commands-nv-menu-edit-paste-dot-dot-dot">
-	      <term><menuchoice>
-		  <shortcut>
-		    <keycombo><keycap>Ctrl</keycap><keycap>Shift</keycap><keycap>v</keycap></keycombo>
-		  </shortcut>
-		  <guimenu>Edit</guimenu>
-		  <guimenuitem>Paste...</guimenuitem>
-		</menuchoice></term>
-	      <listitem>
-		<para>
-		  <action>
-		    
-		    Provides a choice of paste mechanisms with the
-		    ability to set one as the default for use in the
-		    Paste menu function.
-
-		  </action>
-
-		  See the section on <link linkend="nv-paste-types">Paste types</link> for more information.
-
-		</para>
-	      </listitem>
-	    </varlistentry>
-
-
-	    <varlistentry id="commands-nv-menu-edit-delete">
-	      <term><menuchoice>
-		  <shortcut>
-		    <keycombo><keycap>Del</keycap></keycombo>
-		  </shortcut>
-		  <guimenu>Edit</guimenu>
-		  <guimenuitem>Delete</guimenuitem>
-		</menuchoice></term>
-	      <listitem>
-		<para>
-		  <action>
-		    Removes the selected events from the composition
-		    and throws them away.
-		  </action>
-		</para>
-	      </listitem>
-	    </varlistentry>
-
-
-	    <varlistentry id="commands-nv-menu-edit-select-from-start">
-	      <term><menuchoice>
-		  <guimenu>Edit</guimenu>
-		  <guimenuitem>Select from Start</guimenuitem>
-		</menuchoice></term>
-	      <listitem>
-		<para>
-		  <action>
-		    Extends the current selection by selecting
-		    all events from the start of the staff up to the
-		    current selection (or up to the insert cursor,
-		    if no events are currently selected).
-		  </action>
-		</para>
-	      </listitem>
-	    </varlistentry>
-
-
-	    <varlistentry id="commands-nv-menu-edit-select-to-end">
-	      <term><menuchoice>
-		  <guimenu>Edit</guimenu>
-		  <guimenuitem>Select to End</guimenuitem>
-		</menuchoice></term>
-	      <listitem>
-		<para>
-		  <action>
-		    Extends the current selection by selecting
-		    all events from the end of the current selection
-		    (or from the insert cursor, if no events are
-		    currently selected) up to the end of the staff.
-		  </action>
-		</para>
-	      </listitem>
-	    </varlistentry>
-
-
-	    <varlistentry id="commands-nv-menu-edit-select-whole-staff">
-	      <term><menuchoice>
-		  <guimenu>Edit</guimenu>
-		  <guimenuitem>Select Whole Staff</guimenuitem>
-		</menuchoice></term>
-	      <listitem>
-		<para>
-		  <action>
-		    Selects all the events on the current staff.
-		  </action>
-		</para>
-	      </listitem>
-	    </varlistentry>
-
-
-	    <varlistentry id="commands-nv-menu-edit-clear-selection">
-	      <term><menuchoice>
-		  <shortcut>
-		    <keycombo><keycap>Esc</keycap></keycombo>
-		  </shortcut>
-		  <guimenu>Edit</guimenu>
-		  <guimenuitem>Clear Selection</guimenuitem>
-		</menuchoice></term>
-	      <listitem>
-		<para>
-		  <action>
-		    Unselects all events.
-		  </action>
-		</para>
-	      </listitem>
-	    </varlistentry>
-
-	    
-	    <varlistentry id="commands-nv-menu-edit-filter-selection">
-	      <term><menuchoice>
-		  <guimenu>Edit</guimenu>
-		  <guimenuitem>Filter Selection</guimenuitem>
-		</menuchoice></term>
-	      <listitem>
-		<para>
-		  <action>
-		    Invokes an event filter dialog.
-		  </action>
-		  This offers you the ability to filter a range of events in
-		  any of several categories out of your selection.
-	        </para>
-		<para>
-		  <screenshot>
-		    <mediaobject>
-		      <imageobject>
-			<imagedata fileref="rg-eventfilter.png" format="PNG"/>
-		</imageobject>
-		  <textobject>
-		    <phrase>The event filter dialog</phrase>
-		  </textobject>
-		</mediaobject>
-		</screenshot>
-	        </para>
-		<para>
-		  All ranges may be either inclusive or exclusive.
-		</para>
-	        <para>
-		  An inclusive range will remove events on either side of it
-		  from the selection.  You can use this, for example, to
-		  filter everything below middle C and above the A above
-		  middle C out of your selection.
-		</para>
-	        <para>
-		  An exclusive range will remove the events within the range
-		  itself, leaving everything on either side of it selected.
-		  Using the same search points as in the previous example,
-		  you would use an exclusive range to remove everything
-		  between middle C and the A above middle C from your
-		  selection, while leaving everything above and below that
-		  range selected.
-		</para>
-		<para>
-		  Once your selection has been filtered, you can manipulate
-		  it by any conventional means.
-		</para>
-	      </listitem>
-	    </varlistentry>
-
-
-	    <varlistentry id="commands-nv-menu-edit-add-tempo">
-	      <term><menuchoice>
-		  <guimenu>Edit</guimenu>
-		  <guimenuitem>Add Tempo Change...</guimenuitem>
-		</menuchoice></term>
-	      <listitem>
-		<para>
-		  <action>
-		    Invokes a tempo change dialog.
-		  </action>
-		  This offers a
-		  selection of ways to change the tempo of the
-		  composition, including changing the tempo from the
-		  insert cursor position onwards, from the last
-		  tempo change onwards, or for the entire
-		  composition.  See 
-
-for more information.
-		</para>
-	      </listitem>
-	    </varlistentry>
-
-
-	    <varlistentry id="commands-nv-menu-edit-add-time-signature">
-	      <term><menuchoice>
-		  <guimenu>Edit</guimenu>
-		  <guimenuitem>Add Time Signature Change...</guimenuitem>
-		</menuchoice></term>
-	      <listitem>
-		<para>
-		  <action>
-
-		    Invokes a time-signature change dialog.
-
-		  </action>
-
-		  This offers a
-		  selection of ways to change the tempo ofthe
-		  composition, including changing the time signature
-		  from the insert cursor position onwards or from the
-		  start of the current bar.  See 
-Changing the Time Signature
-
-		  for more information.
-
-		</para>
-	      </listitem>
-	    </varlistentry>
-
-
-	    <varlistentry id="commands-nv-menu-edit-add-clef">
-	      <term><menuchoice>
-		  <guimenu>Edit</guimenu>
-		  <guimenuitem>Add Clef Change...</guimenuitem>
-		</menuchoice></term>
-	      <listitem>
-		<para>
-		  <action>
-
-		    Invokes a clef selection dialog, and inserts the
-		    chosen clef at the current insert cursor position.
-
-		  </action>
-
-		  The dialog allows you to choose a clef, but also
-		  to choose how you want the clef to be applied, in
-		  cases where there are already some notes following
-		  the point where the clef is to be inserted.  You
-		  must choose one of the following:
-
-		  <variablelist>
-
-		    <varlistentry>
-		      <term>Maintain current pitches</term>
-		      <listitem>
-			<para>
-			  Any notes following the clef will keep
-			  their current performance pitches.
-			</para>
-			<para>
-			  For example, inserting a
-			  tenor clef in the middle of a previously
-			  treble-clef section will cause the notes following
-			  the clef to be moved an octave
-			  higher up the staff, because they will still have
-			  their treble-clef pitches.
-			</para>
-		      </listitem>
-		    </varlistentry>
-
-		    <varlistentry>
-		      <term>Transpose into appropriate octave</term>
-		      <listitem>
-			<para>
-			  Any notes following the clef will
-			  retain their pitch within the octave, but
-			  may be moved into a different octave to
-			  match the new clef, and therefore will play
-			  at a new pitch.
-			</para>
-			<para>
-			  For example, inserting a tenor clef in the
-			  middle of a previously treble-clef section
-			  will cause the notes following the clef to
-			  move by one staff line only to adjust to the new
-			  clef, but to play an octave lower than before.
-			</para>
-		      </listitem>
-		    </varlistentry>
-
-		  </variablelist>
-
-		</para>
-	      </listitem>
-	    </varlistentry>
-
-
-	    <varlistentry id="commands-nv-menu-edit-add-key-signature">
-	      <term><menuchoice>
-		  <guimenu>Edit</guimenu>
-		  <guimenuitem>Add Key Change...</guimenuitem>
-		</menuchoice></term>
-	      <listitem>
-		<para>
-		  <action>
-		    
-		  </action>
-		</para>
-	      </listitem>
-	    </varlistentry>
-
-
-	  </variablelist>
-	</para>
-
-      </sect2>
-
-      <sect2 id="commands-nv-menu-group">
-	<title>Group menu</title>
-	<para>
-	  <variablelist>
-
-
-	    <varlistentry id="commands-nv-menu-group-beam">
-	      <term><menuchoice>
-		  <guimenu>Group</guimenu>
-		  <guimenuitem>Beam Group</guimenuitem>
-		</menuchoice></term>
-	      <listitem>
-		<para>
-		  <action>
-		    Makes the selected notes into a beamed group.
-		  </action>
-		</para>
-	      </listitem>
-	    </varlistentry>
-
-
-	    <varlistentry id="commands-nv-menu-group-auto-beam">
-	      <term><menuchoice>
-		  <guimenu>Group</guimenu>
-		  <guimenuitem>Auto-Beam</guimenuitem>
-		</menuchoice></term>
-	      <listitem>
-		<para>
-		  <action>
-		    Scans the area covered by the selection and attempts
-		    to group short notes into plausible beamed groups.
-		  </action>
-		</para>
-	      </listitem>
-	    </varlistentry>
-
-
-	    <varlistentry id="commands-nv-menu-group-break-group">
-	      <term><menuchoice>
-		  <guimenu>Group</guimenu>
-		  <guimenuitem>Unbeam</guimenuitem>
-		</menuchoice></term>
-	      <listitem>
-		<para>
-		  <action>
-		    Removes the selected notes from any beamed groups
-		    they may be part of, leaving them as separate
-		    individuals.
-		  </action>
-		  If part of a beamed group is selected, the unselected
-		  part of the group will remain beamed.
-		</para>
-	      </listitem>
-	    </varlistentry>
-
-	    <varlistentry id="commands-nv-menu-group-tuplet">
-	      <term><menuchoice>
-		  <guimenu>Group</guimenu>
-		  <guimenuitem>Tuplet</guimenuitem>
-		</menuchoice></term>
-	      <listitem>
-		<para>
-		  <action>
-		    Makes a triplet or other tuplet group.
-		  </action>
-		  This function allows you to adjust the timing of a
-		  short section of music in the ratio of two
-		  durations, for example to indicate that three notes
-		  should be played in the time of two (the classic
-		  triplet), or nine in the time of six, or whatever.
-		  You can set this ratio in a dialog box when you
-		  invoke the function.
-		</para>
-		<para>
-		  If you have selected some events before invoking the
-		  function, it will assume that you want to make a
-		  tuplet group out of the selected region (or as close
-		  to its duration as possible) and will adjust the
-		  default values available in the dialog accordingly.
-		</para>
-	      </listitem>
-	    </varlistentry>
-
-
-	    <varlistentry id="commands-nv-menu-group-simple-tuplet">
-	      <term><menuchoice>
-		  <guimenu>Group</guimenu>
-		  <guimenuitem>Simple Tuplet</guimenuitem>
-		</menuchoice></term>
-	      <listitem>
-		<para>
-		  <action>
-
-		    Makes a tuplet group (normally of triplets) with
-		    the most apparently obvious ratio of durations.
-
-		  </action>
-		  Usually this function will attempt to make a triplet
-		  group starting at the current insert cursor, or if
-		  some events are selected, will attempt to make them
-		  into triplets.  It is possible that it might end up
-		  making non-triplet groups if there is no obvious
-		  valid triplet arrangement.
-		</para>
-	      </listitem>
-	    </varlistentry>
-
-
-	    <varlistentry id="commands-nv-menu-group-grace">
-	      <term><menuchoice>
-		  <guimenu>Group</guimenu>
-		  <guimenuitem>Make Grace Notes</guimenuitem>
-		</menuchoice></term>
-	      <listitem>
-		<para>
-		  <action>
-		    Converts the selected notes into grace notes.
-		  </action>
-		</para>
-	      </listitem>
-	    </varlistentry>
-
-
-
-	    <varlistentry id="commands-nv-menu-group-ungrace">
-	      <term><menuchoice>
-		  <guimenu>Group</guimenu>
-		  <guimenuitem>Ungrace</guimenuitem>
-		</menuchoice></term>
-	      <listitem>
-		<para>
-		  <action>
-		    Converts any grace notes in the selection to
-		    normal notes.
-		  </action>
-		</para>
-	      </listitem>
-	    </varlistentry>
-
-
-
-	    <varlistentry id="commands-nv-menu-group-slur">
-	      <term><menuchoice>
-		  <guimenu>Group</guimenu>
-		  <guimenuitem>Slur</guimenuitem>
-		</menuchoice></term>
-	      <listitem>
-		<para>
-		  <action>
-		    Adds a slur across the selected notes.
-		  </action>
-		  To remove the slur, click on it
-		  with the erase tool just as you would for a note.
-		</para>
-	      </listitem>
-	    </varlistentry>
-
-
-
-	    <varlistentry id="commands-nv-menu-group-crescendo">
-	      <term><menuchoice>
-		  <guimenu>Group</guimenu>
-		  <guimenuitem>Crescendo</guimenuitem>
-		</menuchoice></term>
-	      <listitem>
-		<para>
-		  <action>
-		    Adds a crescendo (opening hairpin) indication
-		    across the selected notes.
-		  </action>
-		  To remove the crescendo indication, click on it
-		  with the erase tool just as you would for a note.
-		</para>
-	      </listitem>
-	    </varlistentry>
-
-
-
-	    <varlistentry id="commands-nv-menu-group-decrescendo">
-	      <term><menuchoice>
-		  <guimenu>Group</guimenu>
-		  <guimenuitem>Decrescendo</guimenuitem>
-		</menuchoice></term>
-	      <listitem>
-		<para>
-		  <action>
-		    Adds a decrescendo (closing hairpin) indication
-		    across the selected notes.
-		  </action>
-		  To remove the decrescendo indication, click on it
-		  with the erase tool just as you would for a note.
-		</para>
-	      </listitem>
-	    </varlistentry>
-
-
-	  </variablelist>
-	</para>
-
-      </sect2>
-
-      <sect2 id="commands-nv-menu-notes">
-	<title>Notes menu</title>
-	<para>
-	  <variablelist>
-
-	    <varlistentry id="commands-nv-menu-notes-">
-	      <term><menuchoice>
-		  <guimenu>Notes</guimenu>
-		  <guimenuitem></guimenuitem>
-		</menuchoice></term>
-	      <listitem>
-		<para>
-		  <action>
-
-		  </action>
-		</para>
-	      </listitem>
-	    </varlistentry>
-
-
-	    <varlistentry id="commands-nv-menu-notes-style-actionmenu">
-	      <term><menuchoice>
-		  <guimenu>Notes</guimenu>
-		  <guimenuitem>Note Style</guimenuitem>
-		</menuchoice></term>
-	      <listitem>
-		<para>
-		  <action>
-		    Change the note style of the selected notes.
-		  </action>
-		  This submenu contains an entry for each of the <link
-		    linkend="nv-note-styles">note
-		    styles</link> that are currently available.  Choosing one
-		  will change the note style of the selected notes to
-		  that style.
-		</para>
-	      </listitem>
-	    </varlistentry>
-
-
-	    <varlistentry id="commands-nv-menu-notes-stems">
-	      <term><menuchoice>
-		  <guimenu>Notes</guimenu>
-		  <guimenuitem>Stem Direction</guimenuitem>
-		</menuchoice></term>
-	      <listitem>
-		<para>
-		  <action>
-		    Change the stem
-		    direction of the selected notes.
-		  </action>
-		  This submenu allows you to specify that all the
-		  <link linkend="nv-note-qualities">stems</link> of
-		  the selected notes should point up or down, plus an
-		  entry to reset the stem directions to those that
-		  Rosegarden originally chose for the notes.
-		</para>
-	      </listitem>
-	    </varlistentry>
-
-
-	    <varlistentry id="commands-nv-menu-notes-slashes">
-	      <term><menuchoice>
-		  <guimenu>Notes</guimenu>
-		  <guimenuitem>Slashes</guimenuitem>
-		</menuchoice></term>
-	      <listitem>
-		<para>
-		  <action>
-		    Add diagonal
-		    slashes across the selected notes' stems.
-		  </action>
-		  This submenu allows you to choose a number of
-		  diagonal strokes or <link linkend="nv-note-qualities">slashes</link> to be drawn across the
-		  stems of each of the selected notes.  These may be
-		  used, for example, to indicate repetition or rolls
-		  to a human reader.  They do not (yet) affect
-		  performance using Rosegarden.
-		</para>
-	      </listitem>
-	    </varlistentry>
-
-	  </variablelist>
-	</para>
-
-      </sect2>
-
-      <sect2 id="commands-nv-menu-marks">
-	<title>Marks menu</title>
-	<para>
-	  <variablelist>
-	    <varlistentry>
-	      <term><menuchoice>
-		  <guimenu>blah</guimenu>
-		  <guimenuitem>blah</guimenuitem>
-		</menuchoice></term>
-	      <listitem>
-		<para>to be continued</para>
-	      </listitem>
-	    </varlistentry>
-	  </variablelist>
-	</para>
-
-      </sect2>
-
-      <sect2 id="commands-nv-menu-transforms">
-	<title>Transforms menu</title>
-	<para>
-	  <variablelist>
-
-	    <varlistentry id="commands-nv-menu-transforms-normalize-rests">
-	      <term><menuchoice>
-		  <guimenu>Transforms</guimenu>
-		  <guimenuitem>Normalize Rests</guimenuitem>
-		</menuchoice></term>
-	      <listitem>
-		<para>
-		  <action>Makes the rests in the selection
-		    theoretically correct.</action>
-
-		  This function examines each sequence of consecutive
-		  rests found in the selection, and adjusts, splits
-		  and merges rests as necessary to ensure that the
-		  rests have theoretically correct durations and fall
-		  on the correct boundaries.
-		</para>
-
-		<para>For example, a 4/4 bar containing a crotchet
-		  (quarter-note), then a minim (half-note) rest and a
-		  crotchet rest will be rearranged to place the crotchet
-		  rest first, as the minim rest should not cross the
-		  central beat boundary of the bar.
-		</para>
-
-		<para>This function is also useful in occasional
-		  situations where Rosegarden has made a bad job of
-		  maintaining the rests correctly within a bar, for
-		  example when editing imported &MIDI; data.  Normalizing
-		  the rests will usually make the arrangement of notes
-		  in such a situation a bit clearer.  (Rosegarden always
-		  normalizes the rests as a matter of course when
-		  importing or recording &MIDI;, but things can sometimes
-		  get muddled up again.)</para>
-
-	      </listitem>
-	    </varlistentry>
-
-	    <varlistentry id="commands-nv-menu-transforms-collapse-rests">
-	      <term><menuchoice>
-		  <guimenu>Transforms</guimenu>
-		  <guimenuitem>Collapse Rests</guimenuitem>
-		</menuchoice></term>
-	      <listitem>
-		<para>
-		  <action>Makes multiple short rests into fewer longer
-		    ones.</action>
-
-		  This function merges consecutive rests into longer
-		  rests, wherever possible.  That is, wherever two
-		  consecutive rests in the selection are found to have
-		  a total duration expressible as a single longer
-		  rest, they will be merged.
-		</para>
-	      </listitem>
-	    </varlistentry>
-
-	    <varlistentry id="commands-nv-menu-transforms-collapse-notes">
-	      <term><menuchoice>
-		  <guimenu>Transforms</guimenu>
-		  <guimenuitem>Collapse Equal-Pitch Notes</guimenuitem>
-		</menuchoice></term>
-	      <listitem>
-		<para>
-		  <action>Makes multiple short notes into fewer longer
-		    ones.</action>
-
-		  This function merges consecutive notes into longer
-		  notes, wherever possible.  That is, wherever two
-		  consecutive notes of equal pitch in the selection
-		  are found to have a total duration expressible as a
-		  single longer note, they will be merged.
-		</para>
-	      </listitem>
-	    </varlistentry>
-
-	    <varlistentry id="commands-nv-menu-transforms-tie-notes">
-	      <term><menuchoice>
-		  <guimenu>Transforms</guimenu>
-		  <guimenuitem>Tie Equal-Pitch Notes</guimenuitem>
-		</menuchoice></term>
-	      <listitem>
-		<para><action>Ties consecutive notes whenever possible.</action>
-
-		  This function ties together any consecutive notes of
-		  equal pitch found in the selection.  Tied notes are
-		  shown with a curved line joining the note heads, and
-		  are played as a single long note.
-		</para>
-	      </listitem>
-	    </varlistentry>
-
-	    <varlistentry id="commands-nv-menu-transforms-untie-notes">
-	      <term><menuchoice>
-		  <guimenu>Transforms</guimenu>
-		  <guimenuitem>Untie Notes</guimenuitem>
-		</menuchoice></term>
-	      <listitem>
-		<para><action>Breaks ties between notes.</action>
-
-		  Any tied notes found in the selection are untied,
-		  and will subsequently be played as separate
-		  notes.</para>
-	      </listitem>
-	    </varlistentry>
-
-	    <varlistentry id="commands-nv-menu-transforms-make-viable">
-	      <term><menuchoice>
-		  <guimenu>Transforms</guimenu>
-		  <guimenuitem>Make Notes Viable</guimenuitem>
-		</menuchoice></term>
-	      <listitem>
-		<para><action>Splits notes at displayable
-		    durations.</action> This function is intended to deal
-		  with notes that have excessively long durations that
-		  overflow barlines or that are too long to be displayed
-		  as a single note.  It takes any such notes and splits
-		  them into shorter, tied notes.
-		</para>
-	      </listitem>
-	    </varlistentry>
-
-	    <varlistentry id="commands-nv-menu-transforms-de-counterpoint">
-	      <term><menuchoice>
-		  <guimenu>Transforms</guimenu>
-		  <guimenuitem>De-Counterpoint</guimenuitem>
-		</menuchoice></term>
-	      <listitem>
-		<para><action>Turns counterpoint into a series of split-and-tied notes and chords.</action>
-
-		  &rosegarden; has no explicit support for counterpoint
-		  (multiple lines of notes edited separately on the
-		  same staff), but it will do its best to approximate
-		  it when it finds notes in a segment that are
-		  apparently contrapuntal, i.e. that overlap but that
-		  are not precise enough to be treated as chords.  For
-		  example, when a short note starts shortly after a
-		  longer note, Rosegarden will show the longer note
-		  and a short <quote>spacing</quote> rest together, followed by the
-		  shorter note.  Unfortunately this often isn't what
-		  you want.
-		</para>
-
-		<para>The De-Counterpoint function can be applied to a
-		  selection that contains overlapping notes.  It will
-		  split overlapping notes at the point where they
-		  overlap, and tie together the resulting split notes,
-		  ensuring that the music takes the form of a series of
-		  chords and/or single notes starting and ending in neat
-		  blocks, with some notes possibly tied.
-		</para>
-	      </listitem>
-	    </varlistentry>
-
-	    <varlistentry id="commands-nv-menu-transforms-quantize">
-	      <term><menuchoice>
-		  <guimenu>Transforms</guimenu>
-		  <guimenuitem>Quantize...</guimenuitem>
-		</menuchoice></term>
-	      <listitem>
-		<para><action>Quantizes the selection.</action></para>
-	      </listitem>
-	    </varlistentry>
-
-	    <varlistentry id="commands-nv-menu-transforms-fix-smoothing">
-	      <term><menuchoice>
-		  <guimenu>Transforms</guimenu>
-		  <guimenuitem>Fix Smoothed Values</guimenuitem>
-		</menuchoice></term>
-	      <listitem>
-		<para><action>Makes the note durations in the current
-		    view permanent.</action>
-
-		  When notating recorded or performance &MIDI;,
-		  Rosegarden usually has to round off the durations of
-		  some notes so that they can be displayed as normal
-		  note types.  This is known as <link
-		    linkend="nv-quantization">smoothing</link>, and it
-		  normally does not affect the notes actually played,
-		  it's just a convenience for display.  The Fix
-		  Smoothed Values function takes the current smoothed
-		  note durations and sets them such that they are used
-		  for performance (and editing in the matrix view,
-		  etc) as well as for notation.
-		</para>
-	      </listitem>
-	    </varlistentry>
-
-	    <varlistentry id="commands-nv-menu-transforms-interpret">
-	      <term><menuchoice>
-		  <guimenu>Transforms</guimenu>
-		  <guimenuitem>Interpret...</guimenuitem>
-		</menuchoice></term>
-	      <listitem>
-		<para><action>Modifies the velocities and timings of
-		    notes according to any written or indicated dynamics
-		    found.</action> The selection of interpretations
-		  available is as follows:
-
-		  <variablelist>
-		    <varlistentry>
-		      <term>Apply text dynamics (p, mf, ff etc)
-		      </term>
-		      <listitem><para> Sets a velocity to each note
-			  based on the last piece of text of "Dynamic"
-			  type seen on the same staff (only texts of the
-			  form pp, p, mp, mf, f, ff, fff etc are matched).
-			</para></listitem>
-		    </varlistentry>
-
-		    <varlistentry>
-		      <term>Apply hairpin dynamics
-		      </term>
-		      <listitem><para> Makes the notes gradually
-			  increase or decrease in velocity during a
-			  crescendo or decrescendo hairpin.
-			</para></listitem>
-		    </varlistentry>
-
-		    <varlistentry>
-		      <term>
-			Stress beats
-		      </term>
-		      <listitem><para> Makes notes that land on bar or
-			  beat boundaries slightly louder (greater
-			  velocity) than the surrounding notes.
-			</para></listitem>
-		    </varlistentry>
-		    
-		    <varlistentry>
-		      <term>
-			Articulate slurs, staccato, tenuto etc
-		      </term>
-		      <listitem><para> Shortens unslurred notes,
-			  shortens staccato notes more, and gives notes
-			  inside slurs and tenuto notes their full length.
-			</para></listitem>
-		    </varlistentry>
-		  </variablelist>
-
-		</para>
-
-	      </listitem>
-	    </varlistentry>
-
-	    <varlistentry id="commands-nv-menu-transforms-transpose">
-	      <term><menuchoice>
-		  <guimenu>Transforms</guimenu>
-		  <guimenuitem>Transpose</guimenuitem>
-		</menuchoice></term>
-	      <listitem>
-		<para><action>Alters the pitch of the selected
-		    notes.</action> This submenu contains basic
-		  transposition functions which move the selected notes
-		  up or down a semitone or a whole octave in pitch, as
-		  well as a general transpose function that allows you
-		  to choose how far up or down you want to transpose the
-		  selection.
-		</para>
-
-		<para>These functions simply change the stored pitches
-		  of the notes in the selection, so that they both play
-		  and appear at the new pitches.  They do not deal with
-		  performance transposition (displaying one pitch and
-		  playing another), for which see the main window's
-		  segment parameter box; nor do they help you with
-		  transposing from one key into another, for which see
-		  the <link
-		    linkend="commands-nv-menu-edit-add-key-signature">key
-		    change</link> function.
-		</para>
-	      </listitem>
-	    </varlistentry>
-
-	  </variablelist>
-	</para>
-
-      </sect2>
-
-
-    </sect1>
-  </chapter>
-
--->
-
-
-  <!--
-  **********************************
-  
   PART III:
   Technical material
 
@@ -7780,7 +6217,7 @@ Changing the Time Signature
 	<listitem>
 	  <para>
 
-	    Rosegarden is Copyright 2000-2006 Guillaume Laurent,
+	    Rosegarden is Copyright 2000-2007 Guillaume Laurent,
 	    Chris Cannam and Richard Bown.  The moral rights of
 	    Guillaume Laurent, Chris Cannam and Richard Bown to be
 	    identified as the authors of this work have been asserted.
