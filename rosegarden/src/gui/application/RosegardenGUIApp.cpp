@@ -965,7 +965,7 @@ void RosegardenGUIApp::setupActions()
 
     pixmap.load(pixmapDir + "/toolbar/manage-audio-segments.xpm");
     icon = QIconSet(pixmap);
-    new KAction(i18n("Manage A&udio"), icon,
+    new KAction(i18n("Manage A&udio Files"), icon,
                 Key_U + CTRL,
                 this, SLOT(slotAudioManager()),
                 actionCollection(), "audio_manager");

@@ -28,6 +28,7 @@
 #include "document/ConfigGroups.h"
 #include "document/RosegardenGUIDoc.h"
 #include "document/io/LilypondExporter.h"
+#include "gui/widgets/CollapsingFrame.h"
 #include "misc/Strings.h"
 
 #include <kapplication.h>
@@ -44,6 +45,7 @@
 #include <qtooltip.h>
 #include <qvbox.h>
 #include <qwidget.h>
+#include <qfont.h>
 
 namespace Rosegarden
 {
@@ -69,8 +71,7 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
     std::vector<PropertyName> fixedKeys =
 	CompositionMetadataKeys::getFixedKeys();
 
-    std::set
-        <std::string> shown;
+    std::set<std::string> shown;
 
     for (unsigned int index = 0; index < fixedKeys.size(); index++) {
 	std::string key = fixedKeys[index].getName();
@@ -159,10 +160,23 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
     // LilyPond export: Non-printable headers
     //
 
-    QGroupBox *otherHeadersBox = new QGroupBox
-                           (1, Horizontal,
-                            i18n("Non-printable headers"), this);
+    CollapsingFrame *otherHeadersBox = new CollapsingFrame
+        (i18n("Non-printable headers"), this, "nonprintableheaders");
     QFrame *frameOtherHeaders = new QFrame(otherHeadersBox);
+    otherHeadersBox->setWidgetFill(true);
+    QFont font(otherHeadersBox->font());
+    font.setBold(false);
+    otherHeadersBox->setFont(font);
+    otherHeadersBox->setWidget(frameOtherHeaders);
+
+    // set default expansion to false for this group -- what a faff
+    KConfig *config = kapp->config();
+    QString groupTemp = config->group();
+    config->setGroup("CollapsingFrame");
+    bool expanded = config->readBoolEntry("nonprintableheaders", false);
+    config->writeEntry("nonprintableheaders", expanded);
+    config->setGroup(groupTemp);
+
     QGridLayout *layoutOtherHeaders = new QGridLayout(frameOtherHeaders, 2, 2, 10, 5);
 
     m_metadata = new KListView(frameOtherHeaders);

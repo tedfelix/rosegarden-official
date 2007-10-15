@@ -73,20 +73,23 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
 
     QTabWidget * tabWidget = new QTabWidget(mainbox);
 
-    QVBox * vboxGeneral = new QVBox();
-    tabWidget->addTab(vboxGeneral,i18n("General options"));
+    QFrame *generalFrame;
+    QFrame *advancedFrame;
+    QGridLayout *generalGrid;
+    QGridLayout *advancedGrid;
 
-    QVBox * vboxAdvanced = new QVBox();
-    tabWidget->addTab(vboxAdvanced,i18n("Advanced options"));
+    generalFrame = new QFrame();
+    tabWidget->addTab(generalFrame, i18n("General options"));
 
-    m_headersPage = new HeadersConfigurationPage(this,m_doc);
-    tabWidget->addTab(m_headersPage,i18n("Headers"));
+    generalGrid = new QGridLayout(generalFrame, 1, 1, 5, 5);
 
-    vboxGeneral->setSpacing(5);
-    vboxGeneral->setMargin(5);
+    advancedFrame = new QFrame();
+    tabWidget->addTab(advancedFrame, i18n("Advanced options"));
 
-    vboxAdvanced->setSpacing(5);
-    vboxAdvanced->setMargin(5);
+    advancedGrid = new QGridLayout(advancedFrame, 1, 1, 5, 5);
+
+    m_headersPage = new HeadersConfigurationPage(this, m_doc);
+    tabWidget->addTab(m_headersPage, i18n("Headers"));
 
     m_headersPage->setSpacing(5);
     m_headersPage->setMargin(5);
@@ -97,7 +100,8 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
 
     QGroupBox *basicOptionsBox = new QGroupBox
                            (1, Horizontal,
-                            i18n("Basic options"), vboxGeneral);
+                            i18n("Basic options"), generalFrame);
+    generalGrid->addWidget(basicOptionsBox, 0, 0);
 
     QFrame *frameBasic = new QFrame(basicOptionsBox);
     QGridLayout *layoutBasic = new QGridLayout(frameBasic, 3, 2, 10, 5);
@@ -159,7 +163,8 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
 
     QGroupBox *staffOptionsBox = new QGroupBox
                            (1, Horizontal,
-                            i18n("Staff level options"), vboxGeneral);
+                            i18n("Staff level options"), generalFrame);
+    generalGrid->addWidget(staffOptionsBox, 1, 0);
 
     QFrame *frameStaff = new QFrame(staffOptionsBox);
     QGridLayout *layoutStaff = new QGridLayout(frameStaff, 2, 2, 10, 5);
@@ -186,7 +191,8 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
 
     QGroupBox *notationOptionsBox = new QGroupBox
                            (1, Horizontal,
-                            i18n("Notation options"), vboxGeneral);
+                            i18n("Notation options"), generalFrame);
+    generalGrid->addWidget(notationOptionsBox, 2, 0);
 
     QFrame *frameNotation = new QFrame(notationOptionsBox);
     QGridLayout *layoutNotation = new QGridLayout(frameNotation, 4, 2, 10, 5);
@@ -221,13 +227,16 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
     m_lilyExportStaffGroup->setChecked(config->readBoolEntry("lilyexportstaffgroup", false));
     layoutNotation->addMultiCellWidget(m_lilyExportStaffGroup, 3, 3, 0, 1);
 
+    generalGrid->setRowStretch(3, 10);
+
     //
     // LilyPond export: Advanced options
     //
 
     QGroupBox *advancedLayoutOptionsBox = new QGroupBox
                            (1, Horizontal,
-                            i18n("Layout options"), vboxAdvanced);
+                            i18n("Layout options"), advancedFrame);
+    advancedGrid->addWidget(advancedLayoutOptionsBox, 0, 0);
 
     QFrame *frameAdvancedLayout = new QFrame(advancedLayoutOptionsBox);
     QGridLayout *layoutAdvancedLayout = new QGridLayout(frameAdvancedLayout, 2, 2, 10, 5);
@@ -249,7 +258,8 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
 
     QGroupBox *miscOptionsBox = new QGroupBox
                            (1, Horizontal,
-                            i18n("Miscellaneous options"), vboxAdvanced);
+                            i18n("Miscellaneous options"), advancedFrame);
+    advancedGrid->addWidget(miscOptionsBox, 1, 0);
 
     QFrame *frameMisc = new QFrame(miscOptionsBox);
     QGridLayout *layoutMisc = new QGridLayout(frameMisc, 2, 2, 10, 5);
@@ -263,6 +273,8 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
                            i18n("Export \\midi block"), frameMisc);
     m_lilyExportMidi->setChecked(config->readBoolEntry("lilyexportmidi", false));
     layoutMisc->addMultiCellWidget(m_lilyExportMidi, 1, 1, 0, 1);
+
+    advancedGrid->setRowStretch(2, 10);
 
     resize(minimumSize());
 }
