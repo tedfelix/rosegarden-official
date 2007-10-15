@@ -137,8 +137,7 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
     m_lilyPaperLandscape->setChecked(config->readBoolEntry("lilypaperlandscape", false));
 
     hboxPaper->addWidget( m_lilyPaperSize );
-    hboxPaper->addItem( new QSpacerItem( 2, 9, QSizePolicy::Minimum, 
-			    QSizePolicy::Expanding ) );
+    hboxPaper->addWidget( new QLabel( " ", frameBasic ) ); // fixed-size spacer
     hboxPaper->addWidget( m_lilyPaperLandscape );
     layoutBasic->addLayout(hboxPaper, 1, 1);
 
@@ -223,40 +222,47 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
     layoutNotation->addMultiCellWidget(m_lilyExportStaffGroup, 3, 3, 0, 1);
 
     //
-    // LilyPond export: Extra options
+    // LilyPond export: Advanced options
     //
 
-    QGroupBox *extraOptionsBox = new QGroupBox
+    QGroupBox *advancedLayoutOptionsBox = new QGroupBox
                            (1, Horizontal,
-                            i18n("Extra options"), vboxAdvanced);
+                            i18n("Layout options"), vboxAdvanced);
 
-    QFrame *frameExtra = new QFrame(extraOptionsBox);
-    QGridLayout *layoutExtra = new QGridLayout(frameExtra, 3, 2, 10, 5);
+    QFrame *frameAdvancedLayout = new QFrame(advancedLayoutOptionsBox);
+    QGridLayout *layoutAdvancedLayout = new QGridLayout(frameAdvancedLayout, 2, 2, 10, 5);
 
-    m_lilyExportPointAndClick = new QCheckBox(
-                                    i18n("Enable \"point and click\" debugging"), frameExtra);
-    m_lilyExportPointAndClick->setChecked(config->readBoolEntry("lilyexportpointandclick", false));
-    layoutExtra->addMultiCellWidget(m_lilyExportPointAndClick, 0, 0, 0, 1);
-
-    m_lilyExportMidi = new QCheckBox(
-                           i18n("Export \\midi block"), frameExtra);
-    m_lilyExportMidi->setChecked(config->readBoolEntry("lilyexportmidi", false));
-    layoutExtra->addMultiCellWidget(m_lilyExportMidi, 1, 1, 0, 1);
-
-    m_lilyRaggedBottom = new QCheckBox(
-                           i18n("Ragged bottom (systems will not be spread vertically across the page)"), frameExtra);
-    m_lilyRaggedBottom->setChecked(config->readBoolEntry("lilyraggedbottom", false));
-    layoutExtra->addMultiCellWidget(m_lilyRaggedBottom, 2, 2, 0, 1);
-
-    m_lilyLyricsHAlignment = new KComboBox( frameExtra );
+    m_lilyLyricsHAlignment = new KComboBox( frameAdvancedLayout );
     m_lilyLyricsHAlignment->insertItem(i18n("Left"));
     m_lilyLyricsHAlignment->insertItem(i18n("Center"));
     m_lilyLyricsHAlignment->insertItem(i18n("Right"));
     m_lilyLyricsHAlignment->setCurrentItem(config->readUnsignedNumEntry("lilylyricshalignment", 0));
 
-    layoutExtra->addWidget(new QLabel(
-                          i18n("Lyrics alignment"), frameExtra), 3, 0);
-    layoutExtra->addWidget(m_lilyLyricsHAlignment, 3, 1);
+    layoutAdvancedLayout->addWidget(new QLabel(
+                          i18n("Lyrics alignment"), frameAdvancedLayout), 0, 0);
+    layoutAdvancedLayout->addWidget(m_lilyLyricsHAlignment, 0, 1);
+
+    m_lilyRaggedBottom = new QCheckBox(
+                           i18n("Ragged bottom (systems will not be spread vertically across the page)"), frameAdvancedLayout);
+    m_lilyRaggedBottom->setChecked(config->readBoolEntry("lilyraggedbottom", false));
+    layoutAdvancedLayout->addMultiCellWidget(m_lilyRaggedBottom, 1, 2, 0, 1);
+
+    QGroupBox *miscOptionsBox = new QGroupBox
+                           (1, Horizontal,
+                            i18n("Miscellaneous options"), vboxAdvanced);
+
+    QFrame *frameMisc = new QFrame(miscOptionsBox);
+    QGridLayout *layoutMisc = new QGridLayout(frameMisc, 2, 2, 10, 5);
+
+    m_lilyExportPointAndClick = new QCheckBox(
+                                    i18n("Enable \"point and click\" debugging"), frameMisc);
+    m_lilyExportPointAndClick->setChecked(config->readBoolEntry("lilyexportpointandclick", false));
+    layoutMisc->addMultiCellWidget(m_lilyExportPointAndClick, 0, 0, 0, 1);
+
+    m_lilyExportMidi = new QCheckBox(
+                           i18n("Export \\midi block"), frameMisc);
+    m_lilyExportMidi->setChecked(config->readBoolEntry("lilyexportmidi", false));
+    layoutMisc->addMultiCellWidget(m_lilyExportMidi, 1, 1, 0, 1);
 
     resize(minimumSize());
 }
