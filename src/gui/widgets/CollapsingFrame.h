@@ -48,6 +48,12 @@ public:
     CollapsingFrame(QString label, QWidget *parent = 0, const char *name = 0);
     virtual ~CollapsingFrame();
 
+    QFont font() const;
+    void setFont(QFont font);
+
+    /// If true, the widget fills the available space.  Call before setWidget
+    void setWidgetFill(bool fill);
+
     /// This frame contains a single other widget.  Set it here.
     void setWidget(QWidget *w);
 
@@ -58,6 +64,7 @@ protected:
     QGridLayout *m_layout;
     QToolButton *m_toggleButton;
     QWidget *m_widget;
+    bool m_fill;
     bool m_collapsed;
 };
 
