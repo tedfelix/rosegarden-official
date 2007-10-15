@@ -157,6 +157,7 @@
 #include "gui/widgets/ProgressDialog.h"
 #include "gui/widgets/ScrollBoxDialog.h"
 #include "gui/widgets/ScrollBox.h"
+#include "gui/widgets/QDeferScrollView.h"
 #include "NotationCanvasView.h"
 #include "NotationElement.h"
 #include "NotationEraser.h"
@@ -175,6 +176,7 @@
 #include "RestInserter.h"
 #include "sound/MappedEvent.h"
 #include "TextInserter.h"
+#include "HeadersGroup.h"
 #include <kaction.h>
 #include <kcombobox.h>
 #include <kconfig.h>
@@ -213,6 +215,8 @@
 #include <qwidget.h>
 #include <qvalidator.h>
 #include <algorithm>
+#include <qpushbutton.h>
+#include <qtooltip.h>
 
 
 namespace Rosegarden
@@ -341,7 +345,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
                            std::vector<Segment *> segments,
                            QWidget *parent,
                            bool showProgressive) :
-        EditView(doc, segments, 1, parent, "notationview"),
+        EditView(doc, segments, 2, parent, "notationview"),
         m_properties(getViewLocalPropertyPrefix()),
         m_selectionCounter(0),
         m_insertModeLabel(0),
@@ -386,7 +390,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
         m_inhibitRefresh(true),
         m_ok(false),
         m_printMode(false),
-        m_printSize(8) // set in positionStaffs
+        m_printSize(8), // set in positionStaffs
+        m_showHeadersGroup(0)
 {
     initActionDataMaps(); // does something only the 1st time it's called
 
@@ -400,6 +405,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     // by both the actions and the layout toolbar
 
     m_config->setGroup(NotationViewConfigGroup);
+
+    m_showHeadersGroup = m_config->readNumEntry("shownotationheader", 1);
 
     m_fontName = qstrtostr(m_config->readEntry
                            ("notefont",
@@ -496,6 +503,36 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
                             i, this,
                             m_fontName, m_fontSize));
     }
+
+
+    // HeadersGroup ctor must not be called before m_staffs initialization
+    m_headersGroupView = new QDeferScrollView(getCentralWidget());
+    QWidget * vport = m_headersGroupView->viewport();
+    m_headersGroup = new HeadersGroup(vport, this, &doc->getComposition());
+    m_headersGroupView->setVScrollBarMode(QScrollView::AlwaysOff);
+    m_headersGroupView->setHScrollBarMode(QScrollView::AlwaysOff);
+
+    m_grid->addWidget(m_headersGroupView, CANVASVIEW_ROW, 0);
+
+    // Add a close button just above the track headers.
+    // The grid layout is only here to maintain the button in a
+    // right place
+    m_headersTopFrame = new QFrame(getCentralWidget());
+    QGridLayout * headersTopGrid
+        = new QGridLayout(m_headersTopFrame, 2, 2);
+    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+    QCanvasPixmap pixmap(pixmapDir + "/misc/close.xpm");
+    QPushButton * hideHeadersButton
+        = new QPushButton(m_headersTopFrame);
+    headersTopGrid->addWidget(hideHeadersButton, 1, 1,
+                                        Qt::AlignRight | Qt::AlignBottom);
+    hideHeadersButton->setIconSet(QIconSet(pixmap));
+    hideHeadersButton->setFlat(true);
+    QToolTip::add(hideHeadersButton, "Close track headers");
+    headersTopGrid->setMargin(4);
+
+    m_grid->addWidget(m_headersTopFrame, TOPBARBUTTONS_ROW, 0);
+
 
     //
     // layout
@@ -651,6 +688,35 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     (doc, SIGNAL(pointerPositionChanged(timeT)),
      this, SLOT(slotSetPointerPosition(timeT)));
 
+    //
+    // Connect vertical scrollbars between canvas and notation header
+    QObject::connect
+    (getCanvasView()->verticalScrollBar(), SIGNAL(valueChanged(int)),
+     this, SLOT(slotVerticalScrollHeadersGroup(int)));
+
+    QObject::connect
+    (getCanvasView()->verticalScrollBar(), SIGNAL(sliderMoved(int)),
+     this, SLOT(slotVerticalScrollHeadersGroup(int)));
+
+    QObject::connect
+    (m_headersGroupView, SIGNAL(gotWheelEvent(QWheelEvent*)),
+     getCanvasView(), SLOT(slotExternalWheelEvent(QWheelEvent*)));
+
+    // Ensure notation header keeps the right bottom margin when user
+    // toggles the canvas view bottom rulers
+    connect(getCanvasView(), SIGNAL(bottomWidgetHeightChanged(int)),
+            this, SLOT(slotCanvasBottomWidgetHeightChanged(int)));
+
+    // Signal canvas horizontal scroll to notation header
+    QObject::connect
+    (getCanvasView(), SIGNAL(contentsMoving(int, int)),
+     m_headersGroup, SLOT(slotUpdateAllHeaders(int, int)));
+
+    // Connect the close notation header button
+    QObject::connect(hideHeadersButton, SIGNAL(clicked()), 
+                                  this, SLOT(slotHideHeadersGroup()));
+
+
     stateChanged("have_selection", KXMLGUIClient::StateReverse);
     stateChanged("have_notes_in_selection", KXMLGUIClient::StateReverse);
     stateChanged("have_rests_in_selection", KXMLGUIClient::StateReverse);
@@ -764,7 +830,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
         m_inhibitRefresh(true),
         m_ok(false),
         m_printMode(true),
-        m_printSize(8) // set in positionStaffs
+        m_printSize(8), // set in positionStaffs
+        m_showHeadersGroup(0)
 {
     assert(segments.size() > 0);
     NOTATION_DEBUG << "NotationView print ctor" << endl;
@@ -1196,6 +1263,44 @@ void NotationView::positionStaffs()
         << (pageWidth - leftMargin * 2) << endl;
 
     }
+
+
+    // Destroy then recreate all track headers
+    hideHeadersGroup();
+    m_headersGroup->removeAllHeaders();
+    if (m_pageMode == LinedStaff::LinearMode) {
+        for (int i = minTrack; i <= maxTrack; ++i) {
+            TrackIntMap::iterator hi = trackHeights.find(i);
+            if (hi != trackHeights.end()) {
+                TrackId trackId = getDocument()->getComposition()
+                                        .getTrackByPosition(i)->getId();
+                m_headersGroup->addHeader(trackId, trackHeights[i],
+                                          trackCoords[i], getCanvasLeftX());
+            }
+        }
+
+        m_headersGroup->completeToHeight(canvas()->height());
+
+        m_headersGroupView->addChild(m_headersGroup);
+
+        m_headersGroupView->setBottomMargin(getBottomWidget()->height()
+                        + getCanvasView()->horizontalScrollBar()->height());
+
+        slotCanvasBottomWidgetHeightChanged(getBottomWidget()->height());
+
+        if (    (m_showHeadersGroup == 2)
+             || (    (m_showHeadersGroup == 1)
+                  && (m_headersGroup->getUsedHeight()
+                          > getCanvasView()->visibleHeight()))) {
+            showHeadersGroup();
+        }
+    }
+}
+
+void NotationView::slotCanvasBottomWidgetHeightChanged(int newHeight)
+{
+     m_headersGroupView->setBottomMargin(
+             newHeight + getCanvasView()->horizontalScrollBar()->height());
 }
 
 void NotationView::positionPages()
@@ -1415,6 +1520,9 @@ void NotationView::setupActions()
 
     actionCollection()->insert(m_fontSizeActionMenu);
 
+    new KAction(i18n("Show track headers"), 0, this,
+                        SLOT(slotShowHeadersGroup()),
+                        actionCollection(), "show_track_headers");
 
     KActionMenu *spacingActionMenu =
         new KActionMenu(i18n("S&pacing"), this, "stretch_actionmenu");
@@ -2424,6 +2532,11 @@ NotationView::getNotationStaff(const Segment &segment)
     return 0;
 }
 
+bool NotationView::isCurrentStaff(int i)
+{
+    return getCurrentSegment() == &(m_staffs[i]->getSegment());
+}
+
 void NotationView::initLayoutToolbar()
 {
     KToolBar *layoutToolbar = toolBar("Layout Toolbar");
@@ -2559,6 +2672,10 @@ QSize NotationView::getViewSize()
 void NotationView::setViewSize(QSize s)
 {
     canvas()->resize(s.width(), s.height());
+
+    if ((m_pageMode == LinedStaff::LinearMode) && m_showHeadersGroup) {
+        m_headersGroup->completeToHeight(s.height());
+    }
 }
 
 void
@@ -2577,6 +2694,7 @@ NotationView::setPageMode(LinedStaff::PageMode pageMode)
             m_rawNoteRuler->hide();
         if (m_tempoRuler)
             m_tempoRuler->hide();
+        hideHeadersGroup();
     } else {
         if (m_topStandardRuler)
             m_topStandardRuler->show();
@@ -2588,6 +2706,7 @@ NotationView::setPageMode(LinedStaff::PageMode pageMode)
             m_rawNoteRuler->show();
         if (m_tempoRuler && getToggleAction("show_tempo_ruler")->isChecked())
             m_tempoRuler->show();
+        showHeadersGroup();
     }
 
     stateChanged("linear_mode",
@@ -2614,6 +2733,10 @@ NotationView::setPageMode(LinedStaff::PageMode pageMode)
             m_staffs[i]->markChanged();
         }
     }
+
+    // Layout is done : Time related to left of canvas should now
+    // correctly be determined and track headers contents be drawn.
+    m_headersGroup->slotUpdateAllHeaders(0, 0, true);
 
     positionPages();
 
@@ -6237,6 +6360,9 @@ NotationView::slotSetCurrentStaff(int staffNo)
         updateView();
 
         slotSetInsertCursorPosition(getInsertionTime(), false, false);
+
+        m_headersGroup->setCurrent(
+                                m_staffs[staffNo]->getSegment().getTrack());
     }
 }
 
@@ -7183,6 +7309,46 @@ NotationView::slotRenderSomething()
 NotationCanvasView* NotationView::getCanvasView()
 {
     return dynamic_cast<NotationCanvasView *>(m_canvasView);
+}
+
+void
+NotationView::slotVerticalScrollHeadersGroup(int y)
+{
+    m_headersGroupView->setContentsPos(0, y);
+}
+
+void
+NotationView::slotShowHeadersGroup()
+{
+    m_showHeadersGroup = 2;
+    showHeadersGroup();
+}
+
+void
+NotationView::slotHideHeadersGroup()
+{
+    m_showHeadersGroup = 0;
+    hideHeadersGroup();
+}
+
+void
+NotationView::showHeadersGroup()
+{
+    if (m_headersGroupView && (m_pageMode == LinedStaff::LinearMode)) {
+        m_headersGroupView->setFixedWidth(
+                                m_headersGroupView->contentsWidth() + 2);
+        m_headersGroupView->show();
+        m_headersTopFrame->show();
+    }
+}
+
+void
+NotationView::hideHeadersGroup()
+{
+    if (m_headersGroupView) {
+        m_headersGroupView->hide();
+        m_headersTopFrame->hide();
+    }
 }
 
 }

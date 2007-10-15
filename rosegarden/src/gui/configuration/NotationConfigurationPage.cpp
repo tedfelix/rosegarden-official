@@ -147,6 +147,26 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     layout->addMultiCellWidget(m_proportion, row, row, 1, 2);
     ++row;
 
+    layout->addWidget(new QLabel(i18n("Show track headers (linear layout only)"),
+                                      frame), row, 0);
+
+    m_showTrackHeaders = new KComboBox(frame);
+    m_showTrackHeaders->setEditable(false);
+    m_showTrackHeaders->insertItem(i18n("Never"));
+    m_showTrackHeaders->insertItem(i18n("When needed"));
+    m_showTrackHeaders->insertItem(i18n("Always"));
+    int defaultShowTrackHeaders = m_cfg->readNumEntry("shownotationheader", 2);
+    if (defaultShowTrackHeaders >= 0 && defaultShowTrackHeaders <= 2) {
+        m_showTrackHeaders->setCurrentItem(defaultShowTrackHeaders);
+    }
+    QToolTip::add(m_showTrackHeaders, QString(i18n(
+        "\"Always\" and \"Never\" mean what they usually mean\n"
+        "\"When needed\" means \"when staves are too many to all fit"
+        " in the current window\"")));
+
+    layout->addMultiCellWidget(m_showTrackHeaders, row, row, 1, 2);
+    ++row;
+
     layout->setRowSpacing(row, 20);
     ++row;
 
@@ -214,6 +234,7 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     ++row;
 
     layout->setRowStretch(row, 10);
+
 
     addTab(frame, i18n("Layout"));
 
@@ -687,6 +708,8 @@ NotationConfigurationPage::apply()
     m_cfg->writeEntry("showinvisibles", m_showInvisibles->isChecked());
     m_cfg->writeEntry("showranges", m_showRanges->isChecked());
     m_cfg->writeEntry("showcollisions", m_showCollisions->isChecked());
+    m_cfg->writeEntry("shownotationheader",
+                       m_showTrackHeaders->currentItem());
     m_cfg->writeEntry("style", m_untranslatedNoteStyle[m_noteStyle->currentItem()]);
     m_cfg->writeEntry("inserttype", m_insertType->currentItem());
     m_cfg->writeEntry("autobeam", m_autoBeam->isChecked());

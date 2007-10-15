@@ -2132,6 +2132,58 @@ NotePixmapFactory::makeKeyDisplayPixmap(const Key &key, const Clef &clef)
 }
 
 QCanvasPixmap*
+NotePixmapFactory::makeTrackHeaderPixmap(int height,
+        int charWidth, int charHeight,
+        const Key &key, const Clef &clef, QColor clefColour, bool drawClef,
+        const QString &upperText, QColor upperTextColour,
+        const QString &lowerText, QColor lowerTextColour
+        )
+{
+    height -= 4;    // Make place to label frame :
+                    // 4 = 2 * (margin + lineWidth)
+
+    // Minimum width of a string displayed as upper or lower text
+    int maxTextAllowedWidth = 20 * charWidth;
+
+    QCanvasPixmap* clefAndKeyPixmap = NULL;
+    clefAndKeyPixmap = makeKeyDisplayPixmap(key, clef);
+    int clefAndKeyWidth = clefAndKeyPixmap->width();
+    int clefAndKeyHeight = clefAndKeyPixmap->height();
+
+    int width = maxTextAllowedWidth > clefAndKeyWidth ?
+                            maxTextAllowedWidth : clefAndKeyWidth;
+
+    createPixmapAndMask(width, height);
+
+    int clefAndKeyY = (height - clefAndKeyHeight) / 2;
+    int clefAndKeyX = width - clefAndKeyWidth;
+    if (drawClef) {
+        if (clefColour != Qt::black) clefAndKeyPixmap->fill(clefColour);
+        m_p->drawPixmap(clefAndKeyX, clefAndKeyY, *clefAndKeyPixmap);
+    }
+
+    int upperTextY, lowerTextY;
+    if (charHeight < clefAndKeyY) {
+        // If enough space, place text just outside clef pixmap
+        upperTextY = clefAndKeyY - charHeight + 4;  // +4 : adjust
+        lowerTextY = clefAndKeyY + clefAndKeyHeight + charHeight;
+    } else {
+        // Else use top and bottom positions
+        upperTextY = charHeight;
+        lowerTextY = m_generatedHeight - 4;  // -4 : adjust
+    }
+
+    m_p->painter().setPen(upperTextColour);
+    m_p->drawText(charWidth, upperTextY, upperText);
+
+    m_p->painter().setPen(lowerTextColour);
+    m_p->drawText(charWidth, lowerTextY, lowerText);
+
+    delete clefAndKeyPixmap;
+    return makeCanvasPixmap(m_pointZero);
+}
+
+QCanvasPixmap*
 NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
         bool useSharps)
 {

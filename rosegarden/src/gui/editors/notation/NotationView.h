@@ -86,6 +86,8 @@ class EventSelection;
 class Event;
 class Clef;
 class ChordNameRuler;
+class QDeferScrollView;
+class HeadersGroup;
 
 
 /**
@@ -165,6 +167,9 @@ public:
 
     /// Return a pointer to the staff corresponding to the given segment
     NotationStaff *getNotationStaff(const Segment &segment);
+
+    /// Return true if the staff at the specified index is the current one
+    bool isCurrentStaff(int i);
 
     QCanvas* canvas() { return getCanvasView()->canvas(); }
     
@@ -309,7 +314,13 @@ public:
      */
     virtual void print(bool previewOnly = false);
 
-    
+    /**
+     * Return X of the left of the canvas visible part.
+     */
+    double getCanvasLeftX() { return getCanvasView()->contentsX(); }
+
+    virtual RulerScale* getHLayout();
+
 public slots:
 
     /**
@@ -477,6 +488,14 @@ public slots:
     void slotToggleAnnotations();
     void slotToggleLilyPondDirectives();
     void slotEditLyrics();
+
+    /// Notation header slots
+    void slotShowHeadersGroup();
+    void slotHideHeadersGroup();
+    void slotVerticalScrollHeadersGroup(int);
+
+    /// Adjust notation header view when bottom ruler added or removed
+    void slotCanvasBottomWidgetHeightChanged(int);
 
     /// group slots
     void slotGroupBeam();
@@ -814,8 +833,6 @@ signals:
 
 protected:
 
-    virtual RulerScale* getHLayout();
-
     virtual void paintEvent(QPaintEvent* e);
 
     /**
@@ -959,6 +976,10 @@ protected:
 
     virtual void updateViewCaption();
 
+    void showHeadersGroup();
+    void hideHeadersGroup();
+
+
     //--------------- Data members ---------------------------------
 
     NotationProperties m_properties;
@@ -1059,6 +1080,11 @@ protected:
     int m_printSize;
 
     static std::map<KProcess *, KTempFile *> m_lilyTempFileMap;
+
+    int m_showHeadersGroup;
+    QDeferScrollView * m_headersGroupView;
+    HeadersGroup * m_headersGroup;
+    QFrame * m_headersTopFrame;
 };
 
 

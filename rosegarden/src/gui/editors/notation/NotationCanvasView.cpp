@@ -475,5 +475,11 @@ NotationCanvasView::slotRenderComplete()
     QCanvasView::viewportPaintEvent(&ev);
 }
 
+void
+NotationCanvasView::slotExternalWheelEvent(QWheelEvent* e)
+{
+    wheelEvent(e);
+}
+
 }
 #include "NotationCanvasView.moc"
