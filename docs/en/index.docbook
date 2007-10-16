@@ -44,11 +44,12 @@
        something is the way it is, particularly if it might not be
        obvious.
 
-     * It's also entirely permissible to omit advanced stuff
-       from the "Using Rosegarden" section and document it only in
-       the reference section.  "Using Rosegarden" should be about
-       understanding how and why, not about knowing every last clever
-       detail.
+     * It's also entirely permissible to omit advanced stuff.  This
+       document is be about understanding how and why, not about
+       knowing every last clever detail.  Initially we were going to
+       include a function reference section for the clever details,
+       but it proved too hard to keep up to date, and not all that
+       useful.  Providing a quick bit of guidance is most of the job.       
 
      * Bear in mind we can link extensively from any part of
        the handbook to any other.  Unfortunately DocBook won't allow
@@ -155,10 +156,11 @@
 
     * Track buttons showing sometimes-instrument, sometimes-label.
 
-    * Can't usefully double-click / right-click on most rulers.
-      This would be useful for a slower but clearer way to set
-      loops; adding and editing markers; etc.  Setting loops is
-      particularly opaque especially in notation and matrix views.
+    * Mostly FIXED -- Can't usefully double-click / right-click on
+      most rulers.  This would be useful for a slower but clearer
+      way to set loops; adding and editing markers; etc.  Setting
+      loops is particularly opaque especially in notation and
+      matrix views.
 
     * Hideous inconsistency (documented in an RFE already) between
       having to use RG for MIDI routing and being unable to use RG
@@ -188,8 +190,6 @@
     * Event list
 
     * Event editor dialogs
-
-    * Tempo / timesig editor
 
     * Document properties
 
