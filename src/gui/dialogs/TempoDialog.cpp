@@ -124,40 +124,56 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc,
     }
 
     // Scope Box
-    QButtonGroup *scopeBox = new QButtonGroup(1, Horizontal,
-                             i18n("Scope"), vbox);
+    QButtonGroup *scopeGroup = new QButtonGroup(1, Horizontal,
+                                                i18n("Scope"), vbox);
 
-    new QLabel(scopeBox);
+//    new QLabel(scopeBox);
+
+    QVBox *scopeBox = new QVBox(scopeGroup);
+
+    scopeBox->setSpacing(5);
+    scopeBox->setMargin(5);
 
     QHBox *currentBox = new QHBox(scopeBox);
     new QLabel(i18n("The pointer is currently at "), currentBox);
     m_tempoTimeLabel = new QLabel(currentBox);
     m_tempoBarLabel = new QLabel(currentBox);
+    QLabel *spare = new QLabel(currentBox);
+    currentBox->setStretchFactor(spare, 20);
+
     m_tempoStatusLabel = new QLabel(scopeBox);
 
-    new QLabel(scopeBox);
+//    new QLabel(scopeBox);
+
+    QHBox *changeWhereBox = new QHBox(scopeBox);
+    spare = new QLabel("      ", changeWhereBox);
+    QVBox *changeWhereVBox = new QVBox(changeWhereBox);
+    changeWhereBox->setStretchFactor(changeWhereVBox, 20);
 
     m_tempoChangeHere = new QRadioButton
-                        (i18n("Apply this tempo from here onwards"), scopeBox);
+                        (i18n("Apply this tempo from here onwards"),
+                         changeWhereVBox);
 
     m_tempoChangeBefore = new QRadioButton
-                          (i18n("Replace the last tempo change"), scopeBox);
-    m_tempoChangeBeforeAt = new QLabel(scopeBox);
+                          (i18n("Replace the last tempo change"),
+                           changeWhereVBox);
+    m_tempoChangeBeforeAt = new QLabel(changeWhereVBox);
     m_tempoChangeBeforeAt->hide();
 
     m_tempoChangeStartOfBar = new QRadioButton
-                              (i18n("Apply this tempo from the start of this bar"), scopeBox);
+                              (i18n("Apply this tempo from the start of this bar"), changeWhereVBox);
 
     m_tempoChangeGlobal = new QRadioButton
-                          (i18n("Apply this tempo to the whole composition"), scopeBox);
+                          (i18n("Apply this tempo to the whole composition"), changeWhereVBox);
 
-    QHBox *optionHBox = new QHBox(scopeBox);
-    new QLabel(optionHBox);
+    QHBox *optionHBox = new QHBox(changeWhereVBox);
+    new QLabel("         ", optionHBox);
     m_defaultBox = new QCheckBox
                    (i18n("Also make this the default tempo"), optionHBox);
-    new QLabel(optionHBox);
+    spare = new QLabel(optionHBox);
+    optionHBox->setStretchFactor(spare, 20);
 
-    new QLabel(scopeBox);
+//    new QLabel(scopeBox);
 
     connect(m_tempoChangeHere, SIGNAL(clicked()),
             SLOT(slotActionChanged()));
