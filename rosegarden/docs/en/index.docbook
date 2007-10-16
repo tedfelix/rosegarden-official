@@ -156,7 +156,7 @@
 
     * Track buttons showing sometimes-instrument, sometimes-label.
 
-    * Mostly FIXED -- Can't usefully double-click / right-click on
+    * Mostly FIXED - Can't usefully double-click / right-click on
       most rulers.  This would be useful for a slower but clearer
       way to set loops; adding and editing markers; etc.  Setting
       loops is particularly opaque especially in notation and
