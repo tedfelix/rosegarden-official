@@ -444,8 +444,15 @@ AlsaDriver::getAutoTimer(bool &wantTimerChecks)
 	    if (i->sclas != SND_TIMER_SCLASS_NONE)
 		continue;
 	    if (i->clas == SND_TIMER_CLASS_PCM) {
-		wantTimerChecks = false; // pointless with PCM timer
-		return i->name;
+		if (i->resolution != 0) {
+		    long hz = 1000000000 / i->resolution;
+		    if (hz >= 750) {
+			wantTimerChecks = false; // pointless with PCM timer
+			return i->name;
+		    } else {
+			audit << "PCM timer: inadequate resolution " << i->resolution << std::endl;
+		    }
+                }
 	    }
 	}
     }
@@ -5336,6 +5343,10 @@ std::string
 AlsaDriver::getAlsaModuleVersionString()
 {
     FILE *v = fopen("/proc/asound/version", "r");
+    
+    // Examples:
+    // Advanced Linux Sound Architecture Driver Version 1.0.14rc3.
+    // Advanced Linux Sound Architecture Driver Version 1.0.14 (Thu May 31 09:03:25 2007 UTC).
 
     if (v) {
 	char buf[256];
@@ -5343,9 +5354,10 @@ AlsaDriver::getAlsaModuleVersionString()
 	fclose(v);
 
 	std::string vs(buf);
-	std::string::size_type sp = vs.find_last_of(' ');
-	if (sp != std::string::npos) {
-	    vs = vs.substr(sp + 1);
+	std::string::size_type sp = vs.find_first_of('.');
+	if (sp > 0 && sp != std::string::npos) {
+	    while (sp > 0 && isdigit(vs[sp-1])) --sp;
+	    vs = vs.substr(sp);
 	    if (vs.length() > 0 && vs[vs.length()-1] == '\n') {
 		vs = vs.substr(0, vs.length()-1);
 	    }
