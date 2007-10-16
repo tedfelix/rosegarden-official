@@ -91,6 +91,12 @@
     in creating the theme above.  This will probably result in a
     mis-match, but I find I really don't care.)
 
+    (NOTE in reply to the above: the scheme was originally from
+    KDE 2.x, yes.  I suggest we don't worry about icon mismatches too
+    much, as most of the screenshots don't have icons in semantically
+    meaningful roles anyway.  I use Crystal SVG too now and I don't 
+    really intend to change that for the documentation.)
+
      * KDE Style: "Light Style, 3rd Revision"
 
      * Colour scheme: "Blue Slate", with high-contrast
@@ -102,7 +108,17 @@
        antialiasing off.  (For pictures of the segment and instrument
        parameter boxes I usually turn the size up to 13px, which
        perhaps says something about our use of font size in these
-       boxes.)
+       boxes.)  WARNING: This is not a reliable hint any more, as
+       the KDE font size is not in pixels but points that depend
+       on the detected monitor resolution.  Go for something that
+       looks a bit like the existing screenshots; it will probably
+       be smaller than 11pt.
+
+       NOTE: switching off sub-pixel antialiasing is quite important,
+       as otherwise your text will look weird and fuzzy to any
+       readers with CRT monitors or LCDs with a different colour
+       ordering.  The exact choice of font is less important: I
+       think you can get away with Vera or whatever.
 
      * Window Decorations: "Quartz"
 
@@ -175,8 +191,6 @@
 
     * Tempo / timesig editor
 
-    * Split by Pitch
-
     * Document properties
 
     * Add images for the tools (move, split &c) when describing them
@@ -185,7 +199,7 @@
 
     * Update notation menu references
 
-    * Add new notation stuff
+    * Add new notation stuff     <- "new" when this to-do item was added? when was that I wonder?
 
     * Config dialog
 
@@ -469,10 +483,10 @@
       to include, all in one big bundle.</para>
       <para>Use <menuchoice>
 	  <guimenu>File</guimenu>
-	  <guimenu>Export</guimenu>
+	  <guimenuitem>Export</guimenuitem>
 	  <guimenuitem>Export Rosegarden Project file...</guimenuitem></menuchoice> to export the current composition and its associated data into a Rosegarden Project file, and  <menuchoice>
 	  <guimenu>File</guimenu>
-	  <guimenu>Import</guimenu>
+	  <guimenuitem>Import</guimenuitem>
 	  <guimenuitem>Import Rosegarden Project file...</guimenuitem></menuchoice> to expand a Rosegarden Project file back into a composition and load it.</para>
 
       <para>Note that Rosegarden Project format is an interchange
@@ -485,55 +499,64 @@
     <sect1 id="file-other">
       <title>Other file formats</title>
 	<para>Rosegarden can export to and import from a number of other file formats.  Some of these are described here; see also <link linkend="file-printing">Printing</link> for information about LilyPond file export.</para>
-      <sect2 id="file-other-csound">
-	<title>Csound</title>
+	<variablelist>
+	<varlistentry>
+	<term>Csound</term>
+	<listitem>
       <para>You can export score files for the Csound synthesis system using 
 	<menuchoice>
 	  <guimenu>File</guimenu>
-	  <guimenu>Export</guimenu>
+	  <guimenuitem>Export</guimenuitem>
 	  <guimenuitem>Export Csound score file...</guimenuitem>
 	</menuchoice>.  Together with a suitable orchestra file (not supplied), this can be used to play the composition through <ulink url="http://www.csounds.com/">Csound</ulink>. Note that not all data in the Rosegarden composition necessarily can or will be saved in the Csound format.</para>
-	</sect2>
-      <sect2 id="file-other-mup">
-	<title>Mup</title>
+	</listitem>
+	</varlistentry>
+	<varlistentry>
+      <term>Mup</term>
+	<listitem>
 	<para>You can use <menuchoice>
 	    <guimenu>File</guimenu>
-	    <guimenu>Export</guimenu>
+	    <guimenuitem>Export</guimenuitem>
 	    <guimenuitem>Export Mup file...</guimenuitem>
 	  </menuchoice>
 	  to save the contents of the current composition into a new Mup file.  This can then be processed by the <ulink url="http://www.arkkra.com/">Mup</ulink> music publication system, although it is likely that the file may need some tweaking to get really good quality output.  Note that not all data in the Rosegarden composition necessarily can or will be saved in the Mup format.</para>
-      </sect2>
-
-      <sect2 id="file-other-musicxml">
-	<title>MusicXML</title>
+      </listitem>
+	</varlistentry>
+	<varlistentry>
+      <term>MusicXML</term>
+	<listitem>
 	<para>The <menuchoice>
 	    <guimenu>File</guimenu>
-	    <guimenu>Export</guimenu>
+	    <guimenuitem>Export</guimenuitem>
 	    <guimenuitem>Export MusicXML file...</guimenuitem>
 	  </menuchoice>
 	  function saves the contents of the current composition into a new MusicXML file.  This can then be used with any music software that supports the MusicXML format.  Note that MusicXML support is experimental and has not been well tested.  Not all data in the Rosegarden composition necessarily can or will be saved in the MusicXML format.</para>
-      </sect2>
-
-      <sect2 id="file-other-hydrogen">
-	<title>Hydrogen</title>
+	</listitem>
+	</varlistentry>
+	<varlistentry>
+      <term>Hydrogen</term>
+	<listitem>
 	<para>Rosegarden can import h2song files created by the Hydrogen drum machine.  These are imported into a skeletal MIDI-style structure with one track per pattern.  The audio samples they use are not imported.  Use  <menuchoice>
 	    <guimenu>File</guimenu>
-	    <guimenu>Import</guimenu>
+	    <guimenuitem>Import</guimenuitem>
 	    <guimenuitem>Import Hydrogen file...</guimenuitem>
 	  </menuchoice> to import a Hydrogen file.</para>
-	</sect2>
-
-      <sect2 id="file-other-rg21">
-	<title>Rosegarden 2.1</title>
+	</listitem>
+	</varlistentry>
+	<varlistentry>
+      <term>Rosegarden 2.1</term>
+	<listitem>
 	<para>Use the 
 	  <menuchoice>
 	    <guimenu>File</guimenu>
-	    <guimenu>Import</guimenu>
+	    <guimenuitem>Import</guimenuitem>
 	    <guimenuitem>Import Rosegarden 2.1 file...</guimenuitem>
 	  </menuchoice> function to create a new composition from the contents of an existing X11 Rosegarden v2.1 (.rose) file.
 	  </para>
-      </sect2>
+	</listitem>
 
+	</varlistentry>
+	</variablelist>
       </sect1>
 
     <sect1 id="file-merge">
@@ -1017,13 +1040,16 @@
       <sect2 id="segment-view-split-by-pitch">
 	<title>Other Split functions</title>
 	<para>The Segments menu contains a number of other Split functions.</para>
-	<para>
-	  <menuchoice>
+	<variablelist>
+	<varlistentry>
+	<term>Split on Silence</term>
+	<listitem><para><menuchoice>
 		  <guimenu>Segments</guimenu>
-		  <guimenu>Split</guimenu>
+		  <guimenuitem>Split</guimenuitem>
 		  <guimenuitem>Split on Silence</guimenuitem>
 		</menuchoice>
-	  splits the selected segments on silences.		  This function works slightly differently depending
+	  splits the selected segments on silences.
+		  This function works slightly differently depending
 		  on whether the selected segments contain audio or
 		  MIDI data.  For audio segments, it offers you a
 		  dialog in which you can choose a threshold below
@@ -1033,11 +1059,14 @@
 		  splits the segment everywhere that a full bar of
 		  silence occurs.
 	</para>
-
-	<para>
+	</listitem>
+	</varlistentry>
+	<varlistentry>
+	<term>Split by Pitch</term>
+	<listitem><para>
 		<menuchoice>
 		  <guimenu>Segments</guimenu>
-		  <guimenu>Split</guimenu>
+		  <guimenuitem>Split</guimenuitem>
 		  <guimenuitem>Split by Pitch...</guimenuitem>
 		</menuchoice>
 		  splits the currently selected segments into higher and
@@ -1067,7 +1096,25 @@
 		  track, with one overlapping the other.
 		  
 		</para>
-	<!-- to do: split by recording source, and at time -->
+	</listitem></varlistentry>
+
+	<varlistentry>
+<term>Split by Recording Source</term><listitem><para><menuchoice>
+		  <guimenu>Segments</guimenu>
+		  <guimenuitem>Split</guimenuitem>
+		  <guimenuitem>Split by Recording Source...</guimenuitem>
+		</menuchoice> splits the currently selected segments according to the MIDI channel and device their events were recorded from.</para><para>If you have recorded events from more than one MIDI channel or device into the a single segment, you can use this function to split them into separate segments afterwards.  Select the channel or device whose events you want to split out, and the segment will be split into two segments, one containing events from the selected channel or device and the other containing the remaining events.  The two segments are both created on the same track, with one overlapping the other.</para><para>See also <link linkend="recording">Recording</link> and <link linkend="track-recording-filters">Track recording filters</link> for more details on how to select the source MIDI channel or device for a recording.</para></listitem></varlistentry>
+
+
+	<varlistentry>
+	<term>Split at Time</term><listitem><para>The <menuchoice>
+		  <guimenu>Segments</guimenu>
+		  <guimenuitem>Split</guimenuitem>
+		  <guimenuitem>Split at Time...</guimenuitem>
+		</menuchoice> function simply splits the currently selected segments into two parts at the time you specify.</para></listitem></varlistentry>	
+
+	</variablelist>
+	  
 	</sect2>
     </sect1>
 
@@ -1105,7 +1152,7 @@
       </sect2>
 
       <sect2 id="tempo-ruler">
-	<title>Tempo Rulers</title>
+	<title>Tempo rulers</title>
 	<para>
 	  The &rosegarden; <link linkend="segment-view">track editor</link>, <link
 	  linkend="matrix-view">matrix editor</link> and <link
@@ -1147,14 +1194,38 @@
 	a tempo change up or down to make the tempo ramp gradually
 	towards an ending tempo value.</para>
 
-	<para>Double-click on the tempo ruler to open the tempo and
-	time signature editor.</para>
+	<para>Double-click on the tempo ruler to open the <link linkend="tempo-timesig">tempo and
+	time signature editor</link>.</para>
+
+</sect2>
+
+<sect2 id="tempo-timesig">
+	<title>Tempo and time signature editor</title>
+	
+      <para>
+	<screenshot>
+	  <mediaobject>
+	    <imageobject>
+	      <imagedata fileref="rg-tempotimesig.png" format="PNG"/>
+      </imageobject>
+	<textobject>
+	  <phrase>&rosegarden;'s tempo and time signature editor</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+      </para>
+
+	<para>The tempo and time signature editor window lists all of the tempo and time signature changes in the composition.  You can edit an individual tempo or time signature change by double-clicking on it.</para>
+
       </sect2>
 
-      <!-- !!! tidy this up, add Tap Tempo and Get Tempos From Beat Segment -->
-
       <sect2 id="tempo-edit">
-	<title>Tempo Editor</title>
+	<title>Changing Tempo</title>
+	<para>
+	You can edit an existing tempo change, or add a new one, by using the <link linkend="tempo-ruler">tempo ruler</link>, by double-clicking on the tempo display in the <link linkend="transport">Transport window</link>, by using the <menuchoice>
+		  <guimenu>Composition</guimenu>
+		  <guimenuitem>Add Tempo Change...</guimenuitem>
+		</menuchoice> menu function, or by double-clicking on an existing tempo in the <link linkend="tempo-timesig">tempo and time signature editor</link>.  Each of these will bring you to some variation of the tempo editing dialog:</para>
 	<para>
 	  <screenshot>
 	    <mediaobject>
@@ -1167,11 +1238,18 @@
 	</mediaobject>
 	</screenshot>
 	</para>
+	<para>To set a new tempo, either dial it into the numeric tempo spinbox at the top, or else click repeatedly on the Tap button at approximately the speed you want and let &rosegarden; work out the tempo for you.
+	  </para>
+	<para>By default, a new tempo is "fixed"; that is, the tempo remains constant from the tempo change until the next tempo change is reached.  Alternatively, you can tell &rosegarden; to make the tempo ramp smoothly to a particular value, or to the following tempo value, by the point at which the next tempo change is reached.  See also <link linkend="tempo">Tempo</link> for more details on tempo handling.</para>
       </sect2>
       
       <sect2 id="time-signature">
 	<title>Time signature</title>
 	<para>
+	  To change the time signature, use <menuchoice>
+		  <guimenu>Composition</guimenu>
+		  <guimenuitem>Add Time Signature Change...</guimenuitem>
+		</menuchoice> or double-click on the existing time signature in the <link linkend="transport">Transport window</link> or <link linkend="tempo-timesig">tempo and time signature editor</link>.</para><para>
 	  <screenshot>
 	    <mediaobject>
 	      <imageobject>
@@ -1184,6 +1262,28 @@
 	</screenshot>
 	</para>
       </sect2>
+<sect2 id="tempo-from-segment">
+	<title>Setting tempo from an existing segment</title>
+	<para>&rosegarden; provides two ways to set tempo from a segment that you have recorded or imported:</para>
+	  <variablelist>
+	    <varlistentry>
+	    <term>Audio Segment Duration</term>
+	      <listitem><para>Use the <menuchoice>
+		  <guimenu>Composition</guimenu>
+		  <guimenuitem>Set Tempo to Audio Segment Duration</guimenuitem></menuchoice> function when you have imported or recorded an audio segment that you know is exactly one bar long, and you want to ensure that the tempo for surrounding note events is set appropriately.</para><para>This function uses the duration of the selected segment (which must be an audio segment of a single bar) to work out a single matching tempo setting.  It does not analyse the content of the audio segment in any way; it simply looks at how long it is.</para>
+		</listitem>
+	    </varlistentry>
+	  <varlistentry>
+	    <term>Beat Segment</term>
+	    <listitem><para><menuchoice>
+		  <guimenu>Composition</guimenu>
+		  <guimenuitem>Set Tempos from Beat Segment</guimenuitem></menuchoice> analyses a segment of MIDI events that are assumed to be at beat positions for the current time signature, and sets a series of tempo changes according to the time elapsed between consecutive beats.</para>
+	      <para>You can use this to set an overall tempo map for a composition by "tapping" tempo in a recorded segment.  For example, you can record from a MIDI keyboard and tap a series of single notes at approximate beat positions, speeding up and slowing down gradually; then select the recorded segment and use this function to set a tempo map that speeds up and slows down to match your tapping.</para>
+	      </listitem>
+	    </varlistentry>
+	  </variablelist>
+	</sect2>
+		
     </sect1>
 
     <sect1 id="markers-ranges-loops">
@@ -1357,7 +1457,8 @@
     <menuchoice> <guimenu lang="en">Adjust</guimenu>
     <guimenuitem>Trigger Segment...</guimenuitem></menuchoice>
     function in the matrix or <menuchoice> <guimenu
-    lang="en">Ornament</guimenu> <guimenuitem>Trigger
+    lang="en">Note</guimenu><guimenuitem
+    lang="en">Ornaments</guimenuitem> <guimenuitem>Trigger
     Ornament...</guimenuitem></menuchoice> function in the notation
     editor.</para>
 
@@ -1592,8 +1693,7 @@
 	    <guimenu lang="en">Settings</guimenu>
 	    <guimenuitem>Configure Rosegarden...</guimenuitem>
 	  </menuchoice>
-	  and in the Sequencer page's Synchronisation tab, select "Sync"
-	  from the JACK transport mode menu.</para>
+	  and check the <guimenuitem>Use JACK transport</guimenuitem> box.</para>
 	
 	<para>When the JACK transport is in use, all of the applications
 	  that are subscribed to it share a common transport control, and
@@ -1620,7 +1720,7 @@
 	    <guimenu lang="en">Settings</guimenu>
 	    <guimenuitem>Configure Rosegarden...</guimenuitem>
 	  </menuchoice>
-	  and in the Sequencer page's Synchronisation tab, select "MTC
+	  and in the MIDI page's MIDI Sync tab, select "MTC
 	  Master" from the MIDI Time Code menu.  To make Rosegarden an
 	  MTC Slave so that Rosegarden's transport will automatically
 	  be synchronised with incoming MTC events, select "MTC
@@ -2648,8 +2748,7 @@
 				note heads will appear in red by default.  You
 				can turn this behavior off with
 				<menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure
-					Rosegarden</guimenuitem><guimenuitem>Notation</guimenuitem>
-				    <guimenuitem>Behaviour</guimenuitem><guimenuitem>Show
+					Rosegarden</guimenuitem><guimenuitem>Notation</guimenuitem><guimenuitem>Show
 					notes outside playable range in
 					red</guimenuitem></menuchoice>
 			    </para>
@@ -3542,9 +3641,9 @@
 	operations that use the insert cursor will take place.  The
 	topmost staff is the current one by default, but you can
 	switch to a different staff by ctrl-clicking on it, or by using the
-	<guimenu>Tools</guimenu><guimenuitem>Local
-	    Cursor...</guimenuitem><guimenuitem>Cursor Up Staff</guimenuitem> and
-	<guimenuitem>Cursor Down Staff</guimenuitem> menu functions.
+	<menuchoice><guimenu>Tools</guimenu><guimenuitem>Local
+	  Cursor</guimenuitem><guimenuitem>Cursor Up Staff</guimenuitem></menuchoice> and
+	<menuchoice><guimenuitem>Cursor Down Staff</guimenuitem></menuchoice> menu functions.
       </para>
 
     </sect1>
@@ -3672,7 +3771,7 @@
 	      Enabled via
 	      <menuchoice>
 	        <guimenu>Settings</guimenu>
-                <guimenuitem>Rulers...</guimenuitem>
+                <guimenuitem>Rulers</guimenuitem>
                 <guimenuitem>Show Raw Note Ruler</guimenuitem>
               </menuchoice>, it draws a small bar above
 	      each note, similar to the way notes appear in the matrix.  In this
@@ -4579,7 +4678,7 @@
 	the <guimenuitem>Add Slur</guimenuitem>, 
 	<guimenuitem>Add Crescendo</guimenuitem> or 
 	<guimenuitem>Add Decrescendo</guimenuitem> options from
-	the <guimenu>Group</guimenu> menu.</para>
+	the <guimenu>Phrase</guimenu> menu.</para>
 
      <para>Placement of hairpins can be somewhat tricky, and this is
 	 especially so with haripins that run in line with dynamic markings.
@@ -4611,7 +4710,7 @@
 	direction that &rosegarden; would otherwise have chosen.  See
 	also <link linkend="nv-beamed-groups">Beams</link>.</para>
 
-      <para>The <guimenu>Notes</guimenu> menu also contains options for adding slashes
+      <para>The <guimenu>Note</guimenu> menu also contains options for adding slashes
 	across note stems, for example to indicate short repeated
 	notes or drum rolls.  These are currently purely notational;
 	&rosegarden; will not take them into account when playing the
@@ -4624,9 +4723,9 @@
       <title>Beams</title>
       
       <para>Adding beams to notes is considered a grouping operation
-	in the &rosegarden; Notation editor, available on the <guimenu>Group</guimenu>
-	menu.  Select the notes you want to beam, and use the Beam
-	<guimenu>Group</guimenu> menu option.  To remove a beam, select the notes and use
+	in the &rosegarden; Notation editor, available on the <guimenu>Phrase</guimenu>
+	menu.  Select the notes you want to beam, and use the
+	<guimenuitem>Beam Group</guimenuitem> menu option.  To remove a beam, select the notes and use
 	the <guimenuitem>Unbeam</guimenuitem> menu option.</para>
 
       <para>It is possible to have more than one beamed group
@@ -4642,7 +4741,7 @@
 	this, select the notes you want to calculate the beaming for
 	(for example by triple-clicking to select a whole staff) and
 	then use the <guimenuitem>Auto-Beam</guimenuitem> option on the 
-	<guimenu>Group menu</guimenu>.  Auto-beaming
+	<guimenu>Phrase</guimenu> menu.  Auto-beaming
 	is also done automatically when loading a &MIDI; file, for
 	example, and the editor also does some automatic beaming as
 	you enter notes (this can be disabled by changing the
@@ -4822,13 +4921,13 @@
 	<title>Adjusting note and rest durations</title>
 	
 	<sect3 id="nv-normalize-rests">
-	  <title>Normalizing Rests</title>
+	  <title>Normalizing rests</title>
 
 	  <para>Sometimes as a result of editing or quantization
 	  operations, a piece of notation can end up with incorrect
 	  rest durations for the current time signature.  You can use
-	  the <guimenuitem>Normalize Rests</guimenuitem> function to
-	  fix these.  This function examines each sequence of
+	  the <menuchoice><guimenu>Adjust</guimenu><guimenuitem>Rests</guimenuitem><guimenuitem>Normalize Rests</guimenuitem></menuchoice> function to
+	  fix these.  This examines each sequence of
 	  consecutive rests found in the selection, and adjusts,
 	  splits and merges rests as necessary to ensure that the
 	  rests have theoretically correct durations and fall on the
@@ -4842,62 +4941,35 @@
 	    central beat boundary of the bar.
 	  </para>
 	</sect3>
-<!--
 
-!!! Some of this looks like it ought to be mentioned, but it all refers to
-actions whose names and locations have changed radically since whenever this
-was written.  Someone has already commented this out, and I'm leaving it out,
-but not without a vague feeling that I really ought to go work out what modern
-actions all of this is talking about, and bring this bit up to date.
+	<sect3 id="nv-make-viable">
+	  <title>Splitting very long notes</title> <para>The
+	  <menuchoice> <guimenu>Adjust</guimenu>
+	  <guimenuitem>Notes</guimenuitem> <guimenuitem>Tie Notes at
+	  Barlines</guimenuitem> </menuchoice> is intended to deal
+	  with notes that have excessively long durations, and
+	  therefore overflow barlines or are too long to be
+	  displayed as a single note.  It takes any such notes and
+	  splits them into shorter, tied notes.
+	  </para>
+	</sect3>
 
-	    <varlistentry id="commands-nv-menu-transforms-make-viable">
-	      <term><menuchoice>
-		  <guimenu>Transforms</guimenu>
-		  <guimenuitem>Make Notes Viable</guimenuitem>
-		</menuchoice></term>
-	      <listitem>
-		<para><action>Splits notes at displayable
-		    durations.</action> This function is intended to deal
-		  with notes that have excessively long durations that
-		  overflow barlines or that are too long to be displayed
-		  as a single note.  It takes any such notes and splits
-		  them into shorter, tied notes.
-		</para>
-	      </listitem>
-	    </varlistentry>
+	<sect3 id="nv-de-counterpoint">
+	  <title>Splitting overlapping notes</title>
+	  <para>The 
+<menuchoice> <guimenu>Adjust</guimenu>
+	  <guimenuitem>Notes</guimenuitem> <guimenuitem>Split-and-Tie Overlapping Chords</guimenuitem> </menuchoice> function can be used to turn "counterpoint" notes into a series of split-and-tied notes and chords.</para>
 
-	    <varlistentry id="commands-nv-menu-transforms-de-counterpoint">
-	      <term><menuchoice>
-		  <guimenu>Transforms</guimenu>
-		  <guimenuitem>De-Counterpoint</guimenuitem>
-		</menuchoice></term>
-	      <listitem>
-		<para><action>Turns counterpoint into a series of split-and-tied notes and chords.</action>
+	  <para>It can be applied to a selection that contains
+	  overlapping notes.  It will split overlapping notes at the
+	  point where they overlap, and tie together the resulting
+	  split notes, ensuring that the music takes the form of a
+	  series of chords and/or single notes starting and ending in
+	  neat blocks, with some notes possibly tied.
+	  </para>
+	</sect3>
 
-		  &rosegarden; has no explicit support for counterpoint
-		  (multiple lines of notes edited separately on the
-		  same staff), but it will do its best to approximate
-		  it when it finds notes in a segment that are
-		  apparently contrapuntal, i.e. that overlap but that
-		  are not precise enough to be treated as chords.  For
-		  example, when a short note starts shortly after a
-		  longer note, Rosegarden will show the longer note
-		  and a short <quote>spacing</quote> rest together, followed by the
-		  shorter note.  Unfortunately this often isn't what
-		  you want.
-		</para>
-
-		<para>The De-Counterpoint function can be applied to a
-		  selection that contains overlapping notes.  It will
-		  split overlapping notes at the point where they
-		  overlap, and tie together the resulting split notes,
-		  ensuring that the music takes the form of a series of
-		  chords and/or single notes starting and ending in neat
-		  blocks, with some notes possibly tied.
-		</para>
-	      </listitem>
-	    </varlistentry>
-
+<!-- need a proper section for this and diatonic transpose
 	    <varlistentry id="nv-transpose">
 	    <title>Transpose</title>
 		<para><action>Alters the pitch of the selected
@@ -4928,8 +5000,8 @@ actions all of this is talking about, and bring this bit up to date.
 	  <para>
 	      You may occasionally wish to to nudge the positioning of some
 	      element of notation that Rosegarden's layout algorithm has not
-	      placed in an optimal location.  Ctrl-click and drag slurs, hairpins,
-	      text events, and several others.  You may not reposition notes in
+	      placed in an optimal location.  Use Ctrl-click and drag to move slurs, hairpins,
+	      text events, and several other sorts of events.  You may not reposition notes in
 	      this fashion.
 	  </para>
       </sect2>
@@ -4943,7 +5015,7 @@ actions all of this is talking about, and bring this bit up to date.
       <!-- !!! -->
       <para>
 	  You can use the Interpret function<menuchoice>
-	      <guimenu>Adjust</guimenu><guimenu>Notes</guimenu><guimenuitem>Interpret...</guimenuitem>
+	      <guimenu>Adjust</guimenu><guimenuitem>Interpret...</guimenuitem>
 	  </menuchoice>
 	  to modify the velocities and timings of notes according to any
 	  written or indicated dynamics found. The selection of
@@ -5226,7 +5298,7 @@ actions all of this is talking about, and bring this bit up to date.
       <para>To create a new type of ornament, first write out the
       notes "in longhand" that you want the ornament to play, and then
       select the notes and use <menuchoice>
-      <guimenu>Notes</guimenu><guimenu>Ornaments</guimenu><guimenuitem>Make
+      <guimenu>Note</guimenu><guimenuitem>Ornaments</guimenuitem><guimenuitem>Make
       Ornament...</guimenuitem></menuchoice>.  This cuts the notes to
       the clipboard, pastes them into a new triggered segment, and
       replaces them with a single note of the same duration that
@@ -5234,7 +5306,7 @@ actions all of this is talking about, and bring this bit up to date.
  
       <para>To make a note play an existing ornament, select it and
       use <menuchoice>
-      <guimenu>Notes</guimenu><guimenu>Ornaments</guimenu><guimenuitem>Trigger
+      <guimenu>Note</guimenu><guimenuitem>Ornaments</guimenuitem><guimenuitem>Trigger
       Ornament...</guimenuitem></menuchoice>.</para>
 
       <para>
