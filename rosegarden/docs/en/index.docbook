@@ -621,7 +621,9 @@
 	  features special <link linkend="nv-lilypond-directives">exportable
 	      directives</link> that provide access to LilyPond features for
 	  which there is currently no parallel within &rosegarden;'s own
-	  native interface.</para>
+	  native interface.
+      </para>
+
       <para>LilyPond may be conveniently used with the
 	  <menuchoice>
 	    <guimenu lang="en">File</guimenu>
@@ -637,6 +639,82 @@
           </menuchoice>
 	  function.
       </para>
+
+      <para>
+	  When Export, Preview, or Printing is done with LilyPond,
+	  there is available also a collection of
+	  <link linkend="lilypond-options">LilyPond options</link>.
+      </para>
+      </sect1>
+
+    <sect1 id="lilypond-options">
+      <title>LilyPond options</title>
+      <para>If one of the LilyPond export functions is invoked, there will
+	  appear a dialog in which options specific to LilyPond export may be
+	  altered.
+      </para>
+
+      <variablelist>
+	<varlistentry>
+	  <term>LilyPond version</term>
+	    <listitem><para>
+		LilyPond version installed into the system should be automatically
+		detected in the dialog,  but it is possible to export to any other
+		LilyPond version since 2.6.  Historically,  LilyPond's syntax has
+		changed somewhat over time,  but since LilyPond version 2.6 changes
+		have have been less radical and more maintainable.</para>
+	    </listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term>Paper size and Landscape</term>
+	    <listitem><para>
+		Paper size can be A3, A4, A5, A6, Legal, US Letter, and Tabloid.
+		All paper sizes may also be used in Landscape mode.</para>
+	    </listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term>Font size</term>
+	    <listitem><para>
+		Font size affects the size of the notes.  If you want to fit more
+		staffs into the paper,  you should decrease the font size.</para>
+	    </listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term>Export content</term>
+	    <listitem><para>
+		Export content concerns tracks that have segments in them, which
+		are the tracks that are not empty.
+		It is possible to export All tracks,  Non-muted tracks, the current
+		Selected track,  or Selected segments.  If LilyPond export is
+		launched from the Notation view,  Selected segments include
+		the same selection which was used in opening the Notation view.</para>
+	    </listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term>Merge tracks that have the same name</term>
+	    <listitem><para>
+		It is possible to Merge tracks that have the same name.
+		This options allows for example to make a piano score with 
+		several independent voices.  You may give first three tracks
+		name "Right" and three next tracks "Left" and then merge
+		them in LilyPond export.  Sometimes you may encounter notes that
+		overlap in printed from,  you may avoid them by selecting one
+		of the collapsing notes and fine adjust its position in
+		Notation view function
+	  <menuchoice>
+	    <guimenu lang="en">Adjust</guimenu>
+            <guimenuitem>Fine Positioning</guimenuitem>
+            <guimenuitem>Push Right/Left</guimenuitem>
+          </menuchoice>.</para>
+	    </listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term>...</term>
+	    <listitem><para>
+		... </para>
+	    </listitem>
+	</varlistentry>
+      </variablelist>
       </sect1>
 
   </chapter>
