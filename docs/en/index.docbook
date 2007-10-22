@@ -709,9 +709,107 @@
 	    </listitem>
 	</varlistentry>
 	<varlistentry>
-	  <term>...</term>
+	  <term>Export tempo marks</term>
 	    <listitem><para>
-		... </para>
+		Tempo marks are not exported by default.  If tempo changes
+		rarely,  you may want to export all tempo marks,  but if
+		tempo changes too often,  you may eport only the first mark.</para>
+	    </listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term>Export lyrics</term>
+	    <listitem><para>
+		<link linkend="nv-text-lyrics">Lyrics</link> is exported if this
+		option is checked.  Text is entered in Unicode, which
+		makes it possible to enter lyrics in all languages.  Multiple
+		lines of lyrics per staff is also possible,  see the section
+		on <link linkend="nv-text-lyrics">Editign lyrics</link>.</para>
+	    </listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term>Export beamings</term>
+	    <listitem><para>
+		<link linkend="nv-beamed-groups">Beams</link> defined in
+		&rosegarden; can be exported,  or the default
+		beam grouping of LilyPond can be used.  Future versions
+		of &rosegarden; may support nested note grouping.</para>
+	    </listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term>Add staff group bracket</term>
+	    <listitem><para>
+		Staff group bracket may be added to cover all staffs.
+		Future versions of &rosegarden; may support nested staff
+		groupings.</para>
+	    </listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term>Lyrics alignment</term>
+	    <listitem><para>
+		Lyrics is aligned Left by default.  Sometimes Center or
+		Right alignment provides results in more pleasant output.</para>
+	    </listitem>
+	</varlistentry>
+	<varlistentry>
+	  <term>Ragged bottom</term>
+	    <listitem><para>
+		The staff cover the whole page from the top to the bottom.
+		When there are only few staff,  Ragged bottom places the
+		extra vertical space to the bottom of the page instead.</para>
+	    </listitem>
+	</varlistentry>	<varlistentry>
+	  <term>Enable "point-and-click" debugging</term>
+	    <listitem><para>
+		If you export the LilyPond source with the 
+	  <menuchoice>
+	    <guimenu lang="en">File</guimenu>
+	    <guimenuitem>Export</guimenuitem>
+            <guimenuitem>Export LilyPond</guimenuitem>
+          </menuchoice>
+		function,  you may open the LilyPond source by clicking
+		notes in the PDF output.  Consult <ulink url="  http://lilypond.org/doc/v2.10/Documentation/user/lilypond/Point-and-click#Point-and-click">LilyPond documentation</ulink> for more
+		information.
+</para>
+	    </listitem>
+	</varlistentry>	<varlistentry>
+	  <term>Export \midi block</term>
+	    <listitem><para>
+		LilyPond is capable to produce also MIDI output.  Check this
+		option if you wish the LilyPond source to use this option.
+		Note however that MIDI output which you obtain via &rosegarden;
+		sequencer, via
+	  <menuchoice>
+	    <guimenu lang="en">File</guimenu>
+	    <guimenuitem>Export</guimenuitem>
+            <guimenuitem>Export MIDI file</guimenuitem>
+          </menuchoice>,
+		and via LilyPond's MIDI output may differ.</para>
+	    </listitem>
+	</varlistentry>	<varlistentry>
+	  <term>Headers</term>
+	    <listitem><para>
+		Headers can be edited both in LilyPond export dialog and through the
+	  <menuchoice>
+	    <guimenu lang="en">Composition</guimenu>
+	    <guimenuitem>Edit Document Properties</guimenuitem>
+          </menuchoice> function.</para><para>Some of the headers will appear
+		only in LilyPond output.
+		The position of the Printable headers match roughly with
+		the positions of the headers in the printed output.
+		Below is shown an example with all headers and lyrics
+		entered with Unicode text.</para>
+	<para>
+	<screenshot>
+	  <mediaobject>
+	    <imageobject>
+	      <imagedata fileref="headers-and-unicode-lyrics.png" format="PNG"/>
+	    </imageobject>
+	    <textobject>
+	      <phrase>LilyPond's output showing all headers and Unicode lyrics.</phrase>
+	    </textobject>
+	  </mediaobject>
+	</screenshot>
+	</para>
 	    </listitem>
 	</varlistentry>
       </variablelist>
