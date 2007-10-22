@@ -4669,6 +4669,34 @@
 
     <!-- Indications -->
 
+    <sect1 id="nv-guitarchords">
+      <title>Guitar Chords</title>
+
+      <para>Like text, it is possible to add guitar chord diagrams to a notation track. This is done by toggling the
+      <guimenuitem>Guitar Chord</guimenuitem> button, and then clicking on the same area as for adding text.
+      This will open the Guitar Chord dialog. With it you can select which guitar chord diagram you want to add,
+      from a chord dictionary which comprises most of the common chord fingerings. For convenience, the fingerings are
+      sorted in three different categories : <guimenuitem>beginner</guimenuitem>, <guimenuitem>common</guimenuitem>
+      and <guimenuitem>all</guimenuitem>. These categories are actually based on the chord extension (A7 is a beginner
+      chord, while A13 isn't), not on the fingering itself.   
+	</para>
+      <para>
+	<screenshot>
+	  <mediaobject>
+	    <imageobject>
+	      <imagedata fileref="rg-guitarchorddialog.png" format="PNG"/>
+      </imageobject>
+	<textobject>
+	  <phrase>&rosegarden;'s general tuplet dialog</phrase>
+	</textobject>
+      </mediaobject>
+      </screenshot>
+      </para>
+       
+	</sect1>
+
+    <!-- Indications -->
+
     <sect1 id="nv-indication">
       <title>Slurs and hairpins</title>
 
