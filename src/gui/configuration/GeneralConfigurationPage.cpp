@@ -115,8 +115,8 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
     m_autoSave->insertItem(i18n("Every half an hour"));
     m_autoSave->insertItem(i18n("Never"));
 
-    bool doAutoSave = m_cfg->readBoolEntry("autosave");
-    int autoSaveInterval = m_cfg->readUnsignedNumEntry("autosaveinterval");
+    bool doAutoSave = m_cfg->readBoolEntry("autosave", true);
+    int autoSaveInterval = m_cfg->readUnsignedNumEntry("autosaveinterval", 300);
     if (!doAutoSave || autoSaveInterval == 0) {
         m_autoSave->setCurrentItem(4); // off
     } else if (autoSaveInterval < 45) {
