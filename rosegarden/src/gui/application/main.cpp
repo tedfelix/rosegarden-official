@@ -490,6 +490,42 @@ int main(int argc, char *argv[])
     }
 
     KConfig *config = kapp->config();
+
+    // If there is no config setting for the startup window size, set
+    // one now.  But base the default on the appropriate desktop size
+    // (i.e. not the entire desktop, if Xinerama is in use).  This is
+    // obtained from KGlobalSettings::desktopGeometry(), but we can't
+    // give it a meaningful point to measure from at this stage so we
+    // always use the "leftmost" display (point 0,0).
+
+    // The config keys are "Height X" and "Width Y" where X and Y are
+    // the sizes of the available desktop (i.e. the whole shebang if
+    // under Xinerama).  These are obtained from QDesktopWidget.
+
+    config->setGroup("MainView");
+
+    QDesktopWidget *desktop = KApplication::desktop();
+    if (desktop) {
+	QRect totalRect(desktop->availableGeometry());
+	QRect desktopRect = KGlobalSettings::desktopGeometry(QPoint(0, 0));
+	QSize startupSize;
+	if (desktopRect.height() <= 800) {
+	    startupSize = QSize((desktopRect.width() * 6) / 7,
+				(desktopRect.height() * 6) / 7);
+	} else {
+	    startupSize = QSize((desktopRect.width() * 4) / 5,
+				(desktopRect.height() * 4) / 5);
+	}
+	QString widthKey = QString("Width %1").arg(totalRect.width());
+	QString heightKey = QString("Height %1").arg(totalRect.height());
+	if (!config->hasKey(widthKey)) {
+	    config->writeEntry(widthKey, startupSize.width());
+	}
+	if (!config->hasKey(heightKey)) {
+	    config->writeEntry(heightKey, startupSize.height());
+	}
+    }
+
     config->setGroup("KDE Action Restrictions");
     config->writeEntry("action/help_report_bug", false);
 
