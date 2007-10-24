@@ -33,6 +33,7 @@
 #include <kstddirs.h>
 #include <ktip.h>
 #include <kprocess.h>
+#include <kglobalsettings.h>
 
 #include "document/ConfigGroups.h"
 #include "misc/Strings.h"
