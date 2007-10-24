@@ -30,6 +30,7 @@
 #include <qthread.h>
 #include <qstringlist.h>
 #include <qobject.h>
+#include <qhttp.h>
 
 class KProcess;
 
@@ -55,8 +56,14 @@ public:
     bool haveLilypondView(QStringList *missingApplications);
     bool haveAudioFileImporter(QStringList *missingApplications);
 
+signals:
+    void newerVersionAvailable(QString);
+
 protected slots:
     void stdoutReceived(KProcess *, char *, int);
+
+    void slotHttpResponseHeaderReceived(const QHttpResponseHeader &);
+    void slotHttpDone(bool);
 
 protected:
     bool m_ready;
@@ -70,7 +77,9 @@ protected:
     bool m_haveAudioFileImporter;
     QStringList m_audioFileImporterMissing;
     QString m_stdoutBuffer;
+    bool m_versionHttpFailed;
     void parseStdoutBuffer(QStringList &target);
+    bool isVersionNewerThan(QString, QString);
 };
 
 

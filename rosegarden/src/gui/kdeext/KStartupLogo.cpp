@@ -45,7 +45,8 @@ KStartupLogo::KStartupLogo(QWidget * parent, const char *name)
                   WStyle_NoBorder | WStyle_StaysOnTop | WStyle_Tool | WX11BypassWM | WWinOwnDC
 #endif
                  ),
-        m_readyToHide(false)
+	  m_readyToHide(false),
+	  m_showTip(true)
 {
     QString pixmapFile = locate("appdata", "pixmaps/splash.png");
     if (!pixmapFile)
@@ -116,8 +117,10 @@ void KStartupLogo::close()
 {
     if (!m_wasClosed && isVisible()) {
 
-        RG_DEBUG << "KStartupLogo::close: Showing Tips\n";
-        KTipDialog::showTip(locate("data", "rosegarden/tips"));
+	if (m_showTip) {
+	    RG_DEBUG << "KStartupLogo::close: Showing Tips\n";
+	    KTipDialog::showTip(locate("data", "rosegarden/tips"));
+	}
     }
 
     QWidget::close();

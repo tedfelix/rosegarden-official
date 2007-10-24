@@ -4461,6 +4461,8 @@ void RosegardenGUIApp::slotTestStartupTester()
 
     if (!m_startupTester) {
         m_startupTester = new StartupTester();
+        connect(m_startupTester, SIGNAL(newerVersionAvailable(QString)),
+                this, SLOT(slotNewerVersionAvailable(QString)));
         m_startupTester->start();
         QTimer::singleShot(100, this, SLOT(slotTestStartupTester()));
         return ;
@@ -7881,6 +7883,21 @@ RosegardenGUIDoc *RosegardenGUIApp::getDocument() const
 {
     return m_doc;
 }
+
+void
+RosegardenGUIApp::slotNewerVersionAvailable(QString v)
+{
+    KStartupLogo::hideIfStillThere();
+    CurrentProgressDialog::freeze();
+    KMessageBox::information
+        (this,
+         i18n("<h3>Newer version available</h3><p>A newer version of Rosegarden may be available.<br>Please consult the <a href=\"http://www.rosegardenmusic.com/getting/\">Rosegarden website</a> for more information.</p>"),
+         i18n("Newer version available"),
+         QString("version-%1-available-show").arg(v),
+         KMessageBox::AllowLink);
+    CurrentProgressDialog::thaw();
+}
+
 
 const void* RosegardenGUIApp::SequencerExternal = (void*)-1;
 RosegardenGUIApp *RosegardenGUIApp::m_myself = 0;

@@ -1523,6 +1523,8 @@ public slots:
 
     void slotShowToolHelp(const QString &);
 
+    void slotNewerVersionAvailable(QString);
+
 private:
 
 
