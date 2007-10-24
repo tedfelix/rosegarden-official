@@ -94,6 +94,7 @@ SET(EXAMPLE_FILES
     examples/doodle-q.rg
     examples/exercise_notation.rg
     examples/glazunov.rg
+    examples/headers-and-unicode-lyrics.rg
     examples/himno_de_riego.rg
     examples/interpretation-example.rg
     examples/let-all-mortal-flesh.rg
