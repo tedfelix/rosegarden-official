@@ -31,13 +31,14 @@
 class KStartupLogo : public QWidget
 {
     Q_OBJECT
-public:
 
+public:
     static KStartupLogo* getInstance();
 
     static void hideIfStillThere();
     
     void setHideEnabled(bool enabled) { m_readyToHide = enabled; };
+    void setShowTip(bool showTip) { m_showTip = showTip; };
 
 public slots:
     void slotShowStatusMessage(QString);
@@ -52,6 +53,7 @@ protected:
     virtual void mousePressEvent( QMouseEvent*);
 
     bool m_readyToHide;
+    bool m_showTip;
 
     QPixmap m_pixmap;
 

@@ -35,10 +35,14 @@
 #include <kprocess.h>
 #include <kglobalsettings.h>
 
+#include <qstringlist.h>
+#include <qregexp.h>
+
 #include "document/ConfigGroups.h"
 #include "misc/Strings.h"
 #include "misc/Debug.h"
 #include "gui/application/RosegardenGUIApp.h"
+#include "gui/widgets/CurrentProgressDialog.h"
 #include "document/RosegardenGUIDoc.h"
 #include "gui/kdeext/KStartupLogo.h"
 
@@ -351,8 +355,7 @@ void testInstalledVersion()
             QString s = text.readLine().stripWhiteSpace();
             versionFile.close();
             if (s) {
-                if (s == VERSION)
-                    return ;
+                if (s == VERSION) return;
                 installedVersion = s;
             }
         }
@@ -492,6 +495,14 @@ int main(int argc, char *argv[])
 
     KConfig *config = kapp->config();
 
+    config->setGroup(GeneralOptionsConfigGroup);
+    QString lastVersion = config->readEntry("lastversion", "");
+    bool newVersion = (lastVersion != VERSION);
+    if (newVersion) {
+	std::cerr << "*** This is the first time running this Rosegarden version" << std::endl;
+	config->writeEntry("lastversion", VERSION);
+    }
+
     // If there is no config setting for the startup window size, set
     // one now.  But base the default on the appropriate desktop size
     // (i.e. not the entire desktop, if Xinerama is in use).  This is
@@ -548,6 +559,7 @@ int main(int argc, char *argv[])
     if (config->readBoolEntry("Logo", true) && (!kapp->isRestored() && args->isSet("splash")) ) {
         RG_DEBUG << k_funcinfo << "Showing startup logo\n";
         startLogo = KStartupLogo::getInstance();
+	startLogo->setShowTip(!newVersion);
         startLogo->show();
     }
 
@@ -629,35 +641,6 @@ int main(int argc, char *argv[])
         RG_DEBUG << "RosegardenGUI - " << e.getMessage() << endl;
     }
 
-    if (startLogo) {
-
-        // pause to ensure the logo has been visible for a reasonable
-        // length of time, just 'cos it looks a bit silly to show it
-        // and remove it immediately
-
-        struct timeval now;
-        gettimeofday(&now, 0);
-
-        RealTime visibleFor =
-            RealTime(now.tv_sec, now.tv_usec * 1000) -
-            RealTime(logoShowTime.tv_sec, logoShowTime.tv_usec * 1000);
-
-        if (visibleFor < RealTime(2, 0)) {
-            int waitTime = visibleFor.sec * 1000 + visibleFor.msec();
-            QTimer::singleShot(2500 - waitTime, startLogo, SLOT(close()));
-        } else {
-            startLogo->close();
-        }
-
-    } else {
-
-        // if the start logo is there, it's responsible for showing this;
-        // otherwise we have to
-
-        RG_DEBUG << "main: Showing Tips\n";
-        KTipDialog::showTip(locate("data", "rosegarden/tips"));
-    }
-
 
     config->setGroup(SequencerOptionsConfigGroup);
 
@@ -689,6 +672,54 @@ int main(int argc, char *argv[])
 #ifdef Q_WS_X11
     XSetErrorHandler( _x_errhandler );
 #endif
+
+    if (startLogo) {
+
+        // pause to ensure the logo has been visible for a reasonable
+        // length of time, just 'cos it looks a bit silly to show it
+        // and remove it immediately
+
+        struct timeval now;
+        gettimeofday(&now, 0);
+
+        RealTime visibleFor =
+            RealTime(now.tv_sec, now.tv_usec * 1000) -
+            RealTime(logoShowTime.tv_sec, logoShowTime.tv_usec * 1000);
+
+        if (visibleFor < RealTime(2, 0)) {
+            int waitTime = visibleFor.sec * 1000 + visibleFor.msec();
+            QTimer::singleShot(2500 - waitTime, startLogo, SLOT(close()));
+        } else {
+            startLogo->close();
+        }
+
+    } else {
+
+        // if the start logo is there, it's responsible for showing this;
+        // otherwise we have to
+
+	if (!newVersion) {
+	    RG_DEBUG << "main: Showing Tips\n";
+	    KTipDialog::showTip(locate("data", "rosegarden/tips"));
+	}
+    }
+
+    if (newVersion) {
+	KStartupLogo::hideIfStillThere();
+	CurrentProgressDialog::freeze();
+
+	KDialogBase *dialog = new KDialogBase(rosegardengui, "welcome",
+					      true, i18n("Welcome!"),
+					      KDialogBase::Ok,
+					      KDialogBase::Ok, false);
+	QVBox *mw = dialog->makeVBoxMainWidget();
+	QLabel *label = new QLabel
+	    (i18n("<h2>Welcome to Rosegarden!</h2><p>Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.</p><p>Rosegarden was brought to you by a team of volunteers across the world.  To learn more about Rosegarden, see <a href=\"http://www.rosegardenmusic.com/\">http://www.rosegardenmusic.com/</a>, or see the Help menu for tutorials and other information.</p>"), mw);
+	dialog->showButtonOK(true);
+	dialog->exec();
+
+	CurrentProgressDialog::thaw();
+    }
 
     return kapp->exec();
 }
