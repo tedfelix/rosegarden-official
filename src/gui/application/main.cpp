@@ -19,8 +19,8 @@
     COPYING included with this distribution for more information.
 */
 
+
 #ifndef USE_PCH
-#include <sys/time.h>
 #include <qlabel.h>
 #include <qtimer.h>
 #include <qstringlist.h>
@@ -38,6 +38,7 @@
 #include <kglobalsettings.h>
 #endif
 
+#include <sys/time.h>
 #include "base/RealTime.h"
 #include "document/ConfigGroups.h"
 #include "document/RosegardenGUIDoc.h"
