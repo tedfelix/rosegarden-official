@@ -19,11 +19,13 @@
     COPYING included with this distribution for more information.
 */
 
-#include <qtimer.h>
-#include <kapplication.h>
+#ifndef USE_PCH
 #include <sys/time.h>
-#include "base/RealTime.h"
-
+#include <qlabel.h>
+#include <qtimer.h>
+#include <qstringlist.h>
+#include <qregexp.h>
+#include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>
 #include <klocale.h>
@@ -34,21 +36,18 @@
 #include <ktip.h>
 #include <kprocess.h>
 #include <kglobalsettings.h>
+#endif
 
-#include <qstringlist.h>
-#include <qregexp.h>
-
+#include "base/RealTime.h"
 #include "document/ConfigGroups.h"
+#include "document/RosegardenGUIDoc.h"
 #include "misc/Strings.h"
 #include "misc/Debug.h"
 #include "gui/application/RosegardenGUIApp.h"
 #include "gui/widgets/CurrentProgressDialog.h"
-#include "document/RosegardenGUIDoc.h"
 #include "gui/kdeext/KStartupLogo.h"
-
 #include "gui/application/RosegardenApplication.h"
 #include "gui/application/RosegardenDCOP.h"
-
 #include "gui/kdeext/klearlook.h"
 
 using namespace Rosegarden;
@@ -713,8 +712,8 @@ int main(int argc, char *argv[])
 					      KDialogBase::Ok,
 					      KDialogBase::Ok, false);
 	QVBox *mw = dialog->makeVBoxMainWidget();
-	QLabel *label = new QLabel
-	    (i18n("<h2>Welcome to Rosegarden!</h2><p>Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.</p><p>Rosegarden was brought to you by a team of volunteers across the world.  To learn more about Rosegarden, see <a href=\"http://www.rosegardenmusic.com/\">http://www.rosegardenmusic.com/</a>, or see the Help menu for tutorials and other information.</p>"), mw);
+	QLabel *label = new QLabel((QWidget*)mw);
+	label->setText(i18n("<h2>Welcome to Rosegarden!</h2><p>Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.</p><p>Rosegarden was brought to you by a team of volunteers across the world.  To learn more about Rosegarden, see <a href=\"http://www.rosegardenmusic.com/\">http://www.rosegardenmusic.com/</a>, or see the Help menu for tutorials and other information.</p>"));
 	dialog->showButtonOK(true);
 	dialog->exec();
 
