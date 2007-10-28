@@ -27,6 +27,7 @@
 
 #include "base/Sets.h"
 #include "base/Event.h"
+#include "base/NotationRules.h"
 #include "base/NotationTypes.h"
 #include "base/Quantizer.h"
 #include "NotationProperties.h"
@@ -106,6 +107,8 @@ NotationChord::hasStem() const
 bool
 NotationChord::hasStemUp() const
 {
+    NotationRules rules;
+
     // believe anything found in any of the notes, if in a persistent
     // property or a property apparently set by the beaming algorithm
 
@@ -141,12 +144,7 @@ NotationChord::hasStemUp() const
         ++i;
     }
 
-    int high = getHeight(getHighestNote()), low = getHeight(getLowestNote());
-
-    // If two notes are an equal distance from the middle line,
-    // the preferred direction is down.
-
-    return (high + low) < 2*4;
+    return rules.isStemUp(getHighestNoteHeight(),getLowestNoteHeight());
 }
 
 bool

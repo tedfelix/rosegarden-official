@@ -25,6 +25,7 @@
 #include <cmath>
 #include "NotePixmapFactory.h"
 #include "misc/Debug.h"
+#include "base/NotationRules.h"
 #include <kapplication.h>
 
 #include <klocale.h>
@@ -2187,6 +2188,8 @@ QCanvasPixmap*
 NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
         bool useSharps)
 {
+    NotationRules rules;
+
     Pitch pitch(p);
     Accidental accidental(pitch.getAccidental(useSharps));
     NotePixmapParameters params(Note::Crotchet, 0, accidental);
@@ -2199,7 +2202,7 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
     int h = pitch.getHeightOnStaff
             (clef,
              useSharps ? Key("C major") : Key("A minor"));
-    params.setStemGoesUp(h <= 4);
+    params.setStemGoesUp(rules.isStemUp(h));
 
     if (h < -1)
         params.setStemLength(lw * (4 - h) / 2);
@@ -2252,6 +2255,8 @@ QCanvasPixmap*
 NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
         int octave, int step)
 {
+    NotationRules rules;
+
     Pitch pitch(step, octave, p, 0);
     Accidental accidental = pitch.getDisplayAccidental(Key("C major"));
     NotePixmapParameters params(Note::Crotchet, 0, accidental);
@@ -2264,7 +2269,7 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
     int h = pitch.getHeightOnStaff
             (clef,
              Key("C major"));
-    params.setStemGoesUp(h <= 4);
+    params.setStemGoesUp(rules.isStemUp(h));
 
     if (h < -1)
         params.setStemLength(lw * (4 - h) / 2);
