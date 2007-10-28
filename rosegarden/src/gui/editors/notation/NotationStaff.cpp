@@ -1826,7 +1826,8 @@ NotationStaff::showPreviewNote(double layoutX, int heightOnStaff,
     params.setNoteHeadShifted(false);
     params.setDrawFlag(true);
     params.setDrawStem(true);
-    params.setStemGoesUp(heightOnStaff <= 4);
+    // If a single note is on the middle line, the preferred direction is down.
+    params.setStemGoesUp(heightOnStaff < 4);
     params.setLegerLines(heightOnStaff < 0 ? heightOnStaff :
                          heightOnStaff > 8 ? heightOnStaff - 8 : 0);
     params.setBeamed(false);
