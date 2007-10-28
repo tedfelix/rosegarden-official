@@ -4850,14 +4850,16 @@
 
       <para>
       	Like text, it is possible to add guitar chord diagrams to a
-      	notation track. This is done by toggling the
+      	notation track (or to edit previously added ones). This is
+      	done by toggling the
       	<guimenuitem>Guitar Chord</guimenuitem>
       	button, and then clicking on the same area as for adding text.
       	This will open the Guitar Chord dialog. With it you can select
       	which guitar chord diagram you want to add from a chord
       	dictionary which comprises most of the common chord fingerings
-      	by specifying a chord's root and its extension. For convenience, the fingerings are sorted in three
-      	different categories :
+      	by specifying a chord's root and its extension. For
+      	convenience, the fingerings are sorted in three different
+      	categories :
       	<guimenuitem>beginner</guimenuitem>
       	,
       	<guimenuitem>common</guimenuitem>
@@ -4905,10 +4907,12 @@
       	</screenshot>
 
       	Note that while you can choose the extension from a list of
-      	predefined values, you can also type whatever value you want. However, in that case,
-      	the new fingering will only be available in the 'all' list. Also, you can only delete
-      	and edit your own chords. Those from the predefined dictionary cannot be changed. If you
-      	spot a mistake in one of them, please report it to the development team.
+      	predefined values, you can also type whatever value you want.
+      	However, in that case, the new fingering will only be
+      	available in the 'all' list. Also, you can only delete and
+      	edit your own chords. Those from the predefined dictionary
+      	cannot be changed. If you spot a mistake in one of them,
+      	please report it to the development team.
       </para>
 
     </sect1>
