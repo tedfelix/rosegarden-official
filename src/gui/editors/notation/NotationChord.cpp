@@ -143,13 +143,10 @@ NotationChord::hasStemUp() const
 
     int high = getHeight(getHighestNote()), low = getHeight(getLowestNote());
 
-    if (high > 4) {
-        if (low > 4)
-            return false;
-        else
-            return ((high - 4) < (5 - low));
-    } else
-        return true;
+    // If two notes are an equal distance from the middle line,
+    // the preferred direction is down.
+
+    return (high + low) < 2*4;
 }
 
 bool
