@@ -4033,7 +4033,7 @@
 			    fileref="rg-notationtools.png" format="PNG"/>
 		      </imageobject>
 		      <textobject>
-			  <phrase>The insert, erase, text, and fretboard tools</phrase>
+			  <phrase>The insert, erase, text, and guitar chord tools</phrase>
 		      </textobject>
 		  </mediaobject>
 	      </screenshot>
@@ -4848,28 +4848,70 @@
     <sect1 id="nv-guitarchords">
       <title>Guitar Chords</title>
 
-      <para>Like text, it is possible to add guitar chord diagrams to a notation track. This is done by toggling the
-      <guimenuitem>Guitar Chord</guimenuitem> button, and then clicking on the same area as for adding text.
-      This will open the Guitar Chord dialog. With it you can select which guitar chord diagram you want to add,
-      from a chord dictionary which comprises most of the common chord fingerings. For convenience, the fingerings are
-      sorted in three different categories : <guimenuitem>beginner</guimenuitem>, <guimenuitem>common</guimenuitem>
-      and <guimenuitem>all</guimenuitem>. These categories are actually based on the chord extension (A7 is a beginner
-      chord, while A13 isn't), not on the fingering itself.   
-	</para>
       <para>
-	<screenshot>
-	  <mediaobject>
-	    <imageobject>
-	      <imagedata fileref="rg-guitarchorddialog.png" format="PNG"/>
-      </imageobject>
-	<textobject>
-	  <phrase>&rosegarden;'s general tuplet dialog</phrase>
-	</textobject>
-      </mediaobject>
-      </screenshot>
+      	Like text, it is possible to add guitar chord diagrams to a
+      	notation track. This is done by toggling the
+      	<guimenuitem>Guitar Chord</guimenuitem>
+      	button, and then clicking on the same area as for adding text.
+      	This will open the Guitar Chord dialog. With it you can select
+      	which guitar chord diagram you want to add from a chord
+      	dictionary which comprises most of the common chord fingerings
+      	by specifying a chord's root and its extension. For convenience, the fingerings are sorted in three
+      	different categories :
+      	<guimenuitem>beginner</guimenuitem>
+      	,
+      	<guimenuitem>common</guimenuitem>
+      	and
+      	<guimenuitem>all</guimenuitem>
+      	. These categories are actually based on the chord extension
+      	(A7 is a beginner chord, while A13 isn't), not on the
+      	fingering itself, so you can still see "advanced" chord
+      	fingerings listed, even in beginner mode.
       </para>
-       
-	</sect1>
+
+
+      <para>
+      	<screenshot>
+      		<mediaobject>
+      			<imageobject>
+      				<imagedata fileref="rg-guitarchorddialog.png"
+      					format="PNG" />
+      			</imageobject>
+      			<textobject>
+      				<phrase>&rosegarden;'s chord selector dialog
+      				</phrase>
+      			</textobject>
+      		</mediaobject>
+      	</screenshot>
+      </para>
+
+      <para>
+      	It is also possible to add your own fingerings if needed. To
+      	do this, click on the 'New' button. This will pop up a chord
+      	editor, where you can "draw" which fingering you want to add,
+      	and specify its root, chord extension, and starting fret
+      	number.
+      	<screenshot>
+      		<mediaobject>
+      			<imageobject>
+      				<imagedata
+      					fileref="rg-guitarchordeditordialog.png" format="PNG" />
+      			</imageobject>
+      			<textobject>
+      				<phrase>&rosegarden;'s chord editor dialog
+      				</phrase>
+      			</textobject>
+      		</mediaobject>
+      	</screenshot>
+
+      	Note that while you can choose the extension from a list of
+      	predefined values, you can also type whatever value you want. However, in that case,
+      	the new fingering will only be available in the 'all' list. Also, you can only delete
+      	and edit your own chords. Those from the predefined dictionary cannot be changed. If you
+      	spot a mistake in one of them, please report it to the development team.
+      </para>
+
+    </sect1>
 
     <!-- Indications -->
 
