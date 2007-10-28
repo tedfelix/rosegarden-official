@@ -44,8 +44,10 @@ public:
      */
     bool isStemUp(int heightOnStaff) { return heightOnStaff < 4; }
 
-    // If two notes are an equal distance from the middle line,
-    // the preferred direction is down.
+    /**
+     * If the extreme notes in a chord are an equal distance from the middle line,
+     * the preferred direction is down.
+     */
     bool isStemUp(int highestHeightOnStaff, int lowestHeightOnStaff) {
         return (highestHeightOnStaff + lowestHeightOnStaff) < 2*4;
     }
