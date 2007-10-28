@@ -28,6 +28,7 @@
 #include <klocale.h>
 #include <kstddirs.h>
 #include "base/Composition.h"
+#include "base/NotationRules.h"
 #include "base/NotationTypes.h"
 #include "base/RealTime.h"
 #include "gui/application/RosegardenApplication.h"

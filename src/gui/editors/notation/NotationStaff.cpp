@@ -38,6 +38,7 @@
 #include "base/MidiDevice.h"
 #include "base/MidiTypes.h"
 #include "base/NotationQuantizer.h"
+#include "base/NotationRules.h"
 #include "base/NotationTypes.h"
 #include "base/Profiler.h"
 #include "base/Segment.h"
@@ -1821,13 +1822,13 @@ NotationStaff::showPreviewNote(double layoutX, int heightOnStaff,
                                const Note &note)
 {
     NotePixmapParameters params(note.getNoteType(), note.getDots());
+    NotationRules rules;
 
     params.setAccidental(Accidentals::NoAccidental);
     params.setNoteHeadShifted(false);
     params.setDrawFlag(true);
     params.setDrawStem(true);
-    // If a single note is on the middle line, the preferred direction is down.
-    params.setStemGoesUp(heightOnStaff < 4);
+    params.setStemGoesUp(rules.isStemUp(heightOnStaff));
     params.setLegerLines(heightOnStaff < 0 ? heightOnStaff :
                          heightOnStaff > 8 ? heightOnStaff - 8 : 0);
     params.setBeamed(false);
