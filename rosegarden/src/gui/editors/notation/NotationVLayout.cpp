@@ -30,6 +30,7 @@
 #include "base/Composition.h"
 #include "base/Event.h"
 #include "base/LayoutEngine.h"
+#include "base/NotationRules.h"
 #include "base/NotationTypes.h"
 #include "base/NotationQuantizer.h"
 #include "base/Staff.h"
@@ -442,6 +443,8 @@ void
 NotationVLayout::positionSlur(NotationStaff &staff,
                               NotationElementList::iterator i)
 {
+    NotationRules rules;
+
     bool phrasing = ((*i)->event()->get
                      <String>(Indication::IndicationTypePropertyName)
                      == Indication::PhrasingSlur);
@@ -491,7 +494,7 @@ NotationVLayout::positionSlur(NotationStaff &staff,
                 event->dump(std::cerr);
             }
 
-            bool stemUp = (h <= 4);
+            bool stemUp = rules.isStemUp(h);
             event->get
             <Bool>(m_properties.VIEW_LOCAL_STEM_UP, stemUp);
 
