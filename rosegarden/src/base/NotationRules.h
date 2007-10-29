@@ -40,16 +40,62 @@ public:
     ~NotationRules() { };
 
     /**
+     * If a single note is above the middle line, the preferred direction is up.
+     *
      * If a single note is on the middle line, the preferred direction is down.
+     *
+     * If a single note is below the middle line, the preferred direction is down.
      */
     bool isStemUp(int heightOnStaff) { return heightOnStaff < 4; }
 
     /**
-     * If the extreme notes in a chord are an equal distance from the middle line,
-     * the preferred direction is down.
+     * If the highest note in a chord is more distant from the middle
+     * line than the lowest note in a chord, the preferred direction is down.
+     *
+     * If the extreme notes in a chord are an equal distance from the 
+     * middle line, the preferred direction is down.
+     *
+     * If the lowest note in a chord is more distant from the middle
+     * line than the highest note in a chord, the preferred direction is up.
      */
     bool isStemUp(int highestHeightOnStaff, int lowestHeightOnStaff) {
         return (highestHeightOnStaff + lowestHeightOnStaff) < 2*4;
+    }
+
+    /**
+     * If majority of notes are below the middle line, 
+     * the preferred direction is up.
+     *
+     * If notes are equally distributed around the middle line,
+     * the preferred direction is down.
+     *
+     * If majority of notes are above the middle line, 
+     * the preferred direction is down.
+     */
+    bool isBeamAboveWeighted(int weightAbove, int weightBelow) {
+        return weightBelow > weightAbove;
+    }
+
+    /**
+     * If the highest note in a group is more distant from the middle
+     * line than the lowest note in a group, the preferred direction is down.
+     *
+     * If the extreme notes in a group are an equal distance from the 
+     * middle line, the preferred direction is down.
+     *
+     * If the lowest note in a group is more distant from the middle
+     * line than the highest note in a group, the preferred direction is up.
+     */
+    bool isBeamAbove(int highestHeightOnStaff, int lowestHeightOnStaff) {
+        return (highestHeightOnStaff + lowestHeightOnStaff) < 2*4;
+    }
+    bool isBeamAbove(int highestHeightOnStaff, int lowestHeightOnStaff,
+                     int weightAbove, int weightBelow) {
+        if (highestHeightOnStaff + lowestHeightOnStaff == 2*4) {
+	    return isBeamAboveWeighted(weightAbove,weightBelow);
+	} else {
+	    return isBeamAbove(highestHeightOnStaff,lowestHeightOnStaff);
+	}
     }
 };
 
