@@ -4127,6 +4127,55 @@
 	  </listitem>
 	</varlistentry>
       </variablelist>
+
+      <sect2>
+	<title>Transposing</title>
+	
+	<para>
+	  <screenshot>
+	    <mediaobject>
+	      <imageobject>
+	        <imagedata fileref="transpose-by-interval.png" format="PNG"/>
+		  </imageobject>
+	  	  <textobject>
+	        <phrase>Transposing by interval</phrase>
+	      </textobject>
+	    </mediaobject>
+	  </screenshot>
+	</para>
+	<para>
+	  In Notation view menu there are two functions which can be
+	  used to transpose notes by an arbitrary interval, namely
+	    <menuchoice>
+	      <guimenu lang="en">Adjust</guimenu>
+	      <guimenuitem>Transpose</guimenuitem>
+	      <guimenuitem>Transpose by Semitones</guimenuitem>
+	    </menuchoice>
+	  function which asks just the number of semitones to be
+	  transposed, and
+	    <menuchoice>
+	      <guimenu lang="en">Adjust</guimenu>
+	      <guimenuitem>Transpose</guimenuitem>
+	      <guimenuitem>Transpose by Interval</guimenuitem>
+	    </menuchoice>
+	  function which shows a neat dialog that can be used to 
+	  transpose notes. In the latter, the dialog shows an example 
+	  notes before and after transposing and expresses the
+	  interval in written form. The interval may be changed either
+	  by dragging the notes shown by the dialog or by changing
+	  separately the base note, its octavation and accidentals.
+	</para>
+	<para>
+	  In Segment view, Notation view, and Track view there is also
+	    <menuchoice>
+	      <guimenu lang="en">Segment(s)</guimenu>
+	      <guimenuitem>Transpose by Interval</guimenuitem>
+	    </menuchoice>
+	  function which makes a transpose to entire segment. In this
+	  dialog you may also choose whether only the notes are
+	  transposed or the keys of the segment are transposed also.
+	</para>
+      </sect2>
     </sect1>
 
     <!-- Insertion: notes, auto-ties, accidentals -->
