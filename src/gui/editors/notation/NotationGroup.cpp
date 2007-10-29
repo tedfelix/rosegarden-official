@@ -28,6 +28,7 @@
 
 #include "base/Equation.h"
 #include "base/Event.h"
+#include "base/NotationRules.h"
 #include "base/NotationTypes.h"
 #include "base/Quantizer.h"
 #include "NotationChord.h"
@@ -230,6 +231,8 @@ NotationGroup::height(const NELIterator &i) const
 void
 NotationGroup::applyStemProperties()
 {
+    NotationRules rules;
+
     NELIterator initialNote(getInitialNote()),
     finalNote( getFinalNote());
 
@@ -261,7 +264,7 @@ NotationGroup::applyStemProperties()
     << m_weightAbove << ", weightBelow " << m_weightBelow
     << ", up " << up << ", down " << down << endl;
 
-    bool aboveNotes = !(m_weightAbove > m_weightBelow);
+    bool aboveNotes = rules.isBeamAbove(height(getHighestNote()),height(getLowestNote()),m_weightAbove,m_weightBelow);
     if (up != down) {
         if (up > down)
             aboveNotes = true;
@@ -347,8 +350,10 @@ NotationGroup::Beam
 
 NotationGroup::calculateBeam(NotationStaff &staff)
 {
+    NotationRules rules;
+
     Beam beam;
-    beam.aboveNotes = !(m_weightAbove > m_weightBelow);
+    beam.aboveNotes = rules.isBeamAbove(height(getHighestNote()),height(getLowestNote()),m_weightAbove,m_weightBelow);
     beam.startY = 0;
     beam.gradient = 0;
     beam.necessary = false;
