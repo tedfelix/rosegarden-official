@@ -23,6 +23,14 @@
 #ifndef _NOTATION_RULES_H_
 #define _NOTATION_RULES_H_
 
+
+/**
+ * Common major and minor scales.
+ */
+static int scale_Cmajor[] = { 0, 2, 4, 5, 7, 9, 11 };
+static int scale_Cminor[] = { 0, 2, 3, 5, 7, 8, 10 };
+static int scale_Cminor_harmonic[] = { 0, 2, 3, 5, 7, 8, 11 };
+
 namespace Rosegarden
 {
 

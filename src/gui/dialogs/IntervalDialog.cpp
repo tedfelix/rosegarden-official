@@ -30,6 +30,7 @@
 #include <klocale.h>
 #include "misc/Strings.h"
 #include "base/MidiDevice.h"
+#include "base/NotationRules.h"
 #include <kcombobox.h>
 #include <kdialogbase.h>
 #include <qframe.h>
@@ -108,36 +109,12 @@ IntervalDialog::getOctaveDistance()
     return m_targetnote->getOctave() - m_referencenote->getOctave();
 }
 
-// input: C = 0, D = 1, E = 2, F = 3, etc
-// output: C = 0, D = 2, E = 4, F = 5, etc
-int
-getChromaticStepValue(int stepnr)
-{
-    switch (stepnr)
-    {
-    case 0: //C
-       return 0;
-    case 1: //D
-       return 2;
-    case 2: //E
-       return 4;
-    case 3: //F
-       return 5;
-    case 4: //G
-       return 7;
-    case 5: //A
-       return 9;
-    case 6: //B
-       return 11;
-    }
-}
-
 // chromatic distance between the steps, not taking account octaves or 
 // accidentals
 int
 IntervalDialog::getStepDistanceChromatic()
 {
-    return getChromaticStepValue(m_targetnote->getStep()) - getChromaticStepValue(m_referencenote->getStep());
+    return scale_Cmajor[m_targetnote->getStep()] - scale_Cmajor[m_referencenote->getStep()];
     // - getChromaticStepValue(m_referencestep->currentItem());
     //return m_targetnote->getPitch() - m_referencenote->getPitch();
 }
@@ -177,13 +154,8 @@ IntervalDialog::getIntervalName(int intervalDiatonic, int intervalChromatic)
         displayIntervalChromatic = -displayIntervalChromatic;
     }
     
-    // the 'natural' (perfect / major) chromatic intervals associated 
-    // with each diatonic step
-    static int stepIntervals[] = { 0,2,4,5,7,9,11 };
-        
-        
     int octaves = displayIntervalDiatonic / 7;
-    int deviation = displayIntervalChromatic % 12 - stepIntervals[displayIntervalDiatonic % 7];
+    int deviation = displayIntervalChromatic % 12 - scale_Cmajor[displayIntervalDiatonic % 7];
     // Note (hjj):
     // "1 octave and a diminished octave" is better than
     // "2 octaves and a diminished unison"
