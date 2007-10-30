@@ -59,10 +59,10 @@ PitchDragLabel::~PitchDragLabel()
 void
 PitchDragLabel::slotSetPitch(int p)
 {
-    bool up = (p > m_pitch);
-    m_usingSharps = up;
     if (m_pitch == p)
         return ;
+    bool up = (p > m_pitch);
+    m_usingSharps = up;
     m_pitch = p;
     calculatePixmap();
     emitPitchChange();
@@ -108,25 +108,18 @@ PitchDragLabel::mouseMoveEvent(QMouseEvent *e)
             newPitch = 127;
 
         if (m_pitch != newPitch) {
-            bool up = (newPitch > m_pitch);
-            m_pitch = newPitch;
-            m_usingSharps = up;
-            calculatePixmap();
-            emit pitchDragged(m_pitch);
-	    if (up)
+	    if (newPitch > m_pitch)
 	    {
 		// use sharps
-		emit pitchDragged(m_pitch, (int)(((long)m_pitch) / 12),
-                                  steps_Cmajor_with_sharps[m_pitch % 12]);
+		emit pitchDragged(newPitch, (int)(((long)newPitch) / 12),
+                                  steps_Cmajor_with_sharps[newPitch % 12]);
 	    }
 	    else
 	    {
 		// use flats
-		emit pitchDragged(m_pitch, (int)(((long)m_pitch) / 12),
-                                  steps_Cmajor_with_flats[m_pitch % 12]);
+		emit pitchDragged(newPitch, (int)(((long)newPitch) / 12),
+                                  steps_Cmajor_with_flats[newPitch % 12]);
 	    }
-            emit preview(m_pitch);
-            paintEvent(0);
         }
     }
 }
@@ -163,21 +156,17 @@ PitchDragLabel::wheelEvent(QWheelEvent *e)
 {
     if (e->delta() > 0) {
         if (m_pitch < 127) {
-            ++m_pitch;
-            m_usingSharps = true;
-            calculatePixmap();
-			emitPitchChange();
-            emit preview(m_pitch);
-            paintEvent(0);
+	    int newPitch = m_pitch + 1;
+	    // use sharps
+	    emit pitchDragged(newPitch, (int)(((long)newPitch) / 12),
+                              steps_Cmajor_with_sharps[newPitch % 12]);
         }
     } else {
         if (m_pitch > 0) {
-            --m_pitch;
-            m_usingSharps = false;
-            calculatePixmap();
-            emitPitchChange();
-            emit preview(m_pitch);
-            paintEvent(0);
+	    int newPitch = m_pitch - 1;
+	    // use flats
+	    emit pitchDragged(newPitch, (int)(((long)newPitch) / 12),
+                              steps_Cmajor_with_flats[newPitch % 12]);
         }
     }
 }

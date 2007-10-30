@@ -118,10 +118,10 @@ DiatonicPitchChooser::DiatonicPitchChooser(QString title,
     //connect(m_pitchDragLabel, SIGNAL(pitchChanged(int)),
     //        this, SIGNAL(pitchChanged(int)));
 
-    connect(m_pitchDragLabel, SIGNAL(pitchChanged(int,int,int)),
+    connect(m_pitchDragLabel, SIGNAL(pitchDragged(int,int,int)),
             this, SIGNAL(noteChanged(int,int,int)));
 
-    connect(m_pitchDragLabel, SIGNAL(pitchDragged(int,int,int)),
+    connect(m_pitchDragLabel, SIGNAL(pitchChanged(int,int,int)),
             this, SIGNAL(noteChanged(int,int,int)));
 
     connect(m_pitchDragLabel, SIGNAL(preview(int)),
@@ -150,15 +150,12 @@ DiatonicPitchChooser::slotSetPitch(int pitch)
 
     m_octave->setCurrentItem((int)(((long) pitch) / 12));
 
-    // hjj: Instead of steps_Cmajor, the following line was related to :
-    //   static int steps[] = { 0,0,1,2,2,3,3,4,4,5,6,6 };
-    // but why ?
     int step = steps_Cmajor[pitch % 12];
     m_step->setCurrentItem(step);
     
-    Accidental accidental = Accidentals::getAccidental((pitch % 12) - scale_Cmajor[step]);
+    int pitchChange = (pitch % 12) - scale_Cmajor[step];
     
-    m_accidental->setCurrentItem(Accidentals::getPitchOffset(accidental) + 2);
+    m_accidental->setCurrentItem(pitchChange + 2);
 
     m_pitchLabel->setText(QString("%1").arg(pitch));
     
@@ -184,7 +181,7 @@ DiatonicPitchChooser::slotSetOctave(int octave)
     update();
 }
 
-/** input 0..5: doubleflat .. doublesharp */
+/** input 0..4: doubleflat .. doublesharp */
 void
 DiatonicPitchChooser::slotSetAccidental(int accidental)
 {
@@ -216,8 +213,8 @@ DiatonicPitchChooser::slotSetNote(int pitch, int octave, int step)
     m_octave->setCurrentItem(octave);
     m_step->setCurrentItem(step);
     
-    Accidental accidental = Accidentals::getAccidental(pitch - (octave * 12 + scale_Cmajor[step]));
-    m_accidental->setCurrentItem(Accidentals::getPitchOffset(accidental) + 2);
+    int pitchOffset = pitch - (octave * 12 + scale_Cmajor[step]);
+    m_accidental->setCurrentItem(pitchOffset + 2);
 
     //MidiPitchLabel pl(p);
     m_pitchLabel->setText(QString("%1").arg(pitch));
