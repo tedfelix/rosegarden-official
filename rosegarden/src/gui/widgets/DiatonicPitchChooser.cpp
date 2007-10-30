@@ -42,8 +42,6 @@
 namespace Rosegarden
 {
 
-static int steps[] = { 0,0,1,2,2,3,3,4,4,5,6,6 };
-
 DiatonicPitchChooser::DiatonicPitchChooser(QString title,
                            QWidget *parent,
                            int defaultNote,
@@ -151,7 +149,11 @@ DiatonicPitchChooser::slotSetPitch(int pitch)
         m_pitchDragLabel->slotSetPitch(pitch);
 
     m_octave->setCurrentItem((int)(((long) pitch) / 12));
-    int step = steps[pitch % 12];
+
+    // hjj: Instead of steps_Cmajor, the following line was related to :
+    //   static int steps[] = { 0,0,1,2,2,3,3,4,4,5,6,6 };
+    // but why ?
+    int step = steps_Cmajor[pitch % 12];
     m_step->setCurrentItem(step);
     
     Accidental accidental = Accidentals::getAccidental((pitch % 12) - scale_Cmajor[step]);

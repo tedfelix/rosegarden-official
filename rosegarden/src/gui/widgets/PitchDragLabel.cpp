@@ -25,6 +25,7 @@
 
 #include "PitchDragLabel.h"
 
+#include "base/NotationRules.h"
 #include "base/NotationTypes.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include <qcanvas.h>
@@ -91,9 +92,6 @@ PitchDragLabel::mousePressEvent(QMouseEvent *e)
     }
 }
 
-static int stepsSharp[] = { 0,0,1,1,2,3,3,4,4,5,5,6 };
-static int stepsFlat[] = { 0,1,1,2,2,3,4,4,5,5,6,6 };
-
 void
 PitchDragLabel::mouseMoveEvent(QMouseEvent *e)
 {
@@ -118,12 +116,14 @@ PitchDragLabel::mouseMoveEvent(QMouseEvent *e)
 	    if (up)
 	    {
 		// use sharps
-		emit pitchDragged(m_pitch, (int)(((long)m_pitch) / 12), stepsSharp[m_pitch % 12]);
+		emit pitchDragged(m_pitch, (int)(((long)m_pitch) / 12),
+                                  steps_Cmajor_with_sharps[m_pitch % 12]);
 	    }
 	    else
 	    {
 		// use flats
-		emit pitchDragged(m_pitch, (int)(((long)m_pitch) / 12), stepsFlat[m_pitch % 12]);
+		emit pitchDragged(m_pitch, (int)(((long)m_pitch) / 12),
+                                  steps_Cmajor_with_flats[m_pitch % 12]);
 	    }
             emit preview(m_pitch);
             paintEvent(0);

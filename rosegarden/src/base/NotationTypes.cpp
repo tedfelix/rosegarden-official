@@ -1668,11 +1668,8 @@ Pitch::getNoteInScale(const Key &key) const
     p += 24; // in case these calculations made it -ve
     p %= 12;
     
-    static int major[]          = { 0, 0, 1, 1, 2, 3, 3, 4, 4, 5, 5, 6 };
-    static int minor_harmonic[] = { 0, 0, 1, 2, 2, 3, 3, 4, 5, 5, 5, 6 };
-
-    if (key.isMinor()) return minor_harmonic[p];
-    else return major[p];
+    if (key.isMinor()) return steps_Cminor_harmonic[p];
+    else return steps_Cmajor[p];
 }
 
 char
