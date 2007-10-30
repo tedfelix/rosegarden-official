@@ -1,5 +1,6 @@
 // -*- c-basic-offset: 4 -*-
 
+#include "NotationRules.h"
 #include "NotationTypes.h"
 
 using namespace Rosegarden;
@@ -275,8 +276,7 @@ int testNote(Accidental &acc, Key &key, int octave, int note)
 
     if (key == Key("C major")) {
 	if (acc == Accidentals::NoAccidental) {
-	    static int pitches[] = { 0, 2, 4, 5, 7, 9, 11 };
-	    Pitch comparative(pitches[nis], octave);
+	    Pitch comparative(scale_Cmajor[nis], octave);
 	    if (comparative.getPerformancePitch() != p) {
 		cout << "testNote: " << note << " " << acc << ", " << key.getName() << ", octave " << octave << ": "
 		     << "comparative pitch is " << comparative.getPerformancePitch() << ", should be " << p << endl;
