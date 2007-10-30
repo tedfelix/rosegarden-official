@@ -73,7 +73,7 @@ fi
 
 reqd=
 
-for x in mktemp OR tempfile; do
+for x in mktemp tempfile; do
     if [ -x "`type -path $x`" ]; then
 	prog_temp_file=$x
 	break;
@@ -89,7 +89,7 @@ if [ -x "`type -path kdialog`" ]; then
     prog_kdialog=kdialog
 fi
 
-for x in acroread OR kpdf OR kghostview OR gpdf OR xpdf OR evince; do
+for x in acroread kpdf kghostview gpdf xpdf evince; do
     if [ -x "`type -path $x`" ]; then
 	prog_pdf_view=$x
 	break;
