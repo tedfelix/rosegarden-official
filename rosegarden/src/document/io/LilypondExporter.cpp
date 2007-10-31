@@ -1235,7 +1235,10 @@ LilypondExporter::writeBar(Segment *s,
 
     bool isNew = false;
     TimeSignature timeSignature = m_composition->getTimeSignatureInBar(barNo, isNew);
-    if (isNew && !timeSignature.isHidden()) {
+    if (isNew) {
+	if (timeSignature.isHidden()) {
+	    str << "\\once \\override Staff.TimeSignature #'break-visibility = #(vector #f #f #f) ";
+	}
         str << "\\time "
         << timeSignature.getNumerator() << "/"
         << timeSignature.getDenominator()
