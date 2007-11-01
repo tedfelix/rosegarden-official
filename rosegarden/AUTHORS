@@ -8,6 +8,7 @@ Developers:
 
 D. Michael McIntyre <dmmcintyr@users.sourceforge.net>
 Pedro Lopez-Cabanillas <plcl@users.sourceforge.net>
+Heikki Johannes Junes <hjunes@users.sourceforge.net>
 
 
 Contributors:
@@ -115,13 +116,6 @@ Carolyn McIntyre (deceased)
       time, and always humored him when he came over to play her some new
       instrument, even though she really hated his playing.
       Born October 19, 1951, died September 21, 2007, R. I. P.
-
-Heikki Johannes Junes <hjunes@cc.hut.fi>
-    * Finnish translation
-    * LilyPond 2.x export
-    * LilyPond bug fixes/enhancements
-    * Invert, retrograde and retrograde invert functions
-    * Soprano, French violin, etc. clefs in Notation View
 
 Piotr Sawicki <pelle@plusnet.pl>
     * Polish translation

@@ -421,6 +421,7 @@ int main(int argc, char *argv[])
     aboutData.addAuthor("Richard Bown (lead)", 0, "richard.bown@ferventsoftware.com");
     aboutData.addAuthor("D. Michael McIntyre", 0, "dmmcintyr@users.sourceforge.net");
     aboutData.addAuthor("Pedro Lopez-Cabanillas", 0, "plcl@users.sourceforge.net");
+    aboutData.addAuthor("Heikki Johannes Junes", 0, "hjunes@users.sourceforge.net");
 
     aboutData.addCredit("Randall Farmer", I18N_NOOP("Chord labelling code"), " rfarme@simons-rock.edu");
     aboutData.addCredit("Hans  Kieserman", I18N_NOOP("Lilypond output\nassorted other patches\ni18n-ization"), "hkieserman@mail.com");
@@ -457,7 +458,6 @@ int main(int argc, char *argv[])
     aboutData.addCredit("Feliu Ferrer", I18N_NOOP("Catalan translation"), "mverge2@pie.xtec.es");
     aboutData.addCredit("Quim Perez i Noguer", I18N_NOOP("Catalan translation"), "noguer@osona.com");
     aboutData.addCredit("Carolyn McIntyre", I18N_NOOP("1.2.3 splash screen photo\nGave birth to D. Michael McIntyre, bought him a good flute once\nupon a time, and always humored him when he came over to play her\nsome new instrument, even though she really hated his playing.\nBorn October 19, 1951, died September 21, 2007, R. I. P."), "DECEASED");
-    aboutData.addCredit("Heikki Johannes Junes", I18N_NOOP("Finnish translation\nLilyPond export fixes/improvements"), "hjunes@cc.hut.fi");
     aboutData.addCredit("Stephen Torri", I18N_NOOP("Initial guitar chord editing code"), "storri@torri.org");
     aboutData.addCredit("Piotr Sawicki", I18N_NOOP("Polish translation"), "pelle@plusnet.pl");
     aboutData.addCredit("David García-Abad", I18N_NOOP("Basque translation"), "davidgarciabad@telefonica.net");
