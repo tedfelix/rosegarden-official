@@ -6674,6 +6674,9 @@
       <para>
         <itemizedlist>
 	  <listitem><para>
+	      1.6.0 &ndash; November 2007: fretboards, diatonic transpose, multiple lines of lyrics, marker ruler improvements, overlapping notes visibility, LilyPond export enhancements and new dialog, better infrared remote control support, better configuration dialog, fixes
+	  </para></listitem>
+	  <listitem><para>
 	      1.5.1 &ndash; March 2007: bug fixes
 	  </para></listitem>
 	  <listitem><para>
