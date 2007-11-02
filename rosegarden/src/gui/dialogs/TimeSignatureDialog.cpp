@@ -173,12 +173,12 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
     config->setGroup(GeneralOptionsConfigGroup);
 
     m_hideSignatureButton = new QCheckBox
-                            (i18n("Make the time signature hidden"), groupBox);
+                            (i18n("Hide the time signature"), groupBox);
     m_hideSignatureButton->setChecked
     (config->readBoolEntry("timesigdialogmakehidden", false));
 
     m_hideBarsButton = new QCheckBox
-                       (i18n("Make subsequent bar lines hidden"), groupBox);
+                       (i18n("Hide the affected bar lines"), groupBox);
     m_hideBarsButton->setChecked
     (config->readBoolEntry("timesigdialogmakehiddenbars", false));
 
