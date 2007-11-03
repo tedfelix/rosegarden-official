@@ -988,7 +988,6 @@ LilypondExporter::write()
 		        QString text = "";
 
 		        timeT lastTime = (*i)->getStartTime();
-		        int lastBarNo = m_composition->getBarNumber(lastTime);
 		        for (Segment::iterator j = (*i)->begin();
 		            (*i)->isBeforeEndMarker(j); ++j) {
 		
@@ -1009,7 +1008,6 @@ LilypondExporter::write()
 		            if (!isNote && !isLyric) continue;
 		
 		            timeT myTime = (*j)->getNotationAbsoluteTime();
-		            int myBarNo = m_composition->getBarNumber(myTime);
 		
 			    if (isNote) {
 				if ((myTime > lastTime) || firstNote) {
@@ -1670,7 +1668,6 @@ LilypondExporter::writeBar(Segment *s,
                 Guitar::Chord chord = Guitar::Chord(**i);
                 const Guitar::Fingering& fingering = chord.getFingering();
                 
-                int firstFret = fingering.getStartFret();
                 int barreStart = 0, barreEnd = 0, barreFret = 0;
 
                 // 

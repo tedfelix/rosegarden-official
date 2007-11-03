@@ -160,43 +160,43 @@ private:
     static const PropertyName SKIP_PROPERTY;
     
     unsigned int m_paperSize;
-    static const int PAPER_A3      = 0;
-    static const int PAPER_A4      = 1;
-    static const int PAPER_A5      = 2;
-    static const int PAPER_A6      = 3;
-    static const int PAPER_LEGAL   = 4;
-    static const int PAPER_LETTER  = 5;
-    static const int PAPER_TABLOID = 6;
-    static const int PAPER_NONE    = 7;
+    static const unsigned int PAPER_A3      = 0;
+    static const unsigned int PAPER_A4      = 1;
+    static const unsigned int PAPER_A5      = 2;
+    static const unsigned int PAPER_A6      = 3;
+    static const unsigned int PAPER_LEGAL   = 4;
+    static const unsigned int PAPER_LETTER  = 5;
+    static const unsigned int PAPER_TABLOID = 6;
+    static const unsigned int PAPER_NONE    = 7;
 
     bool m_paperLandscape;
     unsigned int m_fontSize;
-    static const int FONT_11	= 0;
-    static const int FONT_13	= 1;
-    static const int FONT_16	= 2;
-    static const int FONT_19	= 3;
-    static const int FONT_20	= 4;
-    static const int FONT_23	= 5;
-    static const int FONT_26	= 6;
+    static const unsigned int FONT_11	= 0;
+    static const unsigned int FONT_13	= 1;
+    static const unsigned int FONT_16	= 2;
+    static const unsigned int FONT_19	= 3;
+    static const unsigned int FONT_20	= 4;
+    static const unsigned int FONT_23	= 5;
+    static const unsigned int FONT_26	= 6;
 
     bool m_exportLyrics;
     bool m_exportMidi;
 
     unsigned int m_lyricsHAlignment;
-    static const int LEFT_ALIGN   = 0;
-    static const int CENTER_ALIGN = 1;
-    static const int RIGHT_ALIGN  = 2;
+    static const unsigned int LEFT_ALIGN   = 0;
+    static const unsigned int CENTER_ALIGN = 1;
+    static const unsigned int RIGHT_ALIGN  = 2;
     
     unsigned int m_exportTempoMarks;
-    static const int EXPORT_NONE_TEMPO_MARKS = 0;
-    static const int EXPORT_FIRST_TEMPO_MARK = 1;
-    static const int EXPORT_ALL_TEMPO_MARKS = 2;
+    static const unsigned int EXPORT_NONE_TEMPO_MARKS = 0;
+    static const unsigned int EXPORT_FIRST_TEMPO_MARK = 1;
+    static const unsigned int EXPORT_ALL_TEMPO_MARKS = 2;
     
     unsigned int m_exportSelection;
-    static const int EXPORT_ALL_TRACKS = 0;
-    static const int EXPORT_NONMUTED_TRACKS = 1;
-    static const int EXPORT_SELECTED_TRACK = 2;
-    static const int EXPORT_SELECTED_SEGMENTS = 3;
+    static const unsigned int EXPORT_ALL_TRACKS = 0;
+    static const unsigned int EXPORT_NONMUTED_TRACKS = 1;
+    static const unsigned int EXPORT_SELECTED_TRACK = 2;
+    static const unsigned int EXPORT_SELECTED_SEGMENTS = 3;
 
     bool m_exportPointAndClick;
     bool m_exportBeams;
