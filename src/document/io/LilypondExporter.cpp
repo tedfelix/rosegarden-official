@@ -1395,6 +1395,18 @@ LilypondExporter::writeBar(Segment *s,
                 << xDisplacement << " ";
             }
 
+            bool hiddenNote = false;
+            if (e->has(INVISIBLE)) {
+                if (e->get
+                        <Bool>(INVISIBLE)) {
+                    hiddenNote = true;
+                }
+            }
+	    
+	    if ( hiddenNote ) {
+	        str << "\\hideNotes ";
+	    }
+
             if (e->has(NotationProperties::STEM_UP)) {
                 if (e->get
                         <Bool>(NotationProperties::STEM_UP)) {
@@ -1510,6 +1522,10 @@ LilypondExporter::writeBar(Segment *s,
 
             if (tiedForward)
                 str << "~ ";
+
+	    if ( hiddenNote ) {
+	        str << "\\unHideNotes ";
+	    }
 
             if (newBeamedGroup) {
                 // This is a workaround for bug #1705430:
