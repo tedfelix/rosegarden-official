@@ -84,6 +84,7 @@
 #include <kdockwidget.h>
 #include <kglobal.h>
 #include <kiconloader.h>
+#include <kstddirs.h>
 #include <ktabwidget.h>
 #include <kxmlguiclient.h>
 #include <qaccel.h>
@@ -695,13 +696,23 @@ EditView::setupActions()
 {
     createInsertPitchActionMenu();
 
-    new KAction(AddTempoChangeCommand::getGlobalName(), 0, this,
-                SLOT(slotAddTempo()), actionCollection(),
-                "add_tempo");
+    //
+    // Tempo and time signature changes
+    //
+    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+    QCanvasPixmap pixmap(pixmapDir + "/toolbar/event-insert-tempo.xpm");
+    QIconSet icon = QIconSet(pixmap);
+    new KAction(AddTempoChangeCommand::getGlobalName(),
+		icon, 0,
+		this, SLOT(slotAddTempo()),
+		actionCollection(), "add_tempo");
 
-    new KAction(AddTimeSignatureCommand::getGlobalName(), 0, this,
-                SLOT(slotAddTimeSignature()), actionCollection(),
-                "add_time_signature");
+    pixmap.load(pixmapDir + "/toolbar/event-insert-timesig.xpm");
+    icon = QIconSet(pixmap);
+    new KAction(AddTimeSignatureCommand::getGlobalName(),
+		icon, 0,
+		this, SLOT(slotAddTimeSignature()),
+		actionCollection(), "add_time_signature");
 
     //
     // Transforms
