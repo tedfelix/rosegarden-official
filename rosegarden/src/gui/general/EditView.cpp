@@ -700,14 +700,14 @@ EditView::setupActions()
     // Tempo and time signature changes
     //
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QCanvasPixmap pixmap(pixmapDir + "/toolbar/event-insert-tempo.xpm");
+    QCanvasPixmap pixmap(pixmapDir + "/toolbar/event-insert-tempo.png");
     QIconSet icon = QIconSet(pixmap);
     new KAction(AddTempoChangeCommand::getGlobalName(),
 		icon, 0,
 		this, SLOT(slotAddTempo()),
 		actionCollection(), "add_tempo");
 
-    pixmap.load(pixmapDir + "/toolbar/event-insert-timesig.xpm");
+    pixmap.load(pixmapDir + "/toolbar/event-insert-timesig.png");
     icon = QIconSet(pixmap);
     new KAction(AddTimeSignatureCommand::getGlobalName(),
 		icon, 0,
