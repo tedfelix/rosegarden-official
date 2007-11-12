@@ -239,8 +239,8 @@ for years.  Sorry about that, folks.  Patches welcome.</i>
 <html>
 <p>If you're working with a human performance and you need to insert some new
 notes, these new notes will sound for their entire written duration.  To blend
-these new notes into a human performance, select them, then use <b>Adjust -> Notes ->
-Interpret</b> from the notation view to interpret any marks and  massage their performance
+these new notes into a human performance, select them, then use <b>Adjust -> Interpret...</b> 
+from the notation view to interpret any marks and  massage their performance
 durations to something less mechanical.</p>
 </html>
 </tip>
