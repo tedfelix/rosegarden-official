@@ -528,7 +528,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
                                         Qt::AlignRight | Qt::AlignBottom);
     hideHeadersButton->setIconSet(QIconSet(pixmap));
     hideHeadersButton->setFlat(true);
-    QToolTip::add(hideHeadersButton, "Close track headers");
+    QToolTip::add(hideHeadersButton, i18n("Close track headers"));
     headersTopGrid->setMargin(4);
 
     m_grid->addWidget(m_headersTopFrame, TOPBARBUTTONS_ROW, 0);
