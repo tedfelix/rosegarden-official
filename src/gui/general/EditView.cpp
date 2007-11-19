@@ -1611,14 +1611,16 @@ void
 EditView::slotFlipForwards()
 {
     RG_DEBUG << "EditView::slotFlipForwards" << endl;
-    getCurrentControlRuler()->flipForwards();
+    ControlRuler* ruler = getCurrentControlRuler();
+    if (ruler) ruler->flipForwards();
 }
 
 void
 EditView::slotFlipBackwards()
 {
     RG_DEBUG << "EditView::slotFlipBackwards" << endl;
-    getCurrentControlRuler()->flipBackwards();
+    ControlRuler* ruler = getCurrentControlRuler();
+    if (ruler) ruler->flipBackwards();
 }
 
 ControlRuler* EditView::getCurrentControlRuler()
