@@ -78,9 +78,6 @@ protected:
                    std::ofstream &str);
 
     std::string numToId(int);
-
- private:
-    static const int MAX_DOTS = 4;
 };
 
 
