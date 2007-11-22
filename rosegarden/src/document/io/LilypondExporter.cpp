@@ -747,7 +747,12 @@ LilypondExporter::write()
 
 	    // Check whether the track is a non-midi track.
 	    InstrumentId instrumentId = track->getInstrument();
-	    bool isMidiTrack = (instrumentId >= MidiInstrumentBase && instrumentId < SoftSynthInstrumentBase);
+	    // very off the cuff tentative fix for #1836149; this is so obvious
+	    // a fix that I wonder why this <SoftSynthInstrumentBase was ever
+	    // written in the first place, and it makes me suspicous that I'm
+	    // missing the big picture somewhere.  Anyway, it seems to work:
+	    //bool isMidiTrack = (instrumentId >= MidiInstrumentBase && instrumentId) < SoftSynthInstrumentBase);
+	    bool isMidiTrack = instrumentId >= MidiInstrumentBase;
     
             if (isMidiTrack && ( // Skip non-midi tracks.
 		(m_exportSelection == EXPORT_ALL_TRACKS) || 
