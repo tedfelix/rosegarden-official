@@ -163,7 +163,7 @@ MusicXmlExporter::writeNote(Event *e, timeT lastNoteTime,
         str << "\t\t\t\t<voice>" << "1" << "</voice>" << std::endl;
     }
 
-    Note note = Note::getNearestNote(e->getNotationDuration(), MAX_DOTS);
+    Note note = Note::getNearestNote(e->getNotationDuration());
 
     static const char *noteNames[] = {
         "64th", "32nd", "16th", "eighth", "quarter", "half", "whole", "breve"
