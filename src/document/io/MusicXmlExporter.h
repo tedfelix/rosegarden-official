@@ -68,8 +68,8 @@ public:
 protected:
     RosegardenGUIDoc *m_doc;
     std::string m_fileName;
-    void writeClef(Event *event, std::ofstream &str);
-    void writeKey(Event *event, std::ofstream &str);
+    void writeClef(Rosegarden::Clef, std::ofstream &str);
+    void writeKey(Rosegarden::Key, std::ofstream &str);
     void writeTime(TimeSignature timeSignature, std::ofstream &str);
     void writeNote(Event *e, timeT lastNoteTime,
                    AccidentalTable &table,
