@@ -49,7 +49,9 @@ AddTimeSignatureAndNormalizeCommand::AddTimeSignatureAndNormalizeCommand
     }
 
     for (Composition::iterator i = composition->begin();
-            i != composition->end(); ++i) {
+         i != composition->end(); ++i) {
+
+        if ((*i)->getType() != Segment::Internal) continue;
 
         timeT startTime = (*i)->getStartTime();
         timeT endTime = (*i)->getEndTime();

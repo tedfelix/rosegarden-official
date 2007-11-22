@@ -38,6 +38,7 @@ void
 MakeRegionViableCommand::modifySegment()
 {
     Segment &segment(getSegment());
+    if (segment.getType() != Segment::Internal) return;
     SegmentNotationHelper helper(segment);
 
     helper.makeNotesViable(getStartTime(), getEndTime(), true);
