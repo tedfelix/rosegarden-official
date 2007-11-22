@@ -103,6 +103,7 @@ fi
 
 for x in kprinter gtklp; do
     if [ -x "`type -path $x`" ]; then
+	case "$x" in kprinter) x="$x --stdin";; esac
 	prog_printer=$x
 	break;
     fi
@@ -358,7 +359,7 @@ echo "LilyPond version is $lilypond_version, file version is $fileversion"
 	            $prog_pdf_view "$target"
                 fi
 	        if [ -n "$printing" ]; then
-	            $prog_printer "$target"
+	            $prog_printer < "$target"
 	        fi
             fi
 	    exit 0
