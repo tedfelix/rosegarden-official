@@ -224,13 +224,12 @@ MusicXmlExporter::writeNote(Event *e, timeT lastNoteTime,
 }
 
 void
-MusicXmlExporter::writeKey(Event *event, std::ofstream &str)
+MusicXmlExporter::writeKey(Rosegarden::Key whichKey, std::ofstream &str)
 {
-    Rosegarden::Key whichKey(*event);
     str << "\t\t\t\t<key>" << std::endl;
     str << "\t\t\t\t<fifths>"
-    << (whichKey.isSharp() ? "" : "-")
-    << (whichKey.getAccidentalCount()) << "</fifths>" << std::endl;
+        << (whichKey.isSharp() ? "" : "-")
+        << (whichKey.getAccidentalCount()) << "</fifths>" << std::endl;
     str << "\t\t\t\t<mode>";
     if (whichKey.isMinor()) {
         str << "minor";
@@ -251,12 +250,9 @@ MusicXmlExporter::writeTime(TimeSignature timeSignature, std::ofstream &str)
 }
 
 void
-MusicXmlExporter::writeClef(Event *event, std::ofstream &str)
+MusicXmlExporter::writeClef(Clef whichClef, std::ofstream &str)
 {
     str << "\t\t\t\t<clef>" << std::endl;
-    std::string whichClef = Clef::Treble;
-    event->get
-    <String>(Clef::ClefPropertyName, whichClef);
     if (whichClef == Clef::Treble) {
         str << "\t\t\t\t<sign>G</sign>" << std::endl;
         str << "\t\t\t\t<line>2</line>" << std::endl;
@@ -385,6 +381,8 @@ MusicXmlExporter::write()
         TimeSignature prevTimeSignature;
 
         bool timeSigPending = false;
+        bool keyPending = false;
+        bool clefPending = false;
 
         for (CompositionTimeSliceAdapter::iterator k = adapter.begin();
                 k != adapter.end(); ++k) {
@@ -399,38 +397,73 @@ MusicXmlExporter::write()
 
             // Open a new measure if necessary
             // Incomplete: How does MusicXML handle non-contiguous measures?
+
             int measureNumber = composition->getBarNumber(absoluteTime);
 
-            if (oldMeasureNumber < 0) {
-                str << "\t\t<measure number=\"" << (measureNumber + 1) << "\">" << std::endl;
-                str << "\t\t\t<attributes>" << std::endl;
-                // Divisions is divisions of crotchet (quarter-note) on which all
-                // note-lengths are based
-                str << "\t\t\t\t<divisions>" << Note(Note::Crotchet).getDuration() << "</divisions>" << std::endl;
-                prevTimeSignature = composition->getTimeSignatureAt(composition->getStartMarker());
-                timeSigPending = true;
-                startedAttributes = true;
+            TimeSignature timeSignature = composition->getTimeSignatureAt(absoluteTime);
 
-            } else if (measureNumber > oldMeasureNumber) {
+            if (measureNumber != oldMeasureNumber) {
 
                 if (startedAttributes) {
+                    
+                    // rather bizarrely, MusicXML appears to require
+                    // key, time, clef in that order
+
+                    if (keyPending) {
+                        writeKey(key, str);
+                        keyPending = false;
+                    }
+                    if (timeSigPending) {
+                        writeTime(prevTimeSignature, str);
+                        timeSigPending = false;
+                    }
+                    if (clefPending) {
+                        writeClef(clef, str);
+                        clefPending = false;
+                    }
+
                     str << "\t\t\t</attributes>" << std::endl;
                     startedAttributes = false;
                 }
 
                 while (measureNumber > oldMeasureNumber) {
 
+                    bool first = (oldMeasureNumber < 0);
+
+                    if (!first) {
+                        if (startedAttributes) {
+                            str << "\t\t\t</attributes>" << std::endl;
+                        }                            
+                        str << "\t\t</measure>\n" << std::endl;
+                    }
+
                     ++oldMeasureNumber;
-                    str << "\t\t</measure>\n" << std::endl;
+
                     str << "\t\t<measure number=\"" << (oldMeasureNumber + 1) << "\">" << std::endl;
+
+                    if (first) {
+                        str << "\t\t\t<attributes>" << std::endl;
+                        // Divisions is divisions of crotchet (quarter-note) on which all
+                        // note-lengths are based
+                        str << "\t\t\t\t<divisions>" << Note(Note::Crotchet).getDuration() << "</divisions>" << std::endl;
+                        startedAttributes = true;
+                        timeSigPending = true;
+                    }
                 }
 
                 accTable = AccidentalTable(key, clef);
-
-            } else if (measureNumber < oldMeasureNumber) {
-                // Incomplete: Error!
             }
+
             oldMeasureNumber = measureNumber;
+
+            if (timeSignature != prevTimeSignature) {
+                prevTimeSignature = timeSignature;
+                timeSigPending = true;
+                if (!startedAttributes) {
+                    str << "\t\t\t<attributes>" << std::endl;
+                    startedAttributes = true;
+                }
+            }
 
             // process event
             if (event->isa(Rosegarden::Key::EventType)) {
@@ -439,12 +472,8 @@ MusicXmlExporter::write()
                     str << "\t\t\t<attributes>" << std::endl;
                     startedAttributes = true;
                 }
-                writeKey(event, str);
-                if (timeSigPending) {
-                    writeTime(prevTimeSignature, str);
-                    timeSigPending = false;
-                }
                 key = Rosegarden::Key(*event);
+                keyPending = true;
                 accTable = AccidentalTable(key, clef);
 
             } else if (event->isa(Clef::EventType)) {
@@ -453,27 +482,28 @@ MusicXmlExporter::write()
                     str << "\t\t\t<attributes>" << std::endl;
                     startedAttributes = true;
                 }
-                if (timeSigPending) {
-                    writeTime(prevTimeSignature, str);
-                    timeSigPending = false;
-                }
-                writeClef(event, str);
                 clef = Clef(*event);
+                clefPending = true;
                 accTable = AccidentalTable(key, clef);
 
             } else if (event->isa(Note::EventRestType) ||
                        event->isa(Note::EventType)) {
-
-                if (timeSigPending) {
-                    if (!startedAttributes) {
-                        str << "\t\t\t<attributes>" << std::endl;
-                        startedAttributes = true;
-                    }
-                    writeTime(prevTimeSignature, str);
-                    timeSigPending = false;
-                }
-
+                
                 if (startedAttributes) {
+                
+                    if (keyPending) {
+                        writeKey(key, str);
+                        keyPending = false;
+                    }
+                    if (timeSigPending) {
+                        writeTime(prevTimeSignature, str);
+                        timeSigPending = false;
+                    }
+                    if (clefPending) {
+                        writeClef(clef, str);
+                        clefPending = false;
+                    }
+
                     str << "\t\t\t</attributes>" << std::endl;
                     startedAttributes = false;
                 }
@@ -489,6 +519,25 @@ MusicXmlExporter::write()
         }
 
         if (startedPart) {
+            if (startedAttributes) {
+                
+                if (keyPending) {
+                    writeKey(key, str);
+                    keyPending = false;
+                }
+                if (timeSigPending) {
+                    writeTime(prevTimeSignature, str);
+                    timeSigPending = false;
+                }
+                if (clefPending) {
+                    writeClef(clef, str);
+                    clefPending = false;
+                }
+                
+                str << "\t\t\t</attributes>" << std::endl;
+                startedAttributes = false;
+            }
+
             str << "\t\t</measure>" << std::endl;
             str << "\t</part>" << std::endl;
         }
