@@ -35,6 +35,7 @@
 #include <qpushbutton.h>
 #include <qstring.h>
 #include <qwidget.h>
+#include "misc/Debug.h"
 
 
 namespace Rosegarden
@@ -124,6 +125,14 @@ CountdownDialog::setElapsedTime(int elapsedSeconds)
     if (m_pastEndMode) {
         m_progressBar->setPosition(m_progressBarWidth);
     } else {
+        // Attempt a simplistic fix for #1838190.  In the context of an isolated
+	// test example, I'm fairly sure m_totalTime was 0, causing a divide by
+	// zero error, though the trace just listed it as an "Arithmetic
+	// exception."
+        if (m_totalTime == 0) {
+	    RG_DEBUG << "CountdownDialog::setElapsedTime: FAILSAFE CODE FIRED, see bug #1838190 for details" << endl;
+	    m_totalTime = 1;
+	}
         int barPosition = m_progressBarWidth -
                           (elapsedSeconds * m_progressBarWidth) / m_totalTime;
         m_progressBar->setPosition(barPosition);
