@@ -205,6 +205,8 @@ signals:
     void audioSegmentAutoSplit(Segment*);
     void editRepeat(Segment*, timeT);
 
+    void setPointerPosition(timeT);
+
     void showContextHelp(const QString &);
 
 protected:
