@@ -168,6 +168,10 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
             SIGNAL(editRepeat(Segment*, timeT)),
             SLOT(slotEditRepeat(Segment*, timeT)));
 
+    connect(m_trackEditor->getSegmentCanvas(),
+            SIGNAL(setPointerPosition(timeT)),
+            doc, SLOT(slotSetPointerPosition(timeT)));
+
     connect(m_trackEditor,
             SIGNAL(droppedDocument(QString)),
             parent,
