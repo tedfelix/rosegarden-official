@@ -265,7 +265,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
 
     m_cfg->setGroup(MatrixViewConfigGroup);
     m_matrixBackgroundTextures->setChecked(m_cfg->readBoolEntry
-                                           ("backgroundtextures", false));
+                                           ("backgroundtextures", true));
     m_cfg->setGroup(NotationViewConfigGroup);
     m_notationBackgroundTextures->setChecked(m_cfg->readBoolEntry
                                              ("backgroundtextures", true));

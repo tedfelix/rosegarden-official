@@ -196,12 +196,15 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     QCanvas *tCanvas = new QCanvas(this);
 
     m_config->setGroup(MatrixViewConfigGroup);
-    if (m_config->readBoolEntry("backgroundtextures", false)) {
+    if (m_config->readBoolEntry("backgroundtextures", true)) {
         QPixmap background;
         QString pixmapDir =
             KGlobal::dirs()->findResource("appdata", "pixmaps/");
-        if (background.load(QString("%1/misc/bg-paper-white.xpm").
-                            arg(pixmapDir))) {
+	// We now use a lined background for the non-percussion matrix,
+	// suggested and supplied by Alessandro Preziosi
+	QString backgroundPixmap = isDrumMode() ? "bg-paper-white.xpm" : "bg-matrix-lines.xpm";
+        if (background.load(QString("%1/misc/%2").
+                            arg(pixmapDir, backgroundPixmap))) {
             tCanvas->setBackgroundPixmap(background);
         }
     }
