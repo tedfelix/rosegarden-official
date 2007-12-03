@@ -196,7 +196,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     QCanvas *tCanvas = new QCanvas(this);
 
     m_config->setGroup(MatrixViewConfigGroup);
-    if (m_config->readBoolEntry("backgroundtextures", true)) {
+    if (m_config->readBoolEntry("backgroundtextures-1.6-plus", true)) {
         QPixmap background;
         QString pixmapDir =
             KGlobal::dirs()->findResource("appdata", "pixmaps/");
@@ -523,9 +523,9 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     setCurrentSelection(0, false);
 
-    // Change this when the matrix view will have its own page
+    // Change this if the matrix view ever has its own page
     // in the config dialog.
-    setConfigDialogPageIndex(2);
+    setConfigDialogPageIndex(0);
 
     // default zoom
     m_config->setGroup(MatrixViewConfigGroup);
