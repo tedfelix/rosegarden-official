@@ -769,7 +769,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
          this, SLOT(slotUpdateStaffName()));
     }
 
-    setConfigDialogPageIndex(2);
+    setConfigDialogPageIndex(3);
     setOutOfCtor();
 
     // Property and Control Rulers
