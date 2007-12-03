@@ -323,7 +323,7 @@ void GeneralConfigurationPage::apply()
         mainTextureChanged = true;
     } else {
         m_cfg->setGroup(MatrixViewConfigGroup);
-        if (m_cfg->readBoolEntry("backgroundtextures", false) !=
+        if (m_cfg->readBoolEntry("backgroundtextures-1.6-plus", false) !=
             m_matrixBackgroundTextures->isChecked()) {
             texturesChanged = true;
         } else {
@@ -339,7 +339,7 @@ void GeneralConfigurationPage::apply()
     m_cfg->writeEntry("backgroundtextures", m_backgroundTextures->isChecked());
 
     m_cfg->setGroup(MatrixViewConfigGroup);
-    m_cfg->writeEntry("backgroundtextures", m_matrixBackgroundTextures->isChecked());
+    m_cfg->writeEntry("backgroundtextures-1.6-plus", m_matrixBackgroundTextures->isChecked());
 
     m_cfg->setGroup(NotationViewConfigGroup);
     m_cfg->writeEntry("backgroundtextures", m_notationBackgroundTextures->isChecked());
