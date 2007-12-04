@@ -495,7 +495,7 @@ RosegardenGUIDoc::deleteOrphanedAudioFiles(bool documentWillNotBeSaved)
         return true;
 
     QString question =
-        i18n("About to delete 1 audio file permanently from the hard disk.\nThere will be no way to recover this file.\nAre you sure?", "About to delete %n audio files permanently from the hard disk.\nThere will be no way to recover these files.\nAre you sure?", recordedOrphans.size());
+        i18n("<qt>About to delete 1 audio file permanently from the hard disk.<br>There will be no way to recover this file.<br>Are you sure?</qt>\n", "<qt>About to delete %n audio files permanently from the hard disk.<br>There will be no way to recover these files.<br>Are you sure?</qt>", recordedOrphans.size());
 
     int reply = KMessageBox::warningContinueCancel(0, question);
 
