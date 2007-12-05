@@ -19,7 +19,7 @@
 	<p>Some things that may be of interest include:
 
 	<ul>
-	<li><a href="/resources/faq/">Frequently asked questions</a> about Rosegarden.  If you have any problems installing or using Rosegarden, please read these first.</li>
+	<li><a href="http://rosegarden.wiki.sourceforge.net/Frequently+Asked+Questions">Frequently asked questions</a> about Rosegarden.  If you have any problems installing or using Rosegarden, please read these first.</li>
 	<li>The <a href="http://rosegarden.sourceforge.net/tutorial">Rosegarden Companion</a> book, and a free online <a href="http://rosegarden.sourceforge.net/tutorial/">tutorial</a>, by D. Michael McIntyre.</li>
 	<li>The <a href="/doc/en/">Rosegarden Handbook</a>, the reference manual and help text for Rosegarden available from within the program.</li>
 	<li>Have you found a bug?  Please read these <a

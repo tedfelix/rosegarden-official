@@ -124,8 +124,12 @@
       your program and generates masses of statistics.  Use <b>cachegrind</b>
       with the excellent visualisation tool
       <a href="http://kcachegrind.sourceforge.net/">kcachegrind</a>.
-      </ul>
 
+      <li><a href="http://www.cmake.org/">CMake</a> - a solid, cross
+      platform build configuration system: we settled on CMake after
+      using Automake and SCons.</li>
+
+      </ul>
 
     </div>
 

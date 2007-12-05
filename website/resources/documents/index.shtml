@@ -28,7 +28,7 @@
     MIDI hardware, here is a <a href="rgd-HOWTO.shtml">mini-HOWTO for
     creating voice definitions for Rosegarden</a>.  You should also
     check out the ever-growing <a
-    href="http://svn.sourceforge.net/viewcvs.cgi/rosegarden/trunk/rosegarden/gui/library/">device
+    href="http://rosegarden.svn.sourceforge.net/viewcvs.cgi/rosegarden/trunk/rosegarden/data/library/">device
     library</a> (a snapshot of which is included with each
     Rosegarden release) to make sure your device hasn't already been
     mapped.
@@ -63,7 +63,7 @@
 
     <p>
     There are also some notes to be found in
-    <a href="http://svn.sourceforge.net/viewcvs.cgi/rosegarden/trunk/docs/">Rosegarden SVN</a> itself.
+    <a href="http://rosegarden.svn.sourceforge.net/viewcvs.cgi/rosegarden/trunk/docs/">Rosegarden SVN</a> itself.
     </p>
 
     <p>We now have a <a
