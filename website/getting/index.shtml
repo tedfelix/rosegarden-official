@@ -43,6 +43,13 @@
     <div align="center">
     <table cellspacing="0" border="0" cellpadding="5">
 
+    <tr>
+    <td>&nbsp;&nbsp;</td>
+    <td>&nbsp;<b>Distro&nbsp;release</b>&nbsp;</td>
+    <td>&nbsp;<b>Rosegarden&nbsp;version</b>&nbsp;</td>
+    <td>&nbsp;<b>Available&nbsp;via</b>&nbsp;</td>
+    </tr>
+
     <!--#include virtual="/getting/auto-distro-table.html" -->
 
     <tr><td>&nbsp;</td></tr>
