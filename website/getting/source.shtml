@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <!--#include virtual="/head.html" -->
+  <body>
+
+    <!--#include virtual="/title.html" -->
+    <!--#include virtual="/nav.html" -->
+    <!--#include virtual="/getting/subnav.html" -->
+    <!--#include virtual="/subleft.html" -->
+    <!--#include virtual="/subright.html" -->
+
+    <div id="maincontainer">
+    <div id="main">
+
+    <br>
+    <h2>Rosegarden source downloads</h2>
+
+        <br>
+    <hr>
+    <a name="source"></a><h2>Source Downloads</h2>
+
+    <h3>Current stable release</h3>
+
+	<p><i>Note: please read the <a
+	href="/getting/requirements/">Hardware and System Requirements
+	page</a> to find out whether Rosegarden will work on your
+	system, and read the README file in the downloaded package for
+	details of how to compile.</i></p>
+
+    <ul><li><a href="http://sourceforge.net/"><img align="right"
+src="http://sourceforge.net/sflogo.php?group_id=4932&type=1"
+width="88" height="31" border="0" alt="SourceForge.net Logo"/></a><a
+href="http://sourceforge.net/project/showfiles.php?group_id=4932&package_id=4959&release_id=493714">Rosegarden
+release 1.6.0 source code</a>, 6th December 2007, for download from the
+SourceForge page. <i>(<a href="http://sourceforge.net/project/shownotes.php?release_id=493714&group_id=4932">release note</a>)</i></li></ul>
+
+    <h3>Development code from Subversion</h3>
+
+    <p>The latest, up-to-the-minute source code in use by Rosegarden
+    developers is always available using the Subversion (svn)
+    source-code control system from SourceForge.  The main Subversion
+    repository can be retrieved with:</p>
+
+    <blockquote><code>svn co https://rosegarden.svn.sourceforge.net/svnroot/rosegarden/trunk/rosegarden</code></blockquote>
+    
+    <p>This will obtain the main development trunk; this is where
+    most of the interesting new features appear first in a working
+    state, but it isn't always guaranteed to build or run.  Please read <a
+    href="http://sourceforge.net/svn/?group_id=4932">the instructions
+    here</a> for more details on using Subversion.</p>
+
+    <p>You can also browse the source code <a
+    href="http://rosegarden.svn.sourceforge.net/viewvc/rosegarden/trunk/rosegarden/">here</a>.</p>
+
+    <h3>Other branches</h3>
+
+    <p>Several "branches" of the Rosegarden source code are available
+    in Subversion, containing different features for prospective developers
+    or other interested parties.  These branches are accessible in the
+    <code>branches/</code> directory of the svn repository, with the
+    following command :</p>
+    <blockquote><code>svn co https://rosegarden.svn.sourceforge.net/svnroot/rosegarden/branches/&lt;BRANCH&gt;/rosegarden rosegarden</code></blockquote>
+    <p>replacing <code>&lt;BRANCH&gt;</code> with the name of the branch you want.</p>
+
+    <p>You can browse the current branches <a
+    href="http://rosegarden.svn.sourceforge.net/viewvc/rosegarden/branches/">here</a>.</p>
+
+    <p>Currently active branches are:
+
+    <ul> <li><b>stable_1_6</b> - This is the branch used for the 1.6.0
+    release, and to collect bug fixes for the next stable minor
+    release.  It should always be more stable than the trunk.</li>
+
+    <li><b>musicxml</b> - This branch contains initial work on
+    MusicXML import.</li>
+
+    <li><b>trayicon</b> - This branch contains work for a possible
+    enhancement that gives the sequencer process an icon and context
+    menu in the system tray.</li>
+
+    <li><b>notation_updates</b> - This branch contains some
+    experiments related to notation improvements.</li>
+
+    <li><b>kiftsgate</b> - This branch contains initial work towards
+    modularising the Rosegarden notation framework somewhat.</li>
+
+    <li><b>glasgow_pitchtracker_update</b> - This contains extensive custom work to support the <a
+    href="http://markov.music.gla.ac.uk/CMT/cmt.py/Projects/rgtracker.html">University
+    of Glasgow Pitch Tracker project</a>.</li>
+    </ul>
+    
+<br>
+
+<hr>
+
+<h3>"X11 Rosegarden" 2.1 releases</h3>
+
+<p>Before the current Rosegarden project, there was another
+Rosegarden: a now rather antique program, simpler, less powerful but
+also less resource-hungry.  We're calling it "X11 Rosegarden" here, to
+distinguish it from the newer Rosegarden.  It was originally written
+for Silicon Graphics IRIX machines, and then ported to Linux and other
+Unix variants.  If you're interested, you can still get it in source
+code form right here.
+
+<UL>
+
+<LI>"X11 Rosegarden" 2.1 patchlevel 4 <A HREF="http://www.cannam.demon.co.uk/rosegarden/distribution/rosegarden-2.1pl4.tar.gz">sources via http</a> (573K).
+
+<LI>"X11 Rosegarden" 2.1 patchlevel 3 <A HREF="http://www.cannam.demon.co.uk/rosegarden/distribution/rosegarden-2.1pl3.tar.gz">sources via http</a> (570K), and <a href="http://www.cannam.demon.co.uk/rosegarden/distribution/rosegarden-2.1pl2pl3.patch.gz">patch from 2.1 patchlevel 2 to patchlevel 3</a> (7K).
+
+<LI>"X11 Rosegarden" 2.1 patchlevel 3 for Linux, <A HREF="http://www.cannam.demon.co.uk/rosegarden/distribution/rosegarden-2.1pl3-i686-pc-linux-gnu.tar.gz">binaries via http</a> (379K).  Built on a Debian 2.2 system.
+
+<LI>Torsten Duwe's patch to make "X11 Rosegarden" 2.1 use the OSS 
+/dev/sequencer2 API, <A
+HREF="http://www.cannam.demon.co.uk/rosegarden/distribution/rosegarden-2.1-2.2u0.patch.gz">via http
+only</a> (24K). This patch also includes some of the fixes in 2.1pl2.  It should be
+applied to the original 2.1 sources; it will not apply correctly to
+2.1pl2 or pl3.
+<!--
+<LI>"X11 Rosegarden" 2.1 for ELF-format Linux system, 
+<A HREF="ftp://ftp.cs.bath.ac.uk/pub/dream/ROSE/rosegarden-2.1-i586-pc-linux-gnu.tar.gz">
+binaries via ftp</A> or <A HREF="http://www.cannam.demon.co.uk/rosegarden/distribution/rosegarden-2.1-i586-pc-linux-gnu.tar.gz">via http</a> (354K).
+Built with a 2.0.18 kernel and XFree86 3.1.2 libraries.
+-->
+<LI>"X11 Rosegarden" 2.1 for SGI IRIX 6.2, <A
+HREF="ftp://ftp.cs.bath.ac.uk/pub/dream/ROSE/rosegarden-2.1-mips-sgi-irix6.2.tar.gz">
+binaries via ftp</A> or <A
+HREF="http://www.cannam.demon.co.uk/rosegarden/distribution/rosegarden-2.1-mips-sgi-irix6.2.tar.gz">via
+http</A> (501K). This distribution lacks the Petal filter scripting
+language, because the SGI machine I have access to doesn't have new
+enough Tcl/TclMIDI components to build it.
+
+<LI>"X11 Rosegarden" 2.1 for OpenVMS Vax or Alpha, <A
+HREF="http://www.cannam.demon.co.uk/rosegarden/distribution/rosegarden-21.zip">binaries via http in the UK</a> (3.6Mb) -- ported by Patrick Moreau.
+
+<LI>"X11 Rosegarden" 2.1
+<A HREF="ftp://ftp.cs.bath.ac.uk/pub/dream/ROSE/rosegarden-2.1-sources.tar.gz">sources via ftp</A> or <A HREF="http://www.cannam.demon.co.uk/rosegarden/distribution/rosegarden-2.1-sources.tar.gz">via http</A> (553K).
+
+
+</UL>
+
+    </div>
+    </div>
+
+  </body>
+</html> 
+
