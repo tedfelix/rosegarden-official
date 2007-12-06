@@ -17,7 +17,10 @@
 
     <p>The Rosegarden development team makes Rosegarden available in
     <a href="source.shtml">source code form</a>, to be compiled after
-    download.  We don't make ready-to-run binaries; you should get
+    download.  <a href="source.shtml">Download the Rosegarden source distribution here.</a></p>
+
+
+    <p>We don't make ready-to-run binaries; you should get
     those as packages tailored for a particular Linux distribution.</p>
 
     <p>Rosegarden is a complex program that requires numerous
@@ -39,6 +42,8 @@
     <p>Please consult your distribution's documentation for more
     details, and check that your distribution provides the latest
     available version (currently Rosegarden-1.6.0) before installing.</p>
+
+    <br>
 
     <div align="center">
     <table cellspacing="0" border="0" cellpadding="5">
