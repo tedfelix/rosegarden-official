@@ -289,7 +289,8 @@ a:active {
 }
 
 a:visited {
-    color: #64684f;
+/*    color: #64684f; */
+    color: #00aa00;
     text-decoration: none;
 }
 
