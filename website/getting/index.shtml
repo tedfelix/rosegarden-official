@@ -74,7 +74,7 @@
     <!--#include virtual="/getting/auto-distro-table.html" -->
 
     <tr><td>&nbsp;</td></tr>
-    <tr><td align="center" rowspan="1" class="a"><a href="http://www.studio-to-go.com/"><img src="../images/stg-logo.png" alt="Studio to Go" border="0"></a></td><td class=a>&nbsp;Studio to Go! v2.0</td><td>&nbsp;Rosegarden v1.5.5-fervent&nbsp;</td><td>&nbsp;</td></tr>
+    <tr><td align="center" rowspan="1" class="a"><a href="http://www.studio-to-go.com/"><img src="../images/stg-logo.png" alt="Studio to Go" border="0"></a></td><td class=a>&nbsp;Studio to Go! v2.0</td><td>&nbsp;Rosegarden v1.6.0&nbsp;</td><td>Registered users forum download</td></tr>
     </table>
     </div>
 
