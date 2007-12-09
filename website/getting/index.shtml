@@ -35,29 +35,24 @@
     <h2>Distribution packages</h2>
 
     <p>Installable binary packages for many major Linux distributions
-    including Mandriva, Debian, Ubuntu, SuSE, ALT Linux and PCLinuxOS
-    are available via these distributions' standard downloadable package
-    repositories.</p>
-
-    <p>Please consult your distribution's documentation for more
-    details, and check that your distribution provides the latest
-    available version (currently Rosegarden-1.6.0) before installing.</p>
+    are available via the distributions' standard package
+    repositories.  Please consult your distribution's documentation for more details on how to obtain and install packages from these repositories.</p>
 
     <p><b>Note:</b> Rosegarden benefits greatly from running on a
     system that is well tuned for audio and low-latency use.  Many
     distributions have at least one specialised low-latency kernel
     package available via some sort of additional multimedia
     distribution or repository; consider using one of these.  For
-    example, Ubuntu users should consider <a
-    href="http://www.ubuntustudio.org/">Ubuntu Studio</a>; Debian
-    users <a href="http://www.64studio.com">64 Studio</a> or <a
-    href="http://www.musix.org.ar/en/index.html">Musix</a>; Fedora
-    users <a
+    example, <b>Ubuntu</b> -> <a
+    href="http://www.ubuntustudio.org/">Ubuntu Studio</a>; <b>Debian</b>
+    -> <a href="http://www.64studio.com">64 Studio</a> or <a
+    href="http://www.musix.org.ar/en/index.html">Musix</a>; <b>Fedora</b>
+    -> <a
     href="http://ccrma.stanford.edu/planetccrma/software/">PlanetCCRMA</a>;
-    OpenSUSE users <a href="http://www.jacklab.org/">JAD</a>.  In many
-    cases the version of Rosegarden will be the same as the base
-    distribution; it's the kernel, JACK audio server and so on that
-    will differ.</p>
+    <b>OpenSUSE</b> -> <a href="http://www.jacklab.org/">JAD</a>.  In most
+    cases the choice of a multimedia distribution will make no difference
+to which version of Rosegarden you can use: it will affect the type of Linux kernel and other audio services available, and consequently how well Rosegarden will run.
+    </p>
 
     <br>
 
