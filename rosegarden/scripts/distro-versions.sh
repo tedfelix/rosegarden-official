@@ -1,10 +1,5 @@
 #!/bin/bash
 
-
-echo '<table cellspacing=0 border=0 cellpadding=5>'
-
-echo '<tr><td>&nbsp;&nbsp;</td><td>&nbsp;<b>Distribution release</b>&nbsp;</td><td>&nbsp;<b>Rosegarden version</b>&nbsp;</td><td>&nbsp;<b>Available from</b>&nbsp;</td></tr>'
-
 maxrelease=5
 
 
@@ -69,8 +64,47 @@ echo '</tr>'
 for x in `seq 1 $maxrelease` ; do echo '<tr></tr>'; done
 
 
+# OpenSUSE Packman
+
+packman_package_url='http://packman.links2linux.org/package/rosegarden4'
+
+echo '<tr><td>&nbsp;</td></tr>'
+echo '<tr>'
+echo '<td class="b" align="center" rowspan="'$maxrelease'"><a href="http://en.opensuse.org/"><img src="http://en.opensuse.org/skins/opensuse/images/common/geeko.jpg" alt="OpenSUSE" border="0"></a></td>'
+
+packman_version=`wget -O- "$packman_package_url" 2>/dev/null | fgrep src.rpm | sed -e 's/^.*rosegarden4*-//' -e 's/-[0-9]\.pm.*//'`
+
+case "$packman_version" in
+    [0-9]*)
+    	echo '</tr><tr>'
+	echo "<td class=a>&nbsp;OpenSUSE&nbsp;</td>"
+	echo "<td class=a>&nbsp;Rosegarden v$packman_version&nbsp;</td>"
+	echo "<td class=a>Packman repository</td>"
+	;;
+esac
+echo "</tr>"
+for x in `seq 1 $maxrelease` ; do echo '<tr></tr>'; done
 
 
+# Gentoo
+
+gentoo_package_url='http://gentoo-portage.com/media-sound/rosegarden/'
+
+echo '<tr><td>&nbsp;</td></tr>'
+echo '<tr>'
+echo '<td class="b" align="center" rowspan="'$maxrelease'"><a href="http://www.gentoo.org/"><img src="http://www.gentoo.org/images/gentoo-new.gif" alt="Gentoo" border="0"></a></td>'
+
+gentoo_version=`wget -O- "$gentoo_package_url" 2>/dev/null |  grep 'rosegarden-[0-9]\.' | head -1 | sed -e 's/^.*rosegarden-\([0-9\.]*\).*$/\1/'`
+
+case "$gentoo_version" in
+    [0-9]*)
+        echo '</tr><tr>'
+        echo "<td class=a>&nbsp;Gentoo&nbsp;</td>"
+        echo "<td class=a>&nbsp;Rosegarden v$gentoo_version&nbsp;</td>"
+        echo "<td class=a>Portage</td>"
+        ;;
+esac
+echo "</tr>"
+for x in `seq 1 $maxrelease` ; do echo '<tr></tr>'; done
 
 
-echo '</table>'
