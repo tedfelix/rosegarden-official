@@ -7,8 +7,8 @@
     <!--#include virtual="/nav.html" -->
 
     <div style="float:right; text-align:right; position:relative; top:30px">
-      <a href="images/snap-1.5-1.png"><img src="images/snap-1.5-1-thumb.png" style="border-width: 2px; border-color: #315e13; border-style: solid; margin-top: 0px; margin-bottom: 20px; margin-left: 30px; margin-right: 10px" alt=""/></a><br>
-      <a href="images/snap-1.5-3.png"><img src="images/snap-1.5-3-thumb.png" style="border-width: 2px; border-color: #315e13; border-style: solid; margin-top: 10px; margin-left: 30px; margin-right: 10px" alt=""/></a></div>
+      <a href="images/snap-1.5-1.png"><img src="images/snap-1.5-1-thumb.png" style="border-width: 2px; border-color: #000000; border-style: solid; margin-top: 0px; margin-bottom: 20px; margin-left: 30px; margin-right: 10px" alt=""/></a><br>
+      <a href="images/snap-1.5-3.png"><img src="images/snap-1.5-3-thumb.png" style="border-width: 2px; border-color: #000000; border-style: solid; margin-top: 10px; margin-left: 30px; margin-right: 10px" alt=""/></a></div>
 
     <!--#include virtual="/subleft.html" -->
     <!--#include virtual="/subright.html" -->
