@@ -35,7 +35,7 @@
   font-family: verdana, sans-serif;
   font-size: 0.9em;
   font-weight: normal;
-  color: #32421a;
+  color: #cf8b42;
 }
 
 .newsheadline { 
@@ -247,14 +247,14 @@ a {
 }
 
 #subnav>a {
-  color: #324220;
+  color: #cccccc;
   text-decoration: none;
   font-weight: normal;
   font-family: verdana, sans-serif;
 }
 
 #subnav>b>a {
-  color: #324220;
+  color: #eeeeee;
   text-decoration: none;
   font-weight: bold;
   font-family: verdana, sans-serif;
