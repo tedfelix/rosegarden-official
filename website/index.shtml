@@ -16,11 +16,11 @@
     <div id="main">
 
       <h2>What is Rosegarden?</h2>
-      <p>
+<!--      <p>
       <i>"the closest native equivalent to
       Cubase<small>&reg;</small> for Linux" &ndash; <a
       href="http://www.soundonsound.com/sos/Feb03/articles/linuxaudio.asp"
-      target="_new">Sound on Sound</a></i></p>
+      target="_new">Sound on Sound</a></i></p>  -->
 
       <p>
       Rosegarden is a professional <b>audio and MIDI sequencer</b>,
