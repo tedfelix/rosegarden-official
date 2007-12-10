@@ -27,9 +27,7 @@
     <h3>System hardware</h3>
 
 	<p>As this is a Linux application, the first requirement is
-	for a PC capable of running Linux.  (It is possible to run
-	Linux on Mac and some other systems, but we have no
-	information about using Rosegarden in that environment.)
+	for a PC capable of running Linux.
 
     <p>The recommended minimum hardware for MIDI use is a
     400MHz system with 64MB of memory.  With an 800MHz system with
@@ -42,6 +40,15 @@
 	plugins, Rosegarden sequencer process) in memory at once
 	&ndash; currently 256MB is really a bare minimum, as Rosegarden
 	is a fairly memory-hungry application.</p>
+
+	<p>You will get far better performance from Rosegarden on any
+	hardware if you use a Linux kernel that is optimised for
+	real-time applications; the best way to achieve this depends
+	on your choice of Linux distribution, but for many
+	distributions the easiest thing is to look for a "multimedia
+	repository", "multimedia distribution" or "audio overlay"
+	tailored to your distribution and install a low-latency kernel
+	from there.
 
     <h3>Audio hardware</h3>
 
