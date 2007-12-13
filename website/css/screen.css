@@ -74,7 +74,8 @@
   background-color: #ffffff;
   float: right;
   clear: right;
-  width: 90px;
+  width: 120px;
+  height: 600px;
   margin-top: 30px;
   margin-bottom: -10px;
   margin-left: 0px;
@@ -124,7 +125,7 @@
   padding-right: 30px;
   border-color: #bbbbbb;
   border-left-width: 170px;
-  border-right-width: 130px;
+  border-right-width: 135px;
   border-bottom-width: 1em;
   border-top-width: 0px;
   border-style: solid;

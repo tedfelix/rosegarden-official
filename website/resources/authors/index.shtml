@@ -5,9 +5,10 @@
 
     <!--#include virtual="/title.html" -->
     <!--#include virtual="/nav.html" -->
+    <!--#include virtual="/subleft.html" -->
+    <!--#include virtual="/subright.html" -->
 
     <div id="main">
-    <br>
 
     <h2>Authors</h2> <p>Rosegarden has had three core developers who
     between them are to blame for most of the application as you find

@@ -6,9 +6,18 @@
     <!--#include virtual="/title.html" -->
     <!--#include virtual="/nav.html" -->
 
-    <div style="float:right; text-align:right; position:relative; top:30px">
-      <a href="images/snap-1.5-1.png"><img src="images/snap-1.5-1-thumb.png" style="border-width: 2px; border-color: #000000; border-style: solid; margin-top: 0px; margin-bottom: 20px; margin-left: 30px; margin-right: 10px" alt=""/></a><br>
-      <a href="images/snap-1.5-3.png"><img src="images/snap-1.5-3-thumb.png" style="border-width: 2px; border-color: #000000; border-style: solid; margin-top: 10px; margin-left: 30px; margin-right: 10px" alt=""/></a></div>
+<div style="float:right; margin-top: 5px">
+<script type="text/javascript"><!--
+google_ad_client = "pub-6311390097103672";
+//rghp
+google_ad_slot = "1599275235";
+google_ad_width = 120;
+google_ad_height = 600;
+//--></script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</div>
 
     <!--#include virtual="/subleft.html" -->
     <!--#include virtual="/subright.html" -->
@@ -16,11 +25,6 @@
     <div id="main">
 
       <h2>What is Rosegarden?</h2>
-<!--      <p>
-      <i>"the closest native equivalent to
-      Cubase<small>&reg;</small> for Linux" &ndash; <a
-      href="http://www.soundonsound.com/sos/Feb03/articles/linuxaudio.asp"
-      target="_new">Sound on Sound</a></i></p>  -->
 
       <p>
       Rosegarden is a professional <b>audio and MIDI sequencer</b>,
@@ -29,6 +33,10 @@
       easy-to-learn, attractive application that runs on Linux, ideal
       for composers, musicians, music students, and small studio or
       home recording environments.
+      </p>
+
+      <p align="center"><a href="images/snap-1.5-1.png"><img src="/images/snap-1.5-1-thumb.png" style="border-width: 2px; border-color: #000000; border-style: solid; margin-top: 10px; margin-bottom: 10px; margin-left: 0px; margin-right: 10px" alt=""/></a><a href="images/snap-1.5-3.png"><img src="/images/snap-1.5-3-thumb.png" style="border-width: 2px; border-color: #000000; border-style: solid; margin-top: 0px; margin-left: 0px; margin-right: 0px; margin-bottom: 20px" alt=""/></a></p>
+
 	<p><b>Release 1.6.0 now available!</b> This is a substantial new feature release.  Read the <a href="http://sourceforge.net/project/shownotes.php?release_id=559733&group_id=4932">release note</a>, and 
 	<a href="getting/">get the code here</a>!</p>
 
