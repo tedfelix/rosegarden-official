@@ -6,7 +6,7 @@
     <!--#include virtual="/title.html" -->
     <!--#include virtual="/nav.html" -->
 
-<div style="float:right">
+<div style="float:right; margin-top: 5px">
 <script type="text/javascript"><!--
 google_ad_client = "pub-6311390097103672";
 //rghp
@@ -25,11 +25,6 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
     <div id="main">
 
       <h2>What is Rosegarden?</h2>
-<!--      <p>
-      <i>"the closest native equivalent to
-      Cubase<small>&reg;</small> for Linux" &ndash; <a
-      href="http://www.soundonsound.com/sos/Feb03/articles/linuxaudio.asp"
-      target="_new">Sound on Sound</a></i></p>  -->
 
       <p>
       Rosegarden is a professional <b>audio and MIDI sequencer</b>,
