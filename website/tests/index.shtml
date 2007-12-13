@@ -6,11 +6,6 @@
     <!--#include virtual="/title.html" -->
     <!--#include virtual="/nav.html" -->
 
-
-    <div style="float:right; text-align:right; position:relative; top:30px">
-      <a href="images/snap-1.5-1.png"><img src="images/snap-1.5-1-thumb.png" style="border-width: 2px; border-color: #000000; border-style: solid; margin-top: 0px; margin-bottom: 20px; margin-left: 30px; margin-right: 10px" alt=""/></a><br>
-      <a href="images/snap-1.5-3.png"><img src="images/snap-1.5-3-thumb.png" style="border-width: 2px; border-color: #000000; border-style: solid; margin-top: 10px; margin-left: 30px; margin-right: 10px" alt=""/></a></div>
-
     <!--#include virtual="/subleft.html" -->
     <!--#include virtual="/subright.html" -->
 
@@ -43,6 +38,11 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
       easy-to-learn, attractive application that runs on Linux, ideal
       for composers, musicians, music students, and small studio or
       home recording environments.
+      </p>
+
+      <a href="images/snap-1.5-1.png"><img src="/images/snap-1.5-1-thumb.png" style="border-width: 2px; border-color: #000000; border-style: solid; margin-top: 0px; margin-bottom: 20px; margin-left: 30px; margin-right: 10px" alt=""/></a><br>
+      <a href="images/snap-1.5-3.png"><img src="/images/snap-1.5-3-thumb.png" style="border-width: 2px; border-color: #000000; border-style: solid; margin-top: 10px; margin-left: 30px; margin-right: 10px" alt=""/></a>
+
 	<p><b>Release 1.6.0 now available!</b> This is a substantial new feature release.  Read the <a href="http://sourceforge.net/project/shownotes.php?release_id=559733&group_id=4932">release note</a>, and 
 	<a href="getting/">get the code here</a>!</p>
 
