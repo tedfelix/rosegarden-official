@@ -40,11 +40,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
       home recording environments.
       </p>
 
-<!--      <div align="center">
-      <table border="0" cellpadding="5"><tr><td valign="middle">
---><p><a href="images/snap-1.5-1.png"><img src="/images/snap-1.5-1-thumb.png" style="border-width: 2px; border-color: #000000; border-style: solid; margin-top: 0px; margin-bottom: 20px; margin-left: 30px; margin-right: 10px" alt=""/></a><!-- </td><td valign="middle"> -->
-<a href="images/snap-1.5-3.png"><img src="/images/snap-1.5-3-thumb.png" style="border-width: 2px; border-color: #000000; border-style: solid; margin-top: 10px; margin-left: 30px; margin-right: 10px" alt=""/></a>
-<!-- </td></tr></table></div> --> </p>
+      <p><a href="images/snap-1.5-1.png"><img src="/images/snap-1.5-1-thumb.png" style="border-width: 2px; border-color: #000000; border-style: solid; margin-top: 10px; margin-bottom: 10px; margin-left: 0px; margin-right: 10px" alt=""/></a><a href="images/snap-1.5-3.png"><img src="/images/snap-1.5-3-thumb.png" style="border-width: 2px; border-color: #000000; border-style: solid; margin-top: 0px; margin-left: 0px; margin-right: 0px" alt=""/></a>
 
 	<p><b>Release 1.6.0 now available!</b> This is a substantial new feature release.  Read the <a href="http://sourceforge.net/project/shownotes.php?release_id=559733&group_id=4932">release note</a>, and 
 	<a href="getting/">get the code here</a>!</p>
