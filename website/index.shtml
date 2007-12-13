@@ -6,7 +6,7 @@
     <!--#include virtual="/title.html" -->
     <!--#include virtual="/nav.html" -->
 
-<div style="float:right; margin-top: 5px">
+<div style="float: right; margin-top: 5px; margin-right: 5px">
 <script type="text/javascript"><!--
 google_ad_client = "pub-6311390097103672";
 //rghp
