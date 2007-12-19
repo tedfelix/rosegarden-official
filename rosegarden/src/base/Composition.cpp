@@ -1754,7 +1754,7 @@ std::string Composition::toXmlString()
 	 i != m_tempoSegment.end(); ++i) {
 
 	tempoT tempo = tempoT((*i)->get<Int>(TempoProperty));
-	tempoT target = 0;
+	tempoT target = -1;
 	if ((*i)->has(TargetTempoProperty)) {
 	    target = tempoT((*i)->get<Int>(TargetTempoProperty));
 	}
