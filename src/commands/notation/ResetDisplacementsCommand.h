@@ -37,6 +37,7 @@ namespace Rosegarden
 {
 
 class EventSelection;
+class CommandRegistry;
 
 
 class ResetDisplacementsCommand : public BasicSelectionCommand
@@ -46,7 +47,9 @@ public:
         BasicSelectionCommand(getGlobalName(), selection, true),
         m_selection(&selection) { }
 
-    static QString getGlobalName() { return i18n("Restore Positions"); }
+    static QString getGlobalName() { return i18n("&Restore Positions"); }
+
+    static void registerCommand(CommandRegistry *r);
 
 protected:
     virtual void modifySegment();

@@ -37,6 +37,7 @@ namespace Rosegarden
 {
 
 class EventSelection;
+class CommandRegistry;
 
 
 class RemoveMarksCommand : public BasicSelectionCommand
@@ -47,6 +48,8 @@ public:
         m_selection(&selection) { }
 
     static QString getGlobalName() { return i18n("&Remove All Marks"); }
+
+    static void registerCommand(CommandRegistry *r);
 
 protected:
     virtual void modifySegment();

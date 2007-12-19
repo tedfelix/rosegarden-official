@@ -77,13 +77,8 @@
 #include "commands/notation/EraseEventCommand.h"
 #include "commands/notation/InterpretCommand.h"
 #include "commands/notation/KeyInsertionCommand.h"
-#include "commands/notation/MakeNotesViableCommand.h"
 #include "commands/notation/MultiKeyInsertionCommand.h"
 #include "commands/notation/NormalizeRestsCommand.h"
-#include "commands/notation/RemoveFingeringMarksCommand.h"
-#include "commands/notation/RemoveMarksCommand.h"
-#include "commands/notation/RemoveNotationQuantizeCommand.h"
-#include "commands/notation/ResetDisplacementsCommand.h"
 #include "commands/notation/RespellCommand.h"
 #include "commands/notation/RestoreSlursCommand.h"
 #include "commands/notation/RestoreStemsCommand.h"
@@ -1726,10 +1721,6 @@ void NotationView::setupActions()
                 SLOT(slotTransformsUntieNotes()), actionCollection(),
                 "untie_notes");
 
-    new KAction(MakeNotesViableCommand::getGlobalName(), 0, this,
-                SLOT(slotTransformsMakeNotesViable()), actionCollection(),
-                "make_notes_viable");
-
     new KAction(RestoreStemsCommand::getGlobalName(), 0, this,
                 SLOT(slotTransformsRestoreStems()), actionCollection(),
                 "restore_stems");
@@ -1814,10 +1805,6 @@ void NotationView::setupActions()
                 SLOT(slotTransformsQuantize()), actionCollection(),
                 "quantize");
 
-    new KAction(RemoveNotationQuantizeCommand::getGlobalName(), 0,
-                this, SLOT(slotTransformsRemoveQuantization()), actionCollection(),
-                "remove_quantization");
-
     new KAction(InterpretCommand::getGlobalName(), 0,
                 this, SLOT(slotTransformsInterpret()), actionCollection(),
                 "interpret");
@@ -1829,14 +1816,6 @@ void NotationView::setupActions()
     icon = QIconSet
            (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                                          ("text-mark")));
-
-    new KAction(RemoveMarksCommand::getGlobalName(), 0, this,
-                SLOT(slotMarksRemoveMarks()), actionCollection(),
-                "remove_marks");
-
-    new KAction(RemoveFingeringMarksCommand::getGlobalName(), 0, this,
-                SLOT(slotMarksRemoveFingeringMarks()), actionCollection(),
-                "remove_fingering_marks");
 
     new KAction(i18n("Ma&ke Ornament..."), 0, this,
                 SLOT(slotMakeOrnament()), actionCollection(),
@@ -2047,10 +2026,6 @@ void NotationView::setupActions()
     new KAction(i18n("&Filter Selection"), "filter", Key_F + CTRL, this,
                 SLOT(slotFilterSelection()), actionCollection(),
                 "filter_selection");
-
-    new KAction(i18n("&Restore Positions"), 0, this,
-                SLOT(slotFinePositionRestore()), actionCollection(),
-                "fine_position_restore");
 
     new KAction(i18n("Make &Invisible"), 0, this,
                 SLOT(slotMakeInvisible()), actionCollection(),
@@ -4402,15 +4377,6 @@ void NotationView::slotFilterSelection()
     }
 }
 
-void NotationView::slotFinePositionRestore()
-{
-    if (!m_currentEventSelection)
-        return ;
-    KTmpStatusMsg msg(i18n("Restoring computed positions..."), this);
-
-    addCommandToHistory(new ResetDisplacementsCommand(*m_currentEventSelection));
-}
-
 void NotationView::slotMakeVisible()
 {
     if (!m_currentEventSelection)
@@ -4644,16 +4610,6 @@ void NotationView::slotTransformsUntieNotes()
                         (*m_currentEventSelection));
 }
 
-void NotationView::slotTransformsMakeNotesViable()
-{
-    if (!m_currentEventSelection)
-        return ;
-    KTmpStatusMsg msg(i18n("Making notes viable..."), this);
-
-    addCommandToHistory(new MakeNotesViableCommand
-                        (*m_currentEventSelection));
-}
-
 void NotationView::slotTransformsRestoreStems()
 {
     if (!m_currentEventSelection)
@@ -4671,16 +4627,6 @@ void NotationView::slotTransformsRestoreSlurs()
     KTmpStatusMsg msg(i18n("Restoring slur positions..."), this);
 
     addCommandToHistory(new RestoreSlursCommand
-                        (*m_currentEventSelection));
-}
-
-void NotationView::slotTransformsRemoveQuantization()
-{
-    if (!m_currentEventSelection)
-        return ;
-    KTmpStatusMsg msg(i18n("Removing notation quantization..."), this);
-
-    addCommandToHistory(new RemoveNotationQuantizeCommand
                         (*m_currentEventSelection));
 }
 
@@ -4989,20 +4935,6 @@ void NotationView::slotAddDotNotationOnly()
         return ;
     KTmpStatusMsg msg(i18n("Adding dot..."), this);
     addCommandToHistory(new AddDotCommand(*m_currentEventSelection, true));
-}
-
-void NotationView::slotMarksRemoveMarks()
-{
-    if (m_currentEventSelection)
-        addCommandToHistory(new RemoveMarksCommand
-                            (*m_currentEventSelection));
-}
-
-void NotationView::slotMarksRemoveFingeringMarks()
-{
-    if (m_currentEventSelection)
-        addCommandToHistory(new RemoveFingeringMarksCommand
-                            (*m_currentEventSelection));
 }
 
 void

@@ -28,11 +28,20 @@
 #include "base/Event.h"
 #include "base/Selection.h"
 #include "document/BasicSelectionCommand.h"
+#include "document/CommandRegistry.h"
 #include <qstring.h>
 
 
 namespace Rosegarden
 {
+
+void
+RemoveNotationQuantizeCommand::registerCommand(CommandRegistry *r)
+{
+    r->registerCommand
+        (getGlobalName(), "", "", "remove_quantization",
+         new SelectionCommandBuilder<RemoveNotationQuantizeCommand>());
+}
 
 void
 RemoveNotationQuantizeCommand::modifySegment()

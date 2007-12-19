@@ -487,11 +487,9 @@ public slots:
     void slotTransformsCollapseNotes();
     void slotTransformsTieNotes();
     void slotTransformsUntieNotes();
-    void slotTransformsMakeNotesViable();
     void slotTransformsRestoreStems();
     void slotTransformsRestoreSlurs();
     void slotTransformsQuantize();
-    void slotTransformsRemoveQuantization();
     void slotTransformsInterpret();
 
     void slotRespellDoubleFlat();
@@ -509,8 +507,6 @@ public slots:
     void slotSwitchFromNoteToRest();
     void slotToggleDot();
 
-    void slotMarksRemoveMarks();
-    void slotMarksRemoveFingeringMarks();
     void slotMakeOrnament();
     void slotUseOrnament();
     void slotRemoveOrnament();
@@ -527,8 +523,6 @@ public slots:
     void slotEditAddSustain(bool down);
     void slotEditTranspose();
     void slotEditElement(NotationStaff *, NotationElement *, bool advanced);
-
-    void slotFinePositionRestore();
 
     void slotMakeVisible();
     void slotMakeInvisible();

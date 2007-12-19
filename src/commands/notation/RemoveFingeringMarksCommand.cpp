@@ -27,11 +27,20 @@
 
 #include "base/Selection.h"
 #include "document/BasicSelectionCommand.h"
+#include "document/CommandRegistry.h"
 #include <qstring.h>
 
 
 namespace Rosegarden
 {
+
+void
+RemoveFingeringMarksCommand::registerCommand(CommandRegistry *r)
+{
+    r->registerCommand
+        (getGlobalName(), "", "", "remove_fingering_marks",
+         new SelectionCommandBuilder<RemoveFingeringMarksCommand>());
+}
 
 void
 RemoveFingeringMarksCommand::modifySegment()

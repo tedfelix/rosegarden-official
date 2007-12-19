@@ -37,6 +37,7 @@ namespace Rosegarden
 {
 
 class EventSelection;
+class CommandRegistry;
 
 
 class RemoveNotationQuantizeCommand : public BasicSelectionCommand
@@ -48,6 +49,8 @@ public:
     
     static QString getGlobalName() { return i18n("Remo&ve Notation Quantization"); }
     
+    static void registerCommand(CommandRegistry *r);
+
 protected:
     virtual void modifySegment();
 

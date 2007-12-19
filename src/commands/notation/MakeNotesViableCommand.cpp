@@ -29,11 +29,20 @@
 #include "base/SegmentNotationHelper.h"
 #include "base/Selection.h"
 #include "document/BasicSelectionCommand.h"
+#include "document/CommandRegistry.h"
 #include <qstring.h>
 
 
 namespace Rosegarden
 {
+
+void
+MakeNotesViableCommand::registerCommand(CommandRegistry *r)
+{
+    r->registerCommand
+        (getGlobalName(), "", "", "make_notes_viable",
+         new SelectionCommandBuilder<MakeNotesViableCommand>());
+}
 
 void
 MakeNotesViableCommand::modifySegment()

@@ -38,6 +38,7 @@ namespace Rosegarden
 
 class Segment;
 class EventSelection;
+class CommandRegistry;
 
 
 /// MakeNotesViable works on a selection or entire segment
@@ -53,6 +54,8 @@ public:
         m_selection(0) { }
 
     static QString getGlobalName() { return i18n("Tie Notes at &Barlines"); }
+
+    static void registerCommand(CommandRegistry *r);
 
 protected:
     virtual void modifySegment();

@@ -44,6 +44,11 @@
 #include "commands/notation/GraceCommand.h"
 #include "commands/notation/IncrementDisplacementsCommand.h"
 #include "commands/notation/MakeAccidentalsCautionaryCommand.h"
+#include "commands/notation/MakeNotesViableCommand.h"
+#include "commands/notation/RemoveFingeringMarksCommand.h"
+#include "commands/notation/RemoveMarksCommand.h"
+#include "commands/notation/RemoveNotationQuantizeCommand.h"
+#include "commands/notation/ResetDisplacementsCommand.h"
 
 #include "NoteFontFactory.h"
 #include "NoteFont.h"
@@ -60,14 +65,13 @@ NotationCommandRegistry::NotationCommandRegistry(EditView *v) :
     EditViewCommandRegistry(v)
 {
     AddFingeringMarkCommand::registerCommand(this);
-    AddSlashesCommand::registerCommand(this);
     AddIndicationCommand::registerCommand(this);
     AddMarkCommand::registerCommand(this);
+    AddSlashesCommand::registerCommand(this);
     AddTextMarkCommand::registerCommand(this);
-    BeamCommand::registerCommand(this);
     AutoBeamCommand::registerCommand(this);
+    BeamCommand::registerCommand(this);
     BreakCommand::registerCommand(this);
-    MakeChordCommand::registerCommand(this);
     ChangeSlurPositionCommand::registerCommand(this);
     ChangeStemsCommand::registerCommand(this);
     ChangeStyleCommand::registerCommand(this);
@@ -77,6 +81,12 @@ NotationCommandRegistry::NotationCommandRegistry(EditView *v) :
     GraceCommand::registerCommand(this);
     IncrementDisplacementsCommand::registerCommand(this);
     MakeAccidentalsCautionaryCommand::registerCommand(this);
+    MakeChordCommand::registerCommand(this);
+    MakeNotesViableCommand::registerCommand(this);
+    RemoveFingeringMarksCommand::registerCommand(this);
+    RemoveMarksCommand::registerCommand(this);
+    RemoveNotationQuantizeCommand::registerCommand(this);
+    ResetDisplacementsCommand::registerCommand(this);
 }
 
 NotationCommandRegistry::~NotationCommandRegistry()
