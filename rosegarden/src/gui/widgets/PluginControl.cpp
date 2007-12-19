@@ -77,7 +77,7 @@ PluginControl::PluginControl(QWidget *parent,
         }
 
         float step = (upperBound - lowerBound) / 100.0;
-        float pageStep = step * 10.0;
+        float pageStep = step * 10.f;
         Rotary::TickMode ticks = Rotary::PageStepTicks;
         bool snapToTicks = false;
 
@@ -97,41 +97,65 @@ PluginControl::PluginControl(QWidget *parent,
             snapToTicks = true;
         }
 
+        float displayLower = lowerBound, displayUpper = upperBound;
+
+        bool logarithmic = (port->getDisplayHint() & PluginPort::Logarithmic);
+
+        if (logarithmic) {
+            float logthresh = -10;
+            float thresh = powf(10, logthresh);
+            if (lowerBound > thresh) lowerBound = log10f(lowerBound);
+            else {
+                if (upperBound > 1) lowerBound = 0;
+                else lowerBound = logthresh;
+            }
+            if (upperBound > thresh) upperBound = log10f(upperBound);
+            else upperBound = logthresh;
+
+            step = (upperBound - lowerBound) / 100.0;
+            pageStep = step * 10.f;
+            initialValue = log10f(initialValue);
+        }
+
         QLabel *low;
         if (port->getDisplayHint() &
-                (PluginPort::Integer |
-                 PluginPort::Toggled)) {
-            low = new QLabel(QString("%1").arg(int(lowerBound)), parent);
+            (PluginPort::Integer | PluginPort::Toggled)) {
+            low = new QLabel(QString("%1").arg(int(displayLower)), parent);
         } else {
-            low = new QLabel(QString("%1").arg(lowerBound), parent);
+            low = new QLabel(QString("%1").arg(displayLower), parent);
         }
         low->setFont(plainFont);
 
+//        std::cerr << "port " << port->getName() << ": lower bound "
+//                  << displayLower << ", upper bound " << displayUpper
+//                  << ", logarithmic " << logarithmic << ", default "
+//                  << initialValue << ", actual lower " << lowerBound
+//                  << ", actual upper " << upperBound << ", step "
+//                  << step << std::endl;
+
         m_dial = new ::Rosegarden::Rotary(parent,
-                            lowerBound,    // min
-                            upperBound,    // max
-                            step,          // step
-                            pageStep,      // page step
-                            initialValue,  // initial
-                            30,            // size
-                            ticks,
-                            snapToTicks);
+                                          lowerBound,    // min
+                                          upperBound,    // max
+                                          step,          // step
+                                          pageStep,      // page step
+                                          initialValue,  // initial
+                                          30,            // size
+                                          ticks,
+                                          snapToTicks,
+                                          false,         // centred
+                                          logarithmic);
 
         m_dial->setKnobColour(GUIPalette::getColour(GUIPalette::RotaryPlugin));
-
-        //m_dial->setPosition(defaultValue);
-        //emit valueChanged(defaultValue);
 
         connect(m_dial, SIGNAL(valueChanged(float)),
                 this, SLOT(slotValueChanged(float)));
 
         QLabel *upp;
         if (port->getDisplayHint() &
-                (PluginPort::Integer |
-                 PluginPort::Toggled)) {
-            upp = new QLabel(QString("%1").arg(int(upperBound)), parent);
+            (PluginPort::Integer | PluginPort::Toggled)) {
+            upp = new QLabel(QString("%1").arg(int(displayUpper)), parent);
         } else {
-            upp = new QLabel(QString("%1").arg(upperBound), parent);
+            upp = new QLabel(QString("%1").arg(displayUpper), parent);
         }
         upp->setFont(plainFont);
 
