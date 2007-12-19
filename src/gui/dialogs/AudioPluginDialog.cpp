@@ -455,7 +455,7 @@ AudioPluginDialog::slotPluginSelected(int i)
                 //
                 if (inst->getPort(count) == 0) {
                     inst->addPort(count, (float)(*it)->getDefaultValue());
-                    std::cerr << "Plugin port name " << (*it)->getName() << ", default: " << (*it)->getDefaultValue() << std::endl;
+//                    std::cerr << "Plugin port name " << (*it)->getName() << ", default: " << (*it)->getDefaultValue() << std::endl;
                 }
 
             } else if ((*it)->getType() & PluginPort::Audio) {
