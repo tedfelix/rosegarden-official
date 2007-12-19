@@ -37,6 +37,7 @@
 #include <qobject.h>
 #include <qstring.h>
 #include <qwidget.h>
+#include <cmath>
 
 
 namespace Rosegarden
