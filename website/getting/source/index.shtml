@@ -55,7 +55,7 @@ SourceForge page. <i>(<a href="http://sourceforge.net/project/shownotes.php?rele
     or other interested parties.  These branches are accessible in the
     <code>branches/</code> directory of the svn repository, with the
     following command :</p>
-    <blockquote><code>svn co https://rosegarden.svn.sourceforge.net/svnroot/rosegarden/branches/&lt;BRANCH&gt;/rosegarden rosegarden</code></blockquote>
+    <blockquote><code>svn co https://rosegarden.svn.sourceforge.net/svnroot/rosegarden/branches/&lt;BRANCH&gt;</code></blockquote>
     <p>replacing <code>&lt;BRANCH&gt;</code> with the name of the branch you want.</p>
 
     <p>You can browse the current branches <a
