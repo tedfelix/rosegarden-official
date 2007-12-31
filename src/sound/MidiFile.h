@@ -133,6 +133,7 @@ private:
     // Internal MidiComposition
     //
     MidiComposition       m_midiComposition;
+    std::map<int, int>    m_trackChannelMap;
 
     // Clear the m_midiComposition
     //
