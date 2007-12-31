@@ -62,7 +62,7 @@ public:
     virtual void punchOut();
     virtual void resetPlayback(const RealTime &oldPosition, const RealTime &position);
     virtual void allNotesOff();
-    virtual void processNotesOff(const RealTime &time, bool now);
+    virtual void processNotesOff(const RealTime &time, bool now, bool everything = false);
 
     virtual RealTime getSequencerTime();
 

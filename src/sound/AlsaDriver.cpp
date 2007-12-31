@@ -151,6 +151,8 @@ AlsaDriver::shutdown()
     std::cerr << "AlsaDriver::~AlsaDriver - shutting down" << std::endl;
 #endif
 
+    processNotesOff(getAlsaTime(), true, true);
+
 #ifdef HAVE_LIBJACK
     delete m_jackDriver;
     m_jackDriver = 0;
@@ -2289,7 +2291,7 @@ AlsaDriver::allNotesOff()
 }
 
 void
-AlsaDriver::processNotesOff(const RealTime &time, bool now)
+AlsaDriver::processNotesOff(const RealTime &time, bool now, bool everything)
 {
     if (m_noteOffQueue.empty()) {
         return;
@@ -2317,7 +2319,7 @@ AlsaDriver::processNotesOff(const RealTime &time, bool now)
 #ifdef DEBUG_PROCESS_MIDI_OUT
 	    std::cerr << "Note off time " << ev->getRealTime() << " is beyond current time " << time << std::endl;
 #endif
-	    break;
+	    if (!everything) break;
 	}
 
 #ifdef DEBUG_PROCESS_MIDI_OUT
