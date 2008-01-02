@@ -112,7 +112,7 @@ public slots:
     /**
      * Scroll the view such that the numbered track is on-screen
      */
-    void slotScrollToTrack(int track);
+    void slotScrollToTrack(int trackPosition);
 
     /**
      * Set the position pointer during playback

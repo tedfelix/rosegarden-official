@@ -1555,8 +1555,8 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
 #endif
 
     if (getView() &&
-            getView()->getTrackEditor() &&
-            getView()->getTrackEditor()->getSegmentCanvas()) {
+        getView()->getTrackEditor() &&
+        getView()->getTrackEditor()->getSegmentCanvas()) {
         getView()->getTrackEditor()->getSegmentCanvas()->endAudioPreviewGeneration();
     }
 
@@ -1597,6 +1597,11 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
     // finally recreate the main view
     //
     initView();
+
+    if (getView() && getView()->getTrackEditor()) {
+        connect(m_doc, SIGNAL(makeTrackVisible(int)),
+                getView()->getTrackEditor(), SLOT(slotScrollToTrack(int)));
+    }
 
     connect(m_doc, SIGNAL(devicesResyncd()),
             this, SLOT(slotDocumentDevicesResyncd()));
