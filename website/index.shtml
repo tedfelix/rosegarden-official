@@ -7,14 +7,17 @@
     <!--#include virtual="/nav.html" -->
 
 <div style="float: right; margin-top: 5px; margin-right: 5px">
-<script type="text/javascript"><!--
+<!--
+<script type="text/javascript">
 google_ad_client = "pub-6311390097103672";
 //120x60, created 02/01/08
 google_ad_slot = "7791035738";
 google_ad_width = 120;
 google_ad_height = 60;
 google_cpa_choice = ""; // on file
-//--></script><script type="text/javascript"
+</script>
+-->
+<script type="text/javascript"
 src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </script><script type="text/javascript"><!--
 google_ad_client = "pub-6311390097103672";
