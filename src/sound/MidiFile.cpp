@@ -822,7 +822,11 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
 
     // Clear down the assigned Instruments we already have
     //
-    m_studio->unassignAllInstruments();
+    if (type == CONVERT_REPLACE) {
+	m_studio->unassignAllInstruments();
+    }
+
+    std::vector<Segment *> addedSegments;
 
 #ifdef MIDI_DEBUG
 
@@ -1072,11 +1076,11 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
                                                 rosegardenTime,
                                                 rosegardenDuration);
                     rosegardenEvent->set
-                    <Int>(BaseProperties::PITCH,
-                          (*midiEvent)->getPitch());
+			<Int>(BaseProperties::PITCH,
+			      (*midiEvent)->getPitch());
                     rosegardenEvent->set
-                    <Int>(BaseProperties::VELOCITY,
-                          (*midiEvent)->getVelocity());
+			<Int>(BaseProperties::VELOCITY,
+			      (*midiEvent)->getVelocity());
                     break;
 
                     // We ignore any NOTE OFFs here as we've already
@@ -1101,35 +1105,39 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
 
                     if (!instrument) {
 
-//			std::cerr << "First in track" << std::endl;
-			instrument = m_studio->getInstrumentById(compInstrument);
-			if (instrument) {
-//			    std::cerr << "Instrument " << compInstrument << " -> program " << (int)(*midiEvent)->getData1() << std::endl;
-			    instrument->setPercussion
-				((*midiEvent)->getChannelNumber() ==
-				 MIDI_PERCUSSION_CHANNEL);
-			    instrument->setSendProgramChange(true);
-			    instrument->setProgramChange((*midiEvent)->getData1());
-			    instrument->setSendBankSelect(msb >= 0 || lsb >= 0);
-			    if (instrument->sendsBankSelect()) {
-				instrument->setMSB(msb >= 0 ? msb : 0);
-				instrument->setLSB(lsb >= 0 ? lsb : 0);
+			bool percussion = (*midiEvent)->getChannelNumber() ==
+			    MIDI_PERCUSSION_CHANNEL;
+			int program = (*midiEvent)->getData1();
+
+			if (type == CONVERT_REPLACE) {
+
+			    instrument = m_studio->getInstrumentById(compInstrument);
+			    if (instrument) {
+				instrument->setPercussion(percussion);
+				instrument->setSendProgramChange(true);
+				instrument->setProgramChange(program);
+				instrument->setSendBankSelect(msb >= 0 || lsb >= 0);
+				if (instrument->sendsBankSelect()) {
+				    instrument->setMSB(msb >= 0 ? msb : 0);
+				    instrument->setLSB(lsb >= 0 ? lsb : 0);
+				}
 			    }
+			} else { // not CONVERT_REPLACE
+			    instrument =
+				m_studio->assignMidiProgramToInstrument
+				(program, msb, lsb, percussion);
 			}
 		    }
 
 		    // assign it here
 		    if (instrument) {
-
 			track->setInstrument(instrument->getId());
 			
-//			    std::cerr << "Program change found: setting program " << (int)(*midiEvent)->getData1() << " to instrument " << instrument->getId() << std::endl;
-			
-			// give the Segment a name based on the the Instrument
+			// give the Segment a name based on the the
+			// Instrument
 			//
 			rosegardenSegment->setLabel
                             (m_studio->getSegmentName(instrument->getId()));
-//			std::cerr << "segment label now \"" << rosegardenSegment->getLabel() << "\"" << std::endl;
 			
 			if ((*midiEvent)->getTime() == 0)
 			    break; // no insert
@@ -1315,6 +1323,7 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
             //
             composition.addTrack(track);
             composition.addSegment(rosegardenSegment);
+	    addedSegments.push_back(rosegardenSegment);
             compTrack++;
 
         } else {
@@ -1329,10 +1338,10 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
         composition.setEndMarker(composition.getBarEndForTime(maxTime));
     }
 
-    for (Composition::segmentcontainer::iterator i = composition.begin();
-	 i != composition.end(); ++i) {
+    for (std::vector<Segment *>::iterator i = addedSegments.begin();
+	 i != addedSegments.end(); ++i) {
 	Segment *s = *i;
-	if (s && (s->getLabel() == "" || s->getLabel() == " ")) {
+	if (s) {
 	    Instrument *instr = m_studio->getInstrumentFor(s);
 	    if (instr) s->setLabel(m_studio->getSegmentName(instr->getId()));
 	}

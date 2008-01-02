@@ -62,6 +62,7 @@
 #include "commands/segment/AddTracksCommand.h"
 #include "commands/segment/SegmentInsertCommand.h"
 #include "commands/segment/SegmentRecordCommand.h"
+#include "commands/segment/ChangeCompositionLengthCommand.h"
 #include "gui/application/RosegardenApplication.h"
 #include "gui/application/RosegardenGUIApp.h"
 #include "gui/application/RosegardenGUIView.h"
@@ -706,10 +707,12 @@ RosegardenGUIDoc::mergeDocument(RosegardenGUIDoc *doc,
         time0 = getComposition().getBarEndForTime(getComposition().getDuration());
     }
 
-    int myMaxTrack = getComposition().getMaxTrackId();
-    int yrMinTrack = doc->getComposition().getMinTrackId();
-    int yrMaxTrack = doc->getComposition().getMaxTrackId();
+    int myMaxTrack = getComposition().getNbTracks();
+    int yrMinTrack = 0;
+    int yrMaxTrack = doc->getComposition().getNbTracks();
     int yrNrTracks = yrMaxTrack - yrMinTrack + 1;
+
+    int firstAlteredTrack = yrMinTrack;
 
     if (options & MERGE_IN_NEW_TRACKS) {
 
@@ -720,6 +723,8 @@ RosegardenGUIDoc::mergeDocument(RosegardenGUIDoc *doc,
                              MidiInstrumentBase,
                              -1));
 
+        firstAlteredTrack = myMaxTrack + 1;
+
     } else if (yrMaxTrack > myMaxTrack) {
 
         command->addCommand(new AddTracksCommand
@@ -729,13 +734,20 @@ RosegardenGUIDoc::mergeDocument(RosegardenGUIDoc *doc,
                              -1));
     }
 
+    TrackId firstNewTrackId = getComposition().getNewTrackId();
+    timeT lastSegmentEndTime = 0;
+
     for (Composition::iterator i = doc->getComposition().begin(), j = i;
-            i != doc->getComposition().end(); i = j) {
+         i != doc->getComposition().end(); i = j) {
 
         ++j;
         Segment *s = *i;
+        timeT segmentEndTime = s->getEndMarkerTime();
 
         int yrTrack = s->getTrack();
+        Track *t = doc->getComposition().getTrackById(yrTrack);
+        if (t) yrTrack = t->getPosition();
+
         int myTrack = yrTrack;
 
         if (options & MERGE_IN_NEW_TRACKS) {
@@ -746,9 +758,18 @@ RosegardenGUIDoc::mergeDocument(RosegardenGUIDoc *doc,
 
         if (options & MERGE_AT_END) {
             s->setStartTime(s->getStartTime() + time0);
+            segmentEndTime += time0;
+        }
+        if (segmentEndTime > lastSegmentEndTime) {
+            lastSegmentEndTime = segmentEndTime;
         }
 
-        command->addCommand(new SegmentInsertCommand(&getComposition(), s, myTrack));
+        Track *track = getComposition().getTrackByPosition(myTrack);
+        TrackId tid = 0;
+        if (track) tid = track->getId();
+        else tid = firstNewTrackId + yrTrack - yrMinTrack;
+
+        command->addCommand(new SegmentInsertCommand(&getComposition(), s, tid));
     }
 
     if (!(options & MERGE_KEEP_OLD_TIMINGS)) {
@@ -773,7 +794,16 @@ RosegardenGUIDoc::mergeDocument(RosegardenGUIDoc *doc,
         }
     }
 
+    if (lastSegmentEndTime > getComposition().getEndMarker()) {
+        command->addCommand(new ChangeCompositionLengthCommand
+                            (&getComposition(),
+                             getComposition().getStartMarker(),
+                             lastSegmentEndTime));
+    }
+
     m_commandHistory->addCommand(command);
+
+    emit makeTrackVisible(firstAlteredTrack + yrNrTracks/2 + 1);
 }
 
 void RosegardenGUIDoc::clearStudio()

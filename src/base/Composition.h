@@ -136,7 +136,6 @@ public:
     void resetTrackIdAndPosition(TrackId oldId, TrackId newId, int position);
 
     TrackId getMinTrackId() const;
-
     TrackId getMaxTrackId() const;
 
     const recordtrackcontainer &getRecordTracks() const { return m_recordTracks; }
