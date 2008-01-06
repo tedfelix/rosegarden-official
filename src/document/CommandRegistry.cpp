@@ -29,6 +29,7 @@
 #include <qfile.h>
 
 #include <kglobal.h>
+#include <kcommand.h>
 
 namespace Rosegarden {
 

@@ -30,6 +30,7 @@
 #include <qnamespace.h>
 
 #include <kshortcut.h>
+#include <kcommand.h>
 
 #include <map>
 #include <vector>

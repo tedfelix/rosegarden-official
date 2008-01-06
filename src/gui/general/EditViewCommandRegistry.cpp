@@ -26,6 +26,11 @@
 
 #include <kinputdialog.h>
 #include <kactionclasses.h>
+#include <kstddirs.h>
+#include <klocale.h>
+#include <kmessagebox.h>
+
+#include <qfile.h>
 
 #include "gui/general/EditView.h"
 #include "misc/Strings.h"
