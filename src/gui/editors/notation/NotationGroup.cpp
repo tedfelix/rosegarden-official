@@ -47,16 +47,16 @@ NotationGroup::NotationGroup(NotationElementList &nel,
                              std::pair<timeT, timeT> barRange,
                              const NotationProperties &p,
                              const Clef &clef, const Key &key) :
-        AbstractSet<NotationElement, NotationElementList>(nel, i, q),
-        m_barRange(barRange),
-        //!!! What if the clef and/or key change in the course of the group?
-        m_clef(clef),
-        m_key(key),
-        m_weightAbove(0),
-        m_weightBelow(0),
-        m_userSamples(false),
-        m_type(Beamed),
-        m_properties(p)
+    AbstractSet<NotationElement, NotationElementList>(nel, i, q),
+    m_barRange(barRange),
+    //!!! What if the clef and/or key change in the course of the group?
+    m_clef(clef),
+    m_key(key),
+    m_weightAbove(0),
+    m_weightBelow(0),
+    m_userSamples(false),
+    m_type(Beamed),
+    m_properties(p)
 {
     if (!(*i)->event()->get
             <Int>
@@ -155,7 +155,7 @@ NotationGroup::sample(const NELIterator &i, bool goingForwards)
     //    NOTATION_DEBUG << "NotationGroup::sample: group id is " << m_groupNo << endl;
 
     AbstractSet<NotationElement, NotationElementList>::sample
-    (i, goingForwards);
+        (i, goingForwards);
 
     // If the sum of the distances from the middle line to the notes
     // above the middle line exceeds the sum of the distances from the
@@ -165,8 +165,7 @@ NotationGroup::sample(const NELIterator &i, bool goingForwards)
     if (!static_cast<NotationElement*>(*i)->isNote())
         return true;
     if (m_userSamples) {
-        if (m_initialNote == getContainer().end())
-            m_initialNote = i;
+        if (m_initialNote == getContainer().end()) m_initialNote = i;
         m_finalNote = i;
     }
 
@@ -206,8 +205,7 @@ int
 NotationGroup::height(const NELIterator &i) const
 {
     long h = 0;
-    if ((*i)->event()->get
-            <Int>(NotationProperties::HEIGHT_ON_STAFF, h)) {
+    if ((*i)->event()->get<Int>(NotationProperties::HEIGHT_ON_STAFF, h)) {
         return h;
     }
 
@@ -223,8 +221,7 @@ NotationGroup::height(const NELIterator &i) const
     }
 
     // not setMaybe, as we know the property is absent:
-    (*i)->event()->set
-    <Int>(NotationProperties::HEIGHT_ON_STAFF, h, false);
+    (*i)->event()->set<Int>(NotationProperties::HEIGHT_ON_STAFF, h, false);
     return h;
 }
 
@@ -233,14 +230,25 @@ NotationGroup::applyStemProperties()
 {
     NotationRules rules;
 
-    NELIterator initialNote(getInitialNote()),
-    finalNote( getFinalNote());
+    NELIterator
+        initialNote(getInitialNote()),
+        finalNote(getFinalNote());
 
     if (initialNote == getContainer().end() ||
-            initialNote == finalNote) {
+        initialNote == finalNote) {
         NOTATION_DEBUG << "NotationGroup::applyStemProperties: no notes in group"
-        << endl;
-        return ; // no notes, no case to answer
+                       << endl;
+        return; // no notes, no case to answer
+    }
+
+    if (getHighestNote() == getContainer().end()) {
+        std::cerr << "ERROR: NotationGroup::applyStemProperties: no highest note!" << std::endl;
+        abort();
+    }
+
+    if (getLowestNote() == getContainer().end()) {
+        std::cerr << "ERROR: NotationGroup::applyStemProperties: no lowest note!" << std::endl;
+        abort();
     }
 
     int up = 0, down = 0;
@@ -249,31 +257,29 @@ NotationGroup::applyStemProperties()
         NotationElement* el = static_cast<NotationElement*>(*i);
         if (el->isNote()) {
             if (el->event()->has(NotationProperties::STEM_UP)) {
-                if (el->event()->get
-                        <Bool>(NotationProperties::STEM_UP)) ++up;
-                else
-                    ++down;
+                if (el->event()->get<Bool>(NotationProperties::STEM_UP)) ++up;
+                else ++down;
             }
         }
 
-        if (i == finalNote)
-            break;
+        if (i == finalNote) break;
     }
 
     NOTATION_DEBUG << "NotationGroup::applyStemProperties: weightAbove "
-    << m_weightAbove << ", weightBelow " << m_weightBelow
-    << ", up " << up << ", down " << down << endl;
+                   << m_weightAbove << ", weightBelow " << m_weightBelow
+                   << ", up " << up << ", down " << down << endl;
 
-    bool aboveNotes = rules.isBeamAbove(height(getHighestNote()),height(getLowestNote()),m_weightAbove,m_weightBelow);
+    bool aboveNotes = rules.isBeamAbove(height(getHighestNote()),
+                                        height(getLowestNote()),
+                                        m_weightAbove,
+                                        m_weightBelow);
     if (up != down) {
-        if (up > down)
-            aboveNotes = true;
-        else
-            aboveNotes = false;
+        if (up > down) aboveNotes = true;
+        else aboveNotes = false;
     }
 
     NOTATION_DEBUG << "NotationGroup::applyStemProperties: hence aboveNotes "
-    << aboveNotes << endl;
+                   << aboveNotes << endl;
 
     /*!!!
         if ((*initialNote)->event()->has(STEM_UP) &&
@@ -288,29 +294,28 @@ NotationGroup::applyStemProperties()
         }
     */
     for (NELIterator i = initialNote; i != getContainer().end(); ++i) {
+
         NotationElement* el = static_cast<NotationElement*>(*i);
 
         el->event()->setMaybe<Bool>(NotationProperties::BEAM_ABOVE, aboveNotes);
 
         if (el->isNote() &&
-                el->event()->has(BaseProperties::NOTE_TYPE) &&
-                el->event()->get
-                <Int>(BaseProperties::NOTE_TYPE) < Note::Crotchet &&
-                el->event()->has(BaseProperties::BEAMED_GROUP_ID) &&
-                el->event()->get<Int>(BaseProperties::BEAMED_GROUP_ID) == m_groupNo) {
+            el->event()->has(BaseProperties::NOTE_TYPE) &&
+            el->event()->get<Int>(BaseProperties::NOTE_TYPE) < Note::Crotchet &&
+            el->event()->has(BaseProperties::BEAMED_GROUP_ID) &&
+            el->event()->get<Int>(BaseProperties::BEAMED_GROUP_ID) == m_groupNo) {
 
             el->event()->setMaybe<Bool>(NotationProperties::BEAMED, true);
             //	    el->event()->setMaybe<Bool>(m_properties.VIEW_LOCAL_STEM_UP, aboveNotes);
 
-        }
-        else if (el->isNote()) {
+        } else if (el->isNote()) {
 
             if (i == initialNote || i == finalNote) {
                 (*i)->event()->setMaybe<Bool>
-                (m_properties.VIEW_LOCAL_STEM_UP, aboveNotes);
+                    (m_properties.VIEW_LOCAL_STEM_UP, aboveNotes);
             } else {
                 (*i)->event()->setMaybe<Bool>
-                (m_properties.VIEW_LOCAL_STEM_UP, !aboveNotes);
+                    (m_properties.VIEW_LOCAL_STEM_UP, !aboveNotes);
             }
         }
 
@@ -353,18 +358,23 @@ NotationGroup::calculateBeam(NotationStaff &staff)
     NotationRules rules;
 
     Beam beam;
-    beam.aboveNotes = rules.isBeamAbove(height(getHighestNote()),height(getLowestNote()),m_weightAbove,m_weightBelow);
+    beam.aboveNotes = true;
     beam.startY = 0;
     beam.gradient = 0;
     beam.necessary = false;
 
     NELIterator initialNote(getInitialNote()),
-    finalNote( getFinalNote());
+        finalNote(getFinalNote());
 
     if (initialNote == getContainer().end() ||
-            initialNote == finalNote) {
+        initialNote == finalNote) {
         return beam; // no notes, or at most one: no case to answer
     }
+
+    beam.aboveNotes = rules.isBeamAbove(height(getHighestNote()),
+                                        height(getLowestNote()),
+                                        m_weightAbove,
+                                        m_weightBelow);
 
     if ((*initialNote)->event()->has(NotationProperties::BEAM_ABOVE)) {
         beam.aboveNotes = (*initialNote)->event()->get
