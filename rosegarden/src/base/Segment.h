@@ -411,9 +411,7 @@ public:
     /**
      * Fill up the segment with rests, from the end of the last event
      * currently on the segment to the endTime given.  Actually, this
-     * does much the same as setDuration does when it extends a segment,
-     * although the endTime is absolute whereas the argument to
-     * setDuration is relative to the start of the segment.
+     * does much the same as setEndTime does when it extends a segment.
      */
     void fillWithRests(timeT endTime);
 

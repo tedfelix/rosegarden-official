@@ -1783,6 +1783,14 @@ void NotationView::setupActions()
                 SLOT(slotEditDelete()), actionCollection(),
                 "delete");
 
+    new KAction(i18n("Move to Staff Above"), 0, this,
+                SLOT(slotMoveEventsUpStaff()), actionCollection(),
+                "move_events_up_staff");
+
+    new KAction(i18n("Move to Staff Below"), 0, this,
+                SLOT(slotMoveEventsDownStaff()), actionCollection(),
+                "move_events_down_staff");
+
     //
     // Settings menu
     //
@@ -3307,6 +3315,58 @@ NotationView::getCurrentLinedStaff()
     return getLinedStaff(m_currentStaff);
 }
 
+LinedStaff *
+NotationView::getStaffAbove()
+{
+    if (m_staffs.size() < 2) return 0;
+
+    Composition *composition =
+        m_staffs[m_currentStaff]->getSegment().getComposition();
+
+    Track *track = composition->
+        getTrackById(m_staffs[m_currentStaff]->getSegment().getTrack());
+    if (!track) return 0;
+
+    int position = track->getPosition();
+    Track *newTrack = 0;
+
+    while ((newTrack = composition->getTrackByPosition(--position))) {
+        for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+            if (m_staffs[i]->getSegment().getTrack() == newTrack->getId()) {
+                return m_staffs[i];
+            }
+        }
+    }
+
+    return 0;
+}
+
+LinedStaff *
+NotationView::getStaffBelow()
+{
+    if (m_staffs.size() < 2) return 0;
+
+    Composition *composition =
+        m_staffs[m_currentStaff]->getSegment().getComposition();
+
+    Track *track = composition->
+        getTrackById(m_staffs[m_currentStaff]->getSegment().getTrack());
+    if (!track) return 0;
+
+    int position = track->getPosition();
+    Track *newTrack = 0;
+
+    while ((newTrack = composition->getTrackByPosition(++position))) {
+        for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+            if (m_staffs[i]->getSegment().getTrack() == newTrack->getId()) {
+                return m_staffs[i];
+            }
+        }
+    }
+
+    return 0;
+}
+
 timeT
 NotationView::getInsertionTime()
 {
@@ -4755,6 +4815,62 @@ void NotationView::slotEditGeneralPaste()
             slotSetInsertCursorPosition(endTime, true, false);
         }
     }
+}
+
+void
+NotationView::slotMoveEventsUpStaff()
+{
+    LinedStaff *targetStaff = getStaffAbove();
+    if (!targetStaff) return;
+    if (!m_currentEventSelection) return;
+    Segment &targetSegment = targetStaff->getSegment();
+    
+    KMacroCommand *command = new KMacroCommand(i18n("Move Events to Staff Above"));
+
+    timeT insertionTime = m_currentEventSelection->getStartTime();
+
+    Clipboard *c = new Clipboard;
+    CopyCommand *cc = new CopyCommand(*m_currentEventSelection, c);
+    cc->execute();
+
+    command->addCommand(new EraseCommand(*m_currentEventSelection));;
+
+    command->addCommand(new PasteEventsCommand
+                        (targetSegment, c,
+                         insertionTime,
+                         PasteEventsCommand::NoteOverlay));
+
+    addCommandToHistory(command);
+
+    delete c;
+}
+
+void
+NotationView::slotMoveEventsDownStaff()
+{
+    LinedStaff *targetStaff = getStaffBelow();
+    if (!targetStaff) return;
+    if (!m_currentEventSelection) return;
+    Segment &targetSegment = targetStaff->getSegment();
+    
+    KMacroCommand *command = new KMacroCommand(i18n("Move Events to Staff Below"));
+
+    timeT insertionTime = m_currentEventSelection->getStartTime();
+
+    Clipboard *c = new Clipboard;
+    CopyCommand *cc = new CopyCommand(*m_currentEventSelection, c);
+    cc->execute();
+
+    command->addCommand(new EraseCommand(*m_currentEventSelection));;
+
+    command->addCommand(new PasteEventsCommand
+                        (targetSegment, c,
+                         insertionTime,
+                         PasteEventsCommand::NoteOverlay));
+
+    addCommandToHistory(command);
+
+    delete c;
 }
 
 void NotationView::slotPreviewSelection()
@@ -6369,55 +6485,17 @@ NotationView::slotSetCurrentStaff(int staffNo)
 void
 NotationView::slotCurrentStaffUp()
 {
-    if (m_staffs.size() < 2)
-        return ;
-
-    Composition *composition =
-        m_staffs[m_currentStaff]->getSegment().getComposition();
-
-    Track *track = composition->
-        getTrackById(m_staffs[m_currentStaff]->getSegment().getTrack());
-    if (!track)
-        return ;
-
-    int position = track->getPosition();
-    Track *newTrack = 0;
-
-    while ((newTrack = composition->getTrackByPosition(--position))) {
-        for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-            if (m_staffs[i]->getSegment().getTrack() == newTrack->getId()) {
-                slotSetCurrentStaff(i);
-                return ;
-            }
-        }
-    }
+    LinedStaff *staff = getStaffAbove();
+    if (!staff) return;
+    slotSetCurrentStaff(staff->getId());
 }
 
 void
 NotationView::slotCurrentStaffDown()
 {
-    if (m_staffs.size() < 2)
-        return ;
-
-    Composition *composition =
-        m_staffs[m_currentStaff]->getSegment().getComposition();
-
-    Track *track = composition->
-        getTrackById(m_staffs[m_currentStaff]->getSegment().getTrack());
-    if (!track)
-        return ;
-
-    int position = track->getPosition();
-    Track *newTrack = 0;
-
-    while ((newTrack = composition->getTrackByPosition(++position))) {
-        for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-            if (m_staffs[i]->getSegment().getTrack() == newTrack->getId()) {
-                slotSetCurrentStaff(i);
-                return ;
-            }
-        }
-    }
+    LinedStaff *staff = getStaffBelow();
+    if (!staff) return;
+    slotSetCurrentStaff(staff->getId());
 }
 
 void

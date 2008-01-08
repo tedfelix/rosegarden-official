@@ -14,6 +14,9 @@
   <Action name="general_paste"/>
   <Action name="delete"/>
   <Separator/>
+    <Action name="move_events_up_staff"/>
+    <Action name="move_events_down_staff"/>
+  <Separator/>
   <Action name="select_from_start"/>
   <Action name="select_to_end"/>
   <Action name="select_whole_staff"/>
@@ -652,6 +655,8 @@
 	<Action name="break_tuplets"/>
 	<Action name="make_invisible"/>
 	<Action name="make_visible"/>
+    <Action name="move_events_up_staff"/>
+    <Action name="move_events_down_staff"/>
   </enable>
 </State>
 
@@ -794,6 +799,8 @@
     <Action name="cursor_down_staff"/>
     <Action name="cursor_prior_segment"/>
     <Action name="cursor_next_segment"/>
+    <Action name="move_events_up_staff"/>
+    <Action name="move_events_down_staff"/>
   </enable>
 </State>
 
