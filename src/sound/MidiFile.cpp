@@ -931,7 +931,9 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
             }
 
             if ((*midiEvent)->isMeta()) {
+
                 switch ((*midiEvent)->getMetaEventCode()) {
+
                 case MIDI_TEXT_EVENT: {
                         std::string text = (*midiEvent)->getMetaMessage();
                         rosegardenEvent =
@@ -941,6 +943,8 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
 
                 case MIDI_LYRIC: {
                         std::string text = (*midiEvent)->getMetaMessage();
+//		    std::cerr << "lyric event: text=\""
+//			      << text << "\", time=" << rosegardenTime << std::endl;
                         rosegardenEvent =
                             Text(text, Text::Lyric).
                             getAsEvent(rosegardenTime);
@@ -964,6 +968,10 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
                 case MIDI_TRACK_NAME:
                     track->setLabel((*midiEvent)->getMetaMessage());
                     break;
+
+		case MIDI_INSTRUMENT_NAME:
+		    rosegardenSegment->setLabel((*midiEvent)->getMetaMessage());
+		    break;
 
                 case MIDI_END_OF_TRACK: {
                         timeT trackEndTime = rosegardenTime;
@@ -1041,7 +1049,6 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
 
                 case MIDI_SEQUENCE_NUMBER:
                 case MIDI_CHANNEL_PREFIX_OR_PORT:
-                case MIDI_INSTRUMENT_NAME:
                 case MIDI_CUE_POINT:
                 case MIDI_CHANNEL_PREFIX:
                 case MIDI_SEQUENCER_SPECIFIC:
@@ -1132,15 +1139,11 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
 		    // assign it here
 		    if (instrument) {
 			track->setInstrument(instrument->getId());
-			
-			// give the Segment a name based on the the
-			// Instrument
-			//
-			rosegardenSegment->setLabel
-                            (m_studio->getSegmentName(instrument->getId()));
-			
-			if ((*midiEvent)->getTime() == 0)
-			    break; // no insert
+			// We used to set the segment name from the instrument
+			// here, but now we do them all at the end only if the
+			// segment has no other name set (e.g. from instrument
+			// meta event)
+			if ((*midiEvent)->getTime() == 0) break; // no insert
 		    }
 
                     // did we have a bank select? if so, insert that too
@@ -1316,6 +1319,15 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
 
 #ifdef MIDI_DEBUG
             std::cerr << "MIDI import: adding segment with start time " << rosegardenSegment->getStartTime() << " and end time " << rosegardenSegment->getEndTime() << std::endl;
+	    if (rosegardenSegment->getEndTime() == 2880) {
+		std::cerr << "events:" << std::endl;
+		for (Segment::iterator i = rosegardenSegment->begin();
+		     i != rosegardenSegment->end(); ++i) {
+		    std::cerr << "type = " << (*i)->getType() << std::endl;
+		    std::cerr << "time = " << (*i)->getAbsoluteTime() << std::endl;
+		    std::cerr << "duration = " << (*i)->getDuration() << std::endl;
+		}
+	    }
 #endif
 
             // add the Segment to the Composition and increment the
@@ -1342,8 +1354,22 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
 	 i != addedSegments.end(); ++i) {
 	Segment *s = *i;
 	if (s) {
+	    timeT duration = s->getEndMarkerTime() - s->getStartTime();
+/*
+	    std::cerr << "duration = " << duration << " (start "
+		      << s->getStartTime() << ", end " << s->getEndTime()
+		      << ", marker " << s->getEndMarkerTime() << ")" << std::endl;
+*/
+	    if (duration == 0) {
+		s->setEndMarkerTime(s->getStartTime() +
+				    Note(Note::Crotchet).getDuration());
+	    }
 	    Instrument *instr = m_studio->getInstrumentFor(s);
-	    if (instr) s->setLabel(m_studio->getSegmentName(instr->getId()));
+	    if (instr) {
+		if (s->getLabel() == "") {
+		    s->setLabel(m_studio->getSegmentName(instr->getId()));
+		}
+	    }
 	}
     }
 
