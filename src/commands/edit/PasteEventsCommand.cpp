@@ -247,10 +247,8 @@ PasteEventsCommand::modifySegment()
                 continue;
             Event *e = (*i)->copyMoving(pasteTime - origin);
             if (e->has(BEAMED_GROUP_ID)) {
-                e->set
-                <Int>(BEAMED_GROUP_ID,
-                      groupIdMap[e->get
-                                 <Int>(BEAMED_GROUP_ID)]);
+                e->set<Int>(BEAMED_GROUP_ID,
+                            groupIdMap[e->get<Int>(BEAMED_GROUP_ID)]);
             }
             if ((*i)->isa(Note::EventType)) {
                 // e is model event: we retain ownership of it

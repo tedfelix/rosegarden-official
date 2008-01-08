@@ -382,6 +382,16 @@ public slots:
     void slotEditDelete();
 
     /**
+     * move the selection to the staff above
+     */
+    void slotMoveEventsUpStaff();
+
+    /**
+     * move the selection to the staff below
+     */
+    void slotMoveEventsDownStaff();
+
+    /**
      * toggles the tools toolbar
      */
     void slotToggleToolsToolBar();
@@ -945,6 +955,9 @@ protected:
     virtual Segment *getCurrentSegment();
     virtual Staff *getCurrentStaff() { return getCurrentLinedStaff(); }
     virtual LinedStaff *getCurrentLinedStaff();
+
+    virtual LinedStaff *getStaffAbove();
+    virtual LinedStaff *getStaffBelow();
         
     virtual bool hasSegment(Segment *segment);
 
