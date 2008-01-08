@@ -67,6 +67,12 @@ public:
                                        QMouseEvent*,
                                        ViewElement* el);
 
+    virtual void handleRightButtonPress(timeT time,
+                                        int height,
+                                        int staffNo,
+                                        QMouseEvent*,
+                                        ViewElement*);
+
     virtual int handleMouseMove(timeT,
                                 int height,
                                 QMouseEvent*);
