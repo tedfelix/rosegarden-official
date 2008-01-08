@@ -28,7 +28,7 @@
 
 #include <string>
 #include <kdialogbase.h>
-#include <vector>
+#include <deque>
 
 
 class QWidget;
@@ -55,7 +55,7 @@ protected slots:
 protected:
     std::string m_text;
     std::string m_codec;
-    std::vector<std::string> m_codecs;
+    std::deque<std::string> m_codecs;
     QLabel *m_example;
 };
 
