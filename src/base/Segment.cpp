@@ -742,10 +742,14 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
 
     for (; i != ib && i != end(); ++i) {
 
-	// if we have any rests remaining in this area, treat them
-	// as "hard" rests (they had tuplet data, so we don't want to
-	// disturb them)
-	if (!((*i)->isa(Note::EventType) || (*i)->isa(Note::EventRestType))) {
+	// Boundary events for sets of rests may be notes (obviously),
+	// text events (because they need to be "attached" to
+	// something that has the correct timing), or rests (any
+	// remaining rests in this area have tuplet data so should be
+	// treated as "hard" rests);
+	if (!((*i)->isa(Note::EventType) ||
+	      (*i)->isa(Text::EventType) ||
+	      (*i)->isa(Note::EventRestType))) {
 	    continue;
 	}
 
