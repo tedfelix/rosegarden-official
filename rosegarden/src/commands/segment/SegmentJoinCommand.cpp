@@ -72,6 +72,10 @@ SegmentJoinCommand::execute()
         return ;
     }
 
+    // we normalize rests in any overlapping areas
+    timeT overlapStart = 0, overlapEnd = 0;
+    bool haveOverlap = false;
+
     if (!m_newSegment) {
 
         m_newSegment = new Segment(*m_oldSegments[0]);
@@ -80,16 +84,38 @@ SegmentJoinCommand::execute()
 
         for (unsigned int i = 1; i < m_oldSegments.size(); ++i) {
 
-            //!!! we really should normalize rests in any overlapping areas
+            Segment *s = m_oldSegments[i];
 
-            if (m_oldSegments[i]->getStartTime() >
-                    m_newSegment->getEndMarkerTime()) {
-                m_newSegment->setEndMarkerTime
-                (m_oldSegments[i]->getStartTime());
+            timeT start = s->getStartTime(), end = s->getEndMarkerTime();
+
+            timeT os = 0, oe = 0;
+            bool haveOverlapHere = false;
+
+            if (start < m_newSegment->getEndMarkerTime() &&
+                end > m_newSegment->getStartTime()) {
+                haveOverlapHere = true;
+                os = std::max(start, m_newSegment->getStartTime());
+                oe = std::min(end, m_newSegment->getEndMarkerTime());
+                std::cerr << "overlap here, os = " << os << ", oe = " << oe << std::endl;
             }
 
-            for (Segment::iterator si = m_oldSegments[i]->begin();
-                    m_oldSegments[i]->isBeforeEndMarker(si); ++si) {
+            if (haveOverlapHere) {
+                if (haveOverlap) {
+                    overlapStart = std::min(overlapStart, os);
+                    overlapEnd = std::max(overlapEnd, oe);
+                } else {
+                    overlapStart = os;
+                    overlapEnd = oe;
+                    haveOverlap = true;
+                }
+            }
+
+            if (start > m_newSegment->getEndMarkerTime()) {
+                m_newSegment->setEndMarkerTime(start);
+            }
+
+            for (Segment::iterator si = s->begin();
+                 s->isBeforeEndMarker(si); ++si) {
 
                 // weed out duplicate clefs and keys
 
@@ -97,7 +123,7 @@ SegmentJoinCommand::execute()
                     try {
                         Clef newClef(**si);
                         if (m_newSegment->getClefAtTime
-                                ((*si)->getAbsoluteTime() + 1) == newClef) {
+                            ((*si)->getAbsoluteTime() + 1) == newClef) {
                             continue;
                         }
                     } catch (...) { }
@@ -107,7 +133,7 @@ SegmentJoinCommand::execute()
                     try {
                         Key newKey(**si);
                         if (m_newSegment->getKeyAtTime
-                                ((*si)->getAbsoluteTime() + 1) == newKey) {
+                            ((*si)->getAbsoluteTime() + 1) == newKey) {
                             continue;
                         }
                     } catch (...) { }
@@ -116,15 +142,17 @@ SegmentJoinCommand::execute()
                 m_newSegment->insert(new Event(**si));
             }
 
-            if (m_oldSegments[i]->getEndMarkerTime() >
-                    m_newSegment->getEndMarkerTime()) {
-                m_newSegment->setEndMarkerTime
-                (m_oldSegments[i]->getEndMarkerTime());
+            if (end > m_newSegment->getEndMarkerTime()) {
+                m_newSegment->setEndMarkerTime(end);
             }
         }
     }
 
     composition->addSegment(m_newSegment);
+
+    if (haveOverlap) {
+        m_newSegment->normalizeRests(overlapStart, overlapEnd);
+    }
 
     for (unsigned int i = 0; i < m_oldSegments.size(); ++i) {
         composition->detachSegment(m_oldSegments[i]);
