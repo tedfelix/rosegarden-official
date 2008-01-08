@@ -84,15 +84,32 @@ IdentifyTextCodecDialog::IdentifyTextCodecDialog(QWidget *parent,
     int i = 0;
     int current = -1;
 
+    int selectedProbability = 0;
+    if (cc) {
+        selectedProbability = cc->heuristicContentMatch
+            (m_text.c_str(), m_text.length());
+    }
+
     while ((codec = QTextCodec::codecForIndex(i)) != 0) {
 
-        if (codec->heuristicContentMatch(m_text.c_str(), m_text.length()) <= 0) {
+        int probability = codec->heuristicContentMatch
+            (m_text.c_str(), m_text.length());
+
+        if (probability <= 0) {
             ++i;
             continue;
         }
 
-        std::cerr << "codec " << codec->name() << " probability " << codec->heuristicContentMatch(m_text.c_str(), m_text.length()) << std::endl;
         std::string name = codec->name();
+
+        std::cerr << "codec " << name << " probability " << probability << std::endl;
+
+        if (name == "UTF-8" && 
+            (!cc || (cc->name() != name)) &&
+            probability > selectedProbability/2) {
+            std::cerr << "UTF-8 has a decent probability, selecting it instead to promote global harmony" << std::endl;
+            cc = codec;
+        }
 
         QString description = codecDescriptions[name];
         if (description == "") {
