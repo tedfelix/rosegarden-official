@@ -51,7 +51,8 @@ public:
 
 private:
     Segment *m_segment;
-    Segment *m_newSegment;
+    Segment *m_newSegmentA;
+    Segment *m_newSegmentB;
     timeT m_splitTime;
     timeT *m_previousEndMarkerTime;
     bool m_detached;
