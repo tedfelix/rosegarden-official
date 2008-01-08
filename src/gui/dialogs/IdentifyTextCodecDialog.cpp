@@ -85,12 +85,15 @@ IdentifyTextCodecDialog::IdentifyTextCodecDialog(QWidget *parent,
     int current = -1;
 
     while ((codec = QTextCodec::codecForIndex(i)) != 0) {
+
         if (codec->heuristicContentMatch(m_text.c_str(), m_text.length()) <= 0) {
             ++i;
             continue;
         }
+
         std::cerr << "codec " << codec->name() << " probability " << codec->heuristicContentMatch(m_text.c_str(), m_text.length()) << std::endl;
         std::string name = codec->name();
+
         QString description = codecDescriptions[name];
         if (description == "") {
             if (strtoqstr(name).left(3) == "CP ") {
@@ -98,20 +101,21 @@ IdentifyTextCodecDialog::IdentifyTextCodecDialog(QWidget *parent,
                               arg(strtoqstr(name).right(name.length() - 3));
             }
         }
+
         if (description != "") {
             description = i18n("%1 (%2)").arg(strtoqstr(name)).arg(description);
         } else {
             description = strtoqstr(name);
         }
+
         codecs->insertItem(description, 0);
-        m_codecs.push_back(name);
+        m_codecs.push_front(name);
+        if (current >= 0) ++current;
+
         if (cc && (name == cc->name())) {
-            codecs->setCurrentItem(0);
             current = 0;
-        } else {
-            if (current >= 0)
-                ++current;
         }
+
         ++i;
     }
 
@@ -124,23 +128,27 @@ IdentifyTextCodecDialog::IdentifyTextCodecDialog(QWidget *parent,
     font.setStyleHint(QFont::TypeWriter);
     m_example->setFont(font);
     m_example->setPaletteForegroundColor(Qt::blue);
-    slotCodecSelected(current >= 0 ? current : 0);
+    std::cerr << "calling slotCodecSelected(" << current << ")" << std::endl;
+    if (current < 0) current = 0;
+    codecs->setCurrentItem(current);
+    slotCodecSelected(current);
 }
 
 void
 IdentifyTextCodecDialog::slotCodecSelected(int i)
 {
-    if (i < 0 || i >= m_codecs.size())
-        return ;
-    std::string name = m_codecs[m_codecs.size() - i - 1];
+//    std::cerr << "codec index = " << i << std::endl;
+    if (i < 0 || i >= m_codecs.size()) return;
+    std::string name = m_codecs[i];
+//    std::cerr << "codecs: ";
+//    for (int j = 0; j < m_codecs.size(); ++j) std::cerr << m_codecs[j] << " ";
+//    std::cerr << std::endl;
     QTextCodec *codec = QTextCodec::codecForName(strtoqstr(name));
-    if (!codec)
-        return ;
+    if (!codec) return;
     m_codec = qstrtostr(codec->name());
     std::cerr << "Applying codec " << m_codec << std::endl;
     QString outText = codec->toUnicode(m_text.c_str(), m_text.length());
-    if (outText.length() > 80)
-        outText = outText.left(80);
+    if (outText.length() > 80) outText = outText.left(80);
     m_example->setText("\"" + outText + "\"");
 }
 
