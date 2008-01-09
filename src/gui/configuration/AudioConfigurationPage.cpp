@@ -99,6 +99,7 @@ AudioConfigurationPage::AudioConfigurationPage(
     layout->addMultiCellWidget(m_previewStyle, row, row, 1, 2);
     ++row;
 
+#ifdef HAVE_LIBJACK
     m_cfg->setGroup(SequencerOptionsConfigGroup);
 
     label = new QLabel(i18n("Record audio files as"), frame);
@@ -109,6 +110,7 @@ AudioConfigurationPage::AudioConfigurationPage(
     layout->addWidget(label, row, 0);
     layout->addMultiCellWidget(m_audioRecFormat, row, row, 1, 2);
     ++row;
+#endif
 
     m_cfg->setGroup(GeneralOptionsConfigGroup);
 
@@ -144,6 +146,7 @@ AudioConfigurationPage::AudioConfigurationPage(
                       row, 0);
 //    ++row;
 
+#ifdef HAVE_LIBJACK
     m_createFaderOuts = new QCheckBox(i18n("for individual audio instruments"), frame);
     m_createFaderOuts->setChecked(m_cfg->readBoolEntry("audiofaderouts", false));
 
@@ -158,6 +161,7 @@ AudioConfigurationPage::AudioConfigurationPage(
 //    layout->addWidget(label, row, 0, Qt::AlignRight);
     layout->addWidget(m_createSubmasterOuts, row, 1);
     ++row;
+#endif
 
     layout->setRowStretch(row, 10);
 
@@ -165,6 +169,7 @@ AudioConfigurationPage::AudioConfigurationPage(
 
     // --------------------- Startup control ----------------------
     //
+#ifdef HAVE_LIBJACK
 #define OFFER_JACK_START_OPTION 1
 #ifdef OFFER_JACK_START_OPTION
 
@@ -209,6 +214,7 @@ AudioConfigurationPage::AudioConfigurationPage(
     addTab(frame, i18n("JACK Startup"));
 
 #endif // OFFER_JACK_START_OPTION
+#endif // HAVE_LIBJACK
 
 }
 
@@ -224,6 +230,7 @@ AudioConfigurationPage::apply()
 {
     m_cfg->setGroup(SequencerOptionsConfigGroup);
 
+#ifdef HAVE_LIBJACK
 #ifdef OFFER_JACK_START_OPTION
     // Jack control
     //
@@ -236,6 +243,7 @@ AudioConfigurationPage::apply()
     m_cfg->writeEntry("audiofaderouts", m_createFaderOuts->isChecked());
     m_cfg->writeEntry("audiosubmasterouts", m_createSubmasterOuts->isChecked());
     m_cfg->writeEntry("audiorecordfileformat", m_audioRecFormat->currentItem());
+#endif
 
     m_cfg->setGroup(GeneralOptionsConfigGroup);
 
