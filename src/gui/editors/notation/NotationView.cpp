@@ -4582,7 +4582,7 @@ std::map<KProcess *, KTempFile *> NotationView::m_lilyTempFileMap;
 
 void NotationView::slotPrintLilypond()
 {
-    KTmpStatusMsg msg(i18n("Printing Lilypond file..."), this);
+    KTmpStatusMsg msg(i18n("Printing LilyPond file..."), this);
     KTempFile *file = new KTempFile(QString::null, ".ly");
     file->setAutoDelete(true);
     if (!file->name()) {
@@ -4606,7 +4606,7 @@ void NotationView::slotPrintLilypond()
 
 void NotationView::slotPreviewLilypond()
 {
-    KTmpStatusMsg msg(i18n("Previewing Lilypond file..."), this);
+    KTmpStatusMsg msg(i18n("Previewing LilyPond file..."), this);
     KTempFile *file = new KTempFile(QString::null, ".ly");
     file->setAutoDelete(true);
     if (!file->name()) {
@@ -4648,7 +4648,7 @@ bool NotationView::exportLilypondFile(QString file, bool forPreview)
         return false;
     }
 
-    ProgressDialog progressDlg(i18n("Exporting Lilypond file..."),
+    ProgressDialog progressDlg(i18n("Exporting LilyPond file..."),
                                100,
                                this);
 

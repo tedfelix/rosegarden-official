@@ -589,7 +589,7 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotExportMIDI()), actionCollection(),
                 "file_export_midi");
 
-    new KAction(i18n("Export &Lilypond file..."), 0, 0, this,
+    new KAction(i18n("Export &LilyPond file..."), 0, 0, this,
                 SLOT(slotExportLilypond()), actionCollection(),
                 "file_export_lilypond");
 
@@ -4931,10 +4931,10 @@ void RosegardenGUIApp::exportMupFile(QString file)
 
 void RosegardenGUIApp::slotExportLilypond()
 {
-    KTmpStatusMsg msg(i18n("Exporting Lilypond file..."), this);
+    KTmpStatusMsg msg(i18n("Exporting LilyPond file..."), this);
 
     QString fileName = getValidWriteFile
-                       (QString("*.ly|") + i18n("Lilypond files") +
+                       (QString("*.ly|") + i18n("LilyPond files") +
                         "\n*|" + i18n("All files"),
                         i18n("Export as..."));
 
@@ -4949,7 +4949,7 @@ std::map<KProcess *, KTempFile *> RosegardenGUIApp::m_lilyTempFileMap;
 
 void RosegardenGUIApp::slotPrintLilypond()
 {
-    KTmpStatusMsg msg(i18n("Printing Lilypond file..."), this);
+    KTmpStatusMsg msg(i18n("Printing LilyPond file..."), this);
     KTempFile *file = new KTempFile(QString::null, ".ly");
     file->setAutoDelete(true);
     if (!file->name()) {
@@ -4973,7 +4973,7 @@ void RosegardenGUIApp::slotPrintLilypond()
 
 void RosegardenGUIApp::slotPreviewLilypond()
 {
-    KTmpStatusMsg msg(i18n("Previewing Lilypond file..."), this);
+    KTmpStatusMsg msg(i18n("Previewing LilyPond file..."), this);
     KTempFile *file = new KTempFile(QString::null, ".ly");
     file->setAutoDelete(true);
     if (!file->name()) {
@@ -5015,7 +5015,7 @@ bool RosegardenGUIApp::exportLilypondFile(QString file, bool forPreview)
         return false;
     }
 
-    ProgressDialog progressDlg(i18n("Exporting Lilypond file..."),
+    ProgressDialog progressDlg(i18n("Exporting LilyPond file..."),
                                100,
                                this);
 
