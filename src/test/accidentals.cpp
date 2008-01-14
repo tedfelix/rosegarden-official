@@ -62,10 +62,27 @@ int testBbinBb()
     return 0;
 }
 
+// Verifies that the height on staff for pitch 61 using flats is -1, not -2
+int testDesHeight()
+{
+    bool useSharps = false;
+
+    Pitch pitch(61);
+    int h = pitch.getHeightOnStaff(Clef(Clef::Treble, 0), useSharps);
+
+    if (h != -1)
+    {
+        std::cerr << "Error in testDesHeight: expected height -1, got " << h << std::endl;
+        return -1;
+    } 
+    return 0;
+}
+
 int test_accidentals(int argc, char **argv)
 {
   return testBInEMinor() +
       testFInBMinor() +
       testInvalidSuggestion() +
-      testBbinBb();
+      testBbinBb() +
+      testDesHeight();
 }
