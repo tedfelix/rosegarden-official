@@ -2199,9 +2199,7 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
     int lw = getLineSpacing();
     int width = getClefWidth(Clef::Bass) + 10 * getNoteBodyWidth();
 
-    int h = pitch.getHeightOnStaff
-            (clef,
-             useSharps ? Key("C major") : Key("A minor"));
+    int h = pitch.getHeightOnStaff(clef, useSharps);
     params.setStemGoesUp(rules.isStemUp(h));
 
     if (h < -1)
