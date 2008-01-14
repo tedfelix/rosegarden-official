@@ -1689,6 +1689,16 @@ Pitch::getHeightOnStaff(const Clef &clef, const Key &key) const
 }
 
 int
+Pitch::getHeightOnStaff(const Clef &clef, bool useSharps) const
+{
+    int heightOnStaff;
+    Accidental accidental(m_accidental);
+    rawPitchToDisplayPitch(m_pitch, clef, Key("C major"), heightOnStaff, accidental, 
+        useSharps ? UseSharps : UseFlats);
+    return heightOnStaff;
+}
+
+int
 Pitch::getOctave(int octaveBase) const
 {
     return m_pitch / 12 + octaveBase;

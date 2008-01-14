@@ -893,8 +893,20 @@ public:
      * conventional 5-line staff.  0 is the bottom line, 1 the first
      * space, etc., so for example middle-C in the treble clef would
      * return -2.
+     *
+     * Chooses the most likely accidental for this pitch in this key.
      */
     int getHeightOnStaff(const Clef &clef, const Key &key) const;
+
+    /**
+     * Return the height at which this pitch should display on a
+     * conventional 5-line staff.  0 is the bottom line, 1 the first
+     * space, etc., so for example middle-C in the treble clef would
+     * return -2.
+     *
+     * Chooses the accidental specified by the 'useSharps' parameter
+     */
+    int getHeightOnStaff(const Clef &clef, bool useSharps) const;
 
     /**
      * Return the octave containing this pitch.  The octaveBase argument
