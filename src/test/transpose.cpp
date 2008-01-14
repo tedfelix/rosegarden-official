@@ -126,7 +126,7 @@ int testIntervalToString()
         + testIntervalString(0,0,"a perfect unison")
 	+ testIntervalString(0,1,"up an augmented unison") 
 	+ testIntervalString(7,12,"up 1 octave") 
-	+ testIntervalString(7,13,"up 1 octave and an augmented unison");
+	+ testIntervalString(7,13,"up an augmented octave");
 
     QString text = IntervalDialog::getIntervalName(1, 1);
     std::cout << "Minor second: " << text << std::endl;
@@ -147,8 +147,8 @@ int test_transpose(int argc, char **argv)
     return testAisDisplayAccidentalInCmaj() +
         testAisToBis() +
         testGToD() +
-        testCisToC() +
         testTransposeBbToF() +
-        testIntervalToString();
+        testIntervalToString() +
+        testCisToC();
 	
 }
