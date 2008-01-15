@@ -210,6 +210,11 @@ public:
     bool isInTripletMode();
 
     /**
+     * Discover whether grace-mode insertions are enabled
+     */
+    bool isInGraceMode();
+
+    /**
      * Discover whether annotations are being displayed or not
      */
     bool areAnnotationsVisible() { return m_annotationsVisible; }
@@ -260,6 +265,7 @@ public:
     void showPreviewNote(int staffNo, double layoutX,
                          int pitch, int height,
                          const Note &note,
+                         bool grace,
                          int velocity = -1);
 
     /// Remove any visible preview note
@@ -515,8 +521,10 @@ public slots:
     void slotGroupGeneralTuplet();
     void slotGroupTuplet(bool simple);
     void slotGroupUnTuplet();
+/*!!!
     void slotGroupGrace();
     void slotGroupUnGrace();
+*/
     void slotGroupSlur();
     void slotGroupPhrasingSlur();
     void slotGroupGlissando();

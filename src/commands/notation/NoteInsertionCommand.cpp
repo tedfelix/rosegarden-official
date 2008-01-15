@@ -43,11 +43,12 @@ namespace Rosegarden
 using namespace BaseProperties;
 
 NoteInsertionCommand::NoteInsertionCommand(Segment &segment, timeT time,
-        timeT endTime, Note note, int pitch,
-        Accidental accidental,
-        bool autoBeam,
-        bool matrixType,
-        NoteStyleName noteStyle) :
+                                           timeT endTime, Note note, int pitch,
+                                           Accidental accidental,
+                                           AutoBeamMode autoBeam,
+                                           MatrixMode matrixType,
+                                           GraceMode grace,
+                                           NoteStyleName noteStyle) :
         BasicCommand(i18n("Insert Note"), segment,
                      getModificationStartTime(segment, time),
                      (autoBeam ? segment.getBarEndForTime(endTime) : endTime)),
@@ -55,8 +56,9 @@ NoteInsertionCommand::NoteInsertionCommand(Segment &segment, timeT time,
         m_note(note),
         m_pitch(pitch),
         m_accidental(accidental),
-        m_autoBeam(autoBeam),
-        m_matrixType(matrixType),
+        m_autoBeam(autoBeam == AutoBeamOn),
+        m_matrixType(matrixType == MatrixModeOn),
+        m_grace(grace == GraceModeOn),
         m_noteStyle(noteStyle),
         m_lastInsertedEvent(0)
 {
@@ -94,54 +96,59 @@ NoteInsertionCommand::modifySegment()
 {
     Segment &segment(getSegment());
     SegmentNotationHelper helper(segment);
-
-    // If we're attempting to insert at the same time and pitch as an
-    // existing note, then we remove the existing note first (so as to
-    // change its duration, if the durations differ)
     Segment::iterator i, j;
-    segment.getTimeSlice(m_insertionTime, i, j);
-    while (i != j) {
-        if ((*i)->isa(Note::EventType)) {
-            long pitch;
-            if ((*i)->get
-                    <Int>(PITCH, pitch) && pitch == m_pitch) {
-                helper.deleteNote(*i);
-                break;
-            }
-        }
-        ++i;
-    }
 
     // insert via a model event, so as to apply the note style
 
     Event *e = new Event
-               (Note::EventType, m_insertionTime, m_note.getDuration());
+               (Note::EventType,
+                m_insertionTime,
+                m_grace ? 0 : m_note.getDuration(),
+                m_grace ? -1 : 0,
+                m_insertionTime,
+                m_note.getDuration());
 
-    e->set
-    <Int>(PITCH, m_pitch);
-    e->set
-    <Int>(VELOCITY, 100);
+    e->set<Int>(PITCH, m_pitch);
+    e->set<Int>(VELOCITY, 100);
 
     if (m_accidental != Accidentals::NoAccidental) {
-        e->set
-        <String>(ACCIDENTAL, m_accidental);
+        e->set<String>(ACCIDENTAL, m_accidental);
     }
 
     if (m_noteStyle != NoteStyleFactory::DefaultStyle) {
-        e->set
-        <String>(NotationProperties::NOTE_STYLE, m_noteStyle);
+        e->set<String>(NotationProperties::NOTE_STYLE, m_noteStyle);
     }
 
-    if (m_matrixType) {
-        i = SegmentMatrixHelper(segment).insertNote(e);
+    if (m_grace) {
+        e->set<Bool>(IS_GRACE_NOTE, true);
+        i = segment.insert(e);
     } else {
-        i = helper.insertNote(e);
-        // e is just a model for SegmentNotationHelper::insertNote
-        delete e;
+
+        // If we're attempting to insert at the same time and pitch as
+        // an existing note, then we remove the existing note first
+        // (so as to change its duration, if the durations differ)
+        segment.getTimeSlice(m_insertionTime, i, j);
+        while (i != j) {
+            if ((*i)->isa(Note::EventType)) {
+                long pitch;
+                if ((*i)->get<Int>(PITCH, pitch) && pitch == m_pitch) {
+                    helper.deleteNote(*i);
+                    break;
+                }
+            }
+            ++i;
+        }
+        
+        if (m_matrixType) {
+            i = SegmentMatrixHelper(segment).insertNote(e);
+        } else {
+            i = helper.insertNote(e);
+            // e is just a model for SegmentNotationHelper::insertNote
+            delete e;
+        }
     }
 
-    if (i != segment.end())
-        m_lastInsertedEvent = *i;
+    if (i != segment.end()) m_lastInsertedEvent = *i;
 
     if (m_autoBeam) {
 

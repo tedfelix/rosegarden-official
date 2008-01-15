@@ -146,7 +146,8 @@ NotationGroup::sample(const NELIterator &i, bool goingForwards)
     } else if (t == BaseProperties::GROUP_TYPE_TUPLED) {
         m_type = Tupled;
     } else if (t == BaseProperties::GROUP_TYPE_GRACE) {
-        m_type = Grace;
+        std::cerr << "NotationGroup::NotationGroup: WARNING: Obsolete group type Grace found" << std::endl;
+        return false;
     } else {
         NOTATION_DEBUG << "NotationGroup::NotationGroup: Warning: Rejecting sample() for unknown GroupType \"" << t << "\"" << endl;
         return false;
@@ -454,7 +455,7 @@ NotationGroup::calculateBeam(NotationStaff &staff)
     int finalDX = (int) (*finalNote)->getLayoutX() - initialX;
     int extremeDX = (int)(*extremeNote)->getLayoutX() - initialX;
 
-    int spacing = staff.getNotePixmapFactory(m_type == Grace).getLineSpacing();
+    int spacing = staff.getNotePixmapFactory(false).getLineSpacing();
 
     beam.gradient = 0;
     if (finalDX > 0) {
@@ -494,7 +495,7 @@ NotationGroup::calculateBeam(NotationStaff &staff)
     }
 
     // minimal stem lengths at start, middle-extreme and end of beam
-    int sl = staff.getNotePixmapFactory(m_type == Grace).getStemLength();
+    int sl = staff.getNotePixmapFactory(false).getStemLength();
     int ml = spacing * 2;
     int el = sl;
 
@@ -918,7 +919,7 @@ NotationGroup::applyTuplingLine(NotationStaff &staff)
 
         //	NOTATION_DEBUG << "applyTuplingLine: beam.startY is " << beam.startY << ", initialY is " << initialY << " so my startY is " << startY << ", endY " << endY << ", beam.gradient " << beam.gradient << endl;
 
-        int nh = staff.getNotePixmapFactory(m_type == Grace).getNoteBodyHeight();
+        int nh = staff.getNotePixmapFactory(false).getNoteBodyHeight();
 
         if (followBeam) { // adjust to move text slightly away from beam
 

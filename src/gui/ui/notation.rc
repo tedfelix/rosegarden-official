@@ -396,6 +396,7 @@
 
   <Action name="chord_mode"/>
   <Action name="triplet_mode"/>
+  <Action name="grace_mode"/>
 
   <Separator/>
   <Action name="toggle_step_by_step"/>
@@ -483,6 +484,7 @@
 
   <Action name="chord_mode"/>
   <Action name="triplet_mode" />
+  <Action name="grace_mode" />
 </ToolBar>
 
 <ToolBar name="Rests Toolbar" hidden="false" position="left">
@@ -537,7 +539,7 @@
   <Separator/>
   <Action name="tuplet"/>
   <Action name="simple_tuplet"/>
-  <Action name="grace"/>
+<!--  <Action name="grace"/> -->
   <Separator/>
   <Action name="slur"/>
 <!--  <Action name="glissando"/> -->
@@ -687,7 +689,7 @@
     <Action name="auto_beam"/>
     <Action name="break_group"/>
 <!--    <Action name="break_tuplets"/> -->
-    <Action name="grace"/>
+<!--    <Action name="grace"/> -->
 <!--    <Action name="ungrace"/> -->
     <Action name="slur"/>
   <Action name="phrasing_slur"/>

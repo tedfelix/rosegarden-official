@@ -38,10 +38,11 @@ namespace Rosegarden
 {
 
 RestInsertionCommand::RestInsertionCommand(Segment &segment, timeT time,
-        timeT endTime, Note note) :
-        NoteInsertionCommand(segment, time, endTime, note, 0,
-                             Accidentals::NoAccidental,
-                             false, false, NoteStyleFactory::DefaultStyle)
+                                           timeT endTime, Note note) :
+    NoteInsertionCommand(segment, time, endTime, note, 0,
+                         Accidentals::NoAccidental,
+                         AutoBeamOff, MatrixModeOff, GraceModeOff,
+                         NoteStyleFactory::DefaultStyle)
 {
     setName("Insert Rest");
 }

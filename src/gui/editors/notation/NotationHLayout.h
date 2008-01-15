@@ -65,9 +65,10 @@ class NotationHLayout : public ProgressReporter,
                         public HorizontalLayoutEngine
 {
 public:
-    NotationHLayout(Composition *c, NotePixmapFactory *npf,
-                     const NotationProperties &properties,
-                     QObject* parent, const char* name = 0);
+    NotationHLayout(Composition *c,
+                    NotePixmapFactory *npf,
+                    const NotationProperties &properties,
+                    QObject* parent, const char* name = 0);
 
     virtual ~NotationHLayout();
 
@@ -371,7 +372,7 @@ protected:
     (NotationElementList *notes, NotationElementList::iterator &i,
      const Clef &, const ::Rosegarden::Key &,
      AccidentalTable &, float &lyricWidth,
-     ChunkList &chunks, int &graceCount, int ottavaShift,
+     ChunkList &chunks, NotePixmapFactory *, int ottavaShift,
      NotationElementList::iterator &to);
 
     typedef std::map<int, NotationElementList::iterator> TieMap;
@@ -398,12 +399,16 @@ protected:
     (Staff &staff, const NotationChord &);
 
     float getLayoutWidth(ViewElement &,
+                         NotePixmapFactory *,
                          const ::Rosegarden::Key &) const;
 
     int getBarMargin() const;
     int getPreBarMargin() const;
     int getPostBarMargin() const;
     int getFixedItemSpacing() const;
+
+    NotePixmapFactory *getNotePixmapFactory(Staff &);
+    NotePixmapFactory *getGraceNotePixmapFactory(Staff &);
 
     //--------------- Data members ---------------------------------
 
@@ -418,6 +423,10 @@ protected:
     int m_spacing;
     int m_proportion;
     int m_keySigCancelMode;
+
+    //!!! This should not be here -- different staffs may have
+    //different sizes in principle, so we should always be referring
+    //to the npf of a particular staff
     NotePixmapFactory *m_npf;
 
     static std::vector<int> m_availableSpacings;
