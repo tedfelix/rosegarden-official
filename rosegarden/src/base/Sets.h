@@ -300,7 +300,12 @@ AbstractSet<Element, Container>::initialise()
     for (i = j = m_baseIterator; i != getContainer().begin() && test(--j); i = j){
         if (sample(j, false)) {
             m_initial = j;
-            if (getAsEvent(j)->isa(Note::EventType)) m_initialNote = j;
+            if (getAsEvent(j)->isa(Note::EventType)) {
+		m_initialNote = j;
+		if (m_finalNote == getContainer().end()) {
+		    m_finalNote = j;
+		}
+	    }
         }
     }
 
@@ -312,7 +317,12 @@ AbstractSet<Element, Container>::initialise()
     for (i = j = m_baseIterator; ++j != getContainer().end() && test(j); i = j) {
         if (sample(j, true)) {
             m_final = j;
-            if (getAsEvent(j)->isa(Note::EventType)) m_finalNote = j;
+            if (getAsEvent(j)->isa(Note::EventType)) {
+		m_finalNote = j;
+		if (m_initialNote == getContainer().end()) {
+		    m_initialNote = j;
+		}
+	    }
         }
     }
 }
