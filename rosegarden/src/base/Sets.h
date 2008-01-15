@@ -201,6 +201,8 @@ public:
      */
     virtual Iterator getFirstElementNotInChord();
 
+    virtual int getSubOrdering() { return m_subordering; }
+
 protected:
     virtual bool test(const Iterator&);
     virtual bool sample(const Iterator&, bool goingForwards);
@@ -368,10 +370,12 @@ GenericChord<Element, Container, singleStaff>::GenericChord(Container &c,
     m_subordering(getAsEvent(i)->getSubOrdering()),
     m_firstReject(c.end())
 {
-        AbstractSet<Element, Container>::initialise();
+    AbstractSet<Element, Container>::initialise();
 
     if (std::vector<typename Container::iterator>::size() > 1) {
-        std::stable_sort(std::vector<typename Container::iterator>::begin(), std::vector<typename Container::iterator>::end(), PitchGreater());
+        std::stable_sort(std::vector<typename Container::iterator>::begin(),
+			 std::vector<typename Container::iterator>::end(),
+			 PitchGreater());
     }
 
 /*!!! this should all be removed ultimately
@@ -403,7 +407,13 @@ bool
 GenericChord<Element, Container, singleStaff>::test(const Iterator &i)
 {
     Event *e = getAsEvent(i);
-    if (AbstractSet<Element, Container>::getQuantizer().getQuantizedAbsoluteTime(e) != m_time) return false;
+    if (AbstractSet<Element, Container>::
+	getQuantizer().getQuantizedAbsoluteTime(e) != m_time) {
+	return false;
+    }
+    if (e->getSubOrdering() != m_subordering) {
+	return false;
+    }
 
     // We permit note or rest events etc here, because if a chord is a
     // little staggered (for performance reasons) then it's not at all

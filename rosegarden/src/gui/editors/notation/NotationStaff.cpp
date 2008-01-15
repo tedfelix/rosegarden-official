@@ -1819,8 +1819,11 @@ NotationStaff::isSelected(NotationElementList::iterator it)
 
 void
 NotationStaff::showPreviewNote(double layoutX, int heightOnStaff,
-                               const Note &note)
+                               const Note &note, bool grace)
 {
+    NotePixmapFactory *npf = m_notePixmapFactory;
+    if (grace) npf = m_graceNotePixmapFactory;
+
     NotePixmapParameters params(note.getNoteType(), note.getDots());
     NotationRules rules;
 
@@ -1841,7 +1844,7 @@ NotationStaff::showPreviewNote(double layoutX, int heightOnStaff,
 
     delete m_previewSprite;
     m_previewSprite = new QCanvasSimpleSprite
-                      (m_notePixmapFactory->makeNotePixmap(params), m_canvas);
+                      (npf->makeNotePixmap(params), m_canvas);
 
     int layoutY = getLayoutYForHeight(heightOnStaff);
     LinedStaffCoords coords = getCanvasCoordsForLayoutCoords(layoutX, layoutY);

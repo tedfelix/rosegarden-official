@@ -61,7 +61,7 @@ PasteEventsCommand::PasteEventsCommand(Segment &segment,
             Segment *s(clipboard->getSingleSegment());
             for (Segment::iterator i = s->begin(); i != s->end(); ++i) {
                 if ((*i)->isa(Clef::EventType) ||
-                        (*i)->isa(Key::EventType)) {
+                    (*i)->isa(Key::EventType)) {
                     m_relayoutEndTime = s->getEndTime();
                     break;
                 }

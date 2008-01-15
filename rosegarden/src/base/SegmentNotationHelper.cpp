@@ -111,14 +111,14 @@ SegmentNotationHelper::setNotationProperties(timeT startTime, timeT endTime)
 	from = segment().findTime(startTime);
 	to   = segment().findTime(endTime);
     }
-
+/*!!!
     bool justSeenGraceNote = false;
     timeT graceNoteStart = 0;
-
+*/
     for (Segment::iterator i = from;
 	 i != to && segment().isBeforeEndMarker(i); ++i) {
 
-	if ((*i)->has(NOTE_TYPE) && !(*i)->has(IS_GRACE_NOTE)) continue;
+	if ((*i)->has(NOTE_TYPE) /*!!! && !(*i)->has(IS_GRACE_NOTE) */) continue;
 
 	timeT duration = (*i)->getNotationDuration();
 
@@ -138,7 +138,7 @@ SegmentNotationHelper::setNotationProperties(timeT startTime, timeT endTime)
 	if ((*i)->isa(Note::EventType) || (*i)->isa(Note::EventRestType)) {
 
 	    if ((*i)->isa(Note::EventType)) {
-		
+/*!!!		
 		if ((*i)->has(IS_GRACE_NOTE) &&
 		    (*i)->get<Bool>(IS_GRACE_NOTE)) {
 
@@ -152,6 +152,7 @@ SegmentNotationHelper::setNotationProperties(timeT startTime, timeT endTime)
 		    duration += (*i)->getNotationAbsoluteTime() - graceNoteStart;
 		    justSeenGraceNote = false;
 		}
+*/
 	    }
 
 	    Note n(Note::getNearestNote(duration));
@@ -1675,8 +1676,8 @@ SegmentNotationHelper::removeRests(timeT time, timeT &duration, bool testOnly)
 {
     Event dummy("dummy", time, 0, MIN_SUBORDERING);
     
-//    cerr << "SegmentNotationHelper::removeRests(" << time
-//         << ", " << duration << ")\n";
+    std::cerr << "SegmentNotationHelper::removeRests(" << time
+	      << ", " << duration << ")" << std::endl;
 
     iterator from = segment().lower_bound(&dummy);
 

@@ -43,14 +43,30 @@ class Event;
 class NoteInsertionCommand : public BasicCommand
 {
 public:
+    enum AutoBeamMode {
+        AutoBeamOff,
+        AutoBeamOn
+    };
+
+    enum MatrixMode {
+        MatrixModeOff,
+        MatrixModeOn
+    };
+
+    enum GraceMode {
+        GraceModeOff,
+        GraceModeOn
+    };
+
     NoteInsertionCommand(Segment &segment,
                          timeT time,
                          timeT endTime,
                          Note note,
                          int pitch,
                          Accidental accidental,
-                         bool autoBeam,
-                         bool matrixType,
+                         AutoBeamMode autoBeam,
+                         MatrixMode matrixType,
+                         GraceMode grace,
                          NoteStyleName noteStyle);
     virtual ~NoteInsertionCommand();
 
@@ -59,8 +75,7 @@ public:
 protected:
     virtual void modifySegment();
 
-    timeT getModificationStartTime(Segment &,
-                                               timeT);
+    timeT getModificationStartTime(Segment &, timeT);
 
     timeT m_insertionTime;
     Note m_note;
@@ -68,6 +83,7 @@ protected:
     Accidental m_accidental;
     bool m_autoBeam;
     bool m_matrixType;
+    bool m_grace;
     NoteStyleName m_noteStyle;
 
     Event *m_lastInsertedEvent;

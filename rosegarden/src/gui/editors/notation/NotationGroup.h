@@ -52,7 +52,7 @@ class NotationGroup : public AbstractSet<NotationElement,
 public:
     typedef NotationElementList::iterator NELIterator;
 
-    enum Type { Beamed, Tupled, Grace };
+    enum Type { Beamed, Tupled };
 
     /// Group contents will be sampled from elements surrounding elementInGroup
     NotationGroup(NotationElementList &nel, NELIterator elementInGroup,

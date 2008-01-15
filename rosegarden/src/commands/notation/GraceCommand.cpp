@@ -38,6 +38,8 @@ namespace Rosegarden
 
 using namespace BaseProperties;
 
+/*!!!
+
 GraceCommand::GraceCommand(EventSelection &selection) :
         BasicCommand(getGlobalName(),
                      selection.getSegment(),
@@ -80,12 +82,9 @@ GraceCommand::modifySegment()
             i != m_selection->getSegmentEvents().end(); ++i) {
 
         if ((*i)->isa(Note::EventType)) {
-            (*i)->set
-            <Bool>(IS_GRACE_NOTE, true);
-            (*i)->set
-            <Int>(BEAMED_GROUP_ID, id);
-            (*i)->set
-            <String>(BEAMED_GROUP_TYPE, GROUP_TYPE_GRACE);
+            (*i)->set<Bool>(IS_GRACE_NOTE, true);
+            (*i)->set<Int>(BEAMED_GROUP_ID, id);
+            (*i)->set<String>(BEAMED_GROUP_TYPE, GROUP_TYPE_GRACE);
         }
 
         if ((*i)->getAbsoluteTime() + (*i)->getDuration() >
@@ -110,5 +109,7 @@ GraceCommand::modifySegment()
         ++i0;
     }
 }
+
+*/
 
 }

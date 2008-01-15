@@ -89,7 +89,7 @@
 #include "commands/notation/DeCounterpointCommand.h"
 #include "commands/notation/EraseEventCommand.h"
 #include "commands/notation/FixNotationQuantizeCommand.h"
-#include "commands/notation/GraceCommand.h"
+//!!!#include "commands/notation/GraceCommand.h"
 #include "commands/notation/IncrementDisplacementsCommand.h"
 #include "commands/notation/InterpretCommand.h"
 #include "commands/notation/KeyInsertionCommand.h"
@@ -110,7 +110,7 @@
 #include "commands/notation/TextInsertionCommand.h"
 #include "commands/notation/TieNotesCommand.h"
 #include "commands/notation/TupletCommand.h"
-#include "commands/notation/UnGraceCommand.h"
+  //!!!#include "commands/notation/UnGraceCommand.h"
 #include "commands/notation/UntieNotesCommand.h"
 #include "commands/notation/UnTupletCommand.h"
 #include "commands/segment/PasteToTriggerSegmentCommand.h"
@@ -1885,18 +1885,27 @@ void NotationView::setupActions()
     new KAction(UnTupletCommand::getGlobalName(), 0, this,
                 SLOT(slotGroupUnTuplet()), actionCollection(), "break_tuplets");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("triplet")));
+    icon = QIconSet(NotePixmapFactory::toQPixmap
+                    (NotePixmapFactory::makeToolbarPixmap("triplet")));
     (new KToggleAction(i18n("Trip&let Insert Mode"), icon, Key_G,
                        this, SLOT(slotUpdateInsertModeStatus()),
                        actionCollection(), "triplet_mode"))->
-    setChecked(false);
+        setChecked(false);
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("chord")));
+    icon = QIconSet(NotePixmapFactory::toQPixmap
+                    (NotePixmapFactory::makeToolbarPixmap("chord")));
     (new KToggleAction(i18n("C&hord Insert Mode"), icon, Key_H,
                        this, SLOT(slotUpdateInsertModeStatus()),
                        actionCollection(), "chord_mode"))->
-    setChecked(false);
+        setChecked(false);
 
+    icon = QIconSet(NotePixmapFactory::toQPixmap
+                    (NotePixmapFactory::makeToolbarPixmap("group-grace")));
+    (new KToggleAction(i18n("Grace Insert Mode"), icon, 0,
+                       this, SLOT(slotUpdateInsertModeStatus()),
+                       actionCollection(), "grace_mode"))->
+        setChecked(false);
+/*!!!
     icon = QIconSet
            (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                                          ("group-grace")));
@@ -1906,7 +1915,7 @@ void NotationView::setupActions()
 
     new KAction(UnGraceCommand::getGlobalName(), 0, this,
                 SLOT(slotGroupUnGrace()), actionCollection(), "ungrace");
-
+*/
     icon = QIconSet
            (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                                          ("group-slur")));
@@ -2473,6 +2482,13 @@ bool
 NotationView::isInTripletMode()
 {
     return ((KToggleAction *)actionCollection()->action("triplet_mode"))->
+           isChecked();
+}
+
+bool
+NotationView::isInGraceMode()
+{
+    return ((KToggleAction *)actionCollection()->action("grace_mode"))->
            isChecked();
 }
 
@@ -3268,10 +3284,10 @@ void NotationView::playNote(Segment &s, int pitch, int velocity)
 
 void NotationView::showPreviewNote(int staffNo, double layoutX,
                                    int pitch, int height,
-                                   const Note &note,
+                                   const Note &note, bool grace,
                                    int velocity)
 {
-    m_staffs[staffNo]->showPreviewNote(layoutX, height, note);
+    m_staffs[staffNo]->showPreviewNote(layoutX, height, note, grace);
     playNote(m_staffs[staffNo]->getSegment(), pitch, velocity);
 }
 
@@ -4170,20 +4186,23 @@ NotationView::MarkActionDataMap* NotationView::m_markActionDataMap = 0;
 void
 NotationView::slotUpdateInsertModeStatus()
 {
+    QString tripletMessage = i18n("Triplet");
+    QString chordMessage = i18n("Chord");
+    QString graceMessage = i18n("Grace");
     QString message;
-    if (isInChordMode()) {
-        if (isInTripletMode()) {
-            message = i18n(" Triplet Chord");
-        } else {
-            message = i18n(" Chord");
-        }
-    } else {
-        if (isInTripletMode()) {
-            message = i18n(" Triplet");
-        } else {
-            message = "";
-        }
+
+    if (isInTripletMode()) {
+        message = i18n("%1 %2").arg(message).arg(tripletMessage);
     }
+
+    if (isInChordMode()) {
+        message = i18n("%1 %2").arg(message).arg(chordMessage);
+    }
+
+    if (isInGraceMode()) {
+        message = i18n("%1 %2").arg(message).arg(graceMessage);
+    }
+
     m_insertModeLabel->setText(message);
 }
 
@@ -4195,9 +4214,7 @@ NotationView::slotUpdateAnnotationsStatus()
             Segment &s = getStaff(i)->getSegment();
             for (Segment::iterator j = s.begin(); j != s.end(); ++j) {
                 if ((*j)->isa(Text::EventType) &&
-                        ((*j)->get
-                         <String>
-                         (Text::TextTypePropertyName)
+                        ((*j)->get<String>(Text::TextTypePropertyName)
                          == Text::Annotation)) {
                     m_annotationsLabel->setText(i18n("Hidden annotations"));
                     return ;
@@ -4472,8 +4489,7 @@ NotationView::slotChangeFont(std::string newName, int newSize)
 
     // update the various GUI elements
 
-    std::set
-        <std::string> fs(NoteFontFactory::getFontNames());
+    std::set<std::string> fs(NoteFontFactory::getFontNames());
     std::vector<std::string> f(fs.begin(), fs.end());
     std::sort(f.begin(), f.end());
 
@@ -5227,7 +5243,7 @@ void NotationView::slotGroupUnTuplet()
     addCommandToHistory(new UnTupletCommand
                         (*m_currentEventSelection));
 }
-
+/*!!!
 void NotationView::slotGroupGrace()
 {
     if (!m_currentEventSelection)
@@ -5245,7 +5261,7 @@ void NotationView::slotGroupUnGrace()
 
     addCommandToHistory(new UnGraceCommand(*m_currentEventSelection));
 }
-
+*/
 void NotationView::slotGroupSlur()
 {
     KTmpStatusMsg msg(i18n("Adding slur..."), this);

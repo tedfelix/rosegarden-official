@@ -372,7 +372,8 @@ void NoteInserter::showPreview()
 
     m_nParentView->showPreviewNote(m_clickStaffNo, m_clickInsertX,
                                    pitch, m_clickHeight,
-                                   Note(m_noteType, m_noteDots));
+                                   Note(m_noteType, m_noteDots),
+                                   m_nParentView->isInGraceMode());
 }
 
 void NoteInserter::clearPreview()
@@ -482,8 +483,8 @@ NoteInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
     }
 
     if (time < segment.getStartTime() ||
-            endTime > segment.getEndMarkerTime() ||
-            noteEnd > segment.getEndMarkerTime()) {
+        endTime > segment.getEndMarkerTime() ||
+        noteEnd > segment.getEndMarkerTime()) {
         return 0;
     }
 
@@ -492,17 +493,21 @@ NoteInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
     NoteInsertionCommand *insertionCommand =
         new NoteInsertionCommand
         (segment, time, endTime, note, pitch, accidental,
-         m_autoBeam && !m_nParentView->isInTripletMode(),
-         m_matrixInsertType,
+         (m_autoBeam && !m_nParentView->isInTripletMode()) ?
+         NoteInsertionCommand::AutoBeamOn : NoteInsertionCommand::AutoBeamOff,
+         m_matrixInsertType ?
+         NoteInsertionCommand::MatrixModeOn : NoteInsertionCommand::MatrixModeOff,
+         m_nParentView->isInGraceMode() ?
+         NoteInsertionCommand::GraceModeOn : NoteInsertionCommand::GraceModeOff,
          m_defaultStyle);
 
     KCommand *activeCommand = insertionCommand;
 
-    if (m_nParentView->isInTripletMode()) {
+    if (m_nParentView->isInTripletMode() && !m_nParentView->isInGraceMode()) {
         Segment::iterator i(segment.findTime(time));
         if (i != segment.end() &&
             !(*i)->has(BaseProperties::BEAMED_GROUP_TUPLET_BASE)) {
-
+            
             KMacroCommand *command = new KMacroCommand(insertionCommand->name());
 
             //## Attempted fix to bug reported on rg-user by SlowPic

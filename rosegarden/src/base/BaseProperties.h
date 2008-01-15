@@ -49,11 +49,11 @@ extern const PropertyName BEAMED_GROUP_TUPLED_COUNT;
 extern const PropertyName BEAMED_GROUP_UNTUPLED_COUNT;
 
 extern const PropertyName IS_GRACE_NOTE;
-extern const PropertyName HAS_GRACE_NOTES;
+extern const PropertyName HAS_GRACE_NOTES; // obsolete
 
 extern const std::string GROUP_TYPE_BEAMED;
 extern const std::string GROUP_TYPE_TUPLED;
-extern const std::string GROUP_TYPE_GRACE;
+extern const std::string GROUP_TYPE_GRACE; // obsolete
 
 extern const PropertyName TRIGGER_SEGMENT_ID;
 extern const PropertyName TRIGGER_SEGMENT_RETUNE;

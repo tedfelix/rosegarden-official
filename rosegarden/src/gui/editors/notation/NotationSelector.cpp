@@ -513,11 +513,12 @@ void NotationSelector::drag(int x, int y, bool final)
     if (!final && !singleNonNotePreview) {
 
         if ((pitch != m_lastDragPitch || dragTime != m_lastDragTime) &&
-                m_clickedElement->isNote()) {
+            m_clickedElement->isNote()) {
 
             m_nParentView->showPreviewNote(targetStaff->getId(),
                                            layoutX, pitch, height,
-                                           Note::getNearestNote(duration));
+                                           Note::getNearestNote(duration),
+                                           m_clickedElement->isGrace());
             m_lastDragPitch = pitch;
             m_lastDragTime = dragTime;
         }

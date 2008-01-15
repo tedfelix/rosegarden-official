@@ -40,7 +40,7 @@ namespace Rosegarden
 
 class EventSelection;
 
-
+/*!!!
 class GraceCommand : public BasicCommand
 {
 public:
@@ -53,7 +53,7 @@ protected:
     timeT getEffectiveEndTime(EventSelection &);
     EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
 };
-
+*/
 
 }
 

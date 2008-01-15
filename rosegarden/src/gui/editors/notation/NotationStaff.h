@@ -303,7 +303,7 @@ public:
      * an insert. 
      */
     virtual void showPreviewNote(double layoutX, int heightOnStaff,
-                                 const Note &note);
+                                 const Note &note, bool grace);
 
     /**
      * Remove any visible preview note.
