@@ -237,6 +237,9 @@ NotationGroup::applyStemProperties()
 
     if (initialNote == getContainer().end() ||
         initialNote == finalNote) {
+        //!!! This is not true -- if initialNote == finalNote there is
+        // one note in the group, not none.  But we still won't have a
+        // beam.
         NOTATION_DEBUG << "NotationGroup::applyStemProperties: no notes in group"
                        << endl;
         return; // no notes, no case to answer
