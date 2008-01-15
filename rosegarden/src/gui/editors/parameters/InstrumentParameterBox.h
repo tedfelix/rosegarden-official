@@ -61,8 +61,7 @@ public:
 
     void useInstrument(Instrument *instrument);
 
-    Instrument* getSelectedInstrument()
-        { return m_selectedInstrument; }
+    Instrument* getSelectedInstrument();
 
     void setAudioMeter(float dBleft, float dBright,
                        float recDBleft, float recDBright);
@@ -108,7 +107,8 @@ protected:
     MIDIInstrumentParameterPanel    *m_midiInstrumentParameters;
     AudioInstrumentParameterPanel   *m_audioInstrumentParameters;
 
-    Instrument          *m_selectedInstrument;
+    // -1 if no instrument, InstrumentId otherwise
+    int                              m_selectedInstrument;
 
     // So we can setModified()
     //

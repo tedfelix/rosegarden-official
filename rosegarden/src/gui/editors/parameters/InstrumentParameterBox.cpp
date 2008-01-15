@@ -49,17 +49,17 @@ namespace Rosegarden
 {
 
 InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
-        QWidget *parent)
-        : RosegardenParameterBox(i18n("Instrument"),
-                                 i18n("Instrument Parameters"),
-                                 parent),
-        m_widgetStack(new QWidgetStack(this)),
-        m_noInstrumentParameters(new QVBox(this)),
-        m_midiInstrumentParameters(new MIDIInstrumentParameterPanel(doc, this)),
-        m_audioInstrumentParameters(new AudioInstrumentParameterPanel(doc, this)),
-        m_selectedInstrument(0),
-        m_doc(doc),
-        m_lastShowAdditionalControlsArg(false)
+                                               QWidget *parent)
+    : RosegardenParameterBox(i18n("Instrument"),
+                             i18n("Instrument Parameters"),
+                             parent),
+      m_widgetStack(new QWidgetStack(this)),
+      m_noInstrumentParameters(new QVBox(this)),
+      m_midiInstrumentParameters(new MIDIInstrumentParameterPanel(doc, this)),
+      m_audioInstrumentParameters(new AudioInstrumentParameterPanel(doc, this)),
+      m_selectedInstrument(-1),
+      m_doc(doc),
+      m_lastShowAdditionalControlsArg(false)
 {
     m_widgetStack->setFont(m_font);
     m_noInstrumentParameters->setFont(m_font);
@@ -141,6 +141,14 @@ InstrumentParameterBox::~InstrumentParameterBox()
     }
 }
 
+Instrument *
+InstrumentParameterBox::getSelectedInstrument()
+{
+    if (m_selectedInstrument < 0) return 0;
+    if (!m_doc) return 0;
+    return m_doc->getStudio().getInstrumentById(m_selectedInstrument);
+}
+
 QString
 InstrumentParameterBox::getPreviousBox(RosegardenParameterArea::Arrangement arrangement) const
 {
@@ -185,18 +193,23 @@ InstrumentParameterBox::useInstrument(Instrument *instrument)
     }
 
     // ok
-    m_selectedInstrument = instrument;
+    if (instrument) {
+        m_selectedInstrument = instrument->getId();
+    } else {
+        m_selectedInstrument = -1;
+    }
 
     // Hide or Show according to Instrument type
     //
     if (instrument->getType() == Instrument::Audio ||
-            instrument->getType() == Instrument::SoftSynth) {
-        m_audioInstrumentParameters->setupForInstrument(m_selectedInstrument);
+        instrument->getType() == Instrument::SoftSynth) {
+
+        m_audioInstrumentParameters->setupForInstrument(getSelectedInstrument());
         m_widgetStack->raiseWidget(m_audioInstrumentParameters);
 
     } else { // Midi
 
-        m_midiInstrumentParameters->setupForInstrument(m_selectedInstrument);
+        m_midiInstrumentParameters->setupForInstrument(getSelectedInstrument());
         m_midiInstrumentParameters->showAdditionalControls(m_lastShowAdditionalControlsArg);
         m_widgetStack->raiseWidget(m_midiInstrumentParameters);
         emit instrumentPercussionSetChanged(instrument);
@@ -208,7 +221,7 @@ InstrumentParameterBox::useInstrument(Instrument *instrument)
 void
 InstrumentParameterBox::slotUpdateAllBoxes()
 {
-    emit instrumentPercussionSetChanged(m_selectedInstrument);
+    emit instrumentPercussionSetChanged(getSelectedInstrument());
 
     std::vector<InstrumentParameterBox*>::iterator it =
         instrumentParamBoxes.begin();
@@ -216,9 +229,9 @@ InstrumentParameterBox::slotUpdateAllBoxes()
     // To update all open IPBs
     //
     for (; it != instrumentParamBoxes.end(); it++) {
-        if ((*it) != this && m_selectedInstrument &&
-                (*it)->getSelectedInstrument() == m_selectedInstrument)
-            (*it)->useInstrument(m_selectedInstrument);
+        if ((*it) != this && getSelectedInstrument() &&
+            (*it)->getSelectedInstrument() == getSelectedInstrument())
+            (*it)->useInstrument(getSelectedInstrument());
     }
 }
 
