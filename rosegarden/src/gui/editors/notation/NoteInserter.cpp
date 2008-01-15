@@ -444,13 +444,7 @@ NoteInserter::getOttavaShift(Segment &segment, timeT time)
 
     for (Segment::iterator i = segment.findTime(time); ; --i) {
 
-        if (!segment.isBeforeEndMarker(i))
-            break;
-
-        if ((*i)->isa(Note::EventType) &&
-                (*i)->has(NotationProperties::OTTAVA_SHIFT)) {
-            ottavaShift = (*i)->get
-                          <Int>(NotationProperties::OTTAVA_SHIFT);
+        if (!segment.isBeforeEndMarker(i)) {
             break;
         }
 
@@ -458,14 +452,20 @@ NoteInserter::getOttavaShift(Segment &segment, timeT time)
             try {
                 Indication ind(**i);
                 if (ind.isOttavaType()) {
-                    ottavaShift = ind.getOttavaShift();
+                    timeT endTime =
+                        (*i)->getNotationAbsoluteTime() +
+                        (*i)->getNotationDuration();
+                    if (time < endTime) {
+                        ottavaShift = ind.getOttavaShift();
+                    }
                     break;
                 }
             } catch (...) { }
         }
 
-        if (i == segment.begin())
+        if (i == segment.begin()) {
             break;
+        }
     }
 
     return ottavaShift;
