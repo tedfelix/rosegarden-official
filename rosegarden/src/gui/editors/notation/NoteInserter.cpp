@@ -46,6 +46,7 @@
 #include "NotationStrings.h"
 #include "NotationTool.h"
 #include "NotationView.h"
+#include "NotationStaff.h"
 #include "NotePixmapFactory.h"
 #include "NoteStyleFactory.h"
 #include <kaction.h>
@@ -279,6 +280,10 @@ NoteInserter::computeLocationAndPreview(QMouseEvent *e)
         return false;
     }
 
+    // If we're inserting grace notes, then we need to "dress to the
+    // right", as it were
+    bool grace = m_nParentView->isInGraceMode();
+
     int height = staff->getHeightAtCanvasCoords(x, y);
 
     Event *clefEvt = 0, *keyEvt = 0;
@@ -300,6 +305,28 @@ NoteInserter::computeLocationAndPreview(QMouseEvent *e)
         key = Rosegarden::Key(*keyEvt);
 
     NotationElement* el = static_cast<NotationElement*>(*itr);
+    if (grace && el->isNote() && el->getCanvasItem()) {
+        NotationStaff *ns = dynamic_cast<NotationStaff *>(staff);
+        if (!ns) {
+            std::cerr << "WARNING: NoteInserter: Staff is not a NotationStaff"
+                      << std::endl;
+        } else {
+            if (x - el->getCanvasX() >
+                ns->getNotePixmapFactory(false).getNoteBodyWidth()) {
+                NotationElementList::iterator j(itr);
+                while (++j != staff->getViewElementList()->end()) {
+                    NotationElement *candidate = static_cast<NotationElement *>(*j);
+                    if (candidate->isRest()) break;
+                    if (candidate->isNote() &&
+                        candidate->getViewAbsoluteTime() > el->getViewAbsoluteTime()) {
+                        itr = j;
+                        el = candidate;
+                    }
+                }
+            }
+        }
+    }
+
     if (el->isRest() && el->getCanvasItem()) {
         time += getOffsetWithinRest(staffNo, itr, x);
         m_clickInsertX += (x - el->getCanvasX());
@@ -493,9 +520,9 @@ NoteInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
     NoteInsertionCommand *insertionCommand =
         new NoteInsertionCommand
         (segment, time, endTime, note, pitch, accidental,
-         (m_autoBeam && !m_nParentView->isInTripletMode()) ?
+         (m_autoBeam && !m_nParentView->isInTripletMode() && !m_nParentView->isInGraceMode()) ?
          NoteInsertionCommand::AutoBeamOn : NoteInsertionCommand::AutoBeamOff,
-         m_matrixInsertType ?
+         m_matrixInsertType && !m_nParentView->isInGraceMode() ?
          NoteInsertionCommand::MatrixModeOn : NoteInsertionCommand::MatrixModeOff,
          m_nParentView->isInGraceMode() ?
          NoteInsertionCommand::GraceModeOn : NoteInsertionCommand::GraceModeOff,
