@@ -146,6 +146,7 @@ protected:
 
     bool m_clickHappened;
     timeT m_clickTime;
+    int m_clickSubordering;
     int m_clickPitch;
     int m_clickHeight;
     int m_clickStaffNo;
