@@ -67,6 +67,7 @@ public:
                          AutoBeamMode autoBeam,
                          MatrixMode matrixType,
                          GraceMode grace,
+                         int subordering,
                          NoteStyleName noteStyle);
     virtual ~NoteInsertionCommand();
 
@@ -84,6 +85,7 @@ protected:
     bool m_autoBeam;
     bool m_matrixType;
     bool m_grace;
+    int m_subOrdering;
     NoteStyleName m_noteStyle;
 
     Event *m_lastInsertedEvent;

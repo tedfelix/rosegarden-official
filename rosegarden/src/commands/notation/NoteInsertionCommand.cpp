@@ -48,6 +48,7 @@ NoteInsertionCommand::NoteInsertionCommand(Segment &segment, timeT time,
                                            AutoBeamMode autoBeam,
                                            MatrixMode matrixType,
                                            GraceMode grace,
+                                           int subordering,
                                            NoteStyleName noteStyle) :
         BasicCommand(i18n("Insert Note"), segment,
                      getModificationStartTime(segment, time),
@@ -59,6 +60,7 @@ NoteInsertionCommand::NoteInsertionCommand(Segment &segment, timeT time,
         m_autoBeam(autoBeam == AutoBeamOn),
         m_matrixType(matrixType == MatrixModeOn),
         m_grace(grace == GraceModeOn),
+        m_subOrdering(subordering),
         m_noteStyle(noteStyle),
         m_lastInsertedEvent(0)
 {
@@ -104,7 +106,7 @@ NoteInsertionCommand::modifySegment()
                (Note::EventType,
                 m_insertionTime,
                 m_grace ? 0 : m_note.getDuration(),
-                m_grace ? -1 : 0,
+                m_grace ? (m_subOrdering == 0 ? -1 : m_subOrdering) : 0,
                 m_insertionTime,
                 m_note.getDuration());
 
