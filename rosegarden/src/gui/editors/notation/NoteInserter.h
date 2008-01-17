@@ -151,6 +151,7 @@ protected:
     int m_clickHeight;
     int m_clickStaffNo;
     double m_clickInsertX;
+    float m_targetSubordering;
 
     Accidental m_accidental;
     Accidental m_lastAccidental;

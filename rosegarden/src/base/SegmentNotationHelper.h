@@ -382,13 +382,27 @@ public:
     /**
      * Give all events between the start of the timeslice containing
      * from and the start of the timeslice containing to the same new
-     * group id and the given type
+     * group id and the given type.
      *
      * Do not use this for making tuplet groups, unless the events
      * in the group already have the other tuplet properties or you
      * intend to add those yourself.  Use makeTupletGroup instead.
      */
     void makeBeamedGroup(iterator from, iterator to, std::string type);
+
+    /**
+     * Give all events between from and to the same new group id and
+     * the given type.
+     *
+     * Use makeBeamedGroup for normal notes.  This function is usually
+     * used for groups of grace notes, which are equal in time and
+     * distinguished by subordering.
+     *
+     * Do not use this for making tuplet groups, unless the events
+     * in the group already have the other tuplet properties or you
+     * intend to add those yourself.
+     */
+    void makeBeamedGroupExact(iterator from, iterator to, std::string type);
 
 
     /**
@@ -543,7 +557,8 @@ protected:
     void setInsertedNoteGroup(Event *e, iterator i);
 
     /// for use by makeBeamedGroup
-    void makeBeamedGroupAux(iterator from, iterator to, std::string type);
+    void makeBeamedGroupAux(iterator from, iterator to, std::string type,
+			    bool groupGraces);
 
     /// for use by unbeam
     void unbeamAux(iterator from, iterator to);
