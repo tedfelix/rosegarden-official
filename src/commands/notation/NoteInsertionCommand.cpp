@@ -48,7 +48,7 @@ NoteInsertionCommand::NoteInsertionCommand(Segment &segment, timeT time,
                                            AutoBeamMode autoBeam,
                                            MatrixMode matrixType,
                                            GraceMode grace,
-                                           int subordering,
+                                           float targetSubordering,
                                            NoteStyleName noteStyle) :
         BasicCommand(i18n("Insert Note"), segment,
                      getModificationStartTime(segment, time),
@@ -60,7 +60,7 @@ NoteInsertionCommand::NoteInsertionCommand(Segment &segment, timeT time,
         m_autoBeam(autoBeam == AutoBeamOn),
         m_matrixType(matrixType == MatrixModeOn),
         m_grace(grace == GraceModeOn),
-        m_subOrdering(subordering),
+        m_targetSubordering(targetSubordering),
         m_noteStyle(noteStyle),
         m_lastInsertedEvent(0)
 {
@@ -102,11 +102,23 @@ NoteInsertionCommand::modifySegment()
 
     // insert via a model event, so as to apply the note style
 
+    // subordering is always negative for these insertions; round it down
+    int actualSubordering = lrintf(floorf(m_targetSubordering + 0.01));
+    if (m_grace && actualSubordering >= 0) actualSubordering = -1;
+
+    // this is true if the subordering is "more or less" an integer,
+    // as opposed to something like -0.5
+    bool suborderingExact = (actualSubordering != 
+                             (lrintf(floorf(m_targetSubordering - 0.01))));
+
+    std::cerr << "actualSubordering = " << actualSubordering
+              << " suborderingExact = " << suborderingExact << std::endl;
+
     Event *e = new Event
                (Note::EventType,
                 m_insertionTime,
                 m_grace ? 0 : m_note.getDuration(),
-                m_grace ? (m_subOrdering == 0 ? -1 : m_subOrdering) : 0,
+                m_grace ? (actualSubordering == 0 ? -1 : actualSubordering) : 0,
                 m_insertionTime,
                 m_note.getDuration());
 
@@ -122,8 +134,66 @@ NoteInsertionCommand::modifySegment()
     }
 
     if (m_grace) {
+
+        if (!suborderingExact) {
+
+            // Adjust suborderings of any existing grace notes, if there
+            // is at least one with the same subordering and
+            // suborderingExact is not set
+
+            segment.getTimeSlice(m_insertionTime, i, j);
+            bool collision = false;
+            for (Segment::iterator k = i; k != j; ++k) {
+                if ((*k)->getSubOrdering() == actualSubordering) {
+                    collision = true;
+                    break;
+                }
+            }
+            
+            if (collision) {
+                std::vector<Event *> toInsert, toErase;
+                for (Segment::iterator k = i; k != j; ++k) {
+                    if ((*k)->isa(Note::EventType) &&
+                        (*k)->getSubOrdering() <= actualSubordering) {
+                        toErase.push_back(*k);
+                        toInsert.push_back
+                            (new Event(**k,
+                                       (*k)->getAbsoluteTime(),
+                                       (*k)->getDuration(),
+                                       (*k)->getSubOrdering() - 1,
+                                       (*k)->getNotationAbsoluteTime(),
+                                       (*k)->getNotationDuration()));
+                    }
+                }
+                for (std::vector<Event *>::iterator k = toErase.begin();
+                     k != toErase.end(); ++k) segment.eraseSingle(*k);
+                for (std::vector<Event *>::iterator k = toInsert.begin();
+                     k != toInsert.end(); ++k) segment.insert(*k);
+            }
+        }
+
         e->set<Bool>(IS_GRACE_NOTE, true);
         i = segment.insert(e);
+
+        Segment::iterator k;
+        segment.getTimeSlice(m_insertionTime, j, k);
+        Segment::iterator bg0 = segment.end(), bg1 = segment.end();
+        while (j != k) {
+            std::cerr << "testing for truthiness: time " << (*j)->getAbsoluteTime() << ", subordering " << (*j)->getSubOrdering() << std::endl;
+            if ((*j)->isa(Note::EventType) &&
+                (*j)->getSubOrdering() < 0 &&
+                (*j)->has(IS_GRACE_NOTE) &&
+                (*j)->get<Bool>(IS_GRACE_NOTE)) {
+                std::cerr << "truthiful" << std::endl;
+                if (bg0 == segment.end()) bg0 = j;
+                bg1 = j;
+            }
+            ++j;
+        }
+        if (bg0 != segment.end() && bg1 != bg0) {
+            helper.makeBeamedGroupExact(bg0, bg1, GROUP_TYPE_BEAMED);
+        }
+            
     } else {
 
         // If we're attempting to insert at the same time and pitch as

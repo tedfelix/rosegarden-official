@@ -307,30 +307,41 @@ NoteInserter::computeLocationAndPreview(QMouseEvent *e)
         key = Rosegarden::Key(*keyEvt);
 
     int subordering = el->event()->getSubOrdering();
+    float targetSubordering = subordering;
 
-    if (grace && el->isNote() && el->getCanvasItem()) {
+    if (grace && el->getCanvasItem()) {
 
         NotationStaff *ns = dynamic_cast<NotationStaff *>(staff);
         if (!ns) {
             std::cerr << "WARNING: NoteInserter: Staff is not a NotationStaff"
                       << std::endl;
         } else {
+            std::cerr << "x=" << x << ", el->getCanvasX()=" << el->getCanvasX() << std::endl;
+            if (el->isRest()) std::cerr << "elt is a rest" << std::endl;
             if (x - el->getCanvasX() >
                 ns->getNotePixmapFactory(false).getNoteBodyWidth()) {
                 NotationElementList::iterator j(itr);
                 while (++j != staff->getViewElementList()->end()) {
                     NotationElement *candidate = static_cast<NotationElement *>(*j);
-                    if (candidate->isRest() || candidate->isGrace()) break;
-                    if (candidate->isNote() &&
-                        candidate->getViewAbsoluteTime() > el->getViewAbsoluteTime()) {
+                    if ((candidate->isNote() || candidate->isRest()) &&
+                        (candidate->getViewAbsoluteTime()
+                         > el->getViewAbsoluteTime() ||
+                         candidate->event()->getSubOrdering()
+                         > el->event()->getSubOrdering())) {
                         itr = j;
                         el = candidate;
                         m_clickInsertX = el->getLayoutX();
                         time = el->event()->getAbsoluteTime();
                         subordering = el->event()->getSubOrdering();
+                        targetSubordering = subordering;
+                        break;
                     }
                 }
             }
+        }
+
+        if (x - el->getCanvasX() < 1) {
+            targetSubordering -= 0.5;
         }
     }
 
@@ -392,6 +403,7 @@ NoteInserter::computeLocationAndPreview(QMouseEvent *e)
         m_clickPitch = pitch;
         m_clickHeight = height;
         m_clickStaffNo = staffNo;
+        m_targetSubordering = targetSubordering;
 
         showPreview();
     }
@@ -526,11 +538,9 @@ NoteInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
 
     pitch += getOttavaShift(segment, time) * 12;
 
-    int subordering = 0;
-    if (m_nParentView->isInGraceMode() && 
-        m_clickSubordering < 0 &&
-        m_clickSubordering > -10) {
-        subordering = m_clickSubordering - 1;
+    float targetSubordering = 0;
+    if (m_nParentView->isInGraceMode()) {
+        targetSubordering = m_targetSubordering;
     }
 
     NoteInsertionCommand *insertionCommand =
@@ -542,7 +552,7 @@ NoteInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
          NoteInsertionCommand::MatrixModeOn : NoteInsertionCommand::MatrixModeOff,
          m_nParentView->isInGraceMode() ?
          NoteInsertionCommand::GraceModeOn : NoteInsertionCommand::GraceModeOff,
-         subordering,
+         targetSubordering,
          m_defaultStyle);
 
     KCommand *activeCommand = insertionCommand;

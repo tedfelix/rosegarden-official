@@ -1221,7 +1221,8 @@ SegmentNotationHelper::hasEffectiveDuration(iterator i)
 void
 SegmentNotationHelper::makeBeamedGroup(timeT from, timeT to, string type)
 {
-    makeBeamedGroupAux(segment().findTime(from), segment().findTime(to), type);
+    makeBeamedGroupAux(segment().findTime(from), segment().findTime(to),
+		       type, false);
 }
 
 void
@@ -1230,17 +1231,27 @@ SegmentNotationHelper::makeBeamedGroup(iterator from, iterator to, string type)
     makeBeamedGroupAux
       ((from == end()) ? from : segment().findTime((*from)->getAbsoluteTime()),
 	 (to == end()) ? to   : segment().findTime((*to  )->getAbsoluteTime()),
-	 type);
+       type, false);
+}
+
+void
+SegmentNotationHelper::makeBeamedGroupExact(iterator from, iterator to, string type)
+{
+    makeBeamedGroupAux(from, to, type, true);
 }
 
 void
 SegmentNotationHelper::makeBeamedGroupAux(iterator from, iterator to,
-					  string type)
+					  string type, bool groupGraces)
 {
+    cerr << "SegmentNotationHelper::makeBeamedGroupAux: type " << type << endl;
+    if (from == to) cerr << "from == to" <<endl;
+
     int groupId = segment().getNextId();
     bool beamedSomething = false;
 
     for (iterator i = from; i != to; ++i) {
+	std::cerr << "looking at " << (*i)->getType() << " at " << (*i)->getAbsoluteTime() << std::endl;
 
 	// don't permit ourselves to change the type of an
 	// already-grouped event here
@@ -1249,12 +1260,20 @@ SegmentNotationHelper::makeBeamedGroupAux(iterator from, iterator to,
 	    continue;
 	}
 
+	if (!groupGraces) {
+	    if ((*i)->has(IS_GRACE_NOTE) &&
+		(*i)->get<Bool>(IS_GRACE_NOTE)) {
+		continue;
+	    }
+	}
+
 	// don't beam anything longer than a quaver unless it's
 	// between beamed quavers -- in which case marking it as
 	// beamed will ensure that it gets re-stemmed appropriately
 
 	if ((*i)->isa(Note::EventType) &&
 	    (*i)->getNotationDuration() >= Note(Note::Crotchet).getDuration()) {
+	    std::cerr << "too long" <<std::endl;
 	    if (!beamedSomething) continue;
 	    iterator j = i;
 	    bool somethingLeft = false;
@@ -1269,6 +1288,7 @@ SegmentNotationHelper::makeBeamedGroupAux(iterator from, iterator to,
 	    if (!somethingLeft) continue;
 	}
 
+	std::cerr << "beaming it" <<std::endl;
         (*i)->set<Int>(BEAMED_GROUP_ID, groupId);
         (*i)->set<String>(BEAMED_GROUP_TYPE, type);
     }
