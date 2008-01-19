@@ -66,10 +66,10 @@ print STDERR "This program is Free Software under the GNU General Public License
 
 my $dcop = undef;
 sub usage {
-    print STDERR "Usage: rgproject [--quiet] [--pack] file.rg [file.rgp]\n";
-    print STDERR "       rgproject [--quiet] --unpack file.rgp\n";
-    print STDERR "       rgproject [--quiet] --rg file.rgp\n";
-    print STDERR "       rgproject --conftest\n";
+    print STDERR "Usage: rosegarden-project-package [--quiet] [--pack] file.rg [file.rgp]\n";
+    print STDERR "       rosegarden-project-package [--quiet] --unpack file.rgp\n";
+    print STDERR "       rosegarden-project-package [--quiet] --rg file.rgp\n";
+    print STDERR "       rosegarden-project-package --conftest\n";
     if (defined $dcop) {
 	`dcop "$dcop" close`;
     }
