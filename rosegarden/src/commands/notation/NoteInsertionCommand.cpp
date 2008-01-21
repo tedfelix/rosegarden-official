@@ -25,6 +25,7 @@
 
 #include "NoteInsertionCommand.h"
 
+#include <cmath>
 #include <klocale.h>
 #include "base/Event.h"
 #include "base/NotationTypes.h"
