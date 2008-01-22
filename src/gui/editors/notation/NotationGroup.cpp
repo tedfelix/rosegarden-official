@@ -125,19 +125,17 @@ NotationGroup::sample(const NELIterator &i, bool goingForwards)
         m_final = i;
 
     std::string t;
-    if (!(*i)->event()->get
-            <String>(BaseProperties::BEAMED_GROUP_TYPE, t)) {
-        //	NOTATION_DEBUG << "NotationGroup::NotationGroup: Rejecting sample() for non-beamed element" << endl;
+    if (!(*i)->event()->get<String>(BaseProperties::BEAMED_GROUP_TYPE, t)) {
+        NOTATION_DEBUG << "NotationGroup::NotationGroup: Rejecting sample() for non-beamed element" << endl;
         return false;
     }
 
     long n;
-    if (!(*i)->event()->get
-            <Int>(BaseProperties::BEAMED_GROUP_ID, n)) return false;
+    if (!(*i)->event()->get<Int>(BaseProperties::BEAMED_GROUP_ID, n)) return false;
     if (m_groupNo == -1) {
         m_groupNo = n;
     } else if (n != m_groupNo) {
-        //	NOTATION_DEBUG << "NotationGroup::NotationGroup: Rejecting sample() for event with group id " << n << " (mine is " << m_groupNo << ")" << endl;
+        NOTATION_DEBUG << "NotationGroup::NotationGroup: Rejecting sample() for event with group id " << n << " (mine is " << m_groupNo << ")" << endl;
         return false;
     }
 
@@ -153,7 +151,7 @@ NotationGroup::sample(const NELIterator &i, bool goingForwards)
         return false;
     }
 
-    //    NOTATION_DEBUG << "NotationGroup::sample: group id is " << m_groupNo << endl;
+    NOTATION_DEBUG << "NotationGroup::sample: group id is " << m_groupNo << endl;
 
     AbstractSet<NotationElement, NotationElementList>::sample
         (i, goingForwards);
@@ -387,17 +385,26 @@ NotationGroup::calculateBeam(NotationStaff &staff)
     }
 
     timeT crotchet = Note(Note::Crotchet).getDuration();
+
     beam.necessary =
-        (*initialNote)->getViewDuration() < crotchet
-        && (*finalNote)->getViewDuration() < crotchet
-        && (*finalNote)->getViewAbsoluteTime() >
-        (*initialNote)->getViewAbsoluteTime();
+        (*initialNote)->getViewDuration() < crotchet &&
+        (*finalNote)->getViewDuration() < crotchet;
+
+    beam.necessary = beam.necessary &&
+        (((*finalNote)->getViewAbsoluteTime() >
+          (*initialNote)->getViewAbsoluteTime()) ||
+         (((*finalNote)->getViewAbsoluteTime() ==
+           (*initialNote)->getViewAbsoluteTime()) &&
+          ((*finalNote)->event()->getSubOrdering() >
+           (*initialNote)->event()->getSubOrdering())));
 
     // We continue even if the beam is not necessary, because the
     // same data is used to generate the tupling line in tupled
     // groups that do not have beams
 
     // if (!beam.necessary) return beam;
+
+    NOTATION_DEBUG << "NotationGroup::calculateBeam: beam necessariness: " << beam.necessary << endl;
 
     NotationChord initialChord(getContainer(), initialNote, &getQuantizer(),
                                m_properties, m_clef, m_key),
