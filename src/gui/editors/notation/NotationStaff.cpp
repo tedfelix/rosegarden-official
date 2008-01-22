@@ -1798,7 +1798,7 @@ NotationStaff::setTuplingParameters(NotationElement *elt,
 
         long tupletCount;
         if (elt->event()->get
-                <Int>(BaseProperties::BEAMED_GROUP_UNTUPLED_COUNT, tupletCount)) {
+            <Int>(BaseProperties::BEAMED_GROUP_UNTUPLED_COUNT, tupletCount)) {
 
             params.setTupletCount(tupletCount);
             params.setTuplingLineY(tuplingLineY - (int)elt->getLayoutY());
