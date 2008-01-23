@@ -60,7 +60,7 @@ NoteInsertionCommand::NoteInsertionCommand(Segment &segment, timeT time,
         m_accidental(accidental),
         m_autoBeam(autoBeam == AutoBeamOn),
         m_matrixType(matrixType == MatrixModeOn),
-        m_grace(grace == GraceModeOn),
+        m_grace(grace),
         m_targetSubordering(targetSubordering),
         m_noteStyle(noteStyle),
         m_lastInsertedEvent(0)
@@ -105,7 +105,9 @@ NoteInsertionCommand::modifySegment()
 
     // subordering is always negative for these insertions; round it down
     int actualSubordering = lrintf(floorf(m_targetSubordering + 0.01));
-    if (m_grace && actualSubordering >= 0) actualSubordering = -1;
+    if ((m_grace != GraceModeOff) && actualSubordering >= 0) {
+        actualSubordering = -1;
+    }
 
     // this is true if the subordering is "more or less" an integer,
     // as opposed to something like -0.5
@@ -115,13 +117,28 @@ NoteInsertionCommand::modifySegment()
     std::cerr << "actualSubordering = " << actualSubordering
               << " suborderingExact = " << suborderingExact << std::endl;
 
-    Event *e = new Event
-               (Note::EventType,
-                m_insertionTime,
-                m_grace ? 0 : m_note.getDuration(),
-                m_grace ? (actualSubordering == 0 ? -1 : actualSubordering) : 0,
-                m_insertionTime,
-                m_note.getDuration());
+    Event *e;
+
+    if (m_grace == GraceModeOff) {
+
+        e = new Event
+            (Note::EventType,
+             m_insertionTime,
+             m_note.getDuration(),
+             0,
+             m_insertionTime,
+             m_note.getDuration());
+
+    } else {
+
+        e = new Event
+            (Note::EventType,
+             m_insertionTime,
+             0,
+             actualSubordering == 0 ? -1 : actualSubordering,
+             m_insertionTime,
+             m_note.getDuration());
+    }
 
     e->set<Int>(PITCH, m_pitch);
     e->set<Int>(VELOCITY, 100);
@@ -134,7 +151,7 @@ NoteInsertionCommand::modifySegment()
         e->set<String>(NotationProperties::NOTE_STYLE, m_noteStyle);
     }
 
-    if (m_grace) {
+    if (m_grace != GraceModeOff) {
 
         if (!suborderingExact) {
 
@@ -191,8 +208,32 @@ NoteInsertionCommand::modifySegment()
             }
             ++j;
         }
+
         if (bg0 != segment.end() && bg1 != bg0) {
-            helper.makeBeamedGroupExact(bg0, bg1, GROUP_TYPE_BEAMED);
+            if (bg1 != segment.end()) ++bg1;
+            int count = 0;
+            int pso = 0;
+            for (Segment::iterator i = bg0; i != bg1; ++i) {
+                (*i)->unset(BEAMED_GROUP_ID);
+                (*i)->unset(BEAMED_GROUP_TYPE);
+                (*i)->unset(BEAMED_GROUP_TUPLED_COUNT);
+                (*i)->unset(BEAMED_GROUP_UNTUPLED_COUNT);
+                if ((*i)->getSubOrdering() != pso) {
+                    ++count;
+                    pso = (*i)->getSubOrdering();
+                }
+            }
+            if (m_grace == GraceAndTripletModesOn) {
+                helper.makeBeamedGroupExact(bg0, bg1, GROUP_TYPE_TUPLED);
+                if (count > 1) {
+                    for (Segment::iterator i = bg0; i != bg1; ++i) {
+                        (*i)->set<Int>(BEAMED_GROUP_TUPLED_COUNT, count-1);
+                        (*i)->set<Int>(BEAMED_GROUP_UNTUPLED_COUNT, count);
+                    }
+                }
+            } else {
+                helper.makeBeamedGroupExact(bg0, bg1, GROUP_TYPE_BEAMED);
+            }
         }
             
     } else {

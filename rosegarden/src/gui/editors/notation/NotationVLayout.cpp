@@ -331,7 +331,7 @@ NotationVLayout::scanStaff(Staff &staffBase, timeT, timeT)
                 }
 
                 el->event()->setMaybe<Int>
-                (m_properties.UNBEAMED_STEM_LENGTH, stemLength);
+                    (m_properties.UNBEAMED_STEM_LENGTH, stemLength);
             }
 
 
