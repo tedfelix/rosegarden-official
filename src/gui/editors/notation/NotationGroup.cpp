@@ -58,9 +58,8 @@ NotationGroup::NotationGroup(NotationElementList &nel,
     m_type(Beamed),
     m_properties(p)
 {
-    if (!(*i)->event()->get
-            <Int>
-            (BaseProperties::BEAMED_GROUP_ID, m_groupNo)) m_groupNo = -1;
+    if (!(*i)->event()->get<Int>
+        (BaseProperties::BEAMED_GROUP_ID, m_groupNo)) m_groupNo = -1;
 
     initialise();
 
@@ -337,8 +336,7 @@ const
 
         if (el->isNote() &&
                 el->event()->has(BaseProperties::NOTE_TYPE) &&
-                el->event()->get
-                <Int>(BaseProperties::NOTE_TYPE) < Note::Crotchet &&
+                el->event()->get<Int>(BaseProperties::NOTE_TYPE) < Note::Crotchet &&
                 el->event()->has(BaseProperties::BEAMED_GROUP_ID) &&
                 el->event()->get<Int>(BaseProperties::BEAMED_GROUP_ID) == m_groupNo) {
             if (found) return true; // a rest is wholly enclosed by beamed notes
@@ -354,7 +352,6 @@ const
 }
 
 NotationGroup::Beam
-
 NotationGroup::calculateBeam(NotationStaff &staff)
 {
     NotationRules rules;
@@ -365,7 +362,8 @@ NotationGroup::calculateBeam(NotationStaff &staff)
     beam.gradient = 0;
     beam.necessary = false;
 
-    NELIterator initialNote(getInitialNote()),
+    NELIterator 
+        initialNote(getInitialNote()),
         finalNote(getFinalNote());
 
     if (initialNote == getContainer().end() ||
@@ -415,6 +413,10 @@ NotationGroup::calculateBeam(NotationStaff &staff)
         return beam;
     }
 
+    bool isGrace =
+        (*initialNote)->event()->has(BaseProperties::IS_GRACE_NOTE) &&
+        (*initialNote)->event()->get<Bool>(BaseProperties::IS_GRACE_NOTE);
+
     int initialHeight, finalHeight, extremeHeight;
     NELIterator extremeNote;
 
@@ -433,8 +435,7 @@ NotationGroup::calculateBeam(NotationStaff &staff)
     }
 
     int diff = initialHeight - finalHeight;
-    if (diff < 0)
-        diff = -diff;
+    if (diff < 0) diff = -diff;
 
     bool linear =
         (beam.aboveNotes ?
@@ -465,7 +466,7 @@ NotationGroup::calculateBeam(NotationStaff &staff)
     int finalDX = (int) (*finalNote)->getLayoutX() - initialX;
     int extremeDX = (int)(*extremeNote)->getLayoutX() - initialX;
 
-    int spacing = staff.getNotePixmapFactory(false).getLineSpacing();
+    int spacing = staff.getNotePixmapFactory(isGrace).getLineSpacing();
 
     beam.gradient = 0;
     if (finalDX > 0) {
@@ -505,7 +506,7 @@ NotationGroup::calculateBeam(NotationStaff &staff)
     }
 
     // minimal stem lengths at start, middle-extreme and end of beam
-    int sl = staff.getNotePixmapFactory(false).getStemLength();
+    int sl = staff.getNotePixmapFactory(isGrace).getStemLength();
     int ml = spacing * 2;
     int el = sl;
 
@@ -524,12 +525,9 @@ NotationGroup::calculateBeam(NotationStaff &staff)
 
         if ((c0 - sl > topY) || (c1 - ml > topY) || (c2 - el > topY)) {
             if (haveInternalRest()) {
-                if (c0 - sl > topY)
-                    sl = c0 - topY;
-                if (c1 - ml > topY)
-                    ml = c1 - topY;
-                if (c2 - el > topY)
-                    el = c2 - topY;
+                if (c0 - sl > topY) sl = c0 - topY;
+                if (c1 - ml > topY) ml = c1 - topY;
+                if (c2 - el > topY) el = c2 - topY;
                 NOTATION_DEBUG << "made internal rest adjustment for above notes" << endl;
                 NOTATION_DEBUG << "sl: " << sl << ", ml: " << ml << ", el: " << el << endl;
             }
@@ -539,12 +537,9 @@ NotationGroup::calculateBeam(NotationStaff &staff)
 
         if ((c0 + sl < bottomY) || (c1 + ml < bottomY) || (c2 + el < bottomY)) {
             if (haveInternalRest()) {
-                if (c0 + sl < bottomY)
-                    sl = bottomY - c0;
-                if (c1 + ml < bottomY)
-                    ml = bottomY - c1;
-                if (c2 + el < bottomY)
-                    el = bottomY - c2;
+                if (c0 + sl < bottomY) sl = bottomY - c0;
+                if (c1 + ml < bottomY) ml = bottomY - c1;
+                if (c2 + el < bottomY) el = bottomY - c2;
                 NOTATION_DEBUG << "made internal rest adjustment for below notes" << endl;
                 NOTATION_DEBUG << "sl: " << sl << ", ml: " << ml << ", el: " << el << endl;
             }
@@ -568,23 +563,17 @@ NotationGroup::calculateBeam(NotationStaff &staff)
 
     // ensure extended to middle line if necessary, and assign suitable stem length
     if (beam.aboveNotes) {
-        if (c0 - sl > midY)
-            sl = c0 - midY;
-        if (c1 - ml > midY)
-            ml = c1 - midY;
-        if (c2 - el > midY)
-            el = c2 - midY;
+        if (c0 - sl > midY) sl = c0 - midY;
+        if (c1 - ml > midY) ml = c1 - midY;
+        if (c2 - el > midY) el = c2 - midY;
         if (extremeDX > 1.0 || extremeDX < -1.0) {
             //	    beam.gradient = int(100 * double(c2 - c0) / double(extremeDX));
         }
         beam.startY = min(min(c0 - sl, c1 - ml), c2 - el);
     } else {
-        if (c0 + sl < midY)
-            sl = midY - c0;
-        if (c1 + ml < midY)
-            ml = midY - c1;
-        if (c2 + el < midY)
-            el = midY - c2;
+        if (c0 + sl < midY) sl = midY - c0;
+        if (c1 + ml < midY) ml = midY - c1;
+        if (c2 + el < midY) el = midY - c2;
         if (extremeDX > 1.0 || extremeDX < -1.0) {
             //	    beam.gradient = int(100 * double(c2 - c0) / double(extremeDX));
         }
@@ -867,12 +856,12 @@ NotationGroup::applyTuplingLine(NotationStaff &staff)
 
     Beam beam(calculateBeam(staff));
 
-    NELIterator initialNote(getInitialNote()),
-    finalNote( getFinalNote()),
-
-    initialElement(getInitialElement()),
-    finalElement( getFinalElement());
-
+    NELIterator
+        initialNote(getInitialNote()),
+        finalNote(getFinalNote()),
+        initialElement(getInitialElement()),
+        finalElement(getFinalElement());
+    
     NELIterator initialNoteOrRest(initialElement);
     NotationElement* initialNoteOrRestEl = static_cast<NotationElement*>(*initialNoteOrRest);
 
@@ -888,8 +877,11 @@ NotationGroup::applyTuplingLine(NotationStaff &staff)
         initialNoteOrRestEl = static_cast<NotationElement*>(*initialNoteOrRest);
     }
 
-    if (initialNoteOrRest == staff.getViewElementList()->end())
-        return ;
+    if (initialNoteOrRest == staff.getViewElementList()->end()) return;
+
+    bool isGrace =
+        (*initialNote)->event()->has(BaseProperties::IS_GRACE_NOTE) &&
+        (*initialNote)->event()->get<Bool>(BaseProperties::IS_GRACE_NOTE);
 
     //    NOTATION_DEBUG << "NotationGroup::applyTuplingLine: first element is " << (initialNoteOrRestEl->isNote() ? "Note" : "Non-Note") << ", last is " << (static_cast<NotationElement*>(*finalElement)->isNote() ? "Note" : "Non-Note") << endl;
 
@@ -929,21 +921,19 @@ NotationGroup::applyTuplingLine(NotationStaff &staff)
 
         //	NOTATION_DEBUG << "applyTuplingLine: beam.startY is " << beam.startY << ", initialY is " << initialY << " so my startY is " << startY << ", endY " << endY << ", beam.gradient " << beam.gradient << endl;
 
-        int nh = staff.getNotePixmapFactory(false).getNoteBodyHeight();
+        int nh = staff.getNotePixmapFactory(isGrace).getNoteBodyHeight();
 
         if (followBeam) { // adjust to move text slightly away from beam
 
             int maxEndBeamCount = 1;
             long bc;
-            if ((*initialNoteOrRest)->event()->get
-                    <Int>
-                    (m_properties.BEAM_NEXT_BEAM_COUNT, bc)) {
+            if ((*initialNoteOrRest)->event()->get<Int>
+                (m_properties.BEAM_NEXT_BEAM_COUNT, bc)) {
                 if (bc > maxEndBeamCount)
                     maxEndBeamCount = bc;
             }
-            if ((*finalNote)->event()->get
-                    <Int>
-                    (m_properties.BEAM_NEXT_BEAM_COUNT, bc)) {
+            if ((*finalNote)->event()->get<Int>
+                (m_properties.BEAM_NEXT_BEAM_COUNT, bc)) {
                 if (bc > maxEndBeamCount)
                     maxEndBeamCount = bc;
             }

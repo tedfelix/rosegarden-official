@@ -551,7 +551,10 @@ NoteInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
          m_matrixInsertType && !m_nParentView->isInGraceMode() ?
          NoteInsertionCommand::MatrixModeOn : NoteInsertionCommand::MatrixModeOff,
          m_nParentView->isInGraceMode() ?
-         NoteInsertionCommand::GraceModeOn : NoteInsertionCommand::GraceModeOff,
+         (m_nParentView->isInTripletMode() ?
+          NoteInsertionCommand::GraceAndTripletModesOn :
+          NoteInsertionCommand::GraceModeOn)
+         : NoteInsertionCommand::GraceModeOff,
          targetSubordering,
          m_defaultStyle);
 

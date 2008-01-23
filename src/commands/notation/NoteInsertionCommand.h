@@ -55,7 +55,8 @@ public:
 
     enum GraceMode {
         GraceModeOff,
-        GraceModeOn
+        GraceModeOn,
+        GraceAndTripletModesOn
     };
 
     NoteInsertionCommand(Segment &segment,
@@ -84,7 +85,7 @@ protected:
     Accidental m_accidental;
     bool m_autoBeam;
     bool m_matrixType;
-    bool m_grace;
+    GraceMode m_grace;
     float m_targetSubordering;
     NoteStyleName m_noteStyle;
 
