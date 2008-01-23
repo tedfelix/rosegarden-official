@@ -1781,10 +1781,16 @@ RosegardenGUIDoc::insertRecordedMidi(const MappedComposition &mC)
             int channel = (*i)->getRecordedChannel();
             int device = (*i)->getRecordedDevice();
 
+	    TrackId tid = (*i)->getTrackId();
+	    Track *track = getComposition().getTrackById(tid);
+
             switch ((*i)->getType()) {
             case MappedEvent::MidiNote:
 
-                pitch = (*i)->getPitch();
+                // adjust the notation by the opposite of track transpose so the
+		// resulting recording will play correctly, and notation will
+		// read correctly; tentative fix for #1597279
+                pitch = (*i)->getPitch() - track->getTranspose();
 
                 if ((*i)->getDuration() < RealTime::zeroTime) {
 
