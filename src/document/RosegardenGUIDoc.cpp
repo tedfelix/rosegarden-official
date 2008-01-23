@@ -1788,8 +1788,8 @@ RosegardenGUIDoc::insertRecordedMidi(const MappedComposition &mC)
             case MappedEvent::MidiNote:
 
                 // adjust the notation by the opposite of track transpose so the
-		// resulting recording will play correctly, and notation will
-		// read correctly; tentative fix for #1597279
+                // resulting recording will play correctly, and notation will
+                // read correctly; tentative fix for #1597279
                 pitch = (*i)->getPitch() - track->getTranspose();
 
                 if ((*i)->getDuration() < RealTime::zeroTime) {
