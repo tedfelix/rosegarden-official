@@ -39,8 +39,10 @@
 #include <kcombobox.h>
 #include <kconfig.h>
 #include <kdialogbase.h>
+#include <qbuttongroup.h>
 #include <qdialog.h>
 #include <qframe.h>
+#include <qgroupbox.h>
 #include <qlabel.h>
 #include <qstring.h>
 #include <qvbox.h>
@@ -50,9 +52,10 @@
 namespace Rosegarden
 {
 
-PresetHandlerDialog::PresetHandlerDialog(QWidget *parent)
+PresetHandlerDialog::PresetHandlerDialog(QWidget *parent, bool fromNotation)
         : KDialogBase(parent, "presethandlerdialog", true, i18n("Load track parameters preset"), Ok | Cancel, Ok),
-        m_config(kapp->config())
+        m_config(kapp->config()),
+        m_fromNotation(fromNotation)
 {
     m_presets = new PresetGroup();
     m_categories = m_presets->getCategories();
@@ -77,7 +80,7 @@ PresetHandlerDialog::initDialog()
 
     QFrame *frame = new QFrame(vBox);
 
-    QGridLayout *layout = new QGridLayout(frame, 5, 5, 10, 5);
+    QGridLayout *layout = new QGridLayout(frame, 6, 5, 10, 5);
 
     QLabel *title = new QLabel(i18n("Select preset track parameters for:"), frame);
 
@@ -92,6 +95,23 @@ PresetHandlerDialog::initDialog()
     m_playerCombo->insertItem(i18n("Amateur"));
     m_playerCombo->insertItem(i18n("Professional"));
 
+    QGroupBox *scopeBox = new QButtonGroup
+        (1, Horizontal, i18n("Scope"), frame);
+    if (m_fromNotation) {
+        QRadioButton *onlySelectedSegments = new 
+            QRadioButton(i18n("Only selected segments (EXPERIMENTAL)"), scopeBox);
+        m_convertAllSegments = new 
+            QRadioButton(i18n("All segments in this track (EXPERIMENTAL"), scopeBox);
+        onlySelectedSegments->setChecked(true);
+    }
+    else {
+        QRadioButton *onlyNewSegments = new 
+            QRadioButton(i18n("Only for new segments"), scopeBox);
+        m_convertSegments = new 
+            QRadioButton(i18n("Convert existing segments (EXPERIMENTAL)"), scopeBox);
+        onlyNewSegments->setChecked(true);
+    }
+    
     layout->addMultiCellWidget(title, 0, 0, 0, 1, AlignLeft);
     layout->addWidget(catlabel, 1, 0, AlignRight);
     layout->addWidget(m_categoryCombo, 1, 1);
@@ -99,6 +119,7 @@ PresetHandlerDialog::initDialog()
     layout->addWidget(m_instrumentCombo, 2, 1);
     layout->addWidget(plylabel, 3, 0, AlignRight);
     layout->addWidget(m_playerCombo, 3, 1);
+    layout->addMultiCellWidget(scopeBox, 4, 4, 0, 1, AlignLeft);
 
     populateCategoryCombo();
     // try to set to same category used previously
@@ -169,6 +190,28 @@ PresetHandlerDialog::getHighRange()
         return p.getHighAm();
     } else {
         return p.getHighPro();
+    }
+}
+
+bool
+PresetHandlerDialog::getConvertAllSegments()
+{
+    if (m_fromNotation) {
+        return m_convertAllSegments && m_convertAllSegments->isChecked();
+    }
+    else {
+        return m_convertSegments && m_convertSegments->isChecked();
+    }
+}
+
+bool
+PresetHandlerDialog::getConvertOnlySelectedSegments()
+{
+    if (m_fromNotation) {
+        return m_convertAllSegments && !m_convertAllSegments->isChecked();
+    }
+    else {
+        return false;
     }
 }
 

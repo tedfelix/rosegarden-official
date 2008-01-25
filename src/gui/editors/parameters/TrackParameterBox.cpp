@@ -48,6 +48,7 @@
 #include "base/NotationTypes.h"
 #include "base/Studio.h"
 #include "base/Track.h"
+#include "commands/segment/SegmentSyncCommand.h"
 #include "document/RosegardenGUIDoc.h"
 #include "gui/dialogs/PitchPickerDialog.h"
 #include "gui/general/GUIPalette.h"
@@ -830,7 +831,7 @@ TrackParameterBox::slotColorChanged(int index)
                 slotDocColoursChanged();
             }
         }
-        // Else we don't do anything as they either didn't give a name·
+        // Else we don't do anything as they either didn't give a nameï¿½
         // or didn't give a colour
     }
 }
@@ -891,6 +892,24 @@ TrackParameterBox::slotPresetPressed()
         if (dialog.exec() == QDialog::Accepted) {
             m_presetLbl->setText(dialog.getName());
             trk->setPresetLabel(dialog.getName());
+            if (dialog.getConvertAllSegments()) {
+                // get all segments for this track and convert them.
+                for (Composition::segmentcontainer::const_iterator si = 
+                            comp.getSegments().begin();
+                        si != comp.getSegments().end(); ++si) {
+                    if ((*si)->getTrack() == comp.getSelectedTrack())
+                    {
+                        // convert this segment
+                        Segment *s = *si;
+                        if (s->getTranspose() != dialog.getTranspose()) {
+                            SegmentSyncCommand* command = new 
+                                SegmentSyncCommand(*s, dialog.getTranspose());
+                            // TODO do this in an undo-able way
+                            command->execute();
+                        }
+                    }
+                }
+            }
             m_defClef->setCurrentItem(dialog.getClef());
             m_defTranspose->setCurrentItem(QString("%1").arg
                                            (dialog.getTranspose()), true);

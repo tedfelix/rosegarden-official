@@ -30,6 +30,7 @@
 #define _RG_PRESETHANDLERDIALOG_H_
 
 #include <kdialogbase.h>
+#include <qradiobutton.h>
 #include <qstring.h>
 #include "CategoryElement.h"
 
@@ -50,13 +51,14 @@ class PresetHandlerDialog : public KDialogBase
 
 public:
 
-    PresetHandlerDialog(QWidget* parent);
+    PresetHandlerDialog(QWidget* parent, bool fromNotation = false);
     ~PresetHandlerDialog();
 
     PresetGroup *m_presets;
     CategoriesContainer m_categories;
 
     KConfig *m_config;
+    bool m_fromNotation;
 
     //-------[ accessor functions ]------------------------
 
@@ -66,6 +68,8 @@ public:
     int getTranspose();
     int getLowRange();
     int getHighRange();
+    bool getConvertAllSegments();
+    bool getConvertOnlySelectedSegments();
 
 protected:
 
@@ -83,6 +87,8 @@ protected:
     KComboBox   *m_categoryCombo;
     KComboBox   *m_instrumentCombo;
     KComboBox   *m_playerCombo;
+    QRadioButton *m_convertSegments;
+    QRadioButton *m_convertAllSegments;
 
 protected slots:
 
