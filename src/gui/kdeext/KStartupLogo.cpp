@@ -4,7 +4,7 @@
     Rosegarden
     A sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
@@ -82,7 +82,7 @@ void KStartupLogo::paintEvent(QPaintEvent*)
 
     // grep me: splash color
     //    QColor bg(49, 94, 19); // color for 2006 splash
-    QColor bg(19, 19, 19);  // color for the 2007 splash
+    QColor bg(19, 19, 19);  // color for the 2008 splash
     paint.setPen(bg);
     paint.setBrush(bg);
     paint.drawRect(QRect(m_pixmap.width() - 220, m_pixmap.height() - 43,

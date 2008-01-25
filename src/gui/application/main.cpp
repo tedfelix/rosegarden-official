@@ -4,7 +4,7 @@
     Rosegarden
     A sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
@@ -411,7 +411,7 @@ int main(int argc, char *argv[])
 
     KAboutData aboutData( "rosegarden", I18N_NOOP("Rosegarden"),
                           VERSION, description, KAboutData::License_GPL,
-                          I18N_NOOP("Copyright 2000 - 2007 Guillaume Laurent, Chris Cannam, Richard Bown\nParts copyright 1994 - 2004 Chris Cannam, Andy Green, Richard Bown, Guillaume Laurent\nLilypond fonts copyright 1997 - 2005 Han-Wen Nienhuys and Jan Nieuwenhuizen"),
+                          I18N_NOOP("Copyright 2000 - 2008 Guillaume Laurent, Chris Cannam, Richard Bown\nParts copyright 1994 - 2004 Chris Cannam, Andy Green, Richard Bown, Guillaume Laurent\nLilypond fonts copyright 1997 - 2005 Han-Wen Nienhuys and Jan Nieuwenhuizen"),
                           0,
                           "http://www.rosegardenmusic.com/",
                           "rosegarden-devel@lists.sourceforge.net");
@@ -457,7 +457,7 @@ int main(int argc, char *argv[])
     aboutData.addCredit("Lucas Godoy", I18N_NOOP("Spanish translation"), "godoy.lucas@gmail.com");
     aboutData.addCredit("Feliu Ferrer", I18N_NOOP("Catalan translation"), "mverge2@pie.xtec.es");
     aboutData.addCredit("Quim Perez i Noguer", I18N_NOOP("Catalan translation"), "noguer@osona.com");
-    aboutData.addCredit("Carolyn McIntyre", I18N_NOOP("1.2.3 splash screen photo\nGave birth to D. Michael McIntyre, bought him a good flute once\nupon a time, and always humored him when he came over to play her\nsome new instrument, even though she really hated his playing.\nBorn October 19, 1951, died September 21, 2007, R. I. P."), "DECEASED");
+    aboutData.addCredit("Carolyn McIntyre", I18N_NOOP("1.2.3 splash screen photo\nGave birth to D. Michael McIntyre, bought him a good flute once\nupon a time, and always humored him when he came over to play her\nsome new instrument, even though she really hated his playing.\nBorn October 19, 1951, died September 21, 2008, R. I. P."), "DECEASED");
     aboutData.addCredit("Stephen Torri", I18N_NOOP("Initial guitar chord editing code"), "storri@torri.org");
     aboutData.addCredit("Piotr Sawicki", I18N_NOOP("Polish translation"), "pelle@plusnet.pl");
     aboutData.addCredit("David García-Abad", I18N_NOOP("Basque translation"), "davidgarciabad@telefonica.net");
