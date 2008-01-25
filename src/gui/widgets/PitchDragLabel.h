@@ -77,8 +77,8 @@ protected:
     void calculatePixmap() const;
     void calculatePixmap(int pitch, int octave, int step) const;
 
-	/** emits 'pitchChanged' events, both diatonic and chromatic */
-	void emitPitchChange();
+    /** emits 'pitchChanged' events, both diatonic and chromatic */
+    void emitPitchChange();
 
     mutable QPixmap m_pixmap;
 
