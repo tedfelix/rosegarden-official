@@ -4,7 +4,7 @@
     Rosegarden
     A sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
@@ -5348,7 +5348,7 @@ AlsaDriver::getAlsaModuleVersionString()
     
     // Examples:
     // Advanced Linux Sound Architecture Driver Version 1.0.14rc3.
-    // Advanced Linux Sound Architecture Driver Version 1.0.14 (Thu May 31 09:03:25 2007 UTC).
+    // Advanced Linux Sound Architecture Driver Version 1.0.14 (Thu May 31 09:03:25 2008 UTC).
 
     if (v) {
 	char buf[256];

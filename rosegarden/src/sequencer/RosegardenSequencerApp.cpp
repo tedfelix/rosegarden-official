@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -100,7 +100,7 @@ RosegardenSequencerApp::RosegardenSequencerApp() :
 
     // Creating this object also initialises the Rosegarden ALSA/JACK
     // interface for both playback and recording. MappedStudio
-    // aduio faders are also created.
+    // audio faders are also created.
     //
     m_driver = SoundDriverFactory::createDriver(m_studio);
     m_studio->setSoundDriver(m_driver);
