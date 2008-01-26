@@ -114,7 +114,8 @@
 #include "commands/notation/UntieNotesCommand.h"
 #include "commands/notation/UnTupletCommand.h"
 #include "commands/segment/PasteToTriggerSegmentCommand.h"
-#include "commands/segment/SegmentChangeTransposeCommand.h"
+#include "commands/segment/SegmentSyncCommand.h"
+#include "commands/segment/SegmentTransposeCommand.h"
 #include "commands/segment/RenameTrackCommand.h"
 #include "document/RosegardenGUIDoc.h"
 #include "document/ConfigGroups.h"
@@ -144,6 +145,7 @@
 #include "gui/general/LinedStaff.h"
 #include "gui/general/LinedStaffManager.h"
 #include "gui/general/ProgressReporter.h"
+#include "gui/general/PresetHandlerDialog.h"
 #include "gui/general/RosegardenCanvasView.h"
 #include "gui/kdeext/KTmpStatusMsg.h"
 #include "gui/kdeext/QCanvasSimpleSprite.h"
@@ -2249,6 +2251,10 @@ void NotationView::setupActions()
     new KAction(TransposeCommand::getDiatonicGlobalName(false), 0, this,
                 SLOT(slotEditTranspose()), actionCollection(),
                 "transpose_segment");
+
+	new KAction(i18n("Switch instrument"), 0, this,
+                SLOT(slotEditSwitchInstrument()), actionCollection(),
+                "switch_instrument");
 
 
     // setup Settings menu
@@ -6165,71 +6171,39 @@ void NotationView::slotEditAddSustainUp()
 
 void NotationView::slotEditTranspose()
 {
-	IntervalDialog intervalDialog(this, true, true);
+    IntervalDialog intervalDialog(this, true, true);
     int ok = intervalDialog.exec();
     
     int semitones = intervalDialog.getChromaticDistance();
     int steps = intervalDialog.getDiatonicDistance();
-	
-	if (!ok || (semitones == 0 && steps == 0)) return;
+
+    if (!ok || (semitones == 0 && steps == 0)) return;
+
+    // TODO combine commands into one 
+    for (int i = 0; i < m_segments.size(); i++)
+    {
+        addCommandToHistory(new SegmentTransposeCommand(*(m_segments[i]), 
+            intervalDialog.getChangeKey(), steps, semitones, 
+            intervalDialog.getTransposeSegmentBack()));
+    }
+}
+
+void NotationView::slotEditSwitchInstrument()
+{
+    PresetHandlerDialog presetHandlerDialog(this, true);
     
-    Segment &segment = m_staffs[m_currentStaff]->getSegment();
-	EventSelection wholeSegment(segment, segment.getStartTime(), segment.getEndMarkerTime());
+    if (presetHandlerDialog.exec() != QDialog::Accepted) return;
     
-    //TODO who cleans this up?
-    KMacroCommand *macro = new KMacroCommand("Transpose Segment by Interval");
-    
-    // Key insertion can do transposition, but a C4 to D becomes a D4, while
-	//  a C4 to G becomes a G3. Because we let the user specify an explicit number
-	//  of octaves to move the notes up/down, we add the keys without transposing
-	//  and handle the transposition ourselves:
-	if (intervalDialog.getChangeKey())
-	{
-		Rosegarden::Key key = segment.getKeyAtTime(segment.getStartTime());
-		Rosegarden::Key newKey = key.transpose(semitones, steps);
-		
-		macro->addCommand
-			(new KeyInsertionCommand
-			 (segment,
-			  segment.getStartTime(),
-			  newKey,
-			  false,
-			  false,
-			  true,
-			  true));
-		
-		EventSelection::eventcontainer::iterator i;
-		std::list<KeyInsertionCommand*> commands;
-		
-		for (i = wholeSegment.getSegmentEvents().begin();
-            i != wholeSegment.getSegmentEvents().end(); ++i) {
-        		// transpose key
-				if ((*i)->isa(Rosegarden::Key::EventType)) {
-        			macro->addCommand
-						(new KeyInsertionCommand
-						 (segment,
-			  			 (*i)->getAbsoluteTime(),
-			  			 (Rosegarden::Key (**i)).transpose(semitones, steps),
-			 			 false,
-			 			 false,
-					 	 true,
-						 true));
-        		}
-        		
-        }
-	}
-	
-	macro->addCommand(new TransposeCommand
-		(semitones, steps, wholeSegment));
-	
-	if (intervalDialog.getTransposeSegmentBack())
-	{
-		// Transpose segment in opposite direction
-		int newTranspose = segment.getTranspose() - semitones;
-		macro->addCommand(new SegmentChangeTransposeCommand(newTranspose, &segment));
-	}
-	
-	addCommandToHistory(macro);
+    // TODO combine commands into one 
+    for (int i = 0; i < m_segments.size(); i++)
+    {
+    	// TODO add support for 'apply to all segments on track 
+        addCommandToHistory(new SegmentSyncCommand(*(m_segments[i]), 
+            presetHandlerDialog.getTranspose(), 
+            presetHandlerDialog.getLowRange(), 
+            presetHandlerDialog.getHighRange()));
+    }
+
 }
 
 void NotationView::slotEditElement(NotationStaff *staff,
@@ -6448,7 +6422,6 @@ NotationView::slotUpdateRecordingSegment(Segment *segment,
         return ;
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
         if (&m_staffs[i]->getSegment() == segment) {
-            //	    refreshSegment(segment, updateFrom, segment->getEndMarkerTime());
             refreshSegment(segment, 0, 0);
         }
     }

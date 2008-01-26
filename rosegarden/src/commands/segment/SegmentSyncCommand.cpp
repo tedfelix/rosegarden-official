@@ -33,25 +33,25 @@
 
 namespace Rosegarden
 {
-SegmentSyncCommand::SegmentSyncCommand(Segment &segment, int newTranspose) :
+SegmentSyncCommand::SegmentSyncCommand(Segment &segment, int newTranspose, int lowRange, int highRange) :
         KMacroCommand(i18n("Sync segment parameters"))
 {
-    processSegment(segment, newTranspose);
+    processSegment(segment, newTranspose, lowRange, highRange);
 }
 
-SegmentSyncCommand::SegmentSyncCommand(SegmentSelection selection, int newTranspose) :
+SegmentSyncCommand::SegmentSyncCommand(SegmentSelection selection, int newTranspose, int lowRange, int highRange) :
         KMacroCommand(i18n("Sync segment parameters"))
 {
     for (SegmentSelection::iterator i = selection.begin();
             i != selection.end(); ++i) 
     {
         Segment &segment = **i;    
-        processSegment(segment, newTranspose);
+        processSegment(segment, newTranspose, lowRange, highRange);
     }
 }
      
 void 
-SegmentSyncCommand::processSegment(Segment &segment, int newTranspose)
+SegmentSyncCommand::processSegment(Segment &segment, int newTranspose, int lowRange, int highRange)
 {
     KMacroCommand * macroCommand = this;
     
@@ -67,6 +67,10 @@ SegmentSyncCommand::processSegment(Segment &segment, int newTranspose)
 
     SegmentTransposeCommand* command = new SegmentTransposeCommand(segment, true, steps, semitones, true);
     macroCommand->addCommand(command);
+    
+    // TODO do this in an undoable fashion:
+    segment.setLowestPlayable(lowRange);
+    segment.setHighestPlayable(highRange);
 }
 
 
