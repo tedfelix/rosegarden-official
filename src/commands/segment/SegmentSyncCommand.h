@@ -42,15 +42,15 @@ class SegmentSyncCommand : public KMacroCommand
 {
 public:
     SegmentSyncCommand(Segment &segment,
-        int newTranspose);
+        int newTranspose, int lowRange, int highRange);
 
     SegmentSyncCommand(SegmentSelection selection,
-        int newTranspose);
+        int newTranspose, int lowRange, int highRange);
 
     virtual ~SegmentSyncCommand();
 
 protected:
-    void processSegment(Segment &segment, int newTranspose);
+    void processSegment(Segment &segment, int newTranspose, int lowRange, int highRange);
 };
 
 }

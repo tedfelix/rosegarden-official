@@ -433,7 +433,7 @@ public slots:
     void slotToggleGroupToolBar();
 
     /**
-     * toggles the font toolbar
+     * toggles the layout toolbar
      */
     void slotToggleLayoutToolBar();
 
@@ -597,6 +597,7 @@ public slots:
     void slotEditAddSustainUp();
     void slotEditAddSustain(bool down);
     void slotEditTranspose();
+    void slotEditSwitchInstrument();
     void slotEditElement(NotationStaff *, NotationElement *, bool advanced);
 
     void slotFinePositionLeft();

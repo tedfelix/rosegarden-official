@@ -901,12 +901,10 @@ TrackParameterBox::slotPresetPressed()
                     {
                         // convert this segment
                         Segment *s = *si;
-                        if (s->getTranspose() != dialog.getTranspose()) {
-                            SegmentSyncCommand* command = new 
-                                SegmentSyncCommand(*s, dialog.getTranspose());
-                            // TODO do this in an undo-able way
-                            command->execute();
-                        }
+                        SegmentSyncCommand* command = new 
+                            SegmentSyncCommand(*s, dialog.getTranspose(), dialog.getLowRange(), dialog.getHighRange());
+                        // TODO do this in an undo-able way
+                        command->execute();
                     }
                 }
             }
