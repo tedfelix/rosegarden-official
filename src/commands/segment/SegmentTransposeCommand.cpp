@@ -75,10 +75,8 @@ SegmentTransposeCommand::processSegment(Segment &segment, bool changeKey, int st
         for (i = wholeSegment->getSegmentEvents().begin();
             i != wholeSegment->getSegmentEvents().end(); ++i) {
                 // transpose key
-                //std::cout << "checking if it's a key... - looks like adding the key-insertion invalidates the segment, let's put those in a list again." << std::endl;
                 if ((*i)->isa(Rosegarden::Key::EventType)) {
                     Rosegarden::Key trKey = (Rosegarden::Key (**i)).transpose(semitones, steps); 
-                      std::cout << "Transposing other key: from " << (Rosegarden::Key (**i)).getName() << " to " << trKey.getName() << std::endl;
                     //commands.push_front
                     macroCommand->addCommand
                         (new KeyInsertionCommand
@@ -107,7 +105,6 @@ SegmentTransposeCommand::processSegment(Segment &segment, bool changeKey, int st
 	      true);
         //commandHistory->addCommand(firstKeyCommand);
         macroCommand->addCommand(firstKeyCommand);
-        std::cout << "Done changing key" << std::endl;
     }
         
     if (transposeSegmentBack)
