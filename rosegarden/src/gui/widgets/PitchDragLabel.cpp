@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2008
+    This program is Copyright 2000-2007
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -59,10 +59,10 @@ PitchDragLabel::~PitchDragLabel()
 void
 PitchDragLabel::slotSetPitch(int p)
 {
-    if (m_pitch == p)
-        return ;
     bool up = (p > m_pitch);
     m_usingSharps = up;
+    if (m_pitch == p)
+        return ;
     m_pitch = p;
     calculatePixmap();
     emitPitchChange();
@@ -108,18 +108,25 @@ PitchDragLabel::mouseMoveEvent(QMouseEvent *e)
             newPitch = 127;
 
         if (m_pitch != newPitch) {
-	    if (newPitch > m_pitch)
+            bool up = (newPitch > m_pitch);
+            m_pitch = newPitch;
+            m_usingSharps = up;
+            calculatePixmap();
+            emit pitchDragged(m_pitch);
+	    if (up)
 	    {
 		// use sharps
-		emit pitchDragged(newPitch, (int)(((long)newPitch) / 12),
-                                  steps_Cmajor_with_sharps[newPitch % 12]);
+		emit pitchDragged(m_pitch, (int)(((long)m_pitch) / 12),
+                                  steps_Cmajor_with_sharps[m_pitch % 12]);
 	    }
 	    else
 	    {
 		// use flats
-		emit pitchDragged(newPitch, (int)(((long)newPitch) / 12),
-                                  steps_Cmajor_with_flats[newPitch % 12]);
+		emit pitchDragged(m_pitch, (int)(((long)m_pitch) / 12),
+                                  steps_Cmajor_with_flats[m_pitch % 12]);
 	    }
+            emit preview(m_pitch);
+            paintEvent(0);
         }
     }
 }
@@ -156,17 +163,21 @@ PitchDragLabel::wheelEvent(QWheelEvent *e)
 {
     if (e->delta() > 0) {
         if (m_pitch < 127) {
-	    int newPitch = m_pitch + 1;
-	    // use sharps
-	    emit pitchDragged(newPitch, (int)(((long)newPitch) / 12),
-                              steps_Cmajor_with_sharps[newPitch % 12]);
+            ++m_pitch;
+            m_usingSharps = true;
+            calculatePixmap();
+			emitPitchChange();
+            emit preview(m_pitch);
+            paintEvent(0);
         }
     } else {
         if (m_pitch > 0) {
-	    int newPitch = m_pitch - 1;
-	    // use flats
-	    emit pitchDragged(newPitch, (int)(((long)newPitch) / 12),
-                              steps_Cmajor_with_flats[newPitch % 12]);
+            --m_pitch;
+            m_usingSharps = false;
+            calculatePixmap();
+            emitPitchChange();
+            emit preview(m_pitch);
+            paintEvent(0);
         }
     }
 }
