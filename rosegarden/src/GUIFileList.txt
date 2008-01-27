@@ -680,6 +680,7 @@ SET(gui_SRCS
 	gui/general/CategoryElement.cpp
 	gui/general/CategoryElement.h
 	gui/general/ClefIndex.h
+	gui/general/ClefIndex.cpp
 	gui/general/EditToolBox.cpp
 	gui/general/EditToolBox.h
 	gui/general/EditTool.cpp

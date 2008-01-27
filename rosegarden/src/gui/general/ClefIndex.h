@@ -23,9 +23,12 @@
 #ifndef _CLEF_INDEX_H_
 #define _CLEF_INDEX_H_
 
+#include "base/NotationTypes.h"
+#include <qstring.h>
+
 // used variously by TPB, SPB, PresetHandler to correlate combo box indices to
 // clef types
-enum { TrebleClef,                      // G clef, line 2
+enum { TrebleClef = 0,                  // G clef, line 2
        BassClef,                        // F clef, line 4
        CrotalesClef,                    // G clef, line 2, 15 above
        XylophoneClef,                   // G clef, line 2,  8 above
@@ -43,5 +46,14 @@ enum { TrebleClef,                      // G clef, line 2
        SubbassClef,                     // F clef, line 5
        TwoBarClef                       // percussion clef  //!!! doesn't exist yet!
      };
+
+namespace Rosegarden 
+{
+
+const Clef clefIndexToClef(int index);
+
+const int clefNameToClefIndex(QString s);
+
+}
 
 #endif // _CLEF_INDEX_H_
