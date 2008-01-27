@@ -139,6 +139,7 @@
 #include "gui/dialogs/UseOrnamentDialog.h"
 #include "gui/rulers/StandardRuler.h"
 #include "gui/general/ActiveItem.h"
+#include "gui/general/ClefIndex.h"
 #include "gui/general/EditViewBase.h"
 #include "gui/general/EditView.h"
 #include "gui/general/GUIPalette.h"
@@ -6201,7 +6202,8 @@ void NotationView::slotEditSwitchInstrument()
         addCommandToHistory(new SegmentSyncCommand(*(m_segments[i]), 
             presetHandlerDialog.getTranspose(), 
             presetHandlerDialog.getLowRange(), 
-            presetHandlerDialog.getHighRange()));
+            presetHandlerDialog.getHighRange(),
+            clefIndexToClef(presetHandlerDialog.getClef())));
     }
 
 }

@@ -902,7 +902,9 @@ TrackParameterBox::slotPresetPressed()
                         // convert this segment
                         Segment *s = *si;
                         SegmentSyncCommand* command = new 
-                            SegmentSyncCommand(*s, dialog.getTranspose(), dialog.getLowRange(), dialog.getHighRange());
+                            SegmentSyncCommand(*s, dialog.getTranspose(), 
+                                dialog.getLowRange(), dialog.getHighRange(),
+                                clefIndexToClef(dialog.getClef()));
                         m_doc->getCommandHistory()->addCommand(command);
                     }
                 }

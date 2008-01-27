@@ -30,28 +30,29 @@
 #include "commands/edit/TransposeCommand.h"
 #include "commands/segment/SegmentChangeTransposeCommand.h"
 #include "commands/segment/SegmentTransposeCommand.h"
+#include "commands/segment/SegmentSyncClefCommand.h"
 
 namespace Rosegarden
 {
-SegmentSyncCommand::SegmentSyncCommand(Segment &segment, int newTranspose, int lowRange, int highRange) :
+SegmentSyncCommand::SegmentSyncCommand(Segment &segment, int newTranspose, int lowRange, int highRange, const Clef& clef) :
         KMacroCommand(i18n("Sync segment parameters"))
 {
-    processSegment(segment, newTranspose, lowRange, highRange);
+    processSegment(segment, newTranspose, lowRange, highRange, clef);
 }
 
-SegmentSyncCommand::SegmentSyncCommand(SegmentSelection selection, int newTranspose, int lowRange, int highRange) :
+SegmentSyncCommand::SegmentSyncCommand(SegmentSelection selection, int newTranspose, int lowRange, int highRange, const Clef& clef) :
         KMacroCommand(i18n("Sync segment parameters"))
 {
     for (SegmentSelection::iterator i = selection.begin();
             i != selection.end(); ++i) 
     {
         Segment &segment = **i;    
-        processSegment(segment, newTranspose, lowRange, highRange);
+        processSegment(segment, newTranspose, lowRange, highRange, clef);
     }
 }
      
 void 
-SegmentSyncCommand::processSegment(Segment &segment, int newTranspose, int lowRange, int highRange)
+SegmentSyncCommand::processSegment(Segment &segment, int newTranspose, int lowRange, int highRange, const Clef& clef)
 {
     KMacroCommand * macroCommand = this;
     
@@ -71,6 +72,8 @@ SegmentSyncCommand::processSegment(Segment &segment, int newTranspose, int lowRa
     // TODO do this in an undoable fashion:
     segment.setLowestPlayable(lowRange);
     segment.setHighestPlayable(highRange);
+    
+    macroCommand->addCommand(new SegmentSyncClefCommand(segment, clef));
 }
 
 
