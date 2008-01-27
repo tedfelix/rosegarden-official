@@ -5,7 +5,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -23,8 +23,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SEGMENTSYNCCOMMAND_H_
-#define _RG_SEGMENTSYNCCOMMAND_H_
+#ifndef _RG_SEGMENTSYNCCLEFCOMMAND_H_
+#define _RG_SEGMENTSYNCCLEFCOMMAND_H_
 
 #include <kcommand.h>
 #include "base/Event.h"
@@ -39,19 +39,15 @@ class Segment;
 class SegmentSelection;
 
 
-class SegmentSyncCommand : public KMacroCommand
+class SegmentSyncClefCommand : public KMacroCommand
 {
 public:
-    SegmentSyncCommand(Segment &segment,
-        int newTranspose, int lowRange, int highRange, const Clef& clef);
+    SegmentSyncClefCommand(Segment &segment, const Clef& clef);
 
-    SegmentSyncCommand(SegmentSelection selection,
-        int newTranspose, int lowRange, int highRange, const Clef& clef);
-
-    virtual ~SegmentSyncCommand();
+    virtual ~SegmentSyncClefCommand();
 
 protected:
-    void processSegment(Segment &segment, int newTranspose, int lowRange, int highRange, const Clef& clef);
+    void processSegment(Segment &segment, const Clef& clef);
 };
 
 }
