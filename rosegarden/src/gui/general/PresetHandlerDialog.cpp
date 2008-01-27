@@ -137,6 +137,14 @@ PresetHandlerDialog::initDialog()
     // others, because the contents of this combo are static)
     m_playerCombo->setCurrentItem(m_config->readNumEntry("player_combo_index", 0));
 
+    if (m_fromNotation){
+        m_convertAllSegments->setChecked(m_config->readBoolEntry("convert_all_segments", 0));
+    }
+    else {
+    	m_convertSegments->setChecked(m_config->readBoolEntry("convert_segments", 0));
+    }
+    	 
+    
     connect(m_categoryCombo, SIGNAL(activated(int)),
             SLOT(slotCategoryIndexChanged(int)));
 }
@@ -257,6 +265,13 @@ PresetHandlerDialog::slotOk()
     m_config->writeEntry("instrument_combo_index", m_instrumentCombo->currentItem());
     m_config->writeEntry("player_combo_index", m_playerCombo->currentItem());
 
+    if (m_fromNotation) {
+        m_config->writeEntry("convert_all_segments", m_convertAllSegments->isChecked());
+    }
+    else {
+        m_config->writeEntry("convert_segments", m_convertSegments->isChecked());
+    }
+    
     QDialog::accept();
 }
 
