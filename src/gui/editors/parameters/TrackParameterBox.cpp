@@ -903,10 +903,10 @@ TrackParameterBox::slotPresetPressed()
                         Segment *s = *si;
                         SegmentSyncCommand* command = new 
                             SegmentSyncCommand(*s, dialog.getTranspose(), dialog.getLowRange(), dialog.getHighRange());
-                        // TODO do this in an undo-able way
-                        command->execute();
+                        m_doc->getCommandHistory()->addCommand(command);
                     }
                 }
+                
             }
             m_defClef->setCurrentItem(dialog.getClef());
             m_defTranspose->setCurrentItem(QString("%1").arg
