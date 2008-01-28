@@ -893,22 +893,12 @@ TrackParameterBox::slotPresetPressed()
             m_presetLbl->setText(dialog.getName());
             trk->setPresetLabel(dialog.getName());
             if (dialog.getConvertAllSegments()) {
-                // get all segments for this track and convert them.
-                for (Composition::segmentcontainer::const_iterator si = 
-                            comp.getSegments().begin();
-                        si != comp.getSegments().end(); ++si) {
-                    if ((*si)->getTrack() == comp.getSelectedTrack())
-                    {
-                        // convert this segment
-                        Segment *s = *si;
-                        SegmentSyncCommand* command = new 
-                            SegmentSyncCommand(*s, dialog.getTranspose(), 
-                                dialog.getLowRange(), dialog.getHighRange(),
-                                clefIndexToClef(dialog.getClef()));
-                        m_doc->getCommandHistory()->addCommand(command);
-                    }
-                }
-                
+            	SegmentSyncCommand* command = new SegmentSyncCommand(
+            			comp.getSegments(), comp.getSelectedTrack(),
+            			dialog.getTranspose(), dialog.getLowRange(), 
+            			dialog.getHighRange(),
+            			clefIndexToClef(dialog.getClef()));
+                m_doc->getCommandHistory()->addCommand(command);
             }
             m_defClef->setCurrentItem(dialog.getClef());
             m_defTranspose->setCurrentItem(QString("%1").arg
