@@ -6191,19 +6191,25 @@ void NotationView::slotEditTranspose()
 
 void NotationView::slotEditSwitchInstrument()
 {
-    PresetHandlerDialog presetHandlerDialog(this, true);
+    PresetHandlerDialog dialog(this, true);
     
-    if (presetHandlerDialog.exec() != QDialog::Accepted) return;
+    if (dialog.exec() != QDialog::Accepted) return;
     
-    // TODO combine commands into one 
-    for (int i = 0; i < m_segments.size(); i++)
-    {
-    	// TODO add support for 'apply to all segments on track 
-        addCommandToHistory(new SegmentSyncCommand(*(m_segments[i]), 
-            presetHandlerDialog.getTranspose(), 
-            presetHandlerDialog.getLowRange(), 
-            presetHandlerDialog.getHighRange(),
-            clefIndexToClef(presetHandlerDialog.getClef())));
+    if (dialog.getConvertAllSegments()) {
+        // get all segments for this track and convert them.
+        Composition& comp = getDocument()->getComposition();
+        TrackId selectedTrack = getCurrentSegment()->getTrack();
+        addCommandToHistory(new SegmentSyncCommand(comp.getSegments(), selectedTrack,
+                dialog.getTranspose(), 
+        	    dialog.getLowRange(), 
+                dialog.getHighRange(),
+                clefIndexToClef(dialog.getClef())));
+    } else {
+        addCommandToHistory(new SegmentSyncCommand(m_segments, 
+            dialog.getTranspose(), 
+    	    dialog.getLowRange(), 
+            dialog.getHighRange(),
+            clefIndexToClef(dialog.getClef())));
     }
 
 }

@@ -101,7 +101,7 @@ PresetHandlerDialog::initDialog()
         QRadioButton *onlySelectedSegments = new 
             QRadioButton(i18n("Only selected segments (EXPERIMENTAL)"), scopeBox);
         m_convertAllSegments = new 
-            QRadioButton(i18n("All segments in this track (EXPERIMENTAL"), scopeBox);
+            QRadioButton(i18n("All segments in this track (EXPERIMENTAL)"), scopeBox);
         onlySelectedSegments->setChecked(true);
     }
     else {

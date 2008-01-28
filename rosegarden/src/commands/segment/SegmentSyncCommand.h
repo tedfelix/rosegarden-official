@@ -27,6 +27,7 @@
 #define _RG_SEGMENTSYNCCOMMAND_H_
 
 #include <kcommand.h>
+#include "base/Composition.h"
 #include "base/Event.h"
 #include "base/NotationTypes.h"
 #include "document/MultiViewCommandHistory.h"
@@ -46,7 +47,13 @@ public:
         int newTranspose, int lowRange, int highRange, const Clef& clef);
 
     SegmentSyncCommand(SegmentSelection selection,
-        int newTranspose, int lowRange, int highRange, const Clef& clef);
+            int newTranspose, int lowRange, int highRange, const Clef& clef);
+
+    SegmentSyncCommand(std::vector<Segment *> segments,
+            int newTranspose, int lowRange, int highRange, const Clef& clef);
+
+    SegmentSyncCommand(Composition::segmentcontainer& segments, TrackId track,
+            int newTranspose, int lowRange, int highRange, const Clef& clef);
 
     virtual ~SegmentSyncCommand();
 
