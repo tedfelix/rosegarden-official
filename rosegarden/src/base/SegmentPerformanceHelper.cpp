@@ -47,8 +47,8 @@ SegmentPerformanceHelper::getTiedNotes(iterator i)
     e->get<Bool>(TIED_BACKWARD, tiedBack);
     e->get<Bool>(TIED_FORWARD, tiedForward);
 
-    timeT d = e->getDuration();
-    timeT t = e->getAbsoluteTime();
+    timeT d = e->getNotationDuration();
+    timeT t = e->getNotationAbsoluteTime();
 
     if (!e->has(PITCH)) return c;
     int pitch = e->get<Int>(PITCH);
@@ -65,7 +65,7 @@ SegmentPerformanceHelper::getTiedNotes(iterator i)
 	    if (!(*j)->isa(Note::EventType)) continue;
 	    e = *j; // can reuse e because this branch always returns
 
-	    timeT t2 = e->getAbsoluteTime() + e->getDuration();
+	    timeT t2 = e->getNotationAbsoluteTime() + e->getNotationDuration();
 	    if (t2 < t) break;
 
 	    if (t2 > t || !e->has(PITCH) ||
@@ -94,7 +94,7 @@ SegmentPerformanceHelper::getTiedNotes(iterator i)
 
         e = *j;
 
-        timeT t2 = e->getAbsoluteTime();
+        timeT t2 = e->getNotationAbsoluteTime();
         
         if (t2 > t + d) break;
         else if (t2 < t + d || !e->has(PITCH) ||
@@ -103,7 +103,7 @@ SegmentPerformanceHelper::getTiedNotes(iterator i)
         if (!e->get<Bool>(TIED_BACKWARD, tiedBack) ||
             !tiedBack) break;
 
-        d += e->getDuration();
+        d += e->getNotationDuration();
 	c.push_back(j);
 	valid = true;
 
