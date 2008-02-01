@@ -153,11 +153,65 @@
       <range class="amateur" low="28" high="83"/>
       <range class="professional" low="23" high="88"/>
     </instrument>
+    <instrument name="Lute">
+      <clef type="guitar" />
+      <transpose value="0" />
+      <range class="amateur" low="33" high="98"/>
+      <range class="professional" low="33" high="98"/>
+    </instrument>
+    <instrument name="Cittern">
+      <clef type="treble" />
+      <transpose value="0" />
+      <range class="amateur" low="48" high="94"/>
+      <range class="professional" low="48" high="94"/>
+    </instrument>
+    <instrument name="Piccolo balalaika">
+      <clef type="xylophone" />
+      <transpose value="0" />
+      <range class="amateur" low="71" high="91"/>
+      <range class="professional" low="71" high="91"/>
+    </instrument>
+    <instrument name="Prima balalaika">
+      <clef type="treble" />
+      <transpose value="0" />
+      <range class="amateur" low="64" high="79"/>
+      <range class="professional" low="64" high="79"/>
+    </instrument>
+    <instrument name="Secunda balalaika">
+      <clef type="treble" />
+      <transpose value="0" />
+      <range class="amateur" low="57" high="72"/>
+      <range class="professional" low="57" high="72"/>
+    </instrument>
+    <instrument name="Alto balalaika">
+      <clef type="treble" />
+      <transpose value="0" />
+      <range class="amateur" low="52" high="67"/>
+      <range class="professional" low="52" high="67"/>
+    </instrument>
+    <instrument name="Bass balalaika">
+      <clef type="bass" />
+      <transpose value="0" />
+      <range class="amateur" low="40" high="60"/>
+      <range class="professional" low="40" high="60"/>
+    </instrument>
+    <instrument name="Contrabass balalaika">
+      <clef type="contrabass" />
+      <transpose value="0" />
+      <range class="amateur" low="28" high="48"/>
+      <range class="professional" low="28" high="48"/>
+    </instrument>
     <instrument name="Mandolin">
       <clef type="treble" />
       <transpose value="0" />
       <range class="amateur" low="55" high="85"/>
       <range class="professional" low="55" high="85"/>
+    </instrument>
+    <instrument name="Mandola">
+      <clef type="guitar" />
+      <transpose value="0" />
+      <range class="amateur" low="43" high="83"/>
+      <range class="professional" low="43" high="83"/>
     </instrument>
     <instrument name="Ukulele">
       <clef type="treble" />
@@ -188,6 +242,12 @@
       <transpose value="0" />
       <range class="amateur" low="23" high="104"/>
       <range class="professional" low="23" high="104"/>
+    </instrument>
+    <instrument name="Koto">
+      <clef type="treble" />
+      <transpose value="0" />
+      <range class="amateur" low="50" high="81"/>
+      <range class="professional" low="50" high="81"/>
     </instrument>
   </category>
   <category name="Flutes">
@@ -243,13 +303,13 @@
       <clef type="treble" />
       <transpose value="0" />
       <range class="amateur" low="62" high="89"/>
-      <range class="professional" low="60" high="84"/>
+      <range class="professional" low="60" high="93"/>
     </instrument>
     <instrument name="Transverse flute (B foot)">
       <clef type="treble" />
       <transpose value="0" />
       <range class="amateur" low="62" high="89"/>
-      <range class="professional" low="59" high="84"/>
+      <range class="professional" low="59" high="93"/>
     </instrument>
     <instrument name="Alto transverse flute">
       <clef type="treble" />
@@ -258,7 +318,7 @@
       <range class="professional" low="55" high="80"/>
     </instrument>
     <instrument name="Garklein recorder">
-      <clef type="crotales" />
+      <clef type="crotale" />
       <transpose value="0" />
       <range class="amateur" low="84" high="105"/>
       <range class="professional" low="84" high="108"/>
@@ -365,8 +425,32 @@
       <range class="amateur" low="69" high="96"/>
       <range class="professional" low="69" high="96"/>
     </instrument>
+    <instrument name="Pan flute">
+      <clef type="treble" />
+      <transpose value="0" />
+      <range class="amateur" low="55" high="91"/>
+      <range class="professional" low="55" high="91"/>
+    </instrument>
+    <instrument name="Shakuhachi">
+      <clef type="treble" />
+      <transpose value="0" />
+      <range class="amateur" low="62" high="86"/>
+      <range class="professional" low="62" high="86"/>
+    </instrument>
   </category>
   <category name="Double reeds">
+    <instrument name="Piccolo oboe in F">
+      <clef type="treble" />
+      <transpose value="5" />
+      <range class="amateur" low="58" high="86"/>
+      <range class="professional" low="58" high="92"/>
+    </instrument>
+    <instrument name="Piccolo oboe in Eb">
+      <clef type="treble" />
+      <transpose value="3" />
+      <range class="amateur" low="58" high="86"/>
+      <range class="professional" low="58" high="92"/>
+    </instrument>
     <instrument name="Oboe">
       <clef type="treble" />
       <transpose value="0" />
@@ -517,7 +601,7 @@
       <range class="amateur" low="40" high="62"/>
       <range class="professional" low="40" high="65"/>
     </instrument>
-    <instrument name="Rankett">
+    <instrument name="Rackett">
       <clef type="bass" />
       <transpose value="0" />
       <range class="amateur" low="34" high="62"/>
@@ -564,6 +648,12 @@
       <transpose value="-33" />
       <range class="amateur" low="58" high="86"/>
       <range class="professional" low="58" high="89"/>
+    </instrument>
+    <instrument name="Bagpipe">
+      <clef type="treble" />
+      <transpose value="0" />
+      <range class="amateur" low="60" high="79"/>
+      <range class="professional" low="60" high="79"/>
     </instrument>
   </category>
   <category name="Single reeds">
@@ -1054,13 +1144,13 @@
       <range class="professional" low="40" high="59"/>
     </instrument>
     <instrument name="Glockenspiel">
-      <clef type="crotales" />
+      <clef type="crotale" />
       <transpose value="0" />
       <range class="amateur" low="79" high="108"/>
       <range class="professional" low="79" high="108"/>
     </instrument>
     <instrument name="Orff soprano glockenspiel">
-      <clef type="crotales" />
+      <clef type="crotale" />
       <transpose value="0" />
       <range class="amateur" low="84" high="105"/>
       <range class="professional" low="84" high="105"/>
@@ -1072,19 +1162,19 @@
       <range class="professional" low="72" high="93"/>
     </instrument>
     <instrument name="Crotales">
-      <clef type="crotales" />
+      <clef type="crotale" />
       <transpose value="0" />
       <range class="amateur" low="84" high="108"/>
       <range class="professional" low="84" high="108"/>
     </instrument>
     <instrument name="Tubaphone">
-      <clef type="crotales" />
+      <clef type="crotale" />
       <transpose value="0" />
       <range class="amateur" low="84" high="108"/>
       <range class="professional" low="84" high="108"/>
     </instrument>
     <instrument name="Almglocken (treble)">
-      <clef type="crotales" />
+      <clef type="crotale" />
       <transpose value="0" />
       <range class="amateur" low="60" high="105"/>
       <range class="professional" low="60" high="105"/>
@@ -1132,31 +1222,31 @@
       <range class="professional" low="36" high="53"/>
     </instrument>
     <instrument name="Cello steel drums">
-      <clef type="bass" />
+      <clef type="tenor" />
       <transpose value="0" />
       <range class="amateur" low="47" high="67"/>
       <range class="professional" low="47" high="67"/>
     </instrument>
     <instrument name="Tenor steel drums">
-      <clef type="bass" />
+      <clef type="alto" />
       <transpose value="0" />
       <range class="amateur" low="52" high="69"/>
       <range class="professional" low="52" high="69"/>
     </instrument>
     <instrument name="Guitar steel drums">
-      <clef type="bass" />
+      <clef type="treble" />
       <transpose value="0" />
       <range class="amateur" low="54" high="81"/>
       <range class="professional" low="54" high="81"/>
     </instrument>
     <instrument name="Alto steel drums">
-      <clef type="bass" />
+      <clef type="treble" />
       <transpose value="0" />
       <range class="amateur" low="56" high="85"/>
       <range class="professional" low="56" high="85"/>
     </instrument>
     <instrument name="Soprano steel drums">
-      <clef type="bass" />
+      <clef type="treble" />
       <transpose value="0" />
       <range class="amateur" low="60" high="88"/>
       <range class="professional" low="60" high="88"/>
@@ -1239,6 +1329,18 @@
       <range class="amateur" low="45" high="96"/>
       <range class="professional" low="45" high="96"/>
     </instrument>
+    <instrument name="Dulcimer (treble)">
+      <clef type="treble" />
+      <transpose value="0" />
+      <range class="amateur" low="48" high="86"/>
+      <range class="professional" low="43" high="88"/>
+    </instrument>
+    <instrument name="Dulcimer (bass)">
+      <clef type="bass" />
+      <transpose value="0" />
+      <range class="amateur" low="48" high="86"/>
+      <range class="professional" low="43" high="88"/>
+    </instrument>
     <instrument name="Mallet synthesizer (treble)">
       <clef type="treble" />
       <transpose value="0" />
@@ -1247,6 +1349,374 @@
     </instrument>
     <instrument name="Mallet synthesizer (bass)">
       <clef type="bass" />
+      <transpose value="0" />
+      <range class="amateur" low="0   " high="127 "/>
+      <range class="professional" low="0   " high="127 "/>
+    </instrument>
+  </category>
+  <category name="Unpitched Percussion">
+    <instrument name="Snare drum">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Piccolo snare drum">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Military drum">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Tom-toms">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Chinese tom-toms">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Bongos">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Congas">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Timbales">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Bass drum">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Tambourine">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Frame drum">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Tablas">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Cuíca">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Finger cymbals">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Cymbals">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Hi-hat cymbals">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Suspended cymbal">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Ride cymbal">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Sizzle cymbal">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Crash cymbal">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Splash cymbal">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Chinese cymbal">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Triangle">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Cowbells">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Tam-tam">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Bells">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Sleighbells">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Bell plate">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Bowl gongs">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Tubo">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Metal castanets">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Automobile brake drums">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Iron pipes">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Chaines">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Anvil">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Woodblocks">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Temple blocks">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Claves">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Castanets">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Guiro">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Maracas">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Cabasa">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Quijada">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Vibra slap">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Slit drum">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Whip">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Ratchet">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Thundersheet">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Sandpaper blocks">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Wooden wind chimes">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Bamboo wind chimes">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Metal wind chimes">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Glass wind chimes">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Shell wind chimes">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Stones">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Finger snap">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Hand clap">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Slap">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Stamp">
+      <clef type="two-bar" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Drum set">
+      <clef type="box" />
+      <transpose value="0" />
+      <range class="amateur" low="0" high="127"/>
+      <range class="professional" low="0" high="127"/>
+    </instrument>
+    <instrument name="Percussion synthesizer">
+      <clef type="two-bar" />
       <transpose value="0" />
       <range class="amateur" low="0   " high="127 "/>
       <range class="professional" low="0   " high="127 "/>
@@ -1290,7 +1760,7 @@
       <range class="professional" low="29" high="89"/>
     </instrument>
     <instrument name="Celesta (treble)">
-      <clef type="crotales" />
+      <clef type="crotale" />
       <transpose value="0" />
       <range class="amateur" low="60" high="108"/>
       <range class="professional" low="60" high="108"/>
@@ -1410,6 +1880,12 @@
       <transpose value="0" />
       <range class="amateur" low="28" high="103"/>
       <range class="professional" low="28" high="103"/>
+    </instrument>
+    <instrument name="Melodica">
+      <clef type="treble" />
+      <transpose value="0" />
+      <range class="amateur" low="53" high="84"/>
+      <range class="professional" low="53" high="84"/>
     </instrument>
   </category>
   <category name="Voices">
@@ -1531,4 +2007,4 @@
     </instrument>
   </category>
 </presets>
-<!-- IMPORTED 251 INSTRUMENTS -->
+<!-- IMPORTED 330 INSTRUMENTS -->
