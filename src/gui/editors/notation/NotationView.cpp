@@ -4734,7 +4734,7 @@ void NotationView::slotEditCutAndClose()
 static const QString RESTRICTED_PASTE_FAILED_DESCRIPTION = i18n(
                       "The Restricted paste type requires enough empty " \
                       "space (containing only rests) at the paste position " \
-                      "to hold all of the events to be pasted.\n" \ 
+                      "to hold all of the events to be pasted.\n" \
                       "Not enough space was found.\n" \
                       "If you want to paste anyway, consider using one of " \
                       "the other paste types from the \"Paste...\" option " \
