@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -597,7 +596,7 @@ public slots:
     void slotEditAddSustainUp();
     void slotEditAddSustain(bool down);
     void slotEditTranspose();
-    void slotEditSwitchInstrument();
+    void slotEditSwitchPreset();
     void slotEditElement(NotationStaff *, NotationElement *, bool advanced);
 
     void slotFinePositionLeft();

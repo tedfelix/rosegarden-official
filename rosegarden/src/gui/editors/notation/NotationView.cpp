@@ -2253,9 +2253,9 @@ void NotationView::setupActions()
                 SLOT(slotEditTranspose()), actionCollection(),
                 "transpose_segment");
 
-	new KAction(i18n("Switch instrument"), 0, this,
-                SLOT(slotEditSwitchInstrument()), actionCollection(),
-                "switch_instrument");
+	new KAction(i18n("Convert notation for..."), 0, this,
+                SLOT(slotEditSwitchPreset()), actionCollection(),
+                "switch_preset");
 
 
     // setup Settings menu
@@ -6189,7 +6189,7 @@ void NotationView::slotEditTranspose()
     }
 }
 
-void NotationView::slotEditSwitchInstrument()
+void NotationView::slotEditSwitchPreset()
 {
     PresetHandlerDialog dialog(this, true);
     
