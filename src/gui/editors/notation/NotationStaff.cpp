@@ -678,7 +678,6 @@ NotationStaff::positionElements(timeT from, timeT to)
                 if (!spanning) {
                     (void)(el->event()->get
                            <Bool>(BaseProperties::TIED_FORWARD, spanning));
-		    NOTATION_DEBUG << "DMM: Staff tied forward == " << (spanning ? "true" : "false") << endl;
                 }
 
                 if (spanning) {
