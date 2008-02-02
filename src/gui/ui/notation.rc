@@ -76,7 +76,7 @@
   <Action name="set_segment_duration"/>
   <Separator/>
   <Action name="transpose_segment"/>
-  <Action name="switch_instrument"/>
+  <Action name="switch_preset"/>
 </Menu>
 
 
