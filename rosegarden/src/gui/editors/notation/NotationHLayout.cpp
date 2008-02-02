@@ -1714,8 +1714,6 @@ NotationHLayout::positionChord(Staff &staff,
         note->event()->get<Bool>(TIED_FORWARD, tiedForwards);
         note->event()->get<Bool>(TIED_BACKWARD, tiedBack);
 
-	NOTATION_DEBUG << "DMM: Hlayout says tied forward == " << (tiedForwards ? "true" : "false") << " tied backward == " << (tiedBack ? "true" : "false") << endl;
-
         if (!note->event()->has(PITCH))
             continue;
         int pitch = note->event()->get<Int>(PITCH);
