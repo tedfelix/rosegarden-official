@@ -59,6 +59,7 @@ PresetHandlerDialog::PresetHandlerDialog(QWidget *parent, bool fromNotation)
 {
     m_presets = new PresetGroup();
     m_categories = m_presets->getCategories();
+    if (m_fromNotation) setCaption(i18n("Convert notation for..."));
 
     initDialog();
 }
@@ -83,6 +84,7 @@ PresetHandlerDialog::initDialog()
     QGridLayout *layout = new QGridLayout(frame, 6, 5, 10, 5);
 
     QLabel *title = new QLabel(i18n("Select preset track parameters for:"), frame);
+    if (m_fromNotation) title->setText(i18n("Create appropriate notation for:"));
 
     QLabel *catlabel = new QLabel(i18n("Category"), frame);
     m_categoryCombo = new KComboBox(frame);
@@ -98,7 +100,7 @@ PresetHandlerDialog::initDialog()
     QGroupBox *scopeBox = new QButtonGroup
         (1, Horizontal, i18n("Scope"), frame);
     if (m_fromNotation) {
-        QRadioButton *onlySelectedSegments = new 
+        QRadioButton *onlySelectedSegments = new
             QRadioButton(i18n("Only selected segments (EXPERIMENTAL)"), scopeBox);
         m_convertAllSegments = new 
             QRadioButton(i18n("All segments in this track (EXPERIMENTAL)"), scopeBox);

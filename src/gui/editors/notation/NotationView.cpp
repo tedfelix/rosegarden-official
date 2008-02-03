@@ -6228,7 +6228,7 @@ void NotationView::slotEditSwitchPreset()
     }
 
     m_doc->slotDocumentModified();
-
+    emit updateView();
 }
 
 void NotationView::slotEditElement(NotationStaff *staff,
