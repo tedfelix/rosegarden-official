@@ -6199,18 +6199,35 @@ void NotationView::slotEditSwitchPreset()
         // get all segments for this track and convert them.
         Composition& comp = getDocument()->getComposition();
         TrackId selectedTrack = getCurrentSegment()->getTrack();
+
+	// satisfy #1885251 the way that seems most reasonble to me at the
+	// moment, only changing track parameters when acting on all segments on
+	// this track from the notation view 
+	//
+	//!!! This won't be undoable, and I'm not sure if that's seriously
+	// wrong, or just mildly wrong, but I'm betting somebody will tell me
+	// about it if this was inappropriate
+	Track *track = comp.getTrackById(selectedTrack);
+	track->setPresetLabel(dialog.getName());
+	track->setClef(dialog.getClef());
+	track->setTranspose(dialog.getTranspose());
+	track->setLowestPlayable(dialog.getLowRange());
+	track->setHighestPlayable(dialog.getHighRange());
+
         addCommandToHistory(new SegmentSyncCommand(comp.getSegments(), selectedTrack,
-                dialog.getTranspose(), 
-        	    dialog.getLowRange(), 
-                dialog.getHighRange(),
-                clefIndexToClef(dialog.getClef())));
+                            dialog.getTranspose(), 
+                            dialog.getLowRange(), 
+                            dialog.getHighRange(),
+                            clefIndexToClef(dialog.getClef())));
     } else {
         addCommandToHistory(new SegmentSyncCommand(m_segments, 
-            dialog.getTranspose(), 
-    	    dialog.getLowRange(), 
-            dialog.getHighRange(),
-            clefIndexToClef(dialog.getClef())));
+                            dialog.getTranspose(), 
+                            dialog.getLowRange(), 
+                            dialog.getHighRange(),
+                            clefIndexToClef(dialog.getClef())));
     }
+
+    m_doc->slotDocumentModified();
 
 }
 
