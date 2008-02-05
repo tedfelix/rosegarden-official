@@ -361,6 +361,17 @@ SegmentPerformanceHelper::getGraceNoteTimeAndDuration(bool host, iterator i,
     // note or more grace notes = longer proportion], (c)
     // configurable, or (d) all of the above.
 
+    // Of course we also ought to be taking into account the notated
+    // duration of the grace notes -- though in my working examples it
+    // generally doesn't seem to be the case that we can always just
+    // follow those.  I wonder if we can always use the grace notes'
+    // notated duration if the ratio of grace note duration to host
+    // note duration is less than some value?  Whatever we do, we
+    // should be dividing the grace note duration up in proportion to
+    // the durations of the grace notes, in situations where we have
+    // more than one grace note consecutively of different durations;
+    // that isn't handled at all here.
+
     if (i == end()) return false;
 
     iteratorcontainer graceNotes, hostNotes;
