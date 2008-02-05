@@ -8,14 +8,14 @@
   <Action name="erase"/>
   <Action name="resize"/>
 <!-- <Separator/> -->
-<!-- Defunct: <Action name="half_speed"/> -->
-<!-- Defunct: <Action name="double_speed"/> -->
+<!-- Defunct: <Action name="halve_durations"/> -->
+<!-- Defunct: <Action name="double_durations"/> -->
 </Menu>
 
 <!-- Defunct: <State name="have_selection"> -->
 <!--  <enable> -->
-<!--    <Action name="half_speed"/> -->
-<!--    <Action name="double_speed"/> -->
+<!--    <Action name="halve_durations"/> -->
+<!--    <Action name="double_durations"/> -->
 <!--  </enable> -->
 <!--</State> -->
 

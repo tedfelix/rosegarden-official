@@ -717,13 +717,13 @@ EditView::setupActions()
     //
     // Transforms
     //
-    new KAction(i18n("&Halve Speed"), Key_Less + CTRL, this,
-                SLOT(slotHalfSpeed()), actionCollection(),
-                "half_speed");
+    new KAction(i18n("&Halve Durations"), Key_H + CTRL, this,
+                SLOT(slotHalveDurations()), actionCollection(),
+                "halve_durations");
 
-    new KAction(i18n("&Double Speed"), Key_Greater + CTRL, this,
-                SLOT(slotDoubleSpeed()), actionCollection(),
-                "double_speed");
+    new KAction(i18n("&Double Durations"), Key_H + CTRL + SHIFT, this,
+                SLOT(slotDoubleDurations()), actionCollection(),
+                "double_durations");
 
     new KAction(RescaleCommand::getGlobalName(), 0, this,
                 SLOT(slotRescale()), actionCollection(),
@@ -1399,30 +1399,30 @@ EditView::slotClearControlRulerItem()
 }
 
 void
-EditView::slotHalfSpeed()
+EditView::slotHalveDurations()
 {
     if (!m_currentEventSelection)
         return ;
 
-    KTmpStatusMsg msg(i18n("Halving speed..."), this);
-
-    addCommandToHistory(
-        new RescaleCommand(*m_currentEventSelection,
-                           m_currentEventSelection->getTotalDuration() * 2,
-                           false));
-}
-
-void
-EditView::slotDoubleSpeed()
-{
-    if (!m_currentEventSelection)
-        return ;
-
-    KTmpStatusMsg msg(i18n("Doubling speed..."), this);
+    KTmpStatusMsg msg(i18n("Halving durations..."), this);
 
     addCommandToHistory(
         new RescaleCommand(*m_currentEventSelection,
                            m_currentEventSelection->getTotalDuration() / 2,
+                           false));
+}
+
+void
+EditView::slotDoubleDurations()
+{
+    if (!m_currentEventSelection)
+        return ;
+
+    KTmpStatusMsg msg(i18n("Doubling durations..."), this);
+
+    addCommandToHistory(
+        new RescaleCommand(*m_currentEventSelection,
+                           m_currentEventSelection->getTotalDuration() * 2,
                            false));
 }
 

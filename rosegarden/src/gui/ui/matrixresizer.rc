@@ -8,8 +8,8 @@
   <Action name="draw"/>
   <Action name="erase"/>
 <!-- <Separator/> -->
-<!-- Defunct: <Action name="half_speed"/> -->
-<!-- Defunct: <Action name="double_speed"/> -->
+<!-- Defunct: <Action name="halve_durations"/> -->
+<!-- Defunct: <Action name="double_durations"/> -->
 </Menu>
 
 </kpartgui>

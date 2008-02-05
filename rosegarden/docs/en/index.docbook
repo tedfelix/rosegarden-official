@@ -5268,6 +5268,26 @@
 	  </para>
 	</sect3>
 
+	<sect3 id="nv-rescale">
+	  <title>Rescaling note durations</title>
+	  <para>The 
+	  <menuchoice> <guimenu>Adjust</guimenu>
+	  <guimenuitem>Rescale</guimenuitem> <guimenuitem>Halve
+	  Durations</guimenuitem> </menuchoice> and
+	  <menuchoice> <guimenu>Adjust</guimenu>
+	  <guimenuitem>Rescale</guimenuitem> <guimenuitem>Double
+	  Durations</guimenuitem> </menuchoice> functions can be
+	  used to perform the most simple rescaling functions.
+	  </para>
+
+	  <para>For more elaborate rescalings, use the
+	  <menuchoice> <guimenu>Adjust</guimenu>
+	  <guimenuitem>Rescale</guimenuitem> <guimenuitem>Stretch
+	  or Squash...</guimenuitem> </menuchoice> function with
+	  which you scale the total lenth of the selection.
+	  </para>
+	</sect3>
+
 <!-- need a proper section for this and diatonic transpose
 	    <varlistentry id="nv-transpose">
 	    <title>Transpose</title>

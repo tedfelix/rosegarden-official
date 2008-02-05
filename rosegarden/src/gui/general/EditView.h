@@ -168,8 +168,8 @@ public slots:
     virtual void slotShowPropertyControlRuler();
 
     // rescale
-    void slotHalfSpeed();
-    void slotDoubleSpeed();
+    void slotHalveDurations();
+    void slotDoubleDurations();
     void slotRescale();
 
     // transpose
