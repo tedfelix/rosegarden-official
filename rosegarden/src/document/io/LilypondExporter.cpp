@@ -55,6 +55,7 @@
 #include "base/Studio.h"
 #include "base/Track.h"
 #include "base/NotationQuantizer.h"
+#include "base/Marker.h"
 #include "document/RosegardenGUIDoc.h"
 #include "gui/application/RosegardenApplication.h"
 #include "gui/application/RosegardenGUIView.h"
@@ -72,6 +73,7 @@
 #include <qtextcodec.h>
 #include <kapplication.h>
 #include <sstream>
+#include <algorithm>
 
 namespace Rosegarden
 {
@@ -133,6 +135,7 @@ LilypondExporter::readConfigVariables(void)
     m_lyricsHAlignment = cfg->readBoolEntry("lilylyricshalignment", LEFT_ALIGN);
 
     m_languageLevel = cfg->readUnsignedNumEntry("lilylanguage", LILYPOND_VERSION_2_6);
+    m_exportMarkerMode = cfg->readUnsignedNumEntry("lilyexportmarkermode", EXPORT_NO_MARKERS );
 }
 
 LilypondExporter::~LilypondExporter()
@@ -354,6 +357,14 @@ LilypondExporter::protectIllegalChars(std::string inStr)
     //
     return tmpStr.utf8().data();
 }
+
+struct MarkerComp {
+    // Sort Markers by time
+    // Perhaps this should be made generic with a template?
+    bool operator()( Marker *a, Marker *b ) { 
+        return a->getTime() < b->getTime();
+    }
+};
 
 bool
 LilypondExporter::write()
@@ -694,6 +705,44 @@ LilypondExporter::write()
         str << std::endl;
         str << indent(--col) << "}" << std::endl;
     }
+    // Markers
+    // Skip until marker, make sure there's only one marker per measure
+    if ( m_exportMarkerMode != EXPORT_NO_MARKERS ) {
+        str << indent(col++) << "markers = {" << std::endl;
+        timeT prevMarkerTime = 0;
+
+        // Need the markers sorted by time
+        Composition::markercontainer markers( m_composition->getMarkers() ); // copy
+        std::sort( markers.begin(), markers.end(), MarkerComp() );
+        Composition::markerconstiterator i_marker = markers.begin();
+
+        while  ( i_marker != markers.end() ) {
+            timeT markerTime = m_composition->getBarStartForTime((*i_marker)->getTime());
+            RG_DEBUG << "Marker: " << (*i_marker)->getTime() << " previous: " << prevMarkerTime << endl;
+            // how to cope with time signature changes?
+            if ( markerTime > prevMarkerTime ) {
+                str << indent(col);
+                writeSkip(m_composition->getTimeSignatureAt(markerTime),
+                        markerTime, markerTime - prevMarkerTime, false, str);
+                str << "\\mark "; 
+                switch (m_exportMarkerMode) {
+                    case EXPORT_DEFAULT_MARKERS:
+                        // Use the marker name for text
+                        str << "\\default %% " << (*i_marker)->getName() << std::endl;
+                        break;
+                    case EXPORT_TEXT_MARKERS:
+                        // Raise the text above the staff as not to clash with the other stuff
+                        str << "\\markup { \\hspace #0 \\raise #1.5 \"" << (*i_marker)->getName() << "\" }" << std::endl;
+                        break;
+                    default:
+                        break;
+                }
+                prevMarkerTime = markerTime;
+            }
+            ++i_marker;
+        }
+        str << indent(--col) << "}" << std::endl;
+    }
 
     // open \score section
     str << "\\score {" << std::endl;
@@ -847,6 +896,9 @@ LilypondExporter::write()
                     str << indent(col) << "\\new Voice \\global" << std::endl;
                     if (tempoCount > 0) {
                         str << indent(col) << "\\new Voice \\globalTempo" << std::endl;
+                    }
+                    if ( m_exportMarkerMode != EXPORT_NO_MARKERS ) {
+                        str << indent(col) << "\\new Voice \\markers" << std::endl;
                     }
                 }
 

@@ -21,6 +21,7 @@
 
 
 #include "Marker.h"
+#include "misc/Debug.h"
 
 #if (__GNUC__ < 3)
 #include <strstream>

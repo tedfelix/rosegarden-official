@@ -34,6 +34,7 @@
 #include "document/RosegardenGUIDoc.h"
 #include "misc/Strings.h"
 #include <kcombobox.h>
+#include <klineedit.h>
 #include <kconfig.h>
 #include <kdialogbase.h>
 #include <kglobal.h>
@@ -180,6 +181,7 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
     m_lilyExportSelection->insertItem(i18n("Selected track"));
     m_lilyExportSelection->insertItem(i18n("Selected segments"));
     m_lilyExportSelection->setCurrentItem(config->readUnsignedNumEntry("lilyexportselection", 1));
+
     layoutStaff->addWidget(m_lilyExportSelection, 0, 1);
 
     m_lilyExportStaffMerge = new QCheckBox(
@@ -229,7 +231,7 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
     m_lilyExportStaffGroup->setChecked(config->readBoolEntry("lilyexportstaffgroup", false));
     layoutNotation->addMultiCellWidget(m_lilyExportStaffGroup, 3, 3, 0, 1);
 
-    generalGrid->setRowStretch(3, 10);
+    generalGrid->setRowStretch(4, 10);
 
     //
     // LilyPond export: Advanced options
@@ -276,6 +278,16 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
     m_lilyExportMidi->setChecked(config->readBoolEntry("lilyexportmidi", false));
     layoutMisc->addMultiCellWidget(m_lilyExportMidi, 1, 1, 0, 1);
 
+    m_lilyMarkerMode = new KComboBox(frameMisc);
+    m_lilyMarkerMode->insertItem(i18n("No markers"));
+    m_lilyMarkerMode->insertItem(i18n("Rehearsal marks"));
+    m_lilyMarkerMode->insertItem(i18n("Marker text"));
+    m_lilyMarkerMode->setCurrentItem(config->readUnsignedNumEntry("lilyexportmarkermode", 0));
+
+    layoutMisc->addWidget( new QLabel( 
+                             i18n("Export markers"), frameMisc),2, 0 );
+    layoutMisc->addWidget(m_lilyMarkerMode, 2, 1);
+    
     advancedGrid->setRowStretch(2, 10);
 
     resize(minimumSize());
@@ -301,7 +313,7 @@ LilypondOptionsDialog::slotApply()
     config->writeEntry("lilyexportstaffgroup", m_lilyExportStaffGroup->isChecked());
     config->writeEntry("lilyexportstaffmerge", m_lilyExportStaffMerge->isChecked());
     config->writeEntry("lilylyricshalignment", m_lilyLyricsHAlignment->currentItem());
-
+    config->writeEntry("lilyexportmarkermode", m_lilyMarkerMode->currentItem());
     m_headersPage->apply();
 }
  
