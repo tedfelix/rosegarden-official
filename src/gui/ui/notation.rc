@@ -226,8 +226,8 @@
         <Separator/>
 	<Menu name="Rescale">
 	      <text>Rescale</text>
-	      <Action name="half_speed"/>
-	      <Action name="double_speed"/>
+	      <Action name="halve_durations"/>
+	      <Action name="double_durations"/>
 	      <Separator/>
 	      <Action name="rescale"/>
 	</Menu>
@@ -762,8 +762,8 @@
     <Action name="invert"/>
     <Action name="retrograde"/>
     <Action name="retrograde_invert"/>
-    <Action name="half_speed"/>
-    <Action name="double_speed"/>
+    <Action name="halve_durations"/>
+    <Action name="double_durations"/>
     <Action name="rescale"/>
     <Menu name="Stems"/>
     <Menu name="Slashes"/>

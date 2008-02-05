@@ -77,8 +77,8 @@
   <Separator/>
   <Menu name="Rescale">
     <text>Rescale</text>
-    <Action name="half_speed"/>
-    <Action name="double_speed"/>
+    <Action name="halve_durations"/>
+    <Action name="double_durations"/>
     <Separator/>
     <Action name="rescale"/>
   </Menu>
@@ -239,8 +239,8 @@
     <Action name="collapse_notes"/>
     <Action name="legatoize"/>
     <Action name="rescale"/>
-    <Action name="double_speed"/>
-    <Action name="half_speed"/>
+    <Action name="double_durations"/>
+    <Action name="halve_durations"/>
     <Action name="velocity_up"/>
     <Action name="velocity_down"/>
     <Action name="jog_left"/>
