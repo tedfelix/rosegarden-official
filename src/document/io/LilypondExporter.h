@@ -204,6 +204,12 @@ private:
     bool m_exportStaffMerge;
     bool m_raggedBottom;
 
+    unsigned int m_exportMarkerMode;
+    
+    static const unsigned int EXPORT_NO_MARKERS = 0;
+    static const unsigned int EXPORT_DEFAULT_MARKERS = 1;
+    static const unsigned int EXPORT_TEXT_MARKERS = 2;
+
     int m_languageLevel;
     static const int LILYPOND_VERSION_2_6  = 0;
     static const int LILYPOND_VERSION_2_8  = 1;

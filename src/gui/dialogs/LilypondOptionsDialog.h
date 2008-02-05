@@ -35,6 +35,7 @@ class QWidget;
 class QCheckBox;
 class QComboBox;
 class QLineEdit;
+class QLineEdit;
 
 namespace Rosegarden
 {
@@ -74,7 +75,7 @@ protected:
     QCheckBox *m_lilyExportBeams;
     QCheckBox *m_lilyExportStaffGroup;
     QCheckBox *m_lilyExportStaffMerge;
-
+    QComboBox *m_lilyMarkerMode;
     HeadersConfigurationPage *m_headersPage;
 
 };
