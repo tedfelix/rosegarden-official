@@ -47,6 +47,25 @@ public:
     iteratorcontainer getTiedNotes(iterator i);
 
     /**
+     * Returns two sequences of iterators pointing to the note events
+     * that are grace notes, or host notes for grace notes, associated
+     * with the given event, which is itself either a grace note or a
+     * host note for a grace note.  The grace note iterators are
+     * returned in the graceNotes sequence, and the host note
+     * iterators in hostNotes.  isHostNote is set to true if the
+     * given event is a host note, false otherwise.
+     * 
+     * If the given event is not a grace note, is a grace note with no
+     * host note, or is a potential host note without any grace notes,
+     * the sequences will both be empty and the function will return
+     * false.
+     */
+    bool getGraceAndHostNotes(iterator i,
+			      iteratorcontainer &graceNotes,
+			      iteratorcontainer &hostNotes,
+			      bool &isHostNote);
+
+    /**
      * Returns the absolute time of the note event pointed to by i.
      */
     timeT getSoundingAbsoluteTime(iterator i);
@@ -89,6 +108,17 @@ public:
      * any tempo changes occurring during the event at i.
      */
     RealTime getRealSoundingDuration(iterator i);
+
+    /**
+     * Return a sounding duration (estimated) and start time for the
+     * note event pointed to by i.  If host is true, i is expected to
+     * be the "host" note for one or more grace notes; if host is
+     * false, i is expected to point to a grace note.  If the relevant
+     * expectation is not met, this function returns false.  Otherwise
+     * the sounding time and duration are returned through t and d and
+     * the function returns true.
+     */
+    bool getGraceNoteTimeAndDuration(bool host, iterator i, timeT &t, timeT &d);
 };
 
 }

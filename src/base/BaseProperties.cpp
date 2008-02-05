@@ -96,9 +96,14 @@ const PropertyName BEAMED_GROUP_TUPLET_BASE	 = "tupletbase";
 const PropertyName BEAMED_GROUP_TUPLED_COUNT	 = "tupledcount";
 const PropertyName BEAMED_GROUP_UNTUPLED_COUNT	 = "untupledcount";
 
-// persistent
+// persistent, but mixed-case anyway
 const PropertyName IS_GRACE_NOTE                 = "IsGraceNote";
+
+// obsolete
 const PropertyName HAS_GRACE_NOTES               = "HasGraceNotes";
+
+// non-persistent
+const PropertyName MAY_HAVE_GRACE_NOTES          = "MayHaveGraceNotes";
 
 const std::string GROUP_TYPE_BEAMED		 = "beamed";
 const std::string GROUP_TYPE_TUPLED		 = "tupled";
