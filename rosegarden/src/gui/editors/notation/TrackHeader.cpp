@@ -155,11 +155,6 @@ TrackHeader::updateHeader(double x)
     int transpose = 0, transpose0;
     int staff;
 
-    // Get widget default common character size
-    // ("x" stand here for a "common character")
-    int charHeight = fontMetrics().height();
-    int charWidth = fontMetrics().width(i18n("x"));
-
     Composition *comp = 
         static_cast<HeadersGroup *>(parent())->getComposition();
     Track *track = comp->getTrackById(m_track);
@@ -259,7 +254,7 @@ TrackHeader::updateHeader(double x)
 
         NotePixmapFactory * npf = m_notationView->getNotePixmapFactory();
         QPixmap pmap = NotePixmapFactory::toQPixmap(
-                  npf->makeTrackHeaderPixmap(m_height, charWidth, charHeight,
+                  npf->makeTrackHeaderPixmap(m_height,
                                              key, clef, clefColour, drawClef,
                                              upperText, upperTextColour,
                                              label, lowerTextColour));
