@@ -104,6 +104,8 @@ NotePixmapFactory::NotePixmapFactory(std::string fontName, int size) :
         m_bigTimeSigFontMetrics(m_bigTimeSigFont),
         m_ottavaFont(defaultSerifFontFamily, 8, QFont::Normal, true),
         m_ottavaFontMetrics(m_ottavaFont),
+        m_trackHeaderFont(defaultSerifFontFamily, 12, QFont::Normal),
+        m_trackHeaderFontMetrics(m_trackHeaderFont),
         m_generatedPixmap(0),
         m_generatedMask(0),
         m_generatedWidth( -1),
@@ -130,6 +132,8 @@ NotePixmapFactory::NotePixmapFactory(const NotePixmapFactory &npf) :
         m_bigTimeSigFontMetrics(m_bigTimeSigFont),
         m_ottavaFont(defaultSerifFontFamily, 8, QFont::Normal, true),
         m_ottavaFontMetrics(m_ottavaFont),
+        m_trackHeaderFont(defaultSerifFontFamily, 12, QFont::Normal),
+        m_trackHeaderFontMetrics(m_trackHeaderFont),
         m_generatedPixmap(0),
         m_generatedMask(0),
         m_generatedWidth( -1),
@@ -237,6 +241,12 @@ NotePixmapFactory::init(std::string fontName, int size)
     m_ottavaFont = config->readFontEntry("textfont", &textFont);
     m_ottavaFont.setPixelSize(size * 2);
     m_ottavaFontMetrics = QFontMetrics(m_ottavaFont);
+
+    m_trackHeaderFont = config->readFontEntry("textfont", &textFont);
+    m_trackHeaderFont.setWeight(QFont::DemiBold);
+           // (Don't seem to be any difference between DemiBold and Bold : ??)
+    m_trackHeaderFont.setPixelSize(12);
+    m_trackHeaderFontMetrics = QFontMetrics(m_trackHeaderFont);
 }
 
 NotePixmapFactory::~NotePixmapFactory()
@@ -2134,7 +2144,6 @@ NotePixmapFactory::makeKeyDisplayPixmap(const Key &key, const Clef &clef)
 
 QCanvasPixmap*
 NotePixmapFactory::makeTrackHeaderPixmap(int height,
-        int charWidth, int charHeight,
         const Key &key, const Clef &clef, QColor clefColour, bool drawClef,
         const QString &upperText, QColor upperTextColour,
         const QString &lowerText, QColor lowerTextColour
@@ -2142,6 +2151,12 @@ NotePixmapFactory::makeTrackHeaderPixmap(int height,
 {
     height -= 4;    // Make place to label frame :
                     // 4 = 2 * (margin + lineWidth)
+
+   // Get widget default common character size
+   // ("X" stands here for a "common character")
+    QRect bounds = m_trackHeaderFontMetrics.boundingRect(i18n("X"));
+    int charHeight = bounds.height();
+    int charWidth = bounds.width();
 
     // Minimum width of a string displayed as upper or lower text
     int maxTextAllowedWidth = 20 * charWidth;
@@ -2173,6 +2188,10 @@ NotePixmapFactory::makeTrackHeaderPixmap(int height,
         upperTextY = charHeight;
         lowerTextY = m_generatedHeight - 4;  // -4 : adjust
     }
+
+    m_p->painter().setFont(m_trackHeaderFont);
+    if (!m_inPrinterMethod)
+        m_p->maskPainter().setFont(m_trackHeaderFont);
 
     m_p->painter().setPen(upperTextColour);
     m_p->drawText(charWidth, upperTextY, upperText);

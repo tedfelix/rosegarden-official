@@ -139,7 +139,6 @@ public:
                                        const Clef &clef);
 
     QCanvasPixmap* makeTrackHeaderPixmap(int height,
-                        int charWidth, int charHeight,
                         const Key &key, const Clef &clef,
                         QColor clefColour, bool drawClef,
                         const QString &upperText, QColor upperTextColour,
@@ -297,6 +296,9 @@ protected:
 
     QFont m_ottavaFont;
     QFontMetrics m_ottavaFontMetrics;
+
+    QFont m_trackHeaderFont;
+    QFontMetrics m_trackHeaderFontMetrics;
 
     QPixmap *m_generatedPixmap;
     QBitmap *m_generatedMask;
