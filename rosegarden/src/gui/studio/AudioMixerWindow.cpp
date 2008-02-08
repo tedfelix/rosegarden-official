@@ -102,8 +102,12 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
 
     QIconSet icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                              ("transport-play")));
-    new KAction(i18n("&Play"), icon, Key_Enter, this,
+    KAction *play = new KAction(i18n("&Play"), icon, Key_Enter, this,
                 SIGNAL(play()), actionCollection(), "play");
+    // Alternative shortcut for Play
+    KShortcut playShortcut = play->shortcut();
+    playShortcut.append( KKey(Key_Return + CTRL) );
+    play->setShortcut(playShortcut);
 
     icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-stop")));

@@ -1130,6 +1130,10 @@ void RosegardenGUIApp::setupActions()
     m_playTransport = new KAction(i18n("&Play"), icon, Key_Enter, this,
                                   SLOT(slotPlay()), actionCollection(),
                                   "play");
+    // Alternative shortcut for Play
+    KShortcut playShortcut = m_playTransport->shortcut();
+    playShortcut.append( KKey(Key_Return + CTRL) );
+    m_playTransport->setShortcut(playShortcut);
     m_playTransport->setGroup(TransportDialogConfigGroup);
 
     pixmap.load(pixmapDir + "/toolbar/transport-stop.png");
@@ -5937,6 +5941,10 @@ RosegardenGUIApp::plugAccelerators(QWidget *widget, QAccel *acc)
 {
 
     acc->connectItem(acc->insertItem(Key_Enter),
+                     this,
+                     SLOT(slotPlay()));
+    // Alternative shortcut for Play
+    acc->connectItem(acc->insertItem(Key_Return + CTRL),
                      this,
                      SLOT(slotPlay()));
 
