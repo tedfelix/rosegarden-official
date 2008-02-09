@@ -60,12 +60,13 @@ void
 SegmentChangePlayableRangeCommand::unexecute()
 {
    	m_segment->setLowestPlayable(m_oldLowestPlayableNote);
-   	m_segment->setHighestPlayable(m_oldHighetPlayableNote);
+   	m_segment->setHighestPlayable(m_oldHighestPlayableNote);
 }
 
 QString
 SegmentChangePlayableRangeCommand::getGlobalName(int low, int high)
 {
+    bool unit = false; // fake code to allow trunk/ to compile!
     if (!unit) {
         return "Undo change playable range";
     } else {
