@@ -21,7 +21,8 @@
 
     Some restructuring by Chris Cannam.
 
-    Brain surgery to support LilyPond 2.x export by Heikki Junes.
+    Massive brain surgery, fixes, improvements, and additions by
+        Heikki Junes
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -56,6 +57,7 @@
 #include "base/Track.h"
 #include "base/NotationQuantizer.h"
 #include "base/Marker.h"
+#include "base/StaffExportTypes.h"
 #include "document/RosegardenGUIDoc.h"
 #include "gui/application/RosegardenApplication.h"
 #include "gui/application/RosegardenGUIView.h"
@@ -130,7 +132,6 @@ LilypondExporter::readConfigVariables(void)
     m_exportTempoMarks = cfg->readUnsignedNumEntry("lilyexporttempomarks", EXPORT_NONE_TEMPO_MARKS);
     m_exportPointAndClick = cfg->readBoolEntry("lilyexportpointandclick", false);
     m_exportBeams = cfg->readBoolEntry("lilyexportbeamings", false);
-    m_exportStaffGroup = cfg->readBoolEntry("lilyexportstaffgroup", false);
     m_exportStaffMerge = cfg->readBoolEntry("lilyexportstaffmerge", false);
     m_lyricsHAlignment = cfg->readBoolEntry("lilylyricshalignment", LEFT_ALIGN);
 
@@ -746,19 +747,14 @@ LilypondExporter::write()
 
     // open \score section
     str << "\\score {" << std::endl;
-
-    // bind staffs with or without staff group bracket
-    str << indent(++col) // indent+
-	<< (m_exportStaffGroup == true ? "\\new StaffGroup " : "")
-	<< "<<" << std::endl;
-
-    // Make chords offset colliding notes by default
-    str << indent(++col) << "% force offset of colliding notes in chords:" << std::endl;
-    str << indent(col)
-    << "\\override Score.NoteColumn #\'force-hshift = #1.0" << std::endl;
-
+    
     int lastTrackIndex = -1;
     int voiceCounter = 0;
+    bool firstTrack = true;
+    int staffGroupCounter = 0;
+    int pianoStaffCounter = 0;
+    int bracket = 0;
+    int prevBracket = -1;
 
     // Write out all segments for each Track, in track order.
     // This involves a hell of a lot of loops through all tracks
@@ -775,6 +771,41 @@ LilypondExporter::write()
 
             if ((*i)->getTrack() != track->getId())
                 continue;
+
+	    // handle the bracket(s) for the first track, and if no brackets
+	    // present, open with a <<
+	    prevBracket = bracket;
+	    bracket = track->getStaffBracket();
+
+            //!!! how will all these indentions work out?  Probably not well,
+	    // but maybe if users always provide sensible input, this will work
+	    // out sensibly.  Maybe.  If not, we'll need some tracking gizmos to
+	    // figure out the indention, or just skip the indention for these or
+	    // something.  TBA.
+	    if (firstTrack) {
+	        str << indent(col) << "<< % global wrapper" << std::endl;
+		if (bracket == Brackets::SquareOn) {
+		    str << indent(col++) << "\\context StaffGroup = \"" << staffGroupCounter++
+		        << "\" << " << std::endl; //indent+
+		} else if (bracket == Brackets::CurlyOn) {
+		    str << indent(col++) << "\\context PianoStaff = \"" << pianoStaffCounter++
+		        << "\" << " << std::endl; //indent+
+		} else if (bracket == Brackets::CurlySquareOn) {
+		    str << indent(col++) << "\\context StaffGroup = \"" << staffGroupCounter++
+		        << "\" << " << std::endl; //indent+
+		    str << indent(col++) << "\\context PianoStaff = \"" << pianoStaffCounter++
+		        << "\" << " << std::endl; //indent+
+		} else {
+		    str << indent(col++) << "<< % first track has no bracket specified" << std::endl; //indent+
+		}
+
+		// Make chords offset colliding notes by default (only write for
+		// first track)
+		str << indent(++col) << "% force offset of colliding notes in chords:"
+		    << std::endl;
+		str << indent(col)   << "\\override Score.NoteColumn #\'force-hshift = #1.0"
+		    << std::endl;
+	    }
 
             emit setProgress(int(double(trackPos) /
                                  double(m_composition->getNbTracks()) * 100.0));
@@ -796,25 +827,60 @@ LilypondExporter::write()
 
 	    // Check whether the track is a non-midi track.
 	    InstrumentId instrumentId = track->getInstrument();
-	    // very off the cuff tentative fix for #1836149; this is so obvious
-	    // a fix that I wonder why this <SoftSynthInstrumentBase was ever
-	    // written in the first place, and it makes me suspicous that I'm
-	    // missing the big picture somewhere.  Anyway, it seems to work:
-	    //bool isMidiTrack = (instrumentId >= MidiInstrumentBase && instrumentId) < SoftSynthInstrumentBase);
 	    bool isMidiTrack = instrumentId >= MidiInstrumentBase;
     
             if (isMidiTrack && ( // Skip non-midi tracks.
 		(m_exportSelection == EXPORT_ALL_TRACKS) || 
                 ((m_exportSelection == EXPORT_NONMUTED_TRACKS) && (!track->isMuted())) ||
-                ((m_exportSelection == EXPORT_SELECTED_TRACK) && (m_view != NULL) && (track->getId() == m_composition->getSelectedTrack())) ||
-                ((m_exportSelection == EXPORT_SELECTED_TRACK) && (m_notationView != NULL) && (track->getId() == m_notationView->getCurrentSegment()->getTrack())) ||
+                ((m_exportSelection == EXPORT_SELECTED_TRACK) && (m_view != NULL) &&
+		 (track->getId() == m_composition->getSelectedTrack())) ||
+                ((m_exportSelection == EXPORT_SELECTED_TRACK) && (m_notationView != NULL) &&
+		 (track->getId() == m_notationView->getCurrentSegment()->getTrack())) ||
                 ((m_exportSelection == EXPORT_SELECTED_SEGMENTS) && (currentSegmentSelected)))) {
                 if ((int) (*i)->getTrack() != lastTrackIndex) {
                     if (lastTrackIndex != -1) {
                         // close the old track (Staff context)
-                        str << indent(--col) << ">> % Staff" << std::endl;  // indent-
+			str << indent(--col) << ">> % Staff ends" << std::endl; //indent-
                     }
                     lastTrackIndex = (*i)->getTrack();
+
+
+		    // handle any necessary bracket closures with a rude
+		    // hack, because bracket closures need to be handled
+		    // right under staff closures, but at this point in the
+		    // loop we are one track too early for closing, so we use
+		    // the bracket setting for the previous track for closing
+		    // purposes (I'm not quite sure why this works, but it does)			
+		    if (prevBracket == Brackets::SquareOff ||
+			prevBracket == Brackets::SquareOnOff) {
+			str << indent(--col) << ">> % StaffGroup " << staffGroupCounter
+			    << std::endl; //indent-
+		    } else	if (prevBracket == Brackets::CurlyOff) {
+			str << indent(--col) << ">> % PianoStaff " << pianoStaffCounter
+			    << std::endl; //indent-
+		    } else if (prevBracket == Brackets::CurlySquareOff) {
+			str << indent(--col) << ">> % PianoStaff " << pianoStaffCounter
+			    << std::endl; //indent-
+			str << indent(--col) << ">> % StaffGroup " << staffGroupCounter
+			    << std::endl; //indent-
+		    }
+
+		    // handle any bracket start events
+		    if (!firstTrack) {
+		        if (bracket == Brackets::SquareOn ||
+			    bracket == Brackets::SquareOnOff) {
+			    str << indent(col++) << "\\context StaffGroup = \""
+			        << ++staffGroupCounter << "\" <<" << std::endl;
+			} else if (bracket == Brackets::CurlyOn) {
+			    str << indent(col++) << "\\context PianoStaff = \""
+			        << ++pianoStaffCounter << "\" <<" << std::endl;
+			} else if (bracket == Brackets::CurlySquareOn) {
+			    str << indent(col++) << "\\context StaffGroup = \""
+			        << ++staffGroupCounter << "\" <<" << std::endl;
+			    str << indent(++col) << "\\context PianoStaff = \""
+			        << ++pianoStaffCounter << "\" <<" << std::endl;
+			}
+		    } 
 
                     // avoid problem with <untitled> tracks yielding a
                     // .ly file that jumbles all notes together on a
@@ -870,18 +936,22 @@ LilypondExporter::write()
 		    }
 		    staffNameWithTranspose << " } }";
 		    if (m_languageLevel < LILYPOND_VERSION_2_10) {
-			str << indent(++col) << "\\set Staff.instrument = " << staffNameWithTranspose.str() << std::endl;
+			str << indent(++col) << "\\set Staff.instrument = " << staffNameWithTranspose.str()
+			    << std::endl;
 		    } else {
-			str << indent(++col) << "\\set Staff.instrumentName = " << staffNameWithTranspose.str() << std::endl;
+			str << indent(++col) << "\\set Staff.instrumentName = "
+			    << staffNameWithTranspose.str() << std::endl;
 		    }
 
                     if (m_exportMidi) {
                         // Set midi instrument for the Staff
                         std::ostringstream staffMidiName;
-                        Instrument *instr = m_studio->getInstrumentById(m_composition->getTrackById(lastTrackIndex)->getInstrument());
+                        Instrument *instr = m_studio->getInstrumentById(
+			        m_composition->getTrackById(lastTrackIndex)->getInstrument());
                         staffMidiName << instr->getProgramName();
 
-                        str << indent(col) << "\\set Staff.midiInstrument = \"" << staffMidiName.str() << "\"" << std::endl;
+                        str << indent(col) << "\\set Staff.midiInstrument = \"" << staffMidiName.str()
+			    << "\"" << std::endl;
                     }
 
 		    // multi measure rests are used by default
@@ -900,6 +970,7 @@ LilypondExporter::write()
                     if ( m_exportMarkerMode != EXPORT_NO_MARKERS ) {
                         str << indent(col) << "\\new Voice \\markers" << std::endl;
                     }
+
                 }
 
                 // Temporary storage for non-atomic events (!BOOM)
@@ -921,6 +992,11 @@ LilypondExporter::write()
                 str << std::endl << indent(col) << "\\override Voice.TextScript #'padding = #2.0";
                 str << std::endl << indent(col) << "\\override MultiMeasureRest #'expand-limit = 1" << std::endl;
 
+                // staff notation size
+		int staffSize = track->getStaffSize();
+		if (staffSize == StaffTypes::Small) str << indent(col) << "\\small" << std::endl;
+		else if (staffSize == StaffTypes::Tiny) str << indent(col) << "\\tiny" << std::endl;
+
                 SegmentNotationHelper helper(**i);
                 helper.setNotationProperties();
 
@@ -934,7 +1010,8 @@ LilypondExporter::write()
                     //!!! This doesn't cope correctly yet with time signature changes
                     // during this skipped section.
                     str << std::endl << indent(col);
-                    writeSkip(timeSignature, compositionStartTime, m_composition->getBarStart(firstBar) - compositionStartTime,
+                    writeSkip(timeSignature, compositionStartTime,
+		              m_composition->getBarStart(firstBar) - compositionStartTime,
                               false, str);
                 }
 
@@ -995,7 +1072,7 @@ LilypondExporter::write()
                         if (!prevBarWasAlt2) {
                             col--;
                             str << std::endl << indent(--col) << "} \% close alternative 1 "
-                            << std::endl << indent(col++) << "{  \% open alternative 2";
+                                << std::endl << indent(col++) << "{  \% open alternative 2";
                             col++;
                         }
                         prevBarWasAlt2 = true;
@@ -1107,33 +1184,53 @@ LilypondExporter::write()
 			    str << indent(col) << "\\lyricsto \"" << voiceNumber.str() << "\""
 			        << " \\new Lyrics \\lyricmode {" << std::endl;
 			    if (m_lyricsHAlignment == RIGHT_ALIGN) {
-				str << indent(++col) << "\\override LyricText #'self-alignment-X = #RIGHT" << std::endl;
+				str << indent(++col) << "\\override LyricText #'self-alignment-X = #RIGHT"
+				    << std::endl;
 			    } else if (m_lyricsHAlignment == CENTER_ALIGN) {
-				str << indent(++col) << "\\override LyricText #'self-alignment-X = #CENTER" << std::endl;
+				str << indent(++col) << "\\override LyricText #'self-alignment-X = #CENTER"
+				    << std::endl;
 			    } else {
-				str << indent(++col) << "\\override LyricText #'self-alignment-X = #LEFT" << std::endl;
+				str << indent(++col) << "\\override LyricText #'self-alignment-X = #LEFT"
+				    << std::endl;
 			    }
 			    str << indent(col) << "\\set ignoreMelismata = ##t" << std::endl;
 			    str << indent(col) << text.utf8() << " " << std::endl;
 			    str << indent(col) << "\\unset ignoreMelismata" << std::endl;
 			    str << indent(--col) << "} % Lyrics " << (currentVerse+1) << std::endl;
 			    // close the Lyrics context
-		        }
-		    }
-		}
-            }
-        }
-    }
+		        } // if ( rx.search( text....
+		    } // for (long currentVerse = 0....
+		} // if (m_exportLyrics....
+            } // if (isMidiTrack.... 
+            firstTrack = false;
+        } // for (Composition::iterator i = m_composition->begin()....
+    } // for (int trackPos = 0....
 
     // close the last track (Staff context)
     if (voiceCounter > 0) {
-        str << indent(--col) << ">> % Staff (final)";  // indent-
+        str << indent(--col) << ">> % Staff (final) ends" << std::endl;  // indent-
+
+	// handle any necessary final bracket closures
+	if (bracket == Brackets::SquareOff ||
+	    bracket == Brackets::SquareOnOff) {
+	    str << indent(--col) << ">> % StaffGroup " << staffGroupCounter
+		<< std::endl; //indent-
+	} else	if (bracket == Brackets::CurlyOff) {
+	    str << indent(--col) << ">> % PianoStaff (final) " << pianoStaffCounter
+		<< std::endl; //indent-
+	} else if (bracket == Brackets::CurlySquareOff) {
+	    str << indent(--col) << ">> % PianoStaff (final)" << pianoStaffCounter
+		<< std::endl; //indent-
+	    str << indent(--col) << ">> % StaffGroup (final) " << staffGroupCounter
+		<< std::endl; //indent-
+	}
     } else {
         str << indent(--col) << "% (All staffs were muted.)" << std::endl;
     }
 
     // close \notes section
     str << std::endl << indent(--col) << ">> % notes" << std::endl << std::endl; // indent-
+    str << std::endl << indent(col) << ">> %global wrapper" << std::endl;
 
     // write \layout block
     str << indent(col) << "\\layout { }" << std::endl;

@@ -94,12 +94,14 @@ SET(EXAMPLE_FILES
     examples/doodle-q.rg
     examples/exercise_notation.rg
     examples/glazunov.rg
+    examples/glazunov-for-solo-and-piano-with-cue.rg
     examples/headers-and-unicode-lyrics.rg
     examples/himno_de_riego.rg
     examples/interpretation-example.rg
     examples/let-all-mortal-flesh.rg
     examples/lilypond-alternative-endings.rg
     examples/lilypond-directives.rg
+    examples/lilypond-staff-groupings.rg
     examples/mandolin-sonatina.rg
     examples/mozart-quartet.rg
     examples/notation-for-string-orchestra-in-D-minor.rg
