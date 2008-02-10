@@ -216,7 +216,7 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
     // default to lyric export == false because if you export the default
     // empty "- - -" lyrics, crap results ensue, and people will know if they
     // do need to export the lyrics - DMM
-    // fixed, no "- - -" lyrics is generated for an empty lyrics
+    // fixed, no "- - -" lyrics are generated for an empty lyrics
     // default again into lyrics - HJJ
     m_lilyExportLyrics->setChecked(config->readBoolEntry("lilyexportlyrics", true));
     layoutNotation->addMultiCellWidget(m_lilyExportLyrics, 1, 1, 0, 1);
@@ -226,10 +226,11 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
     m_lilyExportBeams->setChecked(config->readBoolEntry("lilyexportbeamings", false));
     layoutNotation->addMultiCellWidget(m_lilyExportBeams, 2, 2, 0, 1);
 
-    m_lilyExportStaffGroup = new QCheckBox(
+// deprecated option - replaced with per-track combo boxes
+/*  m_lilyExportStaffGroup = new QCheckBox(
                                  i18n("Add staff group bracket"), frameNotation);
     m_lilyExportStaffGroup->setChecked(config->readBoolEntry("lilyexportstaffgroup", false));
-    layoutNotation->addMultiCellWidget(m_lilyExportStaffGroup, 3, 3, 0, 1);
+    layoutNotation->addMultiCellWidget(m_lilyExportStaffGroup, 3, 3, 0, 1); */
 
     generalGrid->setRowStretch(4, 10);
 
@@ -310,7 +311,6 @@ LilypondOptionsDialog::slotApply()
     config->writeEntry("lilyexportselection", m_lilyExportSelection->currentItem());
     config->writeEntry("lilyexportpointandclick", m_lilyExportPointAndClick->isChecked());
     config->writeEntry("lilyexportbeamings", m_lilyExportBeams->isChecked());
-    config->writeEntry("lilyexportstaffgroup", m_lilyExportStaffGroup->isChecked());
     config->writeEntry("lilyexportstaffmerge", m_lilyExportStaffMerge->isChecked());
     config->writeEntry("lilylyricshalignment", m_lilyLyricsHAlignment->currentItem());
     config->writeEntry("lilyexportmarkermode", m_lilyMarkerMode->currentItem());
