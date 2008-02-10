@@ -619,7 +619,8 @@
           </menuchoice>
           function, and it
 	  features special <link linkend="nv-lilypond-directives">exportable
-	      directives</link> that provide access to LilyPond features for
+	      directives</link> and <link linkend="track-parameters">track
+	      parameters</link> that provide access to LilyPond features for
 	  which there is currently no parallel within &rosegarden;'s own
 	  native interface.
       </para>
@@ -697,10 +698,17 @@
 		This options allows for example to make a piano score with 
 		several independent voices.  You may give first three tracks
 		name "Right" and three next tracks "Left" and then merge
-		them in LilyPond export.  Sometimes you may encounter notes that
-		overlap in printed from,  you may avoid them by selecting one
-		of the collapsing notes and fine adjust its position in
-		Notation view function
+		them in LilyPond export.  (This provides an easier way to manage
+		overlapping segments with the price that the top and bottom
+		parts will have different names on the page.  If you wish both
+		of them to be named, eg. "Piano," then you will have to keep all
+		of the segments on the same pair of staffs. Consult <ulink
+		url="http://rosegarden.sourceforge.net/tutorial/supplemental/piano/piano-by-example.html">Piano
+		by Example</ulink> for a hands-on demonstration of this.) <!--
+		this comment makes absolutely no sense to me(dmm):   Sometimes you
+		may encounter notes that overlap in printed form,  you may avoid
+		them by selecting one of the collapsing notes and fine adjust
+		its position in Notation view function -->
 	  <menuchoice>
 	    <guimenu lang="en">Adjust</guimenu>
             <guimenuitem>Fine Positioning</guimenuitem>
@@ -735,27 +743,28 @@
 		of &rosegarden; may support nested note grouping.</para>
 	    </listitem>
 	</varlistentry>
-	<varlistentry>
+<!-- deprecated
+        <varlistentry>
 	  <term>Add staff group bracket</term>
 	    <listitem><para>
 		Staff group bracket may be added to cover all staffs.
 		Future versions of &rosegarden; may support nested staff
 		groupings.</para>
 	    </listitem>
-	</varlistentry>
+	</varlistentry> -->
 	<varlistentry>
 	  <term>Lyrics alignment</term>
 	    <listitem><para>
 		Lyrics is aligned Left by default.  Sometimes Center or
-		Right alignment provides results in more pleasant output.</para>
+		Right alignment provides results and more pleasant output.</para>
 	    </listitem>
 	</varlistentry>
 	<varlistentry>
 	  <term>Ragged bottom</term>
 	    <listitem><para>
-		The staff cover the whole page from the top to the bottom.
-		When there are only few staff,  Ragged bottom places the
-		extra vertical space to the bottom of the page instead.</para>
+		The staffs normally cover the whole page from top to bottom.
+		When there are only a few staffs, this option places the
+		extra vertical space at the bottom of the page instead.</para>
 	    </listitem>
 	</varlistentry>	<varlistentry>
 	  <term>Enable "point-and-click" debugging</term>
@@ -774,7 +783,7 @@
 	</varlistentry>	<varlistentry>
 	  <term>Export \midi block</term>
 	    <listitem><para>
-		LilyPond is capable to produce also MIDI output.  Check this
+		LilyPond is also capable of producing MIDI output.  Check this
 		option if you wish the LilyPond source to use this option.
 		Note however that MIDI output which you obtain via &rosegarden;
 		sequencer, via
@@ -783,7 +792,7 @@
 	    <guimenuitem>Export</guimenuitem>
             <guimenuitem>Export MIDI file</guimenuitem>
           </menuchoice>,
-		and via LilyPond's MIDI output may differ.</para>
+		and via LilyPond's MIDI output may differ considerably.</para>
 	    </listitem>
 	</varlistentry>	<varlistentry>
 	  <term>Headers</term>
@@ -2747,9 +2756,13 @@
     <para>
 	It allows you to assign instruments to tracks, control what
 	incoming &MIDI; data from which sources will be recorded to
-	particular tracks, and make selections that govern how &MIDI; segments
+	particular tracks, control staff attributes (currently only for LilyPond
+	export,) make selections that govern how &MIDI; segments
 	will be created for each track that is assigned to a non-audio
-	instrument.
+	instrument, and apply these selections to existing segments (as when
+	converting a trumpet part from an imported &MIDI; file to be
+	represented as notation playable by a real human on a real instrument,
+	for example.)
     </para>
     <para>This box is divided into three sections:</para>
 	<sect2 id="track-playback-parameters">
@@ -2786,6 +2799,30 @@
 		The recording filters are also used to <link linkend="studio-midi-routing">route MIDI events </link> to the assigned track instrument when you are recording.
              </para>
 	</sect2>
+	<sect2 id="track-staff-params">
+	    <title>Staff export options</title>
+	    <para>
+	        These provide you with a means of exporting notation to render
+		at either normal, small, or tiny size (eg. for printing certain
+		parts at cue size,) and allow you to export a variety of nested
+		brackets.
+	   </para>
+	   <para>
+	        You are responsible for creating a series of bracket start and
+		end markers that will yield a functional result, and if you make
+		a mistake with these, it is likely that your file will not
+		export or preview correctly in LilyPond.
+	   </para>
+	   <para>You should probably look at "lilypond-staff-groupings.rg" in
+	   the examples/ directory to see how these are used.  [ { and {[ start
+	   a bracket or brackets on this track, while ] } and ]} provide
+	   corresponding ends, and [  ] is supposed to put a bracket around a
+	   single staff, although this option does not currently produce the
+	   expected result in LilyPond 2.10.25.  These brackets may be mixed and
+	   matched, as demonstrated in the example file, and this mechanism is
+	   quite flexible.
+	   </para>
+	</sect2>
 	<sect2 id="track-create-with">
 	    <title>Create segments with</title>
 	    <para>
@@ -2812,7 +2849,11 @@
 				launches a dialog that allows you to pick
 				a pre-defined collection of parameters
 				that provide guidelines for how you should
-				write parts for real-world instruments.
+				write parts for real-world instruments, and
+				optionally convert any existing segments on this
+				track to take on these new parameters.
+				<!-- needs a tutorial somewhere, and a link to
+				that tutorial DMM -->
 			    </para>
 			    <para>
 			    <inlinemediaobject>
