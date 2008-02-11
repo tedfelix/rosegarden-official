@@ -64,17 +64,16 @@
     margin-right:0px; margin-bottom:8px"
     src="http://www.telegraph-road.org/rosegarden-author-pic.png"
     alt=" "/>Guillaume lives in Cannes, in the South of France.
-    He used Linux from 1995 until 2007, and first worked on
+    He's been using Linux since 1995, and first worked on
     Rosegarden in the summer of 1996, when he supplied a few hundred
-    lines of new code in his first couple of emails.  Guillaume was
+    lines of new code in his first couple of emails.  Guillaume is
     responsible for getting the Rosegarden project restarted, for
     creating the basic design and writing much of the GUI code and
     file and data framework, and for most of the project administration.
 
     <p>He has also helped maintain <a href="http://gtkmm.sourceforge.net/">Gtk--</a> for a while, and was
     involved in some parts of <a href="http://www.kde.org">KDE</a> here and there.  In his spare time,
-    he works as a software engineer.  Lately, he has gotten disgusted with Linux
-    and KDE, and has hopped on the Apple/OS-X bandwagon.
+    he works as a software engineer.
     </p>
 
     <h4><a href="http://home.comcast.net/~documentarian">D. Michael McIntyre</a></h4>
