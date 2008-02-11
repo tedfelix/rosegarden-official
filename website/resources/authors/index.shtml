@@ -31,7 +31,7 @@
     style="float:right; margin-top: 0px; margin-left: 12px;
     margin-right:0px; margin-bottom:8px"
     src="http://www.all-day-breakfast.com/rosegarden-author-pic.png"
-    alt="Chris Cannam"/>Chris has been working on one incarnation or
+    alt=" "/>Chris has been working on one incarnation or
     another of Rosegarden since the end of 1993.  It was then a
     university project for two students, devised by professor <a
     href="http://www.bath.ac.uk/~masjpf/">John Fitch</a> at the
@@ -55,9 +55,7 @@
     began  working on Rosegarden at the end of 1995, when he was drafted in to
     take over the Unix sequencer.  He was responsible for the Rosegarden MIDI,
     audio, sequencing and recording code, and significant parts of the GUI.
-    He has been on a protracted sabbatical from development work on the
-    project since the release of 1.0, but his influence remains visible in
-    every corner of the application.</p>
+    He retired from the project after seeing it through to the release of 1.0.</p>
 
     <h4><a href="http://www.telegraph-road.org">Guillaume Laurent</a></h4>
     <p><small>glaurent <i>at</i> telegraph-road <i>dot</i> org</small></p>
@@ -66,23 +64,24 @@
     margin-right:0px; margin-bottom:8px"
     src="http://www.telegraph-road.org/rosegarden-author-pic.png"
     alt=" "/>Guillaume lives in Cannes, in the South of France.
-    He's been using Linux since 1995, and first worked on
+    He used Linux from 1995 until 2007, and first worked on
     Rosegarden in the summer of 1996, when he supplied a few hundred
-    lines of new code in his first couple of emails.  Guillaume is
+    lines of new code in his first couple of emails.  Guillaume was
     responsible for getting the Rosegarden project restarted, for
     creating the basic design and writing much of the GUI code and
     file and data framework, and for most of the project administration.
 
     <p>He has also helped maintain <a href="http://gtkmm.sourceforge.net/">Gtk--</a> for a while, and was
     involved in some parts of <a href="http://www.kde.org">KDE</a> here and there.  In his spare time,
-    he works as a software engineer.
+    he works as a software engineer.  Lately, he has gotten disgusted with Linux
+    and KDE, and has hopped on the Apple/OS-X bandwagon.
     </p>
 
-    <h4>D. Michael McIntyre</h4>
+    <h4><a href="http://home.comcast.net/~documentarian">D. Michael McIntyre</a></h4>
     <p><small>dmmcintyr <i>at</i> users <i>dot</i> sourceforge <i>dot</i> net</small></p>
     <p><img style="float:right; margin-top: 0px; margin-left: 12px;
     margin-right:0px; margin-bottom:8px"
-    src="http://users.adelphia.net/~silvan/silvan-headshot.jpg" alt="
+    src="http://home.comcast.net/~documentarian/michael-headshot.jpg" alt="
     "/>Michael lives in Christiansburg, Virginia, in the United States of
     America.  He got his first taste of Linux toward the end of 2001.  He came
     to work at Rosegarden in December 2002, after being shamed into doing
@@ -91,36 +90,59 @@
 	posting</a> on the Linux Audio Users mailing list.  That discussion
     lead him to begin writing a <a
 	href="http://rosegarden.sourceforge.net/tutorial/">tutorial</a> for
-    Rosegarden, which has since grown into a full-fledged <a
-	href="http://bomots.de/vorschau.htm">book</a>.</p> <p>In addition to
-    his writings, he has found himself increasingly immersed in development
-    work around the project.  Unlike everyone else who has chipped in to help
-    build Rosegarden, Michael is not a programmer by trade, or training.  He
-    has managed to get things done through some mixture of desperation and
-    determination that hearkens back to his childhood roots, growing up in the
-    era when PCs were expensive business computers, and home users got
-    software for their TRS-80s, Apples, and Commodores by writing it
-    themselves, or laboriously typing page after page of listings out of fan
-    magazines.</p>
+    Rosegarden, which grew into a full-fledged book, and went on to be
+    pronounced a &quot;total financial disaster&quot; by the publisher.</p>
+    <p>In the years since the book, Michael has concentrated on user support,
+    administration, and working toward making Rosegarden a more and more serious
+    choice for music notation.  He enjoys <a
+    href="http://flickr.com/photos/arborvitian">photography</a>, <a
+    href="http://home.comcast.net/~documentarian">woodworking</a>, hiking in the
+    mountain country of the eastern US, gardening, cooking, and, of course
+    music.  He plays trumpet, alto/tenor horn, flute, recorder, guitar, and some
+    keyboard, harmonica, and drums. In his spare time, he drives an 18-wheeler
+    to earn the money he pours down all of these various black holes.</p>
 
     <h4>Pedro Lopez-Cabanillas</h4>
     <p><small>pedro <i>dot</i> lopez <i>dot</i> cabanillas <i>at</i> gmail <i>dot</i> com</small></p>
     <p><img style="float:right; margin-top: 0px; margin-left: 12px;
     margin-right:0px; margin-bottom:8px"
-    src="http://users.adelphia.net/~silvan/pedro-headshot.jpg" alt=" "/>
+    src="http://home.comcast.net/~documentarian/pedro-headshot.jpg" alt=" "/>
     
     Pedro lives in Barcelona, Spain. He tried Rosegarden the first time a few
     days  after the <a
 	href="http://lalists.stanford.edu/lau/2002/11/0317.html">infamous
 	post</a> from Michael. He soon felt that the project was  <a
 	href="http://lalists.stanford.edu/lau/2002/12/0413.html">worthy of his
-	interest,</a> and started to actively help and contribute.  Pedro
-    works as a professional developer for a transnational company, and in his
-    spare time contributes to several libre software projects, such as <a
+	interest,</a> and started to actively help and contribute, bringing
+	about countless improvements to MIDI handling, creating the new track
+	parameters, and getting involved with bits of this and that almost
+	everywhere in the application.  Pedro works as a professional developer
+	for a transnational company, and in his spare time contributes to
+	several libre software projects, such as <a
 	href="http://kmetronome.sourceforge.net">KMetronome</a> and <a
-	href="http://kmetronome.sourceforge.net/kmidimon/">KMidimon.</a>  He
-    is also an amateur musician, playing pop and classical music with flutes,
-    and some MIDI instruments.  </p>
+	href="http://kmetronome.sourceforge.net/kmidimon/">KMidimon.</a>  He is
+	also an amateur musician, playing pop and classical music with flutes,
+	and some MIDI instruments.</p>
+
+    <h4><a href= "http://ltl.tkk.fi/wiki/Heikki_Junes">Heikki Junes</a></h4>
+    <p><small>hjunes <i>at</i> gmail <i>dot</i> com</small></p>
+    <p><img style="float:right; margin-top: 0px; margin-left: 12px;
+    margin-right:0px; margin-bottom:8px"
+    src="http://home.comcast.net/~documentarian/heikki-headshot.jpg"
+    alt=" " />
+
+    Heikki is a graduate student at the <a
+    href="http://ltl.tkk.fi/wiki/Heikki_Junes"> Low Temperature Laboratory</a>
+    at the Helsinki University of Technology in Helsinki, Finland, where he is
+    currently working with helium crystals.</p>
+    <p>Heikki just showed up out of nowhere one day and asked for developer
+    access.  He has gone on to make dramatic improvements in the LilyPond export
+    engine, and is almost single-handedly responsible for how useful and
+    reliable it has become as a vehicle for producing high-quality printouts.
+    He has done a lot of work on the <a
+    href="http://rosegarden.wiki.sourceforge.net/">Rosegarden Wiki</a>, and has
+    become quite the organizer.</p>
+
 
     <h3>Friends of Rosegarden</h3>
     <p>An ever-growing list of people are helping and have helped
