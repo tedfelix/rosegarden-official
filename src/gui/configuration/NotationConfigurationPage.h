@@ -79,6 +79,7 @@ protected:
     QComboBox *m_multiStaffSize;
     QComboBox *m_printingSize;
     KFontRequester* m_textFont;
+    KFontRequester* m_sansFont;
     KFontRequester* m_timeSigFont;
     QPushButton *m_viewButton;
     QLabel *m_fontOriginLabel;

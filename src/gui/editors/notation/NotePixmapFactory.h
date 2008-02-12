@@ -185,6 +185,7 @@ public:
 
 
     static const char* const defaultSerifFontFamily;
+    static const char* const defaultSansSerifFontFamily;
     static const char* const defaultTimeSigFontFamily;
     
 

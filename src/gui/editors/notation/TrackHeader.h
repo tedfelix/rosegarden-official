@@ -10,6 +10,9 @@
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
 
+    This file is Copyright 2007-2008
+        Yves Guillemot      <yc.guillemot@wanadoo.fr> 
+
     The moral rights of Guillaume Laurent, Chris Cannam, and Richard
     Bown to claim authorship of this work have been asserted.
 

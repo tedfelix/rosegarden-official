@@ -86,8 +86,9 @@ class NotePixmapCache : public std::map<CharName, QCanvasPixmap*>
     // nothing to add -- just so we can predeclare it in the header
 };
 
-const char* const NotePixmapFactory::defaultSerifFontFamily = "Times New Roman";
-const char* const NotePixmapFactory::defaultTimeSigFontFamily = "Century Schoolbook";
+const char* const NotePixmapFactory::defaultSerifFontFamily = "Bitstream Vera Serif";
+const char* const NotePixmapFactory::defaultSansSerifFontFamily = "Bitstream Vera Sans";
+const char* const NotePixmapFactory::defaultTimeSigFontFamily = "Bitstream Vera Serif";
 
 NotePixmapFactory::NotePixmapFactory(std::string fontName, int size) :
         m_selected(false),
@@ -104,7 +105,7 @@ NotePixmapFactory::NotePixmapFactory(std::string fontName, int size) :
         m_bigTimeSigFontMetrics(m_bigTimeSigFont),
         m_ottavaFont(defaultSerifFontFamily, 8, QFont::Normal, true),
         m_ottavaFontMetrics(m_ottavaFont),
-        m_trackHeaderFont(defaultSerifFontFamily, 12, QFont::Normal),
+        m_trackHeaderFont(defaultSansSerifFontFamily, 10, QFont::Normal),
         m_trackHeaderFontMetrics(m_trackHeaderFont),
         m_generatedPixmap(0),
         m_generatedMask(0),
@@ -132,7 +133,7 @@ NotePixmapFactory::NotePixmapFactory(const NotePixmapFactory &npf) :
         m_bigTimeSigFontMetrics(m_bigTimeSigFont),
         m_ottavaFont(defaultSerifFontFamily, 8, QFont::Normal, true),
         m_ottavaFontMetrics(m_ottavaFont),
-        m_trackHeaderFont(defaultSerifFontFamily, 12, QFont::Normal),
+        m_trackHeaderFont(defaultSansSerifFontFamily, 10, QFont::Normal),
         m_trackHeaderFontMetrics(m_trackHeaderFont),
         m_generatedPixmap(0),
         m_generatedMask(0),
@@ -209,7 +210,7 @@ NotePixmapFactory::init(std::string fontName, int size)
     // Resize the fonts, because the original constructor used point
     // sizes only and we want pixels
     QFont timeSigFont(defaultTimeSigFontFamily),
-    textFont(defaultSerifFontFamily);
+        textFont(defaultSerifFontFamily);
     KConfig* config = kapp->config();
     config->setGroup(NotationViewConfigGroup);
 
@@ -242,10 +243,9 @@ NotePixmapFactory::init(std::string fontName, int size)
     m_ottavaFont.setPixelSize(size * 2);
     m_ottavaFontMetrics = QFontMetrics(m_ottavaFont);
 
-    m_trackHeaderFont = config->readFontEntry("textfont", &textFont);
-    m_trackHeaderFont.setWeight(QFont::DemiBold);
-           // (Don't seem to be any difference between DemiBold and Bold : ??)
-    m_trackHeaderFont.setPixelSize(12);
+    m_trackHeaderFont = QFont(defaultSansSerifFontFamily);
+    m_trackHeaderFont = config->readFontEntry("sansfont", &m_trackHeaderFont);
+    m_trackHeaderFont.setPixelSize(size * 3 / 2);
     m_trackHeaderFontMetrics = QFontMetrics(m_trackHeaderFont);
 }
 
@@ -1884,9 +1884,8 @@ NotePixmapFactory::makeClefPixmap(const Clef &clef)
 
     m_p->painter().setPen(Qt::black);
     QPoint hotspot(plain.getHotspot());
-    if (oct > 0)
-        hotspot.setY(hotspot.y() + rect.height());
-    return makeCanvasPixmap(hotspot);
+    if (oct > 0) hotspot.setY(hotspot.y() + rect.height());
+    return makeCanvasPixmap(hotspot, true);
 }
 
 QCanvasPixmap*
@@ -2152,8 +2151,8 @@ NotePixmapFactory::makeTrackHeaderPixmap(int height,
     height -= 4;    // Make place to label frame :
                     // 4 = 2 * (margin + lineWidth)
 
-   // Get widget default common character size
-   // ("X" stands here for a "common character")
+    // Get widget default common character size
+    // ("X" stands here for a "common character")
     QRect bounds = m_trackHeaderFontMetrics.boundingRect(i18n("X"));
     int charHeight = bounds.height();
     int charWidth = bounds.width();
@@ -2200,7 +2199,7 @@ NotePixmapFactory::makeTrackHeaderPixmap(int height,
     m_p->drawText(charWidth, lowerTextY, lowerText);
 
     delete clefAndKeyPixmap;
-    return makeCanvasPixmap(m_pointZero);
+    return makeCanvasPixmap(m_pointZero, true);
 }
 
 QCanvasPixmap*
@@ -2928,7 +2927,8 @@ NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
         m_p->painter().setPen(Qt::black);
 
         return makeCanvasPixmap(QPoint(0, denomR.height() +
-                                       (getNoteBodyHeight() / 4) - 1));
+                                       (getNoteBodyHeight() / 4) - 1),
+                                true);
     }
 }
 
@@ -2986,56 +2986,69 @@ NotePixmapFactory::getTextFont(const Text &text) const
     int weight = QFont::Normal;
     bool italic = false;
     bool large = false;
+    bool tiny = false;
     bool serif = true;
 
     if (type == Text::Tempo ||
-            type == Text::LocalTempo ||
-            type == Text::LocalDirection ||
-            type == Text::Chord) {
+        type == Text::LocalTempo ||
+        type == Text::LocalDirection ||
+        type == Text::Chord) {
         weight = QFont::Bold;
     }
 
     if (type == Text::Dynamic ||
-            type == Text::LocalDirection) {
+        type == Text::LocalDirection) {
         italic = true;
     }
 
     if (type == Text::StaffName ||
-            type == Text::Direction ||
-            type == Text::Tempo) {
+        type == Text::Direction ||
+        type == Text::Tempo) {
         large = true;
     }
 
-    QFont defaultTextFont(defaultSerifFontFamily);
-    KConfig* config = kapp->config();
-    QFont textFont = config->readFontEntry("textfont", &defaultTextFont);
-    textFont.setStyleStrategy(QFont::StyleStrategy(QFont::PreferDefault | QFont::PreferMatch));
-
     if (type == Text::Annotation ||
-            type == Text::LilypondDirective) {
+        type == Text::LilypondDirective) {
         serif = false;
-        textFont = QFont("lucida");
+        tiny = true;
     }
+    
+    KConfig* config = kapp->config();
+
+    QFont textFont;
+
+    if (serif) {
+        textFont = QFont(defaultSerifFontFamily);
+        textFont = config->readFontEntry("textfont", &textFont);
+    } else {
+        textFont = QFont(defaultSansSerifFontFamily);
+        textFont = config->readFontEntry("sansfont", &textFont);
+    }
+
+    textFont.setStyleStrategy(QFont::StyleStrategy(QFont::PreferDefault |
+                                                   QFont::PreferMatch));
 
     int size;
     if (large)
-        size = getLineSpacing() * 7 / 2;
+        size = (getLineSpacing() * 7) / 2;
+    else if (tiny)
+        size = (getLineSpacing() * 4) / 3;
     else if (serif)
-        size = getLineSpacing() * 2;
+        size = (getLineSpacing() * 2);
     else
-        size = getLineSpacing() * 3 / 2;
+        size = (getLineSpacing() * 3) / 2;
 
     textFont.setPixelSize(size);
     textFont.setStyleHint(serif ? QFont::Serif : QFont::SansSerif);
     textFont.setWeight(weight);
     textFont.setItalic(italic);
 
-    //     NOTATION_DEBUG << "NotePixmapFactory::getTextFont: requested size " << size
-    // 		   << " for type " << type << endl;
-
-    //     NOTATION_DEBUG << "NotePixmapFactory::getTextFont: returning font '"
-    //                    << textFont.toString() << "' for type " << type.c_str()
-    //                    << " text : " << text.getText().c_str() << endl;
+    NOTATION_DEBUG << "NotePixmapFactory::getTextFont: requested size " << size
+     		   << " for type " << type << endl;
+    
+    NOTATION_DEBUG << "NotePixmapFactory::getTextFont: returning font '"
+                   << textFont.toString() << "' for type " << type.c_str()
+                   << " text : " << text.getText().c_str() << endl;
 
     m_textFontCache[type.c_str()] = textFont;
     return textFont;
@@ -3049,7 +3062,7 @@ NotePixmapFactory::makeTextPixmap(const Text &text)
     std::string type(text.getTextType());
 
     if (type == Text::Annotation ||
-            type == Text::LilypondDirective) {
+        type == Text::LilypondDirective) {
         return makeAnnotationPixmap(text, (type == Text::LilypondDirective));
     }
 
@@ -3096,7 +3109,7 @@ NotePixmapFactory::drawText(const Text &text,
     std::string type(text.getTextType());
 
     if (type == Text::Annotation ||
-            type == Text::LilypondDirective) {
+        type == Text::LilypondDirective) {
         QCanvasPixmap *map = makeAnnotationPixmap(text, (type == Text::LilypondDirective));
         painter.drawPixmap(x, y, *map);
         return ;
@@ -3222,7 +3235,7 @@ NotePixmapFactory::createPixmapAndMask(int width, int height,
 
     static unsigned long total = 0;
     total += width * height;
-    //    NOTATION_DEBUG << "createPixmapAndMask: " << width << "x" << height << " (" << (width*height) << " px, " << total << " total)" << endl;
+    NOTATION_DEBUG << "createPixmapAndMask: " << width << "x" << height << " (" << (width*height) << " px, " << total << " total)" << endl;
 
     // clear up pixmap and mask
     m_generatedPixmap->fill();
