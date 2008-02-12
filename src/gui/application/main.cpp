@@ -515,10 +515,11 @@ int main(int argc, char *argv[])
     // under Xinerama).  These are obtained from QDesktopWidget.
 
     config->setGroup("MainView");
+    int windowWidth = 0, windowHeight = 0;
 
     QDesktopWidget *desktop = KApplication::desktop();
     if (desktop) {
-	QRect totalRect(desktop->availableGeometry());
+	QRect totalRect(desktop->screenGeometry());
 	QRect desktopRect = KGlobalSettings::desktopGeometry(QPoint(0, 0));
 	QSize startupSize;
 	if (desktopRect.height() <= 800) {
@@ -530,12 +531,10 @@ int main(int argc, char *argv[])
 	}
 	QString widthKey = QString("Width %1").arg(totalRect.width());
 	QString heightKey = QString("Height %1").arg(totalRect.height());
-	if (!config->hasKey(widthKey)) {
-	    config->writeEntry(widthKey, startupSize.width());
-	}
-	if (!config->hasKey(heightKey)) {
-	    config->writeEntry(heightKey, startupSize.height());
-	}
+	windowWidth = config->readUnsignedNumEntry
+	    (widthKey, startupSize.width());
+	windowHeight = config->readUnsignedNumEntry
+	    (heightKey, startupSize.height());
     }
 
     config->setGroup("KDE Action Restrictions");
@@ -597,6 +596,10 @@ int main(int argc, char *argv[])
                                              startLogo);
 
         app.setMainWidget(rosegardengui);
+
+	if (windowWidth != 0 && windowHeight != 0) {
+	    rosegardengui->resize(windowWidth, windowHeight);
+	}
 
         rosegardengui->show();
 
