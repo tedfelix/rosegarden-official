@@ -531,30 +531,37 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     ++row;
 
     QFont defaultTextFont(NotePixmapFactory::defaultSerifFontFamily),
-    defaultTimeSigFont(NotePixmapFactory::defaultTimeSigFontFamily);
+        defaultSansFont(NotePixmapFactory::defaultSansSerifFontFamily),
+        defaultTimeSigFont(NotePixmapFactory::defaultTimeSigFontFamily);
 
-//    frame = new QFrame(otherFontBox);
-//    QGridLayout *otherLayout = new QGridLayout(frame, 2, 2, 10, 5);
-
-//    otherLayout->addWidget
     layout->addWidget
         (new QLabel(i18n("Text font"), frame), row, 0);
     m_textFont = new KFontRequester(frame);
     QFont textFont = m_cfg->readFontEntry("textfont", &defaultTextFont);
     m_textFont->setFont(textFont);
-//    otherLayout->addWidget(m_textFont, 0, 1);
     layout->addMultiCellWidget(m_textFont, row, row, 1, 3);
     ++row;
 
-//    otherLayout->addWidget
+    layout->addWidget
+        (new QLabel(i18n("Sans-serif font"), frame), row, 0);
+    m_sansFont = new KFontRequester(frame);
+    QFont sansFont = m_cfg->readFontEntry("sansfont", &defaultSansFont);
+    m_sansFont->setFont(sansFont);
+    layout->addMultiCellWidget(m_sansFont, row, row, 1, 3);
+    ++row;
+
+/*!!! No -- not much point in having the time sig font here: it's only
+ * used if the time sig characters are not found in the notation font,
+ * and our default notation font has all the characters we need
+
     layout->addWidget
         (new QLabel(i18n("Time Signature font"), frame), row, 0);
     m_timeSigFont = new KFontRequester(frame);
     QFont timeSigFont = m_cfg->readFontEntry("timesigfont", &defaultTimeSigFont);
     m_timeSigFont->setFont(timeSigFont);
-//    otherLayout->addWidget(m_timeSigFont, 1, 1);
     layout->addMultiCellWidget(m_timeSigFont, row, row, 1, 3);
     ++row;
+*/
 
 //    addTab(mainFrame, i18n("Font"));
     addTab(frame, i18n("Font"));
@@ -693,9 +700,12 @@ NotationConfigurationPage::apply()
                       m_printingSize->currentText().toUInt());
     m_cfg->writeEntry("textfont",
                       m_textFont->font());
+    m_cfg->writeEntry("sansfont",
+                      m_sansFont->font());
+/*!!!
     m_cfg->writeEntry("timesigfont",
                       m_timeSigFont->font());
-
+*/
     std::vector<int> s = NotationHLayout::getAvailableSpacings();
     m_cfg->writeEntry("spacing", s[m_spacing->currentItem()]);
 
