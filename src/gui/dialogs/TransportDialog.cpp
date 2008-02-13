@@ -28,9 +28,9 @@
 #include <klocale.h>
 #include <kstddirs.h>
 #include "base/Composition.h"
-#include "base/NotationRules.h"
 #include "base/NotationTypes.h"
 #include "base/RealTime.h"
+#include "misc/Debug.h"
 #include "gui/application/RosegardenApplication.h"
 #include "gui/general/MidiPitchLabel.h"
 #include "gui/studio/StudioControl.h"
@@ -90,6 +90,8 @@ TransportDialog::TransportDialog(QWidget *parent,
     setCaption(i18n("Rosegarden Transport"));
 
     resetFonts();
+
+    initModeMap();
 
     // set the LCD frame background to black
     //
@@ -272,6 +274,35 @@ TransportDialog::~TransportDialog()
     }
 }
 
+std::string
+TransportDialog::getCurrentModeAsString()
+{
+    bool found = false;
+    for (std::map<std::string, TimeDisplayMode>::iterator iter = m_modeMap.begin();
+         iter != m_modeMap.end() && !found;
+         iter++)
+    {
+        if (iter->second == m_currentMode) {
+            return iter->first;
+        }
+    }
+
+    // we shouldn't get here unless the map is not well-configured
+    RG_DEBUG << "TransportDialog::getCurrentModeAsString: could not map current mode " 
+        << m_currentMode << " to string." << endl;
+    throw Exception("could not map current mode to string.");
+}
+
+void
+TransportDialog::initModeMap()
+{
+    m_modeMap["RealMode"]         = RealMode;
+    m_modeMap["SMPTEMode"]        = SMPTEMode;
+    m_modeMap["BarMode"]          = BarMode;
+    m_modeMap["BarMetronomeMode"] = BarMetronomeMode;
+    m_modeMap["FrameMode"]        = FrameMode;
+}
+
 void
 TransportDialog::show()
 {
@@ -369,7 +400,7 @@ TransportDialog::getSMPTEResolution(int &framesPerSecond,
 }
 
 void
-TransportDialog::slotChangeTimeDisplay()
+TransportDialog::computeSampleRate()
 {
     if (m_sampleRate == 0) {
 
@@ -387,6 +418,11 @@ TransportDialog::slotChangeTimeDisplay()
         }
     }
 
+}
+
+void
+TransportDialog::cycleThroughModes()
+{
     switch (m_currentMode) {
 
     case RealMode:
@@ -412,9 +448,12 @@ TransportDialog::slotChangeTimeDisplay()
         m_currentMode = RealMode;
         break;
     }
+}
 
+void
+TransportDialog::displayTime()
+{
     switch (m_currentMode) {
-
     case RealMode:
         m_clearMetronomeTimer->stop();
         m_transport->TimeDisplayLabel->hide();
@@ -444,6 +483,45 @@ TransportDialog::slotChangeTimeDisplay()
         m_transport->TimeDisplayLabel->show();
         break;
     }
+}
+
+void
+TransportDialog::setNewMode(const std::string& newModeAsString)
+{
+    TimeDisplayMode newMode = RealMode; // default value if not found
+    
+    std::map<std::string, TimeDisplayMode>::iterator iter =
+        m_modeMap.find(newModeAsString);
+
+    if (iter != m_modeMap.end()) {
+        // value found
+        newMode = iter->second;
+    } else {
+        // don't fail: use default value set at declaration
+    }
+
+    setNewMode(newMode);
+}
+
+void
+TransportDialog::setNewMode(const TimeDisplayMode& newMode)
+{
+    computeSampleRate();
+    
+    m_currentMode = newMode;
+    
+    displayTime();
+}
+
+
+void
+TransportDialog::slotChangeTimeDisplay()
+{
+    computeSampleRate();
+    
+    cycleThroughModes();
+    
+    displayTime();
 }
 
 void
@@ -959,9 +1037,9 @@ TransportDialog::slotLoopButtonClicked()
     //    config->setGroup(SequencerOptionsConfigGroup);
     //    if (config->readBoolEntry("jacktransport", false))
     //    {
-    //	//!!! - this will fail silently
-    //	m_transport->LoopButton->setEnabled(false);
-    //	m_transport->LoopButton->setOn(false);
+    //    //!!! - this will fail silently
+    //    m_transport->LoopButton->setEnabled(false);
+    //    m_transport->LoopButton->setOn(false);
     //        return;
     //    }
 

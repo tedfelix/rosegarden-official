@@ -1361,13 +1361,14 @@ void RosegardenGUIApp::initView()
     //     setCentralWidget(m_swapView);
     setCaption(m_doc->getTitle());
 
-    // set the pointer position
-    //
-    slotSetPointerPosition(m_doc->getComposition().getPosition());
-
 
     // Transport setup
     //
+    std::string transportMode = m_doc->getConfiguration().
+                       get
+                        <String>
+                        (DocumentConfiguration::TransportMode);
+ 
 
     slotEnableTransport(true);
 
@@ -1388,6 +1389,13 @@ void RosegardenGUIApp::initView()
 
     // Set the solo button
     getTransport()->SoloButton()->setOn(comp.isSolo());
+
+    // set the transport mode found in the configuration
+    getTransport()->setNewMode(transportMode);
+
+    // set the pointer position
+    //
+    slotSetPointerPosition(m_doc->getComposition().getPosition());
 
     // make sure we show
     //
@@ -4333,45 +4341,44 @@ RosegardenGUIApp::slotUpdateMonitoring()
 
 void RosegardenGUIApp::slotSetPointerPosition(timeT t)
 {
-    if (!m_seqManager)
-        return ;
+    Composition &comp = m_doc->getComposition();
 
     //    std::cerr << "RosegardenGUIApp::slotSetPointerPosition: t = " << t << std::endl;
 
-    Composition &comp = m_doc->getComposition();
-
-    if ( m_seqManager->getTransportStatus() == PLAYING ||
-            m_seqManager->getTransportStatus() == RECORDING ) {
-        if (t > comp.getEndMarker()) {
-            if (m_seqManager->getTransportStatus() == PLAYING) {
-
-                slotStop();
-                t = comp.getEndMarker();
-                m_doc->slotSetPointerPosition(t); //causes this method to be re-invoked
-                return ;
-
-            } else { // if recording, increase composition duration
-                std::pair<timeT, timeT> timeRange = comp.getBarRangeForTime(t);
-                timeT barDuration = timeRange.second - timeRange.first;
-                timeT newEndMarker = t + 10 * barDuration;
-                comp.setEndMarker(newEndMarker);
-                getView()->getTrackEditor()->slotReadjustCanvasSize();
-                getView()->getTrackEditor()->updateRulers();
-            }
-        }
+    if (m_seqManager) {
+	    if ( m_seqManager->getTransportStatus() == PLAYING ||
+	            m_seqManager->getTransportStatus() == RECORDING ) {
+	        if (t > comp.getEndMarker()) {
+	            if (m_seqManager->getTransportStatus() == PLAYING) {
+	
+	                slotStop();
+	                t = comp.getEndMarker();
+	                m_doc->slotSetPointerPosition(t); //causes this method to be re-invoked
+	                return ;
+	
+	            } else { // if recording, increase composition duration
+	                std::pair<timeT, timeT> timeRange = comp.getBarRangeForTime(t);
+	                timeT barDuration = timeRange.second - timeRange.first;
+	                timeT newEndMarker = t + 10 * barDuration;
+	                comp.setEndMarker(newEndMarker);
+	                getView()->getTrackEditor()->slotReadjustCanvasSize();
+	                getView()->getTrackEditor()->updateRulers();
+	            }
+	        }
+	    }
+	
+	    // cc 20050520 - jump at the sequencer even if we're not playing,
+	    // because we might be a transport master of some kind
+	    try {
+	        if (!m_originatingJump) {
+	            m_seqManager->sendSequencerJump(comp.getElapsedRealTime(t));
+	        }
+	    } catch (QString s) {
+	        KMessageBox::error(this, s);
+	    }
     }
 
-    // cc 20050520 - jump at the sequencer even if we're not playing,
-    // because we might be a transport master of some kind
-    try {
-        if (!m_originatingJump) {
-            m_seqManager->sendSequencerJump(comp.getElapsedRealTime(t));
-        }
-    } catch (QString s) {
-        KMessageBox::error(this, s);
-    }
-
-    // and the time sig
+    // set the time sig
     getTransport()->setTimeSignature(comp.getTimeSignatureAt(t));
 
     // and the tempo
@@ -4407,6 +4414,18 @@ void RosegardenGUIApp::slotSetPointerPosition(timeT t)
 
             getTransport()->displayFrameTime(rT);
         }
+    }
+    
+    // handle transport mode configuration changes
+    std::string modeAsString = getTransport()->getCurrentModeAsString();
+	
+    if (m_doc->getConfiguration().get<String>
+            (DocumentConfiguration::TransportMode) != modeAsString) {
+
+        m_doc->getConfiguration().set<String>
+            (DocumentConfiguration::TransportMode, modeAsString);
+
+        //m_doc->slotDocumentModified(); to avoid being prompted for a file change when merely changing the transport display
     }
 
     // Update position on the marker editor if it's available
