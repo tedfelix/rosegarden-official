@@ -165,11 +165,13 @@ namespace CompositionMetadataKeys
 // Keep these in lower case
 const PropertyName DocumentConfiguration::SequencerOptions      = "sequenceroptions";
 const PropertyName DocumentConfiguration::ZoomLevel             = "zoomlevel";
+const PropertyName DocumentConfiguration::TransportMode         = "transportmode";
 
 
 DocumentConfiguration::DocumentConfiguration()
 {
     set<Int>(ZoomLevel, 0);
+    set<String>(TransportMode, ""); // apparently generates an exception if not initialized
 }
     
 DocumentConfiguration::DocumentConfiguration(const DocumentConfiguration &conf):
@@ -210,6 +212,9 @@ DocumentConfiguration::toXmlString()
 
     config << "    <" << ZoomLevel << " type=\"Int\">" << get<Int>(ZoomLevel)
            << "</" << ZoomLevel << ">\n";
+
+    config << "    <" << TransportMode << " type=\"String\">" << get<String>(TransportMode)
+           << "</" << TransportMode << ">\n";
 
     config << "</configuration>" << endl;
 

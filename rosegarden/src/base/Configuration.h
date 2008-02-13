@@ -138,6 +138,8 @@ public:
     static const PropertyName SequencerOptions;
 
     static const PropertyName ZoomLevel;
+
+    static const PropertyName TransportMode;
 };
 
 

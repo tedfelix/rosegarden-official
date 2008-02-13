@@ -60,7 +60,10 @@ public:
 
     enum TimeDisplayMode { RealMode, SMPTEMode, BarMode, BarMetronomeMode, FrameMode };
 
+    std::string getCurrentModeAsString();
     TimeDisplayMode getCurrentMode() { return m_currentMode; }
+    void setNewMode(const std::string& newModeAsString);
+    void setNewMode(const TimeDisplayMode& newMode);
     bool isShowingTimeToEnd();
     bool isExpanded();
 
@@ -104,6 +107,9 @@ public:
 
 protected:
     virtual void closeEvent(QCloseEvent * e);
+    void computeSampleRate();
+    void cycleThroughModes();
+    void displayTime();
 
 public slots:
 
@@ -153,6 +159,7 @@ private:
     void loadPixmaps();
     void resetFonts();
     void resetFont(QWidget *);
+    void initModeMap();
 
     //--------------- Data members ---------------------------------
 
@@ -211,6 +218,8 @@ private:
     QColor m_originalBackground;
 
     int m_sampleRate;
+
+    std::map<std::string, TimeDisplayMode> m_modeMap;
 };
 
  
