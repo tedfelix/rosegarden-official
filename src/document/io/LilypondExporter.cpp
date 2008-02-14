@@ -1370,6 +1370,7 @@ LilypondExporter::writeBar(Segment *s,
                            bool &nextBarIsDouble, bool &nextBarIsEnd, bool &nextBarIsDot)
 {
     int lastStem = 0; // 0 => unset, -1 => down, 1 => up
+    int isGrace = 0;
 
     Segment::iterator i = s->findTime(barStart);
     if (!s->isBeforeEndMarker(i))
@@ -1430,6 +1431,8 @@ LilypondExporter::writeBar(Segment *s,
         // First test whether we're entering or leaving a group,
         // before we consider how to write the event itself (at least
         // for pre-2.0 Lilypond output)
+	QString startGroupBeamingsStr = "";
+	QString endGroupBeamingsStr = "";
 
         if ((*i)->isa(Note::EventType) || (*i)->isa(Note::EventRestType) ||
                 (*i)->isa(Clef::EventType) || (*i)->isa(Rosegarden::Key::EventType)) {
@@ -1443,14 +1446,13 @@ LilypondExporter::writeBar(Segment *s,
 
                     if (groupId != -1) {
                         // and leaving an old one
-                        if (groupType == GROUP_TYPE_TUPLED ||
-                                groupType == GROUP_TYPE_GRACE) {
+                        if (groupType == GROUP_TYPE_TUPLED) {
                             if (m_exportBeams && notesInBeamedGroup > 0)
-                                str << "] ";
-                            str << "} ";
+                                endGroupBeamingsStr += "] ";
+                            endGroupBeamingsStr += "} ";
                         } else if (groupType == GROUP_TYPE_BEAMED) {
                             if (m_exportBeams && notesInBeamedGroup > 0)
-                                str << "] ";
+                                endGroupBeamingsStr += "] ";
                         }
                     }
 
@@ -1473,7 +1475,7 @@ LilypondExporter::writeBar(Segment *s,
                             groupId = -1;
                             groupType = "";
                         } else {
-                            str << "\\times " << numerator << "/" << denominator << " { ";
+                            startGroupBeamingsStr += QString("\\times %1/%2 { ").arg(numerator).arg(denominator);
                             tupletRatio = std::pair<int, int>(numerator, denominator);
 			    // Require explicit beamed groups,
 			    // fixes bug #1683205.
@@ -1486,15 +1488,6 @@ LilypondExporter::writeBar(Segment *s,
                         notesInBeamedGroup = 0;
 			// there can currently be only on group type, reset tuplet ratio
                         tupletRatio = std::pair<int, int>(1,1);
-                    } else if (groupType == GROUP_TYPE_GRACE) {
-                        str << "\\grace { ";
-			// Require explicit beamed group,
-			// fixes bug #1683205.
-		        // HJJ: Why line below was originally present?
-                        // newBeamedGroup = true;
-                        notesInBeamedGroup = 0;
-			// there can currently be only on group type, reset tuplet ratio
-                        tupletRatio = std::pair<int, int>(1,1);
                     }
                 }
 
@@ -1503,21 +1496,36 @@ LilypondExporter::writeBar(Segment *s,
 
                 if (groupId != -1) {
                     // leaving a beamed group
-                    if (groupType == GROUP_TYPE_TUPLED ||
-                            groupType == GROUP_TYPE_GRACE) {
+                    if (groupType == GROUP_TYPE_TUPLED) {
                         if (m_exportBeams && notesInBeamedGroup > 0)
-                            str << "] ";
-                        str << "} ";
+                            endGroupBeamingsStr += "] ";
+                        endGroupBeamingsStr += "} ";
                         tupletRatio = std::pair<int, int>(1, 1);
                     } else if (groupType == GROUP_TYPE_BEAMED) {
                         if (m_exportBeams && notesInBeamedGroup > 0)
-                            str << "] ";
+                            endGroupBeamingsStr += "] ";
                     }
                     groupId = -1;
                     groupType = "";
                 }
             }
         }
+
+	// Test whether the next note is grace note or not.
+	// The start or end of beamed grouping should be put in proper places.
+	str << endGroupBeamingsStr.utf8();
+	if ((*i)->has(IS_GRACE_NOTE) && (*i)->get<Bool>(IS_GRACE_NOTE)) {
+	    if (isGrace == 0) { 
+	        isGrace = 1;
+                str << "\\grace { ";
+	        // str << "%{ grace starts %} "; // DEBUG
+	    }
+	} else if (isGrace == 1) {
+	    isGrace = 0;
+	    // str << "%{ grace ends %} "; // DEBUG
+            str << "} ";
+	}
+	str << startGroupBeamingsStr.utf8();
 
         timeT soundingDuration = -1;
         timeT duration = calculateDuration
@@ -1899,8 +1907,7 @@ LilypondExporter::writeBar(Segment *s,
     }
 
     if (groupId != -1) {
-        if (groupType == GROUP_TYPE_TUPLED ||
-                groupType == GROUP_TYPE_GRACE) {
+        if (groupType == GROUP_TYPE_TUPLED) {
             if (m_exportBeams && notesInBeamedGroup > 0)
                 str << "] ";
             str << "} ";
@@ -1909,6 +1916,12 @@ LilypondExporter::writeBar(Segment *s,
             if (m_exportBeams && notesInBeamedGroup > 0)
                 str << "] ";
         }
+    }
+
+    if (isGrace == 1) {
+	isGrace = 0;
+	// str << "%{ grace ends %} "; // DEBUG
+        str << "} ";
     }
 
     if (lastStem != 0) {
