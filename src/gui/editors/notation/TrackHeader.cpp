@@ -31,6 +31,7 @@
 #include "HeadersGroup.h"
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
+#include "base/StaffExportTypes.h"
 #include "base/Track.h"
 #include "base/Colour.h"
 #include "base/ColourMap.h"
@@ -106,6 +107,45 @@ TrackHeader::TrackHeader(QWidget *parent, TrackId trackId, int height, int ypos)
         TrackId trackId = segment.getTrack();
 
         if (trackId  == m_track) {
+	    QString notationSize = i18n("normal");
+	    switch (track->getStaffSize()) {
+		case StaffTypes::Small:
+		    notationSize = i18n("small");
+		    break;
+		case StaffTypes::Tiny:
+		    notationSize = i18n("tiny");
+		    break;
+	    }
+
+	    QString bracketText = i18n("--");
+	    switch (track->getStaffBracket()) {
+		case Brackets::SquareOn:
+		    bracketText = "[-";
+		    break;
+		case Brackets::SquareOff:
+		    bracketText = "-]";
+		    break;
+		case Brackets::SquareOnOff:
+		    bracketText = "[-]";
+		    break;
+		case Brackets::CurlyOn:
+		    bracketText = "{-";
+		    break;
+		case Brackets::CurlyOff:
+		    bracketText = "-}";
+		    break;
+		case Brackets::CurlySquareOn:
+		    bracketText = "{[-";
+		    break;
+		case Brackets::CurlySquareOff:
+		    bracketText = "-]}";
+		    break;
+	    }
+
+	    toolTipText += QString(i18n("\n  size: %1  bracket: %2 "))
+				    .arg(notationSize)
+				    .arg(bracketText);
+	                               
             timeT segStart = segment.getStartTime();
             timeT segEnd = segment.getEndMarkerTime();
             int barStart = comp->getBarNumber(segStart) + 1;
@@ -114,14 +154,14 @@ TrackHeader::TrackHeader(QWidget *parent, TrackId trackId, int height, int ypos)
             if (transpose) {
                 QString transposeName;
                 transposeValueToName(transpose, transposeName);
-                toolTipText += QString(i18n("\n   [%1-%2] in %3 (tr=%4) : \"%5\""))
+                toolTipText += QString(i18n("\n  bars [%1-%2] in %3 (tr=%4) : \"%5\""))
                                         .arg(barStart)
                                         .arg(barEnd)
                                         .arg(transposeName)
                                         .arg(transpose)
                                         .arg(segment.getLabel());
             } else {
-                toolTipText += QString(i18n("\n   [%1-%2] (tr=%3) : \"%4\""))
+                toolTipText += QString(i18n("\n  bars [%1-%2] (tr=%3) : \"%4\""))
                                         .arg(barStart)
                                         .arg(barEnd)
                                         .arg(transpose)
