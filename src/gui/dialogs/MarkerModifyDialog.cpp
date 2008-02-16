@@ -97,7 +97,7 @@ MarkerModifyDialog::initialise(Composition *composition,
 
     QGridLayout *layout = new QGridLayout(frame, 2, 2, 5, 5);
 
-    layout->addWidget(new QLabel(i18n("Name:"), frame), 0, 0);
+    layout->addWidget(new QLabel(i18n("Text:"), frame), 0, 0);
     m_nameEdit = new QLineEdit(name, frame);
     layout->addWidget(m_nameEdit, 0, 1);
 

@@ -84,7 +84,7 @@ MarkerEditor::MarkerEditor(QWidget *parent,
 
     m_listView = new KListView(mainFrame);
     m_listView->addColumn(i18n("Marker time  "));
-    m_listView->addColumn(i18n("Marker name  "));
+    m_listView->addColumn(i18n("Marker text  "));
     m_listView->addColumn(i18n("Marker description "));
 
     // Align centrally

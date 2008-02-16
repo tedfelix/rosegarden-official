@@ -783,7 +783,9 @@ LilypondExporter::write()
 	    // figure out the indention, or just skip the indention for these or
 	    // something.  TBA.
 	    if (firstTrack) {
-	        str << indent(col) << "<< % global wrapper" << std::endl;
+	        // seems to be common to every case now
+	        str << indent(col++) << "<< % common" << std::endl;
+
 		if (bracket == Brackets::SquareOn) {
 		    str << indent(col++) << "\\context StaffGroup = \"" << staffGroupCounter++
 		        << "\" << " << std::endl; //indent+
@@ -795,8 +797,6 @@ LilypondExporter::write()
 		        << "\" << " << std::endl; //indent+
 		    str << indent(col++) << "\\context PianoStaff = \"" << pianoStaffCounter++
 		        << "\" << " << std::endl; //indent+
-		} else {
-		    str << indent(col++) << "<< % first track has no bracket specified" << std::endl; //indent+
 		}
 
 		// Make chords offset colliding notes by default (only write for
@@ -877,7 +877,7 @@ LilypondExporter::write()
 			} else if (bracket == Brackets::CurlySquareOn) {
 			    str << indent(col++) << "\\context StaffGroup = \""
 			        << ++staffGroupCounter << "\" <<" << std::endl;
-			    str << indent(++col) << "\\context PianoStaff = \""
+			    str << indent(col++) << "\\context PianoStaff = \""
 			        << ++pianoStaffCounter << "\" <<" << std::endl;
 			}
 		    } 
@@ -1219,7 +1219,7 @@ LilypondExporter::write()
 	    str << indent(--col) << ">> % PianoStaff (final) " << pianoStaffCounter
 		<< std::endl; //indent-
 	} else if (bracket == Brackets::CurlySquareOff) {
-	    str << indent(--col) << ">> % PianoStaff (final)" << pianoStaffCounter
+	    str << indent(--col) << ">> % PianoStaff (final) " << pianoStaffCounter
 		<< std::endl; //indent-
 	    str << indent(--col) << ">> % StaffGroup (final) " << staffGroupCounter
 		<< std::endl; //indent-
@@ -1230,7 +1230,7 @@ LilypondExporter::write()
 
     // close \notes section
     str << std::endl << indent(--col) << ">> % notes" << std::endl << std::endl; // indent-
-    str << std::endl << indent(col) << ">> %global wrapper" << std::endl;
+//    str << std::endl << indent(col) << ">> % global wrapper" << std::endl;
 
     // write \layout block
     str << indent(col) << "\\layout { }" << std::endl;
