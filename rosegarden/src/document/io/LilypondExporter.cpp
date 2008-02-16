@@ -1546,6 +1546,7 @@ LilypondExporter::writeBar(Segment *s,
             Chord chord(*s, i, m_composition->getNotationQuantizer());
             Event *e = *chord.getInitialNote();
             bool tiedForward = false;
+	    bool tiedUp = false;
 
             // Examine the following event, and truncate our duration
             // if we overlap it.
@@ -1624,11 +1625,18 @@ LilypondExporter::writeBar(Segment *s,
                     if (noteHasCautionaryAccidental)
                         str << "?";
 
-                    bool noteTiedForward = false;
-                    (*i)->get
-                    <Bool>(TIED_FORWARD, noteTiedForward);
-                    if (noteTiedForward)
-                        tiedForward = true;
+// this seems like a lot of redundant running around, so let's try the simple
+// version (DMM)
+//
+//                  bool noteTiedForward = false;
+//                  (*i)->get
+//                  <Bool>(TIED_FORWARD, noteTiedForward);
+//                  if (noteTiedForward)
+//                      tiedForward = true;
+                      
+                    // get TIED_FORWARD and TIE_IS_ABOVE for later
+                    (*i)->get<Bool>(TIED_FORWARD, tiedForward);
+		    (*i)->get<Bool>(TIE_IS_ABOVE, tiedUp);
 
                     str << " ";
                 } else if ((*i)->isa(Indication::EventType)) {
@@ -1683,7 +1691,10 @@ LilypondExporter::writeBar(Segment *s,
             handleStartingEvents(eventsToStart, str);
 
             if (tiedForward)
-                str << "~ ";
+	        if (tiedUp) 
+                    str << "^~ ";
+		else
+		    str << "_~ ";
 
 	    if ( hiddenNote ) {
 	        str << "\\unHideNotes ";

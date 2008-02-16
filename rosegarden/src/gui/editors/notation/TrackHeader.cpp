@@ -98,7 +98,7 @@ TrackHeader::TrackHeader(QWidget *parent, TrackId trackId, int height, int ypos)
 
     QString preset = track->getPresetLabel();
     if (preset != QString(""))
-        toolTipText += QString(i18n("\nPreset : %1").arg(preset));
+        toolTipText += QString(i18n("\nNotate for: %1").arg(preset));
 
     for (int i=0; i<m_notationView->getStaffCount(); i++) {
 
@@ -142,7 +142,7 @@ TrackHeader::TrackHeader(QWidget *parent, TrackId trackId, int height, int ypos)
 		    break;
 	    }
 
-	    toolTipText += QString(i18n("\n  size: %1  bracket: %2 "))
+	    toolTipText += QString(i18n("\nSize: %1  Bracket: %2 "))
 				    .arg(notationSize)
 				    .arg(bracketText);
 	                               
@@ -154,14 +154,14 @@ TrackHeader::TrackHeader(QWidget *parent, TrackId trackId, int height, int ypos)
             if (transpose) {
                 QString transposeName;
                 transposeValueToName(transpose, transposeName);
-                toolTipText += QString(i18n("\n  bars [%1-%2] in %3 (tr=%4) : \"%5\""))
+                toolTipText += QString(i18n("\nbars [%1-%2] in %3 (tr=%4) : \"%5\""))
                                         .arg(barStart)
                                         .arg(barEnd)
                                         .arg(transposeName)
                                         .arg(transpose)
                                         .arg(segment.getLabel());
             } else {
-                toolTipText += QString(i18n("\n  bars [%1-%2] (tr=%3) : \"%4\""))
+                toolTipText += QString(i18n("\nbars [%1-%2] (tr=%3) : \"%4\""))
                                         .arg(barStart)
                                         .arg(barEnd)
                                         .arg(transpose)
