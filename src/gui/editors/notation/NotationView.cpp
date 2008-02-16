@@ -82,6 +82,7 @@
 #include "commands/notation/BeamCommand.h"
 #include "commands/notation/BreakCommand.h"
 #include "commands/notation/ChangeSlurPositionCommand.h"
+#include "commands/notation/ChangeTiePositionCommand.h"
 #include "commands/notation/ChangeStemsCommand.h"
 #include "commands/notation/ChangeStyleCommand.h"
 #include "commands/notation/ClefInsertionCommand.h"
@@ -89,7 +90,6 @@
 #include "commands/notation/DeCounterpointCommand.h"
 #include "commands/notation/EraseEventCommand.h"
 #include "commands/notation/FixNotationQuantizeCommand.h"
-//!!!#include "commands/notation/GraceCommand.h"
 #include "commands/notation/IncrementDisplacementsCommand.h"
 #include "commands/notation/InterpretCommand.h"
 #include "commands/notation/KeyInsertionCommand.h"
@@ -104,13 +104,13 @@
 #include "commands/notation/ResetDisplacementsCommand.h"
 #include "commands/notation/RespellCommand.h"
 #include "commands/notation/RestoreSlursCommand.h"
+#include "commands/notation/RestoreTiesCommand.h"
 #include "commands/notation/RestoreStemsCommand.h"
 #include "commands/notation/SetVisibilityCommand.h"
 #include "commands/notation/SustainInsertionCommand.h"
 #include "commands/notation/TextInsertionCommand.h"
 #include "commands/notation/TieNotesCommand.h"
 #include "commands/notation/TupletCommand.h"
-  //!!!#include "commands/notation/UnGraceCommand.h"
 #include "commands/notation/UntieNotesCommand.h"
 #include "commands/notation/UnTupletCommand.h"
 #include "commands/segment/PasteToTriggerSegmentCommand.h"
@@ -2045,6 +2045,20 @@ void NotationView::setupActions()
     new KAction(RestoreSlursCommand::getGlobalName(), 0, this,
                 SLOT(slotTransformsRestoreSlurs()), actionCollection(),
                 "restore_slurs");
+
+    new KAction(ChangeTiePositionCommand::getGlobalName(true),
+                0, this,
+                SLOT(slotTransformsTiesAbove()), actionCollection(),
+                "ties_above");
+
+    new KAction(ChangeTiePositionCommand::getGlobalName(false),
+                0, this,
+                SLOT(slotTransformsTiesBelow()), actionCollection(),
+                "ties_below");
+
+    new KAction(RestoreTiesCommand::getGlobalName(), 0, this,
+                SLOT(slotTransformsRestoreTies()), actionCollection(),
+                "restore_ties");
 
     icon = QIconSet
            (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
@@ -5254,25 +5268,7 @@ void NotationView::slotGroupUnTuplet()
     addCommandToHistory(new UnTupletCommand
                         (*m_currentEventSelection));
 }
-/*!!!
-void NotationView::slotGroupGrace()
-{
-    if (!m_currentEventSelection)
-        return ;
-    KTmpStatusMsg msg(i18n("Making grace notes..."), this);
 
-    addCommandToHistory(new GraceCommand(*m_currentEventSelection));
-}
-
-void NotationView::slotGroupUnGrace()
-{
-    if (!m_currentEventSelection)
-        return ;
-    KTmpStatusMsg msg(i18n("Making non-grace notes..."), this);
-
-    addCommandToHistory(new UnGraceCommand(*m_currentEventSelection));
-}
-*/
 void NotationView::slotGroupSlur()
 {
     KTmpStatusMsg msg(i18n("Adding slur..."), this);
@@ -5486,6 +5482,37 @@ void NotationView::slotTransformsRestoreSlurs()
     KTmpStatusMsg msg(i18n("Restoring slur positions..."), this);
 
     addCommandToHistory(new RestoreSlursCommand
+                        (*m_currentEventSelection));
+}
+
+void NotationView::slotTransformsTiesAbove()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Positioning ties..."), this);
+
+    addCommandToHistory(new ChangeTiePositionCommand
+                        (true, *m_currentEventSelection));
+}
+
+void NotationView::slotTransformsTiesBelow()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Positioning ties..."), this);
+
+    addCommandToHistory(new ChangeTiePositionCommand
+                        (false, *m_currentEventSelection));
+
+}
+
+void NotationView::slotTransformsRestoreTies()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Restoring tie positions..."), this);
+
+    addCommandToHistory(new RestoreTiesCommand
                         (*m_currentEventSelection));
 }
 

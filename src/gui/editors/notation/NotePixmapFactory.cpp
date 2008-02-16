@@ -435,9 +435,14 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
         }
     }
 
+    bool tieAbove = params.m_tieAbove;
+    if (!params.m_tiePositionExplicit) {
+        tieAbove = !params.m_stemGoesUp;
+    }
+
     if (params.m_tied) {
         m_right = std::max(m_right, params.m_tieLength);
-        if (params.m_stemGoesUp) {
+        if (!tieAbove) {
             m_below = std::max(m_below, m_noteBodyHeight * 2);
         } else {
             m_above = std::max(m_above, m_noteBodyHeight * 2);
@@ -567,8 +572,7 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
     }
 
     if (params.m_tied) {
-        drawTie(!params.m_stemGoesUp, params.m_tieLength,
-                dotWidth * params.m_dots);
+        drawTie(tieAbove, params.m_tieLength, dotWidth * params.m_dots);
     }
 
     if (painter) {

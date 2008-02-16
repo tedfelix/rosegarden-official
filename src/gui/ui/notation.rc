@@ -189,6 +189,13 @@
 		<Separator/>
 		<Action name="tie_notes"/>
 		<Action name="untie_notes"/>
+	  	<Menu name="Ties">
+			<text>Tie &amp;Position</text>
+			<Action name="restore_ties"/>
+			<Separator/>
+	  		<Action name="ties_above"/>
+			<Action name="ties_below"/>
+		</Menu>
 		<Separator/>
 		<Action name="crescendo"/>
 		<Action name="decrescendo"/>
@@ -648,6 +655,9 @@
     <Action name="slurs_above"/>
     <Action name="slurs_below"/>
     <Action name="restore_slurs"/>
+    <Action name="ties_above"/>
+    <Action name="ties_below"/>
+    <Action name="restore_ties"/>
     <Action name="fine_position_left"/>
     <Action name="fine_position_right"/>
     <Action name="fine_position_up"/>

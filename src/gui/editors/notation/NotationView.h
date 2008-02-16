@@ -520,10 +520,6 @@ public slots:
     void slotGroupGeneralTuplet();
     void slotGroupTuplet(bool simple);
     void slotGroupUnTuplet();
-/*!!!
-    void slotGroupGrace();
-    void slotGroupUnGrace();
-*/
     void slotGroupSlur();
     void slotGroupPhrasingSlur();
     void slotGroupGlissando();
@@ -550,6 +546,9 @@ public slots:
     void slotTransformsSlursAbove();
     void slotTransformsSlursBelow();
     void slotTransformsRestoreSlurs();
+    void slotTransformsTiesAbove();
+    void slotTransformsTiesBelow();
+    void slotTransformsRestoreTies();
     void slotTransformsQuantize();
     void slotTransformsFixQuantization();
     void slotTransformsRemoveQuantization();
