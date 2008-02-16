@@ -44,6 +44,7 @@ UntieNotesCommand::modifySegment()
             i != m_selection->getSegmentEvents().end(); ++i) {
 
         (*i)->unset(TIED_FORWARD);
+        (*i)->unset(TIE_IS_ABOVE);
         (*i)->unset(TIED_BACKWARD);
     }
 }
