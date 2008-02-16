@@ -61,10 +61,9 @@ TieNotesCommand::modifySegment()
                 segment.end()) {
             if (!m_selection->contains(*sj))
                 break;
-            (*si)->set
-            <Bool>(TIED_FORWARD, true);
-            (*sj)->set
-            <Bool>(TIED_BACKWARD, true);
+            (*si)->set<Bool>(TIED_FORWARD, true);
+            (*si)->unset(TIE_IS_ABOVE);
+            (*sj)->set<Bool>(TIED_BACKWARD, true);
             si = sj;
         }
     }
