@@ -7,7 +7,9 @@
     <!--#include virtual="/nav.html" -->
 
 <div style="float: right; margin-top: 5px; margin-right: 5px">
-<table border=0 cellpadding=0 cellspacing=5><tr><td>
+<table border=0 cellpadding=0 cellspacing=5>
+<!-- 
+<tr><td>
 <script type="text/javascript">
 google_ad_client = "pub-6311390097103672";
 //120x60, created 02/01/08
@@ -20,6 +22,7 @@ google_cpa_choice = ""; // on file
 src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </script>
 </td></tr>
+-->
 <tr><td>
 <script type="text/javascript"><!--
 google_ad_client = "pub-6311390097103672";
