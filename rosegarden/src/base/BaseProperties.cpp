@@ -83,6 +83,7 @@ PropertyName getMarkPropertyName(int markNo)
 
 const PropertyName TIED_BACKWARD	= "tiedback";
 const PropertyName TIED_FORWARD		= "tiedforward";
+const PropertyName TIE_IS_ABOVE		= "tieabove";
 
 // capitalised for back-compatibility (used to be in NotationProperties)
 const PropertyName HEIGHT_ON_STAFF      = "HeightOnStaff";

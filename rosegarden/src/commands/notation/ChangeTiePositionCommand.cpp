@@ -23,10 +23,11 @@
 */
 
 
-#include "ChangeSlurPositionCommand.h"
+#include "ChangeTiePositionCommand.h"
 
 #include "base/NotationTypes.h"
 #include "base/Selection.h"
+#include "base/BaseProperties.h"
 #include "document/BasicSelectionCommand.h"
 #include "gui/editors/notation/NotationProperties.h"
 #include <qstring.h>
@@ -36,21 +37,16 @@ namespace Rosegarden
 {
 
 void
-ChangeSlurPositionCommand::modifySegment()
+ChangeTiePositionCommand::modifySegment()
 {
     EventSelection::eventcontainer::iterator i;
 
     for (i = m_selection->getSegmentEvents().begin();
          i != m_selection->getSegmentEvents().end(); ++i) {
 
-        if ((*i)->isa(Indication::EventType)) {
-            std::string indicationType;
-            if ((*i)->get<String>
-                (Indication::IndicationTypePropertyName, indicationType)
-                && (indicationType == Indication::Slur ||
-                    indicationType == Indication::PhrasingSlur)) {
-                (*i)->set<Bool>(NotationProperties::SLUR_ABOVE, m_above);
-            }
+        if ((*i)->has(BaseProperties::TIED_FORWARD) &&
+            (*i)->get<Bool>(BaseProperties::TIED_FORWARD)) {
+            (*i)->set<Bool>(BaseProperties::TIE_IS_ABOVE, m_above);
         }
     }
 }

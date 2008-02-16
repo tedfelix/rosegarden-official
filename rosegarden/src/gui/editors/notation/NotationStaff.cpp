@@ -1610,8 +1610,7 @@ NotationStaff::renderNote(ViewElementList::iterator &vli)
     }
 
     long tieLength = 0;
-    (void)(elt->event()->get
-           <Int>(properties.TIE_LENGTH, tieLength));
+    (void)(elt->event()->get<Int>(properties.TIE_LENGTH, tieLength));
     if (tieLength > 0) {
         params.setTied(true);
         params.setTieLength(tieLength);
@@ -1619,12 +1618,17 @@ NotationStaff::renderNote(ViewElementList::iterator &vli)
         params.setTied(false);
     }
 
+    if (elt->event()->has(BaseProperties::TIE_IS_ABOVE)) {
+        params.setTiePosition
+            (true, elt->event()->get<Bool>(BaseProperties::TIE_IS_ABOVE));
+    } else {
+        params.setTiePosition(false, false); // the default
+    }
+
     long accidentalShift = 0;
     bool accidentalExtra = false;
-    if (elt->event()->get
-            <Int>(properties.ACCIDENTAL_SHIFT, accidentalShift)) {
-        elt->event()->get
-        <Bool>(properties.ACCIDENTAL_EXTRA_SHIFT, accidentalExtra);
+    if (elt->event()->get<Int>(properties.ACCIDENTAL_SHIFT, accidentalShift)) {
+        elt->event()->get<Bool>(properties.ACCIDENTAL_EXTRA_SHIFT, accidentalExtra);
     }
     params.setAccidentalShift(accidentalShift);
     params.setAccExtraShift(accidentalExtra);
@@ -1635,12 +1639,10 @@ NotationStaff::renderNote(ViewElementList::iterator &vli)
 
     if (beamed) {
 
-        if (elt->event()->get
-                <Bool>(properties.CHORD_PRIMARY_NOTE, primary)
-                && primary) {
+        if (elt->event()->get<Bool>(properties.CHORD_PRIMARY_NOTE, primary)
+            && primary) {
 
-            int myY = elt->event()->get
-                      <Int>(properties.BEAM_MY_Y);
+            int myY = elt->event()->get<Int>(properties.BEAM_MY_Y);
 
             stemLength = myY - (int)elt->getLayoutY();
             if (stemLength < 0)

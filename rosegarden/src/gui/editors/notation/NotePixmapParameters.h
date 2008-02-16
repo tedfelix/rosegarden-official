@@ -87,6 +87,11 @@ public:
     void setTied(bool tied)               { m_tied             = tied;      }
     void setTieLength(int tieLength)      { m_tieLength        = tieLength; }
 
+    void setTiePosition(bool expl, bool above) {
+        m_tiePositionExplicit = expl;
+        m_tieAbove = above;
+    }
+
     void setMarks(const std::vector<Mark> &marks);
     void removeMarks();
 
@@ -139,6 +144,8 @@ private:
 
     bool    m_tied;
     int     m_tieLength;
+    bool    m_tiePositionExplicit;
+    bool    m_tieAbove;
 
     bool    m_inRange;
 
