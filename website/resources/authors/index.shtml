@@ -27,18 +27,15 @@
     <h4><a href="http://www.all-day-breakfast.com/cannam/">Chris
     Cannam</a></h4>
     <p><small>cannam <i>at</i> all-day-breakfast <i>dot</i> com</small></p>
-    <p><img
-    style="float:right; margin-top: 0px; margin-left: 12px;
-    margin-right:0px; margin-bottom:8px"
-    src="http://www.all-day-breakfast.com/rosegarden-author-pic.png"
-    alt=" "/>Chris has been working on one incarnation or
-    another of Rosegarden since the end of 1993.  It was then a
-    university project for two students, devised by professor <a
+
+    <p><img style="float:right; margin-top: 0px; margin-left: 12px;
+    margin-right: 0px; margin-bottom: 8px;" src="pics/cannam.png" alt=" "/>Chris has been working on one incarnation or another of
+    Rosegarden since the end of 1993.  It was then a university
+    project for two students, devised by professor <a
     href="http://www.bath.ac.uk/~masjpf/">John Fitch</a> at the
-    University of Bath, with <a
-    href="http://www.all-day-breakfast.com/space/">Andy Green</a>
-    working on the MIDI sequencer and Chris on the notation editor.
-    They were the sole developers until late in 1995.</p>
+    University of Bath, with Andy Green working on the MIDI sequencer
+    and Chris on the notation editor.  They were the sole developers
+    until late in 1995.</p>
 
     <p>Chris has worked on nearly every aspect of Rosegarden at some
     point, having been responsible for most of the notation rendering
@@ -47,22 +44,19 @@
     management subsystems.  He has mostly managed to avoid working on
     the segment and matrix editors.  He lives in London.</p>
 
-    <h4>Richard Bown</h4>
-    <p><small>richard <i>dot</i> bown <i>at</i> ferventsoftware <i>dot</i> com</small></p>
-    <p><!-- <img style="float:right; margin-top: 0px; margin-left: 12px;
-    margin-right:0px; margin-bottom:8px"
-    src="http://www.bownie.com/rosegarden-author-pic.png" alt=" "/> -->Richard
-    began  working on Rosegarden at the end of 1995, when he was drafted in to
-    take over the Unix sequencer.  He was responsible for the Rosegarden MIDI,
-    audio, sequencing and recording code, and significant parts of the GUI.
-    He retired from the project after seeing it through to the release of 1.0.</p>
+    <h4>Richard Bown</h4> <p>Richard began
+    working on Rosegarden at the end of 1995, when he was drafted in
+    to take over the Unix sequencer.  He was responsible for the
+    Rosegarden MIDI, audio, sequencing and recording code, and
+    significant parts of the GUI.  He retired from the project after
+    seeing it through to the release of 1.0.</p>
 
     <h4><a href="http://www.telegraph-road.org">Guillaume Laurent</a></h4>
     <p><small>glaurent <i>at</i> telegraph-road <i>dot</i> org</small></p>
 
     <p><img style="float:right; margin-top: 0px; margin-left: 12px;
     margin-right:0px; margin-bottom:8px"
-    src="http://www.telegraph-road.org/rosegarden-author-pic.png"
+    src="pics/glaurent.png"
     alt=" "/>Guillaume lives in Cannes, in the South of France.
     He's been using Linux since 1995, and first worked on
     Rosegarden in the summer of 1996, when he supplied a few hundred
@@ -80,7 +74,7 @@
     <p><small>dmmcintyr <i>at</i> users <i>dot</i> sourceforge <i>dot</i> net</small></p>
     <p><img style="float:right; margin-top: 0px; margin-left: 12px;
     margin-right:0px; margin-bottom:8px"
-    src="http://home.comcast.net/~documentarian/michael-headshot.jpg" alt="
+    src="pics/dmm.jpg" alt="
     "/>Michael lives in Christiansburg, Virginia, in the United States of
     America.  He got his first taste of Linux toward the end of 2001.  He came
     to work at Rosegarden in December 2002, after being shamed into doing
@@ -105,7 +99,7 @@
     <p><small>pedro <i>dot</i> lopez <i>dot</i> cabanillas <i>at</i> gmail <i>dot</i> com</small></p>
     <p><img style="float:right; margin-top: 0px; margin-left: 12px;
     margin-right:0px; margin-bottom:8px"
-    src="http://home.comcast.net/~documentarian/pedro-headshot.jpg" alt=" "/>
+    src="pics/plcl.jpg" alt=" "/>
     
     Pedro lives in Barcelona, Spain. He tried Rosegarden the first time a few
     days  after the <a
@@ -127,7 +121,7 @@
     <p><small>hjunes <i>at</i> gmail <i>dot</i> com</small></p>
     <p><img style="float:right; margin-top: 0px; margin-left: 12px;
     margin-right:0px; margin-bottom:8px"
-    src="http://home.comcast.net/~documentarian/heikki-headshot.jpg"
+    src="pics/hjunes.jpg"
     alt=" " />
 
     Heikki is a graduate student at the <a
