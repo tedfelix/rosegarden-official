@@ -630,6 +630,7 @@ TrackParameterBox::slotUpdateControls(int /*dummy*/)
     m_defColor->setCurrentItem(trk->getColor());
     m_highestPlayable = trk->getHighestPlayable();
     m_lowestPlayable = trk->getLowestPlayable();
+    updateHighLow();
 
     m_staffSizeCombo->setCurrentItem(trk->getStaffSize());
     m_staffBracketCombo->setCurrentItem(trk->getStaffBracket());
