@@ -24,12 +24,12 @@
     <li><a href="http://mstation.org/rosegarden_bown.php">Interview with Richard Bown on mstation.org</a> by John Littler, 2003</li>
     </ul>
 
-    <h4 style="clear:right"><a href="http://www.all-day-breakfast.com/cannam/">Chris
+    <h4><a href="http://www.all-day-breakfast.com/cannam/">Chris
     Cannam</a></h4>
-    <p><small>cannam <i>at</i> all-day-breakfast <i>dot</i> com</small></p>
-
     <p><img style="float:right; margin-top: 0px; margin-left: 12px;
-    margin-right: 0px; margin-bottom: 8px;" src="pics/cannam.png" alt=" "/>Chris has been working on one incarnation or another of
+    margin-right: 0px; margin-bottom: 8px;" src="pics/cannam.png" alt=" "/><small>cannam <i>at</i> all-day-breakfast <i>dot</i> com</small></p>
+
+    <p>Chris has been working on one incarnation or another of
     Rosegarden since the end of 1993.  It was then a university
     project for two students, devised by professor <a
     href="http://www.bath.ac.uk/~masjpf/">John Fitch</a> at the
