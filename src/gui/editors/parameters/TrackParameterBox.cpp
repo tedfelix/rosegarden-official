@@ -623,14 +623,15 @@ TrackParameterBox::slotUpdateControls(int /*dummy*/)
     if (!trk)
         return ;
 
-    m_presetLbl->setText(trk->getPresetLabel());
-    m_presetLbl->setEnabled(true);
     m_defClef->setCurrentItem(trk->getClef());
     m_defTranspose->setCurrentItem(QString("%1").arg(trk->getTranspose()), true);
     m_defColor->setCurrentItem(trk->getColor());
     m_highestPlayable = trk->getHighestPlayable();
     m_lowestPlayable = trk->getLowestPlayable();
     updateHighLow();
+    // set this down here because updateHighLow just disabled the label
+    m_presetLbl->setText(trk->getPresetLabel());
+    m_presetLbl->setEnabled(true);
 
     m_staffSizeCombo->setCurrentItem(trk->getStaffSize());
     m_staffBracketCombo->setCurrentItem(trk->getStaffBracket());
