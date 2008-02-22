@@ -101,16 +101,16 @@ PresetHandlerDialog::initDialog()
         (1, Horizontal, i18n("Scope"), frame);
     if (m_fromNotation) {
         QRadioButton *onlySelectedSegments = new
-            QRadioButton(i18n("Only selected segments (EXPERIMENTAL)"), scopeBox);
+            QRadioButton(i18n("Only selected segments"), scopeBox);
         m_convertAllSegments = new 
-            QRadioButton(i18n("All segments in this track (EXPERIMENTAL)"), scopeBox);
+            QRadioButton(i18n("All segments in this track"), scopeBox);
         onlySelectedSegments->setChecked(true);
     }
     else {
         QRadioButton *onlyNewSegments = new 
             QRadioButton(i18n("Only for new segments"), scopeBox);
         m_convertSegments = new 
-            QRadioButton(i18n("Convert existing segments (EXPERIMENTAL)"), scopeBox);
+            QRadioButton(i18n("Convert existing segments"), scopeBox);
         onlyNewSegments->setChecked(true);
     }
     
