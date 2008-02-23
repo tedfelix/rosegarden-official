@@ -1,0 +1,29 @@
+#!/bin/bash
+#
+# fix-all-rgd-headers
+#
+# Copyright (c) 2008  D. Michael McIntyre <rosegarden.trumpeter@gmail.com>
+# Released under the GPL
+#
+# REQUIRES: 
+#
+#
+# PURPOSE:
+#
+#
+#
+
+ohCrap () {
+echo $1
+exit 1
+}
+
+dir=$(basename $PWD)
+[ "$dir" == "scripts" ] || ohCrap "must be run from scripts/ directory!"
+
+for f in ../data/library/*.rgd; do
+    echo "rewriting header for: $f"
+    ./fix-rgd-headers.py $f || ohCrap "something barfed!  abort!"
+done
+
+exit 0
