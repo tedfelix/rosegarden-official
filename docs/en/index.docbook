@@ -2813,14 +2813,10 @@
 		a mistake with these, it is likely that your file will not
 		export or preview correctly in LilyPond.
 	   </para>
-	   <para>You should probably look at "lilypond-staff-groupings.rg" in
-	   the examples/ directory to see how these are used.  [ { and {[ start
-	   a bracket or brackets on this track, while ] } and ]} provide
-	   corresponding ends, and [  ] is supposed to put a bracket around a
-	   single staff, although this option does not currently produce the
-	   expected result in LilyPond 2.10.25.  These brackets may be mixed and
-	   matched, as demonstrated in the example file, and this mechanism is
-	   quite flexible.
+	   <para>For a detailed, hands-on demonstration of brackets in action,
+	   please see
+	   <ulink url="http://rosegarden.sourceforge.net/tutorial/supplemental/fidelio/fidelio.html">this
+	   online tutorial.</ulink>
 	   </para>
 	</sect2>
 	<sect2 id="track-create-with">
@@ -2863,23 +2859,30 @@
 			    </inlinemediaobject>
 			    </para>
 			    <para>
-				You first pick a Category, then an
-				Instrument, and finally choose whether you
-				wish to write a part for an amateur or a
-				professional player. <footnote><para>This database was
-				compiled by Magnus Johansson, who deserves
-				all the special mention we can muster for
-				his outstanding effort on this.</para></footnote>
+				You first pick a Category, then an Instrument,
+				and finally choose whether you wish to write a
+				part for an amateur or a professional player.
+				<footnote><para>This database was compiled by
+				Magnus Johansson, who deserves all the special
+				mention we can muster for his outstanding effort
+				on this.</para></footnote> The Scope controls
+				allow you to choose whether these parameters
+				will only affect segments that don't yet exist
+				(which you will subsequently record, or draw
+				with the pencil) or should convert any existing
+				segments to take these parameters as well.  (For
+				a demonstration of the latter case in action,
+				please see
+				<ulink url="http://rosegarden.sourceforge.net/tutorial/supplemental/fidelio/fidelio.html">
+				this online tutorial.)</ulink>
 				Clicking the <guimenuitem>OK</guimenuitem>
-				button injects the appropriate parameters
-				into the remaining widgets in this part of
-				the track parameters box, where you can
-				tweak them if you desire.<footnote><para>No
-				    facility is provided at this time for
-				    assembling your own database of presets,
-				    or customizing the existing ones in a
-				    permanent way.</para></footnote>
-			    </para>
+				button injects the appropriate parameters into
+				the remaining widgets in this part of the track
+				parameters box, where you can tweak them if you
+				desire.<footnote><para>No facility is provided
+				at this time for assembling your own database of
+				presets, or customizing the existing ones in a
+				permanent way.</para></footnote> </para>
 			    <para>
 				Once you have loaded a preset, the name of
 				your chosen preset will be used as the label
@@ -4106,8 +4109,7 @@
 	      used. Some of them (such as <guimenuitem>Cut</guimenuitem> 
 	      or the <guimenuitem>Note Style</guimenuitem>
 	      functions) will operate on any selected events; others
-	      (such as the <guimenuitem>Grace Notes</guimenuitem> 
-	      or <guimenuitem>Stem Directions</guimenuitem> functions)
+	      (<guimenuitem>Stem Directions</guimenuitem> function)
 	      will refuse to work unless the selection contains 
 	      some notes.
 	    </para>
