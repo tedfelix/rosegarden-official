@@ -314,7 +314,7 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
         timeSignature = getComposition()->getTimeSignatureInBar
                         (barNo, newTimeSig);
         NOTATION_DEBUG << "bar " << barNo << ", startBarOfStaff " << startBarOfStaff
-        << ", newTimeSig " << newTimeSig << endl;
+                       << ", newTimeSig " << newTimeSig << endl;
         if (barNo == startBarOfStaff)
             newTimeSig = true;
 
@@ -1318,7 +1318,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
             bdi->second.layoutData.x += offset;
 
-            if (bdi->second.basicData.newTimeSig)
+            if (bdi->second.basicData.newTimeSig)  
                 bdi->second.layoutData.timeSigX += (int)offset;
 
             for (NotationElementList::iterator it = from;

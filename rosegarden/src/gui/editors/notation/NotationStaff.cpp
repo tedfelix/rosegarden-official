@@ -1913,13 +1913,15 @@ NotationStaff::markChanged(timeT from, timeT to, bool movedOnly)
 
         if (!movedOnly && m_ready) { // undo all the rendering we've already done
             for (NotationElementList::iterator i = getViewElementList()->begin();
-                    i != getViewElementList()->end(); ++i) {
+                 i != getViewElementList()->end(); ++i) {
                 static_cast<NotationElement *>(*i)->removeCanvasItem();
             }
 
             m_clefChanges.clear();
             m_keyChanges.clear();
         }
+
+        drawStaffName();
 
     } else {
 
