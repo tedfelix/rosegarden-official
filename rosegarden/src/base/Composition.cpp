@@ -524,6 +524,17 @@ Composition::calculateBarPositions() const
     timeT lastSigTime = 0;
     timeT barDuration = TimeSignature().getBarDuration();
 
+    if (getStartMarker() < 0) {
+	if (!t.empty() && (*t.begin())->getAbsoluteTime() <= 0) {
+	    barDuration = TimeSignature(**t.begin()).getBarDuration();
+	}
+	lastBarNo = getStartMarker() / barDuration;
+	lastSigTime = getStartMarker();
+#ifdef DEBUG_BAR_STUFF
+	cerr << "Composition::calculateBarPositions: start marker = " << getStartMarker() << ", so initial bar number = " << lastBarNo << endl;
+#endif
+    }
+
     for (i = t.begin(); i != t.end(); ++i) {
 
 	timeT myTime = (*i)->getAbsoluteTime();
@@ -683,6 +694,10 @@ Composition::getBarRange(int n) const
 int
 Composition::addTimeSignature(timeT t, TimeSignature timeSig)
 {
+#ifdef DEBUG_BAR_STUFF
+    cerr << "Composition::addTimeSignature(" << t << ", " << timeSig.getNumerator() << "/" << timeSig.getDenominator() << ")" << endl;
+#endif
+
     ReferenceSegment::iterator i =
 	m_timeSigSegment.insert(timeSig.getAsEvent(t));
     m_barPositionsNeedCalculating = true;
