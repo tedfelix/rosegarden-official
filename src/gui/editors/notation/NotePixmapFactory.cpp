@@ -3239,7 +3239,7 @@ NotePixmapFactory::createPixmapAndMask(int width, int height,
 
     static unsigned long total = 0;
     total += width * height;
-    NOTATION_DEBUG << "createPixmapAndMask: " << width << "x" << height << " (" << (width*height) << " px, " << total << " total)" << endl;
+//    NOTATION_DEBUG << "createPixmapAndMask: " << width << "x" << height << " (" << (width*height) << " px, " << total << " total)" << endl;
 
     // clear up pixmap and mask
     m_generatedPixmap->fill();
