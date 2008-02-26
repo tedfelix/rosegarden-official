@@ -1905,6 +1905,8 @@ NotationStaff::markChanged(timeT from, timeT to, bool movedOnly)
 
     NOTATION_DEBUG << "NotationStaff::markChanged (" << from << " -> " << to << ") " << movedOnly << endl;
 
+    drawStaffName();//!!!
+
     if (from == to) {
 
         m_status.clear();

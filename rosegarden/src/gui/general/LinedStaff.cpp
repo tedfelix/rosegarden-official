@@ -608,6 +608,7 @@ LinedStaff::sizeStaff(HorizontalLayoutEngine &layout)
         if (isNew && barNo < lastBar) {
             currentTimeSignature = timeSig;
             insertTimeSignature(timeSigX, currentTimeSignature);
+            RG_DEBUG << "LinedStaff[" << this << "]::sizeStaff: bar no " << barNo << " has time signature at " << timeSigX << endl;
         }
 
         RG_DEBUG << "LinedStaff::sizeStaff: inserting bar at " << x << " on staff " << this << " (isNew " << isNew << ", timeSigX " << timeSigX << ")" << endl;

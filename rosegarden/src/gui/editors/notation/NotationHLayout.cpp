@@ -801,8 +801,7 @@ NotationHLayout::preSquishBar(int barNo)
             }
 
             maxStretchy = std::max(maxStretchy, (*j)->stretchy);
-            totalFixed = std::max(totalFixed, (*j)->fixed )
-                         ;
+            totalFixed = std::max(totalFixed, (*j)->fixed);
         }
 
         NOTATION_DEBUG << "NotationHLayout::preSquishBar: minRate " << minRate << ", maxStretchy " << maxStretchy << ", totalFixed " << totalFixed << endl;
@@ -1371,7 +1370,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
         }
 
         if (bdi->second.basicData.newTimeSig ||
-                !bdi->second.basicData.timeSignature.hasHiddenBars()) {
+            !bdi->second.basicData.timeSignature.hasHiddenBars()) {
             offset += getPostBarMargin();
         }
 
@@ -1385,6 +1384,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
         NOTATION_DEBUG << "have " << chunks.size() << " chunks, reconciledWidth " << bdi->second.sizeData.reconciledWidth << ", idealWidth " << bdi->second.sizeData.idealWidth << ", ratio " << reconcileRatio << endl;
 
         double delta = 0;
+        float sigx = 0.f;
 
         for (NotationElementList::iterator it = from; it != to; ++it) {
 
@@ -1406,11 +1406,23 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
                     continue;
             }
 
+//            float sigx = 0;
+
             if (chunkitr != chunks.end()) {
                 NOTATION_DEBUG << "new chunk: addr " << &(*chunkitr) << " duration=" << (*chunkitr).duration << " subordering=" << (*chunkitr).subordering << " fixed=" << (*chunkitr).fixed << " stretchy=" << (*chunkitr).stretchy << " x=" << (*chunkitr).x << endl;
                 x = barX + offset + reconcileRatio * (*chunkitr).x;
                 fixed = (*chunkitr).fixed;
-                NOTATION_DEBUG << "adjusted x is " << x << endl;
+//                sigx = barX + offset - fixed;
+//                sigx = x - fixed;
+                NOTATION_DEBUG << "adjusted x is " << x << ", fixed is " << fixed << endl;
+
+                if (timeSigToPlace) {
+                    if (el->event()->isa(Clef::EventType) ||
+                        el->event()->isa(Rosegarden::Key::EventType)) {
+                        sigx = x + (*chunkitr).fixed + (*chunkitr).stretchy;
+                    }
+                }
+
                 ChunkList::iterator chunkscooter(chunkitr);
                 if (++chunkscooter != chunks.end()) {
                     delta = (*chunkscooter).x - (*chunkitr).x;
@@ -1419,18 +1431,26 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
                             bdi->second.sizeData.fixedWidth - (*chunkitr).x;
                 }
                 delta *= reconcileRatio;
+
                 ++chunkitr;
             } else {
                 x = barX + reconciledWidth - getPreBarMargin();
+//                sigx = x;
                 delta = 0;
             }
 
             if (timeSigToPlace &&
-                    !el->event()->isa(Clef::EventType) &&
-                    !el->event()->isa(::Rosegarden::Key::EventType)) {
-                NOTATION_DEBUG << "Placing timesig at " << x << endl;
-                bdi->second.layoutData.timeSigX = (int)(x - fixed )
-                                                      ;
+                !el->event()->isa(Clef::EventType) &&
+                !el->event()->isa(::Rosegarden::Key::EventType)) {
+
+                if (sigx == 0.f) {
+                    sigx = barX + offset;
+                }
+
+//                NOTATION_DEBUG << "Placing timesig at " << (x - fixed) << endl;
+//                bdi->second.layoutData.timeSigX = (int)(x - fixed);
+                NOTATION_DEBUG << "Placing timesig at " << sigx << " (would previously have been " << int(x-fixed) << "?)" << endl;
+                bdi->second.layoutData.timeSigX = (int)sigx;
                 double shift = getFixedItemSpacing() +
                                m_npf->getTimeSigWidth(timeSignature);
                 offset += shift;
