@@ -40,6 +40,9 @@ ControlItem::ControlItem(ControlRuler* ruler, ElementAdapter* elementAdapter,
       m_controlRuler(ruler),
       m_elementAdapter(elementAdapter)
 {
+    if (width < DefaultWidth/4) {
+        width = DefaultWidth/4; // avoid invisible zero-duration items
+    }
     setWidth(width);
     setPen(QPen(Qt::black, BorderThickness));
     setBrush(Qt::blue);
