@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -36,34 +35,38 @@ namespace Rosegarden
 {
 
 class EventSelection;
+class CommandRegistry;
 
 
 class RespellCommand : public BasicSelectionCommand
 {
 public:
-    enum Type {
-        Set,
-        Up,
-        Down,
-        Restore
+    struct RespellType
+    {
+        enum {
+            Set, Up, Down, Restore
+        } type;
+
+        Accidental accidental;
     };
 
-    RespellCommand(Type type, Accidental acc,
+    RespellCommand(RespellType type,
                    EventSelection &selection) :
-        BasicSelectionCommand(getGlobalName(type, acc), selection, true),
+        BasicSelectionCommand(getGlobalName(type), selection, true),
         m_selection(&selection),
-        m_type(type),
-        m_accidental(acc) { }
+        m_type(type) { }
 
-    static QString getGlobalName(Type type, Accidental acc);
+    static QString getGlobalName(RespellType type);
+
+    static RespellType getArgument(QString actionName, CommandArgumentQuerier &);
+    static void registerCommand(CommandRegistry *r);
 
 protected:
     virtual void modifySegment();
 
 private:
     EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
-    Type m_type;
-    Accidental m_accidental;
+    RespellType m_type;
 };
 
 

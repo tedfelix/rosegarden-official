@@ -29,6 +29,7 @@
 #include "base/NotationTypes.h"
 #include "base/Selection.h"
 #include "document/BasicSelectionCommand.h"
+#include "document/CommandRegistry.h"
 #include "base/BaseProperties.h"
 #include <qstring.h>
 
@@ -39,22 +40,22 @@ using namespace BaseProperties;
 using namespace Accidentals;
 
 QString
-RespellCommand::getGlobalName(Type type, Accidental accidental)
+RespellCommand::getGlobalName(RespellType type)
 {
-    switch (type) {
+    switch (type.type) {
 
-    case Set: {
+    case RespellType::Set: {
             QString s(i18n("Respell with %1"));
             //!!! should be in notationstrings:
-            if (accidental == DoubleSharp) {
+            if (type.accidental == DoubleSharp) {
                 s = s.arg(i18n("Do&uble Sharp"));
-            } else if (accidental == Sharp) {
+            } else if (type.accidental == Sharp) {
                 s = s.arg(i18n("&Sharp"));
-            } else if (accidental == Flat) {
+            } else if (type.accidental == Flat) {
                 s = s.arg(i18n("&Flat"));
-            } else if (accidental == DoubleFlat) {
+            } else if (type.accidental == DoubleFlat) {
                 s = s.arg(i18n("Dou&ble Flat"));
-            } else if (accidental == Natural) {
+            } else if (type.accidental == Natural) {
                 s = s.arg(i18n("&Natural"));
             } else {
                 s = s.arg(i18n("N&one"));
@@ -62,17 +63,94 @@ RespellCommand::getGlobalName(Type type, Accidental accidental)
             return s;
         }
 
-    case Up:
+    case RespellType::Up:
         return i18n("Respell Accidentals &Upward");
 
-    case Down:
+    case RespellType::Down:
         return i18n("Respell Accidentals &Downward");
 
-    case Restore:
+    case RespellType::Restore:
         return i18n("&Restore Accidentals");
     }
 
     return i18n("Respell Accidentals");
+}
+
+RespellCommand::RespellType
+RespellCommand::getArgument(QString actionName, CommandArgumentQuerier &)
+{
+    RespellType type;
+    type.type = RespellType::Set;
+    type.accidental = Natural;
+
+    if (actionName == "respell_doubleflat") {
+        type.accidental = DoubleFlat;
+    } else if (actionName == "respell_flat") {
+        type.accidental = Flat;
+    } else if (actionName == "respell_natural") {
+        type.accidental = Natural;
+    } else if (actionName == "respell_sharp") {
+        type.accidental = Sharp;
+    } else if (actionName == "respell_doublesharp") {
+        type.accidental = DoubleSharp;
+    } else if (actionName == "respell_restore") {
+        type.type = RespellType::Restore;
+    } else if (actionName == "respell_up") {
+        type.type = RespellType::Up;
+    } else if (actionName == "respell_down") {
+        type.type = RespellType::Down;
+    }
+
+    return type;
+}
+
+void
+RespellCommand::registerCommand(CommandRegistry *r)
+{
+    RespellType type;
+    type.type = RespellType::Set;
+
+    type.accidental = DoubleFlat;
+    r->registerCommand
+        (getGlobalName(type), "accmenu-doubleflat", "", "respell_doubleflat",
+         new ArgumentAndSelectionCommandBuilder<RespellCommand>());
+
+    type.accidental = Flat;
+    r->registerCommand
+        (getGlobalName(type), "accmenu-flat", "", "respell_flat",
+         new ArgumentAndSelectionCommandBuilder<RespellCommand>());
+
+    type.accidental = Natural;
+    r->registerCommand
+        (getGlobalName(type), "accmenu-natural", "", "respell_natural",
+         new ArgumentAndSelectionCommandBuilder<RespellCommand>());
+
+    type.accidental = Sharp;
+    r->registerCommand
+        (getGlobalName(type), "accmenu-sharp", "", "respell_sharp",
+         new ArgumentAndSelectionCommandBuilder<RespellCommand>());
+
+    type.accidental = DoubleSharp;
+    r->registerCommand
+        (getGlobalName(type), "accmenu-doublesharp", "", "respell_doublesharp",
+         new ArgumentAndSelectionCommandBuilder<RespellCommand>());
+
+    type.accidental = Natural;
+    
+    type.type = RespellType::Up;
+    r->registerCommand
+        (getGlobalName(type), "", "Ctrl+Shift+Up", "respell_up",
+         new ArgumentAndSelectionCommandBuilder<RespellCommand>());
+    
+    type.type = RespellType::Down;
+    r->registerCommand
+        (getGlobalName(type), "", "Ctrl+Shift+Down", "respell_down",
+         new ArgumentAndSelectionCommandBuilder<RespellCommand>());
+    
+    type.type = RespellType::Restore;
+    r->registerCommand
+        (getGlobalName(type), "", "", "respell_restore",
+         new ArgumentAndSelectionCommandBuilder<RespellCommand>());
 }
 
 void
@@ -81,17 +159,17 @@ RespellCommand::modifySegment()
     EventSelection::eventcontainer::iterator i;
 
     for (i = m_selection->getSegmentEvents().begin();
-            i != m_selection->getSegmentEvents().end(); ++i) {
+         i != m_selection->getSegmentEvents().end(); ++i) {
 
         if ((*i)->isa(Note::EventType)) {
 
-            if (m_type == Up || m_type == Down) {
+            if (m_type.type == RespellType::Up ||
+                m_type.type == RespellType::Down) {
 
                 Accidental acc = NoAccidental;
-                (*i)->get
-                <String>(ACCIDENTAL, acc);
+                (*i)->get<String>(ACCIDENTAL, acc);
 
-                if (m_type == Down) {
+                if (m_type.type == RespellType::Down) {
                     if (acc == DoubleFlat) {
                         acc = Flat;
                     } else if (acc == Flat || acc == NoAccidental) {
@@ -109,25 +187,22 @@ RespellCommand::modifySegment()
                     }
                 }
 
-                (*i)->set
-                <String>(ACCIDENTAL, acc);
+                (*i)->set<String>(ACCIDENTAL, acc);
 
-            } else if (m_type == Set) {
+            } else if (m_type.type == RespellType::Set) {
 
                 // trap respelling black key notes as natural; which is
                 // impossible, and makes rawPitchToDisplayPitch() do crazy
                 // things as a consequence (fixes #1349782)
                 // 1 = C#, 3 = D#, 6 = F#, 8 = G#, 10 = A#
                 long pitch;
-                (*i)->get
-                <Int>(PITCH, pitch);
+                (*i)->get<Int>(PITCH, pitch);
                 pitch %= 12;
                 if ((pitch == 1 || pitch == 3 || pitch == 6 || pitch == 8 || pitch == 10 )
-                        && m_accidental == Natural) {
+                    && m_type.accidental == Natural) {
                     // fail silently; is there anything to do here?
                 } else {
-                    (*i)->set
-                    <String>(ACCIDENTAL, m_accidental);
+                    (*i)->set<String>(ACCIDENTAL, m_type.accidental);
                 }
 
             } else {

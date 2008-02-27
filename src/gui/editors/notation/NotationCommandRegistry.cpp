@@ -49,6 +49,7 @@
 #include "commands/notation/RemoveMarksCommand.h"
 #include "commands/notation/RemoveNotationQuantizeCommand.h"
 #include "commands/notation/ResetDisplacementsCommand.h"
+#include "commands/notation/RespellCommand.h"
 #include "commands/notation/RestoreSlursCommand.h"
 #include "commands/notation/RestoreTiesCommand.h"
 
@@ -89,6 +90,7 @@ NotationCommandRegistry::NotationCommandRegistry(EditView *v) :
     RemoveMarksCommand::registerCommand(this);
     RemoveNotationQuantizeCommand::registerCommand(this);
     ResetDisplacementsCommand::registerCommand(this);
+    RespellCommand::registerCommand(this);
     RestoreSlursCommand::registerCommand(this);
     RestoreTiesCommand::registerCommand(this);
 }

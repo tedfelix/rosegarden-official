@@ -525,15 +525,6 @@ public slots:
     void slotTransformsQuantize();
     void slotTransformsInterpret();
 
-    void slotRespellDoubleFlat();
-    void slotRespellFlat();
-    void slotRespellNatural();
-    void slotRespellSharp();
-    void slotRespellDoubleSharp();
-    void slotRespellUp();
-    void slotRespellDown();
-    void slotRespellRestore();
-
     void slotInsertNoteFromAction();
     void slotInsertRest();
     void slotSwitchFromRestToNote();

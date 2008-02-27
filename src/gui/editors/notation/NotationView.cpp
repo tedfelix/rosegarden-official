@@ -79,7 +79,6 @@
 #include "commands/notation/KeyInsertionCommand.h"
 #include "commands/notation/MultiKeyInsertionCommand.h"
 #include "commands/notation/NormalizeRestsCommand.h"
-#include "commands/notation/RespellCommand.h"
 #include "commands/notation/RestoreStemsCommand.h"
 #include "commands/notation/SetVisibilityCommand.h"
 #include "commands/notation/SustainInsertionCommand.h"
@@ -1851,74 +1850,6 @@ void NotationView::setupActions()
     new KAction(RestoreStemsCommand::getGlobalName(), 0, this,
                 SLOT(slotTransformsRestoreStems()), actionCollection(),
                 "restore_stems");
-
-    icon = QIconSet
-           (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                                         ("accmenu-doubleflat")));
-
-    new KAction(RespellCommand::getGlobalName
-                (RespellCommand::Set, Accidentals::DoubleFlat),
-                icon, 0, this,
-                SLOT(slotRespellDoubleFlat()), actionCollection(),
-                "respell_doubleflat");
-
-    icon = QIconSet
-           (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                                         ("accmenu-flat")));
-
-    new KAction(RespellCommand::getGlobalName
-                (RespellCommand::Set, Accidentals::Flat),
-                icon, 0, this,
-                SLOT(slotRespellFlat()), actionCollection(),
-                "respell_flat");
-
-    icon = QIconSet
-           (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                                         ("accmenu-natural")));
-
-    new KAction(RespellCommand::getGlobalName
-                (RespellCommand::Set, Accidentals::Natural),
-                icon, 0, this,
-                SLOT(slotRespellNatural()), actionCollection(),
-                "respell_natural");
-
-    icon = QIconSet
-           (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                                         ("accmenu-sharp")));
-
-    new KAction(RespellCommand::getGlobalName
-                (RespellCommand::Set, Accidentals::Sharp),
-                icon, 0, this,
-                SLOT(slotRespellSharp()), actionCollection(),
-                "respell_sharp");
-
-    icon = QIconSet
-           (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                                         ("accmenu-doublesharp")));
-
-    new KAction(RespellCommand::getGlobalName
-                (RespellCommand::Set, Accidentals::DoubleSharp),
-                icon, 0, this,
-                SLOT(slotRespellDoubleSharp()), actionCollection(),
-                "respell_doublesharp");
-
-    new KAction(RespellCommand::getGlobalName
-                (RespellCommand::Up, Accidentals::NoAccidental),
-                Key_Up + CTRL + SHIFT, this,
-                SLOT(slotRespellUp()), actionCollection(),
-                "respell_up");
-
-    new KAction(RespellCommand::getGlobalName
-                (RespellCommand::Down, Accidentals::NoAccidental),
-                Key_Down + CTRL + SHIFT, this,
-                SLOT(slotRespellDown()), actionCollection(),
-                "respell_down");
-
-    new KAction(RespellCommand::getGlobalName
-                (RespellCommand::Restore, Accidentals::NoAccidental),
-                0, this,
-                SLOT(slotRespellRestore()), actionCollection(),
-                "respell_restore");
 
     icon = QIconSet
            (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
@@ -5051,94 +4982,6 @@ void NotationView::slotToggleDot()
     }
 
     setMenuStates();
-}
-
-void NotationView::slotRespellDoubleFlat()
-{
-    if (!m_currentEventSelection)
-        return ;
-    KTmpStatusMsg msg(i18n("Forcing accidentals..."), this);
-
-    addCommandToHistory(new RespellCommand(RespellCommand::Set,
-                                           Accidentals::DoubleFlat,
-                                           *m_currentEventSelection));
-}
-
-void NotationView::slotRespellFlat()
-{
-    if (!m_currentEventSelection)
-        return ;
-    KTmpStatusMsg msg(i18n("Forcing accidentals..."), this);
-
-    addCommandToHistory(new RespellCommand(RespellCommand::Set,
-                                           Accidentals::Flat,
-                                           *m_currentEventSelection));
-}
-
-void NotationView::slotRespellNatural()
-{
-    if (!m_currentEventSelection)
-        return ;
-    KTmpStatusMsg msg(i18n("Forcing accidentals..."), this);
-
-    addCommandToHistory(new RespellCommand(RespellCommand::Set,
-                                           Accidentals::Natural,
-                                           *m_currentEventSelection));
-}
-
-void NotationView::slotRespellSharp()
-{
-    if (!m_currentEventSelection)
-        return ;
-    KTmpStatusMsg msg(i18n("Forcing accidentals..."), this);
-
-    addCommandToHistory(new RespellCommand(RespellCommand::Set,
-                                           Accidentals::Sharp,
-                                           *m_currentEventSelection));
-}
-
-void NotationView::slotRespellDoubleSharp()
-{
-    if (!m_currentEventSelection)
-        return ;
-    KTmpStatusMsg msg(i18n("Forcing accidentals..."), this);
-
-    addCommandToHistory(new RespellCommand(RespellCommand::Set,
-                                           Accidentals::DoubleSharp,
-                                           *m_currentEventSelection));
-}
-
-void NotationView::slotRespellUp()
-{
-    if (!m_currentEventSelection)
-        return ;
-    KTmpStatusMsg msg(i18n("Forcing accidentals..."), this);
-
-    addCommandToHistory(new RespellCommand(RespellCommand::Up,
-                                           Accidentals::NoAccidental,
-                                           *m_currentEventSelection));
-}
-
-void NotationView::slotRespellDown()
-{
-    if (!m_currentEventSelection)
-        return ;
-    KTmpStatusMsg msg(i18n("Forcing accidentals..."), this);
-
-    addCommandToHistory(new RespellCommand(RespellCommand::Down,
-                                           Accidentals::NoAccidental,
-                                           *m_currentEventSelection));
-}
-
-void NotationView::slotRespellRestore()
-{
-    if (!m_currentEventSelection)
-        return ;
-    KTmpStatusMsg msg(i18n("Restoring accidentals..."), this);
-
-    addCommandToHistory(new RespellCommand(RespellCommand::Restore,
-                                           Accidentals::NoAccidental,
-                                           *m_currentEventSelection));
 }
 
 void NotationView::slotTransformsQuantize()
