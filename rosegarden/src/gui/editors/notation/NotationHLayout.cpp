@@ -315,8 +315,6 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
                         (barNo, newTimeSig);
         NOTATION_DEBUG << "bar " << barNo << ", startBarOfStaff " << startBarOfStaff
                        << ", newTimeSig " << newTimeSig << endl;
-        if (barNo == startBarOfStaff)
-            newTimeSig = true;
 
         float fixedWidth = 0.0;
         if (newTimeSig && !timeSignature.isHidden()) {
