@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -455,7 +455,7 @@ AudioPluginDialog::slotPluginSelected(int i)
                 //
                 if (inst->getPort(count) == 0) {
                     inst->addPort(count, (float)(*it)->getDefaultValue());
-                    std::cerr << "Plugin port name " << (*it)->getName() << ", default: " << (*it)->getDefaultValue() << std::endl;
+//                    std::cerr << "Plugin port name " << (*it)->getName() << ", default: " << (*it)->getDefaultValue() << std::endl;
                 }
 
             } else if ((*it)->getType() & PluginPort::Audio) {

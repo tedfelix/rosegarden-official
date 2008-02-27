@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -30,6 +30,7 @@
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
 #include "base/SegmentNotationHelper.h"
+#include "base/Studio.h"
 #include "document/BasicCommand.h"
 #include "base/BaseProperties.h"
 #include "base/Selection.h"
@@ -46,13 +47,15 @@ KeyInsertionCommand::KeyInsertionCommand(Segment &segment, timeT time,
         Key key,
         bool convert,
         bool transpose,
-        bool transposeKey) :
+        bool transposeKey,
+	bool ignorePercussion) :
         BasicCommand(getGlobalName(&key), segment, time, segment.getEndTime()),
         m_key(key),
         m_lastInsertedEvent(0),
         m_convert(convert),
         m_transpose(transpose),
-        m_transposeKey(transposeKey)
+        m_transposeKey(transposeKey),
+	m_ignorePercussion(ignorePercussion)
 
 {
     // nothing

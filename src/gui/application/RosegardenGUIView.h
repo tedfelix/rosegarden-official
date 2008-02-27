@@ -5,7 +5,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -161,7 +161,9 @@ public slots:
     void slotEditSegmentAudio(Segment*);
     void slotSegmentAutoSplit(Segment*);
     void slotEditRepeat(Segment*, timeT);
+/* hjj: WHAT DO DO WITH THIS ?
     void slotEditMetadata(QString);
+*/
 
     /**
      * Highlight all the Segments on a Track because the Track has
@@ -195,7 +197,7 @@ public slots:
 
     void slotShowSegmentLabels(bool);
 
-    void slotAddTracks(unsigned int, InstrumentId);
+    void slotAddTracks(unsigned int count, InstrumentId instrument, int position);
 
     void slotDeleteTracks(std::vector<TrackId> tracks);
 

@@ -5,6 +5,7 @@
 <MenuBar>
 
 <Menu name="file" append="new_merge">
+<Action name="file_print_lilypond" append="print_merge" />
 <Action name="file_preview_lilypond" append="print_merge" />
 </Menu>
 
@@ -12,6 +13,9 @@
   <Action name="cut_and_close"/>
   <Action name="general_paste"/>
   <Action name="delete"/>
+  <Separator/>
+    <Action name="move_events_up_staff"/>
+    <Action name="move_events_down_staff"/>
   <Separator/>
   <Action name="select_from_start"/>
   <Action name="select_to_end"/>
@@ -43,6 +47,8 @@
     <Action name="show_controller_events_ruler"/>
 <!--    <Action name="add_control_ruler"/> -->
     <Menu name="add_control_ruler"><text>Add Event Ruler</text></Menu>
+    <Separator/>
+    <Action name="show_track_headers"/>
 </Menu>
 
 <Menu name="document">
@@ -70,6 +76,7 @@
   <Action name="set_segment_duration"/>
   <Separator/>
   <Action name="transpose_segment"/>
+  <Action name="switch_preset"/>
 </Menu>
 
 
@@ -182,6 +189,13 @@
 		<Separator/>
 		<Action name="tie_notes"/>
 		<Action name="untie_notes"/>
+	  	<Menu name="Ties">
+			<text>Tie &amp;Position</text>
+			<Action name="restore_ties"/>
+			<Separator/>
+	  		<Action name="ties_above"/>
+			<Action name="ties_below"/>
+		</Menu>
 		<Separator/>
 		<Action name="crescendo"/>
 		<Action name="decrescendo"/>
@@ -219,8 +233,8 @@
         <Separator/>
 	<Menu name="Rescale">
 	      <text>Rescale</text>
-	      <Action name="half_speed"/>
-	      <Action name="double_speed"/>
+	      <Action name="halve_durations"/>
+	      <Action name="double_durations"/>
 	      <Separator/>
 	      <Action name="rescale"/>
 	</Menu>
@@ -390,6 +404,7 @@
 
   <Action name="chord_mode"/>
   <Action name="triplet_mode"/>
+  <Action name="grace_mode"/>
 
   <Separator/>
   <Action name="toggle_step_by_step"/>
@@ -477,6 +492,7 @@
 
   <Action name="chord_mode"/>
   <Action name="triplet_mode" />
+  <Action name="grace_mode" />
 </ToolBar>
 
 <ToolBar name="Rests Toolbar" hidden="false" position="left">
@@ -531,7 +547,7 @@
   <Separator/>
   <Action name="tuplet"/>
   <Action name="simple_tuplet"/>
-  <Action name="grace"/>
+<!--  <Action name="grace"/> -->
   <Separator/>
   <Action name="slur"/>
 <!--  <Action name="glissando"/> -->
@@ -639,6 +655,9 @@
     <Action name="slurs_above"/>
     <Action name="slurs_below"/>
     <Action name="restore_slurs"/>
+    <Action name="ties_above"/>
+    <Action name="ties_below"/>
+    <Action name="restore_ties"/>
     <Action name="fine_position_left"/>
     <Action name="fine_position_right"/>
     <Action name="fine_position_up"/>
@@ -649,6 +668,8 @@
 	<Action name="break_tuplets"/>
 	<Action name="make_invisible"/>
 	<Action name="make_visible"/>
+    <Action name="move_events_up_staff"/>
+    <Action name="move_events_down_staff"/>
   </enable>
 </State>
 
@@ -679,7 +700,7 @@
     <Action name="auto_beam"/>
     <Action name="break_group"/>
 <!--    <Action name="break_tuplets"/> -->
-    <Action name="grace"/>
+<!--    <Action name="grace"/> -->
 <!--    <Action name="ungrace"/> -->
     <Action name="slur"/>
   <Action name="phrasing_slur"/>
@@ -751,8 +772,8 @@
     <Action name="invert"/>
     <Action name="retrograde"/>
     <Action name="retrograde_invert"/>
-    <Action name="half_speed"/>
-    <Action name="double_speed"/>
+    <Action name="halve_durations"/>
+    <Action name="double_durations"/>
     <Action name="rescale"/>
     <Menu name="Stems"/>
     <Menu name="Slashes"/>
@@ -791,6 +812,8 @@
     <Action name="cursor_down_staff"/>
     <Action name="cursor_prior_segment"/>
     <Action name="cursor_next_segment"/>
+    <Action name="move_events_up_staff"/>
+    <Action name="move_events_down_staff"/>
   </enable>
 </State>
 

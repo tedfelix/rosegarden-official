@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -30,6 +30,7 @@
 #include "base/Composition.h"
 #include "base/Event.h"
 #include "base/LayoutEngine.h"
+#include "base/NotationRules.h"
 #include "base/NotationTypes.h"
 #include "base/NotationQuantizer.h"
 #include "base/Staff.h"
@@ -330,7 +331,7 @@ NotationVLayout::scanStaff(Staff &staffBase, timeT, timeT)
                 }
 
                 el->event()->setMaybe<Int>
-                (m_properties.UNBEAMED_STEM_LENGTH, stemLength);
+                    (m_properties.UNBEAMED_STEM_LENGTH, stemLength);
             }
 
 
@@ -409,7 +410,7 @@ NotationVLayout::scanStaff(Staff &staffBase, timeT, timeT)
 
             } else if (el->event()->isa(Guitar::Chord::EventType)) {
 
-                el->setLayoutY(staff.getLayoutYForHeight(22));
+                el->setLayoutY(staff.getLayoutYForHeight(22) + displacedY);
             }
         }
     }
@@ -442,6 +443,8 @@ void
 NotationVLayout::positionSlur(NotationStaff &staff,
                               NotationElementList::iterator i)
 {
+    NotationRules rules;
+
     bool phrasing = ((*i)->event()->get
                      <String>(Indication::IndicationTypePropertyName)
                      == Indication::PhrasingSlur);
@@ -491,7 +494,7 @@ NotationVLayout::positionSlur(NotationStaff &staff,
                 event->dump(std::cerr);
             }
 
-            bool stemUp = (h <= 4);
+            bool stemUp = rules.isStemUp(h);
             event->get
             <Bool>(m_properties.VIEW_LOCAL_STEM_UP, stemUp);
 

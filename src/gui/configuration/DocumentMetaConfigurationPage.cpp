@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -39,6 +39,7 @@
 #include "ConfigurationPage.h"
 #include "document/RosegardenGUIDoc.h"
 #include "gui/editors/notation/NotationStrings.h"
+#include "gui/configuration/HeadersConfigurationPage.h"
 #include "gui/general/GUIPalette.h"
 #include "TabbedConfigurationPage.h"
 #include <kconfig.h>
@@ -107,114 +108,8 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
         const char *name) :
         TabbedConfigurationPage(doc, parent, name)
 {
-    QFrame *frame = new QFrame(m_tabWidget);
-    QGridLayout *layout = new QGridLayout(frame, 3, 2, 10, 5);
-
-    m_fixed = new KListView(frame);
-    m_fixed->addColumn(i18n("Name"));
-    m_fixed->addColumn(i18n("Value"));
-    m_fixed->setFullWidth(true);
-    m_fixed->setItemsRenameable(true);
-    m_fixed->setRenameable(1);
-    m_fixed->setItemMargin(5);
-    m_fixed->setSorting( -1);
-    m_fixed->setDefaultRenameAction(QListView::Accept);
-    m_fixed->setShowSortIndicator(false);
-
-    m_metadata = new KListView(frame);
-    m_metadata->addColumn(i18n("Name"));
-    m_metadata->addColumn(i18n("Value"));
-    m_metadata->setFullWidth(true);
-    m_metadata->setItemsRenameable(true);
-    m_metadata->setRenameable(0);
-    m_metadata->setRenameable(1);
-    m_metadata->setItemMargin(5);
-    m_metadata->setDefaultRenameAction(QListView::Accept);
-    m_metadata->setShowSortIndicator(true);
-
-    Configuration &metadata = doc->getComposition().getMetadata();
-
-    std::set
-        <std::string> shown;
-
-    std::vector<PropertyName> fixedKeys =
-        CompositionMetadataKeys::getFixedKeys();
-
-    // do these in reverse order, as the list appears to insert at the start
-    for (unsigned int i = fixedKeys.size(); i > 0; --i) {
-        PropertyName pn = fixedKeys[i - 1];
-        QString trName;
-        if (pn == CompositionMetadataKeys::Composer) {
-            trName = i18n("Composer");
-        } else if (pn == CompositionMetadataKeys::Arranger) {
-            trName = i18n("Arranger");
-        } else if (pn == CompositionMetadataKeys::Copyright) {
-            trName = i18n("Copyright");
-        } else if (pn == CompositionMetadataKeys::Title) {
-            trName = i18n("Title");
-        } else if (pn == CompositionMetadataKeys::Subtitle) {
-            trName = i18n("Subtitle");
-        // The following are recognized only by LilyPond output
-        } else if (pn == CompositionMetadataKeys::Subsubtitle) {
-            trName = i18n("Subsubtitle");
-        } else if (pn == CompositionMetadataKeys::Dedication) {
-            trName = i18n("Dedication");
-        } else if (pn == CompositionMetadataKeys::Poet) {
-            trName = i18n("Poet");
-        } else if (pn == CompositionMetadataKeys::Meter) {
-            trName = i18n("Meter");
-        } else if (pn == CompositionMetadataKeys::Opus) {
-            trName = i18n("Opus");
-        } else if (pn == CompositionMetadataKeys::Instrument) {
-            trName = i18n("Instrument");
-        } else if (pn == CompositionMetadataKeys::Piece) {
-            trName = i18n("Piece");
-        } else if (pn == CompositionMetadataKeys::Tagline) {
-            trName = i18n("Tagline");
-        } else {
-            trName = strtoqstr(pn.getName());
-            trName = trName.left(1).upper() + trName.right(trName.length() - 1);
-        }
-        new KListViewItem(m_fixed, trName, strtoqstr(metadata.get<String>(pn, "")));
-        shown.insert(pn.getName());
-    }
-
-    std::vector<std::string> names(metadata.getPropertyNames());
-
-    for (unsigned int i = 0; i < names.size(); ++i) {
-
-        if (shown.find(names[i]) != shown.end())
-            continue;
-
-        QString name(strtoqstr(names[i]));
-
-        // property names stored in lower case
-        name = name.left(1).upper() + name.right(name.length() - 1);
-
-        new KListViewItem(m_metadata, name,
-                          strtoqstr(metadata.get<String>(names[i])));
-
-        shown.insert(names[i]);
-    }
-
-    layout->addMultiCellWidget(m_fixed, 0, 0, 0, 1);
-    layout->addMultiCellWidget(m_metadata, 1, 1, 0, 1);
-
-    QPushButton* addPropButton = new QPushButton(i18n("Add New Property"),
-                                 frame);
-    layout->addWidget(addPropButton, 2, 0, Qt::AlignHCenter);
-
-    QPushButton* deletePropButton = new QPushButton(i18n("Delete Property"),
-                                    frame);
-    layout->addWidget(deletePropButton, 2, 1, Qt::AlignHCenter);
-
-    connect(addPropButton, SIGNAL(clicked()),
-            this, SLOT(slotAddNewProperty()));
-
-    connect(deletePropButton, SIGNAL(clicked()),
-            this, SLOT(slotDeleteProperty()));
-
-    addTab(frame, i18n("Description"));
+    m_headersPage = new HeadersConfigurationPage(this, doc);
+    addTab(m_headersPage, i18n("Headers"));
 
     Composition &comp = doc->getComposition();
     std::set
@@ -230,8 +125,8 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
             ++internalSegments;
     }
 
-    frame = new QFrame(m_tabWidget);
-    layout = new QGridLayout(frame,
+    QFrame *frame = new QFrame(m_tabWidget);
+    QGridLayout *layout = new QGridLayout(frame,
                              6, 2,
                              10, 5);
 
@@ -428,63 +323,14 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
 }
 
 void
-DocumentMetaConfigurationPage::slotAddNewProperty()
-{
-    QString propertyName;
-    int i = 0;
-
-    while (1) {
-        propertyName =
-            (i > 0 ? i18n("{new property %1}").arg(i) : i18n("{new property}"));
-        if (!m_doc->getComposition().getMetadata().has(qstrtostr(propertyName)))
-            break;
-        ++i;
-    }
-
-    new KListViewItem(m_metadata, propertyName, i18n("{undefined}"));
-}
-
-void
-DocumentMetaConfigurationPage::slotDeleteProperty()
-{
-    delete m_metadata->currentItem();
-}
-
-void
 DocumentMetaConfigurationPage::apply()
 {
-    Configuration &metadata = m_doc->getComposition().getMetadata();
-    metadata.clear();
-
-    // If one of the items still has focus, it won't remember edits
-    m_fixed->setFocus();
-    m_metadata->setFocus();
-
-    std::vector<PropertyName> fixedKeys =
-        CompositionMetadataKeys::getFixedKeys();
-    std::vector<PropertyName>::iterator i = fixedKeys.begin();
-
-    for (QListViewItem *item = m_fixed->firstChild();
-            item != 0; item = item->nextSibling()) {
-
-        if (i == fixedKeys.end())
-            break;
-
-        metadata.set<String>(*i, qstrtostr(item->text(1)));
-
-        ++i;
-    }
-
-    for (QListViewItem *item = m_metadata->firstChild();
-            item != 0; item = item->nextSibling()) {
-
-        metadata.set<String>(qstrtostr(item->text(0).lower()),
-                             qstrtostr(item->text(1)));
-    }
+    m_headersPage->apply();
 
     m_doc->slotDocumentModified();
 }
 
+/* hjj: WHAT TO DO WITH THIS ?
 void
 DocumentMetaConfigurationPage::selectMetadata(QString name)
 {
@@ -518,6 +364,7 @@ DocumentMetaConfigurationPage::selectMetadata(QString name)
         return ;
     }
 }
+*/
 
 }
 #include "DocumentMetaConfigurationPage.moc"

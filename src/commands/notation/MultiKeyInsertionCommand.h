@@ -5,7 +5,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -32,6 +32,7 @@
 #include <klocale.h>
 #include "misc/Strings.h"
 #include <kcommand.h>
+#include "document/RosegardenGUIDoc.h"
 
 
 class Add;
@@ -40,19 +41,21 @@ class Add;
 namespace Rosegarden
 {
 
-class Composition;
+//class Composition;
+class RosegardenGUIDoc;
 
 
 class MultiKeyInsertionCommand : public KMacroCommand
 {
 public:
     
-    MultiKeyInsertionCommand(Composition &composition,
+    MultiKeyInsertionCommand(RosegardenGUIDoc* doc,
                              timeT time,
                              Key key,
                              bool shouldConvert,
                              bool shouldTranspose,
-                             bool shouldTransposeKey); 
+                             bool shouldTransposeKey,
+			     bool shouldIgnorePercussion); 
     virtual ~MultiKeyInsertionCommand();
 
     static QString getGlobalName(Key *key = 0) {

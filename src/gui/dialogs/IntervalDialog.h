@@ -5,7 +5,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -61,6 +61,8 @@ public:
     
     // Transpose the segment itself in the opposite direction?
     bool getTransposeSegmentBack();
+    
+    static QString getIntervalName(int intervalDiatonic, int intervalChromatic);
     
 public slots:
     void slotSetReferenceNote(int,int,int);

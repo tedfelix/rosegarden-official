@@ -4,7 +4,7 @@
     Rosegarden
     A sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
@@ -136,7 +136,6 @@ public:
     void resetTrackIdAndPosition(TrackId oldId, TrackId newId, int position);
 
     TrackId getMinTrackId() const;
-
     TrackId getMaxTrackId() const;
 
     const recordtrackcontainer &getRecordTracks() const { return m_recordTracks; }

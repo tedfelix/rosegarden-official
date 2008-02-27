@@ -32,6 +32,7 @@
       <Action name="file_export_mup" />
       <Action name="file_export_musicxml" />
     </Menu>
+    <Action name="file_print_lilypond" append="print_merge" />
     <Action name="file_preview_lilypond" append="print_merge" />
   <Separator/>
         <Action name="audio_manager"/>
@@ -106,7 +107,7 @@
 	<Separator/>
         <Action name="join_segments"/>
 	<Menu name="split">
-	<text>&amp;Split...</text>
+	<text>&amp;Split</text>
 	    <Action name="auto_split"/>
 	    <Action name="split_by_pitch"/>
 	    <Action name="split_by_recording"/>
@@ -127,6 +128,9 @@
 	<Separator/>
         <Action name="select_next_track"/>
         <Action name="select_previous_track"/>
+        <Separator/>
+        <Action name="toggle_mute_track"/>
+        <Action name="toggle_arm_track"/>
         <Separator/>
         <Action name="unmute_all_tracks"/>
         <Action name="mute_all_tracks"/>

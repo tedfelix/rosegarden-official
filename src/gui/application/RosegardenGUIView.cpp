@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -52,6 +52,7 @@
 #include "document/RosegardenGUIDoc.h"
 #include "RosegardenApplication.h"
 #include "gui/configuration/GeneralConfigurationPage.h"
+#include "gui/configuration/AudioConfigurationPage.h"
 #include "gui/dialogs/AudioSplitDialog.h"
 #include "gui/dialogs/AudioManagerDialog.h"
 #include "gui/dialogs/DocumentConfigureDialog.h"
@@ -166,6 +167,10 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
     connect(m_trackEditor->getSegmentCanvas(),
             SIGNAL(editRepeat(Segment*, timeT)),
             SLOT(slotEditRepeat(Segment*, timeT)));
+
+    connect(m_trackEditor->getSegmentCanvas(),
+            SIGNAL(setPointerPosition(timeT)),
+            doc, SLOT(slotSetPointerPosition(timeT)));
 
     connect(m_trackEditor,
             SIGNAL(droppedDocument(QString)),
@@ -291,6 +296,7 @@ void RosegardenGUIView::updateSelectionContents()
     m_trackEditor->getSegmentCanvas()->updateSelectionContents();
 }
 
+/* hjj: WHAT DO DO WITH THIS ?
 void
 RosegardenGUIView::slotEditMetadata(QString name)
 {
@@ -304,6 +310,7 @@ RosegardenGUIView::slotEditMetadata(QString name)
 
     configDlg->show();
 }
+*/
 
 void RosegardenGUIView::slotEditSegment(Segment* segment)
 {
@@ -493,8 +500,10 @@ RosegardenGUIView::createNotationView(std::vector<Segment *> segmentsToEdit)
             this, SLOT(slotEditSegmentsPercussionMatrix(std::vector<Segment *>)));
     connect(notationView, SIGNAL(openInEventList(std::vector<Segment *>)),
             this, SLOT(slotEditSegmentsEventList(std::vector<Segment *>)));
+/* hjj: WHAT DO DO WITH THIS ?
     connect(notationView, SIGNAL(editMetadata(QString)),
             this, SLOT(slotEditMetadata(QString)));
+*/
     connect(notationView, SIGNAL(editTriggerSegment(int)),
             this, SLOT(slotEditTriggerSegment(int)));
     connect(notationView, SIGNAL(staffLabelChanged(TrackId, QString)),
@@ -826,24 +835,30 @@ void RosegardenGUIView::slotEditSegmentAudio(Segment *segment)
 
     QString application = config->readEntry("externalaudioeditor", "");
 
-    if (application.isEmpty()) {
+    if (application == "") {
+        application = AudioConfigurationPage::getBestAvailableAudioEditor();
+    }
+
+    QStringList splitCommand = QStringList::split(" ", application);
+
+    if (splitCommand.size() == 0) {
+
         std::cerr << "RosegardenGUIView::slotEditSegmentAudio() - "
         << "external editor \"" << application.data()
         << "\" not found" << std::endl;
 
-
         KMessageBox::sorry(this,
-                           i18n("You've not yet defined an audio editor for Rosegarden to use.\nSee Settings -> Configure Rosegarden -> General -> External Editors."));
+                           i18n("You've not yet defined an audio editor for Rosegarden to use.\nSee Settings -> Configure Rosegarden -> Audio."));
 
         return ;
     }
 
-    QFileInfo *appInfo = new QFileInfo(application);
+    QFileInfo *appInfo = new QFileInfo(splitCommand[0]);
     if (appInfo->exists() == false || appInfo->isExecutable() == false) {
         std::cerr << "RosegardenGUIView::slotEditSegmentAudio() - "
-        << "can't execute \"" << application << "\""
-        << std::endl;
-        return ;
+                  << "can't execute \"" << splitCommand[0] << "\""
+                  << std::endl;
+        return;
     }
 
     AudioFile *aF = getDocument()->getAudioFileManager().
@@ -854,14 +869,13 @@ void RosegardenGUIView::slotEditSegmentAudio(Segment *segment)
         return ;
     }
 
-
     // wait cursor
     QApplication::setOverrideCursor(QCursor(Qt::waitCursor));
 
     // Prepare the process
     //
     KProcess *process = new KProcess();
-    (*process) << application;
+    (*process) << splitCommand;
     (*process) << QString(aF->getFilename().c_str());
 
     // Start it
@@ -1327,10 +1341,10 @@ void RosegardenGUIView::slotShowSegmentLabels(bool v)
 }
 
 void RosegardenGUIView::slotAddTracks(unsigned int nbTracks,
-                                      InstrumentId id)
+                                      InstrumentId id, int pos)
 {
-    RG_DEBUG << "RosegardenGUIView::slotAddTracks(" << nbTracks << ")" << endl;
-    m_trackEditor->slotAddTracks(nbTracks, id);
+    RG_DEBUG << "RosegardenGUIView::slotAddTracks(" << nbTracks << ", " << pos << ")" << endl;
+    m_trackEditor->slotAddTracks(nbTracks, id, pos);
 }
 
 void RosegardenGUIView::slotDeleteTracks(

@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -84,7 +84,7 @@ MarkerEditor::MarkerEditor(QWidget *parent,
 
     m_listView = new KListView(mainFrame);
     m_listView->addColumn(i18n("Marker time  "));
-    m_listView->addColumn(i18n("Marker name  "));
+    m_listView->addColumn(i18n("Marker text  "));
     m_listView->addColumn(i18n("Marker description "));
 
     // Align centrally

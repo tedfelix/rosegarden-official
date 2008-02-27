@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -80,18 +80,17 @@
 #include "commands/notation/MultiKeyInsertionCommand.h"
 #include "commands/notation/NormalizeRestsCommand.h"
 #include "commands/notation/RespellCommand.h"
-#include "commands/notation/RestoreSlursCommand.h"
 #include "commands/notation/RestoreStemsCommand.h"
 #include "commands/notation/SetVisibilityCommand.h"
 #include "commands/notation/SustainInsertionCommand.h"
 #include "commands/notation/TextInsertionCommand.h"
 #include "commands/notation/TieNotesCommand.h"
 #include "commands/notation/TupletCommand.h"
-#include "commands/notation/UnGraceCommand.h"
 #include "commands/notation/UntieNotesCommand.h"
 #include "commands/notation/UnTupletCommand.h"
 #include "commands/segment/PasteToTriggerSegmentCommand.h"
-#include "commands/segment/SegmentChangeTransposeCommand.h"
+#include "commands/segment/SegmentSyncCommand.h"
+#include "commands/segment/SegmentTransposeCommand.h"
 #include "commands/segment/RenameTrackCommand.h"
 #include "document/RosegardenGUIDoc.h"
 #include "document/ConfigGroups.h"
@@ -115,12 +114,14 @@
 #include "gui/dialogs/UseOrnamentDialog.h"
 #include "gui/rulers/StandardRuler.h"
 #include "gui/general/ActiveItem.h"
+#include "gui/general/ClefIndex.h"
 #include "gui/general/EditViewBase.h"
 #include "gui/general/EditView.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/LinedStaff.h"
 #include "gui/general/LinedStaffManager.h"
 #include "gui/general/ProgressReporter.h"
+#include "gui/general/PresetHandlerDialog.h"
 #include "gui/general/RosegardenCanvasView.h"
 #include "gui/kdeext/KTmpStatusMsg.h"
 #include "gui/kdeext/QCanvasSimpleSprite.h"
@@ -134,6 +135,7 @@
 #include "gui/widgets/ProgressDialog.h"
 #include "gui/widgets/ScrollBoxDialog.h"
 #include "gui/widgets/ScrollBox.h"
+#include "gui/widgets/QDeferScrollView.h"
 #include "NotationCanvasView.h"
 #include "NotationElement.h"
 #include "NotationEraser.h"
@@ -153,6 +155,7 @@
 #include "sound/MappedEvent.h"
 #include "TextInserter.h"
 #include "NotationCommandRegistry.h"
+#include "HeadersGroup.h"
 #include <kaction.h>
 #include <kcombobox.h>
 #include <kconfig.h>
@@ -191,6 +194,8 @@
 #include <qwidget.h>
 #include <qvalidator.h>
 #include <algorithm>
+#include <qpushbutton.h>
+#include <qtooltip.h>
 
 
 namespace Rosegarden
@@ -295,7 +300,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
                            std::vector<Segment *> segments,
                            QWidget *parent,
                            bool showProgressive) :
-        EditView(doc, segments, 1, parent, "notationview"),
+        EditView(doc, segments, 2, parent, "notationview"),
         m_properties(getViewLocalPropertyPrefix()),
         m_selectionCounter(0),
         m_insertModeLabel(0),
@@ -340,7 +345,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
         m_inhibitRefresh(true),
         m_ok(false),
         m_printMode(false),
-        m_printSize(8) // set in positionStaffs
+        m_printSize(8), // set in positionStaffs
+        m_showHeadersGroup(0)
 {
     initActionDataMaps(); // does something only the 1st time it's called
 
@@ -354,6 +360,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     // by both the actions and the layout toolbar
 
     m_config->setGroup(NotationViewConfigGroup);
+
+    m_showHeadersGroup = m_config->readNumEntry("shownotationheader", 1);
 
     m_fontName = qstrtostr(m_config->readEntry
                            ("notefont",
@@ -453,6 +461,36 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
                             i, this,
                             m_fontName, m_fontSize));
     }
+
+
+    // HeadersGroup ctor must not be called before m_staffs initialization
+    m_headersGroupView = new QDeferScrollView(getCentralWidget());
+    QWidget * vport = m_headersGroupView->viewport();
+    m_headersGroup = new HeadersGroup(vport, this, &doc->getComposition());
+    m_headersGroupView->setVScrollBarMode(QScrollView::AlwaysOff);
+    m_headersGroupView->setHScrollBarMode(QScrollView::AlwaysOff);
+
+    m_grid->addWidget(m_headersGroupView, CANVASVIEW_ROW, 0);
+
+    // Add a close button just above the track headers.
+    // The grid layout is only here to maintain the button in a
+    // right place
+    m_headersTopFrame = new QFrame(getCentralWidget());
+    QGridLayout * headersTopGrid
+        = new QGridLayout(m_headersTopFrame, 2, 2);
+    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+    QCanvasPixmap pixmap(pixmapDir + "/misc/close.xpm");
+    QPushButton * hideHeadersButton
+        = new QPushButton(m_headersTopFrame);
+    headersTopGrid->addWidget(hideHeadersButton, 1, 1,
+                                        Qt::AlignRight | Qt::AlignBottom);
+    hideHeadersButton->setIconSet(QIconSet(pixmap));
+    hideHeadersButton->setFlat(true);
+    QToolTip::add(hideHeadersButton, i18n("Close track headers"));
+    headersTopGrid->setMargin(4);
+
+    m_grid->addWidget(m_headersTopFrame, TOPBARBUTTONS_ROW, 0);
+
 
     //
     // layout
@@ -608,6 +646,35 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     (doc, SIGNAL(pointerPositionChanged(timeT)),
      this, SLOT(slotSetPointerPosition(timeT)));
 
+    //
+    // Connect vertical scrollbars between canvas and notation header
+    QObject::connect
+    (getCanvasView()->verticalScrollBar(), SIGNAL(valueChanged(int)),
+     this, SLOT(slotVerticalScrollHeadersGroup(int)));
+
+    QObject::connect
+    (getCanvasView()->verticalScrollBar(), SIGNAL(sliderMoved(int)),
+     this, SLOT(slotVerticalScrollHeadersGroup(int)));
+
+    QObject::connect
+    (m_headersGroupView, SIGNAL(gotWheelEvent(QWheelEvent*)),
+     getCanvasView(), SLOT(slotExternalWheelEvent(QWheelEvent*)));
+
+    // Ensure notation header keeps the right bottom margin when user
+    // toggles the canvas view bottom rulers
+    connect(getCanvasView(), SIGNAL(bottomWidgetHeightChanged(int)),
+            this, SLOT(slotCanvasBottomWidgetHeightChanged(int)));
+
+    // Signal canvas horizontal scroll to notation header
+    QObject::connect
+    (getCanvasView(), SIGNAL(contentsMoving(int, int)),
+     m_headersGroup, SLOT(slotUpdateAllHeaders(int, int)));
+
+    // Connect the close notation header button
+    QObject::connect(hideHeadersButton, SIGNAL(clicked()), 
+                                  this, SLOT(slotHideHeadersGroup()));
+
+
     stateChanged("have_selection", KXMLGUIClient::StateReverse);
     stateChanged("have_notes_in_selection", KXMLGUIClient::StateReverse);
     stateChanged("have_rests_in_selection", KXMLGUIClient::StateReverse);
@@ -660,7 +727,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
          this, SLOT(slotUpdateStaffName()));
     }
 
-    setConfigDialogPageIndex(2);
+    setConfigDialogPageIndex(3);
     setOutOfCtor();
 
     // Property and Control Rulers
@@ -721,7 +788,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
         m_inhibitRefresh(true),
         m_ok(false),
         m_printMode(true),
-        m_printSize(8) // set in positionStaffs
+        m_printSize(8), // set in positionStaffs
+        m_showHeadersGroup(0)
 {
     assert(segments.size() > 0);
     NOTATION_DEBUG << "NotationView print ctor" << endl;
@@ -1153,6 +1221,44 @@ void NotationView::positionStaffs()
         << (pageWidth - leftMargin * 2) << endl;
 
     }
+
+
+    // Destroy then recreate all track headers
+    hideHeadersGroup();
+    m_headersGroup->removeAllHeaders();
+    if (m_pageMode == LinedStaff::LinearMode) {
+        for (int i = minTrack; i <= maxTrack; ++i) {
+            TrackIntMap::iterator hi = trackHeights.find(i);
+            if (hi != trackHeights.end()) {
+                TrackId trackId = getDocument()->getComposition()
+                                        .getTrackByPosition(i)->getId();
+                m_headersGroup->addHeader(trackId, trackHeights[i],
+                                          trackCoords[i], getCanvasLeftX());
+            }
+        }
+
+        m_headersGroup->completeToHeight(canvas()->height());
+
+        m_headersGroupView->addChild(m_headersGroup);
+
+        m_headersGroupView->setBottomMargin(getBottomWidget()->height()
+                        + getCanvasView()->horizontalScrollBar()->height());
+
+        slotCanvasBottomWidgetHeightChanged(getBottomWidget()->height());
+
+        if (    (m_showHeadersGroup == 2)
+             || (    (m_showHeadersGroup == 1)
+                  && (m_headersGroup->getUsedHeight()
+                          > getCanvasView()->visibleHeight()))) {
+            showHeadersGroup();
+        }
+    }
+}
+
+void NotationView::slotCanvasBottomWidgetHeightChanged(int newHeight)
+{
+     m_headersGroupView->setBottomMargin(
+             newHeight + getCanvasView()->horizontalScrollBar()->height());
 }
 
 void NotationView::positionPages()
@@ -1328,6 +1434,10 @@ void NotationView::setupActions()
     KStdAction::printPreview(this, SLOT(slotFilePrintPreview()),
                              actionCollection());
 
+    new KAction(i18n("Print &with LilyPond..."), 0, 0, this,
+                SLOT(slotPrintLilypond()), actionCollection(),
+                "file_print_lilypond");
+
     new KAction(i18n("Preview with Lil&yPond..."), 0, 0, this,
                 SLOT(slotPreviewLilypond()), actionCollection(),
                 "file_preview_lilypond");
@@ -1368,6 +1478,9 @@ void NotationView::setupActions()
 
     actionCollection()->insert(m_fontSizeActionMenu);
 
+    new KAction(i18n("Show track headers"), 0, this,
+                        SLOT(slotShowHeadersGroup()),
+                        actionCollection(), "show_track_headers");
 
     KActionMenu *spacingActionMenu =
         new KActionMenu(i18n("S&pacing"), this, "stretch_actionmenu");
@@ -1607,6 +1720,14 @@ void NotationView::setupActions()
                 SLOT(slotEditDelete()), actionCollection(),
                 "delete");
 
+    new KAction(i18n("Move to Staff Above"), 0, this,
+                SLOT(slotMoveEventsUpStaff()), actionCollection(),
+                "move_events_up_staff");
+
+    new KAction(i18n("Move to Staff Below"), 0, this,
+                SLOT(slotMoveEventsDownStaff()), actionCollection(),
+                "move_events_down_staff");
+
     //
     // Settings menu
     //
@@ -1685,20 +1806,26 @@ void NotationView::setupActions()
     new KAction(UnTupletCommand::getGlobalName(), 0, this,
                 SLOT(slotGroupUnTuplet()), actionCollection(), "break_tuplets");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("triplet")));
+    icon = QIconSet(NotePixmapFactory::toQPixmap
+                    (NotePixmapFactory::makeToolbarPixmap("triplet")));
     (new KToggleAction(i18n("Trip&let Insert Mode"), icon, Key_G,
                        this, SLOT(slotUpdateInsertModeStatus()),
                        actionCollection(), "triplet_mode"))->
-    setChecked(false);
+        setChecked(false);
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("chord")));
+    icon = QIconSet(NotePixmapFactory::toQPixmap
+                    (NotePixmapFactory::makeToolbarPixmap("chord")));
     (new KToggleAction(i18n("C&hord Insert Mode"), icon, Key_H,
                        this, SLOT(slotUpdateInsertModeStatus()),
                        actionCollection(), "chord_mode"))->
-    setChecked(false);
+        setChecked(false);
 
-    new KAction(UnGraceCommand::getGlobalName(), 0, this,
-                SLOT(slotGroupUnGrace()), actionCollection(), "ungrace");
+    icon = QIconSet(NotePixmapFactory::toQPixmap
+                    (NotePixmapFactory::makeToolbarPixmap("group-grace")));
+    (new KToggleAction(i18n("Grace Insert Mode"), icon, 0,
+                       this, SLOT(slotUpdateInsertModeStatus()),
+                       actionCollection(), "grace_mode"))->
+        setChecked(false);
 
     // setup Transforms menu
     new KAction(NormalizeRestsCommand::getGlobalName(), Key_N + CTRL, this,
@@ -1724,10 +1851,6 @@ void NotationView::setupActions()
     new KAction(RestoreStemsCommand::getGlobalName(), 0, this,
                 SLOT(slotTransformsRestoreStems()), actionCollection(),
                 "restore_stems");
-
-    new KAction(RestoreSlursCommand::getGlobalName(), 0, this,
-                SLOT(slotTransformsRestoreSlurs()), actionCollection(),
-                "restore_slurs");
 
     icon = QIconSet
            (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
@@ -1849,6 +1972,10 @@ void NotationView::setupActions()
                 SLOT(slotEditTranspose()), actionCollection(),
                 "transpose_segment");
 
+	new KAction(i18n("Convert notation for..."), 0, this,
+                SLOT(slotEditSwitchPreset()), actionCollection(),
+                "switch_preset");
+
 
     // setup Settings menu
     static QString actionsToolbars[][4] =
@@ -1953,8 +2080,12 @@ void NotationView::setupActions()
 
     icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-play")));
-    new KAction(i18n("&Play"), icon, Key_Enter, this,
+    KAction *play = new KAction(i18n("&Play"), icon, Key_Enter, this,
                 SIGNAL(play()), actionCollection(), "play");
+    // Alternative shortcut for Play
+    KShortcut playShortcut = play->shortcut();
+    playShortcut.append( KKey(Key_Return + CTRL) );
+    play->setShortcut(playShortcut);
 
     icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-stop")));
@@ -2064,6 +2195,13 @@ NotationView::isInTripletMode()
            isChecked();
 }
 
+bool
+NotationView::isInGraceMode()
+{
+    return ((KToggleAction *)actionCollection()->action("grace_mode"))->
+           isChecked();
+}
+
 void
 NotationView::setupFontSizeMenu(std::string oldFontName)
 {
@@ -2126,6 +2264,11 @@ NotationView::getNotationStaff(const Segment &segment)
             return m_staffs[i];
     }
     return 0;
+}
+
+bool NotationView::isCurrentStaff(int i)
+{
+    return getCurrentSegment() == &(m_staffs[i]->getSegment());
 }
 
 void NotationView::initLayoutToolbar()
@@ -2263,6 +2406,10 @@ QSize NotationView::getViewSize()
 void NotationView::setViewSize(QSize s)
 {
     canvas()->resize(s.width(), s.height());
+
+    if ((m_pageMode == LinedStaff::LinearMode) && m_showHeadersGroup) {
+        m_headersGroup->completeToHeight(s.height());
+    }
 }
 
 void
@@ -2281,6 +2428,7 @@ NotationView::setPageMode(LinedStaff::PageMode pageMode)
             m_rawNoteRuler->hide();
         if (m_tempoRuler)
             m_tempoRuler->hide();
+        hideHeadersGroup();
     } else {
         if (m_topStandardRuler)
             m_topStandardRuler->show();
@@ -2292,6 +2440,7 @@ NotationView::setPageMode(LinedStaff::PageMode pageMode)
             m_rawNoteRuler->show();
         if (m_tempoRuler && getToggleAction("show_tempo_ruler")->isChecked())
             m_tempoRuler->show();
+        showHeadersGroup();
     }
 
     stateChanged("linear_mode",
@@ -2318,6 +2467,10 @@ NotationView::setPageMode(LinedStaff::PageMode pageMode)
             m_staffs[i]->markChanged();
         }
     }
+
+    // Layout is done : Time related to left of canvas should now
+    // correctly be determined and track headers contents be drawn.
+    m_headersGroup->slotUpdateAllHeaders(0, 0, true);
 
     positionPages();
 
@@ -2841,10 +2994,10 @@ void NotationView::playNote(Segment &s, int pitch, int velocity)
 
 void NotationView::showPreviewNote(int staffNo, double layoutX,
                                    int pitch, int height,
-                                   const Note &note,
+                                   const Note &note, bool grace,
                                    int velocity)
 {
-    m_staffs[staffNo]->showPreviewNote(layoutX, height, note);
+    m_staffs[staffNo]->showPreviewNote(layoutX, height, note, grace);
     playNote(m_staffs[staffNo]->getSegment(), pitch, velocity);
 }
 
@@ -2888,6 +3041,58 @@ NotationView::getCurrentLinedStaff()
     return getLinedStaff(m_currentStaff);
 }
 
+LinedStaff *
+NotationView::getStaffAbove()
+{
+    if (m_staffs.size() < 2) return 0;
+
+    Composition *composition =
+        m_staffs[m_currentStaff]->getSegment().getComposition();
+
+    Track *track = composition->
+        getTrackById(m_staffs[m_currentStaff]->getSegment().getTrack());
+    if (!track) return 0;
+
+    int position = track->getPosition();
+    Track *newTrack = 0;
+
+    while ((newTrack = composition->getTrackByPosition(--position))) {
+        for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+            if (m_staffs[i]->getSegment().getTrack() == newTrack->getId()) {
+                return m_staffs[i];
+            }
+        }
+    }
+
+    return 0;
+}
+
+LinedStaff *
+NotationView::getStaffBelow()
+{
+    if (m_staffs.size() < 2) return 0;
+
+    Composition *composition =
+        m_staffs[m_currentStaff]->getSegment().getComposition();
+
+    Track *track = composition->
+        getTrackById(m_staffs[m_currentStaff]->getSegment().getTrack());
+    if (!track) return 0;
+
+    int position = track->getPosition();
+    Track *newTrack = 0;
+
+    while ((newTrack = composition->getTrackByPosition(++position))) {
+        for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+            if (m_staffs[i]->getSegment().getTrack() == newTrack->getId()) {
+                return m_staffs[i];
+            }
+        }
+    }
+
+    return 0;
+}
+
 timeT
 NotationView::getInsertionTime()
 {
@@ -2905,20 +3110,15 @@ NotationView::getInsertionTime(Clef &clef,
 
     LinedStaff *staff = m_staffs[m_currentStaff];
     double layoutX = staff->getLayoutXOfInsertCursor();
-    if (layoutX < 0)
-        layoutX = 0;
+    if (layoutX < 0) layoutX = 0;
     Event *clefEvt = 0, *keyEvt = 0;
     (void)staff->getElementUnderLayoutX(layoutX, clefEvt, keyEvt);
 
-    if (clefEvt)
-        clef = Clef(*clefEvt);
-    else
-        clef = Clef();
+    if (clefEvt) clef = Clef(*clefEvt);
+    else clef = Clef();
 
-    if (keyEvt)
-        key = Rosegarden::Key(*keyEvt);
-    else
-        key = Rosegarden::Key();
+    if (keyEvt) key = Rosegarden::Key(*keyEvt);
+    else key = Rosegarden::Key();
 
     return m_insertionTime;
 }
@@ -3664,20 +3864,23 @@ NotationView::NoteChangeActionDataMap* NotationView::m_noteChangeActionDataMap =
 void
 NotationView::slotUpdateInsertModeStatus()
 {
+    QString tripletMessage = i18n("Triplet");
+    QString chordMessage = i18n("Chord");
+    QString graceMessage = i18n("Grace");
     QString message;
-    if (isInChordMode()) {
-        if (isInTripletMode()) {
-            message = i18n(" Triplet Chord");
-        } else {
-            message = i18n(" Chord");
-        }
-    } else {
-        if (isInTripletMode()) {
-            message = i18n(" Triplet");
-        } else {
-            message = "";
-        }
+
+    if (isInTripletMode()) {
+        message = i18n("%1 %2").arg(message).arg(tripletMessage);
     }
+
+    if (isInChordMode()) {
+        message = i18n("%1 %2").arg(message).arg(chordMessage);
+    }
+
+    if (isInGraceMode()) {
+        message = i18n("%1 %2").arg(message).arg(graceMessage);
+    }
+
     m_insertModeLabel->setText(message);
 }
 
@@ -3689,9 +3892,7 @@ NotationView::slotUpdateAnnotationsStatus()
             Segment &s = getStaff(i)->getSegment();
             for (Segment::iterator j = s.begin(); j != s.end(); ++j) {
                 if ((*j)->isa(Text::EventType) &&
-                        ((*j)->get
-                         <String>
-                         (Text::TextTypePropertyName)
+                        ((*j)->get<String>(Text::TextTypePropertyName)
                          == Text::Annotation)) {
                     m_annotationsLabel->setText(i18n("Hidden annotations"));
                     return ;
@@ -3966,8 +4167,7 @@ NotationView::slotChangeFont(std::string newName, int newSize)
 
     // update the various GUI elements
 
-    std::set
-        <std::string> fs(NoteFontFactory::getFontNames());
+    std::set<std::string> fs(NoteFontFactory::getFontNames());
     std::vector<std::string> f(fs.begin(), fs.end());
     std::sort(f.begin(), f.end());
 
@@ -4074,9 +4274,9 @@ NotationView::slotFilePrintPreview()
 
 std::map<KProcess *, KTempFile *> NotationView::m_lilyTempFileMap;
 
-void NotationView::slotPreviewLilypond()
+void NotationView::slotPrintLilypond()
 {
-    KTmpStatusMsg msg(i18n("Previewing Lilypond file..."), this);
+    KTmpStatusMsg msg(i18n("Printing LilyPond file..."), this);
     KTempFile *file = new KTempFile(QString::null, ".ly");
     file->setAutoDelete(true);
     if (!file->name()) {
@@ -4089,7 +4289,32 @@ void NotationView::slotPreviewLilypond()
     }
     KProcess *proc = new KProcess;
     *proc << "rosegarden-lilypondview";
-    *proc << "-g";
+    *proc << "--graphical";
+    *proc << "--print";
+    *proc << file->name();
+    connect(proc, SIGNAL(processExited(KProcess *)),
+            this, SLOT(slotLilypondViewProcessExited(KProcess *)));
+    m_lilyTempFileMap[proc] = file;
+    proc->start(KProcess::NotifyOnExit);
+}
+
+void NotationView::slotPreviewLilypond()
+{
+    KTmpStatusMsg msg(i18n("Previewing LilyPond file..."), this);
+    KTempFile *file = new KTempFile(QString::null, ".ly");
+    file->setAutoDelete(true);
+    if (!file->name()) {
+        // CurrentProgressDialog::freeze();
+        KMessageBox::sorry(this, i18n("Failed to open a temporary file for Lilypond export."));
+        delete file;
+    }
+    if (!exportLilypondFile(file->name(), true)) {
+        return ;
+    }
+    KProcess *proc = new KProcess;
+    *proc << "rosegarden-lilypondview";
+    *proc << "--graphical";
+    *proc << "--pdf";
     *proc << file->name();
     connect(proc, SIGNAL(processExited(KProcess *)),
             this, SLOT(slotLilypondViewProcessExited(KProcess *)));
@@ -4117,7 +4342,7 @@ bool NotationView::exportLilypondFile(QString file, bool forPreview)
         return false;
     }
 
-    ProgressDialog progressDlg(i18n("Exporting Lilypond file..."),
+    ProgressDialog progressDlg(i18n("Exporting LilyPond file..."),
                                100,
                                this);
 
@@ -4178,14 +4403,14 @@ void NotationView::slotEditCutAndClose()
 }
 
 static const QString RESTRICTED_PASTE_FAILED_DESCRIPTION = i18n(
-                      "The Restricted paste type requires enough empty\n" \
-                      "space (containing only rests) at the paste position\n" \
+                      "The Restricted paste type requires enough empty " \
+                      "space (containing only rests) at the paste position " \
                       "to hold all of the events to be pasted.\n" \
                       "Not enough space was found.\n" \
-                      "If you want to paste anyway, consider using one of\n" \
-                      "the other paste types from the \"Paste...\" option\n" \
-                      "on the Edit menu.  You can also change the default\n" \
-                      "paste type to something other than Restricted if\n" \
+                      "If you want to paste anyway, consider using one of " \
+                      "the other paste types from the \"Paste...\" option " \
+                      "on the Edit menu.  You can also change the default " \
+                      "paste type to something other than Restricted if " \
                       "you wish."
     );
 
@@ -4229,10 +4454,7 @@ void NotationView::slotEditPaste()
              i18n("Couldn't paste at this point."), RESTRICTED_PASTE_FAILED_DESCRIPTION);
     } else {
         addCommandToHistory(command);
-        //!!! well, we really just want to select the events
-        // we just pasted
-        setCurrentSelection(new EventSelection
-                            (segment, insertionTime, endTime));
+        setCurrentSelection(new EventSelection(command->getPastedEvents()));
         slotSetInsertCursorPosition(endTime, true, false);
     }
 }
@@ -4287,6 +4509,62 @@ void NotationView::slotEditGeneralPaste()
             slotSetInsertCursorPosition(endTime, true, false);
         }
     }
+}
+
+void
+NotationView::slotMoveEventsUpStaff()
+{
+    LinedStaff *targetStaff = getStaffAbove();
+    if (!targetStaff) return;
+    if (!m_currentEventSelection) return;
+    Segment &targetSegment = targetStaff->getSegment();
+    
+    KMacroCommand *command = new KMacroCommand(i18n("Move Events to Staff Above"));
+
+    timeT insertionTime = m_currentEventSelection->getStartTime();
+
+    Clipboard *c = new Clipboard;
+    CopyCommand *cc = new CopyCommand(*m_currentEventSelection, c);
+    cc->execute();
+
+    command->addCommand(new EraseCommand(*m_currentEventSelection));;
+
+    command->addCommand(new PasteEventsCommand
+                        (targetSegment, c,
+                         insertionTime,
+                         PasteEventsCommand::NoteOverlay));
+
+    addCommandToHistory(command);
+
+    delete c;
+}
+
+void
+NotationView::slotMoveEventsDownStaff()
+{
+    LinedStaff *targetStaff = getStaffBelow();
+    if (!targetStaff) return;
+    if (!m_currentEventSelection) return;
+    Segment &targetSegment = targetStaff->getSegment();
+    
+    KMacroCommand *command = new KMacroCommand(i18n("Move Events to Staff Below"));
+
+    timeT insertionTime = m_currentEventSelection->getStartTime();
+
+    Clipboard *c = new Clipboard;
+    CopyCommand *cc = new CopyCommand(*m_currentEventSelection, c);
+    cc->execute();
+
+    command->addCommand(new EraseCommand(*m_currentEventSelection));;
+
+    command->addCommand(new PasteEventsCommand
+                        (targetSegment, c,
+                         insertionTime,
+                         PasteEventsCommand::NoteOverlay));
+
+    addCommandToHistory(command);
+
+    delete c;
 }
 
 void NotationView::slotPreviewSelection()
@@ -4561,15 +4839,6 @@ void NotationView::slotGroupUnTuplet()
                         (*m_currentEventSelection));
 }
 
-void NotationView::slotGroupUnGrace()
-{
-    if (!m_currentEventSelection)
-        return ;
-    KTmpStatusMsg msg(i18n("Making non-grace notes..."), this);
-
-    addCommandToHistory(new UnGraceCommand(*m_currentEventSelection));
-}
-
 void NotationView::slotTransformsNormalizeRests()
 {
     if (!m_currentEventSelection)
@@ -4617,16 +4886,6 @@ void NotationView::slotTransformsRestoreStems()
     KTmpStatusMsg msg(i18n("Restoring computed stem directions..."), this);
 
     addCommandToHistory(new RestoreStemsCommand
-                        (*m_currentEventSelection));
-}
-
-void NotationView::slotTransformsRestoreSlurs()
-{
-    if (!m_currentEventSelection)
-        return ;
-    KTmpStatusMsg msg(i18n("Restoring slur positions..."), this);
-
-    addCommandToHistory(new RestoreSlursCommand
                         (*m_currentEventSelection));
 }
 
@@ -5096,15 +5355,17 @@ void NotationView::slotEditAddKeySignature()
 
         bool transposeKey = dialog.shouldBeTransposed();
         bool applyToAll = dialog.shouldApplyToAll();
+	bool ignorePercussion = dialog.shouldIgnorePercussion();
 
         if (applyToAll) {
             addCommandToHistory
                 (new MultiKeyInsertionCommand
-                 (getDocument()->getComposition(),
+                 (getDocument(),
                   insertionTime, dialog.getKey(),
                   conversion == KeySignatureDialog::Convert,
                   conversion == KeySignatureDialog::Transpose,
-                  transposeKey));
+                  transposeKey,
+		  ignorePercussion));
         } else {
             addCommandToHistory
                 (new KeyInsertionCommand
@@ -5112,7 +5373,8 @@ void NotationView::slotEditAddKeySignature()
                   insertionTime, dialog.getKey(),
                   conversion == KeySignatureDialog::Convert,
                   conversion == KeySignatureDialog::Transpose,
-                  transposeKey));
+                  transposeKey,
+		  false));
         }
     }
 }
@@ -5171,69 +5433,63 @@ void NotationView::slotEditAddSustainUp()
 
 void NotationView::slotEditTranspose()
 {
-	IntervalDialog intervalDialog(this, true, true);
+    IntervalDialog intervalDialog(this, true, true);
     int ok = intervalDialog.exec();
     
     int semitones = intervalDialog.getChromaticDistance();
     int steps = intervalDialog.getDiatonicDistance();
-	
-	if (!ok || (semitones == 0 && steps == 0)) return;
+
+    if (!ok || (semitones == 0 && steps == 0)) return;
+
+    // TODO combine commands into one 
+    for (int i = 0; i < m_segments.size(); i++)
+    {
+        addCommandToHistory(new SegmentTransposeCommand(*(m_segments[i]), 
+            intervalDialog.getChangeKey(), steps, semitones, 
+            intervalDialog.getTransposeSegmentBack()));
+    }
+}
+
+void NotationView::slotEditSwitchPreset()
+{
+    PresetHandlerDialog dialog(this, true);
     
-    Segment &segment = m_staffs[m_currentStaff]->getSegment();
-	EventSelection wholeSegment(segment, segment.getStartTime(), segment.getEndMarkerTime());
+    if (dialog.exec() != QDialog::Accepted) return;
     
-    //TODO who cleans this up?
-    KMacroCommand *macro = new KMacroCommand("Transpose Segment by Interval");
-    
-    // Key insertion can do transposition, but a C4 to D becomes a D4, while
-	//  a C4 to G becomes a G3. Because we let the user specify an explicit number
-	//  of octaves to move the notes up/down, we add the keys without transposing
-	//  and handle the transposition ourselves:
-	if (intervalDialog.getChangeKey())
-	{
-		Rosegarden::Key key = segment.getKeyAtTime(segment.getStartTime());
-		Rosegarden::Key newKey = key.transpose(semitones, steps);
-		
-		macro->addCommand
-			(new KeyInsertionCommand
-			 (segment,
-			  segment.getStartTime(),
-			  newKey,
-			  false,
-			  false,
-			  true));
-		
-		EventSelection::eventcontainer::iterator i;
-		std::list<KeyInsertionCommand*> commands;
-		
-		for (i = wholeSegment.getSegmentEvents().begin();
-            i != wholeSegment.getSegmentEvents().end(); ++i) {
-        		// transpose key
-				if ((*i)->isa(Rosegarden::Key::EventType)) {
-        			macro->addCommand
-						(new KeyInsertionCommand
-						 (segment,
-			  			 (*i)->getAbsoluteTime(),
-			  			 (Rosegarden::Key (**i)).transpose(semitones, steps),
-			 			 false,
-			 			 false,
-					 	 true));
-        		}
-        		
-        }
-	}
-	
-	macro->addCommand(new TransposeCommand
-		(semitones, steps, wholeSegment));
-	
-	if (intervalDialog.getTransposeSegmentBack())
-	{
-		// Transpose segment in opposite direction
-		int newTranspose = segment.getTranspose() - semitones;
-		macro->addCommand(new SegmentChangeTransposeCommand(newTranspose, &segment));
-	}
-	
-	addCommandToHistory(macro);
+    if (dialog.getConvertAllSegments()) {
+        // get all segments for this track and convert them.
+        Composition& comp = getDocument()->getComposition();
+        TrackId selectedTrack = getCurrentSegment()->getTrack();
+
+	// satisfy #1885251 the way that seems most reasonble to me at the
+	// moment, only changing track parameters when acting on all segments on
+	// this track from the notation view 
+	//
+	//!!! This won't be undoable, and I'm not sure if that's seriously
+	// wrong, or just mildly wrong, but I'm betting somebody will tell me
+	// about it if this was inappropriate
+	Track *track = comp.getTrackById(selectedTrack);
+	track->setPresetLabel(dialog.getName());
+	track->setClef(dialog.getClef());
+	track->setTranspose(dialog.getTranspose());
+	track->setLowestPlayable(dialog.getLowRange());
+	track->setHighestPlayable(dialog.getHighRange());
+
+        addCommandToHistory(new SegmentSyncCommand(comp.getSegments(), selectedTrack,
+                            dialog.getTranspose(), 
+                            dialog.getLowRange(), 
+                            dialog.getHighRange(),
+                            clefIndexToClef(dialog.getClef())));
+    } else {
+        addCommandToHistory(new SegmentSyncCommand(m_segments, 
+                            dialog.getTranspose(), 
+                            dialog.getLowRange(), 
+                            dialog.getHighRange(),
+                            clefIndexToClef(dialog.getClef())));
+    }
+
+    m_doc->slotDocumentModified();
+    emit updateView();
 }
 
 void NotationView::slotEditElement(NotationStaff *staff,
@@ -5297,7 +5553,8 @@ void NotationView::slotEditElement(NotationStaff *staff,
                       element->event()->getAbsoluteTime(), dialog.getKey(),
                       conversion == KeySignatureDialog::Convert,
                       conversion == KeySignatureDialog::Transpose,
-                      dialog.shouldBeTransposed()));
+                      dialog.shouldBeTransposed(),
+		      dialog.shouldIgnorePercussion()));
             }
 
         } catch (Exception e) {
@@ -5451,7 +5708,6 @@ NotationView::slotUpdateRecordingSegment(Segment *segment,
         return ;
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
         if (&m_staffs[i]->getSegment() == segment) {
-            //	    refreshSegment(segment, updateFrom, segment->getEndMarkerTime());
             refreshSegment(segment, 0, 0);
         }
     }
@@ -5495,61 +5751,26 @@ NotationView::slotSetCurrentStaff(int staffNo)
         updateView();
 
         slotSetInsertCursorPosition(getInsertionTime(), false, false);
+
+        m_headersGroup->setCurrent(
+                                m_staffs[staffNo]->getSegment().getTrack());
     }
 }
 
 void
 NotationView::slotCurrentStaffUp()
 {
-    if (m_staffs.size() < 2)
-        return ;
-
-    Composition *composition =
-        m_staffs[m_currentStaff]->getSegment().getComposition();
-
-    Track *track = composition->
-        getTrackById(m_staffs[m_currentStaff]->getSegment().getTrack());
-    if (!track)
-        return ;
-
-    int position = track->getPosition();
-    Track *newTrack = 0;
-
-    while ((newTrack = composition->getTrackByPosition(--position))) {
-        for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-            if (m_staffs[i]->getSegment().getTrack() == newTrack->getId()) {
-                slotSetCurrentStaff(i);
-                return ;
-            }
-        }
-    }
+    LinedStaff *staff = getStaffAbove();
+    if (!staff) return;
+    slotSetCurrentStaff(staff->getId());
 }
 
 void
 NotationView::slotCurrentStaffDown()
 {
-    if (m_staffs.size() < 2)
-        return ;
-
-    Composition *composition =
-        m_staffs[m_currentStaff]->getSegment().getComposition();
-
-    Track *track = composition->
-        getTrackById(m_staffs[m_currentStaff]->getSegment().getTrack());
-    if (!track)
-        return ;
-
-    int position = track->getPosition();
-    Track *newTrack = 0;
-
-    while ((newTrack = composition->getTrackByPosition(++position))) {
-        for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-            if (m_staffs[i]->getSegment().getTrack() == newTrack->getId()) {
-                slotSetCurrentStaff(i);
-                return ;
-            }
-        }
-    }
+    LinedStaff *staff = getStaffBelow();
+    if (!staff) return;
+    slotSetCurrentStaff(staff->getId());
 }
 
 void
@@ -5928,7 +6149,7 @@ void NotationView::slotText()
 void NotationView::slotGuitarChord()
 {
     m_currentNotePixmap->setPixmap
-        (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("text")));
+        (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("guitarchord")));
     setTool(m_toolBox->getTool(GuitarChordInserter::ToolName));
     setMenuStates();
 }
@@ -6441,6 +6662,46 @@ NotationView::slotRenderSomething()
 NotationCanvasView* NotationView::getCanvasView()
 {
     return dynamic_cast<NotationCanvasView *>(m_canvasView);
+}
+
+void
+NotationView::slotVerticalScrollHeadersGroup(int y)
+{
+    m_headersGroupView->setContentsPos(0, y);
+}
+
+void
+NotationView::slotShowHeadersGroup()
+{
+    m_showHeadersGroup = 2;
+    showHeadersGroup();
+}
+
+void
+NotationView::slotHideHeadersGroup()
+{
+    m_showHeadersGroup = 0;
+    hideHeadersGroup();
+}
+
+void
+NotationView::showHeadersGroup()
+{
+    if (m_headersGroupView && (m_pageMode == LinedStaff::LinearMode)) {
+        m_headersGroupView->setFixedWidth(
+                                m_headersGroupView->contentsWidth() + 2);
+        m_headersGroupView->show();
+        m_headersTopFrame->show();
+    }
+}
+
+void
+NotationView::hideHeadersGroup()
+{
+    if (m_headersGroupView) {
+        m_headersGroupView->hide();
+        m_headersTopFrame->hide();
+    }
 }
 
 }

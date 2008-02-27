@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -344,7 +344,7 @@ NoteSymbols::getGuitarChordHeight ( int imgHeight ) const
 unsigned int
 NoteSymbols::getFontPixelSize ( int imgWidth, int imgHeight ) const
 {
-    return std::max(6, imgHeight / 10);
+    return std::max(8, imgHeight / 10);
 }
 
 std::pair<bool, unsigned int>

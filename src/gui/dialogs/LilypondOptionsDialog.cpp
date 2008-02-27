@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -24,14 +24,17 @@
 
 
 #include "LilypondOptionsDialog.h"
+#include "document/io/LilypondExporter.h"
+#include "gui/configuration/HeadersConfigurationPage.h"
+
 #include <qlayout.h>
 #include <kapplication.h>
 
-#include <klocale.h>
 #include "document/ConfigGroups.h"
 #include "document/RosegardenGUIDoc.h"
 #include "misc/Strings.h"
 #include <kcombobox.h>
+#include <klineedit.h>
 #include <kconfig.h>
 #include <kdialogbase.h>
 #include <kglobal.h>
@@ -48,7 +51,6 @@
 #include <qwidget.h>
 #include <iostream>
 
-
 namespace Rosegarden
 {
 
@@ -61,6 +63,8 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
                     Apply | Ok | Cancel),
 	m_doc(doc)
 {
+    setHelp("file-printing");
+
     KConfig *config = kapp->config();
     config->setGroup(NotationViewConfigGroup);
 
@@ -72,14 +76,26 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
 
     QTabWidget * tabWidget = new QTabWidget(mainbox);
 
-    QVBox * vboxGeneral = new QVBox();
-    tabWidget->addTab(vboxGeneral,i18n("General options"));
+    QFrame *generalFrame;
+    QFrame *advancedFrame;
+    QGridLayout *generalGrid;
+    QGridLayout *advancedGrid;
 
-    QVBox * vboxAdvanced = new QVBox();
-    tabWidget->addTab(vboxAdvanced,i18n("Advanced options"));
+    generalFrame = new QFrame();
+    tabWidget->addTab(generalFrame, i18n("General options"));
 
-    QVBox * vboxHeaders = new QVBox();
-    tabWidget->addTab(vboxHeaders,i18n("Headers"));
+    generalGrid = new QGridLayout(generalFrame, 1, 1, 5, 5);
+
+    advancedFrame = new QFrame();
+    tabWidget->addTab(advancedFrame, i18n("Advanced options"));
+
+    advancedGrid = new QGridLayout(advancedFrame, 1, 1, 5, 5);
+
+    m_headersPage = new HeadersConfigurationPage(this, m_doc);
+    tabWidget->addTab(m_headersPage, i18n("Headers"));
+
+    m_headersPage->setSpacing(5);
+    m_headersPage->setMargin(5);
 
     //
     // LilyPond export: Basic options
@@ -87,7 +103,8 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
 
     QGroupBox *basicOptionsBox = new QGroupBox
                            (1, Horizontal,
-                            i18n("Basic options"), vboxGeneral);
+                            i18n("Basic options"), generalFrame);
+    generalGrid->addWidget(basicOptionsBox, 0, 0);
 
     QFrame *frameBasic = new QFrame(basicOptionsBox);
     QGridLayout *layoutBasic = new QGridLayout(frameBasic, 3, 2, 10, 5);
@@ -127,8 +144,7 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
     m_lilyPaperLandscape->setChecked(config->readBoolEntry("lilypaperlandscape", false));
 
     hboxPaper->addWidget( m_lilyPaperSize );
-    hboxPaper->addItem( new QSpacerItem( 2, 9, QSizePolicy::Minimum, 
-			    QSizePolicy::Expanding ) );
+    hboxPaper->addWidget( new QLabel( " ", frameBasic ) ); // fixed-size spacer
     hboxPaper->addWidget( m_lilyPaperLandscape );
     layoutBasic->addLayout(hboxPaper, 1, 1);
 
@@ -150,7 +166,8 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
 
     QGroupBox *staffOptionsBox = new QGroupBox
                            (1, Horizontal,
-                            i18n("Staff level options"), vboxGeneral);
+                            i18n("Staff level options"), generalFrame);
+    generalGrid->addWidget(staffOptionsBox, 1, 0);
 
     QFrame *frameStaff = new QFrame(staffOptionsBox);
     QGridLayout *layoutStaff = new QGridLayout(frameStaff, 2, 2, 10, 5);
@@ -164,6 +181,7 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
     m_lilyExportSelection->insertItem(i18n("Selected track"));
     m_lilyExportSelection->insertItem(i18n("Selected segments"));
     m_lilyExportSelection->setCurrentItem(config->readUnsignedNumEntry("lilyexportselection", 1));
+
     layoutStaff->addWidget(m_lilyExportSelection, 0, 1);
 
     m_lilyExportStaffMerge = new QCheckBox(
@@ -177,7 +195,8 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
 
     QGroupBox *notationOptionsBox = new QGroupBox
                            (1, Horizontal,
-                            i18n("Notation options"), vboxGeneral);
+                            i18n("Notation options"), generalFrame);
+    generalGrid->addWidget(notationOptionsBox, 2, 0);
 
     QFrame *frameNotation = new QFrame(notationOptionsBox);
     QGridLayout *layoutNotation = new QGridLayout(frameNotation, 4, 2, 10, 5);
@@ -193,11 +212,13 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
     layoutNotation->addWidget(m_lilyTempoMarks, 0, 1);
  
     m_lilyExportLyrics = new QCheckBox(
-                             i18n("Export lyrics (takes some space, even if empty)"), frameNotation);
+                             i18n("Export lyrics"), frameNotation);
     // default to lyric export == false because if you export the default
     // empty "- - -" lyrics, crap results ensue, and people will know if they
     // do need to export the lyrics - DMM
-    m_lilyExportLyrics->setChecked(config->readBoolEntry("lilyexportlyrics", false));
+    // fixed, no "- - -" lyrics are generated for an empty lyrics
+    // default again into lyrics - HJJ
+    m_lilyExportLyrics->setChecked(config->readBoolEntry("lilyexportlyrics", true));
     layoutNotation->addMultiCellWidget(m_lilyExportLyrics, 1, 1, 0, 1);
 
     m_lilyExportBeams = new QCheckBox(
@@ -205,132 +226,72 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
     m_lilyExportBeams->setChecked(config->readBoolEntry("lilyexportbeamings", false));
     layoutNotation->addMultiCellWidget(m_lilyExportBeams, 2, 2, 0, 1);
 
-    m_lilyExportStaffGroup = new QCheckBox(
+// deprecated option - replaced with per-track combo boxes
+/*  m_lilyExportStaffGroup = new QCheckBox(
                                  i18n("Add staff group bracket"), frameNotation);
     m_lilyExportStaffGroup->setChecked(config->readBoolEntry("lilyexportstaffgroup", false));
-    layoutNotation->addMultiCellWidget(m_lilyExportStaffGroup, 3, 3, 0, 1);
+    layoutNotation->addMultiCellWidget(m_lilyExportStaffGroup, 3, 3, 0, 1); */
+
+    generalGrid->setRowStretch(4, 10);
 
     //
-    // LilyPond export: Extra options
+    // LilyPond export: Advanced options
     //
 
-    QGroupBox *extraOptionsBox = new QGroupBox
+    QGroupBox *advancedLayoutOptionsBox = new QGroupBox
                            (1, Horizontal,
-                            i18n("Extra options"), vboxAdvanced);
+                            i18n("Layout options"), advancedFrame);
+    advancedGrid->addWidget(advancedLayoutOptionsBox, 0, 0);
 
-    QFrame *frameExtra = new QFrame(extraOptionsBox);
-    QGridLayout *layoutExtra = new QGridLayout(frameExtra, 3, 1, 10, 5);
+    QFrame *frameAdvancedLayout = new QFrame(advancedLayoutOptionsBox);
+    QGridLayout *layoutAdvancedLayout = new QGridLayout(frameAdvancedLayout, 2, 2, 10, 5);
 
-    m_lilyExportPointAndClick = new QCheckBox(
-                                    i18n("Enable \"point and click\" debugging"), frameExtra);
-    m_lilyExportPointAndClick->setChecked(config->readBoolEntry("lilyexportpointandclick", false));
-    layoutExtra->addWidget(m_lilyExportPointAndClick, 0, 0);
+    m_lilyLyricsHAlignment = new KComboBox( frameAdvancedLayout );
+    m_lilyLyricsHAlignment->insertItem(i18n("Left"));
+    m_lilyLyricsHAlignment->insertItem(i18n("Center"));
+    m_lilyLyricsHAlignment->insertItem(i18n("Right"));
+    m_lilyLyricsHAlignment->setCurrentItem(config->readUnsignedNumEntry("lilylyricshalignment", 0));
 
-    m_lilyExportMidi = new QCheckBox(
-                           i18n("Export \\midi block"), frameExtra);
-    m_lilyExportMidi->setChecked(config->readBoolEntry("lilyexportmidi", false));
-    layoutExtra->addWidget(m_lilyExportMidi, 1, 0);
+    layoutAdvancedLayout->addWidget(new QLabel(
+                          i18n("Lyrics alignment"), frameAdvancedLayout), 0, 0);
+    layoutAdvancedLayout->addWidget(m_lilyLyricsHAlignment, 0, 1);
 
     m_lilyRaggedBottom = new QCheckBox(
-                           i18n("Ragged bottom (systems will not be spread vertically across the page)"), frameExtra);
+                           i18n("Ragged bottom (systems will not be spread vertically across the page)"), frameAdvancedLayout);
     m_lilyRaggedBottom->setChecked(config->readBoolEntry("lilyraggedbottom", false));
-    layoutExtra->addWidget(m_lilyRaggedBottom, 2, 0);
+    layoutAdvancedLayout->addMultiCellWidget(m_lilyRaggedBottom, 1, 2, 0, 1);
 
-    //
-    // LilyPond export: Headers
-    //
-
-    QGroupBox *headersBox = new QGroupBox
+    QGroupBox *miscOptionsBox = new QGroupBox
                            (1, Horizontal,
-                            i18n("Printable headers"), vboxHeaders);
+                            i18n("Miscellaneous options"), advancedFrame);
+    advancedGrid->addWidget(miscOptionsBox, 1, 0);
 
-    QFrame *frameHeaders = new QFrame(headersBox);
-    QGridLayout *layoutHeaders = new QGridLayout(frameHeaders, 10, 6, 10, 5);
+    QFrame *frameMisc = new QFrame(miscOptionsBox);
+    QGridLayout *layoutMisc = new QGridLayout(frameMisc, 2, 2, 10, 5);
 
-    // grab user headers from metadata
-    Configuration metadata = (&m_doc->getComposition())->getMetadata();
-    std::vector<std::string> propertyNames = metadata.getPropertyNames();
-    std::vector<PropertyName> fixedKeys =
-	CompositionMetadataKeys::getFixedKeys();
+    m_lilyExportPointAndClick = new QCheckBox(
+                                    i18n("Enable \"point and click\" debugging"), frameMisc);
+    m_lilyExportPointAndClick->setChecked(config->readBoolEntry("lilyexportpointandclick", false));
+    layoutMisc->addMultiCellWidget(m_lilyExportPointAndClick, 0, 0, 0, 1);
 
-    for (unsigned int index = 0; index < fixedKeys.size(); index++) {
-	std::string key = fixedKeys[index].getName();
-	std::string header = "";
-	for (unsigned int i = 0; i < propertyNames.size(); ++i) {
-	    std::string property = propertyNames [i];
-	    if (property == key) {
-		header = metadata.get<String>(property);
-	    }
-	}
+    m_lilyExportMidi = new QCheckBox(
+                           i18n("Export \\midi block"), frameMisc);
+    m_lilyExportMidi->setChecked(config->readBoolEntry("lilyexportmidi", false));
+    layoutMisc->addMultiCellWidget(m_lilyExportMidi, 1, 1, 0, 1);
 
-	unsigned int row = 0, col = 0, width = 1;
-	QLineEdit *editHeader = new QLineEdit( QString( header ), frameHeaders );
-	if (key == headerDedication) {  
-	    m_editDedication = editHeader;
-	    row = 0; col = 2; width = 2;
-	}
-	if (key == headerTitle) {       
-	    m_editTitle = editHeader;	
-	    row = 1; col = 1; width = 4;
-	    }
-	if (key == headerSubtitle) {
-	    m_editSubtitle = editHeader;
-	    row = 2; col = 1; width = 4;
-	}
-	if (key == headerSubsubtitle) { 
-	    m_editSubsubtitle = editHeader;
-	    row = 3; col = 2; width = 2;
-	}
-	if (key == headerPoet) {        
-	    m_editPoet = editHeader;
-	    row = 4; col = 0; width = 2;
-	}
-	if (key == headerInstrument) {  
-	    m_editInstrument = editHeader;
-	    row = 4; col = 2; width = 2;
-	}
-	if (key == headerComposer) {    
-	    m_editComposer = editHeader;
-	    row = 4; col = 4; width = 2; 
-	}
-	if (key == headerMeter) {       
-	    m_editMeter = editHeader;
-	    row = 5; col = 0; width = 3; 
-	}
-	if (key == headerArranger) {    
-	    m_editArranger = editHeader;
-	    row = 5; col = 3; width = 3; 
-	}
-	if (key == headerPiece) {       
-	    m_editPiece = editHeader;
-	    row = 6; col = 0; width = 3; 
-	}
-	if (key == headerOpus) {        
-	    m_editOpus = editHeader;
-	    row = 6; col = 3; width = 3; 
-	}
-	if (key == headerCopyright) {   
-	    m_editCopyright = editHeader;
-	    row = 8; col = 1; width = 4; 
-	}
-	if (key == headerTagline) {     
-	    m_editTagline = editHeader;
-	    row = 9; col = 1; width = 4; 
-	}
+    m_lilyMarkerMode = new KComboBox(frameMisc);
+    m_lilyMarkerMode->insertItem(i18n("No markers"));
+    m_lilyMarkerMode->insertItem(i18n("Rehearsal marks"));
+    m_lilyMarkerMode->insertItem(i18n("Marker text"));
+    m_lilyMarkerMode->setCurrentItem(config->readUnsignedNumEntry("lilyexportmarkermode", 0));
 
-	// editHeader->setReadOnly( true );
-	editHeader->setAlignment( (col == 0 ? Qt::AlignLeft : (col >= 3 ? Qt::AlignRight : Qt::AlignCenter) ));
+    layoutMisc->addWidget( new QLabel( 
+                             i18n("Export markers"), frameMisc),2, 0 );
+    layoutMisc->addWidget(m_lilyMarkerMode, 2, 1);
+    
+    advancedGrid->setRowStretch(2, 10);
 
-	layoutHeaders->addMultiCellWidget(editHeader, row, row, col, col+(width-1) );
-
-	//
-	// ToolTips
-	//
-	QToolTip::add( editHeader, key );
-    }
-    QLabel *separator = new QLabel(i18n("The composition comes here."), frameHeaders);
-    separator->setAlignment( Qt::AlignCenter );
-    layoutHeaders->addMultiCellWidget(separator, 7, 7, 1, 4 );
+    resize(minimumSize());
 }
 
 void
@@ -350,29 +311,10 @@ LilypondOptionsDialog::slotApply()
     config->writeEntry("lilyexportselection", m_lilyExportSelection->currentItem());
     config->writeEntry("lilyexportpointandclick", m_lilyExportPointAndClick->isChecked());
     config->writeEntry("lilyexportbeamings", m_lilyExportBeams->isChecked());
-    config->writeEntry("lilyexportstaffgroup", m_lilyExportStaffGroup->isChecked());
     config->writeEntry("lilyexportstaffmerge", m_lilyExportStaffMerge->isChecked());
-
-    //
-    // Update header fields
-    //
-
-    Configuration &metadata = (&m_doc->getComposition())->getMetadata();
-    metadata.set<String>(CompositionMetadataKeys::Dedication, qstrtostr(m_editDedication->text()));
-    metadata.set<String>(CompositionMetadataKeys::Title, qstrtostr(m_editTitle->text()));
-    metadata.set<String>(CompositionMetadataKeys::Subtitle, qstrtostr(m_editSubtitle->text()));
-    metadata.set<String>(CompositionMetadataKeys::Subsubtitle, qstrtostr(m_editSubsubtitle->text()));
-    metadata.set<String>(CompositionMetadataKeys::Poet, qstrtostr(m_editPoet->text()));
-    metadata.set<String>(CompositionMetadataKeys::Composer, qstrtostr(m_editComposer->text()));
-    metadata.set<String>(CompositionMetadataKeys::Meter, qstrtostr(m_editMeter->text()));
-    metadata.set<String>(CompositionMetadataKeys::Opus, qstrtostr(m_editOpus->text()));
-    metadata.set<String>(CompositionMetadataKeys::Arranger, qstrtostr(m_editArranger->text()));
-    metadata.set<String>(CompositionMetadataKeys::Instrument, qstrtostr(m_editInstrument->text()));
-    metadata.set<String>(CompositionMetadataKeys::Piece, qstrtostr(m_editPiece->text()));
-    metadata.set<String>(CompositionMetadataKeys::Copyright, qstrtostr(m_editCopyright->text()));
-    metadata.set<String>(CompositionMetadataKeys::Tagline, qstrtostr(m_editTagline->text()));
-
-    m_doc->slotDocumentModified();
+    config->writeEntry("lilylyricshalignment", m_lilyLyricsHAlignment->currentItem());
+    config->writeEntry("lilyexportmarkermode", m_lilyMarkerMode->currentItem());
+    m_headersPage->apply();
 }
  
 void

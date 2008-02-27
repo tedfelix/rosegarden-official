@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -36,6 +36,7 @@
 #include "RosegardenParameterArea.h"
 #include "RosegardenParameterBox.h"
 #include <qstring.h>
+#include <qcheckbox.h> // #include <QCheckBox> in QT4, thinking ahead
 #include <vector>
 
 
@@ -44,6 +45,7 @@ class QPushButton;
 class QLabel;
 class QFrame;
 class KComboBox;
+class QCheckBox;
 
 
 namespace Rosegarden
@@ -87,6 +89,9 @@ public slots:
     void slotLowestPressed();
     void slotPresetPressed();
 
+    void slotStaffSizeChanged(int index);
+    void slotStaffBracketChanged(int index);
+
 signals:
     void instrumentSelected(TrackId, int);
 
@@ -109,8 +114,10 @@ private:
 
     KComboBox           *m_defClef;
     KComboBox           *m_defColor;
-
     KComboBox           *m_defTranspose;
+    KComboBox           *m_staffSizeCombo;
+    KComboBox           *m_staffBracketCombo;
+
 
     int                 m_addColourPos;
     int                 m_highestPlayable;
@@ -130,14 +137,17 @@ private:
     int                 m_selectedTrackId;
     
     char                m_lastInstrumentType;
-    
+
     // Additional elements that may be hidden in vertical stacked mode
     //QFrame              *m_separator2;
     QFrame              *m_playbackGroup;
     QFrame              *m_recordGroup;
     QFrame              *m_defaultsGroup;
+    QFrame              *m_staffGroup;
     QLabel              *m_segHeader;
     QLabel              *m_presetLbl;
+    QLabel              *m_staffGrpLbl;
+    QLabel              *m_grandStaffLbl;
     QLabel              *m_clefLbl;
     QLabel              *m_transpLbl;
     QLabel              *m_colorLbl;

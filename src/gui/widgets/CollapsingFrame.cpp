@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -44,6 +44,7 @@ namespace Rosegarden
 CollapsingFrame::CollapsingFrame(QString label, QWidget *parent, const char *n) :
         QFrame(parent, n),
         m_widget(0),
+        m_fill(false),
         m_collapsed(false)
 {
     m_layout = new QGridLayout(this, 3, 3, 0, 0);
@@ -72,11 +73,33 @@ CollapsingFrame::~CollapsingFrame()
 {}
 
 void
+CollapsingFrame::setWidgetFill(bool fill)
+{
+    m_fill = fill;
+}
+
+QFont
+CollapsingFrame::font() const
+{
+    return m_toggleButton->font();
+}
+
+void
+CollapsingFrame::setFont(QFont font)
+{
+    m_toggleButton->setFont(font);
+}
+
+void
 CollapsingFrame::setWidget(QWidget *widget)
 {
     assert(!m_widget);
     m_widget = widget;
-    m_layout->addWidget(widget, 1, 1);
+    if (m_fill) {
+        m_layout->addMultiCellWidget(widget, 1, 1, 0, 2);
+    } else {
+        m_layout->addWidget(widget, 1, 1);
+    }
 
     bool expanded = true;
     if (name(0)) {
@@ -93,6 +116,8 @@ CollapsingFrame::setWidget(QWidget *widget)
 void
 CollapsingFrame::toggle()
 {
+    int h = m_toggleButton->height();
+
     m_collapsed = !m_collapsed;
 
     m_widget->setShown(!m_collapsed);
@@ -115,6 +140,8 @@ CollapsingFrame::toggle()
     }
 
     m_toggleButton->setIconSet(pixmap);
+
+    m_toggleButton->setMaximumHeight(h);
 }
 
 }

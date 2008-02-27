@@ -2,6 +2,7 @@
 //
 
 #include "NotationTypes.h"
+#include "gui/dialogs/IntervalDialog.h"
 
 using namespace Rosegarden;
 using std::cout;
@@ -109,12 +110,45 @@ int testTransposeBbToF()
     return 0;
 }
 
+int testIntervalString(int steps, int semitones, QString expectedString)
+{
+    QString text = IntervalDialog::getIntervalName(steps, semitones);
+    if (text != expectedString) {
+        std::cout << "When converting the interval " << steps << "," << semitones << " to string, expected '" << expectedString << "' but got '" << text << "'" << std::endl;
+        return -1;
+    }
+    return 0;
+}
+
+int testIntervalToString()
+{
+    return testIntervalString(1,1,"up a minor second")
+        + testIntervalString(0,0,"a perfect unison")
+	+ testIntervalString(0,1,"up an augmented unison") 
+	+ testIntervalString(7,12,"up 1 octave") 
+	+ testIntervalString(7,13,"up an augmented octave");
+
+    QString text = IntervalDialog::getIntervalName(1, 1);
+    std::cout << "Minor second: " << text << std::endl;
+
+    text = IntervalDialog::getIntervalName(0, 0);
+    std::cout << "Perfect unison: " << text << std::endl;
+    text = IntervalDialog::getIntervalName(0, 1);
+    std::cout << "Augmented unison: " << text << std::endl;
+    text = IntervalDialog::getIntervalName(7, 12);
+    std::cout << "1 octave: " << text << std::endl;
+    text = IntervalDialog::getIntervalName(7, 13);
+    std::cout << "Octave and augmented unison: " << text << std::endl;
+    return 0;
+}
+
 int test_transpose(int argc, char **argv)
 {
     return testAisDisplayAccidentalInCmaj() +
         testAisToBis() +
         testGToD() +
-        testCisToC() +
-        testTransposeBbToF();
+        testTransposeBbToF() +
+        testIntervalToString() +
+        testCisToC();
 	
 }

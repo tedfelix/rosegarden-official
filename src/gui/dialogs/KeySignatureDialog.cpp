@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -43,6 +43,7 @@
 #include <qtooltip.h>
 #include <qvbox.h>
 #include <qwidget.h>
+#include <qcheckbox.h>
 
 
 namespace Rosegarden
@@ -61,7 +62,9 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
         m_clef(clef),
         m_valid(true),
         m_ignoreComboChanges(false),
-        m_explanatoryLabel(0)
+        m_explanatoryLabel(0),
+        m_applyToAllButton(0),
+        m_noPercussionCheckBox(0)
 {
     setHelp("nv-signatures-key");
 
@@ -134,6 +137,10 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
             new QRadioButton(i18n("Apply to all segments at this time"),
                              buttonFrame);
         applyToOneButton->setChecked(true);
+        m_noPercussionCheckBox =
+            new QCheckBox(i18n("Exclude percussion segments"), buttonFrame);
+        m_noPercussionCheckBox->setChecked(true);
+        
     } else {
         m_applyToAllButton = 0;
         buttonFrame->hide();
@@ -191,6 +198,12 @@ bool
 KeySignatureDialog::shouldBeTransposed() const
 {
     return m_yesTransposeButton && m_yesTransposeButton->isChecked();
+}
+
+bool
+KeySignatureDialog::shouldIgnorePercussion() const
+{
+    return m_noPercussionCheckBox && m_noPercussionCheckBox->isChecked();
 }
 
 void

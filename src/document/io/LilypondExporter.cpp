@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -21,7 +21,8 @@
 
     Some restructuring by Chris Cannam.
 
-    Brain surgery to support LilyPond 2.x export by Heikki Junes.
+    Massive brain surgery, fixes, improvements, and additions by
+        Heikki Junes
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -55,6 +56,8 @@
 #include "base/Studio.h"
 #include "base/Track.h"
 #include "base/NotationQuantizer.h"
+#include "base/Marker.h"
+#include "base/StaffExportTypes.h"
 #include "document/RosegardenGUIDoc.h"
 #include "gui/application/RosegardenApplication.h"
 #include "gui/application/RosegardenGUIView.h"
@@ -72,7 +75,7 @@
 #include <qtextcodec.h>
 #include <kapplication.h>
 #include <sstream>
-
+#include <algorithm>
 
 namespace Rosegarden
 {
@@ -89,31 +92,12 @@ LilypondExporter::LilypondExporter(RosegardenGUIApp *parent,
         m_doc(doc),
         m_fileName(fileName)
 {
-    m_pitchBorked = false;
-
-    // grab config info
-    KConfig *cfg = kapp->config();
-    cfg->setGroup(NotationViewConfigGroup);
-
-    m_view = ((RosegardenGUIApp *)parent)->getView();
-    m_notationView = NULL;
     m_composition = &m_doc->getComposition();
     m_studio = &m_doc->getStudio();
-    m_paperSize = cfg->readUnsignedNumEntry("lilypapersize", 1);
-    m_paperLandscape = cfg->readBoolEntry("lilypaperlandscape", false);
-    m_fontSize = cfg->readUnsignedNumEntry("lilyfontsize", 4);
-    m_raggedBottom = cfg->readBoolEntry("lilyraggedbottom", false);
-    m_exportSelection = cfg->readUnsignedNumEntry("lilyexportselection", 1);
-    m_exportLyrics = cfg->readBoolEntry("lilyexportlyrics", true);
-    m_exportMidi = cfg->readBoolEntry("lilyexportmidi", false);
-    m_exportTempoMarks = cfg->readUnsignedNumEntry("lilyexporttempomarks", 0);
-    m_exportPointAndClick = cfg->readBoolEntry("lilyexportpointandclick", false);
-    m_exportBeams = cfg->readBoolEntry("lilyexportbeamings", false);
-    m_exportStaffGroup = cfg->readBoolEntry("lilyexportstaffgroup", false);
-    m_exportStaffMerge = cfg->readBoolEntry("lilyexportstaffmerge", false);
+    m_view = ((RosegardenGUIApp *)parent)->getView();
+    m_notationView = NULL;
 
-    m_languageLevel = cfg->readUnsignedNumEntry("lilylanguage", 0);
-
+    readConfigVariables();
 }
 
 LilypondExporter::LilypondExporter(NotationView *parent,
@@ -123,30 +107,36 @@ LilypondExporter::LilypondExporter(NotationView *parent,
         m_doc(doc),
         m_fileName(fileName)
 {
-    m_pitchBorked = false;
+    m_composition = &m_doc->getComposition();
+    m_studio = &m_doc->getStudio();
+    m_view = NULL;
+    m_notationView = ((NotationView *)parent);
 
+    readConfigVariables();
+}
+
+void
+LilypondExporter::readConfigVariables(void)
+{
     // grab config info
     KConfig *cfg = kapp->config();
     cfg->setGroup(NotationViewConfigGroup);
 
-    m_view = NULL;
-    m_notationView = ((NotationView *)parent);
-    m_composition = &m_doc->getComposition();
-    m_studio = &m_doc->getStudio();
-    m_paperSize = cfg->readUnsignedNumEntry("lilypapersize", 1);
+    m_paperSize = cfg->readUnsignedNumEntry("lilypapersize", PAPER_A4);
     m_paperLandscape = cfg->readBoolEntry("lilypaperlandscape", false);
-    m_fontSize = cfg->readUnsignedNumEntry("lilyfontsize", 4);
-    m_exportSelection = cfg->readUnsignedNumEntry("lilyexportselection", 1);
+    m_fontSize = cfg->readUnsignedNumEntry("lilyfontsize", FONT_20);
+    m_raggedBottom = cfg->readBoolEntry("lilyraggedbottom", false);
+    m_exportSelection = cfg->readUnsignedNumEntry("lilyexportselection", EXPORT_NONMUTED_TRACKS);
     m_exportLyrics = cfg->readBoolEntry("lilyexportlyrics", true);
     m_exportMidi = cfg->readBoolEntry("lilyexportmidi", false);
-    m_exportTempoMarks = cfg->readUnsignedNumEntry("lilyexporttempomarks", 0);
+    m_exportTempoMarks = cfg->readUnsignedNumEntry("lilyexporttempomarks", EXPORT_NONE_TEMPO_MARKS);
     m_exportPointAndClick = cfg->readBoolEntry("lilyexportpointandclick", false);
     m_exportBeams = cfg->readBoolEntry("lilyexportbeamings", false);
-    m_exportStaffGroup = cfg->readBoolEntry("lilyexportstaffgroup", false);
     m_exportStaffMerge = cfg->readBoolEntry("lilyexportstaffmerge", false);
+    m_lyricsHAlignment = cfg->readBoolEntry("lilylyricshalignment", LEFT_ALIGN);
 
-    m_languageLevel = cfg->readUnsignedNumEntry("lilylanguage", 0);
-
+    m_languageLevel = cfg->readUnsignedNumEntry("lilylanguage", LILYPOND_VERSION_2_6);
+    m_exportMarkerMode = cfg->readUnsignedNumEntry("lilyexportmarkermode", EXPORT_NO_MARKERS );
 }
 
 LilypondExporter::~LilypondExporter()
@@ -369,6 +359,14 @@ LilypondExporter::protectIllegalChars(std::string inStr)
     return tmpStr.utf8().data();
 }
 
+struct MarkerComp {
+    // Sort Markers by time
+    // Perhaps this should be made generic with a template?
+    bool operator()( Marker *a, Marker *b ) { 
+        return a->getTime() < b->getTime();
+    }
+};
+
 bool
 LilypondExporter::write()
 {
@@ -411,19 +409,19 @@ LilypondExporter::write()
 
     switch (m_languageLevel) {
 
-    case 0:
+    case LILYPOND_VERSION_2_6:
         str << "\\version \"2.6.0\"" << std::endl;
         break;
 
-    case 1:
+    case LILYPOND_VERSION_2_8:
         str << "\\version \"2.8.0\"" << std::endl;
         break;
 
-    case 2:
+    case LILYPOND_VERSION_2_10:
         str << "\\version \"2.10.0\"" << std::endl;
         break;
 
-    case 3:
+    case LILYPOND_VERSION_2_12:
         str << "\\version \"2.12.0\"" << std::endl;
         break;
 
@@ -432,7 +430,7 @@ LilypondExporter::write()
         std::cerr << "ERROR: Unknown language level " << m_languageLevel
 	    << ", using \\version \"2.6.0\" instead" << std::endl;
         str << "\\version \"2.6.0\"" << std::endl;
-        m_languageLevel = 0;
+        m_languageLevel = LILYPOND_VERSION_2_6;
     }
 
     // enable "point and click" debugging via pdf to make finding the
@@ -459,20 +457,6 @@ LilypondExporter::write()
     if (!propertyNames.empty()) {
         str << "\\header {" << std::endl;
         col++;  // indent+
-
-        const std::string headerDedication = "dedication";
-        const std::string headerTitle = "title";
-        const std::string headerSubtitle = "subtitle";
-        const std::string headerSubsubtitle = "subsubtitle";
-        const std::string headerPoet = "poet";
-        const std::string headerComposer = "composer";
-        const std::string headerMeter = "meter";
-        const std::string headerOpus = "opus";
-        const std::string headerArranger = "arranger";
-        const std::string headerInstrument = "instrument";
-        const std::string headerPiece = "piece";
-        const std::string headerCopyright = "copyright";
-        const std::string headerTagline = "tagline";
 
         bool userTagline = false;
 
@@ -520,7 +504,7 @@ LilypondExporter::write()
     // (not the cleanest output but maybe the most reliable)
 
     // paper/font sizes
-    int font = 20; // default, if config problem
+    int font;
     switch (m_fontSize) {
     case 0 :
         font = 11;
@@ -543,6 +527,8 @@ LilypondExporter::write()
     case 6 :
         font = 26;
         break;
+    default :
+	font = 20; // if config problem
     }
 
     str << indent(col) << "#(set-global-staff-size " << font << ")" << std::endl;
@@ -550,28 +536,28 @@ LilypondExporter::write()
     // write user-specified paper type as default paper size
     std::string paper = "";
     switch (m_paperSize) {
-    case 0 :
+    case PAPER_A3 :
         paper += "a3";
         break;
-    case 1 :
+    case PAPER_A4 :
         paper += "a4";
         break;
-    case 2 :
+    case PAPER_A5 :
         paper += "a5";
         break;
-    case 3 :
+    case PAPER_A6 :
         paper += "a6";
         break;
-    case 4 :
+    case PAPER_LEGAL :
         paper += "legal";
         break;
-    case 5 :
+    case PAPER_LETTER :
         paper += "letter";
         break;
-    case 6 :
+    case PAPER_TABLOID :
         paper += "tabloid";
         break;
-    case 7 :
+    case PAPER_NONE :
         paper = "";
         break; // "do not specify"
     }
@@ -666,7 +652,7 @@ LilypondExporter::write()
         bool tempoMarksInvisible = false;
 
         str << indent(col++) << "globalTempo = {" << std::endl;
-        if (m_exportTempoMarks == 0 && tempoMarksInvisible == false) {
+        if (m_exportTempoMarks == EXPORT_NONE_TEMPO_MARKS && tempoMarksInvisible == false) {
             str << indent(col) << "\\override Score.MetronomeMark #'transparent = ##t" << std::endl;
             tempoMarksInvisible = true;
         }
@@ -698,7 +684,7 @@ LilypondExporter::write()
                       tempoChangeTime, tempoChangeTime - prevTempoChangeTime, false, str);
             // add new \tempo only if tempo was changed
             if (tempo != prevTempo) {
-                if (m_exportTempoMarks == 1 && tempoMarksInvisible == false) {
+                if (m_exportTempoMarks == EXPORT_FIRST_TEMPO_MARK && tempoMarksInvisible == false) {
                     str << std::endl << indent(col) << "\\override Score.MetronomeMark #'transparent = ##t";
                     tempoMarksInvisible = true;
                 }
@@ -720,22 +706,55 @@ LilypondExporter::write()
         str << std::endl;
         str << indent(--col) << "}" << std::endl;
     }
+    // Markers
+    // Skip until marker, make sure there's only one marker per measure
+    if ( m_exportMarkerMode != EXPORT_NO_MARKERS ) {
+        str << indent(col++) << "markers = {" << std::endl;
+        timeT prevMarkerTime = 0;
+
+        // Need the markers sorted by time
+        Composition::markercontainer markers( m_composition->getMarkers() ); // copy
+        std::sort( markers.begin(), markers.end(), MarkerComp() );
+        Composition::markerconstiterator i_marker = markers.begin();
+
+        while  ( i_marker != markers.end() ) {
+            timeT markerTime = m_composition->getBarStartForTime((*i_marker)->getTime());
+            RG_DEBUG << "Marker: " << (*i_marker)->getTime() << " previous: " << prevMarkerTime << endl;
+            // how to cope with time signature changes?
+            if ( markerTime > prevMarkerTime ) {
+                str << indent(col);
+                writeSkip(m_composition->getTimeSignatureAt(markerTime),
+                        markerTime, markerTime - prevMarkerTime, false, str);
+                str << "\\mark "; 
+                switch (m_exportMarkerMode) {
+                    case EXPORT_DEFAULT_MARKERS:
+                        // Use the marker name for text
+                        str << "\\default %% " << (*i_marker)->getName() << std::endl;
+                        break;
+                    case EXPORT_TEXT_MARKERS:
+                        // Raise the text above the staff as not to clash with the other stuff
+                        str << "\\markup { \\hspace #0 \\raise #1.5 \"" << (*i_marker)->getName() << "\" }" << std::endl;
+                        break;
+                    default:
+                        break;
+                }
+                prevMarkerTime = markerTime;
+            }
+            ++i_marker;
+        }
+        str << indent(--col) << "}" << std::endl;
+    }
 
     // open \score section
     str << "\\score {" << std::endl;
-
-    // bind staffs with or without staff group bracket
-    str << indent(++col) // indent+
-	<< (m_exportStaffGroup == true ? "\\new StaffGroup " : "")
-	<< "<<" << std::endl;
-
-    // Make chords offset colliding notes by default
-    str << indent(++col) << "% force offset of colliding notes in chords:" << std::endl;
-    str << indent(col)
-    << "\\override Score.NoteColumn #\'force-hshift = #1.0" << std::endl;
-
+    
     int lastTrackIndex = -1;
     int voiceCounter = 0;
+    bool firstTrack = true;
+    int staffGroupCounter = 0;
+    int pianoStaffCounter = 0;
+    int bracket = 0;
+    int prevBracket = -1;
 
     // Write out all segments for each Track, in track order.
     // This involves a hell of a lot of loops through all tracks
@@ -753,12 +772,48 @@ LilypondExporter::write()
             if ((*i)->getTrack() != track->getId())
                 continue;
 
+	    // handle the bracket(s) for the first track, and if no brackets
+	    // present, open with a <<
+	    prevBracket = bracket;
+	    bracket = track->getStaffBracket();
+
+            //!!! how will all these indentions work out?  Probably not well,
+	    // but maybe if users always provide sensible input, this will work
+	    // out sensibly.  Maybe.  If not, we'll need some tracking gizmos to
+	    // figure out the indention, or just skip the indention for these or
+	    // something.  TBA.
+	    if (firstTrack) {
+	        // seems to be common to every case now
+	        str << indent(col++) << "<< % common" << std::endl;
+
+		if (bracket == Brackets::SquareOn) {
+		    str << indent(col++) << "\\context StaffGroup = \"" << staffGroupCounter++
+		        << "\" << " << std::endl; //indent+
+		} else if (bracket == Brackets::CurlyOn) {
+		    str << indent(col++) << "\\context PianoStaff = \"" << pianoStaffCounter++
+		        << "\" << " << std::endl; //indent+
+		} else if (bracket == Brackets::CurlySquareOn) {
+		    str << indent(col++) << "\\context StaffGroup = \"" << staffGroupCounter++
+		        << "\" << " << std::endl; //indent+
+		    str << indent(col++) << "\\context PianoStaff = \"" << pianoStaffCounter++
+		        << "\" << " << std::endl; //indent+
+		}
+
+		// Make chords offset colliding notes by default (only write for
+		// first track)
+		str << indent(++col) << "% force offset of colliding notes in chords:"
+		    << std::endl;
+		str << indent(col)   << "\\override Score.NoteColumn #\'force-hshift = #1.0"
+		    << std::endl;
+	    }
+
             emit setProgress(int(double(trackPos) /
                                  double(m_composition->getNbTracks()) * 100.0));
             rgapp->refreshGUI(50);
             
             bool currentSegmentSelected = false;
-            if ((m_exportSelection == 3) && (m_view != NULL) && (m_view->haveSelection())) {
+            if ((m_exportSelection == EXPORT_SELECTED_SEGMENTS) && 
+		(m_view != NULL) && (m_view->haveSelection())) {
             	//
             	// Check whether the current segment is in the list of selected segments.
             	//
@@ -766,31 +821,66 @@ LilypondExporter::write()
                 for (SegmentSelection::iterator it = selection.begin(); it != selection.end(); it++) {
                     if ((*it) == (*i)) currentSegmentSelected = true;
                 }
-            } else if ((m_exportSelection == 3) && (m_notationView != NULL)) {
+            } else if ((m_exportSelection == EXPORT_SELECTED_SEGMENTS) && (m_notationView != NULL)) {
 		currentSegmentSelected = m_notationView->hasSegment(*i);
 	    }
 
 	    // Check whether the track is a non-midi track.
 	    InstrumentId instrumentId = track->getInstrument();
-	    bool isMidiTrack = (instrumentId >= MidiInstrumentBase && instrumentId < SoftSynthInstrumentBase);
+	    bool isMidiTrack = instrumentId >= MidiInstrumentBase;
     
-    	    // The meaning of exportSelection meaning is to export:
-    	    // 0 -> All tracks
-    	    // 1 -> Non-muted tracks
-    	    // 2 -> Selected track
-    	    // 3 -> Selected segments
             if (isMidiTrack && ( // Skip non-midi tracks.
-		(m_exportSelection == 0) || 
-                ((m_exportSelection == 1) && (!track->isMuted())) ||
-                ((m_exportSelection == 2) && (m_view != NULL) && (track->getId() == m_composition->getSelectedTrack())) ||
-                ((m_exportSelection == 2) && (m_notationView != NULL) && (track->getId() == m_notationView->getCurrentSegment()->getTrack())) ||
-                ((m_exportSelection == 3) && (currentSegmentSelected)))) {
+		(m_exportSelection == EXPORT_ALL_TRACKS) || 
+                ((m_exportSelection == EXPORT_NONMUTED_TRACKS) && (!track->isMuted())) ||
+                ((m_exportSelection == EXPORT_SELECTED_TRACK) && (m_view != NULL) &&
+		 (track->getId() == m_composition->getSelectedTrack())) ||
+                ((m_exportSelection == EXPORT_SELECTED_TRACK) && (m_notationView != NULL) &&
+		 (track->getId() == m_notationView->getCurrentSegment()->getTrack())) ||
+                ((m_exportSelection == EXPORT_SELECTED_SEGMENTS) && (currentSegmentSelected)))) {
                 if ((int) (*i)->getTrack() != lastTrackIndex) {
                     if (lastTrackIndex != -1) {
                         // close the old track (Staff context)
-                        str << indent(--col) << ">> % Staff" << std::endl;  // indent-
+			str << indent(--col) << ">> % Staff ends" << std::endl; //indent-
                     }
                     lastTrackIndex = (*i)->getTrack();
+
+
+		    // handle any necessary bracket closures with a rude
+		    // hack, because bracket closures need to be handled
+		    // right under staff closures, but at this point in the
+		    // loop we are one track too early for closing, so we use
+		    // the bracket setting for the previous track for closing
+		    // purposes (I'm not quite sure why this works, but it does)			
+		    if (prevBracket == Brackets::SquareOff ||
+			prevBracket == Brackets::SquareOnOff) {
+			str << indent(--col) << ">> % StaffGroup " << staffGroupCounter
+			    << std::endl; //indent-
+		    } else	if (prevBracket == Brackets::CurlyOff) {
+			str << indent(--col) << ">> % PianoStaff " << pianoStaffCounter
+			    << std::endl; //indent-
+		    } else if (prevBracket == Brackets::CurlySquareOff) {
+			str << indent(--col) << ">> % PianoStaff " << pianoStaffCounter
+			    << std::endl; //indent-
+			str << indent(--col) << ">> % StaffGroup " << staffGroupCounter
+			    << std::endl; //indent-
+		    }
+
+		    // handle any bracket start events
+		    if (!firstTrack) {
+		        if (bracket == Brackets::SquareOn ||
+			    bracket == Brackets::SquareOnOff) {
+			    str << indent(col++) << "\\context StaffGroup = \""
+			        << ++staffGroupCounter << "\" <<" << std::endl;
+			} else if (bracket == Brackets::CurlyOn) {
+			    str << indent(col++) << "\\context PianoStaff = \""
+			        << ++pianoStaffCounter << "\" <<" << std::endl;
+			} else if (bracket == Brackets::CurlySquareOn) {
+			    str << indent(col++) << "\\context StaffGroup = \""
+			        << ++staffGroupCounter << "\" <<" << std::endl;
+			    str << indent(col++) << "\\context PianoStaff = \""
+			        << ++pianoStaffCounter << "\" <<" << std::endl;
+			}
+		    } 
 
                     // avoid problem with <untitled> tracks yielding a
                     // .ly file that jumbles all notes together on a
@@ -822,15 +912,46 @@ LilypondExporter::write()
 
                     str << "<< " << std::endl;
 
-                    str << indent(++col) << "\\set Staff.instrument = \"" << staffName.str() << "\"" << std::endl;
+		    // The octavation is omitted in the instrument name.
+		    // HJJ: Should it be automatically added to the clef: G^8 ?
+		    // What if two segments have different transpose in a track?
+                    std::ostringstream staffNameWithTranspose;
+		    staffNameWithTranspose << "\\markup { \\column { \"" << staffName.str() << " \"";
+		    if (((*i)->getTranspose() % 12) != 0) {
+			staffNameWithTranspose << " \\line { ";
+			switch ((*i)->getTranspose() % 12) {
+			case 1 : staffNameWithTranspose << "\"in D\" \\smaller \\flat"; break;
+			case 2 : staffNameWithTranspose << "\"in D\""; break;
+			case 3 : staffNameWithTranspose << "\"in E\" \\smaller \\flat"; break;
+			case 4 : staffNameWithTranspose << "\"in E\""; break;
+			case 5 : staffNameWithTranspose << "\"in F\""; break;
+			case 6 : staffNameWithTranspose << "\"in G\" \\smaller \\flat"; break;
+			case 7 : staffNameWithTranspose << "\"in G\""; break;
+			case 8 : staffNameWithTranspose << "\"in A\" \\smaller \\flat"; break;
+			case 9 : staffNameWithTranspose << "\"in A\""; break;
+			case 10 : staffNameWithTranspose << "\"in B\" \\smaller \\flat"; break;
+			case 11 : staffNameWithTranspose << "\"in B\""; break;
+			}
+			staffNameWithTranspose << " }";
+		    }
+		    staffNameWithTranspose << " } }";
+		    if (m_languageLevel < LILYPOND_VERSION_2_10) {
+			str << indent(++col) << "\\set Staff.instrument = " << staffNameWithTranspose.str()
+			    << std::endl;
+		    } else {
+			str << indent(++col) << "\\set Staff.instrumentName = "
+			    << staffNameWithTranspose.str() << std::endl;
+		    }
 
                     if (m_exportMidi) {
                         // Set midi instrument for the Staff
                         std::ostringstream staffMidiName;
-                        Instrument *instr = m_studio->getInstrumentById(m_composition->getTrackById(lastTrackIndex)->getInstrument());
+                        Instrument *instr = m_studio->getInstrumentById(
+			        m_composition->getTrackById(lastTrackIndex)->getInstrument());
                         staffMidiName << instr->getProgramName();
 
-                        str << indent(col) << "\\set Staff.midiInstrument = \"" << staffMidiName.str() << "\"" << std::endl;
+                        str << indent(col) << "\\set Staff.midiInstrument = \"" << staffMidiName.str()
+			    << "\"" << std::endl;
                     }
 
 		    // multi measure rests are used by default
@@ -846,6 +967,10 @@ LilypondExporter::write()
                     if (tempoCount > 0) {
                         str << indent(col) << "\\new Voice \\globalTempo" << std::endl;
                     }
+                    if ( m_exportMarkerMode != EXPORT_NO_MARKERS ) {
+                        str << indent(col) << "\\new Voice \\markers" << std::endl;
+                    }
+
                 }
 
                 // Temporary storage for non-atomic events (!BOOM)
@@ -867,6 +992,11 @@ LilypondExporter::write()
                 str << std::endl << indent(col) << "\\override Voice.TextScript #'padding = #2.0";
                 str << std::endl << indent(col) << "\\override MultiMeasureRest #'expand-limit = 1" << std::endl;
 
+                // staff notation size
+		int staffSize = track->getStaffSize();
+		if (staffSize == StaffTypes::Small) str << indent(col) << "\\small" << std::endl;
+		else if (staffSize == StaffTypes::Tiny) str << indent(col) << "\\tiny" << std::endl;
+
                 SegmentNotationHelper helper(**i);
                 helper.setNotationProperties();
 
@@ -880,7 +1010,8 @@ LilypondExporter::write()
                     //!!! This doesn't cope correctly yet with time signature changes
                     // during this skipped section.
                     str << std::endl << indent(col);
-                    writeSkip(timeSignature, compositionStartTime, m_composition->getBarStart(firstBar) - compositionStartTime,
+                    writeSkip(timeSignature, compositionStartTime,
+		              m_composition->getBarStart(firstBar) - compositionStartTime,
                               false, str);
                 }
 
@@ -941,7 +1072,7 @@ LilypondExporter::write()
                         if (!prevBarWasAlt2) {
                             col--;
                             str << std::endl << indent(--col) << "} \% close alternative 1 "
-                            << std::endl << indent(col++) << "{  \% open alternative 2";
+                                << std::endl << indent(col++) << "{  \% open alternative 2";
                             col++;
                         }
                         prevBarWasAlt2 = true;
@@ -987,10 +1118,10 @@ LilypondExporter::write()
                          currentVerse <= lastVerse; 
 			 currentVerse++) {
 		        bool haveLyric = false;
+			bool firstNote = true;
 		        QString text = "";
 
 		        timeT lastTime = (*i)->getStartTime();
-		        int lastBarNo = m_composition->getBarNumber(lastTime);
 		        for (Segment::iterator j = (*i)->begin();
 		            (*i)->isBeforeEndMarker(j); ++j) {
 		
@@ -1006,26 +1137,21 @@ LilypondExporter::write()
 		                        isLyric = true;
 		                    }
 		                }
-		            } else {
-		                if ((*j)->has(BaseProperties::TIED_BACKWARD) &&
-		                        (*j)->get
-		                        <Bool>(BaseProperties::TIED_BACKWARD))
-		                    continue;
 		            }
 		
-		            if (!isNote && !isLyric)
-		                continue;
+		            if (!isNote && !isLyric) continue;
 		
 		            timeT myTime = (*j)->getNotationAbsoluteTime();
-		            int myBarNo = m_composition->getBarNumber(myTime);
 		
-		            if (myTime > lastTime && isNote) {
-		                if (!haveLyric)
-		                    text += " _";
-		                // text[verse] += " _";
-		                lastTime = myTime;
-		                haveLyric = false;
-		            }
+			    if (isNote) {
+				if ((myTime > lastTime) || firstNote) {
+				    if (!haveLyric)
+					text += " _";
+				    lastTime = myTime;
+				    haveLyric = false;
+				    firstNote = false;
+				}
+			    }
 		
 		            if (isLyric) {
 			        long verse;
@@ -1034,16 +1160,20 @@ LilypondExporter::write()
 				if (verse == currentVerse) {
 		                    std::string ssyllable;
 		                    (*j)->get<String>(Text::TextPropertyName, ssyllable);
+				    text += " ";
 			    
 		                    QString syllable(strtoqstr(ssyllable));
 		                    syllable.replace(QRegExp("\\s+"), "");
-		                    text += " \"" + syllable + "\"";
+		                    text += "\"" + syllable + "\"";
 		                    haveLyric = true;
 				} else if (verse > lastVerse) {
                                   lastVerse = verse;
 				}
 			    }
 		        }
+
+			text.replace( QRegExp(" _+([^ ])") , " \\1" );
+			text.replace( "\"_\"" , " " );
 		
 		        // Do not create empty context for lyrics.
 		        // Does this save some vertical space, as was written
@@ -1053,25 +1183,54 @@ LilypondExporter::write()
 		    
 			    str << indent(col) << "\\lyricsto \"" << voiceNumber.str() << "\""
 			        << " \\new Lyrics \\lyricmode {" << std::endl;
-			    str << indent(++col) << text << " " << std::endl;
+			    if (m_lyricsHAlignment == RIGHT_ALIGN) {
+				str << indent(++col) << "\\override LyricText #'self-alignment-X = #RIGHT"
+				    << std::endl;
+			    } else if (m_lyricsHAlignment == CENTER_ALIGN) {
+				str << indent(++col) << "\\override LyricText #'self-alignment-X = #CENTER"
+				    << std::endl;
+			    } else {
+				str << indent(++col) << "\\override LyricText #'self-alignment-X = #LEFT"
+				    << std::endl;
+			    }
+			    str << indent(col) << "\\set ignoreMelismata = ##t" << std::endl;
+			    str << indent(col) << text.utf8() << " " << std::endl;
+			    str << indent(col) << "\\unset ignoreMelismata" << std::endl;
 			    str << indent(--col) << "} % Lyrics " << (currentVerse+1) << std::endl;
 			    // close the Lyrics context
-		        }
-		    }
-		}
-            }
-        }
-    }
+		        } // if ( rx.search( text....
+		    } // for (long currentVerse = 0....
+		} // if (m_exportLyrics....
+            } // if (isMidiTrack.... 
+            firstTrack = false;
+        } // for (Composition::iterator i = m_composition->begin()....
+    } // for (int trackPos = 0....
 
     // close the last track (Staff context)
     if (voiceCounter > 0) {
-        str << indent(--col) << ">> % Staff (final)";  // indent-
+        str << indent(--col) << ">> % Staff (final) ends" << std::endl;  // indent-
+
+	// handle any necessary final bracket closures
+	if (bracket == Brackets::SquareOff ||
+	    bracket == Brackets::SquareOnOff) {
+	    str << indent(--col) << ">> % StaffGroup " << staffGroupCounter
+		<< std::endl; //indent-
+	} else	if (bracket == Brackets::CurlyOff) {
+	    str << indent(--col) << ">> % PianoStaff (final) " << pianoStaffCounter
+		<< std::endl; //indent-
+	} else if (bracket == Brackets::CurlySquareOff) {
+	    str << indent(--col) << ">> % PianoStaff (final) " << pianoStaffCounter
+		<< std::endl; //indent-
+	    str << indent(--col) << ">> % StaffGroup (final) " << staffGroupCounter
+		<< std::endl; //indent-
+	}
     } else {
         str << indent(--col) << "% (All staffs were muted.)" << std::endl;
     }
 
     // close \notes section
     str << std::endl << indent(--col) << ">> % notes" << std::endl << std::endl; // indent-
+//    str << std::endl << indent(col) << ">> % global wrapper" << std::endl;
 
     // write \layout block
     str << indent(col) << "\\layout { }" << std::endl;
@@ -1088,120 +1247,114 @@ LilypondExporter::write()
         str << indent(--col) << "} " << std::endl;
     }
 
-    // DMM - a friendly userland warning if they happen to tease out any lingering
-    // trouble with this stuff;  since users don't usually see the debug messages
-    if (m_pitchBorked) {
-        CurrentProgressDialog::freeze();
-        KMessageBox::sorry(0,
-                           i18n("You encountered an enharmonic resolution bug somewhere during this "
-                                "operation.  You may wish to save a copy of your current composition "
-                                "and email it to dmmcintyr@users.sourceforge.net for analysis.\n\n"
-                                "In the meantime, you will probably need to make manual adjustments "
-                                "to the file you've just exported."));
-    }
-
     // close \score section and close out the file
     str << "} % score" << std::endl;
     str.close();
     return true;
 }
 
-timeT
+timeT 
 LilypondExporter::calculateDuration(Segment *s,
-                                    const Segment::iterator &i,
-                                    timeT barEnd,
-                                    timeT &soundingDuration,
-                                    const std::pair<int, int> &tupletRatio,
-                                    bool &overlong)
+		                            const Segment::iterator &i,
+		                            timeT barEnd,
+		                            timeT &soundingDuration,
+		                            const std::pair<int, int> &tupletRatio,
+		                            bool &overlong)
 {
-    timeT duration = (*i)->getNotationDuration();
-    timeT absTime = (*i)->getNotationAbsoluteTime();
+	timeT duration = (*i)->getNotationDuration();
+	timeT absTime = (*i)->getNotationAbsoluteTime();
 
-    RG_DEBUG << "LilypondExporter::calculateDuration: first duration, absTime: "
-    << duration << ", " << absTime << endl;
+	RG_DEBUG << "LilypondExporter::calculateDuration: first duration, absTime: "
+	<< duration << ", " << absTime << endl;
 
-    timeT durationCorrection = 0;
+	timeT durationCorrection = 0;
 
-    if ((*i)->isa(Note::EventType) || (*i)->isa(Note::EventRestType)) {
-        try {
-            // tuplet compensation, etc
-            Note::Type type = (*i)->get
-                              <Int>(NOTE_TYPE);
-            int dots = (*i)->get
-                       <Int>(NOTE_DOTS);
-            durationCorrection = Note(type, dots).getDuration() - duration;
-        } catch (Exception e) { // no properties
-        }
-    }
-
-    duration += durationCorrection;
-
-    RG_DEBUG << "LilypondExporter::calculateDuration: now duration is "
-    << duration << " after correction of " << durationCorrection << endl;
-
-    soundingDuration = duration * tupletRatio.first / tupletRatio.second;
-
-    timeT toNext = barEnd - absTime;
-    if (soundingDuration > toNext) {
-        soundingDuration = toNext;
-        duration = soundingDuration * tupletRatio.second / tupletRatio.first;
-        overlong = true;
-    }
-
-    RG_DEBUG << "LilypondExporter::calculateDuration: time to barEnd is "
-    << toNext << endl;
-
-    // Examine the following event, and truncate our duration
-    // if we overlap it.
-    Segment::iterator nextElt = s->end();
-    toNext = soundingDuration;
-
-    if ((*i)->isa(Note::EventType)) {
-
-        Chord chord(*s, i, m_composition->getNotationQuantizer());
-        Segment::iterator nextElt = chord.getFinalElement();
-        ++nextElt;
-
-        if (s->isBeforeEndMarker(nextElt)) {
-            // The quantizer sometimes sticks a rest at the same time
-            // as this note -- don't use that one here, and mark it as
-            // not to be exported -- it's just a heavy-handed way of
-            // rendering counterpoint in RG
-            if ((*nextElt)->isa(Note::EventRestType) &&
-                    (*nextElt)->getNotationAbsoluteTime() == absTime) {
-                (*nextElt)->set
-                <Bool>(SKIP_PROPERTY, true);
-                ++nextElt;
-            }
-        }
-
-    } else {
-
-        nextElt = i;
-        ++nextElt;
-    }
-
-    if (s->isBeforeEndMarker(nextElt)) {
-	RG_DEBUG << "LilypondExporter::calculateDuration: inside conditional " << endl;
-        toNext = (*nextElt)->getNotationAbsoluteTime() - absTime;
-	// if the note was lengthened, assume it was lengthened to the left
-	// when truncating to the beginning of the next note
-	if (durationCorrection > 0)
-	{
-	    toNext += durationCorrection;
+	if ((*i)->isa(Note::EventType) || (*i)->isa(Note::EventRestType)) {
+		try {
+			// tuplet compensation, etc
+			Note::Type type = (*i)->get<Int>(NOTE_TYPE);
+			int dots = (*i)->get<Int>(NOTE_DOTS);
+			durationCorrection = Note(type, dots).getDuration() - duration;
+		} catch (Exception e) { // no properties
+		}
 	}
-        if (soundingDuration > toNext) {
-            soundingDuration = toNext;
-            duration = soundingDuration * tupletRatio.second / tupletRatio.first;
-        }
-    }
 
-    RG_DEBUG << "LilypondExporter::calculateDuration: second toNext is "
-    << toNext << endl;
+	duration += durationCorrection;
 
-    RG_DEBUG << "LilypondExporter::calculateDuration: final duration, soundingDuration: " << duration << ", " << soundingDuration << endl;
+	RG_DEBUG << "LilypondExporter::calculateDuration: now duration is "
+	<< duration << " after correction of " << durationCorrection << endl;
 
-    return duration;
+	soundingDuration = duration * tupletRatio.first/ tupletRatio.second;
+
+	timeT toNext = barEnd - absTime;
+	if (soundingDuration > toNext) {
+		soundingDuration = toNext;
+		duration = soundingDuration * tupletRatio.second/ tupletRatio.first;
+		overlong = true;
+	}
+
+	RG_DEBUG << "LilypondExporter::calculateDuration: time to barEnd is "
+	<< toNext << endl;
+
+	// Examine the following event, and truncate our duration
+	// if we overlap it.
+	Segment::iterator nextElt = s->end();
+	toNext = soundingDuration;
+
+	if ((*i)->isa(Note::EventType)) {
+
+		Chord chord(*s, i, m_composition->getNotationQuantizer());
+		Segment::iterator nextElt = chord.getFinalElement();
+		++nextElt;
+
+		if (s->isBeforeEndMarker(nextElt)) {
+			// The quantizer sometimes sticks a rest at the same time
+			// as this note -- don't use that one here, and mark it as
+			// not to be exported -- it's just a heavy-handed way of
+			// rendering counterpoint in RG
+			if ((*nextElt)->isa(Note::EventRestType) &&
+				(*nextElt)->getNotationAbsoluteTime() == absTime) {
+				(*nextElt)->set<Bool>(SKIP_PROPERTY, true);
+				++nextElt;
+			}
+		}
+
+	} else {
+		nextElt = i;
+		++nextElt;
+		while (s->isBeforeEndMarker(nextElt)) {
+			if ((*nextElt)->isa(Controller::EventType) ||
+				(*nextElt)->isa(ProgramChange::EventType) ||
+				(*nextElt)->isa(SystemExclusive::EventType) ||
+				(*nextElt)->isa(ChannelPressure::EventType) ||
+				(*nextElt)->isa(KeyPressure::EventType) ||
+				(*nextElt)->isa(PitchBend::EventType))
+				++nextElt;
+			else
+				break;
+		}
+	}
+
+	if (s->isBeforeEndMarker(nextElt)) {
+		RG_DEBUG << "LilypondExporter::calculateDuration: inside conditional " << endl;
+		toNext = (*nextElt)->getNotationAbsoluteTime() - absTime;
+		// if the note was lengthened, assume it was lengthened to the left
+		// when truncating to the beginning of the next note
+		if (durationCorrection > 0) {
+			toNext += durationCorrection;
+		}
+		if (soundingDuration > toNext) {
+			soundingDuration = toNext;
+			duration = soundingDuration * tupletRatio.second/ tupletRatio.first;
+		}
+	}
+
+	RG_DEBUG << "LilypondExporter::calculateDuration: second toNext is "
+	<< toNext << endl;
+
+	RG_DEBUG << "LilypondExporter::calculateDuration: final duration, soundingDuration: " << duration << ", " << soundingDuration << endl;
+
+	return duration;
 }
 
 void
@@ -1217,6 +1370,7 @@ LilypondExporter::writeBar(Segment *s,
                            bool &nextBarIsDouble, bool &nextBarIsEnd, bool &nextBarIsDot)
 {
     int lastStem = 0; // 0 => unset, -1 => down, 1 => up
+    int isGrace = 0;
 
     Segment::iterator i = s->findTime(barStart);
     if (!s->isBeforeEndMarker(i))
@@ -1234,7 +1388,10 @@ LilypondExporter::writeBar(Segment *s,
 
     bool isNew = false;
     TimeSignature timeSignature = m_composition->getTimeSignatureInBar(barNo, isNew);
-    if (isNew && !timeSignature.isHidden()) {
+    if (isNew) {
+	if (timeSignature.isHidden()) {
+	    str << "\\once \\override Staff.TimeSignature #'break-visibility = #(vector #f #f #f) ";
+	}
         str << "\\time "
         << timeSignature.getNumerator() << "/"
         << timeSignature.getDenominator()
@@ -1243,10 +1400,16 @@ LilypondExporter::writeBar(Segment *s,
 
     timeT absTime = (*i)->getNotationAbsoluteTime();
     timeT writtenDuration = 0;
+    std::pair<int,int> barDurationRatio(timeSignature.getNumerator(),timeSignature.getDenominator());
+    std::pair<int,int> durationRatioSum(0,1);
+    static std::pair<int,int> durationRatio(0,1);
 
     if (absTime > barStart) {
-        writtenDuration = absTime - barStart;
-        writeSkip(timeSignature, 0, writtenDuration, true, str);
+        Note note(Note::getNearestNote(absTime - barStart, MAX_DOTS));
+        writtenDuration += note.getDuration();
+        durationRatio = writeSkip(timeSignature, 0, note.getDuration(), true, str);
+	durationRatioSum = fractionSum(durationRatioSum,durationRatio);
+        // str << qstrtostr(QString(" %{ %1/%2 %} ").arg(durationRatio.first).arg(durationRatio.second)); // DEBUG
     }
 
     timeT prevDuration = -1;
@@ -1268,6 +1431,8 @@ LilypondExporter::writeBar(Segment *s,
         // First test whether we're entering or leaving a group,
         // before we consider how to write the event itself (at least
         // for pre-2.0 Lilypond output)
+	QString startGroupBeamingsStr = "";
+	QString endGroupBeamingsStr = "";
 
         if ((*i)->isa(Note::EventType) || (*i)->isa(Note::EventRestType) ||
                 (*i)->isa(Clef::EventType) || (*i)->isa(Rosegarden::Key::EventType)) {
@@ -1281,14 +1446,13 @@ LilypondExporter::writeBar(Segment *s,
 
                     if (groupId != -1) {
                         // and leaving an old one
-                        if (groupType == GROUP_TYPE_TUPLED ||
-                                groupType == GROUP_TYPE_GRACE) {
+                        if (groupType == GROUP_TYPE_TUPLED) {
                             if (m_exportBeams && notesInBeamedGroup > 0)
-                                str << "] ";
-                            str << "} ";
+                                endGroupBeamingsStr += "] ";
+                            endGroupBeamingsStr += "} ";
                         } else if (groupType == GROUP_TYPE_BEAMED) {
                             if (m_exportBeams && notesInBeamedGroup > 0)
-                                str << "] ";
+                                endGroupBeamingsStr += "] ";
                         }
                     }
 
@@ -1311,7 +1475,7 @@ LilypondExporter::writeBar(Segment *s,
                             groupId = -1;
                             groupType = "";
                         } else {
-                            str << "\\times " << numerator << "/" << denominator << " { ";
+                            startGroupBeamingsStr += QString("\\times %1/%2 { ").arg(numerator).arg(denominator);
                             tupletRatio = std::pair<int, int>(numerator, denominator);
 			    // Require explicit beamed groups,
 			    // fixes bug #1683205.
@@ -1322,13 +1486,8 @@ LilypondExporter::writeBar(Segment *s,
                     } else if (groupType == GROUP_TYPE_BEAMED) {
                         newBeamedGroup = true;
                         notesInBeamedGroup = 0;
-                    } else if (groupType == GROUP_TYPE_GRACE) {
-                        str << "\\grace { ";
-			// Require explicit beamed group,
-			// fixes bug #1683205.
-		        // HJJ: Why line below was originally present?
-                        // newBeamedGroup = true;
-                        notesInBeamedGroup = 0;
+			// there can currently be only on group type, reset tuplet ratio
+                        tupletRatio = std::pair<int, int>(1,1);
                     }
                 }
 
@@ -1337,21 +1496,36 @@ LilypondExporter::writeBar(Segment *s,
 
                 if (groupId != -1) {
                     // leaving a beamed group
-                    if (groupType == GROUP_TYPE_TUPLED ||
-                            groupType == GROUP_TYPE_GRACE) {
+                    if (groupType == GROUP_TYPE_TUPLED) {
                         if (m_exportBeams && notesInBeamedGroup > 0)
-                            str << "] ";
-                        str << "} ";
+                            endGroupBeamingsStr += "] ";
+                        endGroupBeamingsStr += "} ";
                         tupletRatio = std::pair<int, int>(1, 1);
                     } else if (groupType == GROUP_TYPE_BEAMED) {
                         if (m_exportBeams && notesInBeamedGroup > 0)
-                            str << "] ";
+                            endGroupBeamingsStr += "] ";
                     }
                     groupId = -1;
                     groupType = "";
                 }
             }
         }
+
+	// Test whether the next note is grace note or not.
+	// The start or end of beamed grouping should be put in proper places.
+	str << endGroupBeamingsStr.utf8();
+	if ((*i)->has(IS_GRACE_NOTE) && (*i)->get<Bool>(IS_GRACE_NOTE)) {
+	    if (isGrace == 0) { 
+	        isGrace = 1;
+                str << "\\grace { ";
+	        // str << "%{ grace starts %} "; // DEBUG
+	    }
+	} else if (isGrace == 1) {
+	    isGrace = 0;
+	    // str << "%{ grace ends %} "; // DEBUG
+            str << "} ";
+	}
+	str << startGroupBeamingsStr.utf8();
 
         timeT soundingDuration = -1;
         timeT duration = calculateDuration
@@ -1372,6 +1546,7 @@ LilypondExporter::writeBar(Segment *s,
             Chord chord(*s, i, m_composition->getNotationQuantizer());
             Event *e = *chord.getInitialNote();
             bool tiedForward = false;
+	    bool tiedUp = false;
 
             // Examine the following event, and truncate our duration
             // if we overlap it.
@@ -1382,6 +1557,18 @@ LilypondExporter::writeBar(Segment *s,
                 str << "\\once \\override NoteColumn #'force-hshift = #"
                 << xDisplacement << " ";
             }
+
+            bool hiddenNote = false;
+            if (e->has(INVISIBLE)) {
+                if (e->get
+                        <Bool>(INVISIBLE)) {
+                    hiddenNote = true;
+                }
+            }
+	    
+	    if ( hiddenNote ) {
+	        str << "\\hideNotes ";
+	    }
 
             if (e->has(NotationProperties::STEM_UP)) {
                 if (e->get
@@ -1420,7 +1607,7 @@ LilypondExporter::writeBar(Segment *s,
 
                 } else if ((*i)->isa(Note::EventType)) {
 
-                    if (m_languageLevel >= 1) {
+                    if (m_languageLevel >= LILYPOND_VERSION_2_8) {
                         // one \tweak per each chord note
                         if (chord.size() > 1)
                             writeStyle(*i, prevStyle, col, str, true);
@@ -1438,11 +1625,18 @@ LilypondExporter::writeBar(Segment *s,
                     if (noteHasCautionaryAccidental)
                         str << "?";
 
-                    bool noteTiedForward = false;
-                    (*i)->get
-                    <Bool>(TIED_FORWARD, noteTiedForward);
-                    if (noteTiedForward)
-                        tiedForward = true;
+// this seems like a lot of redundant running around, so let's try the simple
+// version (DMM)
+//
+//                  bool noteTiedForward = false;
+//                  (*i)->get
+//                  <Bool>(TIED_FORWARD, noteTiedForward);
+//                  if (noteTiedForward)
+//                      tiedForward = true;
+                      
+                    // get TIED_FORWARD and TIE_IS_ABOVE for later
+                    (*i)->get<Bool>(TIED_FORWARD, tiedForward);
+		    (*i)->get<Bool>(TIE_IS_ABOVE, tiedUp);
 
                     str << " ";
                 } else if ((*i)->isa(Indication::EventType)) {
@@ -1458,12 +1652,12 @@ LilypondExporter::writeBar(Segment *s,
                 str << "> ";
 
             if (duration != prevDuration) {
-                writeDuration(duration, str);
+                durationRatio = writeDuration(duration, str);
                 str << " ";
                 prevDuration = duration;
             }
 
-            if (m_languageLevel == 0) {
+            if (m_languageLevel == LILYPOND_VERSION_2_6) {
                 // only one override per chord, and that outside the <>
                 if (stylei != s->end()) {
                     writeStyle(*stylei, prevStyle, col, str, false);
@@ -1478,6 +1672,9 @@ LilypondExporter::writeBar(Segment *s,
             writeSlashes(*i, str);
 
             writtenDuration += soundingDuration;
+	    std::pair<int,int> ratio = fractionProduct(durationRatio,tupletRatio);
+	    durationRatioSum = fractionSum(durationRatioSum, ratio);
+	    // str << qstrtostr(QString(" %{ %1/%2 * %3/%4 = %5/%6 %} ").arg(durationRatio.first).arg(durationRatio.second).arg(tupletRatio.first).arg(tupletRatio.second).arg(ratio.first).arg(ratio.second)); // DEBUG
 
             std::vector<Mark> marks(chord.getMarksForChord());
             // problem here: stem direction unavailable (it's a view-local property)
@@ -1494,7 +1691,14 @@ LilypondExporter::writeBar(Segment *s,
             handleStartingEvents(eventsToStart, str);
 
             if (tiedForward)
-                str << "~ ";
+	        if (tiedUp) 
+                    str << "^~ ";
+		else
+		    str << "_~ ";
+
+	    if ( hiddenNote ) {
+	        str << "\\unHideNotes ";
+	    }
 
             if (newBeamedGroup) {
                 // This is a workaround for bug #1705430:
@@ -1548,7 +1752,7 @@ LilypondExporter::writeBar(Segment *s,
 		}
 	    
 		if (duration != prevDuration) {
-		    writeDuration(duration, str);
+		    durationRatio = writeDuration(duration, str);
 		    if (MultiMeasureRestCount > 0) {
 			str << "*" << (1 + MultiMeasureRestCount);
 		    }
@@ -1570,7 +1774,10 @@ LilypondExporter::writeBar(Segment *s,
 	    } else {
 		MultiMeasureRestCount--;
 	    }
-	    writtenDuration += soundingDuration;
+            writtenDuration += soundingDuration;
+	    std::pair<int,int> ratio = fractionProduct(durationRatio,tupletRatio);
+	    durationRatioSum = fractionSum(durationRatioSum, ratio);
+	    // str << qstrtostr(QString(" %{ %1/%2 * %3/%4 = %5/%6 %} ").arg(durationRatio.first).arg(durationRatio.second).arg(tupletRatio.first).arg(tupletRatio.second).arg(ratio.first).arg(ratio.second)); // DEBUG
         } else if ((*i)->isa(Clef::EventType)) {
 
             try {
@@ -1650,7 +1857,6 @@ LilypondExporter::writeBar(Segment *s,
                 Guitar::Chord chord = Guitar::Chord(**i);
                 const Guitar::Fingering& fingering = chord.getFingering();
                 
-                int firstFret = fingering.getStartFret();
                 int barreStart = 0, barreEnd = 0, barreFret = 0;
 
                 // 
@@ -1712,8 +1918,7 @@ LilypondExporter::writeBar(Segment *s,
     }
 
     if (groupId != -1) {
-        if (groupType == GROUP_TYPE_TUPLED ||
-                groupType == GROUP_TYPE_GRACE) {
+        if (groupType == GROUP_TYPE_TUPLED) {
             if (m_exportBeams && notesInBeamedGroup > 0)
                 str << "] ";
             str << "} ";
@@ -1722,6 +1927,12 @@ LilypondExporter::writeBar(Segment *s,
             if (m_exportBeams && notesInBeamedGroup > 0)
                 str << "] ";
         }
+    }
+
+    if (isGrace == 1) {
+	isGrace = 0;
+	// str << "%{ grace ends %} "; // DEBUG
+        str << "} ";
     }
 
     if (lastStem != 0) {
@@ -1733,20 +1944,25 @@ LilypondExporter::writeBar(Segment *s,
         qstrtostr(QString("% %1").
                   arg(i18n("warning: overlong bar truncated here")));
     }
-    if (writtenDuration < barEnd - barStart) {
+
+    if (fractionSmaller(durationRatioSum, barDurationRatio)) {
         str << std::endl << indent(col) <<
-        qstrtostr(QString("% %1").
-                  arg(i18n("warning: bar too short, padding with rests")))
-        << std::endl << indent(col);
-        writeSkip(timeSignature, writtenDuration,
-                  (barEnd - barStart) - writtenDuration, true, str);
+	    qstrtostr(QString("% %1").
+                arg(i18n("warning: bar too short, padding with rests")));
+        str << std::endl << indent(col) <<
+        qstrtostr(QString("% %1/%2 < %3/%4").
+                  arg(durationRatioSum.first).
+                  arg(durationRatioSum.second).
+                  arg(barDurationRatio.first).
+                  arg(barDurationRatio.second))
+	    << std::endl << indent(col);
+        durationRatio = writeSkip(timeSignature, writtenDuration,
+				  (barEnd - barStart) - writtenDuration, true, str);
+	durationRatioSum = fractionSum(durationRatioSum,durationRatio);
     }
     //
-    // Export bar checks.
+    // Export bar and bar checks.
     //
-    if (MultiMeasureRestCount == 0 && !nextBarIsDouble && !nextBarIsEnd && !nextBarIsDot) {
-        str << " |";
-    }
     if (nextBarIsDouble) {
         str << "\\bar \"||\" ";
         nextBarIsDouble = false;
@@ -1756,10 +1972,12 @@ LilypondExporter::writeBar(Segment *s,
     } else if (nextBarIsDot) {
         str << "\\bar \":\" ";
         nextBarIsDot = false;
+    } else if (MultiMeasureRestCount == 0) {
+        str << " |";
     }
 }
 
-void
+std::pair<int,int>
 LilypondExporter::writeSkip(const TimeSignature &timeSig,
                             timeT offset,
                             timeT duration,
@@ -1768,6 +1986,8 @@ LilypondExporter::writeSkip(const TimeSignature &timeSig,
 {
     DurationList dlist;
     timeSig.getDurationListForInterval(dlist, duration, offset);
+    std::pair<int,int> durationRatioSum(0,1);
+    std::pair<int,int> durationRatio(0,1);
 
     int t = 0, count = 0;
 
@@ -1784,11 +2004,15 @@ LilypondExporter::writeSkip(const TimeSignature &timeSig,
                 else
                     str << "r";
 
-                writeDuration(t, str);
+                durationRatio = writeDuration(t, str);
 
-                if (count > 1)
+                if (count > 1) {
                     str << "*" << count;
+		    durationRatio = fractionProduct(durationRatio,count);
+		}
                 str << " ";
+
+		durationRatioSum = fractionSum(durationRatioSum,durationRatio);
             }
 
             if (i != dlist.end()) {
@@ -1803,6 +2027,7 @@ LilypondExporter::writeSkip(const TimeSignature &timeSig,
         if (i == dlist.end())
             break;
     }
+    return durationRatioSum;
 }
 
 bool
@@ -2013,50 +2238,54 @@ LilypondExporter::writeStyle(const Event *note, std::string &prevStyle,
     }
 }
 
-void
+std::pair<int,int>
 LilypondExporter::writeDuration(timeT duration,
                                 std::ofstream &str)
 {
     Note note(Note::getNearestNote(duration, MAX_DOTS));
+    std::pair<int,int> durationRatio(0,1);
 
     switch (note.getNoteType()) {
 
     case Note::SixtyFourthNote:
-        str << "64";
+        str << "64"; durationRatio = std::pair<int,int>(1,64);
         break;
 
     case Note::ThirtySecondNote:
-        str << "32";
+        str << "32"; durationRatio = std::pair<int,int>(1,32);
         break;
 
     case Note::SixteenthNote:
-        str << "16";
+        str << "16"; durationRatio = std::pair<int,int>(1,16);
         break;
 
     case Note::EighthNote:
-        str << "8";
+        str << "8"; durationRatio = std::pair<int,int>(1,8);
         break;
 
     case Note::QuarterNote:
-        str << "4";
+        str << "4"; durationRatio = std::pair<int,int>(1,4);
         break;
 
     case Note::HalfNote:
-        str << "2";
+        str << "2"; durationRatio = std::pair<int,int>(1,2);
         break;
 
     case Note::WholeNote:
-        str << "1";
+        str << "1"; durationRatio = std::pair<int,int>(1,1);
         break;
 
     case Note::DoubleWholeNote:
-        str << "\\breve";
+        str << "\\breve"; durationRatio = std::pair<int,int>(2,1);
         break;
     }
 
     for (int numDots = 0; numDots < note.getDots(); numDots++) {
         str << ".";
     }
+    durationRatio = fractionProduct(durationRatio,
+	    std::pair<int,int>((1<<(note.getDots()+1))-1,1<<note.getDots()));
+    return durationRatio;
 }
 
 void

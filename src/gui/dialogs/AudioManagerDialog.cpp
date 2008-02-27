@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -872,7 +872,7 @@ AudioManagerDialog::slotDeleteUnused()
         if (names.size() > 0) {
 
             QString question =
-                i18n("About to delete 1 audio file permanently from the hard disk.\nThis action cannot be undone, and there will be no way to recover this file.\nAre you sure?", "About to delete %n audio files permanently from the hard disk.\nThis action cannot be undone, and there will be no way to recover these files.\nAre you sure?", names.size());
+                i18n("<qt>About to delete 1 audio file permanently from the hard disk.<br>This action cannot be undone, and there will be no way to recover this file.<br>Are you sure?</qt>\n", "<qt>About to delete %n audio files permanently from the hard disk.<br>This action cannot be undone, and there will be no way to recover these files.<br>Are you sure?</qt>", names.size());
 
             int reply = KMessageBox::warningContinueCancel(this, question);
 

@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -59,18 +59,19 @@ using namespace BaseProperties;
 NotationHLayout::NotationHLayout(Composition *c, NotePixmapFactory *npf,
                                  const NotationProperties &properties,
                                  QObject* parent, const char* name) :
-        ProgressReporter(parent, name),
-        HorizontalLayoutEngine(c),
-        m_totalWidth(0.),
-        m_pageMode(false),
-        m_pageWidth(0.),
-        m_spacing(100),
-        m_proportion(60),
-        m_npf(npf),
-        m_notationQuantizer(c->getNotationQuantizer()),
-        m_properties(properties),
-        m_timePerProgressIncrement(0),
-        m_staffCount(0)
+    ProgressReporter(parent, name),
+    HorizontalLayoutEngine(c),
+    m_totalWidth(0.),
+    m_pageMode(false),
+    m_pageWidth(0.),
+    m_spacing(100),
+    m_proportion(60),
+    m_keySigCancelMode(1),
+    m_npf(npf),
+    m_notationQuantizer(c->getNotationQuantizer()),
+    m_properties(properties),
+    m_timePerProgressIncrement(0),
+    m_staffCount(0)
 {
     //    NOTATION_DEBUG << "NotationHLayout::NotationHLayout()" << endl;
 
@@ -150,6 +151,22 @@ const
     }
 }
 
+NotePixmapFactory *
+NotationHLayout::getNotePixmapFactory(Staff &staff)
+{
+    NotationStaff *ns = dynamic_cast<NotationStaff *>(&staff);
+    if (ns) return &ns->getNotePixmapFactory(false);
+    else return 0;
+}
+
+NotePixmapFactory *
+NotationHLayout::getGraceNotePixmapFactory(Staff &staff)
+{
+    NotationStaff *ns = dynamic_cast<NotationStaff *>(&staff);
+    if (ns) return &ns->getNotePixmapFactory(true);
+    else return 0;
+}
+
 void
 NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 {
@@ -172,6 +189,8 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
     NotationElementList *notes = staff.getViewElementList();
     BarDataList &barList(getBarData(staff));
 
+    NotePixmapFactory *npf = getNotePixmapFactory(staff);
+
     int startBarNo = getComposition()->getBarNumber(startTime);
     int endBarNo = getComposition()->getBarNumber(endTime);
     /*
@@ -184,8 +203,8 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
         segment.getComposition()->
         getTrackById(segment.getTrack())->getLabel();
     m_staffNameWidths[&staff] =
-        m_npf->getNoteBodyWidth() * 2 +
-        m_npf->getTextWidth(Text(name, Text::StaffName));
+        npf->getNoteBodyWidth() * 2 +
+        npf->getTextWidth(Text(name, Text::StaffName));
 
     NOTATION_DEBUG << "NotationHLayout::scanStaff: full scan " << isFullScan << ", times " << startTime << "->" << endTime << ", bars " << startBarNo << "->" << endBarNo << ", staff name \"" << segment.getLabel() << "\", width " << m_staffNameWidths[&staff] << endl;
 
@@ -295,14 +314,14 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
         timeSignature = getComposition()->getTimeSignatureInBar
                         (barNo, newTimeSig);
         NOTATION_DEBUG << "bar " << barNo << ", startBarOfStaff " << startBarOfStaff
-        << ", newTimeSig " << newTimeSig << endl;
+                       << ", newTimeSig " << newTimeSig << endl;
         if (barNo == startBarOfStaff)
             newTimeSig = true;
 
         float fixedWidth = 0.0;
         if (newTimeSig && !timeSignature.isHidden()) {
-            fixedWidth += m_npf->getNoteBodyWidth() +
-                          m_npf->getTimeSigWidth(timeSignature);
+            fixedWidth += npf->getNoteBodyWidth() +
+                          npf->getTimeSigWidth(timeSignature);
         }
 
         setBarBasicData(staff, barNo, from, barCorrect, timeSignature, newTimeSig);
@@ -363,7 +382,7 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 
                 //		NOTATION_DEBUG << "Found clef" << endl;
                 chunks.push_back(Chunk(el->event()->getSubOrdering(),
-                                       getLayoutWidth(*el, key)));
+                                       getLayoutWidth(*el, npf, key)));
 
                 clef = Clef(*el->event());
                 accTable.newClef(clef);
@@ -372,7 +391,7 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 
                 //		NOTATION_DEBUG << "Found key" << endl;
                 chunks.push_back(Chunk(el->event()->getSubOrdering(),
-                                       getLayoutWidth(*el, key)));
+                                       getLayoutWidth(*el, npf, key)));
 
                 key = ::Rosegarden::Key(*el->event());
 
@@ -385,10 +404,10 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
                 // contribute to a fixed area following the next chord
 
                 if (el->event()->has(Text::TextTypePropertyName) &&
-                        el->event()->get<String>(Text::TextTypePropertyName) ==
-                        Text::Lyric) {
+                    el->event()->get<String>(Text::TextTypePropertyName) ==
+                    Text::Lyric) {
                     lyricWidth = std::max
-                        (lyricWidth, float(m_npf->getTextWidth(Text(*el->event()))));
+                        (lyricWidth, float(npf->getTextWidth(Text(*el->event()))));
                     NOTATION_DEBUG << "Setting lyric width to " << lyricWidth
                                    << " for text " << el->event()->get<String>(Text::TextPropertyName) << endl;
                 }
@@ -396,15 +415,18 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 
             } else if (el->isNote()) {
 
+                NotePixmapFactory *cnpf = npf;
+                if (el->isGrace()) cnpf = getGraceNotePixmapFactory(staff);
+
                 scanChord(notes, itr, clef, key, accTable,
-                          lyricWidth, chunks, graceCount, ottavaShift, to);
+                          lyricWidth, chunks, cnpf, ottavaShift, to);
 
             } else if (el->isRest()) {
 
                 chunks.push_back(Chunk(el->getViewDuration(),
                                        el->event()->getSubOrdering(),
                                        0,
-                                       getLayoutWidth(*el, key)));
+                                       getLayoutWidth(*el, npf, key)));
 
             } else if (el->event()->isa(Indication::EventType)) {
 
@@ -426,9 +448,9 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 
             } else {
 
-                NOTATION_DEBUG << "Found something I don't know about (type is " << el->event()->getType() << ")" << endl;
+//                NOTATION_DEBUG << "Found something I don't know about (type is " << el->event()->getType() << ")" << endl;
                 chunks.push_back(Chunk(el->event()->getSubOrdering(),
-                                       getLayoutWidth(*el, key)));
+                                       getLayoutWidth(*el, npf, key)));
             }
 
             actualBarEnd = el->getViewAbsoluteTime() + el->getViewDuration();
@@ -524,7 +546,7 @@ NotationHLayout::scanChord(NotationElementList *notes,
                            AccidentalTable &accTable,
                            float &lyricWidth,
                            ChunkList &chunks,
-                           int &graceCount,
+                           NotePixmapFactory *npf,
                            int ottavaShift,
                            NotationElementList::iterator &to)
 {
@@ -533,16 +555,17 @@ NotationHLayout::scanChord(NotationElementList *notes,
     bool someCautionary = false;
     bool barEndsInChord = false;
     bool grace = false;
-    /*
-        NOTATION_DEBUG << "NotationHLayout::scanChord: "
-    		   << chord.size() << "-voice chord at "
-    		   << (*itr)->event()->getAbsoluteTime()
-    		   << " unquantized, "
-    		   << (*itr)->getViewAbsoluteTime()
-    		   << " quantized" << endl;
-     
-        NOTATION_DEBUG << "Contents:" << endl;
+
+    std::cerr << "NotationHLayout::scanChord: "
+              << chord.size() << "-voice chord at "
+              << (*itr)->event()->getAbsoluteTime()
+              << " unquantized, "
+              << (*itr)->getViewAbsoluteTime()
+              << " quantized" << std::endl;
+    
+//    NOTATION_DEBUG << "Contents:" << endl;
         
+    /*
         for (NotationElementList::iterator i = chord.getInitialElement();
     	 i != notes->end(); ++i) {
     	(*i)->event()->dump(std::cerr);
@@ -554,7 +577,7 @@ NotationHLayout::scanChord(NotationElementList *notes,
     // that may crop up in the middle of it.
 
     for (NotationElementList::iterator i = chord.getInitialElement();
-            i != notes->end(); ++i) {
+         i != notes->end(); ++i) {
 
         NotationElement *el = static_cast<NotationElement*>(*i);
         if (el->isRest()) {
@@ -564,8 +587,9 @@ NotationHLayout::scanChord(NotationElementList *notes,
             continue;
         }
 
-        if (el->isGrace())
+        if (el->isGrace()) {
             grace = true;
+        }
 
         long pitch = 64;
         if (!el->event()->get<Int>(PITCH, pitch)) {
@@ -623,12 +647,12 @@ NotationHLayout::scanChord(NotationElementList *notes,
     if (someAccidental != Accidentals::NoAccidental) {
         bool extraShift = false;
         int shift = chord.getMaxAccidentalShift(extraShift);
-        int e = m_npf->getAccidentalWidth(someAccidental, shift, extraShift);
+        int e = npf->getAccidentalWidth(someAccidental, shift, extraShift);
         if (someAccidental != Accidentals::Sharp) {
-            e = std::max(e, m_npf->getAccidentalWidth(Accidentals::Sharp, shift, extraShift));
+            e = std::max(e, npf->getAccidentalWidth(Accidentals::Sharp, shift, extraShift));
         }
         if (someCautionary) {
-            e += m_npf->getNoteBodyWidth();
+            e += npf->getNoteBodyWidth();
         }
         extraWidth += e;
     }
@@ -636,22 +660,23 @@ NotationHLayout::scanChord(NotationElementList *notes,
     float layoutExtra = 0;
     if (chord.hasNoteHeadShifted()) {
         if (chord.hasStemUp()) {
-            layoutExtra += m_npf->getNoteBodyWidth();
+            layoutExtra += npf->getNoteBodyWidth();
         } else {
-            extraWidth = std::max(extraWidth, float(m_npf->getNoteBodyWidth()));
+            extraWidth = std::max(extraWidth, float(npf->getNoteBodyWidth()));
         }
     }
-
+/*!!!
     if (grace) {
-        chunks.push_back(Chunk( -10 + graceCount,
-                                extraWidth + m_npf->getNoteBodyWidth()));
-        if (graceCount < 9)
-            ++graceCount;
-        return ;
+        std::cerr << "Grace note: subordering " << chord.getSubOrdering() << std::endl;
+        chunks.push_back(Chunk(-10 + graceCount,
+                               extraWidth + npf->getNoteBodyWidth()));
+        if (graceCount < 9) ++graceCount;
+        return;
     } else {
+        std::cerr << "Non-grace note (grace count was " << graceCount << ")" << std::endl;
         graceCount = 0;
     }
-
+*/
     NotationElementList::iterator myLongest = chord.getLongestElement();
     if (myLongest == notes->end()) {
         NOTATION_DEBUG << "WARNING: NotationHLayout::scanChord: No longest element in chord!" << endl;
@@ -661,19 +686,25 @@ NotationHLayout::scanChord(NotationElementList *notes,
 
     NOTATION_DEBUG << "Lyric width is " << lyricWidth << endl;
 
-    chunks.push_back(Chunk(d, 0, extraWidth,
-                           std::max(layoutExtra +
-                                    getLayoutWidth(**myLongest, key),
-                                    lyricWidth)));
-
-    lyricWidth = 0;
+    if (grace) {
+        chunks.push_back(Chunk(d, chord.getSubOrdering(),
+                               extraWidth + layoutExtra
+                               + getLayoutWidth(**myLongest, npf, key)
+                               - npf->getNoteBodyWidth(), // tighten up
+                               0));
+    } else {
+        chunks.push_back(Chunk(d, 0, extraWidth,
+                               std::max(layoutExtra +
+                                        getLayoutWidth(**myLongest, npf, key),
+                                        lyricWidth)));
+        lyricWidth = 0;
+    }
 
     itr = chord.getFinalElement();
     if (barEndsInChord) {
         to = itr;
         ++to;
     }
-    return ;
 }
 
 struct ChunkLocation {
@@ -770,8 +801,7 @@ NotationHLayout::preSquishBar(int barNo)
             }
 
             maxStretchy = std::max(maxStretchy, (*j)->stretchy);
-            totalFixed = std::max(totalFixed, (*j)->fixed )
-                         ;
+            totalFixed = std::max(totalFixed, (*j)->fixed);
         }
 
         NOTATION_DEBUG << "NotationHLayout::preSquishBar: minRate " << minRate << ", maxStretchy " << maxStretchy << ", totalFixed " << totalFixed << endl;
@@ -1288,7 +1318,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
             bdi->second.layoutData.x += offset;
 
-            if (bdi->second.basicData.newTimeSig)
+            if (bdi->second.basicData.newTimeSig)  
                 bdi->second.layoutData.timeSigX += (int)offset;
 
             for (NotationElementList::iterator it = from;
@@ -1328,6 +1358,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
         double barInset = notationStaff.getBarInset(barNo, repeatClefAndKey);
 
         NotationElement *lastDynamicText = 0;
+        int fretboardCount = 0;
         int count = 0;
 
         double offset = 0.0;
@@ -1339,7 +1370,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
         }
 
         if (bdi->second.basicData.newTimeSig ||
-                !bdi->second.basicData.timeSignature.hasHiddenBars()) {
+            !bdi->second.basicData.timeSignature.hasHiddenBars()) {
             offset += getPostBarMargin();
         }
 
@@ -1353,6 +1384,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
         NOTATION_DEBUG << "have " << chunks.size() << " chunks, reconciledWidth " << bdi->second.sizeData.reconciledWidth << ", idealWidth " << bdi->second.sizeData.idealWidth << ", ratio " << reconcileRatio << endl;
 
         double delta = 0;
+        float sigx = 0.f;
 
         for (NotationElementList::iterator it = from; it != to; ++it) {
 
@@ -1360,7 +1392,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
             delta = 0;
             float fixed = 0;
 
-        if (el->event()->isa(Note::EventType)) {
+            if (el->event()->isa(Note::EventType)) {
                 long pitch = 0;
                 el->event()->get<Int>(PITCH, pitch);
                 NOTATION_DEBUG << "element is a " << el->event()->getType() << " (pitch " << pitch << ")" << endl;
@@ -1374,12 +1406,23 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
                     continue;
             }
 
+//            float sigx = 0;
+
             if (chunkitr != chunks.end()) {
                 NOTATION_DEBUG << "new chunk: addr " << &(*chunkitr) << " duration=" << (*chunkitr).duration << " subordering=" << (*chunkitr).subordering << " fixed=" << (*chunkitr).fixed << " stretchy=" << (*chunkitr).stretchy << " x=" << (*chunkitr).x << endl;
                 x = barX + offset + reconcileRatio * (*chunkitr).x;
-                fixed = (*chunkitr)
-                            .fixed;
-                NOTATION_DEBUG << "adjusted x is " << x << endl;
+                fixed = (*chunkitr).fixed;
+//                sigx = barX + offset - fixed;
+//                sigx = x - fixed;
+                NOTATION_DEBUG << "adjusted x is " << x << ", fixed is " << fixed << endl;
+
+                if (timeSigToPlace) {
+                    if (el->event()->isa(Clef::EventType) ||
+                        el->event()->isa(Rosegarden::Key::EventType)) {
+                        sigx = x + (*chunkitr).fixed + (*chunkitr).stretchy;
+                    }
+                }
+
                 ChunkList::iterator chunkscooter(chunkitr);
                 if (++chunkscooter != chunks.end()) {
                     delta = (*chunkscooter).x - (*chunkitr).x;
@@ -1388,18 +1431,26 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
                             bdi->second.sizeData.fixedWidth - (*chunkitr).x;
                 }
                 delta *= reconcileRatio;
+
                 ++chunkitr;
             } else {
                 x = barX + reconciledWidth - getPreBarMargin();
+//                sigx = x;
                 delta = 0;
             }
 
             if (timeSigToPlace &&
-                    !el->event()->isa(Clef::EventType) &&
-                    !el->event()->isa(::Rosegarden::Key::EventType)) {
-                NOTATION_DEBUG << "Placing timesig at " << x << endl;
-                bdi->second.layoutData.timeSigX = (int)(x - fixed )
-                                                      ;
+                !el->event()->isa(Clef::EventType) &&
+                !el->event()->isa(::Rosegarden::Key::EventType)) {
+
+                if (sigx == 0.f) {
+                    sigx = barX + offset;
+                }
+
+//                NOTATION_DEBUG << "Placing timesig at " << (x - fixed) << endl;
+//                bdi->second.layoutData.timeSigX = (int)(x - fixed);
+                NOTATION_DEBUG << "Placing timesig at " << sigx << " (would previously have been " << int(x-fixed) << "?)" << endl;
+                bdi->second.layoutData.timeSigX = (int)sigx;
                 double shift = getFixedItemSpacing() +
                                m_npf->getTimeSigWidth(timeSignature);
                 offset += shift;
@@ -1493,7 +1544,11 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
             } else if (el->event()->isa(Guitar::Chord::EventType)) {
 
                 int guitarChordWidth = m_npf->getLineSpacing() * 6;
-                el->setLayoutX(x - (guitarChordWidth / 2));
+                el->setLayoutX(x - (guitarChordWidth / 2)
+                               + fretboardCount * (guitarChordWidth +
+                                                   m_npf->getNoteBodyWidth()/2)
+                               + displacedX);
+                ++fretboardCount;
 
             } else {
 
@@ -1574,15 +1629,18 @@ NotationHLayout::getSpacingDuration(Staff &staff,
     timeT t((*i)->getViewAbsoluteTime());
     timeT d((*i)->getViewDuration());
 
+    if (d > 0 && (*i)->event()->getDuration() == 0) return d; // grace note
+
     NotationElementList::iterator j(i), e(staff.getViewElementList()->end());
     while (j != e && ((*j)->getViewAbsoluteTime() == t ||
                       (*j)->getViewDuration() == 0)) {
         ++j;
     }
-    if (j == e)
+    if (j == e) {
         return d;
-    else
+    } else {
         return (*j)->getViewAbsoluteTime() - (*i)->getViewAbsoluteTime();
+    }
 }
 
 timeT
@@ -1593,6 +1651,8 @@ NotationHLayout::getSpacingDuration(Staff &staff,
 
     NotationElementList::iterator i = chord.getShortestElement();
     timeT d((*i)->getViewDuration());
+
+    if (d > 0 && (*i)->event()->getDuration() == 0) return d; // grace note
 
     NotationElementList::iterator j(i), e(staff.getViewElementList()->end());
     while (j != e && (chord.contains(j) || (*j)->getViewDuration() == 0))
@@ -1628,8 +1688,8 @@ NotationHLayout::positionChord(Staff &staff,
     // particular complication here.
 
     for (NotationElementList::iterator citr = chord.getInitialElement();
-            citr != staff.getViewElementList()->end(); ++citr) {
-
+         citr != staff.getViewElementList()->end(); ++citr) {
+        
         if (citr == to)
             barEndsInChord = true;
 
@@ -1685,8 +1745,8 @@ NotationHLayout::positionChord(Staff &staff,
                 NotationElementList::iterator otherItr(ti->second);
 
                 if ((*otherItr)->getViewAbsoluteTime() +
-                        (*otherItr)->getViewDuration() ==
-                        note->getViewAbsoluteTime()) {
+                    (*otherItr)->getViewDuration() ==
+                    note->getViewAbsoluteTime()) {
 
                     NOTATION_DEBUG << "Second note in tie at " << note->getViewAbsoluteTime() << ": found first note, it matches" << endl;
 
@@ -1722,6 +1782,7 @@ NotationHLayout::positionChord(Staff &staff,
 
 float
 NotationHLayout::getLayoutWidth(ViewElement &ve,
+                                NotePixmapFactory *npf,
                                 const ::Rosegarden::Key &previousKey) const
 {
     NotationElement& e = static_cast<NotationElement&>(ve);
@@ -1736,13 +1797,13 @@ NotationHLayout::getLayoutWidth(ViewElement &ve,
 
         if (e.isNote()) {
             bw = m_npf->getNoteBodyWidth(noteType)
-                 + m_npf->getDotWidth() * dots;
+                + m_npf->getDotWidth() * dots;
         } else {
             bw = m_npf->getRestWidth(Note(noteType, dots));
         }
 
         double multiplier = double(Note(noteType, dots).getDuration()) /
-                            double(Note(Note::Quaver) .getDuration());
+                            double(Note(Note::Quaver).getDuration());
         multiplier -= 1.0;
         multiplier *= m_proportion / 100.0;
         multiplier += 1.0;

@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -38,10 +38,11 @@ namespace Rosegarden
 {
 
 RestInsertionCommand::RestInsertionCommand(Segment &segment, timeT time,
-        timeT endTime, Note note) :
-        NoteInsertionCommand(segment, time, endTime, note, 0,
-                             Accidentals::NoAccidental,
-                             false, false, NoteStyleFactory::DefaultStyle)
+                                           timeT endTime, Note note) :
+    NoteInsertionCommand(segment, time, endTime, note, 0,
+                         Accidentals::NoAccidental,
+                         AutoBeamOff, MatrixModeOff, GraceModeOff, 0,
+                         NoteStyleFactory::DefaultStyle)
 {
     setName("Insert Rest");
 }

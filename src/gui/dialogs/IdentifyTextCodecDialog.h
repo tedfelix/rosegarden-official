@@ -5,7 +5,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -28,7 +28,7 @@
 
 #include <string>
 #include <kdialogbase.h>
-#include <vector>
+#include <deque>
 
 
 class QWidget;
@@ -55,7 +55,7 @@ protected slots:
 protected:
     std::string m_text;
     std::string m_codec;
-    std::vector<std::string> m_codecs;
+    std::deque<std::string> m_codecs;
     QLabel *m_example;
 };
 

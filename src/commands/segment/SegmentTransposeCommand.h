@@ -5,7 +5,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -51,7 +51,7 @@ public:
 
     static QString getGlobalName(int semitones = 0, int step = 0) {
         switch (semitones) {
-        default:  return i18n("Transpose by &Interval (EXPERIMENTAL)...");
+        default:  return i18n("Transpose by &Interval...");
         }
     }
 

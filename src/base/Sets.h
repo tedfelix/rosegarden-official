@@ -4,7 +4,7 @@
     Rosegarden
     A sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
@@ -201,6 +201,8 @@ public:
      */
     virtual Iterator getFirstElementNotInChord();
 
+    virtual int getSubOrdering() { return m_subordering; }
+
 protected:
     virtual bool test(const Iterator&);
     virtual bool sample(const Iterator&, bool goingForwards);
@@ -298,7 +300,12 @@ AbstractSet<Element, Container>::initialise()
     for (i = j = m_baseIterator; i != getContainer().begin() && test(--j); i = j){
         if (sample(j, false)) {
             m_initial = j;
-            if (getAsEvent(j)->isa(Note::EventType)) m_initialNote = j;
+            if (getAsEvent(j)->isa(Note::EventType)) {
+		m_initialNote = j;
+		if (m_finalNote == getContainer().end()) {
+		    m_finalNote = j;
+		}
+	    }
         }
     }
 
@@ -310,7 +317,12 @@ AbstractSet<Element, Container>::initialise()
     for (i = j = m_baseIterator; ++j != getContainer().end() && test(j); i = j) {
         if (sample(j, true)) {
             m_final = j;
-            if (getAsEvent(j)->isa(Note::EventType)) m_finalNote = j;
+            if (getAsEvent(j)->isa(Note::EventType)) {
+		m_finalNote = j;
+		if (m_initialNote == getContainer().end()) {
+		    m_initialNote = j;
+		}
+	    }
         }
     }
 }
@@ -368,10 +380,12 @@ GenericChord<Element, Container, singleStaff>::GenericChord(Container &c,
     m_subordering(getAsEvent(i)->getSubOrdering()),
     m_firstReject(c.end())
 {
-        AbstractSet<Element, Container>::initialise();
+    AbstractSet<Element, Container>::initialise();
 
     if (std::vector<typename Container::iterator>::size() > 1) {
-        std::stable_sort(std::vector<typename Container::iterator>::begin(), std::vector<typename Container::iterator>::end(), PitchGreater());
+        std::stable_sort(std::vector<typename Container::iterator>::begin(),
+			 std::vector<typename Container::iterator>::end(),
+			 PitchGreater());
     }
 
 /*!!! this should all be removed ultimately
@@ -403,7 +417,13 @@ bool
 GenericChord<Element, Container, singleStaff>::test(const Iterator &i)
 {
     Event *e = getAsEvent(i);
-    if (AbstractSet<Element, Container>::getQuantizer().getQuantizedAbsoluteTime(e) != m_time) return false;
+    if (AbstractSet<Element, Container>::
+	getQuantizer().getQuantizedAbsoluteTime(e) != m_time) {
+	return false;
+    }
+    if (e->getSubOrdering() != m_subordering) {
+	return false;
+    }
 
     // We permit note or rest events etc here, because if a chord is a
     // little staggered (for performance reasons) then it's not at all

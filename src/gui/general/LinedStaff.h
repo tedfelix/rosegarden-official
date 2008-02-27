@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -422,8 +422,7 @@ public:
      * Move the insertion cursor to the layout-X coordinate
      * corresponding to the given time, and show it.
      */
-    virtual void setInsertCursorPosition
-    (HorizontalLayoutEngine&, timeT);
+    virtual void setInsertCursorPosition(HorizontalLayoutEngine&, timeT);
 
     /**
      * Move the insertion cursor to the layout-X coordinate
@@ -437,6 +436,11 @@ public:
      * is not current or there is some other problem.
      */
     virtual double getLayoutXOfInsertCursor() const;
+
+    /**
+     * Return the time of the insert cursor.
+     */
+    virtual timeT getInsertCursorTime(HorizontalLayoutEngine&) const;
 
     /**
      * Return the canvas coordinates of the top of the insert
@@ -745,6 +749,8 @@ protected:
 
     QCanvasLine *m_pointer;
     QCanvasLine *m_insertCursor;
+    timeT m_insertCursorTime;
+    bool m_insertCursorTimeValid;
 };
 
 

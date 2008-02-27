@@ -5,7 +5,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -146,10 +146,12 @@ protected:
 
     bool m_clickHappened;
     timeT m_clickTime;
+    int m_clickSubordering;
     int m_clickPitch;
     int m_clickHeight;
     int m_clickStaffNo;
     double m_clickInsertX;
+    float m_targetSubordering;
 
     Accidental m_accidental;
     Accidental m_lastAccidental;

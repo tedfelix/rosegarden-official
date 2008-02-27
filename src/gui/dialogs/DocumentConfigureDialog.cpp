@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -29,17 +29,34 @@
 #include <klocale.h>
 #include "ConfigureDialogBase.h"
 #include "document/RosegardenGUIDoc.h"
-#include "gui/configuration/AudioConfigurationPage.h"
+#include "gui/configuration/AudioPropertiesPage.h"
 #include "gui/configuration/ColourConfigurationPage.h"
 #include "gui/configuration/DocumentMetaConfigurationPage.h"
 #include "gui/configuration/GeneralConfigurationPage.h"
 #include <kdialogbase.h>
 #include <qstring.h>
 #include <qwidget.h>
+#include <kstddirs.h>
 
 
 namespace Rosegarden
 {
+static QPixmap loadIcon(const char *name)
+{
+    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+    QString fileBase = pixmapDir + "/misc/";
+    fileBase += name;
+    if (QFile(fileBase + ".png").exists()) {
+        return QPixmap(fileBase + ".png");
+    } else if (QFile(fileBase + ".xpm").exists()) {
+        return QPixmap(fileBase + ".xpm");
+    }
+
+    QPixmap pmap = KGlobal::instance()->iconLoader()
+        ->loadIcon(QString::fromLatin1(name), KIcon::NoGroup, KIcon::SizeMedium);
+    return pmap;
+}
+
 
 DocumentConfigureDialog::DocumentConfigureDialog(RosegardenGUIDoc *doc,
         QWidget *parent,
@@ -63,11 +80,11 @@ DocumentConfigureDialog::DocumentConfigureDialog(RosegardenGUIDoc *doc,
 
     // Audio Page
     //
-    pageWidget = addPage(AudioConfigurationPage::iconLabel(),
-                         AudioConfigurationPage::title(),
-                         loadIcon(AudioConfigurationPage::iconName()));
+    pageWidget = addPage(AudioPropertiesPage::iconLabel(),
+                         AudioPropertiesPage::title(),
+                         loadIcon(AudioPropertiesPage::iconName()));
     vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
-    page = new AudioConfigurationPage(doc, pageWidget);
+    page = new AudioPropertiesPage(doc, pageWidget);
     vlay->addWidget(page);
     page->setPageIndex(pageIndex(pageWidget));
     m_configurationPages.push_back(page);
@@ -82,6 +99,8 @@ DocumentConfigureDialog::DocumentConfigureDialog(RosegardenGUIDoc *doc,
     vlay->addWidget(page);
     page->setPageIndex(pageIndex(pageWidget));
     m_configurationPages.push_back(page);
+
+    resize(minimumSize());
 }
 
 void
@@ -92,8 +111,8 @@ DocumentConfigureDialog::showAudioPage()
     for (configurationpages::iterator i = m_configurationPages.begin();
             i != m_configurationPages.end(); ++i) {
 
-        AudioConfigurationPage *page =
-            dynamic_cast<AudioConfigurationPage *>(*i);
+        AudioPropertiesPage *page =
+            dynamic_cast<AudioPropertiesPage *>(*i);
 
         if (!page) {
             ++index;
@@ -105,6 +124,7 @@ DocumentConfigureDialog::showAudioPage()
     }
 }
 
+/* hjj: WHAT TO DO WITH THIS ?
 void
 DocumentConfigureDialog::selectMetadata(QString name)
 {
@@ -126,5 +146,6 @@ DocumentConfigureDialog::selectMetadata(QString name)
         return ;
     }
 }
+*/
 
 }

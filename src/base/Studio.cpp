@@ -4,7 +4,7 @@
     Rosegarden
     A sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
@@ -25,6 +25,10 @@
 #include "MidiDevice.h"
 #include "AudioDevice.h"
 #include "Instrument.h"
+
+#include "Segment.h"
+#include "Track.h"
+#include "Composition.h"
 
 #if (__GNUC__ < 3)
 #include <strstream>
@@ -224,6 +228,25 @@ Studio::getInstrumentFromList(int index)
 
 }
 
+Instrument *
+Studio::getInstrumentFor(Segment *segment)
+{
+    if (!segment) return 0;
+    if (!segment->getComposition()) return 0;
+    TrackId tid = segment->getTrack();
+    Track *track = segment->getComposition()->getTrackById(tid);
+    if (!track) return 0;
+    return getInstrumentFor(track);
+}
+
+Instrument *
+Studio::getInstrumentFor(Track *track)
+{
+    if (!track) return 0;
+    InstrumentId iid = track->getInstrument();
+    return getInstrumentById(iid);
+}
+
 BussList
 Studio::getBusses()
 {
@@ -243,6 +266,14 @@ void
 Studio::addBuss(Buss *buss)
 {
     m_busses.push_back(buss);
+}
+
+PluginContainer *
+Studio::getContainerById(InstrumentId id)
+{
+    PluginContainer *pc = getInstrumentById(id);
+    if (pc) return pc;
+    else return getBussById(id);
 }
 
 RecordIn *

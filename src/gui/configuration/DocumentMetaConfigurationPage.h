@@ -5,7 +5,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -39,7 +39,7 @@ namespace Rosegarden
 {
 
 class RosegardenGUIDoc;
-
+class HeadersConfigurationPage;
 
 /**
  * Document Meta-information page
@@ -58,18 +58,15 @@ public:
     static QString title() { return i18n("About"); }
     static QString iconName()  { return "contents"; }
 
+/* hjj: WHAT TO DO WITH THIS ?
     void selectMetadata(QString name);
+*/
 
-protected slots:
-    void slotAddNewProperty();
-    void slotDeleteProperty();
-    
 protected:
 
     //--------------- Data members ---------------------------------
 
-    KListView *m_fixed;
-    KListView *m_metadata;
+    HeadersConfigurationPage *m_headersPage;
 };
 
 

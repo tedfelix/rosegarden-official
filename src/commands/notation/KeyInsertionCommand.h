@@ -5,7 +5,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -43,7 +43,11 @@ namespace Rosegarden
 class Segment;
 class Event;
 
-
+//!!! Note, the shouldIgnorePercussion parameter probably shouldn't have been
+// added to the individual KeyInsertionCommand in the first place, but I haven't
+// made up my mind yet for sure, and I already changed all the calls to this
+// constructor, so I'm leaving this in until after the new code is field
+// tested, and I can determine it really never will be wanted (DMM)
 /*
  * Inserts a key change into a single segment, taking segment transpose into
  * account (fixes #1520716) if desired.
@@ -57,7 +61,8 @@ public:
                         Key key,
                         bool shouldConvert,
                         bool shouldTranspose,
-                        bool shouldTransposeKey);
+                        bool shouldTransposeKey,
+			bool shouldIgnorePercussion);
     virtual ~KeyInsertionCommand();
 
     static QString getGlobalName(Key *key = 0) {
@@ -79,6 +84,7 @@ protected:
     bool m_convert;
     bool m_transpose;
     bool m_transposeKey;
+    bool m_ignorePercussion;
 };
 
 /*

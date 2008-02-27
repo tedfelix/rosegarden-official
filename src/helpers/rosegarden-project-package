@@ -61,15 +61,15 @@ use File::Copy;
 use File::Basename;
 use Getopt::Long;
 
-print STDERR "Rosegarden Project Packager v0.25 (c) Fervent Software Ltd 2005-2007\n";
+print STDERR "Rosegarden Project Packager v0.25 (c) Fervent Software Ltd 2005-2008\n";
 print STDERR "This program is Free Software under the GNU General Public License.\n";
 
 my $dcop = undef;
 sub usage {
-    print STDERR "Usage: rgproject [--quiet] [--pack] file.rg [file.rgp]\n";
-    print STDERR "       rgproject [--quiet] --unpack file.rgp\n";
-    print STDERR "       rgproject [--quiet] --rg file.rgp\n";
-    print STDERR "       rgproject --conftest\n";
+    print STDERR "Usage: rosegarden-project-package [--quiet] [--pack] file.rg [file.rgp]\n";
+    print STDERR "       rosegarden-project-package [--quiet] --unpack file.rgp\n";
+    print STDERR "       rosegarden-project-package [--quiet] --rg file.rgp\n";
+    print STDERR "       rosegarden-project-package --conftest\n";
     if (defined $dcop) {
 	`dcop "$dcop" close`;
     }

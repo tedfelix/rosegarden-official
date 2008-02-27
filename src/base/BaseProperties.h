@@ -2,7 +2,7 @@
     Rosegarden
     A sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
@@ -40,6 +40,7 @@ extern PropertyName getMarkPropertyName(int markNo);
 
 extern const PropertyName TIED_BACKWARD;
 extern const PropertyName TIED_FORWARD;
+extern const PropertyName TIE_IS_ABOVE; // optional; default position if absent
 
 extern const PropertyName BEAMED_GROUP_ID;
 extern const PropertyName BEAMED_GROUP_TYPE;
@@ -49,11 +50,12 @@ extern const PropertyName BEAMED_GROUP_TUPLED_COUNT;
 extern const PropertyName BEAMED_GROUP_UNTUPLED_COUNT;
 
 extern const PropertyName IS_GRACE_NOTE;
-extern const PropertyName HAS_GRACE_NOTES;
+extern const PropertyName HAS_GRACE_NOTES; // obsolete
+extern const PropertyName MAY_HAVE_GRACE_NOTES; // hint for use by performance helper
 
 extern const std::string GROUP_TYPE_BEAMED;
 extern const std::string GROUP_TYPE_TUPLED;
-extern const std::string GROUP_TYPE_GRACE;
+extern const std::string GROUP_TYPE_GRACE; // obsolete
 
 extern const PropertyName TRIGGER_SEGMENT_ID;
 extern const PropertyName TRIGGER_SEGMENT_RETUNE;

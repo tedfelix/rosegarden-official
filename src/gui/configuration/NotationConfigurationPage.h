@@ -5,7 +5,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -63,11 +63,10 @@ public:
 
     static QString iconLabel() { return i18n("Notation"); }
     static QString title()     { return i18n("Notation"); }
-    static QString iconName()  { return "music_eightnote"; }
+    static QString iconName()  { return "configure-notation"; }
 
 protected slots:
     void slotFontComboChanged(int);
-    void slotRescanFonts();
     void slotPopulateFontCombo(bool rescan);
     void slotViewButtonPressed();
 
@@ -80,6 +79,7 @@ protected:
     QComboBox *m_multiStaffSize;
     QComboBox *m_printingSize;
     KFontRequester* m_textFont;
+    KFontRequester* m_sansFont;
     KFontRequester* m_timeSigFont;
     QPushButton *m_viewButton;
     QLabel *m_fontOriginLabel;
@@ -93,7 +93,8 @@ protected:
     QCheckBox *m_showUnknowns;
     QCheckBox *m_showInvisibles;
     QCheckBox *m_showRanges;
-    QComboBox *m_showCollisions;
+    QCheckBox *m_showCollisions;
+    QComboBox *m_showTrackHeaders;
     QComboBox *m_noteStyle;
     QComboBox *m_insertType;
     QCheckBox *m_autoBeam;
@@ -102,6 +103,7 @@ protected:
     QComboBox *m_accOctavePolicy;
     QComboBox *m_accBarPolicy;
     QComboBox *m_keySigCancelMode;
+    QCheckBox *m_splitAndTie;
     QuantizeParameters *m_quantizeFrame;
     QStringList m_untranslatedFont;
     QStringList m_untranslatedNoteStyle;

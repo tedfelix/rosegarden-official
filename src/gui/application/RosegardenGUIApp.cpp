@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -96,6 +96,7 @@
 #include "document/RosegardenGUIDoc.h"
 #include "document/ConfigGroups.h"
 #include "gui/application/RosegardenApplication.h"
+#include "gui/dialogs/AddTracksDialog.h"
 #include "gui/dialogs/AudioManagerDialog.h"
 #include "gui/dialogs/AudioPluginDialog.h"
 #include "gui/dialogs/AudioSplitDialog.h"
@@ -311,7 +312,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
             // try to launch JACK - if the configuration wants us to.
             if (!launchJack()) {
                 KStartupLogo::hideIfStillThere();
-                KMessageBox::error(this, i18n("Attempted to launch JACK audio daemon failed.  Audio will be disabled.\nPlease check configuration (Settings->Configure Rosegarden->Sequencer->JACK control)\n and restart."));
+                KMessageBox::error(this, i18n("Attempted to launch JACK audio daemon failed.  Audio will be disabled.\nPlease check configuration (Settings -> Configure Rosegarden -> Audio -> Startup)\n and restart."));
             }
         } else {
             //this client was just for testing
@@ -588,7 +589,7 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotExportMIDI()), actionCollection(),
                 "file_export_midi");
 
-    new KAction(i18n("Export &Lilypond file..."), 0, 0, this,
+    new KAction(i18n("Export &LilyPond file..."), 0, 0, this,
                 SLOT(slotExportLilypond()), actionCollection(),
                 "file_export_lilypond");
 
@@ -603,6 +604,10 @@ void RosegardenGUIApp::setupActions()
     new KAction(i18n("Export M&up file..."), 0, 0, this,
                 SLOT(slotExportMup()), actionCollection(),
                 "file_export_mup");
+
+    new KAction(i18n("Print &with LilyPond..."), 0, 0, this,
+                SLOT(slotPrintLilypond()), actionCollection(),
+                "file_print_lilypond");
 
     new KAction(i18n("Preview with Lil&yPond..."), 0, 0, this,
                 SLOT(slotPreviewLilypond()), actionCollection(),
@@ -886,12 +891,12 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotQuantizeSelection()), actionCollection(),
                 "quantize_selection");
 
-	new KAction(SegmentLabelCommand::getGlobalName(),
+    new KAction(SegmentLabelCommand::getGlobalName(),
                 0,
                 this, SLOT(slotRelabelSegments()),
                 actionCollection(), "relabel_segment");
 
-	new KAction(SegmentTransposeCommand::getGlobalName(),
+    new KAction(SegmentTransposeCommand::getGlobalName(),
                 0,
                 this, SLOT(slotTransposeSegments()),
                 actionCollection(), "transpose");
@@ -960,7 +965,7 @@ void RosegardenGUIApp::setupActions()
 
     pixmap.load(pixmapDir + "/toolbar/manage-audio-segments.xpm");
     icon = QIconSet(pixmap);
-    new KAction(i18n("Manage A&udio"), icon,
+    new KAction(i18n("Manage A&udio Files"), icon,
                 Key_U + CTRL,
                 this, SLOT(slotAudioManager()),
                 actionCollection(), "audio_manager");
@@ -978,7 +983,7 @@ void RosegardenGUIApp::setupActions()
                 this, SLOT(slotAddTrack()),
                 actionCollection(), "add_track");
 
-    new KAction(i18n("&Add Multiple Tracks..."), 0,
+    new KAction(i18n("&Add Tracks..."), 0,
                 this, SLOT(slotAddTracks()),
                 actionCollection(), "add_tracks");
 
@@ -1009,6 +1014,16 @@ void RosegardenGUIApp::setupActions()
                 Key_Up,
                 this, SLOT(slotTrackUp()),
                 actionCollection(), "select_previous_track");
+
+    new KAction(i18n("Mute or Unmute Track"),
+                Key_U,
+                this, SLOT(slotToggleMutedCurrentTrack()),
+                actionCollection(), "toggle_mute_track");
+
+    new KAction(i18n("Arm or Un-arm Track for Record"),
+                Key_R,
+                this, SLOT(slotToggleRecordCurrentTrack()),
+                actionCollection(), "toggle_arm_track");
 
     pixmap.load(pixmapDir + "/toolbar/mute-all.png");
     icon = QIconSet(pixmap);
@@ -1115,6 +1130,10 @@ void RosegardenGUIApp::setupActions()
     m_playTransport = new KAction(i18n("&Play"), icon, Key_Enter, this,
                                   SLOT(slotPlay()), actionCollection(),
                                   "play");
+    // Alternative shortcut for Play
+    KShortcut playShortcut = m_playTransport->shortcut();
+    playShortcut.append( KKey(Key_Return + CTRL) );
+    m_playTransport->setShortcut(playShortcut);
     m_playTransport->setGroup(TransportDialogConfigGroup);
 
     pixmap.load(pixmapDir + "/toolbar/transport-stop.png");
@@ -1342,13 +1361,14 @@ void RosegardenGUIApp::initView()
     //     setCentralWidget(m_swapView);
     setCaption(m_doc->getTitle());
 
-    // set the pointer position
-    //
-    slotSetPointerPosition(m_doc->getComposition().getPosition());
-
 
     // Transport setup
     //
+    std::string transportMode = m_doc->getConfiguration().
+                       get
+                        <String>
+                        (DocumentConfiguration::TransportMode);
+ 
 
     slotEnableTransport(true);
 
@@ -1369,6 +1389,13 @@ void RosegardenGUIApp::initView()
 
     // Set the solo button
     getTransport()->SoloButton()->setOn(comp.isSolo());
+
+    // set the transport mode found in the configuration
+    getTransport()->setNewMode(transportMode);
+
+    // set the pointer position
+    //
+    slotSetPointerPosition(m_doc->getComposition().getPosition());
 
     // make sure we show
     //
@@ -1540,8 +1567,8 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
 #endif
 
     if (getView() &&
-            getView()->getTrackEditor() &&
-            getView()->getTrackEditor()->getSegmentCanvas()) {
+        getView()->getTrackEditor() &&
+        getView()->getTrackEditor()->getSegmentCanvas()) {
         getView()->getTrackEditor()->getSegmentCanvas()->endAudioPreviewGeneration();
     }
 
@@ -1582,6 +1609,11 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
     // finally recreate the main view
     //
     initView();
+
+    if (getView() && getView()->getTrackEditor()) {
+        connect(m_doc, SIGNAL(makeTrackVisible(int)),
+                getView()->getTrackEditor(), SLOT(slotScrollToTrack(int)));
+    }
 
     connect(m_doc, SIGNAL(devicesResyncd()),
             this, SLOT(slotDocumentDevicesResyncd()));
@@ -2930,9 +2962,9 @@ RosegardenGUIApp::slotSplitSelectionAtTime()
 
     timeT now = m_doc->getComposition().getPosition();
 
-    QString title = selection.size() > 1 ?
-                    i18n("Split Segments at Time") :
-                    i18n("Split Segment at Time");
+    QString title = i18n("Split Segment at Time",
+                         "Split %n Segments at Time",
+                         selection.size());
 
     TimeDialog dialog(m_view, title,
                       &m_doc->getComposition(),
@@ -3432,7 +3464,14 @@ void RosegardenGUIApp::slotAddTrack()
         }
     }
 
-    m_view->slotAddTracks(1, id);
+    Composition &comp = m_doc->getComposition();
+    TrackId trackId = comp.getSelectedTrack();
+    Track *track = comp.getTrackById(trackId);
+
+    int pos = -1;
+    if (track) pos = track->getPosition() + 1;
+
+    m_view->slotAddTracks(1, id, pos);
 }
 
 void RosegardenGUIApp::slotAddTracks()
@@ -3467,22 +3506,21 @@ void RosegardenGUIApp::slotAddTracks()
         }
     }
 
+    Composition &comp = m_doc->getComposition();
+    TrackId trackId = comp.getSelectedTrack();
+    Track *track = comp.getTrackById(trackId);
+
+    int pos = 0;
+    if (track) pos = track->getPosition();
+
     bool ok = false;
 
-    int tracks = QInputDialog::getInteger(
-                     i18n("Add Multiple Tracks"),
-                     i18n("How many tracks do you want to add?"),
-                     1,
-                     1,
-                     32,
-                     1,
-                     &ok,
-                     this);
+    AddTracksDialog dialog(this, pos);
 
-    // create tracks if ok
-    //
-    if (ok)
-        m_view->slotAddTracks(tracks, id);
+    if (dialog.exec() == QDialog::Accepted) {
+        m_view->slotAddTracks(dialog.getTracks(), id, 
+                              dialog.getInsertPosition());
+    }
 }
 
 void RosegardenGUIApp::slotDeleteTrack()
@@ -3906,7 +3944,7 @@ RosegardenGUIApp::createDocumentFromMIDIFile(QString file)
         timeT startTime(segment.getStartTime());
         timeT endTime(segment.getEndMarkerTime());
 
-        RG_DEBUG << "segment: start time " << segment.getStartTime() << ", end time " << segment.getEndTime() << ", end marker time " << segment.getEndMarkerTime() << ", events " << segment.size() << endl;
+//        std::cerr << "segment: start time " << segment.getStartTime() << ", end time " << segment.getEndTime() << ", end marker time " << segment.getEndMarkerTime() << ", events " << segment.size() << std::endl;
 
         EventQuantizeCommand *subCommand = new EventQuantizeCommand
                                            (segment, startTime, endTime, "Notation Options", true);
@@ -4303,45 +4341,44 @@ RosegardenGUIApp::slotUpdateMonitoring()
 
 void RosegardenGUIApp::slotSetPointerPosition(timeT t)
 {
-    if (!m_seqManager)
-        return ;
+    Composition &comp = m_doc->getComposition();
 
     //    std::cerr << "RosegardenGUIApp::slotSetPointerPosition: t = " << t << std::endl;
 
-    Composition &comp = m_doc->getComposition();
-
-    if ( m_seqManager->getTransportStatus() == PLAYING ||
-            m_seqManager->getTransportStatus() == RECORDING ) {
-        if (t > comp.getEndMarker()) {
-            if (m_seqManager->getTransportStatus() == PLAYING) {
-
-                slotStop();
-                t = comp.getEndMarker();
-                m_doc->slotSetPointerPosition(t); //causes this method to be re-invoked
-                return ;
-
-            } else { // if recording, increase composition duration
-                std::pair<timeT, timeT> timeRange = comp.getBarRangeForTime(t);
-                timeT barDuration = timeRange.second - timeRange.first;
-                timeT newEndMarker = t + 10 * barDuration;
-                comp.setEndMarker(newEndMarker);
-                getView()->getTrackEditor()->slotReadjustCanvasSize();
-                getView()->getTrackEditor()->updateRulers();
-            }
-        }
+    if (m_seqManager) {
+	    if ( m_seqManager->getTransportStatus() == PLAYING ||
+	            m_seqManager->getTransportStatus() == RECORDING ) {
+	        if (t > comp.getEndMarker()) {
+	            if (m_seqManager->getTransportStatus() == PLAYING) {
+	
+	                slotStop();
+	                t = comp.getEndMarker();
+	                m_doc->slotSetPointerPosition(t); //causes this method to be re-invoked
+	                return ;
+	
+	            } else { // if recording, increase composition duration
+	                std::pair<timeT, timeT> timeRange = comp.getBarRangeForTime(t);
+	                timeT barDuration = timeRange.second - timeRange.first;
+	                timeT newEndMarker = t + 10 * barDuration;
+	                comp.setEndMarker(newEndMarker);
+	                getView()->getTrackEditor()->slotReadjustCanvasSize();
+	                getView()->getTrackEditor()->updateRulers();
+	            }
+	        }
+	    }
+	
+	    // cc 20050520 - jump at the sequencer even if we're not playing,
+	    // because we might be a transport master of some kind
+	    try {
+	        if (!m_originatingJump) {
+	            m_seqManager->sendSequencerJump(comp.getElapsedRealTime(t));
+	        }
+	    } catch (QString s) {
+	        KMessageBox::error(this, s);
+	    }
     }
 
-    // cc 20050520 - jump at the sequencer even if we're not playing,
-    // because we might be a transport master of some kind
-    try {
-        if (!m_originatingJump) {
-            m_seqManager->sendSequencerJump(comp.getElapsedRealTime(t));
-        }
-    } catch (QString s) {
-        KMessageBox::error(this, s);
-    }
-
-    // and the time sig
+    // set the time sig
     getTransport()->setTimeSignature(comp.getTimeSignatureAt(t));
 
     // and the tempo
@@ -4377,6 +4414,18 @@ void RosegardenGUIApp::slotSetPointerPosition(timeT t)
 
             getTransport()->displayFrameTime(rT);
         }
+    }
+    
+    // handle transport mode configuration changes
+    std::string modeAsString = getTransport()->getCurrentModeAsString();
+	
+    if (m_doc->getConfiguration().get<String>
+            (DocumentConfiguration::TransportMode) != modeAsString) {
+
+        m_doc->getConfiguration().set<String>
+            (DocumentConfiguration::TransportMode, modeAsString);
+
+        //m_doc->slotDocumentModified(); to avoid being prompted for a file change when merely changing the transport display
     }
 
     // Update position on the marker editor if it's available
@@ -4440,6 +4489,8 @@ void RosegardenGUIApp::slotTestStartupTester()
 
     if (!m_startupTester) {
         m_startupTester = new StartupTester();
+        connect(m_startupTester, SIGNAL(newerVersionAvailable(QString)),
+                this, SLOT(slotNewerVersionAvailable(QString)));
         m_startupTester->start();
         QTimer::singleShot(100, this, SLOT(slotTestStartupTester()));
         return ;
@@ -4903,10 +4954,10 @@ void RosegardenGUIApp::exportMupFile(QString file)
 
 void RosegardenGUIApp::slotExportLilypond()
 {
-    KTmpStatusMsg msg(i18n("Exporting Lilypond file..."), this);
+    KTmpStatusMsg msg(i18n("Exporting LilyPond file..."), this);
 
     QString fileName = getValidWriteFile
-                       (QString("*.ly|") + i18n("Lilypond files") +
+                       (QString("*.ly|") + i18n("LilyPond files") +
                         "\n*|" + i18n("All files"),
                         i18n("Export as..."));
 
@@ -4919,9 +4970,9 @@ void RosegardenGUIApp::slotExportLilypond()
 std::map<KProcess *, KTempFile *> RosegardenGUIApp::m_lilyTempFileMap;
 
 
-void RosegardenGUIApp::slotPreviewLilypond()
+void RosegardenGUIApp::slotPrintLilypond()
 {
-    KTmpStatusMsg msg(i18n("Previewing Lilypond file..."), this);
+    KTmpStatusMsg msg(i18n("Printing LilyPond file..."), this);
     KTempFile *file = new KTempFile(QString::null, ".ly");
     file->setAutoDelete(true);
     if (!file->name()) {
@@ -4934,7 +4985,32 @@ void RosegardenGUIApp::slotPreviewLilypond()
     }
     KProcess *proc = new KProcess;
     *proc << "rosegarden-lilypondview";
-    *proc << "-g";
+    *proc << "--graphical";
+    *proc << "--print";
+    *proc << file->name();
+    connect(proc, SIGNAL(processExited(KProcess *)),
+            this, SLOT(slotLilypondViewProcessExited(KProcess *)));
+    m_lilyTempFileMap[proc] = file;
+    proc->start(KProcess::NotifyOnExit);
+}
+
+void RosegardenGUIApp::slotPreviewLilypond()
+{
+    KTmpStatusMsg msg(i18n("Previewing LilyPond file..."), this);
+    KTempFile *file = new KTempFile(QString::null, ".ly");
+    file->setAutoDelete(true);
+    if (!file->name()) {
+        CurrentProgressDialog::freeze();
+        KMessageBox::sorry(this, i18n("Failed to open a temporary file for Lilypond export."));
+        delete file;
+    }
+    if (!exportLilypondFile(file->name(), true)) {
+        return ;
+    }
+    KProcess *proc = new KProcess;
+    *proc << "rosegarden-lilypondview";
+    *proc << "--graphical";
+    *proc << "--pdf";
     *proc << file->name();
     connect(proc, SIGNAL(processExited(KProcess *)),
             this, SLOT(slotLilypondViewProcessExited(KProcess *)));
@@ -4962,7 +5038,7 @@ bool RosegardenGUIApp::exportLilypondFile(QString file, bool forPreview)
         return false;
     }
 
-    ProgressDialog progressDlg(i18n("Exporting Lilypond file..."),
+    ProgressDialog progressDlg(i18n("Exporting LilyPond file..."),
                                100,
                                this);
 
@@ -5334,7 +5410,7 @@ void RosegardenGUIApp::slotStartAtTime(int sec, int usec)
 void RosegardenGUIApp::slotStop()
 {
     if (m_seqManager &&
-            m_seqManager->getCountdownDialog()) {
+        m_seqManager->getCountdownDialog()) {
         disconnect(m_seqManager->getCountdownDialog(), SIGNAL(stopped()),
                    this, SLOT(slotStop()));
         disconnect(m_seqManager->getCountdownDialog(), SIGNAL(completed()),
@@ -5884,6 +5960,10 @@ RosegardenGUIApp::plugAccelerators(QWidget *widget, QAccel *acc)
 {
 
     acc->connectItem(acc->insertItem(Key_Enter),
+                     this,
+                     SLOT(slotPlay()));
+    // Alternative shortcut for Play
+    acc->connectItem(acc->insertItem(Key_Return + CTRL),
                      this,
                      SLOT(slotPlay()));
 
@@ -6796,9 +6876,7 @@ RosegardenGUIApp::slotShowPluginDialog(QWidget *parent,
 
     PluginContainer *container = 0;
 
-    container = m_doc->getStudio().getInstrumentById(instrumentId);
-    if (!container)
-        container = m_doc->getStudio().getBussById(instrumentId);
+    container = m_doc->getStudio().getContainerById(instrumentId);
     if (!container) {
         RG_DEBUG << "RosegardenGUIApp::slotShowPluginDialog - "
         << "no instrument or buss of id " << instrumentId << endl;
@@ -6902,9 +6980,7 @@ RosegardenGUIApp::slotPluginSelected(InstrumentId instrumentId,
 
     PluginContainer *container = 0;
 
-    container = m_doc->getStudio().getInstrumentById(instrumentId);
-    if (!container)
-        container = m_doc->getStudio().getBussById(instrumentId);
+    container = m_doc->getStudio().getContainerById(instrumentId);
     if (!container) {
         RG_DEBUG << "RosegardenGUIApp::slotPluginSelected - "
         << "no instrument or buss of id " << instrumentId << endl;
@@ -7052,9 +7128,7 @@ RosegardenGUIApp::slotChangePluginPort(InstrumentId instrumentId,
 {
     PluginContainer *container = 0;
 
-    container = m_doc->getStudio().getInstrumentById(instrumentId);
-    if (!container)
-        container = m_doc->getStudio().getBussById(instrumentId);
+    container = m_doc->getStudio().getContainerById(instrumentId);
     if (!container) {
         RG_DEBUG << "RosegardenGUIApp::slotChangePluginPort - "
         << "no instrument or buss of id " << instrumentId << endl;
@@ -7101,9 +7175,7 @@ RosegardenGUIApp::slotPluginPortChanged(InstrumentId instrumentId,
 {
     PluginContainer *container = 0;
 
-    container = m_doc->getStudio().getInstrumentById(instrumentId);
-    if (!container)
-        container = m_doc->getStudio().getBussById(instrumentId);
+    container = m_doc->getStudio().getContainerById(instrumentId);
     if (!container) {
         RG_DEBUG << "RosegardenGUIApp::slotPluginPortChanged - "
         << "no instrument or buss of id " << instrumentId << endl;
@@ -7151,9 +7223,7 @@ RosegardenGUIApp::slotChangePluginProgram(InstrumentId instrumentId,
 {
     PluginContainer *container = 0;
 
-    container = m_doc->getStudio().getInstrumentById(instrumentId);
-    if (!container)
-        container = m_doc->getStudio().getBussById(instrumentId);
+    container = m_doc->getStudio().getContainerById(instrumentId);
     if (!container) {
         RG_DEBUG << "RosegardenGUIApp::slotChangePluginProgram - "
         << "no instrument or buss of id " << instrumentId << endl;
@@ -7204,9 +7274,7 @@ RosegardenGUIApp::slotPluginProgramChanged(InstrumentId instrumentId,
 {
     PluginContainer *container = 0;
 
-    container = m_doc->getStudio().getInstrumentById(instrumentId);
-    if (!container)
-        container = m_doc->getStudio().getBussById(instrumentId);
+    container = m_doc->getStudio().getContainerById(instrumentId);
     if (!container) {
         RG_DEBUG << "RosegardenGUIApp::slotPluginProgramChanged - "
         << "no instrument or buss of id " << instrumentId << endl;
@@ -7261,9 +7329,7 @@ RosegardenGUIApp::slotChangePluginConfiguration(InstrumentId instrumentId,
 {
     PluginContainer *container = 0;
 
-    container = m_doc->getStudio().getInstrumentById(instrumentId);
-    if (!container)
-        container = m_doc->getStudio().getBussById(instrumentId);
+    container = m_doc->getStudio().getContainerById(instrumentId);
     if (!container) {
         RG_DEBUG << "RosegardenGUIApp::slotChangePluginConfiguration - "
         << "no instrument or buss of id " << instrumentId << endl;
@@ -7355,9 +7421,7 @@ RosegardenGUIApp::slotPluginBypassed(InstrumentId instrumentId,
 {
     PluginContainer *container = 0;
 
-    container = m_doc->getStudio().getInstrumentById(instrumentId);
-    if (!container)
-        container = m_doc->getStudio().getBussById(instrumentId);
+    container = m_doc->getStudio().getContainerById(instrumentId);
     if (!container) {
         RG_DEBUG << "RosegardenGUIApp::slotPluginBypassed - "
         << "no instrument or buss of id " << instrumentId << endl;
@@ -7791,8 +7855,8 @@ void
 RosegardenGUIApp::slotAutoSave()
 {
     if (!m_seqManager ||
-            m_seqManager->getTransportStatus() == PLAYING ||
-            m_seqManager->getTransportStatus() == RECORDING)
+        m_seqManager->getTransportStatus() == PLAYING ||
+        m_seqManager->getTransportStatus() == RECORDING)
         return ;
 
     KConfig* config = kapp->config();
@@ -7851,6 +7915,21 @@ RosegardenGUIDoc *RosegardenGUIApp::getDocument() const
 {
     return m_doc;
 }
+
+void
+RosegardenGUIApp::slotNewerVersionAvailable(QString v)
+{
+    KStartupLogo::hideIfStillThere();
+    CurrentProgressDialog::freeze();
+    KMessageBox::information
+        (this,
+         i18n("<h3>Newer version available</h3><p>A newer version of Rosegarden may be available.<br>Please consult the <a href=\"http://www.rosegardenmusic.com/getting/\">Rosegarden website</a> for more information.</p>"),
+         i18n("Newer version available"),
+         QString("version-%1-available-show").arg(v),
+         KMessageBox::AllowLink);
+    CurrentProgressDialog::thaw();
+}
+
 
 const void* RosegardenGUIApp::SequencerExternal = (void*)-1;
 RosegardenGUIApp *RosegardenGUIApp::m_myself = 0;

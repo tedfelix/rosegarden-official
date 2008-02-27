@@ -5,7 +5,7 @@
     Rosegarden
     A sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
@@ -21,6 +21,7 @@
 */
 
 #include <cstdio> // needed for sprintf()
+#include "NotationRules.h"
 #include "NotationTypes.h"
 #include "BaseProperties.h"
 #include <iostream>
@@ -1557,11 +1558,8 @@ Pitch::Pitch(int noteInScale, int octave, const Key &key,
     m_pitch = (key.getTonicPitch());
     m_pitch = (octave - octaveBase) * 12 + m_pitch % 12;
 
-    static int major[]          = { 0, 2, 4, 5, 7, 9, 11 };
-    static int minor_harmonic[] = { 0, 2, 3, 5, 7, 8, 11 };
-    
-    if (key.isMinor()) m_pitch += minor_harmonic[noteInScale];
-    else m_pitch += major[noteInScale];
+    if (key.isMinor()) m_pitch += scale_Cminor_harmonic[noteInScale];
+    else m_pitch += scale_Cmajor[noteInScale];
 
     m_pitch += Accidentals::getPitchOffset(m_accidental);
 }
@@ -1570,9 +1568,7 @@ Pitch::Pitch(int noteInCMajor, int octave, int pitch,
 	     int octaveBase) :
     m_pitch(pitch)
 {
-    static int Cmajor[] = { 0, 2, 4, 5, 7, 9, 11 };
-    
-    int natural = (octave - octaveBase) * 12 + Cmajor[noteInCMajor];
+    int natural = (octave - octaveBase) * 12 + scale_Cmajor[noteInCMajor];
     m_accidental = Accidentals::getAccidental(pitch - natural);
 }
 
@@ -1672,11 +1668,8 @@ Pitch::getNoteInScale(const Key &key) const
     p += 24; // in case these calculations made it -ve
     p %= 12;
     
-    static int major[]          = { 0, 0, 1, 1, 2, 3, 3, 4, 4, 5, 5, 6 };
-    static int minor_harmonic[] = { 0, 0, 1, 2, 2, 3, 3, 4, 5, 5, 5, 6 };
-
-    if (key.isMinor()) return minor_harmonic[p];
-    else return major[p];
+    if (key.isMinor()) return steps_Cminor_harmonic[p];
+    else return steps_Cmajor[p];
 }
 
 char
@@ -1692,6 +1685,16 @@ Pitch::getHeightOnStaff(const Clef &clef, const Key &key) const
     int heightOnStaff;
     Accidental accidental(m_accidental);
     rawPitchToDisplayPitch(m_pitch, clef, key, heightOnStaff, accidental, UseKey);
+    return heightOnStaff;
+}
+
+int
+Pitch::getHeightOnStaff(const Clef &clef, bool useSharps) const
+{
+    int heightOnStaff;
+    Accidental accidental(m_accidental);
+    rawPitchToDisplayPitch(m_pitch, clef, Key("C major"), heightOnStaff, accidental, 
+        useSharps ? UseSharps : UseFlats);
     return heightOnStaff;
 }
 
@@ -1810,8 +1813,7 @@ Pitch Pitch::transpose(const Key &key, int pitchDelta, int heightDelta)
     }
         
     // calculate new accidental for step
-    static int stepIntervals[] = { 0,2,4,5,7,9,11 };
-    int pitchWithoutAccidental = ((newStep / 7) * 12 + stepIntervals[newStep % 7]);
+    int pitchWithoutAccidental = ((newStep / 7) * 12 + scale_Cmajor[newStep % 7]);
     int newAccidentalOffset = newPitch - pitchWithoutAccidental;
 
     // construct pitch-object to return

@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -196,12 +196,15 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     QCanvas *tCanvas = new QCanvas(this);
 
     m_config->setGroup(MatrixViewConfigGroup);
-    if (m_config->readBoolEntry("backgroundtextures", false)) {
+    if (m_config->readBoolEntry("backgroundtextures-1.6-plus", true)) {
         QPixmap background;
         QString pixmapDir =
             KGlobal::dirs()->findResource("appdata", "pixmaps/");
-        if (background.load(QString("%1/misc/bg-paper-white.xpm").
-                            arg(pixmapDir))) {
+	// We now use a lined background for the non-percussion matrix,
+	// suggested and supplied by Alessandro Preziosi
+	QString backgroundPixmap = isDrumMode() ? "bg-paper-white.xpm" : "bg-matrix-lines.xpm";
+        if (background.load(QString("%1/misc/%2").
+                            arg(pixmapDir, backgroundPixmap))) {
             tCanvas->setBackgroundPixmap(background);
         }
     }
@@ -445,11 +448,13 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     StandardRuler *topStandardRuler = new StandardRuler(getDocument(),
                                 &m_hlayout, int(xorigin), 25,
                                 false, getCentralWidget());
+    topStandardRuler->setSnapGrid(m_snapGrid);
     setTopStandardRuler(topStandardRuler);
 
     StandardRuler *bottomStandardRuler = new StandardRuler(getDocument(),
                                    &m_hlayout, 0, 25,
                                    true, getBottomWidget());
+    bottomStandardRuler->setSnapGrid(m_snapGrid);
     setBottomStandardRuler(bottomStandardRuler);
 
     topStandardRuler->connectRulerToDocPointer(doc);
@@ -518,9 +523,9 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     setCurrentSelection(0, false);
 
-    // Change this when the matrix view will have its own page
+    // Change this if the matrix view ever has its own page
     // in the config dialog.
-    setConfigDialogPageIndex(2);
+    setConfigDialogPageIndex(0);
 
     // default zoom
     m_config->setGroup(MatrixViewConfigGroup);
@@ -774,8 +779,12 @@ void MatrixView::setupActions()
 
     icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-play")));
-    new KAction(i18n("&Play"), icon, Key_Enter, this,
+    KAction *play = new KAction(i18n("&Play"), icon, Key_Enter, this,
                 SIGNAL(play()), actionCollection(), "play");
+    // Alternative shortcut for Play
+    KShortcut playShortcut = play->shortcut();
+    playShortcut.append( KKey(Key_Return + CTRL) );
+    play->setShortcut(playShortcut);
 
     icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-stop")));
@@ -1579,7 +1588,8 @@ MatrixView::slotSetInsertCursorPosition(timeT time, bool scroll)
     m_staffs[0]->setInsertCursorPosition(m_hlayout, time);
 
     if (scroll && !getCanvasView()->isAutoScrolling()) {
-        getCanvasView()->slotScrollHoriz(static_cast<int>(getXbyWorldMatrix(m_hlayout.getXForTime(time))));
+        getCanvasView()->slotScrollHoriz
+            (static_cast<int>(getXbyWorldMatrix(m_hlayout.getXForTime(time))));
     }
 
     updateView();
@@ -1626,6 +1636,7 @@ void MatrixView::slotEditPaste()
         slotStatusHelpMsg(i18n("Couldn't paste at this point"));
     } else {
         addCommandToHistory(command);
+        setCurrentSelection(new EventSelection(command->getPastedEvents()));
     }
 }
 
@@ -2418,8 +2429,7 @@ timeT
 MatrixView::getInsertionTime()
 {
     MatrixStaff *staff = m_staffs[0];
-    double ix = staff->getLayoutXOfInsertCursor();
-    return m_hlayout.getTimeForX(ix);
+    return staff->getInsertCursorTime(m_hlayout);
 }
 
 void

@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -27,6 +27,7 @@
 
 #include "base/Sets.h"
 #include "base/Event.h"
+#include "base/NotationRules.h"
 #include "base/NotationTypes.h"
 #include "base/Quantizer.h"
 #include "NotationProperties.h"
@@ -106,6 +107,8 @@ NotationChord::hasStem() const
 bool
 NotationChord::hasStemUp() const
 {
+    NotationRules rules;
+
     // believe anything found in any of the notes, if in a persistent
     // property or a property apparently set by the beaming algorithm
 
@@ -141,15 +144,7 @@ NotationChord::hasStemUp() const
         ++i;
     }
 
-    int high = getHeight(getHighestNote()), low = getHeight(getLowestNote());
-
-    if (high > 4) {
-        if (low > 4)
-            return false;
-        else
-            return ((high - 4) < (5 - low));
-    } else
-        return true;
+    return rules.isStemUp(getHighestNoteHeight(),getLowestNoteHeight());
 }
 
 bool

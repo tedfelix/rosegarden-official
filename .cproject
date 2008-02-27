@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <?fileVersion 4.0.0?>
 
 <cproject>
@@ -58,6 +58,7 @@
 
 <storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
 <storageModule moduleId="org.eclipse.cdt.core.language.mapping"/>
+
 <storageModule moduleId="org.eclipse.cdt.core.pathentry">
 <pathentry excluding="RGbuild/" kind="src" path=""/>
 <pathentry excluding="cache/" kind="out" path=""/>

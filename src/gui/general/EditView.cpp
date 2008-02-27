@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -85,6 +85,7 @@
 #include <kdockwidget.h>
 #include <kglobal.h>
 #include <kiconloader.h>
+#include <kstddirs.h>
 #include <ktabwidget.h>
 #include <kxmlguiclient.h>
 #include <qaccel.h>
@@ -700,24 +701,34 @@ EditView::setupActions()
 {
     createInsertPitchActionMenu();
 
-    new KAction(AddTempoChangeCommand::getGlobalName(), 0, this,
-                SLOT(slotAddTempo()), actionCollection(),
-                "add_tempo");
+    //
+    // Tempo and time signature changes
+    //
+    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+    QCanvasPixmap pixmap(pixmapDir + "/toolbar/event-insert-tempo.png");
+    QIconSet icon = QIconSet(pixmap);
+    new KAction(AddTempoChangeCommand::getGlobalName(),
+		icon, 0,
+		this, SLOT(slotAddTempo()),
+		actionCollection(), "add_tempo");
 
-    new KAction(AddTimeSignatureCommand::getGlobalName(), 0, this,
-                SLOT(slotAddTimeSignature()), actionCollection(),
-                "add_time_signature");
+    pixmap.load(pixmapDir + "/toolbar/event-insert-timesig.png");
+    icon = QIconSet(pixmap);
+    new KAction(AddTimeSignatureCommand::getGlobalName(),
+		icon, 0,
+		this, SLOT(slotAddTimeSignature()),
+		actionCollection(), "add_time_signature");
 
     //
     // Transforms
     //
-    new KAction(i18n("&Halve Speed"), Key_Less + CTRL, this,
-                SLOT(slotHalfSpeed()), actionCollection(),
-                "half_speed");
+    new KAction(i18n("&Halve Durations"), Key_H + CTRL, this,
+                SLOT(slotHalveDurations()), actionCollection(),
+                "halve_durations");
 
-    new KAction(i18n("&Double Speed"), Key_Greater + CTRL, this,
-                SLOT(slotDoubleSpeed()), actionCollection(),
-                "double_speed");
+    new KAction(i18n("&Double Durations"), Key_H + CTRL + SHIFT, this,
+                SLOT(slotDoubleDurations()), actionCollection(),
+                "double_durations");
 
     new KAction(RescaleCommand::getGlobalName(), 0, this,
                 SLOT(slotRescale()), actionCollection(),
@@ -1393,30 +1404,30 @@ EditView::slotClearControlRulerItem()
 }
 
 void
-EditView::slotHalfSpeed()
+EditView::slotHalveDurations()
 {
     if (!m_currentEventSelection)
         return ;
 
-    KTmpStatusMsg msg(i18n("Halving speed..."), this);
-
-    addCommandToHistory(
-        new RescaleCommand(*m_currentEventSelection,
-                           m_currentEventSelection->getTotalDuration() * 2,
-                           false));
-}
-
-void
-EditView::slotDoubleSpeed()
-{
-    if (!m_currentEventSelection)
-        return ;
-
-    KTmpStatusMsg msg(i18n("Doubling speed..."), this);
+    KTmpStatusMsg msg(i18n("Halving durations..."), this);
 
     addCommandToHistory(
         new RescaleCommand(*m_currentEventSelection,
                            m_currentEventSelection->getTotalDuration() / 2,
+                           false));
+}
+
+void
+EditView::slotDoubleDurations()
+{
+    if (!m_currentEventSelection)
+        return ;
+
+    KTmpStatusMsg msg(i18n("Doubling durations..."), this);
+
+    addCommandToHistory(
+        new RescaleCommand(*m_currentEventSelection,
+                           m_currentEventSelection->getTotalDuration() * 2,
                            false));
 }
 
@@ -1605,14 +1616,16 @@ void
 EditView::slotFlipForwards()
 {
     RG_DEBUG << "EditView::slotFlipForwards" << endl;
-    getCurrentControlRuler()->flipForwards();
+    ControlRuler* ruler = getCurrentControlRuler();
+    if (ruler) ruler->flipForwards();
 }
 
 void
 EditView::slotFlipBackwards()
 {
     RG_DEBUG << "EditView::slotFlipBackwards" << endl;
-    getCurrentControlRuler()->flipBackwards();
+    ControlRuler* ruler = getCurrentControlRuler();
+    if (ruler) ruler->flipBackwards();
 }
 
 ControlRuler* EditView::getCurrentControlRuler()

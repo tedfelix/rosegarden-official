@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -773,15 +773,25 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             track->setColor(colorStr.toInt());
         }
 
-        QString highplayStr = atts.value("highestPlayable");
+        QString highplayStr = atts.value("defaultHighestPlayable");
         if (highplayStr) {
             track->setHighestPlayable(highplayStr.toInt());
         }
 
-        QString lowplayStr = atts.value("lowestPlayable");
+        QString lowplayStr = atts.value("defaultLowestPlayable");
         if (lowplayStr) {
             track->setLowestPlayable(lowplayStr.toInt());
         }
+
+	QString staffSizeStr = atts.value("staffSize");
+	if (staffSizeStr) {
+	    track->setStaffSize(staffSizeStr.toInt());
+	}
+
+	QString staffBracketStr = atts.value("staffBracket");
+	if (staffBracketStr) {
+	    track->setStaffBracket(staffBracketStr.toInt());
+	}
 
         getComposition().addTrack(track);
 

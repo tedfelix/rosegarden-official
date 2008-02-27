@@ -5,7 +5,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -52,7 +52,7 @@ class NotationGroup : public AbstractSet<NotationElement,
 public:
     typedef NotationElementList::iterator NELIterator;
 
-    enum Type { Beamed, Tupled, Grace };
+    enum Type { Beamed, Tupled };
 
     /// Group contents will be sampled from elements surrounding elementInGroup
     NotationGroup(NotationElementList &nel, NELIterator elementInGroup,

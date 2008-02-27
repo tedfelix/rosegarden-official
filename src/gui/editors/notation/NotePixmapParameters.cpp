@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -66,8 +66,9 @@ NotePixmapParameters::NotePixmapParameters(Note::Type noteType,
         m_tuplingLineGradient(0.0),
         m_tied(false),
         m_tieLength(0),
-        m_inRange(true),
-        m_isColliding(false)
+        m_tiePositionExplicit(false),
+        m_tieAbove(false),
+        m_inRange(true)
 {
     // nothing else
 }

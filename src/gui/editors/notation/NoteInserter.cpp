@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -46,6 +46,7 @@
 #include "NotationStrings.h"
 #include "NotationTool.h"
 #include "NotationView.h"
+#include "NotationStaff.h"
 #include "NotePixmapFactory.h"
 #include "NoteStyleFactory.h"
 #include <kaction.h>
@@ -279,6 +280,10 @@ NoteInserter::computeLocationAndPreview(QMouseEvent *e)
         return false;
     }
 
+    // If we're inserting grace notes, then we need to "dress to the
+    // right", as it were
+    bool grace = m_nParentView->isInGraceMode();
+
     int height = staff->getHeightAtCanvasCoords(x, y);
 
     Event *clefEvt = 0, *keyEvt = 0;
@@ -292,14 +297,54 @@ NoteInserter::computeLocationAndPreview(QMouseEvent *e)
         return false;
     }
 
-    timeT time = (*itr)->event()->getAbsoluteTime(); // not getViewAbsoluteTime()
-    m_clickInsertX = (*itr)->getLayoutX();
+    NotationElement* el = static_cast<NotationElement*>(*itr);
+
+    timeT time = el->event()->getAbsoluteTime(); // not getViewAbsoluteTime()
+    m_clickInsertX = el->getLayoutX();
     if (clefEvt)
         clef = Clef(*clefEvt);
     if (keyEvt)
         key = Rosegarden::Key(*keyEvt);
 
-    NotationElement* el = static_cast<NotationElement*>(*itr);
+    int subordering = el->event()->getSubOrdering();
+    float targetSubordering = subordering;
+
+    if (grace && el->getCanvasItem()) {
+
+        NotationStaff *ns = dynamic_cast<NotationStaff *>(staff);
+        if (!ns) {
+            std::cerr << "WARNING: NoteInserter: Staff is not a NotationStaff"
+                      << std::endl;
+        } else {
+            std::cerr << "x=" << x << ", el->getCanvasX()=" << el->getCanvasX() << std::endl;
+            if (el->isRest()) std::cerr << "elt is a rest" << std::endl;
+            if (x - el->getCanvasX() >
+                ns->getNotePixmapFactory(false).getNoteBodyWidth()) {
+                NotationElementList::iterator j(itr);
+                while (++j != staff->getViewElementList()->end()) {
+                    NotationElement *candidate = static_cast<NotationElement *>(*j);
+                    if ((candidate->isNote() || candidate->isRest()) &&
+                        (candidate->getViewAbsoluteTime()
+                         > el->getViewAbsoluteTime() ||
+                         candidate->event()->getSubOrdering()
+                         > el->event()->getSubOrdering())) {
+                        itr = j;
+                        el = candidate;
+                        m_clickInsertX = el->getLayoutX();
+                        time = el->event()->getAbsoluteTime();
+                        subordering = el->event()->getSubOrdering();
+                        targetSubordering = subordering;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (x - el->getCanvasX() < 1) {
+            targetSubordering -= 0.5;
+        }
+    }
+
     if (el->isRest() && el->getCanvasItem()) {
         time += getOffsetWithinRest(staffNo, itr, x);
         m_clickInsertX += (x - el->getCanvasX());
@@ -341,6 +386,7 @@ NoteInserter::computeLocationAndPreview(QMouseEvent *e)
 
     if (m_clickHappened) {
         if (time != m_clickTime ||
+            subordering != m_clickSubordering ||
             pitch != m_clickPitch ||
             height != m_clickHeight ||
             staffNo != m_clickStaffNo) {
@@ -353,9 +399,11 @@ NoteInserter::computeLocationAndPreview(QMouseEvent *e)
 
     if (changed) {
         m_clickTime = time;
+        m_clickSubordering = subordering;
         m_clickPitch = pitch;
         m_clickHeight = height;
         m_clickStaffNo = staffNo;
+        m_targetSubordering = targetSubordering;
 
         showPreview();
     }
@@ -372,7 +420,8 @@ void NoteInserter::showPreview()
 
     m_nParentView->showPreviewNote(m_clickStaffNo, m_clickInsertX,
                                    pitch, m_clickHeight,
-                                   Note(m_noteType, m_noteDots));
+                                   Note(m_noteType, m_noteDots),
+                                   m_nParentView->isInGraceMode());
 }
 
 void NoteInserter::clearPreview()
@@ -443,13 +492,7 @@ NoteInserter::getOttavaShift(Segment &segment, timeT time)
 
     for (Segment::iterator i = segment.findTime(time); ; --i) {
 
-        if (!segment.isBeforeEndMarker(i))
-            break;
-
-        if ((*i)->isa(Note::EventType) &&
-                (*i)->has(NotationProperties::OTTAVA_SHIFT)) {
-            ottavaShift = (*i)->get
-                          <Int>(NotationProperties::OTTAVA_SHIFT);
+        if (!segment.isBeforeEndMarker(i)) {
             break;
         }
 
@@ -457,14 +500,20 @@ NoteInserter::getOttavaShift(Segment &segment, timeT time)
             try {
                 Indication ind(**i);
                 if (ind.isOttavaType()) {
-                    ottavaShift = ind.getOttavaShift();
+                    timeT endTime =
+                        (*i)->getNotationAbsoluteTime() +
+                        (*i)->getNotationDuration();
+                    if (time < endTime) {
+                        ottavaShift = ind.getOttavaShift();
+                    }
                     break;
                 }
             } catch (...) { }
         }
 
-        if (i == segment.begin())
+        if (i == segment.begin()) {
             break;
+        }
     }
 
     return ottavaShift;
@@ -482,27 +531,40 @@ NoteInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
     }
 
     if (time < segment.getStartTime() ||
-            endTime > segment.getEndMarkerTime() ||
-            noteEnd > segment.getEndMarkerTime()) {
+        endTime > segment.getEndMarkerTime() ||
+        noteEnd > segment.getEndMarkerTime()) {
         return 0;
     }
 
     pitch += getOttavaShift(segment, time) * 12;
 
+    float targetSubordering = 0;
+    if (m_nParentView->isInGraceMode()) {
+        targetSubordering = m_targetSubordering;
+    }
+
     NoteInsertionCommand *insertionCommand =
         new NoteInsertionCommand
         (segment, time, endTime, note, pitch, accidental,
-         m_autoBeam && !m_nParentView->isInTripletMode(),
-         m_matrixInsertType,
+         (m_autoBeam && !m_nParentView->isInTripletMode() && !m_nParentView->isInGraceMode()) ?
+         NoteInsertionCommand::AutoBeamOn : NoteInsertionCommand::AutoBeamOff,
+         m_matrixInsertType && !m_nParentView->isInGraceMode() ?
+         NoteInsertionCommand::MatrixModeOn : NoteInsertionCommand::MatrixModeOff,
+         m_nParentView->isInGraceMode() ?
+         (m_nParentView->isInTripletMode() ?
+          NoteInsertionCommand::GraceAndTripletModesOn :
+          NoteInsertionCommand::GraceModeOn)
+         : NoteInsertionCommand::GraceModeOff,
+         targetSubordering,
          m_defaultStyle);
 
     KCommand *activeCommand = insertionCommand;
 
-    if (m_nParentView->isInTripletMode()) {
+    if (m_nParentView->isInTripletMode() && !m_nParentView->isInGraceMode()) {
         Segment::iterator i(segment.findTime(time));
         if (i != segment.end() &&
             !(*i)->has(BaseProperties::BEAMED_GROUP_TUPLET_BASE)) {
-
+            
             KMacroCommand *command = new KMacroCommand(insertionCommand->name());
 
             //## Attempted fix to bug reported on rg-user by SlowPic

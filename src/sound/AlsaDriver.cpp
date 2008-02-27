@@ -4,7 +4,7 @@
     Rosegarden
     A sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
@@ -75,8 +75,14 @@ static int _failureReportWriteIndex = 0;
 static int _failureReportReadIndex = 0;
 
 AlsaDriver::AlsaDriver(MappedStudio *studio):
-        SoundDriver(studio, std::string("alsa-lib version ") +
-                    std::string(SND_LIB_VERSION_STR)),
+        SoundDriver(studio,
+		    std::string("[ALSA library version ") +
+                    std::string(SND_LIB_VERSION_STR) + 
+		    std::string(", module version ") +
+		    getAlsaModuleVersionString() + 
+		    std::string(", kernel version ") +
+		    getKernelVersionString() +
+		    "]"),
         m_client( -1),
         m_inputPort( -1),
         m_syncOutputPort( -1),
@@ -107,7 +113,7 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
 
 {
     Audit audit;
-    audit << "Rosegarden " << VERSION << " - AlsaDriver - "
+    audit << "Rosegarden " << VERSION << " - AlsaDriver "
     << m_name << std::endl;
 }
 
@@ -144,6 +150,8 @@ AlsaDriver::shutdown()
 #ifdef DEBUG_ALSA
     std::cerr << "AlsaDriver::~AlsaDriver - shutting down" << std::endl;
 #endif
+
+    processNotesOff(getAlsaTime(), true, true);
 
 #ifdef HAVE_LIBJACK
     delete m_jackDriver;
@@ -381,48 +389,17 @@ AlsaDriver::getAutoTimer(bool &wantTimerChecks)
     // runs at 250Hz, we really have to choose it anyway and just give
     // a warning.
 
+    bool pcmTimerAccepted = false;
     wantTimerChecks = false; // for most options
 
 #ifdef HAVE_LIBJACK
-
     if (m_jackDriver) {
-
-        // use system timer with timer checks if at 1000Hz or more
-
-        for (std::vector<AlsaTimerInfo>::iterator i = m_timers.begin();
-                i != m_timers.end(); ++i) {
-            if (i->sclas != SND_TIMER_SCLASS_NONE)
-                continue;
-            if (i->clas == SND_TIMER_CLASS_GLOBAL) {
-                if (i->device == SND_TIMER_GLOBAL_SYSTEM) {
-                    long hz = 1000000000 / i->resolution;
-                    if (hz > 240) {
-                        if (hz < 750) {
-                            audit << "System timer is only " << hz << "Hz, sending a warning" << std::endl;
-                            reportFailure(MappedEvent::WarningImpreciseTimer);
-                        }
-                        wantTimerChecks = true;
-                        return i->name;
-                    }
-                }
-            }
-        }
-
-        // look for the first PCM playback timer; that's all we know
-        // about for now (until JACK becomes able to tell us which PCM
-        // it's on)
-
-        for (std::vector<AlsaTimerInfo>::iterator i = m_timers.begin();
-                i != m_timers.end(); ++i) {
-            if (i->sclas != SND_TIMER_SCLASS_NONE)
-                continue;
-            if (i->clas == SND_TIMER_CLASS_PCM)
-                return i->name;
-        }
+	wantTimerChecks = true;
+	pcmTimerAccepted = true;
     }
 #endif
 
-    // look for a system timer with a frequency of 1000Hz or more
+    // look for a high frequency system timer
 
     for (std::vector<AlsaTimerInfo>::iterator i = m_timers.begin();
             i != m_timers.end(); ++i) {
@@ -431,29 +408,56 @@ AlsaDriver::getAutoTimer(bool &wantTimerChecks)
         if (i->clas == SND_TIMER_CLASS_GLOBAL) {
             if (i->device == SND_TIMER_GLOBAL_SYSTEM) {
                 long hz = 1000000000 / i->resolution;
-                if (hz > 240) {
-                    if (hz < 750) {
-                        audit << "System timer is only " << hz << "Hz, sending a warning" << std::endl;
-                        reportFailure(MappedEvent::WarningImpreciseTimer);
-                    }
+                if (hz >= 750) {
                     return i->name;
                 }
             }
         }
     }
 
-    // look for the system RTC timer if available
+    // Look for the system RTC timer if available.  This has been
+    // known to hang some real-time kernels, but reports suggest that
+    // recent kernels are OK.  Avoid if the kernel is older than
+    // 2.6.20 or the ALSA driver is older than 1.0.14.
 
-    /* No, this doesn't seem to be safe with some popular kernels
-     
+    if (versionIsAtLeast(getAlsaModuleVersionString(),
+			 1, 0, 14) &&
+	versionIsAtLeast(getKernelVersionString(),
+			 2, 6, 20)) {
+
         for (std::vector<AlsaTimerInfo>::iterator i = m_timers.begin();
-    	 i != m_timers.end(); ++i) {
-    	if (i->sclas != SND_TIMER_SCLASS_NONE) continue;
-    	if (i->clas == SND_TIMER_CLASS_GLOBAL) {
-    	    if (i->device == SND_TIMER_GLOBAL_RTC) return i->name;
-    	}
+	     i != m_timers.end(); ++i) {
+	    if (i->sclas != SND_TIMER_SCLASS_NONE) continue;
+	    if (i->clas == SND_TIMER_CLASS_GLOBAL) {
+		if (i->device == SND_TIMER_GLOBAL_RTC) {
+		    return i->name;
+		}
+	    }
         }
-    */
+    }
+
+    // look for the first PCM playback timer; that's all we know about
+    // for now (until JACK becomes able to tell us which PCM it's on)
+
+    if (pcmTimerAccepted) {
+
+	for (std::vector<AlsaTimerInfo>::iterator i = m_timers.begin();
+	     i != m_timers.end(); ++i) {
+	    if (i->sclas != SND_TIMER_SCLASS_NONE)
+		continue;
+	    if (i->clas == SND_TIMER_CLASS_PCM) {
+		if (i->resolution != 0) {
+		    long hz = 1000000000 / i->resolution;
+		    if (hz >= 750) {
+			wantTimerChecks = false; // pointless with PCM timer
+			return i->name;
+		    } else {
+			audit << "PCM timer: inadequate resolution " << i->resolution << std::endl;
+		    }
+                }
+	    }
+	}
+    }
 
     // next look for slow, unpopular 100Hz 2.4 system timer
 
@@ -783,7 +787,7 @@ AlsaDriver::createMidiDevice(AlsaPortDescription *port,
     static int unknownCounter;
 
     static int counters[3][2]; // [system/hardware/software][out/in]
-    const int SYSTEM = 0, HARDWARE = 1, SOFTWARE = 2;
+    const int UNKNOWN = -1, SYSTEM = 0, HARDWARE = 1, SOFTWARE = 2;
     static const char *firstNames[4][2] = {
                                               { "MIDI output system device", "MIDI input system device"
                                               },
@@ -814,108 +818,113 @@ AlsaDriver::createMidiDevice(AlsaPortDescription *port,
         if (reqDirection == MidiDevice::Play && !port->isWriteable())
             return 0;
 
-        // ALSA 1.0.11rc1 changed the client number ranges, suddenly
-        // and without notice.
-        //
-        // Before the switch, system clients were 0-63, hardware
-        // clients 64-127 and software clients 128+.  After the
-        // switch, system clients are 0-15, hardware clients 16-127
-        // and software clients 128+.
-        //
-        // This is problematic because it means we can no longer tell
-        // reliably whether a client in the range 16-63 is a system or
-        // hardware client without knowing the ALSA driver version.
-        // And we don't know that -- it's not guaranteed to be the
-        // same as the library version and probably in many cases it
-        // isn't, regardless of what the ALSA webpage advises.
-        //
-        // Using these numbers for this purpose is clearly not
-        // supported by ALSA, but there doesn't seem to be any other
-        // way to distinguish between these categories, and it's an
-        // important distinction because we want to be able to
-        // autoconnect to hardware clients but absolutely not to
-        // system ones.
-
-        int category = SOFTWARE;
-        bool ambiguousCategory = false;
+        int category = UNKNOWN;
         bool noConnect = false;
+	bool isSynth = false;
+	bool synthKnown = false;
 
         if (port->m_client < 16) {
+
             category = SYSTEM;
             noConnect = true;
-        } else if (port->m_client < 64) {
-            // I said we can't rely on this, but it's better than
-            // nothing.  What an absolutely foul hack.
-            bool oldScheme = (SND_LIB_MAJOR == 0 ||
-                              (SND_LIB_MAJOR == 1 &&
-                               SND_LIB_MINOR == 0 &&
-                               SND_LIB_SUBMINOR < 11));
-            if (oldScheme) {
-                category = SYSTEM;
-                // These numbers were even exported via the ALSA API!
-                if (port->m_client == 62 || port->m_client == 63) {
-                    noConnect = true;
-                }
-            } else {
-                category = HARDWARE;
-            }
-            ambiguousCategory = true;
-        } else if (port->m_client < 128) {
-            category = HARDWARE;
-        } else {
-            category = SOFTWARE;
-        }
+	    isSynth = false;
+	    synthKnown = true;
+
+	} else {
+
+#ifdef SND_SEQ_PORT_TYPE_HARDWARE
+	    if (port->m_portType & SND_SEQ_PORT_TYPE_HARDWARE) {
+		category = HARDWARE;
+	    }
+#endif
+#ifdef SND_SEQ_PORT_TYPE_SOFTWARE
+	    if (port->m_portType & SND_SEQ_PORT_TYPE_SOFTWARE) {
+		category = SOFTWARE;
+	    }
+#endif	    
+#ifdef SND_SEQ_PORT_TYPE_SYNTHESIZER
+	    if (port->m_portType & SND_SEQ_PORT_TYPE_SYNTHESIZER) {
+		isSynth = true;
+		synthKnown = true;
+	    }
+#endif	    
+#ifdef SND_SEQ_PORT_TYPE_APPLICATION
+	    if (port->m_portType & SND_SEQ_PORT_TYPE_APPLICATION) {
+		category = SOFTWARE;
+		isSynth = false;
+		synthKnown = true;
+	    }
+#endif	    
+
+	    if (category == UNKNOWN) {
+
+		if (port->m_client < 64) {
+
+		    if (versionIsAtLeast(getAlsaModuleVersionString(),
+					 1, 0, 11)) {
+
+			category = HARDWARE;
+
+		    } else {
+
+			category = SYSTEM;
+			noConnect = true;
+		    }
+
+		} else if (port->m_client < 128) {
+
+		    category = HARDWARE;
+		    
+		} else {
+		    
+		    category = SOFTWARE;
+		}
+	    }
+	}
 
         bool haveName = false;
 
-        if (category != SYSTEM && reqDirection == MidiDevice::Play) {
+        if (!synthKnown) {
 
-            // No way to query whether a port is a MIDI synth, as
-            // PORT_TYPE_SYNTH actually indicates something different
-            // (ability to do direct wavetable synthesis -- nothing
-            // to do with MIDI).  But we assume GM/GS/XG/MT32 devices
-            // are synths.
+	    if (category != SYSTEM && reqDirection == MidiDevice::Play) {
 
-            bool isSynth = (port->m_portType &
-                            (SND_SEQ_PORT_TYPE_MIDI_GM |
-                             SND_SEQ_PORT_TYPE_MIDI_GS |
-                             SND_SEQ_PORT_TYPE_MIDI_XG |
-                             SND_SEQ_PORT_TYPE_MIDI_MT32));
+		// We assume GM/GS/XG/MT32 devices are synths.
 
-            // Because we can't discover through the API whether a
-            // port is a synth, we are instead reduced to this
-            // disgusting hack.  (At least we should make this
-            // configurable!)
+		bool isSynth = (port->m_portType &
+				(SND_SEQ_PORT_TYPE_MIDI_GM |
+				 SND_SEQ_PORT_TYPE_MIDI_GS |
+				 SND_SEQ_PORT_TYPE_MIDI_XG |
+				 SND_SEQ_PORT_TYPE_MIDI_MT32));
 
-            if (!isSynth &&
+		if (!isSynth &&
                     (port->m_name.find("ynth") < port->m_name.length()))
-                isSynth = true;
-            if (!isSynth &&
+		    isSynth = true;
+		if (!isSynth &&
                     (port->m_name.find("nstrument") < port->m_name.length()))
-                isSynth = true;
-            if (!isSynth &&
+		    isSynth = true;
+		if (!isSynth &&
                     (port->m_name.find("VSTi") < port->m_name.length()))
-                isSynth = true;
+		    isSynth = true;
 
-            if (category == SYSTEM)
-                isSynth = false;
+	    } else {
+		isSynth = false;
+	    }
+	}
 
-            if (isSynth) {
-                int clientType = (category == SOFTWARE) ? 1 : 0;
-                if (specificCounters[clientType] == 0) {
-                    sprintf(deviceName, specificNames[clientType]);
-                    ++specificCounters[clientType];
-                } else {
-                    sprintf(deviceName,
-                            specificCountedNames[clientType],
-                            ++specificCounters[clientType]);
-                }
-                haveName = true;
-            }
+	if (isSynth) {
+	    int clientType = (category == SOFTWARE) ? 1 : 0;
+	    if (specificCounters[clientType] == 0) {
+		sprintf(deviceName, specificNames[clientType]);
+		++specificCounters[clientType];
+	    } else {
+		sprintf(deviceName,
+			specificCountedNames[clientType],
+			++specificCounters[clientType]);
+	    }
+	    haveName = true;
         }
 
         if (!haveName) {
-
             if (counters[category][reqDirection] == 0) {
                 sprintf(deviceName, firstNames[category][reqDirection]);
                 ++counters[category][reqDirection];
@@ -939,7 +948,7 @@ AlsaDriver::createMidiDevice(AlsaPortDescription *port,
         << "\nDefault device name for this device is "
         << deviceName << std::endl;
 
-    } else {
+    } else { // !port
 
         sprintf(deviceName, "Anonymous MIDI device %d", ++unknownCounter);
 
@@ -2282,7 +2291,7 @@ AlsaDriver::allNotesOff()
 }
 
 void
-AlsaDriver::processNotesOff(const RealTime &time, bool now)
+AlsaDriver::processNotesOff(const RealTime &time, bool now, bool everything)
 {
     if (m_noteOffQueue.empty()) {
         return;
@@ -2310,7 +2319,7 @@ AlsaDriver::processNotesOff(const RealTime &time, bool now)
 #ifdef DEBUG_PROCESS_MIDI_OUT
 	    std::cerr << "Note off time " << ev->getRealTime() << " is beyond current time " << time << std::endl;
 #endif
-	    break;
+	    if (!everything) break;
 	}
 
 #ifdef DEBUG_PROCESS_MIDI_OUT
@@ -5331,6 +5340,127 @@ AlsaDriver::reportFailure(MappedEvent::FailureCode code)
     _failureReportWriteIndex =
         (_failureReportWriteIndex + 1) % FAILURE_REPORT_COUNT;
 }
+
+std::string
+AlsaDriver::getAlsaModuleVersionString()
+{
+    FILE *v = fopen("/proc/asound/version", "r");
+    
+    // Examples:
+    // Advanced Linux Sound Architecture Driver Version 1.0.14rc3.
+    // Advanced Linux Sound Architecture Driver Version 1.0.14 (Thu May 31 09:03:25 2008 UTC).
+
+    if (v) {
+	char buf[256];
+	fgets(buf, 256, v);
+	fclose(v);
+
+	std::string vs(buf);
+	std::string::size_type sp = vs.find_first_of('.');
+	if (sp > 0 && sp != std::string::npos) {
+	    while (sp > 0 && isdigit(vs[sp-1])) --sp;
+	    vs = vs.substr(sp);
+	    if (vs.length() > 0 && vs[vs.length()-1] == '\n') {
+		vs = vs.substr(0, vs.length()-1);
+	    }
+	    if (vs.length() > 0 && vs[vs.length()-1] == '.') {
+		vs = vs.substr(0, vs.length()-1);
+	    }
+	    return vs;
+	}
+    }
+
+    return "(unknown)";
+}
+
+std::string
+AlsaDriver::getKernelVersionString()
+{
+    FILE *v = fopen("/proc/version", "r");
+
+    if (v) {
+	char buf[256];
+	fgets(buf, 256, v);
+	fclose(v);
+
+	std::string vs(buf);
+	std::string key(" version ");
+	std::string::size_type sp = vs.find(key);
+	if (sp != std::string::npos) {
+	    vs = vs.substr(sp + key.length());
+	    sp = vs.find(' ');
+	    if (sp != std::string::npos) {
+		vs = vs.substr(0, sp);
+	    }
+	    if (vs.length() > 0 && vs[vs.length()-1] == '\n') {
+		vs = vs.substr(0, vs.length()-1);
+	    }
+	    return vs;
+	}
+    }
+
+    return "(unknown)";
+}
+
+void
+AlsaDriver::extractVersion(std::string v, int &major, int &minor, int &subminor, std::string &suffix)
+{
+    major = minor = subminor = 0;
+    suffix = "";
+    if (v == "(unknown)") return;
+
+    std::string::size_type sp, pp;
+
+    sp = v.find('.');
+    if (sp == std::string::npos) goto done;
+    major = atoi(v.substr(0, sp).c_str());
+    pp = sp + 1;
+
+    sp = v.find('.', pp);
+    if (sp == std::string::npos) goto done;
+    minor = atoi(v.substr(pp, sp - pp).c_str());
+    pp = sp + 1;
+
+    while (++sp < v.length() && (::isdigit(v[sp]) || v[sp] == '-'));
+    subminor = atoi(v.substr(pp, sp - pp).c_str());
+
+    if (sp >= v.length()) goto done;
+    suffix = v.substr(sp);
+
+done:
+    std::cerr << "extractVersion: major = " << major << ", minor = " << minor << ", subminor = " << subminor << ", suffix = \"" << suffix << "\"" << std::endl;
+}
+
+bool
+AlsaDriver::versionIsAtLeast(std::string v, int major, int minor, int subminor)
+{
+    int actualMajor, actualMinor, actualSubminor;
+    std::string actualSuffix;
+
+    extractVersion(v, actualMajor, actualMinor, actualSubminor, actualSuffix);
+
+    bool ok = false;
+
+    if (actualMajor > major) {
+	ok = true;
+    } else if (actualMajor == major) {
+	if (actualMinor > minor) {
+	    ok = true;
+	} else if (actualMinor == minor) {
+	    if (actualSubminor > subminor) {
+		ok = true;
+	    } else if (actualSubminor == subminor) {
+		if (strncmp(actualSuffix.c_str(), "rc", 2) &&
+		    strncmp(actualSuffix.c_str(), "pre", 3)) {
+		    ok = true;
+		}
+	    }
+	}
+    }
+
+    std::cerr << "AlsaDriver::versionIsAtLeast: is version " << v << " at least " << major << "." << minor << "." << subminor << "? " << (ok ? "yes" : "no") << std::endl;
+    return ok;
+}    
 
 }
 

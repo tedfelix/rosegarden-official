@@ -4,7 +4,7 @@
     Rosegarden
     A sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
@@ -31,6 +31,7 @@
 #endif
 
 #include "Composition.h"
+#include "StaffExportTypes.h"
 
 namespace Rosegarden
 {
@@ -48,7 +49,9 @@ Track::Track():
    m_transpose(0),
    m_color(0),
    m_highestPlayable(127),
-   m_lowestPlayable(0)
+   m_lowestPlayable(0),
+   m_staffSize(StaffTypes::Normal),
+   m_staffBracket(Brackets::None)
 {
 }
 
@@ -70,7 +73,9 @@ Track::Track(TrackId id,
    m_transpose(0),
    m_color(0),
    m_highestPlayable(127),
-   m_lowestPlayable(0)
+   m_lowestPlayable(0),
+   m_staffSize(StaffTypes::Normal),
+   m_staffBracket(Brackets::None)
 {
 }
 
@@ -177,6 +182,9 @@ std::string Track::toXmlString()
     track << " defaultColour=\"" << m_color << "\"";
     track << " defaultHighestPlayable=\"" << m_highestPlayable << "\"";
     track << " defaultLowestPlayable=\"" << m_lowestPlayable << "\"";
+
+    track << " staffSize=\"" << m_staffSize << "\"";
+    track << " staffBracket=\"" << m_staffBracket << "\"";
 
 #if (__GNUC__ < 3)
     track << "/>"<< std::ends;

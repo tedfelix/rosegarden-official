@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -450,7 +450,7 @@ RawNoteRuler::paintEvent(QPaintEvent* e)
         if (track)
             trackPosition = track->getPosition();
 
-	QToolTip::add(this,i18n("Track #%1, Segment \"%2\" (runtime id %2)")
+	QToolTip::add(this,i18n("Track #%1, Segment \"%2\" (runtime id %3)")
 		           .arg(trackPosition + 1)
 		           .arg(m_segment->getLabel())
 		           .arg(m_segment->getRuntimeId()));

@@ -5,7 +5,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -303,7 +303,7 @@ public:
      * an insert. 
      */
     virtual void showPreviewNote(double layoutX, int heightOnStaff,
-                                 const Note &note);
+                                 const Note &note, bool grace);
 
     /**
      * Remove any visible preview note.
@@ -329,6 +329,11 @@ public:
     const NotationProperties &getProperties() const;
 
     virtual double getBarInset(int barNo, bool isFirstBarInRow) const;
+
+    /**
+     * Return the time at the given canvas coordinates
+     */
+    timeT getTimeAtCanvasCoords(double x, int y) const;
 
 protected:
 
@@ -447,6 +452,12 @@ protected:
 
     void truncateClefsAndKeysAt(int);
 
+    /** Verify that a possible Clef or Key in bar is already inserted
+     * in m_clefChange or m_keyChange.
+     * If not, do the insertion.
+     */
+    void checkAndCompleteClefsAndKeys(int bar);
+
     NotePixmapFactory *m_notePixmapFactory;
     NotePixmapFactory *m_graceNotePixmapFactory;
     QCanvasSimpleSprite *m_previewSprite;
@@ -458,7 +469,7 @@ protected:
     bool m_colourQuantize;
     bool m_showUnknowns;
     bool m_showRanges;
-    int m_showCollisions;
+    bool m_showCollisions;
     int m_keySigCancelMode;
 
     QPainter *m_printPainter;
@@ -468,6 +479,8 @@ protected:
     BarStatusMap m_status;
     std::pair<int, int> m_lastRenderCheck;
     bool m_ready;
+
+    int m_lastRenderedBar;
 };
 
 

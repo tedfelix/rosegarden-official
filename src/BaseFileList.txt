@@ -51,6 +51,7 @@ SET(base_SRCS
 	base/MidiTypes.h
 	base/NotationQuantizer.cpp
 	base/NotationQuantizer.h
+	base/NotationRules.h
 	base/NotationTypes.cpp
 	base/NotationTypes.h
 	base/Profiler.cpp

@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -175,76 +175,8 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent* e)
         // add a clef to the start of the segment (tracks initialize to a
         // default of 0 for this property, so treble will be the default if it
         // is not specified elsewhere)
-        switch (track->getClef()) {
-        case TrebleClef:
-            segment->insert(Clef(Clef::Treble).getAsEvent
-                            (segment->getStartTime()));
-            break;
-        case BassClef:
-            segment->insert(Clef(Clef::Bass).getAsEvent
-                            (segment->getStartTime()));
-            break;
-        case CrotalesClef:
-            segment->insert(Clef(Clef::Treble, 2).getAsEvent
-                            (segment->getStartTime()));
-            break;
-        case XylophoneClef:
-            segment->insert(Clef(Clef::Treble, 1).getAsEvent
-                            (segment->getStartTime()));
-            break;
-        case GuitarClef:
-            segment->insert(Clef(Clef::Treble, -1).getAsEvent
-                            (segment->getStartTime()));
-            break;
-        case ContrabassClef:
-            segment->insert(Clef(Clef::Bass, -1).getAsEvent
-                            (segment->getStartTime()));
-            break;
-        case CelestaClef:
-            segment->insert(Clef(Clef::Bass, 2).getAsEvent
-                            (segment->getStartTime()));
-            break;
-        case OldCelestaClef:
-            segment->insert(Clef(Clef::Bass, 1).getAsEvent
-                            (segment->getStartTime()));
-            break;
-        case FrenchClef:
-            segment->insert(Clef(Clef::French).getAsEvent
-                            (segment->getStartTime()));
-            break;
-        case SopranoClef:
-            segment->insert(Clef(Clef::Soprano).getAsEvent
-                            (segment->getStartTime()));
-            break;
-        case MezzosopranoClef:
-            segment->insert(Clef(Clef::Mezzosoprano).getAsEvent
-                            (segment->getStartTime()));
-            break;
-        case AltoClef:
-            segment->insert(Clef(Clef::Alto).getAsEvent
-                            (segment->getStartTime()));
-            break;
-        case TenorClef:
-            segment->insert(Clef(Clef::Tenor).getAsEvent
-                            (segment->getStartTime()));
-            break;
-        case BaritoneClef:
-            segment->insert(Clef(Clef::Baritone).getAsEvent
-                            (segment->getStartTime()));
-            break;
-        case VarbaritoneClef:
-            segment->insert(Clef(Clef::Varbaritone).getAsEvent
-                            (segment->getStartTime()));
-            break;
-        case SubbassClef:
-            segment->insert(Clef(Clef::Subbass).getAsEvent
-                            (segment->getStartTime()));
-            break;
-        default:
-            segment->insert(Clef(Clef::Treble).getAsEvent
-                            (segment->getStartTime()));
-        }
-
+        segment->insert(clefIndexToClef(track->getClef()).getAsEvent
+                        (segment->getStartTime()));
         segment->setTranspose(track->getTranspose());
         segment->setColourIndex(track->getColor());
         segment->setLowestPlayable(track->getLowestPlayable());

@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -245,11 +245,9 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
         m_rebeam->setChecked
         (config->readBoolEntry("quantizerebeam", true));
         m_makeViable->setChecked
-        (config->readBoolEntry("quantizemakeviable",
-                               defaultQuantizer == Notation));
+        (config->readBoolEntry("quantizemakeviable", false));
         m_deCounterpoint->setChecked
-        (config->readBoolEntry("quantizedecounterpoint",
-                               defaultQuantizer == Notation));
+        (config->readBoolEntry("quantizedecounterpoint", false));
         m_articulate->setChecked
         (config->readBoolEntry("quantizearticulate", true));
         advanced = config->readBoolEntry("quantizeshowadvanced", false);

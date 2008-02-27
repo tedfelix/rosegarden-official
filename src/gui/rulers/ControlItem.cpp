@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -40,6 +40,9 @@ ControlItem::ControlItem(ControlRuler* ruler, ElementAdapter* elementAdapter,
       m_controlRuler(ruler),
       m_elementAdapter(elementAdapter)
 {
+    if (width < DefaultWidth/4) {
+        width = DefaultWidth/4; // avoid invisible zero-duration items
+    }
     setWidth(width);
     setPen(QPen(Qt::black, BorderThickness));
     setBrush(Qt::blue);

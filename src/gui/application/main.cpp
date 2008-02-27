@@ -4,7 +4,7 @@
     Rosegarden
     A sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
@@ -19,11 +19,13 @@
     COPYING included with this distribution for more information.
 */
 
-#include <qtimer.h>
-#include <kapplication.h>
-#include <sys/time.h>
-#include "base/RealTime.h"
 
+#ifndef USE_PCH
+#include <qlabel.h>
+#include <qtimer.h>
+#include <qstringlist.h>
+#include <qregexp.h>
+#include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>
 #include <klocale.h>
@@ -33,16 +35,21 @@
 #include <kstddirs.h>
 #include <ktip.h>
 #include <kprocess.h>
+#include <kglobalsettings.h>
+#endif
 
+#include <sys/time.h>
+#include "base/RealTime.h"
 #include "document/ConfigGroups.h"
+#include "document/RosegardenGUIDoc.h"
 #include "misc/Strings.h"
 #include "misc/Debug.h"
 #include "gui/application/RosegardenGUIApp.h"
-#include "document/RosegardenGUIDoc.h"
+#include "gui/widgets/CurrentProgressDialog.h"
 #include "gui/kdeext/KStartupLogo.h"
-
 #include "gui/application/RosegardenApplication.h"
 #include "gui/application/RosegardenDCOP.h"
+#include "gui/kdeext/klearlook.h"
 
 using namespace Rosegarden;
 
@@ -348,8 +355,7 @@ void testInstalledVersion()
             QString s = text.readLine().stripWhiteSpace();
             versionFile.close();
             if (s) {
-                if (s == VERSION)
-                    return ;
+                if (s == VERSION) return;
                 installedVersion = s;
             }
         }
@@ -405,7 +411,7 @@ int main(int argc, char *argv[])
 
     KAboutData aboutData( "rosegarden", I18N_NOOP("Rosegarden"),
                           VERSION, description, KAboutData::License_GPL,
-                          I18N_NOOP("Copyright 2000 - 2007 Guillaume Laurent, Chris Cannam, Richard Bown\nParts copyright 1994 - 2004 Chris Cannam, Andy Green, Richard Bown, Guillaume Laurent\nLilypond fonts copyright 1997 - 2005 Han-Wen Nienhuys and Jan Nieuwenhuizen"),
+                          I18N_NOOP("Copyright 2000 - 2008 Guillaume Laurent, Chris Cannam, Richard Bown\nParts copyright 1994 - 2004 Chris Cannam, Andy Green, Richard Bown, Guillaume Laurent\nLilypond fonts copyright 1997 - 2005 Han-Wen Nienhuys and Jan Nieuwenhuizen"),
                           0,
                           "http://www.rosegardenmusic.com/",
                           "rosegarden-devel@lists.sourceforge.net");
@@ -415,6 +421,7 @@ int main(int argc, char *argv[])
     aboutData.addAuthor("Richard Bown (lead)", 0, "richard.bown@ferventsoftware.com");
     aboutData.addAuthor("D. Michael McIntyre", 0, "dmmcintyr@users.sourceforge.net");
     aboutData.addAuthor("Pedro Lopez-Cabanillas", 0, "plcl@users.sourceforge.net");
+    aboutData.addAuthor("Heikki Johannes Junes", 0, "hjunes@users.sourceforge.net");
 
     aboutData.addCredit("Randall Farmer", I18N_NOOP("Chord labelling code"), " rfarme@simons-rock.edu");
     aboutData.addCredit("Hans  Kieserman", I18N_NOOP("Lilypond output\nassorted other patches\ni18n-ization"), "hkieserman@mail.com");
@@ -425,7 +432,7 @@ int main(int argc, char *argv[])
     aboutData.addCredit("Eckhard Jokisch", I18N_NOOP("German translation"), "e.jokisch@u-code.de");
     aboutData.addCredit("Kevin Donnelly", I18N_NOOP("Welsh translation"));
     aboutData.addCredit("Didier Burli", I18N_NOOP("French translation"), "didierburli@bluewin.ch");
-    aboutData.addCredit("Yves Guillemot", I18N_NOOP("French translation"), "yc.guillemot@wanadoo.fr");
+    aboutData.addCredit("Yves Guillemot", I18N_NOOP("French translation\nBug fixes"), "yc.guillemot@wanadoo.fr");
     aboutData.addCredit("Daniele Medri", I18N_NOOP("Italian translation"), "madrid@linuxmeeting.net");
     aboutData.addCredit("Alessandro Musesti", I18N_NOOP("Italian translation"), "a.musesti@dmf.unicatt.it");
     aboutData.addCredit("Stefan Asserhäll", I18N_NOOP("Swedish translation"), "stefan.asserhall@comhem.se");
@@ -450,11 +457,11 @@ int main(int argc, char *argv[])
     aboutData.addCredit("Lucas Godoy", I18N_NOOP("Spanish translation"), "godoy.lucas@gmail.com");
     aboutData.addCredit("Feliu Ferrer", I18N_NOOP("Catalan translation"), "mverge2@pie.xtec.es");
     aboutData.addCredit("Quim Perez i Noguer", I18N_NOOP("Catalan translation"), "noguer@osona.com");
-    aboutData.addCredit("Carolyn McIntyre", I18N_NOOP("1.2.3 splash screen photo (of Michael's rose garden)\nnew splash screen photo (of Michael McIntyre's\ninstruments along with a rose from the garden of Hassell Arnold Hale, 1916-2006,\nmay he rest in peace)"), "catma@adelphia.net");
-    aboutData.addCredit("Heikki Johannes Junes", I18N_NOOP("Finnish translation\nLilyPond export fixes/improvements"), "hjunes@cc.hut.fi");
-    aboutData.addCredit("Stephen Torri", I18N_NOOP("guitar chord editor"), "storri@torri.org");
+    aboutData.addCredit("Carolyn McIntyre", I18N_NOOP("1.2.3 splash screen photo\nGave birth to D. Michael McIntyre, bought him a good flute once\nupon a time, and always humored him when he came over to play her\nsome new instrument, even though she really hated his playing.\nBorn October 19, 1951, died September 21, 2008, R. I. P."), "DECEASED");
+    aboutData.addCredit("Stephen Torri", I18N_NOOP("Initial guitar chord editing code"), "storri@torri.org");
     aboutData.addCredit("Piotr Sawicki", I18N_NOOP("Polish translation"), "pelle@plusnet.pl");
     aboutData.addCredit("David García-Abad", I18N_NOOP("Basque translation"), "davidgarciabad@telefonica.net");
+    aboutData.addCredit("Joerg C. Koenig, Craig Drummond, Bernhard Rosenkränzer, Preston Brown, Than Ngo", I18N_NOOP("Klearlook theme"), "jck@gmx.org");
 
     aboutData.setTranslator(I18N_NOOP("_: NAME OF TRANSLATORS\nYour names") , I18N_NOOP("_: EMAIL OF TRANSLATORS\nYour emails"));
 
@@ -487,14 +494,62 @@ int main(int argc, char *argv[])
     }
 
     KConfig *config = kapp->config();
+
+    config->setGroup(GeneralOptionsConfigGroup);
+    QString lastVersion = config->readEntry("lastversion", "");
+    bool newVersion = (lastVersion != VERSION);
+    if (newVersion) {
+	std::cerr << "*** This is the first time running this Rosegarden version" << std::endl;
+	config->writeEntry("lastversion", VERSION);
+    }
+
+    // If there is no config setting for the startup window size, set
+    // one now.  But base the default on the appropriate desktop size
+    // (i.e. not the entire desktop, if Xinerama is in use).  This is
+    // obtained from KGlobalSettings::desktopGeometry(), but we can't
+    // give it a meaningful point to measure from at this stage so we
+    // always use the "leftmost" display (point 0,0).
+
+    // The config keys are "Height X" and "Width Y" where X and Y are
+    // the sizes of the available desktop (i.e. the whole shebang if
+    // under Xinerama).  These are obtained from QDesktopWidget.
+
+    config->setGroup("MainView");
+    int windowWidth = 0, windowHeight = 0;
+
+    QDesktopWidget *desktop = KApplication::desktop();
+    if (desktop) {
+	QRect totalRect(desktop->screenGeometry());
+	QRect desktopRect = KGlobalSettings::desktopGeometry(QPoint(0, 0));
+	QSize startupSize;
+	if (desktopRect.height() <= 800) {
+	    startupSize = QSize((desktopRect.width() * 6) / 7,
+				(desktopRect.height() * 6) / 7);
+	} else {
+	    startupSize = QSize((desktopRect.width() * 4) / 5,
+				(desktopRect.height() * 4) / 5);
+	}
+	QString widthKey = QString("Width %1").arg(totalRect.width());
+	QString heightKey = QString("Height %1").arg(totalRect.height());
+	windowWidth = config->readUnsignedNumEntry
+	    (widthKey, startupSize.width());
+	windowHeight = config->readUnsignedNumEntry
+	    (heightKey, startupSize.height());
+    }
+
     config->setGroup("KDE Action Restrictions");
     config->writeEntry("action/help_report_bug", false);
+
+    config->setGroup(GeneralOptionsConfigGroup);
+    int install = config->readNumEntry("Install Own Theme", 1);
+    if (install == 2 || (install == 1 && !getenv("KDE_FULL_SESSION"))) {
+	kapp->setStyle(new KlearlookStyle);
+    }
 
     // Show Startup logo
     // (this code borrowed from KDevelop 2.0,
     // (c) The KDevelop Development Team
     //
-    config = kapp->config();
     config->setGroup(GeneralOptionsConfigGroup);
     KStartupLogo* startLogo = 0L;
 
@@ -503,6 +558,7 @@ int main(int argc, char *argv[])
     if (config->readBoolEntry("Logo", true) && (!kapp->isRestored() && args->isSet("splash")) ) {
         RG_DEBUG << k_funcinfo << "Showing startup logo\n";
         startLogo = KStartupLogo::getInstance();
+	startLogo->setShowTip(!newVersion);
         startLogo->show();
     }
 
@@ -541,6 +597,10 @@ int main(int argc, char *argv[])
 
         app.setMainWidget(rosegardengui);
 
+	if (windowWidth != 0 && windowHeight != 0) {
+	    rosegardengui->resize(windowWidth, windowHeight);
+	}
+
         rosegardengui->show();
 
         // raise start logo
@@ -564,7 +624,6 @@ int main(int argc, char *argv[])
     QObject::connect(&app, SIGNAL(aboutToSaveState()),
                      rosegardengui, SLOT(slotDeleteTransport()));
 
-
     // Now that we've started up, raise start logo
     //
     if (startLogo) {
@@ -583,35 +642,6 @@ int main(int argc, char *argv[])
         RG_DEBUG << "RosegardenGUI - " << e << endl;
     } catch (Exception e) {
         RG_DEBUG << "RosegardenGUI - " << e.getMessage() << endl;
-    }
-
-    if (startLogo) {
-
-        // pause to ensure the logo has been visible for a reasonable
-        // length of time, just 'cos it looks a bit silly to show it
-        // and remove it immediately
-
-        struct timeval now;
-        gettimeofday(&now, 0);
-
-        RealTime visibleFor =
-            RealTime(now.tv_sec, now.tv_usec * 1000) -
-            RealTime(logoShowTime.tv_sec, logoShowTime.tv_usec * 1000);
-
-        if (visibleFor < RealTime(2, 0)) {
-            int waitTime = visibleFor.sec * 1000 + visibleFor.msec();
-            QTimer::singleShot(2500 - waitTime, startLogo, SLOT(close()));
-        } else {
-            startLogo->close();
-        }
-
-    } else {
-
-        // if the start logo is there, it's responsible for showing this;
-        // otherwise we have to
-
-        RG_DEBUG << "main: Showing Tips\n";
-        KTipDialog::showTip(locate("data", "rosegarden/tips"));
     }
 
 
@@ -645,6 +675,54 @@ int main(int argc, char *argv[])
 #ifdef Q_WS_X11
     XSetErrorHandler( _x_errhandler );
 #endif
+
+    if (startLogo) {
+
+        // pause to ensure the logo has been visible for a reasonable
+        // length of time, just 'cos it looks a bit silly to show it
+        // and remove it immediately
+
+        struct timeval now;
+        gettimeofday(&now, 0);
+
+        RealTime visibleFor =
+            RealTime(now.tv_sec, now.tv_usec * 1000) -
+            RealTime(logoShowTime.tv_sec, logoShowTime.tv_usec * 1000);
+
+        if (visibleFor < RealTime(2, 0)) {
+            int waitTime = visibleFor.sec * 1000 + visibleFor.msec();
+            QTimer::singleShot(2500 - waitTime, startLogo, SLOT(close()));
+        } else {
+            startLogo->close();
+        }
+
+    } else {
+
+        // if the start logo is there, it's responsible for showing this;
+        // otherwise we have to
+
+	if (!newVersion) {
+	    RG_DEBUG << "main: Showing Tips\n";
+	    KTipDialog::showTip(locate("data", "rosegarden/tips"));
+	}
+    }
+
+    if (newVersion) {
+	KStartupLogo::hideIfStillThere();
+	CurrentProgressDialog::freeze();
+
+	KDialogBase *dialog = new KDialogBase(rosegardengui, "welcome",
+					      true, i18n("Welcome!"),
+					      KDialogBase::Ok,
+					      KDialogBase::Ok, false);
+	QVBox *mw = dialog->makeVBoxMainWidget();
+	QLabel *label = new QLabel((QWidget*)mw);
+	label->setText(i18n("<h2>Welcome to Rosegarden!</h2><p>Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.</p><p>Rosegarden was brought to you by a team of volunteers across the world.  To learn more about Rosegarden, see <a href=\"http://www.rosegardenmusic.com/\">http://www.rosegardenmusic.com/</a>, or see the Help menu for tutorials and other information.</p>"));
+	dialog->showButtonOK(true);
+	dialog->exec();
+
+	CurrentProgressDialog::thaw();
+    }
 
     return kapp->exec();
 }

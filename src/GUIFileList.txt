@@ -31,6 +31,8 @@ SET(commands_SRCS
 	commands/edit/EraseCommand.h
 	commands/edit/EventEditCommand.cpp
 	commands/edit/EventEditCommand.h
+	commands/edit/EventInsertionCommand.cpp
+	commands/edit/EventInsertionCommand.h
 	commands/edit/EventQuantizeCommand.cpp
 	commands/edit/EventQuantizeCommand.h
 	commands/edit/EventUnquantizeCommand.cpp
@@ -67,8 +69,6 @@ SET(commands_SRCS
 	commands/edit/SetTriggerCommand.h
 	commands/edit/TransposeCommand.cpp
 	commands/edit/TransposeCommand.h
-	commands/event/EventInsertionCommand.cpp
-	commands/event/EventInsertionCommand.h
 	commands/matrix/MatrixEraseCommand.cpp
 	commands/matrix/MatrixEraseCommand.h
 	commands/matrix/MatrixInsertionCommand.cpp
@@ -99,6 +99,8 @@ SET(commands_SRCS
 	commands/notation/ChangeStemsCommand.h
 	commands/notation/ChangeStyleCommand.cpp
 	commands/notation/ChangeStyleCommand.h
+	commands/notation/ChangeTiePositionCommand.cpp
+	commands/notation/ChangeTiePositionCommand.h
 	commands/notation/ClefInsertionCommand.cpp
 	commands/notation/ClefInsertionCommand.h
 	commands/notation/CollapseRestsCommand.cpp
@@ -149,6 +151,8 @@ SET(commands_SRCS
 	commands/notation/RestoreSlursCommand.h
 	commands/notation/RestoreStemsCommand.cpp
 	commands/notation/RestoreStemsCommand.h
+	commands/notation/RestoreTiesCommand.cpp
+	commands/notation/RestoreTiesCommand.h
 	commands/notation/SetVisibilityCommand.cpp
 	commands/notation/SetVisibilityCommand.h
 	commands/notation/SustainInsertionCommand.cpp
@@ -225,6 +229,8 @@ SET(commands_SRCS
 	commands/segment/RenameTrackCommand.h
 	commands/segment/SegmentAutoSplitCommand.cpp
 	commands/segment/SegmentAutoSplitCommand.h
+	commands/segment/SegmentChangePlayableRangeCommand.cpp
+	commands/segment/SegmentChangePlayableRangeCommand.h
 	commands/segment/SegmentChangeTransposeCommand.cpp
 	commands/segment/SegmentChangeTransposeCommand.h
 	commands/segment/SegmentChangeQuantizationCommand.cpp
@@ -265,6 +271,10 @@ SET(commands_SRCS
 	commands/segment/SegmentSplitByRecordingSrcCommand.h
 	commands/segment/SegmentSplitCommand.cpp
 	commands/segment/SegmentSplitCommand.h
+	commands/segment/SegmentSyncClefCommand.cpp
+	commands/segment/SegmentSyncClefCommand.h
+	commands/segment/SegmentSyncCommand.cpp
+	commands/segment/SegmentSyncCommand.h
 	commands/segment/SegmentTransposeCommand.cpp
 	commands/segment/SegmentTransposeCommand.h
 	commands/segment/SetTriggerSegmentBasePitchCommand.cpp
@@ -360,6 +370,8 @@ SET(gui_SRCS
 	gui/application/StartupTester.h
 	gui/configuration/AudioConfigurationPage.cpp
 	gui/configuration/AudioConfigurationPage.h
+	gui/configuration/AudioPropertiesPage.cpp
+	gui/configuration/AudioPropertiesPage.h
 	gui/configuration/ColourConfigurationPage.cpp
 	gui/configuration/ColourConfigurationPage.h
 	gui/configuration/ConfigurationPage.cpp
@@ -368,16 +380,20 @@ SET(gui_SRCS
 	gui/configuration/DocumentMetaConfigurationPage.h
 	gui/configuration/GeneralConfigurationPage.cpp
 	gui/configuration/GeneralConfigurationPage.h
+	gui/configuration/HeadersConfigurationPage.cpp
+	gui/configuration/HeadersConfigurationPage.h
 	gui/configuration/LatencyConfigurationPage.cpp
 	gui/configuration/LatencyConfigurationPage.h
 	gui/configuration/MatrixConfigurationPage.cpp
 	gui/configuration/MatrixConfigurationPage.h
+	gui/configuration/MIDIConfigurationPage.cpp
+	gui/configuration/MIDIConfigurationPage.h
 	gui/configuration/NotationConfigurationPage.cpp
 	gui/configuration/NotationConfigurationPage.h
-	gui/configuration/SequencerConfigurationPage.cpp
-	gui/configuration/SequencerConfigurationPage.h
 	gui/configuration/TabbedConfigurationPage.cpp
 	gui/configuration/TabbedConfigurationPage.h
+	gui/dialogs/AddTracksDialog.cpp
+	gui/dialogs/AddTracksDialog.h
 	gui/dialogs/AudioManagerDialog.cpp
 	gui/dialogs/AudioManagerDialog.h
 	gui/dialogs/AudioPlayingDialog.cpp
@@ -603,6 +619,10 @@ SET(gui_SRCS
 	gui/editors/notation/SystemFontXft.h
 	gui/editors/notation/TextInserter.cpp
 	gui/editors/notation/TextInserter.h
+	gui/editors/notation/TrackHeader.cpp
+	gui/editors/notation/TrackHeader.h
+	gui/editors/notation/HeadersGroup.cpp
+	gui/editors/notation/HeadersGroup.h
 	gui/editors/parameters/AudioInstrumentParameterPanel.cpp
 	gui/editors/parameters/AudioInstrumentParameterPanel.h
 	gui/editors/parameters/InstrumentParameterBox.cpp
@@ -672,6 +692,7 @@ SET(gui_SRCS
 	gui/general/CategoryElement.cpp
 	gui/general/CategoryElement.h
 	gui/general/ClefIndex.h
+	gui/general/ClefIndex.cpp
 	gui/general/EditToolBox.cpp
 	gui/general/EditToolBox.h
 	gui/general/EditTool.cpp
@@ -722,6 +743,7 @@ SET(gui_SRCS
 	gui/kdeext/QCanvasSimpleSprite.cpp
 	gui/kdeext/QCanvasSimpleSprite.h
 	gui/kdeext/RGLed.cpp
+	gui/kdeext/klearlook.cpp
 	gui/rulers/ChordNameRuler.cpp
 	gui/rulers/ChordNameRuler.h
 	gui/rulers/ControlChangeCommand.cpp

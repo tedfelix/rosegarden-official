@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -49,7 +49,9 @@ AddTimeSignatureAndNormalizeCommand::AddTimeSignatureAndNormalizeCommand
     }
 
     for (Composition::iterator i = composition->begin();
-            i != composition->end(); ++i) {
+         i != composition->end(); ++i) {
+
+        if ((*i)->getType() != Segment::Internal) continue;
 
         timeT startTime = (*i)->getStartTime();
         timeT endTime = (*i)->getEndTime();

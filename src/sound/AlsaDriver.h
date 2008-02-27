@@ -4,7 +4,7 @@
     Rosegarden
     A sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
@@ -62,7 +62,7 @@ public:
     virtual void punchOut();
     virtual void resetPlayback(const RealTime &oldPosition, const RealTime &position);
     virtual void allNotesOff();
-    virtual void processNotesOff(const RealTime &time, bool now);
+    virtual void processNotesOff(const RealTime &time, bool now, bool everything = false);
 
     virtual RealTime getSequencerTime();
 
@@ -546,6 +546,11 @@ private:
     bool m_firstTimerCheck;
     double m_timerRatio;
     bool m_timerRatioCalculated;
+
+    std::string getAlsaModuleVersionString();
+    std::string getKernelVersionString();
+    void extractVersion(std::string vstr, int &major, int &minor, int &subminor, std::string &suffix);
+    bool versionIsAtLeast(std::string vstr, int major, int minor, int subminor);
 };
 
 }

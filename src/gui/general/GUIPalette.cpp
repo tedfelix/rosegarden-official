@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -258,8 +258,6 @@ const int GUIPalette::TriggerNoteMinValue = 140;
 const int GUIPalette::OutRangeNoteHue = 0;
 const int GUIPalette::OutRangeNoteMinValue = 200;
 
-const int GUIPalette::CollidingNoteHue = 320;
-const int GUIPalette::CollidingNoteMinValue = 255;
 const int GUIPalette::CollisionHaloHue = 42;
 const int GUIPalette::CollisionHaloSaturation = 200;
 

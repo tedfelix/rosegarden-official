@@ -4,7 +4,7 @@
     Rosegarden
     A sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
@@ -606,6 +606,12 @@ Buss::getName() const
     char buffer[20];
     sprintf(buffer, "Submaster %d", m_id);
     return buffer;
+}
+
+std::string
+Buss::getPresentationName() const
+{
+    return getName();
 }
 
 RecordIn::RecordIn() :

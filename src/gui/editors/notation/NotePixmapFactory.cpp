@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -25,6 +25,7 @@
 #include <cmath>
 #include "NotePixmapFactory.h"
 #include "misc/Debug.h"
+#include "base/NotationRules.h"
 #include <kapplication.h>
 
 #include <klocale.h>
@@ -85,8 +86,9 @@ class NotePixmapCache : public std::map<CharName, QCanvasPixmap*>
     // nothing to add -- just so we can predeclare it in the header
 };
 
-const char* const NotePixmapFactory::defaultSerifFontFamily = "Times New Roman";
-const char* const NotePixmapFactory::defaultTimeSigFontFamily = "Century Schoolbook";
+const char* const NotePixmapFactory::defaultSerifFontFamily = "Bitstream Vera Serif";
+const char* const NotePixmapFactory::defaultSansSerifFontFamily = "Bitstream Vera Sans";
+const char* const NotePixmapFactory::defaultTimeSigFontFamily = "Bitstream Vera Serif";
 
 NotePixmapFactory::NotePixmapFactory(std::string fontName, int size) :
         m_selected(false),
@@ -103,6 +105,8 @@ NotePixmapFactory::NotePixmapFactory(std::string fontName, int size) :
         m_bigTimeSigFontMetrics(m_bigTimeSigFont),
         m_ottavaFont(defaultSerifFontFamily, 8, QFont::Normal, true),
         m_ottavaFontMetrics(m_ottavaFont),
+        m_trackHeaderFont(defaultSansSerifFontFamily, 10, QFont::Normal),
+        m_trackHeaderFontMetrics(m_trackHeaderFont),
         m_generatedPixmap(0),
         m_generatedMask(0),
         m_generatedWidth( -1),
@@ -129,6 +133,8 @@ NotePixmapFactory::NotePixmapFactory(const NotePixmapFactory &npf) :
         m_bigTimeSigFontMetrics(m_bigTimeSigFont),
         m_ottavaFont(defaultSerifFontFamily, 8, QFont::Normal, true),
         m_ottavaFontMetrics(m_ottavaFont),
+        m_trackHeaderFont(defaultSansSerifFontFamily, 10, QFont::Normal),
+        m_trackHeaderFontMetrics(m_trackHeaderFont),
         m_generatedPixmap(0),
         m_generatedMask(0),
         m_generatedWidth( -1),
@@ -204,7 +210,7 @@ NotePixmapFactory::init(std::string fontName, int size)
     // Resize the fonts, because the original constructor used point
     // sizes only and we want pixels
     QFont timeSigFont(defaultTimeSigFontFamily),
-    textFont(defaultSerifFontFamily);
+        textFont(defaultSerifFontFamily);
     KConfig* config = kapp->config();
     config->setGroup(NotationViewConfigGroup);
 
@@ -236,6 +242,11 @@ NotePixmapFactory::init(std::string fontName, int size)
     m_ottavaFont = config->readFontEntry("textfont", &textFont);
     m_ottavaFont.setPixelSize(size * 2);
     m_ottavaFontMetrics = QFontMetrics(m_ottavaFont);
+
+    m_trackHeaderFont = QFont(defaultSansSerifFontFamily);
+    m_trackHeaderFont = config->readFontEntry("sansfont", &m_trackHeaderFont);
+    m_trackHeaderFont.setPixelSize(size * 3 / 2);
+    m_trackHeaderFontMetrics = QFontMetrics(m_trackHeaderFont);
 }
 
 NotePixmapFactory::~NotePixmapFactory()
@@ -424,9 +435,14 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
         }
     }
 
+    bool tieAbove = params.m_tieAbove;
+    if (!params.m_tiePositionExplicit) {
+        tieAbove = !params.m_stemGoesUp;
+    }
+
     if (params.m_tied) {
         m_right = std::max(m_right, params.m_tieLength);
-        if (params.m_stemGoesUp) {
+        if (!tieAbove) {
             m_below = std::max(m_below, m_noteBodyHeight * 2);
         } else {
             m_above = std::max(m_above, m_noteBodyHeight * 2);
@@ -483,7 +499,6 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
     NoteCharacter body = getCharacter
                          (charName,
                           params.m_highlighted ? HighlightedColour :
-                          params.m_isColliding ? CollisionColour :
                           params.m_quantized ? QuantizedColour :
                           params.m_trigger ? TriggerColour :
                           params.m_inRange ? PlainColour : OutRangeColour,
@@ -557,8 +572,7 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
     }
 
     if (params.m_tied) {
-        drawTie(!params.m_stemGoesUp, params.m_tieLength,
-                dotWidth * params.m_dots);
+        drawTie(tieAbove, params.m_tieLength, dotWidth * params.m_dots);
     }
 
     if (painter) {
@@ -1874,9 +1888,8 @@ NotePixmapFactory::makeClefPixmap(const Clef &clef)
 
     m_p->painter().setPen(Qt::black);
     QPoint hotspot(plain.getHotspot());
-    if (oct > 0)
-        hotspot.setY(hotspot.y() + rect.height());
-    return makeCanvasPixmap(hotspot);
+    if (oct > 0) hotspot.setY(hotspot.y() + rect.height());
+    return makeCanvasPixmap(hotspot, true);
 }
 
 QCanvasPixmap*
@@ -2132,9 +2145,72 @@ NotePixmapFactory::makeKeyDisplayPixmap(const Key &key, const Clef &clef)
 }
 
 QCanvasPixmap*
+NotePixmapFactory::makeTrackHeaderPixmap(int height,
+        const Key &key, const Clef &clef, QColor clefColour, bool drawClef,
+        const QString &upperText, QColor upperTextColour,
+        const QString &lowerText, QColor lowerTextColour
+        )
+{
+    height -= 4;    // Make place to label frame :
+                    // 4 = 2 * (margin + lineWidth)
+
+    // Get widget default common character size
+    // ("X" stands here for a "common character")
+    QRect bounds = m_trackHeaderFontMetrics.boundingRect(i18n("X"));
+    int charHeight = bounds.height();
+    int charWidth = bounds.width();
+
+    // Minimum width of a string displayed as upper or lower text
+    int maxTextAllowedWidth = 20 * charWidth;
+
+    QCanvasPixmap* clefAndKeyPixmap = NULL;
+    clefAndKeyPixmap = makeKeyDisplayPixmap(key, clef);
+    int clefAndKeyWidth = clefAndKeyPixmap->width();
+    int clefAndKeyHeight = clefAndKeyPixmap->height();
+
+    int width = maxTextAllowedWidth > clefAndKeyWidth ?
+                            maxTextAllowedWidth : clefAndKeyWidth;
+
+    createPixmapAndMask(width, height);
+
+    int clefAndKeyY = (height - clefAndKeyHeight) / 2;
+    int clefAndKeyX = width - clefAndKeyWidth;
+    if (drawClef) {
+        if (clefColour != Qt::black) clefAndKeyPixmap->fill(clefColour);
+        m_p->drawPixmap(clefAndKeyX, clefAndKeyY, *clefAndKeyPixmap);
+    }
+
+    int upperTextY, lowerTextY;
+    if (charHeight < clefAndKeyY) {
+        // If enough space, place text just outside clef pixmap
+        upperTextY = clefAndKeyY - charHeight + 4;  // +4 : adjust
+        lowerTextY = clefAndKeyY + clefAndKeyHeight + charHeight;
+    } else {
+        // Else use top and bottom positions
+        upperTextY = charHeight;
+        lowerTextY = m_generatedHeight - 4;  // -4 : adjust
+    }
+
+    m_p->painter().setFont(m_trackHeaderFont);
+    if (!m_inPrinterMethod)
+        m_p->maskPainter().setFont(m_trackHeaderFont);
+
+    m_p->painter().setPen(upperTextColour);
+    m_p->drawText(charWidth, upperTextY, upperText);
+
+    m_p->painter().setPen(lowerTextColour);
+    m_p->drawText(charWidth, lowerTextY, lowerText);
+
+    delete clefAndKeyPixmap;
+    return makeCanvasPixmap(m_pointZero, true);
+}
+
+QCanvasPixmap*
 NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
         bool useSharps)
 {
+    NotationRules rules;
+
     Pitch pitch(p);
     Accidental accidental(pitch.getAccidental(useSharps));
     NotePixmapParameters params(Note::Crotchet, 0, accidental);
@@ -2144,10 +2220,8 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
     int lw = getLineSpacing();
     int width = getClefWidth(Clef::Bass) + 10 * getNoteBodyWidth();
 
-    int h = pitch.getHeightOnStaff
-            (clef,
-             useSharps ? Key("C major") : Key("A minor"));
-    params.setStemGoesUp(h <= 4);
+    int h = pitch.getHeightOnStaff(clef, useSharps);
+    params.setStemGoesUp(rules.isStemUp(h));
 
     if (h < -1)
         params.setStemLength(lw * (4 - h) / 2);
@@ -2200,6 +2274,8 @@ QCanvasPixmap*
 NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
         int octave, int step)
 {
+    NotationRules rules;
+
     Pitch pitch(step, octave, p, 0);
     Accidental accidental = pitch.getDisplayAccidental(Key("C major"));
     NotePixmapParameters params(Note::Crotchet, 0, accidental);
@@ -2212,7 +2288,7 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
     int h = pitch.getHeightOnStaff
             (clef,
              Key("C major"));
-    params.setStemGoesUp(h <= 4);
+    params.setStemGoesUp(rules.isStemUp(h));
 
     if (h < -1)
         params.setStemLength(lw * (4 - h) / 2);
@@ -2854,7 +2930,8 @@ NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
         m_p->painter().setPen(Qt::black);
 
         return makeCanvasPixmap(QPoint(0, denomR.height() +
-                                       (getNoteBodyHeight() / 4) - 1));
+                                       (getNoteBodyHeight() / 4) - 1),
+                                true);
     }
 }
 
@@ -2912,56 +2989,69 @@ NotePixmapFactory::getTextFont(const Text &text) const
     int weight = QFont::Normal;
     bool italic = false;
     bool large = false;
+    bool tiny = false;
     bool serif = true;
 
     if (type == Text::Tempo ||
-            type == Text::LocalTempo ||
-            type == Text::LocalDirection ||
-            type == Text::Chord) {
+        type == Text::LocalTempo ||
+        type == Text::LocalDirection ||
+        type == Text::Chord) {
         weight = QFont::Bold;
     }
 
     if (type == Text::Dynamic ||
-            type == Text::LocalDirection) {
+        type == Text::LocalDirection) {
         italic = true;
     }
 
     if (type == Text::StaffName ||
-            type == Text::Direction ||
-            type == Text::Tempo) {
+        type == Text::Direction ||
+        type == Text::Tempo) {
         large = true;
     }
 
-    QFont defaultTextFont(defaultSerifFontFamily);
-    KConfig* config = kapp->config();
-    QFont textFont = config->readFontEntry("textfont", &defaultTextFont);
-    textFont.setStyleStrategy(QFont::StyleStrategy(QFont::PreferDefault | QFont::PreferMatch));
-
     if (type == Text::Annotation ||
-            type == Text::LilypondDirective) {
+        type == Text::LilypondDirective) {
         serif = false;
-        textFont = QFont("lucida");
+        tiny = true;
     }
+    
+    KConfig* config = kapp->config();
+
+    QFont textFont;
+
+    if (serif) {
+        textFont = QFont(defaultSerifFontFamily);
+        textFont = config->readFontEntry("textfont", &textFont);
+    } else {
+        textFont = QFont(defaultSansSerifFontFamily);
+        textFont = config->readFontEntry("sansfont", &textFont);
+    }
+
+    textFont.setStyleStrategy(QFont::StyleStrategy(QFont::PreferDefault |
+                                                   QFont::PreferMatch));
 
     int size;
     if (large)
-        size = getLineSpacing() * 7 / 2;
+        size = (getLineSpacing() * 7) / 2;
+    else if (tiny)
+        size = (getLineSpacing() * 4) / 3;
     else if (serif)
-        size = getLineSpacing() * 2;
+        size = (getLineSpacing() * 2);
     else
-        size = getLineSpacing() * 3 / 2;
+        size = (getLineSpacing() * 3) / 2;
 
     textFont.setPixelSize(size);
     textFont.setStyleHint(serif ? QFont::Serif : QFont::SansSerif);
     textFont.setWeight(weight);
     textFont.setItalic(italic);
 
-    //     NOTATION_DEBUG << "NotePixmapFactory::getTextFont: requested size " << size
-    // 		   << " for type " << type << endl;
-
-    //     NOTATION_DEBUG << "NotePixmapFactory::getTextFont: returning font '"
-    //                    << textFont.toString() << "' for type " << type.c_str()
-    //                    << " text : " << text.getText().c_str() << endl;
+    NOTATION_DEBUG << "NotePixmapFactory::getTextFont: requested size " << size
+     		   << " for type " << type << endl;
+    
+    NOTATION_DEBUG << "NotePixmapFactory::getTextFont: returning font '"
+                   << textFont.toString() << "' for type " << type.c_str()
+                   << " text : " << text.getText().c_str() << endl;
 
     m_textFontCache[type.c_str()] = textFont;
     return textFont;
@@ -2975,7 +3065,7 @@ NotePixmapFactory::makeTextPixmap(const Text &text)
     std::string type(text.getTextType());
 
     if (type == Text::Annotation ||
-            type == Text::LilypondDirective) {
+        type == Text::LilypondDirective) {
         return makeAnnotationPixmap(text, (type == Text::LilypondDirective));
     }
 
@@ -3022,7 +3112,7 @@ NotePixmapFactory::drawText(const Text &text,
     std::string type(text.getTextType());
 
     if (type == Text::Annotation ||
-            type == Text::LilypondDirective) {
+        type == Text::LilypondDirective) {
         QCanvasPixmap *map = makeAnnotationPixmap(text, (type == Text::LilypondDirective));
         painter.drawPixmap(x, y, *map);
         return ;
@@ -3148,7 +3238,7 @@ NotePixmapFactory::createPixmapAndMask(int width, int height,
 
     static unsigned long total = 0;
     total += width * height;
-    //    NOTATION_DEBUG << "createPixmapAndMask: " << width << "x" << height << " (" << (width*height) << " px, " << total << " total)" << endl;
+//    NOTATION_DEBUG << "createPixmapAndMask: " << width << "x" << height << " (" << (width*height) << " px, " << total << " total)" << endl;
 
     // clear up pixmap and mask
     m_generatedPixmap->fill();
@@ -3239,13 +3329,6 @@ NotePixmapFactory::getCharacter(CharName name, NoteCharacter &ch,
                (name,
                 GUIPalette::OutRangeNoteHue,
                 GUIPalette::OutRangeNoteMinValue,
-                ch, charType, inverted);
-
-    case CollisionColour:
-        return m_font->getCharacterColoured
-               (name,
-                GUIPalette::CollidingNoteHue,
-                GUIPalette::CollidingNoteMinValue,
                 ch, charType, inverted);
     }
 

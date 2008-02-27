@@ -5,7 +5,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -56,15 +56,16 @@ public:
     };
 
     Rotary(QWidget *parent,
-                     float minValue = 0.0,
-                     float maxValue = 100.0,
-                     float step = 1.0,
-                     float pageStep = 10.0,
-                     float initialPosition = 50.0,
-                     int size = 20,
-                     TickMode ticks = NoTicks,
-                     bool snapToTicks = false,
-                     bool centred = false);
+           float minValue = 0.0,
+           float maxValue = 100.0,
+           float step = 1.0,
+           float pageStep = 10.0,
+           float initialPosition = 50.0,
+           int size = 20,
+           TickMode ticks = NoTicks,
+           bool snapToTicks = false,
+           bool centred = false,
+           bool logarithmic = false); // extents are logs, exp for display
     ~Rotary();
 
     void setMinValue(float min) { m_minValue = min; }
@@ -117,6 +118,7 @@ protected:
     TickMode             m_tickMode;
     bool                 m_snapToTicks;
     bool                 m_centred;
+    bool                 m_logarithmic;
 
     float                m_position;
     float                m_snapPosition;

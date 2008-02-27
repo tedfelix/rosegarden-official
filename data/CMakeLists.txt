@@ -85,6 +85,8 @@ INSTALL(FILES pixmaps/splash.png DESTINATION ${DATADIR}/pixmaps)
 
 # Examples
 SET(EXAMPLE_FILES
+    examples/aveverum.rg
+    examples/aylindaamiga.rg
     examples/bogus-surf-jam.rg
     examples/bwv-1060-trumpet-duet-excerpt.rg
     examples/children.rg
@@ -92,10 +94,14 @@ SET(EXAMPLE_FILES
     examples/doodle-q.rg
     examples/exercise_notation.rg
     examples/glazunov.rg
+    examples/glazunov-for-solo-and-piano-with-cue.rg
+    examples/headers-and-unicode-lyrics.rg
+    examples/himno_de_riego.rg
     examples/interpretation-example.rg
     examples/let-all-mortal-flesh.rg
     examples/lilypond-alternative-endings.rg
     examples/lilypond-directives.rg
+    examples/lilypond-staff-groupings.rg
     examples/mandolin-sonatina.rg
     examples/mozart-quartet.rg
     examples/notation-for-string-orchestra-in-D-minor.rg
@@ -105,7 +111,8 @@ SET(EXAMPLE_FILES
     examples/stormy-riders.rg
     examples/test_tuplets.rg
     examples/the-rose-garden.rg
-    examples/vivaldi-cs3mv2.rg )
+    examples/vivaldi-cs3mv2.rg
+    examples/vivaldi_op44_11_1.rg )
 
 INSTALL(FILES ${EXAMPLE_FILES} DESTINATION ${DATADIR}/examples) 
 INSTALL(FILES examples/autoload.rg DESTINATION ${DATADIR})

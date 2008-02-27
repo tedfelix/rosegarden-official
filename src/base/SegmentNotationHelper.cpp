@@ -4,7 +4,7 @@
     Rosegarden
     A sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
@@ -111,14 +111,14 @@ SegmentNotationHelper::setNotationProperties(timeT startTime, timeT endTime)
 	from = segment().findTime(startTime);
 	to   = segment().findTime(endTime);
     }
-
+/*!!!
     bool justSeenGraceNote = false;
     timeT graceNoteStart = 0;
-
+*/
     for (Segment::iterator i = from;
 	 i != to && segment().isBeforeEndMarker(i); ++i) {
 
-	if ((*i)->has(NOTE_TYPE) && !(*i)->has(IS_GRACE_NOTE)) continue;
+	if ((*i)->has(NOTE_TYPE) /*!!! && !(*i)->has(IS_GRACE_NOTE) */) continue;
 
 	timeT duration = (*i)->getNotationDuration();
 
@@ -138,7 +138,7 @@ SegmentNotationHelper::setNotationProperties(timeT startTime, timeT endTime)
 	if ((*i)->isa(Note::EventType) || (*i)->isa(Note::EventRestType)) {
 
 	    if ((*i)->isa(Note::EventType)) {
-		
+/*!!!		
 		if ((*i)->has(IS_GRACE_NOTE) &&
 		    (*i)->get<Bool>(IS_GRACE_NOTE)) {
 
@@ -152,6 +152,7 @@ SegmentNotationHelper::setNotationProperties(timeT startTime, timeT endTime)
 		    duration += (*i)->getNotationAbsoluteTime() - graceNoteStart;
 		    justSeenGraceNote = false;
 		}
+*/
 	    }
 
 	    Note n(Note::getNearestNote(duration));
@@ -1220,7 +1221,8 @@ SegmentNotationHelper::hasEffectiveDuration(iterator i)
 void
 SegmentNotationHelper::makeBeamedGroup(timeT from, timeT to, string type)
 {
-    makeBeamedGroupAux(segment().findTime(from), segment().findTime(to), type);
+    makeBeamedGroupAux(segment().findTime(from), segment().findTime(to),
+		       type, false);
 }
 
 void
@@ -1229,17 +1231,27 @@ SegmentNotationHelper::makeBeamedGroup(iterator from, iterator to, string type)
     makeBeamedGroupAux
       ((from == end()) ? from : segment().findTime((*from)->getAbsoluteTime()),
 	 (to == end()) ? to   : segment().findTime((*to  )->getAbsoluteTime()),
-	 type);
+       type, false);
+}
+
+void
+SegmentNotationHelper::makeBeamedGroupExact(iterator from, iterator to, string type)
+{
+    makeBeamedGroupAux(from, to, type, true);
 }
 
 void
 SegmentNotationHelper::makeBeamedGroupAux(iterator from, iterator to,
-					  string type)
+					  string type, bool groupGraces)
 {
+    cerr << "SegmentNotationHelper::makeBeamedGroupAux: type " << type << endl;
+    if (from == to) cerr << "from == to" <<endl;
+
     int groupId = segment().getNextId();
     bool beamedSomething = false;
 
     for (iterator i = from; i != to; ++i) {
+	std::cerr << "looking at " << (*i)->getType() << " at " << (*i)->getAbsoluteTime() << std::endl;
 
 	// don't permit ourselves to change the type of an
 	// already-grouped event here
@@ -1248,12 +1260,20 @@ SegmentNotationHelper::makeBeamedGroupAux(iterator from, iterator to,
 	    continue;
 	}
 
+	if (!groupGraces) {
+	    if ((*i)->has(IS_GRACE_NOTE) &&
+		(*i)->get<Bool>(IS_GRACE_NOTE)) {
+		continue;
+	    }
+	}
+
 	// don't beam anything longer than a quaver unless it's
 	// between beamed quavers -- in which case marking it as
 	// beamed will ensure that it gets re-stemmed appropriately
 
 	if ((*i)->isa(Note::EventType) &&
 	    (*i)->getNotationDuration() >= Note(Note::Crotchet).getDuration()) {
+	    std::cerr << "too long" <<std::endl;
 	    if (!beamedSomething) continue;
 	    iterator j = i;
 	    bool somethingLeft = false;
@@ -1268,6 +1288,7 @@ SegmentNotationHelper::makeBeamedGroupAux(iterator from, iterator to,
 	    if (!somethingLeft) continue;
 	}
 
+	std::cerr << "beaming it" <<std::endl;
         (*i)->set<Int>(BEAMED_GROUP_ID, groupId);
         (*i)->set<String>(BEAMED_GROUP_TYPE, type);
     }
@@ -1675,8 +1696,8 @@ SegmentNotationHelper::removeRests(timeT time, timeT &duration, bool testOnly)
 {
     Event dummy("dummy", time, 0, MIN_SUBORDERING);
     
-//    cerr << "SegmentNotationHelper::removeRests(" << time
-//         << ", " << duration << ")\n";
+    std::cerr << "SegmentNotationHelper::removeRests(" << time
+	      << ", " << duration << ")" << std::endl;
 
     iterator from = segment().lower_bound(&dummy);
 

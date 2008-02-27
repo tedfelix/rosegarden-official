@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -42,7 +42,16 @@ StartupTester::StartupTester() :
     m_haveProjectPackager(false),
     m_haveLilypondView(false),
     m_haveAudioFileImporter(false)
-{}
+{
+    QHttp *http = new QHttp();
+    connect(http, SIGNAL(responseHeaderReceived(const QHttpResponseHeader &)),
+            this, SLOT(slotHttpResponseHeaderReceived(const QHttpResponseHeader &)));
+    connect(http, SIGNAL(done(bool)),
+            this, SLOT(slotHttpDone(bool)));
+    m_versionHttpFailed = false;
+    http->setHost("www.rosegardenmusic.com");
+    http->get("/latest-version.txt");
+}
 
 StartupTester::~StartupTester()
 {
@@ -180,6 +189,60 @@ StartupTester::haveAudioFileImporter(QStringList *missing)
     return m_haveAudioFileImporter;
 }
 
+bool
+StartupTester::isVersionNewerThan(QString a, QString b)
+{
+    QRegExp re("[._-]");
+    QStringList alist = QStringList::split(re, a);
+    QStringList blist = QStringList::split(re, b);
+    int ae = alist.size();
+    int be = blist.size();
+    int e = std::max(ae, be);
+    for (int i = 0; i < e; ++i) {
+	int an = 0, bn = 0;
+	if (i < ae) {
+	    an = alist[i].toInt();
+	    if (an == 0) an = -1; // non-numeric field -> "-pre1" etc
+	}
+	if (i < be) {
+	    bn = blist[i].toInt();
+	    if (bn == 0) bn = -1;
+	}
+	if (an < bn) return false;
+	if (an > bn) return true;
+    }
+    return false;
+}
+
+void
+StartupTester::slotHttpResponseHeaderReceived(const QHttpResponseHeader &h)
+{
+    if (h.statusCode() / 100 != 2) m_versionHttpFailed = true;
+}
+
+void
+StartupTester::slotHttpDone(bool error)
+{
+    QHttp *http = const_cast<QHttp *>(dynamic_cast<const QHttp *>(sender()));
+    if (!http) return;
+    http->deleteLater();
+    if (error) return;
+
+    QByteArray responseData = http->readAll();
+    QString str = QString::fromUtf8(responseData.data());
+    QStringList lines = QStringList::split('\n', str);
+    if (lines.empty()) return;
+
+    QString latestVersion = lines[0];
+    RG_DEBUG << "Comparing current version \"" << VERSION
+             << "\" with latest version \"" << latestVersion << "\""
+             << endl;
+    if (isVersionNewerThan(latestVersion, VERSION)) {
+        emit newerVersionAvailable(latestVersion);
+    }
+}
+
 }
 
 #include "StartupTester.moc"
+

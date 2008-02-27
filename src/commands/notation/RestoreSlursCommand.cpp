@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -29,11 +29,20 @@
 #include "base/Selection.h"
 #include "document/BasicSelectionCommand.h"
 #include "gui/editors/notation/NotationProperties.h"
+#include "document/CommandRegistry.h"
 #include <qstring.h>
 
 
 namespace Rosegarden
 {
+
+void
+RestoreSlursCommand::registerCommand(CommandRegistry *r)
+{
+    r->registerCommand
+        (getGlobalName(), "", "", "restore_slurs",
+         new SelectionCommandBuilder<RestoreSlursCommand>());
+}
 
 void
 RestoreSlursCommand::modifySegment()

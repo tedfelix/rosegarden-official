@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -214,7 +214,7 @@ MarkerRuler::slotEditMarker()
     // I think the ruler should be doing all this stuff itself, or
     // emitting signals connected to a dedicated marker model object,
     // not just relying on the app object.  Same goes for practically
-    // everything else we do.  Hey ho.  Having this hereis
+    // everything else we do.  Hey ho.  Having this here is
     // inconsistent with the other methods, so if anyone wants to move
     // it, be my guest.
 

@@ -4,7 +4,7 @@
     Rosegarden
     A sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
@@ -138,21 +138,23 @@ namespace CompositionMetadataKeys
     const PropertyName Piece = "piece";
     const PropertyName Tagline = "tagline";
 
+    // The tab order of the edit fields in HeadersConfigurationPage
+    // is defined by the creation order of the edit fields.
+    // The edit fields are created in the order of the keys in getFixedKeys().
     std::vector<PropertyName> getFixedKeys() {
 	std::vector<PropertyName> keys;
-	keys.push_back(Composer);
-	keys.push_back(Arranger);
-	keys.push_back(Copyright);
+	keys.push_back(Dedication);
 	keys.push_back(Title);
 	keys.push_back(Subtitle);
-        // The following are recognized only by LilyPond output
 	keys.push_back(Subsubtitle);
-	keys.push_back(Dedication);
 	keys.push_back(Poet);
-	keys.push_back(Meter);
-	keys.push_back(Opus);
 	keys.push_back(Instrument);
+	keys.push_back(Composer);
+	keys.push_back(Meter);
+	keys.push_back(Arranger);
 	keys.push_back(Piece);
+	keys.push_back(Opus);
+	keys.push_back(Copyright);
 	keys.push_back(Tagline);
 
 	return keys;
@@ -163,11 +165,13 @@ namespace CompositionMetadataKeys
 // Keep these in lower case
 const PropertyName DocumentConfiguration::SequencerOptions      = "sequenceroptions";
 const PropertyName DocumentConfiguration::ZoomLevel             = "zoomlevel";
+const PropertyName DocumentConfiguration::TransportMode         = "transportmode";
 
 
 DocumentConfiguration::DocumentConfiguration()
 {
     set<Int>(ZoomLevel, 0);
+    set<String>(TransportMode, ""); // apparently generates an exception if not initialized
 }
     
 DocumentConfiguration::DocumentConfiguration(const DocumentConfiguration &conf):
@@ -208,6 +212,9 @@ DocumentConfiguration::toXmlString()
 
     config << "    <" << ZoomLevel << " type=\"Int\">" << get<Int>(ZoomLevel)
            << "</" << ZoomLevel << ">\n";
+
+    config << "    <" << TransportMode << " type=\"String\">" << get<String>(TransportMode)
+           << "</" << TransportMode << ">\n";
 
     config << "</configuration>" << endl;
 

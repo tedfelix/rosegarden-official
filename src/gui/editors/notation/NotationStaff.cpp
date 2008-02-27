@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -38,6 +38,7 @@
 #include "base/MidiDevice.h"
 #include "base/MidiTypes.h"
 #include "base/NotationQuantizer.h"
+#include "base/NotationRules.h"
 #include "base/NotationTypes.h"
 #include "base/Profiler.h"
 #include "base/Segment.h"
@@ -92,9 +93,10 @@ NotationStaff::NotationStaff(QCanvas *canvas, Segment *segment,
         m_colourQuantize(true),
         m_showUnknowns(true),
         m_showRanges(true),
-        m_showCollisions(0),
+        m_showCollisions(true),
         m_printPainter(0),
-        m_ready(false)
+        m_ready(false),
+        m_lastRenderedBar(0)
 {
     KConfig *config = kapp->config();
     config->setGroup(NotationViewConfigGroup);
@@ -103,7 +105,7 @@ NotationStaff::NotationStaff(QCanvas *canvas, Segment *segment,
     // Shouldn't change these  during the lifetime of the staff, really:
     m_showUnknowns = config->readBoolEntry("showunknowns", false);
     m_showRanges = config->readBoolEntry("showranges", true);
-    m_showCollisions = config->readNumEntry("showcollisions", 2);
+    m_showCollisions = config->readBoolEntry("showcollisions", true);
 
     m_keySigCancelMode = config->readNumEntry("keysigcancelmode", 1);
 
@@ -293,6 +295,14 @@ NotationStaff::isStaffNameUpToDate()
     return (m_staffNameText ==
             getSegment().getComposition()->
             getTrackById(getSegment().getTrack())->getLabel());
+}
+
+timeT
+NotationStaff::getTimeAtCanvasCoords(double cx, int cy) const
+{
+    LinedStaffCoords layoutCoords = getLayoutCoordsForCanvasCoords(cx, cy);
+    RulerScale * rs = m_notationView->getHLayout();
+    return rs->getTimeForX(layoutCoords.first);
 }
 
 void
@@ -559,6 +569,16 @@ NotationStaff::positionElements(timeT from, timeT to)
     //    NOTATION_DEBUG << "NotationStaff " << this << "::positionElements()"
     //                         << from << " -> " << to << endl;
     Profiler profiler("NotationStaff::positionElements");
+
+    // Following 4 lines are a workaround to not have m_clefChanges and
+    // m_keyChanges truncated when positionElements() is called with
+    // args outside current segment.
+    // Maybe a better fix would be not to call positionElements() with
+    // such args ...
+    int startTime = getSegment().getStartTime();
+    if (from < startTime) from = startTime;
+    if (to < startTime) to = startTime;
+    if (to == from) return;
 
     emit setOperationName(i18n("Positioning staff %1...").arg(getId() + 1));
     emit setProgress(0);
@@ -1590,8 +1610,7 @@ NotationStaff::renderNote(ViewElementList::iterator &vli)
     }
 
     long tieLength = 0;
-    (void)(elt->event()->get
-           <Int>(properties.TIE_LENGTH, tieLength));
+    (void)(elt->event()->get<Int>(properties.TIE_LENGTH, tieLength));
     if (tieLength > 0) {
         params.setTied(true);
         params.setTieLength(tieLength);
@@ -1599,12 +1618,17 @@ NotationStaff::renderNote(ViewElementList::iterator &vli)
         params.setTied(false);
     }
 
+    if (elt->event()->has(BaseProperties::TIE_IS_ABOVE)) {
+        params.setTiePosition
+            (true, elt->event()->get<Bool>(BaseProperties::TIE_IS_ABOVE));
+    } else {
+        params.setTiePosition(false, false); // the default
+    }
+
     long accidentalShift = 0;
     bool accidentalExtra = false;
-    if (elt->event()->get
-            <Int>(properties.ACCIDENTAL_SHIFT, accidentalShift)) {
-        elt->event()->get
-        <Bool>(properties.ACCIDENTAL_EXTRA_SHIFT, accidentalExtra);
+    if (elt->event()->get<Int>(properties.ACCIDENTAL_SHIFT, accidentalShift)) {
+        elt->event()->get<Bool>(properties.ACCIDENTAL_EXTRA_SHIFT, accidentalExtra);
     }
     params.setAccidentalShift(accidentalShift);
     params.setAccExtraShift(accidentalExtra);
@@ -1615,12 +1639,10 @@ NotationStaff::renderNote(ViewElementList::iterator &vli)
 
     if (beamed) {
 
-        if (elt->event()->get
-                <Bool>(properties.CHORD_PRIMARY_NOTE, primary)
-                && primary) {
+        if (elt->event()->get<Bool>(properties.CHORD_PRIMARY_NOTE, primary)
+            && primary) {
 
-            int myY = elt->event()->get
-                      <Int>(properties.BEAM_MY_Y);
+            int myY = elt->event()->get<Int>(properties.BEAM_MY_Y);
 
             stemLength = myY - (int)elt->getLayoutY();
             if (stemLength < 0)
@@ -1710,21 +1732,15 @@ NotationStaff::renderNote(ViewElementList::iterator &vli)
 
         // The normal on-screen case
 
-        params.setCollision(false);
         bool collision = false;
         QCanvasItem * haloItem = 0;
-        if (m_showCollisions != 0) {
+        if (m_showCollisions) {
             collision = elt->isColliding();
             if (collision) {
-                if (m_showCollisions == 2) {
-                    // Make collision halo
-                    QCanvasPixmap *haloPixmap = factory->makeNoteHaloPixmap(params);
-                    haloItem = new QCanvasNotationSprite(*elt, haloPixmap, m_canvas);
-                    haloItem->setZ(-1);
-                } else {
-                    // Ask notePixmapFactory for collision color
-                    params.setCollision(true);
-                }
+                // Make collision halo
+                QCanvasPixmap *haloPixmap = factory->makeNoteHaloPixmap(params);
+                haloItem = new QCanvasNotationSprite(*elt, haloPixmap, m_canvas);
+                haloItem->setZ(-1);
             }
         }
 
@@ -1732,15 +1748,13 @@ NotationStaff::renderNote(ViewElementList::iterator &vli)
 
         int z = 0;
         if (factory->isSelected())
-            z = 4;
-        else if (collision)
             z = 3;
         else if (quantized)
             z = 2;
 
         setPixmap(elt, pixmap, z, SplitToFit);
 
-        if ((collision) && (m_showCollisions == 2)) {
+        if (collision) {
             // Display collision halo
             LinedStaffCoords coords =
                 getCanvasCoordsForLayoutCoords(elt->getLayoutX(),
@@ -1785,8 +1799,8 @@ NotationStaff::setTuplingParameters(NotationElement *elt,
                tuplingLineFollowsBeam);
 
         long tupletCount;
-        if (elt->event()->get
-                <Int>(BaseProperties::BEAMED_GROUP_UNTUPLED_COUNT, tupletCount)) {
+        if (elt->event()->get<Int>
+            (BaseProperties::BEAMED_GROUP_UNTUPLED_COUNT, tupletCount)) {
 
             params.setTupletCount(tupletCount);
             params.setTuplingLineY(tuplingLineY - (int)elt->getLayoutY());
@@ -1807,15 +1821,19 @@ NotationStaff::isSelected(NotationElementList::iterator it)
 
 void
 NotationStaff::showPreviewNote(double layoutX, int heightOnStaff,
-                               const Note &note)
+                               const Note &note, bool grace)
 {
+    NotePixmapFactory *npf = m_notePixmapFactory;
+    if (grace) npf = m_graceNotePixmapFactory;
+
     NotePixmapParameters params(note.getNoteType(), note.getDots());
+    NotationRules rules;
 
     params.setAccidental(Accidentals::NoAccidental);
     params.setNoteHeadShifted(false);
     params.setDrawFlag(true);
     params.setDrawStem(true);
-    params.setStemGoesUp(heightOnStaff <= 4);
+    params.setStemGoesUp(rules.isStemUp(heightOnStaff));
     params.setLegerLines(heightOnStaff < 0 ? heightOnStaff :
                          heightOnStaff > 8 ? heightOnStaff - 8 : 0);
     params.setBeamed(false);
@@ -1828,7 +1846,7 @@ NotationStaff::showPreviewNote(double layoutX, int heightOnStaff,
 
     delete m_previewSprite;
     m_previewSprite = new QCanvasSimpleSprite
-                      (m_notePixmapFactory->makeNotePixmap(params), m_canvas);
+                      (npf->makeNotePixmap(params), m_canvas);
 
     int layoutY = getLayoutYForHeight(heightOnStaff);
     LinedStaffCoords coords = getCanvasCoordsForLayoutCoords(layoutX, layoutY);
@@ -1887,16 +1905,23 @@ NotationStaff::markChanged(timeT from, timeT to, bool movedOnly)
 
     NOTATION_DEBUG << "NotationStaff::markChanged (" << from << " -> " << to << ") " << movedOnly << endl;
 
+    drawStaffName();//!!!
+
     if (from == to) {
 
         m_status.clear();
 
         if (!movedOnly && m_ready) { // undo all the rendering we've already done
             for (NotationElementList::iterator i = getViewElementList()->begin();
-                    i != getViewElementList()->end(); ++i) {
+                 i != getViewElementList()->end(); ++i) {
                 static_cast<NotationElement *>(*i)->removeCanvasItem();
             }
+
+            m_clefChanges.clear();
+            m_keyChanges.clear();
         }
+
+        drawStaffName();
 
     } else {
 
@@ -2003,6 +2028,7 @@ NotationStaff::checkRendered(timeT from, timeT to)
             positionElements
             (composition->getBarStart(bar),
              composition->getBarEnd(bar));
+            m_lastRenderedBar = bar;
 
             something = true;
 
@@ -2046,14 +2072,76 @@ NotationStaff::doRenderWork(timeT from, timeT to)
             (composition->getBarStart(bar),
              composition->getBarEnd(bar));
             m_status[bar] = Positioned;
+            m_lastRenderedBar = bar;
             return true;
 
         case Positioned:
+            // The bars currently displayed are rendered before the others.
+            // Later, when preceding bars are rendered, truncateClefsAndKeysAt()
+            // is called and possible clefs and/or keys from the bars previously
+            // rendered may be lost. Following code should restore these clefs
+            // and keys in m_clefChanges and m_keyChanges lists.
+            if (bar > m_lastRenderedBar)
+                checkAndCompleteClefsAndKeys(bar);
             continue;
         }
     }
 
     return false;
+}
+
+void
+NotationStaff::checkAndCompleteClefsAndKeys(int bar)
+{
+    // Look for Clef or Key in current bar
+    Composition *composition = getSegment().getComposition();
+    timeT barStartTime = composition->getBarStart(bar);
+    timeT barEndTime = composition->getBarEnd(bar);
+
+    for (ViewElementList::iterator it =
+                          getViewElementList()->findTime(barStartTime);
+             (it != getViewElementList()->end()) 
+                 && ((*it)->getViewAbsoluteTime() < barEndTime); ++it) {
+        if ((*it)->event()->isa(Clef::EventType)) {
+            // Clef found
+            Clef clef = *(*it)->event();
+
+            // Is this clef already in m_clefChanges list ?
+            int xClef = int((*it)->getLayoutX());
+            bool found = false;
+            for (int i = 0; i < m_clefChanges.size(); ++i) {
+                if (    (m_clefChanges[i].first == xClef)
+                    && (m_clefChanges[i].second == clef)) {
+                    found = true;
+                    break;
+                }
+            }
+    
+            // If not, add it
+            if (!found) {
+                m_clefChanges.push_back(ClefChange(xClef, clef));
+            }
+    
+        } else if ((*it)->event()->isa(::Rosegarden::Key::EventType)) {
+            ::Rosegarden::Key key = *(*it)->event();
+    
+            // Is this key already in m_keyChanges list ?
+            int xKey = int((*it)->getLayoutX());
+            bool found = false;
+            for (int i = 0; i < m_keyChanges.size(); ++i) {
+                if (    (m_keyChanges[i].first == xKey)
+                    && (m_keyChanges[i].second == key)) {
+                    found = true;
+                    break;
+                }
+            }
+    
+            // If not, add it
+            if (!found) {
+                m_keyChanges.push_back(KeyChange(xKey, key));
+            }
+        }
+    }
 }
 
 LinedStaff::BarStyle

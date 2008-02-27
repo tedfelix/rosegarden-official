@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -1350,7 +1350,7 @@ void CompositionView::contentsMouseReleaseEvent(QMouseEvent* e)
         return ;
 
     if (e->button() == LeftButton ||
-            e->button() == MidButton )
+        e->button() == MidButton )
         m_tool->handleMouseButtonRelease(e);
 }
 
@@ -1360,6 +1360,8 @@ void CompositionView::contentsMouseDoubleClickEvent(QMouseEvent* e)
 
     if (!m_currentItem) {
         RG_DEBUG << "CompositionView::contentsMouseDoubleClickEvent - no currentItem\n";
+        RulerScale *ruler = grid().getRulerScale();
+        if (ruler) emit setPointerPosition(ruler->getTimeForX(e->pos().x()));
         return ;
     }
 

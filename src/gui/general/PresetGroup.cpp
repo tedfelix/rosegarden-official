@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -163,46 +163,9 @@ PresetGroup::startElement(const QString &, const QString &,
     } else if (lcName == "clef") {
         QString s = attributes.value("type");
         if (s) {
-            if (s == "treble")
-                m_elClef = TrebleClef;
-            else if (s == "bass")
-                m_elClef = BassClef;
-            else if (s == "crotales")
-                m_elClef = CrotalesClef;
-            else if (s == "xylophone")
-                m_elClef = XylophoneClef;
-            else if (s == "guitar")
-                m_elClef = GuitarClef;
-            else if (s == "contrabass")
-                m_elClef = ContrabassClef;
-            else if (s == "celesta")
-                m_elClef = CelestaClef;
-            else if (s == "oldCelesta")
-                m_elClef = OldCelestaClef;
-            else if (s == "french")
-                m_elClef = FrenchClef;
-            else if (s == "soprano")
-                m_elClef = SopranoClef;
-            else if (s == "mezzosoprano")
-                m_elClef = MezzosopranoClef;
-            else if (s == "alto")
-                m_elClef = AltoClef;
-            else if (s == "tenor")
-                m_elClef = TenorClef;
-            else if (s == "baritone")
-                m_elClef = BaritoneClef;
-            else if (s == "varbaritone")
-                m_elClef = VarbaritoneClef;
-            else if (s == "subbass")
-                m_elClef = SubbassClef;
-            else if (s == "two-bar")
-                m_elClef = TwoBarClef;
-            else {
-                RG_DEBUG << "startElement: processed unrecognized clef type: " << s << endl;
-            }
+        	m_elClef = clefNameToClefIndex(s);
             m_clef = true;
         }
-
     } else if (lcName == "transpose") {
         QString s = attributes.value("value");
         if (s) {

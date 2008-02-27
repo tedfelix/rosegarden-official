@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -38,6 +38,8 @@ namespace Rosegarden
 {
 
 using namespace BaseProperties;
+
+/*!!!
 
 void
 GraceCommand::registerCommand(CommandRegistry *r)
@@ -89,12 +91,9 @@ GraceCommand::modifySegment()
             i != m_selection->getSegmentEvents().end(); ++i) {
 
         if ((*i)->isa(Note::EventType)) {
-            (*i)->set
-            <Bool>(IS_GRACE_NOTE, true);
-            (*i)->set
-            <Int>(BEAMED_GROUP_ID, id);
-            (*i)->set
-            <String>(BEAMED_GROUP_TYPE, GROUP_TYPE_GRACE);
+            (*i)->set<Bool>(IS_GRACE_NOTE, true);
+            (*i)->set<Int>(BEAMED_GROUP_ID, id);
+            (*i)->set<String>(BEAMED_GROUP_TYPE, GROUP_TYPE_GRACE);
         }
 
         if ((*i)->getAbsoluteTime() + (*i)->getDuration() >
@@ -119,5 +118,7 @@ GraceCommand::modifySegment()
         ++i0;
     }
 }
+
+*/
 
 }

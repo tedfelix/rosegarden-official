@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -27,6 +27,7 @@
 
 #include <iostream>
 #include <klocale.h>
+#include "base/NotationRules.h"
 #include "base/NotationTypes.h"
 #include "gui/general/MidiPitchLabel.h"
 #include "PitchDragLabel.h"
@@ -40,9 +41,6 @@
 
 namespace Rosegarden
 {
-
-static int stepIntervals[] = { 0,2,4,5,7,9,11 };
-static int steps[] = { 0,0,1,2,2,3,3,4,4,5,6,6 };
 
 DiatonicPitchChooser::DiatonicPitchChooser(QString title,
                            QWidget *parent,
@@ -82,12 +80,12 @@ DiatonicPitchChooser::DiatonicPitchChooser(QString title,
     m_octave->setCurrentItem(defaultOctave);
 
     m_accidental = new KComboBox( hbox );
-    m_accidental->insertItem(Accidentals::DoubleFlat);
-    m_accidental->insertItem(Accidentals::Flat);
-    m_accidental->insertItem(Accidentals::Natural);
-    m_accidental->insertItem(Accidentals::Sharp);
-    m_accidental->insertItem(Accidentals::DoubleSharp);
-    m_accidental->setCurrentItem(2);
+    m_accidental->insertItem(i18n("double flat"));
+    m_accidental->insertItem(i18n("flat"));
+    m_accidental->insertItem(i18n("natural"));
+    m_accidental->insertItem(i18n("sharp"));
+    m_accidental->insertItem(i18n("double sharp"));
+    m_accidental->setCurrentItem(2); // default: natural
 
     m_pitchLabel = new QLabel(QString("%1").arg(getPitch()), hbox);
     
@@ -120,10 +118,10 @@ DiatonicPitchChooser::DiatonicPitchChooser(QString title,
     //connect(m_pitchDragLabel, SIGNAL(pitchChanged(int)),
     //        this, SIGNAL(pitchChanged(int)));
 
-    connect(m_pitchDragLabel, SIGNAL(pitchChanged(int,int,int)),
+    connect(m_pitchDragLabel, SIGNAL(pitchDragged(int,int,int)),
             this, SIGNAL(noteChanged(int,int,int)));
 
-    connect(m_pitchDragLabel, SIGNAL(pitchDragged(int,int,int)),
+    connect(m_pitchDragLabel, SIGNAL(pitchChanged(int,int,int)),
             this, SIGNAL(noteChanged(int,int,int)));
 
     connect(m_pitchDragLabel, SIGNAL(preview(int)),
@@ -134,7 +132,7 @@ DiatonicPitchChooser::DiatonicPitchChooser(QString title,
 int
 DiatonicPitchChooser::getPitch() const
 {
-    return 12 * m_octave->currentItem() + stepIntervals[m_step->currentItem()] + 
+    return 12 * m_octave->currentItem() + scale_Cmajor[m_step->currentItem()] + 
     	(m_accidental->currentItem() - 2);
 }
 
@@ -151,12 +149,13 @@ DiatonicPitchChooser::slotSetPitch(int pitch)
         m_pitchDragLabel->slotSetPitch(pitch);
 
     m_octave->setCurrentItem((int)(((long) pitch) / 12));
-    int step = steps[pitch % 12];
+
+    int step = steps_Cmajor[pitch % 12];
     m_step->setCurrentItem(step);
     
-    Accidental accidental = Accidentals::getAccidental((pitch % 12) - stepIntervals[step]);
+    int pitchChange = (pitch % 12) - scale_Cmajor[step];
     
-    m_accidental->setCurrentItem(Accidentals::getPitchOffset(accidental) + 2);
+    m_accidental->setCurrentItem(pitchChange + 2);
 
     m_pitchLabel->setText(QString("%1").arg(pitch));
     
@@ -182,7 +181,7 @@ DiatonicPitchChooser::slotSetOctave(int octave)
     update();
 }
 
-/** input 0..5: doubleflat .. doublesharp */
+/** input 0..4: doubleflat .. doublesharp */
 void
 DiatonicPitchChooser::slotSetAccidental(int accidental)
 {
@@ -214,8 +213,8 @@ DiatonicPitchChooser::slotSetNote(int pitch, int octave, int step)
     m_octave->setCurrentItem(octave);
     m_step->setCurrentItem(step);
     
-    Accidental accidental = Accidentals::getAccidental(pitch - (octave * 12 + stepIntervals[step]));
-    m_accidental->setCurrentItem(Accidentals::getPitchOffset(accidental) + 2);
+    int pitchOffset = pitch - (octave * 12 + scale_Cmajor[step]);
+    m_accidental->setCurrentItem(pitchOffset + 2);
 
     //MidiPitchLabel pl(p);
     m_pitchLabel->setText(QString("%1").arg(pitch));

@@ -33,7 +33,7 @@ MARK_AS_ADVANCED(EXECUTABLE_OUTPUT_PATH
 
 # Rosegarden version string
 SET (VERSION_MAJOR "1")
-SET (VERSION_MINOR "6")
+SET (VERSION_MINOR "7")
 SET (VERSION_PATCH "0")
 # comment out the next line for a public release
 SET (VERSION_SUFFIX "svn")
@@ -256,6 +256,7 @@ IF(WANT_PCH)
     FIND_PACKAGE(PCHSupport)
     IF(PCHSupport_FOUND)
         SET(USE_PCH TRUE)
+        ADD_DEFINITIONS(-DUSE_PCH)
         MESSAGE(STATUS "Enabling precompiled headers for GCC ${gcc_compiler_version}") 
     ENDIF(PCHSupport_FOUND)
 ENDIF(WANT_PCH)

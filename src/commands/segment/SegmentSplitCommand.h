@@ -5,7 +5,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -51,7 +51,8 @@ public:
 
 private:
     Segment *m_segment;
-    Segment *m_newSegment;
+    Segment *m_newSegmentA;
+    Segment *m_newSegmentB;
     timeT m_splitTime;
     timeT *m_previousEndMarkerTime;
     bool m_detached;

@@ -8,7 +8,7 @@ Rosegarden is a MIDI and audio sequencer and musical notation editor.
 
 Please keep an eye on the FAQ for known problems and workarounds:
 
-  http://www.rosegardenmusic.com/resources/faq/
+  http://rosegarden.wiki.sourceforge.net/Frequently+Asked+Questions
 
 When you find bugs, first check whether a newer version of Rosegarden
 has been released yet; if not, please continue on to:
@@ -45,7 +45,7 @@ when the gui is started, provided it has been correctly installed (by
 If you have any problems running the application, review the
 instructions in the INSTALL file and consult the FAQ:
 
-  http://www.rosegardenmusic.com/resources/faq/
+  http://rosegarden.wiki.sourceforge.net/Frequently+Asked+Questions
 
 If that doesn't answer your question, use the rosegarden-user mailing
 list on SourceForge.
@@ -112,7 +112,7 @@ subdirectory, including:
 Authors and copyright
 ---------------------
 
-* Rosegarden is Copyright 2000-2007 Guillaume Laurent, Chris Cannam
+* Rosegarden is Copyright 2000-2008 Guillaume Laurent, Chris Cannam
   and Richard Bown.
 
 * The moral right of Guillaume Laurent, Chris Cannam and Richard Bown
@@ -132,7 +132,7 @@ Authors and copyright
   See AUTHORS for more details, and the individual source files for
   copyright attributions.
 
-* The Rosegarden splash-screen image is Copyright 2006 D Michael McIntyre.
+* The Rosegarden splash-screen image is Copyright 2007 D Michael McIntyre.
 
 Rosegarden is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

@@ -4,7 +4,7 @@
     Rosegarden
     A sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
@@ -113,6 +113,14 @@ public:
     
     int getLowestPlayable() { return m_lowestPlayable; }
     void setLowestPlayable(int pitch) { m_lowestPlayable = pitch; }
+
+    // Controls size of exported staff in LilyPond
+    int getStaffSize() { return m_staffSize; }
+    void setStaffSize(int index) { m_staffSize = index; }
+    
+    // Staff bracketing in LilyPond
+    int getStaffBracket() { return m_staffBracket; }
+    void setStaffBracket(int index) { m_staffBracket = index; }
     
     bool isArmed() const { return m_armed; }
     void setArmed(bool armed);
@@ -142,6 +150,10 @@ private:
     int            m_color;
     int            m_highestPlayable;
     int            m_lowestPlayable;
+
+    // staff parameters for LilyPond export
+    int            m_staffSize;
+    int            m_staffBracket;
 };
 
 }

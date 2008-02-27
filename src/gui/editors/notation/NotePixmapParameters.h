@@ -5,7 +5,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -87,12 +87,15 @@ public:
     void setTied(bool tied)               { m_tied             = tied;      }
     void setTieLength(int tieLength)      { m_tieLength        = tieLength; }
 
+    void setTiePosition(bool expl, bool above) {
+        m_tiePositionExplicit = expl;
+        m_tieAbove = above;
+    }
+
     void setMarks(const std::vector<Mark> &marks);
     void removeMarks();
 
     void setInRange(bool inRange)         { m_inRange          = inRange;    }
-
-    void setCollision(bool collision)     { m_isColliding     = collision;  }
 
     std::vector<Mark> getNormalMarks() const;
     std::vector<Mark> getAboveMarks() const; // bowings, pause etc
@@ -141,10 +144,10 @@ private:
 
     bool    m_tied;
     int     m_tieLength;
+    bool    m_tiePositionExplicit;
+    bool    m_tieAbove;
 
     bool    m_inRange;
-
-    bool m_isColliding;
 
     std::vector<Mark> m_marks;
 };

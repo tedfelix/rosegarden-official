@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -81,7 +81,7 @@ LyricEditDialog::LyricEditDialog(QWidget *parent,
     unparse();
     
     for (int i = 0; i < m_verseCount; ++i) {
-        m_verseNumber->insertItem(QString("Verse %1").arg(i + 1));
+        m_verseNumber->insertItem(i18n("Verse %1").arg(i + 1));
     }
     m_currentVerse = 0;
     if (m_verseCount == 12) m_verseAddButton->setEnabled(false);
@@ -103,7 +103,7 @@ LyricEditDialog::slotAddVerse()
     NOTATION_DEBUG << "LyricEditDialog::slotAddVerse" << endl;
     m_verseCount++;
     m_texts.push_back(m_skeleton);
-    m_verseNumber->insertItem(QString("Verse %1").arg(m_verseCount));
+    m_verseNumber->insertItem(i18n("Verse %1").arg(m_verseCount));
     m_verseNumber->setCurrentItem(m_verseCount - 1);
     slotVerseNumberChanged(m_verseCount - 1);
     if (m_verseCount == 12) m_verseAddButton->setEnabled(false);

@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -44,6 +44,7 @@ UntieNotesCommand::modifySegment()
             i != m_selection->getSegmentEvents().end(); ++i) {
 
         (*i)->unset(TIED_FORWARD);
+        (*i)->unset(TIE_IS_ABOVE);
         (*i)->unset(TIED_BACKWARD);
     }
 }

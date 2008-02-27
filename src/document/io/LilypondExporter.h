@@ -5,7 +5,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -62,6 +62,19 @@ class NotationView;
 class Key;
 class Composition;
 
+const std::string headerDedication = "dedication";
+const std::string headerTitle = "title";
+const std::string headerSubtitle = "subtitle";
+const std::string headerSubsubtitle = "subsubtitle";
+const std::string headerPoet = "poet";
+const std::string headerComposer = "composer";
+const std::string headerMeter = "meter";
+const std::string headerOpus = "opus";
+const std::string headerArranger = "arranger";
+const std::string headerInstrument = "instrument";
+const std::string headerPiece = "piece";
+const std::string headerCopyright = "copyright";
+const std::string headerTagline = "tagline";
 
 /**
  * Lilypond scorefile export
@@ -87,8 +100,8 @@ protected:
     Composition *m_composition;
     Studio *m_studio;
     std::string m_fileName;
-    bool m_pitchBorked;
 
+    void readConfigVariables(void);
     void writeBar(Segment *, int barNo, int barStart, int barEnd, int col,
                   Rosegarden::Key &key, std::string &lilyText,
                   std::string &prevStyle, eventendlist &eventsInProgress,
@@ -121,11 +134,11 @@ protected:
     // return a string full of column tabs
     std::string indent(const int &column);
                   
-    void writeSkip(const TimeSignature &timeSig,
-                   timeT offset,
-                   timeT duration,
-                   bool useRests,
-                   std::ofstream &);
+    std::pair<int,int> writeSkip(const TimeSignature &timeSig,
+				 timeT offset,
+				 timeT duration,
+				 bool useRests,
+				 std::ofstream &);
 
     /*
      * Handle Lilypond directive.  Returns true if the event was a directive,
@@ -139,7 +152,7 @@ protected:
     void handleText(const Event *, std::string &lilyText);
     void writePitch(const Event *note, const Rosegarden::Key &key, std::ofstream &);
     void writeStyle(const Event *note, std::string &prevStyle, int col, std::ofstream &, bool isInChord);
-    void writeDuration(timeT duration, std::ofstream &);
+    std::pair<int,int> writeDuration(timeT duration, std::ofstream &);
     void writeSlashes(const Event *note, std::ofstream &);
        
 private:
@@ -147,29 +160,97 @@ private:
     static const PropertyName SKIP_PROPERTY;
     
     unsigned int m_paperSize;
+    static const unsigned int PAPER_A3      = 0;
+    static const unsigned int PAPER_A4      = 1;
+    static const unsigned int PAPER_A5      = 2;
+    static const unsigned int PAPER_A6      = 3;
+    static const unsigned int PAPER_LEGAL   = 4;
+    static const unsigned int PAPER_LETTER  = 5;
+    static const unsigned int PAPER_TABLOID = 6;
+    static const unsigned int PAPER_NONE    = 7;
+
     bool m_paperLandscape;
     unsigned int m_fontSize;
+    static const unsigned int FONT_11	= 0;
+    static const unsigned int FONT_13	= 1;
+    static const unsigned int FONT_16	= 2;
+    static const unsigned int FONT_19	= 3;
+    static const unsigned int FONT_20	= 4;
+    static const unsigned int FONT_23	= 5;
+    static const unsigned int FONT_26	= 6;
+
     bool m_exportLyrics;
     bool m_exportMidi;
 
-        // exportTempoMarks meaning:
-        // 0 -> none
-        // 1 -> first
-        // 2 -> all
-    unsigned int m_exportTempoMarks;
+    unsigned int m_lyricsHAlignment;
+    static const unsigned int LEFT_ALIGN   = 0;
+    static const unsigned int CENTER_ALIGN = 1;
+    static const unsigned int RIGHT_ALIGN  = 2;
     
-    	// exportSelection meaning:
-    	// 0 -> All tracks
-    	// 1 -> Non-muted tracks
-    	// 2 -> Selected tracks
-    	// 3 -> Selected segments
+    unsigned int m_exportTempoMarks;
+    static const unsigned int EXPORT_NONE_TEMPO_MARKS = 0;
+    static const unsigned int EXPORT_FIRST_TEMPO_MARK = 1;
+    static const unsigned int EXPORT_ALL_TEMPO_MARKS = 2;
+    
     unsigned int m_exportSelection;
+    static const unsigned int EXPORT_ALL_TRACKS = 0;
+    static const unsigned int EXPORT_NONMUTED_TRACKS = 1;
+    static const unsigned int EXPORT_SELECTED_TRACK = 2;
+    static const unsigned int EXPORT_SELECTED_SEGMENTS = 3;
+
     bool m_exportPointAndClick;
     bool m_exportBeams;
     bool m_exportStaffGroup;
     bool m_exportStaffMerge;
     bool m_raggedBottom;
+
+    unsigned int m_exportMarkerMode;
+    
+    static const unsigned int EXPORT_NO_MARKERS = 0;
+    static const unsigned int EXPORT_DEFAULT_MARKERS = 1;
+    static const unsigned int EXPORT_TEXT_MARKERS = 2;
+
     int m_languageLevel;
+    static const int LILYPOND_VERSION_2_6  = 0;
+    static const int LILYPOND_VERSION_2_8  = 1;
+    static const int LILYPOND_VERSION_2_10 = 2;
+    static const int LILYPOND_VERSION_2_12 = 3;
+
+    std::pair<int,int> fractionSum(std::pair<int,int> x,std::pair<int,int> y) {
+	std::pair<int,int> z(
+	    x.first * y.second + x.second * y.first,
+	    x.second * y.second);
+	return fractionSimplify(z);
+    }
+    std::pair<int,int> fractionProduct(std::pair<int,int> x,std::pair<int,int> y) {
+	std::pair<int,int> z(
+	    x.first * y.first,
+	    x.second * y.second);
+	return fractionSimplify(z);
+    }
+    std::pair<int,int> fractionProduct(std::pair<int,int> x,int y) {
+	std::pair<int,int> z(
+	    x.first * y,
+	    x.second);
+	return fractionSimplify(z);
+    }
+    bool fractionSmaller(std::pair<int,int> x,std::pair<int,int> y) {
+	return (x.first * y.second < x.second * y.first);
+    }
+    std::pair<int,int> fractionSimplify(std::pair<int,int> x) {
+	return std::pair<int,int>(x.first/gcd(x.first,x.second),
+				  x.second/gcd(x.first,x.second));
+    }
+    int gcd(int a, int b) {
+	// Euclid's algorithm to find the greatest common divisor
+	while ( 1 ) {
+	    int r = a % b;
+	    if ( r == 0 )
+		return (b == 0 ? 1 : b);
+	    a = b;
+	    b = r; 
+	}
+    }
 };
 
 

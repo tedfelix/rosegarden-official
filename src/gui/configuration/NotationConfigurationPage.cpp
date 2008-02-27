@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -59,7 +59,7 @@
 #include <qstringlist.h>
 #include <qtabwidget.h>
 #include <qwidget.h>
-
+#include <qtooltip.h>
 
 namespace Rosegarden
 {
@@ -71,147 +71,18 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
 {
     m_cfg->setGroup(NotationViewConfigGroup);
 
-    QFrame *mainFrame = new QFrame(m_tabWidget);
-    QGridLayout *mainLayout = new QGridLayout(mainFrame, 2, 2, 10, 5);
-
-    QGroupBox *noteFontBox = new QGroupBox(1, Horizontal, i18n("Notation font"), mainFrame);
-    QGroupBox *otherFontBox = new QGroupBox(1, Horizontal, i18n("Other fonts"), mainFrame);
-    QGroupBox *descriptionBox = new QGroupBox(1, Horizontal, i18n("Description"), mainFrame);
-
-    mainLayout->addWidget(noteFontBox, 0, 0);
-    mainLayout->addMultiCellWidget(otherFontBox, 1, 1, 0, 1);
-    mainLayout->addWidget(descriptionBox, 0, 1);
-
-    QFrame *frame = new QFrame(noteFontBox);
-    QGridLayout *layout = new QGridLayout(frame, 5, 3, 10, 5);
-
-    layout->addWidget
-    (new QLabel(i18n("Font size for single-staff views"), frame),
-     1, 0);
-    layout->addWidget
-    (new QLabel(i18n("Font size for multi-staff views"), frame),
-     2, 0);
-    layout->addWidget
-    (new QLabel(i18n("Font size for printing (pt)"), frame),
-     3, 0);
-
-    QFrame *subFrame = new QFrame(descriptionBox);
-    QGridLayout *subLayout = new QGridLayout(subFrame,
-                             4, 2,  // nbrow, nbcol
-                             12, 2);
-
-    subLayout->addWidget(new QLabel(i18n("Origin:"), subFrame), 0, 0);
-    subLayout->addWidget(new QLabel(i18n("Copyright:"), subFrame), 1, 0);
-    subLayout->addWidget(new QLabel(i18n("Mapped by:"), subFrame), 2, 0);
-    subLayout->addWidget(new QLabel(i18n("Type:"), subFrame), 3, 0);
-    m_fontOriginLabel = new QLabel(subFrame);
-    m_fontOriginLabel->setAlignment(Qt::WordBreak);
-    m_fontOriginLabel->setFixedWidth(250);
-    m_fontCopyrightLabel = new QLabel(subFrame);
-    m_fontCopyrightLabel->setAlignment(Qt::WordBreak);
-    m_fontCopyrightLabel->setFixedWidth(250);
-    m_fontMappedByLabel = new QLabel(subFrame);
-    m_fontTypeLabel = new QLabel(subFrame);
-    subLayout->addWidget(m_fontOriginLabel, 0, 1);
-    subLayout->addWidget(m_fontCopyrightLabel, 1, 1);
-    subLayout->addWidget(m_fontMappedByLabel, 2, 1);
-    subLayout->addWidget(m_fontTypeLabel, 3, 1);
-
-    //    layout->addMultiCellWidget(subFrame,
-    //                               0, 3,
-    //                               2, 2);
-
-    m_viewButton = 0;
-
-    m_font = new KComboBox(frame);
-
-#ifdef HAVE_XFT
-
-    m_viewButton = new QPushButton(i18n("View"), frame);
-    layout->addWidget(m_font, 0, 0);
-    layout->addWidget(m_viewButton, 0, 1);
-    QObject::connect(m_viewButton, SIGNAL(clicked()),
-                     this, SLOT(slotViewButtonPressed()));
-#else
-
-    layout->addMultiCellWidget(m_font, 0, 0, 0, 1);
-#endif
-
-    QPushButton *rescanButton = new QPushButton(i18n("Rescan available fonts"), frame);
-    layout->addWidget(rescanButton, 4, 0);
-    QObject::connect(rescanButton, SIGNAL(clicked()),
-                     this, SLOT(slotRescanFonts()));
-
-
-    /*
-    #ifdef HAVE_XFT
-        QHBox *fontBox = new QHBox(frame);
-        m_font = new KComboBox(fontBox);
-        m_viewButton = new QPushButton(i18n("View"), fontBox);
-        fontBox->setStretchFactor(m_font, 2);
-        fontBox->setStretchFactor(m_viewButton, 1);
-        layout->addWidget(fontBox, 0, 1);
-        QObject::connect(m_viewButton, SIGNAL(clicked()),
-    		     this, SLOT(slotViewButtonPressed()));
-    #else
-        m_font = new KComboBox(frame);
-        layout->addWidget(m_font, 0, 1);
-    #endif
-    */
-    m_font->setEditable(false);
-
-    m_singleStaffSize = new KComboBox(frame);
-    m_singleStaffSize->setEditable(false);
-
-    m_multiStaffSize = new KComboBox(frame);
-    m_multiStaffSize->setEditable(false);
-
-    m_printingSize = new KComboBox(frame);
-    m_printingSize->setEditable(false);
-
-    slotPopulateFontCombo(false);
-
-    QObject::connect(m_font, SIGNAL(activated(int)),
-                     this, SLOT(slotFontComboChanged(int)));
-
-    layout->addWidget(m_singleStaffSize, 1, 1);
-    layout->addWidget(m_multiStaffSize, 2, 1);
-    layout->addWidget(m_printingSize, 3, 1);
-
-    frame = new QFrame(otherFontBox);
-    QGridLayout *otherLayout = new QGridLayout(frame, 2, 2, 10, 5);
-
-    otherLayout->addWidget
-    (new QLabel(i18n("Text font"), frame),
-     0, 0);
-    otherLayout->addWidget
-    (new QLabel(i18n("Time Signature font"), frame),
-     1, 0);
-
-    m_textFont = new KFontRequester(frame);
-    m_timeSigFont = new KFontRequester(frame);
-
-    QFont defaultTextFont(NotePixmapFactory::defaultSerifFontFamily),
-    defaultTimeSigFont(NotePixmapFactory::defaultTimeSigFontFamily);
-
-    QFont textFont = m_cfg->readFontEntry("textfont", &defaultTextFont);
-    QFont timeSigFont = m_cfg->readFontEntry("timesigfont", &defaultTimeSigFont);
-
-    m_textFont->setFont(textFont);
-    m_timeSigFont->setFont(timeSigFont);
-
-    otherLayout->addWidget(m_textFont, 0, 1);
-    otherLayout->addWidget(m_timeSigFont, 1, 1);
-
-
-    addTab(mainFrame, i18n("Font"));
-
-
+    QFrame *frame;
+    QGridLayout *layout;
 
     frame = new QFrame(m_tabWidget);
-    layout = new QGridLayout(frame, 9, 2, 10, 5);
+    layout = new QGridLayout(frame, 9, 3, 10, 5);
 
-    layout->addWidget(new QLabel(i18n("Default layout mode"), frame), 0, 0);
+    int row = 0;
+
+    layout->setRowSpacing(row, 15);
+    ++row;
+
+    layout->addWidget(new QLabel(i18n("Default layout mode"), frame), row, 0);
 
     m_layoutMode = new KComboBox(frame);
     m_layoutMode->setEditable(false);
@@ -222,9 +93,10 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     if (defaultLayoutMode >= 0 && defaultLayoutMode <= 2) {
         m_layoutMode->setCurrentItem(defaultLayoutMode);
     }
-    layout->addWidget(m_layoutMode, 0, 1);
+    layout->addMultiCellWidget(m_layoutMode, row, row, 1, 2);
+    ++row;
 
-    layout->addWidget(new QLabel(i18n("Default spacing"), frame), 1, 0);
+    layout->addWidget(new QLabel(i18n("Default spacing"), frame), row, 0);
 
     m_spacing = new KComboBox(frame);
     m_spacing->setEditable(false);
@@ -244,9 +116,11 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
         }
     }
 
-    layout->addWidget(m_spacing, 1, 1);
+    layout->addMultiCellWidget(m_spacing, row, row, 1, 2);
 
-    layout->addWidget(new QLabel(i18n("Default duration factor"), frame), 2, 0);
+    ++row;
+
+    layout->addWidget(new QLabel(i18n("Default duration factor"), frame), row, 0);
 
     m_proportion = new KComboBox(frame);
     m_proportion->setEditable(false);
@@ -270,44 +144,96 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
         }
     }
 
-    layout->addWidget(m_proportion, 2, 1);
+    layout->addMultiCellWidget(m_proportion, row, row, 1, 2);
+    ++row;
 
-    m_showUnknowns = new QCheckBox
-                     (i18n("Show non-notation events as question marks"), frame);
+    layout->addWidget(new QLabel(i18n("Show track headers (linear layout only)"),
+                                      frame), row, 0);
+
+    m_showTrackHeaders = new KComboBox(frame);
+    m_showTrackHeaders->setEditable(false);
+    m_showTrackHeaders->insertItem(i18n("Never"));
+    m_showTrackHeaders->insertItem(i18n("When needed"));
+    m_showTrackHeaders->insertItem(i18n("Always"));
+    int defaultShowTrackHeaders = m_cfg->readNumEntry("shownotationheader", 2);
+    if (defaultShowTrackHeaders >= 0 && defaultShowTrackHeaders <= 2) {
+        m_showTrackHeaders->setCurrentItem(defaultShowTrackHeaders);
+    }
+    QToolTip::add(m_showTrackHeaders, QString(i18n(
+        "\"Always\" and \"Never\" mean what they usually mean\n"
+        "\"When needed\" means \"when staves are too many to all fit"
+        " in the current window\"")));
+
+    layout->addMultiCellWidget(m_showTrackHeaders, row, row, 1, 2);
+    ++row;
+
+    layout->setRowSpacing(row, 20);
+    ++row;
+
+    layout->addMultiCellWidget
+        (new QLabel
+         (i18n("Show non-notation events as question marks"), frame),
+         row, row, 0, 1);
+    m_showUnknowns = new QCheckBox(frame);
     bool defaultShowUnknowns = m_cfg->readBoolEntry("showunknowns", false);
     m_showUnknowns->setChecked(defaultShowUnknowns);
-    layout->addWidget(m_showUnknowns, 3, 1);
+    layout->addWidget(m_showUnknowns, row, 2);
+    ++row;
 
-    m_colourQuantize = new QCheckBox
-                       (i18n("Show notation-quantized notes in a different color"), frame);
+    layout->addMultiCellWidget
+        (new QLabel
+         (i18n("Show notation-quantized notes in a different color"), frame),
+         row, row, 0, 1);
+    m_colourQuantize = new QCheckBox(frame);
     bool defaultColourQuantize = m_cfg->readBoolEntry("colourquantize", false);
     m_colourQuantize->setChecked(defaultColourQuantize);
-    layout->addWidget(m_colourQuantize, 4, 1);
+    layout->addWidget(m_colourQuantize, row, 2);
+    ++row;
 
-    m_showInvisibles = new QCheckBox
-                       (i18n("Show \"invisible\" events in grey"), frame);
+    layout->addMultiCellWidget
+        (new QLabel
+         (i18n("Show \"invisible\" events in grey"), frame),
+         row, row, 0, 1);
+    m_showInvisibles = new QCheckBox(frame);
     bool defaultShowInvisibles = m_cfg->readBoolEntry("showinvisibles", true);
     m_showInvisibles->setChecked(defaultShowInvisibles);
-    layout->addWidget(m_showInvisibles, 5, 1);
+    layout->addWidget(m_showInvisibles, row, 2);
+    ++row;
 
-    m_showRanges = new QCheckBox
-                   (i18n("Show notes outside suggested playable range in red"), frame);
+    layout->addMultiCellWidget
+        (new QLabel
+         (i18n("Show notes outside suggested playable range in red"), frame),
+         row, row, 0, 1);
+    m_showRanges = new QCheckBox(frame);
     bool defaultShowRanges = m_cfg->readBoolEntry("showranges", true);
     m_showRanges->setChecked(defaultShowRanges);
-    layout->addWidget(m_showRanges, 6, 1);
+    layout->addWidget(m_showRanges, row, 2);
+    ++row;
 
-    layout->addWidget(new QLabel(
-                            i18n("Show superimposed notes"), frame), 7, 0);
-    m_showCollisions = new KComboBox(frame);
-    m_showCollisions->setEditable(false);
-    m_showCollisions->insertItem(i18n("As normal single notes"));
-    m_showCollisions->insertItem(i18n("In a different color"));
-    m_showCollisions->insertItem(i18n("High-lit with a halo effect"));
-    int defaultShowCollisions = m_cfg->readNumEntry("showcollisions", 2);
-    if (defaultShowCollisions >= 0 && defaultShowCollisions <= 2) {
-        m_showCollisions->setCurrentItem(defaultShowCollisions);
-    }
-    layout->addWidget(m_showCollisions, 7, 1);
+    layout->addMultiCellWidget
+        (new QLabel
+         (i18n("Highlight superimposed notes with a halo effect"), frame),
+         row, row, 0, 1);
+    m_showCollisions = new QCheckBox(frame);
+    bool defaultShowCollisions = m_cfg->readBoolEntry("showcollisions", true);
+    m_showCollisions->setChecked(defaultShowCollisions);
+    layout->addWidget(m_showCollisions, row, 2);
+    ++row;
+
+    layout->setRowSpacing(row, 20);
+    ++row;
+
+    layout->addMultiCellWidget
+        (new QLabel
+         (i18n("When recording MIDI, split-and-tie long notes at barlines"), frame),
+         row, row, 0, 1);
+    m_splitAndTie = new QCheckBox(frame);
+    bool defaultSplitAndTie = m_cfg->readBoolEntry("quantizemakeviable", false);
+    m_splitAndTie->setChecked(defaultSplitAndTie);
+    layout->addWidget(m_splitAndTie, row, 2);
+    ++row;
+
+    layout->setRowStretch(row, 10);
 
 
     addTab(frame, i18n("Layout"));
@@ -315,10 +241,18 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
 
 
     frame = new QFrame(m_tabWidget);
-    layout = new QGridLayout(frame, 6, 2, 10, 5);
+    layout = new QGridLayout(frame, 6, 3, 10, 5);
 
-    layout->addWidget
-    (new QLabel(i18n("Default note style for new notes"), frame), 0, 0);
+    row = 0;
+
+    layout->setRowSpacing(row, 15);
+    ++row;
+
+    layout->addMultiCellWidget
+        (new QLabel(i18n("Default note style for new notes"), frame),
+         row, row, 0, 1);
+
+    layout->setColStretch(2, 10);
 
     m_noteStyle = new KComboBox(frame);
     m_noteStyle->setEditable(false);
@@ -340,10 +274,14 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
         }
     }
 
-    layout->addWidget(m_noteStyle, 0, 1);
+    layout->addWidget(m_noteStyle, row, 2);
+    ++row;
+
+    layout->setRowSpacing(row, 20);
+    ++row;
 
     layout->addWidget
-    (new QLabel(i18n("When inserting notes..."), frame), 1, 0);
+    (new QLabel(i18n("When inserting notes..."), frame), row, 0);
 
     int defaultInsertType = m_cfg->readNumEntry("inserttype", 0);
 
@@ -354,25 +292,37 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     m_insertType->insertItem(i18n("Ignore existing durations"));
     m_insertType->setCurrentItem(defaultInsertType);
 
-    layout->addWidget(m_insertType, 1, 1);
+    layout->addMultiCellWidget(m_insertType, row, row, 1, 2);
+    ++row;
 
     bool autoBeam = m_cfg->readBoolEntry("autobeam", true);
 
-    m_autoBeam = new QCheckBox
-                 (i18n("Auto-beam on insert when appropriate"), frame);
+    layout->addMultiCellWidget
+        (new QLabel
+         (i18n("Auto-beam on insert when appropriate"), frame),
+         row, row, 0, 1);
+    m_autoBeam = new QCheckBox(frame);
     m_autoBeam->setChecked(autoBeam);
-    layout->addWidget(m_autoBeam, 2, 1);
+    layout->addMultiCellWidget(m_autoBeam, row, row, 2, 2);
+
+    ++row;
 
     bool collapse = m_cfg->readBoolEntry("collapse", false);
 
-    m_collapseRests = new QCheckBox
-                      (i18n("Collapse rests after erase"), frame);
+    layout->addMultiCellWidget
+        (new QLabel
+         (i18n("Collapse rests after erase"), frame),
+         row, row, 0, 1);
+    m_collapseRests = new QCheckBox(frame);
     m_collapseRests->setChecked(collapse);
-    layout->addWidget(m_collapseRests, 3, 1);
+    layout->addMultiCellWidget(m_collapseRests, row, row, 2, 2);
+    ++row;
 
+    layout->setRowSpacing(row, 20);
+    ++row;
 
     layout->addWidget
-    (new QLabel(i18n("Default paste type"), frame), 4, 0);
+    (new QLabel(i18n("Default paste type"), frame), row, 0);
 
     m_pasteType = new KComboBox(frame);
     m_pasteType->setEditable(false);
@@ -389,7 +339,10 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     }
 
     m_pasteType->setCurrentItem(defaultPasteType);
-    layout->addWidget(m_pasteType, 4, 1);
+    layout->addMultiCellWidget(m_pasteType, row, row, 1, 2);
+    ++row;
+
+    layout->setRowStretch(row, 10);
 
     addTab(frame, i18n("Editing"));
 
@@ -397,8 +350,13 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
 
     frame = new QFrame(m_tabWidget);
     layout = new QGridLayout(frame, 4, 2, 10, 5);
+    
+    row = 0;
 
-    layout->addWidget(new QLabel(i18n("Accidentals in one octave..."), frame), 0, 0);
+    layout->setRowSpacing(row, 15);
+    ++row;
+
+    layout->addWidget(new QLabel(i18n("Accidentals in one octave..."), frame), row, 0);
     m_accOctavePolicy = new KComboBox(frame);
     m_accOctavePolicy->insertItem(i18n("Affect only that octave"));
     m_accOctavePolicy->insertItem(i18n("Require cautionaries in other octaves"));
@@ -407,9 +365,10 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     if (accOctaveMode >= 0 && accOctaveMode < 3) {
         m_accOctavePolicy->setCurrentItem(accOctaveMode);
     }
-    layout->addWidget(m_accOctavePolicy, 0, 1);
+    layout->addWidget(m_accOctavePolicy, row, 1);
+    ++row;
 
-    layout->addWidget(new QLabel(i18n("Accidentals in one bar..."), frame), 1, 0);
+    layout->addWidget(new QLabel(i18n("Accidentals in one bar..."), frame), row, 0);
     m_accBarPolicy = new KComboBox(frame);
     m_accBarPolicy->insertItem(i18n("Affect only that bar"));
     m_accBarPolicy->insertItem(i18n("Require cautionary resets in following bar"));
@@ -418,9 +377,10 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     if (accBarMode >= 0 && accBarMode < 3) {
         m_accBarPolicy->setCurrentItem(accBarMode);
     }
-    layout->addWidget(m_accBarPolicy, 1, 1);
+    layout->addWidget(m_accBarPolicy, row, 1);
+    ++row;
 
-    layout->addWidget(new QLabel(i18n("Key signature cancellation style:"), frame), 2, 0);
+    layout->addWidget(new QLabel(i18n("Key signature cancellation style"), frame), row, 0);
     m_keySigCancelMode = new KComboBox(frame);
     m_keySigCancelMode->insertItem(i18n("Cancel only when entering C major or A minor"));
     m_keySigCancelMode->insertItem(i18n("Cancel whenever removing sharps or flats"));
@@ -429,12 +389,14 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
     if (cancelMode >= 0 && cancelMode < 3) {
         m_keySigCancelMode->setCurrentItem(cancelMode);
     }
-    layout->addWidget(m_keySigCancelMode, 2, 1);
+    layout->addWidget(m_keySigCancelMode, row, 1);
+    ++row;
+
+    layout->setRowStretch(row, 10);
 
     addTab(frame, i18n("Accidentals"));
 
-
-
+/*
     QString preamble =
         (i18n("Rosegarden can apply automatic quantization to recorded "
               "or imported MIDI data for notation purposes only. "
@@ -451,6 +413,160 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
                        false, false, "Notation Options", preamble);
 
     addTab(m_quantizeFrame, i18n("Quantize"));
+*/
+    row = 0;
+
+//    QFrame *mainFrame = new QFrame(m_tabWidget);
+//    QGridLayout *mainLayout = new QGridLayout(mainFrame, 2, 4, 10, 5);
+
+//    QGroupBox *noteFontBox = new QGroupBox(1, Horizontal, i18n("Notation font"), mainFrame);
+//    QGroupBox *otherFontBox = new QGroupBox(1, Horizontal, i18n("Other fonts"), mainFrame);
+//    QGroupBox *descriptionBox = new QGroupBox(1, Horizontal, i18n("Description"), mainFrame);
+
+//    mainLayout->addWidget(noteFontBox, 0, 0);
+//    mainLayout->addWidget(otherFontBox, 1, 0);
+
+//    QFrame *mainFrame = new QFrame(m_tabWidget);
+    frame = new QFrame(m_tabWidget);
+    layout = new QGridLayout(frame, 2, 4, 10, 5);
+
+//    frame = new QFrame(noteFontBox);
+//    layout = new QGridLayout(frame, 5, 2, 10, 5);
+
+    m_viewButton = 0;
+
+    layout->addWidget(new QLabel(i18n("Notation font"), frame), 0, 0);
+
+    m_font = new KComboBox(frame);
+
+#ifdef HAVE_XFT
+    m_viewButton = new QPushButton(i18n("View"), frame);
+    layout->addMultiCellWidget(m_font, row, row, 1, 2);
+    layout->addWidget(m_viewButton, row, 3);
+    QObject::connect(m_viewButton, SIGNAL(clicked()),
+                     this, SLOT(slotViewButtonPressed()));
+#else
+    layout->addMultiCellWidget(m_font, row, row, 1, 3);
+#endif
+    m_font->setEditable(false);
+    QObject::connect(m_font, SIGNAL(activated(int)),
+                     this, SLOT(slotFontComboChanged(int)));
+    ++row;
+
+    QFrame *subFrame = new QFrame(frame);
+    QGridLayout *subLayout = new QGridLayout(subFrame,
+                                             4, 2,  // nbrow, nbcol
+                                             12, 2);
+
+    QFont font = m_font->font();
+    font.setPointSize((font.pointSize() * 9) / 10);
+
+    QLabel *originLabel = new QLabel(i18n("Origin:"), subFrame);
+    originLabel->setFont(font);
+    subLayout->addWidget(originLabel, 0, 0);
+
+    QLabel *copyrightLabel = new QLabel(i18n("Copyright:"), subFrame);
+    copyrightLabel->setFont(font);
+    subLayout->addWidget(copyrightLabel, 1, 0);
+
+    QLabel *mappedLabel = new QLabel(i18n("Mapped by:"), subFrame); 
+    mappedLabel->setFont(font);
+    subLayout->addWidget(mappedLabel, 2, 0);
+
+    QLabel *typeLabel = new QLabel(i18n("Type:"), subFrame);
+    typeLabel->setFont(font);
+    subLayout->addWidget(typeLabel, 3, 0);
+
+    m_fontOriginLabel = new QLabel(subFrame);
+    m_fontOriginLabel->setAlignment(Qt::WordBreak);
+    m_fontOriginLabel->setFont(font);
+//    m_fontOriginLabel->setFixedWidth(250);
+    m_fontCopyrightLabel = new QLabel(subFrame);
+    m_fontCopyrightLabel->setAlignment(Qt::WordBreak);
+    m_fontCopyrightLabel->setFont(font);
+//    m_fontCopyrightLabel->setFixedWidth(250);
+    m_fontMappedByLabel = new QLabel(subFrame);
+    m_fontMappedByLabel->setFont(font);
+    m_fontTypeLabel = new QLabel(subFrame);
+    m_fontTypeLabel->setFont(font);
+    subLayout->addWidget(m_fontOriginLabel, 0, 1);
+    subLayout->addWidget(m_fontCopyrightLabel, 1, 1);
+    subLayout->addWidget(m_fontMappedByLabel, 2, 1);
+    subLayout->addWidget(m_fontTypeLabel, 3, 1);
+
+    subLayout->setColStretch(1, 10);
+
+    layout->addMultiCellWidget(subFrame,
+                               row, row,
+                               0, 3);
+    ++row;
+
+    layout->addMultiCellWidget
+        (new QLabel(i18n("Font size for single-staff views"), frame),
+         row, row, 0, 1);
+    m_singleStaffSize = new KComboBox(frame);
+    m_singleStaffSize->setEditable(false);
+    layout->addMultiCellWidget(m_singleStaffSize, row, row, 2, 2);
+    ++row;
+
+    layout->addMultiCellWidget
+        (new QLabel(i18n("Font size for multi-staff views"), frame),
+         row, row, 0, 1);
+    m_multiStaffSize = new KComboBox(frame);
+    m_multiStaffSize->setEditable(false);
+    layout->addMultiCellWidget(m_multiStaffSize, row, row, 2, 2);
+    ++row;
+
+    layout->addMultiCellWidget
+        (new QLabel(i18n("Font size for printing (pt)"), frame),
+         row, row, 0, 1);
+    m_printingSize = new KComboBox(frame);
+    m_printingSize->setEditable(false);
+    layout->addMultiCellWidget(m_printingSize, row, row, 2, 2);
+    ++row;
+
+    slotPopulateFontCombo(false);
+
+    layout->setRowSpacing(row, 15);
+    ++row;
+
+    QFont defaultTextFont(NotePixmapFactory::defaultSerifFontFamily),
+        defaultSansFont(NotePixmapFactory::defaultSansSerifFontFamily),
+        defaultTimeSigFont(NotePixmapFactory::defaultTimeSigFontFamily);
+
+    layout->addWidget
+        (new QLabel(i18n("Text font"), frame), row, 0);
+    m_textFont = new KFontRequester(frame);
+    QFont textFont = m_cfg->readFontEntry("textfont", &defaultTextFont);
+    m_textFont->setFont(textFont);
+    layout->addMultiCellWidget(m_textFont, row, row, 1, 3);
+    ++row;
+
+    layout->addWidget
+        (new QLabel(i18n("Sans-serif font"), frame), row, 0);
+    m_sansFont = new KFontRequester(frame);
+    QFont sansFont = m_cfg->readFontEntry("sansfont", &defaultSansFont);
+    m_sansFont->setFont(sansFont);
+    layout->addMultiCellWidget(m_sansFont, row, row, 1, 3);
+    ++row;
+
+/*!!! No -- not much point in having the time sig font here: it's only
+ * used if the time sig characters are not found in the notation font,
+ * and our default notation font has all the characters we need
+
+    layout->addWidget
+        (new QLabel(i18n("Time Signature font"), frame), row, 0);
+    m_timeSigFont = new KFontRequester(frame);
+    QFont timeSigFont = m_cfg->readFontEntry("timesigfont", &defaultTimeSigFont);
+    m_timeSigFont->setFont(timeSigFont);
+    layout->addMultiCellWidget(m_timeSigFont, row, row, 1, 3);
+    ++row;
+*/
+
+//    addTab(mainFrame, i18n("Font"));
+    addTab(frame, i18n("Font"));
+
+
 }
 
 void
@@ -476,12 +592,6 @@ NotationConfigurationPage::slotViewButtonPressed()
         KMessageBox::error(0, i18n(strtoqstr(f.getMessage())));
     }
 #endif
-}
-
-void
-NotationConfigurationPage::slotRescanFonts()
-{
-    slotPopulateFontCombo(true);
 }
 
 void
@@ -590,9 +700,12 @@ NotationConfigurationPage::apply()
                       m_printingSize->currentText().toUInt());
     m_cfg->writeEntry("textfont",
                       m_textFont->font());
+    m_cfg->writeEntry("sansfont",
+                      m_sansFont->font());
+/*!!!
     m_cfg->writeEntry("timesigfont",
                       m_timeSigFont->font());
-
+*/
     std::vector<int> s = NotationHLayout::getAvailableSpacings();
     m_cfg->writeEntry("spacing", s[m_spacing->currentItem()]);
 
@@ -604,7 +717,9 @@ NotationConfigurationPage::apply()
     m_cfg->writeEntry("showunknowns", m_showUnknowns->isChecked());
     m_cfg->writeEntry("showinvisibles", m_showInvisibles->isChecked());
     m_cfg->writeEntry("showranges", m_showRanges->isChecked());
-    m_cfg->writeEntry("showcollisions", m_showCollisions->currentItem());
+    m_cfg->writeEntry("showcollisions", m_showCollisions->isChecked());
+    m_cfg->writeEntry("shownotationheader",
+                       m_showTrackHeaders->currentItem());
     m_cfg->writeEntry("style", m_untranslatedNoteStyle[m_noteStyle->currentItem()]);
     m_cfg->writeEntry("inserttype", m_insertType->currentItem());
     m_cfg->writeEntry("autobeam", m_autoBeam->isChecked());
@@ -614,7 +729,9 @@ NotationConfigurationPage::apply()
     m_cfg->writeEntry("accidentalbarmode", m_accBarPolicy->currentItem());
     m_cfg->writeEntry("keysigcancelmode", m_keySigCancelMode->currentItem());
 
-    (void)m_quantizeFrame->getQuantizer(); // this also writes to the config
+    m_cfg->writeEntry("quantizemakeviable", m_splitAndTie->isChecked());
+
+//    (void)m_quantizeFrame->getQuantizer(); // this also writes to the config
 }
 
 }

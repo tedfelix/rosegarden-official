@@ -1,11 +1,10 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -84,6 +83,8 @@ class EventSelection;
 class Event;
 class Clef;
 class ChordNameRuler;
+class QDeferScrollView;
+class HeadersGroup;
 
 
 /**
@@ -164,6 +165,9 @@ public:
     /// Return a pointer to the staff corresponding to the given segment
     NotationStaff *getNotationStaff(const Segment &segment);
 
+    /// Return true if the staff at the specified index is the current one
+    bool isCurrentStaff(int i);
+
     QCanvas* canvas() { return getCanvasView()->canvas(); }
     
     void setCanvasCursor(const QCursor &cursor) {
@@ -201,6 +205,11 @@ public:
      * Discover whether triplet-mode insertions are enabled
      */
     bool isInTripletMode();
+
+    /**
+     * Discover whether grace-mode insertions are enabled
+     */
+    bool isInGraceMode();
 
     /**
      * Discover whether annotations are being displayed or not
@@ -253,6 +262,7 @@ public:
     void showPreviewNote(int staffNo, double layoutX,
                          int pitch, int height,
                          const Note &note,
+                         bool grace,
                          int velocity = -1);
 
     /// Remove any visible preview note
@@ -307,7 +317,13 @@ public:
      */
     virtual void print(bool previewOnly = false);
 
-    
+    /**
+     * Return X of the left of the canvas visible part.
+     */
+    double getCanvasLeftX() { return getCanvasView()->contentsX(); }
+
+    virtual RulerScale* getHLayout();
+
 public slots:
 
     /**
@@ -332,6 +348,7 @@ public slots:
     /**
      * Export to a temporary file and process
      */
+    void slotPrintLilypond();
     void slotPreviewLilypond();
     void slotLilypondViewProcessExited(KProcess *);
 
@@ -366,6 +383,16 @@ public slots:
      * delete the selection (cut without the copy)
      */
     void slotEditDelete();
+
+    /**
+     * move the selection to the staff above
+     */
+    void slotMoveEventsUpStaff();
+
+    /**
+     * move the selection to the staff below
+     */
+    void slotMoveEventsDownStaff();
 
     /**
      * toggles the tools toolbar
@@ -403,7 +430,7 @@ public slots:
     void slotToggleGroupToolBar();
 
     /**
-     * toggles the font toolbar
+     * toggles the layout toolbar
      */
     void slotToggleLayoutToolBar();
 
@@ -475,12 +502,19 @@ public slots:
     void slotToggleLilyPondDirectives();
     void slotEditLyrics();
 
+    /// Notation header slots
+    void slotShowHeadersGroup();
+    void slotHideHeadersGroup();
+    void slotVerticalScrollHeadersGroup(int);
+
+    /// Adjust notation header view when bottom ruler added or removed
+    void slotCanvasBottomWidgetHeightChanged(int);
+
     /// group slots
     void slotGroupSimpleTuplet();
     void slotGroupGeneralTuplet();
     void slotGroupTuplet(bool simple);
     void slotGroupUnTuplet();
-    void slotGroupUnGrace();
 
     /// transforms slots
     void slotTransformsNormalizeRests();
@@ -488,7 +522,6 @@ public slots:
     void slotTransformsTieNotes();
     void slotTransformsUntieNotes();
     void slotTransformsRestoreStems();
-    void slotTransformsRestoreSlurs();
     void slotTransformsQuantize();
     void slotTransformsInterpret();
 
@@ -522,6 +555,7 @@ public slots:
     void slotEditAddSustainUp();
     void slotEditAddSustain(bool down);
     void slotEditTranspose();
+    void slotEditSwitchPreset();
     void slotEditElement(NotationStaff *, NotationElement *, bool advanced);
 
     void slotMakeVisible();
@@ -770,8 +804,6 @@ signals:
 
 protected:
 
-    virtual RulerScale* getHLayout();
-
     virtual void paintEvent(QPaintEvent* e);
 
     /**
@@ -884,6 +916,9 @@ protected:
     virtual Segment *getCurrentSegment();
     virtual Staff *getCurrentStaff() { return getCurrentLinedStaff(); }
     virtual LinedStaff *getCurrentLinedStaff();
+
+    virtual LinedStaff *getStaffAbove();
+    virtual LinedStaff *getStaffBelow();
         
     virtual bool hasSegment(Segment *segment);
 
@@ -914,6 +949,10 @@ protected:
     bool canPreviewAnotherNote();
 
     virtual void updateViewCaption();
+
+    void showHeadersGroup();
+    void hideHeadersGroup();
+
 
     //--------------- Data members ---------------------------------
 
@@ -1012,6 +1051,11 @@ protected:
     int m_printSize;
 
     static std::map<KProcess *, KTempFile *> m_lilyTempFileMap;
+
+    int m_showHeadersGroup;
+    QDeferScrollView * m_headersGroupView;
+    HeadersGroup * m_headersGroup;
+    QFrame * m_headersTopFrame;
 };
 
 

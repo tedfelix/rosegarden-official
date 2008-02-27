@@ -5,7 +5,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -48,6 +48,12 @@ public:
     CollapsingFrame(QString label, QWidget *parent = 0, const char *name = 0);
     virtual ~CollapsingFrame();
 
+    QFont font() const;
+    void setFont(QFont font);
+
+    /// If true, the widget fills the available space.  Call before setWidget
+    void setWidgetFill(bool fill);
+
     /// This frame contains a single other widget.  Set it here.
     void setWidget(QWidget *w);
 
@@ -58,6 +64,7 @@ protected:
     QGridLayout *m_layout;
     QToolButton *m_toggleButton;
     QWidget *m_widget;
+    bool m_fill;
     bool m_collapsed;
 };
 

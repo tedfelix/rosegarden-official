@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -34,6 +34,8 @@
 #include "base/Segment.h"
 #include "base/Staff.h"
 #include "MatrixStaff.h"
+
+#include <cmath>
 
 
 namespace Rosegarden
@@ -155,12 +157,10 @@ void MatrixHLayout::scanStaff(Staff &staffBase,
 
         // Make sure that very small elements can still be seen
         //
-        if (width < 3)
-            width = 3;
-        else
-            width += 1; // fiddle factor
+        if (width < 3) width = 3;
+        else width += 1; // fiddle factor
 
-        static_cast<MatrixElement*>((*i))->setWidth((int)width);
+        static_cast<MatrixElement*>((*i))->setWidth(lrint(width));
 
         if (isFullScan) {
             m_totalWidth = (*i)->getLayoutX() + width;

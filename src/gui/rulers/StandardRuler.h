@@ -5,7 +5,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -41,6 +41,7 @@ class RulerScale;
 class RosegardenGUIDoc;
 class LoopRuler;
 class MarkerRuler;
+class SnapGrid;
 
 
 class StandardRuler : public QVBox
@@ -49,13 +50,15 @@ class StandardRuler : public QVBox
 
 public:
     StandardRuler(RosegardenGUIDoc *doc,
-               RulerScale *rulerScale,
-               double xorigin,
-               int buttonHeight,
-               bool invert = false, // draw upside-down
-               QWidget* parent = 0,
-               const char* name = 0,
-               WFlags f=0);
+                  RulerScale *rulerScale,
+                  double xorigin,
+                  int buttonHeight,
+                  bool invert = false, // draw upside-down
+                  QWidget* parent = 0,
+                  const char* name = 0,
+                  WFlags f=0);
+
+    void setSnapGrid(SnapGrid *grid);
 
     LoopRuler* getLoopRuler() { return m_loopRuler; }
 

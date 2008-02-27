@@ -4,7 +4,7 @@
     Rosegarden
     A sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
@@ -21,6 +21,7 @@
 
 
 #include "Marker.h"
+#include "misc/Debug.h"
 
 #if (__GNUC__ < 3)
 #include <strstream>

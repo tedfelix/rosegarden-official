@@ -4,7 +4,7 @@
     Rosegarden
     A sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
@@ -309,7 +309,7 @@ Event::dump(ostream& out) const
     if (m_data->m_properties) {
 	for (PropertyMap::const_iterator i = m_data->m_properties->begin();
 	     i != m_data->m_properties->end(); ++i) {
-	    out << "\t\t" << i->first << " [" << i->first.getValue() << "] \t" << *(i->second) << "\n";
+	    out << "\t\t" << i->first.getName() << " [" << i->first.getValue() << "] \t" << *(i->second) << "\n";
 	}
     }
 
@@ -318,7 +318,7 @@ Event::dump(ostream& out) const
 
 	for (PropertyMap::const_iterator i = m_nonPersistentProperties->begin();
 	     i != m_nonPersistentProperties->end(); ++i) {
-	    out << "\t\t" << i->first << " [" << i->first.getValue() << "] \t" << *(i->second) << '\n';
+	    out << "\t\t" << i->first.getName() << " [" << i->first.getValue() << "] \t" << *(i->second) << '\n';
 	}
     }
 

@@ -38,10 +38,10 @@
 #include "commands/notation/ChangeSlurPositionCommand.h"
 #include "commands/notation/ChangeStemsCommand.h"
 #include "commands/notation/ChangeStyleCommand.h"
+#include "commands/notation/ChangeTiePositionCommand.h"
 #include "commands/notation/CollapseRestsCommand.h"
 #include "commands/notation/DeCounterpointCommand.h"
 #include "commands/notation/FixNotationQuantizeCommand.h"
-#include "commands/notation/GraceCommand.h"
 #include "commands/notation/IncrementDisplacementsCommand.h"
 #include "commands/notation/MakeAccidentalsCautionaryCommand.h"
 #include "commands/notation/MakeNotesViableCommand.h"
@@ -49,6 +49,8 @@
 #include "commands/notation/RemoveMarksCommand.h"
 #include "commands/notation/RemoveNotationQuantizeCommand.h"
 #include "commands/notation/ResetDisplacementsCommand.h"
+#include "commands/notation/RestoreSlursCommand.h"
+#include "commands/notation/RestoreTiesCommand.h"
 
 #include "NoteFontFactory.h"
 #include "NoteFont.h"
@@ -75,10 +77,10 @@ NotationCommandRegistry::NotationCommandRegistry(EditView *v) :
     ChangeSlurPositionCommand::registerCommand(this);
     ChangeStemsCommand::registerCommand(this);
     ChangeStyleCommand::registerCommand(this);
+    ChangeTiePositionCommand::registerCommand(this);
     CollapseRestsCommand::registerCommand(this);
     DeCounterpointCommand::registerCommand(this);
     FixNotationQuantizeCommand::registerCommand(this);
-    GraceCommand::registerCommand(this);
     IncrementDisplacementsCommand::registerCommand(this);
     MakeAccidentalsCautionaryCommand::registerCommand(this);
     MakeChordCommand::registerCommand(this);
@@ -87,6 +89,8 @@ NotationCommandRegistry::NotationCommandRegistry(EditView *v) :
     RemoveMarksCommand::registerCommand(this);
     RemoveNotationQuantizeCommand::registerCommand(this);
     ResetDisplacementsCommand::registerCommand(this);
+    RestoreSlursCommand::registerCommand(this);
+    RestoreTiesCommand::registerCommand(this);
 }
 
 NotationCommandRegistry::~NotationCommandRegistry()

@@ -4,7 +4,7 @@
     Rosegarden
     A sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
@@ -215,11 +215,15 @@ LADSPAPluginFactory::getPortMinimum(const LADSPA_Descriptor *descriptor, int por
         minimum = lb;
     } else if (LADSPA_IS_HINT_BOUNDED_ABOVE(d)) {
         MappedObjectValue ub = descriptor->PortRangeHints[port].UpperBound;
-        minimum = std::min(0.0, ub - 1.0);
+        minimum = std::min(0.f, ub - 1.f);
     }
 
     if (LADSPA_IS_HINT_SAMPLE_RATE(d)) {
         minimum *= m_sampleRate;
+    }
+
+    if (LADSPA_IS_HINT_LOGARITHMIC(d)) {
+        if (minimum == 0.f) minimum = 1.f;
     }
 
     return minimum;
@@ -233,17 +237,33 @@ LADSPAPluginFactory::getPortMaximum(const LADSPA_Descriptor *descriptor, int por
 
     MappedObjectValue maximum = 1.0;
 
+//    std::cerr << "LADSPAPluginFactory::getPortMaximum(" << port << ")" << std::endl;
+//    std::cerr << "bounded above: " << LADSPA_IS_HINT_BOUNDED_ABOVE(d) << std::endl;
+
     if (LADSPA_IS_HINT_BOUNDED_ABOVE(d)) {
         MappedObjectValue ub = descriptor->PortRangeHints[port].UpperBound;
         maximum = ub;
     } else {
         MappedObjectValue lb = descriptor->PortRangeHints[port].LowerBound;
-        maximum = lb + 1.0;
+	if (LADSPA_IS_HINT_LOGARITHMIC(d)) {
+	    if (lb == 0.f) lb = 1.f;
+	    maximum = lb * 100.f;
+	} else {
+	    if (lb == 1.f) maximum = 10.f;
+	    else maximum = lb + 10;
+	}
     }
 
     if (LADSPA_IS_HINT_SAMPLE_RATE(d)) {
+//	std::cerr << "note: port has sample rate hint" << std::endl;
         maximum *= m_sampleRate;
     }
+
+//    std::cerr << "maximum: " << maximum << std::endl;
+//    if (LADSPA_IS_HINT_LOGARITHMIC(d)) {
+//	std::cerr << "note: port is logarithmic" << std::endl;
+//    }
+//    std::cerr << "note: minimum is reported as " << getPortMinimum(descriptor, port) << " (from bounded = " << LADSPA_IS_HINT_BOUNDED_BELOW(d) << ", bound = " << descriptor->PortRangeHints[port].LowerBound << ")" << std::endl;
 
     return maximum;
 }
@@ -258,13 +278,12 @@ LADSPAPluginFactory::getPortDefault(const LADSPA_Descriptor *descriptor, int por
     if (m_portDefaults.find(descriptor->UniqueID) !=
             m_portDefaults.end()) {
         if (m_portDefaults[descriptor->UniqueID].find(port) !=
-                m_portDefaults[descriptor->UniqueID].end()) {
+	    m_portDefaults[descriptor->UniqueID].end()) {
 
             deft = m_portDefaults[descriptor->UniqueID][port];
-            if (deft < minimum)
-                deft = minimum;
-            if (deft > maximum)
-                deft = maximum;
+            if (deft < minimum) deft = minimum;
+            if (deft > maximum) deft = maximum;
+//	    std::cerr << "port " << port << ": default " << deft << " from defaults" << std::endl;
             return deft;
         }
     }
@@ -274,44 +293,74 @@ LADSPAPluginFactory::getPortDefault(const LADSPA_Descriptor *descriptor, int por
 
     bool logarithmic = LADSPA_IS_HINT_LOGARITHMIC(d);
 
+    float logmin = 0, logmax = 0;
+    if (logarithmic) {
+        float thresh = powf(10, -10);
+        if (minimum < thresh) logmin = -10;
+        else logmin = log10f(minimum);
+        if (maximum < thresh) logmax = -10;
+        else logmax = log10f(maximum);
+    }
+
     if (!LADSPA_IS_HINT_HAS_DEFAULT(d)) {
 
         deft = minimum;
 
     } else if (LADSPA_IS_HINT_DEFAULT_MINIMUM(d)) {
 
-        deft = minimum;
+	// See comment for DEFAULT_MAXIMUM below
+	if (!LADSPA_IS_HINT_BOUNDED_BELOW(d)) {
+	    deft = descriptor->PortRangeHints[port].LowerBound;
+	    if (LADSPA_IS_HINT_SAMPLE_RATE(d)) {
+		deft *= m_sampleRate;
+	    }
+//	    std::cerr << "default-minimum: " << deft << std::endl;
+	    if (deft < minimum || deft > maximum) deft = minimum;
+//	    std::cerr << "default-minimum: " << deft << std::endl;
+	} else {
+	    deft = minimum;
+	}
 
     } else if (LADSPA_IS_HINT_DEFAULT_LOW(d)) {
-
-        if (logarithmic) {
-            deft = powf(10, log10(minimum) * 0.75 +
-                        log10(maximum) * 0.25);
-        } else {
-            deft = minimum * 0.75 + maximum * 0.25;
-        }
-
+	
+	if (logarithmic) {
+	    deft = powf(10, logmin * 0.75 + logmax * 0.25);
+	} else {
+	    deft = minimum * 0.75 + maximum * 0.25;
+	}
+	
     } else if (LADSPA_IS_HINT_DEFAULT_MIDDLE(d)) {
-
-        if (logarithmic) {
-            deft = powf(10, log10(minimum) * 0.5 +
-                        log10(maximum) * 0.5);
-        } else {
-            deft = minimum * 0.5 + maximum * 0.5;
-        }
-
+	
+	if (logarithmic) {
+	    deft = powf(10, logmin * 0.5 + logmax * 0.5);
+	} else {
+	    deft = minimum * 0.5 + maximum * 0.5;
+	}
+	
     } else if (LADSPA_IS_HINT_DEFAULT_HIGH(d)) {
-
-        if (logarithmic) {
-            deft = powf(10, log10(minimum) * 0.25 +
-                        log10(maximum) * 0.75);
-        } else {
-            deft = minimum * 0.25 + maximum * 0.75;
-        }
+	
+	if (logarithmic) {
+	    deft = powf(10, logmin * 0.25 + logmax * 0.75);
+	} else {
+	    deft = minimum * 0.25 + maximum * 0.75;
+	}
 
     } else if (LADSPA_IS_HINT_DEFAULT_MAXIMUM(d)) {
 
-        deft = maximum;
+	// CMT plugins employ this grossness (setting DEFAULT_MAXIMUM
+	// without BOUNDED_ABOVE and then using the UPPER_BOUND as the
+	// port default)
+	if (!LADSPA_IS_HINT_BOUNDED_ABOVE(d)) {
+	    deft = descriptor->PortRangeHints[port].UpperBound;
+	    if (LADSPA_IS_HINT_SAMPLE_RATE(d)) {
+		deft *= m_sampleRate;
+	    }
+//	    std::cerr << "default-maximum: " << deft << std::endl;
+	    if (deft < minimum || deft > maximum) deft = maximum;
+//	    std::cerr << "default-maximum: " << deft << std::endl;
+	} else {
+	    deft = maximum;
+	}
 
     } else if (LADSPA_IS_HINT_DEFAULT_0(d)) {
 
@@ -334,9 +383,7 @@ LADSPAPluginFactory::getPortDefault(const LADSPA_Descriptor *descriptor, int por
         deft = minimum;
     }
 
-    if (LADSPA_IS_HINT_SAMPLE_RATE(d)) {
-        deft *= m_sampleRate;
-    }
+//    std::cerr << "port " << port << " default = "<< deft << std::endl;
 
     return deft;
 }

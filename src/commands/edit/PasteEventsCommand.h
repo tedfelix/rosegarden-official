@@ -5,7 +5,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -27,6 +27,7 @@
 #define _RG_PASTEEVENTSCOMMAND_H_
 
 #include "document/BasicCommand.h"
+#include "base/Selection.h"
 #include <map>
 #include <qstring.h>
 #include "base/Event.h"
@@ -84,6 +85,8 @@ public:
 
     virtual ~PasteEventsCommand();
 
+    EventSelection getPastedEvents();
+
     static QString getGlobalName() { return i18n("&Paste"); }
 
     /// Determine whether this paste will succeed (without executing it yet)
@@ -99,6 +102,7 @@ protected:
     timeT m_relayoutEndTime;
     Clipboard *m_clipboard;
     PasteType m_pasteType;
+    EventSelection m_pastedEvents;
 };
 
 

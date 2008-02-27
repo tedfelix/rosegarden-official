@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -69,7 +69,8 @@ Rotary::Rotary(QWidget *parent,
                int size,
                TickMode ticks,
                bool snapToTicks,
-               bool centred) :
+               bool centred,
+               bool logarithmic) :
         QWidget(parent),
         m_minValue(minValue),
         m_maxValue(maxValue),
@@ -85,7 +86,8 @@ Rotary::Rotary(QWidget *parent,
         m_buttonPressed(false),
         m_lastY(0),
         m_lastX(0),
-        m_knobColour(0, 0, 0)
+        m_knobColour(0, 0, 0),
+        m_logarithmic(logarithmic)
 {
     setBackgroundMode(Qt::NoBackground);
 
@@ -375,7 +377,6 @@ Rotary::mousePressEvent(QMouseEvent *e)
         m_buttonPressed = true;
         m_lastY = e->y();
         m_lastX = e->x();
-        //_float->setText(QString("%1").arg(m_snapPosition));
     } else if (e->button() == MidButton) // reset to default
     {
         m_position = m_initialPosition;
@@ -396,8 +397,15 @@ Rotary::mousePressEvent(QMouseEvent *e)
         _float = new TextFloat(this);
     _float->reparent(this);
     _float->move(totalPos + QPoint(width() + 2, -height() / 2));
-    _float->setText(QString("%1").arg(m_position));
+    if (m_logarithmic) {
+        _float->setText(QString("%1").arg(powf(10, m_position)));
+    } else {
+        _float->setText(QString("%1").arg(m_position));
+    }        
     _float->show();
+
+//    std::cerr << "Rotary::mousePressEvent: logarithmic = " << m_logarithmic
+//              << ", position = " << m_position << std::endl;
 
     if (e->button() == RightButton || e->button() == MidButton) {
         // one shot, 500ms
@@ -408,16 +416,35 @@ Rotary::mousePressEvent(QMouseEvent *e)
 void
 Rotary::mouseDoubleClickEvent(QMouseEvent * /*e*/)
 {
+    float minv = m_minValue;
+    float maxv = m_maxValue;
+    float val = m_position;
+    float step = m_step;
+
+    if (m_logarithmic) {
+        minv = powf(10, minv);
+        maxv = powf(10, maxv);
+        val = powf(10, val);
+        step = powf(10, step);
+        if (step > 0.001) step = 0.001;
+    }
+
     FloatEdit dialog(this,
                      i18n("Select a new value"),
                      i18n("Enter a new value"),
-                     m_minValue,
-                     m_maxValue,
-                     m_position,
-                     m_step);
+                     minv,
+                     maxv,
+                     val,
+                     step);
 
     if (dialog.exec() == QDialog::Accepted) {
-        m_position = dialog.getValue();
+        float newval = dialog.getValue();
+        if (m_logarithmic) {
+            if (m_position < powf(10, -10)) m_position = -10;
+            else m_position = log10f(newval);
+        } else {
+            m_position = newval;
+        }
         snapPosition();
         update();
 
@@ -470,7 +497,11 @@ Rotary::mouseMoveEvent(QMouseEvent *e)
         emit valueChanged(m_snapPosition);
 
         // draw on the float text
-        _float->setText(QString("%1").arg(m_snapPosition));
+        if (m_logarithmic) {
+            _float->setText(QString("%1").arg(powf(10, m_snapPosition)));
+        } else {
+            _float->setText(QString("%1").arg(m_snapPosition));
+        }
     }
 }
 
@@ -495,7 +526,11 @@ Rotary::wheelEvent(QWheelEvent *e)
         _float = new TextFloat(this);
 
     // draw on the float text
-    _float->setText(QString("%1").arg(m_snapPosition));
+    if (m_logarithmic) {
+        _float->setText(QString("%1").arg(powf(10, m_snapPosition)));
+    } else {
+        _float->setText(QString("%1").arg(m_snapPosition));
+    }
 
     // Reposition - we need to sum the relative positions up to the
     // topLevel or dialog to please move(). Move just top/right of the rotary

@@ -5,7 +5,7 @@
     Rosegarden
     A sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
@@ -411,9 +411,7 @@ public:
     /**
      * Fill up the segment with rests, from the end of the last event
      * currently on the segment to the endTime given.  Actually, this
-     * does much the same as setDuration does when it extends a segment,
-     * although the endTime is absolute whereas the argument to
-     * setDuration is relative to the start of the segment.
+     * does much the same as setEndTime does when it extends a segment.
      */
     void fillWithRests(timeT endTime);
 

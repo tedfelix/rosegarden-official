@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -74,7 +74,7 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc,
             SLOT(slotTempoChanged(const QString &)));
 
     m_tempoTap= new QPushButton(i18n("Tap"), frame);
-    layout->addWidget(m_tempoTap, 0, 4);
+    layout->addWidget(m_tempoTap, 0, 3);
     connect(m_tempoTap, SIGNAL(clicked()), SLOT(slotTapClicked()));
 
 
@@ -105,13 +105,13 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc,
             SLOT(slotTargetChanged(const QString &)));
 
     m_tempoBeatLabel = new QLabel(frame);
-    layout->addWidget(m_tempoBeatLabel, 0, 3);
+    layout->addWidget(m_tempoBeatLabel, 0, 4);
 
     m_tempoBeat = new QLabel(frame);
-    layout->addWidget(m_tempoBeat, 0, 4);
+    layout->addWidget(m_tempoBeat, 0, 5);
 
     m_tempoBeatsPerMinute = new QLabel(frame);
-    layout->addWidget(m_tempoBeatsPerMinute, 0, 5);
+    layout->addWidget(m_tempoBeatsPerMinute, 0, 6);
 
     m_timeEditor = 0;
 
@@ -124,40 +124,56 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc,
     }
 
     // Scope Box
-    QButtonGroup *scopeBox = new QButtonGroup(1, Horizontal,
-                             i18n("Scope"), vbox);
+    QButtonGroup *scopeGroup = new QButtonGroup(1, Horizontal,
+                                                i18n("Scope"), vbox);
 
-    new QLabel(scopeBox);
+//    new QLabel(scopeBox);
+
+    QVBox *scopeBox = new QVBox(scopeGroup);
+
+    scopeBox->setSpacing(5);
+    scopeBox->setMargin(5);
 
     QHBox *currentBox = new QHBox(scopeBox);
     new QLabel(i18n("The pointer is currently at "), currentBox);
     m_tempoTimeLabel = new QLabel(currentBox);
     m_tempoBarLabel = new QLabel(currentBox);
+    QLabel *spare = new QLabel(currentBox);
+    currentBox->setStretchFactor(spare, 20);
+
     m_tempoStatusLabel = new QLabel(scopeBox);
 
-    new QLabel(scopeBox);
+//    new QLabel(scopeBox);
+
+    QHBox *changeWhereBox = new QHBox(scopeBox);
+    spare = new QLabel("      ", changeWhereBox);
+    QVBox *changeWhereVBox = new QVBox(changeWhereBox);
+    changeWhereBox->setStretchFactor(changeWhereVBox, 20);
 
     m_tempoChangeHere = new QRadioButton
-                        (i18n("Apply this tempo from here onwards"), scopeBox);
+                        (i18n("Apply this tempo from here onwards"),
+                         changeWhereVBox);
 
     m_tempoChangeBefore = new QRadioButton
-                          (i18n("Replace the last tempo change"), scopeBox);
-    m_tempoChangeBeforeAt = new QLabel(scopeBox);
+                          (i18n("Replace the last tempo change"),
+                           changeWhereVBox);
+    m_tempoChangeBeforeAt = new QLabel(changeWhereVBox);
     m_tempoChangeBeforeAt->hide();
 
     m_tempoChangeStartOfBar = new QRadioButton
-                              (i18n("Apply this tempo from the start of this bar"), scopeBox);
+                              (i18n("Apply this tempo from the start of this bar"), changeWhereVBox);
 
     m_tempoChangeGlobal = new QRadioButton
-                          (i18n("Apply this tempo to the whole composition"), scopeBox);
+                          (i18n("Apply this tempo to the whole composition"), changeWhereVBox);
 
-    QHBox *optionHBox = new QHBox(scopeBox);
-    new QLabel(optionHBox);
+    QHBox *optionHBox = new QHBox(changeWhereVBox);
+    new QLabel("         ", optionHBox);
     m_defaultBox = new QCheckBox
                    (i18n("Also make this the default tempo"), optionHBox);
-    new QLabel(optionHBox);
+    spare = new QLabel(optionHBox);
+    optionHBox->setStretchFactor(spare, 20);
 
-    new QLabel(scopeBox);
+//    new QLabel(scopeBox);
 
     connect(m_tempoChangeHere, SIGNAL(clicked()),
             SLOT(slotActionChanged()));

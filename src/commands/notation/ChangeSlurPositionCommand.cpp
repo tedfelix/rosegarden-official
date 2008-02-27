@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -60,12 +60,12 @@ ChangeSlurPositionCommand::modifySegment()
     EventSelection::eventcontainer::iterator i;
 
     for (i = m_selection->getSegmentEvents().begin();
-            i != m_selection->getSegmentEvents().end(); ++i) {
+         i != m_selection->getSegmentEvents().end(); ++i) {
 
         if ((*i)->isa(Indication::EventType)) {
             std::string indicationType;
-            if ((*i)->get<String>(Indication::IndicationTypePropertyName,
-                                  indicationType)
+            if ((*i)->get<String>
+                (Indication::IndicationTypePropertyName, indicationType)
                 && (indicationType == Indication::Slur ||
                     indicationType == Indication::PhrasingSlur)) {
                 (*i)->set<Bool>(NotationProperties::SLUR_ABOVE, m_above);

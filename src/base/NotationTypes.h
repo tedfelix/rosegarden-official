@@ -5,7 +5,7 @@
     Rosegarden
     A sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
@@ -424,6 +424,10 @@ public:
 
     bool operator==(const Key &k) const {
         return k.m_name == m_name;
+    }
+
+    bool operator!=(const Key &k) const {
+        return !(k == *this);
     }
 
     /**
@@ -889,8 +893,20 @@ public:
      * conventional 5-line staff.  0 is the bottom line, 1 the first
      * space, etc., so for example middle-C in the treble clef would
      * return -2.
+     *
+     * Chooses the most likely accidental for this pitch in this key.
      */
     int getHeightOnStaff(const Clef &clef, const Key &key) const;
+
+    /**
+     * Return the height at which this pitch should display on a
+     * conventional 5-line staff.  0 is the bottom line, 1 the first
+     * space, etc., so for example middle-C in the treble clef would
+     * return -2.
+     *
+     * Chooses the accidental specified by the 'useSharps' parameter
+     */
+    int getHeightOnStaff(const Clef &clef, bool useSharps) const;
 
     /**
      * Return the octave containing this pitch.  The octaveBase argument

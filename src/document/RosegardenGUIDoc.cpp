@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -62,6 +62,7 @@
 #include "commands/segment/AddTracksCommand.h"
 #include "commands/segment/SegmentInsertCommand.h"
 #include "commands/segment/SegmentRecordCommand.h"
+#include "commands/segment/ChangeCompositionLengthCommand.h"
 #include "gui/application/RosegardenApplication.h"
 #include "gui/application/RosegardenGUIApp.h"
 #include "gui/application/RosegardenGUIView.h"
@@ -495,7 +496,7 @@ RosegardenGUIDoc::deleteOrphanedAudioFiles(bool documentWillNotBeSaved)
         return true;
 
     QString question =
-        i18n("About to delete 1 audio file permanently from the hard disk.\nThere will be no way to recover this file.\nAre you sure?", "About to delete %n audio files permanently from the hard disk.\nThere will be no way to recover these files.\nAre you sure?", recordedOrphans.size());
+        i18n("<qt>About to delete 1 audio file permanently from the hard disk.<br>There will be no way to recover this file.<br>Are you sure?</qt>\n", "<qt>About to delete %n audio files permanently from the hard disk.<br>There will be no way to recover these files.<br>Are you sure?</qt>", recordedOrphans.size());
 
     int reply = KMessageBox::warningContinueCancel(0, question);
 
@@ -706,10 +707,12 @@ RosegardenGUIDoc::mergeDocument(RosegardenGUIDoc *doc,
         time0 = getComposition().getBarEndForTime(getComposition().getDuration());
     }
 
-    int myMaxTrack = getComposition().getMaxTrackId();
-    int yrMinTrack = doc->getComposition().getMinTrackId();
-    int yrMaxTrack = doc->getComposition().getMaxTrackId();
+    int myMaxTrack = getComposition().getNbTracks();
+    int yrMinTrack = 0;
+    int yrMaxTrack = doc->getComposition().getNbTracks();
     int yrNrTracks = yrMaxTrack - yrMinTrack + 1;
+
+    int firstAlteredTrack = yrMinTrack;
 
     if (options & MERGE_IN_NEW_TRACKS) {
 
@@ -717,23 +720,34 @@ RosegardenGUIDoc::mergeDocument(RosegardenGUIDoc *doc,
         command->addCommand(new AddTracksCommand
                             (&getComposition(),
                              yrNrTracks,
-                             MidiInstrumentBase));
+                             MidiInstrumentBase,
+                             -1));
+
+        firstAlteredTrack = myMaxTrack + 1;
 
     } else if (yrMaxTrack > myMaxTrack) {
 
         command->addCommand(new AddTracksCommand
                             (&getComposition(),
                              yrMaxTrack - myMaxTrack,
-                             MidiInstrumentBase));
+                             MidiInstrumentBase,
+                             -1));
     }
 
+    TrackId firstNewTrackId = getComposition().getNewTrackId();
+    timeT lastSegmentEndTime = 0;
+
     for (Composition::iterator i = doc->getComposition().begin(), j = i;
-            i != doc->getComposition().end(); i = j) {
+         i != doc->getComposition().end(); i = j) {
 
         ++j;
         Segment *s = *i;
+        timeT segmentEndTime = s->getEndMarkerTime();
 
         int yrTrack = s->getTrack();
+        Track *t = doc->getComposition().getTrackById(yrTrack);
+        if (t) yrTrack = t->getPosition();
+
         int myTrack = yrTrack;
 
         if (options & MERGE_IN_NEW_TRACKS) {
@@ -744,9 +758,18 @@ RosegardenGUIDoc::mergeDocument(RosegardenGUIDoc *doc,
 
         if (options & MERGE_AT_END) {
             s->setStartTime(s->getStartTime() + time0);
+            segmentEndTime += time0;
+        }
+        if (segmentEndTime > lastSegmentEndTime) {
+            lastSegmentEndTime = segmentEndTime;
         }
 
-        command->addCommand(new SegmentInsertCommand(&getComposition(), s, myTrack));
+        Track *track = getComposition().getTrackByPosition(myTrack);
+        TrackId tid = 0;
+        if (track) tid = track->getId();
+        else tid = firstNewTrackId + yrTrack - yrMinTrack;
+
+        command->addCommand(new SegmentInsertCommand(&getComposition(), s, tid));
     }
 
     if (!(options & MERGE_KEEP_OLD_TIMINGS)) {
@@ -771,7 +794,16 @@ RosegardenGUIDoc::mergeDocument(RosegardenGUIDoc *doc,
         }
     }
 
+    if (lastSegmentEndTime > getComposition().getEndMarker()) {
+        command->addCommand(new ChangeCompositionLengthCommand
+                            (&getComposition(),
+                             getComposition().getStartMarker(),
+                             lastSegmentEndTime));
+    }
+
     m_commandHistory->addCommand(command);
+
+    emit makeTrackVisible(firstAlteredTrack + yrNrTracks/2 + 1);
 }
 
 void RosegardenGUIDoc::clearStudio()
@@ -1108,7 +1140,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 
     QString tempFileName = temp.name();
 
-    std::cerr << "Temporary file name is: \"" << tempFileName << "\"" << std::endl;
+    RG_DEBUG << "Temporary file name is: \"" << tempFileName << "\"" << endl;
 
     // KTempFile creates a temporary file that is already open: close it
     if (!temp.close()) {
@@ -1676,7 +1708,7 @@ RosegardenGUIDoc::xmlParse(QString fileContents, QString &errMsg,
 void
 RosegardenGUIDoc::insertRecordedMidi(const MappedComposition &mC)
 {
-    //     RG_DEBUG << "RosegardenGUIDoc::insertRecordedMidi" << endl;
+    RG_DEBUG << "RosegardenGUIDoc::insertRecordedMidi: " << mC.size() << " events" << endl;
 
     // Just create a new record Segment if we don't have one already.
     // Make sure we don't recreate the record segment if it's already
@@ -1749,10 +1781,16 @@ RosegardenGUIDoc::insertRecordedMidi(const MappedComposition &mC)
             int channel = (*i)->getRecordedChannel();
             int device = (*i)->getRecordedDevice();
 
+	    TrackId tid = (*i)->getTrackId();
+	    Track *track = getComposition().getTrackById(tid);
+
             switch ((*i)->getType()) {
             case MappedEvent::MidiNote:
 
-                pitch = (*i)->getPitch();
+                // adjust the notation by the opposite of track transpose so the
+                // resulting recording will play correctly, and notation will
+                // read correctly; tentative fix for #1597279
+                pitch = (*i)->getPitch() - track->getTranspose();
 
                 if ((*i)->getDuration() < RealTime::zeroTime) {
 
@@ -2476,6 +2514,7 @@ void
 RosegardenGUIDoc::addRecordMIDISegment(TrackId tid)
 {
     RG_DEBUG << "RosegardenGUIDoc::addRecordMIDISegment(" << tid << ")" << endl;
+//    std::cerr << kdBacktrace() << std::endl;
 
     Segment *recordMIDISegment;
 
@@ -2505,29 +2544,7 @@ RosegardenGUIDoc::addRecordMIDISegment(TrackId tid)
 
     recordMIDISegment->setLabel(label);
 
-    Clef clef;
-
-    // insert an initial clef from track parameters
-    switch (track->getClef()) {
-    case TrebleClef:       clef = Clef(Clef::Treble);       break;
-    case BassClef:         clef = Clef(Clef::Bass);         break;
-    case CrotalesClef:     clef = Clef(Clef::Treble, 2);    break;
-    case XylophoneClef:    clef = Clef(Clef::Treble, 1);    break;
-    case GuitarClef:       clef = Clef(Clef::Treble, -1);   break;
-    case ContrabassClef:   clef = Clef(Clef::Bass, -1);     break;
-    case CelestaClef:      clef = Clef(Clef::Bass, 2);      break;
-    case OldCelestaClef:   clef = Clef(Clef::Bass, 1);      break;
-    case FrenchClef:       clef = Clef(Clef::French);       break;
-    case SopranoClef:      clef = Clef(Clef::Soprano);      break;
-    case MezzosopranoClef: clef = Clef(Clef::Mezzosoprano); break;
-    case AltoClef:         clef = Clef(Clef::Alto);         break;
-    case TenorClef:        clef = Clef(Clef::Tenor);        break;
-    case BaritoneClef:     clef = Clef(Clef::Baritone);     break;
-    case VarbaritoneClef:  clef = Clef(Clef::Varbaritone);  break;
-    case SubbassClef:      clef = Clef(Clef::Subbass);      break;
-    default:               clef = Clef(Clef::Treble);       break;
-    }
-
+    Clef clef = clefIndexToClef(track->getClef());
     recordMIDISegment->insert(clef.getAsEvent
                               (recordMIDISegment->getStartTime()));
 

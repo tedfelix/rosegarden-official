@@ -138,6 +138,9 @@
 #include <qxml.h>
 
 // KDE3 headers
+#include <dcopclient.h>
+#include <dcopobject.h>
+#include <dcopref.h>
 #include <kaboutdata.h>
 #include <kaccel.h>
 #include <kactioncollection.h>

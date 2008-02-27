@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -44,7 +44,7 @@
 #include "commands/edit/EraseCommand.h"
 #include "commands/edit/EventEditCommand.h"
 #include "commands/edit/PasteEventsCommand.h"
-#include "commands/event/EventInsertionCommand.h"
+#include "commands/edit/EventInsertionCommand.h"
 #include "commands/segment/SegmentLabelCommand.h"
 #include "commands/segment/SetTriggerSegmentBasePitchCommand.h"
 #include "commands/segment/SetTriggerSegmentBaseVelocityCommand.h"

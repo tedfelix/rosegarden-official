@@ -4,7 +4,7 @@
     Rosegarden
     A sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
@@ -29,10 +29,10 @@ namespace Rosegarden
 
 RunnablePluginInstance::~RunnablePluginInstance()
 {
-    std::cerr << "RunnablePluginInstance::~RunnablePluginInstance" << std::endl;
+//    std::cerr << "RunnablePluginInstance::~RunnablePluginInstance" << std::endl;
 
     if (m_factory) {
-        std::cerr << "Asking factory to release " << m_identifier << std::endl;
+//        std::cerr << "Asking factory to release " << m_identifier << std::endl;
 
         m_factory->releasePlugin(this, m_identifier);
     }

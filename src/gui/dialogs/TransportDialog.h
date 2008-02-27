@@ -1,11 +1,10 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -61,7 +60,10 @@ public:
 
     enum TimeDisplayMode { RealMode, SMPTEMode, BarMode, BarMetronomeMode, FrameMode };
 
+    std::string getCurrentModeAsString();
     TimeDisplayMode getCurrentMode() { return m_currentMode; }
+    void setNewMode(const std::string& newModeAsString);
+    void setNewMode(const TimeDisplayMode& newMode);
     bool isShowingTimeToEnd();
     bool isExpanded();
 
@@ -105,6 +107,9 @@ public:
 
 protected:
     virtual void closeEvent(QCloseEvent * e);
+    void computeSampleRate();
+    void cycleThroughModes();
+    void displayTime();
 
 public slots:
 
@@ -154,6 +159,7 @@ private:
     void loadPixmaps();
     void resetFonts();
     void resetFont(QWidget *);
+    void initModeMap();
 
     //--------------- Data members ---------------------------------
 
@@ -212,6 +218,8 @@ private:
     QColor m_originalBackground;
 
     int m_sampleRate;
+
+    std::map<std::string, TimeDisplayMode> m_modeMap;
 };
 
  

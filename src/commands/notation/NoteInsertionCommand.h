@@ -5,7 +5,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -43,14 +43,32 @@ class Event;
 class NoteInsertionCommand : public BasicCommand
 {
 public:
+    enum AutoBeamMode {
+        AutoBeamOff,
+        AutoBeamOn
+    };
+
+    enum MatrixMode {
+        MatrixModeOff,
+        MatrixModeOn
+    };
+
+    enum GraceMode {
+        GraceModeOff,
+        GraceModeOn,
+        GraceAndTripletModesOn
+    };
+
     NoteInsertionCommand(Segment &segment,
                          timeT time,
                          timeT endTime,
                          Note note,
                          int pitch,
                          Accidental accidental,
-                         bool autoBeam,
-                         bool matrixType,
+                         AutoBeamMode autoBeam,
+                         MatrixMode matrixType,
+                         GraceMode grace,
+                         float targetSubordering,
                          NoteStyleName noteStyle);
     virtual ~NoteInsertionCommand();
 
@@ -60,8 +78,7 @@ public:
 protected:
     virtual void modifySegment();
 
-    timeT getModificationStartTime(Segment &,
-                                               timeT);
+    timeT getModificationStartTime(Segment &, timeT);
 
     timeT m_insertionTime;
     Note m_note;
@@ -69,6 +86,8 @@ protected:
     Accidental m_accidental;
     bool m_autoBeam;
     bool m_matrixType;
+    GraceMode m_grace;
+    float m_targetSubordering;
     NoteStyleName m_noteStyle;
 
     Event *m_lastInsertedEvent;

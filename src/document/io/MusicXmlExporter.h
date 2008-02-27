@@ -5,7 +5,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -68,8 +68,8 @@ public:
 protected:
     RosegardenGUIDoc *m_doc;
     std::string m_fileName;
-    void writeClef(Event *event, std::ofstream &str);
-    void writeKey(Event *event, std::ofstream &str);
+    void writeClef(Rosegarden::Clef, std::ofstream &str);
+    void writeKey(Rosegarden::Key, std::ofstream &str);
     void writeTime(TimeSignature timeSignature, std::ofstream &str);
     void writeNote(Event *e, timeT lastNoteTime,
                    AccidentalTable &table,
@@ -77,8 +77,7 @@ protected:
                    const Rosegarden::Key &key,
                    std::ofstream &str);
 
- private:
-    static const int MAX_DOTS = 4;
+    std::string numToId(int);
 };
 
 

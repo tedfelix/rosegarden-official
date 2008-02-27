@@ -1,11 +1,10 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -29,11 +28,17 @@
 #include "TabbedConfigurationPage.h"
 #include <qstring.h>
 #include <klocale.h>
-
+#include <qlineedit.h>
 
 class QWidget;
+class QSpinBox;
+class QSlider;
 class QPushButton;
 class QLabel;
+class QComboBox;
+class QCheckBox;
+class KConfig;
+class KComboBox;
 
 
 namespace Rosegarden
@@ -42,46 +47,59 @@ namespace Rosegarden
 class RosegardenGUIDoc;
 
 
-/**
- * Audio Configuration page
- *
- * (document-wide settings)
- */
 class AudioConfigurationPage : public TabbedConfigurationPage
 {
     Q_OBJECT
 public:
     AudioConfigurationPage(RosegardenGUIDoc *doc,
-                           QWidget *parent=0, const char *name=0);
+                               KConfig *cfg,
+                               QWidget *parent=0,
+                               const char *name=0);
+
     virtual void apply();
 
     static QString iconLabel() { return i18n("Audio"); }
     static QString title()     { return i18n("Audio Settings"); }
-    static QString iconName()  { return "folder"; }
+    static QString iconName()  { return "configure-audio"; }
+
+#ifdef HAVE_LIBJACK
+    QString getJackPath() { return m_jackPath->text(); }
+#endif // HAVE_LIBJACK
+
+    static QString getBestAvailableAudioEditor();
 
 protected slots:
     void slotFileDialog();
 
-    // Work out and display remaining disk space and time left 
-    // at current path.
-    //
-    void calculateStats();
-
-    void slotFoundMountPoint(const QString&,
-                             unsigned long kBSize,
-                             unsigned long kBUsed,
-                             unsigned long kBAvail);
-    
 protected:
+    QString getExternalAudioEditor() { return m_externalAudioEditorPath->text(); }
+
 
     //--------------- Data members ---------------------------------
 
-    QLabel           *m_path;
-    QLabel           *m_diskSpace;
-    QLabel           *m_minutesAtStereo;
+#ifdef HAVE_LIBJACK
+    QCheckBox *m_startJack;
+    QLineEdit *m_jackPath;
+#endif // HAVE_LIBJACK
 
-    QPushButton      *m_changePathButton;
+
+#ifdef HAVE_LIBJACK
+    // Number of JACK input ports our RG client creates - 
+    // this decides how many audio input destinations
+    // we have.
+    //
+    QCheckBox    *m_createFaderOuts;
+    QCheckBox    *m_createSubmasterOuts;
+
+    QComboBox    *m_audioRecFormat;
+
+#endif // HAVE_LIBJACK
+
+    QLineEdit* m_externalAudioEditorPath;
+    QComboBox* m_previewStyle;
+
 };
+ 
 
 
 }

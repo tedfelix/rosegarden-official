@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -31,15 +31,33 @@
 #include "document/RosegardenGUIDoc.h"
 #include "gui/configuration/GeneralConfigurationPage.h"
 #include "gui/configuration/NotationConfigurationPage.h"
-#include "gui/configuration/SequencerConfigurationPage.h"
+#include "gui/configuration/AudioConfigurationPage.h"
+#include "gui/configuration/MIDIConfigurationPage.h"
 #include <kconfig.h>
 #include <kdialogbase.h>
+#include <kstddirs.h>
 #include <qstring.h>
 #include <qwidget.h>
 
 
 namespace Rosegarden
 {
+
+static QPixmap loadIcon(const char *name)
+{
+    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+    QString fileBase = pixmapDir + "/misc/";
+    fileBase += name;
+    if (QFile(fileBase + ".png").exists()) {
+        return QPixmap(fileBase + ".png");
+    } else if (QFile(fileBase + ".xpm").exists()) {
+        return QPixmap(fileBase + ".xpm");
+    }
+    QPixmap pmap = KGlobal::instance()->iconLoader()
+        ->loadIcon(QString::fromLatin1(name), KIcon::NoGroup, KIcon::SizeMedium);
+    return pmap;
+}
+
 
 ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
                                  KConfig* cfg,
@@ -67,13 +85,20 @@ ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
     connect(page, SIGNAL(updateSidebarStyle(unsigned int)),
             this, SIGNAL(updateSidebarStyle(unsigned int)));
 
-    // Sequencer Page
-    //
-    pageWidget = addPage(SequencerConfigurationPage::iconLabel(),
-                         SequencerConfigurationPage::title(),
-                         loadIcon(SequencerConfigurationPage::iconName()));
+    pageWidget = addPage(MIDIConfigurationPage::iconLabel(),
+                         MIDIConfigurationPage::title(),
+                         loadIcon(MIDIConfigurationPage::iconName()));
     vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
-    page = new SequencerConfigurationPage(doc, cfg, pageWidget);
+    page = new MIDIConfigurationPage(doc, cfg, pageWidget);
+    vlay->addWidget(page);
+    page->setPageIndex(pageIndex(pageWidget));
+    m_configurationPages.push_back(page);
+
+    pageWidget = addPage(AudioConfigurationPage::iconLabel(),
+                         AudioConfigurationPage::title(),
+                         loadIcon(AudioConfigurationPage::iconName()));
+    vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
+    page = new AudioConfigurationPage(doc, cfg, pageWidget);
     vlay->addWidget(page);
     page->setPageIndex(pageIndex(pageWidget));
     m_configurationPages.push_back(page);
@@ -87,28 +112,6 @@ ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
     vlay->addWidget(page);
     page->setPageIndex(pageIndex(pageWidget));
     m_configurationPages.push_back(page);
-    /*
-        // Matrix Page
-        pageWidget = addPage(MatrixConfigurationPage::iconLabel(),
-                             MatrixConfigurationPage::title(),
-                             loadIcon(MatrixConfigurationPage::iconName()));
-        vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
-        page = new MatrixConfigurationPage(cfg, pageWidget);
-        vlay->addWidget(page);
-        page->setPageIndex(pageIndex(pageWidget));
-        m_configurationPages.push_back(page);
-     
-        // Latency Page
-        //
-        pageWidget = addPage(LatencyConfigurationPage::iconLabel(),
-                             LatencyConfigurationPage::title(),
-                             loadIcon(LatencyConfigurationPage::iconName()));
-        vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
-        page = new LatencyConfigurationPage(doc, cfg, pageWidget);
-        vlay->addWidget(page);
-        page->setPageIndex(pageIndex(pageWidget));
-        m_configurationPages.push_back(page);
-    */
 }
 
 }

@@ -5,7 +5,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -138,6 +138,12 @@ public:
     QCanvasPixmap* makeKeyDisplayPixmap(const Key &key,
                                        const Clef &clef);
 
+    QCanvasPixmap* makeTrackHeaderPixmap(int height,
+                        const Key &key, const Clef &clef,
+                        QColor clefColour, bool drawClef,
+                        const QString &upperText, QColor upperTextColour,
+                        const QString &lowerText, QColor lowerTextColour);
+
     // Bounding box and other geometry methods:
 
     int getNoteBodyWidth (Note::Type =
@@ -179,6 +185,7 @@ public:
 
 
     static const char* const defaultSerifFontFamily;
+    static const char* const defaultSansSerifFontFamily;
     static const char* const defaultTimeSigFontFamily;
     
 
@@ -251,8 +258,7 @@ protected:
         QuantizedColour,
         HighlightedColour,
         TriggerColour,
-        OutRangeColour,
-        CollisionColour
+        OutRangeColour
     };
 
     /// draws selected/shaded status from m_selected/m_shaded:
@@ -291,6 +297,9 @@ protected:
 
     QFont m_ottavaFont;
     QFontMetrics m_ottavaFontMetrics;
+
+    QFont m_trackHeaderFont;
+    QFontMetrics m_trackHeaderFontMetrics;
 
     QPixmap *m_generatedPixmap;
     QBitmap *m_generatedMask;

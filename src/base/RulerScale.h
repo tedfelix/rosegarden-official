@@ -3,7 +3,7 @@
     Rosegarden
     A sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
@@ -145,9 +145,6 @@ public:
     double getUnitsPerPixel() const { return m_ratio; }
     void   setUnitsPerPixel(double ratio) { m_ratio = ratio; }
 
-    virtual int getFirstVisibleBar() const { return m_firstBar; }
-    void setFirstVisibleBar(int fb) { m_firstBar = fb; }
-
     virtual double getBarPosition(int n) const;
     virtual double getBarWidth(int n) const;
     virtual double getBeatWidth(int n) const;
@@ -158,7 +155,6 @@ public:
 protected:
     double m_origin;
     double m_ratio;
-    int m_firstBar;
 
 private:
     SimpleRulerScale(const SimpleRulerScale &ruler);

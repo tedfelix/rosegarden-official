@@ -4,7 +4,7 @@
     Rosegarden
     A sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
@@ -51,6 +51,9 @@ typedef std::vector<Device*>::const_iterator DeviceListConstIterator;
 
 class MidiDevice;
 
+class Segment;
+class Track;
+
 
 class Studio : public XmlExportable
 {
@@ -82,9 +85,17 @@ public:
     Instrument* getInstrumentById(InstrumentId id);
     Instrument* getInstrumentFromList(int index);
 
+    // Convenience functions
+    Instrument *getInstrumentFor(Segment *);
+    Instrument *getInstrumentFor(Track *);
+
+    // Return a Buss
     BussList getBusses();
     Buss *getBussById(BussId id);
     void addBuss(Buss *buss);
+
+    // Return an Instrument or a Buss
+    PluginContainer *getContainerById(InstrumentId id);
 
     RecordInList getRecordIns() { return m_recordIns; }
     RecordIn *getRecordIn(int number);

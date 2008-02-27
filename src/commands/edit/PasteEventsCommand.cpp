@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -45,11 +45,12 @@ PasteEventsCommand::PasteEventsCommand(Segment &segment,
                                        Clipboard *clipboard,
                                        timeT pasteTime,
                                        PasteType pasteType) :
-        BasicCommand(getGlobalName(), segment, pasteTime,
-                     getEffectiveEndTime(segment, clipboard, pasteTime)),
-        m_relayoutEndTime(getEndTime()),
-        m_clipboard(new Clipboard(*clipboard)),
-        m_pasteType(pasteType)
+    BasicCommand(getGlobalName(), segment, pasteTime,
+                 getEffectiveEndTime(segment, clipboard, pasteTime)),
+    m_relayoutEndTime(getEndTime()),
+    m_clipboard(new Clipboard(*clipboard)),
+    m_pasteType(pasteType),
+    m_pastedEvents(segment)
 {
     if (pasteType != OpenAndPaste) {
 
@@ -60,7 +61,7 @@ PasteEventsCommand::PasteEventsCommand(Segment &segment,
             Segment *s(clipboard->getSingleSegment());
             for (Segment::iterator i = s->begin(); i != s->end(); ++i) {
                 if ((*i)->isa(Clef::EventType) ||
-                        (*i)->isa(Key::EventType)) {
+                    (*i)->isa(Key::EventType)) {
                     m_relayoutEndTime = s->getEndTime();
                     break;
                 }
@@ -74,10 +75,11 @@ PasteEventsCommand::PasteEventsCommand(Segment &segment,
                                        timeT pasteTime,
                                        timeT pasteEndTime,
                                        PasteType pasteType) :
-        BasicCommand(getGlobalName(), segment, pasteTime, pasteEndTime),
-        m_relayoutEndTime(getEndTime()),
-        m_clipboard(new Clipboard(*clipboard)),
-        m_pasteType(pasteType)
+    BasicCommand(getGlobalName(), segment, pasteTime, pasteEndTime),
+    m_relayoutEndTime(getEndTime()),
+    m_clipboard(new Clipboard(*clipboard)),
+    m_pasteType(pasteType),
+    m_pastedEvents(segment)
 {}
 
 PasteEventsCommand::~PasteEventsCommand()
@@ -233,6 +235,7 @@ PasteEventsCommand::modifySegment()
 
             for (unsigned int i = 0; i < copies.size(); ++i) {
                 destination->insert(copies[i]);
+                m_pastedEvents.addEvent(copies[i]);
             }
 
             break;
@@ -244,16 +247,17 @@ PasteEventsCommand::modifySegment()
                 continue;
             Event *e = (*i)->copyMoving(pasteTime - origin);
             if (e->has(BEAMED_GROUP_ID)) {
-                e->set
-                <Int>(BEAMED_GROUP_ID,
-                      groupIdMap[e->get
-                                 <Int>(BEAMED_GROUP_ID)]);
+                e->set<Int>(BEAMED_GROUP_ID,
+                            groupIdMap[e->get<Int>(BEAMED_GROUP_ID)]);
             }
             if ((*i)->isa(Note::EventType)) {
-                helper.insertNote(e); // e is model event: we retain ownership of it
+                // e is model event: we retain ownership of it
+                Segment::iterator i = helper.insertNote(e);
                 delete e;
+                if (i != destination->end()) m_pastedEvents.addEvent(*i);
             } else {
                 destination->insert(e);
+                m_pastedEvents.addEvent(e);
             }
         }
 
@@ -282,6 +286,7 @@ PasteEventsCommand::modifySegment()
             }
 
             destination->insert(e);
+            m_pastedEvents.addEvent(e);
         }
 
         destination->normalizeRests
@@ -300,10 +305,17 @@ PasteEventsCommand::modifySegment()
                                               <Int>(BEAMED_GROUP_ID)]);
         }
         destination->insert(e);
+        m_pastedEvents.addEvent(e);
     }
 
     destination->normalizeRests
     (source->getStartTime(), source->getEndTime());
+}
+
+EventSelection
+PasteEventsCommand::getPastedEvents()
+{
+    return m_pastedEvents;
 }
 
 }

@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -48,6 +48,8 @@
 #include "base/NotationTypes.h"
 #include "base/Studio.h"
 #include "base/Track.h"
+#include "base/StaffExportTypes.h"
+#include "commands/segment/SegmentSyncCommand.h"
 #include "document/RosegardenGUIDoc.h"
 #include "gui/dialogs/PitchPickerDialog.h"
 #include "gui/general/GUIPalette.h"
@@ -79,6 +81,7 @@
 #include <qvbox.h>
 #include <qwidget.h>
 #include <qwidgetstack.h>
+#include <qcheckbox.h>
 
 
 namespace Rosegarden
@@ -114,6 +117,8 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     config->writeEntry("trackparametersrecord", expanded);
     expanded = config->readBoolEntry("trackparametersdefaults", false);
     config->writeEntry("trackparametersdefaults", expanded);
+    expanded = config->readBoolEntry("trackstaffgroup", false);
+    config->writeEntry("trackstaffgroup", expanded);
     config->setGroup(groupTemp);
 
     QGridLayout *mainLayout = new QGridLayout(this, 5, 1, 2, 1);
@@ -193,10 +198,59 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
 
     mainLayout->addWidget(cframe, 2, 0);
 
+    // staff group
+    //
+    cframe = new CollapsingFrame(i18n("Staff export options"), this,
+                                 "staffoptions");
+    m_staffGroup = new QFrame(cframe);
+    cframe->setWidget(m_staffGroup);
+    groupLayout = new QGridLayout(m_staffGroup, 2, 2, 2, 2);
+
+    groupLayout->setColStretch(1, 1);
+
+    row = 0;
+
+    // Notation size (export only)
+    //
+    // NOTE: This is the only way to get a \small or \tiny inserted before the
+    // first note in LilyPond export.  Setting the actual staff size on a
+    // per-staff (rather than per-score) basis is something the author of the
+    // LilyPond documentation has no idea how to do, so we settle for this,
+    // which is not as nice, but actually a lot easier to implement.
+    m_staffGrpLbl = new QLabel(i18n("Notation size:"), m_staffGroup);
+    groupLayout->addWidget(m_staffGrpLbl, row, 0, AlignLeft);
+    m_staffSizeCombo = new KComboBox(m_staffGroup);
+    m_staffSizeCombo->setMinimumWidth(width11);
+    m_staffSizeCombo->insertItem(i18n("Normal"), StaffTypes::Normal);
+    m_staffSizeCombo->insertItem(i18n("Small"), StaffTypes::Small);
+    m_staffSizeCombo->insertItem(i18n("Tiny"), StaffTypes::Tiny);
+
+    groupLayout->addMultiCellWidget(m_staffSizeCombo, row, row, 1, 2);
+
+    // Staff bracketing (export only at the moment, but using this for GUI
+    // rendering would be nice in the future!) //!!! 
+    row++;
+    m_grandStaffLbl = new QLabel(i18n("Bracket type:"), m_staffGroup);
+    groupLayout->addWidget(m_grandStaffLbl, row, 0, AlignLeft);
+    m_staffBracketCombo = new KComboBox(m_staffGroup);
+    m_staffBracketCombo->setMinimumWidth(width11);
+    m_staffBracketCombo->insertItem(i18n("-----"), Brackets::None);
+    m_staffBracketCombo->insertItem(i18n("[----"), Brackets::SquareOn);
+    m_staffBracketCombo->insertItem(i18n("----]"), Brackets::SquareOff);
+    m_staffBracketCombo->insertItem(i18n("[---]"), Brackets::SquareOnOff);
+    m_staffBracketCombo->insertItem(i18n("{----"), Brackets::CurlyOn);
+    m_staffBracketCombo->insertItem(i18n("----}"), Brackets::CurlyOff);
+    m_staffBracketCombo->insertItem(i18n("{[---"), Brackets::CurlySquareOn);
+    m_staffBracketCombo->insertItem(i18n("---]}"), Brackets::CurlySquareOff);
+
+    groupLayout->addMultiCellWidget(m_staffBracketCombo, row, row, 1, 2);
+
+    mainLayout->addWidget(cframe, 3, 0);
+
 
     // default segment group
     //
-    cframe = new CollapsingFrame(i18n("Create segments with:"), this,
+    cframe = new CollapsingFrame(i18n("Create segments with"), this,
                                  "trackparametersdefaults");
     m_defaultsGroup = new QFrame(cframe);
     cframe->setWidget(m_defaultsGroup);
@@ -298,7 +352,8 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     // populate combo from doc colors
     slotDocColoursChanged();
 
-    mainLayout->addWidget(cframe, 3, 0);
+    mainLayout->addWidget(cframe, 4, 0);
+
 
     // Configure the empty final row to accomodate any extra vertical space.
     //
@@ -337,6 +392,12 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
 
     connect(m_presetButton, SIGNAL(released()),
             SLOT(slotPresetPressed()));
+
+    connect(m_staffSizeCombo, SIGNAL(activated(int)),
+            this, SLOT(slotStaffSizeChanged(int)));
+
+    connect(m_staffBracketCombo, SIGNAL(activated(int)),
+            this, SLOT(slotStaffBracketChanged(int)));
 }
 
 TrackParameterBox::~TrackParameterBox()
@@ -562,13 +623,18 @@ TrackParameterBox::slotUpdateControls(int /*dummy*/)
     if (!trk)
         return ;
 
-    m_presetLbl->setText(trk->getPresetLabel());
-    m_presetLbl->setEnabled(true);
     m_defClef->setCurrentItem(trk->getClef());
     m_defTranspose->setCurrentItem(QString("%1").arg(trk->getTranspose()), true);
     m_defColor->setCurrentItem(trk->getColor());
     m_highestPlayable = trk->getHighestPlayable();
     m_lowestPlayable = trk->getLowestPlayable();
+    updateHighLow();
+    // set this down here because updateHighLow just disabled the label
+    m_presetLbl->setText(trk->getPresetLabel());
+    m_presetLbl->setEnabled(true);
+
+    m_staffSizeCombo->setCurrentItem(trk->getStaffSize());
+    m_staffBracketCombo->setCurrentItem(trk->getStaffBracket());
 }
 
 void
@@ -596,8 +662,8 @@ TrackParameterBox::slotSelectedTrackNameChanged()
         m_trackName = i18n("<untitled>");
     else
         m_trackName.truncate(20);
-    int m_trackNum = m_selectedTrackId + 1;
-    m_trackLabel->setText(i18n("[ Track %1 - %2 ]").arg(m_trackNum).arg(m_trackName));
+    int trackNum = trk->getPosition() + 1;
+    m_trackLabel->setText(i18n("[ Track %1 - %2 ]").arg(trackNum).arg(m_trackName));
 }
 
 void
@@ -807,10 +873,6 @@ TrackParameterBox::slotColorChanged(int index)
     Composition &comp = m_doc->getComposition();
     Track *trk = comp.getTrackById(comp.getSelectedTrack());
 
-    //!!! Tentative fix for #1527462.  I haven't worked out where the -1
-    // comes from, but it is consistent.  I'm going to try a +1 here to see if
-    // it cures this, though I don't quite understand why it would.
-//    trk->setColor(index + 1);
     trk->setColor(index);
 
     if (index == m_addColourPos) {
@@ -830,7 +892,7 @@ TrackParameterBox::slotColorChanged(int index)
                 slotDocColoursChanged();
             }
         }
-        // Else we don't do anything as they either didn't give a name·
+        // Else we don't do anything as they either didn't give a nameï¿½
         // or didn't give a colour
     }
 }
@@ -891,6 +953,14 @@ TrackParameterBox::slotPresetPressed()
         if (dialog.exec() == QDialog::Accepted) {
             m_presetLbl->setText(dialog.getName());
             trk->setPresetLabel(dialog.getName());
+            if (dialog.getConvertAllSegments()) {
+            	SegmentSyncCommand* command = new SegmentSyncCommand(
+            			comp.getSegments(), comp.getSelectedTrack(),
+            			dialog.getTranspose(), dialog.getLowRange(), 
+            			dialog.getHighRange(),
+            			clefIndexToClef(dialog.getClef()));
+                m_doc->getCommandHistory()->addCommand(command);
+            }
             m_defClef->setCurrentItem(dialog.getClef());
             m_defTranspose->setCurrentItem(QString("%1").arg
                                            (dialog.getTranspose()), true);
@@ -915,6 +985,27 @@ TrackParameterBox::slotPresetPressed()
         KMessageBox::sorry(0, i18n("The instrument preset database is corrupt.  Check your installation."));
     }
 
+}
+
+void
+TrackParameterBox::slotStaffSizeChanged(int index) 
+{
+    RG_DEBUG << "TrackParameterBox::sotStaffSizeChanged()" << endl;
+    Composition &comp = m_doc->getComposition();
+    Track *trk = comp.getTrackById(m_selectedTrackId);
+
+    trk->setStaffSize(index);
+}
+
+
+void
+TrackParameterBox::slotStaffBracketChanged(int index)
+{
+    RG_DEBUG << "TrackParameterBox::sotStaffBracketChanged()" << endl;
+    Composition &comp = m_doc->getComposition();
+    Track *trk = comp.getTrackById(m_selectedTrackId);
+
+    trk->setStaffBracket(index);
 }
 
 QString

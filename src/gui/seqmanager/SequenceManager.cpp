@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -653,21 +653,24 @@ SequenceManager::record(bool toggled)
             QByteArray replyData;
 
             // Send Record to the Sequencer to signal it to drop out of record mode
-            //
-            //!!! huh? this doesn't look very plausible
-            //            if (!rgapp->sequencerCall("play(long int, long int, long int, long int, long int, long int, long int, long int, long int, long int, long int)",
-            //                                  replyType, replyData, data))
             if (!rgapp->sequencerCall("punchOut()", replyType, replyData, data)) {
                 SEQMAN_DEBUG << "SequenceManager::record - the \"not very plausible\" code executed\n";
+                // #1797873 - set new transport status first, so that
+                // if we're stopping recording we don't risk the
+                // record segment being restored by a timer while the
+                // document is busy trying to do away with it
+                m_transportStatus = STOPPED;
+
                 m_doc->stopRecordingMidi();
                 m_doc->stopRecordingAudio();
-                m_transportStatus = STOPPED;
                 return ;
             }
 
+            // #1797873 - as above
+            m_transportStatus = PLAYING;
+
             m_doc->stopRecordingMidi();
             m_doc->stopRecordingAudio();
-            m_transportStatus = PLAYING;
 
             return ;
         }
@@ -908,8 +911,7 @@ punchin:
 
 void
 SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
-        AudioManagerDialog
-        *audioManagerDialog)
+                                         AudioManagerDialog *audioManagerDialog)
 {
     static bool boolShowingWarning = false;
     static bool boolShowingALSAWarning = false;
@@ -976,7 +978,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
             }
 
             if ((*i)->getType() ==
-                    MappedEvent::SystemUpdateInstruments) {
+                MappedEvent::SystemUpdateInstruments) {
                 // resync Devices and Instruments
                 //
                 m_doc->syncDevices();
@@ -989,7 +991,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
             }
 
             if (m_transportStatus == PLAYING ||
-                    m_transportStatus == RECORDING) {
+                m_transportStatus == RECORDING) {
                 if ((*i)->getType() == MappedEvent::SystemFailure) {
 
                     SEQMAN_DEBUG << "Failure of some sort..." << endl;
@@ -1158,9 +1160,16 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 
                         std::cerr << "Rosegarden: WARNING: No accurate sequencer timer available" << std::endl;
 
+                        KStartupLogo::hideIfStillThere();
+                        CurrentProgressDialog::freeze();
+
                         KMessageBox::information(
                             dynamic_cast<QWidget*>(m_doc->parent())->parentWidget(),
-                            i18n("<h3>System timer resolution is too low</h3><p>Rosegarden was unable to find a high-resolution timing source for MIDI performance.</p><p>This may mean you are using a Linux system with the kernel timer resolution set too low.  Please contact your Linux distributor for more information.</p>"));
+                            i18n("<h3>System timer resolution is too low</h3><p>Rosegarden was unable to find a high-resolution timing source for MIDI performance.</p><p>This may mean you are using a Linux system with the kernel timer resolution set too low.  Please contact your Linux distributor for more information.</p><p>Some Linux distributors already provide low latency kernels, see <a href=\"http://rosegarden.wiki.sourceforge.net/Low+latency+kernels\">http://rosegarden.wiki.sourceforge.net/Low+latency+kernels</a> for instructions.</p>"), 
+			    NULL, NULL, 
+			    KMessageBox::Notify + KMessageBox::AllowLink);
+                        
+                        CurrentProgressDialog::thaw();
                     }
                 }
             }
@@ -1173,7 +1182,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 
     for (i = mC.begin(); i != mC.end(); ++i ) {
         if (m_transportStatus == STOPPED ||
-                m_transportStatus == RECORDING_ARMED) {
+            m_transportStatus == RECORDING_ARMED) {
             if ((*i)->getType() == MappedEvent::MidiNote) {
                 if ((*i)->getVelocity() == 0) {
                     emit insertableNoteOffReceived((*i)->getPitch(), (*i)->getVelocity());

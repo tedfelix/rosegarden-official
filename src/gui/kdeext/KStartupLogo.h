@@ -4,7 +4,7 @@
     Rosegarden
     A sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
@@ -31,13 +31,14 @@
 class KStartupLogo : public QWidget
 {
     Q_OBJECT
-public:
 
+public:
     static KStartupLogo* getInstance();
 
     static void hideIfStillThere();
     
     void setHideEnabled(bool enabled) { m_readyToHide = enabled; };
+    void setShowTip(bool showTip) { m_showTip = showTip; };
 
 public slots:
     void slotShowStatusMessage(QString);
@@ -52,6 +53,7 @@ protected:
     virtual void mousePressEvent( QMouseEvent*);
 
     bool m_readyToHide;
+    bool m_showTip;
 
     QPixmap m_pixmap;
 

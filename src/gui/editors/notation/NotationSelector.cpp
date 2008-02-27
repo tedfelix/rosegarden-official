@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -141,7 +141,7 @@ void NotationSelector::handleLeftButtonPress(timeT t,
         QMouseEvent* e,
         ViewElement *element)
 {
-    NOTATION_DEBUG << "NotationSelector::handleMousePress: time is " << t << ", staffNo is " << staffNo << ", e and element are " << e << " and " << element << endl;
+    std::cerr << "NotationSelector::handleMousePress: time is " << t << ", staffNo is " << staffNo << ", e and element are " << e << " and " << element << std::endl;
 
     if (m_justSelectedBar) {
         handleMouseTripleClick(t, height, staffNo, e, element);
@@ -180,6 +180,35 @@ void NotationSelector::handleLeftButtonPress(timeT t,
     m_startedFineDrag = false;
 
     //m_parentView->setCursorPosition(p.x());
+}
+
+void NotationSelector::handleRightButtonPress(timeT t,
+        int height,
+        int staffNo,
+        QMouseEvent* e,
+        ViewElement *element)
+{
+    std::cerr << "NotationSelector::handleRightButtonPress" << std::endl;
+
+    const EventSelection *sel = m_nParentView->getCurrentSelection();
+
+    if (!sel || sel->getSegmentEvents().empty()) {
+
+        // if nothing selected, permit the possibility of selecting
+        // something before showing the menu
+
+        if (element) {
+            m_clickedElement = dynamic_cast<NotationElement*>(element);
+            m_selectedStaff = getStaffForElement(m_clickedElement);
+            m_nParentView->setSingleSelectedEvent
+                (m_selectedStaff->getId(), m_clickedElement->event(),
+                 true, true);
+        }
+
+        handleLeftButtonPress(t, height, staffNo, e, element);
+    }
+
+    EditTool::handleRightButtonPress(t, height, staffNo, e, element);
 }
 
 void NotationSelector::slotClickTimeout()
@@ -326,7 +355,7 @@ void NotationSelector::handleMouseRelease(timeT, int, QMouseEvent *e)
             !m_startedFineDrag) {
 
         if (m_clickedElement != 0 && m_selectedStaff) {
-
+            
             // If we didn't drag out a meaningful area, but _did_
             // click on an individual event, then select just that
             // event
@@ -484,11 +513,12 @@ void NotationSelector::drag(int x, int y, bool final)
     if (!final && !singleNonNotePreview) {
 
         if ((pitch != m_lastDragPitch || dragTime != m_lastDragTime) &&
-                m_clickedElement->isNote()) {
+            m_clickedElement->isNote()) {
 
             m_nParentView->showPreviewNote(targetStaff->getId(),
                                            layoutX, pitch, height,
-                                           Note::getNearestNote(duration));
+                                           Note::getNearestNote(duration),
+                                           m_clickedElement->isGrace());
             m_lastDragPitch = pitch;
             m_lastDragTime = dragTime;
         }

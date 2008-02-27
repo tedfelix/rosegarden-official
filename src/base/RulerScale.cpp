@@ -3,7 +3,7 @@
     Rosegarden
     A sequencer and musical notation editor.
 
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <bownie@bownie.com>
@@ -168,8 +168,7 @@ SimpleRulerScale::SimpleRulerScale(Composition *composition,
 				   double origin, double ratio) :
     RulerScale(composition),
     m_origin(origin),
-    m_ratio(ratio),
-    m_firstBar(0)
+    m_ratio(ratio)
 {
     // nothing
 }
@@ -177,8 +176,7 @@ SimpleRulerScale::SimpleRulerScale(Composition *composition,
 SimpleRulerScale::SimpleRulerScale(const SimpleRulerScale &ruler):
     RulerScale(ruler.getComposition()),
     m_origin(ruler.getOrigin()),
-    m_ratio(ruler.getUnitsPerPixel()),
-    m_firstBar(ruler.getFirstVisibleBar())
+    m_ratio(ruler.getUnitsPerPixel())
 {
     // nothing
 }

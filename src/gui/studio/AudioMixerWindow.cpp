@@ -4,7 +4,7 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
  
-    This program is Copyright 2000-2007
+    This program is Copyright 2000-2008
         Guillaume Laurent   <glaurent@telegraph-road.org>,
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
@@ -102,8 +102,12 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
 
     QIconSet icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                              ("transport-play")));
-    new KAction(i18n("&Play"), icon, Key_Enter, this,
+    KAction *play = new KAction(i18n("&Play"), icon, Key_Enter, this,
                 SIGNAL(play()), actionCollection(), "play");
+    // Alternative shortcut for Play
+    KShortcut playShortcut = play->shortcut();
+    playShortcut.append( KKey(Key_Return + CTRL) );
+    play->setShortcut(playShortcut);
 
     icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-stop")));
