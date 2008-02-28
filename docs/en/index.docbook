@@ -630,10 +630,10 @@
 	    <guimenu lang="en">File</guimenu>
             <guimenuitem>Preview with LilyPond</guimenuitem>
           </menuchoice>
-	  function,  which exports the file into a temporary file and processes
+	  function, which exports the file into a temporary file and processes
 	  it directly with LilyPond for preview with a PDF viewer.
 	  If you are happy with the preview, you may print the score using the
-	  printing capability of the PDF viewer,  or use the 
+	  printing capability of the PDF viewer, or use the 
 	  <menuchoice>
 	    <guimenu lang="en">File</guimenu>
             <guimenuitem>Print with LilyPond</guimenuitem>
@@ -660,9 +660,9 @@
 	  <term>LilyPond version</term>
 	    <listitem><para>
 		LilyPond version installed into the system should be automatically
-		detected in the dialog,  but it is possible to export to any other
-		LilyPond version since 2.6.  Historically,  LilyPond's syntax has
-		changed somewhat over time,  but since LilyPond version 2.6 changes
+		detected in the dialog, but it is possible to export to any other
+		LilyPond version since 2.6.  Historically, LilyPond's syntax has
+		changed somewhat over time, but since LilyPond version 2.6 changes
 		have have been less radical and more maintainable.</para>
 	    </listitem>
 	</varlistentry>
@@ -677,7 +677,7 @@
 	  <term>Font size</term>
 	    <listitem><para>
 		Font size affects the size of the notes.  If you want to fit more
-		staffs into the paper,  you should decrease the font size.</para>
+		staffs into the paper, you should decrease the font size.</para>
 	    </listitem>
 	</varlistentry>
 	<varlistentry>
@@ -685,9 +685,9 @@
 	    <listitem><para>
 		Export content concerns tracks that have segments in them, which
 		are the tracks that are not empty.
-		It is possible to export All tracks,  Non-muted tracks, the current
-		Selected track,  or Selected segments.  If LilyPond export is
-		launched from the Notation view,  Selected segments include
+		It is possible to export All tracks, Non-muted tracks, the current
+		Selected track, or Selected segments.  If LilyPond export is
+		launched from the Notation view, Selected segments include
 		the same selection which was used in opening the Notation view.</para>
 	    </listitem>
 	</varlistentry>
@@ -706,7 +706,7 @@
 		url="http://rosegarden.sourceforge.net/tutorial/supplemental/piano/piano-by-example.html">Piano
 		by Example</ulink> for a hands-on demonstration of this.) <!--
 		this comment makes absolutely no sense to me(dmm):   Sometimes you
-		may encounter notes that overlap in printed form,  you may avoid
+		may encounter notes that overlap in printed form, you may avoid
 		them by selecting one of the collapsing notes and fine adjust
 		its position in Notation view function -->
 	  <menuchoice>
@@ -720,8 +720,8 @@
 	  <term>Export tempo marks</term>
 	    <listitem><para>
 		Tempo marks are not exported by default.  If tempo changes
-		rarely,  you may want to export all tempo marks,  but if
-		tempo changes too often,  you may eport only the first mark.</para>
+		rarely, you may want to export all tempo marks, but if
+		tempo changes too often, you may export only the first mark.</para>
 	    </listitem>
 	</varlistentry>
 	<varlistentry>
@@ -730,7 +730,7 @@
 		<link linkend="nv-text-lyrics">Lyrics</link> is exported if this
 		option is checked.  Text is entered in Unicode, which
 		makes it possible to enter lyrics in all languages.  Multiple
-		lines of lyrics per staff is also possible,  see the section
+		lines of lyrics per staff is also possible, see the section
 		on <link linkend="nv-text-lyrics">Editign lyrics</link>.</para>
 	    </listitem>
 	</varlistentry>
@@ -738,7 +738,7 @@
 	  <term>Export beamings</term>
 	    <listitem><para>
 		<link linkend="nv-beamed-groups">Beams</link> defined in
-		&rosegarden; can be exported,  or the default
+		&rosegarden; can be exported, or the default
 		beam grouping of LilyPond can be used.  Future versions
 		of &rosegarden; may support nested note grouping.</para>
 	    </listitem>
@@ -775,7 +775,7 @@
 	    <guimenuitem>Export</guimenuitem>
             <guimenuitem>Export LilyPond</guimenuitem>
           </menuchoice>
-		function,  you may open the LilyPond source by clicking
+		function, you may open the LilyPond source by clicking
 		notes in the PDF output.  Consult <ulink url="  http://lilypond.org/doc/v2.10/Documentation/user/lilypond/Point-and-click#Point-and-click">LilyPond documentation</ulink> for more
 		information.
 </para>
@@ -3705,7 +3705,7 @@
 	and paste functions.  After the paste the pasted notes will
 	be selected instead, and you can then drag them wherever you
 	need them.  You may also copy notes by selecting them with
-	the Select tool,  then keeping Ctrl pressed click-and-drag
+	the Select tool, then keeping Ctrl pressed click-and-drag
 	the selected notes in a new position.
       </para>
     </sect1>
@@ -4802,7 +4802,7 @@
 	  You may always attach one more verse into a single staff
 	  by clicking Add Verse in the lyrics editor.  All the verses
 	  are entered with the same syntax.  If you leave the last verse
-	  without syllables,  or make it empty,  it is removed from
+	  without syllables, or make it empty, it is removed from
 	  the list of verses next time you open the lyrics editor.
 	  </para>
 
