@@ -162,7 +162,11 @@ LilypondExporter::handleStartingEvents(eventstartlist &eventsToStart,
                 else
                     str << "_( ";
             } else if (i.getIndicationType() == Indication::PhrasingSlur) {
-                str << "\\( ";
+                if ((*m)->get
+                        <Bool>(NotationProperties::SLUR_ABOVE))
+                    str << "^\\( ";
+                else
+                    str << "_\\( ";
             } else if (i.getIndicationType() == Indication::Crescendo) {
                 str << "\\< ";
             } else if (i.getIndicationType() == Indication::Decrescendo) {
