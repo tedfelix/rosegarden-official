@@ -2098,7 +2098,7 @@ LilypondExporter::handleText(const Event *textEvent,
 
         } else if (text.getTextType() == Text::Dynamic) {
 
-            // pass through only supported types
+            // supported dynamics first
             if (s == "ppppp" || s == "pppp" || s == "ppp" ||
                     s == "pp" || s == "p" || s == "mp" ||
                     s == "mf" || s == "f" || s == "ff" ||
@@ -2108,8 +2108,9 @@ LilypondExporter::handleText(const Event *textEvent,
                 lilyText += "-\\" + s + " ";
 
             } else {
-                std::cerr << "LilypondExporter::write() - illegal Lilypond dynamic: "
-                << s << std::endl;
+	        // export as a plain markup:
+		// print below staff, bold italics, small
+		lilyText += "_\\markup { \\bold \\italic \"" + s + "\" } ";
             }
 
         } else if (text.getTextType() == Text::Direction) {
