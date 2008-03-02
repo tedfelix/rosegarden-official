@@ -119,6 +119,14 @@ NotationSelector::NotationSelector(NotationView* view)
                 SLOT(slotInterpret()), actionCollection(),
                 "interpret");
 
+    new KAction(i18n("Move to Staff Above"), 0, 0, this,
+                SLOT(slotStaffAbove()), actionCollection(),
+		"move_events_up_staff");
+
+    new KAction(i18n("Move to Staff Below"), 0, 0, this,
+                SLOT(slotStaffBelow()), actionCollection(),
+		"move_events_down_staff");
+
     new KAction(i18n("Make Invisible"), 0, 0, this,
                 SLOT(slotMakeInvisible()), actionCollection(),
                 "make_invisible");
@@ -753,6 +761,16 @@ void NotationSelector::slotCollapseNotes()
 void NotationSelector::slotInterpret()
 {
     m_parentView->actionCollection()->action("interpret")->activate();
+}
+
+void NotationSelector::slotStaffAbove()
+{
+    m_parentView->actionCollection()->action("move_events_up_staff")->activate();
+}
+
+void NotationSelector::slotStaffBelow()
+{
+    m_parentView->actionCollection()->action("move_events_down_staff")->activate();
 }
 
 void NotationSelector::slotMakeInvisible()
