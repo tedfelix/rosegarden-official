@@ -148,6 +148,8 @@ public slots:
     void slotRespellNatural();
     void slotCollapseNotes();
     void slotInterpret();
+    void slotStaffAbove();
+    void slotStaffBelow();
     void slotMakeInvisible();
     void slotMakeVisible();
 
