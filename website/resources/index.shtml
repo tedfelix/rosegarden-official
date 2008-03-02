@@ -20,7 +20,11 @@
 
 	<ul>
 	<li><a href="http://rosegarden.wiki.sourceforge.net/Frequently+Asked+Questions">Frequently asked questions</a> about Rosegarden.  If you have any problems installing or using Rosegarden, please read these first.</li>
-	<li>The <a href="http://rosegarden.sourceforge.net/tutorial">Rosegarden Companion</a> book, and a free online <a href="http://rosegarden.sourceforge.net/tutorial/">tutorial</a>, by D. Michael McIntyre.</li>
+	<li>D. Michael McIntyre has written a book, and a series of detailed
+	online <a
+	href="http://rosegarden.sourceforge.net/tutorial/">tutorials</a> to
+	demonstrate Rosegarden's overall basics, and then move into advanced
+	notation topics in his trademark friendly style.</li>
 	<li>The <a href="/doc/en/">Rosegarden Handbook</a>, the reference manual and help text for Rosegarden available from within the program.</li>
 	<li>Have you found a bug?  Please read these <a
 	    href="http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html">guidelines</a>
