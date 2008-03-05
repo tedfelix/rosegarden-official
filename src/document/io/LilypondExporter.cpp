@@ -2060,6 +2060,12 @@ LilypondExporter::handleDirective(const Event *textEvent,
             nextBarIsEnd = true;
         } else if (directive == Text::BarDot) {
             nextBarIsDot = true;
+	} else if (directive == Text::RestUpHack) {
+	    lilyText += "\\stemUp ";
+	} else if (directive == Text::RestDownHack) {
+	    lilyText += "\\stemDown ";
+	} else if (directive == Text::CancelRestHack) {
+	    lilyText += "\\stemNeutral ";
         } else {
             // pass along less special directives for handling as plain text,
             // so they can be attached to chords and whatlike without
