@@ -275,6 +275,9 @@ TextEventDialog::TextEventDialog(QWidget *parent,
     m_lilypondDirectiveCombo->insertItem(Text::Tiny);
     m_lilypondDirectiveCombo->insertItem(Text::Small);
     m_lilypondDirectiveCombo->insertItem(Text::NormalSize);
+    m_lilypondDirectiveCombo->insertItem(Text::RestUpHack);
+    m_lilypondDirectiveCombo->insertItem(Text::RestDownHack);
+    m_lilypondDirectiveCombo->insertItem(Text::CancelRestHack);
 
     QVBox *exampleVBox = new QVBox(exampleBox);
 
