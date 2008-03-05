@@ -1075,8 +1075,11 @@ LilypondExporter::write()
                     } else if (nextBarIsAlt2 && haveRepeating) {
                         if (!prevBarWasAlt2) {
                             col--;
-                            str << std::endl << indent(--col) << "} \% close alternative 1 "
-                                << std::endl << indent(col++) << "{  \% open alternative 2";
+			    // add an extra str to the following to shut up
+			    // compiler warning from --ing and ++ing it in the
+			    // same statement
+                            str << std::endl << indent(--col) << "} \% close alternative 1 ";
+                            str << std::endl << indent(col++) << "{  \% open alternative 2";
                             col++;
                         }
                         prevBarWasAlt2 = true;
@@ -1629,15 +1632,6 @@ LilypondExporter::writeBar(Segment *s,
                     if (noteHasCautionaryAccidental)
                         str << "?";
 
-// this seems like a lot of redundant running around, so let's try the simple
-// version (DMM)
-//
-//                  bool noteTiedForward = false;
-//                  (*i)->get
-//                  <Bool>(TIED_FORWARD, noteTiedForward);
-//                  if (noteTiedForward)
-//                      tiedForward = true;
-                      
                     // get TIED_FORWARD and TIE_IS_ABOVE for later
                     (*i)->get<Bool>(TIED_FORWARD, tiedForward);
 		    (*i)->get<Bool>(TIE_IS_ABOVE, tiedUp);
@@ -1828,25 +1822,32 @@ LilypondExporter::writeBar(Segment *s,
             }
 
         } else if ((*i)->isa(Rosegarden::Key::EventType)) {
+	    // ignore hidden key signatures
+	    bool hiddenKey = false;
+	    if ((*i)->has(INVISIBLE)) {
+		(*i)->get <Bool>(INVISIBLE, hiddenKey);
+	    }
 
-            try {
-                str << "\\key ";
-                key = Rosegarden::Key(**i);
-                Accidental accidental = Accidentals::NoAccidental;
+	    if (!hiddenKey) {
+		try {
+		    str << "\\key ";
+		    key = Rosegarden::Key(**i);
 
-                std::cout << "key tonic pitch: " << key.getTonicPitch() << std::endl; //REMOVE
-                str << convertPitchToLilyNote(key.getTonicPitch(), accidental, key);
+		    Accidental accidental = Accidentals::NoAccidental;
 
-                if (key.isMinor()) {
-                    str << " \\minor";
-                } else {
-                    str << " \\major";
-                }
-                str << std::endl << indent(col);
+		    str << convertPitchToLilyNote(key.getTonicPitch(), accidental, key);
 
-            } catch (Exception e) {
-                std::cerr << "Bad key: " << e.getMessage() << std::endl;
-            }
+		    if (key.isMinor()) {
+			str << " \\minor";
+		    } else {
+			str << " \\major";
+		    }
+		    str << std::endl << indent(col);
+
+		} catch (Exception e) {
+		    std::cerr << "Bad key: " << e.getMessage() << std::endl;
+		}
+	    }
 
         } else if ((*i)->isa(Text::EventType)) {
 
