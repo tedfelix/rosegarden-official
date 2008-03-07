@@ -693,23 +693,20 @@ public:
     /**
      * Special Lilypond directives
      */
-    static const std::string Segno;         // print segno here
-    static const std::string Coda;          // print coda sign here
-    static const std::string Alternate1;    // first alternative ending
-    static const std::string Alternate2;    // second alternative ending
-    static const std::string BarDouble;     // next barline is double
-    static const std::string BarEnd;        // next barline is final double
-    static const std::string BarDot;        // next barline is dotted
-    static const std::string Gliss;         // \glissando on this note (to next note)
-    static const std::string Arpeggio;      // \arpeggio on this chord
-//    static const std::string ArpeggioUp;    // \ArpeggioUp on this chord
-//    static const std::string ArpeggioDn;    // \ArpeggioDown on this chord
-    static const std::string Tiny;          // begin \tiny font section
-    static const std::string Small;         // begin \small font section
-    static const std::string NormalSize;    // begin \normalsize font section
-    static const std::string RestUpHack;    // force a \StemUp
-    static const std::string RestDownHack;  // force a \StemDown
-    static const std::string CancelRestHack;// force a \StemNeutral
+    static const std::string Segno;       // print segno here
+    static const std::string Coda;        // print coda sign here
+    static const std::string Alternate1;  // first alternative ending
+    static const std::string Alternate2;  // second alternative ending
+    static const std::string BarDouble;   // next barline is double
+    static const std::string BarEnd;      // next barline is final double
+    static const std::string BarDot;      // next barline is dotted
+    static const std::string Gliss;       // \glissando on this note (to next note)
+    static const std::string Arpeggio;    // \arpeggio on this chord
+//    static const std::string ArpeggioUp;  // \ArpeggioUp on this chord
+//    static const std::string ArpeggioDn;  // \ArpeggioDown on this chord
+    static const std::string Tiny;        // begin \tiny font section
+    static const std::string Small;       // begin \small font section
+    static const std::string NormalSize;  // begin \normalsize font section
 
     Text(const Event &e)
         /* throw (Event::NoData, Event::BadType) */;
