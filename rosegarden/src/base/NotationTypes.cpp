@@ -860,9 +860,6 @@ const std::string Text::Arpeggio    = "Arp.";
 const std::string Text::Tiny        = "tiny ->";
 const std::string Text::Small       = "small ->";
 const std::string Text::NormalSize  = "norm. ->";
-const std::string Text::RestUpHack  = "Up ->";
-const std::string Text::RestDownHack = "Down ->";
-const std::string Text::CancelRestHack = "Neutral ->";
 
 Text::Text(const Event &e) :
     m_verse(0)
@@ -956,9 +953,6 @@ Text::getLilypondDirectives()
     v.push_back(Tiny);       
     v.push_back(Small);      
     v.push_back(NormalSize); 
-    v.push_back(RestUpHack);
-    v.push_back(RestDownHack);
-    v.push_back(CancelRestHack);
     
     return v;
 }
