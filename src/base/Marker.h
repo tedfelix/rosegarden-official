@@ -43,12 +43,13 @@ class Marker : public XmlExportable
 {
 public:
     Marker():m_time(0), m_name(std::string("<unnamed>")), 
-             m_description(std::string("<none>")) { }
+             m_description(std::string("<none>")) { m_id = nextSeqVal(); }
 
     Marker(timeT time, const std::string &name,
            const std::string &description):
-        m_time(time), m_name(name), m_description(description) { }
+        m_time(time), m_name(name), m_description(description) { m_id = nextSeqVal(); }
 
+    int getID() const { return m_id; }
     timeT getTime() const { return m_time; }
     std::string getName() const { return m_name; }
     std::string getDescription() const { return m_description; }
@@ -62,10 +63,14 @@ public:
 
 protected:
 
+	int      m_id;
     timeT    m_time;
     std::string          m_name;
     std::string          m_description;
 
+private:
+	static int nextSeqVal() { return ++m_sequence; } // assume there won't be concurrency problem
+	static int m_sequence;
 };
 
 }

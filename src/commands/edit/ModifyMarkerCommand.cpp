@@ -33,12 +33,14 @@ namespace Rosegarden
 {
 
 ModifyMarkerCommand::ModifyMarkerCommand(Composition *comp,
+        int id,
         timeT time,
         timeT newTime,
         const std::string &name,
         const std::string &des):
         KNamedCommand(getGlobalName()),
         m_composition(comp),
+        m_id(id),
         m_time(time),
         m_newTime(newTime),
         m_name(name),
@@ -59,7 +61,7 @@ ModifyMarkerCommand::execute()
     Composition::markerconstiterator it = markers.begin();
 
     for (; it != markers.end(); ++it) {
-        if ((*it)->getTime() == m_time) {
+        if ((*it)->getID() == m_id) {
             if (m_oldName.empty())
                 m_oldName = (*it)->getName();
             if (m_oldDescription.empty())
@@ -82,7 +84,7 @@ ModifyMarkerCommand::unexecute()
     Composition::markerconstiterator it = markers.begin();
 
     for (; it != markers.end(); ++it) {
-        if ((*it)->getTime() == m_newTime) {
+        if ((*it)->getID() == m_id) {
             (*it)->setName(m_oldName);
             (*it)->setDescription(m_oldDescription);
             (*it)->setTime(m_time);

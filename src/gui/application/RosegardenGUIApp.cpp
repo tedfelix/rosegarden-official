@@ -5919,10 +5919,11 @@ RosegardenGUIApp::slotAddMarker(timeT time)
 }
 
 void
-RosegardenGUIApp::slotDeleteMarker(timeT time, QString name, QString description)
+RosegardenGUIApp::slotDeleteMarker(int id, timeT time, QString name, QString description)
 {
     RemoveMarkerCommand *command =
         new RemoveMarkerCommand(&m_doc->getComposition(),
+                                id,
                                 time,
                                 qstrtostr(name),
                                 qstrtostr(description));

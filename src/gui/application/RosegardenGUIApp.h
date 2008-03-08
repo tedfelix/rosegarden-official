@@ -1288,7 +1288,8 @@ public slots:
     /**
      * Remove a marker
      */
-    void slotDeleteMarker(timeT time,
+    void slotDeleteMarker(int id,
+                          timeT time,
                           QString name,
                           QString description);
 

@@ -33,6 +33,8 @@
 namespace Rosegarden
 {
 
+int Marker::m_sequence = 0;
+
 std::string 
 Marker::toXmlString()
 {

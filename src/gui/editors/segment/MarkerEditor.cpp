@@ -262,6 +262,7 @@ MarkerEditor::slotUpdate()
 
         item = new
                MarkerEditorViewItem(m_listView,
+                                    (*it)->getID(),
                                     timeString,
                                     strtoqstr((*it)->getName()),
                                     strtoqstr((*it)->getDescription()));
@@ -275,7 +276,7 @@ MarkerEditor::slotUpdate()
 
     if (m_listView->childCount() == 0) {
         QListViewItem *item =
-            new MarkerEditorViewItem(m_listView, i18n("<none>"));
+            new MarkerEditorViewItem(m_listView, 0, i18n("<none>"));
         ((MarkerEditorViewItem *)item)->setFake(true);
         m_listView->insertItem(item);
 
@@ -304,6 +305,7 @@ MarkerEditor::slotDeleteAll()
 
         RemoveMarkerCommand *rc =
             new RemoveMarkerCommand(&m_doc->getComposition(),
+                                    ei->getID(),
                                     ei->getRawTime(),
                                     qstrtostr(item->text(1)),
                                     qstrtostr(item->text(2)));
@@ -341,6 +343,7 @@ MarkerEditor::slotDelete()
 
     RemoveMarkerCommand *command =
         new RemoveMarkerCommand(&m_doc->getComposition(),
+                                ei->getID(),
                                 ei->getRawTime(),
                                 qstrtostr(item->text(1)),
                                 qstrtostr(item->text(2)));
@@ -483,6 +486,7 @@ MarkerEditor::slotEdit(QListViewItem *i)
     if (dialog.exec() == QDialog::Accepted) {
         ModifyMarkerCommand *command =
             new ModifyMarkerCommand(&m_doc->getComposition(),
+                                    item->getID(),
                                     dialog.getOriginalTime(),
                                     dialog.getTime(),
                                     qstrtostr(dialog.getName()),
