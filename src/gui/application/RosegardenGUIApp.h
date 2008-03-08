@@ -1524,6 +1524,10 @@ public slots:
     void slotShowToolHelp(const QString &);
 
     void slotNewerVersionAvailable(QString);
+    
+    void slotSetQuickMarker();
+    
+    void slotJumpToQuickMarker();    
 
 private:
 
@@ -1658,6 +1662,10 @@ private:
 
     RosegardenParameterArea *m_parameterArea;
 
+    timeT m_quickMarkerTime;
+    KAction *m_setQuickMarkerAction;
+    KAction *m_jumpToQuickMarkerAction;
+    
 #ifdef HAVE_LIRC        
     LircClient *m_lircClient;
     LircCommander *m_lircCommander;

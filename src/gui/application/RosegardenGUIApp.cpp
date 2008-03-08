@@ -519,6 +519,9 @@ RosegardenGUIApp::~RosegardenGUIApp()
         delete m_sequencerProcess;
     }
 
+    delete m_jumpToQuickMarkerAction;
+    delete m_setQuickMarkerAction;
+    
     delete m_transport;
 
     delete m_seqManager;
@@ -1098,6 +1101,17 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotResetMidiNetwork()),
                 actionCollection(), "reset_midi_network");
 
+    m_setQuickMarkerAction = new KAction(i18n("Set Quick Marker"), 0, CTRL + Key_1, this,
+                SLOT(slotSetQuickMarker()), actionCollection(),
+                "set_quick_marker");
+
+    m_jumpToQuickMarkerAction = new KAction(i18n("Jump to Quick Marker"), 0, Key_1, this,
+                SLOT(slotJumpToQuickMarker()), actionCollection(),
+                "jump_to_quick_marker");
+
+    // initialize quick marker
+    m_quickMarkerTime = 0;
+    
     //
     // Marker Ruler popup menu
     //
@@ -5987,6 +6001,14 @@ RosegardenGUIApp::plugAccelerators(QWidget *widget, QAccel *acc)
         dynamic_cast<TransportDialog*>(widget);
 
     if (transport) {
+        acc->connectItem(acc->insertItem(m_jumpToQuickMarkerAction->shortcut()),
+                         this,
+                         SLOT(slotJumpToQuickMarker()));
+
+        acc->connectItem(acc->insertItem(m_setQuickMarkerAction->shortcut()),
+                         this,
+                         SLOT(slotSetQuickMarker()));
+
         connect(transport->PlayButton(),
                 SIGNAL(clicked()),
                 this,
@@ -7928,6 +7950,22 @@ RosegardenGUIApp::slotNewerVersionAvailable(QString v)
          QString("version-%1-available-show").arg(v),
          KMessageBox::AllowLink);
     CurrentProgressDialog::thaw();
+}
+
+void
+RosegardenGUIApp::slotSetQuickMarker()
+{
+    RG_DEBUG << "RosegardenGUIApp::slotSetQuickMarker" << endl;
+    
+    m_quickMarkerTime = m_doc->getComposition().getPosition();
+}
+
+void
+RosegardenGUIApp::slotJumpToQuickMarker()
+{
+    RG_DEBUG << "RosegardenGUIApp::slotJumpToQuickMarker" << endl;
+
+    m_doc->slotSetPointerPosition(m_quickMarkerTime);
 }
 
 
