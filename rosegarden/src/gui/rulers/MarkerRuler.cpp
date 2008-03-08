@@ -199,7 +199,8 @@ MarkerRuler::slotDeleteMarker()
     Rosegarden::Marker* marker = getMarkerAtClickPosition();
     
     if (marker)
-        emit deleteMarker(marker->getTime(),
+        emit deleteMarker(marker->getID(),
+                          marker->getTime(),
                           marker->getName(),
                           marker->getDescription());                          
 }
@@ -222,6 +223,7 @@ MarkerRuler::slotEditMarker()
     if (dialog.exec() == QDialog::Accepted) {
         ModifyMarkerCommand *command =
             new ModifyMarkerCommand(&m_doc->getComposition(),
+                                    marker->getID(),
                                     dialog.getOriginalTime(),
                                     dialog.getTime(),
                                     qstrtostr(dialog.getName()),

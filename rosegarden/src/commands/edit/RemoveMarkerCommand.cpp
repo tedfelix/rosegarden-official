@@ -34,12 +34,14 @@ namespace Rosegarden
 {
 
 RemoveMarkerCommand::RemoveMarkerCommand(Composition *comp,
+        int id,
         timeT time,
         const std::string &name,
         const std::string &description):
         KNamedCommand(getGlobalName()),
         m_composition(comp),
         m_marker(0),
+        m_id(id),
         m_time(time),
         m_name(name),
         m_descr(description),
@@ -61,9 +63,7 @@ RemoveMarkerCommand::execute()
     Composition::markerconstiterator it = markers.begin();
 
     for (; it != markers.end(); ++it) {
-        if ((*it)->getTime() == m_time &&
-                (*it)->getName() == m_name &&
-                (*it)->getDescription() == m_descr) {
+        if ((*it)->getID() == m_id) {
             m_marker = (*it);
             m_composition->detachMarker(m_marker);
             m_detached = true;

@@ -46,6 +46,7 @@ class RemoveMarkerCommand : public KNamedCommand
 {
 public:
     RemoveMarkerCommand(Composition *comp,
+                        int id,
                         timeT time,
                         const std::string &name,
                         const std::string &description);
@@ -60,6 +61,7 @@ protected:
 
     Composition     *m_composition;
     Marker          *m_marker;
+    int              m_id;
     timeT            m_time;
     std::string                  m_name;
     std::string                  m_descr;

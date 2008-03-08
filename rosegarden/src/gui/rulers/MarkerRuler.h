@@ -79,7 +79,7 @@ signals:
     /// add a marker
     void addMarker(timeT);
     
-    void deleteMarker(timeT, QString name, QString description);
+    void deleteMarker(int, timeT, QString name, QString description);
 
     /// Set a loop range
     void setLoop(timeT, timeT);

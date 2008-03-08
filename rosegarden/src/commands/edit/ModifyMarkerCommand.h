@@ -45,6 +45,7 @@ class ModifyMarkerCommand : public KNamedCommand
 {
 public:
     ModifyMarkerCommand(Composition *comp,
+                        int id,
                         timeT time,
                         timeT newTime,
                         const std::string &name,
@@ -62,6 +63,7 @@ protected:
     timeT            m_time;
     timeT            m_newTime;
 
+    int                          m_id;
     std::string                  m_name;
     std::string                  m_description;
     std::string                  m_oldName;
