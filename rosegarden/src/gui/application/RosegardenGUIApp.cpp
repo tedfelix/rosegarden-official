@@ -88,7 +88,7 @@
 #include "commands/studio/ModifyDeviceCommand.h"
 #include "document/io/CsoundExporter.h"
 #include "document/io/HydrogenLoader.h"
-#include "document/io/LilypondExporter.h"
+#include "document/io/LilyPondExporter.h"
 #include "document/MultiViewCommandHistory.h"
 #include "document/io/RG21Loader.h"
 #include "document/io/MupExporter.h"
@@ -108,7 +108,7 @@
 #include "gui/dialogs/FileMergeDialog.h"
 #include "gui/dialogs/IdentifyTextCodecDialog.h"
 #include "gui/dialogs/IntervalDialog.h"
-#include "gui/dialogs/LilypondOptionsDialog.h"
+#include "gui/dialogs/LilyPondOptionsDialog.h"
 #include "gui/dialogs/ManageMetronomeDialog.h"
 #include "gui/dialogs/QuantizeDialog.h"
 #include "gui/dialogs/RescaleDialog.h"
@@ -494,7 +494,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 #endif
 
     stateChanged("have_project_packager", KXMLGUIClient::StateReverse);
-    stateChanged("have_lilypondview", KXMLGUIClient::StateReverse);
+    stateChanged("have_lilyPondview", KXMLGUIClient::StateReverse);
     QTimer::singleShot(1000, this, SLOT(slotTestStartupTester()));
 }
 
@@ -593,8 +593,8 @@ void RosegardenGUIApp::setupActions()
                 "file_export_midi");
 
     new KAction(i18n("Export &LilyPond file..."), 0, 0, this,
-                SLOT(slotExportLilypond()), actionCollection(),
-                "file_export_lilypond");
+                SLOT(slotExportLilyPond()), actionCollection(),
+                "file_export_lilyPond");
 
     new KAction(i18n("Export Music&XML file..."), 0, 0, this,
                 SLOT(slotExportMusicXml()), actionCollection(),
@@ -609,12 +609,12 @@ void RosegardenGUIApp::setupActions()
                 "file_export_mup");
 
     new KAction(i18n("Print &with LilyPond..."), 0, 0, this,
-                SLOT(slotPrintLilypond()), actionCollection(),
-                "file_print_lilypond");
+                SLOT(slotPrintLilyPond()), actionCollection(),
+                "file_print_lilyPond");
 
     new KAction(i18n("Preview with Lil&yPond..."), 0, 0, this,
-                SLOT(slotPreviewLilypond()), actionCollection(),
-                "file_preview_lilypond");
+                SLOT(slotPreviewLilyPond()), actionCollection(),
+                "file_preview_lilyPond");
 
     new KAction(i18n("Play&list"), 0, 0, this,
                 SLOT(slotPlayList()), actionCollection(),
@@ -4539,9 +4539,9 @@ void RosegardenGUIApp::slotTestStartupTester()
         }
     }
 
-    have = m_startupTester->haveLilypondView(&missing);
+    have = m_startupTester->haveLilyPondView(&missing);
 
-    stateChanged("have_lilypondview",
+    stateChanged("have_lilyPondview",
                  have ?
                  KXMLGUIClient::StateNoReverse : KXMLGUIClient::StateReverse);
 
@@ -4551,7 +4551,7 @@ void RosegardenGUIApp::slotTestStartupTester()
              i18n("<h3>LilyPond Preview not available</h3><p>Rosegarden could not find one or more of the additional programs needed to support the LilyPond previewer.</p><p>Notation previews through LilyPond will not be available.</p><p>To fix this, you should install the following additional programs:</p>"),
              missing,
              i18n("LilyPond previews not available"),
-             "startup-lilypondview");
+             "startup-lilyPondview");
     }
 
 #ifdef HAVE_LIBJACK
@@ -4966,7 +4966,7 @@ void RosegardenGUIApp::exportMupFile(QString file)
     }
 }
 
-void RosegardenGUIApp::slotExportLilypond()
+void RosegardenGUIApp::slotExportLilyPond()
 {
     KTmpStatusMsg msg(i18n("Exporting LilyPond file..."), this);
 
@@ -4978,76 +4978,76 @@ void RosegardenGUIApp::slotExportLilypond()
     if (fileName.isEmpty())
         return ;
 
-    exportLilypondFile(fileName);
+    exportLilyPondFile(fileName);
 }
 
 std::map<KProcess *, KTempFile *> RosegardenGUIApp::m_lilyTempFileMap;
 
 
-void RosegardenGUIApp::slotPrintLilypond()
+void RosegardenGUIApp::slotPrintLilyPond()
 {
     KTmpStatusMsg msg(i18n("Printing LilyPond file..."), this);
     KTempFile *file = new KTempFile(QString::null, ".ly");
     file->setAutoDelete(true);
     if (!file->name()) {
         CurrentProgressDialog::freeze();
-        KMessageBox::sorry(this, i18n("Failed to open a temporary file for Lilypond export."));
+        KMessageBox::sorry(this, i18n("Failed to open a temporary file for LilyPond export."));
         delete file;
     }
-    if (!exportLilypondFile(file->name(), true)) {
+    if (!exportLilyPondFile(file->name(), true)) {
         return ;
     }
     KProcess *proc = new KProcess;
-    *proc << "rosegarden-lilypondview";
+    *proc << "rosegarden-lilyPondview";
     *proc << "--graphical";
     *proc << "--print";
     *proc << file->name();
     connect(proc, SIGNAL(processExited(KProcess *)),
-            this, SLOT(slotLilypondViewProcessExited(KProcess *)));
+            this, SLOT(slotLilyPondViewProcessExited(KProcess *)));
     m_lilyTempFileMap[proc] = file;
     proc->start(KProcess::NotifyOnExit);
 }
 
-void RosegardenGUIApp::slotPreviewLilypond()
+void RosegardenGUIApp::slotPreviewLilyPond()
 {
     KTmpStatusMsg msg(i18n("Previewing LilyPond file..."), this);
     KTempFile *file = new KTempFile(QString::null, ".ly");
     file->setAutoDelete(true);
     if (!file->name()) {
         CurrentProgressDialog::freeze();
-        KMessageBox::sorry(this, i18n("Failed to open a temporary file for Lilypond export."));
+        KMessageBox::sorry(this, i18n("Failed to open a temporary file for LilyPond export."));
         delete file;
     }
-    if (!exportLilypondFile(file->name(), true)) {
+    if (!exportLilyPondFile(file->name(), true)) {
         return ;
     }
     KProcess *proc = new KProcess;
-    *proc << "rosegarden-lilypondview";
+    *proc << "rosegarden-lilyPondview";
     *proc << "--graphical";
     *proc << "--pdf";
     *proc << file->name();
     connect(proc, SIGNAL(processExited(KProcess *)),
-            this, SLOT(slotLilypondViewProcessExited(KProcess *)));
+            this, SLOT(slotLilyPondViewProcessExited(KProcess *)));
     m_lilyTempFileMap[proc] = file;
     proc->start(KProcess::NotifyOnExit);
 }
 
-void RosegardenGUIApp::slotLilypondViewProcessExited(KProcess *p)
+void RosegardenGUIApp::slotLilyPondViewProcessExited(KProcess *p)
 {
     delete m_lilyTempFileMap[p];
     m_lilyTempFileMap.erase(p);
     delete p;
 }
 
-bool RosegardenGUIApp::exportLilypondFile(QString file, bool forPreview)
+bool RosegardenGUIApp::exportLilyPondFile(QString file, bool forPreview)
 {
     QString caption = "", heading = "";
     if (forPreview) {
-        caption = i18n("Lilypond Preview Options");
-        heading = i18n("Lilypond preview options");
+        caption = i18n("LilyPond Preview Options");
+        heading = i18n("LilyPond preview options");
     }
 
-    LilypondOptionsDialog dialog(this, m_doc, caption, heading);
+    LilyPondOptionsDialog dialog(this, m_doc, caption, heading);
     if (dialog.exec() != QDialog::Accepted) {
         return false;
     }
@@ -5056,7 +5056,7 @@ bool RosegardenGUIApp::exportLilypondFile(QString file, bool forPreview)
                                100,
                                this);
 
-    LilypondExporter e(this, m_doc, std::string(QFile::encodeName(file)));
+    LilyPondExporter e(this, m_doc, std::string(QFile::encodeName(file)));
 
     connect(&e, SIGNAL(setProgress(int)),
             progressDlg.progressBar(), SLOT(setValue(int)));

@@ -77,19 +77,19 @@ const std::string headerCopyright = "copyright";
 const std::string headerTagline = "tagline";
 
 /**
- * Lilypond scorefile export
+ * LilyPond scorefile export
  */
 
-class LilypondExporter : public ProgressReporter
+class LilyPondExporter : public ProgressReporter
 {
 public:
     typedef std::multiset<Event*, Event::EventCmp> eventstartlist;
     typedef std::multiset<Event*, Event::EventEndCmp> eventendlist;
 
 public:
-    LilypondExporter(RosegardenGUIApp *parent, RosegardenGUIDoc *, std::string fileName);
-    LilypondExporter(NotationView *parent, RosegardenGUIDoc *, std::string fileName);
-    ~LilypondExporter();
+    LilyPondExporter(RosegardenGUIApp *parent, RosegardenGUIDoc *, std::string fileName);
+    LilyPondExporter(NotationView *parent, RosegardenGUIDoc *, std::string fileName);
+    ~LilyPondExporter();
 
     bool write();
 
@@ -120,12 +120,12 @@ protected:
     void handleEndingEvents(eventendlist &eventsInProgress,
                             const Segment::iterator &j, std::ofstream &str);
 
-    // convert note pitch into Lilypond format note string
+    // convert note pitch into LilyPond format note string
     std::string convertPitchToLilyNote(int pitch,
                                        Accidental accidental,
                                        const Rosegarden::Key &key);
 
-    // compose an appropriate Lilypond representation for various Marks
+    // compose an appropriate LilyPond representation for various Marks
     std::string composeLilyMark(std::string eventMark, bool stemUp);
 
     // find/protect illegal characters in user-supplied strings
@@ -141,7 +141,7 @@ protected:
 				 std::ofstream &);
 
     /*
-     * Handle Lilypond directive.  Returns true if the event was a directive,
+     * Handle LilyPond directive.  Returns true if the event was a directive,
      * so subsequent code does not bother to process the event twice
      */
     bool handleDirective(const Event *textEvent,

@@ -119,7 +119,7 @@
 #include "commands/segment/RenameTrackCommand.h"
 #include "document/RosegardenGUIDoc.h"
 #include "document/ConfigGroups.h"
-#include "document/io/LilypondExporter.h"
+#include "document/io/LilyPondExporter.h"
 #include "GuitarChordInserter.h"
 #include "gui/application/SetWaitCursor.h"
 #include "gui/application/RosegardenGUIView.h"
@@ -128,7 +128,7 @@
 #include "gui/dialogs/InterpretDialog.h"
 #include "gui/dialogs/IntervalDialog.h"
 #include "gui/dialogs/KeySignatureDialog.h"
-#include "gui/dialogs/LilypondOptionsDialog.h"
+#include "gui/dialogs/LilyPondOptionsDialog.h"
 #include "gui/dialogs/LyricEditDialog.h"
 #include "gui/dialogs/MakeOrnamentDialog.h"
 #include "gui/dialogs/PasteNotationDialog.h"
@@ -353,7 +353,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
         m_selectionCounter(0),
         m_insertModeLabel(0),
         m_annotationsLabel(0),
-        m_lilypondDirectivesLabel(0),
+        m_lilyPondDirectivesLabel(0),
         m_progressBar(0),
         m_currentNotePixmap(0),
         m_hoveredOverNoteName(0),
@@ -380,7 +380,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
         m_tempoRuler(0),
         m_rawNoteRuler(0),
         m_annotationsVisible(false),
-        m_lilypondDirectivesVisible(false),
+        m_lilyPondDirectivesVisible(false),
         m_selectDefaultNote(0),
         m_fontCombo(0),
         m_fontSizeCombo(0),
@@ -820,7 +820,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
         m_tempoRuler(0),
         m_rawNoteRuler(0),
         m_annotationsVisible(false),
-        m_lilypondDirectivesVisible(false),
+        m_lilyPondDirectivesVisible(false),
         m_selectDefaultNote(0),
         m_fontCombo(0),
         m_fontSizeCombo(0),
@@ -1409,7 +1409,7 @@ void NotationView::slotSaveOptions()
     m_config->writeEntry("Show Raw Note Ruler", getToggleAction("show_raw_note_ruler")->isChecked());
     m_config->writeEntry("Show Tempo Ruler", getToggleAction("show_tempo_ruler")->isChecked());
     m_config->writeEntry("Show Annotations", m_annotationsVisible);
-    m_config->writeEntry("Show LilyPond Directives", m_lilypondDirectivesVisible);
+    m_config->writeEntry("Show LilyPond Directives", m_lilyPondDirectivesVisible);
 
     m_config->sync();
 }
@@ -1468,8 +1468,8 @@ void NotationView::readOptions()
     //    slotToggleAnnotations();
 
     opt = m_config->readBoolEntry("Show LilyPond Directives", true);
-    m_lilypondDirectivesVisible = opt;
-    getToggleAction("show_lilypond_directives")->setChecked(opt);
+    m_lilyPondDirectivesVisible = opt;
+    getToggleAction("show_lilyPond_directives")->setChecked(opt);
     slotUpdateLilyPondDirectivesStatus();
 }
 
@@ -1480,12 +1480,12 @@ void NotationView::setupActions()
                              actionCollection());
 
     new KAction(i18n("Print &with LilyPond..."), 0, 0, this,
-                SLOT(slotPrintLilypond()), actionCollection(),
-                "file_print_lilypond");
+                SLOT(slotPrintLilyPond()), actionCollection(),
+                "file_print_lilyPond");
 
     new KAction(i18n("Preview with Lil&yPond..."), 0, 0, this,
-                SLOT(slotPreviewLilypond()), actionCollection(),
-                "file_preview_lilypond");
+                SLOT(slotPreviewLilyPond()), actionCollection(),
+                "file_preview_lilyPond");
 
     EditViewBase::setupActions("notation.rc");
     EditView::setupActions();
@@ -1734,10 +1734,10 @@ void NotationView::setupActions()
                                   actionCollection(), "guitarchord");
     noteAction->setExclusiveGroup("notes");
 
-    /*    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("lilypond")));
+    /*    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("lilyPond")));
         noteAction = new KRadioAction(i18n("Lil&ypond Directive"), icon, Key_F9, this,
-                                      SLOT(slotLilypondDirective()),
-                                      actionCollection(), "lilypond_directive");
+                                      SLOT(slotLilyPondDirective()),
+                                      actionCollection(), "lilyPond_directive");
         noteAction->setExclusiveGroup("notes"); */
 
 
@@ -1846,7 +1846,7 @@ void NotationView::setupActions()
 
     new KToggleAction(i18n("Show Lily&Pond Directives"), 0, this,
                       SLOT(slotToggleLilyPondDirectives()),
-                      actionCollection(), "show_lilypond_directives");
+                      actionCollection(), "show_lilyPond_directives");
 
     new KAction(i18n("Open L&yric Editor"), 0, this, SLOT(slotEditLyrics()),
                 actionCollection(), "lyric_editor");
@@ -2697,7 +2697,7 @@ void NotationView::initStatusBar()
     m_currentNotePixmap->setMinimumWidth(20);
     m_insertModeLabel = new QLabel(hbox);
     m_annotationsLabel = new QLabel(hbox);
-    m_lilypondDirectivesLabel = new QLabel(hbox);
+    m_lilyPondDirectivesLabel = new QLabel(hbox);
     sb->addWidget(hbox);
 
     sb->insertItem(KTmpStatusMsg::getDefaultMsg(),
@@ -4262,15 +4262,15 @@ NotationView::slotUpdateLilyPondDirectivesStatus()
                         ((*j)->get
                          <String>
                          (Text::TextTypePropertyName)
-                         == Text::LilypondDirective)) {
-                    m_lilypondDirectivesLabel->setText(i18n("Hidden LilyPond directives"));
+                         == Text::LilyPondDirective)) {
+                    m_lilyPondDirectivesLabel->setText(i18n("Hidden LilyPond directives"));
                     return ;
                 }
             }
         }
     }
-    m_lilypondDirectivesLabel->setText("");
-    getToggleAction("show_lilypond_directives")->setChecked(areLilyPondDirectivesVisible());
+    m_lilyPondDirectivesLabel->setText("");
+    getToggleAction("show_lilyPond_directives")->setChecked(areLilyPondDirectivesVisible());
 }
 
 void
@@ -4621,70 +4621,70 @@ NotationView::slotFilePrintPreview()
 
 std::map<KProcess *, KTempFile *> NotationView::m_lilyTempFileMap;
 
-void NotationView::slotPrintLilypond()
+void NotationView::slotPrintLilyPond()
 {
     KTmpStatusMsg msg(i18n("Printing LilyPond file..."), this);
     KTempFile *file = new KTempFile(QString::null, ".ly");
     file->setAutoDelete(true);
     if (!file->name()) {
         // CurrentProgressDialog::freeze();
-        KMessageBox::sorry(this, i18n("Failed to open a temporary file for Lilypond export."));
+        KMessageBox::sorry(this, i18n("Failed to open a temporary file for LilyPond export."));
         delete file;
     }
-    if (!exportLilypondFile(file->name(), true)) {
+    if (!exportLilyPondFile(file->name(), true)) {
         return ;
     }
     KProcess *proc = new KProcess;
-    *proc << "rosegarden-lilypondview";
+    *proc << "rosegarden-lilyPondview";
     *proc << "--graphical";
     *proc << "--print";
     *proc << file->name();
     connect(proc, SIGNAL(processExited(KProcess *)),
-            this, SLOT(slotLilypondViewProcessExited(KProcess *)));
+            this, SLOT(slotLilyPondViewProcessExited(KProcess *)));
     m_lilyTempFileMap[proc] = file;
     proc->start(KProcess::NotifyOnExit);
 }
 
-void NotationView::slotPreviewLilypond()
+void NotationView::slotPreviewLilyPond()
 {
     KTmpStatusMsg msg(i18n("Previewing LilyPond file..."), this);
     KTempFile *file = new KTempFile(QString::null, ".ly");
     file->setAutoDelete(true);
     if (!file->name()) {
         // CurrentProgressDialog::freeze();
-        KMessageBox::sorry(this, i18n("Failed to open a temporary file for Lilypond export."));
+        KMessageBox::sorry(this, i18n("Failed to open a temporary file for LilyPond export."));
         delete file;
     }
-    if (!exportLilypondFile(file->name(), true)) {
+    if (!exportLilyPondFile(file->name(), true)) {
         return ;
     }
     KProcess *proc = new KProcess;
-    *proc << "rosegarden-lilypondview";
+    *proc << "rosegarden-lilyPondview";
     *proc << "--graphical";
     *proc << "--pdf";
     *proc << file->name();
     connect(proc, SIGNAL(processExited(KProcess *)),
-            this, SLOT(slotLilypondViewProcessExited(KProcess *)));
+            this, SLOT(slotLilyPondViewProcessExited(KProcess *)));
     m_lilyTempFileMap[proc] = file;
     proc->start(KProcess::NotifyOnExit);
 }
 
-void NotationView::slotLilypondViewProcessExited(KProcess *p)
+void NotationView::slotLilyPondViewProcessExited(KProcess *p)
 {
     delete m_lilyTempFileMap[p];
     m_lilyTempFileMap.erase(p);
     delete p;
 }
 
-bool NotationView::exportLilypondFile(QString file, bool forPreview)
+bool NotationView::exportLilyPondFile(QString file, bool forPreview)
 {
     QString caption = "", heading = "";
     if (forPreview) {
-        caption = i18n("Lilypond Preview Options");
-        heading = i18n("Lilypond preview options");
+        caption = i18n("LilyPond Preview Options");
+        heading = i18n("LilyPond preview options");
     }
 
-    LilypondOptionsDialog dialog(this, m_doc, caption, heading);
+    LilyPondOptionsDialog dialog(this, m_doc, caption, heading);
     if (dialog.exec() != QDialog::Accepted) {
         return false;
     }
@@ -4693,7 +4693,7 @@ bool NotationView::exportLilypondFile(QString file, bool forPreview)
                                100,
                                this);
 
-    LilypondExporter e(this, m_doc, std::string(QFile::encodeName(file)));
+    LilyPondExporter e(this, m_doc, std::string(QFile::encodeName(file)));
 
     connect(&e, SIGNAL(setProgress(int)),
             progressDlg.progressBar(), SLOT(setValue(int)));
@@ -6381,7 +6381,7 @@ void NotationView::slotEditElement(NotationStaff *staff,
     }
 }
 
-void NotationView::slotBeginLilypondRepeat()
+void NotationView::slotBeginLilyPondRepeat()
 {}
 
 void NotationView::slotDebugDump()
@@ -6984,7 +6984,7 @@ void NotationView::slotToggleAnnotations()
 
 void NotationView::slotToggleLilyPondDirectives()
 {
-    m_lilypondDirectivesVisible = !m_lilypondDirectivesVisible;
+    m_lilyPondDirectivesVisible = !m_lilyPondDirectivesVisible;
     slotUpdateLilyPondDirectivesStatus();
     //!!! use refresh mechanism
     refreshSegment(0, 0, 0);

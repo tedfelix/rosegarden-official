@@ -2984,7 +2984,7 @@ NotePixmapFactory::getTextFont(const Text &text) const
      * Tempo:              Large bold roman, above staff
      * LocalTempo:         Small bold roman, above staff
      * Annotation:         Very small sans-serif, in a yellow box
-     * LilypondDirective:  Very small sans-serif, in a green box
+     * LilyPondDirective:  Very small sans-serif, in a green box
      */
 
     int weight = QFont::Normal;
@@ -3012,7 +3012,7 @@ NotePixmapFactory::getTextFont(const Text &text) const
     }
 
     if (type == Text::Annotation ||
-        type == Text::LilypondDirective) {
+        type == Text::LilyPondDirective) {
         serif = false;
         tiny = true;
     }
@@ -3066,8 +3066,8 @@ NotePixmapFactory::makeTextPixmap(const Text &text)
     std::string type(text.getTextType());
 
     if (type == Text::Annotation ||
-        type == Text::LilypondDirective) {
-        return makeAnnotationPixmap(text, (type == Text::LilypondDirective));
+        type == Text::LilyPondDirective) {
+        return makeAnnotationPixmap(text, (type == Text::LilyPondDirective));
     }
 
     drawTextAux(text, 0, 0, 0);
@@ -3113,8 +3113,8 @@ NotePixmapFactory::drawText(const Text &text,
     std::string type(text.getTextType());
 
     if (type == Text::Annotation ||
-        type == Text::LilypondDirective) {
-        QCanvasPixmap *map = makeAnnotationPixmap(text, (type == Text::LilypondDirective));
+        type == Text::LilyPondDirective) {
+        QCanvasPixmap *map = makeAnnotationPixmap(text, (type == Text::LilyPondDirective));
         painter.drawPixmap(x, y, *map);
         return ;
     }
@@ -3169,7 +3169,7 @@ NotePixmapFactory::makeAnnotationPixmap(const Text &text)
 }
 
 QCanvasPixmap*
-NotePixmapFactory::makeAnnotationPixmap(const Text &text, const bool isLilypondDirective)
+NotePixmapFactory::makeAnnotationPixmap(const Text &text, const bool isLilyPondDirective)
 {
     QString s(strtoqstr(text.getText()));
 
@@ -3200,8 +3200,8 @@ NotePixmapFactory::makeAnnotationPixmap(const Text &text, const bool isLilypondD
     if (!m_inPrinterMethod)
         m_p->maskPainter().setFont(textFont);
 
-    if (isLilypondDirective) {
-        m_p->painter().setBrush(GUIPalette::getColour(GUIPalette::TextLilypondDirectiveBackground));
+    if (isLilyPondDirective) {
+        m_p->painter().setBrush(GUIPalette::getColour(GUIPalette::TextLilyPondDirectiveBackground));
     } else {
         m_p->painter().setBrush(GUIPalette::getColour(GUIPalette::TextAnnotationBackground));
     }

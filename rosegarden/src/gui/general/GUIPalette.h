@@ -131,7 +131,7 @@ public:
 
     static const char* const TextAnnotationBackground;
 
-    static const char* const TextLilypondDirectiveBackground;
+    static const char* const TextLilyPondDirectiveBackground;
 
     static const char* const AudioCountdownBackground;
     static const char* const AudioCountdownForeground;

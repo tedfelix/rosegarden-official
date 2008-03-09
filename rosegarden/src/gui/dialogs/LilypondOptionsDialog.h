@@ -43,17 +43,17 @@ namespace Rosegarden
 class RosegardenGUIDoc;
 class HeadersConfigurationPage;
 
-class LilypondOptionsDialog : public KDialogBase
+class LilyPondOptionsDialog : public KDialogBase
 {
     Q_OBJECT
 
 public:
-    LilypondOptionsDialog(QWidget *parent,
+    LilyPondOptionsDialog(QWidget *parent,
 			  RosegardenGUIDoc *doc,
                           QString windowCaption = "",
                           QString heading = "");
 
-    static void setDefaultLilypondVersion(QString version);
+    static void setDefaultLilyPondVersion(QString version);
 
 public slots:
     void slotApply();

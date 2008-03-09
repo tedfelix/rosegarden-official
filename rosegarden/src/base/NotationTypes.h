@@ -688,10 +688,10 @@ public:
     static const std::string Tempo;
     static const std::string LocalTempo;
     static const std::string Annotation;
-    static const std::string LilypondDirective;
+    static const std::string LilyPondDirective;
 
     /**
-     * Special Lilypond directives
+     * Special LilyPond directives
      */
     static const std::string Segno;       // print segno here
     static const std::string Coda;        // print coda sign here
@@ -731,9 +731,9 @@ public:
     static std::vector<std::string> getUserStyles();
 
     /**
-     * Return a list of available special Lilypond directives
+     * Return a list of available special LilyPond directives
      */
-    static std::vector<std::string> getLilypondDirectives();
+    static std::vector<std::string> getLilyPondDirectives();
 
     /// Returned event is on heap; caller takes responsibility for ownership
     Event *getAsEvent(timeT absoluteTime) const;

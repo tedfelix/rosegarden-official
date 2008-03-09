@@ -23,8 +23,8 @@
 */
 
 
-#include "LilypondOptionsDialog.h"
-#include "document/io/LilypondExporter.h"
+#include "LilyPondOptionsDialog.h"
+#include "document/io/LilyPondExporter.h"
 #include "gui/configuration/HeadersConfigurationPage.h"
 
 #include <qlayout.h>
@@ -54,7 +54,7 @@
 namespace Rosegarden
 {
 
-LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
+LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
 	RosegardenGUIDoc *doc,
         QString windowCaption,
         QString heading) :
@@ -113,7 +113,7 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
                           i18n("Compatibility level"), frameBasic), 0, 0);
 
     m_lilyLanguage = new KComboBox(frameBasic);
-    // See also setDefaultLilypondVersion below
+    // See also setDefaultLilyPondVersion below
     m_lilyLanguage->insertItem(i18n("LilyPond %1").arg("2.6"));
     m_lilyLanguage->insertItem(i18n("LilyPond %1").arg("2.8"));
     m_lilyLanguage->insertItem(i18n("LilyPond %1").arg("2.10"));
@@ -295,7 +295,7 @@ LilypondOptionsDialog::LilypondOptionsDialog(QWidget *parent,
 }
 
 void
-LilypondOptionsDialog::slotApply()
+LilyPondOptionsDialog::slotApply()
 {
     KConfig *config = kapp->config();
     config->setGroup(NotationViewConfigGroup);
@@ -318,14 +318,14 @@ LilypondOptionsDialog::slotApply()
 }
  
 void
-LilypondOptionsDialog::slotOk()
+LilyPondOptionsDialog::slotOk()
 {
     slotApply();
     accept();
 }
 
 void
-LilypondOptionsDialog::setDefaultLilypondVersion(QString version)
+LilyPondOptionsDialog::setDefaultLilyPondVersion(QString version)
 {
     KConfig *config = kapp->config();
     config->setGroup(NotationViewConfigGroup);
@@ -350,7 +350,7 @@ LilypondOptionsDialog::setDefaultLilypondVersion(QString version)
         index = 3;
     }
     if (unstable) {
-        std::cerr << "\nWARNING: Unstable Lilypond version detected, selecting next language version up\n" << std::endl;
+        std::cerr << "\nWARNING: Unstable LilyPond version detected, selecting next language version up\n" << std::endl;
     }
     if (index >= 0) {
         config->writeEntry("lilylanguage", index);
@@ -358,4 +358,4 @@ LilypondOptionsDialog::setDefaultLilypondVersion(QString version)
 }
 
 }
-#include "LilypondOptionsDialog.moc"
+#include "LilyPondOptionsDialog.moc"

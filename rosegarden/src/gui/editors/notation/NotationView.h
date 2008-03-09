@@ -106,7 +106,7 @@ class NotationView : public EditView,
     friend class ClefInserter;
     friend class NotationEraser;
     friend class NotationSelectionPaster;
-    friend class LilypondExporter;
+    friend class LilyPondExporter;
 
     Q_OBJECT
 
@@ -221,7 +221,7 @@ public:
     /**
      * Discover whether LilyPond directives are being displayed or not
      */
-    bool areLilyPondDirectivesVisible() { return m_lilypondDirectivesVisible; }
+    bool areLilyPondDirectivesVisible() { return m_lilyPondDirectivesVisible; }
 
     /**
      * Set the current event selection.
@@ -343,16 +343,16 @@ public slots:
     void slotFilePrintPreview();
 
     /**
-     * export a Lilypond file
+     * export a LilyPond file
      */
-    bool exportLilypondFile(QString url, bool forPreview = false);
+    bool exportLilyPondFile(QString url, bool forPreview = false);
 
     /**
      * Export to a temporary file and process
      */
-    void slotPrintLilypond();
-    void slotPreviewLilypond();
-    void slotLilypondViewProcessExited(KProcess *);
+    void slotPrintLilyPond();
+    void slotPreviewLilyPond();
+    void slotLilyPondViewProcessExited(KProcess *);
 
     /**
      * put the marked text/object into the clipboard and remove it
@@ -801,8 +801,8 @@ public slots:
     // Update notation view based on track/staff name change
     void slotUpdateStaffName();
 
-    // Lilypond Directive slots
-    void slotBeginLilypondRepeat();
+    // LilyPond Directive slots
+    void slotBeginLilyPondRepeat();
 
 signals:
     /**
@@ -1014,7 +1014,7 @@ protected:
     QLabel *m_annotationsLabel;
 
     /// Displayed in the status bar, shows when LilyPond directives are hidden
-    QLabel *m_lilypondDirectivesLabel;
+    QLabel *m_lilyPondDirectivesLabel;
 
     /// Displayed in the status bar, shows progress of current operation
     ProgressBar *m_progressBar;
@@ -1065,7 +1065,7 @@ protected:
     QWidget *m_tempoRuler;
     RawNoteRuler *m_rawNoteRuler;
     bool m_annotationsVisible;
-    bool m_lilypondDirectivesVisible;
+    bool m_lilyPondDirectivesVisible;
     
     KAction* m_selectDefaultNote;
 

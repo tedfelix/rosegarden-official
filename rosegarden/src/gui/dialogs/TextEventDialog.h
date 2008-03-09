@@ -75,11 +75,11 @@ public slots:
     void slotLocalTempoShortcutChanged(const QString &);
 
     //
-    // special Lilypond directives, initial phase, as cheap text events; will
+    // special LilyPond directives, initial phase, as cheap text events; will
     // eventually move out of Text, and out of this dialog into
     // some other less cheesy interface 
     //
-    void slotLilypondDirectiveChanged(const QString &);
+    void slotLilyPondDirectiveChanged(const QString &);
 
 protected:
 
@@ -97,7 +97,7 @@ protected:
     KComboBox *m_tempoShortcutCombo;
     KComboBox *m_localTempoShortcutCombo;
     // temporary home:
-    KComboBox *m_lilypondDirectiveCombo;
+    KComboBox *m_lilyPondDirectiveCombo;
 
 
     QLabel *m_staffAboveLabel;
