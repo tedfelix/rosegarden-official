@@ -318,8 +318,8 @@ SET(document_SRCS
 	document/io/HydrogenLoader.h
 	document/io/HydrogenXMLHandler.cpp
 	document/io/HydrogenXMLHandler.h
-	document/io/LilypondExporter.cpp
-	document/io/LilypondExporter.h
+	document/io/LilyPondExporter.cpp
+	document/io/LilyPondExporter.h
 	document/io/MupExporter.cpp
 	document/io/MupExporter.h
 	document/io/MusicXmlExporter.cpp
@@ -440,8 +440,8 @@ SET(gui_SRCS
 	gui/dialogs/IntervalDialog.h
 	gui/dialogs/KeySignatureDialog.cpp
 	gui/dialogs/KeySignatureDialog.h
-	gui/dialogs/LilypondOptionsDialog.cpp
-	gui/dialogs/LilypondOptionsDialog.h
+	gui/dialogs/LilyPondOptionsDialog.cpp
+	gui/dialogs/LilyPondOptionsDialog.h
 	gui/dialogs/LyricEditDialog.cpp
 	gui/dialogs/LyricEditDialog.h
 	gui/dialogs/MakeOrnamentDialog.cpp
