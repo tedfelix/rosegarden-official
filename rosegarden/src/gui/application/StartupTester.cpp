@@ -107,11 +107,11 @@ StartupTester::run()
     m_stdoutBuffer = "";
     QObject::connect(proc, SIGNAL(receivedStdout(KProcess *, char *, int)),
                      this, SLOT(stdoutReceived(KProcess *, char *, int)));
-    *proc << "rosegarden-lilyPondview";
+    *proc << "rosegarden-lilypondview";
     *proc << "--conftest";
     proc->start(KProcess::Block, KProcess::All);
     if (!proc->normalExit() || proc->exitStatus()) {
-        RG_DEBUG << "StartupTester - No lilyPondview available" << endl;
+        RG_DEBUG << "StartupTester - No lilypondview available" << endl;
         m_haveLilyPondView = false;
         parseStdoutBuffer(m_lilyPondViewMissing);
     } else {
