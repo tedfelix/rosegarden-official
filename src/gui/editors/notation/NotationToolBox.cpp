@@ -75,9 +75,9 @@ EditTool* NotationToolBox::createTool(const QString& toolName)
 
         tool = new GuitarChordInserter(m_nParentView);
 
-/*    else if (toolNamelc == LilypondDirectiveInserter::ToolName)
+/*    else if (toolNamelc == LilyPondDirectiveInserter::ToolName)
 
-        tool = new LilypondDirectiveInserter(m_nParentView);*/
+        tool = new LilyPondDirectiveInserter(m_nParentView);*/
 
     else if (toolNamelc == NotationEraser::ToolName)
 

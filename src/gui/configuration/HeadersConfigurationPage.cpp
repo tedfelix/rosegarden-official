@@ -27,7 +27,7 @@
 
 #include "document/ConfigGroups.h"
 #include "document/RosegardenGUIDoc.h"
-#include "document/io/LilypondExporter.h"
+#include "document/io/LilyPondExporter.h"
 #include "gui/widgets/CollapsingFrame.h"
 #include "misc/Strings.h"
 

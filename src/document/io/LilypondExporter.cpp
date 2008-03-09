@@ -35,7 +35,7 @@
 */
 
 
-#include "LilypondExporter.h"
+#include "LilyPondExporter.h"
 
 #include <klocale.h>
 #include "misc/Debug.h"
@@ -82,13 +82,13 @@ namespace Rosegarden
 
 using namespace BaseProperties;
 
-const PropertyName LilypondExporter::SKIP_PROPERTY
-    = "LilypondExportSkipThisEvent";
+const PropertyName LilyPondExporter::SKIP_PROPERTY
+    = "LilyPondExportSkipThisEvent";
 
-LilypondExporter::LilypondExporter(RosegardenGUIApp *parent,
+LilyPondExporter::LilyPondExporter(RosegardenGUIApp *parent,
                                    RosegardenGUIDoc *doc,
                                    std::string fileName) :
-        ProgressReporter((QObject *)parent, "lilypondExporter"),
+        ProgressReporter((QObject *)parent, "lilyPondExporter"),
         m_doc(doc),
         m_fileName(fileName)
 {
@@ -100,10 +100,10 @@ LilypondExporter::LilypondExporter(RosegardenGUIApp *parent,
     readConfigVariables();
 }
 
-LilypondExporter::LilypondExporter(NotationView *parent,
+LilyPondExporter::LilyPondExporter(NotationView *parent,
                                    RosegardenGUIDoc *doc,
                                    std::string fileName) :
-        ProgressReporter((QObject *)parent, "lilypondExporter"),
+        ProgressReporter((QObject *)parent, "lilyPondExporter"),
         m_doc(doc),
         m_fileName(fileName)
 {
@@ -116,7 +116,7 @@ LilypondExporter::LilypondExporter(NotationView *parent,
 }
 
 void
-LilypondExporter::readConfigVariables(void)
+LilyPondExporter::readConfigVariables(void)
 {
     // grab config info
     KConfig *cfg = kapp->config();
@@ -139,13 +139,13 @@ LilypondExporter::readConfigVariables(void)
     m_exportMarkerMode = cfg->readUnsignedNumEntry("lilyexportmarkermode", EXPORT_NO_MARKERS );
 }
 
-LilypondExporter::~LilypondExporter()
+LilyPondExporter::~LilyPondExporter()
 {
     // nothing
 }
 
 void
-LilypondExporter::handleStartingEvents(eventstartlist &eventsToStart,
+LilyPondExporter::handleStartingEvents(eventstartlist &eventsToStart,
                                        std::ofstream &str)
 {
     eventstartlist::iterator m = eventsToStart.begin();
@@ -187,7 +187,7 @@ LilypondExporter::handleStartingEvents(eventstartlist &eventsToStart,
 }
 
 void
-LilypondExporter::handleEndingEvents(eventendlist &eventsInProgress,
+LilyPondExporter::handleEndingEvents(eventendlist &eventsInProgress,
                                      const Segment::iterator &j,
                                      std::ofstream &str)
 {
@@ -238,7 +238,7 @@ LilypondExporter::handleEndingEvents(eventendlist &eventsInProgress,
 }
 
 std::string
-LilypondExporter::convertPitchToLilyNote(int pitch, Accidental accidental,
+LilyPondExporter::convertPitchToLilyNote(int pitch, Accidental accidental,
         const Rosegarden::Key &key)
 {
     Pitch p(pitch, accidental);
@@ -260,7 +260,7 @@ LilypondExporter::convertPitchToLilyNote(int pitch, Accidental accidental,
 }
 
 std::string
-LilypondExporter::composeLilyMark(std::string eventMark, bool stemUp)
+LilyPondExporter::composeLilyMark(std::string eventMark, bool stemUp)
 {
 
     std::string inStr = "", outStr = "";
@@ -323,7 +323,7 @@ LilypondExporter::composeLilyMark(std::string eventMark, bool stemUp)
             outStr += "\\downbow";
         } else {
             outStr = "";
-            std::cerr << "LilypondExporter::composeLilyMark() - unhandled mark:  "
+            std::cerr << "LilyPondExporter::composeLilyMark() - unhandled mark:  "
             << eventMark << std::endl;
         }
     }
@@ -332,7 +332,7 @@ LilypondExporter::composeLilyMark(std::string eventMark, bool stemUp)
 }
 
 std::string
-LilypondExporter::indent(const int &column)
+LilyPondExporter::indent(const int &column)
 {
     std::string outStr = "";
     for (int c = 1; c <= column; c++) {
@@ -342,7 +342,7 @@ LilypondExporter::indent(const int &column)
 }
 
 std::string
-LilypondExporter::protectIllegalChars(std::string inStr)
+LilyPondExporter::protectIllegalChars(std::string inStr)
 {
 
     QString tmpStr = strtoqstr(inStr);
@@ -372,7 +372,7 @@ struct MarkerComp {
 };
 
 bool
-LilypondExporter::write()
+LilyPondExporter::write()
 {
     QString tmpName = strtoqstr(m_fileName);
 
@@ -384,7 +384,7 @@ LilypondExporter::write()
     QString dirName = nfo.dirPath();
     QString baseName = nfo.fileName();
 
-    // sed Lilypond-choking chars out of the filename proper
+    // sed LilyPond-choking chars out of the filename proper
     bool illegalFilename = (baseName.contains(' ') || baseName.contains("\\"));
     baseName.replace(QRegExp(" "), "");
     baseName.replace(QRegExp("\\\\"), "");
@@ -397,7 +397,7 @@ LilypondExporter::write()
     if (illegalFilename) {
         CurrentProgressDialog::freeze();
         int reply = KMessageBox::warningContinueCancel(
-                        0, i18n("Lilypond does not allow spaces or backslashes in filenames.\n\n"
+                        0, i18n("LilyPond does not allow spaces or backslashes in filenames.\n\n"
                                 "Would you like to use\n\n %1\n\n instead?").arg(baseName));
         if (reply != KMessageBox::Continue)
             return false;
@@ -405,7 +405,7 @@ LilypondExporter::write()
 
     std::ofstream str(qstrtostr(tmpName).c_str(), std::ios::out);
     if (!str) {
-        std::cerr << "LilypondExporter::write() - can't write file " << tmpName << std::endl;
+        std::cerr << "LilyPondExporter::write() - can't write file " << tmpName << std::endl;
         return false;
     }
 
@@ -446,7 +446,7 @@ LilypondExporter::write()
         str << "#(ly:set-option 'point-and-click #f)" << std::endl;
     }
 
-    // Lilypond \header block
+    // LilyPond \header block
 
     // set indention level to make future changes to horizontal layout less
     // tedious, ++col to indent a new level, --col to de-indent
@@ -495,16 +495,16 @@ LilypondExporter::write()
         str << indent(--col) << "}" << std::endl;
     }
 
-    // Lilypond \paper block (optional)
+    // LilyPond \paper block (optional)
     if (m_raggedBottom) {
         str << indent(col) << "\\paper {" << std::endl;
         str << indent(++col) << "ragged-bottom=##t" << std::endl;
         str << indent(--col) << "}" << std::endl;
     }
 
-    // Lilypond music data!   Mapping:
-    // Lilypond Voice = Rosegarden Segment
-    // Lilypond Staff = Rosegarden Track
+    // LilyPond music data!   Mapping:
+    // LilyPond Voice = Rosegarden Segment
+    // LilyPond Staff = Rosegarden Track
     // (not the cleanest output but maybe the most reliable)
 
     // paper/font sizes
@@ -978,14 +978,14 @@ LilypondExporter::write()
                 }
 
                 // Temporary storage for non-atomic events (!BOOM)
-                // ex. Lilypond expects signals when a decrescendo starts
+                // ex. LilyPond expects signals when a decrescendo starts
                 // as well as when it ends
                 eventendlist eventsInProgress;
                 eventstartlist eventsToStart;
 
                 // If the segment doesn't start at 0, add a "skip" to the start
                 // No worries about overlapping segments, because Voices can overlap
-                // voiceCounter is a hack because Lilypond does not by default make
+                // voiceCounter is a hack because LilyPond does not by default make
                 // them unique
                 std::ostringstream voiceNumber;
                 voiceNumber << "voice " << ++voiceCounter;
@@ -1261,7 +1261,7 @@ LilypondExporter::write()
 }
 
 timeT 
-LilypondExporter::calculateDuration(Segment *s,
+LilyPondExporter::calculateDuration(Segment *s,
 		                            const Segment::iterator &i,
 		                            timeT barEnd,
 		                            timeT &soundingDuration,
@@ -1271,7 +1271,7 @@ LilypondExporter::calculateDuration(Segment *s,
 	timeT duration = (*i)->getNotationDuration();
 	timeT absTime = (*i)->getNotationAbsoluteTime();
 
-	RG_DEBUG << "LilypondExporter::calculateDuration: first duration, absTime: "
+	RG_DEBUG << "LilyPondExporter::calculateDuration: first duration, absTime: "
 	<< duration << ", " << absTime << endl;
 
 	timeT durationCorrection = 0;
@@ -1288,7 +1288,7 @@ LilypondExporter::calculateDuration(Segment *s,
 
 	duration += durationCorrection;
 
-	RG_DEBUG << "LilypondExporter::calculateDuration: now duration is "
+	RG_DEBUG << "LilyPondExporter::calculateDuration: now duration is "
 	<< duration << " after correction of " << durationCorrection << endl;
 
 	soundingDuration = duration * tupletRatio.first/ tupletRatio.second;
@@ -1300,7 +1300,7 @@ LilypondExporter::calculateDuration(Segment *s,
 		overlong = true;
 	}
 
-	RG_DEBUG << "LilypondExporter::calculateDuration: time to barEnd is "
+	RG_DEBUG << "LilyPondExporter::calculateDuration: time to barEnd is "
 	<< toNext << endl;
 
 	// Examine the following event, and truncate our duration
@@ -1343,7 +1343,7 @@ LilypondExporter::calculateDuration(Segment *s,
 	}
 
 	if (s->isBeforeEndMarker(nextElt)) {
-		RG_DEBUG << "LilypondExporter::calculateDuration: inside conditional " << endl;
+		RG_DEBUG << "LilyPondExporter::calculateDuration: inside conditional " << endl;
 		toNext = (*nextElt)->getNotationAbsoluteTime() - absTime;
 		// if the note was lengthened, assume it was lengthened to the left
 		// when truncating to the beginning of the next note
@@ -1356,16 +1356,16 @@ LilypondExporter::calculateDuration(Segment *s,
 		}
 	}
 
-	RG_DEBUG << "LilypondExporter::calculateDuration: second toNext is "
+	RG_DEBUG << "LilyPondExporter::calculateDuration: second toNext is "
 	<< toNext << endl;
 
-	RG_DEBUG << "LilypondExporter::calculateDuration: final duration, soundingDuration: " << duration << ", " << soundingDuration << endl;
+	RG_DEBUG << "LilyPondExporter::calculateDuration: final duration, soundingDuration: " << duration << ", " << soundingDuration << endl;
 
 	return duration;
 }
 
 void
-LilypondExporter::writeBar(Segment *s,
+LilyPondExporter::writeBar(Segment *s,
                            int barNo, int barStart, int barEnd, int col,
                            Rosegarden::Key &key,
                            std::string &lilyText,
@@ -1437,7 +1437,7 @@ LilypondExporter::writeBar(Segment *s,
 
         // First test whether we're entering or leaving a group,
         // before we consider how to write the event itself (at least
-        // for pre-2.0 Lilypond output)
+        // for pre-2.0 LilyPond output)
 	QString startGroupBeamingsStr = "";
 	QString endGroupBeamingsStr = "";
 
@@ -1476,7 +1476,7 @@ LilypondExporter::writeBar(Segment *s,
                         (*i)->get
                         <Int>(BEAMED_GROUP_UNTUPLED_COUNT, denominator);
                         if (numerator == 0 || denominator == 0) {
-                            std::cerr << "WARNING: LilypondExporter::writeBar: "
+                            std::cerr << "WARNING: LilyPondExporter::writeBar: "
                             << "tupled event without tupled/untupled counts"
                             << std::endl;
                             groupId = -1;
@@ -1904,7 +1904,7 @@ LilypondExporter::writeBar(Segment *s,
                 str << "\" ";
 
             } catch (Exception e) { // GuitarChord ctor failed
-                RG_DEBUG << "Bad GuitarChord event in Lilypond export" << endl;
+                RG_DEBUG << "Bad GuitarChord event in LilyPond export" << endl;
             }
         }
 
@@ -1983,7 +1983,7 @@ LilypondExporter::writeBar(Segment *s,
 }
 
 std::pair<int,int>
-LilypondExporter::writeSkip(const TimeSignature &timeSig,
+LilyPondExporter::writeSkip(const TimeSignature &timeSig,
                             timeT offset,
                             timeT duration,
                             bool useRests,
@@ -2036,14 +2036,14 @@ LilypondExporter::writeSkip(const TimeSignature &timeSig,
 }
 
 bool
-LilypondExporter::handleDirective(const Event *textEvent,
+LilyPondExporter::handleDirective(const Event *textEvent,
                                   std::string &lilyText,
                                   bool &nextBarIsAlt1, bool &nextBarIsAlt2,
                                   bool &nextBarIsDouble, bool &nextBarIsEnd, bool &nextBarIsDot)
 {
     Text text(*textEvent);
 
-    if (text.getTextType() == Text::LilypondDirective) {
+    if (text.getTextType() == Text::LilyPondDirective) {
         std::string directive = text.getText();
         if (directive == Text::Segno) {
             lilyText += "^\\markup { \\musicglyph #\"scripts.segno\" } ";
@@ -2073,7 +2073,7 @@ LilypondExporter::handleDirective(const Event *textEvent,
 }
 
 void
-LilypondExporter::handleText(const Event *textEvent,
+LilyPondExporter::handleText(const Event *textEvent,
                              std::string &lilyText)
 {
     try {
@@ -2082,7 +2082,7 @@ LilypondExporter::handleText(const Event *textEvent,
         std::string s = text.getText();
 
         // only protect illegal chars if this is Text, rather than
-        // LilypondDirective
+        // LilyPondDirective
         if ((*textEvent).isa(Text::EventType))
             s = protectIllegalChars(s);
 
@@ -2142,7 +2142,7 @@ LilypondExporter::handleText(const Event *textEvent,
         } else {
             textEvent->get
             <String>(Text::TextTypePropertyName, s);
-            std::cerr << "LilypondExporter::write() - unhandled text type: "
+            std::cerr << "LilyPondExporter::write() - unhandled text type: "
             << s << std::endl;
         }
     } catch (Exception e) {
@@ -2151,7 +2151,7 @@ LilypondExporter::handleText(const Event *textEvent,
 }
 
 void
-LilypondExporter::writePitch(const Event *note,
+LilyPondExporter::writePitch(const Event *note,
                              const Rosegarden::Key &key,
                              std::ofstream &str)
 {
@@ -2168,7 +2168,7 @@ LilypondExporter::writePitch(const Event *note,
     note->get
     <String>(ACCIDENTAL, accidental);
 
-    // format of Lilypond note is:
+    // format of LilyPond note is:
     // name + octave + (duration) + text markup
 
     // calculate note name and write note
@@ -2201,7 +2201,7 @@ LilypondExporter::writePitch(const Event *note,
 }
 
 void
-LilypondExporter::writeStyle(const Event *note, std::string &prevStyle,
+LilyPondExporter::writeStyle(const Event *note, std::string &prevStyle,
                              int col, std::ofstream &str, bool isInChord)
 {
     // some hard-coded styles in order to provide rudimentary style export support
@@ -2245,7 +2245,7 @@ LilypondExporter::writeStyle(const Event *note, std::string &prevStyle,
 }
 
 std::pair<int,int>
-LilypondExporter::writeDuration(timeT duration,
+LilyPondExporter::writeDuration(timeT duration,
                                 std::ofstream &str)
 {
     Note note(Note::getNearestNote(duration, MAX_DOTS));
@@ -2295,7 +2295,7 @@ LilypondExporter::writeDuration(timeT duration,
 }
 
 void
-LilypondExporter::writeSlashes(const Event *note, std::ofstream &str)
+LilyPondExporter::writeSlashes(const Event *note, std::ofstream &str)
 {
     // write slashes after text
     // / = 8 // = 16 /// = 32, etc.

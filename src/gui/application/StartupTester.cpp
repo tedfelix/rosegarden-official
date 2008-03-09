@@ -26,7 +26,7 @@
 #include "StartupTester.h"
 
 #include "misc/Debug.h"
-#include "gui/dialogs/LilypondOptionsDialog.h"
+#include "gui/dialogs/LilyPondOptionsDialog.h"
 
 #include <kprocess.h>
 #include <qmutex.h>
@@ -40,7 +40,7 @@ namespace Rosegarden
 StartupTester::StartupTester() :
     m_ready(false),
     m_haveProjectPackager(false),
-    m_haveLilypondView(false),
+    m_haveLilyPondView(false),
     m_haveAudioFileImporter(false)
 {
     QHttp *http = new QHttp();
@@ -61,7 +61,7 @@ void
 StartupTester::run()
 {
     m_projectPackagerMutex.lock();
-    m_lilypondViewMutex.lock();
+    m_lilyPondViewMutex.lock();
     m_audioFileImporterMutex.lock();
     m_ready = true;
 
@@ -107,23 +107,23 @@ StartupTester::run()
     m_stdoutBuffer = "";
     QObject::connect(proc, SIGNAL(receivedStdout(KProcess *, char *, int)),
                      this, SLOT(stdoutReceived(KProcess *, char *, int)));
-    *proc << "rosegarden-lilypondview";
+    *proc << "rosegarden-lilyPondview";
     *proc << "--conftest";
     proc->start(KProcess::Block, KProcess::All);
     if (!proc->normalExit() || proc->exitStatus()) {
-        RG_DEBUG << "StartupTester - No lilypondview available" << endl;
-        m_haveLilypondView = false;
-        parseStdoutBuffer(m_lilypondViewMissing);
+        RG_DEBUG << "StartupTester - No lilyPondview available" << endl;
+        m_haveLilyPondView = false;
+        parseStdoutBuffer(m_lilyPondViewMissing);
     } else {
-        RG_DEBUG << "StartupTester - Lilypondview OK" << endl;
-        m_haveLilypondView = true;
-        QRegExp re("Lilypond version: ([^\n]*)");
+        RG_DEBUG << "StartupTester - LilyPondview OK" << endl;
+        m_haveLilyPondView = true;
+        QRegExp re("LilyPond version: ([^\n]*)");
         if (re.search(m_stdoutBuffer) != -1) {
-            LilypondOptionsDialog::setDefaultLilypondVersion(re.cap(1));
+            LilyPondOptionsDialog::setDefaultLilyPondVersion(re.cap(1));
         }
     }
     delete proc;
-    m_lilypondViewMutex.unlock();
+    m_lilyPondViewMutex.unlock();
 }
 
 bool
@@ -136,8 +136,8 @@ StartupTester::isReady()
     } else {
         return false;
     }
-    if (m_lilypondViewMutex.tryLock()) {
-        m_lilypondViewMutex.unlock();
+    if (m_lilyPondViewMutex.tryLock()) {
+        m_lilyPondViewMutex.unlock();
     } else {
         return false;
     }
@@ -170,13 +170,13 @@ StartupTester::haveProjectPackager(QStringList *missing)
 }
 
 bool
-StartupTester::haveLilypondView(QStringList *missing)
+StartupTester::haveLilyPondView(QStringList *missing)
 {
     while (!m_ready)
         usleep(10000);
-    QMutexLocker locker(&m_lilypondViewMutex);
-    if (missing) *missing = m_lilypondViewMissing;
-    return m_haveLilypondView;
+    QMutexLocker locker(&m_lilyPondViewMutex);
+    if (missing) *missing = m_lilyPondViewMissing;
+    return m_haveLilyPondView;
 }
 
 bool

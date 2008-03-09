@@ -1045,7 +1045,7 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
                      elt->event()->get
                      <String>
                      (Text::TextTypePropertyName) ==
-                     Text::LilypondDirective &&
+                     Text::LilyPondDirective &&
                      !m_notationView->areLilyPondDirectivesVisible()) {
 
                 // nothing here either

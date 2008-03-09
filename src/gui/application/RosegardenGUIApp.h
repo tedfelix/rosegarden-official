@@ -196,9 +196,9 @@ public:
     void exportMupFile(QString url);
 
     /**
-     * export a Lilypond file
+     * export a LilyPond file
      */
-    bool exportLilypondFile(QString url, bool forPreview = false);
+    bool exportLilyPondFile(QString url, bool forPreview = false);
 
     /**
      * export a MusicXml file
@@ -652,16 +652,16 @@ public slots:
     void slotExportMup();
 
     /**
-     * Let the user enter a Lilypond file to export to
+     * Let the user enter a LilyPond file to export to
      */
-    void slotExportLilypond();
+    void slotExportLilyPond();
 
     /**
      * Export to a temporary file and process
      */
-    void slotPrintLilypond();
-    void slotPreviewLilypond();
-    void slotLilypondViewProcessExited(KProcess *);
+    void slotPrintLilyPond();
+    void slotPreviewLilyPond();
+    void slotLilyPondViewProcessExited(KProcess *);
 
     /**
      * Let the user enter a MusicXml file to export to

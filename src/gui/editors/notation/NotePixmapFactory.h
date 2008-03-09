@@ -246,7 +246,7 @@ protected:
     QFont getTextFont(const Text &text) const;
 
     QCanvasPixmap* makeAnnotationPixmap(const Text &text);
-    QCanvasPixmap* makeAnnotationPixmap(const Text &text, const bool isLilypondDirective);
+    QCanvasPixmap* makeAnnotationPixmap(const Text &text, const bool isLilyPondDirective);
 
     void createPixmapAndMask(int width, int height,
                              int maskWidth = -1,
