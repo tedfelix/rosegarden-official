@@ -494,7 +494,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 #endif
 
     stateChanged("have_project_packager", KXMLGUIClient::StateReverse);
-    stateChanged("have_lilyPondview", KXMLGUIClient::StateReverse);
+    stateChanged("have_lilypondview", KXMLGUIClient::StateReverse);
     QTimer::singleShot(1000, this, SLOT(slotTestStartupTester()));
 }
 
@@ -4541,7 +4541,7 @@ void RosegardenGUIApp::slotTestStartupTester()
 
     have = m_startupTester->haveLilyPondView(&missing);
 
-    stateChanged("have_lilyPondview",
+    stateChanged("have_lilypondview",
                  have ?
                  KXMLGUIClient::StateNoReverse : KXMLGUIClient::StateReverse);
 
@@ -4551,7 +4551,7 @@ void RosegardenGUIApp::slotTestStartupTester()
              i18n("<h3>LilyPond Preview not available</h3><p>Rosegarden could not find one or more of the additional programs needed to support the LilyPond previewer.</p><p>Notation previews through LilyPond will not be available.</p><p>To fix this, you should install the following additional programs:</p>"),
              missing,
              i18n("LilyPond previews not available"),
-             "startup-lilyPondview");
+             "startup-lilypondview");
     }
 
 #ifdef HAVE_LIBJACK
@@ -4998,7 +4998,7 @@ void RosegardenGUIApp::slotPrintLilyPond()
         return ;
     }
     KProcess *proc = new KProcess;
-    *proc << "rosegarden-lilyPondview";
+    *proc << "rosegarden-lilypondview";
     *proc << "--graphical";
     *proc << "--print";
     *proc << file->name();
@@ -5022,7 +5022,7 @@ void RosegardenGUIApp::slotPreviewLilyPond()
         return ;
     }
     KProcess *proc = new KProcess;
-    *proc << "rosegarden-lilyPondview";
+    *proc << "rosegarden-lilypondview";
     *proc << "--graphical";
     *proc << "--pdf";
     *proc << file->name();

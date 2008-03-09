@@ -4635,7 +4635,7 @@ void NotationView::slotPrintLilyPond()
         return ;
     }
     KProcess *proc = new KProcess;
-    *proc << "rosegarden-lilyPondview";
+    *proc << "rosegarden-lilypondview";
     *proc << "--graphical";
     *proc << "--print";
     *proc << file->name();
@@ -4659,7 +4659,7 @@ void NotationView::slotPreviewLilyPond()
         return ;
     }
     KProcess *proc = new KProcess;
-    *proc << "rosegarden-lilyPondview";
+    *proc << "rosegarden-lilypondview";
     *proc << "--graphical";
     *proc << "--pdf";
     *proc << file->name();
