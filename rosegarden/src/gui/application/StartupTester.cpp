@@ -115,7 +115,7 @@ StartupTester::run()
         m_haveLilyPondView = false;
         parseStdoutBuffer(m_lilyPondViewMissing);
     } else {
-        RG_DEBUG << "StartupTester - LilyPondview OK" << endl;
+        RG_DEBUG << "StartupTester - lilypondview OK" << endl;
         m_haveLilyPondView = true;
         QRegExp re("LilyPond version: ([^\n]*)");
         if (re.search(m_stdoutBuffer) != -1) {
