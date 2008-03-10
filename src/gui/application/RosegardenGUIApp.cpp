@@ -594,7 +594,7 @@ void RosegardenGUIApp::setupActions()
 
     new KAction(i18n("Export &LilyPond file..."), 0, 0, this,
                 SLOT(slotExportLilyPond()), actionCollection(),
-                "file_export_lilyPond");
+                "file_export_lilypond");
 
     new KAction(i18n("Export Music&XML file..."), 0, 0, this,
                 SLOT(slotExportMusicXml()), actionCollection(),
@@ -610,11 +610,11 @@ void RosegardenGUIApp::setupActions()
 
     new KAction(i18n("Print &with LilyPond..."), 0, 0, this,
                 SLOT(slotPrintLilyPond()), actionCollection(),
-                "file_print_lilyPond");
+                "file_print_lilypond");
 
     new KAction(i18n("Preview with Lil&yPond..."), 0, 0, this,
                 SLOT(slotPreviewLilyPond()), actionCollection(),
-                "file_preview_lilyPond");
+                "file_preview_lilypond");
 
     new KAction(i18n("Play&list"), 0, 0, this,
                 SLOT(slotPlayList()), actionCollection(),

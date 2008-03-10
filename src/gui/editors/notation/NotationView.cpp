@@ -1469,7 +1469,7 @@ void NotationView::readOptions()
 
     opt = m_config->readBoolEntry("Show LilyPond Directives", true);
     m_lilyPondDirectivesVisible = opt;
-    getToggleAction("show_lilyPond_directives")->setChecked(opt);
+    getToggleAction("show_lilypond_directives")->setChecked(opt);
     slotUpdateLilyPondDirectivesStatus();
 }
 
@@ -1481,11 +1481,11 @@ void NotationView::setupActions()
 
     new KAction(i18n("Print &with LilyPond..."), 0, 0, this,
                 SLOT(slotPrintLilyPond()), actionCollection(),
-                "file_print_lilyPond");
+                "file_print_lilypond");
 
     new KAction(i18n("Preview with Lil&yPond..."), 0, 0, this,
                 SLOT(slotPreviewLilyPond()), actionCollection(),
-                "file_preview_lilyPond");
+                "file_preview_lilypond");
 
     EditViewBase::setupActions("notation.rc");
     EditView::setupActions();
@@ -1734,10 +1734,10 @@ void NotationView::setupActions()
                                   actionCollection(), "guitarchord");
     noteAction->setExclusiveGroup("notes");
 
-    /*    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("lilyPond")));
+    /*    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("lilypond")));
         noteAction = new KRadioAction(i18n("Lil&ypond Directive"), icon, Key_F9, this,
                                       SLOT(slotLilyPondDirective()),
-                                      actionCollection(), "lilyPond_directive");
+                                      actionCollection(), "lilypond_directive");
         noteAction->setExclusiveGroup("notes"); */
 
 
@@ -1846,7 +1846,7 @@ void NotationView::setupActions()
 
     new KToggleAction(i18n("Show Lily&Pond Directives"), 0, this,
                       SLOT(slotToggleLilyPondDirectives()),
-                      actionCollection(), "show_lilyPond_directives");
+                      actionCollection(), "show_lilypond_directives");
 
     new KAction(i18n("Open L&yric Editor"), 0, this, SLOT(slotEditLyrics()),
                 actionCollection(), "lyric_editor");
@@ -4270,7 +4270,7 @@ NotationView::slotUpdateLilyPondDirectivesStatus()
         }
     }
     m_lilyPondDirectivesLabel->setText("");
-    getToggleAction("show_lilyPond_directives")->setChecked(areLilyPondDirectivesVisible());
+    getToggleAction("show_lilypond_directives")->setChecked(areLilyPondDirectivesVisible());
 }
 
 void
