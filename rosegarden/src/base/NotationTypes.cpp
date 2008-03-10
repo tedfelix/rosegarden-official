@@ -843,7 +843,7 @@ const std::string Text::LocalDirection    = "local_direction";
 const std::string Text::Tempo             = "tempo";
 const std::string Text::LocalTempo        = "local_tempo";
 const std::string Text::Annotation        = "annotation";
-const std::string Text::LilyPondDirective = "lilyPond_directive";
+const std::string Text::LilyPondDirective = "lilypond_directive";
 
 // special LilyPond directives
 const std::string Text::Segno       = "Segno";  
