@@ -263,7 +263,7 @@ const int GUIPalette::CollisionHaloSaturation = 200;
 
 const char* const GUIPalette::TextAnnotationBackground = "textannotationbackground";
 
-const char* const GUIPalette::TextLilyPondDirectiveBackground = "textlilyPonddirectivebackground";
+const char* const GUIPalette::TextLilyPondDirectiveBackground = "textlilyponddirectivebackground";
 
 const char* const GUIPalette::AudioCountdownBackground = "audiocountdownbackground";
 const char* const GUIPalette::AudioCountdownForeground = "audiocountdownforeground";
