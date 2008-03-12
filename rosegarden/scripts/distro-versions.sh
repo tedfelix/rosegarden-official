@@ -15,7 +15,7 @@ echo '<tr><td>&nbsp;</td></tr>'
 echo '<tr>'
 echo '<td class="a" align="center" rowspan="'$maxrelease'"><a href="http://www.ubuntu.com/"><img src="http://www.ubuntu.com/themes/ubuntu07/images/ubuntulogo.png" alt="Ubuntu" border="0"></a></td>'
 
-wget -O- "$ubuntu_package_url" 2>/dev/null | \
+wget -O- "$ubuntu_package_url" 2>/dev/null | egrep '(all|i386)' | \
     awk '{ gsub(".*:","",$3); gsub("-[^-]*$","",$3); gsub("/"," ",$5); print $5 " " $3}' | \
     sort --key=3 -rn | fgrep -v 2.1 | \
     while read uv ur rv; do
@@ -46,7 +46,7 @@ echo '<tr><td>&nbsp;</td></tr>'
 echo '<tr>'
 echo '<td class="b" align="center" rowspan="'$maxrelease'"><a href="http://www.debian.org/"><img src="http://www.debian.org/logos/openlogo-50.png" alt="Debian" border="0"></a></td>'
 
-wget -O- "$debian_package_url" 2>/dev/null | \
+wget -O- "$debian_package_url" 2>/dev/null | egrep '(all|i386)' | \
     awk '{ gsub(".*:","",$3); gsub("-[^-]*$","",$3); print $5 " " $3}' | \
     sort --key=2 -rn | fgrep -v 2.1 | fgrep -v m68k | \
     while read dv rv; do
@@ -81,6 +81,29 @@ case "$packman_version" in
 	echo "<td class=a>&nbsp;Rosegarden v$packman_version&nbsp;</td>"
 	echo "<td class=a>Packman repository</td>"
 	;;
+esac
+echo "</tr>"
+for x in `seq 1 $maxrelease` ; do echo '<tr></tr>'; done
+
+
+# Arch Linux
+
+
+arch_package_url='http://www.archlinux.org/packages/6128/'
+
+echo '<tr><td>&nbsp;</td></tr>'
+echo '<tr>'
+echo '<td class="b" align="center" rowspan="'$maxrelease'"><a href="http://www.archlinux.org/"><img src="http://www.archlinux.org/media/titlelogo.png" alt="Arch Linux" width="175" height="51" border="0"></a></td>'
+
+arch_version=`wget -O- "$arch_package_url" 2>/dev/null |  grep 'osegarden 4\.[0-9]\.' | head -1 | sed -e 's/^.*rosegarden 4\.\([0-9\.]*\).*$/\1/'`
+
+case "$arch_version" in
+    [0-9]*)
+        echo '</tr><tr>'
+        echo "<td class=a>&nbsp;Arch Linux&nbsp;</td>"
+        echo "<td class=a>&nbsp;Rosegarden v$arch_version&nbsp;</td>"
+        echo "<td class=a>Extra repository</td>"
+        ;;
 esac
 echo "</tr>"
 for x in `seq 1 $maxrelease` ; do echo '<tr></tr>'; done
