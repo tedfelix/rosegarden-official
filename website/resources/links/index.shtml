@@ -37,11 +37,7 @@
 
       <ul>
       <li><a href="http://www.geocities.jp/happy_winges/">Miki's page</a> with music made using Rosegarden.</li>
-<!--
-      <li><a href="http://studio.telaneos.com/">Eric's Studio</a> and some
-      music recorded with Rosegarden and other Linux audio software.
-      </li>
--->
+
       <li><a href="http://music.dooglio.net/">R. Douglas Barbieri's Music Page</a>, "Music to Game By", soundtracks and more.
 
       <li><a href="http://www.alhazred.com/">Alhazred</a>, Brett McCoy's progressive metal project.
@@ -50,7 +46,7 @@
 
       <li><a href="http://www.musically.me.uk/">Will J Godfrey's Music</a>, featuring atmospheric music mostly made with Rosegarden and <a href="http://zynaddsubfx.sourceforge.net/">ZynAddSubFX</a>.
 
-      <li><a href="http://music.wansti.de/">Marek's SuperTux Soundtrack</a> music and other compositions.
+      <li><a href="http://www.discarded-ideas.org/music">Marek's SuperTux Soundtrack</a> music and other compositions.
 
       <li><a href="http://lam.fugal.net/">Music Made with Linux</a> -- a page full of links to music made with Linux music software, including Rosegarden and many other applications.
 
@@ -65,7 +61,7 @@
 
       <li><a href="http://www.alsa-project.org">ALSA - Advanced Linux Sound Architecture</a> - drivers for your soundcards.
 
-      <li><a href="http://jackit.sourceforge.net">JACK - JACK Audio
+      <li><a href="http://http://www.jackaudio.org/">JACK - JACK Audio
       Connection Kit</a> - the excellent low latency audio server used
       by Rosegarden.  Also, <a
       href="http://qjackctl.sourceforge.net/">qjackctl</a> - the
@@ -76,13 +72,11 @@
       JACK apps that make your Rosegarden (and JACK related)
       experience more pleasant.
 
-      <li><a href="http://www.fluidsynth.org">Fluidsynth</a> - a
-      soundfont based softsynth for Linux.  Works as a MIDI target for
-      Rosegarden. Also <a
-      href="http://qsynth.sourceforge.net/">qsynth</a> - a nice GUI
-      for Fluidsynth, from the same author as qjackctl.
+      <li><a href="http://qsynth.sourceforge.net">QSynth</a> - a
+      soundfont based softsynth for Linux using the FluidSynth engine.  Works as a MIDI target for
+      Rosegarden. 
 
-      <li><a href="http://hydrogen.sourceforge.net/">Hydrogen</a> - a
+      <li><a href="http://www.hydrogen-music.org/">Hydrogen</a> - a
       pattern based drum machine and sample-based synth that can also
       be played from Rosegarden.
 

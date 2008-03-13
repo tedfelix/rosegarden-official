@@ -12,13 +12,7 @@
     <div id="maincontainer">
       <div id="main">
 	<br>	
-	<h2>Support</h2>
-	
-	<p>If you need assistance in installing, using or optimising
-	Rosegarden, or with other software that works with it, there
-	are several places you can turn.</p>
-
-	<h3>Community</h3>
+	<h2>Community</h2>
 
 	<p>Rosegarden has an active developer and user community, and
 	there are also numerous resources available for Linux audio
@@ -39,22 +33,12 @@
 	information for developers.</li>
 
 	<li><a
-	href="http://www.linuxdj.com/audio/lad/subscribelau.php3">Linux
+	href="http://lad.linuxaudio.org/subscribe/lau.html">Linux
 	Audio Users</a> and <a
-	href="http://www.linuxdj.com/audio/lad/subscribelad.php3">Linux
+	href="http://lad.linuxaudio.org/subscribe/lad.html">Linux
 	Audio Developers</a> mailing lists.</li>
 
 	</ul>
-
-	<h3>Commercial Installation and Development Support</h3>
-
-	<p>Rosegarden and Linux audio in general make a tremendously
-	attractive proposition for education and small studio
-	environments.</p>
-
-	<p>Check out some of the <a
-	href="/support/bespoke/">support options</a> for such
-	environments.</p>
 
       </div>
     </div>

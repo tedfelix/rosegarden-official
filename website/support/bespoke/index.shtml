@@ -14,32 +14,8 @@
     <div id="main">
 
     <br>
-    <h2>Support and Consultancy</h2>
 
-    <p>Are you interested in how Rosegarden &ndash; or the world of Linux music software &ndash; might be a good fit in your studio, school, college or music technology centre?</p>
-
-    	<ul><li><a href="http://www.ferventsoftware.com/">Fervent Software</a> (based in the UK) are available to give demonstrations, offer consultancy, and help with installation and support.  Fervent support Rosegarden development and employ core Rosegarden developers, offering a wide range of experience in music and audio software, media, and education.</li>
-
-    <li><a href="http://www.kandav.com/eolin">Eolin KB</a> (based in Sweden)
-    produces and sells music technology services and computer systems,
-    offering installation and support for Rosegarden among other
-    services.  Eolin KB's objective is to make computer-aided
-    music-making as smooth as possible.</li>
-    </ul>
-
-    <h3>Development and installation work</h3>
-
-    <p>A strength of software licensed under the GNU General Public License &ndash; such as Rosegarden and many other Linux audio applications &ndash; is the freedom for anyone to alter it to fit particular needs, without risking the support contract or invalidating the license.</p>
-
-    <p>This freedom is particularly valuable for situations such as education or larger installations where no off-the-shelf package is likely to meet your needs perfectly, unless by also including an expensive set of extra features you don't want.
-    </p>
-
-    <p>Fervent Software can offer the skills of core Rosegarden developers to do custom work with Rosegarden and any other GNU licensed music software.  <a href="http://www.ferventsoftware.com/">Contact us for more information.</a></p>
-
-    <h3>Do you offer development work?</h3>
-
-    <p>Anyone anywhere can legally offer services based on Rosegarden and any other GPL software.  If you do and you'd like your name here, just <a href="mailto:cannam@all-day-breakfast.com">contact us</a>.</p>
-
+    </div>
     </div>
 
   </body>
