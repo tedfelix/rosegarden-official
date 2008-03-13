@@ -6,7 +6,7 @@
 
     <!--#include virtual="/title.html" -->
     <!--#include virtual="/nav.html" -->
-    <!--#include virtual="/resources/subnav.html" -->
+    <!--#include virtual="/support/subnav.html" -->
 
         <div class="rightbox">
         <div align="center">
