@@ -58,7 +58,7 @@
 	control over whether a card is supported or not: it depends
 	entirely on whether the card has ALSA support.  To find out
 	whether your hardware will work with ALSA, look it up in the
-	<a href="http://www.alsa-project.org/alsa-doc/">ALSA Soundcard
+	<a href="http://www.alsa-project.org/main/index.php/Matrix:Main">ALSA Soundcard
 	Matrix</a>.
 
     <p>
