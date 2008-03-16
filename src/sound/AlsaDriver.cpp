@@ -392,6 +392,8 @@ AlsaDriver::getAutoTimer(bool &wantTimerChecks)
     bool pcmTimerAccepted = false;
     wantTimerChecks = false; // for most options
 
+    bool rtcCouldBeOK = false;
+
 #ifdef HAVE_LIBJACK
     if (m_jackDriver) {
 	wantTimerChecks = true;
@@ -424,6 +426,8 @@ AlsaDriver::getAutoTimer(bool &wantTimerChecks)
 			 1, 0, 14) &&
 	versionIsAtLeast(getKernelVersionString(),
 			 2, 6, 20)) {
+
+	rtcCouldBeOK = true;
 
         for (std::vector<AlsaTimerInfo>::iterator i = m_timers.begin();
 	     i != m_timers.end(); ++i) {
@@ -459,7 +463,7 @@ AlsaDriver::getAutoTimer(bool &wantTimerChecks)
 	}
     }
 
-    // next look for slow, unpopular 100Hz 2.4 system timer
+    // next look for slow, unpopular 100Hz (2.4) or 250Hz (2.6) system timer
 
     for (std::vector<AlsaTimerInfo>::iterator i = m_timers.begin();
             i != m_timers.end(); ++i) {
@@ -468,7 +472,11 @@ AlsaDriver::getAutoTimer(bool &wantTimerChecks)
         if (i->clas == SND_TIMER_CLASS_GLOBAL) {
             if (i->device == SND_TIMER_GLOBAL_SYSTEM) {
                 audit << "Using low-resolution system timer, sending a warning" << std::endl;
-                reportFailure(MappedEvent::WarningImpreciseTimer);
+		if (rtcCouldBeOK) {
+		    reportFailure(MappedEvent::WarningImpreciseTimerTryRTC);
+		} else {
+		    reportFailure(MappedEvent::WarningImpreciseTimer);
+		}
                 return i->name;
             }
         }
