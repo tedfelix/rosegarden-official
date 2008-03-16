@@ -234,9 +234,9 @@ StartupTester::slotHttpDone(bool error)
     if (lines.empty()) return;
 
     QString latestVersion = lines[0];
-    RG_DEBUG << "Comparing current version \"" << VERSION
-             << "\" with latest version \"" << latestVersion << "\""
-             << endl;
+    std::cerr << "Comparing current version \"" << VERSION
+              << "\" with latest version \"" << latestVersion << "\""
+              << std::endl;
     if (isVersionNewerThan(latestVersion, VERSION)) {
         emit newerVersionAvailable(latestVersion);
     }

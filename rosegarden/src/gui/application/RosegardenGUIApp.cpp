@@ -280,6 +280,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
         m_lircCommander(0),
 #endif
         m_haveAudioImporter(false),
+        m_firstRun(false),
         m_parameterArea(0)
 {
     m_myself = this;
@@ -1858,7 +1859,7 @@ void RosegardenGUIApp::slotSaveOptions()
 
     kapp->config()->setGroup(GeneralOptionsConfigGroup);
     kapp->config()->writeEntry("Show Transport", m_viewTransport->isChecked());
-    kapp->config()->writeEntry("Expanded Transport", m_transport ? getTransport()->isExpanded() : false);
+    kapp->config()->writeEntry("Expanded Transport", m_transport ? getTransport()->isExpanded() : true);
     kapp->config()->writeEntry("Show Track labels", m_viewTrackLabels->isChecked());
     kapp->config()->writeEntry("Show Rulers", m_viewRulers->isChecked());
     kapp->config()->writeEntry("Show Tempo Ruler", m_viewTempoRuler->isChecked());
@@ -1934,7 +1935,7 @@ void RosegardenGUIApp::readOptions()
     m_viewTransport->setChecked(opt);
     slotToggleTransport();
 
-    opt = kapp->config()->readBoolEntry("Expanded Transport", false);
+    opt = kapp->config()->readBoolEntry("Expanded Transport", true);
 
 #ifdef SETTING_LOG_DEBUG
 
@@ -4515,6 +4516,9 @@ void RosegardenGUIApp::slotTestStartupTester()
         return ;
     }
 
+    QStringList missingFeatures;
+    QStringList allMissing;
+
     QStringList missing;
     bool have = m_startupTester->haveProjectPackager(&missing);
 
@@ -4523,19 +4527,17 @@ void RosegardenGUIApp::slotTestStartupTester()
                  KXMLGUIClient::StateNoReverse : KXMLGUIClient::StateReverse);
 
     if (!have) {
+        missingFeatures.push_back(i18n("Export and import of Rosegarden Project files"));
         if (missing.count() == 0) {
-            KMessageBox::information
-                (m_view,
-                 i18n("<h3>Project Packager not available</h3><p>Rosegarden could not run the Project Packager.</p><p>Export and import of Rosegarden Project files will not be available.</p>"),
-                 i18n("Rosegarden Project Packager not available"),
-                 "startup-project-packager");            
+            allMissing.push_back(i18n("The Rosegarden Project Packager helper script"));
         } else {
-            KMessageBox::informationList
-                (m_view,
-                 i18n("<h3>Project Packager not available</h3><p>Rosegarden could not find one or more of the additional programs needed to support the Rosegarden Project Packager.</p><p>Export and import of Rosegarden Project files will not be available.<p><p>To fix this, you should install the following additional programs:</p>"),
-                 missing,
-                 i18n("Rosegarden Project Packager not available"),
-                 "startup-project-packager");
+            for (int i = 0; i < missing.count(); ++i) {
+                if (missingFeatures.count() > 1) {
+                    allMissing.push_back(i18n("%1 - for project file support").arg(missing[i]));
+                } else {
+                    allMissing.push_back(missing[i]);
+                }
+            }
         }
     }
 
@@ -4546,12 +4548,18 @@ void RosegardenGUIApp::slotTestStartupTester()
                  KXMLGUIClient::StateNoReverse : KXMLGUIClient::StateReverse);
 
     if (!have) {
-        KMessageBox::informationList
-            (m_view,
-             i18n("<h3>LilyPond Preview not available</h3><p>Rosegarden could not find one or more of the additional programs needed to support the LilyPond previewer.</p><p>Notation previews through LilyPond will not be available.</p><p>To fix this, you should install the following additional programs:</p>"),
-             missing,
-             i18n("LilyPond previews not available"),
-             "startup-lilypondview");
+        missingFeatures.push_back("Notation previews through LilyPond");
+        if (missing.count() == 0) {
+            allMissing.push_back(i18n("The Rosegarden LilyPondView helper script"));
+        } else {
+            for (int i = 0; i < missing.count(); ++i) {
+                if (missingFeatures.count() > 1) {
+                    allMissing.push_back(i18n("%1 - for LilyPond preview support").arg(missing[i]));
+                } else {
+                    allMissing.push_back(missing[i]);
+                }
+            }
+        }
     }
 
 #ifdef HAVE_LIBJACK
@@ -4560,15 +4568,44 @@ void RosegardenGUIApp::slotTestStartupTester()
         m_haveAudioImporter = m_startupTester->haveAudioFileImporter(&missing);
 
         if (!m_haveAudioImporter) {
-            KMessageBox::informationList
-                (m_view,
-                 i18n("<h3>General audio file import not available</h3><p>Rosegarden could not find one or more of the additional programs needed to support its audio file conversion helper.</p><p>Support for importing additional audio file types, and sample rate conversion, will not be available.</p><p>To fix this, you should install the following additional programs:</p>"),
-                 missing,
-                 i18n("Audio file importer not available"),
-                 "startup-audiofile-importer");
+            missingFeatures.push_back("General audio file import and conversion");
+            if (missing.count() == 0) {
+                allMissing.push_back(i18n("The Rosegarden Audio File Importer helper script"));
+            } else {
+                for (int i = 0; i < missing.count(); ++i) {
+                    if (missingFeatures.count() > 1) {
+                        allMissing.push_back(i18n("%1 - for audio file import").arg(missing[i]));
+                    } else {
+                        allMissing.push_back(missing[i]);
+                    }
+                }
+            }
         }
     }
 #endif
+
+    if (missingFeatures.count() > 0) {
+        QString message = i18n("<h3>Helper programs not found</h3><p>Rosegarden could not find one or more helper programs which it needs to provide some features.  The following features will not be available:</p>");
+        message += i18n("<ul>");
+        for (int i = 0; i < missingFeatures.count(); ++i) {
+            message += i18n("<li>%1</li>").arg(missingFeatures[i]);
+        }
+        message += i18n("</ul>");
+        message += i18n("<p>To fix this, you should install the following additional programs:</p>");
+        message += i18n("<ul>");
+        for (int i = 0; i < allMissing.count(); ++i) {
+            message += i18n("<li>%1</li>").arg(allMissing[i]);
+        }
+        message += i18n("</ul>");
+
+        awaitDialogClearance();
+        
+        KMessageBox::information
+            (m_view,
+             message,
+             i18n("Helper programs not found"),
+             "startup-helpers-missing");
+    }
 
     delete m_startupTester;
     m_startupTester = 0;
@@ -7940,10 +7977,42 @@ RosegardenGUIDoc *RosegardenGUIApp::getDocument() const
 }
 
 void
+RosegardenGUIApp::awaitDialogClearance()
+{
+    bool haveDialog = true;
+
+    std::cerr << "RosegardenGUIApp::awaitDialogClearance: entering" << std::endl;
+    
+    while (haveDialog) {
+
+        const QObjectList *c = children();
+        if (!c) return;
+
+        haveDialog = false;
+        for (QObjectList::const_iterator i = c->begin(); i != c->end(); ++i) {
+            QDialog *dialog = dynamic_cast<QDialog *>(*i);
+            if (dialog && dialog->isVisible()) {
+                haveDialog = true;
+                break;
+            }
+        }
+
+//        std::cerr << "RosegardenGUIApp::awaitDialogClearance: have dialog = "
+//                  << haveDialog << std::endl;
+    
+        if (haveDialog) kapp->processEvents();
+    }
+
+    std::cerr << "RosegardenGUIApp::awaitDialogClearance: exiting" << std::endl;
+}
+
+void
 RosegardenGUIApp::slotNewerVersionAvailable(QString v)
 {
+    if (m_firstRun) return;
     KStartupLogo::hideIfStillThere();
     CurrentProgressDialog::freeze();
+    awaitDialogClearance();
     KMessageBox::information
         (this,
          i18n("<h3>Newer version available</h3><p>A newer version of Rosegarden may be available.<br>Please consult the <a href=\"http://www.rosegardenmusic.com/getting/\">Rosegarden website</a> for more information.</p>"),

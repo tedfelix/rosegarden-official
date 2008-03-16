@@ -80,7 +80,7 @@ TransportDialog::TransportDialog(QWidget *parent,
     m_denominator(0),
     m_framesPerSecond(24),
     m_bitsPerFrame(80),
-    m_isExpanded(false),
+    m_isExpanded(true),
     m_haveOriginalBackground(false),
     m_isBackgroundSet(false),
     m_sampleRate(0)

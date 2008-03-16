@@ -292,6 +292,18 @@ public:
      *
      */
     virtual void alive();
+    
+    /*
+     * Tell the application whether this is the first time this
+     * version of RG has been run
+     */
+    void setIsFirstRun(bool first) { m_firstRun = first; }
+
+    /*
+     * Wait in a sub-event-loop until all modal dialogs from the main
+     * window have been cleared
+     */
+    void awaitDialogClearance();
 
     /*
      * Return the clipboard
@@ -1659,6 +1671,7 @@ private:
 
     StartupTester *m_startupTester;
 
+    bool m_firstRun;
     bool m_haveAudioImporter;
 
     RosegardenParameterArea *m_parameterArea;

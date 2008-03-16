@@ -193,6 +193,8 @@ public:
         FailureJackRestartFailed = 9,
         // A necessary ALSA call has returned an error code
         FailureALSACallFailed    = 10,
+        // Using a timer that has too low a resolution, but RTC might work
+        WarningImpreciseTimerTryRTC = 11,
     } FailureCode;      
 
     MappedEvent(): m_trackId(0),
