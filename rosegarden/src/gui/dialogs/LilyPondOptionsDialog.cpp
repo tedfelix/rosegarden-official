@@ -226,11 +226,12 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     m_lilyExportBeams->setChecked(config->readBoolEntry("lilyexportbeamings", false));
     layoutNotation->addMultiCellWidget(m_lilyExportBeams, 2, 2, 0, 1);
 
-// deprecated option - replaced with per-track combo boxes
-/*  m_lilyExportStaffGroup = new QCheckBox(
-                                 i18n("Add staff group bracket"), frameNotation);
-    m_lilyExportStaffGroup->setChecked(config->readBoolEntry("lilyexportstaffgroup", false));
-    layoutNotation->addMultiCellWidget(m_lilyExportStaffGroup, 3, 3, 0, 1); */
+    // recycle this for a new option to ignore the track brackets (so it is less
+    // obnoxious to print single parts where brackets are in place)
+    m_lilyExportStaffGroup = new QCheckBox(
+                                 i18n("Export track staff brackets"), frameNotation);
+    m_lilyExportStaffGroup->setChecked(config->readBoolEntry("lilyexportstaffbrackets", true));
+    layoutNotation->addMultiCellWidget(m_lilyExportStaffGroup, 3, 3, 0, 1); 
 
     generalGrid->setRowStretch(4, 10);
 
@@ -312,6 +313,7 @@ LilyPondOptionsDialog::slotApply()
     config->writeEntry("lilyexportpointandclick", m_lilyExportPointAndClick->isChecked());
     config->writeEntry("lilyexportbeamings", m_lilyExportBeams->isChecked());
     config->writeEntry("lilyexportstaffmerge", m_lilyExportStaffMerge->isChecked());
+    config->writeEntry("lilyexportstaffbrackets", m_lilyExportStaffGroup->isChecked());
     config->writeEntry("lilylyricshalignment", m_lilyLyricsHAlignment->currentItem());
     config->writeEntry("lilyexportmarkermode", m_lilyMarkerMode->currentItem());
     m_headersPage->apply();

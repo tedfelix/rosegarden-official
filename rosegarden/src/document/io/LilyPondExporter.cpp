@@ -88,9 +88,10 @@ const PropertyName LilyPondExporter::SKIP_PROPERTY
 LilyPondExporter::LilyPondExporter(RosegardenGUIApp *parent,
                                    RosegardenGUIDoc *doc,
                                    std::string fileName) :
-        ProgressReporter((QObject *)parent, "lilyPondExporter"),
+        ProgressReporter((QObject *)parent, "lilypondExporter"),
         m_doc(doc),
-        m_fileName(fileName)
+        m_fileName(fileName),
+        m_lastClefFound(Clef::Treble)
 {
     m_composition = &m_doc->getComposition();
     m_studio = &m_doc->getStudio();
@@ -103,9 +104,11 @@ LilyPondExporter::LilyPondExporter(RosegardenGUIApp *parent,
 LilyPondExporter::LilyPondExporter(NotationView *parent,
                                    RosegardenGUIDoc *doc,
                                    std::string fileName) :
-        ProgressReporter((QObject *)parent, "lilyPondExporter"),
+        ProgressReporter((QObject *)parent, "lilypondExporter"),
         m_doc(doc),
-        m_fileName(fileName)
+        m_fileName(fileName),
+        m_lastClefFound(Clef::Treble)
+
 {
     m_composition = &m_doc->getComposition();
     m_studio = &m_doc->getStudio();
@@ -133,6 +136,7 @@ LilyPondExporter::readConfigVariables(void)
     m_exportPointAndClick = cfg->readBoolEntry("lilyexportpointandclick", false);
     m_exportBeams = cfg->readBoolEntry("lilyexportbeamings", false);
     m_exportStaffMerge = cfg->readBoolEntry("lilyexportstaffmerge", false);
+    m_exportStaffGroup = cfg->readBoolEntry("lilyexportstaffbrackets", true);
     m_lyricsHAlignment = cfg->readBoolEntry("lilylyricshalignment", LEFT_ALIGN);
 
     m_languageLevel = cfg->readUnsignedNumEntry("lilylanguage", LILYPOND_VERSION_2_6);
@@ -789,6 +793,9 @@ LilyPondExporter::write()
 	    if (firstTrack) {
 	        // seems to be common to every case now
 	        str << indent(col++) << "<< % common" << std::endl;
+            }
+
+            if (firstTrack && m_exportStaffGroup) {
 
 		if (bracket == Brackets::SquareOn) {
 		    str << indent(col++) << "\\context StaffGroup = \"" << staffGroupCounter++
@@ -855,22 +862,26 @@ LilyPondExporter::write()
 		    // loop we are one track too early for closing, so we use
 		    // the bracket setting for the previous track for closing
 		    // purposes (I'm not quite sure why this works, but it does)			
-		    if (prevBracket == Brackets::SquareOff ||
-			prevBracket == Brackets::SquareOnOff) {
-			str << indent(--col) << ">> % StaffGroup " << staffGroupCounter
-			    << std::endl; //indent-
-		    } else	if (prevBracket == Brackets::CurlyOff) {
-			str << indent(--col) << ">> % PianoStaff " << pianoStaffCounter
-			    << std::endl; //indent-
-		    } else if (prevBracket == Brackets::CurlySquareOff) {
-			str << indent(--col) << ">> % PianoStaff " << pianoStaffCounter
-			    << std::endl; //indent-
-			str << indent(--col) << ">> % StaffGroup " << staffGroupCounter
-			    << std::endl; //indent-
+                     if (m_exportStaffGroup) {
+                          if (prevBracket == Brackets::SquareOff ||
+                              prevBracket == Brackets::SquareOnOff) {
+                              str << indent(--col) << ">> % StaffGroup " << staffGroupCounter
+                                   << std::endl; //indent-
+                          } else if (prevBracket == Brackets::CurlyOff) {
+                              str << indent(--col) << ">> % PianoStaff " << pianoStaffCounter
+                                   << std::endl; //indent-
+                          } else if (prevBracket == Brackets::CurlySquareOff) {
+                              str << indent(--col) << ">> % PianoStaff " << pianoStaffCounter
+                                   << std::endl; //indent-
+                              str << indent(--col) << ">> % StaffGroup " << staffGroupCounter
+                                   << std::endl; //indent-
+                          }
 		    }
 
-		    // handle any bracket start events
-		    if (!firstTrack) {
+                     // handle any bracket start events (unless track staff
+                     // brackets are being ignored, as when printing single parts
+                     // out of a bigger score one by one)
+                     if (!firstTrack && m_exportStaffGroup) {
 		        if (bracket == Brackets::SquareOn ||
 			    bracket == Brackets::SquareOnOff) {
 			    str << indent(col++) << "\\context StaffGroup = \""
@@ -1217,19 +1228,22 @@ LilyPondExporter::write()
     if (voiceCounter > 0) {
         str << indent(--col) << ">> % Staff (final) ends" << std::endl;  // indent-
 
-	// handle any necessary final bracket closures
-	if (bracket == Brackets::SquareOff ||
-	    bracket == Brackets::SquareOnOff) {
-	    str << indent(--col) << ">> % StaffGroup " << staffGroupCounter
-		<< std::endl; //indent-
-	} else	if (bracket == Brackets::CurlyOff) {
-	    str << indent(--col) << ">> % PianoStaff (final) " << pianoStaffCounter
-		<< std::endl; //indent-
-	} else if (bracket == Brackets::CurlySquareOff) {
-	    str << indent(--col) << ">> % PianoStaff (final) " << pianoStaffCounter
-		<< std::endl; //indent-
-	    str << indent(--col) << ">> % StaffGroup (final) " << staffGroupCounter
-		<< std::endl; //indent-
+        // handle any necessary final bracket closures (if brackets are being
+        // exported)
+        if (m_exportStaffGroup) {
+            if (bracket == Brackets::SquareOff ||
+                 bracket == Brackets::SquareOnOff) {
+                 str << indent(--col) << ">> % StaffGroup " << staffGroupCounter
+                     << std::endl; //indent-
+            } else        if (bracket == Brackets::CurlyOff) {
+                 str << indent(--col) << ">> % PianoStaff (final) " << pianoStaffCounter
+                     << std::endl; //indent-
+            } else if (bracket == Brackets::CurlySquareOff) {
+                 str << indent(--col) << ">> % PianoStaff (final) " << pianoStaffCounter
+                     << std::endl; //indent-
+                 str << indent(--col) << ">> % StaffGroup (final) " << staffGroupCounter
+                     << std::endl; //indent-
+            }
 	}
     } else {
         str << indent(--col) << "% (All staffs were muted.)" << std::endl;
@@ -1548,6 +1562,8 @@ LilyPondExporter::writeBar(Segment *s,
             continue;
         }
 
+        bool needsSlashRest = false;
+
         if ((*i)->isa(Note::EventType)) {
 
             Chord chord(*s, i, m_composition->getNotationQuantizer());
@@ -1728,6 +1744,19 @@ LilyPondExporter::writeBar(Segment *s,
                 }
             }
 
+            bool offsetRest = false;
+            int restOffset  = 0;
+            if ((*i)->has(DISPLACED_Y)) {
+                restOffset  = (*i)->get<Int>(DISPLACED_Y);
+                offsetRest = true;
+            }
+
+            if (offsetRest) {
+                 std::cout << "REST OFFSET: " << restOffset << std::endl;
+            } else {
+                 std::cout << "NO REST OFFSET" << std::endl;
+            }
+
 	    if (MultiMeasureRestCount == 0) {
 		if (hiddenRest) {
 		    str << "s";
@@ -1746,7 +1775,65 @@ LilyPondExporter::writeBar(Segment *s,
 		    }
 		    str << "R";
 		} else {
-		    str << "r";
+                     if (offsetRest) {
+                         // use offset height to get an approximate corresponding
+                          // height on staff
+                         restOffset = restOffset / 1000;
+                          restOffset -= restOffset * 2;
+
+                          // use height on staff to get a MIDI pitch
+                          // get clef from whatever the last clef event was
+                          Rosegarden::Key  k;
+                          Accidental a;
+                         Pitch helper(restOffset, m_lastClefFound, k, a);
+
+                          // port some code from writePitch() here, rather than
+                          // rewriting writePitch() to do both jobs, which
+                          // somebody could conceivably clean up one day if anyone
+                          // is bored
+
+                          // use MIDI pitch to get a named note
+                          int p = helper.getPerformancePitch();
+                          std::string n = convertPitchToLilyNote(p, a, k);
+
+                          // write named note
+                          str << n;
+    
+                          // generate and write octave marks
+                          std::string m = "";
+                          int o = (int)(p / 12);
+
+                          // mystery hack (it was always aiming too low)
+                          o++;
+
+                          if (o < 4) {
+                              for (; o < 4; o++)
+                                   m += ",";
+                          } else {
+                              for (; o > 4; o--)
+                                   m += "\'";
+                          }
+
+                          str << m;
+
+                          // defer the \rest until after any duration, because it
+                          // can't come before a duration if a duration change is
+                          // necessary, which is all determined a bit further on
+                          needsSlashRest = true;
+
+
+                          std::cout << "using pitch letter:"
+                                    << n << m
+                                     << " for offset: " 
+                                     << restOffset
+                                     << " for calculated octave: "
+                                     << o
+                                     << " in clef: "
+                                     << m_lastClefFound.getClefType()
+                                    << std::endl;
+                     } else {
+                         str << "r";
+                     }
 		}
 	    
 		if (duration != prevDuration) {
@@ -1756,6 +1843,13 @@ LilyPondExporter::writeBar(Segment *s,
 		    }
 		    prevDuration = duration;
 		}
+
+                 // have to add \rest to a fake rest note after any required
+                 // duration change
+                 if (needsSlashRest) {
+                     str << "\\rest";
+                     needsSlashRest = false;
+                 }
 
 		if (lilyText != "") {
 		    str << lilyText;
@@ -1806,6 +1900,16 @@ LilyPondExporter::writeBar(Segment *s,
                 } else if (clef.getClefType() == Clef::Subbass) {
                     str << "subbass";
                 }
+
+                // save clef for later use by rests that need repositioned
+                 m_lastClefFound = clef;
+                 std::cout << "getting clef"
+                           << std::endl
+                            << "clef: "
+                            << clef.getClefType()
+                            << " lastClefFound: "
+                            << m_lastClefFound.getClefType()
+                            << std::endl;
 
                 // Transpose the clef one or two octaves up or down, if specified.
                 int octaveOffset = clef.getOctaveOffset();

@@ -100,6 +100,7 @@ protected:
     Composition *m_composition;
     Studio *m_studio;
     std::string m_fileName;
+    Clef m_lastClefFound;
 
     void readConfigVariables(void);
     void writeBar(Segment *, int barNo, int barStart, int barEnd, int col,
