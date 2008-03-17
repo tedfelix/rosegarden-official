@@ -51,10 +51,11 @@ $input"
     shift
 done
 
-echo "input files: $input_files"
+#echo "input files: $input_files"
 
 if [ -n "$print_version" ]; then
     echo "rosegarden-lilypondview v1.6" 1>&2
+    exit 0
 fi
 
 if [ -x "`type -path lilypond`" ]; then
@@ -125,7 +126,7 @@ fi
 [ -z "$prog_temp_file" ] && exit 1
 
 if [ -n "$conftest" ]; then
-    echo "Lilypond version: $lilypond_version"
+    echo "LilyPond version: $lilypond_version"
     exit 0
 fi
 
