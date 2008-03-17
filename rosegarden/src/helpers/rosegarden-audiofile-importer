@@ -1,6 +1,8 @@
 #!/bin/bash
 #
 # Helper application to convert and import audio files for Rosegarden.
+# Copyright 2005-2008 Chris Cannam.  Distributed under the GNU General
+# Public License.
 #
 # Can take audio files of various kinds as input, always produces WAV
 # files that are compatible with Rosegarden as output.
