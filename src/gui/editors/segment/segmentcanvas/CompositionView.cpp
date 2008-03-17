@@ -102,6 +102,7 @@ CompositionView::CompositionView(RosegardenGUIDoc* doc,
         m_showPreviews(false),
         m_showSegmentLabels(true),
         m_fineGrain(false),
+	m_pencilOverExisting(false),
         m_minWidth(m_model->getLength()),
         m_stepSize(0),
         m_rectFill(0xF0, 0xF0, 0xF0),
@@ -1316,6 +1317,7 @@ void CompositionView::contentsMousePressEvent(QMouseEvent* e)
     slotSetSelectCopy((bs & Qt::ControlButton) != 0);
     slotSetSelectAdd((bs & Qt::ShiftButton) != 0);
     slotSetFineGrain((bs & Qt::ShiftButton) != 0);
+    slotSetPencilOverExisting((bs & Qt::AltButton + Qt::ControlButton) != 0);
 
     switch (e->button()) {
     case LeftButton:
@@ -1391,6 +1393,7 @@ void CompositionView::contentsMouseMoveEvent(QMouseEvent* e)
 
     Qt::ButtonState bs = e->state();
     slotSetFineGrain((bs & Qt::ShiftButton) != 0);
+    slotSetPencilOverExisting((bs & Qt::AltButton) != 0);
 
     int follow = m_tool->handleMouseMove(e);
     setScrollDirectionConstraint(follow);
@@ -1526,6 +1529,11 @@ void CompositionView::setTextFloat(int x, int y, const QString &text)
 void CompositionView::slotSetFineGrain(bool value)
 {
     m_fineGrain = value;
+}
+
+void CompositionView::slotSetPencilOverExisting(bool value)
+{
+    m_pencilOverExisting = value;
 }
 
 void

@@ -24,6 +24,8 @@
 
 #include "RulerScale.h"
 
+#include <map>
+
 namespace Rosegarden {
 
 /**
@@ -39,10 +41,10 @@ class SnapGrid
 public:
     /**
      * Construct a SnapGrid that uses the given RulerScale for
-     * x-coordinate mappings and the given vstep for y-coords.
-     * If vstep is zero, y-coords are not snapped at all.
+     * x-coordinate mappings and the given ysnap for y-coords.
+     * If ysnap is zero, y-coords are not snapped at all.
      */
-    SnapGrid(RulerScale *rulerScale, int vstep = 0);
+    SnapGrid(RulerScale *rulerScale, int ysnap = 0);
 
     static const timeT NoSnap;
     static const timeT SnapToBar;
@@ -86,60 +88,79 @@ public:
     timeT getSnapTime(timeT t) const;
 
     /**
-     * Snap a given x-coordinate to the nearest time on
-     * the grid.  Of course this also does x-to-time
-     * conversion, so it's useful even in NoSnap mode.
-     * If the snap time is greater than the bar duration
-     * at this point, the bar duration will be used instead.
+     * Snap a given x-coordinate to the nearest time on the grid.  Of
+     * course this also does x-to-time conversion, so it's useful even
+     * in NoSnap mode.  If the snap time is greater than the bar
+     * duration at this point, the bar duration will be used instead.
      *
-     * If d is SnapLeft or SnapRight, a time to the left or
-     * right respectively of the given coordinate will be
-     * returned; otherwise the nearest time on either side
-     * will be returned.
+     * If d is SnapLeft or SnapRight, a time to the left or right
+     * respectively of the given coordinate will be returned;
+     * otherwise the nearest time on either side will be returned.
      */
     timeT snapX(double x, SnapDirection d = SnapEither) const;
 
     /**
-     * Snap a given time to the nearest time on the grid.
-     * Unlike snapX, this is not useful in NoSnap mode.
-     * If the snap time is greater than the bar duration
-     * at this point, the bar duration will be used instead.
+     * Snap a given time to the nearest time on the grid.  Unlike
+     * snapX, this is not useful in NoSnap mode.  If the snap time is
+     * greater than the bar duration at this point, the bar duration
+     * will be used instead.
      *
-     * If d is SnapLeft or SnapRight, a time to the left or
-     * right respectively of the given coordinate will be
-     * returned; otherwise the nearest time on either side
-     * will be returned.
+     * If d is SnapLeft or SnapRight, a time to the left or right
+     * respectively of the given coordinate will be returned;
+     * otherwise the nearest time on either side will be returned.
      */
     timeT snapTime(timeT t, SnapDirection d = SnapEither) const;
 
     /**
-     * Snap a given y-coordinate to the nearest lower
-     * multiple of the vstep.
+     * Snap a given y-coordinate to the nearest lower bin coordinate.
      */
     int snapY(int y) const {
-        if (m_vstep == 0) return y;
-        else return y / m_vstep * m_vstep;
+        if (m_ysnap == 0) return y;
+	return getYBinCoordinate(getYBin(y));
     }
 
     /**
-     * Return the vstep bin number for the given y-coordinate.
+     * Return the bin number for the given y-coordinate.
      */
-    int getYBin(int y) const {
-        if (m_vstep == 0) return y;
-        else return y / m_vstep;
+    int getYBin(int y) const;
+
+    /**
+     * Return the y-coordinate of the grid line at the start of the
+     * given bin.
+     */
+    int getYBinCoordinate(int bin) const;
+
+    /**
+     * Set the default vertical step.  This is used as the height for
+     * bins that have no specific height multiple set, and the base
+     * height for bins that have a multiple.  Setting the Y snap here
+     * is equivalent to specifying it in the constructor.
+     */
+    void setYSnap(int ysnap) {
+	m_ysnap = ysnap;
     }
 
     /**
-     * Return the y-coordinate of the grid line at the start
-     * of the given vstep bin.
+     * Retrieve the default vertical step.
      */
-    int getYBinCoordinate(int bin) const {
-        if (m_vstep == 0) return bin;
-        else return bin * m_vstep;
-    }
-
     int getYSnap() const {
-        return m_vstep;
+        return m_ysnap;
+    }
+
+    /**
+     * Set the height multiple for a specific bin.  The bin will be
+     * multiple * ysnap high.  The default is 1 for all bins.
+     */
+    void setBinHeightMultiple(int bin, int multiple) {
+	m_ymultiple[bin] = multiple;
+    }
+    
+    /**
+     * Retrieve the height multiple for a bin.
+     */
+    int getBinHeightMultiple(int bin) {
+	if (m_ymultiple.find(bin) == m_ymultiple.end()) return 1;
+	return m_ymultiple[bin];
     }
 
     RulerScale *getRulerScale() {
@@ -153,7 +174,8 @@ public:
 protected:
     RulerScale *m_rulerScale; // I don't own this
     timeT m_snapTime;
-    int m_vstep;
+    int m_ysnap;
+    std::map<int, int> m_ymultiple;
 };
 
 }
