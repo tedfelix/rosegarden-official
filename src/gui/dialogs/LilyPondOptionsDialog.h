@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -74,6 +73,7 @@ protected:
     QCheckBox *m_lilyExportPointAndClick;
     QCheckBox *m_lilyExportBeams;
     QCheckBox *m_lilyExportStaffMerge;
+    QCheckBox *m_lilyExportStaffGroup;
     QComboBox *m_lilyMarkerMode;
     HeadersConfigurationPage *m_headersPage;
 
