@@ -332,6 +332,74 @@ void Composition::setSegmentStartTime(Segment *segment, timeT startTime)
     m_segments.insert(segment);    
 }
 
+int
+Composition::getMaxContemporaneousSegmentsOnTrack(TrackId track) const
+{
+    // Could be made faster, but only if it needs to be.
+
+    // This is similar to the polyphony calculation in
+    // DocumentMetaConfigurationPage ctor.
+
+    std::set<Segment *> simultaneous;
+    std::multimap<timeT, Segment *> ends;
+
+    int maximum = 0;
+
+    for (const_iterator i = begin(); i != end(); ++i) {
+	if ((*i)->getTrack() != track) continue;
+	timeT t0 = (*i)->getStartTime();
+	timeT t1 = (*i)->getEndMarkerTime();
+	while (!ends.empty() && t0 >= ends.begin()->first) {
+	    simultaneous.erase(ends.begin()->second);
+	    ends.erase(ends.begin());
+	}
+	simultaneous.insert(*i);
+	ends.insert(std::multimap<timeT, Segment *>::value_type(t1, *i));
+	int current = simultaneous.size();
+	if (current > maximum) maximum = current;
+    }
+
+    return maximum;
+}
+
+int
+Composition::getSegmentVoiceIndex(const Segment *segment) const
+{
+    TrackId track = segment->getTrack();
+
+    // See function above
+
+    std::map<Segment *, int> indices;
+    std::set<int> used;
+    std::multimap<timeT, Segment *> ends;
+
+    int maximum = 0;
+
+    for (const_iterator i = begin(); i != end(); ++i) {
+	if ((*i)->getTrack() != track) continue;
+	timeT t0 = (*i)->getStartTime();
+	timeT t1 = (*i)->getEndMarkerTime();
+	int index;
+	while (!ends.empty() && t0 >= ends.begin()->first) {
+	    index = indices[ends.begin()->second];
+	    used.erase(index);
+	    indices.erase(ends.begin()->second);
+	    ends.erase(ends.begin());
+	}
+	for (index = 0; ; ++index) {
+	    if (used.find(index) == used.end()) break;
+	}
+	if (*i == segment) return index;
+	indices[*i] = index;
+	used.insert(index);
+	ends.insert(std::multimap<timeT, Segment *>::value_type(t1, *i));
+    }
+
+    std::cerr << "WARNING: Composition::getSegmentVoiceIndex: segment "
+	      << segment << " not found in composition" << std::endl;
+    return 0;
+}
+
 TriggerSegmentRec *
 Composition::addTriggerSegment(Segment *s, int pitch, int velocity)
 {

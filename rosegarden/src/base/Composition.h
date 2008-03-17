@@ -291,6 +291,23 @@ public:
      */
     bool weakDetachSegment(Segment*);
 
+    /**
+     * Get the largest number of segments that "overlap" at any one
+     * time on the given track.  I have given this function a nice
+     * long name to make it feel important.
+     */
+    int getMaxContemporaneousSegmentsOnTrack(TrackId track) const;
+
+    /**
+     * Retrieve a "vertical" index for this segment within its track.
+     * Currently this is based on studying the way that segments on
+     * the track overlap and returning the lowest integer such that no
+     * prior starting segment that overlaps with this one would use
+     * the same integer.  In future this could use proper voice
+     * ordering.
+     */
+    int getSegmentVoiceIndex(const Segment *) const;
+
 
     //////
     //

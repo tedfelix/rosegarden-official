@@ -150,6 +150,8 @@ protected slots:
     void slotAudioPreviewComplete(AudioPreviewUpdater*);
 
 protected:
+    void setTrackHeights();
+
     void setSelected(const Segment*, bool selected = true);
     bool isSelected(const Segment*) const;
     bool isTmpSelected(const Segment*) const;

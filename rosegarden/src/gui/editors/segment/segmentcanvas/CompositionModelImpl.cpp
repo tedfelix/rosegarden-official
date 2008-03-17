@@ -78,6 +78,8 @@ CompositionModelImpl::CompositionModelImpl(Composition& compo,
     m_audioPreviewDataCache.setAutoDelete(true);
     m_composition.addObserver(this);
 
+    setTrackHeights();
+
     const Composition::segmentcontainer& segments = m_composition.getSegments();
     Composition::segmentcontainer::iterator segEnd = segments.end();
 
@@ -594,6 +596,8 @@ void CompositionModelImpl::removePreviewCache(const Segment *s)
 
 void CompositionModelImpl::segmentAdded(const Composition *, Segment *s)
 {
+    setTrackHeights();
+
     makePreviewCache(s);
     s->addObserver(this);
     emit needContentUpdate();
@@ -601,6 +605,8 @@ void CompositionModelImpl::segmentAdded(const Composition *, Segment *s)
 
 void CompositionModelImpl::segmentRemoved(const Composition *, Segment *s)
 {
+    setTrackHeights();
+
     QRect r = computeSegmentRect(*s);
 
     m_selectedSegments.erase(s);
@@ -937,6 +943,19 @@ timeT CompositionModelImpl::getRepeatTimeAt(const QPoint& p, const CompositionIt
     return count != 0 ? startTime + (count * (s->getEndMarkerTime() - s->getStartTime())) : 0;
 }
 
+void CompositionModelImpl::setTrackHeights()
+{
+    for (Composition::trackcontainer::const_iterator i = 
+             m_composition.getTracks().begin();
+         i != m_composition.getTracks().end(); ++i) {
+        
+        int max = m_composition.getMaxContemporaneousSegmentsOnTrack(i->first);
+        if (max == 0) max = 1;
+
+        m_grid.setBinHeightMultiple(i->second->getPosition(), max);
+    }
+}
+
 QPoint CompositionModelImpl::computeSegmentOrigin(const Segment& s)
 {
     //    Profiler profiler("CompositionModelImpl::computeSegmentOrigin", true);
@@ -947,7 +966,10 @@ QPoint CompositionModelImpl::computeSegmentOrigin(const Segment& s)
     QPoint res;
 
     res.setX(int(nearbyint(m_grid.getRulerScale()->getXForTime(startTime))));
-    res.setY(m_grid.getYBinCoordinate(trackPosition));
+
+    res.setY(m_grid.getYBinCoordinate(trackPosition) +
+             m_composition.getSegmentVoiceIndex(&s) *
+             m_grid.getYSnap());
 
     return res;
 }

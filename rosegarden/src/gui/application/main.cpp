@@ -413,7 +413,7 @@ int main(int argc, char *argv[])
 
     KAboutData aboutData( "rosegarden", I18N_NOOP("Rosegarden"),
                           VERSION, description, KAboutData::License_GPL,
-                          I18N_NOOP("Copyright 2000 - 2008 Guillaume Laurent, Chris Cannam, Richard Bown\nParts copyright 1994 - 2004 Chris Cannam, Andy Green, Richard Bown, Guillaume Laurent\nLilypond fonts copyright 1997 - 2005 Han-Wen Nienhuys and Jan Nieuwenhuizen"),
+                          I18N_NOOP("Copyright 2000 - 2008 Guillaume Laurent, Chris Cannam, Richard Bown\nParts copyright 1994 - 2004 Chris Cannam, Andy Green, Richard Bown, Guillaume Laurent\nLilyPond fonts copyright 1997 - 2005 Han-Wen Nienhuys and Jan Nieuwenhuizen"),
                           0,
                           "http://www.rosegardenmusic.com/",
                           "rosegarden-devel@lists.sourceforge.net");
@@ -426,7 +426,7 @@ int main(int argc, char *argv[])
     aboutData.addAuthor("Heikki Johannes Junes", 0, "hjunes@users.sourceforge.net");
 
     aboutData.addCredit("Randall Farmer", I18N_NOOP("Chord labelling code"), " rfarme@simons-rock.edu");
-    aboutData.addCredit("Hans  Kieserman", I18N_NOOP("Lilypond output\nassorted other patches\ni18n-ization"), "hkieserman@mail.com");
+    aboutData.addCredit("Hans  Kieserman", I18N_NOOP("LilyPond output\nassorted other patches\ni18n-ization"), "hkieserman@mail.com");
     aboutData.addCredit("Levi Burton", I18N_NOOP("UI improvements\nbug fixes"), "donburton@sbcglobal.net");
     aboutData.addCredit("Mark Hymers", I18N_NOOP("Segment colours\nOther UI and bug fixes"), "<markh@linuxfromscratch.org>");
     aboutData.addCredit("Alexandre Prokoudine", I18N_NOOP("Russian translation\ni18n-ization"), "avp@altlinux.ru");

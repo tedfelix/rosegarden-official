@@ -303,6 +303,36 @@ TrackButtons::slotUpdateTracks()
         }
     }
 
+    // Set height
+    //
+    for (unsigned int i = 0; i < m_trackHBoxes.size(); ++i) {
+
+        track = comp.getTrackByPosition(i);
+
+        if (track) {
+            
+            int multiple = m_doc->getComposition()
+                .getMaxContemporaneousSegmentsOnTrack(track->getId());
+            if (multiple == 0) multiple = 1;
+
+            // nasty dupe from makeButton
+
+            int buttonGap = 8;
+            int vuWidth = 20;
+            int vuSpacing = 2;
+
+            int labelWidth = m_trackLabelWidth -
+                ((m_cellSize - buttonGap) * 2 +
+                 vuSpacing * 2 + vuWidth);
+
+            m_trackHBoxes[i]->setMinimumSize
+                (labelWidth, m_cellSize * multiple - m_borderGap);
+
+            m_trackHBoxes[i]->setFixedHeight
+                (m_cellSize * multiple - m_borderGap);
+        }
+    }
+
     // Renumber all the labels
     //
     for (unsigned int i = 0; i < m_trackLabels.size(); ++i) {
@@ -974,6 +1004,9 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
 
     int vuWidth = 20;
     int vuSpacing = 2;
+    int multiple = m_doc->getComposition()
+        .getMaxContemporaneousSegmentsOnTrack(trackId);
+    if (multiple == 0) multiple = 1;
     int labelWidth = m_trackLabelWidth - ( (m_cellSize - buttonGap) * 2 +
                                             vuSpacing * 2 + vuWidth );
 
@@ -988,8 +1021,8 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
     trackHBox = new QFrame(this);
     QHBoxLayout *hblayout = new QHBoxLayout(trackHBox);
         
-    trackHBox->setMinimumSize(labelWidth, m_cellSize - m_borderGap);
-    trackHBox->setFixedHeight(m_cellSize - m_borderGap);
+    trackHBox->setMinimumSize(labelWidth, m_cellSize * multiple - m_borderGap);
+    trackHBox->setFixedHeight(m_cellSize * multiple - m_borderGap);
 
     // Try a style for the box
     //
@@ -1050,6 +1083,7 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
     //
     trackLabel = new TrackLabel(trackId, track->getPosition(), trackHBox);
     hblayout->addWidget(trackLabel);
+    hblayout->addSpacing(vuSpacing);
 
     if (track->getLabel() == std::string("")) {
     Rosegarden::Instrument *ins =
