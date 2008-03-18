@@ -129,7 +129,17 @@ void MatrixMover::handleLeftButtonPress(timeT time,
             else
                 newSelection = new EventSelection(m_currentStaff->getSegment());
 
-            newSelection->addEvent(m_currentElement->event());
+            //!!! perhaps unclean in some way?  the logic of all of this
+            // selector/mover/tool stuff is rather difficult to get hold of, but
+            // the following seems to work:
+            //
+            // if the selection already contains the event, remove it from the
+            // selection instead
+            if (selection->contains(m_currentElement->event())){
+                newSelection->removeEvent(m_currentElement->event());
+            } else {
+                newSelection->addEvent(m_currentElement->event());
+            }
             m_mParentView->setCurrentSelection(newSelection, true, true);
             m_mParentView->canvas()->update();
             selection = newSelection;
