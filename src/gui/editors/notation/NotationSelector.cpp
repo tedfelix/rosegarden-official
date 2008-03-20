@@ -92,8 +92,8 @@ NotationSelector::NotationSelector(NotationView* view)
     // commenting it out, but leaving it here in case I change my mind about
     // fooling with it.)  (DMM)
     //    new KAction(i18n("Normalize Rests"), 0, 0, this,
-    //		SLOT(slotCollapseRests()), actionCollection(),
-    //		"collapse_rests");
+    //                SLOT(slotCollapseRests()), actionCollection(),
+    //                "collapse_rests");
 
     new KAction(i18n("Collapse Rests"), 0, 0, this,
                 SLOT(slotCollapseRestsHard()), actionCollection(),
@@ -121,11 +121,11 @@ NotationSelector::NotationSelector(NotationView* view)
 
     new KAction(i18n("Move to Staff Above"), 0, 0, this,
                 SLOT(slotStaffAbove()), actionCollection(),
-		"move_events_up_staff");
+                "move_events_up_staff");
 
     new KAction(i18n("Move to Staff Below"), 0, 0, this,
                 SLOT(slotStaffBelow()), actionCollection(),
-		"move_events_down_staff");
+                "move_events_down_staff");
 
     new KAction(i18n("Make Invisible"), 0, 0, this,
                 SLOT(slotMakeInvisible()), actionCollection(),
@@ -374,13 +374,13 @@ void NotationSelector::handleMouseRelease(timeT, int, QMouseEvent *e)
                     m_selectedStaff->getSegment()) {
 
                 // if the event was already part of the selection, we want to
-		// remove it
+                // remove it
                 if (m_selectionToMerge->contains(m_clickedElement->event())) {
-		    m_selectionToMerge->removeEvent(m_clickedElement->event());
-		} else {
-		    m_selectionToMerge->addEvent(m_clickedElement->event());
-		}
-		
+                    m_selectionToMerge->removeEvent(m_clickedElement->event());
+                } else {
+                    m_selectionToMerge->addEvent(m_clickedElement->event());
+                }
+                
                 m_nParentView->setCurrentSelection(m_selectionToMerge,
                                                    true, true);
                 m_selectionToMerge = 0;
@@ -392,15 +392,15 @@ void NotationSelector::handleMouseRelease(timeT, int, QMouseEvent *e)
                  true, true);
             }
             /*
-            	} else if (m_selectedStaff) {
+                    } else if (m_selectedStaff) {
              
-            	    // If we clicked on no event but on a staff, move the
-            	    // insertion cursor to the point where we clicked. 
-            	    // Actually we only really want this to happen if
-            	    // we aren't double-clicking -- consider using a timer
-            	    // to establish whether a double-click is going to happen
+                        // If we clicked on no event but on a staff, move the
+                        // insertion cursor to the point where we clicked. 
+                        // Actually we only really want this to happen if
+                        // we aren't double-clicking -- consider using a timer
+                        // to establish whether a double-click is going to happen
              
-            	    m_nParentView->slotSetInsertCursorPosition(e->x(), (int)e->y());
+                        m_nParentView->slotSetInsertCursorPosition(e->x(), (int)e->y());
             */
         } else {
             setViewCurrentSelection(false);
