@@ -373,7 +373,14 @@ void NotationSelector::handleMouseRelease(timeT, int, QMouseEvent *e)
                     m_selectionToMerge->getSegment() ==
                     m_selectedStaff->getSegment()) {
 
-                m_selectionToMerge->addEvent(m_clickedElement->event());
+                // if the event was already part of the selection, we want to
+		// remove it
+                if (m_selectionToMerge->contains(m_clickedElement->event())) {
+		    m_selectionToMerge->removeEvent(m_clickedElement->event());
+		} else {
+		    m_selectionToMerge->addEvent(m_clickedElement->event());
+		}
+		
                 m_nParentView->setCurrentSelection(m_selectionToMerge,
                                                    true, true);
                 m_selectionToMerge = 0;
