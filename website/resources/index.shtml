@@ -26,6 +26,10 @@
 	demonstrate Rosegarden's overall basics, and then move into advanced
 	notation topics in his trademark friendly style.</li>
 	<li>The <a href="/doc/en/">Rosegarden Handbook</a>, the reference manual and help text for Rosegarden available from within the program.</li>
+        <li><a
+        href="http://rosegarden.wiki.sourceforge.net/Users+Helping+Users">Users
+        Helping Users</a> is a new place to collect tips and tricks from users
+        for other users.</li>
 	<li>Have you found a bug?  Please read these <a
 	    href="http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html">guidelines</a>
 	to learn the proper procedure for filing a bug report.  Thanks!</li>
