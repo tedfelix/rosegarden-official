@@ -80,6 +80,14 @@ public:
 
     void updateBottomWidgetGeometry();
 
+    /**
+     * Sets the widget which will be between the scrollable part of the view
+     * and the left edge of the view.
+     */
+    void setLeftFixedWidget(QWidget*);
+
+    void updateLeftWidgetGeometry();
+
     /// Map a point with the inverse world matrix
     QPoint inverseMapPoint(const QPoint& p) { return inverseWorldMatrix().map(p); }
 
@@ -153,6 +161,8 @@ protected:
         
     QWidget* m_bottomWidget;
     int m_currentBottomWidgetHeight;
+
+    QWidget* m_leftWidget;
 
     bool m_smoothScroll;
     int m_smoothScrollTimeInterval;

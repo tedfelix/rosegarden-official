@@ -32,13 +32,13 @@
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
 #include "base/StaffExportTypes.h"
-#include "base/Track.h"
 #include "base/Colour.h"
 #include "base/ColourMap.h"
 #include "base/Track.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/LinedStaff.h"
 #include "document/RosegardenGUIDoc.h"
+#include "misc/Strings.h"
 #include "NotePixmapFactory.h"
 #include "NotationView.h"
 #include "NotationStaff.h"
@@ -64,8 +64,19 @@
 namespace Rosegarden
 {
 
+
+// Status bits
+const int TrackHeader::SEGMENT_HERE                = 1 << 0;
+const int TrackHeader::SUPERIMPOSED_SEGMENTS       = 1 << 1;
+const int TrackHeader::INCONSISTENT_CLEFS          = 1 << 2;
+const int TrackHeader::INCONSISTENT_KEYS           = 1 << 3;
+const int TrackHeader::INCONSISTENT_LABELS         = 1 << 4;
+const int TrackHeader::INCONSISTENT_TRANSPOSITIONS = 1 << 5;
+const int TrackHeader::BEFORE_FIRST_SEGMENT        = 1 << 6;
+
+
 TrackHeader::TrackHeader(QWidget *parent, TrackId trackId, int height, int ypos) :
-        QLabel(parent),                  // QWidget(parent)
+        QLabel(parent),
         m_track(trackId),
         m_height(height),
         m_ypos(ypos),
@@ -73,9 +84,16 @@ TrackHeader::TrackHeader(QWidget *parent, TrackId trackId, int height, int ypos)
         m_lastKey(Rosegarden::Key()),
         m_lastLabel(QString("")),
         m_lastTranspose(0),
+        m_lastUpperText(QString("")),
         m_neverUpdated(true),
         m_isCurrent(true),
-        m_lastStatusPart(0)
+        m_lastStatusPart(0),
+        m_lastWidth(0),
+        m_key(Rosegarden::Key()),
+        m_label(QString("")),
+        m_transpose(0),
+        m_status(0),
+        m_current(false)
 {
 
     m_notationView = static_cast<HeadersGroup *>(parent)->getNotationView();
@@ -94,12 +112,53 @@ TrackHeader::TrackHeader(QWidget *parent, TrackId trackId, int height, int ypos)
 
     QString toolTipText = QString(i18n("Track %1 : \"%2\"")
                             .arg(trackPos + 1)
-                            .arg(track->getLabel()));
+                            .arg(strtoqstr(track->getLabel())));
 
     QString preset = track->getPresetLabel();
     if (preset != QString(""))
         toolTipText += QString(i18n("\nNotate for: %1").arg(preset));
 
+    QString notationSize = i18n("normal");
+    switch (track->getStaffSize()) {
+        case StaffTypes::Small:
+            notationSize = i18n("small");
+            break;
+        case StaffTypes::Tiny:
+            notationSize = i18n("tiny");
+            break;
+    }
+
+    QString bracketText = i18n("--");
+    switch (track->getStaffBracket()) {
+        case Brackets::SquareOn:
+            bracketText = "[-";
+            break;
+        case Brackets::SquareOff:
+            bracketText = "-]";
+            break;
+        case Brackets::SquareOnOff:
+            bracketText = "[-]";
+            break;
+        case Brackets::CurlyOn:
+            bracketText = "{-";
+            break;
+        case Brackets::CurlyOff:
+            bracketText = "-}";
+            break;
+        case Brackets::CurlySquareOn:
+            bracketText = "{[-";
+            break;
+        case Brackets::CurlySquareOff:
+            bracketText = "-]}";
+            break;
+    }
+
+    toolTipText += QString(i18n("\nSize: %1,  Bracket: %2 "))
+                            .arg(notationSize)
+                            .arg(bracketText);
+
+    // Sort segments by position on the track
+    SortedSegments segments;
     for (int i=0; i<m_notationView->getStaffCount(); i++) {
 
         NotationStaff * notationStaff = m_notationView->getNotationStaff(i);
@@ -107,208 +166,46 @@ TrackHeader::TrackHeader(QWidget *parent, TrackId trackId, int height, int ypos)
         TrackId trackId = segment.getTrack();
 
         if (trackId  == m_track) {
-	    QString notationSize = i18n("normal");
-	    switch (track->getStaffSize()) {
-		case StaffTypes::Small:
-		    notationSize = i18n("small");
-		    break;
-		case StaffTypes::Tiny:
-		    notationSize = i18n("tiny");
-		    break;
-	    }
+            segments.insert(&segment);
+        }
+    }
 
-	    QString bracketText = i18n("--");
-	    switch (track->getStaffBracket()) {
-		case Brackets::SquareOn:
-		    bracketText = "[-";
-		    break;
-		case Brackets::SquareOff:
-		    bracketText = "-]";
-		    break;
-		case Brackets::SquareOnOff:
-		    bracketText = "[-]";
-		    break;
-		case Brackets::CurlyOn:
-		    bracketText = "{-";
-		    break;
-		case Brackets::CurlyOff:
-		    bracketText = "-}";
-		    break;
-		case Brackets::CurlySquareOn:
-		    bracketText = "{[-";
-		    break;
-		case Brackets::CurlySquareOff:
-		    bracketText = "-]}";
-		    break;
-	    }
+    for (SortedSegments::iterator i=segments.begin(); i!=segments.end(); ++i) {
+        timeT segStart = (*i)->getStartTime();
+        timeT segEnd = (*i)->getEndMarkerTime();
+        int barStart = comp->getBarNumber(segStart) + 1;
+        int barEnd = comp->getBarNumber(segEnd) + 1;
 
-	    toolTipText += QString(i18n("\nSize: %1  Bracket: %2 "))
-				    .arg(notationSize)
-				    .arg(bracketText);
-	                               
-            timeT segStart = segment.getStartTime();
-            timeT segEnd = segment.getEndMarkerTime();
-            int barStart = comp->getBarNumber(segStart) + 1;
-            int barEnd = comp->getBarNumber(segEnd) + 1;
-            int transpose = segment.getTranspose();
-            if (transpose) {
-                QString transposeName;
-                transposeValueToName(transpose, transposeName);
-                toolTipText += QString(i18n("\nbars [%1-%2] in %3 (tr=%4) : \"%5\""))
-                                        .arg(barStart)
-                                        .arg(barEnd)
-                                        .arg(transposeName)
-                                        .arg(transpose)
-                                        .arg(segment.getLabel());
-            } else {
-                toolTipText += QString(i18n("\nbars [%1-%2] (tr=%3) : \"%4\""))
-                                        .arg(barStart)
-                                        .arg(barEnd)
-                                        .arg(transpose)
-                                        .arg(segment.getLabel());
-            }
+        int transpose = (*i)->getTranspose();
+        if (transpose) {
+            QString transposeName;
+            transposeValueToName(transpose, transposeName);
+            toolTipText += QString(i18n("\nbars [%1-%2] in %3 (tr=%4) : \"%5\""))
+                                    .arg(barStart)
+                                    .arg(barEnd)
+                                    .arg(transposeName)
+                                    .arg(transpose)
+                                    .arg(strtoqstr((*i)->getLabel()));
+        } else {
+            toolTipText += QString(i18n("\nbars [%1-%2] (tr=%3) : \"%4\""))
+                                    .arg(barStart)
+                                    .arg(barEnd)
+                                    .arg(transpose)
+                                    .arg(strtoqstr((*i)->getLabel()));
         }
     }
 
     QToolTip::add(this, toolTipText);
+
+    m_firstSeg = *segments.begin();
+    m_firstSegStartTime = m_firstSeg->getStartTime();
+
+    /// This may not work if two segments are superimposed
+    /// at the beginning of the track (inconsistencies are
+    /// not detected).
+    ///   TODO : Look for the first segment(s) in
+    ///          lookAtStaff() and not here.
 }
-
-
-
-
-
-void
-TrackHeader::updateHeader(double x)
-{
-
-    // Read Clef and Key on canvas at (x, m_ypos + m_height / 2)
-    // Compare them to last Clef and Key then update if necessary
-
-    // Status bits
-    const int SEGMENT_HERE                = 1 << 0;
-    const int SUPERIMPOSED_SEGMENTS       = 1 << 1;
-    const int INCONSISTENT_CLEFS          = 1 << 2;
-    const int INCONSISTENT_KEYS           = 1 << 3;
-    const int INCONSISTENT_LABELS         = 1 << 4;
-    const int INCONSISTENT_TRANSPOSITIONS = 1 << 5;
-
-    Clef clef, clef0;
-    Rosegarden::Key key, key0;
-    QString label, label0;
-    int transpose = 0, transpose0;
-    int staff;
-
-    Composition *comp = 
-        static_cast<HeadersGroup *>(parent())->getComposition();
-    Track *track = comp->getTrackById(m_track);
-    int trackPos = comp->getTrackPositionById(m_track);
-
-    QString trackName = QString("");
-    int status = 0;
-    bool current = false;
-    for (int i=0; i<m_notationView->getStaffCount(); i++) {
-        NotationStaff * notationStaff = m_notationView->getNotationStaff(i);
-        Segment &segment = notationStaff->getSegment();
-        TrackId trackId = segment.getTrack();
-        if (trackId  == m_track) {
-
-            timeT segStart = segment.getStartTime();
-            timeT segEnd = segment.getEndMarkerTime();
-            timeT xTime = notationStaff->getTimeAtCanvasCoords(x, m_ypos);
-
-            current = m_notationView->isCurrentStaff(i);
-
-
-            if ((xTime >= segStart) && (xTime < segEnd)) {
-
-                notationStaff->getClefAndKeyAtCanvasCoords(x,
-                                                           m_ypos + m_height / 2,
-                                                           clef, key);
-                label = QString(segment.getLabel());
-                transpose = segment.getTranspose();
-
-                if (status & SEGMENT_HERE) {
-                    status |= SUPERIMPOSED_SEGMENTS;
-                    if (clef != clef0)
-                        status |= INCONSISTENT_CLEFS;
-                    if (key != key0)
-                        status |= INCONSISTENT_KEYS;
-                    if (label != label0)
-                        status |= INCONSISTENT_LABELS;
-                    if (transpose != transpose0)
-                        status |= INCONSISTENT_TRANSPOSITIONS;
-                } else {
-                    status |= SEGMENT_HERE;
-                }
-
-                staff = i;
-                clef0 = clef;
-                key0 = key;
-                label0 = label;
-                transpose0 = transpose;
-            }                                                // if(xTime...)
-        }                                                // if(trackId...)
-    }
-
-
-    // Filter out bits whose display doesn't depend from
-    int statusPart = status & ~(SUPERIMPOSED_SEGMENTS);
-
-    // Header should be updated only if necessary
-    if (    m_neverUpdated
-         || (statusPart != m_lastStatusPart)
-         || (key != m_lastKey)
-         || (clef != m_lastClef)
-         || (label != m_lastLabel)
-         || (transpose != m_lastTranspose)) {
-
-        m_neverUpdated = false;
-        m_lastStatusPart = statusPart;
-        m_lastKey = key;
-        m_lastClef = clef;
-        m_lastLabel = label;
-        m_lastTranspose = transpose;
-
-        QString noteName;
-        transposeValueToName(transpose, noteName);
-
-        QString upperText = QString(i18n("%1: %2")
-                                         .arg(trackPos + 1)
-                                         .arg(track->getLabel()));
-        if (transpose) upperText += i18n(" in %1").arg(noteName);
-
-        bool drawClef = true;
-        QColor clefColour;
-        if (status & SEGMENT_HERE) {
-            if (status & (INCONSISTENT_CLEFS | INCONSISTENT_KEYS))
-                clefColour = Qt::red;
-            else
-                clefColour = Qt::black;
-        } else {
-            drawClef = false;
-        }
-
-        /// TODO : use colours from GUIPalette
-
-        QColor upperTextColour = (status & INCONSISTENT_TRANSPOSITIONS) ?
-                                                     Qt::red : Qt::black;
-        QColor lowerTextColour = (status & INCONSISTENT_LABELS) ?
-                                                     Qt::red : Qt::black;
-
-        NotePixmapFactory * npf = m_notationView->getNotePixmapFactory();
-        QPixmap pmap = NotePixmapFactory::toQPixmap(
-                  npf->makeTrackHeaderPixmap(m_height,
-                                             key, clef, clefColour, drawClef,
-                                             upperText, upperTextColour,
-                                             label, lowerTextColour));
-
-        setPixmap(pmap);
-
-    }
-
-    setCurrent(current);
-}
-
 
 void
 TrackHeader::setCurrent(bool current)
@@ -328,7 +225,6 @@ TrackHeader::setCurrent(bool current)
         }
     }
 }
-
 
 void
 TrackHeader::transposeValueToName(int transpose, QString &transposeName)
@@ -355,8 +251,194 @@ TrackHeader::transposeValueToName(int transpose, QString &transposeName)
     }
 }
 
+int
+TrackHeader::lookAtStaff(double x, int maxWidth)
+{
+    // Read Clef and Key on canvas at (x, m_ypos + m_height / 2)
+    // then guess the header needed width and return it
+
+    Clef clef, clef0;
+    Rosegarden::Key key, key0;
+    QString label = QString(""), label0;
+    int transpose = 0, transpose0;
+    int staff;
+
+    Composition *comp = 
+        static_cast<HeadersGroup *>(parent())->getComposition();
+    Track *track = comp->getTrackById(m_track);
+    int trackPos = comp->getTrackPositionById(m_track);
+
+    int status = 0;
+    bool current = false;
+    for (int i=0; i<m_notationView->getStaffCount(); i++) {
+        NotationStaff * notationStaff = m_notationView->getNotationStaff(i);
+        Segment &segment = notationStaff->getSegment();
+        TrackId trackId = segment.getTrack();
+        if (trackId  == m_track) {
+
+            /// TODO : What if a segment has been moved ???
+            timeT xTime = notationStaff->getTimeAtCanvasCoords(x, m_ypos);
+            if (xTime < m_firstSegStartTime) {
+                status |= BEFORE_FIRST_SEGMENT;
+                /// TODO : What if superimposed segments ???
+                m_firstSeg->getFirstClefAndKey(clef, key);
+                label = strtoqstr(m_firstSeg->getLabel());
+                transpose = m_firstSeg->getTranspose();
+                current = current || m_notationView->isCurrentStaff(i);
+                break;
+            }
+            timeT segStart = segment.getStartTime();
+            timeT segEnd = segment.getEndMarkerTime();
+            current = current || m_notationView->isCurrentStaff(i);
+
+            if ((xTime >= segStart) && (xTime < segEnd)) {
+
+                notationStaff->getClefAndKeyAtCanvasCoords(x,
+                                            m_ypos + m_height / 2, clef, key);
+                label = strtoqstr(segment.getLabel());
+                transpose = segment.getTranspose();
+
+                if (status & SEGMENT_HERE) {
+                    status |= SUPERIMPOSED_SEGMENTS;
+                    if (clef != clef0)
+                        status |= INCONSISTENT_CLEFS;
+                    if (key != key0)
+                        status |= INCONSISTENT_KEYS;
+                    if (label != label0)
+                        status |= INCONSISTENT_LABELS;
+                    if (transpose != transpose0)
+                        status |= INCONSISTENT_TRANSPOSITIONS;
+                } else {
+                    status |= SEGMENT_HERE;
+                }
+
+                staff = i;
+                clef0 = clef;
+                key0 = key;
+                label0 = label;
+                transpose0 = transpose;
+            }                                                // if(xTime...)
+        }                                                // if(trackId...)
+    }
+
+    // Remember current data
+    m_clef = clef;
+    m_key = key;
+    m_label = label;
+    m_transpose = transpose;
+    m_current = current;
+    m_status = status;
+
+    QString noteName;
+    transposeValueToName(m_transpose, noteName);
+
+    m_upperText = QString(i18n("%1: %2")
+                                .arg(trackPos + 1)
+                                .arg(strtoqstr(track->getLabel())));
+    if (m_transpose) m_transposeText = i18n(" in %1").arg(noteName);
+    else             m_transposeText = QString("");
+
+    NotePixmapFactory * npf = m_notationView->getNotePixmapFactory();
+    int clefAndKeyWidth = npf->getClefAndKeyWidth(key, clef);
+
+    // How many text lines may be written above or under the clef
+    // in track header ?
+    m_numberOfTextLines = npf->getTrackHeaderNTL(m_height);
+
+    int trackLabelWidth =
+            npf->getTrackHeaderTextWidth(m_upperText + m_transposeText)
+                                                        / m_numberOfTextLines;
+    int segmentNameWidth =
+            npf->getTrackHeaderTextWidth(m_label) / m_numberOfTextLines;
+
+    // Get the max. width from upper text and lower text
+    int width = (segmentNameWidth > trackLabelWidth)
+                            ? segmentNameWidth : trackLabelWidth;
+
+    // Text width is limited by max header Width
+    if (width > maxWidth) width = maxWidth;
+
+    // But clef and key width may override max header width
+    if (width < clefAndKeyWidth) width = clefAndKeyWidth;
+
+    return width;
+}
 
 
+
+void
+TrackHeader::updateHeader(int width)
+{
+
+    // Update the header (using given width) if necessary
+
+    Composition *comp = 
+        static_cast<HeadersGroup *>(parent())->getComposition();
+    Track *track = comp->getTrackById(m_track);
+    int trackPos = comp->getTrackPositionById(m_track);
+
+    // Filter out bits whose display doesn't depend from
+    int statusPart = m_status & ~(SUPERIMPOSED_SEGMENTS);
+
+    // Header should be updated only if necessary
+    if (    m_neverUpdated
+         || (width != m_lastWidth)
+         || (statusPart != m_lastStatusPart)
+         || (m_key != m_lastKey)
+         || (m_clef != m_lastClef)
+         || (m_label != m_lastLabel)
+         || (m_upperText != m_lastUpperText)
+         || (m_transpose != m_lastTranspose)) {
+
+        m_neverUpdated = false;
+        m_lastStatusPart = statusPart;
+        m_lastKey = m_key;
+        m_lastClef = m_clef;
+        m_lastLabel = m_label;
+        m_lastTranspose = m_transpose;
+        m_lastUpperText = m_upperText;
+
+        bool drawClef = true;
+        QColor clefColour;
+        if (m_status & (SEGMENT_HERE | BEFORE_FIRST_SEGMENT)) {
+            if (m_status & (INCONSISTENT_CLEFS | INCONSISTENT_KEYS))
+                clefColour = Qt::red;
+            else
+                clefColour = Qt::black;
+        } else {
+            drawClef = false;
+        }
+
+        /// TODO : use colours from GUIPalette
+        QColor upperTextColour = (m_status & INCONSISTENT_TRANSPOSITIONS) ?
+                                                     Qt::red : Qt::black;
+        QColor lowerTextColour = (m_status & INCONSISTENT_LABELS) ?
+                                                     Qt::red : Qt::black;
+
+        NotePixmapFactory * npf = m_notationView->getNotePixmapFactory();
+        QPixmap pmap = NotePixmapFactory::toQPixmap(
+                  npf->makeTrackHeaderPixmap(width, m_height, this));
+
+        setPixmap(pmap);
+        setFixedWidth(width);
+
+        // Forced width may differ from localy computed width
+        m_lastWidth = width;
+    }
+
+    // Highlight header if track is the current one
+    setCurrent(m_current);
+}
+
+bool
+TrackHeader::SegmentCmp::operator()(const Segment * s1, const Segment * s2) const
+{
+    // Sort segments by start time, then by end time
+    if (s1->getStartTime() < s2->getStartTime()) return true;
+    if (s1->getStartTime() > s2->getStartTime()) return false;
+    if (s1->getEndMarkerTime() < s2->getEndMarkerTime()) return true;
+    return false;
+}
 
 }
 #include "TrackHeader.moc"

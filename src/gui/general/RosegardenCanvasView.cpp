@@ -47,6 +47,7 @@ RosegardenCanvasView::RosegardenCanvasView(QCanvas* canvas,
         : QCanvasView(canvas, parent, name, f),
         m_bottomWidget(0),
         m_currentBottomWidgetHeight( -1),
+        m_leftWidget(0),
         m_smoothScroll(true),
         m_smoothScrollTimeInterval(DefaultSmoothScrollTimeInterval),
         m_minDeltaScroll(DefaultMinDeltaScroll),
@@ -83,9 +84,10 @@ void RosegardenCanvasView::setBottomFixedWidget(QWidget* w)
 {
     m_bottomWidget = w;
     if (m_bottomWidget) {
+        int lww = m_leftWidget ? m_leftWidget->sizeHint().width() : 0;
         m_bottomWidget->reparent(this, 0, QPoint(0, 0));
         m_bottomWidget->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed));
-        setMargins(0, 0, 0, m_bottomWidget->sizeHint().height());
+        setMargins(lww, 0, 0, m_bottomWidget->sizeHint().height());
     }
 }
 
@@ -383,7 +385,7 @@ void RosegardenCanvasView::resizeEvent(QResizeEvent* e)
     QCanvasView::resizeEvent(e);
     if (!horizontalScrollBar()->isVisible())
         updateBottomWidgetGeometry();
-
+        updateLeftWidgetGeometry();
 }
 
 void RosegardenCanvasView::setHBarGeometry(QScrollBar &hbar, int x, int y, int w, int h)
@@ -399,19 +401,28 @@ void RosegardenCanvasView::updateBottomWidgetGeometry()
 
     int bottomWidgetHeight = m_bottomWidget->sizeHint().height();
 
-    setMargins(0, 0, 0, bottomWidgetHeight);
+    int leftWidgetWidth = 0;
+    if (m_leftWidget && m_leftWidget->isVisible()) {
+        QScrollView * qsv = dynamic_cast<QScrollView *>(m_leftWidget);
+        leftWidgetWidth = qsv->contentsWidth()+2;
+        qsv->setFixedWidth(leftWidgetWidth);
+    }
+
+    setMargins(leftWidgetWidth, 0, 0, bottomWidgetHeight);
+
     QRect r = frameRect();
     int hScrollBarHeight = 0;
     if (horizontalScrollBar()->isVisible())
-        hScrollBarHeight = horizontalScrollBar()->height() + 2; // + 2 offset needed to preserve border shadow
+        hScrollBarHeight = horizontalScrollBar()->height() + 2;
+                            // + 2 offset : needed to preserve border shadow
 
     int vScrollBarWidth = 0;
     if (verticalScrollBar()->isVisible())
         vScrollBarWidth = verticalScrollBar()->width();
 
-    m_bottomWidget->setGeometry(r.x(),
+    m_bottomWidget->setGeometry(r.x() + leftWidgetWidth,
                                 r.y() + r.height() - bottomWidgetHeight - hScrollBarHeight,
-                                r.width() - vScrollBarWidth,
+                                r.width() - vScrollBarWidth - leftWidgetWidth,
                                 bottomWidgetHeight);
 
     if (bottomWidgetHeight != m_currentBottomWidgetHeight) {
@@ -431,6 +442,44 @@ void RosegardenCanvasView::wheelEvent(QWheelEvent *e)
     }
     QCanvasView::wheelEvent(e);
 }
+
+void RosegardenCanvasView::setLeftFixedWidget(QWidget* w)
+{
+    m_leftWidget = w;
+    if (m_leftWidget) {
+        int bwh = m_bottomWidget ? m_bottomWidget->sizeHint().height() : 0;
+        m_leftWidget->reparent(this, 0, QPoint(0, 0));
+        m_leftWidget->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred));
+        setMargins(m_leftWidget->sizeHint().width(), 0, 0, bwh);
+    }
+}
+
+void RosegardenCanvasView::updateLeftWidgetGeometry()
+{
+    if (!m_leftWidget)
+        return ;
+
+    int leftWidgetWidth = 0;
+    if (m_leftWidget->isVisible()) {
+        QScrollView * qsv = dynamic_cast<QScrollView *>(m_leftWidget);
+        leftWidgetWidth = qsv->contentsWidth() + 2;
+    }
+    m_leftWidget->setFixedWidth(leftWidgetWidth);
+
+    int bottomWidgetHeight = m_bottomWidget ? 
+                                m_bottomWidget->sizeHint().height() : 0;
+
+    setMargins(leftWidgetWidth, 0, 0, bottomWidgetHeight);
+
+    QRect r = frameRect();
+    int hScrollBarHeight = 0;
+    if (horizontalScrollBar()->isVisible())
+        hScrollBarHeight = horizontalScrollBar()->height() + 2;
+                            // + 2 offset : needed to preserve border shadow
+
+    m_leftWidget->setFixedHeight(r.height() - bottomWidgetHeight - hScrollBarHeight);
+}
+
 
 }
 #include "RosegardenCanvasView.moc"
