@@ -217,10 +217,10 @@ protected:
     virtual void paintEvent(QPaintEvent* e);
 
     /**
-     * Locate the given widget in the top bar-buttons position and
+     * Locate the given widgets in the top bar-buttons position and
      * connect up its scrolling signals.
      */
-    void setTopStandardRuler(StandardRuler*);
+    void setTopStandardRuler(StandardRuler*, QWidget *leftBox = NULL);
 
     /**
      * Locate the given widget in the bottom bar-buttons position and
@@ -383,6 +383,7 @@ protected:
     RosegardenCanvasView *m_canvasView;
 
     QVBoxLayout  *m_rulerBox;
+    QLabel       *m_rulerBoxFiller;
     QVBoxLayout  *m_controlBox;
     QVBox        *m_bottomBox;
     StandardRuler   *m_topStandardRuler;

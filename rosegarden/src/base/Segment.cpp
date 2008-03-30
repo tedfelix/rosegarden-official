@@ -1067,6 +1067,39 @@ Segment::getKeyAtTime(timeT time, timeT &ktime) const
     }
 }
 
+void
+Segment::getFirstClefAndKey(Clef &clef, Key &key)
+{
+    bool keyFound = false;
+    bool clefFound = false;
+    clef = Clef();          // Default clef
+    key = Key();            // Default key signature
+
+    iterator i = begin();
+    while (i!=end()) {
+        // Keep current clef and key as soon as a note or rest event is found
+        if ((*i)->isa(Note::EventRestType) || (*i)->isa(Note::EventType)) return;
+
+        // Remember the first clef event found
+        if ((*i)->isa(Clef::EventType)) {
+            clef = Clef(*(*i));
+            // and return if a key has already been found
+            if (keyFound) return;
+            clefFound = true;
+        }
+
+        // Remember the first key event found
+        if ((*i)->isa(Key::EventType)) {
+            key = Key(*(*i));
+            // and return if a clef has already been found
+            if (clefFound) return;
+            keyFound = true;
+        }
+
+        ++i;
+    }
+}
+
 timeT
 Segment::getRepeatEndTime() const
 {

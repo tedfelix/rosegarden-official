@@ -10,6 +10,9 @@
         Chris Cannam        <cannam@all-day-breakfast.com>,
         Richard Bown        <richard.bown@ferventsoftware.com>
 
+    This file is Copyright 2007-2008
+        Yves Guillemot      <yc.guillemot@wanadoo.fr> 
+
     The moral rights of Guillaume Laurent, Chris Cannam, and Richard
     Bown to claim authorship of this work have been asserted.
 
@@ -36,6 +39,7 @@
 
 
 class QLabel;
+class QResizeEvent;
 
 
 namespace Rosegarden
@@ -88,6 +92,14 @@ public:
      */
     void setCurrent(TrackId trackId);
 
+    /**
+     * Highlight as "current" the header of the specified track.
+     */
+    int getWidth()
+    {
+        return m_lastWidth;
+    }
+
 
 public slots :
     /**
@@ -97,17 +109,23 @@ public slots :
      */
     void slotUpdateAllHeaders(int x, int y, bool force = false);
 
+signals :
+    void headersResized(int newWidth);
+
 private:
+    void resizeEvent(QResizeEvent * ev);
+
     NotationView * m_notationView;
     Composition * m_composition;
-    
+
     typedef std::vector<TrackHeader *> TrackHeaderVector;
     TrackHeaderVector m_headers;
 
     int m_usedHeight;
     QLabel * m_filler;
     int m_lastX;
-    int m_width;
+    int m_lastWidth;
+
 };
 
 

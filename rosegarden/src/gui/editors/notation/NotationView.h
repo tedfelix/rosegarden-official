@@ -326,6 +326,19 @@ public:
 
     virtual RulerScale* getHLayout();
 
+    /**
+     * Return the notation window width
+     */
+    int getCanvasVisibleWidth();
+
+    /**
+     * Return the minimal width which shall be allocated to
+     * the track headers top frame.
+     * (The width of the close button + the width of an info
+     *  button still to come).
+     */
+    int getHeadersTopFrameMinWidth();
+
 public slots:
 
     /**
@@ -508,6 +521,8 @@ public slots:
     void slotShowHeadersGroup();
     void slotHideHeadersGroup();
     void slotVerticalScrollHeadersGroup(int);
+    void slotUpdateHeaders(int x, int y);
+    void slotSetHeadersWidth(int w);
 
     /// Adjust notation header view when bottom ruler added or removed
     void slotCanvasBottomWidgetHeightChanged(int);
@@ -1105,6 +1120,9 @@ protected:
     QDeferScrollView * m_headersGroupView;
     HeadersGroup * m_headersGroup;
     QFrame * m_headersTopFrame;
+
+    KAction * m_showHeadersMenuEntry;
+
 };
 
 

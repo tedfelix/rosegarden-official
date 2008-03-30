@@ -461,6 +461,20 @@ public:
      */
     Key getKeyAtTime(timeT time, timeT &ktime) const;
 
+    /**
+     * Return the clef and key signature in effect at the beginning of the
+     * segment using the following rules :
+     *
+     *    - Return the default clef if no clef change is preceding the first
+     *      note or rest event,
+     *    - else return the first clef event in the segment,
+     *    - else return the default clef if the segment has no note event nor
+     *      clef change in it.
+     *
+     *    - Use the same rules with the key signature.
+     */
+    void getFirstClefAndKey(Clef &clef, Key &key);
+
 
     //////
     //
