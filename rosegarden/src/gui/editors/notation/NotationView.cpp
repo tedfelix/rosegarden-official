@@ -1530,7 +1530,7 @@ void NotationView::setupActions()
     actionCollection()->insert(m_fontSizeActionMenu);
 
     m_showHeadersMenuEntry
-        = new KAction(i18n("Show track headers"), 0, this,
+        = new KAction(i18n("Show Track Headers"), 0, this,
                             SLOT(slotShowHeadersGroup()),
                             actionCollection(), "show_track_headers");
 
@@ -2274,7 +2274,7 @@ void NotationView::setupActions()
                 SLOT(slotEditTranspose()), actionCollection(),
                 "transpose_segment");
 
-	new KAction(i18n("Convert notation for..."), 0, this,
+	new KAction(i18n("Convert Notation For..."), 0, this,
                 SLOT(slotEditSwitchPreset()), actionCollection(),
                 "switch_preset");
 
