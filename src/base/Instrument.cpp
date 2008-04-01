@@ -201,7 +201,13 @@ Instrument::Instrument(InstrumentId id,
                      // we store within an unsigned char as 
 
     } else {
-
+/*
+ *
+ * Let's try getting rid of this default behavior, and replacing it with a
+ * change to the factory autoload instead, because this just doesn't work out
+ * very well, and it's fiddly trying to sort the overall behavior into something
+ * less quirky (dmm)
+ *
 	// Also defined in Midi.h but we don't use that - not here
 	// in the clean inner sanctum.
 	//
@@ -212,6 +218,7 @@ Instrument::Instrument(InstrumentId id,
 	    m_channel == MIDI_EXTENDED_PERCUSSION_CHANNEL) {
 	    setPercussion(true);
 	}
+*/
     }
 
     if (it == SoftSynth) {
