@@ -22,6 +22,7 @@
 #include "Instrument.h"
 
 #include <iostream>
+#include <cstring>
 
 #if (__GNUC__ < 3)
 #include <strstream>

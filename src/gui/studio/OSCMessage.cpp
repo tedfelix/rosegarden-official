@@ -28,6 +28,7 @@
 #include "OSCMessage.h"
 
 #include <cstdlib>
+#include <cstring>
 
 namespace Rosegarden
 {

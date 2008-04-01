@@ -44,7 +44,7 @@
 #include <qvbox.h>
 #include <qwidget.h>
 #include <qcheckbox.h>
-
+#include <algorithm>
 
 namespace Rosegarden
 {

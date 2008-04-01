@@ -60,6 +60,7 @@
 #include <qtabwidget.h>
 #include <qwidget.h>
 #include <qtooltip.h>
+#include <algorithm>
 
 namespace Rosegarden
 {
