@@ -370,7 +370,9 @@ Segment::insert(Event *e)
 
     if (t1 > m_endTime ||
 	begin() == end()) {
+	timeT oldTime = m_endTime;
 	m_endTime = t1;
+	notifyEndMarkerChange(m_endTime < oldTime);
     }
 
     iterator i = std::multiset<Event*, Event::EventCmp>::insert(e);

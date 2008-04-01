@@ -596,7 +596,8 @@ void CompositionModelImpl::removePreviewCache(const Segment *s)
 
 void CompositionModelImpl::segmentAdded(const Composition *, Segment *s)
 {
-    setTrackHeights();
+//    std::cerr << "CompositionModelImpl::segmentAdded: segment " << s << " on track " << s->getTrack() << ": calling setTrackHeights" << std::endl;
+    setTrackHeights(s);
 
     makePreviewCache(s);
     s->addObserver(this);
@@ -615,6 +616,15 @@ void CompositionModelImpl::segmentRemoved(const Composition *, Segment *s)
     s->removeObserver(this);
     m_recordingSegments.erase(s); // this could be a recording segment
     emit needContentUpdate(r);
+}
+
+void CompositionModelImpl::segmentEndMarkerChanged(const Composition *, Segment *s, bool)
+{
+//    std::cerr << "CompositionModelImpl::segmentEndMarkerChanged: segment " << s << " on track " << s->getTrack() << ": calling setTrackHeights" << std::endl;
+    if (setTrackHeights(s)) {
+//        std::cerr << "... changed, updating" << std::endl;
+        emit needContentUpdate();
+    }
 }
 
 void CompositionModelImpl::segmentRepeatChanged(const Composition *, Segment *s, bool)
@@ -943,17 +953,40 @@ timeT CompositionModelImpl::getRepeatTimeAt(const QPoint& p, const CompositionIt
     return count != 0 ? startTime + (count * (s->getEndMarkerTime() - s->getStartTime())) : 0;
 }
 
-void CompositionModelImpl::setTrackHeights()
+bool CompositionModelImpl::setTrackHeights(Segment *s)
 {
+    bool heightsChanged = false;
+
+//    std::cerr << "CompositionModelImpl::setTrackHeights" << std::endl;
+
     for (Composition::trackcontainer::const_iterator i = 
              m_composition.getTracks().begin();
          i != m_composition.getTracks().end(); ++i) {
+
+        if (s && i->first != s->getTrack()) continue;
         
         int max = m_composition.getMaxContemporaneousSegmentsOnTrack(i->first);
         if (max == 0) max = 1;
 
+//        std::cerr << "for track " << i->first << ": height = " << max << ", old height = " << m_trackHeights[i->first] << std::endl;
+
+        if (max != m_trackHeights[i->first]) {
+            heightsChanged = true;
+            m_trackHeights[i->first] = max;
+        }
+
         m_grid.setBinHeightMultiple(i->second->getPosition(), max);
     }
+
+    if (heightsChanged) {
+//        std::cerr << "CompositionModelImpl::setTrackHeights: heights have changed" << std::endl;
+        for (Composition::segmentcontainer::iterator i = m_composition.begin();
+             i != m_composition.end(); ++i) {
+            computeSegmentRect(**i);
+        }
+    }
+
+    return heightsChanged;
 }
 
 QPoint CompositionModelImpl::computeSegmentOrigin(const Segment& s)

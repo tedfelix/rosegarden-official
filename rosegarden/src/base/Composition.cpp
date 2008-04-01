@@ -349,6 +349,7 @@ Composition::getMaxContemporaneousSegmentsOnTrack(TrackId track) const
 	if ((*i)->getTrack() != track) continue;
 	timeT t0 = (*i)->getStartTime();
 	timeT t1 = (*i)->getEndMarkerTime();
+//	std::cerr << "getMaxContemporaneousSegmentsOnTrack(" << track << "): segment " << *i << " from " << t0 << " to " << t1 << std::endl;
 	while (!ends.empty() && t0 >= ends.begin()->first) {
 	    simultaneous.erase(ends.begin()->second);
 	    ends.erase(ends.begin());
