@@ -236,14 +236,14 @@ SegmentPerformanceHelper::getSoundingAbsoluteTime(iterator i)
 
     timeT discard;
 
-    std::cerr << "SegmentPerformanceHelper::getSoundingAbsoluteTime at " << (*i)->getAbsoluteTime() << std::endl;
+//    std::cerr << "SegmentPerformanceHelper::getSoundingAbsoluteTime at " << (*i)->getAbsoluteTime() << std::endl;
 
     if ((*i)->has(IS_GRACE_NOTE)) {
-	std::cerr << "it's a grace note" << std::endl;
+//	std::cerr << "it's a grace note" << std::endl;
 	if (getGraceNoteTimeAndDuration(false, i, t, discard)) return t;
     }
     if ((*i)->has(MAY_HAVE_GRACE_NOTES)) {
-	std::cerr << "it's a candidate host note" << std::endl;
+//	std::cerr << "it's a candidate host note" << std::endl;
 	if (getGraceNoteTimeAndDuration(true, i, t, discard)) return t;
     }
 
@@ -257,14 +257,14 @@ SegmentPerformanceHelper::getSoundingDuration(iterator i)
 
     timeT discard;
 
-    std::cerr << "SegmentPerformanceHelper::getSoundingDuration at " << (*i)->getAbsoluteTime() << std::endl;
+//    std::cerr << "SegmentPerformanceHelper::getSoundingDuration at " << (*i)->getAbsoluteTime() << std::endl;
 
     if ((*i)->has(IS_GRACE_NOTE)) {
-	std::cerr << "it's a grace note" << std::endl;
+//	std::cerr << "it's a grace note" << std::endl;
 	if (getGraceNoteTimeAndDuration(false, i, discard, d)) return d;
     }
     if ((*i)->has(MAY_HAVE_GRACE_NOTES)) {
-	std::cerr << "it's a candidate host note" << std::endl;
+//	std::cerr << "it's a candidate host note" << std::endl;
 	if (getGraceNoteTimeAndDuration(true, i, discard, d)) return d;
     }
 

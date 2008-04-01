@@ -129,6 +129,7 @@ public:
     virtual void segmentAdded(const Composition *, Segment *);
     virtual void segmentRemoved(const Composition *, Segment *);
     virtual void segmentRepeatChanged(const Composition *, Segment *, bool);
+    virtual void segmentEndMarkerChanged(const Composition *, Segment *, bool);
     virtual void endMarkerTimeChanged(const Composition *, bool /*shorten*/);
 
     // SegmentObserver
@@ -150,7 +151,7 @@ protected slots:
     void slotAudioPreviewComplete(AudioPreviewUpdater*);
 
 protected:
-    void setTrackHeights();
+    bool setTrackHeights(Segment *changed = 0); // true if something changed
 
     void setSelected(const Segment*, bool selected = true);
     bool isSelected(const Segment*) const;
@@ -219,6 +220,7 @@ protected:
     std::map<const Segment*, CompositionRect> m_segmentRectMap;
     std::map<const Segment*, timeT> m_segmentEndTimeMap;
     std::map<const Segment*, PixmapArray> m_audioSegmentPreviewMap;
+    std::map<TrackId, int> m_trackHeights;
     
     typedef std::map<const Segment*, AudioPreviewUpdater *>
         AudioPreviewUpdaterMap;
