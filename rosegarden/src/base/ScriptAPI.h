@@ -107,9 +107,9 @@ public:
     EventId addEvent(ScriptId id,
                      std::string type, int bar, ScriptTime time, ScriptTime duration);
 
-    void deleteEvent(ScriptId id, EventId id);
+    void deleteEvent(ScriptId id, EventId event);
 
-    std::string getEventType(ScriptId id, EventId id);
+    std::string getEventType(ScriptId id, EventId event);
     std::string getProperty(ScriptId id, EventId event, std::string property);
     void setProperty(ScriptId id, EventId event, std::string property, std::string value);
 

@@ -18,6 +18,7 @@
 #include <iostream>
 #include <fstream>
 #include <cassert>
+#include <cstring>
 
 namespace Rosegarden 
 {

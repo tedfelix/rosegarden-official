@@ -21,6 +21,7 @@
 #include "XmlExportable.h"
 #include <iostream>
 #include <cstdlib>
+#include <cstring>
 
 namespace Rosegarden
 {
