@@ -193,8 +193,9 @@ IF(WANT_TEST)
         kio
         kdeui
         kdeprint
-        RosegardenCommands
         RosegardenExtended
+        RosegardenSegmentCanvas
+        RosegardenCommands
         RosegardenCommon
     )
     FOREACH(currenttest ${tests_SRCS})
