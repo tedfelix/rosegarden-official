@@ -33,6 +33,7 @@
 #include "commands/edit/PasteEventsCommand.h"
 #include "ConfigurationPage.h"
 #include "document/RosegardenGUIDoc.h"
+#include "gui/editors/notation/HeadersGroup.h"
 #include "gui/editors/notation/NotationHLayout.h"
 #include "gui/editors/notation/NoteFontFactory.h"
 #include "gui/editors/notation/NoteFont.h"
@@ -153,11 +154,12 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
 
     m_showTrackHeaders = new KComboBox(frame);
     m_showTrackHeaders->setEditable(false);
-    m_showTrackHeaders->insertItem(i18n("Never"));
-    m_showTrackHeaders->insertItem(i18n("When needed"));
-    m_showTrackHeaders->insertItem(i18n("Always"));
-    int defaultShowTrackHeaders = m_cfg->readNumEntry("shownotationheader", 2);
-    if (defaultShowTrackHeaders >= 0 && defaultShowTrackHeaders <= 2) {
+    m_showTrackHeaders->insertItem(i18n("Never"), HeadersGroup::ShowNever);
+    m_showTrackHeaders->insertItem(i18n("When needed"), HeadersGroup::ShowWhenNeeded);
+    m_showTrackHeaders->insertItem(i18n("Always"), HeadersGroup::ShowAlways);
+    int defaultShowTrackHeaders = m_cfg->readNumEntry("shownotationheader", 
+                                                 HeadersGroup::DefaultShowMode);
+    if (HeadersGroup::isValidShowMode(defaultShowTrackHeaders)) {
         m_showTrackHeaders->setCurrentItem(defaultShowTrackHeaders);
     }
     QToolTip::add(m_showTrackHeaders, QString(i18n(
