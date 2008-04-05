@@ -100,6 +100,16 @@ public:
         return m_lastWidth;
     }
 
+    typedef enum { ShowNever, ShowWhenNeeded, ShowAlways } ShowHeadersModeType;
+
+    // Used to ensure to have one default value and only one.
+    static const ShowHeadersModeType DefaultShowMode = ShowAlways;
+
+    // Useful in configuration dialog.
+    static bool isValidShowMode(int mode)
+    {
+        return ((mode >= ShowNever) && (mode <= ShowAlways));
+    }
 
 public slots :
     /**

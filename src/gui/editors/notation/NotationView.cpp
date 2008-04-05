@@ -413,7 +413,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     m_config->setGroup(NotationViewConfigGroup);
 
-    m_showHeadersGroup = m_config->readNumEntry("shownotationheader", 1);
+    m_showHeadersGroup = m_config->readNumEntry("shownotationheader",
+                                                HeadersGroup::DefaultShowMode);
 
     m_fontName = qstrtostr(m_config->readEntry
                            ("notefont",
@@ -1296,8 +1297,8 @@ void NotationView::positionStaffs()
 
         getCanvasView()->updateLeftWidgetGeometry();
 
-        if (    (m_showHeadersGroup == 2)
-             || (    (m_showHeadersGroup == 1)
+        if (    (m_showHeadersGroup == HeadersGroup::ShowAlways)
+             || (    (m_showHeadersGroup == HeadersGroup::ShowWhenNeeded)
                   && (m_headersGroup->getUsedHeight()
                           > getCanvasView()->visibleHeight()))) {
             m_headersGroup->slotUpdateAllHeaders(getCanvasLeftX(), 0, true);
@@ -2729,7 +2730,8 @@ void NotationView::setViewSize(QSize s)
 {
     canvas()->resize(s.width(), s.height());
 
-    if ((m_pageMode == LinedStaff::LinearMode) && m_showHeadersGroup) {
+    if (   (m_pageMode == LinedStaff::LinearMode)
+        && (m_showHeadersGroup != HeadersGroup::ShowNever)) {
         m_headersGroup->completeToHeight(s.height());
     }
 }
@@ -7458,14 +7460,14 @@ NotationView::slotVerticalScrollHeadersGroup(int y)
 void
 NotationView::slotShowHeadersGroup()
 {
-    m_showHeadersGroup = 2;
+    m_showHeadersGroup = HeadersGroup::ShowAlways;
     showHeadersGroup();
 }
 
 void
 NotationView::slotHideHeadersGroup()
 {
-    m_showHeadersGroup = 0;
+    m_showHeadersGroup = HeadersGroup::ShowNever;
     hideHeadersGroup();
 }
 
