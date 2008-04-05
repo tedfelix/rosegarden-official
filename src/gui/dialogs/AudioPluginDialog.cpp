@@ -39,6 +39,7 @@
 #include "gui/studio/StudioControl.h"
 #include "gui/widgets/PluginControl.h"
 #include "sound/MappedStudio.h"
+#include "sound/PluginIdentifier.h"
 #include <kcombobox.h>
 #include <kdialogbase.h>
 #include <qaccel.h>
@@ -286,7 +287,24 @@ AudioPluginDialog::populatePluginList()
                     continue;
             }
 
-            plugins[(*i)->getName()] = PluginPair(count, *i);
+            QString name = (*i)->getName();
+            bool store = true;
+
+            if (plugins.find(name) != plugins.end()) {
+                // We already have a plugin of this name.  If it's a
+                // LADSPA plugin, replace it (this one might be
+                // something better); otherwise leave it alone.
+                QString id = plugins[name].second->getIdentifier();
+                QString type, soname, label;
+                PluginIdentifier::parseIdentifier(id, type, soname, label);
+                if (type != "ladspa") {
+                    store = false;
+                }
+            }
+
+            if (store) {
+                plugins[(*i)->getName()] = PluginPair(count, *i);
+            }
         }
     }
 
