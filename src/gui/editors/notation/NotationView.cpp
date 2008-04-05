@@ -2800,6 +2800,21 @@ NotationView::setPageMode(LinedStaff::PageMode pageMode)
 
     if (!m_printMode) {
         updateView();
+
+        // At the opening of notation view, when track headers are shown,
+        // the notation canvas is displayed with an horizontal offset compared
+        // to the rulers. This offset disappeared as soon as the track headers
+        // are resized, the view is resized or the view receives a show event.
+        //
+        // Following lines are a hack to force this show event just after the
+        // notation view opening.
+        // A better way to update the notation view should exist, but I didn't
+        // still discover it at present.
+        // The current way drawback is a "flash" as the view is shown, hide,
+        // then shown again when the notation is opened.
+        getCanvasView()->setHidden(true);        // HACK
+        getCanvasView()->show();                 // HACK
+
         slotSetInsertCursorPosition(getInsertionTime(), false, false);
         slotSetPointerPosition(getDocument()->getComposition().getPosition(), false);
     }
