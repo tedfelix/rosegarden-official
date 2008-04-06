@@ -234,6 +234,10 @@ public:
      */
     bool isRegularDotRGFile();
 
+    void setQuickMarker();
+    void jumpToQuickMarker();    
+    timeT getQuickMarkerTime() { return m_quickMarkerTime; }
+
     /**
      * returns the global command history
      */
@@ -709,6 +713,8 @@ protected:
     RealTime m_audioRecordLatency;
 
     timeT m_recordStartTime;
+
+    timeT m_quickMarkerTime;
 
     std::vector<QString> m_orphanedRecordedAudioFiles;
     std::vector<QString> m_orphanedDerivedAudioFiles;

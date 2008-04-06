@@ -129,6 +129,7 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
         m_pluginManager(pluginManager),
         m_audioRecordLatency(0, 0),
         m_autoSavePeriod(0),
+        m_quickMarkerTime(0),
         m_beingDestroyed(false)
 {
     syncDevices();
@@ -257,6 +258,22 @@ void RosegardenGUIDoc::slotDocumentRestored()
 {
     RG_DEBUG << "RosegardenGUIDoc::slotDocumentRestored()\n";
     setModified(false);
+}
+
+void
+RosegardenGUIDoc::setQuickMarker()
+{
+    RG_DEBUG << "RosegardenGUIDoc::setQuickMarker" << endl;
+    
+    m_quickMarkerTime = getComposition().getPosition();
+}
+
+void
+RosegardenGUIDoc::jumpToQuickMarker()
+{
+    RG_DEBUG << "RosegardenGUIDoc::jumpToQuickMarker" << endl;
+
+    slotSetPointerPosition(m_quickMarkerTime);
 }
 
 QString RosegardenGUIDoc::getAutoSaveFileName()

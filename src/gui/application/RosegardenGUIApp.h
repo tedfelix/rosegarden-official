@@ -1676,7 +1676,6 @@ private:
 
     RosegardenParameterArea *m_parameterArea;
 
-    timeT m_quickMarkerTime;
     KAction *m_setQuickMarkerAction;
     KAction *m_jumpToQuickMarkerAction;
     
