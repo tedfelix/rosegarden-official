@@ -1695,7 +1695,10 @@ NotationStaff::renderNote(ViewElementList::iterator &vli)
     NotePixmapFactory *factory = m_notePixmapFactory;
 
     if (elt->isGrace()) {
-        params.setLegerLines(0);
+        // lift this code from elsewhere to fix #1930309, and it seems to work a
+        // treat, as y'all Wrongpondians are wont to say
+        params.setLegerLines(heightOnStaff < 0 ? heightOnStaff :
+                             heightOnStaff > 8 ? heightOnStaff - 8 : 0);
         m_graceNotePixmapFactory->setSelected(m_notePixmapFactory->isSelected());
         m_graceNotePixmapFactory->setShaded(m_notePixmapFactory->isShaded());
         factory = m_graceNotePixmapFactory;
