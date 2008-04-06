@@ -1102,7 +1102,7 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotResetMidiNetwork()),
                 actionCollection(), "reset_midi_network");
 
-    m_setQuickMarkerAction = new KAction(i18n("Set Quick Marker"), 0, CTRL + Key_1, this,
+    m_setQuickMarkerAction = new KAction(i18n("Set Quick Marker at Playback Position"), 0, CTRL + Key_1, this,
                 SLOT(slotSetQuickMarker()), actionCollection(),
                 "set_quick_marker");
 
@@ -1110,9 +1110,6 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotJumpToQuickMarker()), actionCollection(),
                 "jump_to_quick_marker");
 
-    // initialize quick marker
-    m_quickMarkerTime = 0;
-    
     //
     // Marker Ruler popup menu
     //
@@ -8027,7 +8024,8 @@ RosegardenGUIApp::slotSetQuickMarker()
 {
     RG_DEBUG << "RosegardenGUIApp::slotSetQuickMarker" << endl;
     
-    m_quickMarkerTime = m_doc->getComposition().getPosition();
+    m_doc->setQuickMarker();
+    getView()->getTrackEditor()->updateRulers();
 }
 
 void
@@ -8035,9 +8033,8 @@ RosegardenGUIApp::slotJumpToQuickMarker()
 {
     RG_DEBUG << "RosegardenGUIApp::slotJumpToQuickMarker" << endl;
 
-    m_doc->slotSetPointerPosition(m_quickMarkerTime);
+    m_doc->jumpToQuickMarker();
 }
-
 
 const void* RosegardenGUIApp::SequencerExternal = (void*)-1;
 RosegardenGUIApp *RosegardenGUIApp::m_myself = 0;

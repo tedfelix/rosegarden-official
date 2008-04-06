@@ -52,6 +52,7 @@
 #include <kaction.h>
 #include <kstddirs.h>
 #include <qtooltip.h>
+#include <qpointarray.h>
 
 
 namespace Rosegarden
@@ -415,6 +416,24 @@ MarkerRuler::paintEvent(QPaintEvent*)
 
                 painter.setWorldXForm(enableXForm);
             }
+        }
+        
+        if (m_doc->getQuickMarkerTime() > 0) {
+            // draw quick marker
+            double xQM = m_rulerScale->getXForTime(m_doc->getQuickMarkerTime())
+                       + m_xorigin + m_currentXOffset;
+            
+            // draw red triangle
+            painter.setPen(Qt::red);
+            painter.setBrush(Qt::red);
+            QPointArray points(5);
+            points.setPoint(0, int(xQM)-1, 1);
+            points.setPoint(1, int(xQM)-1, m_barHeight-1);
+            points.setPoint(2, int(xQM), m_barHeight-1);
+            points.setPoint(3, int(xQM), m_barHeight/2);
+            points.setPoint(4, int(xQM)+m_barHeight/3, m_barHeight/4);
+    
+            painter.drawPolygon(points, true);
         }
     }
 }
