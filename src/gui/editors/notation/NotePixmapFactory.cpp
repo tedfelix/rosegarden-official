@@ -610,7 +610,6 @@ NotePixmapFactory::makeNoteHaloPixmap(const NotePixmapParameters &params)
     int nbh = getNoteBodyHeight(params.m_noteType);
     int nbw0 = getNoteBodyHeight();
     int nbw = getNoteBodyWidth(params.m_noteType);
-    int hOffset = 0;
 
     createPixmapAndMask(nbw + nbw0, nbh + nbh0);
     drawNoteHalo(0, 0, nbw + nbw0, nbh + nbh0);
@@ -2204,6 +2203,7 @@ NotePixmapFactory::makeTrackHeaderPixmap(
 
     if (header->isAClefToDraw()) {
         const Clef &clef = header->getClef();
+        // TODO : use colours from GUIPalette
         colour = header->isClefInconsistent() ? Qt::red : Qt::black;
 
         int hue, sat, val;
@@ -2241,6 +2241,7 @@ NotePixmapFactory::makeTrackHeaderPixmap(
             m_p->drawText(xpos, ypos, text);
         }
 
+        // TODO : use colours from GUIPalette
         colour = header->isKeyInconsistent() ? Qt::red : Qt::black;
 
 
@@ -2311,6 +2312,7 @@ NotePixmapFactory::makeTrackHeaderPixmap(
 
     // Write transposition text
 
+    // TODO : use colours from GUIPalette
     colour = header->isTransposeInconsistent() ? Qt::red : Qt::black;
     m_p->painter().setFont(m_trackHeaderBoldFont);
      // m_p->maskPainter().setFont(m_trackHeaderBoldFont);
@@ -2324,6 +2326,7 @@ NotePixmapFactory::makeTrackHeaderPixmap(
 
      // Write lower text (segment label)
 
+    // TODO : use colours from GUIPalette
     colour = header->isLabelInconsistent() ? Qt::red : Qt::black;
     m_p->painter().setFont(m_trackHeaderFont);
     // m_p->maskPainter().setFont(m_trackHeaderFont);
@@ -2379,8 +2382,8 @@ NotePixmapFactory::getOneLine(QString &text, int width)
     QString str;
     int n;
 
-    // Immediately stop if string is empty ...
-    if (text.isEmpty()) return QString("");
+    // Immediately stop if string is empty or only contains white spaces ...
+    if (text.stripWhiteSpace().isEmpty()) return QString("");
 
     // ... or if width is too small.
     if (width < m_trackHeaderFontMetrics.boundingRect(text.left(1)).width())

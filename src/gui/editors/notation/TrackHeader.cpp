@@ -257,10 +257,20 @@ TrackHeader::lookAtStaff(double x, int maxWidth)
     // Read Clef and Key on canvas at (x, m_ypos + m_height / 2)
     // then guess the header needed width and return it
 
+    // When walking through the segments :
+    //    clef, key, label and transpose are current values
+    //    clef0, key0, label0 and transpose0 are preceding values used to look
+    //                                       for inconsistencies
+    //    key1, label1 and transpose1 are "visible" (opposed at invisible as are
+    //                                key=<C major>, label="" or transpose=0)
+    //                                preceding or current values which may be
+    //                                displayed with a red colour if some
+    //                                inconsistency occurs.
     Clef clef, clef0;
-    Rosegarden::Key key, key0;
-    QString label = QString(""), label0;
-    int transpose = 0, transpose0;
+    Rosegarden::Key key, key0, key1 = Rosegarden::Key("C major");
+    QString label = QString(""), label0, label1 = QString("");
+    int transpose = 0, transpose0, transpose1 = 0;
+
     int staff;
 
     Composition *comp = 
@@ -313,6 +323,13 @@ TrackHeader::lookAtStaff(double x, int maxWidth)
                 }
 
                 staff = i;
+
+                // If current value is visible, remember it
+                if (key.getAccidentalCount()) key1 = key;
+                if (label.stripWhiteSpace().length()) label1 = label;
+                if (transpose) transpose1 = transpose;
+
+                // Current values become last values
                 clef0 = clef;
                 key0 = key;
                 label0 = label;
@@ -321,11 +338,11 @@ TrackHeader::lookAtStaff(double x, int maxWidth)
         }                                                // if(trackId...)
     }
 
-    // Remember current data
+    // Remember current data (but only visible data if inconsistency)
     m_clef = clef;
-    m_key = key;
-    m_label = label;
-    m_transpose = transpose;
+    m_key = (status & INCONSISTENT_KEYS) ? key1 : key;
+    m_label = (status & INCONSISTENT_LABELS) ? label1 : label;
+    m_transpose = (status & INCONSISTENT_TRANSPOSITIONS) ? transpose1 : transpose;
     m_current = current;
     m_status = status;
 
@@ -339,7 +356,7 @@ TrackHeader::lookAtStaff(double x, int maxWidth)
     else             m_transposeText = QString("");
 
     NotePixmapFactory * npf = m_notationView->getNotePixmapFactory();
-    int clefAndKeyWidth = npf->getClefAndKeyWidth(key, clef);
+    int clefAndKeyWidth = npf->getClefAndKeyWidth(m_key, m_clef);
 
     // How many text lines may be written above or under the clef
     // in track header ?
@@ -372,11 +389,6 @@ TrackHeader::updateHeader(int width)
 
     // Update the header (using given width) if necessary
 
-    Composition *comp = 
-        static_cast<HeadersGroup *>(parent())->getComposition();
-    Track *track = comp->getTrackById(m_track);
-    int trackPos = comp->getTrackPositionById(m_track);
-
     // Filter out bits whose display doesn't depend from
     int statusPart = m_status & ~(SUPERIMPOSED_SEGMENTS);
 
@@ -408,12 +420,6 @@ TrackHeader::updateHeader(int width)
         } else {
             drawClef = false;
         }
-
-        /// TODO : use colours from GUIPalette
-        QColor upperTextColour = (m_status & INCONSISTENT_TRANSPOSITIONS) ?
-                                                     Qt::red : Qt::black;
-        QColor lowerTextColour = (m_status & INCONSISTENT_LABELS) ?
-                                                     Qt::red : Qt::black;
 
         NotePixmapFactory * npf = m_notationView->getNotePixmapFactory();
         QPixmap pmap = NotePixmapFactory::toQPixmap(
