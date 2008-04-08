@@ -386,8 +386,6 @@ void TrackEditor::paintEvent(QPaintEvent* e)
 {
     if (isCompositionModified()) {
 
-        RG_DEBUG << "TrackEditor::paintEvent: composition is modified, update everything\n";
-
         slotReadjustCanvasSize();
         m_trackButtons->slotUpdateTracks();
         m_segmentCanvas->clearSegmentRectsCache(true);

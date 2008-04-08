@@ -2575,6 +2575,11 @@ RosegardenGUIDoc::addRecordMIDISegment(TrackId tid)
 
     m_recordMIDISegments[track->getInstrument()] = recordMIDISegment;
 
+    RosegardenGUIView *w;
+    for (w = m_viewList.first(); w != 0; w = m_viewList.next()) {
+        w->getTrackEditor()->getTrackButtons()->slotUpdateTracks();
+    }
+
     emit newMIDIRecordingSegment(recordMIDISegment);
 }
 
@@ -2650,6 +2655,11 @@ RosegardenGUIDoc::addRecordAudioSegment(InstrumentId iid,
 
     RG_DEBUG << "RosegardenGUIDoc::addRecordAudioSegment: adding record segment for instrument " << iid << " on track " << recordTrack->getId() << endl;
     m_recordAudioSegments[iid] = recordSegment;
+
+    RosegardenGUIView *w;
+    for (w = m_viewList.first(); w != 0; w = m_viewList.next()) {
+        w->getTrackEditor()->getTrackButtons()->slotUpdateTracks();
+    }
 
     emit newAudioRecordingSegment(recordSegment);
 }

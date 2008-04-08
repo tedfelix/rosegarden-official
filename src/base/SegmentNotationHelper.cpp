@@ -1244,14 +1244,14 @@ void
 SegmentNotationHelper::makeBeamedGroupAux(iterator from, iterator to,
 					  string type, bool groupGraces)
 {
-    cerr << "SegmentNotationHelper::makeBeamedGroupAux: type " << type << endl;
-    if (from == to) cerr << "from == to" <<endl;
+//    cerr << "SegmentNotationHelper::makeBeamedGroupAux: type " << type << endl;
+//    if (from == to) cerr << "from == to" <<endl;
 
     int groupId = segment().getNextId();
     bool beamedSomething = false;
 
     for (iterator i = from; i != to; ++i) {
-	std::cerr << "looking at " << (*i)->getType() << " at " << (*i)->getAbsoluteTime() << std::endl;
+//	std::cerr << "looking at " << (*i)->getType() << " at " << (*i)->getAbsoluteTime() << std::endl;
 
 	// don't permit ourselves to change the type of an
 	// already-grouped event here
@@ -1273,7 +1273,7 @@ SegmentNotationHelper::makeBeamedGroupAux(iterator from, iterator to,
 
 	if ((*i)->isa(Note::EventType) &&
 	    (*i)->getNotationDuration() >= Note(Note::Crotchet).getDuration()) {
-	    std::cerr << "too long" <<std::endl;
+//	    std::cerr << "too long" <<std::endl;
 	    if (!beamedSomething) continue;
 	    iterator j = i;
 	    bool somethingLeft = false;
@@ -1288,7 +1288,7 @@ SegmentNotationHelper::makeBeamedGroupAux(iterator from, iterator to,
 	    if (!somethingLeft) continue;
 	}
 
-	std::cerr << "beaming it" <<std::endl;
+//	std::cerr << "beaming it" <<std::endl;
         (*i)->set<Int>(BEAMED_GROUP_ID, groupId);
         (*i)->set<String>(BEAMED_GROUP_TYPE, type);
     }
