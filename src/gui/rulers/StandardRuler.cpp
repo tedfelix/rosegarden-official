@@ -60,7 +60,6 @@ StandardRuler::StandardRuler(RosegardenGUIDoc *doc,
         m_rulerScale(rulerScale),
         m_hButtonBar(0)
 {
-
     setSpacing(0);
 
     if (!m_invert) {
@@ -69,7 +68,7 @@ StandardRuler::StandardRuler(RosegardenGUIDoc *doc,
     }
 
     m_loopRuler = new LoopRuler
-                  (m_rulerScale, m_loopRulerHeight, xorigin, m_invert, this);
+                  (m_doc, m_rulerScale, m_loopRulerHeight, xorigin, m_invert, this, name);
 
     if (m_invert) {
         m_hButtonBar = new MarkerRuler

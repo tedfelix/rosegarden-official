@@ -1516,6 +1516,35 @@
 	pressed.</para>
       </sect2>
 
+      <sect2 id="quick_marker">
+    <title>Quick Marker</title>
+
+    <para>The quick marker is a special moment in time that can be defined
+    on the fly with a single key (by default Ctrl-1) from the main window
+    (track editor). Once defined it appears as a red line in the loop ruler 
+    (it does not appear among other markers, since it does not have a label).
+    At any time when in the track editor you can jump to the quick marker
+    position with a single key (by default simply 1).
+    <screenshot>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="rg-quickmarker.png" format="PNG"/>
+      </imageobject>
+    <textobject>
+      <phrase>Quick Marker at the start of the third bar</phrase>
+    </textobject>
+      </mediaobject>
+      </screenshot>
+    </para>
+    
+    <para>A typical use of the quick marker is when you want to record the same bars
+    on different instruments: after setting the quick marker at the first bar of 
+    the working interval, it is easy to jump to the quick marker each time you need
+    to record a new part.</para>
+    
+    <para>Note that the quick marker position is not saved in your &rosegarden; file.</para>
+      </sect2>
+      
       <sect2 id="ranges-loops">
 	<title>Ranges and loops</title>
 	<para>

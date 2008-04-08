@@ -37,18 +37,24 @@
 #include <qwidget.h>
 #include <qtooltip.h>
 #include <klocale.h>
+#include <kaction.h>
+#include <qpainter.h>
+#include <qpointarray.h>
+#include "document/RosegardenGUIDoc.h"
 
 
 namespace Rosegarden
 {
 
-LoopRuler::LoopRuler(RulerScale *rulerScale,
+LoopRuler::LoopRuler(RosegardenGUIDoc *doc,
+                     RulerScale *rulerScale,
                      int height,
                      double xorigin,
                      bool invert,
                      QWidget *parent,
                      const char *name) : 
     QWidget(parent, name),
+    m_doc(doc),
     m_height(height),
     m_xorigin(xorigin),
     m_invert(invert),
@@ -62,6 +68,14 @@ LoopRuler::LoopRuler(RulerScale *rulerScale,
     m_loopingMode(false),
     m_startLoop(0), m_endLoop(0)
 {
+    /*
+     * I need to understand if this ruler is being built for the main
+     * window (Track Editor) or for any of the segment editors. Apparently
+     * the name parameter is supplied (non-NULL) only for the main window.
+     * I can't find of any other (more decent) way to do this. Sorry.
+     */
+    m_mainWindow = (name != 0 && std::string(name).length() != 0);
+    
     setBackgroundColor(GUIPalette::getColour(GUIPalette::LoopRulerBackground));
 
     // Always snap loop extents to beats; by default apply no snap to
@@ -144,6 +158,26 @@ void LoopRuler::paintEvent(QPaintEvent* e)
     paint.setBrush(colorGroup().foreground());
     drawBarSections(&paint);
     drawLoopMarker(&paint);
+    
+    if (m_mainWindow) {
+        timeT tQM = m_doc->getQuickMarkerTime();
+        if (tQM >= 0) {
+            // draw quick marker
+            double xQM = m_rulerScale->getXForTime(tQM)
+                       + m_xorigin + m_currentXOffset;
+            
+            // draw red segment
+            paint.setPen(Qt::red);
+            paint.setBrush(Qt::red);
+            QPointArray points(4);
+            points.setPoint(0, int(xQM)-1, 1);
+            points.setPoint(1, int(xQM)-1, m_height-1);
+            points.setPoint(2, int(xQM)+2, m_height-1);
+            points.setPoint(3, int(xQM)+2, 1);
+    
+            paint.drawPolygon(points, true);
+        }
+    }
 }
 
 void LoopRuler::drawBarSections(QPainter* paint)
