@@ -284,6 +284,8 @@ TrackButtons::slotUpdateTracks()
     unsigned int newNbTracks = comp.getNbTracks();
     Track *track = 0;
 
+    std::cerr << "TrackButtons::slotUpdateTracks" << std::endl;
+
     if (newNbTracks < m_tracks) {
         for (unsigned int i = m_tracks; i > newNbTracks; --i)
             removeButtons(i - 1);
