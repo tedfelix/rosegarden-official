@@ -245,17 +245,24 @@
       <author>
 	<firstname>Guillaume</firstname>
 	<surname>Laurent</surname>
+        <firstname>D. Michael</firstname>
+        <surname>McIntyre</surname>
+        <firstname>Pedro</firstname>
+        <surname>Lopez-Cabanillas</surname>
+        <firstname>Heikki</firstname>
+        <surname>Junes</surname>
       </author>
       <!-- TRANS:ROLES_OF_TRANSLATORS -->
     </authorgroup>
 
     <copyright>
-      <year>2002-2007</year>
-      <holder>Chris Cannam, Richard Bown, Guillaume Laurent</holder>
+      <year>2002-2008</year>
+      <holder>Chris Cannam, Richard Bown, Guillaume Laurent, D. Michael
+      McIntyre, Pedro Lopez-Cabanillas, Heikki Junes</holder>
     </copyright>
 
-    <date>2007-09-09</date>
-    <releaseinfo>1.6.0</releaseinfo>
+    <date>2008-05-05</date>
+    <releaseinfo>1.7.0</releaseinfo>
 
     <abstract>
       <para>
@@ -313,7 +320,7 @@
       care to specify.  You can use Rosegarden to write, edit, and
       organise music to create a composition, which you can then
       synthesise, add effects to, and mix down for burning to CD or
-      distribution on the web.  Rosegarden also contains professional
+      distribution on the web.  Rosegarden also contains well-rounded 
       notation editing support for high quality printed output.
     </para>
 
@@ -990,7 +997,7 @@
 	portion of the canvas, the canvas will scroll automatically once you
 	reach its edge.  If you keep dragging past the end of the entire
 	composition, you can keep dragging, and will push the end marker right along
-	with you.  (This is a welcome contrast to earlier version of
+	with you.  (This is a welcome contrast to earlier versions of
 	&rosegarden;.)
       </para>
 
@@ -1000,10 +1007,16 @@
 	holding down Shift while clicking and dragging.
       </para>
 
-      <para>New segments are created in a green colour, with a treble clef by
+      <para>New segments are created in a yellow colour, with a treble clef by
 	  default.  You may wish to jump ahead and have a look at <link
 	      linkend="track-parameters">track parameters</link> to explore
 	  other possibilities.
+      </para>
+
+      <para>If you wish to draw a segment that begins in the middle of an
+      existing segment, hold Ctrl and Alt when clicking.  The track will
+      automatically expand to accommodate this new segment.  This is especially
+      useful for some situations involving music notation.
       </para>
 
       <para>
@@ -6765,6 +6778,14 @@
       <title>Rosegarden Revision History</title>
       <para>
         <itemizedlist>
+          <listitem><para>
+              1.7.0 &ndash; May 2008: notation track headers, nested brackets in
+              LilyPond export, grace notes finally functional, quick playback
+              position marker, ties can be flipped, variable-height tracks allow
+              access to all previously overlapping segments, take track
+              transpose into account while recording, convert existing segments
+              when loading an instrument preset, etc., bug fixes galore
+          </para></listitem>
 	  <listitem><para>
 	      1.6.0 &ndash; November 2007: fretboards, diatonic transpose, multiple lines of lyrics, marker ruler improvements, overlapping notes visibility, LilyPond export enhancements and new dialog, better infrared remote control support, better configuration dialog, fixes
 	  </para></listitem>
