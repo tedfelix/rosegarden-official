@@ -164,7 +164,7 @@ void LoopRuler::paintEvent(QPaintEvent* e)
         if (tQM >= 0) {
             // draw quick marker
             double xQM = m_rulerScale->getXForTime(tQM)
-                       + m_xorigin + m_currentXOffset;
+                       + m_xorigin + m_currentXOffset + 1;
             
             // draw red segment
             paint.setPen(Qt::red);
