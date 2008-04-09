@@ -86,7 +86,7 @@
 				PBXFileTableDataSourceColumnWidthsKey = (
 					20,
 					675,
-					318,
+					318.20849609375,
 				);
 				PBXFileTableDataSourceColumnsKey = (
 					PBXErrorsWarningsDataSource_TypeID,
@@ -204,8 +204,8 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 229385632;
-			PBXWorkspaceStateSaveDate = 229385632;
+			PBXPerProjectTemplateStateSaveDate = 229436024;
+			PBXWorkspaceStateSaveDate = 229436024;
 		};
 		perUserProjectItems = {
 			AF0911810D983888006E5966 = AF0911810D983888006E5966 /* PBXTextBookmark */;
@@ -382,6 +382,11 @@
 		name = CompositionToMusicSequence.cpp;
 		path = /Users/glaurent/Development/rgplayer/coremidiwrapper/CompositionToMusicSequence.cpp;
 		sourceTree = "<group>";
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {981, 2002}}";
+			sepNavSelRange = "{837, 15}";
+			sepNavVisRange = "{51, 1716}";
+		};
 	};
 	AF0911E40D997374006E5966 /* CompositionToMusicSequence.cpp:21 */ = {
 		isa = PBXFileBreakpoint;
@@ -1441,6 +1446,7 @@
 		fallbackIsa = XCSourceControlManager;
 		isSCMEnabled = 0;
 		scmConfiguration = {
+			repositoryName = rosegarden;
 		};
 	};
 	AFDEA4850D5FAD5300A3EB95 /* Code sense */ = {
