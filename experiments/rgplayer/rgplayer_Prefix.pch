@@ -1,0 +1,7 @@
+//
+// Prefix header for all source files of the 'rgplayer' target in the 'rgplayer' project
+//
+
+#ifdef __OBJC__
+    #import <Cocoa/Cocoa.h>
+#endif
