@@ -109,14 +109,14 @@ void CompositionToMusicSequence::convertEvent(const Rosegarden::Event* event, ti
 
     if (event->isa(Rosegarden::Note::EventType)) {
         MIDINoteMessage msg;
-        msg.duration = playDuration / 100.0;
+        msg.duration = playDuration / 1000.0;
         long tmp = Rosegarden::MidiMaxValue;
         bool hasProperty = event->get<Rosegarden::Int>(Rosegarden::BaseProperties::VELOCITY, tmp);
         msg.velocity = tmp;        
         hasProperty = event->get<Rosegarden::Int>(Rosegarden::BaseProperties::PITCH, tmp);
         msg.note = tmp;
         
-        MusicTimeStamp timeStamp = playTime / 100.0;
+        MusicTimeStamp timeStamp = playTime / 1000.0;
         m_currentTrack.newMIDINoteEvent(timeStamp, &msg);
     }
     

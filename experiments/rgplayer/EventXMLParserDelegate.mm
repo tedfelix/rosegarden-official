@@ -8,16 +8,18 @@
 
 #import "EventXMLParserDelegate.h"
 
-#include "base/Event.h"
 #include "base/Segment.h"
 #include "base/Property.h"
 
 @implementation EventXMLParserDelegate
 
-@synthesize event;
+@synthesize currentEvent;
+@synthesize inChord;
 
 - (id)init:(RGXMLParser*)parentParser {
     parent = parentParser;
+    currentTime = 0;
+    inChord = FALSE;
     standardKeys = [NSArray arrayWithObjects:@"type", @"duration", @"subordering", @"absoluteTime", @"timeOffset", nil];
     return self;
 }
@@ -32,7 +34,7 @@
         NSString* absoluteTimeStr = [attributeDict objectForKey:@"absoluteTime"];
         NSString* timeOffsetStr = [attributeDict objectForKey:@"timeOffset"];
         
-        Rosegarden::timeT duration = 0, absoluteTime;
+        Rosegarden::timeT duration = 0, absoluteTime = currentTime;
         short subordering = 0;
         
         if (durationStr != nil) {
@@ -42,14 +44,22 @@
             subordering = [suborderingStr intValue];
         }
         
-        absoluteTime = [absoluteTimeStr intValue];
+        if (absoluteTimeStr != nil) {
+            absoluteTime = [absoluteTimeStr intValue];            
+        }
         
         if (timeOffsetStr != nil) {
             absoluteTime += [timeOffsetStr intValue];
         }
         
-        event = new Rosegarden::Event([typeStr cStringUsingEncoding:[NSString defaultCStringEncoding]],
+        currentEvent = new Rosegarden::Event([typeStr cStringUsingEncoding:[NSString defaultCStringEncoding]],
                                       absoluteTime, duration, subordering);
+        
+//        std::cerr << "Parsed Event at absolute time " << absoluteTime << " - duration = " << duration << std::endl;
+        
+        if (!inChord) {
+            currentTime = currentEvent->getAbsoluteTime() + duration;
+        }
         
         for(NSString* key in attributeDict) {
             if ([standardKeys indexOfObjectIdenticalTo:key] == NSNotFound) {
@@ -57,14 +67,14 @@
                 NSString* val = [attributeDict objectForKey:key];
                 if ([val isEqualToString:@"true"] || [val isEqualToString:@"false"]) {
                     BOOL b = [val boolValue];
-                    event->set<Rosegarden::Bool>(keyc, b);
+                    currentEvent->set<Rosegarden::Bool>(keyc, b);
                 } else {
                     NSScanner* scanner = [NSScanner scannerWithString:val];                
                     int iVal = 0;
                     if ([scanner scanInt:&iVal]) {
-                        event->set<Rosegarden::Int>(keyc, iVal);
+                        currentEvent->set<Rosegarden::Int>(keyc, iVal);
                     } else {
-                        event->set<Rosegarden::String>(keyc, [val cStringUsingEncoding:[NSString defaultCStringEncoding]]);
+                        currentEvent->set<Rosegarden::String>(keyc, [val cStringUsingEncoding:[NSString defaultCStringEncoding]]);
                     }
                     
                 }
@@ -86,13 +96,13 @@
             if ([key isEqualToString:@"int"]) {                                
                 int iVal = 0;
                 if ([scanner scanInt:&iVal]) {
-                    event->set<Rosegarden::Int>(propertyNameC, iVal);
+                    currentEvent->set<Rosegarden::Int>(propertyNameC, iVal);
                 }                
             } else if ([key isEqualToString:@"bool"]) {
                 BOOL b = [val boolValue];
-                event->set<Rosegarden::Bool>(propertyNameC, b);
+                currentEvent->set<Rosegarden::Bool>(propertyNameC, b);
             } else {
-                event->set<Rosegarden::String>(propertyNameC, [val cStringUsingEncoding:[NSString defaultCStringEncoding]]);
+                currentEvent->set<Rosegarden::String>(propertyNameC, [val cStringUsingEncoding:[NSString defaultCStringEncoding]]);
             }
         }
         
@@ -102,8 +112,8 @@
 - (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName {
     
     if ([elementName isEqualToString:@"event"]) {
-        parent.currentSegment->insert(event);
-        event = 0;
+        parent.currentSegment->insert(currentEvent);
+        currentEvent = 0;
     } else if ([elementName isEqualToString:@"segment"]) {
         [parent popDelegate];
     }

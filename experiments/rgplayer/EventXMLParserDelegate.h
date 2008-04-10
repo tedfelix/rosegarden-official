@@ -9,17 +9,18 @@
 #import <Cocoa/Cocoa.h>
 #import "RGXMLParser.h"
 
-namespace Rosegarden {
-    class Event;    
-}
+#include "base/Event.h"
 
 @interface EventXMLParserDelegate : NSObject {
     RGXMLParser* parent;
-    Rosegarden::Event* event;
+    Rosegarden::Event* currentEvent;
     NSArray* standardKeys;
+    Rosegarden::timeT currentTime;
+    BOOL inChord;
 }
 
-@property(readonly) Rosegarden::Event* event;
+@property(readonly) Rosegarden::Event* currentEvent;
+@property(readwrite) BOOL inChord;
 
 - (id)init:(RGXMLParser*)parentParser;
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict;

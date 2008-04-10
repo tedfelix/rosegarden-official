@@ -96,8 +96,8 @@
            byItem:(id)item {
 
     NSString* identifier = [tableColumn identifier];
-    NSLog([NSString stringWithFormat:@"objectValueForTableColumn - tableColumn = %@", identifier]);
-    NSLog([NSString stringWithFormat:@"objectValueForTableColumn - item = %@", item]);
+//    NSLog([NSString stringWithFormat:@"objectValueForTableColumn - tableColumn = %@", identifier]);
+//    NSLog([NSString stringWithFormat:@"objectValueForTableColumn - item = %@", item]);
     
     return [compositionWrapper itemValue:item forColumn:identifier];
     
