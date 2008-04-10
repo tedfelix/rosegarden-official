@@ -210,7 +210,7 @@ static void PlayLoop (MusicPlayerW &player, AUGraph &graph, MusicTimeStamp seque
     MusicTrack testTrack = musicSequence.getIndTrack(0);
     MusicEventIterator iter;
     NewMusicEventIterator(testTrack, &iter);
-    MusicEventIteratorNextEvent(iter);
+//    MusicEventIteratorNextEvent(iter);
     Boolean hasEvt = false;
     MusicEventIteratorHasCurrentEvent(iter, &hasEvt);
     if (hasEvt) {
