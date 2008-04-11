@@ -30,6 +30,7 @@
 #include "gui/general/HZoomable.h"
 #include <qsize.h>
 #include <qwidget.h>
+#include <qpen.h>
 #include "base/Event.h"
 
 
@@ -135,7 +136,7 @@ protected:
     SnapGrid    m_defaultGrid;
     SnapGrid    m_loopGrid;
     SnapGrid   *m_grid;
-    
+    QPen        m_quickMarkerPen;
     bool m_loopingMode;
     timeT m_startLoop;
     timeT m_endLoop;
