@@ -66,7 +66,8 @@ LoopRuler::LoopRuler(RosegardenGUIDoc *doc,
     m_loopGrid(rulerScale),
     m_grid(&m_defaultGrid),
     m_loopingMode(false),
-    m_startLoop(0), m_endLoop(0)
+    m_startLoop(0), m_endLoop(0),
+    m_quickMarkerPen(QPen(GUIPalette::getColour(GUIPalette::QuickMarker), 4))
 {
     /*
      * I need to understand if this ruler is being built for the main
@@ -166,16 +167,13 @@ void LoopRuler::paintEvent(QPaintEvent* e)
             double xQM = m_rulerScale->getXForTime(tQM)
                        + m_xorigin + m_currentXOffset;
             
+            paint.setPen(m_quickMarkerPen);
+            
+            // looks necessary to compensate for shift in the CompositionView (cursor)
+            paint.translate(1, 0);
+            
             // draw red segment
-            paint.setPen(Qt::red);
-            paint.setBrush(Qt::red);
-            QPointArray points(4);
-            points.setPoint(0, int(xQM)-1, 1);
-            points.setPoint(1, int(xQM)-1, m_height-1);
-            points.setPoint(2, int(xQM)+2, m_height-1);
-            points.setPoint(3, int(xQM)+2, 1);
-    
-            paint.drawPolygon(points, true);
+            paint.drawLine(int(xQM), 1, int(xQM), m_height-1);
         }
     }
 }

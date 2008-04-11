@@ -172,6 +172,8 @@ GUIPalette::GUIPalette()
 
     m_defaultsMap[MarkerBackground] = QColor(185, 255, 248);
 
+    m_defaultsMap[QuickMarker] = Qt::red;
+
     //    m_defaultsMap[MuteTrackLED] = QColor(218, 190, 230, QColor::Hsv);
     m_defaultsMap[MuteTrackLED] = QColor(211, 194, 238, QColor::Hsv);
     m_defaultsMap[RecordMIDITrackLED] = QColor(45, 250, 225, QColor::Hsv);
@@ -284,6 +286,8 @@ const char* const GUIPalette::RotaryPlugin = "rotaryplugin";
 const char* const GUIPalette::RotaryMeter = "rotarymeter";
 
 const char* const GUIPalette::MarkerBackground = "markerbackground";
+
+const char* const GUIPalette::QuickMarker = "quickmarker";
 
 const char* const GUIPalette::MuteTrackLED = "mutetrackled";
 const char* const GUIPalette::RecordMIDITrackLED = "recordmiditrackled";
