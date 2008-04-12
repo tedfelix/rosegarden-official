@@ -129,14 +129,11 @@ void MatrixMover::handleLeftButtonPress(timeT time,
             else
                 newSelection = new EventSelection(m_currentStaff->getSegment());
 
-            //!!! perhaps unclean in some way?  the logic of all of this
-            // selector/mover/tool stuff is rather difficult to get hold of, but
-            // the following seems to work:
-            //
             // if the selection already contains the event, remove it from the
-            // selection instead
+            // selection if shift is pressed
             if (selection->contains(m_currentElement->event())){
-                newSelection->removeEvent(m_currentElement->event());
+                if (e->state() & Qt::ShiftButton)
+                    newSelection->removeEvent(m_currentElement->event());
             } else {
                 newSelection->addEvent(m_currentElement->event());
             }
