@@ -522,7 +522,7 @@ public slots:
     void slotHideHeadersGroup();
     void slotVerticalScrollHeadersGroup(int);
     void slotUpdateHeaders(int x, int y);
-    void slotSetHeadersWidth(int w);
+    void slotHeadersWidthChanged(int w);
 
     /// Adjust notation header view when bottom ruler added or removed
     void slotCanvasBottomWidgetHeightChanged(int);

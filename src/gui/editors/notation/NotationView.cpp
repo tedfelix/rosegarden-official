@@ -538,6 +538,10 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     connect(m_bottomStandardRuler->getLoopRuler(), SIGNAL(stopMouseMove()),
             m_canvasView, SLOT(stopAutoScroll()));
 
+    // Following connection have to be done before calling setPageMode())
+    connect(m_headersGroup, SIGNAL(headersResized(int)),
+            this, SLOT(slotHeadersWidthChanged(int)));
+
 
     //
     // layout
@@ -711,10 +715,6 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     // toggles the canvas view bottom rulers
     connect(getCanvasView(), SIGNAL(bottomWidgetHeightChanged(int)),
             this, SLOT(slotCanvasBottomWidgetHeightChanged(int)));
-
-    QObject::connect
-    (m_headersGroup, SIGNAL(headersResized(int)),
-     this, SLOT(slotSetHeadersWidth(int)));
 
     // Signal canvas horizontal scroll to notation header
      QObject::connect
@@ -1303,7 +1303,16 @@ void NotationView::positionStaffs()
                           > getCanvasView()->visibleHeight()))) {
             m_headersGroup->slotUpdateAllHeaders(getCanvasLeftX(), 0, true);
             showHeadersGroup();
+
+            // Disable menu entry when headers are shown
+            m_showHeadersMenuEntry->setEnabled(false);
+        } else {
+            // Enable menu entry when headers are hidden
+            m_showHeadersMenuEntry->setEnabled(true);
         }
+    } else {
+        // Disable menu entry when not in linear mode
+        m_showHeadersMenuEntry->setEnabled(false);
     }
 }
 
@@ -2800,21 +2809,6 @@ NotationView::setPageMode(LinedStaff::PageMode pageMode)
 
     if (!m_printMode) {
         updateView();
-
-        // At the opening of notation view, when track headers are shown,
-        // the notation canvas is displayed with an horizontal offset compared
-        // to the rulers. This offset disappeared as soon as the track headers
-        // are resized, the view is resized or the view receives a show event.
-        //
-        // Following lines are a hack to force this show event just after the
-        // notation view opening.
-        // A better way to update the notation view should exist, but I didn't
-        // still discover it at present.
-        // The current way drawback is a "flash" as the view is shown, hide,
-        // then shown again when the notation is opened.
-        getCanvasView()->setHidden(true);        // HACK
-        getCanvasView()->show();                 // HACK
-
         slotSetInsertCursorPosition(getInsertionTime(), false, false);
         slotSetPointerPosition(getDocument()->getComposition().getPosition(), false);
     }
@@ -3894,8 +3888,6 @@ void NotationView::readjustCanvasSize()
 
         LinedStaff &staff = *m_staffs[i];
 
-std::cout << "*** NotationView::readjustCanvasSize() call"
-             " staff.sizeStaff(*m_hlayout)\n";
         staff.sizeStaff(*m_hlayout);
         UPDATE_PROGRESS(1);
 
@@ -3952,6 +3944,11 @@ std::cout << "*** NotationView::readjustCanvasSize() call"
             (QSize(getCanvasView()->width(),
                    getCanvasView()->height()));
         }
+    }
+
+    // Give a correct vertical alignment to track headers
+    if ((m_pageMode == LinedStaff::LinearMode) && m_showHeadersGroup) {
+        m_headersGroupView->setContentsPos(0, getCanvasView()->contentsY());
     }
 }
 
@@ -7477,6 +7474,9 @@ NotationView::slotShowHeadersGroup()
 {
     m_showHeadersGroup = HeadersGroup::ShowAlways;
     showHeadersGroup();
+
+    // Disable menu entry when headers are shown
+    m_showHeadersMenuEntry->setEnabled(false);
 }
 
 void
@@ -7484,19 +7484,18 @@ NotationView::slotHideHeadersGroup()
 {
     m_showHeadersGroup = HeadersGroup::ShowNever;
     hideHeadersGroup();
+
+    // Enable menu entry when headers are hidden
+    m_showHeadersMenuEntry->setEnabled(true);
 }
 
 void
 NotationView::showHeadersGroup()
 {
     if (m_headersGroupView && (m_pageMode == LinedStaff::LinearMode)) {
-        slotSetHeadersWidth(m_headersGroup->getWidth());
         m_headersGroupView->show();
         m_headersTopFrame->show();
         m_rulerBoxFiller->show();
-
-        // Disable menu entry when headers are shown
-        m_showHeadersMenuEntry->setEnabled(false);
     }
 }
 
@@ -7507,9 +7506,6 @@ NotationView::hideHeadersGroup()
         m_headersGroupView->hide();
         m_headersTopFrame->hide();
         m_rulerBoxFiller->hide();
-
-        // Enable menu entry when headers are hide
-        m_showHeadersMenuEntry->setEnabled(true);
     }
 }
 
@@ -7521,9 +7517,8 @@ NotationView::slotUpdateHeaders(int x, int y)
 }
 
 void
-NotationView::slotSetHeadersWidth(int w)
+NotationView::slotHeadersWidthChanged(int w)
 {
-    m_headersGroupView->setFixedWidth(w);
     m_headersTopFrame->setFixedWidth(w);
     m_rulerBoxFiller->setFixedWidth(w);
     m_canvasView->updateLeftWidgetGeometry();

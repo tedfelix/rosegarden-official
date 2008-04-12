@@ -125,7 +125,7 @@ HeadersGroup::slotUpdateAllHeaders(int x, int y, bool force)
         }
 
         if (neededWidth != m_lastWidth) {
-            m_notationView->slotSetHeadersWidth(neededWidth);
+            setFixedWidth(neededWidth);
             m_lastWidth = neededWidth;
 
             // Suppress vertical white stripes on canvas when headers
