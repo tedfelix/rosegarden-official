@@ -5946,8 +5946,8 @@ RosegardenGUIApp::slotAddMarker(timeT time)
     AddMarkerCommand *command =
         new AddMarkerCommand(&m_doc->getComposition(),
                              time,
-                             std::string("new marker"),
-                             std::string("no description"));
+                             i18n("new marker"),
+                             i18n("no description"));
 
     m_doc->getCommandHistory()->addCommand(command);    
 }
