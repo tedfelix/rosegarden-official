@@ -1277,42 +1277,44 @@ void NotationView::positionStaffs()
     }
 
 
-    // Destroy then recreate all track headers
-    hideHeadersGroup();
-    m_headersGroup->removeAllHeaders();
-    if (m_pageMode == LinedStaff::LinearMode) {
-        for (int i = minTrack; i <= maxTrack; ++i) {
-            TrackIntMap::iterator hi = trackHeights.find(i);
-            if (hi != trackHeights.end()) {
-                TrackId trackId = getDocument()->getComposition()
-                                        .getTrackByPosition(i)->getId();
-                m_headersGroup->addHeader(trackId, trackHeights[i],
-                                          trackCoords[i], getCanvasLeftX());
+    if (!m_printMode) {
+        // Destroy then recreate all track headers
+        hideHeadersGroup();
+        m_headersGroup->removeAllHeaders();
+        if (m_pageMode == LinedStaff::LinearMode) {
+            for (int i = minTrack; i <= maxTrack; ++i) {
+                TrackIntMap::iterator hi = trackHeights.find(i);
+                if (hi != trackHeights.end()) {
+                    TrackId trackId = getDocument()->getComposition()
+                                            .getTrackByPosition(i)->getId();
+                    m_headersGroup->addHeader(trackId, trackHeights[i],
+                                              trackCoords[i], getCanvasLeftX());
+                }
             }
-        }
 
-        m_headersGroup->completeToHeight(canvas()->height());
+            m_headersGroup->completeToHeight(canvas()->height());
 
-        m_headersGroupView->addChild(m_headersGroup);
+            m_headersGroupView->addChild(m_headersGroup);
 
-        getCanvasView()->updateLeftWidgetGeometry();
+            getCanvasView()->updateLeftWidgetGeometry();
 
-        if (    (m_showHeadersGroup == HeadersGroup::ShowAlways)
-             || (    (m_showHeadersGroup == HeadersGroup::ShowWhenNeeded)
-                  && (m_headersGroup->getUsedHeight()
-                          > getCanvasView()->visibleHeight()))) {
-            m_headersGroup->slotUpdateAllHeaders(getCanvasLeftX(), 0, true);
-            showHeadersGroup();
+            if (    (m_showHeadersGroup == HeadersGroup::ShowAlways)
+                || (    (m_showHeadersGroup == HeadersGroup::ShowWhenNeeded)
+                      && (m_headersGroup->getUsedHeight()
+                              > getCanvasView()->visibleHeight()))) {
+                m_headersGroup->slotUpdateAllHeaders(getCanvasLeftX(), 0, true);
+                showHeadersGroup();
 
-            // Disable menu entry when headers are shown
-            m_showHeadersMenuEntry->setEnabled(false);
+                // Disable menu entry when headers are shown
+                m_showHeadersMenuEntry->setEnabled(false);
+            } else {
+                // Enable menu entry when headers are hidden
+                m_showHeadersMenuEntry->setEnabled(true);
+            }
         } else {
-            // Enable menu entry when headers are hidden
-            m_showHeadersMenuEntry->setEnabled(true);
+            // Disable menu entry when not in linear mode
+            m_showHeadersMenuEntry->setEnabled(false);
         }
-    } else {
-        // Disable menu entry when not in linear mode
-        m_showHeadersMenuEntry->setEnabled(false);
     }
 }
 
@@ -2801,9 +2803,11 @@ NotationView::setPageMode(LinedStaff::PageMode pageMode)
         }
     }
 
-    // Layout is done : Time related to left of canvas should now
-    // correctly be determined and track headers contents be drawn.
-    m_headersGroup->slotUpdateAllHeaders(0, 0, true);
+    if (!m_printMode) {
+        // Layout is done : Time related to left of canvas should now
+        // correctly be determined and track headers contents be drawn.
+        m_headersGroup->slotUpdateAllHeaders(0, 0, true);
+    }
 
     positionPages();
 
