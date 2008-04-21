@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: pl_PL\n"
-"POT-Creation-Date: 2008-04-12 20:42-0400\n"
+"POT-Creation-Date: 2008-04-13 00:40-0400\n"
 "PO-Revision-Date: 2006-10-01 23:33+0200\n"
 "Last-Translator: Piotr Sawicki <pelle@plusnet.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"

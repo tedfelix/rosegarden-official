@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: cs\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-04-12 20:42-0400\n"
-"PO-Revision-Date: 2008-04-02 17:39+0200\n"
+"PO-Revision-Date: 2008-04-20 12:41+0200\n"
 "Last-Translator: Jan Bína <jbina@mbtrans.cz>\n"
 "Language-Team:  <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1395,10 +1395,8 @@ msgid "Change key for selection"
 msgstr "Změnit tóninu pro výběr"
 
 #: ../src/gui/dialogs/IntervalDialog.cpp:89
-msgid ""
-"Adjust segment transposition in opposite direction (maintain audible pitch)"
-msgstr ""
-"Upravit transpozici segmentu v opačném směru (udržet slyšitelnou výšku)"
+msgid "Adjust segment transposition in opposite direction (maintain audible pitch)"
+msgstr "Upravit transpozici segmentu v opačném směru (udržet slyšitelnou výšku)"
 
 #: ../src/gui/dialogs/IntervalDialog.cpp:190
 #: ../src/gui/dialogs/IntervalDialog.cpp:220
@@ -2230,8 +2228,7 @@ msgstr "Ploché - nastavit %1 na hodnotu"
 
 #: ../src/gui/dialogs/EventParameterDialog.cpp:70
 msgid "Alternating - set %1 to max and min on alternate events"
-msgstr ""
-"Střídavé - nastavit %1 střídavě na maximum a minimum při střídání událostí"
+msgstr "Střídavé - nastavit %1 střídavě na maximum a minimum při střídání událostí"
 
 #: ../src/gui/dialogs/EventParameterDialog.cpp:74
 msgid "Crescendo - set %1 rising from min to max"
@@ -2243,8 +2240,7 @@ msgstr "Diminuendo - nastavit %1 na zmenšující se od maxima po minimum"
 
 #: ../src/gui/dialogs/EventParameterDialog.cpp:82
 msgid "Ringing - set %1 alternating from max to min with both dying to zero"
-msgstr ""
-"Vyzvánění - nastavit %1 na střídání od maxima po minimum s ukončením na nule"
+msgstr "Vyzvánění - nastavit %1 na střídání od maxima po minimum s ukončením na nule"
 
 #: ../src/gui/dialogs/EventParameterDialog.cpp:123
 #: ../src/gui/dialogs/EventParameterDialog.cpp:150
@@ -2510,8 +2506,7 @@ msgstr "Zarovnání textu melodie"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:261
 msgid "Ragged bottom (systems will not be spread vertically across the page)"
-msgstr ""
-"Nevyrovnaná spodní část (osnovy nebudou vertikálně roztaženy po celé straně)"
+msgstr "Nevyrovnaná spodní část (osnovy nebudou vertikálně roztaženy po celé straně)"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:267
 msgid "Miscellaneous options"
@@ -2527,7 +2522,7 @@ msgstr "Exportovat \\blok midi"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:284
 msgid "No markers"
-msgstr "Žádné značky"
+msgstr "Žádné záložky"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:285
 msgid "Rehearsal marks"
@@ -2535,11 +2530,11 @@ msgstr "Cvičební značky"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:286
 msgid "Marker text"
-msgstr "Text značky"
+msgstr "Text záložky"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:290
 msgid "Export markers"
-msgstr "Exportovat značky"
+msgstr "Exportovat záložky"
 
 #: ../src/gui/dialogs/KeySignatureDialog.cpp:59
 msgid "Key Change"
@@ -3084,9 +3079,8 @@ msgid "&Reset MIDI Network"
 msgstr "Provést &reset sítě MIDI"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:1105
-#, fuzzy
 msgid "Set Quick Marker at Playback Position"
-msgstr "Vložit záložku na pozici přehrávání"
+msgstr "Vložit rychlou záložku na pozici přehrávání"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:1109
 msgid "Jump to Quick Marker"
@@ -3590,10 +3584,8 @@ msgid "</ul>"
 msgstr "</ul>"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:4591
-msgid ""
-"<p>To fix this, you should install the following additional programs:</p>"
-msgstr ""
-"<p>K napravení tohoto stavu byste měli nainstalovat dodatečné programy:</p>"
+msgid "<p>To fix this, you should install the following additional programs:</p>"
+msgstr "<p>K napravení tohoto stavu byste měli nainstalovat dodatečné programy:</p>"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:4603
 msgid "Helper programs not found"
@@ -3789,14 +3781,12 @@ msgid "Move Tempo Change"
 msgstr "Přesunout změnu tempa"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5949
-#, fuzzy
 msgid "new marker"
-msgstr "Žádné značky"
+msgstr "nová záložka"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5950
-#, fuzzy
 msgid "no description"
-msgstr "Popis:"
+msgstr "bez popisu"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:6363
 #, c-format
@@ -3847,8 +3837,7 @@ msgid "Saving current document as default studio..."
 msgstr "Probíhá ukládání aktuálního dokumentu jako výchozího studia..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:7738
-msgid ""
-"Are you sure you want to import your default studio and lose the current one?"
+msgid "Are you sure you want to import your default studio and lose the current one?"
 msgstr "Skutečně chcete importovat svoje výchozí studio a ztratit to aktuální?"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:7773
@@ -4267,8 +4256,7 @@ msgstr ""
 "Rosegarden."
 
 #: ../src/gui/seqmanager/SequenceManager.cpp:1031
-msgid ""
-"Run out of processor power for real-time audio processing.  Cannot continue."
+msgid "Run out of processor power for real-time audio processing.  Cannot continue."
 msgstr ""
 "Procesor nemá dostatečný výkon na zpracování zvuku v reálném čase.  Nelze "
 "pokračovat."
@@ -4287,8 +4275,7 @@ msgid "JACK Audio subsystem is losing sample frames."
 msgstr "Zvukový subsystém JACK ztrácí vzorkové rámce."
 
 #: ../src/gui/seqmanager/SequenceManager.cpp:1096
-msgid ""
-"Failed to read audio data from disc in time to service the audio subsystem."
+msgid "Failed to read audio data from disc in time to service the audio subsystem."
 msgstr ""
 "Načítání zvukových dat z disku selhalo z časových důvodu a nebylo tedy možné "
 "obsloužit zvukový subsystém."
@@ -5229,8 +5216,7 @@ msgstr "Řízené MTC"
 
 #: ../src/gui/configuration/MIDIConfigurationPage.cpp:281
 msgid "Automatically connect sync output to all devices in use"
-msgstr ""
-"Automaticky připojit synchronizovaný výstup ke všem používaným zařízením"
+msgstr "Automaticky připojit synchronizovaný výstup ke všem používaným zařízením"
 
 #: ../src/gui/configuration/MIDIConfigurationPage.cpp:292
 msgid "MIDI Sync"
@@ -5813,8 +5799,7 @@ msgid "Export..."
 msgstr "Export..."
 
 #: ../src/gui/studio/BankEditorDialog.cpp:176
-msgid ""
-"Import Bank and Program data from a Rosegarden file to the current Device"
+msgid "Import Bank and Program data from a Rosegarden file to the current Device"
 msgstr ""
 "Importovat data banky a programů ze souboru aplikace Rosegarden do "
 "aktuálního zařízení"
@@ -6311,8 +6296,7 @@ msgstr ""
 
 #: ../src/gui/editors/segment/segmentcanvas/SegmentResizer.cpp:384
 #: ../src/gui/editors/segment/segmentcanvas/SegmentSelector.cpp:502
-msgid ""
-"Click and drag to resize a segment; hold Ctrl as well to rescale its contents"
+msgid "Click and drag to resize a segment; hold Ctrl as well to rescale its contents"
 msgstr ""
 "Klepnutím a tažením změníte velikost segmentu; podržíte-li tlačítko Ctrl, "
 "změníte také délku jeho obsahu"
@@ -6370,8 +6354,7 @@ msgstr "Klepnutím a tažením přesunete segment"
 
 #: ../src/gui/editors/segment/segmentcanvas/SegmentPencil.cpp:225
 msgid "Hold Shift to avoid snapping to bar lines"
-msgstr ""
-"Podržením tlačítka Shift (přesmykače) se vyhnete přichytávání na taktové čáry"
+msgstr "Podržením tlačítka Shift (přesmykače) se vyhnete přichytávání na taktové čáry"
 
 #: ../src/gui/editors/segment/segmentcanvas/SegmentPencil.cpp:283
 msgid "Record or drop audio here"
@@ -6386,10 +6369,8 @@ msgstr ""
 "stisknutým CTRL+Alt budete pracovat v překryvném režimu."
 
 #: ../src/gui/editors/segment/TrackLabel.cpp:77
-msgid ""
-"Click and hold with left mouse button to assign this Track to an Instrument."
-msgstr ""
-"Klepnutím a podržením levého tlačítka myši přiřadíte tuto stopu nástroji."
+msgid "Click and hold with left mouse button to assign this Track to an Instrument."
+msgstr "Klepnutím a podržením levého tlačítka myši přiřadíte tuto stopu nástroji."
 
 #: ../src/gui/editors/segment/TrackLabel.cpp:191
 msgid "Change track name"
@@ -6906,8 +6887,7 @@ msgstr "[ Stopa %1 - %2 ]"
 
 #: ../src/gui/editors/parameters/TrackParameterBox.cpp:985
 msgid "The instrument preset database is corrupt.  Check your installation."
-msgstr ""
-"Databáze přednastavených nástrojů je porušená.  Zkontrolujte instalaci."
+msgstr "Databáze přednastavených nástrojů je porušená.  Zkontrolujte instalaci."
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:173
 #: ../src/gui/editors/parameters/InstrumentParameterBox.cpp:54
@@ -8529,8 +8509,7 @@ msgid "global element must precede note elements"
 msgstr "globální prvek musí předcházet notovým prvkům"
 
 #: ../src/gui/editors/notation/NoteStyleFileReader.cpp:137
-msgid ""
-"global and note elements may have shape or charname attribute, but not both"
+msgid "global and note elements may have shape or charname attribute, but not both"
 msgstr ""
 "globální a notové prvky mohou mít atributy tvaru nebo názvu znaku, ale "
 "nemohou mít obojí"
@@ -10556,7 +10535,7 @@ msgstr "Opakování"
 #: rc.cpp:404
 #, no-c-format
 msgid "Turn on and off the loop markers (if set)"
-msgstr "Zapínání a vypínání značek opakování (jsou-li nastaveny)"
+msgstr "Zapínání a vypínání záložek opakování (jsou-li nastaveny)"
 
 #: rc.cpp:411
 #, no-c-format
@@ -11504,5 +11483,3 @@ msgstr "Menzurální"
 msgid "Triangle"
 msgstr "Trojúhelníkový"
 
-#~ msgid "Set Quick Marker"
-#~ msgstr "Nastavit rychlou záložku"

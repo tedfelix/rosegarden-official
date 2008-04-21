@@ -710,7 +710,7 @@
 		parts will have different names on the page.  If you wish both
 		of them to be named, eg. "Piano," then you will have to keep all
 		of the segments on the same pair of staffs. Consult <ulink
-		url="http://rosegarden.sourceforge.net/tutorial/supplemental/piano/piano-by-example.html">Piano
+		url="http://rosegarden.sourceforge.net/tutorial/supplemental/piano/">Piano
 		by Example</ulink> for a hands-on demonstration of this.) <!--
 		this comment makes absolutely no sense to me(dmm):   Sometimes you
 		may encounter notes that overlap in printed form, you may avoid
