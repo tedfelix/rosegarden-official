@@ -1,22 +1,23 @@
-# translation of es.po to Spanish
+# translation of es.po to
 # This file is distributed under the same license as the PACKAGE package.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER.
+#
 # Pedro Lopez-Cabanillas <plcl@users.sourceforge.net>, 2003, 2004, 2007.
 # D. Michael McIntyre <rosegarden.trumpeter@gmail.com>, 2003, 2004, 2006.
 # Marcos Guglielmetti <marcospcmusica@yahoo.com.ar>, 2005.
-#
+# D. Michael McIntyre <michael.mcintyre@rosegardenmusic.com>, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-12 20:42-0400\n"
-"PO-Revision-Date: 2007-10-04 23:29+0200\n"
-"Last-Translator: Pedro Lopez-Cabanillas <plcl@users.sourceforge.net>\n"
-"Language-Team: Spanish <rosegarden-devel@lists.sourceforge.net>\n"
+"POT-Creation-Date: 2008-04-13 00:40-0400\n"
+"PO-Revision-Date: 2008-04-12 22:33-0400\n"
+"Last-Translator: D. Michael McIntyre <michael.mcintyre@rosegardenmusic.com>\n"
+"Language-Team:  <en@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.10.2\n"
+"X-Generator: KBabel 1.11.4\n"
 
 #: ../src/gui/dialogs/RescaleDialog.cpp:51 rc.cpp:192 rc.cpp:312
 #, no-c-format
@@ -1050,18 +1051,16 @@ msgid "Sequencer is not returning a valid status report."
 msgstr "El Secuenciador no devuelve un informe de estado válido."
 
 #: ../src/gui/dialogs/AddTracksDialog.cpp:46
-#, fuzzy
 msgid "Add Tracks"
-msgstr "Añadir &Pista"
+msgstr "Añadir &Pistas"
 
 #: ../src/gui/dialogs/AddTracksDialog.cpp:54
 msgid "How many tracks do you want to add?"
 msgstr "¿Cuántas pistas desea añadir?"
 
 #: ../src/gui/dialogs/AddTracksDialog.cpp:62
-#, fuzzy
 msgid "Add tracks"
-msgstr "Todas las pistas"
+msgstr "añadir pistas"
 
 #: ../src/gui/dialogs/SimpleEventEditDialog.cpp:75
 msgid "Event Properties"
@@ -1391,9 +1390,8 @@ msgid "a perfect unison"
 msgstr "unísono perfecto"
 
 #: ../src/gui/dialogs/IntervalDialog.cpp:76
-#, fuzzy
 msgid "Effect on Key"
-msgstr "Efecto en la clave"
+msgstr "Efecto sobre la clave"
 
 #: ../src/gui/dialogs/IntervalDialog.cpp:77
 msgid "Transpose within key"
@@ -1954,7 +1952,7 @@ msgstr ""
 "disco duro.\n"
 
 #: ../src/gui/dialogs/AudioManagerDialog.cpp:875
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "_n: <qt>About to delete 1 audio file permanently from the hard disk.<br>This "
 "action cannot be undone, and there will be no way to recover this file."
@@ -1964,14 +1962,13 @@ msgid ""
 "action cannot be undone, and there will be no way to recover these files."
 "<br>Are you sure?</qt>"
 msgstr ""
-"Se borrará un archivo de audio de modo permanente.\n"
-"Esta acción no se puede deshacer y no habrá modo de recuperar este archivo.\n"
-"¿Está seguro?\n"
-"Se borrarán %n archivos de audio de modo permanente.\n"
-"Esta acción no se puede deshacer y no habrá modo de recuperar estos "
-"archivos.\n"
-"¿Está seguro?\n"
-" "
+"_n:<qt>Se borrará un archivo de audio del disco duro de modo permanente."
+"<br>Esta acción no se puede deshacer y no habrá modo de recuperar este "
+"archivo.<br>¿Está seguro?</qt>\n"
+"\n"
+"<qt>Se borrarán %n archivos de audio del disco duro de modo permanente."
+"<br>Esta acción no se puede deshacer y no habrá modo de recuperar estos "
+"archivos.<br>¿Está seguro?</qt> "
 
 #: ../src/document/RosegardenGUIDoc.cpp:525
 #: ../src/gui/dialogs/AudioManagerDialog.cpp:888
@@ -2502,9 +2499,8 @@ msgid "Export tempo marks "
 msgstr "Exportar indicaciones de tempo"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:215
-#, fuzzy
 msgid "Export lyrics"
-msgstr "Exportar dispositivos"
+msgstr "Exportar letra"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:225
 msgid "Export beamings"
@@ -2512,12 +2508,11 @@ msgstr "Exportar agrupaciones"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:232
 msgid "Export track staff brackets"
-msgstr ""
+msgstr "Exportar paréntesis "
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:244
-#, fuzzy
 msgid "Layout options"
-msgstr "Opciones básicas"
+msgstr "Opciones de formato"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:257
 msgid "Lyrics alignment"
@@ -2528,9 +2523,8 @@ msgid "Ragged bottom (systems will not be spread vertically across the page)"
 msgstr "Pié irregular (sistemas no repartidos verticalmente en la página)"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:267
-#, fuzzy
 msgid "Miscellaneous options"
-msgstr "Opciones generales"
+msgstr "Opciones variadas"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:274
 msgid "Enable \"point and click\" debugging"
@@ -2541,24 +2535,20 @@ msgid "Export \\midi block"
 msgstr "Exportar bloque \\midi"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:284
-#, fuzzy
 msgid "No markers"
-msgstr "Sin Submasters"
+msgstr "Sin marcadores"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:285
-#, fuzzy
 msgid "Rehearsal marks"
-msgstr "Eliminar todos los marcadores"
+msgstr "Marcos de ensayo"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:286
-#, fuzzy
 msgid "Marker text"
-msgstr "Tiempo del Marcador  "
+msgstr "Texto del marcador"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:290
-#, fuzzy
 msgid "Export markers"
-msgstr "Exportar indicaciones de tempo"
+msgstr "Exportar marcadores"
 
 #: ../src/gui/dialogs/KeySignatureDialog.cpp:59
 msgid "Key Change"
@@ -2741,7 +2731,6 @@ msgid "Export &MIDI file..."
 msgstr "Exportar archivo &MIDI..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:596
-#, fuzzy
 msgid "Export &LilyPond file..."
 msgstr "Exportar archivo &LilyPond..."
 
@@ -2759,9 +2748,8 @@ msgstr "Exportar archivo M&up..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:612
 #: ../src/gui/editors/notation/NotationView.cpp:1498
-#, fuzzy
 msgid "Print &with LilyPond..."
-msgstr "Previsualización con LilyPond..."
+msgstr "Imprimir con LilyPond..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:616
 #: ../src/gui/editors/notation/NotationView.cpp:1502
@@ -3006,9 +2994,8 @@ msgid "Set &Tempo to Audio Segment Duration"
 msgstr "Establecer &Tempo a la duración del Segmento de Audio"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:972
-#, fuzzy
 msgid "Manage A&udio Files"
-msgstr "Gestionar A&udio"
+msgstr "Gestionar archivos a&udio"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:977
 msgid "Show Segment Labels"
@@ -3019,7 +3006,6 @@ msgid "Add &Track"
 msgstr "Añadir &Pista"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:990
-#, fuzzy
 msgid "&Add Tracks..."
 msgstr "Añadir Pistas..."
 
@@ -3044,13 +3030,12 @@ msgid "Select &Previous Track"
 msgstr "Seleccionar &Pista Anterior"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:1022
-#, fuzzy
 msgid "Mute or Unmute Track"
-msgstr "Silenciar Pista"
+msgstr "Silenciar o no silenciar pista"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:1027
 msgid "Arm or Un-arm Track for Record"
-msgstr ""
+msgstr "Armar o no armar pista para grabar"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:1034
 msgid "&Mute all Tracks"
@@ -3109,13 +3094,12 @@ msgid "&Reset MIDI Network"
 msgstr "&Reiniciar red MIDI"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:1105
-#, fuzzy
 msgid "Set Quick Marker at Playback Position"
-msgstr "Insertar marcador en la posición de reproducción"
+msgstr "Insertar marcador rápido en la posición de reproducción"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:1109
 msgid "Jump to Quick Marker"
-msgstr ""
+msgstr "Saltar al marcador rápido"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:1142
 #: ../src/gui/editors/matrix/MatrixView.cpp:782
@@ -3562,36 +3546,32 @@ msgid "Can't load Hydrogen file.  It appears to be corrupted."
 msgstr "No se puede cargar archivo de Hydrogen. Parece estar corrompido."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:4527
-#, fuzzy
 msgid "Export and import of Rosegarden Project files"
-msgstr "Exportanto archivo de Proyecto de Rosegarden..."
+msgstr "Exportación e importación de archivos de Proyecto de Rosegarden..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:4529
-#, fuzzy
 msgid "The Rosegarden Project Packager helper script"
-msgstr "Empaquetador de Proyectos de Rosegarden no disponible"
+msgstr "El empaquetador de Proyectos de Rosegarden"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:4533
 msgid "%1 - for project file support"
-msgstr ""
+msgstr "%1 - para apoyo de archivos de Proyecto de Rosegarden"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:4550
 msgid "The Rosegarden LilyPondView helper script"
 msgstr ""
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:4554
-#, fuzzy
 msgid "%1 - for LilyPond preview support"
-msgstr "Opciones de previsualización con LilyPond"
+msgstr "%1 - para previsualización con LilyPond"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:4570
 msgid "The Rosegarden Audio File Importer helper script"
 msgstr ""
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:4574
-#, fuzzy
 msgid "%1 - for audio file import"
-msgstr "Directorio de los archivos de audio "
+msgstr " %1 - para importación de archivos de audio "
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:4585
 msgid ""
@@ -3602,25 +3582,25 @@ msgstr ""
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:4586
 #: ../src/gui/application/RosegardenGUIApp.cpp:4592
-#, fuzzy
 msgid "<ul>"
-msgstr "<por omisión>"
+msgstr "<ul>"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:4588
 #: ../src/gui/application/RosegardenGUIApp.cpp:4594
-#, fuzzy
 msgid "<li>%1</li>"
-msgstr "<li>%1 (desde %2)</li>"
+msgstr "<li>%1</li>"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:4590
 #: ../src/gui/application/RosegardenGUIApp.cpp:4596
 msgid "</ul>"
-msgstr ""
+msgstr "</ul>"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:4591
 msgid ""
 "<p>To fix this, you should install the following additional programs:</p>"
 msgstr ""
+"<p>Para arreglar esto, debes instalar los siguientes programas adicionales:</"
+"p>"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:4603
 msgid "Helper programs not found"
@@ -3727,34 +3707,29 @@ msgstr "Archivos Mup\n"
 #: ../src/gui/application/RosegardenGUIApp.cpp:5005
 #: ../src/gui/application/RosegardenGUIApp.cpp:5089
 #: ../src/gui/editors/notation/NotationView.cpp:4715
-#, fuzzy
 msgid "Exporting LilyPond file..."
-msgstr "Exportando archivo.LilyPond..."
+msgstr "Exportando archivo.LilyPond... "
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5008
-#, fuzzy
 msgid "LilyPond files"
-msgstr "Archivos de LilyPond"
+msgstr "Archivos de LilyPond "
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5023
 #: ../src/gui/editors/notation/NotationView.cpp:4649
-#, fuzzy
 msgid "Printing LilyPond file..."
-msgstr "Previsualización de archivo.LilyPond..."
+msgstr "Imprimiendo archivo.LilyPond..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5028
 #: ../src/gui/application/RosegardenGUIApp.cpp:5052
 #: ../src/gui/editors/notation/NotationView.cpp:4654
 #: ../src/gui/editors/notation/NotationView.cpp:4678
-#, fuzzy
 msgid "Failed to open a temporary file for LilyPond export."
-msgstr "Fallo al abrir un archivo temporario para exportar a LilyPond."
+msgstr "Fallo al abrir un archivo temporario para exportar a LilyPond. "
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5047
 #: ../src/gui/editors/notation/NotationView.cpp:4673
-#, fuzzy
 msgid "Previewing LilyPond file..."
-msgstr "Previsualización de archivo.LilyPond..."
+msgstr "Previsualizando archivo.LilyPond..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5080
 #: ../src/gui/editors/notation/NotationView.cpp:4706
@@ -5439,11 +5414,11 @@ msgstr "Lleno"
 
 #: ../src/gui/configuration/NotationConfigurationPage.cpp:152
 msgid "Show track headers (linear layout only)"
-msgstr ""
+msgstr "Mostrar cabezazos de pista (formato linear únicamente)"
 
 #: ../src/gui/configuration/NotationConfigurationPage.cpp:158
 msgid "When needed"
-msgstr ""
+msgstr "Si sea necesario"
 
 #: ../src/gui/configuration/NotationConfigurationPage.cpp:166
 msgid ""
@@ -5451,6 +5426,9 @@ msgid ""
 "\"When needed\" means \"when staves are too many to all fit in the current "
 "window\""
 msgstr ""
+"«Siempre» y «Nunca» significan lo normal\n"
+"«Si sea necesario» significa «cuando hayan demasiados pentagramas y no caban "
+"en la ventana corriente»"
 
 #: ../src/gui/configuration/NotationConfigurationPage.cpp:178
 msgid "Show non-notation events as question marks"
@@ -11580,141 +11558,3 @@ msgstr "Mensural"
 #: ../data/styles/styles.cpp:4
 msgid "Triangle"
 msgstr "Triangle"
-
-#, fuzzy
-#~ msgid "Set Quick Marker"
-#~ msgstr "Borrar un Marcador"
-
-#~ msgid ""
-#~ "Finnish translation\n"
-#~ "LilyPond export fixes/improvements"
-#~ msgstr ""
-#~ "traducción al finlandés\n"
-#~ "correcciones y mejoras de la exportación a LilyPond"
-
-#~ msgid ""
-#~ "<h3>Project Packager not available</h3><p>Rosegarden could not run the "
-#~ "Project Packager.</p><p>Export and import of Rosegarden Project files "
-#~ "will not be available.</p>"
-#~ msgstr ""
-#~ "<h3>Empaquetador de Proyectos no disponible</h3><p>Rosegarden no puede "
-#~ "ejecutar el Empaquetador de Proyectos.</p><p>La exportación e importación "
-#~ "de archivos de proyectos de Rosegarden no estará disponible.</p>"
-
-#~ msgid ""
-#~ "<h3>Project Packager not available</h3><p>Rosegarden could not find one "
-#~ "or more of the additional programs needed to support the Rosegarden "
-#~ "Project Packager.</p><p>Export and import of Rosegarden Project files "
-#~ "will not be available.<p><p>To fix this, you should install the following "
-#~ "additional programs:</p>"
-#~ msgstr ""
-#~ "<h3>Empaquetador de Proyectos no disponible</h3><p>Rosegarden no ha "
-#~ "podido encontrar uno o mas programas adicionales necesarios para dar "
-#~ "soporte al Empaquetador de Proyectos de Rosegarden.</p><p>La exportación "
-#~ "e importación de archivos de proyectos de Rosegarden no estará disponible."
-#~ "<p><p>Para solucionarlo, debe instalar los siguientes programas "
-#~ "adicionales:</p>"
-
-#~ msgid ""
-#~ "<h3>LilyPond Preview not available</h3><p>Rosegarden could not find one "
-#~ "or more of the additional programs needed to support the LilyPond "
-#~ "previewer.</p><p>Notation previews through LilyPond will not be available."
-#~ "</p><p>To fix this, you should install the following additional programs:"
-#~ "</p>"
-#~ msgstr ""
-#~ "<h3>Previsualización en LilyPond no disponible</h3><p>Rosegarden no ha "
-#~ "podidoencontrar uno o mas programas necesarios para soportar la "
-#~ "previsualizacion en LilyPond.</p><p>La previsualización de la partitura "
-#~ "mediante LilyPond no estará disponible.</p> <p>Para solucionarlo, usted "
-#~ "necesita instalar los siguientes programas adicionales:</p>"
-
-#~ msgid "LilyPond previews not available"
-#~ msgstr "Previsualización mediante LilyPond no disponible"
-
-#~ msgid ""
-#~ "<h3>General audio file import not available</h3><p>Rosegarden could not "
-#~ "find one or more of the additional programs needed to support its audio "
-#~ "file conversion helper.</p><p>Support for importing additional audio file "
-#~ "types, and sample rate conversion, will not be available.</p><p>To fix "
-#~ "this, you should install the following additional programs:</p>"
-#~ msgstr ""
-#~ "<h3>Importación de archivo de audio general no disponible</h3> "
-#~ "<p>Rosegarden no ha podido encontrar uno o mas programas adicionales "
-#~ "necesarios para soportar la conversión de archivos de audio.</p> <p>El "
-#~ "soporte para importar tipos adicionales de archivos de audio y conversión "
-#~ "de frecuencias de muestreo no estarán disponibles.</p> <p>Para solucionar "
-#~ "esto, usted debería instalar los siguientes programas adicionales:</p>"
-
-#~ msgid "Audio file importer not available"
-#~ msgstr "Importación de archivo de audio no disponible"
-
-#~ msgid " Triplet Chord"
-#~ msgstr " Triada"
-
-#~ msgid " Chord"
-#~ msgstr " Acorde"
-
-#~ msgid " Triplet"
-#~ msgstr " Tresillo"
-
-#~ msgid "Making grace notes..."
-#~ msgstr "Creando notas de adorno..."
-
-#~ msgid "Making non-grace notes..."
-#~ msgstr "Creando notas no de adorno..."
-
-#~ msgid "Click and drag to draw an empty segment"
-#~ msgstr "hacer clic y arrastrar para dibujar un segmento vacío"
-
-#~ msgid "Marker name  "
-#~ msgstr "Nombre del Marcador  "
-
-#~ msgid "Time Signature font"
-#~ msgstr "Tipografía de medida de compás"
-
-#~ msgid "&Halve Speed"
-#~ msgstr "Mitad de &Velocidad"
-
-#~ msgid "&Double Speed"
-#~ msgstr "&Doble Velocidad"
-
-#~ msgid "Halving speed..."
-#~ msgstr "Reduciendo la velocidad a la mitad..."
-
-#~ msgid "Doubling speed..."
-#~ msgstr "Doblando velocidad..."
-
-#~ msgid "Add staff group bracket"
-#~ msgstr "Usar corchete para agrupar los pentagramas"
-
-#~ msgid "Make subsequent bar lines hidden"
-#~ msgstr "Ocultar las siguientes líneas de compás"
-
-#~ msgid "Make &Grace Notes"
-#~ msgstr "&Crear Notas de Adorno"
-
-#~ msgid "Export lyrics (takes some space, even if empty)"
-#~ msgstr "Exportar letras (ocupa algo de espacio, incluso si no hay texto)"
-
-#~ msgid "Extra options"
-#~ msgstr "Opciones extra"
-
-#~ msgid "&Add Multiple Tracks..."
-#~ msgstr "&Añadir Pistas... "
-
-#~ msgid "Add Multiple Tracks"
-#~ msgstr "Añadir pistas"
-
-#~ msgid ""
-#~ "1.2.3 splash screen photo (of Michael's rose garden)\n"
-#~ "new splash screen photo (of Michael McIntyre's\n"
-#~ "instruments along with a rose from the garden of Hassell Arnold Hale, "
-#~ "1916-2006,\n"
-#~ "may he rest in peace)"
-#~ msgstr ""
-#~ "1.2.3 foto del jardín de rosas de Michael McIntyre\n"
-#~ "foto de los instrumentos de Michael McIntyre, con una rosa del jardín\n"
-#~ "de su abuelo (1916-2006, descanse en paz)"
-
-#~ msgid "&Split..."
-#~ msgstr "Di&vidir "
