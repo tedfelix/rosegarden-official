@@ -51,7 +51,12 @@
 #include "commands/notation/ResetDisplacementsCommand.h"
 #include "commands/notation/RespellCommand.h"
 #include "commands/notation/RestoreSlursCommand.h"
+#include "commands/notation/RestoreStemsCommand.h"
 #include "commands/notation/RestoreTiesCommand.h"
+#include "commands/notation/SetVisibilityCommand.h"
+#include "commands/notation/TieNotesCommand.h"
+#include "commands/notation/UnTupletCommand.h"
+#include "commands/notation/UntieNotesCommand.h"
 
 #include "NoteFontFactory.h"
 #include "NoteFont.h"
@@ -92,7 +97,12 @@ NotationCommandRegistry::NotationCommandRegistry(EditView *v) :
     ResetDisplacementsCommand::registerCommand(this);
     RespellCommand::registerCommand(this);
     RestoreSlursCommand::registerCommand(this);
+    RestoreStemsCommand::registerCommand(this);
     RestoreTiesCommand::registerCommand(this);
+    SetVisibilityCommand::registerCommand(this);
+    TieNotesCommand::registerCommand(this);
+    UnTupletCommand::registerCommand(this);
+    UntieNotesCommand::registerCommand(this);
 }
 
 NotationCommandRegistry::~NotationCommandRegistry()

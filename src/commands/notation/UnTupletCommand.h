@@ -37,6 +37,7 @@ namespace Rosegarden
 {
 
 class EventSelection;
+class CommandRegistry;
 
 
 class UnTupletCommand : public BasicSelectionCommand
@@ -49,6 +50,8 @@ public:
     static QString getGlobalName() {
         return i18n("&Untuplet");
     }
+
+    static void registerCommand(CommandRegistry *r);
 
 protected:
     virtual void modifySegment();

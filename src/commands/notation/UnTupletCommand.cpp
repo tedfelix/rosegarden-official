@@ -28,6 +28,7 @@
 #include "base/Selection.h"
 #include "document/BasicSelectionCommand.h"
 #include "base/BaseProperties.h"
+#include "document/CommandRegistry.h"
 #include <qstring.h>
 
 
@@ -35,6 +36,13 @@ namespace Rosegarden
 {
 
 using namespace BaseProperties;
+
+void
+UnTupletCommand::registerCommand(CommandRegistry *r)
+{
+    r->registerCommand(getGlobalName(), "", "", "break_tuplets",
+                       new SelectionCommandBuilder<UnTupletCommand>());
+}
 
 void
 UnTupletCommand::modifySegment()

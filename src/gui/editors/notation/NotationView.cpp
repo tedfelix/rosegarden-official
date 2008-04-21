@@ -79,14 +79,9 @@
 #include "commands/notation/KeyInsertionCommand.h"
 #include "commands/notation/MultiKeyInsertionCommand.h"
 #include "commands/notation/NormalizeRestsCommand.h"
-#include "commands/notation/RestoreStemsCommand.h"
-#include "commands/notation/SetVisibilityCommand.h"
 #include "commands/notation/SustainInsertionCommand.h"
 #include "commands/notation/TextInsertionCommand.h"
-#include "commands/notation/TieNotesCommand.h"
 #include "commands/notation/TupletCommand.h"
-#include "commands/notation/UntieNotesCommand.h"
-#include "commands/notation/UnTupletCommand.h"
 #include "commands/segment/PasteToTriggerSegmentCommand.h"
 #include "commands/segment/SegmentSyncCommand.h"
 #include "commands/segment/SegmentTransposeCommand.h"
@@ -1802,9 +1797,6 @@ void NotationView::setupActions()
     new KAction(TupletCommand::getGlobalName(false), icon, Key_T + CTRL, this,
                 SLOT(slotGroupGeneralTuplet()), actionCollection(), "tuplet");
 
-    new KAction(UnTupletCommand::getGlobalName(), 0, this,
-                SLOT(slotGroupUnTuplet()), actionCollection(), "break_tuplets");
-
     icon = QIconSet(NotePixmapFactory::toQPixmap
                     (NotePixmapFactory::makeToolbarPixmap("triplet")));
     (new KToggleAction(i18n("Trip&let Insert Mode"), icon, Key_G,
@@ -1834,22 +1826,6 @@ void NotationView::setupActions()
     new KAction(CollapseNotesCommand::getGlobalName(), Key_Equal + CTRL, this,
                 SLOT(slotTransformsCollapseNotes()), actionCollection(),
                 "collapse_notes");
-
-    icon = QIconSet
-           (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                                         ("transforms-tie")));
-
-    new KAction(TieNotesCommand::getGlobalName(), icon, Key_AsciiTilde, this,
-                SLOT(slotTransformsTieNotes()), actionCollection(),
-                "tie_notes");
-
-    new KAction(UntieNotesCommand::getGlobalName(), 0, this,
-                SLOT(slotTransformsUntieNotes()), actionCollection(),
-                "untie_notes");
-
-    new KAction(RestoreStemsCommand::getGlobalName(), 0, this,
-                SLOT(slotTransformsRestoreStems()), actionCollection(),
-                "restore_stems");
 
     icon = QIconSet
            (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
@@ -2088,14 +2064,6 @@ void NotationView::setupActions()
     new KAction(i18n("&Filter Selection"), "filter", Key_F + CTRL, this,
                 SLOT(slotFilterSelection()), actionCollection(),
                 "filter_selection");
-
-    new KAction(i18n("Make &Invisible"), 0, this,
-                SLOT(slotMakeInvisible()), actionCollection(),
-                "make_invisible");
-
-    new KAction(i18n("Make &Visible"), 0, this,
-                SLOT(slotMakeVisible()), actionCollection(),
-                "make_visible");
 
     new KAction(i18n("Toggle Dot"), Key_Period, this,
                 SLOT(slotToggleDot()), actionCollection(),
@@ -4586,24 +4554,6 @@ void NotationView::slotFilterSelection()
     }
 }
 
-void NotationView::slotMakeVisible()
-{
-    if (!m_currentEventSelection)
-        return ;
-    KTmpStatusMsg msg(i18n("Making visible..."), this);
-
-    addCommandToHistory(new SetVisibilityCommand(*m_currentEventSelection, true));
-}
-
-void NotationView::slotMakeInvisible()
-{
-    if (!m_currentEventSelection)
-        return ;
-    KTmpStatusMsg msg(i18n("Making invisible..."), this);
-
-    addCommandToHistory(new SetVisibilityCommand(*m_currentEventSelection, false));
-}
-
 void NotationView::slotToggleToolsToolBar()
 {
     toggleNamedToolBar("Tools Toolbar");
@@ -4760,16 +4710,6 @@ void NotationView::slotGroupTuplet(bool simple)
     }
 }
 
-void NotationView::slotGroupUnTuplet()
-{
-    if (!m_currentEventSelection)
-        return ;
-    KTmpStatusMsg msg(i18n("Untupleting..."), this);
-
-    addCommandToHistory(new UnTupletCommand
-                        (*m_currentEventSelection));
-}
-
 void NotationView::slotTransformsNormalizeRests()
 {
     if (!m_currentEventSelection)
@@ -4787,36 +4727,6 @@ void NotationView::slotTransformsCollapseNotes()
     KTmpStatusMsg msg(i18n("Collapsing notes..."), this);
 
     addCommandToHistory(new CollapseNotesCommand
-                        (*m_currentEventSelection));
-}
-
-void NotationView::slotTransformsTieNotes()
-{
-    if (!m_currentEventSelection)
-        return ;
-    KTmpStatusMsg msg(i18n("Tying notes..."), this);
-
-    addCommandToHistory(new TieNotesCommand
-                        (*m_currentEventSelection));
-}
-
-void NotationView::slotTransformsUntieNotes()
-{
-    if (!m_currentEventSelection)
-        return ;
-    KTmpStatusMsg msg(i18n("Untying notes..."), this);
-
-    addCommandToHistory(new UntieNotesCommand
-                        (*m_currentEventSelection));
-}
-
-void NotationView::slotTransformsRestoreStems()
-{
-    if (!m_currentEventSelection)
-        return ;
-    KTmpStatusMsg msg(i18n("Restoring computed stem directions..."), this);
-
-    addCommandToHistory(new RestoreStemsCommand
                         (*m_currentEventSelection));
 }
 

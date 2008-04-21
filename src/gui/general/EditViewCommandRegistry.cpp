@@ -59,7 +59,8 @@ EditViewCommandRegistry::addAction(QString title,
     bool haveIcon = (iconName != "");
     QIconSet icon;
 
-    std::cerr << "Adding action: " << title << ", " << iconName << ", " << shortcut << ", " << actionName << std::endl;
+    QString scs = shortcut.toString();
+    std::cerr << "Adding action: " << title << ", " << ((iconName && iconName != "") ? iconName : "(no icon)") << ", " << ((scs && scs != "") ? scs : "(no shortcut)") << ", " << actionName << std::endl;
 
     if (haveIcon) {
         QString pixmapDir =

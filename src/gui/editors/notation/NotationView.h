@@ -514,14 +514,10 @@ public slots:
     void slotGroupSimpleTuplet();
     void slotGroupGeneralTuplet();
     void slotGroupTuplet(bool simple);
-    void slotGroupUnTuplet();
 
     /// transforms slots
     void slotTransformsNormalizeRests();
     void slotTransformsCollapseNotes();
-    void slotTransformsTieNotes();
-    void slotTransformsUntieNotes();
-    void slotTransformsRestoreStems();
     void slotTransformsQuantize();
     void slotTransformsInterpret();
 
@@ -548,9 +544,6 @@ public slots:
     void slotEditTranspose();
     void slotEditSwitchPreset();
     void slotEditElement(NotationStaff *, NotationElement *, bool advanced);
-
-    void slotMakeVisible();
-    void slotMakeInvisible();
 
     void slotDebugDump();
 

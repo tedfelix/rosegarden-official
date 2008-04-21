@@ -37,17 +37,21 @@ namespace Rosegarden
 {
 
 class EventSelection;
+class CommandRegistry;
 
 
 class SetVisibilityCommand : public BasicSelectionCommand
 {
 public:
-    SetVisibilityCommand(EventSelection &selection, bool visible) :
+    SetVisibilityCommand(bool visible, EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(), selection, true),
         m_selection(&selection),
         m_visible(visible) { }
 
     static QString getGlobalName() { return i18n("Set Visibility"); }
+
+    static bool getArgument(QString actionName, CommandArgumentQuerier &);
+    static void registerCommand(CommandRegistry *r);
 
 protected:
     virtual void modifySegment();

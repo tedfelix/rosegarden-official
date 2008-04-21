@@ -37,6 +37,7 @@ namespace Rosegarden
 {
 
 class EventSelection;
+class CommandRegistry;
 
 
 class RestoreStemsCommand : public BasicSelectionCommand
@@ -47,6 +48,8 @@ public:
         m_selection(&selection) { }
 
     static QString getGlobalName() { return i18n("&Restore Stems"); }
+
+    static void registerCommand(CommandRegistry *);
 
 protected:
     virtual void modifySegment();
