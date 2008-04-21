@@ -74,7 +74,8 @@ public:
     virtual unsigned int getNbRows();
     virtual const rectcontainer& getRectanglesIn(const QRect& rect,
                                                  RectRanges* notationRects, AudioPreviewDrawData* audioRects);
-    virtual itemcontainer     getItemsAt      (const QPoint&);
+    virtual heightlist getTrackDividersIn(const QRect& rect);
+    virtual itemcontainer getItemsAt (const QPoint&);
     virtual timeT getRepeatTimeAt (const QPoint&, const CompositionItem&);
 
     virtual SnapGrid& grid() { return m_grid; }
@@ -130,6 +131,7 @@ public:
     virtual void segmentRemoved(const Composition *, Segment *);
     virtual void segmentRepeatChanged(const Composition *, Segment *, bool);
     virtual void segmentEndMarkerChanged(const Composition *, Segment *, bool);
+    virtual void segmentTrackChanged(const Composition *, Segment *, TrackId);
     virtual void endMarkerTimeChanged(const Composition *, bool /*shorten*/);
 
     // SegmentObserver

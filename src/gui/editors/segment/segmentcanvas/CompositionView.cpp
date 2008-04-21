@@ -113,6 +113,7 @@ CompositionView::CompositionView(RosegardenGUIDoc* doc,
         m_pointerPen(QPen(m_pointerColor, m_pointerWidth)),
         m_tmpRect(QRect(QPoint(0, 0), QPoint( -1, -1))),
         m_tmpRectFill(CompositionRect::DefaultBrushColor),
+        m_trackDividerColor(GUIPalette::getColour(GUIPalette::TrackDivider)),
         m_drawGuides(false),
         m_guideColor(GUIPalette::getColour(GUIPalette::MovementGuide)),
         m_topGuidePos(0),
@@ -695,6 +696,29 @@ void CompositionView::drawArea(QPainter *p, const QRect& clipRect)
     //     Profiler profiler("CompositionView::drawArea", true);
 
     //     RG_DEBUG << "CompositionView::drawArea() clipRect = " << clipRect << endl;
+
+    //
+    // Fetch track dividing lines
+    //
+    CompositionModel::heightlist lineHeights = getModel()->getTrackDividersIn(clipRect);
+
+    if (!lineHeights.empty()) {
+        p->save();
+        QColor light = m_trackDividerColor.light();
+        p->setPen(light);
+        for (CompositionModel::heightlist::const_iterator hi = lineHeights.begin();
+             hi != lineHeights.end(); ++hi) {
+            p->drawLine(clipRect.x(), *hi - 1, clipRect.x() + clipRect.width(), *hi - 1);
+            p->drawLine(clipRect.x(), *hi, clipRect.x() + clipRect.width(), *hi);
+        }
+        p->setPen(m_trackDividerColor);
+        for (CompositionModel::heightlist::const_iterator hi = lineHeights.begin();
+             hi != lineHeights.end(); ++hi) {
+            p->drawLine(clipRect.x(), *hi - 2, clipRect.x() + clipRect.width(), *hi - 2);
+            p->drawLine(clipRect.x(), *hi + 1, clipRect.x() + clipRect.width(), *hi + 1);
+        }
+        p->restore();
+    }
 
     CompositionModel::AudioPreviewDrawData* audioPreviewData = 0;
     CompositionModel::RectRanges* notationPreviewData = 0;
