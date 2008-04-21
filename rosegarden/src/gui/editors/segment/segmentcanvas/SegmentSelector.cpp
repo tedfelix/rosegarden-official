@@ -217,6 +217,10 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
         return ;
     }
 
+    int startDragTrackPos = m_canvas->grid().getYBin(m_clickPoint.y());
+    int currentTrackPos = m_canvas->grid().getYBin(e->pos().y());
+    int trackDiff = currentTrackPos - startDragTrackPos;
+
     if (!m_currentItem) {
         m_canvas->setDrawSelectionRect(false);
         m_canvas->getModel()->finalizeSelectionRect();
@@ -225,6 +229,8 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
     }
 
     m_canvas->viewport()->setCursor(Qt::arrowCursor);
+
+    Composition &comp = m_doc->getComposition();
 
     if (m_canvas->getModel()->isSelected(m_currentItem)) {
 
@@ -245,21 +251,36 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
                 CompositionItem item = *it;
 
                 Segment* segment = CompositionItemHelper::getSegment(item);
-                int trackPos = m_canvas->grid().getYBin(item->rect().y());
-                Track* track = m_doc->getComposition().getTrackByPosition(trackPos);
-                TrackId itemTrackId = track->getId();
-                timeT itemStartTime = CompositionItemHelper::getStartTime(item, m_canvas->grid());
-                // No -- we absolutely don't want to snap the end time
-                // to the grid.  We want it to remain exactly the same
-                // as it was, but relative to the new start time. --cc
+
+                TrackId origTrackId = segment->getTrack();
+                int trackPos = comp.getTrackPositionById(origTrackId);
+                trackPos += trackDiff;
+
+                if (trackPos < 0) {
+                    trackPos = 0;
+                } else if (trackPos >= comp.getNbTracks()) {
+                    trackPos = comp.getNbTracks() - 1;
+                }
+
+                Track *newTrack = comp.getTrackByPosition(trackPos);
+                int newTrackId = origTrackId;
+                if (newTrack) newTrackId = newTrack->getId();
+
+                timeT itemStartTime = CompositionItemHelper::getStartTime
+                    (item, m_canvas->grid());
+
+                // We absolutely don't want to snap the end time to
+                // the grid.  We want it to remain exactly the same as
+                // it was, but relative to the new start time.
                 timeT itemEndTime = itemStartTime + segment->getEndMarkerTime()
                                     - segment->getStartTime();
+
+                std::cerr << "releasing segment " << segment << ": mouse started at track " << startDragTrackPos << ", is now at " << currentTrackPos << ", diff is " << trackDiff << ", moving from track pos " << comp.getTrackPositionById(origTrackId) << " to " << trackPos << ", id " << origTrackId << " to " << newTrackId << std::endl;
 
                 command->addSegment(segment,
                                     itemStartTime,
                                     itemEndTime,
-                                    itemTrackId);
-
+                                    newTrackId);
             }
 
             addCommandToHistory(command);
@@ -267,7 +288,6 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
 
         m_canvas->getModel()->endChange();
         m_canvas->slotUpdateSegmentsDrawBuffer();
-
     }
 
     // if we've just finished a quick copy then drop the Z level back
@@ -296,6 +316,8 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
     if (m_dispatchTool) {
         return m_dispatchTool->handleMouseMove(e);
     }
+
+    Composition &comp = m_doc->getComposition();
 
     if (!m_currentItem) {
 
@@ -353,6 +375,10 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 
     m_canvas->setSnapGrain(true);
 
+    int startDragTrackPos = m_canvas->grid().getYBin(m_clickPoint.y());
+    int currentTrackPos = m_canvas->grid().getYBin(e->pos().y());
+    int trackDiff = currentTrackPos - startDragTrackPos;
+
     if (m_canvas->getModel()->isSelected(m_currentItem)) {
 
         if (!m_canvas->isFineGrain()) {
@@ -398,9 +424,6 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 
             int newX = int(m_canvas->grid().getRulerScale()->getXForTime(newStartTime));
 
-            int startDragTrackPos = m_canvas->grid().getYBin(m_clickPoint.y());
-            int currentTrackPos = m_canvas->grid().getYBin(e->pos().y());
-            int trackDiff = currentTrackPos - startDragTrackPos;
             int trackPos = m_canvas->grid().getYBin((*it)->savedRect().y());
 
             std::cerr << "segment " << *it << ": mouse started at track " << startDragTrackPos << ", is now at " << currentTrackPos << ", trackPos from " << trackPos << " to ";
@@ -411,29 +434,9 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 
             if (trackPos < 0) {
                 trackPos = 0;
-            } else if (trackPos >= m_doc->getComposition().getNbTracks()) {
-                trackPos = m_doc->getComposition().getNbTracks() - 1;
+            } else if (trackPos >= comp.getNbTracks()) {
+                trackPos = comp.getNbTracks() - 1;
             }
-
-/*!!!
-            int newY = m_canvas->grid().snapY((*it)->savedRect().y() + dy);
-            // Make sure we don't set a non-existing track
-            if (newY < 0) {
-                newY = 0;
-            }
-            TrackId trackPos = m_canvas->grid().getYBin(newY);
-
-            // 	    RG_DEBUG << "SegmentSelector::handleMouseMove: orig y " << (*it)->rect().y()
-            // 		     << ", dy " << dy << ", newY " << newY << ", track " << track << endl;
-
-            // Make sure we don't set a non-existing track (c'td)
-            // TODO: make this suck less. Either the tool should
-            // not allow it in the first place, or we automatically
-            // create new tracks - might make undo very tricky though
-            //
-            if (trackPos >= m_doc->getComposition().getNbTracks())
-                trackPos = m_doc->getComposition().getNbTracks() - 1;
-*/
 
             int newY = m_canvas->grid().getYBinCoordinate(trackPos);
 
@@ -451,9 +454,7 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 
         timeT currentItemStartTime = m_canvas->grid().snapX(m_currentItem->rect().x());
 
-        Composition &comp = m_doc->getComposition();
-        RealTime time =
-            comp.getElapsedRealTime(currentItemStartTime);
+        RealTime time = comp.getElapsedRealTime(currentItemStartTime);
         QString ms;
         ms.sprintf("%03d", time.msec());
 

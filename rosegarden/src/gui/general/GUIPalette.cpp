@@ -129,8 +129,9 @@ GUIPalette::GUIPalette()
     m_defaultsMap[InsertCursor] = QColor(160, 104, 186);
     m_defaultsMap[InsertCursorRuler] = QColor(160, 136, 170);
 
-    m_defaultsMap[MovementGuide] = QColor(172, 230, 139);
-    //m_defaultsMap[MovementGuide] = QColor(62, 161, 194);
+    m_defaultsMap[TrackDivider] = QColor(145, 145, 145);
+    //m_defaultsMap[MovementGuide] = QColor(172, 230, 139);
+    m_defaultsMap[MovementGuide] = QColor(62, 161, 194);
     //m_defaultsMap[MovementGuide] = QColor(255, 189, 89);
     m_defaultsMap[SelectionRectangle] = QColor(103, 128, 211);
     m_defaultsMap[SelectedElement] = QColor(0, 54, 232);
@@ -153,7 +154,8 @@ GUIPalette::GUIPalette()
     m_defaultsMap[AudioCountdownBackground] = Qt::darkGray;
     m_defaultsMap[AudioCountdownForeground] = Qt::red;
 
-    m_defaultsMap[RotaryFloatBackground] = Qt::cyan;
+//    m_defaultsMap[RotaryFloatBackground] = Qt::cyan;
+    m_defaultsMap[RotaryFloatBackground] = QColor(182, 222, 255);
     m_defaultsMap[RotaryFloatForeground] = Qt::black;
 
     m_defaultsMap[RotaryPastelBlue] = QColor(205, 212, 255);
@@ -245,6 +247,7 @@ const char* const GUIPalette::PointerRuler = "pointerruler";
 const char* const GUIPalette::InsertCursor = "insertcursor";
 const char* const GUIPalette::InsertCursorRuler = "insertcursorruler";
 
+const char* const GUIPalette::TrackDivider = "trackdivider";
 const char* const GUIPalette::MovementGuide = "movementguide";
 const char* const GUIPalette::SelectionRectangle = "selectionrectangle";
 const char* const GUIPalette::SelectedElement = "selectedelement";

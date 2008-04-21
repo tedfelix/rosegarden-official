@@ -330,6 +330,8 @@ protected:
     QColor       m_tmpRectFill;
     QPoint       m_splitLinePos;
 
+    QColor       m_trackDividerColor;
+
     bool         m_drawGuides;
     QColor       m_guideColor;
     int          m_topGuidePos;

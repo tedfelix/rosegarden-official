@@ -111,6 +111,7 @@ public:
     static const char* const InsertCursor;
     static const char* const InsertCursorRuler;
 
+    static const char* const TrackDivider;
     static const char* const MovementGuide;
     static const char* const SelectionRectangle;
     static const char* const SelectedElement;
