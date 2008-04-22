@@ -94,6 +94,9 @@ PluginFactory::enumerateAllPlugins(MappedObjectPropertyList &list)
 {
     PluginFactory *factory;
 
+    // Plugins can change the locale, store it for reverting afterwards
+    char *loc = setlocale(LC_ALL, 0);
+
     // Query DSSI plugins before LADSPA ones.
     // This is to provide for the interesting possibility of plugins
     // providing either DSSI or LADSPA versions of themselves,
@@ -109,8 +112,7 @@ PluginFactory::enumerateAllPlugins(MappedObjectPropertyList &list)
     if (factory)
         factory->enumeratePlugins(list);
 
-    // Plugins can change the locale, revert it to default.
-    setlocale(LC_ALL, "C");
+    setlocale(LC_ALL, loc);
 }
 
 
