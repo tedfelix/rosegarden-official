@@ -348,7 +348,7 @@ Composition::getMaxContemporaneousSegmentsOnTrack(TrackId track) const
     for (const_iterator i = begin(); i != end(); ++i) {
 	if ((*i)->getTrack() != track) continue;
 	timeT t0 = (*i)->getStartTime();
-	timeT t1 = (*i)->getEndMarkerTime();
+	timeT t1 = (*i)->getRepeatEndTime();
 //	std::cerr << "getMaxContemporaneousSegmentsOnTrack(" << track << "): segment " << *i << " from " << t0 << " to " << t1 << std::endl;
 	while (!ends.empty() && t0 >= ends.begin()->first) {
 	    simultaneous.erase(ends.begin()->second);
@@ -379,7 +379,7 @@ Composition::getSegmentVoiceIndex(const Segment *segment) const
     for (const_iterator i = begin(); i != end(); ++i) {
 	if ((*i)->getTrack() != track) continue;
 	timeT t0 = (*i)->getStartTime();
-	timeT t1 = (*i)->getEndMarkerTime();
+	timeT t1 = (*i)->getRepeatEndTime();
 	int index;
 	while (!ends.empty() && t0 >= ends.begin()->first) {
 	    index = indices[ends.begin()->second];

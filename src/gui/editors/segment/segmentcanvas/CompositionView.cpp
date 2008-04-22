@@ -703,20 +703,39 @@ void CompositionView::drawArea(QPainter *p, const QRect& clipRect)
     CompositionModel::heightlist lineHeights = getModel()->getTrackDividersIn(clipRect);
 
     if (!lineHeights.empty()) {
+
         p->save();
         QColor light = m_trackDividerColor.light();
         p->setPen(light);
+
         for (CompositionModel::heightlist::const_iterator hi = lineHeights.begin();
              hi != lineHeights.end(); ++hi) {
-            p->drawLine(clipRect.x(), *hi - 1, clipRect.x() + clipRect.width(), *hi - 1);
-            p->drawLine(clipRect.x(), *hi, clipRect.x() + clipRect.width(), *hi);
+            int y = *hi;
+            if (y-1 >= clipRect.y()) {
+                p->drawLine(clipRect.x(), y-1,
+                            clipRect.x() + clipRect.width() - 1, y-1);
+            }
+            if (y >= clipRect.y()) {
+                p->drawLine(clipRect.x(), y,
+                            clipRect.x() + clipRect.width() - 1, y);
+            }
         }
+
         p->setPen(m_trackDividerColor);
+
         for (CompositionModel::heightlist::const_iterator hi = lineHeights.begin();
              hi != lineHeights.end(); ++hi) {
-            p->drawLine(clipRect.x(), *hi - 2, clipRect.x() + clipRect.width(), *hi - 2);
-            p->drawLine(clipRect.x(), *hi + 1, clipRect.x() + clipRect.width(), *hi + 1);
+            int y = *hi;
+            if (y-2 >= clipRect.y()) {
+                p->drawLine(clipRect.x(), y-2,
+                            clipRect.x() + clipRect.width() - 1, y-2);
+            }
+            if (y+1 >= clipRect.y()) {
+                p->drawLine(clipRect.x(), y+1,
+                            clipRect.x() + clipRect.width() - 1, y+1);
+            }
         }
+
         p->restore();
     }
 

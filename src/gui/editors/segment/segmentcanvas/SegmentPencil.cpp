@@ -136,8 +136,8 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
 
     QRect tmpRect;
     tmpRect.setX(int(nearbyint(m_canvas->grid().getRulerScale()->getXForTime(time))));
-    tmpRect.setY(m_canvas->grid().getYBinCoordinate(trackPosition));
-    tmpRect.setHeight(m_canvas->grid().getYSnap() * multiple);
+    tmpRect.setY(m_canvas->grid().getYBinCoordinate(trackPosition) + 1);
+    tmpRect.setHeight(m_canvas->grid().getYSnap() * multiple - 2);
     tmpRect.setWidth(int(nearbyint(m_canvas->grid().getRulerScale()->getWidthForDuration(time, duration))));
 
     m_canvas->setTmpRect(tmpRect,

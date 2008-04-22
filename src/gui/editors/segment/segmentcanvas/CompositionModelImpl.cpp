@@ -643,6 +643,7 @@ void CompositionModelImpl::segmentEndMarkerChanged(const Composition *, Segment 
 void CompositionModelImpl::segmentRepeatChanged(const Composition *, Segment *s, bool)
 {
     clearInCache(s);
+    setTrackHeights(s);
     emit needContentUpdate();
 }
 
@@ -1015,7 +1016,7 @@ QPoint CompositionModelImpl::computeSegmentOrigin(const Segment& s)
 
     res.setY(m_grid.getYBinCoordinate(trackPosition) +
              m_composition.getSegmentVoiceIndex(&s) *
-             m_grid.getYSnap());
+             m_grid.getYSnap() + 1);
 
     return res;
 }
@@ -1093,7 +1094,7 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s, bool 
     timeT endTime = isRecordingSegment ? m_pointerTimePos /*s.getEndTime()*/ : s.getEndMarkerTime();
 
 
-    int h = m_grid.getYSnap();
+    int h = m_grid.getYSnap() - 2;
     int w;
 
     RG_DEBUG << "CompositionModelImpl::computeSegmentRect: x " << origin.x() << ", y " << origin.y() << " startTime " << startTime << ", endTime " << endTime << endl;
@@ -1257,17 +1258,17 @@ CompositionModelImpl::getTrackDividersIn(const QRect& rect)
     int top = m_grid.getYBin(rect.y());
     int bottom = m_grid.getYBin(rect.y() + rect.height());
 
-    std::cerr << "CompositionModelImpl::getTrackDividersIn: rect "
-              << rect.x() << ", " << rect.y() << ", "
-              << rect.width() << "x" << rect.height() << ", top = " << top
-              << ", bottom = " << bottom << std::endl;
+//    std::cerr << "CompositionModelImpl::getTrackDividersIn: rect "
+//              << rect.x() << ", " << rect.y() << ", "
+//              << rect.width() << "x" << rect.height() << ", top = " << top
+//              << ", bottom = " << bottom << std::endl;
     
     CompositionModel::heightlist list;
 
     for (int pos = top; pos <= bottom; ++pos) {
         int divider = m_grid.getYBinCoordinate(pos);
         list.push_back(divider);
-        std::cerr << "divider at " << divider << std::endl;
+//        std::cerr << "divider at " << divider << std::endl;
     }
 
     return list;
