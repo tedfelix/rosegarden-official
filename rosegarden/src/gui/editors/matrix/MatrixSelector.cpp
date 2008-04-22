@@ -168,7 +168,14 @@ void MatrixSelector::handleLeftButtonPress(timeT time,
                                               e,
                                               element);
         return ;
+
+    } else if (e->state() & Qt::ControlButton) {
+
+        handleMidButtonPress(time, height, staffNo, e, element);
+        return;
+
     } else {
+
         // Workaround for #930420 Positional error in sweep-selection box
         // boundary
         int zoomValue = (int)m_matrixView->m_hZoomSlider->getCurrentSize();

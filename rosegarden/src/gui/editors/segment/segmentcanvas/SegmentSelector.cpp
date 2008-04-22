@@ -105,7 +105,7 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
     // not in the selection - then also clear the selection.
     //
     if ((!m_segmentAddMode && !item) ||
-            (!m_segmentAddMode && !(m_canvas->getModel()->isSelected(item)))) {
+        (!m_segmentAddMode && !(m_canvas->getModel()->isSelected(item)))) {
         m_canvas->getModel()->clearSelected();
     }
 
@@ -172,10 +172,11 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
 
     } else {
 
-
-        // Add on middle button - bounding box on rest
+        // Add on middle button or ctrl+left - bounding box on rest
         //
-        if (e->button() == MidButton) {
+        if (e->button() == MidButton ||
+            (e->button() == LeftButton && (e->state() & Qt::ControlButton))) {
+
             m_dispatchTool = getToolBox()->getTool(SegmentPencil::ToolName);
 
             if (m_dispatchTool) {

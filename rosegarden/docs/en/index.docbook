@@ -982,6 +982,7 @@
     </sect1>
     <sect1 id="segment-view-creating">
       <title>Creating segments</title>
+
       <para>
 	To create an empty segment, in order to begin composing
 	something new, you need to use the pencil tool (which is normally the
@@ -993,6 +994,13 @@
 	and drag rightwards until the segment is the right number of
 	bars long.
       </para>
+
+      <para>You can also create segments using the <link
+      linkend="segment-view-selector">Select tool</link>, by clicking
+      and dragging either with the middle mouse button, or with the
+      left button and Ctrl held down.</para>
+
+
       <para>If you want to draw a segment longer than the visible
 	portion of the canvas, the canvas will scroll automatically once you
 	reach its edge.  If you keep dragging past the end of the entire
@@ -1130,11 +1138,11 @@
 	</para>
 
 	<para>To move segments with the select tool, simply click and
-	  drag on the segment.  To create copies, click and drag with
-	  Ctrl held down.  To resize a segment, click and drag on the
-	  right-hand edge of the segment; and to create new segments,
-	  click and drag on an empty area with the middle mouse button.
-	</para>
+	drag on the segment.  To create copies, click and drag with
+	Ctrl held down.  To resize a segment, click and drag on the
+	right-hand edge of the segment.  To create new segments, click
+	and drag on an empty area either with the middle mouse button
+	or with the left mouse button and Ctrl held down.</para>
 
 	<para>
 	  The select tool doesn't replace the other tools completely,
@@ -3546,6 +3554,10 @@
 	the point you click at, and will have a duration
 	corresponding to the distance you drag before releasing the
 	mouse button.</para>
+
+	<para>You can also draw notes using the Select tool (the
+	arrow), by clicking and dragging either with the middle mouse
+	button, or with the left mouse button and Ctrl pressed.</para>
 
       <para>By default, the time and duration are snapped to a
 	particular grid unit, according to the Grid setting on the
