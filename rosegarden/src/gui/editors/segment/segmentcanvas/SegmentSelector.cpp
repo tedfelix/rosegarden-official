@@ -163,7 +163,10 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
         m_currentItem = item;
         m_clickPoint = e->pos();
 
-        m_canvas->setGuidesPos(item->rect().topLeft());
+        int guideX = item->rect().x();
+        int guideY = item->rect().y();
+
+        m_canvas->setGuidesPos(guideX, guideY);
 
         m_canvas->setDrawGuides(true);
 
