@@ -1105,17 +1105,22 @@ Segment::getFirstClefAndKey(Clef &clef, Key &key)
 timeT
 Segment::getRepeatEndTime() const
 {
+    timeT endMarker = getEndMarkerTime();
+
     if (m_repeating && m_composition) {
 	Composition::iterator i(m_composition->findSegment(this));
 	assert(i != m_composition->end());
 	++i;
 	if (i != m_composition->end() && (*i)->getTrack() == getTrack()) {
-	    return (*i)->getStartTime();
+	    timeT t = (*i)->getStartTime();
+	    if (t < endMarker) return endMarker;
+	    else return t;
 	} else {
             return m_composition->getEndMarker();
 	}
     }
-    return getEndMarkerTime();
+
+    return endMarker;
 }
 
 
