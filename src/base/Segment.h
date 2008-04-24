@@ -489,8 +489,9 @@ public:
      * If this Segment is repeating, calculate and return the time at
      * which the repeating stops.  This is the start time of the
      * following Segment on the same Track, if any, or else the end
-     * time of the Composition.  (If this Segment does not repeat,
-     * return the end time of the Segment.)
+     * time of the Composition.  If this Segment does not repeat, or
+     * the time calculated would precede the end time of the Segment,
+     * instead return the end time of the Segment.
      */
     timeT getRepeatEndTime() const;
 
