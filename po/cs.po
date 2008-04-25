@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-12 20:42-0400\n"
+"POT-Creation-Date: 2008-04-25 17:46-0400\n"
 "PO-Revision-Date: 2008-04-20 12:41+0200\n"
 "Last-Translator: Jan Bína <jbina@mbtrans.cz>\n"
 "Language-Team:  <cs@li.org>\n"
@@ -75,7 +75,7 @@ msgid "Document Properties"
 msgstr "Vlastnosti dokumentu"
 
 #: ../src/gui/dialogs/MakeOrnamentDialog.cpp:45
-#: ../src/gui/editors/notation/NotationView.cpp:6044
+#: ../src/gui/editors/notation/NotationView.cpp:6048
 msgid "Make Ornament"
 msgstr "Vytvořit melodickou ozdobu"
 
@@ -157,7 +157,7 @@ msgid "Lyric"
 msgstr "Text melodie"
 
 #: ../src/gui/dialogs/TextEventDialog.cpp:108
-#: ../src/gui/editors/notation/NotationView.cpp:4238
+#: ../src/gui/editors/notation/NotationView.cpp:4242
 msgid "Chord"
 msgstr "Akord"
 
@@ -441,7 +441,7 @@ msgstr "Rychlost:"
 
 #: ../src/gui/dialogs/EventFilterDialog.cpp:102
 #: ../src/gui/dialogs/SimpleEventEditDialog.cpp:129
-#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:257
+#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:260
 msgid "Duration:"
 msgstr "Doba trvání:"
 
@@ -505,8 +505,8 @@ msgid "Highest pitch"
 msgstr "Nejvyšší výška tónu"
 
 #: ../src/gui/dialogs/UseOrnamentDialog.cpp:56
-#: ../src/gui/editors/notation/NotationView.cpp:1617
-#: ../src/gui/editors/notation/NotationView.cpp:6084
+#: ../src/gui/editors/notation/NotationView.cpp:1619
+#: ../src/gui/editors/notation/NotationView.cpp:6088
 msgid "Use Ornament"
 msgstr "Použít melodickou ozdobu"
 
@@ -719,7 +719,7 @@ msgstr "Rozlišení"
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:205
 #: ../src/gui/dialogs/ManageMetronomeDialog.cpp:125
 #: ../src/gui/editors/matrix/MatrixView.cpp:2132
-#: ../src/gui/editors/notation/NotationView.cpp:1580
+#: ../src/gui/editors/notation/NotationView.cpp:1582
 #: ../src/gui/widgets/QuantizeParameters.cpp:128
 #: ../src/gui/widgets/QuantizeParameters.cpp:301
 msgid "None"
@@ -989,7 +989,7 @@ msgid "Marker Properties"
 msgstr "Vlastnosti záložky"
 
 #: ../src/gui/dialogs/MarkerModifyDialog.cpp:100
-#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:554
+#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:576
 msgid "Text:"
 msgstr "Text:"
 
@@ -1055,6 +1055,24 @@ msgstr "Kolik stop chcete přidat?"
 msgid "Add tracks"
 msgstr "Přidat stopy"
 
+#: ../src/gui/dialogs/AddTracksDialog.cpp:64
+msgid "At the top"
+msgstr ""
+
+#: ../src/gui/dialogs/AddTracksDialog.cpp:65
+#, fuzzy
+msgid "Above the current selected track"
+msgstr "Ztlumení všech stop kromě aktuálně vybrané"
+
+#: ../src/gui/dialogs/AddTracksDialog.cpp:66
+#, fuzzy
+msgid "Below the current selected track"
+msgstr "Ztlumení všech stop kromě aktuálně vybrané"
+
+#: ../src/gui/dialogs/AddTracksDialog.cpp:67
+msgid "At the bottom"
+msgstr ""
+
 #: ../src/gui/dialogs/SimpleEventEditDialog.cpp:75
 msgid "Event Properties"
 msgstr "Vlastnosti události"
@@ -1064,22 +1082,22 @@ msgid "Event type:"
 msgstr "Typ události:"
 
 #: ../src/gui/dialogs/SimpleEventEditDialog.cpp:117
-#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:251
+#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:254
 #: ../src/gui/editors/segment/MarkerEditor.cpp:97
 msgid "Absolute time:"
 msgstr "Absolutní čas:"
 
 #: ../src/gui/dialogs/SimpleEventEditDialog.cpp:156
-#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:323
+#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:328
 msgid "Controller name:"
 msgstr "Název ovládacího prvku:"
 
 #: ../src/gui/dialogs/SimpleEventEditDialog.cpp:157
-#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:530
-#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:562
-#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:563
-#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:602
-#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:631
+#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:550
+#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:584
+#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:585
+#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:628
+#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:659
 #: ../src/gui/editors/parameters/TrackParameterBox.cpp:267
 #: ../src/gui/editors/segment/ControlEditorDialog.cpp:269
 #: ../src/gui/editors/segment/MarkerEditor.cpp:279
@@ -1121,104 +1139,104 @@ msgstr "Čas notace:"
 msgid "Notation duration:"
 msgstr "Doba trvání notace:"
 
-#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:283
+#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:286
 msgid "Note pitch:"
 msgstr "Výška noty:"
 
-#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:291
+#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:294
 msgid "Note velocity:"
 msgstr "Rychlost noty:"
 
-#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:317
+#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:322
 msgid "Controller number:"
 msgstr "Číslo ovládacího prvku:"
 
-#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:326
+#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:331
 msgid "Controller value:"
 msgstr "Hodnota ovládacího prvku:"
 
-#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:354
+#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:361
 msgid "Key pitch:"
 msgstr "Výška tónu klávesy:"
 
-#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:362
+#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:369
 msgid "Key pressure:"
 msgstr "Tlaková citlivost klávesy:"
 
-#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:390
+#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:399
 msgid "Channel pressure:"
 msgstr "Kanálová tlaková citlivost:"
 
-#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:418
+#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:432
 msgid "Program change:"
 msgstr "Změna programu:"
 
-#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:461
+#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:477
 msgid "Data length:"
 msgstr "Délka dat:"
 
-#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:462
+#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:478
 msgid "Data:"
 msgstr "Data:"
 
-#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:480
+#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:498
 msgid "Pitchbend MSB:"
 msgstr "Ohýbání výšky tónu MSB:"
 
-#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:488
+#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:506
 msgid "Pitchbend LSB:"
 msgstr "Ohýbání výšky tónu LSB:"
 
-#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:523
+#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:543
 msgid "Indication:"
 msgstr "Označení způsobu hry:"
 
-#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:553
+#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:575
 msgid "Text type:"
 msgstr "Typ textu:"
 
-#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:596
+#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:622
 msgid "Clef type:"
 msgstr "Typ notového klíče:"
 
-#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:625
+#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:653
 msgid "Key name:"
 msgstr "Název klávesy:"
 
-#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:674
+#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:706
 msgid "Unsupported event type:"
 msgstr "Nepodporovaný typ události:"
 
-#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:931
+#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:963
 msgid "Edit Event Time"
 msgstr "Upravit čas události"
 
-#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:943
+#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:975
 msgid "Edit Event Notation Time"
 msgstr "Upravit čas notace události"
 
-#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:955
+#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:987
 msgid "Edit Duration"
 msgstr "Upravit dobu trvání"
 
-#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:968
+#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:1000
 msgid "Edit Notation Duration"
 msgstr "Upravit dobu trvání notace"
 
-#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:981
+#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:1013
 msgid "Edit Pitch"
 msgstr "Upravit výšku tónu"
 
-#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:991
-#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:1016
+#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:1023
+#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:1048
 msgid "*.syx|System exclusive files (*.syx)"
 msgstr "*.syx|Systémové exkluzivní soubory (*.syx)"
 
-#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:992
+#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:1024
 msgid "Load System Exclusive data in File"
 msgstr "Načíst systémová exkluzivní data v souboru"
 
-#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:1017
+#: ../src/gui/dialogs/SimpleEventEditDialog.cpp:1049
 msgid "Save System Exclusive data to..."
 msgstr "Uložit systémová exkluzivní data do..."
 
@@ -1395,8 +1413,10 @@ msgid "Change key for selection"
 msgstr "Změnit tóninu pro výběr"
 
 #: ../src/gui/dialogs/IntervalDialog.cpp:89
-msgid "Adjust segment transposition in opposite direction (maintain audible pitch)"
-msgstr "Upravit transpozici segmentu v opačném směru (udržet slyšitelnou výšku)"
+msgid ""
+"Adjust segment transposition in opposite direction (maintain audible pitch)"
+msgstr ""
+"Upravit transpozici segmentu v opačném směru (udržet slyšitelnou výšku)"
 
 #: ../src/gui/dialogs/IntervalDialog.cpp:190
 #: ../src/gui/dialogs/IntervalDialog.cpp:220
@@ -2228,7 +2248,8 @@ msgstr "Ploché - nastavit %1 na hodnotu"
 
 #: ../src/gui/dialogs/EventParameterDialog.cpp:70
 msgid "Alternating - set %1 to max and min on alternate events"
-msgstr "Střídavé - nastavit %1 střídavě na maximum a minimum při střídání událostí"
+msgstr ""
+"Střídavé - nastavit %1 střídavě na maximum a minimum při střídání událostí"
 
 #: ../src/gui/dialogs/EventParameterDialog.cpp:74
 msgid "Crescendo - set %1 rising from min to max"
@@ -2240,7 +2261,8 @@ msgstr "Diminuendo - nastavit %1 na zmenšující se od maxima po minimum"
 
 #: ../src/gui/dialogs/EventParameterDialog.cpp:82
 msgid "Ringing - set %1 alternating from max to min with both dying to zero"
-msgstr "Vyzvánění - nastavit %1 na střídání od maxima po minimum s ukončením na nule"
+msgstr ""
+"Vyzvánění - nastavit %1 na střídání od maxima po minimum s ukončením na nule"
 
 #: ../src/gui/dialogs/EventParameterDialog.cpp:123
 #: ../src/gui/dialogs/EventParameterDialog.cpp:150
@@ -2506,7 +2528,8 @@ msgstr "Zarovnání textu melodie"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:261
 msgid "Ragged bottom (systems will not be spread vertically across the page)"
-msgstr "Nevyrovnaná spodní část (osnovy nebudou vertikálně roztaženy po celé straně)"
+msgstr ""
+"Nevyrovnaná spodní část (osnovy nebudou vertikálně roztaženy po celé straně)"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:267
 msgid "Miscellaneous options"
@@ -2732,12 +2755,12 @@ msgid "Export M&up file..."
 msgstr "Exportovat soubor M&up..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:612
-#: ../src/gui/editors/notation/NotationView.cpp:1498
+#: ../src/gui/editors/notation/NotationView.cpp:1500
 msgid "Print &with LilyPond..."
 msgstr "Tisk &s aplikací LilyPond..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:616
-#: ../src/gui/editors/notation/NotationView.cpp:1502
+#: ../src/gui/editors/notation/NotationView.cpp:1504
 msgid "Preview with Lil&yPond..."
 msgstr "Náhled s aplikací Lily&Pond..."
 
@@ -2774,7 +2797,7 @@ msgid "Re&do"
 msgstr "&Zrušit vrácení akce zpět"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:665
-#: ../src/gui/editors/notation/NotationView.cpp:2295
+#: ../src/gui/editors/notation/NotationView.cpp:2297
 msgid "Show T&ools Toolbar"
 msgstr "Zobrazit nástrojovou lištu ovládacích &nástrojů"
 
@@ -2787,7 +2810,7 @@ msgid "Show &Editors Toolbar"
 msgstr "Zobrazit nástrojovou lištu pro &editory"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:677
-#: ../src/gui/editors/notation/NotationView.cpp:2307
+#: ../src/gui/editors/notation/NotationView.cpp:2309
 msgid "Show Trans&port Toolbar"
 msgstr "Zobrazit nástrojovou lištu pro trans&port"
 
@@ -2825,7 +2848,7 @@ msgstr "Zobrazit speciální &parametry"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:753
 #: ../src/gui/editors/matrix/MatrixView.cpp:641
-#: ../src/gui/editors/notation/NotationView.cpp:1770
+#: ../src/gui/editors/notation/NotationView.cpp:1772
 msgid "&Select and Edit"
 msgstr "&Vybrat a upravit"
 
@@ -2837,7 +2860,7 @@ msgstr "&Kreslit"
 #: ../src/commands/edit/EraseCommand.h:50
 #: ../src/gui/application/RosegardenGUIApp.cpp:763
 #: ../src/gui/editors/matrix/MatrixView.cpp:651
-#: ../src/gui/editors/notation/NotationView.cpp:1764
+#: ../src/gui/editors/notation/NotationView.cpp:1766
 msgid "&Erase"
 msgstr "&Vymazat"
 
@@ -2889,7 +2912,7 @@ msgid "Insert Range..."
 msgstr "Vložit úsek..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:832
-#: ../src/gui/editors/notation/NotationView.cpp:1802
+#: ../src/gui/editors/notation/NotationView.cpp:1804
 msgid "De&lete"
 msgstr "&Odstranit"
 
@@ -3088,7 +3111,7 @@ msgstr "Přeskočit na rychlou záložku"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:1142
 #: ../src/gui/editors/matrix/MatrixView.cpp:782
-#: ../src/gui/editors/notation/NotationView.cpp:2395
+#: ../src/gui/editors/notation/NotationView.cpp:2397
 #: ../src/gui/studio/AudioMixerWindow.cpp:105
 #: ../src/gui/studio/MidiMixerWindow.cpp:81
 msgid "&Play"
@@ -3096,7 +3119,7 @@ msgstr "&Přehrát"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:1153
 #: ../src/gui/editors/matrix/MatrixView.cpp:791
-#: ../src/gui/editors/notation/NotationView.cpp:2404
+#: ../src/gui/editors/notation/NotationView.cpp:2406
 #: ../src/gui/studio/AudioMixerWindow.cpp:114
 #: ../src/gui/studio/MidiMixerWindow.cpp:90
 msgid "&Stop"
@@ -3104,7 +3127,7 @@ msgstr "&Stop"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:1160
 #: ../src/gui/editors/matrix/MatrixView.cpp:802
-#: ../src/gui/editors/notation/NotationView.cpp:2415
+#: ../src/gui/editors/notation/NotationView.cpp:2417
 #: ../src/gui/studio/AudioMixerWindow.cpp:125
 #: ../src/gui/studio/MidiMixerWindow.cpp:101
 msgid "&Fast Forward"
@@ -3112,7 +3135,7 @@ msgstr "Ukazatel přehrávání o takt &dopředu"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:1168
 #: ../src/gui/editors/matrix/MatrixView.cpp:796
-#: ../src/gui/editors/notation/NotationView.cpp:2409
+#: ../src/gui/editors/notation/NotationView.cpp:2411
 #: ../src/gui/studio/AudioMixerWindow.cpp:119
 #: ../src/gui/studio/MidiMixerWindow.cpp:95
 msgid "Re&wind"
@@ -3130,7 +3153,7 @@ msgstr "&Zaznamenat"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:1189
 #: ../src/gui/editors/matrix/MatrixView.cpp:808
-#: ../src/gui/editors/notation/NotationView.cpp:2421
+#: ../src/gui/editors/notation/NotationView.cpp:2423
 #: ../src/gui/studio/AudioMixerWindow.cpp:131
 #: ../src/gui/studio/MidiMixerWindow.cpp:107
 msgid "Rewind to &Beginning"
@@ -3138,7 +3161,7 @@ msgstr "Ukazatel přehrávání na z&ačátek"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:1196
 #: ../src/gui/editors/matrix/MatrixView.cpp:814
-#: ../src/gui/editors/notation/NotationView.cpp:2427
+#: ../src/gui/editors/notation/NotationView.cpp:2429
 #: ../src/gui/studio/AudioMixerWindow.cpp:137
 #: ../src/gui/studio/MidiMixerWindow.cpp:113
 msgid "Fast Forward to &End"
@@ -3146,13 +3169,13 @@ msgstr "Ukazatel přehrávání na &konec"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:1203
 #: ../src/gui/editors/matrix/MatrixView.cpp:832
-#: ../src/gui/editors/notation/NotationView.cpp:2445
+#: ../src/gui/editors/notation/NotationView.cpp:2447
 msgid "Scro&ll to Follow Playback"
 msgstr "Ro&lovat podle přehrávání"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:1209
 #: ../src/gui/editors/matrix/MatrixView.cpp:838
-#: ../src/gui/editors/notation/NotationView.cpp:2451
+#: ../src/gui/editors/notation/NotationView.cpp:2453
 #: ../src/gui/studio/AudioMixerWindow.cpp:149
 #: ../src/gui/studio/MidiMixerWindow.cpp:125
 msgid "Panic"
@@ -3269,12 +3292,12 @@ msgid "Closing file..."
 msgstr "Zavírá se soubor..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:2421
-#: ../src/gui/editors/notation/NotationView.cpp:4614
+#: ../src/gui/editors/notation/NotationView.cpp:4618
 msgid "Printing..."
 msgstr "Probíhá tisk..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:2433
-#: ../src/gui/editors/notation/NotationView.cpp:4631
+#: ../src/gui/editors/notation/NotationView.cpp:4635
 msgid "Previewing..."
 msgstr "Náhled..."
 
@@ -3288,15 +3311,15 @@ msgstr "Probíhá vyjmutí výběru..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:2474
 #: ../src/gui/editors/matrix/MatrixView.cpp:1614
-#: ../src/gui/editors/notation/NotationView.cpp:4759
+#: ../src/gui/editors/notation/NotationView.cpp:4763
 msgid "Copying selection to clipboard..."
 msgstr "Probíhá kopírování výběru do schránky..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:2484
 #: ../src/gui/editors/eventlist/EventView.cpp:878
 #: ../src/gui/editors/matrix/MatrixView.cpp:1625
-#: ../src/gui/editors/notation/NotationView.cpp:4792
-#: ../src/gui/editors/notation/NotationView.cpp:4837
+#: ../src/gui/editors/notation/NotationView.cpp:4796
+#: ../src/gui/editors/notation/NotationView.cpp:4841
 #: ../src/gui/editors/segment/TriggerSegmentManager.cpp:352
 msgid "Clipboard is empty"
 msgstr "Schránka je prázdná"
@@ -3304,8 +3327,8 @@ msgstr "Schránka je prázdná"
 #: ../src/gui/application/RosegardenGUIApp.cpp:2487
 #: ../src/gui/editors/eventlist/EventView.cpp:882
 #: ../src/gui/editors/matrix/MatrixView.cpp:1629
-#: ../src/gui/editors/notation/NotationView.cpp:4800
-#: ../src/gui/editors/notation/NotationView.cpp:4841
+#: ../src/gui/editors/notation/NotationView.cpp:4804
+#: ../src/gui/editors/notation/NotationView.cpp:4845
 msgid "Inserting clipboard contents..."
 msgstr "Probíhá vkládání obsahu schránky..."
 
@@ -3584,8 +3607,10 @@ msgid "</ul>"
 msgstr "</ul>"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:4591
-msgid "<p>To fix this, you should install the following additional programs:</p>"
-msgstr "<p>K napravení tohoto stavu byste měli nainstalovat dodatečné programy:</p>"
+msgid ""
+"<p>To fix this, you should install the following additional programs:</p>"
+msgstr ""
+"<p>K napravení tohoto stavu byste měli nainstalovat dodatečné programy:</p>"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:4603
 msgid "Helper programs not found"
@@ -3669,7 +3694,7 @@ msgstr "Standardní soubory MIDI\n"
 #: ../src/gui/application/RosegardenGUIApp.cpp:4999
 #: ../src/gui/application/RosegardenGUIApp.cpp:5103
 #: ../src/gui/application/RosegardenGUIApp.cpp:5140
-#: ../src/gui/editors/notation/NotationView.cpp:4729
+#: ../src/gui/editors/notation/NotationView.cpp:4733
 msgid "Export failed.  The file could not be opened for writing."
 msgstr "Export selhal.  Soubor nebylo možné otevřít pro zápis."
 
@@ -3689,7 +3714,7 @@ msgstr "Soubory Mup\n"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5005
 #: ../src/gui/application/RosegardenGUIApp.cpp:5089
-#: ../src/gui/editors/notation/NotationView.cpp:4715
+#: ../src/gui/editors/notation/NotationView.cpp:4719
 msgid "Exporting LilyPond file..."
 msgstr "Probíhá export souboru aplikace LilyPond..."
 
@@ -3698,29 +3723,29 @@ msgid "LilyPond files"
 msgstr "Soubory aplikace LilyPond"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5023
-#: ../src/gui/editors/notation/NotationView.cpp:4649
+#: ../src/gui/editors/notation/NotationView.cpp:4653
 msgid "Printing LilyPond file..."
 msgstr "Probíhá tisk souboru aplikace LilyPond..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5028
 #: ../src/gui/application/RosegardenGUIApp.cpp:5052
-#: ../src/gui/editors/notation/NotationView.cpp:4654
-#: ../src/gui/editors/notation/NotationView.cpp:4678
+#: ../src/gui/editors/notation/NotationView.cpp:4658
+#: ../src/gui/editors/notation/NotationView.cpp:4682
 msgid "Failed to open a temporary file for LilyPond export."
 msgstr "Nepodařilo se otevřít dočasný soubor pro export do aplikace LilyPond."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5047
-#: ../src/gui/editors/notation/NotationView.cpp:4673
+#: ../src/gui/editors/notation/NotationView.cpp:4677
 msgid "Previewing LilyPond file..."
 msgstr "Zobrazuje se náhled souboru aplikace LilyPond..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5080
-#: ../src/gui/editors/notation/NotationView.cpp:4706
+#: ../src/gui/editors/notation/NotationView.cpp:4710
 msgid "LilyPond Preview Options"
 msgstr "Možnosti zobrazení náhledu pro aplikaci LilyPond"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5081
-#: ../src/gui/editors/notation/NotationView.cpp:4707
+#: ../src/gui/editors/notation/NotationView.cpp:4711
 msgid "LilyPond preview options"
 msgstr "Možnosti zobrazení náhledu pro aplikaci LilyPond"
 
@@ -3837,7 +3862,8 @@ msgid "Saving current document as default studio..."
 msgstr "Probíhá ukládání aktuálního dokumentu jako výchozího studia..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:7738
-msgid "Are you sure you want to import your default studio and lose the current one?"
+msgid ""
+"Are you sure you want to import your default studio and lose the current one?"
 msgstr "Skutečně chcete importovat svoje výchozí studio a ztratit to aktuální?"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:7773
@@ -4256,7 +4282,8 @@ msgstr ""
 "Rosegarden."
 
 #: ../src/gui/seqmanager/SequenceManager.cpp:1031
-msgid "Run out of processor power for real-time audio processing.  Cannot continue."
+msgid ""
+"Run out of processor power for real-time audio processing.  Cannot continue."
 msgstr ""
 "Procesor nemá dostatečný výkon na zpracování zvuku v reálném čase.  Nelze "
 "pokračovat."
@@ -4275,7 +4302,8 @@ msgid "JACK Audio subsystem is losing sample frames."
 msgstr "Zvukový subsystém JACK ztrácí vzorkové rámce."
 
 #: ../src/gui/seqmanager/SequenceManager.cpp:1096
-msgid "Failed to read audio data from disc in time to service the audio subsystem."
+msgid ""
+"Failed to read audio data from disc in time to service the audio subsystem."
 msgstr ""
 "Načítání zvukových dat z disku selhalo z časových důvodu a nebylo tedy možné "
 "obsloužit zvukový subsystém."
@@ -4827,7 +4855,7 @@ msgstr "Úroveň rytmické notové skupiny:"
 msgid "2-in-the-time-of-3"
 msgstr "2-na-dobu-3"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4237
+#: ../src/gui/editors/notation/NotationView.cpp:4241
 #: ../src/gui/widgets/QuantizeParameters.cpp:130
 msgid "Triplet"
 msgstr "Triola"
@@ -5216,7 +5244,8 @@ msgstr "Řízené MTC"
 
 #: ../src/gui/configuration/MIDIConfigurationPage.cpp:281
 msgid "Automatically connect sync output to all devices in use"
-msgstr "Automaticky připojit synchronizovaný výstup ke všem používaným zařízením"
+msgstr ""
+"Automaticky připojit synchronizovaný výstup ke všem používaným zařízením"
 
 #: ../src/gui/configuration/MIDIConfigurationPage.cpp:292
 msgid "MIDI Sync"
@@ -5799,7 +5828,8 @@ msgid "Export..."
 msgstr "Export..."
 
 #: ../src/gui/studio/BankEditorDialog.cpp:176
-msgid "Import Bank and Program data from a Rosegarden file to the current Device"
+msgid ""
+"Import Bank and Program data from a Rosegarden file to the current Device"
 msgstr ""
 "Importovat data banky a programů ze souboru aplikace Rosegarden do "
 "aktuálního zařízení"
@@ -6267,26 +6297,26 @@ msgstr "Chcete-li segment rozdělit na dva, klepněte na něj"
 msgid "Click and drag to select segments"
 msgstr "Klepnutím a tažením segmenty vyberete"
 
-#: ../src/gui/editors/segment/segmentcanvas/SegmentMover.cpp:154
-#: ../src/gui/editors/segment/segmentcanvas/SegmentSelector.cpp:238
+#: ../src/gui/editors/segment/segmentcanvas/SegmentMover.cpp:160
+#: ../src/gui/editors/segment/segmentcanvas/SegmentSelector.cpp:248
 msgid "Move Segment"
 msgstr "Přesunout segment"
 
-#: ../src/gui/editors/segment/segmentcanvas/SegmentMover.cpp:154
-#: ../src/gui/editors/segment/segmentcanvas/SegmentSelector.cpp:239
+#: ../src/gui/editors/segment/segmentcanvas/SegmentMover.cpp:160
+#: ../src/gui/editors/segment/segmentcanvas/SegmentSelector.cpp:249
 msgid "Move Segments"
 msgstr "Přesunout segmenty"
 
 #: ../src/gui/editors/matrix/MatrixMover.cpp:217
 #: ../src/gui/editors/matrix/MatrixPainter.cpp:169
 #: ../src/gui/editors/matrix/MatrixResizer.cpp:141
-#: ../src/gui/editors/segment/segmentcanvas/SegmentMover.cpp:210
+#: ../src/gui/editors/segment/segmentcanvas/SegmentMover.cpp:229
 #: ../src/gui/editors/segment/segmentcanvas/SegmentResizer.cpp:255
-#: ../src/gui/editors/segment/segmentcanvas/SegmentSelector.cpp:359
+#: ../src/gui/editors/segment/segmentcanvas/SegmentSelector.cpp:389
 msgid "Hold Shift to avoid snapping to beat grid"
 msgstr "Podržte tlačítko Shift, abyste se vyhnuli přichytávání na mřížku dob"
 
-#: ../src/gui/editors/segment/segmentcanvas/SegmentSelector.cpp:485
+#: ../src/gui/editors/segment/segmentcanvas/SegmentSelector.cpp:490
 msgid ""
 "Click and drag to select segments; middle-click and drag to draw an empty "
 "segment"
@@ -6295,28 +6325,29 @@ msgstr ""
 "tažením nakreslíte prázdný segment"
 
 #: ../src/gui/editors/segment/segmentcanvas/SegmentResizer.cpp:384
-#: ../src/gui/editors/segment/segmentcanvas/SegmentSelector.cpp:502
-msgid "Click and drag to resize a segment; hold Ctrl as well to rescale its contents"
+#: ../src/gui/editors/segment/segmentcanvas/SegmentSelector.cpp:507
+msgid ""
+"Click and drag to resize a segment; hold Ctrl as well to rescale its contents"
 msgstr ""
 "Klepnutím a tažením změníte velikost segmentu; podržíte-li tlačítko Ctrl, "
 "změníte také délku jeho obsahu"
 
 #: ../src/gui/editors/segment/segmentcanvas/SegmentResizer.cpp:386
-#: ../src/gui/editors/segment/segmentcanvas/SegmentSelector.cpp:504
+#: ../src/gui/editors/segment/segmentcanvas/SegmentSelector.cpp:509
 msgid "Click and drag to rescale segment"
 msgstr "Klepnutím a tažením změníte délku segmentu"
 
-#: ../src/gui/editors/segment/segmentcanvas/SegmentSelector.cpp:509
+#: ../src/gui/editors/segment/segmentcanvas/SegmentSelector.cpp:514
 msgid "Click and drag to move segments; hold Ctrl as well to copy them"
 msgstr ""
 "Klepnutím a tažením přesunete segmenty; podržíte-li tlačítko Ctrl, můžete je "
 "také kopírovat"
 
-#: ../src/gui/editors/segment/segmentcanvas/SegmentSelector.cpp:511
+#: ../src/gui/editors/segment/segmentcanvas/SegmentSelector.cpp:516
 msgid "Click and drag to copy segments"
 msgstr "Klepnutím a tažením zkopírujete segmenty"
 
-#: ../src/gui/editors/segment/segmentcanvas/SegmentSelector.cpp:515
+#: ../src/gui/editors/segment/segmentcanvas/SegmentSelector.cpp:520
 msgid ""
 "Click and drag to move segment; hold Ctrl as well to copy it; double-click "
 "to edit"
@@ -6324,7 +6355,7 @@ msgstr ""
 "Klepnutím a tažením přesunete segmenty; podržíte-li tlačítko Ctrl, můžete je "
 "také kopírovat; poklepáním je lze upravovat"
 
-#: ../src/gui/editors/segment/segmentcanvas/SegmentSelector.cpp:517
+#: ../src/gui/editors/segment/segmentcanvas/SegmentSelector.cpp:522
 msgid "Click and drag to copy segment"
 msgstr "Klepnutím a tažením zkopírujete segment"
 
@@ -6348,13 +6379,14 @@ msgstr ""
 "Podržením tlačítka Shift (přesmykače) se vyhnete přichytávání na mřížku dob; "
 "podržíte-li tlačítko Ctrl, můžete také měnit délku obsahu"
 
-#: ../src/gui/editors/segment/segmentcanvas/SegmentMover.cpp:325
+#: ../src/gui/editors/segment/segmentcanvas/SegmentMover.cpp:342
 msgid "Click and drag to move a segment"
 msgstr "Klepnutím a tažením přesunete segment"
 
 #: ../src/gui/editors/segment/segmentcanvas/SegmentPencil.cpp:225
 msgid "Hold Shift to avoid snapping to bar lines"
-msgstr "Podržením tlačítka Shift (přesmykače) se vyhnete přichytávání na taktové čáry"
+msgstr ""
+"Podržením tlačítka Shift (přesmykače) se vyhnete přichytávání na taktové čáry"
 
 #: ../src/gui/editors/segment/segmentcanvas/SegmentPencil.cpp:283
 msgid "Record or drop audio here"
@@ -6369,8 +6401,10 @@ msgstr ""
 "stisknutým CTRL+Alt budete pracovat v překryvném režimu."
 
 #: ../src/gui/editors/segment/TrackLabel.cpp:77
-msgid "Click and hold with left mouse button to assign this Track to an Instrument."
-msgstr "Klepnutím a podržením levého tlačítka myši přiřadíte tuto stopu nástroji."
+msgid ""
+"Click and hold with left mouse button to assign this Track to an Instrument."
+msgstr ""
+"Klepnutím a podržením levého tlačítka myši přiřadíte tuto stopu nástroji."
 
 #: ../src/gui/editors/segment/TrackLabel.cpp:191
 msgid "Change track name"
@@ -6887,7 +6921,8 @@ msgstr "[ Stopa %1 - %2 ]"
 
 #: ../src/gui/editors/parameters/TrackParameterBox.cpp:985
 msgid "The instrument preset database is corrupt.  Check your installation."
-msgstr "Databáze přednastavených nástrojů je porušená.  Zkontrolujte instalaci."
+msgstr ""
+"Databáze přednastavených nástrojů je porušená.  Zkontrolujte instalaci."
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:173
 #: ../src/gui/editors/parameters/InstrumentParameterBox.cpp:54
@@ -6960,7 +6995,7 @@ msgid "Resize Events"
 msgstr "Změnit velikost událostí"
 
 #: ../src/gui/editors/matrix/MatrixResizer.cpp:324
-#: ../src/gui/editors/matrix/MatrixSelector.cpp:597
+#: ../src/gui/editors/matrix/MatrixSelector.cpp:604
 msgid "Click and drag to resize selected notes"
 msgstr "Klepnutím a tažením změníte velikost vybraných not"
 
@@ -7002,14 +7037,14 @@ msgid "Click and drag to copy a note"
 msgstr "Klepnutím a tažením zkopírujete notu"
 
 #: ../src/gui/editors/matrix/MatrixMover.cpp:471
-#: ../src/gui/editors/matrix/MatrixSelector.cpp:604
+#: ../src/gui/editors/matrix/MatrixSelector.cpp:611
 msgid "Click and drag to move selected notes; hold Ctrl as well to copy"
 msgstr ""
 "Klepnutím a tažením přesunete vybrané noty; podržíte-li tlačítko Ctrl, "
 "můžete noty také kopírovat"
 
 #: ../src/gui/editors/matrix/MatrixMover.cpp:473
-#: ../src/gui/editors/matrix/MatrixSelector.cpp:606
+#: ../src/gui/editors/matrix/MatrixSelector.cpp:613
 msgid "Click and drag to copy selected notes"
 msgstr "Klepnutím a tažením zkopírujete vybrané noty"
 
@@ -7033,12 +7068,12 @@ msgid "Resi&ze"
 msgstr "&Změnit velikost"
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:669
-#: ../src/gui/editors/notation/NotationView.cpp:1917
+#: ../src/gui/editors/notation/NotationView.cpp:1919
 msgid "C&hord Insert Mode"
 msgstr "Režim vkládání &akordů"
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:676
-#: ../src/gui/editors/notation/NotationView.cpp:1776
+#: ../src/gui/editors/notation/NotationView.cpp:1778
 msgid "Ste&p Recording"
 msgstr "&Krokový záznam"
 
@@ -7069,90 +7104,90 @@ msgid "Select &All"
 msgstr "Vybrat &vše"
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:732
-#: ../src/gui/editors/notation/NotationView.cpp:2323
+#: ../src/gui/editors/notation/NotationView.cpp:2325
 msgid "Cursor &Back"
 msgstr "Kurzor &zpět"
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:736
-#: ../src/gui/editors/notation/NotationView.cpp:2327
+#: ../src/gui/editors/notation/NotationView.cpp:2329
 msgid "Cursor &Forward"
 msgstr "Kurzor &vpřed"
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:740
-#: ../src/gui/editors/notation/NotationView.cpp:2331
+#: ../src/gui/editors/notation/NotationView.cpp:2333
 msgid "Cursor Ba&ck Bar"
 msgstr "Kurzor na &předchozí taktovou čáru"
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:744
-#: ../src/gui/editors/notation/NotationView.cpp:2335
+#: ../src/gui/editors/notation/NotationView.cpp:2337
 msgid "Cursor For&ward Bar"
 msgstr "Kurzor na &následující taktovou čáru"
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:748
-#: ../src/gui/editors/notation/NotationView.cpp:2339
+#: ../src/gui/editors/notation/NotationView.cpp:2341
 msgid "Cursor Back and Se&lect"
 msgstr "Kurzor zpět a vy&brat"
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:752
-#: ../src/gui/editors/notation/NotationView.cpp:2343
+#: ../src/gui/editors/notation/NotationView.cpp:2345
 msgid "Cursor Forward and &Select"
 msgstr "Kurzor vpřed a v&ybrat"
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:756
-#: ../src/gui/editors/notation/NotationView.cpp:2347
+#: ../src/gui/editors/notation/NotationView.cpp:2349
 msgid "Cursor Back Bar and Select"
 msgstr "Kurzor na předchozí taktovou čáru a vybrat"
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:760
-#: ../src/gui/editors/notation/NotationView.cpp:2351
+#: ../src/gui/editors/notation/NotationView.cpp:2353
 msgid "Cursor Forward Bar and Select"
 msgstr "Kurzor na následující taktovou čáru a vybrat"
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:764
-#: ../src/gui/editors/notation/NotationView.cpp:2361
+#: ../src/gui/editors/notation/NotationView.cpp:2363
 msgid "Cursor to St&art"
 msgstr "Kurzor na z&ačátek"
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:770
-#: ../src/gui/editors/notation/NotationView.cpp:2367
+#: ../src/gui/editors/notation/NotationView.cpp:2369
 msgid "Cursor to &End"
 msgstr "Kurzor na &konec"
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:776
-#: ../src/gui/editors/notation/NotationView.cpp:2389
+#: ../src/gui/editors/notation/NotationView.cpp:2391
 msgid "Cursor to &Playback Pointer"
 msgstr "Kurzor na pozici &ukazatele přehrávání"
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:820
-#: ../src/gui/editors/notation/NotationView.cpp:2433
+#: ../src/gui/editors/notation/NotationView.cpp:2435
 msgid "Playback Pointer to &Cursor"
 msgstr "Ukazatel přehrávání na pozici k&urzoru"
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:826
-#: ../src/gui/editors/notation/NotationView.cpp:2439
+#: ../src/gui/editors/notation/NotationView.cpp:2441
 msgid "&Solo"
 msgstr "&Sólo"
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:841
-#: ../src/gui/editors/notation/NotationView.cpp:2454
+#: ../src/gui/editors/notation/NotationView.cpp:2456
 msgid "Set Loop to Selection"
 msgstr "Nastavit opakování výběru"
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:845
-#: ../src/gui/editors/notation/NotationView.cpp:2458
+#: ../src/gui/editors/notation/NotationView.cpp:2460
 msgid "Clear L&oop"
 msgstr "Vymazat &opakování"
 
 #: ../src/gui/editors/eventlist/EventView.cpp:1157
 #: ../src/gui/editors/matrix/MatrixView.cpp:849
-#: ../src/gui/editors/notation/NotationView.cpp:2462
+#: ../src/gui/editors/notation/NotationView.cpp:2464
 #: ../src/gui/editors/tempo/TempoView.cpp:610
 msgid "Clear Selection"
 msgstr "Vymazat výběr"
 
 #: ../src/gui/editors/eventlist/EventView.cpp:1149
 #: ../src/gui/editors/matrix/MatrixView.cpp:854
-#: ../src/gui/editors/notation/NotationView.cpp:2469
+#: ../src/gui/editors/notation/NotationView.cpp:2471
 msgid "&Filter Selection"
 msgstr "Výběr &filtru"
 
@@ -7178,17 +7213,17 @@ msgid "Show Instrument Parameters"
 msgstr "Zobrazit parametry nástroje"
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:922
-#: ../src/gui/editors/notation/NotationView.cpp:1848
+#: ../src/gui/editors/notation/NotationView.cpp:1850
 msgid "Show Ch&ord Name Ruler"
 msgstr "Zobrazit pravítko názvů &akordů"
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:926
-#: ../src/gui/editors/notation/NotationView.cpp:1856
+#: ../src/gui/editors/notation/NotationView.cpp:1858
 msgid "Show &Tempo Ruler"
 msgstr "Zobrazit pravítko &tempa"
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:1238
-#: ../src/gui/editors/notation/NotationView.cpp:3241
+#: ../src/gui/editors/notation/NotationView.cpp:3245
 #, c-format
 msgid ""
 "_n:   1 event selected \n"
@@ -7198,19 +7233,19 @@ msgstr ""
 "  je vybráno %n událostí(i)"
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:1241
-#: ../src/gui/editors/notation/NotationView.cpp:3243
+#: ../src/gui/editors/notation/NotationView.cpp:3247
 msgid "  No selection "
 msgstr "  Žádný výběr "
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:1348
 #: ../src/gui/editors/matrix/MatrixView.cpp:1360
 #: ../src/gui/editors/matrix/MatrixView.cpp:2079
-#: ../src/gui/editors/notation/NotationView.cpp:5865
+#: ../src/gui/editors/notation/NotationView.cpp:5869
 msgid "Quantizing..."
 msgstr "Probíhá kvantizace..."
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:1370
-#: ../src/gui/editors/notation/NotationView.cpp:5403
+#: ../src/gui/editors/notation/NotationView.cpp:5407
 msgid "Collapsing notes..."
 msgstr "Probíhá sjednocování not..."
 
@@ -7223,13 +7258,13 @@ msgid "Note: %1 (%2.%3s)"
 msgstr "Nota: %1 (%2.%3s)"
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:1531
-#: ../src/gui/editors/notation/NotationView.cpp:7202
+#: ../src/gui/editors/notation/NotationView.cpp:7206
 msgid "Time: %1 (%2.%3s)"
 msgstr "Čas: %1 (%2.%3s)"
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:1604
-#: ../src/gui/editors/notation/NotationView.cpp:4740
-#: ../src/gui/editors/notation/NotationView.cpp:4769
+#: ../src/gui/editors/notation/NotationView.cpp:4744
+#: ../src/gui/editors/notation/NotationView.cpp:4773
 msgid "Cutting selection to clipboard..."
 msgstr "Probíhá vyjmutí výběru do schránky..."
 
@@ -7240,19 +7275,19 @@ msgid "Couldn't paste at this point"
 msgstr "Nebylo možné provést vložení na tomto místě"
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:1647
-#: ../src/gui/editors/notation/NotationView.cpp:4750
+#: ../src/gui/editors/notation/NotationView.cpp:4754
 msgid "Deleting selection..."
 msgstr "Probíhá odstranění výběru..."
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:1833
-#: ../src/gui/editors/notation/NotationView.cpp:5613
+#: ../src/gui/editors/notation/NotationView.cpp:5617
 #, c-format
 msgid "Unknown note insert action %1"
 msgstr "Akce vložení neznámé noty %1"
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:1837
 #: ../src/gui/editors/matrix/MatrixView.cpp:2857
-#: ../src/gui/editors/notation/NotationView.cpp:5617
+#: ../src/gui/editors/notation/NotationView.cpp:5621
 msgid "Inserting note"
 msgstr "Probíhá vložení noty"
 
@@ -7332,24 +7367,24 @@ msgstr " Akord"
 msgid "Click on a note to delete it"
 msgstr "Klepnutím na notu ji odstraníte"
 
-#: ../src/gui/editors/matrix/MatrixSelector.cpp:446
-#: ../src/gui/editors/matrix/MatrixSelector.cpp:579
+#: ../src/gui/editors/matrix/MatrixSelector.cpp:453
+#: ../src/gui/editors/matrix/MatrixSelector.cpp:586
 msgid "Click and drag to select; middle-click and drag to draw new note"
 msgstr ""
 "Klepnutím a tažením provedete výběr; klepnutím prostředním tlačítkem a "
 "tažením nakreslíte novou notu"
 
-#: ../src/gui/editors/matrix/MatrixSelector.cpp:599
+#: ../src/gui/editors/matrix/MatrixSelector.cpp:606
 msgid "Click and drag to resize note"
 msgstr "Klepnutím a tažením změníte velikost noty"
 
-#: ../src/gui/editors/matrix/MatrixSelector.cpp:610
+#: ../src/gui/editors/matrix/MatrixSelector.cpp:617
 msgid "Click and drag to move note; hold Ctrl as well to copy"
 msgstr ""
 "Klepnutím a tažením přesunete notu; podržíte-li tlačítko Ctrl, můžete notu "
 "také kopírovat"
 
-#: ../src/gui/editors/matrix/MatrixSelector.cpp:612
+#: ../src/gui/editors/matrix/MatrixSelector.cpp:619
 msgid "Click and drag to copy note"
 msgstr "Klepnutím a tažením zkopírujete notu"
 
@@ -7509,271 +7544,271 @@ msgstr "Uzavřít hlavičky stop"
 msgid "Preparing to print..."
 msgstr "Probíhá příprava tisku..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:1514
+#: ../src/gui/editors/notation/NotationView.cpp:1516
 msgid "Note &Font"
 msgstr "Notové &písmo"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1537
+#: ../src/gui/editors/notation/NotationView.cpp:1539
 msgid "Si&ze"
 msgstr "V&elikost"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1543
+#: ../src/gui/editors/notation/NotationView.cpp:1545
 msgid "Show Track Headers"
 msgstr "Zobrazit hlavičky stop"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1548
+#: ../src/gui/editors/notation/NotationView.cpp:1550
 msgid "S&pacing"
 msgstr "&Rozestupy"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1570
+#: ../src/gui/editors/notation/NotationView.cpp:1572
 msgid "Du&ration Factor"
 msgstr "Faktor doby &trvání"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1596
+#: ../src/gui/editors/notation/NotationView.cpp:1598
 msgid "Note &Style"
 msgstr "&Styl not"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1622
+#: ../src/gui/editors/notation/NotationView.cpp:1624
 msgid "Insert Rest"
 msgstr "Vložit pomlku"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1626
+#: ../src/gui/editors/notation/NotationView.cpp:1628
 msgid "Switch from Note to Rest"
 msgstr "Přepnout z noty na pomlku"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1631
+#: ../src/gui/editors/notation/NotationView.cpp:1633
 msgid "Switch from Rest to Note"
 msgstr "Přepnout z pomlky na notu"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1688
+#: ../src/gui/editors/notation/NotationView.cpp:1690
 msgid "No accidental"
 msgstr "Žádná posuvka"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1689
+#: ../src/gui/editors/notation/NotationView.cpp:1691
 msgid "Follow previous accidental"
 msgstr "Podle předchozí posuvky"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1690
+#: ../src/gui/editors/notation/NotationView.cpp:1692
 msgid "Sharp"
 msgstr "Křížek"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1691
+#: ../src/gui/editors/notation/NotationView.cpp:1693
 msgid "Flat"
 msgstr "Béčko"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1692
+#: ../src/gui/editors/notation/NotationView.cpp:1694
 msgid "Natural"
 msgstr "Přirozené"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1693
+#: ../src/gui/editors/notation/NotationView.cpp:1695
 msgid "Double sharp"
 msgstr "Dvojitý křížek"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1694
+#: ../src/gui/editors/notation/NotationView.cpp:1696
 msgid "Double flat"
 msgstr "Dvojité béčko"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1715
+#: ../src/gui/editors/notation/NotationView.cpp:1717
 msgid "&Treble Clef"
 msgstr "&Houslový klíč"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1722
+#: ../src/gui/editors/notation/NotationView.cpp:1724
 msgid "&Alto Clef"
 msgstr "&Violový klíč"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1729
+#: ../src/gui/editors/notation/NotationView.cpp:1731
 msgid "Te&nor Clef"
 msgstr "&Tenorový klíč"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1736
+#: ../src/gui/editors/notation/NotationView.cpp:1738
 msgid "&Bass Clef"
 msgstr "&Basový klíč"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1743
+#: ../src/gui/editors/notation/NotationView.cpp:1745
 msgid "&Text"
 msgstr "&Text"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1749
+#: ../src/gui/editors/notation/NotationView.cpp:1751
 msgid "&Guitar Chord"
 msgstr "&Kytarový akord"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1782
+#: ../src/gui/editors/notation/NotationView.cpp:1784
 msgid "Select from Sta&rt"
 msgstr "Vybrat od &začátku"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1786
+#: ../src/gui/editors/notation/NotationView.cpp:1788
 msgid "Select to &End"
 msgstr "Vybrat do &konce"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1790
+#: ../src/gui/editors/notation/NotationView.cpp:1792
 msgid "Select Whole St&aff"
 msgstr "Vybrat celou &osnovu"
 
 #: ../src/commands/edit/CutAndCloseCommand.h:53
-#: ../src/gui/editors/notation/NotationView.cpp:1794
+#: ../src/gui/editors/notation/NotationView.cpp:1796
 msgid "C&ut and Close"
 msgstr "Vyjmout a &zavřít"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1798
+#: ../src/gui/editors/notation/NotationView.cpp:1800
 msgid "Pa&ste..."
 msgstr "&Vložit..."
 
 #: ../src/gui/editors/notation/NotationSelector.cpp:122
-#: ../src/gui/editors/notation/NotationView.cpp:1806
+#: ../src/gui/editors/notation/NotationView.cpp:1808
 msgid "Move to Staff Above"
 msgstr "Přesunout na osnovu výše"
 
 #: ../src/gui/editors/notation/NotationSelector.cpp:126
-#: ../src/gui/editors/notation/NotationView.cpp:1810
+#: ../src/gui/editors/notation/NotationView.cpp:1812
 msgid "Move to Staff Below"
 msgstr "Přesunout na osnovu níže"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1824
+#: ../src/gui/editors/notation/NotationView.cpp:1826
 msgid "&Linear Layout"
 msgstr "&Lineární uspořádání"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1833
+#: ../src/gui/editors/notation/NotationView.cpp:1835
 msgid "&Continuous Page Layout"
 msgstr "&Nekonečná stránka"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1842
+#: ../src/gui/editors/notation/NotationView.cpp:1844
 msgid "&Multiple Page Layout"
 msgstr "&Stránkové uspořádání"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1852
+#: ../src/gui/editors/notation/NotationView.cpp:1854
 msgid "Show Ra&w Note Ruler"
 msgstr "Zobrazit pravítko z&drojových not"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1860
+#: ../src/gui/editors/notation/NotationView.cpp:1862
 msgid "Show &Annotations"
 msgstr "Zobrazit &anotace"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1864
+#: ../src/gui/editors/notation/NotationView.cpp:1866
 msgid "Show Lily&Pond Directives"
 msgstr "Zobrazit direktivy Lily&Pond"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1868
+#: ../src/gui/editors/notation/NotationView.cpp:1870
 msgid "Open L&yric Editor"
 msgstr "Otevřít editor te&xtu melodie"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1910
+#: ../src/gui/editors/notation/NotationView.cpp:1912
 msgid "Trip&let Insert Mode"
 msgstr "Režim vkládání &triol"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1924
+#: ../src/gui/editors/notation/NotationView.cpp:1926
 msgid "Grace Insert Mode"
 msgstr "Respektovat režim vkládání"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2178
+#: ../src/gui/editors/notation/NotationView.cpp:2180
 msgid "&Dump selected events to stderr"
 msgstr "&Vypsat vybrané události do stderr"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2246
+#: ../src/gui/editors/notation/NotationView.cpp:2248
 msgid "Ma&ke Ornament..."
 msgstr "&Vytvořit melodickou ozdobu..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:2250
+#: ../src/gui/editors/notation/NotationView.cpp:2252
 msgid "Trigger &Ornament..."
 msgstr "Spouštěcí melodická &ozdoba..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:2254
+#: ../src/gui/editors/notation/NotationView.cpp:2256
 msgid "Remove Ornament..."
 msgstr "Odstranit melodickou ozdobu..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:2259
+#: ../src/gui/editors/notation/NotationView.cpp:2261
 msgid "&None"
 msgstr "Žá&dná"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2287
+#: ../src/gui/editors/notation/NotationView.cpp:2289
 msgid "Convert Notation For..."
 msgstr "Konvertovat notaci pro..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:2296
+#: ../src/gui/editors/notation/NotationView.cpp:2298
 msgid "Show &Notes Toolbar"
 msgstr "Zobrazit nástrojovou lištu pro &noty"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2297
+#: ../src/gui/editors/notation/NotationView.cpp:2299
 msgid "Show &Rests Toolbar"
 msgstr "Zobrazit nástrojovou lištu pro po&mlky"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2298
+#: ../src/gui/editors/notation/NotationView.cpp:2300
 msgid "Show &Accidentals Toolbar"
 msgstr "Zobrazit nástrojovou lištu pro &posuvky"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2299
+#: ../src/gui/editors/notation/NotationView.cpp:2301
 msgid "Show Cle&fs Toolbar"
 msgstr "Zobrazit nástrojovou lištu pro notové &klíče"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2301
+#: ../src/gui/editors/notation/NotationView.cpp:2303
 msgid "Show &Marks Toolbar"
 msgstr "Zobrazit nástrojovou lištu pro &značky"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2303
+#: ../src/gui/editors/notation/NotationView.cpp:2305
 msgid "Show &Group Toolbar"
 msgstr "Zobrazit nástrojovou lištu pro &skupiny"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2305
+#: ../src/gui/editors/notation/NotationView.cpp:2307
 msgid "Show &Layout Toolbar"
 msgstr "Zobrazit nástrojovou lištu pro &uspořádání"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2309
+#: ../src/gui/editors/notation/NotationView.cpp:2311
 msgid "Show M&eta Toolbar"
 msgstr "Zobrazit nástrojovou lištu m&eta"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2371
+#: ../src/gui/editors/notation/NotationView.cpp:2373
 msgid "Cursor &Up Staff"
 msgstr "Posunout kurzor v osnově &nahoru"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2375
+#: ../src/gui/editors/notation/NotationView.cpp:2377
 msgid "Cursor &Down Staff"
 msgstr "Posunout kurzor v osnově &dolů"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2379
+#: ../src/gui/editors/notation/NotationView.cpp:2381
 msgid "Cursor Pre&vious Segment"
 msgstr "Kurzor na &předchozí segment"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2383
+#: ../src/gui/editors/notation/NotationView.cpp:2385
 msgid "Cursor Ne&xt Segment"
 msgstr "Kurzor na &následující segment"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2473
+#: ../src/gui/editors/notation/NotationView.cpp:2475
 msgid "Push &Left"
 msgstr "Odsunout v&levo"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2477
+#: ../src/gui/editors/notation/NotationView.cpp:2479
 msgid "Push &Right"
 msgstr "Odsunout v&pravo"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2481
+#: ../src/gui/editors/notation/NotationView.cpp:2483
 msgid "Push &Up"
 msgstr "Odsunout &nahoru"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2485
+#: ../src/gui/editors/notation/NotationView.cpp:2487
 msgid "Push &Down"
 msgstr "Odsunout &dolů"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2489
+#: ../src/gui/editors/notation/NotationView.cpp:2491
 msgid "&Restore Positions"
 msgstr "&Obnovit pozice"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2493
+#: ../src/gui/editors/notation/NotationView.cpp:2495
 msgid "Make &Invisible"
 msgstr "Z&neviditelnit"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2497
+#: ../src/gui/editors/notation/NotationView.cpp:2499
 msgid "Make &Visible"
 msgstr "Z&viditelnit"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2501
+#: ../src/gui/editors/notation/NotationView.cpp:2503
 msgid "Toggle Dot"
 msgstr "Přepnout tečku"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2505
-#: ../src/gui/editors/notation/NotationView.cpp:2509
+#: ../src/gui/editors/notation/NotationView.cpp:2507
+#: ../src/gui/editors/notation/NotationView.cpp:2511
 msgid "Add Dot"
 msgstr "Přidat tečku"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2568
+#: ../src/gui/editors/notation/NotationView.cpp:2570
 #, c-format
 msgid ""
 "_n: 1 pixel\n"
@@ -7782,60 +7817,60 @@ msgstr ""
 "_n: 1 pixel\n"
 "%n pixely(ů)"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2617
+#: ../src/gui/editors/notation/NotationView.cpp:2619
 msgid "  Font:  "
 msgstr "  Písmo:  "
 
-#: ../src/gui/editors/notation/NotationView.cpp:2645
+#: ../src/gui/editors/notation/NotationView.cpp:2647
 msgid "Unknown font \"%1\", using default"
 msgstr "Písmo \"%1\" je neznámé, použije se výchozí"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2653
+#: ../src/gui/editors/notation/NotationView.cpp:2655
 msgid "  Size:  "
 msgstr "  Velikost:  "
 
-#: ../src/gui/editors/notation/NotationView.cpp:2675
+#: ../src/gui/editors/notation/NotationView.cpp:2677
 msgid "  Spacing:  "
 msgstr "  Rozestupy:  "
 
-#: ../src/gui/editors/notation/NotationView.cpp:2989
-#: ../src/gui/editors/notation/NotationView.cpp:3814
+#: ../src/gui/editors/notation/NotationView.cpp:2993
+#: ../src/gui/editors/notation/NotationView.cpp:3818
 msgid "  Ready."
 msgstr "  Připraven."
 
-#: ../src/gui/editors/notation/NotationView.cpp:2994
+#: ../src/gui/editors/notation/NotationView.cpp:2998
 msgid "Laying out score..."
 msgstr "Probíhá uspořádání partitury..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:3007
+#: ../src/gui/editors/notation/NotationView.cpp:3011
 msgid "Laying out staff %1..."
 msgstr "Probíhá uspořádání osnovy %1..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:3016
+#: ../src/gui/editors/notation/NotationView.cpp:3020
 msgid "Reconciling staffs..."
 msgstr "Probíhá vyrovnání osnov..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:3881
+#: ../src/gui/editors/notation/NotationView.cpp:3885
 msgid "Sizing and allocating canvas..."
 msgstr "Probíhá nastavení velikosti a přidělení zobrazovací plochy..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:4046
+#: ../src/gui/editors/notation/NotationView.cpp:4050
 msgid "note"
 msgstr "nota"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4046
+#: ../src/gui/editors/notation/NotationView.cpp:4050
 msgid "rest"
 msgstr "pomlka"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4207
+#: ../src/gui/editors/notation/NotationView.cpp:4211
 msgid "%1 - Segment Track #%2 - Notation"
 msgstr "%1 - Stopa segmentu #%2 - Notový zápis"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4213
+#: ../src/gui/editors/notation/NotationView.cpp:4217
 msgid "%1 - All Segments - Notation"
 msgstr "%1 - Všechny segmenty - Notový zápis"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4218
+#: ../src/gui/editors/notation/NotationView.cpp:4222
 msgid ""
 "_n: %1 - Segment - Notation\n"
 "%1 - %n Segments - Notation"
@@ -7843,50 +7878,50 @@ msgstr ""
 "_n: %1 - Segment - Notový zápis\n"
 "%1 - %n Segmenty(ů) - Notový zápis"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4239
+#: ../src/gui/editors/notation/NotationView.cpp:4243
 msgid "Grace"
 msgstr "Respektovat"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4243
 #: ../src/gui/editors/notation/NotationView.cpp:4247
 #: ../src/gui/editors/notation/NotationView.cpp:4251
+#: ../src/gui/editors/notation/NotationView.cpp:4255
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4267
+#: ../src/gui/editors/notation/NotationView.cpp:4271
 msgid "Hidden annotations"
 msgstr "Skryté anotace"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4289
+#: ../src/gui/editors/notation/NotationView.cpp:4293
 msgid "Hidden LilyPond directives"
 msgstr "Skryté direktivy aplikace LilyPond"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4322
+#: ../src/gui/editors/notation/NotationView.cpp:4326
 #, c-format
 msgid "Unknown spacing action %1"
 msgstr "Akce s neznámými rozestupy - %1"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4380
+#: ../src/gui/editors/notation/NotationView.cpp:4384
 #, c-format
 msgid "Unknown proportion action %1"
 msgstr "Akce s neznámými proporcemi - %1"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4427
+#: ../src/gui/editors/notation/NotationView.cpp:4431
 #, c-format
 msgid "Unknown font action %1"
 msgstr "Akce s neznámým písmem - %1"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4445
+#: ../src/gui/editors/notation/NotationView.cpp:4449
 #, c-format
 msgid "Unknown font size %1"
 msgstr "Neznámá velikost písma - %1"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4449
+#: ../src/gui/editors/notation/NotationView.cpp:4453
 #, c-format
 msgid "Unknown font size action %1"
 msgstr "Akce s neznámou velikostí písma - %1"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4776
+#: ../src/gui/editors/notation/NotationView.cpp:4780
 msgid ""
 "The Restricted paste type requires enough empty space (containing only "
 "rests) at the paste position to hold all of the events to be pasted.\n"
@@ -7902,277 +7937,277 @@ msgstr ""
 "vkládání pod možností \"Vložit\" v nabídce Upravit. Pokud chcete, můžete "
 "také změnit výchozí typ vkládání na jiný než Omezený."
 
-#: ../src/gui/editors/notation/NotationView.cpp:4796
+#: ../src/gui/editors/notation/NotationView.cpp:4800
 msgid "Can't paste multiple Segments into one"
 msgstr "Nelze vložit několik segmentů do jednoho"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4824
-#: ../src/gui/editors/notation/NotationView.cpp:4873
+#: ../src/gui/editors/notation/NotationView.cpp:4828
+#: ../src/gui/editors/notation/NotationView.cpp:4877
 msgid "Couldn't paste at this point."
 msgstr "Nebylo možné provést vložení na tomto místě."
 
-#: ../src/gui/editors/notation/NotationView.cpp:4892
+#: ../src/gui/editors/notation/NotationView.cpp:4896
 msgid "Move Events to Staff Above"
 msgstr "Přesunout události na osnovu výše"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4920
+#: ../src/gui/editors/notation/NotationView.cpp:4924
 msgid "Move Events to Staff Below"
 msgstr "Přesunout události na osnovu níže"
 
-#: ../src/gui/editors/notation/NotationView.cpp:5032
+#: ../src/gui/editors/notation/NotationView.cpp:5036
 msgid "Pushing selection left..."
 msgstr "Probíhá odsunutí výběru doleva..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5043
+#: ../src/gui/editors/notation/NotationView.cpp:5047
 msgid "Pushing selection right..."
 msgstr "Probíhá odsunutí výběru doprava..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5054
+#: ../src/gui/editors/notation/NotationView.cpp:5058
 msgid "Pushing selection up..."
 msgstr "Probíhá odsunutí výběru nahoru..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5065
+#: ../src/gui/editors/notation/NotationView.cpp:5069
 msgid "Pushing selection down..."
 msgstr "Probíhá odsunutí výběru dolů..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5076
+#: ../src/gui/editors/notation/NotationView.cpp:5080
 msgid "Restoring computed positions..."
 msgstr "Probíhá obnova vypočtených pozic..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5085
+#: ../src/gui/editors/notation/NotationView.cpp:5089
 msgid "Making visible..."
 msgstr "Probíhá zviditelnění..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5094
+#: ../src/gui/editors/notation/NotationView.cpp:5098
 msgid "Making invisible..."
 msgstr "Probíhá zneviditelnění..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5181
+#: ../src/gui/editors/notation/NotationView.cpp:5185
 msgid "Beaming group..."
 msgstr "Probíhá spojování skupiny trámcem..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5191
+#: ../src/gui/editors/notation/NotationView.cpp:5195
 msgid "Auto-beaming selection..."
 msgstr "Probíhá automatické spojování výběru trámcem..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5201
+#: ../src/gui/editors/notation/NotationView.cpp:5205
 msgid "Breaking groups..."
 msgstr "Probíhá rozdělování skupin..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5289
+#: ../src/gui/editors/notation/NotationView.cpp:5293
 msgid "Untupleting..."
 msgstr "Probíhá rušení rytmických notových skupin..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5297
+#: ../src/gui/editors/notation/NotationView.cpp:5301
 msgid "Adding slur..."
 msgstr "Probíhá přidání legata..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5298
+#: ../src/gui/editors/notation/NotationView.cpp:5302
 msgid "slur"
 msgstr "legato"
 
-#: ../src/gui/editors/notation/NotationView.cpp:5303
+#: ../src/gui/editors/notation/NotationView.cpp:5307
 msgid "Adding phrasing slur..."
 msgstr "Probíhá přidání frázovacího legata..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5304
+#: ../src/gui/editors/notation/NotationView.cpp:5308
 msgid "phrasing slur"
 msgstr "frázovací legato"
 
-#: ../src/gui/editors/notation/NotationView.cpp:5309
+#: ../src/gui/editors/notation/NotationView.cpp:5313
 msgid "Adding glissando..."
 msgstr "Probíhá přidání glissanda..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5310
+#: ../src/gui/editors/notation/NotationView.cpp:5314
 msgid "glissando"
 msgstr "glissando"
 
-#: ../src/gui/editors/notation/NotationView.cpp:5315
+#: ../src/gui/editors/notation/NotationView.cpp:5319
 msgid "Adding crescendo..."
 msgstr "Probíhá přidání crescenda..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5316
-#: ../src/gui/editors/notation/NotationView.cpp:5322
+#: ../src/gui/editors/notation/NotationView.cpp:5320
+#: ../src/gui/editors/notation/NotationView.cpp:5326
 msgid "dynamic"
 msgstr "dynamika"
 
-#: ../src/gui/editors/notation/NotationView.cpp:5321
+#: ../src/gui/editors/notation/NotationView.cpp:5325
 msgid "Adding decrescendo..."
 msgstr "Probíhá přidání decrescenda..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5327
-#: ../src/gui/editors/notation/NotationView.cpp:5333
-#: ../src/gui/editors/notation/NotationView.cpp:5339
-#: ../src/gui/editors/notation/NotationView.cpp:5345
+#: ../src/gui/editors/notation/NotationView.cpp:5331
+#: ../src/gui/editors/notation/NotationView.cpp:5337
+#: ../src/gui/editors/notation/NotationView.cpp:5343
+#: ../src/gui/editors/notation/NotationView.cpp:5349
 msgid "Adding octave..."
 msgstr "Probíhá přidání oktávy..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5328
-#: ../src/gui/editors/notation/NotationView.cpp:5334
-#: ../src/gui/editors/notation/NotationView.cpp:5340
-#: ../src/gui/editors/notation/NotationView.cpp:5346
+#: ../src/gui/editors/notation/NotationView.cpp:5332
+#: ../src/gui/editors/notation/NotationView.cpp:5338
+#: ../src/gui/editors/notation/NotationView.cpp:5344
+#: ../src/gui/editors/notation/NotationView.cpp:5350
 msgid "ottava"
 msgstr "ottava"
 
-#: ../src/gui/editors/notation/NotationView.cpp:5362
+#: ../src/gui/editors/notation/NotationView.cpp:5366
 msgid "Can't add overlapping %1 indications"
 msgstr "Nelze přidat překrývající se označení způsobu hry - %1"
 
-#: ../src/gui/editors/notation/NotationView.cpp:5371
+#: ../src/gui/editors/notation/NotationView.cpp:5375
 msgid "Making chord..."
 msgstr "Probíhá vytváření akordu..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5383
+#: ../src/gui/editors/notation/NotationView.cpp:5387
 msgid "Normalizing rests..."
 msgstr "Probíhá normalizace pomlk..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5393
+#: ../src/gui/editors/notation/NotationView.cpp:5397
 msgid "Collapsing rests..."
 msgstr "Probíhá sjednocování pomlk..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5413
+#: ../src/gui/editors/notation/NotationView.cpp:5417
 msgid "Tying notes..."
 msgstr "Probíhá svazování not ligaturou..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5423
+#: ../src/gui/editors/notation/NotationView.cpp:5427
 msgid "Untying notes..."
 msgstr "Probíhá rušení vázání not ligaturou..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5433
+#: ../src/gui/editors/notation/NotationView.cpp:5437
 msgid "Making notes viable..."
 msgstr "Probíhá úprava not do realizovatelné podoby..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5443
+#: ../src/gui/editors/notation/NotationView.cpp:5447
 msgid "Removing counterpoint..."
 msgstr "Probíhá odstranění kontrapunktu..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5453
+#: ../src/gui/editors/notation/NotationView.cpp:5457
 msgid "Pointing stems up..."
 msgstr "Probíhá otáčení nožiček nahoru..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5463
+#: ../src/gui/editors/notation/NotationView.cpp:5467
 msgid "Pointing stems down..."
 msgstr "Probíhá otáčení nožiček dolů..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5474
+#: ../src/gui/editors/notation/NotationView.cpp:5478
 msgid "Restoring computed stem directions..."
 msgstr "Probíhá obnovení vypočtených směrů nožiček..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5484
-#: ../src/gui/editors/notation/NotationView.cpp:5494
+#: ../src/gui/editors/notation/NotationView.cpp:5488
+#: ../src/gui/editors/notation/NotationView.cpp:5498
 msgid "Positioning slurs..."
 msgstr "Probíhá umísťování legata..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5505
+#: ../src/gui/editors/notation/NotationView.cpp:5509
 msgid "Restoring slur positions..."
 msgstr "Probíhá obnova pozic legata..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5515
-#: ../src/gui/editors/notation/NotationView.cpp:5525
+#: ../src/gui/editors/notation/NotationView.cpp:5519
+#: ../src/gui/editors/notation/NotationView.cpp:5529
 msgid "Positioning ties..."
 msgstr "Probíhá umísťování ligatury..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5536
+#: ../src/gui/editors/notation/NotationView.cpp:5540
 msgid "Restoring tie positions..."
 msgstr "Probíhá obnova pozic ligatury..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5546
+#: ../src/gui/editors/notation/NotationView.cpp:5550
 msgid "Fixing notation quantization..."
 msgstr "Probíhá oprava kvantizace notace..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5556
+#: ../src/gui/editors/notation/NotationView.cpp:5560
 msgid "Removing notation quantization..."
 msgstr "Probíhá odstranění kvantizace notace..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5573
+#: ../src/gui/editors/notation/NotationView.cpp:5577
 msgid "Changing to %1 style..."
 msgstr "Probíhá změna na styl %1..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5581
+#: ../src/gui/editors/notation/NotationView.cpp:5585
 #, c-format
 msgid "Unknown style action %1"
 msgstr "Akce s neznámým stylem - %1"
 
-#: ../src/gui/editors/notation/NotationView.cpp:5594
-#: ../src/gui/editors/notation/NotationView.cpp:5635
-#: ../src/gui/editors/notation/NotationView.cpp:5691
+#: ../src/gui/editors/notation/NotationView.cpp:5598
+#: ../src/gui/editors/notation/NotationView.cpp:5639
+#: ../src/gui/editors/notation/NotationView.cpp:5695
 msgid "No note duration selected"
 msgstr "Nebyla vybrána doba trvání noty"
 
-#: ../src/gui/editors/notation/NotationView.cpp:5656
+#: ../src/gui/editors/notation/NotationView.cpp:5660
 msgid "No rest duration selected"
 msgstr "Nebyla vybrána doba trvání pomlky"
 
-#: ../src/gui/editors/notation/NotationView.cpp:5742
+#: ../src/gui/editors/notation/NotationView.cpp:5746
 msgid "No note or rest duration selected"
 msgstr "Nebyla vybrána doba trvání noty nebo pomlky"
 
-#: ../src/gui/editors/notation/NotationView.cpp:5753
-#: ../src/gui/editors/notation/NotationView.cpp:5764
-#: ../src/gui/editors/notation/NotationView.cpp:5775
-#: ../src/gui/editors/notation/NotationView.cpp:5786
-#: ../src/gui/editors/notation/NotationView.cpp:5797
-#: ../src/gui/editors/notation/NotationView.cpp:5808
-#: ../src/gui/editors/notation/NotationView.cpp:5819
+#: ../src/gui/editors/notation/NotationView.cpp:5757
+#: ../src/gui/editors/notation/NotationView.cpp:5768
+#: ../src/gui/editors/notation/NotationView.cpp:5779
+#: ../src/gui/editors/notation/NotationView.cpp:5790
+#: ../src/gui/editors/notation/NotationView.cpp:5801
+#: ../src/gui/editors/notation/NotationView.cpp:5812
+#: ../src/gui/editors/notation/NotationView.cpp:5823
 msgid "Forcing accidentals..."
 msgstr "Probíhá nucená úprava posuvek..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5830
+#: ../src/gui/editors/notation/NotationView.cpp:5834
 msgid "Restoring accidentals..."
 msgstr "Probíhá obnovení posuvek..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5841
+#: ../src/gui/editors/notation/NotationView.cpp:5845
 msgid "Showing cautionary accidentals..."
 msgstr "Probíhá zobrazení varovných posuvek..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5851
+#: ../src/gui/editors/notation/NotationView.cpp:5855
 msgid "Cancelling cautionary accidentals..."
 msgstr "Probíhá rušení varovných posuvek..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5880
+#: ../src/gui/editors/notation/NotationView.cpp:5884
 msgid "Interpreting selection..."
 msgstr "Probíhá interpretace výběru..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5892
+#: ../src/gui/editors/notation/NotationView.cpp:5896
 msgid "Setting note durations..."
 msgstr "Probíhá nastavení dob trvání not..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5900
-#: ../src/gui/editors/notation/NotationView.cpp:5908
+#: ../src/gui/editors/notation/NotationView.cpp:5904
+#: ../src/gui/editors/notation/NotationView.cpp:5912
 msgid "Adding dot..."
 msgstr "Probíhá přidání tečky..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5930
+#: ../src/gui/editors/notation/NotationView.cpp:5934
 msgid "Text: "
 msgstr "Text: "
 
-#: ../src/gui/editors/notation/NotationView.cpp:5944
+#: ../src/gui/editors/notation/NotationView.cpp:5948
 msgid "Fingering: "
 msgstr "Prstoklad: "
 
-#: ../src/gui/editors/notation/NotationView.cpp:6032
+#: ../src/gui/editors/notation/NotationView.cpp:6036
 msgid "Ornament track %1 bar %2"
 msgstr "Melodická ozdoba - stopa %1, taktová čára %2"
 
-#: ../src/gui/editors/notation/NotationView.cpp:6034
+#: ../src/gui/editors/notation/NotationView.cpp:6038
 #, c-format
 msgid "Ornament bar %1"
 msgstr "Taktová čára melodické ozdoby %1"
 
-#: ../src/gui/editors/notation/NotationView.cpp:6094
+#: ../src/gui/editors/notation/NotationView.cpp:6098
 msgid "Remove Ornaments"
 msgstr "Odstranit melodické ozdoby"
 
-#: ../src/gui/editors/notation/NotationView.cpp:6141
+#: ../src/gui/editors/notation/NotationView.cpp:6145
 msgid "Estimated key signature shown"
 msgstr "Zobrazené odhadované předznamenání"
 
 #: ../src/gui/editors/notation/NotationStaff.cpp:1249
-#: ../src/gui/editors/notation/NotationView.cpp:6198
+#: ../src/gui/editors/notation/NotationView.cpp:6202
 msgid "Sustain"
 msgstr "Držet tón"
 
-#: ../src/gui/editors/notation/NotationView.cpp:6214
+#: ../src/gui/editors/notation/NotationView.cpp:6218
 msgid ""
 "There is no sustain controller defined for this device.\n"
 "Please ensure the device is configured correctly in the Manage MIDI Devices "
@@ -8182,7 +8217,7 @@ msgstr ""
 "Ujistěte se, že je zařízení správně konfigurováno v dialogu Správa zařízení "
 "MIDI v hlavním okně."
 
-#: ../src/gui/editors/notation/NotationView.cpp:7246
+#: ../src/gui/editors/notation/NotationView.cpp:7250
 msgid "Can't insert note: No note duration selected"
 msgstr "Nelze vložit notu. Nebyla vybrána doba trvání noty"
 
@@ -8509,7 +8544,8 @@ msgid "global element must precede note elements"
 msgstr "globální prvek musí předcházet notovým prvkům"
 
 #: ../src/gui/editors/notation/NoteStyleFileReader.cpp:137
-msgid "global and note elements may have shape or charname attribute, but not both"
+msgid ""
+"global and note elements may have shape or charname attribute, but not both"
 msgstr ""
 "globální a notové prvky mohou mít atributy tvaru nebo názvu znaku, ale "
 "nemohou mít obojí"
@@ -9922,7 +9958,7 @@ msgstr "Ligatura &pod"
 msgid " imported from Hydrogen "
 msgstr " importováno z Hydrogen "
 
-#: ../src/document/io/LilyPondExporter.cpp:404 ../src/document/io/fuck.cpp:404
+#: ../src/document/io/LilyPondExporter.cpp:404
 msgid ""
 "LilyPond does not allow spaces or backslashes in filenames.\n"
 "\n"
@@ -9942,12 +9978,10 @@ msgstr ""
 " namísto těchto znaků?"
 
 #: ../src/document/io/LilyPondExporter.cpp:2054
-#: ../src/document/io/fuck.cpp:1966
 msgid "warning: overlong bar truncated here"
 msgstr "varování: příliš dlouhý takt byl zde zkrácen"
 
 #: ../src/document/io/LilyPondExporter.cpp:2060
-#: ../src/document/io/fuck.cpp:1972
 msgid "warning: bar too short, padding with rests"
 msgstr "varování: takt je příliš krátký, bude doplněn pomlkami"
 
@@ -11482,4 +11516,3 @@ msgstr "Menzurální"
 #: ../data/styles/styles.cpp:4
 msgid "Triangle"
 msgstr "Trojúhelníkový"
-
