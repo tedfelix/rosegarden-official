@@ -59,6 +59,7 @@
 #include "base/Track.h"
 #include "ClefInserter.h"
 #include "commands/edit/AddDotCommand.h"
+#include "commands/edit/ChangeVelocityCommand.h"
 #include "commands/edit/ClearTriggersCommand.h"
 #include "commands/edit/CollapseNotesCommand.h"
 #include "commands/edit/CopyCommand.h"
@@ -125,6 +126,7 @@
 #include "gui/application/RosegardenGUIView.h"
 #include "gui/dialogs/ClefDialog.h"
 #include "gui/dialogs/EventEditDialog.h"
+#include "gui/dialogs/EventParameterDialog.h"
 #include "gui/dialogs/InterpretDialog.h"
 #include "gui/dialogs/IntervalDialog.h"
 #include "gui/dialogs/KeySignatureDialog.h"
@@ -2499,6 +2501,20 @@ void NotationView::setupActions()
     new KAction(i18n("Make &Visible"), 0, this,
                 SLOT(slotMakeVisible()), actionCollection(),
                 "make_visible");
+
+    new KAction(ChangeVelocityCommand::getGlobalName(10), 0,
+                Key_Up + SHIFT, this,
+                SLOT(slotVelocityUp()), actionCollection(),
+                "velocity_up");
+
+    new KAction(ChangeVelocityCommand::getGlobalName( -10), 0,
+                Key_Down + SHIFT, this,
+                SLOT(slotVelocityDown()), actionCollection(),
+                "velocity_down");
+
+    new KAction(i18n("Set Event &Velocities..."), 0, this,
+                SLOT(slotSetVelocities()), actionCollection(),
+                "set_velocities");
 
     new KAction(i18n("Toggle Dot"), Key_Period, this,
                 SLOT(slotToggleDot()), actionCollection(),
@@ -5098,6 +5114,70 @@ void NotationView::slotMakeInvisible()
     KTmpStatusMsg msg(i18n("Making invisible..."), this);
 
     addCommandToHistory(new SetVisibilityCommand(*m_currentEventSelection, false));
+}
+
+void NotationView::slotVelocityUp()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Raising velocities..."), this);
+
+    addCommandToHistory
+    (new ChangeVelocityCommand(10, *m_currentEventSelection));
+}
+
+void NotationView::slotVelocityDown()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Lowering velocities..."), this);
+
+    addCommandToHistory
+    (new ChangeVelocityCommand( -10, *m_currentEventSelection));
+}
+
+int NotationView::getVelocityFromSelection()
+{
+    if (!m_currentEventSelection) return 0;
+
+    float totalVelocity = 0;
+    int count = 0;
+
+    for (EventSelection::eventcontainer::iterator i =
+             m_currentEventSelection->getSegmentEvents().begin();
+         i != m_currentEventSelection->getSegmentEvents().end(); ++i) {
+
+        if ((*i)->has(BaseProperties::VELOCITY)) {
+            totalVelocity += (*i)->get<Int>(BaseProperties::VELOCITY);
+            ++count;
+        }
+    }
+
+    if (count > 0) {
+        return (totalVelocity / count) + 0.5;
+    }
+    return 0;
+}
+
+void NotationView::slotSetVelocities()
+{
+    if (!m_currentEventSelection)
+        return ;
+
+    EventParameterDialog dialog(this,
+                                i18n("Set Event Velocities"),
+                                BaseProperties::VELOCITY,
+                                getVelocityFromSelection());
+
+    if (dialog.exec() == QDialog::Accepted) {
+        KTmpStatusMsg msg(i18n("Setting Velocities..."), this);
+        addCommandToHistory(new SelectionPropertyCommand
+                            (m_currentEventSelection,
+                             BaseProperties::VELOCITY,
+                             dialog.getPattern(),
+                             dialog.getValue1(),
+                             dialog.getValue2()));
+    }
 }
 
 void NotationView::slotToggleToolsToolBar()

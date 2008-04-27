@@ -257,6 +257,11 @@ public:
                                 bool redrawNow = false);
 
     /**
+     * Get the average velocity of the selected notes
+     */
+    int getVelocityFromSelection();
+
+    /**
      * Show and sound the given note.  The height is used for display,
      * the pitch for performance, so the two need not correspond (e.g.
      * under ottava there may be octave differences).
@@ -618,6 +623,10 @@ public slots:
     void slotFinePositionUp();
     void slotFinePositionDown();
     void slotFinePositionRestore();
+
+    void slotVelocityUp();
+    void slotVelocityDown();
+    void slotSetVelocities();
 
     void slotMakeVisible();
     void slotMakeInvisible();
