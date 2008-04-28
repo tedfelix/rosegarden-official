@@ -554,12 +554,12 @@ NotationHLayout::scanChord(NotationElementList *notes,
     bool barEndsInChord = false;
     bool grace = false;
 
-    std::cerr << "NotationHLayout::scanChord: "
-              << chord.size() << "-voice chord at "
-              << (*itr)->event()->getAbsoluteTime()
-              << " unquantized, "
-              << (*itr)->getViewAbsoluteTime()
-              << " quantized" << std::endl;
+//    std::cerr << "NotationHLayout::scanChord: "
+//              << chord.size() << "-voice chord at "
+//              << (*itr)->event()->getAbsoluteTime()
+//              << " unquantized, "
+//              << (*itr)->getViewAbsoluteTime()
+//              << " quantized" << std::endl;
     
 //    NOTATION_DEBUG << "Contents:" << endl;
         
