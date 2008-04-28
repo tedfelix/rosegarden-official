@@ -4529,11 +4529,11 @@ void RosegardenGUIApp::slotTestStartupTester()
             allMissing.push_back(i18n("The Rosegarden Project Packager helper script"));
         } else {
             for (int i = 0; i < missing.count(); ++i) {
-                if (missingFeatures.count() > 1) {
+//                if (missingFeatures.count() > 1) {
                     allMissing.push_back(i18n("%1 - for project file support").arg(missing[i]));
-                } else {
-                    allMissing.push_back(missing[i]);
-                }
+//                } else {
+//                    allMissing.push_back(missing[i]);
+//                }
             }
         }
     }
