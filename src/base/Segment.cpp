@@ -242,6 +242,9 @@ Segment::setStartTime(timeT t)
     for (int i = 0; i < events.size(); ++i) {
 	insert(events[i]);
     }
+
+    notifyStartChanged(m_startTime);
+    updateRefreshStatuses(m_startTime, m_endTime);
 }
 
 void
@@ -366,6 +369,7 @@ Segment::insert(Event *e)
 
         if (m_composition) m_composition->setSegmentStartTime(this, t0);
 	else m_startTime = t0;
+	notifyStartChanged(m_startTime);
     }
 
     if (t1 > m_endTime ||
@@ -413,6 +417,7 @@ Segment::erase(iterator pos)
 	timeT startTime = (*begin())->getAbsoluteTime();
         if (m_composition) m_composition->setSegmentStartTime(this, startTime);
 	else m_startTime = startTime;
+	notifyStartChanged(m_startTime);
     }
     if (t1 == m_endTime) {
 	updateEndTime();
@@ -449,6 +454,7 @@ Segment::erase(iterator from, iterator to)
 	timeT startTime = (*begin())->getAbsoluteTime();
         if (m_composition) m_composition->setSegmentStartTime(this, startTime);
 	else m_startTime = startTime;
+	notifyStartChanged(m_startTime);
     }
 
     if (endTime == m_endTime) {
@@ -545,6 +551,7 @@ Segment::fillWithRests(timeT startTime, timeT endTime)
     if (startTime < m_startTime) {
         if (m_composition) m_composition->setSegmentStartTime(this, startTime);
 	else m_startTime = startTime;
+	notifyStartChanged(m_startTime);
     }
 
     TimeSignature ts;
@@ -592,6 +599,7 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
 #endif
         if (m_composition) m_composition->setSegmentStartTime(this, startTime);
 	else m_startTime = startTime;
+	notifyStartChanged(m_startTime);
     }
 
     //!!! Need to remove the rests then relocate the start time
@@ -1168,6 +1176,19 @@ Segment::notifyAppearanceChange() const
 	(*i)->appearanceChanged(this);
     }
 }
+
+void
+Segment::notifyStartChanged(timeT newTime)
+{
+    for (ObserverSet::const_iterator i = m_observers.begin();
+	 i != m_observers.end(); ++i) {
+	(*i)->startChanged(this, newTime);
+    }
+    if (m_composition) {
+	m_composition->notifySegmentStartChanged(this, newTime);
+    }
+}
+    
 
 void
 Segment::notifyEndMarkerChange(bool shorten)

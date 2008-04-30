@@ -130,6 +130,7 @@ public:
     virtual void segmentAdded(const Composition *, Segment *);
     virtual void segmentRemoved(const Composition *, Segment *);
     virtual void segmentRepeatChanged(const Composition *, Segment *, bool);
+    virtual void segmentStartChanged(const Composition *, Segment *, timeT);
     virtual void segmentEndMarkerChanged(const Composition *, Segment *, bool);
     virtual void segmentTrackChanged(const Composition *, Segment *, TrackId);
     virtual void endMarkerTimeChanged(const Composition *, bool /*shorten*/);

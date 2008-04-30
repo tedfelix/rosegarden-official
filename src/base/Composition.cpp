@@ -1884,7 +1884,6 @@ Composition::clearTracks()
         delete ((*it).second);
 
     m_tracks.erase(m_tracks.begin(), m_tracks.end());
-    updateRefreshStatuses();
 }
 
 Track*
@@ -1909,6 +1908,7 @@ Composition::getTrackPositionById(TrackId id) const
     if (!track) return -1;
     return track->getPosition();
 }
+
 
 Rosegarden::TrackId
 Composition::getNewTrackId() const
@@ -2037,7 +2037,17 @@ Composition::notifySegmentTrackChanged(Segment *s, TrackId oldId, TrackId newId)
 }
 
 void
-Composition::notifySegmentEndMarkerChange(Segment *s, bool shorten) const
+Composition::notifySegmentStartChanged(Segment *s, timeT t)
+{
+    updateRefreshStatuses(); // not ideal, but best way to ensure track heights are recomputed
+    for (ObserverSet::const_iterator i = m_observers.begin();
+	 i != m_observers.end(); ++i) {
+	(*i)->segmentStartChanged(this, s, t);
+    }
+}    
+
+void
+Composition::notifySegmentEndMarkerChange(Segment *s, bool shorten)
 {
     for (ObserverSet::const_iterator i = m_observers.begin();
 	 i != m_observers.end(); ++i) {

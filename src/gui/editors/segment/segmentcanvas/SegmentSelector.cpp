@@ -279,7 +279,7 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
                 timeT itemEndTime = itemStartTime + segment->getEndMarkerTime()
                                     - segment->getStartTime();
 
-                std::cerr << "releasing segment " << segment << ": mouse started at track " << startDragTrackPos << ", is now at " << currentTrackPos << ", diff is " << trackDiff << ", moving from track pos " << comp.getTrackPositionById(origTrackId) << " to " << trackPos << ", id " << origTrackId << " to " << newTrackId << std::endl;
+//                std::cerr << "releasing segment " << segment << ": mouse started at track " << startDragTrackPos << ", is now at " << currentTrackPos << ", diff is " << trackDiff << ", moving from track pos " << comp.getTrackPositionById(origTrackId) << " to " << trackPos << ", id " << origTrackId << " to " << newTrackId << std::endl;
 
                 command->addSegment(segment,
                                     itemStartTime,
@@ -430,11 +430,11 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 
             int trackPos = m_canvas->grid().getYBin((*it)->savedRect().y());
 
-            std::cerr << "segment " << *it << ": mouse started at track " << startDragTrackPos << ", is now at " << currentTrackPos << ", trackPos from " << trackPos << " to ";
+//            std::cerr << "segment " << *it << ": mouse started at track " << startDragTrackPos << ", is now at " << currentTrackPos << ", trackPos from " << trackPos << " to ";
 
             trackPos += trackDiff;
 
-            std::cerr << trackPos << std::endl;
+//            std::cerr << trackPos << std::endl;
 
             if (trackPos < 0) {
                 trackPos = 0;
