@@ -631,6 +631,12 @@ void CompositionModelImpl::segmentTrackChanged(const Composition *, Segment *s, 
     }
 }
 
+void CompositionModelImpl::segmentStartChanged(const Composition *, Segment *s, timeT)
+{
+//    std::cerr << "CompositionModelImpl::segmentStartChanged: segment " << s << " on track " << s->getTrack() << ": calling setTrackHeights" << std::endl;
+    if (setTrackHeights(s)) emit needContentUpdate();
+}
+
 void CompositionModelImpl::segmentEndMarkerChanged(const Composition *, Segment *s, bool)
 {
 //    std::cerr << "CompositionModelImpl::segmentEndMarkerChanged: segment " << s << " on track " << s->getTrack() << ": calling setTrackHeights" << std::endl;

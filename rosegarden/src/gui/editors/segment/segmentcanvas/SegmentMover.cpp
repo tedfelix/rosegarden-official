@@ -267,11 +267,11 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
         int trackDiff = currentTrackPos - startDragTrackPos;
         int trackPos = m_canvas->grid().getYBin((*it)->savedRect().y());
 
-        std::cerr << "segment " << *it << ": mouse started at track " << startDragTrackPos << ", is now at " << currentTrackPos << ", trackPos from " << trackPos << " to ";
+//        std::cerr << "segment " << *it << ": mouse started at track " << startDragTrackPos << ", is now at " << currentTrackPos << ", trackPos from " << trackPos << " to ";
 
         trackPos += trackDiff;
 
-        std::cerr << trackPos << std::endl;
+//        std::cerr << trackPos << std::endl;
 
         if (trackPos < 0) {
             trackPos = 0;
