@@ -67,9 +67,7 @@
     </p>
 
     <p>We now have a <a
-    href="http://rosegarden.wiki.sourceforge.net/">Rosegarden Wiki</a>
-    at SourceForge, with (at the time of writing) a bit of
-    documentation for developers in it.</p>
+    href="/wiki/">Rosegarden Wiki</a> with developer documentation in it.</p>
 
 
     <h3>Bug and RFE Priorities on the SourceForge tracker</h3>
