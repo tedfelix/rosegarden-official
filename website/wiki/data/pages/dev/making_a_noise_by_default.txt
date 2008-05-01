@@ -1,0 +1,57 @@
+==Making a noise by default==
+
+The most common source of problems for new users of Rosegarden is //still// a straightforward inability to get any sound out of it.
+
+There are two parts to this problem, plus a third related problem:
+
+  - "Notes" in Rosegarden are MIDI only by default and are not synthesised within the program, so the user needs to run a separate synth or load a plugin and use it explicitly.
+  - To make use of a plugin, or anything else that involves RG actually making the sound, JACK needs to be running properly, and that isn't easy to do.
+  - MIDI timing is only any use if the kernel is compiled with 1000Hz system timer, which is also not easy to do. //Note:// this hopefully isn't as serious a problem with recent kernels and RG 1.6.0, which should pick up the RTC timer on many systems including Ubuntu 7.10.
+
+
+
+We need to fix the first two, and preferably all three, of these things if the random Ubuntu user is going to be able to start up Rosegarden and get some satisfaction straight away. (Note that the third problem becomes a bit less important if we solve the first one using DSSI plugins, whose timing is not at issue.) How can we solve them?
+
+
+
+//dmm-The random Ubuntu user should install ubuntustudio-audio on her Ubuntu or Kubuntu system, which brings in://
+
+  * //a proper kernel, which becomes the default after the next reboot//
+  * //Rosegarden, JACK and friends (eg. QAMix)//
+  * //TiMidity + Freepats set up to run as a quasi system daemon (and is apparently slated to upgrade to FluidSynth + fluid-soundfont for Hardy or whatever comes after Hardy)//
+  * //sundry other goodies//
+
+
+  - Make it possible to treat a collection of plugin instruments as if it was a single MIDI "connection" (named e.g. "Synth plugins #1-16", "Synth plugins #17-32" -- remember that a DSSI plugin only has a single channel). Any user would then be able to assign that connection to any MIDI device in the MIDI device manager. Routing from the MIDI device to the plugins would be handled on the sequencer side and would probably not be especially hard to do. Then, we provide a default autoload in which fluidsynth-dssi plugins are loaded in slots 1-16 (loading 16 plugins is not a resource problem, they share resources behind the scenes), with a GM soundfont (A320U, say -- it has some tuning problems but is better than nothing) loaded in them by default, and in which the first "General MIDI Device" is set to use these plugin slots. We would need to make it possible for RG to load both the plugin and the soundfont from its own installation directory. Result: General MIDI synthesis, out of the box -- provided audio was working. Note that if we did this, it would be highly desirable to support more than one "autoload" template so old-skool users could easily pick plain MIDI if they wanted. That probably converges with the "score selection dialog" stuff somewhere down the line.
+  - Add a PortAudioDriver as well as the existing JACK driver. (William suggested this quite insistently once and I rejected the idea as far too much work. Sorry, William, you were probably right.) PortAudio is also callback-based, so it wouldn't be _that_ hard, but it would substantially increase the amount of code in this already complex and notoriously fragile bit of the application, and it may be hard to manage the timing when MIDI is also involved because PA's latency reporting is not necessarily going to be reliable -- so there is danger here. This output driver would at minimum support playback from the master output only; ideally recording as well (more danger!); never transport. We could always have an icon in the GUI to show which output driver was in use, and have a "don't show this again" warning dialog if PA is selected because JACK was unavailable on startup. PA is never going to be a preferable audio I/O system to JACK, but it may be "enough" for people who are essentially MIDI-based or notation-based users.
+  - I don't have a ready solution to problem 3. Doing our own MIDI timing is not an attractive option, because we would need root privileges to get sufficient timing accuracy -- the whole point of using the ALSA sequencer timer in the first place was that it handled timing in kernel space without the need for a privileged user-space program. Perhaps we can make this problem less serious by focusing on plugin output by default as above, and aim to support JACK MIDI (which also doesn't suffer from this timing issue) in the future as well.
+
+
+
+
+
+**Some notes moved here from [[First Impressions and How to Improve Them]] (a subject of which this is really a part):**
+
+
+
+//[DMM: One thing several similar packages do is load the last file you worked on if you start with no file on the command line. Maybe we should do that, and default the last file you worked on to some synthy demo file. It might be even better to default to something like the Bach concerto trumpet duet arrangement via FluidSynth-DSSI, but I don't think we could contend with the soundfont issue there.//
+
+
+
+I bet that if we just took an "executive decision" to bundle a soundfont such as A320U, relying on the presumed due diligence of Musix etc, we'd manage to find ways to make sure many of the included demos did play by default. Some packagers would want to take the soundfont back out of the package and depend on a separate soundfont package, that's their prerogative.
+
+
+
+Also, another old old feature possibility is to have a message included in the composition that pops up in a dialog when the composition is loaded. It could just be one of the optional header fields in the document properties, or something. Then the demos that remained "pure MIDI" could pop up a message to tell you so. I'm a bit reluctant about this one because I feel it may be opening a whole other box of potential features we haven't time to do. [cc]
+
+
+
+//Another thought might be to depend on Timidity/freepats, and do some kind of startup twiddling to run the thing if nothing else is present.//
+
+
+
+My experiments with this kind of thing in STG suggest that getting any external ALSA sequencer client to run up "automatically" (remember, we also have to get the RG device to connect properly to it) is going to be a tough one to get working reliably cross-distro. I think we should try to avoid going this way. [cc]
+
+
+
+//It's probably the cheapest and most free way to get some kind of MIDI working using stock distro packages, but without depending on DSSI plugins, and it runs as an ALSA sequencer client. I just haven't traditionally recommended it, because I think it sounds inferior to QSynth with a good, big soundfont. Though anyway, my thinking away from DSSI is probably colored by its traditional association with JACK, and all the extra trouble that entails. If DSSI could come up working on any bog standard non-audio distro, that might be the best way to go indeed. We could try that route first, and see how it fares on old hardware. Most of our users seem to want to run Rosegarden on an 800 MHz PIII, because "Linux runs great on old computers." We might even go so far as to put up some "You're pissing in the wind with this fossil" warning dialog about low CPU power and low RAM too. Just look at my own futile resistance to JACK, and stubborn insistence on getting all of this to work on a vanilla distro. I only enjoyed success once I finally relented.//

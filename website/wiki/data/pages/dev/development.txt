@@ -1,0 +1,89 @@
+
+======Development======
+
+A place to gather miscellaneous development notes.
+
+  * **See also: [[Contributing|HOWTO contribute]]**
+  * **See also: [[http://rosegarden.sourceforge.net/code_doc|Doxygen code documentation]]**
+  * **See also: [[EclipseCDT|Eclipse/CDT with Rosegarden]]**
+  * **See also: [[UnitTesting]]**
+
+
+====Explanatory Snippets====
+
+These are short explanations that have come up on the Rosegarden developers' mailing list at one time or another, sometimes with a bit more detail added in the wiki.
+
+See also the [[http://sourceforge.net/mailarchive/forum.php?forum_name=rosegarden-devel|rosegarden-devel archives]].
+
+===Basics===
+
+  * [[Manipulating the document]]
+
+===GUI===
+
+  * [[Loading the Studio or other partial documents from XML]]
+  * [[Keeping GUI elements updated]]
+
+===Sequencer===
+
+  * [[Instruments and Devices]]
+
+===Translations===
+
+  * [[Making strings translatable]]
+
+
+====Discussions about Future Work====
+
+These are either topics that have come up on the mailing list, or things that originally appeared as open-ended feature requests on our trackers.
+
+See also [[Summer_Code|Summer code]].
+
+===Notation===
+
+These need to be simmered down into a single unified Theory of Notation Editing.
+
+  * [[Notation editor improvement thoughts]]
+  * [[Score layout, not just notation layout]]
+  * [[Notation layout, staff types etc]]
+
+===Sequencer===
+
+  * [[Making a noise by default]]
+
+===Other===
+
+  * [[Ramblings about scripting]]
+  * [[A Vision]]
+
+
+
+====Documents in Subversion====
+
+There are several plain-text documents found in the Rosegarden source code repository ([[http://rosegarden.svn.sourceforge.net/viewvc/rosegarden/trunk/docs/|browse]]).
+
+These ones are either vaguely interesting, or at least not hopelessly out of date:
+
+===Basics===
+
+  * [[http://rosegarden.svn.sourceforge.net/viewvc/rosegarden/trunk/docs/code/guidelines.txt?view=markup|Code formatting guidelines]]
+  * [[Overall code structure]] (out of date with respect to code file locations and build structure)
+  * [[http://rosegarden.svn.sourceforge.net/viewvc/rosegarden/trunk/docs/code/creating_events.txt?view=markup|Creating Events and their properties]]
+  * [[http://rosegarden.svn.sourceforge.net/viewvc/rosegarden/trunk/docs/data_struct/units.txt?view=markup|Pitch and time units for Events]]
+  * [[http://rosegarden.svn.sourceforge.net/viewvc/rosegarden/trunk/docs/code/iterators.txt?view=markup|Iterating over Events in segments and compositions]]
+
+===GUI===
+
+  * [[http://%5b%5bhttp//rosegarden.svn.sourceforge.net/viewvc/rosegarden/trunk/docs/design/Menu-Standards.txt?view=markup%5D%5D|Menu layout explanation]]
+  * [[http://rosegarden.svn.sourceforge.net/viewvc/rosegarden/trunk/docs/code/toolbars_management.txt?view=markup|Saving toolbar state]]
+
+===Notation===
+
+  * [[http://rosegarden.svn.sourceforge.net/viewvc/rosegarden/trunk/docs/data_struct/tuplets.txt?view=markup|Triplet/tuplet event storage properties]]
+  * [[http://rosegarden.svn.sourceforge.net/viewvc/rosegarden/trunk/docs/data_struct/sets.txt?view=markup|Notation event grouping terminology]]
+  * [[http://rosegarden.svn.sourceforge.net/viewvc/rosegarden/trunk/docs/code/notation_layout.txt?view=markup|Notation layout procedure]]
+
+===Sequencer===
+
+  * [[http://rosegarden.svn.sourceforge.net/viewvc/rosegarden/trunk/docs/code/multiport_recording.txt?view=markup|Recording from multiple MIDI ports]] (but not onto multiple tracks simultaneously - this document predates that work)
+

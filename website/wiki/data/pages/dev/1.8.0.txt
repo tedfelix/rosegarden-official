@@ -1,0 +1,42 @@
+
+======Things To Do for 1.8.0======
+
+
+
+=====Planned=====
+
+  *
+
+
+
+=====Implemented=====
+
+
+
+====New Features====
+
+  * Blah (Billy-Ray, since rev xxxx)
+
+====Significant Bug Fixes====
+
+  * Blah (Billy-Ray, since rev xxxx)
+
+
+====New Members====
+
+We'd like to thank the following for their continuing quality contributions, and welcome them to the Rosegarden team!
+
+  *
+
+
+
+====Thanks to====
+
+Other people who contributed to Rosegarden development:
+
+  *
+
+People who contributed device files to the Rosegarden Library
+
+  *
+

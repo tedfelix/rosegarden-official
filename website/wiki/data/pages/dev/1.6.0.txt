@@ -1,0 +1,103 @@
+====Aim====
+
+To release Rosegarden 1.6.0 by end of September 2007 - **//Failed!//**
+
+To release Rosegarden 1.6.0 by end of October 2007- //**Released 1.6.0-pre1 (string freeze) in November 2, 2007!**//
+
+New aim: To release Rosegarden 1.6.0 few weeks after that ... **//Finally succeeded!//**
+
+====New features already in trunk for this release====
+
+  * Diatonic transpose (Arnout Engelen)
+
+  * Fretboards (Guillaume)
+
+  * Marker ruler usability improvements (Guillaume)
+
+  * Multiple lines of lyrics (Chris)
+
+  * Highlight overlapping notes in notation editor (Yves Guillemot)
+
+  * Better LilyPond output dialog, preview through Lilypond, print through LilyPond from segment and notation views (Heikki)
+
+  * In-place LilyPond header value editing in LilyPond option dialog (Heikki)
+
+  * Transposition of the staff shown in LilyPond output (Heikki)
+
+  * Show current segment colour in raw note ruler, permit cycling through segments on single staff in notation (Heikki)
+
+  * Nice new splash screen (Michael)
+
+  * Menus and configuration dialog reorganised for easier access and greater clarity (Chris)
+
+  * Infrared remote control: Support for IRKick (KDE LIRC daemon), and LIRC internal client improvements from Toni Arnold (Pedro)
+
+  * Add track(s) in middle (Chris)
+
+  * Update Handbook: Printing with LilyPond, LilyPond options, multiple lines of lyrics, copying with Ctrl+click-and-drag in matrix view, raw note ruler marks segment, transpose by interval (Heikki).
+
+  * [[Preferences Restructuring|Reorganised configuration dialog]] into standard/advanced options using information from [[http://sourceforge.net/mailarchive/message.php?msg_id=200707171219.50939.cannam@all-day-breakfast.com|the preferences survey]] (Chris)
+
+  * Revised example files (Pedro, Guilliaume, Heikki).
+
+====Significant Fixes====
+
+  * Several "stuck notes" fixes
+
+  * Many Lilypond output fixes and compatibility updates
+
+  * Fix occasional unexpected disappearance of matrix!
+
+  * Fix failure to handle multiple plugins in submaster
+
+  * Safer file-save mechanism (use interim temporary file)
+
+  * Fix race condition of simultaneous loading a file and showing a warning during startup
+
+  * Fix sometime crash when punching out of record mode while transport is rolling
+
+  * Fix over-eagerness to complain about system timer resolution even when an alternative timer has been explicitly chosen
+
+  * Fix failure to show plugin editor dialogs for plugins on submasters
+
+  * Fix MusicXML export so its output can at least be validated. (See footnote [1])
+
+  * Fix ALSA version extraction used to choose RTC timer for kernel version >= 2.6.20 and alsa version >= 1.4.0
+
+  * Fix [[http://sourceforge.net/tracker/?func=detail&atid=104932&aid=1781980&group_id=4932|#1781980 Some notes are misaligned after pasting]]
+
+  * Fix [[http://sourceforge.net/tracker/index.php?func=detail&aid=1609130&group_id=4932&atid=104932|#1609130 System timer res. msg. always displayed? Do have 1KHz, rtc]]
+
+  * Fix [[http://sourceforge.net/tracker/index.php?func=detail&aid=1368132&group_id=4932&atid=104932|#1368132 GUIs don't work for plugins on submasters]]
+
+  * Fix [[http://sourceforge.net/tracker/index.php?func=detail&aid=1797873&group_id=4932&atid=104932|#1797873 sequencer crash on punch out from recording]]
+
+====Still To Do====
+
+  * Update translations, see [[Add or update translation|Instructions for translators]]
+
+
+
+See also: [[1.7.0|Plans for 1.7.0]]
+
+
+
+
+
+[1] -- This is an interesting case study. MusicXML export was implemented way back in 2002, because of actual third-party interest in the feature. For over five years therefore this feature has been present in the File menu, but in no circumstances did it ever actually produce valid MusicXML. Yet in all that time we have never received a single bug report about it. Why should that be?
+
+
+
+(a) Nobody has ever tried to use it, despite the apparent initial interest in the feature
+
+(b) Other applications that import MusicXML do so without validating the input, and our output does in fact work in those applications
+
+(c) Nobody ever reports bugs (or more precisely: the fraction of users that report bugs of any kind is smaller than 1 / the number of our users interested in MusicXML)
+
+(d) It was so thoroughly broken that no user, even if inclined to report bugs, could ever work out where to start filing bug reports about it
+
+(e) all of the above.
+
+
+
+Although I've fixed the output so that it now validates (for my test cases), I don't expect that it produces good results -- c.f. at all the work that had to be done in the Lilypond exporter to get it from "working" to "good". I may have an actual use for MusicXML shortly, so perhaps I'll be working on it again...

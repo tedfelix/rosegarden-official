@@ -1,0 +1,89 @@
+======First Impressions, and How to Improve Them======
+
+
+
+How does Rosegarden appear when first installed and run on a new Linux distribution?
+
+
+
+I've been so used to fixing problems "in the distribution" with Studio to Go that I no longer really remember what the normal first time user experience on a non-audio-focused distribution is like. However, I do remember that it used to be pretty lousy; that's one reason STG exists in the first place. So, I downloaded Ubuntu 7.10 and gave it a try. (I just used Ubuntu because it's popular and it isn't KDE-based. Please add your comments on other distros. Preferably working from a clean install rather than your regular development system.)
+
+
+
+//[DMM: I'm not sure how I'm expected to comment on this. Comment page, or inline in the text? I'm picking the latter. It's incredibly annoying how I can't edit wiki pages with Konqueror too, incidentally.]// -- Generally I think wiki pages read best if you just edit the text, and rely on the occasional note at the start or end of a paragraph, or even on the history mechanism in the wiki, to indicate who wrote what, unless you really want to make it clear that there's a conversation afoot. I find the italic a bit harder to follow here, partly because my browser is picking up a particularly ugly italic font. And agreed, it's totally broken with Konqueror. [cc]
+
+
+
+====Ubuntu 7.10 i386 Desktop====
+
+Note: DMM adds that Rosegarden is included in Ubuntu Studio, which is the obvious recommendation for Ubuntu users. Regardless, I'd like to improve the situation for people who stumble across Rosegarden as part of messing about with their normal distro, or who won't be likely to change distro if the applications they would be likely to use there don't look good enough anyway.
+
+  * Rosegarden is available in the "community supported packages" section. It's version 1.5.1.
+
+  * Installation took a heck of a long time, largely spent downloading TeX, which is a complete waste of time (the Debian LilyPond package still depends on the tetex package, even though LilyPond itself hasn't needed it for at least two years).
+
+
+
+When I ran Rosegarden, the first things that came up were:
+
+  * The splash screen (good! something works anyway)
+
+  * The transport dialog and a tiny, tiny main window. The main window size is remembered in a config variable that depends on the screen size; we should check for the existence of that variable at the current screen size on startup and set it to some appropriate fraction of the screen size if it isn't found. //DMM: I may still have a feature request on the window size issue. I raised this issue an eternity ago.// **Update: now fixed in SVN**
+
+  * A dialog warning that JACK was not running so audio would not be available. We could greatly improve this with a PA output driver (see [[Making a noise by default]]), at least replacing it with a dialog saying audio recording would not be available but playback would, or even no dialog but a warning icon somewhere and an error if you tried to record.
+
+  * A dialog warning that the system timer resolution was too low. This one should be "fixed" in RG 1.6.0 with this distribution through use of the RTC timer... assuming that proves reliable. //DMM: I think a move to PA and the RTC timer, if they prove viable, would be good. Most people won't switch distros, and Rosegarden is pretty well castrated on a non-audio distro currently.//
+
+  * (I forgot about this one when first editing this page) A dialog warning that the project packager would not be available because the "flac" program was not found. This is entirely a packaging dependency omission.
+
+
+
+The theme and font looked OK. The demo files were present. Haven't done any serious testing (that wasn't really the focus).
+
+
+
+I forgot to check whether the Help was present -- that's an important one... //[DMM: it frequently isn't installed.]// I think there's a difficulty with the help file location -- I honestly don't know how the help viewer discovers it or how any given packager is supposed to work out where to put it. And of course the help viewer might not be installed either. Why don't we install the HTML version of the help as well, now that we're making it for the website, and link to that if running the help viewer fails, or some such? Or even always use the HTML version? Or use it if KDE is not running? It's not like the KDE help viewer is all that brilliant anyway, although it's not too bad. I don't want to go as far as opening the website version of the handbook; I'd rather stick with something on the filesystem.
+
+
+
+Also, with respect to the tutorial and web links (the ones that need an actual web browser), the Debian package of RG has a patch to make it run "x-www-browser" instead of "konqueror" in case konqueror is not installed. That isn't portable either, but it might be nice to do something a bit cleverer than just run Konqueror, e.g. check for x-www-browser, konqueror, firefox etc in order.
+
+==== ====
+
+====KUbuntu 7.10 i386 Desktop====
+
+OK, so I also tried this in KUbuntu, and this time I remembered to look at the Help menu.
+
+  * Downloading TeX takes up 82% of the total download time for Rosegarden, and yet (I repeat) is 100% unnecessary. This is probably a worse ratio than in regular Ubuntu since the KDE packages are already there in KUbuntu.
+
+  * Help worked in KUbuntu.
+
+  * Installing Rosegarden was actually harder than in regular Ubuntu, because it took me longer to get the additional ("universe") repositories selected. For some reason the KDE installer thing said it was reloading the package list, but didn't.
+
+  * Actually, I thought KUbuntu was not as nice as normal Ubuntu altogether, and I say that as a KDE user. It feels a bit more cobbled together and less well thought through. It's not bad, but the GNOME-based Ubuntu sets a higher standard for coherence and attractiveness to the first-time user.
+
+  * **Damn** - I forgot to check whether any DSSI plugins were installed along with RG. I didn't notice any DSSI packages in the to-install list though.
+
+
+
+====Not particularly distro-specific notes:====
+
+  * Our random tip-of-the-day really isn't ideal here. When you run it for the first time, it really should pop up a particular tip or dialog saying "welcome!" and pointing you to our website, so you don't go assuming that the Ubuntu package is all there is to life.
+
+  * If we had a PA audio driver as well as JACK, and if the package depended on some appropriate DSSI plugins, we could provide one or more demo files that //actually played!// and even offer to open one of them for you the first time you ran the program. We could probably pretty much force packagers to depend on the plugins by making the default first-time startup action be to load a plugin-based demo file... **SEE: [[Making a noise by default]] - I've moved some discussion from this page to there.**
+
+  * Are we any better placed for providing our own packages than we used to be? A first-time welcome message that also told you if there was a newer version available and where to get it from would be particularly nice. //[DMM: The new Ubuntu Studio will ship with 1.5.1, I think. The current one has 1.4.0, I think. All of this suggests we might want to do some kind of Firefox-like check for latest version deal, although we couldn't do this retroactively from the old installed versions that are found everywhere, and I'm not sure how we'd ever actually get it to work anyway.]// -- I think we would make an HTTP request to some URL at rosegardenmusic.com, and if it responded, it would return the latest version number and possibly a list of distros we had packages of it for (pipe dream, I know). We would want to be careful not to send any information to the server, for privacy reasons -- e.g. server would return the latest version and a list of all distros that have it, rather than having us send it the current distro and return the latest available version packaged for that distro, or anything like that. The private way is easier as well, as we could make the file being requested just a simple text file. We wouldn't actually do any automated installation, just notify the user.
+
+
+
+
+
+//Anyway, I quite like starting up with some kind of link to more info, instead of the random tips file. How viable is it to come up with something similar to one of the KDE first time wizard pages with a nifty graphic along one side, and text in the rest of the box. Could the text hyperlink? Maybe come up with something that invites people to find the FAQ, the "corporate" website, my increasingly obsolete book, etc.]//
+
+
+
+I'm sure we can do _something_, with a graphic, text and hyperlinks, quite easily. First time you run a given version of RG. Then only put up the Tip of the Day on the second and subsequent runs.
+
+
+
+All this suggests to me that a PortAudio playback driver should be a pretty high priority, yes?

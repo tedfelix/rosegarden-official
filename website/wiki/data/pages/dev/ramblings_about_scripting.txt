@@ -1,0 +1,30 @@
+[[http://sourceforge.net/mailarchive/message.php?msg_name=200702051750.31132.cannam%40all-day-breakfast.com|Mail archive link]]
+
+<code>
+
+We have a few shreds of DCOP support for calling basic menu functions (loading
+a file, playing from a given time etc), but not really for any editing.
+
+Some of the menu options we have already might have been easier to build if
+there had been a script-style interface to make them from. It needn't even
+necessarily have involved a scripting language -- just an interface that
+works at a slightly higher level than our basic data structures, allowing the
+author to avoid worrying about tedious problems like what happens to
+iterators in a container if you erase an element from the container, etc etc.
+
+A C/C++ API that offered the basic inspection and editing facilities on
+Rosegarden event data (_not_ literal MIDI data, the way I had been conceiving
+of it anyway) in a robust sort of way, so that a program using them could not
+crash and would be reasonably unlikely to fail to complete for any obscure
+reason, would be a useful thing in and of itself and could then be wrapped
+using any sort of scripting language interface.
+
+You can see a few bits of header code for something like this in
+src/base/ScriptAPI.h. The header file has been there for two years without
+ever being properly worked out or having any implementation at all written,
+basically because I (for once) actually avoided spending a whole chunk of
+time working on something that I found interesting but suspected nobody else
+would ever use. If there is evidence that someone else might actually use it
+after all, it can probably be made into something that works pretty quickly.
+
+</code>

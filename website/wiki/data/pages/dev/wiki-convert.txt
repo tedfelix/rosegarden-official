@@ -1,0 +1,36 @@
+=====Pleasantly ugly script to convert from SourceForge wiki format (WikiSpaces) to Dokuwiki=====
+
+<code perl>
+#!/usr/bin/perl
+
+while (<>) {
+  my $h='H_E_A_D_I_N_G';
+  s/^====(.*)====$/$h$h$h$1$h$h$h/;
+  s/^===(.*)===$/$h$h$h$h$1$h$h$h$h/;
+  s/^==(.*)==$/$h$h$h$h$h$1$h$h$h$h$h/;
+  s/^=(.*)=$/$h$h$h$h$h$h$1$h$h$h$h$h$h/;
+  s/$h/=/g;
+  if (/\[\[code[^\]]*\]\]/) {
+    if ($incode) {
+      s/\[\[code\]\]/<\/code>/;
+      $incode=0;
+    } else {
+      s/\[\[code\]\]/<code>/;
+      s/\[\[code( format=\"([^\"]*)\")?\]\]/<code $2>/;
+      $incode=1;
+    }
+  }
+  s/^\* /  * /;
+  s/^\# /  - /;
+  s/^{{(.*)}}/<code bash>
+$1
+<\/code>/;
+  $prevnormal=$normal;
+  if (/^[^<]/) { $normal = 1; } else { $normal = 0; }
+  if ($prevnormal eq $normal) {
+    print "\n";
+  }
+  print;
+}
+
+</code>

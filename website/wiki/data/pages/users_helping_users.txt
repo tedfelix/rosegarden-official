@@ -1,0 +1,4 @@
+======Users Helping Users======
+
+  * [[Creating a Rosegarden score for LilyPond export]]: some dos and don'ts, from Rosegarden user Gunhild Andersen
+

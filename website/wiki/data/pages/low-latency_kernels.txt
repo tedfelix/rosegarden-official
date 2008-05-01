@@ -1,0 +1,9 @@
+======Low latency kernels======
+
+=====Ubuntu, Kubuntu=====
+
+A low latency kernel is included as part of [[https://help.ubuntu.com/community/UbuntuStudio/|Ubuntu Studio]]. If you are running any other variant of Ubuntu Feisty (eg. Kubuntu) you can [[http:///www.ubustu.com/globe/2007/05/23/add-ubuntu-studio-to-an-existing-ubuntu-install/#more-56|add the Studio components to your existing installation]].
+
+
+
+After installation, reboot and be sure to choose the lowlatency kernel from the boot menu at startup, if it is not already the default.

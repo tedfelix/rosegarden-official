@@ -1,0 +1,86 @@
+
+======HOWTO contribute bug fixes and feature enhancements to Rosegarden project======
+
+
+
+There are numerous ways to contribute into Rosegarden. You may
+
+  * Create a patch (described in this page)
+
+  * [[http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html|Report a bug]]
+
+  * [[http://sourceforge.net/tracker/?group_id=4932&atid=354932|Create a feature request]]
+
+  * [[Add or update translation]]
+
+  * [[http://sourceforge.net/mail/?group_id=4932|Discuss in Rosegarden's mailing lists]]
+
+  * Update documentation
+
+
+
+Let's proceed on and follow steps on howto prepare a patch for Rosegarden...
+
+
+
+====1. Check out the current Subversion trunk====
+
+===1.A) As an anonymous user===
+<code bash>
+svn co [[https://rosegarden.svn.sourceforge.net/svnroot/rosegarden/trunk|https://rosegarden.svn.sourceforge.net/svnroot/rosegarden/trunk/rosegarden]]
+</code>
+===1.B) As a sourceforge user===
+<code bash>
+svn co [[https://user@rosegarden.svn.sourceforge.net/svnroot/rosegarden/trunk|https://<user>@rosegarden.svn.sourceforge.net/svnroot/rosegarden/trunk/rosegarden]]
+</code>
+====2. Compile source (be prepared to install missing dependencies in first compile)====
+
+$ cmake .
+
+$ make all
+
+$ sudo make install
+
+As an alternative to the first step, you can run "ccmake ." (note the extra "c") for a curses-based interactive way of adjusting the build parameters (installation prefix, build options etc).
+
+====3. Make changes and recompile====
+
+edit files ... then
+
+$ make; sudo make install
+
+====4. Create patch (against svn and source root)====
+
+cd to the Rosegarden source root directory, then
+
+$ svn update
+
+$ svn diff > patch-user-20070623
+
+====5. Publish patch====
+
+===5.A) as a sourceforge user===
+
+svn commit [ -m "What part of the program is patched: add/change/fix/enable/disable/(any verb) explanation of patch..." ]
+
+===5.B) as a fix to a bug, not being yet a RG developer===
+
+Create new [[http://sourceforge.net/tracker/?group_id=4932&atid=104932|bug report]] (if there is not an existing one), and include the patch as a resulution to the bug.
+
+===5.B) as an implementation of a feature request, not being yet a RG developer===
+
+Create new [[http://sourceforge.net/tracker/?group_id=4932&atid=354932|feature request]] (if there is not an existing one), and include the patch as a fullfillment of the request.
+
+===5.B) as a follower of RG development discussion list: rosegarden-devel AT lists DOT sourceforge DOT net===
+
+Describe your problem in a mail to the list and add the patch as an attachment.
+
+====6. Discuss====
+
+Your patch will be reviewed by one or more Rosegarden developers. Be prepared to improve the patch and resubmit it. We do like getting patches, and are often happy to fix problems with them, so don't be reticent about sending them in even if they're incomplete or imperfect. If you get stuck, send us what you've got!
+
+
+
+===See also: [[Branching|Working with branches]]===
+
+===See also: [[Stable from svn|Installing the latest stable version from svn in different distributions]]===

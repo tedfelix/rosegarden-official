@@ -1,0 +1,342 @@
+
+======Frequently Asked Questions for Rosegarden======
+
+=====General questions=====
+
+====Do I have to be using a particular desktop environment (KDE or whatever)?====
+
+No. Rosegarden uses the KDE libraries for various common controls, but you can run it under any window manager or graphical environment you like with no change in functionality.
+
+
+
+====What are the hardware requirements like?====
+
+Reasonably demanding, because of the mixture of graphical and interactive GUI stuff with precisely timed audio stuff. See [[http://www.rosegardenmusic.com/getting/requirements|requirements]] for more
+
+details.
+
+
+
+====Does it support my soundcard?====
+
+Rosegarden uses the ALSA (Advanced Linux Sound Architecture) soundcard drivers. To find out whether your card is supported by ALSA, see the ALSA project's [[http://www.alsa-project.org/alsa-doc|soundcard matrix]].
+
+
+
+====Is it available in my language?====
+
+Translations are included for Russian, German, Spanish, French, Italian, Estonian, Welsh, Swedish, Dutch, Japanese, simplified Chinese, Czech, Catalan and Finnish.
+
+These translations are provided and maintained by volunteer contributors, and so they may not always be up to date with the current state of the GUI.
+
+If you can help out with translating musical or technical documentation (no programming required, but it's quite hard work), please let us know!
+
+You may look at the wiki page dedicated to [[Add or update translation|adding or updating translation]].
+
+See also docs/howtos/i18n.txt in SVN if you are interested in the technical aspects of translation.
+
+
+
+====Rosegarden apparently saves in a binary format, where can I find the format definition ?====
+
+Actually it's just gzipped XML.
+
+gzip has a bit of trouble with gzipped files that don't end in .gz, so the easy way to have a look is to use
+<code bash>
+  $ gunzip -c somefile.rg > somefile.xml
+</code>
+
+
+=====Compilation or installation problems=====
+
+====Rosegarden is crashing at startup====
+
+Try running up the sequencer by itself first to see if it's a problem with that or the main part of the program. Run:
+<code bash>
+  $ rosegardensequencer
+</code>
+And you should get a few lines of output finishing with:
+<code>
+  RosegardenSequencer - started OK
+</code>
+If the sequencer starts up OK, try to start the main application with the command line switch "--nosequencer". If that fails, see next question on how to obtain a stack trace, which you should provide as part of any bug report you submit.
+
+
+
+====How to get a stack trace for a crash====
+
+First export the environment variable KDE_DEBUG as follows (in bash):
+<code>
+  $ export KDE_DEBUG=1
+</code>
+Start rosegarden from the command line, and reproduce the crash. You should now have a core file in your current directory. The core file is either named "core" or "core.<number>". Run gdb :
+<code>
+  $ gdb rosegarden <core_file>
+</code>
+Then once you get the gdb prompt, use the command 'where' to get the stack trace, and mail to the authors or to the Rosegarden development mailing list, or include in a bug report.
+
+
+
+====I'm using RedHat/Fedora version (whatever), what packages do I need to build this?====
+
+This is most often asked by someone who's also using GNOME and hasn't built a KDE application before, in which case the answer is that you need the kdelibs, kdemultimedia and arts packages (yes, you currently need the arts package for trivial reasons even if you aren't building aRts support), plus the -dev versions of all of those.
+
+Note that RedHat 9 didn't ship a recent enough version of ALSA, so if you want to build on a RedHat 9 system with ALSA support you have to upgrade rather than using the ALSA packages they supply.
+
+
+
+=====Main Window and Segment Editing=====
+
+====How do I set a loop?====
+
+While holding down Shift and and the left mouse button sweep out a loop region in the ruler at the top or bottom of the main composition window. The loop icon in the transport will become enabled and playback will always occur within this loop until you disable it. You can disable the loop by clicking on the loop icon or shift+left clicking in either loop ruler.
+
+
+
+====How do I rename a track?====
+
+Double-click on the track label.
+
+
+
+====How do I see the names of the tracks, instead of their instruments?====
+
+On the main window go to //Settings->View Track Labels//
+
+
+
+====How do I change the instrument for a track?====
+
+Either click with the right mouse button, or click and hold with the left mouse button, on the track/instrument label. A pop-up will appear from which you can choose a new instrument for the track.
+
+
+
+====How do I rename a segment?====
+
+Click the "..." button next to the segment's name shown in the Segment Parameters box.
+
+
+
+====How do I stop segments from snapping to the nearest beat when I move or resize them?====
+
+Hold down the Shift key while you move or resize the segment. (Shift is also used to enable multiple selection, so sometimes you may have to press Shift only after you start dragging.)
+
+
+
+=====Notation and Matrix Editing=====
+
+====Can I get more than one staff at once in the notation editor?====
+
+The //Open in Notation Editor// option on the main view's //Segments// menu will open all the currently-selected segments together in a single editor. So to open them all, first use the //Edit// menu's //Select All Segments// option, then this one. (You can also edit a subset of segments by selecting them with shift-click on the main view, then using //Open in Notation Editor//.)
+
+
+
+====How do I do something like a two-staff piano part?====
+
+There are various angles to this question, and there's not (yet) any one perfect answer.
+
+One thing you can't do is make the notation view use more than one staff for a single segment based on the pitches or other properties of the notes (it's a possibility under consideration, but not likely in
+
+the near future). So you have to split the segment onto multiple tracks, and then open a multi-segment notation editor (see the question above this one). In LilyPond export dialog you have now an option to connect multiple tracks which have the same name as multiple voices in a single staff.
+
+Versions 0.9 and later include a split-by-pitch function (finally!) which you can use to divide a segment into two parts.
+
+You can also select events within a certain pitch range in the Matrix view: you can shift-click on a key in the piano keyboard to select all the notes of that pitch, and you can shift-click and drag to select a range of pitches. The notes are added to any existing selection, so if you want a clean new selection, clear any old one first (by clicking in space with the select tool on the matrix or just hitting Esc).
+
+
+
+====Can I edit all the segments at once in the matrix editor?====
+
+No. A matrix editor shows a single segment only.
+
+
+
+====Notation rendering is rather slow====
+
+It can be. Unlike many other notation applications (including Rosegarden 2.1), we render the full length of each segment to a canvas when the notation editor starts, instead of rendering sections at a
+
+time when it scrolls. This means scrolling should be smooth and quick but the initial rendering phase relatively slow. This can be a problem for long segments, although for other practical reasons you're
+
+probably better off dividing long pieces into more manageable segments anyway.
+
+
+
+=====Playback and recording=====
+
+====ALSA? JACK? Huh?====
+
+Rosegarden likes to use the ALSA Linux sound drivers for MIDI communication, and the JACK low-latency audio server for audio. The build system should detect which of these you have available.
+
+If you have (or build with) ALSA but not JACK, you will be able to send and receive MIDI to or from outboard MIDI hardware and other MIDI applications such as soft synths, but you will not be able to use synth plugins in Rosegarden, nor to record or play back audio segments or apply effects plugins.
+
+
+
+====My soundcard has no built-in MIDI synth and I have no external MIDI devices. How can I get sound?====
+
+You need a soft synth! See the next question.
+
+
+
+====How do I use an ALSA soft synth, such as fluidsynth or Timidity?====
+
+Well first, here's how to get fluidsynth working with a soundfont. First get [[http://www.fluidsynth.org|fluidsynth]]. Then find a soundfont: one reasonable GM example is Musica Theoria 2, available as mustheory2.sf2 from the Collections area of [[http://www.hammersound.net/|Hammersound]], although it's large and it's packed using some stupid Windows-only format (common problem -- a few of the soundfonts on there are only zipped, though, so have a look around).
+
+Then run up fluidsynth with
+<code>
+  $ fluidsynth -m alsa_seq ./mustheory2.sf2
+</code>
+or equivalent for whichever soundfont you want to use. Alternatively get hold of [[http://qsynth.sourceforge.net/|qsynth]] which provides a nice GUI for fluidsynth.
+
+If you're relatively short on CPU power, also give it "-R no" to turn off reverb and you'll get a bit more polyphony before it breaks up. (If you're //very// short on CPU power, forget it.) You may find you have to run it as root or else the pitch goes awry, particularly on laptops with variable-speed CPUs.
+
+Anyway, when fluidsynth is running you should be able to assign tracks to it in Rosegarden. To set a track to one of the soft-synth instruments, right-click on the track label at the left of the track
+
+until the instrument menu appears and select the instrument on there. (If you have no other MIDI devices at all, then the soft-synth should be the default device.)
+
+You can also use Timidity as an ALSA soft-synth with soundfonts. Run it in ALSA input mode:
+<code>
+  $ timidity -iA
+</code>
+You can also use Timidity to play to JACK with reasonably low latency, with some magic incantation like:
+<code>
+  $ timidity -iA -Oj -B2,8
+</code>
+In my experience it takes rather more CPU power than fluidsynth for rather lower-quality output, though I'm sure these things vary a lot depending on how the soundfont is made.
+
+
+
+====How do I select an Instrument?====
+
+You can check which Instrument is selected for your Track by making sure that //Settings->Show Track Labels// is unchecked. You can change Instrument for a Track by right-clicking or clicking and holding on the Track/Instrument label. A pop up menu will appear from which you can select a different output Instrument. Rosegarden automatically assigns the first available synth device on your soundcard for its default output Instrument when importing MIDI files.
+
+
+
+====I've selected a synth Instrument but I don't hear any sound====
+
+If you're hearing silence with a Synth device (say "Emuk10k1 Port 0" or "OPL 3") then make sure you've loaded a soundfont for your soundcard. To load soundfonts use the "sfxload" utility. For example the Creative SBLive! soundcard comes with a set of standard soundfonts (2gmgsmt.sf2, 4gmgsmt.sf2, 8mbgmsfx.sf2) and you can load the 8MB soundfont as follows:
+<code>
+  $ sfxload 8mbgmsfx.sf2
+</code>
+For more fun with soundfonts including how to create them for yourself have a look at the [[http://swami.sourceforge.net|Smurf/Swami project]].
+
+The other classic problem for new users of ALSA is that the mixer settings are either zero or muted. Run alsamixer and check that your levels are okay and unmuted. (Muting is displayed and changed separately from the levels themselves: you can be on 100% but still muted.)
+
+
+
+====What does "System timer resolution is too low" mean?====
+
+If you see this message in an error dialog when Rosegarden starts up, then you are probably using a Linux kernel that doesn't offer sufficiently high-resolution system timers for MIDI use.
+
+Rosegarden uses ALSA sequencer queue scheduling (inside the Linux kernel) for its MIDI output. The sequencer queue can use a variety of timing sources, of which the default is the kernel system timer. The kernel system timer was 1000 Hz in Linux 2.6 kernels up to 2.6.12, but as of 2.6.13 it's now 250 Hz in mainline kernels. This is not good enough for good MIDI timing.
+
+Your options are:
+
+1. Switch the sequencer to use a different timing source (//Settings -> Configure Rosegarden... -> MIDI -> Sequencer timing source//). The best one in theory is the RTC timer, which is only available if you have snd-rtctimer loaded, but unfortunately that has a habit of totally locking some systems running real-time kernels. Meanwhile, the PCM timers only work if the JACK audio server is running, and suffer jitter corresponding to the JACK buffer size.
+
+2. Recompile your kernel with system timer set to 1000 Hz. Sadly there's no way to change this without a recompile. It's the best solution though.
+
+3. Switch to a different Linux distribution that provides a kernel more appropriate for multimedia use.
+
+4. Put up with the poorer timing of a 250 Hz timer (if you want to get rid of the warning while continuing to use this timer, set the timer source to "system timer" rather than "(auto)").
+
+Hopefully future versions of Rosegarden and/or the Linux kernel will provide better ways to solve this problem.
+
+
+
+If you don't want to recompile your kernel and are running (K)Ubuntu, you can choose a lowlatency kernel from the repository (search for it with synaptic or your favorite tool). Install the new kernel and reboot. This will solve the problem and remove the lag.
+
+
+
+
+
+====Only notes at the very start of the composition are played at all====
+
+If Rosegarden plays notes at time zero but then gets stuck and doesn't play anything else afterwards, you might have a non-running sequencer timer selected.
+
+Try going to Settings -> Configure Rosegarden... -> MIDI and changing the "Sequencer timing source" setting.
+
+
+
+====How do I get audio to work?====
+
+If you're using ALSA, then you need to obtain and install [[http://jackit.sourceforge.net/|JACK]] and run jackd before starting the Rosegarden sequencer. If you give jackd the -v option, it will report when Rosegarden succeeds in connecting to it.
+
+Unfortunately getting the right combination of magic incantations to make JACK work is not always easy. Good values for an SBLive and indeed on the built-in via868 on my Acer laptop as follows:
+<code>
+  $ jackd -d alsa -d hw -r 44100 -p 2048 -n 2
+</code>
+This will usually ensure that I don't get any xruns (JACK being unable to process audio in time) and provide reasonable latency. The '-r 44100' option sets the sample rate for the JACK server which will in turn define the rate at which WAV audio files will be recorded. This is important if you want to transfer any of the WAVs directly to CD - 44100 Hz (44.1 kHz) is the sample rate that audio CDs work at.
+
+
+
+====I'm not seeing the right program names for my MIDI device (or any at all)====
+
+Rosegarden has an internal Studio to map your MIDI Program Change information into meaningful instrument labels. You need to set this up do this mapping in the MIDI device manager (Studio->Manage MIDI Devices->Banks or Import). Once you've made changes in your current Rosegarden file you can save it as a default studio (replacing your autoload.rg file) so that all your subsequent sessions in Rosegarden utilise your specialised Studio settings.
+
+
+
+====I've followed all your instructions but I still don't hear any sound====
+
+If you've done everything we've suggested above then you can check what devices the sequencer is seeing by running the Rosegarden sequencer up by itself. Try:
+<code>
+  $ rosegardensequencer
+</code>
+and examine the output of the screen. The output for JACK and ALSA for an SBLive! should look something like this:
+<code>
+  rosegardensequencer: created plugin manager
+  MappedAudioPluginManager::discoverPlugins - discovering plugins
+  Rosegarden 4-0.9 - AlsaDriver - alsa-lib version 0.9.3
+  AlsaDriver::jackSampleRate - sample rate changed to 44100
+  AlsaDriver::createJackInputPorts - adding input port 1
+  AlsaDriver::createJackInputPorts - adding input port 2
+  AlsaDriver::createJackInputPorts - getting ports
+  AlsaDriver::createJackInputPorts - found 2 JACK physical inputs
+  AlsaDriver::createJackInputPorts - connecting from "alsa_pcm:capture_1" to "rosegarden:in_1"
+  AlsaDriver::createJackInputPorts - connecting from "alsa_pcm:capture_2" to "rosegarden:in_2"
+  AlsaDriver::initialiseAudio - JACK sample rate = 44100Hz
+  AlsaDriver::initialiseAudio - added output port 1 (left)
+  AlsaDriver::initialiseAudio - added output port 2 (right)
+  AlsaDriver::initialiseAudio - found 2 JACK physical outputs
+  AlsaDriver::initialiseAudio - connecting from "rosegarden:out_1" to "alsa_pcm:playback_1"
+  AlsaDriver::initialiseAudio - connecting from "rosegarden:out_1" to "alsa_pcm:playback_2"
+  AlsaDriver::initialiseAudio - JACK playback latency  0.092879R
+  AlsaDriver::initialiseAudio - JACK record latency  0.046439R
+  AlsaDriver::initialiseAudio - initialised JACK audio subsystem
+
+  ALSA Client information:
+
+    64,0 - (Rawmidi 0 - EMU10K1 MPU-401 (UART), EMU10K1 MPU-401 (UART))                 (DUPLEX) [ctype 2, ptype 2, cap 127]
+    65,0 - (Emu10k1 WaveTable, Emu10k1 Port 0)          (WRITE ONLY) [ctype 2, ptype 2078, cap 66]
+    65,1 - (Emu10k1 WaveTable, Emu10k1 Port 1)          (WRITE ONLY) [ctype 2, ptype 2078, cap 66]
+    65,2 - (Emu10k1 WaveTable, Emu10k1 Port 2)          (WRITE ONLY) [ctype 2, ptype 2078, cap 66]
+    65,3 - (Emu10k1 WaveTable, Emu10k1 Port 3)          (WRITE ONLY) [ctype 2, ptype 2078, cap 66]
+
+  Creating device 0 in Play mode for connection 65:0 Emu10k1 Port 0 (write)
+  Default device name for this device is MIDI soundcard synth
+  Creating device 1 in Play mode for connection 65:1 Emu10k1 Port 1 (write)
+  Default device name for this device is MIDI soundcard synth 2
+  Creating device 2 in Play mode for connection 65:2 Emu10k1 Port 2 (write)
+  Default device name for this device is MIDI soundcard synth 3
+  Creating device 3 in Play mode for connection 65:3 Emu10k1 Port 3 (write)
+  Default device name for this device is MIDI soundcard synth 4
+  Creating device 4 in Play mode for connection 64:0 Rawmidi 0 - EMU10K1 MPU-401 (UART) (duplex)
+  Default device name for this device is MIDI external device
+  Creating device 5 in Record mode for connection 64:0 Rawmidi 0 - EMU10K1 MPU-401 (UART) (duplex)
+  Default device name for this device is MIDI hardware input device
+  Record client set to (64, 0)
+
+  AlsaDriver::initialiseMidi -  initialised MIDI subsystem
+
+  rosegardensequencer: RosegardenSequencer - started OK
+</code>
+Note the ALSA device list shows the external MIDI port and the wavetable on-board synth devices. If you're using a soft synth, you should see it here too. All of these will be available in the drop-down Instrument list inside Rosegarden.
+
+You can also reach this sequencer status information by using the application itself. Go to: Settings -> Configure Rosegarden -> Sequencer status -> Details....
+
+
+
+=====Improving Performance=====
+
+====I get drop outs or xruns with JACK. How do I improve performance?====
+
+The short answer to this is with care and with some luck. There are various recipes for improving JACK performance. Some are more labour intensive than others. Ask on the rosegarden-user and rosegarden-devel lists for the latest advice and also keep an eye on jackit-devel for more JACK tips.

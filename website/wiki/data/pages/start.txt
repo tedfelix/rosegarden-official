@@ -1,0 +1,52 @@
+====== Rosegarden Wiki ======
+
+===== Pages for Users =====
+
+  * [[Users Helping Users]]
+  * [[Frequently Asked Questions]]
+  * [[Low-latency Kernels]]
+  * [[Stable from SVN|Installing a Stable Version from Subversion]]
+
+===== Links =====
+
+  * [[Articles|Featured articles on Rosegarden]]
+
+===== Pages for Translators =====
+
+  * [[translator:Add or Update Translation|How to Add or Update a Translation]]
+
+===== Pages for Developers =====
+
+**General Docs**
+
+  * [[dev:Development|Development Notes]]
+  * [[dev:Contributing|How to Contribute to the Rosegarden Project]]
+  * [[dev:Branching|Working with Branches]]
+  * [[dev:Working with Multiple Installed Build Versions]]
+
+**Development Ideas**
+
+  * [[dev:Summer Code]] -- suggestions for pieces of work that new developers might like to get started with
+
+**Discussion about Future Work**
+
+  * Plans for [[dev:2.0]]
+  * Plans for [[dev:1.8.0]]
+  * Things Done For [[dev:1.7.0]]
+  * Things Done For [[dev:1.6.0]]
+
+  * [[dev:Notes on porting to Qt4]]
+  * [[dev:Making a noise by default]]
+  * [[dev:First Impressions and How to Improve Them]]
+  * [[dev:Score layout, not just notation layout]]
+  * [[dev:Notation layout, staff types etc]]
+  * [[dev:Notation editor improvement thoughts]]
+
+**Metrics**
+
+  * [[http://www.ohloh.net/projects/538?p=Rosegarden|Ohloh project summary]]
+    * Calculated Project Cost
+    * Possible license conflicts (currently 1 Artistic lisence and 3 LGPL !)
+    * World map of developers (currently 6 developers registered out of 14)
+    * Monthly updated list of svn commit logs
+

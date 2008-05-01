@@ -1,0 +1,81 @@
+
+[[http://sourceforge.net/mailarchive/message.php?msg_name=200602191223.08676.cannam%40all-day-breakfast.com|Mail archive link]] - [[http://lalists.stanford.edu/lad/2006/02/0119.html|See also]] - "Having visions is easy"
+
+<code>
+
+On Sunday 19 Feb 2006 00:38, Luis Garrido wrote:
+> So what is your vision, then?
+
+I'm not sure I have a "vision", or at least not one that I understand
+how to realise, which is probably why it isn't very well expressed in
+Rosegarden.
+
+Traditional notation is a very useful thing in music learning, in
+exchanging and publishing certain sorts of music in certain ways, and
+in musicological contexts. MIDI and the like are very useful not just
+for producing a finished piece of work (in some ways MIDI is rather
+limiting for that) but for experimentation and "rough drafting". What
+I want is to be able to start in either one of those areas and
+incorporate the other, either to start with an existing score and
+explore performance possibilities for it, or to start with a
+performance and try to work out what makes it what it is.
+
+In other words, I'm not directly all that interested in either making
+studio software or published scores. I'm interested in looking at and
+editing music in symbolic terms for educational and exploratory
+purposes. I would like to be able to see, study, and manipulate the
+performance of a score, not just have it played to me, I would like to
+be able to hear other people's interpretations while studying the same
+score, I would like to be able to use linear track-style and other
+block or structural editing operations to edit a score structure, and I
+would like to be able to derive likely scores from performances and
+experiments.
+
+I hope all this manages to sound at the same time sufficiently vague,
+high-concept, and bleeding obvious.
+
+> Is there any commercial software you think succeeds in this?
+
+Sibelius is in fact the closest thing I know of, not so much because of
+its good score layout as because of its parts management and the
+integration of reasonable (if not brilliant) tempo tracking, synth
+plugins, and the like.
+
+> It is all about choices. When mscore is usable and linuxsampler can
+> play Kontakt libraries I will be able to kick Windows out of my
+> computer for good.
+
+Well, there is that practical viewpoint.
+
+As a user, there is always a time (or many) when what you really want is
+a direct alternative to an existing program, whether for a different
+platform, for a lower cost, in an open-source environment or whatever.
+
+As a developer, it offends me to imitate proprietary software directly.
+Rosegarden is a deliberately conservative program that does an awful
+lot of borrowing from the general classes of track-based sequencers and
+notation software, but it isn't a knock-off of any single program.
+Where we've looked at the alternatives, we've done it with a view to
+trying to come up with something better, or something that fits more
+with some conceived model for the rest of the program. Even when we've
+only succeeded in producing something worse, less reliable, more
+confusing and harder to use, at least we've usually made the honest
+effort to investigate and understand what we're trying to make. Indeed
+even if the end result then turned out to be almost indistinguishable
+from another program, we would still have made it with some integrity.
+
+But to set out deliberately to produce and distribute an exact
+replacement for an existing proprietary program, unless there is a
+really strong necessity, is not a righteous thing to do. To replace
+Sibelius with a better program for Linux would be good work. To
+attempt to clone Sibelius for Linux is a wrong to the creators of
+Sibelius and offensive to the creative spirit in the programmers doing
+the work. To do so while claiming that the clone is superior software
+because it has "open source ethics" is doubly wrong. It would be
+better to have no program that worked as well, than to have our best
+program in the field be a cheap duplicate.
+
+
+Chris
+
+</code>

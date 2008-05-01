@@ -1,0 +1,140 @@
+
+=====Notation editor improvement thoughts=====
+
+This page started out as [[http://sourceforge.net/tracker/index.php?func=detail&aid=1310257&group_id=4932&atid=104932|Bug #1310257 - Notation editor has limitations and may confuse]].
+
+See also [[Notation layout, staff types etc]] - excerpts from another discussion about notation editor reworking.
+
+See also [[Score layout, not just notation layout]].
+
+
+
+**CC:**
+
+
+
+OK, so, one problem people often have with the notation editor (this one came to mind first because it's one of the things Michael was complaining about) is the rather obscure way it handles rests and the tendency to end up with rests in apparently wrong places but that the notation editor just won't get rid of.
+
+
+
+There's a simple combination of circumstances at work here. Some salient points:
+
+
+
+a) **Rests in Rosegarden are actual events** that the user can actually enter and that have a concrete existence in the score, but they are also generated automatically to fill gaps in the note events -- and in practice, for probably a majority of users, they are always generated automatically except where RG puts in unwanted rests that then have to be deleted (if possible).
+
+
+
+b) **Rosegarden aims always to be able to produce notation from arbitrary MIDI.** I started out with the intention that the notation editor should always do its best to produce something vaguely meaningful, no matter what sort of polyphonic mess of MIDI events it was given (and that at least shouldn't lie about the events by e.g drawing neatly aligned chords for notes that are in fact of quite differing lengths and only vaguely similar start times, as most sequencers with notation capability do). Consequently we have a notation editor that doesn't formally support multiple voices or overlapping notes (it doesn't like you to enter them and mostly won't get them right) but that still has all sorts of troublesome edge cases in which it tries to deal with drawing them, given segments that start out containing messy overlapping notes. In some cases these actively impede the entry of the sort of music it //does// claim to support -- for example, it's harder than it should be to enter chords, and the situation with rests is unpredictable.
+
+
+
+So, here's a suggestion for a remould.
+
+
+
+1. **We make the notation editor only able to show non-overlapping notes within a single segment.** If you enter notes that overlap, it will always split and tie them (although see below). If notes are recorded that overlap, it will truncate them into tidy chords. There will never be an ambiguity within a single segment (at least as far as the notation editor is concerned) as to which notes belong to which chords, because if two notes are playing simultaneously and in the same segment, they are ipso facto in the same chord (this is not the case at present).
+
+
+
+2. **We implement proper part-writing support** so as to have separate segments able to display as separate parts in the same staff in the notation editor.
+
+
+
+3. **We (somehow) make it very easy to create new segments for new parts in notation.** You want to insert a minim at the same time as (but different pitch from) an existing crotchet? Hit ctrl-something to create a new part and make it active, and then insert the note in that new part -- it will appear on the same staff just as if you'd entered it directly, but it'll be a quite separate theme. If you don't do that, the note gets split and tied with the old one.
+
+
+
+4. **Rests are either auto-generated or manual.** At the moment if you insert a rest, you get the same thing as if Rosegarden creates a rest for you. Either way it may be rearranged on the next edit. What I suggest is that Rosegarden always creates the rests for you -- perhaps they might change to //not even being stored in the
+
+segment//, although the thought is too radical for me to fully comprehend at the moment -- and then any rests you create or edit yourself become a different event type, the "fixed" rest, that could even show up in a different colour and that is treated as if it were a note by the automatic-rest algorithm.
+
+
+
+This scheme could work if all segments for a given part are on the same track (overlapping), or it could work if the segments were on separate tracks. An ideal situation would allow both. The former would require a better way to show overlapping segments in other situations like the main segment canvas (something I thought I might experiment with this week anyway). The latter would require a way to control which tracks get their segments merged into staffs in the notation view (I do have a fuzzy idea for a notation arranger widget, but I haven't got very far with that one yet).
+
+
+
+**DMM, response:**
+
+
+
+I like your thoughts so far WRT the user experience of being able to handily create some new segment and stick things into it for part writing. It would be useful if this could work retroactively, so that I could go back and layer compositions that are currently spread out onto multiple segments in multiple tracks.
+
+
+
+I haven't given a lot of thought to the rest issue, though at first glance the notion of having "hard" and "soft" rests seems appealing, much like hard page breaks vs. computed ones in a text editor, for example.
+
+
+
+Going beyond all of this to some of the other issues I've talked about, I want to throw in my "fold it up" idea for the record here.
+
+
+
+I thought this out at some length on the devel list, and hopefully you have a copy of that message on your hard drive already. The summary version, then, is that my approach to dealing with repeats and complex flow control issues reconciled with our fundamental nature as a MIDI sequencer is this:
+
+
+
+Deal with everything in a linear fashion on the segment canvas, the same way any user of any other MIDI sequencer would have to do in order to render a performance. If we start with a linear sequence of real events (even if the events are automatically copied into segments that are generated in similar fashion to the part writing scheme you discussed) then there's no need to physically move playback around when it hits a DS or what have you. It solves all the problems about not knowing which iteration of a multiple ending repeat we're on when the user presses play in bar 42. It even opens the door to allow for repeats that aren't physically identical, as is frequently the case in
+
+multi-verse lyric music, and thus, by extension, to multi-verse lyrical music as well.
+
+
+
+Friendliying up this stringing out process is probably the subject of a different debate entirely, and the heart of my thinking on this front is to invent some new form of directives that can be inserted into this linear progression in order to instruct the notation editor how to "fold up" three pages of events into a compact single page. Mark this section as the first ending, this as the second ending, mark the segno here, mark the coda there, and so forth, and have the notation editor interpret these things in order to produce a finished result.
+
+
+
+Using some kind of "fold it up" metaphor might open the door to easy multi-bar rests too. They could display for pages at a time if required,
+
+
+
+or on a single track, single staff view, they could compress down to one measure. Since pre-processing to figure out what to do with all these "fold here" directives would be necessary, this could easily be thrown into the pot, I think.
+
+
+
+It might be counterintuitive to edit like this initially, but Rosegarden isn't a notation interpreter, and this feels like a very plausible way to deliver complex notation capabilities to what remains fundamentally a sequencer-based model. It wouldn't please everyone, but a lot of those "everyone's" are really looking for something more like NoteEdit in the first place. Rosegarden isn't a notation interpreter, and can't reasonably be a notation interpreter at the same time it is a true sequencer.
+
+
+
+This whole concept probably makes exporting to Lilypond a horrible proposition, and I noticed that the guy looking to improve our Lilypond export was not terribly enthusiastic about any of this. I leave that question on someone else's priority list.
+
+
+
+**DMM, prior email:**
+
+
+
+Sequencers are linear. The whole problem with this entire concept is that sequencers are linear, but notation isn't (always). It's the fundamental difference between a sequencer-with-notation program and a notation-with-MIDI-interpreter program.
+
+
+
+We've been thinking of ways of rendering non-linear notation as linear sequences, but what if it could go the other way around? What if the notation view could "fold up" linear notation that has certain "fold here" marks embedded into it?
+
+
+
+I can see a couple different use cases (just brainstorming) where this is a workable approach, at least intellectually, in terms of being usable.
+
+
+
+Case 1: I import some MIDI file that has first and second endings and a DS al coda in it. It comes in as a linear stream. I manually figure out where the repeats are, the first and second endings, where to put the signo, and where the coda starts. Maybe do this in the linear layout mode of the notation editor. Then I switch to page view, and presto, all the redundant notes disappear, and I get a neat page instead of three.
+
+
+
+Case 2: I'm entering notation, I put a repeat in, and the data automagically gets copied and extended out, right in front of me, non-virtually, but wrapped in some visual indicator of what is what. I go to the last bar of the second iteration and make some changes, then mark the last bars of both as 1 and 2. Then I fold it up into page mode and see what it looks like.
+
+
+
+Now I realize this sound extremely tricky to implement, and it's a lot easier to picture screens in my head than code, but what if?
+
+
+
+Rosegarden is never going to be anything but a sequencer under the hood, and I think it's acceptable if notation editing has to be done in a somewhat less than immediately intuitive fashion because of that fact. Notate in a straight line, which is basically what you'd have to do if there were no repeats at all anyway, then compress the results into something printable. Instead of linear vs. page preview it might also function as simply a WYSIWYG vs. "display codes" mode.
+
+
+
+Another thing just came to me on this. In case 1, what if I have two parts that are a little different, but want to mark them as part of a series of repeats anyway? That case comes up a *lot* in lyrical music, where the rhythm is slightly different in different verses, and alternative notes or articulations are printed at cue size. I've also seen bits like staccato the first time through and then slur this and that and this the second time through, also with appropriate cue-size indications. More problems to solve there too, but where it could ultimately go could be incredibly cool and flexible. Multi-verse lyrics, no problem, different rhythms on the B side, no problem either, and so on. Bitchy to get your head around thinking how it could be done in code (or mine anyway) but this "do it in a line with all the events real and then fold it up" interface could be taught and used and it seems like a really neat cake-and-eat-it-to approach.
+
+
+
+I'll leave that thought dangling in the air.

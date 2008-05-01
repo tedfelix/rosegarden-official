@@ -1,0 +1,198 @@
+
+======Things To Do for 1.7.0======
+
+
+
+=====Plans=====
+
+  * [[Making a noise by default]]
+
+  * [[First Impressions and How to Improve Them]]
+
+  * Different fonts in LilyPond ([[https://sourceforge.net/tracker/index.php?func=detail&aid=1811129&group_id=4932&atid=354932|#1811129]])
+
+  * Consider merging notation command registration overhaul from Chris's kiftsgate branch?
+
+  * Documentation revise.
+
+** New features: track headers
+
+** New features: segment sync and transpose stuff
+
+** New features: move to staff above/below
+
+** Track brackets and notation sizes
+
+** Philippe's quick marker thing
+
+  * Fix [[http://sourceforge.net/tracker/index.php?func=detail&aid=1048492&group_id=4932&atid=104932|#1048492 bad rendering of close-interval chords]]
+
+
+
+=====Implemented=====
+
+Collect here chronologically new features and bug fixes (ordered by the first fully compilable svn rev in trunk).
+
+====1.7.0 Highlights====
+
+Chris Cannam and D. Michael McIntyre have gotten back to their notation roots for this release, spearheading a successful effort to raise the bar to a whole new level. This effort has included new contributions from established project members Heikki Junes and Arnout Engelen, and translator Yves Guillemot has come over to the development side. New members Philippe Macaire and Jaakko H. Kyro have joined the development team, while Gunhild Andersen has joined us as a documentation writer, pioneering our new Users Helping Users section. On top of all this, we have had code contributions from Colin Fletcher, Alessandro Preziosi, Stefan Asserhall Flameeyes' PettenÃ², and Anders Dahnielson, a segment parameter presets database update from Magnus Johansson, and new library contributions from eight other users! Progress has been slow but steady during this release cycle, with all of this work dragging out for what has felt like years. In spite of this pace, and the seeming lack of anything happening around here day to day, we have managed to bring together more contributions from more people than any previous release of Rosegarden.
+
+====New Features (comprehensive list)====
+
+  * Track headers in Notation view (Yves, since rev 8355)
+
+  * Add test for newer version from RG website (Chris, since rev 8374)
+
+  * Add Welcome to RG message for the first time you run a new version (Chris, since rev 8374)
+
+  * Notation: The preferred stem direction in a chord around the middle line is down (Heikki, since rev 8381)
+
+  * Notation: The preferred beam position in a beamed group around the middle is below (Heikki, since rev 8383)
+
+  * Add icons for Add tempo and Add time signature in NotationView->Composition menu (Heikki, since rev 8415)
+
+  * New matrix background to make black keys stand out (Alessandro Preziosi and Michael, since rev 8449)
+
+  * Move to Staff Above or Staff Below to make sorting out overlapping voice parts considerably easier (Chris, since rev 8545)
+
+  * Radically reformed grace notes now work correctly for the first time in Rosegarden's history, and are now easy to use (Chris, since rev 8557)
+
+  * Sync segments to track parameters (correct clef, transpose notation, alter key signatures, highest/lowest playable notes) available as option when using the load preset button in the Track Parameters Box, which greatly simplifies the process of converting a standard MIDI file into notation suitable for real musicians who play transposing instruments (Arnout, since rev 8583)
+
+  * "Convert notation for..." function added to notation editor to provide another mechanism for using the sync segments functionality (Arnout, since rev 8593)
+
+  * Expanded/corrected instrument presets database (Magnus Johannson, since rev 8597)
+
+  * Export markers to LilyPond (Jaakko H. Kyro, since rev 8618)
+
+  * Alternative shortcut for Play/Stop in laptop use: Ctrl+Return (Heikki, since rev 8626)
+
+  * New track parameters for exporting square, curly, and nested brackets to LilyPond, making it possible to produce true piano notation and complex orchestral scores properly for the first time, without hand editing of the .ly code. (Replaces the now deprecated "Export staff group bracket" option with this new and much more flexible scheme.) (Michael, since rev 8637)
+
+  * The transport mode setting is now stored with and restored from individual compositions (Philippe, since rev 8646)
+
+  * Export the new radically reformed grace notes into LilyPond syntax (Heikki, since rev 8648)
+
+  * Now ties can finally be flipped (Chris, since rev 8653) and the flipped ties exported to LilyPond (Michael, since rev 8655)
+
+  * Arbitrary dynamics exported to LilyPond as markups if they are not on LilyPond's list of supported dynamic types (Michael, since rev 8687)
+
+  * New super ugly LilyPond export hack to try to bludgeon wayward rests into position in multivoice parts (Michael, since rev 8694)
+
+  * Set a quick playback position marker in the main window with Ctrl+1 and recall it with 1 (Philippe, since rev 8705)
+
+  * New variable height tracks finally make working with overlapping segments (eg. to contain concurrent voices for notation purposes) an easy and reasonable process, instead of the nightmare it has been for years (Chris, since rev 8740)
+
+  * Smarter selections in matrix and notation views now allow you to remove individual, previously-selected events without beginning the entire selection process from scratch (Michael, since rev 8744 (matrix) and 8748 (notation))
+
+*
+
+====Significant bug fixes since 1.6.0====
+
+  * Fix crash when using [ ] keys (Pedro, since rev 8432)
+
+  * Export notation for synth plugin tracks (Michael, since rev 8433)
+
+  * Fix support for logarithmic control ports in LADSPA and DSSI plugins; also "fix" some pathological cases used in the CMT plugins with ports that are bounded at one end only (and in some cases have the default set at the other end even though it's not bounded) (Chris, since rev 8500)
+
+  * Fix serious tempo ramp bug (Chris, since rev 8501)
+
+  * Serious overhaul of MIDI import to avoid scrambling karaoke and similar files into a complete mess (Chris, since rev 8515)
+
+  * Fix text codec dialog that appears when importing MIDI files with lyrics (Chris, since rev 8536)
+
+  * Splitting the segment now really splits the segment (Chris, since rev 8538)
+
+  * Track Parameters now displays the correct track (Chris, since rev 8539)
+
+  * No more mysterious zero-length segments on import (Chris, since rev 8540)
+
+  * Align lyrics with rests so they appear at the correct time, if only lyrics and rests in a segment (Chris, since rev 8541)
+
+  * Fix inability to build without JACK (Flameeyes' PettenÃ², since rev 8546)
+
+  * Fix broken pitch chooser dialog to correct accidental display and draggability (Arnout and Michael, various revisions since 8555)
+
+  * Replace perpetually broken grace note functionality (Chris, since rev 8557)
+
+  * Fix crash when deleting a device that was in use (Chris, since rev 8558)
+
+  * First note after 8va or 15ma section no longer at wrong octave (Chris, since rev 8559)
+
+  * Correct display of flipped stems in certain situations (Chris, rev 8560)
+
+  * Repair very tricky ruler bug that prevented the composition from being able to start anywhere other than bar 1 (Michael, since rev 8573)
+
+  * Take track transpose into account when recording, move notation by the opposite amount, so the end result sounds correctly when played back (Michael, since rev 8576)
+
+  * It is now possible to tie notes that have shorter performance durations than their display durations (Chris, since rev 8595)
+
+  * Renamed spurious Halve/Double Speed functions to Double/Halve Durations and assigned new keybindings (Heikki, since rev 8615)
+
+  * Headers for the files in the Rosegarden library rewritten so that all of them show up in everyone's file dialogs (Anders Dahnielson and Michael, since rev 8666)
+
+  * The notation view no longer assumes it is always necessary to display a time signature, which eliminates a lot of extra time signatures that used to have to be hidden by hand (Chris, since rev 8679)
+
+  * Above/below directions of phrasing slurs now exported to LilyPond correctly (Michael, since rev 8680)
+
+  * Hidden key signatures ignored during LilyPond export (Michael, since rev 8693)
+
+  * Corrected a problem whereby you could edit the second of two markers at the same time position, and have the changes apply to the first one at that position (Philippe, since rev 8706)
+
+*
+
+====New members====
+
+We'd like to thank the following for their continuing quality contributions, and welcome them to the Rosegarden team!
+
+  * Philippe Macaire
+
+  * Jaakko H. Kyro
+
+  * Gunhild Andersen
+
+*
+
+
+
+====Thanks to====
+
+Other people who contributed to Rosegarden development:
+
+  * Colin Fletcher
+
+  * Alessandro Preziosi
+
+  * Stefan Asserhall
+
+  * Flameeyes' PettenÃ²
+
+  * Anders Dahnielson
+
+*
+
+People who contributed device files to the Rosegarden Library
+
+  * Damien Goutte-Gattat
+
+  * Oliver VeÄernik
+
+  * Tony Amort
+
+  * Steffen Klein
+
+  * Haig Dedeyan
+
+  * Luis Filipe Lobo
+
+  * Marko Mueller
+
+  * "Piglet"
+
+  * "b.ohnsorg"
+
+
+
+
+
+See also: [[1.6.0]]

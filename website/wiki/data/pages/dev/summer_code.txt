@@ -1,0 +1,104 @@
+
+
+======Summer code======
+
+This page collects small development projects for Rosegarden in the spirit of Google's Summer of Code (although without the funding! Some institutes may proved funding for students who would program open source applications in summer time -- you may pick up projects from here!).
+
+Check also [[Contributing|HOWTO contribute to Rosegarden project]].
+
+
+
+====GUI====
+
+===Segment view===
+
+  * Support multiple open files. ([[https://sourceforge.net/tracker/index.php?func=detail&aid=1258972&group_id=4932&atid=354932|#1258972]])
+
+  * Support vertical zoom; originally: Ability to change vertical and horisontal zoom independenty. ([[https://sourceforge.net/tracker/index.php?func=detail&aid=671177&group_id=4932&atid=354932|#671177]],[[http://sourceforge.net/tracker/index.php?func=detail&aid=713163&group_id=4932&atid=354932|#713163]])
+
+  * Highlight the edge of the segment under cursor; helps in resizing from the edge subsequent segments. ([[https://sourceforge.net/tracker/index.php?func=detail&aid=1438888&group_id=4932&atid=104932|#1438888]])
+
+===Notation view===
+
+  * Support pagebreaks and linebreaks in notation. ([[http://sourceforge.net/tracker/index.php?func=detail&aid=1000397&group_id=4932&atid=354932|#1000397]])
+
+  * Support for several voices per a single staff. ( [[https://sourceforge.net/tracker/?func=detail&atid=354932&aid=1779102&group_id=4932|#1779102]])
+
+  * Support for several tracks with different instruments per a single staff. ([[http://sourceforge.net/tracker/index.php?func=detail&aid=1355463&group_id=4932&atid=354932|#1355463]], [[http://sourceforge.net/tracker/index.php?func=detail&aid=1542039&group_id=4932&atid=354932|#1542039]])
+
+  * Adding (a) new measure(s) to the end of the staff. ([[http://sourceforge.net/tracker/index.php?func=detail&aid=1693738&group_id=4932&atid=354932|#1693738]])
+
+  * Add option to group staffs with different brackets. ([[http://sourceforge.net/tracker/index.php?func=detail&aid=1559811&group_id=4932&atid=354932|#1559811]])
+
+  * Support different types of bar lines: single, double, ending, beginning, repeat, dashed, dotted, empty ([[http://sourceforge.net/tracker/index.php?func=detail&aid=1586412&group_id=4932&atid=354932|#1586412]]).
+
+  * Support for long trill. ([[http://sourceforge.net/tracker/index.php?func=detail&aid=1560372&group_id=4932&atid=104932|#1560372]])
+
+  * Notes may below to only a single type of groups; therefore it is note possible to separate beamed triplet and non-beamed triplet. Support nested note grouping. ([[https://sourceforge.net/tracker/index.php?func=detail&aid=985457&group_id=4932&atid=354932|#985457]])
+
+  * Improve note grouping: beamed and tuplet groups. (bugs-triplet: [[http://sourceforge.net/support/tracker.php?aid=1683205|#1683205]], [[http://sourceforge.net/tracker/index.php?func=detail&aid=1539692&group_id=4932&atid=104932|#1539692]], [[http://sourceforge.net/tracker/index.php?func=detail&aid=1046934&group_id=4932&atid=104932|#1046934]], [[http://sourceforge.net/tracker/index.php?func=detail&aid=987871&group_id=4932&atid=104932|#987871]]; bugs-tuplet: [[http://sourceforge.net/tracker/index.php?func=detail&aid=1724601&group_id=4932&atid=104932|#1724601]], [[http://sourceforge.net/tracker/index.php?func=detail&aid=1110287&group_id=4932&atid=104932|#1110287]], [[http://sourceforge.net/tracker/index.php?func=detail&aid=1109987&group_id=4932&atid=104932|#1109987]], [[http://sourceforge.net/tracker/index.php?func=detail&aid=971313&group_id=4932&atid=104932|#971313]], [[http://sourceforge.net/tracker/index.php?func=detail&aid=971312&group_id=4932&atid=104932|#971312]]; bugs-beamed: [[http://sourceforge.net/tracker/index.php?func=detail&aid=1705430&group_id=4932&atid=104932|#1705430]], [[http://sourceforge.net/tracker/index.php?func=detail&aid=1110247&group_id=4932&atid=354932|#1110247]])
+
+  * Support parenthesized notes. ([[https://sourceforge.net/tracker/index.php?func=detail&aid=882957&group_id=4932&atid=354932|#882957]])
+
+  * Support track-level options: move track up/down, add track, remove track. ([[https://sourceforge.net/tracker/index.php?func=detail&aid=1112023&group_id=4932&atid=354932|#1112023]])
+
+  * Highlight the edge of the event under cursor; helps in resizing from the edge subsequent event. ([[https://sourceforge.net/tracker/index.php?func=detail&aid=1438888&group_id=4932&atid=104932|#1438888]])
+
+  * Highlight the empty area to be filled by a pencil click. ([[https://sourceforge.net/tracker/index.php?func=detail&aid=1438888&group_id=4932&atid=104932|#1438888]])
+
+===Matrix view===
+
+  * Show and edit more than one tracks in a single matrix view. ([[https://sourceforge.net/tracker/index.php?func=detail&aid=1725029&group_id=4932&atid=354932|#1725029]], [[https://sourceforge.net/tracker/index.php?func=detail&aid=931029&group_id=4932&atid=354932|#931029]])
+
+  * Indicate in matrix view which notes are tied. ([[https://sourceforge.net/tracker/index.php?func=detail&aid=1000736&group_id=4932&atid=354932|#1000736]], [[https://sourceforge.net/tracker/?func=detail&atid=104932&aid=988036&group_id=4932|#988036]])
+
+  * Set the length of selected notes Ã  la Notation view: Ctrl+4 etc. ([[https://sourceforge.net/tracker/index.php?func=detail&aid=671177&group_id=4932&atid=354932|#671177]])
+
+  * Support multiclick selections: select bar with double click and whole segment with triple click. ([[https://sourceforge.net/tracker/index.php?func=detail&aid=988167&group_id=4932&atid=354932|#988167]])
+
+===Notation & Matrix view===
+
+  * Support removing note overlaps. ([[https://sourceforge.net/tracker/index.php?func=detail&aid=671177&group_id=4932&atid=354932|#671177]])
+
+  * Support applying legato, or, filling the empty spaces between notes. ([[https://sourceforge.net/tracker/index.php?func=detail&aid=671177&group_id=4932&atid=354932|#671177]])
+
+  * Arrange multiple views in tabs. ([[https://sourceforge.net/tracker/index.php?func=detail&aid=893397&group_id=4932&atid=354932|#893397]])
+
+  * Keep tied notes together in moving one of the notes. ([[https://sourceforge.net/tracker/index.php?func=detail&aid=1109973&group_id=4932&atid=104932|#1109973]])
+
+===Metronome===
+
+  * Changeable precision for beating, up to 16th notes. ([[https://sourceforge.net/tracker/index.php?func=detail&aid=671177&group_id=4932&atid=354932|#671177]])
+
+===Keyboard===
+
+  * Check keyboard shortcuts also for laptop use. ([[https://sourceforge.net/tracker/index.php?func=detail&aid=1438888&group_id=4932&atid=104932|#1438888]])
+
+  * Notes are entered using Qwerty keyboard. Add support to other keyboards layouts, like Dvorak. ([[https://sourceforge.net/tracker/index.php?func=detail&aid=1634575&group_id=4932&atid=104932|#1634575]])
+
+** It would be helpful to many German and potentially other users if this were implemented in a way that supported their layout too.
+
+==== ====
+
+====IO and INFRASTRUCTURE====
+
+===Scripting===
+
+  * Add scripting support for editing events in segments. See [[Ramblings about scripting]]
+
+
+
+===Import & Export===
+
+  * Import MusicXML. ([[https://sourceforge.net/tracker/index.php?func=detail&aid=773378&group_id=4932&atid=354932|#773378]])
+
+  * Better text support in exporting MIDI for karaoke use. ([[https://sourceforge.net/tracker/index.php?func=detail&aid=1039569&group_id=4932&atid=354932|#1039569]])
+
+
+====DOCUMENTATION====
+
+  * Document undocument features. ([[http://sourceforge.net/tracker/index.php?func=detail&aid=1414240&group_id=4932&atid=354932|#1414240]])
+
+====TRANSLATIONS====
+
+  * Add or update a translation.

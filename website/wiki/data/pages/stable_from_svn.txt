@@ -1,0 +1,94 @@
+
+
+======Installing the latest stable version of Rosegarden from svn source======
+
+
+
+These instructions should show howto install stable Rosegarden 1.7 to a freshly installed distribution.
+
+
+
+=====1. Kubuntu 7.10 (Gutsy Gibbon)=====
+
+
+
+Install first subversion.
+<code>
+sudo apt-get install subversion
+</code>
+Download the source of the latest stable version of rosegarden using subversion.
+<code>
+svn checkout https://rosegarden.svn.sourceforge.net/svnroot/rosegarden/branches/stable_1_7
+</code>
+Install the packages needed in building.
+<code>
+sudo apt-get install cmake g++ kdebase-dev fftw3-dev gettext libjack0.100.0-dev \
+  dssi-dev ladspa-sdk liblo0-dev liblrdf0-dev
+</code>
+Now we are ready to build. Let us proceed to the build phase.
+<code>
+cd stable_1_7
+cmake .
+make
+</code>
+After the build phase has finished, install Rosegarden.
+<code>
+sudo make install
+</code>
+Now Rosegarden has been installed!
+
+
+
+Before running Rosegarden, let us install needed packages.
+<code>
+sudo apt-get install libxml-twig-perl flac qjackctl sox
+</code>
+Install LilyPond either with
+<code>
+sudo apt-get install lilypond
+</code>
+or, if you do **not** want to install TeX (extra ~150 Mb) which is not necessary, download stable (2.10.* or 2.12.*) LilyPond installing binary from http://download.linuxaudio.org/lilypond/binaries/linux-x86/. Currently, the latest stable version 2.10.33 (Oct 16, 2007), you may install LilyPond with
+<code>
+wget http://download.linuxaudio.org/lilypond/binaries/linux-x86/lilypond-2.10.33-1.linux-x86.sh
+
+sudo sh ./lilypond-2.10.33-1.linux-x86.sh
+</code>
+
+
+If you need software synthesis, install timidity and freepats.
+<code>
+sudo apt-get install timidity freepats
+</code>
+
+
+Now we are ready to run Rosegarden!
+
+
+
+Start Rosegarden...
+<code>
+rosegarden
+</code>
+...and click ok in warnings. Change settings a bit and select
+<code>
+Setup->Configure Rosegarden...->Audio->JACK Startup->Start JACK when Rosegarden starts [X]
+
+Setup->Configure Rosegarden...->Save Configuration
+</code>
+Then quit rosegarden, so that JACK is started during startup, and rerun rosegarden
+<code>
+rosegarden
+</code>
+Voilá !
+
+
+
+If you would like to have Rosegarden translated into your language, see [[../../Add or update translation|how to add or update translation]].
+
+
+
+=====2. JackLab Audio Distribution 1.0 (JAD)=====
+
+
+
+[[http://sourceforge.net/mailarchive/message.php?msg_name=200711042215.16408.ciwe%40gmx.de|Confirmed]] to build.

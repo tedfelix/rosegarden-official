@@ -1,0 +1,9 @@
+It's usually neatest to wrap manipulations to the document in a 'Command' (src/commands/*).
+
+
+
+Commands know how to undo themselves. When you add a command to the history (e.g. via 'RosegardenGUIDoc::getCommandHistory()->addCommand(my_command);'), the command will be executed and added to the undo history.
+
+
+
+Adding a command to the history also sets the 'modified'-flag for the document, which is used to popup a 'do you want to save your changes?' when needed. If you have to make changes in some other way, you have to make sure that gets set in some other way (e.g. RosegardenGUIDoc::slotDocumentModified()).

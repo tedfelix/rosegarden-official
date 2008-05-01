@@ -1,0 +1,35 @@
+Unit tests are useful to call code in isolation during development (so you don't need to start the entire GUI to test every change), and for regression tests.
+
+
+
+A couple of unit tests for Rosegarden have been written in src/test.
+
+
+
+== Building ==
+
+
+
+Enable WANT_TEST in ccmake and build the codebase as usual
+
+
+
+== Running ==
+
+
+
+Run 'make test'
+
+
+
+== Creating new unit tests ==
+
+
+
+  * write tests in src/test/foo.cpp
+
+  * define an 'int test_foo(int argc, char** argv)'. This method will be called by the test driver, which will report 'Success' if the call returned '0'. If you put multiple tests in one file, this will looks something like 'return test1() + test2() + test3()', where all other tests should also return 0 on success or a positive integer on failure.
+
+  * add to src/TestFileList.txt
+
+  * Enjoy :)

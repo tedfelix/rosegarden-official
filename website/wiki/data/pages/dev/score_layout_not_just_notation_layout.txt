@@ -1,0 +1,69 @@
+
+=====Score layout, not just notation layout=====
+
+Text initially excerpted from [[http://sourceforge.net/tracker/index.php?func=detail&aid=1559811&group_id=4932&atid=354932|RFE #1559811 - more staff grouping options]].
+
+See also [[Notation editor improvement thoughts]].
+
+See also [[Notation layout, staff types etc]].
+
+
+
+**CC:**
+
+
+
+We don't have any staff groupings natively in Rosegarden. The main reason for this is not that the brackets or whatever are hard to represent internally or to draw, but that I failed to come up with a good way for the user to describe what groupings they wanted in the first place.
+
+
+
+If we can come up with a nice, friendly way of getting the user to describe how to arrange groups of staffs -- whether for Lilypond export or for Rosegarden natively -- then we've solved 90% of the problem of doing true score arrangements in Rosegarden, as well as 98% of the problem of doing score arrangements with Rosegarden and Lilypond together.
+
+
+
+So it's an important problem, and I think if we can decide on what the answer is, even if it involves real GUI work (and I think it will), it will happen.
+
+
+
+So I think the right question is the other way around -- not "what is the cheapest thing we can do in Rosegarden to make this sort-of work", but "how would my ideal piece of software solve this problem for me as a user"? The former question works well when you have a thing to do that's simple in concept but doesn't match well with Rosegarden's internals, as is the case with repeats for example. Here the problem is not the match with Rosegarden's internals -- there's no difficulty there -- but what the right GUI approach is in the first place.
+
+
+
+My feeling is that managing groups of staffs is basically taking us most of the way to doing "score layout", and that's intimately associated with things like part extraction and allowing printouts of different groups and subsets of a given set of instruments. Is there a comfortable way of managing that sort of thing from within the track editor itself? Using a control to set a group name or number for each track would kind of work, but it's very unhelpful in terms of visual feedback, particularly if you want to switch from one set of groups to another.
+
+
+
+I rather think we probably want a separate score layout window, in which you can set up (and save and recall) layouts based on identifying tracks by name and choosing the groupings of tracks, and the staff size and so on for each track (with other properties [like the staff type?] that are actually associated with the physical instrument being taken from Track Parameters rather than being defined in the score setup window). It doesn't have to be insanely complicated, but it's obviously enough work that it would be
+
+better to get the ideas right first.
+
+
+
+Limitations of the track editor window as a place for managing proper score layouts:
+
+
+
+  * There might not be a one-to-one relationship between tracks and staffs
+
+
+
+  * The natural order for tracks (when composing and editing) might not be the same as that for staffs (when e.g. printing)
+
+
+
+  * In general, score layout is something associated with arrangement and presentation rather than composition -- this means for example it's desirable to be able to switch from one arrangement to another (you don't have to be a very advanced user in order to want to print one part / the whole thing / one part in big with the rest in a smaller size / one part with the rest in a one-staff reduction / etc).
+
+
+
+  * So far everything in this discussion has related fairly equally to both Lilypond output and Rosegarden-native score arrangements (which we don't do yet, but hopefully this should be a step toward). A (cowardly sort of) problem with doing the score arrangement in the track editor is that it would leave the GUI in a strange sort of half-way state if we didn't actually support all of it within Rosegarden's notation editor but only in Lilypond export. A separate arrangement window would work better in that situation.
+
+
+
+Re. Heikki's comment about the difficulty of merging staffs within RG -- yes, I agree, but this is the way I think we'd like to be heading anyway so let's not let that difficulty put us off adding support for it (though it does mean it might be better if we can do something that would be natural for Lilypond even if not yet wholly supported in RG natively as I mentioned above).
+
+
+
+Hand-drawn sketch of a score management dialog:
+
+{{:rambling-800.jpg|}}
+

@@ -1,0 +1,143 @@
+======Creating a Rosegarden score for LilyPond export======
+
+**SOME DOS AND DON'TS WHEN CREATING A ROSEGARDEN SCORE TO BE EXPORTED TO LILYPOND**
+
+
+
+//"Oh mother, tell your children not to doooo what I have done!"//
+
+
+
+I had been writing a relatively complex score in Rosegarden when exporting it to LilyPond and creating a PDF file of it revealed that my file was in fact filled with several tiny little problems, most of them invisible to me in Rosegarden, which made the PDF look kind of chaotic and frighteningly wrong. Michael was good enough to perform the combined role as my personal therapist and technical hand holder while I was going through the agonies of trying to fix it. I discovered along the way that LilyPond is in fact quite cool, but in order to prevent other users from being forced to discover that for themselves, I thought I'd share here the mistakes I made and how to avoid them.
+
+
+
+__**Starting the new project**__
+
+
+
+//**Time Signatures --- begin by entering them**//
+
+
+
+I work with mixed time signatures quite a lot, and I've come to discover that Rosegarden can tend to get a little bit confused in certain situations when there are multitudes of time signature changes scattered across the score. Michael tells me (NOW he tells me!!) that it can actually be a good idea to insert the desired time signature changes before drawing the segments. So if you know even before you've entered the first note what time signature changes you want, and when, you should probably start out by inserting them before you do anything else.
+
+
+
+//**Segments --- have them all start from the beginning**//
+
+
+
+I actually cut out the parts of the segments in the beginning where nothing was happening, thinking that that might somehow help me save some space in the final PDF. Not so. The empty staffs where all there in the PDF nevertheless. But what also happened was that they had all gotten a default treble clef at the very beginning of the piece. The other clefs would not appear until something actually started happening in that voice. This looked ugly, and not having the right clefs there from the beginning looked confusing. I therefore found that the best thing to do is to have all segments start from the beginning, and also last untill the end of the piece, to avoid the messy look of clefs introducing and reintroducing themselves throughout the score.
+
+
+
+__**Entering the music**__
+
+
+
+//**Note Values --- make sure you get them right**//
+
+
+
+Rosegarden's main developer is a very polite and considerate Briton, and this is actually reflected in certain aspects of Rosegarden's design. For example, if I enter a dotted half note in a 2/4 measure, Rosegarden won't tell me in any confronting manner that this is in fact musically impossible. Instead, it will quietly place a red barlline at the end of this measure, ever so discreetly, and assume that I probably know what I'm doing and that everything is going to be allright in the end.
+
+
+
+But this red barline is actually very easy to overlook. At one point in my score I noticed a red barline, coupled with some weird rests that I had no idea what were doing there. After chasing them backwards, through several pages of my score, I finally noticed the dotted half note in the 2/4 measure. I had of course meant to put a regular half note in there, not a dotted one, and simply hadn't noticed the error.
+
+
+
+One big problem I had when exporting my file was that LilyPond would turn out lots of double time signatures, that is, two instead of one in the same place. This again caused general chaos and confusion in the score, with events being trapped between the two time signatures etc. Quite a nightmare to look at. Only after fiddling around with this for a long time did I discover the cause of this behaviour. I had inserted --- or at least, that's what I thought --- some triplets in one of the voices. But upon closer examination, it turned out that I hadn't managed to bind the three notes together in the triplet, like I thought, but only two of them. This caused a mystical rhytmical phenomenon that for some reason I didn't notice while listening to the piece. But mathematically, the note values didn't add up, as a result of this flawed triplet. Fixing those triplets, to my great relief, made those nasty double time signatures finally go away.
+
+
+
+The moral of this story is this: Pay very close attention when entering notes! Concentrate on getting your note values right. Rosegarden will not sound of f an alarm or anything if you make a rhytmical mistake. It will only indicate the fact that you may be doing something horribly wrong by it's discreete little red barlines, which are very easy to overlook, and which will often follow you around throughout the score as long as the original error goes unnoticed.
+
+
+
+//**Rests --- normalize them**//
+
+
+
+Cutting and pasting and things like that will often for some reason confuse Rosegarden's rest calculation, resulting in rests interspersed between notes, that really have no business being there. There's a quick and easy fix for this: double click to mark the measure this occurs in, or triple click to mark the entire staff*, and simply press Ctrl+N (Normalize rests). That will usually tidy things up. If there still are annoying rests hanging around that have no business being there, there will usually also be a red barline somewhere, indicating that there's something wrong with some note values somewhere. If so, simply track the error down by Ctrl+N'ing one measure after the other untill arriving at something that doesn't add up rhytmically. Change it so that it does, and those annoying rests will go to their final resting place and leave you alone at last.
+
+
+
+*//NB! If you triple click to mark the entire staff in order to Ctrl+N it, make absolutely sure you really want all the rests in that staff to be normalized. If you have changed rests in this staff, Ctrl+N'ing will turn them back into whatever they were before you changed them. And then you'll have to go and change them back again, while asking yourself why you have to be so stupid and impulsive all the time//.
+
+
+
+Another thing that will often cause red barlines, is rests being calculated wrong in measures with changing time signatures. For instance, I had a 5/4 measure in the middle of a theme in 6/4, and the 5/4 measure automatically got the same dotted whole rests as the 6/4 measure, prompting that elusive red barline again.
+
+
+
+//**LilyPond preview --- just do it**//
+
+
+
+In the file menu you'll find the choice to preview your file with LilyPond. If you intend to end up with a handsome PDF of your score with the aid of LilyPond, do use that function and use it often throughout your writing process. You'll never know when something might suddenly look wrong in LilyPond even though everything seems fine in Rosegarden. Also, and because of this, errors of the kind mentioned above are often easier to detect when previewing the LilyPond PDF. This is just sort of a hygiene type of thing to do, if you will. Believe me, the frustration of having finally finished that Great Score of yours and now, all you have to do is PDF it and e-mail it out to whomever is going to help you make that dream come true, only to at that point discover that things look all wrong and there are all sorts of problems with the PDF, is a rather soul crushing one. It's much easier and less time consuming to check in on the PDF during the writing process to make sure it's in good shape.
+
+
+
+//**Lyrics --- wipe and type**//
+
+
+
+Entering lyrics in Rosegarden is a piece of cake. Just use the T symbol , choose song lyrics from the scroll down menu and click below the note where you want the word positioned. But there is one trap that is easy to fall into here, and I was going absolutely bananas before I realized what it was I had done that had caused the lyrics to get all "out of sync" in the PDF, although they were perfectly in place in Rosegarden. Here's that trap: If you have just entered a word, and then realized that let's say for instance you wanted to have a comma after it, when you double click with the Text symbol chosen on that word, the last word that you entered will still be in the Text editor. All you have to do, or so it would seem, is to click beside that word to unmark it, add a comma and press Enter. Voila. Don't do that. In Rosegarden, it will look as if you have replaced let's say the word "moon" with the word "moon,". But that is simply because it is impossible for you to see that what you have is in fact the word "moon" with the word "moon," on top of it. Everything looks swell untill the LilyPond export, where LilyPond will see these two words and place them next to each other instead of on top of each other. So the PDF will have the word "moon" right where you intended it, and the word "moon," at the next available note in that voice. And so all the subsequent lyrics will have been pushed one note too far to the right. That is really quite a horrible sight to behold.
+
+
+
+So never do that. Instead, if you've entered the word "moon", and then realize you want a comma behind it, delete that word both from the score and from the text editor and type "moon," into the blank field. That is the only way to avoid total confusion in the lyrics in the final PDF output. The comma in this case is of course just an example, this is true whenever you want to change a word you've entered. Wipe it out and type it in again, or you'll be sorry.
+
+
+
+//**Polyphony --- keep things separated**//
+
+
+
+If you want to end up with several voices on the same staff, you can easily achieve that on export to LilyPond. Just make sure to give all the tracks you want to see on the same staff the same name, and check the "Merge tracks with identical names" upon LilyPond export, and you've got yourself an instant piece of polyphony. Or whatever it is that you are writing.
+
+
+
+You can see the different voices on the same staff in Rosegarden if you wish. Simply drag one segment on top of another and drop it there, and click on the track to mark it. Now when you open it in the notation editor, the voices will appear on the same staff. But if you intend to keep editing these voices in the note editor, you really should take them apart again before doing so. And I can't stress that enough.
+
+
+
+In my case it was actually quite pointless to overlap those segments in Rosegarden. I wanted to see what it looked like, and I thought I could work with the different voices and edit them on the same staff. The problem is that when you do that, you don't really have any control over which voice you are editing. It may seem obvious to you that it's the second alto, but don't be too sure Rosegarden will make the same assumption. I experienced "inexplicable" problems upon export, untill I took the overlapping voices apart, only to discover that one note was missing from the second alto. Instead I found it hiding in the first alto, where of course it had no business being.
+
+
+
+So I don't really see the point in overlapping segments like this as long as you intend to keep editing them in the notation editor. If you are curious as to what they will look like when written on the same staff, simply preview them in LilyPond. But to avoid invisible confusion, keep them on separate tracks in Rosegarden untill you're done fiddling around with notation.
+
+
+
+Of course, when you want to see separate voices on the same track, you need to make the superfluous rests and other objects invisible. You can do that from the bottom choice in the Adjust menu in the notation editor. And you might as well configure a shortcut for that as well, it will save a lot of time and wrist movement.
+
+
+
+__**When the damage is done**__
+
+
+
+//**LilyPond --- not as tricky as it seems**//
+
+
+
+If you are reading this at a point where you now say to yourself "Gee, I wish someone would have told me all of this two months ago", don't worry. If there are problems with your file that seem too tedious to tidy up through Rosegarden, many things can actually be fixed quite easily in the LilyPond text. All you need is the stomach to look at the LilyPond manual a bit. Remember to take deep breaths while doing so, and it will hopefully start to make a little bit sense after a while. Keep in mind that you can search for the word you're looking for in the content list at the top, thus sparing yourself the unnecessary pain of having to read through a lot of confusing stuff that isn't relevant for your purposes, and that only makes your brain want to retire and move to Florida.
+
+
+
+//**"Help me!"-emails --- they help**//
+
+
+
+Don't hesitate to ask the community for help when in despair. I found that often the mere writing of an email describing the problems I was having would in fact help me think clearer about those problems and give me new ideas for other ways to attempt to solve them that I hadn't tried yet. I believe this is due to a pshycological instinct that tries desperately to minimize the extent to which you will look like a complete idiot for asking, thus actually maximizing the extent to which you suddenly find yourself able to maybe fix it yourself after all. And if not, someone in the community will usually be able to come up with something that might help you solve your problem.
+
+
+
+Good luck with your music, and don't forget to share it!
+
+
+
+Tips provided by Gunhild.

@@ -1,0 +1,92 @@
+
+======Making strings translatable======
+
+
+
+=====A few quick notes=====
+
+
+
+Please note that the base/ directory does not use QString, and so cannot be translated with the KDE tools. If you think a string needs to be there that absolutely must be translated, the mailing list is the best place to work this out.
+
+
+
+Unfortunately, someone has made the decision that American English be the default language for KDE apps, so all internal strings should originate in American English. (I believe setting one's environment to en_US is a no-op? Please correct me if I'm wrong- it may just be the case that my default environment of en_US doesn't allow any en_US po translations.)
+
+
+
+=====Writing code=====
+
+
+
+The only thing you really need to know is to wrap all strings that need to be translated with the i18n() function, for example, i18n("Open File").
+
+
+
+However, please read the following---it will save work in the long run.
+
+
+
+  * There is a version of the i18n method with two arguments. The first arg is an explanation of exactly what the second arg is used for, which helps translators understand ambiguous cases. (Only the second arg is translated.) For example, "View" in English may be used as a verb or noun, which are translated differently in different languages.
+
+  * All languages do not have the same rules about word order. Using the Qstring::arg() method allows easy re-ordering for translation purposes.
+<code>
+BAD: msg = i18n("Loading file ") + filename
+GOOD: msg = i18n("Loading file %1").arg(filename)
+PROBABLY WON'T WORK AT ALL: msg = i18n("Loading " + filename + " for import")
+</code>
+  * arg() should also be used for non-translated strings (proper names, etc) or frequently-changing strings such as version numbers.
+
+
+
+====Plural handling====
+
+
+
+When using plural and singular words to explain something, please use the KDE style i18n() macro with a %n argument. Here is a real example:
+
+
+
+BAD:
+<code>
+QString title = selection.size() > 1 ?
+                    i18n("Split Segments at Time") :
+                    i18n("Split Segment at Time");
+</code>
+GOOD:
+<code>
+QString title = i18n("Split Segment at Time",
+                     "Split %n Segments at Time",
+                     selection.size());
+</code>
+
+
+More tricks available at
+
+  * http://developer.kde.org/documentation/library/kdeqt/kde3arch/kde-i18n-howto.html
+
+  * http://i18n.kde.org
+
+  * http://l10n.kde.org/docs/translation-howto/dictionaries.html
+
+
+
+=====Maintaining the translation files=====
+
+
+
+Every once in a while, the main rosegarden.pot file should be updated from the latest source files with the command
+<code>
+cd po/
+bash ./messages.sh
+</code>
+If the changes are large or it has been a long time since the last update, announce on the mailing list to get the legions involved in updating all translated files. Statistics on the translation percentages in different languages is obtained with command
+<code>
+cd po/
+bash ../scripts/po-stats
+</code>
+The output of this statistics may then be put to [[translator:Add or update translation|the wiki pages for the translators]].
+
+=====Overview of KDE translation system=====
+
+At runtime, the system looks in the $KDEDIR/share/locale/$KDE_LANG/LC_MESSAGES/rosegarden.mo file for strings that match the arguments to i18n and replaces them with the translated versions if available. See the developer.kde.org link above for repercussions with respect to translating #defines, etc.

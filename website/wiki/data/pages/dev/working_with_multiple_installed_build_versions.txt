@@ -1,0 +1,53 @@
+Lifted straight out of an old post on the devel list:
+
+
+<code>
+running multiple Rosegarden builds: msg#00002
+
+Subject: running multiple Rosegarden builds
+List-id: <rosegarden-devel.lists.sourceforge.net>
+
+I know that the subject of how to install and run different builds of
+Rosegarden at once comes up occasionally.  It's not hard to do; here's
+what I do.
+
+Now that I actually have more than about ten gig of disk space in my
+development machine, I'm finally keeping more than one Rosegarden
+source tree active, corresponding to more than one CVS branch.  At the
+moment in fact I have ten build trees, plus the version of Rosegarden
+that came with the distro (Studio to Go!) still installed and runnable
+in /usr.
+
+What I do is keep the source trees under /opt/rosegarden-build as
+separate directories (1.0, head, glasgow_pitchtracker etc) with each
+one configured to a separate target directory
+under /opt/rosegarden-install:
+
+  ./configure --prefix=/opt/rosegarden-install/glasgow_pitchtracker
+  scons configure prefix=/opt/rosegarden-install/head
+  scons configure debug=0 prefix=/opt/rosegarden-install/head_NODEBUG
+
+etc.
+
+Then I have a script that you can find in scripts/cc_run that runs a
+particular build.  I have the HEAD version of this aliased to the shell
+command "run".  It takes an argument for the build name, or guesses it
+from the name of the current directory (handy if you're in a build
+directory).  The -d argument starts it in gdb.  Pretty simple.
+
+  run glasgow_pitchtracker
+  run -d head
+  run -d # when in the head build directory
+  run 1.0 --existingsequencer # extra args passed to the RG process
+  rosegarden # runs my packaged install in /usr/bin
+
+etc.
+
+There's nothing clever or inventive about this and the script doesn't
+really do anything.  As much as anything, this is just a reminder that
+running multiple builds is very easy so long as you remember always to
+set the install prefix to something a long way away from the default.
+
+
+Chris
+</code>

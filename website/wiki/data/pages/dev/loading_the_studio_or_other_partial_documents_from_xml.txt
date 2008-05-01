@@ -1,0 +1,28 @@
+[[http://sourceforge.net/mailarchive/message.php?msg_name=200707191038.26906.cannam%40all-day-breakfast.com|Mail archive link]]
+<code>
+
+Unlike our XML export code, which is located within the particular class being
+exported, we only have one single large XML import class (RoseXmlHandler, in
+src/document/) which reads a complete document in one go.
+
+In cases where we only need to import part of a document -- for example, when
+importing a .rgd device file, which consists of just the studio element from
+a .rg file -- we do it by importing the file as if it were a complete
+document, into a new RosegardenGUIDoc object, and then copying the devices we
+need from the imported document to the current one as appropriate. The
+plugin case would be quite similar to that, I expect.
+
+You can see an example of this logic in the interaction of BankEditorDialog
+(src/gui/studio) and ImportDeviceDialog (src/dialogs -- don't ask why these
+two related dialogs are in different parts of the source tree, it's probably
+a reorganisational mistake). The former calls doImport on the latter, which
+calls importFromRG if the source is a .rgd file, and this function
+(ImportDeviceDialog::importFromRG) does what I just described -- it loads a
+complete document from the .rgd file, and then copies the device and bank
+structures from it into local data members which are subsequently queried
+using the various get...() methods by BankEditorDialog.
+
+Note also that RosegardenGUIDoc::openDocument doesn't care whether the file
+it's loading is plain or gzipped XML.
+
+</code>

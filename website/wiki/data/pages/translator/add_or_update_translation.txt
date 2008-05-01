@@ -1,0 +1,120 @@
+
+======Adding or updating translations======
+
+This page is about translating Rosegarden to your language. For developers, there is also page [[dev:Making strings translatable]].
+
+
+
+This is the current state of translations (see date below) :
+<code>
+branches/stable_1_7/po$ bash ../scripts/po-stats
+Translation status report for Rosegarden project
+
+rosegarden.pot has 2322 messages
+
+Lang 	 Total 	 Done 	 Fuzzy 	Pending	 Status
+---- 	 ----- 	 ---- 	 ----- 	-------	 ------
+es 	 2322 	 2322 	 0 	0	 [+++++] 	 
+fr 	 2322 	 2322 	 0 	0	 [+++++] 	 
+it 	 2322 	 2322 	 0 	0	 [+++++] 	 
+cs 	 2322 	 2318 	 2 	2	 [++++ ] 	 
+fi 	 2322 	 2315 	 5 	2	 [++++ ] 	 
+nl 	 2322 	 2298 	 2 	22	 [++++ ] 	 
+ja 	 2322 	 2215 	 0 	107	 [++++ ] 	 
+sv 	 2322 	 2026 	 208 	88	 [++++ ] 	 
+ru 	 2322 	 2001 	 153 	168	 [++++ ] 	 
+de 	 2322 	 1969 	 188 	165	 [++++ ] 	 
+eu 	 2322 	 1913 	 243 	166	 [++++ ] 	 
+pl 	 2322 	 1896 	 263 	163	 [++++ ] 	 
+ca 	 2322 	 1735 	 364 	223	 [+++  ] 	 
+zh_CN 	 2322 	 1203 	 638 	481	 [++   ] 	 
+cy 	 2322 	 1012 	 801 	509	 [++   ] 	 
+et 	 2322 	 700 	 685 	937	 [+    ] 	 
+en_GB 	 2322 	 68 	 10 	2244	 [     ] 	 
+en 	 2322 	 0 	 0 	2322	 [     ] 	 
+
+Report produced at Thu, 01 May 2008 11:55:52 +0100
+</code>
+If you plan to update the translation of your language, download the release tarball, or pick it from http://rosegarden.svn.sourceforge.net/viewvc/rosegarden/branches/stable_1_7/po/ and just translate the strings. You may get hints of the procedure from the instructions in this page.
+
+
+
+=====1. I cannot find the translation strings. Where are they ?=====
+
+The translation strings are in [[http://rosegarden.svn.sourceforge.net/viewvc/rosegarden/trunk/rosegarden/po/|po/ directory of svn]]. The original file [[http://rosegarden.svn.sourceforge.net/viewvc/*checkout*/rosegarden/trunk/rosegarden/po/rosegarden.pot|rosegarden.pot]] is in english and the translation files have .po suffix.
+
+
+
+=====2. I cannot find a translation to my language and I would like to start a new translation. Where to start ?=====
+
+Firstly, download file [[http://rosegarden.svn.sourceforge.net/viewvc/*checkout*/rosegarden/trunk/rosegarden/po/rosegarden.pot|rosegarden.pot]]. Secondly, check the two-letter abbreviation to your language from [[http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes|the list of ISO 639-1 codes]]. Thirdly, copy [[http://rosegarden.svn.sourceforge.net/viewvc/*checkout*/rosegarden/trunk/rosegarden/po/rosegarden.pot|rosegarden.pot]] as your [ISO 639-1 code].po :
+<code>
+cp rosegarden.pot fi.po
+</code>
+An another example of a more complete code is en_GB in which 'en' stands for the language code for english and 'GB' for the country code for Great Britain.
+
+=====3. There is already the translation to my language, but it seems very old. May start from that ?=====
+
+Surely, you may start from it, download the file of your [[http://rosegarden.svn.sourceforge.net/viewvc/rosegarden/trunk/rosegarden/po/|(ISO 639-1 code).po in svn]].
+
+
+
+=====4. Are there any tools to handle translations ?=====
+
+Just open your language file and start translating! The KDE project has a tool called [[http://kbabel.kde.org/|kbabel]] and the GNOME project a tool called [[http://gtranslator.sourceforge.net/|gtranslator]] which helps manage translated strings, but any text editor that supports UTF-8 is fine.
+<code>
+kbabel fi.po
+
+gtranslator fi.po
+</code>
+=====5. I have no idea what does this particular translation string mean. Where could I get some hints of its meaning ?=====
+
+You have several options :
+
+  * Check how the string has been translated in [[http://rosegarden.svn.sourceforge.net/viewvc/rosegarden/trunk/rosegarden/po/|other languages (in svn)]].
+
+  * Open rosegarden and try to understand the translation string in its context.
+
+  * You may leave it untranslated and come back to it later.
+
+
+
+=====6. I have finished translating. How could I test the translation ?=====
+
+
+
+The following three steps will get you started with Rosegarden in your native language:
+
+
+
+  - Install Rosegarden. If you have KDE running in your language already, that's all you need. Otherwise, you also need to make sure kdebase, kde-i18n-<languageCode>, locales, and locales-<languageCode> are installed.
+
+  - Set your locale to the language you require. For KDE users, this is accomplished with KDE menu/Control Center/Personalization/Country&Language. Otherwise this can be done manually in your favorite shell by setting the environment variable KDE_LANG to your language/locale code of choice. Example: In the Bash shell, type "export KDE_LANG=fr" (no quotes) to use RG in the French language.
+
+  - Start Rosegarden.
+
+
+
+It's that easy!
+
+
+
+Problems with the translations or contributions should be sent to [[mailto:rosegarden-devel@lists.sourceforge.net|rosegarden-devel@lists.sourceforge.net]] .
+
+
+
+=====7. I cannot translate some strings. Why there are not in the translation file ?=====
+
+The basic translations strings like "File" are taken from KDE. Remember to install the language packs corresponding to your language. Example from Ubuntu:
+<code>
+apt-get install kde-i18n-fi
+</code>
+
+
+=====8. The translation works nicely! Where should I send the translation ?=====
+
+Take your file or a diff or the file against svn, and choose from the following:
+
+  * [[http://sourceforge.net/tracker/?func=add&group_id=4932&atid=354932|Submit new feature request]], describe briefly your work and attach the file to the request.
+
+  * Send it to the [[mailto:rosegarden-devel@lists.sourceforge.net|rosegarden-devel@lists.sourceforge.net]] list.

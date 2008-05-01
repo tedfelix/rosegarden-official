@@ -1,0 +1,147 @@
+====Problem description====
+
+
+We would like a way to insert MIDI program changes in the middle of tracks.
+
+This is a common feature in many sequencer programs, but it is not currently
+supported by RG. Also, the "import MIDI files" function can't be properly
+fixed now to process MIDI files having PC events in the middle of the tracks.
+
+====Proposal summary====
+
+Put program changes at the beginning of the segments. Implement this in
+Rosegarden associating the Instrument (which holds the bank/program numbers)
+to the Segment class instead of the Track. Change the MIDI file import
+function to create a new segment whenever it finds a bank/program change
+events in the middle of a track.
+
+====Discussion====
+
+<code>
+On Tuesday 20 Jun 2006 21:04, Pedro Lopez-Cabanillas wrote:
+> On Monday, 19 June 2006 18:32, Chris Cannam wrote:
+> > Note that none of this is an issue when importing MIDI files, because
+> > each distinct program gets separated out to a distinct track
+>
+> This isn't the current behavior of the MIDI import function, and I don't
+> remember it was as you say in the past.
+
+No, you're right. I was thinking of tracks that have channel events sent to
+more than one channel, which we split out into more than one track in order
+to assign each to a different instrument.
+
+> On the other hand, I find some features related to Instruments very poor or
+> even wrong. For instance: why the MIDI channel is an attribute of the
+> Instrument? why the Instruments are attributes of the tracks instead of the
+> segments? And as a consequence: there shouldn't be a limitation of 16
+> instruments per device.
+
+16 instruments per device is an arbitrary number that just coincidentally
+happens to be the same as the number of MIDI channels. If you change the 16
+at AlsaDriver.cpp line 1005 to something else, you'll get a different number.
+It works just as well with 24 or 32, or 200 -- try it!
+
+But I fear and mistrust the instrument/device handling code, and particularly
+the logic that creates the instruments in the first place and tries to keep
+them in sync between GUI and sequencer.
+
+For example, look at what the .rg file loader (rosexmlhandler.cpp:1868 and
+thereabouts) does when reading the instrument elements within each device
+element. It looks up the instrument according to its ID, which is a global
+numbering from 2000 upwards for MIDI instruments, and applies the given bank
+and program to that instrument if it exists, dropping them entirely if it
+doesn't.
+
+The significant points are (a) this code never actually creates instruments or
+assigns instrument IDs to devices -- that's done when the devices are
+created, which is originated by the sequencer if the devices are created to
+match existing available MIDI connections -- and (b) the instrument ID is not
+local to the device, but global. Put together, this means this code has no
+way of dealing with (or really knowing about) the situation where an
+instrument ID is found on the wrong device. For example, if you save a file
+with 16 instruments per device (so that instrument IDs 2000-2015 are on
+device 0, 2016-2031 on device 1 etc), then increase the number of
+auto-generated instruments per device to 24 and reload the file, the
+instruments 2016-2023 will have moved from device 1 to device 0 and tracks
+set to those instruments will suddenly play through a different MIDI port.
+
+The root cause of this is that instruments are being created in the wrong
+place -- they're created on the whim of the sequencer, and then propagated
+back to the GUI. This happens because we want to make sure there are
+candidate instruments with likely connections available for the MIDI ports
+that the sequencer finds on startup. As a result the code that really should
+have the ultimate control over the device and instrument setup (the code that
+reads in the saved devices and instruments from the .rg file) doesn't have
+any real control at all, because the instruments are already there. It can
+ask for the sequencer to create a new device, but it's still at the mercy of
+the sequencer's built-in count of instruments for that device. In fact, all
+the instruments and devices should be created at the GUI, or at least the GUI
+should have control over when and what is created -- only the available
+connections should be managed on the sequencer side.
+
+> My proposal is to associate Instruments to segments instead of tracks, and
+> dissociate the MIDI channels from instruments moving them to the track
+> level.
+
+I'm not sure that this latter bit is necessary, if there can in fact be more
+or less than 16 instruments per device -- is it? Would it make much
+difference either way?
+
+Associating instruments with segments seems at first glance like an excellent
+idea. I wonder if there are any big disadvantages? It sounds equally useful
+for audio instruments, to allow you to apply different effects plugins to
+different segments on the same track.
+
+
+[ later ]
+
+
+> Yes, but the extra instruments don't bring any extra advantage.
+
+Not in terms of the overall capability, but that's a limitation of MIDI (as
+there only are 16 channels and you can't have two different programs on the
+same one at the same time). I was just making the aside that the number of
+instruments is not technically fixed to the number of MIDI channels. (It
+could be an advantage to have more, simply from a management point of view --
+assign separate instruments to all of your tracks and then worry about which
+channels to play them through afterwards. That's not very relevant though.)
+
+But you're right, if you make the instruments per-segment and channels
+per-track, the problem goes away. Nice.
+
+> I don't understand why the methods generateInstruments() and
+> addInstrumentsForDevice() are members of the class AlsaDriver.
+
+I sort-of answered this in the previous email -- the AlsaDriver creates a
+default set of instruments to match up with the available output ports it
+finds on startup. That's really the only reason this logic is there. The
+original idea was probably to have the set of instruments completely fixed by
+the sequencer -- you'd have to look at the aRts driver to see what the
+initial design was, it's probably quite different (and simpler).
+
+> The sequencer doesn't need to care about the Instruments at all.
+
+Not true -- it needs to know about instruments because it also sequences to
+things other than MIDI devices (e.g. synth plugins -- and note that DSSI
+plugins don't have channels). Receiving events associated with particular
+instruments, and then doing the mapping from instrument to output type based
+on a separate relationship between the two, is probably the right thing.
+It's just a question of who creates and manages that relationship.
+
+> It is not strictly necessary, but may be a nightmare otherwise. Imagine
+> this scenario: track one has two segments, both assigned to channel#1.
+> Second track has an instrument assigned to channel#2. If you change the
+> instrument for the second segment on the first track, and assign an
+> instrument having channel #2, you are changing in fact the program for the
+> second track.
+
+Yes, with this and the earlier example I'm convinced.
+
+> Can it be useful for DSSI instruments too? I think so, but I don't know too
+> much the internals.
+
+I would expect so.
+
+Quite a bit of work though, all in all.
+
+</code>

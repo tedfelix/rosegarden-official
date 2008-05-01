@@ -1,0 +1,136 @@
+
+=====Notation layout, staff types etc=====
+
+[[http://sourceforge.net/mailarchive/forum.php?thread_name=200603080947.42888.ztraveler%40adelphia.net&forum_name=rosegarden-devel|Mail archive thread link]] (a long discussion about potential future changes)
+
+See also [[Notation editor improvement thoughts|Notation editor improvements]].
+
+See also [[Score layout, not just notation layout]].
+
+
+
+**Note: this is not a description of code actually in Rosegarden, it's part of a discussion about future work.
+
+That particular discussion didn't really go anywhere, but it's possible material for later.**
+
+
+On Tuesday 21 Mar 2006 16:00, Michelle Donalies wrote:
+> SingleStaff -- the traditional classical staff
+> GrandStaff -- needs to know essentially the same stuff as
+> SingleStaff. The only real difference is to which part (upper or lower) an event belongs.
+> TabStaff -- normal tablature as found in books, with traditional notation above and tab lines below.
+> CompactTabStaff -- only one part, with no traditional notation.
+> PercussionStaff -- this is a different animal. Clefs and key sigs are completely absent.
+> PercussionStaffLine -- like a PercussionStaff, but with only one line, which represents an "instrument"
+> ChordStaff
+
+A good summary, thanks.
+
+So, how do these differ?
+
+The first thing that strikes me (given the recent thread, and my
+comments in it) is that there are not many fundamental differences
+between how these different staffs handle horizontal layout.
+
+I clipped some of your descriptions above, but I didn't see anything
+substantial in there that couldn't be explained as "one staff shows
+event type X but the other one doesn't". Since a staff already gets to
+choose what events it selects from the underlying segment (via
+Staff::wrapEvent), this suggests that nothing outside of the staff
+itself should actually care whether a staff has (say) clefs and keys in
+it or not. Time signature and bar lines (which are not events) are a
+different matter, but it ought still to be a simple question of testing
+a flag to determine whether to lay them out or not, for any staff type.
+
+However, there are certainly differences in implementation in
+Rosegarden, many of which are caused by the current implementation of
+NotationHLayout doing more than it should. These are examples of
+things that appear to me to be really different and potentially
+problematic:
+
+1. Vertical layout. NotationVLayout could certainly be done by a staff
+type rather than a layout class. Different staffs have quite different
+vertical layout techniques and there's no call to reconcile between
+them. (btw I'm also not sure that the NotationView's current code to
+position the staffs on the page will do the right thing if the staffs
+are of unequal heights.)
+
+2. Accidentals. The current HLayout manages which of these are shown
+and how they are spaced based on the current clef and key, which of
+course may differ or disappear in other staff types. This is confined
+to the HLayout::scanStaff area and would be easy to suppress, but it
+would not be so tidy a thing to do as just suppressing the appearance
+of clefs and keys for example.
+
+3. The HLayout does several things which are not strictly its job at
+all, such as assigning stem lengths for beamed groups. (Well, it
+doesn't do these things itself, but it does cause them to happen.) It
+does so just because it's in the right place: after vertical layout but
+before horizontal positioning is finalised. A more correct
+implementation would probably have an intermediate pass between
+vertical and horizontal layout for these. This is again a fairly small
+amount of code in the HLayout class, but it's untidy.
+
+4. Properties calculated in the layout phase are stored in the Event
+object, with names unique to the NotationView instance so that
+different views can do different layouts (e.g. in different sizes, or
+one in a page layout and another in a linear one). However, these are
+View-specific, not Staff-specific. If it became possible to have the
+same event on more than one staff in the same view at the same time,
+this would break.
+
+I don't see any obvious disadvantages to refactoring 1, and I think 2
+and 3 are both candidates for things that could usefully be refactored
+to improve the code even if we had no intention of adding any more
+staff types in the first place, although there may be some tricky
+details. Also I'm not especially happy with the way that beamed groups
+and tuplets are handled anyway. (Our reconciliation of simultaneous
+events on different staffs is quite good though, which is partly why I
+took badly to your observation that doing anything better than
+selecting the widest minimum spacing was "overkill" -- it isn't at all,
+it makes a big difference and we do far better than that now.)
+
+> This still doesn't solve the basic disconnect with a staff representing a Segment rather than a Track.
+
+If you're thinking about that, then you might perhaps also think about
+multi-voice staffs, for which the general underlying thought has been
+that the user may choose optionally to show different segments (even on
+different tracks) as different voices on the same staff, via some sort
+of part arranger interface. Most of the basic layout code supports
+this already.
+
+[ separate email, actually earlier ]
+
+The original idea for the HLayout and VLayout classes was to use
+something like the "visitor" design pattern to separate out the layout
+logic from the staff container or the low-level drawing functions (both
+of which are either in, or invoked from, the staff class). This is not
+so much because you might want to use more than one type of layout for
+a given staff, as to keep the layout-related reasoning separate for
+code management purposes.
+
+The fact that the things we want to do next aren't easily possible using
+the current classes implies that something is wrong, of course, but I'm
+not sure that making the staff class so much more complicated is a good
+idea on the road to fixing it.
+
+Attached is a "whiteboard diagram" I sketched on paper (you can gather
+that I'm still not getting much time at the computer to think about
+these things at the moment). This shows the stages of the layout
+procedure (from memory, so doubtless some omissions) with the classes
+that currently carry them out. Start reading at top-left; the vertical
+division is broadly into single-staff layout at top, multi-staff
+reconcile and layout etc in the middle, drawing at the bottom.
+
+So, for each of the steps on this diagram, which is the most appropriate
+class to do the work? Assuming for the moment that there's no
+obligation to use the existing class structure (there is an obligation
+effectively to use the existing _code_, but it can be rearranged at
+will). It seems that the existing classes mostly do multiple tasks
+that are not necessarily closely related but that share some of the
+same data or domain knowledge (e.g. the HLayout class doing things with
+beamed groups and accidentals), and there may well be a case for
+pulling these things out into more than one class rather than just
+changing which of the existing classes they go into.
+
+{{:whiteboard.jpg|}}

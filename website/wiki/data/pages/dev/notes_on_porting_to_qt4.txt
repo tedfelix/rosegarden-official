@@ -1,0 +1,409 @@
+
+======Thoughts on porting to Qt4/KDE4======
+
+=====Structuring the work=====
+
+Four sorts of work here:
+
+  - Preliminary or refactoring work that does not depend on any major Qt4 conversion slog (but that some Qt4 conversion slog may depend on).  For example, making the sequencer a thread rather than a process (if we did that).
+  - Major Qt4 conversion slog that can be scripted.
+  - Major Qt4 conversion slog that can't be scripted (dull manual tasks).
+  - The "rewrite bits" -- work that takes serious thought and depends on already having a Qt4 backbone, such as the notation editor canvas.
+
+We can also reasonably expect to have some developers (particularly occasional contributors or newer arrivals) wanting to commit fixes and small features while the Qt4 work is going on.
+
+Possible structure:
+
+  * Keep the trunk as a relatively stable KDE3 version, and pledge that any work committed to trunk during the upheaval will be ported over to the Qt4 version at some point afterwards and will not be lost.  Trunk may or may not be released as 1.8.
+  * Create one branch for each chunk of "preliminary or refactoring work" we attempt.  (An existing, rather limited example is the kiftsgate branch, which aims to simplify the notation view by removing most of the action-related code from it, localising it in actions instead -- though we probably should merge that particular branch back to trunk anyway as it's more or less done.)  One developer for each branch, ripping the code apart with gusto.
+  * Create one branch for Qt4 conversion slog.  In it:
+    * First, concentrate on automatable conversion.  I think probably not committing any code changes during this phase; instead collaboratively building up a script or set of scripts (e.g. in Perl) which make each of the automatable replacements using regular expressions and other appropriate magic.  We can test them on local copies until we're satisfied all practical automated conversions are working, then run one last time and commit.  The sole aim here is to get the code as close as possible to compiling.  This can take place concurrently with the "preliminary" work that is happening in other branches.
+    * Merge preliminary work -- a bottleneck.
+    * Then do manual conversion of the remaining dull-o slog changes.  For this we probably ought to assign developers chunks of code to handle each (assuming we can find any developers).
+  * Finally, there's no alternative but to apply lots of actual developer thought to the "rewrite bits" individually.
+
+=====Major subjects to consider=====
+
+====Translation====
+
+One of our goals should be that no translator should have to rewrite a single word as a result of this port.
+
+Qt4 has a different translation file format from the one we use (it's a .ts file, and it's XML) with different tools; KDE4 uses an enhanced version of the same format, with updated tools.
+
+==KDE3 to KDE4==
+
+Porting KDE3 -> 4 there are some big changes in i18n.  I don't see any
+indication that this would break existing .po files, but it's a lot of work
+for us.  i18n is replaced with i18n, i18nc, i18np, i18ncp, and ki18n, and
+the .arg() methods are no longer used.  That looks interesting.
+
+[[http://websvn.kde.org/*checkout*/trunk/KDE/kdelibs/KDE4PORTING.html#i18n]]
+
+ Plural call is renamed to i18np and does away with %n placeholder, all being
+ numbered instead:
+<code cpp>
+     i18np("One image in album %2", "%1 images in album %2", n, albumName);
+</code>
+
+==KDE3 to Qt4==
+
+As far as switching to QT4, if ts2po and po2ts actually work reliably, they
+could serve to convert our existing files to the new format, and convert them
+back, in order to allow translators to continue to use their familiar tools
+in the familiar way.
+
+//(Alexandre: [I did] a po2ts migration back in Scribus 1.0.x days. It was
+fairly easy to do this, but in the end the hierarchy that TS files
+usually have (a branch for each dialog) was not recreated, so I had to
+run lupdate and then use the Ctrl+1 key combination to manually put
+everything in place. I fail to find package that has po2ts for qt4 in
+Ubuntu, so I cannot test it again.)//
+
+The process of swapping i18n() for tr() looks like a lot of work in itself
+though.  It doesn't look like a simple s/i18n/tr/g job at all.  We may have
+difficulties bringing all the i18n stuff up to KDE4 too (although there is a
+Perl script to do a partial conversion, which ought to help considerably,)
+but the QT4 route definitely seems to involve even more difficulties.  As
+near as I can tell, the i18n stuff just works thanks to KDE, and we don't
+have to find and load the translation files manually in main.cpp or
+elsewhere, or futz with any of the rest of this hands-on stuff QT requires to
+make translations work.
+
+Plural handling for Qt4 is described at http://doc.trolltech.com/qq/qq19-plurals.html -- again, a change from what we've been using, but capable enough.
+
+At a glance, it looks like KBabel can handle the QT stuff, but not vice versa.
+The most recent linguist-qt4 I have doesn't know what to do with .po files,
+but the most recent KBabel I have does apparently know how to handle .ts
+files.
+
+====DCOP====
+
+KDE4 moves to D-BUS, which is conceptually similar.  But my radical
+suggestion here is to drop the sequencer process altogether.  Bring it
+into a single process, as a separate thread.
+
+Lose the proxying/forwarding classes from src/sound etc, including the
+whole of MappedStudio.cpp (an overengineered set of classes never
+really used for their intended purpose).  Replace with a simple set of
+container classes.
+
+Keep MappedEvent, and keep the SegmentMmapper etc on both sides,
+writing into memory buffers of fixed-layout objects -- the difference
+is simply that the memory buffers are not shared or file-backed any
+more.
+
+Rename MappedComposition to something less suggestive of an actual
+composition, but keep it.
+
+Lose MappedInstrument and MappedDevice.  Make the sequencer use the
+main studio classes directly (with mutex as appropriate).
+
+Calling directly from one thread's domain to another is fine for
+simple accessors etc, but of course we would still need to schedule
+requests for play, stop etc to ensure they're carried out in the
+correct thread.
+
+Advantages: Code that stands more chance of being understood by other
+programmers.  Opens more possibilities for tighter integration,
+e.g. reading and writing tempo maps from the sequencer, or fixing the
+problems we have with adding and deleting devices, without ludicrous
+amounts of pain.
+
+Disadvantages: More possibilities for threading-related bugs.
+Crashing sequencer crashes the GUI too.
+
+
+====Widget and dialog layouts====
+
+The Qt widget hierarchy and layout classes have changed somewhat for
+Qt4.  The standard form has become a bit longer in terms of lines of
+code, though each line is simpler.
+
+e.g. we do quite a bit of things like
+
+<code cpp>
+   QGroupBox *groupBox = new QGroupBox(1, Horizontal, i18n("Group"), parent);
+   QHBox *hbox = new QHBox(groupBox);
+   QLabel *label = new QLabel(i18n("Thing:"), hbox);
+</code>
+
+The more usual way to write this now would be:
+
+<code cpp>
+   QGroupBox *groupBox = new QGroupBox(i18n("Group")); // or tr() or whatever
+   QHBoxLayout *layout = new QHBoxLayout;
+   groupBox->setLayout(layout);
+   QLabel *label = new QLabel(i18n("Thing:"));
+   layout->addWidget(label);   
+</code>
+
+Also, we use
+
+<code cpp>
+  QGridLayout::addMultiCellWidget(w, a, b, c, d, align);
+</code>
+
+an awful lot.  This has changed to effectively
+
+<code cpp>
+  QGridLayout::addWidget(w, a, c, b - a + 1, d - c + 1, align);
+</code>
+
+The old and new APIs are (respectively)
+
+<code cpp>
+  QGridLayout::addMultiCellWidget(w, fromrow, torow, fromcol, tocol, align);
+  QGridLayout::addWidget(w, fromrow, fromcol, rowspan, colspan, align);
+</code>
+
+The new API is better, but it's going to be a tricky one.  It might
+just about be scriptable.
+
+
+====Canvas areas====
+
+The main segment canvas is a widget, which should be straightforward
+to port.
+
+The matrix currently uses QCanvas.  Guillaume embarked on an
+experimental revision of this for the Qt4 QGraphicsView (in SVN at
+trunk/experiments/matrix4).  This builds into a separate application
+with just a matrix in it.  In my opinion it's not all that promising
+-- it displays, but operations like rubberbanding are slow and zooming
+is buggy.  I personally think it would be better to convert the matrix
+to a widget like the segment canvas (only much, much simpler), because
+I think there would be payoffs in terms of performance and control
+over display that justified the change.
+
+The notation view also uses QCanvas, and it may be better as a
+QGraphicsView because the layout model is much more complex than the
+matrix.  I think we should embark on the most literal possible
+translation from QCanvas and items to QGraphicsView/QGraphicsScene and
+see where it gets us.
+
+
+====Printing====
+
+It might not be unreasonable to remove Rosegarden's native printing
+altogether -- perhaps this is the moment at which we decide that
+Lilypond-only is better.
+
+**Arguments for:**
+
+1) Native printing is a mirror of what's on the screen, and there are dozens
+of bitchy layout problems on-screen that go right to the page.  Like the
+horrible slurs, top of the list.
+
+2) LilyPond export is damn reliable thanks to Heikki.
+
+3) Native printing makes gigantic graphics, and my printer takes hours to
+digest just one page of this stuff.  Native printing is totally useless with
+my printer unless I use a different, lower-resolution print driver that also
+reduces the quality to crap.  I realize this is just me, not the rest of the
+world, but native printing is pure evil to me, and I wouldn't miss it a bit.
+
+**Arguments against:**
+
+1) There are still a few things LilyPond does not export at all.  Pedal marks,
+ottavas, C vs. 4/4 per user preference,
+
+2) The whole rosegarden-lilypondview thing is still rather fragile, and we
+never have done an adequate job of coming up with some way to make sure users
+have the right helper applications in place.
+====Help====
+
+Qt4 includes a help module starting in Qt4.4 (http://doc.trolltech.com/4.4/qthelp.html).  I haven't tried to use it.  I think the help is expected to be represented as a set of HTML files.  I'm a bit suspicious about how far the Qt classes actually get you -- I don't really want to be firing up "Qt Assistant" as a help browser -- we want to either have desktop integration (i.e. use the same help browser as KDE, or even a standard web browser) or have our own built-in help window (which it seems can be done without too much trouble using QTextBrowser).
+
+What does KDE4 do with help?
+
+I'm no great fan of the KDE3 help window; half the time it doesn't even show up for users.  A less well-specified, but more tightly integrated with the application, help system might be no bad thing.  It does beg more questions about translation support though.
+
+//To which Michael replies...  Translation of the manual isn't much of an issue, because the only language that's up to date in any meaningful way, AFAIK, is English anyway.  It would be interesting to see if we could use this as an opportunity to make it easier for the manual to get translated along the way.  It's currently a gigantic pain in the ass.
+
+As far as that goes, I wouldn't much object to converting the whole thing to HTML or something, and doing away with the Docbook.  Docbook can offer lots of cool things, but we don't really care, and it's off-putting.  We've recently had two different people run away screaming after looking at the source for the manual.//
+
+I totally agree about losing Docbook. (Chris)
+
+=====Breakdown of individual classes=====
+
+The notes here contain discussion about how our uses of these classes
+might be ported to "pure" Qt4.  Generally I'm not mentioning porting
+to KDE4 except in cases where "pure" Qt4 looks hard to do.
+
+It may be worth aiming at "mostly Qt4 and cutting back our dependency
+on KDE a bit", rather than going either "pure Qt4" or "the whole hog
+with KDE4".
+
+Note that Trolltech took the very sensible decision to change the
+function name or make an incompatible prototype for each function
+whose behaviour had significantly changed between Qt3 and 4.  This
+means you can easily identify the code you need to work on because it
+doesn't compile; there's very little risk of having it compile and
+then later discovering that doesn't work.
+
+^Scriptable^Class^Notes^
+|Yes|KAboutData|The About box is arguably too KDE-specific for us anyway.  We could easily generate a formatted string from the same data.|
+| |KAction, KActionCollection, KActionMenu|Qt4's QAction is comparably powerful, but lacks the XML GUI setup logic that we use, and is not readily converted to from KDE3 KAction code. This may be a point in favour of KDE4.|
+| |KApplication|Generally, use QApplication|
+| |KCmdLineArgs||
+| |KColorDialog|Use QColorDialog -- but it isn't great and the KDE4 equivalent is likely to be better|
+|Yes|KComboBox|QComboBox|
+|Yes|KCommand, KMacroCommand, KNamedCommand|Use our own classes.  These are trivial classes and I have suitable replacements already in SV.|
+| |KConfig|QSettings does everything KConfig does, but the API is different, and our use of KConfig is quite tricksy in various places -- this is not likely to be completely scriptable.  If KDE4 has a KConfig that is exactly compatible with KDE3's, that might be the answer; but if it's a bit different, it could even be more difficult to move to than the totally different QSettings (because of the risk of getting it compiling and then finding the subtle bugs later).  **Update:** KConfig does have structural changes, to remove the state from the KConfig object.  It's probably six and two threes which is simpler, then.|
+| |KDialog, KDialogBase|QDialog provides much of the same stuff, including intelligent allocation of OK/Cancel etc buttons. The API is significantly different though|
+| |KDockMainWindow, KDockWidget|I don't know.  This could be tricky.  I fear porting the main window.|
+| |KFileDialog|QFileDialog.  The KDE version is likely to be much nicer (at least for many users) than the plain Qt4 one though.  Even if we go plain Qt4, it would be nice to have KDE enhancements as an option...|
+| |KFontRequester|QFontDialog|
+| |KGlobal, KGlobalSettings|
+| |KIcon|QIcon|
+| |KLineEdit| |
+| |KLineEditDlg| |
+| |KListView| |
+| |KListViewItem| |
+| |KMainWindow| |
+| |KMessageBox| |
+| |KProcess| |
+| |KProgress| |
+| |KProgressDialog| |
+| |KRadioAction| |
+| |KRecentFilesAction| |
+| |KSqueezedTextLabel| |
+| |KStartupLogo| |
+| |KStatusBar| |
+| |KStdAccel| |
+| |KStdAction| |
+| |KStyle| |
+| |KTabWidget| |
+| |KTempFile| |
+| |KTipDialog|Michael and I agree that this doesn't really add anything.  Perhaps we should just remove it.  //(Michael: Less for the translators to deal with that way too.  Though an argument the other way is that the tips are actually the only documentation that exists in several target languages.)//|
+| |KTmpStatusMsg| |
+| |KToggleAction| |
+| |KToolBar| |
+| |KToolBarPopupAction| |
+| |KToolBarSeparator| |
+| |KUniqueApplication| |
+| |KURL| |
+| |QAccel| |
+| |QApplication| |
+| |QBitmap| |
+| |QBoxLayout| |
+| |QBrush| |
+| |QButton| |
+| |QButtonGroup| |
+| |QByteArray| |
+| |QCheckBox| |
+| |QCheckListItem| |
+| |QCheckTableItem| |
+| |QCloseEvent| |
+| |QColor| |
+| |QColorGroup| |
+| |QComboBox| |
+| |QComboTableItem| |
+| |QContextMenuEvent| |
+| |QCursor| |
+| |QCustomEvent| |
+| |QDataStream| |
+| |QDate| |
+| |QDateTime| |
+| |QDeferScrollView| |
+| |QDialog| |
+| |QDir| |
+| |QDragEnterEvent| |
+| |QDropEvent| |
+| |QEvent| |
+| |QFile| |
+| |QFileInfo| |
+| |QFont| |
+| |QFontMetrics| |
+| |QFrame| |
+| |QFrames| |
+| |QGrid| |
+| |QGridLayout| |
+| |QGroupBox| |
+| |QHeader| |
+| |QHideEvent| |
+| |QHttp| |
+| |QHttpResponseHeader| |
+| |QIconSet| |
+| |QImage| |
+| |QLabel| |
+| |QLine| |
+| |QLineEdit| |
+| |QList| |
+| |QListBox| |
+| |QListBoxItem| |
+| |QListView| |
+| |QListViewItem| |
+| |QMap| |
+| |QMenuItem| |
+| |QMouseEvent| |
+| |QMutex| |
+| |QMutexLocker| |
+| |QName| |
+| |QObject| |
+| |QObjectList| |
+| |QPaintDevice| |
+| |QPainter| |
+| |QPaintEvent| |
+| |QPalette| |
+| |QPen| |
+| |QPixmap| |
+| |QPoint| |
+| |QPointArray| |
+| |QPopupMenu| |
+| |QPtrList| |
+| |QPtrListIterator| |
+| |QPushButton| |
+| |QRadioButton| |
+| |QRect| |
+| |QRegExp| |
+| |QRegion| |
+| |QResizeEvent| |
+| |QRgb| |
+| |QScrollBar| |
+| |QScrollView| |
+| |QSessionManager| |
+| |QSettings| |
+| |QShowEvent| |
+| |QSignalMapper| |
+| |QSize| |
+| |QSizePolicy| |
+| |QSlider| |
+| |QSocketNotifier| |
+| |QSpacerItem| |
+| |QSpinBox| |
+| |QSpinWidget| |
+| |QString| |
+| |QStringList| |
+| |QStrList| |
+| |QStyle| |
+| |QStyleOption| |
+| |QTabBar| |
+| |QTable| |
+| |QTableItem| |
+| |QTabWidget| |
+| |QTextCodec| |
+| |QTextDrag| |
+| |QTextEdit| |
+| |QTextIStream| |
+| |QTextOStream| |
+| |QTextStream| |
+| |QThread| |
+| |QTime| |
+| |QTimer| |
+| |QToolBar| |
+| |QToolBarExtensionWidget| |
+| |QToolButton| |
+| |QToolTip| |
+| |QUriDrag| |
+| |QValueList| |
+| |QValueVector| |
+| |QWheelEvent| |
+| |QWidget| |
+| |QWidgetItem| |
+| |QWidgetStack| |
+| |QXmlAttributes| |
+| |QXmlDefaultHandler| |
+| |QXmlInputSource| |
+| |QXmlParseException| |
+| |QXmlSimpleReader| |

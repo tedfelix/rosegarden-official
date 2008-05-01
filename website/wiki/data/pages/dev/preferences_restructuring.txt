@@ -1,0 +1,129 @@
+=====Which options are too obvious; which are not obvious enough; which are about right?=====
+
+Key: //Too obvious//, **not obvious enough**, about right
+
+
+
+====General/Presentation====
+
+This is one of the worst config tabs, and it's the first one you see!
+
+  * //Note name style// (definitely)
+
+  * //Audio preview scale// (perhaps a bit)
+
+  * Base octave number
+
+  * //Show tool context help in status bar// (remind me why this is an option at all, again? I think it's just because I was too timid when implementing the feature)
+
+  * //Use textured backgrounds on canvas areas// -- options like this can safely go in an Appearance tab because people will have no problem looking for them if they want to go changing the way it all looks
+
+  * Side-bar parameter box layout
+
+====General/Behaviour====
+
+  * **Default editor on double-click** (should be right up at the top of the default tab)
+
+  * Number of count-in bars
+
+  * **Always use default studio** (not **all** that common to change, but not an option users will necessarily know to go hunting around for)
+
+====General/External Editors====
+
+There is no reason for this to be its own tab.
+
+  * **External audio editor**
+
+====General/Auto-save====
+
+Likewise
+
+  * Enable auto-save
+
+  * Auto-save interval -- this could usefully be a combo with several obvious options in it, I doubt if anyone really needs to enter the exact number of seconds. Off / 30 seconds / one minute / five minutes / ten minutes should do fine. Then we don't need the enable button.
+
+====Sequencer/General====
+
+  * **Sequencer status** -- but this may be OK hidden away if we merge the trayicon branch
+
+  * **Send all MIDI controllers** -- a useful option; the first tab of the Sequencer page is probably an obvious enough place for it, but I want to highlight that it's again not something the user will necessarily think to look for
+
+  * Load SoundFont and associated options
+
+====Sequencer/Startup====
+
+  * Start JACK automatically options. The tab is badly named, given that it only contains these options. I still think the options are intrinsically problematic.
+
+====Sequencer/Record and Mix====
+
+  * //Audio mix and monitor mode// -- there's probably something to be said for removing this altogether
+
+  * Create post-fader outs -- although if we had an Audio tab, these would be among the more obvious options to put in it
+
+  * Record audio files as...
+
+====Sequencer/Synchronisation====
+
+  * Sequencer timer
+
+  * **JACK transport mode**
+
+  * MIDI Clock/System
+
+  * MMC
+
+  * MTC
+
+  * Automatically connect sync output
+
+====Notation/Font====
+
+  * Various font options -- this tab is generally OK I think
+
+====Notation/Layout====
+
+  * **Default layout mode**
+
+  * Default spacing
+
+  * Default duration factor
+
+These are debatable -- if only the notation editor remembered your last setting, it probably wouldn't be necessary to have them as configuration options at all.
+
+  * Show non-notation events as question marks
+
+  * Show notation-quantized notes in different colour
+
+  * Show invisible events in grey
+
+  * Show notes outside playable range in red
+
+  * Show superimposed notes...
+
+====Notation/Editing====
+
+  * Default note style -- again, the notation editor could just remember this. I find it amazing that I bothered to make an option of it, looking back. I must have been bored.
+
+  * When inserting notes... -- I think this option is wrong-headed, although I notice one user reported having used it. The proper options are "split notes" or "coerce new note to match existing notes" -- but not to permit inserting a note overlapping other notes. This is bound up with voice support however
+
+  * Auto-beam on insert
+
+  * Collapse rests after erase
+
+  * Default paste type
+
+====Accidentals====
+
+This one's OK I think
+
+====Quantize====
+
+This one is highly problematic because of the "After quantization" options incorrectly affecting playback and editing in non-notation views. That makes it sort of a recording option, but it's clear that these are intended to be completely notation-specific. Have to think about this.
+
+==== ====
+
+=====We can improve the defaults for=====
+
+  * External audio editor. Default is Audacity; if MHWaveEdit or Rezound is available we should perhaps use one of those in preference (owing to better JACK support and, in MHWaveEdit's case, better workflow for quick edit/save turnaround).
+
+  * "After quantize" in notation/quantize. Should be made to do the minimum by default

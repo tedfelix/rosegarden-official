@@ -1,0 +1,163 @@
+======Using Eclipse/CDT with Rosegarden======
+
+
+
+Eclipse has been a popular IDE for Java developers for a long time, but it also provides an excellent environment for other languages. CDT is the Eclipse IDE for C/C++ developers. This document is a quick tutorial to set up a working development environment for Rosegarden using Eclipse CDT on Linux.
+
+
+
+=====Install Java 5 or newer=====
+
+
+
+First, you need to install a modern Java Runtime. It is likely that your distribution includes it already. If not, you can download a package from Sun:
+
+http://java.com/en/download/index.jsp
+
+
+
+Here are some Java related document and package pointers for some popular distros:
+
+  * Suse http://en.opensuse.org/Java
+  * Mandriva http://club.mandriva.com/xwiki/bin/view/KB/UtilsUjava
+  * Ubuntu http://help.ubuntu.com/community/Java
+  * Debian http://packages.debian.org/stable/libs/sun-java5-jre
+
+
+
+The minimal requirement is the Java 5 Virtual Machine and basic runtime libraries, included in the JRE package. The JDK package also bundles the compiler and tools, which aren't required unless you want to develop in the Java language with Eclipse.
+
+
+
+Once you have installed it, you need to add the java/bin directory to your path, and point a JAVA_HOME environment variable to the installation directory.
+
+For instance:
+<code>
+$ export PATH=$PATH:/usr/java/jdk1.5.0/bin
+$ export JAVA_HOME=/usr/java/jdk1.5.0
+$ java -version
+java version "1.5.0"
+Java(TM) 2 Runtime Environment, Standard Edition (build 1.5.0-b64)
+Java HotSpot(TM) Client VM (build 1.5.0-b64, mixed mode, sharing)
+</code>
+
+
+=====Install Eclipse/CDT=====
+
+
+
+Here you can download a bundle containing the Eclipse IDE for C/C++:
+
+http://www.eclipse.org/downloads/moreinfo/c.php
+
+
+
+It includes Eclipse 3.3 and CDT 4.0, and it is easy to install: you only need to gunzip the package and you are done.
+<code>
+$ tar -xvzf tars/eclipse-cpp-europa-linux-gtk.tar.gz
+$ cd eclipse
+$ ./eclipse
+</code>
+
+
+The first time you run the program, it asks for a directory for the workspace. Here is where your project directories are going to reside.
+
+
+
+=====Install Subversion plugin=====
+
+
+
+Eclipse comes with native CVS support, but Rosegarden uses Subversion (SVN), so you need the Eclipse plugin for SVN.
+
+
+
+Download it from http://subclipse.tigris.org/
+
+and install it following the instructions in http://subclipse.tigris.org/install.html
+
+
+
+It is highly recommended not to install the whole Subclipse plugin (otherwise you may get some unresolved dependencies) and do without the optional parts. When in the Eclipse Update Manager menu, drill down the Subclipse item and uncheck the optional integrations (Buckminster and Mylyn), then proceed with the installation.
+
+
+
+=====Download the Rosegarden SVN repository=====
+
+
+
+Window->Open perspective->Other
+
+Select "SVN Repository Explorer"
+
+
+
+Click with the right mouse button on the "SVN Repository" view, to Open context menu, and click on
+
+New->Repository Location...
+
+
+
+Fill the URL: https://rosegarden.svn.sourceforge.net/svnroot/rosegarden
+
+
+
+After a short time, expand the tree and select trunk/rosegarden (or some other branch/tag you may be interested in).
+
+Press right Mouse Button, click on "Checkout..."
+
+
+
+You are going to create a local project from this point, selecting either the first option (Check out as a new project, using the New Project Wizard) or the second one: Check Out as a project in the workspace. It takes some time for Subversion to download the source tree. It is recommended to keep the suggested project name (simply "rosegarden") so as to make default Run and Debug configurations work correctly.
+
+
+
+Switch to the "C/C++ Perspective", and you will see the new Rosegarden project, ready to build and explore. The "Team" submenu on the contextual menu of the "C++ Projects" view has options for many repository tasks: Commit, Update, Create patch, Apply patch, and a very handful "Synchronize with Repository" option, that shows what files have changed in your local tree and the remote repository, and allows you to commit or update changes selectively. There is also an eclipse perspective dedicated to updates/commits : Team Synchronizing (you can access it from Window->Open Perspective).
+
+
+
+
+
+=====Configure and Compile Rosegarden=====
+
+
+
+Use a terminal to invoke CMake. It is recommended to select both WANT_DEBUG and WANT_FULLDBG, to be able to use the debugging facilities in Eclipse.
+
+
+<code>
+$ cd workspace/rosegarden
+$ cmake . -DWANT_DEBUG=ON -DWANT_FULLDBG=ON
+</code>
+or use the interactive configuration tool:
+<code>
+$ ccmake .
+</code>
+If you wish to have several versions of Rosegarden on the same machine, you should check this post: [[Working with multiple installed build versions|Working+with+multiple+installed+build+versions]]
+
+
+
+Now, return to the Eclipse IDE and select the menu item Project->Build Project. You can send the process to the background, and watch the "console" view for compiler messages.
+
+
+
+=====Running and Debugging=====
+
+
+
+Once you completed the compilation step, you can run Rosegarden from inside the Eclipse IDE. The repository includes three run configurations:
+
+  * rg-sequencer: runs the rosegarden sequencer process
+  * rg-gui-noseq: runs the GUI, without using the sequencer (no MIDI, no audio)
+  * rg-gui-existingseq: runs the GUI connected to an existing sequencer process
+
+
+Before running Rosegarden, you need to install it somewhere. Define an environment variable RGINSTALL to point to the selected DESTDIR/prefix. This variable is used in the provided run configurations. Maybe you want to build your own configurations based on these samples, instead of using/modifying the provided ones.
+
+
+
+You can run several configurations at once, for instance run rg-sequencer first, and then run rg-gui-existingseq. You can use these configurations in either Debug or Run modes. The debug mode has its own perspective, where you can control breakpoints and trace executions. You can set your breakpoints in the source editor window directly. To debug correctly you must have --nofork passed to rosegarden (as done by the three debug configurations).
+
+
+
+Now, you are ready. Start hacking Rosegarden, and enjoy!

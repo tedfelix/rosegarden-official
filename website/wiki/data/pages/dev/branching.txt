@@ -1,0 +1,79 @@
+======Working with branches======
+
+
+If you would like to play in developing something new, which may potentially break the software, create a new branch to play with.
+
+=====1 Creating a new branch=====
+
+Create a new branch by copying the trunk. For example, for a branch called my_branch, do the following (as a single one-line command):
+<code>
+svn copy https://<user>@rosegarden.svn.sourceforge.net/svnroot/rosegarden/trunk/rosegarden \
+         https://<user>@rosegarden.svn.sourceforge.net/svnroot/rosegarden/branches/my_branch
+</code>
+You can see what branches already exist (so as to get ideas for a new name, perhaps) using
+<code>
+svn ls https://<user>@rosegarden.svn.sourceforge.net/svnroot/rosegarden/branches/
+</code>
+=====2 Checking out a branch=====
+
+Replace <user> with your sforge username and lilypond_everywhere with the branch you are working.
+<code>
+svn co my_branch
+</code>
+=====3 Committing changes to the branch=====
+
+Working with branches is as easy as working with the trunk. Commit the changes from the root directory of the branch.
+<code>
+cd my_branch
+svn commit -m "Text which describes the updates."
+</code>
+=====4 Merging changes from trunk to the branch=====
+
+If you would like to merge changes since svn version 8115, do
+<code>
+svn merge -r 8115:HEAD https://rosegarden.svn.sourceforge.net/svnroot/rosegarden/trunk/rosegarden
+</code>
+If there are no conflicts, you may continue by committing the changes to the branch.
+<code>
+svn commit -m "merge from trunk"
+</code>
+Note that such a committing does not work if you had conflicts, therefore, resolve conflicts before committing changes.
+
+=====5 Resolving conflicts=====
+
+In the case of a conflict, there will be 'C' in the place of the file which contained conflicts.
+<code>
+C  foo.c
+</code>
+Such a file will be splitted to several parts.
+<code>
+foo.c
+foo.c.r8115
+foo.c.r8119
+foo.c.working
+</code>
+After you have resolved conflicts, remove the extra files and commit the changes.
+<code>
+rm foo.c.*
+svn commit -m "merge from trunk"
+</code>
+=====6 Merging changes from a branch to trunk=====
+
+Merging from branch to trunk is similar to merging trunk to branch, see **4 Merging changes from trunk to the branch.**
+
+
+
+However, when committing the merge from the branch, **make a verbose changelog on the changes**.
+
+=====7 Closing a branch=====
+
+When a branch is finished with, we usually either delete it if it was very short-lived and uninteresting,
+<code>
+svn rm https://<user>@rosegarden.svn.sourceforge.net/svnroot/rosegarden/branches/uninteresting
+</code>
+or else move it to the branches/obsolete directory on the Subversion server. If in doubt, do the latter:
+<code>
+svn mv https://<user>@rosegarden.svn.sourceforge.net/svnroot/rosegarden/branches/my_branch \
+       https://<user>@rosegarden.svn.sourceforge.net/svnroot/rosegarden/branches/obsolete/
+</code>
+

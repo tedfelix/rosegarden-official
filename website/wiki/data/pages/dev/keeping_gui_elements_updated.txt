@@ -1,0 +1,19 @@
+[[http://sourceforge.net/mailarchive/message.php?msg_name=200706112350.09420.glaurent%40telegraph-road.org|Mail archive link]]
+
+<code>
+
+Keeping GUI elements updated, e.g. notifying the NotationView if a
+segment has changed, is done through the RefreshStatus class. This
+class holds a set of 'observer IDs'. Every Segment carries a
+RefreshStatus, and every edit part displaying one has an observer ID.
+
+
+Whenever a change is made in a segment, its RefreshStatus is set to
+'has changed' for all observer IDs. Then each observer, whenever it's
+refreshed, checks its status ID to see if the segment it displays has
+changed since last update. This is done in EditViewBase::paintEvent().
+
+
+It certainly could have been done better, but it works :-).
+
+</code>
