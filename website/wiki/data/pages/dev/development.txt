@@ -4,6 +4,7 @@
 A place to gather miscellaneous development notes.
 
   * **See also: [[Contributing|HOWTO contribute]]**
+  * **See also: [[Future Plans]]**
   * **See also: [[http://rosegarden.sourceforge.net/code_doc|Doxygen code documentation]]**
   * **See also: [[EclipseCDT|Eclipse/CDT with Rosegarden]]**
   * **See also: [[UnitTesting]]**
@@ -31,31 +32,6 @@ See also the [[http://sourceforge.net/mailarchive/forum.php?forum_name=rosegarde
 ===Translations===
 
   * [[Making strings translatable]]
-
-
-====Discussions about Future Work====
-
-These are either topics that have come up on the mailing list, or things that originally appeared as open-ended feature requests on our trackers.
-
-See also [[Summer_Code|Summer code]].
-
-===Notation===
-
-These need to be simmered down into a single unified Theory of Notation Editing.
-
-  * [[Notation editor improvement thoughts]]
-  * [[Score layout, not just notation layout]]
-  * [[Notation layout, staff types etc]]
-
-===Sequencer===
-
-  * [[Making a noise by default]]
-
-===Other===
-
-  * [[Ramblings about scripting]]
-  * [[A Vision]]
-
 
 
 ====Documents in Subversion====

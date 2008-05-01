@@ -17,30 +17,18 @@
 
 ===== Pages for Developers =====
 
-**General Docs**
-
   * [[dev:Development|Development Notes]]
   * [[dev:Contributing|How to Contribute to the Rosegarden Project]]
   * [[dev:Branching|Working with Branches]]
   * [[dev:Working with Multiple Installed Build Versions]]
-
-**Development Ideas**
-
   * [[dev:Summer Code]] -- suggestions for pieces of work that new developers might like to get started with
 
-**Discussion about Future Work**
+  * [[dev:Future Plans|Future Plans]]
 
   * Plans for [[dev:2.0]]
   * Plans for [[dev:1.8.0]]
   * Things Done For [[dev:1.7.0]]
   * Things Done For [[dev:1.6.0]]
-
-  * [[dev:Notes on porting to Qt4]]
-  * [[dev:Making a noise by default]]
-  * [[dev:First Impressions and How to Improve Them]]
-  * [[dev:Score layout, not just notation layout]]
-  * [[dev:Notation layout, staff types etc]]
-  * [[dev:Notation editor improvement thoughts]]
 
 **Metrics**
 
