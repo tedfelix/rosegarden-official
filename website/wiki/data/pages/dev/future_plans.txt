@@ -1,0 +1,31 @@
+  
+======Future Plans======
+
+These are either topics that have come up on the mailing list, or things that originally appeared as open-ended feature requests on our trackers.  They won't all necessarily happen; they're just ideas.
+
+  * See also: [[Summer_Code|Summer code]].
+  * See also: Plans for [[dev:2.0]]
+  * See also: Plans for [[dev:1.8.0]]
+  * See also: Things Done For [[dev:1.7.0]]
+  * See also: Things Done For [[dev:1.6.0]]
+
+===General===
+
+  * [[Notes on porting to Qt4]]
+  * [[Making a noise by default]]
+  * [[First Impressions and How to Improve Them]]
+
+===Notation===
+
+These need to be simmered down into a single unified Theory of Notation Editing.
+
+  * [[Notation editor improvement thoughts]]
+  * [[Score layout, not just notation layout]]
+  * [[Notation layout, staff types etc]]
+
+===Other===
+
+  * [[Ramblings about scripting]]
+  * [[A Vision]]
+
+
