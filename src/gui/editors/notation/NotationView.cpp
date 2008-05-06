@@ -6627,7 +6627,7 @@ NotationView::slotSetCurrentStaff(int staffNo)
 
         updateView();
 
-        slotSetInsertCursorPosition(getInsertionTime(), false, false);
+        slotSetInsertCursorPosition(getInsertionTime(), false, true);
 
         m_headersGroup->setCurrent(
                                 m_staffs[staffNo]->getSegment().getTrack());
