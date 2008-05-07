@@ -31,6 +31,7 @@
 
 #include "gui/editors/segment/TrackEditor.h"
 #include "gui/editors/segment/TrackButtons.h"
+#include "gui/editors/parameters/TrackParameterBox.h"
 #include "base/BaseProperties.h"
 #include <klocale.h>
 #include <kstddirs.h>
@@ -124,6 +125,7 @@
 #include "GuitarChordInserter.h"
 #include "gui/application/SetWaitCursor.h"
 #include "gui/application/RosegardenGUIView.h"
+#include "gui/application/RosegardenGUIApp.h"
 #include "gui/dialogs/ClefDialog.h"
 #include "gui/dialogs/EventEditDialog.h"
 #include "gui/dialogs/EventParameterDialog.h"
@@ -6325,6 +6327,12 @@ void NotationView::slotEditTranspose()
             intervalDialog.getChangeKey(), steps, semitones, 
             intervalDialog.getTransposeSegmentBack()));
     }
+
+    // Fix #1885520 (Update track parameter widget when transpose changed from notation)
+    RosegardenGUIApp::self()->getView()->getTrackParameterBox()->slotUpdateControls(-1);
+
+    // And update track headers likewise
+    m_headersGroup->slotUpdateAllHeaders(getCanvasLeftX(), 0, true);
 }
 
 void NotationView::slotEditSwitchPreset()
@@ -6366,7 +6374,9 @@ void NotationView::slotEditSwitchPreset()
     }
 
     m_doc->slotDocumentModified();
-    emit updateView();
+
+    // Fix #1885520 (Update track parameter widget when preset changed from notation)
+    RosegardenGUIApp::self()->getView()->getTrackParameterBox()->slotUpdateControls(-1);
 }
 
 void NotationView::slotEditElement(NotationStaff *staff,
