@@ -147,6 +147,10 @@ public:
         return w == m_lastActiveMainWindow;
     }
 
+    TrackParameterBox *getTrackParameterBox() {
+        return m_trackParameterBox;
+    }
+
 public slots:
     void slotEditSegment(Segment*);
     void slotEditSegmentNotation(Segment*);
