@@ -51,21 +51,21 @@ MatrixEraser::MatrixEraser(MatrixView* parent)
     QCanvasPixmap pixmap(pixmapDir + "/toolbar/select.xpm");
     QIconSet icon = QIconSet(pixmap);
 
-    new KAction(i18n("Switch to Select Tool"), icon, 0, this,
+    new KAction(i18n("Switch to Select Tool"), icon, Key_F2, this,
                 SLOT(slotSelectSelected()), actionCollection(),
                 "select");
 
-    new KAction(i18n("Switch to Draw Tool"), "pencil", 0, this,
+    new KAction(i18n("Switch to Draw Tool"), "pencil", Key_F3, this,
                 SLOT(slotDrawSelected()), actionCollection(),
                 "draw");
 
-    new KAction(i18n("Switch to Move Tool"), "move", 0, this,
+    new KAction(i18n("Switch to Move Tool"), "move", Key_F5, this,
                 SLOT(slotMoveSelected()), actionCollection(),
                 "move");
 
     pixmap.load(pixmapDir + "/toolbar/resize.xpm");
     icon = QIconSet(pixmap);
-    new KAction(i18n("Switch to Resize Tool"), icon, 0, this,
+    new KAction(i18n("Switch to Resize Tool"), icon, Key_F6, this,
                 SLOT(slotResizeSelected()), actionCollection(),
                 "resize");
 
