@@ -5,7 +5,7 @@
 
 =====Planned=====
 
-  * Port to QT4 or QT4/KDE4
+  * Port to Qt4 or Qt4/KDE4
 
 
 

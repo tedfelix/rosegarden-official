@@ -1,4 +1,8 @@
+
 ======Users Helping Users======
 
+Complete articles written by users for users.
+
   * [[Creating a Rosegarden score for LilyPond export]]: some dos and don'ts, from Rosegarden user Gunhild Andersen
+
 

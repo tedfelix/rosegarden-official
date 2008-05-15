@@ -31,7 +31,7 @@ These translations are provided and maintained by volunteer contributors, and so
 
 If you can help out with translating musical or technical documentation (no programming required, but it's quite hard work), please let us know!
 
-You may look at the wiki page dedicated to [[Add or update translation|adding or updating translation]].
+You may look at the wiki page dedicated to [[translator:Add or update translation|adding or updating translation]].
 
 See also docs/howtos/i18n.txt in SVN if you are interested in the technical aspects of translation.
 

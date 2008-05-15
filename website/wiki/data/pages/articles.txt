@@ -1,6 +1,10 @@
 
 ======Featured Articles on Rosegarden======
 
+=====2008=====
+
+  * KVR Audio: [[http://www.kvraudio.com/news/9191.html|Rosegarden v1.7.0 Now Available]] (May 7, 2008)
+
 =====2007=====
 
   * 64studio: [[http://64studio.com/manual/audio/rosegarden|MIDI Sequencing with Rosegarden]] (Sep 21, 2007)

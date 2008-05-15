@@ -1,5 +1,11 @@
 ====== Rosegarden Wiki ======
 
+This is the Wiki for user and developer documentation about the [[http://www.rosegardenmusic.com/|Rosegarden]] audio and MIDI sequencer and notation editor.
+
+If you wish to add any new documentation or update anything in here, please create an account and get editing!
+
+Note that developer pages are in the "dev:" namespace, and pages for translators are in the "translator:" namespace.  General user pages do not have any particular namespace; call them whatever you like.
+
 ===== Pages for Users =====
 
   * [[Users Helping Users]]
@@ -10,11 +16,11 @@
 ===== Links =====
 
   * [[Articles|Featured articles on Rosegarden]]
+  * [[Projects|Projects using Rosegarden]]
 
 ===== Pages for Translators =====
 
   * [[translator:Add or Update Translation|How to Add or Update a Translation]]
-
 ===== Pages for Developers =====
 
   * [[dev:Development|Development Notes]]
@@ -24,7 +30,8 @@
   * [[dev:Summer Code]] -- suggestions for pieces of work that new developers might like to get started with
 
   * [[dev:Future Plans|Future Plans]]
-
+  
+  * Things done since 1.7.0 [[dev:SVN_post_1.7.0]]
   * Plans for [[dev:2.0]]
   * Plans for [[dev:1.8.0]]
   * Things Done For [[dev:1.7.0]]

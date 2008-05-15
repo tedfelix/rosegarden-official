@@ -9,7 +9,6 @@ A place to gather miscellaneous development notes.
   * **See also: [[EclipseCDT|Eclipse/CDT with Rosegarden]]**
   * **See also: [[UnitTesting]]**
 
-
 ====Explanatory Snippets====
 
 These are short explanations that have come up on the Rosegarden developers' mailing list at one time or another, sometimes with a bit more detail added in the wiki.
