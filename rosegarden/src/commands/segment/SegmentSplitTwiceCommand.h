@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -23,12 +22,14 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SEGMENTSPLITCOMMAND_H_
-#define _RG_SEGMENTSPLITCOMMAND_H_
+#ifndef _RG_SEGMENTSPLITTWICECOMMAND_H_
+#define _RG_SEGMENTSPLITTWICECOMMAND_H_
 
 #include <string>
 #include <kcommand.h>
 #include "base/Event.h"
+
+#include "DeleteRangeCommand.h"
 
 
 
@@ -37,29 +38,33 @@ namespace Rosegarden
 {
 
 class Segment;
+class Composition;
+
+// Following command replaces two SegmentSplitCommand successive calls
+// when cutting a range to fix bug #1961378 (crash when cutting a range))
 
 
-class SegmentSplitCommand : public KNamedCommand
+class SegmentSplitTwiceCommand : public KNamedCommand
 {
 public:
-    SegmentSplitCommand(Segment *segment,
-                        timeT splitTime);
-    virtual ~SegmentSplitCommand();
+    SegmentSplitTwiceCommand(Segment *segment,
+                        timeT splitTime1, timeT splitTime2,
+                        DeleteRangeCommand::RejoinCommand *rejoins);
+    virtual ~SegmentSplitTwiceCommand();
 
     virtual void execute();
     virtual void unexecute();
-    
-    Segment *getSegmentA() { return m_newSegmentA; }
-    Segment *getSegmentB() { return m_newSegmentB; }
 
 private:
     Segment *m_segment;
     Segment *m_newSegmentA;
     Segment *m_newSegmentB;
-    timeT m_splitTime;
-    timeT *m_previousEndMarkerTime;
+    Segment *m_newSegmentC;
+    timeT m_splitTime1;
+    timeT m_splitTime2;
     bool m_detached;
-    std::string m_segmentLabel;
+    Composition *m_composition;
+    DeleteRangeCommand::RejoinCommand *m_rejoins;
 };
 
 

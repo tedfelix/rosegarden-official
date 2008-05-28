@@ -271,6 +271,8 @@ SET(commands_SRCS
 	commands/segment/SegmentSplitByRecordingSrcCommand.h
 	commands/segment/SegmentSplitCommand.cpp
 	commands/segment/SegmentSplitCommand.h
+	commands/segment/SegmentSplitTwiceCommand.cpp
+	commands/segment/SegmentSplitTwiceCommand.h
 	commands/segment/SegmentSyncClefCommand.cpp
 	commands/segment/SegmentSyncClefCommand.h
 	commands/segment/SegmentSyncCommand.cpp

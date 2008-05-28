@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -48,32 +47,33 @@ public:
                        timeT end);
     virtual ~DeleteRangeCommand();
 
-private:
+
     class RejoinCommand : public KNamedCommand
     {
     public:
-        // This command rejoins s on to a subsequent segment on the same
-        // track that ends at endMarkerTime (presumably the original end
-        // marker time of s, with the range duration subtracted).
+        // This command rejoins pairs of subsequent segment on the same
+        // track. Segments pairs are defined using the addSegmentsPair
+        // method.
 
-        RejoinCommand(Composition *c,
-                      Segment *s,
-                      timeT endMarkerTime) :
-            KNamedCommand(i18n("Rejoin Command")),
-            m_composition(c), m_segment(s), m_endMarkerTime(endMarkerTime),
-            m_joinCommand(0) { }
+        RejoinCommand() :
+            KNamedCommand(i18n("Rejoin Command"))
+            { }
 
-        ~RejoinCommand() { delete m_joinCommand; }
+        virtual ~RejoinCommand();
+
+        // Add a pair of segments that will be jointed later
+        void addSegmentsPair(Segment *s1, Segment *s2);
 
         void execute();
-        void unexecute() { if (m_joinCommand) m_joinCommand->unexecute(); }
+        void unexecute();
+
 
     private:
-        Composition *m_composition;
         Segment *m_segment;
         timeT m_endMarkerTime;
+        Composition *m_composition;
 
-        SegmentJoinCommand *m_joinCommand;
+        std::vector<SegmentJoinCommand *> m_rejoins;
     };
 };
 
