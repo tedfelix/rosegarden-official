@@ -277,7 +277,7 @@
 	    </mediaobject>
 	  </screenshot>
 
-	Rosegarden is an audio and &MIDI; sequencer and musical notation
+	&rosegarden; is an audio and &MIDI; sequencer and musical notation
 	editor.  This Handbook describes how to use it.
 
       </para>
@@ -313,14 +313,14 @@
       <title>About Rosegarden</title>
     <para>
       <application>Rosegarden</application> is a &MIDI; and audio
-      sequencer and musical notation editor.  Rosegarden allows you to
+      sequencer and musical notation editor.  &rosegarden; allows you to
       record, arrange, and compose music, in the shape of traditional
       score or &MIDI; data, or of audio files either imported or
       recorded from a microphone, guitar or whatever audio source you
-      care to specify.  You can use Rosegarden to write, edit, and
+      care to specify.  You can use &rosegarden; to write, edit, and
       organise music to create a composition, which you can then
       synthesise, add effects to, and mix down for burning to CD or
-      distribution on the web.  Rosegarden also contains well-rounded 
+      distribution on the web.  &rosegarden; also contains well-rounded 
       notation editing support for high quality printed output.
     </para>
 
@@ -337,7 +337,7 @@
     This handbook summarises the capabilities of &rosegarden; and
     provides a reference for some of the concepts involved.  It's
     designed to make sense either read in order or used as a reference
-    to the concepts and functions available in Rosegarden.  If you
+    to the concepts and functions available in &rosegarden;.  If you
     would like to read a tutorial as well, <ulink
     url="http://rosegarden.sourceforge.net/tutorial/en/chapter-0.html">you
     can find one here</ulink>.</para>
@@ -345,14 +345,14 @@
     <para>If there's something else that you
     don't understand or require further help with, please visit
     <ulink url="http://www.rosegardenmusic.com/support/">the
-    Rosegarden website</ulink> for Frequently Asked Questions and
+    &rosegarden; website</ulink> for Frequently Asked Questions and
     mailing list instructions.
     </para>
     </sect2>
 
     <sect2 id="intro-menufunctions">
       <title>About Menus and Shortcuts</title> <para>This handbook
-      usually refers to the functions you can use in Rosegarden by
+      usually refers to the functions you can use in &rosegarden; by
       describing where they live on the menus.  For example, the
       function to add a single new track to the main track editor is
 	<menuchoice>
@@ -362,10 +362,10 @@
 
       <para>In many cases, this is not the only way to reach a
       particular function.  In this case the same function is also
-      available through the keyboard shortcut Ctrl+T, and it also
+      available through the keyboard shortcut <keycap>Ctrl</keycap>+T, and it also
       appears as an icon on one of the main window's toolbars.  Both
       the keyboard shortcut and the icon can quickly be learned,
-      because they are shown on the menu in Rosegarden alongside the
+      because they are shown on the menu in &rosegarden; alongside the
       name of the function.  You should bear in mind that although we
       always give the full menu location in this documentation for
       reference purposes, it's not necessarily the best or most usual
@@ -376,17 +376,17 @@
 
     <sect2 id="intro-optional">
       <title>Optional Features</title> <para>This Handbook assumes
-      that your Rosegarden installation supports all the features of
-      which it is capable.  Some of Rosegarden's features, including
+      that your &rosegarden; installation supports all the features of
+      which it is capable.  Some of &rosegarden;'s features, including
       some very major ones, are actually optional when building a
-      Rosegarden installation, depending on which other libraries and
+      &rosegarden; installation, depending on which other libraries and
       supporting code is available.  For example, the whole audio
       subsystem is only compiled in if JACK libraries are available;
       synth plugin support depends on a number of other modules;
       etc.</para> <para>These dependencies are documented in the
-      Rosegarden README and configuration documentation. If you find
+      &rosegarden; README and configuration documentation. If you find
       that this Handbook refers to features not visible in the version
-      of Rosegarden you're using, consult your configuration
+      of &rosegarden; you're using, consult your configuration
       documentation or distributor.
       </para>
     </sect2>
@@ -420,10 +420,10 @@
       <title>New compositions</title>
       <para>
 	When &rosegarden; starts up, it does so with a new document,
-	containing an "empty" composition ready to start editing.
+	containing an <quote>empty</quote>composition ready to start editing.
 	To put something in that composition, you must either record
 	something, or create some blank lengths of music (referred
-	to as "segments") that you can then fill in using the
+	to as <quote>segments</quote>) that you can then fill in using the
 	various editing facilities.
       </para>
       <para>See <link linkend="recording">Recording</link> for details of how to record music, and see the <link
@@ -436,7 +436,7 @@
     <sect1 id="file-midi">
       <title>Using MIDI files</title>
       <para>
-	To import and export MIDI files, use the 
+	To import and export &MIDI; files, use 
 	<menuchoice>
 	  <guimenu lang="en">File</guimenu>
 	  <guimenuitem>Import</guimenuitem>
@@ -447,104 +447,118 @@
 	  <guimenu lang="en">File</guimenu>
 	  <guimenuitem>Export</guimenuitem>
 	  <guimenuitem>Export MIDI File</guimenuitem>
-	</menuchoice>
-	functions.
+	</menuchoice>.
       </para>
       <para>
 	Although &rosegarden; can load and save file formats such as
-	MIDI, it does not store MIDI data internally.  You should
+	&MIDI;, it does not store &MIDI; data internally.  You should
 	generally prefer to save files in &rosegarden;'s own format,
 	as &rosegarden; stores quite a lot of information that will
-	be lost when exporting to MIDI.  This also applies if you merely
+	be lost when exporting to &MIDI;.  This also applies if you merely
 	import a file, and then immediately export it back out.  &rosegarden;
-	translates the raw MIDI to its internal format, and then translates that format
-	back into MIDI.  Some details of the file structure can and do get
+	translates the raw &MIDI; to its internal format, and then translates that format
+	back into &MIDI;.  Some details of the file structure can and do get
 	lost or rearranged in this translation, but the resulting performances
 	should be functionally identical.
       </para>
       <para>
-	When a MIDI file is loaded, &rosegarden; splits out the
-	music into one track per MIDI track or channel in the file,
+	When a &MIDI; file is loaded, &rosegarden; splits out the
+	music into one track per &MIDI; track or channel in the file,
 	<link linkend="studio-midi-import">sets up the appropriate
 	  instrument mappings</link>, and <link
 	  linkend="nv-quantization">attempts to calculate plausible
-	  notation</link> for the MIDI performance data.
+	  notation</link> for the &MIDI; performance data.
       </para>
     </sect1>
 
     <sect1 id="file-rgproject">
-      <title>Rosegarden Project files</title> <para>A Rosegarden
+      <title>Rosegarden Project files</title> <para>A &rosegarden;
       composition file (.rg) contains all of the the note information
-      for your composition, as well as other data such as MIDI
+      for your composition, as well as other data such as &MIDI;
       controller settings, plugin details, and the names of any audio
       files referred to in your composition.  The audio files
-      themselves are not stored in the Rosegarden composition file;
+      themselves are not stored in the &rosegarden; composition file;
       instead you are expected to keep track of their location on disk
       yourself (see <link linkend="segment-view-audio-segments">Audio
       segments</link>).  When you need to transfer a project from one
       computer to another, or to a friend or colleague, this can be
-      inconvenient.  This is where Rosegarden Project files are
+      inconvenient.  This is where &rosegarden; Project files are
       useful.  A Project file contains your composition, all of the
       audio files it uses, any further data files required for plugins
       used in the composition, and any additional files you may want
       to include, all in one big bundle.</para>
       <para>Use <menuchoice>
-	  <guimenu>File</guimenu>
-	  <guimenuitem>Export</guimenuitem>
-	  <guimenuitem>Export Rosegarden Project file...</guimenuitem></menuchoice> to export the current composition and its associated data into a Rosegarden Project file, and  <menuchoice>
-	  <guimenu>File</guimenu>
-	  <guimenuitem>Import</guimenuitem>
-	  <guimenuitem>Import Rosegarden Project file...</guimenuitem></menuchoice> to expand a Rosegarden Project file back into a composition and load it.</para>
+	  <guimenu lang="en">File</guimenu> <guimenuitem>Export</guimenuitem> <guimenuitem>Export
+	  Rosegarden Project file...</guimenuitem></menuchoice> to export the current
+	  composition and its associated data into a &rosegarden; Project file,
+	  and <menuchoice> <guimenu lang="en">File</guimenu> <guimenuitem>Import</guimenuitem> <guimenuitem>Import
+	  Rosegarden Project file...</guimenuitem></menuchoice> to expand a &rosegarden;
+	  Project file back into a composition and load it.</para>
 
-      <para>Note that Rosegarden Project format is an interchange
-      format, not an archival format.  Although Rosegarden composition
+      <para>Note that &rosegarden; Project format is an interchange
+      format, not an archival format.  Although &rosegarden; composition
       files are very carefully checked for compatibility from one
-      Rosegarden version to the next, no long-term guarantees are made for the
+      &rosegarden; version to the next, no long-term guarantees are made for the
       Project file format.</para>
     </sect1>
     
     <sect1 id="file-other">
       <title>Other file formats</title>
-	<para>Rosegarden can export to and import from a number of other file formats.  Some of these are described here; see also <link linkend="file-printing">Printing</link> for information about LilyPond file export.</para>
+	<para>&rosegarden; can export to and import from a number of other file formats.
+	Some of these are described here; see
+	also <link linkend="file-printing">Printing</link> for information about LilyPond
+	file export.</para>
 	<variablelist>
 	<varlistentry>
 	<term>Csound</term>
 	<listitem>
       <para>You can export score files for the Csound synthesis system using 
 	<menuchoice>
-	  <guimenu>File</guimenu>
+	  <guimenu lang="en">File</guimenu>
 	  <guimenuitem>Export</guimenuitem>
 	  <guimenuitem>Export Csound score file...</guimenuitem>
-	</menuchoice>.  Together with a suitable orchestra file (not supplied), this can be used to play the composition through <ulink url="http://www.csounds.com/">Csound</ulink>. Note that not all data in the Rosegarden composition necessarily can or will be saved in the Csound format.</para>
+	</menuchoice>.  Together with a suitable orchestra file (not supplied), this can
+	be used to play the composition
+	through <ulink url="http://www.csounds.com/">Csound</ulink>. Note that not all
+	data in the &rosegarden; composition necessarily can or will be saved in the
+	Csound format.</para>
 	</listitem>
 	</varlistentry>
 	<varlistentry>
       <term>Mup</term>
 	<listitem>
 	<para>You can use <menuchoice>
-	    <guimenu>File</guimenu>
+	    <guimenu lang="en">File</guimenu>
 	    <guimenuitem>Export</guimenuitem>
 	    <guimenuitem>Export Mup file...</guimenuitem>
-	  </menuchoice>
-	  to save the contents of the current composition into a new Mup file.  This can then be processed by the <ulink url="http://www.arkkra.com/">Mup</ulink> music publication system, although it is likely that the file may need some tweaking to get really good quality output.  Note that not all data in the Rosegarden composition necessarily can or will be saved in the Mup format.</para>
+	  </menuchoice> to save the contents of the current composition into a new Mup
+	  file.  This can then be processed by
+	  the <ulink url="http://www.arkkra.com/">Mup</ulink> music publication system,
+	  although it is likely that the file may need some tweaking to get really good
+	  quality output.  Note that not all data in the &rosegarden; composition
+	  necessarily can or will be saved in the Mup format.</para>
       </listitem>
 	</varlistentry>
 	<varlistentry>
       <term>MusicXML</term>
 	<listitem>
-	<para>The <menuchoice>
-	    <guimenu>File</guimenu>
+	<para> <menuchoice>
+	    <guimenu lang="en">File</guimenu>
 	    <guimenuitem>Export</guimenuitem>
 	    <guimenuitem>Export MusicXML file...</guimenuitem>
-	  </menuchoice>
-	  function saves the contents of the current composition into a new MusicXML file.  This can then be used with any music software that supports the MusicXML format.  Note that MusicXML support is experimental and has not been well tested.  Not all data in the Rosegarden composition necessarily can or will be saved in the MusicXML format.</para>
+	  </menuchoice> saves the contents of the current composition into a new
+	  MusicXML file.  This can then be used with any music software that supports the
+	  MusicXML format.  Note that MusicXML support is experimental and has not been
+	  well tested.  Not all data in the &rosegarden; composition necessarily can or
+	  will be saved in the MusicXML format.</para>
 	</listitem>
 	</varlistentry>
 	<varlistentry>
       <term>Hydrogen</term>
-	<listitem>
-	<para>Rosegarden can import h2song files created by the Hydrogen drum machine.  These are imported into a skeletal MIDI-style structure with one track per pattern.  The audio samples they use are not imported.  Use  <menuchoice>
-	    <guimenu>File</guimenu>
+	<listitem> <para>&rosegarden; can import h2song files created by the Hydrogen drum
+	machine.  These are imported into a skeletal &MIDI;-style structure with one track
+	per pattern.  The audio samples they use are not imported.  Use <menuchoice>
+	    <guimenu lang="en">File</guimenu>
 	    <guimenuitem>Import</guimenuitem>
 	    <guimenuitem>Import Hydrogen file...</guimenuitem>
 	  </menuchoice> to import a Hydrogen file.</para>
@@ -553,12 +567,12 @@
 	<varlistentry>
       <term>Rosegarden 2.1</term>
 	<listitem>
-	<para>Use the 
+	<para>Use 
 	  <menuchoice>
-	    <guimenu>File</guimenu>
+	    <guimenu lang="en">File</guimenu>
 	    <guimenuitem>Import</guimenuitem>
 	    <guimenuitem>Import Rosegarden 2.1 file...</guimenuitem>
-	  </menuchoice> function to create a new composition from the contents of an existing X11 Rosegarden v2.1 (.rose) file.
+	  </menuchoice> to create a new composition from the contents of an existing X11 &rosegarden; v2.1 (.rose) file.
 	  </para>
 	</listitem>
 
@@ -587,23 +601,22 @@
       <title>Printing</title>
       <para>
 	You can print out a composition in the form of a musical
-	score, using the
+	score, using 
 	<menuchoice>
 	  <guimenu lang="en">File</guimenu>
 	  <guimenuitem>Print</guimenuitem>
 	</menuchoice>
-	function or the
+	 or 
 	<menuchoice>
 	  <guimenu lang="en">File</guimenu>
 	  <guimenuitem>Print with LilyPond</guimenuitem>
-	</menuchoice>
-	function.
+	</menuchoice>.
       </para>
 
       <para>
 	Producing a score from performance data is a hard task, and
 	in most cases it's unreasonable to expect a default printout
-	based on MIDI data to be very readable.  You should use the
+	based on &MIDI; data to be very readable.  You should use the
 	<link linkend="notation-view">notation editor</link> to tidy
 	up the score before printing.  (See also <link
 	  linkend="nv-quantization">Notation from performance
@@ -618,13 +631,13 @@
 	  with &rosegarden;.  LilyPond is music typesetting software that
 	  reads a specialised text file format and produces high-quality
 	  typeset output.  &rosegarden; is capable of writing LilyPond files
-	  using the
+	  using 
 	  <menuchoice>
 	    <guimenu lang="en">File</guimenu>
 	    <guimenuitem>Export</guimenuitem>
             <guimenuitem>Export LilyPond</guimenuitem>
-          </menuchoice>
-          function, and it
+          </menuchoice>,
+           and it
 	  features special <link linkend="nv-lilypond-directives">exportable
 	      directives</link> and <link linkend="track-parameters">track
 	      parameters</link> that provide access to LilyPond features for
@@ -632,20 +645,18 @@
 	  native interface.
       </para>
 
-      <para>LilyPond may be conveniently used with the
+      <para>LilyPond may be conveniently used with
 	  <menuchoice>
 	    <guimenu lang="en">File</guimenu>
             <guimenuitem>Preview with LilyPond</guimenuitem>
-          </menuchoice>
-	  function, which exports the file into a temporary file and processes
+          </menuchoice>, which exports the file into a temporary file and processes
 	  it directly with LilyPond for preview with a PDF viewer.
 	  If you are happy with the preview, you may print the score using the
-	  printing capability of the PDF viewer, or use the 
+	  printing capability of the PDF viewer, or use  
 	  <menuchoice>
 	    <guimenu lang="en">File</guimenu>
             <guimenuitem>Print with LilyPond</guimenuitem>
-          </menuchoice>
-	  function.
+          </menuchoice>.
       </para>
 
       <para>
@@ -656,17 +667,16 @@
       </sect1>
 
     <sect1 id="lilypond-options">
-      <title>LilyPond options</title>
-      <para>If one of the LilyPond export functions is invoked, there will
-	  appear a dialog in which options specific to LilyPond export may be
-	  altered.
+      <title>LilyPond options</title> <para>If you use one of the LilyPond export
+      functions, a dialog will appear in which options specific to LilyPond export may be
+      altered.
       </para>
 
       <variablelist>
 	<varlistentry>
 	  <term>LilyPond version</term>
 	    <listitem><para>
-		LilyPond version installed into the system should be automatically
+		The LilyPond version installed on the system should be automatically
 		detected in the dialog, but it is possible to export to any other
 		LilyPond version since 2.6.  Historically, LilyPond's syntax has
 		changed somewhat over time, but since LilyPond version 2.6 changes
@@ -704,11 +714,11 @@
 		It is possible to Merge tracks that have the same name.
 		This options allows for example to make a piano score with 
 		several independent voices.  You may give first three tracks
-		name "Right" and three next tracks "Left" and then merge
+		name <quote>Right</quote>and three next tracks <quote>Left</quote>and then merge
 		them in LilyPond export.  (This provides an easier way to manage
 		overlapping segments with the price that the top and bottom
 		parts will have different names on the page.  If you wish both
-		of them to be named, eg. "Piano," then you will have to keep all
+		of them to be named, eg. <quote>Piano,</quote>then you will have to keep all
 		of the segments on the same pair of staffs. Consult <ulink
 		url="http://rosegarden.sourceforge.net/tutorial/supplemental/piano/">Piano
 		by Example</ulink> for a hands-on demonstration of this.) <!--
@@ -774,15 +784,14 @@
 		extra vertical space at the bottom of the page instead.</para>
 	    </listitem>
 	</varlistentry>	<varlistentry>
-	  <term>Enable "point-and-click" debugging</term>
+	  <term>Enable <quote>point-and-click</quote>debugging</term>
 	    <listitem><para>
-		If you export the LilyPond source with the 
+		If you export the LilyPond source with 
 	  <menuchoice>
 	    <guimenu lang="en">File</guimenu>
 	    <guimenuitem>Export</guimenuitem>
             <guimenuitem>Export LilyPond</guimenuitem>
-          </menuchoice>
-		function, you may open the LilyPond source by clicking
+          </menuchoice>, you may open the LilyPond source by clicking
 		notes in the PDF output.  Consult <ulink url="  http://lilypond.org/doc/v2.10/Documentation/user/lilypond/Point-and-click#Point-and-click">LilyPond documentation</ulink> for more
 		information.
 </para>
@@ -790,25 +799,26 @@
 	</varlistentry>	<varlistentry>
 	  <term>Export \midi block</term>
 	    <listitem><para>
-		LilyPond is also capable of producing MIDI output.  Check this
+		LilyPond is also capable of producing &MIDI; output.  Check this
 		option if you wish the LilyPond source to use this option.
-		Note however that MIDI output which you obtain via &rosegarden;
+		Note however that &MIDI; output which you obtain via &rosegarden;
 		sequencer, via
 	  <menuchoice>
 	    <guimenu lang="en">File</guimenu>
 	    <guimenuitem>Export</guimenuitem>
             <guimenuitem>Export MIDI file</guimenuitem>
           </menuchoice>,
-		and via LilyPond's MIDI output may differ considerably.</para>
+		and via LilyPond's &MIDI; output may differ considerably.</para>
 	    </listitem>
 	</varlistentry>	<varlistentry>
 	  <term>Headers</term>
 	    <listitem><para>
-		Headers can be edited both in LilyPond export dialog and through the
+		Headers can be edited both in LilyPond export dialog and through
 	  <menuchoice>
 	    <guimenu lang="en">Composition</guimenu>
 	    <guimenuitem>Edit Document Properties</guimenuitem>
-          </menuchoice> function.</para><para>Some of the headers will appear
+          </menuchoice>.</para>
+	      <para>Some of the headers will appear
 		only in LilyPond output.
 		The position of the Printable headers match roughly with
 		the positions of the headers in the printed output.
@@ -877,7 +887,7 @@
       <para>
 	Tracks can be assigned to a range of &MIDI;, plugin synth, or
 	audio instruments.  In the picture above we see three segments
-	in the track editor on tracks assigned to General MIDI
+	in the track editor on tracks assigned to General &MIDI;
 	instruments.
       </para>
       
@@ -932,7 +942,7 @@
       <para>
 	Each track must have an instrument assigned to it, in order to
 	be heard.  By default the first 16 tracks are assigned to the
-	16 instruments of the first available MIDI device, and the
+	16 instruments of the first available &MIDI; device, and the
 	next 16 tracks are assigned to audio.</para>
 
       <para>To change the instrument assignment for a track,
@@ -970,7 +980,7 @@
 	associated with a track using the <link
 	  linkend="segment-view-instrumentparameterbox">Instrument
 	  Parameter Box</link>.  This is where, for example, you would
-	set a MIDI instrument to use a particular patch and so
+	set a &MIDI; instrument to use a particular patch and so
 	produce a particular sound (piano, strings etc).
       </para>
       <para>
@@ -998,7 +1008,7 @@
       <para>You can also create segments using the <link
       linkend="segment-view-selector">Select tool</link>, by clicking
       and dragging either with the middle mouse button, or with the
-      left button and Ctrl held down.</para>
+      left button and <keycap>Ctrl</keycap> held down.</para>
 
 
       <para>If you want to draw a segment longer than the visible
@@ -1022,14 +1032,15 @@
       </para>
 
       <para>If you wish to draw a segment that begins in the middle of an
-      existing segment, hold Ctrl and Alt when clicking.  The track will
+      existing segment, hold <keycap>Ctrl</keycap> and <keycap>Alt</keycap> when clicking.  The track will
       automatically expand to accommodate this new segment.  This is especially
       useful for some situations involving music notation.
       </para>
 
       <para>
-	Once you have created a segment, you can then begin editing
-	using the <link linkend="matrix-view">matrix</link>, <link linkend="percussion-matrix-view">percussion matrix</link> or <link
+	Once you have created a segment, you can then begin editing using
+	the <link linkend="matrix-view">matrix</link>, <link linkend="percussion-matrix-view">percussion
+	matrix</link> or <link
 	  linkend="notation-view">notation</link> editors.  To use one
 	of these editors, either double-click on the segment, or
 	else click with the right mouse button and choose the editor
@@ -1038,7 +1049,7 @@
 
       <para>
 	If you are intending to <link
-	linkend="recording">record</link> from a MIDI device or audio
+	linkend="recording">record</link> from a &MIDI; device or audio
 	input, you don't need to create a new segment to record into
 	first -- each separate recording always goes into a new
 	segment, created automatically during recording.
@@ -1049,7 +1060,7 @@
       <title>Audio segments</title>
       <para>
 	An audio segment contains recorded or sampled audio data,
-	instead of editable note-event data.  Rosegarden allows you to
+	instead of editable note-event data.  &rosegarden; allows you to
 	record, play, arrange and split audio segments, but does not
 	contain audio waveform editing facilities.
 	</para>
@@ -1076,10 +1087,10 @@
       <para>You can drag-and-drop audio files from the KDE file
       browser or your KDE desktop into the audio file manager, or you
       can open them using its File menu.  Then you can either
-      drag-and-drop them onto Rosegarden's track canvas, or use the
+      drag-and-drop them onto &rosegarden;'s track canvas, or use the
       audio file manager's <menuchoice><guimenu
       lang="en">Action</guimenu><guimenuitem>Insert into Selected
-	    Audio Track</guimenuitem></menuchoice> menu function, provided the current
+	    Audio Track</guimenuitem></menuchoice> menu, provided the current
       selected track in the main window is assigned to an audio
       instrument.  Newly-recorded audio segments also appear in the
       audio file manager dialog.</para>
@@ -1100,8 +1111,8 @@
       <para>The audio manager dialog also shows the sample-rate and
       other information for each audio file, and marks with an
       asterisk any audio file whose sample rate does not match that of
-      the current JACK audio session that Rosegarden is using.
-      Rosegarden will resample these files at playback time using a
+      the current JACK audio session that &rosegarden; is using.
+      &rosegarden; will resample these files at playback time using a
       very low quality zero order hold resampler.  You are advised to
       resample them separately using a separate dedicated audio editor
       instead.
@@ -1112,7 +1123,7 @@
     <sect1 id="segment-view-manipulating">
       <title>Manipulating segments</title>
       <para>
-	The main window contains a selection of "tools" for editing
+	The main window contains a selection of <quote>tools</quote>for editing
 	segments.  These are available from the main toolbar: first
 	select the tool you want from the toolbar, and then click
 	and drag on the segments on the main canvas.
@@ -1139,10 +1150,10 @@
 
 	<para>To move segments with the select tool, simply click and
 	drag on the segment.  To create copies, click and drag with
-	Ctrl held down.  To resize a segment, click and drag on the
+	<keycap>Ctrl</keycap> held down.  To resize a segment, click and drag on the
 	right-hand edge of the segment.  To create new segments, click
 	and drag on an empty area either with the middle mouse button
-	or with the left mouse button and Ctrl held down.</para>
+	or with the left mouse button and <keycap>Ctrl</keycap> held down.</para>
 
 	<para>
 	  The select tool doesn't replace the other tools completely,
@@ -1162,7 +1173,7 @@
 	</imageobject>
 	</inlinemediaobject>
            and click and drag on the segment you want
-	  to move.  If you hold down the Ctrl key while dragging, the
+	  to move.  If you hold down the <keycap>Ctrl</keycap> key while dragging, the
 	  segment will be copied instead of moved.</para>
 
 	<para>To resize a segment, use the resize tool	  <inlinemediaobject>
@@ -1173,7 +1184,7 @@
            and click and drag on the right-hand end of the segment.
            Resizing a segment has the effect of extending or
            shortening it, by subtracting some of its contents or adding
-           silence at the start or end.  If you hold down the Ctrl
+           silence at the start or end.  If you hold down the <keycap>Ctrl</keycap>
            key, the segment will be <link
            linkend="segment-view-rescale">rescaled</link> (stretched
            or squashed) instead of extended or shortened.</para>
@@ -1188,11 +1199,11 @@
         <title>Stretching and squashing segments</title>
         <para>Resizing a segment normally makes it shorter or longer
         by subtracting content or adding some extra space.  However,
-        by holding the Ctrl key while resizing, you can instead
+        by holding the <keycap>Ctrl</keycap> key while resizing, you can instead
         stretch or squash the contents of the segment.  You can also do this by selecting the segment and then using <menuchoice><guimenu lang="en">Segments</guimenu>
       <guimenuitem>Stretch or Squash...</guimenuitem></menuchoice>.</para>
         <para>
-          For segments that contain MIDI events, this re-spaces the
+          For segments that contain &MIDI; events, this re-spaces the
           events so that they are spread across the new segment's
           duration, playing back faster or slower than before but in
           the same relative proportions.
@@ -1250,18 +1261,18 @@
 	<varlistentry>
 	<term>Split on Silence</term>
 	<listitem><para><menuchoice>
-		  <guimenu>Segments</guimenu>
+		  <guimenu lang="en">Segments</guimenu>
 		  <guimenuitem>Split</guimenuitem>
 		  <guimenuitem>Split on Silence</guimenuitem>
 		</menuchoice>
 	  splits the selected segments on silences.
 		  This function works slightly differently depending
 		  on whether the selected segments contain audio or
-		  MIDI data.  For audio segments, it offers you a
+		  &MIDI; data.  For audio segments, it offers you a
 		  dialog in which you can choose a threshold below
-		  which the segment is considered "silent"; it then
+		  which the segment is considered <quote>silent</quote>; it then
 		  splits the segment whenever its amplitude falls
-		  below this threshold.  For MIDI segments, it simply
+		  below this threshold.  For &MIDI; segments, it simply
 		  splits the segment everywhere that a full bar of
 		  silence occurs.
 	</para>
@@ -1271,7 +1282,7 @@
 	<term>Split by Pitch</term>
 	<listitem><para>
 		<menuchoice>
-		  <guimenu>Segments</guimenu>
+		  <guimenu lang="en">Segments</guimenu>
 		  <guimenuitem>Split</guimenuitem>
 		  <guimenuitem>Split by Pitch...</guimenuitem>
 		</menuchoice>
@@ -1279,19 +1290,19 @@
 		    lower parts.
 
 		  This function invokes a dialog allowing you to
-		  choose a pitch as a "split point", and then splits
+		  choose a pitch as a <quote>split point</quote>, and then splits
 		  the selected segments in half with all the notes on
-		  or above that split point in the "higher" segment
-		  and all the notes below it in the "lower".
+		  or above that split point in the <quote>higher</quote>segment
+		  and all the notes below it in the <quote>lower</quote>.
 
 		</para>
 		<para>
 		  If the music in the segment consists of two separate
 		  parts (e.g. left and right hand piano parts) that
 		  are not always completely on either side of a single
-		  split point, you may with to select the "ranging
-		  split-point" option.  If this is selected,
-		  Rosegarden will attempt to track the two parts as
+		  split point, you may with to select the <quote>ranging
+		  split-point</quote>option.  If this is selected,
+		  &rosegarden; will attempt to track the two parts as
 		  they move up and down, usually doing a slightly
 		  better job of separating out notes that were
 		  intended to lie in the two separate parts.
@@ -1306,18 +1317,31 @@
 
 	<varlistentry>
 <term>Split by Recording Source</term><listitem><para><menuchoice>
-		  <guimenu>Segments</guimenu>
+		  <guimenu lang="en">Segments</guimenu>
 		  <guimenuitem>Split</guimenuitem>
 		  <guimenuitem>Split by Recording Source...</guimenuitem>
-		</menuchoice> splits the currently selected segments according to the MIDI channel and device their events were recorded from.</para><para>If you have recorded events from more than one MIDI channel or device into the a single segment, you can use this function to split them into separate segments afterwards.  Select the channel or device whose events you want to split out, and the segment will be split into two segments, one containing events from the selected channel or device and the other containing the remaining events.  The two segments are both created on the same track, with one overlapping the other.</para><para>See also <link linkend="recording">Recording</link> and <link linkend="track-recording-filters">Track recording filters</link> for more details on how to select the source MIDI channel or device for a recording.</para></listitem></varlistentry>
+		</menuchoice> splits the currently selected segments according to the
+		&MIDI; channel and device their events were recorded from.</para><para>If
+		you have recorded events from more than one &MIDI; channel or device into
+		the a single segment, you can use this function to split them into
+		separate segments afterwards.  Select the channel or device whose events
+		you want to split out, and the segment will be split into two segments,
+		one containing events from the selected channel or device and the other
+		containing the remaining events.  The two segments are both created on the
+		same track, with one overlapping the other.</para><para>See
+		also <link linkend="recording">Recording</link>
+		and <link linkend="track-recording-filters">Track recording filters</link>
+		for more details on how to select the source &MIDI; channel or device for
+		a recording.</para></listitem></varlistentry>
 
 
 	<varlistentry>
-	<term>Split at Time</term><listitem><para>The <menuchoice>
-		  <guimenu>Segments</guimenu>
+	<term>Split at Time</term><listitem><para> <menuchoice>
+		  <guimenu lang="en">Segments</guimenu>
 		  <guimenuitem>Split</guimenuitem>
 		  <guimenuitem>Split at Time...</guimenuitem>
-		</menuchoice> function simply splits the currently selected segments into two parts at the time you specify.</para></listitem></varlistentry>	
+		</menuchoice> simply splits the currently selected segments into two parts
+		at the time you specify.</para></listitem></varlistentry>
 
 	</variablelist>
 	  
@@ -1331,12 +1355,12 @@
 	<title>Tempo in Rosegarden</title>
 	<para>
 	  &rosegarden; considers a composition to be accompanied by a
-	  single stream of "tempo changes" and "time signature
-	  changes", which you can edit to adjust the tempo and the
+	  single stream of <quote>tempo changes</quote>and <quote>time signature
+	  changes</quote>, which you can edit to adjust the tempo and the
 	  number and structure of beats in each bar.</para>
 
 	<para>A tempo change
-	  can be to a constant fixed tempo, or it can be "ramped"
+	  can be to a constant fixed tempo, or it can be <quote>ramped</quote>
 	  &mdash; changing smoothly to a different target tempo at a
 	  given future time.  Each tempo change takes effect until the
 	  following one is reached, so any two consecutive tempo changes
@@ -1421,17 +1445,25 @@
       </screenshot>
       </para>
 
-	<para>The tempo and time signature editor window lists all of the tempo and time signature changes in the composition.  You can edit an individual tempo or time signature change by double-clicking on it.</para>
+	<para>The tempo and time signature editor window lists all of the tempo and time
+	signature changes in the composition.  You can edit an individual tempo or time
+	signature change by double-clicking on it.</para>
 
       </sect2>
 
       <sect2 id="tempo-edit">
 	<title>Changing Tempo</title>
 	<para>
-	You can edit an existing tempo change, or add a new one, by using the <link linkend="tempo-ruler">tempo ruler</link>, by double-clicking on the tempo display in the <link linkend="transport">Transport window</link>, by using the <menuchoice>
-		  <guimenu>Composition</guimenu>
+	You can edit an existing tempo change, or add a new one, by using
+	the <link linkend="tempo-ruler">tempo ruler</link>, by double-clicking on the
+	tempo display in the <link linkend="transport">Transport window</link>, by
+	using <menuchoice>
+		  <guimenu lang="en">Composition</guimenu>
 		  <guimenuitem>Add Tempo Change...</guimenuitem>
-		</menuchoice> menu function, or by double-clicking on an existing tempo in the <link linkend="tempo-timesig">tempo and time signature editor</link>.  Each of these will bring you to some variation of the tempo editing dialog:</para>
+		</menuchoice>, or by double-clicking on an existing tempo in
+		the <link linkend="tempo-timesig">tempo and time signature editor</link>.
+		Each of these will bring you to some variation of the tempo editing
+		dialog:</para>
 	<para>
 	  <screenshot>
 	    <mediaobject>
@@ -1444,18 +1476,28 @@
 	</mediaobject>
 	</screenshot>
 	</para>
-	<para>To set a new tempo, either dial it into the numeric tempo spinbox at the top, or else click repeatedly on the Tap button at approximately the speed you want and let &rosegarden; work out the tempo for you.
+	<para>To set a new tempo, either dial it into the numeric tempo spinbox at the
+	top, or else click repeatedly on the Tap button at approximately the speed you
+	want and let &rosegarden; work out the tempo for you.
 	  </para>
-	<para>By default, a new tempo is "fixed"; that is, the tempo remains constant from the tempo change until the next tempo change is reached.  Alternatively, you can tell &rosegarden; to make the tempo ramp smoothly to a particular value, or to the following tempo value, by the point at which the next tempo change is reached.  See also <link linkend="tempo">Tempo</link> for more details on tempo handling.</para>
+	<para>By default, a new tempo is <quote>fixed</quote>; that is, the tempo remains
+	constant from the tempo change until the next tempo change is reached.
+	Alternatively, you can tell &rosegarden; to make the tempo ramp smoothly to a
+	particular value, or to the following tempo value, by the point at which the next
+	tempo change is reached.  See also <link linkend="tempo">Tempo</link> for more
+	details on tempo handling.</para>
       </sect2>
       
       <sect2 id="time-signature">
 	<title>Time signature</title>
 	<para>
 	  To change the time signature, use <menuchoice>
-		  <guimenu>Composition</guimenu>
+		  <guimenu lang="en">Composition</guimenu>
 		  <guimenuitem>Add Time Signature Change...</guimenuitem>
-		</menuchoice> or double-click on the existing time signature in the <link linkend="transport">Transport window</link> or <link linkend="tempo-timesig">tempo and time signature editor</link>.</para><para>
+		</menuchoice> or double-click on the existing time signature in
+		the <link linkend="transport">Transport window</link>
+		or <link linkend="tempo-timesig">tempo and time signature
+		editor</link>.</para><para>
 	  <screenshot>
 	    <mediaobject>
 	      <imageobject>
@@ -1474,17 +1516,32 @@
 	  <variablelist>
 	    <varlistentry>
 	    <term>Audio Segment Duration</term>
-	      <listitem><para>Use the <menuchoice>
-		  <guimenu>Composition</guimenu>
-		  <guimenuitem>Set Tempo to Audio Segment Duration</guimenuitem></menuchoice> function when you have imported or recorded an audio segment that you know is exactly one bar long, and you want to ensure that the tempo for surrounding note events is set appropriately.</para><para>This function uses the duration of the selected segment (which must be an audio segment of a single bar) to work out a single matching tempo setting.  It does not analyse the content of the audio segment in any way; it simply looks at how long it is.</para>
+	      <listitem><para>Use <menuchoice>
+		  <guimenu lang="en">Composition</guimenu> <guimenuitem>Set Tempo to Audio Segment
+		  Duration</guimenuitem></menuchoice> when you have imported or recorded
+		  an audio segment that you know is exactly one bar long, and you want to
+		  ensure that the tempo for surrounding note events is set
+		  appropriately.</para><para>This function uses the duration of the
+		  selected segment (which must be an audio segment of a single bar) to
+		  work out a single matching tempo setting.  It does not analyse the
+		  content of the audio segment in any way; it simply looks at how long it
+		  is.</para>
 		</listitem>
 	    </varlistentry>
 	  <varlistentry>
 	    <term>Beat Segment</term>
 	    <listitem><para><menuchoice>
-		  <guimenu>Composition</guimenu>
-		  <guimenuitem>Set Tempos from Beat Segment</guimenuitem></menuchoice> analyses a segment of MIDI events that are assumed to be at beat positions for the current time signature, and sets a series of tempo changes according to the time elapsed between consecutive beats.</para>
-	      <para>You can use this to set an overall tempo map for a composition by "tapping" tempo in a recorded segment.  For example, you can record from a MIDI keyboard and tap a series of single notes at approximate beat positions, speeding up and slowing down gradually; then select the recorded segment and use this function to set a tempo map that speeds up and slows down to match your tapping.</para>
+		  <guimenu lang="en">Composition</guimenu> <guimenuitem>Set Tempos from Beat
+		  Segment</guimenuitem></menuchoice> analyses a segment of &MIDI; events
+		  that are assumed to be at beat positions for the current time signature,
+		  and sets a series of tempo changes according to the time elapsed between
+		  consecutive beats.</para>
+	      <para>You can use this to set an overall tempo map for a composition by
+	      <quote>tapping</quote>tempo in a recorded segment.  For example, you can record from a
+	      &MIDI; keyboard and tap a series of single notes at approximate beat
+	      positions, speeding up and slowing down gradually; then select the recorded
+	      segment and use this function to set a tempo map that speeds up and slows
+	      down to match your tapping.</para>
 	      </listitem>
 	    </varlistentry>
 	  </variablelist>
@@ -1541,7 +1598,7 @@
     <title>Quick Marker</title>
 
     <para>The quick marker is a special moment in time that can be defined
-    on the fly with a single key (by default Ctrl-1) from the main window
+    on the fly with a single key (by default <keycap>Ctrl</keycap>-1) from the main window
     (track editor). Once defined it appears as a red line in the loop ruler 
     (it does not appear among other markers, since it does not have a label).
     At any time when in the track editor you can jump to the quick marker
@@ -1570,7 +1627,7 @@
 	<title>Ranges and loops</title>
 	<para>
 	  &rosegarden; allows you to highlight a period of time in the
-	  main ruler, which will be used as a "range" for editing
+	  main ruler, which will be used as a <quote>range</quote>for editing
 	  operations and which will be looped during playback.
 	</para>
 
@@ -1611,16 +1668,16 @@
 	    segments, tempos and time signatures within the range.
 	  </para>
 
-	  <para>Set a range and then use the <menuchoice> <guimenu
+	  <para>Set a range and then use <menuchoice> <guimenu
 	  lang="en">Edit</guimenu> <guimenuitem>Cut
 	  Range</guimenuitem> </menuchoice> or
 	  <menuchoice><guimenuitem>Copy
-	  Range</guimenuitem></menuchoice> menu functions to cut or
+	  Range</guimenuitem></menuchoice> to cut or
 	  copy the range to the clipboard.</para>
 
-	  <para>You can paste a range using the standard <menuchoice>
+	  <para>You can paste a range using <menuchoice>
 	  <guimenu lang="en">Edit</guimenu>
-	  <guimenuitem>Paste</guimenuitem></menuchoice> menu function
+	  <guimenuitem>Paste</guimenuitem></menuchoice>
 	  to overlay its contents onto the rest of the composition at
 	  the current playback pointer position, or you can use
 	  <menuchoice> <guimenu lang="en">Edit</guimenu>
@@ -1634,9 +1691,9 @@
 	  <title>Inserting a range</title>
 
           <para>You can also insert an empty range at the current
-          playback position using the <menuchoice> <guimenu
+          playback position using <menuchoice> <guimenu
           lang="en">Edit</guimenu> <guimenuitem>Insert
-          Range</guimenuitem> </menuchoice> menu function.  You can
+          Range</guimenuitem> </menuchoice>.  You can
           specify how much space you want to insert, and then all of
           the segment content, tempos and time signatures following
           the playback position will be pushed along in time by that
@@ -1660,7 +1717,7 @@
 	trill.  One use of triggered segments is in fact for
 	<link linkend="nv-ornaments">playing ornaments</link>.</para>
 
-    <para>Rosegarden can optionally stretch or squash each triggered
+    <para>&rosegarden; can optionally stretch or squash each triggered
     segment to match the duration of the note that triggers it, and
     can raise or lower the pitch and velocity of the segment likewise
     to match.  A triggered segment is played on the same instrument as
@@ -1684,17 +1741,17 @@
     lang="en">Segments</guimenu><guimenuitem>Manage Triggered
     Segments</guimenuitem></menuchoice> option in the main segment
     canvas.  To make a new triggered segment, copy a segment or part
-    of a segment to Rosegarden's clipboard, then use the <menuchoice>
+    of a segment to &rosegarden;'s clipboard, then use the <menuchoice>
     <guimenu lang="en">Edit</guimenu> <guimenuitem>Paste as New
     Triggered Segment</guimenuitem></menuchoice> menu option in this
     manager window.  You can then set a particular note to play this
-    triggered segment instead of the original note, using the
+    triggered segment instead of the original note, using 
     <menuchoice> <guimenu lang="en">Adjust</guimenu>
     <guimenuitem>Trigger Segment...</guimenuitem></menuchoice>
-    function in the matrix or <menuchoice> <guimenu
+    in the matrix or <menuchoice> <guimenu
     lang="en">Note</guimenu><guimenuitem
     lang="en">Ornaments</guimenuitem> <guimenuitem>Trigger
-    Ornament...</guimenuitem></menuchoice> function in the notation
+    Ornament...</guimenuitem></menuchoice> in the notation
     editor.</para>
 
     <para>When triggering a segment, you will be offered a choice for
@@ -1750,7 +1807,7 @@
     </variablelist>
  
     <para>A triggered segment may contain silence at the start or end,
-    and this will be "played" (and stretched or squashed if
+    and this will be <quote>played</quote>(and stretched or squashed if
     appropriate) as well as the notes and other events in the segment.</para>
  
     <para>It is not currently possible to make a triggered segment
@@ -1832,7 +1889,7 @@
       effect at the current playback position.  Double-click on either
       of these to insert a new tempo or time signature change.  See
       <link linkend="segment-view-tempo-timesig">Tempo and Time
-      Signature</link> for more ways to adjust these elsewhere in Rosegarden.
+      Signature</link> for more ways to adjust these elsewhere in &rosegarden;.
     </para>
 
     <para>
@@ -1848,7 +1905,7 @@
     and end (see <link linkend="ranges-loops">Ranges and loops</link>),
     soloing individual tracks, turning on or off the metronome (see
     <link linkend="studio-metronome">Metronomes</link>), and silencing
-    your MIDI devices (the panic button).  </para>
+    your &MIDI; devices (the panic button).  </para>
 
     </sect1>
     <sect1 id="recording">
@@ -1868,7 +1925,7 @@
       <para>
 	To record a new segment into a track, first make sure the
 	right tracks are armed for recording by selecting the red
-	(for audio tracks) or yellow (for MIDI tracks) LED-style
+	(for audio tracks) or yellow (for &MIDI; tracks) LED-style
 	buttons on the track labels, and then use the <link
 	    linkend="transport-overview">Transport's</link> record
 	control.  This has the effect of both starting the transport,
@@ -1894,8 +1951,8 @@
 	linkend="transport-external">external transport</link>.)
       </para>
       <para>
-	If you record to MIDI tracks, you will record from the 
-	MIDI devices that are selected for recording in the
+	If you record to &MIDI; tracks, you will record from the 
+	&MIDI; devices that are selected for recording in the
 	<link linkend="studio-device-editor">MIDI device
         manager</link>, as filtered through the <link
         linkend="track-recording-filters">track level recording filter</link>
@@ -1921,7 +1978,7 @@
       <sect2 id="transport-jack">
 	<title>JACK Transport</title>
 	<para>
-	  Rosegarden supports the JACK transport mechanism for
+	  &rosegarden; supports the JACK transport mechanism for
 	  synchronising its transport with other JACK applications on
 	  the same computer.  To activate it, go to
 	  <menuchoice>
@@ -1942,24 +1999,24 @@
       <sect2 id="transport-mtc">
 	<title>MIDI Time Code</title>
 	<para>
-	  Rosegarden supports MIDI Time Code (MTC) synchronisation in
+	  &rosegarden; supports &MIDI; Time Code (MTC) synchronisation in
 	  master and slave modes.  This is particularly useful for
-	  synchronising the Rosegarden transport with a hardware
+	  synchronising the &rosegarden; transport with a hardware
 	  MTC-capable device, or with software running on other
-	  computers connected via MIDI.
+	  computers connected via &MIDI;.
 	</para>
-	<para>To make Rosegarden the MTC Master, so that it will
+	<para>To make &rosegarden; the MTC Master, so that it will
 	  control any MTC slave device or application connected to it,
 	  go to
 	  <menuchoice>
 	    <guimenu lang="en">Settings</guimenu>
 	    <guimenuitem>Configure Rosegarden...</guimenuitem>
 	  </menuchoice>
-	  and in the MIDI page's MIDI Sync tab, select "MTC
-	  Master" from the MIDI Time Code menu.  To make Rosegarden an
-	  MTC Slave so that Rosegarden's transport will automatically
-	  be synchronised with incoming MTC events, select "MTC
-	  Slave".
+	  and in the &MIDI; page's &MIDI; Sync tab, select <quote>MTC
+	  Master</quote>from the &MIDI; Time Code menu.  To make &rosegarden; an
+	  MTC Slave so that &rosegarden;'s transport will automatically
+	  be synchronised with incoming MTC events, select <quote>MTC
+	  Slave</quote>.
 	</para>
       </sect2>
     </sect1>
@@ -1967,10 +2024,10 @@
     <sect1 id="infrared-remote-controls">
     	<title>Infrared Remote Controls</title>
 		<para>
-			Rosegarden supports infrared remote controls for 
+			&rosegarden; supports infrared remote controls for 
 			almost all transport functions. In order to use it, 
 			you need either the internal LIRC client, which is 
-			an optional feature at Rosegarden's compile time, 
+			an optional feature at &rosegarden;'s compile time, 
 			or the KDE IRKick application (KDE LIRC daemon) 
 			that you can find in your Linux distribution's 
 			repositories. In both cases, you need to install 
@@ -1984,7 +2041,7 @@
 			You can find more details online about the internal
 			LIRC client configuration file and IRKick basics, at  
 			<ulink url="http://www.rosegardenmusic.com/resources/documents/infrared-remotes.shtml">
-			Rosegarden's web site</ulink>.
+			&rosegarden;'s web site</ulink>.
 		</para> 
     </sect1>
   </chapter>
@@ -1995,12 +2052,12 @@
     <sect1 id="studio-introduction">
       <title>Devices, instruments and connections</title>
 
-      <para>Rosegarden uses the term Studio to refer to everything it
+      <para>&rosegarden; uses the term Studio to refer to everything it
       knows about the sound systems attached to the computer.  This
       may include &MIDI; and audio hardware and other sound software,
       and includes information about connections, configuration,
       &MIDI; patches and so on.  The Studio is built-in to every
-      composition you create with Rosegarden.</para>
+      composition you create with &rosegarden;.</para>
 
       <para>Three pieces of terminology are essential here:
 
@@ -2009,13 +2066,13 @@
 	  <varlistentry>
 	    <term>Device</term>
 	    <listitem>
-	      <para>A <quote>device</quote>, as far as Rosegarden is
+	      <para>A <quote>device</quote>, as far as &rosegarden; is
 	      concerned, is simply something capable of producing
-	      sounds.  This may be a MIDI or audio device.  MIDI
+	      sounds.  This may be a &MIDI; or audio device.  &MIDI;
 	      devices do not necessarily correspond directly to
-	      physical MIDI ports: they are just things with names
+	      physical &MIDI; ports: they are just things with names
 	      that you can refer to, expected to work in particular
-	      ways.  Configuration information such as MIDI patch maps
+	      ways.  Configuration information such as &MIDI; patch maps
 	      can be attached to devices.
 	      </para>
 	    </listitem>
@@ -2030,8 +2087,8 @@
 		you can assign tracks to in order to choose which
 		sound they play.  By default, a device contains 16
 		instruments, created for you at startup: if the device
-		is a MIDI device, then these will each be initialised
-		to one of the 16 MIDI channels.  The instrument is
+		is a &MIDI; device, then these will each be initialised
+		to one of the 16 &MIDI; channels.  The instrument is
 		where you set all the properties of a particular
 		voice, such as program settings, reverb, volume etc.
 	      </para>
@@ -2041,9 +2098,9 @@
 	  <varlistentry>
 	    <term>Connection</term>
 	    <listitem>
-	      <para>While a MIDI device is simply a name and a
+	      <para>While a &MIDI; device is simply a name and a
 	      collection of configuration information, the
-	      <quote>connection</quote> specifies which MIDI port it
+	      <quote>connection</quote> specifies which &MIDI; port it
 	      is physically attached to.  This can be configured in
 	      the <link linkend="studio-device-editor">MIDI device
 	      manager</link>.  (Audio and synth plugin devices do not
@@ -2055,25 +2112,25 @@
       </para>
 
       <para>For example, imagine a setup consisting of a PC with two
-	physical MIDI ports, one of which has an external synth
-	attached to it.  Here you would normally configure Rosegarden
-	so as to have one MIDI device, corresponding to the synth.
+	physical &MIDI; ports, one of which has an external synth
+	attached to it.  Here you would normally configure &rosegarden;
+	so as to have one &MIDI; device, corresponding to the synth.
 	You could then configure this device with the correct name and
 	patch map, and then specify a connection for it that
-	corresponded to the relevant MIDI port on your soundcard.
+	corresponded to the relevant &MIDI; port on your soundcard.
 	Each of the 16 default instruments on the device could then be
 	configured with a suitable program, and you would then assign
 	tracks to those.</para>
 
       <para>
-	In practice, Rosegarden will by default create a device for
+	In practice, &rosegarden; will by default create a device for
 	each of the available connections on startup.  So in the
-	example above, two MIDI devices will be created by default
+	example above, two &MIDI; devices will be created by default
 	even though you only need one.  You would generally then
 	rename and apply patch maps to the first, and delete or
 	simply not use the second.  Remember that there is no way
-	for Rosegarden to know what synths you actually have plugged
-	in to the MIDI ports on your computer: for this reason, the
+	for &rosegarden; to know what synths you actually have plugged
+	in to the &MIDI; ports on your computer: for this reason, the
 	devices created at startup are just intended to be a default
 	set, and it's up to you to ensure that the devices you
 	configure match those you are really using.
@@ -2101,7 +2158,7 @@
       </para>
 
       <para>
-	The MIDI device manager dialog shows you the MIDI devices
+	The &MIDI; device manager dialog shows you the &MIDI; devices
 	that you currently have available to you, and where they are
 	connected.  To reach this dialog, use	<menuchoice>
 	  <guimenu lang="en">Studio</guimenu>
@@ -2112,7 +2169,7 @@
       <para>
 	As described in the <link
 	  linkend="studio-introduction">Devices, Instruments and
-	  Connections</link> section, by default Rosegarden tries to
+	  Connections</link> section, by default &rosegarden; tries to
 	provide a plausible set of devices for you at startup, and
 	to make sensible connections for those devices.  But the
 	default configuration might not always be suitable, and so
@@ -2122,17 +2179,17 @@
       
       <para>
 	Each of the Play devices listed here provides a target for
-	MIDI tracks to talk to: if you add a new Play device, you
+	&MIDI; tracks to talk to: if you add a new Play device, you
 	will then have 16 new instruments on this device which you
 	can assign tracks to.  If you then assign a connection for
 	that device, the tracks assigned to it will play to the
 	appropriate channel (depending on the instrument) of any
-	MIDI synth attached to that connection.
+	&MIDI; synth attached to that connection.
       </para>
 
       <para> The Record devices listed here represent possible
-	sources for recording MIDI.  You can make one or more of them
-	current (so that Rosegarden will listen to them when
+	sources for recording &MIDI;.  You can make one or more of them
+	current (so that &rosegarden; will listen to them when
 	recording) using the checkboxes on each line, as shown in this
 	dialog.  </para>
 
@@ -2148,25 +2205,25 @@
               <imagedata fileref="rg-bankeditor.png" format="PNG"/>
       </imageobject>
 	<textobject>
-	  <phrase>The MIDI bank and program editor</phrase>
+	  <phrase>The &MIDI; bank and program editor</phrase>
 	</textobject>
       </mediaobject>
       </screenshot>
       </para>
 
       <para>
-	Remember that each MIDI device contains a number of
+	Remember that each &MIDI; device contains a number of
 	instruments, and that you can assign tracks to those
-	instruments.  In MIDI terms, each instrument corresponds to
-	a single channel on your MIDI synth.  You can choose which
+	instruments.  In &MIDI; terms, each instrument corresponds to
+	a single channel on your &MIDI; synth.  You can choose which
 	of the available voices (sounds) on your synth each
 	instrument uses, but in order to do this, you need to let
-	Rosegarden know the names for all of the available voices.
+	&rosegarden; know the names for all of the available voices.
       </para>
 
       <para>
 	This dialog allows you to attach banks of programs (names for
-	voices) to your MIDI devices, thus permitting each
+	voices) to your &MIDI; devices, thus permitting each
 	instrument on a device to be set to use one of those voices
 	in the <link
 	  linkend="segment-view-instrumentparameterbox">Instrument
@@ -2185,31 +2242,31 @@
       <para>
         If there is no current .rgd file available for your synth,
         then you can use this dialog to create a new bank.  To do this
-        you will have to find the program map in your synth's MIDI
+        you will have to find the program map in your synth's &MIDI;
         Implementation Chart and enter all the names by hand: you can
-        then Export them to a .rgd file to share with other Rosegarden
+        then Export them to a .rgd file to share with other &rosegarden;
         users.  Contact the rosegarden-user mailing list if you have
         made a new .rgd file and would like to share it.  (This is how
         all of the existing .rgd files have come to be included with
-        Rosegarden: other users have contributed them.)
+        &rosegarden;: other users have contributed them.)
       </para>
 
       <sect2 id="studio-keymappings">
 	<title>Percussion Key Mappings</title>
 
 	<para>
-	  Many MIDI synthesizers have at least one percussion program,
-	  in which each "pitch" plays a different type of sound.
-	  Rosegarden contains a dedicated percussion matrix editor to
+	  Many &MIDI; synthesizers have at least one percussion program,
+	  in which each <quote>pitch</quote>plays a different type of sound.
+	  &rosegarden; contains a dedicated percussion matrix editor to
 	  view and edit notes against a scale consisting of the
 	  correct names for the pitches, instead of against the
 	  conventional piano keyboard pitch scale.
 	</para>
 
 	<para>
-	  The key mappings available for a particular MIDI device are
-	  also defined in the Rosegarden device (".rgd") file.  Each
-	  MIDI program that is defined as a percussion program can
+	  The key mappings available for a particular &MIDI; device are
+	  also defined in the &rosegarden; device (".rgd") file.  Each
+	  &MIDI; program that is defined as a percussion program can
 	  have a key mapping associated with it; if there is one, then
 	  it will be used by default in any track that is assigned to
 	  this program.  Like program and bank definitions, key
@@ -2229,12 +2286,12 @@
 	</para>
 
 	<para>Note that the Studio only manages information about
-	  existing MIDI devices for Rosegarden, it does not actually
+	  existing &MIDI; devices for &rosegarden;, it does not actually
 	  handle tasks such as loading a SoundFont to your soundcard in
 	  the first place.  If you want to make sure a SoundFont is
-	  loaded to your soundcard when Rosegarden starts up, you should
-	  use the special "Load SoundFont to SoundBlaster card at
-	  startup" option in the sequencer configuration in
+	  loaded to your soundcard when &rosegarden; starts up, you should
+	  use the special <quote>Load SoundFont to SoundBlaster card at
+	  startup</quote> option in the sequencer configuration in
 	<menuchoice>
 	  <guimenu lang="en">Settings</guimenu>
 	  <guimenuitem>Configure Rosegarden...</guimenuitem>
@@ -2246,29 +2303,29 @@
 	<title>Variations</title>
 
 	<para>
-	  Some MIDI devices (for example, those from Roland)
+	  Some &MIDI; devices (for example, those from Roland)
 	  organise their program names using a scheme known as
-	  "variations".  For these devices, you generally want to
+	  <quote>variations</quote>.  For these devices, you generally want to
 	  select a program by first selecting the basic program name
 	  &mdash; such as a piano &mdash; and then selecting one
 	  of a set of variations on that program &mdash; such as an
-	  electric piano.  This is in contrast to General MIDI-based
+	  electric piano.  This is in contrast to General &MIDI;-based
 	  synths, which organise their programs into banks and
 	  expect you to choose a bank first and then a program from
 	  that bank.
 	</para>
 
 	<para>
-	  Rosegarden can support devices that use variations, but
+	  &rosegarden; can support devices that use variations, but
 	  you still have to enter the program names in a bank
 	  format.  Internally, devices that use variations still use
-	  MIDI bank select controllers to choose between the
+	  &MIDI; bank select controllers to choose between the
 	  variations; you need to find out from your synth's
 	  documentation whether your device uses the LSB or MSB bank
 	  select to choose variations, and which bank number
 	  corresponds to which variation.  You can then enter the
-	  banks as normal, and use the "Show Variation list based on
-	  MSB/LSB" option on the bank dialog to tell Rosegarden to
+	  banks as normal, and use the <quote>Show Variation list based on
+	  MSB/LSB</quote> option on the bank dialog to tell &rosegarden; to
 	  show variations instead of banks when displaying that
 	  device in an instrument parameter box.
 	</para>
@@ -2313,8 +2370,8 @@
     <sect1 id="studio-audio-routing">
       <title>Audio Routing</title>
       <para>
-	Any Rosegarden track assigned to an audio or synth plugin
-	instrument becomes part of Rosegarden's audio routing
+	Any &rosegarden; track assigned to an audio or synth plugin
+	instrument becomes part of &rosegarden;'s audio routing
 	architecture.  There are 16 audio instruments and 16 synth
 	plugin instruments, and each of these has a set of adjustable
 	parameters including fader level, pan, effects and so on.
@@ -2326,25 +2383,25 @@
 	synth plugin instruments have an output connection.
       </para>
       
-      <para>An instrument's input connection defines where Rosegarden
+      <para>An instrument's input connection defines where &rosegarden;
       will read audio data from when recording to this instrument.
-      The most usual setting would be to one of Rosegarden's external
+      The most usual setting would be to one of &rosegarden;'s external
       audio inputs, the number of which is configurable in the <link
       linkend="studio-audio-mixer">audio mixer</link>.  These
-      correspond to JACK audio ports exposed by Rosegarden, to which
+      correspond to JACK audio ports exposed by &rosegarden;, to which
       you can connect outputs from any other JACK audio application or
       soundcard capture ports using an external JACK router
       application such as <ulink
       url="http://qjackctl.sf.net/">QJackCtl</ulink>.  You can also
       set an instrument's audio input to the output of one of
-      Rosegarden's built-in audio submasters or master output for
+      &rosegarden;'s built-in audio submasters or master output for
       mixdowns.
       </para>
       <para>An instrument's output connection defines where the audio
       goes when played.  Instruments default to sending their audio to
-      Rosegarden's master output, which is another (stereo pair of)
+      &rosegarden;'s master output, which is another (stereo pair of)
       external JACK port(s) that can then be connected up using the
-      same external JACK router.  However, Rosegarden also supports up
+      same external JACK router.  However, &rosegarden; also supports up
       to eight internal submaster busses, to which you can send
       instrument outputs instead so as to group instruments into
       related categories.  You can control the number and routing of
@@ -2352,9 +2409,9 @@
       mixer</link>.
       </para>
       <para>
-	Rosegarden currently supports effects using a set of pre-fader
+	&rosegarden; currently supports effects using a set of pre-fader
 	insert effects slots for each audio instrument.  You cannot
-	yet assign effects to the submaster busses, and Rosegarden
+	yet assign effects to the submaster busses, and &rosegarden;
 	does not yet support send effects, although you can obtain
 	similar results using an external JACK effects and mixing
 	architecture.
@@ -2369,23 +2426,23 @@
 
     <sect1 id="studio-midi-routing">
       <title>MIDI Routing</title>
-      <para>&rosegarden; is able to instantly send incoming MIDI events to 
-      some output device and MIDI channel. This feature is known as MIDI Thru.</para>
-      <para>MIDI Thru is enabled by default in &rosegarden;. You may want 
+      <para>&rosegarden; is able to instantly send incoming &MIDI; events to 
+      some output device and &MIDI; channel. This feature is known as &MIDI; Thru.</para>
+      <para>&MIDI; Thru is enabled by default in &rosegarden;. You may want 
       to globally disable it using the menu option <menuchoice>
       <guimenu lang="en">Studio</guimenu>
       <guimenuitem>MIDI Thru Routing</guimenuitem></menuchoice>, if you prefer 
-      to use an external MIDI routing system. There is also a global filter by 
-      MIDI event type, which you may use to ignore some event types and let other
+      to use an external &MIDI; routing system. There is also a global filter by 
+      &MIDI; event type, which you may use to ignore some event types and let other
       types to be routed. It is explained in the section <link linkend="studio-midi-filters">
-      MIDI filters</link>.</para>
+      &MIDI; filters</link>.</para>
       <para>MIDI Thru routing works quite differently when &rosegarden; is playing 
       or stopped than when it is recording.</para>
       <itemizedlist>
-        <listitem><para>When &rosegarden; is playing or in stopped state, the MIDI 
+        <listitem><para>When &rosegarden; is playing or in stopped state, the &MIDI; 
         thru function routes events to the selected track instrument. The selected 
         track has its track name highlighted.</para></listitem>
-        <listitem><para>When &rosegarden; is recording, the MIDI events are routed 
+        <listitem><para>When &rosegarden; is recording, the &MIDI; events are routed 
         to the armed track instruments, based on the <link linkend="track-recording-filters">
         recording filters</link>. It doesn't
         matter which track is selected. Only one instrument is selected for each event,
@@ -2410,7 +2467,7 @@
       </para>
 
       <para>
-	Rosegarden's audio mixer window, reached through 
+	&rosegarden;'s audio mixer window, reached through 
 	<menuchoice>
 	  <guimenu lang="en">Studio</guimenu> <guimenuitem>Audio
 	  Mixer</guimenuitem></menuchoice>, resembles a hardware audio
@@ -2438,7 +2495,7 @@
 	linkend="studio-audio-routing">audio routing</link> settings
 	for the number of stereo audio record inputs available and the
 	number of submasters.  These are studio settings whose values
-	are saved with your Rosegarden format file.</para>
+	are saved with your &rosegarden; format file.</para>
 
       <para>Note that if you are not actually using any submasters
       (i.e. if there are no instruments configured to route their
@@ -2457,22 +2514,22 @@
 	      <imagedata fileref="rg-midimixer.png" format="PNG"/>
             </imageobject>
 	    <textobject>
-	      <phrase>&rosegarden;'s MIDI Mixer</phrase>
+	      <phrase>&rosegarden;'s &MIDI; Mixer</phrase>
 	    </textobject>
           </mediaobject>
         </screenshot>
       </para>
       <para>
-	Rosegarden's MIDI mixer window, reached through 
+	&rosegarden;'s &MIDI; mixer window, reached through 
 	<menuchoice>
 	  <guimenu lang="en">Studio</guimenu> <guimenuitem>MIDI
 	  Mixer</guimenuitem></menuchoice>, provides a way to see and
 	  edit the <link
 	  linkend="segment-view-instrumentparameterbox-midi">instrument
-	  parameter values</link> for a number of MIDI instruments at once.</para>
+	  parameter values</link> for a number of &MIDI; instruments at once.</para>
       
       <para>The window is organised using a tabbed pane.  Along the
-	bottom, you will see one tab for each playback MIDI device in
+	bottom, you will see one tab for each playback &MIDI; device in
 	your studio configuration.  When you select a device tab, the
 	rest of the window will update to show the controls for the 16
 	instruments of that device.
@@ -2482,7 +2539,7 @@
 	The controls shown for each instrument are those set up in the
 	<!-- !!! link linkend="studio-device-controllers" --> control
 	parameter manager, as well as volume (corresponding to the
-	MIDI volume control change, not to MIDI velocity or audio dB
+	&MIDI; volume control change, not to &MIDI; velocity or audio dB
 	levels) and an approximate output level indicator.
       </para>
     </sect1>
@@ -2490,12 +2547,12 @@
     <sect1 id="studio-plugins">
       <title>Audio Plugins</title>
       <para>An audio plugin is a piece of software, separate from
-      Rosegarden, that Rosegarden can load and use in order to perform
+      &rosegarden;, that &rosegarden; can load and use in order to perform
       a particular audio processing task.  These can be broadly
       divided into effects plugins and synth plugins.  Effects plugins
       take an audio input and manipulate it to produce a different
-      audio output; synth plugins take MIDI-like events as input and
-      turn them into audio output.  Rosegarden uses the Linux standard
+      audio output; synth plugins take &MIDI;-like events as input and
+      turn them into audio output.  &rosegarden; uses the Linux standard
       LADSPA plugin API for effects and the DSSI plugin API for
       synths, permitting the use of large numbers of open-source
       plugins made available by many developers.
@@ -2503,8 +2560,8 @@
       <para>The use of plugins has a cost in CPU time, as audio
       processing in real time usually takes a significant amount of
       work even on a modern CPU. It also has a potential cost in
-      reliability: when Rosegarden is running a plugin, if the plugin
-      hangs or crashes, so does Rosegarden.  Many plugins are very
+      reliability: when &rosegarden; is running a plugin, if the plugin
+      hangs or crashes, so does &rosegarden;.  Many plugins are very
       reliable, but it's inevitable that some will not be so well
       tested.
       </para>
@@ -2514,7 +2571,7 @@
 	controllable way.  Examples include reverb, delay effects,
 	dynamic compression and so on.
 	</para>
-	<para>Every audio or synth-plugin instrument in Rosegarden has
+	<para>Every audio or synth-plugin instrument in &rosegarden; has
 	five associated effects slots.  By default these are empty,
 	but you can load plugins into them in order to chain up to
 	five effects onto the audio signal before it goes through
@@ -2582,15 +2639,15 @@
 	<title>Synth plugins</title>
 	<para>
 	  Synth plugins can be used in place of hardware or standalone
-	  soft-synth MIDI devices, to generate sounds from your note
+	  soft-synth &MIDI; devices, to generate sounds from your note
 	  event segments.</para>
 
 	<para>Using a synth plugin gives you somewhat better control
-	and repeatability than using an external MIDI device, because
-	Rosegarden will be able to load the correct plugins for you
+	and repeatability than using an external &MIDI; device, because
+	&rosegarden; will be able to load the correct plugins for you
 	and use the correct settings the next time you load your same
 	file.  Plugins may also offer better timing resolution than
-	external MIDI devices, and synth plugin instruments have the
+	external &MIDI; devices, and synth plugin instruments have the
 	advantage of being routable like audio instruments, which also
 	means you can add effects plugins on top of them.
 	</para>
@@ -2619,12 +2676,12 @@
 	for effects plugins, but with a list of synth plugins instead
 	of effects.  Once again, you will be shown the particular set
 	of rotary parameters for the synth you have selected.  Synth
-	plugins may also have "programs", selectable from a menu --
+	plugins may also have <quote>programs</quote>, selectable from a menu &ndash;
 	this menu will only appear if you have chosen a synth that supports
 	them.  When you have selected and configured a synth plugin
-	for an instrument, any MIDI data on tracks assigned to that
+	for an instrument, any &MIDI; data on tracks assigned to that
 	instrument should play through that synth, as should
-	incoming MIDI data during recording or monitoring.
+	incoming &MIDI; data during recording or monitoring.
 	</para>
       </sect2>
 
@@ -2632,15 +2689,15 @@
 	<title>Plugin native editor windows</title>
 
 	<para>Most plugins can be controlled completely using the
-	rotary controllers in Rosegarden's plugin dialog.  However, a
+	rotary controllers in &rosegarden;'s plugin dialog.  However, a
 	few plugins (generally synths) also have their own editor
-	windows which can be switched on or off from Rosegarden and
+	windows which can be switched on or off from &rosegarden; and
 	which may provide more complete or more organised
 	controls.</para>
 
 	<para>When you select a plugin that has its own editor window,
 	the button at the lower left of the plugin dialog labelled
-	"Editor" will become active:</para>
+	<quote>Editor</quote>will become active:</para>
 
 	<para>
 	  <screenshot>
@@ -2658,18 +2715,18 @@
 	<para>(For synth plugins, there is a similar button in the
 	instrument parameter box.)  Clicking this button should show
 	the plugin's own editor window.  Any changes you make in this
-	editor window should also be reflected in Rosegarden's own
+	editor window should also be reflected in &rosegarden;'s own
 	plugin dialog, if visible, and of course should be saved in
-	your Rosegarden file as normal.</para>
+	your &rosegarden; file as normal.</para>
       </sect2>
     </sect1>
 
     <sect1 id="studio-metronome">
       <title>Metronomes</title>
       <para>
-	Rosegarden has two built-in metronomes, one for use during
+	&rosegarden; has two built-in metronomes, one for use during
 	recording and one that can be switched on during normal
-	playback.  They work by sending notes to a MIDI instrument,
+	playback.  They work by sending notes to a &MIDI; instrument,
 	and both metronomes use the same instrument, pitch and
 	velocity information.
       </para>
@@ -2693,13 +2750,13 @@
 	  <guimenuitem>Manage Metronome</guimenuitem>
 	</menuchoice>
 	to bring up the metronome dialog.
-	Here you can select a MIDI instrument for the metronome and
+	Here you can select a &MIDI; instrument for the metronome and
 	choose the metronome's resolution (whether it should tick
 	once per beat, once per subdivision of a beat, or only once
 	per bar), pitch, and velocities.  Properties such as the
-	actual voice the MIDI synth uses for the metronome tick
+	actual voice the &MIDI; synth uses for the metronome tick
 	depend on the instrument selected, just as the voice used
-	for a MIDI track depends on the instrument that track is
+	for a &MIDI; track depends on the instrument that track is
 	assigned to.  You can configure the instrument by assigning
 	a track to it on the main window and selecting the correct
 	program from the instrument parameter box.
@@ -2715,7 +2772,7 @@
       </para>
 
       <para>
-	Rosegarden also has a "visual metronome": the transport window
+	&rosegarden; also has a <quote>visual metronome</quote>: the transport window
 	can be told to flash brightly to mark each beat.  See <link
 	linkend="transport">the Transport section</link> for more
 	details.</para>
@@ -2737,10 +2794,10 @@
       </para>
 
       <para>
-        Using this dialog you can decide which MIDI events Rosegarden
+        Using this dialog you can decide which &MIDI; events &rosegarden;
         will ignore or accept, either when forwarding events using
-        MIDI THRU or when simply recording them.  Use the check boxes
-        on this dialog to tell Rosegarden which types of MIDI events
+        &MIDI; THRU or when simply recording them.  Use the check boxes
+        on this dialog to tell &rosegarden; which types of &MIDI; events
         you don't want to forward or record.
       </para>
 
@@ -2750,29 +2807,29 @@
     <sect1 id="studio-external-controllers">
       <title>External MIDI control surfaces</title>
       <para>
-	Rosegarden's audio and MIDI mixer windows and main canvas can
-	also be controlled to some degree by an external MIDI device.
-	To set this up, you will need to use an ALSA MIDI connection
-	manager such as qjackctl to connect your MIDI controller
-	device to Rosegarden's "external controller" input and output
-	MIDI ports.
+	&rosegarden;'s audio and &MIDI; mixer windows and main canvas can
+	also be controlled to some degree by an external &MIDI; device.
+	To set this up, you will need to use an ALSA &MIDI; connection
+	manager such as qjackctl to connect your &MIDI; controller
+	device to &rosegarden;'s <quote>external controller</quote>input and output
+	&MIDI; ports.
       </para>
       <para>
-	Rosegarden accepts MIDI control change messages to adjust the
-	mixer track corresponding to the incoming MIDI channel on each
-	controller event, and also sends out MIDI messages when
+	&rosegarden; accepts &MIDI; control change messages to adjust the
+	mixer track corresponding to the incoming &MIDI; channel on each
+	controller event, and also sends out &MIDI; messages when
 	something is changed in a mixer track in order to support
 	controllers with powered faders or knobs.
       </para>
-      <para>Rosegarden accepts MIDI controller number 81 to change the
+      <para>&rosegarden; accepts &MIDI; controller number 81 to change the
       currently active window.  Send controller 81 with data value 0-9
       to select the main window, 10-19 to select the audio mixer
-      window or 20-29 to select the MIDI mixer window.</para>
-      <para>Rosegarden accepts MIDI controller number 82 to change the
+      window or 20-29 to select the &MIDI; mixer window.</para>
+      <para>&rosegarden; accepts &MIDI; controller number 82 to change the
       currently selected track in the main window.  The stepping of
-      this controller depends on the number of tracks in the window --
+      this controller depends on the number of tracks in the window &ndash;
       the ratio of controller data value to track number will be
-      calculated so as to use the full MIDI controller data range,
+      calculated so as to use the full &MIDI; controller data range,
       provided there are no more than 128 tracks in the window.</para>
     </sect1>
 
@@ -2826,27 +2883,44 @@
 	<sect2 id="track-recording-filters">
 	    <title>Track recording filters</title>
 	    <para>
-               These provide you a way to control what events are recorded to this track. If you leave the default values ("all") for both parameters, every received event will be stored in the track. This setting is safe and convenient if you are recording only one MIDI track. Otherwise, you should adjust one or both parameters to select only the desired events for the track.
+               These provide you a way to control what events are recorded to this
+               track. If you leave the default values (<quote>all</quote>) for both parameters, every
+               received event will be stored in the track. This setting is safe and
+               convenient if you are recording only one &MIDI; track. Otherwise, you
+               should adjust one or both parameters to select only the desired events for
+               the track.
             </para>
 	    <variablelist>
 		    <varlistentry>
 			<term>Device</term>
 			<listitem>
-			    <para>You can record from only one of the available devices marked for recording in the  <link linkend="studio-device-editor">device manager</link>, or from all of them simultaneously.</para>
+			    <para>You can record from only one of the available devices
+			    marked for recording in
+			    the <link linkend="studio-device-editor">device
+			    manager</link>, or from all of them simultaneously.</para>
 			</listitem>
 		    </varlistentry>
 		    <varlistentry>
 			<term>Channel</term>
 			<listitem>
-			    <para>You can record from all channels, or limit recording to only one of the 16 available MIDI channels. In this case, only MIDI channel messages matching the channel number will be recorded, and system messages not having a channel (as system exclusive events) will be discarded.</para>
+			    <para>You can record from all channels, or limit recording to
+			    only one of the 16 available &MIDI; channels. In this case,
+			    only &MIDI; channel messages matching the channel number will
+			    be recorded, and system messages not having a channel (as
+			    system exclusive events) will be discarded.</para>
 			</listitem>
 		    </varlistentry>
 	     </variablelist>
 	     <para>
-               Both parameters are cummulative: you can filter only a device, only a channel, or both a device and a channel simultaneously. It is not mandatory to ensure mutually exclusive selections for all the armed tracks, but if you don't do so you will find duplicated events at several recorded tracks.
+               Both parameters are cummulative: you can filter only a device, only a
+               channel, or both a device and a channel simultaneously. It is not mandatory
+               to ensure mutually exclusive selections for all the armed tracks, but if
+               you don't do so you will find duplicated events at several recorded tracks.
              </para>
 	     <para>
-		The recording filters are also used to <link linkend="studio-midi-routing">route MIDI events </link> to the assigned track instrument when you are recording.
+		The recording filters are also used
+		to <link linkend="studio-midi-routing">route MIDI events </link> to the
+		assigned track instrument when you are recording.
              </para>
 	</sect2>
 	<sect2 id="track-staff-params">
@@ -3017,7 +3091,7 @@
 				pitches exceeding the values specified, the
 				note heads will appear in red by default.  You
 				can turn this behavior off with
-				<menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure
+				<menuchoice><guimenu lang="en">Settings</guimenu><guimenuitem>Configure
 					Rosegarden</guimenuitem><guimenuitem>Notation</guimenuitem><guimenuitem>Show
 					notes outside playable range in
 					red</guimenuitem></menuchoice>
@@ -3048,7 +3122,7 @@
       </para>
 
       <para>
-	The segment parameter box can be found at the left side of the Rosegarden main window.  (If you can't see it, try using 	<menuchoice>
+	The segment parameter box can be found at the left side of the &rosegarden; main window.  (If you can't see it, try using 	<menuchoice>
 	  <guimenu lang="en">Settings</guimenu>
 	  <guimenuitem>Show Special Parameters</guimenuitem>
 	</menuchoice>.)
@@ -3057,7 +3131,7 @@
 	parameters will be shown in the segment parameter box and can be
 	edited there.  If several segments are selected, the parameter box
 	will only show the current values where they are the same for all
-	of the selected segments -- but you can still edit them, and your
+	of the selected segments &ndash; but you can still edit them, and your
 	changes will apply to the whole selection.
 
 	<variablelist>
@@ -3065,7 +3139,7 @@
 	    <term>Label</term>
 	    <listitem>
 	      <para>Shows the label of the selected segment (or segments, if
-		they all have the same label).  Click the "Edit" button to edit
+		they all have the same label).  Click the <quote>Edit</quote>button to edit
 		the label.</para>
 	    </listitem>
 	  </varlistentry>
@@ -3145,7 +3219,7 @@
 	    <listitem>
 	      <para>Shows the colour being used for the display of the
 		selected segments.  You can choose another colour from the
-		dropdown, or choose the "Add New Colour" option if you want a
+		dropdown, or choose the <quote>Add New Colour</quote>option if you want a
 		colour not in the dropdown.
 	      </para>
 	      <para>
@@ -3156,7 +3230,7 @@
 	</menuchoice>
 		(then choose the Colour page on the document properties
 		dialog).  The modified colour palette will be saved
-		with the composition in the Rosegarden file.
+		with the composition in the &rosegarden; file.
 		<screenshot>
 		  <mediaobject>
 		    <imageobject>
@@ -3179,7 +3253,7 @@
       <title>The Instrument Parameter Box</title>
       <para>
 	The instrument parameter box can be found at the left side of
-	the Rosegarden main window, near the <link
+	the &rosegarden; main window, near the <link
 	linkend="segment-view-segmentparameterbox">Segment Parameter
 	Box</link>.  (If you can't see it, try using
 	<menuchoice> <guimenu lang="en">Settings</guimenu>
@@ -3194,7 +3268,7 @@
 	than one track at a time.</para>
 
       <para>The layout and contents of the instrument
-	parameter box depend on the type of instrument: MIDI, audio,
+	parameter box depend on the type of instrument: &MIDI;, audio,
 	or synth plugin.
       </para>
 
@@ -3207,28 +3281,28 @@
 	      <imagedata fileref="rg-ipb-midi.png" format="PNG"/>
       </imageobject>
 	<textobject>
-	  <phrase>&rosegarden;'s instrument parameter box for a MIDI instrument</phrase>
+	  <phrase>&rosegarden;'s instrument parameter box for a &MIDI; instrument</phrase>
 	</textobject>
       </mediaobject>
       </screenshot>
       </para>
-	<para>When you select a track assigned to a MIDI instrument,
-	the instrument parameter box shows MIDI parameters.
+	<para>When you select a track assigned to a &MIDI; instrument,
+	the instrument parameter box shows &MIDI; parameters.
 	</para>
 	<para>At the top, this box
 	shows the name of the instrument and the connection that its
 	device is using.
 	</para>
-	<para>Below that, you can see and edit the MIDI
+	<para>Below that, you can see and edit the &MIDI;
 	channel number and the <link linkend="studio-bank-editor">bank
 	and program</link> settings that should be sent to the
-	instrument at the start of playback (including a "percussion"
+	instrument at the start of playback (including a <quote>percussion</quote>
 	toggle that controls whether only percussion programs should
 	be offered in these settings).</para>
 
 	<para>Finally this box shows you the <!-- !!! link
 	linkend="studio-device-controllers" --> controllers available
-	for this device (those for a General MIDI device are shown
+	for this device (those for a General &MIDI; device are shown
 	above).  Any settings you make here will be sent to this
 	instrument's channel at the start of playback.</para>
       </sect2>
@@ -3266,10 +3340,11 @@
 	set the instrument to mono, it will reduce any audio data and
 	effect outputs to mono before applying pan.)
 	  </para>
-	<para>The column of five buttons at lower left are the effects
-	slots.  Click on them to select and activate plugin effects
-	for this audio instrument, and to control them using the <link linkend="studio-plugins">plugin editor dialog</link>.  These are insert effects,
-	applied in order from top to bottom before the fader and pan.
+	<para>The column of five buttons at lower left are the effects slots.  Click on
+	them to select and activate plugin effects for this audio instrument, and to
+	control them using the <link linkend="studio-plugins">plugin editor dialog</link>.
+	These are insert effects, applied in order from top to bottom before the fader and
+	pan.
 	</para>
       </sect2>
 
@@ -3290,14 +3365,14 @@
 	<para>When you select a track assigned to a synth plugin
 	instrument, the instrument parameter box shows synth
 	parameters.  You will notice that although a synth plugin
-	track uses segments with MIDI data in them, in terms of
+	track uses segments with &MIDI; data in them, in terms of
 	control and routing it behaves more like an audio track.
 	</para>
 	<para>The most important control here is the button at top
 	left (saying Xsynth in the above picture) which shows the name
 	of the synth plugin in use for this instrument.  Click this to
 	select a particular synth and control it in the standard
-	Rosegarden <link linkend="studio-plugins">plugin editor dialog</link>.  Once
+	&rosegarden; <link linkend="studio-plugins">plugin editor dialog</link>.  Once
 	you've selected a plugin, you may also be able to click the
 	Editor button below it in order to open a dedicated GUI editor
 	for the particular plugin (if the plugin has one).
@@ -3314,10 +3389,10 @@
   <chapter id="quantization">
     <title>Quantization</title>
     <para>
-      "Quantization" is the process of repositioning notes and other
+      <quote>Quantization</quote>is the process of repositioning notes and other
       events so that they start or finish on exact beat divisions.  It
       is traditionally used to make an approximate performance into a
-      precise but rather mechanical-sounding one -- either because
+      precise but rather mechanical-sounding one &ndash; either because
       precision is the desired effect, or for reasons such as making
       the notes clearer in notation.
     </para>
@@ -3336,7 +3411,7 @@
       in matrix or notation editors.  This shows you a dialog in which
       you can select the precise quantization parameters you need, and
       then it applies these to all of the selected segments or notes.
-      (You can also quickly reach this dialog by pressing the "="
+      (You can also quickly reach this dialog by pressing the <quote>=</quote>
       key.)
     </para>
 
@@ -3380,12 +3455,12 @@
 	  remove any gaps between notes by extending each note so as
 	  to (at least) continue until the start of the following one.
 	  You can also obtain this legato effect without the
-	  accompanying grid quantization using the
+	  accompanying grid quantization using
 	<menuchoice>
 	  <guimenu lang="en">Adjust</guimenu>
 	  <guimenuitem>Quantize</guimenuitem>
 	  <guimenuitem>Legato</guimenuitem>
-	</menuchoice> function in the Matrix editor.
+	</menuchoice> in the Matrix editor.
 	  </para>
 	</listitem>
       </varlistentry>
@@ -3418,7 +3493,7 @@
 	<term>Swing</term>
 	<listitem>
 	  <para>This is a percentage figure which adjusts the degree
-	  by which alternate beats are quantized "late".</para>
+	  by which alternate beats are quantized <quote>late</quote>.</para>
 	  <para>If set to
 	  None (the default), quantization will be to an even grid
 	  spaced according to the base grid unit.</para>
@@ -3441,12 +3516,12 @@
 	  <para>The default behaviour of the grid quantizer is to move
 	  each note exactly onto its nearest grid line.  But if you
 	  set the iterative amount to something less than 100% (the
-	  "Full quantize" default), each note will only be moved that
+	  <quote>Full quantize</quote>default), each note will only be moved that
 	  percentage of the distance toward its nearest grid line,
 	  resulting in a nearly-but-not-quite quantized effect.</para>
 	  <para>This quantizer may be applied repeatedly so as to try
 	  out gradually increasing degrees of quantization, hence the
-	  name "iterative".  Use 
+	  name <quote>iterative</quote>.  Use 
 	<menuchoice>
 	  <guimenu lang="en">Adjust</guimenu>
 	  <guimenuitem>Quantize</guimenuitem>
@@ -3508,7 +3583,7 @@
       Each matrix editor window shows a single segment.  To edit a
       segment, just right-click on it in the main canvas and select
       the matrix editor from the menu.  Alternatively, you can
-      configure Rosegarden to make the matrix editor the default
+      configure &rosegarden; to make the matrix editor the default
       editor available when you double-click on a segment.
     </para>
 
@@ -3530,8 +3605,8 @@
       <para>The Quantize menu works rather differently.  Rather than
       controlling the behaviour of other editing tools, it actually
       performs an action.  When you change the value in this menu, the
-      selected notes -- or the whole segment if nothing is selected
-      -- will immediately be quantized using a grid quantizer of the
+      selected notes &ndash; or the whole segment if nothing is selected
+      &ndash; will immediately be quantized using a grid quantizer of the
       chosen resolution.
       </para>
       <para>The Quantize menu also shows you continuously what
@@ -3557,7 +3632,7 @@
 
 	<para>You can also draw notes using the Select tool (the
 	arrow), by clicking and dragging either with the middle mouse
-	button, or with the left mouse button and Ctrl pressed.</para>
+	button, or with the left mouse button and <keycap>Ctrl</keycap> pressed.</para>
 
       <para>By default, the time and duration are snapped to a
 	particular grid unit, according to the Grid setting on the
@@ -3645,25 +3720,25 @@
       </sect2>
 
       <sect2 id="matrix-insertion-midi">
-	<title>Entering notes using a MIDI keyboard</title>
+	<title>Entering notes using a &MIDI; keyboard</title>
 
 	<para>
 	  You can enter notes into the matrix editor one at a time
-	  using a MIDI keyboard or other MIDI control device.  The
+	  using a &MIDI; keyboard or other &MIDI; control device.  The
 	  matrix editor uses the pitches you play on the keyboard,
 	  but the durations you have selected in the Grid setting of
-	  the editor itself.  This is known as "step recording".
+	  the editor itself.  This is known as <quote>step recording</quote>.
 	</para>
 
 	<para>
-	  To start entering notes from a MIDI keyboard, first make
-	  sure the keyboard is configured as a MIDI
+	  To start entering notes from a &MIDI; keyboard, first make
+	  sure the keyboard is configured as a &MIDI;
 	  record device.  Then make sure you have the right Grid
 	  setting in the View menu or toolbar, as this controls the
 	  note duration.  Then press the <!-- !!!  image of button
 	  --> step recording button on the matrix editor's toolbar,
 	  or select Step Recording from the Tools menu.  From that
-	  point on all notes pressed on the MIDI keyboard will be
+	  point on all notes pressed on the &MIDI; keyboard will be
 	  inserted at the current insertion time in that window,
 	  until step recording is switched off again or activated in
 	  a different window or the window is closed.
@@ -3703,11 +3778,13 @@
 
 	  <sect2 id="matrix-selectionfilter">
           <title>Filtering the selection</title>
-		  <para>The <menuchoice>
-		  <guimenu>Edit</guimenu>
+		  <para> <menuchoice>
+		  <guimenu lang="en">Edit</guimenu>
 		  <guimenuitem>Filter Selection</guimenuitem>
-		</menuchoice> function offers you the ability to filter a range of events in
-		  any of several categories out of your selection.  You can use this to refine the selection, if you want some action to apply to only certain events in it.
+		</menuchoice> offers you the ability to filter a range of events in
+		  any of several categories out of your selection.  You can use this to
+		  refine the selection, if you want some action to apply to only certain
+		  events in it.
 	        </para>
 		<para>
 		  <screenshot>
@@ -3759,7 +3836,7 @@
 	and paste functions.  After the paste the pasted notes will
 	be selected instead, and you can then drag them wherever you
 	need them.  You may also copy notes by selecting them with
-	the Select tool, then keeping Ctrl pressed click-and-drag
+	the Select tool, then keeping <keycap>Ctrl</keycap> pressed click-and-drag
 	the selected notes in a new position.
       </para>
     </sect1>
@@ -3773,7 +3850,7 @@
     linkend="matrix-view">Matrix editor</link>, except that it shows
     pitch names on the vertical scale instead of a piano keyboard, and
     it does not show the duration for each note.  This is intended for
-    use with percussion programs on MIDI instruments, in which each
+    use with percussion programs on &MIDI; instruments, in which each
     note pitch plays a different percussion sound.</para>
 
     <para>
@@ -3891,14 +3968,10 @@
 	    <listitem>
 
 	      <para>Alternatively, you can use the main window's
-		Open in
-		Notation Editor menu function, either on
-		the Segments menu or on the right-button popup menu on
-		a segment in the canvas.  Select the segments you want
-		to edit (by shift-clicking as above, or by using the
-		Select All Segments function) and
-		then select Open in
-		Notation Editor.</para>
+		Open in Notation Editor menu function, either on the Segments menu or on
+		the right-button popup menu on a segment in the canvas.  Select the
+		segments you want to edit (by shift-clicking as above, or by using Select
+		All Segments) and then select Open in Notation Editor.</para>
 	    </listitem>
 	    
 	  </varlistentry>
@@ -3908,16 +3981,16 @@
 
       <para>
 	If you have more than one staff (i.e. segment) visible in the notation
-	editor, only one of them can be "current" at once.  The
+	editor, only one of them can be <quote>current</quote>at once.  The
 	current staff can be distinguished because it has the insert
 	cursor on it (see <link linkend="nv-rulers">Rulers and
 	  Cursors</link>), and this is the staff on which any editing
 	operations that use the insert cursor will take place.  The
 	topmost staff is the current one by default, but you can
-	switch to a different staff by ctrl-clicking on it, or by using the
-	<menuchoice><guimenu>Tools</guimenu><guimenuitem>Local
+	switch to a different staff by ctrl-clicking on it, or by using
+	<menuchoice><guimenu lang="en">Tools</guimenu><guimenuitem>Local
 	  Cursor</guimenuitem><guimenuitem>Cursor Up Staff</guimenuitem></menuchoice> and
-	<menuchoice><guimenuitem>Cursor Down Staff</guimenuitem></menuchoice> menu functions.
+	<menuchoice><guimenuitem>Cursor Down Staff</guimenuitem></menuchoice>.
       </para>
 
     </sect1>
@@ -3973,7 +4046,8 @@
       </para>
 
       <para>
-	To switch between these layout modes, use the Linear Layout, Continuous Page Layout and Multiple Page Layout menu functions.
+	To switch between these layout modes, use the Linear Layout, Continuous Page
+	Layout and Multiple Page Layout menu functions.
       </para>
     </sect1>
 
@@ -4044,7 +4118,7 @@
 	      differs from the duration of the actual performance.
 	      Enabled via
 	      <menuchoice>
-	        <guimenu>Settings</guimenu>
+	        <guimenu lang="en">Settings</guimenu>
                 <guimenuitem>Rulers</guimenuitem>
                 <guimenuitem>Show Raw Note Ruler</guimenuitem>
               </menuchoice>, it draws a small bar above
@@ -4158,14 +4232,12 @@
 	  <term>Functions that operate on selections</term>
 	  <listitem>
 	    <para>
-	      The majority of the remaining menu functions require a
-	      selection to be made on the canvas before they can be
-	      used. Some of them (such as <guimenuitem>Cut</guimenuitem> 
-	      or the <guimenuitem>Note Style</guimenuitem>
-	      functions) will operate on any selected events; others
-	      (<guimenuitem>Stem Directions</guimenuitem> function)
-	      will refuse to work unless the selection contains 
-	      some notes.
+	      The majority of the remaining menu functions require a selection to be made
+	      on the canvas before they can be used. Some of them (such
+	      as <guimenuitem>Cut</guimenuitem> or the <guimenuitem>Note
+	      Style</guimenuitem>) will operate on any selected events; others
+	      (<guimenuitem>Stem Directions</guimenuitem>) will refuse to work
+	      unless the selection contains some notes.
 	    </para>
 	    <para>
 	      To select some events on the canvas, switch to the
@@ -4184,7 +4256,7 @@
 	    <para>
 	      To select a whole bar, double-click with the Select tool
 	      on some empty space within that bar; to select the whole
-	      staff, click three times. The Edit menu carries
+	      staff, click three times. The <!-- Menu --> Edit menu carries
 	      functions for selecting extended areas based on the
 	      location of the insert cursor, and you can also select
 	      events around the insert cursor by holding Shift and
@@ -4194,10 +4266,12 @@
 	      It is not possible to select events from more than
 	      one staff at once.
 	    </para>
-		  <para>After selecting some events, you can filter your selection further using the <menuchoice>
-		  <guimenu>Edit</guimenu>
+		  <para>After selecting some events, you can filter your selection further using <menuchoice>
+		  <guimenu lang="en">Edit</guimenu>
 		  <guimenuitem>Filter Selection</guimenuitem>
-		</menuchoice> function.  For more details, refer to <link linkend="matrix-selectionfilter">the corresponding function in the matrix editor</link>.
+		</menuchoice>.  For more details, refer
+		to <link linkend="matrix-selectionfilter">the corresponding function in
+		the matrix editor</link>.
 	        </para>
 	  </listitem>
 	</varlistentry>
@@ -4248,14 +4322,14 @@
 	      <guimenuitem>Transpose</guimenuitem>
 	      <guimenuitem>Transpose by Semitones</guimenuitem>
 	    </menuchoice>
-	  function which asks just the number of semitones to be
+	  which asks just the number of semitones to be
 	  transposed, and
 	    <menuchoice>
 	      <guimenu lang="en">Adjust</guimenu>
 	      <guimenuitem>Transpose</guimenuitem>
 	      <guimenuitem>Transpose by Interval</guimenuitem>
 	    </menuchoice>
-	  function which shows a neat dialog that can be used to 
+	  which shows a neat dialog that can be used to 
 	  transpose notes. In the latter, the dialog shows an example 
 	  notes before and after transposing and expresses the
 	  interval in written form. The interval may be changed either
@@ -4268,7 +4342,7 @@
 	      <guimenu lang="en">Segment(s)</guimenu>
 	      <guimenuitem>Transpose by Interval</guimenuitem>
 	    </menuchoice>
-	  function which makes a transpose to entire segment. In this
+	   which makes a transpose to entire segment. In this
 	  dialog you may also choose whether only the notes are
 	  transposed or the keys of the segment are transposed also.
 	</para>
@@ -4300,7 +4374,7 @@
       <para>You can also select one of the accidentals on the toolbar
       to insert sharpened or flattened notes.  If no accidental is
       selected, the note inserted will follow the key signature.
-      Alternatively, you can select the "Follow previous accidental"
+      Alternatively, you can select the <quote>Follow previous accidental</quote>
       icon (shown as a note with an arrow pointing back from where the
       accidental would appear) to make the note follow whatever
       accidental was last used at the same height on the staff.</para>
@@ -4310,8 +4384,8 @@
 	want to create chords and will split the existing or new note
 	accordingly so as to create one or more chords with ties.  If
 	you really do want to chord two different durations, you can
-	select the tied noteheads and use the Collapse Equal-Pitch Notes
-	function to merge them together. Alternatively, the default
+	select the tied noteheads and use Collapse Equal-Pitch Notes <!-- Menu -->
+	to merge them together. Alternatively, the default
 	behaviour can be changed in the &rosegarden; configuration dialog
 	so as not to do the split at all.</para>
 
@@ -4369,7 +4443,7 @@
 	    <listitem><para><keycap>L</keycap> &ndash; Ti</para></listitem>
 	  </itemizedlist>
 
-	  <para>Press the "." key to togggle between dotted and
+	  <para>Press the <quote>.</quote>key to togggle between dotted and
 	  undotted durations.</para>
 
 	  <para>Holding <keycap>Shift</keycap> while pressing a key
@@ -4421,7 +4495,7 @@
 	  want to change are selected, and then press
 	  <keycap>Ctrl</keycap> plus the number key for the note you
 	  want.  You can also add or remove dots, by pressing
-	  <keycap>Ctrl</keycap> plus "." &mdash; use this repeatedly to
+	  <keycap>Ctrl</keycap> plus <quote>.</quote>&mdash; use this repeatedly to
 	  select between one dot, two dots and no dots.</para>
 
 	  <para>If you also hold <keycap>Alt</keycap> as well as
@@ -4446,7 +4520,7 @@
 	  <para>The keyboard shortcuts are currently designed for use
 	    with a QWERTY-layout keyboard.  There is not yet any way to
 	    remap the keys for another layout, short of reassigning each
-	    key individually using the "Configure Shortcuts..." option
+	    key individually using the <quote>Configure Shortcuts...</quote>option
 	    on the Settings menu.</para>
 
 	  <para>Holding the <keycap>Ctrl</keycap> key while pressing a
@@ -4458,24 +4532,24 @@
       </sect2>
 
       <sect2 id="nv-insertion-midi">
-	<title>Entering notes using a MIDI keyboard</title>
+	<title>Entering notes using a &MIDI; keyboard</title>
 
 	<para>
 	  You can enter notes into the notation editor one at a time
-	  using a MIDI keyboard or other MIDI control device &mdash; a
+	  using a &MIDI; keyboard or other &MIDI; control device &mdash; a
 	  process known as step recording.  The notation editor uses
 	  the pitches you play on the keyboard, but the durations you
 	  have selected in the editor itself.
 	</para>
 
 	<para>
-	  To start entering notes from a MIDI keyboard, first make
-	  sure the keyboard is configured as your default MIDI
+	  To start entering notes from a &MIDI; keyboard, first make
+	  sure the keyboard is configured as your default &MIDI;
 	  record device.  Then make sure a notation tool is selected
 	  to set a duration.  Then press the <!-- !!!  image of
 	  button --> step recording button on the notation editor's
 	  toolbar, or select Step Recording from the Tools menu.
-	  From that point on all notes pressed on the MIDI keyboard
+	  From that point on all notes pressed on the &MIDI; keyboard
 	  will be inserted at the current insertion time in that
 	  notation window, until step recording is switched off
 	  again or activated in a different window or the window is
@@ -4514,6 +4588,7 @@
       linkend="nv-rulers">insert cursor</link> at the point where you
       want the change to happen, and use one of the Edit menu's Add
       Clef Change..., Add Key Change..., Add Tempo Change... and Add
+	<!-- !!! Menu fixup -->
       Time Signature Change... functions.  You will then see a dialog
       box in which you can choose the particular clef, key, tempo or
       time signature setting you want to apply, as follows.</para>
@@ -4664,7 +4739,7 @@
 			You must choose whether any existing notes following
 			this key change will maintain their current pitches,
 			maintain their current accidentals in the key, or
-			whether Rosegarden should make an attempt to transpose
+			whether &rosegarden; should make an attempt to transpose
 			the part into the new key.
 		    </para>
 		</listitem>
@@ -4701,7 +4776,7 @@
 	associated with a particular note or rest, it may be helpful to click
 	the T cursor directly on that note, so as to ensure proper placement
 	in time.  A dialog box will appear, into which you can type the text
-	and choose its intended purpose.  (Rosegarden prefers to store what
+	and choose its intended purpose.  (&rosegarden; prefers to store what
 	the text is for, rather than how it should look; this is so that in
 	future we may be able to configure how the various sorts of text are
 	presented for each individual user.)
@@ -4722,13 +4797,13 @@
 
     <variablelist>
 
-	<!-- NOTE: I have removed the "by default" in the following
-	descriptions.  There is no "by default" to this.  It does
+	<!-- NOTE: I have removed the <quote>by default</quote>in the following
+	descriptions.  There is no <quote>by default</quote>to this.  It does
 	what it does, and there is no changing it without editing
 	source code. (dmm) -->
 
 	<varlistentry><term>Dynamic</term><listitem><para> Used for
-	      minor local indications such as the dynamic marks "p", "mf"
+	      minor local indications such as the dynamic marks <quote>p</quote>, <quote>mf</quote>
 	      etc. Shown below the staff in small italic
 	      type.  </para></listitem></varlistentry>
 
@@ -4773,7 +4848,7 @@
 	      score.  Shown below the staff, boxed-out in a yellow
 	      sticky-label-style box.  These may not be visible
 	      initially, and can be turned on via
-	      <guimenu>Settings</guimenu>
+	      <guimenu lang="en">Settings</guimenu>
 	      <guimenuitem>Show Annotations</guimenuitem>
 	    </para></listitem></varlistentry>
 
@@ -4784,14 +4859,14 @@
 	      beyond what it can do within its own native interface.
 	      Shown above the staff, in a green box.  These may not be visible
 	      initially, and can be turned on via
-	      <guimenu>Settings</guimenu>
+	      <guimenu lang="en">Settings</guimenu>
 	      <guimenuitem>Show LilyPond Directives</guimenuitem>
 	    </para></listitem></varlistentry>
 	</variablelist>
 
       <para>For many of the styles, a new combo box will appear that allows
 	  you to select from a variety of commonly-used texts appropriate for
-	  that style, such as "Allegro" and "ritardando."  Selecting one of
+	  that style, such as <quote>Allegro</quote>and <quote>ritardando.</quote> Selecting one of
 	  these texts saves typing, but in no way impedes your ability to type
 	  your own text by hand, should you so desire.
       </para>
@@ -4802,12 +4877,11 @@
       <sect2 id="nv-text-lyrics">
 	<title>Editing lyrics</title>
 	
-	<para>The Lyric editor, available from the 
+	<para>The Lyric editor, available from 
 	  <menuchoice>
 	    <guimenu lang="en">View</guimenu>
             <guimenuitem>Open Lyric Editor</guimenuitem>
-          </menuchoice>
-	  function, allows you to edit all of
+          </menuchoice>, allows you to edit all of
 	  the lyric events for a single staff at once, using a fairly
 	  rudimentary textual editing system.  To use it, just
 	  activate the menu option, edit the lyric text in the
@@ -4815,7 +4889,7 @@
 
 	<para>The lyrics you enter should follow a particular
 	  format.  Bar lines are vital to avoid the editor getting
-	  confused, and are represented with a slash ("/").  Within
+	  confused, and are represented with a slash (<quote>/</quote>).  Within
 	  each bar the individual syllables are separated by spaces
 	  (at least one space: the editor doesn't care about any extra
 	  whitespace). Each syllable in turn will be attached to the
@@ -4825,13 +4899,13 @@
 	  quantizing).</para>
 
 	<para>If you want a note to have no syllable attached to it,
-	  you need to provide a dot (".") as the syllable for that
+	  you need to provide a dot (<quote>.</quote>) as the syllable for that
 	  note.  (This is why the default lyric text for a segment is
 	  usually full of dots.)  Remember to separate the dots with
 	  spaces, so that they are clearly separate syllables.</para>
 	
 	<para>If you want more than one syllable on the same note,
-	  with a space between them, use a tilde ("~") instead of the
+	  with a space between them, use a tilde (<quote>~</quote>) instead of the
 	  space.  It will be shown as a space on the score.</para>
 
 	<para>If you want to split a syllable across two notes, with
@@ -4840,7 +4914,7 @@
 	  no special treatment within syllables.)</para>
 
 	<para>Syllables consisting only of numbers surrounded by
-	  square brackets (like "[29]") will be ignored; this is the
+	  square brackets (like <quote>[29]</quote>) will be ignored; this is the
 	  format used for the automatically-generated bar numbers
 	  shown in the editor.</para>
 
@@ -4964,7 +5038,7 @@
 	      <varlistentry>
 		  <term>Tiny ->.</term><listitem><para>Placed anywhere,
 			  designates that notation immediately following this
-			  directive should be rendered at the "tiny" size (see file
+			  directive should be rendered at the <quote>tiny</quote>size (see file
 			  lilypond-directives.rg for example)
 		   </para></listitem>
 	       </varlistentry>
@@ -4972,7 +5046,7 @@
 	      <varlistentry>
 		  <term>Small ->.</term><listitem><para>Placed anywhere,
 			  designates that notation immediately following this
-			  directive should be rendered at the "small" size (see file
+			  directive should be rendered at the <quote>small</quote>size (see file
 			  lilypond-directives.rg for example)
 		   </para></listitem>
 	       </varlistentry>
@@ -5013,7 +5087,7 @@
       	<guimenuitem>all</guimenuitem>
       	. These categories are actually based on the chord extension
       	(A7 is a beginner chord, while A13 isn't), not on the
-      	fingering itself, so you can still see "advanced" chord
+      	fingering itself, so you can still see <quote>advanced</quote>chord
       	fingerings listed, even in beginner mode.
       </para>
 
@@ -5036,7 +5110,7 @@
       <para>
       	It is also possible to add your own fingerings if needed. To
       	do this, click on the 'New' button. This will pop up a chord
-      	editor, where you can "draw" which fingering you want to add,
+      	editor, where you can <quote>draw</quote>which fingering you want to add,
       	and specify its root, chord extension, and starting fret
       	number.
       	<screenshot>
@@ -5074,7 +5148,7 @@
 	the <guimenuitem>Add Slur</guimenuitem>, 
 	<guimenuitem>Add Crescendo</guimenuitem> or 
 	<guimenuitem>Add Decrescendo</guimenuitem> options from
-	the <guimenu>Phrase</guimenu> menu.</para>
+	the <guimenu lang="en">Phrase</guimenu> menu.</para>
 
      <para>Placement of hairpins can be somewhat tricky, and this is
 	 especially so with haripins that run in line with dynamic markings.
@@ -5106,7 +5180,7 @@
 	direction that &rosegarden; would otherwise have chosen.  See
 	also <link linkend="nv-beamed-groups">Beams</link>.</para>
 
-      <para>The <guimenu>Note</guimenu> menu also contains options for adding slashes
+      <para>The <guimenu lang="en">Note</guimenu> menu also contains options for adding slashes
 	across note stems, for example to indicate short repeated
 	notes or drum rolls.  These are currently purely notational;
 	&rosegarden; will not take them into account when playing the
@@ -5119,14 +5193,14 @@
       <title>Beams</title>
       
       <para>Adding beams to notes is considered a grouping operation
-	in the &rosegarden; Notation editor, available on the <guimenu>Phrase</guimenu>
+	in the &rosegarden; Notation editor, available on the <guimenu lang="en">Phrase</guimenu>
 	menu.  Select the notes you want to beam, and use the
 	<guimenuitem>Beam Group</guimenuitem> menu option.  To remove a beam, select the notes and use
 	the <guimenuitem>Unbeam</guimenuitem> menu option.</para>
 
       <para>It is possible to have more than one beamed group
 	happening at the same time &mdash; you just select and beam the
-	separate groups one at a time &mdash; but Rosegarden is usually not
+	separate groups one at a time &mdash; but &rosegarden; is usually not
 	yet clever enough to work out which notes should have stems up
 	and which should have stems down for simultaneous beamed
 	groups, so you will probably have to set the stem directions
@@ -5137,11 +5211,11 @@
 	this, select the notes you want to calculate the beaming for
 	(for example by triple-clicking to select a whole staff) and
 	then use the <guimenuitem>Auto-Beam</guimenuitem> option on the 
-	<guimenu>Phrase</guimenu> menu.  Auto-beaming
+	<guimenu lang="en">Phrase</guimenu> menu.  Auto-beaming
 	is also done automatically when loading a &MIDI; file, for
 	example, and the editor also does some automatic beaming as
 	you enter notes (this can be disabled by changing the
-	"Auto-Beam when appropriate" setting on the configuration
+	<quote>Auto-Beam when appropriate</quote>setting on the configuration
 	dialog or the insertion tool's right-button menu).</para>
 
     </sect1>
@@ -5166,7 +5240,7 @@
 	groups must always be played with a shorter duration than
 	written.)</para>
 
-      <para>The triplet and tuplet menu functions work by taking an
+      <para>The triplet and tuplet menu <!-- Menu work --> work by taking an
 	existing series of notes or rests and squashing them so they
 	play quicker, filling in the left-over space at the end of the
 	series with a final rest and drawing the whole as a tuplet
@@ -5319,15 +5393,14 @@
 	<sect3 id="nv-normalize-rests">
 	  <title>Normalizing rests</title>
 
-	  <para>Sometimes as a result of editing or quantization
-	  operations, a piece of notation can end up with incorrect
-	  rest durations for the current time signature.  You can use
-	  the <menuchoice><guimenu>Adjust</guimenu><guimenuitem>Rests</guimenuitem><guimenuitem>Normalize Rests</guimenuitem></menuchoice> function to
-	  fix these.  This examines each sequence of
-	  consecutive rests found in the selection, and adjusts,
-	  splits and merges rests as necessary to ensure that the
-	  rests have theoretically correct durations and fall on the
-	  correct boundaries.
+	  <para>Sometimes as a result of editing or quantization operations, a piece of
+	  notation can end up with incorrect rest durations for the current time
+	  signature.  You can
+	  use <menuchoice><guimenu lang="en">Adjust</guimenu><guimenuitem>Rests</guimenuitem><guimenuitem>Normalize
+	  Rests</guimenuitem></menuchoice> to fix these.  This examines each sequence of
+	  consecutive rests found in the selection, and adjusts, splits and merges rests
+	  as necessary to ensure that the rests have theoretically correct durations and
+	  fall on the correct boundaries.
 	  </para>
 	  
 	  <para>For example, a 4/4 bar containing a crotchet
@@ -5340,7 +5413,7 @@
 
 	<sect3 id="nv-make-viable">
 	  <title>Splitting very long notes</title> <para>The
-	  <menuchoice> <guimenu>Adjust</guimenu>
+	  <menuchoice> <guimenu lang="en">Adjust</guimenu>
 	  <guimenuitem>Notes</guimenuitem> <guimenuitem>Tie Notes at
 	  Barlines</guimenuitem> </menuchoice> is intended to deal
 	  with notes that have excessively long durations, and
@@ -5352,9 +5425,11 @@
 
 	<sect3 id="nv-de-counterpoint">
 	  <title>Splitting overlapping notes</title>
-	  <para>The 
-<menuchoice> <guimenu>Adjust</guimenu>
-	  <guimenuitem>Notes</guimenuitem> <guimenuitem>Split-and-Tie Overlapping Chords</guimenuitem> </menuchoice> function can be used to turn "counterpoint" notes into a series of split-and-tied notes and chords.</para>
+	  <para>
+<menuchoice> <guimenu lang="en">Adjust</guimenu>
+	  <guimenuitem>Notes</guimenuitem> <guimenuitem>Split-and-Tie Overlapping
+	  Chords</guimenuitem> </menuchoice> can be used to turn <quote>counterpoint</quote>notes into
+	  a series of split-and-tied notes and chords.</para>
 
 	  <para>It can be applied to a selection that contains
 	  overlapping notes.  It will split overlapping notes at the
@@ -5367,20 +5442,19 @@
 
 	<sect3 id="nv-rescale">
 	  <title>Rescaling note durations</title>
-	  <para>The 
-	  <menuchoice> <guimenu>Adjust</guimenu>
+	  <para>You can use 
+	  <menuchoice> <guimenu lang="en">Adjust</guimenu>
 	  <guimenuitem>Rescale</guimenuitem> <guimenuitem>Halve
 	  Durations</guimenuitem> </menuchoice> and
-	  <menuchoice> <guimenu>Adjust</guimenu>
+	  <menuchoice> <guimenu lang="en">Adjust</guimenu>
 	  <guimenuitem>Rescale</guimenuitem> <guimenuitem>Double
-	  Durations</guimenuitem> </menuchoice> functions can be
-	  used to perform the most simple rescaling functions.
+	  Durations</guimenuitem> </menuchoice> to perform the most simple rescaling.
 	  </para>
 
-	  <para>For more elaborate rescalings, use the
-	  <menuchoice> <guimenu>Adjust</guimenu>
+	  <para>For more elaborate rescalings, use 
+	  <menuchoice> <guimenu lang="en">Adjust</guimenu>
 	  <guimenuitem>Rescale</guimenuitem> <guimenuitem>Stretch
-	  or Squash...</guimenuitem> </menuchoice> function with
+	  or Squash...</guimenuitem> </menuchoice> with
 	  which you scale the total lenth of the selection.
 	  </para>
 	</sect3>
@@ -5415,8 +5489,8 @@
 	  <title id="nv-microposition">Repositioning notation elements</title>
 	  <para>
 	      You may occasionally wish to to nudge the positioning of some
-	      element of notation that Rosegarden's layout algorithm has not
-	      placed in an optimal location.  Use Ctrl-click and drag to move slurs, hairpins,
+	      element of notation that &rosegarden;'s layout algorithm has not
+	      placed in an optimal location.  Use <keycap>Ctrl</keycap>-click and drag to move slurs, hairpins,
 	      text events, and several other sorts of events.  You may not reposition notes in
 	      this fashion.
 	  </para>
@@ -5430,8 +5504,8 @@
       <title>Interpreting Performance Cues in Notation</title>
       <!-- !!! -->
       <para>
-	  You can use the Interpret function<menuchoice>
-	      <guimenu>Adjust</guimenu><guimenuitem>Interpret...</guimenuitem>
+	  You can use <menuchoice>
+	      <guimenu lang="en">Adjust</guimenu><guimenuitem>Interpret...</guimenuitem>
 	  </menuchoice>
 	  to modify the velocities and timings of notes according to any
 	  written or indicated dynamics found. The selection of
@@ -5442,7 +5516,7 @@
 	    <term>Apply text dynamics (p, mf, ff etc)
 	    </term>
 	    <listitem><para> Sets a velocity to each note
-		based on the last piece of text of "Dynamic"
+		based on the last piece of text of <quote>Dynamic</quote>
 		type seen on the same staff (only texts of the
 		form pp, p, mp, mf, f, ff, fff, etc., are matched; these are
 		the texts that are available by default when entering text events
@@ -5514,7 +5588,7 @@
 	doesn't affect the notes that play, or that you edit in
 	other views such as the matrix.  This quantization is
 	automatically applied to music imported or recorded from
-	MIDI, although not all of its possible capabilities are
+	&MIDI;, although not all of its possible capabilities are
 	enabled by default.
       </para>
 
@@ -5551,8 +5625,8 @@
 	either for the entire score or for a selection of notes, you
 	can choose to use a different level of quantization or none
 	at all.  To apply a different quantization to some notes,
-	select the notes and use the Quantize...
-	menu function (tick the box labelled <quote>Quantize for
+	select the notes and use  Quantize... <!-- Menu -->
+	(tick the box labelled <quote>Quantize for
 	  notation only</quote>).  The quantization level or type used
 	by default can be changed in the configuration dialog.
       </para>
@@ -5568,11 +5642,11 @@
 	    <varlistentry>
 	      <term>Complexity</term>
 	      <listitem>
-		<para>The "complexity" of a notation quantizer is its
-		  most fundamental parameter.  A "complex" quantizer
+		<para>The <quote>complexity</quote>of a notation quantizer is its
+		  most fundamental parameter.  A <quote>complex</quote>quantizer
 		  will be more prepared to accept that complex-looking
 		  music is in fact intended to be complex, whereas a
-		  "simple" quantizer is more likely to assume that
+		  <quote>simple</quote>quantizer is more likely to assume that
 		  complex-looking music results from an imprecise
 		  performance of simple music.
 		</para>
@@ -5666,14 +5740,14 @@
 		  durations not exactly expressible with single note
 		  heads to be split into multiple notes appropriately,
 		  and tied.  This has the same effect as applying the
-		  <!-- !!! link --> "Tie Notes at Barlines" function
+		  <!-- !!! link --> <quote>Tie Notes at Barlines</quote>function
 		  in the notation view.
 		</para>
 		<para>
 		  This parameter is not set by default because it
 		  changes the number of note events, which is
 		  undesirable when using &rosegarden; partly or
-		  principally as a MIDI sequencer.
+		  principally as a &MIDI; sequencer.
 		</para>
 	      </listitem>
 	    </varlistentry>
@@ -5685,14 +5759,14 @@
 		  Causes overlapping notes to be split and tied, so
 		  as to make strict chords with individual noteheads
 		  tied as necessary.  This has the same effect as
-		  applying the <!-- !!! link --> "Split-and-Tie
-		  Overlapping Chords" function in the notation view.
+		  applying the <!-- !!! link --> <quote>Split-and-Tie
+		  Overlapping Chords</quote>function in the notation view.
 		</para>
 		<para>
 		  This parameter is not set by default partly because
 		  it changes the number of note events, which is
 		  undesirable when using &rosegarden; partly or
-		  principally as a MIDI sequencer.
+		  principally as a &MIDI; sequencer.
 		</para>
 	      </listitem>
 	    </varlistentry>
@@ -5705,16 +5779,16 @@
 
       <title>Playing ornaments</title>
 
-      <para>Rosegarden supports playback of ornaments using its <link
+      <para>&rosegarden; supports playback of ornaments using its <link
       linkend="triggered-segments">triggered segments</link>
       mechanism.  You can create triggered segments containing any of
       the various types of trill or ornament you might want, and
       associate them with the notes that want to play them.</para>
  
       <para>To create a new type of ornament, first write out the
-      notes "in longhand" that you want the ornament to play, and then
+      notes <quote>in longhand</quote>that you want the ornament to play, and then
       select the notes and use <menuchoice>
-      <guimenu>Note</guimenu><guimenuitem>Ornaments</guimenuitem><guimenuitem>Make
+      <guimenu lang="en">Note</guimenu><guimenuitem>Ornaments</guimenuitem><guimenuitem>Make
       Ornament...</guimenuitem></menuchoice>.  This cuts the notes to
       the clipboard, pastes them into a new triggered segment, and
       replaces them with a single note of the same duration that
@@ -5722,7 +5796,7 @@
  
       <para>To make a note play an existing ornament, select it and
       use <menuchoice>
-      <guimenu>Note</guimenu><guimenuitem>Ornaments</guimenuitem><guimenuitem>Trigger
+      <guimenu lang="en">Note</guimenu><guimenuitem>Ornaments</guimenuitem><guimenuitem>Trigger
       Ornament...</guimenuitem></menuchoice>.</para>
 
       <para>
@@ -5743,7 +5817,7 @@
       change all uses of that ornament, not just the one that you
       double-clicked on.</para>
 
-      <para>Note that while Rosegarden can shift triggered segments up
+      <para>Note that while &rosegarden; can shift triggered segments up
       and down in pitch to match their triggering notes, it is not
       clever enough to perform transposition into a different
       key or scale position.</para>
@@ -5772,7 +5846,7 @@
 	as part of the composition.  You can also change the default
 	style for new notes using the 
 	<guimenuitem>Configure Rosegarden...</guimenuitem> option in the 
-	<guimenu>Settings</guimenu> menu.
+	<guimenu lang="en">Settings</guimenu> menu.
       </para>
 
       <para>
@@ -5805,14 +5879,14 @@
 	the share directory for the &rosegarden; installation (usually
 	a subdirectory of the KDE desktop installation tree, such as
 	/opt/kde/share/apps/rosegarden).  You will find that this
-	directory has a subdirectory called "fonts": copy the font
+	directory has a subdirectory called <quote>fonts</quote>: copy the font
 	files into there, and restart &rosegarden;.  If your font is
 	supported, it should now appear on the font menu in the
 	notation editor.</para>
 
       <para>Complete or partial support is currently provided for
 	the following fonts: Fughetta, by Blake Hodgetts; Petrucci,
-	the "original" Finale font; Maestro, the "new" Finale font;
+	the <quote>original</quote>Finale font; Maestro, the <quote>new</quote>Finale font;
 	Opus, the Sibelius font; Inkpen, the Sibelius jazz font;
 	Sonata from Adobe; Steinberg, from the Cubase sequencer; and
 	Xinfonia.  (Most of the above font names are registered
@@ -5881,17 +5955,17 @@
 
       <para>If you have a notation font installed on your system in a
 	scalable format (TrueType or Type-1) but it is not currently
-	supported by Rosegarden, you can create your own mapping XML
+	supported by &rosegarden;, you can create your own mapping <acronym>XML</acronym>
 	file to describe the font's character map and metrics in a way
-	Rosegarden can use.  These files are installed in the
-	fonts/mappings subdirectory of the Rosegarden installation
+	&rosegarden; can use.  These files are installed in the
+	fonts/mappings subdirectory of the &rosegarden; installation
 	directory, and a number of samples are included with the
 	distribution.</para>
 
       <para>You can also use these mapping files to define new
 	pixmap-based fonts, in which every shape in a particular size is
 	loaded from a separate pixmap file.  The two standard notation
-	fonts supplied with Rosegarden are pixmap fonts defined in
+	fonts supplied with &rosegarden; are pixmap fonts defined in
 	exactly this way.
       </para>
 
@@ -5901,13 +5975,13 @@
 	fonts.  This is because most of the mapping file format is the
 	same for scalable and pixmap fonts, and where there are
 	different elements for the different sorts of fonts, it is
-	usually possible to include both of them.  Rosegarden will
+	usually possible to include both of them.  &rosegarden; will
 	usually use pixmaps where available and scalable fonts
 	otherwise.
       </para>
 
       <para>You may also wish to edit the mapping files supplied with
-	Rosegarden if you find their measurements for alignment or
+	&rosegarden; if you find their measurements for alignment or
 	sizing are not to your liking.  (If you believe that any of the
 	supplied files are actually wrong, please let us know.)
       </para>
@@ -5919,9 +5993,9 @@
       </sect2>
 
       <sect2 id="developers-note-fonts-mapping-format">
-	<title>Notation font mapping XML format</title>
+	<title>Notation font mapping <acronym>XML</acronym> format</title>
 
-	<para>Here is a summary of the XML elements that may be used
+	<para>Here is a summary of the <acronym>XML</acronym> elements that may be used
 	  in the font mapping file.</para>
 
 	<sect3 id="developers-note-fonts-mapping-format-font-encoding">
@@ -5929,12 +6003,12 @@
 
 	  <para>This element must exist in every mapping file, and
 	    should contain all the other elements.  The only attribute
-	    is "name", which contains the font's name as shown in the
+	    is <quote>name</quote>, which contains the font's name as shown in the
 	    font selection dropdown.  Although the file format will
-	    permit any name to be used here, Rosegarden will only pick
-	    up the font corectly if the XML file has the same name as
-	    the contents of this attribute (except that the XML file
-	    should be named in lower-case and should end in ".xml").
+	    permit any name to be used here, &rosegarden; will only pick
+	    up the font corectly if the <acronym>XML</acronym> file has the same name as
+	    the contents of this attribute (except that the <acronym>XML</acronym> file
+	    should be named in lower-case and should end in <quote>.xml</quote>).
 	  </para>
 	</sect3>
 
@@ -5942,7 +6016,7 @@
 	  <title>font-information</title>
 
 	  <para>This should normally be the first child element of
-	    "rosegarden-font-encoding".  It may have any of the
+	    <quote>rosegarden-font-encoding</quote>.  It may have any of the
 	    following attributes, all of which are optional:
 
 	    <variablelist>
@@ -5981,16 +6055,16 @@
 		<term>type</term>
 		<listitem>
 		  <para>The type of the font.  This attribute should
-		    contain one of the values "pixmap" or "scalable".
+		    contain one of the values <quote>pixmap</quote>or <quote>scalable</quote>.
 		    Fonts that are loaded into the windowing system and
-		    are available to Rosegarden as standard system fonts
-		    have type "scalable"; fonts that need to be loaded
+		    are available to &rosegarden; as standard system fonts
+		    have type <quote>scalable</quote>; fonts that need to be loaded
 		    from pixmap files corresponding to individual sizes
 		    of pixmap (such as the feta and rg21 fonts included
-		    with Rosegarden) have type "pixmap".</para>
+		    with &rosegarden;) have type <quote>pixmap</quote>.</para>
 
 		  <para>This information is only intended for the user
-		    reference; it isn't actually used by Rosegarden.  It is
+		    reference; it isn't actually used by &rosegarden;.  It is
 		    legitimate in practice for a font to be a mixture of the
 		    two, but in general we will assume in this documentation
 		    that a font is either scalable or pixmap.</para>
@@ -6002,7 +6076,7 @@
 		<listitem>
 		  <para>A boolean attribute indicating whether the
 		    font is antialiased (smooth) or not.  Should have
-		    the value "true" or "false".  If the font is smooth,
+		    the value <quote>true</quote>or <quote>false</quote>.  If the font is smooth,
 		    other display elements such as beams and slurs that
 		    are not generated from the font will also be
 		    antialiased.</para>
@@ -6013,14 +6087,14 @@
 		<term>autocrop</term>
 		<listitem>
 		  <para>Only relevant for scalable (system) fonts.
-		    Rosegarden usually expects the metrics for a font to
+		    &rosegarden; usually expects the metrics for a font to
 		    contain the vertically smallest bounding boxes for
 		    elements such as note heads and accents, rather than
 		    including empty space above or below these elements
 		    for alignment purposes.  Most fonts do not do what
-		    Rosegarden expects.  Therefore for these fonts you
-		    should set the autocrop attribute to "true"; then
-		    Rosegarden will crop any unnecessary space from the
+		    &rosegarden; expects.  Therefore for these fonts you
+		    should set the autocrop attribute to <quote>true</quote>; then
+		    &rosegarden; will crop any unnecessary space from the
 		    top and bottom of these elements when rendering
 		    them.</para>
 		</listitem>
@@ -6042,16 +6116,16 @@
 	      linkend="developers-note-fonts-mapping-format-font-symbol-map">font-symbol-map</link>
 	    element.  This scheme is used to decide which notation
 	    fonts should be offered to the user, and also allows you
-	    to compose a Rosegarden notation font from more than one
+	    to compose a &rosegarden; notation font from more than one
 	    system font if desired.
 	  </para>
-	  <para>The "font-requirements" element should contain a list
-	    of "font-requirement" child elements.  Each of these has two
-	    attributes: "font-id", containing a numerical ID of your
+	  <para>The <quote>font-requirements</quote>element should contain a list
+	    of <quote>font-requirement</quote>child elements.  Each of these has two
+	    attributes: <quote>font-id</quote>, containing a numerical ID of your
 	    choice for reference elsewhere in the file, and either a
-	    "name" or a "names" attribute.  If "name" is provided, it
+	    <quote>name</quote>or a <quote>names</quote>attribute.  If <quote>name</quote> is provided, it
 	    will be used as the name of a single system font to be
-	    associated with the font id; if "names" is provided, it will
+	    associated with the font id; if <quote>names</quote> is provided, it will
 	    be treated as a comma-separated list of system fonts and the
 	    first one found will be associated with the font id.
 	  </para>
@@ -6060,10 +6134,10 @@
 	<sect3 id="developers-note-fonts-mapping-format-font-sizes">
 	  <title>font-sizes</title>
 
-	  <para>The "font-sizes" element specifies which notation font
+	  <para>The <quote>font-sizes</quote> element specifies which notation font
 	    sizes are available, and how the nominal font size relates
 	    to the dimensions of non-font elements such as stems, staff
-	    lines and beams.  The "size" of a notation font is assumed
+	    lines and beams.  The <quote>size</quote> of a notation font is assumed
 	    to be the distance in pixels between staff lines, or more
 	    precisely, the height of a conventional note head that
 	    completely fills the space between lines: the size therefore
@@ -6073,49 +6147,49 @@
 
 	  <para>
 	    <!-- !!! TODO throughout this section: how to mark up XML element/attribute names? equiv of <code> in HTML would do -->
-	    There are two possible child elements of "font-sizes":
-	    "font-scale" and "font-size".  Their use depends on the
+	    There are two possible child elements of <quote>font-sizes</quote>:
+	    <quote>font-scale</quote> and <quote>font-size</quote>.  Their use depends on the
 	    type of font being described.</para>
 
 	  <para>
-	    For pixmap (non-scalable) fonts, the "font-sizes" element
-	    should contain a list of "font-size" elements, one for
+	    For pixmap (non-scalable) fonts, the <quote>font-sizes</quote> element
+	    should contain a list of <quote>font-size</quote> elements, one for
 	    each size of pixmaps available.  The pixmaps themselves
 	    must be installed in the
 	    fonts/&lt;font-name&gt;/&lt;font-size&gt; subdirectory of
-	    the Rosegarden installation directory, where
+	    the &rosegarden; installation directory, where
 	    &lt;font-name&gt; is the name of the font (as specified in
-	    the "rosegarden-font-encoding" element at the start of the
+	    the <quote>rosegarden-font-encoding</quote> element at the start of the
 	    mapping file), or a lower-case version of the name, and
 	    &lt;font-size&gt; is the pixel size of the font.  A font
 	    size will only be made available to the user if it has an
-	    entry in the "font-sizes" list and the pixmap directory is
+	    entry in the <quote>font-sizes</quote> list and the pixmap directory is
 	    found.
 	  </para>
 	  
 	  <para>
-	    For scalable fonts, the "font-sizes" element should
-	    contain one "font-scale" element that defines the
+	    For scalable fonts, the <quote>font-sizes</quote> element should
+	    contain one <quote>font-scale</quote> element that defines the
 	    relationships between font and non-font elements in a
 	    general way, and also defines the relationship between
-	    Rosegarden's nominal font size and the size of the
-	    corresponding system font.  If this "font-scale" element
-	    is found, then Rosegarden will assume the font is
+	    &rosegarden;'s nominal font size and the size of the
+	    corresponding system font.  If this <quote>font-scale</quote> element
+	    is found, then &rosegarden; will assume the font is
 	    available in any size.  You can however still include one
-	    or more "font-size" elements to define precise proportions
+	    or more <quote>font-size</quote> elements to define precise proportions
 	    for any particular size for which the general proportions
 	    do not quite work correctly, for example because of
 	    rounding error.
 	  </para>
 
 	  <para>
-	    The attributes of "font-scale" and "font-size" are very
+	    The attributes of <quote>font-scale</quote> and <quote>font-size</quote> are very
 	    similar.  The main difference is that all attributes of
-	    "font-scale" are floating-point values relative to the
+	    <quote>font-scale</quote> are floating-point values relative to the
 	    font size, where 1.0 is the base font size (i.e. the
 	    distance between staff lines), whereas attributes of
-	    "font-size" are integer pixel values.  The attributes
-	    available are as follows.  (Those marked "optional" have
+	    <quote>font-size</quote> are integer pixel values.  The attributes
+	    available are as follows.  (Those marked <quote>optional</quote> have
 	    vaguely sensible defaults, so it's a good idea to try not
 	    setting them first.)
 	  </para>
@@ -6126,7 +6200,7 @@
 	      <term>note-height</term>
 	      <listitem>
 		<para>This attribute is only available for the
-		  "font-size" element, and it is mandatory in that
+		  <quote>font-size</quote> element, and it is mandatory in that
 		  element.  It defines the base size of font to which the
 		  other attributes in this element apply, and a size that
 		  will be offered to the user and used when looking up
@@ -6137,9 +6211,9 @@
 	    <varlistentry>
 	      <term>font-height</term>
 	      <listitem>
-		<para>May be used in either "font-size" or "font-scale".
+		<para>May be used in either <quote>font-size</quote> or <quote>font-scale</quote>.
 		  This is only relevant for scalable fonts, but is
-		  mandatory for them if used in the "font-scale" element.
+		  mandatory for them if used in the <quote>font-scale</quote> element.
 		  This defines the size of the system font used to draw a
 		  given size of notation font.</para>
 	      </listitem>
@@ -6205,7 +6279,7 @@
 	    font, and which pixmap files or system font code points
 	    they should be drawn from.</para>
 
-	  <para>It should contain a list of "symbol" elements.  These
+	  <para>It should contain a list of <quote>symbol</quote> elements.  These
 	    have several possible attributes, the choice of which will
 	    normally depend on whether the font is based on pixmaps or
 	    system fonts:
@@ -6222,17 +6296,17 @@
 		    3.2 standard</ulink>, the name should be that used to
 		  identify the symbol in the standard.</para>
 
-		<para>Most of the symbols Rosegarden expects to find
+		<para>Most of the symbols &rosegarden; expects to find
 		  are in the standard; one exception is that many fonts
 		  have a special version of the flag symbol that is
 		  intended to be used when composing multiple flags from
-		  individual single flags.  Rosegarden refers to this as
-		  "MUSICAL SYMBOL COMBINING FLAG-0", a name not used in
+		  individual single flags.  &rosegarden; refers to this as
+		  <quote>MUSICAL SYMBOL COMBINING FLAG-0</quote>, a name not used in
 		  the Unicode standard (which has flags 1-5 only).</para>
 
 		<para>For a definitive set of the symbol names
-		  Rosegarden knows about, see the file
-		  "gui/notecharname.cpp" in the Rosegarden source
+		  &rosegarden; knows about, see the file
+		  <quote>gui/notecharname.cpp</quote> in the &rosegarden; source
 		  distribution.  Note however that it is possible to use
 		  additional symbol names by introducing them in a <link
 		    linkend="developers-note-styles">notation
@@ -6250,7 +6324,7 @@
 		  symbol in a pixmap font.  The file itself should be
 		  installed to
 		  fonts/&lt;font-name&gt;/&lt;font-size&gt;/&lt;src&gt;.xpm
-		  under the Rosegarden installation directory.
+		  under the &rosegarden; installation directory.
 		</para>
 	      </listitem>
 	    </varlistentry>
@@ -6349,8 +6423,8 @@
 	  <para>
 	    Although none of these attributes is mandatory except for
 	    the name, a symbol obviously needs to supply at least one
-	    of "src", "inversion-src", "code", "inversion-code",
-	    "glyph", or "inversion-glyph" to stand any chance of being
+	    of <quote>src</quote>, <quote>inversion-src</quote>, <quote>code</quote>, <quote>inversion-code</quote>,
+	    <quote>glyph</quote>, or <quote>inversion-glyph</quote> to stand any chance of being
 	    rendered at all.  It is of course perfectly legitimate to
 	    supply several or all of these attributes.
 	  </para>
@@ -6371,31 +6445,31 @@
       <title>Creating new notation styles</title>
 
       <para>
-	Rosegarden's notation editor has the ability to display and
+	&rosegarden;'s notation editor has the ability to display and
 	edit notes in various standard styles: classical, diamond
-	heads and so on.  These styles are all defined in XML style
+	heads and so on.  These styles are all defined in <acronym>XML</acronym> style
 	definition files installed along with the application, and
-	it's possible to create a new one by writing a simple XML
-	file.  Rosegarden simply looks at the set of installed files
+	it's possible to create a new one by writing a simple <acronym>XML</acronym>
+	file.  &rosegarden; simply looks at the set of installed files
 	to determine which styles to offer the user.  You can refer to
 	the default set of files in the styles subdirectory of the
-	Rosegarden installation directory for examples.
+	&rosegarden; installation directory for examples.
       </para>
 
       <para>
 	The file format is not yet especially comprehensive; at the
 	moment it has been designed to be powerful enough to describe
-	the standard styles that come with Rosegarden, but not much
+	the standard styles that come with &rosegarden;, but not much
 	more.  If you should try to create new styles this way, we'd
-	be very interested in your feedback on the Rosegarden
+	be very interested in your feedback on the &rosegarden;
 	mailing-lists.
       </para>
       
       <sect2 id="developers-note-styles-format">
-	<title>Notation style XML format</title>
+	<title>Notation style <acronym>XML</acronym> format</title>
 
 	<para>
-	  Here is a summary of the XML elements that may be used in
+	  Here is a summary of the <acronym>XML</acronym> elements that may be used in
 	  a style definition file.
 	</para>
 
@@ -6404,7 +6478,7 @@
 
 	  <para>This element must exist in every style file, and
 	    should contain all the other elements.  It has one optional
-	    attribute, "base-style", which may be used to name a style
+	    attribute, <quote>base-style</quote>, which may be used to name a style
 	    from which this style takes the default values for any
 	    parameters not specified elsewhere in the present file.
 	    It's often good practice to define a style in terms of the
@@ -6412,7 +6486,7 @@
 	    Cross.xml for a particularly simple example.
 	  </para>
 
-	  <para>Note that the "rosegarden-note-style" element does not
+	  <para>Note that the <quote>rosegarden-note-style</quote> element does not
 	    give the name of the style being defined, which is instead
 	    currently drawn from the name of the file.  At some point in
 	    the future we may add internationalizable style name
@@ -6422,12 +6496,12 @@
 	<sect3 id="developers-note-styles-global-note">
 	  <title>global, note</title>
 	  
-	  <para>Within the "rosegarden-note-style" element, there may
-	    be one "global" element and any number of "note" elements.
+	  <para>Within the <quote>rosegarden-note-style</quote> element, there may
+	    be one <quote>global</quote> element and any number of <quote>note</quote> elements.
 	    We describe these together, as they have almost identical
-	    sets of attributes.  The "global" element simply provides
+	    sets of attributes.  The <quote>global</quote> element simply provides
 	    default values for those parameters not specified for a
-	    particular note type in any following "note" element.
+	    particular note type in any following <quote>note</quote> element.
 	  </para>
 
 	  <para>The attributes for these elements are as follows.  All
@@ -6438,12 +6512,12 @@
 	    <varlistentry>
 	      <term>type</term>
 	      <listitem>
-		<para>Only relevant to the "note" element, and
+		<para>Only relevant to the <quote>note</quote> element, and
 		  mandatory for that element.  This attribute specifies
 		  which sort of note is being styled.  Legal values are
-		  textual American or British note names (from "64th",
-		  "sixth-fourth note", "hemidemisemiquaver" etc to
-		  "double whole note").
+		  textual American or British note names (from <quote>64th</quote>,
+		  <quote>sixth-fourth note</quote>, <quote>hemidemisemiquaver</quote> etc to
+		  <quote>double whole note</quote>).
 		</para>
 	      </listitem>
 	    </varlistentry>
@@ -6453,9 +6527,9 @@
 	      <listitem>
 		<para>Defines a note head shape for this style.  Any
 		  string is a legal value, but the only values
-		  implemented so far are "angled oval", "level oval",
-		  "breve", "cross", "triangle up", "triangle down",
-		  "diamond" and "rectangle".  The value "number" is also
+		  implemented so far are <quote>angled oval</quote>, <quote>level oval</quote>,
+		  <quote>breve</quote>, <quote>cross</quote>, <quote>triangle up</quote>, <quote>triangle down</quote>,
+		  <quote>diamond</quote> and <quote>rectangle</quote>.  The value <quote>number</quote> is also
 		  recognised but not yet implemented.
 		</para>
 	      </listitem>
@@ -6466,11 +6540,11 @@
 	      <listitem>
 		<para>Defines a note font character name to be used as
 		  the note head for this style.  An element may supply a
-		  "shape" or "charname" attribute, but not both.  The
+		  <quote>shape</quote> or <quote>charname</quote> attribute, but not both.  The
 		  name should be one of those defined in the current
 		  notation font's <link
 		    linkend="developers-note-fonts-mapping-format-font-symbol-map">symbol
-		    map</link> (in a "name" attribute).
+		    map</link> (in a <quote>name</quote> attribute).
 		</para>
 	      </listitem>
 	    </varlistentry>
@@ -6481,7 +6555,7 @@
 		<para>Specifies whether this note should have a filled
 		  head (where applicable, i.e. where the shape attribute
 		  supplies a shape that is available both filled and
-		  unfilled).  Must be "true" or "false".
+		  unfilled).  Must be <quote>true</quote> or <quote>false</quote>.
 		</para>
 	      </listitem>
 	    </varlistentry>
@@ -6490,7 +6564,7 @@
 	      <term>stem</term>
 	      <listitem>
 		<para>Specifies whether this note should have a stem.
-		  Must be "true" or "false".
+		  Must be <quote>true</quote> or <quote>false</quote>.
 		</para>
 	      </listitem>
 	    </varlistentry>
@@ -6517,9 +6591,9 @@
 	      <term>hfixpoint</term>
 	      <listitem>
 		<para>Specifies in which x position the stem fixes to
-		  the note head.  Acceptable values are "normal" (the
+		  the note head.  Acceptable values are <quote>normal</quote> (the
 		  right side when the stem points up, the left when it
-		  points down), "central", and "reversed" (left side
+		  points down), <quote>central</quote>, and <quote>reversed</quote> (left side
 		  when the stem points up, right when it points down).
 		</para>
 	      </listitem>
@@ -6529,9 +6603,9 @@
 	      <term>vfixpoint</term>
 	      <listitem>
 		<para>Specifies in which y position the stem fixes to
-		  the note head.  Acceptable values are "near" (the stem
+		  the note head.  Acceptable values are <quote>near</quote> (the stem
 		  fixes to the top when pointing up, the bottom when
-		  pointing down), "middle", or "far".
+		  pointing down), <quote>middle</quote>, or <quote>far</quote>.
 		</para>
 	      </listitem>
 	    </varlistentry>
@@ -6705,7 +6779,7 @@
 	<listitem>
 	  <para>
 
-	    Rosegarden is Copyright 2000-2008 Guillaume Laurent,
+	    &rosegarden; is Copyright 2000-2008 Guillaume Laurent,
 	    Chris Cannam and Richard Bown.  The moral rights of
 	    Guillaume Laurent, Chris Cannam and Richard Bown to be
 	    identified as the authors of this work have been asserted.
@@ -6716,7 +6790,7 @@
 	<listitem>
 	  <para>
 
-	    Parts of Rosegarden are derived from X11 Rosegarden 2.1,
+	    Parts of &rosegarden; are derived from X11 Rosegarden 2.1,
 	    which is Copyright 1994 &ndash; 2001 Chris Cannam, Andrew Green,
 	    Richard Bown and Guillaume Laurent.
 
@@ -6726,7 +6800,7 @@
 	<listitem>
 	  <para>
 
-	    For musical notation display Rosegarden uses pixmaps
+	    For musical notation display &rosegarden; uses pixmaps
 	    derived from the Feta font, part of the <ulink
 	      url="http://lilypond.org/">LilyPond</ulink> software,
 	    which is Copyright 1997 &ndash; 2001 Jan Nieuwenhuizen and
@@ -6748,7 +6822,7 @@
 	<listitem>
 	  <para>
 
-  The Rosegarden splash-screen image is Copyright 2006 Carolyn H. McIntyre,
+  The &rosegarden; splash-screen image is Copyright 2006 Carolyn H. McIntyre,
   used by permission.
 
 	  </para>
@@ -6799,29 +6873,37 @@
               when loading an instrument preset, etc., bug fixes galore
           </para></listitem>
 	  <listitem><para>
-	      1.6.0 &ndash; November 2007: fretboards, diatonic transpose, multiple lines of lyrics, marker ruler improvements, overlapping notes visibility, LilyPond export enhancements and new dialog, better infrared remote control support, better configuration dialog, fixes
+	      1.6.0 &ndash; November 2007: fretboards, diatonic transpose, multiple lines
+	            of lyrics, marker ruler improvements, overlapping notes visibility,
+	            LilyPond export enhancements and new dialog, better infrared remote
+	            control support, better configuration dialog, fixes
 	  </para></listitem>
 	  <listitem><para>
 	      1.5.1 &ndash; March 2007: bug fixes
 	  </para></listitem>
 	  <listitem><para>
-	      1.5 &ndash; February 2007: audio timestretching and input format conversion, matrix usability improvements, tempo tapping, context help, some features, code reorganisation and new build system (again)
+	      1.5 &ndash; February 2007: audio timestretching and input format conversion,
+	          matrix usability improvements, tempo tapping, context help, some
+	          features, code reorganisation and new build system (again)
 	  </para></listitem>
 	  <listitem><para>
               1.4 &ndash; September 2006: LilyPond export vastly improved,
 	      exportable LilyPond directives, cut/copy/paste by ranges that
 	      include tempo and time data, tempo entry and manipulation vastly
-	      improved, multi-track MIDI recording, MIDI recording filters,
+	      improved, multi-track &MIDI; recording, &MIDI; recording filters,
 	      track paramter box, create segments using preset parameters from
 	      a database of over 300 real-world instruments, texts like
-	      "Allegro" offered as a parallel alternative to typing, LilyPond
+	      <quote>Allegro</quote>offered as a parallel alternative to typing, LilyPond
 	      preview, assorted smaller features, many bug fixes
           </para></listitem>
 	  <listitem><para>
 	      1.2.4 &ndash; July 2006: bug fixes
 	  </para></listitem>
 	  <listitem><para>
-	      1.2.3 &ndash; February 2006: new segment canvas, percussion matrix, multi-track audio recording, project packager, external MIDI controllers, MTC sync, proper ALSA MIDI ports, new icons, new build system
+	      1.2.3 &ndash; February 2006: new segment canvas, percussion matrix,
+	            multi-track audio recording, project packager, external &MIDI;
+	            controllers, MTC sync, proper ALSA &MIDI; ports, new icons, new build
+	            system
 	  </para></listitem>
 	  <listitem><para>
 	      1.0 &ndash; February 2005: many fixes, DSSI effects, latency compensation
@@ -6848,7 +6930,7 @@
 	      0.9 &ndash; April 2003: many notation improvements, improved bank editor, audio enhancements and refinements, translations
 	  </para></listitem>
 	  <listitem><para>
-	      0.8.5 &ndash; December 2002: bank editor, MIDI filters, panic button
+	      0.8.5 &ndash; December 2002: bank editor, &MIDI; filters, panic button
 	  </para></listitem>
 	  <listitem><para>
 	      0.8 &ndash; October 2002: printing, LADSPA plugins, improved Matrix View
