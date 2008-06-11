@@ -78,20 +78,28 @@ SegmentSplitTwiceCommand::execute()
         return;
     }
 
-    SegmentSplitCommand split1 = SegmentSplitCommand(m_segment, m_splitTime1);
+    // This method should not have been called if the range don't cut the
+    // segment twice (test done in DeleteRangeCommand)
+
+    SegmentSplitCommand split1
+        = SegmentSplitCommand(m_segment, m_splitTime1, true);
     split1.execute();
     m_newSegmentA = split1.getSegmentA();
     m_newSegmentB = split1.getSegmentB();
 
-    SegmentSplitCommand split2 = SegmentSplitCommand(m_newSegmentB, m_splitTime2);
+    SegmentSplitCommand split2
+        = SegmentSplitCommand(m_newSegmentB, m_splitTime2, true);
     split2.execute();
     m_newSegmentB = split2.getSegmentA();
     m_newSegmentC = split2.getSegmentB();
 
-    if (    (m_segment->getStartTime() < m_splitTime1)
-         && (m_segment->getEndMarkerTime() > m_splitTime2)) {
-        if (m_rejoins) m_rejoins->addSegmentsPair(m_newSegmentA, m_newSegmentC);
+    if (m_rejoins) {
+        // If in SegmentDeleteRange context prepare the junction
+        // of external segments
+        m_rejoins->addSegmentsPair(m_newSegmentA, m_newSegmentC);
     }
+
+    m_detached = false; // i.e. new segments are not detached
 }
 
 void

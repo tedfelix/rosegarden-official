@@ -49,7 +49,7 @@ class SegmentSplitTwiceCommand : public KNamedCommand
 public:
     SegmentSplitTwiceCommand(Segment *segment,
                         timeT splitTime1, timeT splitTime2,
-                        DeleteRangeCommand::RejoinCommand *rejoins);
+                        DeleteRangeCommand::RejoinCommand *rejoins = 0);
     virtual ~SegmentSplitTwiceCommand();
 
     virtual void execute();
