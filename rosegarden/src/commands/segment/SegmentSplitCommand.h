@@ -42,8 +42,11 @@ class Segment;
 class SegmentSplitCommand : public KNamedCommand
 {
 public:
+
+    // If keepLabel is true, "(split)" is not append to the new segments label
     SegmentSplitCommand(Segment *segment,
-                        timeT splitTime);
+                        timeT splitTime,
+                        bool keepLabel = false);
     virtual ~SegmentSplitCommand();
 
     virtual void execute();
@@ -57,9 +60,8 @@ private:
     Segment *m_newSegmentA;
     Segment *m_newSegmentB;
     timeT m_splitTime;
-    timeT *m_previousEndMarkerTime;
     bool m_detached;
-    std::string m_segmentLabel;
+    bool m_keepLabel;
 };
 
 

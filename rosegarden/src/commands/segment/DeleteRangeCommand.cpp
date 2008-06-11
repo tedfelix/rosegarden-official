@@ -65,11 +65,12 @@ DeleteRangeCommand::DeleteRangeCommand(Composition *composition,
         for (Composition::iterator i = composition->begin();
                 i != composition->end(); ++i) {
 
-            if ((*i)->getStartTime() >= t || (*i)->getEndMarkerTime() <= t) {
-                continue;
-            }
-
             if ((*i)->getType() == Segment::Audio) {
+
+                if ((*i)->getStartTime() >= t || (*i)->getEndMarkerTime() <= t) {
+                    continue;
+                }
+
                 addCommand(new AudioSegmentSplitCommand(*i, t));
             }
         }
@@ -80,16 +81,35 @@ DeleteRangeCommand::DeleteRangeCommand(Composition *composition,
     for (Composition::iterator i = composition->begin();
             i != composition->end(); ++i) {
 
-        // Split twice all segments at the range limits.
-        // The first and last from the three resulting segments are
-        // added to the rejoinCommand to be rejoined later.
-
-        if ((*i)->getStartTime() >= t1 || (*i)->getEndMarkerTime() <= t0) {
-            continue;
-        }
-
         if ((*i)->getType() != Segment::Audio) {
-           addCommand(new SegmentSplitTwiceCommand(*i, t0, t1, rejoinCommand));
+
+            // How many time to split the segment ?
+            timeT t;
+            int count = 0;
+            if (t0 > (*i)->getStartTime() && t0 < (*i)->getEndMarkerTime()) {
+                count++;
+                t = t0;
+            }
+            if (t1 > (*i)->getStartTime() && t1 < (*i)->getEndMarkerTime()) {
+                count++;
+                t = t1;
+            }
+
+            // Split the segment
+            switch(count) {
+                case 0 : // Do nothing
+                    break;
+
+                case 1 : // Split segment once.
+                    addCommand(new SegmentSplitCommand(*i, t, true));
+                    break;
+
+                case 2 : // Split segment twice.
+                        // The first and last from the three resulting segments
+                        // will be stored into the rejoinCommand to be rejoined later.
+                    addCommand(new SegmentSplitTwiceCommand(*i, t0, t1, rejoinCommand));
+                    break;
+            }
         }
     }
 

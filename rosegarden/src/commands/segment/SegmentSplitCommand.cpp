@@ -38,14 +38,14 @@ namespace Rosegarden
 {
 
 SegmentSplitCommand::SegmentSplitCommand(Segment *segment,
-        timeT splitTime) :
+        timeT splitTime, bool keepLabel) :
         KNamedCommand(i18n("Split Segment")),
         m_segment(segment),
         m_newSegmentA(0),
         m_newSegmentB(0),
         m_splitTime(splitTime),
-        m_previousEndMarkerTime(0),
-        m_detached(true)
+        m_detached(true),
+        m_keepLabel(keepLabel)
 {}
 
 SegmentSplitCommand::~SegmentSplitCommand()
@@ -54,7 +54,6 @@ SegmentSplitCommand::~SegmentSplitCommand()
         delete m_newSegmentA;
         delete m_newSegmentB;
     }
-    delete m_previousEndMarkerTime;
 }
 
 void
@@ -130,10 +129,12 @@ SegmentSplitCommand::execute()
 
     // Set labels
     //
-    m_segmentLabel = m_segment->getLabel();
-    QString newLabel = strtoqstr(m_segmentLabel);
-    if (!newLabel.endsWith(i18n(" (split)"))) {
-        newLabel = i18n("%1 (split)").arg(newLabel);
+    std::string label = m_segment->getLabel();
+    QString newLabel = strtoqstr(label);
+    if (!m_keepLabel) {
+        if (!newLabel.endsWith(i18n(" (split)"))) {
+            newLabel = i18n("%1 (split)").arg(newLabel);
+        }
     }
     m_newSegmentA->setLabel(newLabel);
     m_newSegmentB->setLabel(newLabel);
@@ -165,6 +166,7 @@ SegmentSplitCommand::execute()
     }
 
     m_newSegmentA->setEndTime(m_splitTime);
+    m_newSegmentA->setEndMarkerTime(m_splitTime);
 
     m_segment->getComposition()->detachSegment(m_segment);
 
