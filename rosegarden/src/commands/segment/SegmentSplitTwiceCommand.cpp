@@ -53,6 +53,16 @@ SegmentSplitTwiceCommand::SegmentSplitTwiceCommand(Segment *segment,
         m_composition(segment->getComposition()),
         m_rejoins(rejoins)
 {
+
+    // This command should not be called if the range doesn't cut the
+    // segment twice
+    assert(splitTime1 > segment->getStartTime());
+    assert(splitTime1 < segment->getEndMarkerTime());
+    assert(splitTime2 < segment->getEndMarkerTime());
+    assert(splitTime2 > segment->getStartTime());
+    assert(splitTime1 < splitTime2);
+
+
 }
 
 SegmentSplitTwiceCommand::~SegmentSplitTwiceCommand()
@@ -77,9 +87,6 @@ SegmentSplitTwiceCommand::execute()
         m_detached = false; // i.e. new segments are not detached
         return;
     }
-
-    // This method should not have been called if the range don't cut the
-    // segment twice (test done in DeleteRangeCommand)
 
     SegmentSplitCommand split1
         = SegmentSplitCommand(m_segment, m_splitTime1, true);

@@ -78,11 +78,26 @@ SegmentJoinCommand::execute()
 
     if (!m_newSegment) {
 
-        m_newSegment = new Segment(*m_oldSegments[0]);
-
-        // that duplicated segment 0; now do the rest
-
+        // Find out the leftmost segment
+        timeT t0 = m_oldSegments[0]->getStartTime();
+        unsigned int i0 = 0;
         for (unsigned int i = 1; i < m_oldSegments.size(); ++i) {
+            timeT t = m_oldSegments[i]->getStartTime();
+            if (t < t0) {
+                t0 = t;
+                i0 = i;
+            }
+        }
+
+        // Always begin with the leftmost segment to keep in the new segment
+        // any clef or key change found at the start of this segment.
+        m_newSegment = new Segment(*m_oldSegments[i0]);
+
+        // that duplicated segment i0; now do the rest
+
+        for (unsigned int i = 0; i < m_oldSegments.size(); ++i) {
+
+            if (i == i0) continue; // Don't add twice the first old segment
 
             Segment *s = m_oldSegments[i];
 
