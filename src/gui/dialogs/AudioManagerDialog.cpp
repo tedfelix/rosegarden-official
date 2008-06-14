@@ -1078,9 +1078,9 @@ AudioManagerDialog::addFile(const KURL& kurl)
     AudioFileManager &aFM = m_doc->getAudioFileManager();
 
     if (!kurl.isLocalFile()) {
-	if (!RosegardenGUIApp::self()->testAudioPath("importing a remote audio file")) return false;
+	if (!RosegardenGUIApp::self()->testAudioPath(i18n("importing a remote audio file"))) return false;
     } else if (aFM.fileNeedsConversion(qstrtostr(kurl.path()), m_sampleRate)) {
-        if (!RosegardenGUIApp::self()->testAudioPath("importing an audio file that needs to be converted or resampled")) return false;
+        if (!RosegardenGUIApp::self()->testAudioPath(i18n("importing an audio file that needs to be converted or resampled"))) return false;
     }
 
     ProgressDialog progressDlg(i18n("Adding audio file..."),
