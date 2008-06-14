@@ -1530,9 +1530,9 @@ RosegardenGUIView::slotDroppedNewAudio(QString audioDesc)
 
     KURL kurl(url);
     if (!kurl.isLocalFile()) {
-        if (!RosegardenGUIApp::self()->testAudioPath("importing a remote audio file")) return;
+        if (!RosegardenGUIApp::self()->testAudioPath(i18n("importing a remote audio file"))) return;
     } else if (aFM.fileNeedsConversion(qstrtostr(kurl.path()), sampleRate)) {
-	if (!RosegardenGUIApp::self()->testAudioPath("importing an audio file that needs to be converted or resampled")) return;
+	if (!RosegardenGUIApp::self()->testAudioPath(i18n("importing an audio file that needs to be converted or resampled"))) return;
     }
 
     ProgressDialog progressDlg(i18n("Adding audio file..."),
