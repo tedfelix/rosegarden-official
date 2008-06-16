@@ -3,6 +3,7 @@
 #include "XmlExportable.h"
 #include <iostream>
 #include <string>
+#include <cstdlib>
 
 using namespace Rosegarden;
 using std::cout;

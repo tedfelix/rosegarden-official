@@ -3,15 +3,8 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
+    Copyright 2000-2008 the Rosegarden development team.
 
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
-
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
- 
     This file is Copyright 2006
         Pedro Lopez-Cabanillas <plcl@users.sourceforge.net>
         D. Michael McIntyre <dmmcintyr@users.sourceforge.net>
