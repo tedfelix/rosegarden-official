@@ -58,4 +58,4 @@ pitch.o: ../XmlExportable.h #../StringHash.h
 
 transpose.o: ../NotationTypes.h 
 accidentals.o: ../NotationTypes.h 
-realtime.o: ../RealTime.h
+realtime.o: ../RealTime.h ../RealTime.cpp
