@@ -1,6 +1,7 @@
 // -*- c-basic-offset: 4 -*-
 
 #include "NotationTypes.h"
+#include <cstdlib>
 
 using namespace Rosegarden;
 using std::cout;
