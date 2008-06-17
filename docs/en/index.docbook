@@ -2939,7 +2939,7 @@
 	   </para>
 	   <para>For a detailed, hands-on demonstration of brackets in action,
 	   please see
-	   <ulink url="http://rosegarden.sourceforge.net/tutorial/supplemental/fidelio/fidelio.html">this
+	   <ulink url="http://rosegarden.sourceforge.net/tutorial/supplemental/fidelio/">this
 	   online tutorial.</ulink>
 	   </para>
 	</sect2>
@@ -2997,7 +2997,7 @@
 				segments to take these parameters as well.  (For
 				a demonstration of the latter case in action,
 				please see
-				<ulink url="http://rosegarden.sourceforge.net/tutorial/supplemental/fidelio/fidelio.html">
+				<ulink url="http://rosegarden.sourceforge.net/tutorial/supplemental/fidelio/">
 				this online tutorial.)</ulink>
 				Clicking the <guimenuitem>OK</guimenuitem>
 				button injects the appropriate parameters into
