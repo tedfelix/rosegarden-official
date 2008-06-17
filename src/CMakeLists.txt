@@ -44,8 +44,8 @@ INCLUDE(SoundFileList.txt)
 KDE3_AUTOMOC(${common_sound_SRCS})
 
 ADD_LIBRARY(RosegardenCommon STATIC
-    ${misc_SRCS}
     ${base_SRCS}
+    ${misc_SRCS}
     ${common_sound_SRCS}
 )
 

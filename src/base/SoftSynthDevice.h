@@ -21,6 +21,7 @@
 #include "Device.h"
 #include "Instrument.h"
 #include "Controllable.h"
+#include "MidiMetronome.h"
 
 namespace Rosegarden
 {
@@ -54,7 +55,11 @@ public:
     virtual const ControlParameter *getControlParameter(const std::string &type,
                                                         MidiByte controllerNumber) const;
 
+    void setMetronome(const MidiMetronome &);
+    const MidiMetronome* getMetronome() const { return m_metronome; }
+
 private:
+    MidiMetronome *m_metronome;
     static ControlList m_controlList;
     static void checkControlList();
 };

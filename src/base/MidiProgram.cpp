@@ -194,25 +194,5 @@ MidiKeyMapping::getPitchExtent() const
 
 	
 
-MidiMetronome::MidiMetronome(InstrumentId instrument,
-                             MidiByte barPitch,
-                             MidiByte beatPitch,
-                             MidiByte subBeatPitch,
-			     int depth,
-                             MidiByte barVely,
-                             MidiByte beatVely,
-			     MidiByte subBeatVely):
-         m_instrument(instrument),
-         m_barPitch(barPitch),
-         m_beatPitch(beatPitch),
-         m_subBeatPitch(subBeatPitch),
-	 m_depth(depth),
-         m_barVelocity(barVely),
-         m_beatVelocity(beatVely),
-	 m_subBeatVelocity(subBeatVely)
-{
-    // nothing else
-}
-
 }
 

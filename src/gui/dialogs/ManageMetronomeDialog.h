@@ -19,7 +19,7 @@
 #ifndef _RG_MANAGEMETRONOMEDIALOG_H_
 #define _RG_MANAGEMETRONOMEDIALOG_H_
 
-#include "base/MidiProgram.h"
+#include "base/MidiMetronome.h"
 #include <kdialogbase.h>
 
 
@@ -28,13 +28,13 @@ class QSpinBox;
 class QCheckBox;
 class KComboBox;
 
-
 namespace Rosegarden
 {
 
 class RosegardenGUIDoc;
 class PitchChooser;
 class InstrumentParameterBox;
+class Device;
 
 
 class ManageMetronomeDialog : public KDialogBase
@@ -79,6 +79,10 @@ protected:
     MidiByte   m_barPitch;
     MidiByte   m_beatPitch;
     MidiByte   m_subBeatPitch;
+
+    bool isSuitable(Device *, bool *hasConnectionReturn = 0);
+    void setMetronome(Device *, const MidiMetronome &);
+    const MidiMetronome *getMetronome(Device *);
 };
 
 
