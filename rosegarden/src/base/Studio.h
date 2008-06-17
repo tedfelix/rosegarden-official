@@ -20,6 +20,7 @@
 #include "Instrument.h"
 #include "Device.h"
 #include "MidiProgram.h"
+#include "MidiMetronome.h"
 #include "ControlParameter.h"
 
 // The Studio is where Midi and Audio devices live.  We can query

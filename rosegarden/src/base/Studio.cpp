@@ -18,6 +18,7 @@
 #include "Studio.h"
 #include "MidiDevice.h"
 #include "AudioDevice.h"
+#include "SoftSynthDevice.h"
 #include "Instrument.h"
 
 #include "Segment.h"
@@ -359,17 +360,22 @@ const MidiMetronome*
 Studio::getMetronomeFromDevice(DeviceId id)
 {
     std::vector<Device*>::iterator it;
-    MidiDevice *midiDevice;
 
-    for (it = m_devices.begin(); it != m_devices.end(); it++)
-    {
-        midiDevice = dynamic_cast<MidiDevice*>(*it);
+    for (it = m_devices.begin(); it != m_devices.end(); it++) {
+
+        MidiDevice *midiDevice = dynamic_cast<MidiDevice*>(*it);
 
         if (midiDevice && 
             midiDevice->getId() == id &&
-            midiDevice->getMetronome())
-        {
+            midiDevice->getMetronome()) {
             return midiDevice->getMetronome();
+        }
+
+	SoftSynthDevice *ssDevice = dynamic_cast<SoftSynthDevice *>(*it);
+        if (ssDevice && 
+            ssDevice->getId() == id &&
+            ssDevice->getMetronome()) {
+            return ssDevice->getMetronome();
         }
     }
 

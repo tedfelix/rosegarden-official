@@ -21,6 +21,7 @@
 
 #include "Device.h"
 #include "Instrument.h"
+#include "MidiMetronome.h"
 #include "MidiProgram.h"
 #include "ControlParameter.h"
 #include "Controllable.h"
@@ -66,7 +67,6 @@ public:
     // Instrument must be on heap; I take ownership of it
     virtual void addInstrument(Instrument*);
 
-    void removeMetronome();
     void setMetronome(const MidiMetronome &);
     const MidiMetronome* getMetronome() const { return m_metronome; }
 

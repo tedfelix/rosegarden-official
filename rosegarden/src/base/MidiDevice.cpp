@@ -261,13 +261,6 @@ MidiDevice::addBank(const MidiBank &bank)
 }
 
 void
-MidiDevice::removeMetronome()
-{
-    delete m_metronome;
-    m_metronome = 0;
-}
-
-void
 MidiDevice::setMetronome(const MidiMetronome &metronome)
 {
     delete m_metronome;

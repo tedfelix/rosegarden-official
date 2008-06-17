@@ -33,6 +33,7 @@
 #include "base/Instrument.h"
 #include "base/Marker.h"
 #include "base/MidiDevice.h"
+#include "base/SoftSynthDevice.h"
 #include "base/MidiProgram.h"
 #include "base/MidiTypes.h"
 #include "base/NotationTypes.h"
@@ -1810,7 +1811,10 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         // Only create if we have a device
         //
-        if (m_device && m_device->getType() == Device::Midi) {
+        if (m_device &&
+            (m_device->getType() == Device::Midi ||
+             m_device->getType() == Device::SoftSynth)) {
+
             InstrumentId instrument =
                 atts.value("instrument").toInt();
 
@@ -1831,8 +1835,11 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             if (atts.value("subbeatvelocity"))
                 metronome.setSubBeatVelocity(atts.value("subbeatvelocity").toInt());
 
-            dynamic_cast<MidiDevice*>(m_device)->
-            setMetronome(metronome);
+            MidiDevice *md = dynamic_cast<MidiDevice *>(m_device);
+            if (md) md->setMetronome(metronome);
+
+            SoftSynthDevice *ssd = dynamic_cast<SoftSynthDevice *>(m_device);
+            if (ssd) ssd->setMetronome(metronome);
         }
 
     } else if (lcName == "instrument") {

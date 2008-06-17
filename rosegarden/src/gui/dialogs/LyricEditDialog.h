@@ -49,6 +49,7 @@ public:
 protected slots:
     void slotVerseNumberChanged(int);
     void slotAddVerse();
+    void slotRemoveVerse();
 
 protected:
     Segment *m_segment;
@@ -57,6 +58,7 @@ protected:
     QComboBox *m_verseNumber;
     QTextEdit *m_textEdit;
     QPushButton *m_verseAddButton;
+    QPushButton *m_verseRemoveButton;
 
     int m_verseCount;
     std::vector<QString> m_texts;
@@ -64,6 +66,7 @@ protected:
 
     void countVerses();
     void unparse();
+    void verseDialogRepopulate();
 };
 
 }
