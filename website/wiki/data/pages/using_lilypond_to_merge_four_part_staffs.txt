@@ -1,0 +1,43 @@
+There's a functional difficulty with writing for four voice parts in rosegarden. Simply put, it's much easier to edit score in four staffs, but it's much more efficient to print in two staffs, if possible. Well it is possible. A comparatively simple method of printing two staffs is available, if you don't mind a bit of text editing*. Once the piece is ready in four staffs, instead of printing it directly, export the file to lilypond and make the following changes to the resulting lilypond file "filename.ly"
+
+
+
+1. First remove the contexts for Staff 2 and 4. Delete all the text for the 2 contexts between the closing double angles '>>' to the last "\new Voice" directive. This forces the voice context from Staff 2 onto Staff 1 and the voice context from Staff 4 onto Staff 3. 
+
+The section to delete (twice) looks something like this. 
+
+         >> % Staff ends
+         \context Staff = "track 2" <<
+             \set Staff.instrumentName = \markup { \column { " " } }
+             \set Staff.midiInstrument = "Acoustic Grand Piano"
+             \set Score.skipBars = ##t
+             \set Staff.printKeyCancellation = ##f
+            \new Voice \global
+            \new Voice \globalTempo
+
+
+
+2. Add \voiceOne, \voiceTwo \voiceThree \voiceFour directives to each Voice context as follows so that lilypond can correctly handle collisions between notes. Lilypond does a good job of this. \voiceOne and \voiceThree stem directions are always up and \voiceTwo and \voiceFour always down.
+
+            \context Voice = "voice 1" {
+                \override Voice.TextScript #'padding = #2.0
+                \override MultiMeasureRest #'expand-limit = 1
+                \voiceOne
+
+
+
+
+Now save the file and run lilypond against it.
+
+            lilypond filename.ly 
+
+Lilypond will generate among other things, a pdf that can be printed. YMMV
+
+
+
+There are a few other tweaks you can use on your lilypond file for better output. One is removing slur collisions. To do this edit voice 1 and 3 and change all _'s to ^'s. Do the reverse (change all ^'s to _'s) on voice 2 and 4 to complete the process. 
+
+
+
+
+* I'm aware that there are 'rosegarden only' methods to do this, but so far, I've found them disappointing.

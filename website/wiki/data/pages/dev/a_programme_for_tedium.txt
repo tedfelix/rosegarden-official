@@ -1,0 +1,123 @@
+====== A Programme For Tedium ======
+
+Or "A Program For Tediumme".  How to help out with the dull, mechanical part of converting to Qt4.
+
+===== Working environment =====
+
+Here's how to check out, update, and test-build the "Qt4 Mechanised Conversion" branch.
+
+First you'll need the Qt4 and KDE4 headers.  Here on Ubuntu 8.04 this one line seems to be enough:
+
+<code>
+  $ sudo apt-get install kdelibs5-dev
+</code>
+
+Yes, that's a 5.
+
+Then,
+
+<code>
+  $ svn co https://rosegarden.svn.sourceforge.net/svnroot/rosegarden/branches/qt4-mechanised
+  $ cd qt4-mechanised
+  $ bash run-converter.sh
+  $ make -f qt4-makefile    # Note qt4-makefile has hard-coded system paths: edit for your system
+</code>
+
+So, you do that, and what happens?  It should work fine, up to the Make stage, and then you get lots of errors.
+
+===== The errors =====
+
+For me, at the time of writing, the first error is:
+
+<code>
+/usr/bin/c++ -c -Wall -O0 -g -DHAVE_ALSA -DHAVE_LIBJACK -DHAVE_DSSI -DHAVE_LADSPA -DHAVE_LIBLO -DHAVE_LIBLRDF -DHAVE_XFT -DDEBUG -D'VERSION="2.0-yeah-whatever-innit"' -I/usr/include/qt4/QtCore -I/usr/include/qt4/QtGui -I/usr/include/qt4/QtXml -I/usr/include/qt4/QtNetwork -I/usr/include/qt4 -I/usr/lib/kde4/include -I/usr/include -I/usr/local/include -I/usr/include/freetype2 -Isrc/base -Isrc src/document/MultiViewCommandHistory.cpp -o src/document/MultiViewCommandHistory.o
+src/document/MultiViewCommandHistory.cpp:35:24: error: qpopupmenu.h: No such file or directory
+</code>
+
+With make -k, you can see all the errors:
+
+<code>
+  $ make -k -f qt4-makefile 2>&1 | grep error | wc
+    13209  122366 1449720
+  $
+</code>
+
+OK, 13209 errors.  So that's the bad news.  Well, some of the bad news.
+
+Here's some better news:
+
+<code>
+  $ find src -name \*.cpp | wc
+    574     574   22863
+  $ find src/ -name \*.o | wc
+    217     217    7886
+</code>
+
+So even with all those errors, a third to a half of the code seems to have compiled fine.  Sure, it was the easiest third -- by definition -- but it's a start.
+
+===== What to do about it =====
+
+So, you look at the first error, or you run make with -k and find one of the most numerous errors.
+
+//Could that error be fixed using a simple search and replace on the source code?//
+
+If so, you need to work out how to express that replacement in Perl, and add it to the end of ''convert.pl'', before the last ''print'' line.  Make sure you also read the introductory comments for that file, and add a little comment saying what you're doing.
+
+(If it can't be fixed using an automated search and replace, don't even try to fix it now.  **Don't** start editing the source code itself, unless you really know what you're doing and have a cunning plan in mind.)
+
+Test your change by running convert.pl on just the one file you changed, for example
+
+<code>
+  $ perl ./convert.pl ./src/gui/editors/eventlist/EventView.cpp
+</code>
+
+and scanning the results to see if they seem more or less right.  If it looks OK, re-run
+
+<code>
+  $ bash run-converter.sh
+</code>
+
+Then, rebuild and repeat as necessary.
+
+=== How can I tell whether it's easily fixable or not? ===
+
+Refer to the [[http://websvn.kde.org/*checkout*/trunk/KDE/kdelibs/KDE4PORTING.html|KDE4 porting guidelines]] and the [[http://doc.trolltech.com/4.3/porting4.html|Qt4 porting guidelines]].
+
+=== What about Qt3/KDE3 compatibility code? ===
+
+Ideally, we'd be able to make do without using the Qt3 compatibility stuff found in Qt4, or the KDE3 compatibility stuff found in KDE4.
+
+But what we really want to do, more than anything, is to get //something// working.
+
+So if you can see a simple search-and-replace change that involves a Q3 header and class, or a k3 header and class, go ahead and make it.  At least at this stage we'll be able to easily see all such changes in the convert script, and maybe think again about them later.
+
+=== What if I'm not sure about it? ===
+
+Do it anyway!  Put the replacement in convert.pl, with a comment saying you don't really know what you're doing.  Commit it and tell the -devel list.  We can sort it out later.
+
+
+===== What to ignore =====
+
+You almost certainly will want to run with -k and ignore some of the errors, for example by dumping to a file:
+
+<code>
+  $ make -k -f qt4-makefile 2>&1 | tee make.log
+</code>
+
+and then reading the file.  Errors worth ignoring at this stage include:
+
+  * Anything to do with DCOP
+  * Anything with QCanvas in it
+  * Anything that turns out to need some actual code, not just simple search and replace.  (Though if you get as far as finding out that it needs real code, it might be worth adding a comment in convert.pl to say that you at least looked into it.)
+
+===== What to commit =====
+
+At this stage, try to avoid committing your actual code changes.  It's simpler just to commit convert.pl with your new scripted change in it.
+
+<code>
+  $ svn commit convert.pl
+</code>
+
+(If you think it would be better to commit all the code as we go along, say so.  I've changed my mind about this more than once already.)
+
+And finally, **tell the rosegarden-devel list** all about what you've done, no matter how trivial.  Let's keep the noise up!

@@ -128,22 +128,11 @@ Hold down the Shift key while you move or resize the segment. (Shift is also use
 ====Can I get more than one staff at once in the notation editor?====
 
 The //Open in Notation Editor// option on the main view's //Segments// menu will open all the currently-selected segments together in a single editor. So to open them all, first use the //Edit// menu's //Select All Segments// option, then this one. (You can also edit a subset of segments by selecting them with shift-click on the main view, then using //Open in Notation Editor//.)
-
-
-
 ====How do I do something like a two-staff piano part?====
 
 There are various angles to this question, and there's not (yet) any one perfect answer.
 
-One thing you can't do is make the notation view use more than one staff for a single segment based on the pitches or other properties of the notes (it's a possibility under consideration, but not likely in
-
-the near future). So you have to split the segment onto multiple tracks, and then open a multi-segment notation editor (see the question above this one). In LilyPond export dialog you have now an option to connect multiple tracks which have the same name as multiple voices in a single staff.
-
-Versions 0.9 and later include a split-by-pitch function (finally!) which you can use to divide a segment into two parts.
-
-You can also select events within a certain pitch range in the Matrix view: you can shift-click on a key in the piano keyboard to select all the notes of that pitch, and you can shift-click and drag to select a range of pitches. The notes are added to any existing selection, so if you want a clean new selection, clear any old one first (by clicking in space with the select tool on the matrix or just hitting Esc).
-
-
+For the best treatise on the subject, please see [[http://rosegarden.sourceforge.net/tutorial/supplemental/piano|Piano Notation by Example]]
 
 ====Can I edit all the segments at once in the matrix editor?====
 

@@ -1,12 +1,17 @@
 
 ======Thoughts on porting to Qt4/KDE4======
 
+See also:
+
+  * [[http://doc.trolltech.com/4.1/porting4.html|Porting from Qt3 to Qt4]]
+  * [[http://websvn.kde.org/*checkout*/trunk/KDE/kdelibs/KDE4PORTING.html|Porting from KDE3 to KDE4]]
+
 =====Structuring the work=====
 
 Four sorts of work here:
 
   - Preliminary or refactoring work that does not depend on any major Qt4 conversion slog (but that some Qt4 conversion slog may depend on).  For example, making the sequencer a thread rather than a process (if we did that).
-  - Major Qt4 conversion slog that can be scripted.
+  - Major Qt4 conversion slog that can be scripted.  See [[A Programme For Tedium]].
   - Major Qt4 conversion slog that can't be scripted (dull manual tasks).
   - The "rewrite bits" -- work that takes serious thought and depends on already having a Qt4 backbone, such as the notation editor canvas.
 
@@ -17,12 +22,19 @@ Possible structure:
   * Keep the trunk as a relatively stable KDE3 version, and pledge that any work committed to trunk during the upheaval will be ported over to the Qt4 version at some point afterwards and will not be lost.  Trunk may or may not be released as 1.8.
   * Create one branch for each chunk of "preliminary or refactoring work" we attempt.  (An existing, rather limited example is the kiftsgate branch, which aims to simplify the notation view by removing most of the action-related code from it, localising it in actions instead -- though we probably should merge that particular branch back to trunk anyway as it's more or less done.)  One developer for each branch, ripping the code apart with gusto.
   * Create one branch for Qt4 conversion slog.  In it:
-    * First, concentrate on automatable conversion.  I think probably not committing any code changes during this phase; instead collaboratively building up a script or set of scripts (e.g. in Perl) which make each of the automatable replacements using regular expressions and other appropriate magic.  We can test them on local copies until we're satisfied all practical automated conversions are working, then run one last time and commit.  The sole aim here is to get the code as close as possible to compiling.  This can take place concurrently with the "preliminary" work that is happening in other branches.
+    * First, concentrate on automatable conversion.  I initially thought it might be best not to commit any changes to actual code, instead just building up a set of transformations in a script that we can then run once at the end and commit the results of.  I've changed my mind about this; I think instead we should commit as we go, and also keep the script that made the changes up to date so that the current changes could always be reproduced.  See [[A Programme For Tedium]].  The sole aim here is to get the code as close as possible to compiling.  This can take place concurrently with the "preliminary" work that is happening in other branches.
     * Merge preliminary work -- a bottleneck.
     * Then do manual conversion of the remaining dull-o slog changes.  For this we probably ought to assign developers chunks of code to handle each (assuming we can find any developers).
   * Finally, there's no alternative but to apply lots of actual developer thought to the "rewrite bits" individually.
 
 =====Major subjects to consider=====
+
+==== Build system ====
+
+Our CMake build system should continue to work, but will need a lot of updating to handle different header locations and to avoid getting mixed up between Qt3/KDE3 and Qt4/KDE4 headers.  I personally have never had KDE4 headers installed on any of my machines at all yet, so I've no idea where they go or what they look like.
+
+It would be great if someone could take on the task of updating the CMake files so as to build with entirely "v4" instead of "v3" headers, libraries, moc etc -- perhaps in the qt4-mechanised branch so we can test it as we test any mechanical updates.
+
 
 ====Translation====
 
@@ -159,6 +171,7 @@ The old and new APIs are (respectively)
 The new API is better, but it's going to be a tricky one.  It might
 just about be scriptable.
 
+Qt4 object constructors no longer have a "name" argument (which used to appear optionally at the end of the constructor arguments in Qt3).  It wasn't very useful even in Qt3 and we probably haven't used it all that much overall, but I bet there are some classes that will be using it disproportionately heavily.
 
 ====Canvas areas====
 
@@ -214,7 +227,7 @@ have the right helper applications in place.
 
 Qt4 includes a help module starting in Qt4.4 (http://doc.trolltech.com/4.4/qthelp.html).  I haven't tried to use it.  I think the help is expected to be represented as a set of HTML files.  I'm a bit suspicious about how far the Qt classes actually get you -- I don't really want to be firing up "Qt Assistant" as a help browser -- we want to either have desktop integration (i.e. use the same help browser as KDE, or even a standard web browser) or have our own built-in help window (which it seems can be done without too much trouble using QTextBrowser).
 
-What does KDE4 do with help?
+**An unknown:** What does KDE4 do with help?  Research needed!
 
 I'm no great fan of the KDE3 help window; half the time it doesn't even show up for users.  A less well-specified, but more tightly integrated with the application, help system might be no bad thing.  It does beg more questions about translation support though.
 
