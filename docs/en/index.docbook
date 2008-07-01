@@ -205,7 +205,7 @@
 
     * Make sure the guimenuitem etc tags are being used for all menu refs
 
-    * Give keyboard shortcuts for menu functions?
+    * Give keyboard shortcuts for menu functions? SOM
 
     * Go through again changing Rosegarden -> &rosegarden; and double-hyphen ->
       &ndash; or &mdash; and review any uses of "the ... function" to see
@@ -351,28 +351,59 @@
     </sect2>
 
     <sect2 id="intro-menufunctions">
-      <title>About Menus and Shortcuts</title> <para>This handbook
-      usually refers to the functions you can use in &rosegarden; by
-      describing where they live on the menus.  For example, the
-      function to add a single new track to the main track editor is
+      <title>About Menus and Shortcuts</title> <para>This handbook usually refers to the
+      functions you can use in &rosegarden; by describing where they live on the menus.
+      For example, the function to add a single new track to the main track editor is
 	<menuchoice>
+<shortcut><keycombo><keycap>Ctrl</keycap><keycap>T</keycap></keycombo>
+</shortcut>
 	  <guimenu lang="en">Tracks</guimenu>
 	  <guimenuitem>Add Track</guimenuitem>
 	</menuchoice>.</para>
 
-      <para>In many cases, this is not the only way to reach a
-      particular function.  In this case the same function is also
-      available through the keyboard shortcut <keycap>Ctrl</keycap>+T, and it also
-      appears as an icon on one of the main window's toolbars.  Both
-      the keyboard shortcut and the icon can quickly be learned,
-      because they are shown on the menu in &rosegarden; alongside the
-      name of the function.  You should bear in mind that although we
-      always give the full menu location in this documentation for
-      reference purposes, it's not necessarily the best or most usual
-      way to use a function, and you should keep an eye on the
-      keyboard shortcuts or toolbar icons as well.
+      <para>In many cases, this is not the only way to reach a particular function.  In
+      this case the same function is also available through the keyboard shortcut, and it
+      also appears as an icon on one of the main window's toolbars.  Both the keyboard
+      shortcut and the icon can quickly be learned, because they are shown on the menu in
+      &rosegarden; alongside the name of the function.  You should bear in mind that
+      although we always give the full menu location in this documentation for reference
+      purposes, it's not necessarily the best or most usual way to use a function, and you
+      should keep an eye on the keyboard shortcuts or toolbar icons as well. You can add
+      your own <link linkend="keyboard-shortcuts">keyboard shortcuts</link>.
       </para>
     </sect2>
+    <sect2 id="keyboard-shortcuts">
+      <title>Setting your own Keyboard Shortcuts</title>
+      <!-- I'm not particularly happy with the placement of this section. I would prefer
+           it to be part of a configuration section which, I note, is meant to be written
+           some time(tm). Then I could put a simple link to it from the previous section. SOM -->
+      <para> If you find yourself going to the same menu item over and over again, maybe you
+      should consider setting up some shortcuts of your own.  Go to the
+      <menuchoice><guimenu lang="en">Settings</guimenu> <guimenuitem> Configure
+      Shortcuts...</guimenuitem></menuchoice> which will open a dialog box so you can make
+      your own keyboard shortcuts.  Say for example, you are always opening the lyric
+      editor. To set up a keyboard shortcut do a search for <quote>lyric</quote> in the
+      search box at the top of the dialog. This narrows the field down to the lyric
+      editor, which shows up in the search results box. Now click on that and the shortcut
+      editor opens up. </para>
+	<para>
+	<screenshot>
+	  <mediaobject>
+	    <imageobject>
+	      <imagedata fileref="rg-shortcut-editor.png" format="PNG"/>
+	    </imageobject>
+	    <textobject>
+	      <phrase>Shorcut editor showing a sample shortcut for the lyric editor.</phrase>
+	    </textobject>
+	  </mediaobject>
+	</screenshot>
+	</para>
+<para> Now put the key of your choice in the box by using the keyboard. &rosegarden; will
+let you know if that shortcut is already taken. If you want a key combination just press
+those keys. Click on <guibutton>OK</guibutton> to accept.  The nice thing about this is
+that the shortcut you've made will show up on the menu just like the built-in
+ones.</para></sect2>
+
 
     <sect2 id="intro-optional">
       <title>Optional Features</title> <para>This Handbook assumes
@@ -420,16 +451,15 @@
       <title>New compositions</title>
       <para>
 	When &rosegarden; starts up, it does so with a new document,
-	containing an <quote>empty</quote>composition ready to start editing.
+	containing an <quote>empty</quote> composition ready to start editing.
 	To put something in that composition, you must either record
 	something, or create some blank lengths of music (referred
 	to as <quote>segments</quote>) that you can then fill in using the
 	various editing facilities.
       </para>
-      <para>See <link linkend="recording">Recording</link> for details of how to record music, and see the <link
-	  linkend="segment-view">Track Editor</link> section for a
-	description of how to create, edit, and manage segments of
-	music.
+      <para>See <link linkend="recording">Recording</link> for details of how to record
+      music, and see the <link linkend="segment-view">Track Editor</link> section for a
+      description of how to create, edit, and manage segments of music.
       </para>
     </sect1>
 
@@ -439,13 +469,13 @@
 	To import and export &MIDI; files, use 
 	<menuchoice>
 	  <guimenu lang="en">File</guimenu>
-	  <guimenuitem>Import</guimenuitem>
+	  <guisubmenu>Import</guisubmenu>
 	  <guimenuitem>Import MIDI File</guimenuitem>
 	</menuchoice>
 	and
 	<menuchoice>
 	  <guimenu lang="en">File</guimenu>
-	  <guimenuitem>Export</guimenuitem>
+	  <guisubmenu>Export</guisubmenu>
 	  <guimenuitem>Export MIDI File</guimenuitem>
 	</menuchoice>.
       </para>
@@ -487,12 +517,19 @@
       audio files it uses, any further data files required for plugins
       used in the composition, and any additional files you may want
       to include, all in one big bundle.</para>
-      <para>Use <menuchoice>
-	  <guimenu lang="en">File</guimenu> <guimenuitem>Export</guimenuitem> <guimenuitem>Export
-	  Rosegarden Project file...</guimenuitem></menuchoice> to export the current
+      <para>
+	Use <menuchoice>
+	<guimenu lang="en">File</guimenu>
+	<guisubmenu>Export</guisubmenu>
+	<guimenuitem>Export Rosegarden Project file...</guimenuitem>
+	</menuchoice> to export the current
 	  composition and its associated data into a &rosegarden; Project file,
-	  and <menuchoice> <guimenu lang="en">File</guimenu> <guimenuitem>Import</guimenuitem> <guimenuitem>Import
-	  Rosegarden Project file...</guimenuitem></menuchoice> to expand a &rosegarden;
+	  and 
+	  <menuchoice> 
+	    <guimenu lang="en">File</guimenu>
+	    <guisubmenu>Import</guisubmenu> 
+	    <guimenuitem>Import Rosegarden Project file...</guimenuitem>
+	    </menuchoice> to expand a &rosegarden;
 	  Project file back into a composition and load it.</para>
 
       <para>Note that &rosegarden; Project format is an interchange
@@ -515,9 +552,9 @@
       <para>You can export score files for the Csound synthesis system using 
 	<menuchoice>
 	  <guimenu lang="en">File</guimenu>
-	  <guimenuitem>Export</guimenuitem>
+	  <guisubmenu>Export</guisubmenu>
 	  <guimenuitem>Export Csound score file...</guimenuitem>
-	</menuchoice>.  Together with a suitable orchestra file (not supplied), this can
+	</menuchoice>. Together with a suitable orchestra file (not supplied), this can
 	be used to play the composition
 	through <ulink url="http://www.csounds.com/">Csound</ulink>. Note that not all
 	data in the &rosegarden; composition necessarily can or will be saved in the
@@ -529,7 +566,7 @@
 	<listitem>
 	<para>You can use <menuchoice>
 	    <guimenu lang="en">File</guimenu>
-	    <guimenuitem>Export</guimenuitem>
+	    <guisubmenu>Export</guisubmenu>
 	    <guimenuitem>Export Mup file...</guimenuitem>
 	  </menuchoice> to save the contents of the current composition into a new Mup
 	  file.  This can then be processed by
@@ -544,7 +581,7 @@
 	<listitem>
 	<para> <menuchoice>
 	    <guimenu lang="en">File</guimenu>
-	    <guimenuitem>Export</guimenuitem>
+	    <guisubmenu>Export</guisubmenu>
 	    <guimenuitem>Export MusicXML file...</guimenuitem>
 	  </menuchoice> saves the contents of the current composition into a new
 	  MusicXML file.  This can then be used with any music software that supports the
@@ -559,7 +596,7 @@
 	machine.  These are imported into a skeletal &MIDI;-style structure with one track
 	per pattern.  The audio samples they use are not imported.  Use <menuchoice>
 	    <guimenu lang="en">File</guimenu>
-	    <guimenuitem>Import</guimenuitem>
+	    <guisubmenu>Import</guisubmenu>
 	    <guimenuitem>Import Hydrogen file...</guimenuitem>
 	  </menuchoice> to import a Hydrogen file.</para>
 	</listitem>
@@ -570,7 +607,7 @@
 	<para>Use 
 	  <menuchoice>
 	    <guimenu lang="en">File</guimenu>
-	    <guimenuitem>Import</guimenuitem>
+	    <guisubmenu>Import</guisubmenu>
 	    <guimenuitem>Import Rosegarden 2.1 file...</guimenuitem>
 	  </menuchoice> to create a new composition from the contents of an existing X11 &rosegarden; v2.1 (.rose) file.
 	  </para>
@@ -590,10 +627,10 @@
       <para>To merge a file, just use the relevant option on the
 	<menuchoice>
 	  <guimenu lang="en">File</guimenu>
-	  <guimenuitem>Merge</guimenuitem>
+	  <guisubmenu>Merge</guisubmenu>
 	</menuchoice>
-	submenu, instead of using the Open or
-	Import option.
+	submenu, instead of using the <guisubmenu>Open</guisubmenu> or
+	<guisubmenu>Import</guisubmenu> option.
       </para>
     </sect1>
 
@@ -634,7 +671,7 @@
 	  using 
 	  <menuchoice>
 	    <guimenu lang="en">File</guimenu>
-	    <guimenuitem>Export</guimenuitem>
+	    <guisubmenu>Export</guisubmenu>
             <guimenuitem>Export LilyPond</guimenuitem>
           </menuchoice>,
            and it
@@ -702,33 +739,30 @@
 	    <listitem><para>
 		Export content concerns tracks that have segments in them, which
 		are the tracks that are not empty.
-		It is possible to export All tracks, Non-muted tracks, the current
-		Selected track, or Selected segments.  If LilyPond export is
+		It is possible to export <quote>All</quote> tracks, <quote>Non-muted</quote> tracks, the current
+		<quote>Selected</quote> track, or <quote>Selected</quote> segments.  If LilyPond export is
 		launched from the Notation view, Selected segments include
 		the same selection which was used in opening the Notation view.</para>
 	    </listitem>
 	</varlistentry>
 	<varlistentry>
 	  <term>Merge tracks that have the same name</term>
-	    <listitem><para>
-		It is possible to Merge tracks that have the same name.
-		This options allows for example to make a piano score with 
-		several independent voices.  You may give first three tracks
-		name <quote>Right</quote>and three next tracks <quote>Left</quote>and then merge
-		them in LilyPond export.  (This provides an easier way to manage
-		overlapping segments with the price that the top and bottom
-		parts will have different names on the page.  If you wish both
-		of them to be named, eg. <quote>Piano,</quote>then you will have to keep all
-		of the segments on the same pair of staffs. Consult <ulink
-		url="http://rosegarden.sourceforge.net/tutorial/supplemental/piano/">Piano
-		by Example</ulink> for a hands-on demonstration of this.) <!--
-		this comment makes absolutely no sense to me(dmm):   Sometimes you
-		may encounter notes that overlap in printed form, you may avoid
-		them by selecting one of the collapsing notes and fine adjust
-		its position in Notation view function -->
+	    <listitem><para> It is possible to Merge tracks that have the same name.  This
+	    options allows for example to make a piano score with several independent
+	    voices.  You may give first three tracks name <quote>Right</quote> and three
+	    next tracks <quote>Left</quote> and then merge them in LilyPond export.  (This
+	    provides an easier way to manage overlapping segments with the price that the
+	    top and bottom parts will have different names on the page.  If you wish both
+	    of them to be named, eg. <quote>Piano,</quote> then you will have to keep all
+	    of the segments on the same pair of staffs. Consult <ulink
+	    url="http://rosegarden.sourceforge.net/tutorial/supplemental/piano/">Piano by
+	    Example</ulink> for a hands-on demonstration of this.) <!-- this comment makes
+	    absolutely no sense to me(dmm): Sometimes you may encounter notes that overlap
+	    in printed form, you may avoid them by selecting one of the collapsing notes
+	    and fine adjust its position in Notation view function -->
 	  <menuchoice>
 	    <guimenu lang="en">Adjust</guimenu>
-            <guimenuitem>Fine Positioning</guimenuitem>
+            <guisubmenu>Fine Positioning</guisubmenu>
             <guimenuitem>Push Right/Left</guimenuitem>
           </menuchoice>.</para>
 	    </listitem>
@@ -748,7 +782,7 @@
 		option is checked.  Text is entered in Unicode, which
 		makes it possible to enter lyrics in all languages.  Multiple
 		lines of lyrics per staff is also possible, see the section
-		on <link linkend="nv-text-lyrics">Editign lyrics</link>.</para>
+		on <link linkend="nv-text-lyrics">Editing lyrics</link>.</para>
 	    </listitem>
 	</varlistentry>
 	<varlistentry>
@@ -772,8 +806,8 @@
 	<varlistentry>
 	  <term>Lyrics alignment</term>
 	    <listitem><para>
-		Lyrics is aligned Left by default.  Sometimes Center or
-		Right alignment provides results and more pleasant output.</para>
+		Lyrics are aligned left by default.  Sometimes center or
+		right alignment provide more pleasing output.</para>
 	    </listitem>
 	</varlistentry>
 	<varlistentry>
@@ -781,15 +815,15 @@
 	    <listitem><para>
 		The staffs normally cover the whole page from top to bottom.
 		When there are only a few staffs, this option places the
-		extra vertical space at the bottom of the page instead.</para>
+		extra vertical space at the bottom of the page.</para>
 	    </listitem>
 	</varlistentry>	<varlistentry>
-	  <term>Enable <quote>point-and-click</quote>debugging</term>
+	  <term>Enable <quote>point-and-click</quote> debugging</term>
 	    <listitem><para>
 		If you export the LilyPond source with 
 	  <menuchoice>
 	    <guimenu lang="en">File</guimenu>
-	    <guimenuitem>Export</guimenuitem>
+	    <guisubmenu>Export</guisubmenu>
             <guimenuitem>Export LilyPond</guimenuitem>
           </menuchoice>, you may open the LilyPond source by clicking
 		notes in the PDF output.  Consult <ulink url="  http://lilypond.org/doc/v2.10/Documentation/user/lilypond/Point-and-click#Point-and-click">LilyPond documentation</ulink> for more
@@ -801,26 +835,26 @@
 	    <listitem><para>
 		LilyPond is also capable of producing &MIDI; output.  Check this
 		option if you wish the LilyPond source to use this option.
-		Note however that &MIDI; output which you obtain via &rosegarden;
+		Note however that &MIDI; output which you obtain with &rosegarden;
 		sequencer, via
 	  <menuchoice>
 	    <guimenu lang="en">File</guimenu>
-	    <guimenuitem>Export</guimenuitem>
+	    <guisubmenu>Export</guisubmenu>
             <guimenuitem>Export MIDI file</guimenuitem>
           </menuchoice>,
-		and via LilyPond's &MIDI; output may differ considerably.</para>
+		and LilyPond's &MIDI; output may differ considerably.</para>
 	    </listitem>
 	</varlistentry>	<varlistentry>
 	  <term>Headers</term>
 	    <listitem><para>
-		Headers can be edited both in LilyPond export dialog and through
+		You can edit headers both in LilyPond export dialog and through
 	  <menuchoice>
 	    <guimenu lang="en">Composition</guimenu>
-	    <guimenuitem>Edit Document Properties</guimenuitem>
+	    <guisubmenu>Edit Document Properties</guisubmenu>
           </menuchoice>.</para>
 	      <para>Some of the headers will appear
 		only in LilyPond output.
-		The position of the Printable headers match roughly with
+		The position of the printable headers match roughly with
 		the positions of the headers in the printed output.
 		Below is shown an example with all headers and lyrics
 		entered with Unicode text.</para>
@@ -853,7 +887,7 @@
 	structure &mdash; the main window shows a track editor with
 	a list of tracks and their associated instruments down the
 	left hand side.  You can manipulate and move blocks of
-	music data (referred to as &ldquo;segments&rdquo;) on the
+	music data (referred to as <quote>segments</quote>) on the
 	track editor as well as opening the segments themselves in
 	specialised editors (<link
 	  linkend="notation-view">notation</link>, <link
@@ -966,7 +1000,7 @@
       <para>
 	An instrument can be understood as a single channel on a
 	&MIDI; device, or as a mono or stereo audio output or an audio
-	synth plugin.  Tracks containing note data should be assigned
+	synth plugin.  You should assign tracks containing note data
 	to &MIDI; or synth plugin instruments, and those containing
 	audio to audio instruments.  You can assign more than one
 	track to the same instrument, in which case the multiple
@@ -1022,7 +1056,7 @@
       <para>
 	Usually each new segment starts on a barline and extends bar
 	by bar, but this snap-to-grid effect can be prevented by
-	holding down Shift while clicking and dragging.
+	holding down <keycap>Shift</keycap> while clicking and dragging.
       </para>
 
       <para>New segments are created in a yellow colour, with a treble clef by
@@ -1031,10 +1065,10 @@
 	  other possibilities.
       </para>
 
-      <para>If you wish to draw a segment that begins in the middle of an
-      existing segment, hold <keycap>Ctrl</keycap> and <keycap>Alt</keycap> when clicking.  The track will
-      automatically expand to accommodate this new segment.  This is especially
-      useful for some situations involving music notation.
+      <para>If you wish to draw a segment that begins in the middle of an existing
+      segment, hold <keycombo><keycap>Ctrl</keycap><keycap>Alt</keycap></keycombo> when
+      clicking.  The track will automatically expand to accommodate this new segment.
+      This is especially useful for some situations involving music notation.
       </para>
 
       <para>
@@ -1051,7 +1085,7 @@
 	If you are intending to <link
 	linkend="recording">record</link> from a &MIDI; device or audio
 	input, you don't need to create a new segment to record into
-	first -- each separate recording always goes into a new
+	first &ndash; each separate recording always goes into a new
 	segment, created automatically during recording.
       </para>
     </sect1>
@@ -1068,8 +1102,8 @@
       linkend="recording">record</link> from an audio source onto a
       track assigned to an audio instrument, or you can work with
       existing WAV files.  To do this, you need to use the audio
-      manager dialog (reached via <menuchoice><guimenu
-      lang="en">File</guimenu><guimenuitem>Manage Audio Files</guimenuitem></menuchoice>).
+      manager dialog <menuchoice><guimenu
+      lang="en">File</guimenu><guimenuitem>Manage Audio Files</guimenuitem></menuchoice>.
 	</para>
       <para>
         <screenshot>
@@ -1084,27 +1118,25 @@
       </screenshot>
       </para>
 
-      <para>You can drag-and-drop audio files from the KDE file
-      browser or your KDE desktop into the audio file manager, or you
-      can open them using its File menu.  Then you can either
-      drag-and-drop them onto &rosegarden;'s track canvas, or use the
-      audio file manager's <menuchoice><guimenu
-      lang="en">Action</guimenu><guimenuitem>Insert into Selected
-	    Audio Track</guimenuitem></menuchoice> menu, provided the current
-      selected track in the main window is assigned to an audio
-      instrument.  Newly-recorded audio segments also appear in the
-      audio file manager dialog.</para>
+      <para>You can drag-and-drop audio files from the KDE file browser or your KDE
+      desktop into the audio file manager, or you can open them using its
+      <guimenuitem>File</guimenuitem> menu.  Then you can
+      either drag-and-drop them onto &rosegarden;'s track canvas, or use the audio file
+      manager's <menuchoice><guimenu lang="en">Action</guimenu><guimenuitem>Insert into
+      Selected Audio Track</guimenuitem></menuchoice> menu, provided the current selected
+      track in the main window is assigned to an audio instrument.  Newly-recorded audio
+      segments also appear in the audio file manager dialog.</para>
 
       <para>Details of the audio files associated with a particular
       composition are saved with that composition, but the audio files
       themselves are not.  You should ensure your document has a
-      sensible audio file search path (via <menuchoice><guimenu
-      lang="en">Composition</guimenu><guimenuitem>Edit Document
-      Properties...</guimenuitem><guimenuitem>Audio</guimenuitem></menuchoice>)
+      sensible audio file search path using <menuchoice><guimenu
+      lang="en">Composition</guimenu><guisubmenu>Edit Document
+      Properties...</guisubmenu><guimenuitem>Audio</guimenuitem></menuchoice>
       so as to keep your audio files accessible together.  You can also export
-      your project to a &rosegarden; project package file (.rgp) via
+      your project to a &rosegarden; project package file (.rgp) using
       <menuchoice><guimenu lang="en">File</guimenu>
-      <guimenuitem>Export</guimenuitem><guimenuitem>Export Rosegarden Project File
+      <guisubmenu>Export</guisubmenu><guimenuitem>Export Rosegarden Project File
       </guimenuitem></menuchoice> to collect any scattered audio files
       together in one place.</para>
 
@@ -1123,7 +1155,7 @@
     <sect1 id="segment-view-manipulating">
       <title>Manipulating segments</title>
       <para>
-	The main window contains a selection of <quote>tools</quote>for editing
+	The main window contains a selection of <quote>tools</quote> for editing
 	segments.  These are available from the main toolbar: first
 	select the tool you want from the toolbar, and then click
 	and drag on the segments on the main canvas.
@@ -1132,18 +1164,14 @@
       <sect2 id="segment-view-selector">
 	<title>The Select tool</title>
 	<para>
-	  The select tool	  <inlinemediaobject>
-	    <imageobject>
-	      <imagedata fileref="rg-select.png"/>
-	</imageobject>
-	</inlinemediaobject>
-          is actually a
-	  multipurpose tool: it can be used to select, move, copy,
-	  resize and create segments.</para>
-
+	  The select tool <inlinemediaobject> 
+	  <imageobject><imagedata fileref="rg-select.png" format="PNG" /></imageobject></inlinemediaobject> is actually a
+	  multipurpose tool: it can be used to select, move, copy, resize and create
+	  segments.</para>
+	 
 	<para>The most obvious use is
 	  selection: select a single segment by clicking on it with
-	  the select tool, or select several by clicking with Shift
+	  the select tool, or select several by clicking with <keycap>Shift</keycap>
 	  held down, or by clicking in an empty area of the window and
 	  dragging out an area.
 	</para>
@@ -1156,7 +1184,7 @@
 	or with the left mouse button and <keycap>Ctrl</keycap> held down.</para>
 
 	<para>
-	  The select tool doesn't replace the other tools completely,
+	  The select tool doesn't replace the other tools completely
 	  though &mdash; sometimes you need to be more precise about
 	  which operation you intend, particularly when working on small
 	  segments.
@@ -1166,30 +1194,22 @@
 
       <sect2 id="segment-view-move-resize">
 	<title>Move and Resize tools</title>
-	<para>To move a segment to a different start time or track,
-	  use the move tool	  <inlinemediaobject>
-	    <imageobject>
-	      <imagedata fileref="rg-move.png"/>
-	</imageobject>
-	</inlinemediaobject>
-           and click and drag on the segment you want
-	  to move.  If you hold down the <keycap>Ctrl</keycap> key while dragging, the
-	  segment will be copied instead of moved.</para>
+	<para>To move a segment to a different start time or track, use the move tool
+	<inlinemediaobject><imageobject><imagedata fileref="rg-move.png" format="PNG" />
+	</imageobject></inlinemediaobject> and click and drag on the segment you want to
+	move.  If you hold down the <keycap>Ctrl</keycap> key while dragging, the segment
+	will be copied instead of moved.</para>
 
-	<para>To resize a segment, use the resize tool	  <inlinemediaobject>
-	    <imageobject>
-	      <imagedata fileref="rg-resize.png"/>
-	</imageobject>
-	</inlinemediaobject>
-           and click and drag on the right-hand end of the segment.
-           Resizing a segment has the effect of extending or
-           shortening it, by subtracting some of its contents or adding
-           silence at the start or end.  If you hold down the <keycap>Ctrl</keycap>
-           key, the segment will be <link
-           linkend="segment-view-rescale">rescaled</link> (stretched
-           or squashed) instead of extended or shortened.</para>
+	<para>To resize a segment, use the resize tool
+	<inlinemediaobject><imageobject><imagedata fileref="rg-resize.png" format="PNG"
+	/></imageobject></inlinemediaobject> and click and drag on the right-hand end of
+	the segment.  Resizing a segment has the effect of extending or shortening it, by
+	subtracting some of its contents or adding silence at the start or end.  If you
+	hold down the <keycap>Ctrl</keycap> key, the segment will be <link
+	linkend="segment-view-rescale">rescaled</link> (stretched or squashed) instead of
+	extended or shortened.</para>
 
-	<para>For both move and resize you can hold Shift for fine
+	<para>For both move and resize you can hold <keycap>Shift</keycap> for fine
 	positioning, to avoid snapping to a particular grid position.
 	</para>
 
@@ -1197,10 +1217,11 @@
 
       <sect2 id="segment-view-rescale">
         <title>Stretching and squashing segments</title>
-        <para>Resizing a segment normally makes it shorter or longer
-        by subtracting content or adding some extra space.  However,
-        by holding the <keycap>Ctrl</keycap> key while resizing, you can instead
-        stretch or squash the contents of the segment.  You can also do this by selecting the segment and then using <menuchoice><guimenu lang="en">Segments</guimenu>
+        <para>Resizing a segment normally makes it shorter or longer by subtracting
+        content or adding some extra space.  However, by holding the <keycap>Ctrl</keycap>
+        key while resizing, you can instead stretch or squash the contents of the segment.
+        You can also do this by selecting the segment and then using <menuchoice><guimenu
+        lang="en">Segments</guimenu>
       <guimenuitem>Stretch or Squash...</guimenuitem></menuchoice>.</para>
         <para>
           For segments that contain &MIDI; events, this re-spaces the
@@ -1209,10 +1230,14 @@
           the same relative proportions.
         </para>
         <para>
-          For audio segments, this time-stretches the audio, altering
-          its played speed without altering its pitch (as would happen
-          if the audio was simply played back faster or slower).
-          Time-stretching usually adds some audible artifacts as well,
+          For audio segments, this time-stretches the audio <footnote><para>For reference,
+          &rosegarden; uses a frequency-domain time-stretcher based on a phase vocoder
+          with phase-locking at percussive transients.  This usually produces good results
+          with stable harmonic sounds such as pads and basses as well as purely percussive
+          sounds such as drum loops, but is less effective for composite material or music
+          with soft or breathy note onsets.</para></footnote>, altering its played speed
+          without altering its pitch (as would happen if the audio was simply played back
+          faster or slower).  Time-stretching usually adds some audible artifacts as well,
           so the quality of your results may vary.
         </para>
         <para>
@@ -1222,33 +1247,20 @@
           file instead of accumulating timestretching artifacts with
           each rescale.  You can rescale both mono and stereo audio.
         </para>
-        <para>
-          (For reference, &rosegarden; uses a frequency-domain
-          time-stretcher based on a phase vocoder with phase-locking
-          at percussive transients.  This usually produces good
-          results with stable harmonic sounds such as pads and basses
-          as well as purely percussive sounds such as drum loops, but
-          is less effective for composite material or music with soft
-          or breathy note onsets.)
-        </para>
+                 
       </sect2>
 
       <sect2 id="segment-view-split-join">
 	<title>Split tool</title>
 	<para>
-	  You can use the split tool
-	  <inlinemediaobject>
-	    <imageobject>
-	      <imagedata fileref="rg-split.png"/>
-	</imageobject>
-	</inlinemediaobject>
-	  to split a single segment
-	  into two separate segments.  To split your segment, select the
-	  split tool and click on the segment you wish to split.
+	  You can use the split tool <inlinemediaobject><imageobject><imagedata
+	  fileref="rg-split.png" format="PNG" /></imageobject></inlinemediaobject> to
+	  split a single segment into two separate segments.  To split your segment,
+	  select the split tool and click on the segment you wish to split.
 	</para>
 	<para>
 	  By default segments are split on the closest barline to the
-	  cursor, but this can be prevented by holding down Shift
+	  cursor, but this can be prevented by holding down <keycap>Shift</keycap>
 	  while splitting the segment.
 	</para>
 
@@ -1262,7 +1274,7 @@
 	<term>Split on Silence</term>
 	<listitem><para><menuchoice>
 		  <guimenu lang="en">Segments</guimenu>
-		  <guimenuitem>Split</guimenuitem>
+		  <guisubmenu>Split</guisubmenu>
 		  <guimenuitem>Split on Silence</guimenuitem>
 		</menuchoice>
 	  splits the selected segments on silences.
@@ -1283,16 +1295,16 @@
 	<listitem><para>
 		<menuchoice>
 		  <guimenu lang="en">Segments</guimenu>
-		  <guimenuitem>Split</guimenuitem>
+		  <guisubmenu>Split</guisubmenu>
 		  <guimenuitem>Split by Pitch...</guimenuitem>
 		</menuchoice>
 		  splits the currently selected segments into higher and
-		    lower parts.
+		    lower parts.</para>
 
-		  This function invokes a dialog allowing you to
+		 <para> This function invokes a dialog allowing you to
 		  choose a pitch as a <quote>split point</quote>, and then splits
 		  the selected segments in half with all the notes on
-		  or above that split point in the <quote>higher</quote>segment
+		  or above that split point in the <quote>higher</quote> segment
 		  and all the notes below it in the <quote>lower</quote>.
 
 		</para>
@@ -1300,8 +1312,8 @@
 		  If the music in the segment consists of two separate
 		  parts (e.g. left and right hand piano parts) that
 		  are not always completely on either side of a single
-		  split point, you may with to select the <quote>ranging
-		  split-point</quote>option.  If this is selected,
+		  split point, you may wish to select the <quote>ranging
+		  split-point</quote> option.  If this is selected,
 		  &rosegarden; will attempt to track the two parts as
 		  they move up and down, usually doing a slightly
 		  better job of separating out notes that were
@@ -1318,7 +1330,7 @@
 	<varlistentry>
 <term>Split by Recording Source</term><listitem><para><menuchoice>
 		  <guimenu lang="en">Segments</guimenu>
-		  <guimenuitem>Split</guimenuitem>
+		  <guisubmenu>Split</guisubmenu>
 		  <guimenuitem>Split by Recording Source...</guimenuitem>
 		</menuchoice> splits the currently selected segments according to the
 		&MIDI; channel and device their events were recorded from.</para><para>If
@@ -1338,7 +1350,7 @@
 	<varlistentry>
 	<term>Split at Time</term><listitem><para> <menuchoice>
 		  <guimenu lang="en">Segments</guimenu>
-		  <guimenuitem>Split</guimenuitem>
+		  <guisubmenu>Split</guisubmenu>
 		  <guimenuitem>Split at Time...</guimenuitem>
 		</menuchoice> simply splits the currently selected segments into two parts
 		at the time you specify.</para></listitem></varlistentry>
@@ -1355,7 +1367,7 @@
 	<title>Tempo in Rosegarden</title>
 	<para>
 	  &rosegarden; considers a composition to be accompanied by a
-	  single stream of <quote>tempo changes</quote>and <quote>time signature
+	  single stream of <quote>tempo changes</quote> and <quote>time signature
 	  changes</quote>, which you can edit to adjust the tempo and the
 	  number and structure of beats in each bar.</para>
 
@@ -1373,8 +1385,8 @@
 	  displays tempo in beats per minute, and the duration of a
 	  beat depends on the time signature.  &rosegarden; only
 	  permits a single time signature to be in effect in any given
-	  bar (that is, you can't have different time signatures in
-	  different tracks).  Each new time signature causes a new bar
+	  bar; you can't have different time signatures in
+	  different tracks.  Each new time signature causes a new bar
 	  to start, so you can place two time signatures closer
 	  together than the natural bar duration in order to obtain a
 	  partial bar.
@@ -1432,19 +1444,19 @@
 <sect2 id="tempo-timesig">
 	<title>Tempo and time signature editor</title>
 	
-      <para>
-	<screenshot>
-	  <mediaobject>
-	    <imageobject>
-	      <imagedata fileref="rg-tempotimesig.png" format="PNG"/>
-      </imageobject>
-	<textobject>
-	  <phrase>&rosegarden;'s tempo and time signature editor</phrase>
-	</textobject>
-      </mediaobject>
-      </screenshot>
-      </para>
-
+	<para>
+	  <screenshot>
+	    <mediaobject>
+	      <imageobject>
+		<imagedata fileref="rg-tempotime-editor.png" format="PNG" />
+	      </imageobject>
+	      <textobject>
+		<phrase>Rosegarden's tempo and time signature editor</phrase>
+	      </textobject>
+	    </mediaobject>
+	  </screenshot>
+	</para>
+ 
 	<para>The tempo and time signature editor window lists all of the tempo and time
 	signature changes in the composition.  You can edit an individual tempo or time
 	signature change by double-clicking on it.</para>
@@ -1468,16 +1480,16 @@
 	  <screenshot>
 	    <mediaobject>
 	      <imageobject>
-		<imagedata fileref="rg-tempodialog.png" format="PNG"/>
-	</imageobject>
-	  <textobject>
-	    <phrase>&rosegarden;'s tempo dialog</phrase>
-	  </textobject>
-	</mediaobject>
-	</screenshot>
+		<imagedata fileref="rg-tempodialog.png" format="PNG" />
+	      </imageobject>
+	      <textobject>
+		<phrase>Rosegarden's tempo dialog</phrase>
+	      </textobject>
+	    </mediaobject>
+	  </screenshot>
 	</para>
 	<para>To set a new tempo, either dial it into the numeric tempo spinbox at the
-	top, or else click repeatedly on the Tap button at approximately the speed you
+	top, or else click repeatedly on the <guibutton>Tap</guibutton> button at approximately the speed you
 	want and let &rosegarden; work out the tempo for you.
 	  </para>
 	<para>By default, a new tempo is <quote>fixed</quote>; that is, the tempo remains
@@ -1495,22 +1507,25 @@
 		  <guimenu lang="en">Composition</guimenu>
 		  <guimenuitem>Add Time Signature Change...</guimenuitem>
 		</menuchoice> or double-click on the existing time signature in
-		the <link linkend="transport">Transport window</link>
+		the <link linkend="transport">transport window</link>
 		or <link linkend="tempo-timesig">tempo and time signature
-		editor</link>.</para><para>
-	  <screenshot>
-	    <mediaobject>
-	      <imageobject>
-		<imagedata fileref="rg-timesigdialog.png" format="PNG"/>
-	</imageobject>
-	  <textobject>
-	      <phrase>&rosegarden;'s time signature dialog</phrase>
-	  </textobject>
-	</mediaobject>
-	</screenshot>
-	</para>
+		editor</link>.</para>
+		
+		<para>
+		  <screenshot>
+		    <mediaobject>
+		      <imageobject>
+			<imagedata fileref="rg-timesigdialog.png" format="PNG" />
+		      </imageobject>
+		      <textobject>
+			<phrase>&rosegarden;'s time signature dialog</phrase>
+		      </textobject>
+		    </mediaobject>
+		  </screenshot>
+		</para>
+     
       </sect2>
-<sect2 id="tempo-from-segment">
+      <sect2 id="tempo-from-segment">
 	<title>Setting tempo from an existing segment</title>
 	<para>&rosegarden; provides two ways to set tempo from a segment that you have recorded or imported:</para>
 	  <variablelist>
@@ -1524,7 +1539,7 @@
 		  appropriately.</para><para>This function uses the duration of the
 		  selected segment (which must be an audio segment of a single bar) to
 		  work out a single matching tempo setting.  It does not analyse the
-		  content of the audio segment in any way; it simply looks at how long it
+		  content of the audio segment in any way &ndash; it simply looks at how long it
 		  is.</para>
 		</listitem>
 	    </varlistentry>
@@ -1537,7 +1552,7 @@
 		  and sets a series of tempo changes according to the time elapsed between
 		  consecutive beats.</para>
 	      <para>You can use this to set an overall tempo map for a composition by
-	      <quote>tapping</quote>tempo in a recorded segment.  For example, you can record from a
+	      <quote>tapping</quote> tempo in a recorded segment.  For example, you can record from a
 	      &MIDI; keyboard and tap a series of single notes at approximate beat
 	      positions, speeding up and slowing down gradually; then select the recorded
 	      segment and use this function to set a tempo map that speeds up and slows
@@ -1567,7 +1582,7 @@
 	<screenshot>
 	  <mediaobject>
 	    <imageobject>
-	      <imagedata fileref="rg-markerloop.png" format="PNG"/>
+	      <imagedata fileref="rg-markerloop.png" format="PNG" />
       </imageobject>
 	<textobject>
 	  <phrase>A marker and a loop range</phrase>
@@ -1580,7 +1595,7 @@
 	the ruler to open the marker editor.  Make sure &rosegarden;'s
 	playback pointer (see <link linkend="transport">The
 	Transport</link>) is in the location you want to add the
-	marker at, and then click the Add button to add a new marker
+	marker, and then click the <guibutton>Add</guibutton> button to add a new marker
 	at the playback position.  You can then double-click on the
 	marker's entry in the marker editor window to edit its name or
 	adjust its location.</para>
@@ -1590,23 +1605,23 @@
 
 	<para>You can set a <link linkend="ranges-loops">loop range</link>
 	between two marker positions, by clicking in the area between
-	the markers in the marker ruler with the Shift key
+	the markers in the marker ruler with the <keycap>Shift</keycap> key
 	pressed.</para>
       </sect2>
 
       <sect2 id="quick_marker">
     <title>Quick Marker</title>
 
-    <para>The quick marker is a special moment in time that can be defined
-    on the fly with a single key (by default <keycap>Ctrl</keycap>-1) from the main window
-    (track editor). Once defined it appears as a red line in the loop ruler 
-    (it does not appear among other markers, since it does not have a label).
-    At any time when in the track editor you can jump to the quick marker
-    position with a single key (by default simply 1).
+    <para>The quick marker is a special moment in time that can be defined on the fly with
+    a single key (by default <keycombo><keycap>Ctrl</keycap><keycap>1</keycap></keycombo>)
+    from the main window (track editor). Once defined it appears as a red line in the loop
+    ruler (it does not appear among other markers, since it does not have a label).  At
+    any time when in the track editor you can jump to the quick marker position with a
+    single key (by default simply <keycap>1</keycap>).
     <screenshot>
       <mediaobject>
         <imageobject>
-          <imagedata fileref="rg-quickmarker.png" format="PNG"/>
+          <imagedata fileref="rg-quickmarker.png" format="PNG" />
       </imageobject>
     <textobject>
       <phrase>Quick Marker at the start of the third bar</phrase>
@@ -1627,11 +1642,11 @@
 	<title>Ranges and loops</title>
 	<para>
 	  &rosegarden; allows you to highlight a period of time in the
-	  main ruler, which will be used as a <quote>range</quote>for editing
+	  main ruler, which will be used as a <quote>range</quote> for editing
 	  operations and which will be looped during playback.
 	</para>
 
-	<para>To set the current range, click and drag with the Shift
+	<para>To set the current range, click and drag with the <keycap>Shift</keycap>
 	key pressed on the subdivided area of the main ruler at the
 	top of the editing window.  The range that you drag will be
 	highlighted in white as you drag it, and will snap to the
@@ -1642,21 +1657,21 @@
 	<para>You can also set a range between two <link
 	linkend="markers">markers</link> by shift-clicking between the
 	marker positions in the marker ruler, or set a range using the
-	<link linkend="transport-overview">Transport</link> window.
-	The Transport contains small buttons to set the start and end
+	<link linkend="transport-overview">transport</link> window.
+	The transport contains small buttons to set the start and end
 	of the current range to the current playback pointer position.
 	Either of these methods allows you to set more precise end
 	points for your range than you can with click-drag.</para>
 
 	<para>To clear a range and restore normal playback, click on
-	the subdivided area of the main ruler with the Shift key
-	pressed, or toggle the loop button on the Transport.</para>
+	the subdivided area of the main ruler with the <keycap>Shift</keycap> key
+	pressed, or toggle the loop button on the transport.</para>
 
 	<para>Note that playback looping when a range is defined is
-	not the same thing as the <link
+	not the same thing as <link
 	linkend="segment-view-segmentparameterbox">repeating
-	segment</link> function available in the segment parameters
-	(which seamlessly repeats individual segments rather than
+	segment</link> available in the segment parameters
+	(which seamlessly repeats individual segments rather than 
 	causing the transport to jump).</para>
 
 	<sect3 id="range-operations">
@@ -1695,7 +1710,7 @@
           lang="en">Edit</guimenu> <guimenuitem>Insert
           Range</guimenuitem> </menuchoice>.  You can
           specify how much space you want to insert, and then all of
-          the segment content, tempos and time signatures following
+          the segment content, tempos, and time signatures following
           the playback position will be pushed along in time by that
           duration to leave an empty space.
           </para>
@@ -1727,7 +1742,7 @@
 	<screenshot>
 	  <mediaobject>
 	    <imageobject>
-	      <imagedata fileref="rg-triggersegment.png" format="PNG"/>
+	      <imagedata fileref="rg-triggersegment.png" format="PNG" />
       </imageobject>
 	<textobject>
 	  <phrase>&rosegarden;'s Trigger Segment dialog, as reached from the matrix editor</phrase>
@@ -1736,7 +1751,7 @@
       </screenshot>
       </para>
  
-    <para>Triggered segments are managed through a window available
+    <para>You manage triggered segments through a window available
     via the <menuchoice> <guimenu
     lang="en">Segments</guimenu><guimenuitem>Manage Triggered
     Segments</guimenuitem></menuchoice> option in the main segment
@@ -1749,8 +1764,8 @@
     <menuchoice> <guimenu lang="en">Adjust</guimenu>
     <guimenuitem>Trigger Segment...</guimenuitem></menuchoice>
     in the matrix or <menuchoice> <guimenu
-    lang="en">Note</guimenu><guimenuitem
-    lang="en">Ornaments</guimenuitem> <guimenuitem>Trigger
+    lang="en">Note</guimenu><guisubmenu
+    lang="en">Ornaments</guisubmenu> <guimenuitem>Trigger
     Ornament...</guimenuitem></menuchoice> in the notation
     editor.</para>
 
@@ -1807,7 +1822,7 @@
     </variablelist>
  
     <para>A triggered segment may contain silence at the start or end,
-    and this will be <quote>played</quote>(and stretched or squashed if
+    and this will be <quote>played</quote> (and stretched or squashed if
     appropriate) as well as the notes and other events in the segment.</para>
  
     <para>It is not currently possible to make a triggered segment
@@ -1816,10 +1831,10 @@
     segment, and you can't trigger audio segments.</para>
  
     <para>To edit the contents of a triggered segment, either
-    double-click on it in the Manage Triggered Segments window, or
+    double-click on it in the manage triggered segments window, or
     double-click on any note that triggers it.  Apart from editing the
     notes in the segment, you can also change the duration of the
-    segment itself from the Edit menu of the resulting event list
+    segment itself from the <guimenuitem>Edit</guimenuitem> menu of the resulting event list
     view.  Remember that editing a triggered segment will affect all
     the notes that trigger it, not just the one that you
     double-clicked to get to the editing window.</para>
@@ -1835,7 +1850,7 @@
       the tracks from left to right playing the contents of the
       segments as it crosses them.  The pointer's position on the
       screen is tracked and controlled by a window called the
-      Transport.
+      transport.
     </para>
     
     <sect1 id="transport-overview"><title>Overview</title>
@@ -1843,7 +1858,7 @@
       <screenshot>
         <mediaobject>
           <imageobject>
-            <imagedata fileref="rg-transport.png" format="PNG"/>
+            <imagedata fileref="rg-transport.png" format="PNG" />
     </imageobject>
       <textobject>
 	<phrase>&rosegarden;'s Transport window</phrase>
@@ -1853,30 +1868,23 @@
     </para>
 
     <para>
-      If the Transport isn't visible, you can activate it with <menuchoice> <guimenu lang="en">Settings</guimenu> 
+      If the transport isn't visible, you can activate it with <menuchoice> <guimenu lang="en">Settings</guimenu> 
 	<guimenuitem>Show Transport</guimenuitem> </menuchoice>.
     </para>
     
-    <para>The Transport shows the time reached by the playback
+    <para>The transport shows the time reached by the playback
       pointer, in seconds by default.</para>
 
-    <para>You can switch it to show
-      musical time (bar and beat counts), musical time with a flashing
-      visual metronome, or audio sample frame times, using the topmost
-      of the small buttons <inlinemediaobject>
-	    <imageobject>
-	      <imagedata fileref="rg-button-bar-time.png"/>
-	</imageobject>
-	</inlinemediaobject> on the left of the transport window.</para>
+    <para>You can switch it to show musical time (bar and beat counts), musical time with
+    a flashing visual metronome, or audio sample frame times, using the topmost of the
+    small buttons <inlinemediaobject><imageobject><imagedata
+    fileref="rg-button-bar-time.png" format="PNG" /></imageobject></inlinemediaobject> on
+    the left of the transport window.</para>
 
-    <para>The
-      button immediately below that <inlinemediaobject>
-	    <imageobject>
-	      <imagedata fileref="rg-button-from-end.png"/>
-	</imageobject>
-	</inlinemediaobject> toggles the display so as to show
-      time remaining to the end of the composition instead of from the
-      start.</para>
+    <para>The button immediately below that <inlinemediaobject><imageobject><imagedata
+    fileref="rg-button-from-end.png" format="PNG" /></imageobject></inlinemediaobject>
+    toggles the display so as to show time remaining to the end of the composition instead
+    of from the start.</para>
 
     <para>
       The main controls on the transport start the sequencer playing
@@ -1898,14 +1906,14 @@
       playback position to be set to.
     </para>
 
-    <para>Additional controls and a &MIDI; event display are hidden on
-    the bottom flap on the transport, which can be toggled on or off
-    using the arrow button next to it at the left.  Also on this extra
-    portion there are buttons for recording, setting the loop start
-    and end (see <link linkend="ranges-loops">Ranges and loops</link>),
-    soloing individual tracks, turning on or off the metronome (see
-    <link linkend="studio-metronome">Metronomes</link>), and silencing
-    your &MIDI; devices (the panic button).  </para>
+    <para>Additional controls and a &MIDI; event display are hidden on the bottom flap on
+    the transport, which can be toggled on or off using the arrow button next to it at the
+    left.  Also on this extra portion there are buttons for recording, setting the loop
+    start and end (see <link linkend="ranges-loops">Ranges and loops</link>), soloing
+    individual tracks, turning on or off the metronome (see <link
+    linkend="studio-metronome">Metronomes</link>), and silencing your &MIDI; devices (the
+    panic button <inlinemediaobject><imageobject><imagedata fileref="rg-transport-panic.png"
+    format="PNG" /></imageobject></inlinemediaobject>).  </para>
 
     </sect1>
     <sect1 id="recording">
@@ -1914,7 +1922,7 @@
         <screenshot>
           <mediaobject>
             <imageobject>
-              <imagedata fileref="rg-trackbuttons.png" format="PNG"/>
+              <imagedata fileref="rg-trackbuttons.png" format="PNG" />
       </imageobject>
 	<textobject>
 	  <phrase>Track buttons in various states of recording readiness</phrase>
@@ -1927,7 +1935,7 @@
 	right tracks are armed for recording by selecting the red
 	(for audio tracks) or yellow (for &MIDI; tracks) LED-style
 	buttons on the track labels, and then use the <link
-	    linkend="transport-overview">Transport's</link> record
+	    linkend="transport-overview">transport's</link> record
 	control.  This has the effect of both starting the transport,
 	thus playing the existing composition, and recording into the
 	appropriate track, or tracks.
@@ -1946,7 +1954,7 @@
 	while playing a composition to switch instantly between
 	playback and recording without stopping the transport, or you
 	can use <keycap>Space</keycap> to arm for recording when the transport is
-	stopped, so that a subsequent Play will in fact record as
+	stopped, so that a subsequent <quote>play</quote> will in fact record as
 	well.  (The latter is handy when synchronising to an <link
 	linkend="transport-external">external transport</link>.)
       </para>
@@ -2012,11 +2020,11 @@
 	    <guimenu lang="en">Settings</guimenu>
 	    <guimenuitem>Configure Rosegarden...</guimenuitem>
 	  </menuchoice>
-	  and in the &MIDI; page's &MIDI; Sync tab, select <quote>MTC
-	  Master</quote>from the &MIDI; Time Code menu.  To make &rosegarden; an
+	  and in the &MIDI; page's &MIDI; Sync tab, select <guimenuitem>MTC
+	  Master</guimenuitem>from the &MIDI; <guimenuitem>Time Code</guimenuitem> menu.  To make &rosegarden; an
 	  MTC Slave so that &rosegarden;'s transport will automatically
-	  be synchronised with incoming MTC events, select <quote>MTC
-	  Slave</quote>.
+	  be synchronised with incoming MTC events, select <guimenuitem>MTC
+	  Slave</guimenuitem>.
 	</para>
       </sect2>
     </sect1>
@@ -2052,11 +2060,11 @@
     <sect1 id="studio-introduction">
       <title>Devices, instruments and connections</title>
 
-      <para>&rosegarden; uses the term Studio to refer to everything it
+      <para>&rosegarden; uses the term studio to refer to everything it
       knows about the sound systems attached to the computer.  This
       may include &MIDI; and audio hardware and other sound software,
       and includes information about connections, configuration,
-      &MIDI; patches and so on.  The Studio is built-in to every
+      &MIDI; patches and so on.  The studio is built-in to every
       composition you create with &rosegarden;.</para>
 
       <para>Three pieces of terminology are essential here:
@@ -2102,7 +2110,7 @@
 	      collection of configuration information, the
 	      <quote>connection</quote> specifies which &MIDI; port it
 	      is physically attached to.  This can be configured in
-	      the <link linkend="studio-device-editor">MIDI device
+	      the <link linkend="studio-device-editor">&MIDI; device
 	      manager</link>.  (Audio and synth plugin devices do not
 	      have connections in the same way.)
 	      </para>
@@ -2137,21 +2145,21 @@
       </para>
 
       <para>Once configured, the studio setup is stored with every
-	Rosegarden-format file you save.</para>
+	&rosegarden;-format file you save.</para>
 
     </sect1>
 
     <sect1 id="studio-device-editor">
-      <title>Managing MIDI devices</title>
+      <title>Managing &MIDI; devices</title>
 
       <para>
         <screenshot>
           <mediaobject>
             <imageobject>
-              <imagedata fileref="rg-devicemanager.png" format="PNG"/>
+              <imagedata fileref="rg-devicemanager.png" format="PNG" />
       </imageobject>
 	<textobject>
-	  <phrase>The MIDI device manager</phrase>
+	  <phrase>The &MIDI; device manager</phrase>
 	</textobject>
       </mediaobject>
       </screenshot>
@@ -2178,8 +2186,8 @@
       </para>
       
       <para>
-	Each of the Play devices listed here provides a target for
-	&MIDI; tracks to talk to: if you add a new Play device, you
+	Each of the play devices listed here provides a target for
+	&MIDI; tracks to talk to: if you add a new play device, you
 	will then have 16 new instruments on this device which you
 	can assign tracks to.  If you then assign a connection for
 	that device, the tracks assigned to it will play to the
@@ -2187,7 +2195,7 @@
 	&MIDI; synth attached to that connection.
       </para>
 
-      <para> The Record devices listed here represent possible
+      <para> The record devices listed here represent possible
 	sources for recording &MIDI;.  You can make one or more of them
 	current (so that &rosegarden; will listen to them when
 	recording) using the checkboxes on each line, as shown in this
@@ -2202,7 +2210,7 @@
         <screenshot>
           <mediaobject>
             <imageobject>
-              <imagedata fileref="rg-bankeditor.png" format="PNG"/>
+              <imagedata fileref="rg-bankeditor.png" format="PNG" />
       </imageobject>
 	<textobject>
 	  <phrase>The &MIDI; bank and program editor</phrase>
@@ -2234,7 +2242,7 @@
 	The usual way to set up the program names for a device is
 	simply to import them from one of the supplied device
 	(".rgd") files.  To do this, select a device in the list on
-	the left of the dialog, then click the Import button below
+	the left of the dialog, then click the <guibutton>Import</guibutton> button below
 	the list and choose the .rgd file corresponding to your
 	synth.
       </para>
@@ -2256,7 +2264,7 @@
 
 	<para>
 	  Many &MIDI; synthesizers have at least one percussion program,
-	  in which each <quote>pitch</quote>plays a different type of sound.
+	  in which each <quote>pitch</quote> plays a different type of sound.
 	  &rosegarden; contains a dedicated percussion matrix editor to
 	  view and edit notes against a scale consisting of the
 	  correct names for the pitches, instead of against the
@@ -2281,11 +2289,11 @@
 	  If you happen to be using a soft-synth or soundcard synth
 	  that uses SoundFont (.sf2) files, you can simply load the
 	  correct program names directly from your .sf2 file into this
-	  dialog.  Just ask to Import as normal, and then choose the
+	  dialog.  Just ask to <guimenuitem>Import</guimenuitem> as normal, and then choose the
 	  .sf2 file that you are using instead of a .rgd file.
 	</para>
 
-	<para>Note that the Studio only manages information about
+	<para>Note that the studio only manages information about
 	  existing &MIDI; devices for &rosegarden;, it does not actually
 	  handle tasks such as loading a SoundFont to your soundcard in
 	  the first place.  If you want to make sure a SoundFont is
@@ -2425,7 +2433,7 @@
     </sect1>
 
     <sect1 id="studio-midi-routing">
-      <title>MIDI Routing</title>
+      <title>&MIDI; Routing</title>
       <para>&rosegarden; is able to instantly send incoming &MIDI; events to 
       some output device and &MIDI; channel. This feature is known as &MIDI; Thru.</para>
       <para>&MIDI; Thru is enabled by default in &rosegarden;. You may want 
@@ -2436,7 +2444,7 @@
       &MIDI; event type, which you may use to ignore some event types and let other
       types to be routed. It is explained in the section <link linkend="studio-midi-filters">
       &MIDI; filters</link>.</para>
-      <para>MIDI Thru routing works quite differently when &rosegarden; is playing 
+      <para>&MIDI; Thru routing works quite differently when &rosegarden; is playing 
       or stopped than when it is recording.</para>
       <itemizedlist>
         <listitem><para>When &rosegarden; is playing or in stopped state, the &MIDI; 
@@ -2457,7 +2465,7 @@
 	<screenshot>
 	  <mediaobject>
 	    <imageobject>
-	      <imagedata fileref="rg-audiomixer.png" format="PNG"/>
+	      <imagedata fileref="rg-audiomixer.png" format="PNG" />
             </imageobject>
 	    <textobject>
 	      <phrase>&rosegarden;'s Audio Mixer</phrase>
@@ -2501,7 +2509,7 @@
       (i.e. if there are no instruments configured to route their
       output to a submaster) you may see a small performance
       improvement if you set the number of submasters explicitly to
-      None, rather than keeping unused ones in the configuration.
+      <quote>None</quote>, rather than keeping unused ones in the configuration.
       </para>
     </sect1>
 
@@ -2511,7 +2519,7 @@
 	<screenshot>
 	  <mediaobject>
 	    <imageobject>
-	      <imagedata fileref="rg-midimixer.png" format="PNG"/>
+	      <imagedata fileref="rg-midimixer.png" format="PNG" />
             </imageobject>
 	    <textobject>
 	      <phrase>&rosegarden;'s &MIDI; Mixer</phrase>
@@ -2522,7 +2530,7 @@
       <para>
 	&rosegarden;'s &MIDI; mixer window, reached through 
 	<menuchoice>
-	  <guimenu lang="en">Studio</guimenu> <guimenuitem>MIDI
+	  <guimenu lang="en">Studio</guimenu> <guimenuitem>&MIDI;
 	  Mixer</guimenuitem></menuchoice>, provides a way to see and
 	  edit the <link
 	  linkend="segment-view-instrumentparameterbox-midi">instrument
@@ -2537,7 +2545,8 @@
 
       <para>
 	The controls shown for each instrument are those set up in the
-	<!-- !!! link linkend="studio-device-controllers" --> control
+	<!-- !!! link linkend="studio-device-controllers"  Manage MIDI
+	 Devices -> select device -> Control Events...--> control
 	parameter manager, as well as volume (corresponding to the
 	&MIDI; volume control change, not to &MIDI; velocity or audio dB
 	levels) and an approximate output level indicator.
@@ -2585,7 +2594,7 @@
 	  <screenshot>
 	    <mediaobject>
 	      <imageobject>
-		<imagedata fileref="rg-pluginbuttons.png" format="PNG"/>
+		<imagedata fileref="rg-pluginbuttons.png" format="PNG" />
 	      </imageobject>
 	      <textobject>
 	      <phrase>Plugin Slot Buttons</phrase>
@@ -2596,8 +2605,8 @@
 	<para>(These buttons are also optionally available in the <link
 	linkend="studio-audio-mixer">audio mixer</link> window.)
 	</para>
-	<para>Clicking a plugin button will
-	pop up the plugin dialog.  This shows you
+	<para>Clicking a plugin button will make the 
+	the plugin dialog pop up.  This shows you
 	the available categories of effects in the first menu; select
 	one, and you can then choose your plugin in the second menu.
 	</para>
@@ -2605,7 +2614,7 @@
 	<screenshot>
 	  <mediaobject>
 	    <imageobject>
-	      <imagedata fileref="rg-plugin-dialog.png" format="PNG"/>
+	      <imagedata fileref="rg-plugin-dialog.png" format="PNG" />
             </imageobject>
 	    <textobject>
 	      <phrase>A &rosegarden; Plugin Dialog</phrase>
@@ -2626,11 +2635,11 @@
 	<para>It is also possible to copy one plugin with its current
 	configuration into another slot, so as to use the same plugin
 	settings with more than one instrument, or to base one plugin
-	configuration on another.  Just click the Copy button when you
+	configuration on another.  Just click the <guibutton>Copy</guibutton> button when you
 	have the plugin set up the way you want it, and then open
-	another plugin slot's plugin dialog and click Paste.</para>
+	another plugin slot's plugin dialog and click <guibutton>Paste</guibutton>.</para>
 
-	<para>Finally, you can use the Bypass toggle to remove a
+	<para>Finally, you can use the <guimenuitem>Bypass</guimenuitem> toggle to remove a
 	plugin temporarily from processing while retaining its
 	configuration.
 	</para>
@@ -2647,7 +2656,7 @@
 	&rosegarden; will be able to load the correct plugins for you
 	and use the correct settings the next time you load your same
 	file.  Plugins may also offer better timing resolution than
-	external &MIDI; devices, and synth plugin instruments have the
+	external &MIDI; devices. Synth plugin instruments also have the
 	advantage of being routable like audio instruments, which also
 	means you can add effects plugins on top of them.
 	</para>
@@ -2663,7 +2672,7 @@
 	  <screenshot>
 	    <mediaobject>
 	      <imageobject>
-		<imagedata fileref="rg-synthpluginbuttons.png" format="PNG"/>
+		<imagedata fileref="rg-synthpluginbuttons.png" format="PNG" />
 	      </imageobject>
 	      <textobject>
 	      <phrase>Synth Plugin Buttons</phrase>
@@ -2697,13 +2706,13 @@
 
 	<para>When you select a plugin that has its own editor window,
 	the button at the lower left of the plugin dialog labelled
-	<quote>Editor</quote>will become active:</para>
+	<guibutton>Editor</guibutton>will become active:</para>
 
 	<para>
 	  <screenshot>
 	    <mediaobject>
 	      <imageobject>
-		<imagedata fileref="rg-plugineditorbutton.png" format="PNG"/>
+		<imagedata fileref="rg-plugineditorbutton.png" format="PNG" />
 	      </imageobject>
 	      <textobject>
 	      <phrase>A Plugin Editor Button</phrase>
@@ -2735,7 +2744,7 @@
 	<screenshot>
 	  <mediaobject>
 	    <imageobject>
-	      <imagedata fileref="rg-metronome.png" format="PNG"/>
+	      <imagedata fileref="rg-metronome.png" format="PNG" />
       </imageobject>
 	<textobject>
 	  <phrase>&rosegarden;'s metronome configuration dialog</phrase>
@@ -2764,7 +2773,7 @@
 
       <para>
 	The record and play metronomes can be switched on or off
-	from the Transport window, using the metronome button.  This
+	from the transport window, using the metronome button.  This
 	button controls the record metronome when recording is armed
 	or in progress, and the play metronome at other times.  By
 	default, the record metronome is switched on and the play
@@ -2784,7 +2793,7 @@
         <screenshot>
           <mediaobject>
             <imageobject>
-              <imagedata fileref="rg-midifilter.png" format="PNG"/>
+              <imagedata fileref="rg-midifilter.png" format="PNG" />
       </imageobject>
 	<textobject>
 	  <phrase>The MIDI filter dialog</phrase>
@@ -2811,7 +2820,7 @@
 	also be controlled to some degree by an external &MIDI; device.
 	To set this up, you will need to use an ALSA &MIDI; connection
 	manager such as qjackctl to connect your &MIDI; controller
-	device to &rosegarden;'s <quote>external controller</quote>input and output
+	device to &rosegarden;'s <quote>external controller</quote> input and output
 	&MIDI; ports.
       </para>
       <para>
@@ -2844,7 +2853,7 @@
 	<screenshot>
 	  <mediaobject>
 	    <imageobject>
-	      <imagedata fileref="rg-trackparameterbox.png" format="PNG"/>
+	      <imagedata fileref="rg-trackparameterbox.png" format="PNG" />
       </imageobject>
 	<textobject>
 	  <phrase>&rosegarden;'s track parameter box</phrase>
@@ -2855,10 +2864,10 @@
 	<para>
 	  The track parameter box can be found at the left side of the
 	  &rosegarden; main window.  It displays the parameters for the
-	  currently selected track.  (If you can't see it, try using 	<menuchoice>
+	  currently selected track.  If you can't see it, try using 	<menuchoice>
 	  <guimenu lang="en">Settings</guimenu>
 	  <guimenuitem>Show Special Parameters</guimenuitem>
-	</menuchoice>.)
+	</menuchoice>.
     </para>
     <para>
 	It allows you to assign instruments to tracks, control what
@@ -2866,10 +2875,9 @@
 	particular tracks, control staff attributes (currently only for LilyPond
 	export,) make selections that govern how &MIDI; segments
 	will be created for each track that is assigned to a non-audio
-	instrument, and apply these selections to existing segments (as when
+	instrument, and apply these selections to existing segments. For example when
 	converting a trumpet part from an imported &MIDI; file to be
-	represented as notation playable by a real human on a real instrument,
-	for example.)
+	represented as notation playable by a real human on a real instrument.
     </para>
     <para>This box is divided into three sections:</para>
 	<sect2 id="track-playback-parameters">
@@ -2884,7 +2892,7 @@
 	    <title>Track recording filters</title>
 	    <para>
                These provide you a way to control what events are recorded to this
-               track. If you leave the default values (<quote>all</quote>) for both parameters, every
+               track. If you leave the default values <quote>all</quote> for both parameters, every
                received event will be stored in the track. This setting is safe and
                convenient if you are recording only one &MIDI; track. Otherwise, you
                should adjust one or both parameters to select only the desired events for
@@ -2919,7 +2927,7 @@
              </para>
 	     <para>
 		The recording filters are also used
-		to <link linkend="studio-midi-routing">route MIDI events </link> to the
+		to <link linkend="studio-midi-routing">route &MIDI; events </link> to the
 		assigned track instrument when you are recording.
              </para>
 	</sect2>
@@ -2927,7 +2935,7 @@
 	    <title>Staff export options</title>
 	    <para>
 	        These provide you with a means of exporting notation to render
-		at either normal, small, or tiny size (eg. for printing certain
+		at either normal, small, or tiny size (eg for printing certain
 		parts at cue size,) and allow you to export a variety of nested
 		brackets.
 	   </para>
@@ -2953,7 +2961,7 @@
 		exist.  They are aimed especially at notation users,
 		and they facilitate operations that require you to use
 		more than one segment on a track (as when using
-		<!-- link -->repeats, or <link
+		<link linkend="segment-view-segmentparameterbox">repeats</link>, or <link
 		    linkend="nv-lilypond-directives">alternative
 		    endings</link>), by allowing you to create a series of new
 		segments that all have the same properties by default.
@@ -2965,7 +2973,7 @@
 			<term>Preset</term>
 			<listitem>
 			    <para>
-				The <guimenuitem>Load</guimenuitem> button
+				The <guibutton>Load</guibutton> button
 				launches a dialog that allows you to pick
 				a pre-defined collection of parameters
 				that provide guidelines for how you should
@@ -2978,28 +2986,25 @@
 			    <para>
 			    <inlinemediaobject>
 				<imageobject>
-				    <imagedata fileref="rg-loadpreset.png" format="PNG"/>
+				    <imagedata fileref="rg-loadpreset.png" format="PNG" />
 				</imageobject>
 			    </inlinemediaobject>
 			    </para>
-			    <para>
-				You first pick a Category, then an Instrument,
-				and finally choose whether you wish to write a
-				part for an amateur or a professional player.
-				<footnote><para>This database was compiled by
-				Magnus Johansson, who deserves all the special
-				mention we can muster for his outstanding effort
-				on this.</para></footnote> The Scope controls
-				allow you to choose whether these parameters
-				will only affect segments that don't yet exist
-				(which you will subsequently record, or draw
-				with the pencil) or should convert any existing
-				segments to take these parameters as well.  (For
-				a demonstration of the latter case in action,
-				please see
+			    <para> You first pick a <guilabel>Category</guilabel>, then an
+			    <guilabel>Instrument</guilabel>, and finally choose whether
+			    you wish to write a part for an amateur or a professional
+			    player.  <footnote><para>This database was compiled by Magnus
+			    Johansson, who deserves all the special mention we can muster
+			    for his outstanding effort on this.  </para></footnote> The
+			    <guilabel>Scope</guilabel> controls allow you to choose whether these parameters
+			    will only affect segments that don't yet exist (which you will
+			    subsequently record, or draw with the pencil) or should
+			    convert any existing segments to take these parameters as
+			    well.  (For a demonstration of the latter case in action,
+			    please see
 				<ulink url="http://rosegarden.sourceforge.net/tutorial/supplemental/fidelio/">
 				this online tutorial.)</ulink>
-				Clicking the <guimenuitem>OK</guimenuitem>
+				Clicking the <guibutton>OK</guibutton>
 				button injects the appropriate parameters into
 				the remaining widgets in this part of the track
 				parameters box, where you can tweak them if you
@@ -3069,8 +3074,8 @@
 			<term>Range</term>
 			<listitem>
 			    <para>
-				The <guimenuitem>Low:</guimenuitem> and 
-				<guimenuitem>High:</guimenuitem> buttons,
+				The <guibutton>Low:</guibutton> and 
+				<guibutton>High:</guibutton> buttons,
 				launch a dialog that allows you to pick a
 				pitch using a staff.  The lowest and highest pitches
 				you select will then appear right on these
@@ -3091,8 +3096,8 @@
 				pitches exceeding the values specified, the
 				note heads will appear in red by default.  You
 				can turn this behavior off with
-				<menuchoice><guimenu lang="en">Settings</guimenu><guimenuitem>Configure
-					Rosegarden</guimenuitem><guimenuitem>Notation</guimenuitem><guimenuitem>Show
+				<menuchoice><guimenu lang="en">Settings</guimenu><guisubmenu>Configure
+					Rosegarden</guisubmenu><guimenuitem>Notation</guimenuitem><guimenuitem>Show
 					notes outside playable range in
 					red</guimenuitem></menuchoice>
 			    </para>
@@ -3112,7 +3117,7 @@
 	<screenshot>
 	  <mediaobject>
 	    <imageobject>
-	      <imagedata fileref="rg-segmentparameterbox.png" format="PNG"/>
+	      <imagedata fileref="rg-segmentparameterbox.png" format="PNG" />
       </imageobject>
 	<textobject>
 	  <phrase>&rosegarden;'s segment parameter box</phrase>
@@ -3122,24 +3127,24 @@
       </para>
 
       <para>
-	The segment parameter box can be found at the left side of the &rosegarden; main window.  (If you can't see it, try using 	<menuchoice>
+	The segment parameter box can be found at the left side of the &rosegarden; main
+	window.  If you can't see it, try using
+	<menuchoice>
 	  <guimenu lang="en">Settings</guimenu>
-	  <guimenuitem>Show Special Parameters</guimenuitem>
-	</menuchoice>.)
- It allows you to modify some aspects of the
-	selected segments.</para><para>If a single segment is currently selected, its
-	parameters will be shown in the segment parameter box and can be
-	edited there.  If several segments are selected, the parameter box
-	will only show the current values where they are the same for all
-	of the selected segments &ndash; but you can still edit them, and your
-	changes will apply to the whole selection.
+	  <guimenuitem>Show Special Parameters</guimenuitem> </menuchoice>.  It allows you
+	  to modify some aspects of the selected segments.</para><para>If a single segment
+	  is currently selected, its parameters will be shown in the segment parameter box
+	  and can be edited there.  If several segments are selected, the parameter box
+	  will only show the current values where they are the same for all of the
+	  selected segments &ndash; but you can still edit them, and your changes will
+	  apply to the whole selection.
 
 	<variablelist>
 	  <varlistentry>
 	    <term>Label</term>
 	    <listitem>
 	      <para>Shows the label of the selected segment (or segments, if
-		they all have the same label).  Click the <quote>Edit</quote>button to edit
+		they all have the same label).  Click the <guibutton>Edit</guibutton>button to edit
 		the label.</para>
 	    </listitem>
 	  </varlistentry>
@@ -3217,10 +3222,10 @@
 	  <varlistentry>
 	    <term>Colour</term>
 	    <listitem>
-	      <para>Shows the colour being used for the display of the
-		selected segments.  You can choose another colour from the
-		dropdown, or choose the <quote>Add New Colour</quote>option if you want a
-		colour not in the dropdown.
+	      <para>Shows the colour being used for the display of the selected segments.
+	      You can choose another colour from the dropdown, or choose the <quote>Add
+	      New Colour</quote> option at the very bottom of the list of colours if you
+	      want a colour not in the dropdown.
 	      </para>
 	      <para>
 		You can also manage and rename colours using
@@ -3228,13 +3233,13 @@
 	  <guimenu lang="en">Composition</guimenu>
 	  <guimenuitem>Edit Document Properties...</guimenuitem>
 	</menuchoice>
-		(then choose the Colour page on the document properties
-		dialog).  The modified colour palette will be saved
+		and choose the Colour page on the document properties
+		dialog.  The modified colour palette will be saved
 		with the composition in the &rosegarden; file.
 		<screenshot>
 		  <mediaobject>
 		    <imageobject>
-		      <imagedata fileref="rg-colours.png" format="PNG"/>
+		      <imagedata fileref="rg-colours.png" format="PNG" />
 	      </imageobject>
 		<textobject>
 		  <phrase>&rosegarden;'s colour manager</phrase>
@@ -3255,10 +3260,10 @@
 	The instrument parameter box can be found at the left side of
 	the &rosegarden; main window, near the <link
 	linkend="segment-view-segmentparameterbox">Segment Parameter
-	Box</link>.  (If you can't see it, try using
+	Box</link>.  If you can't see it, try using
 	<menuchoice> <guimenu lang="en">Settings</guimenu>
 	<guimenuitem>Show Special
-	Parameters</guimenuitem> </menuchoice>.)</para>
+	Parameters</guimenuitem> </menuchoice>.</para>
 
       <para>It shows you
 	which instrument is assigned to the current selected track,
@@ -3278,7 +3283,7 @@
 	<screenshot>
 	  <mediaobject>
 	    <imageobject>
-	      <imagedata fileref="rg-ipb-midi.png" format="PNG"/>
+	      <imagedata fileref="rg-ipb-midi.png" format="PNG" />
       </imageobject>
 	<textobject>
 	  <phrase>&rosegarden;'s instrument parameter box for a &MIDI; instrument</phrase>
@@ -3296,9 +3301,9 @@
 	<para>Below that, you can see and edit the &MIDI;
 	channel number and the <link linkend="studio-bank-editor">bank
 	and program</link> settings that should be sent to the
-	instrument at the start of playback (including a <quote>percussion</quote>
+	instrument at the start of playback including a <guilabel>percussion</guilabel>
 	toggle that controls whether only percussion programs should
-	be offered in these settings).</para>
+	be offered in these settings.</para>
 
 	<para>Finally this box shows you the <!-- !!! link
 	linkend="studio-device-controllers" --> controllers available
@@ -3313,7 +3318,7 @@
 	<screenshot>
 	  <mediaobject>
 	    <imageobject>
-	      <imagedata fileref="rg-ipb-audio.png" format="PNG"/>
+	      <imagedata fileref="rg-ipb-audio.png" format="PNG" />
       </imageobject>
 	<textobject>
 	  <phrase>&rosegarden;'s instrument parameter box for an audio instrument</phrase>
@@ -3335,10 +3340,10 @@
 	the input and output <link linkend="studio-audio-routing">audio routing</link> for this
 	instrument.  Below them you can select whether the instrument
 	is mono or stereo, and the pan setting for position in the
-	stereo field.  (Audio instruments are always ultimately
+	stereo field. <footnote><para>Audio instruments are always ultimately
 	stereo, because the pan setting is always applied.  But if you
 	set the instrument to mono, it will reduce any audio data and
-	effect outputs to mono before applying pan.)
+	effect outputs to mono before applying pan.</para></footnote>
 	  </para>
 	<para>The column of five buttons at lower left are the effects slots.  Click on
 	them to select and activate plugin effects for this audio instrument, and to
@@ -3354,7 +3359,7 @@
 	<screenshot>
 	  <mediaobject>
 	    <imageobject>
-	      <imagedata fileref="rg-ipb-synth.png" format="PNG"/>
+	      <imagedata fileref="rg-ipb-synth.png" format="PNG" />
       </imageobject>
 	<textobject>
 	  <phrase>&rosegarden;'s instrument parameter box for a synth plugin instrument</phrase>
@@ -3369,13 +3374,13 @@
 	control and routing it behaves more like an audio track.
 	</para>
 	<para>The most important control here is the button at top
-	left (saying Xsynth in the above picture) which shows the name
+	left (saying <guibutton>Xsynth</guibutton> in the above picture) which shows the name
 	of the synth plugin in use for this instrument.  Click this to
 	select a particular synth and control it in the standard
 	&rosegarden; <link linkend="studio-plugins">plugin editor dialog</link>.  Once
 	you've selected a plugin, you may also be able to click the
-	Editor button below it in order to open a dedicated GUI editor
-	for the particular plugin (if the plugin has one).
+	<guibutton>Editor</guibutton> button below it in order to open a dedicated GUI editor
+	for the particular plugin if the plugin has one.
 	</para>
 	<para>The remaining controls here are the same as for audio
 	instruments: the playback fader, playback level, output
@@ -3389,7 +3394,7 @@
   <chapter id="quantization">
     <title>Quantization</title>
     <para>
-      <quote>Quantization</quote>is the process of repositioning notes and other
+      <quote>Quantization</quote> is the process of repositioning notes and other
       events so that they start or finish on exact beat divisions.  It
       is traditionally used to make an approximate performance into a
       precise but rather mechanical-sounding one &ndash; either because
@@ -3400,6 +3405,7 @@
     <para>
       For general quantization, use
       	<menuchoice>
+	  <shortcut><keycap>=</keycap></shortcut>
 	  <guimenu lang="en">Segments</guimenu>
 	  <guimenuitem>Quantize</guimenuitem>
 	</menuchoice>
@@ -3411,15 +3417,17 @@
       in matrix or notation editors.  This shows you a dialog in which
       you can select the precise quantization parameters you need, and
       then it applies these to all of the selected segments or notes.
-      (You can also quickly reach this dialog by pressing the <quote>=</quote>
-      key.)
+      <!-- 
+       (You can also quickly reach this dialog by pressing the <keycap>=</keycap>
+       key.)
+        -->
     </para>
 
     <para>
       <screenshot>
 	<mediaobject>
 	  <imageobject>
-	    <imagedata fileref="rg-gridquantizer.png" format="PNG"/>
+	    <imagedata fileref="rg-gridquantizer.png" format="PNG" />
     </imageobject>
       <textobject>
 	<phrase>&rosegarden;'s quantize dialog</phrase>
@@ -3457,10 +3465,11 @@
 	  You can also obtain this legato effect without the
 	  accompanying grid quantization using
 	<menuchoice>
+	  <shortcut><keycap>-</keycap></shortcut>
 	  <guimenu lang="en">Adjust</guimenu>
 	  <guimenuitem>Quantize</guimenuitem>
 	  <guimenuitem>Legato</guimenuitem>
-	</menuchoice> in the Matrix editor.
+	</menuchoice> in the matrix editor.
 	  </para>
 	</listitem>
       </varlistentry>
@@ -3516,13 +3525,14 @@
 	  <para>The default behaviour of the grid quantizer is to move
 	  each note exactly onto its nearest grid line.  But if you
 	  set the iterative amount to something less than 100% (the
-	  <quote>Full quantize</quote>default), each note will only be moved that
+	  <quote>Full quantize</quote> default), each note will only be moved that
 	  percentage of the distance toward its nearest grid line,
 	  resulting in a nearly-but-not-quite quantized effect.</para>
 	  <para>This quantizer may be applied repeatedly so as to try
 	  out gradually increasing degrees of quantization, hence the
 	  name <quote>iterative</quote>.  Use 
 	<menuchoice>
+	  <shortcut><keycap>+</keycap></shortcut>
 	  <guimenu lang="en">Adjust</guimenu>
 	  <guimenuitem>Quantize</guimenuitem>
 	  <guimenuitem>Repeat Last Quantize</guimenuitem>
@@ -3541,7 +3551,7 @@
       </varlistentry>
     </variablelist>
 
-    <para>The quantize dialog also has an optional Advanced section
+    <para>The quantize dialog also has an optional <guibutton>Advanced</guibutton> section
       containing further options for 
 	  <link linkend="nv-quantization">notation quantization</link>.
     </para>
@@ -3549,8 +3559,8 @@
     <para>
       Another simple way to apply a grid quantizer is to do it in the
       main window, using the <guimenuitem>Quantize</guimenuitem> menu
-      on the <link linkend="segment-view-segmentparameterbox">Segment
-      Parameter Box</link>.  If you select some segments and change
+      on the <link linkend="segment-view-segmentparameterbox">segment
+      parameter box</link>.  If you select some segments and change
       the value shown in the menu, the segments will immediately be
       grid-quantized to the resolution shown in the menu.
     </para>
@@ -3573,46 +3583,48 @@
       <screenshot>
 	<mediaobject>
 	  <imageobject>
-	    <imagedata fileref="rg-matrixview.png" format="PNG"/>
+	    <imagedata fileref="rg-matrixview.png" format="PNG" />
     </imageobject>
       <textobject>
 	<phrase>&rosegarden;'s matrix editor</phrase>
       </textobject>
     </mediaobject>
     </screenshot>
-      Each matrix editor window shows a single segment.  To edit a
-      segment, just right-click on it in the main canvas and select
-      the matrix editor from the menu.  Alternatively, you can
-      configure &rosegarden; to make the matrix editor the default
-      editor available when you double-click on a segment.
+      Each matrix editor window shows a single segment.  To edit a segment, just
+      right-click on it in the main canvas and select the matrix editor from
+      <menuchoice><shortcut><keycap>M</keycap></shortcut><guimenu
+      lang="en">Segments</guimenu><guimenuitem> Open in Matrix
+      Editor</guimenuitem></menuchoice>.  Alternatively, you can configure
+      &rosegarden; to make the matrix editor the default editor available when you
+      double-click on a segment.
     </para>
 
     <sect1 id="matrix-grid-quantize">
       <title>The Grid and Quantize controls</title>
       <para>
-	The matrix view contains Grid and Quantize menus in its main
+	The matrix view contains <guilabel>Grid</guilabel> and <guilabel>Quantize</guilabel> menus in its main
 	toolbar.
       </para>
-      <para>The Grid menu controls the size of the visible grid in the
+      <para>The <guilabel>Grid</guilabel> menu controls the size of the visible grid in the
       background of the matrix view, as well as the time resolution
       used when entering and moving notes.  After you set it to a
       particular time value, the normal note insertion and drag
       operations will then snap automatically to grid points spaced at
       that time width.  You can override the snap-to-grid effect
-      temporarily by holding down Shift during editing, or you can
-      disable it by setting the Grid menu to None.
+      temporarily by holding down <keycap>Shift</keycap> during editing, or you can
+      disable it by setting the <guilabel>Grid</guilabel> menu to <guibutton>None</guibutton>.
       </para>
-      <para>The Quantize menu works rather differently.  Rather than
+      <para>The <guilabel>Quantize</guilabel> menu works rather differently.  Rather than
       controlling the behaviour of other editing tools, it actually
       performs an action.  When you change the value in this menu, the
       selected notes &ndash; or the whole segment if nothing is selected
       &ndash; will immediately be quantized using a grid quantizer of the
       chosen resolution.
       </para>
-      <para>The Quantize menu also shows you continuously what
+      <para>The <guilabel>Quantize</guilabel> menu also shows you continuously what
       resolution the current segment or selection is quantized to.
       For example, if you select a set of notes that start on
-      consecutive quarter-note beats, the Quantize menu will update
+      consecutive quarter-note beats, the <guilabel>Quantize</guilabel> menu will update
       itself to show 1/4, as this is the coarsest resolution
       consistent with the existing quantization of the current
       selection.
@@ -3630,14 +3642,14 @@
 	corresponding to the distance you drag before releasing the
 	mouse button.</para>
 
-	<para>You can also draw notes using the Select tool (the
-	arrow), by clicking and dragging either with the middle mouse
-	button, or with the left mouse button and <keycap>Ctrl</keycap> pressed.</para>
+	<para>You can also draw notes using the select tool  <inlinemediaobject><imageobject><imagedata fileref="rg-select.png" format="PNG" /></imageobject></inlinemediaobject>
+, by clicking and dragging either with the <mousebutton>middle</mousebutton> mouse
+	button, or with the <mousebutton>left</mousebutton> mouse button and <keycap>Ctrl</keycap> pressed.</para>
 
       <para>By default, the time and duration are snapped to a
-	particular grid unit, according to the Grid setting on the
-	View menu or the toolbar.  You can prevent this effect by
-	holding down Shift while clicking and dragging.
+	particular grid unit, according to the <guilabel>Grid</guilabel> setting on the
+	<guimenu>View</guimenu> menu or the toolbar.  You can prevent this effect by
+	holding down <keycap>Shift</keycap> while clicking and dragging.
       </para>
 
       <sect2 id="matrix-insertion-keyboard">
@@ -3646,9 +3658,10 @@
 	<sect3>
 	  <title>Duration</title>
 
-	  <para>The durations of notes entered from the keyboard are
-	    controlled by the Grid setting on the View menu or
-	    toolbar.  You can set this using the number keys:</para>
+	  <para>The durations of notes entered from the keyboard are controlled by the
+	  <guilabel>Grid</guilabel> setting on the <menuchoice><guimenu
+	  lang="en">View</guimenu><guimenuitem>Grid</guimenuitem></menuchoice> menu or
+	  toolbar.  You can set this using the number keys:</para>
 
 	  <itemizedlist>
 	    <listitem><para><keycap>5</keycap> &ndash; Whole bar</para></listitem>
@@ -3666,7 +3679,7 @@
 	<sect3>
 	  <title>Pitch</title>
 
-	  <para>Once the correct duration is selected in the Grid
+	  <para>Once the correct duration is selected in the <guilabel>Grid</guilabel>
 	    menu, you can insert a note at the current position of the
 	    <link linkend="nv-rulers">insert cursor</link> by pressing
 	    one of the pitch keys:</para>
@@ -3683,8 +3696,8 @@
 
 	  <para>Holding <keycap>Shift</keycap> while pressing a key
 	    will sharpen the note (except for Mi and Ti, which don't
-	    have sharpened versions) and holding <keycap>Shift</keycap>
-	    and <keycap>Ctrl</keycap> together will flatten it (except
+	    have sharpened versions) and holding <keycombo><keycap>Shift</keycap>
+	    <keycap>Ctrl</keycap></keycombo> together will flatten it (except
 	    for Fa and Do).</para>
 
 	  <para>To enter notes an octave higher, use the corresponding
@@ -3702,7 +3715,7 @@
 	  <title>Other remarks</title>
 
 	  <para>All of the insertion commands are also available on a
-	    submenu of the Tools menu.  It's unlikely you'd ever want to
+	    submenu of the <guimenu>Tools</guimenu> menu.  It's unlikely you'd ever want to
 	    navigate the menus just to insert a single note, but the
 	    menus show the keyboard shortcuts and so provide a useful
 	    reference in case you forget which key is which.</para>
@@ -3726,38 +3739,38 @@
 	  You can enter notes into the matrix editor one at a time
 	  using a &MIDI; keyboard or other &MIDI; control device.  The
 	  matrix editor uses the pitches you play on the keyboard,
-	  but the durations you have selected in the Grid setting of
+	  but the durations you have selected in the <guilabel>Grid</guilabel> setting of
 	  the editor itself.  This is known as <quote>step recording</quote>.
 	</para>
 
 	<para>
-	  To start entering notes from a &MIDI; keyboard, first make
-	  sure the keyboard is configured as a &MIDI;
-	  record device.  Then make sure you have the right Grid
-	  setting in the View menu or toolbar, as this controls the
-	  note duration.  Then press the <!-- !!!  image of button
-	  --> step recording button on the matrix editor's toolbar,
-	  or select Step Recording from the Tools menu.  From that
-	  point on all notes pressed on the &MIDI; keyboard will be
-	  inserted at the current insertion time in that window,
-	  until step recording is switched off again or activated in
-	  a different window or the window is closed.
+	  To start entering notes from a &MIDI; keyboard, first make sure the keyboard is
+	  configured as a &MIDI; record device.  Then make sure you have the right grid
+	  setting in the <guimenu lang="en">View</guimenu> menu or toolbar, as this
+	  controls the note duration.  Then press the
+	  <inlinemediaobject><imageobject><imagedata fileref="rg-steprecord.png"
+	  format="PNG" /></imageobject></inlinemediaobject> step recording button on the
+	  matrix editor's toolbar, or select <menuchoice><guimenu
+	  lang="en">Tools</guimenu><guimenuitem>Step Recording</guimenuitem></menuchoice>.
+	  From that point on all notes pressed on the &MIDI; keyboard will be inserted at
+	  the current insertion time in that window, until step recording is switched off
+	  again, or activated in a different window, or the window is closed.
 	</para>
 
 	<para>
-	  You can change the Grid setting while step recording is in
+	  You can change the grid setting while step recording is in
 	  progress, in order to insert notes of different durations.
 	</para>
       </sect2>
     </sect1>
 
     <sect1 id="matrix-selection">
-      <title>Selecting notes</title> <para>To select notes in the
-	matrix editor, switch to the Select (arrow) tool and then
-	outline a rectangular area containing the notes you want to
-	select.  The selected events will then be highlighted in blue.
-	If you instead click on a single event, just that event will
-	be selected.
+      <title>Selecting notes</title> <para>To select notes in the matrix editor, switch to
+      the select <inlinemediaobject><imageobject><imagedata fileref="rg-select.png"
+      format="PNG" /></imageobject></inlinemediaobject> <keycap>F2</keycap> tool and then
+      outline a rectangular area containing the notes you want to select.  The selected
+      events will then be highlighted in blue.  If you instead click on a single event,
+      just that event will be selected.
 
       </para><para>If you hold <keycap>Shift</keycap> while dragging
 	out a rectangle or clicking on a note, the new selection will
@@ -3766,7 +3779,7 @@
 
       <para>
 	To clear a selection, click in an empty space on the matrix
-	editor, or hit the Escape key.</para>
+	editor, or hit the <keycap>Escape</keycap> key.</para>
       
       <para>You can also select all of the notes of a given pitch,
 	by shift-clicking on a key in the piano keyboard down the left
@@ -3790,7 +3803,7 @@
 		  <screenshot>
 		    <mediaobject>
 		      <imageobject>
-			<imagedata fileref="rg-eventfilter.png" format="PNG"/>
+			<imagedata fileref="rg-eventfilter.png" format="PNG" />
 		</imageobject>
 		  <textobject>
 		    <phrase>The event filter dialog</phrase>
@@ -3827,16 +3840,16 @@
       <title>Moving and copying notes</title>
       <para>
 	You can move notes in both time and pitch on the matrix
-	editor by either clicking and dragging them with the Move
+	editor by either clicking and dragging them with the move
 	tool, or selecting them and then dragging them with the
-	Select tool.
+	select tool.
       </para>
       <para>
 	To copy notes, select them and then use the standard copy
 	and paste functions.  After the paste the pasted notes will
 	be selected instead, and you can then drag them wherever you
 	need them.  You may also copy notes by selecting them with
-	the Select tool, then keeping <keycap>Ctrl</keycap> pressed click-and-drag
+	the select tool, then keeping <keycap>Ctrl</keycap> pressed click-and-drag
 	the selected notes in a new position.
       </para>
     </sect1>
@@ -3847,17 +3860,20 @@
     <title>The Percussion Matrix editor</title>
     
     <para>The Percussion Matrix editor is identical to the <link
-    linkend="matrix-view">Matrix editor</link>, except that it shows
-    pitch names on the vertical scale instead of a piano keyboard, and
-    it does not show the duration for each note.  This is intended for
-    use with percussion programs on &MIDI; instruments, in which each
-    note pitch plays a different percussion sound.</para>
+    linkend="matrix-view">Matrix editor</link>, except that it shows pitch names on the
+    vertical scale instead of a piano keyboard, and it does not show the duration for each
+    note. It can be found under
+    <menuchoice><shortcut><keycap>D</keycap></shortcut><guimenu
+    lang="en">Segments</guimenu><guimenuitem>Edit With</guimenuitem><guimenuitem>Open in
+    Percussion Matrix Editor</guimenuitem></menuchoice>. This is intended for use with
+    percussion programs on &MIDI; instruments, in which each note pitch plays a different
+    percussion sound.</para>
 
     <para>
       <screenshot>
 	<mediaobject>
 	  <imageobject>
-	    <imagedata fileref="rg-percussionmatrix.png" format="PNG"/>
+	    <imagedata fileref="rg-percussionmatrix.png" format="PNG" />
     </imageobject>
       <textobject>
 	<phrase>&rosegarden;'s percussion matrix editor</phrase>
@@ -3882,15 +3898,18 @@
 
       <para>
 
-	The &rosegarden; notation editor enables you to view and edit
-	one or more staffs in traditional score notation.
+	The &rosegarden; notation editor enables you to view and edit one or more staffs
+	in traditional score notation.  It can be found under
+	<menuchoice><shortcut><keycap>N</keycap></shortcut><guimenu
+	lang="en">Segments</guimenu><guimenuitem>Edit With</guimenuitem><guimenuitem>Open
+	in Notation Editor</guimenuitem></menuchoice>.
 
       </para><para>
 
 	<screenshot>
 	  <mediaobject>
 	    <imageobject>
-	      <imagedata fileref="rg-notationview.png" format="PNG"/>
+	      <imagedata fileref="rg-notationview.png" format="PNG" />
       </imageobject>
 	<textobject>
 	  <phrase>&rosegarden;'s notation editor</phrase>
@@ -3920,11 +3939,11 @@
 
       <para>
 	There are three ways to open a notation editor from the
-	&rosegarden; main window.  (They all require that you
+	&rosegarden; main window.  They all require that you
 	have some existing segments in the main window first,
 	so if you're starting a new composition, you should
 	create your segments before you start thinking about
-	how to edit them.)
+	how to edit them.
 
 	<variablelist>
 
@@ -3938,10 +3957,10 @@
 		the default editor (notation, matrix, or event list),
 		and by default this is the notation editor.  So
 		double-clicking a single segment will open it as a
-		single staff in a Notation editor window.</para>
+		single staff in a notation editor window.</para>
 	      
 	      <para>You can also open a multi-staff editor this way:
-		holding down the Shift key, select (with a single
+		holding down the <keycap>Shift</keycap> key, select (with a single
 		mouse click) each of the segments on the main view
 		that you want to open, but double-click on the last
 		one.  All of the selected segments will then be opened
@@ -3954,8 +3973,8 @@
 	    <term>The Open in Default Editor menu function (the Return key)</term>
 	    <listitem>
 
-	      <para>The Return key is a shortcut for the Open in
-		Default Editor menu function, which does much the same
+	      <para>The <keycap>Return</keycap> key is a shortcut for Open in
+		Default Editor, which does much the same
 		thing as double-clicking: opens all of the currently
 		selected segments together in a notation editor, or in
 		whichever other editor you have configured as your
@@ -3964,7 +3983,7 @@
 	  </varlistentry>
 	  
 	  <varlistentry>
-	    <term>The Open in Notation Editor menu functions</term>
+	    <term>The Open in Notation Editor menu functions</term> <!-- !!!this needs work menu work rewording? SOM-->
 	    <listitem>
 
 	      <para>Alternatively, you can use the main window's
@@ -3980,17 +3999,20 @@
       </para>
 
       <para>
-	If you have more than one staff (i.e. segment) visible in the notation
-	editor, only one of them can be <quote>current</quote>at once.  The
-	current staff can be distinguished because it has the insert
-	cursor on it (see <link linkend="nv-rulers">Rulers and
-	  Cursors</link>), and this is the staff on which any editing
-	operations that use the insert cursor will take place.  The
-	topmost staff is the current one by default, but you can
-	switch to a different staff by ctrl-clicking on it, or by using
-	<menuchoice><guimenu lang="en">Tools</guimenu><guimenuitem>Local
-	  Cursor</guimenuitem><guimenuitem>Cursor Up Staff</guimenuitem></menuchoice> and
-	<menuchoice><guimenuitem>Cursor Down Staff</guimenuitem></menuchoice>.
+	If you have more than one staff (i.e. segment) visible in the notation editor,
+	only one of them can be <quote>current</quote> at once.  The current staff can be
+	distinguished because it has the insert cursor on it (see <link
+	linkend="nv-rulers">Rulers and Cursors</link>), and this is the staff on which any
+	editing operations that use the insert cursor will take place.  The topmost staff
+	is the current one by default, but you can switch to a different staff by
+	ctrl-clicking on it, or by using
+	<menuchoice><shortcut><keycombo><keycap>Shift</keycap><keycap>Up</keycap></keycombo>
+	</shortcut><guimenu
+	lang="en">Tools</guimenu><guimenuitem>Local
+	Cursor</guimenuitem><guimenuitem>Cursor Up Staff</guimenuitem></menuchoice> and
+	<menuchoice><shortcut><keycombo><keycap>Shift</keycap><keycap>Down</keycap></keycombo>
+	</shortcut><guimenuitem>Cursor
+	Down Staff</guimenuitem></menuchoice>.
       </para>
 
     </sect1>
@@ -4001,39 +4023,39 @@
       <title>Linear and page layouts</title>
 
       <para>
-	The usual way the notation editor displays staffs is known
-	as Linear layout: one staff on top of another, with each
-	staff as a single, horizontally scrollable long line.  Some
-	of the functions of the editor (such as the <link
-	  linkend="nv-rulers">Rulers</link>) are only available in
-	Linear layout.
+	The usual way the notation editor displays staffs is known as linear layout: one
+	staff on top of another, with each staff as a single, horizontally scrollable long
+	line.  Some of the functions of the editor (such as the <link
+	linkend="nv-rulers">Rulers</link>) are only available in linear layout
+	<menuchoice><guimenu lang="en">View</guimenu><guisubmenu>Layout
+	Mode</guisubmenu><guimenuitem>Linear Layout</guimenuitem></menuchoice>
       </para>
 
       <para>
 	However, you can also display staffs in two different
-	page-based layouts: Continuous Page and Multiple Page.</para>
+	page-based layouts: continuous page and multiple page layouts.</para>
 
-      <para>In Continuous Page layout, the music is arranged in one
-	infinitely-tall page of the same width as the window.  Each
-	staff breaks at the end of a line, starting a new line below
-	the remaining staffs.</para>
+      <para>In continuous page layout, <menuchoice><guimenu
+      lang="en">View</guimenu><guisubmenu>Continuous Page Layout
+      </guisubmenu><guimenuitem>Linear Layout</guimenuitem></menuchoice> the music is
+      arranged in one infinitely-tall page of the same width as the window.  Each staff
+      breaks at the end of a line, starting a new line below the remaining staffs.</para>
 
-      <para>In Multiple Page layout, the music is divided up into
-	real pages much as it will be when printed.  The size of each
-	page is calculated so that approximately the same amount of
-	music will fit on each line as it will when actually printed
-	(according to the point size specified for the printing
-	resolution in the configuration dialog).  The printed version
-	is unlikely to be exactly the same, as it depends on the
-	precise paper size and margins in use when printing, but it
-	should be fairly close if you happen to be using A4
-	paper.</para>
+      <para>In multiple page layout, <menuchoice><guimenu
+      lang="en">View</guimenu><guisubmenu>Layout Mode</guisubmenu><guimenuitem>Multiple
+      Page Layout</guimenuitem></menuchoice> the music is divided up into real pages much
+      as it will be when printed.  The size of each page is calculated so that
+      approximately the same amount of music will fit on each line as it will when
+      actually printed (according to the point size specified for the printing resolution
+      in the configuration dialog).  The printed version is unlikely to be exactly the
+      same, as it depends on the precise paper size and margins in use when printing, but
+      it should be fairly close if you happen to be using A4 paper.</para>
 
       <para>
 	<screenshot>
 	  <mediaobject>
 	    <imageobject>
-	      <imagedata fileref="rg-notationview-multipage.png" format="PNG"/>
+	      <imagedata fileref="rg-notationview-multipage.png" format="PNG" />
       </imageobject>
 	<textobject>
 	  <phrase>&rosegarden;'s notation editor in Multiple Page layout</phrase>
@@ -4045,10 +4067,7 @@
 	work in the page layout modes as well as in linear layout.
       </para>
 
-      <para>
-	To switch between these layout modes, use the Linear Layout, Continuous Page
-	Layout and Multiple Page Layout menu functions.
-      </para>
+     
     </sect1>
 
     <!-- Rulers and Cursors -->
@@ -4057,9 +4076,9 @@
       <title>Rulers and cursors</title>
 
       <para>
-	The &rosegarden; Notation editor window includes two graduated rulers,
+	The &rosegarden; notation editor window includes two graduated rulers,
 	each associated with its own cursor.  The rulers are the horizontal strips
-	divided up with tickmarks at top and bottom of the main
+	divided with tickmarks at top and bottom of the main
 	notation canvas, and the cursors are the coloured vertical
 	lines shown initially at the start of the top staff in the
 	editor.  In addition to these main two, there are the <guimenuitem>chord
@@ -4068,7 +4087,7 @@
     </para>
       <para>
 	Note that the rulers are only shown in <link
-	  linkend="nv-layout">Linear layout</link> mode, and several of them
+	  linkend="nv-layout">linear layout</link> mode, and several of them
       are not displayed by default.
       </para>
 
@@ -4077,7 +4096,7 @@
       <screenshot>
 	<mediaobject>
 	  <imageobject>
-	    <imagedata fileref="rg-cursors.png" format="PNG"/>
+	    <imagedata fileref="rg-cursors.png" format="PNG" />
     </imageobject>
       <textobject>
 	<phrase>The notation editor's two cursors</phrase>
@@ -4090,7 +4109,7 @@
 	The purple cursor is the insert cursor.  It shows the point
 	at which operations such as insert and paste will take
 	place.  You can reposition the insert cursor by clicking or
-	dragging on the top ruler, or by clicking with the Select
+	dragging on the top ruler, or by clicking with the select
 	tool on an empty part of the staff (avoiding any events), or
 	by clicking anywhere with <keycap>Ctrl</keycap> held down.
       </para>
@@ -4098,7 +4117,7 @@
       <para>You can also use the left and right arrow keys to move
 	the insert cursor one event at a time.  If you hold <keycap>Ctrl</keycap> while
 	pressing the arrow keys, the cursor will move a whole bar at a
-	time; if you hold Shift, the cursor will <link
+	time; if you hold <keycap>Shift</keycap>, the cursor will <link
 	  linkend="nv-tools-selections">select the events</link> as it
 	passes over them.
       </para>
@@ -4139,7 +4158,7 @@
 		  <mediaobject>
 		      <imageobject>
 			  <imagedata
-			    fileref="rg-rawnoteruler.png" format="PNG"/>
+			    fileref="rg-rawnoteruler.png" format="PNG" />
 		      </imageobject>
 		      <textobject>
 			  <phrase>The raw note ruler,
@@ -4152,14 +4171,12 @@
       </sect2>
       <sect2 id="nv-chord-name-ruler">
 	  <title>The chord name ruler</title>
-	<para>The chord name ruler analyzes the tonality of the piece, and
-	    attempts to display which chords are sounding.  This is for
-	    informational purposes only, and you can neither print nor edit the
-	    contents of this ruler.
-	    <!-- !!! throw in a link to how to do proper chords with text, and
-	    should probably get into fretboards too, but I'm not going to mention
-	    fretboards in this manual at this time (for 1.3) because it's too
-	    rough, and I just don't care to get into that yet -->
+	<para>The chord name ruler analyzes the tonality of the piece, and attempts to
+	display which chords are sounding.  This is for informational purposes only, and
+	you can neither print nor edit the contents of this ruler. To actually write
+	chords which will print see <link linkend="chord-text">Chords</link> in the
+	section on text elements in a &rosegarden; file.
+	    <!-- !!! throw in a link to how to do proper chords with text, (SOM-done)  -->
 	</para>
     </sect2>
     <sect2 id="nv-tempo-ruler">
@@ -4182,7 +4199,7 @@
       <title>Tools and selections</title>
       <para>
 	Most of the menu and toolbar editing functions in the
-	&rosegarden; Notation editor fall into one of three
+	&rosegarden; notation editor fall into one of three
 	categories: <quote>tools</quote>, <quote>functions that
 	  operate on selections</quote>, and <quote>drag
 	  operations</quote>.
@@ -4193,16 +4210,16 @@
 	  <term>Tools</term>
 	  <listitem>
 	    <para>
-	      The basic tools are the selection tool, the erase
-	      tool, and those for inserting notes, rests, text and so
-	      on, which are usually accessed from the toolbar buttons.
+	      The basic tools are the selection tool <keycap>F2</keycap>, the erase tool
+	      <keycap>F4</keycap>, and those for inserting notes, rests, text and so on,
+	      which are usually accessed from the toolbar buttons.
 	  </para>
 	  <para>
 	      <screenshot>
 		  <mediaobject>
 		      <imageobject>
 			  <imagedata
-			    fileref="rg-notationtools.png" format="PNG"/>
+			    fileref="rg-notationtools.png" format="PNG" />
 		      </imageobject>
 		      <textobject>
 			  <phrase>The insert, erase, text, and guitar chord tools</phrase>
@@ -4212,18 +4229,18 @@
 	  </para>
 
 	    <para>
-	      Choosing a tool changes the default behaviour of the
-	      mouse buttons on the main notation canvas, at least
-	      until another tool is chosen instead.  For example,
-	      choosing the selection tool allows you to make
-	      selections and so to use the selection-based functions
-	      (below); choosing an insertion tool (such as one of the
-	      notes) switches the <acronym>GUI</acronym>'s behaviour so as to insert
-	      notes by clicking on the canvas; choosing the erase tool
-	      allows you to remove events by clicking on them.
+	      Choosing a tool changes the default behaviour of the mouse buttons on the
+	      main notation canvas, at least until another tool is chosen instead.  For
+	      example, choosing the selection tool allows you to make selections and so to
+	      use the selection-based functions (below); choosing an insertion tool (such
+	      as one of the notes) switches the <acronym>GUI</acronym>'s behaviour so as
+	      to insert notes by clicking on the canvas; choosing the erase tool
+	      <inlinemediaobject><imageobject><imagedata fileref="rg-eraser.png"
+	      format="PNG" /></imageobject></inlinemediaobject> allows you to remove
+	      events by clicking on them.
 	    </para>
 	    <para>
-	      You can also change the current tool using the Tools menu.
+	      You can also change the current tool using the <guimenu lang="en">Tools</guimenu> menu.
 	    </para>
 	  </listitem>
 	</varlistentry>
@@ -4234,39 +4251,41 @@
 	    <para>
 	      The majority of the remaining menu functions require a selection to be made
 	      on the canvas before they can be used. Some of them (such
-	      as <guimenuitem>Cut</guimenuitem> or the <guimenuitem>Note
-	      Style</guimenuitem>) will operate on any selected events; others
-	      (<guimenuitem>Stem Directions</guimenuitem>) will refuse to work
-	      unless the selection contains some notes.
+	      as <guimenuitem>Cut</guimenuitem><keycombo><keycap>Ctrl</keycap><keycap>X</keycap></keycombo>
+	      or the <guimenuitem>Note Style</guimenuitem>) will operate on any selected
+	      events; others (<guimenuitem>Stem Directions</guimenuitem>) will refuse to
+	      work unless the selection contains some notes.
 	    </para>
 	    <para>
 	      To select some events on the canvas, switch to the
-	      Select (arrow) tool and then outline a rectangular area
+	      select <inlinemediaobject><imageobject><imagedata fileref="rg-select.png" format="PNG" /></imageobject></inlinemediaobject>
+	 tool and then outline a rectangular area
 	      containing the events you want to select. The selected
 	      events will then be highlighted in blue. If you click
 	      on a single event, just that event will be selected <footnote> 
-		<para> You can also double-click on a single event to open an
-		  editing dialog for that event, but that's got nothing to
-		  do with selections.</para> </footnote>).
-	    </para><para>If you hold 
-	      <keycap>Shift</keycap> while dragging
-	      out a rectangle, its contents will be added to any
-	      existing selection instead of replacing it.
+		<para> You can also double-click on a single event to open an editing
+		dialog for that event, but that's got nothing to do with
+		selections.</para> </footnote>.  </para><para>If you hold
+		<keycap>Shift</keycap> while dragging out a rectangle, its contents will
+		be added to any existing selection instead of replacing it.
 	    </para>
 	    <para>
-	      To select a whole bar, double-click with the Select tool
+	      To select a whole bar, double-click with the select tool
 	      on some empty space within that bar; to select the whole
-	      staff, click three times. The <!-- Menu --> Edit menu carries
+	      staff, click three times. The <guimenu lang="en">Edit</guimenu> menu carries
 	      functions for selecting extended areas based on the
 	      location of the insert cursor, and you can also select
-	      events around the insert cursor by holding Shift and
+	      events around the insert cursor by holding <keycap>Shift</keycap> and
 	      pressing the left or right arrow keys.
 	    </para>
 	    <para>
 	      It is not possible to select events from more than
 	      one staff at once.
 	    </para>
-		  <para>After selecting some events, you can filter your selection further using <menuchoice>
+		  <para>After selecting some events, you can filter your selection further
+		  using
+		  <menuchoice><shortcut><keycombo><keycap>Ctrl</keycap><keycap>F</keycap></keycombo>
+		</shortcut>
 		  <guimenu lang="en">Edit</guimenu>
 		  <guimenuitem>Filter Selection</guimenuitem>
 		</menuchoice>.  For more details, refer
@@ -4280,20 +4299,19 @@
 	  <term>Drag operations</term>
 	  <listitem>
 	    <para>
-	      You can also do a certain amount of editing just by
-	      dragging things around.  Switch to the Select (arrow)
-	      tool, and then you can change the pitch of notes by
-	      just click-and-dragging their heads up or down, and
-	      change the times of notes and other events by dragging
-	      them left or right.  (You can't drag rests or time
-	      signatures, but you can drag everything else.  If you
-	      have more than one event selected, the whole selection
-	      will be dragged at once.)
+	      You can also do a certain amount of editing just by dragging things around.
+	      Switch to the select <inlinemediaobject><imageobject><imagedata
+	      fileref="rg-select.png" format="PNG" /></imageobject></inlinemediaobject>
+	      tool, and then you can change the pitch of notes by just click-and-dragging
+	      their heads up or down, and change the times of notes and other events by
+	      dragging them left or right.  (You can't drag rests or time signatures, but
+	      you can drag everything else.  If you have more than one event selected, the
+	      whole selection will be dragged at once.)
 	    </para>
 	    <para>
 	      Dragging is usually a less accurate way of editing
 	      things than using the menu or toolbar functions, but
-	      it can be easier.
+	      it can be more intuitive.
 	    </para>
 	  </listitem>
 	</varlistentry>
@@ -4306,7 +4324,7 @@
 	  <screenshot>
 	    <mediaobject>
 	      <imageobject>
-	        <imagedata fileref="transpose-by-interval.png" format="PNG"/>
+	        <imagedata fileref="transpose-by-interval.png" format="PNG" />
 		  </imageobject>
 	  	  <textobject>
 	        <phrase>Transposing by interval</phrase>
@@ -4315,7 +4333,7 @@
 	  </screenshot>
 	</para>
 	<para>
-	  In Notation view menu there are two functions which can be
+	  In notation view menu there are two functions which can be
 	  used to transpose notes by an arbitrary interval, namely
 	    <menuchoice>
 	      <guimenu lang="en">Adjust</guimenu>
@@ -4337,14 +4355,12 @@
 	  separately the base note, its octavation and accidentals.
 	</para>
 	<para>
-	  In Segment view, Notation view, and Track view there is also
+	  You can access the transpose by interval dialog in <!-- In Segment view (what's
+	  this?) --> the notation and track (or default) view through
 	    <menuchoice>
 	      <guimenu lang="en">Segment(s)</guimenu>
-	      <guimenuitem>Transpose by Interval</guimenuitem>
-	    </menuchoice>
-	   which makes a transpose to entire segment. In this
-	  dialog you may also choose whether only the notes are
-	  transposed or the keys of the segment are transposed also.
+	      <guimenuitem>Transpose by Interval</guimenuitem> </menuchoice>.
+	  
 	</para>
       </sect2>
     </sect1>
@@ -4362,7 +4378,7 @@
 	      <mediaobject>
 		  <imageobject>
 		      <imagedata
-			fileref="rg-notation-toolbars.png" format="PNG"/>
+			fileref="rg-notation-toolbars.png" format="PNG" />
 		  </imageobject>
 		  <textobject>
 		      <phrase>The duration, rests, and accidentals toolbars</phrase>
@@ -4371,23 +4387,25 @@
 	  </screenshot>
       </para>
 
-      <para>You can also select one of the accidentals on the toolbar
-      to insert sharpened or flattened notes.  If no accidental is
-      selected, the note inserted will follow the key signature.
-      Alternatively, you can select the <quote>Follow previous accidental</quote>
-      icon (shown as a note with an arrow pointing back from where the
-      accidental would appear) to make the note follow whatever
-      accidental was last used at the same height on the staff.</para>
+      <para>You can also select one of the accidentals on the toolbar to insert sharpened
+      or flattened notes.  If no accidental is selected, the note inserted will follow the
+      key signature.  Alternatively, you can select the
+      <inlinemediaobject><imageobject><imagedata fileref="rg-follow.png" format="PNG"
+      /></imageobject></inlinemediaobject> follow previous accidental icon to make the
+      note follow whatever accidental was last used at the same height on the
+      staff.</para>
 
-      <para>If you add a note at the same time as an existing note of
-	different duration, the editor will generally assume that you
-	want to create chords and will split the existing or new note
-	accordingly so as to create one or more chords with ties.  If
-	you really do want to chord two different durations, you can
-	select the tied noteheads and use Collapse Equal-Pitch Notes <!-- Menu -->
-	to merge them together. Alternatively, the default
-	behaviour can be changed in the &rosegarden; configuration dialog
-	so as not to do the split at all.</para>
+      <para>If you add a note at the same time as an existing note of different duration,
+      the editor will generally assume that you want to create chords and will split the
+      existing or new note accordingly so as to create one or more chords with ties.  If
+      you really do want to chord two different durations, you can select the tied
+      noteheads and use
+      <menuchoice><shortcut><keycombo><keycap>Ctrl</keycap><keycap>=</keycap></keycombo>
+      </shortcut><guimenu
+      lang="en">Adjust</guimenu><guisubmenu>Notes</guisubmenu><guimenuitem>Collapse
+      Equal-Pitch Notes</guimenuitem></menuchoice> to merge them together. Alternatively,
+      the default behaviour can be changed in the &rosegarden; configuration dialog so as
+      not to do the split at all.</para>
 
       <para>If you add a note exactly over an existing note of
 	different duration (i.e. at the same pitch), the duration of the
@@ -4443,7 +4461,7 @@
 	    <listitem><para><keycap>L</keycap> &ndash; Ti</para></listitem>
 	  </itemizedlist>
 
-	  <para>Press the <quote>.</quote>key to togggle between dotted and
+	  <para>Press the <keycap>.</keycap>key to toggle between dotted and
 	  undotted durations.</para>
 
 	  <para>Holding <keycap>Shift</keycap> while pressing a key
@@ -4473,20 +4491,19 @@
 
 	</sect3>
 
-	<sect3>
+	  <sect3 id="chord-insert">
 	  <title>Chords</title>
 
-	  <para>The default behaviour of the notation editor is to
-	    move the insert cursor forward after inserting a note, so as
-	    to be ready to insert another note after it in a melody;
-	    this can be changed using the <keycap>H</keycap> key, which
-	    switches to chord mode so that subsequent insertions occur
-	    at the same time as the last one.  Pressing
-	    <keycap>H</keycap> again switches back to the melody
-	    insertion behaviour.</para>
-
-	</sect3>
-
+	  <para>The default behaviour of the notation editor is to move the insert cursor
+	  forward after inserting a note, so as to be ready to insert another note after
+	  it in a melody; this can be changed using
+	  <menuchoice><shortcut><keycap>H</keycap></shortcut><guimenu
+	  lang="en">Tools</guimenu><guimenuitem>Chord Insert
+	  Mode</guimenuitem></menuchoice>, which switches to chord mode so that
+	  subsequent insertions occur at the same time as the last one.  Pressing
+	  <keycap>H</keycap> again switches back to the melody insertion behaviour.</para>
+	  </sect3>
+	
 	<sect3>
 	  <title>Changing note durations</title>
 
@@ -4495,8 +4512,8 @@
 	  want to change are selected, and then press
 	  <keycap>Ctrl</keycap> plus the number key for the note you
 	  want.  You can also add or remove dots, by pressing
-	  <keycap>Ctrl</keycap> plus <quote>.</quote>&mdash; use this repeatedly to
-	  select between one dot, two dots and no dots.</para>
+	  <keycombo><keycap>Ctrl</keycap><keycap>.</keycap></keycombo>&mdash; use this repeatedly to
+	  cycle between one dot, two dots and no dots.</para>
 
 	  <para>If you also hold <keycap>Alt</keycap> as well as
 	  <keycap>Ctrl</keycap>, you will change the durations of the
@@ -4512,16 +4529,16 @@
 	  <title>Other remarks</title>
 
 	  <para>All of the insertion commands are also available on a
-	    submenu of the Tools menu.  It's unlikely you'd ever want to
+	    submenu of the <guimenu lang= "en">Tools</guimenu> menu.  It's unlikely you'd ever want to
 	    navigate the menus just to insert a single note, but the
 	    menus show the keyboard shortcuts and so provide a useful
 	    reference in case you forget which key is which.</para>
 
-	  <para>The keyboard shortcuts are currently designed for use
-	    with a QWERTY-layout keyboard.  There is not yet any way to
-	    remap the keys for another layout, short of reassigning each
-	    key individually using the <quote>Configure Shortcuts...</quote>option
-	    on the Settings menu.</para>
+	  <para>The keyboard shortcuts are currently designed for use with a QWERTY-layout
+	  keyboard.  There is not yet any way to remap the keys for another layout, short
+	  of reassigning each key individually using <menuchoice><guimenu
+	  lang="en">Settings</guimenu><guimenuitem>Configure
+	  Shortcuts...</guimenuitem></menuchoice>. </para>
 
 	  <para>Holding the <keycap>Ctrl</keycap> key while pressing a
 	    number will select the corresponding dotted-note
@@ -4543,24 +4560,23 @@
 	</para>
 
 	<para>
-	  To start entering notes from a &MIDI; keyboard, first make
-	  sure the keyboard is configured as your default &MIDI;
-	  record device.  Then make sure a notation tool is selected
-	  to set a duration.  Then press the <!-- !!!  image of
-	  button --> step recording button on the notation editor's
-	  toolbar, or select Step Recording from the Tools menu.
-	  From that point on all notes pressed on the &MIDI; keyboard
-	  will be inserted at the current insertion time in that
-	  notation window, until step recording is switched off
-	  again or activated in a different window or the window is
-	  closed.
+	  To start entering notes from a &MIDI; keyboard, first make sure the keyboard is
+	  configured as your default &MIDI; record device.  Then make sure a notation tool
+	  is selected to set a duration.  Then press the
+	  <inlinemediaobject><imageobject><imagedata fileref="rg-steprecord.png"
+	  format="PNG" /></imageobject></inlinemediaobject> step recording button on the
+	  notation editor's toolbar, or <menuchoice><guimenu
+	  lang="en">Tools</guimenu><guimenuitem>Step Recording</guimenuitem></menuchoice>.
+	  From that point on all notes pressed on the &MIDI; keyboard will be inserted at
+	  the current insertion time in that notation window, until step recording is
+	  switched off again or activated in a different window or the window is closed.
 	</para>
 
 	<para>
 	  You can select another notation tool while step recording
 	  is in progress, in order to insert notes of different
-	  durations; and you can also switch into Chord mode <!--
-	  !!! link --> to insert chords.
+	  durations; and you can also switch into  <link
+	  linkend="chord-insert">chord mode</link><keycap>H</keycap> to insert chords.
 	</para>
       </sect2>
       
@@ -4583,15 +4599,15 @@
 	This applies only to time: there is no such restriction on the
 	use of clef and key changes.  See also <link linkend="tempo">Tempo in Rosegarden</link>.</para>
 
-      <para>To change the clef, key, tempo or time signature within a
-      notation editor window, position the <link
-      linkend="nv-rulers">insert cursor</link> at the point where you
-      want the change to happen, and use one of the Edit menu's Add
-      Clef Change..., Add Key Change..., Add Tempo Change... and Add
-	<!-- !!! Menu fixup -->
-      Time Signature Change... functions.  You will then see a dialog
-      box in which you can choose the particular clef, key, tempo or
-      time signature setting you want to apply, as follows.</para>
+      <para>To change the clef, key, tempo or time signature within a notation editor
+      window, position the <link linkend="nv-rulers">insert cursor</link> at the point
+      where you want the change to happen, and use one of <menuchoice><guimenu
+      lang="en">Segment</guimenu><guimenuitem>Add Clef
+      Change...</guimenuitem></menuchoice>, <guimenuitem>Add Key Change...</guimenuitem>, <guimenuitem>Add
+      Tempo Change...</guimenuitem>, or <guimenuitem>Add Time Signature
+      Change...</guimenuitem>.  You will then see a dialog box in
+      which you can choose the particular clef, key, tempo or time signature setting you
+      want to apply, as follows.</para>
 
       <sect2 id="nv-signatures-clef">
 	<title>Clef</title>
@@ -4599,7 +4615,7 @@
 	  <screenshot>
 	    <mediaobject>
 	      <imageobject>
-		<imagedata fileref="rg-clefdialog.png" format="PNG"/>
+		<imagedata fileref="rg-clefdialog.png" format="PNG" />
 	</imageobject>
 	  <textobject>
 	    <phrase>&rosegarden;'s clef dialog</phrase>
@@ -4620,16 +4636,14 @@
 	      <term>Maintain current pitches</term>
 	      <listitem>
 		<para>
-		  Any notes following the clef will keep
-		  their current performance pitches.
+		  Any notes following the clef will keep their current performance
+		  pitches.
 		</para>
 		<para>
-		  For example, inserting a
-		  tenor clef in the middle of a previously
-		  treble-clef section will cause the notes following
-		  the clef to be moved an octave
-		  higher up the staff, because they will still have
-		  their treble-clef pitches.
+		  For example, inserting a tenor clef in the middle of a previously
+		  treble-clef section will cause the notes following the clef to be moved
+		  an octave higher up the staff, because they will still have their
+		  treble-clef pitches.
 		</para>
 	      </listitem>
 	    </varlistentry>
@@ -4638,18 +4652,15 @@
 	      <term>Transpose into appropriate octave</term>
 	      <listitem>
 		<para>
-		  Any notes following the clef will
-		  retain their pitch within the octave, but
-		  may be moved into a different octave to
-		  match the new clef, and therefore will play
-		  at a new pitch.
+		  Any notes following the clef will retain their pitch within the octave,
+		  but may be moved into a different octave to match the new clef, and
+		  therefore will play at a new pitch.
 		</para>
 		<para>
-		  For example, inserting a tenor clef in the
-		  middle of a previously treble-clef section
-		  will cause the notes following the clef to
-		  move by one staff line only to adjust to the new
-		  clef, but to play an octave lower than before.
+		  For example, inserting a tenor clef in the middle of a previously
+		  treble-clef section will cause the notes following the clef to move by
+		  one staff line only to adjust to the new clef, but to play an octave
+		  lower than before.
 		</para>
 	      </listitem>
 	    </varlistentry>
@@ -4665,7 +4676,7 @@
 	  <screenshot>
 	    <mediaobject>
 	      <imageobject>
-		<imagedata fileref="rg-keysigdialog.png" format="PNG"/>
+		<imagedata fileref="rg-keysigdialog.png" format="PNG" />
 	</imageobject>
 	  <textobject>
 	    <phrase>&rosegarden;'s key signature dialog</phrase>
@@ -4724,10 +4735,10 @@
 			this time, the previous key transposition choice will
 			govern whether all segments receive the specified key,
 			or a key appropriately transposed segment by segment.
-			(This is a convenient way to deal with notation for
+			This is a convenient way to deal with notation for
 			transposing instruments, because it frees you to think
 			of all keys in concert pitch, and allow &rosegarden;
-			to work out what key is used for what transposition.)
+			to work out what key is used for what transposition.
 		    </para>
 		</listitem>
 	    </varlistentry>
@@ -4736,11 +4747,10 @@
 		<term>Existing notes following key change</term>
 		<listitem>
 		    <para>
-			You must choose whether any existing notes following
-			this key change will maintain their current pitches,
-			maintain their current accidentals in the key, or
-			whether &rosegarden; should make an attempt to transpose
-			the part into the new key.
+			You must choose whether any existing notes following this key
+			change will maintain their current pitches, maintain their current
+			accidentals in the key, or whether &rosegarden; should make an
+			attempt to transpose the part into the new key.
 		    </para>
 		</listitem>
 	    </varlistentry>
@@ -4755,36 +4765,29 @@
     <sect1 id="nv-text">
       <title>Text, Lyrics, and LilyPond directives</title>
       
-      <para>A staff can contain various sorts of text, in text
-	events.  There are two basic classes of user-editable text event: single
-	text items used for point annotations etc., and lyrics, plus a third
-	type used especially for tweaking LilyPond export.  User-editable
-	types can be created (and so associated with a particular
-	time in the staff) using the Text tool, which is available on
-	the
-	<inlinemediaobject>
-	    <imageobject>
-		<imagedata fileref="rg-text-cursor.png" format="PNG"/>
-      	    </imageobject>
-  	</inlinemediaobject>
-	button in the toolbar.  Lyrics can
-	also be created this way, but are more easily created using
-	the <link linkend="nv-text-lyrics">lyric editor</link>.</para>
+      <para>A staff can contain various sorts of text, in text events.  There are three
+      basic classes of user-editable text event: single text items used for point
+      annotations etc., and lyrics, plus a third type used especially for tweaking
+      LilyPond export.  User-editable types can be created (and so associated with a
+      particular time in the staff) using the text tool, which is available on the
+      <inlinemediaobject><imageobject><imagedata fileref="rg-text-cursor.png" format="PNG"
+      /></imageobject></inlinemediaobject> button in the toolbar.  Lyrics can also be
+      created this way, but are more easily created using the <link
+      linkend="nv-text-lyrics">lyric editor</link>.</para>
 
-      <para>To add a piece of text, select the Text tool and click
-	at the point where you want to add it.  If you want the text
-	associated with a particular note or rest, it may be helpful to click
-	the T cursor directly on that note, so as to ensure proper placement
-	in time.  A dialog box will appear, into which you can type the text
-	and choose its intended purpose.  (&rosegarden; prefers to store what
-	the text is for, rather than how it should look; this is so that in
-	future we may be able to configure how the various sorts of text are
-	presented for each individual user.)
+      <para>To add a piece of text, select the text tool and click at the point where you
+      want to add it.  If you want the text associated with a particular note or rest, it
+      may be helpful to click the <guiicon>T</guiicon> cursor directly on that note, so as to
+      ensure proper placement in time.  A dialog box will appear, into which you can type
+      the text and choose its intended purpose from the drop down
+      <guilabel>Style</guilabel> box.  &rosegarden; prefers to store what the text is
+      for, rather than how it should look; this is so that in future we may be able to
+      configure how the various sorts of text are presented.
 
 	  <screenshot>
 	    <mediaobject>
 	      <imageobject>
-		<imagedata fileref="rg-textdialog.png" format="PNG"/>
+		<imagedata fileref="rg-textdialog.png" format="PNG" />
 	</imageobject>
 	  <textobject>
 	    <phrase>&rosegarden;'s text dialog</phrase>
@@ -4827,7 +4830,7 @@
 	      above the staff in a small bold roman type.
         </para></listitem></varlistentry>
 
-	<varlistentry><term>Chord</term><listitem><para> Used
+	<varlistentry id="chord-text"><term>Chord</term><listitem><para> Used
 	      to indicate chord changes for guitarists, etc.  Shown
 	      above the staff in a small bold roman type.
 	    </para></listitem></varlistentry>
@@ -4836,20 +4839,20 @@
 	      lyrics are usually created in the <link
 		linkend="nv-text-lyrics">lyric editor</link>, they can also
 	      be entered word by word if necessary using this style.  This
-	      style is shown below the text in a small roman typet.
-	      (Warning: if you enter lyrics this way and later
+	      style is shown below the text in a small roman type.
+	      <important><para>Warning: if you enter lyrics this way and later
 	      edit the staff's lyrics using the lyric editor, any lyrics
 	      entered this way may be modified or moved if their
 	      positioning is not compatible with that expected by the
-	      lyric editor.)  </para></listitem></varlistentry>
+	      lyric editor.</para></important>  </para></listitem></varlistentry>
 
 	<varlistentry><term>Annotation</term><listitem><para> Used
 	      for helpful text that is not strictly considered part of the
 	      score.  Shown below the staff, boxed-out in a yellow
 	      sticky-label-style box.  These may not be visible
 	      initially, and can be turned on via
-	      <guimenu lang="en">Settings</guimenu>
-	      <guimenuitem>Show Annotations</guimenuitem>
+	      <menuchoice><guimenu lang="en">Settings</guimenu>
+	      <guimenuitem>Show Annotations</guimenuitem></menuchoice>
 	    </para></listitem></varlistentry>
 
 	<varlistentry><term>LilyPond Directive</term><listitem><para> Used
@@ -4858,15 +4861,14 @@
 	      provide a means to extend &rosegarden;'s capabilities
 	      beyond what it can do within its own native interface.
 	      Shown above the staff, in a green box.  These may not be visible
-	      initially, and can be turned on via
-	      <guimenu lang="en">Settings</guimenu>
-	      <guimenuitem>Show LilyPond Directives</guimenuitem>
+	      initially, and can be turned on via <menuchoice><guimenu lang="en">Settings</guimenu>
+	      <guimenuitem>Show LilyPond Directives</guimenuitem></menuchoice>
 	    </para></listitem></varlistentry>
 	</variablelist>
 
       <para>For many of the styles, a new combo box will appear that allows
 	  you to select from a variety of commonly-used texts appropriate for
-	  that style, such as <quote>Allegro</quote>and <quote>ritardando.</quote> Selecting one of
+	  that style, such as <quote>Allegro</quote> and <quote>ritardando</quote>. Selecting one of
 	  these texts saves typing, but in no way impedes your ability to type
 	  your own text by hand, should you so desire.
       </para>
@@ -4885,53 +4887,49 @@
 	  the lyric events for a single staff at once, using a fairly
 	  rudimentary textual editing system.  To use it, just
 	  activate the menu option, edit the lyric text in the
-	  resulting dialog, and then hit OK.</para>
+	  resulting dialog, and then hit <guibutton>OK</guibutton>.</para>
 
 	<para>The lyrics you enter should follow a particular
 	  format.  Bar lines are vital to avoid the editor getting
-	  confused, and are represented with a slash (<quote>/</quote>).  Within
-	  each bar the individual syllables are separated by spaces
-	  (at least one space: the editor doesn't care about any extra
+	  confused, and are represented with a slash <quote>/</quote>.  Within
+	  each bar the individual syllables are separated by at least one space (the editor doesn't care about any extra
 	  whitespace). Each syllable in turn will be attached to the
-	  next subsequent note or chord within that bar (although at
+	  next subsequent note or chord within that bar. <note><para>although at
 	  the moment the editor can get quite confused by chords that
 	  are not exact, i.e. that require smoothing or
-	  quantizing).</para>
+	  quantizing</para></note>.</para>
 
 	<para>If you want a note to have no syllable attached to it,
-	  you need to provide a dot (<quote>.</quote>) as the syllable for that
-	  note.  (This is why the default lyric text for a segment is
-	  usually full of dots.)  Remember to separate the dots with
+	  you need to provide a dot <quote>.</quote> as the syllable for that
+	  note.  <footnote><para>This is why the default lyric text for a segment is
+	  usually full of dots.</para></footnote>  Remember to separate the dots with
 	  spaces, so that they are clearly separate syllables.</para>
 	
 	<para>If you want more than one syllable on the same note,
-	  with a space between them, use a tilde (<quote>~</quote>) instead of the
+	  with a space between them, use a tilde <quote>~</quote> instead of the
 	  space.  It will be shown as a space on the score.</para>
 
 	<para>If you want to split a syllable across two notes, with
 	  a hyphen, you need to enter a space following the hyphen so
-	  the editor knows to treat it as two syllables.  (Hyphens get
-	  no special treatment within syllables.)</para>
+	  the editor knows to treat it as two syllables.  Hyphens get
+	  no special treatment within syllables.</para>
 
 	<para>Syllables consisting only of numbers surrounded by
-	  square brackets (like <quote>[29]</quote>) will be ignored; this is the
+	  square brackets like <quote>[29]</quote> will be ignored; this is the
 	  format used for the automatically-generated bar numbers
 	  shown in the editor.</para>
 
-	<para>You should also be aware that the textual format of
-	  lyrics is only used for editing:  the lyrics are actually
-	  stored as distinct text events (one per syllable).  This
-	  means that the text format may potentially change in the
-	  future to accommodate more advanced editing capabilities,
-	  although the event format should not change and so your
-	  saved files should continue to be compatible.</para>
+	<para>You should also be aware that the textual format of lyrics is only used for
+	editing: the lyrics are actually stored as distinct text events (one per
+	syllable).  This means that the text format may potentially change in the future
+	to accommodate more advanced editing capabilities, although the event format
+	should not change and so your saved files should continue to be compatible.</para>
 
-	<para>&rosegarden; supports also multiple lines of lyrics.
-	  You may always attach one more verse into a single staff
-	  by clicking Add Verse in the lyrics editor.  All the verses
-	  are entered with the same syntax.  If you leave the last verse
-	  without syllables, or make it empty, it is removed from
-	  the list of verses next time you open the lyrics editor.
+	<para>&rosegarden; supports also multiple lines of lyrics.  You may always attach
+	one more verse into a single staff by clicking <guibutton>Add Verse</guibutton> in
+	the lyrics editor.  All the verses are entered with the same syntax.  If you leave
+	the last verse without syllables, or make it empty, it is removed from the list of
+	verses next time you open the lyrics editor.
 	  </para>
 
       </sect2>
@@ -4939,12 +4937,11 @@
 	  <!-- text has a link here because the reading chain is:
 	  intro -> lilypond directives, which puts you at a point well away
 	  from any explanation of the whole text dialog and whatnot -->
-	  <title>Using special LilyPond directives</title>
+	  <title>Using LilyPond directives</title>
 	  <para>LilyPond directives are a special kind of <link
-		  linkend="nv-text">text</link> that you can
-	      use to export .ly files that take advantage of
-	      functionality not yet available directly through &rosegarden;'s
-	      own native interface.
+	  linkend="nv-text">text</link> that you can use to export .ly files that take
+	  advantage of functionality not yet available directly through &rosegarden;'s own
+	  native interface.
 	  </para>
 	  <para>Some of these are a bit fiddly with respect to how their
 	      placement in time affects their function.  It is not always
@@ -4959,31 +4956,23 @@
 	  <variablelist>
 	      <varlistentry>
 		  <term>Segno</term><listitem><para>used to export a 
-		    <inlinemediaobject>
-			<imageobject>
-			    <imagedata fileref="rg-segno.png" format="PNG"/>
-			</imageobject>
-		    </inlinemediaobject>
-		   </para></listitem>
+		    <inlinemediaobject><imageobject><imagedata fileref="rg-segno.png" 
+		    format="PNG" /></imageobject></inlinemediaobject>
+		  </para></listitem>
 	      </varlistentry>
 
 	      <varlistentry>
-		  <term>Coda</term><listitem><para>used to export a 
-		    <inlinemediaobject>
-			<imageobject>
-			    <imagedata fileref="rg-coda.png" format="PNG"/>
-			</imageobject>
-		    </inlinemediaobject>
-		   </para></listitem>
+		  <term>Coda</term><listitem><para>used to export a
+		    <inlinemediaobject><imageobject><imagedata fileref="rg-coda.png"
+		    format="PNG" /></imageobject></inlinemediaobject>
+		  </para></listitem>
 	       </varlistentry>
 
 	      <varlistentry>
-		  <term>Alt1</term><listitem><para>Placed anywhere in a
-			  measure, designates that the measure(s)
-			  that follow this one should be exported as the
-			  first alternate ending (see file 
-			  lilypond-alternative-endings.rg for example)
-		   </para></listitem>
+		  <term>Alt1</term><listitem><para>Placed anywhere in a measure,
+		  designates that the measure(s) that follow this one should be exported
+		  as the first alternate ending (see file lilypond-alternative-endings.rg
+		  for example) </para></listitem>
 	      </varlistentry>
 
 	      <varlistentry>
@@ -4991,7 +4980,7 @@
 			  measure, designates that the measure(s)
 			  that follow this one should be exported as the
 			  second alternate ending (see file 
-			  lilypond-alterantive-endings.rg for example)
+			  lilypond-alternative-endings.rg for example)
 		   </para></listitem>
 	       </varlistentry>
 
@@ -5038,7 +5027,7 @@
 	      <varlistentry>
 		  <term>Tiny ->.</term><listitem><para>Placed anywhere,
 			  designates that notation immediately following this
-			  directive should be rendered at the <quote>tiny</quote>size (see file
+			  directive should be rendered at the <quote>tiny</quote> size (see file
 			  lilypond-directives.rg for example)
 		   </para></listitem>
 	       </varlistentry>
@@ -5046,7 +5035,7 @@
 	      <varlistentry>
 		  <term>Small ->.</term><listitem><para>Placed anywhere,
 			  designates that notation immediately following this
-			  directive should be rendered at the <quote>small</quote>size (see file
+			  directive should be rendered at the <quote>small</quote> size (see file
 			  lilypond-directives.rg for example)
 		   </para></listitem>
 	       </varlistentry>
@@ -5069,26 +5058,19 @@
       <title>Guitar Chords</title>
 
       <para>
-      	Like text, it is possible to add guitar chord diagrams to a
-      	notation track (or to edit previously added ones). This is
-      	done by toggling the
-      	<guimenuitem>Guitar Chord</guimenuitem>
-      	button, and then clicking on the same area as for adding text.
-      	This will open the Guitar Chord dialog. With it you can select
-      	which guitar chord diagram you want to add from a chord
-      	dictionary which comprises most of the common chord fingerings
-      	by specifying a chord's root and its extension. For
-      	convenience, the fingerings are sorted in three different
-      	categories :
-      	<guimenuitem>beginner</guimenuitem>
-      	,
-      	<guimenuitem>common</guimenuitem>
-      	and
-      	<guimenuitem>all</guimenuitem>
-      	. These categories are actually based on the chord extension
-      	(A7 is a beginner chord, while A13 isn't), not on the
-      	fingering itself, so you can still see <quote>advanced</quote>chord
-      	fingerings listed, even in beginner mode.
+      	You can add guitar chord diagrams to a notation track (or edit previously added
+      	ones). You can do this by toggling the <inlinemediaobject><imageobject><imagedata
+      	fileref="rg-guitarchord.png" format="PNG" /></imageobject></inlinemediaobject>
+      	<guibutton>guitar chord</guibutton> button, and then clicking on a note or
+      	barline.  This will open the guitar chord dialog. With it you can select which
+      	guitar chord diagram you want to add from a chord dictionary which comprises most
+      	of the common chord fingerings by specifying a chord's root and its extension. For
+      	convenience, the fingerings are sorted in three different categories :
+      	<guibutton>beginner</guibutton>, <guibutton>common</guibutton>, and
+      	<guibutton>all</guibutton>.  These categories are actually based on the chord
+      	extension (A7 is a beginner chord, while A13 isn't), not on the fingering itself,
+      	so you can still see <quote>advanced</quote> chord fingerings listed, even in
+      	beginner mode.
       </para>
 
 
@@ -5108,11 +5090,10 @@
       </para>
 
       <para>
-      	It is also possible to add your own fingerings if needed. To
-      	do this, click on the 'New' button. This will pop up a chord
-      	editor, where you can <quote>draw</quote>which fingering you want to add,
-      	and specify its root, chord extension, and starting fret
-      	number.
+      	You may add your own fingerings if needed. To do this, click on the
+      	<guibutton>New</guibutton> button. This will pop up a chord editor, where you can
+      	<quote>draw</quote> which fingering you want to add, and specify its root, chord
+      	extension, and starting fret number.
       	<screenshot>
       		<mediaobject>
       			<imageobject>
@@ -5126,13 +5107,11 @@
       		</mediaobject>
       	</screenshot>
 
-      	Note that while you can choose the extension from a list of
-      	predefined values, you can also type whatever value you want.
-      	However, in that case, the new fingering will only be
-      	available in the 'all' list. Also, you can only delete and
-      	edit your own chords. Those from the predefined dictionary
-      	cannot be changed. If you spot a mistake in one of them,
-      	please report it to the development team.
+      	Note that while you can choose the extension from a list of predefined values, you
+      	can also type whatever value you want.  However, in that case, the new fingering
+      	will only be available in the <quote>all</quote> list. You can only delete and
+      	edit your own chords. Those from the predefined dictionary cannot be changed. If
+      	you spot a mistake in one of them, please report it to the development team.
       </para>
 
     </sect1>
@@ -5142,13 +5121,18 @@
     <sect1 id="nv-indication">
       <title>Slurs and hairpins</title>
 
-      <para>Slur and hairpin (crescendo/decrescendo) dynamic markings are stored as events,
-	just like notes or rests.  To create one, select the area you
-	want it to cover (a series of notes or whatever), and then use
-	the <guimenuitem>Add Slur</guimenuitem>, 
-	<guimenuitem>Add Crescendo</guimenuitem> or 
-	<guimenuitem>Add Decrescendo</guimenuitem> options from
-	the <guimenu lang="en">Phrase</guimenu> menu.</para>
+      <para>Slur and hairpin (crescendo/decrescendo) dynamic markings are stored as
+      events, just like notes or rests.  To create one, select the area you want it to
+      cover (a series of notes or whatever), and then use the
+      <menuchoice><shortcut><keycap>)</keycap></shortcut><guimenu
+      lang="en">Phrase</guimenu><guimenuitem>Add Slur</guimenuitem></menuchoice>,
+      <menuchoice><shortcut><keycap>Ctrl</keycap><keycap>)</keycap></shortcut><guimenu
+      lang="en">Phrase</guimenu><guimenuitem>Add Phrasing Slur</guimenuitem></menuchoice>, 
+      <menuchoice><shortcut><keycap>&lt;</keycap></shortcut><guimenu
+      lang="en">Phrase</guimenu> <guimenuitem>Add Crescendo</guimenuitem></menuchoice> or
+      <menuchoice><shortcut><keycap>&gt;</keycap></shortcut><guimenu
+      lang="en">Phrase</guimenu><guimenuitem>Add Decrescendo</guimenuitem></menuchoice>
+      options.</para>
 
      <para>Placement of hairpins can be somewhat tricky, and this is
 	 especially so with haripins that run in line with dynamic markings.
@@ -5162,9 +5146,9 @@
 	 exported to LilyPond.
      </para>
 
-      <para>You remove a slur or hairpin in the same way as any
-	other event: either select it with the selection tool and then
-	hit <keycap>Delete</keycap>, or click on it with the erase tool active.</para>
+      <para>You can remove a slur or hairpin in the same way as any
+	other event: either select it with the selection tool <keycap>F2</keycap> and then
+	hit <keycap>Delete</keycap>, or click on it with the erase <keycap>F4</keycap> tool active.</para>
 
     </sect1>
 
@@ -5173,14 +5157,16 @@
     <sect1 id="nv-note-qualities">
       <title>Note stems and slashes</title>
 
-      <para>You can set the stem direction of any selected notes
-	(provided they are a sort that have stems) using the three
-	Stem Direction options on the Notes menu.  The options allow
-	you to either fix the stems up or down, or revert to the stem
-	direction that &rosegarden; would otherwise have chosen.  See
-	also <link linkend="nv-beamed-groups">Beams</link>.</para>
+      <para>You can set the stem direction of any selected notes (provided they are a sort
+      that have stems) using the three stem direction options on the <guimenu
+      lang="en">Notes</guimenu> menu.  The options allow you to either fix the stems up
+      <keycombo><keycap>Ctrl</keycap><keycap>Page Up</keycap></keycombo> or down
+      <keycombo><keycap>Ctrl</keycap><keycap>Page Down</keycap></keycombo> , or revert to
+      the stem direction that &rosegarden; would otherwise have chosen.  See also <link
+      linkend="nv-beamed-groups">Beams</link>.</para>
 
-      <para>The <guimenu lang="en">Note</guimenu> menu also contains options for adding slashes
+      <para>The <menuchoice><guimenu lang="en">Note</guimenu><guisubmenu>Marks</guisubmenu></menuchoice>
+      menu also contains a selection of options for adding marks to annotate notes, such as slashes
 	across note stems, for example to indicate short repeated
 	notes or drum rolls.  These are currently purely notational;
 	&rosegarden; will not take them into account when playing the
@@ -5192,31 +5178,36 @@
     <sect1 id="nv-beamed-groups">
       <title>Beams</title>
       
-      <para>Adding beams to notes is considered a grouping operation
-	in the &rosegarden; Notation editor, available on the <guimenu lang="en">Phrase</guimenu>
-	menu.  Select the notes you want to beam, and use the
-	<guimenuitem>Beam Group</guimenuitem> menu option.  To remove a beam, select the notes and use
-	the <guimenuitem>Unbeam</guimenuitem> menu option.</para>
+      <para>Adding beams to notes is considered a grouping operation in the &rosegarden;
+      notation editor.  Select the notes you want to beam, and use
+      the <menuchoice><shortcut><keycombo><keycap>Ctrl</keycap><keycap>B</keycap></keycombo>
+      </shortcut><guimenu
+      lang="en">Phrase</guimenu><guimenuitem>Beam Group</guimenuitem></menuchoice> menu
+      option.  To remove a beam, select the notes and use
+      <menuchoice><shortcut><keycombo><keycap>Ctrl</keycap><keycap>U</keycap></keycombo>
+      </shortcut><guimenu
+      lang="en">Phrase</guimenu><guimenuitem>Unbeam</guimenuitem></menuchoice>.</para>
 
       <para>It is possible to have more than one beamed group
 	happening at the same time &mdash; you just select and beam the
 	separate groups one at a time &mdash; but &rosegarden; is usually not
-	yet clever enough to work out which notes should have stems up
+	clever enough to work out which notes should have stems up
 	and which should have stems down for simultaneous beamed
-	groups, so you will probably have to set the stem directions
+	groups, so you will probably have to set the <link linkend="nv-note-qualities">stem directions</link> 
 	of the notes in the groups explicitly as well as beaming them.</para>
 
-      <para>&rosegarden; can attempt to guess a sensible beaming for a
-	piece of music, provided it's not too complicated.  To invoke
-	this, select the notes you want to calculate the beaming for
-	(for example by triple-clicking to select a whole staff) and
-	then use the <guimenuitem>Auto-Beam</guimenuitem> option on the 
-	<guimenu lang="en">Phrase</guimenu> menu.  Auto-beaming
-	is also done automatically when loading a &MIDI; file, for
-	example, and the editor also does some automatic beaming as
-	you enter notes (this can be disabled by changing the
-	<quote>Auto-Beam when appropriate</quote>setting on the configuration
-	dialog or the insertion tool's right-button menu).</para>
+      <para>&rosegarden; can attempt to guess a sensible beaming for a piece of music,
+      provided it's not too complicated.  To invoke this, select the notes you want to
+      calculate the beaming for (for example by triple-clicking to select a whole staff)
+      and then use <menuchoice><guimenu
+      lang="en">Phrase</guimenu><guimenuitem>Auto-Beam</guimenuitem></menuchoice>.
+      Auto-beaming is also done automatically when loading a &MIDI; file, for example, and
+      the editor also does some automatic beaming as you enter notes.</para> <note><para>This can be disabled
+      by changing the <guilabel>Auto-Beam on insert when appropriate</guilabel> setting on
+      the <menuchoice><guimenu lang="en">Settings</guimenu><guisubmenu>Configure
+      &rosegarden;...</guisubmenu></menuchoice> configuration dialog on the
+      <guilabel>Edit</guilabel> tab or the insertion tool's
+      <mousebutton>right</mousebutton>-mouse menu.</para></note>
 
     </sect1>
 
@@ -5240,28 +5231,33 @@
 	groups must always be played with a shorter duration than
 	written.)</para>
 
-      <para>The triplet and tuplet menu <!-- Menu work --> work by taking an
-	existing series of notes or rests and squashing them so they
-	play quicker, filling in the left-over space at the end of the
-	series with a final rest and drawing the whole as a tuplet
-	group.  You can therefore create a new series of triplets by
-	entering the first two notes of the series (in their normal
-	form), making them into triplets, and then filling in the rest
-	left over by the triplet operation with the final note of the
-	triplet.  Or you can apply the triplet operation before you
-	enter any notes, thus turning the original rest itself into
-	triplet form, and then insert the notes of the triplet on top
-	of it.  Some examples may help:</para>
+	<para>You can make a triplet by first selecting the notes and going to
+	<menuchoice><shortcut><keycombo><keycap>Ctrl</keycap><keycap>R</keycap></keycombo>
+	</shortcut><guimenu
+	lang="en">Phrase</guimenu><guimenuitem>Triplet</guimenuitem></menuchoice>. To make
+	a tuplet, select the notes and go to
+	<menuchoice><shortcut><keycombo><keycap>Ctrl</keycap><keycap>T</keycap></keycombo>
+	</shortcut><guimenu
+	lang="en">Phrase</guimenu><guisubmenu>Tuplet</guisubmenu></menuchoice>to get to the tuplet dialog.
+	The triplet and tuplet menu work by taking an existing series of notes or rests and squashing them
+	so they play quicker, filling in the left-over space at the end of the series with
+	a final rest and drawing the whole as a tuplet group.  You can therefore create a
+	new series of triplets by entering the first two notes of the series (in their
+	normal form), making them into triplets, and then filling in the rest left over by
+	the triplet operation with the final note of the triplet.  Or you can apply the
+	triplet operation before you enter any notes, thus turning the original rest
+	itself into triplet form, and then insert the notes of the triplet on top of it.
+	Some examples may help:</para>
 
       <!-- Need examples and screenshots -->
       
-      <!-- Then discuss general tuplet dialog... -->
+      <!-- Then discuss general tuplet dialog...-->
 
       <para>
 	<screenshot>
 	  <mediaobject>
 	    <imageobject>
-	      <imagedata fileref="rg-tupletdialog.png" format="PNG"/>
+	      <imagedata fileref="rg-tupletdialog.png" format="PNG" />
       </imageobject>
 	<textobject>
 	  <phrase>&rosegarden;'s general tuplet dialog</phrase>
@@ -5287,20 +5283,26 @@
       <title>Paste types</title>
 
       <para>
-	The meaning of <quote>cut and paste</quote> is less obvious for a music
-	editing program than it is for something like a word
-	processor in which the letters and words go in a simple
-	linear order.  Accordingly, &rosegarden;'s Notation editor
-	offers several different types of Paste operation, as well
-	as separate Cut and Cut and
-	  Close functions.
+	The meaning of <quote>cut and paste</quote> is less obvious for a music editing
+	program than it is for something like a word processor in which the letters and
+	words go in a simple linear order.  Accordingly, &rosegarden;'s notation editor
+	offers several different types of paste operation, as well as separate
+	<menuchoice><shortcut><keycombo><keycap>Ctrl</keycap><keycap>X</keycap></keycombo>
+	</shortcut><guimenu
+	lang="en">Edit</guimenu><guimenuitem>Cut</guimenuitem></menuchoice> and
+	<menuchoice><shortcut><keycombo><keycap>Ctrl</keycap><keycap>Shift</keycap><keycap>X</keycap></keycombo>
+	</shortcut><guimenu
+	lang="en">Edit</guimenu><guimenuitem>Cut and Copy</guimenuitem></menuchoice>
+	functions. Cut and close means that when you <quote>cut</quote> a segment the
+	space left by the segment disappears from the track by moving forward all the
+	events later in the track.
       </para>
 
       <para>
 	<screenshot>
 	  <mediaobject>
 	    <imageobject>
-	      <imagedata fileref="rg-pastedialog.png" format="PNG"/>
+	      <imagedata fileref="rg-pastedialog.png" format="PNG" />
       </imageobject>
 	<textobject>
 	  <phrase>&rosegarden;'s paste-type dialog</phrase>
@@ -5308,7 +5310,7 @@
       </mediaobject>
       </screenshot>
 
-	The types of Paste operation are:</para>
+	The types of paste operation are:</para>
 
       <variablelist>
 
@@ -5322,12 +5324,13 @@
 	      is not carried out.
 	    </para>
 	    <para>
-	      This is the default paste type.
+	      This is the default paste type. The shortcut for this operation is
+	      <keycombo><keycap>Ctrl</keycap><keycap>V</keycap></keycombo> .
 	    </para>
 	  </listitem>
 	</varlistentry>
 
-	<varlistentry>
+	    <varlistentry>
 	  <term>Simple</term>
 	  <listitem>
 	    <para>Erases enough events to make a gap long enough to
@@ -5336,13 +5339,13 @@
 	      in the time covered by the paste.
 	    </para>
 	  </listitem>
-	</varlistentry>
+	    </varlistentry>
 
 	<varlistentry>
 	  <term>Open and Paste</term>
 	  <listitem>
 	    <para>The opposite of Cut and
-		Close. <!-- !!! define that --> Makes room for the paste by moving all of the
+		Close. Makes room for the paste by moving all of the
 	      subsequent events further towards the end of the
 	      composition.
 	    </para>
@@ -5376,9 +5379,18 @@
       </variablelist>
 
       <para>All of these take effect at the current position of the 
-	insert cursor on the current staff.  To choose between the various 
-	paste types, use the Paste...
-	menu option (with dots) on the Edit menu.
+	insert cursor on the current staff.   You can choose all the paste varieties <!-- clag, superglue, tarzan's grip -->
+	 through
+	 <menuchoice>
+	   <shortcut>
+	     <keycombo><keycap>Ctrl</keycap>
+	     <keycap>Shift</keycap>
+	     <keycap>V</keycap></keycombo>
+	   </shortcut>
+	   <guimenu lang="en">Edit</guimenu>
+	   <guimenuitem>Paste...</guimenuitem>
+	   </menuchoice>. You can also change the default paste type in this dialog.
+	 
       </para>
 
     </sect1>
@@ -5395,9 +5407,15 @@
 
 	  <para>Sometimes as a result of editing or quantization operations, a piece of
 	  notation can end up with incorrect rest durations for the current time
-	  signature.  You can
-	  use <menuchoice><guimenu lang="en">Adjust</guimenu><guimenuitem>Rests</guimenuitem><guimenuitem>Normalize
-	  Rests</guimenuitem></menuchoice> to fix these.  This examines each sequence of
+	  signature.  You can use 
+	  <menuchoice>
+	    <shortcut>
+	      <keycombo><keycap>Ctrl</keycap><keycap>N</keycap></keycombo>
+	    </shortcut>
+	    <guimenu lang="en">Adjust</guimenu>
+	    <guisubmenu>Rests</guisubmenu>
+	    <guimenuitem>Normalize Rests</guimenuitem>
+	    </menuchoice> to fix these.  This examines each sequence of
 	  consecutive rests found in the selection, and adjusts, splits and merges rests
 	  as necessary to ensure that the rests have theoretically correct durations and
 	  fall on the correct boundaries.
@@ -5426,9 +5444,9 @@
 	<sect3 id="nv-de-counterpoint">
 	  <title>Splitting overlapping notes</title>
 	  <para>
-<menuchoice> <guimenu lang="en">Adjust</guimenu>
+	    <menuchoice> <guimenu lang="en">Adjust</guimenu>
 	  <guimenuitem>Notes</guimenuitem> <guimenuitem>Split-and-Tie Overlapping
-	  Chords</guimenuitem> </menuchoice> can be used to turn <quote>counterpoint</quote>notes into
+	  Chords</guimenuitem> </menuchoice> can be used to turn <quote>counterpoint</quote> notes into
 	  a series of split-and-tied notes and chords.</para>
 
 	  <para>It can be applied to a selection that contains
@@ -5443,10 +5461,13 @@
 	<sect3 id="nv-rescale">
 	  <title>Rescaling note durations</title>
 	  <para>You can use 
-	  <menuchoice> <guimenu lang="en">Adjust</guimenu>
-	  <guimenuitem>Rescale</guimenuitem> <guimenuitem>Halve
-	  Durations</guimenuitem> </menuchoice> and
-	  <menuchoice> <guimenu lang="en">Adjust</guimenu>
+	  <menuchoice><shortcut><keycombo><keycap>Ctrl</keycap><keycap>H</keycap></keycombo>
+	  </shortcut> <guimenu lang="en">Adjust</guimenu>
+	  <guimenuitem>Rescale</guimenuitem> <guimenuitem>Halve Durations</guimenuitem>
+	  </menuchoice> and <menuchoice>
+	  <shortcut><keycombo><keycap>Ctrl</keycap><keycap>Shift</keycap><keycap>H</keycap></keycombo>
+	  </shortcut>
+	  <guimenu lang="en">Adjust</guimenu>
 	  <guimenuitem>Rescale</guimenuitem> <guimenuitem>Double
 	  Durations</guimenuitem> </menuchoice> to perform the most simple rescaling.
 	  </para>
@@ -5455,7 +5476,7 @@
 	  <menuchoice> <guimenu lang="en">Adjust</guimenu>
 	  <guimenuitem>Rescale</guimenuitem> <guimenuitem>Stretch
 	  or Squash...</guimenuitem> </menuchoice> with
-	  which you scale the total lenth of the selection.
+	  which you scale the total length of the selection. <!-- Id like to see a more expansive explanation SOM -->
 	  </para>
 	</sect3>
 
@@ -5470,7 +5491,7 @@
 		  to choose how far up or down you want to transpose the
 		  selection.
 		</para>
-
+SOM - why has this section been commented out? It looks like it's obsolete? Can we get rid of it?
 		<para>These functions simply change the stored pitches
 		of the notes in the selection, so that they both play
 		and appear at the new pitches.  They do not deal with
@@ -5488,11 +5509,11 @@
       <sect2>
 	  <title id="nv-microposition">Repositioning notation elements</title>
 	  <para>
-	      You may occasionally wish to to nudge the positioning of some
-	      element of notation that &rosegarden;'s layout algorithm has not
-	      placed in an optimal location.  Use <keycap>Ctrl</keycap>-click and drag to move slurs, hairpins,
-	      text events, and several other sorts of events.  You may not reposition notes in
-	      this fashion.
+	      You may occasionally wish to to nudge the positioning of some element of
+	      notation that &rosegarden;'s layout algorithm has not placed in an optimal
+	      location.  Use <keycap>Ctrl</keycap>-click and drag or <keycap>Alt</keycap>
+	      right or left arrow to move slurs, hairpins, text events, and several other
+	      sorts of events.  You may not reposition notes in this fashion.
 	  </para>
       </sect2>
 
@@ -5505,7 +5526,7 @@
       <!-- !!! -->
       <para>
 	  You can use <menuchoice>
-	      <guimenu lang="en">Adjust</guimenu><guimenuitem>Interpret...</guimenuitem>
+	      <guimenu lang="en">Adjust</guimenu><guisubmenu>Interpret...</guisubmenu>
 	  </menuchoice>
 	  to modify the velocities and timings of notes according to any
 	  written or indicated dynamics found. The selection of
@@ -5515,13 +5536,11 @@
 	  <varlistentry>
 	    <term>Apply text dynamics (p, mf, ff etc)
 	    </term>
-	    <listitem><para> Sets a velocity to each note
-		based on the last piece of text of <quote>Dynamic</quote>
-		type seen on the same staff (only texts of the
-		form pp, p, mp, mf, f, ff, fff, etc., are matched; these are
-		the texts that are available by default when entering text events
-		of this style).
-	      </para></listitem>
+	    <listitem><para> Sets a velocity to each note based on the last piece of text
+	    of <quote>Dynamic</quote> type seen on the same staff (only texts of the form
+	    pp, p, mp, mf, f, ff, fff, etc., are matched; these are the texts that are
+	    available by default when entering text events of this style).
+	    </para></listitem>
 	  </varlistentry>
 	  
 	  <varlistentry>
@@ -5593,19 +5612,18 @@
       </para>
 
       <para>
-	There are two ways to see which notes have been quantized
-	for notation.  By default, each notation view contains a <link
-	    linkend="nv-raw-note-ruler">raw
-	    note ruler</link> (in the group of rulers above the score) showing
-	a rectangular block for each note.  This block is positioned
-	so as to represent the time and duration of the note as
-	performed, but with the top and bottom edges of the
-	rectangle extended or shortened to represent the time after
-	notation quantization.  If this is too much information for
-	you, you can alternatively choose (in the configuration
-	dialog) to show in a green colour all note heads in the
-	score that have had their timings altered by notation
-	quantization.
+	There are two ways to see which notes have been quantized for notation.  By
+	default, each notation view contains a <link linkend="nv-raw-note-ruler">raw note
+	ruler</link> (in the group of rulers above the score) showing a rectangular block
+	for each note.  This block is positioned so as to represent the time and duration
+	of the note as performed, but with the top and bottom edges of the rectangle
+	extended or shortened to represent the time after notation quantization.  If this
+	is too much information for you, you can choose in <menuchoice><guimenu
+	lang="en">Settings</guimenu><guisubmenu>Configure
+	&rosegarden;...</guisubmenu></menuchoice> and choose the
+	<guilabel>Notation</guilabel><guilabel>Layout</guilabel> dialog to show in a
+	green colour all note heads in the score that have had their timings altered by
+	notation quantization.
       </para>
 
       <para>
@@ -5613,7 +5631,7 @@
 	<screenshot>
 	  <mediaobject>
 	    <imageobject>
-	      <imagedata fileref="rg-notationquantizer.png" format="PNG"/>
+	      <imagedata fileref="rg-notationquantizer.png" format="PNG" />
       </imageobject>
 	<textobject>
 	  <phrase>&rosegarden;'s notation quantize dialog</phrase>
@@ -5625,11 +5643,11 @@
 	either for the entire score or for a selection of notes, you
 	can choose to use a different level of quantization or none
 	at all.  To apply a different quantization to some notes,
-	select the notes and use  Quantize... <!-- Menu -->
-	(tick the box labelled <quote>Quantize for
-	  notation only</quote>).  The quantization level or type used
-	by default can be changed in the configuration dialog.
-      </para>
+	select the notes and use the<guibutton>Q</guibutton> button and
+	tick the box labelled <guilabel>Quantize for
+	  notation only</guilabel> on that dialog.  The quantization level or type used
+	by default can be changed in the configuration dialog as follows.
+	      </para>
 
       <sect2 id="nv-quantization-parameters">
 	<title>Configurable parameters for the heuristic notation quantizer</title>
@@ -5642,11 +5660,11 @@
 	    <varlistentry>
 	      <term>Complexity</term>
 	      <listitem>
-		<para>The <quote>complexity</quote>of a notation quantizer is its
-		  most fundamental parameter.  A <quote>complex</quote>quantizer
+		<para>The <quote>complexity</quote> of a notation quantizer is its
+		  most fundamental parameter.  A <quote>complex</quote> quantizer
 		  will be more prepared to accept that complex-looking
 		  music is in fact intended to be complex, whereas a
-		  <quote>simple</quote>quantizer is more likely to assume that
+		  <quote>simple</quote> quantizer is more likely to assume that
 		  complex-looking music results from an imprecise
 		  performance of simple music.
 		</para>
@@ -5694,7 +5712,7 @@
 		</para>
 	      </listitem>
 	    </varlistentry>
-
+	    <!-- allow counterpoint? SOM  -->
 	  </variablelist>
 
 	</sect3>
@@ -5735,18 +5753,16 @@
 	    <varlistentry>
 	      <term>Tie notes at barlines etc</term>
 	      <listitem>
-		<para>Causes any notes that are still found after
-		  quantization to overlap barlines or to have
-		  durations not exactly expressible with single note
-		  heads to be split into multiple notes appropriately,
-		  and tied.  This has the same effect as applying the
-		  <!-- !!! link --> <quote>Tie Notes at Barlines</quote>function
-		  in the notation view.
+		<para>Causes any notes that are still found after quantization to overlap
+		barlines or to have durations not exactly expressible with single note
+		heads to be split into multiple notes appropriately, and tied.  This has
+		the same effect as applying <link linkend="nv-make-viable">
+		<guimenuitem>Tie Notes at Barlines</guimenuitem></link> in the notation
+		view.
 		</para>
 		<para>
-		  This parameter is not set by default because it
-		  changes the number of note events, which is
-		  undesirable when using &rosegarden; partly or
+		  This parameter is not set by default because it changes the number of
+		  note events, which is undesirable when using &rosegarden; partly or
 		  principally as a &MIDI; sequencer.
 		</para>
 	      </listitem>
@@ -5759,8 +5775,8 @@
 		  Causes overlapping notes to be split and tied, so
 		  as to make strict chords with individual noteheads
 		  tied as necessary.  This has the same effect as
-		  applying the <!-- !!! link --> <quote>Split-and-Tie
-		  Overlapping Chords</quote>function in the notation view.
+		  applying <link linkend="nv-de-counterpoint"><guimenuitem>Split-and-Tie
+		  Overlapping Chords</guimenuitem></link> in the notation view.
 		</para>
 		<para>
 		  This parameter is not set by default partly because
@@ -5786,7 +5802,7 @@
       associate them with the notes that want to play them.</para>
  
       <para>To create a new type of ornament, first write out the
-      notes <quote>in longhand</quote>that you want the ornament to play, and then
+      notes <quote>in longhand</quote> that you want the ornament to play, and then
       select the notes and use <menuchoice>
       <guimenu lang="en">Note</guimenu><guimenuitem>Ornaments</guimenuitem><guimenuitem>Make
       Ornament...</guimenuitem></menuchoice>.  This cuts the notes to
@@ -5803,7 +5819,7 @@
 	<screenshot>
 	  <mediaobject>
 	    <imageobject>
-	      <imagedata fileref="rg-useornament.png" format="PNG"/>
+	      <imagedata fileref="rg-useornament.png" format="PNG" />
       </imageobject>
 	<textobject>
 	  <phrase>&rosegarden;'s Trigger Ornament dialog</phrase>
@@ -5838,15 +5854,14 @@
       </para>
 
       <para>
-	A set of standard styles (Classical, Cross, Triangle and
-	Mensural) is provided, and you can change the style used for
-	individual notes by selecting them and then using the Note
-	Style menu options.  Each note remembers which
-	style has been chosen for it, and this information is saved
-	as part of the composition.  You can also change the default
-	style for new notes using the 
-	<guimenuitem>Configure Rosegarden...</guimenuitem> option in the 
-	<guimenu lang="en">Settings</guimenu> menu.
+	A set of standard styles (Classical, Cross, Triangle and Mensural) is provided,
+	and you can change the style used for individual notes by selecting them and then
+	using <menuchoice><guimenu lang="en">Note</guimenu><guisubmenu>Note
+	Style</guisubmenu></menuchoice>.  Each note remembers which style has been chosen
+	for it, and this information is saved as part of the composition.  You can also
+	change the default style for new notes using the <guimenuitem>Configure
+	Rosegarden...</guimenuitem> option in the <guimenu lang="en">Settings</guimenu>
+	menu.
       </para>
 
       <para>
@@ -5886,7 +5901,7 @@
 
       <para>Complete or partial support is currently provided for
 	the following fonts: Fughetta, by Blake Hodgetts; Petrucci,
-	the <quote>original</quote>Finale font; Maestro, the <quote>new</quote>Finale font;
+	the <quote>original</quote> Finale font; Maestro, the <quote>new</quote> Finale font;
 	Opus, the Sibelius font; Inkpen, the Sibelius jazz font;
 	Sonata from Adobe; Steinberg, from the Cubase sequencer; and
 	Xinfonia.  (Most of the above font names are registered
@@ -5915,16 +5930,16 @@
     <sect1 id="ev-introduction">
       <title>Introduction</title>
 
-      <para>
-
-	The &rosegarden; Event List editor shows the events in a
-	single segment in a raw form, and enables you to edit the
-	precise properties of those events individually.
-
+      <para> The &rosegarden; Event List editor shows the events in a single segment in a
+      raw form, and enables you to edit the precise properties of those events
+      individually. It can be accessed in the track editor or main window through
+      <menuchoice><shortcut><keycap>E</keycap></shortcut><guimenu
+      lang="en">Segments</guimenu><guisubmenu>Edit With</guisubmenu><guimenuitem>Open in
+      Event List Editor</guimenuitem></menuchoice>.
 	<screenshot>
 	  <mediaobject>
 	    <imageobject>
-	      <imagedata fileref="rg-eventlisteditor.png" format="PNG"/>
+	      <imagedata fileref="rg-eventlisteditor.png" format="PNG" />
       </imageobject>
 	<textobject>
 	  <phrase>&rosegarden;'s event list editor</phrase>
@@ -5935,7 +5950,7 @@
     </sect1>
   </chapter>
 
-
+  <!-- Isn't there something more we can write about this? SOM -->
 
 
   <!--
@@ -6055,7 +6070,7 @@
 		<term>type</term>
 		<listitem>
 		  <para>The type of the font.  This attribute should
-		    contain one of the values <quote>pixmap</quote>or <quote>scalable</quote>.
+		    contain one of the values <quote>pixmap</quote> or <quote>scalable</quote>.
 		    Fonts that are loaded into the windowing system and
 		    are available to &rosegarden; as standard system fonts
 		    have type <quote>scalable</quote>; fonts that need to be loaded
@@ -6076,7 +6091,7 @@
 		<listitem>
 		  <para>A boolean attribute indicating whether the
 		    font is antialiased (smooth) or not.  Should have
-		    the value <quote>true</quote>or <quote>false</quote>.  If the font is smooth,
+		    the value <quote>true</quote> or <quote>false</quote>.  If the font is smooth,
 		    other display elements such as beams and slurs that
 		    are not generated from the font will also be
 		    antialiased.</para>
@@ -6119,11 +6134,11 @@
 	    to compose a &rosegarden; notation font from more than one
 	    system font if desired.
 	  </para>
-	  <para>The <quote>font-requirements</quote>element should contain a list
-	    of <quote>font-requirement</quote>child elements.  Each of these has two
+	  <para>The <quote>font-requirements</quote> element should contain a list
+	    of <quote>font-requirement</quote> child elements.  Each of these has two
 	    attributes: <quote>font-id</quote>, containing a numerical ID of your
 	    choice for reference elsewhere in the file, and either a
-	    <quote>name</quote>or a <quote>names</quote>attribute.  If <quote>name</quote> is provided, it
+	    <quote>name</quote> or a <quote>names</quote> attribute.  If <quote>name</quote> is provided, it
 	    will be used as the name of a single system font to be
 	    associated with the font id; if <quote>names</quote> is provided, it will
 	    be treated as a comma-separated list of system fonts and the
@@ -6893,7 +6908,7 @@
 	      improved, multi-track &MIDI; recording, &MIDI; recording filters,
 	      track paramter box, create segments using preset parameters from
 	      a database of over 300 real-world instruments, texts like
-	      <quote>Allegro</quote>offered as a parallel alternative to typing, LilyPond
+	      <quote>Allegro</quote> offered as a parallel alternative to typing, LilyPond
 	      preview, assorted smaller features, many bug fixes
           </para></listitem>
 	  <listitem><para>
@@ -6965,3 +6980,5 @@
 
   &documentation.index; 
 </book>
+
+
