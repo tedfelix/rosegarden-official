@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: fi\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-04-27 08:10-0400\n"
-"PO-Revision-Date: 2008-04-02 09:51+0300\n"
+"PO-Revision-Date: 2008-07-04 23:49+0300\n"
 "Last-Translator: Heikki Junes\n"
 "Language-Team:  <fi@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1060,21 +1060,19 @@ msgstr "Lisää raitoja"
 
 #: ../src/gui/dialogs/AddTracksDialog.cpp:64
 msgid "At the top"
-msgstr ""
+msgstr "Ylhäällä"
 
 #: ../src/gui/dialogs/AddTracksDialog.cpp:65
-#, fuzzy
 msgid "Above the current selected track"
-msgstr "Vaimentaa kaikki muut paitsi valitut raidat"
+msgstr "Valitun raidan yläpuolella"
 
 #: ../src/gui/dialogs/AddTracksDialog.cpp:66
-#, fuzzy
 msgid "Below the current selected track"
-msgstr "Vaimentaa kaikki muut paitsi valitut raidat"
+msgstr "Valitun raidan alapuolella"
 
 #: ../src/gui/dialogs/AddTracksDialog.cpp:67
 msgid "At the bottom"
-msgstr ""
+msgstr "Alhaalla"
 
 #: ../src/gui/dialogs/SimpleEventEditDialog.cpp:75
 msgid "Event Properties"
@@ -1416,10 +1414,8 @@ msgid "Change key for selection"
 msgstr "Vaihda sävellajia valinnalle"
 
 #: ../src/gui/dialogs/IntervalDialog.cpp:89
-msgid ""
-"Adjust segment transposition in opposite direction (maintain audible pitch)"
-msgstr ""
-"Tee osan siirrot vastakkaiseen suuntaan (säilyttäen nuottien soittokorkeudet)"
+msgid "Adjust segment transposition in opposite direction (maintain audible pitch)"
+msgstr "Tee osan siirrot vastakkaiseen suuntaan (säilyttäen nuottien soittokorkeudet)"
 
 #: ../src/gui/dialogs/IntervalDialog.cpp:190
 #: ../src/gui/dialogs/IntervalDialog.cpp:220
@@ -2248,8 +2244,7 @@ msgstr "Alennus - aseta %1 arvoksi"
 
 #: ../src/gui/dialogs/EventParameterDialog.cpp:70
 msgid "Alternating - set %1 to max and min on alternate events"
-msgstr ""
-"Vaihteleva - aseta %1 suurimmaksi ja pienimmäksi vaihtelevissa tapahtumissa"
+msgstr "Vaihteleva - aseta %1 suurimmaksi ja pienimmäksi vaihtelevissa tapahtumissa"
 
 #: ../src/gui/dialogs/EventParameterDialog.cpp:74
 msgid "Crescendo - set %1 rising from min to max"
@@ -3102,9 +3097,8 @@ msgid "&Reset MIDI Network"
 msgstr "&Palauta MIDI-verkko alkutilaan"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:1105
-#, fuzzy
 msgid "Set Quick Marker at Playback Position"
-msgstr "Syötä merkintä toisto-osoittimen kohdalle"
+msgstr "Aseta pikamerkintä toisto-osoittimen kohdalleSyötä merkintä toisto-osoittimen kohdalle"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:1109
 msgid "Jump to Quick Marker"
@@ -3530,8 +3524,7 @@ msgstr "Tuo Rosegarden 2.1 -tiedosto..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:4052
 msgid "Can't load Rosegarden 2.1 file.  It appears to be corrupted."
-msgstr ""
-"Ei voitu ladata Rosegarden 2.1 -tiedostoa.  Se näyttää olevan viallinen."
+msgstr "Ei voitu ladata Rosegarden 2.1 -tiedostoa.  Se näyttää olevan viallinen."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:4078
 #: ../src/gui/application/RosegardenGUIApp.cpp:4095
@@ -3609,8 +3602,7 @@ msgid "</ul>"
 msgstr "</ul>"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:4591
-msgid ""
-"<p>To fix this, you should install the following additional programs:</p>"
+msgid "<p>To fix this, you should install the following additional programs:</p>"
 msgstr "<p>Korjataksesi tämän sinun täytyy asentaa seuraavat lisäohjelmat:</p>"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:4603
@@ -3808,14 +3800,12 @@ msgid "Move Tempo Change"
 msgstr "Siirrä tempomuutos"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5949
-#, fuzzy
 msgid "new marker"
-msgstr "Ei merkintöjä"
+msgstr "uusi merkintä"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5950
-#, fuzzy
 msgid "no description"
-msgstr "Kuvaus:"
+msgstr "ei kuvausta"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:6363
 #, c-format
@@ -3866,10 +3856,8 @@ msgid "Saving current document as default studio..."
 msgstr "Tallennetaan nykyinen dokumentti oletusstudioksi..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:7738
-msgid ""
-"Are you sure you want to import your default studio and lose the current one?"
-msgstr ""
-"Haluatko todella tuoda oletusstudiosi ja hävittää tämänhetkisen studion?"
+msgid "Are you sure you want to import your default studio and lose the current one?"
+msgstr "Haluatko todella tuoda oletusstudiosi ja hävittää tämänhetkisen studion?"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:7773
 msgid "Import Studio from File"
@@ -4285,8 +4273,7 @@ msgstr ""
 "Toisten ohjelmien lopettaminen saattaa parantaa Rosegardenin suorituskykyä."
 
 #: ../src/gui/seqmanager/SequenceManager.cpp:1031
-msgid ""
-"Run out of processor power for real-time audio processing.  Cannot continue."
+msgid "Run out of processor power for real-time audio processing.  Cannot continue."
 msgstr ""
 "Prosessorin teho ei riittänyt reaaliaikaiseen äänenkäsittelyyn.  Ei voida "
 "jatkaa."
@@ -4306,10 +4293,8 @@ msgid "JACK Audio subsystem is losing sample frames."
 msgstr "JACK ääni -alijärjestelmä hukkaa näytteiden kehyksiä."
 
 #: ../src/gui/seqmanager/SequenceManager.cpp:1096
-msgid ""
-"Failed to read audio data from disc in time to service the audio subsystem."
-msgstr ""
-"Äänitietojen lukeminen ajallaan ääni-alijärjestelmää varten epäonnistui."
+msgid "Failed to read audio data from disc in time to service the audio subsystem."
+msgstr "Äänitietojen lukeminen ajallaan ääni-alijärjestelmää varten epäonnistui."
 
 #: ../src/gui/seqmanager/SequenceManager.cpp:1100
 msgid ""
@@ -5247,8 +5232,7 @@ msgstr "MTC seurain"
 
 #: ../src/gui/configuration/MIDIConfigurationPage.cpp:281
 msgid "Automatically connect sync output to all devices in use"
-msgstr ""
-"Yhdistä automaattisesti sync-ulostulo kaikkiin käytössä oleviin laitteisiin"
+msgstr "Yhdistä automaattisesti sync-ulostulo kaikkiin käytössä oleviin laitteisiin"
 
 #: ../src/gui/configuration/MIDIConfigurationPage.cpp:292
 msgid "MIDI Sync"
@@ -5831,17 +5815,14 @@ msgid "Export..."
 msgstr "Vie..."
 
 #: ../src/gui/studio/BankEditorDialog.cpp:176
-msgid ""
-"Import Bank and Program data from a Rosegarden file to the current Device"
-msgstr ""
-"Tuo pankki- ja ohjelmadataa Rosegarden-tiedostosta nykyiselle laitteelle"
+msgid "Import Bank and Program data from a Rosegarden file to the current Device"
+msgstr "Tuo pankki- ja ohjelmadataa Rosegarden-tiedostosta nykyiselle laitteelle"
 
 #: ../src/gui/studio/BankEditorDialog.cpp:179
 msgid ""
 "Export all Device and Bank information to a Rosegarden format  interchange "
 "file"
-msgstr ""
-"Vie kaikki laite- ja pankkitieto Rosegardenin formaattivaihto-tiedostoon"
+msgstr "Vie kaikki laite- ja pankkitieto Rosegardenin formaattivaihto-tiedostoon"
 
 #: ../src/gui/studio/BankEditorDialog.cpp:190
 msgid "Copy all Program names from current Bank to clipboard"
@@ -6029,8 +6010,7 @@ msgstr "Laite tai instrumentti"
 
 #: ../src/gui/studio/RemapInstrumentDialog.cpp:65
 msgid "Remap Tracks by all Instruments on a Device or by single Instrument"
-msgstr ""
-"Merkitse raidat laitteen kaikilla instrumenteilla tai yhdellä instrumentilla"
+msgstr "Merkitse raidat laitteen kaikilla instrumenteilla tai yhdellä instrumentilla"
 
 #: ../src/gui/studio/RemapInstrumentDialog.cpp:74
 msgid "Choose Source and Destination"
@@ -6325,8 +6305,7 @@ msgstr ""
 
 #: ../src/gui/editors/segment/segmentcanvas/SegmentResizer.cpp:384
 #: ../src/gui/editors/segment/segmentcanvas/SegmentSelector.cpp:507
-msgid ""
-"Click and drag to resize a segment; hold Ctrl as well to rescale its contents"
+msgid "Click and drag to resize a segment; hold Ctrl as well to rescale its contents"
 msgstr ""
 "Klikkaa ja vedä muuttaaksesi osan kokoa, pidä myös Ctrl pohjassa "
 "mitoittaaksesi uudelleen myös sisällön"
@@ -6394,12 +6373,10 @@ msgstr "Nauhoita tai pudoa ääntä tähän"
 msgid ""
 "Click and drag to draw an empty segment.  Control+Alt click and drag to draw "
 "in overlap mode."
-msgstr ""
-"Klikkaa ja vedä tyhjä osa.  Ctrl+Alt -klikkaa ja vedä päällekkäistilassa."
+msgstr "Klikkaa ja vedä tyhjä osa.  Ctrl+Alt -klikkaa ja vedä päällekkäistilassa."
 
 #: ../src/gui/editors/segment/TrackLabel.cpp:77
-msgid ""
-"Click and hold with left mouse button to assign this Track to an Instrument."
+msgid "Click and hold with left mouse button to assign this Track to an Instrument."
 msgstr ""
 "Napauta ja pidä vasenta hiiren korvaa pohjassa liittääksesi instrumentin "
 "tälle raidalle."
@@ -6478,8 +6455,7 @@ msgstr ""
 msgid ""
 "This will remove all triggered segments from the whole composition.  Are you "
 "sure?"
-msgstr ""
-"Tämä poistaa kaikki sysäistävät osat koko sävellyksestä.  Oletko varma?"
+msgstr "Tämä poistaa kaikki sysäistävät osat koko sävellyksestä.  Oletko varma?"
 
 #: ../src/gui/editors/segment/TriggerSegmentManager.cpp:288
 msgid "Remove all triggered segments"
@@ -6918,8 +6894,7 @@ msgstr "[ Raita %1 - %2 ]"
 
 #: ../src/gui/editors/parameters/TrackParameterBox.cpp:985
 msgid "The instrument preset database is corrupt.  Check your installation."
-msgstr ""
-"Instrumentin esiasetus-tietokanta on turmeltunut.  Tarkista asennuksesi."
+msgstr "Instrumentin esiasetus-tietokanta on turmeltunut.  Tarkista asennuksesi."
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:173
 #: ../src/gui/editors/parameters/InstrumentParameterBox.cpp:54
@@ -8546,8 +8521,7 @@ msgid "global element must precede note elements"
 msgstr "kaiken kattavien elementtien täytyy edeltää nuottielementtejä"
 
 #: ../src/gui/editors/notation/NoteStyleFileReader.cpp:137
-msgid ""
-"global and note elements may have shape or charname attribute, but not both"
+msgid "global and note elements may have shape or charname attribute, but not both"
 msgstr ""
 "kaikenkattavilla ja nuottielementeillä voi olla muoto- tai merkkinimi-"
 "ominaisuus, mutta ei molempia"
@@ -9426,8 +9400,7 @@ msgstr "Liitä olemassaolevaan väliin [\"rajoitettu\"]"
 
 #: ../src/commands/edit/PasteEventsCommand.cpp:100
 msgid "Erase existing events to make room [\"simple\"]"
-msgstr ""
-"Poista olemassa olevat tapahtumat tilan lisäämiseksi [\"yksinkertainen\"]"
+msgstr "Poista olemassa olevat tapahtumat tilan lisäämiseksi [\"yksinkertainen\"]"
 
 #: ../src/commands/edit/PasteEventsCommand.cpp:102
 msgid "Move existing events out of the way [\"open-n-paste\"]"
@@ -10168,8 +10141,7 @@ msgstr "Yhteensopimattomia näytteenottotaajuuksia"
 msgid ""
 "<h3>Plugins not found</h3><p>The following audio plugins could not be loaded:"
 "</p><ul>"
-msgstr ""
-"<h3>Lisäosia ei löytynyt</h3><p>Seuraavaa ääni-lisäosaa ei ladattu:</p><ul>"
+msgstr "<h3>Lisäosia ei löytynyt</h3><p>Seuraavaa ääni-lisäosaa ei ladattu:</p><ul>"
 
 #: ../src/document/RosegardenGUIDoc.cpp:1698
 msgid "<li>%1 (from %2)</li>"
@@ -10419,9 +10391,9 @@ msgid "Convert"
 msgstr "Muunna"
 
 #: rc.cpp:201
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Velocities"
-msgstr "Nopeus:"
+msgstr "Nopeudet"
 
 #: rc.cpp:204
 #, no-c-format
@@ -11398,8 +11370,7 @@ msgstr "Inkpen"
 
 #: ../data/fonts/mappings/fonts.cpp:17
 msgid "Inkpen is part of Sibelius, but other fonts may use the same mappings."
-msgstr ""
-"Inkpen on osa Sibelius:ta, mutta muut kirjasimet voivat käyttää sen karttaa."
+msgstr "Inkpen on osa Sibelius:ta, mutta muut kirjasimet voivat käyttää sen karttaa."
 
 #: ../data/fonts/mappings/fonts.cpp:18 ../data/fonts/mappings/fonts.cpp:28
 msgid "Copyright Sibelius Software Ltd"
@@ -11411,8 +11382,7 @@ msgstr "Maestro"
 
 #: ../data/fonts/mappings/fonts.cpp:22
 msgid "Maestro is part of Finale, but other fonts use the same mappings."
-msgstr ""
-"Maestro on osa Finale:a, mutta muut kirjasimet voivat käyttää sen karttaa."
+msgstr "Maestro on osa Finale:a, mutta muut kirjasimet voivat käyttää sen karttaa."
 
 #: ../data/fonts/mappings/fonts.cpp:23 ../data/fonts/mappings/fonts.cpp:33
 msgid "Copyright Coda Inc"
@@ -11420,8 +11390,7 @@ msgstr "Copyright Coda Inc"
 
 #: ../data/fonts/mappings/fonts.cpp:27
 msgid "Opus is part of Sibelius, but other fonts may use the same mappings."
-msgstr ""
-"Opus on osa Sibelius:ta, mutta muut kirjasimet voivat käyttää sen karttaa."
+msgstr "Opus on osa Sibelius:ta, mutta muut kirjasimet voivat käyttää sen karttaa."
 
 #: ../data/fonts/mappings/fonts.cpp:31
 msgid "Petrucci"
@@ -11429,8 +11398,7 @@ msgstr "Petrucci"
 
 #: ../data/fonts/mappings/fonts.cpp:32
 msgid "Petrucci is part of Finale, but other fonts use the same mappings."
-msgstr ""
-"Petrucci on osa Finale:a, mutta muut kirjasimet voivat käyttää sen karttaa."
+msgstr "Petrucci on osa Finale:a, mutta muut kirjasimet voivat käyttää sen karttaa."
 
 #: ../data/fonts/mappings/fonts.cpp:36
 msgid "RG21"
@@ -11496,5 +11464,3 @@ msgstr "Mensuraali"
 msgid "Triangle"
 msgstr "Kolmio"
 
-#~ msgid "Set Quick Marker"
-#~ msgstr "Aseta pikamerkintä"
