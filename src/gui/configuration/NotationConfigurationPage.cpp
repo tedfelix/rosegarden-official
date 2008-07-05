@@ -103,7 +103,7 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
 
         QString text("%1 %");
         if (*i == 100)
-            text = "%1 % (normal)";
+            text = i18n("%1 % (normal)");
         m_spacing->insertItem(text.arg(*i));
 
         if (*i == defaultSpacing) {
@@ -127,7 +127,7 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
 
         QString text = QString("%1 %").arg(*i);
         if (*i == 40)
-            text = "40 % (normal)";
+            text = i18n("%1 % (normal)").arg(*i);
         else if (*i == 0)
             text = i18n("None");
         else if (*i == 100)
