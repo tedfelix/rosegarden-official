@@ -960,7 +960,7 @@ msgstr "Piilota altistetut tahtiviivat"
 
 #: ../src/gui/dialogs/TimeSignatureDialog.cpp:186
 msgid "Show as common time"
-msgstr "Näytä yhteisenä aikana"
+msgstr "Näytä C-merkintänä"
 
 #: ../src/gui/dialogs/TimeSignatureDialog.cpp:191
 msgid "Correct the durations of following measures"
@@ -968,11 +968,11 @@ msgstr "Korjaa seuraavien tahtien kestot"
 
 #: ../src/gui/dialogs/TimeSignatureDialog.cpp:280
 msgid "Display as common time"
-msgstr "Näytä yhteisenä aikana"
+msgstr "Näytä C-merkintänä"
 
 #: ../src/gui/dialogs/TimeSignatureDialog.cpp:284
 msgid "Display as cut common time"
-msgstr "Näytä leikkauksen yhteisenä aikana"
+msgstr "Näytä pystyviivallisena C-merkintänä"
 
 #: ../src/gui/dialogs/ConfigureDialog.cpp:66
 msgid "Configure Rosegarden"
@@ -5470,12 +5470,12 @@ msgstr "Sivuuta olemassa olevat kestot"
 
 #: ../src/gui/configuration/NotationConfigurationPage.cpp:305
 msgid "Auto-beam on insert when appropriate"
-msgstr "Palkita syötettävät nuotit automaattisesti, kun se on sopivaa"
+msgstr "Palkita lisättävät nuotit soveltuvin osin automaattisesti"
 
 #: ../src/gui/configuration/NotationConfigurationPage.cpp:317
 #: ../src/gui/editors/notation/NotationEraser.cpp:54
 msgid "Collapse rests after erase"
-msgstr "Litistä tauot poiston jälkeen"
+msgstr "Yhdistä tauot poiston jälkeen"
 
 #: ../src/gui/configuration/NotationConfigurationPage.cpp:328
 msgid "Default paste type"
@@ -7388,7 +7388,7 @@ msgstr "Ominaisuudet  "
 
 #: ../src/gui/editors/tempo/TempoView.cpp:208
 msgid "Common, hidden"
-msgstr "Yhteinen, piilotettu"
+msgstr "C-merkintä, piilotettu"
 
 #: ../src/gui/editors/tempo/TempoView.cpp:210
 msgid "Hidden"
@@ -7396,7 +7396,7 @@ msgstr "Piilotettu"
 
 #: ../src/gui/editors/tempo/TempoView.cpp:213
 msgid "Common"
-msgstr "Yhteinen"
+msgstr "C-merkintä"
 
 #: ../src/gui/editors/tempo/TempoView.cpp:220
 msgid "Time Signature   "
@@ -11463,4 +11463,8 @@ msgstr "Mensuraali"
 #: ../data/styles/styles.cpp:4
 msgid "Triangle"
 msgstr "Kolmio"
+
+#: ...
+msgid "%1 % (normal)"
+msgstr "%1 % (normaali)"
 
