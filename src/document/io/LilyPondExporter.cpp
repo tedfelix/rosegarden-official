@@ -1443,6 +1443,15 @@ LilyPondExporter::calculateDuration(Segment *s,
 				(*nextElt)->isa(ChannelPressure::EventType) ||
 				(*nextElt)->isa(KeyPressure::EventType) ||
 				(*nextElt)->isa(PitchBend::EventType))
+				//
+				// TODO (HJJ): Check here for SustainPedalDown and SustainPedalUp
+				//
+				// Controller::NUMBER == Controller::EventSubOrdering  ? ( = -5 )
+				// Controller::VALUE > 0  ? (down, if positive, max = 127)
+				// Controller::VALUE == 0  ? (up, if zero)
+				//
+				// Add Lilypond post-note commands \sustainDown and \sustainUp accordingly
+				//
 				++nextElt;
 			else
 				break;
