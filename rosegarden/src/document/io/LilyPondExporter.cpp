@@ -142,12 +142,46 @@ LilyPondExporter::~LilyPondExporter()
 }
 
 void
-LilyPondExporter::handleStartingEvents(eventstartlist &eventsToStart,
-                                       std::ofstream &str)
+LilyPondExporter::handleStartingPreEvents(eventstartlist &preEventsToStart,
+                                          std::ofstream &str)
 {
-    eventstartlist::iterator m = eventsToStart.begin();
+    eventstartlist::iterator m = preEventsToStart.begin();
 
-    while (m != eventsToStart.end()) {
+    while (m != preEventsToStart.end()) {
+
+        try {
+            Indication i(**m);
+
+            if (i.getIndicationType() == Indication::QuindicesimaUp) {
+                str << "#(set-octavation 2) ";
+            } else if (i.getIndicationType() == Indication::OttavaUp) {
+                str << "#(set-octavation 1) ";
+            } else if (i.getIndicationType() == Indication::OttavaDown) {
+                str << "#(set-octavation -1) ";
+            } else if (i.getIndicationType() == Indication::QuindicesimaDown) {
+                str << "#(set-octavation -2) ";
+            }
+
+        } catch (Event::BadType) {
+            // Not an indication
+        } catch (Event::NoData e) {
+            std::cerr << "Bad indication: " << e.getMessage() << std::endl;
+        }
+
+        eventstartlist::iterator n(m);
+        ++n;
+        preEventsToStart.erase(m);
+        m = n;
+    }
+}
+
+void
+LilyPondExporter::handleStartingPostEvents(eventstartlist &postEventsToStart,
+                                           std::ofstream &str)
+{
+    eventstartlist::iterator m = postEventsToStart.begin();
+
+    while (m != postEventsToStart.end()) {
 
         try {
             Indication i(**m);
@@ -168,6 +202,18 @@ LilyPondExporter::handleStartingEvents(eventstartlist &eventsToStart,
                 str << "\\< ";
             } else if (i.getIndicationType() == Indication::Decrescendo) {
                 str << "\\> ";
+            } else if (i.getIndicationType() == Indication::QuindicesimaUp) {
+                // #(set-octavation 2) ... #(set-octavation 0)
+                str << "#(set-octavation 2) ";
+            } else if (i.getIndicationType() == Indication::OttavaUp) {
+                // #(set-octavation 1) ... #(set-octavation 0)
+                str << "#(set-octavation 1) ";
+            } else if (i.getIndicationType() == Indication::OttavaDown) {
+                // #(set-octavation -1) ... #(set-octavation 0)
+                str << "#(set-octavation -1) ";
+            } else if (i.getIndicationType() == Indication::QuindicesimaDown) {
+                // #(set-octavation -2) ... #(set-octavation 0)
+                str << "#(set-octavation -2) ";
             }
 
         } catch (Event::BadType) {
@@ -178,19 +224,71 @@ LilyPondExporter::handleStartingEvents(eventstartlist &eventsToStart,
 
         eventstartlist::iterator n(m);
         ++n;
-        eventsToStart.erase(m);
+        postEventsToStart.erase(m);
         m = n;
     }
 }
 
 void
-LilyPondExporter::handleEndingEvents(eventendlist &eventsInProgress,
-                                     const Segment::iterator &j,
-                                     std::ofstream &str)
+LilyPondExporter::handleEndingPreEvents(eventendlist &preEventsInProgress,
+                                        const Segment::iterator &j,
+                                        std::ofstream &str)
 {
-    eventendlist::iterator k = eventsInProgress.begin();
+    eventendlist::iterator k = preEventsInProgress.begin();
 
-    while (k != eventsInProgress.end()) {
+    while (k != preEventsInProgress.end()) {
+
+        eventendlist::iterator l(k);
+        ++l;
+
+        // Handle and remove all the relevant events in progress
+        // This assumes all deferred events are indications
+
+        try {
+            Indication i(**k);
+
+            timeT indicationEnd =
+                (*k)->getNotationAbsoluteTime() + i.getIndicationDuration();
+            timeT eventEnd =
+                (*j)->getNotationAbsoluteTime() + (*j)->getNotationDuration();
+
+            if (indicationEnd < eventEnd ||
+                    ((i.getIndicationType() == Indication::Slur ||
+                      i.getIndicationType() == Indication::PhrasingSlur) &&
+                     indicationEnd == eventEnd)) {
+
+                if (i.getIndicationType() == Indication::QuindicesimaUp) {
+                    str << "#(set-octavation 0) ";
+                } else if (i.getIndicationType() == Indication::OttavaUp) {
+                    str << "#(set-octavation 0) ";
+                } else if (i.getIndicationType() == Indication::OttavaDown) {
+                    str << "#(set-octavation 0) ";
+                } else if (i.getIndicationType() == Indication::QuindicesimaDown) {
+                    str << "#(set-octavation 0) ";
+                }
+
+                preEventsInProgress.erase(k);
+            }
+
+        } catch (Event::BadType) {
+            // not an indication
+
+        } catch (Event::NoData e) {
+            std::cerr << "Bad indication: " << e.getMessage() << std::endl;
+        }
+
+        k = l;
+    }
+}
+
+void
+LilyPondExporter::handleEndingPostEvents(eventendlist &postEventsInProgress,
+                                         const Segment::iterator &j,
+                                         std::ofstream &str)
+{
+    eventendlist::iterator k = postEventsInProgress.begin();
+
+    while (k != postEventsInProgress.end()) {
 
         eventendlist::iterator l(k);
         ++l;
@@ -220,7 +318,7 @@ LilyPondExporter::handleEndingEvents(eventendlist &eventsInProgress,
                     str << "\\! ";
                 }
 
-                eventsInProgress.erase(k);
+                postEventsInProgress.erase(k);
             }
 
         } catch (Event::BadType) {
@@ -984,8 +1082,10 @@ LilyPondExporter::write()
                 // Temporary storage for non-atomic events (!BOOM)
                 // ex. LilyPond expects signals when a decrescendo starts
                 // as well as when it ends
-                eventendlist eventsInProgress;
-                eventstartlist eventsToStart;
+                eventendlist preEventsInProgress;
+                eventstartlist preEventsToStart;
+                eventendlist postEventsInProgress;
+                eventstartlist postEventsToStart;
 
                 // If the segment doesn't start at 0, add a "skip" to the start
                 // No worries about overlapping segments, because Voices can overlap
@@ -1092,7 +1192,7 @@ LilyPondExporter::write()
                     // write out a bar's worth of events
                     writeBar(*i, barNo, barStart, barEnd, col, key,
                              lilyText,
-                             prevStyle, eventsInProgress, str,
+                             prevStyle, preEventsInProgress, postEventsInProgress, str,
                              MultiMeasureRestCount, 
                              nextBarIsAlt1, nextBarIsAlt2, nextBarIsDouble, nextBarIsEnd, nextBarIsDot);
 
@@ -1377,7 +1477,8 @@ LilyPondExporter::writeBar(Segment *s,
                            Rosegarden::Key &key,
                            std::string &lilyText,
                            std::string &prevStyle,
-                           eventendlist &eventsInProgress,
+                           eventendlist &preEventsInProgress,
+                           eventendlist &postEventsInProgress,
                            std::ofstream &str,
                            int &MultiMeasureRestCount,
                            bool &nextBarIsAlt1, bool &nextBarIsAlt2,
@@ -1430,7 +1531,8 @@ LilyPondExporter::writeBar(Segment *s,
     }
 
     timeT prevDuration = -1;
-    eventstartlist eventsToStart;
+    eventstartlist preEventsToStart;
+    eventstartlist postEventsToStart;
 
     long groupId = -1;
     std::string groupType = "";
@@ -1610,6 +1712,9 @@ LilyPondExporter::writeBar(Segment *s,
                 }
             }
 
+            handleEndingPreEvents(preEventsInProgress, i, str);
+            handleStartingPreEvents(preEventsToStart, str);
+
             if (chord.size() > 1)
                 str << "< ";
 
@@ -1650,8 +1755,10 @@ LilyPondExporter::writeBar(Segment *s,
 
                     str << " ";
                 } else if ((*i)->isa(Indication::EventType)) {
-                    eventsToStart.insert(*i);
-                    eventsInProgress.insert(*i);
+                    preEventsToStart.insert(*i);
+                    preEventsInProgress.insert(*i);
+                    postEventsToStart.insert(*i);
+                    postEventsInProgress.insert(*i);
                 }
 
                 if (i == chord.getFinalElement())
@@ -1697,8 +1804,8 @@ LilyPondExporter::writeBar(Segment *s,
             if (marks.size() > 0)
                 str << " ";
 
-            handleEndingEvents(eventsInProgress, i, str);
-            handleStartingEvents(eventsToStart, str);
+            handleEndingPostEvents(postEventsInProgress, i, str);
+            handleStartingPostEvents(postEventsToStart, str);
 
             if (tiedForward)
 	        if (tiedUp) 
@@ -1771,6 +1878,9 @@ LilyPondExporter::writeBar(Segment *s,
 		    }
 		    str << "R";
 		} else {
+                     handleEndingPreEvents(preEventsInProgress, i, str);
+                     handleStartingPreEvents(preEventsToStart, str);
+
                      if (offsetRest) {
                          // use offset height to get an approximate corresponding
                           // height on staff
@@ -1854,8 +1964,8 @@ LilyPondExporter::writeBar(Segment *s,
 
 		str << " ";
 	    
-		handleEndingEvents(eventsInProgress, i, str);
-		handleStartingEvents(eventsToStart, str);
+		handleEndingPostEvents(postEventsInProgress, i, str);
+		handleStartingPostEvents(postEventsToStart, str);
 
 		if (newBeamedGroup)
 		    notesInBeamedGroup++;
@@ -2015,8 +2125,10 @@ LilyPondExporter::writeBar(Segment *s,
         }
 
         if ((*i)->isa(Indication::EventType)) {
-            eventsToStart.insert(*i);
-            eventsInProgress.insert(*i);
+            preEventsToStart.insert(*i);
+            preEventsInProgress.insert(*i);
+            postEventsToStart.insert(*i);
+            postEventsInProgress.insert(*i);
         }
 
         ++i;

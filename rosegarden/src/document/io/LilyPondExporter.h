@@ -98,7 +98,8 @@ protected:
     void readConfigVariables(void);
     void writeBar(Segment *, int barNo, int barStart, int barEnd, int col,
                   Rosegarden::Key &key, std::string &lilyText,
-                  std::string &prevStyle, eventendlist &eventsInProgress,
+                  std::string &prevStyle,
+                  eventendlist &preEventsInProgress, eventendlist &postEventsInProgress,
                   std::ofstream &str, int &MultiMeasureRestCount,
                   bool &nextBarIsAlt1, bool &nextBarIsAlt2,
                   bool &nextBarIsDouble, bool &nextBarIsEnd, bool &nextBarIsDot);
@@ -110,9 +111,12 @@ protected:
                                         const std::pair<int, int> &tupletRatio,
                                         bool &overlong);
 
-    void handleStartingEvents(eventstartlist &eventsToStart, std::ofstream &str);
-    void handleEndingEvents(eventendlist &eventsInProgress,
-                            const Segment::iterator &j, std::ofstream &str);
+    void handleStartingPreEvents(eventstartlist &preEventsToStart, std::ofstream &str);
+    void handleEndingPreEvents(eventendlist &preEventsInProgress,
+                               const Segment::iterator &j, std::ofstream &str);
+    void handleStartingPostEvents(eventstartlist &postEventsToStart, std::ofstream &str);
+    void handleEndingPostEvents(eventendlist &postEventsInProgress,
+                                const Segment::iterator &j, std::ofstream &str);
 
     // convert note pitch into LilyPond format note string
     std::string convertPitchToLilyNote(int pitch,
