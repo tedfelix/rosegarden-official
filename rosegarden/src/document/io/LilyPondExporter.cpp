@@ -1406,6 +1406,9 @@ LilyPondExporter::writeBar(Segment *s,
 	if (timeSignature.isHidden()) {
 	    str << "\\once \\override Staff.TimeSignature #'break-visibility = #(vector #f #f #f) ";
 	}
+	if (timeSignature.isCommon() == false) {
+	    str << "\\once \\override Staff.TimeSignature #'style = #'() ";
+	}
         str << "\\time "
         << timeSignature.getNumerator() << "/"
         << timeSignature.getDenominator()
