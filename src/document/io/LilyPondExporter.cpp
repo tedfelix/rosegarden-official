@@ -218,6 +218,43 @@ LilyPondExporter::handleStartingPostEvents(eventstartlist &postEventsToStart,
 
         } catch (Event::BadType) {
             // Not an indication
+            // Check for sustainDown or sustainUp events
+            if ((*m)->isa(Controller::EventType) &&
+	        (*m)->has(Controller::NUMBER) &&
+	        (*m)->has(Controller::VALUE)) {
+                if ((*m)->get <Int>(Controller::NUMBER) == 64) {
+		    //
+		    // As a first approximation, any positive value for
+		    // the pedal event results in a new "Ped." marking.
+		    //
+		    // If the pedals have been entered with a midi piano,
+		    // the pedal may have continuous values from 0 to 127
+		    // and there may appear funny output with plenty of 
+		    // "Ped." marks indicating the change of pedal pressure.
+		    //
+		    // One could use the following code to make the pedal
+		    // marks transparent, but the invisible syntax has to
+		    // be put before the note, while the pedal syntax goes
+		    // after the note. Therefore, the following does not work:
+		    //
+		    //   c' \sustainUp \once \overr...#'transparent \sustainDown
+		    //
+		    // If a solution which allows to hide the pedal marks,
+		    // the example code below which shows how to hide the marks
+		    // can be removed.
+		    //
+		    /*
+                     *if ((*m)->has(INVISIBLE) && (*m)->get <Bool>(INVISIBLE)) {
+                     *    str << "\\once \\override Staff.SustainPedal #'transparent = ##t ";
+		     *}
+		     */
+                    if ((*m)->get <Int>(Controller::VALUE) > 0) {
+                        str << "\\sustainDown ";
+                    } else {
+                        str << "\\sustainUp ";
+                    }
+                }
+            }
         } catch (Event::NoData e) {
             std::cerr << "Bad indication: " << e.getMessage() << std::endl;
         }
@@ -1442,19 +1479,11 @@ LilyPondExporter::calculateDuration(Segment *s,
 				(*nextElt)->isa(SystemExclusive::EventType) ||
 				(*nextElt)->isa(ChannelPressure::EventType) ||
 				(*nextElt)->isa(KeyPressure::EventType) ||
-				(*nextElt)->isa(PitchBend::EventType))
-				//
-				// TODO (HJJ): Check here for SustainPedalDown and SustainPedalUp
-				//
-				// Controller::NUMBER == Controller::EventSubOrdering  ? ( = -5 )
-				// Controller::VALUE > 0  ? (down, if positive, max = 127)
-				// Controller::VALUE == 0  ? (up, if zero)
-				//
-				// Add Lilypond post-note commands \sustainDown and \sustainUp accordingly
-				//
+				(*nextElt)->isa(PitchBend::EventType)) {
 				++nextElt;
-			else
+			} else {
 				break;
+                        }
 		}
 	}
 
@@ -1516,7 +1545,15 @@ LilyPondExporter::writeBar(Segment *s,
 	if (timeSignature.isHidden()) {
 	    str << "\\once \\override Staff.TimeSignature #'break-visibility = #(vector #f #f #f) ";
 	}
+	//
+	// It is not possible to jump between common time signature "C"
+	// and fractioned time signature "4/4", because new time signature
+	// is entered only if the time signature fraction changes.
+	// Maybe some tweak is needed in order to allow the jumping between
+	// "C" and "4/4" ? (HJJ)
+	//
 	if (timeSignature.isCommon() == false) {
+	    // use numberedtime signature: 4/4
 	    str << "\\once \\override Staff.TimeSignature #'style = #'() ";
 	}
         str << "\\time "
@@ -1637,7 +1674,14 @@ LilyPondExporter::writeBar(Segment *s,
                     groupType = "";
                 }
             }
-        }
+        } else if ((*i)->isa(Controller::EventType) &&
+                   (*i)->has(Controller::NUMBER) &&
+	           (*i)->has(Controller::VALUE)) {
+            if ((*i)->get <Int>(Controller::NUMBER) == 64) {
+                postEventsToStart.insert(*i);
+                postEventsInProgress.insert(*i);
+            }
+	}
 
 	// Test whether the next note is grace note or not.
 	// The start or end of beamed grouping should be put in proper places.
