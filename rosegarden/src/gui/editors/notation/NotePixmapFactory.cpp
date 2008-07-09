@@ -2869,10 +2869,12 @@ NotePixmapFactory::drawOttavaAux(int length, int octavesUp,
     QRect r;
 
     if (octavesUp == 2 || octavesUp == -2) {
-        label = "15ma  ";
+        if (octavesUp == 2) label = "15ma  ";
+            else label = "15mb  ";
         backpedal = m_ottavaFontMetrics.width("15") / 2;
     } else {
-        label = "8va  ";
+        if (octavesUp == 1) label = "8va  ";
+            else label = "8vb  ";
         backpedal = m_ottavaFontMetrics.width("8") / 2;
     }
 
