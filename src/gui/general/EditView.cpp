@@ -1195,8 +1195,11 @@ EditView::getPitchFromNoteInsertAction(QString name,
             scalePitch = 0;
         }
 
+	//
+	// Note: middle-C is in octave 5 + octaveBase (default = -2) = 3 (hjj)
+	//
         Pitch pitch
-        (scalePitch, 4 + octave + clef.getOctave(), key, accidental);
+        (scalePitch, 3 + octave + clef.getOctave(), key, accidental);
         return pitch.getPerformancePitch();
 
     } else {
