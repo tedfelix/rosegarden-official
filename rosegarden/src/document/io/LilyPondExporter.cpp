@@ -1312,6 +1312,7 @@ LilyPondExporter::write()
 			    
 		                    QString syllable(strtoqstr(ssyllable));
 		                    syllable.replace(QRegExp("\\s+"), "");
+		                    syllable.replace(QRegExp("\""), "\\\"");
 		                    text += "\"" + syllable + "\"";
 		                    haveLyric = true;
 				} else if (verse > lastVerse) {
