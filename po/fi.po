@@ -471,7 +471,7 @@ msgstr "muokkaa"
 #: ../src/gui/dialogs/EventFilterDialog.cpp:141
 #: ../src/gui/dialogs/EventFilterDialog.cpp:157
 msgid "choose a pitch using a staff"
-msgstr "valitse äänenkorkeus käyttäen viivastoa"
+msgstr "valitse sävelkorkeus käyttäen viivastoa"
 
 #: ../src/gui/dialogs/EventFilterDialog.cpp:182
 #: ../src/gui/dialogs/EventFilterDialog.cpp:188
@@ -956,7 +956,7 @@ msgstr "Piilota tahtilajimerkintä"
 
 #: ../src/gui/dialogs/TimeSignatureDialog.cpp:181
 msgid "Hide the affected bar lines"
-msgstr "Piilota altistetut tahtiviivat"
+msgstr "Piilota tahtiviivat, joihin tahtilaji vaikuttaa"
 
 #: ../src/gui/dialogs/TimeSignatureDialog.cpp:186
 msgid "Show as common time"
@@ -1306,7 +1306,7 @@ msgstr "Ylempi avain"
 #: ../src/gui/dialogs/ClefDialog.cpp:96
 #: ../src/gui/dialogs/KeySignatureDialog.cpp:152
 msgid "Maintain current pitches"
-msgstr "Säilytä nykyiset äänenkorkeudet"
+msgstr "Säilytä nykyiset sävelkorkeudet"
 
 #: ../src/gui/dialogs/ClefDialog.cpp:99
 msgid "Transpose into appropriate octave"
@@ -2298,11 +2298,11 @@ msgstr "Tempo kiinnitettään seuraavaan tempon muutokseen asti"
 
 #: ../src/gui/dialogs/TempoDialog.cpp:82
 msgid "Tempo ramps to the following tempo"
-msgstr "Tempo viettyy seuraavaan tempoon"
+msgstr "Tempo muuttuu vähitellen seuraavaan tempoon"
 
 #: ../src/gui/dialogs/TempoDialog.cpp:83
 msgid "Tempo ramps to:"
-msgstr "Tempo viettyy:"
+msgstr "Muuta vähitellen tempoon:"
 
 #: ../src/gui/dialogs/TempoDialog.cpp:120
 msgid "Time of tempo change"
@@ -2564,11 +2564,11 @@ msgstr "Sävellajimerkintä"
 
 #: ../src/gui/dialogs/KeySignatureDialog.cpp:80
 msgid "Key transposition"
-msgstr "Avaimen muutos"
+msgstr "Sävellajin muutos"
 
 #: ../src/gui/dialogs/KeySignatureDialog.cpp:86
 msgid "Existing notes following key change"
-msgstr "Olemassa olevat nuotit seuraavat sävellajin muutosta"
+msgstr "Kuinka nuotit seuraavat sävellajin muutosta"
 
 #: ../src/gui/dialogs/KeySignatureDialog.cpp:98
 msgid "Flatten"
@@ -2593,11 +2593,11 @@ msgstr "Molli"
 
 #: ../src/gui/dialogs/KeySignatureDialog.cpp:123
 msgid "Transpose key according to segment transposition"
-msgstr "Muuta avain osan sävelkorkeusmuutoksen mukaan"
+msgstr "Muuta sävellaji osan sävelkorkeusmuutoksen mukaiseksi"
 
 #: ../src/gui/dialogs/KeySignatureDialog.cpp:126
 msgid "Use specified key.  Do not transpose"
-msgstr "Käytä tiettyä avainta.  Älä muuta avainta"
+msgstr "Käytä valittua sävellajia muuttamatta sävelkorkeuksia"
 
 #: ../src/gui/dialogs/KeySignatureDialog.cpp:134
 msgid "Apply to current segment only"
@@ -2605,7 +2605,7 @@ msgstr "Sovella vain nykyiseen osaan"
 
 #: ../src/gui/dialogs/KeySignatureDialog.cpp:137
 msgid "Apply to all segments at this time"
-msgstr "Sovella tämän ajan kaikkiin osiin"
+msgstr "Sovella tämän ajankohdan kaikkiin osiin"
 
 #: ../src/gui/dialogs/KeySignatureDialog.cpp:141
 msgid "Exclude percussion segments"
@@ -2617,7 +2617,7 @@ msgstr "Säilytä nykyiset korotusmerkit"
 
 #: ../src/gui/dialogs/KeySignatureDialog.cpp:158
 msgid "Transpose into this key"
-msgstr "Siirrä tähän sävellajiin"
+msgstr "Siirrä valittuun sävellajiin"
 
 #: ../src/gui/dialogs/KeySignatureDialog.cpp:331
 msgid "No such key"
@@ -5519,7 +5519,7 @@ msgstr "Vaadi yksikäsiteinen nollaus seuraavassa tahdissa"
 
 #: ../src/gui/configuration/NotationConfigurationPage.cpp:386
 msgid "Key signature cancellation style"
-msgstr "Avainmerkinnän perumisen tyyli"
+msgstr "Sävellajimerkinnän perumisen tyyli"
 
 #: ../src/gui/configuration/NotationConfigurationPage.cpp:388
 msgid "Cancel only when entering C major or A minor"
@@ -5760,7 +5760,7 @@ msgstr "Väriasetukset"
 #: ../src/gui/studio/MidiDeviceListViewItem.cpp:55
 #: ../src/gui/studio/MidiKeyMapListViewItem.cpp:44
 msgid "Key Mapping"
-msgstr "Näppäimien kartoitus"
+msgstr "Kosketinkuvaus"
 
 #: ../src/gui/studio/BankEditorDialog.cpp:97
 msgid "Manage MIDI Banks and Programs"
@@ -5786,7 +5786,7 @@ msgstr "Lisää pankki"
 
 #: ../src/gui/studio/BankEditorDialog.cpp:141
 msgid "Add Key Mapping"
-msgstr "Lisää näppäinyhdistelmä"
+msgstr "Lisää kosketinkuvaus"
 
 #: ../src/gui/studio/BankEditorDialog.cpp:153
 msgid "Add a Bank to the current device"
@@ -5794,15 +5794,15 @@ msgstr "Lisää pankki nykyiselle laitteelle"
 
 #: ../src/gui/studio/BankEditorDialog.cpp:157
 msgid "Add a Percussion Key Mapping to the current device"
-msgstr "Lisää lyömäsoitinnäppäinyhdistelmä nykyiselle laitteelle"
+msgstr "Lisää lyömäsoittimen kosketinkuvaus nykyiselle laitteelle"
 
 #: ../src/gui/studio/BankEditorDialog.cpp:161
 msgid "Delete the current Bank or Key Mapping"
-msgstr "Poista nykyinen pankki tai näppäinyhdistelmä"
+msgstr "Poista nykyinen pankki tai kosketinkuvaus"
 
 #: ../src/gui/studio/BankEditorDialog.cpp:165
 msgid "Delete all Banks and Key Mappings from the current Device"
-msgstr "Poista kaikkia pankit ja näppäinyhdistelmät nykyiseltä laitteelta"
+msgstr "Poista kaikki pankit ja kosketinkuvaukset nykyiseltä laitteelta"
 
 #: ../src/gui/studio/BankEditorDialog.cpp:167
 #: ../src/gui/studio/DeviceManagerDialog.cpp:117
@@ -6180,7 +6180,7 @@ msgstr "LSB-arvo"
 #: ../src/gui/studio/MidiProgramsEditor.cpp:541
 #, c-format
 msgid "Key Mapping: %1"
-msgstr "Näppäinkartta: %1"
+msgstr "Kosketinkuvaus: %1"
 
 #: ../src/gui/studio/MidiProgramsEditor.cpp:476
 msgid "<no key mapping>"
@@ -6189,7 +6189,7 @@ msgstr "<ei näppäinyhdistelmää>"
 #: ../src/gui/studio/MidiKeyMappingEditor.cpp:57
 #: ../src/gui/studio/MidiKeyMappingEditor.cpp:81
 msgid "Key Mapping details"
-msgstr "Näppäinyhdistelmän yksityiskohdat"
+msgstr "Kosketinkuvauksen yksityiskohdat"
 
 #: ../src/gui/studio/MidiKeyMappingEditor.cpp:58
 msgid "Pitches"
@@ -10704,13 +10704,13 @@ msgid ""
 "you'll be given the\n"
 "option to load the autosaved version, or the unmodified original.</p>\n"
 msgstr ""
-"<p>...että Rosegardenilla käytönaikainen varmennusominaisuus?<br><br>\n"
-"Voit valita varmennusaikavälin: <b>Asetukset->Konfiguroi\n"
+"<p>...että Rosegardenilla on automaattinen varmuuskopio-ominaisuus?<br><br>\n"
+"Voit valita varmuuskopioinnin aikavälin: <b>Asetukset->Konfiguroi\n"
 "Rosegarden</b>.<br><br>\n"
 "Kun jokin menee vinoon, kuten virrat katkeavat tai Rosegarden kaatuu\n"
-"(valitettavasti, sitä tapahtuu...) lataa vain tiedosto jonka parissa "
-"työskentelit, ja sinulle annetaan\n"
-"valinta ladata varmistettu versio tai aiempi tallennos.</p>\n"
+"(valitettavasti, sitä tapahtuu...) avaa vain tiedosto jonka parissa "
+"työskentelit, jonka jälkeen sinulle ehdotetaan\n"
+"avattavaksi joko varmuuskopioitu versio tai sitä aiempi aiempi tallennos.</p>\n"
 
 #: ../docs/en/tips.cpp:23
 msgid ""
