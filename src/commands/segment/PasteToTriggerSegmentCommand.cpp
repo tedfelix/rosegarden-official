@@ -98,7 +98,12 @@ PasteToTriggerSegmentCommand::execute()
             }
         }
 
-        m_segment->setLabel(qstrtostr(m_label));
+        if (m_label == "" && m_clipboard->isSingleSegment()) {
+            m_segment->setLabel(m_clipboard->getSingleSegment()->getLabel());
+        }
+        else {
+            m_segment->setLabel(qstrtostr(m_label));
+        }
 
         TriggerSegmentRec *rec =
             m_composition->addTriggerSegment(m_segment, m_basePitch, m_baseVelocity);
