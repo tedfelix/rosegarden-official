@@ -7104,6 +7104,26 @@ void NotationView::slotEditLyrics()
 {
     Staff *staff = getCurrentStaff();
     Segment &segment = staff->getSegment();
+    int oldVerseCount = 1;
+    
+    // The loop below is identical with the one in LyricEditDialog::countVerses() 
+    // Maybe countVerses() should be moved to a Segment manipulating class ? (hjj)
+    for (Segment::iterator i = (&segment)->begin();
+         (&segment)->isBeforeEndMarker(i); ++i) {
+
+        if ((*i)->isa(Text::EventType)) {
+
+            std::string textType;
+            if ((*i)->get<String>(Text::TextTypePropertyName, textType) &&
+                textType == Text::Lyric) {
+
+                long verse = 0;
+                (*i)->get<Int>(Text::LyricVersePropertyName, verse);
+
+                if (verse >= oldVerseCount) oldVerseCount = verse + 1;
+            }
+        }
+    }
 
     LyricEditDialog dialog(this, &segment);
 
@@ -7115,6 +7135,12 @@ void NotationView::slotEditLyrics()
         for (int i = 0; i < dialog.getVerseCount(); ++i) {
             SetLyricsCommand *command = new SetLyricsCommand
                 (&segment, i, dialog.getLyricData(i));
+            macro->addCommand(command);
+        }
+        for (int i = dialog.getVerseCount(); i < oldVerseCount; ++i) {
+	    // (hjj) verse count decreased, delete extra verses.
+            SetLyricsCommand *command = new SetLyricsCommand
+                (&segment, i, QString(""));
             macro->addCommand(command);
         }
 
