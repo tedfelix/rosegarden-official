@@ -267,6 +267,8 @@ NotationStrings::makeNoteMenuLabel(timeT duration,
             return QString("1/%1").arg(wholeNote / duration);
         } else if ((duration / wholeNote) * wholeNote == duration) {
             return QString("%1/1").arg(duration / wholeNote);
+        } else if ((wholeNote /(duration*2/3)) * (duration*2/3) == wholeNote) {
+            return QString("3/%1").arg(wholeNote / (duration*1/3));
         } else {
             return i18n("%1 ticks").arg(duration);
             plural = false;
