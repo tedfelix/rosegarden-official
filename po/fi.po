@@ -913,7 +913,7 @@ msgstr "Tahtilajimerkintä"
 
 #: ../src/gui/dialogs/TimeSignatureDialog.cpp:116
 msgid "Time where signature takes effect"
-msgstr "Aika minä merkintä tulee voimaan"
+msgstr "Aika, jona merkintä tulee voimaan"
 
 #: ../src/gui/dialogs/KeySignatureDialog.cpp:83
 #: ../src/gui/dialogs/TempoDialog.cpp:128
@@ -925,7 +925,7 @@ msgstr "Laajuus"
 #: ../src/gui/dialogs/TimeSignatureDialog.cpp:141
 #, c-format
 msgid "Insertion point is at start of measure %1."
-msgstr "Syöttöpiste alkaa tahdista %1."
+msgstr "Syöttökohta alkaa tahdista %1."
 
 #: ../src/gui/dialogs/TimeSignatureDialog.cpp:145
 #, c-format
@@ -934,7 +934,7 @@ msgstr "Syöttökohdan on tahdin %1 keskellä."
 
 #: ../src/gui/dialogs/TimeSignatureDialog.cpp:150
 msgid "Insertion point is at start of composition."
-msgstr "Syöttöpiste on sävellyksen alussa."
+msgstr "Syöttökohta on sävellyksen alussa."
 
 #: ../src/gui/dialogs/TimeSignatureDialog.cpp:155
 msgid "Start measure %1 here"
@@ -1086,7 +1086,7 @@ msgstr "Tapahtumatyyppi:"
 #: ../src/gui/dialogs/SimpleEventEditDialog.cpp:254
 #: ../src/gui/editors/segment/MarkerEditor.cpp:97
 msgid "Absolute time:"
-msgstr "Täysi aika:"
+msgstr "Ajankohta:"
 
 #: ../src/gui/dialogs/SimpleEventEditDialog.cpp:156
 #: ../src/gui/dialogs/SimpleEventEditDialog.cpp:328
@@ -1572,7 +1572,7 @@ msgstr "Tapahtumatyyppi: "
 
 #: ../src/gui/dialogs/EventEditDialog.cpp:91
 msgid "Absolute time: "
-msgstr "Täysi aika: "
+msgstr "Ajankohta: "
 
 #: ../src/gui/dialogs/EventEditDialog.cpp:101
 msgid "Duration: "
@@ -3098,7 +3098,7 @@ msgstr "&Palauta MIDI-verkko alkutilaan"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:1105
 msgid "Set Quick Marker at Playback Position"
-msgstr "Aseta pikamerkintä toisto-osoittimen kohdalleSyötä merkintä toisto-osoittimen kohdalle"
+msgstr "Aseta pikamerkintä toisto-osoittimen kohdalle"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:1109
 msgid "Jump to Quick Marker"
@@ -3779,7 +3779,7 @@ msgstr ""
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5780
 msgid "Move playback pointer to time"
-msgstr "Sirrä toisto-osoitin ajan kohdalle"
+msgstr "Sirrä toisto-osoitin ajankohtaan"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5793
 #: ../src/gui/editors/matrix/MatrixView.cpp:2240
@@ -6494,7 +6494,7 @@ msgstr "&Musiikkiajat"
 #: ../src/gui/editors/segment/TriggerSegmentManager.cpp:422
 #: ../src/gui/editors/tempo/TempoView.cpp:632
 msgid "&Real Times"
-msgstr "&Tosiajat"
+msgstr "&Kellonajat"
 
 #: ../src/gui/editors/eventlist/EventView.cpp:1189
 #: ../src/gui/editors/segment/MarkerEditor.cpp:419
@@ -6525,7 +6525,7 @@ msgstr "Osoittimen sijainti"
 
 #: ../src/gui/editors/segment/MarkerEditor.cpp:100
 msgid "Real time:"
-msgstr "Tosiaika:"
+msgstr "Kellonaika:"
 
 #: ../src/gui/editors/segment/MarkerEditor.cpp:103
 msgid "In measure:"
@@ -8384,7 +8384,7 @@ msgstr "kaksois-kokot"
 
 #: ../src/gui/editors/notation/NotationStrings.cpp:278
 msgid "%1 ticks"
-msgstr "%1 pientä merkkiä"
+msgstr "%1 aikayksikköä"
 
 #: ../src/gui/editors/notation/FontViewFrame.cpp:100
 #, c-format
@@ -10598,7 +10598,7 @@ msgstr "TAHTI"
 #: rc.cpp:444
 #, no-c-format
 msgid "Switch between real time, musical time, and frame count"
-msgstr "Vaihda tosiajan, musiikkiajan, ja kehysmäärän välillä"
+msgstr "Vaihda kellonajan, musiikkiajan, ja kehysmäärän välillä"
 
 #: rc.cpp:448
 #, no-c-format
@@ -10675,7 +10675,7 @@ msgstr ""
 #: rc.cpp:494
 #, no-c-format
 msgid "Display time to end"
-msgstr "Näytä lopun kestoaika"
+msgstr "Näytä lopun kesto"
 
 #: ../docs/en/tips.cpp:3
 msgid ""
@@ -11043,8 +11043,8 @@ msgid ""
 "count, and a visual metronome as well as real time?<br><br>Just click on the "
 "small button at the extreme top left of the window.</p>\n"
 msgstr ""
-"<p>...että kuljetinikkuna voi näyttää musiikin ajan, näytteen kehysluvun, ja "
-"näkyvän metronomin, kuten myös oikean ajan? <br><br>Klikkaan vain pientä "
+"<p>...että kuljetinikkuna voi näyttää musiikkiajan, näytteen kehysluvun, ja "
+"näkyvän metronomin, kuten myös kellonajan? <br><br>Klikkaan vain pientä "
 "painiketta, joka on äärimmäisenä ikkunan vasemmassa yläkulmassa.</p>\n"
 
 #: ../docs/en/tips.cpp:202
