@@ -28,8 +28,9 @@
     <Action name="snap_16"/>
     <Action name="snap_12"/>
     <Action name="snap_8"/>
-    <Action name="snap_6"/>
+    <Action name="snap_dotted_8"/>
     <Action name="snap_4"/>
+    <Action name="snap_dotted_4"/>
     <Action name="snap_2"/>
     <Action name="snap_beat"/>
     <Action name="snap_bar"/>
