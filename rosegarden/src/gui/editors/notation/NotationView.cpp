@@ -6821,6 +6821,18 @@ NotationView::doDeferredCursorMove()
     NotationElementList::iterator i =
         staff->getViewElementList()->findNearestTime(t);
 
+    //
+    // Up to this point everything goes ok when adding the first note in the 
+    // beginning of the composition.
+    //
+    // However, there is a BUG with rests: not all rests have an associated
+    // canvas. The rests which do not have an associated canvas are not
+    // recognized by the following code and the _cursor position_ is not
+    // updated correctly to be just after the added note when the first note 
+    // of a segment have been added in the beginning of the segment.
+    //
+    // Why the canvas item is missing for the predefined rests ? (hjj)
+    //
     while (i != staff->getViewElementList()->end() &&
            !static_cast<NotationElement*>(*i)->getCanvasItem())
         ++i;
