@@ -7318,11 +7318,11 @@ msgstr "Poista sysääjät"
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:2723
 msgid "%1 - Segment Track #%2 - %3"
-msgstr "%1 - osan raita #%2 - %3"
+msgstr "%1 - Osa raidalla #%2 - %3"
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:2730
 msgid "%1 - All Segments - %2"
-msgstr "%1 - kaikki osat - %2"
+msgstr "%1 - Kaikki osat - %2"
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:2737
 msgid ""
@@ -7808,7 +7808,7 @@ msgstr "  Koko:  "
 
 #: ../src/gui/editors/notation/NotationView.cpp:2693
 msgid "  Spacing:  "
-msgstr "  Väli(stys):  "
+msgstr "  Välit:  "
 
 #: ../src/gui/editors/notation/NotationView.cpp:3009
 #: ../src/gui/editors/notation/NotationView.cpp:3834
@@ -7841,7 +7841,7 @@ msgstr "tauko"
 
 #: ../src/gui/editors/notation/NotationView.cpp:4227
 msgid "%1 - Segment Track #%2 - Notation"
-msgstr "%1 - Osan raita #%2 - Nuotinnus"
+msgstr "%1 - Osa raidalla #%2 - Nuotinnus"
 
 #: ../src/gui/editors/notation/NotationView.cpp:4233
 msgid "%1 - All Segments - Notation"
@@ -8680,11 +8680,11 @@ msgstr "%1 - sysäistävä osa: %2"
 
 #: ../src/gui/editors/eventlist/EventView.cpp:1592
 msgid "%1 - Segment Track #%2 - Event List"
-msgstr "%1 - osan raita #%2 - tapahtumalista"
+msgstr "%1 - Osa raidalla #%2 - Tapahtumalista"
 
 #: ../src/gui/editors/eventlist/EventView.cpp:1598
 msgid "%1 - %2 Segments - Event List"
-msgstr "%1 - %2 osaa - tapahtumalista"
+msgstr "%1 - %2 osaa - Tapahtumalista"
 
 #: ../src/gui/rulers/TempoRuler.cpp:131
 msgid "Insert Tempo Change at Playback Position"
