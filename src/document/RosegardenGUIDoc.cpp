@@ -25,6 +25,7 @@
 #include "gui/editors/segment/TrackButtons.h"
 #include <klocale.h>
 #include <kstddirs.h>
+#include "misc/AppendLabel.h"
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "gui/general/ClefIndex.h"
@@ -2550,10 +2551,10 @@ RosegardenGUIDoc::addRecordMIDISegment(TrackId tid)
         } else {
             label = track->getLabel();
         }
-        label = qstrtostr(i18n("%1 (recorded)").arg(strtoqstr(label)));
     }
 
-    recordMIDISegment->setLabel(label);
+    recordMIDISegment->setLabel(appendLabel(label,
+            qstrtostr(i18n("(recorded)"))));
 
     Clef clef = clefIndexToClef(track->getClef());
     recordMIDISegment->insert(clef.getAsEvent
@@ -2625,17 +2626,15 @@ RosegardenGUIDoc::addRecordAudioSegment(InstrumentId iid,
                 m_studio.getInstrumentById(recordTrack->getInstrument());
 
             if (instr) {
-                label = instr->getName() + std::string(" ");
+                label = instr->getName();
             }
 
         } else {
-            label = recordTrack->getLabel() + std::string(" ");
+            label = recordTrack->getLabel();
         }
-
-        label += std::string("(recorded audio)");
     }
 
-    recordSegment->setLabel(label);
+    recordSegment->setLabel(appendLabel(label, qstrtostr(i18n("(recorded)"))));
     recordSegment->setAudioFileId(auid);
 
     // set color for audio segment to distinguish it from a MIDI segment on an

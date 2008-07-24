@@ -18,6 +18,7 @@
 
 #include "SegmentRescaleCommand.h"
 
+#include "misc/AppendLabel.h"
 #include "misc/Strings.h"
 #include "base/Event.h"
 #include "base/Composition.h"
@@ -91,13 +92,9 @@ SegmentRescaleCommand::execute()
 
         m_newSegment = new Segment();
         m_newSegment->setTrack(m_segment->getTrack());
-        QString oldLabel = strtoqstr(m_segment->getLabel());
-        if (oldLabel.endsWith(i18n("(rescaled)"))) {
-            m_newSegment->setLabel(m_segment->getLabel());
-        } else {
-            m_newSegment->setLabel(qstrtostr(i18n("%1 (rescaled)").arg
-                                             (oldLabel)));
-        }
+        std::string label = m_segment->getLabel();
+        m_newSegment->setLabel(appendLabel(
+                label, qstrtostr(i18n("(rescaled)"))));
         m_newSegment->setColourIndex(m_segment->getColourIndex());
 
         for (Segment::iterator i = m_segment->begin();

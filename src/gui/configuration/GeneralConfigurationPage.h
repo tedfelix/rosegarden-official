@@ -82,8 +82,9 @@ protected slots:
 protected:
     int getCountInSpin()            { return m_countIn->value(); }
     int getDblClickClient()         { return m_client->currentItem(); }
-    int getNoteNameStyle() { return m_nameStyle->currentItem(); }
-
+    int getNoteNameStyle()          { return m_nameStyle->currentItem(); }
+    int getAppendLabel()            { return m_appendLabel->isChecked(); }
+    
     //--------------- Data members ---------------------------------
     RosegardenGUIDoc* m_doc;
 
@@ -97,6 +98,7 @@ protected:
     QComboBox* m_nameStyle;
     QComboBox* m_sidebarStyle;
     QComboBox* m_globalStyle;
+    QCheckBox* m_appendLabel;
     QCheckBox *m_jackTransport;
 
 };

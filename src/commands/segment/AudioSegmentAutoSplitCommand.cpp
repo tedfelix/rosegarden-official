@@ -20,6 +20,7 @@
 
 #include "base/Event.h"
 #include "misc/Debug.h"
+#include "misc/AppendLabel.h"
 #include "misc/Strings.h"
 #include "base/Composition.h"
 #include "base/RealTime.h"
@@ -136,10 +137,9 @@ AudioSegmentAutoSplitCommand::execute()
 
             // label
             sprintf(splitNumber, "%d", splitCount++);
-            newSegment->
-            setLabel(qstrtostr(i18n("%1 (autosplit %2)").arg
-                               (strtoqstr(m_segment->getLabel())).arg
-                               (splitNumber)));
+            std::string label = m_segment->getLabel();
+            newSegment->setLabel(appendLabel(label, qstrtostr(
+                    i18n("(part %1)").arg(splitCount))));
 
             newSegment->setColourIndex(m_segment->getColourIndex());
 

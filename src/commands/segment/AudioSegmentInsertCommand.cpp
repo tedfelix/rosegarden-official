@@ -20,6 +20,7 @@
 
 #include <klocale.h>
 #include "misc/Debug.h"
+#include "misc/AppendLabel.h"
 #include "misc/Strings.h"
 #include "base/Composition.h"
 #include "base/RealTime.h"
@@ -98,19 +99,15 @@ AudioSegmentInsertCommand::execute()
 
         // Label by audio file name
         //
-        std::string label = "";
-
         AudioFile *aF =
             m_audioFileManager->getAudioFile(m_audioFileId);
 
-        if (aF)
-            label = qstrtostr(i18n("%1 (inserted)").arg
-                              (strtoqstr(aF->getName())));
-        else
-            label = qstrtostr(i18n("unknown audio file"));
-
-        m_segment->setLabel(label);
-
+        if (aF) {
+            std::string label = aF->getName();
+            m_segment->setLabel(appendLabel(label, qstrtostr(i18n("(inserted)"))));
+        } else {
+            m_segment->setLabel(i18n("unknown audio file"));
+        }
         m_composition->addSegment(m_segment);
     } else {
         m_composition->addSegment(m_segment);
