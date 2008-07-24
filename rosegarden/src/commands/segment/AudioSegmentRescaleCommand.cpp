@@ -18,6 +18,7 @@
 
 #include "AudioSegmentRescaleCommand.h"
 
+#include "misc/AppendLabel.h"
 #include "misc/Strings.h"
 #include "base/Event.h"
 #include "base/Composition.h"
@@ -115,11 +116,8 @@ AudioSegmentRescaleCommand::execute()
 
         m_newSegment = new Segment(*m_segment);
 
-        QString oldLabel = strtoqstr(m_segment->getLabel());
-        if (!oldLabel.endsWith(i18n("(rescaled)"))) {
-            m_newSegment->setLabel(qstrtostr(i18n("%1 (rescaled)").arg
-                                             (oldLabel)));
-        }
+        std::string label = m_newSegment->getLabel();
+        m_newSegment->setLabel(appendLabel(label, qstrtostr(i18n("(rescaled)"))));
 
         AudioFileId sourceFileId = m_segment->getAudioFileId();
         float absoluteRatio = m_ratio;

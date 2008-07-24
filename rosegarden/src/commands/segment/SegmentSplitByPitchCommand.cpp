@@ -20,6 +20,7 @@
 
 #include "base/BaseProperties.h"
 #include "base/Sets.h"
+#include "misc/AppendLabel.h"
 #include "misc/Strings.h"
 #include "base/Composition.h"
 #include "base/Event.h"
@@ -160,10 +161,8 @@ SegmentSplitByPitchCommand::execute()
                      BaseProperties::GROUP_TYPE_BEAMED);
 
     std::string label = m_segment->getLabel();
-    m_newSegmentA->setLabel(qstrtostr(i18n("%1 (upper)").arg
-                                      (strtoqstr(label))));
-    m_newSegmentB->setLabel(qstrtostr(i18n("%1 (lower)").arg
-                                      (strtoqstr(label))));
+    m_newSegmentA->setLabel(appendLabel(label, qstrtostr(i18n("(upper)"))));
+    m_newSegmentB->setLabel(appendLabel(label, qstrtostr(i18n("(lower)"))));
     m_newSegmentA->setColourIndex(m_segment->getColourIndex());
     m_newSegmentB->setColourIndex(m_segment->getColourIndex());
 

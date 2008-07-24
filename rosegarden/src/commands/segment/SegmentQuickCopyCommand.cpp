@@ -18,6 +18,7 @@
 
 #include "SegmentQuickCopyCommand.h"
 
+#include "misc/AppendLabel.h"
 #include "misc/Strings.h"
 #include "base/Composition.h"
 #include "base/Segment.h"
@@ -47,8 +48,8 @@ SegmentQuickCopyCommand::execute()
 {
     if (!m_segment) {
         m_segment = new Segment(*m_segmentToCopy);
-        m_segment->setLabel(qstrtostr(i18n("%1 (copied)").arg
-                                      (strtoqstr(m_segment->getLabel()))));
+        std::string label = m_segment->getLabel();
+        m_segment->setLabel(appendLabel(label, qstrtostr(i18n("(copied)"))));
     }
     m_composition->addSegment(m_segment);
     m_detached = false;

@@ -19,6 +19,7 @@
 #include "AudioSegmentSplitCommand.h"
 
 #include <klocale.h>
+#include "misc/AppendLabel.h"
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "base/RealTime.h"
@@ -91,12 +92,8 @@ AudioSegmentSplitCommand::execute()
 
         // Set labels
         //
-        m_segmentLabel = m_segment->getLabel();
-        QString newLabel = strtoqstr(m_segmentLabel);
-        if (!newLabel.endsWith(i18n(" (split)"))) {
-            newLabel = i18n("%1 (split)").arg(newLabel);
-        }
-        m_segment->setLabel(qstrtostr(newLabel));
+        std::string label = m_segment->getLabel();
+        m_segment->setLabel(appendLabel(label, qstrtostr(i18n("(split)"))));
         m_newSegment->setLabel(m_segment->getLabel());
 
         // Set color

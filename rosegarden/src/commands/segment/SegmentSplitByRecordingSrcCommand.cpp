@@ -19,6 +19,7 @@
 #include "SegmentSplitByRecordingSrcCommand.h"
 
 #include "base/BaseProperties.h"
+#include "misc/AppendLabel.h"
 #include "misc/Strings.h"
 #include "base/Composition.h"
 #include "base/Event.h"
@@ -110,10 +111,8 @@ SegmentSplitByRecordingSrcCommand::execute()
                                       m_segment->getEndMarkerTime());
 
         std::string label = m_segment->getLabel();
-        m_newSegmentA->setLabel(qstrtostr(i18n("%1 (split)").arg
-                                          (strtoqstr(label))));
-        m_newSegmentB->setLabel(qstrtostr(i18n("%1 (split)").arg
-                                          (strtoqstr(label))));
+        m_newSegmentA->setLabel(appendLabel(label, qstrtostr(i18n("(split)"))));
+        m_newSegmentB->setLabel(appendLabel(label, qstrtostr(i18n("(split)"))));
         m_newSegmentA->setColourIndex(m_segment->getColourIndex());
         m_newSegmentB->setColourIndex(m_segment->getColourIndex());
     }

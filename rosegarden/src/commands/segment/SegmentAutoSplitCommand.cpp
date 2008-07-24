@@ -20,6 +20,7 @@
 
 #include "base/Event.h"
 #include "misc/Debug.h"
+#include "misc/AppendLabel.h"
 #include "misc/Strings.h"
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
@@ -138,8 +139,8 @@ SegmentAutoSplitCommand::execute()
 
             Segment *newSegment = new Segment();
             newSegment->setTrack(m_segment->getTrack());
-            newSegment->setLabel(qstrtostr(i18n("%1 (part)").arg
-                                           (strtoqstr(m_segment->getLabel()))));
+            std::string label = m_segment->getLabel();
+            newSegment->setLabel(appendLabel(label, qstrtostr(i18n("(part %1)").arg(split + 1))));
             newSegment->setColourIndex(m_segment->getColourIndex());
 
             timeT startTime = segmentStart;

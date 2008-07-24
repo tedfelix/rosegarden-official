@@ -3,4 +3,6 @@ SET(misc_SRCS
 	misc/Debug.h
 	misc/Strings.cpp
 	misc/Strings.h
+	misc/AppendLabel.cpp
+	misc/AppendLabel.h
 )

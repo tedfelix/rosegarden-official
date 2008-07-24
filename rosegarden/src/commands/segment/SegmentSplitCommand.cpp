@@ -19,6 +19,7 @@
 #include "SegmentSplitCommand.h"
 
 #include <klocale.h>
+#include "misc/AppendLabel.h"
 #include "misc/Strings.h"
 #include "base/Event.h"
 #include "base/Composition.h"
@@ -123,14 +124,12 @@ SegmentSplitCommand::execute()
     // Set labels
     //
     std::string label = m_segment->getLabel();
-    QString newLabel = strtoqstr(label);
+    m_newSegmentA->setLabel(label);
+    m_newSegmentB->setLabel(label);
     if (!m_keepLabel) {
-        if (!newLabel.endsWith(i18n(" (split)"))) {
-            newLabel = i18n("%1 (split)").arg(newLabel);
-        }
+        m_newSegmentA->setLabel(appendLabel(label, qstrtostr(i18n("(split)"))));
+        m_newSegmentB->setLabel(appendLabel(label, qstrtostr(i18n("(split)"))));
     }
-    m_newSegmentA->setLabel(newLabel);
-    m_newSegmentB->setLabel(newLabel);
 
     m_newSegmentB->setColourIndex(m_segment->getColourIndex());
     m_newSegmentB->setTranspose(m_segment->getTranspose());
