@@ -3,14 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
- 
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
- 
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -33,6 +26,7 @@
 #include "base/Device.h"
 #include "base/Instrument.h"
 #include "base/MidiDevice.h"
+#include "base/SoftSynthDevice.h"
 #include "base/MidiProgram.h"
 #include "base/RealTime.h"
 #include "base/Studio.h"
@@ -42,6 +36,7 @@
 #include "gui/studio/StudioControl.h"
 #include "gui/widgets/PitchChooser.h"
 #include "sound/MappedEvent.h"
+#include "sound/PluginIdentifier.h"
 #include <kcombobox.h>
 #include <kdialogbase.h>
 #include <qcheckbox.h>
@@ -90,21 +85,22 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
     DeviceId deviceId = studio.getMetronomeDevice();
 
     for (it = devices->begin(); it != devices->end(); it++) {
-        MidiDevice *dev =
-            dynamic_cast<MidiDevice*>(*it);
 
-        if (dev && dev->getDirection() == MidiDevice::Play) {
-            QString label = strtoqstr(dev->getName());
-            QString connection = strtoqstr(dev->getConnection());
-            label += " - ";
-            if (connection == "")
-                label += i18n("No connection");
-            else
-                label += connection;
-            m_metronomeDevice->insertItem(label);
-            if (dev->getId() == deviceId) {
-                m_metronomeDevice->setCurrentItem(m_metronomeDevice->count() - 1);
-            }
+        Device *dev = *it;
+        bool hasConnection = false;
+        if (!isSuitable(dev, &hasConnection)) continue;
+
+        QString label = strtoqstr(dev->getName());
+        QString connection = strtoqstr(dev->getConnection());
+
+        if (hasConnection && connection != "") {
+            label = i18n("%1 - %2").arg(label).arg(connection);
+        } else if (!hasConnection) {
+            label = i18n("%1 - No connection").arg(label);
+        }
+        m_metronomeDevice->insertItem(label);
+        if (dev->getId() == deviceId) {
+            m_metronomeDevice->setCurrentItem(m_metronomeDevice->count() - 1);
         }
     }
 
@@ -198,21 +194,19 @@ ManageMetronomeDialog::populate(int deviceIndex)
     DeviceList *devices = m_doc->getStudio().getDevices();
     DeviceListConstIterator it;
     int count = 0;
-    MidiDevice *dev = 0;
+    Device *dev = 0;
 
     for (it = devices->begin(); it != devices->end(); it++) {
-        dev = dynamic_cast<MidiDevice*>(*it);
 
-        if (dev && dev->getDirection() == MidiDevice::Play) {
-            if (count == deviceIndex)
-                break;
+        dev = *it;
+        if (!isSuitable(dev)) continue;
 
-            count++;
-        }
+        if (count == deviceIndex) break;
+        count++;
     }
 
     // sanity
-    if (count < 0 || dev == 0) {
+    if (count < 0 || dev == 0 || !isSuitable(dev)) {
         if (m_instrumentParameterBox)
             m_instrumentParameterBox->useInstrument(0);
         return ;
@@ -222,7 +216,7 @@ ManageMetronomeDialog::populate(int deviceIndex)
     InstrumentList list = dev->getPresentationInstruments();
     InstrumentList::iterator iit;
 
-    const MidiMetronome *metronome = dev->getMetronome();
+    const MidiMetronome *metronome = getMetronome(dev);
 
     // if we've got no metronome against this device then create one
     if (metronome == 0) {
@@ -235,35 +229,61 @@ ManageMetronomeDialog::populate(int deviceIndex)
             }
         }
 
-        dev->setMetronome(MidiMetronome(id));
+        setMetronome(dev, MidiMetronome(id));
 
-        metronome = dev->getMetronome();
+        metronome = getMetronome(dev);
     }
 
     // metronome should now be set but we still check it
     if (metronome) {
         int position = 0;
         int count = 0;
+
         for (iit = list.begin(); iit != list.end(); ++iit) {
-            QString iname(strtoqstr((*iit)->getPresentationName()));
+
+            QString iname(strtoqstr((*iit)->getName()));
+            QString ipname(strtoqstr((*iit)->getPresentationName()));
             QString pname(strtoqstr((*iit)->getProgramName()));
-            if (pname != "")
-                iname += " (" + pname + ")";
 
-            bool used = false;
-            for (Composition::trackcontainer::iterator tit =
-                        m_doc->getComposition().getTracks().begin();
-                    tit != m_doc->getComposition().getTracks().end(); ++tit) {
+            QString text;
 
-                if (tit->second->getInstrument() == (*iit)->getId()) {
-                    used = true;
-                    break;
+            if ((*iit)->getType() == Instrument::SoftSynth) {
+
+                iname.replace(i18n("Synth plugin "), "");
+                pname = "";
+
+                AudioPluginInstance *plugin = (*iit)->getPlugin
+                    (Instrument::SYNTH_PLUGIN_POSITION);
+                if (plugin) {
+                    pname = strtoqstr(plugin->getProgram());
+                    QString identifier = strtoqstr(plugin->getIdentifier());
+                    if (identifier != "") {
+                        QString type, soName, label;
+                        PluginIdentifier::parseIdentifier
+                            (identifier, type, soName, label);
+                        if (pname == "") {
+                            pname = strtoqstr(plugin->getDistinctiveConfigurationText());
+                        }
+                        if (pname != "") {
+                            pname = QString("%1: %2").arg(label).arg(pname);
+                        } else {
+                            pname = label;
+                        }
+                    }
                 }
+
+            } else {
+
+                iname = ipname;
             }
 
-            //	    if (used) iname = i18n("%1 [used]").arg(iname);
+            if (pname != "") {
+                text = i18n("%1 (%2)").arg(iname).arg(pname);
+            } else {
+                text = iname;
+            }
 
-            m_metronomeInstrument->insertItem(iname);
+            m_metronomeInstrument->insertItem(text);
 
             if ((*iit)->getId() == metronome->getInstrument()) {
                 position = count;
@@ -298,21 +318,19 @@ ManageMetronomeDialog::slotInstrumentChanged(int i)
     DeviceList *devices = m_doc->getStudio().getDevices();
     DeviceListConstIterator it;
     int count = 0;
-    MidiDevice *dev = 0;
+    Device *dev = 0;
 
     for (it = devices->begin(); it != devices->end(); it++) {
-        dev = dynamic_cast<MidiDevice*>(*it);
 
-        if (dev && dev->getDirection() == MidiDevice::Play) {
-            if (count == deviceIndex)
-                break;
+        dev = *it;
+        if (!isSuitable(dev)) continue;
 
-            count++;
-        }
+        if (count == deviceIndex) break;
+        count++;
     }
 
     // sanity
-    if (count < 0 || dev == 0) {
+    if (count < 0 || dev == 0 || !isSuitable(dev)) {
         m_instrumentParameterBox->useInstrument(0);
         return ;
     }
@@ -362,20 +380,18 @@ ManageMetronomeDialog::slotApply()
     DeviceList *devices = m_doc->getStudio().getDevices();
     DeviceListConstIterator it;
     int count = 0;
-    MidiDevice *dev = 0;
+    Device *dev = 0;
 
     for (it = devices->begin(); it != devices->end(); it++) {
-        dev = dynamic_cast<MidiDevice*>(*it);
 
-        if (dev && dev->getDirection() == MidiDevice::Play) {
-            if (count == m_metronomeDevice->currentItem())
-                break;
+        dev = *it;
+        if (!isSuitable(dev)) continue;
 
-            count++;
-        }
+        if (count == m_metronomeDevice->currentItem()) break;
+        count++;
     }
 
-    if (!dev) {
+    if (!dev || !isSuitable(dev)) {
         std::cerr << "Warning: ManageMetronomeDialog::slotApply: no " << m_metronomeDevice->currentItem() << "th device" << std::endl;
         return ;
     }
@@ -383,9 +399,8 @@ ManageMetronomeDialog::slotApply()
     DeviceId deviceId = dev->getId();
     studio.setMetronomeDevice(deviceId);
 
-    if (dev->getMetronome() == 0)
-        return ;
-    MidiMetronome metronome(*dev->getMetronome());
+    if (getMetronome(dev) == 0) return ;
+    MidiMetronome metronome(*getMetronome(dev));
 
     // get instrument
     InstrumentList list = dev->getPresentationInstruments();
@@ -413,7 +428,7 @@ ManageMetronomeDialog::slotApply()
     metronome.setSubBeatVelocity(
         MidiByte(m_metronomeSubBeatVely->value()));
 
-    dev->setMetronome(metronome);
+    setMetronome(dev, metronome);
 
     m_doc->getComposition().setPlayMetronome(m_playEnabled->isChecked());
     m_doc->getComposition().setRecordMetronome(m_recordEnabled->isChecked());
@@ -431,25 +446,21 @@ ManageMetronomeDialog::slotPreviewPitch(int pitch)
     DeviceList *devices = m_doc->getStudio().getDevices();
     DeviceListConstIterator it;
     int count = 0;
-    MidiDevice *dev = 0;
+    Device *dev = 0;
 
     for (it = devices->begin(); it != devices->end(); it++) {
-        dev = dynamic_cast<MidiDevice*>(*it);
 
-        if (dev && dev->getDirection() == MidiDevice::Play) {
-            if (count == m_metronomeDevice->currentItem())
-                break;
+        dev = *it;
+        if (!isSuitable(dev)) continue;
 
-            count++;
-        }
+        if (count == m_metronomeDevice->currentItem()) break;
+        count++;
     }
 
-    if (!dev)
-        return ;
+    if (!dev || !isSuitable(dev)) return;
 
-    const MidiMetronome *metronome = dev->getMetronome();
-    if (metronome == 0)
-        return ;
+    const MidiMetronome *metronome = getMetronome(dev);
+    if (metronome == 0) return;
 
     InstrumentList list = dev->getPresentationInstruments();
 
@@ -503,6 +514,54 @@ ManageMetronomeDialog::slotPitchSelectorChanged(int selection)
         break;
     }
 }
+
+bool
+ManageMetronomeDialog::isSuitable(Device *dev, bool *hasConnectionReturn)
+{
+    MidiDevice *md = dynamic_cast<MidiDevice *>(dev);
+    if (md && md->getDirection() == MidiDevice::Play) {
+        if (hasConnectionReturn) {
+            if (md->getConnection() == "") *hasConnectionReturn = false;
+            else *hasConnectionReturn = true;
+        }
+        return true;
+    }
+    if (dynamic_cast<SoftSynthDevice *>(dev)) {
+        if (hasConnectionReturn) *hasConnectionReturn = true;
+        return true;
+    }
+    return false;
+}
+
+void
+ManageMetronomeDialog::setMetronome(Device *dev, const MidiMetronome &metronome)
+{
+    MidiDevice *md = dynamic_cast<MidiDevice *>(dev);
+    if (md) {
+        md->setMetronome(metronome);
+        return;
+    }
+    SoftSynthDevice *ssd = dynamic_cast<SoftSynthDevice *>(dev);
+    if (ssd) {
+        ssd->setMetronome(metronome);
+        return;
+    }
+}
+
+const MidiMetronome *
+ManageMetronomeDialog::getMetronome(Device *dev)
+{
+    MidiDevice *md = dynamic_cast<MidiDevice *>(dev);
+    if (md) {
+        return md->getMetronome();
+    }
+    SoftSynthDevice *ssd = dynamic_cast<SoftSynthDevice *>(dev);
+    if (ssd) {
+        return ssd->getMetronome();
+    }
+    return 0;
+}
+
 
 }
 #include "ManageMetronomeDialog.moc"

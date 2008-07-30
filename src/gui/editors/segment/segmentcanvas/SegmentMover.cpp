@@ -3,14 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
- 
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
- 
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -141,8 +134,14 @@ void SegmentMover::handleMouseButtonPress(QMouseEvent *e)
 
 }
 
-void SegmentMover::handleMouseButtonRelease(QMouseEvent*)
+void SegmentMover::handleMouseButtonRelease(QMouseEvent *e)
 {
+    Composition &comp = m_doc->getComposition();
+
+    int startDragTrackPos = m_canvas->grid().getYBin(m_clickPoint.y());
+    int currentTrackPos = m_canvas->grid().getYBin(e->pos().y());
+    int trackDiff = currentTrackPos - startDragTrackPos;
+
     if (m_currentItem) {
 
         if (changeMade()) {
@@ -163,22 +162,33 @@ void SegmentMover::handleMouseButtonRelease(QMouseEvent*)
                 CompositionItem item = *it;
 
                 Segment* segment = CompositionItemHelper::getSegment(item);
-                int trackPos = m_canvas->grid().getYBin(item->rect().y());
-                Track* track = m_doc->getComposition().getTrackByPosition(trackPos);
-                TrackId itemTrackId = track->getId();
+
+                TrackId origTrackId = segment->getTrack();
+                int trackPos = comp.getTrackPositionById(origTrackId);
+                trackPos += trackDiff;
+
+                if (trackPos < 0) {
+                    trackPos = 0;
+                } else if (trackPos >= comp.getNbTracks()) {
+                    trackPos = comp.getNbTracks() - 1;
+                }
+
+                Track *newTrack = comp.getTrackByPosition(trackPos);
+                int newTrackId = origTrackId;
+                if (newTrack) newTrackId = newTrack->getId();
+
                 timeT newStartTime = CompositionItemHelper::getStartTime(item, m_canvas->grid());
 
-                // No -- we absolutely don't want to snap the end time
+                // We absolutely don't want to snap the end time
                 // to the grid.  We want it to remain exactly the same
-                // as it was, but relative to the new start time. --cc
-                //                timeT newEndTime   = CompositionItemHelper::getEndTime(item, m_canvas->grid());
+                // as it was, but relative to the new start time.
                 timeT newEndTime = newStartTime + segment->getEndMarkerTime()
                                    - segment->getStartTime();
 
                 command->addSegment(segment,
                                     newStartTime,
                                     newEndTime,
-                                    itemTrackId);
+                                    newTrackId);
             }
 
             addCommandToHistory(command);
@@ -200,6 +210,8 @@ void SegmentMover::handleMouseButtonRelease(QMouseEvent*)
 int SegmentMover::handleMouseMove(QMouseEvent *e)
 {
     m_canvas->setSnapGrain(true);
+
+    Composition &comp = m_doc->getComposition();
 
     if (!m_currentItem) {
         setBasicContextHelp();
@@ -242,6 +254,24 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
         timeT newStartTime = m_canvas->grid().snapX((*it)->savedRect().x() + dx);
 
         int newX = int(m_canvas->grid().getRulerScale()->getXForTime(newStartTime));
+
+        int startDragTrackPos = m_canvas->grid().getYBin(m_clickPoint.y());
+        int currentTrackPos = m_canvas->grid().getYBin(e->pos().y());
+        int trackDiff = currentTrackPos - startDragTrackPos;
+        int trackPos = m_canvas->grid().getYBin((*it)->savedRect().y());
+
+//        std::cerr << "segment " << *it << ": mouse started at track " << startDragTrackPos << ", is now at " << currentTrackPos << ", trackPos from " << trackPos << " to ";
+
+        trackPos += trackDiff;
+
+//        std::cerr << trackPos << std::endl;
+
+        if (trackPos < 0) {
+            trackPos = 0;
+        } else if (trackPos >= comp.getNbTracks()) {
+            trackPos = comp.getNbTracks() - 1;
+        }
+/*!!!
         int newY = m_canvas->grid().snapY((*it)->savedRect().y() + dy);
         // Make sure we don't set a non-existing track
         if (newY < 0) {
@@ -259,10 +289,10 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
         // not allow it in the first place, or we automatically
         // create new tracks - might make undo very tricky though
         //
-        if (trackPos >= m_doc->getComposition().getNbTracks())
-            trackPos = m_doc->getComposition().getNbTracks() - 1;
-
-        newY = m_canvas->grid().getYBinCoordinate(trackPos);
+        if (trackPos >= comp.getNbTracks())
+            trackPos = comp.getNbTracks() - 1;
+*/
+        int newY = m_canvas->grid().getYBinCoordinate(trackPos);
 
         //             RG_DEBUG << "SegmentMover::handleMouseMove: moving to "
         //                      << newX << "," << newY << endl;
@@ -283,9 +313,7 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
 
     timeT currentItemStartTime = m_canvas->grid().snapX(m_currentItem->rect().x());
 
-    Composition &comp = m_doc->getComposition();
-    RealTime time =
-        comp.getElapsedRealTime(currentItemStartTime);
+    RealTime time = comp.getElapsedRealTime(currentItemStartTime);
     QString ms;
     ms.sprintf("%03d", time.msec());
 

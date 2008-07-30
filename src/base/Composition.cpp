@@ -3,14 +3,8 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <bownie@bownie.com>
-
-    The moral right of the authors to claim authorship of this work
-    has been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
+    See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
@@ -330,6 +324,75 @@ void Composition::setSegmentStartTime(Segment *segment, timeT startTime)
 
     // re-add it
     m_segments.insert(segment);    
+}
+
+int
+Composition::getMaxContemporaneousSegmentsOnTrack(TrackId track) const
+{
+    // Could be made faster, but only if it needs to be.
+
+    // This is similar to the polyphony calculation in
+    // DocumentMetaConfigurationPage ctor.
+
+    std::set<Segment *> simultaneous;
+    std::multimap<timeT, Segment *> ends;
+
+    int maximum = 0;
+
+    for (const_iterator i = begin(); i != end(); ++i) {
+	if ((*i)->getTrack() != track) continue;
+	timeT t0 = (*i)->getStartTime();
+	timeT t1 = (*i)->getRepeatEndTime();
+//	std::cerr << "getMaxContemporaneousSegmentsOnTrack(" << track << "): segment " << *i << " from " << t0 << " to " << t1 << std::endl;
+	while (!ends.empty() && t0 >= ends.begin()->first) {
+	    simultaneous.erase(ends.begin()->second);
+	    ends.erase(ends.begin());
+	}
+	simultaneous.insert(*i);
+	ends.insert(std::multimap<timeT, Segment *>::value_type(t1, *i));
+	int current = simultaneous.size();
+	if (current > maximum) maximum = current;
+    }
+
+    return maximum;
+}
+
+int
+Composition::getSegmentVoiceIndex(const Segment *segment) const
+{
+    TrackId track = segment->getTrack();
+
+    // See function above
+
+    std::map<Segment *, int> indices;
+    std::set<int> used;
+    std::multimap<timeT, Segment *> ends;
+
+    int maximum = 0;
+
+    for (const_iterator i = begin(); i != end(); ++i) {
+	if ((*i)->getTrack() != track) continue;
+	timeT t0 = (*i)->getStartTime();
+	timeT t1 = (*i)->getRepeatEndTime();
+	int index;
+	while (!ends.empty() && t0 >= ends.begin()->first) {
+	    index = indices[ends.begin()->second];
+	    used.erase(index);
+	    indices.erase(ends.begin()->second);
+	    ends.erase(ends.begin());
+	}
+	for (index = 0; ; ++index) {
+	    if (used.find(index) == used.end()) break;
+	}
+	if (*i == segment) return index;
+	indices[*i] = index;
+	used.insert(index);
+	ends.insert(std::multimap<timeT, Segment *>::value_type(t1, *i));
+    }
+
+    std::cerr << "WARNING: Composition::getSegmentVoiceIndex: segment "
+	      << segment << " not found in composition" << std::endl;
+    return 0;
 }
 
 TriggerSegmentRec *
@@ -1815,7 +1878,6 @@ Composition::clearTracks()
         delete ((*it).second);
 
     m_tracks.erase(m_tracks.begin(), m_tracks.end());
-    updateRefreshStatuses();
 }
 
 Track*
@@ -1840,6 +1902,7 @@ Composition::getTrackPositionById(TrackId id) const
     if (!track) return -1;
     return track->getPosition();
 }
+
 
 Rosegarden::TrackId
 Composition::getNewTrackId() const
@@ -1968,7 +2031,17 @@ Composition::notifySegmentTrackChanged(Segment *s, TrackId oldId, TrackId newId)
 }
 
 void
-Composition::notifySegmentEndMarkerChange(Segment *s, bool shorten) const
+Composition::notifySegmentStartChanged(Segment *s, timeT t)
+{
+    updateRefreshStatuses(); // not ideal, but best way to ensure track heights are recomputed
+    for (ObserverSet::const_iterator i = m_observers.begin();
+	 i != m_observers.end(); ++i) {
+	(*i)->segmentStartChanged(this, s, t);
+    }
+}    
+
+void
+Composition::notifySegmentEndMarkerChange(Segment *s, bool shorten)
 {
     for (ObserverSet::const_iterator i = m_observers.begin();
 	 i != m_observers.end(); ++i) {

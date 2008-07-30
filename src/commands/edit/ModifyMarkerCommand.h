@@ -4,14 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
-
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -45,6 +38,7 @@ class ModifyMarkerCommand : public KNamedCommand
 {
 public:
     ModifyMarkerCommand(Composition *comp,
+                        int id,
                         timeT time,
                         timeT newTime,
                         const std::string &name,
@@ -62,6 +56,7 @@ protected:
     timeT            m_time;
     timeT            m_newTime;
 
+    int                          m_id;
     std::string                  m_name;
     std::string                  m_description;
     std::string                  m_oldName;

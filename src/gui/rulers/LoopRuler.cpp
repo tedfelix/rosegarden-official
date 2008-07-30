@@ -3,14 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
- 
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
- 
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -37,18 +30,24 @@
 #include <qwidget.h>
 #include <qtooltip.h>
 #include <klocale.h>
+#include <kaction.h>
+#include <qpainter.h>
+#include <qpointarray.h>
+#include "document/RosegardenGUIDoc.h"
 
 
 namespace Rosegarden
 {
 
-LoopRuler::LoopRuler(RulerScale *rulerScale,
+LoopRuler::LoopRuler(RosegardenGUIDoc *doc,
+                     RulerScale *rulerScale,
                      int height,
                      double xorigin,
                      bool invert,
                      QWidget *parent,
                      const char *name) : 
     QWidget(parent, name),
+    m_doc(doc),
     m_height(height),
     m_xorigin(xorigin),
     m_invert(invert),
@@ -60,8 +59,17 @@ LoopRuler::LoopRuler(RulerScale *rulerScale,
     m_loopGrid(rulerScale),
     m_grid(&m_defaultGrid),
     m_loopingMode(false),
-    m_startLoop(0), m_endLoop(0)
+    m_startLoop(0), m_endLoop(0),
+    m_quickMarkerPen(QPen(GUIPalette::getColour(GUIPalette::QuickMarker), 4))
 {
+    /*
+     * I need to understand if this ruler is being built for the main
+     * window (Track Editor) or for any of the segment editors. Apparently
+     * the name parameter is supplied (non-NULL) only for the main window.
+     * I can't find of any other (more decent) way to do this. Sorry.
+     */
+    m_mainWindow = (name != 0 && std::string(name).length() != 0);
+    
     setBackgroundColor(GUIPalette::getColour(GUIPalette::LoopRulerBackground));
 
     // Always snap loop extents to beats; by default apply no snap to
@@ -144,6 +152,23 @@ void LoopRuler::paintEvent(QPaintEvent* e)
     paint.setBrush(colorGroup().foreground());
     drawBarSections(&paint);
     drawLoopMarker(&paint);
+    
+    if (m_mainWindow) {
+        timeT tQM = m_doc->getQuickMarkerTime();
+        if (tQM >= 0) {
+            // draw quick marker
+            double xQM = m_rulerScale->getXForTime(tQM)
+                       + m_xorigin + m_currentXOffset;
+            
+            paint.setPen(m_quickMarkerPen);
+            
+            // looks necessary to compensate for shift in the CompositionView (cursor)
+            paint.translate(1, 0);
+            
+            // draw red segment
+            paint.drawLine(int(xQM), 1, int(xQM), m_height-1);
+        }
+    }
 }
 
 void LoopRuler::drawBarSections(QPainter* paint)

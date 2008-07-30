@@ -3,14 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
- 
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
- 
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -26,6 +19,7 @@
 #include "AudioSegmentSplitCommand.h"
 
 #include <klocale.h>
+#include "misc/AppendLabel.h"
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "base/RealTime.h"
@@ -98,12 +92,8 @@ AudioSegmentSplitCommand::execute()
 
         // Set labels
         //
-        m_segmentLabel = m_segment->getLabel();
-        QString newLabel = strtoqstr(m_segmentLabel);
-        if (!newLabel.endsWith(i18n(" (split)"))) {
-            newLabel = i18n("%1 (split)").arg(newLabel);
-        }
-        m_segment->setLabel(qstrtostr(newLabel));
+        std::string label = m_segment->getLabel();
+        m_segment->setLabel(appendLabel(label, qstrtostr(i18n("(split)"))));
         m_newSegment->setLabel(m_segment->getLabel());
 
         // Set color

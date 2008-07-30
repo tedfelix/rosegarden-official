@@ -3,14 +3,8 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <bownie@bownie.com>
-
-    The moral right of the authors to claim authorship of this work
-    has been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
+    See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
@@ -32,6 +26,8 @@
 
 namespace Rosegarden
 {
+
+int Marker::m_sequence = 0;
 
 std::string 
 Marker::toXmlString()

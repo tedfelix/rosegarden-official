@@ -3,14 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
- 
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
- 
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -246,6 +239,9 @@ SimpleEventEditDialog::setupForEvent()
     m_velocitySpinBox->blockSignals(true);
     m_metaEdit->blockSignals(true);
 
+    m_pitchSpinBox->setMinValue(MidiMinValue);
+    m_pitchSpinBox->setMaxValue(MidiMaxValue);
+
     // Some common settings
     //
     m_durationLabel->setText(i18n("Absolute time:"));
@@ -308,7 +304,9 @@ SimpleEventEditDialog::setupForEvent()
 
         if (m_typeCombo)
             m_typeCombo->setCurrentItem(0);
+
     } else if (m_type == Controller::EventType) {
+
         m_durationLabel->hide();
         m_durationSpinBox->hide();
         m_durationEditButton->hide();
@@ -345,7 +343,9 @@ SimpleEventEditDialog::setupForEvent()
 
         if (m_typeCombo)
             m_typeCombo->setCurrentItem(1);
+
     } else if (m_type == KeyPressure::EventType) {
+
         m_durationLabel->hide();
         m_durationSpinBox->hide();
         m_durationEditButton->hide();
@@ -381,7 +381,9 @@ SimpleEventEditDialog::setupForEvent()
 
         if (m_typeCombo)
             m_typeCombo->setCurrentItem(2);
+
     } else if (m_type == ChannelPressure::EventType) {
+
         m_durationLabel->hide();
         m_durationSpinBox->hide();
         m_durationEditButton->hide();
@@ -409,10 +411,15 @@ SimpleEventEditDialog::setupForEvent()
 
         if (m_typeCombo)
             m_typeCombo->setCurrentItem(3);
+
     } else if (m_type == ProgramChange::EventType) {
+
         m_durationLabel->hide();
         m_durationSpinBox->hide();
         m_durationEditButton->hide();
+
+        m_pitchSpinBox->setMinValue(MidiMinValue + 1);
+        m_pitchSpinBox->setMaxValue(MidiMaxValue + 1);
 
         m_pitchLabel->show();
         m_pitchLabel->setText(i18n("Program change:"));
@@ -437,7 +444,9 @@ SimpleEventEditDialog::setupForEvent()
 
         if (m_typeCombo)
             m_typeCombo->setCurrentItem(4);
+
     } else if (m_type == SystemExclusive::EventType) {
+
         m_durationLabel->hide();
         m_durationSpinBox->hide();
         m_durationEditButton->hide();
@@ -471,7 +480,9 @@ SimpleEventEditDialog::setupForEvent()
 
         if (m_typeCombo)
             m_typeCombo->setCurrentItem(5);
+
     } else if (m_type == PitchBend::EventType) {
+
         m_durationLabel->hide();
         m_durationSpinBox->hide();
         m_durationEditButton->hide();
@@ -507,7 +518,9 @@ SimpleEventEditDialog::setupForEvent()
 
         if (m_typeCombo)
             m_typeCombo->setCurrentItem(6);
+
     } else if (m_type == Indication::EventType) {
+
         m_pitchLabel->hide();
         m_pitchSpinBox->hide();
         m_pitchEditButton->hide();
@@ -532,7 +545,9 @@ SimpleEventEditDialog::setupForEvent()
 
         if (m_typeCombo)
             m_typeCombo->setCurrentItem(7);
+
     } else if (m_type == Text::EventType) {
+
         m_durationLabel->hide();
         m_durationSpinBox->hide();
         m_durationEditButton->hide();
@@ -565,7 +580,9 @@ SimpleEventEditDialog::setupForEvent()
 
         if (m_typeCombo)
             m_typeCombo->setCurrentItem(8);
+
     } else if (m_type == Note::EventRestType) {
+
         m_pitchLabel->hide();
         m_pitchSpinBox->hide();
         m_pitchEditButton->hide();
@@ -581,7 +598,9 @@ SimpleEventEditDialog::setupForEvent()
 
         if (m_typeCombo)
             m_typeCombo->setCurrentItem(9);
+
     } else if (m_type == Clef::EventType) {
+
         m_durationLabel->hide();
         m_durationSpinBox->hide();
         m_durationEditButton->hide();
@@ -610,7 +629,9 @@ SimpleEventEditDialog::setupForEvent()
 
         if (m_typeCombo)
             m_typeCombo->setCurrentItem(10);
+
     } else if (m_type == ::Rosegarden::Key::EventType) {
+
         m_durationLabel->hide();
         m_durationSpinBox->hide();
         m_durationEditButton->hide();
@@ -639,7 +660,9 @@ SimpleEventEditDialog::setupForEvent()
 
         if (m_typeCombo)
             m_typeCombo->setCurrentItem(11);
+
     } else if (m_type == Guitar::Chord::EventType) {
+
         m_durationLabel->hide();
         m_durationSpinBox->hide();
         m_durationEditButton->hide();
@@ -670,7 +693,9 @@ SimpleEventEditDialog::setupForEvent()
 
         if (m_typeCombo)
             m_typeCombo->setCurrentItem(12);
+
     } else {
+
         m_durationLabel->setText(i18n("Unsupported event type:"));
         m_durationLabel->show();
         m_durationSpinBox->hide();

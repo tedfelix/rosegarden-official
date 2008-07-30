@@ -3,14 +3,8 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <bownie@bownie.com>
-
-    The moral right of the authors to claim authorship of this work
-    has been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
+    See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
@@ -42,13 +36,15 @@ ControlList
 SoftSynthDevice::m_controlList;
 
 SoftSynthDevice::SoftSynthDevice() :
-    Device(0, "Default Soft Synth Device", Device::SoftSynth)
+    Device(0, "Default Soft Synth Device", Device::SoftSynth),
+    m_metronome(0)
 {
     checkControlList();
 }
 
 SoftSynthDevice::SoftSynthDevice(DeviceId id, const std::string &name) :
-    Device(id, name, Device::SoftSynth)
+    Device(id, name, Device::SoftSynth),
+    m_metronome(0)
 {
     checkControlList();
 }
@@ -56,7 +52,8 @@ SoftSynthDevice::SoftSynthDevice(DeviceId id, const std::string &name) :
 
 SoftSynthDevice::SoftSynthDevice(const SoftSynthDevice &dev) :
     Device(dev.getId(), dev.getName(), dev.getType()),
-    Controllable()
+    Controllable(),
+    m_metronome(0)
 {
     // Copy the instruments
     //
@@ -64,10 +61,12 @@ SoftSynthDevice::SoftSynthDevice(const SoftSynthDevice &dev) :
     InstrumentList::iterator iIt = insList.begin();
     for (; iIt != insList.end(); iIt++)
         m_instruments.push_back(new Instrument(**iIt));
+    if (dev.m_metronome) m_metronome = new MidiMetronome(*dev.m_metronome);
 }
 
 SoftSynthDevice::~SoftSynthDevice()
 {
+    delete m_metronome;
 }
 
 void
@@ -137,6 +136,13 @@ SoftSynthDevice::getControlParameter(const std::string &type,
     return 0;
 }
 
+void
+SoftSynthDevice::setMetronome(const MidiMetronome &metronome)
+{
+    delete m_metronome;
+    m_metronome = new MidiMetronome(metronome);
+}
+
 std::string
 SoftSynthDevice::toXmlString()
 {
@@ -150,6 +156,21 @@ SoftSynthDevice::toXmlString()
     for (iit = m_instruments.begin(); iit != m_instruments.end(); ++iit)
         ssiDevice << (*iit)->toXmlString();
 
+    if (m_metronome) {
+
+        ssiDevice << "        <metronome "
+                   << "instrument=\"" << m_metronome->getInstrument() << "\" "
+                   << "barpitch=\"" << (int)m_metronome->getBarPitch() << "\" "
+                   << "beatpitch=\"" << (int)m_metronome->getBeatPitch() << "\" "
+                   << "subbeatpitch=\"" << (int)m_metronome->getSubBeatPitch() << "\" "
+                   << "depth=\"" << (int)m_metronome->getDepth() << "\" "
+                   << "barvelocity=\"" << (int)m_metronome->getBarVelocity() << "\" "
+                   << "beatvelocity=\"" << (int)m_metronome->getBeatVelocity() << "\" "
+                   << "subbeatvelocity=\"" << (int)m_metronome->getSubBeatVelocity() 
+                   << "\"/>"
+                   << std::endl << std::endl;
+    }
+
     ssiDevice << "    </device>"
 #if (__GNUC__ < 3)
                 << std::endl << std::ends;
@@ -157,7 +178,7 @@ SoftSynthDevice::toXmlString()
                 << std::endl;
 #endif
 
-   return ssiDevice.str();
+    return ssiDevice.str();
 }
 
 

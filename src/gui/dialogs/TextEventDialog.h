@@ -4,14 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
-
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -75,11 +68,11 @@ public slots:
     void slotLocalTempoShortcutChanged(const QString &);
 
     //
-    // special Lilypond directives, initial phase, as cheap text events; will
+    // special LilyPond directives, initial phase, as cheap text events; will
     // eventually move out of Text, and out of this dialog into
     // some other less cheesy interface 
     //
-    void slotLilypondDirectiveChanged(const QString &);
+    void slotLilyPondDirectiveChanged(const QString &);
 
 protected:
 
@@ -97,7 +90,7 @@ protected:
     KComboBox *m_tempoShortcutCombo;
     KComboBox *m_localTempoShortcutCombo;
     // temporary home:
-    KComboBox *m_lilypondDirectiveCombo;
+    KComboBox *m_lilyPondDirectiveCombo;
 
 
     QLabel *m_staffAboveLabel;

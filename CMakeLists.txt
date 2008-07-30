@@ -1,3 +1,26 @@
+# Rosegarden
+# A MIDI and audio sequencer and musical notation editor.
+#
+# This program is Copyright 2000-2008
+#     Guillaume Laurent   <glaurent@telegraph-road.org>,
+#     Chris Cannam        <cannam@all-day-breakfast.com>,
+#     Richard Bown        <richard.bown@ferventsoftware.com>
+#
+# The moral rights of Guillaume Laurent, Chris Cannam, and Richard
+# Bown to claim authorship of this work have been asserted.
+#
+# This file is Copyright 2006-2008
+#     Pedro Lopez-Cabanillas <plcl@users.sourceforge.net>
+#
+# Other copyrights also apply to some parts of this work.  Please
+# see the AUTHORS file and individual file headers for details.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 2 of the
+# License, or (at your option) any later version.  See the file
+# COPYING included with this distribution for more information.
+
 # The name of our project is "ROSEGARDEN". CMakeLists files in this project can
 # refer to the root source directory of the project as ${ROSEGARDEN_SOURCE_DIR} 
 # and to the root binary directory of the project as ${ROSEGARDEN_BINARY_DIR}
@@ -34,7 +57,7 @@ MARK_AS_ADVANCED(EXECUTABLE_OUTPUT_PATH
 # Rosegarden version string
 SET (VERSION_MAJOR "1")
 SET (VERSION_MINOR "7")
-SET (VERSION_PATCH "0")
+SET (VERSION_PATCH "1")
 # comment out the next line for a public release
 SET (VERSION_SUFFIX "svn")
 SET (VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
@@ -63,6 +86,8 @@ IF(NOT WANT_SOUND)
     ADD_DEFINITIONS(-DNO_SOUND)
 ENDIF(NOT WANT_SOUND)
 
+# Save the flags before FindKDE3 
+SET(SAVED_CXX_FLAGS ${CMAKE_CXX_FLAGS})
 # Check for KDE3
 FIND_PACKAGE(KDE3 REQUIRED QUIET)
 IF(QT_FOUND)
@@ -81,8 +106,8 @@ ELSE(KDE3_FOUND)
     MESSAGE(FATAL_ERROR "KDE3 Not found")
 ENDIF(KDE3_FOUND)
 
-# Clear the flags set by FindKDE3 
-SET(CMAKE_CXX_FLAGS "")
+# Restore the flags saved before FindKDE3 
+SET(CMAKE_CXX_FLAGS ${SAVED_CXX_FLAGS})
 MARK_AS_ADVANCED(KDE3_BUILD_TESTS
                  KDE3_ENABLE_FINAL
 		 KDE3_DCOPIDL_EXECUTABLE

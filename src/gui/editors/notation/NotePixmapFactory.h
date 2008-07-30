@@ -1,17 +1,9 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
-
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -56,7 +48,7 @@ class NoteFont;
 class NotePixmapPainter;
 class NotePixmapCache;
 class Clef;
-
+class TrackHeader;
 
 /**
  * Generates QCanvasPixmaps for various notation items.
@@ -138,11 +130,8 @@ public:
     QCanvasPixmap* makeKeyDisplayPixmap(const Key &key,
                                        const Clef &clef);
 
-    QCanvasPixmap* makeTrackHeaderPixmap(int height,
-                        const Key &key, const Clef &clef,
-                        QColor clefColour, bool drawClef,
-                        const QString &upperText, QColor upperTextColour,
-                        const QString &lowerText, QColor lowerTextColour);
+    QCanvasPixmap* makeTrackHeaderPixmap(int width, int height,
+                                            TrackHeader *header);
 
     // Bounding box and other geometry methods:
 
@@ -170,6 +159,37 @@ public:
     int getKeyWidth(const Key &key,
                     Key previousKey = Key::DefaultKey) const;
     int getTextWidth(const Text &text) const;
+
+    /**
+     * Returns the width of clef and key signature drawn in a track header.
+     */
+    int getClefAndKeyWidth(const Key &key, const Clef &clef);
+
+    /**
+     * Returns the Number of Text Lines that can be written at top and bottom
+     * of a track header.
+     * The parameter is the track header height.
+     * Always returns a value >= 1.
+     */
+    int getTrackHeaderNTL(int height);
+
+    /**
+     * Returns the width of a text string written in a track header.
+     */
+    int getTrackHeaderTextWidth(QString str);
+
+    /**
+     * Returns the spacing of a text lines written in a track header.
+     */
+    int getTrackHeaderTextLineSpacing();
+
+    /**
+     * Returns from the beginning of "text" a string of horizontal size
+     * "width" (when written with m_trackHeaderFont) and removes it
+     * from "text".
+     */
+    QString getOneLine(QString &text, int width);
+
 
     /**
      * We need this function because as of Qt 3.1, QCanvasPixmap
@@ -246,7 +266,7 @@ protected:
     QFont getTextFont(const Text &text) const;
 
     QCanvasPixmap* makeAnnotationPixmap(const Text &text);
-    QCanvasPixmap* makeAnnotationPixmap(const Text &text, const bool isLilypondDirective);
+    QCanvasPixmap* makeAnnotationPixmap(const Text &text, const bool isLilyPondDirective);
 
     void createPixmapAndMask(int width, int height,
                              int maskWidth = -1,
@@ -298,8 +318,14 @@ protected:
     QFont m_ottavaFont;
     QFontMetrics m_ottavaFontMetrics;
 
+    QFont m_clefOttavaFont;
+    QFontMetrics m_clefOttavaFontMetrics;
+
     QFont m_trackHeaderFont;
     QFontMetrics m_trackHeaderFontMetrics;
+
+    QFont m_trackHeaderBoldFont;
+    QFontMetrics m_trackHeaderBoldFontMetrics;
 
     QPixmap *m_generatedPixmap;
     QBitmap *m_generatedMask;

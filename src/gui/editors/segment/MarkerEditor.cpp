@@ -3,14 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
- 
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
- 
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -262,6 +255,7 @@ MarkerEditor::slotUpdate()
 
         item = new
                MarkerEditorViewItem(m_listView,
+                                    (*it)->getID(),
                                     timeString,
                                     strtoqstr((*it)->getName()),
                                     strtoqstr((*it)->getDescription()));
@@ -275,7 +269,7 @@ MarkerEditor::slotUpdate()
 
     if (m_listView->childCount() == 0) {
         QListViewItem *item =
-            new MarkerEditorViewItem(m_listView, i18n("<none>"));
+            new MarkerEditorViewItem(m_listView, 0, i18n("<none>"));
         ((MarkerEditorViewItem *)item)->setFake(true);
         m_listView->insertItem(item);
 
@@ -304,6 +298,7 @@ MarkerEditor::slotDeleteAll()
 
         RemoveMarkerCommand *rc =
             new RemoveMarkerCommand(&m_doc->getComposition(),
+                                    ei->getID(),
                                     ei->getRawTime(),
                                     qstrtostr(item->text(1)),
                                     qstrtostr(item->text(2)));
@@ -341,6 +336,7 @@ MarkerEditor::slotDelete()
 
     RemoveMarkerCommand *command =
         new RemoveMarkerCommand(&m_doc->getComposition(),
+                                ei->getID(),
                                 ei->getRawTime(),
                                 qstrtostr(item->text(1)),
                                 qstrtostr(item->text(2)));
@@ -483,6 +479,7 @@ MarkerEditor::slotEdit(QListViewItem *i)
     if (dialog.exec() == QDialog::Accepted) {
         ModifyMarkerCommand *command =
             new ModifyMarkerCommand(&m_doc->getComposition(),
+                                    item->getID(),
                                     dialog.getOriginalTime(),
                                     dialog.getTime(),
                                     qstrtostr(dialog.getName()),

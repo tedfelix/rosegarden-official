@@ -3,14 +3,8 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <bownie@bownie.com>
-
-    The moral right of the authors to claim authorship of this work
-    has been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
+    See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
@@ -43,12 +37,13 @@ class Marker : public XmlExportable
 {
 public:
     Marker():m_time(0), m_name(std::string("<unnamed>")), 
-             m_description(std::string("<none>")) { }
+             m_description(std::string("<none>")) { m_id = nextSeqVal(); }
 
     Marker(timeT time, const std::string &name,
            const std::string &description):
-        m_time(time), m_name(name), m_description(description) { }
+        m_time(time), m_name(name), m_description(description) { m_id = nextSeqVal(); }
 
+    int getID() const { return m_id; }
     timeT getTime() const { return m_time; }
     std::string getName() const { return m_name; }
     std::string getDescription() const { return m_description; }
@@ -62,10 +57,14 @@ public:
 
 protected:
 
+	int      m_id;
     timeT    m_time;
     std::string          m_name;
     std::string          m_description;
 
+private:
+	static int nextSeqVal() { return ++m_sequence; } // assume there won't be concurrency problem
+	static int m_sequence;
 };
 
 }

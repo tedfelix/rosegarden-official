@@ -3,14 +3,8 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-
-    This program is Copyright 2000-2004
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <bownie@bownie.com>
-
-    The moral right of the authors to claim authorship of this work
-    has been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
+    See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
@@ -107,9 +101,9 @@ public:
     EventId addEvent(ScriptId id,
                      std::string type, int bar, ScriptTime time, ScriptTime duration);
 
-    void deleteEvent(ScriptId id, EventId id);
+    void deleteEvent(ScriptId id, EventId event);
 
-    std::string getEventType(ScriptId id, EventId id);
+    std::string getEventType(ScriptId id, EventId event);
     std::string getProperty(ScriptId id, EventId event, std::string property);
     void setProperty(ScriptId id, EventId event, std::string property, std::string value);
 

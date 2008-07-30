@@ -4,14 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
-
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -30,6 +23,7 @@
 #include "gui/general/HZoomable.h"
 #include <qsize.h>
 #include <qwidget.h>
+#include <qpen.h>
 #include "base/Event.h"
 
 
@@ -42,6 +36,7 @@ namespace Rosegarden
 {
 
 class RulerScale;
+class RosegardenGUIDoc;
 
 
 /**
@@ -54,7 +49,8 @@ class LoopRuler : public QWidget, public HZoomable
     Q_OBJECT
 
 public:
-    LoopRuler(RulerScale *rulerScale,
+    LoopRuler(RosegardenGUIDoc *doc,
+              RulerScale *rulerScale,
               int height = 0,
               double xorigin = 0.0,
               bool invert = false,
@@ -127,11 +123,13 @@ protected:
     int  m_width;
     bool m_activeMousePress;
 
+    RosegardenGUIDoc *m_doc;
+    bool m_mainWindow;
     RulerScale *m_rulerScale;
     SnapGrid    m_defaultGrid;
     SnapGrid    m_loopGrid;
     SnapGrid   *m_grid;
-    
+    QPen        m_quickMarkerPen;
     bool m_loopingMode;
     timeT m_startLoop;
     timeT m_endLoop;

@@ -3,14 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
- 
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
- 
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -33,6 +26,7 @@
 #include "commands/edit/PasteEventsCommand.h"
 #include "ConfigurationPage.h"
 #include "document/RosegardenGUIDoc.h"
+#include "gui/editors/notation/HeadersGroup.h"
 #include "gui/editors/notation/NotationHLayout.h"
 #include "gui/editors/notation/NoteFontFactory.h"
 #include "gui/editors/notation/NoteFont.h"
@@ -60,6 +54,7 @@
 #include <qtabwidget.h>
 #include <qwidget.h>
 #include <qtooltip.h>
+#include <algorithm>
 
 namespace Rosegarden
 {
@@ -108,7 +103,7 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
 
         QString text("%1 %");
         if (*i == 100)
-            text = "%1 % (normal)";
+            text = i18n("%1 % (normal)");
         m_spacing->insertItem(text.arg(*i));
 
         if (*i == defaultSpacing) {
@@ -132,7 +127,7 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
 
         QString text = QString("%1 %").arg(*i);
         if (*i == 40)
-            text = "40 % (normal)";
+            text = i18n("%1 % (normal)").arg(*i);
         else if (*i == 0)
             text = i18n("None");
         else if (*i == 100)
@@ -152,11 +147,12 @@ NotationConfigurationPage::NotationConfigurationPage(KConfig *cfg,
 
     m_showTrackHeaders = new KComboBox(frame);
     m_showTrackHeaders->setEditable(false);
-    m_showTrackHeaders->insertItem(i18n("Never"));
-    m_showTrackHeaders->insertItem(i18n("When needed"));
-    m_showTrackHeaders->insertItem(i18n("Always"));
-    int defaultShowTrackHeaders = m_cfg->readNumEntry("shownotationheader", 2);
-    if (defaultShowTrackHeaders >= 0 && defaultShowTrackHeaders <= 2) {
+    m_showTrackHeaders->insertItem(i18n("Never"), HeadersGroup::ShowNever);
+    m_showTrackHeaders->insertItem(i18n("When needed"), HeadersGroup::ShowWhenNeeded);
+    m_showTrackHeaders->insertItem(i18n("Always"), HeadersGroup::ShowAlways);
+    int defaultShowTrackHeaders = m_cfg->readNumEntry("shownotationheader", 
+                                                 HeadersGroup::DefaultShowMode);
+    if (HeadersGroup::isValidShowMode(defaultShowTrackHeaders)) {
         m_showTrackHeaders->setCurrentItem(defaultShowTrackHeaders);
     }
     QToolTip::add(m_showTrackHeaders, QString(i18n(

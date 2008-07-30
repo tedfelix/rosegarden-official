@@ -3,14 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
- 
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
- 
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -77,6 +70,8 @@ CompositionModelImpl::CompositionModelImpl(Composition& compo,
     m_notationPreviewDataCache.setAutoDelete(true);
     m_audioPreviewDataCache.setAutoDelete(true);
     m_composition.addObserver(this);
+
+    setTrackHeights();
 
     const Composition::segmentcontainer& segments = m_composition.getSegments();
     Composition::segmentcontainer::iterator segEnd = segments.end();
@@ -594,6 +589,9 @@ void CompositionModelImpl::removePreviewCache(const Segment *s)
 
 void CompositionModelImpl::segmentAdded(const Composition *, Segment *s)
 {
+    std::cerr << "CompositionModelImpl::segmentAdded: segment " << s << " on track " << s->getTrack() << ": calling setTrackHeights" << std::endl;
+    setTrackHeights(s);
+
     makePreviewCache(s);
     s->addObserver(this);
     emit needContentUpdate();
@@ -601,6 +599,8 @@ void CompositionModelImpl::segmentAdded(const Composition *, Segment *s)
 
 void CompositionModelImpl::segmentRemoved(const Composition *, Segment *s)
 {
+    setTrackHeights();
+
     QRect r = computeSegmentRect(*s);
 
     m_selectedSegments.erase(s);
@@ -611,9 +611,38 @@ void CompositionModelImpl::segmentRemoved(const Composition *, Segment *s)
     emit needContentUpdate(r);
 }
 
+void CompositionModelImpl::segmentTrackChanged(const Composition *, Segment *s, TrackId tid)
+{
+    std::cerr << "CompositionModelImpl::segmentTrackChanged: segment " << s << " on track " << tid << ", calling setTrackHeights" << std::endl;
+
+    // we don't call setTrackHeights(s), because some of the tracks
+    // above s may have changed height as well (if s was moved off one
+    // of them)
+    if (setTrackHeights()) {
+        std::cerr << "... changed, updating" << std::endl;
+        emit needContentUpdate();
+    }
+}
+
+void CompositionModelImpl::segmentStartChanged(const Composition *, Segment *s, timeT)
+{
+//    std::cerr << "CompositionModelImpl::segmentStartChanged: segment " << s << " on track " << s->getTrack() << ": calling setTrackHeights" << std::endl;
+    if (setTrackHeights(s)) emit needContentUpdate();
+}
+
+void CompositionModelImpl::segmentEndMarkerChanged(const Composition *, Segment *s, bool)
+{
+//    std::cerr << "CompositionModelImpl::segmentEndMarkerChanged: segment " << s << " on track " << s->getTrack() << ": calling setTrackHeights" << std::endl;
+    if (setTrackHeights(s)) {
+//        std::cerr << "... changed, updating" << std::endl;
+        emit needContentUpdate();
+    }
+}
+
 void CompositionModelImpl::segmentRepeatChanged(const Composition *, Segment *s, bool)
 {
     clearInCache(s);
+    setTrackHeights(s);
     emit needContentUpdate();
 }
 
@@ -937,17 +966,56 @@ timeT CompositionModelImpl::getRepeatTimeAt(const QPoint& p, const CompositionIt
     return count != 0 ? startTime + (count * (s->getEndMarkerTime() - s->getStartTime())) : 0;
 }
 
+bool CompositionModelImpl::setTrackHeights(Segment *s)
+{
+    bool heightsChanged = false;
+
+//    std::cerr << "CompositionModelImpl::setTrackHeights" << std::endl;
+
+    for (Composition::trackcontainer::const_iterator i = 
+             m_composition.getTracks().begin();
+         i != m_composition.getTracks().end(); ++i) {
+
+        if (s && i->first != s->getTrack()) continue;
+        
+        int max = m_composition.getMaxContemporaneousSegmentsOnTrack(i->first);
+        if (max == 0) max = 1;
+
+//        std::cerr << "for track " << i->first << ": height = " << max << ", old height = " << m_trackHeights[i->first] << std::endl;
+
+        if (max != m_trackHeights[i->first]) {
+            heightsChanged = true;
+            m_trackHeights[i->first] = max;
+        }
+
+        m_grid.setBinHeightMultiple(i->second->getPosition(), max);
+    }
+
+    if (heightsChanged) {
+//        std::cerr << "CompositionModelImpl::setTrackHeights: heights have changed" << std::endl;
+        for (Composition::segmentcontainer::iterator i = m_composition.begin();
+             i != m_composition.end(); ++i) {
+            computeSegmentRect(**i);
+        }
+    }
+
+    return heightsChanged;
+}
+
 QPoint CompositionModelImpl::computeSegmentOrigin(const Segment& s)
 {
     //    Profiler profiler("CompositionModelImpl::computeSegmentOrigin", true);
 
-    int trackPosition = m_composition.getTrackById(s.getTrack())->getPosition();
+    int trackPosition = m_composition.getTrackPositionById(s.getTrack());
     timeT startTime = s.getStartTime();
 
     QPoint res;
 
     res.setX(int(nearbyint(m_grid.getRulerScale()->getXForTime(startTime))));
-    res.setY(m_grid.getYBinCoordinate(trackPosition));
+
+    res.setY(m_grid.getYBinCoordinate(trackPosition) +
+             m_composition.getSegmentVoiceIndex(&s) *
+             m_grid.getYSnap() + 1);
 
     return res;
 }
@@ -1025,10 +1093,10 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s, bool 
     timeT endTime = isRecordingSegment ? m_pointerTimePos /*s.getEndTime()*/ : s.getEndMarkerTime();
 
 
-    int h = m_grid.getYSnap();
+    int h = m_grid.getYSnap() - 2;
     int w;
 
-    //     RG_DEBUG << "CompositionModelImpl::computeSegmentRect: x " << origin.x() << ", y " << origin.y() << " startTime " << startTime << ", endTime " << endTime << endl;
+    RG_DEBUG << "CompositionModelImpl::computeSegmentRect: x " << origin.x() << ", y " << origin.y() << " startTime " << startTime << ", endTime " << endTime << endl;
 
     if (s.isRepeating()) {
         timeT repeatStart = endTime;
@@ -1181,6 +1249,28 @@ const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(con
     }
 
     return m_res;
+}
+
+CompositionModel::heightlist
+CompositionModelImpl::getTrackDividersIn(const QRect& rect)
+{
+    int top = m_grid.getYBin(rect.y());
+    int bottom = m_grid.getYBin(rect.y() + rect.height());
+
+//    std::cerr << "CompositionModelImpl::getTrackDividersIn: rect "
+//              << rect.x() << ", " << rect.y() << ", "
+//              << rect.width() << "x" << rect.height() << ", top = " << top
+//              << ", bottom = " << bottom << std::endl;
+    
+    CompositionModel::heightlist list;
+
+    for (int pos = top; pos <= bottom; ++pos) {
+        int divider = m_grid.getYBinCoordinate(pos);
+        list.push_back(divider);
+//        std::cerr << "divider at " << divider << std::endl;
+    }
+
+    return list;
 }
 
 CompositionModel::rectlist* CompositionModelImpl::getNotationPreviewData(const Segment* s)

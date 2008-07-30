@@ -3,14 +3,8 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <bownie@bownie.com>
-
-    The moral right of the authors to claim authorship of this work
-    has been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
+    See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
@@ -199,26 +193,6 @@ MidiKeyMapping::getPitchExtent() const
 }
 
 	
-
-MidiMetronome::MidiMetronome(InstrumentId instrument,
-                             MidiByte barPitch,
-                             MidiByte beatPitch,
-                             MidiByte subBeatPitch,
-			     int depth,
-                             MidiByte barVely,
-                             MidiByte beatVely,
-			     MidiByte subBeatVely):
-         m_instrument(instrument),
-         m_barPitch(barPitch),
-         m_beatPitch(beatPitch),
-         m_subBeatPitch(subBeatPitch),
-	 m_depth(depth),
-         m_barVelocity(barVely),
-         m_beatVelocity(beatVely),
-	 m_subBeatVelocity(subBeatVely)
-{
-    // nothing else
-}
 
 }
 

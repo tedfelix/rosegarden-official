@@ -3,14 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
- 
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
- 
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -87,7 +80,13 @@ void SegmentPencil::slotCanvasScrolled(int newX, int newY)
 void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
 {
     if (e->button() == RightButton)
-        return ;
+        return;
+
+    // is user holding Ctrl+Alt? (ugly, but we are running short on available
+    // modifiers; Alt is grabbed by the window manager, and right clicking, my
+    // (dmm) original idea, is grabbed by the context menu, so let's see how
+    // this goes over
+    bool pencilAnyway = (m_canvas->pencilOverExisting());
 
     m_newRect = false;
 
@@ -95,9 +94,11 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
     //
     CompositionItem item = m_canvas->getFirstItemAt(e->pos());
 
+    // If user clicked a rect, and pencilAnyway is false, then there's nothing
+    // left to do here
     if (item) {
         delete item;
-        return ; // mouse click was on a rect, nothing to do
+        if (!pencilAnyway) return ;
     }
 
     // make new item
@@ -115,15 +116,21 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
     if (!t)
         return ;
 
+    TrackId trackId = t->getId();
+
     timeT time = int(nearbyint(m_canvas->grid().snapX(e->pos().x(), SnapGrid::SnapLeft)));
     timeT duration = int(nearbyint(m_canvas->grid().getSnapTime(double(e->pos().x()))));
     if (duration == 0)
         duration = Note(Note::Shortest).getDuration();
 
+    int multiple = m_doc->getComposition()
+        .getMaxContemporaneousSegmentsOnTrack(trackId);
+    if (multiple < 1) multiple = 1;
+
     QRect tmpRect;
     tmpRect.setX(int(nearbyint(m_canvas->grid().getRulerScale()->getXForTime(time))));
-    tmpRect.setY(m_canvas->grid().getYBinCoordinate(trackPosition));
-    tmpRect.setHeight(m_canvas->grid().getYSnap());
+    tmpRect.setY(m_canvas->grid().getYBinCoordinate(trackPosition) + 1);
+    tmpRect.setHeight(m_canvas->grid().getYSnap() * multiple - 2);
     tmpRect.setWidth(int(nearbyint(m_canvas->grid().getRulerScale()->getWidthForDuration(time, duration))));
 
     m_canvas->setTmpRect(tmpRect,
@@ -272,7 +279,7 @@ void SegmentPencil::setContextHelpFor(QPoint p)
         }
     }
 
-    setContextHelp(i18n("Click and drag to draw an empty segment"));
+    setContextHelp(i18n("Click and drag to draw an empty segment.  Control+Alt click and drag to draw in overlap mode."));
 }
 
 const QString SegmentPencil::ToolName   = "segmentpencil";

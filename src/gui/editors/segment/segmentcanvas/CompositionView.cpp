@@ -3,14 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
- 
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
- 
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -102,6 +95,7 @@ CompositionView::CompositionView(RosegardenGUIDoc* doc,
         m_showPreviews(false),
         m_showSegmentLabels(true),
         m_fineGrain(false),
+	m_pencilOverExisting(false),
         m_minWidth(m_model->getLength()),
         m_stepSize(0),
         m_rectFill(0xF0, 0xF0, 0xF0),
@@ -112,6 +106,7 @@ CompositionView::CompositionView(RosegardenGUIDoc* doc,
         m_pointerPen(QPen(m_pointerColor, m_pointerWidth)),
         m_tmpRect(QRect(QPoint(0, 0), QPoint( -1, -1))),
         m_tmpRectFill(CompositionRect::DefaultBrushColor),
+        m_trackDividerColor(GUIPalette::getColour(GUIPalette::TrackDivider)),
         m_drawGuides(false),
         m_guideColor(GUIPalette::getColour(GUIPalette::MovementGuide)),
         m_topGuidePos(0),
@@ -694,6 +689,48 @@ void CompositionView::drawArea(QPainter *p, const QRect& clipRect)
     //     Profiler profiler("CompositionView::drawArea", true);
 
     //     RG_DEBUG << "CompositionView::drawArea() clipRect = " << clipRect << endl;
+
+    //
+    // Fetch track dividing lines
+    //
+    CompositionModel::heightlist lineHeights = getModel()->getTrackDividersIn(clipRect);
+
+    if (!lineHeights.empty()) {
+
+        p->save();
+        QColor light = m_trackDividerColor.light();
+        p->setPen(light);
+
+        for (CompositionModel::heightlist::const_iterator hi = lineHeights.begin();
+             hi != lineHeights.end(); ++hi) {
+            int y = *hi;
+            if (y-1 >= clipRect.y()) {
+                p->drawLine(clipRect.x(), y-1,
+                            clipRect.x() + clipRect.width() - 1, y-1);
+            }
+            if (y >= clipRect.y()) {
+                p->drawLine(clipRect.x(), y,
+                            clipRect.x() + clipRect.width() - 1, y);
+            }
+        }
+
+        p->setPen(m_trackDividerColor);
+
+        for (CompositionModel::heightlist::const_iterator hi = lineHeights.begin();
+             hi != lineHeights.end(); ++hi) {
+            int y = *hi;
+            if (y-2 >= clipRect.y()) {
+                p->drawLine(clipRect.x(), y-2,
+                            clipRect.x() + clipRect.width() - 1, y-2);
+            }
+            if (y+1 >= clipRect.y()) {
+                p->drawLine(clipRect.x(), y+1,
+                            clipRect.x() + clipRect.width() - 1, y+1);
+            }
+        }
+
+        p->restore();
+    }
 
     CompositionModel::AudioPreviewDrawData* audioPreviewData = 0;
     CompositionModel::RectRanges* notationPreviewData = 0;
@@ -1316,6 +1353,7 @@ void CompositionView::contentsMousePressEvent(QMouseEvent* e)
     slotSetSelectCopy((bs & Qt::ControlButton) != 0);
     slotSetSelectAdd((bs & Qt::ShiftButton) != 0);
     slotSetFineGrain((bs & Qt::ShiftButton) != 0);
+    slotSetPencilOverExisting((bs & Qt::AltButton + Qt::ControlButton) != 0);
 
     switch (e->button()) {
     case LeftButton:
@@ -1391,6 +1429,7 @@ void CompositionView::contentsMouseMoveEvent(QMouseEvent* e)
 
     Qt::ButtonState bs = e->state();
     slotSetFineGrain((bs & Qt::ShiftButton) != 0);
+    slotSetPencilOverExisting((bs & Qt::AltButton) != 0);
 
     int follow = m_tool->handleMouseMove(e);
     setScrollDirectionConstraint(follow);
@@ -1526,6 +1565,11 @@ void CompositionView::setTextFloat(int x, int y, const QString &text)
 void CompositionView::slotSetFineGrain(bool value)
 {
     m_fineGrain = value;
+}
+
+void CompositionView::slotSetPencilOverExisting(bool value)
+{
+    m_pencilOverExisting = value;
 }
 
 void

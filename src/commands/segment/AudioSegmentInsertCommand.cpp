@@ -3,14 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
- 
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
- 
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -27,6 +20,7 @@
 
 #include <klocale.h>
 #include "misc/Debug.h"
+#include "misc/AppendLabel.h"
 #include "misc/Strings.h"
 #include "base/Composition.h"
 #include "base/RealTime.h"
@@ -105,19 +99,15 @@ AudioSegmentInsertCommand::execute()
 
         // Label by audio file name
         //
-        std::string label = "";
-
         AudioFile *aF =
             m_audioFileManager->getAudioFile(m_audioFileId);
 
-        if (aF)
-            label = qstrtostr(i18n("%1 (inserted)").arg
-                              (strtoqstr(aF->getName())));
-        else
-            label = qstrtostr(i18n("unknown audio file"));
-
-        m_segment->setLabel(label);
-
+        if (aF) {
+            std::string label = aF->getName();
+            m_segment->setLabel(appendLabel(label, qstrtostr(i18n("(inserted)"))));
+        } else {
+            m_segment->setLabel(i18n("unknown audio file"));
+        }
         m_composition->addSegment(m_segment);
     } else {
         m_composition->addSegment(m_segment);

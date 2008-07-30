@@ -4,14 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
-
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -196,9 +189,9 @@ public:
     void exportMupFile(QString url);
 
     /**
-     * export a Lilypond file
+     * export a LilyPond file
      */
-    bool exportLilypondFile(QString url, bool forPreview = false);
+    bool exportLilyPondFile(QString url, bool forPreview = false);
 
     /**
      * export a MusicXml file
@@ -292,6 +285,18 @@ public:
      *
      */
     virtual void alive();
+    
+    /*
+     * Tell the application whether this is the first time this
+     * version of RG has been run
+     */
+    void setIsFirstRun(bool first) { m_firstRun = first; }
+
+    /*
+     * Wait in a sub-event-loop until all modal dialogs from the main
+     * window have been cleared
+     */
+    void awaitDialogClearance();
 
     /*
      * Return the clipboard
@@ -652,16 +657,16 @@ public slots:
     void slotExportMup();
 
     /**
-     * Let the user enter a Lilypond file to export to
+     * Let the user enter a LilyPond file to export to
      */
-    void slotExportLilypond();
+    void slotExportLilyPond();
 
     /**
      * Export to a temporary file and process
      */
-    void slotPrintLilypond();
-    void slotPreviewLilypond();
-    void slotLilypondViewProcessExited(KProcess *);
+    void slotPrintLilyPond();
+    void slotPreviewLilyPond();
+    void slotLilyPondViewProcessExited(KProcess *);
 
     /**
      * Let the user enter a MusicXml file to export to
@@ -1288,7 +1293,8 @@ public slots:
     /**
      * Remove a marker
      */
-    void slotDeleteMarker(timeT time,
+    void slotDeleteMarker(int id,
+                          timeT time,
                           QString name,
                           QString description);
 
@@ -1524,6 +1530,10 @@ public slots:
     void slotShowToolHelp(const QString &);
 
     void slotNewerVersionAvailable(QString);
+    
+    void slotSetQuickMarker();
+    
+    void slotJumpToQuickMarker();    
 
 private:
 
@@ -1654,10 +1664,14 @@ private:
 
     StartupTester *m_startupTester;
 
+    bool m_firstRun;
     bool m_haveAudioImporter;
 
     RosegardenParameterArea *m_parameterArea;
 
+    KAction *m_setQuickMarkerAction;
+    KAction *m_jumpToQuickMarkerAction;
+    
 #ifdef HAVE_LIRC        
     LircClient *m_lircClient;
     LircCommander *m_lircCommander;

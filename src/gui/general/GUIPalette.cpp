@@ -3,14 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
- 
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
- 
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -129,8 +122,9 @@ GUIPalette::GUIPalette()
     m_defaultsMap[InsertCursor] = QColor(160, 104, 186);
     m_defaultsMap[InsertCursorRuler] = QColor(160, 136, 170);
 
-    m_defaultsMap[MovementGuide] = QColor(172, 230, 139);
-    //m_defaultsMap[MovementGuide] = QColor(62, 161, 194);
+    m_defaultsMap[TrackDivider] = QColor(145, 145, 145);
+    //m_defaultsMap[MovementGuide] = QColor(172, 230, 139);
+    m_defaultsMap[MovementGuide] = QColor(62, 161, 194);
     //m_defaultsMap[MovementGuide] = QColor(255, 189, 89);
     m_defaultsMap[SelectionRectangle] = QColor(103, 128, 211);
     m_defaultsMap[SelectedElement] = QColor(0, 54, 232);
@@ -148,12 +142,13 @@ GUIPalette::GUIPalette()
 
     m_defaultsMap[TextAnnotationBackground] = QColor(255, 255, 180);
 
-    m_defaultsMap[TextLilypondDirectiveBackground] = QColor(95, 157, 87);
+    m_defaultsMap[TextLilyPondDirectiveBackground] = QColor(95, 157, 87);
 
     m_defaultsMap[AudioCountdownBackground] = Qt::darkGray;
     m_defaultsMap[AudioCountdownForeground] = Qt::red;
 
-    m_defaultsMap[RotaryFloatBackground] = Qt::cyan;
+//    m_defaultsMap[RotaryFloatBackground] = Qt::cyan;
+    m_defaultsMap[RotaryFloatBackground] = QColor(182, 222, 255);
     m_defaultsMap[RotaryFloatForeground] = Qt::black;
 
     m_defaultsMap[RotaryPastelBlue] = QColor(205, 212, 255);
@@ -171,6 +166,8 @@ GUIPalette::GUIPalette()
     m_defaultsMap[RotaryMeter] = QColor(255, 100, 0);
 
     m_defaultsMap[MarkerBackground] = QColor(185, 255, 248);
+
+    m_defaultsMap[QuickMarker] = Qt::red;
 
     //    m_defaultsMap[MuteTrackLED] = QColor(218, 190, 230, QColor::Hsv);
     m_defaultsMap[MuteTrackLED] = QColor(211, 194, 238, QColor::Hsv);
@@ -243,6 +240,7 @@ const char* const GUIPalette::PointerRuler = "pointerruler";
 const char* const GUIPalette::InsertCursor = "insertcursor";
 const char* const GUIPalette::InsertCursorRuler = "insertcursorruler";
 
+const char* const GUIPalette::TrackDivider = "trackdivider";
 const char* const GUIPalette::MovementGuide = "movementguide";
 const char* const GUIPalette::SelectionRectangle = "selectionrectangle";
 const char* const GUIPalette::SelectedElement = "selectedelement";
@@ -263,7 +261,7 @@ const int GUIPalette::CollisionHaloSaturation = 200;
 
 const char* const GUIPalette::TextAnnotationBackground = "textannotationbackground";
 
-const char* const GUIPalette::TextLilypondDirectiveBackground = "textlilyponddirectivebackground";
+const char* const GUIPalette::TextLilyPondDirectiveBackground = "textlilyponddirectivebackground";
 
 const char* const GUIPalette::AudioCountdownBackground = "audiocountdownbackground";
 const char* const GUIPalette::AudioCountdownForeground = "audiocountdownforeground";
@@ -284,6 +282,8 @@ const char* const GUIPalette::RotaryPlugin = "rotaryplugin";
 const char* const GUIPalette::RotaryMeter = "rotarymeter";
 
 const char* const GUIPalette::MarkerBackground = "markerbackground";
+
+const char* const GUIPalette::QuickMarker = "quickmarker";
 
 const char* const GUIPalette::MuteTrackLED = "mutetrackled";
 const char* const GUIPalette::RecordMIDITrackLED = "recordmiditrackled";

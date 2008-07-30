@@ -3,14 +3,8 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <bownie@bownie.com>
-
-    The moral right of the authors to claim authorship of this work
-    has been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
+    See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
@@ -201,7 +195,13 @@ Instrument::Instrument(InstrumentId id,
                      // we store within an unsigned char as 
 
     } else {
-
+/*
+ *
+ * Let's try getting rid of this default behavior, and replacing it with a
+ * change to the factory autoload instead, because this just doesn't work out
+ * very well, and it's fiddly trying to sort the overall behavior into something
+ * less quirky (dmm)
+ *
 	// Also defined in Midi.h but we don't use that - not here
 	// in the clean inner sanctum.
 	//
@@ -212,6 +212,7 @@ Instrument::Instrument(InstrumentId id,
 	    m_channel == MIDI_EXTENDED_PERCUSSION_CHANNEL) {
 	    setPercussion(true);
 	}
+*/
     }
 
     if (it == SoftSynth) {

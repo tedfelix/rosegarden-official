@@ -4,14 +4,8 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <bownie@bownie.com>
-
-    The moral right of the authors to claim authorship of this work
-    has been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
+    See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
@@ -843,9 +837,9 @@ const std::string Text::LocalDirection    = "local_direction";
 const std::string Text::Tempo             = "tempo";
 const std::string Text::LocalTempo        = "local_tempo";
 const std::string Text::Annotation        = "annotation";
-const std::string Text::LilypondDirective = "lilypond_directive";
+const std::string Text::LilyPondDirective = "lilypond_directive";
 
-// special Lilypond directives
+// special LilyPond directives
 const std::string Text::Segno       = "Segno";  
 const std::string Text::Coda        = "Coda";
 const std::string Text::Alternate1  = "Alt1 ->";
@@ -929,13 +923,13 @@ Text::getUserStyles()
     v.push_back(Chord);
     v.push_back(Lyric);
     v.push_back(Annotation);
-    v.push_back(LilypondDirective);
+    v.push_back(LilyPondDirective);
 
     return v;
 }
 
 std::vector<std::string>
-Text::getLilypondDirectives()
+Text::getLilyPondDirectives()
 {
     std::vector<std::string> v;
 
@@ -1445,7 +1439,7 @@ Pitch::rawPitchToDisplayPitch(int rawpitch,
     
     // Failsafe...  If this ever executes, there's trouble to fix...
 // WIP - DMM - munged up to explore #937389, which is temporarily deferred,
-// owing to its non-critical nature, having been hacked around in the Lilypond
+// owing to its non-critical nature, having been hacked around in the LilyPond
 // code
 #ifndef DEBUG_PITCH
     if (accidental == "") {

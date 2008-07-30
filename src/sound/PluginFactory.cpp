@@ -3,14 +3,8 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
- 
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <bownie@bownie.com>
- 
-    The moral right of the authors to claim authorship of this work
-    has been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
+    See the AUTHORS file for more details.
  
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
@@ -94,6 +88,9 @@ PluginFactory::enumerateAllPlugins(MappedObjectPropertyList &list)
 {
     PluginFactory *factory;
 
+    // Plugins can change the locale, store it for reverting afterwards
+    char *loc = setlocale(LC_ALL, 0);
+
     // Query DSSI plugins before LADSPA ones.
     // This is to provide for the interesting possibility of plugins
     // providing either DSSI or LADSPA versions of themselves,
@@ -109,8 +106,7 @@ PluginFactory::enumerateAllPlugins(MappedObjectPropertyList &list)
     if (factory)
         factory->enumeratePlugins(list);
 
-    // Plugins can change the locale, revert it to default.
-    setlocale(LC_ALL, "C");
+    setlocale(LC_ALL, loc);
 }
 
 

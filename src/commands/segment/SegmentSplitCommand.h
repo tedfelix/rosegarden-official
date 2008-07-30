@@ -4,14 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
-
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -42,21 +35,26 @@ class Segment;
 class SegmentSplitCommand : public KNamedCommand
 {
 public:
+
+    // If keepLabel is true, "(split)" is not append to the new segments label
     SegmentSplitCommand(Segment *segment,
-                        timeT splitTime);
+                        timeT splitTime,
+                        bool keepLabel = false);
     virtual ~SegmentSplitCommand();
 
     virtual void execute();
     virtual void unexecute();
+    
+    Segment *getSegmentA() { return m_newSegmentA; }
+    Segment *getSegmentB() { return m_newSegmentB; }
 
 private:
     Segment *m_segment;
     Segment *m_newSegmentA;
     Segment *m_newSegmentB;
     timeT m_splitTime;
-    timeT *m_previousEndMarkerTime;
     bool m_detached;
-    std::string m_segmentLabel;
+    bool m_keepLabel;
 };
 
 

@@ -3,14 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
- 
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
- 
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -64,7 +57,8 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
         m_doc(doc),
         m_client(0),
         m_countIn(0),
-        m_nameStyle(0)
+        m_nameStyle(0),
+        m_appendLabel(0)
 {
     m_cfg->setGroup(GeneralOptionsConfigGroup);
 
@@ -131,6 +125,14 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
 
     layout->addMultiCellWidget(m_autoSave, row, row, 1, 2);
     ++row;
+
+    label = new QLabel(i18n("Append suffixes to segment labels"), frame);
+    layout->addWidget(label, row, 0);
+
+    m_appendLabel = new QCheckBox(frame);
+    m_appendLabel->setChecked(m_cfg->readBoolEntry("appendlabel", true));
+    layout->addMultiCellWidget(m_appendLabel, row, row, 1, 2);
+    row++;
 
     // JACK Transport
     //
@@ -368,6 +370,9 @@ void GeneralConfigurationPage::apply()
         m_cfg->writeEntry("autosaveinterval", interval);
         emit updateAutoSaveInterval(interval);
     }
+
+    bool appendLabel = getAppendLabel();
+    m_cfg->writeEntry("appendlabel", appendLabel);
 
 #ifdef HAVE_LIBJACK
     m_cfg->setGroup(SequencerOptionsConfigGroup);

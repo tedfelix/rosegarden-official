@@ -3,14 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
- 
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
- 
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -60,7 +53,6 @@ StandardRuler::StandardRuler(RosegardenGUIDoc *doc,
         m_rulerScale(rulerScale),
         m_hButtonBar(0)
 {
-
     setSpacing(0);
 
     if (!m_invert) {
@@ -69,7 +61,7 @@ StandardRuler::StandardRuler(RosegardenGUIDoc *doc,
     }
 
     m_loopRuler = new LoopRuler
-                  (m_rulerScale, m_loopRulerHeight, xorigin, m_invert, this);
+                  (m_doc, m_rulerScale, m_loopRulerHeight, xorigin, m_invert, this, name);
 
     if (m_invert) {
         m_hButtonBar = new MarkerRuler
@@ -113,8 +105,8 @@ void StandardRuler::connectRulerToDocPointer(RosegardenGUIDoc *doc)
      RosegardenGUIApp::self(), SLOT(slotAddMarker(timeT)));
 
     QObject::connect
-    (m_hButtonBar, SIGNAL(deleteMarker(timeT, QString, QString)),
-     RosegardenGUIApp::self(), SLOT(slotDeleteMarker(timeT, QString, QString)));
+    (m_hButtonBar, SIGNAL(deleteMarker(int, timeT, QString, QString)),
+     RosegardenGUIApp::self(), SLOT(slotDeleteMarker(int, timeT, QString, QString)));
 
     QObject::connect
     (m_loopRuler, SIGNAL(dragPointerToPosition(timeT)),

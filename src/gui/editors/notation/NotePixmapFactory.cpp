@@ -3,14 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
- 
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
- 
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -39,6 +32,7 @@
 #include "gui/editors/guitar/Fingering.h"
 #include "gui/editors/guitar/FingeringBox.h"
 #include "gui/editors/guitar/NoteSymbols.h"
+#include "gui/editors/notation/TrackHeader.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/PixmapFunctions.h"
 #include "gui/general/Spline.h"
@@ -105,8 +99,12 @@ NotePixmapFactory::NotePixmapFactory(std::string fontName, int size) :
         m_bigTimeSigFontMetrics(m_bigTimeSigFont),
         m_ottavaFont(defaultSerifFontFamily, 8, QFont::Normal, true),
         m_ottavaFontMetrics(m_ottavaFont),
+        m_clefOttavaFont(defaultSerifFontFamily, 8, QFont::Normal),
+        m_clefOttavaFontMetrics(m_ottavaFont),
         m_trackHeaderFont(defaultSansSerifFontFamily, 10, QFont::Normal),
         m_trackHeaderFontMetrics(m_trackHeaderFont),
+        m_trackHeaderBoldFont(defaultSansSerifFontFamily, 10, QFont::Bold),
+        m_trackHeaderBoldFontMetrics(m_trackHeaderBoldFont),
         m_generatedPixmap(0),
         m_generatedMask(0),
         m_generatedWidth( -1),
@@ -133,8 +131,12 @@ NotePixmapFactory::NotePixmapFactory(const NotePixmapFactory &npf) :
         m_bigTimeSigFontMetrics(m_bigTimeSigFont),
         m_ottavaFont(defaultSerifFontFamily, 8, QFont::Normal, true),
         m_ottavaFontMetrics(m_ottavaFont),
+        m_clefOttavaFont(defaultSerifFontFamily, 8, QFont::Normal),
+        m_clefOttavaFontMetrics(m_ottavaFont),
         m_trackHeaderFont(defaultSansSerifFontFamily, 10, QFont::Normal),
         m_trackHeaderFontMetrics(m_trackHeaderFont),
+        m_trackHeaderBoldFont(defaultSansSerifFontFamily, 10, QFont::Bold),
+        m_trackHeaderBoldFontMetrics(m_trackHeaderBoldFont),
         m_generatedPixmap(0),
         m_generatedMask(0),
         m_generatedWidth( -1),
@@ -163,7 +165,13 @@ NotePixmapFactory::operator=(const NotePixmapFactory &npf)
         m_fingeringFont = npf.m_fingeringFont;
         m_fingeringFontMetrics = QFontMetrics(m_fingeringFont);
         m_ottavaFont = npf.m_ottavaFont;
-        m_ottavaFontMetrics = QFontMetrics(m_ottavaFontMetrics);
+        m_ottavaFontMetrics = QFontMetrics(m_ottavaFont);
+        m_clefOttavaFont = npf.m_clefOttavaFont;
+        m_clefOttavaFontMetrics = QFontMetrics(m_clefOttavaFont);
+        m_trackHeaderFont = npf.m_trackHeaderFont;
+        m_trackHeaderFontMetrics = QFontMetrics(m_trackHeaderFont);
+        m_trackHeaderBoldFont = npf.m_trackHeaderBoldFont;
+        m_trackHeaderBoldFontMetrics = QFontMetrics(m_trackHeaderBoldFont);
         init(npf.m_font->getName(), npf.m_font->getSize());
         m_dottedRestCache->clear();
         m_textFontCache.clear();
@@ -243,10 +251,17 @@ NotePixmapFactory::init(std::string fontName, int size)
     m_ottavaFont.setPixelSize(size * 2);
     m_ottavaFontMetrics = QFontMetrics(m_ottavaFont);
 
-    m_trackHeaderFont = QFont(defaultSansSerifFontFamily);
+    m_clefOttavaFont = config->readFontEntry("textfont", &textFont);
+    m_clefOttavaFont.setPixelSize(getLineSpacing() * 3 / 2);
+    m_clefOttavaFontMetrics = QFontMetrics(m_clefOttavaFont);
+
     m_trackHeaderFont = config->readFontEntry("sansfont", &m_trackHeaderFont);
-    m_trackHeaderFont.setPixelSize(size * 3 / 2);
+    m_trackHeaderFont.setPixelSize(12);
     m_trackHeaderFontMetrics = QFontMetrics(m_trackHeaderFont);
+
+    m_trackHeaderBoldFont = m_trackHeaderFont;
+    m_trackHeaderBoldFont.setBold(true);
+    m_trackHeaderBoldFontMetrics = QFontMetrics(m_trackHeaderBoldFont);
 }
 
 NotePixmapFactory::~NotePixmapFactory()
@@ -588,7 +603,6 @@ NotePixmapFactory::makeNoteHaloPixmap(const NotePixmapParameters &params)
     int nbh = getNoteBodyHeight(params.m_noteType);
     int nbw0 = getNoteBodyHeight();
     int nbw = getNoteBodyWidth(params.m_noteType);
-    int hOffset = 0;
 
     createPixmapAndMask(nbw + nbw0, nbh + nbh0);
     drawNoteHalo(0, 0, nbw + nbw0, nbh + nbh0);
@@ -1852,13 +1866,6 @@ NotePixmapFactory::makeClefPixmap(const Clef &clef)
     if (oct == 0)
         return plain.getCanvasPixmap();
 
-    QFont defaultOctaveFont(defaultSerifFontFamily);
-    KConfig* config = kapp->config();
-    config->setGroup(NotationViewConfigGroup);
-    QFont octaveFont = config->readFontEntry("textfont", &defaultOctaveFont);
-    octaveFont.setPixelSize(getLineSpacing() * 3 / 2);
-    QFontMetrics octaveFontMetrics(octaveFont);
-
     // fix #1522784 and use 15 rather than 16 for double octave offset
     int adjustedOctave = (8 * (oct < 0 ? -oct : oct));
     if (adjustedOctave > 8)
@@ -1867,7 +1874,7 @@ NotePixmapFactory::makeClefPixmap(const Clef &clef)
         adjustedOctave++;
 
     QString text = QString("%1").arg(adjustedOctave);
-    QRect rect = octaveFontMetrics.boundingRect(text);
+    QRect rect = m_clefOttavaFontMetrics.boundingRect(text);
 
     createPixmapAndMask(plain.getWidth(),
                         plain.getHeight() + rect.height());
@@ -1878,9 +1885,9 @@ NotePixmapFactory::makeClefPixmap(const Clef &clef)
 
     m_p->drawNoteCharacter(0, oct < 0 ? 0 : rect.height(), plain);
 
-    m_p->painter().setFont(octaveFont);
+    m_p->painter().setFont(m_clefOttavaFont);
     if (!m_inPrinterMethod)
-        m_p->maskPainter().setFont(octaveFont);
+        m_p->maskPainter().setFont(m_clefOttavaFont);
 
     m_p->drawText(plain.getWidth() / 2 - rect.width() / 2,
                   oct < 0 ? plain.getHeight() + rect.height() - 1 :
@@ -2144,65 +2151,253 @@ NotePixmapFactory::makeKeyDisplayPixmap(const Key &key, const Clef &clef)
     return makeCanvasPixmap(m_pointZero);
 }
 
-QCanvasPixmap*
-NotePixmapFactory::makeTrackHeaderPixmap(int height,
-        const Key &key, const Clef &clef, QColor clefColour, bool drawClef,
-        const QString &upperText, QColor upperTextColour,
-        const QString &lowerText, QColor lowerTextColour
-        )
+int
+NotePixmapFactory::getClefAndKeyWidth(const Key &key, const Clef &clef)
 {
-    height -= 4;    // Make place to label frame :
+    std::vector<int> ah = key.getAccidentalHeights(clef);
+    Accidental accidental = key.isSharp() ? Sharp : Flat;
+    NoteCharacter plain = getCharacter(m_style->getClefCharName(clef),
+                                       PlainColour, false);
+
+    int clefWidth = plain.getWidth();
+    int accWidth = getAccidentalWidth(accidental);
+    int maxDelta = getAccidentalWidth(Sharp);
+
+    int width = clefWidth + 2 * maxDelta + ah.size() * accWidth;
+
+    return width;
+}
+
+QCanvasPixmap*
+NotePixmapFactory::makeTrackHeaderPixmap(
+        int width, int height, TrackHeader *header)
+{
+
+    height -= 4;    // Make room to the label frame :
                     // 4 = 2 * (margin + lineWidth)
-
-    // Get widget default common character size
-    // ("X" stands here for a "common character")
-    QRect bounds = m_trackHeaderFontMetrics.boundingRect(i18n("X"));
-    int charHeight = bounds.height();
-    int charWidth = bounds.width();
-
-    // Minimum width of a string displayed as upper or lower text
-    int maxTextAllowedWidth = 20 * charWidth;
-
-    QCanvasPixmap* clefAndKeyPixmap = NULL;
-    clefAndKeyPixmap = makeKeyDisplayPixmap(key, clef);
-    int clefAndKeyWidth = clefAndKeyPixmap->width();
-    int clefAndKeyHeight = clefAndKeyPixmap->height();
-
-    int width = maxTextAllowedWidth > clefAndKeyWidth ?
-                            maxTextAllowedWidth : clefAndKeyWidth;
 
     createPixmapAndMask(width, height);
 
-    int clefAndKeyY = (height - clefAndKeyHeight) / 2;
-    int clefAndKeyX = width - clefAndKeyWidth;
-    if (drawClef) {
-        if (clefColour != Qt::black) clefAndKeyPixmap->fill(clefColour);
-        m_p->drawPixmap(clefAndKeyX, clefAndKeyY, *clefAndKeyPixmap);
+    int lw = getLineSpacing();
+    int h;
+    QColor colour;
+    int maxDelta = getAccidentalWidth(Sharp);
+
+    // Staff Y position inside the whole header
+    int offset = (height - 10 * lw -1) / 2;
+
+    // Draw staff lines
+    m_p->painter().setPen(QPen(Qt::black, getStaffLineThickness()));
+    for (h = 0; h <= 8; h += 2) {
+        int y = (lw * 3) + ((8 - h) * lw) / 2;
+        m_p->drawLine(maxDelta/2, y + offset, m_generatedWidth - maxDelta/2, y + offset);
     }
 
-    int upperTextY, lowerTextY;
-    if (charHeight < clefAndKeyY) {
-        // If enough space, place text just outside clef pixmap
-        upperTextY = clefAndKeyY - charHeight + 4;  // +4 : adjust
-        lowerTextY = clefAndKeyY + clefAndKeyHeight + charHeight;
-    } else {
-        // Else use top and bottom positions
-        upperTextY = charHeight;
-        lowerTextY = m_generatedHeight - 4;  // -4 : adjust
+    if (header->isAClefToDraw()) {
+        const Clef &clef = header->getClef();
+        // TODO : use colours from GUIPalette
+        colour = header->isClefInconsistent() ? Qt::red : Qt::black;
+
+        int hue, sat, val;
+        colour.getHsv(&hue, &sat, &val);
+        NoteCharacter clefChar = m_font->getCharacterColoured
+                                       (m_style->getClefCharName(clef),
+                                        hue, val, NoteFont::Screen, false);
+
+        // Draw clef
+        h = clef.getAxisHeight();
+        int y = (lw * 3) + ((8 - h) * lw) / 2;
+        m_p->drawNoteCharacter(maxDelta,
+                               y - clefChar.getHotspot().y() + offset, clefChar);
+
+        // If necessary, write 8 or 15 above or under the clef
+        int oct = clef.getOctaveOffset();
+        if (oct != 0) {
+
+            int adjustedOctave = (8 * (oct < 0 ? -oct : oct));
+            if (adjustedOctave > 8)
+                adjustedOctave--;
+            else if (adjustedOctave < 8)
+                adjustedOctave++;
+
+            QString text = QString("%1").arg(adjustedOctave);
+            QRect rect = m_clefOttavaFontMetrics.boundingRect(text);
+
+            m_p->painter().setPen(colour);
+
+            m_p->painter().setFont(m_clefOttavaFont);
+            // m_p->maskPainter().setFont(m_clefOttavaFont);
+            int xpos = maxDelta + clefChar.getWidth() / 2 - rect.width() / 2;
+            int ypos = y - clefChar.getHotspot().y() + offset 
+                         + (oct < 0 ? clefChar.getHeight() + rect.height() - 1 : - rect.height() / 3);
+            m_p->drawText(xpos, ypos, text);
+        }
+
+        // TODO : use colours from GUIPalette
+        colour = header->isKeyInconsistent() ? Qt::red : Qt::black;
+
+
+        // Draw the key signature if any
+
+        const Key &key = header->getKey();
+        std::vector<int> ah = key.getAccidentalHeights(clef);
+
+        CharName charName = key.isSharp() ?
+                            NoteCharacterNames::SHARP :
+                            NoteCharacterNames::FLAT;
+
+        colour.getHsv(&hue, &sat, &val);
+        NoteCharacter accident = m_font->getCharacterColoured(charName,
+                                          hue, val, NoteFont::Screen, false);
+
+        QPoint hotspot(m_font->getHotspot(charName));
+        int delta = accident.getWidth() - hotspot.x();
+
+        int x = clefChar.getWidth() + maxDelta;
+        for (unsigned int i = 0; i < ah.size(); ++i) {
+            h = ah[i];
+            y = (lw * 3) + ((8 - h) * lw) / 2 - hotspot.y() + offset;
+            m_p->drawNoteCharacter(x, y, accident);
+
+            x += delta;
+        }
+
     }
 
     m_p->painter().setFont(m_trackHeaderFont);
-    if (!m_inPrinterMethod)
-        m_p->maskPainter().setFont(m_trackHeaderFont);
+    // m_p->maskPainter().setFont(m_trackHeaderFont);
 
-    m_p->painter().setPen(upperTextColour);
-    m_p->drawText(charWidth, upperTextY, upperText);
+    QString text;
+    QString textLine;
 
-    m_p->painter().setPen(lowerTextColour);
-    m_p->drawText(charWidth, lowerTextY, lowerText);
+    int charHeight = m_trackHeaderFontMetrics.height();
+    int charWidth = m_trackHeaderFontMetrics.maxWidth();
 
-    delete clefAndKeyPixmap;
+    const QString transposeText = header->getTransposeText();
+    QRect bounds = m_trackHeaderBoldFontMetrics.boundingRect(transposeText);
+    int transposeWidth = bounds.width();
+
+
+    // Write upper text (track name and track label)
+
+    m_p->painter().setPen(Qt::black);
+    text = header->getUpperText();
+    int numberOfTextLines = header->getNumberOfTextLines();
+
+    for (int l=1; l<=numberOfTextLines; l++) {
+        int upperTextY = charHeight + (l - 1) * getTrackHeaderTextLineSpacing();
+        if (l == numberOfTextLines) {
+            int transposeSpace = transposeWidth ? transposeWidth + charWidth / 4 : 0;
+            textLine = getOneLine(text, width - transposeSpace - charWidth / 2);
+            if (!text.isEmpty()) {
+                // String too long : cut it and replace last character by dots
+                int len = textLine.length();
+                if (len > 1) textLine.replace(len - 1, 1, i18n("..."));
+            }
+        } else {
+            textLine = getOneLine(text, width - charWidth / 2);
+        }
+        if (textLine.isEmpty()) break;
+        m_p->drawText(charWidth / 4, upperTextY, textLine);
+    }
+
+
+    // Write transposition text
+
+    // TODO : use colours from GUIPalette
+    colour = header->isTransposeInconsistent() ? Qt::red : Qt::black;
+    m_p->painter().setFont(m_trackHeaderBoldFont);
+     // m_p->maskPainter().setFont(m_trackHeaderBoldFont);
+    m_p->painter().setPen(colour);
+
+    m_p->drawText(width - transposeWidth - charWidth / 4,
+                charHeight
+                    + (numberOfTextLines - 1) * getTrackHeaderTextLineSpacing(),
+                transposeText);
+
+
+     // Write lower text (segment label)
+
+    // TODO : use colours from GUIPalette
+    colour = header->isLabelInconsistent() ? Qt::red : Qt::black;
+    m_p->painter().setFont(m_trackHeaderFont);
+    // m_p->maskPainter().setFont(m_trackHeaderFont);
+
+    m_p->painter().setPen(colour);
+    text = header->getLowerText();
+
+    for (int l=1; l<=numberOfTextLines; l++) {
+        int lowerTextY = m_generatedHeight - 4            // -4 : adjust
+            - (numberOfTextLines - l) * getTrackHeaderTextLineSpacing();
+
+        QString textLine = getOneLine(text, width - charWidth / 2);
+        if (textLine.isEmpty()) break;
+
+        if ((l == numberOfTextLines)  && !text.isEmpty()) {
+                // String too long : cut it and replace last character by dots
+                int len = textLine.length();
+                if (len > 1) textLine.replace(len - 1, 1, i18n("..."));
+        }
+
+        m_p->drawText(charWidth / 4, lowerTextY, textLine);
+    }
+
     return makeCanvasPixmap(m_pointZero, true);
+}
+
+int
+NotePixmapFactory::getTrackHeaderNTL(int height)
+{
+    int clefMaxHeight = 12 * getLineSpacing();
+    int textLineHeight = getTrackHeaderTextLineSpacing();
+    int numberOfLines = ((height - clefMaxHeight) / 2) / textLineHeight;
+    return (numberOfLines > 0) ? numberOfLines : 1;
+}
+
+int
+NotePixmapFactory::getTrackHeaderTextWidth(QString str)
+{
+    QRect bounds = m_trackHeaderFontMetrics.boundingRect(str);
+    return bounds.width();
+}
+
+int
+NotePixmapFactory::getTrackHeaderTextLineSpacing()
+{
+    // 3/2 is some arbitrary line spacing
+    return m_trackHeaderFont.pixelSize() * 3 / 2;
+}
+
+QString
+NotePixmapFactory::getOneLine(QString &text, int width)
+{
+    QString str;
+    int n;
+
+    // Immediately stop if string is empty or only contains white spaces ...
+    if (text.stripWhiteSpace().isEmpty()) return QString("");
+
+    // ... or if width is too small.
+    if (width < m_trackHeaderFontMetrics.boundingRect(text.left(1)).width())
+        return QString("");
+
+    // Get a first approx. string length
+    int totalLength = text.length();
+    n = totalLength * width / getTrackHeaderTextWidth(text) + 1;
+    if (n > totalLength) n = totalLength;
+
+    // Verify string size is less than width then correct it if necessary
+    while (((getTrackHeaderTextWidth(text.left(n))) > width) && n) n--;
+
+    if (n == 0) {
+        str = text;
+        text = QString("");
+    } else {
+        str = text.left(n);
+        text.remove(0, n);
+    }
+
+    return str;
 }
 
 QCanvasPixmap*
@@ -2673,10 +2868,12 @@ NotePixmapFactory::drawOttavaAux(int length, int octavesUp,
     QRect r;
 
     if (octavesUp == 2 || octavesUp == -2) {
-        label = "15ma  ";
+        if (octavesUp == 2) label = "15ma  ";
+            else label = "15mb  ";
         backpedal = m_ottavaFontMetrics.width("15") / 2;
     } else {
-        label = "8va  ";
+        if (octavesUp == 1) label = "8va  ";
+            else label = "8vb  ";
         backpedal = m_ottavaFontMetrics.width("8") / 2;
     }
 
@@ -2983,7 +3180,7 @@ NotePixmapFactory::getTextFont(const Text &text) const
      * Tempo:              Large bold roman, above staff
      * LocalTempo:         Small bold roman, above staff
      * Annotation:         Very small sans-serif, in a yellow box
-     * LilypondDirective:  Very small sans-serif, in a green box
+     * LilyPondDirective:  Very small sans-serif, in a green box
      */
 
     int weight = QFont::Normal;
@@ -3011,7 +3208,7 @@ NotePixmapFactory::getTextFont(const Text &text) const
     }
 
     if (type == Text::Annotation ||
-        type == Text::LilypondDirective) {
+        type == Text::LilyPondDirective) {
         serif = false;
         tiny = true;
     }
@@ -3065,8 +3262,8 @@ NotePixmapFactory::makeTextPixmap(const Text &text)
     std::string type(text.getTextType());
 
     if (type == Text::Annotation ||
-        type == Text::LilypondDirective) {
-        return makeAnnotationPixmap(text, (type == Text::LilypondDirective));
+        type == Text::LilyPondDirective) {
+        return makeAnnotationPixmap(text, (type == Text::LilyPondDirective));
     }
 
     drawTextAux(text, 0, 0, 0);
@@ -3112,8 +3309,8 @@ NotePixmapFactory::drawText(const Text &text,
     std::string type(text.getTextType());
 
     if (type == Text::Annotation ||
-        type == Text::LilypondDirective) {
-        QCanvasPixmap *map = makeAnnotationPixmap(text, (type == Text::LilypondDirective));
+        type == Text::LilyPondDirective) {
+        QCanvasPixmap *map = makeAnnotationPixmap(text, (type == Text::LilyPondDirective));
         painter.drawPixmap(x, y, *map);
         return ;
     }
@@ -3168,7 +3365,7 @@ NotePixmapFactory::makeAnnotationPixmap(const Text &text)
 }
 
 QCanvasPixmap*
-NotePixmapFactory::makeAnnotationPixmap(const Text &text, const bool isLilypondDirective)
+NotePixmapFactory::makeAnnotationPixmap(const Text &text, const bool isLilyPondDirective)
 {
     QString s(strtoqstr(text.getText()));
 
@@ -3199,8 +3396,8 @@ NotePixmapFactory::makeAnnotationPixmap(const Text &text, const bool isLilypondD
     if (!m_inPrinterMethod)
         m_p->maskPainter().setFont(textFont);
 
-    if (isLilypondDirective) {
-        m_p->painter().setBrush(GUIPalette::getColour(GUIPalette::TextLilypondDirectiveBackground));
+    if (isLilyPondDirective) {
+        m_p->painter().setBrush(GUIPalette::getColour(GUIPalette::TextLilyPondDirectiveBackground));
     } else {
         m_p->painter().setBrush(GUIPalette::getColour(GUIPalette::TextAnnotationBackground));
     }

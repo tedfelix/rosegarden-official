@@ -4,14 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
-
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -233,6 +226,10 @@ public:
      * false if it's an imported file or a new file (not yet saved)
      */
     bool isRegularDotRGFile();
+
+    void setQuickMarker();
+    void jumpToQuickMarker();    
+    timeT getQuickMarkerTime() { return m_quickMarkerTime; }
 
     /**
      * returns the global command history
@@ -709,6 +706,8 @@ protected:
     RealTime m_audioRecordLatency;
 
     timeT m_recordStartTime;
+
+    timeT m_quickMarkerTime;
 
     std::vector<QString> m_orphanedRecordedAudioFiles;
     std::vector<QString> m_orphanedDerivedAudioFiles;

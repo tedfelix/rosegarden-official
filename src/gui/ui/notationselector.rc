@@ -16,6 +16,9 @@
   <Action name="collapse_notes" />
   <Action name="interpret" />
   <Separator />
+  <Action name="move_events_up_staff" />
+  <Action name="move_events_down_staff" />
+  <Separator />
   <Action name="make_invisible" />
   <Action name="make_visible" />
 </Menu>

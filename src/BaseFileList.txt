@@ -45,6 +45,7 @@ SET(base_SRCS
 	base/Marker.h
 	base/MidiDevice.cpp
 	base/MidiDevice.h
+	base/MidiMetronome.h
 	base/MidiProgram.cpp
 	base/MidiProgram.h
 	base/MidiTypes.cpp

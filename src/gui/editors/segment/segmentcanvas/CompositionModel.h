@@ -4,14 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
-
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -63,9 +56,9 @@ public:
     };
 
     typedef std::vector<QRect> rectlist;
+    typedef std::vector<int> heightlist;
     typedef std::vector<CompositionRect> rectcontainer;
     typedef std::set<CompositionItem, CompositionItemCompare> itemcontainer;
-//    typedef std::set<CompositionItem> itemcontainer;
 
     struct AudioPreviewDrawDataItem {
         AudioPreviewDrawDataItem(PixmapArray p, QPoint bp, QRect r) :
@@ -125,7 +118,9 @@ public:
     virtual const rectcontainer& getRectanglesIn(const QRect& rect,
                                                  RectRanges* notationRects, AudioPreviewDrawData* audioRects) = 0;
 
-    virtual itemcontainer     getItemsAt      (const QPoint&) = 0;
+    virtual heightlist getTrackDividersIn(const QRect& rect) = 0;
+
+    virtual itemcontainer getItemsAt (const QPoint&) = 0;
     virtual timeT getRepeatTimeAt (const QPoint&, const CompositionItem&) = 0;
 
     virtual SnapGrid& grid() = 0;

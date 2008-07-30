@@ -256,6 +256,12 @@
 	      <Action name="retrograde_invert"/>
 	</Menu>
 		<Separator/>
+	<Menu name="velocities">
+		<text>Velocities</text>
+		<Action name="velocity_up"/>
+		<Action name="velocity_down"/>
+		<Action name="set_velocities"/>
+	</Menu>
 	<Menu name="fine_positioning">
 		<text>&amp;Fine Positioning</text>
 		<Action name="fine_position_restore"/>
@@ -775,6 +781,9 @@
     <Action name="halve_durations"/>
     <Action name="double_durations"/>
     <Action name="rescale"/>
+    <Action name="velocity_up"/>
+    <Action name="velocity_down"/>
+    <Action name="set_velocities"/>
     <Menu name="Stems"/>
     <Menu name="Slashes"/>
     <Menu name="Transpose"/>
@@ -796,6 +805,7 @@
 <Menu name="rests"/>
 <Menu name="transform_notes"/>
 <Menu name="quantize_notes"/>
+<Menu name="velocities"/>
   </enable>
 </State>
 

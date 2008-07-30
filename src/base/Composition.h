@@ -3,14 +3,8 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <bownie@bownie.com>
-
-    The moral right of the authors to claim authorship of this work
-    has been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
+    See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
@@ -290,6 +284,23 @@ public:
      * nor updating refresh statuses.
      */
     bool weakDetachSegment(Segment*);
+
+    /**
+     * Get the largest number of segments that "overlap" at any one
+     * time on the given track.  I have given this function a nice
+     * long name to make it feel important.
+     */
+    int getMaxContemporaneousSegmentsOnTrack(TrackId track) const;
+
+    /**
+     * Retrieve a "vertical" index for this segment within its track.
+     * Currently this is based on studying the way that segments on
+     * the track overlap and returning the lowest integer such that no
+     * prior starting segment that overlaps with this one would use
+     * the same integer.  In future this could use proper voice
+     * ordering.
+     */
+    int getSegmentVoiceIndex(const Segment *) const;
 
 
     //////
@@ -931,7 +942,8 @@ protected:
     void notifySegmentEventsTimingChanged(Segment *s, timeT delay, RealTime rtDelay) const;
     void notifySegmentTransposeChanged(Segment *s, int transpose) const;
     void notifySegmentTrackChanged(Segment *s, TrackId oldId, TrackId newId) const;
-    void notifySegmentEndMarkerChange(Segment *s, bool shorten) const;
+    void notifySegmentStartChanged(Segment *, timeT);
+    void notifySegmentEndMarkerChange(Segment *s, bool shorten);
     void notifyEndMarkerChange(bool shorten) const;
     void notifyTrackChanged(Track*) const;
     void notifyTrackDeleted(TrackId) const;
@@ -1040,6 +1052,12 @@ public:
      */
     virtual void segmentTransposeChanged(const Composition *, Segment *,
                                          int /* transpose */) { }
+
+    /**
+     * Called when the segment's start time has changed
+     */
+    virtual void segmentStartChanged(const Composition *, Segment *,
+				     timeT /* newStartTime */) { }
 
     /**
      * Called when the segment's end marker time has changed

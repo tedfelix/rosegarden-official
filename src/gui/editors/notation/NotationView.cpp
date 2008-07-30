@@ -3,14 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
- 
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
- 
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -31,6 +24,7 @@
 
 #include "gui/editors/segment/TrackEditor.h"
 #include "gui/editors/segment/TrackButtons.h"
+#include "gui/editors/parameters/TrackParameterBox.h"
 #include "base/BaseProperties.h"
 #include <klocale.h>
 #include <kstddirs.h>
@@ -59,6 +53,7 @@
 #include "base/Track.h"
 #include "ClefInserter.h"
 #include "commands/edit/AddDotCommand.h"
+#include "commands/edit/ChangeVelocityCommand.h"
 #include "commands/edit/ClearTriggersCommand.h"
 #include "commands/edit/CollapseNotesCommand.h"
 #include "commands/edit/CopyCommand.h"
@@ -88,16 +83,18 @@
 #include "commands/segment/RenameTrackCommand.h"
 #include "document/RosegardenGUIDoc.h"
 #include "document/ConfigGroups.h"
-#include "document/io/LilypondExporter.h"
+#include "document/io/LilyPondExporter.h"
 #include "GuitarChordInserter.h"
 #include "gui/application/SetWaitCursor.h"
 #include "gui/application/RosegardenGUIView.h"
+#include "gui/application/RosegardenGUIApp.h"
 #include "gui/dialogs/ClefDialog.h"
 #include "gui/dialogs/EventEditDialog.h"
+#include "gui/dialogs/EventParameterDialog.h"
 #include "gui/dialogs/InterpretDialog.h"
 #include "gui/dialogs/IntervalDialog.h"
 #include "gui/dialogs/KeySignatureDialog.h"
-#include "gui/dialogs/LilypondOptionsDialog.h"
+#include "gui/dialogs/LilyPondOptionsDialog.h"
 #include "gui/dialogs/LyricEditDialog.h"
 #include "gui/dialogs/MakeOrnamentDialog.h"
 #include "gui/dialogs/PasteNotationDialog.h"
@@ -299,7 +296,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
         m_selectionCounter(0),
         m_insertModeLabel(0),
         m_annotationsLabel(0),
-        m_lilypondDirectivesLabel(0),
+        m_lilyPondDirectivesLabel(0),
         m_progressBar(0),
         m_currentNotePixmap(0),
         m_hoveredOverNoteName(0),
@@ -326,7 +323,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
         m_tempoRuler(0),
         m_rawNoteRuler(0),
         m_annotationsVisible(false),
-        m_lilypondDirectivesVisible(false),
+        m_lilyPondDirectivesVisible(false),
         m_selectDefaultNote(0),
         m_fontCombo(0),
         m_fontSizeCombo(0),
@@ -340,7 +337,11 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
         m_ok(false),
         m_printMode(false),
         m_printSize(8), // set in positionStaffs
-        m_showHeadersGroup(0)
+        m_showHeadersGroup(0),
+        m_headersGroupView(0),
+        m_headersGroup(0),
+        m_headersTopFrame(0),
+        m_showHeadersMenuEntry(0)
 {
     initActionDataMaps(); // does something only the 1st time it's called
 
@@ -355,7 +356,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     m_config->setGroup(NotationViewConfigGroup);
 
-    m_showHeadersGroup = m_config->readNumEntry("shownotationheader", 1);
+    m_showHeadersGroup = m_config->readNumEntry("shownotationheader",
+                                                HeadersGroup::DefaultShowMode);
 
     m_fontName = qstrtostr(m_config->readEntry
                            ("notefont",
@@ -403,13 +405,6 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     updateViewCaption();
 
-    setTopStandardRuler(new StandardRuler(getDocument(),
-                                    m_hlayout, m_leftGutter, 25,
-                                    false, getCentralWidget()));
-
-    m_topStandardRuler->getLoopRuler()->setBackgroundColor
-        (GUIPalette::getColour(GUIPalette::InsertCursorRuler));
-
     m_chordNameRuler = new ChordNameRuler
                        (m_hlayout, doc, segments, m_leftGutter, 20, getCentralWidget());
     addRuler(m_chordNameRuler);
@@ -438,16 +433,6 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     setBottomStandardRuler(new StandardRuler(getDocument(), m_hlayout, m_leftGutter, 25,
                                        true, getBottomWidget()));
 
-    connect(m_topStandardRuler->getLoopRuler(), SIGNAL(startMouseMove(int)),
-            m_canvasView, SLOT(startAutoScroll(int)));
-    connect(m_topStandardRuler->getLoopRuler(), SIGNAL(stopMouseMove()),
-            m_canvasView, SLOT(stopAutoScroll()));
-
-    connect(m_bottomStandardRuler->getLoopRuler(), SIGNAL(startMouseMove(int)),
-            m_canvasView, SLOT(startAutoScroll(int)));
-    connect(m_bottomStandardRuler->getLoopRuler(), SIGNAL(stopMouseMove()),
-            m_canvasView, SLOT(stopAutoScroll()));
-
     for (unsigned int i = 0; i < segments.size(); ++i)
     {
         m_staffs.push_back(new NotationStaff
@@ -463,8 +448,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_headersGroup = new HeadersGroup(vport, this, &doc->getComposition());
     m_headersGroupView->setVScrollBarMode(QScrollView::AlwaysOff);
     m_headersGroupView->setHScrollBarMode(QScrollView::AlwaysOff);
-
-    m_grid->addWidget(m_headersGroupView, CANVASVIEW_ROW, 0);
+    m_headersGroupView->setFixedWidth(m_headersGroupView->contentsWidth());
+    m_canvasView->setLeftFixedWidget(m_headersGroupView);
 
     // Add a close button just above the track headers.
     // The grid layout is only here to maintain the button in a
@@ -482,8 +467,26 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     hideHeadersButton->setFlat(true);
     QToolTip::add(hideHeadersButton, i18n("Close track headers"));
     headersTopGrid->setMargin(4);
+    setTopStandardRuler(new StandardRuler(getDocument(),
+                                    m_hlayout, m_leftGutter, 25,
+                                    false, getCentralWidget()), m_headersTopFrame);
 
-    m_grid->addWidget(m_headersTopFrame, TOPBARBUTTONS_ROW, 0);
+    m_topStandardRuler->getLoopRuler()->setBackgroundColor
+        (GUIPalette::getColour(GUIPalette::InsertCursorRuler));
+
+    connect(m_topStandardRuler->getLoopRuler(), SIGNAL(startMouseMove(int)),
+            m_canvasView, SLOT(startAutoScroll(int)));
+    connect(m_topStandardRuler->getLoopRuler(), SIGNAL(stopMouseMove()),
+            m_canvasView, SLOT(stopAutoScroll()));
+
+    connect(m_bottomStandardRuler->getLoopRuler(), SIGNAL(startMouseMove(int)),
+            m_canvasView, SLOT(startAutoScroll(int)));
+    connect(m_bottomStandardRuler->getLoopRuler(), SIGNAL(stopMouseMove()),
+            m_canvasView, SLOT(stopAutoScroll()));
+
+    // Following connection have to be done before calling setPageMode())
+    connect(m_headersGroup, SIGNAL(headersResized(int)),
+            this, SLOT(slotHeadersWidthChanged(int)));
 
 
     //
@@ -660,14 +663,13 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
             this, SLOT(slotCanvasBottomWidgetHeightChanged(int)));
 
     // Signal canvas horizontal scroll to notation header
-    QObject::connect
-    (getCanvasView(), SIGNAL(contentsMoving(int, int)),
-     m_headersGroup, SLOT(slotUpdateAllHeaders(int, int)));
+     QObject::connect
+     (getCanvasView(), SIGNAL(contentsMoving(int, int)),
+     this, SLOT(slotUpdateHeaders(int, int)));
 
-    // Connect the close notation header button
+    // Connect the close notation headers button
     QObject::connect(hideHeadersButton, SIGNAL(clicked()), 
                                   this, SLOT(slotHideHeadersGroup()));
-
 
     stateChanged("have_selection", KXMLGUIClient::StateReverse);
     stateChanged("have_notes_in_selection", KXMLGUIClient::StateReverse);
@@ -769,7 +771,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
         m_tempoRuler(0),
         m_rawNoteRuler(0),
         m_annotationsVisible(false),
-        m_lilypondDirectivesVisible(false),
+        m_lilyPondDirectivesVisible(false),
         m_selectDefaultNote(0),
         m_fontCombo(0),
         m_fontSizeCombo(0),
@@ -783,7 +785,11 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
         m_ok(false),
         m_printMode(true),
         m_printSize(8), // set in positionStaffs
-        m_showHeadersGroup(0)
+        m_showHeadersGroup(0),
+        m_headersGroupView(0),
+        m_headersGroup(0),
+        m_headersTopFrame(0),
+        m_showHeadersMenuEntry(0)
 {
     assert(segments.size() > 0);
     NOTATION_DEBUG << "NotationView print ctor" << endl;
@@ -1217,42 +1223,50 @@ void NotationView::positionStaffs()
     }
 
 
-    // Destroy then recreate all track headers
-    hideHeadersGroup();
-    m_headersGroup->removeAllHeaders();
-    if (m_pageMode == LinedStaff::LinearMode) {
-        for (int i = minTrack; i <= maxTrack; ++i) {
-            TrackIntMap::iterator hi = trackHeights.find(i);
-            if (hi != trackHeights.end()) {
-                TrackId trackId = getDocument()->getComposition()
-                                        .getTrackByPosition(i)->getId();
-                m_headersGroup->addHeader(trackId, trackHeights[i],
-                                          trackCoords[i], getCanvasLeftX());
+    if (!m_printMode) {
+        // Destroy then recreate all track headers
+        hideHeadersGroup();
+        m_headersGroup->removeAllHeaders();
+        if (m_pageMode == LinedStaff::LinearMode) {
+            for (int i = minTrack; i <= maxTrack; ++i) {
+                TrackIntMap::iterator hi = trackHeights.find(i);
+                if (hi != trackHeights.end()) {
+                    TrackId trackId = getDocument()->getComposition()
+                                            .getTrackByPosition(i)->getId();
+                    m_headersGroup->addHeader(trackId, trackHeights[i],
+                                              trackCoords[i], getCanvasLeftX());
+                }
             }
-        }
 
-        m_headersGroup->completeToHeight(canvas()->height());
+            m_headersGroup->completeToHeight(canvas()->height());
 
-        m_headersGroupView->addChild(m_headersGroup);
+            m_headersGroupView->addChild(m_headersGroup);
 
-        m_headersGroupView->setBottomMargin(getBottomWidget()->height()
-                        + getCanvasView()->horizontalScrollBar()->height());
+            getCanvasView()->updateLeftWidgetGeometry();
 
-        slotCanvasBottomWidgetHeightChanged(getBottomWidget()->height());
+            if (    (m_showHeadersGroup == HeadersGroup::ShowAlways)
+                || (    (m_showHeadersGroup == HeadersGroup::ShowWhenNeeded)
+                      && (m_headersGroup->getUsedHeight()
+                              > getCanvasView()->visibleHeight()))) {
+                m_headersGroup->slotUpdateAllHeaders(getCanvasLeftX(), 0, true);
+                showHeadersGroup();
 
-        if (    (m_showHeadersGroup == 2)
-             || (    (m_showHeadersGroup == 1)
-                  && (m_headersGroup->getUsedHeight()
-                          > getCanvasView()->visibleHeight()))) {
-            showHeadersGroup();
+                // Disable menu entry when headers are shown
+                m_showHeadersMenuEntry->setEnabled(false);
+            } else {
+                // Enable menu entry when headers are hidden
+                m_showHeadersMenuEntry->setEnabled(true);
+            }
+        } else {
+            // Disable menu entry when not in linear mode
+            m_showHeadersMenuEntry->setEnabled(false);
         }
     }
 }
 
 void NotationView::slotCanvasBottomWidgetHeightChanged(int newHeight)
 {
-     m_headersGroupView->setBottomMargin(
-             newHeight + getCanvasView()->horizontalScrollBar()->height());
+    getCanvasView()->updateLeftWidgetGeometry();
 }
 
 void NotationView::positionPages()
@@ -1348,6 +1362,7 @@ void NotationView::slotUpdateStaffName()
 {
     LinedStaff *staff = getLinedStaff(m_currentStaff);
     staff->drawStaffName();
+    m_headersGroup->slotUpdateAllHeaders(getCanvasLeftX(), 0, true);
 }
 
 void NotationView::slotSaveOptions()
@@ -1358,7 +1373,7 @@ void NotationView::slotSaveOptions()
     m_config->writeEntry("Show Raw Note Ruler", getToggleAction("show_raw_note_ruler")->isChecked());
     m_config->writeEntry("Show Tempo Ruler", getToggleAction("show_tempo_ruler")->isChecked());
     m_config->writeEntry("Show Annotations", m_annotationsVisible);
-    m_config->writeEntry("Show LilyPond Directives", m_lilypondDirectivesVisible);
+    m_config->writeEntry("Show LilyPond Directives", m_lilyPondDirectivesVisible);
 
     m_config->sync();
 }
@@ -1417,7 +1432,7 @@ void NotationView::readOptions()
     //    slotToggleAnnotations();
 
     opt = m_config->readBoolEntry("Show LilyPond Directives", true);
-    m_lilypondDirectivesVisible = opt;
+    m_lilyPondDirectivesVisible = opt;
     getToggleAction("show_lilypond_directives")->setChecked(opt);
     slotUpdateLilyPondDirectivesStatus();
 }
@@ -1429,11 +1444,11 @@ void NotationView::setupActions()
                              actionCollection());
 
     new KAction(i18n("Print &with LilyPond..."), 0, 0, this,
-                SLOT(slotPrintLilypond()), actionCollection(),
+                SLOT(slotPrintLilyPond()), actionCollection(),
                 "file_print_lilypond");
 
     new KAction(i18n("Preview with Lil&yPond..."), 0, 0, this,
-                SLOT(slotPreviewLilypond()), actionCollection(),
+                SLOT(slotPreviewLilyPond()), actionCollection(),
                 "file_preview_lilypond");
 
     EditViewBase::setupActions("notation.rc");
@@ -1472,9 +1487,10 @@ void NotationView::setupActions()
 
     actionCollection()->insert(m_fontSizeActionMenu);
 
-    new KAction(i18n("Show track headers"), 0, this,
-                        SLOT(slotShowHeadersGroup()),
-                        actionCollection(), "show_track_headers");
+    m_showHeadersMenuEntry
+        = new KAction(i18n("Show Track Headers"), 0, this,
+                            SLOT(slotShowHeadersGroup()),
+                            actionCollection(), "show_track_headers");
 
     KActionMenu *spacingActionMenu =
         new KActionMenu(i18n("S&pacing"), this, "stretch_actionmenu");
@@ -1664,7 +1680,7 @@ void NotationView::setupActions()
 
     /*    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("lilypond")));
         noteAction = new KRadioAction(i18n("Lil&ypond Directive"), icon, Key_F9, this,
-                                      SLOT(slotLilypondDirective()),
+                                      SLOT(slotLilyPondDirective()),
                                       actionCollection(), "lilypond_directive");
         noteAction->setExclusiveGroup("notes"); */
 
@@ -1879,7 +1895,7 @@ void NotationView::setupActions()
                 SLOT(slotEditTranspose()), actionCollection(),
                 "transpose_segment");
 
-	new KAction(i18n("Convert notation for..."), 0, this,
+	new KAction(i18n("Convert Notation For..."), 0, this,
                 SLOT(slotEditSwitchPreset()), actionCollection(),
                 "switch_preset");
 
@@ -2064,6 +2080,20 @@ void NotationView::setupActions()
     new KAction(i18n("&Filter Selection"), "filter", Key_F + CTRL, this,
                 SLOT(slotFilterSelection()), actionCollection(),
                 "filter_selection");
+
+    new KAction(ChangeVelocityCommand::getGlobalName(10), 0,
+                Key_Up + SHIFT, this,
+                SLOT(slotVelocityUp()), actionCollection(),
+                "velocity_up");
+
+    new KAction(ChangeVelocityCommand::getGlobalName( -10), 0,
+                Key_Down + SHIFT, this,
+                SLOT(slotVelocityDown()), actionCollection(),
+                "velocity_down");
+
+    new KAction(i18n("Set Event &Velocities..."), 0, this,
+                SLOT(slotSetVelocities()), actionCollection(),
+                "set_velocities");
 
     new KAction(i18n("Toggle Dot"), Key_Period, this,
                 SLOT(slotToggleDot()), actionCollection(),
@@ -2281,7 +2311,7 @@ void NotationView::initStatusBar()
     m_currentNotePixmap->setMinimumWidth(20);
     m_insertModeLabel = new QLabel(hbox);
     m_annotationsLabel = new QLabel(hbox);
-    m_lilypondDirectivesLabel = new QLabel(hbox);
+    m_lilyPondDirectivesLabel = new QLabel(hbox);
     sb->addWidget(hbox);
 
     sb->insertItem(KTmpStatusMsg::getDefaultMsg(),
@@ -2306,7 +2336,8 @@ void NotationView::setViewSize(QSize s)
 {
     canvas()->resize(s.width(), s.height());
 
-    if ((m_pageMode == LinedStaff::LinearMode) && m_showHeadersGroup) {
+    if (   (m_pageMode == LinedStaff::LinearMode)
+        && (m_showHeadersGroup != HeadersGroup::ShowNever)) {
         m_headersGroup->completeToHeight(s.height());
     }
 }
@@ -2367,9 +2398,11 @@ NotationView::setPageMode(LinedStaff::PageMode pageMode)
         }
     }
 
-    // Layout is done : Time related to left of canvas should now
-    // correctly be determined and track headers contents be drawn.
-    m_headersGroup->slotUpdateAllHeaders(0, 0, true);
+    if (!m_printMode) {
+        // Layout is done : Time related to left of canvas should now
+        // correctly be determined and track headers contents be drawn.
+        m_headersGroup->slotUpdateAllHeaders(0, 0, true);
+    }
 
     positionPages();
 
@@ -3511,6 +3544,11 @@ void NotationView::readjustCanvasSize()
                    getCanvasView()->height()));
         }
     }
+
+    // Give a correct vertical alignment to track headers
+    if ((m_pageMode == LinedStaff::LinearMode) && m_showHeadersGroup) {
+        m_headersGroupView->setContentsPos(0, getCanvasView()->contentsY());
+    }
 }
 
 void NotationView::slotNoteAction()
@@ -3814,14 +3852,14 @@ NotationView::slotUpdateLilyPondDirectivesStatus()
                         ((*j)->get
                          <String>
                          (Text::TextTypePropertyName)
-                         == Text::LilypondDirective)) {
-                    m_lilypondDirectivesLabel->setText(i18n("Hidden LilyPond directives"));
+                         == Text::LilyPondDirective)) {
+                    m_lilyPondDirectivesLabel->setText(i18n("Hidden LilyPond directives"));
                     return ;
                 }
             }
         }
     }
-    m_lilypondDirectivesLabel->setText("");
+    m_lilyPondDirectivesLabel->setText("");
     getToggleAction("show_lilypond_directives")->setChecked(areLilyPondDirectivesVisible());
 }
 
@@ -4173,17 +4211,17 @@ NotationView::slotFilePrintPreview()
 
 std::map<KProcess *, KTempFile *> NotationView::m_lilyTempFileMap;
 
-void NotationView::slotPrintLilypond()
+void NotationView::slotPrintLilyPond()
 {
     KTmpStatusMsg msg(i18n("Printing LilyPond file..."), this);
     KTempFile *file = new KTempFile(QString::null, ".ly");
     file->setAutoDelete(true);
     if (!file->name()) {
         // CurrentProgressDialog::freeze();
-        KMessageBox::sorry(this, i18n("Failed to open a temporary file for Lilypond export."));
+        KMessageBox::sorry(this, i18n("Failed to open a temporary file for LilyPond export."));
         delete file;
     }
-    if (!exportLilypondFile(file->name(), true)) {
+    if (!exportLilyPondFile(file->name(), true)) {
         return ;
     }
     KProcess *proc = new KProcess;
@@ -4192,22 +4230,22 @@ void NotationView::slotPrintLilypond()
     *proc << "--print";
     *proc << file->name();
     connect(proc, SIGNAL(processExited(KProcess *)),
-            this, SLOT(slotLilypondViewProcessExited(KProcess *)));
+            this, SLOT(slotLilyPondViewProcessExited(KProcess *)));
     m_lilyTempFileMap[proc] = file;
     proc->start(KProcess::NotifyOnExit);
 }
 
-void NotationView::slotPreviewLilypond()
+void NotationView::slotPreviewLilyPond()
 {
     KTmpStatusMsg msg(i18n("Previewing LilyPond file..."), this);
     KTempFile *file = new KTempFile(QString::null, ".ly");
     file->setAutoDelete(true);
     if (!file->name()) {
         // CurrentProgressDialog::freeze();
-        KMessageBox::sorry(this, i18n("Failed to open a temporary file for Lilypond export."));
+        KMessageBox::sorry(this, i18n("Failed to open a temporary file for LilyPond export."));
         delete file;
     }
-    if (!exportLilypondFile(file->name(), true)) {
+    if (!exportLilyPondFile(file->name(), true)) {
         return ;
     }
     KProcess *proc = new KProcess;
@@ -4216,27 +4254,27 @@ void NotationView::slotPreviewLilypond()
     *proc << "--pdf";
     *proc << file->name();
     connect(proc, SIGNAL(processExited(KProcess *)),
-            this, SLOT(slotLilypondViewProcessExited(KProcess *)));
+            this, SLOT(slotLilyPondViewProcessExited(KProcess *)));
     m_lilyTempFileMap[proc] = file;
     proc->start(KProcess::NotifyOnExit);
 }
 
-void NotationView::slotLilypondViewProcessExited(KProcess *p)
+void NotationView::slotLilyPondViewProcessExited(KProcess *p)
 {
     delete m_lilyTempFileMap[p];
     m_lilyTempFileMap.erase(p);
     delete p;
 }
 
-bool NotationView::exportLilypondFile(QString file, bool forPreview)
+bool NotationView::exportLilyPondFile(QString file, bool forPreview)
 {
     QString caption = "", heading = "";
     if (forPreview) {
-        caption = i18n("Lilypond Preview Options");
-        heading = i18n("Lilypond preview options");
+        caption = i18n("LilyPond Preview Options");
+        heading = i18n("LilyPond preview options");
     }
 
-    LilypondOptionsDialog dialog(this, m_doc, caption, heading);
+    LilyPondOptionsDialog dialog(this, m_doc, caption, heading);
     if (dialog.exec() != QDialog::Accepted) {
         return false;
     }
@@ -4245,7 +4283,7 @@ bool NotationView::exportLilypondFile(QString file, bool forPreview)
                                100,
                                this);
 
-    LilypondExporter e(this, m_doc, std::string(QFile::encodeName(file)));
+    LilyPondExporter e(this, m_doc, std::string(QFile::encodeName(file)));
 
     connect(&e, SIGNAL(setProgress(int)),
             progressDlg.progressBar(), SLOT(setValue(int)));
@@ -4551,6 +4589,70 @@ void NotationView::slotFilterSelection()
             setCurrentSelection(newSelection);
         else
             setCurrentSelection(0);
+    }
+}
+
+void NotationView::slotVelocityUp()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Raising velocities..."), this);
+
+    addCommandToHistory
+    (new ChangeVelocityCommand(10, *m_currentEventSelection));
+}
+
+void NotationView::slotVelocityDown()
+{
+    if (!m_currentEventSelection)
+        return ;
+    KTmpStatusMsg msg(i18n("Lowering velocities..."), this);
+
+    addCommandToHistory
+    (new ChangeVelocityCommand( -10, *m_currentEventSelection));
+}
+
+int NotationView::getVelocityFromSelection()
+{
+    if (!m_currentEventSelection) return 0;
+
+    float totalVelocity = 0;
+    int count = 0;
+
+    for (EventSelection::eventcontainer::iterator i =
+             m_currentEventSelection->getSegmentEvents().begin();
+         i != m_currentEventSelection->getSegmentEvents().end(); ++i) {
+
+        if ((*i)->has(BaseProperties::VELOCITY)) {
+            totalVelocity += (*i)->get<Int>(BaseProperties::VELOCITY);
+            ++count;
+        }
+    }
+
+    if (count > 0) {
+        return (totalVelocity / count) + 0.5;
+    }
+    return 0;
+}
+
+void NotationView::slotSetVelocities()
+{
+    if (!m_currentEventSelection)
+        return ;
+
+    EventParameterDialog dialog(this,
+                                i18n("Set Event Velocities"),
+                                BaseProperties::VELOCITY,
+                                getVelocityFromSelection());
+
+    if (dialog.exec() == QDialog::Accepted) {
+        KTmpStatusMsg msg(i18n("Setting Velocities..."), this);
+        addCommandToHistory(new SelectionPropertyCommand
+                            (m_currentEventSelection,
+                             BaseProperties::VELOCITY,
+                             dialog.getPattern(),
+                             dialog.getValue1(),
+                             dialog.getValue2()));
     }
 }
 
@@ -5201,6 +5303,12 @@ void NotationView::slotEditTranspose()
             intervalDialog.getChangeKey(), steps, semitones, 
             intervalDialog.getTransposeSegmentBack()));
     }
+
+    // Fix #1885520 (Update track parameter widget when transpose changed from notation)
+    RosegardenGUIApp::self()->getView()->getTrackParameterBox()->slotUpdateControls(-1);
+
+    // And update track headers likewise
+    m_headersGroup->slotUpdateAllHeaders(getCanvasLeftX(), 0, true);
 }
 
 void NotationView::slotEditSwitchPreset()
@@ -5242,7 +5350,9 @@ void NotationView::slotEditSwitchPreset()
     }
 
     m_doc->slotDocumentModified();
-    emit updateView();
+
+    // Fix #1885520 (Update track parameter widget when preset changed from notation)
+    RosegardenGUIApp::self()->getView()->getTrackParameterBox()->slotUpdateControls(-1);
 }
 
 void NotationView::slotEditElement(NotationStaff *staff,
@@ -5364,7 +5474,7 @@ void NotationView::slotEditElement(NotationStaff *staff,
     }
 }
 
-void NotationView::slotBeginLilypondRepeat()
+void NotationView::slotBeginLilyPondRepeat()
 {}
 
 void NotationView::slotDebugDump()
@@ -5503,7 +5613,7 @@ NotationView::slotSetCurrentStaff(int staffNo)
 
         updateView();
 
-        slotSetInsertCursorPosition(getInsertionTime(), false, false);
+        slotSetInsertCursorPosition(getInsertionTime(), false, true);
 
         m_headersGroup->setCurrent(
                                 m_staffs[staffNo]->getSegment().getTrack());
@@ -5694,6 +5804,18 @@ NotationView::doDeferredCursorMove()
     NotationElementList::iterator i =
         staff->getViewElementList()->findNearestTime(t);
 
+    //
+    // Up to this point everything goes ok when adding the first note in the 
+    // beginning of the composition.
+    //
+    // However, there is a BUG with rests: not all rests have an associated
+    // canvas. The rests which do not have an associated canvas are not
+    // recognized by the following code and the _cursor position_ is not
+    // updated correctly to be just after the added note when the first note 
+    // of a segment have been added in the beginning of the segment.
+    //
+    // Why the canvas item is missing for the predefined rests ? (hjj)
+    //
     while (i != staff->getViewElementList()->end() &&
            !static_cast<NotationElement*>(*i)->getCanvasItem())
         ++i;
@@ -5967,7 +6089,7 @@ void NotationView::slotToggleAnnotations()
 
 void NotationView::slotToggleLilyPondDirectives()
 {
-    m_lilypondDirectivesVisible = !m_lilypondDirectivesVisible;
+    m_lilyPondDirectivesVisible = !m_lilyPondDirectivesVisible;
     slotUpdateLilyPondDirectivesStatus();
     //!!! use refresh mechanism
     refreshSegment(0, 0, 0);
@@ -5977,6 +6099,26 @@ void NotationView::slotEditLyrics()
 {
     Staff *staff = getCurrentStaff();
     Segment &segment = staff->getSegment();
+    int oldVerseCount = 1;
+    
+    // The loop below is identical with the one in LyricEditDialog::countVerses() 
+    // Maybe countVerses() should be moved to a Segment manipulating class ? (hjj)
+    for (Segment::iterator i = (&segment)->begin();
+         (&segment)->isBeforeEndMarker(i); ++i) {
+
+        if ((*i)->isa(Text::EventType)) {
+
+            std::string textType;
+            if ((*i)->get<String>(Text::TextTypePropertyName, textType) &&
+                textType == Text::Lyric) {
+
+                long verse = 0;
+                (*i)->get<Int>(Text::LyricVersePropertyName, verse);
+
+                if (verse >= oldVerseCount) oldVerseCount = verse + 1;
+            }
+        }
+    }
 
     LyricEditDialog dialog(this, &segment);
 
@@ -5988,6 +6130,12 @@ void NotationView::slotEditLyrics()
         for (int i = 0; i < dialog.getVerseCount(); ++i) {
             SetLyricsCommand *command = new SetLyricsCommand
                 (&segment, i, dialog.getLyricData(i));
+            macro->addCommand(command);
+        }
+        for (int i = dialog.getVerseCount(); i < oldVerseCount; ++i) {
+	    // (hjj) verse count decreased, delete extra verses.
+            SetLyricsCommand *command = new SetLyricsCommand
+                (&segment, i, QString(""));
             macro->addCommand(command);
         }
 
@@ -6410,6 +6558,12 @@ NotationView::slotRenderSomething()
     PixmapArrayGC::deleteAll();
     NOTATION_DEBUG << "NotationView::slotRenderSomething: updating thumbnails" << endl;
     updateThumbnails(true);
+
+    // Update track headers when rendering is done
+    // (better late than never)
+    m_headersGroup->slotUpdateAllHeaders(getCanvasLeftX(), 0, true);
+    m_headersGroupView->setContentsPos(getCanvasView()->contentsX(),
+                                           getCanvasView()->contentsY());
 }
 
 NotationCanvasView* NotationView::getCanvasView()
@@ -6426,25 +6580,30 @@ NotationView::slotVerticalScrollHeadersGroup(int y)
 void
 NotationView::slotShowHeadersGroup()
 {
-    m_showHeadersGroup = 2;
+    m_showHeadersGroup = HeadersGroup::ShowAlways;
     showHeadersGroup();
+
+    // Disable menu entry when headers are shown
+    m_showHeadersMenuEntry->setEnabled(false);
 }
 
 void
 NotationView::slotHideHeadersGroup()
 {
-    m_showHeadersGroup = 0;
+    m_showHeadersGroup = HeadersGroup::ShowNever;
     hideHeadersGroup();
+
+    // Enable menu entry when headers are hidden
+    m_showHeadersMenuEntry->setEnabled(true);
 }
 
 void
 NotationView::showHeadersGroup()
 {
     if (m_headersGroupView && (m_pageMode == LinedStaff::LinearMode)) {
-        m_headersGroupView->setFixedWidth(
-                                m_headersGroupView->contentsWidth() + 2);
         m_headersGroupView->show();
         m_headersTopFrame->show();
+        m_rulerBoxFiller->show();
     }
 }
 
@@ -6454,7 +6613,43 @@ NotationView::hideHeadersGroup()
     if (m_headersGroupView) {
         m_headersGroupView->hide();
         m_headersTopFrame->hide();
+        m_rulerBoxFiller->hide();
     }
+}
+
+void
+NotationView::slotUpdateHeaders(int x, int y)
+{
+    m_headersGroup->slotUpdateAllHeaders(x, y);
+    m_headersGroupView->setContentsPos(x, y);
+}
+
+void
+NotationView::slotHeadersWidthChanged(int w)
+{
+    m_headersTopFrame->setFixedWidth(w);
+    m_rulerBoxFiller->setFixedWidth(w);
+    m_canvasView->updateLeftWidgetGeometry();
+}
+
+
+int
+NotationView::getCanvasVisibleWidth()
+{
+    if (getCanvasView()) {
+        return getCanvasView()->visibleWidth();
+    } else {
+        return -1;
+    }
+}
+
+int
+NotationView::getHeadersTopFrameMinWidth()
+{
+    /// TODO : use a real button width got from a real button
+
+    // 2 buttons (2 x 24) + 2 margins (2 x 4) + buttons spacing (4)
+    return 4 + 24 + 4 + 24 + 4;
 }
 
 }

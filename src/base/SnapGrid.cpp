@@ -3,14 +3,8 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <bownie@bownie.com>
-
-    The moral right of the authors to claim authorship of this work
-    has been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
+    See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
@@ -35,10 +29,10 @@ const timeT SnapGrid::SnapToBar  = -2;
 const timeT SnapGrid::SnapToBeat = -3;
 const timeT SnapGrid::SnapToUnit = -4;
 
-SnapGrid::SnapGrid(RulerScale *rulerScale, int vstep) :
+SnapGrid::SnapGrid(RulerScale *rulerScale, int ysnap) :
     m_rulerScale(rulerScale),
     m_snapTime(SnapToBeat),
-    m_vstep(vstep)
+    m_ysnap(ysnap)
 {
     // nothing else 
 }
@@ -125,5 +119,68 @@ SnapGrid::snapTime(timeT time, SnapDirection direction) const
     else if ((offset - rounded) > (rounded + snapTime - offset)) return right;
     else return left;
 }
+
+int
+SnapGrid::getYBin(int y) const
+{
+    if (m_ysnap == 0) return y;
+
+    int cy = 0;
+
+    std::map<int, int>::const_iterator i = m_ymultiple.begin();
+
+    int nextbin = -1;
+    if (i != m_ymultiple.end()) nextbin = i->first;
+
+    for (int b = 0; ; ++b) {
+
+	if (nextbin == b) {
+
+	    cy += i->second * m_ysnap;
+	    ++i;
+	    if (i == m_ymultiple.end()) nextbin = -1;
+	    else nextbin = i->first;
+
+	} else {
+	    
+	    cy += m_ysnap;
+	}
+
+	if (cy > y) {
+	    return b;
+	}
+    }
+}
+
+int
+SnapGrid::getYBinCoordinate(int bin) const
+{
+    if (m_ysnap == 0) return bin;
+
+    int y = 0;
+
+    std::map<int, int>::const_iterator i = m_ymultiple.begin();
+
+    int nextbin = -1;
+    if (i != m_ymultiple.end()) nextbin = i->first;
+
+    for (int b = 0; b < bin; ++b) {
+
+	if (nextbin == b) {
+
+	    y += i->second * m_ysnap;
+	    ++i;
+	    if (i == m_ymultiple.end()) nextbin = -1;
+	    else nextbin = i->first;
+
+	} else {
+	    
+	    y += m_ysnap;
+	}
+    }
+
+    return y;
+}
+
 
 }

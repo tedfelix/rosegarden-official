@@ -3,14 +3,8 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
- 
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <bownie@bownie.com>
- 
-    The moral right of the authors to claim authorship of this work
-    has been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
+    See the AUTHORS file for more details.
  
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
@@ -19,13 +13,11 @@
     COPYING included with this distribution for more information.
 */
 
-
-#ifndef USE_PCH
-#include <qlabel.h>
 #include <qtimer.h>
-#include <qstringlist.h>
-#include <qregexp.h>
 #include <kapplication.h>
+#include <sys/time.h>
+#include "base/RealTime.h"
+
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>
 #include <klocale.h>
@@ -36,19 +28,23 @@
 #include <ktip.h>
 #include <kprocess.h>
 #include <kglobalsettings.h>
-#endif
 
-#include <sys/time.h>
-#include "base/RealTime.h"
+#include <qstringlist.h>
+#include <qregexp.h>
+#include <qvbox.h>
+#include <qlabel.h>
+
 #include "document/ConfigGroups.h"
-#include "document/RosegardenGUIDoc.h"
 #include "misc/Strings.h"
 #include "misc/Debug.h"
 #include "gui/application/RosegardenGUIApp.h"
 #include "gui/widgets/CurrentProgressDialog.h"
+#include "document/RosegardenGUIDoc.h"
 #include "gui/kdeext/KStartupLogo.h"
+
 #include "gui/application/RosegardenApplication.h"
 #include "gui/application/RosegardenDCOP.h"
+
 #include "gui/kdeext/klearlook.h"
 
 using namespace Rosegarden;
@@ -411,7 +407,7 @@ int main(int argc, char *argv[])
 
     KAboutData aboutData( "rosegarden", I18N_NOOP("Rosegarden"),
                           VERSION, description, KAboutData::License_GPL,
-                          I18N_NOOP("Copyright 2000 - 2008 Guillaume Laurent, Chris Cannam, Richard Bown\nParts copyright 1994 - 2004 Chris Cannam, Andy Green, Richard Bown, Guillaume Laurent\nLilypond fonts copyright 1997 - 2005 Han-Wen Nienhuys and Jan Nieuwenhuizen"),
+                          I18N_NOOP("Copyright 2000 - 2008 Guillaume Laurent, Chris Cannam, Richard Bown\nParts copyright 1994 - 2004 Chris Cannam, Andy Green, Richard Bown, Guillaume Laurent\nLilyPond fonts copyright 1997 - 2005 Han-Wen Nienhuys and Jan Nieuwenhuizen"),
                           0,
                           "http://www.rosegardenmusic.com/",
                           "rosegarden-devel@lists.sourceforge.net");
@@ -424,7 +420,7 @@ int main(int argc, char *argv[])
     aboutData.addAuthor("Heikki Johannes Junes", 0, "hjunes@users.sourceforge.net");
 
     aboutData.addCredit("Randall Farmer", I18N_NOOP("Chord labelling code"), " rfarme@simons-rock.edu");
-    aboutData.addCredit("Hans  Kieserman", I18N_NOOP("Lilypond output\nassorted other patches\ni18n-ization"), "hkieserman@mail.com");
+    aboutData.addCredit("Hans  Kieserman", I18N_NOOP("LilyPond output\nassorted other patches\ni18n-ization"), "hkieserman@mail.com");
     aboutData.addCredit("Levi Burton", I18N_NOOP("UI improvements\nbug fixes"), "donburton@sbcglobal.net");
     aboutData.addCredit("Mark Hymers", I18N_NOOP("Segment colours\nOther UI and bug fixes"), "<markh@linuxfromscratch.org>");
     aboutData.addCredit("Alexandre Prokoudine", I18N_NOOP("Russian translation\ni18n-ization"), "avp@altlinux.ru");
@@ -457,7 +453,7 @@ int main(int argc, char *argv[])
     aboutData.addCredit("Lucas Godoy", I18N_NOOP("Spanish translation"), "godoy.lucas@gmail.com");
     aboutData.addCredit("Feliu Ferrer", I18N_NOOP("Catalan translation"), "mverge2@pie.xtec.es");
     aboutData.addCredit("Quim Perez i Noguer", I18N_NOOP("Catalan translation"), "noguer@osona.com");
-    aboutData.addCredit("Carolyn McIntyre", I18N_NOOP("1.2.3 splash screen photo\nGave birth to D. Michael McIntyre, bought him a good flute once\nupon a time, and always humored him when he came over to play her\nsome new instrument, even though she really hated his playing.\nBorn October 19, 1951, died September 21, 2008, R. I. P."), "DECEASED");
+    aboutData.addCredit("Carolyn McIntyre", I18N_NOOP("1.2.3 splash screen photo\nGave birth to D. Michael McIntyre, bought him a good flute once\nupon a time, and always humored him when he came over to play her\nsome new instrument, even though she really hated his playing.\nBorn October 19, 1951, died September 21, 2007, R. I. P."), "DECEASED");
     aboutData.addCredit("Stephen Torri", I18N_NOOP("Initial guitar chord editing code"), "storri@torri.org");
     aboutData.addCredit("Piotr Sawicki", I18N_NOOP("Polish translation"), "pelle@plusnet.pl");
     aboutData.addCredit("David García-Abad", I18N_NOOP("Basque translation"), "davidgarciabad@telefonica.net");
@@ -595,6 +591,8 @@ int main(int argc, char *argv[])
                                              args->isSet("existingsequencer"),
                                              startLogo);
 
+	rosegardengui->setIsFirstRun(newVersion);
+
         app.setMainWidget(rosegardengui);
 
 	if (windowWidth != 0 && windowHeight != 0) {
@@ -702,7 +700,7 @@ int main(int argc, char *argv[])
         // otherwise we have to
 
 	if (!newVersion) {
-	    RG_DEBUG << "main: Showing Tips\n";
+	    RosegardenGUIApp::self()->awaitDialogClearance();
 	    KTipDialog::showTip(locate("data", "rosegarden/tips"));
 	}
     }
@@ -716,9 +714,17 @@ int main(int argc, char *argv[])
 					      KDialogBase::Ok,
 					      KDialogBase::Ok, false);
 	QVBox *mw = dialog->makeVBoxMainWidget();
-	QLabel *label = new QLabel((QWidget*)mw);
-	label->setText(i18n("<h2>Welcome to Rosegarden!</h2><p>Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.</p><p>Rosegarden was brought to you by a team of volunteers across the world.  To learn more about Rosegarden, see <a href=\"http://www.rosegardenmusic.com/\">http://www.rosegardenmusic.com/</a>, or see the Help menu for tutorials and other information.</p>"));
+	QHBox *hb = new QHBox(mw);
+	QLabel *image = new QLabel(hb);
+	image->setAlignment(Qt::AlignTop);
+	QString iconFile = locate("appdata", "pixmaps/misc/welcome-icon.png");
+	if (iconFile) {
+	    image->setPixmap(QPixmap(iconFile));
+	}
+	QLabel *label = new QLabel(hb);
+	label->setText(i18n("<h2>Welcome to Rosegarden!</h2><p>Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.</p><ul><li>If you have not already done so, you may wish to install some DSSI synth plugins, or a separate synth program such as QSynth.  Rosegarden does not synthesize sounds from MIDI on its own, so without these you will hear nothing.</li><br><br><li>Rosegarden uses the JACK audio server for recording and playback of audio, and for playback from DSSI synth plugins.  These features will only be available if the JACK server is running.</li><br><br><li>Rosegarden has comprehensive documentation: see the Help menu for the handbook, tutorials, and other information!</li></ul><p>Rosegarden was brought to you by a team of volunteers across the world.  To learn more, go to <a href=\"http://www.rosegardenmusic.com/\">http://www.rosegardenmusic.com/</a>.</p>"));
 	dialog->showButtonOK(true);
+	rosegardengui->awaitDialogClearance();
 	dialog->exec();
 
 	CurrentProgressDialog::thaw();

@@ -3,14 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
- 
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
- 
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -60,19 +53,19 @@ MatrixResizer::MatrixResizer(MatrixView* parent)
     QCanvasPixmap pixmap(pixmapDir + "/toolbar/select.xpm");
     QIconSet icon = QIconSet(pixmap);
 
-    new KAction(i18n("Switch to Select Tool"), icon, 0, this,
+    new KAction(i18n("Switch to Select Tool"), icon, Key_F2, this,
                 SLOT(slotSelectSelected()), actionCollection(),
                 "select");
 
-    new KAction(i18n("Switch to Draw Tool"), "pencil", 0, this,
+    new KAction(i18n("Switch to Draw Tool"), "pencil", Key_F3, this,
                 SLOT(slotDrawSelected()), actionCollection(),
                 "draw");
 
-    new KAction(i18n("Switch to Erase Tool"), "eraser", 0, this,
+    new KAction(i18n("Switch to Erase Tool"), "eraser", Key_F4, this,
                 SLOT(slotEraseSelected()), actionCollection(),
                 "erase");
 
-    new KAction(i18n("Switch to Move Tool"), "move", 0, this,
+    new KAction(i18n("Switch to Move Tool"), "move", Key_F5, this,
                 SLOT(slotMoveSelected()), actionCollection(),
                 "move");
 

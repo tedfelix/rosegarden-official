@@ -4,14 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
-
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -113,6 +106,15 @@ public:
     bool isFineGrain() const { return m_fineGrain; }
 
     /**
+     * Find out whether the user is requesting to draw over an existing segment
+     * with the pencil, by holding the Ctrl key.  This is used by the segment
+     * pencil to decide whether to abort or not if a user attempts to draw over
+     * an existing segment, and this is all necessary in order to avoid breaking
+     * the double-click-to-open behavior.
+     */
+    bool pencilOverExisting() const { return m_pencilOverExisting; }
+
+    /**
      * Set whether the segment items contain previews or not
      */
     void setShowPreviews(bool previews) { m_showPreviews = previews; }
@@ -172,6 +174,7 @@ public slots:
     void slotSetSelectCopy(bool value);
 
     void slotSetFineGrain(bool value);
+    void slotSetPencilOverExisting(bool value);
 
     // Show and hige the splitting line on a Segment
     //
@@ -303,6 +306,7 @@ protected:
     bool         m_showPreviews;
     bool         m_showSegmentLabels;
     bool         m_fineGrain;
+    bool         m_pencilOverExisting;
 
     int          m_minWidth;
 
@@ -318,6 +322,8 @@ protected:
     QRect        m_tmpRect;
     QColor       m_tmpRectFill;
     QPoint       m_splitLinePos;
+
+    QColor       m_trackDividerColor;
 
     bool         m_drawGuides;
     QColor       m_guideColor;

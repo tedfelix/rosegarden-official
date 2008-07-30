@@ -3,14 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
- 
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
- 
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -57,7 +50,7 @@ TextEventDialog::TextEventDialog(QWidget *parent,
         KDialogBase(parent, 0, true, i18n("Text"), Ok | Cancel | Help),
         m_notePixmapFactory(npf),
         m_styles(Text::getUserStyles()) /*,
-            //m_directives(Text::getLilypondDirectives()) */
+            //m_directives(Text::getLilyPondDirectives()) */
 {
     setHelp("nv-text");
     QVBox *vbox = makeVBoxMainWidget();
@@ -110,7 +103,7 @@ TextEventDialog::TextEventDialog(QWidget *parent,
         } else if (style == Text::Annotation) {
             m_typeCombo->insertItem(i18n("Annotation"));        // 7
 
-        } else if (style == Text::LilypondDirective) {
+        } else if (style == Text::LilyPondDirective) {
             m_typeCombo->insertItem(i18n("LilyPond Directive")); // 8
 
         } else {
@@ -251,30 +244,30 @@ TextEventDialog::TextEventDialog(QWidget *parent,
     m_localTempoShortcutCombo->insertItem(i18n("Tempo Primo"));
     m_localTempoShortcutCombo->hide();
 
-    // Lilypond directive combo
+    // LilyPond directive combo
     m_directiveLabel = new QLabel(i18n("Directive:  "), entryGrid);
     m_directiveLabel->hide();
 
-    m_lilypondDirectiveCombo = new KComboBox(entryGrid);
-    m_lilypondDirectiveCombo->hide();
+    m_lilyPondDirectiveCombo = new KComboBox(entryGrid);
+    m_lilyPondDirectiveCombo->hide();
 
     // not i18nable, because the directive exporter currently depends on the
     // textual contents of these strings, not some more abstract associated
     // type label
-    m_lilypondDirectiveCombo->insertItem(Text::Segno);
-    m_lilypondDirectiveCombo->insertItem(Text::Coda);
-    m_lilypondDirectiveCombo->insertItem(Text::Alternate1);
-    m_lilypondDirectiveCombo->insertItem(Text::Alternate2);
-    m_lilypondDirectiveCombo->insertItem(Text::BarDouble);
-    m_lilypondDirectiveCombo->insertItem(Text::BarEnd);
-    m_lilypondDirectiveCombo->insertItem(Text::BarDot);
-    m_lilypondDirectiveCombo->insertItem(Text::Gliss);
-    m_lilypondDirectiveCombo->insertItem(Text::Arpeggio);
-    //    m_lilypondDirectiveCombo->insertItem(Text::ArpeggioUp);
-    //    m_lilypondDirectiveCombo->insertItem(Text::ArpeggioDn);
-    m_lilypondDirectiveCombo->insertItem(Text::Tiny);
-    m_lilypondDirectiveCombo->insertItem(Text::Small);
-    m_lilypondDirectiveCombo->insertItem(Text::NormalSize);
+    m_lilyPondDirectiveCombo->insertItem(Text::Segno);
+    m_lilyPondDirectiveCombo->insertItem(Text::Coda);
+    m_lilyPondDirectiveCombo->insertItem(Text::Alternate1);
+    m_lilyPondDirectiveCombo->insertItem(Text::Alternate2);
+    m_lilyPondDirectiveCombo->insertItem(Text::BarDouble);
+    m_lilyPondDirectiveCombo->insertItem(Text::BarEnd);
+    m_lilyPondDirectiveCombo->insertItem(Text::BarDot);
+    m_lilyPondDirectiveCombo->insertItem(Text::Gliss);
+    m_lilyPondDirectiveCombo->insertItem(Text::Arpeggio);
+    //    m_lilyPondDirectiveCombo->insertItem(Text::ArpeggioUp);
+    //    m_lilyPondDirectiveCombo->insertItem(Text::ArpeggioDn);
+    m_lilyPondDirectiveCombo->insertItem(Text::Tiny);
+    m_lilyPondDirectiveCombo->insertItem(Text::Small);
+    m_lilyPondDirectiveCombo->insertItem(Text::NormalSize);
 
     QVBox *exampleVBox = new QVBox(exampleBox);
 
@@ -323,7 +316,7 @@ TextEventDialog::TextEventDialog(QWidget *parent,
     m_localDirectionShortcutCombo->setCurrentItem(config->readNumEntry("local_direction_shortcut", 0));
     m_tempoShortcutCombo->setCurrentItem(config->readNumEntry("tempo_shortcut", 0));
     m_localTempoShortcutCombo->setCurrentItem(config->readNumEntry("local_tempo_shortcut", 0));
-    m_lilypondDirectiveCombo->setCurrentItem(config->readNumEntry("lilypond_directive_combo", 0));
+    m_lilyPondDirectiveCombo->setCurrentItem(config->readNumEntry("lilyPond_directive_combo", 0));
 
     m_prevChord = config->readEntry("previous_chord", "");
     m_prevLyric = config->readEntry("previous_lyric", "");
@@ -344,8 +337,8 @@ TextEventDialog::TextEventDialog(QWidget *parent,
                      this, SLOT(slotTempoShortcutChanged(const QString &)));
     QObject::connect(m_localTempoShortcutCombo, SIGNAL(activated(const QString &)),
                      this, SLOT(slotLocalTempoShortcutChanged(const QString &)));
-    QObject::connect(m_lilypondDirectiveCombo, SIGNAL(activated(const QString &)),
-                     this, SLOT(slotLilypondDirectiveChanged(const QString &)));
+    QObject::connect(m_lilyPondDirectiveCombo, SIGNAL(activated(const QString &)),
+                     this, SLOT(slotLilyPondDirectiveChanged(const QString &)));
 
     m_text->setFocus();
     slotTypeChanged(strtoqstr(getTextType()));
@@ -468,19 +461,19 @@ TextEventDialog::slotTypeChanged(const QString &)
         m_text->setText(m_prevAnnotation);
 
     //
-    // Lilypond directives only taking temporary residence here; will move out
+    // LilyPond directives only taking temporary residence here; will move out
     // into some new class eventually
     //
-    if (type == Text::LilypondDirective) {
-        m_lilypondDirectiveCombo->show();
+    if (type == Text::LilyPondDirective) {
+        m_lilyPondDirectiveCombo->show();
         m_directiveLabel->show();
         m_staffAboveLabel->hide();
         m_staffBelowLabel->show();
         m_text->setReadOnly(true);
         m_text->setEnabled(false);
-        slotLilypondDirectiveChanged(text);
+        slotLilyPondDirectiveChanged(text);
     } else {
-        m_lilypondDirectiveCombo->hide();
+        m_lilyPondDirectiveCombo->hide();
         m_directiveLabel->hide();
         m_text->setReadOnly(false);
         m_text->setEnabled(true);
@@ -520,7 +513,7 @@ TextEventDialog::slotOK()
     config->writeEntry("tempo_shortcut", m_tempoShortcutCombo->currentItem());
     config->writeEntry("local_tempo_shortcut", m_localTempoShortcutCombo->currentItem());
     // temporary home:
-    config->writeEntry("lilypond_directive_combo", m_lilypondDirectiveCombo->currentItem());
+    config->writeEntry("lilyPond_directive_combo", m_lilyPondDirectiveCombo->currentItem());
 
     // store  last chord, lyric, annotation, depending on what's currently in
     // the text entry widget
@@ -584,9 +577,9 @@ TextEventDialog::slotLocalTempoShortcutChanged(const QString &text)
 }
 
 void
-TextEventDialog::slotLilypondDirectiveChanged(const QString &)
+TextEventDialog::slotLilyPondDirectiveChanged(const QString &)
 {
-    m_text->setText(strtoqstr(m_lilypondDirectiveCombo->currentText()));
+    m_text->setText(strtoqstr(m_lilyPondDirectiveCombo->currentText()));
 }
 
 }

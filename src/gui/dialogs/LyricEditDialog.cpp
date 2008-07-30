@@ -3,14 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
- 
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
- 
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -69,6 +62,8 @@ LyricEditDialog::LyricEditDialog(QWidget *parent,
     connect(m_verseNumber, SIGNAL(activated(int)), this, SLOT(slotVerseNumberChanged(int)));
     m_verseAddButton = new QPushButton(i18n("Add Verse"), hbox);
     connect(m_verseAddButton, SIGNAL(clicked()), this, SLOT(slotAddVerse()));
+    m_verseRemoveButton = new QPushButton(i18n("Remove Verse"), hbox);
+    connect(m_verseRemoveButton, SIGNAL(clicked()), this, SLOT(slotRemoveVerse()));
     QFrame *f = new QFrame(hbox);
     hbox->setStretchFactor(f, 10);
 
@@ -78,19 +73,17 @@ LyricEditDialog::LyricEditDialog(QWidget *parent,
     m_textEdit->setMinimumWidth(300);
     m_textEdit->setMinimumHeight(200);
 
-    unparse();
-    
-    for (int i = 0; i < m_verseCount; ++i) {
-        m_verseNumber->insertItem(i18n("Verse %1").arg(i + 1));
-    }
     m_currentVerse = 0;
-    if (m_verseCount == 12) m_verseAddButton->setEnabled(false);
+    unparse();
+    verseDialogRepopulate();
+
 }
 
 void
 LyricEditDialog::slotVerseNumberChanged(int verse)
 {
     NOTATION_DEBUG << "LyricEditDialog::slotVerseNumberChanged(" << verse << ")" << endl;
+
     QString text = m_textEdit->text();
     m_texts[m_currentVerse] = text;
     m_textEdit->setText(m_texts[verse]);
@@ -101,12 +94,32 @@ void
 LyricEditDialog::slotAddVerse()
 {
     NOTATION_DEBUG << "LyricEditDialog::slotAddVerse" << endl;
-    m_verseCount++;
+
     m_texts.push_back(m_skeleton);
-    m_verseNumber->insertItem(i18n("Verse %1").arg(m_verseCount));
-    m_verseNumber->setCurrentItem(m_verseCount - 1);
+
+    m_verseCount++;
+
+// NOTE slotVerseNumberChanged should be called with m_currentVerse argument
+//  if we ever decide to add new verse between existing ones
     slotVerseNumberChanged(m_verseCount - 1);
-    if (m_verseCount == 12) m_verseAddButton->setEnabled(false);
+    verseDialogRepopulate();
+}
+
+void
+LyricEditDialog::slotRemoveVerse()
+{
+    NOTATION_DEBUG << "LyricEditDialog::slotRemoveVerse" << endl;
+
+    std::cerr << "deleting at position " << m_currentVerse << std::endl;
+    std::vector<QString>::iterator itr = m_texts.begin();
+    for (int i = 0; i < m_currentVerse; ++i) ++itr;
+
+    std::cerr << "text being deleted is: " << *itr << std::endl;
+    m_texts.erase(itr);
+
+    m_verseCount--;
+    if (m_currentVerse == m_verseCount) m_currentVerse--;
+    verseDialogRepopulate();
 }
 
 void
@@ -247,6 +260,31 @@ LyricEditDialog::getLyricData(int verse) const
     } else {
         return m_texts[verse];
     }
+}
+
+void
+LyricEditDialog::verseDialogRepopulate()
+{
+    m_verseNumber->clear();
+
+    for (int i = 0; i < m_verseCount; ++i) {
+        m_verseNumber->insertItem(i18n("Verse %1").arg(i + 1));
+    }
+
+    if (m_verseCount == 12)
+        m_verseAddButton->setEnabled(false);
+    else
+        m_verseAddButton->setEnabled(true);
+
+    if (m_verseCount == 1)
+        m_verseRemoveButton->setEnabled(false);
+    else
+        m_verseRemoveButton->setEnabled(true);
+
+    m_verseNumber->setCurrentItem(m_currentVerse);
+
+    std::cerr << "m_currentVerse = " << m_currentVerse << ", text = " << m_texts[m_currentVerse] << std::endl;
+    m_textEdit->setText(m_texts[m_currentVerse]);
 }
 
 }

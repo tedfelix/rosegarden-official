@@ -3,14 +3,8 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <bownie@bownie.com>
-
-    The moral right of the authors to claim authorship of this work
-    has been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
+    See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
@@ -1244,14 +1238,14 @@ void
 SegmentNotationHelper::makeBeamedGroupAux(iterator from, iterator to,
 					  string type, bool groupGraces)
 {
-    cerr << "SegmentNotationHelper::makeBeamedGroupAux: type " << type << endl;
-    if (from == to) cerr << "from == to" <<endl;
+//    cerr << "SegmentNotationHelper::makeBeamedGroupAux: type " << type << endl;
+//    if (from == to) cerr << "from == to" <<endl;
 
     int groupId = segment().getNextId();
     bool beamedSomething = false;
 
     for (iterator i = from; i != to; ++i) {
-	std::cerr << "looking at " << (*i)->getType() << " at " << (*i)->getAbsoluteTime() << std::endl;
+//	std::cerr << "looking at " << (*i)->getType() << " at " << (*i)->getAbsoluteTime() << std::endl;
 
 	// don't permit ourselves to change the type of an
 	// already-grouped event here
@@ -1273,7 +1267,7 @@ SegmentNotationHelper::makeBeamedGroupAux(iterator from, iterator to,
 
 	if ((*i)->isa(Note::EventType) &&
 	    (*i)->getNotationDuration() >= Note(Note::Crotchet).getDuration()) {
-	    std::cerr << "too long" <<std::endl;
+//	    std::cerr << "too long" <<std::endl;
 	    if (!beamedSomething) continue;
 	    iterator j = i;
 	    bool somethingLeft = false;
@@ -1288,7 +1282,7 @@ SegmentNotationHelper::makeBeamedGroupAux(iterator from, iterator to,
 	    if (!somethingLeft) continue;
 	}
 
-	std::cerr << "beaming it" <<std::endl;
+//	std::cerr << "beaming it" <<std::endl;
         (*i)->set<Int>(BEAMED_GROUP_ID, groupId);
         (*i)->set<String>(BEAMED_GROUP_TYPE, type);
     }

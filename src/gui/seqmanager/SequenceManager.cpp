@@ -3,14 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
- 
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
- 
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -108,40 +101,40 @@ SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
             m_lastTransportStartPosition(0),
             m_sampleRate(0)
 {
-// Replaced this with a call to cleanup() from composition mmapper ctor:
-// if done here, this removes the mmapped versions of any segments stored
-// in the autoload (that have only just been mapped by the ctor!)
-//    m_compositionMmapper->cleanup();
+    // Replaced this with a call to cleanup() from composition mmapper ctor:
+    // if done here, this removes the mmapped versions of any segments stored
+    // in the autoload (that have only just been mapped by the ctor!)
+    //    m_compositionMmapper->cleanup();
 
-m_countdownDialog = new CountdownDialog(dynamic_cast<QWidget*>
-                                        (m_doc->parent())->parentWidget());
-// Connect these for use later
-//
-connect(m_countdownTimer, SIGNAL(timeout()),
-        this, SLOT(slotCountdownTimerTimeout()));
+    m_countdownDialog = new CountdownDialog(dynamic_cast<QWidget*>
+                                            (m_doc->parent())->parentWidget());
+    // Connect these for use later
+    //
+    connect(m_countdownTimer, SIGNAL(timeout()),
+            this, SLOT(slotCountdownTimerTimeout()));
 
-connect(m_reportTimer, SIGNAL(timeout()),
-        this, SLOT(slotAllowReport()));
+    connect(m_reportTimer, SIGNAL(timeout()),
+            this, SLOT(slotAllowReport()));
 
-connect(m_compositionMmapperResetTimer, SIGNAL(timeout()),
-        this, SLOT(slotScheduledCompositionMmapperReset()));
+    connect(m_compositionMmapperResetTimer, SIGNAL(timeout()),
+            this, SLOT(slotScheduledCompositionMmapperReset()));
 
 
-connect(doc->getCommandHistory(), SIGNAL(commandExecuted()),
-        this, SLOT(update()));
+    connect(doc->getCommandHistory(), SIGNAL(commandExecuted()),
+            this, SLOT(update()));
 
-m_doc->getComposition().addObserver(this);
+    m_doc->getComposition().addObserver(this);
 
-// The owner of this sequence manager will need to call
-// checkSoundDriverStatus on it to set up its status appropriately
-// immediately after construction; we used to do it from here but
-// we're not well placed to handle reporting to the user if it
-// throws an exception (and we don't want to leave the object half
-// constructed).
+    // The owner of this sequence manager will need to call
+    // checkSoundDriverStatus on it to set up its status appropriately
+    // immediately after construction; we used to do it from here but
+    // we're not well placed to handle reporting to the user if it
+    // throws an exception (and we don't want to leave the object half
+    // constructed).
 
-// Try to map the sequencer file
-//
-mapSequencer();
+    // Try to map the sequencer file
+    //
+    mapSequencer();
 }
 
 SequenceManager::~SequenceManager()
@@ -1146,13 +1139,13 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                     if ((*i)->getData1() == MappedEvent::FailureJackRestartFailed) {
 
                         KMessageBox::error(
-                            dynamic_cast<QWidget*>(m_doc->parent())->parentWidget(),
+                            dynamic_cast<QWidget*>(m_doc->parent()),
                             i18n("The JACK Audio subsystem has failed or it has stopped Rosegarden from processing audio.\nPlease restart Rosegarden to continue working with audio.\nQuitting other running applications may improve Rosegarden's performance."));
 
                     } else if ((*i)->getData1() == MappedEvent::FailureJackRestart) {
 
                         KMessageBox::error(
-                            dynamic_cast<QWidget*>(m_doc->parent())->parentWidget(),
+                            dynamic_cast<QWidget*>(m_doc->parent()),
                             i18n("The JACK Audio subsystem has stopped Rosegarden from processing audio, probably because of a processing overload.\nAn attempt to restart the audio service has been made, but some problems may remain.\nQuitting other running applications may improve Rosegarden's performance."));
 
                     } else if ((*i)->getData1() == MappedEvent::WarningImpreciseTimer &&
@@ -1163,9 +1156,29 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                         KStartupLogo::hideIfStillThere();
                         CurrentProgressDialog::freeze();
 
+                        RosegardenGUIApp::self()->awaitDialogClearance();
+
                         KMessageBox::information(
-                            dynamic_cast<QWidget*>(m_doc->parent())->parentWidget(),
+                            dynamic_cast<QWidget*>(m_doc->parent()),
                             i18n("<h3>System timer resolution is too low</h3><p>Rosegarden was unable to find a high-resolution timing source for MIDI performance.</p><p>This may mean you are using a Linux system with the kernel timer resolution set too low.  Please contact your Linux distributor for more information.</p><p>Some Linux distributors already provide low latency kernels, see <a href=\"http://rosegarden.wiki.sourceforge.net/Low+latency+kernels\">http://rosegarden.wiki.sourceforge.net/Low+latency+kernels</a> for instructions.</p>"), 
+			    NULL, NULL, 
+			    KMessageBox::Notify + KMessageBox::AllowLink);
+                        
+                        CurrentProgressDialog::thaw();
+
+                    } else if ((*i)->getData1() == MappedEvent::WarningImpreciseTimerTryRTC &&
+                               shouldWarnForImpreciseTimer()) {
+
+                        std::cerr << "Rosegarden: WARNING: No accurate sequencer timer available" << std::endl;
+
+                        KStartupLogo::hideIfStillThere();
+                        CurrentProgressDialog::freeze();
+
+                        RosegardenGUIApp::self()->awaitDialogClearance();
+
+                        KMessageBox::information(
+                            dynamic_cast<QWidget*>(m_doc->parent()),
+                            i18n("<h3>System timer resolution is too low</h3><p>Rosegarden was unable to find a high-resolution timing source for MIDI performance.</p><p>You may be able to solve this problem by loading the RTC timer kernel module.  To do this, try running <b>sudo modprobe snd-rtctimer</b> in a terminal window and then restarting Rosegarden.</p><p>Alternatively, check whether your Linux distributor provides a multimedia-optimized kernel.  See <a href=\"http://rosegarden.wiki.sourceforge.net/Low+latency+kernels\">http://rosegarden.wiki.sourceforge.net/Low+latency+kernels</a> for notes about this.</p>"), 
 			    NULL, NULL, 
 			    KMessageBox::Notify + KMessageBox::AllowLink);
                         
@@ -1297,14 +1310,17 @@ SequenceManager::checkSoundDriverStatus(bool warnUser)
     }
 
     if (text != "") {
-        KMessageBox::error(dynamic_cast<QWidget*>(m_doc->parent())->parentWidget(), i18n("<h3>Sequencer startup failed</h3>%1").arg(text));
+        RosegardenGUIApp::self()->awaitDialogClearance();
+        KMessageBox::error(RosegardenGUIApp::self(),
+                           i18n("<h3>Sequencer startup failed</h3>%1").arg(text));
         CurrentProgressDialog::thaw();
         return;
     }
 
 #ifdef HAVE_LIBJACK
     if (!(m_soundDriverStatus & AUDIO_OK)) {
-        KMessageBox::information(dynamic_cast<QWidget*>(m_doc->parent())->parentWidget(), i18n("<h3>Failed to connect to JACK audio server.</h3><p>Rosegarden could not connect to the JACK audio server.  This probably means the JACK server is not running.</p><p>If you want to be able to play or record audio files or use plugins, you should exit Rosegarden and start the JACK server before running Rosegarden again.</p>"),
+        RosegardenGUIApp::self()->awaitDialogClearance();
+        KMessageBox::information(RosegardenGUIApp::self(), i18n("<h3>Failed to connect to JACK audio server.</h3><p>Rosegarden could not connect to the JACK audio server.  This probably means the JACK server is not running.</p><p>If you want to be able to play or record audio files or use plugins, you should exit Rosegarden and start the JACK server before running Rosegarden again.</p>"),
                                  i18n("Failed to connect to JACK"),
                                  "startup-jack-failed");
     }

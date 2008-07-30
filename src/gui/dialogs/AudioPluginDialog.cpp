@@ -3,14 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
- 
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
- 
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -39,6 +32,7 @@
 #include "gui/studio/StudioControl.h"
 #include "gui/widgets/PluginControl.h"
 #include "sound/MappedStudio.h"
+#include "sound/PluginIdentifier.h"
 #include <kcombobox.h>
 #include <kdialogbase.h>
 #include <qaccel.h>
@@ -286,7 +280,24 @@ AudioPluginDialog::populatePluginList()
                     continue;
             }
 
-            plugins[(*i)->getName()] = PluginPair(count, *i);
+            QString name = (*i)->getName();
+            bool store = true;
+
+            if (plugins.find(name) != plugins.end()) {
+                // We already have a plugin of this name.  If it's a
+                // LADSPA plugin, replace it (this one might be
+                // something better); otherwise leave it alone.
+                QString id = plugins[name].second->getIdentifier();
+                QString type, soname, label;
+                PluginIdentifier::parseIdentifier(id, type, soname, label);
+                if (type != "ladspa") {
+                    store = false;
+                }
+            }
+
+            if (store) {
+                plugins[(*i)->getName()] = PluginPair(count, *i);
+            }
         }
     }
 

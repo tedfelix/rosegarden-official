@@ -3,14 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
- 
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
- 
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -1045,7 +1038,7 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
                      elt->event()->get
                      <String>
                      (Text::TextTypePropertyName) ==
-                     Text::LilypondDirective &&
+                     Text::LilyPondDirective &&
                      !m_notationView->areLilyPondDirectivesVisible()) {
 
                 // nothing here either
@@ -1695,7 +1688,10 @@ NotationStaff::renderNote(ViewElementList::iterator &vli)
     NotePixmapFactory *factory = m_notePixmapFactory;
 
     if (elt->isGrace()) {
-        params.setLegerLines(0);
+        // lift this code from elsewhere to fix #1930309, and it seems to work a
+        // treat, as y'all Wrongpondians are wont to say
+        params.setLegerLines(heightOnStaff < 0 ? heightOnStaff :
+                             heightOnStaff > 8 ? heightOnStaff - 8 : 0);
         m_graceNotePixmapFactory->setSelected(m_notePixmapFactory->isSelected());
         m_graceNotePixmapFactory->setShaded(m_notePixmapFactory->isShaded());
         factory = m_graceNotePixmapFactory;

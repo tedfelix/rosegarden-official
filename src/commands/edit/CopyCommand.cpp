@@ -3,14 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
- 
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
- 
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -25,6 +18,7 @@
 
 #include "CopyCommand.h"
 
+#include "misc/AppendLabel.h"
 #include "misc/Strings.h"
 #include "base/Clipboard.h"
 #include "base/Composition.h"
@@ -42,8 +36,9 @@ CopyCommand::CopyCommand(EventSelection &selection,
 {
     m_sourceClipboard = new Clipboard;
     m_savedClipboard = 0;
-    m_sourceClipboard->newSegment(&selection)->setLabel
-    (selection.getSegment().getLabel() + " " + qstrtostr(i18n("(excerpt)")));
+    std::string label = selection.getSegment().getLabel();
+    m_sourceClipboard->newSegment(&selection)->setLabel(
+            appendLabel(label, qstrtostr(i18n("(excerpt)"))));
 }
 
 CopyCommand::CopyCommand(SegmentSelection &selection,
@@ -56,13 +51,9 @@ CopyCommand::CopyCommand(SegmentSelection &selection,
 
     for (SegmentSelection::iterator i = selection.begin();
             i != selection.end(); ++i) {
-        QString newLabel = strtoqstr((*i)->getLabel());
-        if (newLabel.contains(i18n("(copied)"))) {
-            m_sourceClipboard->newSegment(*i);
-        } else {
-            m_sourceClipboard->newSegment(*i)->
-            setLabel(qstrtostr(i18n("%1 (copied)").arg(newLabel)));
-        }
+        std::string label = (*i)->getLabel();
+        m_sourceClipboard->newSegment(*i)->setLabel(
+                appendLabel(label, qstrtostr(i18n("(copied)"))));
     }
 }
 

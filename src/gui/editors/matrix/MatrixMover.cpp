@@ -3,14 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
- 
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
- 
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -64,21 +57,21 @@ MatrixMover::MatrixMover(MatrixView* parent) :
     QCanvasPixmap pixmap(pixmapDir + "/toolbar/select.xpm");
     QIconSet icon = QIconSet(pixmap);
 
-    new KAction(i18n("Switch to Select Tool"), icon, 0, this,
+    new KAction(i18n("Switch to Select Tool"), icon, Key_F2, this,
                 SLOT(slotSelectSelected()), actionCollection(),
                 "select");
 
-    new KAction(i18n("Switch to Draw Tool"), "pencil", 0, this,
+    new KAction(i18n("Switch to Draw Tool"), "pencil", Key_F3, this,
                 SLOT(slotDrawSelected()), actionCollection(),
                 "draw");
 
-    new KAction(i18n("Switch to Erase Tool"), "eraser", 0, this,
+    new KAction(i18n("Switch to Erase Tool"), "eraser", Key_F4, this,
                 SLOT(slotEraseSelected()), actionCollection(),
                 "erase");
 
     pixmap.load(pixmapDir + "/toolbar/resize.xpm");
     icon = QIconSet(pixmap);
-    new KAction(i18n("Switch to Resize Tool"), icon, 0, this,
+    new KAction(i18n("Switch to Resize Tool"), icon, Key_F6, this,
                 SLOT(slotResizeSelected()), actionCollection(),
                 "resize");
 
@@ -129,7 +122,14 @@ void MatrixMover::handleLeftButtonPress(timeT time,
             else
                 newSelection = new EventSelection(m_currentStaff->getSegment());
 
-            newSelection->addEvent(m_currentElement->event());
+            // if the selection already contains the event, remove it from the
+            // selection if shift is pressed
+            if (selection->contains(m_currentElement->event())){
+                if (e->state() & Qt::ShiftButton)
+                    newSelection->removeEvent(m_currentElement->event());
+            } else {
+                newSelection->addEvent(m_currentElement->event());
+            }
             m_mParentView->setCurrentSelection(newSelection, true, true);
             m_mParentView->canvas()->update();
             selection = newSelection;

@@ -3,14 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
- 
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
- 
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -32,6 +25,7 @@
 #include "gui/editors/segment/TrackButtons.h"
 #include <klocale.h>
 #include <kstddirs.h>
+#include "misc/AppendLabel.h"
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "gui/general/ClefIndex.h"
@@ -129,6 +123,7 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
         m_pluginManager(pluginManager),
         m_audioRecordLatency(0, 0),
         m_autoSavePeriod(0),
+        m_quickMarkerTime(-1),
         m_beingDestroyed(false)
 {
     syncDevices();
@@ -257,6 +252,23 @@ void RosegardenGUIDoc::slotDocumentRestored()
 {
     RG_DEBUG << "RosegardenGUIDoc::slotDocumentRestored()\n";
     setModified(false);
+}
+
+void
+RosegardenGUIDoc::setQuickMarker()
+{
+    RG_DEBUG << "RosegardenGUIDoc::setQuickMarker" << endl;
+    
+    m_quickMarkerTime = getComposition().getPosition();
+}
+
+void
+RosegardenGUIDoc::jumpToQuickMarker()
+{
+    RG_DEBUG << "RosegardenGUIDoc::jumpToQuickMarker" << endl;
+
+    if (m_quickMarkerTime >= 0)
+        slotSetPointerPosition(m_quickMarkerTime);
 }
 
 QString RosegardenGUIDoc::getAutoSaveFileName()
@@ -2539,10 +2551,10 @@ RosegardenGUIDoc::addRecordMIDISegment(TrackId tid)
         } else {
             label = track->getLabel();
         }
-        label = qstrtostr(i18n("%1 (recorded)").arg(strtoqstr(label)));
     }
 
-    recordMIDISegment->setLabel(label);
+    recordMIDISegment->setLabel(appendLabel(label,
+            qstrtostr(i18n("(recorded)"))));
 
     Clef clef = clefIndexToClef(track->getClef());
     recordMIDISegment->insert(clef.getAsEvent
@@ -2557,6 +2569,11 @@ RosegardenGUIDoc::addRecordMIDISegment(TrackId tid)
     m_composition.addSegment(recordMIDISegment);
 
     m_recordMIDISegments[track->getInstrument()] = recordMIDISegment;
+
+    RosegardenGUIView *w;
+    for (w = m_viewList.first(); w != 0; w = m_viewList.next()) {
+        w->getTrackEditor()->getTrackButtons()->slotUpdateTracks();
+    }
 
     emit newMIDIRecordingSegment(recordMIDISegment);
 }
@@ -2609,17 +2626,15 @@ RosegardenGUIDoc::addRecordAudioSegment(InstrumentId iid,
                 m_studio.getInstrumentById(recordTrack->getInstrument());
 
             if (instr) {
-                label = instr->getName() + std::string(" ");
+                label = instr->getName();
             }
 
         } else {
-            label = recordTrack->getLabel() + std::string(" ");
+            label = recordTrack->getLabel();
         }
-
-        label += std::string("(recorded audio)");
     }
 
-    recordSegment->setLabel(label);
+    recordSegment->setLabel(appendLabel(label, qstrtostr(i18n("(recorded)"))));
     recordSegment->setAudioFileId(auid);
 
     // set color for audio segment to distinguish it from a MIDI segment on an
@@ -2633,6 +2648,11 @@ RosegardenGUIDoc::addRecordAudioSegment(InstrumentId iid,
 
     RG_DEBUG << "RosegardenGUIDoc::addRecordAudioSegment: adding record segment for instrument " << iid << " on track " << recordTrack->getId() << endl;
     m_recordAudioSegments[iid] = recordSegment;
+
+    RosegardenGUIView *w;
+    for (w = m_viewList.first(); w != 0; w = m_viewList.next()) {
+        w->getTrackEditor()->getTrackButtons()->slotUpdateTracks();
+    }
 
     emit newAudioRecordingSegment(recordSegment);
 }

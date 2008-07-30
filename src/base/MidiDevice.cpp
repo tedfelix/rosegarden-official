@@ -3,14 +3,8 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <bownie@bownie.com>
-
-    The moral right of the authors to claim authorship of this work
-    has been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
+    See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
@@ -264,13 +258,6 @@ void
 MidiDevice::addBank(const MidiBank &bank)
 {
     m_bankList.push_back(bank);
-}
-
-void
-MidiDevice::removeMetronome()
-{
-    delete m_metronome;
-    m_metronome = 0;
 }
 
 void

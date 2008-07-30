@@ -3,14 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
- 
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
- 
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -865,6 +858,7 @@ void MatrixView::setupActions()
     m_snapValues.push_back(crotchetDuration / 4);
     m_snapValues.push_back(crotchetDuration / 3);
     m_snapValues.push_back(crotchetDuration / 2);
+    m_snapValues.push_back((crotchetDuration * 3) / 4);
     m_snapValues.push_back(crotchetDuration);
     m_snapValues.push_back((crotchetDuration * 3) / 2);
     m_snapValues.push_back(crotchetDuration * 2);
@@ -904,7 +898,8 @@ void MatrixView::setupActions()
             else if (d == crotchetDuration * 2) cut = Key_2;
 
             QString actionName = QString("snap_%1").arg(int((crotchetDuration * 4) / d));
-            if (d == (crotchetDuration * 3) / 2) actionName = "snap_3";
+            if (d == (crotchetDuration * 3) / 4) actionName = "snap_dotted_8";
+            if (d == (crotchetDuration * 3) / 2) actionName = "snap_dotted_4";
             new KAction(i18n("Snap to %1").arg(label), pixmap, cut, this,
                         SLOT(slotSetSnapFromAction()), actionCollection(),
                         actionName);
@@ -2024,6 +2019,9 @@ MatrixView::slotSetSnapFromAction()
         int snap = name.right(name.length() - 5).toInt();
         if (snap > 0) {
             slotSetSnap(Note(Note::Semibreve).getDuration() / snap);
+        } else if (name.left(12) == "snap_dotted_") {
+            snap = name.right(name.length() - 12).toInt();
+            slotSetSnap((3*Note(Note::Semibreve).getDuration()) / (2*snap));
         } else if (name == "snap_none") {
             slotSetSnap(SnapGrid::NoSnap);
         } else if (name == "snap_beat") {

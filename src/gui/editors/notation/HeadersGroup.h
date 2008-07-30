@@ -4,14 +4,10 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
+    Copyright 2000-2008 the Rosegarden development team.
 
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
-
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    This file is Copyright 2007-2008
+        Yves Guillemot      <yc.guillemot@wanadoo.fr> 
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -36,6 +32,7 @@
 
 
 class QLabel;
+class QResizeEvent;
 
 
 namespace Rosegarden
@@ -88,6 +85,24 @@ public:
      */
     void setCurrent(TrackId trackId);
 
+    /**
+     * Highlight as "current" the header of the specified track.
+     */
+    int getWidth()
+    {
+        return m_lastWidth;
+    }
+
+    typedef enum { ShowNever, ShowWhenNeeded, ShowAlways } ShowHeadersModeType;
+
+    // Used to ensure to have one default value and only one.
+    static const ShowHeadersModeType DefaultShowMode = ShowAlways;
+
+    // Useful in configuration dialog.
+    static bool isValidShowMode(int mode)
+    {
+        return ((mode >= ShowNever) && (mode <= ShowAlways));
+    }
 
 public slots :
     /**
@@ -97,17 +112,23 @@ public slots :
      */
     void slotUpdateAllHeaders(int x, int y, bool force = false);
 
+signals :
+    void headersResized(int newWidth);
+
 private:
+    void resizeEvent(QResizeEvent * ev);
+
     NotationView * m_notationView;
     Composition * m_composition;
-    
+
     typedef std::vector<TrackHeader *> TrackHeaderVector;
     TrackHeaderVector m_headers;
 
     int m_usedHeight;
     QLabel * m_filler;
     int m_lastX;
-    int m_width;
+    int m_lastWidth;
+
 };
 
 

@@ -62,6 +62,9 @@
         <Separator/>
         <Action name="edit_markers"/>
         <Action name="edit_doc_properties"/>
+        <Separator/>
+        <Action name="set_quick_marker"/>
+        <Action name="jump_to_quick_marker"/>
   </Menu>
   <Menu name="Studio">
 	<text>&amp;Studio</text>

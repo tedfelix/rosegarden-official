@@ -3,14 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
- 
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
- 
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -61,10 +54,10 @@ AddTracksDialog::AddTracksDialog(QWidget *parent, int currentTrack) :
     posBox->setSpacing(4);
     new QLabel(i18n("Add tracks"), posBox);
     m_position = new KComboBox(posBox);
-    m_position->insertItem(tr("At the top"));
-    m_position->insertItem(tr("Above the current selected track"));
-    m_position->insertItem(tr("Below the current selected track"));
-    m_position->insertItem(tr("At the bottom"));
+    m_position->insertItem(i18n("At the top"));
+    m_position->insertItem(i18n("Above the current selected track"));
+    m_position->insertItem(i18n("Below the current selected track"));
+    m_position->insertItem(i18n("At the bottom"));
 
     KConfig *config = kapp->config();
     config->setGroup(GeneralOptionsConfigGroup);

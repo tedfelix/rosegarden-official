@@ -3,14 +3,8 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <bownie@bownie.com>
-
-    The moral right of the authors to claim authorship of this work
-    has been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
+    See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
@@ -236,14 +230,14 @@ SegmentPerformanceHelper::getSoundingAbsoluteTime(iterator i)
 
     timeT discard;
 
-    std::cerr << "SegmentPerformanceHelper::getSoundingAbsoluteTime at " << (*i)->getAbsoluteTime() << std::endl;
+//    std::cerr << "SegmentPerformanceHelper::getSoundingAbsoluteTime at " << (*i)->getAbsoluteTime() << std::endl;
 
     if ((*i)->has(IS_GRACE_NOTE)) {
-	std::cerr << "it's a grace note" << std::endl;
+//	std::cerr << "it's a grace note" << std::endl;
 	if (getGraceNoteTimeAndDuration(false, i, t, discard)) return t;
     }
     if ((*i)->has(MAY_HAVE_GRACE_NOTES)) {
-	std::cerr << "it's a candidate host note" << std::endl;
+//	std::cerr << "it's a candidate host note" << std::endl;
 	if (getGraceNoteTimeAndDuration(true, i, t, discard)) return t;
     }
 
@@ -257,14 +251,14 @@ SegmentPerformanceHelper::getSoundingDuration(iterator i)
 
     timeT discard;
 
-    std::cerr << "SegmentPerformanceHelper::getSoundingDuration at " << (*i)->getAbsoluteTime() << std::endl;
+//    std::cerr << "SegmentPerformanceHelper::getSoundingDuration at " << (*i)->getAbsoluteTime() << std::endl;
 
     if ((*i)->has(IS_GRACE_NOTE)) {
-	std::cerr << "it's a grace note" << std::endl;
+//	std::cerr << "it's a grace note" << std::endl;
 	if (getGraceNoteTimeAndDuration(false, i, discard, d)) return d;
     }
     if ((*i)->has(MAY_HAVE_GRACE_NOTES)) {
-	std::cerr << "it's a candidate host note" << std::endl;
+//	std::cerr << "it's a candidate host note" << std::endl;
 	if (getGraceNoteTimeAndDuration(true, i, discard, d)) return d;
     }
 

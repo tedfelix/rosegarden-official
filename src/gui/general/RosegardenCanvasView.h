@@ -4,14 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
-
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -79,6 +72,14 @@ public:
     void setBottomFixedWidget(QWidget*);
 
     void updateBottomWidgetGeometry();
+
+    /**
+     * Sets the widget which will be between the scrollable part of the view
+     * and the left edge of the view.
+     */
+    void setLeftFixedWidget(QWidget*);
+
+    void updateLeftWidgetGeometry();
 
     /// Map a point with the inverse world matrix
     QPoint inverseMapPoint(const QPoint& p) { return inverseWorldMatrix().map(p); }
@@ -153,6 +154,8 @@ protected:
         
     QWidget* m_bottomWidget;
     int m_currentBottomWidgetHeight;
+
+    QWidget* m_leftWidget;
 
     bool m_smoothScroll;
     int m_smoothScrollTimeInterval;

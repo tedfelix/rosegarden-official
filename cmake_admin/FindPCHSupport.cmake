@@ -1,3 +1,26 @@
+# Rosegarden
+# A MIDI and audio sequencer and musical notation editor.
+#
+# This program is Copyright 2000-2008
+#     Guillaume Laurent   <glaurent@telegraph-road.org>,
+#     Chris Cannam        <cannam@all-day-breakfast.com>,
+#     Richard Bown        <richard.bown@ferventsoftware.com>
+#
+# The moral rights of Guillaume Laurent, Chris Cannam, and Richard
+# Bown to claim authorship of this work have been asserted.
+#
+# This file is Copyright 2006-2008
+#     Pedro Lopez-Cabanillas <plcl@users.sourceforge.net>
+#
+# Other copyrights also apply to some parts of this work.  Please
+# see the AUTHORS file and individual file headers for details.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License as
+# published by the Free Software Foundation; either version 2 of the
+# License, or (at your option) any later version.  See the file
+# COPYING included with this distribution for more information.
+
 # - Try to find precompiled headers support for GCC 3.4 and 4.x
 # Once done this will define:
 #
@@ -31,6 +54,7 @@ MACRO(ADD_PRECOMPILED_HEADER _targetName _input)
     SET(_output "${_outdir}/${CMAKE_BUILD_TYPE}.c++")
     STRING(TOUPPER "CMAKE_CXX_FLAGS_${CMAKE_BUILD_TYPE}" _flags_var_name)
     SET(_compiler_FLAGS ${${_flags_var_name}})
+    SET(_compiler_FLAGS "${CMAKE_CXX_FLAGS} ${_compiler_FLAGS}") 
     SEPARATE_ARGUMENTS(_compiler_FLAGS)
     #MESSAGE("_compiler_FLAGS: ${_compiler_FLAGS}")
     ADD_CUSTOM_COMMAND(
@@ -45,6 +69,5 @@ MACRO(ADD_PRECOMPILED_HEADER _targetName _input)
            -o ${_output} ${_source}
         DEPENDS ${_source} )
     ADD_CUSTOM_TARGET(${_targetName} DEPENDS ${_output})
-    #SET(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-include ${_name} -Winvalid-pch -H")
-    SET(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-include ${_name} -Winvalid-pch")
+    SET(CMAKE_CXX_FLAGS "-include ${_name} -Winvalid-pch ${CMAKE_CXX_FLAGS}")
 ENDMACRO(ADD_PRECOMPILED_HEADER)

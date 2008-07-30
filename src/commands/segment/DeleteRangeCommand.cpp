@@ -3,14 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
- 
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
- 
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -33,6 +26,7 @@
 #include "OpenOrCloseRangeCommand.h"
 #include "SegmentJoinCommand.h"
 #include "SegmentSplitCommand.h"
+#include "SegmentSplitTwiceCommand.h"
 
 
 namespace Rosegarden
@@ -46,8 +40,9 @@ DeleteRangeCommand::DeleteRangeCommand(Composition *composition,
     // segments that will need rejoining with their neighbours
     // afterwards.
 
-    std::vector<Segment *> rejoins;
+    RejoinCommand *rejoinCommand = new RejoinCommand();
 
+    // Audio segments first
     for (int e = 0; e < 2; ++e) {
 
         // Split all segments at the range end first, then the range
@@ -63,21 +58,54 @@ DeleteRangeCommand::DeleteRangeCommand(Composition *composition,
         for (Composition::iterator i = composition->begin();
                 i != composition->end(); ++i) {
 
-            if ((*i)->getStartTime() >= t || (*i)->getEndMarkerTime() <= t) {
-                continue;
-            }
-
             if ((*i)->getType() == Segment::Audio) {
-                addCommand(new AudioSegmentSplitCommand(*i, t));
-            } else {
-                addCommand(new SegmentSplitCommand(*i, t));
 
-                if (t == t0 && (*i)->getEndMarkerTime() > t1) {
-                    rejoins.push_back(*i);
+                if ((*i)->getStartTime() >= t || (*i)->getEndMarkerTime() <= t) {
+                    continue;
                 }
+
+                addCommand(new AudioSegmentSplitCommand(*i, t));
             }
         }
     }
+
+
+    // then non audio segments
+    for (Composition::iterator i = composition->begin();
+            i != composition->end(); ++i) {
+
+        if ((*i)->getType() != Segment::Audio) {
+
+            // How many time to split the segment ?
+            timeT t;
+            int count = 0;
+            if (t0 > (*i)->getStartTime() && t0 < (*i)->getEndMarkerTime()) {
+                count++;
+                t = t0;
+            }
+            if (t1 > (*i)->getStartTime() && t1 < (*i)->getEndMarkerTime()) {
+                count++;
+                t = t1;
+            }
+
+            // Split the segment
+            switch(count) {
+                case 0 : // Do nothing
+                    break;
+
+                case 1 : // Split segment once.
+                    addCommand(new SegmentSplitCommand(*i, t, true));
+                    break;
+
+                case 2 : // Split segment twice.
+                        // The first and last from the three resulting segments
+                        // will be stored into the rejoinCommand to be rejoined later.
+                    addCommand(new SegmentSplitTwiceCommand(*i, t0, t1, rejoinCommand));
+                    break;
+            }
+        }
+    }
+
 
     // Then commands to do the rest of the work
 
@@ -85,43 +113,49 @@ DeleteRangeCommand::DeleteRangeCommand(Composition *composition,
 
     addCommand(new OpenOrCloseRangeCommand(composition, t0, t1, false));
 
-    for (std::vector<Segment *>::iterator i = rejoins.begin();
-            i != rejoins.end(); ++i) {
-        addCommand(new RejoinCommand(composition, *i,
-                                     (*i)->getEndMarkerTime() + t0 - t1));
-    }
+    addCommand(rejoinCommand);
+
 }
 
 DeleteRangeCommand::~DeleteRangeCommand()
-{}
+{
+}
+
+
+DeleteRangeCommand::RejoinCommand::~RejoinCommand()
+{
+    for (std::vector<SegmentJoinCommand *>::iterator i = m_rejoins.begin();
+            i != m_rejoins.end(); ++i) {
+        delete *i;
+    }
+}
 
 void
 DeleteRangeCommand::RejoinCommand::execute()
 {
-    if (m_joinCommand) {
-        m_joinCommand->execute();
-        return ;
+    for (std::vector<SegmentJoinCommand *>::iterator i = m_rejoins.begin();
+            i != m_rejoins.end(); ++i) {
+        (*i)->execute();
     }
+}
 
-    //!!! Need to remove the "(split)" names from the segment bits
-
-    for (Composition::iterator i = m_composition->begin();
-            i != m_composition->end(); ++i) {
-        if ((*i) == m_segment)
-            continue;
-        if ((*i)->getTrack() != m_segment->getTrack())
-            continue;
-        if ((*i)->getEndMarkerTime() != m_endMarkerTime)
-            continue;
-        if ((*i)->getStartTime() <= m_segment->getStartTime())
-            continue;
-        SegmentSelection selection;
-        selection.insert(m_segment);
-        selection.insert(*i);
-        m_joinCommand = new SegmentJoinCommand(selection);
-        m_joinCommand->execute();
-        break;
+void
+DeleteRangeCommand::RejoinCommand::unexecute()
+{
+    for (std::vector<SegmentJoinCommand *>::iterator i = m_rejoins.begin();
+            i != m_rejoins.end(); ++i) {
+        (*i)->unexecute();
     }
+}
+
+void
+DeleteRangeCommand::RejoinCommand::addSegmentsPair(Segment *s1, Segment *s2)
+{
+    SegmentSelection selection;
+    selection.insert(s1);
+    selection.insert(s2);
+    SegmentJoinCommand *joinCommand = new SegmentJoinCommand(selection);
+    m_rejoins.push_back(joinCommand);
 }
 
 }

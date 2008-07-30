@@ -4,14 +4,8 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <bownie@bownie.com>
-
-    The moral right of the authors to claim authorship of this work
-    has been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
+    See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
@@ -688,10 +682,10 @@ public:
     static const std::string Tempo;
     static const std::string LocalTempo;
     static const std::string Annotation;
-    static const std::string LilypondDirective;
+    static const std::string LilyPondDirective;
 
     /**
-     * Special Lilypond directives
+     * Special LilyPond directives
      */
     static const std::string Segno;       // print segno here
     static const std::string Coda;        // print coda sign here
@@ -731,9 +725,9 @@ public:
     static std::vector<std::string> getUserStyles();
 
     /**
-     * Return a list of available special Lilypond directives
+     * Return a list of available special LilyPond directives
      */
-    static std::vector<std::string> getLilypondDirectives();
+    static std::vector<std::string> getLilyPondDirectives();
 
     /// Returned event is on heap; caller takes responsibility for ownership
     Event *getAsEvent(timeT absoluteTime) const;

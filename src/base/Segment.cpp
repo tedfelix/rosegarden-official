@@ -3,14 +3,8 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <bownie@bownie.com>
-
-    The moral right of the authors to claim authorship of this work
-    has been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
+    See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
@@ -242,6 +236,9 @@ Segment::setStartTime(timeT t)
     for (int i = 0; i < events.size(); ++i) {
 	insert(events[i]);
     }
+
+    notifyStartChanged(m_startTime);
+    updateRefreshStatuses(m_startTime, m_endTime);
 }
 
 void
@@ -366,11 +363,14 @@ Segment::insert(Event *e)
 
         if (m_composition) m_composition->setSegmentStartTime(this, t0);
 	else m_startTime = t0;
+	notifyStartChanged(m_startTime);
     }
 
     if (t1 > m_endTime ||
 	begin() == end()) {
+	timeT oldTime = m_endTime;
 	m_endTime = t1;
+	notifyEndMarkerChange(m_endTime < oldTime);
     }
 
     iterator i = std::multiset<Event*, Event::EventCmp>::insert(e);
@@ -411,6 +411,7 @@ Segment::erase(iterator pos)
 	timeT startTime = (*begin())->getAbsoluteTime();
         if (m_composition) m_composition->setSegmentStartTime(this, startTime);
 	else m_startTime = startTime;
+	notifyStartChanged(m_startTime);
     }
     if (t1 == m_endTime) {
 	updateEndTime();
@@ -447,6 +448,7 @@ Segment::erase(iterator from, iterator to)
 	timeT startTime = (*begin())->getAbsoluteTime();
         if (m_composition) m_composition->setSegmentStartTime(this, startTime);
 	else m_startTime = startTime;
+	notifyStartChanged(m_startTime);
     }
 
     if (endTime == m_endTime) {
@@ -543,6 +545,7 @@ Segment::fillWithRests(timeT startTime, timeT endTime)
     if (startTime < m_startTime) {
         if (m_composition) m_composition->setSegmentStartTime(this, startTime);
 	else m_startTime = startTime;
+	notifyStartChanged(m_startTime);
     }
 
     TimeSignature ts;
@@ -590,6 +593,7 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
 #endif
         if (m_composition) m_composition->setSegmentStartTime(this, startTime);
 	else m_startTime = startTime;
+	notifyStartChanged(m_startTime);
     }
 
     //!!! Need to remove the rests then relocate the start time
@@ -1067,20 +1071,58 @@ Segment::getKeyAtTime(timeT time, timeT &ktime) const
     }
 }
 
+void
+Segment::getFirstClefAndKey(Clef &clef, Key &key)
+{
+    bool keyFound = false;
+    bool clefFound = false;
+    clef = Clef();          // Default clef
+    key = Key();            // Default key signature
+
+    iterator i = begin();
+    while (i!=end()) {
+        // Keep current clef and key as soon as a note or rest event is found
+        if ((*i)->isa(Note::EventRestType) || (*i)->isa(Note::EventType)) return;
+
+        // Remember the first clef event found
+        if ((*i)->isa(Clef::EventType)) {
+            clef = Clef(*(*i));
+            // and return if a key has already been found
+            if (keyFound) return;
+            clefFound = true;
+        }
+
+        // Remember the first key event found
+        if ((*i)->isa(Key::EventType)) {
+            key = Key(*(*i));
+            // and return if a clef has already been found
+            if (clefFound) return;
+            keyFound = true;
+        }
+
+        ++i;
+    }
+}
+
 timeT
 Segment::getRepeatEndTime() const
 {
+    timeT endMarker = getEndMarkerTime();
+
     if (m_repeating && m_composition) {
 	Composition::iterator i(m_composition->findSegment(this));
 	assert(i != m_composition->end());
 	++i;
 	if (i != m_composition->end() && (*i)->getTrack() == getTrack()) {
-	    return (*i)->getStartTime();
+	    timeT t = (*i)->getStartTime();
+	    if (t < endMarker) return endMarker;
+	    else return t;
 	} else {
             return m_composition->getEndMarker();
 	}
     }
-    return getEndMarkerTime();
+
+    return endMarker;
 }
 
 
@@ -1128,6 +1170,19 @@ Segment::notifyAppearanceChange() const
 	(*i)->appearanceChanged(this);
     }
 }
+
+void
+Segment::notifyStartChanged(timeT newTime)
+{
+    for (ObserverSet::const_iterator i = m_observers.begin();
+	 i != m_observers.end(); ++i) {
+	(*i)->startChanged(this, newTime);
+    }
+    if (m_composition) {
+	m_composition->notifySegmentStartChanged(this, newTime);
+    }
+}
+    
 
 void
 Segment::notifyEndMarkerChange(bool shorten)

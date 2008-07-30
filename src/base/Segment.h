@@ -4,14 +4,8 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <bownie@bownie.com>
-
-    The moral right of the authors to claim authorship of this work
-    has been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
+    See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
@@ -461,6 +455,20 @@ public:
      */
     Key getKeyAtTime(timeT time, timeT &ktime) const;
 
+    /**
+     * Return the clef and key signature in effect at the beginning of the
+     * segment using the following rules :
+     *
+     *    - Return the default clef if no clef change is preceding the first
+     *      note or rest event,
+     *    - else return the first clef event in the segment,
+     *    - else return the default clef if the segment has no note event nor
+     *      clef change in it.
+     *
+     *    - Use the same rules with the key signature.
+     */
+    void getFirstClefAndKey(Clef &clef, Key &key);
+
 
     //////
     //
@@ -475,8 +483,9 @@ public:
      * If this Segment is repeating, calculate and return the time at
      * which the repeating stops.  This is the start time of the
      * following Segment on the same Track, if any, or else the end
-     * time of the Composition.  (If this Segment does not repeat,
-     * return the end time of the Segment.)
+     * time of the Composition.  If this Segment does not repeat, or
+     * the time calculated would precede the end time of the Segment,
+     * instead return the end time of the Segment.
      */
     timeT getRepeatEndTime() const;
 
@@ -662,6 +671,7 @@ private: // stuff to support SegmentObservers
     void notifyAdd(Event *) const;
     void notifyRemove(Event *) const;
     void notifyAppearanceChange() const;
+    void notifyStartChanged(timeT);
     void notifyEndMarkerChange(bool shorten);
     void notifySourceDeletion() const;
 
@@ -712,6 +722,11 @@ public:
      * like a label change for instance
      */
     virtual void appearanceChanged(const Segment *) { }
+
+    /**
+     * Called after a change that affects the start time of the segment
+     */
+    virtual void startChanged(const Segment *, timeT) { }
 
     /**
      * Called after the segment's end marker time has been

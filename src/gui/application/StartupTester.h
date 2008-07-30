@@ -4,14 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
-
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -53,7 +46,7 @@ public:
     // completed in the background, then it will block.
     
     bool haveProjectPackager(QStringList *missingApplications);
-    bool haveLilypondView(QStringList *missingApplications);
+    bool haveLilyPondView(QStringList *missingApplications);
     bool haveAudioFileImporter(QStringList *missingApplications);
 
 signals:
@@ -68,12 +61,12 @@ protected slots:
 protected:
     bool m_ready;
     QMutex m_projectPackagerMutex;
-    QMutex m_lilypondViewMutex;
+    QMutex m_lilyPondViewMutex;
     QMutex m_audioFileImporterMutex;
     bool m_haveProjectPackager;
     QStringList m_projectPackagerMissing;
-    bool m_haveLilypondView;
-    QStringList m_lilypondViewMissing;
+    bool m_haveLilyPondView;
+    QStringList m_lilyPondViewMissing;
     bool m_haveAudioFileImporter;
     QStringList m_audioFileImporterMissing;
     QString m_stdoutBuffer;

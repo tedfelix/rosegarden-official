@@ -3,14 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
- 
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
- 
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -199,7 +192,8 @@ MarkerRuler::slotDeleteMarker()
     Rosegarden::Marker* marker = getMarkerAtClickPosition();
     
     if (marker)
-        emit deleteMarker(marker->getTime(),
+        emit deleteMarker(marker->getID(),
+                          marker->getTime(),
                           marker->getName(),
                           marker->getDescription());                          
 }
@@ -222,6 +216,7 @@ MarkerRuler::slotEditMarker()
     if (dialog.exec() == QDialog::Accepted) {
         ModifyMarkerCommand *command =
             new ModifyMarkerCommand(&m_doc->getComposition(),
+                                    marker->getID(),
                                     dialog.getOriginalTime(),
                                     dialog.getTime(),
                                     qstrtostr(dialog.getName()),

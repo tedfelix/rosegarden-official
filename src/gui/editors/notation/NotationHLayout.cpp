@@ -3,14 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
- 
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
- 
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -315,8 +308,6 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
                         (barNo, newTimeSig);
         NOTATION_DEBUG << "bar " << barNo << ", startBarOfStaff " << startBarOfStaff
                        << ", newTimeSig " << newTimeSig << endl;
-        if (barNo == startBarOfStaff)
-            newTimeSig = true;
 
         float fixedWidth = 0.0;
         if (newTimeSig && !timeSignature.isHidden()) {
@@ -556,12 +547,12 @@ NotationHLayout::scanChord(NotationElementList *notes,
     bool barEndsInChord = false;
     bool grace = false;
 
-    std::cerr << "NotationHLayout::scanChord: "
-              << chord.size() << "-voice chord at "
-              << (*itr)->event()->getAbsoluteTime()
-              << " unquantized, "
-              << (*itr)->getViewAbsoluteTime()
-              << " quantized" << std::endl;
+//    std::cerr << "NotationHLayout::scanChord: "
+//              << chord.size() << "-voice chord at "
+//              << (*itr)->event()->getAbsoluteTime()
+//              << " unquantized, "
+//              << (*itr)->getViewAbsoluteTime()
+//              << " quantized" << std::endl;
     
 //    NOTATION_DEBUG << "Contents:" << endl;
         

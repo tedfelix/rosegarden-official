@@ -12,7 +12,9 @@ LINK_DIRECTORIES(
     ${JACK_LIB_DIR}
     ${XFT_LIB_DIR}
     ${LIBLO_LIB_DIR}
-    ${LIRC_LIB_DIR}    
+    ${LRDF_LIB_DIR}
+    ${LIRC_LIB_DIR}
+    ${FFTW3F_LIB_DIR}    
 )
 
 INCLUDE_DIRECTORIES(AFTER
@@ -42,8 +44,8 @@ INCLUDE(SoundFileList.txt)
 KDE3_AUTOMOC(${common_sound_SRCS})
 
 ADD_LIBRARY(RosegardenCommon STATIC
-    ${misc_SRCS}
     ${base_SRCS}
+    ${misc_SRCS}
     ${common_sound_SRCS}
 )
 
@@ -193,8 +195,9 @@ IF(WANT_TEST)
         kio
         kdeui
         kdeprint
-        RosegardenCommands
         RosegardenExtended
+        RosegardenSegmentCanvas
+        RosegardenCommands
         RosegardenCommon
     )
     FOREACH(currenttest ${tests_SRCS})

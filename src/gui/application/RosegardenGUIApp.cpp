@@ -3,14 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
- 
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
- 
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -88,7 +81,7 @@
 #include "commands/studio/ModifyDeviceCommand.h"
 #include "document/io/CsoundExporter.h"
 #include "document/io/HydrogenLoader.h"
-#include "document/io/LilypondExporter.h"
+#include "document/io/LilyPondExporter.h"
 #include "document/MultiViewCommandHistory.h"
 #include "document/io/RG21Loader.h"
 #include "document/io/MupExporter.h"
@@ -108,7 +101,7 @@
 #include "gui/dialogs/FileMergeDialog.h"
 #include "gui/dialogs/IdentifyTextCodecDialog.h"
 #include "gui/dialogs/IntervalDialog.h"
-#include "gui/dialogs/LilypondOptionsDialog.h"
+#include "gui/dialogs/LilyPondOptionsDialog.h"
 #include "gui/dialogs/ManageMetronomeDialog.h"
 #include "gui/dialogs/QuantizeDialog.h"
 #include "gui/dialogs/RescaleDialog.h"
@@ -280,6 +273,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
         m_lircCommander(0),
 #endif
         m_haveAudioImporter(false),
+        m_firstRun(false),
         m_parameterArea(0)
 {
     m_myself = this;
@@ -519,6 +513,9 @@ RosegardenGUIApp::~RosegardenGUIApp()
         delete m_sequencerProcess;
     }
 
+    delete m_jumpToQuickMarkerAction;
+    delete m_setQuickMarkerAction;
+    
     delete m_transport;
 
     delete m_seqManager;
@@ -590,7 +587,7 @@ void RosegardenGUIApp::setupActions()
                 "file_export_midi");
 
     new KAction(i18n("Export &LilyPond file..."), 0, 0, this,
-                SLOT(slotExportLilypond()), actionCollection(),
+                SLOT(slotExportLilyPond()), actionCollection(),
                 "file_export_lilypond");
 
     new KAction(i18n("Export Music&XML file..."), 0, 0, this,
@@ -606,11 +603,11 @@ void RosegardenGUIApp::setupActions()
                 "file_export_mup");
 
     new KAction(i18n("Print &with LilyPond..."), 0, 0, this,
-                SLOT(slotPrintLilypond()), actionCollection(),
+                SLOT(slotPrintLilyPond()), actionCollection(),
                 "file_print_lilypond");
 
     new KAction(i18n("Preview with Lil&yPond..."), 0, 0, this,
-                SLOT(slotPreviewLilypond()), actionCollection(),
+                SLOT(slotPreviewLilyPond()), actionCollection(),
                 "file_preview_lilypond");
 
     new KAction(i18n("Play&list"), 0, 0, this,
@@ -1097,6 +1094,14 @@ void RosegardenGUIApp::setupActions()
     new KAction(i18n("&Reset MIDI Network"), 0, this,
                 SLOT(slotResetMidiNetwork()),
                 actionCollection(), "reset_midi_network");
+
+    m_setQuickMarkerAction = new KAction(i18n("Set Quick Marker at Playback Position"), 0, CTRL + Key_1, this,
+                SLOT(slotSetQuickMarker()), actionCollection(),
+                "set_quick_marker");
+
+    m_jumpToQuickMarkerAction = new KAction(i18n("Jump to Quick Marker"), 0, Key_1, this,
+                SLOT(slotJumpToQuickMarker()), actionCollection(),
+                "jump_to_quick_marker");
 
     //
     // Marker Ruler popup menu
@@ -1844,7 +1849,7 @@ void RosegardenGUIApp::slotSaveOptions()
 
     kapp->config()->setGroup(GeneralOptionsConfigGroup);
     kapp->config()->writeEntry("Show Transport", m_viewTransport->isChecked());
-    kapp->config()->writeEntry("Expanded Transport", m_transport ? getTransport()->isExpanded() : false);
+    kapp->config()->writeEntry("Expanded Transport", m_transport ? getTransport()->isExpanded() : true);
     kapp->config()->writeEntry("Show Track labels", m_viewTrackLabels->isChecked());
     kapp->config()->writeEntry("Show Rulers", m_viewRulers->isChecked());
     kapp->config()->writeEntry("Show Tempo Ruler", m_viewTempoRuler->isChecked());
@@ -1920,7 +1925,7 @@ void RosegardenGUIApp::readOptions()
     m_viewTransport->setChecked(opt);
     slotToggleTransport();
 
-    opt = kapp->config()->readBoolEntry("Expanded Transport", false);
+    opt = kapp->config()->readBoolEntry("Expanded Transport", true);
 
 #ifdef SETTING_LOG_DEBUG
 
@@ -4501,6 +4506,9 @@ void RosegardenGUIApp::slotTestStartupTester()
         return ;
     }
 
+    QStringList missingFeatures;
+    QStringList allMissing;
+
     QStringList missing;
     bool have = m_startupTester->haveProjectPackager(&missing);
 
@@ -4509,35 +4517,39 @@ void RosegardenGUIApp::slotTestStartupTester()
                  KXMLGUIClient::StateNoReverse : KXMLGUIClient::StateReverse);
 
     if (!have) {
+        missingFeatures.push_back(i18n("Export and import of Rosegarden Project files"));
         if (missing.count() == 0) {
-            KMessageBox::information
-                (m_view,
-                 i18n("<h3>Project Packager not available</h3><p>Rosegarden could not run the Project Packager.</p><p>Export and import of Rosegarden Project files will not be available.</p>"),
-                 i18n("Rosegarden Project Packager not available"),
-                 "startup-project-packager");            
+            allMissing.push_back(i18n("The Rosegarden Project Packager helper script"));
         } else {
-            KMessageBox::informationList
-                (m_view,
-                 i18n("<h3>Project Packager not available</h3><p>Rosegarden could not find one or more of the additional programs needed to support the Rosegarden Project Packager.</p><p>Export and import of Rosegarden Project files will not be available.<p><p>To fix this, you should install the following additional programs:</p>"),
-                 missing,
-                 i18n("Rosegarden Project Packager not available"),
-                 "startup-project-packager");
+            for (int i = 0; i < missing.count(); ++i) {
+//                if (missingFeatures.count() > 1) {
+                    allMissing.push_back(i18n("%1 - for project file support").arg(missing[i]));
+//                } else {
+//                    allMissing.push_back(missing[i]);
+//                }
+            }
         }
     }
 
-    have = m_startupTester->haveLilypondView(&missing);
+    have = m_startupTester->haveLilyPondView(&missing);
 
     stateChanged("have_lilypondview",
                  have ?
                  KXMLGUIClient::StateNoReverse : KXMLGUIClient::StateReverse);
 
     if (!have) {
-        KMessageBox::informationList
-            (m_view,
-             i18n("<h3>LilyPond Preview not available</h3><p>Rosegarden could not find one or more of the additional programs needed to support the LilyPond previewer.</p><p>Notation previews through LilyPond will not be available.</p><p>To fix this, you should install the following additional programs:</p>"),
-             missing,
-             i18n("LilyPond previews not available"),
-             "startup-lilypondview");
+        missingFeatures.push_back("Notation previews through LilyPond");
+        if (missing.count() == 0) {
+            allMissing.push_back(i18n("The Rosegarden LilyPondView helper script"));
+        } else {
+            for (int i = 0; i < missing.count(); ++i) {
+                if (missingFeatures.count() > 1) {
+                    allMissing.push_back(i18n("%1 - for LilyPond preview support").arg(missing[i]));
+                } else {
+                    allMissing.push_back(missing[i]);
+                }
+            }
+        }
     }
 
 #ifdef HAVE_LIBJACK
@@ -4546,15 +4558,44 @@ void RosegardenGUIApp::slotTestStartupTester()
         m_haveAudioImporter = m_startupTester->haveAudioFileImporter(&missing);
 
         if (!m_haveAudioImporter) {
-            KMessageBox::informationList
-                (m_view,
-                 i18n("<h3>General audio file import not available</h3><p>Rosegarden could not find one or more of the additional programs needed to support its audio file conversion helper.</p><p>Support for importing additional audio file types, and sample rate conversion, will not be available.</p><p>To fix this, you should install the following additional programs:</p>"),
-                 missing,
-                 i18n("Audio file importer not available"),
-                 "startup-audiofile-importer");
+            missingFeatures.push_back("General audio file import and conversion");
+            if (missing.count() == 0) {
+                allMissing.push_back(i18n("The Rosegarden Audio File Importer helper script"));
+            } else {
+                for (int i = 0; i < missing.count(); ++i) {
+                    if (missingFeatures.count() > 1) {
+                        allMissing.push_back(i18n("%1 - for audio file import").arg(missing[i]));
+                    } else {
+                        allMissing.push_back(missing[i]);
+                    }
+                }
+            }
         }
     }
 #endif
+
+    if (missingFeatures.count() > 0) {
+        QString message = i18n("<h3>Helper programs not found</h3><p>Rosegarden could not find one or more helper programs which it needs to provide some features.  The following features will not be available:</p>");
+        message += i18n("<ul>");
+        for (int i = 0; i < missingFeatures.count(); ++i) {
+            message += i18n("<li>%1</li>").arg(missingFeatures[i]);
+        }
+        message += i18n("</ul>");
+        message += i18n("<p>To fix this, you should install the following additional programs:</p>");
+        message += i18n("<ul>");
+        for (int i = 0; i < allMissing.count(); ++i) {
+            message += i18n("<li>%1</li>").arg(allMissing[i]);
+        }
+        message += i18n("</ul>");
+
+        awaitDialogClearance();
+        
+        KMessageBox::information
+            (m_view,
+             message,
+             i18n("Helper programs not found"),
+             "startup-helpers-missing");
+    }
 
     delete m_startupTester;
     m_startupTester = 0;
@@ -4952,7 +4993,7 @@ void RosegardenGUIApp::exportMupFile(QString file)
     }
 }
 
-void RosegardenGUIApp::slotExportLilypond()
+void RosegardenGUIApp::slotExportLilyPond()
 {
     KTmpStatusMsg msg(i18n("Exporting LilyPond file..."), this);
 
@@ -4964,23 +5005,23 @@ void RosegardenGUIApp::slotExportLilypond()
     if (fileName.isEmpty())
         return ;
 
-    exportLilypondFile(fileName);
+    exportLilyPondFile(fileName);
 }
 
 std::map<KProcess *, KTempFile *> RosegardenGUIApp::m_lilyTempFileMap;
 
 
-void RosegardenGUIApp::slotPrintLilypond()
+void RosegardenGUIApp::slotPrintLilyPond()
 {
     KTmpStatusMsg msg(i18n("Printing LilyPond file..."), this);
     KTempFile *file = new KTempFile(QString::null, ".ly");
     file->setAutoDelete(true);
     if (!file->name()) {
         CurrentProgressDialog::freeze();
-        KMessageBox::sorry(this, i18n("Failed to open a temporary file for Lilypond export."));
+        KMessageBox::sorry(this, i18n("Failed to open a temporary file for LilyPond export."));
         delete file;
     }
-    if (!exportLilypondFile(file->name(), true)) {
+    if (!exportLilyPondFile(file->name(), true)) {
         return ;
     }
     KProcess *proc = new KProcess;
@@ -4989,22 +5030,22 @@ void RosegardenGUIApp::slotPrintLilypond()
     *proc << "--print";
     *proc << file->name();
     connect(proc, SIGNAL(processExited(KProcess *)),
-            this, SLOT(slotLilypondViewProcessExited(KProcess *)));
+            this, SLOT(slotLilyPondViewProcessExited(KProcess *)));
     m_lilyTempFileMap[proc] = file;
     proc->start(KProcess::NotifyOnExit);
 }
 
-void RosegardenGUIApp::slotPreviewLilypond()
+void RosegardenGUIApp::slotPreviewLilyPond()
 {
     KTmpStatusMsg msg(i18n("Previewing LilyPond file..."), this);
     KTempFile *file = new KTempFile(QString::null, ".ly");
     file->setAutoDelete(true);
     if (!file->name()) {
         CurrentProgressDialog::freeze();
-        KMessageBox::sorry(this, i18n("Failed to open a temporary file for Lilypond export."));
+        KMessageBox::sorry(this, i18n("Failed to open a temporary file for LilyPond export."));
         delete file;
     }
-    if (!exportLilypondFile(file->name(), true)) {
+    if (!exportLilyPondFile(file->name(), true)) {
         return ;
     }
     KProcess *proc = new KProcess;
@@ -5013,27 +5054,27 @@ void RosegardenGUIApp::slotPreviewLilypond()
     *proc << "--pdf";
     *proc << file->name();
     connect(proc, SIGNAL(processExited(KProcess *)),
-            this, SLOT(slotLilypondViewProcessExited(KProcess *)));
+            this, SLOT(slotLilyPondViewProcessExited(KProcess *)));
     m_lilyTempFileMap[proc] = file;
     proc->start(KProcess::NotifyOnExit);
 }
 
-void RosegardenGUIApp::slotLilypondViewProcessExited(KProcess *p)
+void RosegardenGUIApp::slotLilyPondViewProcessExited(KProcess *p)
 {
     delete m_lilyTempFileMap[p];
     m_lilyTempFileMap.erase(p);
     delete p;
 }
 
-bool RosegardenGUIApp::exportLilypondFile(QString file, bool forPreview)
+bool RosegardenGUIApp::exportLilyPondFile(QString file, bool forPreview)
 {
     QString caption = "", heading = "";
     if (forPreview) {
-        caption = i18n("Lilypond Preview Options");
-        heading = i18n("Lilypond preview options");
+        caption = i18n("LilyPond Preview Options");
+        heading = i18n("LilyPond preview options");
     }
 
-    LilypondOptionsDialog dialog(this, m_doc, caption, heading);
+    LilyPondOptionsDialog dialog(this, m_doc, caption, heading);
     if (dialog.exec() != QDialog::Accepted) {
         return false;
     }
@@ -5042,7 +5083,7 @@ bool RosegardenGUIApp::exportLilypondFile(QString file, bool forPreview)
                                100,
                                this);
 
-    LilypondExporter e(this, m_doc, std::string(QFile::encodeName(file)));
+    LilyPondExporter e(this, m_doc, std::string(QFile::encodeName(file)));
 
     connect(&e, SIGNAL(setProgress(int)),
             progressDlg.progressBar(), SLOT(setValue(int)));
@@ -5898,17 +5939,18 @@ RosegardenGUIApp::slotAddMarker(timeT time)
     AddMarkerCommand *command =
         new AddMarkerCommand(&m_doc->getComposition(),
                              time,
-                             std::string("new marker"),
-                             std::string("no description"));
+                             i18n("new marker"),
+                             i18n("no description"));
 
     m_doc->getCommandHistory()->addCommand(command);    
 }
 
 void
-RosegardenGUIApp::slotDeleteMarker(timeT time, QString name, QString description)
+RosegardenGUIApp::slotDeleteMarker(int id, timeT time, QString name, QString description)
 {
     RemoveMarkerCommand *command =
         new RemoveMarkerCommand(&m_doc->getComposition(),
+                                id,
                                 time,
                                 qstrtostr(name),
                                 qstrtostr(description));
@@ -5987,6 +6029,14 @@ RosegardenGUIApp::plugAccelerators(QWidget *widget, QAccel *acc)
         dynamic_cast<TransportDialog*>(widget);
 
     if (transport) {
+        acc->connectItem(acc->insertItem(m_jumpToQuickMarkerAction->shortcut()),
+                         this,
+                         SLOT(slotJumpToQuickMarker()));
+
+        acc->connectItem(acc->insertItem(m_setQuickMarkerAction->shortcut()),
+                         this,
+                         SLOT(slotSetQuickMarker()));
+
         connect(transport->PlayButton(),
                 SIGNAL(clicked()),
                 this,
@@ -7917,10 +7967,42 @@ RosegardenGUIDoc *RosegardenGUIApp::getDocument() const
 }
 
 void
+RosegardenGUIApp::awaitDialogClearance()
+{
+    bool haveDialog = true;
+
+    std::cerr << "RosegardenGUIApp::awaitDialogClearance: entering" << std::endl;
+    
+    while (haveDialog) {
+
+        const QObjectList *c = children();
+        if (!c) return;
+
+        haveDialog = false;
+        for (QObjectList::const_iterator i = c->begin(); i != c->end(); ++i) {
+            QDialog *dialog = dynamic_cast<QDialog *>(*i);
+            if (dialog && dialog->isVisible()) {
+                haveDialog = true;
+                break;
+            }
+        }
+
+//        std::cerr << "RosegardenGUIApp::awaitDialogClearance: have dialog = "
+//                  << haveDialog << std::endl;
+    
+        if (haveDialog) kapp->processEvents();
+    }
+
+    std::cerr << "RosegardenGUIApp::awaitDialogClearance: exiting" << std::endl;
+}
+
+void
 RosegardenGUIApp::slotNewerVersionAvailable(QString v)
 {
+    if (m_firstRun) return;
     KStartupLogo::hideIfStillThere();
     CurrentProgressDialog::freeze();
+    awaitDialogClearance();
     KMessageBox::information
         (this,
          i18n("<h3>Newer version available</h3><p>A newer version of Rosegarden may be available.<br>Please consult the <a href=\"http://www.rosegardenmusic.com/getting/\">Rosegarden website</a> for more information.</p>"),
@@ -7930,6 +8012,22 @@ RosegardenGUIApp::slotNewerVersionAvailable(QString v)
     CurrentProgressDialog::thaw();
 }
 
+void
+RosegardenGUIApp::slotSetQuickMarker()
+{
+    RG_DEBUG << "RosegardenGUIApp::slotSetQuickMarker" << endl;
+    
+    m_doc->setQuickMarker();
+    getView()->getTrackEditor()->updateRulers();
+}
+
+void
+RosegardenGUIApp::slotJumpToQuickMarker()
+{
+    RG_DEBUG << "RosegardenGUIApp::slotJumpToQuickMarker" << endl;
+
+    m_doc->jumpToQuickMarker();
+}
 
 const void* RosegardenGUIApp::SequencerExternal = (void*)-1;
 RosegardenGUIApp *RosegardenGUIApp::m_myself = 0;

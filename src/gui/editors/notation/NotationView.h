@@ -3,14 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
-
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -104,7 +97,7 @@ class NotationView : public EditView,
     friend class ClefInserter;
     friend class NotationEraser;
     friend class NotationSelectionPaster;
-    friend class LilypondExporter;
+    friend class LilyPondExporter;
 
     Q_OBJECT
 
@@ -219,7 +212,7 @@ public:
     /**
      * Discover whether LilyPond directives are being displayed or not
      */
-    bool areLilyPondDirectivesVisible() { return m_lilypondDirectivesVisible; }
+    bool areLilyPondDirectivesVisible() { return m_lilyPondDirectivesVisible; }
 
     /**
      * Set the current event selection.
@@ -253,6 +246,11 @@ public:
                                 Event *event,
                                 bool preview = false,
                                 bool redrawNow = false);
+
+    /**
+     * Get the average velocity of the selected notes
+     */
+    int getVelocityFromSelection();
 
     /**
      * Show and sound the given note.  The height is used for display,
@@ -324,6 +322,19 @@ public:
 
     virtual RulerScale* getHLayout();
 
+    /**
+     * Return the notation window width
+     */
+    int getCanvasVisibleWidth();
+
+    /**
+     * Return the minimal width which shall be allocated to
+     * the track headers top frame.
+     * (The width of the close button + the width of an info
+     *  button still to come).
+     */
+    int getHeadersTopFrameMinWidth();
+
 public slots:
 
     /**
@@ -341,16 +352,16 @@ public slots:
     void slotFilePrintPreview();
 
     /**
-     * export a Lilypond file
+     * export a LilyPond file
      */
-    bool exportLilypondFile(QString url, bool forPreview = false);
+    bool exportLilyPondFile(QString url, bool forPreview = false);
 
     /**
      * Export to a temporary file and process
      */
-    void slotPrintLilypond();
-    void slotPreviewLilypond();
-    void slotLilypondViewProcessExited(KProcess *);
+    void slotPrintLilyPond();
+    void slotPreviewLilyPond();
+    void slotLilyPondViewProcessExited(KProcess *);
 
     /**
      * put the marked text/object into the clipboard and remove it
@@ -506,6 +517,8 @@ public slots:
     void slotShowHeadersGroup();
     void slotHideHeadersGroup();
     void slotVerticalScrollHeadersGroup(int);
+    void slotUpdateHeaders(int x, int y);
+    void slotHeadersWidthChanged(int w);
 
     /// Adjust notation header view when bottom ruler added or removed
     void slotCanvasBottomWidgetHeightChanged(int);
@@ -544,6 +557,10 @@ public slots:
     void slotEditTranspose();
     void slotEditSwitchPreset();
     void slotEditElement(NotationStaff *, NotationElement *, bool advanced);
+
+    void slotVelocityUp();
+    void slotVelocityDown();
+    void slotSetVelocities();
 
     void slotDebugDump();
 
@@ -739,8 +756,8 @@ public slots:
     // Update notation view based on track/staff name change
     void slotUpdateStaffName();
 
-    // Lilypond Directive slots
-    void slotBeginLilypondRepeat();
+    // LilyPond Directive slots
+    void slotBeginLilyPondRepeat();
 
 signals:
     /**
@@ -952,7 +969,7 @@ protected:
     QLabel *m_annotationsLabel;
 
     /// Displayed in the status bar, shows when LilyPond directives are hidden
-    QLabel *m_lilypondDirectivesLabel;
+    QLabel *m_lilyPondDirectivesLabel;
 
     /// Displayed in the status bar, shows progress of current operation
     ProgressBar *m_progressBar;
@@ -1003,7 +1020,7 @@ protected:
     QWidget *m_tempoRuler;
     RawNoteRuler *m_rawNoteRuler;
     bool m_annotationsVisible;
-    bool m_lilypondDirectivesVisible;
+    bool m_lilyPondDirectivesVisible;
     
     KAction* m_selectDefaultNote;
 
@@ -1040,6 +1057,9 @@ protected:
     QDeferScrollView * m_headersGroupView;
     HeadersGroup * m_headersGroup;
     QFrame * m_headersTopFrame;
+
+    KAction * m_showHeadersMenuEntry;
+
 };
 
 

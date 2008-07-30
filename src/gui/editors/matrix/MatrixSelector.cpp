@@ -3,14 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
- 
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
- 
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -74,15 +67,15 @@ MatrixSelector::MatrixSelector(MatrixView* view)
     connect(m_parentView, SIGNAL(usedSelection()),
             this, SLOT(slotHideSelection()));
 
-    new KAction(i18n("Switch to Draw Tool"), "pencil", 0, this,
+    new KAction(i18n("Switch to Draw Tool"), "pencil", Key_F3, this,
                 SLOT(slotDrawSelected()), actionCollection(),
                 "draw");
 
-    new KAction(i18n("Switch to Erase Tool"), "eraser", 0, this,
+    new KAction(i18n("Switch to Erase Tool"), "eraser", Key_F4, this,
                 SLOT(slotEraseSelected()), actionCollection(),
                 "erase");
 
-    new KAction(i18n("Switch to Move Tool"), "move", 0, this,
+    new KAction(i18n("Switch to Move Tool"), "move", Key_F5, this,
                 SLOT(slotMoveSelected()), actionCollection(),
                 "move");
 
@@ -90,7 +83,7 @@ MatrixSelector::MatrixSelector(MatrixView* view)
     QCanvasPixmap pixmap(pixmapDir + "/toolbar/resize.xpm");
     QIconSet icon = QIconSet(pixmap);
 
-    new KAction(i18n("Switch to Resize Tool"), icon, 0, this,
+    new KAction(i18n("Switch to Resize Tool"), icon, Key_F6, this,
                 SLOT(slotResizeSelected()), actionCollection(),
                 "resize");
 
@@ -168,7 +161,14 @@ void MatrixSelector::handleLeftButtonPress(timeT time,
                                               e,
                                               element);
         return ;
+
+    } else if (e->state() & Qt::ControlButton) {
+
+        handleMidButtonPress(time, height, staffNo, e, element);
+        return;
+
     } else {
+
         // Workaround for #930420 Positional error in sweep-selection box
         // boundary
         int zoomValue = (int)m_matrixView->m_hZoomSlider->getCurrentSize();

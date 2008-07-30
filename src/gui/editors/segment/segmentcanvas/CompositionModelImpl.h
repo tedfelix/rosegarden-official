@@ -4,14 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
-
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -74,7 +67,8 @@ public:
     virtual unsigned int getNbRows();
     virtual const rectcontainer& getRectanglesIn(const QRect& rect,
                                                  RectRanges* notationRects, AudioPreviewDrawData* audioRects);
-    virtual itemcontainer     getItemsAt      (const QPoint&);
+    virtual heightlist getTrackDividersIn(const QRect& rect);
+    virtual itemcontainer getItemsAt (const QPoint&);
     virtual timeT getRepeatTimeAt (const QPoint&, const CompositionItem&);
 
     virtual SnapGrid& grid() { return m_grid; }
@@ -129,6 +123,9 @@ public:
     virtual void segmentAdded(const Composition *, Segment *);
     virtual void segmentRemoved(const Composition *, Segment *);
     virtual void segmentRepeatChanged(const Composition *, Segment *, bool);
+    virtual void segmentStartChanged(const Composition *, Segment *, timeT);
+    virtual void segmentEndMarkerChanged(const Composition *, Segment *, bool);
+    virtual void segmentTrackChanged(const Composition *, Segment *, TrackId);
     virtual void endMarkerTimeChanged(const Composition *, bool /*shorten*/);
 
     // SegmentObserver
@@ -150,6 +147,8 @@ protected slots:
     void slotAudioPreviewComplete(AudioPreviewUpdater*);
 
 protected:
+    bool setTrackHeights(Segment *changed = 0); // true if something changed
+
     void setSelected(const Segment*, bool selected = true);
     bool isSelected(const Segment*) const;
     bool isTmpSelected(const Segment*) const;
@@ -217,6 +216,7 @@ protected:
     std::map<const Segment*, CompositionRect> m_segmentRectMap;
     std::map<const Segment*, timeT> m_segmentEndTimeMap;
     std::map<const Segment*, PixmapArray> m_audioSegmentPreviewMap;
+    std::map<TrackId, int> m_trackHeights;
     
     typedef std::map<const Segment*, AudioPreviewUpdater *>
         AudioPreviewUpdaterMap;

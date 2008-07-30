@@ -3,14 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
- 
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
- 
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -879,9 +872,12 @@ NotationGroup::applyTuplingLine(NotationStaff &staff)
 
     if (initialNoteOrRest == staff.getViewElementList()->end()) return;
 
-    bool isGrace =
-        (*initialNote)->event()->has(BaseProperties::IS_GRACE_NOTE) &&
-        (*initialNote)->event()->get<Bool>(BaseProperties::IS_GRACE_NOTE);
+    bool isGrace = false;
+    if (initialNote != staff.getViewElementList()->end()) {
+        isGrace =
+            (*initialNote)->event()->has(BaseProperties::IS_GRACE_NOTE) &&
+            (*initialNote)->event()->get<Bool>(BaseProperties::IS_GRACE_NOTE);
+    }
 
     //    NOTATION_DEBUG << "NotationGroup::applyTuplingLine: first element is " << (initialNoteOrRestEl->isNote() ? "Note" : "Non-Note") << ", last is " << (static_cast<NotationElement*>(*finalElement)->isNote() ? "Note" : "Non-Note") << endl;
 
@@ -889,7 +885,7 @@ NotationGroup::applyTuplingLine(NotationStaff &staff)
     int finalX = (int)(*finalElement)->getLayoutX();
 
     if (initialNote == staff.getViewElementList()->end() &&
-            finalNote == staff.getViewElementList()->end()) {
+          finalNote == staff.getViewElementList()->end()) {
 
         Event *e = (*initialNoteOrRest)->event();
         e->setMaybe<Int>(m_properties.TUPLING_LINE_MY_Y,

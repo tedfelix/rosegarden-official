@@ -3,14 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
- 
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
- 
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -93,6 +86,7 @@
 #include <qdialog.h>
 #include <qframe.h>
 #include <qinputdialog.h>
+#include <qlabel.h>
 #include <qobjectlist.h>
 #include <qpopupmenu.h>
 #include <qsize.h>
@@ -125,6 +119,7 @@ EditView::EditView(RosegardenGUIDoc *doc,
         m_activeItem(0),
         m_canvasView(0),
         m_rulerBox(new QVBoxLayout),  // top ruler box - added to grid later on
+        m_rulerBoxFiller(0),          // On the left of m_rulerBox
         m_controlBox(new QVBoxLayout),  // top control ruler box - added to grid later on
         m_bottomBox(new QVBox(this, "bottomframe")),  // bottom box - added to bottom of canvas view by setCanvasView()
         m_topStandardRuler(0),
@@ -141,7 +136,19 @@ EditView::EditView(RosegardenGUIDoc *doc,
 
     (dynamic_cast<QBoxLayout*>(m_bottomBox->layout()))->setDirection(QBoxLayout::BottomToTop);
 
-    m_grid->addLayout(m_rulerBox, RULERS_ROW, m_mainCol);
+    // m_rulerBoxFiller is a white label used to keep m_rulerBox exactly
+    // above the scrolling part of the view (and never above the
+    // RosegardenCanvasView::m_leftWidget).
+    QGridLayout * gl = new QGridLayout(1, 2); 
+    gl->setColStretch(0, 0);
+    gl->setColStretch(1, 1);
+    gl->addLayout(m_rulerBox, 0, 1);
+    m_rulerBoxFiller = new QLabel(getCentralWidget());
+    gl->addWidget(m_rulerBoxFiller, 0, 0);
+    m_rulerBoxFiller->hide();
+
+    m_grid->addLayout(gl, RULERS_ROW, m_mainCol);
+
     m_grid->addMultiCellLayout(m_controlBox, CONTROLS_ROW, CONTROLS_ROW, 0, 1);
     m_controlBox->setAlignment(AlignRight);
     //     m_grid->addWidget(m_controlRulers, CONTROLRULER_ROW, 2);
@@ -257,11 +264,21 @@ void EditView::setControlRulersCurrentSegment()
     */
 }
 
-void EditView::setTopStandardRuler(StandardRuler* w)
+void EditView::setTopStandardRuler(StandardRuler* w, QWidget *leftBox)
 {
     delete m_topStandardRuler;
     m_topStandardRuler = w;
-    m_grid->addWidget(w, TOPBARBUTTONS_ROW, m_mainCol);
+
+    QGridLayout * gl = new QGridLayout(1, 2); 
+    gl->setColStretch(0, 0);
+    gl->setColStretch(1, 1);
+
+    gl->addWidget(w, 0, 1);
+    if (leftBox) {
+        gl->addWidget(leftBox, 0, 0);
+    }
+
+    m_grid->addLayout(gl, TOPBARBUTTONS_ROW, m_mainCol);
 
     if (m_canvasView) {
         connect(m_canvasView->horizontalScrollBar(), SIGNAL(valueChanged(int)),
@@ -1183,8 +1200,11 @@ EditView::getPitchFromNoteInsertAction(QString name,
             scalePitch = 0;
         }
 
+	//
+	// Note: middle-C is in octave 5 + octaveBase (default = -2) = 3 (hjj)
+	//
         Pitch pitch
-        (scalePitch, 4 + octave + clef.getOctave(), key, accidental);
+        (scalePitch, 3 + octave + clef.getOctave(), key, accidental);
         return pitch.getPerformancePitch();
 
     } else {

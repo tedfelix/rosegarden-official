@@ -3,14 +3,8 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <bownie@bownie.com>
-
-    The moral right of the authors to claim authorship of this work
-    has been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
+    See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
@@ -206,17 +200,8 @@ long
 RealTime::realTime2Frame(const RealTime &time, unsigned int sampleRate)
 {
     if (time < zeroTime) return -realTime2Frame(-time, sampleRate);
-
-    // We like integers.  The last term is always zero unless the
-    // sample rate is greater than 1MHz, but hell, you never know...
-
-    long frame =
-	time.sec * sampleRate +
-	(time.msec() * sampleRate) / 1000 +
-	((time.usec() - 1000 * time.msec()) * sampleRate) / 1000000 +
-	((time.nsec - 1000 * time.usec()) * sampleRate) / 1000000000;
-
-    return frame;
+    double s = time.sec + double(time.nsec + 1) / 1000000000.0;
+    return long(s * sampleRate);
 }
 
 RealTime
@@ -227,7 +212,7 @@ RealTime::frame2RealTime(long frame, unsigned int sampleRate)
     RealTime rt;
     rt.sec = frame / sampleRate;
     frame -= rt.sec * sampleRate;
-    rt.nsec = (int)(((float(frame) * 1000000) / sampleRate) * 1000);
+    rt.nsec = (int)(((double(frame) * 1000000.0) / sampleRate) * 1000.0);
     return rt;
 }
 

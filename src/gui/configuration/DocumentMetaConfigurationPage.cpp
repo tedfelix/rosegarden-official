@@ -3,14 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
- 
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
- 
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -226,8 +219,7 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
                         QString("%1").arg(s->getEndMarkerTime() -
                                           s->getStartTime())));
 
-        std::set
-            <long> notesOn;
+        std::set<long> notesOn;
         std::multimap<timeT, long> noteOffs;
         int events = 0, notes = 0, poly = 0, maxPoly = 0;
 
@@ -238,21 +230,18 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
                 ++notes;
                 timeT startTime = (*si)->getAbsoluteTime();
                 timeT endTime = startTime + (*si)->getDuration();
-                if (endTime == startTime)
-                    continue;
+                if (endTime == startTime) continue;
                 while (!noteOffs.empty() &&
                         (startTime >= noteOffs.begin()->first)) {
                     notesOn.erase(noteOffs.begin()->second);
                     noteOffs.erase(noteOffs.begin());
                 }
                 long pitch = 0;
-                (*si)->get
-                <Int>(BaseProperties::PITCH, pitch);
+                (*si)->get<Int>(BaseProperties::PITCH, pitch);
                 notesOn.insert(pitch);
                 noteOffs.insert(std::multimap<timeT, long>::value_type(endTime, pitch));
                 poly = notesOn.size();
-                if (poly > maxPoly)
-                    maxPoly = poly;
+                if (poly > maxPoly) maxPoly = poly;
             }
         }
 

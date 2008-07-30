@@ -3,14 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
- 
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
- 
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -75,9 +68,9 @@ EditTool* NotationToolBox::createTool(const QString& toolName)
 
         tool = new GuitarChordInserter(m_nParentView);
 
-/*    else if (toolNamelc == LilypondDirectiveInserter::ToolName)
+/*    else if (toolNamelc == LilyPondDirectiveInserter::ToolName)
 
-        tool = new LilypondDirectiveInserter(m_nParentView);*/
+        tool = new LilyPondDirectiveInserter(m_nParentView);*/
 
     else if (toolNamelc == NotationEraser::ToolName)
 

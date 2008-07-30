@@ -3,14 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
- 
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
- 
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -26,6 +19,7 @@
 #include "SegmentSplitCommand.h"
 
 #include <klocale.h>
+#include "misc/AppendLabel.h"
 #include "misc/Strings.h"
 #include "base/Event.h"
 #include "base/Composition.h"
@@ -38,14 +32,14 @@ namespace Rosegarden
 {
 
 SegmentSplitCommand::SegmentSplitCommand(Segment *segment,
-        timeT splitTime) :
+        timeT splitTime, bool keepLabel) :
         KNamedCommand(i18n("Split Segment")),
         m_segment(segment),
         m_newSegmentA(0),
         m_newSegmentB(0),
         m_splitTime(splitTime),
-        m_previousEndMarkerTime(0),
-        m_detached(true)
+        m_detached(true),
+        m_keepLabel(keepLabel)
 {}
 
 SegmentSplitCommand::~SegmentSplitCommand()
@@ -54,7 +48,6 @@ SegmentSplitCommand::~SegmentSplitCommand()
         delete m_newSegmentA;
         delete m_newSegmentB;
     }
-    delete m_previousEndMarkerTime;
 }
 
 void
@@ -130,13 +123,13 @@ SegmentSplitCommand::execute()
 
     // Set labels
     //
-    m_segmentLabel = m_segment->getLabel();
-    QString newLabel = strtoqstr(m_segmentLabel);
-    if (!newLabel.endsWith(i18n(" (split)"))) {
-        newLabel = i18n("%1 (split)").arg(newLabel);
+    std::string label = m_segment->getLabel();
+    m_newSegmentA->setLabel(label);
+    m_newSegmentB->setLabel(label);
+    if (!m_keepLabel) {
+        m_newSegmentA->setLabel(appendLabel(label, qstrtostr(i18n("(split)"))));
+        m_newSegmentB->setLabel(appendLabel(label, qstrtostr(i18n("(split)"))));
     }
-    m_newSegmentA->setLabel(newLabel);
-    m_newSegmentB->setLabel(newLabel);
 
     m_newSegmentB->setColourIndex(m_segment->getColourIndex());
     m_newSegmentB->setTranspose(m_segment->getTranspose());
@@ -165,6 +158,7 @@ SegmentSplitCommand::execute()
     }
 
     m_newSegmentA->setEndTime(m_splitTime);
+    m_newSegmentA->setEndMarkerTime(m_splitTime);
 
     m_segment->getComposition()->detachSegment(m_segment);
 

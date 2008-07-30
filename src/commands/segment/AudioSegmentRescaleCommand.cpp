@@ -3,14 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
- 
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
- 
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -25,6 +18,7 @@
 
 #include "AudioSegmentRescaleCommand.h"
 
+#include "misc/AppendLabel.h"
 #include "misc/Strings.h"
 #include "base/Event.h"
 #include "base/Composition.h"
@@ -122,11 +116,8 @@ AudioSegmentRescaleCommand::execute()
 
         m_newSegment = new Segment(*m_segment);
 
-        QString oldLabel = strtoqstr(m_segment->getLabel());
-        if (!oldLabel.endsWith(i18n("(rescaled)"))) {
-            m_newSegment->setLabel(qstrtostr(i18n("%1 (rescaled)").arg
-                                             (oldLabel)));
-        }
+        std::string label = m_newSegment->getLabel();
+        m_newSegment->setLabel(appendLabel(label, qstrtostr(i18n("(rescaled)"))));
 
         AudioFileId sourceFileId = m_segment->getAudioFileId();
         float absoluteRatio = m_ratio;

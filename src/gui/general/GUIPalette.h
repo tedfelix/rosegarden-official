@@ -4,14 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-
-    This program is Copyright 2000-2008
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
-
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2008 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -111,6 +104,7 @@ public:
     static const char* const InsertCursor;
     static const char* const InsertCursorRuler;
 
+    static const char* const TrackDivider;
     static const char* const MovementGuide;
     static const char* const SelectionRectangle;
     static const char* const SelectedElement;
@@ -131,7 +125,7 @@ public:
 
     static const char* const TextAnnotationBackground;
 
-    static const char* const TextLilypondDirectiveBackground;
+    static const char* const TextLilyPondDirectiveBackground;
 
     static const char* const AudioCountdownBackground;
     static const char* const AudioCountdownForeground;
@@ -152,6 +146,8 @@ public:
     static const char* const RotaryMeter;
 
     static const char* const MarkerBackground;
+
+    static const char* const QuickMarker;
 
     static const char* const MuteTrackLED;
     static const char* const RecordMIDITrackLED;
