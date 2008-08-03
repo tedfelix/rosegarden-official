@@ -11,9 +11,9 @@ msgstr ""
 "Project-Id-Version: ja\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-04-27 08:10-0400\n"
-"PO-Revision-Date: 2008-04-20 09:45+0900\n"
-"Last-Translator: oota toshiya <ribbon@users.sourceforgew.net>\n"
-"Language-Team: \n"
+"PO-Revision-Date: 2008-08-02 21:44+0900\n"
+"Last-Translator: oota toshiya <ribbon@users.sourceforge.net>\n"
+"Language-Team:  <ribbon@users.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1058,7 +1058,7 @@ msgstr "トラックを追加"
 
 #: ../src/gui/dialogs/AddTracksDialog.cpp:64
 msgid "At the top"
-msgstr ""
+msgstr "一番上で"
 
 #: ../src/gui/dialogs/AddTracksDialog.cpp:65
 msgid "Above the current selected track"
@@ -1070,7 +1070,7 @@ msgstr "現在選択されているトラックの下"
 
 #: ../src/gui/dialogs/AddTracksDialog.cpp:67
 msgid "At the bottom"
-msgstr ""
+msgstr "一番下で"
 
 #: ../src/gui/dialogs/SimpleEventEditDialog.cpp:75
 msgid "Event Properties"
@@ -1412,8 +1412,7 @@ msgid "Change key for selection"
 msgstr "セレクションのためのキー変更"
 
 #: ../src/gui/dialogs/IntervalDialog.cpp:89
-msgid ""
-"Adjust segment transposition in opposite direction (maintain audible pitch)"
+msgid "Adjust segment transposition in opposite direction (maintain audible pitch)"
 msgstr ""
 
 #: ../src/gui/dialogs/IntervalDialog.cpp:190
@@ -2241,8 +2240,7 @@ msgstr "ディミニエンド - %1 を最大値から最小値ヘ右下りで設
 
 #: ../src/gui/dialogs/EventParameterDialog.cpp:82
 msgid "Ringing - set %1 alternating from max to min with both dying to zero"
-msgstr ""
-"リンギング効果 - %1 を最大から最小値へ、最小値からゼロへの両方を交互に設定"
+msgstr "リンギング効果 - %1 を最大から最小値へ、最小値からゼロへの両方を交互に設定"
 
 #: ../src/gui/dialogs/EventParameterDialog.cpp:123
 #: ../src/gui/dialogs/EventParameterDialog.cpp:150
@@ -2492,7 +2490,7 @@ msgstr "lyricのエクスポート"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:225
 msgid "Export beamings"
-msgstr ""
+msgstr "ビームのエクスポート"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:232
 msgid "Export track staff brackets"
@@ -3582,8 +3580,7 @@ msgid "</ul>"
 msgstr "</ul>"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:4591
-msgid ""
-"<p>To fix this, you should install the following additional programs:</p>"
+msgid "<p>To fix this, you should install the following additional programs:</p>"
 msgstr ""
 "<p>これを修復するために、以下の追加プログラムをインストール する必要がありま"
 "す:</p>"
@@ -3838,8 +3835,7 @@ msgid "Saving current document as default studio..."
 msgstr "現在のドキュメントをデフォルトのスタジオとしてセーブ..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:7738
-msgid ""
-"Are you sure you want to import your default studio and lose the current one?"
+msgid "Are you sure you want to import your default studio and lose the current one?"
 msgstr "ドキュメントを破棄してデフォルトのスタジオをインポートしますか?"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:7773
@@ -3899,8 +3895,7 @@ msgstr "ファイルをオープン"
 
 #: ../src/gui/application/main.cpp:370
 msgid "Installation contains the wrong version of Rosegarden."
-msgstr ""
-"インストールされたものに間違ったバージョンのRosegardenが含まれています。"
+msgstr "インストールされたものに間違ったバージョンのRosegardenが含まれています。"
 
 #: ../src/gui/application/main.cpp:371
 msgid ""
@@ -4070,7 +4065,7 @@ msgstr "HSpinBox class"
 
 #: ../src/gui/application/main.cpp:446
 msgid "Transposition by interval"
-msgstr ""
+msgstr "インターバルによるトランスポジション"
 
 #: ../src/gui/application/main.cpp:447
 msgid "Original designs for rotary controllers"
@@ -4250,8 +4245,7 @@ msgstr ""
 "れます。"
 
 #: ../src/gui/seqmanager/SequenceManager.cpp:1031
-msgid ""
-"Run out of processor power for real-time audio processing.  Cannot continue."
+msgid "Run out of processor power for real-time audio processing.  Cannot continue."
 msgstr ""
 "リアルタイムオーディオ処理に必要な処理能力を使いきりました。続けることはでき"
 "ません。"
@@ -4270,8 +4264,7 @@ msgid "JACK Audio subsystem is losing sample frames."
 msgstr "JACK オーディオサブシステムはサンプルフレームを失いました。"
 
 #: ../src/gui/seqmanager/SequenceManager.cpp:1096
-msgid ""
-"Failed to read audio data from disc in time to service the audio subsystem."
+msgid "Failed to read audio data from disc in time to service the audio subsystem."
 msgstr ""
 "オーディオサブシステムに提供するために、オーディオデータをディスクから時間内"
 "に読み出せなかった。"
@@ -4789,7 +4782,7 @@ msgstr "ベースグリッドユニット:"
 
 #: ../src/gui/widgets/QuantizeParameters.cpp:114
 msgid "Complexity:"
-msgstr ""
+msgstr "複雑度:"
 
 #: ../src/gui/widgets/QuantizeParameters.cpp:118
 msgid "Very high"
@@ -5105,8 +5098,7 @@ msgstr "プレゼンテーション"
 msgid ""
 "Changes to the textured background in the main window will not take effect "
 "until you restart Rosegarden."
-msgstr ""
-"Rosegardenを再起動するまでメインウィンドウ背景のテクスチャは変更されません。"
+msgstr "Rosegardenを再起動するまでメインウィンドウ背景のテクスチャは変更されません。"
 
 #: ../src/gui/configuration/AudioConfigurationPage.cpp:168
 #: ../src/gui/configuration/GeneralConfigurationPage.h:78
@@ -5139,6 +5131,9 @@ msgid ""
 "incur a\n"
 "delay at the start of playback due to the amount of data being transmitted."
 msgstr ""
+"Rosegardenは望んだ時に、playをたたいた時には毎回、すべてのMIDIコントローラ（パン、リバーブ、その他）を\n"
+"すべてのMIDIデバイスに送信することができる。このオプションは通常、大量のデータの送信のために、再生の開始が\n"
+"遅れることになることに注意。"
 
 #: ../src/gui/configuration/MIDIConfigurationPage.cpp:138
 msgid "Sequencer timing source"
@@ -5152,8 +5147,7 @@ msgstr "起動時にSoundBlastarカードにフォントをロード"
 msgid ""
 "Check this box to enable soundfont loading on EMU10K-based cards when "
 "Rosegarden is launched"
-msgstr ""
-"Rosegardenの起動時にEMU10Kベースのカード上にサウンドフォントをロードします。"
+msgstr "Rosegardenの起動時にEMU10Kベースのカード上にサウンドフォントをロードします。"
 
 #: ../src/gui/configuration/MIDIConfigurationPage.cpp:173
 msgid "Path to 'asfxload' or 'sfxload' command"
@@ -5229,7 +5223,7 @@ msgstr ""
 
 #: ../src/gui/configuration/DocumentMetaConfigurationPage.cpp:141
 msgid "Playing duration:"
-msgstr ""
+msgstr "再生のデュレーション"
 
 #: ../src/gui/configuration/DocumentMetaConfigurationPage.cpp:146
 msgid "Tracks:"
@@ -5399,7 +5393,7 @@ msgstr "非ノーテーションイベントを?で表示"
 
 #: ../src/gui/configuration/NotationConfigurationPage.cpp:188
 msgid "Show notation-quantized notes in a different color"
-msgstr ""
+msgstr "記譜ごとにクォンタイズされた音符を別の色で表示"
 
 #: ../src/gui/configuration/NotationConfigurationPage.cpp:198
 msgid "Show \"invisible\" events in grey"
@@ -5411,7 +5405,7 @@ msgstr "推奨される演奏可能な範囲外の音符は赤で表示されま
 
 #: ../src/gui/configuration/NotationConfigurationPage.cpp:218
 msgid "Highlight superimposed notes with a halo effect"
-msgstr ""
+msgstr "スーパーインポーズされた音符を光輪効果でハイライト"
 
 #: ../src/gui/configuration/NotationConfigurationPage.cpp:231
 msgid "When recording MIDI, split-and-tie long notes at barlines"
@@ -5431,7 +5425,7 @@ msgstr "音符挿入時..."
 
 #: ../src/gui/configuration/NotationConfigurationPage.cpp:294
 msgid "Split notes into ties to make durations match"
-msgstr ""
+msgstr "デュレーションに一致させるように音符をタイに分割"
 
 #: ../src/gui/configuration/NotationConfigurationPage.cpp:295
 msgid "Ignore existing durations"
@@ -5772,16 +5766,14 @@ msgid "Export..."
 msgstr "エクスポート"
 
 #: ../src/gui/studio/BankEditorDialog.cpp:176
-msgid ""
-"Import Bank and Program data from a Rosegarden file to the current Device"
+msgid "Import Bank and Program data from a Rosegarden file to the current Device"
 msgstr "現在のデバイスにRosegardenファイルからバンクとプログラムをインポート"
 
 #: ../src/gui/studio/BankEditorDialog.cpp:179
 msgid ""
 "Export all Device and Bank information to a Rosegarden format  interchange "
 "file"
-msgstr ""
-"すべてのデバイスとバンク情報をRosegardenフォーマットに変換してエクスポート"
+msgstr "すべてのデバイスとバンク情報をRosegardenフォーマットに変換してエクスポート"
 
 #: ../src/gui/studio/BankEditorDialog.cpp:190
 msgid "Copy all Program names from current Bank to clipboard"
@@ -5793,7 +5785,7 @@ msgstr "現在のバンクにクリップボードからプログラム名をペ
 
 #: ../src/gui/studio/BankEditorDialog.cpp:216
 msgid "Show Variation list based on "
-msgstr ""
+msgstr "右記をベースにしたバリエーションリストの表示"
 
 #: ../src/gui/studio/BankEditorDialog.cpp:1010
 msgid "<new bank>"
@@ -6219,11 +6211,11 @@ msgstr "セグメントの上でクリックで削除"
 msgid ""
 "Click on a segment to split it in two; hold Shift to avoid snapping to beat "
 "grid"
-msgstr ""
+msgstr "２つに分割するためにセグメントをクリックし、拍子グリッドにスナップしないようにシフトを押したままにする"
 
 #: ../src/gui/editors/segment/segmentcanvas/SegmentSplitter.cpp:168
 msgid "Click on a segment to split it in two"
-msgstr ""
+msgstr "２つに分割するためにセグメントをクリック"
 
 #: ../src/gui/editors/segment/segmentcanvas/SegmentSelector.cpp:81
 msgid "Click and drag to select segments"
@@ -6258,8 +6250,7 @@ msgstr ""
 
 #: ../src/gui/editors/segment/segmentcanvas/SegmentResizer.cpp:384
 #: ../src/gui/editors/segment/segmentcanvas/SegmentSelector.cpp:507
-msgid ""
-"Click and drag to resize a segment; hold Ctrl as well to rescale its contents"
+msgid "Click and drag to resize a segment; hold Ctrl as well to rescale its contents"
 msgstr ""
 "クリックしてドラッグでセグメントの長さ変更; Ctrlキーを押しながらでコンテンツ"
 "の長さ変更"
@@ -6271,8 +6262,7 @@ msgstr "クリックしてドラッグするとセグメントの長さ変更"
 
 #: ../src/gui/editors/segment/segmentcanvas/SegmentSelector.cpp:514
 msgid "Click and drag to move segments; hold Ctrl as well to copy them"
-msgstr ""
-"クリックしてドラッグでセグメントの移動; Ctrlキーを押しつづけながらでコピー"
+msgstr "クリックしてドラッグでセグメントの移動; Ctrlキーを押しつづけながらでコピー"
 
 #: ../src/gui/editors/segment/segmentcanvas/SegmentSelector.cpp:516
 msgid "Click and drag to copy segments"
@@ -6306,8 +6296,7 @@ msgstr ""
 msgid ""
 "Hold Shift to avoid snapping to beat grid; hold Ctrl as well to rescale "
 "contents"
-msgstr ""
-"SHIFTキーを押しながらで拍グリッドのスナップを無効; Ctrlキーを押しながらで縮尺"
+msgstr "SHIFTキーを押しながらで拍グリッドのスナップを無効; Ctrlキーを押しながらで縮尺"
 
 #: ../src/gui/editors/segment/segmentcanvas/SegmentMover.cpp:342
 msgid "Click and drag to move a segment"
@@ -6330,8 +6319,7 @@ msgstr ""
 "ラップモードで描画"
 
 #: ../src/gui/editors/segment/TrackLabel.cpp:77
-msgid ""
-"Click and hold with left mouse button to assign this Track to an Instrument."
+msgid "Click and hold with left mouse button to assign this Track to an Instrument."
 msgstr "トラックにインストゥルメントを割り当てるには左マウスボタンをクリック"
 
 #: ../src/gui/editors/segment/TrackLabel.cpp:191
@@ -6829,7 +6817,7 @@ msgstr "---"
 
 #: ../src/gui/editors/parameters/TrackParameterBox.cpp:331
 msgid "Choose the lowest suggested playable note, using a staff"
-msgstr ""
+msgstr "推奨される演奏可能な音符を五線を使って選択"
 
 #: ../src/gui/editors/parameters/TrackParameterBox.cpp:334
 msgid "Highest"
@@ -6838,6 +6826,8 @@ msgstr "最高"
 #: ../src/gui/editors/parameters/TrackParameterBox.cpp:338
 msgid "Choose the highest suggested playable note, using a staff"
 msgstr ""
+"推奨される演奏\n"
+"可能な音符を五線を使って選択"
 
 #: ../src/gui/editors/parameters/TrackParameterBox.cpp:666
 msgid "[ Track %1 - %2 ]"
@@ -8161,11 +8151,11 @@ msgstr "フォントマッピングファイル %1 が開けない"
 
 #: ../src/gui/editors/notation/NotationStrings.cpp:52
 msgid "%1-dotted-%2"
-msgstr ""
+msgstr "%1-付点-%2"
 
 #: ../src/gui/editors/notation/NotationStrings.cpp:54
 msgid "%1-dotted %2"
-msgstr ""
+msgstr "%1-付点 %2"
 
 #: ../src/gui/editors/notation/NotationStrings.cpp:57
 #, c-format
@@ -8454,8 +8444,7 @@ msgid "global element must precede note elements"
 msgstr ""
 
 #: ../src/gui/editors/notation/NoteStyleFileReader.cpp:137
-msgid ""
-"global and note elements may have shape or charname attribute, but not both"
+msgid "global and note elements may have shape or charname attribute, but not both"
 msgstr ""
 
 #: ../src/gui/editors/notation/NotationVLayout.cpp:493
@@ -8721,7 +8710,7 @@ msgstr "コントローライベント番号"
 
 #: ../src/gui/rulers/ControllerEventsRuler.cpp:471
 msgid "Add line of controllers"
-msgstr ""
+msgstr "コントローラの行を追加"
 
 #: ../src/gui/rulers/LoopRuler.cpp:89
 msgid ""
@@ -8757,7 +8746,7 @@ msgstr "プリセットトラックパラメータの選択:"
 
 #: ../src/gui/general/PresetHandlerDialog.cpp:87
 msgid "Create appropriate notation for:"
-msgstr ""
+msgstr "右記のための適切な記法を作成:"
 
 #: ../src/gui/general/PresetHandlerDialog.cpp:89
 msgid "Category"
@@ -8886,11 +8875,11 @@ msgstr "コントローラ上に複数データを挿入"
 
 #: ../src/gui/general/EditView.cpp:843
 msgid "Flip forward"
-msgstr ""
+msgstr "前進に変更"
 
 #: ../src/gui/general/EditView.cpp:847
 msgid "Flip backwards"
-msgstr ""
+msgstr "後退に変更"
 
 #: ../src/gui/general/EditView.cpp:851
 msgid "Draw property line"
@@ -9923,8 +9912,7 @@ msgstr ""
 msgid ""
 "_n: Delete the 1 audio file recorded during the unsaved session?\n"
 "Delete the %n audio files recorded during the unsaved session?"
-msgstr ""
-"未保存のセッション中の録音された%n個のオーディオファイルを削除してよいですか?"
+msgstr "未保存のセッション中の録音された%n個のオーディオファイルを削除してよいですか?"
 
 #: ../src/document/RosegardenGUIDoc.cpp:501
 msgid ""
@@ -9937,6 +9925,11 @@ msgid ""
 "\n"
 "Please select any you wish to delete permanently from the hard disk.\n"
 msgstr ""
+"以下のオーディオファイルはこのセッションの間に録音されたが、オーディオファイルマネージャから\n"
+"アンロードされていない。そのため、セーブしたドキュメント中でもはや使うことができない。\n"
+"ディスクスペースの節約のためにそれらのファイルを削除してもよい。\n"
+"\n"
+"ハードディスクから恒久的に削除したい任意ののものを選んでください。\n"
 
 #: ../src/document/RosegardenGUIDoc.cpp:517
 #, c-format
@@ -10285,9 +10278,9 @@ msgid "Convert"
 msgstr "変換"
 
 #: rc.cpp:201
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Velocities"
-msgstr "ベロシティ:"
+msgstr "ベロシティ"
 
 #: rc.cpp:204
 #, no-c-format
@@ -11097,8 +11090,7 @@ msgstr "Inkpen"
 
 #: ../data/fonts/mappings/fonts.cpp:17
 msgid "Inkpen is part of Sibelius, but other fonts may use the same mappings."
-msgstr ""
-"InkpenはSibeliusの一部であるが、その他のフォントは同じマッピングで使える。"
+msgstr "InkpenはSibeliusの一部であるが、その他のフォントは同じマッピングで使える。"
 
 #: ../data/fonts/mappings/fonts.cpp:18 ../data/fonts/mappings/fonts.cpp:28
 msgid "Copyright Sibelius Software Ltd"
@@ -11110,8 +11102,7 @@ msgstr "Maestro"
 
 #: ../data/fonts/mappings/fonts.cpp:22
 msgid "Maestro is part of Finale, but other fonts use the same mappings."
-msgstr ""
-"MaestroはFinalの一部であるが、その他のフォントは同じマッピングで使える。"
+msgstr "MaestroはFinalの一部であるが、その他のフォントは同じマッピングで使える。"
 
 #: ../data/fonts/mappings/fonts.cpp:23 ../data/fonts/mappings/fonts.cpp:33
 msgid "Copyright Coda Inc"
@@ -11127,8 +11118,7 @@ msgstr "Petrucci"
 
 #: ../data/fonts/mappings/fonts.cpp:32
 msgid "Petrucci is part of Finale, but other fonts use the same mappings."
-msgstr ""
-"PetrucciはFinareの一部であるが、その他のフォントは同じマッピングで使える。"
+msgstr "PetrucciはFinareの一部であるが、その他のフォントは同じマッピングで使える。"
 
 #: ../data/fonts/mappings/fonts.cpp:36
 msgid "RG21"
@@ -11193,3 +11183,4 @@ msgstr "Mensural"
 #: ../data/styles/styles.cpp:4
 msgid "Triangle"
 msgstr "三連符"
+
