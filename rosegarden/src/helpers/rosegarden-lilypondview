@@ -95,7 +95,7 @@ if [ -x "`type -path kdialog`" ]; then
     prog_kdialog=kdialog
 fi
 
-for x in acroread kpdf kghostview gpdf xpdf evince; do
+for x in acroread okular kpdf kghostview gpdf xpdf evince; do
     if [ -x "`type -path $x`" ]; then
 	prog_pdf_view=$x
 	break;
