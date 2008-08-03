@@ -115,6 +115,17 @@ RestInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
     return insertionCommand->getLastInsertedEvent();
 }
 
+void RestInserter::slotSetDots(unsigned int dots)
+{
+    KToggleAction *dotsAction = dynamic_cast<KToggleAction *>
+                                (actionCollection()->action("toggle_dot"));
+    if (dotsAction && m_noteDots != dots) {
+        dotsAction->setChecked(dots > 0);
+        slotToggleDot();
+        m_noteDots = dots;
+    }
+}
+
 void RestInserter::slotToggleDot()
 {
     m_noteDots = (m_noteDots) ? 0 : 1;
@@ -133,7 +144,7 @@ void RestInserter::slotNotesSelected()
 {
     Note note(m_noteType, m_noteDots);
     QString actionName(NotationStrings::getReferenceName(note));
-    actionName.replace(QRegExp(" "), "_");
+    actionName.replace(QRegExp("-"), "_");
     m_parentView->actionCollection()->action(actionName)->activate();
 }
 

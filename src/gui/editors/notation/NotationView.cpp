@@ -5800,23 +5800,24 @@ void NotationView::slotSwitchFromNoteToRest()
 
 void NotationView::slotToggleDot()
 {
-    NoteInserter *noteInserter = dynamic_cast<NoteInserter *>(m_tool);
-    if (noteInserter) {
-        Note note(noteInserter->getCurrentNote());
+    // Test first RestInserter which is a sub-class of NoteInserter.
+    RestInserter *restInserter = dynamic_cast<RestInserter *>(m_tool);
+    if (restInserter) {
+        Note note(restInserter->getCurrentNote());
         if (note.getNoteType() == Note::Shortest ||
             note.getNoteType() == Note::Longest)
             return ;
-        noteInserter->slotSetDots(note.getDots() ? 0 : 1);
-        setTool(noteInserter);
+        restInserter->slotSetDots(note.getDots() ? 0 : 1);
+        setTool(restInserter);
     } else {
-        RestInserter *restInserter = dynamic_cast<RestInserter *>(m_tool);
-        if (restInserter) {
-            Note note(restInserter->getCurrentNote());
+        NoteInserter *noteInserter = dynamic_cast<NoteInserter *>(m_tool);
+        if (noteInserter) {
+            Note note(noteInserter->getCurrentNote());
             if (note.getNoteType() == Note::Shortest ||
                 note.getNoteType() == Note::Longest)
                 return ;
-            restInserter->slotSetDots(note.getDots() ? 0 : 1);
-            setTool(restInserter);
+            noteInserter->slotSetDots(note.getDots() ? 0 : 1);
+            setTool(noteInserter);
         } else {
             KMessageBox::sorry(this, i18n("No note or rest duration selected"));
         }
