@@ -597,12 +597,13 @@ void NoteInserter::slotSetNote(Note::Type nt)
 
 void NoteInserter::slotSetDots(unsigned int dots)
 {
-    m_noteDots = dots;
-
     KToggleAction *dotsAction = dynamic_cast<KToggleAction *>
                                 (actionCollection()->action("toggle_dot"));
-    if (dotsAction)
+    if (dotsAction && m_noteDots != dots) {
         dotsAction->setChecked(dots > 0);
+        slotToggleDot();
+        m_noteDots = dots;
+    }
 }
 
 void NoteInserter::slotSetAccidental(Accidental accidental,
