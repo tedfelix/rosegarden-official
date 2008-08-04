@@ -3081,17 +3081,19 @@ bool NotationView::applyLayout(int staffNo, timeT startTime, timeT endTime)
 void NotationView::setCurrentSelectedNote(const char *pixmapName,
                                           bool rest, Note::Type n, int dots)
 {
-    NoteInserter* inserter = 0;
+    if (rest) {
+        RestInserter* restInserter = dynamic_cast<RestInserter*>(m_toolBox->getTool(RestInserter::ToolName));
 
-    if (rest)
-        inserter = dynamic_cast<NoteInserter*>(m_toolBox->getTool(RestInserter::ToolName));
-    else
-        inserter = dynamic_cast<NoteInserter*>(m_toolBox->getTool(NoteInserter::ToolName));
+        restInserter->slotSetNote(n);
+        restInserter->slotSetDots(dots);
+        setTool(restInserter);
+    } else {
+        NoteInserter* noteInserter = dynamic_cast<NoteInserter*>(m_toolBox->getTool(NoteInserter::ToolName));
 
-    inserter->slotSetNote(n);
-    inserter->slotSetDots(dots);
-
-    setTool(inserter);
+        noteInserter->slotSetNote(n);
+        noteInserter->slotSetDots(dots);
+        setTool(noteInserter);
+    }
 
     m_currentNotePixmap->setPixmap
         (NotePixmapFactory::toQPixmap
