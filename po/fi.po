@@ -2524,7 +2524,7 @@ msgstr "Sanoituksien sijainti"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:261
 msgid "Ragged bottom (systems will not be spread vertically across the page)"
-msgstr "Liehuna ladottu alalaita (viivastoja ei levitetä koko sivun poikki)"
+msgstr "Liehuna ladottu alalaita (viivastoja ei levitetä koko sivun alalle)"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:267
 msgid "Miscellaneous options"
@@ -2536,7 +2536,7 @@ msgstr "Salli \"osoita-ja-klikkaa\" -korjailu"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:279
 msgid "Export \\midi block"
-msgstr "Vie \\midi-lohko"
+msgstr "Vie \\midi -lohko"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:284
 msgid "No markers"
@@ -11467,4 +11467,8 @@ msgstr "Kolmio"
 #: ...
 msgid "%1 % (normal)"
 msgstr "%1 % (normaali)"
+
+#: ...
+msgid "Interpret chord texts as lead sheet chord names"
+msgstr "Tulkitse sointutekstit omalle rivilleen sointunimiksi"
 
