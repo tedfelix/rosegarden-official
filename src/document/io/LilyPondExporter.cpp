@@ -134,6 +134,7 @@ LilyPondExporter::readConfigVariables(void)
 
     m_languageLevel = cfg->readUnsignedNumEntry("lilylanguage", LILYPOND_VERSION_2_6);
     m_exportMarkerMode = cfg->readUnsignedNumEntry("lilyexportmarkermode", EXPORT_NO_MARKERS );
+    m_chordNamesMode = cfg->readBoolEntry("lilychordnamesmode", false);
 }
 
 LilyPondExporter::~LilyPondExporter()
@@ -1350,6 +1351,73 @@ LilyPondExporter::write()
 		        } // if ( rx.search( text....
 		    } // for (long currentVerse = 0....
 		} // if (m_exportLyrics....
+		//
+                // Write accumulated chord name events to the ChordName context, if desired.
+		//
+                if (m_chordNamesMode) {
+		    bool haveChordName = false;
+
+		    timeT lastTime = (*i)->getStartTime();
+		    for (Segment::iterator j = (*i)->begin();
+		        (*i)->isBeforeEndMarker(j); ++j) {
+		
+		        bool isNote = (*j)->isa(Note::EventType);
+		        bool isChord = false;
+		
+		        if (!isNote) {
+		            if ((*j)->isa(Text::EventType)) {
+		                std::string textType;
+		                if ((*j)->get
+		                        <String>(Text::TextTypePropertyName, textType) &&
+		                        textType == Text::Chord) {
+		                    isChord = true;
+		                }
+		            }
+		        }
+		
+		        if (!isNote && !isChord) continue;
+		
+		        timeT myTime = (*j)->getNotationAbsoluteTime();
+		
+		        if (isChord) {
+		            std::string schord;
+		            (*j)->get<String>(Text::TextPropertyName, schord);
+		            QString chord(strtoqstr(schord));
+		            chord.replace(QRegExp("\\s+"), "");
+		            chord.replace(QRegExp("h"), "b");
+
+		            // DEBUG: str << " %{ '" << chord.utf8() << "' %} ";
+                            QRegExp rx( "^([a-g]([ei]s)?)([:](m|dim|aug|maj|sus|\\d+|[.^]|[+-])*)?(/[+]?[a-g]([ei]s)?)?$" );
+		            if ( rx.search( chord ) != -1 ) {
+				// The chord duration is zero, but the chord
+				// intervals is given with skips (see below).
+                                QRegExp rxStart( "^([a-g]([ei]s)?)" );
+		                chord.replace(QRegExp(rxStart), QString("\\1") + QString("4*0"));
+                            } else {
+				// Skip improper chords.
+				str << " %{ improper chord: '" << chord.utf8() << "' %} ";
+				continue;
+                            }
+
+			    if (! haveChordName) {
+			        str << indent(col++) << "\\new ChordNames \\chordmode {" << std::endl;
+				str << indent(col);
+		                haveChordName = true;
+                            }
+                            if (haveChordName) {
+				// The chord intervals are specified with skips.
+                                writeSkip(m_composition->getTimeSignatureAt(myTime), lastTime, myTime - lastTime, false, str);
+                                str << chord.utf8() << " ";
+                            }
+                            lastTime = myTime;
+			}
+		    } // for
+                    if ( haveChordName ) {
+			str << std::endl;
+	                str << indent(--col) << "} % ChordNames " << std::endl;
+                    }
+		} // if (m_exportChords....
+
             } // if (isMidiTrack.... 
             firstTrack = false;
         } // for (Composition::iterator i = m_composition->begin()....
@@ -2357,10 +2425,14 @@ LilyPondExporter::handleText(const Event *textEvent,
             // print above staff, bold, large
             lilyText += "^\\markup { \\bold \\large \"" + s + "\" } ";
 
-        } else if (text.getTextType() == Text::LocalTempo ||
-                   text.getTextType() == Text::Chord) {
+        } else if (text.getTextType() == Text::LocalTempo) {
 
             // print above staff, bold, small
+            lilyText += "^\\markup { \\bold \"" + s + "\" } ";
+        } else if (m_chordNamesMode == false && text.getTextType() == Text::Chord) {
+
+            // Either (1) the chords will have an own ChordNames context
+            //     or (2) they will be printed above staff, bold, small.
             lilyText += "^\\markup { \\bold \"" + s + "\" } ";
 
         } else if (text.getTextType() == Text::Dynamic) {

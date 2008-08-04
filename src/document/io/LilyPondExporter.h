@@ -203,6 +203,8 @@ private:
     bool m_raggedBottom;
 
     unsigned int m_exportMarkerMode;
+
+    bool m_chordNamesMode;
     
     static const unsigned int EXPORT_NO_MARKERS = 0;
     static const unsigned int EXPORT_DEFAULT_MARKERS = 1;
