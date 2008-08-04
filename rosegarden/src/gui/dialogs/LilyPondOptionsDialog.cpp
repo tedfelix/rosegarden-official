@@ -238,7 +238,7 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     advancedGrid->addWidget(advancedLayoutOptionsBox, 0, 0);
 
     QFrame *frameAdvancedLayout = new QFrame(advancedLayoutOptionsBox);
-    QGridLayout *layoutAdvancedLayout = new QGridLayout(frameAdvancedLayout, 2, 2, 10, 5);
+    QGridLayout *layoutAdvancedLayout = new QGridLayout(frameAdvancedLayout, 3, 2, 10, 5);
 
     m_lilyLyricsHAlignment = new KComboBox( frameAdvancedLayout );
     m_lilyLyricsHAlignment->insertItem(i18n("Left"));
@@ -253,7 +253,12 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     m_lilyRaggedBottom = new QCheckBox(
                            i18n("Ragged bottom (systems will not be spread vertically across the page)"), frameAdvancedLayout);
     m_lilyRaggedBottom->setChecked(config->readBoolEntry("lilyraggedbottom", false));
-    layoutAdvancedLayout->addMultiCellWidget(m_lilyRaggedBottom, 1, 2, 0, 1);
+    layoutAdvancedLayout->addMultiCellWidget(m_lilyRaggedBottom, 1, 1, 0, 1);
+
+    m_lilyChordNamesMode = new QCheckBox(
+                           i18n("Interpret chord texts as lead sheet chord names"), frameAdvancedLayout);
+    m_lilyChordNamesMode->setChecked(config->readBoolEntry("lilychordnamesmode", false));
+    layoutAdvancedLayout->addMultiCellWidget(m_lilyChordNamesMode, 2, 2, 0, 1);
 
     QGroupBox *miscOptionsBox = new QGroupBox
                            (1, Horizontal,
@@ -299,6 +304,7 @@ LilyPondOptionsDialog::slotApply()
     config->writeEntry("lilypaperlandscape", m_lilyPaperLandscape->isChecked());
     config->writeEntry("lilyfontsize", m_lilyFontSize->currentItem());
     config->writeEntry("lilyraggedbottom", m_lilyRaggedBottom->isChecked());
+    config->writeEntry("lilychordnamesmode", m_lilyChordNamesMode->isChecked());
     config->writeEntry("lilyexportlyrics", m_lilyExportLyrics->isChecked());
     config->writeEntry("lilyexportmidi", m_lilyExportMidi->isChecked());
     config->writeEntry("lilyexporttempomarks", m_lilyTempoMarks->currentItem());
