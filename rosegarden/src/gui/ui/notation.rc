@@ -306,6 +306,7 @@
 	    <Action name="dotted_semiquaver" />
 	    <Action name="dotted_demisemi" />
 	    <Separator/>
+	    <Action name="toggle_dot" />
 	    <Action name="switch_from_rest_to_note" />
       </Menu>
 
@@ -328,6 +329,7 @@
 	    <Action name="dotted_rest_semiquaver" />
 	    <Action name="dotted_rest_demisemi" />
 	    <Separator/>
+	    <Action name="toggle_dot" />
 	    <Action name="switch_from_note_to_rest" />
       </Menu>
 
