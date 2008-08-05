@@ -982,8 +982,6 @@ LilyPondExporter::write()
                         // close the old track (Staff context)
 			str << indent(--col) << ">> % Staff ends" << std::endl; //indent-
                     }
-                    lastTrackIndex = (*i)->getTrack();
-
 
 		    // handle any necessary bracket closures with a rude
 		    // hack, because bracket closures need to be handled
@@ -1006,6 +1004,82 @@ LilyPondExporter::write()
                                    << std::endl; //indent-
                           }
 		    }
+                }
+
+		//
+                // Write the chord text events into a lead sheet format.
+                // The chords are placed into ChordName context above the staff,
+                // which is between the previous ending staff and next starting
+                // staff.
+		//
+                if (m_chordNamesMode) {
+		    unsigned int numberOfChords = 0;
+
+		    // timeT lastTime = (*i)->getStartTime();
+		    timeT lastTime = compositionStartTime;
+		    for (Segment::iterator j = (*i)->begin();
+		        (*i)->isBeforeEndMarker(j); ++j) {
+		
+		        bool isNote = (*j)->isa(Note::EventType);
+		        bool isChord = false;
+		
+		        if (!isNote) {
+		            if ((*j)->isa(Text::EventType)) {
+		                std::string textType;
+		                if ((*j)->get
+		                        <String>(Text::TextTypePropertyName, textType) &&
+		                        textType == Text::Chord) {
+		                    isChord = true;
+		                }
+		            }
+		        }
+		
+		        if (!isNote && !isChord) continue;
+		
+		        timeT myTime = (*j)->getNotationAbsoluteTime();
+		
+		        if (isChord) {
+		            std::string schord;
+		            (*j)->get<String>(Text::TextPropertyName, schord);
+		            QString chord(strtoqstr(schord));
+		            chord.replace(QRegExp("\\s+"), "");
+		            chord.replace(QRegExp("h"), "b");
+
+		            // DEBUG: str << " %{ '" << chord.utf8() << "' %} ";
+                            QRegExp rx( "^([a-g]([ei]s)?)([:](m|dim|aug|maj|sus|\\d+|[.^]|[+-])*)?(/[+]?[a-g]([ei]s)?)?$" );
+		            if ( rx.search( chord ) != -1 ) {
+				// The chord duration is zero, but the chord
+				// intervals is given with skips (see below).
+                                QRegExp rxStart( "^([a-g]([ei]s)?)" );
+		                chord.replace(QRegExp(rxStart), QString("\\1") + QString("4*0"));
+                            } else {
+				// Skip improper chords.
+				str << " %{ improper chord: '" << chord.utf8() << "' %} ";
+				continue;
+                            }
+
+			    if (numberOfChords == 0) {
+			        str << indent(col++) << "\\new ChordNames \\chordmode {" << std::endl;
+				str << indent(col);
+		                numberOfChords++;
+                            }
+                            if (numberOfChords > 0) {
+				// The chord intervals are specified with skips.
+                                writeSkip(m_composition->getTimeSignatureAt(myTime), lastTime, myTime - lastTime, false, str);
+                                str << chord.utf8() << " ";
+                            }
+                            lastTime = myTime;
+			}
+		    } // for
+                    if ( numberOfChords > 0 ) {
+			if ( numberOfChords == 1) str << "s8 ";
+			str << std::endl;
+	                str << indent(--col) << "} % ChordNames " << std::endl;
+                    }
+		} // if (m_exportChords....
+
+                if ((int) (*i)->getTrack() != lastTrackIndex) {
+                     lastTrackIndex = (*i)->getTrack();
 
                      // handle any bracket start events (unless track staff
                      // brackets are being ignored, as when printing single parts
@@ -1351,73 +1425,6 @@ LilyPondExporter::write()
 		        } // if ( rx.search( text....
 		    } // for (long currentVerse = 0....
 		} // if (m_exportLyrics....
-		//
-                // Write accumulated chord name events to the ChordName context, if desired.
-		//
-                if (m_chordNamesMode) {
-		    bool haveChordName = false;
-
-		    timeT lastTime = (*i)->getStartTime();
-		    for (Segment::iterator j = (*i)->begin();
-		        (*i)->isBeforeEndMarker(j); ++j) {
-		
-		        bool isNote = (*j)->isa(Note::EventType);
-		        bool isChord = false;
-		
-		        if (!isNote) {
-		            if ((*j)->isa(Text::EventType)) {
-		                std::string textType;
-		                if ((*j)->get
-		                        <String>(Text::TextTypePropertyName, textType) &&
-		                        textType == Text::Chord) {
-		                    isChord = true;
-		                }
-		            }
-		        }
-		
-		        if (!isNote && !isChord) continue;
-		
-		        timeT myTime = (*j)->getNotationAbsoluteTime();
-		
-		        if (isChord) {
-		            std::string schord;
-		            (*j)->get<String>(Text::TextPropertyName, schord);
-		            QString chord(strtoqstr(schord));
-		            chord.replace(QRegExp("\\s+"), "");
-		            chord.replace(QRegExp("h"), "b");
-
-		            // DEBUG: str << " %{ '" << chord.utf8() << "' %} ";
-                            QRegExp rx( "^([a-g]([ei]s)?)([:](m|dim|aug|maj|sus|\\d+|[.^]|[+-])*)?(/[+]?[a-g]([ei]s)?)?$" );
-		            if ( rx.search( chord ) != -1 ) {
-				// The chord duration is zero, but the chord
-				// intervals is given with skips (see below).
-                                QRegExp rxStart( "^([a-g]([ei]s)?)" );
-		                chord.replace(QRegExp(rxStart), QString("\\1") + QString("4*0"));
-                            } else {
-				// Skip improper chords.
-				str << " %{ improper chord: '" << chord.utf8() << "' %} ";
-				continue;
-                            }
-
-			    if (! haveChordName) {
-			        str << indent(col++) << "\\new ChordNames \\chordmode {" << std::endl;
-				str << indent(col);
-		                haveChordName = true;
-                            }
-                            if (haveChordName) {
-				// The chord intervals are specified with skips.
-                                writeSkip(m_composition->getTimeSignatureAt(myTime), lastTime, myTime - lastTime, false, str);
-                                str << chord.utf8() << " ";
-                            }
-                            lastTime = myTime;
-			}
-		    } // for
-                    if ( haveChordName ) {
-			str << std::endl;
-	                str << indent(--col) << "} % ChordNames " << std::endl;
-                    }
-		} // if (m_exportChords....
-
             } // if (isMidiTrack.... 
             firstTrack = false;
         } // for (Composition::iterator i = m_composition->begin()....
