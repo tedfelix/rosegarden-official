@@ -2166,32 +2166,36 @@ LilyPondExporter::writeBar(Segment *s,
             }
 
         } else if ((*i)->isa(Rosegarden::Key::EventType)) {
-	    // ignore hidden key signatures
+	    // don't export invisible key signatures
 	    bool hiddenKey = false;
 	    if ((*i)->has(INVISIBLE)) {
 		(*i)->get <Bool>(INVISIBLE, hiddenKey);
 	    }
 
-	    if (!hiddenKey) {
-		try {
-		    str << "\\key ";
-		    key = Rosegarden::Key(**i);
+            try {
+                // grab the value of the key anyway, so we know what it was for
+                // future calls to writePitch() (fixes #2039048)
+                str << "\\key ";
+                key = Rosegarden::Key(**i);
 
-		    Accidental accidental = Accidentals::NoAccidental;
+                // then we only write a \key change to the export stream if the
+                // key signature was meant to be visible
+                if (!hiddenKey) {
+                    Accidental accidental = Accidentals::NoAccidental;
 
-		    str << convertPitchToLilyNote(key.getTonicPitch(), accidental, key);
+                    str << convertPitchToLilyNote(key.getTonicPitch(), accidental, key);
 
-		    if (key.isMinor()) {
-			str << " \\minor";
-		    } else {
-			str << " \\major";
-		    }
-		    str << std::endl << indent(col);
+                    if (key.isMinor()) {
+                        str << " \\minor";
+                    } else {
+                        str << " \\major";
+                    }
+                    str << std::endl << indent(col);
+                }
 
-		} catch (Exception e) {
-		    std::cerr << "Bad key: " << e.getMessage() << std::endl;
-		}
-	    }
+            } catch (Exception e) {
+                std::cerr << "Bad key: " << e.getMessage() << std::endl;
+            }
 
         } else if ((*i)->isa(Text::EventType)) {
 
