@@ -1015,7 +1015,6 @@ LilyPondExporter::write()
                 if (m_chordNamesMode) {
 		    int numberOfChords = -1;
 
-		    // timeT lastTime = (*i)->getStartTime();
 		    timeT lastTime = compositionStartTime;
 		    for (Segment::iterator j = (*i)->begin();
 		        (*i)->isBeforeEndMarker(j); ++j) {
@@ -1073,6 +1072,7 @@ LilyPondExporter::write()
 			}
 		    } // for
                     if ( numberOfChords >= 0 ) {
+			writeSkip(m_composition->getTimeSignatureAt(lastTime), lastTime, compositionEndTime - lastTime, false, str);
 			if ( numberOfChords == 1) str << "s8 ";
 			str << std::endl;
 	                str << indent(--col) << "} % ChordNames " << std::endl;
