@@ -2175,12 +2175,13 @@ LilyPondExporter::writeBar(Segment *s,
             try {
                 // grab the value of the key anyway, so we know what it was for
                 // future calls to writePitch() (fixes #2039048)
-                str << "\\key ";
                 key = Rosegarden::Key(**i);
 
                 // then we only write a \key change to the export stream if the
                 // key signature was meant to be visible
                 if (!hiddenKey) {
+                    str << "\\key ";
+
                     Accidental accidental = Accidentals::NoAccidental;
 
                     str << convertPitchToLilyNote(key.getTonicPitch(), accidental, key);
