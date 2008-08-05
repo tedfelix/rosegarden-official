@@ -1013,7 +1013,7 @@ LilyPondExporter::write()
                 // staff.
 		//
                 if (m_chordNamesMode) {
-		    unsigned int numberOfChords = 0;
+		    int numberOfChords = -1;
 
 		    // timeT lastTime = (*i)->getStartTime();
 		    timeT lastTime = compositionStartTime;
@@ -1058,20 +1058,21 @@ LilyPondExporter::write()
 				continue;
                             }
 
-			    if (numberOfChords == 0) {
+			    if (numberOfChords == -1) {
 			        str << indent(col++) << "\\new ChordNames \\chordmode {" << std::endl;
 				str << indent(col);
 		                numberOfChords++;
                             }
-                            if (numberOfChords > 0) {
+                            if (numberOfChords >= 0) {
 				// The chord intervals are specified with skips.
                                 writeSkip(m_composition->getTimeSignatureAt(myTime), lastTime, myTime - lastTime, false, str);
                                 str << chord.utf8() << " ";
+		                numberOfChords++;
                             }
                             lastTime = myTime;
 			}
 		    } // for
-                    if ( numberOfChords > 0 ) {
+                    if ( numberOfChords >= 0 ) {
 			if ( numberOfChords == 1) str << "s8 ";
 			str << std::endl;
 	                str << indent(--col) << "} % ChordNames " << std::endl;
