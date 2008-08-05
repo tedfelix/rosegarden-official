@@ -930,12 +930,12 @@ LilyPondExporter::write()
 		    str << indent(col++) << "\\context StaffGroup = \"" << staffGroupCounter++
 		        << "\" << " << std::endl; //indent+
 		} else if (bracket == Brackets::CurlyOn) {
-		    str << indent(col++) << "\\context PianoStaff = \"" << pianoStaffCounter++
+		    str << indent(col++) << "\\context GrandStaff = \"" << pianoStaffCounter++
 		        << "\" << " << std::endl; //indent+
 		} else if (bracket == Brackets::CurlySquareOn) {
 		    str << indent(col++) << "\\context StaffGroup = \"" << staffGroupCounter++
 		        << "\" << " << std::endl; //indent+
-		    str << indent(col++) << "\\context PianoStaff = \"" << pianoStaffCounter++
+		    str << indent(col++) << "\\context GrandStaff = \"" << pianoStaffCounter++
 		        << "\" << " << std::endl; //indent+
 		}
 
@@ -995,10 +995,10 @@ LilyPondExporter::write()
                               str << indent(--col) << ">> % StaffGroup " << staffGroupCounter
                                    << std::endl; //indent-
                           } else if (prevBracket == Brackets::CurlyOff) {
-                              str << indent(--col) << ">> % PianoStaff " << pianoStaffCounter
+                              str << indent(--col) << ">> % GrandStaff " << pianoStaffCounter
                                    << std::endl; //indent-
                           } else if (prevBracket == Brackets::CurlySquareOff) {
-                              str << indent(--col) << ">> % PianoStaff " << pianoStaffCounter
+                              str << indent(--col) << ">> % GrandStaff " << pianoStaffCounter
                                    << std::endl; //indent-
                               str << indent(--col) << ">> % StaffGroup " << staffGroupCounter
                                    << std::endl; //indent-
@@ -1091,12 +1091,12 @@ LilyPondExporter::write()
 			    str << indent(col++) << "\\context StaffGroup = \""
 			        << ++staffGroupCounter << "\" <<" << std::endl;
 			} else if (bracket == Brackets::CurlyOn) {
-			    str << indent(col++) << "\\context PianoStaff = \""
+			    str << indent(col++) << "\\context GrandStaff = \""
 			        << ++pianoStaffCounter << "\" <<" << std::endl;
 			} else if (bracket == Brackets::CurlySquareOn) {
 			    str << indent(col++) << "\\context StaffGroup = \""
 			        << ++staffGroupCounter << "\" <<" << std::endl;
-			    str << indent(col++) << "\\context PianoStaff = \""
+			    str << indent(col++) << "\\context GrandStaff = \""
 			        << ++pianoStaffCounter << "\" <<" << std::endl;
 			}
 		    } 
@@ -1443,10 +1443,10 @@ LilyPondExporter::write()
                  str << indent(--col) << ">> % StaffGroup " << staffGroupCounter
                      << std::endl; //indent-
             } else        if (bracket == Brackets::CurlyOff) {
-                 str << indent(--col) << ">> % PianoStaff (final) " << pianoStaffCounter
+                 str << indent(--col) << ">> % GrandStaff (final) " << pianoStaffCounter
                      << std::endl; //indent-
             } else if (bracket == Brackets::CurlySquareOff) {
-                 str << indent(--col) << ">> % PianoStaff (final) " << pianoStaffCounter
+                 str << indent(--col) << ">> % GrandStaff (final) " << pianoStaffCounter
                      << std::endl; //indent-
                  str << indent(--col) << ">> % StaffGroup (final) " << staffGroupCounter
                      << std::endl; //indent-
@@ -1461,7 +1461,11 @@ LilyPondExporter::write()
 //    str << std::endl << indent(col) << ">> % global wrapper" << std::endl;
 
     // write \layout block
-    str << indent(col) << "\\layout { }" << std::endl;
+    str << indent(col++) << "\\layout {" << std::endl;
+    if (m_chordNamesMode) {
+        str << indent(col) << "\\context { \\GrandStaff \\accepts \"ChordNames\" }" << std::endl;
+    }
+    str << indent(--col) << "}" << std::endl;
 
     // write initial tempo in Midi block, if user wishes (added per user request...
     // makes debugging the .ly file easier because fewer "noisy" errors are
