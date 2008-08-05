@@ -776,7 +776,7 @@ LilyPondExporter::write()
 
     // All the tempo changes are included in "globalTempo" context.
     // This context contains only skip notes between the tempo changes.
-    // First tempo marking should still be include in \midi{ } block.
+    // First tempo marking should still be include in \midi{ } block (prior to 2.10).
     // If tempo marks are printed in future, they should probably be
     // included in this context and the note duration in the tempo
     // mark should be according to the time signature. (hjj)
@@ -1475,7 +1475,9 @@ LilyPondExporter::write()
         // Incomplete?  Can I get away without converting tempo relative to the time
         // signature for this purpose?  we'll see...
         str << indent(col++) << "\\midi {" << std::endl;
-        str << indent(col) << "\\tempo 4 = " << tempo << std::endl;
+        if (m_languageLevel < LILYPOND_VERSION_2_10) {
+            str << indent(col) << "\\tempo 4 = " << tempo << std::endl;
+        }
         str << indent(--col) << "} " << std::endl;
     }
 
