@@ -704,6 +704,12 @@ LilyPondExporter::write()
 	    << std::endl;
     }
 
+    // Define exceptions for ChordNames context: c:3
+    if (m_chordNamesMode) {
+        str << "chExceptionMusic = { <c e>-\\markup { \\super \"3\"} }" << std::endl;
+        str << "chExceptions = #(append (sequential-music-to-chord-exceptions chExceptionMusic #t) ignatzekExceptions)" << std::endl;
+    }
+
     // Find out the printed length of the composition
     Composition::iterator i = m_composition->begin();
     if ((*i) == NULL) {
@@ -1059,6 +1065,7 @@ LilyPondExporter::write()
 
 			    if (numberOfChords == -1) {
 			        str << indent(col++) << "\\new ChordNames \\chordmode {" << std::endl;
+				str << indent(col) << "\\set chordNameExceptions = #chExceptions" << std::endl;
 				str << indent(col);
 		                numberOfChords++;
                             }
