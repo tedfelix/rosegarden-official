@@ -153,7 +153,7 @@ msgstr "Tempo"
 
 #: ../src/gui/dialogs/TextEventDialog.cpp:102
 msgid "Local Tempo"
-msgstr "Paikallinen temp"
+msgstr "Paikallinen tempo"
 
 #: ../src/gui/dialogs/TextEventDialog.cpp:105
 msgid "Lyric"
@@ -7428,7 +7428,7 @@ msgstr "&Muokkaa nimikettä"
 
 #: ../src/gui/editors/tempo/TempoView.cpp:834
 msgid "%1 - Tempo and Time Signature Editor"
-msgstr "%1 - tempo- tahtilajimerkinnän muokkain"
+msgstr "%1 - tempo- ja tahtilajimerkinnän muokkain"
 
 #: ../src/gui/editors/guitar/GuitarChordEditorDialog.cpp:43
 msgid "Guitar Chord Editor"
@@ -10343,7 +10343,7 @@ msgstr "&Etumerkit"
 #: rc.cpp:168
 #, no-c-format
 msgid "&Phrase"
-msgstr "&Fraasi"
+msgstr "Sä&e"
 
 #: rc.cpp:171
 #, no-c-format
