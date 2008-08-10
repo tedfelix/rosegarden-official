@@ -796,7 +796,7 @@ msgstr ""
 "\n"
 "Tässä tiedostossa on tuntemattomassa kielikoodauksessa olevaa tekstiä.\n"
 "\n"
-"Ole hyvä, ja valitse yksi seuraavista arvioiduista koodauksista\n"
+"Ole hyvä ja valitse yksi seuraavista arvioiduista koodauksista\n"
 "tätä tekstiä varten käytettäväksi:\n"
 
 #: ../src/gui/dialogs/IdentifyTextCodecDialog.cpp:61
@@ -1813,8 +1813,8 @@ msgstr ""
 "* Jotkin äänitiedostot on koodattu eri näytetaajuudella kuin mitä JACK-"
 "äänipalvelin käyttää.\n"
 "Rosegarden soittaa ne oikealla nopeudella, mutta ne kuulostavat kauhealta.\n"
-"Ole hyvä, ja harkitse sellaisten tiedostoja ulkoista uudistettua "
-"näytteenottoa, tai sovita JACK-palvelimen näytteenottotaajuus."
+"Ole hyvä ja harkitse sellaisten tiedostojen näytteenottoa uudelleen "
+"ohjelman ulkopuolella, tai sovita JACK-palvelimen näytteenottotaajuus."
 
 #: ../src/gui/dialogs/AudioManagerDialog.cpp:132
 msgid "&Add Audio File..."
@@ -1927,7 +1927,7 @@ msgid ""
 "Are you sure?"
 msgstr ""
 "Tämä vapauttaa kaikki äänitiedostot ja poistaa niihin liitetyt osat.\n"
-"Tätä toimintoa ei voida perua, ja liitännät näihin tiedostoihin menetetään.\n"
+"Tätä toimintoa ei voida perua ja liitännät näihin tiedostoihin menetetään.\n"
 "Tiedostoja ei poisteta kovalevyltäsi.\n"
 "Oletko varma?"
 
@@ -1942,7 +1942,7 @@ msgid ""
 msgstr ""
 "Tämä vapauttaa kaikki äänitiedostot, joita ei ole liitetty yhteenkään osaan "
 "tässä sävellyksessä.\n"
-"Tätä toimintoa ei voida perua, ja liitännät näihin tiedostoihin menetetään.\n"
+"Tätä toimintoa ei voida perua ja liitännät näihin tiedostoihin menetetään.\n"
 "Tiedostoja ei poisteta kovalevyltäsi.\n"
 "Oletko varma?"
 
@@ -1954,7 +1954,7 @@ msgid ""
 msgstr ""
 "Seuraavia äänitiedostoja ei ole käytetty nykyisessä sävellyksessä.\n"
 "\n"
-"Ole hyvä, ja valitse halutessasi niistä joitakin poistaaksesi ne pysyvästi "
+"Ole hyvä ja valitse halutessasi niistä joitakin poistaaksesi ne pysyvästi "
 "kovalevyltäsi.\n"
 
 #: ../src/gui/dialogs/AudioManagerDialog.cpp:875
@@ -1969,7 +1969,7 @@ msgid ""
 "<br>Are you sure?</qt>"
 msgstr ""
 "Ollaan poistamassa pysyvästi 1 äänitiedosto kovalevyltä.<br>Tätä toimintoa "
-"ei voida perua, ja eikä tapoja palauttaa tätä tiedostoa ole. <br>Oletko "
+"ei voida perua ja eikä tapoja palauttaa tätä tiedostoa ole. <br>Oletko "
 "varma?<br>\n"
 "\n"
 "<qt>Ollaan poistamassa pysyvästi %n äänitiedostoa kovalevyltä.<br>Tätä "
@@ -3455,7 +3455,7 @@ msgid ""
 "\n"
 "        Segments->Collapse Segments.\n"
 msgstr ""
-"Liitäntätyökalua ei ole vielä toteutettu.  Ole hyvä, ja valitse osat jotka "
+"Liitäntätyökalua ei ole vielä toteutettu.  Ole hyvä ja valitse osat jotka "
 "halua liittää yhteen ja käytä sitten valikon kohtaa:\n"
 "\n"
 "        Osat -> Taita osat kokoon.\n"
@@ -3779,7 +3779,7 @@ msgstr ""
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5780
 msgid "Move playback pointer to time"
-msgstr "Sirrä toisto-osoitin ajankohtaan"
+msgstr "Siirrä toisto-osoitin ajankohtaan"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5793
 #: ../src/gui/editors/matrix/MatrixView.cpp:2240
@@ -3942,7 +3942,7 @@ msgstr ""
 "\n"
 " Tämä voi tarkoittaa seuraavaa:\n"
 "\n"
-" 1. Tämä on uusi Rosegarden-päivitys, ja sitä ei ole vielä\n"
+" 1. Tämä on uusi Rosegarden-päivitys ja sitä ei ole vielä\n"
 "     asennettu.  Jos käänsit sen itse, tarkista että olet\n"
 "     ajanut \"make install\" ja että käskyn suoritus on päättynyt\n"
 "     onnistuneesti.\n"
@@ -4208,7 +4208,7 @@ msgstr ""
 "lisäosia, tai erillisen synth-ohjelman, kuten QSynth.  Rosegarden ei "
 "syntetisoi ääniä MIDI:stä, joten ilman synteisoijaa et kuule mitään.</"
 "li><br><br><li>Rosegarden käyttää JACK-äänipalvelinta nauhoittaakseen ja "
-"toistaakseen ääntä, ja toistaakseen DSSI-synth lisäosia.  Nämä ominaisuudet "
+"toistaakseen ääntä sekä toistaakseen DSSI-synth lisäosia.  Nämä ominaisuudet "
 "ovat käytössä vain jos JACK-palvelin on ajossa.</"
 "li><br><br><li>Rosegardelilla on kattava ohjekirja: katse Ohje-valikosta "
 "käsikirja, oppaat ja muu informaatio!</li></ul><p>Rosegardenin toi käyttöösi "
@@ -4253,7 +4253,7 @@ msgid ""
 msgstr ""
 "JACK ääni -alijärjestelmän käyttö epäonnistui tai se on keskeyttänyt "
 "Rosegarden äänen käsittelyn.\n"
-"Ole hyvä, ja käynnistä Rosegarden uudelleen jatkaaksesi äänen kanssa "
+"Ole hyvä ja käynnistä Rosegarden uudelleen jatkaaksesi äänen kanssa "
 "työskentelyä.\n"
 "Toisten ohjelmien lopettaminen saattaa parantaa Rosegardenin suorituskykyä."
 
@@ -4285,7 +4285,7 @@ msgid ""
 "information."
 msgstr ""
 "Vakava virhe tapahtui ALSA MIDI -alijärjestelmässä.  Sekvenssointia ei "
-"voitane jatkaa.  Ole hyvä, ja tarkista komentorivin tuloste saadaksesi lisää "
+"voitane jatkaa.  Ole hyvä ja tarkista komentorivin tuloste saadaksesi lisää "
 "tietoa."
 
 #: ../src/gui/seqmanager/SequenceManager.cpp:1078
@@ -4366,7 +4366,7 @@ msgid ""
 msgstr ""
 "<p>Sekä MIDI, että Ääni -alijärjestelmien alustaminen epäonnistui.</"
 "p><p>Voit jatkaa ilman sekvensseriä, mutta suosittelen Rosegardenin "
-"sulkemista, käskyn\"alsaconf\" ajamista pääkäyttäjänä, ja Rosegardenin "
+"sulkemista, käskyn\"alsaconf\" ajamista pääkäyttäjänä ja Rosegardenin "
 "käynnistämistä uudelleen. Jos haluat nimenomaan olla käyttämättä "
 "sekvensseriä, käytä \"rosegarden --nosequencer\" välttääksesi jatkossa tämän "
 "virheilmoituksen näkemisen.</p>"
@@ -4381,7 +4381,7 @@ msgid ""
 msgstr ""
 "<p>MIDI-alijärjestelmän alustaminen epäonnistui.</p><p>Voit jatkaa ilman "
 "sekvensseriä, mutta suosittelen Rosegardenin sulkemista, käskyn\"modprobe "
-"snd-seq-midi\" ajamista pääkäyttäjänä, ja Rosegardenin käynnistämistä "
+"snd-seq-midi\" ajamista pääkäyttäjänä ja Rosegardenin käynnistämistä "
 "uudelleen. Jos haluat nimenomaan olla käyttämättä sekvensseriä, käytä "
 "\"rosegarden --nosequencer\" välttääksesi jatkossa tämän virheilmoituksen "
 "näkemisen.</p>"
@@ -7079,62 +7079,62 @@ msgstr "Valitse &kaikki"
 #: ../src/gui/editors/matrix/MatrixView.cpp:732
 #: ../src/gui/editors/notation/NotationView.cpp:2327
 msgid "Cursor &Back"
-msgstr "Kursori &taaksepäin"
+msgstr "Kohdistin &taaksepäin"
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:736
 #: ../src/gui/editors/notation/NotationView.cpp:2331
 msgid "Cursor &Forward"
-msgstr "Kursori &eteenpäin"
+msgstr "Kohdistin &eteenpäin"
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:740
 #: ../src/gui/editors/notation/NotationView.cpp:2335
 msgid "Cursor Ba&ck Bar"
-msgstr "Kursori e&delliselle tahdille"
+msgstr "Kohdistin e&delliselle tahdille"
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:744
 #: ../src/gui/editors/notation/NotationView.cpp:2339
 msgid "Cursor For&ward Bar"
-msgstr "Kursori s&euraavalle tahdille"
+msgstr "Kohdistin s&euraavalle tahdille"
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:748
 #: ../src/gui/editors/notation/NotationView.cpp:2343
 msgid "Cursor Back and Se&lect"
-msgstr "Kursori taaksepäin ja va&litse"
+msgstr "Kohdistin taaksepäin ja va&litse"
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:752
 #: ../src/gui/editors/notation/NotationView.cpp:2347
 msgid "Cursor Forward and &Select"
-msgstr "Kursori eteenpäin ja &valitse"
+msgstr "Kohdistin eteenpäin ja &valitse"
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:756
 #: ../src/gui/editors/notation/NotationView.cpp:2351
 msgid "Cursor Back Bar and Select"
-msgstr "Kursori edelliselle tahdille ja valitse"
+msgstr "Kohdistin edelliselle tahdille ja valitse"
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:760
 #: ../src/gui/editors/notation/NotationView.cpp:2355
 msgid "Cursor Forward Bar and Select"
-msgstr "Kursori seuraavalle tahdille ja valitse"
+msgstr "Kohdistin seuraavalle tahdille ja valitse"
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:764
 #: ../src/gui/editors/notation/NotationView.cpp:2365
 msgid "Cursor to St&art"
-msgstr "Kursori &alkuun"
+msgstr "Kohdistin &alkuun"
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:770
 #: ../src/gui/editors/notation/NotationView.cpp:2371
 msgid "Cursor to &End"
-msgstr "Kursori loppuu&n"
+msgstr "Kohdistin loppuu&n"
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:776
 #: ../src/gui/editors/notation/NotationView.cpp:2393
 msgid "Cursor to &Playback Pointer"
-msgstr "Kursori &toisto-osoittimen kohdalle"
+msgstr "Kohdistin &toisto-osoittimen kohdalle"
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:820
 #: ../src/gui/editors/notation/NotationView.cpp:2437
 msgid "Playback Pointer to &Cursor"
-msgstr "Toisto-osoitin &kursorin kohdalle"
+msgstr "Toisto-osoitin &kohdistimen kohdalle"
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:826
 #: ../src/gui/editors/notation/NotationView.cpp:2443
@@ -7734,19 +7734,19 @@ msgstr "Näytä &Muutos -työkalut"
 
 #: ../src/gui/editors/notation/NotationView.cpp:2375
 msgid "Cursor &Up Staff"
-msgstr "Kursori viivaston verran &ylös"
+msgstr "Kohdistin viivaston verran &ylös"
 
 #: ../src/gui/editors/notation/NotationView.cpp:2379
 msgid "Cursor &Down Staff"
-msgstr "Kursori viivaston verran a&las"
+msgstr "Kohdistin viivaston verran a&las"
 
 #: ../src/gui/editors/notation/NotationView.cpp:2383
 msgid "Cursor Pre&vious Segment"
-msgstr "Kursori edelliseen osaan"
+msgstr "Kohdistin edelliseen osaan"
 
 #: ../src/gui/editors/notation/NotationView.cpp:2387
 msgid "Cursor Ne&xt Segment"
-msgstr "Kursori seuraavaan osaan"
+msgstr "Kohdistin seuraavaan osaan"
 
 #: ../src/gui/editors/notation/NotationView.cpp:2477
 msgid "Push &Left"
@@ -8191,7 +8191,7 @@ msgid ""
 "dialog in the main window."
 msgstr ""
 "Tälle laitteelle ei oltu määritelty pedaalin ohjainta.\n"
-"Ole hyvä, ja varmista että laite on määritetty oikein pääikkunan Hallitse "
+"Ole hyvä ja varmista että laite on määritetty oikein pääikkunan Hallitse "
 "MIDI-laitteita -valikossa."
 
 #: ../src/gui/editors/notation/NotationView.cpp:7330
@@ -9759,7 +9759,7 @@ msgstr "Vaihda kaikki sävella&jiin %1..."
 #: ../src/commands/notation/KeyInsertionCommand.h:67
 #: ../src/commands/notation/MultiKeyInsertionCommand.h:65
 msgid "Add &Key Change..."
-msgstr "Lisää &sävellajinvaihdos..."
+msgstr "Lisää &sävellajin vaihto..."
 
 #: ../src/commands/notation/RestoreStemsCommand.h:49
 msgid "&Restore Stems"
@@ -10014,12 +10014,12 @@ msgid ""
 msgstr ""
 "Seuraavat äänitiedostot najuhoitettiin tämän session aikana, mutta ne "
 "vapautettiin\n"
-"äänitiedoston hallitsijasta, ja niin ne eivät ole enää käytössä "
+"äänitiedoston hallitsijasta ja niin ne eivät ole enää käytössä "
 "dokumentissa, jota juuri tallennat.\n"
 "\n"
 "Haluanet siivot nämä tiedostot säästääksesi levytilaa.\n"
 "\n"
-"Ole hyvä, ja valitse halutessasi mikä tahansa niistä poistaaksesi sen "
+"Ole hyvä ja valitse halutessasi mikä tahansa niistä poistaaksesi sen "
 "pysyvästi kovalevyltä.\n"
 
 #: ../src/document/RosegardenGUIDoc.cpp:517
@@ -10129,7 +10129,7 @@ msgstr ""
 "p><p>Rosegarden soittaa ne oikealla nopeudella, mutta äänitiedostot, jotka "
 "nauhoitettiin tai tuotiin eri taajuuksilla kuin mikä on nykyisen JACK-"
 "palvelimen näytteenottotaajuus (%1 Hz) kuulostavat todennäköisesti kauheilta."
-"</p><p>Ole hyvä ja katso äänitiedostojen hallintaikkunasta lisätietoja, ja "
+"</p><p>Ole hyvä ja katso äänitiedostojen hallintaikkunasta lisätietoja sekä "
 "harkitse niiden tiedostojen näytteenottotaajuuden muuttamista, jotka ovat "
 "väärällä taajuudella.</p>"
 
@@ -10423,7 +10423,7 @@ msgstr "&Avaimet"
 #: rc.cpp:228 rc.cpp:327
 #, no-c-format
 msgid "Local &Cursor"
-msgstr "Paikallinen &osoitin"
+msgstr "Paikan &kohdistin"
 
 #: rc.cpp:249
 #, no-c-format
@@ -10598,7 +10598,7 @@ msgstr "TAHTI"
 #: rc.cpp:444
 #, no-c-format
 msgid "Switch between real time, musical time, and frame count"
-msgstr "Vaihda kellonajan, musiikkiajan, ja kehysmäärän välillä"
+msgstr "Vaihda kellonajan, musiikkiajan ja kehysmäärän välillä"
 
 #: rc.cpp:448
 #, no-c-format
@@ -10613,7 +10613,7 @@ msgstr "Kelaa taaksepäin"
 #: rc.cpp:455
 #, no-c-format
 msgid "Moves the current pointer position back one bar."
-msgstr "Siirtää nykyisen osoittimen sijainnin yhden tahdin taaksepäin."
+msgstr "Siirtää nykyisen toisto-osoittimen sijainnin yhden tahdin taaksepäin."
 
 #: rc.cpp:459
 #, no-c-format
@@ -10626,8 +10626,8 @@ msgid ""
 "Moves the pointer position to the start of the composition. (This may mean "
 "going forwards if the pointer is currently before the start.)"
 msgstr ""
-"Siirtää osoittimen sijainnin sävellyksen alkuun. (Tämä saattaa merkitä "
-"eteenpäin siirtymistä, jos osoitin sattuu olemaan alkua ennen.)"
+"Siirtää toisto-osoittimen sijainnin sävellyksen alkuun. (Tämä saattaa merkitä "
+"eteenpäin siirtymistä, jos toisto-osoitin sattuu olemaan alkua ennen.)"
 
 #: rc.cpp:466
 #, no-c-format
@@ -10640,8 +10640,8 @@ msgid ""
 "Plays from the current pointer position, or pauses playback if already in "
 "progress."
 msgstr ""
-"Soittaa nykyisestä osoittimen kohdasta, tai pysäyttää toiston, jos se on jo "
-"etenemässä."
+"Soittaa nykyisestä toisto-osoittimen kohdasta, tai pysäyttää toiston, jos "
+"se on jo etenemässä."
 
 #: rc.cpp:476
 #, no-c-format
@@ -10656,7 +10656,7 @@ msgstr "Pikakelaus"
 #: rc.cpp:483
 #, no-c-format
 msgid "Moves the current pointer position forwards one bar."
-msgstr "Siirtää nykyisen osoittimen sijainnin yhden tahdin eteenpäin."
+msgstr "Siirtää nykyisen toisto-osoittimen sijainnin yhden tahdin eteenpäin."
 
 #: rc.cpp:487
 #, no-c-format
@@ -10669,8 +10669,8 @@ msgid ""
 "Moves the pointer position to the end of the composition.  (This may mean "
 "going backwards if the pointer is already beyond the end.)"
 msgstr ""
-"Siirtää osoittimen sijainnin sävellyksen loppuun.  (Tämä voi tarkoittaa "
-"siirtymistä taaksepäin, jos osoitin sattuu olemaan loppua myöhemmin.)"
+"Siirtää toisto-osoittimen sijainnin sävellyksen loppuun.  (Tämä voi tarkoittaa "
+"siirtymistä taaksepäin, jos toisto-osoitin sattuu olemaan loppua myöhemmin.)"
 
 #: rc.cpp:494
 #, no-c-format
@@ -10691,7 +10691,7 @@ msgstr ""
 "&nbsp;&nbsp;* paina kohdistimella raidan nimen kohdalta ja odota hetki<br>\n"
 "&nbsp;&nbsp;* valitse ulostulolaite<br>\n"
 "&nbsp;&nbsp;* valitse yksi laitteen vapaista instrumenteista (#1 - #16)<br>\n"
-"&nbsp;&nbsp;* aseta instrumentin ulostulokanava, ohjelma, pankki, ja \n"
+"&nbsp;&nbsp;* aseta instrumentin ulostulokanava, ohjelma, pankki ja \n"
 "ohjaimet instrumentin ominaisuuslaatikosta\n"
 
 #: ../docs/en/tips.cpp:13
@@ -10770,7 +10770,7 @@ msgid ""
 msgstr ""
 "<p>...että voit pakottaa oletusstudion käytettäväksi kaikissa Rosegarden-"
 "sävellyksissä latauksen yhteydessä?<br><br>Jos studioasetuksesi ei muutu "
-"kovin usein, ja haluat\n"
+"kovin usein ja haluat\n"
 "oletusstudiosi asetusten ohittavan minkä tahansa\n"
 "tallennetun tiedoston sisältämän studion asetukset latauksen yhteydessä, "
 "voit asettaa\n"
@@ -10786,7 +10786,7 @@ msgid ""
 "negative number.</p>\n"
 msgstr ""
 "<p>Jos olet vahingossa nauhoittanut niin lyhyen osan, että sitä ei tahdo\n"
-"näkyä kankaalla, ja jonka kuulet vain seuraavilla nauhoituskerroilla,\n"
+"näkyä kankaalla ja jonka kuulet vain seuraavilla nauhoituskerroilla,\n"
 "pääset käsiksi siihen asettamalla <b>Sävellys -> Muuta dokumentin\n"
 "alku ja loppu</b> ja määrittämällä sävellyksen alkukohdaksi negatiivisen "
 "luvun.</p>\n"
@@ -10843,10 +10843,10 @@ msgid ""
 "course, the dedicated draw, move and resize tools are still quicker for "
 "repeated operations.)</p>\n"
 msgstr ""
-"<p>...että voit käyttää nuolityökalua piirtääksesi, siirtääksesi, ja "
-"uudelleenmitoittaaksesi osia ja tapahtumia, kuten myös valitaksesi niitä?"
+"<p>...että voit käyttää nuolityökalua piirtääksesi, siirtääksesi ja "
+"mitoittaaksesi uudelleen osia ja tapahtumia, kuten myös valitaksesi niitä?"
 "<br><br>Piirrä osa tai tapahtumalohko siirtääksesi sitä, vedä lohkon "
-"oikeasta reunasta mitoittaaksesi sen koon uudelleen, ja vedä keskimmäinen "
+"oikeasta reunasta mitoittaaksesi sen koon uudelleen ja vedä keskimmäinen "
 "nappi pohjaan painettuna piirtääksesi uuden osan tai tapahtuman.<br><br> "
 "(Varsinaisten piirto-, kuljetin- ja uudelleenmitoitustyökalujen käyttö on "
 "tietyssti yhä nopeampaa toistuvissa operaatioissa.)</p>\n"
@@ -10871,7 +10871,7 @@ msgid ""
 "in Notation Editor</b>.</p>\n"
 msgstr ""
 "<p>...että voit muokata useampia osia useammilla raidoilla samanaikaisesti\n"
-"nuotintajassa?  Valitse vain osat, ja käytä <b>Muokkaa -> Avaa nuotintaja</"
+"nuotintajassa?  Valitse vain osat ja käytä <b>Muokkaa -> Avaa nuotintaja</"
 "b>.</p>\n"
 
 #: ../docs/en/tips.cpp:111
@@ -10897,7 +10897,7 @@ msgstr ""
 "<p>...että Rosegarden voi tulostaa käyttäen LilyPond-ohjelmaa, joka on "
 "korkealaatuinen nuottien ladontaohjelma?<br><br>\n"
 "Suunnista <b>Tiedosto</b>-valikosta <b>Esikatsele LilyPondilla</b>. \n"
-"Tiedosto viedään, hahmonnetaan, ja esikatsellaan KPDF-ohjelmalla tai yhdellä "
+"Tiedosto viedään, hahmonnetaan ja esikatsellaan KPDF-ohjelmalla tai yhdellä "
 "monista muista PDF-katselijoilla, joissa se voidaan sitten myös tulostaa.</"
 "p>\n"
 
@@ -10940,7 +10940,7 @@ msgstr ""
 "jossa\n"
 "on haluttu raitamäärä, sekä mitkä tahansa studion tai dokumentin "
 "ominaisuuksia,\n"
-"jotka haluat määrittää, ja aseta <b>Sävellys -> Studio -> Tallenne nykyinen "
+"jotka haluat määrittää ja aseta <b>Sävellys -> Studio -> Tallenne nykyinen "
 "dokumentti\n"
 "oletusstudioksi</b> tehdäksesi tämän uudeksi oletukseksi.</p>\n"
 
@@ -10984,7 +10984,7 @@ msgstr ""
 "lounais-Virginiassa, Yhdysvalloissa.)<br><br>\n"
 "Olemme saaneet panoksia myös muualta Yhdysvalloista, Iso-Britanniasta, "
 "Espanjasta, Meksikosta, Argentiinasta, Saksasta,\n"
-"Ruotsista, Venäjältä, Japanista, Suomesta, ja Italiasta, vain muutamia "
+"Ruotsista, Venäjältä, Japanista, Suomesta ja Italiasta, vain muutamia "
 "mainitakseni..</p>\n"
 
 #: ../docs/en/tips.cpp:169
@@ -11043,8 +11043,8 @@ msgid ""
 "count, and a visual metronome as well as real time?<br><br>Just click on the "
 "small button at the extreme top left of the window.</p>\n"
 msgstr ""
-"<p>...että kuljetinikkuna voi näyttää musiikkiajan, näytteen kehysluvun, ja "
-"näkyvän metronomin, kuten myös kellonajan? <br><br>Klikkaan vain pientä "
+"<p>...että kuljetinikkuna voi näyttää musiikkiajan, näytteen kehysluvun ja "
+"näkyvän metronomin sekä myös kellonajan? <br><br>Klikkaan vain pientä "
 "painiketta, joka on äärimmäisenä ikkunan vasemmassa yläkulmassa.</p>\n"
 
 #: ../docs/en/tips.cpp:202
@@ -11081,7 +11081,7 @@ msgid ""
 msgstr ""
 "<p>...että jos olet muokkaamassa osaa matriisi- tai nuottinäkymässä, voit "
 "asettaa sen osan silmukaksi muokatessasi sitä? <br><br>Valitse se ja aseta "
-"<b>Työkalut -> Paikallinen osoitin -> Aseta silmukka valinnalle</b>, ja "
+"<b>Työkalut -> Paikan kohdistin -> Aseta silmukka valinnalle</b> ja "
 "napauta Toista.</p><br><br>\n"
 "<i>Tämä ominaisuus ei toimi aivan yhtä hyvin sävellyksissä, joissa on "
 "ääninäytteitä.</i>\n"
@@ -11116,7 +11116,7 @@ msgstr ""
 "<p>... että nuotinnusnäkymä näyttää nuotit käyttäen niiden näyttökestoa, kun "
 "matriisinäkymä puolestaan sallii niiden soittokeston muuttamisen.<br><br>\n"
 "<i>Ole varovainen sidottujen nuottien kanssa matriisissa.  Ei ole ilmeistä "
-"että ne ovat sidottuja, ja jos katkaiset nuottiparin sidoksen, seuraava "
+"että ne ovat sidottuja ja jos katkaiset nuottiparin sidoksen seuraava "
 "nuottinäkymä voi mennä onnettomasti sekaisin.  Tämä on vanha "
 "ohjelmointivirhe, joka on ollut meidän TODO (tehtävänä) -listallamme "
 "vuosia.  Pahoittelut siitä.  Korjaukset ovat tervetulleita.</i>\n"
@@ -11138,7 +11138,7 @@ msgstr ""
 "nuotteja,\n"
 "nämä uudet nuotit soivat koko niiden kirjoitetun keston verran. "
 "Sekoittaaksesi\n"
-"nämä uudet nuotit ihmisesitykseen, valitse ne, ja aseta <b>Sovita -> "
+"nämä uudet nuotit ihmisesitykseen valitse ne ja aseta <b>Sovita -> "
 "Tulkitse...</b>\n"
 " nuottinäkymästä tulkitaksesi minkä tahansa merkin ja hieroaksesi niiden\n"
 "esityskestoa hieman vähemmän mekaaniseksi.</p>\n"
@@ -11190,7 +11190,7 @@ msgid ""
 msgstr ""
 "<p>...että Rosegardenissa on nyt raidan ominaisuudet kun <b>Luodaan osa:</b> "
 "tietyillä\n"
-"ominaisuuksilla.<br><br>Voita esivalita avaimen, sävelkorkeuden, värin, ja "
+"ominaisuuksilla.<br><br>Voita esivalita avaimen, sävelkorkeuden, värin sekä "
 "määritellä\n"
 "korkeimmat ja alimmat soitettavat nuotit (nuotit tämän alueen ulkopuolella "
 "näkyvät\n"
@@ -11218,7 +11218,7 @@ msgstr ""
 "ominaisuuksista, jotka kuvaavat yli 300\n"
 "maailmalta löytyvää musiikki-instrumenttia, ryhmiteltyinä muutamaan "
 "sopivaan\n"
-"luokkaan.<br><br>Kukin esiasetus sisältää avaimen, sävelkorkeuden, ja "
+"luokkaan.<br><br>Kukin esiasetus sisältää avaimen, sävelkorkeuden ja "
 "soittoääniala-\n"
 "ehdotuksen sekä harrastelija- että ammattilaissoittajille.<br><br>Napauta \n"
 "<b>Lataa</b>-painiketta uuden raidan ominaisuuslaatikossa aloittaaksesi! <i> "
@@ -11246,7 +11246,7 @@ msgstr ""
 "nimi yhteen viivastoon?<br><br>Jos esimerkiksi yhdessä osassa on kolme "
 "ääntä, kirjoita kukin ääni riippumattomaan osaan/viivastoon, kukin eri "
 "raidalle.   Anna kaikille\n"
-"kolmelle raidalle sama nimi, ja valitse <b>[x] Yhdistä raidat joilla on sama "
+"kolmelle raidalle sama nimi ja valitse <b>[x] Yhdistä raidat joilla on sama "
 "nimi<b>\n"
 "valintaikkunasta, joka ilmestyy kun viet tai esikatselet LilyPondilla."
 "<br><br>\n"
@@ -11262,7 +11262,7 @@ msgid ""
 msgstr ""
 " \t \n"
 "<p>...että voit käyttää hiiren rullaa vierittääksesi ylös ja alas, "
-"vasemmalle ja oikealle, ja lähentääksesi ja loitontaaksesi?<br><br>Pyöritä "
+"vasemmalle ja oikealle sekä lähentääksesi ja loitontaaksesi?<br><br>Pyöritä "
 "vain rullaa vierittääksesi ylös tai alas.  PIdä myös Alt pohjassa "
 "vierittääksesi vasemmalle tai oikealle, tai pidä Ctrl pohjassa lähentääksesi "
 "tai loitontaaksesi.</p> \t \n"
@@ -11295,7 +11295,7 @@ msgstr ""
 "äänitiedoston hallinnasta ja pudottamalla sen Rosegarden-osien kankaaseen?  "
 "(Tarkista että pudotit sen ääniraidalle!)<br><br>Voit myös pudottaa "
 "äänitiedostot Rosegardenin äänitiedostojen hallintaikkunasta osien "
-"kankaaseen, ja muista ohjelmista äänitiedojen hallintaan</p>\n"
+"kankaaseen ja muista ohjelmista äänitiedojen hallintaan</p>\n"
 
 #: ../docs/en/tips.cpp:317
 msgid ""
