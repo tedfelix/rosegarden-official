@@ -118,6 +118,9 @@ NoteInserter::NoteInserter(NotationView* view)
 
     connect(m_parentView, SIGNAL(changeAccidental(Accidental, bool)),
             this, SLOT(slotSetAccidental(Accidental, bool)));
+
+    // Push down the default RadioAction on Accidentals.
+    m_parentView->actionCollection()->action("no_accidental")->activate();
 }
 
 NoteInserter::NoteInserter(const QString& menuName, NotationView* view)
@@ -132,6 +135,9 @@ NoteInserter::NoteInserter(const QString& menuName, NotationView* view)
 {
     connect(m_parentView, SIGNAL(changeAccidental(Accidental, bool)),
             this, SLOT(slotSetAccidental(Accidental, bool)));
+
+    // Push down the default RadioAction on Accidentals.
+    m_parentView->actionCollection()->action("no_accidental")->activate();
 }
 
 NoteInserter::~NoteInserter()
