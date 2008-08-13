@@ -18,8 +18,8 @@
 
     <p>Rosegarden is an international project with contributors all
     over the world, and one way that people can contribute is by
-    providing and maintaining translations of the GUI into other
-    languages than its original English.</p>
+    providing and maintaining translations of the GUI into languages
+    other than its original English.</p>
 
     <br>
     <div align="center"><img src="languages.png"/></div>
@@ -30,10 +30,12 @@
     work of...</p>
 
     <p>Alexandre Prokoudine &ndash; Russian<br>
-    Pedro Lopez-Cabanillas, Marcos Guglielmetti, Lisandro Dami&aacute;n Nicanor P&eacute;rez Meyer, Javier Castrillo, Lucas Godoy &ndash; Spanish<br>
+    Pedro Lopez-Cabanillas, Marcos Guglielmetti, Lisandro Dami&aacute;n Nicanor
+    P&eacute;rez Meyer, Javier Castrillo, Lucas Godoy, D. Michael
+    McIntyre &ndash; Spanish<br>
     J&ouml;rg Schumann &ndash; German<br>
     Kevin Donnelly &ndash; Welsh<br>
-    Didier Burli &ndash; French<br>
+    Didier Burli, Yves Guillemot &ndash; French<br>
     Daniele Medri, Alessandro Musesti &ndash; Italian<br>
     Stefan Asserh&auml;ll &ndash; Swedish<br>
     Hasso Tepper &ndash; Estonian<br>
@@ -42,6 +44,10 @@
     Liu Songhe &ndash; Chinese (simplified)<br>
     Jan B&iacute;na &ndash; Czech<br>
     Quim Perez i Noguer, Feliu Ferrer &ndash; Catalan<br>
+    Heikki Junes &ndash; Finnish<br>
+    Hasso Tepper &ndash; Estonian<br>
+    Citra Paska &dash; Indonesian<br>
+
 
     <p>Is your language on that list?  If not, perhaps you or somebody
     you know might be able to maintain a translation.</p>
