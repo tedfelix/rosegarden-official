@@ -92,14 +92,17 @@ SetLyricsCommand::execute()
     Composition *comp = m_segment->getComposition();
     int barNo = comp->getBarNumber(m_segment->getStartTime());
 
-    for (QStringList::Iterator bsi = barStrings.begin();
-            bsi != barStrings.end(); ++bsi) {
+    QStringList::Iterator bsi = barStrings.begin();
+    while ( bsi != barStrings.end() ) {
+	++bsi; // update here in order to check whether we are in the last bar string
+        bool isLastBSI = (bsi == barStrings.end());
 
         NOTATION_DEBUG << "Parsing lyrics for bar number " << barNo << ": \"" << *bsi << "\"" << endl;
 
         std::pair<timeT, timeT> barRange = comp->getBarRange(barNo++);
         QString syllables = *bsi;
         syllables.replace(QRegExp("\\[\\d+\\] "), " ");
+        syllables.replace(QRegExp("\n"), " ");
         QStringList syllableList = QStringList::split(" ", syllables); // no empties
 
         i = m_segment->findTime(barRange.first);
@@ -108,8 +111,11 @@ SetLyricsCommand::execute()
         for (QStringList::Iterator ssi = syllableList.begin();
                 ssi != syllableList.end(); ++ssi) {
 
+	    // As a rule, syllables belong to a certain bar. However, from the
+	    // last barString list syllables may flow to the following bars.
+	    // As a result, one may copy&paste the full syllable list of a verse.
             while (m_segment->isBeforeEndMarker(i) &&
-                    (*i)->getAbsoluteTime() < barRange.second &&
+                    (isLastBSI || (*i)->getAbsoluteTime() < barRange.second) &&
                     (!(*i)->isa(Note::EventType) ||
                      (*i)->getNotationAbsoluteTime() <= laterThan ||
                      ((*i)->has(TIED_BACKWARD) &&
