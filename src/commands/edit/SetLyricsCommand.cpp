@@ -94,9 +94,6 @@ SetLyricsCommand::execute()
 
     QStringList::Iterator bsi = barStrings.begin();
     while ( bsi != barStrings.end() ) {
-	++bsi; // update here in order to check whether we are in the last bar string
-        bool isLastBSI = (bsi == barStrings.end());
-
         NOTATION_DEBUG << "Parsing lyrics for bar number " << barNo << ": \"" << *bsi << "\"" << endl;
 
         std::pair<timeT, timeT> barRange = comp->getBarRange(barNo++);
@@ -107,6 +104,9 @@ SetLyricsCommand::execute()
 
         i = m_segment->findTime(barRange.first);
         timeT laterThan = barRange.first - 1;
+
+	++bsi; // update here in order to check whether we are in the last bar string
+        bool isLastBSI = (bsi == barStrings.end());
 
         for (QStringList::Iterator ssi = syllableList.begin();
                 ssi != syllableList.end(); ++ssi) {
