@@ -1,18 +1,19 @@
-# translation of new-new-fr.po to français
+# translation of fr.po to
 # This file is distributed under the same license as the PACKAGE package.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 #
 # Guillaume Laurent <glaurent@telegraph-road.org>, 2003.
 # Burli <didierburli@hotmail.com>, 2003,2004.
 # Yves Guillemot <yc.guillemot@wanadoo.fr>, 2007, 2008.
+# D. Michael McIntyre <michael.mcintyre@rosegardenmusic.com>, 2008.
 msgid ""
 msgstr ""
-"Project-Id-Version: new-new-fr\n"
+"Project-Id-Version: fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-08-12 21:06-0400\n"
-"PO-Revision-Date: 2008-04-13 16:58+0200\n"
-"Last-Translator: Yves Guillemot <yc.guillemot@wanadoo.fr>\n"
-"Language-Team: français <fr@li.org>\n"
+"PO-Revision-Date: 2008-08-18 09:38-0400\n"
+"Last-Translator: D. Michael McIntyre <michael.mcintyre@rosegardenmusic.com>\n"
+"Language-Team:  <en@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -685,14 +686,12 @@ msgid "Device"
 msgstr "Périphérique"
 
 #: ../src/gui/dialogs/ManageMetronomeDialog.cpp:97
-#, fuzzy
 msgid "%1 - %2"
-msgstr "%1 %2"
+msgstr "%1 - %2"
 
 #: ../src/gui/dialogs/ManageMetronomeDialog.cpp:99
-#, fuzzy
 msgid "%1 - No connection"
-msgstr "Pas de connexion"
+msgstr "%1 - Pas de connexion"
 
 #: ../src/gui/configuration/HeadersConfigurationPage.cpp:105
 #: ../src/gui/dialogs/ManageMetronomeDialog.cpp:107
@@ -779,9 +778,8 @@ msgid "Recording"
 msgstr "Enregistrement"
 
 #: ../src/gui/dialogs/ManageMetronomeDialog.cpp:252
-#, fuzzy
 msgid "Synth plugin "
-msgstr "Greffons de synthétiseurs"
+msgstr "Greffon de synthétiseur"
 
 #: ../src/gui/dialogs/IdentifyTextCodecDialog.cpp:116
 #: ../src/gui/dialogs/ManageMetronomeDialog.cpp:281
@@ -1417,8 +1415,7 @@ msgid "Change key for selection"
 msgstr "Modifier l'armature"
 
 #: ../src/gui/dialogs/IntervalDialog.cpp:82
-msgid ""
-"Adjust segment transposition in opposite direction (maintain audible pitch)"
+msgid "Adjust segment transposition in opposite direction (maintain audible pitch)"
 msgstr ""
 "Ajuster en sens inverse la transposition du segment (conserver la hauteur "
 "des notes entendues)"
@@ -1689,9 +1686,8 @@ msgid "Add Verse"
 msgstr "Ajouter un vers"
 
 #: ../src/gui/dialogs/LyricEditDialog.cpp:65
-#, fuzzy
 msgid "Remove Verse"
-msgstr "Enlever les déclencheurs"
+msgstr "Enlever vers"
 
 #: ../src/gui/dialogs/LyricEditDialog.cpp:271
 #, c-format
@@ -2021,14 +2017,13 @@ msgstr "Entrer la nouvelle étiquette"
 
 #: ../src/gui/application/RosegardenGUIView.cpp:1526
 #: ../src/gui/dialogs/AudioManagerDialog.cpp:1074
-#, fuzzy
 msgid "importing a remote audio file"
-msgstr "Importation d'un fichier audio..."
+msgstr "Importation d'un fichier audio"
 
 #: ../src/gui/application/RosegardenGUIView.cpp:1528
 #: ../src/gui/dialogs/AudioManagerDialog.cpp:1076
 msgid "importing an audio file that needs to be converted or resampled"
-msgstr ""
+msgstr "importation d'un fichier audio qui a besoin d'être transformé"
 
 #: ../src/gui/application/RosegardenGUIView.cpp:1531
 #: ../src/gui/dialogs/AudioManagerDialog.cpp:1079
@@ -2123,8 +2118,7 @@ msgstr "Changer la durée de la composition"
 
 #: ../src/gui/dialogs/CompositionLengthDialog.cpp:43
 msgid "Set the Start and End bar markers for this Composition"
-msgstr ""
-"Définition des numéros des première et dernière mesures de cette composition"
+msgstr "Définition des numéros des première et dernière mesures de cette composition"
 
 #: ../src/gui/dialogs/CompositionLengthDialog.cpp:47
 msgid "Start Bar"
@@ -2238,8 +2232,7 @@ msgstr "<pas de module externe>"
 
 #: ../src/gui/dialogs/AudioPluginDialog.cpp:420
 msgid "This plugin has too many controls to edit here."
-msgstr ""
-"Ce greffon a trop de paramètres pour qu'il soit possible de les modifier ici."
+msgstr "Ce greffon a trop de paramètres pour qu'il soit possible de les modifier ici."
 
 #: ../src/gui/dialogs/AudioPluginDialog.cpp:431
 #, c-format
@@ -2285,8 +2278,7 @@ msgstr "Bémol - valeur à %1"
 
 #: ../src/gui/dialogs/EventParameterDialog.cpp:63
 msgid "Alternating - set %1 to max and min on alternate events"
-msgstr ""
-"Alternance - alterner %1 entre max et min à chacun des événements successifs"
+msgstr "Alternance - alterner %1 entre max et min à chacun des événements successifs"
 
 #: ../src/gui/dialogs/EventParameterDialog.cpp:67
 msgid "Crescendo - set %1 rising from min to max"
@@ -2572,7 +2564,7 @@ msgstr ""
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:259
 msgid "Interpret chord texts as lead sheet chord names"
-msgstr ""
+msgstr "Interprêter les textes d'accord comme noms d'accord en format «lead sheet»"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:265
 msgid "Miscellaneous options"
@@ -3651,8 +3643,7 @@ msgid "</ul>"
 msgstr "</ul>"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:4584
-msgid ""
-"<p>To fix this, you should install the following additional programs:</p>"
+msgid "<p>To fix this, you should install the following additional programs:</p>"
 msgstr ""
 "<p>Pour corriger ceci, vous devriez installer les programmes supplémentaires "
 "suivants:</p>"
@@ -3902,16 +3893,14 @@ msgstr "Insertion d'événements MIDI \"panique\" pour transmission..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:7701
 msgid "Are you sure you want to save this as your default studio?"
-msgstr ""
-"Confirmez-vous l'enregistrement de ceci en tant que studio par défaut ?"
+msgstr "Confirmez-vous l'enregistrement de ceci en tant que studio par défaut ?"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:7706
 msgid "Saving current document as default studio..."
 msgstr "Enregistrement du Studio par défaut..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:7731
-msgid ""
-"Are you sure you want to import your default studio and lose the current one?"
+msgid "Are you sure you want to import your default studio and lose the current one?"
 msgstr ""
 "Confirmez-vous l'importation du studio par défaut et la perte du studio "
 "courant?"
@@ -4342,8 +4331,7 @@ msgstr ""
 "peut améliorer les performances de Rosegarden."
 
 #: ../src/gui/seqmanager/SequenceManager.cpp:1024
-msgid ""
-"Run out of processor power for real-time audio processing.  Cannot continue."
+msgid "Run out of processor power for real-time audio processing.  Cannot continue."
 msgstr ""
 "Le processeur ne dispose plus d'assez de puissance pour effectuer en temps "
 "réel le traitement audio demandé.  Impossible de continuer."
@@ -4363,8 +4351,7 @@ msgid "JACK Audio subsystem is losing sample frames."
 msgstr "Le sous-système JACK audio perd des samples."
 
 #: ../src/gui/seqmanager/SequenceManager.cpp:1089
-msgid ""
-"Failed to read audio data from disc in time to service the audio subsystem."
+msgid "Failed to read audio data from disc in time to service the audio subsystem."
 msgstr ""
 "La lecture des données audio depuis le disque n'est pas assez rapide pour le "
 "sous-système audio."
@@ -5120,7 +5107,7 @@ msgstr "Jamais"
 
 #: ../src/gui/configuration/GeneralConfigurationPage.cpp:129
 msgid "Append suffixes to segment labels"
-msgstr ""
+msgstr "Annexer suffixes aux étiquettes de segment"
 
 #: ../src/gui/configuration/GeneralConfigurationPage.cpp:142
 msgid "Use JACK transport"
@@ -5228,8 +5215,7 @@ msgstr "Numéro de l'octave de base pour l'affichage de la hauteur MIDI"
 
 #: ../src/gui/configuration/MIDIConfigurationPage.cpp:100
 msgid "Always use default studio when loading files"
-msgstr ""
-"Toujours utiliser le studio par défaut lors de l'ouverture d'un fichier"
+msgstr "Toujours utiliser le studio par défaut lors de l'ouverture d'un fichier"
 
 #: ../src/gui/configuration/MIDIConfigurationPage.cpp:112
 msgid "Send all MIDI Controllers at start of each playback"
@@ -5312,8 +5298,7 @@ msgstr "Esclave MTC"
 
 #: ../src/gui/configuration/MIDIConfigurationPage.cpp:274
 msgid "Automatically connect sync output to all devices in use"
-msgstr ""
-"Connexion automatique de la sortie synchro à tous les périphériques utilisés"
+msgstr "Connexion automatique de la sortie synchro à tous les périphériques utilisés"
 
 #: ../src/gui/configuration/MIDIConfigurationPage.cpp:285
 msgid "MIDI Sync"
@@ -5481,9 +5466,8 @@ msgstr "Espacement par défaut"
 
 #: ../src/gui/configuration/NotationConfigurationPage.cpp:106
 #: ../src/gui/configuration/NotationConfigurationPage.cpp:130
-#, fuzzy
 msgid "%1 % (normal)"
-msgstr "normale"
+msgstr "%1 % (normale)"
 
 #: ../src/gui/configuration/NotationConfigurationPage.cpp:118
 msgid "Default duration factor"
@@ -5555,8 +5539,7 @@ msgstr "Quand on insère des notes..."
 
 #: ../src/gui/configuration/NotationConfigurationPage.cpp:287
 msgid "Split notes into ties to make durations match"
-msgstr ""
-"Séparer les notes et les lier pour les rendre compatibles avec la mesure"
+msgstr "Séparer les notes et les lier pour les rendre compatibles avec la mesure"
 
 #: ../src/gui/configuration/NotationConfigurationPage.cpp:288
 msgid "Ignore existing durations"
@@ -5912,8 +5895,7 @@ msgid "Export..."
 msgstr "Exporter..."
 
 #: ../src/gui/studio/BankEditorDialog.cpp:169
-msgid ""
-"Import Bank and Program data from a Rosegarden file to the current Device"
+msgid "Import Bank and Program data from a Rosegarden file to the current Device"
 msgstr ""
 "Importer les banques et programmes d'un fichier Rosegarden vers le "
 "périphérique courant"
@@ -5928,13 +5910,11 @@ msgstr ""
 
 #: ../src/gui/studio/BankEditorDialog.cpp:183
 msgid "Copy all Program names from current Bank to clipboard"
-msgstr ""
-"Copier les noms des programmes de la banque courante vers le presse-papiers"
+msgstr "Copier les noms des programmes de la banque courante vers le presse-papiers"
 
 #: ../src/gui/studio/BankEditorDialog.cpp:187
 msgid "Paste Program names from clipboard to current Bank"
-msgstr ""
-"Coller les noms de programmes du presse-papiers vers la banque courante"
+msgstr "Coller les noms de programmes du presse-papiers vers la banque courante"
 
 #: ../src/gui/studio/BankEditorDialog.cpp:209
 msgid "Show Variation list based on "
@@ -6067,8 +6047,7 @@ msgstr ""
 
 #: ../src/gui/studio/DeviceManagerDialog.cpp:128
 msgid "Export Bank and Controller data to a Rosegarden interchange file"
-msgstr ""
-"Exporter les banques et les contrôleurs vers un fichier d'échange Rosegarden"
+msgstr "Exporter les banques et les contrôleurs vers un fichier d'échange Rosegarden"
 
 #: ../src/gui/studio/DeviceManagerDialog.cpp:131
 msgid "View and edit Banks and Programs for the selected device"
@@ -6419,8 +6398,7 @@ msgstr ""
 
 #: ../src/gui/editors/segment/segmentcanvas/SegmentResizer.cpp:377
 #: ../src/gui/editors/segment/segmentcanvas/SegmentSelector.cpp:500
-msgid ""
-"Click and drag to resize a segment; hold Ctrl as well to rescale its contents"
+msgid "Click and drag to resize a segment; hold Ctrl as well to rescale its contents"
 msgstr ""
 "Cliquer et glisser pour modifier la taille d'un segment; si la touche Ctrl "
 "est maintenue enfoncé, le contenu du segment sera également redimensionné"
@@ -6496,8 +6474,7 @@ msgstr ""
 "pour créer un segment en mode superposition."
 
 #: ../src/gui/editors/segment/TrackLabel.cpp:70
-msgid ""
-"Click and hold with left mouse button to assign this Track to an Instrument."
+msgid "Click and hold with left mouse button to assign this Track to an Instrument."
 msgstr ""
 "Cliquer avec le bouton gauche et le maintenir enfoncé pour assigner cette "
 "piste à un instrument."
@@ -7482,8 +7459,7 @@ msgstr "Cliquer et glisser pour redimensionner une note"
 
 #: ../src/gui/editors/matrix/MatrixSelector.cpp:610
 msgid "Click and drag to move note; hold Ctrl as well to copy"
-msgstr ""
-"Cliquer et glisser pour déplacer une note; maintenir Ctrl pressé pour copier"
+msgstr "Cliquer et glisser pour déplacer une note; maintenir Ctrl pressé pour copier"
 
 #: ../src/gui/editors/matrix/MatrixSelector.cpp:612
 msgid "Click and drag to copy note"
@@ -8521,8 +8497,7 @@ msgstr "Erreur: Nom introuvable %1"
 
 #: ../src/gui/editors/notation/FontViewFrame.cpp:101
 msgid "Warning: No good match for font name %1 (best is %2)"
-msgstr ""
-"Avertissement: Pas de résultat pour ce nom de police %1 (le meilleur est %2)"
+msgstr "Avertissement: Pas de résultat pour ce nom de police %1 (le meilleur est %2)"
 
 #: ../src/gui/editors/notation/FontViewFrame.cpp:109
 #, c-format
@@ -8650,8 +8625,7 @@ msgid "global element must precede note elements"
 msgstr "L'élément global doit précéder les éléments de note"
 
 #: ../src/gui/editors/notation/NoteStyleFileReader.cpp:130
-msgid ""
-"global and note elements may have shape or charname attribute, but not both"
+msgid "global and note elements may have shape or charname attribute, but not both"
 msgstr ""
 "Les éléments globaux et note peuvent avoir soit un attribut \"shape\", soit "
 "un attribut \"charname\", mais pas les deux"
@@ -9240,8 +9214,7 @@ msgstr "Importation d'un fichier audio..."
 
 #: ../src/sound/AudioFileManager.cpp:787
 msgid "Failed to convert or resample audio file on import"
-msgstr ""
-"Echec de la conversion ou du rééchantillonnage du fichier audio importé"
+msgstr "Echec de la conversion ou du rééchantillonnage du fichier audio importé"
 
 #: ../src/sequencer/main.cpp:39 ../src/sequencer/main.cpp:79
 msgid "RosegardenSequencer"
@@ -9321,9 +9294,8 @@ msgstr "Séparer le segment audio"
 #: ../src/commands/segment/SegmentSplitByRecordingSrcCommand.cpp:115
 #: ../src/commands/segment/SegmentSplitCommand.cpp:130
 #: ../src/commands/segment/SegmentSplitCommand.cpp:131
-#, fuzzy
 msgid "(split)"
-msgstr ".(séparé)"
+msgstr "(séparé)"
 
 #: ../src/commands/segment/SegmentLabelCommand.cpp:33
 msgid "Label Segments"
@@ -9340,9 +9312,8 @@ msgstr "Transposer par &intervalle..."
 
 #: ../src/commands/segment/AudioSegmentAutoSplitCommand.cpp:142
 #: ../src/commands/segment/SegmentAutoSplitCommand.cpp:143
-#, fuzzy
 msgid "(part %1)"
-msgstr "%1 (partie)"
+msgstr "(partie %1)"
 
 #: ../src/commands/segment/AudioSegmentInsertCommand.cpp:45
 #: ../src/commands/segment/SegmentInsertCommand.cpp:36
@@ -9351,9 +9322,8 @@ msgid "Create Segment"
 msgstr "Créer Segment"
 
 #: ../src/commands/segment/AudioSegmentInsertCommand.cpp:107
-#, fuzzy
 msgid "(inserted)"
-msgstr "%1 (inséré)"
+msgstr "(inséré)"
 
 #: ../src/commands/segment/AudioSegmentInsertCommand.cpp:109
 msgid "unknown audio file"
@@ -9381,14 +9351,12 @@ msgid "Change Segment Color..."
 msgstr "Changer la couleur du segment..."
 
 #: ../src/commands/segment/SegmentSplitByPitchCommand.cpp:164
-#, fuzzy
 msgid "(upper)"
-msgstr "%1 (plus haut)"
+msgstr "(plus haut)"
 
 #: ../src/commands/segment/SegmentSplitByPitchCommand.cpp:165
-#, fuzzy
 msgid "(lower)"
-msgstr "%1 (plus bas)"
+msgstr "(plus bas)"
 
 #: ../src/commands/segment/SegmentSingleRepeatToCopyCommand.cpp:32
 msgid "Turn Single Repeat into Copy"
@@ -9497,9 +9465,8 @@ msgid "Sync segment clef"
 msgstr "Synchroniser la clef du segment"
 
 #: ../src/commands/segment/SegmentSplitTwiceCommand.cpp:45
-#, fuzzy
 msgid "Split Twice Segment"
-msgstr "Séparer le segment"
+msgstr "Séparer le segment deux fois"
 
 #: ../src/commands/matrix/MatrixInsertionCommand.cpp:39
 #: ../src/commands/notation/NoteInsertionCommand.cpp:47
@@ -9532,13 +9499,11 @@ msgstr "Effacer des événements existants pour faire de la place [\"simple\"]"
 
 #: ../src/commands/edit/PasteEventsCommand.cpp:95
 msgid "Move existing events out of the way [\"open-n-paste\"]"
-msgstr ""
-"Pousser les événements existants pour faire de la place [\"open-n-paste\"]"
+msgstr "Pousser les événements existants pour faire de la place [\"open-n-paste\"]"
 
 #: ../src/commands/edit/PasteEventsCommand.cpp:97
 msgid "Overlay notes, tying against present notes [\"note-overlay\"]"
-msgstr ""
-"Laisser les notes se chevaucher, les lier aux autres notes [\"note-overlay\"]"
+msgstr "Laisser les notes se chevaucher, les lier aux autres notes [\"note-overlay\"]"
 
 #: ../src/commands/edit/PasteEventsCommand.cpp:99
 msgid "Overlay notes, ignoring present notes [\"matrix-overlay\"]"
@@ -10302,9 +10267,8 @@ msgstr "Insérer un enregistrement Midi"
 
 #: ../src/document/RosegardenGUIDoc.cpp:2557
 #: ../src/document/RosegardenGUIDoc.cpp:2637
-#, fuzzy
 msgid "(recorded)"
-msgstr "%1 (enregistré)"
+msgstr "(enregistré)"
 
 #: ../src/document/RoseXmlHandler.cpp:436
 msgid ""
@@ -10529,9 +10493,9 @@ msgid "Convert"
 msgstr "Convertir"
 
 #: rc.cpp:201
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Velocities"
-msgstr "Vélocité:"
+msgstr "Vélocités:"
 
 #: rc.cpp:204
 #, no-c-format
@@ -10646,8 +10610,7 @@ msgstr "Panique"
 #: rc.cpp:371
 #, no-c-format
 msgid "Resets all MIDI devices if you've got stuck notes"
-msgstr ""
-"Mise à zèro de tous les périphériques. MIDI si vous avez des notes bloquées"
+msgstr "Mise à zèro de tous les périphériques. MIDI si vous avez des notes bloquées"
 
 #: rc.cpp:378
 #, no-c-format
@@ -11649,14 +11612,3 @@ msgstr "Mensurale"
 msgid "Triangle"
 msgstr "Triangle"
 
-#~ msgid "%1 (rescaled)"
-#~ msgstr "%1 (redimensionné)"
-
-#~ msgid "%1 (split)"
-#~ msgstr "%1 (coupé)"
-
-#~ msgid "%1 (copied)"
-#~ msgstr "%1 (copié)"
-
-#~ msgid "%1 (autosplit %2)"
-#~ msgstr "%1 (sépar. auto %2)"
