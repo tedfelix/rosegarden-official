@@ -115,10 +115,15 @@ LyricEditDialog::slotRemoveVerse()
     for (int i = 0; i < m_currentVerse; ++i) ++itr;
 
     std::cerr << "text being deleted is: " << *itr << std::endl;
-    m_texts.erase(itr);
-
-    m_verseCount--;
-    if (m_currentVerse == m_verseCount) m_currentVerse--;
+    if (m_verseCount > 1) {
+        m_texts.erase(itr);
+        m_verseCount--;
+        if (m_currentVerse == m_verseCount) m_currentVerse--;
+    } else {
+        std::cerr << "deleting last verse" << std::endl;
+        m_texts.clear();
+        m_texts.push_back(m_skeleton);
+    }
     verseDialogRepopulate();
 }
 
@@ -276,7 +281,7 @@ LyricEditDialog::verseDialogRepopulate()
     else
         m_verseAddButton->setEnabled(true);
 
-    if (m_verseCount == 1)
+    if (m_verseCount == 0)
         m_verseRemoveButton->setEnabled(false);
     else
         m_verseRemoveButton->setEnabled(true);
