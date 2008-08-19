@@ -77,6 +77,8 @@ LyricEditDialog::LyricEditDialog(QWidget *parent,
     unparse();
     verseDialogRepopulate();
 
+    m_textEdit->setCursorPosition(0,0);
+    m_textEdit->setFocus();
 }
 
 void
