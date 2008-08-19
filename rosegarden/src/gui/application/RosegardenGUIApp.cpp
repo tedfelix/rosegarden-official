@@ -4538,7 +4538,7 @@ void RosegardenGUIApp::slotTestStartupTester()
                  KXMLGUIClient::StateNoReverse : KXMLGUIClient::StateReverse);
 
     if (!have) {
-        missingFeatures.push_back("Notation previews through LilyPond");
+        missingFeatures.push_back(i18n("Notation previews through LilyPond"));
         if (missing.count() == 0) {
             allMissing.push_back(i18n("The Rosegarden LilyPondView helper script"));
         } else {
@@ -4558,7 +4558,7 @@ void RosegardenGUIApp::slotTestStartupTester()
         m_haveAudioImporter = m_startupTester->haveAudioFileImporter(&missing);
 
         if (!m_haveAudioImporter) {
-            missingFeatures.push_back("General audio file import and conversion");
+            missingFeatures.push_back(i18n("General audio file import and conversion"));
             if (missing.count() == 0) {
                 allMissing.push_back(i18n("The Rosegarden Audio File Importer helper script"));
             } else {
