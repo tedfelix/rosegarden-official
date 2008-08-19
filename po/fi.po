@@ -7516,7 +7516,7 @@ msgstr "tiedostoa '%1' ei voitu avata"
 
 #: ../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp:421
 #, c-format
-msgid "couldn't parse chord dictionnary : %1"
+msgid "couldn't parse chord dictionary : %1"
 msgstr "ei voitu jäsentää sointukirjastoa : %1"
 
 #: ../src/gui/editors/notation/NoteFontViewer.cpp:80

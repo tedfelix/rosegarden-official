@@ -418,7 +418,7 @@ GuitarChordSelectorDialog::parseChordFile(const QString& chordFileName)
     NOTATION_DEBUG << "GuitarChordSelectorDialog::parseChordFile() parsing " << chordFileName << endl;
     reader.parse(source);
     if (!ok)
-        KMessageBox::error(0, i18n("couldn't parse chord dictionnary : %1").arg(handler.errorString()));
+        KMessageBox::error(0, i18n("couldn't parse chord dictionary : %1").arg(handler.errorString()));
     
 }
 
