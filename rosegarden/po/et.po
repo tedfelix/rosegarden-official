@@ -7640,7 +7640,7 @@ msgstr "Faili '%1' pole võimalik avada."
 
 #: ../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp:421
 #, c-format
-msgid "couldn't parse chord dictionnary : %1"
+msgid "couldn't parse chord dictionary : %1"
 msgstr ""
 
 #: ../src/gui/editors/notation/NoteFontViewer.cpp:80

@@ -7551,7 +7551,7 @@ msgstr "no se ha podido abrir el archivo '%1'"
 
 #: ../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp:421
 #, c-format
-msgid "couldn't parse chord dictionnary : %1"
+msgid "couldn't parse chord dictionary : %1"
 msgstr "no se ha podido interpretar el diccionario de acordes : '%1'"
 
 #: ../src/gui/editors/notation/NoteFontViewer.cpp:80
