@@ -436,6 +436,16 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     if (m_view) {
         connect(m_seqManager, SIGNAL(controllerDeviceEventReceived(MappedEvent *)),
                 m_view, SLOT(slotControllerDeviceEventReceived(MappedEvent *)));
+                
+                
+		
+		MIDIInstrumentParameterPanel *mipp;
+		mipp = m_instrumentParameterBox->getMIDIInstrumentParameterPanel();
+		if(! mipp){
+			RG_DEBUG << "Error: m_instrumentParameterBox->getMIDIInstrumentParameterPanel() is NULL in RosegardenGUIApp.cpp 445 \n";
+		}
+		connect(m_seqManager, SIGNAL(signalSelectProgramNoSend(int)), (QObject*)mipp, SLOT(slotSelectProgramNoSend(int)) );
+                
     }
 
     if (m_seqManager->getSoundDriverStatus() & AUDIO_OK) {

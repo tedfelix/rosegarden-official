@@ -134,6 +134,15 @@ InstrumentParameterBox::~InstrumentParameterBox()
     }
 }
 
+
+MIDIInstrumentParameterPanel * 
+    InstrumentParameterBox::getMIDIInstrumentParameterPanel()
+{
+	if (!m_midiInstrumentParameters) return 0;
+	return m_midiInstrumentParameters;
+}
+
+
 Instrument *
 InstrumentParameterBox::getSelectedInstrument()
 {
