@@ -85,6 +85,7 @@
 #include <qvbox.h>
 #include <qwidget.h>
 
+#include "gui/editors/parameters/MIDIInstrumentParameterPanel.h"
 
 namespace Rosegarden
 {
@@ -1062,7 +1063,12 @@ void RosegardenGUIView::slotUpdateInstrumentParameterBox(int id)
     // Reset the instrument
     //
     m_instrumentParameterBox->useInstrument(instrument);
-
+    
+    // set prog-change select-box unchecked (if selected TrackChanged)
+    MIDIInstrumentParameterPanel *mipp;
+    mipp = m_instrumentParameterBox->getMIDIInstrumentParameterPanel();
+    mipp->slotToggleChangeListOnProgChange(false);
+    
     // Then do this instrument/track fiddling
     //
     /*

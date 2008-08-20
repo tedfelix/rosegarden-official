@@ -915,6 +915,16 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 
     MappedComposition::const_iterator i;
 
+    // before applying through-filter, catch prog-change-msg
+    int prg;
+    for (i = mC.begin(); i != mC.end(); ++i ) {
+			if ((*i)->getType() == MappedEvent::MidiProgramChange) {
+				// this selects the program-list entry on prog-change-messages 
+				prg = (*i)->getData1();
+				emit signalSelectProgramNoSend( prg );
+			}
+    }
+    
     // Thru filtering is done at the sequencer for the actual sound
     // output, but here we need both filtered (for OUT display) and
     // unfiltered (for insertable note callbacks) compositions, so
@@ -969,7 +979,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                 m_doc->finalizeAudioFile((int)(*i)->getData1() +
                                          (int)(*i)->getData2() * 256);
             }
-
+            
             if ((*i)->getType() ==
                 MappedEvent::SystemUpdateInstruments) {
                 // resync Devices and Instruments

@@ -209,6 +209,7 @@ public slots:
     void update();
 
 signals:
+    void signalSelectProgramNoSend(int);
     void setProgress(int);
     void incrementProgress(int);
 

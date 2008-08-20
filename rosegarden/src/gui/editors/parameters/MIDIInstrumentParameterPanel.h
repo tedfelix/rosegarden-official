@@ -54,12 +54,15 @@ public:
     virtual void setupForInstrument(Instrument*);
 
     void showAdditionalControls(bool showThem);
+    
+    void slotToggleChangeListOnProgChange(bool val);
 
 signals:
     void changeInstrumentLabel(InstrumentId id, QString label);
     void instrumentParametersChanged(InstrumentId);
 
 public slots:
+    void slotSelectProgramNoSend(int prog);
     void slotSelectProgram(int index);
     void slotSelectBank(int index);
     void slotSelectVariation(int index);
@@ -107,10 +110,12 @@ protected:
     QCheckBox          *m_bankCheckBox;
     QCheckBox          *m_variationCheckBox;
     QCheckBox          *m_programCheckBox;
+    QCheckBox          *m_evalMidiPrgChgCheckBox;
 
     QLabel             *m_bankLabel;
     QLabel             *m_variationLabel;
     QLabel             *m_programLabel;
+    QLabel             *m_evalMidiPrgChgLabel;
 
     QGridLayout        *m_mainGrid;
     QFrame             *m_rotaryFrame;

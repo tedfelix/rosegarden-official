@@ -61,9 +61,12 @@ public:
 
     void setDocument(RosegardenGUIDoc* doc);
     
+    MIDIInstrumentParameterPanel * getMIDIInstrumentParameterPanel();
+    
     virtual void showAdditionalControls(bool showThem);
 
     virtual QString getPreviousBox(RosegardenParameterArea::Arrangement) const;
+    
 
 public slots:
 
