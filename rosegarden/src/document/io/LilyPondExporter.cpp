@@ -1394,7 +1394,8 @@ LilyPondExporter::write()
 				    text += " ";
 			    
 		                    QString syllable(strtoqstr(ssyllable));
-		                    syllable.replace(QRegExp("\\s+"), "");
+		                    syllable.replace(QRegExp("^\\s+"), "");
+		                    syllable.replace(QRegExp("\\s+$"), "");
 		                    syllable.replace(QRegExp("\""), "\\\"");
 		                    text += "\"" + syllable + "\"";
 		                    haveLyric = true;
