@@ -1820,6 +1820,10 @@ void MatrixView::slotInsertNoteFromAction()
         Accidentals::NoAccidental;
 
     timeT time(getInsertionTime());
+    if (time >= segment.getEndMarkerTime()) {
+        MATRIX_DEBUG << "WARNING: off end of segment" << endl;
+        return ;
+    }
     ::Rosegarden::Key key = segment.getKeyAtTime(time);
     Clef clef = segment.getClefAtTime(time);
 
