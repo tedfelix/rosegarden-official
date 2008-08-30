@@ -1473,6 +1473,9 @@ LilyPondExporter::write()
     if (m_chordNamesMode) {
         str << indent(col) << "\\context { \\GrandStaff \\accepts \"ChordNames\" }" << std::endl;
     }
+    if (m_exportLyrics) {
+        str << indent(col) << "\\context { \\GrandStaff \\accepts \"Lyrics\" }" << std::endl;
+    }
     str << indent(--col) << "}" << std::endl;
 
     // write initial tempo in Midi block, if user wishes (added per user request...
