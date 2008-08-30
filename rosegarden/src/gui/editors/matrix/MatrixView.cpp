@@ -1580,6 +1580,11 @@ MatrixView::slotSetInsertCursorPosition(timeT time, bool scroll)
     //!!! For now.  Probably unlike slotSetPointerPosition this one
     // should snap to the nearest event or grid line.
 
+    Segment &s = m_staffs[0]->getSegment();
+
+    if (time < s.getStartTime())     time = s.getStartTime();
+    if (time > s.getEndMarkerTime()) time = s.getEndMarkerTime();
+    
     m_staffs[0]->setInsertCursorPosition(m_hlayout, time);
 
     if (scroll && !getCanvasView()->isAutoScrolling()) {
