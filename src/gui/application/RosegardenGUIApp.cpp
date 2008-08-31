@@ -444,7 +444,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 		if(! mipp){
 			RG_DEBUG << "Error: m_instrumentParameterBox->getMIDIInstrumentParameterPanel() is NULL in RosegardenGUIApp.cpp 445 \n";
 		}
-		connect(m_seqManager, SIGNAL(signalSelectProgramNoSend(int)), (QObject*)mipp, SLOT(slotSelectProgramNoSend(int)) );
+		connect(m_seqManager, SIGNAL(signalSelectProgramNoSend(int,int,int)), (QObject*)mipp, SLOT(slotSelectProgramNoSend(int,int,int)) );
                 
     }
 
