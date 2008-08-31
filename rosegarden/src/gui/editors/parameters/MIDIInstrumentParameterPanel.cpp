@@ -982,7 +982,7 @@ MIDIInstrumentParameterPanel::slotSelectBank(int index)
 
 
 
-void MIDIInstrumentParameterPanel::slotSelectProgramNoSend(int prog)
+void MIDIInstrumentParameterPanel::slotSelectProgramNoSend(int prog, int bank_lsb, int bank_msb )
 {
     /*
      * This function changes the program-list entry, if
@@ -990,23 +990,60 @@ void MIDIInstrumentParameterPanel::slotSelectProgramNoSend(int prog)
      * 
      * (the slot is being connected in RosegardenGUIApp.cpp,
      *  and called (signaled) by SequenceManger.cpp)
+     * 
+     * parameters:
+     * prog : the program to select (triggered by program change message)
+     * bank_lsb : the bank to select (if no bank-select occured, this is -1)
+     *				(triggered by bank-select message (fine,lsb value))
+     * bank_msb : coarse/msb value  (-1 if not specified)
      */
     if( ! this->m_evalMidiPrgChgCheckBox->isChecked() ){
         return;
     }
-    
+	
+	
+	
+	
+	if (m_selectedInstrument == 0)
+		return ;
+
+	MidiDevice *md = dynamic_cast<MidiDevice*>
+			(m_selectedInstrument->getDevice());
+	
+	if (!md) {
+		RG_DEBUG << "WARNING: MIDIInstrumentParameterPanel::slotSelectBank: No MidiDevice for Instrument "
+				<< m_selectedInstrument->getId() << endl;
+		return ;
+	}
+	
+	bool changed_bank = false;
+	// bank msb value (MSB, coarse)
+	if ((bank_msb >= 0) ){ // and md->getVariationType() != MidiDevice::VariationFromMSB ) {
+		if (m_selectedInstrument->getMSB() != bank_msb ) {
+			m_selectedInstrument->setMSB( bank_msb );
+			changed_bank = true;
+		}
+	}	
+	// selection of bank (LSB, fine)
+	if ((bank_lsb >= 0) ){ //and md->getVariationType() != MidiDevice::VariationFromLSB) {
+		if (m_selectedInstrument->getLSB() != bank_lsb ) {
+			m_selectedInstrument->setLSB( bank_lsb );
+			changed_bank = true;
+		}
+	}
+	
     bool change = false;
-    if (m_selectedInstrument->getProgramChange() != (MidiByte)prog) {
+	if (m_selectedInstrument->getProgramChange() != (MidiByte)prog) {
         m_selectedInstrument->setProgramChange( (MidiByte)prog );
         change = true;
     }
     
-    populateVariationList();
+    //populateVariationList();
     
-    if (change) {
+    if (change or changed_bank) {
         //sendBankAndProgram();
-        emit changeInstrumentLabel( m_selectedInstrument->getId(),
-                    strtoqstr(m_selectedInstrument->getProgramName()) );
+        //emit changeInstrumentLabel( m_selectedInstrument->getId(),
+        //            strtoqstr(m_selectedInstrument->getProgramName()) );
         emit updateAllBoxes();
         
         emit instrumentParametersChanged(m_selectedInstrument->getId());

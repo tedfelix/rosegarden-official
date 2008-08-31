@@ -62,7 +62,7 @@ signals:
     void instrumentParametersChanged(InstrumentId);
 
 public slots:
-    void slotSelectProgramNoSend(int prog);
+    void slotSelectProgramNoSend(int prog, int bank_lsb, int bank_msb);
     void slotSelectProgram(int index);
     void slotSelectBank(int index);
     void slotSelectVariation(int index);
