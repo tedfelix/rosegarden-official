@@ -1198,8 +1198,21 @@ EditView::getPitchFromNoteInsertAction(QString name,
 	//
 	// Note: middle-C is in octave 5 + octaveBase (default = -2) = 3 (hjj)
 	//
+	int octavePosition = 3 + octave + clef.getOctave();
+	
+        // Keep the distance (clef position)-(1st note of scale) between 0...6 
+        // ( The table below is reused from base/NotationTypes.cpp )
+        static int pitchToHeight[2][12] =
+            {
+                { 0, 0, 1, 2, 2, 3, 3, 4, 5, 5, 6, 6 },
+                // a ., b, c, ., d, ., e, f, ., g, . 
+                { 0, 1, 1, 2, 2, 3, 4, 4, 5, 5, 6, 6 } 
+            };
+	int octaveAdjust = floor((2 + clef.getAxisHeight() - clef.getPitchOffset() -
+            pitchToHeight[key.isMinor()][key.getTonicPitch()]) / 7);
+	
         Pitch pitch
-        (scalePitch, 3 + octave + clef.getOctave(), key, accidental);
+        (scalePitch, octavePosition + octaveAdjust, key, accidental);
         return pitch.getPerformancePitch();
 
     } else {
