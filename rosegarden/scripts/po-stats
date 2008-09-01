@@ -60,14 +60,24 @@ echo -e "\nrosegarden.pot has $POT messages"
 echo -e "\nLang \t Total \t Done \t Fuzzy \tPending\t Status"
 echo -e   "---- \t ----- \t ---- \t ----- \t-------\t ------"
 
-W=0
+# For some reason, piping the result of the for loop to sort causes the value of
+# W to be lost.  I can't figure out how that's happening, but it is.  I get a
+# "Warning!" without ever seeing the explanatory text that's supposed to follow.
+#
+# So I'm going to do a crappy job of fixing it instead of working out something
+# more elegant
+#
+# W=0
+
+[ -f ".W" ]&&rm .W
 
 for P in *.po; do
     getValues $P
     MSG=""
     if [ $POT != $TOTAL ]; then
 	MSG="Warning!"
-	W=1
+	# W=1
+        touch .W
     fi
     BAR='['
     COUNT=0
@@ -83,8 +93,10 @@ for P in *.po; do
     echo -e "${P/.po/} \t $TOTAL \t $TRANSLATED \t $FUZZY \t$UNTRANSLATED\t $BAR \t $MSG"
 done | sort -k 3,3rn -k 1
 
-if [ $W == 1 ]; then
-    echo -e "\nSome translations have more or less messages than rosegarden.pot"
+# if [ $W == 1 ]; then
+if [ -f ".W" ]; then
+    echo -e "\nSome translations have a different number of messages than rosegarden.pot"
+    echo -e "\nThis probably means you need to run ./messages.sh to sort this out."
 fi
 
 echo -e "\nReport produced at $(date -R)"
