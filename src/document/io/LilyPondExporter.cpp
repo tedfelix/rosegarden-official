@@ -134,6 +134,7 @@ LilyPondExporter::readConfigVariables(void)
 
     m_languageLevel = cfg->readUnsignedNumEntry("lilylanguage", LILYPOND_VERSION_2_6);
     m_exportMarkerMode = cfg->readUnsignedNumEntry("lilyexportmarkermode", EXPORT_NO_MARKERS );
+    m_chordNamesMode = cfg->readBoolEntry("lilychordnamesmode", false);
 }
 
 LilyPondExporter::~LilyPondExporter()
@@ -703,6 +704,12 @@ LilyPondExporter::write()
 	    << std::endl;
     }
 
+    // Define exceptions for ChordNames context: c:3
+    if (m_chordNamesMode) {
+        str << "chExceptionMusic = { <c e>-\\markup { \\super \"3\"} }" << std::endl;
+        str << "chExceptions = #(append (sequential-music-to-chord-exceptions chExceptionMusic #t) ignatzekExceptions)" << std::endl;
+    }
+
     // Find out the printed length of the composition
     Composition::iterator i = m_composition->begin();
     if ((*i) == NULL) {
@@ -775,7 +782,7 @@ LilyPondExporter::write()
 
     // All the tempo changes are included in "globalTempo" context.
     // This context contains only skip notes between the tempo changes.
-    // First tempo marking should still be include in \midi{ } block.
+    // First tempo marking should still be include in \midi{ } block (prior to 2.10).
     // If tempo marks are printed in future, they should probably be
     // included in this context and the note duration in the tempo
     // mark should be according to the time signature. (hjj)
@@ -929,12 +936,12 @@ LilyPondExporter::write()
 		    str << indent(col++) << "\\context StaffGroup = \"" << staffGroupCounter++
 		        << "\" << " << std::endl; //indent+
 		} else if (bracket == Brackets::CurlyOn) {
-		    str << indent(col++) << "\\context PianoStaff = \"" << pianoStaffCounter++
+		    str << indent(col++) << "\\context GrandStaff = \"" << pianoStaffCounter++
 		        << "\" << " << std::endl; //indent+
 		} else if (bracket == Brackets::CurlySquareOn) {
 		    str << indent(col++) << "\\context StaffGroup = \"" << staffGroupCounter++
 		        << "\" << " << std::endl; //indent+
-		    str << indent(col++) << "\\context PianoStaff = \"" << pianoStaffCounter++
+		    str << indent(col++) << "\\context GrandStaff = \"" << pianoStaffCounter++
 		        << "\" << " << std::endl; //indent+
 		}
 
@@ -981,8 +988,6 @@ LilyPondExporter::write()
                         // close the old track (Staff context)
 			str << indent(--col) << ">> % Staff ends" << std::endl; //indent-
                     }
-                    lastTrackIndex = (*i)->getTrack();
-
 
 		    // handle any necessary bracket closures with a rude
 		    // hack, because bracket closures need to be handled
@@ -996,15 +1001,93 @@ LilyPondExporter::write()
                               str << indent(--col) << ">> % StaffGroup " << staffGroupCounter
                                    << std::endl; //indent-
                           } else if (prevBracket == Brackets::CurlyOff) {
-                              str << indent(--col) << ">> % PianoStaff " << pianoStaffCounter
+                              str << indent(--col) << ">> % GrandStaff " << pianoStaffCounter
                                    << std::endl; //indent-
                           } else if (prevBracket == Brackets::CurlySquareOff) {
-                              str << indent(--col) << ">> % PianoStaff " << pianoStaffCounter
+                              str << indent(--col) << ">> % GrandStaff " << pianoStaffCounter
                                    << std::endl; //indent-
                               str << indent(--col) << ">> % StaffGroup " << staffGroupCounter
                                    << std::endl; //indent-
                           }
 		    }
+                }
+
+		//
+                // Write the chord text events into a lead sheet format.
+                // The chords are placed into ChordName context above the staff,
+                // which is between the previous ending staff and next starting
+                // staff.
+		//
+                if (m_chordNamesMode) {
+		    int numberOfChords = -1;
+
+		    timeT lastTime = compositionStartTime;
+		    for (Segment::iterator j = (*i)->begin();
+		        (*i)->isBeforeEndMarker(j); ++j) {
+		
+		        bool isNote = (*j)->isa(Note::EventType);
+		        bool isChord = false;
+		
+		        if (!isNote) {
+		            if ((*j)->isa(Text::EventType)) {
+		                std::string textType;
+		                if ((*j)->get
+		                        <String>(Text::TextTypePropertyName, textType) &&
+		                        textType == Text::Chord) {
+		                    isChord = true;
+		                }
+		            }
+		        }
+		
+		        if (!isNote && !isChord) continue;
+		
+		        timeT myTime = (*j)->getNotationAbsoluteTime();
+		
+		        if (isChord) {
+		            std::string schord;
+		            (*j)->get<String>(Text::TextPropertyName, schord);
+		            QString chord(strtoqstr(schord));
+		            chord.replace(QRegExp("\\s+"), "");
+		            chord.replace(QRegExp("h"), "b");
+
+		            // DEBUG: str << " %{ '" << chord.utf8() << "' %} ";
+                            QRegExp rx( "^([a-g]([ei]s)?)([:](m|dim|aug|maj|sus|\\d+|[.^]|[+-])*)?(/[+]?[a-g]([ei]s)?)?$" );
+		            if ( rx.search( chord ) != -1 ) {
+				// The chord duration is zero, but the chord
+				// intervals is given with skips (see below).
+                                QRegExp rxStart( "^([a-g]([ei]s)?)" );
+		                chord.replace(QRegExp(rxStart), QString("\\1") + QString("4*0"));
+                            } else {
+				// Skip improper chords.
+				str << " %{ improper chord: '" << chord.utf8() << "' %} ";
+				continue;
+                            }
+
+			    if (numberOfChords == -1) {
+			        str << indent(col++) << "\\new ChordNames \\chordmode {" << std::endl;
+				str << indent(col) << "\\set chordNameExceptions = #chExceptions" << std::endl;
+				str << indent(col);
+		                numberOfChords++;
+                            }
+                            if (numberOfChords >= 0) {
+				// The chord intervals are specified with skips.
+                                writeSkip(m_composition->getTimeSignatureAt(myTime), lastTime, myTime - lastTime, false, str);
+                                str << chord.utf8() << " ";
+		                numberOfChords++;
+                            }
+                            lastTime = myTime;
+			}
+		    } // for
+                    if ( numberOfChords >= 0 ) {
+			writeSkip(m_composition->getTimeSignatureAt(lastTime), lastTime, compositionEndTime - lastTime, false, str);
+			if ( numberOfChords == 1) str << "s8 ";
+			str << std::endl;
+	                str << indent(--col) << "} % ChordNames " << std::endl;
+                    }
+		} // if (m_exportChords....
+
+                if ((int) (*i)->getTrack() != lastTrackIndex) {
+                     lastTrackIndex = (*i)->getTrack();
 
                      // handle any bracket start events (unless track staff
                      // brackets are being ignored, as when printing single parts
@@ -1015,12 +1098,12 @@ LilyPondExporter::write()
 			    str << indent(col++) << "\\context StaffGroup = \""
 			        << ++staffGroupCounter << "\" <<" << std::endl;
 			} else if (bracket == Brackets::CurlyOn) {
-			    str << indent(col++) << "\\context PianoStaff = \""
+			    str << indent(col++) << "\\context GrandStaff = \""
 			        << ++pianoStaffCounter << "\" <<" << std::endl;
 			} else if (bracket == Brackets::CurlySquareOn) {
 			    str << indent(col++) << "\\context StaffGroup = \""
 			        << ++staffGroupCounter << "\" <<" << std::endl;
-			    str << indent(col++) << "\\context PianoStaff = \""
+			    str << indent(col++) << "\\context GrandStaff = \""
 			        << ++pianoStaffCounter << "\" <<" << std::endl;
 			}
 		    } 
@@ -1311,7 +1394,8 @@ LilyPondExporter::write()
 				    text += " ";
 			    
 		                    QString syllable(strtoqstr(ssyllable));
-		                    syllable.replace(QRegExp("\\s+"), "");
+		                    syllable.replace(QRegExp("^\\s+"), "");
+		                    syllable.replace(QRegExp("\\s+$"), "");
 		                    syllable.replace(QRegExp("\""), "\\\"");
 		                    text += "\"" + syllable + "\"";
 		                    haveLyric = true;
@@ -1367,10 +1451,10 @@ LilyPondExporter::write()
                  str << indent(--col) << ">> % StaffGroup " << staffGroupCounter
                      << std::endl; //indent-
             } else        if (bracket == Brackets::CurlyOff) {
-                 str << indent(--col) << ">> % PianoStaff (final) " << pianoStaffCounter
+                 str << indent(--col) << ">> % GrandStaff (final) " << pianoStaffCounter
                      << std::endl; //indent-
             } else if (bracket == Brackets::CurlySquareOff) {
-                 str << indent(--col) << ">> % PianoStaff (final) " << pianoStaffCounter
+                 str << indent(--col) << ">> % GrandStaff (final) " << pianoStaffCounter
                      << std::endl; //indent-
                  str << indent(--col) << ">> % StaffGroup (final) " << staffGroupCounter
                      << std::endl; //indent-
@@ -1385,7 +1469,14 @@ LilyPondExporter::write()
 //    str << std::endl << indent(col) << ">> % global wrapper" << std::endl;
 
     // write \layout block
-    str << indent(col) << "\\layout { }" << std::endl;
+    str << indent(col++) << "\\layout {" << std::endl;
+    if (m_chordNamesMode) {
+        str << indent(col) << "\\context { \\GrandStaff \\accepts \"ChordNames\" }" << std::endl;
+    }
+    if (m_exportLyrics) {
+        str << indent(col) << "\\context { \\GrandStaff \\accepts \"Lyrics\" }" << std::endl;
+    }
+    str << indent(--col) << "}" << std::endl;
 
     // write initial tempo in Midi block, if user wishes (added per user request...
     // makes debugging the .ly file easier because fewer "noisy" errors are
@@ -1395,7 +1486,9 @@ LilyPondExporter::write()
         // Incomplete?  Can I get away without converting tempo relative to the time
         // signature for this purpose?  we'll see...
         str << indent(col++) << "\\midi {" << std::endl;
-        str << indent(col) << "\\tempo 4 = " << tempo << std::endl;
+        if (m_languageLevel < LILYPOND_VERSION_2_10) {
+            str << indent(col) << "\\tempo 4 = " << tempo << std::endl;
+        }
         str << indent(--col) << "} " << std::endl;
     }
 
@@ -2086,32 +2179,37 @@ LilyPondExporter::writeBar(Segment *s,
             }
 
         } else if ((*i)->isa(Rosegarden::Key::EventType)) {
-	    // ignore hidden key signatures
+	    // don't export invisible key signatures
 	    bool hiddenKey = false;
 	    if ((*i)->has(INVISIBLE)) {
 		(*i)->get <Bool>(INVISIBLE, hiddenKey);
 	    }
 
-	    if (!hiddenKey) {
-		try {
-		    str << "\\key ";
-		    key = Rosegarden::Key(**i);
+            try {
+                // grab the value of the key anyway, so we know what it was for
+                // future calls to writePitch() (fixes #2039048)
+                key = Rosegarden::Key(**i);
 
-		    Accidental accidental = Accidentals::NoAccidental;
+                // then we only write a \key change to the export stream if the
+                // key signature was meant to be visible
+                if (!hiddenKey) {
+                    str << "\\key ";
 
-		    str << convertPitchToLilyNote(key.getTonicPitch(), accidental, key);
+                    Accidental accidental = Accidentals::NoAccidental;
 
-		    if (key.isMinor()) {
-			str << " \\minor";
-		    } else {
-			str << " \\major";
-		    }
-		    str << std::endl << indent(col);
+                    str << convertPitchToLilyNote(key.getTonicPitch(), accidental, key);
 
-		} catch (Exception e) {
-		    std::cerr << "Bad key: " << e.getMessage() << std::endl;
-		}
-	    }
+                    if (key.isMinor()) {
+                        str << " \\minor";
+                    } else {
+                        str << " \\major";
+                    }
+                    str << std::endl << indent(col);
+                }
+
+            } catch (Exception e) {
+                std::cerr << "Bad key: " << e.getMessage() << std::endl;
+            }
 
         } else if ((*i)->isa(Text::EventType)) {
 
@@ -2357,10 +2455,14 @@ LilyPondExporter::handleText(const Event *textEvent,
             // print above staff, bold, large
             lilyText += "^\\markup { \\bold \\large \"" + s + "\" } ";
 
-        } else if (text.getTextType() == Text::LocalTempo ||
-                   text.getTextType() == Text::Chord) {
+        } else if (text.getTextType() == Text::LocalTempo) {
 
             // print above staff, bold, small
+            lilyText += "^\\markup { \\bold \"" + s + "\" } ";
+        } else if (m_chordNamesMode == false && text.getTextType() == Text::Chord) {
+
+            // Either (1) the chords will have an own ChordNames context
+            //     or (2) they will be printed above staff, bold, small.
             lilyText += "^\\markup { \\bold \"" + s + "\" } ";
 
         } else if (text.getTextType() == Text::Dynamic) {

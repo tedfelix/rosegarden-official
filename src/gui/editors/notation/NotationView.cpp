@@ -2665,17 +2665,19 @@ bool NotationView::applyLayout(int staffNo, timeT startTime, timeT endTime)
 void NotationView::setCurrentSelectedNote(const char *pixmapName,
                                           bool rest, Note::Type n, int dots)
 {
-    NoteInserter* inserter = 0;
+    if (rest) {
+        RestInserter* restInserter = dynamic_cast<RestInserter*>(m_toolBox->getTool(RestInserter::ToolName));
 
-    if (rest)
-        inserter = dynamic_cast<NoteInserter*>(m_toolBox->getTool(RestInserter::ToolName));
-    else
-        inserter = dynamic_cast<NoteInserter*>(m_toolBox->getTool(NoteInserter::ToolName));
+        restInserter->slotSetNote(n);
+        restInserter->slotSetDots(dots);
+        setTool(restInserter);
+    } else {
+        NoteInserter* noteInserter = dynamic_cast<NoteInserter*>(m_toolBox->getTool(NoteInserter::ToolName));
 
-    inserter->slotSetNote(n);
-    inserter->slotSetDots(dots);
-
-    setTool(inserter);
+        noteInserter->slotSetNote(n);
+        noteInserter->slotSetDots(dots);
+        setTool(noteInserter);
+    }
 
     m_currentNotePixmap->setPixmap
         (NotePixmapFactory::toQPixmap
@@ -4971,23 +4973,24 @@ void NotationView::slotSwitchFromNoteToRest()
 
 void NotationView::slotToggleDot()
 {
-    NoteInserter *noteInserter = dynamic_cast<NoteInserter *>(m_tool);
-    if (noteInserter) {
-        Note note(noteInserter->getCurrentNote());
+    // Test first RestInserter which is a sub-class of NoteInserter.
+    RestInserter *restInserter = dynamic_cast<RestInserter *>(m_tool);
+    if (restInserter) {
+        Note note(restInserter->getCurrentNote());
         if (note.getNoteType() == Note::Shortest ||
             note.getNoteType() == Note::Longest)
             return ;
-        noteInserter->slotSetDots(note.getDots() ? 0 : 1);
-        setTool(noteInserter);
+        restInserter->slotSetDots(note.getDots() ? 0 : 1);
+        setTool(restInserter);
     } else {
-        RestInserter *restInserter = dynamic_cast<RestInserter *>(m_tool);
-        if (restInserter) {
-            Note note(restInserter->getCurrentNote());
+        NoteInserter *noteInserter = dynamic_cast<NoteInserter *>(m_tool);
+        if (noteInserter) {
+            Note note(noteInserter->getCurrentNote());
             if (note.getNoteType() == Note::Shortest ||
                 note.getNoteType() == Note::Longest)
                 return ;
-            restInserter->slotSetDots(note.getDots() ? 0 : 1);
-            setTool(restInserter);
+            noteInserter->slotSetDots(note.getDots() ? 0 : 1);
+            setTool(noteInserter);
         } else {
             KMessageBox::sorry(this, i18n("No note or rest duration selected"));
         }

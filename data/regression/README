@@ -1,0 +1,16 @@
+The files in this directory are short and simple regression test files.  When
+adding new regression tests to this directory, please document their purpose in
+this file.
+
+We should probably endeavor to run through all of these before making a release.
+
+
+export_hidden_key_signatures.rg
+-------------------------------
+I discovered that I introduced a bug in revision 8693 whereby my attempt at
+preventing hidden key signatures from exporting actually broke the spelling of
+exported LilyPond notes in a painful way.  This file should export with all
+leter notes having -is suffixes (fis, cis, dis, gis) in the key of E major, with
+only one key signature printed.
+
+

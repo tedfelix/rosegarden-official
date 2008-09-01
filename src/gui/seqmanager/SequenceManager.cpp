@@ -915,6 +915,38 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 
     MappedComposition::const_iterator i;
 
+    // before applying through-filter, catch program-change-messages
+    int prg;
+	int bnk_msb;
+	int bnk_lsb;
+	bnk_lsb = -1;
+	bnk_lsb = -1;
+	for (i = mC.begin(); i != mC.end(); ++i ) {
+		
+		// catch bank selects (lsb)
+		if ((*i)->getType() == MappedEvent::MidiController){
+				prg = (*i)->getData1();
+				if (prg == 32 ) {
+					// then it's a Bank Select (fine, LSB)
+					// get bank nr: 
+					bnk_lsb = (*i)->getData2();
+				}else 
+					if (prg == 0 ) {
+					// then it's a Bank Select (coarse, MSB)
+					// get msb value: 
+					bnk_msb = (*i)->getData2();
+				}
+		}
+		// catch program changes
+		if ((*i)->getType() == MappedEvent::MidiProgramChange) {
+				// this selects the program-list entry on prog-change-messages 
+				// as well as the previously received bank select (lsb)
+				prg = (*i)->getData1();
+				emit signalSelectProgramNoSend( prg, bnk_lsb, bnk_msb );
+		}
+    }
+    
+	
     // Thru filtering is done at the sequencer for the actual sound
     // output, but here we need both filtered (for OUT display) and
     // unfiltered (for insertable note callbacks) compositions, so
@@ -969,7 +1001,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                 m_doc->finalizeAudioFile((int)(*i)->getData1() +
                                          (int)(*i)->getData2() * 256);
             }
-
+            
             if ((*i)->getType() ==
                 MappedEvent::SystemUpdateInstruments) {
                 // resync Devices and Instruments

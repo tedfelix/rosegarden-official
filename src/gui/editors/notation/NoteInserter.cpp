@@ -118,6 +118,9 @@ NoteInserter::NoteInserter(NotationView* view)
 
     connect(m_parentView, SIGNAL(changeAccidental(Accidental, bool)),
             this, SLOT(slotSetAccidental(Accidental, bool)));
+
+    // Push down the default RadioAction on Accidentals.
+    m_parentView->actionCollection()->action("no_accidental")->activate();
 }
 
 NoteInserter::NoteInserter(const QString& menuName, NotationView* view)
@@ -132,6 +135,9 @@ NoteInserter::NoteInserter(const QString& menuName, NotationView* view)
 {
     connect(m_parentView, SIGNAL(changeAccidental(Accidental, bool)),
             this, SLOT(slotSetAccidental(Accidental, bool)));
+
+    // Push down the default RadioAction on Accidentals.
+    m_parentView->actionCollection()->action("no_accidental")->activate();
 }
 
 NoteInserter::~NoteInserter()
@@ -597,12 +603,13 @@ void NoteInserter::slotSetNote(Note::Type nt)
 
 void NoteInserter::slotSetDots(unsigned int dots)
 {
-    m_noteDots = dots;
-
     KToggleAction *dotsAction = dynamic_cast<KToggleAction *>
                                 (actionCollection()->action("toggle_dot"));
-    if (dotsAction)
+    if (dotsAction && m_noteDots != dots) {
         dotsAction->setChecked(dots > 0);
+        slotToggleDot();
+        m_noteDots = dots;
+    }
 }
 
 void NoteInserter::slotSetAccidental(Accidental accidental,

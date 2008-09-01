@@ -49,6 +49,8 @@
 #include <qwidget.h>
 #include <algorithm>
 
+#include <qtooltip.h>
+
 
 namespace Rosegarden
 {
@@ -69,32 +71,44 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     m_programCheckBox = new QCheckBox(this);
     m_variationCheckBox = new QCheckBox(this);
     m_percussionCheckBox = new QCheckBox(this);
-
+    
     m_bankValue->setSizeLimit(20);
     m_programValue->setSizeLimit(20);
     m_variationValue->setSizeLimit(20);
-
+    
     m_bankLabel = new QLabel(i18n("Bank"), this);
     m_variationLabel = new QLabel(i18n("Variation"), this);
     m_programLabel = new QLabel(i18n("Program"), this);
     QLabel *channelLabel = new QLabel(i18n("Channel out"), this);
     QLabel *percussionLabel = new QLabel(i18n("Percussion"), this);
-
+    
     // Ensure a reasonable amount of space in the program dropdowns even
     // if no instrument initially selected
     QFontMetrics metrics(m_programValue->font());
     int width22 = metrics.width("1234567890123456789012");
     int width25 = metrics.width("1234567890123456789012345");
-
+    
     m_bankValue->setMinimumWidth(width22);
     m_programValue->setMinimumWidth(width22);
     m_variationValue->setMinimumWidth(width22);
-
+    
     m_connectionLabel->setFixedWidth(width25);
     m_connectionLabel->setAlignment(Qt::AlignCenter);
-
+    
+    
+    QString programTip = i18n("<qt>use program changes from an external source to manipulate these controls (only valid for the currently-active track)</qt>");
+    m_evalMidiPrgChgCheckBox = new QCheckBox(this); 
+    m_evalMidiPrgChgLabel = new QLabel(i18n("Receive external"), this);
+    QToolTip::add(m_evalMidiPrgChgLabel, programTip);
+    
+    m_evalMidiPrgChgCheckBox->setDisabled(false);
+    m_evalMidiPrgChgCheckBox->setChecked(false);
+    QToolTip::add(m_evalMidiPrgChgCheckBox, programTip);
+    m_evalMidiPrgChgCheckBox->setAccel((QKeySequence)"Shift+P");
+    
+    
     // Configure the empty final row to accomodate any extra vertical space.
-
+    
     m_mainGrid->setRowStretch(m_mainGrid->numRows() - 1, 1);
 
 
@@ -120,7 +134,11 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     m_mainGrid->addWidget(m_variationLabel, 6, 0);
     m_mainGrid->addWidget(m_variationCheckBox, 6, 1);
     m_mainGrid->addWidget(m_variationValue, 6, 2, AlignRight);
-
+      
+    m_mainGrid->addWidget(m_evalMidiPrgChgLabel, 7, 0, AlignLeft);
+    m_mainGrid->addWidget(m_evalMidiPrgChgCheckBox, 7, 2, AlignRight);	
+    
+    
     // Populate channel lists
     //
     for (int i = 0; i < 16; i++) {
@@ -156,8 +174,11 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
 
     connect(m_variationCheckBox, SIGNAL(toggled(bool)),
             this, SLOT(slotToggleVariation(bool)));
-
-
+    
+    connect(m_evalMidiPrgChgCheckBox, SIGNAL(toggled(bool)),
+    		this, SLOT(slotToggleChangeListOnProgChange(bool)) );
+    
+    
     // Connect activations
     //
     connect(m_bankValue, SIGNAL(activated(int)),
@@ -181,6 +202,14 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     connect(m_rotaryMapper, SIGNAL(mapped(int)),
             this, SLOT(slotControllerChanged(int)));
 }
+
+
+void MIDIInstrumentParameterPanel::slotToggleChangeListOnProgChange(bool val){
+    // used to disable prog-change select-box 
+    // (in MIDIInstrumentParameterPanel), if TrackChanged 
+	this->m_evalMidiPrgChgCheckBox->setChecked(val);
+}
+
 
 void
 MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
@@ -623,11 +652,15 @@ MIDIInstrumentParameterPanel::populateProgramList()
             m_programLabel->show();
             m_programCheckBox->show();
             m_programValue->show();
+            m_evalMidiPrgChgCheckBox->show();
+            m_evalMidiPrgChgLabel->show();
         }
     } else {
         m_programLabel->hide();
         m_programCheckBox->hide();
         m_programValue->hide();
+        m_evalMidiPrgChgCheckBox->hide();
+        m_evalMidiPrgChgLabel->hide();
     }
 
     for (unsigned int i = 0; i < programs.size(); ++i) {
@@ -944,6 +977,89 @@ MIDIInstrumentParameterPanel::slotSelectBank(int index)
 
     emit instrumentParametersChanged(m_selectedInstrument->getId());
 }
+
+
+
+
+
+void MIDIInstrumentParameterPanel::slotSelectProgramNoSend(int prog, int bank_lsb, int bank_msb )
+{
+    /*
+     * This function changes the program-list entry, if
+     * a midi program change message occured.
+     * 
+     * (the slot is being connected in RosegardenGUIApp.cpp,
+     *  and called (signaled) by SequenceManger.cpp)
+     * 
+     * parameters:
+     * prog : the program to select (triggered by program change message)
+     * bank_lsb : the bank to select (if no bank-select occured, this is -1)
+     *				(triggered by bank-select message (fine,lsb value))
+     * bank_msb : coarse/msb value  (-1 if not specified)
+     */
+    if( ! this->m_evalMidiPrgChgCheckBox->isChecked() ){
+        return;
+    }
+	
+	
+	
+	
+	if (m_selectedInstrument == 0)
+		return ;
+
+	MidiDevice *md = dynamic_cast<MidiDevice*>
+			(m_selectedInstrument->getDevice());
+	
+	if (!md) {
+		RG_DEBUG << "WARNING: MIDIInstrumentParameterPanel::slotSelectBank: No MidiDevice for Instrument "
+				<< m_selectedInstrument->getId() << endl;
+		return ;
+	}
+	
+	bool changed_bank = false;
+	// bank msb value (MSB, coarse)
+	if ((bank_msb >= 0) ){ // and md->getVariationType() != MidiDevice::VariationFromMSB ) {
+		if (m_selectedInstrument->getMSB() != bank_msb ) {
+			m_selectedInstrument->setMSB( bank_msb );
+			changed_bank = true;
+		}
+	}	
+	// selection of bank (LSB, fine)
+	if ((bank_lsb >= 0) ){ //and md->getVariationType() != MidiDevice::VariationFromLSB) {
+		if (m_selectedInstrument->getLSB() != bank_lsb ) {
+			m_selectedInstrument->setLSB( bank_lsb );
+			changed_bank = true;
+		}
+	}
+	
+    bool change = false;
+	if (m_selectedInstrument->getProgramChange() != (MidiByte)prog) {
+        m_selectedInstrument->setProgramChange( (MidiByte)prog );
+        change = true;
+    }
+    
+    //populateVariationList();
+    
+    if (change or changed_bank) {
+        //sendBankAndProgram();
+        //emit changeInstrumentLabel( m_selectedInstrument->getId(),
+        //            strtoqstr(m_selectedInstrument->getProgramName()) );
+        emit updateAllBoxes();
+        
+        emit instrumentParametersChanged(m_selectedInstrument->getId());
+    }
+    
+}
+
+
+
+
+
+
+
+
+
+
 
 void
 MIDIInstrumentParameterPanel::slotSelectProgram(int index)

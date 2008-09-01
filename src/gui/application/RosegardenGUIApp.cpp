@@ -436,6 +436,16 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     if (m_view) {
         connect(m_seqManager, SIGNAL(controllerDeviceEventReceived(MappedEvent *)),
                 m_view, SLOT(slotControllerDeviceEventReceived(MappedEvent *)));
+                
+                
+		
+		MIDIInstrumentParameterPanel *mipp;
+		mipp = m_instrumentParameterBox->getMIDIInstrumentParameterPanel();
+		if(! mipp){
+			RG_DEBUG << "Error: m_instrumentParameterBox->getMIDIInstrumentParameterPanel() is NULL in RosegardenGUIApp.cpp 445 \n";
+		}
+		connect(m_seqManager, SIGNAL(signalSelectProgramNoSend(int,int,int)), (QObject*)mipp, SLOT(slotSelectProgramNoSend(int,int,int)) );
+                
     }
 
     if (m_seqManager->getSoundDriverStatus() & AUDIO_OK) {
@@ -4538,7 +4548,7 @@ void RosegardenGUIApp::slotTestStartupTester()
                  KXMLGUIClient::StateNoReverse : KXMLGUIClient::StateReverse);
 
     if (!have) {
-        missingFeatures.push_back("Notation previews through LilyPond");
+        missingFeatures.push_back(i18n("Notation previews through LilyPond"));
         if (missing.count() == 0) {
             allMissing.push_back(i18n("The Rosegarden LilyPondView helper script"));
         } else {
@@ -4558,7 +4568,7 @@ void RosegardenGUIApp::slotTestStartupTester()
         m_haveAudioImporter = m_startupTester->haveAudioFileImporter(&missing);
 
         if (!m_haveAudioImporter) {
-            missingFeatures.push_back("General audio file import and conversion");
+            missingFeatures.push_back(i18n("General audio file import and conversion"));
             if (missing.count() == 0) {
                 allMissing.push_back(i18n("The Rosegarden Audio File Importer helper script"));
             } else {
