@@ -44,7 +44,7 @@ CompositionLengthDialog::CompositionLengthDialog(
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
     QWidget *vBox = new QWidget(this);
-    QVBoxLayout vBoxLayout = new QVBoxLayout;
+    QVBoxLayout *vBoxLayout = new QVBoxLayout;
     metagrid->addWidget(vBox, 0, 0);
 
 
@@ -64,7 +64,7 @@ CompositionLengthDialog::CompositionLengthDialog(
     QWidget *endBox = new QWidget( vBox );
     vBoxLayout->addWidget(endBox);
     vBox->setLayout(vBoxLayout);
-    QHBoxLayout endBoxLayout = new QHBoxLayout;
+    QHBoxLayout *endBoxLayout = new QHBoxLayout;
     QLabel *child_4 = new QLabel(i18n("End Bar"), endBox );
     endBoxLayout->addWidget(child_4);
     m_endMarkerSpinBox = new QSpinBox( endBox );

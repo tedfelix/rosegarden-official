@@ -88,7 +88,7 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
     // VU meter and fader
     //
     QWidget *faderHbox = new QWidget(this);
-    QHBoxLayout faderHboxLayout = new QHBoxLayout;
+    QHBoxLayout *faderHboxLayout = new QHBoxLayout;
 
     m_vuMeter = new AudioVUMeter( faderHbox , true);
     faderHboxLayout->addWidget(m_vuMeter);

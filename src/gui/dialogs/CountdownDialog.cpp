@@ -45,7 +45,7 @@ CountdownDialog::CountdownDialog(QWidget *parent, int seconds):
     setCaption(i18n("Recording..."));
 
     QWidget *hBox = new QWidget(this);
-    QHBoxLayout hBoxLayout = new QHBoxLayout;
+    QHBoxLayout *hBoxLayout = new QHBoxLayout;
     m_label = new QLabel( hBox );
     hBoxLayout->addWidget(m_label);
     m_time = new QLabel( hBox );

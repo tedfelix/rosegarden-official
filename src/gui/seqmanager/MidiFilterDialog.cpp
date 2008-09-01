@@ -49,7 +49,7 @@ MidiFilterDialog::MidiFilterDialog(QDialogButtonBox::QWidget *parent,
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
     QWidget *hBox = new QWidget(this);
-    QHBoxLayout hBoxLayout = new QHBoxLayout;
+    QHBoxLayout *hBoxLayout = new QHBoxLayout;
     metagrid->addWidget(hBox, 0, 0);
 
 

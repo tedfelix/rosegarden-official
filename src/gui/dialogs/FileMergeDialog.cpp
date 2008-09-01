@@ -47,13 +47,13 @@ FileMergeDialog::FileMergeDialog(QDialogButtonBox::QWidget *parent,
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
     QWidget *vbox = new QWidget(this);
-    QVBoxLayout vboxLayout = new QVBoxLayout;
+    QVBoxLayout *vboxLayout = new QVBoxLayout;
     metagrid->addWidget(vbox, 0, 0);
 
 
     QWidget *hbox = new QWidget( vbox );
     vboxLayout->addWidget(hbox);
-    QHBoxLayout hboxLayout = new QHBoxLayout;
+    QHBoxLayout *hboxLayout = new QHBoxLayout;
     QLabel *child_3 = new QLabel(i18n("Merge new file  "), hbox );
     hboxLayout->addWidget(child_3);
 

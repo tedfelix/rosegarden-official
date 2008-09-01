@@ -33,7 +33,7 @@ TrivialVelocityDialog::TrivialVelocityDialog(QWidget *parent, QString label, int
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
     QWidget *hbox = new QWidget(this);
-    QHBoxLayout hboxLayout = new QHBoxLayout;
+    QHBoxLayout *hboxLayout = new QHBoxLayout;
     metagrid->addWidget(hbox, 0, 0);
 
         QLabel *child_3 = new QLabel(label, hbox );

@@ -43,7 +43,7 @@ FloatEdit::FloatEdit(QDialogButtonBox::QWidget *parent,
     QVBox *vbox = makeVBoxMainWidget();
     QGroupBox *groupBox = new QGroupBox(1, Horizontal, text, vbox);
     QWidget *inVbox = new QWidget(groupBox);
-    QVBoxLayout inVboxLayout = new QVBoxLayout;
+    QVBoxLayout *inVboxLayout = new QVBoxLayout;
 
     // Calculate decimal points according to the step size
     //

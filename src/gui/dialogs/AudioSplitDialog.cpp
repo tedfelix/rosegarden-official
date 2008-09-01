@@ -70,7 +70,7 @@ AudioSplitDialog::AudioSplitDialog(QDialogButtonBox::QWidget *parent,
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
     QWidget *w = new QWidget(this);
-    QVBoxLayout wLayout = new QVBoxLayout;
+    QVBoxLayout *wLayout = new QVBoxLayout;
     metagrid->addWidget(w, 0, 0);
 
 
@@ -92,7 +92,7 @@ AudioSplitDialog::AudioSplitDialog(QDialogButtonBox::QWidget *parent,
     QWidget *hbox = new QWidget( w );
     wLayout->addWidget(hbox);
     w->setLayout(wLayout);
-    QHBoxLayout hboxLayout = new QHBoxLayout;
+    QHBoxLayout *hboxLayout = new QHBoxLayout;
     QLabel *child_3 = new QLabel(i18n("Threshold"), hbox );
     hboxLayout->addWidget(child_3);
     m_thresholdSpin = new QSpinBox( hbox );

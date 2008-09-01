@@ -46,7 +46,7 @@ AddTracksDialog::AddTracksDialog(QDialogButtonBox::QWidget *parent, int currentT
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
     QWidget *vBox = new QWidget(this);
-    QVBoxLayout vBoxLayout = new QVBoxLayout;
+    QVBoxLayout *vBoxLayout = new QVBoxLayout;
     metagrid->addWidget(vBox, 0, 0);
 
 
@@ -63,7 +63,7 @@ AddTracksDialog::AddTracksDialog(QDialogButtonBox::QWidget *parent, int currentT
     QWidget *posBox = new QWidget( vBox );
     vBoxLayout->addWidget(posBox);
     vBox->setLayout(vBoxLayout);
-    QHBoxLayout posBoxLayout = new QHBoxLayout;
+    QHBoxLayout *posBoxLayout = new QHBoxLayout;
     posBoxLayout->setSpacing(4);
     QLabel *child_4 = new QLabel(i18n("Add tracks"), posBox );
     posBoxLayout->addWidget(child_4);

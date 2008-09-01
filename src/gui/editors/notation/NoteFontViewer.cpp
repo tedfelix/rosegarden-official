@@ -85,7 +85,7 @@ NoteFontViewer::NoteFontViewer(QWidget *parent, QString noteFontName,
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
     QWidget *box = new QWidget(this);
-    QVBoxLayout boxLayout = new QVBoxLayout;
+    QVBoxLayout *boxLayout = new QVBoxLayout;
     metagrid->addWidget(box, 0, 0);
 
     KToolBar *controls = new KToolBar( box );

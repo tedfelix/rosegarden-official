@@ -45,7 +45,7 @@ MakeOrnamentDialog::MakeOrnamentDialog(QDialogButtonBox::QWidget *parent, QStrin
     new QLabel(i18n("The name is used to identify both the ornament\nand the triggered segment that stores\nthe ornament's notes."), nameBox);
 
     QWidget *hbox = new QWidget(nameBox);
-    QHBoxLayout hboxLayout = new QHBoxLayout;
+    QHBoxLayout *hboxLayout = new QHBoxLayout;
     QLabel *child_3 = new QLabel(i18n("Name:  "), hbox );
     hboxLayout->addWidget(child_3);
     m_name = new QLineEdit(defaultName, hbox );

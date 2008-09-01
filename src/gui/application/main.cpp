@@ -714,7 +714,7 @@ int main(int argc, char *argv[])
 					      KDialogBase::Ok, false);
 	QVBox *mw = dialog->makeVBoxMainWidget();
 	QWidget *hb = new QWidget(mw);
-	QHBoxLayout hbLayout = new QHBoxLayout;
+	QHBoxLayout *hbLayout = new QHBoxLayout;
 	QLabel *image = new QLabel( hb );
 	hbLayout->addWidget(image);
 	image->setAlignment(Qt::AlignTop);

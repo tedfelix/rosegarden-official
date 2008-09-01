@@ -91,7 +91,7 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
         m_notationTarget->hide();
 
     QWidget *parameterBox = new QWidget(this);
-    QHBoxLayout parameterBoxLayout = new QHBoxLayout;
+    QHBoxLayout *parameterBoxLayout = new QHBoxLayout;
     m_mainLayout->addWidget(parameterBox, zero + 1, 0);
 
     m_notationBox = new QGroupBox( i18n("Notation parameters"), parameterBox );

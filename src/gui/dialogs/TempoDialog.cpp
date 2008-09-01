@@ -155,7 +155,7 @@ TempoDialog::TempoDialog(QDialogButtonBox::QWidget *parent, RosegardenGUIDoc *do
     spare = new QLabel("      ", changeWhereBox );
     changeWhereBoxLayout->addWidget(spare);
     QWidget *changeWhereVBox = new QWidget(changeWhereBox);
-    QVBoxLayout changeWhereVBoxLayout = new QVBoxLayout;
+    QVBoxLayout *changeWhereVBoxLayout = new QVBoxLayout;
     changeWhereBoxLayout->addWidget(changeWhereVBox);
     changeWhereBox->setLayout(changeWhereBoxLayout);
     changeWhereBoxLayout->setStretchFactor(changeWhereVBox, 20);
@@ -178,7 +178,7 @@ TempoDialog::TempoDialog(QDialogButtonBox::QWidget *parent, RosegardenGUIDoc *do
     QWidget *optionHBox = new QWidget( changeWhereVBox );
     changeWhereVBoxLayout->addWidget(optionHBox);
     changeWhereVBox->setLayout(changeWhereVBoxLayout);
-    QHBoxLayout optionHBoxLayout = new QHBoxLayout;
+    QHBoxLayout *optionHBoxLayout = new QHBoxLayout;
     QLabel *child_6 = new QLabel("         ", optionHBox );
     optionHBoxLayout->addWidget(child_6);
     m_defaultBox = new QCheckBox(i18n("Also make this the default tempo"), optionHBox );

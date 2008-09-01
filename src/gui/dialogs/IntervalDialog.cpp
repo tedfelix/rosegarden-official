@@ -51,13 +51,13 @@ IntervalDialog::IntervalDialog(QDialogButtonBox::QWidget *parent, bool askChange
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
     QWidget *vBox = new QWidget(this);
-    QVBoxLayout vBoxLayout = new QVBoxLayout;
+    QVBoxLayout *vBoxLayout = new QVBoxLayout;
     metagrid->addWidget(vBox, 0, 0);
 
 
     QWidget *hBox = new QWidget( vBox );
     vBoxLayout->addWidget(hBox);
-    QHBoxLayout hBoxLayout = new QHBoxLayout;
+    QHBoxLayout *hBoxLayout = new QHBoxLayout;
 
     m_referencenote = new DiatonicPitchChooser(i18n("Reference note:"), hBox );
     hBoxLayout->addWidget(m_referencenote);

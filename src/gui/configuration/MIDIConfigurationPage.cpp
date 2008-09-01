@@ -268,7 +268,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     ++row;
 
     QWidget *hbox = new QWidget(frame);
-    QHBoxLayout hboxLayout = new QHBoxLayout;
+    QHBoxLayout *hboxLayout = new QHBoxLayout;
     hboxLayout->setSpacing(5);
     layout->addWidget(hbox, row, 0, row- row+1, 1- 1);
 

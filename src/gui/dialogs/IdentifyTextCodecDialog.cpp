@@ -46,7 +46,7 @@ IdentifyTextCodecDialog::IdentifyTextCodecDialog(QDialogButtonBox::QWidget *pare
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
     QWidget *vbox = new QWidget(this);
-    QVBoxLayout vboxLayout = new QVBoxLayout;
+    QVBoxLayout *vboxLayout = new QVBoxLayout;
     metagrid->addWidget(vbox, 0, 0);
 
     new QLabel(i18n("\nThis file contains text in an unknown language encoding.\n\nPlease select one of the following estimated text encodings\nfor use with the text in this file:\n"), vbox);

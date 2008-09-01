@@ -56,7 +56,7 @@ ClefDialog::ClefDialog(QDialogButtonBox::QWidget *parent,
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
     QWidget *vbox = new QWidget(this);
-    QVBoxLayout vboxLayout = new QVBoxLayout;
+    QVBoxLayout *vboxLayout = new QVBoxLayout;
     metagrid->addWidget(vbox, 0, 0);
 
 
@@ -68,7 +68,7 @@ ClefDialog::ClefDialog(QDialogButtonBox::QWidget *parent,
     vbox->setLayout(vboxLayout);
 
     QWidget *clefBox = new QWidget(clefFrame);
-    QHBoxLayout clefBoxLayout = new QHBoxLayout;
+    QHBoxLayout *clefBoxLayout = new QHBoxLayout;
 
     BigArrowButton *clefDown = new BigArrowButton( clefBox , Qt::LeftArrow);
     clefBoxLayout->addWidget(clefDown);

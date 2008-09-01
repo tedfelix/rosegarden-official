@@ -49,7 +49,7 @@ EventParameterDialog::EventParameterDialog(
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
     QWidget *vBox = new QWidget(this);
-    QVBoxLayout vBoxLayout = new QVBoxLayout;
+    QVBoxLayout *vBoxLayout = new QVBoxLayout;
     metagrid->addWidget(vBox, 0, 0);
 
 
@@ -93,7 +93,7 @@ EventParameterDialog::EventParameterDialog(
     QWidget *value1Box = new QWidget( vBox );
     vBoxLayout->addWidget(value1Box);
     vBox->setLayout(vBoxLayout);
-    QHBoxLayout value1BoxLayout = new QHBoxLayout;
+    QHBoxLayout *value1BoxLayout = new QHBoxLayout;
     m_value1Label = new QLabel(i18n("Value"), value1Box );
     value1BoxLayout->addWidget(m_value1Label);
     m_value1Combo = new QComboBox( value1Box );

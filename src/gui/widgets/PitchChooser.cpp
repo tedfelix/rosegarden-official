@@ -41,7 +41,7 @@ PitchChooser::PitchChooser(QString title,
     m_pitchDragLabel = new PitchDragLabel(this, defaultPitch);
 
     QWidget *hbox = new QWidget(this);
-    QHBoxLayout hboxLayout = new QHBoxLayout;
+    QHBoxLayout *hboxLayout = new QHBoxLayout;
     hboxLayout->setSpacing(6);
 
     QLabel *child_4 = new QLabel(i18n("Pitch:"), hbox );

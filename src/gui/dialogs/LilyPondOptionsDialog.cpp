@@ -66,7 +66,7 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QDialogButtonBox::QWidget *parent,
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
     QWidget *mainbox = new QWidget(this);
-    QVBoxLayout mainboxLayout = new QVBoxLayout;
+    QVBoxLayout *mainboxLayout = new QVBoxLayout;
     metagrid->addWidget(mainbox, 0, 0);
 
 

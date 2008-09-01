@@ -81,7 +81,7 @@ DeviceEditorDialog::DeviceEditorDialog(QDialogButtonBox::QWidget *parent,
     populate();
 
     QWidget *hbox = new QWidget(mainBox);
-    QHBoxLayout hboxLayout = new QHBoxLayout;
+    QHBoxLayout *hboxLayout = new QHBoxLayout;
     QPushButton *addButton = new QPushButton(i18n("Add Play Device"), hbox );
     hboxLayout->addWidget(addButton);
     QPushButton *addRButton = new QPushButton(i18n("Add Record Device"), hbox );

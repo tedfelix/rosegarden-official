@@ -99,7 +99,7 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     setWFlags(WDestructiveClose);
 
     QWidget *box = new QWidget(this);
-    QVBoxLayout boxLayout = new QVBoxLayout;
+    QVBoxLayout *boxLayout = new QVBoxLayout;
     setCentralWidget(box);
     boxLayout->setMargin(10);
     boxLayout->setSpacing(5);

@@ -119,7 +119,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     // Left-side list view
     //
     QWidget *leftPart = new QWidget(splitter);
-    QVBoxLayout leftPartLayout = new QVBoxLayout;
+    QVBoxLayout *leftPartLayout = new QVBoxLayout;
     m_listView = new KListView( leftPart );
     leftPartLayout->addWidget(m_listView);
     m_listView->addColumn(i18n("MIDI Device"));
@@ -212,7 +212,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     vboxLayout->addWidget(m_optionBox);
 
     QWidget *variationBox = new QWidget(m_optionBox);
-    QHBoxLayout variationBoxLayout = new QHBoxLayout;
+    QHBoxLayout *variationBoxLayout = new QHBoxLayout;
     m_variationToggle = new QCheckBox(i18n("Show Variation list based on "), variationBox );
     variationBoxLayout->addWidget(m_variationToggle);
     m_variationCombo = new QComboBox( variationBox );

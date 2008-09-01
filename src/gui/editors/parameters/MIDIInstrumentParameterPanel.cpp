@@ -397,7 +397,7 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
         } else {
 
             QWidget *hbox = new QWidget(m_rotaryFrame);
-            QHBoxLayout hboxLayout = new QHBoxLayout;
+            QHBoxLayout *hboxLayout = new QHBoxLayout;
             hboxLayout->setSpacing(8);
 
             float smallStep = 1.0;

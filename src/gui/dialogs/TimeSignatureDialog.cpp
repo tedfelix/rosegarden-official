@@ -80,7 +80,7 @@ TimeSignatureDialog::TimeSignatureDialog(QDialogButtonBox::QWidget *parent,
     QGroupBox *groupBox = new QGroupBox
                           (1, Horizontal, i18n("Time signature"), vbox);
     QWidget *denomBox = new QWidget(groupBox);
-    QHBoxLayout denomBoxLayout = new QHBoxLayout;
+    QHBoxLayout *denomBoxLayout = new QHBoxLayout;
 
     QLabel *explanatoryLabel = 0;
     if (explanatoryText) {

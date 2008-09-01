@@ -74,7 +74,7 @@ EventEditDialog::EventEditDialog(QDialogButtonBox::QWidget *parent,
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
     QWidget *vbox = new QWidget(this);
-    QVBoxLayout vboxLayout = new QVBoxLayout;
+    QVBoxLayout *vboxLayout = new QVBoxLayout;
     metagrid->addWidget(vbox, 0, 0);
 
 
@@ -246,7 +246,7 @@ case UInt: {
             RealTime realTime = m_originalEvent.get<RealTimeT>(name);
 
             QWidget *hbox = new QWidget(m_persistentGrid);
-            QHBoxLayout hboxLayout = new QHBoxLayout;
+            QHBoxLayout *hboxLayout = new QHBoxLayout;
 
             // seconds
             //

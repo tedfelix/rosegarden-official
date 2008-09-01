@@ -699,7 +699,7 @@ if ($code =~ /KDialogBase/) {
 
     $p->trigger('QHBox * ${hbox} = new QHBox ( ${parent} ) ;');
     $p->replacement('QWidget *${hbox} = new QWidget(${parent});');
-    $p->replacement('QHBoxLayout ${hbox}Layout = new QHBoxLayout;');
+    $p->replacement('QHBoxLayout *${hbox}Layout = new QHBoxLayout;');
 
         $p->target('${widget} * ${child} = new ${widget} ( @{before,} ${hbox} @{,after} ) ;', "A");
         $p->replacement('${widget} *${child} = new ${widget}(@{before,} ${hbox} @{,after});');
@@ -759,7 +759,7 @@ if ($code =~ /KDialogBase/) {
 
     $p->trigger('QVBox * ${vbox} = new QVBox ( ${parent} ) ;');
     $p->replacement('QWidget *${vbox} = new QWidget(${parent});');
-    $p->replacement('QVBoxLayout ${vbox}Layout = new QVBoxLayout;');
+    $p->replacement('QVBoxLayout *${vbox}Layout = new QVBoxLayout;');
 
         $p->target('${widget} * ${child} = new ${widget} ( @{before,} ${vbox} @{,after} ) ;', "A");
         $p->replacement('${widget} *${child} = new ${widget}(@{before,} ${vbox} @{,after});');

@@ -46,7 +46,7 @@ DiatonicPitchChooser::DiatonicPitchChooser(QString title,
     m_pitchDragLabel = new PitchDragLabel(this, defaultPitch);
 
     QWidget *hbox = new QWidget(this);
-    QHBoxLayout hboxLayout = new QHBoxLayout;
+    QHBoxLayout *hboxLayout = new QHBoxLayout;
     hboxLayout->setSpacing(6);
 
     m_step = new QComboBox( hbox );

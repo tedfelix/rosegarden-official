@@ -2312,7 +2312,7 @@ void NotationView::initStatusBar()
     sb->addWidget(m_hoveredOverNoteName);
 
     QWidget *hbox = new QWidget(sb);
-    QHBoxLayout hboxLayout = new QHBoxLayout;
+    QHBoxLayout *hboxLayout = new QHBoxLayout;
     m_currentNotePixmap = new QLabel( hbox );
     hboxLayout->addWidget(m_currentNotePixmap);
     m_currentNotePixmap->setMinimumWidth(20);

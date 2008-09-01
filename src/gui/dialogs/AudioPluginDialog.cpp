@@ -92,7 +92,7 @@ AudioPluginDialog::AudioPluginDialog(QDialogButtonBox::QWidget *parent,
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
     QWidget *vbox = new QWidget(this);
-    QVBoxLayout vboxLayout = new QVBoxLayout;
+    QVBoxLayout *vboxLayout = new QVBoxLayout;
     metagrid->addWidget(vbox, 0, 0);
 
 
@@ -117,7 +117,7 @@ AudioPluginDialog::AudioPluginDialog(QDialogButtonBox::QWidget *parent,
         (m_pluginList, i18n("Select a plugin from this list."));
 
     QWidget *h = new QWidget(pluginSelectionBox);
-    QHBoxLayout hLayout = new QHBoxLayout;
+    QHBoxLayout *hLayout = new QHBoxLayout;
 
 // top line
     m_bypass = new QCheckBox(i18n("Bypass"), h );

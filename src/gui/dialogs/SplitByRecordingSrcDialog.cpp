@@ -47,7 +47,7 @@ SplitByRecordingSrcDialog::SplitByRecordingSrcDialog(QDialogButtonBox::QWidget *
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
     QWidget *vBox = new QWidget(this);
-    QVBoxLayout vBoxLayout = new QVBoxLayout;
+    QVBoxLayout *vBoxLayout = new QVBoxLayout;
     metagrid->addWidget(vBox, 0, 0);
 
 

@@ -145,7 +145,7 @@ ImportDeviceDialog::doImport()
     }
 
     QWidget *optionsBox = new QWidget(mainFrame);
-    QHBoxLayout optionsBoxLayout = new QHBoxLayout;
+    QHBoxLayout *optionsBoxLayout = new QHBoxLayout;
 
     QGroupBox *gb = new QGroupBox( i18n("Options"), optionsBox );
     optionsBoxLayout->addWidget(gb);

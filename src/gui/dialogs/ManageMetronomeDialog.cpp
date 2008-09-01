@@ -67,7 +67,7 @@ ManageMetronomeDialog::ManageMetronomeDialog(QDialogButtonBox::QWidget *parent,
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
     QWidget *hbox = new QWidget(this);
-    QHBoxLayout hboxLayout = new QHBoxLayout;
+    QHBoxLayout *hboxLayout = new QHBoxLayout;
     metagrid->addWidget(hbox, 0, 0);
 
 
@@ -76,7 +76,7 @@ ManageMetronomeDialog::ManageMetronomeDialog(QDialogButtonBox::QWidget *parent,
     //    m_instrumentParameterBox = new InstrumentParameterBox(doc, hbox);
 
     QWidget *vbox = new QWidget(hbox);
-    QVBoxLayout vboxLayout = new QVBoxLayout;
+    QVBoxLayout *vboxLayout = new QVBoxLayout;
     hboxLayout->addWidget(vbox);
 
     QGroupBox *deviceBox = new QGroupBox( i18n("Metronome Instrument"), vbox );

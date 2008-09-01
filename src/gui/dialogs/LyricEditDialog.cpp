@@ -56,7 +56,7 @@ LyricEditDialog::LyricEditDialog(QDialogButtonBox::QWidget *parent,
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
     QWidget *vbox = new QWidget(this);
-    QVBoxLayout vboxLayout = new QVBoxLayout;
+    QVBoxLayout *vboxLayout = new QVBoxLayout;
     metagrid->addWidget(vbox, 0, 0);
 
 
@@ -65,7 +65,7 @@ LyricEditDialog::LyricEditDialog(QDialogButtonBox::QWidget *parent,
     vbox->setLayout(vboxLayout);
 
     QWidget *hbox = new QWidget(groupBox);
-    QHBoxLayout hboxLayout = new QHBoxLayout;
+    QHBoxLayout *hboxLayout = new QHBoxLayout;
     hboxLayout->setSpacing(5);
 //    new QLabel(i18n("Verse:"), hbox);
     m_verseNumber = new QComboBox( hbox );

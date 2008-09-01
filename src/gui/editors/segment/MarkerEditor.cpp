@@ -72,7 +72,7 @@ MarkerEditor::MarkerEditor(QWidget *parent,
         m_modified(false)
 {
     QWidget *mainFrame = new QWidget(this);
-    QVBoxLayout mainFrameLayout = new QVBoxLayout;
+    QVBoxLayout *mainFrameLayout = new QVBoxLayout;
     setCentralWidget(mainFrame);
 
     setCaption(i18n("Manage Markers"));

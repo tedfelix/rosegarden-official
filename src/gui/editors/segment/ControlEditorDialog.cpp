@@ -77,7 +77,7 @@ ControlEditorDialog::ControlEditorDialog(QWidget *parent,
     RG_DEBUG << "ControlEditorDialog::ControlEditorDialog: device is " << m_device << endl;
 
     QWidget *mainFrame = new QWidget(this);
-    QVBoxLayout mainFrameLayout = new QVBoxLayout;
+    QVBoxLayout *mainFrameLayout = new QVBoxLayout;
     setCentralWidget(mainFrame);
 
     setCaption(i18n("Manage Control Events"));

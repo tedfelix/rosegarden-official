@@ -278,7 +278,7 @@ TextEventDialog::TextEventDialog(QDialogButtonBox::QWidget *parent,
     m_lilyPondDirectiveCombo->addItem(Text::NormalSize);
 
     QWidget *exampleVBox = new QWidget(exampleBox);
-    QVBoxLayout exampleVBoxLayout = new QVBoxLayout;
+    QVBoxLayout *exampleVBoxLayout = new QVBoxLayout;
 
     int ls = m_notePixmapFactory->getLineSpacing();
 
