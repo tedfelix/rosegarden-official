@@ -21,8 +21,8 @@
 
 #include "base/AudioLevel.h"
 #include <map>
-#include <qcolor.h>
-#include <qwidget.h>
+#include <QColor>
+#include <QWidget>
 #include <utility>
 
 

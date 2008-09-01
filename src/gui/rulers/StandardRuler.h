@@ -19,7 +19,8 @@
 #ifndef _RG_STANDARDRULER_H_
 #define _RG_STANDARDRULER_H_
 
-#include <qvbox.h>
+#include <QWidget>
+#include <QVBoxLayout>
 #include "base/Event.h"
 
 

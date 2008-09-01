@@ -21,7 +21,7 @@
 
 #include "base/Exception.h"
 #include "base/NotationTypes.h"
-#include <qstring.h>
+#include <QString>
 #include "base/Event.h"
 
 

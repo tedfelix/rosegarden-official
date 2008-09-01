@@ -63,7 +63,7 @@
 #include "NoteCharacter.h"
 #include "NoteStyleFactory.h"
 
-#include <qiconset.h>
+#include <QIcon>
 
 
 namespace Rosegarden
@@ -110,7 +110,7 @@ NotationCommandRegistry::~NotationCommandRegistry()
 }
 
 bool
-NotationCommandRegistry::findIcon(QString iconName, QIconSet &icon)
+NotationCommandRegistry::findIcon(QString iconName, QIcon &icon)
 {
     NoteFont *font = 0;
     try {
@@ -132,7 +132,7 @@ NotationCommandRegistry::findIcon(QString iconName, QIconSet &icon)
 
     if (found) {
         QPixmap *pixmap = character.getPixmap();
-        if (pixmap) icon = QIconSet(*pixmap);
+        if (pixmap) icon = QIcon(*pixmap);
         else found = false;
     }
 

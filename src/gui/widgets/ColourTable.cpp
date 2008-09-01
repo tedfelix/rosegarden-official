@@ -25,11 +25,11 @@
 #include "gui/general/GUIPalette.h"
 #include <kcolordialog.h>
 #include <klineeditdlg.h>
-#include <qcolor.h>
-#include <qpoint.h>
-#include <qstring.h>
+#include <QColor>
+#include <QPoint>
+#include <QString>
 #include <qtable.h>
-#include <qwidget.h>
+#include <QWidget>
 
 
 namespace Rosegarden

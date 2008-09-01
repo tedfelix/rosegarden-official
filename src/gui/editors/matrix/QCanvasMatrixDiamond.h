@@ -19,12 +19,13 @@
 #ifndef _RG_QCANVASMATRIXDIAMOND_H_
 #define _RG_QCANVASMATRIXDIAMOND_H_
 
+#include <Q3Canvas>
 #include "QCanvasMatrixRectangle.h"
 #include <qpointarray.h>
 
 
 class QPainter;
-class QCanvas;
+class Q3Canvas;
 
 
 namespace Rosegarden
@@ -34,12 +35,12 @@ class MatrixElement;
 
 
 /**
- * A QCanvas diamond shape referencing a MatrixElement
+ * A Q3Canvas diamond shape referencing a MatrixElement
  */
 class QCanvasMatrixDiamond : public QCanvasMatrixRectangle
 {
 public:
-    QCanvasMatrixDiamond(MatrixElement&, QCanvas *);
+    QCanvasMatrixDiamond(MatrixElement&, Q3Canvas *);
     ~QCanvasMatrixDiamond();
 
     QPointArray areaPoints() const;

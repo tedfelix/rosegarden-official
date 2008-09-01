@@ -19,8 +19,8 @@
 #ifndef _RG_SEGMENTJOINCOMMAND_H_
 #define _RG_SEGMENTJOINCOMMAND_H_
 
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include <vector>
 #include <klocale.h>
 
@@ -34,7 +34,7 @@ class SegmentSelection;
 class Segment;
 
 
-class SegmentJoinCommand : public KNamedCommand
+class SegmentJoinCommand : public NamedCommand
 {
 public:
     SegmentJoinCommand(SegmentSelection &segments);

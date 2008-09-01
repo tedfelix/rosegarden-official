@@ -20,7 +20,7 @@
 #define _RG_SEGMENTJOINER_H_
 
 #include "SegmentTool.h"
-#include <qstring.h>
+#include <QString>
 
 
 class QMouseEvent;

@@ -17,12 +17,12 @@
 
 
 #include "TrackEditor.h"
-#include <qlayout.h>
+#include <QLayout>
 #include <kapplication.h>
 
 #include <klocale.h>
 #include <kconfig.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include "misc/Debug.h"
 #include "document/ConfigGroups.h"
 #include "gui/seqmanager/SequenceManager.h"
@@ -53,22 +53,22 @@
 #include "TrackButtons.h"
 #include "TrackEditorIface.h"
 #include <dcopobject.h>
-#include <kcommand.h>
+#include "document/Command.h"
 #include <kglobal.h>
 #include <kmessagebox.h>
-#include <qapplication.h>
-#include <qcursor.h>
-#include <qfont.h>
-#include <qpixmap.h>
-#include <qpoint.h>
+#include <QApplication>
+#include <QCursor>
+#include <QFont>
+#include <QPixmap>
+#include <QPoint>
 #include <qscrollview.h>
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qstrlist.h>
-#include <qwidget.h>
-#include <qvalidator.h>
+#include <QString>
+#include <QStringList>
+#include <QStringList>
+#include <QWidget>
+#include <QValidator>
 #include <qdragobject.h>
-#include <qtextstream.h>
+#include <QTextStream>
 
 
 namespace Rosegarden
@@ -575,7 +575,7 @@ TrackEditor::getCommandHistory()
 }
 
 void
-TrackEditor::addCommandToHistory(KCommand *command)
+TrackEditor::addCommandToHistory(Command *command)
 {
     getCommandHistory()->addCommand(command);
 }
@@ -597,7 +597,7 @@ TrackEditor::slotScrollToTrack(int track)
 void
 TrackEditor::slotDeleteSelectedSegments()
 {
-    KMacroCommand *macro = new KMacroCommand("Delete Segments");
+    MacroCommand *macro = new MacroCommand("Delete Segments");
 
     SegmentSelection segments =
         m_segmentCanvas->getSelectedSegments();
@@ -641,7 +641,7 @@ TrackEditor::slotTurnRepeatingSegmentToRealCopies()
     else
         text = i18n("Turn Repeating Segments into Real Copies");
 
-    KMacroCommand *macro = new KMacroCommand(text);
+    MacroCommand *macro = new MacroCommand(text);
 
     SegmentSelection::iterator it = segments.begin();
     for (; it != segments.end(); it++) {

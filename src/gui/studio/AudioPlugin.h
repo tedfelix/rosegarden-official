@@ -20,8 +20,8 @@
 #define _RG_AUDIOPLUGIN_H_
 
 #include "base/AudioPluginInstance.h"
-#include <qcolor.h>
-#include <qstring.h>
+#include <QColor>
+#include <QString>
 #include <vector>
 
 

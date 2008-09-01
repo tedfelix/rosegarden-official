@@ -19,8 +19,8 @@
 #ifndef _RG_ROSEGARDENTEXTFLOAT_H_
 #define _RG_ROSEGARDENTEXTFLOAT_H_
 
-#include <qstring.h>
-#include <qwidget.h>
+#include <QString>
+#include <QWidget>
 
 
 class QPaintEvent;

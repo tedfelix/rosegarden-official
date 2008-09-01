@@ -20,7 +20,8 @@
 #define _RG_IDENTIFYTEXTCODECDIALOG_H_
 
 #include <string>
-#include <kdialogbase.h>
+#include <QDialog>
+#include <QDialogButtonBox>
 #include <deque>
 
 
@@ -33,12 +34,12 @@ namespace Rosegarden
 
 
 
-class IdentifyTextCodecDialog : public KDialogBase
+class IdentifyTextCodecDialog : public QDialog
 {
     Q_OBJECT
     
 public:
-    IdentifyTextCodecDialog(QWidget *parent, std::string text);
+    IdentifyTextCodecDialog(QDialogButtonBox::QWidget *parent, std::string text);
 
     std::string getCodec() const { return m_codec; }
 

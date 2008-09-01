@@ -18,8 +18,8 @@
 
 #include "ZoomSlider.h"
 
-#include <qslider.h>
-#include <qwidget.h>
+#include <QSlider>
+#include <QWidget>
 
 
 namespace Rosegarden

@@ -57,7 +57,7 @@ void MmappedSegment::map()
 
     m_mmappedSize = fInfo.size();
 
-    m_fd = ::open(m_filename.latin1(), O_RDWR);
+    m_fd = ::open(m_filename.toLatin1().data(), O_RDWR);
 
     m_mmappedRegion = ::mmap(0, m_mmappedSize, PROT_READ, MAP_SHARED, m_fd, 0);
 

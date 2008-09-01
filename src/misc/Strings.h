@@ -16,7 +16,7 @@
 #define _ROSE_STRINGS_H_
 
 #include <string>
-#include <qstring.h>
+#include <QString>
 #include "PropertyName.h"
 #include "Exception.h"
 

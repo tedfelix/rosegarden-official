@@ -25,12 +25,12 @@
 #include "base/RulerScale.h"
 #include "base/Segment.h"
 #include "gui/general/GUIPalette.h"
-#include <qfont.h>
-#include <qfontmetrics.h>
-#include <qpainter.h>
-#include <qrect.h>
-#include <qsize.h>
-#include <qwidget.h>
+#include <QFont>
+#include <QFontMetrics>
+#include <QPainter>
+#include <QRect>
+#include <QSize>
+#include <QWidget>
 
 
 namespace Rosegarden

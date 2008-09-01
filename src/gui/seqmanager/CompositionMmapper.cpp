@@ -19,7 +19,7 @@
 #include "CompositionMmapper.h"
 #include "misc/Debug.h"
 
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include "base/Composition.h"
 #include "base/Segment.h"
 #include "document/RosegardenGUIDoc.h"
@@ -27,10 +27,10 @@
 #include "SegmentMmapperFactory.h"
 #include "SegmentMmapper.h"
 #include <kglobal.h>
-#include <qdir.h>
-#include <qfile.h>
-#include <qstring.h>
-#include <qstringlist.h>
+#include <QDir>
+#include <QFile>
+#include <QString>
+#include <QStringList>
 #include <stdint.h>
 
 

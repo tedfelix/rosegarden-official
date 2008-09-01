@@ -16,6 +16,7 @@
 */
 
 
+#include <Q3CanvasPixmap>
 #include "EventView.h"
 #include "EventViewItem.h"
 #include "TrivialVelocityDialog.h"
@@ -56,28 +57,28 @@
 #include <kconfig.h>
 #include <klocale.h>
 #include <kstatusbar.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kglobal.h>
 #include <klineeditdlg.h>
 #include <klistview.h>
 #include <kxmlguiclient.h>
-#include <qbuttongroup.h>
+#include <QGroupBox>
 #include <qcanvas.h>
-#include <qcheckbox.h>
-#include <qdialog.h>
-#include <qframe.h>
-#include <qgroupbox.h>
-#include <qiconset.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qlistview.h>
-#include <qpixmap.h>
-#include <qpoint.h>
+#include <QCheckBox>
+#include <QDialog>
+#include <QFrame>
+#include <QGroupBox>
+#include <QIcon>
+#include <QLabel>
+#include <QLayout>
+#include <QListView>
+#include <QPixmap>
+#include <QPoint>
 #include <qpopupmenu.h>
-#include <qpushbutton.h>
-#include <qsize.h>
-#include <qstring.h>
-#include <qwidget.h>
+#include <QPushButton>
+#include <QSize>
+#include <QString>
+#include <QWidget>
 #include <algorithm>
 
 
@@ -119,7 +120,7 @@ EventView::EventView(RosegardenGUIDoc *doc,
     // define some note filtering buttons in a group
     //
     m_filterGroup =
-        new QButtonGroup(1, Horizontal, i18n("Event filters"), getCentralWidget());
+        new QGroupBox(1, Horizontal, i18n("Event filters"), getCentralWidget());
 
     m_noteCheckBox = new QCheckBox(i18n("Note"), m_filterGroup);
     m_programCheckBox = new QCheckBox(i18n("Program Change"), m_filterGroup);
@@ -186,22 +187,22 @@ EventView::EventView(RosegardenGUIDoc *doc,
 
         layout->addWidget(new QLabel(i18n("Default timing:  "), frame), 3, 0);
 
-        KComboBox *adjust = new KComboBox(frame);
-        layout->addMultiCellWidget(adjust, 3, 3, 1, 2);
-        adjust->insertItem(i18n("As stored"));
-        adjust->insertItem(i18n("Truncate if longer than note"));
-        adjust->insertItem(i18n("End at same time as note")); 
-        adjust->insertItem(i18n("Stretch or squash segment to note duration"));
+        QComboBox *adjust = new QComboBox(frame);
+        layout->addWidget(adjust, 3, 1, 1, 2);
+        adjust->addItem(i18n("As stored"));
+        adjust->addItem(i18n("Truncate if longer than note"));
+        adjust->addItem(i18n("End at same time as note")); 
+        adjust->addItem(i18n("Stretch or squash segment to note duration"));
 
         std::string timing = rec->getDefaultTimeAdjust();
         if (timing == BaseProperties::TRIGGER_SEGMENT_ADJUST_NONE) {
-            adjust->setCurrentItem(0);
+            adjust->setCurrentIndex(0);
         } else if (timing == BaseProperties::TRIGGER_SEGMENT_ADJUST_SQUISH) {
-            adjust->setCurrentItem(3);
+            adjust->setCurrentIndex(3);
         } else if (timing == BaseProperties::TRIGGER_SEGMENT_ADJUST_SYNC_START) {
-            adjust->setCurrentItem(1);
+            adjust->setCurrentIndex(1);
         } else if (timing == BaseProperties::TRIGGER_SEGMENT_ADJUST_SYNC_END) {
-            adjust->setCurrentItem(2);
+            adjust->setCurrentIndex(2);
         }
 
         connect(adjust, SIGNAL(activated(int)), this, SLOT(slotTriggerTimeAdjustChanged(int)));
@@ -209,7 +210,7 @@ EventView::EventView(RosegardenGUIDoc *doc,
         QCheckBox *retune = new QCheckBox(i18n("Adjust pitch to trigger note by default"), frame);
         retune->setChecked(rec->getDefaultRetune());
         connect(retune, SIGNAL(clicked()), this, SLOT(slotTriggerRetuneChanged()));
-        layout->addMultiCellWidget(retune, 4, 4, 1, 2);
+        layout->addWidget(retune, 4, 1, 1, 2);
 
         */
 
@@ -537,7 +538,7 @@ EventView::applyLayout(int /*staffNo*/)
             index--;
 
         m_eventList->setSelected(m_eventList->itemAtIndex(index), true);
-        m_eventList->setCurrentItem(m_eventList->itemAtIndex(index));
+        m_eventList->setCurrentIndex(m_eventList->itemAtIndex(index));
 
         // ensure visible
         m_eventList->ensureItemVisible(m_eventList->itemAtIndex(index));
@@ -1111,34 +1112,34 @@ EventView::setupActions()
     EditViewBase::setupActions("eventlist.rc");
 
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QIconSet icon(QPixmap(pixmapDir + "/toolbar/event-insert.png"));
+    QIcon icon(QPixmap(pixmapDir + "/toolbar/event-insert.png"));
 
     new KAction(i18n("&Insert Event"), icon, Key_I, this,
                 SLOT(slotEditInsert()), actionCollection(),
                 "insert");
 
-    QCanvasPixmap pixmap(pixmapDir + "/toolbar/event-delete.png");
-    icon = QIconSet(pixmap);
+    Q3CanvasPixmap pixmap(pixmapDir + "/toolbar/event-delete.png");
+    icon = QIcon(pixmap);
 
     new KAction(i18n("&Delete Event"), icon, Key_Delete, this,
                 SLOT(slotEditDelete()), actionCollection(),
                 "delete");
 
     pixmap.load(pixmapDir + "/toolbar/event-edit.png");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
 
     new KAction(i18n("&Edit Event"), icon, Key_E, this,
                 SLOT(slotEditEvent()), actionCollection(),
                 "edit_simple");
 
     pixmap.load(pixmapDir + "/toolbar/event-edit-advanced.png");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
 
     new KAction(i18n("&Advanced Event Editor"), icon, Key_A, this,
                 SLOT(slotEditEventAdvanced()), actionCollection(),
                 "edit_advanced");
 
-    //    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/eventfilter.xpm"));
+    //    icon = QIcon(Q3CanvasPixmap(pixmapDir + "/toolbar/eventfilter.xpm"));
     new KAction(i18n("&Filter Selection"), "filter", Key_F, this,
                 SLOT(slotFilterSelection()), actionCollection(),
                 "filter_selection");
@@ -1157,7 +1158,7 @@ EventView::setupActions()
     KRadioAction *action;
 
     pixmap.load(pixmapDir + "/toolbar/time-musical.png");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
 
     action = new KRadioAction(i18n("&Musical Times"), icon, 0, this,
                               SLOT(slotMusicalTime()),
@@ -1167,7 +1168,7 @@ EventView::setupActions()
         action->setChecked(true);
 
     pixmap.load(pixmapDir + "/toolbar/time-real.png");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
 
     action = new KRadioAction(i18n("&Real Times"), icon, 0, this,
                               SLOT(slotRealTime()),
@@ -1177,7 +1178,7 @@ EventView::setupActions()
         action->setChecked(true);
 
     pixmap.load(pixmapDir + "/toolbar/time-raw.png");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
 
     action = new KRadioAction(i18n("Ra&w Times"), icon, 0, this,
                               SLOT(slotRawTime()),
@@ -1214,7 +1215,7 @@ EventView::initStatusBar()
     sb->addWidget(m_hoveredOverNoteName);
     */
 
-    sb->insertItem(KTmpStatusMsg::getDefaultMsg(),
+    sb->addItem(KTmpStatusMsg::getDefaultMsg(),
                    KTmpStatusMsg::getDefaultId(), 1);
     sb->setItemAlignment(KTmpStatusMsg::getDefaultId(),
                          AlignLeft | AlignVCenter);
@@ -1508,8 +1509,8 @@ void
 EventView::createMenu()
 {
     m_menu = new QPopupMenu(this);
-    m_menu->insertItem(i18n("Open in Event Editor"), 0);
-    m_menu->insertItem(i18n("Open in Expert Event Editor"), 1);
+    m_menu->addItem(i18n("Open in Event Editor"), 0);
+    m_menu->addItem(i18n("Open in Expert Event Editor"), 1);
 
     connect(m_menu, SIGNAL(activated(int)),
             SLOT(slotMenuActivated(int)));
@@ -1522,7 +1523,7 @@ EventView::slotMenuActivated(int value)
 
     if (value == 0) {
         EventViewItem *eItem = dynamic_cast<EventViewItem*>
-                               (m_eventList->currentItem());
+                               (m_eventList->currentIndex());
 
         if (eItem) {
             Event *event = eItem->getEvent();
@@ -1541,7 +1542,7 @@ EventView::slotMenuActivated(int value)
         }
     } else if (value == 1) {
         EventViewItem *eItem = dynamic_cast<EventViewItem*>
-                               (m_eventList->currentItem());
+                               (m_eventList->currentIndex());
 
         if (eItem) {
             Event *event = eItem->getEvent();

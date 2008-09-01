@@ -19,8 +19,8 @@
 #ifndef _RG_BASETOOL_H_
 #define _RG_BASETOOL_H_
 
-#include <qobject.h>
-#include <qstring.h>
+#include <QObject>
+#include <QString>
 
 
 class QPopupMenu;

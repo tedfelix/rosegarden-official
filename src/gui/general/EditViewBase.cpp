@@ -16,12 +16,13 @@
 */
 
 
+#include <Q3CanvasPixmap>
 #include "EditViewBase.h"
-#include <qlayout.h>
+#include <QLayout>
 #include <kapplication.h>
 
 #include <klocale.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include "misc/Debug.h"
 #include "base/Clipboard.h"
 #include "base/Event.h"
@@ -38,7 +39,7 @@
 #include "gui/general/EditViewTimeSigNotifier.h"
 #include "gui/kdeext/KTmpStatusMsg.h"
 #include <kaction.h>
-#include <kcommand.h>
+#include "document/Command.h"
 #include <kconfig.h>
 #include <kdockwidget.h>
 #include <kedittoolbar.h>
@@ -46,18 +47,18 @@
 #include <kkeydialog.h>
 #include <kmainwindow.h>
 #include <kstatusbar.h>
-#include <kstdaccel.h>
-#include <kstdaction.h>
+#include <kstandardshortcut.h>
+#include <kstandardaction.h>
 #include <kxmlguiclient.h>
-#include <qaccel.h>
+#include <qshortcut.h>
 #include <qcanvas.h>
-#include <qdialog.h>
-#include <qframe.h>
-#include <qiconset.h>
-#include <qobject.h>
-#include <qpixmap.h>
-#include <qstring.h>
-#include <qwidget.h>
+#include <QDialog>
+#include <QFrame>
+#include <QIcon>
+#include <QObject>
+#include <QPixmap>
+#include <QString>
+#include <QWidget>
 
 
 namespace Rosegarden
@@ -87,7 +88,7 @@ EditViewBase::EditViewBase(RosegardenGUIDoc *doc,
     m_needUpdate(false),
     m_pendingPaintEvent(0),
     m_havePendingPaintEvent(false),
-    m_accelerators(0),
+    m_shortcuterators(0),
     m_configDialogPageIndex(0),
     m_inCtor(true),
     m_timeSigNotifier(new EditViewTimeSigNotifier(doc))
@@ -119,9 +120,9 @@ EditViewBase::EditViewBase(RosegardenGUIDoc *doc,
     (getCommandHistory(), SIGNAL(commandExecuted()),
      this, SLOT(slotTestClipboard()));
 
-    // create accelerators
+    // create shortcuterators
     //
-    m_accelerators = new QAccel(this);
+    m_shortcuterators = new QShortcut(this);
 }
 
 EditViewBase::~EditViewBase()
@@ -150,69 +151,69 @@ void EditViewBase::setupActions(QString rcFileName, bool haveClipboard)
 
     // Actions all edit views will have
 
-    KStdAction::showToolbar(this, SLOT(slotToggleToolBar()),
+    KStandardAction::showToolbar(this, SLOT(slotToggleToolBar()),
                             actionCollection(), "options_show_toolbar");
 
-    KStdAction::showStatusbar(this, SLOT(slotToggleStatusBar()),
+    KStandardAction::showStatusbar(this, SLOT(slotToggleStatusBar()),
                               actionCollection(), "options_show_statusbar");
 
-    KStdAction::preferences(this,
+    KStandardAction::preferences(this,
                             SLOT(slotConfigure()),
                             actionCollection());
 
-    KStdAction::keyBindings(this,
+    KStandardAction::keyBindings(this,
                             SLOT(slotEditKeys()),
                             actionCollection());
 
-    KStdAction::configureToolbars(this,
+    KStandardAction::configureToolbars(this,
                                   SLOT(slotEditToolbars()),
                                   actionCollection());
 
 
     // File menu
-    KStdAction::save (this, SIGNAL(saveFile()), actionCollection());
-    KStdAction::close(this, SLOT(slotCloseWindow()), actionCollection());
+    KStandardAction::save (this, SIGNAL(saveFile()), actionCollection());
+    KStandardAction::close(this, SLOT(slotCloseWindow()), actionCollection());
 
     if (haveClipboard) {
-        KStdAction::cut (this, SLOT(slotEditCut()), actionCollection());
-        KStdAction::copy (this, SLOT(slotEditCopy()), actionCollection());
-        KStdAction::paste (this, SLOT(slotEditPaste()), actionCollection());
+        KStandardAction::cut (this, SLOT(slotEditCut()), actionCollection());
+        KStandardAction::copy (this, SLOT(slotEditCopy()), actionCollection());
+        KStandardAction::paste (this, SLOT(slotEditPaste()), actionCollection());
     }
 
     new KToolBarPopupAction(i18n("Und&o"),
                             "undo",
-                            KStdAccel::key(KStdAccel::Undo),
+                            KStandardShortcut::key(KStandardShortcut::Undo),
                             actionCollection(),
-                            KStdAction::stdName(KStdAction::Undo));
+                            KStandardAction::stdName(KStandardAction::Undo));
 
     new KToolBarPopupAction(i18n("Re&do"),
                             "redo",
-                            KStdAccel::key(KStdAccel::Redo),
+                            KStandardShortcut::key(KStandardShortcut::Redo),
                             actionCollection(),
-                            KStdAction::stdName(KStdAction::Redo));
+                            KStandardAction::stdName(KStandardAction::Redo));
 
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
 
-    QCanvasPixmap pixmap(pixmapDir + "/toolbar/matrix.png");
-    QIconSet icon = QIconSet(pixmap);
+    Q3CanvasPixmap pixmap(pixmapDir + "/toolbar/matrix.png");
+    QIcon icon = QIcon(pixmap);
     new KAction(i18n("Open in Matri&x Editor"), icon, 0, this,
                 SLOT(slotOpenInMatrix()), actionCollection(),
                 "open_in_matrix");
 
     pixmap.load(pixmapDir + "/toolbar/matrix-percussion.png");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
     new KAction(i18n("Open in &Percussion Matrix Editor"), icon, 0, this,
                 SLOT(slotOpenInPercussionMatrix()), actionCollection(),
                 "open_in_percussion_matrix");
 
     pixmap.load(pixmapDir + "/toolbar/notation.png");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
     new KAction(i18n("Open in &Notation Editor"), icon, 0, this,
                 SLOT(slotOpenInNotation()), actionCollection(),
                 "open_in_notation");
 
     pixmap.load(pixmapDir + "/toolbar/eventlist.png");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
     new KAction(i18n("Open in &Event List Editor"), icon, 0, this,
                 SLOT(slotOpenInEventList()), actionCollection(),
                 "open_in_event_list");
@@ -442,7 +443,7 @@ void EditViewBase::closeEvent(QCloseEvent* e)
     }
 }
 
-void EditViewBase::addCommandToHistory(KCommand *command)
+void EditViewBase::addCommandToHistory(Command *command)
 {
     getCommandHistory()->addCommand(command);
 }

@@ -17,7 +17,7 @@
 
 
 #include "AudioInstrumentParameterPanel.h"
-#include <qlayout.h>
+#include <QLayout>
 #include <kapplication.h>
 
 #include <klocale.h>
@@ -38,16 +38,16 @@
 #include "InstrumentParameterPanel.h"
 #include "sound/MappedCommon.h"
 #include "sound/MappedStudio.h"
-#include <qcolor.h>
-#include <qframe.h>
-#include <qlabel.h>
-#include <qpalette.h>
-#include <qpixmap.h>
-#include <qpushbutton.h>
-#include <qstring.h>
-#include <qtooltip.h>
-#include <qwidget.h>
-#include <qsignalmapper.h>
+#include <QColor>
+#include <QFrame>
+#include <QLabel>
+#include <QPalette>
+#include <QPixmap>
+#include <QPushButton>
+#include <QString>
+#include <QToolTip>
+#include <QWidget>
+#include <QSignalMapper>
 
 
 namespace Rosegarden
@@ -108,7 +108,7 @@ AudioInstrumentParameterPanel::slotPluginSelected(InstrumentId instrumentId,
     << ", index = " << index
     << ", plugin = " << plugin << endl;
 
-    QColor pluginBackgroundColour = Qt::black;
+    QColor pluginBackgroundColour = QColor(Qt::black);
     bool bypassed = false;
 
     QPushButton *button = 0;
@@ -172,7 +172,7 @@ AudioInstrumentParameterPanel::slotPluginBypassed(InstrumentId instrumentId,
     AudioPluginInstance *inst =
         m_selectedInstrument->getPlugin(pluginIndex);
 
-    QColor backgroundColour = Qt::black; // default background colour
+    QColor backgroundColour = QColor(Qt::black); // default background colour
 
     if (inst && inst->isAssigned()) {
         AudioPlugin *pluginClass
@@ -218,7 +218,7 @@ AudioInstrumentParameterPanel::setButtonColour(
         button->
         setPaletteBackgroundColor(kapp->palette().
                                   color(QPalette::Active, QColorGroup::ButtonText));
-    } else if (colour == Qt::black) {
+    } else if (colour == QColor(Qt::black)) {
         button->
         setPaletteForegroundColor(kapp->palette().
                                   color(QPalette::Active, QColorGroup::ButtonText));
@@ -228,7 +228,7 @@ AudioInstrumentParameterPanel::setButtonColour(
                                   color(QPalette::Active, QColorGroup::Button));
     } else {
         button->
-        setPaletteForegroundColor(Qt::white);
+        setPaletteForegroundColor(QColor(Qt::white));
 
         button->
         setPaletteBackgroundColor(colour);
@@ -242,10 +242,10 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(RosegardenGUIDoc* d
     QGridLayout *gridLayout = new QGridLayout(this, 3, 2, 5, 5);
 
     // Instrument label : first row, all cols
-    gridLayout->addMultiCellWidget(m_instrumentLabel, 0, 0, 0, 1, AlignCenter);
+    gridLayout->addWidget(m_instrumentLabel, 0, 0, 0- 0+1, 1- 1, AlignCenter);
 
     // fader and connect it
-    gridLayout->addMultiCellWidget(m_audioFader, 1, 1, 0, 1);
+    gridLayout->addWidget(m_audioFader, 1, 0, 0+1, 1- 1);
 
     gridLayout->setRowStretch(2, 1);
 
@@ -375,7 +375,7 @@ AudioInstrumentParameterPanel::setupForInstrument(Instrument* instrument)
             button->setText(noneText);
             QToolTip::add
                 (button, noneText);
-            setButtonColour(index, inst ? inst->isBypassed() : false, Qt::black);
+            setButtonColour(index, inst ? inst->isBypassed() : false, QColor(Qt::black));
         }
     }
 

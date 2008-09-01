@@ -16,13 +16,14 @@
 */
 
 
+#include <Q3CanvasPixmap>
 #include "NoteCharacter.h"
 
-#include <qpainter.h>
-#include <qpixmap.h>
-#include <qpoint.h>
+#include <QPainter>
+#include <QPixmap>
+#include <QPoint>
 #include <qcanvas.h>
-#include <qbitmap.h>
+#include <QBitmap>
 
 
 namespace Rosegarden
@@ -89,10 +90,10 @@ NoteCharacter::getPixmap() const
     return m_pixmap;
 }
 
-QCanvasPixmap *
+Q3CanvasPixmap *
 NoteCharacter::getCanvasPixmap() const
 {
-    return new QCanvasPixmap(*m_pixmap, m_hotspot);
+    return new Q3CanvasPixmap(*m_pixmap, m_hotspot);
 }
 
 void

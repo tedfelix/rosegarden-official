@@ -29,7 +29,7 @@
 #include "NotationEraser.h"
 #include "NotationSelector.h"
 
-#include <qstring.h>
+#include <QString>
 #include <kmessagebox.h>
 
 namespace Rosegarden
@@ -46,7 +46,7 @@ EditTool* NotationToolBox::createTool(const QString& toolName)
 {
     NotationTool* tool = 0;
 
-    QString toolNamelc = toolName.lower();
+    QString toolNamelc = toolName.toLower();
     
     if (toolNamelc == NoteInserter::ToolName)
 

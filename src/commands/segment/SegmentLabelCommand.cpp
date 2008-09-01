@@ -21,7 +21,7 @@
 #include "misc/Strings.h"
 #include "base/Segment.h"
 #include "base/Selection.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
@@ -30,7 +30,7 @@ namespace Rosegarden
 SegmentLabelCommand::SegmentLabelCommand(
     SegmentSelection &segments,
     const QString &label):
-        KNamedCommand(i18n("Label Segments")),
+        NamedCommand(i18n("Label Segments")),
         m_newLabel(label)
 {
     for (SegmentSelection::iterator i = segments.begin();

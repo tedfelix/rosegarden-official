@@ -30,7 +30,7 @@ namespace Rosegarden
 
 DeleteTriggerSegmentCommand::DeleteTriggerSegmentCommand(RosegardenGUIDoc *doc,
         TriggerSegmentId id) :
-        KNamedCommand(i18n("Delete Triggered Segment")),
+        NamedCommand(i18n("Delete Triggered Segment")),
         m_composition(&doc->getComposition()),
         m_id(id),
         m_segment(0),

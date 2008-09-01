@@ -22,8 +22,9 @@
 #include "Chord.h"
 #include "ChordMap.h"
 
-#include <kdialogbase.h>
-#include <qstring.h>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QString>
 #include <vector>
 
 class QListBox;
@@ -36,14 +37,14 @@ namespace Rosegarden
 
 class FingeringBox;
 
-class GuitarChordSelectorDialog : public KDialogBase
+class GuitarChordSelectorDialog : public QDialog
 {
      Q_OBJECT
     
     enum { COMPLEXITY_BEGINNER, COMPLEXITY_COMMON, COMPLEXITY_ALL };
     
 public:
-	GuitarChordSelectorDialog(QWidget *parent=0);
+	GuitarChordSelectorDialog(QDialogButtonBox::QWidget *parent=0);
 
     void init();
 

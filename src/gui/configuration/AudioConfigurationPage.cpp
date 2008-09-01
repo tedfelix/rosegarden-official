@@ -31,26 +31,26 @@
 #include "gui/studio/StudioControl.h"
 #include "sound/MappedEvent.h"
 #include "TabbedConfigurationPage.h"
-#include <kcombobox.h>
+#include <QComboBox>
 #include <kconfig.h>
 #include <kfiledialog.h>
-#include <qcheckbox.h>
-#include <qcombobox.h>
-#include <qcstring.h>
-#include <qdatastream.h>
-#include <qframe.h>
-#include <qlabel.h>
-#include <qlineedit.h>
-#include <qobject.h>
-#include <qpushbutton.h>
-#include <qlayout.h>
-#include <qslider.h>
-#include <qspinbox.h>
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qtabwidget.h>
-#include <qtooltip.h>
-#include <qwidget.h>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QByteArray>
+#include <QDataStream>
+#include <QFrame>
+#include <QLabel>
+#include <QLineEdit>
+#include <QObject>
+#include <QPushButton>
+#include <QLayout>
+#include <QSlider>
+#include <QSpinBox>
+#include <QString>
+#include <QStringList>
+#include <QTabWidget>
+#include <QToolTip>
+#include <QWidget>
 #include <kmessagebox.h>
 
 
@@ -85,23 +85,23 @@ AudioConfigurationPage::AudioConfigurationPage(
     layout->addWidget(new QLabel(i18n("Audio preview scale"),
                                  frame), row, 0);
 
-    m_previewStyle = new KComboBox(frame);
-    m_previewStyle->insertItem(i18n("Linear - easier to see loud peaks"));
-    m_previewStyle->insertItem(i18n("Meter scaling - easier to see quiet activity"));
-    m_previewStyle->setCurrentItem(m_cfg->readUnsignedNumEntry("audiopreviewstyle", 1));
-    layout->addMultiCellWidget(m_previewStyle, row, row, 1, 2);
+    m_previewStyle = new QComboBox(frame);
+    m_previewStyle->addItem(i18n("Linear - easier to see loud peaks"));
+    m_previewStyle->addItem(i18n("Meter scaling - easier to see quiet activity"));
+    m_previewStyle->setCurrentIndex(m_cfg->readUnsignedNumEntry("audiopreviewstyle", 1));
+    layout->addWidget(m_previewStyle, row, 1, row- row+1, 2);
     ++row;
 
 #ifdef HAVE_LIBJACK
     m_cfg->setGroup(SequencerOptionsConfigGroup);
 
     label = new QLabel(i18n("Record audio files as"), frame);
-    m_audioRecFormat = new KComboBox(frame);
-    m_audioRecFormat->insertItem(i18n("16-bit PCM WAV format (smaller files)"));
-    m_audioRecFormat->insertItem(i18n("32-bit float WAV format (higher quality)"));
-    m_audioRecFormat->setCurrentItem(m_cfg->readUnsignedNumEntry("audiorecordfileformat", 1));
+    m_audioRecFormat = new QComboBox(frame);
+    m_audioRecFormat->addItem(i18n("16-bit PCM WAV format (smaller files)"));
+    m_audioRecFormat->addItem(i18n("32-bit float WAV format (higher quality)"));
+    m_audioRecFormat->setCurrentIndex(m_cfg->readUnsignedNumEntry("audiorecordfileformat", 1));
     layout->addWidget(label, row, 0);
-    layout->addMultiCellWidget(m_audioRecFormat, row, row, 1, 2);
+    layout->addWidget(m_audioRecFormat, row, 1, row- row+1, 2);
     ++row;
 #endif
 
@@ -175,9 +175,9 @@ AudioConfigurationPage::AudioConfigurationPage(
     ++row;
 
     label = new QLabel(i18n("Rosegarden can start the JACK audio daemon (jackd) for you automatically if it isn't already running when Rosegarden starts.\n\nThis is recommended for beginners and those who use Rosegarden as their main audio application, but it might not be to the liking of advanced users.\n\nIf you want to start JACK automatically, make sure the command includes a full path where necessary as well as any command-line arguments you want to use.\n\nFor example: /usr/local/bin/jackd -d alsa -d hw -r44100 -p 2048 -n 2\n\n"), frame);
-    label->setAlignment(Qt::WordBreak);
+    label->setAlignment(Qt::TextWordWrap);
 
-    layout->addMultiCellWidget(label, row, row, 0, 3);
+    layout->addWidget(label, row, 0, row- row+1, 3- 1);
     ++row;
 
     // JACK control things
@@ -199,7 +199,7 @@ AudioConfigurationPage::AudioConfigurationPage(
                                         "/usr/bin/qjackctl -s");
     m_jackPath = new QLineEdit(jackPath, frame);
 
-    layout->addMultiCellWidget(m_jackPath, row, row, 1, 3);
+    layout->addWidget(m_jackPath, row, 1, row- row+1, 3);
     ++row;
 
     layout->setRowStretch(row, 10);
@@ -235,17 +235,17 @@ AudioConfigurationPage::apply()
     //
     m_cfg->writeEntry("audiofaderouts", m_createFaderOuts->isChecked());
     m_cfg->writeEntry("audiosubmasterouts", m_createSubmasterOuts->isChecked());
-    m_cfg->writeEntry("audiorecordfileformat", m_audioRecFormat->currentItem());
+    m_cfg->writeEntry("audiorecordfileformat", m_audioRecFormat->currentIndex());
 #endif
 
     m_cfg->setGroup(GeneralOptionsConfigGroup);
 
-    int previewstyle = m_previewStyle->currentItem();
+    int previewstyle = m_previewStyle->currentIndex();
     m_cfg->writeEntry("audiopreviewstyle", previewstyle);
 
     QString externalAudioEditor = getExternalAudioEditor();
 
-    QStringList extlist = QStringList::split(" ", externalAudioEditor);
+    QStringList extlist = externalAudioEditor.split(" ", QString::SkipEmptyParts);
     QString extpath = "";
     if (extlist.size() > 0) extpath = extlist[0];
 
@@ -275,7 +275,7 @@ AudioConfigurationPage::getBestAvailableAudioEditor()
     if (cpath) path = cpath;
     else path = "/usr/bin:/bin";
 
-    QStringList pathList = QStringList::split(":", path);
+    QStringList pathList = path.split(":", QString::SkipEmptyParts);
 
     const char *candidates[] = {
         "mhwaveedit",

@@ -22,7 +22,7 @@
 #include "base/MidiProgram.h"
 #include "base/MidiDevice.h"
 #include "InstrumentParameterPanel.h"
-#include <qstring.h>
+#include <QString>
 
 
 class QWidget;
@@ -31,7 +31,7 @@ class QLabel;
 class QGridLayout;
 class QFrame;
 class QCheckBox;
-class KComboBox;
+class QComboBox;
 
 
 namespace Rosegarden
@@ -100,11 +100,11 @@ protected:
 
     QLabel             *m_connectionLabel;
 
-    KComboBox          *m_bankValue;
-    KComboBox          *m_variationValue;
-    KComboBox          *m_channelValue;
-    KComboBox          *m_programValue;
-    //KComboBox          *m_channelInValue;
+    QComboBox          *m_bankValue;
+    QComboBox          *m_variationValue;
+    QComboBox          *m_channelValue;
+    QComboBox          *m_programValue;
+    //QComboBox          *m_channelInValue;
 
     QCheckBox          *m_percussionCheckBox;
     QCheckBox          *m_bankCheckBox;

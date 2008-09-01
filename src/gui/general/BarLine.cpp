@@ -17,7 +17,7 @@
 
 #include "BarLine.h"
 
-#include <qpainter.h>
+#include <QPainter>
 
 namespace Rosegarden {
         

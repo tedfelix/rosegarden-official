@@ -19,7 +19,7 @@
 #include "base/Segment.h"
 #include "base/Event.h"
 
-#include <qtextcodec.h>
+#include <QTextCodec>
 
 
 
@@ -35,7 +35,7 @@ QString strtoqstr(const Rosegarden::PropertyName &p)
 
 std::string qstrtostr(const QString &qstr)
 {
-    return std::string(qstr.utf8().data());
+    return std::string(qstr.toUtf8().data());
 }
 
 /**

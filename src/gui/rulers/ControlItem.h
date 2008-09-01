@@ -15,6 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
+#include <Q3CanvasRectangle>
 #include <qcanvas.h>
 
 namespace Rosegarden {
@@ -22,7 +23,7 @@ namespace Rosegarden {
 class ControlRuler;
 class ElementAdapter;
         
-class ControlItem : public QCanvasRectangle
+class ControlItem : public Q3CanvasRectangle
 {
 public:
     ControlItem(ControlRuler* controlRuler,

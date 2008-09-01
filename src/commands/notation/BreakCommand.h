@@ -20,7 +20,7 @@
 #define _RG_BREAKCOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
-#include <qstring.h>
+#include <QString>
 #include <klocale.h>
 
 

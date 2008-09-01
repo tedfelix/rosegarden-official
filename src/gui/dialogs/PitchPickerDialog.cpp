@@ -18,28 +18,44 @@
 
 #include "PitchPickerDialog.h"
 #include <klocale.h>
-#include <kdialogbase.h>
-#include <qlayout.h>
-#include <qframe.h>
-#include <qstring.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QLayout>
+#include <QFrame>
+#include <QString>
+#include <QWidget>
+#include <QVBoxLayout>
 
 
 namespace Rosegarden
 {
 
-PitchPickerDialog::PitchPickerDialog(QWidget *parent, int initialPitch, QString text) :
-        KDialogBase(parent, 0, true, i18n("Pitch Selector"), Ok | Cancel)
+PitchPickerDialog::PitchPickerDialog(QDialogButtonBox::QWidget *parent, int initialPitch, QString text) :
+        QDialog(parent)
 {
-    QVBox *vBox = makeVBoxMainWidget();
+    setModal(true);
+    setWindowTitle(i18n("Pitch Selector"));
 
-    QFrame *frame = new QFrame(vBox);
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
+    QWidget *vBox = new QWidget(this);
+    QVBoxLayout vBoxLayout = new QVBoxLayout;
+    metagrid->addWidget(vBox, 0, 0);
+
+
+    QFrame *frame = new QFrame( vBox );
+    vBoxLayout->addWidget(frame);
+    vBox->setLayout(vBoxLayout);
 
     QGridLayout *layout = new QGridLayout(frame, 4, 3, 10, 5);
 
     m_pitch = new PitchChooser(text, frame, initialPitch);
-    layout->addMultiCellWidget(m_pitch, 0, 0, 0, 2, Qt::AlignHCenter);
+    layout->addWidget(m_pitch, 0, 0, 0- 0+1, 2- 1, Qt::AlignHCenter);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 PitchPickerDialog::~PitchPickerDialog()

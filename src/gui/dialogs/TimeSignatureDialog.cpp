@@ -26,30 +26,31 @@
 #include "gui/widgets/TimeWidget.h"
 #include "gui/widgets/BigArrowButton.h"
 #include <kconfig.h>
-#include <kdialogbase.h>
-#include <qbuttongroup.h>
-#include <qcheckbox.h>
-#include <qfont.h>
-#include <qgroupbox.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qobject.h>
-#include <qradiobutton.h>
-#include <qstring.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QGroupBox>
+#include <QCheckBox>
+#include <QFont>
+#include <QGroupBox>
+#include <QLabel>
+#include <QObject>
+#include <QRadioButton>
+#include <QString>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 
 
 namespace Rosegarden
 {
 
-TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
+TimeSignatureDialog::TimeSignatureDialog(QDialogButtonBox::QWidget *parent,
         Composition *composition,
         timeT insertionTime,
         TimeSignature sig,
         bool timeEditable,
         QString explanatoryText) :
-        KDialogBase(parent, 0, true, i18n("Time Signature"), Ok | Cancel | Help),
+        QDialog(parent),
         m_composition(composition),
         m_timeSignature(sig),
         m_time(insertionTime),
@@ -63,6 +64,11 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
         m_startOfBarButton(0),
         m_timeEditor(0)
 {
+    setModal(true);
+    setWindowTitle(i18n("Time Signature"));
+
+#warning Dialog needs QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help)
+
     static QFont *timeSigFont = 0;
 
     if (timeSigFont == 0) {
@@ -73,21 +79,23 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
     QVBox *vbox = makeVBoxMainWidget();
     QGroupBox *groupBox = new QGroupBox
                           (1, Horizontal, i18n("Time signature"), vbox);
-    QHBox *numBox = new QHBox(groupBox);
-    QHBox *denomBox = new QHBox(groupBox);
+    QWidget *denomBox = new QWidget(groupBox);
+    QHBoxLayout denomBoxLayout = new QHBoxLayout;
 
     QLabel *explanatoryLabel = 0;
     if (explanatoryText) {
         explanatoryLabel = new QLabel(explanatoryText, groupBox);
     }
 
-    BigArrowButton *numDown = new BigArrowButton(numBox, Qt::LeftArrow);
-    BigArrowButton *denomDown = new BigArrowButton(denomBox, Qt::LeftArrow);
+    BigArrowButton *numDown = new BigArrowButton( numBox , Qt::LeftArrow);
+    numBoxLayout->addWidget(numDown);
+    BigArrowButton *denomDown = new BigArrowButton( denomBox , Qt::LeftArrow);
+    denomBoxLayout->addWidget(denomDown);
 
-    m_numLabel = new QLabel
-                 (QString("%1").arg(m_timeSignature.getNumerator()), numBox);
-    m_denomLabel = new QLabel
-                   (QString("%1").arg(m_timeSignature.getDenominator()), denomBox);
+    m_numLabel = new QLabel(QString("%1").arg(m_timeSignature.getNumerator()), numBox );
+    numBoxLayout->addWidget(m_numLabel);
+    m_denomLabel = new QLabel(QString("%1").arg(m_timeSignature.getDenominator()), denomBox );
+    denomBoxLayout->addWidget(m_denomLabel);
 
     m_numLabel->setAlignment(AlignHCenter | AlignVCenter);
     m_denomLabel->setAlignment(AlignHCenter | AlignVCenter);
@@ -95,8 +103,12 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
     m_numLabel->setFont(*timeSigFont);
     m_denomLabel->setFont(*timeSigFont);
 
-    BigArrowButton *numUp = new BigArrowButton(numBox, Qt::RightArrow);
-    BigArrowButton *denomUp = new BigArrowButton(denomBox, Qt::RightArrow);
+    BigArrowButton *numUp = new BigArrowButton( numBox , Qt::RightArrow);
+    numBoxLayout->addWidget(numUp);
+    numBox->setLayout(numBoxLayout);
+    BigArrowButton *denomUp = new BigArrowButton( denomBox , Qt::RightArrow);
+    denomBoxLayout->addWidget(denomUp);
+    denomBox->setLayout(denomBoxLayout);
 
     QObject::connect(numDown, SIGNAL(clicked()), this, SLOT(slotNumDown()));
     QObject::connect(numUp, SIGNAL(clicked()), this, SLOT(slotNumUp()));
@@ -119,7 +131,7 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
 
         m_timeEditor = 0;
 
-        groupBox = new QButtonGroup(1, Horizontal, i18n("Scope"), vbox);
+        groupBox = new QGroupBox(1, Horizontal, i18n("Scope"), vbox);
 
         int barNo = composition->getBarNumber(m_time);
         bool atStartOfBar = (m_time == composition->getBarStart(barNo));

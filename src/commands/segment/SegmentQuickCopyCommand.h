@@ -19,8 +19,8 @@
 #ifndef _RG_SEGMENTQUICKCOPYCOMMAND_H_
 #define _RG_SEGMENTQUICKCOPYCOMMAND_H_
 
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include <klocale.h>
 
 
@@ -33,7 +33,7 @@ class Segment;
 class Composition;
 
 
-class SegmentQuickCopyCommand : public KNamedCommand
+class SegmentQuickCopyCommand : public NamedCommand
 {
 public:
     SegmentQuickCopyCommand(Segment *segment);

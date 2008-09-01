@@ -23,7 +23,7 @@
 
 #ifdef HAVE_LIRC
 
-#include <qobject.h>
+#include <QObject>
 #include "base/Track.h"
 
 

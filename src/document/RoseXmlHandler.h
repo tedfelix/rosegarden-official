@@ -25,7 +25,7 @@
 #include <map>
 #include <set>
 #include <string>
-#include <qstring.h>
+#include <QString>
 #include "base/Event.h"
 #include <qxml.h>
 

@@ -20,7 +20,7 @@
 
 #include "misc/Debug.h"
 #include "PresetElement.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden

@@ -22,44 +22,56 @@
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include "gui/widgets/BigArrowButton.h"
 #include <klocale.h>
-#include <kdialogbase.h>
-#include <qbuttongroup.h>
-#include <qgroupbox.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qobject.h>
-#include <qpixmap.h>
-#include <qradiobutton.h>
-#include <qstring.h>
-#include <qtooltip.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QGroupBox>
+#include <QGroupBox>
+#include <QLabel>
+#include <QObject>
+#include <QPixmap>
+#include <QRadioButton>
+#include <QString>
+#include <QToolTip>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 
 
 namespace Rosegarden
 {
 
-ClefDialog::ClefDialog(QWidget *parent,
+ClefDialog::ClefDialog(QDialogButtonBox::QWidget *parent,
                        NotePixmapFactory *npf,
                        Clef defaultClef,
                        bool showConversionOptions) :
-        KDialogBase(parent, 0, true, i18n("Clef"), Ok | Cancel | Help),
+        QDialog(parent),
         m_notePixmapFactory(npf),
         m_clef(defaultClef)
 {
     setHelp("nv-signatures-clef");
 
-    QVBox *vbox = makeVBoxMainWidget();
+    setModal(true);
+    setWindowTitle(i18n("Clef"));
 
-    QGroupBox *clefFrame = new QGroupBox
-                           (1, Horizontal, i18n("Clef"), vbox);
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
+    QWidget *vbox = new QWidget(this);
+    QVBoxLayout vboxLayout = new QVBoxLayout;
+    metagrid->addWidget(vbox, 0, 0);
 
-    QButtonGroup *conversionFrame = new QButtonGroup
-                                    (1, Horizontal, i18n("Existing notes following clef change"), vbox);
 
-    QHBox *clefBox = new QHBox(clefFrame);
+    QGroupBox *clefFrame = new QGroupBox( i18n("Clef"), vbox );
+    vboxLayout->addWidget(clefFrame);
 
-    BigArrowButton *clefDown = new BigArrowButton(clefBox, Qt::LeftArrow);
+    QGroupBox *conversionFrame = new QGroupBox( i18n("Existing notes following clef change"), vbox );
+    vboxLayout->addWidget(conversionFrame);
+    vbox->setLayout(vboxLayout);
+
+    QWidget *clefBox = new QWidget(clefFrame);
+    QHBoxLayout clefBoxLayout = new QHBoxLayout;
+
+    BigArrowButton *clefDown = new BigArrowButton( clefBox , Qt::LeftArrow);
+    clefBoxLayout->addWidget(clefDown);
     QToolTip::add
         (clefDown, i18n("Lower clef"));
 
@@ -76,7 +88,9 @@ ClefDialog::ClefDialog(QWidget *parent,
     QToolTip::add
         (m_octaveDown, i18n("Down an Octave"));
 
-    BigArrowButton *clefUp = new BigArrowButton(clefBox, Qt::RightArrow);
+    BigArrowButton *clefUp = new BigArrowButton( clefBox , Qt::RightArrow);
+    clefBoxLayout->addWidget(clefUp);
+    clefBox->setLayout(clefBoxLayout);
     QToolTip::add
         (clefUp, i18n("Higher clef"));
 
@@ -110,6 +124,11 @@ ClefDialog::ClefDialog(QWidget *parent,
     QObject::connect(m_octaveDown, SIGNAL(clicked()), this, SLOT(slotOctaveDown()));
 
     redrawClefPixmap();
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 Clef

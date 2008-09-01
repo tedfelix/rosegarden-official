@@ -20,9 +20,9 @@
 #define _RG_AUDIOPLUGINMANAGER_H_
 
 #include "AudioPluginClipboard.h"
-#include <qmutex.h>
-#include <qstring.h>
-#include <qthread.h>
+#include <QMutex>
+#include <QString>
+#include <QThread>
 #include <vector>
 #include "AudioPlugin.h"
 

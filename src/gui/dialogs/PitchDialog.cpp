@@ -20,24 +20,40 @@
 
 #include <klocale.h>
 #include "gui/widgets/PitchChooser.h"
-#include <kdialogbase.h>
-#include <qstring.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QString>
+#include <QWidget>
+#include <QVBoxLayout>
 
 
 namespace Rosegarden
 {
 
-PitchDialog::PitchDialog(QWidget *parent, QString title, int defaultPitch) :
-        KDialogBase(parent, 0, true, title, User1 | Ok)
+PitchDialog::PitchDialog(QDialogButtonBox::QWidget *parent, QString title, int defaultPitch) :
+        QDialog(parent)
 {
-    QVBox *vbox = makeVBoxMainWidget();
-    m_pitchChooser = new PitchChooser(title, vbox, defaultPitch);
+    setModal(true);
+    setWindowTitle(title);
+
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
+    QWidget *vbox = new QWidget(this);
+    QVBoxLayout vboxLayout = new QVBoxLayout;
+    metagrid->addWidget(vbox, 0, 0);
+
+    m_pitchChooser = new PitchChooser(title, vbox , defaultPitch);
+    vboxLayout->addWidget(m_pitchChooser);
+    vbox->setLayout(vboxLayout);
 
     setButtonText(User1, i18n("Reset"));
     connect(this, SIGNAL(user1Clicked()),
             m_pitchChooser, SLOT(slotResetToDefault()));
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::User1 | QDialogButtonBox::Ok);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 int

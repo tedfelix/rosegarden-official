@@ -21,8 +21,8 @@
 #include "base/Device.h"
 #include "base/MidiDevice.h"
 #include <kmainwindow.h>
-#include <qstring.h>
-#include <qstringlist.h>
+#include <QString>
+#include <QStringList>
 #include <vector>
 
 

@@ -20,17 +20,17 @@
 #include "misc/Debug.h"
 
 #include <klocale.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include "misc/Strings.h"
 #include "base/Exception.h"
 #include "SystemFont.h"
 #include <kglobal.h>
-#include <qfile.h>
-#include <qfileinfo.h>
-#include <qpixmap.h>
-#include <qregexp.h>
-#include <qstring.h>
-#include <qstringlist.h>
+#include <QFile>
+#include <QFileInfo>
+#include <QPixmap>
+#include <QRegExp>
+#include <QString>
+#include <QStringList>
 
 
 namespace Rosegarden
@@ -57,7 +57,7 @@ NoteFontMap::NoteFontMap(std::string name) :
 
     if (!mapFileMixedInfo.isReadable()) {
 
-        QString lowerName = strtoqstr(name).lower();
+        QString lowerName = strtoqstr(name).toLower();
         lowerName.replace(QRegExp(" "), "_");
         QString mapFileLowerName = QString("%1/mappings/%2.xml")
                                    .arg(m_fontDirectory)
@@ -128,7 +128,7 @@ NoteFontMap::startElement(const QString &, const QString &,
                           const QString &qName,
                           const QXmlAttributes &attributes)
 {
-    QString lcName = qName.lower();
+    QString lcName = qName.toLower();
     m_characterDestination = 0;
 
     // The element names are actually unique within the whole file;
@@ -172,7 +172,7 @@ NoteFontMap::startElement(const QString &, const QString &,
 
         s = attributes.value("smooth");
         if (s)
-            m_smooth = (s.lower() == "true");
+            m_smooth = (s.toLower() == "true");
 
     } else if (lcName == "font-sizes") {
     }
@@ -357,7 +357,7 @@ NoteFontMap::startElement(const QString &, const QString &,
             m_errorString = "font-id is a required attribute of codebase";
             return false;
         }
-        fn = fontId.stripWhiteSpace().toInt(&ok);
+        fn = fontId.trimmed().toInt(&ok);
         if (!ok || fn < 0) {
             m_errorString =
                 QString("invalid font-id attribute \"%1\" (must be integer >= 0)").
@@ -383,7 +383,7 @@ NoteFontMap::startElement(const QString &, const QString &,
         int icode = -1;
         bool ok = false;
         if (code) {
-            icode = code.stripWhiteSpace().toInt(&ok);
+            icode = code.trimmed().toInt(&ok);
             if (!ok || icode < 0) {
                 m_errorString =
                     QString("invalid code attribute \"%1\" (must be integer >= 0)").
@@ -396,7 +396,7 @@ NoteFontMap::startElement(const QString &, const QString &,
         int iglyph = -1;
         ok = false;
         if (glyph) {
-            iglyph = glyph.stripWhiteSpace().toInt(&ok);
+            iglyph = glyph.trimmed().toInt(&ok);
             if (!ok || iglyph < 0) {
                 m_errorString =
                     QString("invalid glyph attribute \"%1\" (must be integer >= 0)").
@@ -419,7 +419,7 @@ NoteFontMap::startElement(const QString &, const QString &,
 
         QString inversionCode = attributes.value("inversion-code");
         if (inversionCode) {
-            icode = inversionCode.stripWhiteSpace().toInt(&ok);
+            icode = inversionCode.trimmed().toInt(&ok);
             if (!ok || icode < 0) {
                 m_errorString =
                     QString("invalid inversion code attribute \"%1\" (must be integer >= 0)").
@@ -431,7 +431,7 @@ NoteFontMap::startElement(const QString &, const QString &,
 
         QString inversionGlyph = attributes.value("inversion-glyph");
         if (inversionGlyph) {
-            iglyph = inversionGlyph.stripWhiteSpace().toInt(&ok);
+            iglyph = inversionGlyph.trimmed().toInt(&ok);
             if (!ok || iglyph < 0) {
                 m_errorString =
                     QString("invalid inversion glyph attribute \"%1\" (must be integer >= 0)").
@@ -443,7 +443,7 @@ NoteFontMap::startElement(const QString &, const QString &,
 
         QString fontId = attributes.value("font-id");
         if (fontId) {
-            int n = fontId.stripWhiteSpace().toInt(&ok);
+            int n = fontId.trimmed().toInt(&ok);
             if (!ok || n < 0) {
                 m_errorString =
                     QString("invalid font-id attribute \"%1\" (must be integer >= 0)").
@@ -453,7 +453,7 @@ NoteFontMap::startElement(const QString &, const QString &,
             symbolData.setFontId(n);
         }
 
-        m_data[qstrtostr(symbolName.upper())] = symbolData;
+        m_data[qstrtostr(symbolName.toUpper())] = symbolData;
 
     } else if (lcName == "font-hotspots") {
     }
@@ -464,7 +464,7 @@ NoteFontMap::startElement(const QString &, const QString &,
             m_errorString = "name is a required attribute of hotspot";
             return false;
         }
-        m_hotspotCharName = qstrtostr(s.upper());
+        m_hotspotCharName = qstrtostr(s.toUpper());
 
     } else if (lcName == "scaled") {
 
@@ -560,7 +560,7 @@ NoteFontMap::startElement(const QString &, const QString &,
         int n = -1;
         bool ok = false;
         if (id) {
-            n = id.stripWhiteSpace().toInt(&ok);
+            n = id.trimmed().toInt(&ok);
             if (!ok) {
                 m_errorString =
                     QString("invalid font-id attribute \"%1\" (must be integer >= 0)").
@@ -617,7 +617,7 @@ NoteFontMap::startElement(const QString &, const QString &,
             return false;
         }
 
-        QString s = attributes.value("strategy").lower();
+        QString s = attributes.value("strategy").toLower();
         SystemFont::Strategy strategy = SystemFont::PreferGlyphs;
 
         if (s) {
@@ -709,7 +709,7 @@ NoteFontMap::checkFile(int size, std::string &src) const
 
         QString pixmapFileLowerName = QString("%1/%2/%3/%4.xpm")
                                       .arg(m_fontDirectory)
-                                      .arg(strtoqstr(m_srcDirectory).lower())
+                                      .arg(strtoqstr(m_srcDirectory).toLower())
                                       .arg(size)
                                       .arg(strtoqstr(src));
 

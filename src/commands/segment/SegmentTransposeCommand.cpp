@@ -26,13 +26,13 @@
 namespace Rosegarden
 {
 SegmentTransposeCommand::SegmentTransposeCommand(Segment &segment, bool changeKey, int steps, int semitones, bool transposeSegmentBack) :
-        KMacroCommand(i18n("Change segment transposition"))
+        MacroCommand(i18n("Change segment transposition"))
 {
     processSegment(segment, changeKey, steps, semitones, transposeSegmentBack);
 }
 
 SegmentTransposeCommand::SegmentTransposeCommand(SegmentSelection selection, bool changeKey, int steps, int semitones, bool transposeSegmentBack) :
-        KMacroCommand(i18n("Change segment transposition"))
+        MacroCommand(i18n("Change segment transposition"))
 {
     //SegmentSelection selection(m_view->getSelection());
     for (SegmentSelection::iterator i = selection.begin();
@@ -46,7 +46,7 @@ SegmentTransposeCommand::SegmentTransposeCommand(SegmentSelection selection, boo
 void 
 SegmentTransposeCommand::processSegment(Segment &segment, bool changeKey, int steps, int semitones, bool transposeSegmentBack)
 {
-    KMacroCommand * macroCommand = this;
+    MacroCommand * macroCommand = this;
 
     // TODO delete it somewhere.
     EventSelection * wholeSegment = new EventSelection(segment, segment.getStartTime(), segment.getEndMarkerTime());

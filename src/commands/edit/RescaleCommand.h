@@ -20,7 +20,7 @@
 #define _RG_RESCALECOMMAND_H_
 
 #include "document/BasicCommand.h"
-#include <qstring.h>
+#include <QString>
 #include "base/Event.h"
 #include <klocale.h>
 

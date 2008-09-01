@@ -20,16 +20,16 @@
 
 #include "base/Studio.h"
 #include <klocale.h>
-#include <kcommand.h>
+#include "document/Command.h"
 
 namespace Rosegarden
 {
 
-class ChangeRecordDeviceCommand : public KNamedCommand
+class ChangeRecordDeviceCommand : public NamedCommand
 {
 public:
     ChangeRecordDeviceCommand(Rosegarden::DeviceId deviceId, bool action) :
-        KNamedCommand(i18n("Change Record Device")),
+        NamedCommand(i18n("Change Record Device")),
         m_deviceId(deviceId), m_action(action) { }
     
     virtual void execute() { swap(); }

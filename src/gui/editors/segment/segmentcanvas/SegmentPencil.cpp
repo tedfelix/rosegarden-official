@@ -33,13 +33,13 @@
 #include "gui/general/GUIPalette.h"
 #include "gui/general/RosegardenCanvasView.h"
 #include "SegmentTool.h"
-#include <kcommand.h>
+#include "document/Command.h"
 #include <klocale.h>
-#include <qcursor.h>
-#include <qevent.h>
-#include <qpoint.h>
-#include <qrect.h>
-#include <qstring.h>
+#include <QCursor>
+#include <QEvent>
+#include <QPoint>
+#include <QRect>
+#include <QString>
 
 
 namespace Rosegarden

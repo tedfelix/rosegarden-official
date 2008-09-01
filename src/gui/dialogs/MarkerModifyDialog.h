@@ -19,9 +19,10 @@
 #ifndef _RG_MARKERMODIFYDIALOG_H_
 #define _RG_MARKERMODIFYDIALOG_H_
 
-#include <kdialogbase.h>
-#include <qstring.h>
-#include <qlineedit.h>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QString>
+#include <QLineEdit>
 
 #include "base/Marker.h"
 #include "gui/widgets/TimeWidget.h"
@@ -35,11 +36,11 @@ class RosegardenGUIDoc;
 class Composition;
 
 
-class MarkerModifyDialog : public KDialogBase
+class MarkerModifyDialog : public QDialog
 {
     Q_OBJECT
 public:
-    MarkerModifyDialog(QWidget *parent,
+    MarkerModifyDialog(QDialogButtonBox::QWidget *parent,
                        Composition *composition,
                        int time,
                        const QString &name,

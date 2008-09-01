@@ -18,7 +18,7 @@
 
 #include "Spline.h"
 
-#include <qpoint.h>
+#include <QPoint>
 
 
 namespace Rosegarden

@@ -17,11 +17,11 @@
 
 
 #include "BankEditorDialog.h"
-#include <qlayout.h>
+#include <QLayout>
 #include <kapplication.h>
 
 #include <klocale.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "base/Device.h"
@@ -41,31 +41,31 @@
 #include "MidiKeyMappingEditor.h"
 #include "MidiProgramsEditor.h"
 #include <kaction.h>
-#include <kcombobox.h>
-#include <kcommand.h>
+#include <QComboBox>
+#include "document/Command.h"
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <klistview.h>
 #include <kmainwindow.h>
 #include <kmessagebox.h>
-#include <kstdaccel.h>
-#include <kstdaction.h>
+#include <kstandardshortcut.h>
+#include <kstandardaction.h>
 #include <kxmlguiclient.h>
-#include <qcheckbox.h>
-#include <qdialog.h>
-#include <qdir.h>
-#include <qfileinfo.h>
-#include <qframe.h>
-#include <qgroupbox.h>
-#include <qhbox.h>
-#include <qpushbutton.h>
-#include <qsizepolicy.h>
-#include <qsplitter.h>
-#include <qstring.h>
-#include <qtooltip.h>
-#include <qvbox.h>
+#include <QCheckBox>
+#include <QDialog>
+#include <QDir>
+#include <QFileInfo>
+#include <QFrame>
+#include <QGroupBox>
+#include <QPushButton>
+#include <QSizePolicy>
+#include <QSplitter>
+#include <QString>
+#include <QToolTip>
 #include <qvgroupbox.h>
-#include <qwidget.h>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 
 
 namespace Rosegarden
@@ -84,14 +84,16 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
         m_lastDevice(Device::NO_DEVICE),
         m_updateDeviceList(false)
 {
-    QVBox* mainFrame = new QVBox(this);
     setCentralWidget(mainFrame);
 
     setCaption(i18n("Manage MIDI Banks and Programs"));
 
-    QSplitter* splitter = new QSplitter(mainFrame);
+    QSplitter *splitter = new QSplitter( mainFrame );
+    mainFrameLayout->addWidget(splitter);
 
-    QFrame* btnBox = new QFrame(mainFrame);
+    QFrame *btnBox = new QFrame( mainFrame );
+    mainFrameLayout->addWidget(btnBox);
+    mainFrame->setLayout(mainFrameLayout);
 
     btnBox->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed));
 
@@ -116,8 +118,10 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     //
     // Left-side list view
     //
-    QVBox* leftPart = new QVBox(splitter);
-    m_listView = new KListView(leftPart);
+    QWidget *leftPart = new QWidget(splitter);
+    QVBoxLayout leftPartLayout = new QVBoxLayout;
+    m_listView = new KListView( leftPart );
+    leftPartLayout->addWidget(m_listView);
     m_listView->addColumn(i18n("MIDI Device"));
     m_listView->addColumn(i18n("Type"));
     m_listView->addColumn(i18n("MSB"));
@@ -127,7 +131,9 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     m_listView->setItemsRenameable(true);
     m_listView->restoreLayout(kapp->config(), BankEditorConfigGroup);
 
-    QFrame *bankBox = new QFrame(leftPart);
+    QFrame *bankBox = new QFrame( leftPart );
+    leftPartLayout->addWidget(bankBox);
+    leftPart->setLayout(leftPartLayout);
     QGridLayout *gridLayout = new QGridLayout(bankBox, 4, 2, 6, 6);
 
     m_addBank = new QPushButton(i18n("Add Bank"), bankBox);
@@ -205,11 +211,15 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     m_optionBox = new QVGroupBox(i18n("Options"), vbox);
     vboxLayout->addWidget(m_optionBox);
 
-    QHBox *variationBox = new QHBox(m_optionBox);
-    m_variationToggle = new QCheckBox(i18n("Show Variation list based on "), variationBox);
-    m_variationCombo = new KComboBox(variationBox);
-    m_variationCombo->insertItem(i18n("LSB"));
-    m_variationCombo->insertItem(i18n("MSB"));
+    QWidget *variationBox = new QWidget(m_optionBox);
+    QHBoxLayout variationBoxLayout = new QHBoxLayout;
+    m_variationToggle = new QCheckBox(i18n("Show Variation list based on "), variationBox );
+    variationBoxLayout->addWidget(m_variationToggle);
+    m_variationCombo = new QComboBox( variationBox );
+    variationBoxLayout->addWidget(m_variationCombo);
+    variationBox->setLayout(variationBoxLayout);
+    m_variationCombo->addItem(i18n("LSB"));
+    m_variationCombo->addItem(i18n("MSB"));
 
     // device/bank modification
     connect(m_listView, SIGNAL(itemRenamed (QListViewItem*, const QString&, int)),
@@ -296,29 +306,29 @@ BankEditorDialog::~BankEditorDialog()
 void
 BankEditorDialog::setupActions()
 {
-    KAction* close = KStdAction::close (this, SLOT(slotFileClose()), actionCollection());
+    KAction* close = KStandardAction::close (this, SLOT(slotFileClose()), actionCollection());
 
     m_closeButton->setText(close->text());
     connect(m_closeButton, SIGNAL(clicked()),
             this, SLOT(slotFileClose()));
 
-    KStdAction::copy (this, SLOT(slotEditCopy()), actionCollection());
-    KStdAction::paste (this, SLOT(slotEditPaste()), actionCollection());
+    KStandardAction::copy (this, SLOT(slotEditCopy()), actionCollection());
+    KStandardAction::paste (this, SLOT(slotEditPaste()), actionCollection());
 
     // some adjustments
 
 
     new KToolBarPopupAction(i18n("Und&o"),
                             "undo",
-                            KStdAccel::key(KStdAccel::Undo),
+                            KStandardShortcut::key(KStandardShortcut::Undo),
                             actionCollection(),
-                            KStdAction::stdName(KStdAction::Undo));
+                            KStandardAction::stdName(KStandardAction::Undo));
 
     new KToolBarPopupAction(i18n("Re&do"),
                             "redo",
-                            KStdAccel::key(KStdAccel::Redo),
+                            KStandardShortcut::key(KStandardShortcut::Redo),
                             actionCollection(),
-                            KStdAction::stdName(KStdAction::Redo));
+                            KStandardAction::stdName(KStandardAction::Redo));
 
     createGUI("bankeditor.rc");
 }
@@ -394,11 +404,11 @@ BankEditorDialog::updateDialog()
         if (m_deviceNameMap.find(midiDevice->getId()) != m_deviceNameMap.end()) {
             // Device already displayed but make sure the label is up to date
             //
-            QListViewItem* currentItem = m_listView->currentItem();
+            QListViewItem* currentIndex = m_listView->currentIndex();
 
-            if (currentItem) {
+            if (currentIndex) {
                 MidiDeviceListViewItem* deviceItem =
-                    getParentDeviceItem(currentItem);
+                    getParentDeviceItem(currentIndex);
 
                 if (deviceItem &&
                         deviceItem->getDeviceId() == midiDevice->getId()) {
@@ -649,7 +659,7 @@ BankEditorDialog::clearItemChildren(QListViewItem* item)
 MidiDevice*
 BankEditorDialog::getCurrentMidiDevice()
 {
-    return getMidiDevice(m_listView->currentItem());
+    return getMidiDevice(m_listView->currentIndex());
 }
 
 void
@@ -688,7 +698,7 @@ BankEditorDialog::checkModified()
         MidiDevice::VariationType variation =
             MidiDevice::NoVariations;
         if (m_variationToggle->isChecked()) {
-            if (m_variationCombo->currentItem() == 0) {
+            if (m_variationCombo->currentIndex() == 0) {
                 variation = MidiDevice::VariationFromLSB;
             } else {
                 variation = MidiDevice::VariationFromMSB;
@@ -784,7 +794,7 @@ BankEditorDialog::populateDevice(QListViewItem* item)
         m_variationToggle->setChecked(device->getVariationType() !=
                                       MidiDevice::NoVariations);
         m_variationCombo->setEnabled(m_variationToggle->isChecked());
-        m_variationCombo->setCurrentItem
+        m_variationCombo->setCurrentIndex
         (device->getVariationType() ==
          MidiDevice::VariationFromLSB ? 0 : 1);
 
@@ -824,7 +834,7 @@ BankEditorDialog::populateDevice(QListViewItem* item)
     m_variationToggle->setChecked(device->getVariationType() !=
                                   MidiDevice::NoVariations);
     m_variationCombo->setEnabled(m_variationToggle->isChecked());
-    m_variationCombo->setCurrentItem
+    m_variationCombo->setCurrentIndex
     (device->getVariationType() ==
      MidiDevice::VariationFromLSB ? 0 : 1);
 
@@ -861,7 +871,7 @@ BankEditorDialog::slotApply()
         MidiDevice::VariationType variation =
             MidiDevice::NoVariations;
         if (m_variationToggle->isChecked()) {
-            if (m_variationCombo->currentItem() == 0) {
+            if (m_variationCombo->currentIndex() == 0) {
                 variation = MidiDevice::VariationFromLSB;
             } else {
                 variation = MidiDevice::VariationFromMSB;
@@ -878,7 +888,7 @@ BankEditorDialog::slotApply()
                                           device->getLibrarianEmail());
 
         MidiKeyMapListViewItem *keyItem = dynamic_cast<MidiKeyMapListViewItem*>
-                                          (m_listView->currentItem());
+                                          (m_listView->currentIndex());
         if (keyItem) {
             KeyMappingList kml(device->getKeyMappings());
             for (int i = 0; i < kml.size(); ++i) {
@@ -913,19 +923,19 @@ BankEditorDialog::slotReset()
     resetProgramList();
 
     m_programEditor->reset();
-    m_programEditor->populate(m_listView->currentItem());
+    m_programEditor->populate(m_listView->currentIndex());
     m_keyMappingEditor->reset();
-    m_keyMappingEditor->populate(m_listView->currentItem());
+    m_keyMappingEditor->populate(m_listView->currentIndex());
 
     MidiDeviceListViewItem* deviceItem = getParentDeviceItem
-                                         (m_listView->currentItem());
+                                         (m_listView->currentIndex());
 
     if (deviceItem) {
         MidiDevice *device = getMidiDevice(deviceItem);
         m_variationToggle->setChecked(device->getVariationType() !=
                                       MidiDevice::NoVariations);
         m_variationCombo->setEnabled(m_variationToggle->isChecked());
-        m_variationCombo->setCurrentItem
+        m_variationCombo->setCurrentIndex
         (device->getVariationType() ==
          MidiDevice::VariationFromLSB ? 0 : 1);
     }
@@ -979,13 +989,13 @@ BankEditorDialog::getParentDeviceItem(QListViewItem* item)
 void
 BankEditorDialog::slotAddBank()
 {
-    if (!m_listView->currentItem())
+    if (!m_listView->currentIndex())
         return ;
 
-    QListViewItem* currentItem = m_listView->currentItem();
+    QListViewItem* currentIndex = m_listView->currentIndex();
 
-    MidiDeviceListViewItem* deviceItem = getParentDeviceItem(currentItem);
-    MidiDevice *device = getMidiDevice(currentItem);
+    MidiDeviceListViewItem* deviceItem = getParentDeviceItem(currentIndex);
+    MidiDevice *device = getMidiDevice(currentIndex);
 
     if (device) {
         // If the bank and program lists are empty then try to
@@ -996,7 +1006,7 @@ BankEditorDialog::slotAddBank()
             setProgramList(device);
         }
 
-        std::pair<int, int> bank = getFirstFreeBank(m_listView->currentItem());
+        std::pair<int, int> bank = getFirstFreeBank(m_listView->currentIndex());
 
         MidiBank newBank(false,
                          bank.first, bank.second,
@@ -1011,7 +1021,7 @@ BankEditorDialog::slotAddBank()
                                      newBank.isPercussion(),
                                      newBank.getMSB(), newBank.getLSB());
         keepBankListForNextPopulate();
-        m_listView->setCurrentItem(newBankItem);
+        m_listView->setCurrentIndex(newBankItem);
 
         slotApply();
         selectDeviceItem(device);
@@ -1021,13 +1031,13 @@ BankEditorDialog::slotAddBank()
 void
 BankEditorDialog::slotAddKeyMapping()
 {
-    if (!m_listView->currentItem())
+    if (!m_listView->currentIndex())
         return ;
 
-    QListViewItem* currentItem = m_listView->currentItem();
+    QListViewItem* currentIndex = m_listView->currentIndex();
 
-    MidiDeviceListViewItem* deviceItem = getParentDeviceItem(currentItem);
-    MidiDevice *device = getMidiDevice(currentItem);
+    MidiDeviceListViewItem* deviceItem = getParentDeviceItem(currentIndex);
+    MidiDevice *device = getMidiDevice(currentIndex);
 
     if (device) {
 
@@ -1066,14 +1076,14 @@ BankEditorDialog::slotAddKeyMapping()
 void
 BankEditorDialog::slotDelete()
 {
-    if (!m_listView->currentItem())
+    if (!m_listView->currentIndex())
         return ;
 
-    QListViewItem* currentItem = m_listView->currentItem();
+    QListViewItem* currentIndex = m_listView->currentIndex();
 
-    MidiBankListViewItem* bankItem = dynamic_cast<MidiBankListViewItem*>(currentItem);
+    MidiBankListViewItem* bankItem = dynamic_cast<MidiBankListViewItem*>(currentIndex);
 
-    MidiDevice *device = getMidiDevice(currentItem);
+    MidiDevice *device = getMidiDevice(currentIndex);
 
     if (device && bankItem) {
         int currentBank = bankItem->getBank();
@@ -1103,7 +1113,7 @@ BankEditorDialog::slotDelete()
 
             // the listview automatically selects a new current item
             m_listView->blockSignals(true);
-            delete currentItem;
+            delete currentIndex;
             m_listView->blockSignals(false);
 
             // Don't allow pasting from this defunct device
@@ -1122,7 +1132,7 @@ BankEditorDialog::slotDelete()
         return ;
     }
 
-    MidiKeyMapListViewItem* keyItem = dynamic_cast<MidiKeyMapListViewItem*>(currentItem);
+    MidiKeyMapListViewItem* keyItem = dynamic_cast<MidiKeyMapListViewItem*>(currentIndex);
 
     if (keyItem && device) {
 
@@ -1170,11 +1180,11 @@ BankEditorDialog::slotDelete()
 void
 BankEditorDialog::slotDeleteAll()
 {
-    if (!m_listView->currentItem())
+    if (!m_listView->currentIndex())
         return ;
 
-    QListViewItem* currentItem = m_listView->currentItem();
-    MidiDeviceListViewItem* deviceItem = getParentDeviceItem(currentItem);
+    QListViewItem* currentIndex = m_listView->currentIndex();
+    MidiDeviceListViewItem* deviceItem = getParentDeviceItem(currentIndex);
     MidiDevice *device = getMidiDevice(deviceItem);
 
     QString question = i18n("Really delete all banks for ") +
@@ -1300,8 +1310,8 @@ BankEditorDialog::slotModifyDeviceOrBankName(QListViewItem* item, const QString 
 
         QString oldName = keyItem->getName();
 
-        QListViewItem* currentItem = m_listView->currentItem();
-        MidiDevice *device = getMidiDevice(currentItem);
+        QListViewItem* currentIndex = m_listView->currentIndex();
+        MidiDevice *device = getMidiDevice(currentIndex);
 
         if (device) {
 
@@ -1440,7 +1450,7 @@ BankEditorDialog::setModified(bool modified)
 }
 
 void
-BankEditorDialog::addCommandToHistory(KCommand *command)
+BankEditorDialog::addCommandToHistory(Command *command)
 {
     getCommandHistory()->addCommand(command);
     setModified(false);
@@ -1540,7 +1550,7 @@ void
 BankEditorDialog::slotEditCopy()
 {
     MidiBankListViewItem* bankItem
-    = dynamic_cast<MidiBankListViewItem*>(m_listView->currentItem());
+    = dynamic_cast<MidiBankListViewItem*>(m_listView->currentIndex());
 
     if (bankItem) {
         m_copyBank = std::pair<DeviceId, int>(bankItem->getDeviceId(),
@@ -1553,7 +1563,7 @@ void
 BankEditorDialog::slotEditPaste()
 {
     MidiBankListViewItem* bankItem
-    = dynamic_cast<MidiBankListViewItem*>(m_listView->currentItem());
+    = dynamic_cast<MidiBankListViewItem*>(m_listView->currentIndex());
 
     if (bankItem) {
         // Get the full program and bank list for the source device

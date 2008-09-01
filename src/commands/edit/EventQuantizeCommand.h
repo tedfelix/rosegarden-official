@@ -20,8 +20,8 @@
 #define _RG_EVENTQUANTIZECOMMAND_H_
 
 #include "document/BasicCommand.h"
-#include <qobject.h>
-#include <qstring.h>
+#include <QObject>
+#include <QString>
 #include "base/Event.h"
 
 

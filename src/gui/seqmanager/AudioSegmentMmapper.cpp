@@ -26,7 +26,7 @@
 #include "document/RosegardenGUIDoc.h"
 #include "SegmentMmapper.h"
 #include "sound/MappedEvent.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden

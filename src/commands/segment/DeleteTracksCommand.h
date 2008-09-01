@@ -19,8 +19,8 @@
 #ifndef _RG_DELETETRACKSCOMMAND_H_
 #define _RG_DELETETRACKSCOMMAND_H_
 
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include <vector>
 #include <klocale.h>
 #include "base/Track.h"
@@ -34,7 +34,7 @@ class Segment;
 class Composition;
 
 
-class DeleteTracksCommand : public KNamedCommand
+class DeleteTracksCommand : public NamedCommand
 {
 public:
     DeleteTracksCommand(Composition *composition,

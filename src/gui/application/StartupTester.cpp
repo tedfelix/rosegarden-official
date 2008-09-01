@@ -21,10 +21,10 @@
 #include "misc/Debug.h"
 #include "gui/dialogs/LilyPondOptionsDialog.h"
 
-#include <kprocess.h>
-#include <qmutex.h>
-#include <qthread.h>
-#include <qregexp.h>
+#include <QProcess>
+#include <QMutex>
+#include <QThread>
+#include <QRegExp>
 
 
 namespace Rosegarden
@@ -58,13 +58,13 @@ StartupTester::run()
     m_audioFileImporterMutex.lock();
     m_ready = true;
 
-    KProcess *proc = new KProcess();
+    QProcess *proc = new QProcess();
     m_stdoutBuffer = "";
-    QObject::connect(proc, SIGNAL(receivedStdout(KProcess *, char *, int)),
-                     this, SLOT(stdoutReceived(KProcess *, char *, int)));
+    QObject::connect(proc, SIGNAL(receivedStdout(QProcess *, char *, int)),
+                     this, SLOT(stdoutReceived(QProcess *, char *, int)));
     *proc << "rosegarden-audiofile-importer";
     *proc << "--conftest";
-    proc->start(KProcess::Block, KProcess::All);
+    proc->start(QProcess::Block, QProcess::All);
     if (!proc->normalExit() || proc->exitStatus()) {
         RG_DEBUG << "StartupTester - No audio file importer available" << endl;
         m_haveAudioFileImporter = false;
@@ -76,13 +76,13 @@ StartupTester::run()
     delete proc;
     m_audioFileImporterMutex.unlock();
 
-    proc = new KProcess;
+    proc = new QProcess;
     m_stdoutBuffer = "";
-    QObject::connect(proc, SIGNAL(receivedStdout(KProcess *, char *, int)),
-                     this, SLOT(stdoutReceived(KProcess *, char *, int)));
+    QObject::connect(proc, SIGNAL(receivedStdout(QProcess *, char *, int)),
+                     this, SLOT(stdoutReceived(QProcess *, char *, int)));
     *proc << "rosegarden-project-package";
     *proc << "--conftest";
-    proc->start(KProcess::Block, KProcess::All);
+    proc->start(QProcess::Block, QProcess::All);
     if (!proc->normalExit() || proc->exitStatus()) {
         m_haveProjectPackager = false;
         // rosegarden-project-package ran but exited with an error code
@@ -96,13 +96,13 @@ StartupTester::run()
     delete proc;
     m_projectPackagerMutex.unlock();
 
-    proc = new KProcess();
+    proc = new QProcess();
     m_stdoutBuffer = "";
-    QObject::connect(proc, SIGNAL(receivedStdout(KProcess *, char *, int)),
-                     this, SLOT(stdoutReceived(KProcess *, char *, int)));
+    QObject::connect(proc, SIGNAL(receivedStdout(QProcess *, char *, int)),
+                     this, SLOT(stdoutReceived(QProcess *, char *, int)));
     *proc << "rosegarden-lilypondview";
     *proc << "--conftest";
-    proc->start(KProcess::Block, KProcess::All);
+    proc->start(QProcess::Block, QProcess::All);
     if (!proc->normalExit() || proc->exitStatus()) {
         RG_DEBUG << "StartupTester - No lilypondview available" << endl;
         m_haveLilyPondView = false;
@@ -138,7 +138,7 @@ StartupTester::isReady()
 }
 
 void
-StartupTester::stdoutReceived(KProcess *, char *buffer, int len)
+StartupTester::stdoutReceived(QProcess *, char *buffer, int len)
 {
     m_stdoutBuffer += QString::fromLatin1(buffer, len);
 }
@@ -186,8 +186,8 @@ bool
 StartupTester::isVersionNewerThan(QString a, QString b)
 {
     QRegExp re("[._-]");
-    QStringList alist = QStringList::split(re, a);
-    QStringList blist = QStringList::split(re, b);
+    QStringList alist = a.split(re, QString::SkipEmptyParts);
+    QStringList blist = b.split(re, QString::SkipEmptyParts);
     int ae = alist.size();
     int be = blist.size();
     int e = std::max(ae, be);
@@ -223,7 +223,7 @@ StartupTester::slotHttpDone(bool error)
 
     QByteArray responseData = http->readAll();
     QString str = QString::fromUtf8(responseData.data());
-    QStringList lines = QStringList::split('\n', str);
+    QStringList lines = str.split('\n', QString::SkipEmptyParts);
     if (lines.empty()) return;
 
     QString latestVersion = lines[0];

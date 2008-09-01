@@ -20,10 +20,10 @@
 
 
 #include <limits>
-#include <qsize.h>
-#include <qwidget.h>
-#include <qvbox.h>
-#include <qlabel.h>
+#include <QSize>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QLabel>
 
 #include "HeadersGroup.h"
 #include "TrackHeader.h"

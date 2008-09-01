@@ -27,7 +27,7 @@
 
 #include "document/CommandRegistry.h"
 
-class QIconSet;
+class QIcon;
 
 namespace Rosegarden {
 
@@ -51,7 +51,7 @@ protected:
 
     virtual void invokeCommand(QString actionName);
 
-    virtual bool findIcon(QString iconName, QIconSet &icon) { return false; }
+    virtual bool findIcon(QString iconName, QIcon &icon) { return false; }
 };
 
 }

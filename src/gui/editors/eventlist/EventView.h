@@ -24,8 +24,8 @@
 #include "base/Segment.h"
 #include "gui/general/EditViewBase.h"
 #include <set>
-#include <qsize.h>
-#include <qstring.h>
+#include <QSize>
+#include <QString>
 #include <vector>
 #include "base/Event.h"
 
@@ -36,7 +36,7 @@ class QPoint;
 class QListViewItem;
 class QLabel;
 class QCheckBox;
-class QButtonGroup;
+class QGroupBox;
 class KListView;
 
 
@@ -172,7 +172,7 @@ protected:
 
     static int   m_lastSetEventFilter;
 
-    QButtonGroup   *m_filterGroup;
+    QGroupBox   *m_filterGroup;
     QCheckBox      *m_noteCheckBox;
     QCheckBox      *m_textCheckBox;
     QCheckBox      *m_sysExCheckBox;

@@ -20,7 +20,7 @@
 #define _RG_MARKEREDITOR_H_
 
 #include <kmainwindow.h>
-#include <qstring.h>
+#include <QString>
 #include "base/Event.h"
 
 
@@ -29,9 +29,9 @@ class QPushButton;
 class QListViewItem;
 class QLabel;
 class QCloseEvent;
-class QAccel;
+class QShortcut;
 class KListView;
-class KCommand;
+class Command;
 
 
 namespace Rosegarden
@@ -52,7 +52,7 @@ public:
 
     void initDialog();
 
-    void addCommandToHistory(KCommand *command);
+    void addCommandToHistory(Command *command);
     MultiViewCommandHistory* getCommandHistory();
 
     void setModified(bool value);
@@ -64,7 +64,7 @@ public:
     // update pointer position
     void updatePosition();
 
-    QAccel* getAccelerators() { return m_accelerators; }
+    QShortcut* getShortcuterators() { return m_shortcuterators; }
 
 public slots:
     void slotUpdate();
@@ -108,7 +108,7 @@ protected:
 
     bool                     m_modified;
 
-    QAccel *m_accelerators;
+    QShortcut *m_shortcuterators;
 };
 
 

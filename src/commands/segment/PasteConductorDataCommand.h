@@ -19,7 +19,7 @@
 #ifndef _RG_PASTECONDUCTORDATACOMMAND_H_
 #define _RG_PASTECONDUCTORDATACOMMAND_H_
 
-#include <kcommand.h>
+#include "document/Command.h"
 #include "base/Event.h"
 
 
@@ -36,7 +36,7 @@ class Clipboard;
  * Paste time signature and tempo data from the given clipboard into
  * the given composition starting at the given time.
  */
-class PasteConductorDataCommand : public KNamedCommand
+class PasteConductorDataCommand : public NamedCommand
 {
 public:
     PasteConductorDataCommand(Composition *composition,

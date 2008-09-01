@@ -15,6 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
+#include <Q3CanvasItemList>
 #include "ControlRulerEventEraseCommand.h"
 #include "ControlItem.h"
 #include "ElementAdapter.h"
@@ -24,7 +25,7 @@
 namespace Rosegarden
 {
 
-ControlRulerEventEraseCommand::ControlRulerEventEraseCommand(QCanvasItemList selectedItems,
+ControlRulerEventEraseCommand::ControlRulerEventEraseCommand(Q3CanvasItemList selectedItems,
                                                          Segment &segment,
                                                          Rosegarden::timeT start, Rosegarden::timeT end)
     : BasicCommand(i18n("Erase Controller Event(s)"),
@@ -42,7 +43,7 @@ void ControlRulerEventEraseCommand::modifySegment()
 {
     Segment &segment(getSegment());
 
-    for (QCanvasItemList::Iterator it=m_selectedItems.begin(); it!=m_selectedItems.end(); ++it) {
+    for (Q3CanvasItemList::Iterator it=m_selectedItems.begin(); it!=m_selectedItems.end(); ++it) {
         if (ControlItem *item = dynamic_cast<ControlItem*>(*it))
             segment.eraseSingle(item->getElementAdapter()->getEvent());
     }

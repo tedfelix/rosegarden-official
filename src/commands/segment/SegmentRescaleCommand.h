@@ -19,8 +19,8 @@
 #ifndef _RG_SEGMENTRESCALECOMMAND_H_
 #define _RG_SEGMENTRESCALECOMMAND_H_
 
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include "base/Event.h"
 #include <klocale.h>
 
@@ -33,7 +33,7 @@ namespace Rosegarden
 class Segment;
 
 
-class SegmentRescaleCommand : public KNamedCommand
+class SegmentRescaleCommand : public NamedCommand
 {
 public:
     SegmentRescaleCommand(Segment *segment,

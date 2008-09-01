@@ -26,10 +26,10 @@
 #include <map>
 #include "SegmentOrderer.h"
 #include <set>
-#include <qcolor.h>
-#include <qpoint.h>
+#include <QColor>
+#include <QPoint>
 #include <qptrdict.h>
-#include <qrect.h>
+#include <QRect>
 #include <vector>
 #include "base/Event.h"
 

@@ -28,7 +28,7 @@
 #include "base/NotationQuantizer.h"
 #include "base/Segment.h"
 #include "base/SegmentNotationHelper.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
@@ -37,7 +37,7 @@ namespace Rosegarden
 SegmentSplitByPitchCommand::SegmentSplitByPitchCommand(Segment *segment,
         int p, bool r, bool d,
         ClefHandling c) :
-        KNamedCommand(i18n("Split by Pitch")),
+        NamedCommand(i18n("Split by Pitch")),
         m_composition(segment->getComposition()),
         m_segment(segment),
         m_newSegmentA(0),

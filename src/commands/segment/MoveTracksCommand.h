@@ -20,8 +20,8 @@
 #define _RG_MOVETRACKSCOMMAND_H_
 
 #include "base/Track.h"
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include <klocale.h>
 
 
@@ -33,7 +33,7 @@ namespace Rosegarden
 class Composition;
 
 
-class MoveTracksCommand : public KNamedCommand
+class MoveTracksCommand : public NamedCommand
 {
 public:
     MoveTracksCommand(Composition *composition,

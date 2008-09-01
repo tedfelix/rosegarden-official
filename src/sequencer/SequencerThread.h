@@ -15,7 +15,7 @@
 #ifndef _ROSEGARDEN_SEQUENCER_THREAD_H_
 #define _ROSEGARDEN_SEQUENCER_THREAD_H_
 
-#include <qthread.h>
+#include <QThread>
 
 namespace Rosegarden
 {

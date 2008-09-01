@@ -16,6 +16,8 @@
 */
 
 
+#include <Q3CanvasItemList>
+#include <Q3CanvasRectangle>
 #include "NotationSelector.h"
 #include "misc/Debug.h"
 
@@ -42,11 +44,11 @@
 #include "NotationView.h"
 #include "NotePixmapFactory.h"
 #include <kaction.h>
-#include <qapplication.h>
-#include <qiconset.h>
-#include <qrect.h>
-#include <qstring.h>
-#include <qtimer.h>
+#include <QApplication>
+#include <QIcon>
+#include <QRect>
+#include <QString>
+#include <QTimer>
 
 
 namespace Rosegarden
@@ -70,7 +72,7 @@ NotationSelector::NotationSelector(NotationView* view)
     connect(this, SIGNAL(editElement(NotationStaff *, NotationElement *, bool)),
             m_parentView, SLOT(slotEditElement(NotationStaff *, NotationElement *, bool)));
 
-    QIconSet icon
+    QIcon icon
     (NotePixmapFactory::toQPixmap(NotePixmapFactory::
                                   makeToolbarPixmap("crotchet")));
     new KToggleAction(i18n("Switch to Insert Tool"), icon, 0, this,
@@ -116,7 +118,7 @@ NotationSelector::NotationSelector(NotationView* view)
                 SLOT(slotStaffAbove()), actionCollection(),
                 "move_events_up_staff");
 
-    new KAction(i18n("Move to Staff Below"), 0, 0, this,
+    new KAction(i18n("Move to Staff TicksBelow"), 0, 0, this,
                 SLOT(slotStaffBelow()), actionCollection(),
                 "move_events_down_staff");
 
@@ -536,7 +538,7 @@ void NotationSelector::drag(int x, int y, bool final)
 
         m_nParentView->clearPreviewNote();
 
-        KMacroCommand *command = new KMacroCommand(MoveCommand::getGlobalName());
+        MacroCommand *command = new MacroCommand(MoveCommand::getGlobalName());
         bool haveSomething = false;
 
         MoveCommand *mc = 0;
@@ -699,7 +701,7 @@ void NotationSelector::dragFine(int x, int y, bool final)
 
 void NotationSelector::ready()
 {
-    m_selectionRect = new QCanvasRectangle(m_nParentView->canvas());
+    m_selectionRect = new Q3CanvasRectangle(m_nParentView->canvas());
 
     m_selectionRect->hide();
     m_selectionRect->setPen(GUIPalette::getColour(GUIPalette::SelectionRectangle));
@@ -827,8 +829,8 @@ EventSelection* NotationSelector::getSelection()
         m_selectionRect->height() > -3 &&
         m_selectionRect->height() <  3) return 0;
 
-    QCanvasItemList itemList = m_selectionRect->collisions(false);
-    QCanvasItemList::Iterator it;
+    Q3CanvasItemList itemList = m_selectionRect->collisions(false);
+    Q3CanvasItemList::Iterator it;
 
     QRect rect = m_selectionRect->rect().normalize();
     QCanvasNotationSprite *sprite = 0;

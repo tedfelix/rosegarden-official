@@ -19,9 +19,9 @@
 #define _RG_AUDIOCONFIGURATIONPAGE_H_
 
 #include "TabbedConfigurationPage.h"
-#include <qstring.h>
+#include <QString>
 #include <klocale.h>
-#include <qlineedit.h>
+#include <QLineEdit>
 
 class QWidget;
 class QSpinBox;
@@ -31,7 +31,7 @@ class QLabel;
 class QComboBox;
 class QCheckBox;
 class KConfig;
-class KComboBox;
+class QComboBox;
 
 
 namespace Rosegarden

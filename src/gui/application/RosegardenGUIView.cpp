@@ -16,6 +16,7 @@
 */
 
 
+#include <Q3Canvas>
 #include "RosegardenGUIView.h"
 #include <kapplication.h>
 
@@ -72,25 +73,25 @@
 #include "sound/AudioFile.h"
 #include "sound/AudioFileManager.h"
 #include "sound/MappedEvent.h"
-#include <kcommand.h>
+#include "document/Command.h"
 #include <kconfig.h>
 #include <kmessagebox.h>
-#include <kprocess.h>
-#include <qapplication.h>
-#include <qcursor.h>
-#include <qdialog.h>
-#include <qfileinfo.h>
-#include <qobject.h>
-#include <qstring.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <QProcess>
+#include <QApplication>
+#include <QCursor>
+#include <QDialog>
+#include <QFileInfo>
+#include <QObject>
+#include <QString>
+#include <QWidget>
+#include <QVBoxLayout>
 
 #include "gui/editors/parameters/MIDIInstrumentParameterPanel.h"
 
 namespace Rosegarden
 {
 
-// Use this to define the basic unit of the main QCanvas size.
+// Use this to define the basic unit of the main Q3Canvas size.
 //
 // This apparently arbitrary figure is what we think is an
 // appropriate width in pixels for a 4/4 bar.  Beware of making it
@@ -812,7 +813,7 @@ void RosegardenGUIView::slotSegmentAutoSplit(Segment *segment)
     AudioSplitDialog aSD(this, segment, getDocument());
 
     if (aSD.exec() == QDialog::Accepted) {
-        KCommand *command =
+        Command *command =
             new AudioSegmentAutoSplitCommand(getDocument(),
                                              segment, aSD.getThreshold());
         slotAddCommandToHistory(command);
@@ -833,7 +834,7 @@ void RosegardenGUIView::slotEditSegmentAudio(Segment *segment)
         application = AudioConfigurationPage::getBestAvailableAudioEditor();
     }
 
-    QStringList splitCommand = QStringList::split(" ", application);
+    QStringList splitCommand = application.split(" ", QString::SkipEmptyParts);
 
     if (splitCommand.size() == 0) {
 
@@ -868,7 +869,7 @@ void RosegardenGUIView::slotEditSegmentAudio(Segment *segment)
 
     // Prepare the process
     //
-    KProcess *process = new KProcess();
+    QProcess *process = new QProcess();
     (*process) << splitCommand;
     (*process) << QString(aF->getFilename().c_str());
 
@@ -1363,7 +1364,7 @@ RosegardenGUIView::getCommandHistory()
 }
 
 void
-RosegardenGUIView::slotAddCommandToHistory(KCommand *command)
+RosegardenGUIView::slotAddCommandToHistory(Command *command)
 {
     getCommandHistory()->addCommand(command);
 }
@@ -2025,12 +2026,12 @@ RosegardenGUIView::createEventView(std::vector<Segment *> segmentsToEdit)
     connect(eventView, SIGNAL(toggleSolo(bool)),
             RosegardenGUIApp::self(), SLOT(slotToggleSolo(bool)));
 
-    // create keyboard accelerators on view
+    // create keyboard shortcuterators on view
     //
     RosegardenGUIApp *par = dynamic_cast<RosegardenGUIApp*>(parent());
 
     if (par) {
-        par->plugAccelerators(eventView, eventView->getAccelerators());
+        par->plugShortcuterators(eventView, eventView->getShortcuterators());
     }
 
     return eventView;

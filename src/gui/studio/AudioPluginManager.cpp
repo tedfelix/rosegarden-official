@@ -26,11 +26,11 @@
 #include "gui/application/RosegardenApplication.h"
 #include "sound/PluginFactory.h"
 #include "sound/PluginIdentifier.h"
-#include <qcstring.h>
-#include <qdatastream.h>
-#include <qmutex.h>
-#include <qstring.h>
-#include <qthread.h>
+#include <QByteArray>
+#include <QDataStream>
+#include <QMutex>
+#include <QString>
+#include <QThread>
 
 
 namespace Rosegarden
@@ -86,8 +86,8 @@ AudioPluginManager::Enumerator::run()
         QString label = rawPlugins[i++];
         QString author = rawPlugins[i++];
         QString copyright = rawPlugins[i++];
-        bool isSynth = ((rawPlugins[i++]).lower() == "true");
-        bool isGrouped = ((rawPlugins[i++]).lower() == "true");
+        bool isSynth = ((rawPlugins[i++]).toLower() == "true");
+        bool isGrouped = ((rawPlugins[i++]).toLower() == "true");
         QString category = rawPlugins[i++];
         unsigned int portCount = rawPlugins[i++].toInt();
 

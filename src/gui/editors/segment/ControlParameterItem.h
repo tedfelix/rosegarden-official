@@ -19,7 +19,7 @@
 #ifndef _RG_CONTROLPARAMETERITEM_H_
 #define _RG_CONTROLPARAMETERITEM_H_
 
-#include <qstring.h>
+#include <QString>
 #include <klistview.h>
 
 

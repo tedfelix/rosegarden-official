@@ -19,7 +19,8 @@
 #ifndef _RG_HEADERSCONFIGURATIONPAGE_H_
 #define _RG_HEADERSCONFIGURATIONPAGE_H_
 
-#include <qvbox.h>
+#include <QWidget>
+#include <QVBoxLayout>
 
 class QVBox;
 class QWidget;

@@ -19,11 +19,11 @@
 #include <unistd.h>
 #include <kapplication.h>
 
-#include <qpainter.h>
-#include <qfontmetrics.h>
+#include <QPainter>
+#include <QFontMetrics>
 
 #include <kapp.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kconfig.h>
 #include <ktip.h>
 
@@ -82,10 +82,10 @@ void KStartupLogo::paintEvent(QPaintEvent*)
     paint.drawRect(QRect(m_pixmap.width() - 220, m_pixmap.height() - 43,
                          220, (y + 8) - (m_pixmap.height() - 43)));
 
-    //    paint.setPen(Qt::black);
-    //    paint.setBrush(Qt::black);
-    paint.setPen(Qt::white);
-    paint.setBrush(Qt::white);
+    //    paint.setPen(QColor(Qt::black));
+    //    paint.setBrush(QColor(Qt::black));
+    paint.setPen(QColor(Qt::white));
+    paint.setBrush(QColor(Qt::white));
 
     //QString version(VERSION);
     //int sepIdx = version.find("-");

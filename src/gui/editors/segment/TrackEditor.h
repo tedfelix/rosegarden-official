@@ -22,8 +22,8 @@
 #include "base/MidiProgram.h"
 #include <map>
 #include "TrackEditorIface.h"
-#include <qstring.h>
-#include <qwidget.h>
+#include <QString>
+#include <QWidget>
 #include "base/Event.h"
 #include "gui/editors/segment/TrackButtons.h"
 
@@ -31,7 +31,7 @@
 class QPaintEvent;
 class QDropEvent;
 class QDragEnterEvent;
-class KCommand;
+class Command;
 
 
 namespace Rosegarden
@@ -94,7 +94,7 @@ public:
      * Manage command history
      */
     MultiViewCommandHistory *getCommandHistory();
-    void addCommandToHistory(KCommand *command);
+    void addCommandToHistory(Command *command);
 
     void updateRulers();
 

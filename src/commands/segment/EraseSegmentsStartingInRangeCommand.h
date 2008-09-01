@@ -19,7 +19,7 @@
 #ifndef _RG_ERASESEGMENTSSTARTINGINRANGECOMMAND_H_
 #define _RG_ERASESEGMENTSSTARTINGINRANGECOMMAND_H_
 
-#include <kcommand.h>
+#include "document/Command.h"
 #include <vector>
 #include "base/Event.h"
 
@@ -30,7 +30,7 @@ class Segment;
 class Composition;
 
 
-class EraseSegmentsStartingInRangeCommand : public KNamedCommand
+class EraseSegmentsStartingInRangeCommand : public NamedCommand
 {
 public:
     EraseSegmentsStartingInRangeCommand(Composition *composition,

@@ -22,7 +22,7 @@
 #include "base/MidiProgram.h"
 #include <map>
 #include "MixerWindow.h"
-#include <qpixmap.h>
+#include <QPixmap>
 #include <vector>
 
 

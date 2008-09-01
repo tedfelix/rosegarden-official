@@ -22,7 +22,7 @@
 #include "base/MidiProgram.h"
 #include "RosegardenParameterArea.h"
 #include "RosegardenParameterBox.h"
-#include <qstring.h>
+#include <QString>
 #include <vector>
 
 

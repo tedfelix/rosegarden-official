@@ -24,9 +24,9 @@
 
 
 // include files for Qt
-#include <qstrlist.h>
+#include <QStringList>
 
-#include <qmutex.h>
+#include <QMutex>
 
 #include "base/Composition.h"
 #include "gui/application/TransportStatus.h"

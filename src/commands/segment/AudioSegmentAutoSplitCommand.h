@@ -19,8 +19,8 @@
 #ifndef _RG_AUDIOSEGMENTAUTOSPLITCOMMAND_H_
 #define _RG_AUDIOSEGMENTAUTOSPLITCOMMAND_H_
 
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include <vector>
 #include <klocale.h>
 
@@ -36,7 +36,7 @@ class Composition;
 class AudioFileManager;
 
 
-class AudioSegmentAutoSplitCommand : public KNamedCommand
+class AudioSegmentAutoSplitCommand : public NamedCommand
 {
 public:
     AudioSegmentAutoSplitCommand(RosegardenGUIDoc *doc,

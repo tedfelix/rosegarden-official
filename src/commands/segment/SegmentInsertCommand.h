@@ -20,7 +20,7 @@
 #define _RG_SEGMENTINSERTCOMMAND_H_
 
 #include "base/Track.h"
-#include <kcommand.h>
+#include "document/Command.h"
 #include "base/Event.h"
 
 
@@ -35,7 +35,7 @@ class RosegardenGUIDoc;
 class Composition;
 
 
-class SegmentInsertCommand : public KNamedCommand
+class SegmentInsertCommand : public NamedCommand
 {
 public:
     SegmentInsertCommand(RosegardenGUIDoc *doc,

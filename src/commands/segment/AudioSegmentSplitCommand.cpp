@@ -25,7 +25,7 @@
 #include "base/RealTime.h"
 #include "base/Composition.h"
 #include "base/Segment.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
@@ -33,7 +33,7 @@ namespace Rosegarden
 
 AudioSegmentSplitCommand::AudioSegmentSplitCommand(Segment *segment,
         timeT splitTime) :
-        KNamedCommand(i18n("Split Audio Segment")),
+        NamedCommand(i18n("Split Audio Segment")),
         m_segment(segment),
         m_newSegment(0),
         m_splitTime(splitTime),

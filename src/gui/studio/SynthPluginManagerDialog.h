@@ -27,7 +27,7 @@
 class QWidget;
 class QPushButton;
 class QCloseEvent;
-class KComboBox;
+class QComboBox;
 
 
 namespace Rosegarden
@@ -75,7 +75,7 @@ protected:
     Studio *m_studio;
     AudioPluginManager *m_pluginManager;
     std::vector<int> m_synthPlugins;
-    std::vector<KComboBox *> m_synthCombos;
+    std::vector<QComboBox *> m_synthCombos;
     std::vector<QPushButton *> m_controlsButtons;
     std::vector<QPushButton *> m_guiButtons;
 

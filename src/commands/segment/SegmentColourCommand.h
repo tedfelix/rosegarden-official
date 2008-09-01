@@ -20,8 +20,8 @@
 #define _RG_SEGMENTCOLOURCOMMAND_H_
 
 #include "base/Segment.h"
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include <vector>
 #include <klocale.h>
 
@@ -34,7 +34,7 @@ namespace Rosegarden
 class SegmentSelection;
 
 
-class SegmentColourCommand : public KNamedCommand
+class SegmentColourCommand : public NamedCommand
 {
 public:
     SegmentColourCommand(SegmentSelection &segments,

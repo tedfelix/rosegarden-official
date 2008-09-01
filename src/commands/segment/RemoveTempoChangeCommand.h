@@ -19,8 +19,8 @@
 #ifndef _RG_REMOVETEMPOCHANGECOMMAND_H_
 #define _RG_REMOVETEMPOCHANGECOMMAND_H_
 
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include "base/Event.h"
 #include "base/Composition.h" // for tempoT
 #include <klocale.h>
@@ -35,12 +35,12 @@ namespace Rosegarden
 class Composition;
 
 
-class RemoveTempoChangeCommand : public KNamedCommand
+class RemoveTempoChangeCommand : public NamedCommand
 {
 public:
     RemoveTempoChangeCommand(Composition *composition,
                              int index):
-        KNamedCommand(getGlobalName()),
+        NamedCommand(getGlobalName()),
         m_composition(composition),
         m_tempoChangeIndex(index),
         m_oldTime(0),

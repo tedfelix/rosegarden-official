@@ -19,7 +19,7 @@
 #include "TempoColour.h"
 
 #include "gui/general/GUIPalette.h"
-#include <qcolor.h>
+#include <QColor>
 
 
 namespace Rosegarden

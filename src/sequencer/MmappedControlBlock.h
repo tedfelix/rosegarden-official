@@ -19,7 +19,7 @@
 #ifndef _MMAPPEDCONTROLBLOCK_H_
 #define _MMAPPEDCONTROLBLOCK_H_
 
-#include <qstring.h>
+#include <QString>
 
 #include "sound/MappedEvent.h"
 #include "sound/ControlBlock.h"

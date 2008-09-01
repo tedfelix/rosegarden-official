@@ -19,13 +19,14 @@
 #ifndef _RG_INTERVALDIALOG_H_
 #define _RG_INTERVALDIALOG_H_
 
-#include <kdialogbase.h>
+#include <QDialog>
+#include <QDialogButtonBox>
 #include <vector>
 #include "gui/widgets/DiatonicPitchChooser.h"
 
 
 class QWidget;
-class KComboBox;
+class QComboBox;
 class QRadioButton;
 class QCheckBox;
 
@@ -36,11 +37,11 @@ namespace Rosegarden
 class RosegardenGUIDoc;
 
 
-class IntervalDialog : public KDialogBase
+class IntervalDialog : public QDialog
 {
     Q_OBJECT
 public:
-    IntervalDialog(QWidget *parent, bool askChangeKey = false, bool askTransposeSegmentBack = false);
+    IntervalDialog(QDialogButtonBox::QWidget *parent, bool askChangeKey = false, bool askTransposeSegmentBack = false);
     
     // Distance in semitones
     int getChromaticDistance();

@@ -19,8 +19,8 @@
 #ifndef _RG_SEGMENTAUTOSPLITCOMMAND_H_
 #define _RG_SEGMENTAUTOSPLITCOMMAND_H_
 
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include <vector>
 #include <klocale.h>
 
@@ -34,7 +34,7 @@ class Segment;
 class Composition;
 
 
-class SegmentAutoSplitCommand : public KNamedCommand
+class SegmentAutoSplitCommand : public NamedCommand
 {
 public:
     SegmentAutoSplitCommand(Segment *segment);

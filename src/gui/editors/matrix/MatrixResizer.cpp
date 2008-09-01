@@ -16,10 +16,11 @@
 */
 
 
+#include <Q3CanvasPixmap>
 #include "MatrixResizer.h"
 
 #include <klocale.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include "base/Event.h"
 #include "base/Segment.h"
 #include "base/Selection.h"
@@ -35,9 +36,9 @@
 #include "MatrixView.h"
 #include <kaction.h>
 #include <kglobal.h>
-#include <qiconset.h>
-#include <qpoint.h>
-#include <qstring.h>
+#include <QIcon>
+#include <QPoint>
+#include <QString>
 #include "misc/Debug.h"
 
 
@@ -50,8 +51,8 @@ MatrixResizer::MatrixResizer(MatrixView* parent)
         m_currentStaff(0)
 {
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QCanvasPixmap pixmap(pixmapDir + "/toolbar/select.xpm");
-    QIconSet icon = QIconSet(pixmap);
+    Q3CanvasPixmap pixmap(pixmapDir + "/toolbar/select.xpm");
+    QIcon icon = QIcon(pixmap);
 
     new KAction(i18n("Switch to Select Tool"), icon, Key_F2, this,
                 SLOT(slotSelectSelected()), actionCollection(),
@@ -103,7 +104,7 @@ void MatrixResizer::handleLeftButtonPress(timeT,
         if (selection) {
             EventSelection *newSelection;
 
-            if ((e->state() & Qt::ShiftButton) ||
+            if ((e->state() & Qt::ShiftModifier) ||
                     selection->contains(m_currentElement->event()))
                 newSelection = new EventSelection(*selection);
             else
@@ -213,7 +214,7 @@ void MatrixResizer::handleMouseRelease(timeT newTime,
         if (selection->getAddedEvents() > 1)
             commandLabel = i18n("Resize Events");
 
-        KMacroCommand *macro = new KMacroCommand(commandLabel);
+        MacroCommand *macro = new MacroCommand(commandLabel);
 
         EventSelection::eventcontainer::iterator it =
             selection->getSegmentEvents().begin();

@@ -19,7 +19,7 @@
 #ifndef _RG_SEGMENTSINGLEREPEATTOCOPYCOMMAND_H_
 #define _RG_SEGMENTSINGLEREPEATTOCOPYCOMMAND_H_
 
-#include <kcommand.h>
+#include "document/Command.h"
 #include "base/Event.h"
 
 
@@ -32,7 +32,7 @@ class Segment;
 class Composition;
 
 
-class SegmentSingleRepeatToCopyCommand : public KNamedCommand
+class SegmentSingleRepeatToCopyCommand : public NamedCommand
 {
 public:
     SegmentSingleRepeatToCopyCommand(Segment *segment,

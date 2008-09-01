@@ -20,15 +20,16 @@
 
 #include "document/ConfigGroups.h"
 #include "PlayList.h"
-#include <kdialogbase.h>
-#include <qstring.h>
-#include <qwidget.h>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QString>
+#include <QWidget>
 
 
 namespace Rosegarden
 {
 
-PlayListDialog::PlayListDialog(QString caption,
+PlayListDialog::PlayListDialog(QDialogButtonBox::QString caption,
                                QWidget* parent, const char* name)
         : KDialogBase(parent, name, false, caption,
                       KDialogBase::Close,  // standard buttons

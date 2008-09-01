@@ -20,8 +20,8 @@
 #define _RG_REMOVETIMESIGNATURECOMMAND_H_
 
 #include "base/NotationTypes.h"
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include "base/Event.h"
 #include <klocale.h>
 
@@ -35,12 +35,12 @@ namespace Rosegarden
 class Composition;
 
 
-class RemoveTimeSignatureCommand : public KNamedCommand
+class RemoveTimeSignatureCommand : public NamedCommand
 {
 public:
     RemoveTimeSignatureCommand(Composition *composition,
                                int index):
-        KNamedCommand(getGlobalName()),
+        NamedCommand(getGlobalName()),
         m_composition(composition),
         m_timeSigIndex(index),
         m_oldTime(0),

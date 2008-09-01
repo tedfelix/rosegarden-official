@@ -22,8 +22,8 @@
 #include "base/Device.h"
 #include "base/MidiDevice.h"
 #include <string>
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include <klocale.h>
 
 
@@ -35,7 +35,7 @@ namespace Rosegarden
 class Studio;
 
 
-class CreateOrDeleteDeviceCommand : public KNamedCommand
+class CreateOrDeleteDeviceCommand : public NamedCommand
 {
 public:
     // Creation constructor
@@ -44,7 +44,7 @@ public:
                                 Device::DeviceType type,
                                 MidiDevice::DeviceDirection direction,
                                 std::string connection) :
-        KNamedCommand(getGlobalName(false)),
+        NamedCommand(getGlobalName(false)),
         m_studio(studio),
         m_name(name),
         m_type(type),

@@ -31,10 +31,10 @@ class QListViewItem;
 class QLabel;
 class QDropEvent;
 class QCloseEvent;
-class QAccel;
+class QShortcut;
 class KURL;
 class KListView;
-class KCommand;
+class Command;
 
 
 namespace Rosegarden
@@ -82,9 +82,9 @@ public:
     //
     void setAudioSubsystemStatus(bool ok);
 
-    // Return the accelerator object
+    // Return the shortcuterator object
     //
-    QAccel* getAccelerators() { return m_accelerators; }
+    QShortcut* getShortcuterators() { return m_shortcuterators; }
 
     // Add a new file to the audio file manager
     //
@@ -111,7 +111,7 @@ public slots:
 
     // Commands
     //
-    void slotCommandExecuted(KCommand *);
+    void slotCommandExecuted(Command *);
 
     /**
      * Accept a list of Segments and highlight accordingly
@@ -178,7 +178,7 @@ protected:
     QLabel           *m_wrongSampleRates;
     RosegardenGUIDoc *m_doc;
 
-    QAccel           *m_accelerators;
+    QShortcut           *m_shortcuterators;
 
     AudioFileId  m_playingAudioFile;
     AudioPlayingDialog      *m_audioPlayingDialog;

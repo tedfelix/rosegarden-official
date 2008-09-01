@@ -20,9 +20,9 @@
 #define _RG_LATENCYCONFIGURATIONPAGE_H_
 
 #include "TabbedConfigurationPage.h"
-#include <qstring.h>
+#include <QString>
 #include <klocale.h>
-#include <qslider.h>
+#include <QSlider>
 
 
 class QWidget;

@@ -19,8 +19,9 @@
 #ifndef _RG_PLAYLISTDIALOG_H_
 #define _RG_PLAYLISTDIALOG_H_
 
-#include <kdialogbase.h>
-#include <qstring.h>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QString>
 
 
 class QWidget;
@@ -33,12 +34,12 @@ namespace Rosegarden
 class PlayList;
 
 
-class PlayListDialog : public KDialogBase
+class PlayListDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    PlayListDialog(QString caption, QWidget* parent = 0, const char* name = 0);
+    PlayListDialog(QDialogButtonBox::QString caption, QWidget* parent = 0, const char* name = 0);
 
     PlayList* getPlayList() { return m_playList; }
 

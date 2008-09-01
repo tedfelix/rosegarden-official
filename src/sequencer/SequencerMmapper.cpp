@@ -23,9 +23,9 @@
 #include <unistd.h>
 #include <errno.h>
 
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 
-#include <qfile.h>
+#include <QFile>
 
 #include "SequencerMmapper.h"
 #include "misc/Debug.h"
@@ -53,7 +53,7 @@ SequencerMmapper::SequencerMmapper():
     QFile::remove
         (m_fileName);
 
-    m_fd = ::open(m_fileName.latin1(),
+    m_fd = ::open(m_fileName.toLatin1().data(),
                   O_RDWR | O_CREAT | O_TRUNC,
                   S_IRUSR | S_IWUSR);
 

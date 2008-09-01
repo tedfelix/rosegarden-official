@@ -16,11 +16,12 @@
 */
 
 
+#include <Q3CanvasPixmap>
 #include "MatrixMover.h"
 
 #include "base/BaseProperties.h"
 #include <klocale.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include "base/Event.h"
 #include "base/Segment.h"
 #include "base/Selection.h"
@@ -38,9 +39,9 @@
 #include "MatrixVLayout.h"
 #include <kaction.h>
 #include <kglobal.h>
-#include <qiconset.h>
-#include <qpoint.h>
-#include <qstring.h>
+#include <QIcon>
+#include <QPoint>
+#include <QString>
 #include "misc/Debug.h"
 
 
@@ -54,8 +55,8 @@ MatrixMover::MatrixMover(MatrixView* parent) :
     m_lastPlayedPitch(-1)
 {
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QCanvasPixmap pixmap(pixmapDir + "/toolbar/select.xpm");
-    QIconSet icon = QIconSet(pixmap);
+    Q3CanvasPixmap pixmap(pixmapDir + "/toolbar/select.xpm");
+    QIcon icon = QIcon(pixmap);
 
     new KAction(i18n("Switch to Select Tool"), icon, Key_F2, this,
                 SLOT(slotSelectSelected()), actionCollection(),
@@ -70,7 +71,7 @@ MatrixMover::MatrixMover(MatrixView* parent) :
                 "erase");
 
     pixmap.load(pixmapDir + "/toolbar/resize.xpm");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
     new KAction(i18n("Switch to Resize Tool"), icon, Key_F6, this,
                 SLOT(slotResizeSelected()), actionCollection(),
                 "resize");
@@ -94,7 +95,7 @@ void MatrixMover::handleLeftButtonPress(timeT time,
     MATRIX_DEBUG << "MatrixMover::handleLeftButtonPress() : time = " << time << ", el = " << el << endl;
     if (!el) return;
 
-    m_quickCopy = (e->state() & Qt::ControlButton);
+    m_quickCopy = (e->state() & Qt::ControlModifier);
 
     if (!m_duplicateElements.empty()) {
         for (size_t i = 0; i < m_duplicateElements.size(); ++i) {
@@ -116,7 +117,7 @@ void MatrixMover::handleLeftButtonPress(timeT time,
         if (selection) {
             EventSelection *newSelection;
 
-            if ((e->state() & Qt::ShiftButton) ||
+            if ((e->state() & Qt::ShiftModifier) ||
                     selection->contains(m_currentElement->event()))
                 newSelection = new EventSelection(*selection);
             else
@@ -125,7 +126,7 @@ void MatrixMover::handleLeftButtonPress(timeT time,
             // if the selection already contains the event, remove it from the
             // selection if shift is pressed
             if (selection->contains(m_currentElement->event())){
-                if (e->state() & Qt::ShiftButton)
+                if (e->state() & Qt::ShiftModifier)
                     newSelection->removeEvent(m_currentElement->event());
             } else {
                 newSelection->addEvent(m_currentElement->event());
@@ -200,7 +201,7 @@ int MatrixMover::handleMouseMove(timeT newTime,
     << newTime << endl;
 
     if (e) {
-        setBasicContextHelp(e->state() & Qt::ControlButton);
+        setBasicContextHelp(e->state() & Qt::ControlModifier);
     }
 
     if (!m_currentElement || !m_currentStaff)
@@ -330,7 +331,7 @@ void MatrixMover::handleMouseRelease(timeT newTime,
         }
     }
 
-    KMacroCommand *macro = new KMacroCommand(commandLabel);
+    MacroCommand *macro = new MacroCommand(commandLabel);
 
     EventSelection::eventcontainer::iterator it =
         selection->getSegmentEvents().begin();

@@ -19,7 +19,7 @@
 #ifndef _RG_ROSEGARDENCOLOURTABLEITEM_H_
 #define _RG_ROSEGARDENCOLOURTABLEITEM_H_
 
-#include <qcolor.h>
+#include <QColor>
 #include <qtable.h>
 
 class QTable;

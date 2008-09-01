@@ -20,7 +20,8 @@
 #define _RG_TUPLETDIALOG_H_
 
 #include "base/NotationTypes.h"
-#include <kdialogbase.h>
+#include <QDialog>
+#include <QDialogButtonBox>
 #include "base/Event.h"
 
 
@@ -29,7 +30,7 @@ class QString;
 class QLabel;
 class QGroupBox;
 class QCheckBox;
-class KComboBox;
+class QComboBox;
 
 
 namespace Rosegarden
@@ -37,12 +38,12 @@ namespace Rosegarden
 
 
 
-class TupletDialog : public KDialogBase
+class TupletDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    TupletDialog(QWidget *parent,
+    TupletDialog(QDialogButtonBox::QWidget *parent,
                  Note::Type defaultUnitType,
                  timeT maxDuration = 0);
 
@@ -65,9 +66,9 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    KComboBox *m_unitCombo;
-    KComboBox *m_untupledCombo;
-    KComboBox *m_tupledCombo;
+    QComboBox *m_unitCombo;
+    QComboBox *m_untupledCombo;
+    QComboBox *m_tupledCombo;
 
     QCheckBox *m_hasTimingAlready;
 

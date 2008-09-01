@@ -21,16 +21,16 @@
 #include <klocale.h>
 #include "base/Track.h"
 #include <klineeditdlg.h>
-#include <qfont.h>
-#include <qframe.h>
-#include <qlabel.h>
-#include <qregexp.h>
-#include <qstring.h>
-#include <qtimer.h>
-#include <qtooltip.h>
-#include <qwidget.h>
+#include <QFont>
+#include <QFrame>
+#include <QLabel>
+#include <QRegExp>
+#include <QString>
+#include <QTimer>
+#include <QToolTip>
+#include <QWidget>
 #include <qwidgetstack.h>
-#include <qvalidator.h>
+#include <QValidator>
 
 
 namespace Rosegarden

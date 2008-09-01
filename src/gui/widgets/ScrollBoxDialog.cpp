@@ -20,12 +20,12 @@
 
 #include "ScrollBox.h"
 #include <kdialog.h>
-#include <qframe.h>
-#include <qpainter.h>
-#include <qpixmap.h>
-#include <qpoint.h>
-#include <qsize.h>
-#include <qwidget.h>
+#include <QFrame>
+#include <QPainter>
+#include <QPixmap>
+#include <QPoint>
+#include <QSize>
+#include <QWidget>
 
 
 namespace Rosegarden

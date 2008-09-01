@@ -16,6 +16,10 @@
 */
 
 
+#include <Q3Canvas>
+#include <Q3CanvasItem>
+#include <Q3CanvasPixmap>
+#include <Q3CanvasView>
 #include "MatrixView.h"
 
 #include "base/BaseProperties.h"
@@ -96,9 +100,9 @@
 #include "sound/MappedEvent.h"
 #include "sound/SequencerDataBlock.h"
 #include <klocale.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kaction.h>
-#include <kcombobox.h>
+#include <QComboBox>
 #include <kconfig.h>
 #include <kdockwidget.h>
 #include <kglobal.h>
@@ -107,19 +111,19 @@
 #include <ktoolbar.h>
 #include <kxmlguiclient.h>
 #include <qcanvas.h>
-#include <qcursor.h>
-#include <qdialog.h>
-#include <qlayout.h>
-#include <qiconset.h>
-#include <qlabel.h>
-#include <qpixmap.h>
-#include <qpoint.h>
+#include <QCursor>
+#include <QDialog>
+#include <QLayout>
+#include <QIcon>
+#include <QLabel>
+#include <QPixmap>
+#include <QPoint>
 #include <qscrollview.h>
-#include <qsize.h>
-#include <qslider.h>
-#include <qstring.h>
-#include <qwidget.h>
-#include <qwmatrix.h>
+#include <QSize>
+#include <QSlider>
+#include <QString>
+#include <QWidget>
+#include <QMatrix>
 
 
 namespace Rosegarden
@@ -186,7 +190,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     connect(m_toolBox, SIGNAL(showContextHelp(const QString &)),
             this, SLOT(slotToolHelpChanged(const QString &)));
 
-    QCanvas *tCanvas = new QCanvas(this);
+    Q3Canvas *tCanvas = new Q3Canvas(this);
 
     m_config->setGroup(MatrixViewConfigGroup);
     if (m_config->readBoolEntry("backgroundtextures-1.6-plus", true)) {
@@ -371,8 +375,8 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     /*
     QObject::connect
-        (getCanvasView(), SIGNAL(activeItemPressed(QMouseEvent*, QCanvasItem*)),
-         this,            SLOT  (activeItemPressed(QMouseEvent*, QCanvasItem*)));
+        (getCanvasView(), SIGNAL(activeItemPressed(QMouseEvent*, Q3CanvasItem*)),
+         this,            SLOT  (activeItemPressed(QMouseEvent*, Q3CanvasItem*)));
          */
 
     QObject::connect
@@ -561,8 +565,8 @@ MatrixView::~MatrixView()
 
     // This looks silly but the reason is that on destruction of the
     // MatrixCanvasView, setCanvas() is called (this is in
-    // ~QCanvasView so we can't do anything about it). This calls
-    // QCanvasView::updateContentsSize(), which in turn updates the
+    // ~Q3CanvasView so we can't do anything about it). This calls
+    // Q3CanvasView::updateContentsSize(), which in turn updates the
     // view's scrollbars, hence calling QScrollBar::setValue(), and
     // sending the QSCrollbar::valueChanged() signal. But we have a
     // slot connected to that signal
@@ -629,7 +633,7 @@ void MatrixView::setupActions()
     KRadioAction* toolAction = 0;
 
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QIconSet icon(QPixmap(pixmapDir + "/toolbar/select.xpm"));
+    QIcon icon(QPixmap(pixmapDir + "/toolbar/select.xpm"));
 
     toolAction = new KRadioAction(i18n("&Select and Edit"), icon, Key_F2,
                                   this, SLOT(slotSelectSelected()),
@@ -651,27 +655,27 @@ void MatrixView::setupActions()
                                   actionCollection(), "move");
     toolAction->setExclusiveGroup("tools");
 
-    QCanvasPixmap pixmap(pixmapDir + "/toolbar/resize.xpm");
-    icon = QIconSet(pixmap);
+    Q3CanvasPixmap pixmap(pixmapDir + "/toolbar/resize.xpm");
+    icon = QIcon(pixmap);
     toolAction = new KRadioAction(i18n("Resi&ze"), icon, Key_F6,
                                   this, SLOT(slotResizeSelected()),
                                   actionCollection(), "resize");
     toolAction->setExclusiveGroup("tools");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("chord")));
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("chord")));
     (new KToggleAction(i18n("C&hord Insert Mode"), icon, Key_H,
                        this, SLOT(slotUpdateInsertModeStatus()),
                        actionCollection(), "chord_mode"))->
     setChecked(false);
 
     pixmap.load(pixmapDir + "/toolbar/step_by_step.xpm");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
     new KToggleAction(i18n("Ste&p Recording"), icon, 0, this,
                       SLOT(slotToggleStepByStep()), actionCollection(),
                       "toggle_step_by_step");
 
     pixmap.load(pixmapDir + "/toolbar/quantize.png");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
     new KAction(EventQuantizeCommand::getGlobalName(), icon, Key_Equal, this,
                 SLOT(slotTransformsQuantize()), actionCollection(),
                 "quantize");
@@ -764,13 +768,13 @@ void MatrixView::setupActions()
                 SLOT(slotJumpToEnd()), actionCollection(),
                 "cursor_end");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-cursor-to-pointer")));
     new KAction(i18n("Cursor to &Playback Pointer"), icon, 0, this,
                 SLOT(slotJumpCursorToPlayback()), actionCollection(),
                 "cursor_to_playback_pointer");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-play")));
     KAction *play = new KAction(i18n("&Play"), icon, Key_Enter, this,
                 SIGNAL(play()), actionCollection(), "play");
@@ -779,54 +783,54 @@ void MatrixView::setupActions()
     playShortcut.append( KKey(Key_Return + CTRL) );
     play->setShortcut(playShortcut);
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-stop")));
     new KAction(i18n("&Stop"), icon, Key_Insert, this,
                 SIGNAL(stop()), actionCollection(), "stop");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-rewind")));
     new KAction(i18n("Re&wind"), icon, Key_End, this,
                 SIGNAL(rewindPlayback()), actionCollection(),
                 "playback_pointer_back_bar");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-ffwd")));
     new KAction(i18n("&Fast Forward"), icon, Key_PageDown, this,
                 SIGNAL(fastForwardPlayback()), actionCollection(),
                 "playback_pointer_forward_bar");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-rewind-end")));
     new KAction(i18n("Rewind to &Beginning"), icon, 0, this,
                 SIGNAL(rewindPlaybackToBeginning()), actionCollection(),
                 "playback_pointer_start");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-ffwd-end")));
     new KAction(i18n("Fast Forward to &End"), icon, 0, this,
                 SIGNAL(fastForwardPlaybackToEnd()), actionCollection(),
                 "playback_pointer_end");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-pointer-to-cursor")));
     new KAction(i18n("Playback Pointer to &Cursor"), icon, 0, this,
                 SLOT(slotJumpPlaybackToCursor()), actionCollection(),
                 "playback_pointer_to_cursor");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-solo")));
     new KToggleAction(i18n("&Solo"), icon, 0, this,
                       SLOT(slotToggleSolo()), actionCollection(),
                       "toggle_solo");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-tracking")));
     (new KToggleAction(i18n("Scro&ll to Follow Playback"), icon, Key_Pause, this,
                        SLOT(slotToggleTracking()), actionCollection(),
                        "toggle_tracking"))->setChecked(m_playTracking);
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-panic")));
     new KAction(i18n("Panic"), icon, Key_P + CTRL + ALT, this,
                 SIGNAL(panic()), actionCollection(), "panic");
@@ -843,7 +847,7 @@ void MatrixView::setupActions()
                 SLOT(slotClearSelection()), actionCollection(),
                 "clear_selection");
 
-    //    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/eventfilter.xpm"));
+    //    icon = QIcon(Q3CanvasPixmap(pixmapDir + "/toolbar/eventfilter.xpm"));
     new KAction(i18n("&Filter Selection"), "filter", Key_F + CTRL, this,
                 SLOT(slotFilterSelection()), actionCollection(),
                 "filter_selection");
@@ -985,7 +989,7 @@ void MatrixView::initStatusBar()
     m_insertModeLabel->setMinimumWidth(20);
     sb->addWidget(m_insertModeLabel);
 
-    sb->insertItem(KTmpStatusMsg::getDefaultMsg(),
+    sb->addItem(KTmpStatusMsg::getDefaultMsg(),
                    KTmpStatusMsg::getDefaultId(), 1);
     sb->setItemAlignment(KTmpStatusMsg::getDefaultId(),
                          AlignLeft | AlignVCenter);
@@ -1283,12 +1287,12 @@ void MatrixView::updateQuantizeCombo()
 
     for (unsigned int i = 0; i < m_quantizations.size(); ++i) {
         if (unit == m_quantizations[i]) {
-            m_quantizeCombo->setCurrentItem(i);
+            m_quantizeCombo->setCurrentIndex(i);
             return ;
         }
     }
 
-    m_quantizeCombo->setCurrentItem(m_quantizeCombo->count() - 1); // "Off"
+    m_quantizeCombo->setCurrentIndex(m_quantizeCombo->count() - 1); // "Off"
 }
 
 void MatrixView::slotPaintSelected()
@@ -1811,7 +1815,7 @@ void MatrixView::slotVerticalScrollPianoKeyboard(int y)
 void MatrixView::slotInsertNoteFromAction()
 {
     const QObject *s = sender();
-    QString name = s->name();
+    QString name = s->objectName();
 
     Segment &segment = *getCurrentSegment();
     int pitch = 0;
@@ -2022,7 +2026,7 @@ void
 MatrixView::slotSetSnapFromAction()
 {
     const QObject *s = sender();
-    QString name = s->name();
+    QString name = s->objectName();
 
     if (name.left(5) == "snap_") {
         int snap = name.right(name.length() - 5).toInt();
@@ -2053,7 +2057,7 @@ MatrixView::slotSetSnap(timeT t)
 
     for (unsigned int i = 0; i < m_snapValues.size(); ++i) {
         if (m_snapValues[i] == t) {
-            m_snapGridCombo->setCurrentItem(i);
+            m_snapGridCombo->setCurrentIndex(i);
             break;
         }
     }
@@ -2129,30 +2133,30 @@ MatrixView::initActionsToolbar()
 
     QPixmap noMap = NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("menu-no-note"));
 
-    m_snapGridCombo = new KComboBox(actionsToolbar);
+    m_snapGridCombo = new QComboBox(actionsToolbar);
 
     for (unsigned int i = 0; i < m_snapValues.size(); i++) {
 
         timeT d = m_snapValues[i];
 
         if (d == SnapGrid::NoSnap) {
-            m_snapGridCombo->insertItem(i18n("None"));
+            m_snapGridCombo->addItem(i18n("None"));
         } else if (d == SnapGrid::SnapToUnit) {
-            m_snapGridCombo->insertItem(i18n("Unit"));
+            m_snapGridCombo->addItem(i18n("Unit"));
         } else if (d == SnapGrid::SnapToBeat) {
-            m_snapGridCombo->insertItem(i18n("Beat"));
+            m_snapGridCombo->addItem(i18n("Beat"));
         } else if (d == SnapGrid::SnapToBar) {
-            m_snapGridCombo->insertItem(i18n("Bar"));
+            m_snapGridCombo->addItem(i18n("Bar"));
         } else {
             timeT err = 0;
             QString label = NotationStrings::makeNoteMenuLabel(d, true, err);
             QPixmap pixmap = NotePixmapFactory::toQPixmap
                 (NotePixmapFactory::makeNoteMenuPixmap(d, err));
-            m_snapGridCombo->insertItem((err ? noMap : pixmap), label);
+            m_snapGridCombo->addItem((err ? noMap : pixmap), label);
         }
 
         if (d == m_snapGrid->getSnapSetting()) {
-            m_snapGridCombo->setCurrentItem(m_snapGridCombo->count() - 1);
+            m_snapGridCombo->setCurrentIndex(m_snapGridCombo->count() - 1);
         }
     }
 
@@ -2166,18 +2170,18 @@ MatrixView::initActionsToolbar()
     QLabel *vlabel = new QLabel(i18n(" Velocity: "), actionsToolbar, "kde toolbar widget");
     vlabel->setIndent(10);
     
-    m_velocityCombo = new KComboBox(actionsToolbar);
+    m_velocityCombo = new QComboBox(actionsToolbar);
     for (int i = 0; i <= 127; ++i) {
-        m_velocityCombo->insertItem(QString("%1").arg(i));
+        m_velocityCombo->addItem(QString("%1").arg(i));
     }
-    m_velocityCombo->setCurrentItem(100); //!!! associate with segment
+    m_velocityCombo->setCurrentIndex(100); //!!! associate with segment
 
     // Quantize combo
     //
     QLabel *qLabel = new QLabel(i18n(" Quantize: "), actionsToolbar, "kde toolbar widget");
     qLabel->setIndent(10);
 
-    m_quantizeCombo = new KComboBox(actionsToolbar);
+    m_quantizeCombo = new QComboBox(actionsToolbar);
 
     for (unsigned int i = 0; i < m_quantizations.size(); ++i) {
 
@@ -2185,10 +2189,10 @@ MatrixView::initActionsToolbar()
         timeT error = 0;
         QString label = NotationStrings::makeNoteMenuLabel(time, true, error);
         QPixmap pmap = NotePixmapFactory::toQPixmap(NotePixmapFactory::makeNoteMenuPixmap(time, error));
-        m_quantizeCombo->insertItem(error ? noMap : pmap, label);
+        m_quantizeCombo->addItem(error ? noMap : pmap, label);
     }
 
-    m_quantizeCombo->insertItem(noMap, i18n("Off"));
+    m_quantizeCombo->addItem(noMap, i18n("Off"));
 
     connect(m_quantizeCombo, SIGNAL(activated(int)),
             this, SLOT(slotQuantizeSelection(int)));
@@ -2226,7 +2230,7 @@ MatrixView::initZoomToolbar()
     m_hZoomSlider = new ZoomSlider<double>
                     (zoomSizes, -1, QSlider::Horizontal, zoomToolbar, "kde toolbar widget");
     m_hZoomSlider->setTracking(true);
-    m_hZoomSlider->setFocusPolicy(QWidget::NoFocus);
+    m_hZoomSlider->setFocusPolicy(Qt::NoFocus);
 
     m_zoomLabel = new QLabel(zoomToolbar, "kde toolbar widget");
     m_zoomLabel->setIndent(10);
@@ -2258,7 +2262,7 @@ MatrixView::slotChangeHorizontalZoom(int)
 
     // Set zoom matrix
     //
-    QWMatrix zoomMatrix;
+    QMatrix zoomMatrix;
     zoomMatrix.scale(zoomValue, 1.0);
     m_canvasView->setWorldMatrix(zoomMatrix);
 
@@ -2328,13 +2332,13 @@ MatrixView::scrollToTime(timeT t)
 int
 MatrixView::getCurrentVelocity() const
 {
-    return m_velocityCombo->currentItem();
+    return m_velocityCombo->currentIndex();
 }
 
 void
 MatrixView::slotSetCurrentVelocity(int value)
 {
-    m_velocityCombo->setCurrentItem(value);
+    m_velocityCombo->setCurrentIndex(value);
 }
 
 

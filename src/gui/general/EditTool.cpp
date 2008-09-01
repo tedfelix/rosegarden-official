@@ -25,9 +25,9 @@
 #include "EditView.h"
 #include "RosegardenCanvasView.h"
 #include <kxmlguiclient.h>
-#include <qevent.h>
+#include <QEvent>
 #include <qpopupmenu.h>
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden

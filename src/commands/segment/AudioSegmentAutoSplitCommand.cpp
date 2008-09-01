@@ -28,7 +28,7 @@
 #include "document/RosegardenGUIDoc.h"
 #include "sound/AudioFileManager.h"
 #include "sound/PeakFileManager.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
@@ -48,7 +48,7 @@ AudioSegmentAutoSplitCommand::AudioSegmentAutoSplitCommand(
     RosegardenGUIDoc *doc,
     Segment *segment,
     int threshold) :
-        KNamedCommand(getGlobalName()),
+        NamedCommand(getGlobalName()),
         m_segment(segment),
         m_composition(segment->getComposition()),
         m_audioFileManager(&(doc->getAudioFileManager())),

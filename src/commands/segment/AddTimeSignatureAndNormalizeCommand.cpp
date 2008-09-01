@@ -29,7 +29,7 @@ namespace Rosegarden
 
 AddTimeSignatureAndNormalizeCommand::AddTimeSignatureAndNormalizeCommand
 (Composition *composition, timeT time, TimeSignature timeSig) :
-        KMacroCommand(AddTimeSignatureCommand::getGlobalName())
+        MacroCommand(AddTimeSignatureCommand::getGlobalName())
 {
     addCommand(new AddTimeSignatureCommand(composition, time, timeSig));
 

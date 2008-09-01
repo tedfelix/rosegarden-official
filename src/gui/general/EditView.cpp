@@ -16,8 +16,11 @@
 */
 
 
+#include <Q3Canvas>
+#include <Q3CanvasItem>
+#include <Q3CanvasPixmap>
 #include "EditView.h"
-#include <qlayout.h>
+#include <QLayout>
 
 #include "base/BaseProperties.h"
 #include <klocale.h>
@@ -74,27 +77,27 @@
 #include "gui/rulers/PropertyControlRuler.h"
 #include "RosegardenCanvasView.h"
 #include <kaction.h>
-#include <kcommand.h>
+#include "document/Command.h"
 #include <kdockwidget.h>
 #include <kglobal.h>
 #include <kiconloader.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <ktabwidget.h>
 #include <kxmlguiclient.h>
-#include <qaccel.h>
+#include <qshortcut.h>
 #include <qbutton.h>
-#include <qdialog.h>
-#include <qframe.h>
-#include <qinputdialog.h>
-#include <qlabel.h>
-#include <qobjectlist.h>
+#include <QDialog>
+#include <QFrame>
+#include <QInputDialog>
+#include <QLabel>
+#include <QObjectList>
 #include <qpopupmenu.h>
-#include <qsize.h>
-#include <qstring.h>
-#include <qtabwidget.h>
-#include <qvbox.h>
-#include <qwidget.h>
-#include <qwmatrix.h>
+#include <QSize>
+#include <QString>
+#include <QTabWidget>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QMatrix>
 
 
 namespace Rosegarden
@@ -216,7 +219,7 @@ void EditView::updateControlRulers(bool updateHPos)
     }
 }
 
-void EditView::setControlRulersZoom(QWMatrix zoomMatrix)
+void EditView::setControlRulersZoom(QMatrix zoomMatrix)
 {
     m_currentRulerZoomMatrix = zoomMatrix;
 
@@ -315,8 +318,8 @@ void EditView::setRewFFwdToAutoRepeat()
         while ( (obj = it.current()) != 0 ) {
             // for each found object...
             ++it;
-            //             RG_DEBUG << "EditView::setRewFFwdToAutoRepeat() : obj name : " << obj->name() << endl;
-            QString objName = obj->name();
+            //             RG_DEBUG << "EditView::setRewFFwdToAutoRepeat() : obj name : " << obj->objectName() << endl;
+            QString objName = obj->objectName();
 
             if (objName.endsWith("playback_pointer_back_bar") || objName.endsWith("playback_pointer_forward_bar")) {
                 QButton* btn = dynamic_cast<QButton*>(obj);
@@ -418,8 +421,8 @@ void EditView::setCanvasView(RosegardenCanvasView *canvasView)
 
     // TODO : connect canvas view's horiz. scrollbar to top/bottom bars and rulers
 
-    //     m_horizontalScrollBar->setRange(m_canvasView->horizontalScrollBar()->minValue(),
-    //                                     m_canvasView->horizontalScrollBar()->maxValue());
+    //     m_horizontalScrollBar->setRange(m_canvasView->horizontalScrollBar()->minimum(),
+    //                                     m_canvasView->horizontalScrollBar()->maximum());
 
     //     m_horizontalScrollBar->setSteps(m_canvasView->horizontalScrollBar()->lineStep(),
     //                                     m_canvasView->horizontalScrollBar()->pageStep());
@@ -468,7 +471,7 @@ EditView::getInsertionTime(Clef &clef,
 }
 
 void EditView::slotActiveItemPressed(QMouseEvent* e,
-                                     QCanvasItem* item)
+                                     Q3CanvasItem* item)
 {
     if (!item)
         return ;
@@ -722,15 +725,15 @@ EditView::setupActions()
     // Tempo and time signature changes
     //
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QCanvasPixmap pixmap(pixmapDir + "/toolbar/event-insert-tempo.png");
-    QIconSet icon = QIconSet(pixmap);
+    Q3CanvasPixmap pixmap(pixmapDir + "/toolbar/event-insert-tempo.png");
+    QIcon icon = QIcon(pixmap);
     new KAction(AddTempoChangeCommand::getGlobalName(),
 		icon, 0,
 		this, SLOT(slotAddTempo()),
 		actionCollection(), "add_tempo");
 
     pixmap.load(pixmapDir + "/toolbar/event-insert-timesig.png");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
     new KAction(AddTimeSignatureCommand::getGlobalName(),
 		icon, 0,
 		this, SLOT(slotAddTimeSignature()),
@@ -898,7 +901,7 @@ EditView::setupAddControlRulerMenu()
             else
                 itemStr = i18n("Unsupported Event Type");
 
-            addControlRulerMenu->insertItem(itemStr, i++);
+            addControlRulerMenu->addItem(itemStr, i++);
         }
 
         connect(addControlRulerMenu, SIGNAL(activated(int)),
@@ -1359,7 +1362,7 @@ void EditView::slotShowPropertyControlRuler()
             // fix for KDE 3.0
             //QListBoxRGProperty* item = dynamic_cast<QListBoxRGProperty*>(propList->selectedItem());
             QListBoxRGProperty* item = dynamic_cast<QListBoxRGProperty*>
-                (propList->item(propList->currentItem()));
+                (propList->item(propList->currentIndex()));
      
             if (item) {
                 PropertyName property = item->getPropertyName();
@@ -1675,11 +1678,11 @@ ControlRuler* EditView::findRuler(const ControlParameter& controller, int &index
 
 PropertyControlRuler* EditView::makePropertyControlRuler(PropertyName propertyName)
 {
-    QCanvas* controlRulerCanvas = new QCanvas(this);
+    Q3Canvas* controlRulerCanvas = new Q3Canvas(this);
     QSize viewSize = getViewSize();
     controlRulerCanvas->resize(viewSize.width(), ControlRuler::DefaultRulerHeight); // TODO - keep it in sync with main canvas size
 
-//     QCanvas* controlRulerCanvas = ControlRulerCanvasRepository::getCanvas(getCurrentSegment(), propertyName,
+//     Q3Canvas* controlRulerCanvas = ControlRulerCanvasRepository::getCanvas(getCurrentSegment(), propertyName,
 //                                                                           getViewSize());
 
     PropertyControlRuler* controlRuler = new PropertyControlRuler
@@ -1693,10 +1696,10 @@ PropertyControlRuler* EditView::makePropertyControlRuler(PropertyName propertyNa
 
 ControllerEventsRuler* EditView::makeControllerEventRuler(const ControlParameter *controller)
 {
-    QCanvas* controlRulerCanvas = new QCanvas(this);
+    Q3Canvas* controlRulerCanvas = new Q3Canvas(this);
     QSize viewSize = getViewSize();
     controlRulerCanvas->resize(viewSize.width(), ControlRuler::DefaultRulerHeight); // TODO - keep it in sync with main canvas size
-//     QCanvas* controlRulerCanvas = ControlRulerCanvasRepository::getCanvas(getCurrentSegment(), controller,
+//     Q3Canvas* controlRulerCanvas = ControlRulerCanvasRepository::getCanvas(getCurrentSegment(), controller,
 //                                                                           getViewSize());
     
 

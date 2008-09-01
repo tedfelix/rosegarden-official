@@ -19,7 +19,8 @@
 #ifndef _RG_PLAYLIST_H_
 #define _RG_PLAYLIST_H_
 
-#include <qvbox.h>
+#include <QWidget>
+#include <QVBoxLayout>
 
 
 class QWidget;

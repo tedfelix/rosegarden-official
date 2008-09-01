@@ -30,7 +30,7 @@ namespace Rosegarden
 {
 
 SegmentEraseCommand::SegmentEraseCommand(Segment *segment) :
-        KNamedCommand(i18n("Erase Segment")),
+        NamedCommand(i18n("Erase Segment")),
         m_composition(segment->getComposition()),
         m_segment(segment),
         m_mgr(0),
@@ -42,7 +42,7 @@ SegmentEraseCommand::SegmentEraseCommand(Segment *segment) :
 
 SegmentEraseCommand::SegmentEraseCommand(Segment *segment,
         AudioFileManager *mgr) :
-        KNamedCommand(i18n("Erase Segment")),
+        NamedCommand(i18n("Erase Segment")),
         m_composition(segment->getComposition()),
         m_segment(segment),
         m_mgr(mgr),

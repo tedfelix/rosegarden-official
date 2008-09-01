@@ -36,7 +36,7 @@ public:
     virtual ~NotationCommandRegistry();
 
 protected:
-    virtual bool findIcon(QString iconName, QIconSet &icon);
+    virtual bool findIcon(QString iconName, QIcon &icon);
 };
 
 }

@@ -39,7 +39,7 @@ bool AudioListView::acceptDrag(QDropEvent* e) const
 
 QDragObject* AudioListView::dragObject()
 {
-    AudioListItem* item = dynamic_cast<AudioListItem*>(currentItem());
+    AudioListItem* item = dynamic_cast<AudioListItem*>(currentIndex());
 
     QString audioData;
     QTextOStream ts(&audioData);

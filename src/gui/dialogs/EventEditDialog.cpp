@@ -26,35 +26,35 @@
 #include "base/PropertyName.h"
 #include "base/RealTime.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
-#include <kdialogbase.h>
+#include <QDialog>
+#include <QDialogButtonBox>
 #include <kmessagebox.h>
-#include <qcheckbox.h>
-#include <qfont.h>
+#include <QCheckBox>
+#include <QFont>
 #include <qgrid.h>
-#include <qgroupbox.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qlineedit.h>
-#include <qobject.h>
-#include <qobjectlist.h>
-#include <qpushbutton.h>
+#include <QGroupBox>
+#include <QLabel>
+#include <QLineEdit>
+#include <QObject>
+#include <QObjectList>
+#include <QPushButton>
 #include <qscrollview.h>
-#include <qsize.h>
-#include <qspinbox.h>
-#include <qstring.h>
-#include <qtooltip.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <QSize>
+#include <QSpinBox>
+#include <QString>
+#include <QToolTip>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 
 
 namespace Rosegarden
 {
 
-EventEditDialog::EventEditDialog(QWidget *parent,
+EventEditDialog::EventEditDialog(QDialogButtonBox::QWidget *parent,
                                  const Event &event,
                                  bool editable) :
-        KDialogBase(parent, 0, true, i18n(editable ? "Advanced Event Edit" : "Advanced Event Viewer"),
-                    (editable ? (Ok | Cancel) : Ok)),
+        QDialog(parent) : Ok)),
         m_durationDisplay(0),
         m_durationDisplayAux(0),
         m_persistentGrid(0),
@@ -68,10 +68,18 @@ EventEditDialog::EventEditDialog(QWidget *parent,
         m_subOrdering(event.getSubOrdering()),
         m_modified(false)
 {
-    QVBox *vbox = makeVBoxMainWidget();
+    setModal(true);
+    setWindowTitle(i18n(editable ? "Advanced Event Edit" : "Advanced Event Viewer"));
 
-    QGroupBox *intrinsicBox = new QGroupBox
-                              (1, Horizontal, i18n("Intrinsics"), vbox);
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
+    QWidget *vbox = new QWidget(this);
+    QVBoxLayout vboxLayout = new QVBoxLayout;
+    metagrid->addWidget(vbox, 0, 0);
+
+
+    QGroupBox *intrinsicBox = new QGroupBox( i18n("Intrinsics"), vbox );
+    vboxLayout->addWidget(intrinsicBox);
 
     QGrid *intrinsicGrid = new QGrid(4, QGrid::Horizontal, intrinsicBox);
 
@@ -114,8 +122,8 @@ EventEditDialog::EventEditDialog(QWidget *parent,
                      this, SLOT(slotSubOrderingChanged(int)));
     slotSubOrderingChanged(event.getSubOrdering());
 
-    QGroupBox *persistentBox = new QGroupBox
-                               (1, Horizontal, i18n("Persistent properties"), vbox);
+    QGroupBox *persistentBox = new QGroupBox( i18n("Persistent properties"), vbox );
+    vboxLayout->addWidget(persistentBox);
     m_persistentGrid = new QGrid(4, QGrid::Horizontal, persistentBox);
 
     QLabel *label = new QLabel(i18n("Name"), m_persistentGrid);
@@ -144,8 +152,9 @@ EventEditDialog::EventEditDialog(QWidget *parent,
         m_nonPersistentGrid = 0;
     } else {
 
-        QGroupBox *nonPersistentBox = new QGroupBox
-                                      (1, Horizontal, i18n("Non-persistent properties"), vbox);
+        QGroupBox *nonPersistentBox = new QGroupBox( i18n("Non-persistent properties"), vbox );
+        vboxLayout->addWidget(nonPersistentBox);
+        vbox->setLayout(vboxLayout);
         new QLabel(i18n("These are cached values, lost if the event is modified."),
                    nonPersistentBox);
 
@@ -183,6 +192,11 @@ EventEditDialog::EventEditDialog(QWidget *parent,
                              this, SLOT(slotPropertyMadePersistent()));
         }
     }
+    QDialogButtonBox *buttonBox = new QDialogButtonBox((QDialogButtonBox::editable ? (QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 void
@@ -231,13 +245,13 @@ case UInt: {
     case RealTimeT: {
             RealTime realTime = m_originalEvent.get<RealTimeT>(name);
 
-            QHBox* hbox = new QHBox(m_persistentGrid);
+            QWidget *hbox = new QWidget(m_persistentGrid);
+            QHBoxLayout hboxLayout = new QHBoxLayout;
 
             // seconds
             //
-            QSpinBox *spinBox = new QSpinBox
-                                (INT_MIN, INT_MAX, 1,
-                                 hbox, strtoqstr(name) + "%sec");
+            QSpinBox *spinBox = new QSpinBox( 1, hbox , strtoqstr(name) + "%sec");
+            hboxLayout->addWidget(spinBox);
             spinBox->setValue(realTime.sec);
 
             QObject::connect(spinBox, SIGNAL(valueChanged(int)),
@@ -245,9 +259,9 @@ case UInt: {
 
             // nseconds
             //
-            spinBox = new QSpinBox
-                      (INT_MIN, INT_MAX, 1,
-                       hbox, strtoqstr(name) + "%nsec");
+            spinBox = new QSpinBox( 1, hbox , strtoqstr(name) + "%nsec");
+            hboxLayout->addWidget(spinBox);
+            hbox->setLayout(hboxLayout);
             spinBox->setValue(realTime.nsec);
 
             QObject::connect(spinBox, SIGNAL(valueChanged(int)),
@@ -355,7 +369,7 @@ EventEditDialog::slotIntPropertyChanged(int value)
         return ;
 
     m_modified = true;
-    QString propertyName = spinBox->name();
+    QString propertyName = spinBox->objectName();
     m_event.set<Int>(qstrtostr(propertyName), value);
 }
 
@@ -368,7 +382,7 @@ EventEditDialog::slotRealTimePropertyChanged(int value)
         return ;
 
     m_modified = true;
-    QString propertyFullName = spinBox->name();
+    QString propertyFullName = spinBox->objectName();
 
     QString propertyName = propertyFullName.section('%', 0, 0),
                            nsecOrSec = propertyFullName.section('%', 1, 1);
@@ -392,7 +406,7 @@ EventEditDialog::slotBoolPropertyChanged()
         return ;
 
     m_modified = true;
-    QString propertyName = checkBox->name();
+    QString propertyName = checkBox->objectName();
     bool checked = checkBox->isChecked();
 
     m_event.set<Bool>(qstrtostr(propertyName), checked);
@@ -407,7 +421,7 @@ EventEditDialog::slotStringPropertyChanged(const QString &value)
         return ;
 
     m_modified = true;
-    QString propertyName = lineEdit->name();
+    QString propertyName = lineEdit->objectName();
     m_event.set<String>(qstrtostr(propertyName), qstrtostr(value));
 }
 
@@ -419,7 +433,7 @@ EventEditDialog::slotPropertyDeleted()
     if (!pushButton)
         return ;
 
-    QString propertyName = pushButton->name();
+    QString propertyName = pushButton->objectName();
 
     if (KMessageBox::warningContinueCancel
             (this,
@@ -451,7 +465,7 @@ EventEditDialog::slotPropertyMadePersistent()
     if (!pushButton)
         return ;
 
-    QString propertyName = pushButton->name();
+    QString propertyName = pushButton->objectName();
 
     if (KMessageBox::warningContinueCancel
             (this,

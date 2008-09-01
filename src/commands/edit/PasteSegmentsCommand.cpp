@@ -22,7 +22,7 @@
 #include "base/Composition.h"
 #include "base/Segment.h"
 #include "base/Track.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
@@ -33,7 +33,7 @@ PasteSegmentsCommand::PasteSegmentsCommand(Composition *composition,
         timeT pasteTime,
         TrackId baseTrack,
         bool useExactTracks) :
-        KNamedCommand(getGlobalName()),
+        NamedCommand(getGlobalName()),
         m_composition(composition),
         m_clipboard(new Clipboard(*clipboard)),
         m_pasteTime(pasteTime),

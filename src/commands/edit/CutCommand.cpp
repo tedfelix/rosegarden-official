@@ -23,7 +23,7 @@
 #include "commands/segment/SegmentEraseCommand.h"
 #include "CopyCommand.h"
 #include "EraseCommand.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
@@ -31,7 +31,7 @@ namespace Rosegarden
 
 CutCommand::CutCommand(EventSelection &selection,
                        Clipboard *clipboard) :
-        KMacroCommand(getGlobalName())
+        MacroCommand(getGlobalName())
 {
     addCommand(new CopyCommand(selection, clipboard));
     addCommand(new EraseCommand(selection));
@@ -39,7 +39,7 @@ CutCommand::CutCommand(EventSelection &selection,
 
 CutCommand::CutCommand(SegmentSelection &selection,
                        Clipboard *clipboard) :
-        KMacroCommand(getGlobalName())
+        MacroCommand(getGlobalName())
 {
     addCommand(new CopyCommand(selection, clipboard));
 

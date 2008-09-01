@@ -20,7 +20,7 @@
 #define _RG_MIDIPITCHLABEL_H_
 
 #include <string>
-#include <qstring.h>
+#include <QString>
 
 
 

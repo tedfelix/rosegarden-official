@@ -22,15 +22,15 @@
 
 #include "ScrollBox.h"
 
-#include <qapplication.h>
-#include <qframe.h>
-#include <qimage.h>
-#include <qpainter.h>
-#include <qpixmap.h>
-#include <qpoint.h>
-#include <qrect.h>
-#include <qsize.h>
-#include <qwidget.h>
+#include <QApplication>
+#include <QFrame>
+#include <QImage>
+#include <QPainter>
+#include <QPixmap>
+#include <QPoint>
+#include <QRect>
+#include <QSize>
+#include <QWidget>
 
 
 namespace Rosegarden
@@ -73,7 +73,7 @@ void ScrollBox::drawContents(QPainter* paint)
 
     QRect c(contentsRect());
 
-    paint->setPen(Qt::red);
+    paint->setPen(QColor(Qt::red));
 
     int len = m_pagesize.width();
     int x = c.x() + c.width() * m_viewpos.x() / len;

@@ -21,34 +21,44 @@
 #include <klocale.h>
 #include "misc/Strings.h"
 #include "base/NotationTypes.h"
-#include <kcombobox.h>
-#include <kdialogbase.h>
-#include <qfont.h>
-#include <qlabel.h>
-#include <qstring.h>
-#include <qtextcodec.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <QComboBox>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QFont>
+#include <QLabel>
+#include <QString>
+#include <QTextCodec>
+#include <QWidget>
+#include <QVBoxLayout>
 
 
 namespace Rosegarden
 {
 
-IdentifyTextCodecDialog::IdentifyTextCodecDialog(QWidget *parent,
+IdentifyTextCodecDialog::IdentifyTextCodecDialog(QDialogButtonBox::QWidget *parent,
         std::string text) :
-        KDialogBase(parent, 0, true, i18n("Choose Text Encoding"), Ok),
+        QDialog(parent),
         m_text(text)
 {
-    QVBox *vbox = makeVBoxMainWidget();
+    setModal(true);
+    setWindowTitle(i18n("Choose Text Encoding"));
+
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
+    QWidget *vbox = new QWidget(this);
+    QVBoxLayout vboxLayout = new QVBoxLayout;
+    metagrid->addWidget(vbox, 0, 0);
+
     new QLabel(i18n("\nThis file contains text in an unknown language encoding.\n\nPlease select one of the following estimated text encodings\nfor use with the text in this file:\n"), vbox);
 
-    KComboBox *codecs = new KComboBox(vbox);
+    QComboBox *codecs = new QComboBox( vbox );
+    vboxLayout->addWidget(codecs);
 
     std::string defaultCodec;
     QTextCodec *cc = QTextCodec::codecForContent(text.c_str(), text.length());
     QTextCodec *codec = 0;
 
-    std::cerr << "cc is " << (cc ? cc->name() : "null") << std::endl;
+    std::cerr << "cc is " << (cc ? cc->objectName() : "null") << std::endl;
 
     std::map<std::string, QString> codecDescriptions;
     codecDescriptions["SJIS"] = i18n("Japanese Shift-JIS");
@@ -93,12 +103,12 @@ IdentifyTextCodecDialog::IdentifyTextCodecDialog(QWidget *parent,
             continue;
         }
 
-        std::string name = codec->name();
+        std::string name = codec->objectName();
 
         std::cerr << "codec " << name << " probability " << probability << std::endl;
 
         if (name == "UTF-8" && 
-            (!cc || (cc->name() != name)) &&
+            (!cc || (cc->objectName() != name)) &&
             probability > selectedProbability/2) {
             std::cerr << "UTF-8 has a decent probability, selecting it instead to promote global harmony" << std::endl;
             cc = codec;
@@ -118,11 +128,11 @@ IdentifyTextCodecDialog::IdentifyTextCodecDialog(QWidget *parent,
             description = strtoqstr(name);
         }
 
-        codecs->insertItem(description, 0);
+        codecs->addItem(description, 0);
         m_codecs.push_front(name);
         if (current >= 0) ++current;
 
-        if (cc && (name == cc->name())) {
+        if (cc && (name == cc->objectName())) {
             current = 0;
         }
 
@@ -133,15 +143,22 @@ IdentifyTextCodecDialog::IdentifyTextCodecDialog(QWidget *parent,
             this, SLOT(slotCodecSelected(int)));
 
     new QLabel(i18n("\nExample text from file:"), vbox);
-    m_example = new QLabel("", vbox);
+    m_example = new QLabel("", vbox );
+    vboxLayout->addWidget(m_example);
+    vbox->setLayout(vboxLayout);
     QFont font;
     font.setStyleHint(QFont::TypeWriter);
     m_example->setFont(font);
-    m_example->setPaletteForegroundColor(Qt::blue);
+    m_example->setPaletteForegroundColor(QColor(Qt::blue));
     std::cerr << "calling slotCodecSelected(" << current << ")" << std::endl;
     if (current < 0) current = 0;
-    codecs->setCurrentItem(current);
+    codecs->setCurrentIndex(current);
     slotCodecSelected(current);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 void
@@ -155,7 +172,7 @@ IdentifyTextCodecDialog::slotCodecSelected(int i)
 //    std::cerr << std::endl;
     QTextCodec *codec = QTextCodec::codecForName(strtoqstr(name));
     if (!codec) return;
-    m_codec = qstrtostr(codec->name());
+    m_codec = qstrtostr(codec->objectName());
     std::cerr << "Applying codec " << m_codec << std::endl;
     QString outText = codec->toUnicode(m_text.c_str(), m_text.length());
     if (outText.length() > 80) outText = outText.left(80);

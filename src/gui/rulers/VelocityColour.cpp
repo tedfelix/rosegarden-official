@@ -18,7 +18,7 @@
 
 #include "VelocityColour.h"
 
-#include <qcolor.h>
+#include <QColor>
 
 // #include <cassert>
 
@@ -29,7 +29,7 @@ namespace Rosegarden
 VelocityColour::VelocityColour(const QColor &loud,
                                const QColor &medium,
                                const QColor &quiet,
-                               int maxValue,
+                               int maximum,
                                int loudKnee,
                                int mediumKnee,
                                int quietKnee):
@@ -39,12 +39,12 @@ VelocityColour::VelocityColour(const QColor &loud,
         m_loudKnee(loudKnee),
         m_mediumKnee(mediumKnee),
         m_quietKnee(quietKnee),
-        m_maxValue(maxValue),
+        m_maximum(maximum),
         m_mixedColour(QColor(0, 0, 0)),  // black as default
         m_multiplyFactor(1000)
 {
 
-//    assert(maxValue > loudKnee);
+//    assert(maximum > loudKnee);
 //    assert(loudKnee > mediumKnee);
 //    assert(mediumKnee > quietKnee);
 
@@ -84,8 +84,8 @@ VelocityColour::~VelocityColour()
 const QColor&
 VelocityColour::getColour(int value)
 {
-    if (value > m_maxValue)
-        value = m_maxValue;
+    if (value > m_maximum)
+        value = m_maximum;
 
     if (value < m_quietKnee) {
         return m_quietColour;

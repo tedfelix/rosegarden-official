@@ -21,12 +21,12 @@
 #include <klocale.h>
 #include "gui/general/MidiPitchLabel.h"
 #include "PitchDragLabel.h"
-#include <qgroupbox.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qspinbox.h>
-#include <qstring.h>
-#include <qwidget.h>
+#include <QGroupBox>
+#include <QLabel>
+#include <QSpinBox>
+#include <QString>
+#include <QWidget>
+#include <QHBoxLayout>
 
 
 namespace Rosegarden
@@ -40,18 +40,23 @@ PitchChooser::PitchChooser(QString title,
 {
     m_pitchDragLabel = new PitchDragLabel(this, defaultPitch);
 
-    QHBox *hbox = new QHBox(this);
-    hbox->setSpacing(6);
+    QWidget *hbox = new QWidget(this);
+    QHBoxLayout hboxLayout = new QHBoxLayout;
+    hboxLayout->setSpacing(6);
 
-    new QLabel(i18n("Pitch:"), hbox);
+    QLabel *child_4 = new QLabel(i18n("Pitch:"), hbox );
+    hboxLayout->addWidget(child_4);
 
-    m_pitch = new QSpinBox(hbox);
-    m_pitch->setMinValue(0);
-    m_pitch->setMaxValue(127);
+    m_pitch = new QSpinBox( hbox );
+    hboxLayout->addWidget(m_pitch);
+    m_pitch->setMinimum(0);
+    m_pitch->setMaximum(127);
     m_pitch->setValue(defaultPitch);
 
     MidiPitchLabel pl(defaultPitch);
-    m_pitchLabel = new QLabel(pl.getQString(), hbox);
+    m_pitchLabel = new QLabel(pl.getQString(), hbox );
+    hboxLayout->addWidget(m_pitchLabel);
+    hbox->setLayout(hboxLayout);
     m_pitchLabel->setMinimumWidth(40);
 
     connect(m_pitch, SIGNAL(valueChanged(int)),

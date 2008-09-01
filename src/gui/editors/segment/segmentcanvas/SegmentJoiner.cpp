@@ -24,9 +24,9 @@
 #include "gui/general/BaseTool.h"
 #include "gui/general/RosegardenCanvasView.h"
 #include "SegmentTool.h"
-#include <kcommand.h>
-#include <qpoint.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QPoint>
+#include <QString>
 #include <klocale.h>
 
 

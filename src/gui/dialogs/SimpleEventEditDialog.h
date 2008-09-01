@@ -21,7 +21,8 @@
 
 #include "base/Event.h"
 #include <string>
-#include <kdialogbase.h>
+#include <QDialog>
+#include <QDialogButtonBox>
 
 
 class QWidget;
@@ -32,7 +33,7 @@ class QLineEdit;
 class QLabel;
 class QGroupBox;
 class QCheckBox;
-class KComboBox;
+class QComboBox;
 
 
 namespace Rosegarden
@@ -41,11 +42,11 @@ namespace Rosegarden
 class RosegardenGUIDoc;
 
 
-class SimpleEventEditDialog : public KDialogBase
+class SimpleEventEditDialog : public QDialog
 {
     Q_OBJECT
 public:
-    SimpleEventEditDialog(QWidget *parent,
+    SimpleEventEditDialog(QDialogButtonBox::QWidget *parent,
                           RosegardenGUIDoc *doc,
                           const Event &event,
                           bool inserting = false); // inserting or editing
@@ -84,7 +85,7 @@ protected:
     timeT        m_duration;
     timeT        m_notationDuration;
 
-    KComboBox               *m_typeCombo;
+    QComboBox               *m_typeCombo;
     QLabel                  *m_typeLabel;
 
     QLabel                  *m_timeLabel;

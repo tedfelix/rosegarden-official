@@ -23,7 +23,7 @@
 #include "base/Segment.h"
 #include "base/Selection.h"
 #include "document/BasicCommand.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden

@@ -33,9 +33,9 @@
 #include "NotePixmapFactory.h"
 #include "NotationElement.h"
 #include <kaction.h>
-#include <qdialog.h>
-#include <qiconset.h>
-#include <qstring.h>
+#include <QDialog>
+#include <QIcon>
+#include <QString>
 
 
 namespace Rosegarden
@@ -45,7 +45,7 @@ TextInserter::TextInserter(NotationView* view)
         : NotationTool("TextInserter", view),
         m_text("", Text::Dynamic)
 {
-    QIconSet icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::
+    QIcon icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::
                              makeToolbarPixmap("select")));
     new KAction(i18n("Switch to Select Tool"), icon, 0, this,
                 SLOT(slotSelectSelected()), actionCollection(),
@@ -55,7 +55,7 @@ TextInserter::TextInserter(NotationView* view)
                 SLOT(slotEraseSelected()), actionCollection(),
                 "erase");
 
-    icon = QIconSet
+    icon = QIcon
            (NotePixmapFactory::toQPixmap(NotePixmapFactory::
                                          makeToolbarPixmap("crotchet")));
     new KAction(i18n("Switch to Inserting Notes"), icon, 0, this,
@@ -139,7 +139,7 @@ void TextInserter::handleLeftButtonPress(timeT,
             (staff->getSegment(), insertionTime, m_text);
 
         if (eraseEvent) {
-            KMacroCommand *macroCommand = new KMacroCommand(command->name());
+            MacroCommand *macroCommand = new MacroCommand(command->objectName());
             macroCommand->addCommand(new EraseEventCommand(staff->getSegment(),
                                      eraseEvent, false));
             macroCommand->addCommand(command);

@@ -47,36 +47,36 @@
 #include "sound/WAVAudioFile.h"
 #include "UnusedAudioSelectionDialog.h"
 #include <klocale.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kaction.h>
-#include <kcommand.h>
+#include "document/Command.h"
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <klineeditdlg.h>
 #include <klistview.h>
 #include <kmainwindow.h>
 #include <kmessagebox.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <kurl.h>
 #include <kxmlguiclient.h>
 #include <kio/netaccess.h>
-#include <qaccel.h>
-#include <qcstring.h>
-#include <qdatastream.h>
-#include <qdialog.h>
+#include <qshortcut.h>
+#include <QByteArray>
+#include <QDataStream>
+#include <QDialog>
 #include <qdragobject.h>
-#include <qfile.h>
-#include <qfileinfo.h>
-#include <qiconset.h>
-#include <qlabel.h>
-#include <qlistview.h>
-#include <qpainter.h>
-#include <qpixmap.h>
-#include <qstring.h>
-#include <qstrlist.h>
-#include <qtimer.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <QFile>
+#include <QFileInfo>
+#include <QIcon>
+#include <QLabel>
+#include <QListView>
+#include <QPainter>
+#include <QPixmap>
+#include <QString>
+#include <QStringList>
+#include <QTimer>
+#include <QWidget>
+#include <QVBoxLayout>
 
 
 namespace Rosegarden
@@ -98,20 +98,24 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     setCaption(i18n("Audio File Manager"));
     setWFlags(WDestructiveClose);
 
-    QVBox *box = new QVBox(this);
+    QWidget *box = new QWidget(this);
+    QVBoxLayout boxLayout = new QVBoxLayout;
     setCentralWidget(box);
-    box->setMargin(10);
-    box->setSpacing(5);
+    boxLayout->setMargin(10);
+    boxLayout->setSpacing(5);
 
     m_sampleRate = RosegardenSequencer::getInstance()->getSampleRate();
 
-    m_fileList = new AudioListView(box);
+    m_fileList = new AudioListView( box );
+    boxLayout->addWidget(m_fileList);
 
-    m_wrongSampleRates = new QLabel(i18n("* Some audio files are encoded at a sample rate different from that of the JACK audio server.\nRosegarden will play them at the correct speed, but they will sound terrible.\nPlease consider resampling such files externally, or adjusting the sample rate of the JACK server."), box);
+    m_wrongSampleRates = new QLabel( or adjusting the sample rate of the JACK server."), box );
+    boxLayout->addWidget(m_wrongSampleRates);
+    box->setLayout(boxLayout);
     m_wrongSampleRates->hide();
 
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QIconSet icon(QPixmap(pixmapDir + "/toolbar/transport-play.xpm"));
+    QIcon icon(QPixmap(pixmapDir + "/toolbar/transport-play.xpm"));
 
     new KAction(i18n("&Add Audio File..."), "fileopen", 0, this,
                 SLOT(slotAdd()), actionCollection(), "add_audio");
@@ -120,7 +124,7 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
                 SLOT(slotRemove()),
                 actionCollection(), "remove_audio");
 
-    icon = QIconSet(QPixmap(pixmapDir + "/toolbar/transport-play.xpm"));
+    icon = QIcon(QPixmap(pixmapDir + "/toolbar/transport-play.xpm"));
     new KAction(i18n("&Play Preview"), icon, 0, this,
                 SLOT(slotPlayPreview()),
                 actionCollection(), "preview_audio");
@@ -131,7 +135,7 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     		actionCollection(), "rename_audio");
     */
 
-    icon = QIconSet(QPixmap(pixmapDir + "/toolbar/insert_audio_into_track.xpm"));
+    icon = QIcon(QPixmap(pixmapDir + "/toolbar/insert_audio_into_track.xpm"));
     new KAction(i18n("&Insert into Selected Audio Track"),
                 icon, 0, this, SLOT(slotInsert()),
                 actionCollection(), "insert_audio");
@@ -192,13 +196,13 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     connect(m_fileList, SIGNAL(dropped(QDropEvent*, QListViewItem*)),
             SLOT(slotDropped(QDropEvent*, QListViewItem*)));
 
-    // setup local accelerators
+    // setup local shortcuterators
     //
-    m_accelerators = new QAccel(this);
+    m_shortcuterators = new QShortcut(this);
 
     // delete
     //
-    m_accelerators->connectItem(m_accelerators->insertItem(Key_Delete),
+    m_shortcuterators->connectItem(m_shortcuterators->addItem(Key_Delete),
                                 this,
                                 SLOT(slotRemove()));
 
@@ -206,15 +210,15 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
 
     // Connect command history for updates
     //
-    connect(getCommandHistory(), SIGNAL(commandExecuted(KCommand *)),
-            this, SLOT(slotCommandExecuted(KCommand *)));
+    connect(getCommandHistory(), SIGNAL(commandExecuted(Command *)),
+            this, SLOT(slotCommandExecuted(Command *)));
 
     //setInitialSize(configDialogSize(AudioManagerDialogConfigGroup));
 
     connect(m_playTimer, SIGNAL(timeout()),
             this, SLOT(slotCancelPlayingAudio()));
 
-    KStdAction::close(this,
+    KStandardAction::close(this,
                       SLOT(slotClose()),
                       actionCollection());
 
@@ -310,7 +314,7 @@ AudioManagerDialog::slotPopulateFileList()
         } catch (Exception e) {
             audioPixmap->fill(); // white
             QPainter p(audioPixmap);
-            p.setPen(Qt::black);
+            p.setPen(QColor(Qt::black));
             p.drawText(10, m_previewHeight / 2, QString("<no preview>"));
         }
 
@@ -1002,7 +1006,7 @@ AudioManagerDialog::getCommandHistory()
 }
 
 void
-AudioManagerDialog::slotCommandExecuted(KCommand*)
+AudioManagerDialog::slotCommandExecuted(Command*)
 {
     slotPopulateFileList();
 }

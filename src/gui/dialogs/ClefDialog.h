@@ -20,7 +20,8 @@
 #define _RG_CLEFDIALOG_H_
 
 #include "base/NotationTypes.h"
-#include <kdialogbase.h>
+#include <QDialog>
+#include <QDialogButtonBox>
 
 
 class QWidget;
@@ -35,7 +36,7 @@ class BigArrowButton;
 class NotePixmapFactory;
 
 
-class ClefDialog : public KDialogBase
+class ClefDialog : public QDialog
 {
     Q_OBJECT
 
@@ -46,7 +47,7 @@ public:
         Transpose,
     };
 
-    ClefDialog(QWidget *parent,
+    ClefDialog(QDialogButtonBox::QWidget *parent,
                NotePixmapFactory *npf,
                Clef defaultClef,
                bool showConversionOptions = true);

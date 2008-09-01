@@ -19,13 +19,14 @@
 #ifndef _RG_NOTECHARACTER_H_
 #define _RG_NOTECHARACTER_H_
 
-#include <qpixmap.h>
-#include <qpoint.h>
+#include <Q3CanvasPixmap>
+#include <QPixmap>
+#include <QPoint>
 #include <qpointarray.h>
 
 
 class QPainter;
-class QCanvasPixmap;
+class Q3CanvasPixmap;
 
 namespace Rosegarden
 {
@@ -63,7 +64,7 @@ public:
     QPoint getHotspot() const;
 
     QPixmap *getPixmap() const;
-    QCanvasPixmap *getCanvasPixmap() const;
+    Q3CanvasPixmap *getCanvasPixmap() const;
 
     void draw(QPainter *painter, int x, int y) const;
     void drawMask(QPainter *painter, int x, int y) const;

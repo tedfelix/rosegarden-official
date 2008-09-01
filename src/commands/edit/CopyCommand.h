@@ -19,8 +19,8 @@
 #ifndef _RG_COPYCOMMAND_H_
 #define _RG_COPYCOMMAND_H_
 
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include "base/Event.h"
 #include <klocale.h>
 
@@ -38,7 +38,7 @@ class Clipboard;
 
 /// Copy a selection
 
-class CopyCommand : public KNamedCommand
+class CopyCommand : public NamedCommand
 {
 public:
     /// Make a CopyCommand that copies events from within a Segment

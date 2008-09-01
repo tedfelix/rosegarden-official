@@ -17,38 +17,47 @@
 
 
 #include "TupletDialog.h"
-#include <qlayout.h>
+#include <QLayout>
 
 #include <klocale.h>
 #include "base/NotationTypes.h"
 #include "gui/editors/notation/NotationStrings.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
-#include <kcombobox.h>
-#include <kdialogbase.h>
-#include <qcheckbox.h>
-#include <qframe.h>
+#include <QComboBox>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QCheckBox>
+#include <QFrame>
 #include <qgrid.h>
-#include <qgroupbox.h>
-#include <qlabel.h>
-#include <qobject.h>
-#include <qstring.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <QGroupBox>
+#include <QLabel>
+#include <QObject>
+#include <QString>
+#include <QWidget>
+#include <QVBoxLayout>
 
 
 namespace Rosegarden
 {
 
-TupletDialog::TupletDialog(QWidget *parent, Note::Type defaultUnitType,
+TupletDialog::TupletDialog(QDialogButtonBox::QWidget *parent, Note::Type defaultUnitType,
                            timeT maxDuration) :
-        KDialogBase(parent, 0, true, i18n("Tuplet"), Ok | Cancel | Help),
+        QDialog(parent),
         m_maxDuration(maxDuration)
 {
     setHelp("nv-tuplets");
-    QVBox *vbox = makeVBoxMainWidget();
+    setModal(true);
+    setWindowTitle(i18n("Tuplet"));
 
-    QGroupBox *timingBox = new QGroupBox
-                           (1, Horizontal, i18n("New timing for tuplet group"), vbox);
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
+    QWidget *vbox = new QWidget(this);
+    QVBoxLayout vboxLayout = new QVBoxLayout;
+    metagrid->addWidget(vbox, 0, 0);
+
+
+    QGroupBox *timingBox = new QGroupBox( i18n("New timing for tuplet group"), vbox );
+    vboxLayout->addWidget(timingBox);
 
     if (m_maxDuration > 0) {
 
@@ -68,10 +77,10 @@ TupletDialog::TupletDialog(QWidget *parent, Note::Type defaultUnitType,
 
     timingLayout->addWidget(new QLabel(i18n("Play "), timingFrame), 0, 0);
 
-    m_untupledCombo = new KComboBox(timingFrame);
+    m_untupledCombo = new QComboBox(timingFrame);
     timingLayout->addWidget(m_untupledCombo, 0, 1);
 
-    m_unitCombo = new KComboBox(timingFrame);
+    m_unitCombo = new QComboBox(timingFrame);
     timingLayout->addWidget(m_unitCombo, 0, 2);
 
     for (Note::Type t = Note::Shortest; t <= Note::Longest; ++t) {
@@ -80,31 +89,32 @@ TupletDialog::TupletDialog(QWidget *parent, Note::Type defaultUnitType,
         if (maxDuration > 0 && (2 * duration > maxDuration))
             break;
         timeT e; // error factor, ignore
-        m_unitCombo->insertItem(NotePixmapFactory::toQPixmap
+        m_unitCombo->addItem(NotePixmapFactory::toQPixmap
                                 (NotePixmapFactory::makeNoteMenuPixmap(duration, e)),
                                 NotationStrings::makeNoteMenuLabel(duration, false, e, true));
         if (defaultUnitType == t) {
-            m_unitCombo->setCurrentItem(m_unitCombo->count() - 1);
+            m_unitCombo->setCurrentIndex(m_unitCombo->count() - 1);
         }
     }
 
     timingLayout->addWidget(new QLabel(i18n("in the time of  "), timingFrame), 1, 0);
 
-    m_tupledCombo = new KComboBox(timingFrame);
+    m_tupledCombo = new QComboBox(timingFrame);
     timingLayout->addWidget(m_tupledCombo, 1, 1);
 
     m_hasTimingAlready = new QCheckBox
                          (i18n("Timing is already correct: update display only"), timingFrame);
     m_hasTimingAlready->setChecked(false);
-    timingLayout->addMultiCellWidget(m_hasTimingAlready, 2, 2, 0, 2);
+    timingLayout->addWidget(m_hasTimingAlready, 2, 0, 0+1, 2- 1);
 
     connect(m_hasTimingAlready, SIGNAL(clicked()), this, SLOT(slotHasTimingChanged()));
 
     updateUntupledCombo();
     updateTupledCombo();
 
-    m_timingDisplayBox = new QGroupBox
-                         (1, Horizontal, i18n("Timing calculations"), vbox);
+    m_timingDisplayBox = new QGroupBox( i18n("Timing calculations"), vbox );
+    vboxLayout->addWidget(m_timingDisplayBox);
+    vbox->setLayout(vboxLayout);
 
     QGrid *timingDisplayGrid = new QGrid(3, QGrid::Horizontal, m_timingDisplayBox);
 
@@ -164,6 +174,11 @@ TupletDialog::TupletDialog(QWidget *parent, Note::Type defaultUnitType,
                      this, SLOT(slotTupledChanged(const QString &)));
     QObject::connect(m_tupledCombo, SIGNAL(textChanged(const QString &)),
                      this, SLOT(slotTupledChanged(const QString &)));
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 void
@@ -177,7 +192,7 @@ TupletDialog::slotHasTimingChanged()
 Note::Type
 TupletDialog::getUnitType() const
 {
-    return Note::Shortest + m_unitCombo->currentItem();
+    return Note::Shortest + m_unitCombo->currentIndex();
 }
 
 int
@@ -218,20 +233,20 @@ TupletDialog::updateUntupledCombo()
     // should possibly be spinboxes, except I think I like
     // being able to "suggest" a few values
 
-    int maxValue = 12;
+    int maximum = 12;
 
     if (m_maxDuration) {
         if (m_hasTimingAlready->isChecked()) {
-            maxValue = (m_maxDuration * 2) / Note(getUnitType()).getDuration();
+            maximum = (m_maxDuration * 2) / Note(getUnitType()).getDuration();
         } else {
-            maxValue = m_maxDuration / Note(getUnitType()).getDuration();
+            maximum = m_maxDuration / Note(getUnitType()).getDuration();
         }
     }
 
     QString previousText = m_untupledCombo->currentText();
     if (previousText.toInt() == 0) {
-        if (maxValue < 3)
-            previousText = QString("%1").arg(maxValue);
+        if (maximum < 3)
+            previousText = QString("%1").arg(maximum);
         else
             previousText = "3";
     }
@@ -239,15 +254,15 @@ TupletDialog::updateUntupledCombo()
     m_untupledCombo->clear();
     bool setText = false;
 
-    for (int i = 1; i <= maxValue; ++i) {
+    for (int i = 1; i <= maximum; ++i) {
         QString text = QString("%1").arg(i);
-        m_untupledCombo->insertItem(text);
+        m_untupledCombo->addItem(text);
         if (m_hasTimingAlready->isChecked()) {
             if (i == (m_maxDuration * 3) / (Note(getUnitType()).getDuration()*2)) {
-                m_untupledCombo->setCurrentItem(m_untupledCombo->count() - 1);
+                m_untupledCombo->setCurrentIndex(m_untupledCombo->count() - 1);
             }
         } else if (text == previousText) {
-            m_untupledCombo->setCurrentItem(m_untupledCombo->count() - 1);
+            m_untupledCombo->setCurrentIndex(m_untupledCombo->count() - 1);
             setText = true;
         }
     }
@@ -280,13 +295,13 @@ TupletDialog::updateTupledCombo()
 
     for (int i = 1; i < untupled; ++i) {
         QString text = QString("%1").arg(i);
-        m_tupledCombo->insertItem(text);
+        m_tupledCombo->addItem(text);
         if (m_hasTimingAlready->isChecked()) {
             if (i == m_maxDuration / Note(getUnitType()).getDuration()) {
-                m_tupledCombo->setCurrentItem(m_tupledCombo->count() - 1);
+                m_tupledCombo->setCurrentIndex(m_tupledCombo->count() - 1);
             }
         } else if (text == previousText) {
-            m_tupledCombo->setCurrentItem(m_tupledCombo->count() - 1);
+            m_tupledCombo->setCurrentIndex(m_tupledCombo->count() - 1);
         }
     }
 }

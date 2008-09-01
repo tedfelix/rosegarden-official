@@ -19,11 +19,14 @@
 #ifndef _RG_CONTROLRULER_H_
 #define _RG_CONTROLRULER_H_
 
+#include <Q3Canvas>
+#include <Q3CanvasItemList>
+#include <Q3CanvasRectangle>
 #include "base/Segment.h"
 #include "gui/general/RosegardenCanvasView.h"
-#include <qcolor.h>
-#include <qpoint.h>
-#include <qstring.h>
+#include <QColor>
+#include <QPoint>
+#include <QString>
 #include <utility>
 
 
@@ -33,8 +36,8 @@ class QScrollBar;
 class QPopupMenu;
 class QMouseEvent;
 class QContextMenuEvent;
-class QCanvasRectangle;
-class QCanvas;
+class Q3CanvasRectangle;
+class Q3Canvas;
 
 
 namespace Rosegarden
@@ -63,7 +66,7 @@ public:
     ControlRuler(Segment*,
                  RulerScale*,
                  EditViewBase* parentView,
-                 QCanvas*,
+                 Q3Canvas*,
                  QWidget* parent=0, const char* name=0, WFlags f=0);
     virtual ~ControlRuler();
 
@@ -78,7 +81,7 @@ public:
 
     int applyTool(double x, int val);
 
-    QCanvasRectangle* getSelectionRectangle() { return m_selectionRect; }
+    Q3CanvasRectangle* getSelectionRectangle() { return m_selectionRect; }
 
     RulerScale* getRulerScale() { return m_rulerScale; }
 
@@ -143,8 +146,8 @@ protected:
     EventSelection* m_eventSelection;
     Segment*        m_segment;
 
-    ControlItem* m_currentItem;
-    QCanvasItemList m_selectedItems;
+    ControlItem* m_currentIndex;
+    Q3CanvasItemList m_selectedItems;
 
     ControlTool *m_tool;
 
@@ -159,7 +162,7 @@ protected:
 
     bool m_selecting;
     ControlSelector* m_selector;
-    QCanvasRectangle* m_selectionRect;
+    Q3CanvasRectangle* m_selectionRect;
 
     QString m_menuName;
     QPopupMenu* m_menu;

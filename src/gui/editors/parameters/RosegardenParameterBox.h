@@ -20,9 +20,9 @@
 #define _RG_ROSEGARDENPARAMETERBOX_H_
 
 #include "RosegardenParameterArea.h"
-#include <qfont.h>
-#include <qframe.h>
-#include <qstring.h>
+#include <QFont>
+#include <QFrame>
+#include <QString>
 #include <klocale.h>
 
 

@@ -22,7 +22,7 @@
 #include "base/RealTime.h"
 #include "base/Track.h"
 #include "sound/AudioFile.h"
-#include <kcommand.h>
+#include "document/Command.h"
 #include "base/Event.h"
 
 
@@ -36,7 +36,7 @@ class Composition;
 class AudioFileManager;
 
 
-class AudioSegmentInsertCommand : public KNamedCommand
+class AudioSegmentInsertCommand : public NamedCommand
 {
 public:
     AudioSegmentInsertCommand(RosegardenGUIDoc *doc,

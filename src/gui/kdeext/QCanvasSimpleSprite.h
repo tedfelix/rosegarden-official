@@ -16,7 +16,11 @@
 #ifndef QCANVASSIMPLESPRITE_H
 #define QCANVASSIMPLESPRITE_H
 
-#include <qwmatrix.h>
+#include <Q3Canvas>
+#include <Q3CanvasPixmap>
+#include <Q3CanvasPixmapArray>
+#include <Q3CanvasSprite>
+#include <QMatrix>
 #include <qcanvas.h>
 
 #include "gui/editors/notation/NotePixmapFactory.h"
@@ -24,42 +28,42 @@
 namespace Rosegarden {
 
 /**
- * A QCanvasSprite with 1 frame only
+ * A Q3CanvasSprite with 1 frame only
  */
-class QCanvasSimpleSprite : public QCanvasSprite
+class QCanvasSimpleSprite : public Q3CanvasSprite
 {
 public:
-    QCanvasSimpleSprite(QPixmap*, QCanvas*);
-    QCanvasSimpleSprite(QCanvasPixmap*, QCanvas*);
-    QCanvasSimpleSprite(const QString &pixmapfile, QCanvas*);
+    QCanvasSimpleSprite(QPixmap*, Q3Canvas*);
+    QCanvasSimpleSprite(Q3CanvasPixmap*, Q3Canvas*);
+    QCanvasSimpleSprite(const QString &pixmapfile, Q3Canvas*);
 
     // For lazy pixmap rendering, when we get around looking at it
-    QCanvasSimpleSprite(QCanvas*);
+    QCanvasSimpleSprite(Q3Canvas*);
 
     virtual ~QCanvasSimpleSprite();
 
 protected:
-    static QCanvasPixmapArray* makePixmapArray(QPixmap *pixmap);
+    static Q3CanvasPixmapArray* makePixmapArray(QPixmap *pixmap);
 
-    static QCanvasPixmapArray* makePixmapArray(QCanvasPixmap *pixmap);
+    static Q3CanvasPixmapArray* makePixmapArray(Q3CanvasPixmap *pixmap);
 
-    static QCanvasPixmapArray* makePixmapArray(const QString &pixmapfile);
+    static Q3CanvasPixmapArray* makePixmapArray(const QString &pixmapfile);
 
     //--------------- Data members ---------------------------------
 
-    QCanvasPixmapArray* m_pixmapArray;
+    Q3CanvasPixmapArray* m_pixmapArray;
 };
 
 class NotationElement;
 
 /**
- * A QCanvasSprite referencing a NotationElement
+ * A Q3CanvasSprite referencing a NotationElement
  */
 class QCanvasNotationSprite : public QCanvasSimpleSprite
 {
 public:
-    QCanvasNotationSprite(Rosegarden::NotationElement&, QPixmap*, QCanvas*);
-    QCanvasNotationSprite(Rosegarden::NotationElement&, QCanvasPixmap*, QCanvas*);
+    QCanvasNotationSprite(Rosegarden::NotationElement&, QPixmap*, Q3Canvas*);
+    QCanvasNotationSprite(Rosegarden::NotationElement&, Q3CanvasPixmap*, Q3Canvas*);
 
     virtual ~QCanvasNotationSprite();
     
@@ -74,19 +78,19 @@ protected:
 class QCanvasNonElementSprite : public QCanvasSimpleSprite
 {
 public:
-    QCanvasNonElementSprite(QPixmap *, QCanvas *);
-    QCanvasNonElementSprite(QCanvasPixmap *, QCanvas *);
+    QCanvasNonElementSprite(QPixmap *, Q3Canvas *);
+    QCanvasNonElementSprite(Q3CanvasPixmap *, Q3Canvas *);
     virtual ~QCanvasNonElementSprite();
 };
 
 /**
- * A QCanvasSprite used for a time signature
+ * A Q3CanvasSprite used for a time signature
  */
 class QCanvasTimeSigSprite : public QCanvasNonElementSprite
 {
 public:
-    QCanvasTimeSigSprite(double layoutX, QPixmap *, QCanvas *);
-    QCanvasTimeSigSprite(double layoutX, QCanvasPixmap *, QCanvas *);
+    QCanvasTimeSigSprite(double layoutX, QPixmap *, Q3Canvas *);
+    QCanvasTimeSigSprite(double layoutX, Q3CanvasPixmap *, Q3Canvas *);
     virtual ~QCanvasTimeSigSprite();
 
     void setLayoutX(double layoutX) { m_layoutX = layoutX; }
@@ -97,29 +101,29 @@ protected:
 };
 
 /**
- * A QCanvasSprite used for a staff name
+ * A Q3CanvasSprite used for a staff name
  */
 class QCanvasStaffNameSprite : public QCanvasNonElementSprite
 {
 public:
-    QCanvasStaffNameSprite(QPixmap *, QCanvas *);
-    QCanvasStaffNameSprite(QCanvasPixmap *, QCanvas *);
+    QCanvasStaffNameSprite(QPixmap *, Q3Canvas *);
+    QCanvasStaffNameSprite(Q3CanvasPixmap *, Q3Canvas *);
     virtual ~QCanvasStaffNameSprite();
 };
 
 /**
- * A GC for QCanvasPixmapArray which have to be deleted seperatly
+ * A GC for Q3CanvasPixmapArray which have to be deleted seperatly
  */
 class PixmapArrayGC
 {
 public:
-    static void registerForDeletion(QCanvasPixmapArray*);
+    static void registerForDeletion(Q3CanvasPixmapArray*);
     static void deleteAll();
     
 protected:
     //--------------- Data members ---------------------------------
 
-    static std::vector<QCanvasPixmapArray*> m_pixmapArrays;
+    static std::vector<Q3CanvasPixmapArray*> m_pixmapArrays;
 };
 
 }

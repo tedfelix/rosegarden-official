@@ -32,7 +32,7 @@
 #include "document/RosegardenGUIDoc.h"
 #include "gui/application/RosegardenApplication.h"
 #include "gui/general/ProgressReporter.h"
-#include <qobject.h>
+#include <QObject>
 
 namespace Rosegarden
 {

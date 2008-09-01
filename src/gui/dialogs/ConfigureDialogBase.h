@@ -19,8 +19,9 @@
 #ifndef _RG_CONFIGUREDIALOGBASE_H_
 #define _RG_CONFIGUREDIALOGBASE_H_
 
-#include <kdialogbase.h>
-#include <qstring.h>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QString>
 #include <vector>
 
 
@@ -33,11 +34,11 @@ namespace Rosegarden
 class ConfigurationPage;
 
 
-class ConfigureDialogBase : public KDialogBase
+class ConfigureDialogBase : public QDialog
 {
     Q_OBJECT
 public:
-    ConfigureDialogBase(QWidget *parent=0,
+    ConfigureDialogBase(QDialogButtonBox::QWidget *parent=0,
                         QString label = 0,
                         const char *name=0);
     virtual ~ConfigureDialogBase();

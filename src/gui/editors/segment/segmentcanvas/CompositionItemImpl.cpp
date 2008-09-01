@@ -21,13 +21,13 @@
 #include "misc/Debug.h"
 #include "base/Segment.h"
 #include "CompositionRect.h"
-#include <qbrush.h>
-#include <qcolor.h>
-#include <qpen.h>
-#include <qpoint.h>
-#include <qrect.h>
-#include <qsize.h>
-#include <qstring.h>
+#include <QBrush>
+#include <QColor>
+#include <QPen>
+#include <QPoint>
+#include <QRect>
+#include <QSize>
+#include <QString>
 
 
 namespace Rosegarden

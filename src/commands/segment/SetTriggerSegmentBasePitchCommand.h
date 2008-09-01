@@ -20,7 +20,7 @@
 #define _RG_SETTRIGGERSEGMENTBASEPITCHCOMMAND_H_
 
 #include "base/TriggerSegment.h"
-#include <kcommand.h>
+#include "document/Command.h"
 
 
 
@@ -31,7 +31,7 @@ namespace Rosegarden
 class Composition;
 
 
-class SetTriggerSegmentBasePitchCommand : public KNamedCommand
+class SetTriggerSegmentBasePitchCommand : public NamedCommand
 {
 public:
     SetTriggerSegmentBasePitchCommand(Composition *composition,

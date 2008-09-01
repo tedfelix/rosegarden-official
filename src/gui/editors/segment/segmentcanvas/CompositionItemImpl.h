@@ -21,7 +21,7 @@
 
 #include "CompositionRect.h"
 #include "CompositionItem.h"
-#include <qrect.h>
+#include <QRect>
 
 
 

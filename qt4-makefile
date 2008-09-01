@@ -49,8 +49,8 @@ LDLIBS		= \
 		-lkdeprint -lkdeui -lkdecore -lQtGui -lQtXml -lQtNetwork -lQtCore \
 		-ljack -lasound -llo -llrdf -lraptor -llirc_client
 
-HEADERS		= $(filter-out templates/template.h, $(wildcard */*.h */*/*.h */*/*/*.h))
-SOURCES		= $(filter-out templates/template.cpp, $(wildcard */*.cpp */*/*.cpp */*/*/*.cpp))
+HEADERS		= $(filter-out templates/template.h, $(wildcard src/*.h src/*/*.h src/*/*/*.h))
+SOURCES		= $(filter-out templates/template.cpp, $(wildcard src/*.cpp src/*/*.cpp src/*/*/*.cpp))
 QHEADERS	= $(shell fgrep -l Q_OBJECT $(HEADERS))
 OBJECTS		= $(patsubst %.cpp,%.o,$(SOURCES))
 QSOURCES	= $(patsubst %.h,%.moc,$(QHEADERS))

@@ -17,7 +17,7 @@
 
 
 #include "DocumentConfigureDialog.h"
-#include <qlayout.h>
+#include <QLayout>
 
 #include <klocale.h>
 #include "ConfigureDialogBase.h"
@@ -27,9 +27,9 @@
 #include "gui/configuration/DocumentMetaConfigurationPage.h"
 #include "gui/configuration/GeneralConfigurationPage.h"
 #include <kdialogbase.h>
-#include <qstring.h>
-#include <qwidget.h>
-#include <kstddirs.h>
+#include <QString>
+#include <QWidget>
+#include <kstandarddirs.h>
 
 
 namespace Rosegarden

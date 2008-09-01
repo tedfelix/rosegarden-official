@@ -22,7 +22,7 @@
 #ifndef _RG_PRESETELEMENT_H_
 #define _RG_PRESETELEMENT_H_
 
-#include <qstring.h>
+#include <QString>
 
 #include <vector>
 

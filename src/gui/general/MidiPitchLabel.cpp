@@ -22,7 +22,7 @@
 #include "document/ConfigGroups.h"
 #include <kconfig.h>
 #include <klocale.h>
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
@@ -55,7 +55,7 @@ MidiPitchLabel::MidiPitchLabel(int pitch)
 std::string
 MidiPitchLabel::getString() const
 {
-    return std::string(m_midiNote.utf8().data());
+    return std::string(m_midiNote.toUtf8().data());
 }
 
 QString

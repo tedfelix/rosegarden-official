@@ -25,8 +25,8 @@
 
 #include "misc/Debug.h"
 #include "base/Exception.h"
-#include <qobject.h>
-#include <qsocketnotifier.h>
+#include <QObject>
+#include <QSocketNotifier>
 #include <fcntl.h>
 #include <cstdlib>
 

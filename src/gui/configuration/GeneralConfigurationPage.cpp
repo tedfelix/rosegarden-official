@@ -28,23 +28,23 @@
 #include "gui/seqmanager/SequenceManager.h"
 #include "sound/SoundDriver.h"
 #include "TabbedConfigurationPage.h"
-#include <kcombobox.h>
+#include <QComboBox>
 #include <kconfig.h>
 #include <kfiledialog.h>
 #include <kmessagebox.h>
-#include <qcheckbox.h>
-#include <qcombobox.h>
-#include <qfileinfo.h>
-#include <qframe.h>
-#include <qlabel.h>
-#include <qlineedit.h>
-#include <qpushbutton.h>
-#include <qspinbox.h>
-#include <qstring.h>
-#include <qtabwidget.h>
-#include <qvbox.h>
-#include <qwidget.h>
-#include <qlayout.h>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QFileInfo>
+#include <QFrame>
+#include <QLabel>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QSpinBox>
+#include <QString>
+#include <QTabWidget>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QLayout>
 
 
 namespace Rosegarden
@@ -81,13 +81,13 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
     layout->addWidget(new QLabel(i18n("Double-click opens segment in"),
                                  frame), row, 0);
 
-    m_client = new KComboBox(frame);
-    m_client->insertItem(i18n("Notation editor"));
-    m_client->insertItem(i18n("Matrix editor"));
-    m_client->insertItem(i18n("Event List editor"));
-    m_client->setCurrentItem(m_cfg->readUnsignedNumEntry("doubleclickclient", NotationView));
+    m_client = new QComboBox(frame);
+    m_client->addItem(i18n("Notation editor"));
+    m_client->addItem(i18n("Matrix editor"));
+    m_client->addItem(i18n("Event List editor"));
+    m_client->setCurrentIndex(m_cfg->readUnsignedNumEntry("doubleclickclient", NotationView));
 
-    layout->addMultiCellWidget(m_client, row, row, 1, 2);
+    layout->addWidget(m_client, row, 1, row- row+1, 2);
     ++row;
 
     layout->addWidget(new QLabel(i18n("Number of count-in measures when recording"),
@@ -95,35 +95,35 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
 
     m_countIn = new QSpinBox(frame);
     m_countIn->setValue(m_cfg->readUnsignedNumEntry("countinbars", 0));
-    m_countIn->setMaxValue(10);
-    m_countIn->setMinValue(0);
-    layout->addMultiCellWidget(m_countIn, row, row, 1, 2);
+    m_countIn->setMaximum(10);
+    m_countIn->setMinimum(0);
+    layout->addWidget(m_countIn, row, 1, row- row+1, 2);
     ++row;
 
     layout->addWidget(new QLabel(i18n("Auto-save interval"), frame), row, 0);
     
-    m_autoSave = new KComboBox(frame);
-    m_autoSave->insertItem(i18n("Every 30 seconds"));
-    m_autoSave->insertItem(i18n("Every minute"));
-    m_autoSave->insertItem(i18n("Every five minutes"));
-    m_autoSave->insertItem(i18n("Every half an hour"));
-    m_autoSave->insertItem(i18n("Never"));
+    m_autoSave = new QComboBox(frame);
+    m_autoSave->addItem(i18n("Every 30 seconds"));
+    m_autoSave->addItem(i18n("Every minute"));
+    m_autoSave->addItem(i18n("Every five minutes"));
+    m_autoSave->addItem(i18n("Every half an hour"));
+    m_autoSave->addItem(i18n("Never"));
 
     bool doAutoSave = m_cfg->readBoolEntry("autosave", true);
     int autoSaveInterval = m_cfg->readUnsignedNumEntry("autosaveinterval", 300);
     if (!doAutoSave || autoSaveInterval == 0) {
-        m_autoSave->setCurrentItem(4); // off
+        m_autoSave->setCurrentIndex(4); // off
     } else if (autoSaveInterval < 45) {
-        m_autoSave->setCurrentItem(0);
+        m_autoSave->setCurrentIndex(0);
     } else if (autoSaveInterval < 150) {
-        m_autoSave->setCurrentItem(1);
+        m_autoSave->setCurrentIndex(1);
     } else if (autoSaveInterval < 900) {
-        m_autoSave->setCurrentItem(2);
+        m_autoSave->setCurrentIndex(2);
     } else {
-        m_autoSave->setCurrentItem(3);
+        m_autoSave->setCurrentIndex(3);
     }
 
-    layout->addMultiCellWidget(m_autoSave, row, row, 1, 2);
+    layout->addWidget(m_autoSave, row, 1, row- row+1, 2);
     ++row;
 
     label = new QLabel(i18n("Append suffixes to segment labels"), frame);
@@ -131,7 +131,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
 
     m_appendLabel = new QCheckBox(frame);
     m_appendLabel->setChecked(m_cfg->readBoolEntry("appendlabel", true));
-    layout->addMultiCellWidget(m_appendLabel, row, row, 1, 2);
+    layout->addWidget(m_appendLabel, row, 1, row- row+1, 2);
     row++;
 
     // JACK Transport
@@ -143,22 +143,22 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
     layout->addWidget(label, row, 0);
 
     m_jackTransport = new QCheckBox(frame);
-    layout->addMultiCellWidget(m_jackTransport, row, row, 1, 2);
+    layout->addWidget(m_jackTransport, row, 1, row- row+1, 2);
 
-//    m_jackTransport->insertItem(i18n("Ignore JACK transport"));
-//    m_jackTransport->insertItem(i18n("Sync"));
+//    m_jackTransport->addItem(i18n("Ignore JACK transport"));
+//    m_jackTransport->addItem(i18n("Sync"));
 
     /*!!! Removed as not yet implemented
-        m_jackTransport->insertItem(i18n("Sync, and offer timebase master"));
+        m_jackTransport->addItem(i18n("Sync, and offer timebase master"));
     */
 
     bool jackMaster = m_cfg->readBoolEntry("jackmaster", false);
     bool jackTransport = m_cfg->readBoolEntry("jacktransport", false);
 /*
     if (jackTransport)
-        m_jackTransport->setCurrentItem(1);
+        m_jackTransport->setCurrentIndex(1);
     else
-        m_jackTransport->setCurrentItem(0);
+        m_jackTransport->setCurrentIndex(0);
 */
     m_jackTransport->setChecked(jackTransport);
 
@@ -221,25 +221,25 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
     layout->addWidget(new QLabel(i18n("Side-bar parameter box layout"),
                                  frame), row, 0);
 
-    m_sidebarStyle = new KComboBox(frame);
-    m_sidebarStyle->insertItem(i18n("Vertically stacked"),
+    m_sidebarStyle = new QComboBox(frame);
+    m_sidebarStyle->addItem(i18n("Vertically stacked"),
                                RosegardenParameterArea::CLASSIC_STYLE);
-    m_sidebarStyle->insertItem(i18n("Tabbed"),
+    m_sidebarStyle->addItem(i18n("Tabbed"),
                                RosegardenParameterArea::TAB_BOX_STYLE);
 
-    m_sidebarStyle->setCurrentItem(m_cfg->readUnsignedNumEntry("sidebarstyle",
+    m_sidebarStyle->setCurrentIndex(m_cfg->readUnsignedNumEntry("sidebarstyle",
                                    0));
-    layout->addMultiCellWidget(m_sidebarStyle, row, row, 1, 3);
+    layout->addWidget(m_sidebarStyle, row, 1, row- row+1, 3);
     ++row;
 
     layout->addWidget(new QLabel(i18n("Note name style"),
                                  frame), row, 0);
 
-    m_nameStyle = new KComboBox(frame);
-    m_nameStyle->insertItem(i18n("Always use US names (e.g. quarter, 8th)"));
-    m_nameStyle->insertItem(i18n("Localized (where available)"));
-    m_nameStyle->setCurrentItem(m_cfg->readUnsignedNumEntry("notenamestyle", Local));
-    layout->addMultiCellWidget(m_nameStyle, row, row, 1, 3);
+    m_nameStyle = new QComboBox(frame);
+    m_nameStyle->addItem(i18n("Always use US names (e.g. quarter, 8th)"));
+    m_nameStyle->addItem(i18n("Localized (where available)"));
+    m_nameStyle->setCurrentIndex(m_cfg->readUnsignedNumEntry("notenamestyle", Local));
+    layout->addWidget(m_nameStyle, row, 1, row- row+1, 3);
     ++row;
 /*
     layout->addWidget(new QLabel(i18n("Show tool context help in status bar"), frame), row, 0);
@@ -275,12 +275,12 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
     ++row;
 
     layout->addWidget(new QLabel(i18n("Use bundled Klearlook theme"), frame), row, 0);
-    m_globalStyle = new KComboBox(frame);
-    m_globalStyle->insertItem(i18n("Never"));
-    m_globalStyle->insertItem(i18n("When not running under KDE"));
-    m_globalStyle->insertItem(i18n("Always"));
-    m_globalStyle->setCurrentItem(m_cfg->readUnsignedNumEntry("Install Own Theme", 1));
-    layout->addMultiCellWidget(m_globalStyle, row, row, 1, 3);
+    m_globalStyle = new QComboBox(frame);
+    m_globalStyle->addItem(i18n("Never"));
+    m_globalStyle->addItem(i18n("When not running under KDE"));
+    m_globalStyle->addItem(i18n("Always"));
+    m_globalStyle->setCurrentIndex(m_cfg->readUnsignedNumEntry("Install Own Theme", 1));
+    layout->addWidget(m_globalStyle, row, 1, row- row+1, 3);
 
     ++row;
 
@@ -307,7 +307,7 @@ void GeneralConfigurationPage::apply()
     int client = getDblClickClient();
     m_cfg->writeEntry("doubleclickclient", client);
 
-    int globalstyle = m_globalStyle->currentItem();
+    int globalstyle = m_globalStyle->currentIndex();
     m_cfg->writeEntry("Install Own Theme", globalstyle);
 
     int namestyle = getNoteNameStyle();
@@ -348,21 +348,21 @@ void GeneralConfigurationPage::apply()
 
     m_cfg->setGroup(GeneralOptionsConfigGroup);
 
-    int sidebarStyle = m_sidebarStyle->currentItem();
+    int sidebarStyle = m_sidebarStyle->currentIndex();
     m_cfg->writeEntry("sidebarstyle", sidebarStyle);
     emit updateSidebarStyle(sidebarStyle);
 
     unsigned int interval = 0;
 
-    if (m_autoSave->currentItem() == 4) {
+    if (m_autoSave->currentIndex() == 4) {
         m_cfg->writeEntry("autosave", false);
     } else {
         m_cfg->writeEntry("autosave", true);
-        if (m_autoSave->currentItem() == 0) {
+        if (m_autoSave->currentIndex() == 0) {
             interval = 30;
-        } else if (m_autoSave->currentItem() == 1) {
+        } else if (m_autoSave->currentIndex() == 1) {
             interval = 60;
-        } else if (m_autoSave->currentItem() == 2) {
+        } else if (m_autoSave->currentIndex() == 2) {
             interval = 300;
         } else {
             interval = 1800;
@@ -380,7 +380,7 @@ void GeneralConfigurationPage::apply()
     // Write the JACK entry
     //
 /*
-    int jackValue = m_jackTransport->currentItem();
+    int jackValue = m_jackTransport->currentIndex();
     bool jackTransport, jackMaster;
 
     switch (jackValue) {

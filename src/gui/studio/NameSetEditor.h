@@ -20,7 +20,7 @@
 #define _RG_NAMESETEDITOR_H_
 
 #include <kcompletion.h>
-#include <qstring.h>
+#include <QString>
 #include <qvgroupbox.h>
 #include <vector>
 

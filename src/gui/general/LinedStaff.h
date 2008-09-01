@@ -18,18 +18,21 @@
 #ifndef _RG_LINEDSTAFF_H_
 #define _RG_LINEDSTAFF_H_
 
+#include <Q3Canvas>
+#include <Q3CanvasItem>
+#include <Q3CanvasLine>
 #include "base/Event.h"
 #include "base/FastVector.h"
 #include "base/Staff.h"
 #include "base/ViewElement.h"
-#include <qrect.h>
+#include <QRect>
 #include <utility>
 #include <vector>
 
 
-class QCanvasLine;
-class QCanvasItem;
-class QCanvas;
+class Q3CanvasLine;
+class Q3CanvasItem;
+class Q3Canvas;
 class isFirstBarInRow;
 class barNo;
 
@@ -92,7 +95,7 @@ protected:
      * \a lineThickness is the number of pixels thick a
      *    staff line should be
      */
-    LinedStaff(QCanvas *, Segment *, SnapGrid *,
+    LinedStaff(Q3Canvas *, Segment *, SnapGrid *,
                int id, int resolution, int lineThickness);
 
     /**
@@ -118,7 +121,7 @@ protected:
      * \a rowSpacing is the distance in pixels between
      *    the tops of consecutive rows on this staff
      */
-    LinedStaff(QCanvas *, Segment *, SnapGrid *,
+    LinedStaff(Q3Canvas *, Segment *, SnapGrid *,
                int id, int resolution, int lineThickness,
                double pageWidth, int rowsPerPage, int rowSpacing);
 
@@ -126,7 +129,7 @@ protected:
      * Create a new LinedStaff for the given Segment, with
      * either page or linear layout.
      */
-    LinedStaff(QCanvas *, Segment *, SnapGrid *,
+    LinedStaff(Q3Canvas *, Segment *, SnapGrid *,
                int id, int resolution, int lineThickness, PageMode pageMode,
                double pageWidth, int rowsPerPage, int rowSpacing);
 
@@ -626,7 +629,7 @@ protected:
     // Note that even linear-layout staffs have multiple rows; their
     // rows all have the same y coordinate but increasing x
     // coordinates, instead of the other way around.  (The only reason
-    // for this is that it seems to be more efficient from the QCanvas
+    // for this is that it seems to be more efficient from the Q3Canvas
     // perspective to create and manipulate many relatively short
     // canvas lines rather than a smaller number of very long ones.)
 
@@ -702,7 +705,7 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    QCanvas *m_canvas;
+    Q3Canvas *m_canvas;
     SnapGrid *m_snapGrid;
 
     int      m_id;
@@ -725,12 +728,12 @@ protected:
 
     bool     m_current;
 
-    typedef std::vector<QCanvasItem *> ItemList;
+    typedef std::vector<Q3CanvasItem *> ItemList;
     typedef std::vector<ItemList> ItemMatrix;
     ItemMatrix m_staffLines;
     ItemList m_staffConnectingLines;
 
-    typedef std::pair<double, QCanvasItem *> LineRec; // layout-x, line
+    typedef std::pair<double, Q3CanvasItem *> LineRec; // layout-x, line
     typedef FastVector<LineRec> LineRecList;
     typedef FastVector<BarLine *> BarLineList;//!!! should be multiset I reckon
     static bool compareBars(const BarLine *, const BarLine *);
@@ -740,8 +743,8 @@ protected:
     LineRecList m_barConnectingLines;
     ItemList m_barNumbers;
 
-    QCanvasLine *m_pointer;
-    QCanvasLine *m_insertCursor;
+    Q3CanvasLine *m_pointer;
+    Q3CanvasLine *m_insertCursor;
     timeT m_insertCursorTime;
     bool m_insertCursorTimeValid;
 };

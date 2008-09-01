@@ -19,7 +19,7 @@
 #include "QDeferScrollView.h"
 
 #include <qscrollview.h>
-#include <qwidget.h>
+#include <QWidget>
 
 
 namespace Rosegarden
@@ -28,7 +28,7 @@ namespace Rosegarden
 QDeferScrollView::QDeferScrollView(QWidget* parent, const char *name, WFlags f)
         : QScrollView(parent, name, f)
 {
-    setFocusPolicy(QWidget::WheelFocus);
+    setFocusPolicy(Qt::WheelFocus);
 }
 
 void QDeferScrollView::setBottomMargin(int m)

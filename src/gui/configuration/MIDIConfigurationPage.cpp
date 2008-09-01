@@ -31,28 +31,28 @@
 #include "gui/studio/StudioControl.h"
 #include "sound/MappedEvent.h"
 #include "TabbedConfigurationPage.h"
-#include <kcombobox.h>
+#include <QComboBox>
 #include <kconfig.h>
 #include <kfiledialog.h>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QByteArray>
+#include <QDataStream>
+#include <QFrame>
+#include <QLabel>
+#include <QLineEdit>
+#include <QObject>
+#include <QPushButton>
+#include <QLayout>
+#include <QSlider>
+#include <QSpinBox>
+#include <QString>
+#include <QStringList>
+#include <QTabWidget>
+#include <QToolTip>
+#include <QWidget>
+#include <QHBoxLayout>
 #include <qcheckbox.h>
-#include <qcombobox.h>
-#include <qcstring.h>
-#include <qdatastream.h>
-#include <qframe.h>
-#include <qlabel.h>
-#include <qlineedit.h>
-#include <qobject.h>
-#include <qpushbutton.h>
-#include <qlayout.h>
-#include <qslider.h>
-#include <qspinbox.h>
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qtabwidget.h>
-#include <qtooltip.h>
-#include <qwidget.h>
-#include <qcheckbox.h>
-#include <qhbox.h>
 
 namespace Rosegarden
 {
@@ -86,10 +86,10 @@ MIDIConfigurationPage::MIDIConfigurationPage(
 					  frame), row, row, 0, 1);
     
     m_midiPitchOctave = new QSpinBox(frame);
-    m_midiPitchOctave->setMaxValue(10);
-    m_midiPitchOctave->setMinValue( -10);
+    m_midiPitchOctave->setMaximum(10);
+    m_midiPitchOctave->setMinimum( -10);
     m_midiPitchOctave->setValue(m_cfg->readNumEntry("midipitchoctave", -2));
-    layout->addMultiCellWidget(m_midiPitchOctave, row, row, 2, 3);
+    layout->addWidget(m_midiPitchOctave, row, 2, row- row+1, 3- 3);
     ++row;
 
     layout->setRowSpacing(row, 20);
@@ -114,7 +114,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     QString controllerTip = i18n("Rosegarden can send all MIDI Controllers (Pan, Reverb etc) to all MIDI devices every\ntime you hit play if you so wish.  Please note that this option will usually incur a\ndelay at the start of playback due to the amount of data being transmitted.");
     QToolTip::add
         (label, controllerTip);
-    layout->addMultiCellWidget(label, row, row, 0, 1);
+    layout->addWidget(label, row, 0, row- row+1, 1- 1);
 
     m_sendControllersAtPlay = new QCheckBox(frame);
     bool sendControllers = m_cfg->readBoolEntry("alwayssendcontrollers", false);
@@ -129,19 +129,19 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     m_cfg->setGroup(SequencerOptionsConfigGroup);
 
     label = new QLabel(i18n("Sequencer timing source"), frame);
-    layout->addMultiCellWidget(label, row, row, 0, 1);
+    layout->addWidget(label, row, 0, row- row+1, 1- 1);
 
-    m_timer = new KComboBox(frame);
-    layout->addMultiCellWidget(m_timer, row, row, 2, 3);
+    m_timer = new QComboBox(frame);
+    layout->addWidget(m_timer, row, 2, row- row+1, 3- 3);
 
     QStringList timers = m_doc->getTimers();
     m_origTimer = m_doc->getCurrentTimer();
     QString currentTimer = m_cfg->readEntry("timer", m_origTimer);
 
     for (unsigned int i = 0; i < timers.size(); ++i) {
-        m_timer->insertItem(timers[i]);
+        m_timer->addItem(timers[i]);
         if (timers[i] == currentTimer)
-            m_timer->setCurrentItem(i);
+            m_timer->setCurrentIndex(i);
     }
 
     ++row;
@@ -156,7 +156,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     QLabel* lbl = new QLabel(i18n("Load SoundFont to SoundBlaster card at startup"), frame);
     QString tooltip = i18n("Check this box to enable soundfont loading on EMU10K-based cards when Rosegarden is launched");
     QToolTip::add(lbl, tooltip);
-    layout->addMultiCellWidget(lbl, row, row, 0, 1);
+    layout->addWidget(lbl, row, 0, row- row+1, 1- 1);
 
     m_sfxLoadEnabled = new QCheckBox(frame);
     layout->addWidget(m_sfxLoadEnabled, row, 2);
@@ -165,14 +165,14 @@ MIDIConfigurationPage::MIDIConfigurationPage(
 
     layout->addWidget(new QLabel(i18n("Path to 'asfxload' or 'sfxload' command"), frame), row, 0);
     m_sfxLoadPath = new QLineEdit(m_cfg->readEntry("sfxloadpath", "/bin/sfxload"), frame);
-    layout->addMultiCellWidget(m_sfxLoadPath, row, row, 1, 2);
+    layout->addWidget(m_sfxLoadPath, row, 1, row- row+1, 2);
     m_sfxLoadChoose = new QPushButton("Choose...", frame);
     layout->addWidget(m_sfxLoadChoose, row, 3);
     ++row;
 
     layout->addWidget(new QLabel(i18n("SoundFont"), frame), row, 0);
     m_soundFontPath = new QLineEdit(m_cfg->readEntry("soundfontpath", ""), frame);
-    layout->addMultiCellWidget(m_soundFontPath, row, row, 1, 2);
+    layout->addWidget(m_soundFontPath, row, 1, row- row+1, 2);
     m_soundFontChoose = new QPushButton("Choose...", frame);
     layout->addWidget(m_soundFontChoose, row, 3);
     ++row;
@@ -215,17 +215,17 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     //
     label = new QLabel(i18n("MIDI Clock and System messages"), frame);
     layout->addWidget(label, row, 0);
-    m_midiSync = new KComboBox(frame);
+    m_midiSync = new QComboBox(frame);
     layout->addWidget(m_midiSync, row, 1);
 
-    m_midiSync->insertItem(i18n("Off"));
-    m_midiSync->insertItem(i18n("Send MIDI Clock, Start and Stop"));
-    m_midiSync->insertItem(i18n("Accept Start, Stop and Continue"));
+    m_midiSync->addItem(i18n("Off"));
+    m_midiSync->addItem(i18n("Send MIDI Clock, Start and Stop"));
+    m_midiSync->addItem(i18n("Accept Start, Stop and Continue"));
 
     int midiClock = m_cfg->readNumEntry("midiclock", 0);
     if (midiClock < 0 || midiClock > 2)
         midiClock = 0;
-    m_midiSync->setCurrentItem(midiClock);
+    m_midiSync->setCurrentIndex(midiClock);
 
     ++row;
 
@@ -234,17 +234,17 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     label = new QLabel(i18n("MIDI Machine Control mode"), frame);
     layout->addWidget(label, row, 0);
 
-    m_mmcTransport = new KComboBox(frame);
+    m_mmcTransport = new QComboBox(frame);
     layout->addWidget(m_mmcTransport, row, 1); //, Qt::AlignHCenter);
 
-    m_mmcTransport->insertItem(i18n("Off"));
-    m_mmcTransport->insertItem(i18n("MMC Master"));
-    m_mmcTransport->insertItem(i18n("MMC Slave"));
+    m_mmcTransport->addItem(i18n("Off"));
+    m_mmcTransport->addItem(i18n("MMC Master"));
+    m_mmcTransport->addItem(i18n("MMC Slave"));
 
     int mmcMode = m_cfg->readNumEntry("mmcmode", 0);
     if (mmcMode < 0 || mmcMode > 2)
         mmcMode = 0;
-    m_mmcTransport->setCurrentItem(mmcMode);
+    m_mmcTransport->setCurrentIndex(mmcMode);
     
     ++row;
 
@@ -253,27 +253,31 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     label = new QLabel(i18n("MIDI Time Code mode"), frame);
     layout->addWidget(label, row, 0);
 
-    m_mtcTransport = new KComboBox(frame);
+    m_mtcTransport = new QComboBox(frame);
     layout->addWidget(m_mtcTransport, row, 1);
 
-    m_mtcTransport->insertItem(i18n("Off"));
-    m_mtcTransport->insertItem(i18n("MTC Master"));
-    m_mtcTransport->insertItem(i18n("MTC Slave"));
+    m_mtcTransport->addItem(i18n("Off"));
+    m_mtcTransport->addItem(i18n("MTC Master"));
+    m_mtcTransport->addItem(i18n("MTC Slave"));
 
     int mtcMode = m_cfg->readNumEntry("mtcmode", 0);
     if (mtcMode < 0 || mtcMode > 2)
         mtcMode = 0;
-    m_mtcTransport->setCurrentItem(mtcMode);
+    m_mtcTransport->setCurrentIndex(mtcMode);
 
     ++row;
 
-    QHBox *hbox = new QHBox(frame);
-    hbox->setSpacing(5);
-    layout->addMultiCellWidget(hbox, row, row, 0, 1);
+    QWidget *hbox = new QWidget(frame);
+    QHBoxLayout hboxLayout = new QHBoxLayout;
+    hboxLayout->setSpacing(5);
+    layout->addWidget(hbox, row, 0, row- row+1, 1- 1);
 
-    label = new QLabel(i18n("Automatically connect sync output to all devices in use"), hbox);
+    label = new QLabel(i18n("Automatically connect sync output to all devices in use"), hbox );
+    hboxLayout->addWidget(label);
 //    layout->addWidget(label, row, 0);
-    m_midiSyncAuto = new QCheckBox(hbox);
+    m_midiSyncAuto = new QCheckBox( hbox );
+    hboxLayout->addWidget(m_midiSyncAuto);
+    hbox->setLayout(hboxLayout);
 //    layout->addWidget(m_midiSyncAuto, row, 1);
 
     m_midiSyncAuto->setChecked(m_cfg->readBoolEntry("midisyncautoconnect", false));
@@ -328,21 +332,21 @@ MIDIConfigurationPage::apply()
 
     // Write the entries
     //
-    m_cfg->writeEntry("mmcmode", m_mmcTransport->currentItem());
-    m_cfg->writeEntry("mtcmode", m_mtcTransport->currentItem());
+    m_cfg->writeEntry("mmcmode", m_mmcTransport->currentIndex());
+    m_cfg->writeEntry("mtcmode", m_mtcTransport->currentIndex());
     m_cfg->writeEntry("midisyncautoconnect", m_midiSyncAuto->isChecked());
 
     // Now send
     //
     MappedEvent mEmccValue(MidiInstrumentBase,  // InstrumentId
                            MappedEvent::SystemMMCTransport,
-                           MidiByte(m_mmcTransport->currentItem()));
+                           MidiByte(m_mmcTransport->currentIndex()));
 
     StudioControl::sendMappedEvent(mEmccValue);
 
     MappedEvent mEmtcValue(MidiInstrumentBase,  // InstrumentId
                            MappedEvent::SystemMTCTransport,
-                           MidiByte(m_mtcTransport->currentItem()));
+                           MidiByte(m_mtcTransport->currentIndex()));
 
     StudioControl::sendMappedEvent(mEmtcValue);
 
@@ -355,7 +359,7 @@ MIDIConfigurationPage::apply()
 
     // ------------- MIDI Clock and System messages ------------
     //
-    int midiClock = m_midiSync->currentItem();
+    int midiClock = m_midiSync->currentIndex();
     m_cfg->writeEntry("midiclock", midiClock);
 
     // Now send it (OLD METHOD - to be removed)

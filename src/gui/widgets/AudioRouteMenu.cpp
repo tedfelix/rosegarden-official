@@ -25,13 +25,13 @@
 #include "gui/widgets/RosegardenPopupMenu.h"
 #include "sound/MappedCommon.h"
 #include "sound/MappedStudio.h"
-#include <kcombobox.h>
+#include <QComboBox>
 #include <klocale.h>
-#include <qcursor.h>
-#include <qobject.h>
-#include <qpoint.h>
-#include <qstring.h>
-#include <qwidget.h>
+#include <QCursor>
+#include <QObject>
+#include <QPoint>
+#include <QString>
+#include <QWidget>
 
 
 namespace Rosegarden
@@ -60,7 +60,7 @@ AudioRouteMenu::AudioRouteMenu(QWidget *par,
 
     case Regular: {
             m_button = 0;
-            m_combo = new KComboBox(par);
+            m_combo = new QComboBox(par);
             connect(m_combo, SIGNAL(activated(int)), this, SLOT(slotEntrySelected(int)));
             break;
         }
@@ -91,9 +91,9 @@ AudioRouteMenu::slotRepopulate()
     case Regular:
         m_combo->clear();
         for (int i = 0; i < getNumEntries(); ++i) {
-            m_combo->insertItem(getEntryText(i));
+            m_combo->addItem(getEntryText(i));
         }
-        m_combo->setCurrentItem(getCurrentEntry());
+        m_combo->setCurrentIndex(getCurrentEntry());
         break;
     }
 }
@@ -130,7 +130,7 @@ AudioRouteMenu::slotShowMenu()
 
     for (int i = 0; i < getNumEntries(); ++i) {
 
-        menu->insertItem(getEntryText(i), this, SLOT(slotEntrySelected(int)),
+        menu->addItem(getEntryText(i), this, SLOT(slotEntrySelected(int)),
                          0, i);
         menu->setItemParameter(i, i);
     }

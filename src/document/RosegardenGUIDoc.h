@@ -30,10 +30,10 @@
 #include "gui/editors/segment/segmentcanvas/AudioPreviewThread.h"
 #include <map>
 #include "sound/AudioFileManager.h"
-// #include <qlist.h>  (fixes problem for Adam Dingle)
-#include <qobject.h>
-#include <qstring.h>
-#include <qstringlist.h>
+// #include <QList>  (fixes problem for Adam Dingle)
+#include <QObject>
+#include <QString>
+#include <QStringList>
 #include <vector>
 #include "base/Event.h"
 

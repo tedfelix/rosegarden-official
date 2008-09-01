@@ -25,7 +25,7 @@
 #include "base/MidiProgram.h"
 #include <map>
 #include "sound/RingBuffer.h"
-#include <qstring.h>
+#include <QString>
 
 
 

@@ -16,6 +16,11 @@
 */
 
 
+#include <Q3Canvas>
+#include <Q3CanvasItem>
+#include <Q3CanvasLine>
+#include <Q3CanvasRectangle>
+#include <Q3CanvasText>
 #include "LinedStaff.h"
 
 #include "misc/Debug.h"
@@ -30,12 +35,12 @@
 #include "GUIPalette.h"
 #include "BarLine.h"
 #include <qcanvas.h>
-#include <qcolor.h>
-#include <qfont.h>
-#include <qfontmetrics.h>
-#include <qpen.h>
-#include <qrect.h>
-#include <qstring.h>
+#include <QColor>
+#include <QFont>
+#include <QFontMetrics>
+#include <QPen>
+#include <QRect>
+#include <QString>
 #include <algorithm>
 
 
@@ -47,7 +52,7 @@ namespace Rosegarden
 const int pointerWidth = 3;
 
 
-LinedStaff::LinedStaff(QCanvas *canvas, Segment *segment,
+LinedStaff::LinedStaff(Q3Canvas *canvas, Segment *segment,
                        SnapGrid *snapGrid, int id,
                        int resolution, int lineThickness) :
     Staff(*segment),
@@ -68,15 +73,15 @@ LinedStaff::LinedStaff(QCanvas *canvas, Segment *segment,
     m_startLayoutX(0),
     m_endLayoutX(0),
     m_current(false),
-    m_pointer(new QCanvasLine(canvas)),
-    m_insertCursor(new QCanvasLine(canvas)),
+    m_pointer(new Q3CanvasLine(canvas)),
+    m_insertCursor(new Q3CanvasLine(canvas)),
     m_insertCursorTime(segment->getStartTime()),
     m_insertCursorTimeValid(false)
 {
     initCursors();
 }
 
-LinedStaff::LinedStaff(QCanvas *canvas, Segment *segment,
+LinedStaff::LinedStaff(Q3Canvas *canvas, Segment *segment,
                        SnapGrid *snapGrid,
                        int id, int resolution, int lineThickness,
                        double pageWidth, int rowsPerPage, int rowSpacing) :
@@ -98,15 +103,15 @@ LinedStaff::LinedStaff(QCanvas *canvas, Segment *segment,
     m_startLayoutX(0),
     m_endLayoutX(0),
     m_current(false),
-    m_pointer(new QCanvasLine(canvas)),
-    m_insertCursor(new QCanvasLine(canvas)),
+    m_pointer(new Q3CanvasLine(canvas)),
+    m_insertCursor(new Q3CanvasLine(canvas)),
     m_insertCursorTime(segment->getStartTime()),
     m_insertCursorTimeValid(false)
 {
     initCursors();
 }
 
-LinedStaff::LinedStaff(QCanvas *canvas, Segment *segment,
+LinedStaff::LinedStaff(Q3Canvas *canvas, Segment *segment,
                        SnapGrid *snapGrid,
                        int id, int resolution, int lineThickness,
                        PageMode pageMode, double pageWidth, int rowsPerPage,
@@ -129,8 +134,8 @@ LinedStaff::LinedStaff(QCanvas *canvas, Segment *segment,
     m_startLayoutX(0),
     m_endLayoutX(0),
     m_current(false),
-    m_pointer(new QCanvasLine(canvas)),
-    m_insertCursor(new QCanvasLine(canvas)),
+    m_pointer(new Q3CanvasLine(canvas)),
+    m_insertCursor(new Q3CanvasLine(canvas)),
     m_insertCursorTime(segment->getStartTime()),
     m_insertCursorTimeValid(false)
 {
@@ -777,7 +782,7 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
         QFontMetrics metrics(font);
         QString text = QString("%1").arg(barNo + 1);
 
-        QCanvasItem *barNoText = new QCanvasText(text, font, m_canvas);
+        Q3CanvasItem *barNoText = new Q3CanvasText(text, font, m_canvas);
         barNoText->setX(x);
         barNoText->setY(y - metrics.height() - m_resolution * 2);
         barNoText->setZ( -1);
@@ -789,7 +794,7 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
         m_barNumbers.push_back(barNoText);
     }
 
-    QCanvasRectangle *rect = 0;
+    Q3CanvasRectangle *rect = 0;
 
     if (showBeatLines()) {
 
@@ -807,7 +812,7 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
 
         for (int gridLine = hidden ? 0 : 1; gridLine < gridLines; ++gridLine) {
 
-            rect = new QCanvasRectangle
+            rect = new Q3CanvasRectangle
                    (0, 0, barThickness, getBarLineHeight(), m_canvas);
 
             rect->moveBy(x + gridLine * dx, y);
@@ -834,7 +839,7 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
 
     if (m_connectingLineLength > 0) {
 
-        rect = new QCanvasRectangle
+        rect = new Q3CanvasRectangle
                (0, 0, barThickness, m_connectingLineLength, m_canvas);
 
         rect->moveBy(x, y);
@@ -1002,7 +1007,7 @@ LinedStaff::resizeStaffLineRow(int row, double x, double length)
         // rather arbitrary (dup in insertBar)
         int barThickness = m_resolution / 12 + 1;
         y = getCanvasYForTopLine(row);
-        QCanvasRectangle *line = new QCanvasRectangle
+        Q3CanvasRectangle *line = new Q3CanvasRectangle
                                  (int(x + length), y, barThickness, m_connectingLineLength, m_canvas);
         line->setPen(GUIPalette::getColour(GUIPalette::StaffConnectingTerminatingLine));
         line->setBrush(GUIPalette::getColour(GUIPalette::StaffConnectingTerminatingLine));
@@ -1034,18 +1039,18 @@ LinedStaff::resizeStaffLineRow(int row, double x, double length)
         //                           << x << "," << y << ") to (" << (x+length-1)
         //                           << "," << y << ")" << endl;
 
-        QCanvasItem *line;
+        Q3CanvasItem *line;
         delete m_staffLines[row][lineIndex];
         m_staffLines[row][lineIndex] = 0;
 
         if (m_lineThickness > 1) {
-            QCanvasRectangle *rline = new QCanvasRectangle
+            Q3CanvasRectangle *rline = new Q3CanvasRectangle
                                       (int(x), y, int(length), m_lineThickness, m_canvas);
             rline->setPen(lineColour);
             rline->setBrush(lineColour);
             line = rline;
         } else {
-            QCanvasLine *lline = new QCanvasLine(m_canvas);
+            Q3CanvasLine *lline = new Q3CanvasLine(m_canvas);
             lline->setPoints(int(x), y, int(x + length), y);
             lline->setPen(lineColour);
             line = lline;

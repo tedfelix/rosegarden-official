@@ -22,10 +22,10 @@
 #include "document/RosegardenGUIDoc.h"
 #include <kconfig.h>
 #include <kdialog.h>
-#include <qstring.h>
-#include <qtabwidget.h>
-#include <qwidget.h>
-#include <qlayout.h>
+#include <QString>
+#include <QTabWidget>
+#include <QWidget>
+#include <QLayout>
 
 
 namespace Rosegarden

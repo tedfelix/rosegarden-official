@@ -19,7 +19,7 @@
 #ifndef _RG_PROGRESSREPORTER_H_
 #define _RG_PROGRESSREPORTER_H_
 
-#include <qobject.h>
+#include <QObject>
 
 
 

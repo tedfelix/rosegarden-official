@@ -16,11 +16,12 @@
 */
 
 
+#include <Q3CanvasPixmap>
 #include "MatrixPainter.h"
 
 #include "base/BaseProperties.h"
 #include <klocale.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include "base/Event.h"
 #include "base/NotationTypes.h"
 #include "base/SegmentMatrixHelper.h"
@@ -37,9 +38,9 @@
 #include "MatrixView.h"
 #include <kaction.h>
 #include <kglobal.h>
-#include <qiconset.h>
-#include <qpoint.h>
-#include <qstring.h>
+#include <QIcon>
+#include <QPoint>
+#include <QString>
 #include "misc/Debug.h"
 
 
@@ -52,8 +53,8 @@ MatrixPainter::MatrixPainter(MatrixView* parent)
         m_currentStaff(0)
 {
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QCanvasPixmap pixmap(pixmapDir + "/toolbar/select.xpm");
-    QIconSet icon = QIconSet(pixmap);
+    Q3CanvasPixmap pixmap(pixmapDir + "/toolbar/select.xpm");
+    QIcon icon = QIcon(pixmap);
 
     new KAction(i18n("Switch to Select Tool"), icon, Key_F2, this,
                 SLOT(slotSelectSelected()), actionCollection(),
@@ -68,7 +69,7 @@ MatrixPainter::MatrixPainter(MatrixView* parent)
                 "move");
 
     pixmap.load(pixmapDir + "/toolbar/resize.xpm");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
     new KAction(i18n("Switch to Resize Tool"), icon, Key_F6, this,
                 SLOT(slotResizeSelected()), actionCollection(),
                 "resize");

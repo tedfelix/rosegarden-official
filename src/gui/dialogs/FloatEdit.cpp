@@ -19,18 +19,19 @@
 #include "FloatEdit.h"
 
 #include "gui/widgets/HSpinBox.h"
-#include <kdialogbase.h>
-#include <qgroupbox.h>
-#include <qlabel.h>
-#include <qstring.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QGroupBox>
+#include <QLabel>
+#include <QString>
+#include <QWidget>
+#include <QVBoxLayout>
 #include <cmath>
 
 namespace Rosegarden
 {
 
-FloatEdit::FloatEdit(QWidget *parent,
+FloatEdit::FloatEdit(QDialogButtonBox::QWidget *parent,
                      const QString &title,
                      const QString &text,
                      float min,
@@ -41,7 +42,8 @@ FloatEdit::FloatEdit(QWidget *parent,
 {
     QVBox *vbox = makeVBoxMainWidget();
     QGroupBox *groupBox = new QGroupBox(1, Horizontal, text, vbox);
-    QVBox *inVbox = new QVBox(groupBox);
+    QWidget *inVbox = new QWidget(groupBox);
+    QVBoxLayout inVboxLayout = new QVBoxLayout;
 
     // Calculate decimal points according to the step size
     //
@@ -51,7 +53,9 @@ FloatEdit::FloatEdit(QWidget *parent,
         dps = int( -calDP);
     //std::cout << "CAL DP = " << calDP << ", dps = " << dps << std::endl;
 
-    m_spin = new HSpinBox(inVbox, value, 1, min, max, dps);
+    m_spin = new HSpinBox( inVbox , dps);
+    inVboxLayout->addWidget(m_spin);
+    inVbox->setLayout(inVboxLayout);
     new QLabel(QString("(min: %1, max: %2)").arg(min).arg(max), inVbox);
 }
 

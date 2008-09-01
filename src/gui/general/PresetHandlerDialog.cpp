@@ -20,7 +20,7 @@
 
 
 #include "PresetHandlerDialog.h"
-#include <qlayout.h>
+#include <QLayout>
 #include <kapplication.h>
 
 #include <klocale.h>
@@ -29,23 +29,24 @@
 #include "CategoryElement.h"
 #include "PresetElement.h"
 #include "PresetGroup.h"
-#include <kcombobox.h>
+#include <QComboBox>
 #include <kconfig.h>
-#include <kdialogbase.h>
-#include <qbuttongroup.h>
-#include <qdialog.h>
-#include <qframe.h>
-#include <qgroupbox.h>
-#include <qlabel.h>
-#include <qstring.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QGroupBox>
+#include <QDialog>
+#include <QFrame>
+#include <QGroupBox>
+#include <QLabel>
+#include <QString>
+#include <QWidget>
+#include <QVBoxLayout>
 
 
 namespace Rosegarden
 {
 
-PresetHandlerDialog::PresetHandlerDialog(QWidget *parent, bool fromNotation)
+PresetHandlerDialog::PresetHandlerDialog(QDialogButtonBox::QWidget *parent, bool fromNotation)
         : KDialogBase(parent, "presethandlerdialog", true, i18n("Load track parameters preset"), Ok | Cancel, Ok),
         m_config(kapp->config()),
         m_fromNotation(fromNotation)
@@ -80,17 +81,17 @@ PresetHandlerDialog::initDialog()
     if (m_fromNotation) title->setText(i18n("Create appropriate notation for:"));
 
     QLabel *catlabel = new QLabel(i18n("Category"), frame);
-    m_categoryCombo = new KComboBox(frame);
+    m_categoryCombo = new QComboBox(frame);
 
     QLabel *inslabel = new QLabel(i18n("Instrument"), frame);
-    m_instrumentCombo = new KComboBox(frame);
+    m_instrumentCombo = new QComboBox(frame);
 
     QLabel *plylabel = new QLabel(i18n("Player Ability"), frame);
-    m_playerCombo = new KComboBox(frame);
-    m_playerCombo->insertItem(i18n("Amateur"));
-    m_playerCombo->insertItem(i18n("Professional"));
+    m_playerCombo = new QComboBox(frame);
+    m_playerCombo->addItem(i18n("Amateur"));
+    m_playerCombo->addItem(i18n("Professional"));
 
-    QGroupBox *scopeBox = new QButtonGroup
+    QGroupBox *scopeBox = new QGroupBox
         (1, Horizontal, i18n("Scope"), frame);
     if (m_fromNotation) {
         QRadioButton *onlySelectedSegments = new
@@ -107,30 +108,30 @@ PresetHandlerDialog::initDialog()
         onlyNewSegments->setChecked(true);
     }
     
-    layout->addMultiCellWidget(title, 0, 0, 0, 1, AlignLeft);
+    layout->addWidget(title, 0, 0, 0- 0+1, 1- 1, AlignLeft);
     layout->addWidget(catlabel, 1, 0, AlignRight);
     layout->addWidget(m_categoryCombo, 1, 1);
     layout->addWidget(inslabel, 2, 0, AlignRight);
     layout->addWidget(m_instrumentCombo, 2, 1);
     layout->addWidget(plylabel, 3, 0, AlignRight);
     layout->addWidget(m_playerCombo, 3, 1);
-    layout->addMultiCellWidget(scopeBox, 4, 4, 0, 1, AlignLeft);
+    layout->addWidget(scopeBox, 4, 0, 0+1, 1- 1, AlignLeft);
 
     populateCategoryCombo();
     // try to set to same category used previously
     m_config->setGroup(GeneralOptionsConfigGroup);
-    m_categoryCombo->setCurrentItem(m_config->readNumEntry("category_combo_index", 0));
+    m_categoryCombo->setCurrentIndex(m_config->readNumEntry("category_combo_index", 0));
 
     // populate the instrument combo
-    slotCategoryIndexChanged(m_categoryCombo->currentItem());
+    slotCategoryIndexChanged(m_categoryCombo->currentIndex());
 
     // try to set to same instrument used previously
     m_config->setGroup(GeneralOptionsConfigGroup);
-    m_instrumentCombo->setCurrentItem(m_config->readNumEntry("instrument_combo_index", 0));
+    m_instrumentCombo->setCurrentIndex(m_config->readNumEntry("instrument_combo_index", 0));
 
     // set to same player used previously (this one can't fail, unlike the
     // others, because the contents of this combo are static)
-    m_playerCombo->setCurrentItem(m_config->readNumEntry("player_combo_index", 0));
+    m_playerCombo->setCurrentIndex(m_config->readNumEntry("player_combo_index", 0));
 
     if (m_fromNotation){
         m_convertAllSegments->setChecked(m_config->readBoolEntry("convert_all_segments", 0));
@@ -153,8 +154,8 @@ PresetHandlerDialog::getName()
 int
 PresetHandlerDialog::getClef()
 {
-    PresetElement p = m_categories[m_categoryCombo->currentItem()].
-                      getPresetByIndex(m_instrumentCombo->currentItem());
+    PresetElement p = m_categories[m_categoryCombo->currentIndex()].
+                      getPresetByIndex(m_instrumentCombo->currentIndex());
 
     return p.getClef();
 }
@@ -162,8 +163,8 @@ PresetHandlerDialog::getClef()
 int
 PresetHandlerDialog::getTranspose()
 {
-    PresetElement p = m_categories[m_categoryCombo->currentItem()].
-                      getPresetByIndex(m_instrumentCombo->currentItem());
+    PresetElement p = m_categories[m_categoryCombo->currentIndex()].
+                      getPresetByIndex(m_instrumentCombo->currentIndex());
 
     return p.getTranspose();
 }
@@ -171,11 +172,11 @@ PresetHandlerDialog::getTranspose()
 int
 PresetHandlerDialog::getLowRange()
 {
-    PresetElement p = m_categories[m_categoryCombo->currentItem()].
-                      getPresetByIndex(m_instrumentCombo->currentItem());
+    PresetElement p = m_categories[m_categoryCombo->currentIndex()].
+                      getPresetByIndex(m_instrumentCombo->currentIndex());
     // 0 == amateur
     // 1 == pro
-    if (m_playerCombo->currentItem() == 0) {
+    if (m_playerCombo->currentIndex() == 0) {
         return p.getLowAm();
     } else {
         return p.getLowPro();
@@ -185,11 +186,11 @@ PresetHandlerDialog::getLowRange()
 int
 PresetHandlerDialog::getHighRange()
 {
-    PresetElement p = m_categories[m_categoryCombo->currentItem()].
-                      getPresetByIndex(m_instrumentCombo->currentItem());
+    PresetElement p = m_categories[m_categoryCombo->currentIndex()].
+                      getPresetByIndex(m_instrumentCombo->currentIndex());
     // 0 == amateur
     // 1 == pro
-    if (m_playerCombo->currentItem() == 0) {
+    if (m_playerCombo->currentIndex() == 0) {
         return p.getHighAm();
     } else {
         return p.getHighPro();
@@ -228,7 +229,7 @@ PresetHandlerDialog::populateCategoryCombo()
 
         RG_DEBUG << "    adding category: " << (*i).getName() << endl;
 
-        m_categoryCombo->insertItem((*i).getName());
+        m_categoryCombo->addItem((*i).getName());
     }
 }
 
@@ -247,7 +248,7 @@ PresetHandlerDialog::slotCategoryIndexChanged(int index)
 
         RG_DEBUG << "    adding instrument: " << (*i).getName() << endl;
 
-        m_instrumentCombo->insertItem((*i).getName());
+        m_instrumentCombo->addItem((*i).getName());
     }
 
 }
@@ -256,9 +257,9 @@ void
 PresetHandlerDialog::slotOk()
 {
     m_config->setGroup(GeneralOptionsConfigGroup);
-    m_config->writeEntry("category_combo_index", m_categoryCombo->currentItem());
-    m_config->writeEntry("instrument_combo_index", m_instrumentCombo->currentItem());
-    m_config->writeEntry("player_combo_index", m_playerCombo->currentItem());
+    m_config->writeEntry("category_combo_index", m_categoryCombo->currentIndex());
+    m_config->writeEntry("instrument_combo_index", m_instrumentCombo->currentIndex());
+    m_config->writeEntry("player_combo_index", m_playerCombo->currentIndex());
 
     if (m_fromNotation) {
         m_config->writeEntry("convert_all_segments", m_convertAllSegments->isChecked());

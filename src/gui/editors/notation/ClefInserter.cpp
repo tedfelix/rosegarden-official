@@ -30,8 +30,8 @@
 #include "NotationView.h"
 #include "NotePixmapFactory.h"
 #include <kaction.h>
-#include <qiconset.h>
-#include <qstring.h>
+#include <QIcon>
+#include <QString>
 
 
 namespace Rosegarden
@@ -41,7 +41,7 @@ ClefInserter::ClefInserter(NotationView* view)
         : NotationTool("ClefInserter", view),
         m_clef(Clef::Treble)
 {
-    QIconSet icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::
+    QIcon icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::
                              makeToolbarPixmap("select")));
     new KAction(i18n("Switch to Select Tool"), icon, 0, this,
                 SLOT(slotSelectSelected()), actionCollection(),
@@ -51,7 +51,7 @@ ClefInserter::ClefInserter(NotationView* view)
                 SLOT(slotEraseSelected()), actionCollection(),
                 "erase");
 
-    icon = QIconSet
+    icon = QIcon
            (NotePixmapFactory::toQPixmap(NotePixmapFactory::
                                          makeToolbarPixmap("crotchet")));
     new KAction(i18n("Switch to Inserting Notes"), icon, 0, this,

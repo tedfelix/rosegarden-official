@@ -19,18 +19,20 @@
 #ifndef _RG_BARLINE_H_
 #define _RG_BARLINE_H_
 
+#include <Q3Canvas>
+#include <Q3CanvasPolygonalItem>
 #include "LinedStaff.h"
 #include <qcanvas.h>
 
 namespace Rosegarden {
 
-class BarLine : public QCanvasPolygonalItem
+class BarLine : public Q3CanvasPolygonalItem
 {
 public:
-    BarLine(QCanvas *canvas, double layoutX,
+    BarLine(Q3Canvas *canvas, double layoutX,
             int barLineHeight, int baseBarThickness, int lineSpacing,
             int inset, LinedStaff::BarStyle style) :
-        QCanvasPolygonalItem(canvas),
+        Q3CanvasPolygonalItem(canvas),
         m_layoutX(layoutX),
         m_barLineHeight(barLineHeight),
         m_baseBarThickness(baseBarThickness),

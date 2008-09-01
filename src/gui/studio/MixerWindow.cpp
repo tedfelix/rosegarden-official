@@ -23,8 +23,8 @@
 #include "base/Studio.h"
 #include "document/RosegardenGUIDoc.h"
 #include <kmainwindow.h>
-#include <qaccel.h>
-#include <qwidget.h>
+#include <qshortcut.h>
+#include <QWidget>
 
 
 namespace Rosegarden
@@ -37,7 +37,7 @@ MixerWindow::MixerWindow(QWidget *parent,
         m_studio(&document->getStudio()),
         m_currentId(0)
 {
-    m_accelerators = new QAccel(this);
+    m_shortcuterators = new QShortcut(this);
 }
 
 void

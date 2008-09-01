@@ -23,7 +23,7 @@
 #include "base/RealTime.h"
 #include "base/Track.h"
 #include "sound/SequencerDataBlock.h"
-#include <qstring.h>
+#include <QString>
 
 
 class LevelInfo;

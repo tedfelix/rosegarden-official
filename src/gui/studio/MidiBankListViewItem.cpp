@@ -22,7 +22,7 @@
 #include "base/Device.h"
 #include "MidiDeviceListViewItem.h"
 #include "MidiKeyMapListViewItem.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden

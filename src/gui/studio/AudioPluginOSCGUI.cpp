@@ -24,10 +24,10 @@
 #include "base/AudioPluginInstance.h"
 #include "base/Exception.h"
 #include "sound/PluginIdentifier.h"
-#include <kprocess.h>
-#include <qdir.h>
-#include <qfileinfo.h>
-#include <qstring.h>
+#include <QProcess>
+#include <QDir>
+#include <QFileInfo>
+#include <QString>
 #include <algorithm>
 
 
@@ -54,7 +54,7 @@ AudioPluginOSCGUI::AudioPluginOSCGUI(AudioPluginInstance *instance,
 
     // arguments: osc url, dll name, label, instance tag
 
-    m_gui = new KProcess();
+    m_gui = new QProcess();
 
     *m_gui << filePath
     << m_serverUrl
@@ -66,7 +66,7 @@ AudioPluginOSCGUI::AudioPluginOSCGUI(AudioPluginInstance *instance,
     << filePath << " " << m_serverUrl << " "
     << soInfo.fileName() << " " << label << " " << friendlyName << endl;
 
-    if (!m_gui->start(KProcess::NotifyOnExit, KProcess::NoCommunication)) {
+    if (!m_gui->start(QProcess::NotifyOnExit, QProcess::NoCommunication)) {
         RG_DEBUG << "AudioPluginOSCGUI::AudioPluginOSCGUI: Couldn't start process " << filePath << endl;
         delete m_gui;
         m_gui = 0;
@@ -139,7 +139,7 @@ AudioPluginOSCGUI::getGUIFilePath(QString identifier)
                     RG_DEBUG << "(is label)" << endl;
                 }
 
-                if (k == nsuffixes || info->fileName().lower().endsWith(suffixes[k])) {
+                if (k == nsuffixes || info->fileName().toLower().endsWith(suffixes[k])) {
                     RG_DEBUG << "(ends with suffix " << (k == nsuffixes ? "(none)" : suffixes[k]) << " or out of suffixes)" << endl;
                     return info->filePath();
                 }

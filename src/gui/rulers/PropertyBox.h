@@ -19,9 +19,9 @@
 #ifndef _RG_PROPERTYBOX_H_
 #define _RG_PROPERTYBOX_H_
 
-#include <qsize.h>
-#include <qstring.h>
-#include <qwidget.h>
+#include <QSize>
+#include <QString>
+#include <QWidget>
 
 
 class QPaintEvent;

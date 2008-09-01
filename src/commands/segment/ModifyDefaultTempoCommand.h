@@ -19,8 +19,8 @@
 #ifndef _RG_MODIFYDEFAULTTEMPOCOMMAND_H_
 #define _RG_MODIFYDEFAULTTEMPOCOMMAND_H_
 
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include <klocale.h>
 #include "base/Composition.h" // for tempoT
 
@@ -30,12 +30,12 @@ namespace Rosegarden
 {
 
 
-class ModifyDefaultTempoCommand : public KNamedCommand
+class ModifyDefaultTempoCommand : public NamedCommand
 {
 public:
     ModifyDefaultTempoCommand(Composition *composition,
                               tempoT tempo):
-        KNamedCommand(getGlobalName()),
+        NamedCommand(getGlobalName()),
         m_composition(composition),
         m_tempo(tempo) {}
 

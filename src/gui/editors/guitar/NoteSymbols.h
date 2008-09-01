@@ -20,8 +20,8 @@
 #ifndef _RG_SYMBOLS_H_
 #define _RG_SYMBOLS_H_
 
-#include <qbrush.h>
-#include <qpainter.h>
+#include <QBrush>
+#include <QPainter>
 
 namespace Rosegarden
 {

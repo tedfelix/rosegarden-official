@@ -22,12 +22,12 @@
 #include "base/AudioLevel.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/rulers/VelocityColour.h"
-#include <qbrush.h>
-#include <qcolor.h>
-#include <qlabel.h>
-#include <qpainter.h>
-#include <qtimer.h>
-#include <qwidget.h>
+#include <QBrush>
+#include <QColor>
+#include <QLabel>
+#include <QPainter>
+#include <QTimer>
+#include <QWidget>
 
 
 namespace Rosegarden
@@ -146,7 +146,7 @@ VUMeter::VUMeter(QWidget *parent,
         red = max * 92 / 100;
         orange = max * 60 / 100;
         green = max * 10 / 100;
-        m_background = Qt::black;
+        m_background = QColor(Qt::black);
     }
 
     if (m_type == AudioPeakHoldLong ||
@@ -485,12 +485,12 @@ VUMeter::drawMeterLevel(QPainter* paint)
                 y = height() - h;
 
                 if (h > loud) {
-                    paint->setPen(Qt::red); // brighter than the red meter bar
+                    paint->setPen(QColor(Qt::red)); // brighter than the red meter bar
                     paint->drawLine(0, y - 1, hW - midWidth - 1, y - 1);
                     paint->drawLine(0, y + 1, hW - midWidth - 1, y + 1);
                 }
 
-                paint->setPen(Qt::white);
+                paint->setPen(QColor(Qt::white));
                 paint->drawLine(0, y, hW - midWidth - 1, y);
             }
 
@@ -517,13 +517,13 @@ VUMeter::drawMeterLevel(QPainter* paint)
                 y = height() - h;
 
                 if (h > loud) {
-                    paint->setPen(Qt::red); // brighter than the red meter bar
+                    paint->setPen(QColor(Qt::red)); // brighter than the red meter bar
                     paint->drawLine(hW + midWidth, y - 1, width(), y - 1);
                     paint->drawLine(hW + midWidth, y + 1, width(), y + 1);
                 }
 
-                paint->setPen(Qt::white);
-                paint->setBrush(Qt::white);
+                paint->setPen(QColor(Qt::white));
+                paint->setBrush(QColor(Qt::white));
 
                 paint->drawLine(hW + midWidth, y, width(), y);
             }
@@ -538,8 +538,8 @@ VUMeter::drawMeterLevel(QPainter* paint)
                 paint->drawRect(0, 0, x, height());
 
             if (m_showPeakLevel) {
-                paint->setPen(Qt::white);
-                paint->setBrush(Qt::white);
+                paint->setPen(QColor(Qt::white));
+                paint->setBrush(QColor(Qt::white));
 
                 // show peak level
                 x = m_peakLevelLeft * width() / m_maxLevel;
@@ -568,8 +568,8 @@ VUMeter::drawMeterLevel(QPainter* paint)
                      */
 
             if (m_showPeakLevel) {
-                paint->setPen(Qt::white);
-                paint->setBrush(Qt::white);
+                paint->setPen(QColor(Qt::white));
+                paint->setBrush(QColor(Qt::white));
 
                 y = height() - (m_peakLevelLeft * height()) / m_maxLevel;
 
@@ -585,8 +585,8 @@ VUMeter::drawMeterLevel(QPainter* paint)
             paint->drawRect(x, 0, width() - x, height());
 
             if (m_showPeakLevel) {
-                paint->setPen(Qt::white);
-                paint->setBrush(Qt::white);
+                paint->setPen(QColor(Qt::white));
+                paint->setBrush(QColor(Qt::white));
 
                 // show peak level
                 x = (m_peakLevelLeft * width()) / m_maxLevel;

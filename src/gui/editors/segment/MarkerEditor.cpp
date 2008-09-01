@@ -16,14 +16,15 @@
 */
 
 
+#include <Q3CanvasPixmap>
 #include "MarkerEditor.h"
 #include "MarkerEditorViewItem.h"
-#include <qlayout.h>
+#include <QLayout>
 #include <kapplication.h>
 
 #include <klocale.h>
-#include <kstddirs.h>
-#include <kstdaccel.h>
+#include <kstandarddirs.h>
+#include <kstandardshortcut.h>
 #include <kconfig.h>
 #include "misc/Debug.h"
 #include "misc/Strings.h"
@@ -38,26 +39,26 @@
 #include "document/ConfigGroups.h"
 #include "gui/dialogs/MarkerModifyDialog.h"
 #include <kaction.h>
-#include <kcommand.h>
+#include "document/Command.h"
 #include <kglobal.h>
 #include <klistview.h>
 #include <kmainwindow.h>
-#include <kstdaccel.h>
-#include <kstdaction.h>
-#include <qaccel.h>
-#include <qdialog.h>
-#include <qframe.h>
-#include <qgroupbox.h>
-#include <qiconset.h>
-#include <qlabel.h>
-#include <qlistview.h>
+#include <kstandardshortcut.h>
+#include <kstandardaction.h>
+#include <qshortcut.h>
+#include <QDialog>
+#include <QFrame>
+#include <QGroupBox>
+#include <QIcon>
+#include <QLabel>
+#include <QListView>
 #include <qptrlist.h>
-#include <qpushbutton.h>
-#include <qsizepolicy.h>
-#include <qstring.h>
-#include <qtooltip.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <QPushButton>
+#include <QSizePolicy>
+#include <QString>
+#include <QToolTip>
+#include <QWidget>
+#include <QVBoxLayout>
 #include <qcanvas.h>
 
 
@@ -70,12 +71,14 @@ MarkerEditor::MarkerEditor(QWidget *parent,
         m_doc(doc),
         m_modified(false)
 {
-    QVBox* mainFrame = new QVBox(this);
+    QWidget *mainFrame = new QWidget(this);
+    QVBoxLayout mainFrameLayout = new QVBoxLayout;
     setCentralWidget(mainFrame);
 
     setCaption(i18n("Manage Markers"));
 
-    m_listView = new KListView(mainFrame);
+    m_listView = new KListView( mainFrame );
+    mainFrameLayout->addWidget(m_listView);
     m_listView->addColumn(i18n("Marker time  "));
     m_listView->addColumn(i18n("Marker text  "));
     m_listView->addColumn(i18n("Marker description "));
@@ -84,8 +87,9 @@ MarkerEditor::MarkerEditor(QWidget *parent,
     for (int i = 0; i < 3; ++i)
         m_listView->setColumnAlignment(i, Qt::AlignHCenter);
 
-    QGroupBox *posGroup = new QGroupBox(2, Horizontal,
-                                        i18n("Pointer position"), mainFrame);
+    QGroupBox *posGroup = new QGroupBox(
+                                        i18n("Pointer position"), mainFrame );
+    mainFrameLayout->addWidget(posGroup);
 
     new QLabel(i18n("Absolute time:"), posGroup);
     m_absoluteTime = new QLabel(posGroup);
@@ -96,7 +100,9 @@ MarkerEditor::MarkerEditor(QWidget *parent,
     new QLabel(i18n("In measure:"), posGroup);
     m_barTime = new QLabel(posGroup);
 
-    QFrame* btnBox = new QFrame(mainFrame);
+    QFrame *btnBox = new QFrame( mainFrame );
+    mainFrameLayout->addWidget(btnBox);
+    mainFrame->setLayout(mainFrameLayout);
 
     btnBox->setSizePolicy(
         QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed));
@@ -168,7 +174,7 @@ MarkerEditor::MarkerEditor(QWidget *parent,
 
     setAutoSaveSettings(MarkerEditorConfigGroup, true);
 
-    m_accelerators = new QAccel(this);
+    m_shortcuterators = new QShortcut(this);
 }
 
 void
@@ -264,14 +270,14 @@ MarkerEditor::slotUpdate()
         //
         item->setRawTime((*it)->getTime());
 
-        m_listView->insertItem(item);
+        m_listView->addItem(item);
     }
 
     if (m_listView->childCount() == 0) {
         QListViewItem *item =
             new MarkerEditorViewItem(m_listView, 0, i18n("<none>"));
         ((MarkerEditorViewItem *)item)->setFake(true);
-        m_listView->insertItem(item);
+        m_listView->addItem(item);
 
         m_listView->setSelectionMode(QListView::NoSelection);
     } else {
@@ -286,7 +292,7 @@ void
 MarkerEditor::slotDeleteAll()
 {
     RG_DEBUG << "MarkerEditor::slotDeleteAll" << endl;
-    KMacroCommand *command = new KMacroCommand(i18n("Remove all markers"));
+    MacroCommand *command = new MacroCommand(i18n("Remove all markers"));
 
     QListViewItem *item = m_listView->firstChild();
 
@@ -326,7 +332,7 @@ void
 MarkerEditor::slotDelete()
 {
     RG_DEBUG << "MarkerEditor::slotDelete" << endl;
-    QListViewItem *item = m_listView->currentItem();
+    QListViewItem *item = m_listView->currentIndex();
 
     MarkerEditorViewItem *ei =
         dynamic_cast<MarkerEditorViewItem *>(item);
@@ -360,7 +366,7 @@ MarkerEditor::slotClose()
 void
 MarkerEditor::setupActions()
 {
-    KAction* close = KStdAction::close(this,
+    KAction* close = KStandardAction::close(this,
                                        SLOT(slotClose()),
                                        actionCollection());
 
@@ -370,15 +376,15 @@ MarkerEditor::setupActions()
     // some adjustments
     new KToolBarPopupAction(i18n("Und&o"),
                             "undo",
-                            KStdAccel::key(KStdAccel::Undo),
+                            KStandardShortcut::key(KStandardShortcut::Undo),
                             actionCollection(),
-                            KStdAction::stdName(KStdAction::Undo));
+                            KStandardAction::stdName(KStandardAction::Undo));
 
     new KToolBarPopupAction(i18n("Re&do"),
                             "redo",
-                            KStdAccel::key(KStdAccel::Redo),
+                            KStandardShortcut::key(KStandardShortcut::Redo),
                             actionCollection(),
-                            KStdAction::stdName(KStdAction::Redo));
+                            KStandardAction::stdName(KStandardAction::Redo));
 
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
     kapp->config()->setGroup(MarkerEditorConfigGroup);
@@ -386,8 +392,8 @@ MarkerEditor::setupActions()
 
     KRadioAction *action;
 
-    QCanvasPixmap pixmap(pixmapDir + "/toolbar/time-musical.png");
-    QIconSet icon(pixmap);
+    Q3CanvasPixmap pixmap(pixmapDir + "/toolbar/time-musical.png");
+    QIcon icon(pixmap);
 
     action = new KRadioAction(i18n("&Musical Times"), icon, 0, this,
                               SLOT(slotMusicalTime()),
@@ -397,7 +403,7 @@ MarkerEditor::setupActions()
         action->setChecked(true);
 
     pixmap.load(pixmapDir + "/toolbar/time-real.png");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
 
     action = new KRadioAction(i18n("&Real Times"), icon, 0, this,
                               SLOT(slotRealTime()),
@@ -407,7 +413,7 @@ MarkerEditor::setupActions()
         action->setChecked(true);
 
     pixmap.load(pixmapDir + "/toolbar/time-raw.png");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
 
     action = new KRadioAction(i18n("Ra&w Times"), icon, 0, this,
                               SLOT(slotRawTime()),
@@ -420,7 +426,7 @@ MarkerEditor::setupActions()
 }
 
 void
-MarkerEditor::addCommandToHistory(KCommand *command)
+MarkerEditor::addCommandToHistory(Command *command)
 {
     getCommandHistory()->addCommand(command);
     setModified(false);

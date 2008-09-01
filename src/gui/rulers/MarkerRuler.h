@@ -20,8 +20,8 @@
 #define _RG_MARKERRULER_H_
 
 #include "gui/general/HZoomable.h"
-#include <qsize.h>
-#include <qwidget.h>
+#include <QSize>
+#include <QWidget>
 #include <kxmlguiclient.h>
 #include "base/Event.h"
 

@@ -20,7 +20,8 @@
 #define _RG_PITCHPICKERDIALOG_H_
 
 #include "gui/widgets/PitchChooser.h"
-#include <kdialogbase.h>
+#include <QDialog>
+#include <QDialogButtonBox>
 
 
 class QWidget;
@@ -29,7 +30,7 @@ class QWidget;
 namespace Rosegarden
 {
 
-class PitchPickerDialog : public KDialogBase
+class PitchPickerDialog : public QDialog
 {
     Q_OBJECT
 

@@ -16,6 +16,7 @@
 */
 
 
+#include <Q3CanvasPixmap>
 #include "RosegardenGUIApp.h"
 #include <kapplication.h>
 
@@ -184,41 +185,41 @@
 #include <kmainwindow.h>
 #include <kmessagebox.h>
 #include <kmimetype.h>
-#include <kprocess.h>
+#include <QProcess>
 #include <kstatusbar.h>
-#include <kstdaccel.h>
-#include <kstdaction.h>
-#include <kstddirs.h>
+#include <kstandardshortcut.h>
+#include <kstandardaction.h>
+#include <kstandarddirs.h>
 #include <ktempfile.h>
 #include <ktip.h>
 #include <ktoolbar.h>
 #include <kurl.h>
 #include <kxmlguiclient.h>
-#include <qaccel.h>
+#include <qshortcut.h>
 #include <qcanvas.h>
-#include <qcstring.h>
-#include <qcursor.h>
-#include <qdatastream.h>
-#include <qdialog.h>
-#include <qdir.h>
-#include <qfile.h>
-#include <qfileinfo.h>
-#include <qiconset.h>
-#include <qinputdialog.h>
-#include <qlabel.h>
-#include <qobject.h>
-#include <qobjectlist.h>
-#include <qpixmap.h>
+#include <QByteArray>
+#include <QCursor>
+#include <QDataStream>
+#include <QDialog>
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
+#include <QIcon>
+#include <QInputDialog>
+#include <QLabel>
+#include <QObject>
+#include <QObjectList>
+#include <QPixmap>
 #include <qpopupmenu.h>
-#include <qpushbutton.h>
-#include <qregexp.h>
-#include <qslider.h>
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qtextcodec.h>
-#include <qtimer.h>
-#include <qvaluevector.h>
-#include <qwidget.h>
+#include <QPushButton>
+#include <QRegExp>
+#include <QSlider>
+#include <QString>
+#include <QStringList>
+#include <QTextCodec>
+#include <QTimer>
+#include <QVector>
+#include <QWidget>
 
 #ifdef HAVE_LIBJACK
 #include <jack/jack.h>
@@ -544,17 +545,17 @@ void RosegardenGUIApp::setupActions()
 {
     // setup File menu
     // New Window ?
-    KStdAction::openNew (this, SLOT(slotFileNew()), actionCollection());
-    KStdAction::open (this, SLOT(slotFileOpen()), actionCollection());
-    m_fileRecent = KStdAction::openRecent(this,
+    KStandardAction::openNew (this, SLOT(slotFileNew()), actionCollection());
+    KStandardAction::open (this, SLOT(slotFileOpen()), actionCollection());
+    m_fileRecent = KStandardAction::openRecent(this,
                                           SLOT(slotFileOpenRecent(const KURL&)),
                                           actionCollection());
-    KStdAction::save (this, SLOT(slotFileSave()), actionCollection());
-    KStdAction::saveAs(this, SLOT(slotFileSaveAs()), actionCollection());
-    KStdAction::revert(this, SLOT(slotRevertToSaved()), actionCollection());
-    KStdAction::close (this, SLOT(slotFileClose()), actionCollection());
-    KStdAction::print (this, SLOT(slotFilePrint()), actionCollection());
-    KStdAction::printPreview (this, SLOT(slotFilePrintPreview()), actionCollection());
+    KStandardAction::save (this, SLOT(slotFileSave()), actionCollection());
+    KStandardAction::saveAs(this, SLOT(slotFileSaveAs()), actionCollection());
+    KStandardAction::revert(this, SLOT(slotRevertToSaved()), actionCollection());
+    KStandardAction::close (this, SLOT(slotFileClose()), actionCollection());
+    KStandardAction::print (this, SLOT(slotFilePrint()), actionCollection());
+    KStandardAction::printPreview (this, SLOT(slotFilePrintPreview()), actionCollection());
 
     new KAction(i18n("Import Rosegarden &Project file..."), 0, 0, this,
                 SLOT(slotImportProject()), actionCollection(),
@@ -624,7 +625,7 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotPlayList()), actionCollection(),
                 "file_show_playlist");
 
-    KStdAction::quit (this, SLOT(slotQuit()), actionCollection());
+    KStandardAction::quit (this, SLOT(slotQuit()), actionCollection());
 
     // help menu
     new KAction(i18n("Rosegarden &Tutorial"), 0, 0, this,
@@ -636,9 +637,9 @@ void RosegardenGUIApp::setupActions()
                 "guidelines");
 
     // setup edit menu
-    KStdAction::cut (this, SLOT(slotEditCut()), actionCollection());
-    KStdAction::copy (this, SLOT(slotEditCopy()), actionCollection());
-    KStdAction::paste (this, SLOT(slotEditPaste()), actionCollection());
+    KStandardAction::cut (this, SLOT(slotEditCut()), actionCollection());
+    KStandardAction::copy (this, SLOT(slotEditCopy()), actionCollection());
+    KStandardAction::paste (this, SLOT(slotEditPaste()), actionCollection());
 
     //
     // undo/redo actions are special in that they are connected to
@@ -647,22 +648,22 @@ void RosegardenGUIApp::setupActions()
     //
     new KToolBarPopupAction(i18n("Und&o"),
                             "undo",
-                            KStdAccel::shortcut(KStdAccel::Undo),
+                            KStandardShortcut::shortcut(KStandardShortcut::Undo),
                             actionCollection(),
-                            KStdAction::stdName(KStdAction::Undo));
+                            KStandardAction::stdName(KStandardAction::Undo));
 
     new KToolBarPopupAction(i18n("Re&do"),
                             "redo",
-                            KStdAccel::shortcut(KStdAccel::Redo),
+                            KStandardShortcut::shortcut(KStandardShortcut::Redo),
                             actionCollection(),
-                            KStdAction::stdName(KStdAction::Redo));
+                            KStandardAction::stdName(KStandardAction::Redo));
     /////
 
 
 
     // setup Settings menu
     //
-    m_viewToolBar = KStdAction::showToolbar (this, SLOT(slotToggleToolBar()), actionCollection(),
+    m_viewToolBar = KStandardAction::showToolbar (this, SLOT(slotToggleToolBar()), actionCollection(),
                     "show_stock_toolbar");
 
     m_viewToolsToolBar = new KToggleAction(i18n("Show T&ools Toolbar"), 0, this,
@@ -685,7 +686,7 @@ void RosegardenGUIApp::setupActions()
                                           SLOT(slotToggleZoomToolBar()), actionCollection(),
                                           "show_zoom_toolbar");
 
-    m_viewStatusBar = KStdAction::showStatusbar(this, SLOT(slotToggleStatusBar()),
+    m_viewStatusBar = KStandardAction::showStatusbar(this, SLOT(slotToggleStatusBar()),
                       actionCollection(), "show_status_bar");
 
     m_viewTransport = new KToggleAction(i18n("Show Tra&nsport"), Key_T, this,
@@ -724,23 +725,23 @@ void RosegardenGUIApp::setupActions()
                 actionCollection(),
                 "show_inst_segment_parameters");
 
-    KStdAction::tipOfDay( this, SLOT( slotShowTip() ), actionCollection() );
+    KStandardAction::tipOfDay( this, SLOT( slotShowTip() ), actionCollection() );
 
     // Standard Actions
     //
-    KStdAction::saveOptions(this,
+    KStandardAction::saveOptions(this,
                             SLOT(slotSaveOptions()),
                             actionCollection());
 
-    KStdAction::preferences(this,
+    KStandardAction::preferences(this,
                             SLOT(slotConfigure()),
                             actionCollection());
 
-    KStdAction::keyBindings(this,
+    KStandardAction::keyBindings(this,
                             SLOT(slotEditKeys()),
                             actionCollection());
 
-    KStdAction::configureToolbars(this,
+    KStandardAction::configureToolbars(this,
                                   SLOT(slotEditToolbars()),
                                   actionCollection());
 
@@ -749,8 +750,8 @@ void RosegardenGUIApp::setupActions()
     // Create the select icon
     //
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QCanvasPixmap pixmap(pixmapDir + "/toolbar/select.xpm");
-    QIconSet icon = QIconSet(pixmap);
+    Q3CanvasPixmap pixmap(pixmapDir + "/toolbar/select.xpm");
+    QIcon icon = QIcon(pixmap);
 
     // TODO : add some shortcuts here
     action = new KRadioAction(i18n("&Select and Edit"), icon, Key_F2,
@@ -774,21 +775,21 @@ void RosegardenGUIApp::setupActions()
     action->setExclusiveGroup("segmenttools");
 
     pixmap.load(pixmapDir + "/toolbar/resize.xpm");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
     action = new KRadioAction(i18n("&Resize"), icon, Key_F6,
                               this, SLOT(slotResizeSelected()),
                               actionCollection(), "resize");
     action->setExclusiveGroup("segmenttools");
 
     pixmap.load(pixmapDir + "/toolbar/split.xpm");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
     action = new KRadioAction(i18n("&Split"), icon, Key_F7,
                               this, SLOT(slotSplitSelected()),
                               actionCollection(), "split");
     action->setExclusiveGroup("segmenttools");
 
     pixmap.load(pixmapDir + "/toolbar/join.xpm");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
     action = new KRadioAction(i18n("&Join"), icon, 0,
                               this, SLOT(slotJoinSelected()),
                               actionCollection(), "join");
@@ -800,7 +801,7 @@ void RosegardenGUIApp::setupActions()
                 "harmonize_selection");
 
     pixmap.load(pixmapDir + "/toolbar/event-insert-timesig.png");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
     new KAction(AddTimeSignatureCommand::getGlobalName(),
                 icon, 0,
                 this, SLOT(slotEditTimeSignature()),
@@ -841,7 +842,7 @@ void RosegardenGUIApp::setupActions()
                 "select_all");
 
     pixmap.load(pixmapDir + "/toolbar/event-insert-tempo.png");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
     new KAction(AddTempoChangeCommand::getGlobalName(),
                 icon, 0,
                 this, SLOT(slotEditTempo()),
@@ -869,31 +870,31 @@ void RosegardenGUIApp::setupActions()
                 "edit_default");
 
     pixmap.load(pixmapDir + "/toolbar/matrix.png");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
     new KAction(i18n("Open in Matri&x Editor"), icon, Key_M, this,
                 SLOT(slotEditInMatrix()), actionCollection(),
                 "edit_matrix");
 
     pixmap.load(pixmapDir + "/toolbar/matrix-percussion.png");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
     new KAction(i18n("Open in &Percussion Matrix Editor"), icon, Key_D, this,
                 SLOT(slotEditInPercussionMatrix()), actionCollection(),
                 "edit_percussion_matrix");
 
     pixmap.load(pixmapDir + "/toolbar/notation.png");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
     new KAction(i18n("Open in &Notation Editor"), icon, Key_N, this,
                 SLOT(slotEditAsNotation()), actionCollection(),
                 "edit_notation");
 
     pixmap.load(pixmapDir + "/toolbar/eventlist.png");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
     new KAction(i18n("Open in &Event List Editor"), icon, Key_E, this,
                 SLOT(slotEditInEventList()), actionCollection(),
                 "edit_event_list");
 
     pixmap.load(pixmapDir + "/toolbar/quantize.png");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
     new KAction(i18n("&Quantize..."), icon, Key_Equal, this,
                 SLOT(slotQuantizeSelection()), actionCollection(),
                 "quantize_selection");
@@ -971,7 +972,7 @@ void RosegardenGUIApp::setupActions()
                 "set_tempo_to_segment_length");
 
     pixmap.load(pixmapDir + "/toolbar/manage-audio-segments.xpm");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
     new KAction(i18n("Manage A&udio Files"), icon,
                 Key_U + CTRL,
                 this, SLOT(slotAudioManager()),
@@ -985,7 +986,7 @@ void RosegardenGUIApp::setupActions()
     // Tracks menu
     //
     pixmap.load(pixmapDir + "/toolbar/add_tracks.png");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
     new KAction(i18n("Add &Track"), icon, CTRL + Key_T,
                 this, SLOT(slotAddTrack()),
                 actionCollection(), "add_track");
@@ -995,19 +996,19 @@ void RosegardenGUIApp::setupActions()
                 actionCollection(), "add_tracks");
 
     pixmap.load(pixmapDir + "/toolbar/delete_track.png");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
     new KAction(i18n("D&elete Track"), icon, CTRL + Key_D,
                 this, SLOT(slotDeleteTrack()),
                 actionCollection(), "delete_track");
 
     pixmap.load(pixmapDir + "/toolbar/move_track_down.png");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
     new KAction(i18n("Move Track &Down"), icon, SHIFT + Key_Down,
                 this, SLOT(slotMoveTrackDown()),
                 actionCollection(), "move_track_down");
 
     pixmap.load(pixmapDir + "/toolbar/move_track_up.png");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
     new KAction(i18n("Move Track &Up"), icon, SHIFT + Key_Up,
                 this, SLOT(slotMoveTrackUp()),
                 actionCollection(), "move_track_up");
@@ -1033,13 +1034,13 @@ void RosegardenGUIApp::setupActions()
                 actionCollection(), "toggle_arm_track");
 
     pixmap.load(pixmapDir + "/toolbar/mute-all.png");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
     new KAction(i18n("&Mute all Tracks"), icon, 0,
                 this, SLOT(slotMuteAllTracks()),
                 actionCollection(), "mute_all_tracks");
 
     pixmap.load(pixmapDir + "/toolbar/un-mute-all.png");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
     new KAction(i18n("&Unmute all Tracks"), icon, 0,
                 this, SLOT(slotUnmuteAllTracks()),
                 actionCollection(), "unmute_all_tracks");
@@ -1052,25 +1053,25 @@ void RosegardenGUIApp::setupActions()
     // Studio menu
     //
     pixmap.load(pixmapDir + "/toolbar/mixer.png");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
     new KAction(i18n("&Audio Mixer"), icon, 0, this,
                 SLOT(slotOpenAudioMixer()),
                 actionCollection(), "audio_mixer");
 
     pixmap.load(pixmapDir + "/toolbar/midimixer.png");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
     new KAction(i18n("Midi Mi&xer"), icon, 0, this,
                 SLOT(slotOpenMidiMixer()),
                 actionCollection(), "midi_mixer");
 
     pixmap.load(pixmapDir + "/toolbar/manage-midi-devices.xpm");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
     new KAction(i18n("Manage MIDI &Devices"), icon, 0, this,
                 SLOT(slotManageMIDIDevices()),
                 actionCollection(), "manage_devices");
 
     pixmap.load(pixmapDir + "/toolbar/manage-synth-plugins.png");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
     new KAction(i18n("Manage S&ynth Plugins"), icon, 0, this,
                 SLOT(slotManageSynths()),
                 actionCollection(), "manage_synths");
@@ -1084,7 +1085,7 @@ void RosegardenGUIApp::setupActions()
                                             actionCollection(), "enable_midi_routing");
 
     pixmap.load(pixmapDir + "/toolbar/time-musical.png");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
     new KAction(i18n("Manage &Metronome"), 0, this,
                 SLOT(slotManageMetronome()),
                 actionCollection(), "manage_metronome");
@@ -1141,7 +1142,7 @@ void RosegardenGUIApp::setupActions()
     // 0 (insert) and keypad Enter for Play and Stop
     //
     pixmap.load(pixmapDir + "/toolbar/transport-play.png");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
     m_playTransport = new KAction(i18n("&Play"), icon, Key_Enter, this,
                                   SLOT(slotPlay()), actionCollection(),
                                   "play");
@@ -1152,14 +1153,14 @@ void RosegardenGUIApp::setupActions()
     m_playTransport->setGroup(TransportDialogConfigGroup);
 
     pixmap.load(pixmapDir + "/toolbar/transport-stop.png");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
     m_stopTransport = new KAction(i18n("&Stop"), icon, Key_Insert, this,
                                   SLOT(slotStop()), actionCollection(),
                                   "stop");
     m_stopTransport->setGroup(TransportDialogConfigGroup);
 
     pixmap.load(pixmapDir + "/toolbar/transport-ffwd.png");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
     m_ffwdTransport = new KAction(i18n("&Fast Forward"), icon, Key_PageDown,
                                   this,
                                   SLOT(slotFastforward()), actionCollection(),
@@ -1167,48 +1168,48 @@ void RosegardenGUIApp::setupActions()
     m_ffwdTransport->setGroup(TransportDialogConfigGroup);
 
     pixmap.load(pixmapDir + "/toolbar/transport-rewind.png");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
     m_rewindTransport = new KAction(i18n("Re&wind"), icon, Key_End, this,
                                     SLOT(slotRewind()), actionCollection(),
                                     "rewind");
     m_rewindTransport->setGroup(TransportDialogConfigGroup);
 
     pixmap.load(pixmapDir + "/toolbar/transport-record.png");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
     m_recordTransport = new KAction(i18n("P&unch in Record"), icon, Key_Space, this,
                                     SLOT(slotToggleRecord()), actionCollection(),
                                     "recordtoggle");
     m_recordTransport->setGroup(TransportDialogConfigGroup);
 
     pixmap.load(pixmapDir + "/toolbar/transport-record.png");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
     m_recordTransport = new KAction(i18n("&Record"), icon, 0, this,
                                     SLOT(slotRecord()), actionCollection(),
                                     "record");
     m_recordTransport->setGroup(TransportDialogConfigGroup);
 
     pixmap.load(pixmapDir + "/toolbar/transport-rewind-end.png");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
     m_rewindEndTransport = new KAction(i18n("Rewind to &Beginning"), icon, 0, this,
                                        SLOT(slotRewindToBeginning()), actionCollection(),
                                        "rewindtobeginning");
     m_rewindEndTransport->setGroup(TransportDialogConfigGroup);
 
     pixmap.load(pixmapDir + "/toolbar/transport-ffwd-end.png");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
     m_ffwdEndTransport = new KAction(i18n("Fast Forward to &End"), icon, 0, this,
                                      SLOT(slotFastForwardToEnd()), actionCollection(),
                                      "fastforwardtoend");
     m_ffwdEndTransport->setGroup(TransportDialogConfigGroup);
 
     pixmap.load(pixmapDir + "/toolbar/transport-tracking.png");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
     (new KToggleAction(i18n("Scro&ll to Follow Playback"), icon, Key_Pause, this,
                        SLOT(slotToggleTracking()), actionCollection(),
                        "toggle_tracking"))->setChecked(true);
 
     pixmap.load(pixmapDir + "/toolbar/transport-panic.png");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
     new KAction( i18n("Panic"), icon, Key_P + CTRL + ALT, this, SLOT(slotPanic()),
                  actionCollection(), "panic");
 
@@ -1251,8 +1252,8 @@ void RosegardenGUIApp::setRewFFwdToAutoRepeat()
         while ( (obj = it.current()) != 0 ) {
             // for each found object...
             ++it;
-            // RG_DEBUG << "obj name : " << obj->name() << endl;
-            QString objName = obj->name();
+            // RG_DEBUG << "obj name : " << obj->objectName() << endl;
+            QString objName = obj->objectName();
 
             if (objName.endsWith("rewind") || objName.endsWith("fast_forward")) {
                 QButton* btn = dynamic_cast<QButton*>(obj);
@@ -1302,7 +1303,7 @@ void RosegardenGUIApp::initZoomToolbar()
     m_zoomSlider = new ZoomSlider<double>
                    (zoomSizes, -1, QSlider::Horizontal, zoomToolbar, "kde toolbar widget");
     m_zoomSlider->setTracking(true);
-    m_zoomSlider->setFocusPolicy(QWidget::NoFocus);
+    m_zoomSlider->setFocusPolicy(Qt::NoFocus);
     m_zoomLabel = new QLabel(minZoom, zoomToolbar, "kde toolbar widget");
     m_zoomLabel->setIndent(10);
 
@@ -1317,7 +1318,7 @@ void RosegardenGUIApp::initZoomToolbar()
 void RosegardenGUIApp::initStatusBar()
 {
     KTmpStatusMsg::setDefaultMsg("");
-    statusBar()->insertItem(KTmpStatusMsg::getDefaultMsg(),
+    statusBar()->addItem(KTmpStatusMsg::getDefaultMsg(),
                             KTmpStatusMsg::getDefaultId(), 1);
     statusBar()->setItemAlignment(KTmpStatusMsg::getDefaultId(),
                                   AlignLeft | AlignVCenter);
@@ -1734,7 +1735,7 @@ RosegardenGUIApp::createDocument(QString filePath, ImportType importType)
 
     QFile file(filePath);
 
-    if (!file.open(IO_ReadOnly)) {
+    if (!file.open(QIODevice::ReadOnly)) {
         KStartupLogo::hideIfStillThere();
         QString errStr =
             i18n("You do not have read permission for \"%1\"").arg(filePath);
@@ -1752,9 +1753,9 @@ RosegardenGUIApp::createDocument(QString filePath, ImportType importType)
 
     if (importType == ImportCheckType) {
         KMimeType::Ptr fileMimeType = KMimeType::findByPath(filePath);
-        if (fileMimeType->name() == "audio/x-midi")
+        if (fileMimeType->objectName() == "audio/x-midi")
             importType = ImportMIDI;
-        else if (fileMimeType->name() == "audio/x-rosegarden")
+        else if (fileMimeType->objectName() == "audio/x-rosegarden")
             importType = ImportRG4;
         else if (filePath.endsWith(".rose"))
             importType = ImportRG21;
@@ -2591,7 +2592,7 @@ void RosegardenGUIApp::slotQuantizeSelection()
 
     SegmentSelection selection = m_view->getSelection();
 
-    KMacroCommand *command = new KMacroCommand
+    MacroCommand *command = new MacroCommand
                              (EventQuantizeCommand::getGlobalName());
 
     for (SegmentSelection::iterator i = selection.begin();
@@ -2613,7 +2614,7 @@ void RosegardenGUIApp::slotRepeatQuantizeSelection()
 
     SegmentSelection selection = m_view->getSelection();
 
-    KMacroCommand *command = new KMacroCommand
+    MacroCommand *command = new MacroCommand
                              (EventQuantizeCommand::getGlobalName());
 
     for (SegmentSelection::iterator i = selection.begin();
@@ -2701,7 +2702,7 @@ void RosegardenGUIApp::slotRescaleSelection()
 
     std::cerr << "slotRescaleSelection: mult = " << mult << ", div = " << div << ", ratio = " << ratio << std::endl;
 
-    KMacroCommand *command = new KMacroCommand
+    MacroCommand *command = new MacroCommand
                              (SegmentRescaleCommand::getGlobalName());
 
     bool pathTested = false;
@@ -2790,7 +2791,7 @@ void RosegardenGUIApp::slotAutoSplitSelection()
 
     SegmentSelection selection = m_view->getSelection();
 
-    KMacroCommand *command = new KMacroCommand
+    MacroCommand *command = new MacroCommand
                              (SegmentAutoSplitCommand::getGlobalName());
 
     for (SegmentSelection::iterator i = selection.begin();
@@ -2853,14 +2854,14 @@ void RosegardenGUIApp::jogSelection(timeT amount)
 void RosegardenGUIApp::createAndSetupTransport()
 {
     // create the Transport GUI and add the callbacks to the
-    // buttons and keyboard accelerators
+    // buttons and keyboard shortcuterators
     //
     m_transport =
         new TransportDialog(this);
-    plugAccelerators(m_transport, m_transport->getAccelerators());
+    plugShortcuterators(m_transport, m_transport->getShortcuterators());
 
-    m_transport->getAccelerators()->connectItem
-        (m_transport->getAccelerators()->insertItem(Key_T),
+    m_transport->getShortcuterators()->connectItem
+        (m_transport->getShortcuterators()->addItem(Key_T),
          this,
          SLOT(slotHideTransport()));
 
@@ -2906,7 +2907,7 @@ void RosegardenGUIApp::slotSplitSelectionByPitch()
 
     SegmentSelection selection = m_view->getSelection();
 
-    KMacroCommand *command = new KMacroCommand
+    MacroCommand *command = new MacroCommand
                              (SegmentSplitByPitchCommand::getGlobalName());
 
     bool haveSomething = false;
@@ -2946,7 +2947,7 @@ RosegardenGUIApp::slotSplitSelectionByRecordedSrc()
 
     SegmentSelection selection = m_view->getSelection();
 
-    KMacroCommand *command = new KMacroCommand
+    MacroCommand *command = new MacroCommand
                              (SegmentSplitByRecordingSrcCommand::getGlobalName());
 
     bool haveSomething = false;
@@ -2988,7 +2989,7 @@ RosegardenGUIApp::slotSplitSelectionAtTime()
                       &m_doc->getComposition(),
                       now, true);
 
-    KMacroCommand *command = new KMacroCommand( title );
+    MacroCommand *command = new MacroCommand( title );
 
     if (dialog.exec() == QDialog::Accepted) {
         for (SegmentSelection::iterator i = selection.begin();
@@ -3179,7 +3180,7 @@ void RosegardenGUIApp::slotTempoToSegmentLength(QWidget* parent)
         << " newTempo         = " << newTempo << endl;
 #endif
 
-        KMacroCommand *macro = new KMacroCommand(i18n("Set Global Tempo"));
+        MacroCommand *macro = new MacroCommand(i18n("Set Global Tempo"));
 
         // Remove all tempo changes in reverse order so as the index numbers
         // don't becoming meaningless as the command gets unwound.
@@ -3710,13 +3711,13 @@ void RosegardenGUIApp::slotImportProject()
 
 void RosegardenGUIApp::importProject(QString filePath)
 {
-    KProcess *proc = new KProcess;
+    QProcess *proc = new QProcess;
     *proc << "rosegarden-project-package";
     *proc << "--unpack";
     *proc << filePath;
 
     KStartupLogo::hideIfStillThere();
-    proc->start(KProcess::Block, KProcess::All);
+    proc->start(QProcess::Block, QProcess::All);
 
     if (!proc->normalExit() || proc->exitStatus()) {
         CurrentProgressDialog::freeze();
@@ -3953,7 +3954,7 @@ RosegardenGUIApp::createDocumentFromMIDIFile(QString file)
     if (comp->getNbSegments() > 0)
         progressPer = (int)(100.0 / double(comp->getNbSegments()));
 
-    KMacroCommand *command = new KMacroCommand(i18n("Calculate Notation"));
+    MacroCommand *command = new MacroCommand(i18n("Calculate Notation"));
 
     for (Composition::iterator i = comp->begin();
             i != comp->end(); ++i) {
@@ -4698,12 +4699,12 @@ bool RosegardenGUIApp::launchJack()
 
     emit startupStatusMessage(i18n("Clearing down jackd..."));
 
-    KProcess *proc = new KProcess; // TODO: do it in a less clumsy way
+    QProcess *proc = new QProcess; // TODO: do it in a less clumsy way
     *proc << "/usr/bin/killall";
     *proc << "-9";
     *proc << "jackd";
 
-    proc->start(KProcess::Block, KProcess::All);
+    proc->start(QProcess::Block, QProcess::All);
 
     if (proc->exitStatus())
         RG_DEBUG << "couldn't kill any jackd processes" << endl;
@@ -4717,13 +4718,13 @@ bool RosegardenGUIApp::launchJack()
         RG_DEBUG << "starting jack \"" << jackPath << "\"" << endl;
 
         QStringList splitCommand;
-        splitCommand = QStringList::split(" ", jackPath);
+        splitCommand = jackPath.split(" ", QString::SkipEmptyParts);
 
         RG_DEBUG << "RosegardenGUIApp::launchJack() : splitCommand length : "
         << splitCommand.size() << endl;
 
         // start jack process
-        m_jackProcess = new KProcess;
+        m_jackProcess = new QProcess;
 
         *m_jackProcess << splitCommand;
 
@@ -4741,7 +4742,7 @@ void RosegardenGUIApp::slotDocumentDevicesResyncd()
     m_trackParameterBox->populateDeviceLists();
 }
 
-void RosegardenGUIApp::slotSequencerExited(KProcess*)
+void RosegardenGUIApp::slotSequencerExited(QProcess*)
 {
     RG_DEBUG << "RosegardenGUIApp::slotSequencerExited Sequencer exited\n";
 
@@ -4788,13 +4789,13 @@ void RosegardenGUIApp::slotExportProject()
         return ;
     }
 
-    KProcess *proc = new KProcess;
+    QProcess *proc = new QProcess;
     *proc << "rosegarden-project-package";
     *proc << "--pack";
     *proc << rgFile;
     *proc << fileName;
 
-    proc->start(KProcess::Block, KProcess::All);
+    proc->start(QProcess::Block, QProcess::All);
 
     if (!proc->normalExit() || proc->exitStatus()) {
         KMessageBox::sorry(this, i18n("Failed to export to project file \"%1\"").arg(fileName));
@@ -4926,7 +4927,7 @@ void RosegardenGUIApp::slotExportLilyPond()
     exportLilyPondFile(fileName);
 }
 
-std::map<KProcess *, KTempFile *> RosegardenGUIApp::m_lilyTempFileMap;
+std::map<QProcess *, KTempFile *> RosegardenGUIApp::m_lilyTempFileMap;
 
 
 void RosegardenGUIApp::slotPrintLilyPond()
@@ -4934,23 +4935,23 @@ void RosegardenGUIApp::slotPrintLilyPond()
     KTmpStatusMsg msg(i18n("Printing LilyPond file..."), this);
     KTempFile *file = new KTempFile(QString::null, ".ly");
     file->setAutoDelete(true);
-    if (!file->name()) {
+    if (!file->objectName()) {
         CurrentProgressDialog::freeze();
         KMessageBox::sorry(this, i18n("Failed to open a temporary file for LilyPond export."));
         delete file;
     }
-    if (!exportLilyPondFile(file->name(), true)) {
+    if (!exportLilyPondFile(file->objectName(), true)) {
         return ;
     }
-    KProcess *proc = new KProcess;
+    QProcess *proc = new QProcess;
     *proc << "rosegarden-lilypondview";
     *proc << "--graphical";
     *proc << "--print";
-    *proc << file->name();
-    connect(proc, SIGNAL(processExited(KProcess *)),
-            this, SLOT(slotLilyPondViewProcessExited(KProcess *)));
+    *proc << file->objectName();
+    connect(proc, SIGNAL(processExited(QProcess *)),
+            this, SLOT(slotLilyPondViewProcessExited(QProcess *)));
     m_lilyTempFileMap[proc] = file;
-    proc->start(KProcess::NotifyOnExit);
+    proc->start(QProcess::NotifyOnExit);
 }
 
 void RosegardenGUIApp::slotPreviewLilyPond()
@@ -4958,26 +4959,26 @@ void RosegardenGUIApp::slotPreviewLilyPond()
     KTmpStatusMsg msg(i18n("Previewing LilyPond file..."), this);
     KTempFile *file = new KTempFile(QString::null, ".ly");
     file->setAutoDelete(true);
-    if (!file->name()) {
+    if (!file->objectName()) {
         CurrentProgressDialog::freeze();
         KMessageBox::sorry(this, i18n("Failed to open a temporary file for LilyPond export."));
         delete file;
     }
-    if (!exportLilyPondFile(file->name(), true)) {
+    if (!exportLilyPondFile(file->objectName(), true)) {
         return ;
     }
-    KProcess *proc = new KProcess;
+    QProcess *proc = new QProcess;
     *proc << "rosegarden-lilypondview";
     *proc << "--graphical";
     *proc << "--pdf";
-    *proc << file->name();
-    connect(proc, SIGNAL(processExited(KProcess *)),
-            this, SLOT(slotLilyPondViewProcessExited(KProcess *)));
+    *proc << file->objectName();
+    connect(proc, SIGNAL(processExited(QProcess *)),
+            this, SLOT(slotLilyPondViewProcessExited(QProcess *)));
     m_lilyTempFileMap[proc] = file;
-    proc->start(KProcess::NotifyOnExit);
+    proc->start(QProcess::NotifyOnExit);
 }
 
-void RosegardenGUIApp::slotLilyPondViewProcessExited(KProcess *p)
+void RosegardenGUIApp::slotLilyPondViewProcessExited(QProcess *p)
 {
     delete m_lilyTempFileMap[p];
     m_lilyTempFileMap.erase(p);
@@ -5216,9 +5217,9 @@ RosegardenGUIApp::slotRecord()
         return ;
     }
 
-    // plugin the keyboard accelerators for focus on this dialog
-    plugAccelerators(m_seqManager->getCountdownDialog(),
-                     m_seqManager->getCountdownDialog()->getAccelerators());
+    // plugin the keyboard shortcuterators for focus on this dialog
+    plugShortcuterators(m_seqManager->getCountdownDialog(),
+                     m_seqManager->getCountdownDialog()->getShortcuterators());
 
     connect(m_seqManager->getCountdownDialog(), SIGNAL(stopped()),
             this, SLOT(slotStop()));
@@ -5765,8 +5766,8 @@ RosegardenGUIApp::slotChangeTempo(timeT time,
         // get time of previous tempo change
         timeT prevTime = comp.getTempoChange(index).first;
 
-        KMacroCommand *macro =
-            new KMacroCommand(i18n("Replace Tempo Change at %1").arg(time));
+        MacroCommand *macro =
+            new MacroCommand(i18n("Replace Tempo Change at %1").arg(time));
 
         macro->addCommand(new RemoveTempoChangeCommand(&comp, index));
         macro->addCommand(new AddTempoChangeCommand(&comp, prevTime, value,
@@ -5780,7 +5781,7 @@ RosegardenGUIApp::slotChangeTempo(timeT time,
                                                                      value, target));
     } else if (action == TempoDialog::GlobalTempo ||
                action == TempoDialog::GlobalTempoWithDefault) {
-        KMacroCommand *macro = new KMacroCommand(i18n("Set Global Tempo"));
+        MacroCommand *macro = new MacroCommand(i18n("Set Global Tempo"));
 
         // Remove all tempo changes in reverse order so as the index numbers
         // don't becoming meaningless as the command gets unwound.
@@ -5818,8 +5819,8 @@ RosegardenGUIApp::slotMoveTempo(timeT oldTime,
     if (index < 0)
         return ;
 
-    KMacroCommand *macro =
-        new KMacroCommand(i18n("Move Tempo Change"));
+    MacroCommand *macro =
+        new MacroCommand(i18n("Move Tempo Change"));
 
     std::pair<timeT, tempoT> tc =
         comp.getTempoChange(index);
@@ -5913,30 +5914,30 @@ RosegardenGUIApp::slotTestClipboard()
 }
 
 void
-RosegardenGUIApp::plugAccelerators(QWidget *widget, QAccel *acc)
+RosegardenGUIApp::plugShortcuterators(QWidget *widget, QShortcut *acc)
 {
 
-    acc->connectItem(acc->insertItem(Key_Enter),
+    acc->connectItem(acc->addItem(Key_Enter),
                      this,
                      SLOT(slotPlay()));
     // Alternative shortcut for Play
-    acc->connectItem(acc->insertItem(Key_Return + CTRL),
+    acc->connectItem(acc->addItem(Key_Return + CTRL),
                      this,
                      SLOT(slotPlay()));
 
-    acc->connectItem(acc->insertItem(Key_Insert),
+    acc->connectItem(acc->addItem(Key_Insert),
                      this,
                      SLOT(slotStop()));
 
-    acc->connectItem(acc->insertItem(Key_PageDown),
+    acc->connectItem(acc->addItem(Key_PageDown),
                      this,
                      SLOT(slotFastforward()));
 
-    acc->connectItem(acc->insertItem(Key_End),
+    acc->connectItem(acc->addItem(Key_End),
                      this,
                      SLOT(slotRewind()));
 
-    acc->connectItem(acc->insertItem(Key_Space),
+    acc->connectItem(acc->addItem(Key_Space),
                      this,
                      SLOT(slotToggleRecord()));
 
@@ -5944,11 +5945,11 @@ RosegardenGUIApp::plugAccelerators(QWidget *widget, QAccel *acc)
         dynamic_cast<TransportDialog*>(widget);
 
     if (transport) {
-        acc->connectItem(acc->insertItem(m_jumpToQuickMarkerAction->shortcut()),
+        acc->connectItem(acc->addItem(m_jumpToQuickMarkerAction->shortcut()),
                          this,
                          SLOT(slotJumpToQuickMarker()));
 
-        acc->connectItem(acc->insertItem(m_setQuickMarkerAction->shortcut()),
+        acc->connectItem(acc->addItem(m_setQuickMarkerAction->shortcut()),
                          this,
                          SLOT(slotSetQuickMarker()));
 
@@ -6058,10 +6059,10 @@ RosegardenGUIApp::createNewAudioFile()
     }
 }
 
-QValueVector<QString>
-RosegardenGUIApp::createRecordAudioFiles(const QValueVector<InstrumentId> &recordInstruments)
+QVector<QString>
+RosegardenGUIApp::createRecordAudioFiles(const QVector<InstrumentId> &recordInstruments)
 {
-    QValueVector<QString> qv;
+    QVector<QString> qv;
     for (unsigned int i = 0; i < recordInstruments.size(); ++i) {
         AudioFile *aF = 0;
         try {
@@ -6091,7 +6092,7 @@ RosegardenGUIApp::getAudioFilePath()
     return QString(m_doc->getAudioFileManager().getAudioPath().c_str());
 }
 
-QValueVector<InstrumentId>
+QVector<InstrumentId>
 RosegardenGUIApp::getArmedInstruments()
 {
     std::set
@@ -6111,7 +6112,7 @@ RosegardenGUIApp::getArmedInstruments()
         }
     }
 
-    QValueVector<InstrumentId> iv;
+    QVector<InstrumentId> iv;
     for (std::set
                 <InstrumentId>::iterator ii = iid.begin();
                 ii != iid.end(); ++ii) {
@@ -6218,8 +6219,8 @@ RosegardenGUIApp::slotAudioManager()
     m_audioManagerDialog->setAudioSubsystemStatus(
         m_seqManager->getSoundDriverStatus() & AUDIO_OK);
 
-    plugAccelerators(m_audioManagerDialog,
-                     m_audioManagerDialog->getAccelerators());
+    plugShortcuterators(m_audioManagerDialog,
+                     m_audioManagerDialog->getShortcuterators());
 
     m_audioManagerDialog->show();
 }
@@ -6542,7 +6543,7 @@ RosegardenGUIApp::slotOpenAudioMixer()
                 SLOT(slotPluginSelected(InstrumentId, int, int)));
     }
 
-    plugAccelerators(m_audioMixer, m_audioMixer->getAccelerators());
+    plugShortcuterators(m_audioMixer, m_audioMixer->getShortcuterators());
 
     m_audioMixer->show();
 }
@@ -6598,7 +6599,7 @@ RosegardenGUIApp::slotOpenMidiMixer()
             m_midiMixer,
             SLOT(slotUpdateInstrument(InstrumentId)));
 
-    plugAccelerators(m_midiMixer, m_midiMixer->getAccelerators());
+    plugShortcuterators(m_midiMixer, m_midiMixer->getShortcuterators());
 
     m_midiMixer->show();
 }
@@ -6716,7 +6717,7 @@ RosegardenGUIApp::slotEditMarkers()
     connect(m_markerEditor, SIGNAL(jumpToMarker(timeT)),
             m_doc, SLOT(slotSetPointerPosition(timeT)));
 
-    plugAccelerators(m_markerEditor, m_markerEditor->getAccelerators());
+    plugShortcuterators(m_markerEditor, m_markerEditor->getShortcuterators());
 
     m_markerEditor->show();
 }
@@ -6760,7 +6761,7 @@ RosegardenGUIApp::slotEditTempos(timeT t)
 
     connect(m_tempoView, SIGNAL(saveFile()), this, SLOT(slotFileSave()));
 
-    plugAccelerators(m_tempoView, m_tempoView->getAccelerators());
+    plugShortcuterators(m_tempoView, m_tempoView->getShortcuterators());
 
     m_tempoView->show();
 }
@@ -6849,10 +6850,10 @@ RosegardenGUIApp::slotShowPluginDialog(QWidget *parent,
             dialog, SLOT(slotControllerDeviceEventReceived(MappedEvent *, const void *)));
 */
 
-    // Plug the new dialog into the standard keyboard accelerators so
+    // Plug the new dialog into the standard keyboard shortcuterators so
     // that we can use them still while the plugin has focus.
     //
-    plugAccelerators(dialog, dialog->getAccelerators());
+    plugShortcuterators(dialog, dialog->getShortcuterators());
 
     connect(dialog,
             SIGNAL(pluginSelected(InstrumentId, int, int)),
@@ -7683,7 +7684,7 @@ RosegardenGUIApp::slotImportStudioFromFile(const QString &file)
         // do want to create devices
         // on the sequencer here
 
-        KMacroCommand *command = new KMacroCommand(i18n("Import Studio"));
+        MacroCommand *command = new MacroCommand(i18n("Import Studio"));
         doc->syncDevices();
 
         // We actually only copy across MIDI play devices... for now

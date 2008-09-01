@@ -19,7 +19,7 @@
 #include "ModifyMarkerCommand.h"
 
 #include "base/Composition.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
@@ -31,7 +31,7 @@ ModifyMarkerCommand::ModifyMarkerCommand(Composition *comp,
         timeT newTime,
         const std::string &name,
         const std::string &des):
-        KNamedCommand(getGlobalName()),
+        NamedCommand(getGlobalName()),
         m_composition(comp),
         m_id(id),
         m_time(time),

@@ -23,7 +23,7 @@
 #include "base/Event.h"
 #include "base/NotationTypes.h"
 #include "gui/editors/notation/NotationStrings.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
@@ -104,7 +104,7 @@ XmlStorableEvent::XmlStorableEvent(const QXmlAttributes &attributes,
             QString val(attrVal);
 
             // Check if boolean val
-            QString valLowerCase(val.lower());
+            QString valLowerCase(val.toLower());
             bool isNumeric;
             int numVal;
 
@@ -158,7 +158,7 @@ XmlStorableEvent::setPropertyFromAttributes(const QXmlAttributes &attributes,
             continue;
         } else if (attrName == "bool") {
             set
-                <Bool>(qstrtostr(name), attrVal.lower() == "true",
+                <Bool>(qstrtostr(name), attrVal.toLower() == "true",
                        persistent);
             have = true;
         } else if (attrName == "int") {

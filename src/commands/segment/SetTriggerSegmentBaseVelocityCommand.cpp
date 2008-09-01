@@ -29,7 +29,7 @@ namespace Rosegarden
 SetTriggerSegmentBaseVelocityCommand::SetTriggerSegmentBaseVelocityCommand(Composition *composition,
         TriggerSegmentId id,
         int newVelocity) :
-        KNamedCommand(i18n("Set Base Velocity")),
+        NamedCommand(i18n("Set Base Velocity")),
         m_composition(composition),
         m_id(id),
         m_newVelocity(newVelocity),

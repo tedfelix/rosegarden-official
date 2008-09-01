@@ -19,8 +19,8 @@
 #ifndef _RG_ROSEGARDENPITCHCHOOSER_H_
 #define _RG_ROSEGARDENPITCHCHOOSER_H_
 
-#include <qgroupbox.h>
-#include <qstring.h>
+#include <QGroupBox>
+#include <QString>
 
 
 class QWidget;

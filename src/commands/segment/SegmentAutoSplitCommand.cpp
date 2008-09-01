@@ -25,7 +25,7 @@
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
@@ -42,7 +42,7 @@ struct AutoSplitPoint
 };
 
 SegmentAutoSplitCommand::SegmentAutoSplitCommand(Segment *segment) :
-        KNamedCommand(getGlobalName()),
+        NamedCommand(getGlobalName()),
         m_segment(segment),
         m_composition(segment->getComposition()),
         m_detached(false)

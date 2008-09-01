@@ -17,7 +17,7 @@
 
 
 #include "ImportDeviceDialog.h"
-#include <qlayout.h>
+#include <QLayout>
 #include <kapplication.h>
 
 #include <klocale.h>
@@ -27,27 +27,28 @@
 #include "base/MidiProgram.h"
 #include "document/RosegardenGUIDoc.h"
 #include "sound/SF2PatchExtractor.h"
-#include <kcombobox.h>
+#include <QComboBox>
 #include <kconfig.h>
-#include <kdialogbase.h>
+#include <QDialog>
+#include <QDialogButtonBox>
 #include <kmessagebox.h>
 #include <kurl.h>
 #include <kio/netaccess.h>
-#include <qbuttongroup.h>
-#include <qcheckbox.h>
-#include <qgroupbox.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qradiobutton.h>
-#include <qstring.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <QGroupBox>
+#include <QCheckBox>
+#include <QGroupBox>
+#include <QLabel>
+#include <QRadioButton>
+#include <QString>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 
 
 namespace Rosegarden
 {
 
-ImportDeviceDialog::ImportDeviceDialog(QWidget *parent, KURL url) :
+ImportDeviceDialog::ImportDeviceDialog(QDialogButtonBox::QWidget *parent, KURL url) :
         KDialogBase(parent, "importdevicedialog", true,
                     i18n("Import from Device..."),
                     Ok | Cancel, Ok),
@@ -106,19 +107,22 @@ ImportDeviceDialog::doImport()
                                         i18n("Source device"),
                                         mainFrame);
 
-    QHBox *deviceBox = new QHBox(groupBox);
-    QHBoxLayout *bl = new QHBoxLayout(deviceBox);
+    QHBoxLayout *bl = new QHBoxLayout( deviceBox );
+    deviceBoxLayout->addWidget(bl);
     bl->addWidget(new QLabel(i18n("Import from: "), deviceBox));
 
     bool showRenameOption = false;
 
     if (m_devices.size() > 1) {
-        m_deviceCombo = new KComboBox(deviceBox);
+        m_deviceCombo = new QComboBox( deviceBox );
+        deviceBoxLayout->addWidget(m_deviceCombo);
         m_deviceLabel = 0;
         bl->addWidget(m_deviceCombo);
     } else {
         m_deviceCombo = 0;
-        m_deviceLabel = new QLabel(deviceBox);
+        m_deviceLabel = new QLabel( deviceBox );
+        deviceBoxLayout->addWidget(m_deviceLabel);
+        deviceBox->setLayout(deviceBoxLayout);
         bl->addWidget(m_deviceLabel);
     }
 
@@ -133,17 +137,18 @@ ImportDeviceDialog::doImport()
             (*i)->setName(qstrtostr(i18n("Device %1").arg(count)));
         }
         if (m_devices.size() > 1) {
-            m_deviceCombo->insertItem(strtoqstr((*i)->getName()));
+            m_deviceCombo->addItem(strtoqstr((*i)->getName()));
         } else {
             m_deviceLabel->setText(strtoqstr((*i)->getName()));
         }
         ++count;
     }
 
-    QHBox *optionsBox = new QHBox(mainFrame);
+    QWidget *optionsBox = new QWidget(mainFrame);
+    QHBoxLayout optionsBoxLayout = new QHBoxLayout;
 
-    QGroupBox *gb = new QGroupBox(1, Horizontal, i18n("Options"),
-                                  optionsBox);
+    QGroupBox *gb = new QGroupBox( i18n("Options"), optionsBox );
+    optionsBoxLayout->addWidget(gb);
 
     m_importBanks = new QCheckBox(i18n("Import banks"), gb);
     m_importKeyMappings = new QCheckBox(i18n("Import key mappings"), gb);
@@ -155,9 +160,10 @@ ImportDeviceDialog::doImport()
         m_rename = 0;
     }
 
-    m_buttonGroup = new QButtonGroup(1, Qt::Horizontal,
-                                     i18n("Bank import behavior"),
-                                     optionsBox);
+    m_buttonGroup = new QGroupBox(
+                                     i18n("Bank import behavior"), optionsBox );
+    optionsBoxLayout->addWidget(m_buttonGroup);
+    optionsBox->setLayout(optionsBoxLayout);
     m_mergeBanks = new QRadioButton(i18n("Merge banks"), m_buttonGroup);
     m_overwriteBanks = new QRadioButton(i18n("Overwrite banks"), m_buttonGroup);
 
@@ -186,7 +192,7 @@ ImportDeviceDialog::slotOk()
 {
     int index = 0;
     if (m_deviceCombo)
-        index = m_deviceCombo->currentItem();
+        index = m_deviceCombo->currentIndex();
     m_device = m_devices[index];
 
     int v = m_buttonGroup->id(m_buttonGroup->selected());

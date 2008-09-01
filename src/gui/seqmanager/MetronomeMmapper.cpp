@@ -21,7 +21,7 @@
 #include <kapplication.h>
 
 #include "sound/Midi.h"
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include "document/ConfigGroups.h"
 #include "base/Event.h"
 #include "base/MidiProgram.h"
@@ -35,7 +35,7 @@
 #include "sound/MappedEvent.h"
 #include <kconfig.h>
 #include <kglobal.h>
-#include <qstring.h>
+#include <QString>
 #include <algorithm>
 
 

@@ -20,20 +20,21 @@
 
 #include <klocale.h>
 #include "gui/widgets/PitchChooser.h"
-#include <kdialogbase.h>
-#include <qgroupbox.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qlineedit.h>
-#include <qstring.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QGroupBox>
+#include <QLabel>
+#include <QLineEdit>
+#include <QString>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 
 
 namespace Rosegarden
 {
 
-MakeOrnamentDialog::MakeOrnamentDialog(QWidget *parent, QString defaultName,
+MakeOrnamentDialog::MakeOrnamentDialog(QDialogButtonBox::QWidget *parent, QString defaultName,
                                        int defaultBasePitch) :
         KDialogBase(parent, "makeornamentdialog", true, i18n("Make Ornament"),
                     Ok | Cancel, Ok)
@@ -43,9 +44,13 @@ MakeOrnamentDialog::MakeOrnamentDialog(QWidget *parent, QString defaultName,
 
     new QLabel(i18n("The name is used to identify both the ornament\nand the triggered segment that stores\nthe ornament's notes."), nameBox);
 
-    QHBox *hbox = new QHBox(nameBox);
-    new QLabel(i18n("Name:  "), hbox);
-    m_name = new QLineEdit(defaultName, hbox);
+    QWidget *hbox = new QWidget(nameBox);
+    QHBoxLayout hboxLayout = new QHBoxLayout;
+    QLabel *child_3 = new QLabel(i18n("Name:  "), hbox );
+    hboxLayout->addWidget(child_3);
+    m_name = new QLineEdit(defaultName, hbox );
+    hboxLayout->addWidget(m_name);
+    hbox->setLayout(hboxLayout);
 
     m_pitch = new PitchChooser(i18n("Base pitch"), vbox, defaultBasePitch);
 }

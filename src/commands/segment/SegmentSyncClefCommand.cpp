@@ -24,7 +24,7 @@
 namespace Rosegarden
 {
 SegmentSyncClefCommand::SegmentSyncClefCommand(Segment &segment, const Clef& clef) :
-        KMacroCommand(i18n("Sync segment clef"))
+        MacroCommand(i18n("Sync segment clef"))
 {
     processSegment(segment, clef);
 }
@@ -32,7 +32,7 @@ SegmentSyncClefCommand::SegmentSyncClefCommand(Segment &segment, const Clef& cle
 void 
 SegmentSyncClefCommand::processSegment(Segment &segment, const Clef& clef)
 {
-    KMacroCommand * macroCommand = this;
+    MacroCommand * macroCommand = this;
 
     // TODO delete it somewhere.
     EventSelection * wholeSegment = new EventSelection(segment, segment.getStartTime(), segment.getEndMarkerTime());

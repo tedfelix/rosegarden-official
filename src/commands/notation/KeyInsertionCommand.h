@@ -21,7 +21,7 @@
 
 #include "base/NotationTypes.h"
 #include "document/BasicCommand.h"
-#include <qstring.h>
+#include <QString>
 #include "base/Event.h"
 #include <klocale.h>
 #include "misc/Strings.h"

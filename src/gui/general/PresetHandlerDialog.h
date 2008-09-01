@@ -22,14 +22,15 @@
 #ifndef _RG_PRESETHANDLERDIALOG_H_
 #define _RG_PRESETHANDLERDIALOG_H_
 
-#include <kdialogbase.h>
-#include <qradiobutton.h>
-#include <qstring.h>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QRadioButton>
+#include <QString>
 #include "CategoryElement.h"
 
 class QWidget;
 class KConfig;
-class KComboBox;
+class QComboBox;
 
 
 namespace Rosegarden
@@ -38,7 +39,7 @@ namespace Rosegarden
 class PresetGroup;
 
 
-class PresetHandlerDialog : public KDialogBase
+class PresetHandlerDialog : public QDialog
 {
     Q_OBJECT
 
@@ -77,9 +78,9 @@ protected:
 
     //---------[ data members ]-----------------------------
 
-    KComboBox   *m_categoryCombo;
-    KComboBox   *m_instrumentCombo;
-    KComboBox   *m_playerCombo;
+    QComboBox   *m_categoryCombo;
+    QComboBox   *m_instrumentCombo;
+    QComboBox   *m_playerCombo;
     QRadioButton *m_convertSegments;
     QRadioButton *m_convertAllSegments;
 

@@ -19,9 +19,9 @@
 #include "BaseToolBox.h"
 
 #include "BaseTool.h"
-#include <qobject.h>
-#include <qstring.h>
-#include <qwidget.h>
+#include <QObject>
+#include <QString>
+#include <QWidget>
 
 
 namespace Rosegarden

@@ -20,7 +20,7 @@
 #define _RG_SEGMENTSPLITTER_H_
 
 #include "SegmentTool.h"
-#include <qstring.h>
+#include <QString>
 #include "base/Event.h"
 
 

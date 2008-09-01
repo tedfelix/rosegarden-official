@@ -16,6 +16,9 @@
 */
 
 
+#include <Q3Canvas>
+#include <Q3CanvasItemList>
+#include <Q3CanvasRectangle>
 #include "MatrixElement.h"
 #include "misc/Debug.h"
 
@@ -25,9 +28,9 @@
 #include "gui/general/GUIPalette.h"
 #include "QCanvasMatrixDiamond.h"
 #include "QCanvasMatrixRectangle.h"
-#include <qbrush.h>
+#include <QBrush>
 #include <qcanvas.h>
-#include <qcolor.h>
+#include <QColor>
 
 
 namespace Rosegarden
@@ -55,7 +58,7 @@ MatrixElement::~MatrixElement()
     removeOverlapRectangles();
 }
 
-void MatrixElement::setCanvas(QCanvas* c)
+void MatrixElement::setCanvas(Q3Canvas* c)
 {
     if (!m_canvasRect->canvas()) {
 
@@ -80,9 +83,9 @@ void MatrixElement::drawOverlapRectangles()
     if (m_overlapRectangles) removeOverlapRectangles();
 
     QRect elRect = m_canvasRect->rect();
-    QCanvasItemList
+    Q3CanvasItemList
           itemList = m_canvasRect->canvas()->collisions(elRect);
-    QCanvasItemList::Iterator it;
+    Q3CanvasItemList::Iterator it;
     MatrixElement* mel = 0;
 
 
@@ -100,8 +103,8 @@ void MatrixElement::drawOverlapRectangles()
                     m_overlapRectangles = new OverlapRectangles();
                 }
 
-                QCanvasRectangle *
-                    overlap = new QCanvasRectangle(rect, m_canvasRect->canvas());
+                Q3CanvasRectangle *
+                    overlap = new Q3CanvasRectangle(rect, m_canvasRect->canvas());
                 overlap->setBrush(GUIPalette::getColour(GUIPalette::MatrixOverlapBlock));
                 overlap->setZ(getCanvasZ() + 1);
                 overlap->show();
@@ -113,9 +116,9 @@ void MatrixElement::drawOverlapRectangles()
 
 void MatrixElement::redrawOverlaps(QRect rect)
 {
-    QCanvasItemList
+    Q3CanvasItemList
           itemList = m_canvasRect->canvas()->collisions(rect);
-    QCanvasItemList::Iterator it;
+    Q3CanvasItemList::Iterator it;
     MatrixElement* mel = 0;
 
     for (it = itemList.begin(); it != itemList.end(); ++it) {

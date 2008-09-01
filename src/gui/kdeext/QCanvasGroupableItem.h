@@ -16,12 +16,23 @@
 #ifndef QCANVASGROUPABLEITEM_H
 #define QCANVASGROUPABLEITEM_H
 
+#include <Q3Canvas>
+#include <Q3CanvasEllipse>
+#include <Q3CanvasItem>
+#include <Q3CanvasItemList>
+#include <Q3CanvasLine>
+#include <Q3CanvasPixmapArray>
+#include <Q3CanvasPolygonalItem>
+#include <Q3CanvasRectangle>
+#include <Q3CanvasSprite>
+#include <Q3CanvasText>
+#include <Q3CanvasView>
 #include <qcanvas.h>
 
 class QCanvasItemGroup;
 
 /**
- * This class is meant to be inherited by QCanvasItem children to make
+ * This class is meant to be inherited by Q3CanvasItem children to make
  * them groupable.
  *
  * On destruction, the item will remove itself from the group it's
@@ -44,7 +55,7 @@ public:
      *
      * @see QCanvasItemGroup#addItemWithRelativeCoords()
      */
-    QCanvasGroupableItem(QCanvasItem*, QCanvasItemGroup*,
+    QCanvasGroupableItem(Q3CanvasItem*, QCanvasItemGroup*,
                          bool withRelativeCoords = false);
 
     virtual ~QCanvasGroupableItem();
@@ -55,8 +66,8 @@ public:
     /// Returns the QCanvasItemGroup this groupable item belongs to
     const QCanvasItemGroup* group() const { return m_group; }
 
-    /// Returns the QCanvasItem which this groupable item wraps
-    QCanvasItem *item() { return m_item; }
+    /// Returns the Q3CanvasItem which this groupable item wraps
+    Q3CanvasItem *item() { return m_item; }
 
     /**
      * Same as moveBy(), except that the move is done relative to the
@@ -77,32 +88,32 @@ private:
     //--------------- Data members ---------------------------------
 
     QCanvasItemGroup* m_group;
-    QCanvasItem*      m_item;
+    Q3CanvasItem*      m_item;
 
 };
 
 
 /**
- * This class implements QCanvasItem groups
+ * This class implements Q3CanvasItem groups
  *
  * An item group will keep its items in a fixed relative position when
  * moved, just like in a drawing program where you can "bind" several
  * items together so that they'll behave as a single item.
  *
- * Proper behavior requires collaboration from the QCanvasView,
- * though. When about to move an item, the QCanvasView object should
+ * Proper behavior requires collaboration from the Q3CanvasView,
+ * though. When about to move an item, the Q3CanvasView object should
  * first check if it's not a groupable item, and if so fetch its
  * QCanvasItemGroup and move it instead.
  */
-class QCanvasItemGroup : public QCanvasItem
+class QCanvasItemGroup : public Q3CanvasItem
 {
 public: 
-    QCanvasItemGroup(QCanvas *);
+    QCanvasItemGroup(Q3Canvas *);
     virtual ~QCanvasItemGroup();
 
     virtual void moveBy(double dx, double dy);
     virtual void advance(int stage);
-    virtual bool collidesWith(const QCanvasItem*) const;
+    virtual bool collidesWith(const Q3CanvasItem*) const;
     virtual void draw(QPainter&);
     virtual void setVisible(bool yes);
     virtual void setSelected(bool yes);
@@ -119,7 +130,7 @@ public:
      *
      * @see addItemWithRelativeCoords()
      */
-    virtual void addItem(QCanvasItem *);
+    virtual void addItem(Q3CanvasItem *);
 
     /**
      * Add a new item to this group.
@@ -132,63 +143,63 @@ public:
      *
      * @see addItem()
      */
-    virtual void addItemWithRelativeCoords(QCanvasItem *);
+    virtual void addItemWithRelativeCoords(Q3CanvasItem *);
 
     /**
      * Remove the specified item from the group
      */
-    virtual void removeItem(QCanvasItem*);
+    virtual void removeItem(Q3CanvasItem*);
 
 private:
-    virtual bool collidesWith(const QCanvasSprite*,
-                              const QCanvasPolygonalItem*,
-                              const QCanvasRectangle*,
-                              const QCanvasEllipse*,
-                              const QCanvasText* ) const;
+    virtual bool collidesWith(const Q3CanvasSprite*,
+                              const Q3CanvasPolygonalItem*,
+                              const Q3CanvasRectangle*,
+                              const Q3CanvasEllipse*,
+                              const Q3CanvasText* ) const;
 
 protected:
     //--------------- Data members ---------------------------------
 
-    QCanvasItemList m_items;
+    Q3CanvasItemList m_items;
 };
 
 
 /**
- * A QCanvasLine which can be put in a QCanvasGroup
+ * A Q3CanvasLine which can be put in a QCanvasGroup
  */
-class QCanvasLineGroupable : public QCanvasLine, public QCanvasGroupableItem
+class QCanvasLineGroupable : public Q3CanvasLine, public QCanvasGroupableItem
 {
 public: 
-    QCanvasLineGroupable(QCanvas *c, QCanvasItemGroup *g);
+    QCanvasLineGroupable(Q3Canvas *c, QCanvasItemGroup *g);
 };
 
 /**
- * A QCanvasRectangle which can be put in a QCanvasGroup
+ * A Q3CanvasRectangle which can be put in a QCanvasGroup
  */
-class QCanvasRectangleGroupable : public QCanvasRectangle, public QCanvasGroupableItem
+class QCanvasRectangleGroupable : public Q3CanvasRectangle, public QCanvasGroupableItem
 {
 public: 
-    QCanvasRectangleGroupable(QCanvas *c, QCanvasItemGroup *g);
+    QCanvasRectangleGroupable(Q3Canvas *c, QCanvasItemGroup *g);
 };
 
 /**
- * A QCanvasText which can be put in a QCanvasGroup
+ * A Q3CanvasText which can be put in a QCanvasGroup
  */
-class QCanvasTextGroupable : public QCanvasText, public QCanvasGroupableItem
+class QCanvasTextGroupable : public Q3CanvasText, public QCanvasGroupableItem
 {
 public: 
-    QCanvasTextGroupable(QCanvas *c, QCanvasItemGroup *g);
-    QCanvasTextGroupable(const QString&, QCanvas *c, QCanvasItemGroup *g);
+    QCanvasTextGroupable(Q3Canvas *c, QCanvasItemGroup *g);
+    QCanvasTextGroupable(const QString&, Q3Canvas *c, QCanvasItemGroup *g);
 };
 
 /**
- * A QCanvasSprite that can be put in a QCanvasGroup
+ * A Q3CanvasSprite that can be put in a QCanvasGroup
  */
-class QCanvasSpriteGroupable : public QCanvasSprite, public QCanvasGroupableItem
+class QCanvasSpriteGroupable : public Q3CanvasSprite, public QCanvasGroupableItem
 {
 public:
-    QCanvasSpriteGroupable(QCanvasPixmapArray*,
-                           QCanvas*,
+    QCanvasSpriteGroupable(Q3CanvasPixmapArray*,
+                           Q3Canvas*,
                            QCanvasItemGroup*);
 };
 

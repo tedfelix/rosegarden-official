@@ -20,7 +20,7 @@
 #include <list>
 #include <map>
 
-#include <qobject.h>
+#include <QObject>
 
 #include "Midi.h"
 #include "MidiEvent.h"

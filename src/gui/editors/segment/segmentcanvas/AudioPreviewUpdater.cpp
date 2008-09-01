@@ -24,9 +24,9 @@
 #include "base/RealTime.h"
 #include "base/Segment.h"
 #include "CompositionModelImpl.h"
-#include <qevent.h>
-#include <qobject.h>
-#include <qrect.h>
+#include <QEvent>
+#include <QObject>
+#include <QRect>
 
 
 namespace Rosegarden

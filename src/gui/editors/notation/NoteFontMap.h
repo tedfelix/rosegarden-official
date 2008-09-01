@@ -24,8 +24,8 @@
 #include <set>
 #include <string>
 #include "SystemFont.h"
-#include <qstring.h>
-#include <qstringlist.h>
+#include <QString>
+#include <QStringList>
 #include <utility>
 #include <qxml.h>
 #include "gui/editors/notation/NoteCharacterNames.h"

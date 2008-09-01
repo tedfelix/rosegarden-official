@@ -19,29 +19,42 @@
 #include "AudioPlayingDialog.h"
 
 #include <klocale.h>
-#include <kdialogbase.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qstring.h>
-#include <qwidget.h>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QLabel>
+#include <QString>
+#include <QWidget>
+#include <QHBoxLayout>
 
 
 namespace Rosegarden
 {
 
-AudioPlayingDialog::AudioPlayingDialog(QWidget *parent,
+AudioPlayingDialog::AudioPlayingDialog(QDialogButtonBox::QWidget *parent,
                                        const QString &name):
-        KDialogBase(parent, 0, true,
-                    i18n("Playing audio file"),
-                    Cancel)
+        QDialog(parent)
 {
-    QHBox *w = makeHBoxMainWidget();
-    QLabel *label = new
-                    QLabel(i18n("Playing audio file \"%1\"").arg(name), w);
+    setModal(true);
+    setWindowTitle(i18n("Playing audio file"));
+
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
+    QWidget *w = new QWidget(this);
+    QHBoxLayout wLayout = new QHBoxLayout;
+    metagrid->addWidget(w, 0, 0);
+
+    QLabel *label = new QLabel(i18n("Playing audio file \"%1\"").arg(name), w );
+    wLayout->addWidget(label);
+    w->setLayout(wLayout);
 
     label->setMinimumHeight(80);
 
 
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Cancel);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 }

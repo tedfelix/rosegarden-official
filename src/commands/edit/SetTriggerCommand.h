@@ -22,7 +22,7 @@
 #include "base/TriggerSegment.h"
 #include "document/BasicSelectionCommand.h"
 #include <string>
-#include <qstring.h>
+#include <QString>
 #include <klocale.h>
 
 

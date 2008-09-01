@@ -19,9 +19,9 @@
 #include "TrackHeader.h"
 
 #include <qheader.h>
-#include <qpainter.h>
-#include <qrect.h>
-#include <qwidget.h>
+#include <QPainter>
+#include <QRect>
+#include <QWidget>
 
 
 namespace Rosegarden

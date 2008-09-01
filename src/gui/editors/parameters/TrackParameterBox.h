@@ -28,8 +28,8 @@
 #include <map>
 #include "RosegardenParameterArea.h"
 #include "RosegardenParameterBox.h"
-#include <qstring.h>
-#include <qcheckbox.h> // #include <QCheckBox> in QT4, thinking ahead
+#include <QString>
+#include <QCheckBox> // #include <QCheckBox> in QT4, thinking ahead
 #include <vector>
 
 
@@ -37,7 +37,7 @@ class QWidget;
 class QPushButton;
 class QLabel;
 class QFrame;
-class KComboBox;
+class QComboBox;
 class QCheckBox;
 
 
@@ -96,20 +96,20 @@ protected:
 private:
     RosegardenGUIDoc    *m_doc;
 
-    KComboBox           *m_playDevice;
-    KComboBox           *m_instrument;
-    KComboBox           *m_recDevice;
-    KComboBox           *m_recChannel;
+    QComboBox           *m_playDevice;
+    QComboBox           *m_instrument;
+    QComboBox           *m_recDevice;
+    QComboBox           *m_recChannel;
 
     QPushButton         *m_presetButton;
     QPushButton         *m_highButton;
     QPushButton         *m_lowButton;
 
-    KComboBox           *m_defClef;
-    KComboBox           *m_defColor;
-    KComboBox           *m_defTranspose;
-    KComboBox           *m_staffSizeCombo;
-    KComboBox           *m_staffBracketCombo;
+    QComboBox           *m_defClef;
+    QComboBox           *m_defColor;
+    QComboBox           *m_defTranspose;
+    QComboBox           *m_staffSizeCombo;
+    QComboBox           *m_staffBracketCombo;
 
 
     int                 m_addColourPos;

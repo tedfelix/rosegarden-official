@@ -18,6 +18,9 @@
 #ifndef _RG_NOTATIONSTAFF_H_
 #define _RG_NOTATIONSTAFF_H_
 
+#include <Q3Canvas>
+#include <Q3CanvasItem>
+#include <Q3CanvasPixmap>
 #include "base/FastVector.h"
 #include "base/Staff.h"
 #include "base/ViewElement.h"
@@ -32,9 +35,9 @@
 
 
 class QPainter;
-class QCanvasPixmap;
-class QCanvasItem;
-class QCanvas;
+class Q3CanvasPixmap;
+class Q3CanvasItem;
+class Q3Canvas;
 class LinedStaffCoords;
 
 
@@ -75,7 +78,7 @@ public:
      * Creates a new NotationStaff for the specified Segment
      * \a id is the id of the staff in the NotationView
      */
-    NotationStaff(QCanvas *, Segment *, SnapGrid *,
+    NotationStaff(Q3Canvas *, Segment *, SnapGrid *,
                   int id, NotationView *view,
                   std::string fontName, int resolution);
     virtual ~NotationStaff();
@@ -425,7 +428,7 @@ protected:
      * bits if it overruns the end of a row and set the bits
      * separately.
      */
-    virtual void setPixmap(NotationElement *, QCanvasPixmap *, int z,
+    virtual void setPixmap(NotationElement *, Q3CanvasPixmap *, int z,
                            FitPolicy policy);
 
     bool isSelected(NotationElementList::iterator);
@@ -433,7 +436,7 @@ protected:
     typedef std::set<QCanvasSimpleSprite *> SpriteSet;
     SpriteSet m_timeSigs;
 
-    typedef std::set<QCanvasItem *> ItemSet;
+    typedef std::set<Q3CanvasItem *> ItemSet;
     ItemSet m_repeatedClefsAndKeys;
 
     typedef std::pair<int, Clef> ClefChange;

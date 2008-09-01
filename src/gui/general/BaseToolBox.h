@@ -20,7 +20,7 @@
 #define _RG_BASETOOLBOX_H_
 
 #include <qdict.h>
-#include <qobject.h>
+#include <QObject>
 
 
 class QWidget;

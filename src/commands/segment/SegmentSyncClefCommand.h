@@ -19,7 +19,7 @@
 #ifndef _RG_SEGMENTSYNCCLEFCOMMAND_H_
 #define _RG_SEGMENTSYNCCLEFCOMMAND_H_
 
-#include <kcommand.h>
+#include "document/Command.h"
 #include "base/Event.h"
 #include "base/NotationTypes.h"
 #include "document/MultiViewCommandHistory.h"
@@ -32,7 +32,7 @@ class Segment;
 class SegmentSelection;
 
 
-class SegmentSyncClefCommand : public KMacroCommand
+class SegmentSyncClefCommand : public MacroCommand
 {
 public:
     SegmentSyncClefCommand(Segment &segment, const Clef& clef);

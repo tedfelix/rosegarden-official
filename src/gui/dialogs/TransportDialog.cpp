@@ -19,7 +19,7 @@
 #include "TransportDialog.h"
 
 #include <klocale.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
 #include "base/RealTime.h"
@@ -34,19 +34,19 @@
 #include "document/ConfigGroups.h"
 #include <kconfig.h>
 #include <kglobal.h>
-#include <qaccel.h>
-#include <qcolor.h>
-#include <qcstring.h>
-#include <qdatastream.h>
-#include <qfont.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qpalette.h>
-#include <qpixmap.h>
-#include <qpushbutton.h>
-#include <qstring.h>
-#include <qtimer.h>
-#include <qwidget.h>
+#include <qshortcut.h>
+#include <QColor>
+#include <QByteArray>
+#include <QDataStream>
+#include <QFont>
+#include <QLabel>
+#include <QPalette>
+#include <QPixmap>
+#include <QPushButton>
+#include <QString>
+#include <QTimer>
+#include <QWidget>
+#include <QHBoxLayout>
 
 
 namespace Rosegarden
@@ -90,22 +90,22 @@ TransportDialog::TransportDialog(QWidget *parent,
 
     // set the LCD frame background to black
     //
-    m_transport->LCDBoxFrame->setBackgroundColor(Qt::black);
+    m_transport->LCDBoxFrame->setBackgroundColor(QColor(Qt::black));
 
     // set all the pixmap backgrounds to black to avoid
     // flickering when we update
     //
-    m_transport->TenThousandthsPixmap->setBackgroundColor(Qt::black);
-    m_transport->ThousandthsPixmap->setBackgroundColor(Qt::black);
-    m_transport->HundredthsPixmap->setBackgroundColor(Qt::black);
-    m_transport->TenthsPixmap->setBackgroundColor(Qt::black);
-    m_transport->UnitSecondsPixmap->setBackgroundColor(Qt::black);
-    m_transport->TenSecondsPixmap->setBackgroundColor(Qt::black);
-    m_transport->UnitMinutesPixmap->setBackgroundColor(Qt::black);
-    m_transport->TenMinutesPixmap->setBackgroundColor(Qt::black);
-    m_transport->UnitHoursPixmap->setBackgroundColor(Qt::black);
-    m_transport->TenHoursPixmap->setBackgroundColor(Qt::black);
-    m_transport->NegativePixmap->setBackgroundColor(Qt::black);
+    m_transport->TenThousandthsPixmap->setBackgroundColor(QColor(Qt::black));
+    m_transport->ThousandthsPixmap->setBackgroundColor(QColor(Qt::black));
+    m_transport->HundredthsPixmap->setBackgroundColor(QColor(Qt::black));
+    m_transport->TenthsPixmap->setBackgroundColor(QColor(Qt::black));
+    m_transport->UnitSecondsPixmap->setBackgroundColor(QColor(Qt::black));
+    m_transport->TenSecondsPixmap->setBackgroundColor(QColor(Qt::black));
+    m_transport->UnitMinutesPixmap->setBackgroundColor(QColor(Qt::black));
+    m_transport->TenMinutesPixmap->setBackgroundColor(QColor(Qt::black));
+    m_transport->UnitHoursPixmap->setBackgroundColor(QColor(Qt::black));
+    m_transport->TenHoursPixmap->setBackgroundColor(QColor(Qt::black));
+    m_transport->NegativePixmap->setBackgroundColor(QColor(Qt::black));
 
     // unset the negative sign to begin with
     m_transport->NegativePixmap->clear();
@@ -254,9 +254,9 @@ TransportDialog::TransportDialog(QWidget *parent,
     connect(m_transport->ThousandthsPixmap, SIGNAL(doubleClicked()),
             this, SLOT(slotEditTime()));
 
-    // accelerator object
+    // shortcuterator object
     //
-    m_accelerators = new QAccel(this);
+    m_shortcuterators = new QShortcut(this);
 }
 
 TransportDialog::~TransportDialog()
@@ -709,9 +709,9 @@ TransportDialog::displayBarTime(int bar, int beat, int unit)
 
     if (m_currentMode == BarMetronomeMode && unit < 2) {
         if (beat == 1) {
-            slotSetBackground(Qt::red);
+            slotSetBackground(QColor(Qt::red));
         } else {
-            slotSetBackground(Qt::cyan);
+            slotSetBackground(QColor(Qt::cyan));
         }
     } else {
         slotResetBackground();

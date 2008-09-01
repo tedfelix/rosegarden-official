@@ -16,9 +16,14 @@
 */
 
 
+#include <Q3Canvas>
+#include <Q3CanvasItem>
+#include <Q3CanvasPixmap>
+#include <Q3CanvasRectangle>
+#include <Q3CanvasText>
 #include "NotationView.h"
 #include <list>
-#include <qlayout.h>
+#include <QLayout>
 #include "misc/Debug.h"
 #include <kapplication.h>
 
@@ -27,7 +32,7 @@
 #include "gui/editors/parameters/TrackParameterBox.h"
 #include "base/BaseProperties.h"
 #include <klocale.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include "misc/Strings.h"
 #include "base/AnalysisTypes.h"
 #include "base/Clipboard.h"
@@ -148,45 +153,45 @@
 #include "NotationCommandRegistry.h"
 #include "HeadersGroup.h"
 #include <kaction.h>
-#include <kcombobox.h>
+#include <QComboBox>
 #include <kconfig.h>
 #include <kglobal.h>
 #include <klineeditdlg.h>
 #include <kmessagebox.h>
 #include <kprinter.h>
-#include <kprocess.h>
+#include <QProcess>
 #include <kprogress.h>
 #include <kstatusbar.h>
-#include <kstdaction.h>
+#include <kstandardaction.h>
 #include <ktempfile.h>
 #include <ktoolbar.h>
 #include <kxmlguiclient.h>
-#include <qbrush.h>
+#include <QBrush>
 #include <qcanvas.h>
-#include <qcursor.h>
-#include <qdialog.h>
-#include <qevent.h>
-#include <qfont.h>
-#include <qfontmetrics.h>
-#include <qhbox.h>
-#include <qiconset.h>
-#include <qlabel.h>
-#include <qobject.h>
+#include <QCursor>
+#include <QDialog>
+#include <QEvent>
+#include <QFont>
+#include <QFontMetrics>
+#include <QIcon>
+#include <QLabel>
+#include <QObject>
 #include <qpaintdevicemetrics.h>
-#include <qpainter.h>
-#include <qpixmap.h>
-#include <qpoint.h>
-#include <qprinter.h>
-#include <qrect.h>
-#include <qregexp.h>
-#include <qsize.h>
-#include <qstring.h>
-#include <qtimer.h>
-#include <qwidget.h>
-#include <qvalidator.h>
+#include <QPainter>
+#include <QPixmap>
+#include <QPoint>
+#include <QPrinter>
+#include <QRect>
+#include <QRegExp>
+#include <QSize>
+#include <QString>
+#include <QTimer>
+#include <QWidget>
+#include <QHBoxLayout>
+#include <QValidator>
 #include <algorithm>
-#include <qpushbutton.h>
-#include <qtooltip.h>
+#include <QPushButton>
+#include <QToolTip>
 
 
 namespace Rosegarden
@@ -398,7 +403,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     setBackgroundMode(PaletteBase);
 
-    QCanvas *tCanvas = new QCanvas(this);
+    Q3Canvas *tCanvas = new Q3Canvas(this);
     tCanvas->resize(width() * 2, height() * 2);
 
     setCanvasView(new NotationCanvasView(*this, tCanvas, getCentralWidget()));
@@ -458,12 +463,12 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     QGridLayout * headersTopGrid
         = new QGridLayout(m_headersTopFrame, 2, 2);
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QCanvasPixmap pixmap(pixmapDir + "/misc/close.xpm");
+    Q3CanvasPixmap pixmap(pixmapDir + "/misc/close.xpm");
     QPushButton * hideHeadersButton
         = new QPushButton(m_headersTopFrame);
     headersTopGrid->addWidget(hideHeadersButton, 1, 1,
                                         Qt::AlignRight | Qt::AlignBottom);
-    hideHeadersButton->setIconSet(QIconSet(pixmap));
+    hideHeadersButton->setIconSet(QIcon(pixmap));
     hideHeadersButton->setFlat(true);
     QToolTip::add(hideHeadersButton, i18n("Close track headers"));
     headersTopGrid->setMargin(4);
@@ -594,16 +599,16 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
      this, SLOT (slotItemPressed(int, int, QMouseEvent*, NotationElement*)));
 
     QObject::connect
-    (getCanvasView(), SIGNAL(activeItemPressed(QMouseEvent*, QCanvasItem*)),
-     this, SLOT (slotActiveItemPressed(QMouseEvent*, QCanvasItem*)));
+    (getCanvasView(), SIGNAL(activeItemPressed(QMouseEvent*, Q3CanvasItem*)),
+     this, SLOT (slotActiveItemPressed(QMouseEvent*, Q3CanvasItem*)));
 
     QObject::connect
-    (getCanvasView(), SIGNAL(nonNotationItemPressed(QMouseEvent*, QCanvasItem*)),
-     this, SLOT (slotNonNotationItemPressed(QMouseEvent*, QCanvasItem*)));
+    (getCanvasView(), SIGNAL(nonNotationItemPressed(QMouseEvent*, Q3CanvasItem*)),
+     this, SLOT (slotNonNotationItemPressed(QMouseEvent*, Q3CanvasItem*)));
 
     QObject::connect
-    (getCanvasView(), SIGNAL(textItemPressed(QMouseEvent*, QCanvasItem*)),
-     this, SLOT (slotTextItemPressed(QMouseEvent*, QCanvasItem*)));
+    (getCanvasView(), SIGNAL(textItemPressed(QMouseEvent*, Q3CanvasItem*)),
+     this, SLOT (slotTextItemPressed(QMouseEvent*, Q3CanvasItem*)));
 
     QObject::connect
     (getCanvasView(), SIGNAL(mouseMoved(QMouseEvent*)),
@@ -835,7 +840,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     setBackgroundMode(PaletteBase);
     m_config->setGroup(NotationViewConfigGroup);
 
-    QCanvas *tCanvas = new QCanvas(this);
+    Q3Canvas *tCanvas = new Q3Canvas(this);
     tCanvas->resize(width() * 2, height() * 2); //!!!
 
     setCanvasView(new NotationCanvasView(*this, tCanvas, getCentralWidget()));
@@ -1001,7 +1006,7 @@ void NotationView::positionStaffs()
         if (metadata.has(CompositionMetadataKeys::Title)) {
             QString title(strtoqstr(metadata.get<String>
                                     (CompositionMetadataKeys::Title)));
-            m_title = new QCanvasText(title, font, canvas());
+            m_title = new Q3CanvasText(title, font, canvas());
             m_title->setX(m_leftGutter + pageWidth / 2 - metrics.width(title) / 2);
             m_title->setY(20 + topMargin / 4 + metrics.ascent());
             m_title->show();
@@ -1014,7 +1019,7 @@ void NotationView::positionStaffs()
         if (metadata.has(CompositionMetadataKeys::Subtitle)) {
             QString subtitle(strtoqstr(metadata.get<String>
                                        (CompositionMetadataKeys::Subtitle)));
-            m_subtitle = new QCanvasText(subtitle, font, canvas());
+            m_subtitle = new Q3CanvasText(subtitle, font, canvas());
             m_subtitle->setX(m_leftGutter + pageWidth / 2 - metrics.width(subtitle) / 2);
             m_subtitle->setY(20 + titleHeight + metrics.ascent());
             m_subtitle->show();
@@ -1024,7 +1029,7 @@ void NotationView::positionStaffs()
         if (metadata.has(CompositionMetadataKeys::Composer)) {
             QString composer(strtoqstr(metadata.get<String>
                                        (CompositionMetadataKeys::Composer)));
-            m_composer = new QCanvasText(composer, font, canvas());
+            m_composer = new Q3CanvasText(composer, font, canvas());
             m_composer->setX(m_leftGutter + pageWidth - metrics.width(composer) - leftMargin);
             m_composer->setY(20 + titleHeight + metrics.ascent());
             m_composer->show();
@@ -1037,7 +1042,7 @@ void NotationView::positionStaffs()
         if (metadata.has(CompositionMetadataKeys::Copyright)) {
             QString copyright(strtoqstr(metadata.get<String>
                                         (CompositionMetadataKeys::Copyright)));
-            m_copyright = new QCanvasText(copyright, font, canvas());
+            m_copyright = new Q3CanvasText(copyright, font, canvas());
             m_copyright->setX(m_leftGutter + leftMargin);
             m_copyright->setY(20 + pageHeight - topMargin - metrics.descent());
             m_copyright->show();
@@ -1336,17 +1341,17 @@ void NotationView::positionPages()
             int h = pageHeight;
 
             QString str = QString("%1").arg(page + 1);
-            QCanvasText *text = new QCanvasText(str, pageNumberFont, canvas());
+            Q3CanvasText *text = new Q3CanvasText(str, pageNumberFont, canvas());
             text->setX(m_leftGutter + pageWidth * page + pageWidth - pageNumberMetrics.width(str) - leftMargin);
             text->setY(y + h - pageNumberMetrics.descent() - topMargin);
             text->setZ( -999);
             text->show();
             m_pageNumbers.push_back(text);
 
-            QCanvasRectangle *rect = new QCanvasRectangle(x, y, w, h, canvas());
+            Q3CanvasRectangle *rect = new Q3CanvasRectangle(x, y, w, h, canvas());
             if (haveBackground)
-                rect->setBrush(QBrush(Qt::white, background));
-            rect->setPen(Qt::black);
+                rect->setBrush(QBrush(QColor(Qt::white), background));
+            rect->setPen(QColor(Qt::black));
             rect->setZ( -1000);
             rect->show();
             m_pages.push_back(rect);
@@ -1439,8 +1444,8 @@ void NotationView::readOptions()
 
 void NotationView::setupActions()
 {
-    KStdAction::print(this, SLOT(slotFilePrint()), actionCollection());
-    KStdAction::printPreview(this, SLOT(slotFilePrintPreview()),
+    KStandardAction::print(this, SLOT(slotFilePrint()), actionCollection());
+    KStandardAction::printPreview(this, SLOT(slotFilePrintPreview()),
                              actionCollection());
 
     new KAction(i18n("Print &with LilyPond..."), 0, 0, this,
@@ -1561,7 +1566,7 @@ void NotationView::setupActions()
 
 
     // setup Notes menu & toolbar
-    QIconSet icon;
+    QIcon icon;
 
     for (NoteActionDataMap::Iterator actionDataIter = m_noteActionDataMap->begin();
             actionDataIter != m_noteActionDataMap->end();
@@ -1569,7 +1574,7 @@ void NotationView::setupActions()
 
         NoteActionData noteActionData = **actionDataIter;
 
-        icon = QIconSet
+        icon = QIcon
                (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                                              (noteActionData.pixmapName)));
         noteAction = new KRadioAction(noteActionData.title,
@@ -1594,7 +1599,7 @@ void NotationView::setupActions()
 
         NoteChangeActionData data = **actionDataIter;
 
-        icon = QIconSet
+        icon = QIcon
                (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                                              (data.pixmapName)));
 
@@ -1624,7 +1629,7 @@ void NotationView::setupActions()
     for (unsigned int i = 0;
             i < sizeof(actionsAccidental) / sizeof(actionsAccidental[0]); ++i) {
 
-        icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+        icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                         (actionsAccidental[i][3])));
         noteAction = new KRadioAction(actionsAccidental[i][0], icon, 0, this,
                                       actionsAccidental[i][1],
@@ -1638,47 +1643,47 @@ void NotationView::setupActions()
     //
 
     // Treble
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("clef-treble")));
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("clef-treble")));
     noteAction = new KRadioAction(i18n("&Treble Clef"), icon, 0, this,
                                   SLOT(slotTrebleClef()),
                                   actionCollection(), "treble_clef");
     noteAction->setExclusiveGroup("notes");
 
     // Alto
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("clef-alto")));
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("clef-alto")));
     noteAction = new KRadioAction(i18n("&Alto Clef"), icon, 0, this,
                                   SLOT(slotAltoClef()),
                                   actionCollection(), "alto_clef");
     noteAction->setExclusiveGroup("notes");
 
     // Tenor
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("clef-tenor")));
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("clef-tenor")));
     noteAction = new KRadioAction(i18n("Te&nor Clef"), icon, 0, this,
                                   SLOT(slotTenorClef()),
                                   actionCollection(), "tenor_clef");
     noteAction->setExclusiveGroup("notes");
 
     // Bass
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("clef-bass")));
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("clef-bass")));
     noteAction = new KRadioAction(i18n("&Bass Clef"), icon, 0, this,
                                   SLOT(slotBassClef()),
                                   actionCollection(), "bass_clef");
     noteAction->setExclusiveGroup("notes");
 
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("text")));
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("text")));
     noteAction = new KRadioAction(i18n("&Text"), icon, Key_F8, this,
                                   SLOT(slotText()),
                                   actionCollection(), "text");
     noteAction->setExclusiveGroup("notes");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("guitarchord")));
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("guitarchord")));
     noteAction = new KRadioAction(i18n("&Guitar Chord"), icon, Key_F9, this,
                                   SLOT(slotGuitarChord()),
                                   actionCollection(), "guitarchord");
     noteAction->setExclusiveGroup("notes");
 
-    /*    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("lilypond")));
+    /*    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("lilypond")));
         noteAction = new KRadioAction(i18n("Lil&ypond Directive"), icon, Key_F9, this,
                                       SLOT(slotLilyPondDirective()),
                                       actionCollection(), "lilypond_directive");
@@ -1693,13 +1698,13 @@ void NotationView::setupActions()
                                   actionCollection(), "erase");
     noteAction->setExclusiveGroup("notes");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("select")));
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("select")));
     noteAction = new KRadioAction(i18n("&Select and Edit"), icon, Key_F2,
                                   this, SLOT(slotSelectSelected()),
                                   actionCollection(), "select");
     noteAction->setExclusiveGroup("notes");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("step_by_step")));
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("step_by_step")));
     new KToggleAction(i18n("Ste&p Recording"), icon, 0, this,
                       SLOT(slotToggleStepByStep()), actionCollection(),
                       "toggle_step_by_step");
@@ -1734,7 +1739,7 @@ void NotationView::setupActions()
                 SLOT(slotMoveEventsUpStaff()), actionCollection(),
                 "move_events_up_staff");
 
-    new KAction(i18n("Move to Staff Below"), 0, this,
+    new KAction(i18n("Move to Staff TicksBelow"), 0, this,
                 SLOT(slotMoveEventsDownStaff()), actionCollection(),
                 "move_events_down_staff");
 
@@ -1745,8 +1750,8 @@ void NotationView::setupActions()
 
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
 
-    QCanvasPixmap pixmap(pixmapDir + "/toolbar/linear-layout.xpm");
-    icon = QIconSet(pixmap);
+    Q3CanvasPixmap pixmap(pixmapDir + "/toolbar/linear-layout.xpm");
+    icon = QIcon(pixmap);
     KRadioAction *linearModeAction = new KRadioAction
                                      (i18n("&Linear Layout"), icon, 0, this, SLOT(slotLinearMode()),
                                       actionCollection(), "linear_mode");
@@ -1755,7 +1760,7 @@ void NotationView::setupActions()
         linearModeAction->setChecked(true);
 
     pixmap.load(pixmapDir + "/toolbar/continuous-page-mode.xpm");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
     KRadioAction *continuousPageModeAction = new KRadioAction
             (i18n("&Continuous Page Layout"), icon, 0, this, SLOT(slotContinuousPageMode()),
              actionCollection(), "continuous_page_mode");
@@ -1764,7 +1769,7 @@ void NotationView::setupActions()
         continuousPageModeAction->setChecked(true);
 
     pixmap.load(pixmapDir + "/toolbar/multi-page-mode.xpm");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
     KRadioAction *multiPageModeAction = new KRadioAction
                                         (i18n("&Multiple Page Layout"), icon, 0, this, SLOT(slotMultiPageMode()),
                                          actionCollection(), "multi_page_mode");
@@ -1799,35 +1804,35 @@ void NotationView::setupActions()
     // Group menu
     //
 
-    icon = QIconSet
+    icon = QIcon
            (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                                          ("group-simple-tuplet")));
 
     new KAction(TupletCommand::getGlobalName(true), icon, Key_R + CTRL, this,
                 SLOT(slotGroupSimpleTuplet()), actionCollection(), "simple_tuplet");
 
-    icon = QIconSet
+    icon = QIcon
            (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                                          ("group-tuplet")));
 
     new KAction(TupletCommand::getGlobalName(false), icon, Key_T + CTRL, this,
                 SLOT(slotGroupGeneralTuplet()), actionCollection(), "tuplet");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap
+    icon = QIcon(NotePixmapFactory::toQPixmap
                     (NotePixmapFactory::makeToolbarPixmap("triplet")));
     (new KToggleAction(i18n("Trip&let Insert Mode"), icon, Key_G,
                        this, SLOT(slotUpdateInsertModeStatus()),
                        actionCollection(), "triplet_mode"))->
         setChecked(false);
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap
+    icon = QIcon(NotePixmapFactory::toQPixmap
                     (NotePixmapFactory::makeToolbarPixmap("chord")));
     (new KToggleAction(i18n("C&hord Insert Mode"), icon, Key_H,
                        this, SLOT(slotUpdateInsertModeStatus()),
                        actionCollection(), "chord_mode"))->
         setChecked(false);
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap
+    icon = QIcon(NotePixmapFactory::toQPixmap
                     (NotePixmapFactory::makeToolbarPixmap("group-grace")));
     (new KToggleAction(i18n("Grace Insert Mode"), icon, 0,
                        this, SLOT(slotUpdateInsertModeStatus()),
@@ -1843,7 +1848,7 @@ void NotationView::setupActions()
                 SLOT(slotTransformsCollapseNotes()), actionCollection(),
                 "collapse_notes");
 
-    icon = QIconSet
+    icon = QIcon
            (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                                          ("quantize")));
 
@@ -1859,7 +1864,7 @@ void NotationView::setupActions()
                 SLOT(slotDebugDump()), actionCollection(), "debug_dump");
 
 
-    icon = QIconSet
+    icon = QIcon
            (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                                          ("text-mark")));
 
@@ -1924,7 +1929,7 @@ void NotationView::setupActions()
     for (unsigned int i = 0;
             i < sizeof(actionsToolbars) / sizeof(actionsToolbars[0]); ++i) {
 
-        icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap(actionsToolbars[i][3])));
+        icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap(actionsToolbars[i][3])));
 
         new KToggleAction(actionsToolbars[i][0], icon, 0,
                           this, actionsToolbars[i][1],
@@ -1995,13 +2000,13 @@ void NotationView::setupActions()
                 SLOT(slotCurrentSegmentNext()), actionCollection(),
                 "cursor_next_segment");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-cursor-to-pointer")));
     new KAction(i18n("Cursor to &Playback Pointer"), icon, 0, this,
                 SLOT(slotJumpCursorToPlayback()), actionCollection(),
                 "cursor_to_playback_pointer");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-play")));
     KAction *play = new KAction(i18n("&Play"), icon, Key_Enter, this,
                 SIGNAL(play()), actionCollection(), "play");
@@ -2010,54 +2015,54 @@ void NotationView::setupActions()
     playShortcut.append( KKey(Key_Return + CTRL) );
     play->setShortcut(playShortcut);
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-stop")));
     new KAction(i18n("&Stop"), icon, Key_Insert, this,
                 SIGNAL(stop()), actionCollection(), "stop");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-rewind")));
     new KAction(i18n("Re&wind"), icon, Key_End, this,
                 SIGNAL(rewindPlayback()), actionCollection(),
                 "playback_pointer_back_bar");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-ffwd")));
     new KAction(i18n("&Fast Forward"), icon, Key_PageDown, this,
                 SIGNAL(fastForwardPlayback()), actionCollection(),
                 "playback_pointer_forward_bar");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-rewind-end")));
     new KAction(i18n("Rewind to &Beginning"), icon, 0, this,
                 SIGNAL(rewindPlaybackToBeginning()), actionCollection(),
                 "playback_pointer_start");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-ffwd-end")));
     new KAction(i18n("Fast Forward to &End"), icon, 0, this,
                 SIGNAL(fastForwardPlaybackToEnd()), actionCollection(),
                 "playback_pointer_end");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-pointer-to-cursor")));
     new KAction(i18n("Playback Pointer to &Cursor"), icon, 0, this,
                 SLOT(slotJumpPlaybackToCursor()), actionCollection(),
                 "playback_pointer_to_cursor");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-solo")));
     new KToggleAction(i18n("&Solo"), icon, 0, this,
                       SLOT(slotToggleSolo()), actionCollection(),
                       "toggle_solo");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-tracking")));
     (new KToggleAction(i18n("Scro&ll to Follow Playback"), icon, Key_Pause, this,
                        SLOT(slotToggleTracking()), actionCollection(),
                        "toggle_tracking"))->setChecked(m_playTracking);
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-panic")));
     new KAction(i18n("Panic"), icon, Key_P + CTRL + ALT, this,
                 SIGNAL(panic()), actionCollection(), "panic");
@@ -2076,7 +2081,7 @@ void NotationView::setupActions()
 
     //    QString pixmapDir =
     //	KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    //    icon = QIconSet(QCanvasPixmap(pixmapDir + "/toolbar/eventfilter.xpm"));
+    //    icon = QIcon(Q3CanvasPixmap(pixmapDir + "/toolbar/eventfilter.xpm"));
     new KAction(i18n("&Filter Selection"), "filter", Key_F + CTRL, this,
                 SLOT(slotFilterSelection()), actionCollection(),
                 "filter_selection");
@@ -2216,7 +2221,7 @@ void NotationView::initLayoutToolbar()
     //
     // font combo
     //
-    m_fontCombo = new KComboBox(layoutToolbar);
+    m_fontCombo = new QComboBox(layoutToolbar);
     m_fontCombo->setEditable(false);
 
     std::set
@@ -2230,9 +2235,9 @@ void NotationView::initLayoutToolbar()
 
         QString fontQName(strtoqstr(*i));
 
-        m_fontCombo->insertItem(fontQName);
-        if (fontQName.lower() == strtoqstr(m_fontName).lower()) {
-            m_fontCombo->setCurrentItem(m_fontCombo->count() - 1);
+        m_fontCombo->addItem(fontQName);
+        if (fontQName.toLower() == strtoqstr(m_fontName).toLower()) {
+            m_fontCombo->setCurrentIndex(m_fontCombo->count() - 1);
             foundFont = true;
         }
     }
@@ -2255,16 +2260,16 @@ void NotationView::initLayoutToolbar()
     // font size combo
     //
     std::vector<int> sizes = NoteFontFactory::getScreenSizes(m_fontName);
-    m_fontSizeCombo = new KComboBox(layoutToolbar, "font size combo");
+    m_fontSizeCombo = new QComboBox(layoutToolbar, "font size combo");
 
     for (std::vector<int>::iterator i = sizes.begin(); i != sizes.end(); ++i) {
 
         value.setNum(*i);
-        m_fontSizeCombo->insertItem(value);
+        m_fontSizeCombo->addItem(value);
     }
     // set combo's current value to default
     value.setNum(m_fontSize);
-    m_fontSizeCombo->setCurrentText(value);
+    m_fontSizeCombo->setItemText(value);
 
     connect(m_fontSizeCombo, SIGNAL(activated(const QString&)),
             this, SLOT(slotChangeFontSizeFromStringValue(const QString&)));
@@ -2277,17 +2282,17 @@ void NotationView::initLayoutToolbar()
     int defaultSpacing = m_hlayout->getSpacing();
     std::vector<int> spacings = NotationHLayout::getAvailableSpacings();
 
-    m_spacingCombo = new KComboBox(layoutToolbar, "spacing combo");
+    m_spacingCombo = new QComboBox(layoutToolbar, "spacing combo");
     for (std::vector<int>::iterator i = spacings.begin(); i != spacings.end(); ++i) {
 
         value.setNum(*i);
         value += "%";
-        m_spacingCombo->insertItem(value);
+        m_spacingCombo->addItem(value);
     }
     // set combo's current value to default
     value.setNum(defaultSpacing);
     value += "%";
-    m_spacingCombo->setCurrentText(value);
+    m_spacingCombo->setItemText(value);
 
     connect(m_spacingCombo, SIGNAL(activated(const QString&)),
             this, SLOT(slotChangeSpacingFromStringValue(const QString&)));
@@ -2306,15 +2311,21 @@ void NotationView::initStatusBar()
     sb->addWidget(m_hoveredOverAbsoluteTime);
     sb->addWidget(m_hoveredOverNoteName);
 
-    QHBox *hbox = new QHBox(sb);
-    m_currentNotePixmap = new QLabel(hbox);
+    QWidget *hbox = new QWidget(sb);
+    QHBoxLayout hboxLayout = new QHBoxLayout;
+    m_currentNotePixmap = new QLabel( hbox );
+    hboxLayout->addWidget(m_currentNotePixmap);
     m_currentNotePixmap->setMinimumWidth(20);
-    m_insertModeLabel = new QLabel(hbox);
-    m_annotationsLabel = new QLabel(hbox);
-    m_lilyPondDirectivesLabel = new QLabel(hbox);
+    m_insertModeLabel = new QLabel( hbox );
+    hboxLayout->addWidget(m_insertModeLabel);
+    m_annotationsLabel = new QLabel( hbox );
+    hboxLayout->addWidget(m_annotationsLabel);
+    m_lilyPondDirectivesLabel = new QLabel( hbox );
+    hboxLayout->addWidget(m_lilyPondDirectivesLabel);
+    hbox->setLayout(hboxLayout);
     sb->addWidget(hbox);
 
-    sb->insertItem(KTmpStatusMsg::getDefaultMsg(),
+    sb->addItem(KTmpStatusMsg::getDefaultMsg(),
                    KTmpStatusMsg::getDefaultId(), 1);
     sb->setItemAlignment(KTmpStatusMsg::getDefaultId(),
                          AlignLeft | AlignVCenter);
@@ -3159,9 +3170,9 @@ void NotationView::print(bool previewOnly)
     //		       (double)pdm.height() / (double)(pageHeight - topMargin*2));
     printpainter.translate( -leftMargin, -topMargin);
 
-    QValueList<int> pages = printer.pageList();
+    QLinkedList<int> pages = printer.pageList();
 
-    for (QValueList<int>::Iterator pli = pages.begin();
+    for (QLinkedList<int>::Iterator pli = pages.begin();
             pli != pages.end(); ) { // incremented just below
 
         int page = *pli - 1;
@@ -3201,10 +3212,10 @@ void NotationView::print(bool previewOnly)
 
         m_config->setGroup(NotationViewConfigGroup);
 
-        NOTATION_DEBUG << "NotationView::print: calling QCanvas::drawArea" << endl;
+        NOTATION_DEBUG << "NotationView::print: calling Q3Canvas::drawArea" << endl;
 
         {
-            Profiler profiler("NotationView::print(QCanvas::drawArea)");
+            Profiler profiler("NotationView::print(Q3Canvas::drawArea)");
 
             if (m_config->readBoolEntry("forcedoublebufferprinting", false)) {
                 getCanvasView()->canvas()->drawArea(pageRect, &printpainter, true);
@@ -3220,7 +3231,7 @@ void NotationView::print(bool previewOnly)
 
         }
 
-        NOTATION_DEBUG << "NotationView::print: QCanvas::drawArea done" << endl;
+        NOTATION_DEBUG << "NotationView::print: Q3Canvas::drawArea done" << endl;
 
         for (size_t i = 0; i < m_staffs.size(); ++i) {
 
@@ -3284,17 +3295,17 @@ NotationView::updateThumbnails(bool complete)
     int thumbScale = 20;
     QPixmap thumbnail(canvas()->width() / thumbScale,
                       canvas()->height() / thumbScale);
-    thumbnail.fill(Qt::white);
+    thumbnail.fill(QColor(Qt::white));
     QPainter thumbPainter(&thumbnail);
 
     if (complete) {
 
         thumbPainter.scale(1.0 / double(thumbScale), 1.0 / double(thumbScale));
-        thumbPainter.setPen(Qt::black);
-        thumbPainter.setBrush(Qt::white);
+        thumbPainter.setPen(QColor(Qt::black));
+        thumbPainter.setBrush(QColor(Qt::white));
 
         /*
-        	QCanvas *canvas = getCanvasView()->canvas();
+        	Q3Canvas *canvas = getCanvasView()->canvas();
         	canvas->drawArea(QRect(0, 0, canvas->width(), canvas->height()),
         			 &thumbPainter, false);
         */ 
@@ -3321,7 +3332,7 @@ NotationView::updateThumbnails(bool complete)
                            pageWidth - leftMargin*3,
                            pageHeight - topMargin*3);
 
-            QCanvas *canvas = getCanvasView()->canvas();
+            Q3Canvas *canvas = getCanvasView()->canvas();
             canvas->drawArea(pageRect, &thumbPainter, false);
 
             if (havePageNumber)
@@ -3339,7 +3350,7 @@ NotationView::updateThumbnails(bool complete)
 
     } else {
 
-        thumbPainter.setPen(Qt::black);
+        thumbPainter.setPen(QColor(Qt::black));
 
         for (int page = 0; page < maxPageCount; ++page) {
 
@@ -3558,15 +3569,15 @@ void NotationView::slotNoteAction()
     const QObject* sigSender = sender();
 
     NoteActionDataMap::Iterator noteAct =
-        m_noteActionDataMap->find(sigSender->name());
+        m_noteActionDataMap->find(sigSender->objectName());
 
     if (noteAct != m_noteActionDataMap->end()) {
-        m_lastNoteAction = sigSender->name();
+        m_lastNoteAction = sigSender->objectName();
         setCurrentSelectedNote(**noteAct);
         setMenuStates();
     } else {
         std::cerr << "NotationView::slotNoteAction() : couldn't find NoteActionData named '"
-        << sigSender->name() << "'\n";
+        << sigSender->objectName() << "'\n";
     }
 }
 
@@ -3589,13 +3600,13 @@ void NotationView::slotNoteChangeAction()
     const QObject* sigSender = sender();
 
     NoteChangeActionDataMap::Iterator noteAct =
-        m_noteChangeActionDataMap->find(sigSender->name());
+        m_noteChangeActionDataMap->find(sigSender->objectName());
 
     if (noteAct != m_noteChangeActionDataMap->end()) {
         slotSetNoteDurations((**noteAct).noteType, (**noteAct).notationOnly);
     } else {
         std::cerr << "NotationView::slotNoteChangeAction() : couldn't find NoteChangeAction named '"
-        << sigSender->name() << "'\n";
+        << sigSender->objectName() << "'\n";
     }
 }
 
@@ -3626,7 +3637,7 @@ void NotationView::initActionDataMaps()
                 QString titleName
                 (NotationStrings::getNoteName(Note(type, dots)));
 
-                titleName = titleName.left(1).upper() +
+                titleName = titleName.left(1).toUpper() +
                             titleName.right(titleName.length() - 1);
 
                 if (rest) {
@@ -3662,7 +3673,7 @@ void NotationView::initActionDataMaps()
             QString titleName
             (NotationStrings::getNoteName(Note(type, 0)));
 
-            titleName = titleName.left(1).upper() +
+            titleName = titleName.left(1).toUpper() +
                         titleName.right(titleName.length() - 1);
 
             int keycode = keys[type - Note::Shortest];
@@ -3878,7 +3889,7 @@ void
 NotationView::slotChangeSpacingFromAction()
 {
     const QObject *s = sender();
-    QString name = s->name();
+    QString name = s->objectName();
 
     if (name.left(8) == "spacing_") {
         int spacing = name.right(name.length() - 8).toInt();
@@ -3938,7 +3949,7 @@ void
 NotationView::slotChangeProportionFromAction()
 {
     const QObject *s = sender();
-    QString name = s->name();
+    QString name = s->objectName();
 
     if (name.left(11) == "proportion_") {
         int proportion = name.right(name.length() - 11).toInt();
@@ -3987,7 +3998,7 @@ void
 NotationView::slotChangeFontFromAction()
 {
     const QObject *s = sender();
-    QString name = s->name();
+    QString name = s->objectName();
     if (name.left(10) == "note_font_") {
         name = name.right(name.length() - 10);
         slotChangeFont(name);
@@ -4001,7 +4012,7 @@ void
 NotationView::slotChangeFontSizeFromAction()
 {
     const QObject *s = sender();
-    QString name = s->name();
+    QString name = s->objectName();
 
     if (name.left(15) == "note_font_size_") {
         name = name.right(name.length() - 15);
@@ -4023,7 +4034,7 @@ void
 NotationView::slotChangeFont(const QString &newName)
 {
     NOTATION_DEBUG << "changeFont: " << newName << endl;
-    slotChangeFont(std::string(newName.utf8()));
+    slotChangeFont(std::string(newName.toUtf8()));
 }
 
 void
@@ -4113,7 +4124,7 @@ NotationView::slotChangeFont(std::string newName, int newSize)
     for (unsigned int i = 0; i < f.size(); ++i) {
         bool thisOne = (f[i] == m_fontName);
         if (thisOne)
-            m_fontCombo->setCurrentItem(i);
+            m_fontCombo->setCurrentIndex(i);
         KToggleAction *action = dynamic_cast<KToggleAction *>
                                 (actionCollection()->action("note_font_" + strtoqstr(f[i])));
         NOTATION_DEBUG << "inspecting " << f[i] << (action ? ", have action" : ", no action") << endl;
@@ -4134,10 +4145,10 @@ NotationView::slotChangeFont(std::string newName, int newSize)
     QString value;
     for (std::vector<int>::iterator i = sizes.begin(); i != sizes.end(); ++i) {
         value.setNum(*i);
-        m_fontSizeCombo->insertItem(value);
+        m_fontSizeCombo->addItem(value);
     }
     value.setNum(m_fontSize);
-    m_fontSizeCombo->setCurrentText(value);
+    m_fontSizeCombo->setItemText(value);
 
     setupFontSizeMenu(oldName);
 
@@ -4211,30 +4222,30 @@ NotationView::slotFilePrintPreview()
     printingView.print(true);
 }
 
-std::map<KProcess *, KTempFile *> NotationView::m_lilyTempFileMap;
+std::map<QProcess *, KTempFile *> NotationView::m_lilyTempFileMap;
 
 void NotationView::slotPrintLilyPond()
 {
     KTmpStatusMsg msg(i18n("Printing LilyPond file..."), this);
     KTempFile *file = new KTempFile(QString::null, ".ly");
     file->setAutoDelete(true);
-    if (!file->name()) {
+    if (!file->objectName()) {
         // CurrentProgressDialog::freeze();
         KMessageBox::sorry(this, i18n("Failed to open a temporary file for LilyPond export."));
         delete file;
     }
-    if (!exportLilyPondFile(file->name(), true)) {
+    if (!exportLilyPondFile(file->objectName(), true)) {
         return ;
     }
-    KProcess *proc = new KProcess;
+    QProcess *proc = new QProcess;
     *proc << "rosegarden-lilypondview";
     *proc << "--graphical";
     *proc << "--print";
-    *proc << file->name();
-    connect(proc, SIGNAL(processExited(KProcess *)),
-            this, SLOT(slotLilyPondViewProcessExited(KProcess *)));
+    *proc << file->objectName();
+    connect(proc, SIGNAL(processExited(QProcess *)),
+            this, SLOT(slotLilyPondViewProcessExited(QProcess *)));
     m_lilyTempFileMap[proc] = file;
-    proc->start(KProcess::NotifyOnExit);
+    proc->start(QProcess::NotifyOnExit);
 }
 
 void NotationView::slotPreviewLilyPond()
@@ -4242,26 +4253,26 @@ void NotationView::slotPreviewLilyPond()
     KTmpStatusMsg msg(i18n("Previewing LilyPond file..."), this);
     KTempFile *file = new KTempFile(QString::null, ".ly");
     file->setAutoDelete(true);
-    if (!file->name()) {
+    if (!file->objectName()) {
         // CurrentProgressDialog::freeze();
         KMessageBox::sorry(this, i18n("Failed to open a temporary file for LilyPond export."));
         delete file;
     }
-    if (!exportLilyPondFile(file->name(), true)) {
+    if (!exportLilyPondFile(file->objectName(), true)) {
         return ;
     }
-    KProcess *proc = new KProcess;
+    QProcess *proc = new QProcess;
     *proc << "rosegarden-lilypondview";
     *proc << "--graphical";
     *proc << "--pdf";
-    *proc << file->name();
-    connect(proc, SIGNAL(processExited(KProcess *)),
-            this, SLOT(slotLilyPondViewProcessExited(KProcess *)));
+    *proc << file->objectName();
+    connect(proc, SIGNAL(processExited(QProcess *)),
+            this, SLOT(slotLilyPondViewProcessExited(QProcess *)));
     m_lilyTempFileMap[proc] = file;
-    proc->start(KProcess::NotifyOnExit);
+    proc->start(QProcess::NotifyOnExit);
 }
 
-void NotationView::slotLilyPondViewProcessExited(KProcess *p)
+void NotationView::slotLilyPondViewProcessExited(QProcess *p)
 {
     delete m_lilyTempFileMap[p];
     m_lilyTempFileMap.erase(p);
@@ -4458,7 +4469,7 @@ NotationView::slotMoveEventsUpStaff()
     if (!m_currentEventSelection) return;
     Segment &targetSegment = targetStaff->getSegment();
     
-    KMacroCommand *command = new KMacroCommand(i18n("Move Events to Staff Above"));
+    MacroCommand *command = new MacroCommand(i18n("Move Events to Staff Above"));
 
     timeT insertionTime = m_currentEventSelection->getStartTime();
 
@@ -4486,7 +4497,7 @@ NotationView::slotMoveEventsDownStaff()
     if (!m_currentEventSelection) return;
     Segment &targetSegment = targetStaff->getSegment();
     
-    KMacroCommand *command = new KMacroCommand(i18n("Move Events to Staff Below"));
+    MacroCommand *command = new MacroCommand(i18n("Move Events to Staff TicksBelow"));
 
     timeT insertionTime = m_currentEventSelection->getStartTime();
 
@@ -4837,7 +4848,7 @@ void NotationView::slotTransformsCollapseNotes()
 void NotationView::slotInsertNoteFromAction()
 {
     const QObject *s = sender();
-    QString name = s->name();
+    QString name = s->objectName();
 
     Segment &segment = m_staffs[m_currentStaff]->getSegment();
 
@@ -5106,7 +5117,7 @@ NotationView::slotMakeOrnament()
     name = dialog.getName();
     basePitch = dialog.getBasePitch();
 
-    KMacroCommand *command = new KMacroCommand(i18n("Make Ornament"));
+    MacroCommand *command = new MacroCommand(i18n("Make Ornament"));
 
     command->addCommand(new CutCommand
                         (*m_currentEventSelection,
@@ -5439,7 +5450,7 @@ void NotationView::slotEditElement(NotationStaff *staff,
                     (staff->getSegment(),
                      element->event()->getAbsoluteTime(),
                      dialog.getText());
-                KMacroCommand *macroCommand = new KMacroCommand(command->name());
+                MacroCommand *macroCommand = new MacroCommand(command->objectName());
                 macroCommand->addCommand(new EraseEventCommand(staff->getSegment(),
                                                                element->event(), false));
                 macroCommand->addCommand(command);
@@ -6127,7 +6138,7 @@ void NotationView::slotEditLyrics()
 
     if (dialog.exec() == QDialog::Accepted) {
 
-        KMacroCommand *macro = new KMacroCommand
+        MacroCommand *macro = new MacroCommand
             (SetLyricsCommand::getGlobalName());
 
         for (int i = 0; i < dialog.getVerseCount(); ++i) {
@@ -6190,7 +6201,7 @@ void NotationView::slotItemPressed(int height, int staffNo,
     }
 }
 
-void NotationView::slotNonNotationItemPressed(QMouseEvent *e, QCanvasItem *it)
+void NotationView::slotNonNotationItemPressed(QMouseEvent *e, Q3CanvasItem *it)
 {
     if (e->type() != QEvent::MouseButtonDblClick)
         return ;
@@ -6233,7 +6244,7 @@ void NotationView::slotNonNotationItemPressed(QMouseEvent *e, QCanvasItem *it)
     }
 }
 
-void NotationView::slotTextItemPressed(QMouseEvent *e, QCanvasItem *it)
+void NotationView::slotTextItemPressed(QMouseEvent *e, Q3CanvasItem *it)
 {
     if (e->type() != QEvent::MouseButtonDblClick)
         return ;

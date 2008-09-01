@@ -19,13 +19,14 @@
 #include "AddTracksDialog.h"
 
 #include <klocale.h>
-#include <kdialogbase.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qspinbox.h>
-#include <kcombobox.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QLabel>
+#include <QSpinBox>
+#include <QComboBox>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 #include <kapp.h>
 #include <kconfig.h>
 
@@ -35,33 +36,53 @@
 namespace Rosegarden
 {
 
-AddTracksDialog::AddTracksDialog(QWidget *parent, int currentTrack) :
-    KDialogBase(parent, 0, true, i18n("Add Tracks"),
-                Ok | Cancel),
+AddTracksDialog::AddTracksDialog(QDialogButtonBox::QWidget *parent, int currentTrack) :
+    QDialog(parent),
     m_currentTrack(currentTrack)
 {
-    QVBox *vBox = makeVBoxMainWidget();
+    setModal(true);
+    setWindowTitle(i18n("Add Tracks"));
 
-    QHBox *countBox = new QHBox(vBox);
-    countBox->setSpacing(4);
-    new QLabel(i18n("How many tracks do you want to add?"), countBox);
-    m_count = new QSpinBox(countBox);
-    m_count->setMinValue(1);
-    m_count->setMaxValue(32);
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
+    QWidget *vBox = new QWidget(this);
+    QVBoxLayout vBoxLayout = new QVBoxLayout;
+    metagrid->addWidget(vBox, 0, 0);
+
+
+    countBoxLayout->setSpacing(4);
+    QLabel *child_8 = new QLabel(i18n("How many tracks do you want to add?"), countBox );
+    countBoxLayout->addWidget(child_8);
+    m_count = new QSpinBox( countBox );
+    countBoxLayout->addWidget(m_count);
+    countBox->setLayout(countBoxLayout);
+    m_count->setMinimum(1);
+    m_count->setMaximum(32);
     m_count->setValue(1);
 
-    QHBox *posBox = new QHBox(vBox);
-    posBox->setSpacing(4);
-    new QLabel(i18n("Add tracks"), posBox);
-    m_position = new KComboBox(posBox);
-    m_position->insertItem(i18n("At the top"));
-    m_position->insertItem(i18n("Above the current selected track"));
-    m_position->insertItem(i18n("Below the current selected track"));
-    m_position->insertItem(i18n("At the bottom"));
+    QWidget *posBox = new QWidget( vBox );
+    vBoxLayout->addWidget(posBox);
+    vBox->setLayout(vBoxLayout);
+    QHBoxLayout posBoxLayout = new QHBoxLayout;
+    posBoxLayout->setSpacing(4);
+    QLabel *child_4 = new QLabel(i18n("Add tracks"), posBox );
+    posBoxLayout->addWidget(child_4);
+    m_position = new QComboBox( posBox );
+    posBoxLayout->addWidget(m_position);
+    posBox->setLayout(posBoxLayout);
+    m_position->addItem(i18n("At the top"));
+    m_position->addItem(i18n("Above the current selected track"));
+    m_position->addItem(i18n("TicksBelow the current selected track"));
+    m_position->addItem(i18n("At the bottom"));
 
     KConfig *config = kapp->config();
     config->setGroup(GeneralOptionsConfigGroup);
-    m_position->setCurrentItem(config->readUnsignedNumEntry("lastaddtracksposition", 2));
+    m_position->setCurrentIndex(config->readUnsignedNumEntry("lastaddtracksposition", 2));
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 int
@@ -73,7 +94,7 @@ AddTracksDialog::getTracks()
 int
 AddTracksDialog::getInsertPosition()
 {
-    int opt = m_position->currentItem();
+    int opt = m_position->currentIndex();
 
     KConfig *config = kapp->config();
     config->setGroup(GeneralOptionsConfigGroup);

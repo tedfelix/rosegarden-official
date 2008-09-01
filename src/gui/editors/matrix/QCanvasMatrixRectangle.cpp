@@ -16,6 +16,8 @@
 */
 
 
+#include <Q3Canvas>
+#include <Q3CanvasRectangle>
 #include "QCanvasMatrixRectangle.h"
 
 #include "MatrixElement.h"
@@ -26,8 +28,8 @@ namespace Rosegarden
 {
 
 QCanvasMatrixRectangle::QCanvasMatrixRectangle(MatrixElement& n,
-        QCanvas* canvas)
-        : QCanvasRectangle(canvas),
+        Q3Canvas* canvas)
+        : Q3CanvasRectangle(canvas),
         m_matrixElement(n)
 {}
 

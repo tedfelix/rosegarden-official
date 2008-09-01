@@ -22,18 +22,18 @@
 #include <kglobalsettings.h>
 #include <klineedit.h>
 #include <klocale.h>
-#include <qframe.h>
-#include <qgroupbox.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qpushbutton.h>
-#include <qstring.h>
-#include <qtabwidget.h>
-#include <qtooltip.h>
-#include <qvbox.h>
+#include <QFrame>
+#include <QGroupBox>
+#include <QLabel>
+#include <QLayout>
+#include <QPushButton>
+#include <QString>
+#include <QTabWidget>
+#include <QToolTip>
 #include <qvgroupbox.h>
-#include <qwidget.h>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 #include <iostream>
 
 namespace Rosegarden
@@ -60,7 +60,7 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
                                         Qt::Horizontal,
                                         i18n("Librarian"),
                                         m_mainFrame);
-    m_mainLayout->addMultiCellWidget(groupBox, 0, 2, 3, 5);
+    m_mainLayout->addWidget(groupBox, 0, 3, 2- 1, 5- 4);
 
     new QLabel(i18n("Name"), groupBox);
     m_librarian = new QLabel(groupBox);

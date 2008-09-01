@@ -20,8 +20,8 @@
 #define _RG_COMPOSITIONITEM_H_
 
 #include <qguardedptr.h>
-#include <qobject.h>
-#include <qrect.h>
+#include <QObject>
+#include <QRect>
 
 
 namespace Rosegarden
@@ -51,7 +51,7 @@ protected:
     mutable QRect m_savedRect;
 };
 
-typedef QGuardedPtr<_CompositionItem> CompositionItem;
+typedef QPointer<_CompositionItem> CompositionItem;
 bool operator<(const CompositionItem&, const CompositionItem&);
 
 

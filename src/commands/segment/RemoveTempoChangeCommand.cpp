@@ -19,7 +19,7 @@
 #include "RemoveTempoChangeCommand.h"
 
 #include "base/Composition.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden

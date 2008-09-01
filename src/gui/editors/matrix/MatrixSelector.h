@@ -19,13 +19,14 @@
 #ifndef _RG_MATRIXSELECTOR_H_
 #define _RG_MATRIXSELECTOR_H_
 
+#include <Q3CanvasRectangle>
 #include "MatrixTool.h"
-#include <qstring.h>
+#include <QString>
 #include "base/Event.h"
 
 
 class QMouseEvent;
-class QCanvasRectangle;
+class Q3CanvasRectangle;
 
 
 namespace Rosegarden
@@ -145,7 +146,7 @@ protected:
     
     //--------------- Data members ---------------------------------
 
-    QCanvasRectangle* m_selectionRect;
+    Q3CanvasRectangle* m_selectionRect;
     bool m_updateRect;
 
     int m_clickedStaff;

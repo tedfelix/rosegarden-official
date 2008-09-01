@@ -20,29 +20,38 @@
 
 #include <klocale.h>
 #include "commands/edit/PasteEventsCommand.h"
-#include <kdialogbase.h>
-#include <qbuttongroup.h>
-#include <qcheckbox.h>
-#include <qobject.h>
-#include <qradiobutton.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QGroupBox>
+#include <QCheckBox>
+#include <QObject>
+#include <QRadioButton>
+#include <QWidget>
+#include <QVBoxLayout>
 
 
 namespace Rosegarden
 {
 
-PasteNotationDialog::PasteNotationDialog(QWidget *parent,
+PasteNotationDialog::PasteNotationDialog(QDialogButtonBox::QWidget *parent,
         PasteEventsCommand::PasteType defaultType) :
-        KDialogBase(parent, 0, true, i18n("Paste"), Ok | Cancel | Help ),
+        QDialog(parent),
         m_defaultType(defaultType)
 {
     setHelp("nv-paste-types");
 
-    QVBox *vbox = makeVBoxMainWidget();
+    setModal(true);
+    setWindowTitle(i18n("Paste"));
 
-    QButtonGroup *pasteTypeGroup = new QButtonGroup
-                                   (1, Horizontal, i18n("Paste type"), vbox);
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
+    QWidget *vbox = new QWidget(this);
+    QVBoxLayout vboxLayout = new QVBoxLayout;
+    metagrid->addWidget(vbox, 0, 0);
+
+
+    QGroupBox *pasteTypeGroup = new QGroupBox( i18n("Paste type"), vbox );
+    vboxLayout->addWidget(pasteTypeGroup);
 
     PasteEventsCommand::PasteTypeMap pasteTypes =
         PasteEventsCommand::getPasteTypes();
@@ -58,12 +67,18 @@ PasteNotationDialog::PasteNotationDialog(QWidget *parent,
         m_pasteTypeButtons.push_back(button);
     }
 
-    QButtonGroup *setAsDefaultGroup = new QButtonGroup
-                                      (1, Horizontal, i18n("Options"), vbox);
+    QGroupBox *setAsDefaultGroup = new QGroupBox( i18n("Options"), vbox );
+    vboxLayout->addWidget(setAsDefaultGroup);
+    vbox->setLayout(vboxLayout);
 
     m_setAsDefaultButton = new QCheckBox
                            (i18n("Make this the default paste type"), setAsDefaultGroup);
     m_setAsDefaultButton->setChecked(true);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help );
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 PasteEventsCommand::PasteType

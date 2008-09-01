@@ -27,12 +27,12 @@
 #include "base/Exception.h"
 #include "CategoryElement.h"
 #include <klocale.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kglobal.h>
-#include <qfile.h>
-#include <qfileinfo.h>
-#include <qregexp.h>
-#include <qstring.h>
+#include <QFile>
+#include <QFileInfo>
+#include <QRegExp>
+#include <QString>
 
 
 namespace Rosegarden
@@ -115,7 +115,7 @@ PresetGroup::startElement(const QString &, const QString &,
                           const QString &qName,
                           const QXmlAttributes &attributes)
 {
-    QString lcName = qName.lower();
+    QString lcName = qName.toLower();
 
     //    RG_DEBUG << "PresetGroup::startElement: processing starting element: " << lcName << endl;
 

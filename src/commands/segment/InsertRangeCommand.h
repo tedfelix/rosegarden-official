@@ -20,14 +20,14 @@
 #define _RG_INSERTRANGECOMMAND_H_
 
 #include "base/Event.h"
-#include <kcommand.h>
+#include "document/Command.h"
 
 namespace Rosegarden
 {
 
 class Composition;
 
-class InsertRangeCommand : public KMacroCommand
+class InsertRangeCommand : public MacroCommand
 {
 public:
     InsertRangeCommand(Composition *composition,

@@ -21,7 +21,7 @@
 #include "base/Selection.h"
 #include "document/BasicSelectionCommand.h"
 
-#include <qstring.h>
+#include <QString>
 #include "base/BaseProperties.h"
 #include "document/CommandRegistry.h"
 

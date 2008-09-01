@@ -22,7 +22,7 @@
 #include "base/MidiProgram.h"
 #include "sound/MappedCommon.h"
 #include "sound/MappedStudio.h"
-#include <qstring.h>
+#include <QString>
 
 
 class MappedObjectValueList;

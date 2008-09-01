@@ -23,8 +23,8 @@
 #include "misc/Debug.h"
 
 #include <vector>
-#include <qstring.h>
-#include <qregexp.h>
+#include <QString>
+#include <QRegExp>
 
 namespace Rosegarden
 {

@@ -19,8 +19,8 @@
 #ifndef _RG_COLLAPSINGFRAME_H_
 #define _RG_COLLAPSINGFRAME_H_
 
-#include <qframe.h>
-#include <qstring.h>
+#include <QFrame>
+#include <QString>
 
 
 class QWidget;

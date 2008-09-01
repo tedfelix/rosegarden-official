@@ -19,9 +19,9 @@
 #ifndef _RG_MOVEACROSSSEGMENTSCOMMAND_H_
 #define _RG_MOVEACROSSSEGMENTSCOMMAND_H_
 
-#include <qstring.h>
+#include <QString>
 #include "base/Event.h"
-#include <kcommand.h>
+#include "document/Command.h"
 
 
 
@@ -33,7 +33,7 @@ class EventSelection;
 class Clipboard;
 
 
-class MoveAcrossSegmentsCommand : public KMacroCommand
+class MoveAcrossSegmentsCommand : public MacroCommand
 {
 public:
     MoveAcrossSegmentsCommand(Segment &firstSegment,

@@ -19,6 +19,8 @@
 #ifndef _RG_QCANVASMATRIXRECTANGLE_H_
 #define _RG_QCANVASMATRIXRECTANGLE_H_
 
+#include <Q3Canvas>
+#include <Q3CanvasRectangle>
 #include <qcanvas.h>
 
 
@@ -29,12 +31,12 @@ class MatrixElement;
 
 
 /**
- * A QCanvasRectangle referencing a MatrixElement
+ * A Q3CanvasRectangle referencing a MatrixElement
  */
-class QCanvasMatrixRectangle : public QCanvasRectangle
+class QCanvasMatrixRectangle : public Q3CanvasRectangle
 {
 public:
-    QCanvasMatrixRectangle(MatrixElement&, QCanvas*);
+    QCanvasMatrixRectangle(MatrixElement&, Q3Canvas*);
 
     virtual ~QCanvasMatrixRectangle();
     

@@ -29,16 +29,16 @@
 #include <kdiskfreesp.h>
 #include <kfiledialog.h>
 #include <kfile.h>
-#include <qcstring.h>
-#include <qdatastream.h>
-#include <qdialog.h>
-#include <qframe.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qstring.h>
-#include <qtabwidget.h>
-#include <qwidget.h>
-#include <qlayout.h>
+#include <QByteArray>
+#include <QDataStream>
+#include <QDialog>
+#include <QFrame>
+#include <QLabel>
+#include <QPushButton>
+#include <QString>
+#include <QTabWidget>
+#include <QWidget>
+#include <QLayout>
 
 
 namespace Rosegarden

@@ -20,11 +20,11 @@
 #define _RG_MULTIKEYINSERTIONCOMMAND_H_
 
 #include "base/NotationTypes.h"
-#include <qstring.h>
+#include <QString>
 #include "base/Event.h"
 #include <klocale.h>
 #include "misc/Strings.h"
-#include <kcommand.h>
+#include "document/Command.h"
 #include "document/RosegardenGUIDoc.h"
 
 
@@ -38,7 +38,7 @@ namespace Rosegarden
 class RosegardenGUIDoc;
 
 
-class MultiKeyInsertionCommand : public KMacroCommand
+class MultiKeyInsertionCommand : public MacroCommand
 {
 public:
     

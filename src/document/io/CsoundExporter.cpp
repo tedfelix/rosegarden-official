@@ -25,7 +25,7 @@
 #include "base/Segment.h"
 #include "base/Track.h"
 #include "gui/general/ProgressReporter.h"
-#include <qobject.h>
+#include <QObject>
 #include <fstream>
 #include "gui/application/RosegardenApplication.h"
 

@@ -23,10 +23,10 @@
 #ifndef _RG_SCROLLBOX_H_
 #define _RG_SCROLLBOX_H_
 
-#include <qframe.h>
-#include <qpixmap.h>
-#include <qpoint.h>
-#include <qsize.h>
+#include <QFrame>
+#include <QPixmap>
+#include <QPoint>
+#include <QSize>
 
 
 class QWidget;

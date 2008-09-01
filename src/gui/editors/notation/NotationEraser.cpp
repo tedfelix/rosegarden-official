@@ -29,8 +29,8 @@
 #include "NotePixmapFactory.h"
 #include <kaction.h>
 #include <kconfig.h>
-#include <qiconset.h>
-#include <qstring.h>
+#include <QIcon>
+#include <QString>
 
 
 namespace Rosegarden
@@ -48,14 +48,14 @@ NotationEraser::NotationEraser(NotationView* view)
                       SLOT(slotToggleRestCollapse()), actionCollection(),
                       "toggle_rest_collapse");
 
-    QIconSet icon
+    QIcon icon
     (NotePixmapFactory::toQPixmap(NotePixmapFactory::
                                   makeToolbarPixmap("crotchet")));
     new KAction(i18n("Switch to Insert Tool"), icon, 0, this,
                 SLOT(slotInsertSelected()), actionCollection(),
                 "insert");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::
                     makeToolbarPixmap("select")));
     new KAction(i18n("Switch to Select Tool"), icon, 0, this,
                 SLOT(slotSelectSelected()), actionCollection(),

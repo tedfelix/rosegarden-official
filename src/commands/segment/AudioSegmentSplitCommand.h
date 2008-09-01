@@ -20,7 +20,7 @@
 #define _RG_AUDIOSEGMENTSPLITCOMMAND_H_
 
 #include <string>
-#include <kcommand.h>
+#include "document/Command.h"
 #include "base/Event.h"
 
 
@@ -32,7 +32,7 @@ namespace Rosegarden
 class Segment;
 
 
-class AudioSegmentSplitCommand : public KNamedCommand
+class AudioSegmentSplitCommand : public NamedCommand
 {
 public:
     AudioSegmentSplitCommand(Segment *segment,

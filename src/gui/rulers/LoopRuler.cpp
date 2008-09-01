@@ -24,11 +24,11 @@
 #include "gui/general/GUIPalette.h"
 #include "gui/general/HZoomable.h"
 #include "gui/general/RosegardenCanvasView.h"
-#include <qpainter.h>
-#include <qrect.h>
-#include <qsize.h>
-#include <qwidget.h>
-#include <qtooltip.h>
+#include <QPainter>
+#include <QRect>
+#include <QSize>
+#include <QWidget>
+#include <QToolTip>
 #include <klocale.h>
 #include <kaction.h>
 #include <qpainter.h>
@@ -249,7 +249,7 @@ LoopRuler::mousePressEvent(QMouseEvent *mE)
     RG_DEBUG << "LoopRuler::mousePressEvent: x = " << mE->x() << endl;
 
     Qt::ButtonState bs = mE->state();
-    setLoopingMode((bs & Qt::ShiftButton) != 0);
+    setLoopingMode((bs & Qt::ShiftModifier) != 0);
 
     if (mE->button() == LeftButton) {
         double x = mE->pos().x() / getHScaleFactor() - m_currentXOffset - m_xorigin;

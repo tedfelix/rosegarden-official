@@ -16,6 +16,7 @@
 */
 
 
+#include <Q3CanvasItem>
 #include "CanvasItemGC.h"
 
 #include "misc/Debug.h"
@@ -25,7 +26,7 @@
 namespace Rosegarden
 {
 
-void CanvasItemGC::mark(QCanvasItem* item)
+void CanvasItemGC::mark(Q3CanvasItem* item)
 {
     if (!item)
         return ;
@@ -52,6 +53,6 @@ void CanvasItemGC::flush()
     m_garbage.clear();
 }
 
-std::vector<QCanvasItem*> CanvasItemGC::m_garbage;
+std::vector<Q3CanvasItem*> CanvasItemGC::m_garbage;
 
 }

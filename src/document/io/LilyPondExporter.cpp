@@ -61,11 +61,11 @@
 #include "gui/widgets/CurrentProgressDialog.h"
 #include <kconfig.h>
 #include <kmessagebox.h>
-#include <qfileinfo.h>
-#include <qobject.h>
-#include <qregexp.h>
-#include <qstring.h>
-#include <qtextcodec.h>
+#include <QFileInfo>
+#include <QObject>
+#include <QRegExp>
+#include <QString>
+#include <QTextCodec>
 #include <kapplication.h>
 #include <sstream>
 #include <algorithm>
@@ -493,7 +493,7 @@ LilyPondExporter::protectIllegalChars(std::string inStr)
     //
     // LilyPond uses utf8 encoding.
     //
-    return tmpStr.utf8().data();
+    return tmpStr.toUtf8().data();
 }
 
 struct MarkerComp {
@@ -1050,7 +1050,7 @@ LilyPondExporter::write()
 		            chord.replace(QRegExp("\\s+"), "");
 		            chord.replace(QRegExp("h"), "b");
 
-		            // DEBUG: str << " %{ '" << chord.utf8() << "' %} ";
+		            // DEBUG: str << " %{ '" << chord.toUtf8() << "' %} ";
                             QRegExp rx( "^([a-g]([ei]s)?)([:](m|dim|aug|maj|sus|\\d+|[.^]|[+-])*)?(/[+]?[a-g]([ei]s)?)?$" );
 		            if ( rx.search( chord ) != -1 ) {
 				// The chord duration is zero, but the chord
@@ -1059,7 +1059,7 @@ LilyPondExporter::write()
 		                chord.replace(QRegExp(rxStart), QString("\\1") + QString("4*0"));
                             } else {
 				// Skip improper chords.
-				str << " %{ improper chord: '" << chord.utf8() << "' %} ";
+				str << " %{ improper chord: '" << chord.toUtf8() << "' %} ";
 				continue;
                             }
 
@@ -1072,7 +1072,7 @@ LilyPondExporter::write()
                             if (numberOfChords >= 0) {
 				// The chord intervals are specified with skips.
                                 writeSkip(m_composition->getTimeSignatureAt(myTime), lastTime, myTime - lastTime, false, str);
-                                str << chord.utf8() << " ";
+                                str << chord.toUtf8() << " ";
 		                numberOfChords++;
                             }
                             lastTime = myTime;
@@ -1427,7 +1427,7 @@ LilyPondExporter::write()
 				    << std::endl;
 			    }
 			    str << indent(col) << "\\set ignoreMelismata = ##t" << std::endl;
-			    str << indent(col) << text.utf8() << " " << std::endl;
+			    str << indent(col) << text.toUtf8() << " " << std::endl;
 			    str << indent(col) << "\\unset ignoreMelismata" << std::endl;
 			    str << indent(--col) << "} % Lyrics " << (currentVerse+1) << std::endl;
 			    // close the Lyrics context
@@ -1779,7 +1779,7 @@ LilyPondExporter::writeBar(Segment *s,
 
 	// Test whether the next note is grace note or not.
 	// The start or end of beamed grouping should be put in proper places.
-	str << endGroupBeamingsStr.utf8();
+	str << endGroupBeamingsStr.toUtf8();
 	if ((*i)->has(IS_GRACE_NOTE) && (*i)->get<Bool>(IS_GRACE_NOTE)) {
 	    if (isGrace == 0) { 
 	        isGrace = 1;
@@ -1791,7 +1791,7 @@ LilyPondExporter::writeBar(Segment *s,
 	    // str << "%{ grace ends %} "; // DEBUG
             str << "} ";
 	}
-	str << startGroupBeamingsStr.utf8();
+	str << startGroupBeamingsStr.toUtf8();
 
         timeT soundingDuration = -1;
         timeT duration = calculateDuration

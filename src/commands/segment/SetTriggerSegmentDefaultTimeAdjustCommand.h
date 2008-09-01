@@ -21,7 +21,7 @@
 
 #include "base/TriggerSegment.h"
 #include <string>
-#include <kcommand.h>
+#include "document/Command.h"
 
 
 
@@ -32,7 +32,7 @@ namespace Rosegarden
 class Composition;
 
 
-class SetTriggerSegmentDefaultTimeAdjustCommand : public KNamedCommand
+class SetTriggerSegmentDefaultTimeAdjustCommand : public NamedCommand
 {
 public:
     SetTriggerSegmentDefaultTimeAdjustCommand(Composition *composition,

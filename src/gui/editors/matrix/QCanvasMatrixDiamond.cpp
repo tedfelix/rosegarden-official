@@ -16,21 +16,22 @@
 */
 
 
+#include <Q3Canvas>
 #include "QCanvasMatrixDiamond.h"
 
 #include "MatrixElement.h"
 #include "QCanvasMatrixRectangle.h"
 #include <qcanvas.h>
-#include <qpainter.h>
+#include <QPainter>
 #include <qpointarray.h>
-#include <qpoint.h>
+#include <QPoint>
 
 
 namespace Rosegarden
 {
 
 QCanvasMatrixDiamond::QCanvasMatrixDiamond(MatrixElement &n,
-        QCanvas* canvas) :
+        Q3Canvas* canvas) :
         QCanvasMatrixRectangle(n, canvas)
 {}
 

@@ -20,7 +20,7 @@
 #define _RG_RESTINSERTER_H_
 
 #include "NoteInserter.h"
-#include <qstring.h>
+#include <QString>
 #include "base/Event.h"
 
 

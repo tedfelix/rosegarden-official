@@ -35,13 +35,13 @@ MmappedControlBlock::MmappedControlBlock(QString fileName)
         m_mmappedSize(sizeof(ControlBlock)),
         m_controlBlock(0)
 {
-    m_fd = ::open(m_fileName.latin1(), O_RDWR);
+    m_fd = ::open(m_fileName.toLatin1().data(), O_RDWR);
 
     if (m_fd < 0) {
         SEQMAN_DEBUG << "MmappedControlBlock : Couldn't open " << m_fileName
         << endl;
         throw Exception(std::string("Couldn't open ")
-                        + m_fileName.latin1());
+                        + m_fileName.toLatin1().data());
     }
 
     //

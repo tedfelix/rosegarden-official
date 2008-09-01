@@ -43,15 +43,15 @@
 
 #include <kapplication.h>
 #include <klocale.h>
-#include <qsize.h>
-#include <qwidget.h>
-#include <qhbox.h>
-#include <qvbox.h>
-#include <qpushbutton.h>
-#include <qlabel.h>
-#include <qframe.h>
-#include <qstring.h>
-#include <qtooltip.h>
+#include <QSize>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QPushButton>
+#include <QLabel>
+#include <QFrame>
+#include <QString>
+#include <QToolTip>
 
 
 namespace Rosegarden
@@ -319,7 +319,7 @@ TrackHeader::lookAtStaff(double x, int maxWidth)
 
                 // If current value is visible, remember it
                 if (key.getAccidentalCount()) key1 = key;
-                if (label.stripWhiteSpace().length()) label1 = label;
+                if (label.trimmed().length()) label1 = label;
                 if (transpose) transpose1 = transpose;
 
                 // Current values become last values
@@ -407,9 +407,9 @@ TrackHeader::updateHeader(int width)
         QColor clefColour;
         if (m_status & (SEGMENT_HERE | BEFORE_FIRST_SEGMENT)) {
             if (m_status & (INCONSISTENT_CLEFS | INCONSISTENT_KEYS))
-                clefColour = Qt::red;
+                clefColour = QColor(Qt::red);
             else
-                clefColour = Qt::black;
+                clefColour = QColor(Qt::black);
         } else {
             drawClef = false;
         }

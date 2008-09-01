@@ -21,11 +21,11 @@
 
 #include "gui/dialogs/TempoDialog.h"
 #include <kxmlguiclient.h>
-#include <qfont.h>
-#include <qfontmetrics.h>
-#include <qpixmap.h>
-#include <qsize.h>
-#include <qwidget.h>
+#include <QFont>
+#include <QFontMetrics>
+#include <QPixmap>
+#include <QSize>
+#include <QWidget>
 #include "base/Event.h"
 
 

@@ -29,9 +29,9 @@
 #include "sound/MappedEvent.h"
 #include "sound/MappedInstrument.h"
 #include "sound/MappedStudio.h"
-#include <qcstring.h>
-#include <qdatastream.h>
-#include <qstring.h>
+#include <QByteArray>
+#include <QDataStream>
+#include <QString>
 
 
 namespace Rosegarden

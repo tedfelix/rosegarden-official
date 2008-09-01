@@ -43,14 +43,14 @@
 #include "AudioPreviewPainter.h"
 #include "gui/general/GUIPalette.h"
 #include "SegmentOrderer.h"
-#include <qbrush.h>
-#include <qcolor.h>
-#include <qpen.h>
-#include <qpoint.h>
-#include <qrect.h>
-#include <qregexp.h>
-#include <qsize.h>
-#include <qstring.h>
+#include <QBrush>
+#include <QColor>
+#include <QPen>
+#include <QPoint>
+#include <QRect>
+#include <QRegExp>
+#include <QSize>
+#include <QString>
 
 
 

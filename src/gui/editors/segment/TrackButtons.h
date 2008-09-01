@@ -23,8 +23,8 @@
 #include "base/Track.h"
 #include "gui/application/RosegardenGUIApp.h"
 #include "TrackLabel.h"
-#include <qframe.h>
-#include <qstring.h>
+#include <QFrame>
+#include <QString>
 #include <vector>
 
 

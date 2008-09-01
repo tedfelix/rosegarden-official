@@ -22,7 +22,7 @@
 #include "document/BasicSelectionCommand.h"
 #include <string>
 #include <vector>
-#include <qstring.h>
+#include <QString>
 
 
 

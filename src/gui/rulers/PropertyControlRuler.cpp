@@ -16,6 +16,9 @@
 */
 
 
+#include <Q3Canvas>
+#include <Q3CanvasItemList>
+#include <Q3CanvasLine>
 #include "PropertyControlRuler.h"
 
 #include "ControlRuler.h"
@@ -35,10 +38,10 @@
 #include "gui/widgets/TextFloat.h"
 #include "gui/general/LinedStaff.h"
 #include <qcanvas.h>
-#include <qcolor.h>
-#include <qpoint.h>
-#include <qstring.h>
-#include <qwidget.h>
+#include <QColor>
+#include <QPoint>
+#include <QString>
+#include <QWidget>
 
 
 namespace Rosegarden
@@ -48,13 +51,13 @@ PropertyControlRuler::PropertyControlRuler(PropertyName propertyName,
         Staff* staff,
         RulerScale* rulerScale,
         EditViewBase* parentView,
-        QCanvas* c, QWidget* parent,
+        Q3Canvas* c, QWidget* parent,
         const char* name, WFlags f) :
         ControlRuler(&(staff->getSegment()), rulerScale,
                      parentView, c, parent, name, f),
         m_propertyName(propertyName),
         m_staff(staff),
-        m_propertyLine(new QCanvasLine(canvas())),
+        m_propertyLine(new Q3CanvasLine(canvas())),
         m_propertyLineShowing(false),
         m_propertyLineX(0),
         m_propertyLineY(0)
@@ -90,11 +93,11 @@ PropertyControlRuler::drawBackground()
 {
     // Draw some minimum and maximum controller value guide lines
     //
-    QCanvasLine *topLine = new QCanvasLine(canvas());
-    QCanvasLine *topQLine = new QCanvasLine(canvas());
-    QCanvasLine *midLine = new QCanvasLine(canvas());
-    QCanvasLine *botQLine = new QCanvasLine(canvas());
-    QCanvasLine *bottomLine = new QCanvasLine(canvas());
+    Q3CanvasLine *topLine = new Q3CanvasLine(canvas());
+    Q3CanvasLine *topQLine = new Q3CanvasLine(canvas());
+    Q3CanvasLine *midLine = new Q3CanvasLine(canvas());
+    Q3CanvasLine *botQLine = new Q3CanvasLine(canvas());
+    Q3CanvasLine *bottomLine = new Q3CanvasLine(canvas());
     //m_controlLine->setPoints(m_controlLineX, m_controlLineY, m_controlLineX, m_controlLineY);
     int cHeight = canvas()->height();
     int cWidth = canvas()->width();
@@ -180,9 +183,9 @@ void PropertyControlRuler::elementRemoved(const Staff *, ViewElement *el)
 
     clearSelectedItems();
 
-    QCanvasItemList allItems = canvas()->allItems();
+    Q3CanvasItemList allItems = canvas()->allItems();
 
-    for (QCanvasItemList::Iterator it = allItems.begin(); it != allItems.end(); ++it) {
+    for (Q3CanvasItemList::Iterator it = allItems.begin(); it != allItems.end(); ++it) {
         if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) {
             ViewElementAdapter * adapter = dynamic_cast<ViewElementAdapter*>(item->getElementAdapter());
             if (adapter->getViewElement() == el) {
@@ -334,10 +337,10 @@ void PropertyControlRuler::contentsContextMenuEvent(QContextMenuEvent* e)
     RG_DEBUG << "PropertyControlRuler::contentsContextMenuEvent\n";
 
     // check if we actually have some control items
-    QCanvasItemList list = canvas()->allItems();
+    Q3CanvasItemList list = canvas()->allItems();
     bool haveItems = false;
 
-    QCanvasItemList::Iterator it = list.begin();
+    Q3CanvasItemList::Iterator it = list.begin();
     for (; it != list.end(); ++it) {
         if (dynamic_cast<ControlItem*>(*it)) {
             haveItems = true;
@@ -406,8 +409,8 @@ PropertyControlRuler::selectAllProperties()
 
     clearSelectedItems();
 
-    QCanvasItemList l = canvas()->allItems();
-    for (QCanvasItemList::Iterator it = l.begin(); it != l.end(); ++it) {
+    Q3CanvasItemList l = canvas()->allItems();
+    for (Q3CanvasItemList::Iterator it = l.begin(); it != l.end(); ++it) {
         if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) {
             m_selectedItems << item;
             (*it)->setSelected(true);
@@ -418,7 +421,7 @@ PropertyControlRuler::selectAllProperties()
 
     /*
     m_eventSelection->addFromSelection(&selection);
-    for (QCanvasItemList::Iterator it=m_selectedItems.begin(); it!=m_selectedItems.end(); ++it) {
+    for (Q3CanvasItemList::Iterator it=m_selectedItems.begin(); it!=m_selectedItems.end(); ++it) {
         if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) {
 
             ElementAdapter* adapter = item->getElementAdapter();

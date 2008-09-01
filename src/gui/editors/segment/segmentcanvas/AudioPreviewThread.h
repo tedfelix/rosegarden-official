@@ -21,9 +21,9 @@
 
 #include "base/RealTime.h"
 #include <map>
-#include <qevent.h>
-#include <qmutex.h>
-#include <qthread.h>
+#include <QEvent>
+#include <QMutex>
+#include <QThread>
 #include <utility>
 #include <vector>
 

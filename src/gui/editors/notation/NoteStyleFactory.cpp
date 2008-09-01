@@ -18,7 +18,7 @@
 
 #include "NoteStyleFactory.h"
 
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include "misc/Strings.h"
 #include "base/Event.h"
 #include "base/Exception.h"
@@ -26,10 +26,10 @@
 #include "NoteStyle.h"
 #include "NoteStyleFileReader.h"
 #include <kglobal.h>
-#include <qdir.h>
-#include <qfileinfo.h>
-#include <qstring.h>
-#include <qstringlist.h>
+#include <QDir>
+#include <QFileInfo>
+#include <QString>
+#include <QStringList>
 
 
 namespace Rosegarden

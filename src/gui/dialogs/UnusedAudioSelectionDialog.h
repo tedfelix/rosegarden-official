@@ -19,8 +19,9 @@
 #ifndef _RG_UNUSEDAUDIOSELECTIONDIALOG_H_
 #define _RG_UNUSEDAUDIOSELECTIONDIALOG_H_
 
-#include <kdialogbase.h>
-#include <qstring.h>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QString>
 #include <vector>
 
 
@@ -33,10 +34,10 @@ namespace Rosegarden
 
 
 
-class UnusedAudioSelectionDialog : public KDialogBase
+class UnusedAudioSelectionDialog : public QDialog
 {
 public:
-    UnusedAudioSelectionDialog(QWidget *,
+    UnusedAudioSelectionDialog(QDialogButtonBox::QWidget *,
                                QString introductoryText,
                                std::vector<QString> fileNames,
                                bool offerCancel = true);

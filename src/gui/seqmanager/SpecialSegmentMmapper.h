@@ -20,7 +20,7 @@
 #define _RG_SPECIALSEGMENTMMAPPER_H_
 
 #include "SegmentMmapper.h"
-#include <qstring.h>
+#include <QString>
 
 
 

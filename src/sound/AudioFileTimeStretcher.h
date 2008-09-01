@@ -18,7 +18,7 @@
 #ifndef _AUDIO_FILE_TIME_STRETCHER_H_
 #define _AUDIO_FILE_TIME_STRETCHER_H_
 
-#include <qobject.h>
+#include <QObject>
 #include "AudioFile.h"
 #include "base/Exception.h"
 

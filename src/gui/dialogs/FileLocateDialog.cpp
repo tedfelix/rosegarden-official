@@ -20,19 +20,20 @@
 
 #include <klocale.h>
 #include "misc/Debug.h"
-#include <kdialogbase.h>
+#include <QDialog>
+#include <QDialogButtonBox>
 #include <kfiledialog.h>
-#include <qfileinfo.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qstring.h>
-#include <qwidget.h>
+#include <QFileInfo>
+#include <QLabel>
+#include <QString>
+#include <QWidget>
+#include <QHBoxLayout>
 
 
 namespace Rosegarden
 {
 
-FileLocateDialog::FileLocateDialog(QWidget *parent,
+FileLocateDialog::FileLocateDialog(QDialogButtonBox::QWidget *parent,
                                    const QString &file,
                                    const QString & /*path*/):
         KDialogBase(parent, 0, true,

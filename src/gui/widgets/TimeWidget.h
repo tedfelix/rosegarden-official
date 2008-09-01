@@ -20,8 +20,8 @@
 #define _RG_ROSEGARDENTIMEWIDGET_H_
 
 #include "base/RealTime.h"
-#include <qgroupbox.h>
-#include <qstring.h>
+#include <QGroupBox>
+#include <QString>
 #include <vector>
 #include "base/Event.h"
 

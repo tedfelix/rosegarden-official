@@ -19,29 +19,40 @@
 #include "UnusedAudioSelectionDialog.h"
 
 #include <klocale.h>
-#include <kdialogbase.h>
+#include <QDialog>
+#include <QDialogButtonBox>
 #include <klistview.h>
-#include <qfileinfo.h>
-#include <qlabel.h>
-#include <qlistview.h>
-#include <qstring.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <QFileInfo>
+#include <QLabel>
+#include <QListView>
+#include <QString>
+#include <QWidget>
+#include <QVBoxLayout>
 
 
 namespace Rosegarden
 {
 
-UnusedAudioSelectionDialog::UnusedAudioSelectionDialog(QWidget *parent,
+UnusedAudioSelectionDialog::UnusedAudioSelectionDialog(QDialogButtonBox::QWidget *parent,
         QString introductoryText,
         std::vector<QString> fileNames,
         bool offerCancel) :
-        KDialogBase(parent, 0, true, i18n("Select Unused Audio Files"), (offerCancel ? (Ok | Cancel) : Ok))
+        QDialog(parent) : Ok))
 {
-    QVBox *vbox = makeVBoxMainWidget();
+    setModal(true);
+    setWindowTitle(i18n("Select Unused Audio Files"));
+
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
+    QWidget *vbox = new QWidget(this);
+    QVBoxLayout vboxLayout = new QVBoxLayout;
+    metagrid->addWidget(vbox, 0, 0);
+
     new QLabel(introductoryText, vbox);
 
-    m_listView = new KListView(vbox);
+    m_listView = new KListView( vbox );
+    vboxLayout->addWidget(m_listView);
+    vbox->setLayout(vboxLayout);
 
     m_listView->addColumn(i18n("File name"));
     m_listView->addColumn(i18n("File size"));
@@ -61,6 +72,11 @@ UnusedAudioSelectionDialog::UnusedAudioSelectionDialog(QWidget *parent,
     }
 
     m_listView->setSelectionMode(QListView::Multi);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox((QDialogButtonBox::offerCancel ? (QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 std::vector<QString>

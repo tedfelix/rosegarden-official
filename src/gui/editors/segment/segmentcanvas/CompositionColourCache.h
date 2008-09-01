@@ -19,7 +19,7 @@
 #ifndef _RG_COMPOSITIONCOLOURCACHE_H_
 #define _RG_COMPOSITIONCOLOURCACHE_H_
 
-#include <qcolor.h>
+#include <QColor>
 
 
 

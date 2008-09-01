@@ -20,7 +20,7 @@
 #define _RG_EVENTUNQUANTIZECOMMAND_H_
 
 #include "document/BasicCommand.h"
-#include <qstring.h>
+#include <QString>
 #include "base/Event.h"
 
 

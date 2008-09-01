@@ -23,8 +23,8 @@
 #include "base/NotationTypes.h"
 #include "gui/dialogs/TempoDialog.h"
 #include "gui/general/EditViewBase.h"
-#include <qsize.h>
-#include <qstring.h>
+#include <QSize>
+#include <QString>
 #include <vector>
 #include "base/Event.h"
 
@@ -33,7 +33,7 @@ class QWidget;
 class QListViewItem;
 class QCloseEvent;
 class QCheckBox;
-class QButtonGroup;
+class QGroupBox;
 class KListView;
 
 
@@ -149,7 +149,7 @@ protected:
 
     static int   m_lastSetFilter;
 
-    QButtonGroup   *m_filterGroup;
+    QGroupBox   *m_filterGroup;
     QCheckBox      *m_tempoCheckBox;
     QCheckBox      *m_timeSigCheckBox;
 

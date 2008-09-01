@@ -17,7 +17,7 @@
 
 
 #include "UseOrnamentDialog.h"
-#include <qlayout.h>
+#include <QLayout>
 #include <kapplication.h>
 
 #include "base/BaseProperties.h"
@@ -28,23 +28,24 @@
 #include "base/NotationTypes.h"
 #include "base/TriggerSegment.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
-#include <kcombobox.h>
+#include <QComboBox>
 #include <kconfig.h>
-#include <kdialogbase.h>
-#include <qcheckbox.h>
-#include <qframe.h>
-#include <qgroupbox.h>
-#include <qlabel.h>
-#include <qlineedit.h>
-#include <qstring.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QCheckBox>
+#include <QFrame>
+#include <QGroupBox>
+#include <QLabel>
+#include <QLineEdit>
+#include <QString>
+#include <QWidget>
+#include <QVBoxLayout>
 
 
 namespace Rosegarden
 {
 
-UseOrnamentDialog::UseOrnamentDialog(QWidget *parent,
+UseOrnamentDialog::UseOrnamentDialog(QDialogButtonBox::QWidget *parent,
                                      Composition *composition) :
         KDialogBase(parent, "useornamentdialog", true, i18n("Use Ornament"),
                     Ok | Cancel, Ok),
@@ -61,7 +62,7 @@ UseOrnamentDialog::UseOrnamentDialog(QWidget *parent,
     label = new QLabel(i18n("Display as:  "), frame);
     layout->addWidget(label, 0, 0);
 
-    m_mark = new KComboBox(frame);
+    m_mark = new QComboBox(frame);
     layout->addWidget(m_mark, 0, 1);
 
     m_marks.push_back(Marks::Trill);
@@ -80,11 +81,11 @@ UseOrnamentDialog::UseOrnamentDialog(QWidget *parent,
                                  };
 
     for (size_t i = 0; i < m_marks.size(); ++i) {
-        m_mark->insertItem(NotePixmapFactory::toQPixmap
+        m_mark->addItem(NotePixmapFactory::toQPixmap
                            (NotePixmapFactory::makeMarkMenuPixmap(m_marks[i])),
                            markLabels[i]);
     }
-    m_mark->insertItem(i18n("Text mark"));
+    m_mark->addItem(i18n("Text mark"));
 
     connect(m_mark, SIGNAL(activated(int)), this, SLOT(slotMarkChanged(int)));
 
@@ -102,27 +103,27 @@ UseOrnamentDialog::UseOrnamentDialog(QWidget *parent,
     label = new QLabel(i18n("Perform using triggered segment: "), frame);
     layout->addWidget(label, 0, 0);
 
-    m_ornament = new KComboBox(frame);
+    m_ornament = new QComboBox(frame);
     layout->addWidget(m_ornament, 0, 1);
 
     int n = 1;
     for (Composition::triggersegmentcontaineriterator i =
                 m_composition->getTriggerSegments().begin();
             i != m_composition->getTriggerSegments().end(); ++i) {
-        m_ornament->insertItem
+        m_ornament->addItem
         (QString("%1. %2").arg(n++).arg(strtoqstr((*i)->getSegment()->getLabel())));
     }
 
     label = new QLabel(i18n("Perform with timing: "), frame);
     layout->addWidget(label, 1, 0);
 
-    m_adjustTime = new KComboBox(frame);
+    m_adjustTime = new QComboBox(frame);
     layout->addWidget(m_adjustTime, 1, 1);
 
-    m_adjustTime->insertItem(i18n("As stored"));
-    m_adjustTime->insertItem(i18n("Truncate if longer than note"));
-    m_adjustTime->insertItem(i18n("End at same time as note"));
-    m_adjustTime->insertItem(i18n("Stretch or squash segment to note duration"));
+    m_adjustTime->addItem(i18n("As stored"));
+    m_adjustTime->addItem(i18n("Truncate if longer than note"));
+    m_adjustTime->addItem(i18n("End at same time as note"));
+    m_adjustTime->addItem(i18n("Stretch or squash segment to note duration"));
 
     m_retune = new QCheckBox(i18n("Adjust pitch to note"), frame);
     m_retune->setChecked(true);
@@ -149,28 +150,28 @@ UseOrnamentDialog::setupFromConfig()
     size_t i = 0;
     for (i = 0; i < m_marks.size(); ++i) {
         if (mark == m_marks[i]) {
-            m_mark->setCurrentItem(i);
+            m_mark->setCurrentIndex(i);
             m_text->setEnabled(false);
             break;
         }
     }
     if (i >= m_marks.size()) {
-        m_mark->setCurrentItem(m_marks.size());
+        m_mark->setCurrentIndex(m_marks.size());
         m_text->setEnabled(true);
         m_text->setText(strtoqstr(Marks::getTextFromMark(mark)));
     }
 
     if (seg >= 0 && seg < m_ornament->count())
-        m_ornament->setCurrentItem(seg);
+        m_ornament->setCurrentIndex(seg);
 
     if (timing == BaseProperties::TRIGGER_SEGMENT_ADJUST_NONE) {
-        m_adjustTime->setCurrentItem(0);
+        m_adjustTime->setCurrentIndex(0);
     } else if (timing == BaseProperties::TRIGGER_SEGMENT_ADJUST_SQUISH) {
-        m_adjustTime->setCurrentItem(3);
+        m_adjustTime->setCurrentIndex(3);
     } else if (timing == BaseProperties::TRIGGER_SEGMENT_ADJUST_SYNC_START) {
-        m_adjustTime->setCurrentItem(1);
+        m_adjustTime->setCurrentIndex(1);
     } else if (timing == BaseProperties::TRIGGER_SEGMENT_ADJUST_SYNC_END) {
-        m_adjustTime->setCurrentItem(2);
+        m_adjustTime->setCurrentIndex(2);
     }
 
     m_retune->setChecked(retune);
@@ -179,7 +180,7 @@ UseOrnamentDialog::setupFromConfig()
 TriggerSegmentId
 UseOrnamentDialog::getId() const
 {
-    int ix = m_ornament->currentItem();
+    int ix = m_ornament->currentIndex();
 
     for (Composition::triggersegmentcontaineriterator i =
                 m_composition->getTriggerSegments().begin();
@@ -196,8 +197,8 @@ UseOrnamentDialog::getId() const
 Mark
 UseOrnamentDialog::getMark() const
 {
-    if (int(m_marks.size()) > m_mark->currentItem())
-        return m_marks[m_mark->currentItem()];
+    if (int(m_marks.size()) > m_mark->currentIndex())
+        return m_marks[m_mark->currentIndex()];
     else
         return Marks::getTextMark(qstrtostr(m_text->text()));
 }
@@ -211,7 +212,7 @@ UseOrnamentDialog::getRetune() const
 std::string
 UseOrnamentDialog::getTimeAdjust() const
 {
-    int option = m_adjustTime->currentItem();
+    int option = m_adjustTime->currentIndex();
 
     switch (option) {
 
@@ -248,7 +249,7 @@ UseOrnamentDialog::slotOk()
     config->writeEntry("useornamentmark", strtoqstr(getMark()));
     config->writeEntry("useornamenttiming", strtoqstr(getTimeAdjust()));
     config->writeEntry("useornamentretune", m_retune->isChecked());
-    config->writeEntry("useornamentlastornament", m_ornament->currentItem());
+    config->writeEntry("useornamentlastornament", m_ornament->currentIndex());
 
     accept();
 }

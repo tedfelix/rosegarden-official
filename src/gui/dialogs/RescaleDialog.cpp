@@ -23,35 +23,45 @@
 #include "base/Composition.h"
 #include "gui/widgets/TimeWidget.h"
 #include <kconfig.h>
-#include <kdialogbase.h>
-#include <qcheckbox.h>
-#include <qgroupbox.h>
-#include <qstring.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QCheckBox>
+#include <QGroupBox>
+#include <QString>
+#include <QWidget>
+#include <QVBoxLayout>
 #include <kapplication.h>
 
 
 namespace Rosegarden
 {
 
-RescaleDialog::RescaleDialog(QWidget *parent,
+RescaleDialog::RescaleDialog(QDialogButtonBox::QWidget *parent,
                              Composition *composition,
                              timeT startTime,
                              timeT originalDuration,
                              bool showCloseGapOption,
                              bool constrainToCompositionDuration) :
-        KDialogBase(parent, 0, true, i18n("Rescale"), User1 | Ok | Cancel)
+        QDialog(parent)
 {
-    QVBox *vbox = makeVBoxMainWidget();
+    setModal(true);
+    setWindowTitle(i18n("Rescale"));
 
-    m_newDuration = new TimeWidget
-                    (i18n("Duration of selection"), vbox, composition,
-                     startTime, originalDuration, true,
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
+    QWidget *vbox = new QWidget(this);
+    QVBoxLayout vboxLayout = new QVBoxLayout;
+    metagrid->addWidget(vbox, 0, 0);
+
+
+    m_newDuration = new TimeWidget(i18n("Duration of selection"), vbox ,
                      constrainToCompositionDuration);
+    vboxLayout->addWidget(m_newDuration);
 
     if (showCloseGapOption) {
-        QGroupBox *optionBox = new QGroupBox(1, Horizontal, i18n("Options"), vbox);
+        QGroupBox *optionBox = new QGroupBox( i18n("Options"), vbox );
+        vboxLayout->addWidget(optionBox);
+        vbox->setLayout(vboxLayout);
         m_closeGap = new QCheckBox(i18n("Adjust times of following events accordingly"),
                                    optionBox);
         KConfig *config = kapp->config();
@@ -65,6 +75,11 @@ RescaleDialog::RescaleDialog(QWidget *parent,
     setButtonText(User1, i18n("Reset"));
     connect(this, SIGNAL(user1Clicked()),
             m_newDuration, SLOT(slotResetToDefault()));
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::User1 | QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 timeT

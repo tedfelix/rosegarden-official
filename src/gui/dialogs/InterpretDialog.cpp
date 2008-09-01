@@ -23,24 +23,34 @@
 #include "document/ConfigGroups.h"
 #include "commands/notation/InterpretCommand.h"
 #include <kconfig.h>
-#include <kdialogbase.h>
-#include <qcheckbox.h>
-#include <qgroupbox.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QCheckBox>
+#include <QGroupBox>
+#include <QWidget>
+#include <QVBoxLayout>
 
 
 namespace Rosegarden
 {
 
-InterpretDialog::InterpretDialog(QWidget *parent) :
-        KDialogBase(parent, 0, true, i18n("Interpret"), Ok | Cancel | Help)
+InterpretDialog::InterpretDialog(QDialogButtonBox::QWidget *parent) :
+        QDialog(parent)
 {
     setHelp("nv-interpret");
 
-    QVBox *vbox = makeVBoxMainWidget();
-    QGroupBox *groupBox = new QGroupBox
-                          (1, Horizontal, i18n("Interpretations to apply"), vbox);
+    setModal(true);
+    setWindowTitle(i18n("Interpret"));
+
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
+    QWidget *vbox = new QWidget(this);
+    QVBoxLayout vboxLayout = new QVBoxLayout;
+    metagrid->addWidget(vbox, 0, 0);
+
+    QGroupBox *groupBox = new QGroupBox( i18n("Interpretations to apply"), vbox );
+    vboxLayout->addWidget(groupBox);
+    vbox->setLayout(vboxLayout);
 
     m_applyTextDynamics = new QCheckBox
                           (i18n("Apply text dynamics (p, mf, ff etc)"), groupBox);
@@ -71,6 +81,11 @@ InterpretDialog::InterpretDialog(QWidget *parent) :
             SIGNAL(clicked()), this, SLOT(slotAllBoxChanged()));
 
     slotAllBoxChanged();
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 void

@@ -19,7 +19,7 @@
 #include "TempoRuler.h"
 
 #include <klocale.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include "misc/Debug.h"
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
@@ -37,21 +37,21 @@
 #include <kglobal.h>
 #include <kxmlguiclient.h>
 #include <kxmlguifactory.h>
-#include <qcolor.h>
-#include <qcursor.h>
-#include <qevent.h>
-#include <qfont.h>
-#include <qfontmetrics.h>
-#include <qiconset.h>
-#include <qobject.h>
-#include <qpainter.h>
-#include <qpixmap.h>
-#include <qpoint.h>
+#include <QColor>
+#include <QCursor>
+#include <QEvent>
+#include <QFont>
+#include <QFontMetrics>
+#include <QIcon>
+#include <QObject>
+#include <QPainter>
+#include <QPixmap>
+#include <QPoint>
 #include <qpopupmenu.h>
-#include <qrect.h>
-#include <qsize.h>
-#include <qstring.h>
-#include <qwidget.h>
+#include <QRect>
+#include <QSize>
+#include <QString>
+#include <QWidget>
 
 
 namespace Rosegarden
@@ -114,9 +114,9 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
      this, SLOT(update()));
 
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QIconSet icon;
+    QIcon icon;
 
-    icon = QIconSet(QPixmap(pixmapDir + "/toolbar/event-insert-tempo.png"));
+    icon = QIcon(QPixmap(pixmapDir + "/toolbar/event-insert-tempo.png"));
     new KAction(i18n("Insert Tempo Change"), icon, 0, this,
                  SLOT(slotInsertTempoHere()), actionCollection(),
                  "insert_tempo_here");
@@ -125,7 +125,7 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
                  SLOT(slotInsertTempoAtPointer()), actionCollection(),
                  "insert_tempo_at_pointer");
 
-    icon = QIconSet(QPixmap(pixmapDir + "/toolbar/event-delete.png"));
+    icon = QIcon(QPixmap(pixmapDir + "/toolbar/event-delete.png"));
     new KAction(i18n("Delete Tempo Change"), icon, 0, this,
                  SLOT(slotDeleteTempoChange()), actionCollection(),
                  "delete_tempo");
@@ -138,7 +138,7 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
                  SLOT(slotUnramp()), actionCollection(),
                  "unramp");
 
-    icon = QIconSet(QPixmap(pixmapDir + "/toolbar/event-edit.png"));
+    icon = QIcon(QPixmap(pixmapDir + "/toolbar/event-edit.png"));
     new KAction(i18n("Edit Tempo..."), icon, 0, this,
                  SLOT(slotEditTempo()), actionCollection(),
                  "edit_tempo");
@@ -262,7 +262,7 @@ TempoRuler::mousePressEvent(QMouseEvent *e)
         m_dragStartTarget = tr.first ? tr.second : -1;
         m_dragOriginalTempo = m_dragStartTempo;
         m_dragOriginalTarget = m_dragStartTarget;
-        m_dragFine = ((e->state() & Qt::ShiftButton) != 0);
+        m_dragFine = ((e->state() & Qt::ShiftModifier) != 0);
 
         int px = m_rulerScale->getXForTime(tc.first) + m_currentXOffset + m_xorigin;
         if (x >= px && x < px + 5) {
@@ -364,7 +364,7 @@ TempoRuler::mouseReleaseEvent(QMouseEvent *e)
 void
 TempoRuler::mouseMoveEvent(QMouseEvent *e)
 {
-    bool shiftPressed = ((e->state() & Qt::ShiftButton) != 0);
+    bool shiftPressed = ((e->state() & Qt::ShiftModifier) != 0);
 
     if (m_dragVert) {
 
@@ -822,7 +822,7 @@ TempoRuler::paintEvent(QPaintEvent* e)
             bool illuminateLine = (illuminate &&
                                    !m_illuminatePoint && !m_illuminateTarget);
 
-            paint.setPen(illuminateLine ? Qt::white : Qt::black);
+            paint.setPen(illuminateLine ? QColor(Qt::white) : QColor(Qt::black));
 
             if (ramping.first) {
                 ry = getYForTempo(ramping.second);
@@ -839,7 +839,7 @@ TempoRuler::paintEvent(QPaintEvent* e)
 
             if (!illuminateLine && illuminate && m_illuminateTarget) {
                 if (x > lastx) {
-                    paint.setPen(Qt::white);
+                    paint.setPen(QColor(Qt::white));
                     paint.drawLine(x - 6, ry - ((ry - lasty) * 6) / (x - lastx),
                                    x - 2, ry);
                 }
@@ -851,10 +851,10 @@ TempoRuler::paintEvent(QPaintEvent* e)
 
             bool illuminatePoint = (illuminate && m_illuminatePoint);
 
-            paint.setPen(illuminatePoint ? Qt::white : Qt::black);
+            paint.setPen(illuminatePoint ? QColor(Qt::white) : QColor(Qt::black));
             paint.drawRect(x - 1, y - 1, 3, 3);
 
-            paint.setPen(illuminatePoint ? Qt::black : Qt::white);
+            paint.setPen(illuminatePoint ? QColor(Qt::black) : QColor(Qt::white));
             paint.drawPoint(x, y);
         }
 
@@ -876,7 +876,7 @@ TempoRuler::paintEvent(QPaintEvent* e)
 
     if (haveSome) {
         bool illuminateLine = (illuminate && !m_illuminatePoint);
-        paint.setPen(illuminateLine ? Qt::white : Qt::black);
+        paint.setPen(illuminateLine ? QColor(Qt::white) : QColor(Qt::black));
         paint.drawLine(lastx + 1, lasty, width(), lasty);
     } else if (!m_refreshLinesOnly) {
         tempoT tempo = m_composition->getTempoAtTime(from);
@@ -886,8 +886,8 @@ TempoRuler::paintEvent(QPaintEvent* e)
         paint.drawRect(e->rect());
     }
 
-    paint.setPen(Qt::black);
-    paint.setBrush(Qt::black);
+    paint.setPen(QColor(Qt::black));
+    paint.setBrush(QColor(Qt::black));
     paint.drawLine(0, 0, width(), 0);
 
     for (TimePoints::iterator i = timePoints.begin();

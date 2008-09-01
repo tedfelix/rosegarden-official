@@ -19,7 +19,7 @@
 #ifndef _RG_WHEELYBUTTON_H_
 #define _RG_WHEELYBUTTON_H_
 
-#include <qpushbutton.h>
+#include <QPushButton>
 
 
 class QWidget;

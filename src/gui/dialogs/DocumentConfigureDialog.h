@@ -19,7 +19,7 @@
 #define _RG_DOCUMENTCONFIGUREDIALOG_H_
 
 #include "ConfigureDialogBase.h"
-#include <qstring.h>
+#include <QString>
 
 
 class QWidget;

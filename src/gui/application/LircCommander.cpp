@@ -29,7 +29,7 @@
 #include "RosegardenGUIApp.h"
 #include "RosegardenGUIView.h"
 
-#include <qobject.h>
+#include <QObject>
 
 
 namespace Rosegarden

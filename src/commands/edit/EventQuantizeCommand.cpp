@@ -30,7 +30,7 @@
 #include "base/Selection.h"
 #include "document/BasicCommand.h"
 #include <kconfig.h>
-#include <qstring.h>
+#include <QString>
 #include "base/BaseProperties.h"
 #include "gui/application/RosegardenApplication.h"
 #include <kapplication.h>

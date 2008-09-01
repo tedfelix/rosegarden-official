@@ -19,7 +19,8 @@
 #ifndef _RG_SHOWSEQUENCERSTATUSDIALOG_H_
 #define _RG_SHOWSEQUENCERSTATUSDIALOG_H_
 
-#include <kdialogbase.h>
+#include <QDialog>
+#include <QDialogButtonBox>
 
 
 class QWidget;
@@ -30,11 +31,11 @@ namespace Rosegarden
 
 
 
-class ShowSequencerStatusDialog : public KDialogBase
+class ShowSequencerStatusDialog : public QDialog
 {
     Q_OBJECT
 public:
-    ShowSequencerStatusDialog(QWidget *parent);
+    ShowSequencerStatusDialog(QDialogButtonBox::QWidget *parent);
 };
 
 

@@ -21,7 +21,7 @@
 #include <vector>
 #include <cmath>
 
-#include <qfileinfo.h>
+#include <QFileInfo>
 
 #include "SoundFile.h"
 #include "RealTime.h"

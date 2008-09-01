@@ -20,7 +20,7 @@
 #define _RG_MAKECHORDCOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
-#include <qstring.h>
+#include <QString>
 #include <klocale.h>
 
 namespace Rosegarden

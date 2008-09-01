@@ -18,20 +18,21 @@
 #ifndef _RG_NOTEPIXMAPFACTORY_H_
 #define _RG_NOTEPIXMAPFACTORY_H_
 
+#include <Q3CanvasPixmap>
 #include "base/NotationTypes.h"
 #include <map>
 #include "NoteCharacter.h"
 #include <string>
-#include <qfont.h>
-#include <qfontmetrics.h>
-#include <qpixmap.h>
-#include <qpoint.h>
+#include <QFont>
+#include <QFontMetrics>
+#include <QPixmap>
+#include <QPoint>
 #include "base/Event.h"
 #include "gui/editors/notation/NoteCharacterNames.h"
 
 
 class QPainter;
-class QCanvasPixmap;
+class Q3CanvasPixmap;
 class QBitmap;
 
 
@@ -76,25 +77,25 @@ public:
 
     // Display methods -- create canvas pixmaps:
 
-    QCanvasPixmap* makeNotePixmap(const NotePixmapParameters &parameters);
-    QCanvasPixmap* makeRestPixmap(const NotePixmapParameters &parameters);
-    QCanvasPixmap* makeClefPixmap(const Clef &clef);
-    QCanvasPixmap* makeKeyPixmap(const Key &key,
+    Q3CanvasPixmap* makeNotePixmap(const NotePixmapParameters &parameters);
+    Q3CanvasPixmap* makeRestPixmap(const NotePixmapParameters &parameters);
+    Q3CanvasPixmap* makeClefPixmap(const Clef &clef);
+    Q3CanvasPixmap* makeKeyPixmap(const Key &key,
                                  const Clef &clef,
                                  Key previousKey =
                                  Key::DefaultKey);
-    QCanvasPixmap* makeTimeSigPixmap(const TimeSignature& sig);
-    QCanvasPixmap* makeHairpinPixmap(int length, bool isCrescendo);
-    QCanvasPixmap* makeSlurPixmap(int length, int dy, bool above, bool phrasing);
-    QCanvasPixmap* makeOttavaPixmap(int length, int octavesUp);
-    QCanvasPixmap* makePedalDownPixmap();
-    QCanvasPixmap* makePedalUpPixmap();
-    QCanvasPixmap* makeUnknownPixmap();
-    QCanvasPixmap* makeTextPixmap(const Text &text);
-    QCanvasPixmap* makeGuitarChordPixmap(const Guitar::Fingering &fingering,
+    Q3CanvasPixmap* makeTimeSigPixmap(const TimeSignature& sig);
+    Q3CanvasPixmap* makeHairpinPixmap(int length, bool isCrescendo);
+    Q3CanvasPixmap* makeSlurPixmap(int length, int dy, bool above, bool phrasing);
+    Q3CanvasPixmap* makeOttavaPixmap(int length, int octavesUp);
+    Q3CanvasPixmap* makePedalDownPixmap();
+    Q3CanvasPixmap* makePedalUpPixmap();
+    Q3CanvasPixmap* makeUnknownPixmap();
+    Q3CanvasPixmap* makeTextPixmap(const Text &text);
+    Q3CanvasPixmap* makeGuitarChordPixmap(const Guitar::Fingering &fingering,
                                        int x, int y);
 
-    QCanvasPixmap* makeNoteHaloPixmap(const NotePixmapParameters &parameters);
+    Q3CanvasPixmap* makeNoteHaloPixmap(const NotePixmapParameters &parameters);
 
     // Printing methods -- draw direct to a paint device:
 
@@ -113,24 +114,24 @@ public:
 
     // Other support methods for producing pixmaps for other contexts:
 
-    static QCanvasPixmap *makeToolbarPixmap(const char *name,
+    static Q3CanvasPixmap *makeToolbarPixmap(const char *name,
                                             bool menuSize = false);
-    static QCanvasPixmap *makeNoteMenuPixmap(timeT duration,
+    static Q3CanvasPixmap *makeNoteMenuPixmap(timeT duration,
                                              timeT &errorReturn);
-    static QCanvasPixmap *makeMarkMenuPixmap(Mark);
+    static Q3CanvasPixmap *makeMarkMenuPixmap(Mark);
 
-    QCanvasPixmap* makePitchDisplayPixmap(int pitch,
+    Q3CanvasPixmap* makePitchDisplayPixmap(int pitch,
                                           const Clef &clef,
                                           bool useSharps);
-    QCanvasPixmap* makePitchDisplayPixmap(int pitch,
+    Q3CanvasPixmap* makePitchDisplayPixmap(int pitch,
                                           const Clef &clef,
                                           int octave,
                                           int step);
-    QCanvasPixmap* makeClefDisplayPixmap(const Clef &clef);
-    QCanvasPixmap* makeKeyDisplayPixmap(const Key &key,
+    Q3CanvasPixmap* makeClefDisplayPixmap(const Clef &clef);
+    Q3CanvasPixmap* makeKeyDisplayPixmap(const Key &key,
                                        const Clef &clef);
 
-    QCanvasPixmap* makeTrackHeaderPixmap(int width, int height,
+    Q3CanvasPixmap* makeTrackHeaderPixmap(int width, int height,
                                             TrackHeader *header);
 
     // Bounding box and other geometry methods:
@@ -192,15 +193,15 @@ public:
 
 
     /**
-     * We need this function because as of Qt 3.1, QCanvasPixmap
+     * We need this function because as of Qt 3.1, Q3CanvasPixmap
      * is no longer copyable by value, while QPixmap still is.
      *
-     * So all the makeXXPixmap are now returning QCanvasPixmap*
-     * instead of QCanvasPixmap, but we need an easy way to
+     * So all the makeXXPixmap are now returning Q3CanvasPixmap*
+     * instead of Q3CanvasPixmap, but we need an easy way to
      * convert them to QPixmap, since we use them that
      * way quite often (to generate toolbar button icons for instance).
      */
-    static QPixmap toQPixmap(QCanvasPixmap*);
+    static QPixmap toQPixmap(Q3CanvasPixmap*);
     static void dumpStats(std::ostream &);
 
 
@@ -265,13 +266,13 @@ protected:
 
     QFont getTextFont(const Text &text) const;
 
-    QCanvasPixmap* makeAnnotationPixmap(const Text &text);
-    QCanvasPixmap* makeAnnotationPixmap(const Text &text, const bool isLilyPondDirective);
+    Q3CanvasPixmap* makeAnnotationPixmap(const Text &text);
+    Q3CanvasPixmap* makeAnnotationPixmap(const Text &text, const bool isLilyPondDirective);
 
     void createPixmapAndMask(int width, int height,
                              int maskWidth = -1,
                              int maskHeight = -1);
-    QCanvasPixmap* makeCanvasPixmap(QPoint hotspot, bool generateMask = false);
+    Q3CanvasPixmap* makeCanvasPixmap(QPoint hotspot, bool generateMask = false);
 
     enum ColourType {
         PlainColour,

@@ -24,13 +24,13 @@
 #include "gui/rulers/PitchRuler.h"
 #include "MatrixStaff.h"
 #include "MatrixView.h"
-#include <qcolor.h>
-#include <qcursor.h>
-#include <qevent.h>
-#include <qfont.h>
-#include <qpainter.h>
-#include <qsize.h>
-#include <qwidget.h>
+#include <QColor>
+#include <QCursor>
+#include <QEvent>
+#include <QFont>
+#include <QPainter>
+#include <QSize>
+#include <QWidget>
 
 
 namespace Rosegarden
@@ -269,7 +269,7 @@ void PianoKeyboard::mousePressEvent(QMouseEvent *e)
 
     if (e->button() == LeftButton) {
         m_mouseDown = true;
-        m_selecting = (bs & Qt::ShiftButton);
+        m_selecting = (bs & Qt::ShiftModifier);
         m_lastKeyPressed = e->y();
 
         if (m_selecting)

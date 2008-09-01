@@ -19,7 +19,8 @@
 #ifndef _RG_ROSEGARDENFLOATEDIT_H_
 #define _RG_ROSEGARDENFLOATEDIT_H_
 
-#include <kdialogbase.h>
+#include <QDialog>
+#include <QDialogButtonBox>
 
 
 class QWidget;
@@ -33,12 +34,12 @@ namespace Rosegarden
 class HSpinBox;
 
 
-class FloatEdit : public KDialogBase
+class FloatEdit : public QDialog
 {
     Q_OBJECT
 
 public:
-    FloatEdit(QWidget *parent,
+    FloatEdit(QDialogButtonBox::QWidget *parent,
                         const QString &title,
                         const QString &text,
                         float min,

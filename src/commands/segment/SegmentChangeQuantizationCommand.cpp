@@ -21,14 +21,14 @@
 #include "base/Segment.h"
 #include "base/BasicQuantizer.h"
 #include "gui/editors/notation/NotationStrings.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
 {
 
 SegmentChangeQuantizationCommand::SegmentChangeQuantizationCommand(timeT unit) :
-        KNamedCommand(getGlobalName(unit)),
+        NamedCommand(getGlobalName(unit)),
         m_unit(unit)
 {
     // nothing

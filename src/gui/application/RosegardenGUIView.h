@@ -25,14 +25,15 @@
 #include "base/Track.h"
 #include "sound/AudioFile.h"
 #include "gui/editors/segment/TrackEditor.h"
-#include <qstring.h>
-#include <qvbox.h>
+#include <QString>
+#include <QWidget>
+#include <QVBoxLayout>
 
 
 class QWidget;
 class QObject;
 class LevelInfo;
-class KCommand;
+class Command;
 
 
 namespace Rosegarden
@@ -219,7 +220,7 @@ public slots:
      * Commands
      *
      */
-    void slotAddCommandToHistory(KCommand *command);
+    void slotAddCommandToHistory(Command *command);
 
     /*
      * Change the Instrument Label

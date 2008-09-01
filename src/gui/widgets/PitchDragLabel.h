@@ -19,9 +19,9 @@
 #ifndef _RG_ROSEGARDENPITCHDRAGLABEL_H_
 #define _RG_ROSEGARDENPITCHDRAGLABEL_H_
 
-#include <qpixmap.h>
-#include <qsize.h>
-#include <qwidget.h>
+#include <QPixmap>
+#include <QSize>
+#include <QWidget>
 
 
 class QWheelEvent;

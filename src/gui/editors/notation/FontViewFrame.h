@@ -19,9 +19,9 @@
 #ifndef _RG_FONTVIEWFRAME_H_
 #define _RG_FONTVIEWFRAME_H_
 
-#include <qframe.h>
-#include <qsize.h>
-#include <qstring.h>
+#include <QFrame>
+#include <QSize>
+#include <QString>
 
 
 class QWidget;

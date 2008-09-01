@@ -19,12 +19,13 @@
 #ifndef _RG_EDITVIEW_H_
 #define _RG_EDITVIEW_H_
 
+#include <Q3CanvasItem>
 #include "base/PropertyName.h"
 #include "EditViewBase.h"
 #include "gui/dialogs/TempoDialog.h"
-#include <qsize.h>
-#include <qstring.h>
-#include <qwmatrix.h>
+#include <QSize>
+#include <QString>
+#include <QMatrix>
 #include <vector>
 #include "base/Event.h"
 
@@ -34,7 +35,7 @@ class QVBoxLayout;
 class QVBox;
 class QPaintEvent;
 class QMouseEvent;
-class QCanvasItem;
+class Q3CanvasItem;
 class KTabWidget;
 class Accidental;
 
@@ -134,9 +135,9 @@ public slots:
      * Called when a mouse press occurred on an active canvas item
      *
      * @see ActiveItem
-     * @see QCanvasItem#setActive
+     * @see Q3CanvasItem#setActive
      */
-    virtual void slotActiveItemPressed(QMouseEvent*, QCanvasItem*);
+    virtual void slotActiveItemPressed(QMouseEvent*, Q3CanvasItem*);
 
     virtual void slotSetInsertCursorPosition(timeT position) = 0;
     
@@ -263,7 +264,7 @@ protected:
     /**
      * Set zoom factor of control rulers
      */
-    void setControlRulersZoom(QWMatrix);
+    void setControlRulersZoom(QMatrix);
 
     /**
      * Set current segment for control rulers
@@ -384,7 +385,7 @@ protected:
     StandardRuler   *m_bottomStandardRuler;
     ControlRuler *m_controlRuler;
     KTabWidget   *m_controlRulers;
-    QWMatrix      m_currentRulerZoomMatrix;
+    QMatrix      m_currentRulerZoomMatrix;
 
     CommandRegistry *m_commandRegistry;
 

@@ -21,9 +21,10 @@
 
 #include "base/Instrument.h"
 #include "base/MidiProgram.h"
-#include <kdialogbase.h>
-#include <qstring.h>
-#include <qstringlist.h>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QString>
+#include <QStringList>
 #include <vector>
 
 
@@ -34,8 +35,8 @@ class QGridLayout;
 class QFrame;
 class QCloseEvent;
 class QCheckBox;
-class QAccel;
-class KComboBox;
+class QShortcut;
+class QComboBox;
 
 
 namespace Rosegarden
@@ -48,12 +49,12 @@ class AudioPluginManager;
 class AudioPluginInstance;
 
 
-class AudioPluginDialog : public KDialogBase
+class AudioPluginDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    AudioPluginDialog(QWidget *parent,
+    AudioPluginDialog(QDialogButtonBox::QWidget *parent,
                       AudioPluginManager *aPM,
 #ifdef HAVE_LIBLO
                       AudioPluginOSCGUIManager *aGM,
@@ -63,7 +64,7 @@ public:
 
     PluginContainer* getPluginContainer() const { return m_pluginContainer; }
 
-    QAccel* getAccelerators() { return m_accelerators; }
+    QShortcut* getShortcuterators() { return m_shortcuterators; }
 
     bool isSynth() { return m_index == int(Instrument::SYNTH_PLUGIN_POSITION); }
 
@@ -124,9 +125,9 @@ protected:
 
     QFrame              *m_pluginParamsBox;
     QWidget             *m_pluginCategoryBox;
-    KComboBox           *m_pluginCategoryList;
+    QComboBox           *m_pluginCategoryList;
     QLabel              *m_pluginLabel;
-    KComboBox           *m_pluginList;
+    QComboBox           *m_pluginList;
     std::vector<int>     m_pluginsInList;
     QLabel              *m_insOuts;
     QLabel              *m_pluginId;
@@ -137,7 +138,7 @@ protected:
     QPushButton         *m_guiButton;
     
     QLabel              *m_programLabel;
-    KComboBox           *m_programCombo;
+    QComboBox           *m_programCombo;
     std::vector<PluginControl*> m_pluginWidgets;
     QGridLayout         *m_gridLayout;
 
@@ -146,7 +147,7 @@ protected:
     bool                 m_generating;
     bool                 m_guiShown;
 
-    QAccel              *m_accelerators;
+    QShortcut              *m_shortcuterators;
 
     void                 populatePluginCategoryList();
     void                 populatePluginList();

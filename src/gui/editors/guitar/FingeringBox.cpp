@@ -116,11 +116,11 @@ FingeringBox::drawContents(QPainter* p)
     
     // DEBUG
 //    p->save();
-//    p->setPen(Qt::red);
+//    p->setPen(QColor(Qt::red));
 //    unsigned int topBorderY = m_noteSymbols.getTopBorder(maximumHeight());
 //    p->drawLine(0, topBorderY, 20, topBorderY);
 //    p->drawRect(m_r1);
-//    p->setPen(Qt::blue);
+//    p->setPen(QColor(Qt::blue));
 //    p->drawRect(m_r2);
 //    p->restore();
 }

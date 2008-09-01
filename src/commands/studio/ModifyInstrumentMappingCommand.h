@@ -21,8 +21,8 @@
 
 #include "base/MidiProgram.h"
 #include "base/Track.h"
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include <vector>
 #include <klocale.h>
 
@@ -38,7 +38,7 @@ class RosegardenGUIDoc;
 class Composition;
 
 
-class ModifyInstrumentMappingCommand : public KNamedCommand
+class ModifyInstrumentMappingCommand : public NamedCommand
 {
 public:
     ModifyInstrumentMappingCommand(RosegardenGUIDoc *doc,

@@ -27,7 +27,7 @@
 #include "base/BaseProperties.h"
 #include "document/BasicCommand.h"
 #include "base/Selection.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
@@ -69,7 +69,7 @@ ClefInsertionCommand::getGlobalName(Clef *)
     /* doesn't handle octave offset -- leave it for now
         if (clef) {
     	QString name(strtoqstr(clef->getClefType()));
-    	name = name.left(1).upper() + name.right(name.length()-1);
+    	name = name.left(1).toUpper() + name.right(name.length()-1);
     	return i18n("Change to %1 Cle&f...").arg(name);
         } else {
     */ 

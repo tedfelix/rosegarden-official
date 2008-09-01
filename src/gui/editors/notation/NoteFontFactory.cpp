@@ -21,7 +21,7 @@
 #include <kapplication.h>
 
 #include <klocale.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include "misc/Strings.h"
 #include "document/ConfigGroups.h"
 #include "base/Exception.h"
@@ -31,9 +31,9 @@
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kmessagebox.h>
-#include <qdir.h>
-#include <qstring.h>
-#include <qstringlist.h>
+#include <QDir>
+#include <QString>
+#include <QStringList>
 #include <algorithm>
 
 
@@ -79,7 +79,7 @@ NoteFontFactory::getFontNames(bool forceRescan)
         QStringList files = dir.entryList();
         for (QStringList::Iterator i = files.begin(); i != files.end(); ++i) {
 
-            if ((*i).length() > 4 && (*i).right(4).lower() == ".xml") {
+            if ((*i).length() > 4 && (*i).right(4).toLower() == ".xml") {
 
                 std::string name(qstrtostr((*i).left((*i).length() - 4)));
 

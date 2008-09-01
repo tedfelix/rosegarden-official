@@ -25,7 +25,7 @@
 #include "NoteFontMap.h"
 #include <set>
 #include <string>
-#include <qpoint.h>
+#include <QPoint>
 #include <utility>
 #include "gui/editors/notation/NoteCharacterNames.h"
 
@@ -87,14 +87,14 @@ public:
 
     /// Returns false if not available
     bool getCharacterColoured(CharName charName,
-                              int hue, int minValue,
+                              int hue, int minimum,
                               NoteCharacter &character,
                               CharacterType type = Screen,
                               bool inverted = false);
 
     /// Returns an empty character if not available
     NoteCharacter getCharacterColoured(CharName charName,
-                                       int hue, int minValue,
+                                       int hue, int minimum,
                                        CharacterType type = Screen,
                                        bool inverted = false);
 
@@ -133,7 +133,7 @@ private:
 
     /// Returns false + blank pixmap if it can't find the right one
     bool getColouredPixmap(CharName charName, QPixmap &pixmap,
-                           int hue, int minValue,
+                           int hue, int minimum,
                            bool inverted = false) const;
 
     /// Returns false + blank pixmap if it can't find the right one

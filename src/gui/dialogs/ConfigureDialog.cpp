@@ -17,7 +17,7 @@
 
 
 #include "ConfigureDialog.h"
-#include <qlayout.h>
+#include <QLayout>
 
 #include <klocale.h>
 #include "ConfigureDialogBase.h"
@@ -28,9 +28,9 @@
 #include "gui/configuration/MIDIConfigurationPage.h"
 #include <kconfig.h>
 #include <kdialogbase.h>
-#include <kstddirs.h>
-#include <qstring.h>
-#include <qwidget.h>
+#include <kstandarddirs.h>
+#include <QString>
+#include <QWidget>
 
 
 namespace Rosegarden

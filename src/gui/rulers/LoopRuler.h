@@ -21,9 +21,9 @@
 
 #include "base/SnapGrid.h"
 #include "gui/general/HZoomable.h"
-#include <qsize.h>
-#include <qwidget.h>
-#include <qpen.h>
+#include <QSize>
+#include <QWidget>
+#include <QPen>
 #include "base/Event.h"
 
 

@@ -21,15 +21,16 @@
 
 #include "base/NotationTypes.h"
 #include <string>
-#include <kdialogbase.h>
-#include <qstring.h>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QString>
 #include <vector>
 
 
 class QWidget;
 class QLineEdit;
 class QLabel;
-class KComboBox;
+class QComboBox;
 class QSpinBox;
 
 namespace Rosegarden
@@ -38,12 +39,12 @@ namespace Rosegarden
 class NotePixmapFactory;
 
 
-class TextEventDialog : public KDialogBase
+class TextEventDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    TextEventDialog(QWidget *parent,
+    TextEventDialog(QDialogButtonBox::QWidget *parent,
                     NotePixmapFactory *npf,
                     Text defaultText,
                     int maxLength = -1); // for Qt default
@@ -82,15 +83,15 @@ protected:
     //--------------- Data members ---------------------------------
 
     QLineEdit *m_text;
-    KComboBox *m_typeCombo;
+    QComboBox *m_typeCombo;
     QSpinBox  *m_verseSpin;
-    KComboBox *m_dynamicShortcutCombo;
-    KComboBox *m_directionShortcutCombo;
-    KComboBox *m_localDirectionShortcutCombo;
-    KComboBox *m_tempoShortcutCombo;
-    KComboBox *m_localTempoShortcutCombo;
+    QComboBox *m_dynamicShortcutCombo;
+    QComboBox *m_directionShortcutCombo;
+    QComboBox *m_localDirectionShortcutCombo;
+    QComboBox *m_tempoShortcutCombo;
+    QComboBox *m_localTempoShortcutCombo;
     // temporary home:
-    KComboBox *m_lilyPondDirectiveCombo;
+    QComboBox *m_lilyPondDirectiveCombo;
 
 
     QLabel *m_staffAboveLabel;

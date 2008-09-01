@@ -20,7 +20,7 @@
 #define _RG_CATEGORYELEMENT_H_
 
 #include "PresetElement.h"
-#include <qstring.h>
+#include <QString>
 
 
 

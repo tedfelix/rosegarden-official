@@ -31,11 +31,11 @@
 #include "base/Track.h"
 #include "gui/editors/notation/NotationStrings.h"
 #include "gui/general/ProgressReporter.h"
-#include <qfile.h>
-#include <qobject.h>
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qtextstream.h>
+#include <QFile>
+#include <QObject>
+#include <QString>
+#include <QStringList>
+#include <QTextStream>
 #include <string>
 #include <vector>
 
@@ -74,7 +74,7 @@ bool RG21Loader::parseClef()
     if (m_tokens.count() != 3 || !m_currentSegment)
         return false;
 
-    std::string clefName = qstrtostr(m_tokens[2].lower());
+    std::string clefName = qstrtostr(m_tokens[2].toLower());
 
     m_currentClef = Clef(clefName);
     Event *clefEvent = m_currentClef.getAsEvent(m_currentSegmentTime);
@@ -92,15 +92,15 @@ bool RG21Loader::parseKey()
     if (keyBase.length() > 1) {
         // Deal correctly with e.g. Bb major
         keyBase =
-            keyBase.left(1).upper() +
-            keyBase.right(keyBase.length() - 1).lower();
+            keyBase.left(1).toUpper() +
+            keyBase.right(keyBase.length() - 1).toLower();
     } else {
-        keyBase = keyBase.upper();
+        keyBase = keyBase.toUpper();
     }
 
     QString keyName = QString("%1 %2or")
                       .arg(keyBase)
-                      .arg(m_tokens[3].lower());
+                      .arg(m_tokens[3].toLower());
 
     m_currentKey = Rosegarden::Key(qstrtostr(keyName));
     Event *keyEvent = m_currentKey.getAsEvent(m_currentSegmentTime);
@@ -233,7 +233,7 @@ bool RG21Loader::parseText()
     }
 
     if (!readNextLine() ||
-            m_tokens.count() != 2 || m_tokens[0].lower() != "position") {
+            m_tokens.count() != 2 || m_tokens[0].toLower() != "position") {
         return false;
     }
 
@@ -293,7 +293,7 @@ void RG21Loader::setGroupProperties(Event *e)
 
 bool RG21Loader::parseGroupStart()
 {
-    m_groupType = qstrtostr(m_tokens[0].lower());
+    m_groupType = qstrtostr(m_tokens[0].toLower());
     m_inGroup = true;
     m_groupId = m_currentSegment->getNextId();
     m_groupStartTime = m_currentSegmentTime;
@@ -335,7 +335,7 @@ bool RG21Loader::parseIndicationStart()
         return false;
 
     unsigned int indicationId = m_tokens[2].toUInt();
-    std::string indicationType = qstrtostr(m_tokens[3].lower());
+    std::string indicationType = qstrtostr(m_tokens[3].toLower());
 
     //    RG_DEBUG << "Indication start: type is \"" << indicationType << "\"" << endl;
 
@@ -578,12 +578,12 @@ bool RG21Loader::parseStaveType()
 
 timeT RG21Loader::convertRG21Duration(QStringList::Iterator& i)
 {
-    QString durationString = (*i).lower();
+    QString durationString = (*i).toLower();
     ++i;
 
     if (durationString == "dotted") {
         durationString += ' ';
-        durationString += (*i).lower();
+        durationString += (*i).toLower();
         ++i;
     }
 
@@ -650,7 +650,7 @@ bool RG21Loader::readNextLine()
         if (m_stream->eof())
             return false;
 
-        m_currentLine = m_currentLine.simplifyWhiteSpace();
+        m_currentLine = m_currentLine.simplified();
 
         if (m_currentLine[0] == '#' ||
                 m_currentLine.length() == 0) {
@@ -658,7 +658,7 @@ bool RG21Loader::readNextLine()
             continue; // skip comments
         }
 
-        m_tokens = QStringList::split(' ', m_currentLine);
+        m_tokens = m_currentLine.split(' ', QString::SkipEmptyParts);
 
     } while (inComment);
 
@@ -671,7 +671,7 @@ bool RG21Loader::load(const QString &fileName, Composition &comp)
     comp.clear();
 
     QFile file(fileName);
-    if (file.open(IO_ReadOnly)) {
+    if (file.open(QIODevice::ReadOnly)) {
         m_stream = new QTextStream(&file);
     } else {
         return false;

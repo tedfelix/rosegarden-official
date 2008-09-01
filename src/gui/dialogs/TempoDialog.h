@@ -19,11 +19,12 @@
 #ifndef _RG_TEMPODIALOG_H_
 #define _RG_TEMPODIALOG_H_
 
-#include <kdialogbase.h>
+#include <QDialog>
+#include <QDialogButtonBox>
 #include "base/Event.h"
 #include "base/Composition.h"
-#include <qpushbutton.h>
-#include <qdatetime.h>
+#include <QPushButton>
+#include <QDateTime>
 
 
 class QWidget;
@@ -41,7 +42,7 @@ class RosegardenGUIDoc;
 class HSpinBox;
 
 
-class TempoDialog : public KDialogBase
+class TempoDialog : public QDialog
 {
     Q_OBJECT
 public:
@@ -53,7 +54,7 @@ public:
         GlobalTempoWithDefault
     };
 
-    TempoDialog(QWidget *parent, RosegardenGUIDoc *doc,
+    TempoDialog(QDialogButtonBox::QWidget *parent, RosegardenGUIDoc *doc,
                 bool timeEditable = false);
     ~TempoDialog();
 

@@ -19,7 +19,8 @@
 #ifndef _RG_COMPOSITIONLENGTHDIALOG_H_
 #define _RG_COMPOSITIONLENGTHDIALOG_H_
 
-#include <kdialogbase.h>
+#include <QDialog>
+#include <QDialogButtonBox>
 #include "base/Event.h"
 
 
@@ -33,11 +34,11 @@ namespace Rosegarden
 class Composition;
 
 
-class CompositionLengthDialog : public KDialogBase
+class CompositionLengthDialog : public QDialog
 {
     Q_OBJECT
 public:
-    CompositionLengthDialog(QWidget *parent,
+    CompositionLengthDialog(QDialogButtonBox::QWidget *parent,
                             Composition *composition);
 
     timeT getStartMarker();

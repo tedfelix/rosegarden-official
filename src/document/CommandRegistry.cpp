@@ -24,12 +24,12 @@
 
 #include "CommandRegistry.h"
 
-#include <qiconset.h>
-#include <qpixmap.h>
-#include <qfile.h>
+#include <QIcon>
+#include <QPixmap>
+#include <QFile>
 
 #include <kglobal.h>
-#include <kcommand.h>
+#include "document/Command.h"
 
 namespace Rosegarden {
 
@@ -49,11 +49,11 @@ void
 CommandRegistry::slotInvokeCommand()
 {
     const QObject *s = sender();
-    QString actionName = s->name();
+    QString actionName = s->objectName();
     
     if (m_builders.find(actionName) == m_builders.end()) {
         std::cerr << "CommandRegistry::slotInvokeCommand: Unknown actionName \""
-                  << actionName << "\"" << std::endl;
+                  << actionName.toStdString() << "\"" << std::endl;
         return;
     }
 

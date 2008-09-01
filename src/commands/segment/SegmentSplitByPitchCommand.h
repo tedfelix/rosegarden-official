@@ -20,8 +20,8 @@
 #define _RG_SEGMENTSPLITBYPITCHCOMMAND_H_
 
 #include "base/Segment.h"
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include <klocale.h>
 #include "gui/general/ClefIndex.h"
 
@@ -34,7 +34,7 @@ namespace Rosegarden
 class Composition;
 
 
-class SegmentSplitByPitchCommand : public KNamedCommand
+class SegmentSplitByPitchCommand : public NamedCommand
 {
 public:
     enum ClefHandling {

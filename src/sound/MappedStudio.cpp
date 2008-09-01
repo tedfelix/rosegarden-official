@@ -53,7 +53,7 @@ static inline void releaseLock(const char *file, int line)
 #define GET_LOCK getLock(__FILE__,__LINE__)
 #define RELEASE_LOCK releaseLock(__FILE__,__LINE__)
 
-// These stream functions are stolen and adapted from Qt3 qvaluevector.h
+// These stream functions are stolen and adapted from Qt3 QVector
 //
 // ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 //

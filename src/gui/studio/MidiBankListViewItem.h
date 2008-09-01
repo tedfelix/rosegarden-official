@@ -21,7 +21,7 @@
 
 #include "base/Device.h"
 #include "MidiDeviceListViewItem.h"
-#include <qstring.h>
+#include <QString>
 
 
 class QListViewItem;

@@ -17,20 +17,20 @@
 
 
 #include "LatencyConfigurationPage.h"
-#include <qlayout.h>
+#include <QLayout>
 
 #include "document/ConfigGroups.h"
 #include "ConfigurationPage.h"
 #include "document/RosegardenGUIDoc.h"
 #include "TabbedConfigurationPage.h"
 #include <kconfig.h>
-#include <qframe.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qslider.h>
-#include <qstring.h>
-#include <qtabwidget.h>
-#include <qwidget.h>
+#include <QFrame>
+#include <QLabel>
+#include <QPushButton>
+#include <QSlider>
+#include <QString>
+#include <QTabWidget>
+#include <QWidget>
 
 
 namespace Rosegarden
@@ -72,8 +72,8 @@ LatencyConfigurationPage::LatencyConfigurationPage(RosegardenGUIDoc *doc,
                                  "jackplaybacklatencysec", 0) * 1000);
 
     m_jackPlayback = new QSlider(Horizontal, frame);
-    m_jackPlayback->setTickmarks(QSlider::Below);
-    layout->addMultiCellWidget(m_jackPlayback, 3, 3, 2, 3);
+    m_jackPlayback->setTickPosition(QSlider::TicksBelow);
+    layout->addWidget(m_jackPlayback, 3, 2, 1, 3- 3);
 
     QLabel *jackPlaybackLabel = new QLabel(QString("%1").arg(jackPlaybackValue),
                                            frame);
@@ -81,10 +81,10 @@ LatencyConfigurationPage::LatencyConfigurationPage(RosegardenGUIDoc *doc,
     connect(m_jackPlayback, SIGNAL(valueChanged(int)),
             jackPlaybackLabel, SLOT(setNum(int)));
 
-    m_jackPlayback->setMinValue(0);
+    m_jackPlayback->setMinimum(0);
     layout->addWidget(new QLabel("0", frame), 3, 1, Qt::AlignRight);
 
-    m_jackPlayback->setMaxValue(500);
+    m_jackPlayback->setMaximum(500);
     layout->addWidget(new QLabel("500", frame), 3, 4, Qt::AlignLeft);
 
     m_jackPlayback->setValue(jackPlaybackValue);
@@ -95,8 +95,8 @@ LatencyConfigurationPage::LatencyConfigurationPage(RosegardenGUIDoc *doc,
                                "jackrecordlatencysec", 0) * 1000);
 
     m_jackRecord = new QSlider(Horizontal, frame);
-    m_jackRecord->setTickmarks(QSlider::Below);
-    layout->addMultiCellWidget(m_jackRecord, 5, 5, 2, 3);
+    m_jackRecord->setTickPosition(QSlider::TicksBelow);
+    layout->addWidget(m_jackRecord, 5, 2, 1, 3- 3);
 
     QLabel *jackRecordLabel = new QLabel(QString("%1").arg(jackRecordValue),
                                          frame);
@@ -104,10 +104,10 @@ LatencyConfigurationPage::LatencyConfigurationPage(RosegardenGUIDoc *doc,
     connect(m_jackRecord, SIGNAL(valueChanged(int)),
             jackRecordLabel, SLOT(setNum(int)));
 
-    m_jackRecord->setMinValue(0);
+    m_jackRecord->setMinimum(0);
     layout->addWidget(new QLabel("0", frame), 5, 1, Qt::AlignRight);
 
-    m_jackRecord->setMaxValue(500);
+    m_jackRecord->setMaximum(500);
     m_jackRecord->setValue(jackRecordValue);
     layout->addWidget(new QLabel("500", frame), 5, 4, Qt::AlignLeft);
 

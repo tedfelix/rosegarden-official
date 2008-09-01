@@ -38,7 +38,7 @@
 #include "sound/PluginIdentifier.h"
 #include "StudioControl.h"
 #include "TimerCallbackAssistant.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden

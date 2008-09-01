@@ -19,8 +19,8 @@
 #ifndef _RG_SETLYRICSCOMMAND_H_
 #define _RG_SETLYRICSCOMMAND_H_
 
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include <vector>
 #include <klocale.h>
 
@@ -34,7 +34,7 @@ class Segment;
 class Event;
 
 
-class SetLyricsCommand : public KNamedCommand
+class SetLyricsCommand : public NamedCommand
 {
 public:
     SetLyricsCommand(Segment *segment, int verse, QString newLyricData);

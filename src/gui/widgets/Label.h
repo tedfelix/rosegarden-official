@@ -19,7 +19,7 @@
 #ifndef _RG_ROSEGARDENLABEL_H_
 #define _RG_ROSEGARDENLABEL_H_
 
-#include <qlabel.h>
+#include <QLabel>
 
 
 class QWidget;

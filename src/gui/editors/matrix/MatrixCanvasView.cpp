@@ -16,6 +16,9 @@
 */
 
 
+#include <Q3Canvas>
+#include <Q3CanvasItem>
+#include <Q3CanvasItemList>
 #include "MatrixCanvasView.h"
 
 #include "base/SnapGrid.h"
@@ -26,8 +29,8 @@
 #include "QCanvasMatrixRectangle.h"
 #include "QCanvasMatrixDiamond.h"
 #include <qcanvas.h>
-#include <qpoint.h>
-#include <qwidget.h>
+#include <QPoint>
+#include <QWidget>
 #include "misc/Debug.h"
 
 
@@ -38,7 +41,7 @@ namespace Rosegarden
 MatrixCanvasView::MatrixCanvasView(MatrixStaff& staff,
                                    SnapGrid *snapGrid,
                                    bool drumMode,
-                                   QCanvas *viewing, QWidget *parent,
+                                   Q3Canvas *viewing, QWidget *parent,
                                    const char *name, WFlags f)
         : RosegardenCanvasView(viewing, parent, name, f),
         m_staff(staff),
@@ -48,7 +51,7 @@ MatrixCanvasView::MatrixCanvasView(MatrixStaff& staff,
         m_previousEvPitch(0),
         m_mouseWasPressed(false),
         m_ignoreClick(false),
-        m_smoothModifier(Qt::ShiftButton),
+        m_smoothModifier(Qt::ShiftModifier),
         m_lastSnap(SnapGrid::SnapToBeat),
         m_isSnapTemporary(false)
 {
@@ -88,14 +91,14 @@ void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
 //    std::cerr << "MatrixCanvasView::contentsMousePressEvent() at pitch "
 //              << evPitch << ", time " << evTime << std::endl;
 
-    QCanvasItemList itemList = canvas()->collisions(p);
-    QCanvasItemList::Iterator it;
+    Q3CanvasItemList itemList = canvas()->collisions(p);
+    Q3CanvasItemList::Iterator it;
     MatrixElement* mel = 0;
-    QCanvasItem* activeItem = 0;
+    Q3CanvasItem* activeItem = 0;
 
     for (it = itemList.begin(); it != itemList.end(); ++it) {
 
-        QCanvasItem *item = *it;
+        Q3CanvasItem *item = *it;
 
         QCanvasMatrixRectangle *mRect = 0;
 
@@ -120,7 +123,7 @@ void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
 
 //            std::cerr << "MatrixCanvasView: adjusted rect " << rect.x() << "," << rect.y() << " (" << rect.width() << "x" << rect.height() << ")" << std::endl;
 
-            // QCanvas::collisions() can be a bit optimistic and report
+            // Q3Canvas::collisions() can be a bit optimistic and report
             // items which are close to the point but not actually under it.
             // So a little sanity check helps.
             if (!rect.contains(p, true)) continue;
@@ -181,13 +184,13 @@ void MatrixCanvasView::contentsMouseMoveEvent(QMouseEvent* e)
         m_previousEvTime = evTime;
     }
 
-    QCanvasItemList itemList = canvas()->collisions(p);
+    Q3CanvasItemList itemList = canvas()->collisions(p);
     MatrixElement* mel = 0;
 
-    for (QCanvasItemList::iterator it = itemList.begin();
+    for (Q3CanvasItemList::iterator it = itemList.begin();
             it != itemList.end(); ++it) {
 
-        QCanvasItem *item = *it;
+        Q3CanvasItem *item = *it;
         QCanvasMatrixRectangle *mRect = 0;
 
         if ((mRect = dynamic_cast<QCanvasMatrixRectangle*>(item))) {

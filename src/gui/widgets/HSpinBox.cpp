@@ -18,7 +18,7 @@
 
 #include "HSpinBox.h"
 
-#include <qstring.h>
+#include <QString>
 #include <cmath>
 #include <algorithm>
 

@@ -19,7 +19,7 @@
 #define _RG_RESPELLCOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
-#include <qstring.h>
+#include <QString>
 
 
 

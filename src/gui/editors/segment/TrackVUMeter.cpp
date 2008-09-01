@@ -19,9 +19,9 @@
 #include "TrackVUMeter.h"
 
 #include "gui/widgets/VUMeter.h"
-#include <qfont.h>
-#include <qstring.h>
-#include <qwidget.h>
+#include <QFont>
+#include <QString>
+#include <QWidget>
 
 
 namespace Rosegarden

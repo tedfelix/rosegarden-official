@@ -26,46 +26,62 @@
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
-#include <kdialogbase.h>
-#include <qgroupbox.h>
-#include <qregexp.h>
-#include <qstring.h>
-#include <qtextedit.h>
-#include <qvbox.h>
-#include <qwidget.h>
-#include <kcombobox.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QGroupBox>
+#include <QRegExp>
+#include <QString>
+#include <QTextEdit>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QComboBox>
+#include <QLabel>
+#include <QPushButton>
 
 
 namespace Rosegarden
 {
 
-LyricEditDialog::LyricEditDialog(QWidget *parent,
+LyricEditDialog::LyricEditDialog(QDialogButtonBox::QWidget *parent,
                                  Segment *segment) :
-    KDialogBase(parent, 0, true, i18n("Edit Lyrics"), Ok | Cancel | Help),
+    QDialog(parent),
     m_segment(segment),
     m_verseCount(0)
 {
     setHelp("nv-text-lyrics");
 
-    QVBox *vbox = makeVBoxMainWidget();
+    setModal(true);
+    setWindowTitle(i18n("Edit Lyrics"));
 
-    QGroupBox *groupBox = new QGroupBox
-                          (1, Horizontal, i18n("Lyrics for this segment"), vbox);
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
+    QWidget *vbox = new QWidget(this);
+    QVBoxLayout vboxLayout = new QVBoxLayout;
+    metagrid->addWidget(vbox, 0, 0);
 
-    QHBox *hbox = new QHBox(groupBox);
-    hbox->setSpacing(5);
+
+    QGroupBox *groupBox = new QGroupBox( i18n("Lyrics for this segment"), vbox );
+    vboxLayout->addWidget(groupBox);
+    vbox->setLayout(vboxLayout);
+
+    QWidget *hbox = new QWidget(groupBox);
+    QHBoxLayout hboxLayout = new QHBoxLayout;
+    hboxLayout->setSpacing(5);
 //    new QLabel(i18n("Verse:"), hbox);
-    m_verseNumber = new KComboBox(hbox);
+    m_verseNumber = new QComboBox( hbox );
+    hboxLayout->addWidget(m_verseNumber);
     m_verseNumber->setEditable(false);
     connect(m_verseNumber, SIGNAL(activated(int)), this, SLOT(slotVerseNumberChanged(int)));
-    m_verseAddButton = new QPushButton(i18n("Add Verse"), hbox);
+    m_verseAddButton = new QPushButton(i18n("Add Verse"), hbox );
+    hboxLayout->addWidget(m_verseAddButton);
     connect(m_verseAddButton, SIGNAL(clicked()), this, SLOT(slotAddVerse()));
-    m_verseRemoveButton = new QPushButton(i18n("Remove Verse"), hbox);
+    m_verseRemoveButton = new QPushButton(i18n("Remove Verse"), hbox );
+    hboxLayout->addWidget(m_verseRemoveButton);
     connect(m_verseRemoveButton, SIGNAL(clicked()), this, SLOT(slotRemoveVerse()));
-    QFrame *f = new QFrame(hbox);
-    hbox->setStretchFactor(f, 10);
+    QFrame *f = new QFrame( hbox );
+    hboxLayout->addWidget(f);
+    hbox->setLayout(hboxLayout);
+    hboxLayout->setStretchFactor(f, 10);
 
     m_textEdit = new QTextEdit(groupBox);
     m_textEdit->setTextFormat(Qt::PlainText);
@@ -79,6 +95,11 @@ LyricEditDialog::LyricEditDialog(QWidget *parent,
 
     m_textEdit->setCursorPosition(0,0);
     m_textEdit->setFocus();
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 void
@@ -262,7 +283,7 @@ LyricEditDialog::getVerseCount() const
 QString
 LyricEditDialog::getLyricData(int verse) const
 {
-    if (verse == m_verseNumber->currentItem()) {
+    if (verse == m_verseNumber->currentIndex()) {
         return m_textEdit->text();
     } else {
         return m_texts[verse];
@@ -275,7 +296,7 @@ LyricEditDialog::verseDialogRepopulate()
     m_verseNumber->clear();
 
     for (int i = 0; i < m_verseCount; ++i) {
-        m_verseNumber->insertItem(i18n("Verse %1").arg(i + 1));
+        m_verseNumber->addItem(i18n("Verse %1").arg(i + 1));
     }
 
     if (m_verseCount == 12)
@@ -288,7 +309,7 @@ LyricEditDialog::verseDialogRepopulate()
     else
         m_verseRemoveButton->setEnabled(true);
 
-    m_verseNumber->setCurrentItem(m_currentVerse);
+    m_verseNumber->setCurrentIndex(m_currentVerse);
 
     std::cerr << "m_currentVerse = " << m_currentVerse << ", text = " << m_texts[m_currentVerse] << std::endl;
     m_textEdit->setText(m_texts[m_currentVerse]);

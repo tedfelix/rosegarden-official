@@ -19,8 +19,8 @@
 #include <set>
 #include <map>
 
-#include <qpixmap.h>
-#include <qobject.h>
+#include <QPixmap>
+#include <QObject>
 
 #include "AudioFile.h"
 #include "XmlExportable.h"
@@ -44,7 +44,7 @@
 // is not (and should not be) used elsewhere within the
 // sound or sequencer libraries.
 
-class KProcess;
+class QProcess;
 
 namespace Rosegarden
 {
@@ -310,7 +310,7 @@ private:
     std::set<AudioFile *> m_recordedAudioFiles;
     std::set<AudioFile *> m_derivedAudioFiles;
 
-    KProcess *m_importProcess;
+    QProcess *m_importProcess;
 
     int m_expectedSampleRate;
 };

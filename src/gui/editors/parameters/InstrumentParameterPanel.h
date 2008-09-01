@@ -19,7 +19,7 @@
 #ifndef _RG_INSTRUMENTPARAMETERPANEL_H_
 #define _RG_INSTRUMENTPARAMETERPANEL_H_
 
-#include <qframe.h>
+#include <QFrame>
 #include <vector>
 #include <utility>
 

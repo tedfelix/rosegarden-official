@@ -26,9 +26,9 @@
 #include "gui/general/BaseTool.h"
 #include "gui/general/RosegardenCanvasView.h"
 #include "SegmentTool.h"
-#include <kcommand.h>
-#include <qpoint.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QPoint>
+#include <QString>
 #include <klocale.h>
 
 
@@ -49,19 +49,19 @@ void SegmentEraser::ready()
 
 void SegmentEraser::handleMouseButtonPress(QMouseEvent *e)
 {
-    setCurrentItem(m_canvas->getFirstItemAt(e->pos()));
+    setCurrentIndex(m_canvas->getFirstItemAt(e->pos()));
 }
 
 void SegmentEraser::handleMouseButtonRelease(QMouseEvent*)
 {
-    if (m_currentItem) {
+    if (m_currentIndex) {
         // no need to test the result, we know it's good (see handleMouseButtonPress)
-        CompositionItemImpl* item = dynamic_cast<CompositionItemImpl*>((_CompositionItem*)m_currentItem);
+        CompositionItemImpl* item = dynamic_cast<CompositionItemImpl*>((_CompositionItem*)m_currentIndex);
 
         addCommandToHistory(new SegmentEraseCommand(item->getSegment()));
     }
 
-    setCurrentItem(CompositionItem());
+    setCurrentIndex(CompositionItem());
 }
 
 int SegmentEraser::handleMouseMove(QMouseEvent*)

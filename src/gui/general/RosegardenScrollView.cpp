@@ -19,15 +19,15 @@
 #include "RosegardenScrollView.h"
 
 #include "misc/Debug.h"
-#include <qapplication.h>
-#include <qcursor.h>
-#include <qpoint.h>
-#include <qrect.h>
-#include <qscrollbar.h>
+#include <QApplication>
+#include <QCursor>
+#include <QPoint>
+#include <QRect>
+#include <QScrollBar>
 #include <qscrollview.h>
-#include <qsizepolicy.h>
-#include <qtimer.h>
-#include <qwidget.h>
+#include <QSizePolicy>
+#include <QTimer>
+#include <QWidget>
 
 
 namespace Rosegarden
@@ -38,9 +38,9 @@ namespace Rosegarden
 
 const int RosegardenScrollView::AutoscrollMargin = 16;
 const int RosegardenScrollView::InitialScrollTime = 30;
-const int RosegardenScrollView::InitialScrollAccel = 5;
+const int RosegardenScrollView::InitialScrollShortcut = 5;
 const int RosegardenScrollView::MaxScrollDelta = 100;      // max a.scroll speed
-const double RosegardenScrollView::ScrollAccelValue = 1.04;// acceleration rate
+const double RosegardenScrollView::ScrollShortcutValue = 1.04;// shortcuteration rate
 
 RosegardenScrollView::RosegardenScrollView(QWidget* parent,
         const char* name, WFlags f)
@@ -51,7 +51,7 @@ RosegardenScrollView::RosegardenScrollView(QWidget* parent,
         m_smoothScrollTimeInterval(DefaultSmoothScrollTimeInterval),
         m_minDeltaScroll(DefaultMinDeltaScroll),
         m_autoScrollTime(InitialScrollTime),
-        m_autoScrollAccel(InitialScrollAccel),
+        m_autoScrollShortcut(InitialScrollShortcut),
         m_autoScrollXMargin(0),
         m_autoScrollYMargin(0),
         m_currentScrollDirection(None),
@@ -79,7 +79,7 @@ void RosegardenScrollView::startAutoScroll()
 
     if ( !m_autoScrollTimer.isActive() ) {
         m_autoScrollTime = InitialScrollTime;
-        m_autoScrollAccel = InitialScrollAccel;
+        m_autoScrollShortcut = InitialScrollShortcut;
         m_autoScrollTimer.start( m_autoScrollTime );
     }
 
@@ -136,14 +136,14 @@ void RosegardenScrollView::doAutoScroll()
         if ( p.x() < m_autoScrollXMargin ) {
             if ( dp.x() > 0 ) {
                 startDecelerating = true;
-                m_minDeltaScroll /= ScrollAccelValue;
+                m_minDeltaScroll /= ScrollShortcutValue;
             }
             dx = -(int(m_minDeltaScroll));
             scrollDirection = Left;
         } else if ( p.x() > visibleWidth() - m_autoScrollXMargin ) {
             if ( dp.x() < 0 ) {
                 startDecelerating = true;
-                m_minDeltaScroll /= ScrollAccelValue;
+                m_minDeltaScroll /= ScrollShortcutValue;
             }
             dx = + (int(m_minDeltaScroll));
             scrollDirection = Right;
@@ -156,9 +156,9 @@ void RosegardenScrollView::doAutoScroll()
             ((scrollDirection == m_currentScrollDirection) || (m_currentScrollDirection == None)) ) {
         scrollBy(dx, dy);
         if ( startDecelerating )
-            m_minDeltaScroll /= ScrollAccelValue;
+            m_minDeltaScroll /= ScrollShortcutValue;
         else
-            m_minDeltaScroll *= ScrollAccelValue;
+            m_minDeltaScroll *= ScrollShortcutValue;
         if (m_minDeltaScroll > MaxScrollDelta )
             m_minDeltaScroll = MaxScrollDelta;
         m_currentScrollDirection = scrollDirection;
@@ -181,7 +181,7 @@ bool RosegardenScrollView::isTimeForSmoothScroll()
                               desktopHeight = QApplication::desktop()->height();
 
     if (m_smoothScroll) {
-        int ta = m_scrollAccelerationTimer.elapsed();
+        int ta = m_scrollShortcuterationTimer.elapsed();
         int t = m_scrollTimer.elapsed();
 
         RG_DEBUG << "t = " << t << ", ta = " << ta << ", int " << m_smoothScrollTimeInterval << ", delta " << m_minDeltaScroll << endl;
@@ -196,11 +196,11 @@ bool RosegardenScrollView::isTimeForSmoothScroll()
                 // reset smoothScrollTimeInterval
                 m_smoothScrollTimeInterval = DefaultSmoothScrollTimeInterval;
                 m_minDeltaScroll = DefaultMinDeltaScroll;
-                m_scrollAccelerationTimer.restart();
+                m_scrollShortcuterationTimer.restart();
             } else if (ta > 50) {
                 //                 m_smoothScrollTimeInterval /= 2;
                 m_minDeltaScroll *= 1.08;
-                m_scrollAccelerationTimer.restart();
+                m_scrollShortcuterationTimer.restart();
             }
 
             m_scrollTimer.restart();

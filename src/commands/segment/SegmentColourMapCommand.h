@@ -21,8 +21,8 @@
 
 #include "base/ColourMap.h"
 #include "base/Segment.h"
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include <klocale.h>
 
 
@@ -34,7 +34,7 @@ namespace Rosegarden
 class RosegardenGUIDoc;
 
 
-class SegmentColourMapCommand : public KNamedCommand
+class SegmentColourMapCommand : public NamedCommand
 {
 public:
     SegmentColourMapCommand(      RosegardenGUIDoc*      doc,

@@ -19,8 +19,8 @@
 #ifndef KSTARTUPLOGO_H
 #define KSTARTUPLOGO_H
 
-#include <qwidget.h>
-#include <qpixmap.h>
+#include <QWidget>
+#include <QPixmap>
 
 class KStartupLogo : public QWidget
 {

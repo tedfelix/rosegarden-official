@@ -18,17 +18,18 @@
 #ifndef _RG_TRIVIALVELOCITYDIALOG_H_
 #define _RG_TRIVIALVELOCITYDIALOG_H_
 
-#include <kdialogbase.h>
+#include <QDialog>
+#include <QDialogButtonBox>
 
 class QHBox;
 class QSpinBox;
 
 namespace Rosegarden {
         
-class TrivialVelocityDialog : public KDialogBase
+class TrivialVelocityDialog : public QDialog
 {
 public:
-    TrivialVelocityDialog(QWidget *parent, QString label, int deft);
+    TrivialVelocityDialog(QDialogButtonBox::QWidget *parent, QString label, int deft);
 
     int getVelocity();
 

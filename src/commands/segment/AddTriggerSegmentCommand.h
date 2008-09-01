@@ -20,7 +20,7 @@
 #define _RG_ADDTRIGGERSEGMENTCOMMAND_H_
 
 #include "base/TriggerSegment.h"
-#include <kcommand.h>
+#include "document/Command.h"
 #include "base/Event.h"
 
 
@@ -34,7 +34,7 @@ class RosegardenGUIDoc;
 class Composition;
 
 
-class AddTriggerSegmentCommand : public KNamedCommand
+class AddTriggerSegmentCommand : public NamedCommand
 {
 public:
     AddTriggerSegmentCommand(RosegardenGUIDoc *doc,

@@ -24,8 +24,8 @@
 #include "RosegardenGUIApp.h"
 #include "RosegardenGUIView.h"
 #include <kcursor.h>
-#include <qcursor.h>
-#include <qwidget.h>
+#include <QCursor>
+#include <QWidget>
 #include <kapplication.h>
 
 namespace Rosegarden

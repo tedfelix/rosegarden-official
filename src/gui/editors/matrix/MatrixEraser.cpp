@@ -16,11 +16,12 @@
 */
 
 
+#include <Q3CanvasPixmap>
 #include "MatrixEraser.h"
 #include "misc/Debug.h"
 
 #include <klocale.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include "base/ViewElement.h"
 #include "commands/matrix/MatrixEraseCommand.h"
 #include "gui/general/EditTool.h"
@@ -29,8 +30,8 @@
 #include "MatrixView.h"
 #include <kaction.h>
 #include <kglobal.h>
-#include <qiconset.h>
-#include <qstring.h>
+#include <QIcon>
+#include <QString>
 
 
 namespace Rosegarden
@@ -41,8 +42,8 @@ MatrixEraser::MatrixEraser(MatrixView* parent)
         m_currentStaff(0)
 {
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QCanvasPixmap pixmap(pixmapDir + "/toolbar/select.xpm");
-    QIconSet icon = QIconSet(pixmap);
+    Q3CanvasPixmap pixmap(pixmapDir + "/toolbar/select.xpm");
+    QIcon icon = QIcon(pixmap);
 
     new KAction(i18n("Switch to Select Tool"), icon, Key_F2, this,
                 SLOT(slotSelectSelected()), actionCollection(),
@@ -57,7 +58,7 @@ MatrixEraser::MatrixEraser(MatrixView* parent)
                 "move");
 
     pixmap.load(pixmapDir + "/toolbar/resize.xpm");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
     new KAction(i18n("Switch to Resize Tool"), icon, Key_F6, this,
                 SLOT(slotResizeSelected()), actionCollection(),
                 "resize");

@@ -26,7 +26,7 @@
 #include "base/NotationTypes.h"
 #include "gui/configuration/GeneralConfigurationPage.h"
 #include <kconfig.h>
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden

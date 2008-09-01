@@ -22,7 +22,8 @@
 #include "base/Event.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include <string>
-#include <kdialogbase.h>
+#include <QDialog>
+#include <QDialogButtonBox>
 
 
 class QWidget;
@@ -38,7 +39,7 @@ namespace Rosegarden
 class PropertyName;
 
 
-class EventEditDialog : public KDialogBase
+class EventEditDialog : public QDialog
 {
     Q_OBJECT
 

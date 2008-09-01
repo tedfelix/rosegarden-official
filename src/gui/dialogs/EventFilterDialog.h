@@ -21,12 +21,13 @@
 #ifndef _RG_EVENTFILTERDIALOG_H_
 #define _RG_EVENTFILTERDIALOG_H_
 
-#include <kdialogbase.h>
+#include <QDialog>
+#include <QDialogButtonBox>
 #include <utility>
 #include <vector>
 #include "base/Event.h"
-#include <qcheckbox.h>
-#include <qcombobox.h>
+#include <QCheckBox>
+#include <QComboBox>
 
 class QWidget;
 class QSpinBox;
@@ -49,7 +50,7 @@ class Event;
  * should continue to be selected.  See matrixview.cpp slotFilterSelection()
  * for an example of how to use this.
  */
-class EventFilterDialog : public KDialogBase
+class EventFilterDialog : public QDialog
 {
     Q_OBJECT
 
@@ -103,9 +104,9 @@ protected:
     void invert (filterRange &);
 
     // return inclusive/exclusive toggle states concisely for tidy code
-    bool pitchIsInclusive()    { return (m_notePitchIncludeComboBox->currentItem()    == 0); }
-    bool velocityIsInclusive() { return (m_noteVelocityIncludeComboBox->currentItem() == 0); }
-    bool durationIsInclusive() { return (m_noteDurationIncludeComboBox->currentItem() == 0); }
+    bool pitchIsInclusive()    { return (m_notePitchIncludeComboBox->currentIndex()    == 0); }
+    bool velocityIsInclusive() { return (m_noteVelocityIncludeComboBox->currentIndex() == 0); }
+    bool durationIsInclusive() { return (m_noteDurationIncludeComboBox->currentIndex() == 0); }
 
 protected slots:
 

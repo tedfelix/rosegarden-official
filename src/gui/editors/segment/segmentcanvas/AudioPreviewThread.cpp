@@ -21,11 +21,11 @@
 #include "base/RealTime.h"
 #include "sound/AudioFileManager.h"
 #include "sound/PeakFileManager.h"
-#include <qapplication.h>
-#include <qevent.h>
-#include <qmutex.h>
-#include <qobject.h>
-#include <qthread.h>
+#include <QApplication>
+#include <QEvent>
+#include <QMutex>
+#include <QObject>
+#include <QThread>
 
 
 namespace Rosegarden

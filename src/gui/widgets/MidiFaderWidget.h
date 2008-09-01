@@ -19,13 +19,13 @@
 #ifndef _RG_MIDIFADERWIDGET_H_
 #define _RG_MIDIFADERWIDGET_H_
 
-#include <qframe.h>
-#include <qstring.h>
+#include <QFrame>
+#include <QString>
 
 
 class QWidget;
 class QPushButton;
-class KComboBox;
+class QComboBox;
 
 
 namespace Rosegarden
@@ -53,7 +53,7 @@ public:
     QPushButton               *m_recordButton;
     Rotary          *m_pan;
 
-    KComboBox                 *m_output; 
+    QComboBox                 *m_output; 
 
     QString                    m_id;
 };

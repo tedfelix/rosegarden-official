@@ -20,12 +20,12 @@
 
 #include "RosegardenParameterArea.h"
 #include <ktabwidget.h>
-#include <qfont.h>
-#include <qframe.h>
+#include <QFont>
+#include <QFrame>
 #include <qscrollview.h>
-#include <qstring.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <QString>
+#include <QWidget>
+#include <QVBoxLayout>
 #include <qwidgetstack.h>
 
 

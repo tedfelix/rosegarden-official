@@ -20,7 +20,7 @@
 #define _RG_SEGMENTRESIZER_H_
 
 #include "SegmentTool.h"
-#include <qstring.h>
+#include <QString>
 
 
 class QPoint;

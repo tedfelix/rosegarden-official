@@ -21,8 +21,8 @@
 
 #include "base/Device.h"
 #include <string>
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include <klocale.h>
 
 
@@ -34,13 +34,13 @@ namespace Rosegarden
 class Studio;
 
 
-class RenameDeviceCommand : public KNamedCommand
+class RenameDeviceCommand : public NamedCommand
 {
 public:
     RenameDeviceCommand(Studio *studio,
                         DeviceId deviceId,
                         std::string name) :
-        KNamedCommand(getGlobalName()),
+        NamedCommand(getGlobalName()),
         m_studio(studio),
         m_deviceId(deviceId),
         m_name(name) { }

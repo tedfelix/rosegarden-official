@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#include <qapplication.h>
-#include <qeventloop.h>
+#include <QApplication>
+#include <QEventLoop>
 
 #include <kmainwindow.h>
 #include <kstatusbar.h>

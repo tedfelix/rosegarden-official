@@ -19,15 +19,19 @@
 #ifndef _RG_AUDIOSPLITDIALOG_H_
 #define _RG_AUDIOSPLITDIALOG_H_
 
-#include <kdialogbase.h>
+#include <Q3Canvas>
+#include <Q3CanvasRectangle>
+#include <Q3CanvasView>
+#include <QDialog>
+#include <QDialogButtonBox>
 #include <vector>
-#include <qspinbox.h>
+#include <QSpinBox>
 
 
 class QWidget;
-class QCanvasView;
-class QCanvasRectangle;
-class QCanvas;
+class Q3CanvasView;
+class Q3CanvasRectangle;
+class Q3Canvas;
 
 
 namespace Rosegarden
@@ -37,11 +41,11 @@ class Segment;
 class RosegardenGUIDoc;
 
 
-class AudioSplitDialog : public KDialogBase
+class AudioSplitDialog : public QDialog
 {
     Q_OBJECT
 public:
-    AudioSplitDialog(QWidget *parent,
+    AudioSplitDialog(QDialogButtonBox::QWidget *parent,
                      Segment *segment,
                      RosegardenGUIDoc *doc);
 
@@ -61,8 +65,8 @@ public slots:
 protected:
     RosegardenGUIDoc              *m_doc;
     Segment           *m_segment;
-    QCanvas                       *m_canvas;
-    QCanvasView                   *m_canvasView;
+    Q3Canvas                       *m_canvas;
+    Q3CanvasView                   *m_canvasView;
     QSpinBox                      *m_thresholdSpin;
 
     int                            m_canvasWidth;
@@ -70,7 +74,7 @@ protected:
     int                            m_previewWidth;
     int                            m_previewHeight;
 
-    std::vector<QCanvasRectangle*> m_previewBoxes;
+    std::vector<Q3CanvasRectangle*> m_previewBoxes;
 
 };
 

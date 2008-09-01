@@ -23,7 +23,7 @@
 #include "base/Clipboard.h"
 #include "base/Composition.h"
 #include "base/Selection.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
@@ -31,7 +31,7 @@ namespace Rosegarden
 
 CopyCommand::CopyCommand(EventSelection &selection,
                          Clipboard *clipboard) :
-        KNamedCommand(getGlobalName()),
+        NamedCommand(getGlobalName()),
         m_targetClipboard(clipboard)
 {
     m_sourceClipboard = new Clipboard;
@@ -43,7 +43,7 @@ CopyCommand::CopyCommand(EventSelection &selection,
 
 CopyCommand::CopyCommand(SegmentSelection &selection,
                          Clipboard *clipboard) :
-        KNamedCommand(getGlobalName()),
+        NamedCommand(getGlobalName()),
         m_targetClipboard(clipboard)
 {
     m_sourceClipboard = new Clipboard;
@@ -61,7 +61,7 @@ CopyCommand::CopyCommand(Composition *composition,
                          timeT beginTime,
                          timeT endTime,
                          Clipboard *clipboard) :
-        KNamedCommand(i18n("Copy Range")),
+        NamedCommand(i18n("Copy Range")),
         m_targetClipboard(clipboard)
 {
     m_sourceClipboard = new Clipboard;

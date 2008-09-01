@@ -19,8 +19,8 @@
 #ifndef _RG_VUMETER_H_
 #define _RG_VUMETER_H_
 
-#include <qcolor.h>
-#include <qlabel.h>
+#include <QColor>
+#include <QLabel>
 
 
 class QWidget;

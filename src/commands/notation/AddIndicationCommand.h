@@ -21,7 +21,7 @@
 
 #include "document/BasicCommand.h"
 #include <string>
-#include <qstring.h>
+#include <QString>
 #include "base/Event.h"
 
 

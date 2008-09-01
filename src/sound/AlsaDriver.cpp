@@ -40,7 +40,7 @@
 #include "AudioPlayQueue.h"
 #include "ExternalTransport.h"
 
-#include <qregexp.h>
+#include <QRegExp>
 #include <pthread.h>
 
 

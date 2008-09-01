@@ -17,7 +17,7 @@
 
 
 #include "ManageMetronomeDialog.h"
-#include <qlayout.h>
+#include <QLayout>
 
 #include <klocale.h>
 #include "misc/Debug.h"
@@ -37,45 +37,56 @@
 #include "gui/widgets/PitchChooser.h"
 #include "sound/MappedEvent.h"
 #include "sound/PluginIdentifier.h"
-#include <kcombobox.h>
-#include <kdialogbase.h>
-#include <qcheckbox.h>
-#include <qframe.h>
-#include <qgroupbox.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qspinbox.h>
-#include <qstring.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <QComboBox>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QCheckBox>
+#include <QFrame>
+#include <QGroupBox>
+#include <QLabel>
+#include <QSpinBox>
+#include <QString>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 
 
 namespace Rosegarden
 {
 
-ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
+ManageMetronomeDialog::ManageMetronomeDialog(QDialogButtonBox::QWidget *parent,
         RosegardenGUIDoc *doc) :
-        KDialogBase(parent, 0, true, i18n("Metronome"), Ok | Apply | Close | Help),
+        QDialog(parent),
         m_doc(doc)
 {
     setHelp("studio-metronome");
 
-    QHBox *hbox = makeHBoxMainWidget();
+    setModal(true);
+    setWindowTitle(i18n("Metronome"));
+
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
+    QWidget *hbox = new QWidget(this);
+    QHBoxLayout hboxLayout = new QHBoxLayout;
+    metagrid->addWidget(hbox, 0, 0);
+
 
     // I think having this as well probably just overcomplicates things
     m_instrumentParameterBox = 0;
     //    m_instrumentParameterBox = new InstrumentParameterBox(doc, hbox);
 
-    QVBox *vbox = new QVBox(hbox);
+    QWidget *vbox = new QWidget(hbox);
+    QVBoxLayout vboxLayout = new QVBoxLayout;
+    hboxLayout->addWidget(vbox);
 
-    QGroupBox *deviceBox = new QGroupBox
-                           (1, Horizontal, i18n("Metronome Instrument"), vbox);
+    QGroupBox *deviceBox = new QGroupBox( i18n("Metronome Instrument"), vbox );
+    vboxLayout->addWidget(deviceBox);
 
     QFrame *frame = new QFrame(deviceBox);
     QGridLayout *layout = new QGridLayout(frame, 2, 2, 10, 5);
 
     layout->addWidget(new QLabel(i18n("Device"), frame), 0, 0);
-    m_metronomeDevice = new KComboBox(frame);
+    m_metronomeDevice = new QComboBox(frame);
     layout->addWidget(m_metronomeDevice, 0, 1);
 
     DeviceList *devices = doc->getStudio().getDevices();
@@ -98,75 +109,79 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
         } else if (!hasConnection) {
             label = i18n("%1 - No connection").arg(label);
         }
-        m_metronomeDevice->insertItem(label);
+        m_metronomeDevice->addItem(label);
         if (dev->getId() == deviceId) {
-            m_metronomeDevice->setCurrentItem(m_metronomeDevice->count() - 1);
+            m_metronomeDevice->setCurrentIndex(m_metronomeDevice->count() - 1);
         }
     }
 
     layout->addWidget(new QLabel(i18n("Instrument"), frame), 1, 0);
-    m_metronomeInstrument = new KComboBox(frame);
+    m_metronomeInstrument = new QComboBox(frame);
     connect(m_metronomeInstrument, SIGNAL(activated(int)), this, SLOT(slotSetModified()));
     connect(m_metronomeInstrument, SIGNAL(activated(int)), this, SLOT(slotInstrumentChanged(int)));
     layout->addWidget(m_metronomeInstrument, 1, 1);
 
-    QGroupBox *beatBox = new QGroupBox
-                         (1, Horizontal, i18n("Beats"), vbox);
+    QGroupBox *beatBox = new QGroupBox( i18n("Beats"), vbox );
+    vboxLayout->addWidget(beatBox);
 
     frame = new QFrame(beatBox);
     layout = new QGridLayout(frame, 4, 2, 10, 5);
 
     layout->addWidget(new QLabel(i18n("Resolution"), frame), 0, 0);
-    m_metronomeResolution = new KComboBox(frame);
-    m_metronomeResolution->insertItem(i18n("None"));
-    m_metronomeResolution->insertItem(i18n("Bars only"));
-    m_metronomeResolution->insertItem(i18n("Bars and beats"));
-    m_metronomeResolution->insertItem(i18n("Bars, beats, and divisions"));
+    m_metronomeResolution = new QComboBox(frame);
+    m_metronomeResolution->addItem(i18n("None"));
+    m_metronomeResolution->addItem(i18n("Bars only"));
+    m_metronomeResolution->addItem(i18n("Bars and beats"));
+    m_metronomeResolution->addItem(i18n("Bars, beats, and divisions"));
     connect(m_metronomeResolution, SIGNAL(activated(int)), this, SLOT(slotResolutionChanged(int)));
     layout->addWidget(m_metronomeResolution, 0, 1);
 
     layout->addWidget(new QLabel(i18n("Bar velocity"), frame), 1, 0);
     m_metronomeBarVely = new QSpinBox(frame);
-    m_metronomeBarVely->setMinValue(0);
-    m_metronomeBarVely->setMaxValue(127);
+    m_metronomeBarVely->setMinimum(0);
+    m_metronomeBarVely->setMaximum(127);
     connect(m_metronomeBarVely, SIGNAL(valueChanged(int)), this, SLOT(slotSetModified()));
     layout->addWidget(m_metronomeBarVely, 1, 1);
 
     layout->addWidget(new QLabel(i18n("Beat velocity"), frame), 2, 0);
     m_metronomeBeatVely = new QSpinBox(frame);
-    m_metronomeBeatVely->setMinValue(0);
-    m_metronomeBeatVely->setMaxValue(127);
+    m_metronomeBeatVely->setMinimum(0);
+    m_metronomeBeatVely->setMaximum(127);
     connect(m_metronomeBeatVely, SIGNAL(valueChanged(int)), this, SLOT(slotSetModified()));
     layout->addWidget(m_metronomeBeatVely, 2, 1);
 
     layout->addWidget(new QLabel(i18n("Sub-beat velocity"), frame), 3, 0);
     m_metronomeSubBeatVely = new QSpinBox(frame);
-    m_metronomeSubBeatVely->setMinValue(0);
-    m_metronomeSubBeatVely->setMaxValue(127);
+    m_metronomeSubBeatVely->setMinimum(0);
+    m_metronomeSubBeatVely->setMaximum(127);
     connect(m_metronomeSubBeatVely, SIGNAL(valueChanged(int)), this, SLOT(slotSetModified()));
     layout->addWidget(m_metronomeSubBeatVely, 3, 1);
 
-    vbox = new QVBox(hbox);
+    vbox = new QVBox( hbox );
+    hboxLayout->addWidget(vbox);
+    hbox->setLayout(hboxLayout);
 
-    m_metronomePitch = new PitchChooser(i18n("Pitch"), vbox, 60);
+    m_metronomePitch = new PitchChooser(i18n("Pitch"), vbox , 60);
+    vboxLayout->addWidget(m_metronomePitch);
     connect(m_metronomePitch, SIGNAL(pitchChanged(int)), this, SLOT(slotPitchChanged(int)));
     connect(m_metronomePitch, SIGNAL(preview(int)), this, SLOT(slotPreviewPitch(int)));
 
-    m_metronomePitchSelector = new KComboBox(m_metronomePitch);
-    m_metronomePitchSelector->insertItem(i18n("for Bar"));
-    m_metronomePitchSelector->insertItem(i18n("for Beat"));
-    m_metronomePitchSelector->insertItem(i18n("for Sub-beat"));
+    m_metronomePitchSelector = new QComboBox(m_metronomePitch);
+    m_metronomePitchSelector->addItem(i18n("for Bar"));
+    m_metronomePitchSelector->addItem(i18n("for Beat"));
+    m_metronomePitchSelector->addItem(i18n("for Sub-beat"));
     connect(m_metronomePitchSelector, SIGNAL(activated(int)), this, SLOT(slotPitchSelectorChanged(int)));
 
-    QGroupBox *enableBox = new QGroupBox
-                           (1, Horizontal, i18n("Metronome Activated"), vbox);
+    QGroupBox *enableBox = new QGroupBox( i18n("Metronome Activated"), vbox );
+    vboxLayout->addWidget(enableBox);
+    vbox->setLayout(vboxLayout);
     m_playEnabled = new QCheckBox(i18n("Playing"), enableBox);
     m_recordEnabled = new QCheckBox(i18n("Recording"), enableBox);
     connect(m_playEnabled, SIGNAL(clicked()), this, SLOT(slotSetModified()));
     connect(m_recordEnabled, SIGNAL(clicked()), this, SLOT(slotSetModified()));
 
     // populate the dialog
-    populate(m_metronomeDevice->currentItem());
+    populate(m_metronomeDevice->currentIndex());
 
     // connect up the device list
     connect(m_metronomeDevice, SIGNAL(activated(int)),
@@ -176,6 +191,11 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
             this, SLOT(slotSetModified()));
 
     setModified(false);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Apply | QDialogButtonBox::Close | QDialogButtonBox::Help);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 void
@@ -283,21 +303,21 @@ ManageMetronomeDialog::populate(int deviceIndex)
                 text = iname;
             }
 
-            m_metronomeInstrument->insertItem(text);
+            m_metronomeInstrument->addItem(text);
 
             if ((*iit)->getId() == metronome->getInstrument()) {
                 position = count;
             }
             count++;
         }
-        m_metronomeInstrument->setCurrentItem(position);
+        m_metronomeInstrument->setCurrentIndex(position);
         slotInstrumentChanged(position);
 
         m_barPitch = metronome->getBarPitch();
         m_beatPitch = metronome->getBeatPitch();
         m_subBeatPitch = metronome->getSubBeatPitch();
         slotPitchSelectorChanged(0);
-        m_metronomeResolution->setCurrentItem(metronome->getDepth());
+        m_metronomeResolution->setCurrentIndex(metronome->getDepth());
         m_metronomeBarVely->setValue(metronome->getBarVelocity());
         m_metronomeBeatVely->setValue(metronome->getBeatVelocity());
         m_metronomeSubBeatVely->setValue(metronome->getSubBeatVelocity());
@@ -313,7 +333,7 @@ ManageMetronomeDialog::slotInstrumentChanged(int i)
     if (!m_instrumentParameterBox)
         return ;
 
-    int deviceIndex = m_metronomeDevice->currentItem();
+    int deviceIndex = m_metronomeDevice->currentIndex();
 
     DeviceList *devices = m_doc->getStudio().getDevices();
     DeviceListConstIterator it;
@@ -387,12 +407,12 @@ ManageMetronomeDialog::slotApply()
         dev = *it;
         if (!isSuitable(dev)) continue;
 
-        if (count == m_metronomeDevice->currentItem()) break;
+        if (count == m_metronomeDevice->currentIndex()) break;
         count++;
     }
 
     if (!dev || !isSuitable(dev)) {
-        std::cerr << "Warning: ManageMetronomeDialog::slotApply: no " << m_metronomeDevice->currentItem() << "th device" << std::endl;
+        std::cerr << "Warning: ManageMetronomeDialog::slotApply: no " << m_metronomeDevice->currentIndex() << "th device" << std::endl;
         return ;
     }
 
@@ -406,7 +426,7 @@ ManageMetronomeDialog::slotApply()
     InstrumentList list = dev->getPresentationInstruments();
 
     Instrument *inst =
-        list[m_metronomeInstrument->currentItem()];
+        list[m_metronomeInstrument->currentIndex()];
 
     if (inst) {
         metronome.setInstrument(inst->getId());
@@ -417,7 +437,7 @@ ManageMetronomeDialog::slotApply()
     metronome.setSubBeatPitch(m_subBeatPitch);
 
     metronome.setDepth(
-        m_metronomeResolution->currentItem());
+        m_metronomeResolution->currentIndex());
 
     metronome.setBarVelocity(
         MidiByte(m_metronomeBarVely->value()));
@@ -453,7 +473,7 @@ ManageMetronomeDialog::slotPreviewPitch(int pitch)
         dev = *it;
         if (!isSuitable(dev)) continue;
 
-        if (count == m_metronomeDevice->currentItem()) break;
+        if (count == m_metronomeDevice->currentIndex()) break;
         count++;
     }
 
@@ -465,7 +485,7 @@ ManageMetronomeDialog::slotPreviewPitch(int pitch)
     InstrumentList list = dev->getPresentationInstruments();
 
     Instrument *inst =
-        list[m_metronomeInstrument->currentItem()];
+        list[m_metronomeInstrument->currentIndex()];
 
     if (inst) {
         RG_DEBUG << "ManageMetronomeDialog::slotPreviewPitch"
@@ -485,7 +505,7 @@ ManageMetronomeDialog::slotPreviewPitch(int pitch)
 void
 ManageMetronomeDialog::slotPitchChanged(int pitch)
 {
-    switch (m_metronomePitchSelector->currentItem()) {
+    switch (m_metronomePitchSelector->currentIndex()) {
     case 0:
         m_barPitch = pitch;
         break;

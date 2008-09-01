@@ -43,7 +43,7 @@ namespace Rosegarden
 class KLedButton : public KLed  {
    Q_OBJECT
   public: 
-   KLedButton(const QColor &col=Qt::green, QWidget *parent=0, const char *name=0);
+   KLedButton(const QColor &col=QColor(Qt::green), QWidget *parent=0, const char *name=0);
    KLedButton(const QColor& col, KLed::State st, KLed::Look look, KLed::Shape shape,
               QWidget *parent=0, const char *name=0);
    ~KLedButton();       

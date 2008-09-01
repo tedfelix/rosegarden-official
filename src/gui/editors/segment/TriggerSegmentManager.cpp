@@ -16,14 +16,15 @@
 */
 
 
+#include <Q3CanvasPixmap>
 #include "TriggerSegmentManager.h"
 #include "TriggerManagerItem.h"
-#include <qlayout.h>
+#include <QLayout>
 #include <kapplication.h>
 
 #include "base/BaseProperties.h"
 #include <klocale.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "base/Clipboard.h"
@@ -41,25 +42,25 @@
 #include "gui/dialogs/TimeDialog.h"
 #include "gui/general/MidiPitchLabel.h"
 #include <kaction.h>
-#include <kcommand.h>
+#include "document/Command.h"
 #include <kglobal.h>
 #include <klistview.h>
 #include <kmainwindow.h>
 #include <kmessagebox.h>
-#include <kstdaccel.h>
-#include <kstdaction.h>
+#include <kstandardshortcut.h>
+#include <kstandardaction.h>
 #include <kconfig.h>
-#include <qaccel.h>
-#include <qdialog.h>
-#include <qframe.h>
-#include <qiconset.h>
-#include <qlistview.h>
-#include <qpushbutton.h>
-#include <qsizepolicy.h>
-#include <qstring.h>
-#include <qtooltip.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <qshortcut.h>
+#include <QDialog>
+#include <QFrame>
+#include <QIcon>
+#include <QListView>
+#include <QPushButton>
+#include <QSizePolicy>
+#include <QString>
+#include <QToolTip>
+#include <QWidget>
+#include <QVBoxLayout>
 #include <qcanvas.h>
 
 
@@ -72,12 +73,14 @@ TriggerSegmentManager::TriggerSegmentManager(QWidget *parent,
         m_doc(doc),
         m_modified(false)
 {
-    QVBox* mainFrame = new QVBox(this);
+    QWidget *mainFrame = new QWidget(this);
+    QVBoxLayout mainFrameLayout = new QVBoxLayout;
     setCentralWidget(mainFrame);
 
     setCaption(i18n("Manage Triggered Segments"));
 
-    m_listView = new KListView(mainFrame);
+    m_listView = new KListView( mainFrame );
+    mainFrameLayout->addWidget(m_listView);
     m_listView->addColumn("Index");
     m_listView->addColumn(i18n("ID"));
     m_listView->addColumn(i18n("Label"));
@@ -90,7 +93,9 @@ TriggerSegmentManager::TriggerSegmentManager(QWidget *parent,
     for (int i = 0; i < 2; ++i)
         m_listView->setColumnAlignment(i, Qt::AlignHCenter);
 
-    QFrame* btnBox = new QFrame(mainFrame);
+    QFrame *btnBox = new QFrame( mainFrame );
+    mainFrameLayout->addWidget(btnBox);
+    mainFrame->setLayout(mainFrameLayout);
 
     btnBox->setSizePolicy(
         QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed));
@@ -162,7 +167,7 @@ TriggerSegmentManager::TriggerSegmentManager(QWidget *parent,
 
     setAutoSaveSettings(TriggerManagerConfigGroup, true);
 
-    m_accelerators = new QAccel(this);
+    m_shortcuterators = new QShortcut(this);
 }
 
 TriggerSegmentManager::~TriggerSegmentManager()
@@ -256,14 +261,14 @@ TriggerSegmentManager::slotUpdate()
         item->setUsage(uses);
         item->setPitch((*it)->getBasePitch());
 
-        m_listView->insertItem(item);
+        m_listView->addItem(item);
         ++i;
     }
 
     if (m_listView->childCount() == 0) {
         QListViewItem *item =
             new TriggerManagerItem(m_listView, i18n("<none>"));
-        m_listView->insertItem(item);
+        m_listView->addItem(item);
 
         m_listView->setSelectionMode(QListView::NoSelection);
     } else {
@@ -278,7 +283,7 @@ TriggerSegmentManager::slotDeleteAll()
         return ;
 
     RG_DEBUG << "TriggerSegmentManager::slotDeleteAll" << endl;
-    KMacroCommand *command = new KMacroCommand(i18n("Remove all triggered segments"));
+    MacroCommand *command = new MacroCommand(i18n("Remove all triggered segments"));
 
     QListViewItem *it = m_listView->firstChild();
 
@@ -319,7 +324,7 @@ TriggerSegmentManager::slotDelete()
     RG_DEBUG << "TriggerSegmentManager::slotDelete" << endl;
 
     TriggerManagerItem *item =
-        dynamic_cast<TriggerManagerItem*>(m_listView->currentItem());
+        dynamic_cast<TriggerManagerItem*>(m_listView->currentIndex());
 
     if (!item)
         return ;
@@ -368,7 +373,7 @@ TriggerSegmentManager::slotClose()
 void
 TriggerSegmentManager::setupActions()
 {
-    KAction* close = KStdAction::close(this,
+    KAction* close = KStandardAction::close(this,
                                        SLOT(slotClose()),
                                        actionCollection());
 
@@ -380,15 +385,15 @@ TriggerSegmentManager::setupActions()
     // some adjustments
     new KToolBarPopupAction(i18n("Und&o"),
                             "undo",
-                            KStdAccel::key(KStdAccel::Undo),
+                            KStandardShortcut::key(KStandardShortcut::Undo),
                             actionCollection(),
-                            KStdAction::stdName(KStdAction::Undo));
+                            KStandardAction::stdName(KStandardAction::Undo));
 
     new KToolBarPopupAction(i18n("Re&do"),
                             "redo",
-                            KStdAccel::key(KStdAccel::Redo),
+                            KStandardShortcut::key(KStandardShortcut::Redo),
                             actionCollection(),
-                            KStdAction::stdName(KStdAction::Redo));
+                            KStandardAction::stdName(KStandardAction::Redo));
 
     new KAction(i18n("Pa&ste as New Triggered Segment"), CTRL + SHIFT + Key_V, this,
                 SLOT(slotPasteAsNew()), actionCollection(),
@@ -399,8 +404,8 @@ TriggerSegmentManager::setupActions()
 
     KRadioAction *action;
 
-    QCanvasPixmap pixmap(pixmapDir + "/toolbar/time-musical.png");
-    QIconSet icon(pixmap);
+    Q3CanvasPixmap pixmap(pixmapDir + "/toolbar/time-musical.png");
+    QIcon icon(pixmap);
 
     action = new KRadioAction(i18n("&Musical Times"), icon, 0, this,
                               SLOT(slotMusicalTime()),
@@ -410,7 +415,7 @@ TriggerSegmentManager::setupActions()
         action->setChecked(true);
 
     pixmap.load(pixmapDir + "/toolbar/time-real.png");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
 
     action = new KRadioAction(i18n("&Real Times"), icon, 0, this,
                               SLOT(slotRealTime()),
@@ -420,7 +425,7 @@ TriggerSegmentManager::setupActions()
         action->setChecked(true);
 
     pixmap.load(pixmapDir + "/toolbar/time-raw.png");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
 
     action = new KRadioAction(i18n("Ra&w Times"), icon, 0, this,
                               SLOT(slotRawTime()),
@@ -433,7 +438,7 @@ TriggerSegmentManager::setupActions()
 }
 
 void
-TriggerSegmentManager::addCommandToHistory(KCommand *command)
+TriggerSegmentManager::addCommandToHistory(Command *command)
 {
     getCommandHistory()->addCommand(command);
     setModified(false);

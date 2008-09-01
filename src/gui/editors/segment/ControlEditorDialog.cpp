@@ -17,7 +17,7 @@
 
 
 #include "ControlEditorDialog.h"
-#include <qlayout.h>
+#include <QLayout>
 #include <kapplication.h>
 
 #include <klocale.h>
@@ -40,24 +40,24 @@
 #include "document/RosegardenGUIDoc.h"
 #include "document/ConfigGroups.h"
 #include <kaction.h>
-#include <kcommand.h>
+#include "document/Command.h"
 #include <klistview.h>
 #include <kmainwindow.h>
-#include <kstdaccel.h>
-#include <kstdaction.h>
-#include <qcolor.h>
-#include <qdialog.h>
-#include <qframe.h>
-#include <qlabel.h>
-#include <qlistview.h>
-#include <qpixmap.h>
+#include <kstandardshortcut.h>
+#include <kstandardaction.h>
+#include <QColor>
+#include <QDialog>
+#include <QFrame>
+#include <QLabel>
+#include <QListView>
+#include <QPixmap>
 #include <qptrlist.h>
-#include <qpushbutton.h>
-#include <qsizepolicy.h>
-#include <qstring.h>
-#include <qtooltip.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <QPushButton>
+#include <QSizePolicy>
+#include <QString>
+#include <QToolTip>
+#include <QWidget>
+#include <QVBoxLayout>
 
 
 namespace Rosegarden
@@ -76,7 +76,8 @@ ControlEditorDialog::ControlEditorDialog(QWidget *parent,
 {
     RG_DEBUG << "ControlEditorDialog::ControlEditorDialog: device is " << m_device << endl;
 
-    QVBox* mainFrame = new QVBox(this);
+    QWidget *mainFrame = new QWidget(this);
+    QVBoxLayout mainFrameLayout = new QVBoxLayout;
     setCentralWidget(mainFrame);
 
     setCaption(i18n("Manage Control Events"));
@@ -93,7 +94,8 @@ ControlEditorDialog::ControlEditorDialog(QWidget *parent,
                arg(device), mainFrame);
     new QLabel("", mainFrame);
 
-    m_listView = new KListView(mainFrame);
+    m_listView = new KListView( mainFrame );
+    mainFrameLayout->addWidget(m_listView);
     m_listView->addColumn(i18n("Control Event name  "));
     m_listView->addColumn(i18n("Control Event type  "));
     m_listView->addColumn(i18n("Control Event value  "));
@@ -112,7 +114,9 @@ ControlEditorDialog::ControlEditorDialog(QWidget *parent,
 
     m_listView->restoreLayout(kapp->config(), ControlEditorConfigGroup);
 
-    QFrame* btnBox = new QFrame(mainFrame);
+    QFrame *btnBox = new QFrame( mainFrame );
+    mainFrameLayout->addWidget(btnBox);
+    mainFrame->setLayout(mainFrameLayout);
 
     btnBox->setSizePolicy(
         QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed));
@@ -255,12 +259,12 @@ ControlEditorDialog::slotUpdate()
         colourPixmap.fill(QColor(c.getRed(), c.getGreen(), c.getBlue()));
         item->setPixmap(7, colourPixmap);
 
-        m_listView->insertItem(item);
+        m_listView->addItem(item);
     }
 
     if (m_listView->childCount() == 0) {
         QListViewItem *item = new QListViewItem(m_listView, i18n("<none>"));
-        m_listView->insertItem(item);
+        m_listView->addItem(item);
 
         m_listView->setSelectionMode(QListView::NoSelection);
     } else {
@@ -301,11 +305,11 @@ ControlEditorDialog::slotDelete()
 {
     RG_DEBUG << "ControlEditorDialog::slotDelete" << endl;
 
-    if (!m_listView->currentItem())
+    if (!m_listView->currentIndex())
         return ;
 
     ControlParameterItem *item =
-        dynamic_cast<ControlParameterItem*>(m_listView->currentItem());
+        dynamic_cast<ControlParameterItem*>(m_listView->currentIndex());
 
     if (item) {
         RemoveControlParameterCommand *command =
@@ -330,7 +334,7 @@ ControlEditorDialog::slotClose()
 void
 ControlEditorDialog::setupActions()
 {
-    KAction* close = KStdAction::close(this,
+    KAction* close = KStandardAction::close(this,
                                        SLOT(slotClose()),
                                        actionCollection());
 
@@ -340,21 +344,21 @@ ControlEditorDialog::setupActions()
     // some adjustments
     new KToolBarPopupAction(i18n("Und&o"),
                             "undo",
-                            KStdAccel::key(KStdAccel::Undo),
+                            KStandardShortcut::key(KStandardShortcut::Undo),
                             actionCollection(),
-                            KStdAction::stdName(KStdAction::Undo));
+                            KStandardAction::stdName(KStandardAction::Undo));
 
     new KToolBarPopupAction(i18n("Re&do"),
                             "redo",
-                            KStdAccel::key(KStdAccel::Redo),
+                            KStandardShortcut::key(KStandardShortcut::Redo),
                             actionCollection(),
-                            KStdAction::stdName(KStdAction::Redo));
+                            KStandardAction::stdName(KStandardAction::Redo));
 
     createGUI("controleditor.rc");
 }
 
 void
-ControlEditorDialog::addCommandToHistory(KCommand *command)
+ControlEditorDialog::addCommandToHistory(Command *command)
 {
     getCommandHistory()->addCommand(command);
     setModified(false);

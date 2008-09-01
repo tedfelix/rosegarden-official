@@ -21,8 +21,8 @@
 #include "BaseToolBox.h"
 #include "EditTool.h"
 #include "EditView.h"
-#include <qobject.h>
-#include <qstring.h>
+#include <QObject>
+#include <QString>
 #include <kmessagebox.h>
 
 namespace Rosegarden

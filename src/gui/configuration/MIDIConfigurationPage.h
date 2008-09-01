@@ -19,10 +19,10 @@
 #define _RG_MIDICONFIGURATIONPAGE_H_
 
 #include "TabbedConfigurationPage.h"
-#include <qstring.h>
+#include <QString>
 #include <klocale.h>
-#include <qlineedit.h>
-#include <qcheckbox.h>
+#include <QLineEdit>
+#include <QCheckBox>
 
 
 class QWidget;
@@ -32,7 +32,7 @@ class QPushButton;
 class QLabel;
 class QComboBox;
 class KConfig;
-class KComboBox;
+class QComboBox;
 
 
 namespace Rosegarden

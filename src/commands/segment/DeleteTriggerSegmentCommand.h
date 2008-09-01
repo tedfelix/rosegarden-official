@@ -20,7 +20,7 @@
 #define _RG_DELETETRIGGERSEGMENTCOMMAND_H_
 
 #include "base/TriggerSegment.h"
-#include <kcommand.h>
+#include "document/Command.h"
 
 
 
@@ -33,7 +33,7 @@ class RosegardenGUIDoc;
 class Composition;
 
 
-class DeleteTriggerSegmentCommand : public KNamedCommand
+class DeleteTriggerSegmentCommand : public NamedCommand
 {
 public:
     DeleteTriggerSegmentCommand(RosegardenGUIDoc *doc,

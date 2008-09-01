@@ -20,7 +20,7 @@
 
 #include "document/RosegardenGUIDoc.h"
 #include <kconfig.h>
-#include <qwidget.h>
+#include <QWidget>
 #include <algorithm>
 
 

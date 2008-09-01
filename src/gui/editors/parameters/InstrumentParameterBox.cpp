@@ -17,7 +17,7 @@
 
 
 #include "InstrumentParameterBox.h"
-#include <qlayout.h>
+#include <QLayout>
 
 #include <klocale.h>
 #include "misc/Debug.h"
@@ -29,12 +29,12 @@
 #include "RosegardenParameterArea.h"
 #include "RosegardenParameterBox.h"
 #include <ktabwidget.h>
-#include <qfont.h>
-#include <qframe.h>
+#include <QFont>
+#include <QFrame>
 #include <qscrollview.h>
-#include <qstring.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <QString>
+#include <QWidget>
+#include <QVBoxLayout>
 #include <qwidgetstack.h>
 
 

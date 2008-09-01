@@ -21,7 +21,7 @@
 #include <klocale.h>
 #include "base/Segment.h"
 #include "SegmentCommand.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden

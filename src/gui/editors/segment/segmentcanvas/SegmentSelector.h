@@ -20,8 +20,8 @@
 #define _RG_SEGMENTSELECTOR_H_
 
 #include "SegmentTool.h"
-#include <qpoint.h>
-#include <qstring.h>
+#include <QPoint>
+#include <QString>
 
 
 class QMouseEvent;

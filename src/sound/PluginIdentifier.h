@@ -16,7 +16,7 @@
 #ifndef _PLUGIN_IDENTIFIER_H_
 #define _PLUGIN_IDENTIFIER_H_
 
-#include <qstring.h>
+#include <QString>
 
 
 // A plugin identifier is simply a string; this class provides methods

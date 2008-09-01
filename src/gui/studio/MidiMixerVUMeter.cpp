@@ -19,7 +19,7 @@
 #include "MidiMixerVUMeter.h"
 
 #include "gui/widgets/VUMeter.h"
-#include <qwidget.h>
+#include <QWidget>
 
 
 namespace Rosegarden

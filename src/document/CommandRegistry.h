@@ -25,12 +25,12 @@
 #ifndef _RG_COMMANDREGISTRY_H_
 #define _RG_COMMANDREGISTRY_H_
 
-#include <qobject.h>
-#include <qstring.h>
+#include <QObject>
+#include <QString>
 #include <qnamespace.h>
 
 #include <kshortcut.h>
-#include <kcommand.h>
+#include "document/Command.h"
 
 #include <map>
 #include <vector>
@@ -60,11 +60,11 @@ class AbstractCommandBuilder
 {
 public:
     // may throw CommandCancelled
-    virtual KCommand *build(QString actionName,
+    virtual Command *build(QString actionName,
                             EventSelection &s,
                             CommandArgumentQuerier &querier) = 0;
 
-    virtual EventSelection *getSubsequentSelection(KCommand *) { return 0; }
+    virtual EventSelection *getSubsequentSelection(Command *) { return 0; }
 };
 
 template <typename Command>
@@ -72,13 +72,13 @@ class SelectionCommandBuilder : public AbstractCommandBuilder
 {
 public:
     // may throw CommandCancelled
-    virtual KCommand *build(QString /* actionName */,
+    virtual Command *build(QString /* actionName */,
                             EventSelection &s,
                             CommandArgumentQuerier &querier) {
         return new Command(s);
     }
 
-    virtual EventSelection *getSubsequentSelection(KCommand *c) {
+    virtual EventSelection *getSubsequentSelection(Command *c) {
         Command *command = dynamic_cast<Command *>(c);
         if (command) return command->getSubsequentSelection();
         return 0;
@@ -90,13 +90,13 @@ class ArgumentAndSelectionCommandBuilder : public AbstractCommandBuilder
 {
 public:
     // may throw CommandCancelled
-    virtual KCommand *build(QString actionName,
+    virtual Command *build(QString actionName,
                             EventSelection &s,
                             CommandArgumentQuerier &querier) {
         return new Command(Command::getArgument(actionName, querier), s);
     }
 
-    virtual EventSelection *getSubsequentSelection(KCommand *c) {
+    virtual EventSelection *getSubsequentSelection(Command *c) {
         Command *command = dynamic_cast<Command *>(c);
         if (command) return command->getSubsequentSelection();
         return 0;

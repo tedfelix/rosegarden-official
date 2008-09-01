@@ -24,7 +24,7 @@
 #include "gui/editors/segment/TrackEditor.h"
 #include "gui/editors/segment/TrackButtons.h"
 #include <klocale.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include "misc/AppendLabel.h"
 #include "misc/Debug.h"
 #include "misc/Strings.h"
@@ -84,25 +84,25 @@
 #include "sound/MappedStudio.h"
 #include "sound/PluginIdentifier.h"
 #include "sound/SoundDriver.h"
-#include <kcommand.h>
+#include "document/Command.h"
 #include <kconfig.h>
 #include <kfilterdev.h>
 #include <kglobal.h>
 #include <kmessagebox.h>
-#include <kprocess.h>
+#include <QProcess>
 #include <kprogress.h>
 #include <ktempfile.h>
-#include <qcstring.h>
-#include <qdatastream.h>
-#include <qdialog.h>
-#include <qdir.h>
-#include <qfile.h>
-#include <qfileinfo.h>
-#include <qobject.h>
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qtextstream.h>
-#include <qwidget.h>
+#include <QByteArray>
+#include <QDataStream>
+#include <QDialog>
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
+#include <QObject>
+#include <QString>
+#include <QStringList>
+#include <QTextStream>
+#include <QWidget>
 #include "gui/widgets/ProgressBar.h"
 
 
@@ -131,7 +131,7 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
     m_viewList.setAutoDelete(false);
     m_editViewList.setAutoDelete(false);
 
-    connect(m_commandHistory, SIGNAL(commandExecuted(KCommand *)),
+    connect(m_commandHistory, SIGNAL(commandExecuted(Command *)),
             this, SLOT(slotDocumentModified()));
 
     connect(m_commandHistory, SIGNAL(documentRestored()),
@@ -303,7 +303,7 @@ void RosegardenGUIDoc::slotAutoSave()
 
 bool RosegardenGUIDoc::isRegularDotRGFile()
 {
-    return getAbsFilePath().right(3).lower() == ".rg";
+    return getAbsFilePath().right(3).toLower() == ".rg";
 }
 
 bool RosegardenGUIDoc::saveIfModified()
@@ -597,7 +597,7 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
         errMsg = i18n("Could not open Rosegarden file");
 
     } else {
-        fileCompressedDevice->open(IO_ReadOnly);
+        fileCompressedDevice->open(QIODevice::ReadOnly);
 
         unsigned int elementCount = fileInfo.size() / 4; // approx. guess
         //         RG_DEBUG << "RosegardenGUIDoc::xmlParse() : elementCount = " << elementCount
@@ -712,7 +712,7 @@ void
 RosegardenGUIDoc::mergeDocument(RosegardenGUIDoc *doc,
                                 int options)
 {
-    KMacroCommand *command = new KMacroCommand(i18n("Merge"));
+    MacroCommand *command = new MacroCommand(i18n("Merge"));
 
     timeT time0 = 0;
     if (options & MERGE_AT_END) {
@@ -1186,7 +1186,7 @@ bool RosegardenGUIDoc::saveDocumentActual(const QString& filename,
 
     KFilterDev* fileCompressedDevice = static_cast<KFilterDev*>(KFilterDev::deviceForFile(filename, "application/x-gzip"));
     fileCompressedDevice->setOrigFileName("audio/x-rosegarden");
-    bool rc = fileCompressedDevice->open(IO_WriteOnly);
+    bool rc = fileCompressedDevice->open(QIODevice::WriteOnly);
 
     if (!rc) {
         // do some error report
@@ -1341,7 +1341,7 @@ bool RosegardenGUIDoc::exportStudio(const QString& filename,
 
     KFilterDev* fileCompressedDevice = static_cast<KFilterDev*>(KFilterDev::deviceForFile(filename, "application/x-gzip"));
     fileCompressedDevice->setOrigFileName("audio/x-rosegarden-device");
-    fileCompressedDevice->open(IO_WriteOnly);
+    fileCompressedDevice->open(QIODevice::WriteOnly);
     QTextStream outStream(fileCompressedDevice);
     outStream.setEncoding(QTextStream::UnicodeUTF8);
 
@@ -2196,7 +2196,7 @@ RosegardenGUIDoc::stopRecordingMidi()
         }
 
         // Quantize for notation only -- doesn't affect performance timings.
-        KMacroCommand *command = new KMacroCommand(i18n("Insert Recorded MIDI"));
+        MacroCommand *command = new MacroCommand(i18n("Insert Recorded MIDI"));
 
         command->addCommand(new EventQuantizeCommand
                             (*s,

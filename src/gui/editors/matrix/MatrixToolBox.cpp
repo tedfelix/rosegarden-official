@@ -27,7 +27,7 @@
 #include "MatrixMover.h"
 #include "MatrixResizer.h"
 
-#include <qstring.h>
+#include <QString>
 #include <kmessagebox.h>
 
 namespace Rosegarden
@@ -42,7 +42,7 @@ EditTool* MatrixToolBox::createTool(const QString& toolName)
 {
     MatrixTool* tool = 0;
 
-    QString toolNamelc = toolName.lower();
+    QString toolNamelc = toolName.toLower();
 
     if (toolNamelc == MatrixPainter::ToolName)
 

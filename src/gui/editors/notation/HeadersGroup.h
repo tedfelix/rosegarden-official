@@ -26,9 +26,9 @@
 #include "base/Track.h"
 
 #include <vector>
-#include <qsize.h>
-#include <qwidget.h>
-#include <qvbox.h>
+#include <QSize>
+#include <QWidget>
+#include <QVBoxLayout>
 
 
 class QLabel;

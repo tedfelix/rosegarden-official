@@ -35,12 +35,12 @@
 #include "SegmentTool.h"
 #include "SegmentToolBox.h"
 #include "SegmentSelector.h"
-#include <kcommand.h>
-#include <qcursor.h>
-#include <qevent.h>
-#include <qpoint.h>
-#include <qrect.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QCursor>
+#include <QEvent>
+#include <QPoint>
+#include <QRect>
+#include <QString>
 #include <klocale.h>
 
 
@@ -94,9 +94,9 @@ void SegmentMover::handleMouseButtonPress(QMouseEvent *e)
 
     if (item) {
 
-        setCurrentItem(item);
+        setCurrentIndex(item);
         m_clickPoint = e->pos();
-        Segment* s = CompositionItemHelper::getSegment(m_currentItem);
+        Segment* s = CompositionItemHelper::getSegment(m_currentIndex);
 
         int x = int(m_canvas->grid().getRulerScale()->getXForTime(s->getStartTime()));
         int y = int(m_canvas->grid().getYBinCoordinate(s->getTrack()));
@@ -111,8 +111,8 @@ void SegmentMover::handleMouseButtonPress(QMouseEvent *e)
 
 
             CompositionModel::itemcontainer& changingItems = m_canvas->getModel()->getChangingItems();
-            // set m_currentItem to its "sibling" among selected (now moving) items
-            setCurrentItem(CompositionItemHelper::findSiblingCompositionItem(changingItems, m_currentItem));
+            // set m_currentIndex to its "sibling" among selected (now moving) items
+            setCurrentIndex(CompositionItemHelper::findSiblingCompositionItem(changingItems, m_currentIndex));
 
         } else {
             RG_DEBUG << "SegmentMover::handleMouseButtonPress() : no selection\n";
@@ -142,7 +142,7 @@ void SegmentMover::handleMouseButtonRelease(QMouseEvent *e)
     int currentTrackPos = m_canvas->grid().getYBin(e->pos().y());
     int trackDiff = currentTrackPos - startDragTrackPos;
 
-    if (m_currentItem) {
+    if (m_currentIndex) {
 
         if (changeMade()) {
 
@@ -202,7 +202,7 @@ void SegmentMover::handleMouseButtonRelease(QMouseEvent *e)
     }
 
     setChangeMade(false);
-    m_currentItem = CompositionItem();
+    m_currentIndex = CompositionItem();
 
     setBasicContextHelp();
 }
@@ -213,7 +213,7 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
 
     Composition &comp = m_doc->getComposition();
 
-    if (!m_currentItem) {
+    if (!m_currentIndex) {
         setBasicContextHelp();
         return RosegardenCanvasView::NoFollow;
     }
@@ -306,19 +306,19 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
     if (changeMade())
         m_canvas->getModel()->signalContentChange();
 
-    guideX = m_currentItem->rect().x();
-    guideY = m_currentItem->rect().y();
+    guideX = m_currentIndex->rect().x();
+    guideY = m_currentIndex->rect().y();
 
     m_canvas->setGuidesPos(guideX, guideY);
 
-    timeT currentItemStartTime = m_canvas->grid().snapX(m_currentItem->rect().x());
+    timeT currentIndexStartTime = m_canvas->grid().snapX(m_currentIndex->rect().x());
 
-    RealTime time = comp.getElapsedRealTime(currentItemStartTime);
+    RealTime time = comp.getElapsedRealTime(currentIndexStartTime);
     QString ms;
     ms.sprintf("%03d", time.msec());
 
     int bar, beat, fraction, remainder;
-    comp.getMusicalTimeForAbsoluteTime(currentItemStartTime, bar, beat, fraction, remainder);
+    comp.getMusicalTimeForAbsoluteTime(currentIndexStartTime, bar, beat, fraction, remainder);
 
     QString posString = QString("%1.%2s (%3, %4, %5)")
         .arg(time.sec).arg(ms)

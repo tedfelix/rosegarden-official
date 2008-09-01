@@ -19,6 +19,8 @@
 #ifndef _RG_MATRIXCANVASVIEW_H_
 #define _RG_MATRIXCANVASVIEW_H_
 
+#include <Q3Canvas>
+#include <Q3CanvasItem>
 #include "gui/general/RosegardenCanvasView.h"
 #include "base/Event.h"
 
@@ -26,8 +28,8 @@
 class QWidget;
 class QWheelEvent;
 class QMouseEvent;
-class QCanvasItem;
-class QCanvas;
+class Q3CanvasItem;
+class Q3Canvas;
 
 
 namespace Rosegarden
@@ -46,7 +48,7 @@ public:
     MatrixCanvasView(MatrixStaff&,
                      SnapGrid *,
                      bool drumMode,
-                     QCanvas *viewing,
+                     Q3Canvas *viewing,
                      QWidget *parent=0, const char *name=0, WFlags f=0);
 
     ~MatrixCanvasView();
@@ -57,12 +59,12 @@ public:
 signals:
 
     /**
-     * Emitted when the user clicks on a QCanvasItem which is active
+     * Emitted when the user clicks on a Q3CanvasItem which is active
      *
-     * @see QCanvasItem#setActive
+     * @see Q3CanvasItem#setActive
      */
     void activeItemPressed(QMouseEvent*,
-                           QCanvasItem* item);
+                           Q3CanvasItem* item);
 
     /**
      * Emitted when the mouse cursor moves to a different height

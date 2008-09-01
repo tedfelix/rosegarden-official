@@ -21,8 +21,8 @@
 
 #include "base/Track.h"
 #include <string>
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include <klocale.h>
 
 
@@ -34,7 +34,7 @@ namespace Rosegarden
 class Composition;
 
 
-class RenameTrackCommand : public KNamedCommand
+class RenameTrackCommand : public NamedCommand
 {
 public:
     RenameTrackCommand(Composition *composition,

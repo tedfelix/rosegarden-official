@@ -19,8 +19,8 @@
 #ifndef _RG_SEGMENTCHANGETRANSPOSECOMMAND_H_
 #define _RG_SEGMENTCHANGETRANSPOSECOMMAND_H_
 
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include <vector>
 #include "base/Event.h"
 
@@ -33,7 +33,7 @@ namespace Rosegarden
 class Segment;
 
 
-class SegmentChangeTransposeCommand : public KNamedCommand
+class SegmentChangeTransposeCommand : public NamedCommand
 {
 public:
     /// Set transpose on segments.

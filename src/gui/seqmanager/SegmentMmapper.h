@@ -19,7 +19,7 @@
 #ifndef _RG_SEGMENTMMAPPER_H_
 #define _RG_SEGMENTMMAPPER_H_
 
-#include <qstring.h>
+#include <QString>
 #include "base/Event.h"
 
 

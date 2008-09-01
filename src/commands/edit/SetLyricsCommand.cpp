@@ -25,9 +25,9 @@
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
 #include "base/BaseProperties.h"
-#include <qregexp.h>
-#include <qstring.h>
-#include <qstringlist.h>
+#include <QRegExp>
+#include <QString>
+#include <QStringList>
 
 
 namespace Rosegarden
@@ -36,7 +36,7 @@ namespace Rosegarden
 using namespace BaseProperties;
 
 SetLyricsCommand::SetLyricsCommand(Segment *segment, int verse, QString newLyricData) :
-        KNamedCommand(getGlobalName()),
+        NamedCommand(getGlobalName()),
         m_segment(segment),
         m_verse(verse),
         m_newLyricData(newLyricData)
@@ -87,7 +87,7 @@ SetLyricsCommand::execute()
     // now parse the new string
 
     QStringList barStrings =
-        QStringList::split("/", m_newLyricData, true); // empties ok
+        m_newLyricData.split("/", QString::KeepEmptyParts); // empties ok
 
     Composition *comp = m_segment->getComposition();
     int barNo = comp->getBarNumber(m_segment->getStartTime());
@@ -100,7 +100,7 @@ SetLyricsCommand::execute()
         QString syllables = *bsi;
         syllables.replace(QRegExp("\\[\\d+\\] "), " ");
         syllables.replace(QRegExp("\n"), " ");
-        QStringList syllableList = QStringList::split(" ", syllables); // no empties
+        QStringList syllableList = syllables.split(" ", QString::SkipEmptyParts); // no empties
 
         i = m_segment->findTime(barRange.first);
         timeT laterThan = barRange.first - 1;
@@ -131,7 +131,7 @@ SetLyricsCommand::execute()
 
             QString syllable = *ssi;
             syllable.replace(QRegExp("~"), " ");
-            syllable = syllable.simplifyWhiteSpace();
+            syllable = syllable.simplified();
             if (syllable == "")
                 continue;
             laterThan = notationTime + 1;

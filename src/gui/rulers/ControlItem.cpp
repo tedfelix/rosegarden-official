@@ -15,6 +15,9 @@
     COPYING included with this distribution for more information.
 */
 
+#include <Q3CanvasItem>
+#include <Q3CanvasItemList>
+#include <Q3CanvasRectangle>
 #include "ControlItem.h"
 #include "ControlRuler.h"
 #include "ElementAdapter.h"
@@ -28,7 +31,7 @@ static int _canvasItemZ = 30;
 
 ControlItem::ControlItem(ControlRuler* ruler, ElementAdapter* elementAdapter,
                          int xx, int width)
-    : QCanvasRectangle(ruler->canvas()),
+    : Q3CanvasRectangle(ruler->canvas()),
       m_value(0),
       m_controlRuler(ruler),
       m_elementAdapter(elementAdapter)
@@ -37,8 +40,8 @@ ControlItem::ControlItem(ControlRuler* ruler, ElementAdapter* elementAdapter,
         width = DefaultWidth/4; // avoid invisible zero-duration items
     }
     setWidth(width);
-    setPen(QPen(Qt::black, BorderThickness));
-    setBrush(Qt::blue);
+    setPen(QPen(QColor(Qt::black), BorderThickness));
+    setBrush(QColor(Qt::blue));
 
     setX(xx);
     setY(canvas()->height());
@@ -78,7 +81,7 @@ void ControlItem::updateFromValue()
     }
 }
 
-typedef std::pair<int, QCanvasItem*> ItemPair;
+typedef std::pair<int, Q3CanvasItem*> ItemPair;
 struct ItemCmp
 {
     bool operator()(const ItemPair &i1, const ItemPair &i2)
@@ -94,7 +97,7 @@ void ControlItem::draw(QPainter &painter)
 
     setBrush(m_controlRuler->valueToColour(m_controlRuler->getMaxItemValue(), m_value));
 
-    QCanvasRectangle::draw(painter);
+    Q3CanvasRectangle::draw(painter);
     
 
     /*
@@ -104,16 +107,16 @@ void ControlItem::draw(QPainter &painter)
 
     // calculate collisions and assign Z values accordingly
     //
-    QCanvasItemList l = collisions(false);
+    Q3CanvasItemList l = collisions(false);
 
     std::vector<ItemPair> sortList;
 
-    for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it) {
+    for (Q3CanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it) {
 
         // skip all but rectangles
-        if ((*it)->rtti() != QCanvasItem::Rtti_Rectangle) continue;
+        if ((*it)->rtti() != Q3CanvasItem::Rtti_Rectangle) continue;
 
-        if (QCanvasRectangle *rect = dynamic_cast<QCanvasRectangle*>(*it))
+        if (Q3CanvasRectangle *rect = dynamic_cast<Q3CanvasRectangle*>(*it))
             sortList.push_back(ItemPair(rect->height(), *it));
     }
 
@@ -177,10 +180,10 @@ void ControlItem::handleMouseWheel(QWheelEvent *)
 
 void ControlItem::setSelected(bool s)
 {
-    QCanvasItem::setSelected(s);
+    Q3CanvasItem::setSelected(s);
 
-    if (s) setPen(QPen(Qt::red, BorderThickness));
-    else setPen(QPen(Qt::black, BorderThickness));
+    if (s) setPen(QPen(QColor(Qt::red), BorderThickness));
+    else setPen(QPen(QColor(Qt::black), BorderThickness));
 
     canvas()->update();
 }

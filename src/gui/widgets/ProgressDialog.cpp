@@ -21,11 +21,11 @@
 #include "misc/Debug.h"
 #include "gui/application/RosegardenApplication.h"
 #include <klocale.h>
-#include <qcursor.h>
-#include <qprogressdialog.h>
-#include <qstring.h>
-#include <qtimer.h>
-#include <qwidget.h>
+#include <QCursor>
+#include <QProgressDialog>
+#include <QString>
+#include <QTimer>
+#include <QWidget>
 
 
 namespace Rosegarden

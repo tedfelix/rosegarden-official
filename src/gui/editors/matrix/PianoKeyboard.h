@@ -20,7 +20,7 @@
 #define _RG_PIANOKEYBOARD_H_
 
 #include "gui/rulers/PitchRuler.h"
-#include <qsize.h>
+#include <QSize>
 #include <vector>
 
 

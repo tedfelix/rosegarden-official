@@ -19,7 +19,7 @@
 #ifndef _RG_SEGMENTTRANSPOSECOMMAND_H_
 #define _RG_SEGMENTTRANSPOSECOMMAND_H_
 
-#include <kcommand.h>
+#include "document/Command.h"
 #include "base/Event.h"
 #include "document/MultiViewCommandHistory.h"
 #include <klocale.h>
@@ -31,7 +31,7 @@ class Segment;
 class SegmentSelection;
 
 
-class SegmentTransposeCommand : public KMacroCommand
+class SegmentTransposeCommand : public MacroCommand
 {
 public:
     SegmentTransposeCommand(Segment &segment,

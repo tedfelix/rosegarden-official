@@ -24,14 +24,14 @@
 
 #include <dcopobject.h>
 #include <dcopref.h>
-#include <qmap.h>
-#include <qstring.h>
-#include <qvaluevector.h>
+#include <QMap>
+#include <QString>
+#include <QVector>
 
 #include "base/Instrument.h"
 #include "sound/MappedComposition.h"
 
-class QCString;
+class QByteArray;
 class KMainWindow;
 class KDCOPActionProxy;
 
@@ -112,21 +112,21 @@ k_dcop:
     //
     virtual QString createNewAudioFile() = 0;
     // called from seq in record()
-    virtual QValueVector<QString> createRecordAudioFiles
-    (const QValueVector<InstrumentId> &recordInstruments) = 0;
+    virtual QVector<QString> createRecordAudioFiles
+    (const QVector<InstrumentId> &recordInstruments) = 0;
     virtual QString getAudioFilePath() = 0;
 
     // called from seq in record()
-    virtual QValueVector<InstrumentId> getArmedInstruments() = 0;
+    virtual QVector<InstrumentId> getArmedInstruments() = 0;
 
     // called from seq in setMappedPropertyList -- from plugin configure()
     virtual void showError(QString error) = 0;
 
     // Actions proxy
     //
-    DCOPRef action( const QCString &name );
-    QCStringList actions();
-    QMap<QCString,DCOPRef> actionMap();
+    DCOPRef action( const QByteArray &name );
+    QList<QByteArray> actions();
+    QMap<QByteArray,DCOPRef> actionMap();
 
 protected:
     //--------------- Data members ---------------------------------

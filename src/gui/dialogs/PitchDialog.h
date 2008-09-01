@@ -19,8 +19,9 @@
 #ifndef _RG_PITCHDIALOG_H_
 #define _RG_PITCHDIALOG_H_
 
-#include <kdialogbase.h>
-#include <qstring.h>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QString>
 
 
 class QWidget;
@@ -32,11 +33,11 @@ namespace Rosegarden
 class PitchChooser;
 
 
-class PitchDialog : public KDialogBase
+class PitchDialog : public QDialog
 {
     Q_OBJECT
 public:
-    PitchDialog(QWidget *parent, QString title, int defaultPitch = 60);
+    PitchDialog(QDialogButtonBox::QWidget *parent, QString title, int defaultPitch = 60);
 
     int getPitch() const;
 

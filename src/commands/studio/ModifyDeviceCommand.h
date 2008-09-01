@@ -22,8 +22,8 @@
 #include "base/Device.h"
 #include "base/MidiDevice.h"
 #include <string>
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include <klocale.h>
 
 
@@ -36,7 +36,7 @@ namespace Rosegarden
 class Studio;
 
 
-class ModifyDeviceCommand : public KNamedCommand
+class ModifyDeviceCommand : public NamedCommand
 {
 public:
     // Any of the arguments passed by pointer may be null (except for

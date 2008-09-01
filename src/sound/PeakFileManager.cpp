@@ -26,7 +26,7 @@
 #include <string>
 #include <vector>
 
-#include <qobject.h>
+#include <QObject>
 
 #include "PeakFileManager.h"
 #include "AudioFile.h"

@@ -16,11 +16,15 @@
 */
 
 
+#include <Q3CanvasItem>
+#include <Q3CanvasItemList>
+#include <Q3CanvasPixmap>
+#include <Q3CanvasRectangle>
 #include "MatrixSelector.h"
 
 #include "base/BaseProperties.h"
 #include <klocale.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include "base/Event.h"
 #include "base/NotationTypes.h"
 #include "base/Selection.h"
@@ -43,10 +47,10 @@
 #include <kglobal.h>
 #include <kapplication.h>
 #include <kconfig.h>
-#include <qdialog.h>
-#include <qiconset.h>
-#include <qpoint.h>
-#include <qstring.h>
+#include <QDialog>
+#include <QIcon>
+#include <QPoint>
+#include <QString>
 #include "misc/Debug.h"
 
 
@@ -80,8 +84,8 @@ MatrixSelector::MatrixSelector(MatrixView* view)
                 "move");
 
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QCanvasPixmap pixmap(pixmapDir + "/toolbar/resize.xpm");
-    QIconSet icon = QIconSet(pixmap);
+    Q3CanvasPixmap pixmap(pixmapDir + "/toolbar/resize.xpm");
+    QIcon icon = QIcon(pixmap);
 
     new KAction(i18n("Switch to Resize Tool"), icon, Key_F6, this,
                 SLOT(slotResizeSelected()), actionCollection(),
@@ -126,7 +130,7 @@ void MatrixSelector::handleLeftButtonPress(timeT time,
     //
     delete m_selectionToMerge; // you can safely delete 0, you know?
     const EventSelection *selectionToMerge = 0;
-    if (e->state() & Qt::ShiftButton)
+    if (e->state() & Qt::ShiftModifier)
         selectionToMerge = m_mParentView->getCurrentSelection();
 
     m_selectionToMerge =
@@ -162,7 +166,7 @@ void MatrixSelector::handleLeftButtonPress(timeT time,
                                               element);
         return ;
 
-    } else if (e->state() & Qt::ControlButton) {
+    } else if (e->state() & Qt::ControlModifier) {
 
         handleMidButtonPress(time, height, staffNo, e, element);
         return;
@@ -432,7 +436,7 @@ void MatrixSelector::handleMouseRelease(timeT time, int height, QMouseEvent *e)
 void MatrixSelector::ready()
 {
     if (m_mParentView) {
-        m_selectionRect = new QCanvasRectangle(m_mParentView->canvas());
+        m_selectionRect = new Q3CanvasRectangle(m_mParentView->canvas());
         m_selectionRect->hide();
         m_selectionRect->setPen(QPen(GUIPalette::getColour(GUIPalette::SelectionRectangle), 2));
 
@@ -520,13 +524,13 @@ EventSelection* MatrixSelector::getSelection()
 
     // get the selections
     //
-    QCanvasItemList l = m_selectionRect->collisions(true);
+    Q3CanvasItemList l = m_selectionRect->collisions(true);
 
     if (l.count())
     {
-        for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
+        for (Q3CanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
         {
-            QCanvasItem *item = *it;
+            Q3CanvasItem *item = *it;
             QCanvasMatrixRectangle *matrixRect = 0;
 
             if ((matrixRect = dynamic_cast<QCanvasMatrixRectangle*>(item)))
@@ -554,14 +558,14 @@ void MatrixSelector::setContextHelpFor(QPoint p, bool ctrlPressed)
 
     // same logic as in MatrixCanvasView::contentsMousePressEvent
 
-    QCanvasItemList itemList = m_mParentView->canvas()->collisions(p);
-    QCanvasItemList::Iterator it;
+    Q3CanvasItemList itemList = m_mParentView->canvas()->collisions(p);
+    Q3CanvasItemList::Iterator it;
     MatrixElement* mel = 0;
-    QCanvasItem* activeItem = 0;
+    Q3CanvasItem* activeItem = 0;
 
     for (it = itemList.begin(); it != itemList.end(); ++it) {
 
-        QCanvasItem *item = *it;
+        Q3CanvasItem *item = *it;
         QCanvasMatrixRectangle *mRect = 0;
 
         if (item->active()) {

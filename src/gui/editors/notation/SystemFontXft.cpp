@@ -120,7 +120,7 @@ SystemFontXft::renderChar(CharName charName, int glyph, int code,
 				  (Visual *)map.x11Visual(),
 				  map.x11Colormap());
 
-    QColor pen(Qt::black);
+    QColor pen(QColor(Qt::black));
     XftColor col;
     col.color.red = pen.red () | pen.red() << 8;
     col.color.green = pen.green () | pen.green() << 8;
@@ -144,7 +144,7 @@ SystemFontXft::renderChar(CharName charName, int glyph, int code,
 
     XftDrawDestroy(draw);
 
-    map.setMask(PixmapFunctions::generateMask(map, Qt::white.rgb()));
+    map.setMask(PixmapFunctions::generateMask(map, QColor(Qt::white).rgb()));
     success = true;
 
     

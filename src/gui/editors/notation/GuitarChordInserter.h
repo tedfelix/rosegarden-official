@@ -20,7 +20,7 @@
 #define _RG_GUITAR_CHORD_INSERTER_H_
 
 #include "NotationTool.h"
-#include <qstring.h>
+#include <QString>
 #include "base/Event.h"
 
 

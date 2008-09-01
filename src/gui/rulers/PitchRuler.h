@@ -19,8 +19,8 @@
 #ifndef _RG_PITCHRULER_H_
 #define _RG_PITCHRULER_H_
 
-#include <qsize.h>
-#include <qwidget.h>
+#include <QSize>
+#include <QWidget>
 
 
 

@@ -22,11 +22,11 @@
 #include "base/Composition.h"
 #include "base/Segment.h"
 #include <set>
-#include <qcolor.h>
-#include <qobject.h>
-#include <qimage.h>
-#include <qpoint.h>
-#include <qrect.h>
+#include <QColor>
+#include <QObject>
+#include <QImage>
+#include <QPoint>
+#include <QRect>
 #include <utility>
 #include <vector>
 #include "base/Event.h"

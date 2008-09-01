@@ -17,7 +17,7 @@
 
 
 #include "AudioMixerWindow.h"
-#include <qlayout.h>
+#include <QLayout>
 #include <kapplication.h>
 
 #include "AudioPlugin.h"
@@ -48,26 +48,26 @@
 #include "sound/MappedEvent.h"
 #include "sound/MappedStudio.h"
 #include <klocale.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kaction.h>
 #include <kglobal.h>
 #include <kmainwindow.h>
-#include <kstdaction.h>
-#include <qaccel.h>
-#include <qcolor.h>
-#include <qfont.h>
-#include <qframe.h>
-#include <qhbox.h>
-#include <qiconset.h>
-#include <qlabel.h>
-#include <qobject.h>
-#include <qpalette.h>
-#include <qpixmap.h>
-#include <qpushbutton.h>
-#include <qstring.h>
-#include <qtooltip.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <kstandardaction.h>
+#include <qshortcut.h>
+#include <QColor>
+#include <QFont>
+#include <QFrame>
+#include <QIcon>
+#include <QLabel>
+#include <QObject>
+#include <QPalette>
+#include <QPixmap>
+#include <QPushButton>
+#include <QString>
+#include <QToolTip>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 
 
 namespace Rosegarden
@@ -89,11 +89,11 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
 {
     populate();
 
-    KStdAction::close(this,
+    KStandardAction::close(this,
                       SLOT(slotClose()),
                       actionCollection());
 
-    QIconSet icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+    QIcon icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                              ("transport-play")));
     KAction *play = new KAction(i18n("&Play"), icon, Key_Enter, this,
                 SIGNAL(play()), actionCollection(), "play");
@@ -102,42 +102,42 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
     playShortcut.append( KKey(Key_Return + CTRL) );
     play->setShortcut(playShortcut);
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-stop")));
     new KAction(i18n("&Stop"), icon, Key_Insert, this,
                 SIGNAL(stop()), actionCollection(), "stop");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-rewind")));
     new KAction(i18n("Re&wind"), icon, Key_End, this,
                 SIGNAL(rewindPlayback()), actionCollection(),
                 "playback_pointer_back_bar");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-ffwd")));
     new KAction(i18n("&Fast Forward"), icon, Key_PageDown, this,
                 SIGNAL(fastForwardPlayback()), actionCollection(),
                 "playback_pointer_forward_bar");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-rewind-end")));
     new KAction(i18n("Rewind to &Beginning"), icon, 0, this,
                 SIGNAL(rewindPlaybackToBeginning()), actionCollection(),
                 "playback_pointer_start");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-ffwd-end")));
     new KAction(i18n("Fast Forward to &End"), icon, 0, this,
                 SIGNAL(fastForwardPlaybackToEnd()), actionCollection(),
                 "playback_pointer_end");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-record")));
     new KAction(i18n("&Record"), icon, 0, this,
                 SIGNAL(record()), actionCollection(),
                 "record");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-panic")));
     new KAction(i18n("Panic"), icon, Key_P + CTRL + ALT, this,
                 SIGNAL(panic()), actionCollection(),
@@ -407,7 +407,7 @@ AudioMixerWindow::populate()
         //	mainLayout->addWidget(idLabel, 2, col, Qt::AlignCenter);
         //	mainLayout->addWidget(rec.m_pan, 2, col+1, Qt::AlignLeft);
 
-        mainLayout->addMultiCellWidget(idLabel, 0, 0, col, col + 1, Qt::AlignCenter);
+        mainLayout->addWidget(idLabel, 0, col, 0- 1, col + 1- col+1, Qt::AlignCenter);
         mainLayout->addWidget(rec.m_pan, 5, col, Qt::AlignCenter);
 
         mainLayout->addWidget(rec.m_fader, 3, col, Qt::AlignCenter);
@@ -426,7 +426,7 @@ AudioMixerWindow::populate()
         mainLayout->addWidget(rec.m_stereoButton, 5, col + 1);
 
         if (rec.m_pluginBox) {
-            mainLayout->addMultiCellWidget(rec.m_pluginBox, 6, 6, col, col + 1);
+            mainLayout->addWidget(rec.m_pluginBox, 6, col, 1, col + 1- col+1);
         }
 
         m_faders[(*i)->getId()] = rec;
@@ -522,19 +522,19 @@ AudioMixerWindow::populate()
         idLabel->setFont(boldFont);
 
         //	mainLayout->addWidget(idLabel, 2, col, Qt::AlignCenter);
-        mainLayout->addMultiCellWidget(idLabel, 0, 0, col, col + 1, Qt::AlignCenter);
+        mainLayout->addWidget(idLabel, 0, col, 0- 1, col + 1- col+1, Qt::AlignCenter);
 
         //	mainLayout->addWidget(rec.m_pan, 2, col+1, Qt::AlignLeft);
-        mainLayout->addMultiCellWidget(rec.m_pan, 5, 5, col, col + 1, Qt::AlignCenter);
+        mainLayout->addWidget(rec.m_pan, 5, col, 1, col + 1- col+1, Qt::AlignCenter);
 
         mainLayout->addWidget(rec.m_fader, 3, col, Qt::AlignCenter);
         mainLayout->addWidget(rec.m_meter, 3, col + 1, Qt::AlignCenter);
 
-        //	mainLayout->addMultiCellWidget(rec.m_muteButton, 4, 4, col, col+1);
+        //	mainLayout->addWidget(rec.m_muteButton, 4, col, 1, col+1- col+1);
         rec.m_muteButton->hide();
 
         if (rec.m_pluginBox) {
-            mainLayout->addMultiCellWidget(rec.m_pluginBox, 6, 6, col, col + 1);
+            mainLayout->addWidget(rec.m_pluginBox, 6, col, 1, col + 1- col+1);
         }
 
         m_submasters.push_back(rec);
@@ -580,11 +580,11 @@ AudioMixerWindow::populate()
         QLabel *idLabel = new QLabel(i18n("Master"), m_mainBox);
         idLabel->setFont(boldFont);
 
-        mainLayout->addMultiCellWidget(idLabel, 0, 0, col, col + 1, Qt::AlignCenter);
+        mainLayout->addWidget(idLabel, 0, col, 0- 1, col + 1- col+1, Qt::AlignCenter);
         mainLayout->addWidget(rec.m_fader, 3, col, Qt::AlignCenter);
         mainLayout->addWidget(rec.m_meter, 3, col + 1, Qt::AlignCenter);
 
-        //	mainLayout->addMultiCellWidget(rec.m_muteButton, 4, 4, col, col+1);
+        //	mainLayout->addWidget(rec.m_muteButton, 4, col, 1, col+1- col+1);
         rec.m_muteButton->hide();
 
         mainLayout->addMultiCell(new QSpacerItem(2, 0), 0, 6, col + 2, col + 2);
@@ -699,7 +699,7 @@ AudioMixerWindow::slotPluginSelected(InstrumentId id,
             }
 
 
-            rec.m_plugins[index]->setPaletteForegroundColor(Qt::white);
+            rec.m_plugins[index]->setPaletteForegroundColor(QColor(Qt::white));
             rec.m_plugins[index]->setPaletteBackgroundColor(pluginBgColour);
         }
     } else if (id > 0 && id <= m_submasters.size()) {
@@ -738,7 +738,7 @@ AudioMixerWindow::slotPluginSelected(InstrumentId id,
             }
 
 
-            rec.m_plugins[index]->setPaletteForegroundColor(Qt::white);
+            rec.m_plugins[index]->setPaletteForegroundColor(QColor(Qt::white));
             rec.m_plugins[index]->setPaletteBackgroundColor(pluginBgColour);
         }
     }
@@ -914,7 +914,7 @@ AudioMixerWindow::updatePluginButtons(int id)
 
             } else if (used) {
 
-                rec->m_plugins[i]->setPaletteForegroundColor(Qt::white);
+                rec->m_plugins[i]->setPaletteForegroundColor(QColor(Qt::white));
                 rec->m_plugins[i]->setPaletteBackgroundColor(pluginBgColour);
 
 
@@ -1438,7 +1438,7 @@ void
 AudioMixerWindow::slotSetInputCountFromAction()
 {
     const QObject *s = sender();
-    QString name = s->name();
+    QString name = s->objectName();
 
     if (name.left(7) == "inputs_") {
 
@@ -1469,7 +1469,7 @@ void
 AudioMixerWindow::slotSetSubmasterCountFromAction()
 {
     const QObject *s = sender();
-    QString name = s->name();
+    QString name = s->objectName();
 
     if (name.left(11) == "submasters_") {
 
@@ -1711,7 +1711,7 @@ AudioMixerWindow::toggleNamedWidgets(bool show, const char* const name)
     QLayoutItem *child;
     while ( (child = it.current()) != 0 ) {
         QWidget * widget = child->widget();
-        if (widget && widget->name() && !strcmp(widget->name(), name)) {
+        if (widget && widget->objectName() && !strcmp(widget->objectName(), name)) {
             if (show)
                 widget->show();
             else

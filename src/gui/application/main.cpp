@@ -13,7 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#include <qtimer.h>
+#include <Q3Canvas>
+#include <QTimer>
 #include <kapplication.h>
 #include <sys/time.h>
 #include "base/RealTime.h"
@@ -24,15 +25,16 @@
 #include <dcopclient.h>
 #include <kconfig.h>
 #include <kmessagebox.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <ktip.h>
-#include <kprocess.h>
+#include <QProcess>
 #include <kglobalsettings.h>
 
-#include <qstringlist.h>
-#include <qregexp.h>
-#include <qvbox.h>
-#include <qlabel.h>
+#include <QStringList>
+#include <QRegExp>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QLabel>
 
 #include "document/ConfigGroups.h"
 #include "misc/Strings.h"
@@ -208,7 +210,7 @@ components:
  
  - a canvas view.  Although this isn't a part of the EditView's
     definition, both of the existing edit views (notation and matrix)
-    use one, because they both use a QCanvas to represent data.
+    use one, because they both use a Q3Canvas to represent data.
  
  - LinedStaff, a staff with lines.  Like the canvas view, this isn't
     part of the EditView definition, but both views use one.
@@ -345,9 +347,9 @@ void testInstalledVersion()
 
     if (versionLocation) {
         QFile versionFile(versionLocation);
-        if (versionFile.open(IO_ReadOnly)) {
+        if (versionFile.open(QIODevice::ReadOnly)) {
             QTextStream text(&versionFile);
-            QString s = text.readLine().stripWhiteSpace();
+            QString s = text.readLine().trimmed();
             versionFile.close();
             if (s) {
                 if (s == VERSION) return;
@@ -649,12 +651,12 @@ int main(int argc, char *argv[])
         QString soundFontPath = config->readEntry("soundfontpath", "");
         QFileInfo sfxLoadInfo(sfxLoadPath), soundFontInfo(soundFontPath);
         if (sfxLoadInfo.isExecutable() && soundFontInfo.isReadable()) {
-            KProcess* sfxLoadProcess = new KProcess;
+            QProcess* sfxLoadProcess = new QProcess;
             (*sfxLoadProcess) << sfxLoadPath << soundFontPath;
             RG_DEBUG << "Starting sfxload : " << sfxLoadPath << " " << soundFontPath << endl;
 
-            QObject::connect(sfxLoadProcess, SIGNAL(processExited(KProcess*)),
-                             &app, SLOT(sfxLoadExited(KProcess*)));
+            QObject::connect(sfxLoadProcess, SIGNAL(processExited(QProcess*)),
+                             &app, SLOT(sfxLoadExited(QProcess*)));
 
             sfxLoadProcess->start();
         } else {
@@ -711,14 +713,18 @@ int main(int argc, char *argv[])
 					      KDialogBase::Ok,
 					      KDialogBase::Ok, false);
 	QVBox *mw = dialog->makeVBoxMainWidget();
-	QHBox *hb = new QHBox(mw);
-	QLabel *image = new QLabel(hb);
+	QWidget *hb = new QWidget(mw);
+	QHBoxLayout hbLayout = new QHBoxLayout;
+	QLabel *image = new QLabel( hb );
+	hbLayout->addWidget(image);
 	image->setAlignment(Qt::AlignTop);
 	QString iconFile = locate("appdata", "pixmaps/misc/welcome-icon.png");
 	if (iconFile) {
 	    image->setPixmap(QPixmap(iconFile));
 	}
-	QLabel *label = new QLabel(hb);
+	QLabel *label = new QLabel( hb );
+	hbLayout->addWidget(label);
+	hb->setLayout(hbLayout);
 	label->setText(i18n("<h2>Welcome to Rosegarden!</h2><p>Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.</p><ul><li>If you have not already done so, you may wish to install some DSSI synth plugins, or a separate synth program such as QSynth.  Rosegarden does not synthesize sounds from MIDI on its own, so without these you will hear nothing.</li><br><br><li>Rosegarden uses the JACK audio server for recording and playback of audio, and for playback from DSSI synth plugins.  These features will only be available if the JACK server is running.</li><br><br><li>Rosegarden has comprehensive documentation: see the Help menu for the handbook, tutorials, and other information!</li></ul><p>Rosegarden was brought to you by a team of volunteers across the world.  To learn more, go to <a href=\"http://www.rosegardenmusic.com/\">http://www.rosegardenmusic.com/</a>.</p>"));
 	dialog->showButtonOK(true);
 	rosegardengui->awaitDialogClearance();

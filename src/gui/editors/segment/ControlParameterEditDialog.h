@@ -20,7 +20,8 @@
 #define _RG_CONTROLPARAMETEREDITDIALOG_H_
 
 #include "base/ControlParameter.h"
-#include <kdialogbase.h>
+#include <QDialog>
+#include <QDialogButtonBox>
 
 
 class QWidget;
@@ -28,7 +29,7 @@ class QString;
 class QSpinBox;
 class QLineEdit;
 class QLabel;
-class KComboBox;
+class QComboBox;
 
 
 namespace Rosegarden
@@ -37,11 +38,11 @@ namespace Rosegarden
 class RosegardenGUIDoc;
 
 
-class ControlParameterEditDialog : public KDialogBase
+class ControlParameterEditDialog : public QDialog
 {
     Q_OBJECT
 public:
-    ControlParameterEditDialog(QWidget *parent,
+    ControlParameterEditDialog(QDialogButtonBox::QWidget *parent,
                                ControlParameter *control,
                                RosegardenGUIDoc *doc);
 
@@ -67,14 +68,14 @@ protected:
     ControlParameter  m_dialogControl;
 
     QLineEdit                    *m_nameEdit;
-    KComboBox                    *m_typeCombo;
+    QComboBox                    *m_typeCombo;
     QLineEdit                    *m_description;
     QSpinBox                     *m_controllerBox;
     QSpinBox                     *m_minBox;
     QSpinBox                     *m_maxBox;
     QSpinBox                     *m_defaultBox;
-    KComboBox                    *m_colourCombo;
-    KComboBox                    *m_ipbPosition;
+    QComboBox                    *m_colourCombo;
+    QComboBox                    *m_ipbPosition;
     QLabel                       *m_hexValue;
 };
 

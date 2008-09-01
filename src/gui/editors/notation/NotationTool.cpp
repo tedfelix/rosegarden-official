@@ -21,7 +21,7 @@
 
 #include "gui/general/EditTool.h"
 #include "NotationView.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden

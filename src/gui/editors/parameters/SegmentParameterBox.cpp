@@ -17,7 +17,7 @@
 
 
 #include "SegmentParameterBox.h"
-#include <qlayout.h>
+#include <QLayout>
 #include <kapplication.h>
 
 #include <klocale.h>
@@ -49,27 +49,27 @@
 #include "RosegardenParameterArea.h"
 #include "RosegardenParameterBox.h"
 #include <kcolordialog.h>
-#include <kcombobox.h>
-#include <kcommand.h>
+#include <QComboBox>
+#include "document/Command.h"
 #include <kconfig.h>
 #include <klineeditdlg.h>
 #include <ktabwidget.h>
 #include <qbutton.h>
-#include <qcheckbox.h>
-#include <qcolor.h>
-#include <qdialog.h>
-#include <qfont.h>
-#include <qfontmetrics.h>
-#include <qframe.h>
-#include <qlabel.h>
-#include <qpixmap.h>
-#include <qpushbutton.h>
+#include <QCheckBox>
+#include <QColor>
+#include <QDialog>
+#include <QFont>
+#include <QFontMetrics>
+#include <QFrame>
+#include <QLabel>
+#include <QPixmap>
+#include <QPushButton>
 #include <qscrollview.h>
-#include <qspinbox.h>
-#include <qstring.h>
-#include <qtooltip.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <QSpinBox>
+#include <QString>
+#include <QToolTip>
+#include <QWidget>
+#include <QVBoxLayout>
 #include <qwidgetstack.h>
 
 
@@ -149,7 +149,7 @@ SegmentParameterBox::initBox()
     connect(m_repeatValue, SIGNAL(pressed()), SLOT(slotRepeatPressed()));
 
     // non-reversing motif style read-only combo
-    m_quantizeValue = new KComboBox(this);
+    m_quantizeValue = new QComboBox(this);
     m_quantizeValue->setFont(font);
     //m_quantizeValue->setFixedHeight(comboHeight);
 
@@ -158,7 +158,7 @@ SegmentParameterBox::initBox()
             SLOT(slotQuantizeSelected(int)));
 
     // reversing motif style read-write combo
-    m_transposeValue = new KComboBox(this);
+    m_transposeValue = new QComboBox(this);
     m_transposeValue->setFont(font);
     //m_transposeValue->setFixedHeight(comboHeight);
 
@@ -171,7 +171,7 @@ SegmentParameterBox::initBox()
             SLOT(slotTransposeTextChanged(const QString&)));
 
     // reversing motif style read-write combo
-    m_delayValue = new KComboBox(this);
+    m_delayValue = new QComboBox(this);
     m_delayValue->setFont(font);
     //m_delayValue->setFixedHeight(comboHeight);
 
@@ -188,11 +188,11 @@ SegmentParameterBox::initBox()
             SLOT(slotDelayTextChanged(const QString &)));
 
     // set up combo box for colours
-    m_colourValue = new KComboBox(false, this);
+    m_colourValue = new QComboBox(false, this);
     m_colourValue->setFont(font);
     //m_colourValue->setFixedHeight(comboHeight);
     //    m_colourValue->setMaximumWidth(width);
-    m_colourValue->setSizeLimit(20);
+    m_colourValue->setMaxVisibleItems(20);
 
     // handle colour combo changes
     connect(m_colourValue, SIGNAL(activated(int)),
@@ -232,15 +232,15 @@ SegmentParameterBox::initBox()
     // Fade in and out times
     //
 //    m_fadeInSpin = new QSpinBox(this);
-//    m_fadeInSpin->setMinValue(0);
-//    m_fadeInSpin->setMaxValue(5000);
+//    m_fadeInSpin->setMinimum(0);
+//    m_fadeInSpin->setMaximum(5000);
 //    m_fadeInSpin->setSuffix(i18n(" ms"));
 //    connect(m_fadeInSpin, SIGNAL(valueChanged(int)),
 //            this, SLOT(slotFadeInChanged(int)));
 
 //    m_fadeOutSpin = new QSpinBox(this);
-//    m_fadeOutSpin->setMinValue(0);
-//    m_fadeOutSpin->setMaxValue(5000);
+//    m_fadeOutSpin->setMinimum(0);
+//    m_fadeOutSpin->setMaximum(5000);
 //    m_fadeOutSpin->setSuffix(i18n(" ms"));
 //    connect(m_fadeOutSpin, SIGNAL(valueChanged(int)),
 //            this, SLOT(slotFadeOutChanged(int)));
@@ -261,31 +261,31 @@ SegmentParameterBox::initBox()
 //    gridLayout->addRowSpacing(0, 12); // why??
 
     gridLayout->addWidget(label, row, 0); //, AlignRight);
-    gridLayout->addMultiCellWidget(m_label, row, row, 1, 4); //, AlignLeft);
+    gridLayout->addWidget(m_label, row, 1, row- row+1, 4); //, AlignLeft);
     gridLayout->addWidget(m_labelButton, row, 5); //, AlignLeft);
     ++row;
 
     gridLayout->addWidget(repeatLabel, row, 0); //, AlignRight);
     gridLayout->addWidget(m_repeatValue, row, 1); //, AlignLeft);
 
-    gridLayout->addMultiCellWidget(transposeLabel, row, row, 2, 3, AlignRight);
-    gridLayout->addMultiCellWidget(m_transposeValue, row, row, 4, 5);
+    gridLayout->addWidget(transposeLabel, row, 2, row- row+1, 3- 3, AlignRight);
+    gridLayout->addWidget(m_transposeValue, row, 4, row- row+1, 5- 5);
     ++row;
 
     gridLayout->addWidget(quantizeLabel, row, 0); //, AlignRight);
-    gridLayout->addMultiCellWidget(m_quantizeValue, row, row, 1, 2); //, AlignLeft);
+    gridLayout->addWidget(m_quantizeValue, row, 1, row- row+1, 2); //, AlignLeft);
 
     gridLayout->addWidget(delayLabel, row, 3, AlignRight);
-    gridLayout->addMultiCellWidget(m_delayValue, row, row, 4, 5);
+    gridLayout->addWidget(m_delayValue, row, 4, row- row+1, 5- 5);
     ++row;
 
     gridLayout->addWidget(colourLabel, row, 0); //, AlignRight);
-    gridLayout->addMultiCellWidget(m_colourValue, row, row, 1, 5);
+    gridLayout->addWidget(m_colourValue, row, 1, row- row+1, 5);
     ++row;
 
 //    gridLayout->addWidget(m_rangeLabel, row, 0); //, AlignRight);
-//    gridLayout->addMultiCellWidget(m_lowButton, row, row, 1, 2);
-//    gridLayout->addMultiCellWidget(m_highButton, row, row, 3, 4);
+//    gridLayout->addWidget(m_lowButton, row, 1, row- row+1, 2);
+//    gridLayout->addWidget(m_highButton, row, 3, row- row+1, 4- 4);
 //    ++row;
 
 //    m_autoFadeLabel->hide();
@@ -316,19 +316,19 @@ SegmentParameterBox::initBox()
         timeT error = 0;
         QString label = NotationStrings::makeNoteMenuLabel(time, true, error);
         QPixmap pmap = NotePixmapFactory::toQPixmap(NotePixmapFactory::makeNoteMenuPixmap(time, error));
-        m_quantizeValue->insertItem(error ? noMap : pmap, label);
+        m_quantizeValue->addItem(error ? noMap : pmap, label);
     }
-    m_quantizeValue->insertItem(noMap, i18n("Off"));
+    m_quantizeValue->addItem(noMap, i18n("Off"));
 
     // default to last item
-    m_quantizeValue->setCurrentItem(m_quantizeValue->count() - 1);
+    m_quantizeValue->setCurrentIndex(m_quantizeValue->count() - 1);
 
     // populate the transpose combo
     //
     for (int i = -m_transposeRange; i < m_transposeRange + 1; i++) {
-        m_transposeValue->insertItem(noMap, QString("%1").arg(i));
+        m_transposeValue->addItem(noMap, QString("%1").arg(i));
         if (i == 0)
-            m_transposeValue->setCurrentItem(m_transposeValue->count() - 1);
+            m_transposeValue->setCurrentIndex(m_transposeValue->count() - 1);
     }
 
     m_delays.clear();
@@ -350,17 +350,17 @@ SegmentParameterBox::initBox()
         timeT error = 0;
         QString label = NotationStrings::makeNoteMenuLabel(time, true, error);
         QPixmap pmap = NotePixmapFactory::toQPixmap(NotePixmapFactory::makeNoteMenuPixmap(time, error));
-        m_delayValue->insertItem((error ? noMap : pmap), label);
+        m_delayValue->addItem((error ? noMap : pmap), label);
     }
 
     for (int i = 0; i < 10; i++) {
         int rtd = (i < 5 ? ((i + 1) * 10) : ((i - 3) * 50));
         m_realTimeDelays.push_back(rtd);
-        m_delayValue->insertItem(i18n("%1 ms").arg(rtd));
+        m_delayValue->addItem(i18n("%1 ms").arg(rtd));
     }
 
     // set delay blank initially
-    m_delayValue->setCurrentItem( -1);
+    m_delayValue->setCurrentIndex( -1);
 
     // populate m_colourValue
     slotDocColoursChanged();
@@ -425,22 +425,22 @@ SegmentParameterBox::slotDocColoursChanged()
         QPixmap colour(15, 15);
         colour.fill(GUIPalette::convertColour(it->second.first));
         if (qtrunc == "") {
-            m_colourValue->insertItem(colour, i18n("Default"), i);
+            m_colourValue->addItem(colour, i18n("Default"), i);
         } else {
             // truncate name to 15 characters to avoid the combo forcing the
             // whole kit and kaboodle too wide
             if (qtrunc.length() > 15)
                 qtrunc = qtrunc.left(12) + "...";
-            m_colourValue->insertItem(colour, qtrunc, i);
+            m_colourValue->addItem(colour, qtrunc, i);
         }
         m_colourList[it->first] = i; // maps colour number to menu index
         ++i;
     }
 
     m_addColourPos = i;
-    m_colourValue->insertItem(i18n("Add New Color"), m_addColourPos);
+    m_colourValue->addItem(i18n("Add New Color"), m_addColourPos);
 
-    m_colourValue->setCurrentItem(0);
+    m_colourValue->setCurrentIndex(0);
 }
 
 void SegmentParameterBox::update()
@@ -632,7 +632,7 @@ SegmentParameterBox::populateBoxFromSegments()
             for (unsigned int i = 0;
                     i < m_standardQuantizations.size(); ++i) {
                 if (m_standardQuantizations[i] == qntzLevel) {
-                    m_quantizeValue->setCurrentItem(i);
+                    m_quantizeValue->setCurrentIndex(i);
                     break;
                 }
             }
@@ -642,33 +642,33 @@ SegmentParameterBox::populateBoxFromSegments()
     case Some:
         // Set the edit text to an unfeasible blank value meaning "Some"
         //
-        m_quantizeValue->setCurrentItem( -1);
+        m_quantizeValue->setCurrentIndex( -1);
         break;
 
         // Assuming "Off" is always the last field
     case None:
     default:
-        m_quantizeValue->setCurrentItem(m_quantizeValue->count() - 1);
+        m_quantizeValue->setCurrentIndex(m_quantizeValue->count() - 1);
         break;
     }
 
     m_quantizeValue->setEnabled(quantized != NotApplicable);
 
     switch (transposed) {
-        // setCurrentItem works with QStrings
+        // setCurrentIndex works with QStrings
         // 2nd arg of "true" means "add if necessary"
     case All:
         m_transposeValue->
-        setCurrentItem(QString("%1").arg(transposeLevel), true);
+        setCurrentIndex(QString("%1").arg(transposeLevel), true);
         break;
 
     case Some:
-        m_transposeValue->setCurrentItem(QString(""), true);
+        m_transposeValue->setCurrentIndex(QString(""), true);
         break;
 
     case None:
     default:
-        m_transposeValue->setCurrentItem("0");
+        m_transposeValue->setCurrentIndex("0");
         break;
     }
 
@@ -683,23 +683,23 @@ SegmentParameterBox::populateBoxFromSegments()
             QString label = NotationStrings::makeNoteMenuLabel(delayLevel,
                             true,
                             error);
-            m_delayValue->setCurrentItem(label, true);
+            m_delayValue->setCurrentIndex(label, true);
 
         } else if (delayLevel < 0) {
 
-            m_delayValue->setCurrentItem(i18n("%1 ms").arg( -delayLevel),
+            m_delayValue->setCurrentIndex(i18n("%1 ms").arg( -delayLevel),
                                          true);
         }
 
         break;
 
     case Some:
-        m_delayValue->setCurrentItem("", true);
+        m_delayValue->setCurrentIndex("", true);
         break;
 
     case None:
     default:
-        m_delayValue->setCurrentItem(0);
+        m_delayValue->setCurrentIndex(0);
         break;
     }
 
@@ -710,16 +710,16 @@ SegmentParameterBox::populateBoxFromSegments()
     switch (diffcolours) {
     case None:
         if (m_colourList.find(myCol) != m_colourList.end())
-            m_colourValue->setCurrentItem(m_colourList[myCol]);
+            m_colourValue->setCurrentIndex(m_colourList[myCol]);
         else
-            m_colourValue->setCurrentItem(0);
+            m_colourValue->setCurrentIndex(0);
         break;
 
 
     case All:
     case NotApplicable:
     default:
-        m_colourValue->setCurrentItem(0);
+        m_colourValue->setCurrentIndex(0);
         break;
 
     }
@@ -827,12 +827,12 @@ void SegmentParameterBox::slotRepeatPressed()
     bool state = false;
 
     switch (m_repeatValue->state()) {
-    case QButton::Off:
+    case QCheckBox::Off:
         state = true;
         break;
 
-    case QButton::NoChange:
-    case QButton::On:
+    case QCheckBox::NoChange:
+    case QCheckBox::On:
     default:
         state = false;
         break;
@@ -1063,7 +1063,7 @@ SegmentParameterBox::getCommandHistory()
 }
 
 void
-SegmentParameterBox::addCommandToHistory(KCommand *command)
+SegmentParameterBox::addCommandToHistory(Command *command)
 {
     m_doc->getCommandHistory()->addCommand(command);
 }
@@ -1120,7 +1120,7 @@ SegmentParameterBox::slotAudioFadeChanged(int value)
         return ;
 
     bool state = false;
-    if (value == QButton::On)
+    if (value == QCheckBox::On)
         state = true;
 
     std::vector<Segment*>::iterator it;
@@ -1140,9 +1140,9 @@ SegmentParameterBox::slotFadeInChanged(int value)
         return ;
 
     if (value == 0 && m_fadeOutSpin->value() == 0)
-        slotAudioFadeChanged(QButton::Off);
+        slotAudioFadeChanged(QCheckBox::Off);
     else
-        slotAudioFadeChanged(QButton::On);
+        slotAudioFadeChanged(QCheckBox::On);
 
     // Convert from ms
     //
@@ -1167,9 +1167,9 @@ SegmentParameterBox::slotFadeOutChanged(int value)
         return ;
 
     if (value == 0 && m_fadeInSpin->value() == 0)
-        slotAudioFadeChanged(QButton::Off);
+        slotAudioFadeChanged(QCheckBox::Off);
     else
-        slotAudioFadeChanged(QButton::On);
+        slotAudioFadeChanged(QCheckBox::On);
 
     // Convert from ms
     //

@@ -22,7 +22,7 @@
 #include "document/BasicCommand.h"
 #include "base/Selection.h"
 #include <map>
-#include <qstring.h>
+#include <QString>
 #include "base/Event.h"
 #include <klocale.h>
 
@@ -66,7 +66,7 @@ public:
      * the events to be pasted by the time the Paste command is
      * executed, but might not do so yet.  This is necessary if the
      * Paste command is to follow another clipboard-based command
-     * in a KMacroCommand sequence.  pasteEndTime must supply the
+     * in a MacroCommand sequence.  pasteEndTime must supply the
      * latest time in the destination segment that may be modified
      * by the paste.
      */

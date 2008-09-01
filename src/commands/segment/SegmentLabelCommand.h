@@ -19,8 +19,8 @@
 #ifndef _RG_SEGMENTLABELCOMMAND_H_
 #define _RG_SEGMENTLABELCOMMAND_H_
 
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include <vector>
 #include <klocale.h>
 
@@ -34,7 +34,7 @@ class SegmentSelection;
 class Segment;
 
 
-class SegmentLabelCommand : public KNamedCommand
+class SegmentLabelCommand : public NamedCommand
 {
 public:
     SegmentLabelCommand(SegmentSelection &segments,

@@ -20,7 +20,7 @@
 #define _RG_MATRIXERASER_H_
 
 #include "MatrixTool.h"
-#include <qstring.h>
+#include <QString>
 
 class QMouseEvent;
 

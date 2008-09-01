@@ -21,7 +21,7 @@
 
 #include "base/Track.h"
 #include "SegmentTool.h"
-#include <qstring.h>
+#include <QString>
 #include "base/Event.h"
 
 

@@ -19,10 +19,10 @@
 #ifndef _RG_SEGMENTITEMPREVIEW_H_
 #define _RG_SEGMENTITEMPREVIEW_H_
 
-#include <qrect.h>
+#include <QRect>
 
 
-class QWMatrix;
+class QMatrix;
 class QPainter;
 
 
@@ -67,7 +67,7 @@ public:
     QRect rect();
     
 protected:
-    virtual void updatePreview(const QWMatrix &matrix) = 0;
+    virtual void updatePreview(const QMatrix &matrix) = 0;
 
     //--------------- Data members ---------------------------------
 

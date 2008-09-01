@@ -21,8 +21,8 @@
 
 #include <string>
 #include "TabbedConfigurationPage.h"
-#include <qstring.h>
-#include <qstringlist.h>
+#include <QString>
+#include <QStringList>
 #include <klocale.h>
 
 

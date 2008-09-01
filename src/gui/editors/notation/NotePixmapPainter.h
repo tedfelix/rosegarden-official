@@ -19,7 +19,7 @@
 #ifndef _RG_NOTEPIXMAPPAINTER_H_
 #define _RG_NOTEPIXMAPPAINTER_H_
 
-#include <qpainter.h>
+#include <QPainter>
 
 namespace Rosegarden {
 
@@ -38,7 +38,7 @@ public:
 	m_externalPainter = painter;
 	m_useMask = false;
 
-	painter->setPen(QPen(Qt::black, 1, Qt::SolidLine,
+	painter->setPen(QPen(QColor(Qt::black), 1, Qt::SolidLine,
 			     Qt::RoundCap, Qt::RoundJoin));
 
 	if (m_externalPainter) {

@@ -19,8 +19,8 @@
 #ifndef _RG_CHANGECOMPOSITIONLENGTHCOMMAND_H_
 #define _RG_CHANGECOMPOSITIONLENGTHCOMMAND_H_
 
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include "base/Event.h"
 #include <klocale.h>
 
@@ -34,7 +34,7 @@ namespace Rosegarden
 class Composition;
 
 
-class ChangeCompositionLengthCommand : public KNamedCommand
+class ChangeCompositionLengthCommand : public NamedCommand
 {
 public:
     ChangeCompositionLengthCommand(Composition *composition,

@@ -29,7 +29,7 @@
 #include <fstream>
 #include <vector>
 
-#include <qobject.h>
+#include <QObject>
 
 
 #include "PeakFile.h"

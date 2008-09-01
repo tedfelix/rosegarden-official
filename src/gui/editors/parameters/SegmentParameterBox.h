@@ -24,7 +24,7 @@
 #include "gui/widgets/ColourTable.h"
 #include "RosegardenParameterArea.h"
 #include "RosegardenParameterBox.h"
-#include <qstring.h>
+#include <QString>
 #include <vector>
 #include "base/Event.h"
 
@@ -34,8 +34,8 @@ class QSpinBox;
 class QPushButton;
 class QLabel;
 class QCheckBox;
-class KCommand;
-class KComboBox;
+class Command;
+class QComboBox;
 
 
 namespace Rosegarden
@@ -75,7 +75,7 @@ public:
 
     // Command history stuff
     MultiViewCommandHistory* getCommandHistory();
-    void addCommandToHistory(KCommand *command);
+    void addCommandToHistory(Command *command);
 
     void setDocument(RosegardenGUIDoc*);
 
@@ -128,10 +128,10 @@ protected:
 //    QPushButton                *m_highButton;
 //    QPushButton                *m_lowButton;
     TristateCheckBox *m_repeatValue;
-    KComboBox                  *m_quantizeValue;
-    KComboBox                  *m_transposeValue;
-    KComboBox                  *m_delayValue;
-    KComboBox                  *m_colourValue;
+    QComboBox                  *m_quantizeValue;
+    QComboBox                  *m_transposeValue;
+    QComboBox                  *m_delayValue;
+    QComboBox                  *m_colourValue;
 
     // Audio autofade
     //

@@ -28,9 +28,9 @@
 #include <kaction.h>
 #include <kdcopactionproxy.h>
 #include <kmainwindow.h>
-#include <qcstring.h>
-#include <qstring.h>
-#include <qvaluelist.h>
+#include <QByteArray>
+#include <QString>
+#include <QLinkedList>
 #include <kapplication.h>
 #include <dcopclient.h>
 
@@ -39,7 +39,7 @@ namespace Rosegarden
 {
 
 RosegardenIface::RosegardenIface(KMainWindow* mainWindow)
-        : DCOPObject(mainWindow->name()),
+        : DCOPObject(mainWindow->objectName()),
         m_dcopActionProxy(0)
 {}
 
@@ -49,25 +49,25 @@ void RosegardenIface::iFaceDelayedInit(KMainWindow* mainWindow)
                         this);
 }
 
-DCOPRef RosegardenIface::action(const QCString &name)
+DCOPRef RosegardenIface::action(const QByteArray &name)
 {
     return DCOPRef(kapp->dcopClient()->appId(),
                    m_dcopActionProxy->actionObjectId(name));
 }
 
-QCStringList RosegardenIface::actions()
+QList<QByteArray> RosegardenIface::actions()
 {
-    QCStringList res;
-    QValueList<KAction *> lst = m_dcopActionProxy->actions();
-    QValueList<KAction *>::ConstIterator it = lst.begin();
-    QValueList<KAction *>::ConstIterator end = lst.end();
+    QList<QByteArray> res;
+    QLinkedList<KAction *> lst = m_dcopActionProxy->actions();
+    QLinkedList<KAction *>::ConstIterator it = lst.begin();
+    QLinkedList<KAction *>::ConstIterator end = lst.end();
     for (; it != end; ++it )
-        res.append( (*it)->name() );
+        res.append( (*it)->objectName() );
 
     return res;
 }
 
-QMap<QCString,DCOPRef> RosegardenIface::actionMap()
+QMap<QByteArray,DCOPRef> RosegardenIface::actionMap()
 {
   return m_dcopActionProxy->actionMap();
 }

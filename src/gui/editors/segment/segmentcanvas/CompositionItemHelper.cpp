@@ -24,9 +24,9 @@
 #include "misc/Debug.h"
 #include "CompositionModel.h"
 #include "CompositionItemImpl.h"
-#include <qcolor.h>
-#include <qpoint.h>
-#include <qrect.h>
+#include <QColor>
+#include <QPoint>
+#include <QRect>
 
 namespace Rosegarden
 {

@@ -20,7 +20,7 @@
 #define _RG_ADDMARKCOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
-#include <qstring.h>
+#include <QString>
 
 
 

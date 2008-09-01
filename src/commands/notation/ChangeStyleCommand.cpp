@@ -25,7 +25,7 @@
 #include "gui/editors/notation/NotationProperties.h"
 #include "gui/editors/notation/NoteStyleFactory.h"
 #include "document/CommandRegistry.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden

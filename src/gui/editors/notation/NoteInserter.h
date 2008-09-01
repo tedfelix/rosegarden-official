@@ -23,7 +23,7 @@
 #include "NotationTool.h"
 #include "NotationElement.h"
 #include "NoteStyle.h"
-#include <qstring.h>
+#include <QString>
 #include "base/Event.h"
 
 

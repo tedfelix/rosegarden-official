@@ -19,7 +19,7 @@
 #ifndef _RG_SEGMENTREPEATTOCOPYCOMMAND_H_
 #define _RG_SEGMENTREPEATTOCOPYCOMMAND_H_
 
-#include <kcommand.h>
+#include "document/Command.h"
 #include <vector>
 
 
@@ -32,7 +32,7 @@ class Segment;
 class Composition;
 
 
-class SegmentRepeatToCopyCommand : public KNamedCommand
+class SegmentRepeatToCopyCommand : public NamedCommand
 {
 public:
     SegmentRepeatToCopyCommand(Segment *segment);

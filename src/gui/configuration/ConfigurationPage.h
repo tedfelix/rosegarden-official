@@ -22,7 +22,7 @@
 #ifndef _RG_CONFIGURATIONPAGE_H_
 #define _RG_CONFIGURATIONPAGE_H_
 
-#include <qwidget.h>
+#include <QWidget>
 
 
 class KConfig;

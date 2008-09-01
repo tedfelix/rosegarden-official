@@ -26,7 +26,7 @@
 #define _RG_SEGMENTSPLITTWICECOMMAND_H_
 
 #include <string>
-#include <kcommand.h>
+#include "document/Command.h"
 #include "base/Event.h"
 
 #include "DeleteRangeCommand.h"
@@ -44,7 +44,7 @@ class Composition;
 // when cutting a range to fix bug #1961378 (crash when cutting a range))
 
 
-class SegmentSplitTwiceCommand : public KNamedCommand
+class SegmentSplitTwiceCommand : public NamedCommand
 {
 public:
     SegmentSplitTwiceCommand(Segment *segment,

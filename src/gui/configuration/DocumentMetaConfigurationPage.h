@@ -20,7 +20,7 @@
 #define _RG_DOCUMENTMETACONFIGURATIONPAGE_H_
 
 #include "TabbedConfigurationPage.h"
-#include <qstring.h>
+#include <QString>
 #include <klocale.h>
 
 

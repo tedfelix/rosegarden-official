@@ -20,7 +20,7 @@
 #define _RG_CUTRANGECOMMAND_H_
 
 #include "base/Event.h"
-#include <kcommand.h>
+#include "document/Command.h"
 
 
 namespace Rosegarden
@@ -30,7 +30,7 @@ class Composition;
 class Clipboard;
 
 
-class CutRangeCommand : public KMacroCommand
+class CutRangeCommand : public MacroCommand
 {
 public:
     CutRangeCommand(Composition *composition,

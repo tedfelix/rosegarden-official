@@ -23,9 +23,9 @@
 #include "base/Device.h"
 #include "base/MidiDevice.h"
 #include "base/Studio.h"
-#include <qcstring.h>
-#include <qdatastream.h>
-#include <qstring.h>
+#include <QByteArray>
+#include <QDataStream>
+#include <QString>
 #include "sequencer/RosegardenSequencer.h"
 
 
@@ -34,7 +34,7 @@ namespace Rosegarden
 
 CreateOrDeleteDeviceCommand::CreateOrDeleteDeviceCommand(Studio *studio,
         DeviceId id) :
-        KNamedCommand(getGlobalName(true)),
+        NamedCommand(getGlobalName(true)),
         m_studio(studio),
         m_deviceId(id),
         m_deviceCreated(true)

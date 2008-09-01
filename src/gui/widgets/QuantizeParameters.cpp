@@ -17,7 +17,7 @@
 
 
 #include "QuantizeParameters.h"
-#include <qlayout.h>
+#include <QLayout>
 #include <kapplication.h>
 
 #include <klocale.h>
@@ -28,18 +28,18 @@
 #include "base/NotationQuantizer.h"
 #include "gui/editors/notation/NotationStrings.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
-#include <kcombobox.h>
+#include <QComboBox>
 #include <kconfig.h>
-#include <qcheckbox.h>
-#include <qframe.h>
-#include <qgroupbox.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qobject.h>
-#include <qpixmap.h>
-#include <qpushbutton.h>
-#include <qstring.h>
-#include <qwidget.h>
+#include <QCheckBox>
+#include <QFrame>
+#include <QGroupBox>
+#include <QLabel>
+#include <QObject>
+#include <QPixmap>
+#include <QPushButton>
+#include <QString>
+#include <QWidget>
+#include <QHBoxLayout>
 
 
 namespace Rosegarden
@@ -64,8 +64,8 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     int zero = 0;
     if (preamble) {
         QLabel *label = new QLabel(preamble, this);
-        label->setAlignment(Qt::WordBreak);
-        m_mainLayout->addMultiCellWidget(label, 0, 0, 0, 1);
+        label->setAlignment(Qt::TextWordWrap);
+        m_mainLayout->addWidget(label, 0, 0, 0- 0+1, 1- 1);
         zero = 1;
     }
 
@@ -77,94 +77,98 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
 
     QGridLayout *layout = new QGridLayout(typeFrame, 2, 2, 5, 3);
     layout->addWidget(new QLabel(i18n("Quantizer type:"), typeFrame), 0, 0);
-    m_typeCombo = new KComboBox(typeFrame);
-    m_typeCombo->insertItem(i18n("Grid quantizer"));
-    m_typeCombo->insertItem(i18n("Legato quantizer"));
-    m_typeCombo->insertItem(i18n("Heuristic notation quantizer"));
+    m_typeCombo = new QComboBox(typeFrame);
+    m_typeCombo->addItem(i18n("Grid quantizer"));
+    m_typeCombo->addItem(i18n("Legato quantizer"));
+    m_typeCombo->addItem(i18n("Heuristic notation quantizer"));
     layout->addWidget(m_typeCombo, 0, 1);
 
     m_notationTarget = new QCheckBox
                        (i18n("Quantize for notation only (leave performance unchanged)"),
                         typeFrame);
-    layout->addMultiCellWidget(m_notationTarget, 1, 1, 0, 1);
+    layout->addWidget(m_notationTarget, 1, 0, 0+1, 1- 1);
     if (!showNotationOption)
         m_notationTarget->hide();
 
-    QHBox *parameterBox = new QHBox(this);
+    QWidget *parameterBox = new QWidget(this);
+    QHBoxLayout parameterBoxLayout = new QHBoxLayout;
     m_mainLayout->addWidget(parameterBox, zero + 1, 0);
 
-    m_notationBox = new QGroupBox
-                    (1, Horizontal, i18n("Notation parameters"), parameterBox);
+    m_notationBox = new QGroupBox( i18n("Notation parameters"), parameterBox );
+    parameterBoxLayout->addWidget(m_notationBox);
     QFrame *notationFrame = new QFrame(m_notationBox);
 
     layout = new QGridLayout(notationFrame, 4, 2, 5, 3);
 
     layout->addWidget(new QLabel(i18n("Base grid unit:"), notationFrame),
                       1, 0);
-    m_notationUnitCombo = new KComboBox(notationFrame);
+    m_notationUnitCombo = new QComboBox(notationFrame);
     layout->addWidget(m_notationUnitCombo, 1, 1);
 
     layout->addWidget(new QLabel(i18n("Complexity:"),
                                  notationFrame), 0, 0);
 
-    m_simplicityCombo = new KComboBox(notationFrame);
-    m_simplicityCombo->insertItem(i18n("Very high"));
-    m_simplicityCombo->insertItem(i18n("High"));
-    m_simplicityCombo->insertItem(i18n("Normal"));
-    m_simplicityCombo->insertItem(i18n("Low"));
-    m_simplicityCombo->insertItem(i18n("Very low"));
+    m_simplicityCombo = new QComboBox(notationFrame);
+    m_simplicityCombo->addItem(i18n("Very high"));
+    m_simplicityCombo->addItem(i18n("High"));
+    m_simplicityCombo->addItem(i18n("Normal"));
+    m_simplicityCombo->addItem(i18n("Low"));
+    m_simplicityCombo->addItem(i18n("Very low"));
     layout->addWidget(m_simplicityCombo, 0, 1);
 
     layout->addWidget(new QLabel(i18n("Tuplet level:"),
                                  notationFrame), 2, 0);
-    m_maxTuplet = new KComboBox(notationFrame);
-    m_maxTuplet->insertItem(i18n("None"));
-    m_maxTuplet->insertItem(i18n("2-in-the-time-of-3"));
-    m_maxTuplet->insertItem(i18n("Triplet"));
+    m_maxTuplet = new QComboBox(notationFrame);
+    m_maxTuplet->addItem(i18n("None"));
+    m_maxTuplet->addItem(i18n("2-in-the-time-of-3"));
+    m_maxTuplet->addItem(i18n("Triplet"));
     /*
-        m_maxTuplet->insertItem(i18n("4-Tuplet"));
-        m_maxTuplet->insertItem(i18n("5-Tuplet"));
-        m_maxTuplet->insertItem(i18n("6-Tuplet"));
-        m_maxTuplet->insertItem(i18n("7-Tuplet"));
-        m_maxTuplet->insertItem(i18n("8-Tuplet"));
+        m_maxTuplet->addItem(i18n("4-Tuplet"));
+        m_maxTuplet->addItem(i18n("5-Tuplet"));
+        m_maxTuplet->addItem(i18n("6-Tuplet"));
+        m_maxTuplet->addItem(i18n("7-Tuplet"));
+        m_maxTuplet->addItem(i18n("8-Tuplet"));
     */
-    m_maxTuplet->insertItem(i18n("Any"));
+    m_maxTuplet->addItem(i18n("Any"));
     layout->addWidget(m_maxTuplet, 2, 1);
 
     m_counterpoint = new QCheckBox(i18n("Permit counterpoint"), notationFrame);
-    layout->addMultiCellWidget(m_counterpoint, 3, 3, 0, 1);
+    layout->addWidget(m_counterpoint, 3, 0, 0+1, 1- 1);
 
-    m_gridBox = new QGroupBox
-                (1, Horizontal, i18n("Grid parameters"), parameterBox);
+    m_gridBox = new QGroupBox( i18n("Grid parameters"), parameterBox );
+    parameterBoxLayout->addWidget(m_gridBox);
+    parameterBox->setLayout(parameterBoxLayout);
     QFrame *gridFrame = new QFrame(m_gridBox);
 
     layout = new QGridLayout(gridFrame, 4, 2, 5, 3);
 
     layout->addWidget(new QLabel(i18n("Base grid unit:"), gridFrame), 0, 0);
-    m_gridUnitCombo = new KComboBox(gridFrame);
+    m_gridUnitCombo = new QComboBox(gridFrame);
     layout->addWidget(m_gridUnitCombo, 0, 1);
 
     m_swingLabel = new QLabel(i18n("Swing:"), gridFrame);
     layout->addWidget(m_swingLabel, 1, 0);
-    m_swingCombo = new KComboBox(gridFrame);
+    m_swingCombo = new QComboBox(gridFrame);
     layout->addWidget(m_swingCombo, 1, 1);
 
     m_iterativeLabel = new QLabel(i18n("Iterative amount:"), gridFrame);
     layout->addWidget(m_iterativeLabel, 2, 0);
-    m_iterativeCombo = new KComboBox(gridFrame);
+    m_iterativeCombo = new QComboBox(gridFrame);
     layout->addWidget(m_iterativeCombo, 2, 1);
 
     m_durationCheckBox = new QCheckBox
                          (i18n("Quantize durations as well as start times"), gridFrame);
-    layout->addMultiCellWidget(m_durationCheckBox, 3, 3, 0, 1);
+    layout->addWidget(m_durationCheckBox, 3, 0, 0+1, 1- 1);
 
     m_postProcessingBox = new QGroupBox
                           (1, Horizontal, i18n("After quantization"), this);
 
     if (preamble) {
-        m_mainLayout->addMultiCellWidget(m_postProcessingBox,
-                                         zero, zero + 1,
-                                         1, 1);
+        m_mainLayout->addWidget(m_postProcessingBox,
+                                         zero,
+                                         1, zero + 1-
+                                         zero+1, 1-
+                                         2);
     } else {
         m_mainLayout->addWidget(m_postProcessingBox, zero + 3, 0);
     }
@@ -229,9 +233,9 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
                                defaultQuantizer == Notation));
         m_durationCheckBox->setChecked
         (config->readBoolEntry("quantizedurations", false));
-        m_simplicityCombo->setCurrentItem
+        m_simplicityCombo->setCurrentIndex
         (config->readNumEntry("quantizesimplicity", 13) - 11);
-        m_maxTuplet->setCurrentItem
+        m_maxTuplet->setCurrentIndex
         (config->readNumEntry("quantizemaxtuplet", 3) - 1);
         m_counterpoint->setChecked
         (config->readBoolEntry("quantizecounterpoint", false));
@@ -250,8 +254,8 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
             (defaultQuantizer == Legato) ? 1 : 0;
         m_notationTarget->setChecked(defaultQuantizer == Notation);
         m_durationCheckBox->setChecked(false);
-        m_simplicityCombo->setCurrentItem(2);
-        m_maxTuplet->setCurrentItem(2);
+        m_simplicityCombo->setCurrentIndex(2);
+        m_maxTuplet->setCurrentIndex(2);
         m_counterpoint->setChecked(false);
         m_rebeam->setChecked(true);
         m_makeViable->setChecked(defaultQuantizer == Notation);
@@ -276,31 +280,31 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
         QString label = NotationStrings::makeNoteMenuLabel(time, false, error);
 
         if (error == 0) {
-            m_gridUnitCombo->insertItem(pmap, label);
-            m_notationUnitCombo->insertItem(pmap, label);
+            m_gridUnitCombo->addItem(pmap, label);
+            m_notationUnitCombo->addItem(pmap, label);
         } else {
-            m_gridUnitCombo->insertItem(noMap, QString("%1").arg(time));
-            m_notationUnitCombo->insertItem(noMap, QString("%1").arg(time));
+            m_gridUnitCombo->addItem(noMap, QString("%1").arg(time));
+            m_notationUnitCombo->addItem(noMap, QString("%1").arg(time));
         }
 
         if (m_standardQuantizations[i] == defaultUnit) {
-            m_gridUnitCombo->setCurrentItem(m_gridUnitCombo->count() - 1);
-            m_notationUnitCombo->setCurrentItem
+            m_gridUnitCombo->setCurrentIndex(m_gridUnitCombo->count() - 1);
+            m_notationUnitCombo->setCurrentIndex
             (m_notationUnitCombo->count() - 1);
         }
     }
 
     for (int i = -100; i <= 200; i += 10) {
-        m_swingCombo->insertItem(i == 0 ? i18n("None") : QString("%1%").arg(i));
+        m_swingCombo->addItem(i == 0 ? i18n("None") : QString("%1%").arg(i));
         if (i == defaultSwing)
-            m_swingCombo->setCurrentItem(m_swingCombo->count() - 1);
+            m_swingCombo->setCurrentIndex(m_swingCombo->count() - 1);
     }
 
     for (int i = 10; i <= 100; i += 10) {
-        m_iterativeCombo->insertItem(i == 100 ? i18n("Full quantize") :
+        m_iterativeCombo->addItem(i == 100 ? i18n("Full quantize") :
                                      QString("%1%").arg(i));
         if (i == defaultIterate)
-            m_iterativeCombo->setCurrentItem(m_iterativeCombo->count() - 1);
+            m_iterativeCombo->setCurrentIndex(m_iterativeCombo->count() - 1);
     }
 
     switch (defaultType) {
@@ -312,7 +316,7 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
         m_iterativeCombo->show();
         m_notationBox->hide();
         m_durationCheckBox->show();
-        m_typeCombo->setCurrentItem(0);
+        m_typeCombo->setCurrentIndex(0);
         break;
     case 1:  // legato
         m_gridBox->show();
@@ -322,11 +326,11 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
         m_iterativeCombo->hide();
         m_notationBox->hide();
         m_durationCheckBox->hide();
-        m_typeCombo->setCurrentItem(1);
+        m_typeCombo->setCurrentIndex(1);
     case 2:  // notation
         m_gridBox->hide();
         m_notationBox->show();
-        m_typeCombo->setCurrentItem(2);
+        m_typeCombo->setCurrentIndex(2);
         break;
     }
 
@@ -339,22 +343,22 @@ QuantizeParameters::getQuantizer() const
     //!!! Excessive duplication with
     // EventQuantizeCommand::makeQuantizer in editcommands.cpp
 
-    int type = m_typeCombo->currentItem();
+    int type = m_typeCombo->currentIndex();
     timeT unit = 0;
 
     if (type == 0 || type == 1) {
-        unit = m_standardQuantizations[m_gridUnitCombo->currentItem()];
+        unit = m_standardQuantizations[m_gridUnitCombo->currentIndex()];
     } else {
-        unit = m_standardQuantizations[m_notationUnitCombo->currentItem()];
+        unit = m_standardQuantizations[m_notationUnitCombo->currentIndex()];
     }
 
     Quantizer *quantizer = 0;
 
-    int swing = m_swingCombo->currentItem();
+    int swing = m_swingCombo->currentIndex();
     swing *= 10;
     swing -= 100;
 
-    int iterate = m_iterativeCombo->currentItem();
+    int iterate = m_iterativeCombo->currentIndex();
     iterate *= 10;
     iterate += 10;
 
@@ -397,8 +401,8 @@ QuantizeParameters::getQuantizer() const
         }
 
         nq->setUnit(unit);
-        nq->setSimplicityFactor(m_simplicityCombo->currentItem() + 11);
-        nq->setMaxTuplet(m_maxTuplet->currentItem() + 1);
+        nq->setSimplicityFactor(m_simplicityCombo->currentIndex() + 11);
+        nq->setMaxTuplet(m_maxTuplet->currentIndex() + 1);
         nq->setContrapuntal(m_counterpoint->isChecked());
         nq->setArticulate(m_articulate->isChecked());
 
@@ -419,9 +423,9 @@ QuantizeParameters::getQuantizer() const
                                m_durationCheckBox->isChecked());
         } else {
             config->writeEntry("quantizesimplicity",
-                               m_simplicityCombo->currentItem() + 11);
+                               m_simplicityCombo->currentIndex() + 11);
             config->writeEntry("quantizemaxtuplet",
-                               m_maxTuplet->currentItem() + 1);
+                               m_maxTuplet->currentIndex() + 1);
             config->writeEntry("quantizecounterpoint",
                                m_counterpoint->isChecked());
             config->writeEntry("quantizearticulate",

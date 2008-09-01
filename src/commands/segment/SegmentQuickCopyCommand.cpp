@@ -22,14 +22,14 @@
 #include "misc/Strings.h"
 #include "base/Composition.h"
 #include "base/Segment.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
 {
 
 SegmentQuickCopyCommand::SegmentQuickCopyCommand(Segment *segment):
-        KNamedCommand(getGlobalName()),
+        NamedCommand(getGlobalName()),
         m_composition(segment->getComposition()),
         m_segmentToCopy(segment),
         m_segment(0),

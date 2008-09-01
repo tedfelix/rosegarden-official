@@ -20,7 +20,7 @@
 
 #include "base/Composition.h"
 #include "base/Marker.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
@@ -30,7 +30,7 @@ AddMarkerCommand::AddMarkerCommand(Composition *comp,
                                    timeT time,
                                    const std::string &name,
                                    const std::string &description):
-        KNamedCommand(getGlobalName()),
+        NamedCommand(getGlobalName()),
         m_composition(comp),
         m_detached(true)
 {

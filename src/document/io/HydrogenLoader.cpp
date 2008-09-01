@@ -25,9 +25,9 @@
 #include "base/Studio.h"
 #include "gui/general/ProgressReporter.h"
 #include "HydrogenXMLHandler.h"
-#include <qfile.h>
-#include <qobject.h>
-#include <qstring.h>
+#include <QFile>
+#include <QObject>
+#include <QString>
 
 
 namespace Rosegarden
@@ -46,7 +46,7 @@ HydrogenLoader::load(const QString& fileName, Composition &comp)
     comp.clear();
 
     QFile file(fileName);
-    if (!file.open(IO_ReadOnly)) {
+    if (!file.open(QIODevice::ReadOnly)) {
         return false;
     }
 

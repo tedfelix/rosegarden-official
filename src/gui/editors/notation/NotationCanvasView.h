@@ -19,8 +19,12 @@
 #ifndef _RG_NOTATIONCANVASVIEW_H_
 #define _RG_NOTATIONCANVASVIEW_H_
 
+#include <Q3Canvas>
+#include <Q3CanvasItem>
+#include <Q3CanvasItemList>
+#include <Q3CanvasText>
 #include "gui/general/RosegardenCanvasView.h"
-#include <qrect.h>
+#include <QRect>
 #include <vector>
 
 
@@ -32,8 +36,8 @@ class QPainter;
 class QMouseEvent;
 class QCanvasLineGroupable;
 class QCanvasItemGroup;
-class QCanvasItem;
-class QCanvas;
+class Q3CanvasItem;
+class Q3Canvas;
 
 
 namespace Rosegarden
@@ -62,7 +66,7 @@ class NotationCanvasView : public RosegardenCanvasView
 
 public:
     NotationCanvasView(const LinedStaffManager &staffmgr,
-                       QCanvas *viewing, QWidget *parent=0,
+                       Q3Canvas *viewing, QWidget *parent=0,
                        const char *name=0, WFlags f=0);
 
     ~NotationCanvasView();
@@ -83,26 +87,26 @@ signals:
                      NotationElement* el);
 
     /**
-     * Emitted when the user clicks on a QCanvasItem which is active
+     * Emitted when the user clicks on a Q3CanvasItem which is active
      *
-     * @see QCanvasItem#setActive
+     * @see Q3CanvasItem#setActive
      */
     void activeItemPressed(QMouseEvent*,
-                           QCanvasItem* item);
+                           Q3CanvasItem* item);
 
     /**
-     * Emitted when the user clicks on a QCanvasItem which is neither
+     * Emitted when the user clicks on a Q3CanvasItem which is neither
      * active nor a notation element
      */
     void nonNotationItemPressed(QMouseEvent *,
-                                QCanvasItem *);
+                                Q3CanvasItem *);
 
     /**
-     * Emitted when the user clicks on a QCanvasItem which is a
-     * plain QCanvasText
+     * Emitted when the user clicks on a Q3CanvasItem which is a
+     * plain Q3CanvasText
      */
     void textItemPressed(QMouseEvent *,
-                         QCanvasItem *);
+                         Q3CanvasItem *);
 
     /**
      * Emitted when the mouse cursor moves to a different height
@@ -170,7 +174,7 @@ protected:
      */
     virtual void contentsMouseDoubleClickEvent(QMouseEvent*);
 
-    void processActiveItems(QMouseEvent*, QCanvasItemList);
+    void processActiveItems(QMouseEvent*, Q3CanvasItemList);
 
     void handleMousePress(int height, int staffNo,
                           QMouseEvent*,

@@ -35,8 +35,8 @@ class QGroupBox;
 class QCloseEvent;
 class QCheckBox;
 class KListView;
-class KCommand;
-class KComboBox;
+class Command;
+class QComboBox;
 
 
 namespace Rosegarden
@@ -69,7 +69,7 @@ public:
 
     std::pair<int, int> getFirstFreeBank(QListViewItem*);
 
-    void addCommandToHistory(KCommand *command);
+    void addCommandToHistory(Command *command);
     MultiViewCommandHistory* getCommandHistory();
 
     void setCurrentDevice(DeviceId device);
@@ -161,7 +161,7 @@ protected:
 
     QGroupBox               *m_optionBox;
     QCheckBox               *m_variationToggle;
-    KComboBox               *m_variationCombo;
+    QComboBox               *m_variationCombo;
 
     QPushButton             *m_closeButton;
     QPushButton             *m_resetButton;

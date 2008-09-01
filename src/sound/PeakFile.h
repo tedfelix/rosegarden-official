@@ -13,8 +13,8 @@
 
 #include <vector>
 
-#include <qobject.h>
-#include <qdatetime.h>
+#include <QObject>
+#include <QDateTime>
 
 #include "SoundFile.h"
 #include "RealTime.h"

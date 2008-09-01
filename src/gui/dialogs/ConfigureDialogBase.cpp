@@ -20,15 +20,16 @@
 
 #include <klocale.h>
 #include "gui/configuration/ConfigurationPage.h"
-#include <kdialogbase.h>
-#include <qstring.h>
-#include <qwidget.h>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QString>
+#include <QWidget>
 
 
 namespace Rosegarden
 {
 
-ConfigureDialogBase::ConfigureDialogBase(QWidget *parent,
+ConfigureDialogBase::ConfigureDialogBase(QDialogButtonBox::QWidget *parent,
         QString label,
         const char *name):
         KDialogBase(IconList, label ? label : i18n("Configure"), Help | Apply | Ok | Cancel,

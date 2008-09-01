@@ -20,10 +20,10 @@
 #include "misc/Debug.h"
 #include "gui/general/PixmapFunctions.h"
 
-#include <qfont.h>
-#include <qfontmetrics.h>
-#include <qpainter.h>
-#include <qpixmap.h>
+#include <QFont>
+#include <QFontMetrics>
+#include <QPainter>
+#include <QPixmap>
 
 namespace Rosegarden {
 
@@ -53,7 +53,7 @@ SystemFontQt::renderChar(CharName charName, int glyph, int code,
     QPainter painter;
     painter.begin(&map);
     painter.setFont(m_font);
-    painter.setPen(Qt::black);
+    painter.setPen(QColor(Qt::black));
     
     NOTATION_DEBUG << "NoteFont: Drawing character code "
 		   << code << " for " << charName.getName()
@@ -62,7 +62,7 @@ SystemFontQt::renderChar(CharName charName, int glyph, int code,
     painter.drawText(0, metrics.ascent(), qc);
     
     painter.end();
-    map.setMask(PixmapFunctions::generateMask(map, Qt::white.rgb()));
+    map.setMask(PixmapFunctions::generateMask(map, QColor(Qt::white).rgb()));
 
     success = true;
     return map;

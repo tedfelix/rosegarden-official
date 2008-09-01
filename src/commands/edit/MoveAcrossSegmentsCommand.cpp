@@ -24,7 +24,7 @@
 #include "base/Selection.h"
 #include "CutCommand.h"
 #include "PasteEventsCommand.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
@@ -35,7 +35,7 @@ MoveAcrossSegmentsCommand::MoveAcrossSegmentsCommand(Segment &,
         timeT newStartTime,
         bool notation,
         EventSelection &selection) :
-        KMacroCommand(getGlobalName()),
+        MacroCommand(getGlobalName()),
         m_clipboard(new Clipboard())
 {
     addCommand(new CutCommand(selection, m_clipboard));

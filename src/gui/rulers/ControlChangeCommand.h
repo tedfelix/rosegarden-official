@@ -18,6 +18,7 @@
 #ifndef _RG_CONTROLCHANGECOMMAND_H_
 #define _RG_CONTROLCHANGECOMMAND_H_
 
+#include <Q3CanvasItemList>
 #include "document/BasicCommand.h"
 #include <qcanvas.h>
 
@@ -30,7 +31,7 @@ class ControlChangeCommand : public BasicCommand
 {
 public:
 
-    ControlChangeCommand(QCanvasItemList selectedItems,
+    ControlChangeCommand(Q3CanvasItemList selectedItems,
                          Segment &segment,
                          Rosegarden::timeT start, Rosegarden::timeT end);
     virtual ~ControlChangeCommand() {;}
@@ -40,7 +41,7 @@ protected:
 
     virtual void modifySegment();
 
-    QCanvasItemList m_selectedItems;
+    Q3CanvasItemList m_selectedItems;
 };
 
 }

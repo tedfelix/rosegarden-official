@@ -43,11 +43,11 @@
 #include "NotePixmapFactory.h"
 #include "NoteStyleFactory.h"
 #include <kaction.h>
-#include <kcommand.h>
+#include "document/Command.h"
 #include <kconfig.h>
-#include <qiconset.h>
-#include <qregexp.h>
-#include <qstring.h>
+#include <QIcon>
+#include <QRegExp>
+#include <QString>
 
 
 namespace Rosegarden
@@ -62,7 +62,7 @@ NoteInserter::NoteInserter(NotationView* view)
         m_lastAccidental(Accidentals::NoAccidental),
         m_followAccidental(false)
 {
-    QIconSet icon;
+    QIcon icon;
 
     KConfig *config = kapp->config();
     config->setGroup(NotationViewConfigGroup);
@@ -79,7 +79,7 @@ NoteInserter::NoteInserter(NotationView* view)
 
     for (unsigned int i = 0; i < 6; ++i) {
 
-        icon = QIconSet
+        icon = QIcon
                (NotePixmapFactory::toQPixmap(NotePixmapFactory::
                                              makeToolbarPixmap(m_actionsAccidental[i][3])));
         KRadioAction* noteAction = new KRadioAction(i18n(m_actionsAccidental[i][0]),
@@ -90,14 +90,14 @@ NoteInserter::NoteInserter(NotationView* view)
         noteAction->setExclusiveGroup("accidentals");
     }
 
-    icon = QIconSet
+    icon = QIcon
            (NotePixmapFactory::toQPixmap(NotePixmapFactory::
                                          makeToolbarPixmap("dotted-crotchet")));
     new KToggleAction(i18n("Dotted note"), icon, 0, this,
                       SLOT(slotToggleDot()), actionCollection(),
                       "toggle_dot");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::
                     makeToolbarPixmap("select")));
     new KAction(i18n("Switch to Select Tool"), icon, 0, this,
                 SLOT(slotSelectSelected()), actionCollection(),
@@ -107,7 +107,7 @@ NoteInserter::NoteInserter(NotationView* view)
                 SLOT(slotEraseSelected()), actionCollection(),
                 "erase");
 
-    icon = QIconSet
+    icon = QIcon
            (NotePixmapFactory::toQPixmap(NotePixmapFactory::
                                          makeToolbarPixmap("rest-crotchet")));
     new KAction(i18n("Switch to Inserting Rests"), icon, 0, this,
@@ -557,14 +557,14 @@ NoteInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
          targetSubordering,
          m_defaultStyle);
 
-    KCommand *activeCommand = insertionCommand;
+    Command *activeCommand = insertionCommand;
 
     if (m_nParentView->isInTripletMode() && !m_nParentView->isInGraceMode()) {
         Segment::iterator i(segment.findTime(time));
         if (i != segment.end() &&
             !(*i)->has(BaseProperties::BEAMED_GROUP_TUPLET_BASE)) {
             
-            KMacroCommand *command = new KMacroCommand(insertionCommand->name());
+            MacroCommand *command = new MacroCommand(insertionCommand->objectName());
 
             //## Attempted fix to bug reported on rg-user by SlowPic
             //## <slowpic@web.de> 28/02/2005 22:32:56 UTC: Triplet input error

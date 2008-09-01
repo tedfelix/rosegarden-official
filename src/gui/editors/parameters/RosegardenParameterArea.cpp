@@ -22,15 +22,15 @@
 
 #include "RosegardenParameterBox.h"
 #include <ktabwidget.h>
-#include <qfont.h>
-#include <qframe.h>
-#include <qpoint.h>
+#include <QFont>
+#include <QFrame>
+#include <QPoint>
 #include <qscrollview.h>
-#include <qstring.h>
-#include <qvbox.h>
-#include <qlayout.h>
+#include <QString>
+#include <QLayout>
 #include <qvgroupbox.h>
-#include <qwidget.h>
+#include <QWidget>
+#include <QVBoxLayout>
 #include <qwidgetstack.h>
 #include <iostream>
 #include <set>

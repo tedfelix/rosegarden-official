@@ -19,13 +19,14 @@
 #ifndef _RG_NOTEFONTVIEWER_H_
 #define _RG_NOTEFONTVIEWER_H_
 
-#include <kdialogbase.h>
-#include <qstring.h>
-#include <qstringlist.h>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QString>
+#include <QStringList>
 
 
 class QWidget;
-class KComboBox;
+class QComboBox;
 
 
 namespace Rosegarden
@@ -34,12 +35,12 @@ namespace Rosegarden
 class FontViewFrame;
 
 
-class NoteFontViewer : public KDialogBase
+class NoteFontViewer : public QDialog
 {
     Q_OBJECT
 
 public:
-    NoteFontViewer(QWidget *parent, QString noteFontName,
+    NoteFontViewer(QDialogButtonBox::QWidget *parent, QString noteFontName,
                    QStringList systemFontNames, int pixelSize);
 
 protected slots:
@@ -48,9 +49,9 @@ protected slots:
     void slotRowChanged(const QString &);
 
 private:
-    KComboBox *m_font;
-    KComboBox *m_view;
-    KComboBox *m_rows;
+    QComboBox *m_font;
+    QComboBox *m_view;
+    QComboBox *m_rows;
     FontViewFrame *m_frame;
 };
 

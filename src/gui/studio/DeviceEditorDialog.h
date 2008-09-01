@@ -20,8 +20,9 @@
 
 #include "base/Studio.h"
 #include "base/MidiDevice.h"
-#include <kdialogbase.h>
-#include <qstringlist.h>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QStringList>
 #include <set>
 
 class QWidget;
@@ -35,11 +36,11 @@ class Studio;
 class RosegardenGUIDoc;
 
 
-class DeviceEditorDialog : public KDialogBase
+class DeviceEditorDialog : public QDialog
 {
     Q_OBJECT
 public:
-    DeviceEditorDialog(QWidget *parent, RosegardenGUIDoc *document);
+    DeviceEditorDialog(QDialogButtonBox::QWidget *parent, RosegardenGUIDoc *document);
     ~DeviceEditorDialog();
 
     void setModified(bool value);

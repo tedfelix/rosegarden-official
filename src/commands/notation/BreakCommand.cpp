@@ -23,7 +23,7 @@
 #include "document/CommandRegistry.h"
 #include "gui/editors/notation/NotationProperties.h"
 #include "base/BaseProperties.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden

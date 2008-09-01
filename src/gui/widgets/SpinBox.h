@@ -19,8 +19,8 @@
 #ifndef _RG_ROSEGARDENSPINBOX_H_
 #define _RG_ROSEGARDENSPINBOX_H_
 
-#include <qspinbox.h>
-#include <qstring.h>
+#include <QSpinBox>
+#include <QString>
 
 
 class QWidget;

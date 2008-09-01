@@ -20,8 +20,8 @@
 
 #include "misc/Strings.h"
 #include "base/AudioPluginInstance.h"
-#include <qcolor.h>
-#include <qstring.h>
+#include <QColor>
+#include <QString>
 
 
 namespace Rosegarden
@@ -45,7 +45,7 @@ AudioPlugin::AudioPlugin(const QString &identifier,
         m_isSynth(isSynth),
         m_isGrouped(isGrouped),
         m_category(category),
-        m_colour(Qt::darkRed)
+        m_colour(QColor(Qt::darkRed))
 {}
 
 void

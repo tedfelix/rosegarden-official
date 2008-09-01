@@ -21,14 +21,14 @@
 
 #include "misc/Debug.h"
 #include "base/AudioLevel.h"
-#include <qcolor.h>
-#include <qevent.h>
-#include <qpainter.h>
-#include <qpixmap.h>
-#include <qpoint.h>
-#include <qstring.h>
-#include <qtimer.h>
-#include <qwidget.h>
+#include <QColor>
+#include <QEvent>
+#include <QPainter>
+#include <QPixmap>
+#include <QPoint>
+#include <QString>
+#include <QTimer>
+#include <QWidget>
 #include <cmath>
 
 namespace Rosegarden

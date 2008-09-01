@@ -19,7 +19,7 @@
 #ifndef _RG_SEGMENTRECORDCOMMAND_H_
 #define _RG_SEGMENTRECORDCOMMAND_H_
 
-#include <kcommand.h>
+#include "document/Command.h"
 
 
 
@@ -38,7 +38,7 @@ class Composition;
  * correctly, and it provides the ability to undo recording.  (The
  * unexecute does remove the segment, it doesn't just pretend to.)
  */
-class SegmentRecordCommand : public KNamedCommand
+class SegmentRecordCommand : public NamedCommand
 {
 public:
     SegmentRecordCommand(Segment *segment);

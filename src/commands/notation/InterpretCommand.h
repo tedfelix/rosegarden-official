@@ -22,7 +22,7 @@
 #include "document/BasicSelectionCommand.h"
 #include <map>
 #include <string>
-#include <qstring.h>
+#include <QString>
 #include "base/Event.h"
 #include <klocale.h>
 

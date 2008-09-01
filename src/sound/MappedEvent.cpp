@@ -12,11 +12,11 @@
   COPYING included with this distribution for more information.
 */
 
-#include <qdir.h>
-#include <qfile.h>
-#include <qfileinfo.h>
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
 
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 
 #include "MappedEvent.h"
 #include "BaseProperties.h"
@@ -387,13 +387,13 @@ DataBlockFile::DataBlockFile(DataBlockRepository::blockid id)
         m_file(m_fileName),
         m_cleared(false)
 {
-    //     std::cerr << "DataBlockFile " << m_fileName.latin1() << std::endl;
+    //     std::cerr << "DataBlockFile " << m_fileName.toLatin1().data() << std::endl;
 }
 
 DataBlockFile::~DataBlockFile()
 {
     if (m_cleared) {
-//        std::cerr << "~DataBlockFile : removing " << m_fileName.latin1() << std::endl;
+//        std::cerr << "~DataBlockFile : removing " << m_fileName.toLatin1().data() << std::endl;
         QFile::remove
             (m_fileName);
     }
@@ -411,7 +411,7 @@ void DataBlockFile::setData(const std::string& s)
     prepareToWrite();
 
     QDataStream stream(&m_file);
-    stream.writeRawBytes(s.data(), s.length());
+    stream.writeRawData(s.data(), s.length());
 }
 
 std::string DataBlockFile::getData()
@@ -424,7 +424,7 @@ std::string DataBlockFile::getData()
     QDataStream stream(&m_file);
  //   std::cerr << "DataBlockFile::getData() : file size = " << m_file.size() << std::endl;
     char* tmp = new char[m_file.size()];
-    stream.readRawBytes(tmp, m_file.size());
+    stream.readRawData(tmp, m_file.size());
     std::string res(tmp, m_file.size());
     delete[] tmp;
 
@@ -441,7 +441,7 @@ void DataBlockFile::addDataString(const std::string& s)
 {
     prepareToWrite();
     QDataStream stream(&m_file);
-    stream.writeRawBytes(s.data(), s.length());
+    stream.writeRawData(s.data(), s.length());
 }
 
 void DataBlockFile::prepareToWrite()
@@ -449,7 +449,7 @@ void DataBlockFile::prepareToWrite()
  //   std::cerr << "DataBlockFile[" << m_fileName << "]: prepareToWrite" << std::endl;
     if (!m_file.isWritable()) {
         m_file.close();
-        m_file.open(IO_WriteOnly | IO_Append);
+        m_file.open(QIODevice::WriteOnly | QIODevice::Append);
         assert(m_file.isWritable());
     }
 }
@@ -459,7 +459,7 @@ void DataBlockFile::prepareToRead()
 //    std::cerr << "DataBlockFile[" << m_fileName << "]: prepareToRead" << std::endl;
     if (!m_file.isReadable()) {
         m_file.close();
-        m_file.open(IO_ReadOnly);
+        m_file.open(QIODevice::ReadOnly);
         assert(m_file.isReadable());
     }
 }

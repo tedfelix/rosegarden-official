@@ -22,7 +22,7 @@
 #include "base/MidiProgram.h"
 #include "base/RealTime.h"
 #include "SegmentMmapper.h"
-#include <qstring.h>
+#include <QString>
 #include <utility>
 #include <vector>
 #include "base/Event.h"

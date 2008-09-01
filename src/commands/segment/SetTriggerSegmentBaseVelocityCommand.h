@@ -20,7 +20,7 @@
 #define _RG_SETTRIGGERSEGMENTBASEVELOCITYCOMMAND_H_
 
 #include "base/TriggerSegment.h"
-#include <kcommand.h>
+#include "document/Command.h"
 
 
 
@@ -31,7 +31,7 @@ namespace Rosegarden
 class Composition;
 
 
-class SetTriggerSegmentBaseVelocityCommand : public KNamedCommand
+class SetTriggerSegmentBaseVelocityCommand : public NamedCommand
 {
 public:
     SetTriggerSegmentBaseVelocityCommand(Composition *composition,

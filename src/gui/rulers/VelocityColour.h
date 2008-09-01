@@ -19,7 +19,7 @@
 #ifndef _RG_VELOCITYCOLOUR_H_
 #define _RG_VELOCITYCOLOUR_H_
 
-#include <qcolor.h>
+#include <QColor>
 
 
 
@@ -41,7 +41,7 @@ public:
     VelocityColour(const QColor &loud,
                    const QColor &medium,
                    const QColor &quiet,
-                   int maxValue,
+                   int maximum,
                    int loudKnee,
                    int mediumKnee,
                    int quietKnee);
@@ -57,7 +57,7 @@ public:
     QColor getMediumColour() const { return m_mediumColour; }
     QColor getQuietColour() const { return m_quietColour; }
 
-    int getMaxValue() const { return m_maxValue; }
+    int getMaxValue() const { return m_maximum; }
 
 private:
 
@@ -67,7 +67,7 @@ private:
     int    m_loudKnee;
     int    m_mediumKnee;
     int    m_quietKnee;
-    int    m_maxValue;
+    int    m_maximum;
 
     // the mixed colour that we can return
     QColor m_mixedColour;

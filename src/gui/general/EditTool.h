@@ -21,7 +21,7 @@
 
 #include "BaseTool.h"
 #include <kxmlguiclient.h>
-#include <qstring.h>
+#include <QString>
 #include "base/Event.h"
 
 

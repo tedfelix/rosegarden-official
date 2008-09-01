@@ -17,10 +17,10 @@
 
 
 #include "TrackButtons.h"
-#include <qlayout.h>
+#include <QLayout>
 
 #include <klocale.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "base/AudioPluginInstance.h"
@@ -43,19 +43,19 @@
 #include <kglobal.h>
 #include <kled.h>
 #include <kmessagebox.h>
-#include <qcursor.h>
-#include <qframe.h>
-#include <qiconset.h>
-#include <qlabel.h>
-#include <qobject.h>
-#include <qpixmap.h>
+#include <QCursor>
+#include <QFrame>
+#include <QIcon>
+#include <QLabel>
+#include <QObject>
+#include <QPixmap>
 #include <qpopupmenu.h>
-#include <qsignalmapper.h>
-#include <qstring.h>
-#include <qtimer.h>
-#include <qwidget.h>
+#include <QSignalMapper>
+#include <QString>
+#include <QTimer>
+#include <QWidget>
 #include <qwidgetstack.h>
-#include <qtooltip.h>
+#include <QToolTip>
 
 namespace Rosegarden
 {
@@ -746,7 +746,7 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QPopupMenu* in
                 }
             }
 
-            QIconSet iconSet
+            QIcon iconSet
                 (connected ?
                  (deviceUsedByAnyone ?
                   connectedUsedPixmap : connectedPixmap) :
@@ -757,7 +757,7 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QPopupMenu* in
 
             QPopupMenu *subMenu = new QPopupMenu(instrumentPopup);
             QString deviceName = strtoqstr(device->getName());
-            instrumentPopup->insertItem(iconSet, deviceName, subMenu);
+            instrumentPopup->addItem(iconSet, deviceName, subMenu);
             instrumentSubMenus.push_back(subMenu);
 
             // Connect up the submenu
@@ -778,7 +778,7 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QPopupMenu* in
             }
         }
 
-        QIconSet iconSet
+        QIcon iconSet
             (connected ?
              (instrUsedByAnyone ?
               instrUsedByMe ?
@@ -792,7 +792,7 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QPopupMenu* in
         if (pname != "")
             iname += " (" + pname + ")";
 
-        instrumentSubMenus[instrumentSubMenus.size() - 1]->insertItem(iconSet, iname, i++);
+        instrumentSubMenus[instrumentSubMenus.size() - 1]->addItem(iconSet, iname, i++);
     }
 
 }

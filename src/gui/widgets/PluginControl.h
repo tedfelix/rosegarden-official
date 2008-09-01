@@ -19,7 +19,7 @@
 #ifndef _RG_PLUGINCONTROL_H_
 #define _RG_PLUGINCONTROL_H_
 
-#include <qobject.h>
+#include <QObject>
 #include <vector>
 
 

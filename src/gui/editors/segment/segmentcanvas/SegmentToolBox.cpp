@@ -29,7 +29,7 @@
 #include "SegmentPencil.h"
 #include "SegmentResizer.h"
 #include "SegmentSplitter.h"
-#include <qstring.h>
+#include <QString>
 #include <kmessagebox.h>
 
 namespace Rosegarden
@@ -45,7 +45,7 @@ SegmentTool* SegmentToolBox::createTool(const QString& toolName)
 {
     SegmentTool* tool = 0;
 
-    QString toolNamelc = toolName.lower();
+    QString toolNamelc = toolName.toLower();
     
     if (toolNamelc == SegmentPencil::ToolName)
 

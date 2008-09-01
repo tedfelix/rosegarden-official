@@ -18,8 +18,8 @@
 
 #include "PreviewRect.h"
 
-#include <qcolor.h>
-#include <qrect.h>
+#include <QColor>
+#include <QRect>
 
 
 namespace Rosegarden

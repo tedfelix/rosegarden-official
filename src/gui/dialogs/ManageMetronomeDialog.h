@@ -20,13 +20,14 @@
 #define _RG_MANAGEMETRONOMEDIALOG_H_
 
 #include "base/MidiMetronome.h"
-#include <kdialogbase.h>
+#include <QDialog>
+#include <QDialogButtonBox>
 
 
 class QWidget;
 class QSpinBox;
 class QCheckBox;
-class KComboBox;
+class QComboBox;
 
 namespace Rosegarden
 {
@@ -37,12 +38,12 @@ class InstrumentParameterBox;
 class Device;
 
 
-class ManageMetronomeDialog : public KDialogBase
+class ManageMetronomeDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    ManageMetronomeDialog(QWidget *parent, RosegardenGUIDoc *doc);
+    ManageMetronomeDialog(QDialogButtonBox::QWidget *parent, RosegardenGUIDoc *doc);
 
     void setModified(bool value);
 
@@ -63,10 +64,10 @@ protected:
 
     RosegardenGUIDoc       *m_doc;
 
-    KComboBox              *m_metronomeDevice;
-    KComboBox              *m_metronomeInstrument;
-    KComboBox              *m_metronomeResolution;
-    KComboBox              *m_metronomePitchSelector;
+    QComboBox              *m_metronomeDevice;
+    QComboBox              *m_metronomeInstrument;
+    QComboBox              *m_metronomeResolution;
+    QComboBox              *m_metronomePitchSelector;
     PitchChooser *m_metronomePitch;
     QSpinBox               *m_metronomeBarVely;
     QSpinBox               *m_metronomeBeatVely;

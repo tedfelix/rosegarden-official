@@ -13,12 +13,22 @@
     COPYING included with this distribution for more information.
 */
 
+#include <Q3Canvas>
+#include <Q3CanvasEllipse>
+#include <Q3CanvasItem>
+#include <Q3CanvasItemList>
+#include <Q3CanvasLine>
+#include <Q3CanvasPixmapArray>
+#include <Q3CanvasPolygonalItem>
+#include <Q3CanvasRectangle>
+#include <Q3CanvasSprite>
+#include <Q3CanvasText>
 #include <qcanvas.h>
 #include "misc/Debug.h"
 
 #include "QCanvasGroupableItem.h"
 
-QCanvasGroupableItem::QCanvasGroupableItem(QCanvasItem *i,
+QCanvasGroupableItem::QCanvasGroupableItem(Q3CanvasItem *i,
         QCanvasItemGroup *g,
         bool withRelativeCoords)
         : m_group(g),
@@ -60,8 +70,8 @@ QCanvasGroupableItem::detach()
 
 //////////////////////////////////////////////////////////////////////
 
-QCanvasItemGroup::QCanvasItemGroup(QCanvas *c)
-        : QCanvasItem(c)
+QCanvasItemGroup::QCanvasItemGroup(Q3Canvas *c)
+        : Q3CanvasItem(c)
 {
     //     RG_DEBUG << "QCanvasItemGroup() - this : " << this << endl;
 }
@@ -71,7 +81,7 @@ QCanvasItemGroup::~QCanvasItemGroup()
     //     RG_DEBUG << "~QCanvasItemGroup() - this : " << this << endl;
 
     // Tell all our items that we're being destroyed
-    QCanvasItemList::Iterator i;
+    Q3CanvasItemList::Iterator i;
     for (i = m_items.begin(); i != m_items.end(); ++i) {
         QCanvasGroupableItem *t = dynamic_cast<QCanvasGroupableItem*>(*i);
         if (t)
@@ -82,9 +92,9 @@ QCanvasItemGroup::~QCanvasItemGroup()
 void
 QCanvasItemGroup::moveBy(double dx, double dy)
 {
-    QCanvasItem::moveBy(dx, dy); // move ourselves
+    Q3CanvasItem::moveBy(dx, dy); // move ourselves
 
-    QCanvasItemList::Iterator i; // move group items
+    Q3CanvasItemList::Iterator i; // move group items
     for (i = m_items.begin(); i != m_items.end(); ++i)
         (*i)->moveBy(dx, dy);
 }
@@ -92,15 +102,15 @@ QCanvasItemGroup::moveBy(double dx, double dy)
 void
 QCanvasItemGroup::advance(int stage)
 {
-    QCanvasItemList::Iterator i;
+    Q3CanvasItemList::Iterator i;
     for (i = m_items.begin(); i != m_items.end(); ++i)
         (*i)->advance(stage);
 }
 
 bool
-QCanvasItemGroup::collidesWith(const QCanvasItem *item) const
+QCanvasItemGroup::collidesWith(const Q3CanvasItem *item) const
 {
-    QCanvasItemList::ConstIterator i;
+    Q3CanvasItemList::ConstIterator i;
     for (i = m_items.begin(); i != m_items.end(); ++i)
         if ((*i)->collidesWith(item))
             return true;
@@ -113,9 +123,9 @@ QCanvasItemGroup::draw(QPainter&)
 {
     // There isn't anything to do - all the items will be drawn
     // seperately by the canvas anyway. However the function has to be
-    // implemented because it's an abstract virtual in QCanvasItem.
+    // implemented because it's an abstract virtual in Q3CanvasItem.
 
-    //     QCanvasItemList::Iterator i;
+    //     Q3CanvasItemList::Iterator i;
     //     for(i = m_items.begin(); i != m_items.end(); ++i)
     //         (*i)->draw(p);
 }
@@ -123,7 +133,7 @@ QCanvasItemGroup::draw(QPainter&)
 void
 QCanvasItemGroup::setVisible(bool yes)
 {
-    QCanvasItemList::Iterator i;
+    Q3CanvasItemList::Iterator i;
     for (i = m_items.begin(); i != m_items.end(); ++i)
         (*i)->setVisible(yes);
 }
@@ -131,9 +141,9 @@ QCanvasItemGroup::setVisible(bool yes)
 void
 QCanvasItemGroup::setSelected(bool yes)
 {
-    QCanvasItem::setSelected(yes);
+    Q3CanvasItem::setSelected(yes);
 
-    QCanvasItemList::Iterator i;
+    Q3CanvasItemList::Iterator i;
     for (i = m_items.begin(); i != m_items.end(); ++i)
         (*i)->setVisible(yes);
 }
@@ -141,9 +151,9 @@ QCanvasItemGroup::setSelected(bool yes)
 void
 QCanvasItemGroup::setEnabled(bool yes)
 {
-    QCanvasItem::setEnabled(yes);
+    Q3CanvasItem::setEnabled(yes);
 
-    QCanvasItemList::Iterator i;
+    Q3CanvasItemList::Iterator i;
     for (i = m_items.begin(); i != m_items.end(); ++i)
         (*i)->setEnabled(yes);
 }
@@ -151,9 +161,9 @@ QCanvasItemGroup::setEnabled(bool yes)
 void
 QCanvasItemGroup::setActive(bool yes)
 {
-    QCanvasItem::setActive(yes);
+    Q3CanvasItem::setActive(yes);
 
-    QCanvasItemList::Iterator i;
+    Q3CanvasItemList::Iterator i;
     for (i = m_items.begin(); i != m_items.end(); ++i)
         (*i)->setActive(yes);
 }
@@ -169,7 +179,7 @@ QCanvasItemGroup::boundingRect() const
 {
     QRect r;
 
-    QCanvasItemList::ConstIterator i;
+    Q3CanvasItemList::ConstIterator i;
     for (i = m_items.begin(); i != m_items.end(); ++i)
         r.unite((*i)->boundingRect());
 
@@ -181,7 +191,7 @@ QCanvasItemGroup::boundingRectAdvanced() const
 {
     QRect r;
 
-    QCanvasItemList::ConstIterator i;
+    Q3CanvasItemList::ConstIterator i;
     for (i = m_items.begin(); i != m_items.end(); ++i)
         r.unite((*i)->boundingRectAdvanced());
 
@@ -189,11 +199,11 @@ QCanvasItemGroup::boundingRectAdvanced() const
 }
 
 bool
-QCanvasItemGroup::collidesWith(const QCanvasSprite *s,
-                               const QCanvasPolygonalItem *p,
-                               const QCanvasRectangle *r,
-                               const QCanvasEllipse *e,
-                               const QCanvasText *t) const
+QCanvasItemGroup::collidesWith(const Q3CanvasSprite *s,
+                               const Q3CanvasPolygonalItem *p,
+                               const Q3CanvasRectangle *r,
+                               const Q3CanvasEllipse *e,
+                               const Q3CanvasText *t) const
 {
     if (s)
         return collidesWith(s);
@@ -211,20 +221,20 @@ QCanvasItemGroup::collidesWith(const QCanvasSprite *s,
 }
 
 void
-QCanvasItemGroup::addItem(QCanvasItem *i)
+QCanvasItemGroup::addItem(Q3CanvasItem *i)
 {
     m_items.append(i);
 }
 
 void
-QCanvasItemGroup::addItemWithRelativeCoords(QCanvasItem *i)
+QCanvasItemGroup::addItemWithRelativeCoords(Q3CanvasItem *i)
 {
     i->moveBy(x(), y());
     addItem(i);
 }
 
 void
-QCanvasItemGroup::removeItem(QCanvasItem *i)
+QCanvasItemGroup::removeItem(Q3CanvasItem *i)
 {
     //     RG_DEBUG << "QCanvasItemGroup::removeItem() - this : "
     //                          << this << " - item : " << i << endl;
@@ -234,40 +244,40 @@ QCanvasItemGroup::removeItem(QCanvasItem *i)
 //////////////////////////////////////////////////////////////////////
 
 
-QCanvasLineGroupable::QCanvasLineGroupable(QCanvas *c,
+QCanvasLineGroupable::QCanvasLineGroupable(Q3Canvas *c,
         QCanvasItemGroup *g)
-        : QCanvasLine(c),
+        : Q3CanvasLine(c),
         QCanvasGroupableItem(this, g)
 {}
 
 //////////////////////////////////////////////////////////////////////
 
-QCanvasRectangleGroupable::QCanvasRectangleGroupable(QCanvas *c,
+QCanvasRectangleGroupable::QCanvasRectangleGroupable(Q3Canvas *c,
         QCanvasItemGroup *g)
-        : QCanvasRectangle(c),
+        : Q3CanvasRectangle(c),
         QCanvasGroupableItem(this, g)
 {}
 
 //////////////////////////////////////////////////////////////////////
 
 QCanvasTextGroupable::QCanvasTextGroupable(const QString& label,
-        QCanvas *c,
+        Q3Canvas *c,
         QCanvasItemGroup *g)
-        : QCanvasText(label, c),
+        : Q3CanvasText(label, c),
         QCanvasGroupableItem(this, g)
 {}
 
-QCanvasTextGroupable::QCanvasTextGroupable(QCanvas *c,
+QCanvasTextGroupable::QCanvasTextGroupable(Q3Canvas *c,
         QCanvasItemGroup *g)
-        : QCanvasText(c),
+        : Q3CanvasText(c),
         QCanvasGroupableItem(this, g)
 {}
 
 //////////////////////////////////////////////////////////////////////
 
-QCanvasSpriteGroupable::QCanvasSpriteGroupable(QCanvasPixmapArray *pa,
-        QCanvas *c,
+QCanvasSpriteGroupable::QCanvasSpriteGroupable(Q3CanvasPixmapArray *pa,
+        Q3Canvas *c,
         QCanvasItemGroup *g)
-        : QCanvasSprite(pa, c),
+        : Q3CanvasSprite(pa, c),
         QCanvasGroupableItem(this, g)
 {}

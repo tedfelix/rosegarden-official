@@ -28,17 +28,17 @@
 #include <kconfig.h>
 #include <klistview.h>
 #include <klocale.h>
-#include <qgroupbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qlineedit.h>
-#include <qpushbutton.h>
-#include <qstring.h>
-#include <qtabwidget.h>
-#include <qtooltip.h>
-#include <qvbox.h>
-#include <qwidget.h>
-#include <qfont.h>
+#include <QGroupBox>
+#include <QLabel>
+#include <QLayout>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QString>
+#include <QTabWidget>
+#include <QToolTip>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QFont>
 
 namespace Rosegarden
 {
@@ -147,7 +147,7 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
     }
     QLabel *separator = new QLabel(i18n("The composition comes here."), frameHeaders);
     separator->setAlignment( Qt::AlignCenter );
-    layoutHeaders->addMultiCellWidget(separator, 7, 7, 1, 4 );
+    layoutHeaders->addWidget(separator, 7, 1, 1, 4 - 2);
 
     //
     // LilyPond export: Non-printable headers
@@ -193,7 +193,7 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
         QString name(strtoqstr(names[i]));
 
         // property names stored in lower case
-        name = name.left(1).upper() + name.right(name.length() - 1);
+        name = name.left(1).toUpper() + name.right(name.length() - 1);
 
         new KListViewItem(m_metadata, name,
                           strtoqstr(metadata.get<String>(names[i])));
@@ -201,7 +201,7 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
         shown.insert(names[i]);
     }
 
-    layoutOtherHeaders->addMultiCellWidget(m_metadata, 0, 0, 0, 1);
+    layoutOtherHeaders->addWidget(m_metadata, 0, 0, 0- 0+1, 1- 1);
 
     QPushButton* addPropButton = new QPushButton(i18n("Add New Property"),
                                  frameOtherHeaders);
@@ -239,7 +239,7 @@ HeadersConfigurationPage::slotAddNewProperty()
 void
 HeadersConfigurationPage::slotDeleteProperty()
 {
-    delete m_metadata->currentItem();
+    delete m_metadata->currentIndex();
 }
 
 void HeadersConfigurationPage::apply()
@@ -276,7 +276,7 @@ void HeadersConfigurationPage::apply()
     for (QListViewItem *item = m_metadata->firstChild();
             item != 0; item = item->nextSibling()) {
 
-        metadata.set<String>(qstrtostr(item->text(0).lower()),
+        metadata.set<String>(qstrtostr(item->text(0).toLower()),
                              qstrtostr(item->text(1)));
     }
 

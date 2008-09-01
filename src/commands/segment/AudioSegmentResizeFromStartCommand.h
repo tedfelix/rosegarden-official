@@ -19,7 +19,7 @@
 #ifndef _RG_AUDIOSEGMENTRESIZEFROMSTARTCOMMAND_H_
 #define _RG_AUDIOSEGMENTRESIZEFROMSTARTCOMMAND_H_
 
-#include <kcommand.h>
+#include "document/Command.h"
 #include "base/Event.h"
 
 
@@ -34,7 +34,7 @@ class Segment;
 /**
  * As above, but for audio segments.
  */
-class AudioSegmentResizeFromStartCommand : public KNamedCommand
+class AudioSegmentResizeFromStartCommand : public NamedCommand
 {
 public:
     AudioSegmentResizeFromStartCommand(Segment *segment,

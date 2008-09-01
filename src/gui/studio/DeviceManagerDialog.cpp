@@ -39,30 +39,30 @@
 #include "gui/dialogs/ImportDeviceDialog.h"
 #include <kapplication.h>
 #include <klocale.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kaction.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kmainwindow.h>
 #include <kmessagebox.h>
-#include <kstdaccel.h>
-#include <kstdaction.h>
-#include <qcstring.h>
-#include <qdatastream.h>
-#include <qdialog.h>
-#include <qdir.h>
-#include <qfileinfo.h>
-#include <qframe.h>
+#include <kstandardshortcut.h>
+#include <kstandardaction.h>
+#include <QByteArray>
+#include <QDataStream>
+#include <QDialog>
+#include <QDir>
+#include <QFileInfo>
+#include <QFrame>
 #include <qgrid.h>
-#include <qgroupbox.h>
-#include <qlayout.h>
-#include <qpushbutton.h>
-#include <qsizepolicy.h>
-#include <qstring.h>
-#include <qstringlist.h>
+#include <QGroupBox>
+#include <QLayout>
+#include <QPushButton>
+#include <QSizePolicy>
+#include <QString>
+#include <QStringList>
 #include <qtable.h>
-#include <qtooltip.h>
-#include <qwidget.h>
+#include <QToolTip>
+#include <QWidget>
 
 
 namespace Rosegarden
@@ -207,7 +207,7 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
     layout->addWidget(closeButton);
     layout->addSpacing(5);
 
-    KAction* close = KStdAction::close(this,
+    KAction* close = KStandardAction::close(this,
                                        SLOT(slotClose()),
                                        actionCollection());
 
@@ -219,15 +219,15 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
     // some adjustments
     new KToolBarPopupAction(i18n("Und&o"),
                             "undo",
-                            KStdAccel::shortcut(KStdAccel::Undo),
+                            KStandardShortcut::shortcut(KStandardShortcut::Undo),
                             actionCollection(),
-                            KStdAction::stdName(KStdAction::Undo));
+                            KStandardAction::stdName(KStandardAction::Undo));
 
     new KToolBarPopupAction(i18n("Re&do"),
                             "redo",
-                            KStdAccel::shortcut(KStdAccel::Redo),
+                            KStandardShortcut::shortcut(KStandardShortcut::Redo),
                             actionCollection(),
-                            KStdAction::stdName(KStdAction::Redo));
+                            KStandardAction::stdName(KStandardAction::Redo));
 
     createGUI("devicemanager.rc");
 
@@ -330,7 +330,7 @@ DeviceManagerDialog::populate()
         }
 
         QComboTableItem *item = new QComboTableItem(m_playTable, m_playConnections, false);
-        item->setCurrentItem(currentConnectionIndex);
+        item->setCurrentIndex(currentConnectionIndex);
         m_playTable->setItem(deviceCount, PLAY_CONNECTION_COL, item);
 
         m_playTable->adjustRow(deviceCount);
@@ -364,7 +364,7 @@ DeviceManagerDialog::populate()
         }
 
         QComboTableItem *item = new QComboTableItem(m_recordTable, m_recordConnections, false);
-        item->setCurrentItem(currentConnectionIndex);
+        item->setCurrentIndex(currentConnectionIndex);
         m_recordTable->setItem(deviceCount, RECORD_CONNECTION_COL, item);
 
         QCheckTableItem *check = new QCheckTableItem(m_recordTable, QString());

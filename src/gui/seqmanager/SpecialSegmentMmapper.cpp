@@ -18,14 +18,14 @@
 
 #include "SpecialSegmentMmapper.h"
 
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include "base/Event.h"
 #include "base/Segment.h"
 #include "base/TriggerSegment.h"
 #include "document/RosegardenGUIDoc.h"
 #include "SegmentMmapper.h"
 #include <kglobal.h>
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden

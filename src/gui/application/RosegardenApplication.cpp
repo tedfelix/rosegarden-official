@@ -27,12 +27,12 @@
 #include <klocale.h>
 #include <kmainwindow.h>
 #include <kmessagebox.h>
-#include <kprocess.h>
+#include <QProcess>
 #include <kuniqueapplication.h>
-#include <qcstring.h>
-#include <qeventloop.h>
-#include <qsessionmanager.h>
-#include <qstring.h>
+#include <QByteArray>
+#include <QEventLoop>
+#include <QSessionManager>
+#include <QString>
 #include <dcopclient.h>
 #include <kconfig.h>
 #include <kstatusbar.h>
@@ -57,7 +57,7 @@ int RosegardenApplication::newInstance()
     return KUniqueApplication::newInstance();
 }
 
-void RosegardenApplication::sfxLoadExited(KProcess *proc)
+void RosegardenApplication::sfxLoadExited(QProcess *proc)
 {
     if (!proc->normalExit()) {
         QString configGroup = config()->group();

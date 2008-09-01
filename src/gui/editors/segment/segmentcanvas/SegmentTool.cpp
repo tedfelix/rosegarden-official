@@ -25,9 +25,9 @@
 #include "gui/application/RosegardenGUIApp.h"
 #include "gui/general/BaseTool.h"
 #include "SegmentToolBox.h"
-#include <kcommand.h>
+#include "document/Command.h"
 #include <kmainwindow.h>
-#include <qpoint.h>
+#include <QPoint>
 #include <qpopupmenu.h>
 
 
@@ -53,24 +53,24 @@ void SegmentTool::ready()
 void
 SegmentTool::handleRightButtonPress(QMouseEvent *e)
 {
-    if (m_currentItem) // mouse button is pressed for some tool
+    if (m_currentIndex) // mouse button is pressed for some tool
         return ;
 
     RG_DEBUG << "SegmentTool::handleRightButtonPress()\n";
 
-    setCurrentItem(m_canvas->getFirstItemAt(e->pos()));
+    setCurrentIndex(m_canvas->getFirstItemAt(e->pos()));
 
-    if (m_currentItem) {
-        if (!m_canvas->getModel()->isSelected(m_currentItem)) {
+    if (m_currentIndex) {
+        if (!m_canvas->getModel()->isSelected(m_currentIndex)) {
 
             m_canvas->getModel()->clearSelected();
-            m_canvas->getModel()->setSelected(m_currentItem);
+            m_canvas->getModel()->setSelected(m_currentIndex);
             m_canvas->getModel()->signalSelection();
         }
     }
 
     showMenu();
-    setCurrentItem(CompositionItem());
+    setCurrentIndex(CompositionItem());
 }
 
 void
@@ -95,7 +95,7 @@ SegmentTool::createMenu()
 }
 
 void
-SegmentTool::addCommandToHistory(KCommand *command)
+SegmentTool::addCommandToHistory(Command *command)
 {
     m_doc->getCommandHistory()->addCommand(command);
 }

@@ -21,8 +21,8 @@
 
 #include "base/ControlParameter.h"
 #include "base/Device.h"
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include <klocale.h>
 
 
@@ -34,13 +34,13 @@ namespace Rosegarden
 class Studio;
 
 
-class AddControlParameterCommand : public KNamedCommand
+class AddControlParameterCommand : public NamedCommand
 {
 public:
     AddControlParameterCommand(Studio *studio,
                                DeviceId device,
                                ControlParameter control):
-        KNamedCommand(getGlobalName()),
+        NamedCommand(getGlobalName()),
         m_studio(studio),
         m_device(device),
         m_control(control),

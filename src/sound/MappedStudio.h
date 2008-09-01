@@ -15,8 +15,8 @@
 #include <map>
 #include <string>
 #include <vector>
-#include <qdatastream.h>
-#include <qstring.h>
+#include <QDataStream>
+#include <QString>
 
 #include "MappedCommon.h"
 #include "Instrument.h"

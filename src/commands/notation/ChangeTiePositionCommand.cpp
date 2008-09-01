@@ -24,7 +24,7 @@
 #include "document/BasicSelectionCommand.h"
 #include "gui/editors/notation/NotationProperties.h"
 #include "document/CommandRegistry.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden

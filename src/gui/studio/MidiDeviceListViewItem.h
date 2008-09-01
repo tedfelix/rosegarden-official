@@ -21,7 +21,7 @@
 
 #include "base/Device.h"
 #include <klistview.h>
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden

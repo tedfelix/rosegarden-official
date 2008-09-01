@@ -25,7 +25,7 @@
 #include "base/BaseProperties.h"
 #include "document/CommandRegistry.h"
 #include "base/Selection.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden

@@ -20,8 +20,8 @@
 #define _RG_REMOVEMARKERCOMMAND_H_
 
 #include <string>
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include "base/Event.h"
 #include <klocale.h>
 
@@ -35,7 +35,7 @@ class Marker;
 class Composition;
 
 
-class RemoveMarkerCommand : public KNamedCommand
+class RemoveMarkerCommand : public NamedCommand
 {
 public:
     RemoveMarkerCommand(Composition *comp,

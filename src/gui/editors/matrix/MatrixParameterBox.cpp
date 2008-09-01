@@ -23,12 +23,12 @@
 #include "base/Selection.h"
 #include "document/RosegardenGUIDoc.h"
 #include "gui/editors/parameters/InstrumentParameterBox.h"
-#include <kcombobox.h>
-#include <qfont.h>
-#include <qfontmetrics.h>
-#include <qframe.h>
-#include <qlayout.h>
-#include <qwidget.h>
+#include <QComboBox>
+#include <QFont>
+#include <QFontMetrics>
+#include <QFrame>
+#include <QLayout>
+#include <QWidget>
 
 
 namespace Rosegarden
@@ -65,7 +65,7 @@ MatrixParameterBox::initBox()
     QGridLayout *gridLayout = new QGridLayout(this, 20, 3, 8, 1);
 
     m_instrumentParameterBox = new InstrumentParameterBox(m_doc, this);
-    gridLayout->addMultiCellWidget(m_instrumentParameterBox, 0, 7, 0, 2);
+    gridLayout->addWidget(m_instrumentParameterBox, 0, 0, 7- 0+1, 2- 1);
 
 }
 

@@ -19,7 +19,7 @@
 #include "ControlBlockMmapper.h"
 #include "misc/Debug.h"
 
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include "misc/Strings.h"
 #include "base/Composition.h"
 #include "base/Exception.h"
@@ -28,8 +28,8 @@
 #include "document/RosegardenGUIDoc.h"
 #include "sound/ControlBlock.h"
 #include <kglobal.h>
-#include <qfile.h>
-#include <qstring.h>
+#include <QFile>
+#include <QString>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -51,7 +51,7 @@ ControlBlockMmapper::ControlBlockMmapper(RosegardenGUIDoc* doc)
     QFile::remove
         (m_fileName);
 
-    m_fd = ::open(m_fileName.latin1(), O_RDWR | O_CREAT | O_TRUNC,
+    m_fd = ::open(m_fileName.toLatin1().data(), O_RDWR | O_CREAT | O_TRUNC,
                   S_IRUSR | S_IWUSR);
     if (m_fd < 0) {
         SEQMAN_DEBUG << "ControlBlockMmapper : Couldn't open " << m_fileName

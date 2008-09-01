@@ -37,16 +37,16 @@
 #include "TabbedConfigurationPage.h"
 #include <kconfig.h>
 #include <klistview.h>
-#include <qframe.h>
-#include <qlabel.h>
-#include <qlistview.h>
-#include <qpixmap.h>
-#include <qpushbutton.h>
-#include <qstring.h>
+#include <QFrame>
+#include <QLabel>
+#include <QListView>
+#include <QPixmap>
+#include <QPushButton>
+#include <QString>
 #include <qtable.h>
-#include <qtabwidget.h>
-#include <qwidget.h>
-#include <qlayout.h>
+#include <QTabWidget>
+#include <QWidget>
+#include <QLayout>
 
 
 namespace Rosegarden
@@ -335,7 +335,7 @@ DocumentMetaConfigurationPage::selectMetadata(QString name)
 
         if (name == strtoqstr(i->getName())) {
             m_fixed->setSelected(item, true);
-            m_fixed->setCurrentItem(item);
+            m_fixed->setCurrentIndex(item);
             return ;
         }
 
@@ -345,11 +345,11 @@ DocumentMetaConfigurationPage::selectMetadata(QString name)
     for (QListViewItem *item = m_metadata->firstChild();
             item != 0; item = item->nextSibling()) {
 
-        if (item->text(0).lower() != name)
+        if (item->text(0).toLower() != name)
             continue;
 
         m_metadata->setSelected(item, true);
-        m_metadata->setCurrentItem(item);
+        m_metadata->setCurrentIndex(item);
         return ;
     }
 }

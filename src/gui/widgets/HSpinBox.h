@@ -19,10 +19,10 @@
 #ifndef _RG_HSPINBOX_H_
 #define _RG_HSPINBOX_H_
 
-#include <qobject.h>
-#include <qspinbox.h>
-#include <qstring.h>
-#include <qvalidator.h>
+#include <QObject>
+#include <QSpinBox>
+#include <QString>
+#include <QValidator>
 
 
 namespace Rosegarden

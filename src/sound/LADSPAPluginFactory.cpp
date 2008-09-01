@@ -20,7 +20,7 @@
 #ifdef HAVE_LADSPA
 
 #include <dlfcn.h>
-#include <qdir.h>
+#include <QDir>
 #include <cmath>
 
 #include "AudioPluginInstance.h"
@@ -785,7 +785,7 @@ LADSPAPluginFactory::generateFallbackCategories()
 
             //	    std::cerr << "LADSPAPluginFactory::generateFallbackCategories: about to open " << (path[i] + "/" + dir[j]) << std::endl;
 
-            if (file.open(IO_ReadOnly)) {
+            if (file.open(QIODevice::ReadOnly)) {
                 //		    std::cerr << "...opened" << std::endl;
                 QTextStream stream(&file);
                 QString line;

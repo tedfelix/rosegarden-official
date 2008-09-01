@@ -26,9 +26,9 @@
 #include "base/NotationTypes.h"
 #include "base/Track.h"
 
-#include <qsize.h>
-#include <qwidget.h>
-#include <qlabel.h>
+#include <QSize>
+#include <QWidget>
+#include <QLabel>
 
 #include <set>
 

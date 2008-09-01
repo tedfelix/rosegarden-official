@@ -17,39 +17,53 @@
 
 
 #include "IntervalDialog.h"
-#include <qlayout.h>
+#include <QLayout>
 
 #include <iostream>
 #include <klocale.h>
 #include "misc/Strings.h"
 #include "base/MidiDevice.h"
 #include "base/NotationRules.h"
-#include <kcombobox.h>
-#include <kdialogbase.h>
-#include <qframe.h>
-#include <qgroupbox.h>
-#include <qcheckbox.h>
-#include <qlabel.h>
-#include <qradiobutton.h>
-#include <qbuttongroup.h>
-#include <qsizepolicy.h>
-#include <qstring.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <QComboBox>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QFrame>
+#include <QGroupBox>
+#include <QCheckBox>
+#include <QLabel>
+#include <QRadioButton>
+#include <QGroupBox>
+#include <QSizePolicy>
+#include <QString>
+#include <QWidget>
+#include <QVBoxLayout>
 
 
 namespace Rosegarden
 {
 
-IntervalDialog::IntervalDialog(QWidget *parent, bool askChangeKey, bool askTransposeSegmentBack) :
-        KDialogBase(parent, 0, true, i18n("Specify Interval"), Ok | Cancel )
+IntervalDialog::IntervalDialog(QDialogButtonBox::QWidget *parent, bool askChangeKey, bool askTransposeSegmentBack) :
+        QDialog(parent)
 {
-    QVBox *vBox = makeVBoxMainWidget();
+    setModal(true);
+    setWindowTitle(i18n("Specify Interval"));
 
-    QHBox *hBox = new QHBox( vBox );
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
+    QWidget *vBox = new QWidget(this);
+    QVBoxLayout vBoxLayout = new QVBoxLayout;
+    metagrid->addWidget(vBox, 0, 0);
 
-    m_referencenote = new DiatonicPitchChooser( i18n("Reference note:"), hBox );
-    m_targetnote = new DiatonicPitchChooser( i18n("Target note:"), hBox );
+
+    QWidget *hBox = new QWidget( vBox );
+    vBoxLayout->addWidget(hBox);
+    QHBoxLayout hBoxLayout = new QHBoxLayout;
+
+    m_referencenote = new DiatonicPitchChooser(i18n("Reference note:"), hBox );
+    hBoxLayout->addWidget(m_referencenote);
+    m_targetnote = new DiatonicPitchChooser(i18n("Target note:"), hBox );
+    hBoxLayout->addWidget(m_targetnote);
+    hBox->setLayout(hBoxLayout);
 
     intervalChromatic = 0;
     intervalDiatonic = 0;
@@ -58,7 +72,8 @@ IntervalDialog::IntervalDialog(QWidget *parent, bool askChangeKey, bool askTrans
     //m_intervalOctavesLabel = new QLabel( i18n("Octaves: %1").arg(intervalDiatonic / 7), hBox);
     //m_intervalStepsLabel = new QLabel( i18n("Steps: %1").arg(intervalDiatonic % 7), hBox);
 
-    m_intervalLabel = new QLabel( i18n("a perfect unison"), vBox);
+    m_intervalLabel = new QLabel(i18n("a perfect unison"), vBox );
+    vBoxLayout->addWidget(m_intervalLabel);
     m_intervalLabel->setAlignment(Qt::AlignCenter);
     QFont font(m_intervalLabel->font());
     font.setItalic(true);
@@ -66,7 +81,8 @@ IntervalDialog::IntervalDialog(QWidget *parent, bool askChangeKey, bool askTrans
 
     if (askChangeKey)
     {
-        QButtonGroup *affectKeyGroup = new QButtonGroup(1, Horizontal, i18n("Effect on Key"), vBox);
+        QGroupBox *affectKeyGroup = new QGroupBox( i18n("Effect on Key"), vBox );
+        vBoxLayout->addWidget(affectKeyGroup);
         m_transposeWithinKey = new QRadioButton(i18n("Transpose within key"), affectKeyGroup);
         m_transposeWithinKey->setChecked(true);
         m_transposeChangingKey = new QRadioButton(i18n("Change key for selection"), affectKeyGroup);
@@ -79,7 +95,9 @@ IntervalDialog::IntervalDialog(QWidget *parent, bool askChangeKey, bool askTrans
     
     if (askTransposeSegmentBack)
     {
-        m_transposeSegmentBack = new QCheckBox( i18n("Adjust segment transposition in opposite direction (maintain audible pitch)"), vBox );
+        m_transposeSegmentBack = new QCheckBox(i18n("Adjust segment transposition in opposite direction (maintain audible pitch)"), vBox );
+        vBoxLayout->addWidget(m_transposeSegmentBack);
+        vBox->setLayout(vBoxLayout);
         m_transposeSegmentBack->setTristate(false);
         m_transposeSegmentBack->setChecked(false);
     }
@@ -93,6 +111,11 @@ IntervalDialog::IntervalDialog(QWidget *parent, bool askChangeKey, bool askTrans
 
     connect(m_targetnote, SIGNAL(noteChanged(int,int,int)),
             this, SLOT(slotSetTargetNote(int,int,int)));
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel );
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 // number of octaves the notes are apart
@@ -108,7 +131,7 @@ int
 IntervalDialog::getStepDistanceChromatic()
 {
     return scale_Cmajor[m_targetnote->getStep()] - scale_Cmajor[m_referencenote->getStep()];
-    // - getChromaticStepValue(m_referencestep->currentItem());
+    // - getChromaticStepValue(m_referencestep->currentIndex());
     //return m_targetnote->getPitch() - m_referencenote->getPitch();
 }
 

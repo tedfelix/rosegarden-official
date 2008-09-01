@@ -18,11 +18,11 @@
 
 #include "PixmapFunctions.h"
 
-#include <qbitmap.h>
-#include <qcolor.h>
-#include <qimage.h>
-#include <qpainter.h>
-#include <qpixmap.h>
+#include <QBitmap>
+#include <QColor>
+#include <QImage>
+#include <QPainter>
+#include <QPixmap>
 
 #include <iostream>
 
@@ -81,7 +81,7 @@ PixmapFunctions::generateMask(const QPixmap &map)
 }
 
 QPixmap
-PixmapFunctions::colourPixmap(const QPixmap &map, int hue, int minValue)
+PixmapFunctions::colourPixmap(const QPixmap &map, int hue, int minimum)
 {
     // assumes pixmap is currently in shades of grey; maps black ->
     // solid colour and greys -> shades of colour
@@ -113,7 +113,7 @@ PixmapFunctions::colourPixmap(const QPixmap &map, int hue, int minValue)
             image.setPixel
             (x, y, QColor(hue,
                           255 - v,
-                          v > minValue ? v : minValue,
+                          v > minimum ? v : minimum,
                           QColor::Hsv).rgb());
         }
     }
@@ -242,7 +242,7 @@ PixmapFunctions::drawPixmapMasked(QPixmap &dest, QBitmap &destMask,
 
             if (ism.depth() == 1 && ism.pixel(x, y) == 0)
                 continue;
-            if (ism.pixel(x, y) == Qt::white.rgb())
+            if (ism.pixel(x, y) == QColor(Qt::white).rgb())
                 continue;
 
             int x1 = x + x0;

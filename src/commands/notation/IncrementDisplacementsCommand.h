@@ -20,9 +20,9 @@
 #define _RG_INCREMENTDISPLACEMENTSCOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
-#include <qstring.h>
+#include <QString>
 #include <klocale.h>
-#include <qpoint.h>
+#include <QPoint>
 
 
 namespace Rosegarden

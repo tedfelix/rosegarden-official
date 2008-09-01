@@ -15,9 +15,9 @@
 #include <cstdlib>
 #include <kapplication.h>
 
-#include <qdatetime.h>
-#include <qstringlist.h>
-#include <qpalette.h>
+#include <QDateTime>
+#include <QStringList>
+#include <QPalette>
 #include <kapp.h>
 
 #include "PeakFile.h"
@@ -143,7 +143,7 @@ PeakFile::parseHeader()
     //
     QString dateString = QString(header.substr(40, 28).c_str());
 
-    QStringList dateTime = QStringList::split(":", dateString);
+    QStringList dateTime = dateString.split(":", QString::SkipEmptyParts);
 
     m_modificationTime.setDate(QDate(dateTime[0].toInt(),
                                      dateTime[1].toInt(),

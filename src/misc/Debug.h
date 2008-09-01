@@ -139,7 +139,7 @@ public:
     std::ostream& operator<<(unsigned long i);
     std::ostream& operator<<(const QString& str);
     std::ostream& operator<<(const char *str);
-    std::ostream& operator<<(const QCString& str);
+    std::ostream& operator<<(const QByteArray& str);
     std::ostream& operator<<(void * p);
     std::ostream& operator<<(KDBGFUNC f);
     std::ostream& operator<<(double d);

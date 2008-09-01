@@ -26,7 +26,7 @@
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
 #include "base/TriggerSegment.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
@@ -37,7 +37,7 @@ PasteToTriggerSegmentCommand::PasteToTriggerSegmentCommand(Composition *composit
         QString label,
         int basePitch,
         int baseVelocity) :
-        KNamedCommand(i18n("Paste as New Triggered Segment")),
+        NamedCommand(i18n("Paste as New Triggered Segment")),
         m_composition(composition),
         m_clipboard(new Clipboard(*clipboard)),
         m_label(label),

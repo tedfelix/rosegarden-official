@@ -16,17 +16,18 @@
 */
 
 
+#include <Q3Canvas>
 #include "StaffLine.h"
 
 #include "misc/Debug.h"
 #include <qcanvas.h>
-#include <qpen.h>
+#include <QPen>
 
 
 namespace Rosegarden
 {
 
-StaffLine::StaffLine(QCanvas *c, QCanvasItemGroup *g, int height) :
+StaffLine::StaffLine(Q3Canvas *c, QCanvasItemGroup *g, int height) :
         QCanvasLineGroupable(c, g),
         m_height(height),
         m_significant(true)

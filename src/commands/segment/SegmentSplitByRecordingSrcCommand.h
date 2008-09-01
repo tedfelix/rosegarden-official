@@ -19,8 +19,8 @@
 #ifndef _RG_SEGMENTSPLITBYRECORDINGSRCCOMMAND_H_
 #define _RG_SEGMENTSPLITBYRECORDINGSRCCOMMAND_H_
 
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include <klocale.h>
 
 
@@ -31,7 +31,7 @@ class Segment;
 class Composition;
 
 
-class SegmentSplitByRecordingSrcCommand : public KNamedCommand
+class SegmentSplitByRecordingSrcCommand : public NamedCommand
 {
 public:
     SegmentSplitByRecordingSrcCommand(Segment *segment,

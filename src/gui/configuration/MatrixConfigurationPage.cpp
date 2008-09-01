@@ -25,12 +25,12 @@
 #include "gui/editors/matrix/MatrixView.h"
 #include "TabbedConfigurationPage.h"
 #include <kconfig.h>
-#include <qframe.h>
-#include <qlabel.h>
-#include <qstring.h>
-#include <qtabwidget.h>
-#include <qwidget.h>
-#include <qlayout.h>
+#include <QFrame>
+#include <QLabel>
+#include <QString>
+#include <QTabWidget>
+#include <QWidget>
+#include <QLayout>
 
 namespace Rosegarden
 {

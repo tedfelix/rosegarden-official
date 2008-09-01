@@ -21,7 +21,7 @@
 
 
 #include "TrackParameterBox.h"
-#include <qlayout.h>
+#include <QLayout>
 #include <kapplication.h>
 
 #include <klocale.h>
@@ -53,28 +53,28 @@
 #include "RosegardenParameterBox.h"
 #include "sound/PluginIdentifier.h"
 #include <kcolordialog.h>
-#include <kcombobox.h>
+#include <QComboBox>
 #include <kconfig.h>
 #include <klineeditdlg.h>
 #include <kmessagebox.h>
 #include <ksqueezedtextlabel.h>
 #include <ktabwidget.h>
-#include <qcolor.h>
-#include <qdialog.h>
-#include <qfont.h>
-#include <qfontmetrics.h>
-#include <qframe.h>
-#include <qlabel.h>
-#include <qpixmap.h>
-#include <qpushbutton.h>
-#include <qregexp.h>
+#include <QColor>
+#include <QDialog>
+#include <QFont>
+#include <QFontMetrics>
+#include <QFrame>
+#include <QLabel>
+#include <QPixmap>
+#include <QPushButton>
+#include <QRegExp>
 #include <qscrollview.h>
-#include <qstring.h>
-#include <qtooltip.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <QString>
+#include <QToolTip>
+#include <QWidget>
+#include <QVBoxLayout>
 #include <qwidgetstack.h>
-#include <qcheckbox.h>
+#include <QCheckBox>
 
 
 namespace Rosegarden
@@ -122,7 +122,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     //
     m_trackLabel = new KSqueezedTextLabel(i18n("<untitled>"), this);
     m_trackLabel->setAlignment(Qt::AlignCenter);
-    //mainLayout->addMultiCellWidget(m_trackLabel, 0, 0, 0, 5, AlignCenter);
+    //mainLayout->addWidget(m_trackLabel, 0, 0, 0- 0+1, 5- 1, AlignCenter);
     mainLayout->addWidget(m_trackLabel, 0, 0);
 
     // playback group
@@ -142,17 +142,17 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     //    row++;
     QLabel *devLabel = new QLabel(i18n("Device"), m_playbackGroup);
     groupLayout->addWidget(devLabel, row, 0);
-    m_playDevice = new KComboBox(m_playbackGroup);
+    m_playDevice = new QComboBox(m_playbackGroup);
     m_playDevice->setMinimumWidth(width25);
-    groupLayout->addMultiCellWidget(m_playDevice, row, row, 1, 2);
+    groupLayout->addWidget(m_playDevice, row, 1, row- row+1, 2);
 
     // playback instrument
     //
     row++;
     QLabel *insLabel = new QLabel(i18n("Instrument"), m_playbackGroup);
-    groupLayout->addMultiCellWidget(insLabel, row, row, 0, 1);
-    m_instrument = new KComboBox(m_playbackGroup);
-    m_instrument->setSizeLimit( 16 );
+    groupLayout->addWidget(insLabel, row, 0, row- row+1, 1- 1);
+    m_instrument = new QComboBox(m_playbackGroup);
+    m_instrument->setMaxVisibleItems( 16 );
     m_instrument->setMinimumWidth(width22);
     groupLayout->addWidget(m_instrument, row, 2);
 
@@ -174,16 +174,16 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
 
     // recording device
     groupLayout->addWidget(new QLabel(i18n("Device"), m_recordGroup), row, 0);
-    m_recDevice = new KComboBox(m_recordGroup);
+    m_recDevice = new QComboBox(m_recordGroup);
     m_recDevice->setMinimumWidth(width25);
-    groupLayout->addMultiCellWidget(m_recDevice, row, row, 1, 2);
+    groupLayout->addWidget(m_recDevice, row, 1, row- row+1, 2);
 
     // recording channel
     //
     row++;
     groupLayout->addMultiCellWidget(new QLabel(i18n("Channel"), m_recordGroup), row, row, 0, 1);
-    m_recChannel = new KComboBox(m_recordGroup);
-    m_recChannel->setSizeLimit( 17 );
+    m_recChannel = new QComboBox(m_recordGroup);
+    m_recChannel->setMaxVisibleItems( 17 );
     m_recChannel->setMinimumWidth(width11);
     groupLayout->addWidget(m_recChannel, row, 2);
 
@@ -212,31 +212,31 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     // which is not as nice, but actually a lot easier to implement.
     m_staffGrpLbl = new QLabel(i18n("Notation size:"), m_staffGroup);
     groupLayout->addWidget(m_staffGrpLbl, row, 0, AlignLeft);
-    m_staffSizeCombo = new KComboBox(m_staffGroup);
+    m_staffSizeCombo = new QComboBox(m_staffGroup);
     m_staffSizeCombo->setMinimumWidth(width11);
-    m_staffSizeCombo->insertItem(i18n("Normal"), StaffTypes::Normal);
-    m_staffSizeCombo->insertItem(i18n("Small"), StaffTypes::Small);
-    m_staffSizeCombo->insertItem(i18n("Tiny"), StaffTypes::Tiny);
+    m_staffSizeCombo->addItem(i18n("Normal"), StaffTypes::Normal);
+    m_staffSizeCombo->addItem(i18n("Small"), StaffTypes::Small);
+    m_staffSizeCombo->addItem(i18n("Tiny"), StaffTypes::Tiny);
 
-    groupLayout->addMultiCellWidget(m_staffSizeCombo, row, row, 1, 2);
+    groupLayout->addWidget(m_staffSizeCombo, row, 1, row- row+1, 2);
 
     // Staff bracketing (export only at the moment, but using this for GUI
     // rendering would be nice in the future!) //!!! 
     row++;
     m_grandStaffLbl = new QLabel(i18n("Bracket type:"), m_staffGroup);
     groupLayout->addWidget(m_grandStaffLbl, row, 0, AlignLeft);
-    m_staffBracketCombo = new KComboBox(m_staffGroup);
+    m_staffBracketCombo = new QComboBox(m_staffGroup);
     m_staffBracketCombo->setMinimumWidth(width11);
-    m_staffBracketCombo->insertItem(i18n("-----"), Brackets::None);
-    m_staffBracketCombo->insertItem(i18n("[----"), Brackets::SquareOn);
-    m_staffBracketCombo->insertItem(i18n("----]"), Brackets::SquareOff);
-    m_staffBracketCombo->insertItem(i18n("[---]"), Brackets::SquareOnOff);
-    m_staffBracketCombo->insertItem(i18n("{----"), Brackets::CurlyOn);
-    m_staffBracketCombo->insertItem(i18n("----}"), Brackets::CurlyOff);
-    m_staffBracketCombo->insertItem(i18n("{[---"), Brackets::CurlySquareOn);
-    m_staffBracketCombo->insertItem(i18n("---]}"), Brackets::CurlySquareOff);
+    m_staffBracketCombo->addItem(i18n("-----"), Brackets::None);
+    m_staffBracketCombo->addItem(i18n("[----"), Brackets::SquareOn);
+    m_staffBracketCombo->addItem(i18n("----]"), Brackets::SquareOff);
+    m_staffBracketCombo->addItem(i18n("[---]"), Brackets::SquareOnOff);
+    m_staffBracketCombo->addItem(i18n("{----"), Brackets::CurlyOn);
+    m_staffBracketCombo->addItem(i18n("----}"), Brackets::CurlyOff);
+    m_staffBracketCombo->addItem(i18n("{[---"), Brackets::CurlySquareOn);
+    m_staffBracketCombo->addItem(i18n("---]}"), Brackets::CurlySquareOff);
 
-    groupLayout->addMultiCellWidget(m_staffBracketCombo, row, row, 1, 2);
+    groupLayout->addWidget(m_staffBracketCombo, row, 1, row- row+1, 2);
 
     mainLayout->addWidget(cframe, 3, 0);
 
@@ -260,76 +260,76 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     m_presetLbl = new QLabel(i18n("<none>"), m_defaultsGroup);
     m_presetLbl->setFrameStyle(QFrame::Panel | QFrame::Sunken);
     m_presetLbl->setFixedWidth(width20);
-    groupLayout->addMultiCellWidget(m_presetLbl, row, row, 1, 3);
+    groupLayout->addWidget(m_presetLbl, row, 1, row- row+1, 3);
 
     m_presetButton = new QPushButton(i18n("Load"), m_defaultsGroup);
-    groupLayout->addMultiCellWidget(m_presetButton, row, row, 4, 5);
+    groupLayout->addWidget(m_presetButton, row, 4, row- row+1, 5- 5);
 
     // default clef
     //
     row++;
     m_clefLbl = new QLabel(i18n("Clef"), m_defaultsGroup);
     groupLayout->addWidget(m_clefLbl, row, 0, AlignLeft);
-    m_defClef = new KComboBox(m_defaultsGroup);
+    m_defClef = new QComboBox(m_defaultsGroup);
     m_defClef->setMinimumWidth(width11);
-    m_defClef->insertItem(i18n("treble"), TrebleClef);
-    m_defClef->insertItem(i18n("bass"), BassClef);
-    m_defClef->insertItem(i18n("crotales"), CrotalesClef);
-    m_defClef->insertItem(i18n("xylophone"), XylophoneClef);
-    m_defClef->insertItem(i18n("guitar"), GuitarClef);
-    m_defClef->insertItem(i18n("contrabass"), ContrabassClef);
-    m_defClef->insertItem(i18n("celesta"), CelestaClef);
-    m_defClef->insertItem(i18n("old celesta"), OldCelestaClef);
-    m_defClef->insertItem(i18n("french"), FrenchClef);
-    m_defClef->insertItem(i18n("soprano"), SopranoClef);
-    m_defClef->insertItem(i18n("mezzosoprano"), MezzosopranoClef);
-    m_defClef->insertItem(i18n("alto"), AltoClef);
-    m_defClef->insertItem(i18n("tenor"), TenorClef);
-    m_defClef->insertItem(i18n("baritone"), BaritoneClef);
-    m_defClef->insertItem(i18n("varbaritone"), VarbaritoneClef);
-    m_defClef->insertItem(i18n("subbass"), SubbassClef);
+    m_defClef->addItem(i18n("treble"), TrebleClef);
+    m_defClef->addItem(i18n("bass"), BassClef);
+    m_defClef->addItem(i18n("crotales"), CrotalesClef);
+    m_defClef->addItem(i18n("xylophone"), XylophoneClef);
+    m_defClef->addItem(i18n("guitar"), GuitarClef);
+    m_defClef->addItem(i18n("contrabass"), ContrabassClef);
+    m_defClef->addItem(i18n("celesta"), CelestaClef);
+    m_defClef->addItem(i18n("old celesta"), OldCelestaClef);
+    m_defClef->addItem(i18n("french"), FrenchClef);
+    m_defClef->addItem(i18n("soprano"), SopranoClef);
+    m_defClef->addItem(i18n("mezzosoprano"), MezzosopranoClef);
+    m_defClef->addItem(i18n("alto"), AltoClef);
+    m_defClef->addItem(i18n("tenor"), TenorClef);
+    m_defClef->addItem(i18n("baritone"), BaritoneClef);
+    m_defClef->addItem(i18n("varbaritone"), VarbaritoneClef);
+    m_defClef->addItem(i18n("subbass"), SubbassClef);
     /*  clef types in the datbase that are not yet supported must be ignored for
      *  now:
-        m_defClef->insertItem(i18n("two bar"), TwoBarClef); */
-    groupLayout->addMultiCellWidget(m_defClef, row, row, 1, 2);
+        m_defClef->addItem(i18n("two bar"), TwoBarClef); */
+    groupLayout->addWidget(m_defClef, row, 1, row- row+1, 2);
 
     // default transpose
     //
     m_transpLbl = new QLabel(i18n("Transpose"), m_defaultsGroup);
-    groupLayout->addMultiCellWidget(m_transpLbl, row, row, 3, 4, AlignRight);
-    m_defTranspose = new KComboBox(m_defaultsGroup);
+    groupLayout->addWidget(m_transpLbl, row, 3, row- row+1, 4- 4, AlignRight);
+    m_defTranspose = new QComboBox(m_defaultsGroup);
 
     connect(m_defTranspose, SIGNAL(activated(int)),
             SLOT(slotTransposeIndexChanged(int)));
 
     int transposeRange = 48;
     for (int i = -transposeRange; i < transposeRange + 1; i++) {
-        m_defTranspose->insertItem(QString("%1").arg(i));
+        m_defTranspose->addItem(QString("%1").arg(i));
         if (i == 0)
-            m_defTranspose->setCurrentItem(m_defTranspose->count() - 1);
+            m_defTranspose->setCurrentIndex(m_defTranspose->count() - 1);
     }
 
-    groupLayout->addMultiCellWidget(m_defTranspose, row, row, 5, 5);
+    groupLayout->addWidget(m_defTranspose, row, 5, row- row+1, 1);
 
     // highest/lowest playable note
     //
     row++;
     m_rangeLbl = new QLabel(i18n("Pitch"), m_defaultsGroup);
-    groupLayout->addMultiCellWidget(m_rangeLbl, row, row, 0, 0);
+    groupLayout->addWidget(m_rangeLbl, row, 0, row- row+1, 0- 1);
 
     groupLayout->addWidget(new QLabel(i18n("Lowest"), m_defaultsGroup), row, 1, AlignRight);
 
     m_lowButton = new QPushButton(i18n("---"), m_defaultsGroup);
     QToolTip::add
         (m_lowButton, i18n("Choose the lowest suggested playable note, using a staff"));
-    groupLayout->addMultiCellWidget(m_lowButton, row, row, 2, 2);
+    groupLayout->addWidget(m_lowButton, row, 2, row- row+1, 1);
 
     groupLayout->addWidget(new QLabel(i18n("Highest"), m_defaultsGroup), row, 3, AlignRight);
 
     m_highButton = new QPushButton(i18n("---"), m_defaultsGroup);
     QToolTip::add
         (m_highButton, i18n("Choose the highest suggested playable note, using a staff"));
-    groupLayout->addMultiCellWidget(m_highButton, row, row, 4, 5);
+    groupLayout->addWidget(m_highButton, row, 4, row- row+1, 5- 5);
 
     updateHighLow();
 
@@ -338,9 +338,9 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     row++;
     m_colorLbl = new QLabel(i18n("Color"), m_defaultsGroup);
     groupLayout->addWidget(m_colorLbl, row, 0, AlignLeft);
-    m_defColor = new KComboBox(false, m_defaultsGroup);
-    m_defColor->setSizeLimit(20);
-    groupLayout->addMultiCellWidget(m_defColor, row, row, 1, 5);
+    m_defColor = new QComboBox(false, m_defaultsGroup);
+    m_defColor->setMaxVisibleItems(20);
+    groupLayout->addWidget(m_defColor, row, 1, row- row+1, 5);
 
     // populate combo from doc colors
     slotDocColoursChanged();
@@ -472,7 +472,7 @@ TrackParameterBox::populatePlaybackDeviceList()
         if (devId != (DeviceId)(currentDevId)) {
             currentDevId = int(devId);
             QString deviceName = strtoqstr(device->getName());
-            m_playDevice->insertItem(deviceName);
+            m_playDevice->addItem(deviceName);
             m_playDeviceIds.push_back(currentDevId);
         }
 
@@ -483,8 +483,8 @@ TrackParameterBox::populatePlaybackDeviceList()
 
     }
 
-    m_playDevice->setCurrentItem( -1);
-    m_instrument->setCurrentItem( -1);
+    m_playDevice->setCurrentIndex( -1);
+    m_instrument->setCurrentIndex( -1);
 }
 
 void
@@ -513,8 +513,8 @@ TrackParameterBox::populateRecordingDeviceList()
         if (inst->getInstrumentType() == Instrument::Audio) {
 
             m_recDeviceIds.push_back(Device::NO_DEVICE);
-            m_recDevice->insertItem(i18n("Audio"));
-            m_recChannel->insertItem(i18n("Audio"));
+            m_recDevice->addItem(i18n("Audio"));
+            m_recChannel->addItem(i18n("Audio"));
 
             m_recDevice->setEnabled(false);
             m_recChannel->setEnabled(false);
@@ -528,7 +528,7 @@ TrackParameterBox::populateRecordingDeviceList()
             m_defaultsGroup->parentWidget()->setShown(true);
 
             m_recDeviceIds.push_back(Device::ALL_DEVICES);
-            m_recDevice->insertItem(i18n("All"));
+            m_recDevice->addItem(i18n("All"));
 
             DeviceList *devices = m_doc->getStudio().getDevices();
             DeviceListConstIterator it;
@@ -541,15 +541,15 @@ TrackParameterBox::populateRecordingDeviceList()
                         QString connection = strtoqstr(dev->getConnection());
                         // remove trailing "(duplex)", "(read only)", "(write only)" etc
                         connection.replace(QRegExp("\\s*\\([^)0-9]+\\)\\s*$"), "");
-                        m_recDevice->insertItem(connection);
+                        m_recDevice->addItem(connection);
                         m_recDeviceIds.push_back(dev->getId());
                     }
                 }
             }
 
-            m_recChannel->insertItem(i18n("All"));
+            m_recChannel->addItem(i18n("All"));
             for (int i = 1; i < 17; ++i) {
-                m_recChannel->insertItem(QString::number(i));
+                m_recChannel->addItem(QString::number(i));
             }
 
             m_recDevice->setEnabled(true);
@@ -558,14 +558,14 @@ TrackParameterBox::populateRecordingDeviceList()
     }
 
     if (inst->getInstrumentType() == Instrument::Audio) {
-        m_recDevice->setCurrentItem(0);
-        m_recChannel->setCurrentItem(0);
+        m_recDevice->setCurrentIndex(0);
+        m_recChannel->setCurrentIndex(0);
     } else {
-        m_recDevice->setCurrentItem(0);
-        m_recChannel->setCurrentItem((int)trk->getMidiInputChannel() + 1);
+        m_recDevice->setCurrentIndex(0);
+        m_recChannel->setCurrentIndex((int)trk->getMidiInputChannel() + 1);
         for (unsigned int i = 0; i < m_recDeviceIds.size(); ++i) {
             if (m_recDeviceIds[i] == trk->getMidiInputDevice()) {
-                m_recDevice->setCurrentItem(i);
+                m_recDevice->setCurrentIndex(i);
                 break;
             }
         }
@@ -616,9 +616,9 @@ TrackParameterBox::slotUpdateControls(int /*dummy*/)
     if (!trk)
         return ;
 
-    m_defClef->setCurrentItem(trk->getClef());
-    m_defTranspose->setCurrentItem(QString("%1").arg(trk->getTranspose()), true);
-    m_defColor->setCurrentItem(trk->getColor());
+    m_defClef->setCurrentIndex(trk->getClef());
+    m_defTranspose->setCurrentIndex(QString("%1").arg(trk->getTranspose()), true);
+    m_defColor->setCurrentIndex(trk->getColor());
     m_highestPlayable = trk->getHighestPlayable();
     m_lowestPlayable = trk->getLowestPlayable();
     updateHighLow();
@@ -626,8 +626,8 @@ TrackParameterBox::slotUpdateControls(int /*dummy*/)
     m_presetLbl->setText(trk->getPresetLabel());
     m_presetLbl->setEnabled(true);
 
-    m_staffSizeCombo->setCurrentItem(trk->getStaffSize());
-    m_staffBracketCombo->setCurrentItem(trk->getStaffBracket());
+    m_staffSizeCombo->setCurrentIndex(trk->getStaffSize());
+    m_staffBracketCombo->setCurrentIndex(trk->getStaffBracket());
 }
 
 void
@@ -682,18 +682,18 @@ TrackParameterBox::slotPlaybackDeviceChanged(int index)
             if ((*it) == devId)
                 break;
         }
-        m_playDevice->setCurrentItem(pos);
+        m_playDevice->setCurrentIndex(pos);
     } else {
         devId = m_playDeviceIds[index];
     }
 
     m_instrument->clear();
-    m_instrument->insertStringList(m_instrumentNames[devId]);
+    m_instrument->addItems(m_instrumentNames[devId]);
 
     populateRecordingDeviceList();
 
     if (index != -1) {
-        m_instrument->setCurrentItem(0);
+        m_instrument->setCurrentIndex(0);
         slotInstrumentChanged(0);
     }
 }
@@ -721,9 +721,9 @@ TrackParameterBox::slotInstrumentChanged(int index)
             if ((*it) == trk->getInstrument())
                 break;
         }
-        m_instrument->setCurrentItem(pos);
+        m_instrument->setCurrentIndex(pos);
     } else {
-        devId = m_playDeviceIds[m_playDevice->currentItem()];
+        devId = m_playDeviceIds[m_playDevice->currentIndex()];
         // set the new selected instrument for the track
         int item = 0;
         std::map<DeviceId, IdsVector>::const_iterator it;
@@ -840,22 +840,22 @@ TrackParameterBox::slotDocColoursChanged()
         QPixmap colour(15, 15);
         colour.fill(GUIPalette::convertColour(it->second.first));
         if (qtrunc == "") {
-            m_defColor->insertItem(colour, i18n("Default"), i);
+            m_defColor->addItem(colour, i18n("Default"), i);
         } else {
             // truncate name to 15 characters to avoid the combo forcing the
             // whole kit and kaboodle too wide
             if (qtrunc.length() > 15)
                 qtrunc = qtrunc.left(12) + "...";
-            m_defColor->insertItem(colour, qtrunc, i);
+            m_defColor->addItem(colour, qtrunc, i);
         }
         m_colourList[it->first] = i; // maps colour number to menu index
         ++i;
     }
 
     m_addColourPos = i;
-    m_defColor->insertItem(i18n("Add New Color"), m_addColourPos);
+    m_defColor->addItem(i18n("Add New Color"), m_addColourPos);
 
-    m_defColor->setCurrentItem(0);
+    m_defColor->setCurrentIndex(0);
 }
 
 void
@@ -954,8 +954,8 @@ TrackParameterBox::slotPresetPressed()
             			clefIndexToClef(dialog.getClef()));
                 m_doc->getCommandHistory()->addCommand(command);
             }
-            m_defClef->setCurrentItem(dialog.getClef());
-            m_defTranspose->setCurrentItem(QString("%1").arg
+            m_defClef->setCurrentIndex(dialog.getClef());
+            m_defTranspose->setCurrentIndex(QString("%1").arg
                                            (dialog.getTranspose()), true);
 
             m_highestPlayable = dialog.getHighRange();

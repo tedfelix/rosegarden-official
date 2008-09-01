@@ -16,6 +16,7 @@
 */
 
 
+#include <Q3CanvasItem>
 #include "NotationElement.h"
 #include "misc/Debug.h"
 
@@ -111,7 +112,7 @@ NotationElement::isGrace() const
 }
 
 void
-NotationElement::setCanvasItem(QCanvasItem *e, double canvasX, double canvasY)
+NotationElement::setCanvasItem(Q3CanvasItem *e, double canvasX, double canvasY)
 {
     removeCanvasItem();
     m_recentlyRegenerated = true;
@@ -120,7 +121,7 @@ NotationElement::setCanvasItem(QCanvasItem *e, double canvasX, double canvasY)
 }
 
 void
-NotationElement::addCanvasItem(QCanvasItem *e, double canvasX, double canvasY)
+NotationElement::addCanvasItem(Q3CanvasItem *e, double canvasX, double canvasY)
 {
     if (!m_canvasItem) {
         std::cerr << "ERROR: Attempt to add extra canvas item to element without main canvas item:";

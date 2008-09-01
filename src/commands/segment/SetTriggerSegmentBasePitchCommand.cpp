@@ -29,7 +29,7 @@ namespace Rosegarden
 SetTriggerSegmentBasePitchCommand::SetTriggerSegmentBasePitchCommand(Composition *composition,
         TriggerSegmentId id,
         int newPitch) :
-        KNamedCommand(i18n("Set Base Pitch")),
+        NamedCommand(i18n("Set Base Pitch")),
         m_composition(composition),
         m_id(id),
         m_newPitch(newPitch),

@@ -20,7 +20,7 @@
 #define _RG_BASICCOMMAND_H_
 
 #include "base/Segment.h"
-#include <kcommand.h>
+#include "document/Command.h"
 #include "base/Event.h"
 #include "misc/Debug.h"
 
@@ -40,7 +40,7 @@ class CommandArgumentQuerier; // forward declaration useful for some subclasses
  * modified by the command, ready to be restored verbatim on undo.
  */
 
-class BasicCommand : public KNamedCommand
+class BasicCommand : public NamedCommand
 {
 public:
     virtual ~BasicCommand();

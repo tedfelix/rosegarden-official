@@ -16,7 +16,7 @@
 #ifndef _PLUGIN_FACTORY_H_
 #define _PLUGIN_FACTORY_H_
 
-#include <qstring.h>
+#include <QString>
 #include <vector>
 
 #include "MappedCommon.h"

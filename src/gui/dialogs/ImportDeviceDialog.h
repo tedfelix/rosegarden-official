@@ -21,8 +21,9 @@
 
 #include "base/MidiDevice.h"
 #include <string>
-#include <kdialogbase.h>
-#include <qstring.h>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QString>
 #include <vector>
 #include <kurl.h>
 
@@ -31,10 +32,10 @@ class QWidget;
 class QRadioButton;
 class QLabel;
 class QCheckBox;
-class QButtonGroup;
+class QGroupBox;
 class ProgramList;
 class KeyMappingList;
-class KComboBox;
+class QComboBox;
 class ControlList;
 class BankList;
 
@@ -45,12 +46,12 @@ namespace Rosegarden
 class RosegardenGUIDoc;
 
 
-class ImportDeviceDialog : public KDialogBase
+class ImportDeviceDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    ImportDeviceDialog(QWidget *parent, KURL url);
+    ImportDeviceDialog(QDialogButtonBox::QWidget *parent, KURL url);
     virtual ~ImportDeviceDialog();
 
     bool doImport();
@@ -80,7 +81,7 @@ protected:
 
     KURL               m_url;
 
-    KComboBox          *m_deviceCombo;
+    QComboBox          *m_deviceCombo;
     QLabel             *m_deviceLabel;
 
     QCheckBox          *m_importBanks;
@@ -88,7 +89,7 @@ protected:
     QCheckBox          *m_importControllers;
     QCheckBox          *m_rename;
 
-    QButtonGroup       *m_buttonGroup;
+    QGroupBox       *m_buttonGroup;
     QRadioButton       *m_mergeBanks;
     QRadioButton       *m_overwriteBanks;
 

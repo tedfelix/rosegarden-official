@@ -25,7 +25,7 @@
 #include "base/Event.h"
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
@@ -33,7 +33,7 @@ namespace Rosegarden
 
 SegmentSplitByRecordingSrcCommand::SegmentSplitByRecordingSrcCommand (
     Segment *segment, int channel, int device ) :
-        KNamedCommand(i18n("Split by Recording Source")),
+        NamedCommand(i18n("Split by Recording Source")),
         m_composition(segment->getComposition()),
         m_segment(segment),
         m_newSegmentA(0),

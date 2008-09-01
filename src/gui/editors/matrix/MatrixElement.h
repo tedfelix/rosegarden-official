@@ -19,8 +19,10 @@
 #ifndef _RG_MATRIXELEMENT_H_
 #define _RG_MATRIXELEMENT_H_
 
+#include <Q3Canvas>
+#include <Q3CanvasRectangle>
 #include "base/ViewElement.h"
-#include <qbrush.h>
+#include <QBrush>
 #include <qcanvas.h>
 #include "QCanvasMatrixRectangle.h"
 
@@ -35,7 +37,7 @@ class Event;
 class MatrixElement : public ViewElement
 {
 
-    typedef std::vector <QCanvasRectangle *> OverlapRectangles;
+    typedef std::vector <Q3CanvasRectangle *> OverlapRectangles;
 
 
 public:
@@ -43,7 +45,7 @@ public:
 
     virtual ~MatrixElement();
 
-    void setCanvas(QCanvas* c);
+    void setCanvas(Q3Canvas* c);
 
     /**
      * Returns the actual x coordinate of the element on the canvas

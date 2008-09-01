@@ -28,7 +28,7 @@
 #include "sound/AudioFileTimeStretcher.h"
 #include "sound/AudioFileManager.h"
 #include "gui/widgets/ProgressDialog.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
@@ -37,7 +37,7 @@ namespace Rosegarden
 AudioSegmentRescaleCommand::AudioSegmentRescaleCommand(RosegardenGUIDoc *doc,
                                                        Segment *s,
 						       float ratio) :
-    KNamedCommand(getGlobalName()),
+    NamedCommand(getGlobalName()),
     m_afm(&doc->getAudioFileManager()),
     m_stretcher(new AudioFileTimeStretcher(m_afm)),
     m_segment(s),
@@ -57,7 +57,7 @@ AudioSegmentRescaleCommand::AudioSegmentRescaleCommand(RosegardenGUIDoc *doc,
 						       float ratio,
                                                        timeT st,
                                                        timeT emt) :
-    KNamedCommand(getGlobalName()),
+    NamedCommand(getGlobalName()),
     m_afm(&doc->getAudioFileManager()),
     m_stretcher(new AudioFileTimeStretcher(m_afm)),
     m_segment(s),

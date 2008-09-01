@@ -19,13 +19,13 @@
 #ifndef _RG_STARTUPTESTER_H_
 #define _RG_STARTUPTESTER_H_
 
-#include <qmutex.h>
-#include <qthread.h>
-#include <qstringlist.h>
-#include <qobject.h>
-#include <qhttp.h>
+#include <QMutex>
+#include <QThread>
+#include <QStringList>
+#include <QObject>
+#include <QHttp>
 
-class KProcess;
+class QProcess;
 
 namespace Rosegarden
 {
@@ -53,7 +53,7 @@ signals:
     void newerVersionAvailable(QString);
 
 protected slots:
-    void stdoutReceived(KProcess *, char *, int);
+    void stdoutReceived(QProcess *, char *, int);
 
     void slotHttpResponseHeaderReceived(const QHttpResponseHeader &);
     void slotHttpDone(bool);

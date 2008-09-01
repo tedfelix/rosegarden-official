@@ -18,9 +18,9 @@
 
 #include "ColourTableItem.h"
 
-#include <qcolor.h>
-#include <qpainter.h>
-#include <qrect.h>
+#include <QColor>
+#include <QPainter>
+#include <QRect>
 #include <qtable.h>
 
 

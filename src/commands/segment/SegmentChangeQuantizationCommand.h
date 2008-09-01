@@ -19,8 +19,8 @@
 #ifndef _RG_SEGMENTCHANGEQUANTIZATIONCOMMAND_H_
 #define _RG_SEGMENTCHANGEQUANTIZATIONCOMMAND_H_
 
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include <vector>
 #include "base/Event.h"
 
@@ -33,7 +33,7 @@ namespace Rosegarden
 class Segment;
 
 
-class SegmentChangeQuantizationCommand : public KNamedCommand
+class SegmentChangeQuantizationCommand : public NamedCommand
 {
 public:
     /// Set quantization on segments.  If unit is zero, switch quantization off

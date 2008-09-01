@@ -22,8 +22,8 @@
 #include "KLedButton.h"
 
 #include <kled.h>
-#include <qcolor.h>
-#include <qwidget.h>
+#include <QColor>
+#include <QWidget>
 
 
 namespace Rosegarden

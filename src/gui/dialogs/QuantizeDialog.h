@@ -19,7 +19,8 @@
 #ifndef _RG_QUANTIZEDIALOG_H_
 #define _RG_QUANTIZEDIALOG_H_
 
-#include <kdialogbase.h>
+#include <QDialog>
+#include <QDialogButtonBox>
 
 
 class QWidget;
@@ -32,12 +33,12 @@ class Quantizer;
 class QuantizeParameters;
 
 
-class QuantizeDialog : public KDialogBase
+class QuantizeDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    QuantizeDialog(QWidget *parent, bool inNotation = false);
+    QuantizeDialog(QDialogButtonBox::QWidget *parent, bool inNotation = false);
     
     /// Returned quantizer object is on heap -- caller must delete
     Quantizer *getQuantizer() const;

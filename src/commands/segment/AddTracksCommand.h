@@ -21,8 +21,8 @@
 
 #include "base/MidiProgram.h"
 #include "base/Composition.h"
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include <vector>
 #include <map>
 #include <klocale.h>
@@ -36,7 +36,7 @@ class Track;
 class Composition;
 
 
-class AddTracksCommand : public KNamedCommand
+class AddTracksCommand : public NamedCommand
 {
 public:
     AddTracksCommand(Composition *composition,

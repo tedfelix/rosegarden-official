@@ -32,13 +32,13 @@
 #include <kcolordialog.h>
 #include <kconfig.h>
 #include <kinputdialog.h>
-#include <qcolor.h>
-#include <qframe.h>
-#include <qpushbutton.h>
-#include <qstring.h>
-#include <qtabwidget.h>
-#include <qwidget.h>
-#include <qlayout.h>
+#include <QColor>
+#include <QFrame>
+#include <QPushButton>
+#include <QString>
+#include <QTabWidget>
+#include <QWidget>
+#include <QLayout>
 
 
 namespace Rosegarden
@@ -58,7 +58,7 @@ ColourConfigurationPage::ColourConfigurationPage(RosegardenGUIDoc *doc,
     m_colourtable = new ColourTable(frame, m_map, m_listmap);
     m_colourtable->setFixedHeight(280);
 
-    layout->addMultiCellWidget(m_colourtable, 0, 0, 0, 1);
+    layout->addWidget(m_colourtable, 0, 0, 0- 0+1, 1- 1);
 
     QPushButton* addColourButton = new QPushButton(i18n("Add New Color"),
                                    frame);

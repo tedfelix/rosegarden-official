@@ -19,42 +19,63 @@
 #include "FileMergeDialog.h"
 
 #include <klocale.h>
-#include <kcombobox.h>
-#include <kdialogbase.h>
-#include <qcheckbox.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qstring.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <QComboBox>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QCheckBox>
+#include <QLabel>
+#include <QString>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 #include "document/RosegardenGUIDoc.h"
 
 
 namespace Rosegarden
 {
 
-FileMergeDialog::FileMergeDialog(QWidget *parent,
+FileMergeDialog::FileMergeDialog(QDialogButtonBox::QWidget *parent,
                                  QString /*fileName*/,
                                  bool timingsDiffer) :
-        KDialogBase(parent, 0, true, i18n("Merge File"), Ok | Cancel | Help)
+        QDialog(parent)
 {
     setHelp("file-merge");
 
-    QVBox *vbox = makeVBoxMainWidget();
+    setModal(true);
+    setWindowTitle(i18n("Merge File"));
 
-    QHBox *hbox = new QHBox(vbox);
-    new QLabel(i18n("Merge new file  "), hbox);
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
+    QWidget *vbox = new QWidget(this);
+    QVBoxLayout vboxLayout = new QVBoxLayout;
+    metagrid->addWidget(vbox, 0, 0);
 
-    m_choice = new KComboBox(hbox);
-    m_choice->insertItem(i18n("At start of existing composition"));
-    m_choice->insertItem(i18n("From end of existing composition"));
+
+    QWidget *hbox = new QWidget( vbox );
+    vboxLayout->addWidget(hbox);
+    QHBoxLayout hboxLayout = new QHBoxLayout;
+    QLabel *child_3 = new QLabel(i18n("Merge new file  "), hbox );
+    hboxLayout->addWidget(child_3);
+
+    m_choice = new QComboBox( hbox );
+    hboxLayout->addWidget(m_choice);
+    hbox->setLayout(hboxLayout);
+    m_choice->addItem(i18n("At start of existing composition"));
+    m_choice->addItem(i18n("From end of existing composition"));
     m_useTimings = 0;
 
     if (timingsDiffer) {
         new QLabel(i18n("The file has different time signatures or tempos."), vbox);
-        m_useTimings = new QCheckBox(i18n("Import these as well"), vbox);
+        m_useTimings = new QCheckBox(i18n("Import these as well"), vbox );
+        vboxLayout->addWidget(m_useTimings);
+        vbox->setLayout(vboxLayout);
         m_useTimings->setChecked(false);
     }
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 int
@@ -62,7 +83,7 @@ FileMergeDialog::getMergeOptions()
 {
     int options = MERGE_KEEP_OLD_TIMINGS | MERGE_IN_NEW_TRACKS;
 
-    if (m_choice->currentItem() == 1) {
+    if (m_choice->currentIndex() == 1) {
         options |= MERGE_AT_END;
     }
 

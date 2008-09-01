@@ -21,8 +21,8 @@
 
 #include "base/MidiProgram.h"
 #include "InstrumentParameterPanel.h"
-#include <qpixmap.h>
-#include <qstring.h>
+#include <QPixmap>
+#include <QString>
 
 
 class QWidget;

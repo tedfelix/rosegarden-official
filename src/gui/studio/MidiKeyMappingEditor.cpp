@@ -29,15 +29,15 @@
 #include "NameSetEditor.h"
 #include <kcompletion.h>
 #include <klineedit.h>
-#include <qframe.h>
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qobject.h>
-#include <qobjectlist.h>
-#include <qpushbutton.h>
-#include <qstring.h>
+#include <QFrame>
+#include <QLayout>
+#include <QLabel>
+#include <QObject>
+#include <QObjectList>
+#include <QPushButton>
+#include <QString>
 #include <qvgroupbox.h>
-#include <qwidget.h>
+#include <QWidget>
 
 
 namespace Rosegarden
@@ -53,7 +53,7 @@ MidiKeyMappingEditor::MidiKeyMappingEditor(BankEditorDialog* bankEditor,
 {
     QWidget *additionalWidget = makeAdditionalWidget(m_mainFrame);
     if (additionalWidget) {
-        m_mainLayout->addMultiCellWidget(additionalWidget, 0, 2, 0, 2);
+        m_mainLayout->addWidget(additionalWidget, 0, 0, 2- 0+1, 2- 1);
     }
 }
 
@@ -155,7 +155,7 @@ MidiKeyMappingEditor::slotNameChanged(const QString& name)
         return ;
     }
 
-    QString senderName = sender()->name();
+    QString senderName = sender()->objectName();
 
     // Adjust value back to zero rated
     //

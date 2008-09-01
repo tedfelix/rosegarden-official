@@ -18,14 +18,14 @@
 #include "Debug.h"
 
 #if KDE_VERSION < KDE_MAKE_VERSION(3,2,0)
-#include <qdatetime.h>
-#include <qpoint.h>
-#include <qrect.h>
-#include <qregion.h>
-#include <qstringlist.h>
-#include <qpen.h>
-#include <qbrush.h>
-#include <qsize.h>
+#include <QDateTime>
+#include <QPoint>
+#include <QRect>
+#include <QRegion>
+#include <QStringList>
+#include <QPen>
+#include <QBrush>
+#include <QSize>
 #include <kurl.h>
 #endif
 
@@ -202,7 +202,7 @@ kdbgostreamAdapter::operator<<(const char *string)
 }
 
 ostream&
-kdbgostreamAdapter::operator<<(const QCString& string)
+kdbgostreamAdapter::operator<<(const QByteArray& string)
 {
     m_kdbgStream << string;
     return *this;

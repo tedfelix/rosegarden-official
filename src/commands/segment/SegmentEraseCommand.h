@@ -20,7 +20,7 @@
 #define _RG_SEGMENTERASECOMMAND_H_
 
 #include <string>
-#include <kcommand.h>
+#include "document/Command.h"
 
 
 
@@ -35,7 +35,7 @@ class AudioFileManager;
 
 ////////////////////////////////////////////////////////////
 
-class SegmentEraseCommand : public KNamedCommand
+class SegmentEraseCommand : public NamedCommand
 {
 public:
     /// for removing segment normally

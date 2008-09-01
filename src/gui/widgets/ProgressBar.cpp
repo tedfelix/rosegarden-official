@@ -19,7 +19,7 @@
 #include "ProgressBar.h"
 
 #include <kprogress.h>
-#include <qwidget.h>
+#include <QWidget>
 
 
 namespace Rosegarden

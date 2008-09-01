@@ -29,7 +29,7 @@ namespace Rosegarden
 SetTriggerSegmentDefaultRetuneCommand::SetTriggerSegmentDefaultRetuneCommand(Composition *composition,
         TriggerSegmentId id,
         bool newDefaultRetune) :
-        KNamedCommand(i18n("Set Default Retune")),
+        NamedCommand(i18n("Set Default Retune")),
         m_composition(composition),
         m_id(id),
         m_newDefaultRetune(newDefaultRetune),

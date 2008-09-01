@@ -18,7 +18,7 @@
 #ifndef _RG_DELETERANGECOMMAND_H_
 #define _RG_DELETERANGECOMMAND_H_
 
-#include <kcommand.h>
+#include "document/Command.h"
 #include "base/Event.h"
 #include <klocale.h>
 
@@ -32,7 +32,7 @@ class Segment;
 class Composition;
 
 
-class DeleteRangeCommand : public KMacroCommand
+class DeleteRangeCommand : public MacroCommand
 {
 public:
     DeleteRangeCommand(Composition *composition,
@@ -41,7 +41,7 @@ public:
     virtual ~DeleteRangeCommand();
 
 
-    class RejoinCommand : public KNamedCommand
+    class RejoinCommand : public NamedCommand
     {
     public:
         // This command rejoins pairs of subsequent segment on the same
@@ -49,7 +49,7 @@ public:
         // method.
 
         RejoinCommand() :
-            KNamedCommand(i18n("Rejoin Command"))
+            NamedCommand(i18n("Rejoin Command"))
             { }
 
         virtual ~RejoinCommand();

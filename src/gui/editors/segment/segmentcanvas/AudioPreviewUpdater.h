@@ -19,8 +19,8 @@
 #ifndef _RG_AUDIOPREVIEWUPDATER_H_
 #define _RG_AUDIOPREVIEWUPDATER_H_
 
-#include <qobject.h>
-#include <qrect.h>
+#include <QObject>
+#include <QRect>
 #include <vector>
 
 

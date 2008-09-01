@@ -23,33 +23,34 @@
 #include "base/NotationTypes.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include "gui/widgets/BigArrowButton.h"
-#include <kcombobox.h>
-#include <kdialogbase.h>
-#include <qbuttongroup.h>
-#include <qgroupbox.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qobject.h>
-#include <qpixmap.h>
-#include <qradiobutton.h>
-#include <qstring.h>
-#include <qtooltip.h>
-#include <qvbox.h>
-#include <qwidget.h>
-#include <qcheckbox.h>
+#include <QComboBox>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QGroupBox>
+#include <QGroupBox>
+#include <QLabel>
+#include <QObject>
+#include <QPixmap>
+#include <QRadioButton>
+#include <QString>
+#include <QToolTip>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QCheckBox>
 #include <algorithm>
 
 namespace Rosegarden
 {
 
-KeySignatureDialog::KeySignatureDialog(QWidget *parent,
+KeySignatureDialog::KeySignatureDialog(QDialogButtonBox::QWidget *parent,
                                        NotePixmapFactory *npf,
                                        Clef clef,
                                        Rosegarden::Key defaultKey,
                                        bool showApplyToAll,
                                        bool showConversionOptions,
                                        QString explanatoryText) :
-        KDialogBase(parent, 0, true, i18n("Key Change"), Ok | Cancel | Help),
+        QDialog(parent),
         m_notePixmapFactory(npf),
         m_key(defaultKey),
         m_clef(clef),
@@ -61,22 +62,31 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
 {
     setHelp("nv-signatures-key");
 
-    QVBox *vbox = makeVBoxMainWidget();
+    setModal(true);
+    setWindowTitle(i18n("Key Change"));
+
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
+    QWidget *vbox = new QWidget(this);
+    QVBoxLayout vboxLayout = new QVBoxLayout;
+    metagrid->addWidget(vbox, 0, 0);
+
 
     QHBox *keyBox = 0;
     QHBox *nameBox = 0;
 
-    QGroupBox *keyFrame = new QGroupBox
-                          (1, Horizontal, i18n("Key signature"), vbox);
+    QGroupBox *keyFrame = new QGroupBox( i18n("Key signature"), vbox );
+    vboxLayout->addWidget(keyFrame);
 
-    QGroupBox *transposeFrame = new QButtonGroup
+    QGroupBox *transposeFrame = new QGroupBox
                                 (1, Horizontal, i18n("Key transposition"), vbox);
 
-    QGroupBox *buttonFrame = new QButtonGroup
+    QGroupBox *buttonFrame = new QGroupBox
                              (1, Horizontal, i18n("Scope"), vbox);
 
-    QButtonGroup *conversionFrame = new QButtonGroup
-                                    (1, Horizontal, i18n("Existing notes following key change"), vbox);
+    QGroupBox *conversionFrame = new QGroupBox( i18n("Existing notes following key change"), vbox );
+    vboxLayout->addWidget(conversionFrame);
+    vbox->setLayout(vboxLayout);
 
     keyBox = new QHBox(keyFrame);
     nameBox = new QHBox(keyFrame);
@@ -97,12 +107,12 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
     QToolTip::add
         (keyUp, i18n("Sharpen"));
 
-    m_keyCombo = new KComboBox(nameBox);
-    m_majorMinorCombo = new KComboBox(nameBox);
-    m_majorMinorCombo->insertItem(i18n("Major"));
-    m_majorMinorCombo->insertItem(i18n("Minor"));
+    m_keyCombo = new QComboBox(nameBox);
+    m_majorMinorCombo = new QComboBox(nameBox);
+    m_majorMinorCombo->addItem(i18n("Major"));
+    m_majorMinorCombo->addItem(i18n("Minor"));
     if (m_key.isMinor()) {
-        m_majorMinorCombo->setCurrentItem(m_majorMinorCombo->count() - 1);
+        m_majorMinorCombo->setCurrentIndex(m_majorMinorCombo->count() - 1);
     }
 
     regenerateKeyCombo();
@@ -165,6 +175,11 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
                      this, SLOT(slotKeyNameChanged(const QString &)));
     QObject::connect(m_majorMinorCombo, SIGNAL(activated(const QString &)),
                      this, SLOT(slotMajorMinorChanged(const QString &)));
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 KeySignatureDialog::ConversionType
@@ -287,10 +302,10 @@ KeySignatureDialog::regenerateKeyCombo()
         if (space > 0)
             name = name.left(space);
 
-        m_keyCombo->insertItem(name);
+        m_keyCombo->addItem(name);
 
         if (m_valid && (*i == m_key)) {
-            m_keyCombo->setCurrentItem(m_keyCombo->count() - 1);
+            m_keyCombo->setCurrentIndex(m_keyCombo->count() - 1);
             textSet = true;
         }
     }
@@ -383,7 +398,7 @@ KeySignatureDialog::setValid(bool valid)
 std::string
 KeySignatureDialog::getKeyName(const QString &s, bool minor)
 {
-    QString u((s.length() >= 1) ? (s.left(1).upper() + s.right(s.length() - 1))
+    QString u((s.length() >= 1) ? (s.left(1).toUpper() + s.right(s.length() - 1))
               : s);
 
     std::string name(qstrtostr(u));

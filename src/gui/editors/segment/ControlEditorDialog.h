@@ -29,7 +29,7 @@ class QPushButton;
 class QListViewItem;
 class QCloseEvent;
 class KListView;
-class KCommand;
+class Command;
 
 
 namespace Rosegarden
@@ -53,7 +53,7 @@ public:
 
     void initDialog();
 
-    void addCommandToHistory(KCommand *command);
+    void addCommandToHistory(Command *command);
     MultiViewCommandHistory* getCommandHistory();
 
     void setModified(bool value);

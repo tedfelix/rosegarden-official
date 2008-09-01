@@ -20,7 +20,7 @@
 #define _RG_PASTERANGECOMMAND_H_
 
 #include "base/Event.h"
-#include <kcommand.h>
+#include "document/Command.h"
 
 
 namespace Rosegarden
@@ -30,7 +30,7 @@ class Composition;
 class Clipboard;
 
 
-class PasteRangeCommand : public KMacroCommand
+class PasteRangeCommand : public MacroCommand
 {
 public:
     PasteRangeCommand(Composition *composition,

@@ -20,21 +20,22 @@
 
 #include <klocale.h>
 #include "FontViewFrame.h"
-#include <kcombobox.h>
-#include <kdialogbase.h>
+#include <QComboBox>
+#include <QDialog>
+#include <QDialogButtonBox>
 #include <ktoolbar.h>
-#include <qlabel.h>
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <QLabel>
+#include <QString>
+#include <QStringList>
+#include <QWidget>
+#include <QVBoxLayout>
 
 
 namespace Rosegarden
 {
 
 void
-NoteFontViewer::slotViewChanged(int i)
+NoteFontViewer::slotViewChanged(QDialogButtonBox::int i)
 {
     m_frame->setGlyphs(i == 0);
 
@@ -43,7 +44,7 @@ NoteFontViewer::slotViewChanged(int i)
 
     for (int r = 0; r < 256; ++r) {
         if (m_frame->hasRow(r)) {
-            m_rows->insertItem(QString("%1").arg(r));
+            m_rows->addItem(QString("%1").arg(r));
             if (firstRow < 0)
                 firstRow = r;
         }
@@ -71,36 +72,46 @@ void
 NoteFontViewer::slotFontChanged(const QString &s)
 {
     m_frame->setFont(s);
-    slotViewChanged(m_view->currentItem());
+    slotViewChanged(m_view->currentIndex());
 }
 
 NoteFontViewer::NoteFontViewer(QWidget *parent, QString noteFontName,
                                QStringList fontNames, int pixelSize) :
-        KDialogBase(parent, 0, true,
-                    i18n("Note Font Viewer: %1").arg(noteFontName), Close)
+        QDialog(parent)
 {
-    QVBox *box = makeVBoxMainWidget();
-    KToolBar* controls = new KToolBar(box);
+    setModal(true);
+    setWindowTitle(i18n("Note Font Viewer: %1").arg(noteFontName));
+
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
+    QWidget *box = new QWidget(this);
+    QVBoxLayout boxLayout = new QVBoxLayout;
+    metagrid->addWidget(box, 0, 0);
+
+    KToolBar *controls = new KToolBar( box );
+    boxLayout->addWidget(controls);
     controls->setMargin(3);
 
     (void) new QLabel(i18n("  Component: "), controls);
-    m_font = new KComboBox(controls);
+    m_font = new QComboBox(controls);
 
     for (QStringList::iterator i = fontNames.begin(); i != fontNames.end();
             ++i) {
-        m_font->insertItem(*i);
+        m_font->addItem(*i);
     }
 
     (void) new QLabel(i18n("  View: "), controls);
-    m_view = new KComboBox(controls);
+    m_view = new QComboBox(controls);
 
-    m_view->insertItem(i18n("Glyphs"));
-    m_view->insertItem(i18n("Codes"));
+    m_view->addItem(i18n("Glyphs"));
+    m_view->addItem(i18n("Codes"));
 
     (void) new QLabel(i18n("  Page: "), controls);
-    m_rows = new KComboBox(controls);
+    m_rows = new QComboBox(controls);
 
-    m_frame = new FontViewFrame(pixelSize, box);
+    m_frame = new FontViewFrame(pixelSize, box );
+    boxLayout->addWidget(m_frame);
+    box->setLayout(boxLayout);
 
     connect(m_font, SIGNAL(activated(const QString &)),
             this, SLOT(slotFontChanged(const QString &)));
@@ -112,6 +123,11 @@ NoteFontViewer::NoteFontViewer(QWidget *parent, QString noteFontName,
             this, SLOT(slotRowChanged(const QString &)));
 
     slotFontChanged(m_font->currentText());
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Close);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 }

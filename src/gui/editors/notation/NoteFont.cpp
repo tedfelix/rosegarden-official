@@ -25,14 +25,14 @@
 #include "NoteCharacter.h"
 #include "NoteFontMap.h"
 #include "SystemFont.h"
-#include <qbitmap.h>
+#include <QBitmap>
 #include <qgarray.h>
-#include <qimage.h>
-#include <qpainter.h>
-#include <qpixmap.h>
-#include <qpoint.h>
-#include <qstring.h>
-#include <qstringlist.h>
+#include <QImage>
+#include <QPainter>
+#include <QPixmap>
+#include <QPoint>
+#include <QString>
+#include <QStringList>
 
 
 namespace Rosegarden
@@ -368,7 +368,7 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
 
 bool
 NoteFont::getColouredPixmap(CharName baseCharName, QPixmap &pixmap,
-                            int hue, int minValue, bool inverted) const
+                            int hue, int minimum, bool inverted) const
 {
     CharName charName(getNameWithColour(baseCharName, hue));
 
@@ -394,7 +394,7 @@ NoteFont::getColouredPixmap(CharName baseCharName, QPixmap &pixmap,
     }
 
     found = new QPixmap
-            (PixmapFunctions::colourPixmap(basePixmap, hue, minValue));
+            (PixmapFunctions::colourPixmap(basePixmap, hue, minimum));
     add(charName, inverted, found);
     pixmap = *found;
     return ok;
@@ -544,13 +544,13 @@ NoteFont::getCharacter(CharName charName,
 
 bool
 NoteFont::getCharacterColoured(CharName charName,
-                               int hue, int minValue,
+                               int hue, int minimum,
                                NoteCharacter &character,
                                CharacterType type,
                                bool inverted)
 {
     QPixmap pixmap;
-    if (!getColouredPixmap(charName, pixmap, hue, minValue, inverted)) {
+    if (!getColouredPixmap(charName, pixmap, hue, minimum, inverted)) {
         return false;
     }
 
@@ -583,12 +583,12 @@ NoteFont::getCharacterColoured(CharName charName,
 
 NoteCharacter
 NoteFont::getCharacterColoured(CharName charName,
-                               int hue, int minValue,
+                               int hue, int minimum,
                                CharacterType type,
                                bool inverted)
 {
     NoteCharacter character;
-    getCharacterColoured(charName, hue, minValue, character, type, inverted);
+    getCharacterColoured(charName, hue, minimum, character, type, inverted);
     return character;
 }
 

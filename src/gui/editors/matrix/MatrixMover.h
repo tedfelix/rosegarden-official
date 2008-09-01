@@ -20,7 +20,7 @@
 #define _RG_MATRIXMOVER_H_
 
 #include "MatrixTool.h"
-#include <qstring.h>
+#include <QString>
 #include "base/Event.h"
 
 

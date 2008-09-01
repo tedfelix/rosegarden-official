@@ -25,22 +25,23 @@
 #include "document/ConfigGroups.h"
 #include "base/Composition.h"
 #include "base/TriggerSegment.h"
-#include <kcombobox.h>
+#include <QComboBox>
 #include <kconfig.h>
-#include <kdialogbase.h>
-#include <qcheckbox.h>
-#include <qframe.h>
-#include <qlabel.h>
-#include <qstring.h>
-#include <qvbox.h>
-#include <qwidget.h>
-#include <qlayout.h>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QCheckBox>
+#include <QFrame>
+#include <QLabel>
+#include <QString>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QLayout>
 
 
 namespace Rosegarden
 {
 
-TriggerSegmentDialog::TriggerSegmentDialog(QWidget *parent,
+TriggerSegmentDialog::TriggerSegmentDialog(QDialogButtonBox::QWidget *parent,
         Composition *composition) :
         KDialogBase(parent, "triggersegmentdialog", true, i18n("Trigger Segment"),
                     Ok | Cancel, Ok),
@@ -54,27 +55,27 @@ TriggerSegmentDialog::TriggerSegmentDialog(QWidget *parent,
     QLabel *label = new QLabel(i18n("Trigger segment: "), frame);
     layout->addWidget(label, 0, 0);
 
-    m_segment = new KComboBox(frame);
+    m_segment = new QComboBox(frame);
     layout->addWidget(m_segment, 0, 1);
 
     int n = 1;
     for (Composition::triggersegmentcontaineriterator i =
                 m_composition->getTriggerSegments().begin();
             i != m_composition->getTriggerSegments().end(); ++i) {
-        m_segment->insertItem
+        m_segment->addItem
         (QString("%1. %2").arg(n++).arg(strtoqstr((*i)->getSegment()->getLabel())));
     }
 
     label = new QLabel(i18n("Perform with timing: "), frame);
     layout->addWidget(label, 1, 0);
 
-    m_adjustTime = new KComboBox(frame);
+    m_adjustTime = new QComboBox(frame);
     layout->addWidget(m_adjustTime, 1, 1);
 
-    m_adjustTime->insertItem(i18n("As stored"));
-    m_adjustTime->insertItem(i18n("Truncate if longer than note"));
-    m_adjustTime->insertItem(i18n("End at same time as note"));
-    m_adjustTime->insertItem(i18n("Stretch or squash segment to note duration"));
+    m_adjustTime->addItem(i18n("As stored"));
+    m_adjustTime->addItem(i18n("Truncate if longer than note"));
+    m_adjustTime->addItem(i18n("End at same time as note"));
+    m_adjustTime->addItem(i18n("Stretch or squash segment to note duration"));
 
     m_retune = new QCheckBox(i18n("Adjust pitch to note"), frame);
     m_retune->setChecked(true);
@@ -98,16 +99,16 @@ TriggerSegmentDialog::setupFromConfig()
     bool retune = config->readBoolEntry("triggersegmentretune", true);
 
     if (seg >= 0 && seg < m_segment->count())
-        m_segment->setCurrentItem(seg);
+        m_segment->setCurrentIndex(seg);
 
     if (timing == BaseProperties::TRIGGER_SEGMENT_ADJUST_NONE) {
-        m_adjustTime->setCurrentItem(0);
+        m_adjustTime->setCurrentIndex(0);
     } else if (timing == BaseProperties::TRIGGER_SEGMENT_ADJUST_SQUISH) {
-        m_adjustTime->setCurrentItem(3);
+        m_adjustTime->setCurrentIndex(3);
     } else if (timing == BaseProperties::TRIGGER_SEGMENT_ADJUST_SYNC_START) {
-        m_adjustTime->setCurrentItem(1);
+        m_adjustTime->setCurrentIndex(1);
     } else if (timing == BaseProperties::TRIGGER_SEGMENT_ADJUST_SYNC_END) {
-        m_adjustTime->setCurrentItem(2);
+        m_adjustTime->setCurrentIndex(2);
     }
 
     m_retune->setChecked(retune);
@@ -116,7 +117,7 @@ TriggerSegmentDialog::setupFromConfig()
 TriggerSegmentId
 TriggerSegmentDialog::getId() const
 {
-    int ix = m_segment->currentItem();
+    int ix = m_segment->currentIndex();
 
     for (Composition::triggersegmentcontaineriterator i =
                 m_composition->getTriggerSegments().begin();
@@ -139,7 +140,7 @@ TriggerSegmentDialog::getRetune() const
 std::string
 TriggerSegmentDialog::getTimeAdjust() const
 {
-    int option = m_adjustTime->currentItem();
+    int option = m_adjustTime->currentIndex();
 
     switch (option) {
 
@@ -165,7 +166,7 @@ TriggerSegmentDialog::slotOk()
 
     config->writeEntry("triggersegmenttiming", strtoqstr(getTimeAdjust()));
     config->writeEntry("triggersegmentretune", m_retune->isChecked());
-    config->writeEntry("triggersegmentlastornament", m_segment->currentItem());
+    config->writeEntry("triggersegmentlastornament", m_segment->currentIndex());
 
     accept();
 }

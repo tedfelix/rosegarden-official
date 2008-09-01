@@ -40,22 +40,22 @@
 #include "SegmentToolBox.h"
 #include "SegmentTool.h"
 #include <kmessagebox.h>
-#include <qbrush.h>
-#include <qcolor.h>
-#include <qevent.h>
-#include <qfont.h>
-#include <qfontmetrics.h>
+#include <QBrush>
+#include <QColor>
+#include <QEvent>
+#include <QFont>
+#include <QFontMetrics>
 #include <qmemarray.h>
-#include <qpainter.h>
-#include <qpen.h>
-#include <qpixmap.h>
-#include <qpoint.h>
-#include <qrect.h>
-#include <qscrollbar.h>
+#include <QPainter>
+#include <QPen>
+#include <QPixmap>
+#include <QPoint>
+#include <QRect>
+#include <QScrollBar>
 #include <qscrollview.h>
-#include <qsize.h>
-#include <qstring.h>
-#include <qwidget.h>
+#include <QSize>
+#include <QString>
+#include <QWidget>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <algorithm>
@@ -89,7 +89,7 @@ CompositionView::CompositionView(RosegardenGUIDoc* doc,
         RosegardenScrollView(parent, name, f | WRepaintNoErase | WResizeNoErase | WStaticContents),
 #endif
         m_model(model),
-        m_currentItem(0),
+        m_currentIndex(0),
         m_tool(0),
         m_toolBox(0),
         m_showPreviews(false),
@@ -234,7 +234,7 @@ void CompositionView::scrollRight()
     if (m_stepSize == 0)
         initStepSize();
 
-    if (horizontalScrollBar()->value() == horizontalScrollBar()->maxValue()) {
+    if (horizontalScrollBar()->value() == horizontalScrollBar()->maximum()) {
 
         resizeContents(contentsWidth() + m_stepSize, contentsHeight());
         setContentsPos(contentsX() + m_stepSize, contentsY());
@@ -543,7 +543,7 @@ void CompositionView::viewportPaintRect(QRect r)
     // DEBUG
 
     //     QPainter pdebug(viewport());
-    //     static QPen framePen(Qt::red, 1);
+    //     static QPen framePen(QColor(Qt::red), 1);
     //     pdebug.setPen(framePen);
     //     pdebug.drawRect(updateRect);
 
@@ -662,7 +662,7 @@ void CompositionView::refreshSegmentsDrawBuffer(const QRect& rect)
     drawArea(&p, rect);
 
     // DEBUG - show what's updated
-    //    QPen framePen(Qt::red, 1);
+    //    QPen framePen(QColor(Qt::red), 1);
     //    p.setPen(framePen);
     //    p.drawRect(rect);
 
@@ -1274,7 +1274,7 @@ void CompositionView::drawTextFloat(QPainter *p, const QRect& clipRect)
 {
     QFontMetrics metrics(p->fontMetrics());
 
-    QRect bound = p->boundingRect(0, 0, 300, metrics.height() + 6, AlignAuto, m_textFloatText);
+    QRect bound = p->boundingRect(0, 0, 300, metrics.height() + 6, AlignLeft, m_textFloatText);
 
     p->save();
 
@@ -1350,10 +1350,10 @@ void CompositionView::slotToolHelpChanged(const QString &text)
 void CompositionView::contentsMousePressEvent(QMouseEvent* e)
 {
     Qt::ButtonState bs = e->state();
-    slotSetSelectCopy((bs & Qt::ControlButton) != 0);
-    slotSetSelectAdd((bs & Qt::ShiftButton) != 0);
-    slotSetFineGrain((bs & Qt::ShiftButton) != 0);
-    slotSetPencilOverExisting((bs & Qt::AltButton + Qt::ControlButton) != 0);
+    slotSetSelectCopy((bs & Qt::ControlModifier) != 0);
+    slotSetSelectAdd((bs & Qt::ShiftModifier) != 0);
+    slotSetFineGrain((bs & Qt::ShiftModifier) != 0);
+    slotSetPencilOverExisting((bs & Qt::AltModifier + Qt::ControlModifier) != 0);
 
     switch (e->button()) {
     case LeftButton:
@@ -1394,21 +1394,21 @@ void CompositionView::contentsMouseReleaseEvent(QMouseEvent* e)
 
 void CompositionView::contentsMouseDoubleClickEvent(QMouseEvent* e)
 {
-    m_currentItem = getFirstItemAt(e->pos());
+    m_currentIndex = getFirstItemAt(e->pos());
 
-    if (!m_currentItem) {
-        RG_DEBUG << "CompositionView::contentsMouseDoubleClickEvent - no currentItem\n";
+    if (!m_currentIndex) {
+        RG_DEBUG << "CompositionView::contentsMouseDoubleClickEvent - no currentIndex\n";
         RulerScale *ruler = grid().getRulerScale();
         if (ruler) emit setPointerPosition(ruler->getTimeForX(e->pos().x()));
         return ;
     }
 
-    RG_DEBUG << "CompositionView::contentsMouseDoubleClickEvent - have currentItem\n";
+    RG_DEBUG << "CompositionView::contentsMouseDoubleClickEvent - have currentIndex\n";
 
-    CompositionItemImpl* itemImpl = dynamic_cast<CompositionItemImpl*>((_CompositionItem*)m_currentItem);
+    CompositionItemImpl* itemImpl = dynamic_cast<CompositionItemImpl*>((_CompositionItem*)m_currentIndex);
 
-    if (m_currentItem->isRepeating()) {
-        timeT time = getModel()->getRepeatTimeAt(e->pos(), m_currentItem);
+    if (m_currentIndex->isRepeating()) {
+        timeT time = getModel()->getRepeatTimeAt(e->pos(), m_currentIndex);
 
         RG_DEBUG << "editRepeat at time " << time << endl;
         if (time > 0)
@@ -1428,8 +1428,8 @@ void CompositionView::contentsMouseMoveEvent(QMouseEvent* e)
         return ;
 
     Qt::ButtonState bs = e->state();
-    slotSetFineGrain((bs & Qt::ShiftButton) != 0);
-    slotSetPencilOverExisting((bs & Qt::AltButton) != 0);
+    slotSetFineGrain((bs & Qt::ShiftModifier) != 0);
+    slotSetPencilOverExisting((bs & Qt::AltModifier) != 0);
 
     int follow = m_tool->handleMouseMove(e);
     setScrollDirectionConstraint(follow);
@@ -1441,7 +1441,7 @@ void CompositionView::contentsMouseMoveEvent(QMouseEvent* e)
             slotScrollHorizSmallSteps(e->pos().x());
 
             // enlarge composition if needed
-            if (horizontalScrollBar()->value() == horizontalScrollBar()->maxValue()) {
+            if (horizontalScrollBar()->value() == horizontalScrollBar()->maximum()) {
                 resizeContents(contentsWidth() + m_stepSize, contentsHeight());
                 setContentsPos(contentsX() + m_stepSize, contentsY());
                 getModel()->setLength(contentsWidth());
@@ -1456,7 +1456,7 @@ void CompositionView::contentsMouseMoveEvent(QMouseEvent* e)
 
 void CompositionView::releaseCurrentItem()
 {
-    m_currentItem = CompositionItem();
+    m_currentIndex = CompositionItem();
 }
 
 void CompositionView::setPointerPos(int pos)
@@ -1555,7 +1555,7 @@ void CompositionView::setTextFloat(int x, int y, const QString &text)
     // most of the time when the floating text is drawn
     // we want to update a larger part of the view
     // so don't update here
-    //     QRect r = fontMetrics().boundingRect(x, y, 300, 40, AlignAuto, m_textFloatText);
+    //     QRect r = fontMetrics().boundingRect(x, y, 300, 40, AlignLeft, m_textFloatText);
     //     slotUpdateSegmentsDrawBuffer(r);
 
 

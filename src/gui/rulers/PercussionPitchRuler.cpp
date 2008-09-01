@@ -25,13 +25,13 @@
 #include "gui/editors/matrix/MatrixView.h"
 #include "gui/general/MidiPitchLabel.h"
 #include "PitchRuler.h"
-#include <qcolor.h>
-#include <qevent.h>
-#include <qfont.h>
-#include <qfontmetrics.h>
-#include <qpainter.h>
-#include <qsize.h>
-#include <qwidget.h>
+#include <QColor>
+#include <QEvent>
+#include <QFont>
+#include <QFontMetrics>
+#include <QPainter>
+#include <QSize>
+#include <QWidget>
 
 
 namespace Rosegarden
@@ -129,7 +129,7 @@ void PercussionPitchRuler::drawHoverNote(int evPitch)
             paint.setPen(QColor(238, 238, 224));
             paint.drawRect(lw + 7, y + 1, m_width - lw, m_lineSpacing);
             std::string key = m_mapping->getMapForKeyName(m_lastHoverHighlight);
-            paint.setPen(Qt::black);
+            paint.setPen(QColor(Qt::black));
             paint.drawText
             (9 + lw, y + m_fontMetrics->ascent() + 1,
              strtoqstr(key));
@@ -176,7 +176,7 @@ void PercussionPitchRuler::mousePressEvent(QMouseEvent *e)
     if (e->button() == LeftButton) {
 
         m_mouseDown = true;
-        m_selecting = (bs & Qt::ShiftButton);
+        m_selecting = (bs & Qt::ShiftModifier);
 
         if (m_selecting)
             emit keySelected(e->y(), false);

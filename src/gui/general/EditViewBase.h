@@ -21,7 +21,7 @@
 #include <set>
 #include <string>
 #include <kdockwidget.h>
-#include <qstring.h>
+#include <QString>
 #include <vector>
 #include "base/Event.h"
 #include "document/CommandRegistry.h"
@@ -32,10 +32,10 @@ class QPaintEvent;
 class QGridLayout;
 class QFrame;
 class QCloseEvent;
-class QAccel;
+class QShortcut;
 class KToggleAction;
 class KConfig;
-class KCommand;
+class Command;
 namespace Rosegarden { class EditViewTimeSigNotifier; }
 
 
@@ -98,7 +98,7 @@ public:
     /**
      * Add a Command to the history
      */
-    virtual void addCommandToHistory(KCommand *);
+    virtual void addCommandToHistory(Command *);
 
     /**
      * Update the view
@@ -106,9 +106,9 @@ public:
     virtual void updateView() = 0;
 
     /**
-     * Return our local accelerator object
+     * Return our local shortcuterator object
      */
-    QAccel* getAccelerators() { return m_accelerators; }
+    QShortcut* getShortcuterators() { return m_shortcuterators; }
 
     /**
      * Return a string unique to this view (amongst views currently
@@ -375,7 +375,7 @@ protected:
     bool         m_havePendingPaintEvent;
     static bool  m_inPaintEvent; // true if _any_ edit view is in a paint event
 
-    QAccel      *m_accelerators;
+    QShortcut      *m_shortcuterators;
 
     int          m_configDialogPageIndex;
 

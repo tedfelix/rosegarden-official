@@ -19,9 +19,10 @@
 #ifndef _RG_BEATSBARSDIALOG_H_
 #define _RG_BEATSBARSDIALOG_H_
 
-#include <kdialogbase.h>
-#include <qspinbox.h>
-#include <kcombobox.h>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QSpinBox>
+#include <QComboBox>
 
 class QWidget;
 
@@ -33,7 +34,7 @@ namespace Rosegarden
  * ask the user to give us information about the selected audio segment for
  * Tempo calculations
  */
-class BeatsBarsDialog : public KDialogBase
+class BeatsBarsDialog : public QDialog
 {
     Q_OBJECT
         
@@ -42,11 +43,11 @@ public:
     BeatsBarsDialog(QWidget *parent);
 
     int getQuantity() { return m_spinBox->value(); }
-    int getMode()     { return m_comboBox->currentItem();   } 
+    int getMode()     { return m_comboBox->currentIndex();   } 
 
 protected:
     QSpinBox  *m_spinBox;
-    KComboBox *m_comboBox;
+    QComboBox *m_comboBox;
 };
 
 

@@ -19,9 +19,9 @@
 #ifndef _RG_CUTCOMMAND_H_
 #define _RG_CUTCOMMAND_H_
 
-#include <qstring.h>
+#include <QString>
 #include <klocale.h>
-#include <kcommand.h>
+#include "document/Command.h"
 
 
 namespace Rosegarden
@@ -34,7 +34,7 @@ class Clipboard;
 
 /// Cut a selection
 
-class CutCommand : public KMacroCommand
+class CutCommand : public MacroCommand
 {
 public:
     /// Make a CutCommand that cuts events from within a Segment

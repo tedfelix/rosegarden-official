@@ -21,7 +21,7 @@
 
 #include <klocale.h>
 
-#include <qdatetime.h>
+#include <QDateTime>
 
 #include "base/Profiler.h"
 #include "sound/MappedComposition.h"

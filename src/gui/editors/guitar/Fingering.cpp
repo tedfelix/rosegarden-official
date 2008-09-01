@@ -19,7 +19,7 @@
 
 #include "misc/Debug.h"
 
-#include <qstringlist.h>
+#include <QStringList>
 #include <sstream>
 #include <algorithm>
 #include <klocale.h>
@@ -92,7 +92,7 @@ Fingering::getBarre() const
 Fingering
 Fingering::parseFingering(const QString& ch, QString& errorString)
 {
-    QStringList tokens = QStringList::split(' ', ch);
+    QStringList tokens = ch.split(' ', QString::SkipEmptyParts);
 
     unsigned int idx = 0;
     Fingering fingering;
@@ -104,7 +104,7 @@ Fingering::parseFingering(const QString& ch, QString& errorString)
         if (b) {
 //            NOTATION_DEBUG << "Fingering::parseFingering : '" << t << "' = " << fn << endl;  
             fingering[idx] = fn;
-        } else if (t.lower() == "x") {
+        } else if (t.toLower() == "x") {
 //            NOTATION_DEBUG << "Fingering::parseFingering : '" << t << "' = MUTED\n";  
             fingering[idx] = MUTED;
         } else {

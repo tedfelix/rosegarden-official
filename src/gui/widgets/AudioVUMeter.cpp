@@ -19,11 +19,11 @@
 #include "AudioVUMeter.h"
 
 #include "gui/rulers/VelocityColour.h"
-#include <qcolor.h>
-#include <qlabel.h>
-#include <qpainter.h>
-#include <qtimer.h>
-#include <qwidget.h>
+#include <QColor>
+#include <QLabel>
+#include <QPainter>
+#include <QTimer>
+#include <QWidget>
 #include "VUMeter.h"
 
 

@@ -12,7 +12,7 @@
   COPYING included with this distribution for more information.
 */
 
-#include <qdatastream.h>
+#include <QDataStream>
 
 #include "Composition.h" // for RealTime
 #include "Event.h"

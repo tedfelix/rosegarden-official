@@ -20,13 +20,13 @@
 #include <kapplication.h>
 
 #include "gui/general/GUIPalette.h"
-#include <qfontmetrics.h>
-#include <qpainter.h>
-#include <qpalette.h>
-#include <qpoint.h>
-#include <qrect.h>
-#include <qstring.h>
-#include <qwidget.h>
+#include <QFontMetrics>
+#include <QPainter>
+#include <QPalette>
+#include <QPoint>
+#include <QRect>
+#include <QString>
+#include <QWidget>
 
 
 namespace Rosegarden
@@ -78,11 +78,11 @@ TextFloat::paintEvent(QPaintEvent *e)
 
     QFontMetrics metrics(paint.fontMetrics());
 
-    QRect r = metrics.boundingRect(0, 0, 400, 400, Qt::AlignAuto, m_text);
+    QRect r = metrics.boundingRect(0, 0, 400, 400, Qt::AlignLeft, m_text);
     resize(r.width() + 7, r.height() + 7);
     paint.drawRect(0, 0, r.width() + 6, r.height() + 6);
-    paint.setPen(Qt::black);
-    paint.drawText(QRect(3, 3, r.width(), r.height()), Qt::AlignAuto, m_text);
+    paint.setPen(QColor(Qt::black));
+    paint.drawText(QRect(3, 3, r.width(), r.height()), Qt::AlignLeft, m_text);
 
     /*
         QRect textBound = metrics.boundingRect(m_text);
@@ -90,7 +90,7 @@ TextFloat::paintEvent(QPaintEvent *e)
         resize(textBound.width() + 7, textBound.height() + 7);
         paint.drawRect(0, 0, textBound.width() + 6, textBound.height() + 6);
      
-        paint.setPen(Qt::black);
+        paint.setPen(QColor(Qt::black));
         paint.drawText(3, textBound.height() + 3, m_text);
     */
 }

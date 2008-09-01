@@ -21,22 +21,27 @@
 #include "ChordMap.h"
 
 #include <klineedit.h>
-#include <qcombobox.h>
-#include <qspinbox.h>
+#include <QComboBox>
+#include <QSpinBox>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kstddirs.h>
-#include <qlayout.h>
-#include <qlabel.h>
+#include <kstandarddirs.h>
+#include <QLayout>
+#include <QLabel>
 
 namespace Rosegarden
 {
 
 GuitarChordEditorDialog::GuitarChordEditorDialog(Guitar::Chord& chord, const Guitar::ChordMap& chordMap, QWidget *parent)
-    : KDialogBase(parent, "GuitarChordEditor", true, i18n("Guitar Chord Editor"), Ok|Cancel),
+    : QDialog(parent),
       m_chord(chord),
       m_chordMap(chordMap)
 {
+    setModal(true);
+    setWindowTitle(i18n("Guitar Chord Editor"));
+
+#warning Dialog needs QDialogButtonBox(Ok|QDialogButtonBox::Cancel)
+
     QWidget *page = new QWidget(this);
     setMainWidget(page);
     QGridLayout *topLayout = new QGridLayout(page, 7, 2, spacingHint());
@@ -60,21 +65,21 @@ GuitarChordEditorDialog::GuitarChordEditorDialog(Guitar::Chord& chord, const Gui
 
     m_fingeringBox = new FingeringBox(true, page);
     m_fingeringBox->setFingering(m_chord.getFingering());
-    topLayout->addMultiCellWidget(m_fingeringBox, 0, 7, 0, 0);
+    topLayout->addWidget(m_fingeringBox, 0, 0, 7- 0+1, 0- 1);
 
     NOTATION_DEBUG << "GuitarChordEditorDialog : chord = " << m_chord << endl;
 
 
     QStringList rootList = m_chordMap.getRootList();
     if (rootList.count() > 0) {
-        m_rootNotesList->insertStringList(rootList);
-        m_rootNotesList->setCurrentItem(rootList.findIndex(m_chord.getRoot()));
+        m_rootNotesList->addItems(rootList);
+        m_rootNotesList->setCurrentIndex(rootList.findIndex(m_chord.getRoot()));
     }
     
     QStringList extList = m_chordMap.getExtList(m_chord.getRoot());
     if (extList.count() > 0) {
-        m_ext->insertStringList(extList);
-        m_ext->setCurrentItem(extList.findIndex(m_chord.getExt()));
+        m_ext->addItems(extList);
+        m_ext->setCurrentIndex(extList.findIndex(m_chord.getExt()));
     }
     
 }

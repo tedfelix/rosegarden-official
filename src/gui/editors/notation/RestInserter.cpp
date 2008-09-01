@@ -33,10 +33,10 @@
 #include "NoteInserter.h"
 #include "NotePixmapFactory.h"
 #include <kaction.h>
-#include <kcommand.h>
-#include <qiconset.h>
-#include <qregexp.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QIcon>
+#include <QRegExp>
+#include <QString>
 
 
 namespace Rosegarden
@@ -47,16 +47,16 @@ using namespace BaseProperties;
 RestInserter::RestInserter(NotationView* view)
     : NoteInserter("RestInserter", view)
 {
-    QIconSet icon;
+    QIcon icon;
     
-    icon = QIconSet
+    icon = QIcon
         (NotePixmapFactory::toQPixmap(NotePixmapFactory::
                                       makeToolbarPixmap("dotted-rest-crotchet")));
     new KToggleAction(i18n("Dotted rest"), icon, 0, this,
                       SLOT(slotToggleDot()), actionCollection(),
                       "toggle_dot");
     
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::
                                                  makeToolbarPixmap("select")));
     new KAction(i18n("Switch to Select Tool"), icon, 0, this,
                 SLOT(slotSelectSelected()), actionCollection(),
@@ -66,7 +66,7 @@ RestInserter::RestInserter(NotationView* view)
                 SLOT(slotEraseSelected()), actionCollection(),
                 "erase");
 
-    icon = QIconSet
+    icon = QIcon
         (NotePixmapFactory::toQPixmap(NotePixmapFactory::
                                       makeToolbarPixmap("crotchet")));
     new KAction(i18n("Switch to Inserting Notes"), icon, 0, this,
@@ -95,14 +95,14 @@ RestInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
     NoteInsertionCommand *insertionCommand =
         new RestInsertionCommand(segment, time, endTime, note);
 
-    KCommand *activeCommand = insertionCommand;
+    Command *activeCommand = insertionCommand;
 
     if (m_nParentView->isInTripletMode()) {
         Segment::iterator i(segment.findTime(time));
         if (i != segment.end() &&
             !(*i)->has(BEAMED_GROUP_TUPLET_BASE)) {
 
-            KMacroCommand *command = new KMacroCommand(insertionCommand->name());
+            MacroCommand *command = new MacroCommand(insertionCommand->objectName());
             command->addCommand(new TupletCommand
                                 (segment, time, note.getDuration()));
             command->addCommand(insertionCommand);

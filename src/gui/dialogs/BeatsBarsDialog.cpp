@@ -17,17 +17,18 @@
 
 
 #include "BeatsBarsDialog.h"
-#include <qlayout.h>
+#include <QLayout>
 
 #include <klocale.h>
 #include "base/Segment.h"
-#include <kcombobox.h>
-#include <kdialogbase.h>
-#include <qframe.h>
-#include <qgroupbox.h>
-#include <qhbox.h>
-#include <qspinbox.h>
-#include <qwidget.h>
+#include <QComboBox>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QFrame>
+#include <QGroupBox>
+#include <QSpinBox>
+#include <QWidget>
+#include <QHBoxLayout>
 
 
 namespace Rosegarden
@@ -48,10 +49,10 @@ BeatsBarsDialog::BeatsBarsDialog(QWidget* parent) :
     m_spinBox = new QSpinBox(1, INT_MAX, 1, frame, "glee");
     layout->addWidget(m_spinBox, 0, 0);
 
-    m_comboBox = new KComboBox(false, frame);
-    m_comboBox->insertItem(i18n("beat(s)"));
-    m_comboBox->insertItem(i18n("bar(s)"));
-    m_comboBox->setCurrentItem(0);
+    m_comboBox = new QComboBox(false, frame);
+    m_comboBox->addItem(i18n("beat(s)"));
+    m_comboBox->addItem(i18n("bar(s)"));
+    m_comboBox->setCurrentIndex(0);
     layout->addWidget(m_comboBox, 0, 1);
 }
 

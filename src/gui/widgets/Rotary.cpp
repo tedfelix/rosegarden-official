@@ -24,19 +24,19 @@
 #include "TextFloat.h"
 #include <kapplication.h>
 #include <klocale.h>
-#include <qbrush.h>
-#include <qcolor.h>
-#include <qdialog.h>
-#include <qimage.h>
-#include <qpainter.h>
-#include <qpalette.h>
-#include <qpen.h>
-#include <qpixmap.h>
-#include <qpoint.h>
-#include <qstring.h>
-#include <qtimer.h>
-#include <qtooltip.h>
-#include <qwidget.h>
+#include <QBrush>
+#include <QColor>
+#include <QDialog>
+#include <QImage>
+#include <QPainter>
+#include <QPalette>
+#include <QPen>
+#include <QPixmap>
+#include <QPoint>
+#include <QString>
+#include <QTimer>
+#include <QToolTip>
+#include <QWidget>
 #include <cmath>
 
 
@@ -54,8 +54,8 @@ Rotary::PixmapCache Rotary::m_pixmaps;
 
 
 Rotary::Rotary(QWidget *parent,
-               float minValue,
-               float maxValue,
+               float minimum,
+               float maximum,
                float step,
                float pageStep,
                float initialPosition,
@@ -65,8 +65,8 @@ Rotary::Rotary(QWidget *parent,
                bool centred,
                bool logarithmic) :
         QWidget(parent),
-        m_minValue(minValue),
-        m_maxValue(maxValue),
+        m_minimum(minimum),
+        m_maximum(maximum),
         m_step(step),
         m_pageStep(pageStep),
         m_size(size),
@@ -136,8 +136,8 @@ Rotary::paintEvent(QPaintEvent *)
 
     double angle = ROTARY_MIN // offset
                    + (ROTARY_RANGE *
-                      (double(m_snapPosition - m_minValue) /
-                       (double(m_maxValue) - double(m_minValue))));
+                      (double(m_snapPosition - m_minimum) /
+                       (double(m_maximum) - double(m_minimum))));
     int degrees = int(angle * 180.0 / M_PI);
 
     //    RG_DEBUG << "degrees: " << degrees << ", size " << m_size << ", pixel " << m_knobColour.pixel() << endl;
@@ -151,10 +151,10 @@ Rotary::paintEvent(QPaintEvent *)
         numTicks = 5;
         break;
     case PageStepTicks:
-        numTicks = 1 + (m_maxValue + 0.0001 - m_minValue) / m_pageStep;
+        numTicks = 1 + (m_maximum + 0.0001 - m_minimum) / m_pageStep;
         break;
     case StepTicks:
-        numTicks = 1 + (m_maxValue + 0.0001 - m_minValue) / m_step;
+        numTicks = 1 + (m_maximum + 0.0001 - m_minimum) / m_step;
         break;
     default:
         break;
@@ -180,7 +180,7 @@ Rotary::paintEvent(QPaintEvent *)
     pen.setWidth(scale);
     paint.setPen(pen);
 
-    if (m_knobColour != Qt::black) {
+    if (m_knobColour != QColor(Qt::black)) {
         paint.setBrush(m_knobColour);
     } else {
         paint.setBrush(
@@ -334,30 +334,30 @@ Rotary::snapPosition()
             break; // meaningless
 
         case LimitTicks:
-            if (m_position < (m_minValue + m_maxValue) / 2.0) {
-                m_snapPosition = m_minValue;
+            if (m_position < (m_minimum + m_maximum) / 2.0) {
+                m_snapPosition = m_minimum;
             } else {
-                m_snapPosition = m_maxValue;
+                m_snapPosition = m_maximum;
             }
             break;
 
         case IntervalTicks:
-            m_snapPosition = m_minValue +
-                             (m_maxValue - m_minValue) / 4.0 *
-                             int((m_snapPosition - m_minValue) /
-                                 ((m_maxValue - m_minValue) / 4.0));
+            m_snapPosition = m_minimum +
+                             (m_maximum - m_minimum) / 4.0 *
+                             int((m_snapPosition - m_minimum) /
+                                 ((m_maximum - m_minimum) / 4.0));
             break;
 
         case PageStepTicks:
-            m_snapPosition = m_minValue +
+            m_snapPosition = m_minimum +
                              m_pageStep *
-                             int((m_snapPosition - m_minValue) / m_pageStep);
+                             int((m_snapPosition - m_minimum) / m_pageStep);
             break;
 
         case StepTicks:
-            m_snapPosition = m_minValue +
+            m_snapPosition = m_minimum +
                              m_step *
-                             int((m_snapPosition - m_minValue) / m_step);
+                             int((m_snapPosition - m_minimum) / m_step);
             break;
         }
     }
@@ -378,7 +378,7 @@ Rotary::mousePressEvent(QMouseEvent *e)
         emit valueChanged(m_snapPosition);
     } else if (e->button() == RightButton) // reset to centre position
     {
-        m_position = (m_maxValue + m_minValue) / 2.0;
+        m_position = (m_maximum + m_minimum) / 2.0;
         snapPosition();
         update();
         emit valueChanged(m_snapPosition);
@@ -409,8 +409,8 @@ Rotary::mousePressEvent(QMouseEvent *e)
 void
 Rotary::mouseDoubleClickEvent(QMouseEvent * /*e*/)
 {
-    float minv = m_minValue;
-    float maxv = m_maxValue;
+    float minv = m_minimum;
+    float maxv = m_maximum;
     float val = m_position;
     float step = m_step;
 
@@ -469,11 +469,11 @@ Rotary::mouseMoveEvent(QMouseEvent *e)
         float newValue = m_position +
                          (m_lastY - float(e->y()) + float(e->x()) - m_lastX) * m_step;
 
-        if (newValue > m_maxValue)
-            m_position = m_maxValue;
+        if (newValue > m_maximum)
+            m_position = m_maximum;
         else
-            if (newValue < m_minValue)
-                m_position = m_minValue;
+            if (newValue < m_minimum)
+                m_position = m_minimum;
             else
                 m_position = newValue;
 
@@ -506,11 +506,11 @@ Rotary::wheelEvent(QWheelEvent *e)
     else
         m_position += m_pageStep;
 
-    if (m_position > m_maxValue)
-        m_position = m_maxValue;
+    if (m_position > m_maximum)
+        m_position = m_maximum;
 
-    if (m_position < m_minValue)
-        m_position = m_minValue;
+    if (m_position < m_minimum)
+        m_position = m_minimum;
 
     snapPosition();
     update();

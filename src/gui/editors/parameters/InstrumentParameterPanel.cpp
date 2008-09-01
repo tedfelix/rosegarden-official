@@ -21,10 +21,10 @@
 #include "base/Instrument.h"
 #include "document/RosegardenGUIDoc.h"
 #include <ksqueezedtextlabel.h>
-#include <qfontmetrics.h>
-#include <qframe.h>
-#include <qlabel.h>
-#include <qwidget.h>
+#include <QFontMetrics>
+#include <QFrame>
+#include <QLabel>
+#include <QWidget>
 
 
 namespace Rosegarden

@@ -17,7 +17,7 @@
 
 
 #include "MIDIInstrumentParameterPanel.h"
-#include <qlayout.h>
+#include <QLayout>
 
 #include "sound/Midi.h"
 #include <klocale.h>
@@ -35,21 +35,21 @@
 #include "InstrumentParameterPanel.h"
 #include "sound/MappedEvent.h"
 #include "sound/MappedInstrument.h"
-#include <kcombobox.h>
+#include <QComboBox>
 #include <ksqueezedtextlabel.h>
-#include <qcheckbox.h>
-#include <qcolor.h>
-#include <qfontmetrics.h>
-#include <qframe.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qregexp.h>
-#include <qsignalmapper.h>
-#include <qstring.h>
-#include <qwidget.h>
+#include <QCheckBox>
+#include <QColor>
+#include <QFontMetrics>
+#include <QFrame>
+#include <QLabel>
+#include <QRegExp>
+#include <QSignalMapper>
+#include <QString>
+#include <QWidget>
+#include <QHBoxLayout>
 #include <algorithm>
 
-#include <qtooltip.h>
+#include <QToolTip>
 
 
 namespace Rosegarden
@@ -63,18 +63,18 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     m_mainGrid = new QGridLayout(this, 10, 3, 2, 1);
 
     m_connectionLabel = new KSqueezedTextLabel(this);
-    m_bankValue = new KComboBox(this);
-    m_channelValue = new KComboBox(this);
-    m_programValue = new KComboBox(this);
-    m_variationValue = new KComboBox(this);
+    m_bankValue = new QComboBox(this);
+    m_channelValue = new QComboBox(this);
+    m_programValue = new QComboBox(this);
+    m_variationValue = new QComboBox(this);
     m_bankCheckBox = new QCheckBox(this);
     m_programCheckBox = new QCheckBox(this);
     m_variationCheckBox = new QCheckBox(this);
     m_percussionCheckBox = new QCheckBox(this);
     
-    m_bankValue->setSizeLimit(20);
-    m_programValue->setSizeLimit(20);
-    m_variationValue->setSizeLimit(20);
+    m_bankValue->setMaxVisibleItems(20);
+    m_programValue->setMaxVisibleItems(20);
+    m_variationValue->setMaxVisibleItems(20);
     
     m_bankLabel = new QLabel(i18n("Bank"), this);
     m_variationLabel = new QLabel(i18n("Variation"), this);
@@ -104,7 +104,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     m_evalMidiPrgChgCheckBox->setDisabled(false);
     m_evalMidiPrgChgCheckBox->setChecked(false);
     QToolTip::add(m_evalMidiPrgChgCheckBox, programTip);
-    m_evalMidiPrgChgCheckBox->setAccel((QKeySequence)"Shift+P");
+    m_evalMidiPrgChgCheckBox->setShortcut((QKeySequence)"Shift+P");
     
     
     // Configure the empty final row to accomodate any extra vertical space.
@@ -114,13 +114,13 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
 
     m_mainGrid->setColStretch(2, 1);
 
-    m_mainGrid->addMultiCellWidget(m_instrumentLabel, 0, 0, 0, 2, AlignCenter);
-    m_mainGrid->addMultiCellWidget(m_connectionLabel, 1, 1, 0, 2, AlignCenter);
+    m_mainGrid->addWidget(m_instrumentLabel, 0, 0, 0- 0+1, 2- 1, AlignCenter);
+    m_mainGrid->addWidget(m_connectionLabel, 1, 0, 0+1, 2- 1, AlignCenter);
 
-    m_mainGrid->addMultiCellWidget(channelLabel, 2, 2, 0, 1, AlignLeft);
+    m_mainGrid->addWidget(channelLabel, 2, 0, 0+1, 1- 1, AlignLeft);
     m_mainGrid->addWidget(m_channelValue, 2, 2, AlignRight);
 
-    m_mainGrid->addMultiCellWidget(percussionLabel, 3, 3, 0, 1, AlignLeft);
+    m_mainGrid->addWidget(percussionLabel, 3, 0, 0+1, 1- 1, AlignLeft);
     m_mainGrid->addWidget(m_percussionCheckBox, 3, 2, AlignRight);
 
     m_mainGrid->addWidget(m_bankLabel, 4, 0, AlignLeft);
@@ -142,10 +142,10 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     // Populate channel lists
     //
     for (int i = 0; i < 16; i++) {
-        m_channelValue->insertItem(QString("%1").arg(i + 1));
+        m_channelValue->addItem(QString("%1").arg(i + 1));
     }
 
-    m_channelValue->setSizeLimit(16);
+    m_channelValue->setMaxVisibleItems(16);
 
     // Disable these by default - they are activate by their
     // checkboxes
@@ -194,10 +194,10 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
             this, SLOT(slotSelectChannel(int)));
 
     // don't select any of the options in any dropdown
-    m_programValue->setCurrentItem( -1);
-    m_bankValue->setCurrentItem( -1);
-    m_channelValue->setCurrentItem( -1);
-    m_variationValue->setCurrentItem( -1);
+    m_programValue->setCurrentIndex( -1);
+    m_bankValue->setCurrentIndex( -1);
+    m_channelValue->setCurrentIndex( -1);
+    m_variationValue->setCurrentIndex( -1);
 
     connect(m_rotaryMapper, SIGNAL(mapped(int)),
             this, SLOT(slotControllerChanged(int)));
@@ -273,7 +273,7 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
 
     // Basic parameters
     //
-    m_channelValue->setCurrentItem((int)instrument->getMidiChannel());
+    m_channelValue->setCurrentIndex((int)instrument->getMidiChannel());
 
     // Check for program change
     //
@@ -315,7 +315,7 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
 {
     if (!m_rotaryFrame) {
         m_rotaryFrame = new QFrame(this);
-        m_mainGrid->addMultiCellWidget(m_rotaryFrame, 8, 8, 0, 2, Qt::AlignHCenter);
+        m_mainGrid->addWidget(m_rotaryFrame, 8, 0, 0+1, 2- 1, Qt::AlignHCenter);
         m_rotaryGrid = new QGridLayout(m_rotaryFrame, 10, 3, 8, 1);
         m_rotaryGrid->addItem(new QSpacerItem(10, 4), 0, 1);
     }
@@ -343,7 +343,7 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
 
         // Get the knob colour - only if the colour is non-default (>0)
         //
-        QColor knobColour = Qt::black; // special case for Rotary
+        QColor knobColour = QColor(Qt::black); // special case for Rotary
         if (it->getColourIndex() > 0) {
             Colour c =
                 comp.getGeneralColourMap().getColourByIndex
@@ -366,11 +366,11 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
             int redraw = 0; // 1 -> position, 2 -> all
 
             if (rotary->getMinValue() != it->getMin()) {
-                rotary->setMinValue(it->getMin());
+                rotary->setMinimum(it->getMin());
                 redraw = 1;
             }
             if (rotary->getMaxValue() != it->getMax()) {
-                rotary->setMaxValue(it->getMax());
+                rotary->setMaximum(it->getMax());
                 redraw = 1;
             }
             if (rotary->getKnobColour() != knobColour) {
@@ -396,8 +396,9 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
 
         } else {
 
-            QHBox *hbox = new QHBox(m_rotaryFrame);
-            hbox->setSpacing(8);
+            QWidget *hbox = new QWidget(m_rotaryFrame);
+            QHBoxLayout hboxLayout = new QHBoxLayout;
+            hboxLayout->setSpacing(8);
 
             float smallStep = 1.0;
 
@@ -407,17 +408,10 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
             else if (it->getMax() - it->getMin() < 20)
                 bigStep = 2.0;
 
-            rotary = new Rotary
-                     (hbox,
-                      it->getMin(),
-                      it->getMax(),
-                      smallStep,
-                      bigStep,
-                      it->getDefault(),
-                      20,
-                      Rotary::NoTicks,
-                      false,
-                      it->getDefault() == 64); //!!! hacky
+            rotary = new Rotary( hbox ,
+                      it->getDefault() == 64);
+            hboxLayout->addWidget(rotary);
+            hbox->setLayout(hboxLayout); //!!! hacky
 
             rotary->setKnobColour(knobColour);
 
@@ -600,16 +594,16 @@ MIDIInstrumentParameterPanel::populateBankList()
     for (BankList::const_iterator i = banks.begin();
             i != banks.end(); ++i) {
         m_banks.push_back(*i);
-        m_bankValue->insertItem(strtoqstr(i->getName()));
+        m_bankValue->addItem(strtoqstr(i->getName()));
     }
 
     m_bankValue->setEnabled(m_selectedInstrument->sendsBankSelect());
 
     if (currentBank < 0 && !banks.empty()) {
-        m_bankValue->setCurrentItem(0);
+        m_bankValue->setCurrentIndex(0);
         slotSelectBank(0);
     } else {
-        m_bankValue->setCurrentItem(currentBank);
+        m_bankValue->setCurrentIndex(currentBank);
     }
 }
 
@@ -666,7 +660,7 @@ MIDIInstrumentParameterPanel::populateProgramList()
     for (unsigned int i = 0; i < programs.size(); ++i) {
         std::string programName = programs[i].getName();
         if (programName != "") {
-            m_programValue->insertItem(QString("%1. %2")
+            m_programValue->addItem(QString("%1. %2")
                                        .arg(programs[i].getProgram() + 1)
                                        .arg(strtoqstr(programName)));
             if (m_selectedInstrument->getProgram() == programs[i]) {
@@ -679,17 +673,17 @@ MIDIInstrumentParameterPanel::populateProgramList()
     m_programValue->setEnabled(m_selectedInstrument->sendsProgramChange());
 
     if (currentProgram < 0 && !m_programs.empty()) {
-        m_programValue->setCurrentItem(0);
+        m_programValue->setCurrentIndex(0);
         slotSelectProgram(0);
     } else {
-        m_programValue->setCurrentItem(currentProgram);
+        m_programValue->setCurrentIndex(currentProgram);
 
         // Ensure that stored program change value is same as the one
         // we're now showing (BUG 937371)
         //
         if (!m_programs.empty()) {
             m_selectedInstrument->setProgramChange
-            ((m_programs[m_programValue->currentItem()]).getProgram());
+            ((m_programs[m_programValue->currentIndex()]).getProgram());
         }
     }
 }
@@ -741,7 +735,7 @@ MIDIInstrumentParameterPanel::populateVariationList()
         RG_DEBUG << "MIDIInstrumentParameterPanel::populateVariationList: have " << variations.size() << " variations for msb " << msb << endl;
     }
 
-    m_variationValue->setCurrentItem( -1);
+    m_variationValue->setCurrentIndex( -1);
 
     MidiProgram defaultProgram;
 
@@ -784,11 +778,11 @@ MIDIInstrumentParameterPanel::populateVariationList()
 
         if (programName != "") { // yes, that is how you know whether it exists
             /*
-            	    m_variationValue->insertItem(programName == defaultProgramName ?
+            	    m_variationValue->addItem(programName == defaultProgramName ?
             					 i18n("(default)") :
             					 strtoqstr(programName));
             */
-            m_variationValue->insertItem(QString("%1. %2")
+            m_variationValue->addItem(QString("%1. %2")
                                          .arg(variations[i] + 1)
                                          .arg(strtoqstr(programName)));
             if (m_selectedInstrument->getProgram() == program) {
@@ -799,10 +793,10 @@ MIDIInstrumentParameterPanel::populateVariationList()
     }
 
     if (currentVariation < 0 && !m_variations.empty()) {
-        m_variationValue->setCurrentItem(0);
+        m_variationValue->setCurrentIndex(0);
         slotSelectVariation(0);
     } else {
-        m_variationValue->setCurrentItem(currentVariation);
+        m_variationValue->setCurrentIndex(currentVariation);
     }
 
     if (m_variations.size() < 2) {

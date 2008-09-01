@@ -20,7 +20,7 @@
 
 #include "base/Device.h"
 #include "base/Studio.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden

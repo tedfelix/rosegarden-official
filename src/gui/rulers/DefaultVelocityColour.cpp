@@ -19,7 +19,7 @@
 #include "DefaultVelocityColour.h"
 
 #include "gui/general/GUIPalette.h"
-#include <qcolor.h>
+#include <QColor>
 #include "VelocityColour.h"
 
 

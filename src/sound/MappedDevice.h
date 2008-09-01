@@ -15,7 +15,7 @@
 #include <string>
 #include <vector>
 
-#include <qdatastream.h>
+#include <QDataStream>
 
 #include "Device.h"
 #include "MidiDevice.h"

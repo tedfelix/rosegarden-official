@@ -27,14 +27,14 @@
 #include "DefaultVelocityColour.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/HZoomable.h"
-#include <qfont.h>
-#include <qfontmetrics.h>
-#include <qpainter.h>
-#include <qrect.h>
-#include <qsize.h>
-#include <qstring.h>
-#include <qtooltip.h>
-#include <qwidget.h>
+#include <QFont>
+#include <QFontMetrics>
+#include <QPainter>
+#include <QRect>
+#include <QSize>
+#include <QString>
+#include <QToolTip>
+#include <QWidget>
 
 
 namespace Rosegarden

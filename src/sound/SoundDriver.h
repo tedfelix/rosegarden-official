@@ -16,7 +16,7 @@
 #include <string>
 #include <vector>
 #include <list>
-#include <qstringlist.h>
+#include <QStringList>
 
 #include "Device.h"
 #include "MappedComposition.h"

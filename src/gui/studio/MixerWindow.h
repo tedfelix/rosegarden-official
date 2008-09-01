@@ -25,7 +25,7 @@
 
 class QWidget;
 class QCloseEvent;
-class QAccel;
+class QShortcut;
 
 
 namespace Rosegarden
@@ -41,7 +41,7 @@ class MixerWindow: public KMainWindow
 
 public:
     MixerWindow(QWidget *parent, RosegardenGUIDoc *document);
-    QAccel* getAccelerators() { return m_accelerators; }
+    QShortcut* getShortcuterators() { return m_shortcuterators; }
 
 signals:
     void closing();
@@ -60,7 +60,7 @@ protected:
     Studio *m_studio;
     InstrumentId m_currentId;
 
-    QAccel *m_accelerators;
+    QShortcut *m_shortcuterators;
 
 };
 

@@ -22,7 +22,7 @@
 #include "base/Colour.h"
 #include "document/ConfigGroups.h"
 #include <kconfig.h>
-#include <qcolor.h>
+#include <QColor>
 
 
 namespace Rosegarden
@@ -52,10 +52,10 @@ QColor GUIPalette::convertColour(const Colour& input)
 
 GUIPalette::GUIPalette()
 {
-    m_defaultsMap[ActiveRecordTrack] = Qt::red;
+    m_defaultsMap[ActiveRecordTrack] = QColor(Qt::red);
 
     m_defaultsMap[SegmentCanvas] = QColor(230, 230, 230);
-    m_defaultsMap[SegmentBorder] = Qt::black;
+    m_defaultsMap[SegmentBorder] = QColor(Qt::black);
 
     // 1.0 colors
     //    m_defaultsMap[RecordingInternalSegmentBlock] = QColor(255, 182, 193);
@@ -67,22 +67,22 @@ GUIPalette::GUIPalette()
     // audio recording preview (pale red)
     m_defaultsMap[RecordingAudioSegmentBlock] = QColor(255, 182, 193);
 
-    m_defaultsMap[RecordingSegmentBorder] = Qt::black;
+    m_defaultsMap[RecordingSegmentBorder] = QColor(Qt::black);
 
     m_defaultsMap[RepeatSegmentBorder] = QColor(130, 133, 170);
 
     m_defaultsMap[SegmentAudioPreview] = QColor(39, 71, 22);
-    m_defaultsMap[SegmentInternalPreview] = Qt::white;
-    m_defaultsMap[SegmentLabel] = Qt::black;
-    m_defaultsMap[SegmentSplitLine] = Qt::black;
+    m_defaultsMap[SegmentInternalPreview] = QColor(Qt::white);
+    m_defaultsMap[SegmentLabel] = QColor(Qt::black);
+    m_defaultsMap[SegmentSplitLine] = QColor(Qt::black);
 
-    m_defaultsMap[MatrixElementBorder] = Qt::black;
+    m_defaultsMap[MatrixElementBorder] = QColor(Qt::black);
     m_defaultsMap[MatrixElementBlock] = QColor(98, 128, 232);
-    m_defaultsMap[MatrixOverlapBlock] = Qt::black;
+    m_defaultsMap[MatrixOverlapBlock] = QColor(Qt::black);
 
     m_defaultsMap[LoopRulerBackground] = QColor(120, 120, 120);
-    m_defaultsMap[LoopRulerForeground] = Qt::white;
-    m_defaultsMap[LoopHighlight] = Qt::white;
+    m_defaultsMap[LoopRulerForeground] = QColor(Qt::white);
+    m_defaultsMap[LoopHighlight] = QColor(Qt::white);
 
     m_defaultsMap[TempoBase] = QColor(197, 211, 125);
 
@@ -90,13 +90,13 @@ GUIPalette::GUIPalette()
     //    m_defaultsMap[TextRulerBackground] = QColor(120, 90, 238, QColor::Hsv);
     //    m_defaultsMap[TextRulerBackground] = QColor(210, 220, 140);
     m_defaultsMap[TextRulerBackground] = QColor(226, 232, 187);
-    m_defaultsMap[TextRulerForeground] = Qt::white;
+    m_defaultsMap[TextRulerForeground] = QColor(Qt::white);
 
     m_defaultsMap[ChordNameRulerBackground] = QColor(230, 230, 230);
-    m_defaultsMap[ChordNameRulerForeground] = Qt::black;
+    m_defaultsMap[ChordNameRulerForeground] = QColor(Qt::black);
 
     m_defaultsMap[RawNoteRulerBackground] = QColor(240, 240, 240);
-    m_defaultsMap[RawNoteRulerForeground] = Qt::black;
+    m_defaultsMap[RawNoteRulerForeground] = QColor(Qt::black);
 
     m_defaultsMap[LevelMeterGreen] = QColor(0, 200, 0);
     m_defaultsMap[LevelMeterOrange] = QColor(255, 165, 0);
@@ -109,14 +109,14 @@ GUIPalette::GUIPalette()
     //    m_defaultsMap[LevelMeterSolidRed] = QColor(255, 50, 50);
     m_defaultsMap[LevelMeterSolidRed] = QColor(255, 0, 0);
 
-    m_defaultsMap[BarLine] = Qt::black;
+    m_defaultsMap[BarLine] = QColor(Qt::black);
     m_defaultsMap[BarLineIncorrect] = QColor(211, 0, 31);
     m_defaultsMap[BeatLine] = QColor(100, 100, 100);
     m_defaultsMap[SubBeatLine] = QColor(212, 212, 212);
     m_defaultsMap[StaffConnectingLine] = QColor(192, 192, 192);
     m_defaultsMap[StaffConnectingTerminatingLine] = QColor(128, 128, 128);
 
-    m_defaultsMap[Pointer] = Qt::darkBlue;
+    m_defaultsMap[Pointer] = QColor(Qt::darkBlue);
     m_defaultsMap[PointerRuler] = QColor(100, 100, 100);
 
     m_defaultsMap[InsertCursor] = QColor(160, 104, 186);
@@ -144,12 +144,12 @@ GUIPalette::GUIPalette()
 
     m_defaultsMap[TextLilyPondDirectiveBackground] = QColor(95, 157, 87);
 
-    m_defaultsMap[AudioCountdownBackground] = Qt::darkGray;
-    m_defaultsMap[AudioCountdownForeground] = Qt::red;
+    m_defaultsMap[AudioCountdownBackground] = QColor(Qt::darkGray);
+    m_defaultsMap[AudioCountdownForeground] = QColor(Qt::red);
 
-//    m_defaultsMap[RotaryFloatBackground] = Qt::cyan;
+//    m_defaultsMap[RotaryFloatBackground] = QColor(Qt::cyan);
     m_defaultsMap[RotaryFloatBackground] = QColor(182, 222, 255);
-    m_defaultsMap[RotaryFloatForeground] = Qt::black;
+    m_defaultsMap[RotaryFloatForeground] = QColor(Qt::black);
 
     m_defaultsMap[RotaryPastelBlue] = QColor(205, 212, 255);
     m_defaultsMap[RotaryPastelRed] = QColor(255, 168, 169);
@@ -167,7 +167,7 @@ GUIPalette::GUIPalette()
 
     m_defaultsMap[MarkerBackground] = QColor(185, 255, 248);
 
-    m_defaultsMap[QuickMarker] = Qt::red;
+    m_defaultsMap[QuickMarker] = QColor(Qt::red);
 
     //    m_defaultsMap[MuteTrackLED] = QColor(218, 190, 230, QColor::Hsv);
     m_defaultsMap[MuteTrackLED] = QColor(211, 194, 238, QColor::Hsv);

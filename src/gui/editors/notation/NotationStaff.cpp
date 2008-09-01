@@ -16,6 +16,10 @@
 */
 
 
+#include <Q3Canvas>
+#include <Q3CanvasItem>
+#include <Q3CanvasPixmap>
+#include <Q3CanvasRectangle>
 #include "NotationStaff.h"
 #include "misc/Debug.h"
 #include <kapplication.h>
@@ -58,15 +62,15 @@
 #include <kconfig.h>
 #include <kmessagebox.h>
 #include <qcanvas.h>
-#include <qpainter.h>
-#include <qpoint.h>
-#include <qrect.h>
+#include <QPainter>
+#include <QPoint>
+#include <QRect>
 
 
 namespace Rosegarden
 {
 
-NotationStaff::NotationStaff(QCanvas *canvas, Segment *segment,
+NotationStaff::NotationStaff(Q3Canvas *canvas, Segment *segment,
                              SnapGrid *snapGrid, int id,
                              NotationView *view,
                              std::string fontName, int resolution) :
@@ -141,7 +145,7 @@ NotationStaff::insertTimeSignature(double layoutX,
         return ;
 
     m_notePixmapFactory->setSelected(false);
-    QCanvasPixmap *pixmap = m_notePixmapFactory->makeTimeSigPixmap(timeSig);
+    Q3CanvasPixmap *pixmap = m_notePixmapFactory->makeTimeSigPixmap(timeSig);
     QCanvasTimeSigSprite *sprite =
         new QCanvasTimeSigSprite(layoutX, pixmap, m_canvas);
 
@@ -194,7 +198,7 @@ NotationStaff::insertRepeatedClefAndKey(double layoutX, int barNo)
         LinedStaffCoords coords =
             getCanvasCoordsForLayoutCoords(layoutX + dx, layoutY);
 
-        QCanvasPixmap *pixmap = m_notePixmapFactory->makeClefPixmap(clef);
+        Q3CanvasPixmap *pixmap = m_notePixmapFactory->makeClefPixmap(clef);
 
         QCanvasNonElementSprite *sprite =
             new QCanvasNonElementSprite(pixmap, m_canvas);
@@ -213,7 +217,7 @@ NotationStaff::insertRepeatedClefAndKey(double layoutX, int barNo)
         LinedStaffCoords coords =
             getCanvasCoordsForLayoutCoords(layoutX + dx, layoutY);
 
-        QCanvasPixmap *pixmap = m_notePixmapFactory->makeKeyPixmap(key, clef);
+        Q3CanvasPixmap *pixmap = m_notePixmapFactory->makeKeyPixmap(key, clef);
 
         QCanvasNonElementSprite *sprite =
             new QCanvasNonElementSprite(pixmap, m_canvas);
@@ -235,10 +239,10 @@ NotationStaff::insertRepeatedClefAndKey(double layoutX, int barNo)
     	LinedStaffCoords coords =
     	    getCanvasCoordsForLayoutCoords(layoutX, layoutY);
         
-    	QCanvasRectangle *rect = new QCanvasRectangle(coords.first, coords.second,
+    	Q3CanvasRectangle *rect = new Q3CanvasRectangle(coords.first, coords.second,
     						      dx, h, m_canvas);
-    	rect->setPen(Qt::black);
-    	rect->setBrush(Qt::white);
+    	rect->setPen(QColor(Qt::black));
+    	rect->setBrush(QColor(Qt::white));
     	rect->setZ(1);
     	rect->show();
      
@@ -269,7 +273,7 @@ NotationStaff::drawStaffName()
         getSegment().getComposition()->
         getTrackById(getSegment().getTrack())->getLabel();
 
-    QCanvasPixmap *map =
+    Q3CanvasPixmap *map =
         m_notePixmapFactory->makeTextPixmap
         (Text(m_staffNameText, Text::StaffName));
 
@@ -935,7 +939,7 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
 
     try {
 
-        QCanvasPixmap *pixmap = 0;
+        Q3CanvasPixmap *pixmap = 0;
 
         m_notePixmapFactory->setSelected(selected);
         m_notePixmapFactory->setShaded(invisible);
@@ -1385,7 +1389,7 @@ NotationStaff::setPainterClipping(QPainter *painter, double lx, int ly,
 }
 
 void
-NotationStaff::setPixmap(NotationElement *elt, QCanvasPixmap *pixmap, int z,
+NotationStaff::setPixmap(NotationElement *elt, Q3CanvasPixmap *pixmap, int z,
                          FitPolicy policy)
 {
     double layoutX = elt->getLayoutX();
@@ -1401,7 +1405,7 @@ NotationStaff::setPixmap(NotationElement *elt, QCanvasPixmap *pixmap, int z,
         double canvasX = coords.first;
         int canvasY = coords.second;
 
-        QCanvasItem *item = 0;
+        Q3CanvasItem *item = 0;
 
         if (m_pageMode == LinearMode || policy == PretendItFittedAllAlong) {
 
@@ -1425,10 +1429,10 @@ NotationStaff::setPixmap(NotationElement *elt, QCanvasPixmap *pixmap, int z,
                         PixmapFunctions::splitPixmap(*pixmap,
                                                      int(rightMargin - canvasX));
 
-                    QCanvasPixmap *leftCanvasPixmap = new QCanvasPixmap
+                    Q3CanvasPixmap *leftCanvasPixmap = new Q3CanvasPixmap
                                                       (split.first, QPoint(pixmap->offsetX(), pixmap->offsetY()));
 
-                    QCanvasPixmap *rightCanvasPixmap = new QCanvasPixmap
+                    Q3CanvasPixmap *rightCanvasPixmap = new Q3CanvasPixmap
                                                        (split.second, QPoint(0, pixmap->offsetY()));
 
                     item = new QCanvasNotationSprite(*elt, leftCanvasPixmap, m_canvas);
@@ -1729,18 +1733,18 @@ NotationStaff::renderNote(ViewElementList::iterator &vli)
         // The normal on-screen case
 
         bool collision = false;
-        QCanvasItem * haloItem = 0;
+        Q3CanvasItem * haloItem = 0;
         if (m_showCollisions) {
             collision = elt->isColliding();
             if (collision) {
                 // Make collision halo
-                QCanvasPixmap *haloPixmap = factory->makeNoteHaloPixmap(params);
+                Q3CanvasPixmap *haloPixmap = factory->makeNoteHaloPixmap(params);
                 haloItem = new QCanvasNotationSprite(*elt, haloPixmap, m_canvas);
                 haloItem->setZ(-1);
             }
         }
 
-        QCanvasPixmap *pixmap = factory->makeNotePixmap(params);
+        Q3CanvasPixmap *pixmap = factory->makeNotePixmap(params);
 
         int z = 0;
         if (factory->isSelected())

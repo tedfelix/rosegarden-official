@@ -21,7 +21,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include "gui/editors/notation/NoteStyle.h"
-#include <qstring.h>
+#include <QString>
 #include <klocale.h>
 
 

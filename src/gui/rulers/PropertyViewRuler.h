@@ -21,10 +21,10 @@
 
 #include "base/PropertyName.h"
 #include "gui/general/HZoomable.h"
-#include <qfont.h>
-#include <qfontmetrics.h>
-#include <qsize.h>
-#include <qwidget.h>
+#include <QFont>
+#include <QFontMetrics>
+#include <QSize>
+#include <QWidget>
 
 
 class QPaintEvent;

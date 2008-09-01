@@ -29,7 +29,7 @@
 #include <Composition.h>
 #include "MappedEvent.h"
 #include <set>
-#include <qdatastream.h>
+#include <QDataStream>
 
 namespace Rosegarden
 {

@@ -18,8 +18,9 @@
 #ifndef _RG_LILYPONDOPTIONSDIALOG_H_
 #define _RG_LILYPONDOPTIONSDIALOG_H_
 
-#include <kdialogbase.h>
-#include <qstring.h>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QString>
 
 #include "gui/configuration/HeadersConfigurationPage.h"
 
@@ -35,12 +36,12 @@ namespace Rosegarden
 class RosegardenGUIDoc;
 class HeadersConfigurationPage;
 
-class LilyPondOptionsDialog : public KDialogBase
+class LilyPondOptionsDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    LilyPondOptionsDialog(QWidget *parent,
+    LilyPondOptionsDialog(QDialogButtonBox::QWidget *parent,
 			  RosegardenGUIDoc *doc,
                           QString windowCaption = "",
                           QString heading = "");

@@ -19,8 +19,8 @@
 #ifndef _RG_PREVIEWRECT_H_
 #define _RG_PREVIEWRECT_H_
 
-#include <qcolor.h>
-#include <qrect.h>
+#include <QColor>
+#include <QRect>
 #include <vector>
 
 

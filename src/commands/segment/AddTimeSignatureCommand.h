@@ -20,8 +20,8 @@
 #define _RG_ADDTIMESIGNATURECOMMAND_H_
 
 #include "base/NotationTypes.h"
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include "base/Event.h"
 #include <klocale.h>
 
@@ -34,7 +34,7 @@ namespace Rosegarden
 class Composition;
 
 
-class AddTimeSignatureCommand : public KNamedCommand
+class AddTimeSignatureCommand : public NamedCommand
 {
 public:
     AddTimeSignatureCommand(Composition *composition,

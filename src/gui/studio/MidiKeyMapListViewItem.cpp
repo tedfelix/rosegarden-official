@@ -22,7 +22,7 @@
 #include "MidiBankListViewItem.h"
 #include "base/Device.h"
 #include <klocale.h>
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden

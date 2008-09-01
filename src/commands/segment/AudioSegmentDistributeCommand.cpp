@@ -25,7 +25,7 @@
 #include "base/Segment.h"
 #include "base/Selection.h"
 #include "sound/AudioFile.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
@@ -35,7 +35,7 @@ AudioSegmentDistributeCommand::AudioSegmentDistributeCommand(
     Composition *comp,
     SegmentSelection &inputSelection,
     Segment *audioSegment):
-        KNamedCommand(getGlobalName()),
+        NamedCommand(getGlobalName()),
         m_composition(comp),
         m_selection(inputSelection),
         m_audioFile(0),
@@ -47,7 +47,7 @@ AudioSegmentDistributeCommand::AudioSegmentDistributeCommand(
     Composition *comp,
     SegmentSelection &inputSelection,
     AudioFile *audioFile):
-        KNamedCommand(getGlobalName()),
+        NamedCommand(getGlobalName()),
         m_composition(comp),
         m_selection(inputSelection),
         m_audioFile(audioFile),

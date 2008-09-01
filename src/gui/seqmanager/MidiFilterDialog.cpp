@@ -24,31 +24,38 @@
 #include "document/RosegardenGUIDoc.h"
 #include "gui/seqmanager/SequenceManager.h"
 #include "sound/MappedEvent.h"
-#include <kdialogbase.h>
-#include <qbuttongroup.h>
-#include <qcheckbox.h>
-#include <qhbox.h>
-#include <qwidget.h>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QGroupBox>
+#include <QCheckBox>
+#include <QWidget>
+#include <QHBoxLayout>
 
 
 namespace Rosegarden
 {
 
-MidiFilterDialog::MidiFilterDialog(QWidget *parent,
+MidiFilterDialog::MidiFilterDialog(QDialogButtonBox::QWidget *parent,
                                    RosegardenGUIDoc *doc):
-        KDialogBase(parent, 0, true, i18n("Modify MIDI filters..."),
-                    Ok | Apply | Close | Help),
+        QDialog(parent),
         m_doc(doc),
         m_modified(true)
 {
     setHelp("studio-midi-filters");
 
-    QHBox *hBox = makeHBoxMainWidget();
+    setModal(true);
+    setWindowTitle(i18n("Modify MIDI filters..."));
 
-    m_thruBox =
-        new QButtonGroup(1,
-                         Qt::Horizontal,
-                         i18n("THRU events to ignore"), hBox);
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
+    QWidget *hBox = new QWidget(this);
+    QHBoxLayout hBoxLayout = new QHBoxLayout;
+    metagrid->addWidget(hBox, 0, 0);
+
+
+    m_thruBox = new QGroupBox(
+                         i18n("THRU events to ignore"), hBox );
+    hBoxLayout->addWidget(m_thruBox);
 
     QCheckBox *noteThru = new QCheckBox(i18n("Note"), m_thruBox);
     QCheckBox *progThru = new QCheckBox(i18n("Program Change"), m_thruBox);
@@ -81,10 +88,10 @@ MidiFilterDialog::MidiFilterDialog(QWidget *parent,
     if (thruFilter & MappedEvent::MidiSystemMessage)
         sysThru->setChecked(true);
 
-    m_recordBox =
-        new QButtonGroup(1,
-                         Qt::Horizontal,
-                         i18n("RECORD events to ignore"), hBox);
+    m_recordBox = new QGroupBox(
+                         i18n("RECORD events to ignore"), hBox );
+    hBoxLayout->addWidget(m_recordBox);
+    hBox->setLayout(hBoxLayout);
 
     QCheckBox *noteRecord = new QCheckBox(i18n("Note"), m_recordBox);
     QCheckBox *progRecord = new QCheckBox(i18n("Program Change"), m_recordBox);
@@ -126,6 +133,11 @@ MidiFilterDialog::MidiFilterDialog(QWidget *parent,
             this, SLOT(slotSetModified()));
 
     setModified(false);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Apply | QDialogButtonBox::Close | QDialogButtonBox::Help);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 void

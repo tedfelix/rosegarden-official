@@ -17,7 +17,7 @@
 
 
 #include "ControlParameterEditDialog.h"
-#include <qlayout.h>
+#include <QLayout>
 
 #include <klocale.h>
 #include "misc/Debug.h"
@@ -28,18 +28,19 @@
 #include "base/Event.h"
 #include "base/MidiTypes.h"
 #include "document/RosegardenGUIDoc.h"
-#include <kcombobox.h>
-#include <kdialogbase.h>
-#include <qcolor.h>
-#include <qframe.h>
-#include <qgroupbox.h>
-#include <qlabel.h>
-#include <qlineedit.h>
-#include <qpixmap.h>
-#include <qspinbox.h>
-#include <qstring.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <QComboBox>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QColor>
+#include <QFrame>
+#include <QGroupBox>
+#include <QLabel>
+#include <QLineEdit>
+#include <QPixmap>
+#include <QSpinBox>
+#include <QString>
+#include <QWidget>
+#include <QVBoxLayout>
 
 
 namespace Rosegarden
@@ -51,17 +52,25 @@ ControlParameterEditDialog::ControlParameterEditDialog(
     QWidget *parent,
     ControlParameter *control,
     RosegardenGUIDoc *doc):
-        KDialogBase(parent, 0, true,
-                    i18n("Edit Control Parameter"), Ok | Cancel),
+        QDialog(parent),
         m_doc(doc),
         m_control(control)
 {
     m_dialogControl = *control; // copy in the ControlParameter
 
-    QVBox *vbox = makeVBoxMainWidget();
+    setModal(true);
+    setWindowTitle(i18n("Edit Control Parameter"));
 
-    QGroupBox *groupBox = new QGroupBox
-                          (1, Horizontal, i18n("Control Event Properties"), vbox);
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
+    QWidget *vbox = new QWidget(this);
+    QVBoxLayout vboxLayout = new QVBoxLayout;
+    metagrid->addWidget(vbox, 0, 0);
+
+
+    QGroupBox *groupBox = new QGroupBox( i18n("Control Event Properties"), vbox );
+    vboxLayout->addWidget(groupBox);
+    vbox->setLayout(vboxLayout);
 
     QFrame *frame = new QFrame(groupBox);
 
@@ -72,12 +81,12 @@ ControlParameterEditDialog::ControlParameterEditDialog(
     layout->addWidget(m_nameEdit, 0, 1);
 
     layout->addWidget(new QLabel(i18n("Type:"), frame), 1, 0);
-    m_typeCombo = new KComboBox(frame);
-    layout->addMultiCellWidget(m_typeCombo, 1, 1, 1, 2);
+    m_typeCombo = new QComboBox(frame);
+    layout->addWidget(m_typeCombo, 1, 1, 1, 2);
 
     layout->addWidget(new QLabel(i18n("Description:"), frame), 2, 0);
     m_description = new QLineEdit(frame);
-    layout->addMultiCellWidget(m_description, 2, 2, 1, 2);
+    layout->addWidget(m_description, 2, 1, 1, 2);
 
     // hex value alongside decimal value
     m_hexValue = new QLabel(frame);
@@ -89,23 +98,23 @@ ControlParameterEditDialog::ControlParameterEditDialog(
 
     layout->addWidget(new QLabel(i18n("Minimum value:"), frame), 4, 0);
     m_minBox = new QSpinBox(frame);
-    layout->addMultiCellWidget(m_minBox, 4, 4, 1, 2);
+    layout->addWidget(m_minBox, 4, 1, 1, 2);
 
     layout->addWidget(new QLabel(i18n("Maximum value:"), frame), 5, 0);
     m_maxBox = new QSpinBox(frame);
-    layout->addMultiCellWidget(m_maxBox, 5, 5, 1, 2);
+    layout->addWidget(m_maxBox, 5, 1, 1, 2);
 
     layout->addWidget(new QLabel(i18n("Default value:"), frame), 6, 0);
     m_defaultBox = new QSpinBox(frame);
-    layout->addMultiCellWidget(m_defaultBox, 6, 6, 1, 2);
+    layout->addWidget(m_defaultBox, 6, 1, 1, 2);
 
     layout->addWidget(new QLabel(i18n("Color:"), frame), 7, 0);
-    m_colourCombo = new KComboBox(frame);
-    layout->addMultiCellWidget(m_colourCombo, 7, 7, 1, 2);
+    m_colourCombo = new QComboBox(frame);
+    layout->addWidget(m_colourCombo, 7, 1, 1, 2);
 
     layout->addWidget(new QLabel(i18n("Instrument Parameter Box position:"), frame), 8, 0);
-    m_ipbPosition = new KComboBox(frame);
-    layout->addMultiCellWidget(m_ipbPosition, 8, 8, 1, 2);
+    m_ipbPosition = new QComboBox(frame);
+    layout->addWidget(m_ipbPosition, 8, 1, 1, 2);
 
     connect(m_nameEdit, SIGNAL(textChanged(const QString&)),
             SLOT(slotNameChanged(const QString&)));
@@ -138,24 +147,24 @@ ControlParameterEditDialog::ControlParameterEditDialog(
     //m_description->selectAll();
 
     // set limits
-    m_controllerBox->setMinValue(0);
-    m_controllerBox->setMaxValue(127);
+    m_controllerBox->setMinimum(0);
+    m_controllerBox->setMaximum(127);
 
-    m_minBox->setMinValue(INT_MIN);
-    m_minBox->setMaxValue(INT_MAX);
+    m_minBox->setMinimum(INT_MIN);
+    m_minBox->setMaximum(INT_MAX);
 
-    m_maxBox->setMinValue(INT_MIN);
-    m_maxBox->setMaxValue(INT_MAX);
+    m_maxBox->setMinimum(INT_MIN);
+    m_maxBox->setMaximum(INT_MAX);
 
-    m_defaultBox->setMinValue(INT_MIN);
-    m_defaultBox->setMaxValue(INT_MAX);
+    m_defaultBox->setMinimum(INT_MIN);
+    m_defaultBox->setMaximum(INT_MAX);
 
     // populate combos
-    m_typeCombo->insertItem(strtoqstr(Controller::EventType));
-    m_typeCombo->insertItem(strtoqstr(PitchBend::EventType));
+    m_typeCombo->addItem(strtoqstr(Controller::EventType));
+    m_typeCombo->addItem(strtoqstr(PitchBend::EventType));
     /*
-    m_typeCombo->insertItem(strtoqstr(KeyPressure::EventType));
-    m_typeCombo->insertItem(strtoqstr(ChannelPressure::EventType));
+    m_typeCombo->addItem(strtoqstr(KeyPressure::EventType));
+    m_typeCombo->addItem(strtoqstr(ChannelPressure::EventType));
     */
 
     // Populate colour combo
@@ -168,27 +177,32 @@ ControlParameterEditDialog::ControlParameterEditDialog(
     for (it = colourMap.begin(); it != colourMap.end(); ++it) {
         Colour c = it->second.first;
         colourPixmap.fill(QColor(c.getRed(), c.getGreen(), c.getBlue()));
-        m_colourCombo->insertItem(colourPixmap, strtoqstr(it->second.second));
+        m_colourCombo->addItem(colourPixmap, strtoqstr(it->second.second));
     }
 
     // Populate IPB position combo
     //
-    m_ipbPosition->insertItem(notShowing);
+    m_ipbPosition->addItem(notShowing);
     for (unsigned int i = 0; i < 32; i++)
-        m_ipbPosition->insertItem(QString("%1").arg(i));
+        m_ipbPosition->addItem(QString("%1").arg(i));
 
     if (m_control->getType() == Controller::EventType)
-        m_typeCombo->setCurrentItem(0);
+        m_typeCombo->setCurrentIndex(0);
     else if (m_control->getType() == PitchBend::EventType)
-        m_typeCombo->setCurrentItem(1);
+        m_typeCombo->setCurrentIndex(1);
     /*
     else if (m_control->getType() == KeyPressure::EventType)
-        m_typeCombo->setCurrentItem(2);
+        m_typeCombo->setCurrentIndex(2);
     else if (m_control->getType() == ChannelPressure::EventType)
-        m_typeCombo->setCurrentItem(3);
+        m_typeCombo->setCurrentIndex(3);
         */
 
     populate();
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 void
@@ -214,10 +228,10 @@ ControlParameterEditDialog::populate()
         if (m_control->getColourIndex() == it->first)
             setItem = pos++;
 
-    m_colourCombo->setCurrentItem(setItem);
+    m_colourCombo->setCurrentIndex(setItem);
 
     // set combo position
-    m_ipbPosition->setCurrentItem(m_control->getIPBPosition() + 1);
+    m_ipbPosition->setCurrentIndex(m_control->getIPBPosition() + 1);
 
     // If the type has changed and there are no defaults then we have to
     // supply some.

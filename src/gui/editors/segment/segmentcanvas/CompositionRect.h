@@ -19,12 +19,12 @@
 #ifndef _RG_COMPOSITIONRECT_H_
 #define _RG_COMPOSITIONRECT_H_
 
-#include <qbrush.h>
-#include <qcolor.h>
-#include <qpen.h>
-#include <qrect.h>
-#include <qstring.h>
-#include <qvaluevector.h>
+#include <QBrush>
+#include <QColor>
+#include <QPen>
+#include <QRect>
+#include <QString>
+#include <QVector>
 
 
 class QSize;
@@ -37,7 +37,7 @@ namespace Rosegarden
 class CompositionRect : public QRect
 {
 public:
-    typedef QValueVector<int> repeatmarks;
+    typedef QVector<int> repeatmarks;
 
     friend bool operator<(const CompositionRect&, const CompositionRect&);
 

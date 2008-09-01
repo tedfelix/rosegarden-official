@@ -16,6 +16,11 @@
 */
 
 
+#include <Q3Canvas>
+#include <Q3CanvasItem>
+#include <Q3CanvasItemList>
+#include <Q3CanvasText>
+#include <Q3CanvasView>
 #include "NotationCanvasView.h"
 #include "misc/Debug.h"
 
@@ -28,21 +33,21 @@
 #include "NotationProperties.h"
 #include "NotationStaff.h"
 #include <qcanvas.h>
-#include <qcolor.h>
-#include <qpainter.h>
-#include <qpen.h>
-#include <qpoint.h>
-#include <qrect.h>
-#include <qsize.h>
-#include <qstring.h>
-#include <qwidget.h>
+#include <QColor>
+#include <QPainter>
+#include <QPen>
+#include <QPoint>
+#include <QRect>
+#include <QSize>
+#include <QString>
+#include <QWidget>
 
 
 namespace Rosegarden
 {
 
 NotationCanvasView::NotationCanvasView(const LinedStaffManager &staffmgr,
-                                       QCanvas *viewing, QWidget *parent,
+                                       Q3Canvas *viewing, QWidget *parent,
                                        const char *name, WFlags f) :
         RosegardenCanvasView(viewing, parent, name, f),
         m_linedStaffManager(staffmgr),
@@ -155,7 +160,7 @@ void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
     << e->button() << " - state : " << e->state()
     << endl;
 
-    QCanvasItemList itemList = canvas()->collisions(e->pos());
+    Q3CanvasItemList itemList = canvas()->collisions(e->pos());
 
     // We don't want to use m_currentStaff/Height, because we want
     // to make sure the event happens at the point we clicked at
@@ -165,7 +170,7 @@ void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
     NotationStaff *staff = dynamic_cast<NotationStaff *>
                            (m_linedStaffManager.getStaffForCanvasCoords(e->x(), e->y()));
 
-    QCanvasItemList::Iterator it;
+    Q3CanvasItemList::Iterator it;
     NotationElement *clickedNote = 0;
     NotationElement *clickedVagueNote = 0;
     NotationElement *clickedNonNote = 0;
@@ -190,7 +195,7 @@ void NotationCanvasView::contentsMousePressEvent(QMouseEvent *e)
             if (dynamic_cast<QCanvasNonElementSprite *>(*it)) {
                 emit nonNotationItemPressed(e, *it);
                 return ;
-            } else if (dynamic_cast<QCanvasText *>(*it)) {
+            } else if (dynamic_cast<Q3CanvasText *>(*it)) {
                 emit textItemPressed(e, *it);
                 return ;
             }
@@ -269,14 +274,14 @@ void NotationCanvasView::contentsMouseDoubleClickEvent(QMouseEvent* e)
 
 void
 NotationCanvasView::processActiveItems(QMouseEvent* e,
-                                       QCanvasItemList itemList)
+                                       Q3CanvasItemList itemList)
 {
-    QCanvasItem* pressedItem = 0;
-    QCanvasItemList::Iterator it;
+    Q3CanvasItem* pressedItem = 0;
+    Q3CanvasItemList::Iterator it;
 
     for (it = itemList.begin(); it != itemList.end(); ++it) {
 
-        QCanvasItem *item = *it;
+        Q3CanvasItem *item = *it;
         if (item->active() && !pressedItem) {
             NOTATION_DEBUG << "mousepress : got active item\n";
             pressedItem = item;
@@ -401,15 +406,15 @@ NotationCanvasView::getElementAtXCoord(QMouseEvent *e) // any old element
     QRect threshold(e->pos(), QSize(4, 100)); //!!!
     threshold.moveCenter(e->pos());
 
-    QCanvasItemList itemList = canvas()->collisions(threshold);
+    Q3CanvasItemList itemList = canvas()->collisions(threshold);
 
-    QCanvasItemList::Iterator it;
+    Q3CanvasItemList::Iterator it;
     QCanvasNotationSprite* sprite = 0;
 
     for (it = itemList.begin(); it != itemList.end(); ++it)
     {
 
-        QCanvasItem *item = *it;
+        Q3CanvasItem *item = *it;
 
         if ((sprite = dynamic_cast<QCanvasNotationSprite*>(item))) {
             return & (sprite->getNotationElement());
@@ -428,7 +433,7 @@ NotationCanvasView::viewportPaintEvent(QPaintEvent *e)
             ch(e->rect().height())*/; 
     //    NOTATION_DEBUG << "NotationCanvasView::viewportPaintEvent: (" << cx << ","
     //		   << cy << ") size (" << cw << "x" << ch << ")" << endl;
-    QCanvasView::viewportPaintEvent(e);
+    Q3CanvasView::viewportPaintEvent(e);
 
     cx += contentsX();
     cy += contentsY();
@@ -445,7 +450,7 @@ NotationCanvasView::drawContents(QPainter *p, int cx, int cy, int cw, int ch)
         NOTATION_DEBUG << "NotationCanvasView::drawContents: (" << cx << ","
     		   << cy << ") size (" << cw << "x" << ch << ")" << endl;
     */
-    QCanvasView::drawContents(p, cx, cy, cw, ch);
+    Q3CanvasView::drawContents(p, cx, cy, cw, ch);
     /*
         emit renderRequired(std::min(contentsX(), cx),
     			std::max(contentsX() + visibleWidth(), cx + cw));
@@ -462,10 +467,10 @@ NotationCanvasView::slotRenderComplete()
     	ch(m_lastRender.height());
         NOTATION_DEBUG << "NotationCanvasView::slotRenderComplete: (" << cx << ","
     		   << cy << ") size (" << cw << "x" << ch << ")" << endl;
-        QCanvasView::drawContents(&painter, cx, cy, cw, ch);
+        Q3CanvasView::drawContents(&painter, cx, cy, cw, ch);
     */
     QPaintEvent ev(m_lastRender);
-    QCanvasView::viewportPaintEvent(&ev);
+    Q3CanvasView::viewportPaintEvent(&ev);
 }
 
 void

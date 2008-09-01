@@ -23,13 +23,13 @@
 #include "CompositionModel.h"
 #include "CompositionItem.h"
 #include "gui/general/RosegardenScrollView.h"
-#include <qbrush.h>
-#include <qcolor.h>
-#include <qpen.h>
-#include <qpixmap.h>
-#include <qpoint.h>
-#include <qrect.h>
-#include <qstring.h>
+#include <QBrush>
+#include <QColor>
+#include <QPen>
+#include <QPixmap>
+#include <QPoint>
+#include <QRect>
+#include <QString>
 #include "base/Event.h"
 
 
@@ -298,7 +298,7 @@ protected:
     //--------------- Data members ---------------------------------
 
     CompositionModel* m_model;
-    CompositionItem m_currentItem;
+    CompositionItem m_currentIndex;
 
     SegmentTool*    m_tool;
     SegmentToolBox* m_toolBox;

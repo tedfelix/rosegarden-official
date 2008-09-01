@@ -20,9 +20,11 @@
 #define _RG_CANVASCURSOR_H_
 
 
+#include <Q3Canvas>
+#include <Q3CanvasRectangle>
 #include <qcanvas.h>
 
-class QCanvas;
+class Q3Canvas;
 
 
 namespace Rosegarden
@@ -30,10 +32,10 @@ namespace Rosegarden
 
 
 
-class CanvasCursor : public QCanvasRectangle
+class CanvasCursor : public Q3CanvasRectangle
 {
 public:
-    CanvasCursor(QCanvas*, int width);
+    CanvasCursor(Q3Canvas*, int width);
     void updateHeight();
 //     virtual QRect boundingRect() const;
 protected:

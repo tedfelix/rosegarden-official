@@ -17,7 +17,7 @@
 
 
 #include "SimpleEventEditDialog.h"
-#include <qlayout.h>
+#include <QLayout>
 
 #include "base/BaseProperties.h"
 #include "base/Event.h"
@@ -28,33 +28,33 @@
 #include "misc/Strings.h"
 #include "PitchDialog.h"
 #include "TimeDialog.h"
-#include <kcombobox.h>
-#include <kdialogbase.h>
+#include <QComboBox>
+#include <QDialog>
+#include <QDialogButtonBox>
 #include <kfiledialog.h>
 #include <klocale.h>
-#include <qcheckbox.h>
-#include <qdialog.h>
-#include <qfile.h>
-#include <qframe.h>
-#include <qgroupbox.h>
-#include <qlabel.h>
-#include <qlineedit.h>
-#include <qpushbutton.h>
-#include <qspinbox.h>
-#include <qstring.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <QCheckBox>
+#include <QDialog>
+#include <QFile>
+#include <QFrame>
+#include <QGroupBox>
+#include <QLabel>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QSpinBox>
+#include <QString>
+#include <QWidget>
+#include <QVBoxLayout>
 
 
 namespace Rosegarden
 {
 
-SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
+SimpleEventEditDialog::SimpleEventEditDialog(QDialogButtonBox::QWidget *parent,
         RosegardenGUIDoc *doc,
         const Event &event,
         bool inserting) :
-        KDialogBase(parent, 0, true,
-                    i18n(inserting ? "Insert Event" : "Edit Event"), Ok | Cancel),
+        QDialog(parent),
         m_event(event),
         m_doc(doc),
         m_type(event.getType()),
@@ -62,10 +62,18 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
         m_duration(event.getDuration()),
         m_modified(false)
 {
-    QVBox *vbox = makeVBoxMainWidget();
+    setModal(true);
+    setWindowTitle(i18n(inserting ? "Insert Event" : "Edit Event"));
 
-    QGroupBox *groupBox = new QGroupBox
-                          (1, Horizontal, i18n("Event Properties"), vbox);
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
+    QWidget *vbox = new QWidget(this);
+    QVBoxLayout vboxLayout = new QVBoxLayout;
+    metagrid->addWidget(vbox, 0, 0);
+
+
+    QGroupBox *groupBox = new QGroupBox( i18n("Event Properties"), vbox );
+    vboxLayout->addWidget(groupBox);
 
     QFrame *frame = new QFrame(groupBox);
 
@@ -77,22 +85,22 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
 
         m_typeLabel = 0;
 
-        m_typeCombo = new KComboBox(frame);
+        m_typeCombo = new QComboBox(frame);
         layout->addWidget(m_typeCombo, 0, 1);
 
-        m_typeCombo->insertItem(strtoqstr(Note::EventType));
-        m_typeCombo->insertItem(strtoqstr(Controller::EventType));
-        m_typeCombo->insertItem(strtoqstr(KeyPressure::EventType));
-        m_typeCombo->insertItem(strtoqstr(ChannelPressure::EventType));
-        m_typeCombo->insertItem(strtoqstr(ProgramChange::EventType));
-        m_typeCombo->insertItem(strtoqstr(SystemExclusive::EventType));
-        m_typeCombo->insertItem(strtoqstr(PitchBend::EventType));
-        m_typeCombo->insertItem(strtoqstr(Indication::EventType));
-        m_typeCombo->insertItem(strtoqstr(Text::EventType));
-        m_typeCombo->insertItem(strtoqstr(Note::EventRestType));
-        m_typeCombo->insertItem(strtoqstr(Clef::EventType));
-        m_typeCombo->insertItem(strtoqstr(::Rosegarden::Key::EventType));
-        m_typeCombo->insertItem(strtoqstr(Guitar::Chord::EventType));
+        m_typeCombo->addItem(strtoqstr(Note::EventType));
+        m_typeCombo->addItem(strtoqstr(Controller::EventType));
+        m_typeCombo->addItem(strtoqstr(KeyPressure::EventType));
+        m_typeCombo->addItem(strtoqstr(ChannelPressure::EventType));
+        m_typeCombo->addItem(strtoqstr(ProgramChange::EventType));
+        m_typeCombo->addItem(strtoqstr(SystemExclusive::EventType));
+        m_typeCombo->addItem(strtoqstr(PitchBend::EventType));
+        m_typeCombo->addItem(strtoqstr(Indication::EventType));
+        m_typeCombo->addItem(strtoqstr(Text::EventType));
+        m_typeCombo->addItem(strtoqstr(Note::EventRestType));
+        m_typeCombo->addItem(strtoqstr(Clef::EventType));
+        m_typeCombo->addItem(strtoqstr(::Rosegarden::Key::EventType));
+        m_typeCombo->addItem(strtoqstr(Guitar::Chord::EventType));
 
         // Connect up the combos
         //
@@ -143,8 +151,8 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
     connect(m_pitchEditButton, SIGNAL(released()),
             SLOT(slotEditPitch()));
 
-    m_pitchSpinBox->setMinValue(MidiMinValue);
-    m_pitchSpinBox->setMaxValue(MidiMaxValue);
+    m_pitchSpinBox->setMinimum(MidiMinValue);
+    m_pitchSpinBox->setMaximum(MidiMaxValue);
 
     m_controllerLabel = new QLabel(i18n("Controller name:"), frame);
     m_controllerLabelValue = new QLabel(i18n("<none>"), frame);
@@ -161,8 +169,8 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
     connect(m_velocitySpinBox, SIGNAL(valueChanged(int)),
             SLOT(slotVelocityChanged(int)));
 
-    m_velocitySpinBox->setMinValue(MidiMinValue);
-    m_velocitySpinBox->setMaxValue(MidiMaxValue);
+    m_velocitySpinBox->setMinimum(MidiMinValue);
+    m_velocitySpinBox->setMaximum(MidiMaxValue);
 
     m_metaLabel = new QLabel(i18n("Meta string:"), frame);
     layout->addWidget(m_metaLabel, 6, 0);
@@ -181,15 +189,16 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
     connect(m_sysexSaveButton, SIGNAL(released()),
             SLOT(slotSysexSave()));
 
-    m_notationGroupBox = new QGroupBox
-                         (1, Horizontal, i18n("Notation Properties"), vbox);
+    m_notationGroupBox = new QGroupBox( i18n("Notation Properties"), vbox );
+    vboxLayout->addWidget(m_notationGroupBox);
+    vbox->setLayout(vboxLayout);
 
     frame = new QFrame(m_notationGroupBox);
 
     layout = new QGridLayout(frame, 3, 3, 5, 5);
 
     m_lockNotationValues = new QCheckBox(i18n("Lock to changes in performed values"), frame);
-    layout->addMultiCellWidget(m_lockNotationValues, 0, 0, 0, 2);
+    layout->addWidget(m_lockNotationValues, 0, 0, 0- 0+1, 2- 1);
     m_lockNotationValues->setChecked(true);
 
     connect(m_lockNotationValues, SIGNAL(released()),
@@ -220,6 +229,11 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
             SLOT(slotEditNotationDuration()));
 
     setupForEvent();
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 void
@@ -239,8 +253,8 @@ SimpleEventEditDialog::setupForEvent()
     m_velocitySpinBox->blockSignals(true);
     m_metaEdit->blockSignals(true);
 
-    m_pitchSpinBox->setMinValue(MidiMinValue);
-    m_pitchSpinBox->setMaxValue(MidiMaxValue);
+    m_pitchSpinBox->setMinimum(MidiMinValue);
+    m_pitchSpinBox->setMaximum(MidiMaxValue);
 
     // Some common settings
     //
@@ -303,7 +317,7 @@ SimpleEventEditDialog::setupForEvent()
         }
 
         if (m_typeCombo)
-            m_typeCombo->setCurrentItem(0);
+            m_typeCombo->setCurrentIndex(0);
 
     } else if (m_type == Controller::EventType) {
 
@@ -342,7 +356,7 @@ SimpleEventEditDialog::setupForEvent()
         }
 
         if (m_typeCombo)
-            m_typeCombo->setCurrentItem(1);
+            m_typeCombo->setCurrentIndex(1);
 
     } else if (m_type == KeyPressure::EventType) {
 
@@ -380,7 +394,7 @@ SimpleEventEditDialog::setupForEvent()
         }
 
         if (m_typeCombo)
-            m_typeCombo->setCurrentItem(2);
+            m_typeCombo->setCurrentIndex(2);
 
     } else if (m_type == ChannelPressure::EventType) {
 
@@ -410,7 +424,7 @@ SimpleEventEditDialog::setupForEvent()
         }
 
         if (m_typeCombo)
-            m_typeCombo->setCurrentItem(3);
+            m_typeCombo->setCurrentIndex(3);
 
     } else if (m_type == ProgramChange::EventType) {
 
@@ -418,8 +432,8 @@ SimpleEventEditDialog::setupForEvent()
         m_durationSpinBox->hide();
         m_durationEditButton->hide();
 
-        m_pitchSpinBox->setMinValue(MidiMinValue + 1);
-        m_pitchSpinBox->setMaxValue(MidiMaxValue + 1);
+        m_pitchSpinBox->setMinimum(MidiMinValue + 1);
+        m_pitchSpinBox->setMaximum(MidiMaxValue + 1);
 
         m_pitchLabel->show();
         m_pitchLabel->setText(i18n("Program change:"));
@@ -443,7 +457,7 @@ SimpleEventEditDialog::setupForEvent()
         }
 
         if (m_typeCombo)
-            m_typeCombo->setCurrentItem(4);
+            m_typeCombo->setCurrentIndex(4);
 
     } else if (m_type == SystemExclusive::EventType) {
 
@@ -479,7 +493,7 @@ SimpleEventEditDialog::setupForEvent()
         }
 
         if (m_typeCombo)
-            m_typeCombo->setCurrentItem(5);
+            m_typeCombo->setCurrentIndex(5);
 
     } else if (m_type == PitchBend::EventType) {
 
@@ -517,7 +531,7 @@ SimpleEventEditDialog::setupForEvent()
         }
 
         if (m_typeCombo)
-            m_typeCombo->setCurrentItem(6);
+            m_typeCombo->setCurrentIndex(6);
 
     } else if (m_type == Indication::EventType) {
 
@@ -544,7 +558,7 @@ SimpleEventEditDialog::setupForEvent()
         }
 
         if (m_typeCombo)
-            m_typeCombo->setCurrentItem(7);
+            m_typeCombo->setCurrentIndex(7);
 
     } else if (m_type == Text::EventType) {
 
@@ -579,7 +593,7 @@ SimpleEventEditDialog::setupForEvent()
         }
 
         if (m_typeCombo)
-            m_typeCombo->setCurrentItem(8);
+            m_typeCombo->setCurrentIndex(8);
 
     } else if (m_type == Note::EventRestType) {
 
@@ -597,7 +611,7 @@ SimpleEventEditDialog::setupForEvent()
         m_metaEdit->hide();
 
         if (m_typeCombo)
-            m_typeCombo->setCurrentItem(9);
+            m_typeCombo->setCurrentIndex(9);
 
     } else if (m_type == Clef::EventType) {
 
@@ -628,7 +642,7 @@ SimpleEventEditDialog::setupForEvent()
         m_metaEdit->hide();
 
         if (m_typeCombo)
-            m_typeCombo->setCurrentItem(10);
+            m_typeCombo->setCurrentIndex(10);
 
     } else if (m_type == ::Rosegarden::Key::EventType) {
 
@@ -659,7 +673,7 @@ SimpleEventEditDialog::setupForEvent()
         m_metaEdit->hide();
 
         if (m_typeCombo)
-            m_typeCombo->setCurrentItem(11);
+            m_typeCombo->setCurrentIndex(11);
 
     } else if (m_type == Guitar::Chord::EventType) {
 
@@ -692,7 +706,7 @@ SimpleEventEditDialog::setupForEvent()
         }
 
         if (m_typeCombo)
-            m_typeCombo->setCurrentItem(12);
+            m_typeCombo->setCurrentIndex(12);
 
     } else {
 
@@ -1019,7 +1033,7 @@ SimpleEventEditDialog::slotSysexLoad()
         return ;
 
     QFile file(path);
-    file.open(IO_ReadOnly);
+    file.open(QIODevice::ReadOnly);
     std::string s;
     unsigned char c;
     while (((c = (unsigned char)file.getch()) != 0xf0) && (file.status() == IO_Ok))
@@ -1044,7 +1058,7 @@ SimpleEventEditDialog::slotSysexSave()
         return ;
 
     QFile file(path);
-    file.open(IO_WriteOnly);
+    file.open(QIODevice::WriteOnly);
     SystemExclusive sysEx(m_event);
     file.writeBlock(sysEx.getRawData().c_str(), sysEx.getRawData().length());
     file.close();

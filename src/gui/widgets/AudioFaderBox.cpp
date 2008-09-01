@@ -17,10 +17,10 @@
 
 
 #include "AudioFaderBox.h"
-#include <qlayout.h>
+#include <QLayout>
 
 #include <klocale.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include "misc/Debug.h"
 #include "AudioRouteMenu.h"
 #include "AudioVUMeter.h"
@@ -33,17 +33,17 @@
 #include "gui/studio/AudioPluginOSCGUIManager.h"
 #include "Rotary.h"
 #include <kglobal.h>
-#include <qframe.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qobject.h>
-#include <qpixmap.h>
-#include <qpushbutton.h>
-#include <qsignalmapper.h>
-#include <qstring.h>
-#include <qtooltip.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <QFrame>
+#include <QLabel>
+#include <QObject>
+#include <QPixmap>
+#include <QPushButton>
+#include <QSignalMapper>
+#include <QString>
+#include <QToolTip>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 #include "VUMeter.h"
 
 
@@ -87,24 +87,26 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
 
     // VU meter and fader
     //
-    QHBox *faderHbox = new QHBox(this);
+    QWidget *faderHbox = new QWidget(this);
+    QHBoxLayout faderHboxLayout = new QHBoxLayout;
 
-    m_vuMeter = new AudioVUMeter(faderHbox, VUMeter::AudioPeakHoldShort,
-                                 true, true);
+    m_vuMeter = new AudioVUMeter( faderHbox , true);
+    faderHboxLayout->addWidget(m_vuMeter);
 
-    m_recordFader = new Fader(AudioLevel::ShortFader,
-                              20, m_vuMeter->height(), faderHbox);
+    m_recordFader = new Fader( m_vuMeter->height(), faderHbox );
+    faderHboxLayout->addWidget(m_recordFader);
 
     m_recordFader->setOutlineColour(GUIPalette::getColour(GUIPalette::RecordFaderOutline));
 
     delete m_vuMeter; // only used the first one to establish height,
     // actually want it after the record fader in
     // hbox
-    m_vuMeter = new AudioVUMeter(faderHbox, VUMeter::AudioPeakHoldShort,
-                                 true, true);
+    m_vuMeter = new AudioVUMeter( faderHbox , true);
+    faderHboxLayout->addWidget(m_vuMeter);
 
-    m_fader = new Fader(AudioLevel::ShortFader,
-                        20, m_vuMeter->height(), faderHbox);
+    m_fader = new Fader( m_vuMeter->height(), faderHbox );
+    faderHboxLayout->addWidget(m_fader);
+    faderHbox->setLayout(faderHboxLayout);
 
     m_fader->setOutlineColour(GUIPalette::getColour(GUIPalette::PlaybackFaderOutline));
 
@@ -157,7 +159,7 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
 
     QGridLayout *grid = new QGridLayout(this, 3, 6, 4, 4);
 
-    grid->addMultiCellWidget(m_synthButton, 0, 0, 0, 2);
+    grid->addWidget(m_synthButton, 0, 0, 0- 0+1, 2- 1);
 
     if (haveInOut) {
         m_inputLabel = new QLabel(i18n("In:"), this);
@@ -168,8 +170,8 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
         grid->addMultiCellWidget(m_audioOutput->getWidget(), 0, 0, 4, 5);
     }
 
-    grid->addMultiCellWidget(pluginVbox, 2, 2, 0, 2);
-    grid->addMultiCellWidget(faderHbox, 1, 2, 3, 5);
+    grid->addWidget(pluginVbox, 2, 0, 0+1, 2- 1);
+    grid->addWidget(faderHbox, 1, 3, 2, 5- 4);
 
     grid->addWidget(m_synthGUIButton, 1, 0);
     grid->addWidget(m_pan, 1, 2);

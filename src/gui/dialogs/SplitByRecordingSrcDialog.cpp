@@ -17,55 +17,65 @@
 
 
 #include "SplitByRecordingSrcDialog.h"
-#include <qlayout.h>
+#include <QLayout>
 
 #include <klocale.h>
 #include "misc/Strings.h"
 #include "base/MidiDevice.h"
 #include "document/RosegardenGUIDoc.h"
-#include <kcombobox.h>
-#include <kdialogbase.h>
-#include <qframe.h>
-#include <qgroupbox.h>
-#include <qlabel.h>
-#include <qsizepolicy.h>
-#include <qstring.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <QComboBox>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QFrame>
+#include <QGroupBox>
+#include <QLabel>
+#include <QSizePolicy>
+#include <QString>
+#include <QWidget>
+#include <QVBoxLayout>
 
 
 namespace Rosegarden
 {
 
-SplitByRecordingSrcDialog::SplitByRecordingSrcDialog(QWidget *parent, RosegardenGUIDoc *doc) :
-        KDialogBase(parent, 0, true, i18n("Split by Recording Source"), Ok | Cancel )
+SplitByRecordingSrcDialog::SplitByRecordingSrcDialog(QDialogButtonBox::QWidget *parent, RosegardenGUIDoc *doc) :
+        QDialog(parent)
 {
-    QVBox *vBox = makeVBoxMainWidget();
+    setModal(true);
+    setWindowTitle(i18n("Split by Recording Source"));
 
-    QGroupBox *groupBox = new QGroupBox
-                          (1, Horizontal, i18n("Recording Source"), vBox);
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
+    QWidget *vBox = new QWidget(this);
+    QVBoxLayout vBoxLayout = new QVBoxLayout;
+    metagrid->addWidget(vBox, 0, 0);
+
+
+    QGroupBox *groupBox = new QGroupBox( i18n("Recording Source"), vBox );
+    vBoxLayout->addWidget(groupBox);
+    vBox->setLayout(vBoxLayout);
     QFrame *frame = new QFrame(groupBox);
     QGridLayout *layout = new QGridLayout(frame, 2, 2, 10, 5);
 
     layout->addWidget(new QLabel( i18n("Channel:"), frame ), 0, 0);
-    m_channel = new KComboBox( frame );
-    m_channel->setSizeLimit( 17 );
+    m_channel = new QComboBox( frame );
+    m_channel->setMaxVisibleItems( 17 );
     layout->addWidget(m_channel, 0, 1);
     QSpacerItem *spacer = new QSpacerItem( 1, 1, QSizePolicy::Expanding, QSizePolicy::Minimum );
     layout->addItem( spacer, 0, 2 );
 
-    m_channel->insertItem(i18n("any"));
+    m_channel->addItem(i18n("any"));
     for (int i = 1; i < 17; ++i) {
-        m_channel->insertItem(QString::number(i));
+        m_channel->addItem(QString::number(i));
     }
 
     layout->addWidget(new QLabel( i18n("Device:"), frame ), 1, 0);
-    m_device = new KComboBox( frame );
-    layout->addMultiCellWidget( m_device, 1, 1, 1, 2 );
+    m_device = new QComboBox( frame );
+    layout->addWidget( m_device, 1, 1, 1, 2 - 2);
 
     m_deviceIds.clear();
     m_deviceIds.push_back( -1);
-    m_device->insertItem(i18n("any"));
+    m_device->addItem(i18n("any"));
 
     DeviceList *devices = doc->getStudio().getDevices();
     DeviceListConstIterator it;
@@ -82,25 +92,30 @@ SplitByRecordingSrcDialog::SplitByRecordingSrcDialog(QWidget *parent, Rosegarden
                 label += i18n("No connection");
             else
                 label += connection;
-            m_device->insertItem(label);
+            m_device->addItem(label);
             m_deviceIds.push_back(dev->getId());
         }
     }
 
-    m_channel->setCurrentItem(0);
-    m_device->setCurrentItem(0);
+    m_channel->setCurrentIndex(0);
+    m_device->setCurrentIndex(0);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel );
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 int
 SplitByRecordingSrcDialog::getChannel()
 {
-    return m_channel->currentItem() - 1;
+    return m_channel->currentIndex() - 1;
 }
 
 int
 SplitByRecordingSrcDialog::getDevice()
 {
-    return m_deviceIds[m_device->currentItem()];
+    return m_deviceIds[m_device->currentIndex()];
 }
 
 }

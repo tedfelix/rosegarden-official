@@ -20,7 +20,7 @@
 
 #include "SystemFont.h"
 
-#include <qfont.h>
+#include <QFont>
 
 namespace Rosegarden {
 

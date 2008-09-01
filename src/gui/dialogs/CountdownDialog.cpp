@@ -17,17 +17,17 @@
 
 
 #include "CountdownDialog.h"
-#include <qlayout.h>
+#include <QLayout>
 
 #include <klocale.h>
 #include "CountdownBar.h"
-#include <qaccel.h>
-#include <qdialog.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qstring.h>
-#include <qwidget.h>
+#include <qshortcut.h>
+#include <QDialog>
+#include <QLabel>
+#include <QPushButton>
+#include <QString>
+#include <QWidget>
+#include <QHBoxLayout>
 #include "misc/Debug.h"
 
 
@@ -44,9 +44,13 @@ CountdownDialog::CountdownDialog(QWidget *parent, int seconds):
     QBoxLayout *layout = new QBoxLayout(this, QBoxLayout::TopToBottom, 10, 14);
     setCaption(i18n("Recording..."));
 
-    QHBox *hBox = new QHBox(this);
-    m_label = new QLabel(hBox);
-    m_time = new QLabel(hBox);
+    QWidget *hBox = new QWidget(this);
+    QHBoxLayout hBoxLayout = new QHBoxLayout;
+    m_label = new QLabel( hBox );
+    hBoxLayout->addWidget(m_label);
+    m_time = new QLabel( hBox );
+    hBoxLayout->addWidget(m_time);
+    hBox->setLayout(hBoxLayout);
 
     layout->addWidget(hBox, 0, AlignCenter);
 
@@ -70,7 +74,7 @@ CountdownDialog::CountdownDialog(QWidget *parent, int seconds):
     //
     setElapsedTime(0);
 
-    m_accelerators = new QAccel(this);
+    m_shortcuterators = new QShortcut(this);
 
 }
 

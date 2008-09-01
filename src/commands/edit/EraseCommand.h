@@ -20,7 +20,7 @@
 #define _RG_ERASECOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
-#include <qstring.h>
+#include <QString>
 #include "base/Event.h"
 #include <klocale.h>
 

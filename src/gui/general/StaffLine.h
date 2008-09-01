@@ -19,12 +19,13 @@
 #ifndef _RG_STAFFLINE_H_
 #define _RG_STAFFLINE_H_
 
+#include <Q3Canvas>
 #include "gui/kdeext/QCanvasGroupableItem.h"
-#include <qpen.h>
+#include <QPen>
 
 
 class QCanvasItemGroup;
-class QCanvas;
+class Q3Canvas;
 
 
 namespace Rosegarden
@@ -41,7 +42,7 @@ namespace Rosegarden
 class StaffLine : public QCanvasLineGroupable
 {
 public:
-    StaffLine(QCanvas *c, QCanvasItemGroup *g, int height);
+    StaffLine(Q3Canvas *c, QCanvasItemGroup *g, int height);
 
     enum { NoHeight = -150 };
  

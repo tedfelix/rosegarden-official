@@ -20,8 +20,8 @@
 #define _RG_AUDIOSEGMENTDISTRIBUTECOMMAND_H_
 
 #include "base/Selection.h"
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include <vector>
 #include <klocale.h>
 
@@ -42,7 +42,7 @@ class AudioFile;
  *
  * (I think this is actually unused --cc)
  */
-class AudioSegmentDistributeCommand : public KNamedCommand
+class AudioSegmentDistributeCommand : public NamedCommand
 {
 public:
     AudioSegmentDistributeCommand(Composition *comp,

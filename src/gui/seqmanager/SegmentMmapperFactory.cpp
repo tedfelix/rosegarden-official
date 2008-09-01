@@ -26,7 +26,7 @@
 #include "AudioSegmentMmapper.h"
 #include "TempoSegmentMmapper.h"
 #include "TimeSigSegmentMmapper.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden

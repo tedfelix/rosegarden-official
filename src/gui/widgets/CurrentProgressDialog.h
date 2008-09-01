@@ -19,7 +19,7 @@
 #ifndef _RG_CURRENTPROGRESSDIALOG_H_
 #define _RG_CURRENTPROGRESSDIALOG_H_
 
-#include <qobject.h>
+#include <QObject>
 
 
 

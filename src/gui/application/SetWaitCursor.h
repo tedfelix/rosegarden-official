@@ -19,7 +19,7 @@
 #ifndef _RG_SETWAITCURSOR_H_
 #define _RG_SETWAITCURSOR_H_
 
-#include <qcursor.h>
+#include <QCursor>
 
 
 

@@ -20,7 +20,7 @@
 #define _RG_TABBEDCONFIGURATIONPAGE_H_
 
 #include "ConfigurationPage.h"
-#include <qstring.h>
+#include <QString>
 
 
 class QWidget;

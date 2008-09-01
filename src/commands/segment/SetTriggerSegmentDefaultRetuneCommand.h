@@ -20,7 +20,7 @@
 #define _RG_SETTRIGGERSEGMENTDEFAULTRETUNECOMMAND_H_
 
 #include "base/TriggerSegment.h"
-#include <kcommand.h>
+#include "document/Command.h"
 
 
 
@@ -31,7 +31,7 @@ namespace Rosegarden
 class Composition;
 
 
-class SetTriggerSegmentDefaultRetuneCommand : public KNamedCommand
+class SetTriggerSegmentDefaultRetuneCommand : public NamedCommand
 {
 public:
     SetTriggerSegmentDefaultRetuneCommand(Composition *composition,

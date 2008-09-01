@@ -24,7 +24,7 @@
 
 #include "base/Exception.h"
 #include "CategoryElement.h"
-#include <qstring.h>
+#include <QString>
 #include <qxml.h>
 
 

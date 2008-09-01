@@ -19,13 +19,13 @@
 #ifndef _RG_MATRIXPARAMETERBOX_H_
 #define _RG_MATRIXPARAMETERBOX_H_
 
-#include <qframe.h>
+#include <QFrame>
 #include <vector>
 #include "base/Event.h"
 
 
 class QWidget;
-class KComboBox;
+class QComboBox;
 
 
 namespace Rosegarden
@@ -51,8 +51,8 @@ public:
 
 protected:
 
-    KComboBox                  *m_quantizeCombo;
-    KComboBox                  *m_snapGridCombo;
+    QComboBox                  *m_quantizeCombo;
+    QComboBox                  *m_snapGridCombo;
     InstrumentParameterBox     *m_instrumentParameterBox;
 
     std::vector<timeT> m_quantizations;

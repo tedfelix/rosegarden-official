@@ -56,20 +56,20 @@
 #include "TempoSegmentMmapper.h"
 #include "TimeSigSegmentMmapper.h"
 #include <klocale.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <kconfig.h>
 #include <kglobal.h>
 #include <kmessagebox.h>
-#include <qapplication.h>
-#include <qcstring.h>
-#include <qcursor.h>
-#include <qdatastream.h>
-#include <qevent.h>
-#include <qobject.h>
-#include <qpushbutton.h>
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qtimer.h>
+#include <QApplication>
+#include <QByteArray>
+#include <QCursor>
+#include <QDataStream>
+#include <QEvent>
+#include <QObject>
+#include <QPushButton>
+#include <QString>
+#include <QStringList>
+#include <QTimer>
 #include <algorithm>
 
 

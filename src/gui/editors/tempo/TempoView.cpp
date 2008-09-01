@@ -16,10 +16,11 @@
 */
 
 
+#include <Q3CanvasPixmap>
 #include "TempoView.h"
 
 #include <klocale.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include "misc/Debug.h"
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
@@ -42,16 +43,16 @@
 #include <kconfig.h>
 #include <klistview.h>
 #include <kxmlguiclient.h>
-#include <qbuttongroup.h>
-#include <qcheckbox.h>
-#include <qdialog.h>
-#include <qiconset.h>
-#include <qlistview.h>
-#include <qpixmap.h>
+#include <QGroupBox>
+#include <QCheckBox>
+#include <QDialog>
+#include <QIcon>
+#include <QListView>
+#include <QPixmap>
 #include <qptrlist.h>
-#include <qsize.h>
-#include <qstring.h>
-#include <qlayout.h>
+#include <QSize>
+#include <QString>
+#include <QLayout>
 #include <qcanvas.h>
 #include <kstatusbar.h>
 
@@ -79,7 +80,7 @@ TempoView::TempoView(RosegardenGUIDoc *doc, QWidget *parent, timeT openTime):
     // define some note filtering buttons in a group
     //
     m_filterGroup =
-        new QButtonGroup(1, Horizontal, i18n("Filter"), getCentralWidget());
+        new QGroupBox(1, Horizontal, i18n("Filter"), getCentralWidget());
 
     m_tempoCheckBox = new QCheckBox(i18n("Tempo"), m_filterGroup);
     m_timeSigCheckBox = new QCheckBox(i18n("Time Signature"), m_filterGroup);
@@ -285,7 +286,7 @@ TempoView::applyLayout(int /*staffNo*/)
             index--;
 
         m_list->setSelected(m_list->itemAtIndex(index), true);
-        m_list->setCurrentItem(m_list->itemAtIndex(index));
+        m_list->setCurrentIndex(m_list->itemAtIndex(index));
 
         // ensure visible
         m_list->ensureItemVisible(m_list->itemAtIndex(index));
@@ -427,7 +428,7 @@ TempoView::slotEditDelete()
     // removing one item by index will affect the indices of
     // subsequent items.  So we'll stack them onto here and then pull
     // them off again.
-    std::vector<KCommand *> commands;
+    std::vector<Command *> commands;
 
     while ((listItem = it.current()) != 0) {
         item = dynamic_cast<TempoListItem*>((*it));
@@ -452,9 +453,9 @@ TempoView::slotEditDelete()
     }
 
     if (haveSomething) {
-        KMacroCommand *command = new KMacroCommand
+        MacroCommand *command = new MacroCommand
                                  (i18n("Delete Tempo or Time Signature"));
-        for (std::vector<KCommand *>::iterator i = commands.end();
+        for (std::vector<Command *>::iterator i = commands.end();
                 i != commands.begin();) {
             command->addCommand(*--i);
         }
@@ -569,28 +570,28 @@ TempoView::setupActions()
     EditViewBase::setupActions("tempoview.rc", false);
 
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QIconSet icon(QPixmap(pixmapDir + "/toolbar/event-insert-tempo.png"));
+    QIcon icon(QPixmap(pixmapDir + "/toolbar/event-insert-tempo.png"));
 
     new KAction(AddTempoChangeCommand::getGlobalName(), icon, Key_I, this,
                 SLOT(slotEditInsertTempo()), actionCollection(),
                 "insert_tempo");
 
-    QCanvasPixmap pixmap(pixmapDir + "/toolbar/event-insert-timesig.png");
-    icon = QIconSet(pixmap);
+    Q3CanvasPixmap pixmap(pixmapDir + "/toolbar/event-insert-timesig.png");
+    icon = QIcon(pixmap);
 
     new KAction(AddTimeSignatureCommand::getGlobalName(), icon, Key_G, this,
                 SLOT(slotEditInsertTimeSignature()), actionCollection(),
                 "insert_timesig");
 
     pixmap.load(pixmapDir + "/toolbar/event-delete.png");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
 
     new KAction(i18n("&Delete"), icon, Key_Delete, this,
                 SLOT(slotEditDelete()), actionCollection(),
                 "delete");
 
     pixmap.load(pixmapDir + "/toolbar/event-edit.png");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
 
     new KAction(i18n("&Edit Item"), icon, Key_E, this,
                 SLOT(slotEdit()), actionCollection(),
@@ -610,7 +611,7 @@ TempoView::setupActions()
     KRadioAction *action;
 
     pixmap.load(pixmapDir + "/toolbar/time-musical.png");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
 
     action = new KRadioAction(i18n("&Musical Times"), icon, 0, this,
                               SLOT(slotMusicalTime()),
@@ -620,7 +621,7 @@ TempoView::setupActions()
         action->setChecked(true);
 
     pixmap.load(pixmapDir + "/toolbar/time-real.png");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
 
     action = new KRadioAction(i18n("&Real Times"), icon, 0, this,
                               SLOT(slotRealTime()),
@@ -630,7 +631,7 @@ TempoView::setupActions()
         action->setChecked(true);
 
     pixmap.load(pixmapDir + "/toolbar/time-raw.png");
-    icon = QIconSet(pixmap);
+    icon = QIcon(pixmap);
 
     action = new KRadioAction(i18n("Ra&w Times"), icon, 0, this,
                               SLOT(slotRawTime()),
@@ -647,7 +648,7 @@ TempoView::initStatusBar()
 {
     KStatusBar* sb = statusBar();
 
-    sb->insertItem(KTmpStatusMsg::getDefaultMsg(),
+    sb->addItem(KTmpStatusMsg::getDefaultMsg(),
                    KTmpStatusMsg::getDefaultId(), 1);
     sb->setItemAlignment(KTmpStatusMsg::getDefaultId(),
                          AlignLeft | AlignVCenter);

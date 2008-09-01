@@ -19,7 +19,7 @@
 #ifndef _RG_COUNTDOWNBAR_H_
 #define _RG_COUNTDOWNBAR_H_
 
-#include <qframe.h>
+#include <QFrame>
 
 
 class QWidget;

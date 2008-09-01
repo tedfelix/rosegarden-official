@@ -21,7 +21,7 @@
 
 #include "base/MidiProgram.h"
 #include "base/Track.h"
-#include <qstring.h>
+#include <QString>
 
 
 

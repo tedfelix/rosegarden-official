@@ -19,8 +19,9 @@
 #ifndef _RG_LYRICEDITDIALOG_H_
 #define _RG_LYRICEDITDIALOG_H_
 
-#include <kdialogbase.h>
-#include <qstring.h>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QString>
 #include <vector>
 
 
@@ -36,12 +37,12 @@ namespace Rosegarden
 class Segment;
 
 
-class LyricEditDialog : public KDialogBase
+class LyricEditDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    LyricEditDialog(QWidget *parent, Segment *segment);
+    LyricEditDialog(QDialogButtonBox::QWidget *parent, Segment *segment);
 
     int getVerseCount() const;
     QString getLyricData(int verse) const;

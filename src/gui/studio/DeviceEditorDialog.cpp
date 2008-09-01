@@ -30,25 +30,26 @@
 #include "document/RosegardenGUIDoc.h"
 #include "document/MultiViewCommandHistory.h"
 #include "sequencer/RosegardenSequencer.h"
-#include <kdialogbase.h>
+#include <QDialog>
+#include <QDialogButtonBox>
 #include <kmessagebox.h>
-#include <qcstring.h>
-#include <qdatastream.h>
-#include <qhbox.h>
-#include <qpushbutton.h>
-#include <qregexp.h>
-#include <qstring.h>
-#include <qstringlist.h>
+#include <QByteArray>
+#include <QDataStream>
+#include <QPushButton>
+#include <QRegExp>
+#include <QString>
+#include <QStringList>
 #include <qtable.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 #include <algorithm>
 
 
 namespace Rosegarden
 {
 
-DeviceEditorDialog::DeviceEditorDialog(QWidget *parent,
+DeviceEditorDialog::DeviceEditorDialog(QDialogButtonBox::QWidget *parent,
                                        RosegardenGUIDoc *document) :
         KDialogBase(parent, "deviceeditordialog", true,
                     i18n("Manage MIDI Devices"), Ok | Apply | Close, Ok, true),
@@ -79,10 +80,15 @@ DeviceEditorDialog::DeviceEditorDialog(QWidget *parent,
 
     populate();
 
-    QHBox *hbox = new QHBox(mainBox);
-    QPushButton *addButton = new QPushButton(i18n("Add Play Device"), hbox);
-    QPushButton *addRButton = new QPushButton(i18n("Add Record Device"), hbox);
-    QPushButton *deleteButton = new QPushButton(i18n("Delete Device"), hbox);
+    QWidget *hbox = new QWidget(mainBox);
+    QHBoxLayout hboxLayout = new QHBoxLayout;
+    QPushButton *addButton = new QPushButton(i18n("Add Play Device"), hbox );
+    hboxLayout->addWidget(addButton);
+    QPushButton *addRButton = new QPushButton(i18n("Add Record Device"), hbox );
+    hboxLayout->addWidget(addRButton);
+    QPushButton *deleteButton = new QPushButton(i18n("Delete Device"), hbox );
+    hboxLayout->addWidget(deleteButton);
+    hbox->setLayout(hboxLayout);
     connect(addButton, SIGNAL(clicked()), this, SLOT(slotAddPlayDevice()));
     connect(addRButton, SIGNAL(clicked()), this, SLOT(slotAddRecordDevice()));
     connect(deleteButton, SIGNAL(clicked()), this, SLOT(slotDeleteDevice()));
@@ -155,7 +161,7 @@ DeviceEditorDialog::populate()
         }
 
         QComboTableItem *item = new QComboTableItem(m_table, list, false);
-        item->setCurrentItem(currentConnectionIndex);
+        item->setCurrentIndex(currentConnectionIndex);
         m_table->setItem(deviceCount, CONNECTION_COL, item);
 
         m_table->adjustRow(deviceCount);
@@ -221,7 +227,7 @@ DeviceEditorDialog::slotClose()
 void
 DeviceEditorDialog::slotApply()
 {
-    KMacroCommand *command = new KMacroCommand("Edit Devices");
+    MacroCommand *command = new MacroCommand("Edit Devices");
 
     // first delete deleted devices, in reverse order of id (so that
     // if we undo this command we'll get the original ids back... probably)
@@ -318,7 +324,7 @@ DeviceEditorDialog::slotAddPlayDevice()
 
     QComboTableItem *item =
         new QComboTableItem(m_table, m_playConnections, false);
-    item->setCurrentItem(m_playConnections.size() - 1);
+    item->setCurrentIndex(m_playConnections.size() - 1);
     m_table->setItem(n, 3, item);
     m_table->adjustRow(n);
 
@@ -336,7 +342,7 @@ DeviceEditorDialog::slotAddRecordDevice()
 
     QComboTableItem *item =
         new QComboTableItem(m_table, m_recordConnections, false);
-    item->setCurrentItem(m_recordConnections.size() - 1);
+    item->setCurrentIndex(m_recordConnections.size() - 1);
     m_table->setItem(n, 3, item);
     m_table->adjustRow(n);
 

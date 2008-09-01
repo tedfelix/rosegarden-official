@@ -19,9 +19,9 @@
 #ifndef _RG_AUDIOFADERBOX_H_
 #define _RG_AUDIOFADERBOX_H_
 
-#include <qframe.h>
-#include <qpixmap.h>
-#include <qstring.h>
+#include <QFrame>
+#include <QPixmap>
+#include <QString>
 #include <vector>
 
 

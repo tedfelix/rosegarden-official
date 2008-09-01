@@ -19,15 +19,17 @@
 #ifndef _RG_CONTROLLEREVENTSRULER_H_
 #define _RG_CONTROLLEREVENTSRULER_H_
 
+#include <Q3Canvas>
+#include <Q3CanvasLine>
 #include "ControlRuler.h"
-#include <qstring.h>
+#include <QString>
 #include "base/Event.h"
 
 
 class QWidget;
 class QMouseEvent;
-class QCanvasLine;
-class QCanvas;
+class Q3CanvasLine;
+class Q3Canvas;
 
 
 namespace Rosegarden
@@ -50,7 +52,7 @@ public:
     ControllerEventsRuler(Segment*,
                           RulerScale*,
                           EditViewBase* parentView,
-                          QCanvas*,
+                          Q3Canvas*,
                           QWidget* parent=0,
                           const ControlParameter *controller = 0,
                           const char* name=0, WFlags f=0);
@@ -98,7 +100,7 @@ protected:
     int                           m_defaultItemWidth;
 
     ControlParameter  *m_controller;
-    QCanvasLine                   *m_controlLine;
+    Q3CanvasLine                   *m_controlLine;
     
     bool                           m_controlLineShowing;
     int                            m_controlLineX;

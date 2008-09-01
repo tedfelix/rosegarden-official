@@ -19,7 +19,8 @@
 #ifndef _RG_AUDIOPLAYINGDIALOG_H_
 #define _RG_AUDIOPLAYINGDIALOG_H_
 
-#include <kdialogbase.h>
+#include <QDialog>
+#include <QDialogButtonBox>
 
 
 class QWidget;
@@ -31,12 +32,12 @@ namespace Rosegarden
 
 
 
-class AudioPlayingDialog : public KDialogBase
+class AudioPlayingDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    AudioPlayingDialog(QWidget *parent, const QString &label);
+    AudioPlayingDialog(QDialogButtonBox::QWidget *parent, const QString &label);
 
 signals:
 

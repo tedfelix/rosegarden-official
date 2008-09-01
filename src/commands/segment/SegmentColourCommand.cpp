@@ -20,7 +20,7 @@
 
 #include "base/Segment.h"
 #include "base/Selection.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
@@ -29,7 +29,7 @@ namespace Rosegarden
 SegmentColourCommand::SegmentColourCommand(
     SegmentSelection &segments,
     const unsigned int index):
-        KNamedCommand(i18n("Change Segment Color")),
+        NamedCommand(i18n("Change Segment Color")),
         m_newColourIndex(index)
 {
     for (SegmentSelection::iterator i = segments.begin(); i != segments.end(); ++i)

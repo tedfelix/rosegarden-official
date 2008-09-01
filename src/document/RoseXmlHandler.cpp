@@ -55,12 +55,12 @@
 #include "sound/AudioFileManager.h"
 #include <kfiledialog.h>
 #include <kmessagebox.h>
-#include <qcstring.h>
-#include <qdatastream.h>
-#include <qdialog.h>
-#include <qfileinfo.h>
-#include <qstring.h>
-#include <qstringlist.h>
+#include <QByteArray>
+#include <QDataStream>
+#include <QDialog>
+#include <QFileInfo>
+#include <QString>
+#include <QStringList>
 #include "XmlStorableEvent.h"
 #include "XmlSubHandler.h"
 
@@ -126,7 +126,7 @@ bool ConfigurationXmlSubHandler::startElement(const QString&, const QString&,
 
 bool ConfigurationXmlSubHandler::characters(const QString& chars)
 {
-    QString ch = chars.stripWhiteSpace();
+    QString ch = chars.trimmed();
     // this method is also called on newlines - skip these cases
     if (ch.isEmpty()) return true;
 
@@ -156,7 +156,7 @@ bool ConfigurationXmlSubHandler::characters(const QString& chars)
     }
 
     if (m_propertyType == "Bool") {
-        QString chLc = ch.lower();
+        QString chLc = ch.toLower();
         
         bool b = (chLc == "true" ||
                   chLc == "1"    ||
@@ -299,7 +299,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         return false;
     }
 
-    QString lcName = qName.lower();
+    QString lcName = qName.toLower();
 
     if (getSubHandler()) {
         return getSubHandler()->startElement(namespaceURI, localName, lcName, atts);
@@ -812,7 +812,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             startTime = startIdxStr.toInt();
         }
 
-        QString segmentType = (atts.value("type")).lower();
+        QString segmentType = (atts.value("type")).toLower();
         if (segmentType) {
             if (segmentType == "audio") {
                 int audioFileId = atts.value("file").toInt();
@@ -843,7 +843,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         }
 
         QString repeatStr = atts.value("repeat");
-        if (repeatStr.lower() == "true") {
+        if (repeatStr.toLower() == "true") {
             m_currentSegment->setRepeating(true);
         }
 
@@ -920,7 +920,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                                                    pitch, velocity);
             if (rec) {
                 if (triggerRetuneStr)
-                    rec->setDefaultRetune(triggerRetuneStr.lower() == "true");
+                    rec->setDefaultRetune(triggerRetuneStr.toLower() == "true");
                 if (triggerAdjustTimeStr)
                     rec->setDefaultTimeAdjust(qstrtostr(triggerAdjustTimeStr));
             }
@@ -1011,7 +1011,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             //
             QString thing;
             KURL url = KFileDialog::getStartURL(QString(":WAVS"), thing);
-            getAudioFileManager().setAudioPath(url.path().latin1());
+            getAudioFileManager().setAudioPath(url.path().toLatin1().data());
 
             /*
             RG_DEBUG << "ATTEMPTING TO FIND IN PATH = " 
@@ -1218,7 +1218,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         m_haveControls = false;
 
-        QString type = (atts.value("type")).lower();
+        QString type = (atts.value("type")).toLower();
         QString idString = atts.value("id");
         QString nameStr = atts.value("name");
 
@@ -1229,7 +1229,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         int id = idString.toInt();
 
         if (type == "midi") {
-            QString direction = atts.value("direction").lower();
+            QString direction = atts.value("direction").toLower();
 
             if (direction.isNull() ||
                     direction == "" ||
@@ -1256,7 +1256,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
             setMIDIDeviceName(nameStr);
 
-            QString vstr = atts.value("variation").lower();
+            QString vstr = atts.value("variation").toLower();
             MidiDevice::VariationType variation =
                 MidiDevice::NoVariations;
             if (!vstr.isNull()) {
@@ -1312,7 +1312,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             }
 
             QString nameStr = atts.value("name");
-            m_percussion = (atts.value("percussion").lower() == "true");
+            m_percussion = (atts.value("percussion").toLower() == "true");
             m_msb = (atts.value("msb")).toInt();
             m_lsb = (atts.value("lsb")).toInt();
 
@@ -1691,7 +1691,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
             bool bypassed = false;
             QString bpStr = atts.value("bypassed");
-            if (bpStr.lower() == "true")
+            if (bpStr.toLower() == "true")
                 bypassed = true;
 
             std::string program = "";
@@ -1965,10 +1965,10 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         QString type = atts.value("type");
         if (type) {
-            if (type.lower() == "buss") {
+            if (type.toLower() == "buss") {
                 if (m_instrument)
                     m_instrument->setAudioInputToBuss(value, channel);
-            } else if (type.lower() == "record") {
+            } else if (type.toLower() == "record") {
                 if (m_instrument)
                     m_instrument->setAudioInputToRecord(value, channel);
             }
@@ -2061,7 +2061,7 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
 {
     if (getSubHandler()) {
         bool finished;
-        bool res = getSubHandler()->endElement(namespaceURI, localName, qName.lower(), finished);
+        bool res = getSubHandler()->endElement(namespaceURI, localName, qName.toLower(), finished);
         if (finished)
             setSubHandler(0);
         return res;
@@ -2076,7 +2076,7 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
         ProgressDialog::processEvents();
     }
 
-    QString lcName = qName.lower();
+    QString lcName = qName.toLower();
 
     if (lcName == "rosegarden-data") {
 

@@ -20,8 +20,8 @@
 
 #include "CompositionModel.h"
 
-#include <qpainter.h>
-#include <qcolor.h>
+#include <QPainter>
+#include <QColor>
 
 namespace Rosegarden {
 

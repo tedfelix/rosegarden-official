@@ -19,7 +19,7 @@
 #define _RG_FINGERING_H_
 
 #include <vector>
-#include <qstring.h>
+#include <QString>
 #include "base/Event.h"
 
 namespace Rosegarden

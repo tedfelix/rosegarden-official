@@ -38,14 +38,14 @@
 #include "document/RosegardenGUIDoc.h"
 #include "document/MultiViewCommandHistory.h"
 #include "gui/general/GUIPalette.h"
-#include <qfont.h>
-#include <qfontmetrics.h>
-#include <qobject.h>
-#include <qpainter.h>
-#include <qrect.h>
-#include <qsize.h>
-#include <qtooltip.h>
-#include <qwidget.h>
+#include <QFont>
+#include <QFontMetrics>
+#include <QObject>
+#include <QPainter>
+#include <QRect>
+#include <QSize>
+#include <QToolTip>
+#include <QWidget>
 
 
 namespace Rosegarden

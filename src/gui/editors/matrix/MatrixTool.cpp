@@ -21,7 +21,7 @@
 #include "gui/general/EditTool.h"
 #include "MatrixView.h"
 #include <kaction.h>
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden

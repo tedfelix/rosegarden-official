@@ -17,7 +17,7 @@
 
 
 #include "MidiMixerWindow.h"
-#include <qlayout.h>
+#include <QLayout>
 
 #include "sound/Midi.h"
 #include <klocale.h>
@@ -41,16 +41,16 @@
 #include "StudioControl.h"
 #include <kaction.h>
 #include <kmainwindow.h>
-#include <kstdaction.h>
-#include <qaccel.h>
-#include <qcolor.h>
-#include <qframe.h>
-#include <qiconset.h>
-#include <qlabel.h>
-#include <qobject.h>
-#include <qstring.h>
-#include <qtabwidget.h>
-#include <qwidget.h>
+#include <kstandardaction.h>
+#include <qshortcut.h>
+#include <QColor>
+#include <QFrame>
+#include <QIcon>
+#include <QLabel>
+#include <QObject>
+#include <QString>
+#include <QTabWidget>
+#include <QWidget>
 
 
 namespace Rosegarden
@@ -65,11 +65,11 @@ MidiMixerWindow::MidiMixerWindow(QWidget *parent,
     //
     setupTabs();
 
-    KStdAction::close(this,
+    KStandardAction::close(this,
                       SLOT(slotClose()),
                       actionCollection());
 
-    QIconSet icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+    QIcon icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                              ("transport-play")));
     KAction *play = new KAction(i18n("&Play"), icon, Key_Enter, this,
                 SIGNAL(play()), actionCollection(), "play");
@@ -78,42 +78,42 @@ MidiMixerWindow::MidiMixerWindow(QWidget *parent,
     playShortcut.append( KKey(Key_Return + CTRL) );
     play->setShortcut(playShortcut);
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-stop")));
     new KAction(i18n("&Stop"), icon, Key_Insert, this,
                 SIGNAL(stop()), actionCollection(), "stop");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-rewind")));
     new KAction(i18n("Re&wind"), icon, Key_End, this,
                 SIGNAL(rewindPlayback()), actionCollection(),
                 "playback_pointer_back_bar");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-ffwd")));
     new KAction(i18n("&Fast Forward"), icon, Key_PageDown, this,
                 SIGNAL(fastForwardPlayback()), actionCollection(),
                 "playback_pointer_forward_bar");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-rewind-end")));
     new KAction(i18n("Rewind to &Beginning"), icon, 0, this,
                 SIGNAL(rewindPlaybackToBeginning()), actionCollection(),
                 "playback_pointer_start");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-ffwd-end")));
     new KAction(i18n("Fast Forward to &End"), icon, 0, this,
                 SIGNAL(fastForwardPlaybackToEnd()), actionCollection(),
                 "playback_pointer_end");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-record")));
     new KAction(i18n("&Record"), icon, 0, this,
                 SIGNAL(record()), actionCollection(),
                 "record");
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-panic")));
     new KAction(i18n("Panic"), icon, Key_P + CTRL + ALT, this,
                 SIGNAL(panic()), actionCollection(),
@@ -161,7 +161,7 @@ MidiMixerWindow::setupTabs()
                 continue;
 
             m_tabFrame = new QFrame(m_tabWidget);
-            m_tabFrame->setFrameStyle(QFrame::TabWidgetPanel);
+            m_tabFrame->setFrameStyle(QFrame::StyledPanel);
             m_tabFrame->setMargin(10);
 
             QGridLayout *mainLayout = new QGridLayout
@@ -174,7 +174,7 @@ MidiMixerWindow::setupTabs()
             //.arg(i18n("MIDI Mixer")), m_tabFrame);
 
             QLabel *label = new QLabel("", m_tabFrame);
-            mainLayout->addMultiCellWidget(label, 0, 0, 0, 16, Qt::AlignCenter);
+            mainLayout->addWidget(label, 0, 0, 0- 0+1, 16- 1, Qt::AlignCenter);
 
             // control labels
             for (unsigned int i = 0; i < controls.size(); ++i) {
@@ -216,7 +216,7 @@ MidiMixerWindow::setupTabs()
                 // Add the controls
                 //
                 for (unsigned int i = 0; i < controls.size(); ++i) {
-                    QColor knobColour = Qt::white;
+                    QColor knobColour = QColor(Qt::white);
 
                     if (controls[i].getColourIndex() > 0) {
                         Colour c =

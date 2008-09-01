@@ -28,13 +28,13 @@
 namespace Rosegarden
 {
 SegmentSyncCommand::SegmentSyncCommand(Segment &segment, int newTranspose, int lowRange, int highRange, const Clef& clef) :
-        KMacroCommand(i18n("Sync segment parameters"))
+        MacroCommand(i18n("Sync segment parameters"))
 {
     processSegment(segment, newTranspose, lowRange, highRange, clef);
 }
 
 SegmentSyncCommand::SegmentSyncCommand(SegmentSelection selection, int newTranspose, int lowRange, int highRange, const Clef& clef) :
-        KMacroCommand(i18n("Sync segment parameters"))
+        MacroCommand(i18n("Sync segment parameters"))
 {
     for (SegmentSelection::iterator i = selection.begin();
             i != selection.end(); ++i) 
@@ -45,7 +45,7 @@ SegmentSyncCommand::SegmentSyncCommand(SegmentSelection selection, int newTransp
 }
 
 SegmentSyncCommand::SegmentSyncCommand(std::vector<Segment *> segments, int newTranspose, int lowRange, int highRange, const Clef& clef) :
-        KMacroCommand(i18n("Sync segment parameters"))
+        MacroCommand(i18n("Sync segment parameters"))
 {
 	for (int i = 0; i < segments.size(); i++) {
         processSegment(*(segments[i]), newTranspose, lowRange, highRange, clef);
@@ -53,7 +53,7 @@ SegmentSyncCommand::SegmentSyncCommand(std::vector<Segment *> segments, int newT
 }
 
 SegmentSyncCommand::SegmentSyncCommand(Composition::segmentcontainer& segments, TrackId selectedTrack, int newTranspose, int lowRange, int highRange, const Clef& clef) :
-        KMacroCommand(i18n("Sync segment parameters"))
+        MacroCommand(i18n("Sync segment parameters"))
 {
     for (Composition::segmentcontainer::const_iterator si = segments.begin();
                         si != segments.end(); ++si) {
@@ -66,7 +66,7 @@ SegmentSyncCommand::SegmentSyncCommand(Composition::segmentcontainer& segments, 
 void 
 SegmentSyncCommand::processSegment(Segment &segment, int newTranspose, int lowRange, int highRange, const Clef& clef)
 {
-    KMacroCommand * macroCommand = this;
+    MacroCommand * macroCommand = this;
     
     // if the new desired setting for 'transpose' is higher, we need to 
     // transpose the notes upwards to compensate:

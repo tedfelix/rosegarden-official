@@ -19,7 +19,7 @@
 #ifndef _RG_SEGMENTSYNCCOMMAND_H_
 #define _RG_SEGMENTSYNCCOMMAND_H_
 
-#include <kcommand.h>
+#include "document/Command.h"
 #include "base/Composition.h"
 #include "base/Event.h"
 #include "base/NotationTypes.h"
@@ -33,7 +33,7 @@ class Segment;
 class SegmentSelection;
 
 
-class SegmentSyncCommand : public KMacroCommand
+class SegmentSyncCommand : public MacroCommand
 {
 public:
     SegmentSyncCommand(Segment &segment,

@@ -28,10 +28,10 @@
 #include "gui/general/GUIPalette.h"
 #include "gui/rulers/LoopRuler.h"
 #include "document/RosegardenGUIDoc.h"
-#include <qobject.h>
-#include <qtooltip.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <QObject>
+#include <QToolTip>
+#include <QWidget>
+#include <QVBoxLayout>
 
 
 namespace Rosegarden

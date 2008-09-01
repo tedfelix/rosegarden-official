@@ -34,9 +34,9 @@
 #include "NotationView.h"
 #include "NotePixmapFactory.h"
 #include <kaction.h>
-#include <qdialog.h>
-#include <qiconset.h>
-#include <qstring.h>
+#include <QDialog>
+#include <QIcon>
+#include <QString>
 
 
 namespace Rosegarden
@@ -46,7 +46,7 @@ GuitarChordInserter::GuitarChordInserter(NotationView* view)
         : NotationTool("GuitarChordInserter", view),
         m_guitarChordSelector(0)
 {
-    QIconSet icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::
+    QIcon icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::
                              makeToolbarPixmap("select")));
 
     new KAction(i18n("Switch to Select Tool"), icon, 0, this,
@@ -57,7 +57,7 @@ GuitarChordInserter::GuitarChordInserter(NotationView* view)
                 SLOT(slotEraseSelected()), actionCollection(),
                 "erase");
 
-    icon = QIconSet
+    icon = QIcon
            (NotePixmapFactory::toQPixmap(NotePixmapFactory::
                                          makeToolbarPixmap("crotchet")));
 

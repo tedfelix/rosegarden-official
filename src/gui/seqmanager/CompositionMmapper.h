@@ -20,7 +20,7 @@
 #define _RG_COMPOSITIONMMAPPER_H_
 
 #include <map>
-#include <qstring.h>
+#include <QString>
 
 
 

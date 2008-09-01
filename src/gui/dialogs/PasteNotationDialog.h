@@ -20,7 +20,8 @@
 #define _RG_PASTENOTATIONDIALOG_H_
 
 #include "commands/edit/PasteEventsCommand.h"
-#include <kdialogbase.h>
+#include <QDialog>
+#include <QDialogButtonBox>
 #include <vector>
 
 
@@ -34,12 +35,12 @@ namespace Rosegarden
 
 
 
-class PasteNotationDialog : public KDialogBase
+class PasteNotationDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    PasteNotationDialog(QWidget *parent,
+    PasteNotationDialog(QDialogButtonBox::QWidget *parent,
                         PasteEventsCommand::PasteType defaultType);
 
     PasteEventsCommand::PasteType getPasteType() const;

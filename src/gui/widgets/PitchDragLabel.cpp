@@ -16,16 +16,17 @@
 */
 
 
+#include <Q3CanvasPixmap>
 #include "PitchDragLabel.h"
 
 #include "base/NotationRules.h"
 #include "base/NotationTypes.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include <qcanvas.h>
-#include <qpainter.h>
-#include <qpixmap.h>
-#include <qsize.h>
-#include <qwidget.h>
+#include <QPainter>
+#include <QPixmap>
+#include <QSize>
+#include <QWidget>
 
 
 namespace Rosegarden
@@ -219,7 +220,7 @@ PitchDragLabel::calculatePixmap(int pitch, int octave, int step) const
         }
     }
 
-    QCanvasPixmap *pmap = m_npf->makePitchDisplayPixmap
+    Q3CanvasPixmap *pmap = m_npf->makePitchDisplayPixmap
                           (m_pitch,
                            Clef(clefType, octaveOffset),
                            octave, step);
@@ -248,7 +249,7 @@ PitchDragLabel::calculatePixmap() const
         }
     }
 
-    QCanvasPixmap *pmap = m_npf->makePitchDisplayPixmap
+    Q3CanvasPixmap *pmap = m_npf->makePitchDisplayPixmap
                           (m_pitch,
                            Clef(clefType, octaveOffset),
                            m_usingSharps);

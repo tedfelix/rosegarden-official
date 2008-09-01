@@ -18,7 +18,7 @@
 #include "Chord.h"
 #include "base/Event.h"
 
-#include <qstring.h>
+#include <QString>
 
 namespace Rosegarden
 {

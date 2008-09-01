@@ -131,14 +131,14 @@
 #undef PAINT_BENCH
 
 #ifdef PAINT_BENCH
-#include <qdatetime.h>
+#include <QDateTime>
 #include <stdio.h>
 #endif
 
 
-#include <qpainter.h>
-#include <qimage.h>
-#include <qcolor.h>
+#include <QPainter>
+#include <QImage>
+#include <QColor>
 #include <kapplication.h>
 #include <kpixmapeffect.h>
 #include "kled.h"
@@ -582,8 +582,8 @@ KLed::paintRectFrame(bool raised)
     QBrush darkBrush(d->offcolor);
     int w = width();
     int h = height();
-    QColor black = Qt::black;
-    QColor white = Qt::white;
+    QColor black = QColor(Qt::black);
+    QColor white = QColor(Qt::white);
     // -----
     if (raised) {
         painter.setPen(white);

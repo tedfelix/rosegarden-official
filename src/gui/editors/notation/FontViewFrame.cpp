@@ -21,12 +21,12 @@
 
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <qfontmetrics.h>
-#include <qframe.h>
-#include <qsize.h>
-#include <qstring.h>
-#include <qwidget.h>
-#include <qpainter.h>
+#include <QFontMetrics>
+#include <QFrame>
+#include <QSize>
+#include <QString>
+#include <QWidget>
+#include <QPainter>
 
 #ifdef HAVE_XFT
 #include <ft2build.h>
@@ -80,7 +80,7 @@ FontViewFrame::loadFont()
     }
 
     FcPattern *pattern = FcPatternCreate();
-    FcPatternAddString(pattern, FC_FAMILY, (FcChar8 *)m_fontName.latin1());
+    FcPatternAddString(pattern, FC_FAMILY, (FcChar8 *)m_fontName.toLatin1().data());
     FcPatternAddInteger(pattern, FC_PIXEL_SIZE, m_fontSize);
 
     FcConfigSubstitute(FcConfigGetCurrent(), pattern, FcMatchPattern);
@@ -97,7 +97,7 @@ FontViewFrame::loadFont()
     FcChar8 *matchFamily;
     FcPatternGetString(match, FC_FAMILY, 0, &matchFamily);
 
-    if (QString((const char *)matchFamily).lower() != m_fontName.lower()) {
+    if (QString((const char *)matchFamily).toLower() != m_fontName.toLower()) {
         KMessageBox::sorry(this, i18n("Warning: No good match for font name %1 (best is %2)").
                            arg(m_fontName).arg(QString((const char *)matchFamily)));
         m_fontName = (const char *)matchFamily;
@@ -157,7 +157,7 @@ void FontViewFrame::paintEvent( QPaintEvent* e )
     XftDraw *draw = XftDrawCreate(x11AppDisplay(), drawable,
                                   (Visual *)x11Visual(), x11Colormap());
 
-    QColor pen(Qt::black);
+    QColor pen(QColor(Qt::black));
     XftColor col;
     col.color.red = pen.red () | pen.red() << 8;
     col.color.green = pen.green () | pen.green() << 8;
@@ -183,7 +183,7 @@ void FontViewFrame::paintEvent( QPaintEvent* e )
                 p.drawText(x - afm.width(s), y, s);
                 p.setPen(QColor(190, 190, 255));
                 p.drawLine(0, y, width(), y);
-                p.setPen(Qt::black);
+                p.setPen(QColor(Qt::black));
                 continue;
             } else if (j == 0) {
                 p.setFont(kapp->font());
@@ -191,7 +191,7 @@ void FontViewFrame::paintEvent( QPaintEvent* e )
                 p.drawText(x, y, s);
                 p.setPen(QColor(190, 190, 255));
                 p.drawLine(x, 0, x, height());
-                p.setPen(Qt::black);
+                p.setPen(QColor(Qt::black));
                 continue;
             }
 

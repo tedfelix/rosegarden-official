@@ -19,13 +19,14 @@
 #ifndef _RG_NOTATIONELEMENT_H_
 #define _RG_NOTATIONELEMENT_H_
 
+#include <Q3CanvasItem>
 #include "base/Exception.h"
 #include "base/ViewElement.h"
 #include <vector>
 #include "base/Event.h"
 
 
-class QCanvasItem;
+class Q3CanvasItem;
 class ItemList;
 
 
@@ -38,7 +39,7 @@ class Event;
 /**
  * The Notation H and V layout is performed on a
  * NotationElementList. Once this is done, each NotationElement is
- * affected a QCanvasItem which is set at these coords.
+ * affected a Q3CanvasItem which is set at these coords.
  *
  * @see NotationView#showElements()
  */
@@ -98,7 +99,7 @@ public:
      *
      * NOTE: The object takes ownership of its canvas item.
      */
-    void setCanvasItem(QCanvasItem *e, double canvasX, double canvasY);
+    void setCanvasItem(Q3CanvasItem *e, double canvasX, double canvasY);
 
     /**
      * Add an extra canvas item associated with this element, for
@@ -108,7 +109,7 @@ public:
      * The element will take ownership of these canvas items and
      * delete them when it deletes the main canvas item.
      */
-    void addCanvasItem(QCanvasItem *e, double canvasX, double canvasY);
+    void addCanvasItem(Q3CanvasItem *e, double canvasX, double canvasY);
 
     /**
      * Remove the main canvas item and any additional ones.
@@ -144,7 +145,7 @@ public:
     void setIsColliding(bool value) { m_isColliding = value; }
 
     /// Returns the associated canvas item
-    QCanvasItem* getCanvasItem() { return m_canvasItem; }
+    Q3CanvasItem* getCanvasItem() { return m_canvasItem; }
 
 protected:
     //--------------- Data members ---------------------------------
@@ -154,9 +155,9 @@ protected:
     bool m_recentlyRegenerated;
     bool m_isColliding;
 
-    QCanvasItem *m_canvasItem;
+    Q3CanvasItem *m_canvasItem;
 
-    typedef std::vector<QCanvasItem *> ItemList;
+    typedef std::vector<Q3CanvasItem *> ItemList;
     ItemList *m_extraItems;
 };
 

@@ -20,7 +20,7 @@
 #define _RG_TEMPOSEGMENTMMAPPER_H_
 
 #include "SpecialSegmentMmapper.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden

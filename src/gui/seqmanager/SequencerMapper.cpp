@@ -26,8 +26,8 @@
 #include "sound/MappedComposition.h"
 #include "sound/MappedEvent.h"
 #include "sound/SequencerDataBlock.h"
-#include <qfileinfo.h>
-#include <qstring.h>
+#include <QFileInfo>
+#include <QString>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -62,7 +62,7 @@ SequencerMapper::map()
         throw Exception("file not found");
     }
 
-    m_fd = ::open(m_filename.latin1(), O_RDWR);
+    m_fd = ::open(m_filename.toLatin1().data(), O_RDWR);
 
     if (m_fd < 0) {
         RG_DEBUG << "SequencerMapper::map() : Couldn't open " << m_filename

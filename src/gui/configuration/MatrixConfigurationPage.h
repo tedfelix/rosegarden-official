@@ -20,7 +20,7 @@
 #define _RG_MATRIXCONFIGURATIONPAGE_H_
 
 #include "TabbedConfigurationPage.h"
-#include <qstring.h>
+#include <QString>
 #include <klocale.h>
 
 

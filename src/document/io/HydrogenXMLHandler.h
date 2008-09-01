@@ -23,7 +23,7 @@
 #include "base/MidiProgram.h"
 #include "base/Track.h"
 #include <string>
-#include <qstring.h>
+#include <QString>
 #include <vector>
 #include <qxml.h>
 

@@ -23,20 +23,25 @@
 
 #include "misc/Debug.h"
 #include <qlistbox.h>
-#include <qlayout.h>
-#include <qcombobox.h>
-#include <qpushbutton.h>
-#include <qlabel.h>
+#include <QLayout>
+#include <QComboBox>
+#include <QPushButton>
+#include <QLabel>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 
 namespace Rosegarden
 {
 
 GuitarChordSelectorDialog::GuitarChordSelectorDialog(QWidget *parent)
-    : KDialogBase(parent, "GuitarChordSelector", true, i18n("Guitar Chord Selector"), Ok|Cancel)
+    : QDialog(parent)
 {
+    setModal(true);
+    setWindowTitle(i18n("Guitar Chord Selector"));
+
+#warning Dialog needs QDialogButtonBox(Ok|QDialogButtonBox::Cancel)
+
     QWidget *page = new QWidget(this);
     setMainWidget(page);
     QGridLayout *topLayout = new QGridLayout(page, 3, 4, spacingHint());
@@ -54,9 +59,9 @@ GuitarChordSelectorDialog::GuitarChordSelectorDialog(QWidget *parent)
     m_editFingeringButton = new QPushButton(i18n("Edit"), page);
     
     m_chordComplexityCombo = new QComboBox(page);
-    m_chordComplexityCombo->insertItem(i18n("beginner"));
-    m_chordComplexityCombo->insertItem(i18n("common"));
-    m_chordComplexityCombo->insertItem(i18n("all"));
+    m_chordComplexityCombo->addItem(i18n("beginner"));
+    m_chordComplexityCombo->addItem(i18n("common"));
+    m_chordComplexityCombo->addItem(i18n("all"));
     
     connect(m_chordComplexityCombo, SIGNAL(activated(int)),
             this, SLOT(slotComplexityChanged(int)));
@@ -78,10 +83,10 @@ GuitarChordSelectorDialog::GuitarChordSelectorDialog(QWidget *parent)
     
     topLayout->addWidget(new QLabel(i18n("Fingerings"), page), 0, 3);
     m_fingeringsList = new QListBox(page);
-    topLayout->addMultiCellWidget(m_fingeringsList, 1, 2, 3, 3);
+    topLayout->addWidget(m_fingeringsList, 1, 3, 2, 1);
     
     m_fingeringBox = new FingeringBox(false, page);
-    topLayout->addMultiCellWidget(m_fingeringBox, 2, 2, 0, 1);
+    topLayout->addWidget(m_fingeringBox, 2, 0, 0+1, 1- 1);
     
     connect(m_rootNotesList, SIGNAL(highlighted(int)),
             this, SLOT(slotRootHighlighted(int)));
@@ -110,7 +115,7 @@ GuitarChordSelectorDialog::populate()
 {    
     QStringList rootList = m_chordMap.getRootList();
     if (rootList.count() > 0) {
-        m_rootNotesList->insertStringList(rootList);
+        m_rootNotesList->addItems(rootList);
 
         QStringList extList = m_chordMap.getExtList(rootList.first());
         populateExtensions(extList);
@@ -124,7 +129,7 @@ GuitarChordSelectorDialog::populate()
     
     m_rootNotesList->sort();
     
-    m_rootNotesList->setCurrentItem(0);
+    m_rootNotesList->setCurrentIndex(0);
 }
 
 void
@@ -152,7 +157,7 @@ GuitarChordSelectorDialog::slotRootHighlighted(int i)
     QStringList extList = m_chordMap.getExtList(m_chord.getRoot());
     populateExtensions(extList);
     if (m_chordExtList->count() > 0)
-        m_chordExtList->setCurrentItem(0);
+        m_chordExtList->setCurrentIndex(0);
     else
         m_fingeringsList->clear(); // clear any previous fingerings    
 }
@@ -165,7 +170,7 @@ GuitarChordSelectorDialog::slotChordExtHighlighted(int i)
     Guitar::ChordMap::chordarray chords = m_chordMap.getChords(m_chord.getRoot(), m_chordExtList->text(i));
     populateFingerings(chords);
     
-    m_fingeringsList->setCurrentItem(0);        
+    m_fingeringsList->setCurrentIndex(0);        
 }
 
 void
@@ -189,7 +194,7 @@ GuitarChordSelectorDialog::slotComplexityChanged(int)
     QStringList extList = m_chordMap.getExtList(m_chord.getRoot());
     populateExtensions(extList);
     if (m_chordExtList->count() > 0)
-        m_chordExtList->setCurrentItem(0);
+        m_chordExtList->setCurrentIndex(0);
     else
         m_fingeringsList->clear(); // clear any previous fingerings    
 }
@@ -208,12 +213,12 @@ GuitarChordSelectorDialog::slotNewFingering()
         // populate lists
         //
         if (!m_rootNotesList->findItem(newChord.getRoot(), Qt::ExactMatch)) {
-            m_rootNotesList->insertItem(newChord.getRoot());
+            m_rootNotesList->addItem(newChord.getRoot());
             m_rootNotesList->sort();
         }
         
         if (!m_chordExtList->findItem(newChord.getExt(), Qt::ExactMatch)) {
-            m_chordExtList->insertItem(newChord.getExt());
+            m_chordExtList->addItem(newChord.getExt());
             m_chordExtList->sort();
         }
     }    
@@ -272,7 +277,7 @@ GuitarChordSelectorDialog::setChord(const Guitar::Chord& chord)
 
     // select the chord's root
     //
-    m_rootNotesList->setCurrentItem(0);
+    m_rootNotesList->setCurrentIndex(0);
     QListBoxItem* correspondingRoot = m_rootNotesList->findItem(chord.getRoot(), Qt::ExactMatch);
     if (correspondingRoot)
         m_rootNotesList->setSelected(correspondingRoot, true);
@@ -280,11 +285,11 @@ GuitarChordSelectorDialog::setChord(const Guitar::Chord& chord)
     // update the dialog's complexity setting if needed, then populate the extension list
     //
     QString chordExt = chord.getExt();
-    int complexityLevel = m_chordComplexityCombo->currentItem();
+    int complexityLevel = m_chordComplexityCombo->currentIndex();
     int chordComplexity = evaluateChordComplexity(chordExt);
     
     if (chordComplexity > complexityLevel) {
-        m_chordComplexityCombo->setCurrentItem(chordComplexity);
+        m_chordComplexityCombo->setCurrentIndex(chordComplexity);
     }
 
     QStringList extList = m_chordMap.getExtList(chord.getRoot());
@@ -350,22 +355,22 @@ GuitarChordSelectorDialog::populateExtensions(const QStringList& extList)
 {
     m_chordExtList->clear();
 
-    if (m_chordComplexityCombo->currentItem() != COMPLEXITY_ALL) {
+    if (m_chordComplexityCombo->currentIndex() != COMPLEXITY_ALL) {
         // some filtering needs to be done
-        int complexityLevel = m_chordComplexityCombo->currentItem();
+        int complexityLevel = m_chordComplexityCombo->currentIndex();
         
         QStringList filteredList;
         for(QStringList::const_iterator i = extList.constBegin(); i != extList.constEnd(); ++i) {
-            if (evaluateChordComplexity((*i).lower().stripWhiteSpace()) <= complexityLevel) {
+            if (evaluateChordComplexity((*i).toLower().trimmed()) <= complexityLevel) {
                 NOTATION_DEBUG << "GuitarChordSelectorDialog::populateExtensions - adding '" << *i << "'\n";
                 filteredList.append(*i); 
             }
         }
         
-        m_chordExtList->insertStringList(filteredList);
+        m_chordExtList->addItems(filteredList);
         
     } else {
-        m_chordExtList->insertStringList(extList);
+        m_chordExtList->addItems(extList);
     }
 }
 
@@ -407,7 +412,7 @@ GuitarChordSelectorDialog::parseChordFile(const QString& chordFileName)
 {
     ChordXmlHandler handler(m_chordMap);
     QFile chordFile(chordFileName);
-    bool ok = chordFile.open(IO_ReadOnly);    
+    bool ok = chordFile.open(QIODevice::ReadOnly);    
     if (!ok)
         KMessageBox::error(0, i18n("couldn't open file '%1'").arg(handler.errorString()));
 

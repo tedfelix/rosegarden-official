@@ -18,9 +18,10 @@
 #ifndef _RG_CONTROLSELECTOR_H_
 #define _RG_CONTROLSELECTOR_H_
 
+#include <Q3CanvasRectangle>
 #include "ControlRuler.h"
 
-class QCanvasRectangle;
+class Q3CanvasRectangle;
 
 namespace Rosegarden {
 
@@ -41,7 +42,7 @@ public:
     virtual void handleMouseButtonRelease(QMouseEvent *e);
     virtual void handleMouseMove(QMouseEvent *e, int deltaX, int deltaY);
 
-    QCanvasRectangle* getSelectionRectangle() { return m_ruler->getSelectionRectangle(); }
+    Q3CanvasRectangle* getSelectionRectangle() { return m_ruler->getSelectionRectangle(); }
 protected:
     //--------------- Data members ---------------------------------
 

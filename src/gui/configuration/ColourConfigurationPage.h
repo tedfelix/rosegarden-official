@@ -22,7 +22,7 @@
 #include "base/ColourMap.h"
 #include "gui/widgets/ColourTable.h"
 #include "TabbedConfigurationPage.h"
-#include <qstring.h>
+#include <QString>
 #include <klocale.h>
 
 

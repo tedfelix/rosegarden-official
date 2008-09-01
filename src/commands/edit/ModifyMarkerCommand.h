@@ -20,8 +20,8 @@
 #define _RG_MODIFYMARKERCOMMAND_H_
 
 #include <string>
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include "base/Event.h"
 #include <klocale.h>
 
@@ -34,7 +34,7 @@ namespace Rosegarden
 class Composition;
 
 
-class ModifyMarkerCommand : public KNamedCommand
+class ModifyMarkerCommand : public NamedCommand
 {
 public:
     ModifyMarkerCommand(Composition *comp,

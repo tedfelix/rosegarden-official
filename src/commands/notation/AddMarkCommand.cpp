@@ -24,7 +24,7 @@
 #include "document/BasicSelectionCommand.h"
 #include "document/CommandRegistry.h"
 #include "base/BaseProperties.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
@@ -75,7 +75,7 @@ AddMarkCommand::getGlobalName(Mark markType)
     else if (markType == Marks::MordentLongInverted)
         m = i18n("Lon&g Inverted Mordent");
     else
-        m = i18n("&%1%2").arg(m[0].upper()).arg(m.right(m.length() - 1));
+        m = i18n("&%1%2").arg(m[0].toUpper()).arg(m.right(m.length() - 1));
     // FIXME: That last i18n has very little chance of working, unless
     // by some miracle the exact same string was translated elsewhere already
     // but we'll leave it as a warning

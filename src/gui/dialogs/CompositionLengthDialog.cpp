@@ -20,45 +20,66 @@
 
 #include <klocale.h>
 #include "base/Composition.h"
-#include <kdialogbase.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qspinbox.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QLabel>
+#include <QSpinBox>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 
 
 namespace Rosegarden
 {
 
 CompositionLengthDialog::CompositionLengthDialog(
-    QWidget *parent,
+    QDialogButtonBox::QWidget *parent,
     Composition *composition):
-        KDialogBase(parent, 0, true, i18n("Change Composition Length"),
-                    Ok | Cancel),
+        QDialog(parent),
         m_composition(composition)
 {
-    QVBox *vBox = makeVBoxMainWidget();
+    setModal(true);
+    setWindowTitle(i18n("Change Composition Length"));
+
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
+    QWidget *vBox = new QWidget(this);
+    QVBoxLayout vBoxLayout = new QVBoxLayout;
+    metagrid->addWidget(vBox, 0, 0);
+
 
     new QLabel(i18n("Set the Start and End bar markers for this Composition"),
                vBox);
 
-    QHBox *startBox = new QHBox(vBox);
-    new QLabel(i18n("Start Bar"), startBox);
-    m_startMarkerSpinBox = new QSpinBox(startBox);
-    m_startMarkerSpinBox->setMinValue( -10);
-    m_startMarkerSpinBox->setMaxValue(10000);
+    QLabel *child_7 = new QLabel(i18n("Start Bar"), startBox );
+    startBoxLayout->addWidget(child_7);
+    m_startMarkerSpinBox = new QSpinBox( startBox );
+    startBoxLayout->addWidget(m_startMarkerSpinBox);
+    startBox->setLayout(startBoxLayout);
+    m_startMarkerSpinBox->setMinimum( -10);
+    m_startMarkerSpinBox->setMaximum(10000);
     m_startMarkerSpinBox->setValue(
         m_composition->getBarNumber(m_composition->getStartMarker()) + 1);
 
-    QHBox *endBox = new QHBox(vBox);
-    new QLabel(i18n("End Bar"), endBox);
-    m_endMarkerSpinBox = new QSpinBox(endBox);
-    m_endMarkerSpinBox->setMinValue( -10);
-    m_endMarkerSpinBox->setMaxValue(10000);
+    QWidget *endBox = new QWidget( vBox );
+    vBoxLayout->addWidget(endBox);
+    vBox->setLayout(vBoxLayout);
+    QHBoxLayout endBoxLayout = new QHBoxLayout;
+    QLabel *child_4 = new QLabel(i18n("End Bar"), endBox );
+    endBoxLayout->addWidget(child_4);
+    m_endMarkerSpinBox = new QSpinBox( endBox );
+    endBoxLayout->addWidget(m_endMarkerSpinBox);
+    endBox->setLayout(endBoxLayout);
+    m_endMarkerSpinBox->setMinimum( -10);
+    m_endMarkerSpinBox->setMaximum(10000);
     m_endMarkerSpinBox->setValue(
         m_composition->getBarNumber(m_composition->getEndMarker()));
 
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 timeT

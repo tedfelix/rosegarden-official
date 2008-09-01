@@ -29,7 +29,7 @@ namespace Rosegarden
 EraseSegmentsStartingInRangeCommand::EraseSegmentsStartingInRangeCommand(
     Composition *composition,
     timeT t0, timeT t1) :
-        KNamedCommand(i18n("Delete Range")),
+        NamedCommand(i18n("Delete Range")),
         m_composition(composition),
         m_beginTime(t0),
         m_endTime(t1),

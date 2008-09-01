@@ -29,22 +29,22 @@
 #include "commands/edit/ModifyMarkerCommand.h"
 #include "document/MultiViewCommandHistory.h"
 #include <kxmlguifactory.h>
-#include <qbrush.h>
-#include <qcursor.h>
-#include <qfont.h>
-#include <qfontmetrics.h>
-#include <qpainter.h>
-#include <qpen.h>
-#include <qpoint.h>
+#include <QBrush>
+#include <QCursor>
+#include <QFont>
+#include <QFontMetrics>
+#include <QPainter>
+#include <QPen>
+#include <QPoint>
 #include <qpopupmenu.h>
-#include <qrect.h>
-#include <qsize.h>
-#include <qstring.h>
-#include <qwidget.h>
+#include <QRect>
+#include <QSize>
+#include <QString>
+#include <QWidget>
 #include <klocale.h>
 #include <kaction.h>
-#include <kstddirs.h>
-#include <qtooltip.h>
+#include <kstandarddirs.h>
+#include <QToolTip>
 
 
 namespace Rosegarden
@@ -83,13 +83,13 @@ MarkerRuler::MarkerRuler(RosegardenGUIDoc *doc,
     m_barFont->setPointSize(10);
 
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QIconSet icon;
+    QIcon icon;
 
     // Use the event insert, delete, edit icons because they are
     // actually generic enough to serve for anything.  Let's hope they
     // don't become more event-specific in future...
 
-    icon = QIconSet(QPixmap(pixmapDir + "/toolbar/event-insert.png"));
+    icon = QIcon(QPixmap(pixmapDir + "/toolbar/event-insert.png"));
     new KAction(i18n("Insert Marker"), icon, 0, this,
              SLOT(slotInsertMarkerHere()), actionCollection(),
              "insert_marker_here");
@@ -98,12 +98,12 @@ MarkerRuler::MarkerRuler(RosegardenGUIDoc *doc,
              SLOT(slotInsertMarkerAtPointer()), actionCollection(),
              "insert_marker_at_pointer");
 
-    icon = QIconSet(QPixmap(pixmapDir + "/toolbar/event-delete.png"));
+    icon = QIcon(QPixmap(pixmapDir + "/toolbar/event-delete.png"));
     new KAction(i18n("Delete Marker"), icon, 0, this,
              SLOT(slotDeleteMarker()), actionCollection(),
              "delete_marker");
     
-    icon = QIconSet(QPixmap(pixmapDir + "/toolbar/event-edit.png"));
+    icon = QIcon(QPixmap(pixmapDir + "/toolbar/event-edit.png"));
     new KAction(i18n("Edit Marker..."), icon, 0, this,
                  SLOT(slotEditMarker()), actionCollection(),
                  "edit_marker");
@@ -436,7 +436,7 @@ MarkerRuler::mousePressEvent(QMouseEvent *e)
         return;       
     }
             
-    bool shiftPressed = ((e->state() & Qt::ShiftButton) != 0);
+    bool shiftPressed = ((e->state() & Qt::ShiftModifier) != 0);
 
     Composition &comp = m_doc->getComposition();
     Composition::markercontainer markers = comp.getMarkers();

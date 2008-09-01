@@ -20,7 +20,7 @@
 #define _RG_TRACKLABEL_H_
 
 #include "base/Track.h"
-#include <qstring.h>
+#include <QString>
 #include <qwidgetstack.h>
 
 

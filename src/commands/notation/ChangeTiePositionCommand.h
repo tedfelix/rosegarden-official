@@ -20,7 +20,7 @@
 #define _RG_ADJUSTMENUCHANGETIEPOSITIONCOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
-#include <qstring.h>
+#include <QString>
 #include <klocale.h>
 
 
@@ -39,7 +39,7 @@ public:
         m_selection(&selection), m_above(above) { }
 
     static QString getGlobalName(bool above) {
-        return above ? i18n("Tie &Above") : i18n("Tie &Below");
+        return above ? i18n("Tie &Above") : i18n("Tie &TicksBelow");
     }
 
     static bool getArgument(QString actionName, CommandArgumentQuerier &);

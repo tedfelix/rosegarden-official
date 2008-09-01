@@ -20,8 +20,8 @@
 #define _RG_PASTETOTRIGGERSEGMENTCOMMAND_H_
 
 #include "base/TriggerSegment.h"
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 
 
 
@@ -34,7 +34,7 @@ class Composition;
 class Clipboard;
 
 
-class PasteToTriggerSegmentCommand : public KNamedCommand
+class PasteToTriggerSegmentCommand : public NamedCommand
 {
 public:
     /// If basePitch is -1, the first pitch in the selection will be used

@@ -27,8 +27,8 @@
 #include "misc/Debug.h"
 #include "document/ConfigGroups.h"
 
-#include <qimage.h>
-#include <qapplication.h>
+#include <QImage>
+#include <QApplication>
 
 #include <kapp.h>
 #include <kconfig.h>
@@ -269,7 +269,7 @@ void AudioPreviewPainter::paintPreviewImage()
                                                                      m_segment->getStartTime()) -
                                  m_model.grid().getRulerScale()->getXForTime(m_segment->getStartTime()));
 
-        m_p.setPen(Qt::blue);
+        m_p.setPen(QColor(Qt::blue));
         m_p.drawRect(0,  m_apData->getSegmentRect().height() - 1, audioFadeInEnd, 1);
         m_pb.drawRect(0, m_apData->getSegmentRect().height() - 1, audioFadeInEnd, 1);
     }

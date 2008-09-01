@@ -30,23 +30,23 @@
 #include <kglobal.h>
 #include <klineedit.h>
 #include <klocale.h>
-#include <kstddirs.h>
-#include <qcheckbox.h>
-#include <qcursor.h>
-#include <qfile.h>
-#include <qframe.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qobjectlist.h>
-#include <qpixmap.h>
-#include <qpoint.h>
+#include <kstandarddirs.h>
+#include <QCheckBox>
+#include <QCursor>
+#include <QFile>
+#include <QFrame>
+#include <QLabel>
+#include <QLayout>
+#include <QObjectList>
+#include <QPixmap>
+#include <QPoint>
 #include <qpopupmenu.h>
-#include <qpushbutton.h>
-#include <qspinbox.h>
-#include <qstring.h>
-#include <qtooltip.h>
+#include <QPushButton>
+#include <QSpinBox>
+#include <QString>
+#include <QToolTip>
 #include <qvgroupbox.h>
-#include <qwidget.h>
+#include <QWidget>
 #include <algorithm>
 
 namespace Rosegarden
@@ -65,7 +65,7 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog* bankEditor,
 {
     QWidget *additionalWidget = makeAdditionalWidget(m_mainFrame);
     if (additionalWidget) {
-        m_mainLayout->addMultiCellWidget(additionalWidget, 0, 2, 0, 2);
+        m_mainLayout->addWidget(additionalWidget, 0, 0, 2- 0+1, 2- 1);
     }
 }
 
@@ -91,8 +91,8 @@ MidiProgramsEditor::makeAdditionalWidget(QWidget *parent)
 
     gridLayout->addWidget(new QLabel(i18n("MSB Value"), frame),
                           1, 0, AlignLeft);
-    m_msb->setMinValue(0);
-    m_msb->setMaxValue(127);
+    m_msb->setMinimum(0);
+    m_msb->setMaximum(127);
     gridLayout->addWidget(m_msb, 1, 1, AlignLeft);
 
     QToolTip::add
@@ -108,8 +108,8 @@ MidiProgramsEditor::makeAdditionalWidget(QWidget *parent)
 
     gridLayout->addWidget(new QLabel(i18n("LSB Value"), frame),
                           2, 0, AlignLeft);
-    m_lsb->setMinValue(0);
-    m_lsb->setMaxValue(127);
+    m_lsb->setMinimum(0);
+    m_lsb->setMaximum(127);
     gridLayout->addWidget(m_lsb, 2, 1, AlignLeft);
 
     connect(m_lsb, SIGNAL(valueChanged(int)),
@@ -384,7 +384,7 @@ MidiProgramsEditor::slotNameChanged(const QString& programName)
         return ;
     }
 
-    QString senderName = sender()->name();
+    QString senderName = sender()->objectName();
 
     // Adjust value back to zero rated
     //
@@ -443,7 +443,7 @@ MidiProgramsEditor::slotEntryButtonPressed()
         return ;
     }
 
-    QString senderName = button->name();
+    QString senderName = button->objectName();
 
     if (!m_device)
         return ;
@@ -466,12 +466,12 @@ MidiProgramsEditor::slotEntryButtonPressed()
         m_device->getKeyMappingForProgram(*program);
     int currentEntry = 0;
 
-    menu->insertItem(i18n("<no key mapping>"), this,
+    menu->addItem(i18n("<no key mapping>"), this,
                      SLOT(slotEntryMenuItemSelected(int)), 0, 0);
     menu->setItemParameter(0, 0);
 
     for (int i = 0; i < kml.size(); ++i) {
-        menu->insertItem(strtoqstr(kml[i].getName()),
+        menu->addItem(strtoqstr(kml[i].getName()),
                          this, SLOT(slotEntryMenuItemSelected(int)),
                          0, i + 1);
         menu->setItemParameter(i + 1, i + 1);

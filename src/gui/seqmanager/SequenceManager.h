@@ -27,8 +27,8 @@
 #include "gui/application/TransportStatus.h"
 #include "sound/MappedComposition.h"
 #include "sound/MappedEvent.h"
-#include <qobject.h>
-#include <qstring.h>
+#include <QObject>
+#include <QString>
 #include <vector>
 #include <map>
 

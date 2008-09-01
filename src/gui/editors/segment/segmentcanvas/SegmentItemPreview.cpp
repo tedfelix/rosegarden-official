@@ -20,9 +20,9 @@
 
 #include "base/RulerScale.h"
 #include "base/Segment.h"
-#include <qpainter.h>
-#include <qrect.h>
-#include <qwmatrix.h>
+#include <QPainter>
+#include <QRect>
+#include <QMatrix>
 
 
 namespace Rosegarden

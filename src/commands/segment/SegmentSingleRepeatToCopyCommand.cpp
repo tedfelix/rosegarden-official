@@ -29,7 +29,7 @@ namespace Rosegarden
 SegmentSingleRepeatToCopyCommand::SegmentSingleRepeatToCopyCommand(
     Segment *segment,
     timeT time):
-        KNamedCommand(i18n("Turn Single Repeat into Copy")),
+        NamedCommand(i18n("Turn Single Repeat into Copy")),
         m_composition(segment->getComposition()),
         m_segment(segment),
         m_newSegment(0),

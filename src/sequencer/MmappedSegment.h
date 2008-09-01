@@ -32,10 +32,10 @@
 #include <kstandarddirs.h>
 
 #include <dcopclient.h>
-#include <qdatetime.h>
-#include <qstring.h>
-#include <qdir.h>
-#include <qbuffer.h>
+#include <QDateTime>
+#include <QString>
+#include <QDir>
+#include <QBuffer>
 
 #include "MmappedControlBlock.h"
 #include "sound/MappedInstrument.h"

@@ -19,6 +19,7 @@
 #ifndef _RG_MATRIXVIEW_H_
 #define _RG_MATRIXVIEW_H_
 
+#include <Q3Canvas>
 #include "base/MidiProgram.h"
 #include "base/PropertyName.h"
 #include "base/SnapGrid.h"
@@ -28,8 +29,8 @@
 #include "MatrixVLayout.h"
 #include "MatrixCanvasView.h"
 #include <kdockwidget.h>
-#include <qpoint.h>
-#include <qsize.h>
+#include <QPoint>
+#include <QSize>
 #include <vector>
 #include "base/Event.h"
 #include "document/ConfigGroups.h"
@@ -41,8 +42,8 @@ class QObject;
 class QMouseEvent;
 class QLabel;
 class QCursor;
-class QCanvas;
-class KComboBox;
+class Q3Canvas;
+class QComboBox;
 
 
 namespace Rosegarden
@@ -93,7 +94,7 @@ public:
                                 timeT startTime = 0,
                                 timeT endTime = 0);
 
-    QCanvas* canvas() { return getCanvasView()->canvas(); }
+    Q3Canvas* canvas() { return getCanvasView()->canvas(); }
 
     void setCanvasCursor(const QCursor &cursor) {
         getCanvasView()->viewport()->setCursor(cursor);
@@ -630,9 +631,9 @@ protected:
 
     // Toolbar flora
     //
-    KComboBox          *m_velocityCombo;
-    KComboBox          *m_quantizeCombo;
-    KComboBox          *m_snapGridCombo;
+    QComboBox          *m_velocityCombo;
+    QComboBox          *m_quantizeCombo;
+    QComboBox          *m_snapGridCombo;
     ZoomSlider<double> *m_hZoomSlider;
     ZoomSlider<double> *m_vZoomSlider;
     QLabel             *m_zoomLabel;

@@ -23,13 +23,13 @@
 #include "gui/general/GUIPalette.h"
 #include "gui/studio/AudioPluginManager.h"
 #include "gui/widgets/Rotary.h"
-#include <qfont.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qobject.h>
-#include <qstring.h>
-#include <qwidget.h>
+#include <QFont>
+#include <QLabel>
+#include <QLayout>
+#include <QObject>
+#include <QString>
+#include <QWidget>
+#include <QHBoxLayout>
 #include <cmath>
 
 

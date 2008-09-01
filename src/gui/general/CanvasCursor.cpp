@@ -16,18 +16,20 @@
 */
 
 
+#include <Q3Canvas>
+#include <Q3CanvasRectangle>
 #include "CanvasCursor.h"
 
 #include "GUIPalette.h"
 #include <qcanvas.h>
-#include <qpen.h>
+#include <QPen>
 
 
 namespace Rosegarden
 {
 
-CanvasCursor::CanvasCursor(QCanvas* c, int width)
-        : QCanvasRectangle(c),
+CanvasCursor::CanvasCursor(Q3Canvas* c, int width)
+        : Q3CanvasRectangle(c),
         m_width(width)
 {
     QPen pen(GUIPalette::getColour(GUIPalette::Pointer));

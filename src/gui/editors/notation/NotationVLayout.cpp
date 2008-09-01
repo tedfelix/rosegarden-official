@@ -35,9 +35,9 @@
 #include "NotationStaff.h"
 #include "NotePixmapFactory.h"
 #include <kmessagebox.h>
-#include <qobject.h>
-#include <qstring.h>
-#include <qwidget.h>
+#include <QObject>
+#include <QString>
+#include <QWidget>
 
 
 namespace Rosegarden

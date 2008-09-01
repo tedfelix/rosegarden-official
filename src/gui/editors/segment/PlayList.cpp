@@ -20,20 +20,20 @@
 #include "PlayListView.h"
 #include "PlayListViewItem.h"
 #include "document/ConfigGroups.h"
-#include <qlayout.h>
+#include <QLayout>
 
 #include <klocale.h>
 #include <kconfig.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kurl.h>
-#include <qframe.h>
-#include <qpushbutton.h>
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qstrlist.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <QFrame>
+#include <QPushButton>
+#include <QString>
+#include <QStringList>
+#include <QStringList>
+#include <QWidget>
+#include <QVBoxLayout>
 #include <qdragobject.h>
 
 
@@ -122,7 +122,7 @@ void PlayList::slotOpenFiles()
         new PlayListViewItem(m_listView, *it);
     }
 
-    enableButtons(m_listView->currentItem());
+    enableButtons(m_listView->currentIndex());
 }
 
 void
@@ -137,43 +137,43 @@ PlayList::slotDropped(QDropEvent *event, QListViewItem* after)
         // weed out non-rg files
         //
         for (QString url = uri.first(); url; url = uri.next()) {
-            if (url.right(3).lower() == ".rg")
+            if (url.right(3).toLower() == ".rg")
                 new PlayListViewItem(m_listView, after, KURL(url));
 
         }
     }
 
-    enableButtons(m_listView->currentItem());
+    enableButtons(m_listView->currentIndex());
 }
 
 void PlayList::slotPlay()
 {
-    PlayListViewItem *currentItem = dynamic_cast<PlayListViewItem*>(m_listView->currentItem());
+    PlayListViewItem *currentIndex = dynamic_cast<PlayListViewItem*>(m_listView->currentIndex());
 
-    if (currentItem)
-        emit play(currentItem->getURL().url());
+    if (currentIndex)
+        emit play(currentIndex->getURL().url());
 }
 
 void PlayList::slotMoveUp()
 {
-    QListViewItem *currentItem = m_listView->currentItem();
-    QListViewItem *previousItem = m_listView->previousSibling(currentItem);
+    QListViewItem *currentIndex = m_listView->currentIndex();
+    QListViewItem *previousItem = m_listView->previousSibling(currentIndex);
 
     if (previousItem)
-        previousItem->moveItem(currentItem);
+        previousItem->moveItem(currentIndex);
 
-    enableButtons(currentItem);
+    enableButtons(currentIndex);
 }
 
 void PlayList::slotMoveDown()
 {
-    QListViewItem *currentItem = m_listView->currentItem();
-    QListViewItem *nextItem = currentItem->nextSibling();
+    QListViewItem *currentIndex = m_listView->currentIndex();
+    QListViewItem *nextItem = currentIndex->nextSibling();
 
     if (nextItem)
-        currentItem->moveItem(nextItem);
+        currentIndex->moveItem(nextItem);
 
-    enableButtons(currentItem);
+    enableButtons(currentIndex);
 }
 
 void PlayList::slotClear()
@@ -184,26 +184,26 @@ void PlayList::slotClear()
 
 void PlayList::slotDeleteCurrent()
 {
-    QListViewItem* currentItem = m_listView->currentItem();
-    if (currentItem)
-        delete currentItem;
+    QListViewItem* currentIndex = m_listView->currentIndex();
+    if (currentIndex)
+        delete currentIndex;
 }
 
-void PlayList::slotCurrentItemChanged(QListViewItem* currentItem)
+void PlayList::slotCurrentItemChanged(QListViewItem* currentIndex)
 {
-    enableButtons(currentItem);
+    enableButtons(currentIndex);
 }
 
-void PlayList::enableButtons(QListViewItem* currentItem)
+void PlayList::enableButtons(QListViewItem* currentIndex)
 {
-    bool enable = (currentItem != 0);
+    bool enable = (currentIndex != 0);
 
     m_playButton->setEnabled(enable);
     m_deleteButton->setEnabled(enable);
 
-    if (currentItem) {
-        m_moveUpButton->setEnabled(currentItem != m_listView->firstChild());
-        m_moveDownButton->setEnabled(currentItem != m_listView->lastItem());
+    if (currentIndex) {
+        m_moveUpButton->setEnabled(currentIndex != m_listView->firstChild());
+        m_moveDownButton->setEnabled(currentIndex != m_listView->lastItem());
     } else {
         m_moveUpButton->setEnabled(false);
         m_moveDownButton->setEnabled(false);

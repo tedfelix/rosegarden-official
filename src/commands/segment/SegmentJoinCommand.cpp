@@ -23,7 +23,7 @@
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
 #include "base/Selection.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
@@ -31,7 +31,7 @@ namespace Rosegarden
 
 SegmentJoinCommand::SegmentJoinCommand(SegmentSelection &
                                        segments) :
-        KNamedCommand(getGlobalName()),
+        NamedCommand(getGlobalName()),
         m_newSegment(0),
         m_detached(false) // true if the old segments are detached, not the new
 {

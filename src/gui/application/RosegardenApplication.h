@@ -20,12 +20,12 @@
 #define _RG_ROSEGARDENAPPLICATION_H_
 
 #include <kuniqueapplication.h>
-#include <qcstring.h>
-#include <qstring.h>
+#include <QByteArray>
+#include <QString>
 
 
 class QSessionManager;
-class KProcess;
+class QProcess;
 
 
 namespace Rosegarden
@@ -55,8 +55,8 @@ public:
     void refreshGUI(int maxTime);
 /*!!!
     bool isSequencerRegistered();
-    bool sequencerSend(QCString dcopCall, QByteArray params = Empty);
-    bool sequencerCall(QCString dcopCall, QCString& replyType,
+    bool sequencerSend(QByteArray dcopCall, QByteArray params = Empty);
+    bool sequencerCall(QByteArray dcopCall, QByteArray& replyType,
                        QByteArray& replyData, QByteArray params = Empty, bool useEventLoop = false);
 */
 
@@ -74,7 +74,7 @@ signals:
     void aboutToSaveState();
     
 public slots:
-    void sfxLoadExited(KProcess *proc);
+    void sfxLoadExited(QProcess *proc);
     void slotSetStatusMessage(QString txt);
 
 protected:

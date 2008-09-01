@@ -42,7 +42,7 @@ AudioSegmentInsertCommand::AudioSegmentInsertCommand(RosegardenGUIDoc *doc,
                                                      AudioFileId audioFileId,
                                                      const RealTime &audioStartTime,
                                                      const RealTime &audioEndTime):
-    KNamedCommand(i18n("Create Segment")),
+    NamedCommand(i18n("Create Segment")),
     m_composition(&(doc->getComposition())),
     m_audioFileManager(&(doc->getAudioFileManager())),
     m_segment(0),

@@ -22,7 +22,8 @@
 #include "base/TriggerSegment.h"
 #include "base/NotationTypes.h"
 #include <string>
-#include <kdialogbase.h>
+#include <QDialog>
+#include <QDialogButtonBox>
 #include <vector>
 
 
@@ -30,7 +31,7 @@ class QWidget;
 class QLineEdit;
 class QLabel;
 class QCheckBox;
-class KComboBox;
+class QComboBox;
 
 
 namespace Rosegarden
@@ -39,12 +40,12 @@ namespace Rosegarden
 class Composition;
 
 
-class UseOrnamentDialog : public KDialogBase
+class UseOrnamentDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    UseOrnamentDialog(QWidget *parent, Composition *);
+    UseOrnamentDialog(QDialogButtonBox::QWidget *parent, Composition *);
 
     TriggerSegmentId getId() const;
     Mark getMark() const;
@@ -61,12 +62,12 @@ protected:
     std::vector<Mark> m_marks;
 
     Composition  *m_composition;
-    KComboBox                *m_ornament;
-    KComboBox                *m_mark;
+    QComboBox                *m_ornament;
+    QComboBox                *m_mark;
     QLabel                   *m_textLabel;
     QLineEdit                *m_text;
     QCheckBox                *m_retune;
-    KComboBox                *m_adjustTime;
+    QComboBox                *m_adjustTime;
 };
 
 

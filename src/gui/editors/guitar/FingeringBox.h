@@ -20,7 +20,7 @@
 #ifndef _RG_FINGERINGBOX_H_
 #define _RG_FINGERINGBOX_H_
 
-#include <qframe.h>
+#include <QFrame>
 
 #include "NoteSymbols.h"
 #include "Fingering.h"

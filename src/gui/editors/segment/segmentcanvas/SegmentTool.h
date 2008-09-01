@@ -21,13 +21,13 @@
 
 #include "gui/general/BaseTool.h"
 #include "CompositionItem.h"
-#include <qpoint.h>
+#include <QPoint>
 #include <utility>
 #include <vector>
 
 
 class QMouseEvent;
-class KCommand;
+class Command;
 
 
 namespace Rosegarden
@@ -68,7 +68,7 @@ public:
     virtual void handleMouseButtonRelease(QMouseEvent*)   = 0;
     virtual int  handleMouseMove(QMouseEvent*)            = 0;
 
-    void addCommandToHistory(KCommand *command);
+    void addCommandToHistory(Command *command);
 
 protected:
     SegmentTool(CompositionView*, RosegardenGUIDoc *doc);
@@ -76,7 +76,7 @@ protected:
     virtual void createMenu();
     virtual bool hasMenu() { return true; }
     
-    void setCurrentItem(CompositionItem item) { if (item != m_currentItem) { delete m_currentItem; m_currentItem = item; } }
+    void setCurrentIndex(CompositionItem item) { if (item != m_currentIndex) { delete m_currentIndex; m_currentIndex = item; } }
 
     SegmentToolBox* getToolBox();
 
@@ -86,7 +86,7 @@ protected:
     //--------------- Data members ---------------------------------
 
     CompositionView*  m_canvas;
-    CompositionItem   m_currentItem;
+    CompositionItem   m_currentIndex;
     RosegardenGUIDoc* m_doc;
     QPoint            m_origPos;
     bool              m_changeMade;

@@ -18,8 +18,8 @@
 
 #include "CompositionItem.h"
 
-#include <qobject.h>
-#include <qrect.h>
+#include <QObject>
+#include <QRect>
 
 
 namespace Rosegarden

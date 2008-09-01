@@ -18,8 +18,8 @@
 #ifndef _RG_AUDIOSEGMENTRESCALECOMMAND_H_
 #define _RG_AUDIOSEGMENTRESCALECOMMAND_H_
 
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include "base/Event.h"
 #include <klocale.h>
 
@@ -32,7 +32,7 @@ class AudioFileTimeStretcher;
 class RosegardenGUIDoc;
 class ProgressDialog;
 
-class AudioSegmentRescaleCommand : public KNamedCommand
+class AudioSegmentRescaleCommand : public NamedCommand
 {
 public:
     AudioSegmentRescaleCommand(RosegardenGUIDoc *doc,

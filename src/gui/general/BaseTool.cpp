@@ -20,10 +20,10 @@
 
 #include "misc/Debug.h"
 #include <kxmlguifactory.h>
-#include <qcursor.h>
-#include <qobject.h>
+#include <QCursor>
+#include <QObject>
 #include <qpopupmenu.h>
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden

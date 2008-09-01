@@ -40,7 +40,7 @@
 #include "NotationStaff.h"
 #include "NotePixmapFactory.h"
 #include <kconfig.h>
-#include <qobject.h>
+#include <QObject>
 #include <cmath>
 
 namespace Rosegarden

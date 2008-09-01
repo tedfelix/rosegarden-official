@@ -19,18 +19,20 @@
 #ifndef _RG_PROPERTYCONTROLRULER_H_
 #define _RG_PROPERTYCONTROLRULER_H_
 
+#include <Q3Canvas>
+#include <Q3CanvasLine>
 #include "base/PropertyName.h"
 #include "base/Staff.h"
 #include "ControlRuler.h"
-#include <qstring.h>
+#include <QString>
 #include "base/Event.h"
 
 
 class QWidget;
 class QMouseEvent;
 class QContextMenuEvent;
-class QCanvasLine;
-class QCanvas;
+class Q3CanvasLine;
+class Q3Canvas;
 
 
 namespace Rosegarden
@@ -54,7 +56,7 @@ public:
                          Staff*,
                          RulerScale*,
                          EditViewBase* parentView,
-                         QCanvas*,
+                         Q3Canvas*,
                          QWidget* parent=0, const char* name=0, WFlags f=0);
 
     virtual ~PropertyControlRuler();
@@ -99,7 +101,7 @@ protected:
     PropertyName       m_propertyName;
     Staff*             m_staff;
 
-    QCanvasLine                   *m_propertyLine;
+    Q3CanvasLine                   *m_propertyLine;
     
     bool                           m_propertyLineShowing;
     int                            m_propertyLineX;

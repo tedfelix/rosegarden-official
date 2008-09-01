@@ -17,7 +17,7 @@
 
 
 #include "SynthPluginManagerDialog.h"
-#include <qlayout.h>
+#include <QLayout>
 
 #include <klocale.h>
 #include "misc/Debug.h"
@@ -31,17 +31,17 @@
 #include "document/RosegardenGUIDoc.h"
 #include "document/ConfigGroups.h"
 #include <kaction.h>
-#include <kcombobox.h>
+#include <QComboBox>
 #include <kmainwindow.h>
-#include <kstdaction.h>
-#include <qframe.h>
-#include <qgroupbox.h>
-#include <qlabel.h>
-#include <qobject.h>
-#include <qpushbutton.h>
-#include <qsizepolicy.h>
-#include <qstring.h>
-#include <qwidget.h>
+#include <kstandardaction.h>
+#include <QFrame>
+#include <QGroupBox>
+#include <QLabel>
+#include <QObject>
+#include <QPushButton>
+#include <QSizePolicy>
+#include <QString>
+#include <QWidget>
 
 
 namespace Rosegarden
@@ -108,10 +108,10 @@ SynthPluginManagerDialog::SynthPluginManagerDialog(QWidget *parent,
             if (plugin)
                 identifier = plugin->getIdentifier();
 
-            int currentItem = 0;
+            int currentIndex = 0;
 
-            KComboBox *pluginCombo = new KComboBox(pluginFrame);
-            pluginCombo->insertItem(i18n("<none>"));
+            QComboBox *pluginCombo = new QComboBox(pluginFrame);
+            pluginCombo->addItem(i18n("<none>"));
 
             for (size_t j = 0; j < m_synthPlugins.size(); ++j) {
 
@@ -121,10 +121,10 @@ SynthPluginManagerDialog::SynthPluginManagerDialog(QWidget *parent,
                 AudioPlugin *plugin =
                     m_pluginManager->getPlugin(m_synthPlugins[j]);
 
-                pluginCombo->insertItem(plugin->getName());
+                pluginCombo->addItem(plugin->getName());
 
                 if (plugin->getIdentifier() == identifier.c_str()) {
-                    pluginCombo->setCurrentItem(pluginCombo->count() - 1);
+                    pluginCombo->setCurrentIndex(pluginCombo->count() - 1);
                 }
             }
 
@@ -164,7 +164,7 @@ SynthPluginManagerDialog::SynthPluginManagerDialog(QWidget *parent,
         layout->addWidget(closeButton);
         layout->addSpacing(5);
 
-        KAction* close = KStdAction::close(this,
+        KAction* close = KStandardAction::close(this,
                                            SLOT(slotClose()),
                                            actionCollection());
 
@@ -193,19 +193,19 @@ SynthPluginManagerDialog::SynthPluginManagerDialog(QWidget *parent,
         if (row >= m_synthCombos.size())
             return ;
 
-        KComboBox *comboBox = m_synthCombos[row];
+        QComboBox *comboBox = m_synthCombos[row];
 
         for (unsigned int i = 0; i < m_synthPlugins.size(); ++i) {
             if (m_synthPlugins[i] == plugin) {
                 blockSignals(true);
-                comboBox->setCurrentItem(i);
+                comboBox->setCurrentIndex(i);
                 blockSignals(false);
                 return ;
             }
         }
 
         blockSignals(true);
-        comboBox->setCurrentItem(0);
+        comboBox->setCurrentIndex(0);
         blockSignals(false);
         return ;
     }

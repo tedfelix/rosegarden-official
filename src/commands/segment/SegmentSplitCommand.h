@@ -20,7 +20,7 @@
 #define _RG_SEGMENTSPLITCOMMAND_H_
 
 #include <string>
-#include <kcommand.h>
+#include "document/Command.h"
 #include "base/Event.h"
 
 
@@ -32,7 +32,7 @@ namespace Rosegarden
 class Segment;
 
 
-class SegmentSplitCommand : public KNamedCommand
+class SegmentSplitCommand : public NamedCommand
 {
 public:
 

@@ -19,24 +19,25 @@
 #include "ExportDeviceDialog.h"
 
 #include <klocale.h>
-#include <kdialogbase.h>
-#include <qbuttongroup.h>
-#include <qlabel.h>
-#include <qradiobutton.h>
-#include <qstring.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QGroupBox>
+#include <QLabel>
+#include <QRadioButton>
+#include <QString>
+#include <QWidget>
+#include <QVBoxLayout>
 
 
 namespace Rosegarden
 {
 
-ExportDeviceDialog::ExportDeviceDialog(QWidget *parent, QString deviceName) :
+ExportDeviceDialog::ExportDeviceDialog(QDialogButtonBox::QWidget *parent, QString deviceName) :
         KDialogBase(parent, "exportdevicedialog", true, i18n("Export Devices..."),
                     Ok | Cancel, Ok)
 {
     QVBox *vbox = makeVBoxMainWidget();
-    QButtonGroup *bg = new QButtonGroup(1, Qt::Horizontal,
+    QGroupBox *bg = new QGroupBox(1, Qt::Horizontal,
                                         i18n("Export devices"),
                                         vbox);
     m_exportAll = new QRadioButton(i18n("Export all devices"), bg);

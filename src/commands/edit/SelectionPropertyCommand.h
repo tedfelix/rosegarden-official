@@ -21,7 +21,7 @@
 
 #include "base/PropertyName.h"
 #include "document/BasicSelectionCommand.h"
-#include <qstring.h>
+#include <QString>
 #include <klocale.h>
 
 

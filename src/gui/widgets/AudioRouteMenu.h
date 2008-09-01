@@ -19,12 +19,12 @@
 #ifndef _RG_AUDIOROUTEMENU_H_
 #define _RG_AUDIOROUTEMENU_H_
 
-#include <qobject.h>
-#include <qstring.h>
+#include <QObject>
+#include <QString>
 
 
 class QWidget;
-class KComboBox;
+class QComboBox;
 
 
 namespace Rosegarden
@@ -72,7 +72,7 @@ private:
     Format m_format;
 
     WheelyButton *m_button;
-    KComboBox *m_combo;
+    QComboBox *m_combo;
 
     int getNumEntries();
     int getCurrentEntry(); // for instrument

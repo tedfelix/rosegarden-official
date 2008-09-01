@@ -17,42 +17,53 @@
 
 
 #include "MarkerModifyDialog.h"
-#include <qlayout.h>
+#include <QLayout>
 
 #include <klocale.h>
 #include "base/Composition.h"
 #include "document/RosegardenGUIDoc.h"
 #include "gui/widgets/TimeWidget.h"
-#include <kdialogbase.h>
-#include <qframe.h>
-#include <qgroupbox.h>
-#include <qlabel.h>
-#include <qlineedit.h>
-#include <qspinbox.h>
-#include <qstring.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QFrame>
+#include <QGroupBox>
+#include <QLabel>
+#include <QLineEdit>
+#include <QSpinBox>
+#include <QString>
+#include <QWidget>
+#include <QVBoxLayout>
 #include "misc/Strings.h"
 
 
 namespace Rosegarden
 {
 
-MarkerModifyDialog::MarkerModifyDialog(QWidget *parent,
+MarkerModifyDialog::MarkerModifyDialog(QDialogButtonBox::QWidget *parent,
                                        Composition *composition,
                                        int time,
                                        const QString &name,
                                        const QString &des):
-    KDialogBase(parent, 0, true, i18n("Edit Marker"), Ok | Cancel)
+    QDialog(parent)
 {
+    setModal(true);
+    setWindowTitle(i18n("Edit Marker"));
+
+#warning Dialog needs QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel)
+
     initialise(composition, time, name, des);
 }
 
 MarkerModifyDialog::MarkerModifyDialog(QWidget *parent,
                                        Composition *composition,
                                        Marker *marker) :
-    KDialogBase(parent, 0, true, i18n("Edit Marker"), Ok | Cancel)
+    QDialog(parent)
 {
+    setModal(true);
+    setWindowTitle(i18n("Edit Marker"));
+
+#warning Dialog needs QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel)
+
     initialise(composition, marker->getTime(),
                strtoqstr(marker->getName()),
                strtoqstr(marker->getDescription()));
@@ -77,9 +88,9 @@ MarkerModifyDialog::initialise(Composition *composition,
         m_timeEdit = new QSpinBox(frame);
         layout->addWidget(m_timeEdit, 0, 1);
      
-        m_timeEdit->setMinValue(INT_MIN);
-        m_timeEdit->setMaxValue(INT_MAX);
-        m_timeEdit->setLineStep(
+        m_timeEdit->setMinimum(INT_MIN);
+        m_timeEdit->setMaximum(INT_MAX);
+        m_timeEdit->setSingleStep(
                 Note(Note::Shortest).getDuration());
         m_timeEdit->setValue(time);
     */

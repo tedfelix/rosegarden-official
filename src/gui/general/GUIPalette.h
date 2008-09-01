@@ -21,7 +21,7 @@
 
 #include "base/Colour.h"
 #include <map>
-#include <qcolor.h>
+#include <QColor>
 
 
 

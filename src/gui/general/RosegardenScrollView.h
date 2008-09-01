@@ -19,10 +19,10 @@
 #ifndef _RG_ROSEGARDENSCROLLVIEW_H_
 #define _RG_ROSEGARDENSCROLLVIEW_H_
 
-#include <qpoint.h>
+#include <QPoint>
 #include <qscrollview.h>
-#include <qdatetime.h>
-#include <qtimer.h>
+#include <QDateTime>
+#include <QTimer>
 
 
 class QWidget;
@@ -147,11 +147,11 @@ protected:
     int m_smoothScrollTimeInterval;
     float m_minDeltaScroll;
     QTime m_scrollTimer;
-    QTime m_scrollAccelerationTimer;
+    QTime m_scrollShortcuterationTimer;
 
     QTimer m_autoScrollTimer;
     int m_autoScrollTime;
-    int m_autoScrollAccel;
+    int m_autoScrollShortcut;
     QPoint m_previousP;
     int m_autoScrollXMargin;
     int m_autoScrollYMargin;
@@ -164,9 +164,9 @@ protected:
 
     static const int AutoscrollMargin;
     static const int InitialScrollTime;
-    static const int InitialScrollAccel;
+    static const int InitialScrollShortcut;
     static const int MaxScrollDelta;
-    static const double ScrollAccelValue;
+    static const double ScrollShortcutValue;
 
 };
 

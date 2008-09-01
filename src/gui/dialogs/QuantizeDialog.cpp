@@ -21,26 +21,33 @@
 #include <klocale.h>
 #include "base/Quantizer.h"
 #include "gui/widgets/QuantizeParameters.h"
-#include <kdialogbase.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QWidget>
+#include <QVBoxLayout>
 
 
 namespace Rosegarden
 {
 
-QuantizeDialog::QuantizeDialog(QWidget *parent, bool inNotation) :
-        KDialogBase(parent, 0, true, i18n("Quantize"), Ok | Cancel | Details | Help)
+QuantizeDialog::QuantizeDialog(QDialogButtonBox::QWidget *parent, bool inNotation) :
+        QDialog(parent)
 {
     setHelp("quantization");
 
-    QVBox *vbox = makeVBoxMainWidget();
+    setModal(true);
+    setWindowTitle(i18n("Quantize"));
 
-    m_quantizeFrame =
-        new QuantizeParameters
-        (vbox, inNotation ? QuantizeParameters::Notation :
-         QuantizeParameters::Grid,
-         true, false, 0);
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
+    QWidget *vbox = new QWidget(this);
+    QVBoxLayout vboxLayout = new QVBoxLayout;
+    metagrid->addWidget(vbox, 0, 0);
+
+
+    m_quantizeFrame = new QuantizeParameters( vbox , 0);
+    vboxLayout->addWidget(m_quantizeFrame);
+    vbox->setLayout(vboxLayout);
 
     setButtonText(Details, i18n("Advanced"));
     setDetailsWidget(m_quantizeFrame->getAdvancedWidget());
@@ -49,6 +56,11 @@ QuantizeDialog::QuantizeDialog(QWidget *parent, bool inNotation) :
     m_quantizeFrame->adjustSize();
     vbox->adjustSize();
     adjustSize();
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Details | QDialogButtonBox::Help);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 Quantizer *

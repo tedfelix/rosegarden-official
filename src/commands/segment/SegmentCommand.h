@@ -19,8 +19,8 @@
 #ifndef _RG_SEGMENTCOMMAND_H_
 #define _RG_SEGMENTCOMMAND_H_
 
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include <vector>
 
 
@@ -35,7 +35,7 @@ class Segment;
 /**
  * Base class for commands from the SegmentParameterBox
  */
-class SegmentCommand : public KNamedCommand
+class SegmentCommand : public NamedCommand
 {
 public:
     SegmentCommand(QString name, const std::vector<Segment*>&);

@@ -19,11 +19,11 @@
 
 #include <string>
 #include "NoteStyle.h"
-#include <qfileinfo.h>
-#include <qdir.h>
+#include <QFileInfo>
+#include <QDir>
 
 #include <kglobal.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <klocale.h>
 
 #include "misc/Strings.h"
@@ -69,7 +69,7 @@ NoteStyleFileReader::startElement(const QString &, const QString &,
 				  const QString &qName,
 				  const QXmlAttributes &attributes)
 {
-    QString lcName = qName.lower();
+    QString lcName = qName.toLower();
 
     if (lcName == "rosegarden-note-style") {
 
@@ -120,7 +120,7 @@ NoteStyleFileReader::setFromAttributes(Note::Type type,
 
     s = attributes.value("shape");
     if (s) {
-	m_style->setShape(type, qstrtostr(s.lower()));
+	m_style->setShape(type, qstrtostr(s.toLower()));
 	haveShape = true;
     }
     
@@ -136,10 +136,10 @@ NoteStyleFileReader::setFromAttributes(Note::Type type,
     }
 
     s = attributes.value("filled");
-    if (s) m_style->setFilled(type, s.lower() == "true");
+    if (s) m_style->setFilled(type, s.toLower() == "true");
     
     s = attributes.value("stem");
-    if (s) m_style->setStem(type, s.lower() == "true");
+    if (s) m_style->setStem(type, s.toLower() == "true");
     
     s = attributes.value("flags");
     if (s) m_style->setFlagCount(type, s.toInt());
@@ -155,7 +155,7 @@ NoteStyleFileReader::setFromAttributes(Note::Type type,
 
     s = attributes.value("hfixpoint");
     if (s) {
-	s = s.lower();
+	s = s.toLower();
 	haveHFix = true;
 	if (s == "normal") hfix = NoteStyle::Normal;
 	else if (s == "central") hfix = NoteStyle::Central;
@@ -165,7 +165,7 @@ NoteStyleFileReader::setFromAttributes(Note::Type type,
 
     s = attributes.value("vfixpoint");
     if (s) {
-	s = s.lower();
+	s = s.toLower();
 	haveVFix = true;
 	if (s == "near") vfix = NoteStyle::Near;
 	else if (s == "middle") vfix = NoteStyle::Middle;

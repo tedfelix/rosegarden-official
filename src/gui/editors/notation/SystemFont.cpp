@@ -22,12 +22,12 @@
 
 #include "misc/Debug.h"
 
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include "NoteFontMap.h"
-#include <qfont.h>
-#include <qfontinfo.h>
-#include <qpixmap.h>
-#include <qstring.h>
+#include <QFont>
+#include <QFontInfo>
+#include <QPixmap>
+#include <QString>
 
 
 namespace Rosegarden
@@ -65,14 +65,14 @@ SystemFont::loadSystemFont(const SystemFontSpec &spec)
     if (!haveFcDirectory) {
         QString fontDir = KGlobal::dirs()->findResource("appdata", "fonts/");
         if (!FcConfigAppFontAddDir(FcConfigGetCurrent(),
-                                   (const FcChar8 *)fontDir.latin1())) {
+                                   (const FcChar8 *)fontDir.toLatin1().data())) {
             NOTATION_DEBUG << "SystemFont::loadSystemFont[Xft]: Failed to add font directory " << fontDir << " to fontconfig, continuing without it" << endl;
         }
         haveFcDirectory = true;
     }
 
     pattern = FcPatternCreate();
-    FcPatternAddString(pattern, FC_FAMILY, (FcChar8 *)name.latin1());
+    FcPatternAddString(pattern, FC_FAMILY, (FcChar8 *)name.toLatin1().data());
     FcPatternAddInteger(pattern, FC_PIXEL_SIZE, size);
     FcConfigSubstitute(FcConfigGetCurrent(), pattern, FcMatchPattern);
 
@@ -93,7 +93,7 @@ SystemFont::loadSystemFont(const SystemFontSpec &spec)
     NOTATION_DEBUG << "SystemFont::loadSystemFont[Xft]: match family is "
     << (char *)matchFamily << endl;
 
-    if (QString((char *)matchFamily).lower() != name.lower()) {
+    if (QString((char *)matchFamily).toLower() != name.toLower()) {
         NOTATION_DEBUG << "SystemFont::loadSystemFont[Xft]: Wrong family returned, falling back on QFont" << endl;
         FcPatternDestroy(match);
         goto qfont;
@@ -139,15 +139,15 @@ qfont:
     // "Fughetta [macromedia]", and exactMatch returns false.  Just as
     // useless, but in a different way.
 
-    QString family = info.family().lower();
+    QString family = info.family().toLower();
 
-    if (family == name.lower())
+    if (family == name.toLower())
         return new SystemFontQt(qfont);
     else {
         int bracket = family.find(" [");
         if (bracket > 1)
             family = family.left(bracket);
-        if (family == name.lower())
+        if (family == name.toLower())
             return new SystemFontQt(qfont);
     }
 

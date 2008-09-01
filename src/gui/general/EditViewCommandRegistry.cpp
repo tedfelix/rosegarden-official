@@ -26,11 +26,11 @@
 
 #include <kinputdialog.h>
 #include <kactionclasses.h>
-#include <kstddirs.h>
+#include <kstandarddirs.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 
-#include <qfile.h>
+#include <QFile>
 
 #include "gui/general/EditView.h"
 #include "misc/Strings.h"
@@ -57,7 +57,7 @@ EditViewCommandRegistry::addAction(QString title,
                                    QString menuActionName)
 {
     bool haveIcon = (iconName != "");
-    QIconSet icon;
+    QIcon icon;
 
     QString scs = shortcut.toString();
     std::cerr << "Adding action: " << title << ", " << ((iconName && iconName != "") ? iconName : "(no icon)") << ", " << ((scs && scs != "") ? scs : "(no shortcut)") << ", " << actionName << std::endl;
@@ -68,9 +68,9 @@ EditViewCommandRegistry::addAction(QString title,
         QString fileBase = pixmapDir + "/toolbar/";
         fileBase += iconName;
         if (QFile(fileBase + ".png").exists()) {
-            icon = QIconSet(QPixmap(fileBase + ".png"));
+            icon = QIcon(QPixmap(fileBase + ".png"));
         } else if (QFile(fileBase + ".xpm").exists()) {
-            icon = QIconSet(QPixmap(fileBase + ".xpm"));
+            icon = QIcon(QPixmap(fileBase + ".xpm"));
         } else {
             haveIcon = findIcon(iconName, icon);
         }
@@ -137,7 +137,7 @@ EditViewCommandRegistry::invokeCommand(QString actionName)
 
         EditViewCommandArgumentQuerier querier(m_view);
 
-        KCommand *command = m_builders[actionName]->build
+        Command *command = m_builders[actionName]->build
             (actionName, *selection, querier);
 
         m_view->addCommandToHistory(command);

@@ -21,11 +21,11 @@
 
 #include "TabbedConfigurationPage.h"
 #include "gui/editors/eventlist/EventView.h"
-#include <qstring.h>
-#include <qcheckbox.h>
-#include <qspinbox.h>
-#include <qcombobox.h>
-#include <qlineedit.h>
+#include <QString>
+#include <QCheckBox>
+#include <QSpinBox>
+#include <QComboBox>
+#include <QLineEdit>
 #include <klocale.h>
 #include <kiconloader.h>
 
@@ -81,8 +81,8 @@ protected slots:
 
 protected:
     int getCountInSpin()            { return m_countIn->value(); }
-    int getDblClickClient()         { return m_client->currentItem(); }
-    int getNoteNameStyle()          { return m_nameStyle->currentItem(); }
+    int getDblClickClient()         { return m_client->currentIndex(); }
+    int getNoteNameStyle()          { return m_nameStyle->currentIndex(); }
     int getAppendLabel()            { return m_appendLabel->isChecked(); }
     
     //--------------- Data members ---------------------------------

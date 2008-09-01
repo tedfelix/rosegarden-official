@@ -18,7 +18,8 @@
 #ifndef _RG_GUITARCHORDEDITOR2_H_
 #define _RG_GUITARCHORDEDITOR2_H_
 
-#include <kdialogbase.h>
+#include <QDialog>
+#include <QDialogButtonBox>
 
 #include "Chord.h"
 #include "ChordMap.h"
@@ -32,7 +33,7 @@ namespace Rosegarden
 class FingeringBox;
 
 
-class GuitarChordEditorDialog : public KDialogBase
+class GuitarChordEditorDialog : public QDialog
 {
     Q_OBJECT
     

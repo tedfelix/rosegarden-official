@@ -18,6 +18,9 @@
 #ifndef _RG_NOTATIONVIEW_H_
 #define _RG_NOTATIONVIEW_H_
 
+#include <Q3Canvas>
+#include <Q3CanvasItem>
+#include <Q3CanvasText>
 #include "base/NotationTypes.h"
 #include "base/Track.h"
 #include "gui/general/EditView.h"
@@ -26,11 +29,11 @@
 #include "NotationProperties.h"
 #include "NotationCanvasView.h"
 #include <string>
-#include <kprocess.h>
+#include <QProcess>
 #include <ktempfile.h>
-#include <qmap.h>
-#include <qsize.h>
-#include <qstring.h>
+#include <QMap>
+#include <QSize>
+#include <QString>
 #include <vector>
 #include "base/Event.h"
 #include "gui/general/ClefIndex.h"
@@ -43,10 +46,10 @@ class QObject;
 class QMouseEvent;
 class QLabel;
 class QCursor;
-class QCanvasItem;
-class QCanvas;
+class Q3CanvasItem;
+class Q3Canvas;
 class KProgress;
-class KComboBox;
+class QComboBox;
 class KActionMenu;
 class KAction;
 
@@ -161,7 +164,7 @@ public:
     /// Return true if the staff at the specified index is the current one
     bool isCurrentStaff(int i);
 
-    QCanvas* canvas() { return getCanvasView()->canvas(); }
+    Q3Canvas* canvas() { return getCanvasView()->canvas(); }
     
     void setCanvasCursor(const QCursor &cursor) {
         getCanvasView()->viewport()->setCursor(cursor);
@@ -361,7 +364,7 @@ public slots:
      */
     void slotPrintLilyPond();
     void slotPreviewLilyPond();
-    void slotLilyPondViewProcessExited(KProcess *);
+    void slotLilyPondViewProcessExited(QProcess *);
 
     /**
      * put the marked text/object into the clipboard and remove it
@@ -575,12 +578,12 @@ public slots:
     /**
      * Called when a mouse press occurred on a non-notation element 
      */
-    void slotNonNotationItemPressed(QMouseEvent *e, QCanvasItem *i);
+    void slotNonNotationItemPressed(QMouseEvent *e, Q3CanvasItem *i);
 
     /**
-     * Called when a mouse press occurred on a QCanvasText
+     * Called when a mouse press occurred on a Q3CanvasText
      */
-    void slotTextItemPressed(QMouseEvent *e, QCanvasItem *i);
+    void slotTextItemPressed(QMouseEvent *e, Q3CanvasItem *i);
 
     void slotMouseMoved(QMouseEvent*);
     void slotMouseReleased(QMouseEvent*);
@@ -987,12 +990,12 @@ protected:
     int m_currentStaff;
     int m_lastFinishingStaff;
 
-    QCanvasItem *m_title;
-    QCanvasItem *m_subtitle;
-    QCanvasItem *m_composer;
-    QCanvasItem *m_copyright;
-    std::vector<QCanvasItem *> m_pages;
-    std::vector<QCanvasItem *> m_pageNumbers;
+    Q3CanvasItem *m_title;
+    Q3CanvasItem *m_subtitle;
+    Q3CanvasItem *m_composer;
+    Q3CanvasItem *m_copyright;
+    std::vector<Q3CanvasItem *> m_pages;
+    std::vector<Q3CanvasItem *> m_pageNumbers;
 
     timeT m_insertionTime;
     enum DeferredCursorMoveType {
@@ -1030,9 +1033,9 @@ protected:
     typedef QMap<QString, NoteChangeActionData *> NoteChangeActionDataMap;
     static NoteChangeActionDataMap* m_noteChangeActionDataMap;
 
-    KComboBox       *m_fontCombo;
-    KComboBox       *m_fontSizeCombo;
-    KComboBox       *m_spacingCombo;
+    QComboBox       *m_fontCombo;
+    QComboBox       *m_fontSizeCombo;
+    QComboBox       *m_spacingCombo;
     KActionMenu     *m_fontSizeActionMenu;
     ScrollBoxDialog *m_pannerDialog;
     QTimer *m_renderTimer;
@@ -1051,7 +1054,7 @@ protected:
     bool m_printMode;
     int m_printSize;
 
-    static std::map<KProcess *, KTempFile *> m_lilyTempFileMap;
+    static std::map<QProcess *, KTempFile *> m_lilyTempFileMap;
 
     int m_showHeadersGroup;
     QDeferScrollView * m_headersGroupView;

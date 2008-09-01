@@ -31,14 +31,14 @@
 
 #include <kapp.h>
 #include <klocale.h>
-#include <kprocess.h>
+#include <QProcess>
 #include <kio/netaccess.h>
 #include <kmessagebox.h>
 
-#include <qpixmap.h>
-#include <qpainter.h>
-#include <qdatetime.h>
-#include <qfile.h>
+#include <QPixmap>
+#include <QPainter>
+#include <QDateTime>
+#include <QFile>
 
 #include "AudioFile.h"
 #include "AudioFileManager.h"
@@ -115,7 +115,7 @@ AudioFileManager::addFile(const std::string &filePath)
     QString ext;
 
     if (filePath.length() > 3) {
-	ext = QString(filePath.substr(filePath.length() - 3, 3).c_str()).lower();
+	ext = QString(filePath.substr(filePath.length() - 3, 3).c_str()).toLower();
     }
 
     // Check for file existing already in manager by path
@@ -445,7 +445,7 @@ AudioFileManager::getFileInPath(const std::string &file)
     QFileInfo searchInfo(searchFile);
 
     if (searchInfo.exists())
-        return searchFile.latin1();
+        return searchFile.toLatin1().data();
 
     std::cout << "AudioFileManager::getFileInPath - "
     << "searchInfo = " << searchFile << std::endl;
@@ -678,7 +678,7 @@ bool
 AudioFileManager::fileNeedsConversion(const std::string &fileName,
                                       int sampleRate)
 {
-    KProcess *proc = new KProcess();
+    QProcess *proc = new QProcess();
     *proc << "rosegarden-audiofile-importer";
     if (sampleRate > 0) {
         *proc << "-r";
@@ -687,7 +687,7 @@ AudioFileManager::fileNeedsConversion(const std::string &fileName,
     *proc << "-w";
     *proc << fileName.c_str();
 
-    proc->start(KProcess::Block, KProcess::NoCommunication);
+    proc->start(QProcess::Block, QProcess::NoCommunication);
 
     int es = proc->exitStatus();
     delete proc;
@@ -705,7 +705,7 @@ AudioFileManager::importFile(const std::string &fileName, int sampleRate)
 
     std::cerr << "AudioFileManager::importFile("<< fileName << ", " << sampleRate << ")" << std::endl;
 
-    KProcess *proc = new KProcess();
+    QProcess *proc = new QProcess();
     *proc << "rosegarden-audiofile-importer";
     if (sampleRate > 0) {
 	*proc << "-r";
@@ -714,7 +714,7 @@ AudioFileManager::importFile(const std::string &fileName, int sampleRate)
     *proc << "-w";
     *proc << fileName.c_str();
 
-    proc->start(KProcess::Block, KProcess::NoCommunication);
+    proc->start(QProcess::Block, QProcess::NoCommunication);
 
     int es = proc->exitStatus();
     delete proc;
@@ -757,7 +757,7 @@ AudioFileManager::importFile(const std::string &fileName, int sampleRate)
         }
     }
 
-    m_importProcess = new KProcess;
+    m_importProcess = new QProcess;
 
     *m_importProcess << "rosegarden-audiofile-importer";
     if (sampleRate > 0) {
@@ -768,7 +768,7 @@ AudioFileManager::importFile(const std::string &fileName, int sampleRate)
     *m_importProcess << fileName.c_str();
     *m_importProcess << (m_audioPath.c_str() + targetName);
     
-    m_importProcess->start(KProcess::NotifyOnExit, KProcess::NoCommunication);
+    m_importProcess->start(QProcess::NotifyOnExit, QProcess::NoCommunication);
 
     while (m_importProcess->isRunning()) {
         kapp->processEvents(100); //!!! not safe to do from seq thread
