@@ -102,3 +102,9 @@ convertFromCodec(std::string text, QTextCodec *codec)
         return text;
 }
 
+std::ostream &
+operator<<(std::ostream &target, const QString &str)
+{
+    return target << str.toStdString();
+}
+

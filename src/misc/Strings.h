@@ -17,6 +17,8 @@
 
 #include <string>
 #include <QString>
+#include <iostream>
+
 #include "PropertyName.h"
 #include "Exception.h"
 
@@ -28,5 +30,8 @@ extern double qstrtodouble(const QString &);
 
 class QTextCodec;
 extern std::string convertFromCodec(std::string, QTextCodec *);
+
+std::ostream &
+operator<<(std::ostream &, const QString &);
 
 #endif
