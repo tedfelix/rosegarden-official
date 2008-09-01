@@ -1414,8 +1414,14 @@ LilyPondExporter::write()
 		        QRegExp rx( "\"" );
 		        if ( rx.search( text ) != -1 ) {
 		    
-			    str << indent(col) << "\\lyricsto \"" << voiceNumber.str() << "\""
-			        << " \\new Lyrics \\lyricmode {" << std::endl;
+		            if (m_languageLevel <= LILYPOND_VERSION_2_10) {
+			        str << indent(col) << "\\lyricsto \"" << voiceNumber.str() << "\""
+			            << " \\new Lyrics \\lyricmode {" << std::endl;
+                            } else {
+			        str << indent(col)
+			            << "\\new Lyrics \\with {alignBelowContext=\"track " << (trackPos + 1) << "\"} "
+                                    << "\\lyricsto \"" << voiceNumber.str() << "\"" << " \\lyricmode {" << std::endl;
+                            }
 			    if (m_lyricsHAlignment == RIGHT_ALIGN) {
 				str << indent(++col) << "\\override LyricText #'self-alignment-X = #RIGHT"
 				    << std::endl;
