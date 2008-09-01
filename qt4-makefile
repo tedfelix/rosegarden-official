@@ -1,0 +1,99 @@
+
+# These paths set up for Ubuntu 8.04 with kdelibs5-dev and qt4-dev.
+# For some mad reason, KDE4 headers are in /usr/lib/kde4/include on
+# this system.  Someone is really going to have to explain that to me.
+# More sensibly, Qt4 headers are in /usr/include/Qt4.  Note also
+# special names of moc and uic (to avoid messing with alternatives).
+
+KDEDIR		= /usr
+QTDIR		= /usr
+
+KDEINC		= $(KDEDIR)/lib/kde4/include
+KDELIB		= $(KDEDIR)/lib
+
+QTINC		= $(QTDIR)/include/qt4
+QTLIB		= $(QTDIR)/lib
+
+CCDIR		= /usr
+
+CCACHE		= 
+CC		= $(CCACHE) $(CCDIR)/bin/cc
+CXX		= $(CCACHE) $(CCDIR)/bin/c++
+LD		= $(CXX)
+MOC		= $(QTDIR)/bin/moc-qt4
+# don't want to use DCOP any more
+#DCOPIDL		= $(KDEDIR)/bin/dcopidl
+#DCOPIDL2CPP	= $(KDEDIR)/bin/dcopidl2cpp
+UIC		= $(QTDIR)/bin/uic-qt4
+
+CXXFLAGS	= -Wall -O0 -g -DHAVE_ALSA -DHAVE_LIBJACK -DHAVE_DSSI -DHAVE_LADSPA -DHAVE_LIBLO -DHAVE_LIBLRDF -DHAVE_XFT -DDEBUG -D'VERSION="2.0-yeah-whatever-innit"'
+LDFLAGS		= 
+
+INCLUDES	= \
+		-I$(QTINC)/QtCore \
+		-I$(QTINC)/QtGui \
+		-I$(QTINC)/QtXml \
+		-I$(QTINC)/QtNetwork \
+		-I$(QTINC) \
+		-I$(KDEINC) \
+		-I$(CCDIR)/include \
+		-I/usr/local/include \
+		-I/usr/include/freetype2 \
+                -Isrc/base \
+		-Isrc
+
+LDLIBS		= \
+		-L$(CCDIR)/lib \
+		-L$(KDELIB) \
+		-L$(QTLIB) \
+		-lkdeprint -lkdeui -lkdecore -lQtGui -lQtXml -lQtNetwork -lQtCore \
+		-ljack -lasound -llo -llrdf -lraptor -llirc_client
+
+HEADERS		= $(filter-out templates/template.h, $(wildcard */*.h */*/*.h */*/*/*.h))
+SOURCES		= $(filter-out templates/template.cpp, $(wildcard */*.cpp */*/*.cpp */*/*/*.cpp))
+QHEADERS	= $(shell fgrep -l Q_OBJECT $(HEADERS))
+OBJECTS		= $(patsubst %.cpp,%.o,$(SOURCES))
+QSOURCES	= $(patsubst %.h,%.moc,$(QHEADERS))
+UI		= $(wildcard gui/ui/*.ui)
+UIHEADERS	= $(patsubst %.ui,%.h,$(UI))
+UISOURCES	= $(patsubst %.ui,%.cpp,$(UI))
+UIMOC		= $(patsubst %.ui,%.moc,$(UI))
+
+#GUISOURCES	= $(filter-out sequencer/%.cpp, $(SOURCES)) gui/application/RosegardenIface_skel.cpp gui/editors/segment/TrackEditorIface_skel.cpp
+GUISOURCES	= $(filter-out sequencer/%.cpp, $(SOURCES))
+GUIOBJECTS	= $(patsubst %.cpp,%.o,$(GUISOURCES))
+#SEQSOURCES	= $(wildcard base/*.cpp misc/*.cpp sound/*.cpp sequencer/*.cpp) sequencer/RosegardenSequencerIface_skel.cpp
+SEQSOURCES	= $(wildcard base/*.cpp misc/*.cpp sound/*.cpp sequencer/*.cpp)
+SEQOBJECTS	= $(patsubst %.cpp,%.o,$(SEQSOURCES))
+
+all:	$(QSOURCES) $(UIHEADERS) $(UISOURCES) $(UIMOC) $(OBJECTS) $(LIBRARIES) $(EXECUTABLES) rosegardensequencer rosegarden
+
+rosegarden:	$(GUIOBJECTS)
+		$(CXX) -o $@ $^ $(LDLIBS)
+
+rosegardensequencer:	$(SEQOBJECTS)
+		$(CXX) -o $@ $^ $(LDLIBS)
+
+%.h: %.ui
+	$(UIC) $< > $@
+
+%.cpp: %.ui %.h
+	$(UIC) -pch $(patsubst %.cpp,%.moc,$@) -impl $(patsubst %.cpp,%.h,$@) $(patsubst %.cpp,%.ui,$@) > $@
+
+%.moc: %.h
+	$(MOC) $< -o $@
+
+#%.kidl: %.h
+#	$(DCOPIDL) $< > $@
+
+#%_skel.cpp: %.kidl
+#	$(DCOPIDL2CPP) --c++-suffix cpp --no-signals --no-stub $<
+
+%.o: %.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCLUDES) $< -o $@
+
+clean:
+	rm -f $(QSOURCES) $(UIHEADERS) $(UISOURCES) $(UIMOC) $(OBJECTS) $(LIBRARIES) $(EXECUTABLES)
+
+test:
+	echo $(QSOURCES)

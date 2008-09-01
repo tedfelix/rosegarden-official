@@ -19,126 +19,207 @@
 #ifndef _RG_MULTIVIEWCOMMANDHISTORY_H_
 #define _RG_MULTIVIEWCOMMANDHISTORY_H_
 
-#include <set>
+#include <QObject>
+#include <QString>
+
 #include <stack>
-#include <qobject.h>
+#include <set>
+#include <map>
 
+class QAction;
+class QMenu;
+class QToolBar;
+class QTimer;
 
-class QString;
-class KCommand;
-class KActionCollection;
-
-
-namespace Rosegarden
+namespace Rosegarden 
 {
 
-
+class Command;
+class MacroCommand;
 
 /**
- * The MultiViewCommandHistory class is much like KCommandHistory in
- * that it stores a list of executed commands and maintains Undo and
- * Redo actions synchronised with those commands.
+ * The MultiViewCommandHistory class stores a list of executed
+ * commands and maintains Undo and Redo actions synchronised with
+ * those commands.
  *
- * The difference is that MultiViewCommandHistory allows you to
- * associate more than one Undo and Redo action with the same command
- * history, and it keeps them all up-to-date at once.  This makes it
- * effective in systems where multiple views may be editing the same
- * data at once.
+ * MultiViewCommandHistory allows you to associate more than one Undo
+ * and Redo menu or toolbar with the same command history, and it
+ * keeps them all up-to-date at once.  This makes it effective in
+ * systems where multiple views may be editing the same data.
  */
 
 class MultiViewCommandHistory : public QObject
 {
     Q_OBJECT
-public:
 
-    MultiViewCommandHistory();
+public:
     virtual ~MultiViewCommandHistory();
+
+    static MultiViewCommandHistory *getInstance();
 
     void clear();
     
-    void attachView(KActionCollection *collection);
-    void detachView(KActionCollection *collection);
+    void registerMenu(QMenu *menu);
+    void registerToolbar(QToolBar *toolbar);
 
-    void addCommand(KCommand *command, bool execute = true);
+    /**
+     * Add a command to the command history.
+     * 
+     * The command will normally be executed before being added; but
+     * if a compound operation is in use (see startCompoundOperation
+     * below), the execute status of the compound operation will
+     * determine whether the command is executed or not.
+     */
+    void addCommand(Command *command);
     
-    /// @return the maximum number of items in the undo history
-    int undoLimit() { return m_undoLimit; }
+    /**
+     * Add a command to the command history.
+     *
+     * If execute is true, the command will be executed before being
+     * added.  Otherwise it will be assumed to have been already
+     * executed -- a command should not be added to the history unless
+     * its work has actually been done somehow!
+     *
+     * If a compound operation is in use (see startCompoundOperation
+     * below), the execute value passed to this method will override
+     * the execute status of the compound operation.  In this way it's
+     * possible to have a compound operation mixing both to-execute
+     * and pre-executed commands.
+     *
+     * If bundle is true, the command will be a candidate for bundling
+     * with any adjacent bundleable commands that have the same name,
+     * into a single compound command.  This is useful for small
+     * commands that may be executed repeatedly altering the same data
+     * (e.g. type text, set a parameter) whose number and extent is
+     * not known in advance.  The bundle parameter will be ignored if
+     * a compound operation is already in use.
+     */
+    void addCommand(Command *command, bool execute, bool bundle = false);
+    
+    /// Return the maximum number of items in the undo history.
+    int getUndoLimit() const { return m_undoLimit; }
 
-    /// Set the maximum number of items in the undo history
+    /// Set the maximum number of items in the undo history.
     void setUndoLimit(int limit);
 
-    /// @return the maximum number of items in the redo history
-    int redoLimit() { return m_redoLimit; }
+    /// Return the maximum number of items in the redo history.
+    int getRedoLimit() const { return m_redoLimit; }
 
-    /// Set the maximum number of items in the redo history
+    /// Set the maximum number of items in the redo history.
     void setRedoLimit(int limit);
     
+    /// Return the maximum number of items visible in undo and redo menus.
+    int getMenuLimit() const { return m_menuLimit; }
+
+    /// Set the maximum number of items in the menus.
+    void setMenuLimit(int limit);
+
+    /// Return the time after which a bundle will be closed if nothing is added.
+    int getBundleTimeout() const { return m_bundleTimeout; }
+
+    /// Set the time after which a bundle will be closed if nothing is added.
+    void setBundleTimeout(int msec);
+
+    /// Start recording commands to batch up into a single compound command.
+    void startCompoundOperation(QString name, bool execute);
+
+    /// Finish recording commands and store the compound command.
+    void endCompoundOperation();
+
 public slots:
     /**
-     * Remember when you saved the document.
-     * Call this right after saving the document. As soon as
-     * the history reaches the current index again (via some
-     * undo/redo operations) it will emit @ref documentRestored
-     * If you implemented undo/redo properly the document is
-     * the same you saved before.
+     * Checkpoint function that should be called when the document is
+     * saved.  If the undo/redo stack later returns to the point at
+     * which the document was saved, the documentRestored signal will
+     * be emitted.
      */
     virtual void documentSaved();
 
-protected slots:
-    void slotUndo();
-    void slotRedo();
-    void slotUndoAboutToShow();
-    void slotUndoActivated(int);
-    void slotRedoAboutToShow();
-    void slotRedoActivated(int);
+    /**
+     * Add a command to the history that has already been executed,
+     * without executing it again.  Equivalent to addCommand(command, false).
+     */
+    void addExecutedCommand(Command *);
 
+    /**
+     * Add a command to the history and also execute it.  Equivalent
+     * to addCommand(command, true).
+     */
+    void addCommandAndExecute(Command *);
+
+    void undo();
+    void redo();
+
+protected slots:
+    void undoActivated(QAction *);
+    void redoActivated(QAction *);
+    void bundleTimerTimeout();
+    
 signals:
     /**
-     * This is emitted every time a command is executed
-     * (whether by addCommand, undo or redo).
-     * You can use this to update the GUI, for instance.
-     */
-    void commandExecuted(KCommand *);
-
-    /**
-     * This is emitted every time a command is executed
-     * (whether by addCommand, undo or redo).
-     *
-     * It should be connected to the update() slot of widgets
-     * which need to repaint after a command
+     * Emitted whenever a command has just been executed or
+     * unexecuted, whether by addCommand, undo, or redo.
      */
     void commandExecuted();
 
     /**
-     * This is emitted every time we reach the index where you
-     * saved the document for the last time. See @ref documentSaved
+     * Emitted whenever a command has just been executed, whether by
+     * addCommand or redo.
+     */
+    void commandExecuted(Command *);
+
+    /**
+     * Emitted whenever a command has just been unexecuted, whether by
+     * addCommand or undo.
+     */
+    void commandUnexecuted(Command *);
+
+    /**
+     * Emitted when the undo/redo stack has reached the same state at
+     * which the documentSaved slot was last called.
      */
     void documentRestored();
 
-private:
-    //--------------- Data members ---------------------------------
+protected:
+    MultiViewCommandHistory();
+    static MultiViewCommandHistory *m_instance;
 
-    typedef std::set<KActionCollection *> ViewSet;
-    ViewSet m_views;
+    QAction *m_undoAction;
+    QAction *m_redoAction;
+    QAction *m_undoMenuAction;
+    QAction *m_redoMenuAction;
+    QMenu *m_undoMenu;
+    QMenu *m_redoMenu;
 
-    typedef std::stack<KCommand *> CommandStack;
+    std::map<QAction *, int> m_actionCounts;
+
+    typedef std::stack<Command *> CommandStack;
     CommandStack m_undoStack;
     CommandStack m_redoStack;
 
     int m_undoLimit;
     int m_redoLimit;
+    int m_menuLimit;
     int m_savedAt;
 
-    void updateButtons();
-    void updateButton(bool undo, const QString &name, CommandStack &stack);
-    void updateMenu(bool undo, const QString &name, CommandStack &stack);
+    MacroCommand *m_currentCompound;
+    bool m_executeCompound;
+    void addToCompound(Command *command, bool execute);
+
+    MacroCommand *m_currentBundle;
+    QString m_currentBundleName;
+    QTimer *m_bundleTimer;
+    int m_bundleTimeout;
+    void addToBundle(Command *command, bool execute);
+    void closeBundle();
+    
+    void updateActions();
+
     void clipCommands();
 
     void clipStack(CommandStack &stack, int limit);
     void clearStack(CommandStack &stack);
 };
-
-
 
 }
 

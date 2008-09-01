@@ -19,14 +19,14 @@
 #include "BasicCommand.h"
 
 #include "base/Segment.h"
-#include <qstring.h>
+#include <QString>
 
 namespace Rosegarden
 {
     
 BasicCommand::BasicCommand(const QString &name, Segment &segment,
                timeT start, timeT end, bool bruteForceRedo) :
-    KNamedCommand(name),
+    NamedCommand(name),
     m_startTime(calculateStartTime(start, segment)),
     m_endTime(calculateEndTime(end, segment)),
     m_segment(segment),
@@ -108,7 +108,7 @@ BasicCommand::execute()
     }
 
     m_segment.updateRefreshStatuses(getStartTime(), getRelayoutEndTime());
-    RG_DEBUG << "BasicCommand(" << name() << "): updated refresh statuses "
+    RG_DEBUG << "BasicCommand(" << getName() << "): updated refresh statuses "
          << getStartTime() << " -> " << getRelayoutEndTime() << endl;
 }
 
@@ -128,7 +128,7 @@ BasicCommand::unexecute()
 void
 BasicCommand::copyTo(Rosegarden::Segment *events)
 {
-    RG_DEBUG << "BasicCommand(" << name() << ")::copyTo: " << &m_segment << " to "
+    RG_DEBUG << "BasicCommand(" << getName() << ")::copyTo: " << &m_segment << " to "
          << events << ", range (" 
          << m_startTime << "," << m_endTime
          << ")" << endl;
@@ -145,7 +145,7 @@ BasicCommand::copyTo(Rosegarden::Segment *events)
 void
 BasicCommand::copyFrom(Rosegarden::Segment *events)
 {
-    RG_DEBUG << "BasicCommand(" << name() << ")::copyFrom: " << events << " to "
+    RG_DEBUG << "BasicCommand(" << getName() << ")::copyFrom: " << events << " to "
          << &m_segment << ", range (" 
          << m_startTime << "," << m_endTime
          << ")" << endl;

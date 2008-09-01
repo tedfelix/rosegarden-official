@@ -745,7 +745,6 @@ SET(gui_SRCS
 	gui/kdeext/QCanvasSimpleSprite.cpp
 	gui/kdeext/QCanvasSimpleSprite.h
 	gui/kdeext/RGLed.cpp
-	gui/kdeext/klearlook.cpp
 	gui/rulers/ChordNameRuler.cpp
 	gui/rulers/ChordNameRuler.h
 	gui/rulers/ControlChangeCommand.cpp
