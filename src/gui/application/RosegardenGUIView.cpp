@@ -25,7 +25,7 @@
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "document/ConfigGroups.h"
-#include "gui/application/RosegardenDCOP.h"
+#include "gui/application/TransportStatus.h"
 #include "base/AudioLevel.h"
 #include "base/Composition.h"
 #include "base/Instrument.h"

@@ -21,7 +21,7 @@
 #include "misc/Strings.h"
 #include "ConfigurationPage.h"
 #include "document/RosegardenGUIDoc.h"
-#include "gui/application/RosegardenApplication.h"
+#include "sequencer/RosegardenSequencer.h"
 #include "gui/studio/AudioPluginManager.h"
 #include "sound/AudioFileManager.h"
 #include "TabbedConfigurationPage.h"
@@ -111,17 +111,7 @@ AudioPropertiesPage::slotFoundMountPoint(const QString&,
 
     AudioPluginManager *apm = m_doc->getPluginManager();
 
-    int sampleRate = 48000;
-    QCString replyType;
-    QByteArray replyData;
-
-    if (rgapp->sequencerCall("getSampleRate()", replyType, replyData)) {
-
-        QDataStream streamIn(replyData, IO_ReadOnly);
-        unsigned int result;
-        streamIn >> result;
-        sampleRate = result;
-    }
+    int sampleRate = RosegardenSequencer::getInstance()->getSampleRate();
 
     // Work out total bytes and divide this by the sample rate times the
     // number of channels (2) times the number of bytes per sample (2)

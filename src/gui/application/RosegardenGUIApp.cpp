@@ -23,7 +23,7 @@
 #include "gui/editors/segment/TrackButtons.h"
 #include "misc/Debug.h"
 #include "misc/Strings.h"
-#include "gui/application/RosegardenDCOP.h"
+#include "gui/application/TransportStatus.h"
 #include "base/AnalysisTypes.h"
 #include "base/AudioPluginInstance.h"
 #include "base/Clipboard.h"
@@ -155,6 +155,8 @@
 #include "RosegardenGUIView.h"
 #include "RosegardenIface.h"
 #include "SetWaitCursor.h"
+#include "sequencer/RosegardenSequencer.h"
+#include "sequencer/SequencerThread.h"
 #include "sound/AudioFile.h"
 #include "sound/AudioFileManager.h"
 #include "sound/MappedCommon.h"
@@ -227,7 +229,6 @@ namespace Rosegarden
 {
 
 RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
-                                   bool useExistingSequencer,
                                    QObject *startupStatusMessageReceiver)
         : DCOPObject("RosegardenIface"), RosegardenIface(this), KDockMainWindow(0),
         m_actionsSetup(false),
@@ -237,7 +238,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
         m_mainDockWidget(0),
         m_dockLeft(0),
         m_doc(0),
-        m_sequencerProcess(0),
+        m_sequencerThread(0),
         m_sequencerCheckedIn(false),
 #ifdef HAVE_LIBJACK
         m_jackProcess(0),
@@ -316,7 +317,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 #endif // HAVE_LIBJACK
 
         emit startupStatusMessage(i18n("Starting sequencer..."));
-        launchSequencer(useExistingSequencer);
+        launchSequencer();
 
     } else
         RG_DEBUG << "RosegardenGUIApp : don't use sequencer\n";
@@ -516,11 +517,10 @@ RosegardenGUIApp::~RosegardenGUIApp()
     delete m_pluginGUIManager;
 #endif
 
-    if (isSequencerRunning() && !isSequencerExternal()) {
-        m_sequencerProcess->blockSignals(true);
-        rgapp->sequencerSend("quit()");
+    if (isSequencerRunning()) {
+        RosegardenSequencer::getInstance()->quit();
         usleep(300000);
-        delete m_sequencerProcess;
+        delete m_sequencerThread;
     }
 
     delete m_jumpToQuickMarkerAction;
@@ -1620,6 +1620,9 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
     //
     connect(m_playTimer, SIGNAL(timeout()), this, SLOT(slotUpdatePlaybackPosition()));
     connect(m_stopTimer, SIGNAL(timeout()), this, SLOT(slotUpdateMonitoring()));
+
+    connect(m_playTimer, SIGNAL(timeout()), this, SLOT(slotCheckTransportStatus()));
+    connect(m_stopTimer, SIGNAL(timeout()), this, SLOT(slotCheckTransportStatus()));
 
     // finally recreate the main view
     //
@@ -4213,6 +4216,40 @@ RosegardenGUIApp::mergeFile(QString filePath, ImportType type)
 }
 
 void
+RosegardenGUIApp::slotCheckTransportStatus()
+{
+    ExternalTransport::TransportRequest req;
+    RealTime rt;
+    bool have = RosegardenSequencer::getInstance()->
+        getNextTransportRequest(req, rt);
+
+    if (have) {
+        switch (req) {
+        case ExternalTransport::TransportNoChange:    break;
+        case ExternalTransport::TransportStop:        stop(); break;
+        case ExternalTransport::TransportStart:       play(); break;
+        case ExternalTransport::TransportPlay:        play(); break;
+        case ExternalTransport::TransportRecord:      record(); break;
+        case ExternalTransport::TransportJumpToTime:  jumpToTime(rt); break;
+        case ExternalTransport::TransportStartAtTime: startAtTime(rt); break;
+        case ExternalTransport::TransportStopAtTime:  stop(); jumpToTime(rt); break;
+        }
+    }
+
+    TransportStatus status = RosegardenSequencer::getInstance()->
+        getStatus();
+    
+    stateChanged("not_playing",
+                 (status == PLAYING ||
+                  status == RECORDING) ?
+                 KXMLGUIClient::StateReverse : KXMLGUIClient::StateNoReverse);
+
+    if (m_seqManager) m_seqManager->setTransportStatus(status);
+    
+    return;
+}
+
+void
 RosegardenGUIApp::slotUpdatePlaybackPosition()
 {
     static int callbackCount = 0;
@@ -4617,7 +4654,7 @@ void RosegardenGUIApp::slotDebugDump()
     comp.dump(std::cerr);
 }
 
-bool RosegardenGUIApp::launchSequencer(bool useExisting)
+bool RosegardenGUIApp::launchSequencer()
 {
     if (!isUsingSequencer()) {
         RG_DEBUG << "RosegardenGUIApp::launchSequencer() - not using seq. - returning\n";
@@ -4630,143 +4667,13 @@ bool RosegardenGUIApp::launchSequencer(bool useExisting)
         return true;
     }
 
-    // Check to see if we're clearing down sequencer processes -
-    // if we're not we check DCOP for an existing sequencer and
-    // try to talk to use that (that's the "developer" mode).
-    //
-    // User mode should clear down sequencer processes.
-    //
-    if (kapp->dcopClient()->isApplicationRegistered(
-                QCString(ROSEGARDEN_SEQUENCER_APP_NAME))) {
-        RG_DEBUG << "RosegardenGUIApp::launchSequencer() - "
-        << "existing DCOP registered sequencer found\n";
-
-        if (useExisting) {
-            if (m_seqManager) m_seqManager->checkSoundDriverStatus(false);
-            m_sequencerProcess = (KProcess*)SequencerExternal;
-            return true;
-        }
-
-        KProcess *proc = new KProcess;
-        *proc << "/usr/bin/killall";
-        *proc << "rosegardensequencer";
-        *proc << "lt-rosegardensequencer";
-
-        proc->start(KProcess::Block, KProcess::All);
-
-        if (!proc->normalExit() || proc->exitStatus()) {
-            RG_DEBUG << "couldn't kill any sequencer processes" << endl;
-        }
-        delete proc;
-
-        sleep(1);
-
-        if (kapp->dcopClient()->isApplicationRegistered(
-                    QCString(ROSEGARDEN_SEQUENCER_APP_NAME))) {
-            RG_DEBUG << "RosegardenGUIApp::launchSequencer() - "
-            << "failed to kill existing sequencer\n";
-
-            KProcess *proc = new KProcess;
-            *proc << "/usr/bin/killall";
-            *proc << "-9";
-            *proc << "rosegardensequencer";
-            *proc << "lt-rosegardensequencer";
-
-            proc->start(KProcess::Block, KProcess::All);
-
-            if (proc->exitStatus()) {
-                RG_DEBUG << "couldn't kill any sequencer processes" << endl;
-            }
-            delete proc;
-
-            sleep(1);
-        }
-    }
-
-    //
-    // No sequencer is running, so start one
-    //
-    KTmpStatusMsg msg(i18n("Starting the sequencer..."), this);
-
-    if (!m_sequencerProcess) {
-        m_sequencerProcess = new KProcess;
-
-        (*m_sequencerProcess) << "rosegardensequencer";
-
-        // Command line arguments
-        //
-        KConfig *config = kapp->config();
-        config->setGroup(SequencerOptionsConfigGroup);
-        QString options = config->readEntry("commandlineoptions");
-        if (!options.isEmpty()) {
-            (*m_sequencerProcess) << options;
-            RG_DEBUG << "sequencer options \"" << options << "\"" << endl;
-        }
-
-    } else {
-        RG_DEBUG << "RosegardenGUIApp::launchSequencer() - sequencer KProcess already created\n";
-        m_sequencerProcess->disconnect(); // disconnect processExit signal
-        // it will be reconnected later on
-    }
-
-    bool res = m_sequencerProcess->start();
-
-    if (!res) {
-        KMessageBox::error(0, i18n("Couldn't start the sequencer"));
-        RG_DEBUG << "Couldn't start the sequencer\n";
-        m_sequencerProcess = 0;
-        // If starting it didn't even work, fall back to no sequencer mode
-        m_useSequencer = false;
-    } else {
-        // connect processExited only after start, otherwise
-        // a failed startup will call slotSequencerExited()
-        // right away and we don't get to check the result
-        // of m_sequencerProcess->start() and thus make the distinction
-        // between the case where the sequencer was successfully launched
-        // but crashed right away, or the case where the process couldn't
-        // be launched at all (missing executable, etc...)
-        //
-        // We also re-check that the process is still running at this
-        // point in case it crashed between the moment we check res above
-        // and now.
-        //
-        //usleep(1000 * 1000); // even wait half a sec. to make sure it's actually running
-        if (m_sequencerProcess->isRunning()) {
-
-            try {
-                //                 if (m_seqManager) {
-                //                     RG_DEBUG << "RosegardenGUIApp::launchSequencer : checking sound driver status\n";
-                //                     m_seqManager->checkSoundDriverStatus();
-                //                 }
-
-                stateChanged("sequencer_running");
-                slotEnableTransport(true);
-
-                connect(m_sequencerProcess, SIGNAL(processExited(KProcess*)),
-                        this, SLOT(slotSequencerExited(KProcess*)));
-
-            } catch (Exception e) {
-                m_sequencerProcess = 0;
-                m_useSequencer = false;
-                stateChanged("sequencer_running", KXMLGUIClient::StateReverse);
-                slotEnableTransport(false);
-            }
-
-        } else { // if it crashed so fast, it's probably pointless
-            // to try restarting it later, so also fall back to no
-            // sequencer mode
-            m_sequencerProcess = 0;
-            m_useSequencer = false;
-            stateChanged("sequencer_running", KXMLGUIClient::StateReverse);
-            slotEnableTransport(false);
-        }
-
-    }
+    m_sequencerThread = new SequencerThread();
+//!!! not in Qt3 QThread    connect(m_sequencerThread, SIGNAL(finished()), this, SLOT(slotSequencerExited()));
+    m_sequencerThread->start();
 
     // Sync current devices with the sequencer
     //
-    if (m_doc)
-        m_doc->syncDevices();
+    if (m_doc) m_doc->syncDevices();
 
     if (m_doc && m_doc->getStudio().haveMidiDevices()) {
         stateChanged("got_midi_devices");
@@ -4774,7 +4681,7 @@ bool RosegardenGUIApp::launchSequencer(bool useExisting)
         stateChanged("got_midi_devices", KXMLGUIClient::StateReverse);
     }
 
-    return res;
+    return true;
 }
 
 #ifdef HAVE_LIBJACK
@@ -4849,7 +4756,8 @@ void RosegardenGUIApp::slotSequencerExited(KProcess*)
         KMessageBox::error(0, i18n("The Rosegarden sequencer could not be started, so sound and recording will be unavailable for this session.\nFor assistance with correct audio and MIDI configuration, go to http://rosegardenmusic.com."));
     }
 
-    m_sequencerProcess = 0; // isSequencerRunning() will return false
+    delete m_sequencerThread;
+    m_sequencerThread = 0; // isSequencerRunning() will return false
     // but isUsingSequencer() will keep returning true
     // so pressing the play button may attempt to restart the sequencer
 }
@@ -5227,6 +5135,8 @@ RosegardenGUIApp::slotSetPlayPosition(timeT time)
     slotPlay();
 }
 
+/*!!!
+
 void RosegardenGUIApp::notifySequencerStatus(int status)
 {
     stateChanged("not_playing",
@@ -5237,7 +5147,7 @@ void RosegardenGUIApp::notifySequencerStatus(int status)
     if (m_seqManager)
         m_seqManager->setTransportStatus((TransportStatus) status);
 }
-
+*/
 void RosegardenGUIApp::processAsynchronousMidi(const MappedComposition &mC)
 {
     if (!m_seqManager) {
@@ -5260,8 +5170,7 @@ RosegardenGUIApp::slotRecord()
 
         // Try to launch sequencer and return if we fail
         //
-        if (!launchSequencer(false))
-            return ;
+        if (!launchSequencer()) return;
     }
 
     if (m_seqManager->getTransportStatus() == RECORDING) {
@@ -5326,9 +5235,8 @@ RosegardenGUIApp::slotRecord()
 void
 RosegardenGUIApp::slotToggleRecord()
 {
-    if (!isUsingSequencer() ||
-            (!isSequencerRunning() && !launchSequencer(false)))
-        return ;
+    if (!isUsingSequencer() || (!isSequencerRunning() && !launchSequencer()))
+        return;
 
     try {
         m_seqManager->record(true);
@@ -5390,12 +5298,10 @@ void RosegardenGUIApp::slotPlay()
 
         // Try to launch sequencer and return if it fails
         //
-        if (!launchSequencer(false))
-            return ;
+        if (!launchSequencer()) return;
     }
 
-    if (!m_seqManager)
-        return ;
+    if (!m_seqManager) return;
 
     // If we're armed and ready to record then do this instead (calling
     // slotRecord ensures we don't toggle the recording state in
@@ -5444,17 +5350,16 @@ void RosegardenGUIApp::slotPlay()
 
 }
 
-void RosegardenGUIApp::slotJumpToTime(int sec, int usec)
+void RosegardenGUIApp::slotJumpToTime(RealTime rt)
 {
     Composition *comp = &m_doc->getComposition();
-    timeT t = comp->getElapsedTimeForRealTime
-              (RealTime(sec, usec * 1000));
+    timeT t = comp->getElapsedTimeForRealTime(rt);
     m_doc->slotSetPointerPosition(t);
 }
 
-void RosegardenGUIApp::slotStartAtTime(int sec, int usec)
+void RosegardenGUIApp::slotStartAtTime(RealTime rt)
 {
-    slotJumpToTime(sec, usec);
+    slotJumpToTime(rt);
     slotPlay();
 }
 
@@ -6345,26 +6250,13 @@ RosegardenGUIApp::slotAddAudioFile(unsigned int id)
 {
     AudioFile *aF = m_doc->getAudioFileManager().getAudioFile(id);
 
-    if (aF == 0)
-        return ;
+    if (aF == 0) return;
 
-    QCString replyType;
-    QByteArray replyData;
-    QByteArray data;
-    QDataStream streamOut(data, IO_WriteOnly);
+    int result = RosegardenSequencer::getInstance()->
+        addAudioFile(strtoqstr(aF->getFilename()), aF->getId());
 
-    // We have to pass the filename as a QString
-    //
-    streamOut << QString(strtoqstr(aF->getFilename()));
-    streamOut << (int)aF->getId();
-
-    if (rgapp->sequencerCall("addAudioFile(QString, int)", replyType, replyData, data)) {
-        QDataStream streamIn(replyData, IO_ReadOnly);
-        int result;
-        streamIn >> result;
-        if (!result) {
-            KMessageBox::error(this, i18n("Sequencer failed to add audio file %1").arg(aF->getFilename().c_str()));
-        }
+    if (!result) {
+        KMessageBox::error(this, i18n("Sequencer failed to add audio file %1").arg(aF->getFilename().c_str()));
     }
 }
 
@@ -6374,22 +6266,10 @@ RosegardenGUIApp::slotDeleteAudioFile(unsigned int id)
     if (m_doc->getAudioFileManager().removeFile(id) == false)
         return ;
 
-    QCString replyType;
-    QByteArray replyData;
-    QByteArray data;
-    QDataStream streamOut(data, IO_WriteOnly);
+    int result = RosegardenSequencer::getInstance()->removeAudioFile(id);
 
-    // file id
-    //
-    streamOut << (int)id;
-
-    if (rgapp->sequencerCall("removeAudioFile(int)", replyType, replyData, data)) {
-        QDataStream streamIn(replyData, IO_ReadOnly);
-        int result;
-        streamIn >> result;
-        if (!result) {
-            KMessageBox::error(this, i18n("Sequencer failed to remove audio file id %1").arg(id));
-        }
+    if (!result) {
+        KMessageBox::error(this, i18n("Sequencer failed to remove audio file id %1").arg(id));
     }
 }
 
@@ -6423,11 +6303,7 @@ RosegardenGUIApp::slotDeleteAllAudioFiles()
 
     // Clear at the sequencer
     //
-    QCString replyType;
-    QByteArray replyData;
-    QByteArray data;
-
-    rgapp->sequencerCall("clearAllAudioFiles()", replyType, replyData, data);
+    RosegardenSequencer::getInstance()->clearAllAudioFiles();
 }
 
 void
@@ -8039,7 +7915,6 @@ RosegardenGUIApp::slotJumpToQuickMarker()
     m_doc->jumpToQuickMarker();
 }
 
-const void* RosegardenGUIApp::SequencerExternal = (void*)-1;
 RosegardenGUIApp *RosegardenGUIApp::m_myself = 0;
 
 }

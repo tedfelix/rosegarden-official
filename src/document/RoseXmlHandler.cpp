@@ -43,7 +43,7 @@
 #include "base/Track.h"
 #include "base/TriggerSegment.h"
 #include "gui/application/RosegardenGUIApp.h"
-#include "gui/application/RosegardenApplication.h"
+#include "sequencer/RosegardenSequencer.h"
 #include "gui/dialogs/FileLocateDialog.h"
 #include "gui/general/ProgressReporter.h"
 #include "gui/kdeext/KStartupLogo.h"
@@ -2241,37 +2241,17 @@ RoseXmlHandler::addMIDIDevice(QString name, bool createAtSequencer)
 
     if (createAtSequencer) {
 
-        QByteArray data;
-        QByteArray replyData;
-        QCString replyType;
-        QDataStream arg(data, IO_WriteOnly);
-
-        arg << (int)Device::Midi;
-        arg << (unsigned int)MidiDevice::Play;
-
-        if (!rgapp->sequencerCall("addDevice(int, unsigned int)", replyType, replyData, data)) {
-            SEQMAN_DEBUG << "RoseXmlHandler::addMIDIDevice - "
-            << "can't call sequencer addDevice" << endl;
-            return ;
-        }
-
-        if (replyType == "unsigned int") {
-            QDataStream reply(replyData, IO_ReadOnly);
-            reply >> deviceId;
-        } else {
-            SEQMAN_DEBUG << "RoseXmlHandler::addMIDIDevice - "
-            << "got unknown returntype from addDevice()" << endl;
-            return ;
-        }
+        deviceId = RosegardenSequencer::getInstance()->
+            addDevice(Device::Midi, MidiDevice::Play);
 
         if (deviceId == Device::NO_DEVICE) {
             SEQMAN_DEBUG << "RoseXmlHandler::addMIDIDevice - "
-            << "sequencer addDevice failed" << endl;
-            return ;
+                         << "sequencer addDevice failed" << endl;
+            return;
         }
 
         SEQMAN_DEBUG << "RoseXmlHandler::addMIDIDevice - "
-        << " added device " << deviceId << endl;
+                     << " added device " << deviceId << endl;
 
     } else {
         // Generate a new device id at the base Studio side only.
@@ -2330,17 +2310,10 @@ RoseXmlHandler::setMIDIDeviceConnection(QString connection)
     SEQMAN_DEBUG << "RoseXmlHandler::setMIDIDeviceConnection(" << connection << ")" << endl;
 
     MidiDevice *md = dynamic_cast<MidiDevice *>(m_device);
-    if (!md)
-        return ;
+    if (!md) return;
 
-    QByteArray data;
-    QDataStream arg(data, IO_WriteOnly);
-
-    arg << (unsigned int)md->getId();
-    arg << connection;
-
-    rgapp->sequencerSend("setPlausibleConnection(unsigned int, QString)",
-                         data);
+    RosegardenSequencer::getInstance()->setPlausibleConnection
+        (md->getId(), connection);
     // connection should be sync'd later in the natural course of things
 }
 
@@ -2350,19 +2323,10 @@ RoseXmlHandler::setMIDIDeviceName(QString name)
     SEQMAN_DEBUG << "RoseXmlHandler::setMIDIDeviceName(" << name << ")" << endl;
 
     MidiDevice *md = dynamic_cast<MidiDevice *>(m_device);
-    if (!md)
-        return ;
+    if (!md) return;
 
-    QByteArray data;
-    QDataStream arg(data, IO_WriteOnly);
-
-    arg << (unsigned int)md->getId();
-    arg << name;
-
-    std::cerr << "Renaming device " << md->getId() << " to " << name << std::endl;
-
-    rgapp->sequencerSend("renameDevice(unsigned int, QString)",
-                         data);
+    RosegardenSequencer::getInstance()->renameDevice
+        (md->getId(), name);
 }
 
 }

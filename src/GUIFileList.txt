@@ -359,7 +359,6 @@ SET(gui_SRCS
 	gui/application/LircCommander.h
 	gui/application/RosegardenApplication.cpp
 	gui/application/RosegardenApplication.h
-	gui/application/RosegardenDCOP.h
 	gui/application/RosegardenGUIApp.cpp
 	gui/application/RosegardenGUIApp.h
 	gui/application/RosegardenGUIView.cpp
@@ -370,6 +369,7 @@ SET(gui_SRCS
 	gui/application/SetWaitCursor.h
 	gui/application/StartupTester.cpp
 	gui/application/StartupTester.h
+	gui/application/TransportStatus.h
 	gui/configuration/AudioConfigurationPage.cpp
 	gui/configuration/AudioConfigurationPage.h
 	gui/configuration/AudioPropertiesPage.cpp

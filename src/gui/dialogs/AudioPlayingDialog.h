@@ -20,7 +20,6 @@
 #define _RG_AUDIOPLAYINGDIALOG_H_
 
 #include <kdialogbase.h>
-#include "gui/application/RosegardenDCOP.h"
 
 
 class QWidget;

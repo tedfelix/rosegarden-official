@@ -246,7 +246,7 @@ bool MmappedSegment::iterator::atEnd() const
 
 MmappedSegmentsMetaIterator::MmappedSegmentsMetaIterator(
     mmappedsegments& segments,
-    ControlBlockMmapper* controlBlockMmapper)
+    MmappedControlBlock* controlBlockMmapper)
         : m_controlBlockMmapper(controlBlockMmapper),
         m_segments(segments)
 {

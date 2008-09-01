@@ -43,6 +43,7 @@
 #include "gui/kdeext/KStartupLogo.h"
 #include "gui/studio/StudioControl.h"
 #include "gui/widgets/CurrentProgressDialog.h"
+#include "sequencer/RosegardenSequencer.h"
 #include "MetronomeMmapper.h"
 #include "SegmentMmapperFactory.h"
 #include "SequencerMapper.h"
@@ -312,23 +313,12 @@ SequenceManager::play()
     bool lowLat = config->readBoolEntry("audiolowlatencymonitoring", true);
 
     if (lowLat != m_lastLowLatencySwitchSent) {
-
-        QByteArray data;
-        QDataStream streamOut(data, IO_WriteOnly);
-        streamOut << lowLat;
-
-        rgapp->sequencerSend("setLowLatencyMode(bool)", data);
+        RosegardenSequencer::getInstance()->setLowLatencyMode(lowLat);
         m_lastLowLatencySwitchSent = lowLat;
     }
 
-    QByteArray data;
-    QCString replyType;
-    QByteArray replyData;
-    QDataStream streamOut(data, IO_WriteOnly);
-
-    // playback start position
-    streamOut << (long)startPos.sec;
-    streamOut << (long)startPos.nsec;
+    RealTime readAhead, audioMix, audioRead, audioWrite;
+    long smallFileSize;
 
     // Apart from perhaps the small file size, I think with hindsight
     // that these options are more easily set to reasonable defaults
@@ -338,38 +328,22 @@ SequenceManager::play()
     //is larger than the JACK period size
 
     if (lowLat) {
-        streamOut << 0L; // read-ahead sec
-        streamOut << 160000000L; // read-ahead nsec
-        streamOut << 0L; // audio mix sec
-        streamOut << 60000000L; // audio mix nsec: ignored in lowlat mode
-        streamOut << 2L; // audio read sec
-        streamOut << 500000000L; // audio read nsec
-        streamOut << 4L; // audio write sec
-        streamOut << 0L; // audio write nsec
-        streamOut << 256L; // cacheable small file size in K
+        readAhead  = RealTime(0, 160000000);
+        audioMix   = RealTime(0, 60000000); // ignored in lowlat mode
+        audioRead  = RealTime(2, 500000000); // audio read nsec
+        audioWrite = RealTime(4, 0);
+        smallFileSize = 256; // K
     } else {
-        streamOut << 0L; // read-ahead sec
-        streamOut << 500000000L; // read-ahead nsec
-        streamOut << 0L; // audio mix sec
-        streamOut << 400000000L; // audio mix nsec
-        streamOut << 2L; // audio read sec
-        streamOut << 500000000L; // audio read nsec
-        streamOut << 4L; // audio write sec
-        streamOut << 0L; // audio write nsec
-        streamOut << 256L; // cacheable small file size in K
+        readAhead  = RealTime(0, 500000000);
+        audioMix   = RealTime(0, 400000000); // ignored in lowlat mode
+        audioRead  = RealTime(2, 500000000); // audio read nsec
+        audioWrite = RealTime(4, 0);
+        smallFileSize = 256; // K
     }
 
-    // Send Play to the Sequencer
-    if (!rgapp->sequencerCall("play(long int, long int, long int, long int, long int, long int, long int, long int, long int, long int, long int)",
-                              replyType, replyData, data)) {
-        m_transportStatus = STOPPED;
-        return false;
-    }
-
-    // ensure the return type is ok
-    QDataStream streamIn(replyData, IO_ReadOnly);
-    int result;
-    streamIn >> result;
+    int result = 
+        RosegardenSequencer::getInstance()->
+        play(startPos, readAhead, audioMix, audioRead, audioWrite, smallFileSize);
 
     if (result) {
         // completed successfully
@@ -459,13 +433,7 @@ SequenceManager::stop()
     //
     QApplication::setOverrideCursor(QCursor(Qt::waitCursor));
 
-    QCString replyType;
-    QByteArray replyData;
-
-    bool failed = false;
-    if (!rgapp->sequencerCall("stop()", replyType, replyData)) {
-        failed = true;
-    }
+    RosegardenSequencer::getInstance()->stop();
 
     // restore
     QApplication::restoreOverrideCursor();
@@ -493,10 +461,6 @@ SequenceManager::stop()
     // We don't reset controllers at this point - what happens with static
     // controllers the next time we play otherwise?  [rwb]
     //resetControllers();
-
-    if (failed) {
-        throw(Exception("Failed to contact Rosegarden sequencer with stop command.   Please save your composition and restart Rosegarden to continue."));
-    }
 }
 
 void
@@ -566,12 +530,7 @@ SequenceManager::notifySequencerStatus(TransportStatus status)
 void
 SequenceManager::sendSequencerJump(const RealTime &time)
 {
-    QByteArray data;
-    QDataStream streamOut(data, IO_WriteOnly);
-    streamOut << (long)time.sec;
-    streamOut << (long)time.nsec;
-
-    rgapp->sequencerSend("jumpTo(long int, long int)", data);
+    RosegardenSequencer::getInstance()->jumpTo(time);
 }
 
 void
@@ -641,13 +600,8 @@ SequenceManager::record(bool toggled)
         if (m_transportStatus == RECORDING) {
             SEQMAN_DEBUG << "SequenceManager::record - stop recording and keep playing\n";
 
-            QByteArray data;
-            QCString replyType;
-            QByteArray replyData;
+            if (!RosegardenSequencer::getInstance()->punchOut()) {
 
-            // Send Record to the Sequencer to signal it to drop out of record mode
-            if (!rgapp->sequencerCall("punchOut()", replyType, replyData, data)) {
-                SEQMAN_DEBUG << "SequenceManager::record - the \"not very plausible\" code executed\n";
                 // #1797873 - set new transport status first, so that
                 // if we're stopping recording we don't risk the
                 // record segment being restored by a timer while the
@@ -790,23 +744,12 @@ punchin:
         bool lowLat = config->readBoolEntry("audiolowlatencymonitoring", true);
 
         if (lowLat != m_lastLowLatencySwitchSent) {
-
-            QByteArray data;
-            QDataStream streamOut(data, IO_WriteOnly);
-            streamOut << lowLat;
-
-            rgapp->sequencerSend("setLowLatencyMode(bool)", data);
+            RosegardenSequencer::getInstance()->setLowLatencyMode(lowLat);
             m_lastLowLatencySwitchSent = lowLat;
         }
 
-        QByteArray data;
-        QCString replyType;
-        QByteArray replyData;
-        QDataStream streamOut(data, IO_WriteOnly);
-
-        // playback start position
-        streamOut << (long)startPos.sec;
-        streamOut << (long)startPos.nsec;
+        RealTime readAhead, audioMix, audioRead, audioWrite;
+        long smallFileSize;
 
         // Apart from perhaps the small file size, I think with hindsight
         // that these options are more easily set to reasonable defaults
@@ -818,42 +761,23 @@ punchin:
         //is larger than the JACK period size
 
         if (lowLat) {
-            streamOut << 0L; // read-ahead sec
-            streamOut << 160000000L; // read-ahead nsec
-            streamOut << 0L; // audio mix sec
-            streamOut << 60000000L; // audio mix nsec: ignored in lowlat mode
-            streamOut << 2L; // audio read sec
-            streamOut << 500000000L; // audio read nsec
-            streamOut << 4L; // audio write sec
-            streamOut << 0L; // audio write nsec
-            streamOut << 256L; // cacheable small file size in K
+            readAhead  = RealTime(0, 160000000);
+            audioMix   = RealTime(0, 60000000); // ignored in lowlat mode
+            audioRead  = RealTime(2, 500000000); // audio read nsec
+            audioWrite = RealTime(4, 0);
+            smallFileSize = 256; // K
         } else {
-            streamOut << 0L; // read-ahead sec
-            streamOut << 500000000L; // read-ahead nsec
-            streamOut << 0L; // audio mix sec
-            streamOut << 400000000L; // audio mix nsec
-            streamOut << 2L; // audio read sec
-            streamOut << 500000000L; // audio read nsec
-            streamOut << 4L; // audio write sec
-            streamOut << 0L; // audio write nsec
-            streamOut << 256L; // cacheable small file size in K
+            readAhead  = RealTime(0, 500000000);
+            audioMix   = RealTime(0, 400000000); // ignored in lowlat mode
+            audioRead  = RealTime(2, 500000000); // audio read nsec
+            audioWrite = RealTime(4, 0);
+            smallFileSize = 256; // K
         }
 
-        // record type
-        streamOut << (long)STARTING_TO_RECORD;
-
-        // Send Play to the Sequencer
-        if (!rgapp->sequencerCall("record(long int, long int, long int, long int, long int, long int, long int, long int, long int, long int, long int, long int)",
-                                  replyType, replyData, data)) {
-            // failed
-            m_transportStatus = STOPPED;
-            return ;
-        }
-
-        // ensure the return type is ok
-        QDataStream streamIn(replyData, IO_ReadOnly);
-        int result;
-        streamIn >> result;
+        int result = 
+            RosegardenSequencer::getInstance()->
+            record(startPos, readAhead, audioMix, audioRead, audioWrite, smallFileSize,
+                   STARTING_TO_RECORD);
 
         if (result) {
 
@@ -1275,46 +1199,19 @@ SequenceManager::setLoop(const timeT &lhs, const timeT &rhs)
     //	return;
     //    }
 
-    // Let the sequencer know about the loop markers
-    //
-    QByteArray data;
-    QDataStream streamOut(data, IO_WriteOnly);
-
     RealTime loopStart =
         m_doc->getComposition().getElapsedRealTime(lhs);
     RealTime loopEnd =
         m_doc->getComposition().getElapsedRealTime(rhs);
 
-    streamOut << (long)loopStart.sec;
-    streamOut << (long)loopStart.nsec;
-    streamOut << (long)loopEnd.sec;
-    streamOut << (long)loopEnd.nsec;
-
-    rgapp->sequencerSend("setLoop(long int, long int, long int, long int)", data);
+    RosegardenSequencer::getInstance()->setLoop(loopStart, loopEnd);
 }
 
 void
 SequenceManager::checkSoundDriverStatus(bool warnUser)
 {
-    QByteArray data;
-    QCString replyType;
-    QByteArray replyData;
-    QDataStream streamOut(data, IO_WriteOnly);
-
-    streamOut << QString(VERSION);
-
-    if (! rgapp->sequencerCall("getSoundDriverStatus(QString)",
-                               replyType, replyData, data)) {
-
-        m_soundDriverStatus = NO_DRIVER;
-
-    } else {
-
-        QDataStream streamIn(replyData, IO_ReadOnly);
-        unsigned int result;
-        streamIn >> result;
-        m_soundDriverStatus = result;
-    }
+    m_soundDriverStatus = RosegardenSequencer::getInstance()->
+        getSoundDriverStatus(VERSION);
 
     SEQMAN_DEBUG << "Sound driver status is: " << m_soundDriverStatus << endl;
 
@@ -1796,16 +1693,9 @@ void SequenceManager::segmentModified(Segment* s)
     << sizeChanged << endl;
 
     if ((m_transportStatus == PLAYING) && sizeChanged) {
-        QByteArray data;
-        QDataStream streamOut(data, IO_WriteOnly);
-
-        streamOut << (QString)m_compositionMmapper->getSegmentFileName(s);
-        streamOut << (size_t)m_compositionMmapper->getSegmentFileSize(s);
-
-        SEQMAN_DEBUG << "SequenceManager::segmentModified() : DCOP-call sequencer remapSegment"
-        << m_compositionMmapper->getSegmentFileName(s) << endl;
-
-        rgapp->sequencerSend("remapSegment(QString, size_t)", data);
+        RosegardenSequencer::getInstance()->
+            remapSegment((QString)m_compositionMmapper->getSegmentFileName(s),
+                         (size_t)m_compositionMmapper->getSegmentFileSize(s));
     }
 }
 
@@ -1841,8 +1731,7 @@ void SequenceManager::segmentEventsTimingChanged(const Composition*, Segment * s
     SEQMAN_DEBUG << "SequenceManager::segmentEventsTimingChanged(" << s << ", " << t << ")\n";
     segmentModified(s);
     if (s && s->getType() == Segment::Audio && m_transportStatus == PLAYING) {
-        QByteArray data;
-        rgapp->sequencerSend("remapTracks()", data);
+        RosegardenSequencer::getInstance()->remapTracks();
     }
 }
 
@@ -1857,8 +1746,7 @@ void SequenceManager::segmentTrackChanged(const Composition*, Segment *s, TrackI
     SEQMAN_DEBUG << "SequenceManager::segmentTrackChanged(" << s << ", " << id << ")\n";
     segmentModified(s);
     if (s && s->getType() == Segment::Audio && m_transportStatus == PLAYING) {
-        QByteArray data;
-        rgapp->sequencerSend("remapTracks()", data);
+        RosegardenSequencer::getInstance()->remapTracks();
     }
 }
 
@@ -1875,15 +1763,8 @@ void SequenceManager::processAddedSegment(Segment* s)
     m_compositionMmapper->segmentAdded(s);
 
     if (m_transportStatus == PLAYING) {
-
-        QByteArray data;
-        QDataStream streamOut(data, IO_WriteOnly);
-
-        streamOut << m_compositionMmapper->getSegmentFileName(s);
-
-        if (!rgapp->sequencerSend("addSegment(QString)", data)) {
-            m_transportStatus = STOPPED;
-        }
+        RosegardenSequencer::getInstance()->addSegment
+            (m_compositionMmapper->getSegmentFileName(s));
     }
 
     // Add to segments map
@@ -1900,16 +1781,7 @@ void SequenceManager::processRemovedSegment(Segment* s)
     m_compositionMmapper->segmentDeleted(s);
 
     if (m_transportStatus == PLAYING) {
-
-        QByteArray data;
-        QDataStream streamOut(data, IO_WriteOnly);
-
-        streamOut << filename;
-
-        if (!rgapp->sequencerSend("deleteSegment(QString)", data)) {
-            // failed
-            m_transportStatus = STOPPED;
-        }
+        RosegardenSequencer::getInstance()->deleteSegment(filename);
     }
 
     // Remove from segments map
@@ -1933,8 +1805,7 @@ void SequenceManager::trackChanged(const Composition *, Track* t)
     m_controlBlockMmapper->updateTrackData(t);
 
     if (m_transportStatus == PLAYING) {
-        QByteArray data;
-        rgapp->sequencerSend("remapTracks()", data);
+        RosegardenSequencer::getInstance()->remapTracks();
     }
 }
 
@@ -1950,9 +1821,9 @@ void SequenceManager::metronomeChanged(InstrumentId id,
     // metronome instrument, pitch etc
 
     SEQMAN_DEBUG << "SequenceManager::metronomeChanged (simple)"
-    << ", instrument = "
-    << id
-    << endl;
+                 << ", instrument = "
+                 << id
+                 << endl;
 
     if (regenerateTicks)
         resetMetronomeMmapper();
@@ -1975,9 +1846,9 @@ void SequenceManager::metronomeChanged(const Composition *)
     // has changed -- the metronome itself has not actually changed
 
     SEQMAN_DEBUG << "SequenceManager::metronomeChanged "
-    << ", instrument = "
-    << m_metronomeMmapper->getMetronomeInstrument()
-    << endl;
+                 << ", instrument = "
+                 << m_metronomeMmapper->getMetronomeInstrument()
+                 << endl;
 
     m_controlBlockMmapper->updateMetronomeData
     (m_metronomeMmapper->getMetronomeInstrument());
@@ -1999,8 +1870,7 @@ void SequenceManager::soloChanged(const Composition *, bool solo, TrackId select
 {
     if (m_controlBlockMmapper->updateSoloData(solo, selectedTrack)) {
         if (m_transportStatus == PLAYING) {
-            QByteArray data;
-            rgapp->sequencerSend("remapTracks()", data);
+            RosegardenSequencer::getInstance()->remapTracks();
         }
     }
 }
@@ -2142,13 +2012,7 @@ SequenceManager::getSampleRate()
 {
     if (m_sampleRate != 0) return m_sampleRate;
 
-    QCString replyType;
-    QByteArray replyData;
-    if (rgapp->sequencerCall("getSampleRate()", replyType, replyData)) {
-        QDataStream streamIn(replyData, IO_ReadOnly);
-        unsigned int result;
-        streamIn >> m_sampleRate;
-    }
+    m_sampleRate = RosegardenSequencer::getInstance()->getSampleRate();
 
     return m_sampleRate;
 }

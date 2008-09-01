@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -84,6 +83,7 @@ class AudioPluginManager;
 class AudioPluginDialog;
 class AudioMixerWindow;
 class AudioManagerDialog;
+class SequencerThread;
 
 /**
   * The base class for RosegardenGUI application windows. It sets up the main
@@ -115,7 +115,6 @@ public:
      * @see initMenuBar initToolBar
      */
     RosegardenGUIApp(bool useSequencer = true,
-                     bool useExistingSequencer = false,
                      QObject *startupStatusMessageReceiver = 0);
 
     virtual ~RosegardenGUIApp();
@@ -223,8 +222,8 @@ public:
     virtual void record()             { slotRecord(); }
     virtual void rewindToBeginning()  { slotRewindToBeginning(); }
     virtual void fastForwardToEnd()   { slotFastForwardToEnd(); }
-    virtual void jumpToTime(int sec, int usec) { slotJumpToTime(sec, usec); }
-    virtual void startAtTime(int sec, int usec) { slotStartAtTime(sec, usec); }
+    virtual void jumpToTime(RealTime rt) { slotJumpToTime(rt); }
+    virtual void startAtTime(RealTime rt) { slotStartAtTime(rt); }
     
     virtual void trackUp()            { slotTrackUp(); }
     virtual void trackDown()          { slotTrackDown(); }
@@ -237,7 +236,7 @@ public:
      *
      * @see slotSequencerExited()
      */
-    bool launchSequencer(bool useExistingSequencer);
+    bool launchSequencer();
 
 #ifdef HAVE_LIBJACK
     /*
@@ -262,17 +261,12 @@ public:
      * The result is dynamically updated depending on the sequencer's
      * status.
      */
-    bool isSequencerRunning() { return m_useSequencer && (m_sequencerProcess != 0); }
+    bool isSequencerRunning() { return m_useSequencer && (m_sequencerThread != 0); }
 
-    /**
-     * Returns true if the sequencer wasn't started by us
-     */
-    bool isSequencerExternal() { return m_useSequencer && (m_sequencerProcess == SequencerExternal); }
-    
     /**
      * Set the sequencer status - pass through DCOP as an int
      */
-    virtual void notifySequencerStatus(int status);
+//!!!    virtual void notifySequencerStatus(int status);
 
     /**
      * Handle some random incoming MIDI events.
@@ -1116,8 +1110,8 @@ public slots:
     void slotToggleRecord();
     void slotRewindToBeginning();
     void slotFastForwardToEnd();
-    void slotJumpToTime(int sec, int usec);
-    void slotStartAtTime(int sec, int usec);
+    void slotJumpToTime(RealTime);
+    void slotStartAtTime(RealTime);
     void slotRefreshTimeDisplay();
     void slotToggleTracking();
 
@@ -1453,6 +1447,8 @@ public slots:
      */
     void slotUpdateMonitoring();
 
+    void slotCheckTransportStatus();
+
     /**
      * Create a plugin dialog for a given instrument and slot, or
      * raise an exising one.
@@ -1592,7 +1588,7 @@ private:
     KAction *m_rewindEndTransport;
     KAction *m_ffwdEndTransport;
 
-    KProcess* m_sequencerProcess;
+    SequencerThread *m_sequencerThread;
     bool m_sequencerCheckedIn;
 
 #ifdef HAVE_LIBJACK

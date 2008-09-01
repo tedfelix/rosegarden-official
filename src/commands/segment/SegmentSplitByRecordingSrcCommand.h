@@ -22,9 +22,6 @@
 #include <kcommand.h>
 #include <qstring.h>
 #include <klocale.h>
-#include "gui/application/RosegardenDCOP.h"
-
-
 
 
 namespace Rosegarden

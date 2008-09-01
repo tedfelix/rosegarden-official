@@ -21,7 +21,6 @@
 #include "misc/Debug.h"
 #include "document/ConfigGroups.h"
 #include "document/RosegardenGUIDoc.h"
-#include "gui/application/RosegardenDCOP.h"
 #include "gui/kdeext/KTmpStatusMsg.h"
 #include "RosegardenGUIApp.h"
 #include <kcmdlineargs.h>
@@ -56,33 +55,6 @@ int RosegardenApplication::newInstance()
     }
 
     return KUniqueApplication::newInstance();
-}
-
-bool RosegardenApplication::isSequencerRegistered()
-{
-    if (noSequencerMode())
-        return false;
-    return dcopClient()->isApplicationRegistered(ROSEGARDEN_SEQUENCER_APP_NAME);
-}
-
-bool RosegardenApplication::sequencerSend(QCString dcopCall, QByteArray params)
-{
-    if (noSequencerMode())
-        return false;
-
-    return dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
-                              ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                              dcopCall, params);
-}
-
-bool RosegardenApplication::sequencerCall(QCString dcopCall, QCString& replyType, QByteArray& replyData,
-        QByteArray params, bool useEventLoop)
-{
-    if (noSequencerMode())
-        return false;
-    return dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
-                              ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                              dcopCall, params, replyType, replyData, useEventLoop);
 }
 
 void RosegardenApplication::sfxLoadExited(KProcess *proc)

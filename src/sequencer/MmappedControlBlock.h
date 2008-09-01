@@ -27,11 +27,11 @@
 namespace Rosegarden
 {
 
-class ControlBlockMmapper
+class MmappedControlBlock
 {
 public:
-    ControlBlockMmapper(QString fileName);
-    ~ControlBlockMmapper();
+    MmappedControlBlock(QString fileName);
+    ~MmappedControlBlock();
     
     QString getFileName() { return m_fileName; }
 

@@ -22,6 +22,7 @@
 #include "AudioPluginClipboard.h"
 #include "AudioPlugin.h"
 #include "base/AudioPluginInstance.h"
+#include "sequencer/RosegardenSequencer.h"
 #include "gui/application/RosegardenApplication.h"
 #include "sound/PluginFactory.h"
 #include "sound/PluginIdentifier.h"
@@ -285,16 +286,7 @@ AudioPluginManager::awaitEnumeration()
 void
 AudioPluginManager::fetchSampleRate()
 {
-    QCString replyType;
-    QByteArray replyData;
-
-    if (rgapp->sequencerCall("getSampleRate()", replyType, replyData)) {
-
-        QDataStream streamIn(replyData, IO_ReadOnly);
-        unsigned int result;
-        streamIn >> result;
-        m_sampleRate = result;
-    }
+    m_sampleRate = RosegardenSequencer::getInstance()->getSampleRate();
 }
 
 }

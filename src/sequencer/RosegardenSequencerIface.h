@@ -5,9 +5,6 @@
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2008 the Rosegarden development team.
 
-    Other copyrights also apply to some parts of this work.  Please
-    see the AUTHORS file and individual file headers for details.
-
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -18,82 +15,60 @@
 #ifndef _ROSEGARDENSEQUENCERIFACE_H_
 #define _ROSEGARDENSEQUENCERIFACE_H_
 
-#include <dcopobject.h>
-// #include <qvaluevector.h>
-// #include <qpair.h>
-
-#include "gui/application/RosegardenDCOP.h"
+#include "gui/application/TransportStatus.h"
 
 #include "base/Event.h"
 #include "sound/MappedComposition.h"
 #include "sound/MappedEvent.h"
 #include "base/Instrument.h"
 #include "sound/MappedDevice.h"
-#include "sound/MappedRealTime.h"
 #include "sound/MappedStudio.h"
 #include "sound/MappedCommon.h"
 
 namespace Rosegarden {
 
-class RosegardenSequencerIface : virtual public DCOPObject
+class RosegardenSequencerIface
 {
-    K_DCOP
 public:
-    k_dcop:
-
     // close the sequencer
     //
     virtual void quit() = 0;
 
-    
-
     // play from a given time with given parameters
     //
-    virtual int play(long timeSec,
-                     long timeNsec,
-                     long readAheadSec,
-                     long readAheadNsec,
-                     long audioMixSec,
-                     long audioMixNsec,
-                     long audioReadSec,
-                     long audioReadNsec,
-                     long audioWriteSec,
-                     long audioWriteNsec,
-                     long smallFileSize) = 0;
+    virtual bool play(const RealTime &position,
+                      const RealTime &readAhead,
+                      const RealTime &audioMix,
+                      const RealTime &audioRead,
+                      const RealTime &audioWrite,
+                      long smallFileSize) = 0;
 
     // record from a given time with given parameters
     //
-    virtual int record(long timeSec,
-                       long timeNsec,
-                       long readAheadSec,
-                       long readAheadNsec,
-                       long audioMixSec,
-                       long audioMixNsec,
-                       long audioReadSec,
-                       long audioReadNsec,
-                       long audioWriteSec,
-                       long audioWriteNsec,
-                       long smallFileSize,
-                       long recordMode) = 0;
+    virtual bool record(const RealTime &position,
+                        const RealTime &readAhead,
+                        const RealTime &audioMix,
+                        const RealTime &audioRead,
+                        const RealTime &audioWrite,
+                        long smallFileSize,
+                        long recordMode) = 0;
 
     // stop the sequencer
     //
-    virtual ASYNC stop() = 0;
+    virtual void stop() = 0;
 
     // punch out from recording to playback
     //
-    virtual int punchOut() = 0;
+    virtual bool punchOut() = 0;
     
     // Set the sequencer to a given time
     //
-    virtual void jumpTo(long posSec, long posNsec) = 0;
+    virtual void jumpTo(const RealTime &) = 0;
 
     // Set a loop on the sequencer
     //
-    virtual void setLoop(long loopStartSec,
-                         long loopStartNsec,
-                         long loopEndSec,
-                         long loopEndNsec) = 0;
+    virtual void setLoop(const RealTime &start,
+                         const RealTime &end) = 0;
 
     // Get the status of the Sequencer
     //
@@ -101,8 +76,8 @@ public:
 
     // Add and delete audio files on the Sequencer
     //
-    virtual int addAudioFile(const QString &fileName, int id) = 0;
-    virtual int removeAudioFile(int id) = 0;
+    virtual bool addAudioFile(const QString &fileName, int id) = 0;
+    virtual bool removeAudioFile(int id) = 0;
     virtual void clearAllAudioFiles() = 0;
 
     // Single set function as the MappedInstrument is so lightweight.
@@ -116,21 +91,6 @@ public:
     // of MappedEvents (Program Changes, SysExs, async Events etc).
     //
     virtual void processSequencerSlice(MappedComposition mC) = 0;
-
-
-    // Horrible ugly ugly ugly interface for single MappedEvents
-    // just until we implement the proper MappedEvent interface
-    //
-    virtual void processMappedEvent(unsigned int id,
-                                    int type,
-                                    unsigned char pitch,
-                                    unsigned char velocity,
-                                    long absTimeSec,
-                                    long absTimeNsec,
-                                    long durationSec,
-                                    long durationNsec,
-                                    long audioStartMarkerSec,
-                                    long audioStartMarkerNsec) = 0;
 
     // The proper implementation
     //
@@ -152,7 +112,7 @@ public:
     // getConnections, getConnection and setConnection methods
     // may be used with devices of the given type.
     //
-    virtual int canReconnect(int deviceType) = 0;
+    virtual int canReconnect(Device::DeviceType deviceType) = 0;
     
     // Create a device of the given type and direction (corresponding
     // to MidiDevice::DeviceDirection enum) and return its id.
@@ -160,7 +120,8 @@ public:
     // currently ignored for non-MIDI devices.
     // Do not use this unless canReconnect(type) returned true.
     //
-    virtual unsigned int addDevice(int type, unsigned int direction) = 0;
+    virtual unsigned int addDevice(Device::DeviceType type,
+                                   MidiDevice::DeviceDirection direction) = 0;
 
     // Remove the device of the given id.
     // Ignored if driver does not permit changing the number of devices
@@ -180,15 +141,16 @@ public:
     // Returns zero if devices of this type are non-reconnectable
     // (i.e. if canReconnect(type) would return false).
     //
-    virtual unsigned int getConnections(int type, unsigned int direction) = 0;
+    virtual unsigned int getConnections(Device::DeviceType type,
+                                        MidiDevice::DeviceDirection direction) = 0;
 
     // Return one of the set of permissible connections for a device of
     // the given type and direction (corresponding to MidiDevice::
     // DeviceDirection enum).  Direction is ignored for non-MIDI devices.
     // Returns the empty string for invalid parameters.
     // 
-    virtual QString getConnection(int type,
-                                  unsigned int direction,
+    virtual QString getConnection(Device::DeviceType type,
+                                  MidiDevice::DeviceDirection direction,
                                   unsigned int connectionNo) = 0;
 
     // Reconnect a particular device.
@@ -229,8 +191,8 @@ public:
 
     // Fetch audio play latencies
     //
-    virtual MappedRealTime getAudioPlayLatency() = 0;
-    virtual MappedRealTime getAudioRecordLatency() = 0;
+    virtual RealTime getAudioPlayLatency() = 0;
+    virtual RealTime getAudioRecordLatency() = 0;
 
     // Set a property on a MappedObject
     //
@@ -293,10 +255,9 @@ public:
     //
     virtual int createMappedObject(int type) = 0;
 
-    // Destroy an object (returns a bool but for KDE2 DCOP compat we
-    // use an int of course).
+    // Destroy an object
     //
-    virtual int destroyMappedObject(int id) = 0;
+    virtual bool destroyMappedObject(int id) = 0;
 
     // Connect two objects
     //
@@ -323,7 +284,7 @@ public:
     // note when the TEMPO changes - this is to allow the sequencer
     // to generate MIDI clock (at 24 PPQN).
     //
-    virtual void setQuarterNoteLength(long timeSec, long timeNsec) = 0;
+    virtual void setQuarterNoteLength(RealTime) = 0;
 
     // Return a (potentially lengthy) human-readable status log
     //

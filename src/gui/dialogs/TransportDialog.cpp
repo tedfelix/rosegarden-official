@@ -24,6 +24,8 @@
 #include "base/NotationTypes.h"
 #include "base/RealTime.h"
 #include "misc/Debug.h"
+#include "sequencer/RosegardenSequencer.h"
+#include "gui/application/TransportStatus.h"
 #include "gui/application/RosegardenApplication.h"
 #include "gui/general/MidiPitchLabel.h"
 #include "gui/studio/StudioControl.h"
@@ -396,21 +398,8 @@ void
 TransportDialog::computeSampleRate()
 {
     if (m_sampleRate == 0) {
-
-        QCString replyType;
-        QByteArray replyData;
-        m_sampleRate = 0;
-
-        if (rgapp->sequencerCall("getSampleRate()", replyType, replyData)) {
-            QDataStream streamIn(replyData, IO_ReadOnly);
-            unsigned int result;
-            streamIn >> result;
-            m_sampleRate = result;
-        } else {
-            m_sampleRate = -1;
-        }
+        m_sampleRate = RosegardenSequencer::getInstance()->getSampleRate();
     }
-
 }
 
 void

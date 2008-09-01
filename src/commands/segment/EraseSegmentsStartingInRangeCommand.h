@@ -22,10 +22,6 @@
 #include <kcommand.h>
 #include <vector>
 #include "base/Event.h"
-#include "gui/application/RosegardenDCOP.h"
-
-
-
 
 namespace Rosegarden
 {

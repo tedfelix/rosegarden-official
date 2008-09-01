@@ -29,7 +29,7 @@
 #include "commands/studio/RenameDeviceCommand.h"
 #include "document/RosegardenGUIDoc.h"
 #include "document/MultiViewCommandHistory.h"
-#include "gui/application/RosegardenApplication.h"
+#include "sequencer/RosegardenSequencer.h"
 #include <kdialogbase.h>
 #include <kmessagebox.h>
 #include <qcstring.h>
@@ -74,10 +74,8 @@ DeviceEditorDialog::DeviceEditorDialog(QWidget *parent,
     m_table->setColumnReadOnly(0, true);
     m_table->setColumnReadOnly(2, true);
 
-    makeConnectionList((unsigned int)MidiDevice::Play,
-                       m_playConnections);
-    makeConnectionList((unsigned int)MidiDevice::Record,
-                       m_recordConnections);
+    makeConnectionList(MidiDevice::Play, m_playConnections);
+    makeConnectionList(MidiDevice::Record, m_recordConnections);
 
     populate();
 
@@ -173,51 +171,17 @@ DeviceEditorDialog::populate()
 }
 
 void
-DeviceEditorDialog::makeConnectionList(unsigned int direction,
+DeviceEditorDialog::makeConnectionList(MidiDevice::DeviceDirection direction,
                                        QStringList &list)
 {
-    QByteArray data;
-    QByteArray replyData;
-    QCString replyType;
-    QDataStream arg(data, IO_WriteOnly);
-    arg << (int)Device::Midi;
-    arg << direction;
+    list.clear();
 
-    if (!rgapp->sequencerCall("getConnections(int, unsigned int)", replyType, replyData, data)) {
-        RG_DEBUG << "DeviceEditorDialog: can't call Sequencer" << endl;
-        list.append(i18n("No connection"));
-        return ;
-    }
-
-    QDataStream reply(replyData, IO_ReadOnly);
-    unsigned int connections = 0;
-    if (replyType == "unsigned int")
-        reply >> connections;
+    unsigned int connections = RosegardenSequencer::getInstance()->
+        getConnections(Device::Midi, direction);
 
     for (unsigned int i = 0; i < connections; ++i) {
-
-        QByteArray data;
-        QByteArray replyData;
-        QCString replyType;
-        QDataStream arg(data, IO_WriteOnly);
-        arg << (int)Device::Midi;
-        arg << direction;
-        arg << i;
-
-
-        if (!rgapp->sequencerCall("getConnection(int, unsigned int, unsigned int)",
-                                  replyType, replyData, data)) {
-            RG_DEBUG << "DeviceEditorDialog: can't call Sequencer" << endl;
-            list.append(i18n("No connection"));
-            return ;
-        }
-
-        QDataStream reply(replyData, IO_ReadOnly);
-        QString connection;
-        if (replyType == "QString") {
-            reply >> connection;
-            list.append(connection);
-        }
+        list.append(RosegardenSequencer::getInstance()->
+                    getConnection(Device::Midi, direction, i));
     }
 
     list.append(i18n("No connection"));
@@ -226,8 +190,7 @@ DeviceEditorDialog::makeConnectionList(unsigned int direction,
 void
 DeviceEditorDialog::setModified(bool m)
 {
-    if (m_modified == m)
-        return ;
+    if (m_modified == m) return;
     enableButtonOK(m);
     enableButtonApply(m);
     m_modified = m;

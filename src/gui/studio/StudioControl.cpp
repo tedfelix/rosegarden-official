@@ -23,7 +23,7 @@
 #include "base/MidiProgram.h"
 #include "base/Profiler.h"
 #include "base/RealTime.h"
-#include "gui/application/RosegardenApplication.h"
+#include "sequencer/RosegardenSequencer.h"
 #include "sound/MappedCommon.h"
 #include "sound/MappedComposition.h"
 #include "sound/MappedEvent.h"
@@ -40,87 +40,20 @@ namespace Rosegarden
 MappedObjectId
 StudioControl::createStudioObject(MappedObject::MappedObjectType type)
 {
-Profiler profiler("StudioControl::createStudioObject", true);
-
-int value = -1;
-QByteArray data;
-QCString replyType;
-QByteArray replyData;
-QDataStream streamOut(data, IO_WriteOnly);
-
-streamOut << (int)type;
-
-if (!rgapp->sequencerCall("createMappedObject(int)",
-                          replyType, replyData, data))
-{
-    SEQMAN_DEBUG << "createStudioObject - "
-    << "failed to contact Rosegarden sequencer"
-    << endl;
-} else
-{
-    QDataStream streamIn(replyData, IO_ReadOnly);
-    streamIn >> value;
-}
-
-return value;
+    return RosegardenSequencer::getInstance()->createMappedObject(type);
 }
 
 bool
 StudioControl::destroyStudioObject(MappedObjectId id)
 {
-    Profiler profiler("StudioControl::destroyStudioObject", true);
-
-    int value = 0;
-    QByteArray data;
-    QCString replyType;
-    QByteArray replyData;
-    QDataStream streamOut(data, IO_WriteOnly);
-
-    streamOut << int(id);
-
-    if (!rgapp->sequencerCall("destroyMappedObject(int)",
-                              replyType, replyData, data)) {
-        SEQMAN_DEBUG << "destroyStudioObject - "
-        << "failed to contact Rosegarden sequencer"
-        << endl;
-    } else {
-        QDataStream streamIn(replyData, IO_ReadOnly);
-        streamIn >> value;
-    }
-
-    if (value == 1)
-        return true;
-    else
-        return false;
+    return RosegardenSequencer::getInstance()->destroyMappedObject(id);
 }
 
 MappedObjectPropertyList
 StudioControl::getStudioObjectProperty(MappedObjectId id,
                                        const MappedObjectProperty &property)
 {
-    Profiler profiler("StudioControl::getStudioObjectProperty", true);
-
-    MappedObjectPropertyList list;
-
-    QByteArray data;
-    QCString replyType;
-    QByteArray replyData;
-    QDataStream streamOut(data, IO_WriteOnly);
-
-    streamOut << (int)id;
-    streamOut << QString(property);
-
-    if (!rgapp->sequencerCall("getPropertyList(int, QString)",
-                              replyType, replyData, data)) {
-        SEQMAN_DEBUG << "getStudioObjectProperty - "
-        << "failed to contact Rosegarden sequencer"
-        << endl;
-    } else {
-        QDataStream streamIn(replyData, IO_ReadOnly);
-        streamIn >> list;
-    }
-
-    return list;
+    return RosegardenSequencer::getInstance()->getPropertyList(id, property);
 }
 
 bool
@@ -128,17 +61,7 @@ StudioControl::setStudioObjectProperty(MappedObjectId id,
                                        const MappedObjectProperty &property,
                                        MappedObjectValue value)
 {
-    Profiler profiler("StudioControl::setStudioObjectProperty(float)", true);
-
-    QByteArray data;
-    QDataStream streamOut(data, IO_WriteOnly);
-
-    streamOut << (int)id;
-    streamOut << (QString)property;
-    streamOut << (float)value;
-
-    rgapp->sequencerSend("setMappedProperty(int, QString, float)", data);
-
+    RosegardenSequencer::getInstance()->setMappedProperty(id, property, value);
     return true;
 }
 
@@ -147,17 +70,8 @@ StudioControl::setStudioObjectProperties(const MappedObjectIdList &ids,
         const MappedObjectPropertyList &properties,
         const MappedObjectValueList &values)
 {
-    Profiler profiler("StudioControl::setStudioObjectProperties(floats)", true);
-
-    QByteArray data;
-    QDataStream streamOut(data, IO_WriteOnly);
-
-    streamOut << ids;
-    streamOut << properties;
-    streamOut << values;
-
-    rgapp->sequencerSend("setMappedProperties(MappedObjectIdList, MappedObjectPropertyList, MappedObjectValueList)", data);
-
+    RosegardenSequencer::getInstance()->setMappedProperties
+        (ids, properties, values);
     return true;
 }
 
@@ -166,17 +80,7 @@ StudioControl::setStudioObjectProperty(MappedObjectId id,
                                        const MappedObjectProperty &property,
                                        const QString &value)
 {
-    Profiler profiler("StudioControl::setStudioObjectProperty(string)", true);
-
-    QByteArray data;
-    QDataStream streamOut(data, IO_WriteOnly);
-
-    streamOut << (int)id;
-    streamOut << (QString)property;
-    streamOut << (QString)value;
-
-    rgapp->sequencerSend("setMappedProperty(int, QString, QString)", data);
-
+    RosegardenSequencer::getInstance()->setMappedProperty(id, property, value);
     return true;
 }
 
@@ -185,47 +89,14 @@ StudioControl::setStudioObjectPropertyList(MappedObjectId id,
         const MappedObjectProperty &property,
         const MappedObjectPropertyList &values)
 {
-    Profiler profiler("StudioControl::setStudioObjectPropertyList", true);
-
-    QByteArray data;
-    QDataStream streamOut(data, IO_WriteOnly);
-
-    streamOut << (int)id;
-    streamOut << (QString)property;
-    streamOut << values;
-
-    RG_DEBUG << "StudioControl::setStudioObjectPropertyList: " << values.size() << " values for property " << property << endl;
-
-    rgapp->sequencerSend("setMappedPropertyList(int, QString, MappedObjectPropertyList)",
-                         data);
-
+    RosegardenSequencer::getInstance()->setMappedPropertyList(id, property, values);
     return true;
 }
 
 MappedObjectId
 StudioControl::getStudioObjectByType(MappedObject::MappedObjectType type)
 {
-    Profiler profiler("StudioControl::getStudioObjectByType", true);
-
-    int value = -1;
-    QByteArray data;
-    QCString replyType;
-    QByteArray replyData;
-    QDataStream streamOut(data, IO_WriteOnly);
-
-    streamOut << (int)type;
-
-    if (!rgapp->sequencerCall("getMappedObjectId(int)",
-                              replyType, replyData, data)) {
-        SEQMAN_DEBUG << "getStudioObjectByType - "
-        << "failed to contact Rosegarden sequencer"
-        << endl;
-    } else {
-        QDataStream streamIn(replyData, IO_ReadOnly);
-        streamIn >> value;
-    }
-
-    return value;
+    return RosegardenSequencer::getInstance()->getMappedObjectId(type);
 }
 
 void
@@ -233,250 +104,85 @@ StudioControl::setStudioPluginPort(MappedObjectId pluginId,
                                    unsigned long portId,
                                    MappedObjectValue value)
 {
-    Profiler profiler("StudioControl::setStudioPluginPort", true);
-
-    QByteArray data;
-    QDataStream streamOut(data, IO_WriteOnly);
-
-    // Use new MappedEvent interface
-    //
-    streamOut << (int)pluginId;
-    streamOut << (unsigned long)portId;
-    streamOut << (float)value;
-
-    rgapp->sequencerSend("setMappedPort(int, unsigned long int, float)", data);
+    RosegardenSequencer::getInstance()->setMappedPort(pluginId, portId, value);
 }
 
 MappedObjectValue
 StudioControl::getStudioPluginPort(MappedObjectId pluginId,
                                    unsigned long portId)
 {
-    Profiler profiler("StudioControl::getStudioPluginPort", true);
-
-    float value = 0.0;
-    QByteArray data;
-    QCString replyType;
-    QByteArray replyData;
-    QDataStream streamOut(data, IO_WriteOnly);
-
-    streamOut << (int)pluginId;
-    streamOut << (unsigned long)portId;
-
-    if (!rgapp->sequencerCall("getMappedPort(int, unsigned long int)",
-                              replyType, replyData, data)) {
-        SEQMAN_DEBUG << "getStudioPluginPort - "
-        << "failed to contact Rosegarden sequencer"
-        << endl;
-    } else {
-        QDataStream streamIn(replyData, IO_ReadOnly);
-        streamIn >> value;
-    }
-
-    return value;
+    return RosegardenSequencer::getInstance()->getMappedPort(pluginId, portId);
 }
 
 MappedObjectPropertyList
 StudioControl::getPluginInformation()
 {
-    MappedObjectPropertyList list;
-
-    QByteArray data;
-    QCString replyType;
-    QByteArray replyData;
-
-    if (!rgapp->sequencerCall("getPluginInformation()",
-                              replyType, replyData, data)) {
-        SEQMAN_DEBUG << "getPluginInformation - "
-        << "failed to contact Rosegarden sequencer"
-        << endl;
-    } else {
-        QDataStream streamIn(replyData, IO_ReadOnly);
-        streamIn >> list;
-    }
-
-    return list;
+    return RosegardenSequencer::getInstance()->getPluginInformation();
 }
 
 QString
 StudioControl::getPluginProgram(MappedObjectId id, int bank, int program)
 {
-    QByteArray data;
-    QCString replyType;
-    QByteArray replyData;
-    QDataStream streamOut(data, IO_WriteOnly);
-
-    streamOut << (int)id;
-    streamOut << (int)bank;
-    streamOut << (int)program;
-
-    QString programName;
-
-    if (!rgapp->sequencerCall("getPluginProgram(int, int, int)",
-                              replyType, replyData, data)) {
-        SEQMAN_DEBUG << "getPluginProgram - "
-        << "failed to contact Rosegarden sequencer"
-        << endl;
-    } else {
-        QDataStream streamIn(replyData, IO_ReadOnly);
-        streamIn >> programName;
-    }
-
-    return programName;
+    return RosegardenSequencer::getInstance()->getPluginProgram(id, bank, program);
 }
 
 unsigned long
 StudioControl::getPluginProgram(MappedObjectId id, QString name)
 {
-    QByteArray data;
-    QCString replyType;
-    QByteArray replyData;
-    QDataStream streamOut(data, IO_WriteOnly);
-
-    streamOut << (int)id;
-    streamOut << name;
-
-    unsigned long rv;
-
-    if (!rgapp->sequencerCall("getPluginProgram(int, QString)",
-                              replyType, replyData, data)) {
-        SEQMAN_DEBUG << "getPluginProgram - "
-        << "failed to contact Rosegarden sequencer"
-        << endl;
-    } else {
-        QDataStream streamIn(replyData, IO_ReadOnly);
-        streamIn >> rv;
-    }
-
-    return rv;
+    return RosegardenSequencer::getInstance()->getPluginProgram(id, name);
 }
 
 void
 StudioControl::connectStudioObjects(MappedObjectId id1,
                                     MappedObjectId id2)
 {
-    Profiler profiler("StudioControl::connectStudioObjects", true);
-
-    QByteArray data;
-    QDataStream streamOut(data, IO_WriteOnly);
-
-    streamOut << (int)id1;
-    streamOut << (int)id2;
-
-    if (!rgapp->sequencerSend("connectMappedObjects(int, int)", data)) {
-        SEQMAN_DEBUG << "connectStudioObjects - "
-        << "failed to contact Rosegarden sequencer"
-        << endl;
-    }
-
-    return ;
+    RosegardenSequencer::getInstance()->connectMappedObjects(id1, id2);
 }
 
 void
 StudioControl::disconnectStudioObjects(MappedObjectId id1,
                                        MappedObjectId id2)
 {
-    Profiler profiler("StudioControl::disconnectStudioObjects", true);
-
-    QByteArray data;
-    QDataStream streamOut(data, IO_WriteOnly);
-
-    streamOut << (int)id1;
-    streamOut << (int)id2;
-
-    if (!rgapp->sequencerSend("disconnectMappedObjects(int, int)", data)) {
-        SEQMAN_DEBUG << "disconnectStudioObjects - "
-        << "failed to contact Rosegarden sequencer"
-        << endl;
-    }
-
-    return ;
+    RosegardenSequencer::getInstance()->disconnectMappedObjects(id1, id2);
 }
 
 void
 StudioControl::disconnectStudioObject(MappedObjectId id)
 {
-    Profiler profiler("StudioControl::disconnectStudioObject", true);
-
-    QByteArray data;
-    QDataStream streamOut(data, IO_WriteOnly);
-
-    streamOut << (int)id;
-
-    if (!rgapp->sequencerSend("disconnectMappedObject(int)", data)) {
-        SEQMAN_DEBUG << "disconnectStudioObject - "
-        << "failed to contact Rosegarden sequencer"
-        << endl;
-    }
-
-    return ;
+    RosegardenSequencer::getInstance()->disconnectMappedObject(id);
 }
 
 void
 StudioControl::sendMappedEvent(const MappedEvent &mE)
 {
-    Profiler profiler("StudioControl::sendMappedEvent", true);
-
-    static MappedEvent mEs;
-
-    mEs = mE; // just in case the passed mapped event has dubious
-    // origins and taking its address isn't safe
-
-    mEs.setPersistent(true); // to avoid that MappedComposition dtor try to free it
-
-    MappedComposition mC;
-    mC.insert(&mEs);
-    StudioControl::sendMappedComposition(mC);
+    RosegardenSequencer::getInstance()->processMappedEvent(mE);
 }
 
 void
 StudioControl::sendMappedComposition(const MappedComposition &mC)
 {
-    Profiler profiler("StudioControl::sendMappedComposition", true);
-
     if (mC.size() == 0)
         return ;
-
-    QCString replyType;
-    QByteArray replyData;
 
     MappedComposition::const_iterator it = mC.begin();
 
     for (; it != mC.end(); it++) {
-        QByteArray data;
-        QDataStream streamOut(data, IO_WriteOnly);
-
-        streamOut << (*it);
-        rgapp->sequencerSend("processMappedEvent(MappedEvent)", data);
+        RosegardenSequencer::getInstance()->processMappedEvent(*it);
     }
 }
 
 void
 StudioControl::sendMappedInstrument(const MappedInstrument &mI)
 {
-    Profiler profiler("StudioControl::sendMappedInstrument", true);
-
-    QByteArray data;
-    QDataStream streamOut(data, IO_WriteOnly);
-
-    streamOut << (int)mI.getType();
-    streamOut << (unsigned char)mI.getChannel();
-    streamOut << (unsigned int)mI.getId();
-
-    rgapp->sequencerSend("setMappedInstrument(int, unsigned char, unsigned int)", data);
+    RosegardenSequencer::getInstance()->setMappedInstrument(mI.getType(),
+                                                            mI.getChannel(),
+                                                            mI.getId());
 }
 
 void
 StudioControl::sendQuarterNoteLength(const RealTime &length)
 {
-    Profiler profiler("StudioControl::sendQuarterNoteLength", true);
-
-    QByteArray data;
-    QDataStream streamOut(data, IO_WriteOnly);
-
-    streamOut << (long)length.sec;
-    streamOut << (long)length.nsec;
-
-    rgapp->sequencerSend("setQuarterNoteLength(long int, long int)", data);
+    RosegardenSequencer::getInstance()->setQuarterNoteLength(length);
 }
 
 void
@@ -523,8 +229,7 @@ StudioControl::sendRPN(InstrumentId instrumentId,
                          MidiMaxValue); // null
     mC.insert(mE);
 
-
-    StudioControl::sendMappedComposition(mC);
+    sendMappedComposition(mC);
 }
 
 void
@@ -556,7 +261,6 @@ StudioControl::sendNRPN(InstrumentId instrumentId,
                          value);
     mC.insert(mE);
 
-
     // Null the controller using - this is "best practice"
     //
     mE = new MappedEvent(instrumentId,
@@ -570,6 +274,8 @@ StudioControl::sendNRPN(InstrumentId instrumentId,
                          MIDI_CONTROLLER_RPN_1,
                          MidiMaxValue); // null
     mC.insert(mE);
+
+    sendMappedComposition(mC);
 }
 
 }

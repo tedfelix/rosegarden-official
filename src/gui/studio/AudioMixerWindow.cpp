@@ -26,7 +26,7 @@
 #include "StudioControl.h"
 #include "sound/Midi.h"
 #include "misc/Debug.h"
-#include "gui/application/RosegardenDCOP.h"
+#include "gui/application/TransportStatus.h"
 #include "base/AudioLevel.h"
 #include "base/AudioPluginInstance.h"
 #include "base/Composition.h"
@@ -1315,7 +1315,7 @@ AudioMixerWindow::updateMonitorMeters(SequencerMapper *mapper)
     // only show monitor levels when quiescent or when recording (as
     // record levels)
     if (m_document->getSequenceManager() &&
-            m_document->getSequenceManager()->getTransportStatus() == PLAYING) {
+        m_document->getSequenceManager()->getTransportStatus() == PLAYING) {
         return ;
     }
 

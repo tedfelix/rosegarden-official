@@ -27,7 +27,7 @@
 #include <qtextedit.h>
 #include <qvbox.h>
 #include <qwidget.h>
-#include "gui/application/RosegardenApplication.h"
+#include "sequencer/RosegardenSequencer.h"
 
 
 namespace Rosegarden
@@ -40,24 +40,7 @@ ShowSequencerStatusDialog::ShowSequencerStatusDialog(QWidget *parent) :
 
     new QLabel(i18n("Sequencer status:"), vbox);
 
-    QString status(i18n("Status not available."));
-
-    QCString replyType;
-    QByteArray replyData;
-    QByteArray data;
-
-    if (!rgapp->sequencerCall("getStatusLog()", replyType, replyData)) {
-        status = i18n("Sequencer is not running or is not responding.");
-    }
-
-    QDataStream streamIn(replyData, IO_ReadOnly);
-    QString result;
-    streamIn >> result;
-    if (!result) {
-        status = i18n("Sequencer is not returning a valid status report.");
-    } else {
-        status = result;
-    }
+    QString status = RosegardenSequencer::getInstance()->getStatusLog();
 
     QTextEdit *text = new QTextEdit(vbox);
     text->setTextFormat(Qt::PlainText);

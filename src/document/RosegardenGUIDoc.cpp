@@ -57,7 +57,7 @@
 #include "commands/segment/SegmentInsertCommand.h"
 #include "commands/segment/SegmentRecordCommand.h"
 #include "commands/segment/ChangeCompositionLengthCommand.h"
-#include "gui/application/RosegardenApplication.h"
+#include "gui/application/TransportStatus.h"
 #include "gui/application/RosegardenGUIApp.h"
 #include "gui/application/RosegardenGUIView.h"
 #include "gui/dialogs/UnusedAudioSelectionDialog.h"
@@ -73,6 +73,7 @@
 #include "gui/widgets/ProgressDialog.h"
 #include "MultiViewCommandHistory.h"
 #include "RoseXmlHandler.h"
+#include "sequencer/RosegardenSequencer.h"
 #include "sound/AudioFile.h"
 #include "sound/AudioFileManager.h"
 #include "sound/MappedCommon.h"
@@ -80,7 +81,6 @@
 #include "sound/MappedDevice.h"
 #include "sound/MappedInstrument.h"
 #include "sound/MappedEvent.h"
-#include "sound/MappedRealTime.h"
 #include "sound/MappedStudio.h"
 #include "sound/PluginIdentifier.h"
 #include "sound/SoundDriver.h"
@@ -820,9 +820,7 @@ RosegardenGUIDoc::mergeDocument(RosegardenGUIDoc *doc,
 
 void RosegardenGUIDoc::clearStudio()
 {
-    QCString replyType;
-    QByteArray replyData;
-    rgapp->sequencerCall("clearStudio()", replyType, replyData);
+    RosegardenSequencer::getInstance()->clearStudio();
     RG_DEBUG << "cleared studio\n";
 }
 
@@ -2225,34 +2223,21 @@ RosegardenGUIDoc::stopRecordingMidi()
 void
 RosegardenGUIDoc::prepareAudio()
 {
-    if (!isSequencerRunning())
-        return ;
-
-    QCString replyType;
-    QByteArray replyData;
+    if (!isSequencerRunning()) return;
 
     // Clear down the sequencer AudioFilePlayer object
     //
-    rgapp->sequencerSend("clearAllAudioFiles()");
+    RosegardenSequencer::getInstance()->clearAllAudioFiles();
 
     for (AudioFileManagerIterator it = m_audioFileManager.begin();
-            it != m_audioFileManager.end(); it++) {
+         it != m_audioFileManager.end(); it++) {
 
-        QByteArray data;
-        QDataStream streamOut(data, IO_WriteOnly);
-
-        // We have to pass the filename as a QString
-        //
-        streamOut << QString(strtoqstr((*it)->getFilename()));
-        streamOut << (int)(*it)->getId();
-
-        rgapp->sequencerCall("addAudioFile(QString, int)", replyType, replyData, data);
-        QDataStream streamIn(replyData, IO_ReadOnly);
-        int result;
-        streamIn >> result;
+        bool result = RosegardenSequencer::getInstance()->
+            addAudioFile(strtoqstr((*it)->getFilename()),
+                         (*it)->getId());
         if (!result) {
             RG_DEBUG << "prepareAudio() - failed to add file \""
-            << (*it)->getFilename() << "\"" << endl;
+                     << (*it)->getFilename() << "\"" << endl;
         }
     }
 }
@@ -2287,37 +2272,7 @@ RosegardenGUIDoc::syncDevices()
     //
     int timeout = 60;
 
-    while (isSequencerRunning() && !rgapp->isSequencerRegistered() && timeout > 0) {
-        RG_DEBUG << "RosegardenGUIDoc::syncDevices - "
-        << "waiting for Sequencer to come up" << endl;
-
-        ProgressDialog::processEvents();
-        sleep(1); // 1s
-        --timeout;
-    }
-
-    if (isSequencerRunning() && !rgapp->isSequencerRegistered() && timeout == 0) {
-
-        // Give up, kill sequencer if possible, and report
-        KProcess *proc = new KProcess;
-        *proc << "/usr/bin/killall";
-        *proc << "rosegardensequencer";
-        *proc << "lt-rosegardensequencer";
-
-        proc->start(KProcess::Block, KProcess::All);
-
-        if (proc->exitStatus()) {
-            RG_DEBUG << "couldn't kill any sequencer processes" << endl;
-        }
-
-        delete proc;
-        RosegardenGUIApp *app = (RosegardenGUIApp*)parent();
-        app->slotSequencerExited(0);
-        return ;
-    }
-
-    if (!isSequencerRunning())
-        return ;
+    if (!isSequencerRunning()) return;
 
     // Set the default timer first.  We only do this first time and
     // when changed in the configuration dialog.
@@ -2330,38 +2285,21 @@ RosegardenGUIDoc::syncDevices()
         setTimer = true;
     }
 
-    QByteArray replyData;
-    QCString replyType;
-
-    // Get number of devices the sequencer has found
-    //
-    rgapp->sequencerCall("getDevices()", replyType, replyData, RosegardenApplication::Empty, true);
-
-    unsigned int devices = 0;
-
-    if (replyType == "unsigned int") {
-        QDataStream reply(replyData, IO_ReadOnly);
-        reply >> devices;
-    } else {
-        RG_DEBUG << "RosegardenGUIDoc::syncDevices - "
-        << "got unknown returntype from getDevices()" << endl;
-        return ;
-    }
+    unsigned int devices = RosegardenSequencer::getInstance()->getDevices();
 
     RG_DEBUG << "RosegardenGUIDoc::syncDevices - devices = "
-    << devices << endl;
+             << devices << endl;
 
     for (unsigned int i = 0; i < devices; i++) {
 
         RG_DEBUG << "RosegardenGUIDoc::syncDevices - i = "
-        << i << endl;
+                 << i << endl;
 
         getMappedDevice(i);
     }
 
     RG_DEBUG << "RosegardenGUIDoc::syncDevices - "
-    << "Sequencer alive - Instruments synced" << endl;
-
+             << "Sequencer alive - Instruments synced" << endl;
 
     // Force update of view on current track selection
     //
@@ -2383,111 +2321,88 @@ RosegardenGUIDoc::syncDevices()
 void
 RosegardenGUIDoc::getMappedDevice(DeviceId id)
 {
-    QByteArray data;
-    QByteArray replyData;
-    QCString replyType;
-    QDataStream arg(data, IO_WriteOnly);
-
-    arg << (unsigned int)id;
-
-    rgapp->sequencerCall("getMappedDevice(unsigned int)",
-                         replyType, replyData, data);
-
-    MappedDevice *mD = new MappedDevice();
-    QDataStream reply(replyData, IO_ReadOnly);
-
-    if (replyType == "MappedDevice")
-        // unfurl
-        reply >> mD;
-    else
-        return ;
+    MappedDevice md = RosegardenSequencer::getInstance()->getMappedDevice(id);
 
     // See if we've got this device already
     //
     Device *device = m_studio.getDevice(id);
 
-    if (mD->getId() == Device::NO_DEVICE) {
-        if (device)
-            m_studio.removeDevice(id);
-        delete mD;
-        return ;
+    if (md.getId() == Device::NO_DEVICE) {
+        if (device) m_studio.removeDevice(id);
+        return;
     }
 
-    if (mD->size() == 0) {
+    if (md.size() == 0) {
         // no instruments is OK for a record device
-        if (mD->getType() != Device::Midi ||
-                mD->getDirection() != MidiDevice::Record) {
+        if (md.getType() != Device::Midi ||
+            md.getDirection() != MidiDevice::Record) {
 
             RG_DEBUG << "RosegardenGUIDoc::getMappedDevice() - "
-            << "no instruments found" << endl;
-            if (device)
-                m_studio.removeDevice(id);
-            delete mD;
-            return ;
+                     << "no instruments found" << endl;
+            if (device) m_studio.removeDevice(id);
+            return;
         }
     }
 
     bool hadDeviceAlready = (device != 0);
 
     if (!hadDeviceAlready) {
-        if (mD->getType() == Device::Midi) {
-            device =
-                new MidiDevice
-                (id,
-                 mD->getName(),
-                 mD->getDirection());
+        if (md.getType() == Device::Midi) {
 
-            dynamic_cast<MidiDevice *>(device)
-            ->setRecording(mD->isRecording());
-
+            device = new MidiDevice(id, md.getName(), md.getDirection());
+            dynamic_cast<MidiDevice *>(device)->setRecording(md.isRecording());
             m_studio.addDevice(device);
 
             RG_DEBUG << "RosegardenGUIDoc::getMappedDevice - "
-            << "adding MIDI Device \""
-            << device->getName() << "\" id = " << id
-            << " direction = " << mD->getDirection()
-            << " recording = " << mD->isRecording()
-            << endl;
-        } else if (mD->getType() == Device::SoftSynth) {
-            device = new SoftSynthDevice(id, mD->getName());
+                     << "adding MIDI Device \""
+                     << device->getName() << "\" id = " << id
+                     << " direction = " << md.getDirection()
+                     << " recording = " << md.isRecording()
+                     << endl;
+
+        } else if (md.getType() == Device::SoftSynth) {
+
+            device = new SoftSynthDevice(id, md.getName());
             m_studio.addDevice(device);
 
             RG_DEBUG << "RosegardenGUIDoc::getMappedDevice - "
-            << "adding soft synth Device \""
-            << device->getName() << "\" id = " << id << endl;
-        } else if (mD->getType() == Device::Audio) {
-            device = new AudioDevice(id, mD->getName());
+                     << "adding soft synth Device \""
+                     << device->getName() << "\" id = " << id << endl;
+
+        } else if (md.getType() == Device::Audio) {
+
+            device = new AudioDevice(id, md.getName());
             m_studio.addDevice(device);
 
             RG_DEBUG << "RosegardenGUIDoc::getMappedDevice - "
-            << "adding audio Device \""
-            << device->getName() << "\" id = " << id << endl;
+                     << "adding audio Device \""
+                     << device->getName() << "\" id = " << id << endl;
+
         } else {
             RG_DEBUG << "RosegardenGUIDoc::getMappedDevice - "
-            << "unknown device - \"" << mD->getName()
-            << "\" (type = "
-            << mD->getType() << ")\n";
-            return ;
+                     << "unknown device - \"" << md.getName()
+                     << "\" (type = "
+                     << md.getType() << ")\n";
+            return;
         }
     }
 
     if (hadDeviceAlready) {
         // direction might have changed
-        if (mD->getType() == Device::Midi) {
-            MidiDevice *midid =
-                dynamic_cast<MidiDevice *>(device);
+        if (md.getType() == Device::Midi) {
+            MidiDevice *midid = dynamic_cast<MidiDevice *>(device);
             if (midid) {
-                midid->setDirection(mD->getDirection());
-                midid->setRecording(mD->isRecording());
+                midid->setDirection(md.getDirection());
+                midid->setRecording(md.isRecording());
             }
         }
     }
 
-    std::string connection(mD->getConnection());
+    std::string connection(md.getConnection());
     RG_DEBUG << "RosegardenGUIDoc::getMappedDevice - got \"" << connection
-    << "\", direction " << mD->getDirection()
-    << " recording " << mD->isRecording()
-    << endl;
+             << "\", direction " << md.getDirection()
+             << " recording " << md.isRecording()
+             << endl;
     device->setConnection(connection);
 
     Instrument *instrument;
@@ -2495,7 +2410,7 @@ RosegardenGUIDoc::getMappedDevice(DeviceId id)
 
     InstrumentList existingInstrs(device->getAllInstruments());
 
-    for (it = mD->begin(); it != mD->end(); it++) {
+    for (it = md.begin(); it != md.end(); it++) {
         InstrumentId instrumentId = (*it)->getId();
 
         bool haveInstrument = false;
@@ -2518,8 +2433,6 @@ RosegardenGUIDoc::getMappedDevice(DeviceId id)
             device->addInstrument(instrument);
         }
     }
-
-    delete mD;
 }
 
 void
@@ -2814,17 +2727,9 @@ RosegardenGUIDoc::finalizeAudioFile(InstrumentId iid)
 
     // Now install the file in the sequencer
     //
-    // We're playing fast and loose with DCOP here - we just send
-    // this request and carry on regardless otherwise the sequencer
-    // can just hang our request.  We don't risk a call() and we
-    // don't get a return type.  Ugly and hacky but it appears to
-    // work for me - so hey.
-    //
-    QByteArray data;
-    QDataStream streamOut(data, IO_WriteOnly);
-    streamOut << QString(strtoqstr(newAudioFile->getFilename()));
-    streamOut << (int)newAudioFile->getId();
-    rgapp->sequencerSend("addAudioFile(QString, int)", data);
+    RosegardenSequencer::getInstance()->addAudioFile
+        (strtoqstr(newAudioFile->getFilename()),
+         newAudioFile->getId());
 
     // clear down
     m_recordAudioSegments.erase(iid);
@@ -2834,43 +2739,13 @@ RosegardenGUIDoc::finalizeAudioFile(InstrumentId iid)
 RealTime
 RosegardenGUIDoc::getAudioPlayLatency()
 {
-    QCString replyType;
-    QByteArray replyData;
-
-    if (!rgapp->sequencerCall("getAudioPlayLatency()", replyType, replyData)) {
-        RG_DEBUG << "RosegardenGUIDoc::getAudioPlayLatency - "
-        << "Playback failed to contact Rosegarden sequencer"
-        << endl;
-        return RealTime::zeroTime;
-    }
-
-    // ensure the return type is ok
-    QDataStream streamIn(replyData, IO_ReadOnly);
-    MappedRealTime result;
-    streamIn >> result;
-
-    return (result.getRealTime());
+    return RosegardenSequencer::getInstance()->getAudioPlayLatency();
 }
 
 RealTime
 RosegardenGUIDoc::getAudioRecordLatency()
 {
-    QCString replyType;
-    QByteArray replyData;
-
-    if (!rgapp->sequencerCall("getAudioRecordLatency()", replyType, replyData)) {
-        RG_DEBUG << "RosegardenGUIDoc::getAudioRecordLatency - "
-        << "Playback failed to contact Rosegarden sequencer"
-        << endl;
-        return RealTime::zeroTime;
-    }
-
-    // ensure the return type is ok
-    QDataStream streamIn(replyData, IO_ReadOnly);
-    MappedRealTime result;
-    streamIn >> result;
-
-    return (result.getRealTime());
+    return RosegardenSequencer::getInstance()->getAudioRecordLatency();
 }
 
 void
@@ -2884,50 +2759,10 @@ RosegardenGUIDoc::getTimers()
 {
     QStringList list;
 
-    QCString replyType;
-    QByteArray replyData;
-
-    if (!rgapp->sequencerCall("getTimers()", replyType, replyData)) {
-        RG_DEBUG << "RosegardenGUIDoc::getTimers - "
-        << "failed to contact Rosegarden sequencer" << endl;
-        return list;
-    }
-
-    if (replyType != "unsigned int") {
-        RG_DEBUG << "RosegardenGUIDoc::getTimers - "
-        << "wrong reply type (" << replyType << ") from sequencer" << endl;
-        return list;
-    }
-
-    QDataStream streamIn(replyData, IO_ReadOnly);
-    unsigned int count = 0;
-    streamIn >> count;
+    unsigned int count = RosegardenSequencer::getInstance()->getTimers();
 
     for (unsigned int i = 0; i < count; ++i) {
-
-        QByteArray data;
-        QDataStream streamOut(data, IO_WriteOnly);
-
-        streamOut << i;
-
-        if (!rgapp->sequencerCall("getTimer(unsigned int)",
-                                  replyType, replyData, data)) {
-            RG_DEBUG << "RosegardenGUIDoc::getTimers - "
-            << "failed to contact Rosegarden sequencer" << endl;
-            return list;
-        }
-
-        if (replyType != "QString") {
-            RG_DEBUG << "RosegardenGUIDoc::getTimers - "
-            << "wrong reply type (" << replyType << ") from sequencer" << endl;
-            return list;
-        }
-
-        QDataStream streamIn(replyData, IO_ReadOnly);
-        QString name;
-        streamIn >> name;
-
-        list.push_back(name);
+        list.push_back(RosegardenSequencer::getInstance()->getTimer(i));
     }
 
     return list;
@@ -2936,43 +2771,13 @@ RosegardenGUIDoc::getTimers()
 QString
 RosegardenGUIDoc::getCurrentTimer()
 {
-    QCString replyType;
-    QByteArray replyData;
-
-    if (!rgapp->sequencerCall("getCurrentTimer()", replyType, replyData)) {
-        RG_DEBUG << "RosegardenGUIDoc::getCurrentTimer - "
-        << "failed to contact Rosegarden sequencer" << endl;
-        return "";
-    }
-
-    if (replyType != "QString") {
-        RG_DEBUG << "RosegardenGUIDoc::getCurrentTimer - "
-        << "wrong reply type (" << replyType << ") from sequencer" << endl;
-        return "";
-    }
-
-    QDataStream streamIn(replyData, IO_ReadOnly);
-    QString name;
-    streamIn >> name;
-    return name;
+    return RosegardenSequencer::getInstance()->getCurrentTimer();
 }
 
 void
 RosegardenGUIDoc::setCurrentTimer(QString name)
 {
-    QCString replyType;
-    QByteArray replyData;
-
-    QByteArray data;
-    QDataStream streamOut(data, IO_WriteOnly);
-
-    streamOut << name;
-
-    if (!rgapp->sequencerCall("setCurrentTimer(QString)",
-                              replyType, replyData, data)) {
-        RG_DEBUG << "RosegardenGUIDoc::setCurrentTimer - "
-        << "failed to contact Rosegarden sequencer" << endl;
-    }
+    RosegardenSequencer::getInstance()->setCurrentTimer(name);
 }
 
 void
@@ -2994,25 +2799,18 @@ RosegardenGUIDoc::initialiseControllers()
                 advancedControls.push_back(MidiControlPair(cIt->first, cIt->second));
             }
 
-            advancedControls.
-            push_back(
-                MidiControlPair(MIDI_CONTROLLER_PAN,
-                                (*it)->getPan()));
-            advancedControls.
-            push_back(
-                MidiControlPair(MIDI_CONTROLLER_VOLUME,
-                                (*it)->getVolume()));
+            advancedControls.push_back
+                (MidiControlPair(MIDI_CONTROLLER_PAN, (*it)->getPan()));
+            advancedControls.push_back
+                (MidiControlPair(MIDI_CONTROLLER_VOLUME, (*it)->getVolume()));
 
-
-            std::vector<MidiControlPair>::iterator
-            iit = advancedControls.begin();
+            std::vector<MidiControlPair>::iterator iit = advancedControls.begin();
             for (; iit != advancedControls.end(); iit++) {
                 try {
-                    mE =
-                        new MappedEvent((*it)->getId(),
-                                        MappedEvent::MidiController,
-                                        iit->first,
-                                        iit->second);
+                    mE = new MappedEvent((*it)->getId(),
+                                         MappedEvent::MidiController,
+                                         iit->first,
+                                         iit->second);
                 } catch (...) {
                     continue;
                 }
@@ -3041,10 +2839,10 @@ RosegardenGUIDoc::clearAllPlugins()
             for (; pIt != (*it)->endPlugins(); pIt++) {
                 if ((*pIt)->getMappedId() != -1) {
                     if (StudioControl::
-                            destroyStudioObject((*pIt)->getMappedId()) == false) {
+                        destroyStudioObject((*pIt)->getMappedId()) == false) {
                         RG_DEBUG << "RosegardenGUIDoc::clearAllPlugins - "
-                        << "couldn't find plugin instance "
-                        << (*pIt)->getMappedId() << endl;
+                                 << "couldn't find plugin instance "
+                                 << (*pIt)->getMappedId() << endl;
                     }
                 }
                 (*pIt)->clearPorts();

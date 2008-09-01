@@ -25,7 +25,7 @@
 #include <qcstring.h>
 #include <qdatastream.h>
 #include <qstring.h>
-#include "gui/application/RosegardenApplication.h"
+#include "sequencer/RosegardenSequencer.h"
 
 
 namespace Rosegarden
@@ -38,25 +38,12 @@ ReconnectDeviceCommand::execute()
 
     if (device) {
         m_oldConnection = device->getConnection();
-
-        QByteArray data;
-        QByteArray replyData;
-        QCString replyType;
-        QDataStream arg(data, IO_WriteOnly);
-
-        arg << (unsigned int)m_deviceId;
-        arg << strtoqstr(m_newConnection);
-
-        if (!rgapp->sequencerCall("setConnection(unsigned int, QString)",
-                                  replyType, replyData, data)) {
-            SEQMAN_DEBUG << "ReconnectDeviceCommand::execute - "
-            << "failure in sequencer setConnection" << endl;
-            return ;
-        }
+        RosegardenSequencer::getInstance()->setConnection
+            (m_deviceId, strtoqstr(m_newConnection));
 
         SEQMAN_DEBUG << "ReconnectDeviceCommand::execute - "
-        << " reconnected device " << m_deviceId
-        << " to " << m_newConnection << endl;
+                     << " reconnected device " << m_deviceId
+                     << " to " << m_newConnection << endl;
     }
 }
 
@@ -66,25 +53,12 @@ ReconnectDeviceCommand::unexecute()
     Device *device = m_studio->getDevice(m_deviceId);
 
     if (device) {
-
-        QByteArray data;
-        QByteArray replyData;
-        QCString replyType;
-        QDataStream arg(data, IO_WriteOnly);
-
-        arg << (unsigned int)m_deviceId;
-        arg << strtoqstr(m_oldConnection);
-
-        if (!rgapp->sequencerCall("setConnection(unsigned int, QString)",
-                                  replyType, replyData, data)) {
-            SEQMAN_DEBUG << "ReconnectDeviceCommand::unexecute - "
-            << "failure in sequencer setConnection" << endl;
-            return ;
-        }
+        RosegardenSequencer::getInstance()->setConnection
+            (m_deviceId, strtoqstr(m_oldConnection));
 
         SEQMAN_DEBUG << "ReconnectDeviceCommand::unexecute - "
-        << " reconnected device " << m_deviceId
-        << " to " << m_oldConnection << endl;
+                     << " reconnected device " << m_deviceId
+                     << " to " << m_oldConnection << endl;
     }
 }
 

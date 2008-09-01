@@ -24,7 +24,7 @@
 #include "base/MidiProgram.h"
 #include "base/RealTime.h"
 #include "base/Track.h"
-#include "gui/application/RosegardenDCOP.h"
+#include "gui/application/TransportStatus.h"
 #include "sound/MappedComposition.h"
 #include "sound/MappedEvent.h"
 #include <qobject.h>

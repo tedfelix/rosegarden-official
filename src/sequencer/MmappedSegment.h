@@ -37,7 +37,7 @@
 #include <qdir.h>
 #include <qbuffer.h>
 
-#include "ControlBlockMmapper.h"
+#include "MmappedControlBlock.h"
 #include "sound/MappedInstrument.h"
 
 namespace Rosegarden {
@@ -119,7 +119,7 @@ public:
     typedef std::map<QString, MmappedSegment*> mmappedsegments;
 
     MmappedSegmentsMetaIterator(mmappedsegments&,
-                                ControlBlockMmapper*);
+                                MmappedControlBlock*);
     ~MmappedSegmentsMetaIterator();
 
     /// reset all iterators to beginning
@@ -162,7 +162,7 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    ControlBlockMmapper* m_controlBlockMmapper;
+    MmappedControlBlock* m_controlBlockMmapper;
 
     RealTime m_currentTime;
     mmappedsegments& m_segments;

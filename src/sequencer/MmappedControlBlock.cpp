@@ -16,7 +16,7 @@
     COPYING included with this distribution for more information.
 */
 
-#include "ControlBlockMmapper.h"
+#include "MmappedControlBlock.h"
 
 #include <fcntl.h>
 #include <unistd.h>
@@ -28,7 +28,7 @@
 namespace Rosegarden
 {
 
-ControlBlockMmapper::ControlBlockMmapper(QString fileName)
+MmappedControlBlock::MmappedControlBlock(QString fileName)
         : m_fileName(fileName),
         m_fd( -1),
         m_mmappedBuffer(0),
@@ -38,7 +38,7 @@ ControlBlockMmapper::ControlBlockMmapper(QString fileName)
     m_fd = ::open(m_fileName.latin1(), O_RDWR);
 
     if (m_fd < 0) {
-        SEQMAN_DEBUG << "ControlBlockMmapper : Couldn't open " << m_fileName
+        SEQMAN_DEBUG << "MmappedControlBlock : Couldn't open " << m_fileName
         << endl;
         throw Exception(std::string("Couldn't open ")
                         + m_fileName.latin1());
@@ -58,14 +58,14 @@ ControlBlockMmapper::ControlBlockMmapper(QString fileName)
         throw Exception("mmap failed");
     }
 
-    SEQMAN_DEBUG << "ControlBlockMmapper : mmap size : " << m_mmappedSize
+    SEQMAN_DEBUG << "MmappedControlBlock : mmap size : " << m_mmappedSize
     << " at " << (void*)m_mmappedBuffer << endl;
 
     // Create new control block on file
     m_controlBlock = new (m_mmappedBuffer) ControlBlock;
 }
 
-ControlBlockMmapper::~ControlBlockMmapper()
+MmappedControlBlock::~MmappedControlBlock()
 {
     ::munmap(m_mmappedBuffer, m_mmappedSize);
     ::close(m_fd);

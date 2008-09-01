@@ -1,4 +1,5 @@
-// -*- c-indentation-style:"stroustrup" c-basic-offset: 4 -*-
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
+
 /*
   Rosegarden
   A sequencer and musical notation editor.
@@ -770,7 +771,7 @@ AudioFileManager::importFile(const std::string &fileName, int sampleRate)
     m_importProcess->start(KProcess::NotifyOnExit, KProcess::NoCommunication);
 
     while (m_importProcess->isRunning()) {
-	kapp->processEvents(100);
+        kapp->processEvents(100); //!!! not safe to do from seq thread
     }
 
     if (!m_importProcess->normalExit()) {

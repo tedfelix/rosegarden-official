@@ -37,7 +37,7 @@
 #include "document/RosegardenGUIDoc.h"
 #include "document/ConfigGroups.h"
 #include "gui/application/RosegardenGUIView.h"
-#include "gui/application/RosegardenApplication.h"
+#include "sequencer/RosegardenSequencer.h"
 #include "gui/widgets/AudioListItem.h"
 #include "gui/widgets/AudioListView.h"
 #include "gui/widgets/CurrentProgressDialog.h"
@@ -103,16 +103,7 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     box->setMargin(10);
     box->setSpacing(5);
 
-    m_sampleRate = 0;
-
-    QCString replyType;
-    QByteArray replyData;
-    if (rgapp->sequencerCall("getSampleRate()", replyType, replyData)) {
-        QDataStream streamIn(replyData, IO_ReadOnly);
-        unsigned int result;
-        streamIn >> result;
-        m_sampleRate = result;
-    }
+    m_sampleRate = RosegardenSequencer::getInstance()->getSampleRate();
 
     m_fileList = new AudioListView(box);
 

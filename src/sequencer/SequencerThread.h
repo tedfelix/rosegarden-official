@@ -1,13 +1,9 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2008 the Rosegarden development team.
-
-    Other copyrights also apply to some parts of this work.  Please
-    see the AUTHORS file and individual file headers for details.
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
@@ -16,37 +12,22 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SPLITBYRECORDINGSRCDIALOG_H_
-#define _RG_SPLITBYRECORDINGSRCDIALOG_H_
+#ifndef _ROSEGARDEN_SEQUENCER_THREAD_H_
+#define _ROSEGARDEN_SEQUENCER_THREAD_H_
 
-#include <kdialogbase.h>
-#include <vector>
-
-class QWidget;
-class KComboBox;
-
+#include <qthread.h>
 
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
-
-
-class SplitByRecordingSrcDialog : public KDialogBase
+class SequencerThread : public QThread
 {
-    Q_OBJECT
 public:
-    SplitByRecordingSrcDialog(QWidget *parent, RosegardenGUIDoc *doc);
     
-    int getChannel();
-    int getDevice();
-    
-private:
-    std::vector<int> m_deviceIds;
-    KComboBox *m_channel;
-    KComboBox *m_device;
-};
 
+protected:
+    virtual void run();
+};
 
 }
 

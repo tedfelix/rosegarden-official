@@ -309,7 +309,6 @@ static KCmdLineOptions options[] =
         { "nosequencer", I18N_NOOP("Don't use the sequencer (support editing only)"), 0 },
         { "nosplash", I18N_NOOP("Don't show the splash screen"), 0 },
         { "nofork", I18N_NOOP("Don't automatically run in the background"), 0 },
-        { "existingsequencer", I18N_NOOP("Attach to a running sequencer process, if found"), 0 },
         { "ignoreversion", I18N_NOOP("Ignore installed version - for devs only"), 0 },
         { "+[File]", I18N_NOOP("file to open"), 0 },
         { 0, 0, 0 }
@@ -587,9 +586,7 @@ int main(int argc, char *argv[])
         app.setNoSequencerMode(true);
 #endif // NO_SOUND
 
-        rosegardengui = new RosegardenGUIApp(!app.noSequencerMode(),
-                                             args->isSet("existingsequencer"),
-                                             startLogo);
+        rosegardengui = new RosegardenGUIApp(!app.noSequencerMode(), startLogo);
 
 	rosegardengui->setIsFirstRun(newVersion);
 
@@ -633,7 +630,7 @@ int main(int argc, char *argv[])
     // Check for sequencer and launch if needed
     //
     try {
-        rosegardengui->launchSequencer(args->isSet("existingsequencer"));
+        rosegardengui->launchSequencer();
     } catch (std::string e) {
         RG_DEBUG << "RosegardenGUI - " << e << endl;
     } catch (QString e) {

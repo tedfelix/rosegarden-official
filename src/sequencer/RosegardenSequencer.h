@@ -1,13 +1,9 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2008 the Rosegarden development team.
-
-    Other copyrights also apply to some parts of this work.  Please
-    see the AUTHORS file and individual file headers for details.
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
@@ -16,10 +12,10 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _ROSEGARDEN_SEQUENCER_APP_H_
-#define _ROSEGARDEN_SEQUENCER_APP_H_
+#ifndef _ROSEGARDEN_SEQUENCER_H_
+#define _ROSEGARDEN_SEQUENCER_H_
  
-// RosegardenSequencerApp is the sequencer application for Rosegarden.
+// RosegardenSequencer is the sequencer application for Rosegarden.
 // It owns a Sequencer object which wraps the ALSA 
 // and JACK funtionality.  At this level we deal with comms with
 // the Rosegarden GUI application, the high level marshalling of data 
@@ -30,15 +26,10 @@
 // include files for Qt
 #include <qstrlist.h>
 
-// include files for KDE 
-#include <kapp.h>
-#include <kmainwindow.h>
-#include <kaccel.h>
-
-#include <qtimer.h>
+#include <qmutex.h>
 
 #include "base/Composition.h"
-#include "gui/application/RosegardenDCOP.h"
+#include "gui/application/TransportStatus.h"
 
 #include "RosegardenSequencerIface.h"
 
@@ -52,15 +43,12 @@
 
 #include <deque>
 
-class KURL;
-class KRecentFilesAction;
-
 namespace Rosegarden { 
 
 // forward declaration of the RosegardenGUI classes
 class RosegardenGUIDoc;
 class RosegardenGUIView;
-class ControlBlockMmapper;
+class MmappedControlBlock;
 
 class MappedInstrument;
 class SoundDriver;
@@ -68,16 +56,17 @@ class SoundDriver;
 /**
  * The sequencer application
  */
-class RosegardenSequencerApp : public KMainWindow,
-                               virtual public RosegardenSequencerIface,
-                               public ExternalTransport
+class RosegardenSequencer : public RosegardenSequencerIface,
+                            public ExternalTransport
 {
-    Q_OBJECT
-
 public:
-    RosegardenSequencerApp();
-    ~RosegardenSequencerApp();
+    ~RosegardenSequencer();
 
+    static RosegardenSequencer *getInstance();
+
+    void lock();
+    void unlock();
+	
     //      -------- START OF DCOP INTERFACE METHODS --------
     //
     //
@@ -88,69 +77,30 @@ public:
 
     // Based on RealTime timestamps
     //
-    int play(const RealTime &position,
-             const RealTime &readAhead,
-             const RealTime &audioMix,
-             const RealTime &audioRead,
-             const RealTime &audioWrite,
-             long smallFileSize);
+    bool play(const RealTime &position,
+              const RealTime &readAhead,
+              const RealTime &audioMix,
+              const RealTime &audioRead,
+              const RealTime &audioWrite,
+              long smallFileSize);
 
     // recording
-    int record(const RealTime &position,
-               const RealTime &readAhead,
-               const RealTime &audioMix,
-               const RealTime &audioRead,
-               const RealTime &audioWrite,
-               long smallFileSize,
-               long recordMode);
+    bool record(const RealTime &position,
+                const RealTime &readAhead,
+                const RealTime &audioMix,
+                const RealTime &audioRead,
+                const RealTime &audioWrite,
+                long smallFileSize,
+                long recordMode);
 
-    virtual int punchOut();
+    virtual bool punchOut();
 
     // looping
     void setLoop(const RealTime &loopStart,
                  const RealTime &loopEnd);
 
-
-    // Play wrapper for DCOP
-    //
-    virtual int play(long timeSec,
-                     long timeNsec,
-                     long readAheadSec,
-                     long readAheadNsec,
-                     long audioMixSec,
-                     long audioMixNsec,
-                     long audioReadSec,
-                     long audioReadNsec,
-                     long audioWriteSec,
-                     long audioWriteNsec,
-                     long smallFileSize);
-
-    // Record wrapper for DCOP
-    //
-    virtual int record(long timeSec,
-                       long timeNsec,
-                       long readAheadSec,
-                       long readAheadNsec,
-                       long audioMixSec,
-                       long audioMixNsec,
-                       long audioReadSec,
-                       long audioReadNsec,
-                       long audioWriteSec,
-                       long audioWriteNsec,
-                       long smallFileSize,
-                       long recordMode);
-
-    
-    // Jump to a pointer in the playback (uses longs instead
-    // of RealTime for DCOP)
-    //
-    //
-    virtual void jumpTo(long posSec, long posNsec);
-
-    // Set a loop on the Sequencer
-    //
-    virtual void setLoop(long loopStartSec, long loopStartNsec,
-                         long loopEndSec, long loopEndNsec);
+    // Jump to a pointer in the playback
+    virtual void jumpTo(const RealTime &rt);
  
     // Return the Sound system status (audio/MIDI)
     //
@@ -158,8 +108,8 @@ public:
 
     // Add and remove Audio files on the sequencer
     //
-    virtual int addAudioFile(const QString &fileName, int id);
-    virtual int removeAudioFile(int id);
+    virtual bool addAudioFile(const QString &fileName, int id);
+    virtual bool removeAudioFile(int id);
 
     // Deletes all the audio files and clears down any flapping i/o handles
     //
@@ -179,34 +129,23 @@ public:
     //
     virtual void processSequencerSlice(MappedComposition mC);
 
-    // Yeuch!
-    //
-    virtual void processMappedEvent(unsigned int id,
-                                    int type,
-                                    unsigned char pitch,
-                                    unsigned char velocity,
-                                    long absTimeSec,
-                                    long absTimeNsec,
-                                    long durationSec,
-                                    long durationNsec,
-                                    long audioStartMarkerSec,
-                                    long audioStartMarkerNsec);
-
-    // And now do it properly
-    //
     virtual void processMappedEvent(MappedEvent mE);
 
     virtual unsigned int getDevices();
     virtual MappedDevice getMappedDevice(unsigned int id);
 
-    virtual int canReconnect(int deviceType);
-    virtual unsigned int addDevice(int type, unsigned int direction);
+    virtual int canReconnect(Device::DeviceType deviceType);
+    virtual unsigned int addDevice(Device::DeviceType type,
+                                   MidiDevice::DeviceDirection direction);
     virtual void removeDevice(unsigned int id);
     virtual void renameDevice(unsigned int id, QString name);
-    virtual unsigned int getConnections(int type, unsigned int direction);
-    virtual QString getConnection(int type, unsigned int direction,
+    virtual unsigned int getConnections(Device::DeviceType type,
+                                        MidiDevice::DeviceDirection direction);
+    virtual QString getConnection(Device::DeviceType type,
+                                  MidiDevice::DeviceDirection direction,
                                   unsigned int connectionNo);
-    virtual void setConnection(unsigned int deviceId, QString connection);
+    virtual void setConnection(unsigned int deviceId,
+                               QString connection);
     virtual void setPlausibleConnection(unsigned int deviceId,
                                         QString idealConnection);
     
@@ -219,8 +158,8 @@ public:
 
     // Audio latencies
     //
-    virtual MappedRealTime getAudioPlayLatency();
-    virtual MappedRealTime getAudioRecordLatency();
+    virtual RealTime getAudioPlayLatency();
+    virtual RealTime getAudioRecordLatency();
 
     // Set a MappedObject 
     //
@@ -275,7 +214,7 @@ public:
 
     // Destroy an object
     //
-    virtual int destroyMappedObject(int id);
+    virtual bool destroyMappedObject(int id);
 
     // Connect two objects
     //
@@ -308,11 +247,13 @@ public:
 
     // Set Quarter note length
     //
-    virtual void setQuarterNoteLength(long timeSec, long timeNsec);
+    virtual void setQuarterNoteLength(RealTime rt);
 
     // Get a status report
     // 
     virtual QString getStatusLog();
+
+    bool getNextTransportRequest(TransportRequest &request, RealTime &time);
 
     //
     //
@@ -335,13 +276,13 @@ public:
     // Update internal clock and send GUI position pointer movement
     void updateClocks();
 
-    bool checkExternalTransport();
+//!!!    bool checkExternalTransport();
 
     // Sends status changes up to GUI
-    void notifySequencerStatus();
+//!!!    void notifySequencerStatus();
 
     // Send latest slice information back to GUI for display
-    void notifyVisuals(MappedComposition *mC);
+//!!!    void notifyVisuals(MappedComposition *mC);
 
     // These two methods process any pending MIDI or audio
     // and send them up to the gui for storage and display
@@ -383,6 +324,10 @@ public:
     // the call itself
     void sequencerAlive();
 
+    // check for new external clients (ALSA sequencer or whatever) --
+    // polled regularly
+    void checkForNewClients();
+
     /*
     // Audio latencies
     //
@@ -414,13 +359,8 @@ public:
     bool isTransportSyncComplete(TransportToken token);
     TransportToken getInvalidTransportToken() const { return 0; }
 
-public slots:
-
-    // Check for new clients - on timeout
-    //
-    void slotCheckForNewClients();
-
 protected:
+    RosegardenSequencer();
 
     // get events whilst handling loop
     //
@@ -490,33 +430,30 @@ protected:
     // so you can reconstruct it at either end of the link for 
     // presentation, storage etc.
     //
-    MappedStudio       *m_studio;
-
-    // Slice revert storage
-    //
-    RealTime            m_oldSliceSize;
-    QTimer                         *m_sliceTimer;
-
-    // Timer to check for new clients
-    //
-    QTimer                         *m_newClientTimer;
+    MappedStudio *m_studio;
 
     // mmap segments
-    //
-    QString                         m_segmentFilesPath;
-    MmappedSegmentsMetaIterator::mmappedsegments    m_mmappedSegments;
-    MmappedSegmentsMetaIterator*    m_metaIterator;
-    RealTime            m_lastStartTime;
+    // 
+    QString m_segmentFilesPath;
+    MmappedSegmentsMetaIterator::mmappedsegments m_mmappedSegments;
+    MmappedSegmentsMetaIterator* m_metaIterator;
+    RealTime m_lastStartTime;
 
-    MappedComposition   m_mC;
-    ControlBlockMmapper            *m_controlBlockMmapper;
-    SequencerMmapper                m_sequencerMapper;
+    MappedComposition m_mC;
+    MmappedControlBlock *m_controlBlockMmapper;
+    SequencerMmapper m_sequencerMapper;
 
     typedef std::pair<TransportRequest, RealTime> TransportPair;
-    std::deque<TransportPair>       m_transportRequests;
-    TransportToken                  m_transportToken;
+    std::deque<TransportPair> m_transportRequests;
+    TransportToken m_transportToken;
 
-    bool                            m_isEndOfCompReached;
+    bool m_isEndOfCompReached;
+    
+    QMutex m_mutex;
+    QMutex m_transportRequestMutex;
+
+    static RosegardenSequencer *m_instance;
+    static QMutex m_instanceMutex;
 };
 
 }

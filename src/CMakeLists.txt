@@ -62,30 +62,6 @@ ELSE(WANT_SOUND)
     SET(snd_SRCS ${nosnd_SRCS})
 ENDIF(WANT_SOUND)
 
-KDE3_ADD_DCOP_SKELS(sequencer_SRCS ${seq_dcop_SRCS})
-KDE3_ADD_DCOP_STUBS(sequencer_SRCS ${seq_dcop_SRCS}) 
-KDE3_AUTOMOC(${sequencer_SRCS})
-
-KDE3_ADD_EXECUTABLE(rosegardensequencer 
-    ${snd_SRCS}
-    ${sequencer_SRCS}
-)
-
-IF(USE_PCH)
-    ADD_DEPENDENCIES(rosegardensequencer precompiled_headers)
-ENDIF(USE_PCH)
-
-TARGET_LINK_LIBRARIES(rosegardensequencer 
-    ${QT_AND_KDECORE_LIBS} 
-    ${ALSA_LIBS} 
-    ${JACK_LIBS}
-    ${LIBLO_LIBS}
-    ${LRDF_LIBS}
-    ${FFTW3F_LIBS}
-    kdeui
-    RosegardenCommon
-)
-
 # gui executable
 INCLUDE(GUIFileList.txt)
 
@@ -96,10 +72,16 @@ KDE3_AUTOMOC(${gui_SRCS})
 KDE3_AUTOMOC(${segmentcanvas_SRCS})
 KDE3_AUTOMOC(${commands_SRCS})
 KDE3_AUTOMOC(${document_SRCS})
+KDE3_AUTOMOC(${sequencer_SRCS})
 
 ADD_LIBRARY(RosegardenExtended STATIC
     ${document_SRCS}
     ${gui_SRCS}
+)
+
+ADD_LIBRARY(RosegardenSequencer STATIC
+    ${snd_SRCS}
+    ${sequencer_SRCS}
 )
 
 ADD_LIBRARY(RosegardenCommands STATIC
@@ -128,6 +110,7 @@ KDE3_ADD_EXECUTABLE(rosegarden
     #${commands_SRCS}
     #${document_SRCS}
     #${gui_SRCS}
+    #${sequencer_SRCS}
     #${segmentcanvas_SRCS}
     gui/application/main.cpp
 )
@@ -143,18 +126,21 @@ TARGET_LINK_LIBRARIES(rosegarden
     ${FFTW3F_LIBS}
     ${XFT_LIBS}
     ${LIRC_LIBS}
+    ${ALSA_LIBS} 
     ${JACK_LIBS}
+    ${FFTW3F_LIBS}
     kio
     kdeui
     kdeprint
     RosegardenExtended
+    RosegardenSequencer
     RosegardenSegmentCanvas
     RosegardenCommands
     RosegardenCommon
 )
 
 # Install targets
-INSTALL(TARGETS rosegarden rosegardensequencer
+INSTALL(TARGETS rosegarden 
         RUNTIME DESTINATION ${KDE3EXECDIR} )
 
 # Install helper scripts
@@ -196,6 +182,7 @@ IF(WANT_TEST)
         kdeui
         kdeprint
         RosegardenExtended
+        RosegardenSequencer
         RosegardenSegmentCanvas
         RosegardenCommands
         RosegardenCommon

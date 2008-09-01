@@ -21,7 +21,6 @@
 
 #include <kdialogbase.h>
 #include <vector>
-#include "gui/application/RosegardenDCOP.h"
 #include "gui/widgets/DiatonicPitchChooser.h"
 
 

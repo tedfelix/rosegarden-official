@@ -25,7 +25,6 @@
 #include <kstddirs.h>
 #include "misc/Debug.h"
 #include "document/ConfigGroups.h"
-#include "gui/application/RosegardenDCOP.h"
 #include "gui/seqmanager/SequenceManager.h"
 #include "gui/rulers/StandardRuler.h"
 #include "base/Composition.h"
@@ -82,20 +81,20 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
                          double initialUnitsPerPixel,
                          QWidget* parent, const char* name,
                          WFlags) :
-        DCOPObject("TrackEditorIface"),
-        QWidget(parent, name),
-        m_doc(doc),
-        m_rulerScale(rulerScale),
-        m_topStandardRuler(0),
-        m_bottomStandardRuler(0),
-        m_trackButtons(0),
-        m_segmentCanvas(0),
-        m_trackButtonScroll(0),
-        m_showTrackLabels(showTrackLabels),
-        m_canvasWidth(0),
-        m_compositionRefreshStatusId(doc->getComposition().getNewRefreshStatusId()),
-        m_playTracking(true),
-        m_initialUnitsPerPixel(initialUnitsPerPixel)
+    DCOPObject("TrackEditorIface"),
+    QWidget(parent, name),
+    m_doc(doc),
+    m_rulerScale(rulerScale),
+    m_topStandardRuler(0),
+    m_bottomStandardRuler(0),
+    m_trackButtons(0),
+    m_segmentCanvas(0),
+    m_trackButtonScroll(0),
+    m_showTrackLabels(showTrackLabels),
+    m_canvasWidth(0),
+    m_compositionRefreshStatusId(doc->getComposition().getNewRefreshStatusId()),
+    m_playTracking(true),
+    m_initialUnitsPerPixel(initialUnitsPerPixel)
 {
     // accept dnd
     setAcceptDrops(true);

@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -19,11 +18,11 @@
 #ifndef _RG_DEVICEEDITORDIALOG_H_
 #define _RG_DEVICEEDITORDIALOG_H_
 
-#include <base/Studio.h>
+#include "base/Studio.h"
+#include "base/MidiDevice.h"
 #include <kdialogbase.h>
 #include <qstringlist.h>
 #include <set>
-
 
 class QWidget;
 class QTable;
@@ -61,7 +60,8 @@ private:
 
     QStringList m_playConnections;
     QStringList m_recordConnections;
-    void makeConnectionList(unsigned int direction, QStringList &list);
+    void makeConnectionList(MidiDevice::DeviceDirection direction, 
+			    QStringList &list);
     
     QTable *m_table;
 

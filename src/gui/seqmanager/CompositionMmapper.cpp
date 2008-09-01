@@ -23,7 +23,7 @@
 #include "base/Composition.h"
 #include "base/Segment.h"
 #include "document/RosegardenGUIDoc.h"
-#include "gui/application/RosegardenApplication.h"
+#include "sequencer/RosegardenSequencer.h"
 #include "SegmentMmapperFactory.h"
 #include "SegmentMmapper.h"
 #include <kglobal.h>
@@ -76,7 +76,7 @@ void CompositionMmapper::cleanup()
 {
     // In case the sequencer is still running, mapping some segments
     //
-    rgapp->sequencerSend("closeAllSegments()");
+    RosegardenSequencer::getInstance()->closeAllSegments();
 
     // Erase all 'segment_*' files
     //
@@ -86,10 +86,8 @@ void CompositionMmapper::cleanup()
     for (unsigned int i = 0; i < segmentsDir.count(); ++i) {
         QString segmentName = tmpPath + '/' + segmentsDir[i];
         SEQMAN_DEBUG << "CompositionMmapper : cleaning up " << segmentName << endl;
-        QFile::remove
-            (segmentName);
+        QFile::remove(segmentName);
     }
-
 }
 
 bool CompositionMmapper::segmentModified(Segment* segment)
