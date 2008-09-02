@@ -3457,6 +3457,19 @@ NotationView::getInsertionTime(Clef &clef,
     // set m_insertionTime to the right value when we first placed
     // the insert cursor.  We could get clef and key directly from
     // the segment but the staff has a more efficient lookup
+    // 
+    // TODO: When changing clef or key, the dialog should show
+    //       the clef which is affected. The use of function
+    //       getElementUnderLayoutX(...) function may not work,
+    //       because when InsertCursor is on a bar line and
+    //       the clef change is just after the bar line,
+    //       the previous clef will be shown, not the affected one:
+    //
+    //       G-clef (notes)     | F-clef (notes)
+    //                          ^ <--- InsertCursor
+    //
+    //       From above situation F-clef should be returned, while
+    //       currently G-clef is being returned. (hjj)
 
     LinedStaff *staff = m_staffs[m_currentStaff];
     double layoutX = staff->getLayoutXOfInsertCursor();
