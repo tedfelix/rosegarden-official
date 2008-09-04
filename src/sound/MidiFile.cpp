@@ -37,6 +37,9 @@
 #include "MidiTypes.h"
 #include "Profiler.h"
 
+#include <limits.h>
+
+
 //#define MIDI_DEBUG 1
 
 #if (__GNUC__ < 3)
@@ -806,7 +809,7 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
     multiplier /= g;
     divisor /= g;
 
-    timeT maxRawTime = sizeof(signed long int); // was: LONG_MAX;
+    timeT maxRawTime = LONG_MAX;
     if (multiplier > divisor)
         maxRawTime = (maxRawTime / multiplier) * divisor;
 

@@ -51,6 +51,8 @@
 #include <QWidget>
 #include <QVBoxLayout>
 
+#include <limits.h>
+
 
 namespace Rosegarden
 {
@@ -380,10 +382,10 @@ EventFilterDialog::getDurationFromIndex(int index)
         return long(Note(Note::WholeNote).getDuration());
         // unlimited
     case 0 :
-        return sizeof(signed long int); // was: LONG_MAX;
+        return LONG_MAX;
     }
     // failsafe
-    return sizeof(signed long int); // was: LONG_MAX;
+    return LONG_MAX;
 }
 
 void

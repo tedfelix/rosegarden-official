@@ -26,6 +26,7 @@
 #include <algorithm>
 #include <cmath>
 #include <typeinfo>
+#include <limits.h>
 
 #if (__GNUC__ < 3)
 #include <strstream>
@@ -1681,7 +1682,7 @@ void Composition::checkSelectedAndRecordTracks()
 TrackId
 Composition::getClosestValidTrackId(TrackId id) const
 {
-    long diff = sizeof(signed long int); // was: LONG_MAX;
+    long diff = LONG_MAX;
     TrackId closestValidTrackId = 0;
 
     for (trackcontainer::const_iterator i = getTracks().begin();
