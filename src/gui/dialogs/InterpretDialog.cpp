@@ -63,19 +63,24 @@ InterpretDialog::InterpretDialog(QDialogButtonBox::QWidget *parent) :
     m_allInterpretations = new QCheckBox
                            (i18n("All available interpretations"), groupBox);
 
-    KConfig *config = kapp->config();
-    config->setGroup(NotationViewConfigGroup);
+    QSettings *config = kapp->config();
+    config->beginGroup( NotationViewConfigGroup );
+    // 
+    // manually-FIX, add:
+    // config->endGroup();		// corresponding to: config->beginGroup( NotationViewConfigGroup );
+    //  
+;
 
     m_allInterpretations->setChecked
-    (config->readBoolEntry("interpretall", true));
+    ( qStrToBool( config->value("interpretall", "true" ) ) );
     m_applyTextDynamics->setChecked
-    (config->readBoolEntry("interprettextdynamics", true));
+    ( qStrToBool( config->value("interprettextdynamics", "true" ) ) );
     m_applyHairpins->setChecked
-    (config->readBoolEntry("interprethairpins", true));
+    ( qStrToBool( config->value("interprethairpins", "true" ) ) );
     m_stressBeats->setChecked
-    (config->readBoolEntry("interpretstressbeats", true));
+    ( qStrToBool( config->value("interpretstressbeats", "true" ) ) );
     m_articulate->setChecked
-    (config->readBoolEntry("interpretarticulate", true));
+    ( qStrToBool( config->value("interpretarticulate", "true" ) ) );
 
     connect(m_allInterpretations,
             SIGNAL(clicked()), this, SLOT(slotAllBoxChanged()));
@@ -101,8 +106,13 @@ InterpretDialog::slotAllBoxChanged()
 int
 InterpretDialog::getInterpretations()
 {
-    KConfig *config = kapp->config();
-    config->setGroup(NotationViewConfigGroup);
+    QSettings *config = kapp->config();
+    config->beginGroup( NotationViewConfigGroup );
+    // 
+    // manually-FIX, add:
+    // config->endGroup();		// corresponding to: config->beginGroup( NotationViewConfigGroup );
+    //  
+;
 
     config->writeEntry("interpretall", m_allInterpretations->isChecked());
     config->writeEntry("interprettextdynamics", m_applyTextDynamics->isChecked());

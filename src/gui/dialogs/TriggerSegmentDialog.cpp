@@ -88,15 +88,20 @@ TriggerSegmentDialog::TriggerSegmentDialog(QDialogButtonBox::QWidget *parent,
 void
 TriggerSegmentDialog::setupFromConfig()
 {
-    KConfig *config = kapp->config();
-    config->setGroup(GeneralOptionsConfigGroup);
+    QSettings *config = kapp->config();
+    config->beginGroup( GeneralOptionsConfigGroup );
+    // 
+    // manually-FIX, add:
+    // config->endGroup();		// corresponding to: config->beginGroup( GeneralOptionsConfigGroup );
+    //  
+;
 
-    int seg = config->readNumEntry("triggersegmentlastornament", 0);
+    int seg = config->value("triggersegmentlastornament", 0).toInt() ;
     std::string timing = qstrtostr
                          (config->readEntry
                           ("triggersegmenttiming",
                            strtoqstr(BaseProperties::TRIGGER_SEGMENT_ADJUST_SQUISH)));
-    bool retune = config->readBoolEntry("triggersegmentretune", true);
+    bool retune = qStrToBool( config->value("triggersegmentretune", "true" ) ) ;
 
     if (seg >= 0 && seg < m_segment->count())
         m_segment->setCurrentIndex(seg);
@@ -161,8 +166,13 @@ TriggerSegmentDialog::getTimeAdjust() const
 void
 TriggerSegmentDialog::slotOk()
 {
-    KConfig *config = kapp->config();
-    config->setGroup(GeneralOptionsConfigGroup);
+    QSettings *config = kapp->config();
+    config->beginGroup( GeneralOptionsConfigGroup );
+    // 
+    // manually-FIX, add:
+    // config->endGroup();		// corresponding to: config->beginGroup( GeneralOptionsConfigGroup );
+    //  
+;
 
     config->writeEntry("triggersegmenttiming", strtoqstr(getTimeAdjust()));
     config->writeEntry("triggersegmentretune", m_retune->isChecked());

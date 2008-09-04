@@ -97,10 +97,15 @@ MetronomeMmapper::MetronomeMmapper(RosegardenGUIDoc* doc)
         }
     }
 
-    KConfig *config = kapp->config();
-    config->setGroup(SequencerOptionsConfigGroup);
-    int midiClock = config->readNumEntry("midiclock", 0);
-    int mtcMode = config->readNumEntry("mtcmode", 0);
+    QSettings *config = kapp->config();
+    config->beginGroup( SequencerOptionsConfigGroup );
+    // 
+    // manually-FIX, add:
+    // config->endGroup();		// corresponding to: config->beginGroup( SequencerOptionsConfigGroup );
+    //  
+;
+    int midiClock = config->value("midiclock", 0).toInt() ;
+    int mtcMode = config->value("mtcmode", 0).toInt() ;
 
     if (midiClock == 1) {
         timeT quarterNote = Note(Note::Crotchet).getDuration();
@@ -219,10 +224,15 @@ void MetronomeMmapper::sortTicks()
 
 size_t MetronomeMmapper::computeMmappedSize()
 {
-    KConfig *config = kapp->config();
-    config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
-    int midiClock = config->readNumEntry("midiclock", 0);
-    int mtcMode = config->readNumEntry("mtcmode", 0);
+    QSettings *config = kapp->config();
+    config->beginGroup( Rosegarden::SequencerOptionsConfigGroup );
+    // 
+    // manually-FIX, add:
+    // config->endGroup();		// corresponding to: config->beginGroup( Rosegarden::SequencerOptionsConfigGroup );
+    //  
+;
+    int midiClock = config->value("midiclock", 0).toInt() ;
+    int mtcMode = config->value("mtcmode", 0).toInt() ;
 
     // base size for Metronome ticks
     size_t size = m_ticks.size() * sizeof(MappedEvent);

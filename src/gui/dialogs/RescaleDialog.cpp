@@ -64,10 +64,15 @@ RescaleDialog::RescaleDialog(QDialogButtonBox::QWidget *parent,
         vbox->setLayout(vboxLayout);
         m_closeGap = new QCheckBox(i18n("Adjust times of following events accordingly"),
                                    optionBox);
-        KConfig *config = kapp->config();
-        config->setGroup(GeneralOptionsConfigGroup);
+        QSettings *config = kapp->config();
+        config->beginGroup( GeneralOptionsConfigGroup );
+        // 
+        // manually-FIX, add:
+        // config->endGroup();		// corresponding to: config->beginGroup( GeneralOptionsConfigGroup );
+        //  
+;
         m_closeGap->setChecked
-        (config->readBoolEntry("rescaledialogadjusttimes", true));
+        ( qStrToBool( config->value("rescaledialogadjusttimes", "true" ) ) );
     } else {
         m_closeGap = 0;
     }
@@ -92,8 +97,13 @@ bool
 RescaleDialog::shouldCloseGap()
 {
     if (m_closeGap) {
-        KConfig *config = kapp->config();
-        config->setGroup(GeneralOptionsConfigGroup);
+        QSettings *config = kapp->config();
+        config->beginGroup( GeneralOptionsConfigGroup );
+        // 
+        // manually-FIX, add:
+        // config->endGroup();		// corresponding to: config->beginGroup( GeneralOptionsConfigGroup );
+        //  
+;
         config->writeEntry("rescaledialogadjusttimes", m_closeGap->isChecked());
         return m_closeGap->isChecked();
     } else {

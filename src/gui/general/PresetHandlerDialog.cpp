@@ -119,25 +119,35 @@ PresetHandlerDialog::initDialog()
 
     populateCategoryCombo();
     // try to set to same category used previously
-    m_config->setGroup(GeneralOptionsConfigGroup);
-    m_categoryCombo->setCurrentIndex(m_config->readNumEntry("category_combo_index", 0));
+    m_config->beginGroup( GeneralOptionsConfigGroup );
+    // 
+    // manually-FIX, add:
+    // m_config->endGroup();		// corresponding to: m_config->beginGroup( GeneralOptionsConfigGroup );
+    //  
+;
+    m_categoryCombo->setCurrentIndex( m_config->value("category_combo_index", 0).toInt() );
 
     // populate the instrument combo
     slotCategoryIndexChanged(m_categoryCombo->currentIndex());
 
     // try to set to same instrument used previously
-    m_config->setGroup(GeneralOptionsConfigGroup);
-    m_instrumentCombo->setCurrentIndex(m_config->readNumEntry("instrument_combo_index", 0));
+    m_config->beginGroup( GeneralOptionsConfigGroup );
+    // 
+    // manually-FIX, add:
+    // m_config->endGroup();		// corresponding to: m_config->beginGroup( GeneralOptionsConfigGroup );
+    //  
+;
+    m_instrumentCombo->setCurrentIndex( m_config->value("instrument_combo_index", 0).toInt() );
 
     // set to same player used previously (this one can't fail, unlike the
     // others, because the contents of this combo are static)
-    m_playerCombo->setCurrentIndex(m_config->readNumEntry("player_combo_index", 0));
+    m_playerCombo->setCurrentIndex( m_config->value("player_combo_index", 0).toInt() );
 
     if (m_fromNotation){
-        m_convertAllSegments->setChecked(m_config->readBoolEntry("convert_all_segments", 0));
+        m_convertAllSegments->setChecked( qStrToBool( m_config->value("convert_all_segments", "0" ) ) );
     }
     else {
-    	m_convertSegments->setChecked(m_config->readBoolEntry("convert_segments", 0));
+    	m_convertSegments->setChecked( qStrToBool( m_config->value("convert_segments", "0" ) ) );
     }
     	 
     
@@ -256,7 +266,12 @@ PresetHandlerDialog::slotCategoryIndexChanged(int index)
 void
 PresetHandlerDialog::slotOk()
 {
-    m_config->setGroup(GeneralOptionsConfigGroup);
+    m_config->beginGroup( GeneralOptionsConfigGroup );
+    // 
+    // manually-FIX, add:
+    // m_config->endGroup();		// corresponding to: m_config->beginGroup( GeneralOptionsConfigGroup );
+    //  
+;
     m_config->writeEntry("category_combo_index", m_categoryCombo->currentIndex());
     m_config->writeEntry("instrument_combo_index", m_instrumentCombo->currentIndex());
     m_config->writeEntry("player_combo_index", m_playerCombo->currentIndex());

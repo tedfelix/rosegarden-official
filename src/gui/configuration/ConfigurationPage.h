@@ -47,11 +47,11 @@ public:
                       QWidget *parent=0, const char *name=0)
         : QWidget(parent, name), m_doc(doc), m_cfg(0), m_pageIndex(0) {}
 
-    ConfigurationPage(KConfig *cfg,
+    ConfigurationPage(QSettings *cfg,
                       QWidget *parent=0, const char *name=0)
         : QWidget(parent, name), m_doc(0), m_cfg(cfg), m_pageIndex(0) {}
 
-    ConfigurationPage(RosegardenGUIDoc *doc, KConfig *cfg,
+    ConfigurationPage(RosegardenGUIDoc *doc, QSettings *cfg,
                       QWidget *parent=0, const char *name=0)
         : QWidget(parent, name), m_doc(doc), m_cfg(cfg), m_pageIndex(0) {}
 
@@ -86,7 +86,7 @@ protected:
     //--------------- Data members ---------------------------------
 
     RosegardenGUIDoc* m_doc;
-    KConfig* m_cfg;
+    QSettings *m_cfg;
 
     int m_pageIndex;
 };

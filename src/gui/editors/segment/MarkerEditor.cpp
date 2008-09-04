@@ -253,8 +253,17 @@ MarkerEditor::slotUpdate()
 
     Composition::markerconstiterator it;
 
-    kapp->config()->setGroup(MarkerEditorConfigGroup);
-    int timeMode = kapp->config()->readNumEntry("timemode", 0);
+    kapp->config()->beginGroup( MarkerEditorConfigGroup );
+
+    // 
+
+    // manually-FIX, add:
+
+    // kapp->config()->endGroup();		// corresponding to: kapp->config()->beginGroup( MarkerEditorConfigGroup );
+
+    //  
+;
+    int timeMode = kapp->config()->value("timemode", 0).toInt() ;
 
     for (it = markers.begin(); it != markers.end(); ++it) {
         QString timeString = makeTimeString((*it)->getTime(), timeMode);
@@ -387,8 +396,13 @@ MarkerEditor::setupActions()
                             KStandardAction::stdName(KStandardAction::Redo));
 
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    kapp->config()->setGroup(MarkerEditorConfigGroup);
-    int timeMode = kapp->config()->readNumEntry("timemode", 0);
+    kapp->config()->beginGroup( MarkerEditorConfigGroup );
+    // 
+    // manually-FIX, add:
+    // kapp->config()->endGroup();		// corresponding to: kapp->config()->beginGroup( MarkerEditorConfigGroup );
+    //  
+;
+    int timeMode = kapp->config()->value("timemode", 0).toInt() ;
 
     KRadioAction *action;
 
@@ -568,7 +582,12 @@ MarkerEditor::makeTimeString(timeT time, int timeMode)
 void
 MarkerEditor::slotMusicalTime()
 {
-    kapp->config()->setGroup(MarkerEditorConfigGroup);
+    kapp->config()->beginGroup( MarkerEditorConfigGroup );
+    // 
+    // manually-FIX, add:
+    // kapp->config()->endGroup();		// corresponding to: kapp->config()->beginGroup( MarkerEditorConfigGroup );
+    //  
+;
     kapp->config()->writeEntry("timemode", 0);
     slotUpdate();
 }
@@ -576,7 +595,12 @@ MarkerEditor::slotMusicalTime()
 void
 MarkerEditor::slotRealTime()
 {
-    kapp->config()->setGroup(MarkerEditorConfigGroup);
+    kapp->config()->beginGroup( MarkerEditorConfigGroup );
+    // 
+    // manually-FIX, add:
+    // kapp->config()->endGroup();		// corresponding to: kapp->config()->beginGroup( MarkerEditorConfigGroup );
+    //  
+;
     kapp->config()->writeEntry("timemode", 1);
     slotUpdate();
 }
@@ -584,7 +608,12 @@ MarkerEditor::slotRealTime()
 void
 MarkerEditor::slotRawTime()
 {
-    kapp->config()->setGroup(MarkerEditorConfigGroup);
+    kapp->config()->beginGroup( MarkerEditorConfigGroup );
+    // 
+    // manually-FIX, add:
+    // kapp->config()->endGroup();		// corresponding to: kapp->config()->beginGroup( MarkerEditorConfigGroup );
+    //  
+;
     kapp->config()->writeEntry("timemode", 2);
     slotUpdate();
 }

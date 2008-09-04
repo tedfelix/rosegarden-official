@@ -51,7 +51,7 @@ public:
     PresetGroup *m_presets;
     CategoriesContainer m_categories;
 
-    KConfig *m_config;
+    QSettings *m_config;
     bool m_fromNotation;
 
     //-------[ accessor functions ]------------------------

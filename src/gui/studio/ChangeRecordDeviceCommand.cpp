@@ -29,8 +29,13 @@ void
 ChangeRecordDeviceCommand::swap()
  {
 
-        KConfig *config = kapp->config();
-        config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
+        QSettings *config = kapp->config();
+        config->beginGroup( Rosegarden::SequencerOptionsConfigGroup );
+        // 
+        // manually-FIX, add:
+        // config->endGroup();		// corresponding to: config->beginGroup( Rosegarden::SequencerOptionsConfigGroup );
+        //  
+;
         QStringList devList = config->readListEntry("midirecorddevice");
         QString sdevice = QString::number(m_deviceId);
         if (m_action) 

@@ -101,18 +101,28 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     title_font.setBold(true);
 
     // Set up default expansions for the collapsing elements
-    KConfig *config = kapp->config();
+    QSettings *config = kapp->config();
     QString groupTemp = config->group();
-    config->setGroup("CollapsingFrame");
-    bool expanded = config->readBoolEntry("trackparametersplayback", true);
+    config->beginGroup( "CollapsingFrame" );
+    // 
+    // manually-FIX, add:
+    // config->endGroup();		// corresponding to: config->beginGroup( "CollapsingFrame" );
+    //  
+;
+    bool expanded = qStrToBool( config->value("trackparametersplayback", "true" ) ) ;
     config->writeEntry("trackparametersplayback", expanded);
-    expanded = config->readBoolEntry("trackparametersrecord", false);
+    expanded = qStrToBool( config->value("trackparametersrecord", "false" ) ) ;
     config->writeEntry("trackparametersrecord", expanded);
-    expanded = config->readBoolEntry("trackparametersdefaults", false);
+    expanded = qStrToBool( config->value("trackparametersdefaults", "false" ) ) ;
     config->writeEntry("trackparametersdefaults", expanded);
-    expanded = config->readBoolEntry("trackstaffgroup", false);
+    expanded = qStrToBool( config->value("trackstaffgroup", "false" ) ) ;
     config->writeEntry("trackstaffgroup", expanded);
-    config->setGroup(groupTemp);
+    config->beginGroup( groupTemp );
+    // 
+    // manually-FIX, add:
+    // config->endGroup();		// corresponding to: config->beginGroup( groupTemp );
+    //  
+;
 
     QGridLayout *mainLayout = new QGridLayout(this, 5, 1, 2, 1);
 
@@ -588,9 +598,14 @@ TrackParameterBox::updateHighLow()
     Pitch highest(m_highestPlayable, accidental);
     Pitch lowest(m_lowestPlayable, accidental);
 
-    KConfig *config = kapp->config();
-    config->setGroup(GeneralOptionsConfigGroup);
-    int base = config->readNumEntry("midipitchoctave", -2);
+    QSettings *config = kapp->config();
+    config->beginGroup( GeneralOptionsConfigGroup );
+    // 
+    // manually-FIX, add:
+    // config->endGroup();		// corresponding to: config->beginGroup( GeneralOptionsConfigGroup );
+    //  
+;
+    int base = config->value("midipitchoctave", -2).toInt() ;
     bool useSharps = true;
     bool includeOctave = true;
 

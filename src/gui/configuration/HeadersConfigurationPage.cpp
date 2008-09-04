@@ -154,12 +154,22 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
     //
 
     // set default expansion to false for this group -- what a faff
-    KConfig *config = kapp->config();
+    QSettings *config = kapp->config();
     QString groupTemp = config->group();
-    config->setGroup("CollapsingFrame");
-    bool expanded = config->readBoolEntry("nonprintableheaders", false);
+    config->beginGroup( "CollapsingFrame" );
+    // 
+    // manually-FIX, add:
+    // config->endGroup();		// corresponding to: config->beginGroup( "CollapsingFrame" );
+    //  
+;
+    bool expanded = qStrToBool( config->value("nonprintableheaders", "false" ) ) ;
     config->writeEntry("nonprintableheaders", expanded);
-    config->setGroup(groupTemp);
+    config->beginGroup( groupTemp );
+    // 
+    // manually-FIX, add:
+    // config->endGroup();		// corresponding to: config->beginGroup( groupTemp );
+    //  
+;
 
     CollapsingFrame *otherHeadersBox = new CollapsingFrame
         (i18n("Non-printable headers"), this, "nonprintableheaders");
@@ -244,8 +254,13 @@ HeadersConfigurationPage::slotDeleteProperty()
 
 void HeadersConfigurationPage::apply()
 {
-    KConfig *config = kapp->config();
-    config->setGroup(NotationViewConfigGroup);
+    QSettings *config = kapp->config();
+    config->beginGroup( NotationViewConfigGroup );
+    // 
+    // manually-FIX, add:
+    // config->endGroup();		// corresponding to: config->beginGroup( NotationViewConfigGroup );
+    //  
+;
 
     // If one of the items still has focus, it won't remember edits.
     // Switch between two fields in order to lose the current focus.

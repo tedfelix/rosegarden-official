@@ -64,10 +64,15 @@ NoteInserter::NoteInserter(NotationView* view)
 {
     QIcon icon;
 
-    KConfig *config = kapp->config();
-    config->setGroup(NotationViewConfigGroup);
-    m_autoBeam = config->readBoolEntry("autobeam", true);
-    m_matrixInsertType = (config->readNumEntry("inserttype", 0) > 0);
+    QSettings *config = kapp->config();
+    config->beginGroup( NotationViewConfigGroup );
+    // 
+    // manually-FIX, add:
+    // config->endGroup();		// corresponding to: config->beginGroup( NotationViewConfigGroup );
+    //  
+;
+    m_autoBeam = qStrToBool( config->value("autobeam", "true" ) ) ;
+    m_matrixInsertType = (config->value("inserttype", 0).toInt()  > 0);
     m_defaultStyle = qstrtostr(config->readEntry
                                ("style", strtoqstr(NoteStyleFactory::DefaultStyle)));
 

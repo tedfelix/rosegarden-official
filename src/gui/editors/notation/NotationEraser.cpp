@@ -40,9 +40,14 @@ NotationEraser::NotationEraser(NotationView* view)
         : NotationTool("NotationEraser", view),
         m_collapseRest(false)
 {
-    KConfig *config = kapp->config();
-    config->setGroup(NotationViewConfigGroup);
-    m_collapseRest = config->readBoolEntry("collapse", false);
+    QSettings *config = kapp->config();
+    config->beginGroup( NotationViewConfigGroup );
+    // 
+    // manually-FIX, add:
+    // config->endGroup();		// corresponding to: config->beginGroup( NotationViewConfigGroup );
+    //  
+;
+    m_collapseRest = qStrToBool( config->value("collapse", "false" ) ) ;
 
     new KToggleAction(i18n("Collapse rests after erase"), 0, this,
                       SLOT(slotToggleRestCollapse()), actionCollection(),

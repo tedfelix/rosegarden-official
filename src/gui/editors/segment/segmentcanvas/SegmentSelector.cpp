@@ -474,8 +474,13 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 
 void SegmentSelector::setContextHelpFor(QPoint p, bool ctrlPressed)
 {
-    kapp->config()->setGroup(GeneralOptionsConfigGroup);
-    if (!kapp->config()->readBoolEntry("toolcontexthelp", true)) return;
+    kapp->config()->beginGroup( GeneralOptionsConfigGroup );
+    // 
+    // manually-FIX, add:
+    // kapp->config()->endGroup();		// corresponding to: kapp->config()->beginGroup( GeneralOptionsConfigGroup );
+    //  
+;
+    if (! qStrToBool( kapp->config()->value("toolcontexthelp", "true" ) ) ) return;
 
     CompositionItem item = m_canvas->getFirstItemAt(p);
 

@@ -37,13 +37,18 @@ namespace Rosegarden
 {
 
 LatencyConfigurationPage::LatencyConfigurationPage(RosegardenGUIDoc *doc,
-        KConfig *cfg,
+        QSettings *cfg,
         QWidget *parent,
         const char *name)
         : TabbedConfigurationPage(doc, cfg, parent, name)
 {
     //     Configuration &config = doc->getConfiguration();
-    m_cfg->setGroup(LatencyOptionsConfigGroup);
+    m_cfg->beginGroup( LatencyOptionsConfigGroup );
+    // 
+    // manually-FIX, add:
+    // m_cfg->endGroup();		// corresponding to: m_cfg->beginGroup( LatencyOptionsConfigGroup );
+    //  
+;
 
 #ifdef NOT_DEFINED
 #ifdef HAVE_LIBJACK
@@ -119,7 +124,12 @@ LatencyConfigurationPage::LatencyConfigurationPage(RosegardenGUIDoc *doc,
 
 void LatencyConfigurationPage::apply()
 {
-    m_cfg->setGroup(LatencyOptionsConfigGroup);
+    m_cfg->beginGroup( LatencyOptionsConfigGroup );
+    // 
+    // manually-FIX, add:
+    // m_cfg->endGroup();		// corresponding to: m_cfg->beginGroup( LatencyOptionsConfigGroup );
+    //  
+;
 
 #ifdef HAVE_LIBJACK
 

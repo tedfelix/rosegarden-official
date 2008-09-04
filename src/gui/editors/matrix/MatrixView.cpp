@@ -192,8 +192,17 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     Q3Canvas *tCanvas = new Q3Canvas(this);
 
-    m_config->setGroup(MatrixViewConfigGroup);
-    if (m_config->readBoolEntry("backgroundtextures-1.6-plus", true)) {
+    m_config->beginGroup( MatrixViewConfigGroup );
+
+    // 
+
+    // manually-FIX, add:
+
+    // m_config->endGroup();		// corresponding to: m_config->beginGroup( MatrixViewConfigGroup );
+
+    //  
+;
+    if ( qStrToBool( m_config->value("backgroundtextures-1.6-plus", "true" ) ) ) {
         QPixmap background;
         QString pixmapDir =
             KGlobal::dirs()->findResource("appdata", "pixmaps/");
@@ -323,7 +332,12 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     if (snapGridSize != -1) {
         m_snapGrid->setSnapTime(snapGridSize);
     } else {
-        m_config->setGroup(MatrixViewConfigGroup);
+        m_config->beginGroup( MatrixViewConfigGroup );
+        // 
+        // manually-FIX, add:
+        // m_config->endGroup();		// corresponding to: m_config->beginGroup( MatrixViewConfigGroup );
+        //  
+;
         snapGridSize = m_config->readNumEntry
             ("Snap Grid Size", SnapGrid::SnapToBeat);
         m_snapGrid->setSnapTime(snapGridSize);
@@ -525,7 +539,12 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     setConfigDialogPageIndex(0);
 
     // default zoom
-    m_config->setGroup(MatrixViewConfigGroup);
+    m_config->beginGroup( MatrixViewConfigGroup );
+    // 
+    // manually-FIX, add:
+    // m_config->endGroup();		// corresponding to: m_config->beginGroup( MatrixViewConfigGroup );
+    //  
+;
     double zoom = m_config->readDoubleNumEntry("Zoom Level",
                                                m_hZoomSlider->getCurrentSize());
     m_hZoomSlider->setSize(zoom);
@@ -587,7 +606,12 @@ MatrixView::~MatrixView()
 
 void MatrixView::slotSaveOptions()
 {
-    m_config->setGroup(MatrixViewConfigGroup);
+    m_config->beginGroup( MatrixViewConfigGroup );
+    // 
+    // manually-FIX, add:
+    // m_config->endGroup();		// corresponding to: m_config->beginGroup( MatrixViewConfigGroup );
+    //  
+;
 
     m_config->writeEntry("Show Chord Name Ruler", getToggleAction("show_chords_ruler")->isChecked());
     m_config->writeEntry("Show Tempo Ruler", getToggleAction("show_tempo_ruler")->isChecked());
@@ -600,19 +624,24 @@ void MatrixView::slotSaveOptions()
 void MatrixView::readOptions()
 {
     EditView::readOptions();
-    m_config->setGroup(MatrixViewConfigGroup);
+    m_config->beginGroup( MatrixViewConfigGroup );
+    // 
+    // manually-FIX, add:
+    // m_config->endGroup();		// corresponding to: m_config->beginGroup( MatrixViewConfigGroup );
+    //  
+;
 
     bool opt = false;
 
-    opt = m_config->readBoolEntry("Show Chord Name Ruler", false);
+    opt = qStrToBool( m_config->value("Show Chord Name Ruler", "false" ) ) ;
     getToggleAction("show_chords_ruler")->setChecked(opt);
     slotToggleChordsRuler();
 
-    opt = m_config->readBoolEntry("Show Tempo Ruler", true);
+    opt = qStrToBool( m_config->value("Show Tempo Ruler", "true" ) ) ;
     getToggleAction("show_tempo_ruler")->setChecked(opt);
     slotToggleTempoRuler();
 
-    opt = m_config->readBoolEntry("Show Parameters", true);
+    opt = qStrToBool( m_config->value("Show Parameters", "true" ) ) ;
     if (!opt) {
         m_dockLeft->undock();
         m_dockLeft->hide();
@@ -1004,16 +1033,30 @@ void MatrixView::slotToolHelpChanged(const QString &s)
     if (m_toolContextHelp == msg) return;
     m_toolContextHelp = msg;
 
-    m_config->setGroup(GeneralOptionsConfigGroup);
-    if (!m_config->readBoolEntry("toolcontexthelp", true)) return;
+    m_config->beginGroup( GeneralOptionsConfigGroup );
+
+    // 
+
+    // manually-FIX, add:
+
+    // m_config->endGroup();		// corresponding to: m_config->beginGroup( GeneralOptionsConfigGroup );
+
+    //  
+;
+    if (! qStrToBool( m_config->value("toolcontexthelp", "true" ) ) ) return;
 
     if (m_mouseInCanvasView) statusBar()->changeItem(m_toolContextHelp, 1);
 }
 
 void MatrixView::slotMouseEnteredCanvasView()
 {
-    m_config->setGroup(GeneralOptionsConfigGroup);
-    if (!m_config->readBoolEntry("toolcontexthelp", true)) return;
+    m_config->beginGroup( GeneralOptionsConfigGroup );
+    // 
+    // manually-FIX, add:
+    // m_config->endGroup();		// corresponding to: m_config->beginGroup( GeneralOptionsConfigGroup );
+    //  
+;
+    if (! qStrToBool( m_config->value("toolcontexthelp", "true" ) ) ) return;
 
     m_mouseInCanvasView = true;
     statusBar()->changeItem(m_toolContextHelp, 1);
@@ -2067,7 +2110,16 @@ MatrixView::slotSetSnap(timeT t)
 
     m_segments[0]->setSnapGridSize(t);
 
-    m_config->setGroup(MatrixViewConfigGroup);
+    m_config->beginGroup( MatrixViewConfigGroup );
+
+    // 
+
+    // manually-FIX, add:
+
+    // m_config->endGroup();		// corresponding to: m_config->beginGroup( MatrixViewConfigGroup );
+
+    //  
+;
     m_config->writeEntry("Snap Grid Size", t);
 
     updateView();
@@ -2285,7 +2337,16 @@ MatrixView::slotChangeHorizontalZoom(int)
     if (m_bottomStandardRuler)
         m_bottomStandardRuler->update();
 
-    m_config->setGroup(MatrixViewConfigGroup);
+    m_config->beginGroup( MatrixViewConfigGroup );
+
+    // 
+
+    // manually-FIX, add:
+
+    // m_config->endGroup();		// corresponding to: m_config->beginGroup( MatrixViewConfigGroup );
+
+    //  
+;
     m_config->writeEntry("Zoom Level", zoomValue);
 
     // If you do adjust the viewsize then please remember to

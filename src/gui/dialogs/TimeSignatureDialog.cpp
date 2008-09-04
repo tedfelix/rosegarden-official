@@ -174,28 +174,33 @@ TimeSignatureDialog::TimeSignatureDialog(QDialogButtonBox::QWidget *parent,
     }
 
     groupBox = new QGroupBox(1, Horizontal, i18n("Options"), vbox);
-    KConfig *config = kapp->config();
-    config->setGroup(GeneralOptionsConfigGroup);
+    QSettings *config = kapp->config();
+    config->beginGroup( GeneralOptionsConfigGroup );
+    // 
+    // manually-FIX, add:
+    // config->endGroup();		// corresponding to: config->beginGroup( GeneralOptionsConfigGroup );
+    //  
+;
 
     m_hideSignatureButton = new QCheckBox
                             (i18n("Hide the time signature"), groupBox);
     m_hideSignatureButton->setChecked
-    (config->readBoolEntry("timesigdialogmakehidden", false));
+    ( qStrToBool( config->value("timesigdialogmakehidden", "false" ) ) );
 
     m_hideBarsButton = new QCheckBox
                        (i18n("Hide the affected bar lines"), groupBox);
     m_hideBarsButton->setChecked
-    (config->readBoolEntry("timesigdialogmakehiddenbars", false));
+    ( qStrToBool( config->value("timesigdialogmakehiddenbars", "false" ) ) );
 
     m_commonTimeButton = new QCheckBox
                          (i18n("Show as common time"), groupBox);
     m_commonTimeButton->setChecked
-    (config->readBoolEntry("timesigdialogshowcommon", true));
+    ( qStrToBool( config->value("timesigdialogshowcommon", "true" ) ) );
 
     m_normalizeRestsButton = new QCheckBox
                              (i18n("Correct the durations of following measures"), groupBox);
     m_normalizeRestsButton->setChecked
-    (config->readBoolEntry("timesigdialognormalize", true));
+    ( qStrToBool( config->value("timesigdialognormalize", "true" ) ) );
 
     QObject::connect(m_hideSignatureButton, SIGNAL(clicked()), this,
                      SLOT(slotUpdateCommonTimeButton()));
@@ -208,8 +213,13 @@ TimeSignatureDialog::TimeSignatureDialog(QDialogButtonBox::QWidget *parent,
 TimeSignature
 TimeSignatureDialog::getTimeSignature() const
 {
-    KConfig *config = kapp->config();
-    config->setGroup(GeneralOptionsConfigGroup);
+    QSettings *config = kapp->config();
+    config->beginGroup( GeneralOptionsConfigGroup );
+    // 
+    // manually-FIX, add:
+    // config->endGroup();		// corresponding to: config->beginGroup( GeneralOptionsConfigGroup );
+    //  
+;
 
     config->writeEntry("timesigdialogmakehidden", m_hideSignatureButton->isChecked());
     config->writeEntry("timesigdialogmakehiddenbars", m_hideBarsButton->isChecked());

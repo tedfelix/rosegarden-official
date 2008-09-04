@@ -26,10 +26,15 @@ appendLabel(const std::string &label, const std::string &suffix)
 {
     using std::string;
 
-    KConfig *config = kapp->config();
-    config->setGroup(GeneralOptionsConfigGroup);
+    QSettings *config = kapp->config();
+    config->beginGroup( GeneralOptionsConfigGroup );
+    // 
+    // manually-FIX, add:
+    // config->endGroup();		// corresponding to: config->beginGroup( GeneralOptionsConfigGroup );
+    //  
+;
 
-    if (!config->readBoolEntry("appendlabel", true)) {
+    if (! qStrToBool( config->value("appendlabel", "true" ) ) ) {
        return string(label);
     }
     if (label.length() >= suffix.length()) {

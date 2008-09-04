@@ -59,7 +59,7 @@ namespace Rosegarden
 
 MIDIConfigurationPage::MIDIConfigurationPage(
     RosegardenGUIDoc *doc,
-    KConfig *cfg,
+    QSettings *cfg,
     QWidget *parent,
     const char *name):
         TabbedConfigurationPage(cfg, parent, name),
@@ -80,7 +80,16 @@ MIDIConfigurationPage::MIDIConfigurationPage(
 
     QLabel *label = 0;
 
-    m_cfg->setGroup(GeneralOptionsConfigGroup);
+    m_cfg->beginGroup( GeneralOptionsConfigGroup );
+
+    // 
+
+    // manually-FIX, add:
+
+    // m_cfg->endGroup();		// corresponding to: m_cfg->beginGroup( GeneralOptionsConfigGroup );
+
+    //  
+;
 
     layout->addMultiCellWidget(new QLabel(i18n("Base octave number for MIDI pitch display"),
 					  frame), row, row, 0, 1);
@@ -88,26 +97,40 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     m_midiPitchOctave = new QSpinBox(frame);
     m_midiPitchOctave->setMaximum(10);
     m_midiPitchOctave->setMinimum( -10);
-    m_midiPitchOctave->setValue(m_cfg->readNumEntry("midipitchoctave", -2));
+    m_midiPitchOctave->setValue( m_cfg->value("midipitchoctave", -2).toInt() );
     layout->addWidget(m_midiPitchOctave, row, 2, row- row+1, 3- 3);
     ++row;
 
     layout->setRowSpacing(row, 20);
     ++row;
 
-    m_cfg->setGroup(GeneralOptionsConfigGroup);
+    m_cfg->beginGroup( GeneralOptionsConfigGroup );
+
+    // 
+
+    // manually-FIX, add:
+
+    // m_cfg->endGroup();		// corresponding to: m_cfg->beginGroup( GeneralOptionsConfigGroup );
+
+    //  
+;
 
     layout->addMultiCellWidget(new QLabel(i18n("Always use default studio when loading files"),
 					  frame), row, row, 0, 1);
 
     m_studio = new QCheckBox(frame);
-    m_studio->setChecked(m_cfg->readBoolEntry("alwaysusedefaultstudio", false));
+    m_studio->setChecked( qStrToBool( m_cfg->value("alwaysusedefaultstudio", "false" ) ) );
     layout->addWidget(m_studio, row, 2);
     ++row;
 
     // Send Controllers
     //
-    m_cfg->setGroup(SequencerOptionsConfigGroup);
+    m_cfg->beginGroup( SequencerOptionsConfigGroup );
+    // 
+    // manually-FIX, add:
+    // m_cfg->endGroup();		// corresponding to: m_cfg->beginGroup( SequencerOptionsConfigGroup );
+    //  
+;
 
     label = new QLabel(i18n("Send all MIDI Controllers at start of each playback"), frame);
 
@@ -117,7 +140,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     layout->addWidget(label, row, 0, row- row+1, 1- 1);
 
     m_sendControllersAtPlay = new QCheckBox(frame);
-    bool sendControllers = m_cfg->readBoolEntry("alwayssendcontrollers", false);
+    bool sendControllers = qStrToBool( m_cfg->value("alwayssendcontrollers", "false" ) ) ;
     m_sendControllersAtPlay->setChecked(sendControllers);
     QToolTip::add
         (m_sendControllersAtPlay, controllerTip);
@@ -126,7 +149,12 @@ MIDIConfigurationPage::MIDIConfigurationPage(
 
     // Timer selection
     //
-    m_cfg->setGroup(SequencerOptionsConfigGroup);
+    m_cfg->beginGroup( SequencerOptionsConfigGroup );
+    // 
+    // manually-FIX, add:
+    // m_cfg->endGroup();		// corresponding to: m_cfg->beginGroup( SequencerOptionsConfigGroup );
+    //  
+;
 
     label = new QLabel(i18n("Sequencer timing source"), frame);
     layout->addWidget(label, row, 0, row- row+1, 1- 1);
@@ -136,7 +164,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(
 
     QStringList timers = m_doc->getTimers();
     m_origTimer = m_doc->getCurrentTimer();
-    QString currentTimer = m_cfg->readEntry("timer", m_origTimer);
+    QString currentTimer = m_cfg->value("timer", m_origTimer) ;
 
     for (unsigned int i = 0; i < timers.size(); ++i) {
         m_timer->addItem(timers[i]);
@@ -149,7 +177,16 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     layout->setRowSpacing(row, 20);
     ++row;
 
-    m_cfg->setGroup(SequencerOptionsConfigGroup);
+    m_cfg->beginGroup( SequencerOptionsConfigGroup );
+
+    // 
+
+    // manually-FIX, add:
+
+    // m_cfg->endGroup();		// corresponding to: m_cfg->beginGroup( SequencerOptionsConfigGroup );
+
+    //  
+;
 
     // SoundFont loading
     //
@@ -164,20 +201,20 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     ++row;
 
     layout->addWidget(new QLabel(i18n("Path to 'asfxload' or 'sfxload' command"), frame), row, 0);
-    m_sfxLoadPath = new QLineEdit(m_cfg->readEntry("sfxloadpath", "/bin/sfxload"), frame);
+    m_sfxLoadPath = new QLineEdit(m_cfg->value("sfxloadpath", "/bin/sfxload") , frame);
     layout->addWidget(m_sfxLoadPath, row, 1, row- row+1, 2);
     m_sfxLoadChoose = new QPushButton("Choose...", frame);
     layout->addWidget(m_sfxLoadChoose, row, 3);
     ++row;
 
     layout->addWidget(new QLabel(i18n("SoundFont"), frame), row, 0);
-    m_soundFontPath = new QLineEdit(m_cfg->readEntry("soundfontpath", ""), frame);
+    m_soundFontPath = new QLineEdit(m_cfg->value("soundfontpath", "") , frame);
     layout->addWidget(m_soundFontPath, row, 1, row- row+1, 2);
     m_soundFontChoose = new QPushButton("Choose...", frame);
     layout->addWidget(m_soundFontChoose, row, 3);
     ++row;
 
-    bool sfxLoadEnabled = m_cfg->readBoolEntry("sfxloadenabled", false);
+    bool sfxLoadEnabled = qStrToBool( m_cfg->value("sfxloadenabled", "false" ) ) ;
     m_sfxLoadEnabled->setChecked(sfxLoadEnabled);
     if (!sfxLoadEnabled) {
         m_sfxLoadPath->setEnabled(false);
@@ -199,7 +236,16 @@ MIDIConfigurationPage::MIDIConfigurationPage(
 
     addTab(frame, i18n("General"));
 
-    m_cfg->setGroup(SequencerOptionsConfigGroup);
+    m_cfg->beginGroup( SequencerOptionsConfigGroup );
+
+    // 
+
+    // manually-FIX, add:
+
+    // m_cfg->endGroup();		// corresponding to: m_cfg->beginGroup( SequencerOptionsConfigGroup );
+
+    //  
+;
 
     //  -------------- Synchronisation tab -----------------
     //
@@ -222,7 +268,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     m_midiSync->addItem(i18n("Send MIDI Clock, Start and Stop"));
     m_midiSync->addItem(i18n("Accept Start, Stop and Continue"));
 
-    int midiClock = m_cfg->readNumEntry("midiclock", 0);
+    int midiClock = m_cfg->value("midiclock", 0).toInt() ;
     if (midiClock < 0 || midiClock > 2)
         midiClock = 0;
     m_midiSync->setCurrentIndex(midiClock);
@@ -241,7 +287,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     m_mmcTransport->addItem(i18n("MMC Master"));
     m_mmcTransport->addItem(i18n("MMC Slave"));
 
-    int mmcMode = m_cfg->readNumEntry("mmcmode", 0);
+    int mmcMode = m_cfg->value("mmcmode", 0).toInt() ;
     if (mmcMode < 0 || mmcMode > 2)
         mmcMode = 0;
     m_mmcTransport->setCurrentIndex(mmcMode);
@@ -260,7 +306,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     m_mtcTransport->addItem(i18n("MTC Master"));
     m_mtcTransport->addItem(i18n("MTC Slave"));
 
-    int mtcMode = m_cfg->readNumEntry("mtcmode", 0);
+    int mtcMode = m_cfg->value("mtcmode", 0).toInt() ;
     if (mtcMode < 0 || mtcMode > 2)
         mtcMode = 0;
     m_mtcTransport->setCurrentIndex(mtcMode);
@@ -280,7 +326,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     hbox->setLayout(hboxLayout);
 //    layout->addWidget(m_midiSyncAuto, row, 1);
 
-    m_midiSyncAuto->setChecked(m_cfg->readBoolEntry("midisyncautoconnect", false));
+    m_midiSyncAuto->setChecked( qStrToBool( m_cfg->value("midisyncautoconnect", "false" ) ) );
 
     ++row;
 
@@ -316,7 +362,12 @@ MIDIConfigurationPage::slotSoundFontChoose()
 void
 MIDIConfigurationPage::apply()
 {
-    m_cfg->setGroup(SequencerOptionsConfigGroup);
+    m_cfg->beginGroup( SequencerOptionsConfigGroup );
+    // 
+    // manually-FIX, add:
+    // m_cfg->endGroup();		// corresponding to: m_cfg->beginGroup( SequencerOptionsConfigGroup );
+    //  
+;
 
     m_cfg->writeEntry("alwayssendcontrollers",
                       m_sendControllersAtPlay->isChecked());
@@ -384,7 +435,16 @@ MIDIConfigurationPage::apply()
         m_doc->getSequenceManager()->metronomeChanged(instrument, true);
     }
 
-    m_cfg->setGroup(GeneralOptionsConfigGroup);
+    m_cfg->beginGroup( GeneralOptionsConfigGroup );
+
+    // 
+
+    // manually-FIX, add:
+
+    // m_cfg->endGroup();		// corresponding to: m_cfg->beginGroup( GeneralOptionsConfigGroup );
+
+    //  
+;
 
     bool deftstudio = getUseDefaultStudio();
     m_cfg->writeEntry("alwaysusedefaultstudio", deftstudio);
