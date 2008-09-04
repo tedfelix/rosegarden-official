@@ -31,7 +31,6 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 
-#include <dcopclient.h>
 #include <QDateTime>
 #include <QString>
 #include <QDir>
