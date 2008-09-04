@@ -26,10 +26,10 @@
     <ul><li><a href="http://sourceforge.net/"><img align="right"
 src="http://sourceforge.net/sflogo.php?group_id=4932&type=1"
 width="88" height="31" border="0" alt="SourceForge.net Logo"/></a><a
-href="http://sourceforge.net/project/showfiles.php?group_id=4932&package_id=4959&release_id=617314">Rosegarden
-release 1.7.1 source code</a>, 2nd August 2008, for download from the
+href="http://sourceforge.net/project/showfiles.php?group_id=4932&package_id=4959&release_id=623980">Rosegarden
+release 1.7.2 source code</a>, 3rd September 2008, for download from the
 SourceForge page. <i>(<a
-href="https://sourceforge.net/project/shownotes.php?group_id=4932&release_id=617314">release note</a>)</i></li></ul>
+href="https://sourceforge.net/project/shownotes.php?group_id=4932&release_id=623980">release note</a>)</i></li></ul>
 
     <h3>Development code from Subversion</h3>
 
@@ -49,6 +49,11 @@ href="https://sourceforge.net/project/shownotes.php?group_id=4932&release_id=617
     <p>You can also browse the source code <a
     href="http://rosegarden.svn.sourceforge.net/viewvc/rosegarden/trunk/rosegarden/">here</a>.</p>
 
+    <p>Interested developers should also browse the <a
+    href="http://rosegardenmusic.com/wiki/dev:contributing">Rosegarden wiki</a>,
+    and should consider having a look at helping with the <a
+    href="http://rosegardenmusic.com/wiki/">QT4 Port</a>.</p>
+
     <h3>Other branches</h3>
 
     <p>Several "branches" of the Rosegarden source code are available
@@ -64,16 +69,11 @@ href="https://sourceforge.net/project/shownotes.php?group_id=4932&release_id=617
 
     <p>Currently active branches are:
 
-    <ul> <li><b>stable_1_7</b> - This is the branch used for the 1.7.0
-    release, and to collect bug fixes for the next stable minor
-    release.  It should always be more stable than the trunk.</li>
+    <ul> <li><b>qt4</b> - This is where a handful of brave souls are trying to
+    move a mountain.  It will eventually become Rosegarden 2.0.</li>
 
     <li><b>musicxml</b> - This branch contains initial work on
     MusicXML import.</li>
-
-    <li><b>trayicon</b> - This branch contains work for a possible
-    enhancement that gives the sequencer process an icon and context
-    menu in the system tray.</li>
 
     <li><b>notation_updates</b> - This branch contains some
     experiments related to notation improvements.</li>
