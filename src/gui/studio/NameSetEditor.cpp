@@ -76,33 +76,45 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
 
     tabw->setMargin(10);
 
-    QHBox *h;
-    QVBox *v;
-    QHBox *numBox;
+    QWidget *h;
+    QHBoxLayout *hLayout;
+
+    QWidget *v;
+    QVBoxLayout *vLayout;
+
+    QWidget *numBox;
+    QHBoxLayout *numBoxLayout;
 
     unsigned int tabs = 4;
     unsigned int cols = 2;
     unsigned int labelId = 0;
 
     for (unsigned int tab = 0; tab < tabs; ++tab) {
-        h = new QHBox(tabw);
+        h = new QWidget(tabw);
+        hLayout = new QHBoxLayout;
 
         for (unsigned int col = 0; col < cols; ++col) {
-            v = new QVBox(h);
+            v = new QWidget(h);
+            vLayout = new QVBoxLayout;
+            hLayout->addWidget(v);
 
             for (unsigned int row = 0; row < 128 / (tabs*cols); ++row) {
-                numBox = new QHBox(v);
+                numBox = new QWidget(v);
+                numBoxLayout = new QHBoxLayout;
+                vLayout->addWidget(numBox);
                 QString numberText = QString("%1").arg(labelId + 1);
 
                 if (tab == 0 && col == 0 && row == 0) {
                     // Initial label; button to adjust whether labels start at 0 or 1
                     m_initialLabel = new QPushButton(numberText, numBox);
+                    numBoxLayout->addWidget(m_initialLabel);
                     connect(m_initialLabel,
                             SIGNAL(clicked()),
                             this,
                             SLOT(slotToggleInitialLabel()));
                 } else {
                     QLabel *label = new QLabel(numberText, numBox);
+                    numBoxLayout->addWidget(label);
                     label->setFixedWidth(40);
                     label->setAlignment(AlignCenter);
                     m_labels.push_back(label);
@@ -112,6 +124,7 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
 
                 if (showEntryButtons) {
                     QPushButton *button = new QPushButton("", numBox, numberText);
+                    numBoxLayout->addWidget(button);
                     button->setMaximumWidth(40);
                     button->setMaximumHeight(20);
                     button->setFlat(true);
@@ -121,6 +134,8 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
                 }
 
                 KLineEdit* lineEdit = new KLineEdit(numBox, numberText);
+                numBoxLayout->addWidget(lineEdit);
+                numBox->setLayout(numBoxLayout);
                 lineEdit->setMinimumWidth(110);
                 lineEdit->setCompletionMode(KGlobalSettings::CompletionAuto);
                 lineEdit->setCompletionObject(&m_completion);
@@ -133,7 +148,9 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
 
                 ++labelId;
             }
+            v->setLayout(vLayout);
         }
+        h->setLayout(hLayout);
 
         tabw->addTab(h,
                      (tab == 0 ? headingPrefix + QString(" %1 - %2") :

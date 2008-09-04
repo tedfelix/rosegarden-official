@@ -72,24 +72,28 @@ KeySignatureDialog::KeySignatureDialog(QDialogButtonBox::QWidget *parent,
     metagrid->addWidget(vbox, 0, 0);
 
 
-    QHBox *keyBox = 0;
-    QHBox *nameBox = 0;
+    QWidget *keyBox = 0;
+    QWidget *nameBox = 0;
 
     QGroupBox *keyFrame = new QGroupBox( i18n("Key signature"), vbox );
     vboxLayout->addWidget(keyFrame);
 
     QGroupBox *transposeFrame = new QGroupBox
                                 (1, Horizontal, i18n("Key transposition"), vbox);
+    vboxLayout->addWidget(transposeFrame);
 
     QGroupBox *buttonFrame = new QGroupBox
                              (1, Horizontal, i18n("Scope"), vbox);
+    vboxLayout->addWidget(buttonFrame);
 
     QGroupBox *conversionFrame = new QGroupBox( i18n("Existing notes following key change"), vbox );
     vboxLayout->addWidget(conversionFrame);
     vbox->setLayout(vboxLayout);
 
-    keyBox = new QHBox(keyFrame);
-    nameBox = new QHBox(keyFrame);
+    keyBox = new QWidget(keyFrame);
+    QHBoxLayout *keyBoxLayout = new QHBoxLayout;
+    nameBox = new QWidget(keyFrame);
+    QHBoxLayout *nameBoxLayout = new QHBoxLayout;
 
     QLabel *explanatoryLabel = 0;
     if (explanatoryText) {
@@ -97,18 +101,25 @@ KeySignatureDialog::KeySignatureDialog(QDialogButtonBox::QWidget *parent,
     }
 
     BigArrowButton *keyDown = new BigArrowButton(keyBox, Qt::LeftArrow);
+    keyBoxLayout->addWidget(keyDown);
     QToolTip::add
         (keyDown, i18n("Flatten"));
 
     m_keyLabel = new QLabel(i18n("Key"), keyBox);
+    keyBoxLayout->addWidget(m_keyLabel);
     m_keyLabel->setAlignment(AlignVCenter | AlignHCenter);
 
     BigArrowButton *keyUp = new BigArrowButton(keyBox, Qt::RightArrow);
+    keyBoxLayout->addWidget(keyUp);
+    keyBox->setLayout(keyBoxLayout);
     QToolTip::add
         (keyUp, i18n("Sharpen"));
 
     m_keyCombo = new QComboBox(nameBox);
+    nameBoxLayout->addWidget(m_keyCombo);
     m_majorMinorCombo = new QComboBox(nameBox);
+    nameBoxLayout->addWidget(m_majorMinorCombo);
+    nameBox->setLayout(nameBoxLayout);
     m_majorMinorCombo->addItem(i18n("Major"));
     m_majorMinorCombo->addItem(i18n("Minor"));
     if (m_key.isMinor()) {
