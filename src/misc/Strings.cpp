@@ -93,6 +93,19 @@ double qstrtodouble(const QString &s)
     return strtodouble(qstrtostr(s));
 }
 
+
+bool qStrToBool(const QString &s)
+{
+	QString tt = s.toLower();
+	tt = tt.trimmed();
+	if ( (tt == 'yes') or (tt == 'true') or (tt == 'on') or (tt == '1') ){
+		return true;
+	}
+	return false;
+}
+
+
+
 std::string
 convertFromCodec(std::string text, QTextCodec *codec)
 {
