@@ -380,10 +380,10 @@ EventFilterDialog::getDurationFromIndex(int index)
         return long(Note(Note::WholeNote).getDuration());
         // unlimited
     case 0 :
-        return LONG_MAX;
+        return sizeof(signed long int); // was: LONG_MAX;
     }
     // failsafe
-    return LONG_MAX;
+    return sizeof(signed long int); // was: LONG_MAX;
 }
 
 void

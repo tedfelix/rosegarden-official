@@ -1681,7 +1681,7 @@ void Composition::checkSelectedAndRecordTracks()
 TrackId
 Composition::getClosestValidTrackId(TrackId id) const
 {
-    long diff = LONG_MAX;
+    long diff = sizeof(signed long int); // was: LONG_MAX;
     TrackId closestValidTrackId = 0;
 
     for (trackcontainer::const_iterator i = getTracks().begin();

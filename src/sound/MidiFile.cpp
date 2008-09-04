@@ -806,7 +806,7 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
     multiplier /= g;
     divisor /= g;
 
-    timeT maxRawTime = LONG_MAX;
+    timeT maxRawTime = sizeof(signed long int); // was: LONG_MAX;
     if (multiplier > divisor)
         maxRawTime = (maxRawTime / multiplier) * divisor;
 

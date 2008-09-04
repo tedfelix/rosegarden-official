@@ -98,7 +98,7 @@ bool qStrToBool(const QString &s)
 {
 	QString tt = s.toLower();
 	tt = tt.trimmed();
-	if ( (tt == 'yes') or (tt == 'true') or (tt == 'on') or (tt == '1') ){
+	if ( (tt == 'yes') || (tt == 'true') || (tt == 'on') || (tt == '1') ){
 		return true;
 	}
 	return false;
