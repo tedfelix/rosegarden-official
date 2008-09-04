@@ -30,6 +30,7 @@ CXXFLAGS	= -Wall -O0 -g -DHAVE_ALSA -DHAVE_LIBJACK -DHAVE_DSSI -DHAVE_LADSPA -DH
 LDFLAGS		= 
 
 INCLUDES	= \
+		-I$(QTINC)/Qt3Support \
 		-I$(QTINC)/QtCore \
 		-I$(QTINC)/QtGui \
 		-I$(QTINC)/QtXml \
@@ -46,7 +47,7 @@ LDLIBS		= \
 		-L$(CCDIR)/lib \
 		-L$(KDELIB) \
 		-L$(QTLIB) \
-		-lkdeprint -lkdeui -lkdecore -lQtGui -lQtXml -lQtNetwork -lQtCore \
+		-lkdeprint -lkdeui -lkdecore -lQt3Support -lQtGui -lQtXml -lQtNetwork -lQtCore \
 		-ljack -lasound -llo -llrdf -lraptor -llirc_client
 
 HEADERS		= $(filter-out templates/template.h, $(wildcard src/*.h src/*/*.h src/*/*/*.h))
