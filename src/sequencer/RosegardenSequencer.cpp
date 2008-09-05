@@ -33,6 +33,8 @@
 #include <QVector>
 #include <QMutex>
 
+
+#include "misc/Strings.h"
 #include "misc/Debug.h"
 #include "MmappedControlBlock.h"
 #include "MmappedSegment.h"
