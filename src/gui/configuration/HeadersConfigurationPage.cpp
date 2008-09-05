@@ -45,9 +45,11 @@ namespace Rosegarden
 
 HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
 	RosegardenGUIDoc *doc) :
-	QVBox(parent),
+	QWidget(parent),
 	m_doc(doc)
 {
+    QVBoxLayout *layout = new QVBoxLayout;
+
     //
     // LilyPond export: Printable headers
     //
@@ -55,6 +57,7 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
     QGroupBox *headersBox = new QGroupBox
                            (1, Horizontal,
                             i18n("Printable headers"), this);
+    layout->addWidget(headersBox);
     QFrame *frameHeaders = new QFrame(headersBox);
     QGridLayout *layoutHeaders = new QGridLayout(frameHeaders, 10, 6, 10, 5);
 
@@ -173,6 +176,8 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
 
     CollapsingFrame *otherHeadersBox = new CollapsingFrame
         (i18n("Non-printable headers"), this, "nonprintableheaders");
+    layout->addWidget(otherHeadersBox);
+    setLayout(layout);
     QFrame *frameOtherHeaders = new QFrame(otherHeadersBox);
     otherHeadersBox->setWidgetFill(true);
     QFont font(otherHeadersBox->font());
