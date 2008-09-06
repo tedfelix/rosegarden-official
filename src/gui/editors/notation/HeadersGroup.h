@@ -28,7 +28,6 @@
 #include <vector>
 #include <QSize>
 #include <QWidget>
-#include <QVBoxLayout>
 
 
 class QLabel;
@@ -42,9 +41,10 @@ namespace Rosegarden
 class NotationView;
 class Composition;
 class TrackHeader;
+class QVBoxLayout;
 
 
-class HeadersGroup : public QVBox
+class HeadersGroup : public QWidget
 {
     Q_OBJECT
 public:
@@ -129,6 +129,7 @@ private:
     int m_lastX;
     int m_lastWidth;
 
+    QVBoxLayout *m_layout;
 };
 
 

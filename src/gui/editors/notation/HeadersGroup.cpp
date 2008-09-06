@@ -37,14 +37,16 @@ namespace Rosegarden
 
 HeadersGroup::
 HeadersGroup(QWidget *parent, NotationView * nv, Composition * comp) :
-        QVBox(parent),
+        QWidget(parent),
         m_notationView(nv),
         m_composition(comp),
         m_usedHeight(0),
         m_filler(0),
         m_lastX(INT_MIN),
-        m_lastWidth(-1)
+        m_lastWidth(-1),
+        m_layout(0)
 {
+    m_layout = new QVBoxLayout;
 }
 
 void
@@ -52,11 +54,13 @@ HeadersGroup::removeAllHeaders()
 {
     TrackHeaderVector::iterator i;
     for (i=m_headers.begin(); i!=m_headers.end(); i++) {
+        m_layout->removeWidget(*i);    // Useful ?
         delete *i;
     }
     m_headers.erase(m_headers.begin(), m_headers.end());
 
     if (m_filler) {
+        m_layout->removeWidget(m_filler);    // Useful ?
         delete m_filler;
         m_filler = 0;
     }
@@ -68,6 +72,8 @@ void
 HeadersGroup::addHeader(int trackId, int height, int ypos, double xcur)
 {
     TrackHeader * sh = new TrackHeader(this, trackId, height, ypos);
+    m_layout->addWidget(sh);
+    setLayout(m_layout);      // May it harm to call setLayout more than once ?
     m_headers.push_back(sh);
     m_usedHeight += height;
 }
@@ -76,7 +82,11 @@ void
 HeadersGroup::completeToHeight(int height)
 {
     if (height > m_usedHeight) {
-        if (!m_filler) m_filler = new QLabel(this);
+        if (!m_filler) {
+            m_filler = new QLabel(this);
+            m_layout->addWidget(sh);
+            setLayout(m_layout);  // May it harm to call setLayout more than once ?
+        }
         m_filler->setFixedHeight(height - m_usedHeight);
     }
 }
