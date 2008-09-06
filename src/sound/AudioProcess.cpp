@@ -25,6 +25,7 @@
 #include "AudioPlayQueue.h"
 #include "PluginFactory.h"
 
+#include "misc/Strings.h"
 #include <sys/time.h>
 #include <pthread.h>
 
