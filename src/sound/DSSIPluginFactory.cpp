@@ -16,7 +16,7 @@
 #include "DSSIPluginFactory.h"
 #include <iostream>
 #include <cstdlib>
-
+#include "misc/Strings.h"
 #ifdef HAVE_DSSI
 
 #include <dlfcn.h>
