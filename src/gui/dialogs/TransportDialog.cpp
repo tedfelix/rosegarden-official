@@ -24,6 +24,7 @@
 #include "base/NotationTypes.h"
 #include "base/RealTime.h"
 #include "misc/Debug.h"
+#include "misc/Strings.h"
 #include "sequencer/RosegardenSequencer.h"
 #include "gui/application/TransportStatus.h"
 #include "gui/application/RosegardenApplication.h"
