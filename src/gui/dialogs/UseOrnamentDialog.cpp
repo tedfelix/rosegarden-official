@@ -136,21 +136,16 @@ UseOrnamentDialog::UseOrnamentDialog(QDialogButtonBox::QWidget *parent,
 void
 UseOrnamentDialog::setupFromConfig()
 {
-    QSettings *config = kapp->config();
-    config->beginGroup( NotationViewConfigGroup );
-    // 
-    // manually-FIX, add:
-    // config->endGroup();		// corresponding to: config->beginGroup( NotationViewConfigGroup );
-    //  
-;
+    KConfig *config = kapp->config();
+    config->setGroup(NotationViewConfigGroup);
 
-    Mark mark = qstrtostr(config->value("useornamentmark", "trill") );
-    int seg = config->value("useornamentlastornament", 0).toInt() ;
+    Mark mark = qstrtostr(config->readEntry("useornamentmark", "trill"));
+    int seg = config->readNumEntry("useornamentlastornament", 0);
     std::string timing = qstrtostr
                          (config->readEntry
                           ("useornamenttiming",
                            strtoqstr(BaseProperties::TRIGGER_SEGMENT_ADJUST_SQUISH)));
-    bool retune = qStrToBool( config->value("useornamentretune", "true" ) ) ;
+    bool retune = config->readBoolEntry("useornamentretune", true);
 
     size_t i = 0;
     for (i = 0; i < m_marks.size(); ++i) {
@@ -248,13 +243,8 @@ UseOrnamentDialog::slotMarkChanged(int i)
 void
 UseOrnamentDialog::slotOk()
 {
-    QSettings *config = kapp->config();
-    config->beginGroup( NotationViewConfigGroup );
-    // 
-    // manually-FIX, add:
-    // config->endGroup();		// corresponding to: config->beginGroup( NotationViewConfigGroup );
-    //  
-;
+    KConfig *config = kapp->config();
+    config->setGroup(NotationViewConfigGroup);
 
     config->writeEntry("useornamentmark", strtoqstr(getMark()));
     config->writeEntry("useornamenttiming", strtoqstr(getTimeAdjust()));

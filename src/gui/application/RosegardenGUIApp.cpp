@@ -380,19 +380,10 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     // Lookup the configuration parameter that specifies the default
     // arrangement, and instantiate it.
 
-    kapp->config()->beginGroup( GeneralOptionsConfigGroup );
-
-    // 
-
-    // manually-FIX, add:
-
-    // kapp->config()->endGroup();		// corresponding to: kapp->config()->beginGroup( GeneralOptionsConfigGroup );
-
-    //  
-;
+    kapp->config()->setGroup(GeneralOptionsConfigGroup);
     m_parameterArea->setArrangement((RosegardenParameterArea::Arrangement)
-                                    kapp->config( )->value("sidebarstyle",
-                                                                         RosegardenParameterArea::CLASSIC_STYLE).toUInt() );
+                                    kapp->config()->readUnsignedNumEntry("sidebarstyle",
+                                                                         RosegardenParameterArea::CLASSIC_STYLE));
 
     m_dockLeft->update();
 
@@ -1159,24 +1150,14 @@ void RosegardenGUIApp::setupActions()
     KShortcut playShortcut = m_playTransport->shortcut();
     playShortcut.append( KKey(Key_Return + CTRL) );
     m_playTransport->setShortcut(playShortcut);
-    m_playTransport->beginGroup( TransportDialogConfigGroup );
-    // 
-    // manually-FIX, add:
-    // m_playTransport->endGroup();		// corresponding to: m_playTransport->beginGroup( TransportDialogConfigGroup );
-    //  
-;
+    m_playTransport->setGroup(TransportDialogConfigGroup);
 
     pixmap.load(pixmapDir + "/toolbar/transport-stop.png");
     icon = QIcon(pixmap);
     m_stopTransport = new KAction(i18n("&Stop"), icon, Key_Insert, this,
                                   SLOT(slotStop()), actionCollection(),
                                   "stop");
-    m_stopTransport->beginGroup( TransportDialogConfigGroup );
-    // 
-    // manually-FIX, add:
-    // m_stopTransport->endGroup();		// corresponding to: m_stopTransport->beginGroup( TransportDialogConfigGroup );
-    //  
-;
+    m_stopTransport->setGroup(TransportDialogConfigGroup);
 
     pixmap.load(pixmapDir + "/toolbar/transport-ffwd.png");
     icon = QIcon(pixmap);
@@ -1184,72 +1165,42 @@ void RosegardenGUIApp::setupActions()
                                   this,
                                   SLOT(slotFastforward()), actionCollection(),
                                   "fast_forward");
-    m_ffwdTransport->beginGroup( TransportDialogConfigGroup );
-    // 
-    // manually-FIX, add:
-    // m_ffwdTransport->endGroup();		// corresponding to: m_ffwdTransport->beginGroup( TransportDialogConfigGroup );
-    //  
-;
+    m_ffwdTransport->setGroup(TransportDialogConfigGroup);
 
     pixmap.load(pixmapDir + "/toolbar/transport-rewind.png");
     icon = QIcon(pixmap);
     m_rewindTransport = new KAction(i18n("Re&wind"), icon, Key_End, this,
                                     SLOT(slotRewind()), actionCollection(),
                                     "rewind");
-    m_rewindTransport->beginGroup( TransportDialogConfigGroup );
-    // 
-    // manually-FIX, add:
-    // m_rewindTransport->endGroup();		// corresponding to: m_rewindTransport->beginGroup( TransportDialogConfigGroup );
-    //  
-;
+    m_rewindTransport->setGroup(TransportDialogConfigGroup);
 
     pixmap.load(pixmapDir + "/toolbar/transport-record.png");
     icon = QIcon(pixmap);
     m_recordTransport = new KAction(i18n("P&unch in Record"), icon, Key_Space, this,
                                     SLOT(slotToggleRecord()), actionCollection(),
                                     "recordtoggle");
-    m_recordTransport->beginGroup( TransportDialogConfigGroup );
-    // 
-    // manually-FIX, add:
-    // m_recordTransport->endGroup();		// corresponding to: m_recordTransport->beginGroup( TransportDialogConfigGroup );
-    //  
-;
+    m_recordTransport->setGroup(TransportDialogConfigGroup);
 
     pixmap.load(pixmapDir + "/toolbar/transport-record.png");
     icon = QIcon(pixmap);
     m_recordTransport = new KAction(i18n("&Record"), icon, 0, this,
                                     SLOT(slotRecord()), actionCollection(),
                                     "record");
-    m_recordTransport->beginGroup( TransportDialogConfigGroup );
-    // 
-    // manually-FIX, add:
-    // m_recordTransport->endGroup();		// corresponding to: m_recordTransport->beginGroup( TransportDialogConfigGroup );
-    //  
-;
+    m_recordTransport->setGroup(TransportDialogConfigGroup);
 
     pixmap.load(pixmapDir + "/toolbar/transport-rewind-end.png");
     icon = QIcon(pixmap);
     m_rewindEndTransport = new KAction(i18n("Rewind to &Beginning"), icon, 0, this,
                                        SLOT(slotRewindToBeginning()), actionCollection(),
                                        "rewindtobeginning");
-    m_rewindEndTransport->beginGroup( TransportDialogConfigGroup );
-    // 
-    // manually-FIX, add:
-    // m_rewindEndTransport->endGroup();		// corresponding to: m_rewindEndTransport->beginGroup( TransportDialogConfigGroup );
-    //  
-;
+    m_rewindEndTransport->setGroup(TransportDialogConfigGroup);
 
     pixmap.load(pixmapDir + "/toolbar/transport-ffwd-end.png");
     icon = QIcon(pixmap);
     m_ffwdEndTransport = new KAction(i18n("Fast Forward to &End"), icon, 0, this,
                                      SLOT(slotFastForwardToEnd()), actionCollection(),
                                      "fastforwardtoend");
-    m_ffwdEndTransport->beginGroup( TransportDialogConfigGroup );
-    // 
-    // manually-FIX, add:
-    // m_ffwdEndTransport->endGroup();		// corresponding to: m_ffwdEndTransport->beginGroup( TransportDialogConfigGroup );
-    //  
-;
+    m_ffwdEndTransport->setGroup(TransportDialogConfigGroup);
 
     pixmap.load(pixmapDir + "/toolbar/transport-tracking.png");
     icon = QIcon(pixmap);
@@ -1743,17 +1694,8 @@ RosegardenGUIApp::openFile(QString filePath, ImportType type)
         RG_DEBUG << "RosegardenGUIApp::openFile(): calling slotDocColoursChanged() in doc" << endl;
         doc->slotDocColoursChanged();
 
-        kapp->config()->beginGroup( GeneralOptionsConfigGroup );
-
-        // 
-
-        // manually-FIX, add:
-
-        // kapp->config()->endGroup();		// corresponding to: kapp->config()->beginGroup( GeneralOptionsConfigGroup );
-
-        //  
-;
-        if ( qStrToBool( kapp->config()->value("alwaysusedefaultstudio", "false" ) ) ) {
+        kapp->config()->setGroup(GeneralOptionsConfigGroup);
+        if (kapp->config()->readBoolEntry("alwaysusedefaultstudio", false)) {
 
             QString autoloadFile =
                 KGlobal::dirs()->findResource("appdata", "autoload.rg");
@@ -1919,16 +1861,7 @@ void RosegardenGUIApp::slotSaveOptions()
     _settingLog(QString("SETTING 2 : show track labels = %1").arg(m_viewTrackLabels->isChecked()));
 #endif
 
-    kapp->config()->beginGroup( GeneralOptionsConfigGroup );
-
-    // 
-
-    // manually-FIX, add:
-
-    // kapp->config()->endGroup();		// corresponding to: kapp->config()->beginGroup( GeneralOptionsConfigGroup );
-
-    //  
-;
+    kapp->config()->setGroup(GeneralOptionsConfigGroup);
     kapp->config()->writeEntry("Show Transport", m_viewTransport->isChecked());
     kapp->config()->writeEntry("Expanded Transport", m_transport ? getTransport()->isExpanded() : true);
     kapp->config()->writeEntry("Show Track labels", m_viewTrackLabels->isChecked());
@@ -1953,28 +1886,19 @@ void RosegardenGUIApp::slotSaveOptions()
 
 void RosegardenGUIApp::setupFileDialogSpeedbar()
 {
-    QSettings *config = kapp->config();
+    KConfig *config = kapp->config();
 
-    config->beginGroup( "KFileDialog Speedbar" );
-
-    // 
-
-    // manually-FIX, add:
-
-    // config->endGroup();		// corresponding to: config->beginGroup( "KFileDialog Speedbar" );
-
-    //  
-;
+    config->setGroup("KFileDialog Speedbar");
 
     RG_DEBUG << "RosegardenGUIApp::setupFileDialogSpeedbar" << endl;
 
-    bool hasSetExamplesItem = qStrToBool( config->value("Examples Set", "false" ) ) ;
+    bool hasSetExamplesItem = config->readBoolEntry("Examples Set", false);
 
     RG_DEBUG << "RosegardenGUIApp::setupFileDialogSpeedbar: examples set " << hasSetExamplesItem << endl;
 
     if (!hasSetExamplesItem) {
 
-        unsigned int n = config->value("Number of Entries", 0).toUInt() ;
+        unsigned int n = config->readUnsignedNumEntry("Number of Entries", 0);
 
         config->writeEntry(QString("Description_%1").arg(n), i18n("Example Files"));
         config->writeEntry(QString("IconGroup_%1").arg(n), 4);
@@ -2009,22 +1933,13 @@ void RosegardenGUIApp::readOptions()
 
     bool opt;
 
-    kapp->config()->beginGroup( GeneralOptionsConfigGroup );
+    kapp->config()->setGroup(GeneralOptionsConfigGroup);
 
-    // 
-
-    // manually-FIX, add:
-
-    // kapp->config()->endGroup();		// corresponding to: kapp->config()->beginGroup( GeneralOptionsConfigGroup );
-
-    //  
-;
-
-    opt = qStrToBool( kapp->config()->value("Show Transport", "true" ) ) ;
+    opt = kapp->config()->readBoolEntry("Show Transport", true);
     m_viewTransport->setChecked(opt);
     slotToggleTransport();
 
-    opt = qStrToBool( kapp->config()->value("Expanded Transport", "true" ) ) ;
+    opt = kapp->config()->readBoolEntry("Expanded Transport", true);
 
 #ifdef SETTING_LOG_DEBUG
 
@@ -2036,7 +1951,7 @@ void RosegardenGUIApp::readOptions()
     else
         getTransport()->slotPanelCloseButtonClicked();
 
-    opt = qStrToBool( kapp->config()->value("Show Track labels", "true" ) ) ;
+    opt = kapp->config()->readBoolEntry("Show Track labels", true);
 
 #ifdef SETTING_LOG_DEBUG
 
@@ -2046,27 +1961,27 @@ void RosegardenGUIApp::readOptions()
     m_viewTrackLabels->setChecked(opt);
     slotToggleTrackLabels();
 
-    opt = qStrToBool( kapp->config()->value("Show Rulers", "true" ) ) ;
+    opt = kapp->config()->readBoolEntry("Show Rulers", true);
     m_viewRulers->setChecked(opt);
     slotToggleRulers();
 
-    opt = qStrToBool( kapp->config()->value("Show Tempo Ruler", "true" ) ) ;
+    opt = kapp->config()->readBoolEntry("Show Tempo Ruler", true);
     m_viewTempoRuler->setChecked(opt);
     slotToggleTempoRuler();
 
-    opt = qStrToBool( kapp->config()->value("Show Chord Name Ruler", "false" ) ) ;
+    opt = kapp->config()->readBoolEntry("Show Chord Name Ruler", false);
     m_viewChordNameRuler->setChecked(opt);
     slotToggleChordNameRuler();
 
-    opt = qStrToBool( kapp->config()->value("Show Previews", "true" ) ) ;
+    opt = kapp->config()->readBoolEntry("Show Previews", true);
     m_viewPreviews->setChecked(opt);
     slotTogglePreviews();
 
-    opt = qStrToBool( kapp->config()->value("Show Segment Labels", "true" ) ) ;
+    opt = kapp->config()->readBoolEntry("Show Segment Labels", true);
     m_viewSegmentLabels->setChecked(opt);
     slotToggleSegmentLabels();
 
-    opt = qStrToBool( kapp->config()->value("Show Parameters", "true" ) ) ;
+    opt = kapp->config()->readBoolEntry("Show Parameters", true);
     if (!opt) {
         m_dockLeft->undock();
         m_dockLeft->hide();
@@ -2075,7 +1990,7 @@ void RosegardenGUIApp::readOptions()
     }
 
     // MIDI Thru routing
-    opt = qStrToBool( kapp->config()->value("MIDI Thru Routing", "true" ) ) ;
+    opt = kapp->config()->readBoolEntry("MIDI Thru Routing", true);
     m_enableMIDIrouting->setChecked(opt);
     slotEnableMIDIThruRouting();
 
@@ -2087,7 +2002,7 @@ void RosegardenGUIApp::readOptions()
 
 }
 
-void RosegardenGUIApp::saveGlobalProperties(QSettings *cfg)
+void RosegardenGUIApp::saveGlobalProperties(KConfig *cfg)
 {
     if (m_doc->getTitle() != i18n("Untitled") && !m_doc->isModified()) {
         // saving to tempfile not necessary
@@ -2110,10 +2025,10 @@ void RosegardenGUIApp::saveGlobalProperties(QSettings *cfg)
     }
 }
 
-void RosegardenGUIApp::readGlobalProperties(QSettings *_cfg)
+void RosegardenGUIApp::readGlobalProperties(KConfig* _cfg)
 {
-    QString filename = _cfg->value("filename", "") ;
-    bool modified = qStrToBool( _cfg->value("modified", "false" ) ) ;
+    QString filename = _cfg->readEntry("filename", "");
+    bool modified = _cfg->readBoolEntry("modified", false);
 
     if (modified) {
         bool canRecover;
@@ -2270,18 +2185,10 @@ void RosegardenGUIApp::slotFileOpen()
 {
     slotStatusHelpMsg(i18n("Opening file..."));
 
-    kapp->config()->beginGroup( GeneralOptionsConfigGroup );
+    kapp->config()->setGroup(GeneralOptionsConfigGroup);
 
-    // 
-
-    // manually-FIX, add:
-
-    // kapp->config()->endGroup();		// corresponding to: kapp->config()->beginGroup( GeneralOptionsConfigGroup );
-
-    //  
-;
-
-    QString lastOpenedVersion =         kapp->config()->value("Last File Opened Version", "none") ;
+    QString lastOpenedVersion =
+        kapp->config()->readEntry("Last File Opened Version", "none");
 
     if (lastOpenedVersion != VERSION) {
 
@@ -2289,13 +2196,8 @@ void RosegardenGUIApp::slotFileOpen()
         // program before.  Default to the examples directory.
 
         QString examplesDir = KGlobal::dirs()->findResource("appdata", "examples/");
-        kapp->config()->beginGroup( "Recent Dirs" );
-        // 
-        // manually-FIX, add:
-        // kapp->config()->endGroup();		// corresponding to: kapp->config()->beginGroup( "Recent Dirs" );
-        //  
-;
-        QString recentString = kapp->config()->value("ROSEGARDEN", "") ;
+        kapp->config()->setGroup("Recent Dirs");
+        QString recentString = kapp->config()->readEntry("ROSEGARDEN", "");
         kapp->config()->writeEntry
         ("ROSEGARDEN", QString("file:%1,%2").arg(examplesDir).arg(recentString));
     }
@@ -2311,16 +2213,7 @@ void RosegardenGUIApp::slotFileOpen()
     if (m_doc && !m_doc->saveIfModified())
         return ;
 
-    kapp->config()->beginGroup( GeneralOptionsConfigGroup );
-
-    // 
-
-    // manually-FIX, add:
-
-    // kapp->config()->endGroup();		// corresponding to: kapp->config()->beginGroup( GeneralOptionsConfigGroup );
-
-    //  
-;
+    kapp->config()->setGroup(GeneralOptionsConfigGroup);
     kapp->config()->writeEntry("Last File Opened Version", VERSION);
 
     openURL(url);
@@ -4795,19 +4688,14 @@ bool RosegardenGUIApp::launchSequencer()
 #ifdef HAVE_LIBJACK
 bool RosegardenGUIApp::launchJack()
 {
-    QSettings *config = kapp->config();
-    config->beginGroup( SequencerOptionsConfigGroup );
-    // 
-    // manually-FIX, add:
-    // config->endGroup();		// corresponding to: config->beginGroup( SequencerOptionsConfigGroup );
-    //  
-;
+    KConfig* config = kapp->config();
+    config->setGroup(SequencerOptionsConfigGroup);
 
-    bool startJack = qStrToBool( config->value("jackstart", "false" ) ) ;
+    bool startJack = config->readBoolEntry("jackstart", false);
     if (!startJack)
         return true; // we don't do anything
 
-    QString jackPath = config->value("jackcommand", "") ;
+    QString jackPath = config->readEntry("jackcommand", "");
 
     emit startupStatusMessage(i18n("Clearing down jackd..."));
 
@@ -5427,14 +5315,9 @@ void RosegardenGUIApp::slotPlay()
 
     // Send the controllers at start of playback if required
     //
-    QSettings *config = kapp->config();
-    config->beginGroup( SequencerOptionsConfigGroup );
-    // 
-    // manually-FIX, add:
-    // config->endGroup();		// corresponding to: config->beginGroup( SequencerOptionsConfigGroup );
-    //  
-;
-    bool sendControllers = qStrToBool( config->value("alwayssendcontrollers", "false" ) ) ;
+    KConfig *config = kapp->config();
+    config->setGroup(SequencerOptionsConfigGroup);
+    bool sendControllers = config->readBoolEntry("alwayssendcontrollers", false);
 
     if (sendControllers)
         m_doc->initialiseControllers();
@@ -7913,14 +7796,9 @@ RosegardenGUIApp::slotAutoSave()
         m_seqManager->getTransportStatus() == RECORDING)
         return ;
 
-    QSettings *config = kapp->config();
-    config->beginGroup( GeneralOptionsConfigGroup );
-    // 
-    // manually-FIX, add:
-    // config->endGroup();		// corresponding to: config->beginGroup( GeneralOptionsConfigGroup );
-    //  
-;
-    if (! qStrToBool( config->value("autosave", "true" ) ) )
+    KConfig* config = kapp->config();
+    config->setGroup(GeneralOptionsConfigGroup);
+    if (!config->readBoolEntry("autosave", true))
         return ;
 
     m_doc->slotAutoSave();

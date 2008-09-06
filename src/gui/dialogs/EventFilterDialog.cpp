@@ -102,49 +102,29 @@ EventFilterDialog::initDialog()
     m_notePitchIncludeComboBox = new QComboBox(0, noteFrame);
     m_notePitchIncludeComboBox->addItem(i18n("include"));
     m_notePitchIncludeComboBox->addItem(i18n("exclude"));
-    cfg->beginGroup( EventFilterDialogConfigGroup );
-    // 
-    // manually-FIX, add:
-    // cfg->endGroup();		// corresponding to: cfg->beginGroup( EventFilterDialogConfigGroup );
-    //  
-;
-    m_notePitchIncludeComboBox->setCurrentIndex( qStrToBool( cfg->value("pitchinclude", "0" ) ) );
+    cfg->setGroup(EventFilterDialogConfigGroup);
+    m_notePitchIncludeComboBox->setCurrentIndex(cfg->readBoolEntry("pitchinclude", 0));
     noteFrameLayout->addWidget(m_notePitchIncludeComboBox, 1, 0);
 
     m_noteVelocityIncludeComboBox = new QComboBox(0, noteFrame);
     m_noteVelocityIncludeComboBox->addItem(i18n("include"));
     m_noteVelocityIncludeComboBox->addItem(i18n("exclude"));
-    cfg->beginGroup( EventFilterDialogConfigGroup );
-    // 
-    // manually-FIX, add:
-    // cfg->endGroup();		// corresponding to: cfg->beginGroup( EventFilterDialogConfigGroup );
-    //  
-;
-    m_noteVelocityIncludeComboBox->setCurrentIndex( qStrToBool( cfg->value("velocityinclude", "0" ) ) );
+    cfg->setGroup(EventFilterDialogConfigGroup);
+    m_noteVelocityIncludeComboBox->setCurrentIndex(cfg->readBoolEntry("velocityinclude", 0));
     noteFrameLayout->addWidget(m_noteVelocityIncludeComboBox, 2, 0);
 
     m_noteDurationIncludeComboBox = new QComboBox(0, noteFrame);
     m_noteDurationIncludeComboBox->addItem(i18n("include"));
     m_noteDurationIncludeComboBox->addItem(i18n("exclude"));
-    cfg->beginGroup( EventFilterDialogConfigGroup );
-    // 
-    // manually-FIX, add:
-    // cfg->endGroup();		// corresponding to: cfg->beginGroup( EventFilterDialogConfigGroup );
-    //  
-;
-    m_noteDurationIncludeComboBox->setCurrentIndex( qStrToBool( cfg->value("durationinclude", "0" ) ) );
+    cfg->setGroup(EventFilterDialogConfigGroup);
+    m_noteDurationIncludeComboBox->setCurrentIndex(cfg->readBoolEntry("durationinclude", 0));
     noteFrameLayout->addWidget(m_noteDurationIncludeComboBox, 3, 0);
 
     // Pitch From
     m_pitchFromSpinBox = new QSpinBox(noteFrame);
     m_pitchFromSpinBox->setMaximum(127);
-    cfg->beginGroup( EventFilterDialogConfigGroup );
-    // 
-    // manually-FIX, add:
-    // cfg->endGroup();		// corresponding to: cfg->beginGroup( EventFilterDialogConfigGroup );
-    //  
-;
-    m_pitchFromSpinBox->setValue( cfg->value("pitchfrom", 0).toUInt() );
+    cfg->setGroup(EventFilterDialogConfigGroup);
+    m_pitchFromSpinBox->setValue(cfg->readUnsignedNumEntry("pitchfrom", 0));
     noteFrameLayout->addWidget(m_pitchFromSpinBox, 1, 2);
     connect(m_pitchFromSpinBox, SIGNAL(valueChanged(int)),
             SLOT(slotPitchFromChanged(int)));
@@ -162,13 +142,8 @@ EventFilterDialog::initDialog()
     // Pitch To
     m_pitchToSpinBox = new QSpinBox(noteFrame);
     m_pitchToSpinBox->setMaximum(127);
-    cfg->beginGroup( EventFilterDialogConfigGroup );
-    // 
-    // manually-FIX, add:
-    // cfg->endGroup();		// corresponding to: cfg->beginGroup( EventFilterDialogConfigGroup );
-    //  
-;
-    m_pitchToSpinBox->setValue( cfg->value("pitchto", 127).toUInt() );
+    cfg->setGroup(EventFilterDialogConfigGroup);
+    m_pitchToSpinBox->setValue(cfg->readUnsignedNumEntry("pitchto", 127));
     noteFrameLayout->addWidget(m_pitchToSpinBox, 1, 4);
     connect(m_pitchToSpinBox, SIGNAL(valueChanged(int)),
             SLOT(slotPitchToChanged(int)));
@@ -183,26 +158,16 @@ EventFilterDialog::initDialog()
     // Velocity From/To
     m_velocityFromSpinBox = new QSpinBox(noteFrame);
     m_velocityFromSpinBox->setMaximum(127);
-    cfg->beginGroup( EventFilterDialogConfigGroup );
-    // 
-    // manually-FIX, add:
-    // cfg->endGroup();		// corresponding to: cfg->beginGroup( EventFilterDialogConfigGroup );
-    //  
-;
-    m_velocityFromSpinBox->setValue( cfg->value("velocityfrom", 0).toUInt() );
+    cfg->setGroup(EventFilterDialogConfigGroup);
+    m_velocityFromSpinBox->setValue(cfg->readUnsignedNumEntry("velocityfrom", 0));
     noteFrameLayout->addWidget(m_velocityFromSpinBox, 2, 2);
     connect(m_velocityFromSpinBox, SIGNAL(valueChanged(int)),
             SLOT(slotVelocityFromChanged(int)));
 
     m_velocityToSpinBox = new QSpinBox(noteFrame);
     m_velocityToSpinBox->setMaximum(127);
-    cfg->beginGroup( EventFilterDialogConfigGroup );
-    // 
-    // manually-FIX, add:
-    // cfg->endGroup();		// corresponding to: cfg->beginGroup( EventFilterDialogConfigGroup );
-    //  
-;
-    m_velocityToSpinBox->setValue( cfg->value("velocityto", 127).toUInt() );
+    cfg->setGroup(EventFilterDialogConfigGroup);
+    m_velocityToSpinBox->setValue(cfg->readUnsignedNumEntry("velocityto", 127));
     noteFrameLayout->addWidget( m_velocityToSpinBox, 2, 4 );
     connect(m_velocityToSpinBox, SIGNAL(valueChanged(int)),
             SLOT(slotVelocityToChanged(int)));
@@ -264,18 +229,11 @@ EventFilterDialog::populateDurationCombos()
     m_noteDurationFromComboBox->addItem(noMap, i18n("shortest"));
     m_noteDurationToComboBox->addItem(noMap, i18n("shortest"));
 
-    cfg->beginGroup( EventFilterDialogConfigGroup );
-
-    // 
-
-    // manually-FIX, add:
-
-    // cfg->endGroup();		// corresponding to: cfg->beginGroup( EventFilterDialogConfigGroup );
-
-    //  
-;
-    m_noteDurationFromComboBox->setCurrentIndex(         cfg->value("durationfrom", 0).toUInt() );
-    m_noteDurationToComboBox->setCurrentIndex(         cfg->value("durationto", (m_noteDurationToComboBox->count().toUInt()  - 1)));
+    cfg->setGroup(EventFilterDialogConfigGroup);
+    m_noteDurationFromComboBox->setCurrentIndex(
+        cfg->readUnsignedNumEntry("durationfrom", 0));
+    m_noteDurationToComboBox->setCurrentIndex(
+        cfg->readUnsignedNumEntry("durationto", (m_noteDurationToComboBox->count() - 1)));
 }
 
 void
@@ -305,12 +263,7 @@ EventFilterDialog::slotToggleNone()
 void
 EventFilterDialog::slotOk()
 {
-    cfg->beginGroup( EventFilterDialogConfigGroup );
-    // 
-    // manually-FIX, add:
-    // cfg->endGroup();		// corresponding to: cfg->beginGroup( EventFilterDialogConfigGroup );
-    //  
-;
+    cfg->setGroup(EventFilterDialogConfigGroup);
 
     cfg->writeEntry("pitchinclude", m_notePitchIncludeComboBox->currentIndex());
     cfg->writeEntry("pitchfrom", m_pitchFromSpinBox->value());

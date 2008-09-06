@@ -280,14 +280,10 @@ DeviceManagerDialog::populate()
 {
     DeviceList *devices = m_studio->getDevices();
 
-    //QSettings *config = kapp->config();
-    //config->beginGroup( SequencerOptionsConfigGroup );
-    // 
-    // manually-FIX, add:
-    // //config->endGroup();		// corresponding to: //config->beginGroup( SequencerOptionsConfigGroup );
-    //  
-;
-    //DeviceId recordDevice =     //config->value("midirecorddevice").toUInt() ;
+    //KConfig *config = kapp->config();
+    //config->setGroup(SequencerOptionsConfigGroup);
+    //DeviceId recordDevice =
+    //config->readUnsignedNumEntry("midirecorddevice");
 
     m_playDevices.clear();
     m_recordDevices.clear();

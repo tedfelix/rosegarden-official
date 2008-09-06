@@ -59,7 +59,7 @@ public:
     EventFilterDialog(QWidget* parent);
     ~EventFilterDialog();
 
-    QSettings *cfg;
+    KConfig *cfg;
 
     //-------[ accessor functions ]------------------------
 

@@ -96,21 +96,11 @@ CollapsingFrame::setWidget(QWidget *widget)
 
     bool expanded = true;
     if (name(0)) {
-        QSettings *config = kapp->config();
+        KConfig *config = kapp->config();
         QString groupTemp = config->group();
-        config->beginGroup( "CollapsingFrame" );
-        // 
-        // manually-FIX, add:
-        // config->endGroup();		// corresponding to: config->beginGroup( "CollapsingFrame" );
-        //  
-;
-        expanded = qStrToBool( config->value(name(, "" ) ) , true);
-        config->beginGroup( groupTemp );
-        // 
-        // manually-FIX, add:
-        // config->endGroup();		// corresponding to: config->beginGroup( groupTemp );
-        //  
-;
+        config->setGroup("CollapsingFrame");
+        expanded = config->readBoolEntry(name(), true);
+        config->setGroup(groupTemp);
     }
     if (expanded != !m_collapsed)
         toggle();
@@ -135,21 +125,11 @@ CollapsingFrame::toggle()
     }
 
     if (name(0)) {
-        QSettings *config = kapp->config();
+        KConfig *config = kapp->config();
         QString groupTemp = config->group();
-        config->beginGroup( "CollapsingFrame" );
-        // 
-        // manually-FIX, add:
-        // config->endGroup();		// corresponding to: config->beginGroup( "CollapsingFrame" );
-        //  
-;
+        config->setGroup("CollapsingFrame");
         config->writeEntry(name(), !m_collapsed);
-        config->beginGroup( groupTemp );
-        // 
-        // manually-FIX, add:
-        // config->endGroup();		// corresponding to: config->beginGroup( groupTemp );
-        //  
-;
+        config->setGroup(groupTemp);
     }
 
     m_toggleButton->setIconSet(pixmap);

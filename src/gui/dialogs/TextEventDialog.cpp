@@ -321,24 +321,19 @@ TextEventDialog::TextEventDialog(QDialogButtonBox::QWidget *parent,
     m_staffBelowLabel->setPixmap(map);
 
     // restore last setting for shortcut combos
-    QSettings *config = kapp->config();
-    config->beginGroup( NotationViewConfigGroup );
-    // 
-    // manually-FIX, add:
-    // config->endGroup();		// corresponding to: config->beginGroup( NotationViewConfigGroup );
-    //  
-;
+    KConfig *config = kapp->config();
+    config->setGroup(NotationViewConfigGroup);
 
-    m_dynamicShortcutCombo->setCurrentIndex( config->value("dynamic_shortcut", 0).toInt() );
-    m_directionShortcutCombo->setCurrentIndex( config->value("direction_shortcut", 0).toInt() );
-    m_localDirectionShortcutCombo->setCurrentIndex( config->value("local_direction_shortcut", 0).toInt() );
-    m_tempoShortcutCombo->setCurrentIndex( config->value("tempo_shortcut", 0).toInt() );
-    m_localTempoShortcutCombo->setCurrentIndex( config->value("local_tempo_shortcut", 0).toInt() );
-    m_lilyPondDirectiveCombo->setCurrentIndex( config->value("lilyPond_directive_combo", 0).toInt() );
+    m_dynamicShortcutCombo->setCurrentIndex(config->readNumEntry("dynamic_shortcut", 0));
+    m_directionShortcutCombo->setCurrentIndex(config->readNumEntry("direction_shortcut", 0));
+    m_localDirectionShortcutCombo->setCurrentIndex(config->readNumEntry("local_direction_shortcut", 0));
+    m_tempoShortcutCombo->setCurrentIndex(config->readNumEntry("tempo_shortcut", 0));
+    m_localTempoShortcutCombo->setCurrentIndex(config->readNumEntry("local_tempo_shortcut", 0));
+    m_lilyPondDirectiveCombo->setCurrentIndex(config->readNumEntry("lilyPond_directive_combo", 0));
 
-    m_prevChord = config->value("previous_chord", "") ;
-    m_prevLyric = config->value("previous_lyric", "") ;
-    m_prevAnnotation = config->value("previous_annotation", "") ;
+    m_prevChord = config->readEntry("previous_chord", "");
+    m_prevLyric = config->readEntry("previous_lyric", "");
+    m_prevAnnotation = config->readEntry("previous_annotation", "");
 
     QObject::connect(m_text, SIGNAL(textChanged(const QString &)),
                      this, SLOT(slotTextChanged(const QString &)));
@@ -527,13 +522,8 @@ void
 TextEventDialog::slotOK()
 {
     // store last setting for shortcut combos
-    QSettings *config = kapp->config();
-    config->beginGroup( NotationViewConfigGroup );
-    // 
-    // manually-FIX, add:
-    // config->endGroup();		// corresponding to: config->beginGroup( NotationViewConfigGroup );
-    //  
-;
+    KConfig *config = kapp->config();
+    config->setGroup(NotationViewConfigGroup);
 
     config->writeEntry("dynamic_shortcut", m_dynamicShortcutCombo->currentIndex());
     config->writeEntry("direction_shortcut", m_directionShortcutCombo->currentIndex());

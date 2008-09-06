@@ -53,7 +53,7 @@ static QPixmap loadIcon(const char *name)
 
 
 ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
-                                 QSettings *cfg,
+                                 KConfig* cfg,
                                  QWidget *parent,
                                  const char *name)
         : ConfigureDialogBase(parent, i18n("Configure Rosegarden"), name)

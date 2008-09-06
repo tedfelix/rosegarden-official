@@ -35,17 +35,12 @@
 namespace Rosegarden
 {
 
-MatrixConfigurationPage::MatrixConfigurationPage(QSettings *cfg,
+MatrixConfigurationPage::MatrixConfigurationPage(KConfig *cfg,
         QWidget *parent,
         const char *name) :
         TabbedConfigurationPage(cfg, parent, name)
 {
-    m_cfg->beginGroup( MatrixViewConfigGroup );
-    // 
-    // manually-FIX, add:
-    // m_cfg->endGroup();		// corresponding to: m_cfg->beginGroup( MatrixViewConfigGroup );
-    //  
-;
+    m_cfg->setGroup(MatrixViewConfigGroup);
 
     QFrame *frame = new QFrame(m_tabWidget);
     QGridLayout *layout = new QGridLayout(frame,
@@ -59,12 +54,7 @@ MatrixConfigurationPage::MatrixConfigurationPage(QSettings *cfg,
 
 void MatrixConfigurationPage::apply()
 {
-    m_cfg->beginGroup( MatrixViewConfigGroup );
-    // 
-    // manually-FIX, add:
-    // m_cfg->endGroup();		// corresponding to: m_cfg->beginGroup( MatrixViewConfigGroup );
-    //  
-;
+    m_cfg->setGroup(MatrixViewConfigGroup);
 }
 
 }

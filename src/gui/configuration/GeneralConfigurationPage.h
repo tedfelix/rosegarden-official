@@ -63,7 +63,7 @@ public:
     };
 
     GeneralConfigurationPage(RosegardenGUIDoc *doc,
-                             QSettings *cfg,
+                             KConfig *cfg,
                              QWidget *parent=0, const char *name=0);
 
     virtual void apply();

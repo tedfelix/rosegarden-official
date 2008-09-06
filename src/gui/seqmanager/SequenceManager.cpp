@@ -307,15 +307,10 @@ SequenceManager::play()
     if (comp.isLooping())
         startPos = comp.getElapsedRealTime(comp.getLoopStart());
 
-    QSettings *config = kapp->config();
-    config->beginGroup( SequencerOptionsConfigGroup );
-    // 
-    // manually-FIX, add:
-    // config->endGroup();		// corresponding to: config->beginGroup( SequencerOptionsConfigGroup );
-    //  
-;
+    KConfig* config = kapp->config();
+    config->setGroup(SequencerOptionsConfigGroup);
 
-    bool lowLat = qStrToBool( config->value("audiolowlatencymonitoring", "true" ) ) ;
+    bool lowLat = config->readBoolEntry("audiolowlatencymonitoring", true);
 
     if (lowLat != m_lastLowLatencySwitchSent) {
         RosegardenSequencer::getInstance()->setLowLatencyMode(lowLat);
@@ -547,13 +542,8 @@ SequenceManager::record(bool toggled)
 
     Composition &comp = m_doc->getComposition();
     Studio &studio = m_doc->getStudio();
-    QSettings *config = kapp->config();
-    config->beginGroup( GeneralOptionsConfigGroup );
-    // 
-    // manually-FIX, add:
-    // config->endGroup();		// corresponding to: config->beginGroup( GeneralOptionsConfigGroup );
-    //  
-;
+    KConfig* config = kapp->config();
+    config->setGroup(GeneralOptionsConfigGroup);
 
     bool punchIn = false; // are we punching in?
 
@@ -697,7 +687,7 @@ punchin:
         else {
             if (m_transportStatus != RECORDING_ARMED && punchIn == false) {
                 int startBar = comp.getBarNumber(comp.getPosition());
-                startBar -= config->value("countinbars", 0).toUInt() ;
+                startBar -= config->readUnsignedNumEntry("countinbars", 0);
                 m_doc->slotSetPointerPosition(comp.getBarRange(startBar).first);
             }
         }
@@ -751,7 +741,7 @@ punchin:
         RealTime startPos =
             comp.getElapsedRealTime(comp.getPosition());
 
-        bool lowLat = qStrToBool( config->value("audiolowlatencymonitoring", "true" ) ) ;
+        bool lowLat = config->readBoolEntry("audiolowlatencymonitoring", true);
 
         if (lowLat != m_lastLowLatencySwitchSent) {
             RosegardenSequencer::getInstance()->setLowLatencyMode(lowLat);
@@ -942,14 +932,9 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                 //
                 m_doc->syncDevices();
 
-                /*QSettings *config = kapp->config();
-                  		config->beginGroup( SequencerOptionsConfigGroup );
-                  		// 
-                  		// manually-FIX, add:
-                  		// config->endGroup();		// corresponding to: config->beginGroup( SequencerOptionsConfigGroup );
-                  		//  
-;
-                QString recordDeviceStr = config->value("midirecorddevice") ;
+                /*KConfig* config = kapp->config();
+                  		config->setGroup(SequencerOptionsConfigGroup);
+                QString recordDeviceStr = config->readEntry("midirecorddevice");
                 sendMIDIRecordingDevice(recordDeviceStr);*/
                 restoreRecordSubscriptions();
             }
@@ -1204,14 +1189,9 @@ SequenceManager::setLoop(const timeT &lhs, const timeT &rhs)
     // do not set a loop if JACK transport sync is enabled, because this is
     // completely broken, and apparently broken due to a limitation of JACK
     // transport itself.  #1240039 - DMM
-    //    QSettings *config = kapp->config();
-    //    config->beginGroup( SequencerOptionsConfigGroup );
-    // 
-    // manually-FIX, add:
-    // //    config->endGroup();		// corresponding to: //    config->beginGroup( SequencerOptionsConfigGroup );
-    //  
-;
-    //    if ( qStrToBool( config->value("jacktransport", "false" ) ) )
+    //    KConfig* config = kapp->config();
+    //    config->setGroup(SequencerOptionsConfigGroup);
+    //    if (config->readBoolEntry("jacktransport", false))
     //    {
     //	//!!! message box should go here to inform user of why the loop was
     //	// not set, but I can't add it at the moment due to to the pre-release
@@ -1443,14 +1423,9 @@ SequenceManager::sendMIDIRecordingDevice(const QString recordDeviceStr)
 void
 SequenceManager::restoreRecordSubscriptions()
 {
-    QSettings *config = kapp->config();
-    config->beginGroup( SequencerOptionsConfigGroup );
-    // 
-    // manually-FIX, add:
-    // config->endGroup();		// corresponding to: config->beginGroup( SequencerOptionsConfigGroup );
-    //  
-;
-    //QString recordDeviceStr = config->value("midirecorddevice") ;
+    KConfig* config = kapp->config();
+    config->setGroup(SequencerOptionsConfigGroup);
+    //QString recordDeviceStr = config->readEntry("midirecorddevice");
     QStringList devList = config->readListEntry("midirecorddevice");
 
     for ( QStringList::ConstIterator it = devList.begin();
@@ -1463,23 +1438,18 @@ SequenceManager::restoreRecordSubscriptions()
 void
 SequenceManager::reinitialiseSequencerStudio()
 {
-    QSettings *config = kapp->config();
-    config->beginGroup( SequencerOptionsConfigGroup );
-    // 
-    // manually-FIX, add:
-    // config->endGroup();		// corresponding to: config->beginGroup( SequencerOptionsConfigGroup );
-    //  
-;
-    //QString recordDeviceStr = config->value("midirecorddevice") ;
+    KConfig* config = kapp->config();
+    config->setGroup(SequencerOptionsConfigGroup);
+    //QString recordDeviceStr = config->readEntry("midirecorddevice");
 
     //sendMIDIRecordingDevice(recordDeviceStr);
     restoreRecordSubscriptions();
 
     // Toggle JACK audio ports appropriately
     //
-    bool submasterOuts = qStrToBool( config->value("audiosubmasterouts", "false" ) ) ;
-    bool faderOuts = qStrToBool( config->value("audiofaderouts", "false" ) ) ;
-    unsigned int audioFileFormat = config->value("audiorecordfileformat", 1).toUInt() ;
+    bool submasterOuts = config->readBoolEntry("audiosubmasterouts", false);
+    bool faderOuts = config->readBoolEntry("audiofaderouts", false);
+    unsigned int audioFileFormat = config->readUnsignedNumEntry("audiorecordfileformat", 1);
 
     MidiByte ports = 0;
     if (faderOuts) {
@@ -1944,24 +1914,19 @@ void SequenceManager::tempoChanged(const Composition *c)
 void
 SequenceManager::sendTransportControlStatuses()
 {
-    QSettings *config = kapp->config();
-    config->beginGroup( SequencerOptionsConfigGroup );
-    // 
-    // manually-FIX, add:
-    // config->endGroup();		// corresponding to: config->beginGroup( SequencerOptionsConfigGroup );
-    //  
-;
+    KConfig* config = kapp->config();
+    config->setGroup(SequencerOptionsConfigGroup);
 
     // Get the config values
     //
-    bool jackTransport = qStrToBool( config->value("jacktransport", "false" ) ) ;
-    bool jackMaster = qStrToBool( config->value("jackmaster", "false" ) ) ;
+    bool jackTransport = config->readBoolEntry("jacktransport", false);
+    bool jackMaster = config->readBoolEntry("jackmaster", false);
 
-    int mmcMode = config->value("mmcmode", 0).toInt() ;
-    int mtcMode = config->value("mtcmode", 0).toInt() ;
+    int mmcMode = config->readNumEntry("mmcmode", 0);
+    int mtcMode = config->readNumEntry("mtcmode", 0);
 
-    int midiClock = config->value("midiclock", 0).toInt() ;
-    bool midiSyncAuto = qStrToBool( config->value("midisyncautoconnect", "false" ) ) ;
+    int midiClock = config->readNumEntry("midiclock", 0);
+    bool midiSyncAuto = config->readBoolEntry("midisyncautoconnect", false);
 
     // Send JACK transport
     //
@@ -2055,13 +2020,8 @@ SequenceManager::getSampleRate()
 bool
 SequenceManager::shouldWarnForImpreciseTimer()
 {
-    kapp->config()->beginGroup( SequencerOptionsConfigGroup );
-    // 
-    // manually-FIX, add:
-    // kapp->config()->endGroup();		// corresponding to: kapp->config()->beginGroup( SequencerOptionsConfigGroup );
-    //  
-;
-    QString timer = kapp->config()->value("timer") ;
+    kapp->config()->setGroup(SequencerOptionsConfigGroup);
+    QString timer = kapp->config()->readEntry("timer");
     if (timer == "(auto)" || timer == "") return true;
     else return false; // if the user has chosen the timer, leave them alone
 }

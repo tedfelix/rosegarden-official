@@ -46,7 +46,7 @@ class MIDIConfigurationPage : public TabbedConfigurationPage
     Q_OBJECT
 public:
     MIDIConfigurationPage(RosegardenGUIDoc *doc,
-                               QSettings *cfg,
+                               KConfig *cfg,
                                QWidget *parent=0,
                                const char *name=0);
 

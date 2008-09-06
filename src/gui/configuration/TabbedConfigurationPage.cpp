@@ -39,7 +39,7 @@ TabbedConfigurationPage::TabbedConfigurationPage(RosegardenGUIDoc *doc,
     init();
 }
 
-TabbedConfigurationPage::TabbedConfigurationPage(QSettings *cfg,
+TabbedConfigurationPage::TabbedConfigurationPage(KConfig *cfg,
                                                  QWidget *parent,
                                                  const char *name)
     : ConfigurationPage(cfg, parent, name)
@@ -48,7 +48,7 @@ TabbedConfigurationPage::TabbedConfigurationPage(QSettings *cfg,
 }
 
 TabbedConfigurationPage::TabbedConfigurationPage(RosegardenGUIDoc *doc,
-                                                 QSettings *cfg,
+                                                 KConfig *cfg,
                                                  QWidget *parent,
                                                  const char *name)
     : ConfigurationPage(doc, cfg, parent, name)

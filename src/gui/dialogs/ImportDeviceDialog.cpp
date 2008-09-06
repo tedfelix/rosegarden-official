@@ -167,23 +167,18 @@ ImportDeviceDialog::doImport()
     m_mergeBanks = new QRadioButton(i18n("Merge banks"), m_buttonGroup);
     m_overwriteBanks = new QRadioButton(i18n("Overwrite banks"), m_buttonGroup);
 
-    QSettings *config = kapp->config();
-    config->beginGroup( GeneralOptionsConfigGroup );
-    // 
-    // manually-FIX, add:
-    // config->endGroup();		// corresponding to: config->beginGroup( GeneralOptionsConfigGroup );
-    //  
-;
+    KConfig *config = kapp->config();
+    config->setGroup(GeneralOptionsConfigGroup);
 
-    m_importBanks->setChecked( qStrToBool( config->value("importbanks", "true" ) ) );
-    m_importKeyMappings->setChecked( qStrToBool( config->value("importkeymappings", "true" ) ) );
-    m_importControllers->setChecked( qStrToBool( config->value("importcontrollers", "true" ) ) );
+    m_importBanks->setChecked(config->readBoolEntry("importbanks", true));
+    m_importKeyMappings->setChecked(config->readBoolEntry("importkeymappings", true));
+    m_importControllers->setChecked(config->readBoolEntry("importcontrollers", true));
 
-    bool rename = qStrToBool( config->value("importbanksrename", "true" ) ) ;
+    bool rename = config->readBoolEntry("importbanksrename", true);
     if (m_rename)
         m_rename->setChecked(rename);
 
-    bool overwrite = qStrToBool( config->value("importbanksoverwrite", "true" ) ) ;
+    bool overwrite = config->readBoolEntry("importbanksoverwrite", true);
     if (overwrite)
         m_buttonGroup->setButton(1);
     else
@@ -201,13 +196,8 @@ ImportDeviceDialog::slotOk()
     m_device = m_devices[index];
 
     int v = m_buttonGroup->id(m_buttonGroup->selected());
-    QSettings *config = kapp->config();
-    config->beginGroup( GeneralOptionsConfigGroup );
-    // 
-    // manually-FIX, add:
-    // config->endGroup();		// corresponding to: config->beginGroup( GeneralOptionsConfigGroup );
-    //  
-;
+    KConfig *config = kapp->config();
+    config->setGroup(GeneralOptionsConfigGroup);
     config->writeEntry("importbanksoverwrite", v == 1);
     if (m_rename)
         config->writeEntry("importbanksrename", m_rename->isChecked());

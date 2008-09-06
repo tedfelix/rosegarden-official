@@ -342,18 +342,13 @@ void RosegardenGUIView::slotEditSegment(Segment* segment)
         slotEditSegmentAudio(segment);
     } else {
 
-        QSettings *config = kapp->config();
-        config->beginGroup( GeneralOptionsConfigGroup );
-        // 
-        // manually-FIX, add:
-        // config->endGroup();		// corresponding to: config->beginGroup( GeneralOptionsConfigGroup );
-        //  
-;
+        KConfig* config = kapp->config();
+        config->setGroup(GeneralOptionsConfigGroup);
         GeneralConfigurationPage::DoubleClickClient
         client =
             (GeneralConfigurationPage::DoubleClickClient)
-            ( config->value("doubleclickclient",
-                                          (unsigned int).toUInt() GeneralConfigurationPage::NotationView));
+            (config->readUnsignedNumEntry("doubleclickclient",
+                                          (unsigned int)GeneralConfigurationPage::NotationView));
 
         if (client == GeneralConfigurationPage::MatrixView) {
 
@@ -830,15 +825,10 @@ void RosegardenGUIView::slotEditSegmentAudio(Segment *segment)
     std::cout << "RosegardenGUIView::slotEditSegmentAudio() - "
     << "starting external audio editor" << std::endl;
 
-    QSettings *config = kapp->config();
-    config->beginGroup( GeneralOptionsConfigGroup );
-    // 
-    // manually-FIX, add:
-    // config->endGroup();		// corresponding to: config->beginGroup( GeneralOptionsConfigGroup );
-    //  
-;
+    KConfig* config = kapp->config();
+    config->setGroup(GeneralOptionsConfigGroup);
 
-    QString application = config->value("externalaudioeditor", "") ;
+    QString application = config->readEntry("externalaudioeditor", "");
 
     if (application == "") {
         application = AudioConfigurationPage::getBestAvailableAudioEditor();
@@ -1741,15 +1731,10 @@ RosegardenGUIView::slotUpdateRecordingSegment(Segment *segment,
         return ;
     lastRecordingSegment = segment;
 
-    QSettings *config = kapp->config();
-    config->beginGroup( GeneralOptionsConfigGroup );
-    // 
-    // manually-FIX, add:
-    // config->endGroup();		// corresponding to: config->beginGroup( GeneralOptionsConfigGroup );
-    //  
-;
+    KConfig* config = kapp->config();
+    config->setGroup(GeneralOptionsConfigGroup);
 
-    int tracking = config->value("recordtracking", 0).toUInt() ;
+    int tracking = config->readUnsignedNumEntry("recordtracking", 0);
     if (tracking != 1)
         return ;
 
