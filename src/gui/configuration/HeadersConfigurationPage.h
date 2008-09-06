@@ -20,9 +20,7 @@
 #define _RG_HEADERSCONFIGURATIONPAGE_H_
 
 #include <QWidget>
-#include <QVBoxLayout>
 
-class QVBox;
 class QWidget;
 class QLineEdit;
 class KListView;
@@ -32,7 +30,7 @@ namespace Rosegarden
 
 class RosegardenGUIDoc;
 
-class HeadersConfigurationPage : public QVBox
+class HeadersConfigurationPage : public QWidget
 {
     Q_OBJECT
 

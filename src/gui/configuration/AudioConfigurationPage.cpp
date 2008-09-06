@@ -59,7 +59,7 @@ namespace Rosegarden
 
 AudioConfigurationPage::AudioConfigurationPage(
     RosegardenGUIDoc *doc,
-    KConfig *cfg,
+    QSettings cfg,
     QWidget *parent,
     const char *name):
     TabbedConfigurationPage(cfg, parent, name),
@@ -68,7 +68,18 @@ AudioConfigurationPage::AudioConfigurationPage(
     // set the document in the super class
     m_doc = doc;
 
-    m_cfg->setGroup(SequencerOptionsConfigGroup);
+    QSettings m_cfg;
+
+    m_cfg.beginGroup( SequencerOptionsConfigGroup );
+
+    // 
+
+    // FIX-manually-(GW), add:
+
+    // m_cfg.endGroup();		// corresponding to: m_cfg.beginGroup( SequencerOptionsConfigGroup );
+
+    //  
+
 
     QFrame *frame = new QFrame(m_tabWidget);
     QGridLayout *layout = new QGridLayout(frame, 7, 2, 10, 5);
@@ -77,7 +88,18 @@ AudioConfigurationPage::AudioConfigurationPage(
 
     int row = 0;
 
-    m_cfg->setGroup(GeneralOptionsConfigGroup);
+    QSettings m_cfg;
+
+    m_cfg.beginGroup( GeneralOptionsConfigGroup );
+
+    // 
+
+    // FIX-manually-(GW), add:
+
+    // m_cfg.endGroup();		// corresponding to: m_cfg.beginGroup( GeneralOptionsConfigGroup );
+
+    //  
+
 
     layout->setRowSpacing(row, 15);
     ++row;
@@ -88,24 +110,41 @@ AudioConfigurationPage::AudioConfigurationPage(
     m_previewStyle = new QComboBox(frame);
     m_previewStyle->addItem(i18n("Linear - easier to see loud peaks"));
     m_previewStyle->addItem(i18n("Meter scaling - easier to see quiet activity"));
-    m_previewStyle->setCurrentIndex(m_cfg->readUnsignedNumEntry("audiopreviewstyle", 1));
+    m_previewStyle->setCurrentIndex( m_cfg.value("audiopreviewstyle", 1).toUInt() );
     layout->addWidget(m_previewStyle, row, 1, row- row+1, 2);
     ++row;
 
 #ifdef HAVE_LIBJACK
-    m_cfg->setGroup(SequencerOptionsConfigGroup);
+    QSettings m_cfg;
+    m_cfg.beginGroup( SequencerOptionsConfigGroup );
+    // 
+    // FIX-manually-(GW), add:
+    // m_cfg.endGroup();		// corresponding to: m_cfg.beginGroup( SequencerOptionsConfigGroup );
+    //  
+
 
     label = new QLabel(i18n("Record audio files as"), frame);
     m_audioRecFormat = new QComboBox(frame);
     m_audioRecFormat->addItem(i18n("16-bit PCM WAV format (smaller files)"));
     m_audioRecFormat->addItem(i18n("32-bit float WAV format (higher quality)"));
-    m_audioRecFormat->setCurrentIndex(m_cfg->readUnsignedNumEntry("audiorecordfileformat", 1));
+    m_audioRecFormat->setCurrentIndex( m_cfg.value("audiorecordfileformat", 1).toUInt() );
     layout->addWidget(label, row, 0);
     layout->addWidget(m_audioRecFormat, row, 1, row- row+1, 2);
     ++row;
 #endif
 
-    m_cfg->setGroup(GeneralOptionsConfigGroup);
+    QSettings m_cfg;
+
+    m_cfg.beginGroup( GeneralOptionsConfigGroup );
+
+    // 
+
+    // FIX-manually-(GW), add:
+
+    // m_cfg.endGroup();		// corresponding to: m_cfg.beginGroup( GeneralOptionsConfigGroup );
+
+    //  
+
 
     layout->addWidget(new QLabel(i18n("External audio editor"), frame),
                       row, 0);
@@ -114,8 +153,8 @@ AudioConfigurationPage::AudioConfigurationPage(
 
     std::cerr << "defaultAudioEditor = " << defaultAudioEditor << std::endl;
 
-    QString externalAudioEditor = m_cfg->readEntry("externalaudioeditor",
-                                  defaultAudioEditor);
+    QString externalAudioEditor = m_cfg.value("externalaudioeditor",
+                                  defaultAudioEditor) ;
 
     if (externalAudioEditor == "") {
         externalAudioEditor = defaultAudioEditor;
@@ -133,7 +172,18 @@ AudioConfigurationPage::AudioConfigurationPage(
     connect(changePathButton, SIGNAL(clicked()), SLOT(slotFileDialog()));
     ++row;
 
-    m_cfg->setGroup(SequencerOptionsConfigGroup);
+    QSettings m_cfg;
+
+    m_cfg.beginGroup( SequencerOptionsConfigGroup );
+
+    // 
+
+    // FIX-manually-(GW), add:
+
+    // m_cfg.endGroup();		// corresponding to: m_cfg.beginGroup( SequencerOptionsConfigGroup );
+
+    //  
+
 
     layout->addWidget(new QLabel(i18n("Create JACK outputs"), frame),
                       row, 0);
@@ -141,15 +191,14 @@ AudioConfigurationPage::AudioConfigurationPage(
 
 #ifdef HAVE_LIBJACK
     m_createFaderOuts = new QCheckBox(i18n("for individual audio instruments"), frame);
-    m_createFaderOuts->setChecked(m_cfg->readBoolEntry("audiofaderouts", false));
+    m_createFaderOuts->setChecked( qStrToBool( m_cfg.value("audiofaderouts", "false" ) ) );
 
 //    layout->addWidget(label, row, 0, Qt::AlignRight);
     layout->addWidget(m_createFaderOuts, row, 1);
     ++row;
 
     m_createSubmasterOuts = new QCheckBox(i18n("for submasters"), frame);
-    m_createSubmasterOuts->setChecked(m_cfg->readBoolEntry("audiosubmasterouts",
-                                      false));
+    m_createSubmasterOuts->setChecked( qStrToBool( m_cfg.value("audiosubmasterouts", "                                      false" ) ) );
 
 //    layout->addWidget(label, row, 0, Qt::AlignRight);
     layout->addWidget(m_createSubmasterOuts, row, 1);
@@ -182,7 +231,7 @@ AudioConfigurationPage::AudioConfigurationPage(
 
     // JACK control things
     //
-    bool startJack = m_cfg->readBoolEntry("jackstart", false);
+    bool startJack = qStrToBool( m_cfg.value("jackstart", "false" ) ) ;
     m_startJack = new QCheckBox(frame);
     m_startJack->setChecked(startJack);
 
@@ -194,8 +243,8 @@ AudioConfigurationPage::AudioConfigurationPage(
     layout->addWidget(new QLabel(i18n("JACK command"), frame),
                       row, 0);
 
-    QString jackPath = m_cfg->readEntry("jackcommand",
-                                        // "/usr/local/bin/jackd -d alsa -d hw -r 44100 -p 2048 -n 2");
+    QString jackPath = m_cfg.value("jackcommand",
+                                        // "/usr/local/bin/jackd -d alsa -d hw -r 44100 -p 2048 -n 2") ;
                                         "/usr/bin/qjackctl -s");
     m_jackPath = new QLineEdit(jackPath, frame);
 
@@ -221,7 +270,13 @@ AudioConfigurationPage::slotFileDialog()
 void
 AudioConfigurationPage::apply()
 {
-    m_cfg->setGroup(SequencerOptionsConfigGroup);
+    QSettings m_cfg;
+    m_cfg.beginGroup( SequencerOptionsConfigGroup );
+    // 
+    // FIX-manually-(GW), add:
+    // m_cfg.endGroup();		// corresponding to: m_cfg.beginGroup( SequencerOptionsConfigGroup );
+    //  
+
 
 #ifdef HAVE_LIBJACK
 #ifdef OFFER_JACK_START_OPTION
@@ -238,7 +293,18 @@ AudioConfigurationPage::apply()
     m_cfg->writeEntry("audiorecordfileformat", m_audioRecFormat->currentIndex());
 #endif
 
-    m_cfg->setGroup(GeneralOptionsConfigGroup);
+    QSettings m_cfg;
+
+    m_cfg.beginGroup( GeneralOptionsConfigGroup );
+
+    // 
+
+    // FIX-manually-(GW), add:
+
+    // m_cfg.endGroup();		// corresponding to: m_cfg.beginGroup( GeneralOptionsConfigGroup );
+
+    //  
+
 
     int previewstyle = m_previewStyle->currentIndex();
     m_cfg->writeEntry("audiopreviewstyle", previewstyle);

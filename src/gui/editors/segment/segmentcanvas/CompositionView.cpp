@@ -1323,8 +1323,14 @@ bool CompositionView::event(QEvent* e)
 
 void CompositionView::enterEvent(QEvent *e)
 {
-    kapp->config()->setGroup(GeneralOptionsConfigGroup);
-    if (!kapp->config()->readBoolEntry("toolcontexthelp", true)) return;
+    QSettings kapp->config();
+    kapp->config().beginGroup( GeneralOptionsConfigGroup );
+    // 
+    // FIX-manually-(GW), add:
+    // kapp->config().endGroup();		// corresponding to: kapp->config().beginGroup( GeneralOptionsConfigGroup );
+    //  
+
+    if (! qStrToBool( kapp->config().value("toolcontexthelp", "true" ) ) ) return;
 
     emit showContextHelp(m_toolContextHelp);
     m_contextHelpShown = true;
@@ -1341,8 +1347,19 @@ void CompositionView::slotToolHelpChanged(const QString &text)
     if (m_toolContextHelp == text) return;
     m_toolContextHelp = text;
 
-    kapp->config()->setGroup(GeneralOptionsConfigGroup);
-    if (!kapp->config()->readBoolEntry("toolcontexthelp", true)) return;
+    QSettings kapp->config();
+
+    kapp->config().beginGroup( GeneralOptionsConfigGroup );
+
+    // 
+
+    // FIX-manually-(GW), add:
+
+    // kapp->config().endGroup();		// corresponding to: kapp->config().beginGroup( GeneralOptionsConfigGroup );
+
+    //  
+
+    if (! qStrToBool( kapp->config().value("toolcontexthelp", "true" ) ) ) return;
 
     if (m_contextHelpShown) emit showContextHelp(text);
 }

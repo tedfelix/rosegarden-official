@@ -215,39 +215,40 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     int defaultIterate = 100;
 
     if (m_configCategory) {
-        KConfig *config = kapp->config();
-        config->setGroup(m_configCategory);
-        defaultType =
-            config->readNumEntry("quantizetype",
-                                 (defaultQuantizer == Notation) ? 2 :
+        QSettings config ; // was: kapp->config()
+        QSettings config;
+        config.beginGroup( m_configCategory );
+        // 
+        // FIX-manually-(GW), add:
+        // config.endGroup();		// corresponding to: config.beginGroup( m_configCategory );
+        //  
+
+        defaultType =             config.value("quantizetype",
+                                 (defaultQuantizer == Notation).toInt()  ? 2 :
                                  (defaultQuantizer == Legato) ? 1 :
                                  0);
-        defaultUnit =
-            config->readNumEntry("quantizeunit", defaultUnit);
-        defaultSwing =
-            config->readNumEntry("quantizeswing", defaultSwing);
-        defaultIterate =
-            config->readNumEntry("quantizeiterate", defaultIterate);
+        defaultUnit =             config.value("quantizeunit", defaultUnit).toInt() ;
+        defaultSwing =             config.value("quantizeswing", defaultSwing).toInt() ;
+        defaultIterate =             config.value("quantizeiterate", defaultIterate).toInt() ;
         m_notationTarget->setChecked
-        (config->readBoolEntry("quantizenotationonly",
-                               defaultQuantizer == Notation));
+        ( qStrToBool( config.value("quantizenotationonly", "                               defaultQuantizer == Notation" ) ) );
         m_durationCheckBox->setChecked
-        (config->readBoolEntry("quantizedurations", false));
+        ( qStrToBool( config.value("quantizedurations", "false" ) ) );
         m_simplicityCombo->setCurrentIndex
-        (config->readNumEntry("quantizesimplicity", 13) - 11);
+        ( config.value("quantizesimplicity", 13).toInt()  - 11);
         m_maxTuplet->setCurrentIndex
-        (config->readNumEntry("quantizemaxtuplet", 3) - 1);
+        ( config.value("quantizemaxtuplet", 3).toInt()  - 1);
         m_counterpoint->setChecked
-        (config->readBoolEntry("quantizecounterpoint", false));
+        ( qStrToBool( config.value("quantizecounterpoint", "false" ) ) );
         m_rebeam->setChecked
-        (config->readBoolEntry("quantizerebeam", true));
+        ( qStrToBool( config.value("quantizerebeam", "true" ) ) );
         m_makeViable->setChecked
-        (config->readBoolEntry("quantizemakeviable", false));
+        ( qStrToBool( config.value("quantizemakeviable", "false" ) ) );
         m_deCounterpoint->setChecked
-        (config->readBoolEntry("quantizedecounterpoint", false));
+        ( qStrToBool( config.value("quantizedecounterpoint", "false" ) ) );
         m_articulate->setChecked
-        (config->readBoolEntry("quantizearticulate", true));
-        advanced = config->readBoolEntry("quantizeshowadvanced", false);
+        ( qStrToBool( config.value("quantizearticulate", "true" ) ) );
+        advanced = qStrToBool( config.value("quantizeshowadvanced", "false" ) ) ;
     } else {
         defaultType =
             (defaultQuantizer == Notation) ? 2 :
@@ -410,8 +411,14 @@ QuantizeParameters::getQuantizer() const
     }
 
     if (m_configCategory) {
-        KConfig *config = kapp->config();
-        config->setGroup(m_configCategory);
+        QSettings config ; // was: kapp->config()
+        QSettings config;
+        config.beginGroup( m_configCategory );
+        // 
+        // FIX-manually-(GW), add:
+        // config.endGroup();		// corresponding to: config.beginGroup( m_configCategory );
+        //  
+
         config->writeEntry("quantizetype", type);
         config->writeEntry("quantizeunit", unit);
         config->writeEntry("quantizeswing", swing);

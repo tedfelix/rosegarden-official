@@ -95,16 +95,22 @@ NotationStaff::NotationStaff(Q3Canvas *canvas, Segment *segment,
         m_ready(false),
         m_lastRenderedBar(0)
 {
-    KConfig *config = kapp->config();
-    config->setGroup(NotationViewConfigGroup);
-    m_colourQuantize = config->readBoolEntry("colourquantize", false);
+    QSettings config ; // was: kapp->config()
+    QSettings config;
+    config.beginGroup( NotationViewConfigGroup );
+    // 
+    // FIX-manually-(GW), add:
+    // config.endGroup();		// corresponding to: config.beginGroup( NotationViewConfigGroup );
+    //  
+
+    m_colourQuantize = qStrToBool( config.value("colourquantize", "false" ) ) ;
 
     // Shouldn't change these  during the lifetime of the staff, really:
-    m_showUnknowns = config->readBoolEntry("showunknowns", false);
-    m_showRanges = config->readBoolEntry("showranges", true);
-    m_showCollisions = config->readBoolEntry("showcollisions", true);
+    m_showUnknowns = qStrToBool( config.value("showunknowns", "false" ) ) ;
+    m_showRanges = qStrToBool( config.value("showranges", "true" ) ) ;
+    m_showCollisions = qStrToBool( config.value("showcollisions", "true" ) ) ;
 
-    m_keySigCancelMode = config->readNumEntry("keysigcancelmode", 1);
+    m_keySigCancelMode = config.value("keysigcancelmode", 1).toInt() ;
 
     changeFont(fontName, resolution);
 }
@@ -430,9 +436,15 @@ NotationStaff::getNoteNameAtCanvasCoords(double x, int y,
     ::Rosegarden::Key key;
     getClefAndKeyAtCanvasCoords(x, y, clef, key);
 
-    KConfig *config = kapp->config();
-    config->setGroup(GeneralOptionsConfigGroup);
-    int baseOctave = config->readNumEntry("midipitchoctave", -2);
+    QSettings config ; // was: kapp->config()
+    QSettings config;
+    config.beginGroup( GeneralOptionsConfigGroup );
+    // 
+    // FIX-manually-(GW), add:
+    // config.endGroup();		// corresponding to: config.beginGroup( GeneralOptionsConfigGroup );
+    //  
+
+    int baseOctave = config.value("midipitchoctave", -2).toInt() ;
 
     Pitch p(getHeightAtCanvasCoords(x, y), clef, key);
     //!!! i18n() how?
@@ -914,9 +926,15 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
             <Bool>(BaseProperties::INVISIBLE, invisible) && invisible) {
         if (m_printPainter)
             return ;
-        KConfig *config = kapp->config();
-        config->setGroup("Notation Options");
-        bool showInvisibles = config->readBoolEntry("showinvisibles", true);
+        QSettings config ; // was: kapp->config()
+        QSettings config;
+        config.beginGroup( "Notation Options" );
+        // 
+        // FIX-manually-(GW), add:
+        // config.endGroup();		// corresponding to: config.beginGroup( "Notation Options" );
+        //  
+
+        bool showInvisibles = qStrToBool( config.value("showinvisibles", "true" ) ) ;
         if (!showInvisibles)
             return ;
     }

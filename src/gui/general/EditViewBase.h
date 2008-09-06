@@ -354,7 +354,7 @@ protected:
     int m_viewNumber;
     std::string m_viewLocalPropertyPrefix;
 
-    KConfig* m_config;
+    QSettings m_config;
 
     RosegardenGUIDoc* m_doc;
     std::vector<Segment *> m_segments;

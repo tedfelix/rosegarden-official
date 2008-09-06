@@ -127,12 +127,18 @@ EventQuantizeCommand::modifySegment()
 
     if (m_configGroup) {
         //!!! need way to decide whether to do these even if no config group (i.e. through args to the command)
-        KConfig *config = kapp->config();
-        config->setGroup(m_configGroup);
+        QSettings config ; // was: kapp->config()
+        QSettings config;
+        config.beginGroup( m_configGroup );
+        // 
+        // FIX-manually-(GW), add:
+        // config.endGroup();		// corresponding to: config.beginGroup( m_configGroup );
+        //  
 
-        rebeam = config->readBoolEntry("quantizerebeam", true);
-        makeviable = config->readBoolEntry("quantizemakeviable", false);
-        decounterpoint = config->readBoolEntry("quantizedecounterpoint", false);
+
+        rebeam = qStrToBool( config.value("quantizerebeam", "true" ) ) ;
+        makeviable = qStrToBool( config.value("quantizemakeviable", "false" ) ) ;
+        decounterpoint = qStrToBool( config.value("quantizedecounterpoint", "false" ) ) ;
     }
 
     if (m_selection) {
@@ -197,22 +203,28 @@ EventQuantizeCommand::makeQuantizer(QString configGroup,
     //!!! Excessive duplication with
     // QuantizeParameters::getQuantizer in widgets.cpp
 
-    KConfig *config = kapp->config();
-    config->setGroup(configGroup);
+    QSettings config ; // was: kapp->config()
+    QSettings config;
+    config.beginGroup( configGroup );
+    // 
+    // FIX-manually-(GW), add:
+    // config.endGroup();		// corresponding to: config.beginGroup( configGroup );
+    //  
+
 
     timeT defaultUnit =
         Note(Note::Demisemiquaver).getDuration();
 
-    int type = config->readNumEntry("quantizetype", notationDefault ? 2 : 0);
-    timeT unit = config->readNumEntry("quantizeunit", defaultUnit);
-    bool notateOnly = config->readBoolEntry("quantizenotationonly", notationDefault);
-    bool durations = config->readBoolEntry("quantizedurations", false);
-    int simplicity = config->readNumEntry("quantizesimplicity", 13);
-    int maxTuplet = config->readNumEntry("quantizemaxtuplet", 3);
-    bool counterpoint = config->readNumEntry("quantizecounterpoint", false);
-    bool articulate = config->readBoolEntry("quantizearticulate", true);
-    int swing = config->readNumEntry("quantizeswing", 0);
-    int iterate = config->readNumEntry("quantizeiterate", 100);
+    int type = config.value("quantizetype", notationDefault ? 2 : 0).toInt() ;
+    timeT unit = config.value("quantizeunit", defaultUnit).toInt() ;
+    bool notateOnly = qStrToBool( config.value("quantizenotationonly", "notationDefault" ) ) ;
+    bool durations = qStrToBool( config.value("quantizedurations", "false" ) ) ;
+    int simplicity = config.value("quantizesimplicity", 13).toInt() ;
+    int maxTuplet = config.value("quantizemaxtuplet", 3).toInt() ;
+    bool counterpoint = config.value("quantizecounterpoint", false).toInt() ;
+    bool articulate = qStrToBool( config.value("quantizearticulate", "true" ) ) ;
+    int swing = config.value("quantizeswing", 0).toInt() ;
+    int iterate = config.value("quantizeiterate", 100).toInt() ;
 
     m_quantizer = 0;
 

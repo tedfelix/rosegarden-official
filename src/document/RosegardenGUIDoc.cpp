@@ -163,8 +163,14 @@ RosegardenGUIDoc::~RosegardenGUIDoc()
 unsigned int
 RosegardenGUIDoc::getAutoSavePeriod() const
 {
-    KConfig* config = kapp->config();
-    config->setGroup(GeneralOptionsConfigGroup);
+    QSettings config ; // was: kapp->config()
+    QSettings config;
+    config.beginGroup( GeneralOptionsConfigGroup );
+    // 
+    // FIX-manually-(GW), add:
+    // config.endGroup();		// corresponding to: config.beginGroup( GeneralOptionsConfigGroup );
+    //  
+
     return config->readUnsignedNumEntry("autosaveinterval", 60);
 }
 
@@ -1096,12 +1102,18 @@ void RosegardenGUIDoc::initialiseStudio()
     // Now commit all the remaining changes
     StudioControl::setStudioObjectProperties(ids, properties, values);
 
-    KConfig* config = kapp->config();
-    config->setGroup(SequencerOptionsConfigGroup);
+    QSettings config ; // was: kapp->config()
+    QSettings config;
+    config.beginGroup( SequencerOptionsConfigGroup );
+    // 
+    // FIX-manually-(GW), add:
+    // config.endGroup();		// corresponding to: config.beginGroup( SequencerOptionsConfigGroup );
+    //  
 
-    bool faderOuts = config->readBoolEntry("audiofaderouts", false);
-    bool submasterOuts = config->readBoolEntry("audiosubmasterouts", false);
-    unsigned int audioFileFormat = config->readUnsignedNumEntry("audiorecordfileformat", 1);
+
+    bool faderOuts = qStrToBool( config.value("audiofaderouts", "false" ) ) ;
+    bool submasterOuts = qStrToBool( config.value("audiosubmasterouts", "false" ) ) ;
+    unsigned int audioFileFormat = config.value("audiorecordfileformat", 1).toUInt() ;
 
     MidiByte ports = 0;
     if (faderOuts) {
@@ -1955,10 +1967,16 @@ RosegardenGUIDoc::insertRecordedMidi(const MappedComposition &mC)
 
         if (haveNotes) {
 
-            KConfig* config = kapp->config();
-            config->setGroup(GeneralOptionsConfigGroup);
+            QSettings config ; // was: kapp->config()
+            QSettings config;
+            config.beginGroup( GeneralOptionsConfigGroup );
+            // 
+            // FIX-manually-(GW), add:
+            // config.endGroup();		// corresponding to: config.beginGroup( GeneralOptionsConfigGroup );
+            //  
 
-            int tracking = config->readUnsignedNumEntry("recordtracking", 0);
+
+            int tracking = config.value("recordtracking", 0).toUInt() ;
             if (tracking == 1) { // notation
                 for ( RecordingSegmentMap::const_iterator it = m_recordMIDISegments.begin();
                         it != m_recordMIDISegments.end(); ++it) {
@@ -2278,9 +2296,15 @@ RosegardenGUIDoc::syncDevices()
     // when changed in the configuration dialog.
     static bool setTimer = false;
     if (!setTimer) {
-        kapp->config()->setGroup(SequencerOptionsConfigGroup);
+        QSettings kapp->config();
+        kapp->config().beginGroup( SequencerOptionsConfigGroup );
+        // 
+        // FIX-manually-(GW), add:
+        // kapp->config().endGroup();		// corresponding to: kapp->config().beginGroup( SequencerOptionsConfigGroup );
+        //  
+
         QString currentTimer = getCurrentTimer();
-        currentTimer = kapp->config()->readEntry("timer", currentTimer);
+        currentTimer = kapp->config().value("timer", currentTimer) ;
         setCurrentTimer(currentTimer);
         setTimer = true;
     }
@@ -2303,8 +2327,14 @@ RosegardenGUIDoc::syncDevices()
 
     // Force update of view on current track selection
     //
-    kapp->config()->setGroup(GeneralOptionsConfigGroup);
-    bool opt = kapp->config()->readBoolEntry("Show Track labels", true);
+    QSettings kapp->config();
+    kapp->config().beginGroup( GeneralOptionsConfigGroup );
+    // 
+    // FIX-manually-(GW), add:
+    // kapp->config().endGroup();		// corresponding to: kapp->config().beginGroup( GeneralOptionsConfigGroup );
+    //  
+
+    bool opt = qStrToBool( kapp->config().value("Show Track labels", "true" ) ) ;
     TrackLabel::InstrumentTrackLabels labels = TrackLabel::ShowInstrument;
     if (opt)
         labels = TrackLabel::ShowTrack;

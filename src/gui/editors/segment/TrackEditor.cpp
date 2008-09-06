@@ -163,8 +163,19 @@ TrackEditor::init(QWidget* rosegardenguiview)
 
     m_segmentCanvas = new CompositionView(m_doc, m_compositionModel, this);
 
-    kapp->config()->setGroup(GeneralOptionsConfigGroup);
-    if (kapp->config()->readBoolEntry("backgroundtextures", true)) {
+    QSettings kapp->config();
+
+    kapp->config().beginGroup( GeneralOptionsConfigGroup );
+
+    // 
+
+    // FIX-manually-(GW), add:
+
+    // kapp->config().endGroup();		// corresponding to: kapp->config().beginGroup( GeneralOptionsConfigGroup );
+
+    //  
+
+    if ( qStrToBool( kapp->config().value("backgroundtextures", "true" ) ) ) {
         QPixmap background;
         QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
         if (background.load(QString("%1/misc/bg-segmentcanvas.xpm").

@@ -430,7 +430,7 @@ protected:
      *
      * @see KTMainWindow#saveProperties
      */
-    virtual void saveGlobalProperties(KConfig *_cfg);
+    virtual void saveGlobalProperties(QSettings _cfg);
 
     /**
      * reads the session config file and restores the application's
@@ -439,7 +439,7 @@ protected:
      *
      * @see KTMainWindow#readProperties
      */
-    virtual void readGlobalProperties(KConfig *_cfg);
+    virtual void readGlobalProperties(QSettings _cfg);
 
     /**
      * Create a new audio file for the sequencer and return the

@@ -75,9 +75,15 @@ AddTracksDialog::AddTracksDialog(QDialogButtonBox::QWidget *parent, int currentT
     m_position->addItem(i18n("TicksBelow the current selected track"));
     m_position->addItem(i18n("At the bottom"));
 
-    KConfig *config = kapp->config();
-    config->setGroup(GeneralOptionsConfigGroup);
-    m_position->setCurrentIndex(config->readUnsignedNumEntry("lastaddtracksposition", 2));
+    QSettings config ; // was: kapp->config()
+    QSettings config;
+    config.beginGroup( GeneralOptionsConfigGroup );
+    // 
+    // FIX-manually-(GW), add:
+    // config.endGroup();		// corresponding to: config.beginGroup( GeneralOptionsConfigGroup );
+    //  
+
+    m_position->setCurrentIndex( config.value("lastaddtracksposition", 2).toUInt() );
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
@@ -96,8 +102,14 @@ AddTracksDialog::getInsertPosition()
 {
     int opt = m_position->currentIndex();
 
-    KConfig *config = kapp->config();
-    config->setGroup(GeneralOptionsConfigGroup);
+    QSettings config ; // was: kapp->config()
+    QSettings config;
+    config.beginGroup( GeneralOptionsConfigGroup );
+    // 
+    // FIX-manually-(GW), add:
+    // config.endGroup();		// corresponding to: config.beginGroup( GeneralOptionsConfigGroup );
+    //  
+
     config->writeEntry("lastaddtracksposition", opt);
 
     int pos = 0;

@@ -253,8 +253,14 @@ NotationStrings::makeNoteMenuLabel(timeT duration,
         }
     }
 
-    KConfig *config = kapp->config();
-    config->setGroup(GeneralOptionsConfigGroup);
+    QSettings config ; // was: kapp->config()
+    QSettings config;
+    config.beginGroup( GeneralOptionsConfigGroup );
+    // 
+    // FIX-manually-(GW), add:
+    // config.endGroup();		// corresponding to: config.beginGroup( GeneralOptionsConfigGroup );
+    //  
+
     GeneralConfigurationPage::NoteNameStyle noteNameStyle =
         (GeneralConfigurationPage::NoteNameStyle)
         config->readUnsignedNumEntry

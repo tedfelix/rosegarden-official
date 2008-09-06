@@ -551,8 +551,14 @@ EventSelection* MatrixSelector::getSelection()
 
 void MatrixSelector::setContextHelpFor(QPoint p, bool ctrlPressed)
 {
-    kapp->config()->setGroup(GeneralOptionsConfigGroup);
-    if (!kapp->config()->readBoolEntry("toolcontexthelp", true)) return;
+    QSettings kapp->config();
+    kapp->config().beginGroup( GeneralOptionsConfigGroup );
+    // 
+    // FIX-manually-(GW), add:
+    // kapp->config().endGroup();		// corresponding to: kapp->config().beginGroup( GeneralOptionsConfigGroup );
+    //  
+
+    if (! qStrToBool( kapp->config().value("toolcontexthelp", "true" ) ) ) return;
 
     p = m_mParentView->inverseMapPoint(p);
 

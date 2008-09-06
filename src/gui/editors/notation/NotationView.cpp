@@ -359,10 +359,21 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     // Initialise the display-related defaults that will be needed
     // by both the actions and the layout toolbar
 
-    m_config->setGroup(NotationViewConfigGroup);
+    QSettings m_config;
 
-    m_showHeadersGroup = m_config->readNumEntry("shownotationheader",
-                                                HeadersGroup::DefaultShowMode);
+    m_config.beginGroup( NotationViewConfigGroup );
+
+    // 
+
+    // FIX-manually-(GW), add:
+
+    // m_config.endGroup();		// corresponding to: m_config.beginGroup( NotationViewConfigGroup );
+
+    //  
+
+
+    m_showHeadersGroup = m_config.value("shownotationheader",
+                                                HeadersGroup::DefaultShowMode).toInt() ;
 
     m_fontName = qstrtostr(m_config->readEntry
                            ("notefont",
@@ -382,10 +393,10 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
                  ((segments.size() > 1 ? "multistaffnotesize" : "singlestaffnotesize"),
                   NoteFontFactory::getDefaultSize(m_fontName));
 
-    int defaultSpacing = m_config->readNumEntry("spacing", 100);
+    int defaultSpacing = m_config.value("spacing", 100).toInt() ;
     m_hlayout->setSpacing(defaultSpacing);
 
-    int defaultProportion = m_config->readNumEntry("proportion", 60);
+    int defaultProportion = m_config.value("proportion", 60).toInt() ;
     m_hlayout->setProportion(defaultProportion);
 
     delete m_notePixmapFactory;
@@ -521,8 +532,19 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_currentStaff = 0;
     m_staffs[0]->setCurrent(true);
 
-    m_config->setGroup(NotationViewConfigGroup);
-    int layoutMode = m_config->readNumEntry("layoutmode", 0);
+    QSettings m_config;
+
+    m_config.beginGroup( NotationViewConfigGroup );
+
+    // 
+
+    // FIX-manually-(GW), add:
+
+    // m_config.endGroup();		// corresponding to: m_config.beginGroup( NotationViewConfigGroup );
+
+    //  
+
+    int layoutMode = m_config.value("layoutmode", 0).toInt() ;
 
     try
     {
@@ -803,7 +825,18 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     // Initialise the display-related defaults that will be needed
     // by both the actions and the layout toolbar
 
-    m_config->setGroup(NotationViewConfigGroup);
+    QSettings m_config;
+
+    m_config.beginGroup( NotationViewConfigGroup );
+
+    // 
+
+    // FIX-manually-(GW), add:
+
+    // m_config.endGroup();		// corresponding to: m_config.beginGroup( NotationViewConfigGroup );
+
+    //  
+
 
     if (referenceView)
     {
@@ -826,9 +859,9 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
         m_hlayout->setProportion(referenceView->m_hlayout->getProportion());
     } else
     {
-        int defaultSpacing = m_config->readNumEntry("spacing", 100);
+        int defaultSpacing = m_config.value("spacing", 100).toInt() ;
         m_hlayout->setSpacing(defaultSpacing);
-        int defaultProportion = m_config->readNumEntry("proportion", 60);
+        int defaultProportion = m_config.value("proportion", 60).toInt() ;
         m_hlayout->setProportion(defaultProportion);
     }
 
@@ -838,7 +871,13 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_vlayout->setNotePixmapFactory(m_notePixmapFactory);
 
     setBackgroundMode(PaletteBase);
-    m_config->setGroup(NotationViewConfigGroup);
+    QSettings m_config;
+    m_config.beginGroup( NotationViewConfigGroup );
+    // 
+    // FIX-manually-(GW), add:
+    // m_config.endGroup();		// corresponding to: m_config.beginGroup( NotationViewConfigGroup );
+    //  
+
 
     Q3Canvas *tCanvas = new Q3Canvas(this);
     tCanvas->resize(width() * 2, height() * 2); //!!!
@@ -955,8 +994,19 @@ void NotationView::positionStaffs()
 {
     NOTATION_DEBUG << "NotationView::positionStaffs" << endl;
 
-    m_config->setGroup(NotationViewConfigGroup);
-    m_printSize = m_config->readUnsignedNumEntry("printingnotesize", 5);
+    QSettings m_config;
+
+    m_config.beginGroup( NotationViewConfigGroup );
+
+    // 
+
+    // FIX-manually-(GW), add:
+
+    // m_config.endGroup();		// corresponding to: m_config.beginGroup( NotationViewConfigGroup );
+
+    //  
+
+    m_printSize = m_config.value("printingnotesize", 5).toUInt() ;
 
     int minTrack = 0, maxTrack = 0;
     bool haveMinTrack = false;
@@ -998,7 +1048,13 @@ void NotationView::positionStaffs()
             getDocument()->getComposition().getMetadata();
 
         QFont defaultFont(NotePixmapFactory::defaultSerifFontFamily);
-        m_config->setGroup(NotationViewConfigGroup);
+        QSettings m_config;
+        m_config.beginGroup( NotationViewConfigGroup );
+        // 
+        // FIX-manually-(GW), add:
+        // m_config.endGroup();		// corresponding to: m_config.beginGroup( NotationViewConfigGroup );
+        //  
+
         QFont font = m_config->readFontEntry("textfont", &defaultFont);
         font.setPixelSize(m_fontSize * 5);
         QFontMetrics metrics(font);
@@ -1283,8 +1339,19 @@ void NotationView::positionPages()
     QPixmap deskBackground;
     bool haveBackground = false;
 
-    m_config->setGroup(NotationViewConfigGroup);
-    if (m_config->readBoolEntry("backgroundtextures", true)) {
+    QSettings m_config;
+
+    m_config.beginGroup( NotationViewConfigGroup );
+
+    // 
+
+    // FIX-manually-(GW), add:
+
+    // m_config.endGroup();		// corresponding to: m_config.beginGroup( NotationViewConfigGroup );
+
+    //  
+
+    if ( qStrToBool( m_config.value("backgroundtextures", "true" ) ) ) {
         QString pixmapDir =
             KGlobal::dirs()->findResource("appdata", "pixmaps/");
         if (background.load(QString("%1/misc/bg-paper-cream.xpm").
@@ -1360,7 +1427,18 @@ void NotationView::positionPages()
         updateThumbnails(false);
     }
 
-    m_config->setGroup(NotationViewConfigGroup);
+    QSettings m_config;
+
+    m_config.beginGroup( NotationViewConfigGroup );
+
+    // 
+
+    // FIX-manually-(GW), add:
+
+    // m_config.endGroup();		// corresponding to: m_config.beginGroup( NotationViewConfigGroup );
+
+    //  
+
 }
 
 void NotationView::slotUpdateStaffName()
@@ -1372,7 +1450,13 @@ void NotationView::slotUpdateStaffName()
 
 void NotationView::slotSaveOptions()
 {
-    m_config->setGroup(NotationViewConfigGroup);
+    QSettings m_config;
+    m_config.beginGroup( NotationViewConfigGroup );
+    // 
+    // FIX-manually-(GW), add:
+    // m_config.endGroup();		// corresponding to: m_config.beginGroup( NotationViewConfigGroup );
+    //  
+
 
     m_config->writeEntry("Show Chord Name Ruler", getToggleAction("show_chords_ruler")->isChecked());
     m_config->writeEntry("Show Raw Note Ruler", getToggleAction("show_raw_note_ruler")->isChecked());
@@ -1414,29 +1498,40 @@ void NotationView::readOptions()
     setOneToolbar("show_accidentals_toolbar", "Accidentals Toolbar");
     setOneToolbar("show_meta_toolbar", "Meta Toolbar");
 
-    m_config->setGroup(NotationViewConfigGroup);
+    QSettings m_config;
+
+    m_config.beginGroup( NotationViewConfigGroup );
+
+    // 
+
+    // FIX-manually-(GW), add:
+
+    // m_config.endGroup();		// corresponding to: m_config.beginGroup( NotationViewConfigGroup );
+
+    //  
+
 
     bool opt;
 
-    opt = m_config->readBoolEntry("Show Chord Name Ruler", false);
+    opt = qStrToBool( m_config.value("Show Chord Name Ruler", "false" ) ) ;
     getToggleAction("show_chords_ruler")->setChecked(opt);
     slotToggleChordsRuler();
 
-    opt = m_config->readBoolEntry("Show Raw Note Ruler", true);
+    opt = qStrToBool( m_config.value("Show Raw Note Ruler", "true" ) ) ;
     getToggleAction("show_raw_note_ruler")->setChecked(opt);
     slotToggleRawNoteRuler();
 
-    opt = m_config->readBoolEntry("Show Tempo Ruler", true);
+    opt = qStrToBool( m_config.value("Show Tempo Ruler", "true" ) ) ;
     getToggleAction("show_tempo_ruler")->setChecked(opt);
     slotToggleTempoRuler();
 
-    opt = m_config->readBoolEntry("Show Annotations", true);
+    opt = qStrToBool( m_config.value("Show Annotations", "true" ) ) ;
     m_annotationsVisible = opt;
     getToggleAction("show_annotations")->setChecked(opt);
     slotUpdateAnnotationsStatus();
     //    slotToggleAnnotations();
 
-    opt = m_config->readBoolEntry("Show LilyPond Directives", true);
+    opt = qStrToBool( m_config.value("Show LilyPond Directives", "true" ) ) ;
     m_lilyPondDirectivesVisible = opt;
     getToggleAction("show_lilypond_directives")->setChecked(opt);
     slotUpdateLilyPondDirectivesStatus();
@@ -1746,7 +1841,7 @@ void NotationView::setupActions()
     //
     // Settings menu
     //
-    int layoutMode = m_config->readNumEntry("layoutmode", 0);
+    int layoutMode = m_config.value("layoutmode", 0).toInt() ;
 
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
 
@@ -3210,14 +3305,25 @@ void NotationView::print(bool previewOnly)
         // mishandling of pixmap masks?) in qt-3.0.  Let's permit
         // it as a "hidden" option.
 
-        m_config->setGroup(NotationViewConfigGroup);
+        QSettings m_config;
+
+        m_config.beginGroup( NotationViewConfigGroup );
+
+        // 
+
+        // FIX-manually-(GW), add:
+
+        // m_config.endGroup();		// corresponding to: m_config.beginGroup( NotationViewConfigGroup );
+
+        //  
+
 
         NOTATION_DEBUG << "NotationView::print: calling Q3Canvas::drawArea" << endl;
 
         {
             Profiler profiler("NotationView::print(Q3Canvas::drawArea)");
 
-            if (m_config->readBoolEntry("forcedoublebufferprinting", false)) {
+            if ( qStrToBool( m_config.value("forcedoublebufferprinting", "false" ) ) ) {
                 getCanvasView()->canvas()->drawArea(pageRect, &printpainter, true);
             } else {
 #if QT_VERSION >= 0x030100
@@ -4389,8 +4495,14 @@ void NotationView::slotEditPaste()
         (clipboard->getSingleSegment()->getEndTime() -
          clipboard->getSingleSegment()->getStartTime());
 
-    KConfig *config = kapp->config();
-    config->setGroup(NotationViewConfigGroup);
+    QSettings config ; // was: kapp->config()
+    QSettings config;
+    config.beginGroup( NotationViewConfigGroup );
+    // 
+    // FIX-manually-(GW), add:
+    // config.endGroup();		// corresponding to: config.beginGroup( NotationViewConfigGroup );
+    //  
+
     PasteEventsCommand::PasteType defaultType = (PasteEventsCommand::PasteType)
         config->readUnsignedNumEntry("pastetype",
                                      PasteEventsCommand::Restricted);
@@ -4423,8 +4535,14 @@ void NotationView::slotEditGeneralPaste()
     LinedStaff *staff = getCurrentLinedStaff();
     Segment &segment = staff->getSegment();
 
-    KConfig *config = kapp->config();
-    config->setGroup(NotationViewConfigGroup);
+    QSettings config ; // was: kapp->config()
+    QSettings config;
+    config.beginGroup( NotationViewConfigGroup );
+    // 
+    // FIX-manually-(GW), add:
+    // config.endGroup();		// corresponding to: config.beginGroup( NotationViewConfigGroup );
+    //  
+
     PasteEventsCommand::PasteType defaultType = (PasteEventsCommand::PasteType)
         config->readUnsignedNumEntry("pastetype",
                                      PasteEventsCommand::Restricted);
@@ -4435,7 +4553,13 @@ void NotationView::slotEditGeneralPaste()
 
         PasteEventsCommand::PasteType type = dialog.getPasteType();
         if (dialog.setAsDefault()) {
-            config->setGroup(NotationViewConfigGroup);
+            QSettings config;
+            config.beginGroup( NotationViewConfigGroup );
+            // 
+            // FIX-manually-(GW), add:
+            // config.endGroup();		// corresponding to: config.beginGroup( NotationViewConfigGroup );
+            //  
+
             config->writeEntry("pastetype", type);
         }
 

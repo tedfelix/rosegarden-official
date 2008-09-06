@@ -61,9 +61,21 @@ void RosegardenApplication::sfxLoadExited(QProcess *proc)
 {
     if (!proc->normalExit()) {
         QString configGroup = config()->group();
-        config()->setGroup(SequencerOptionsConfigGroup);
-        QString soundFontPath = config()->readEntry("soundfontpath", "");
-        config()->setGroup(configGroup);
+        QSettings config();
+        config().beginGroup( SequencerOptionsConfigGroup );
+        // 
+        // FIX-manually-(GW), add:
+        // config().endGroup();		// corresponding to: config().beginGroup( SequencerOptionsConfigGroup );
+        //  
+
+        QString soundFontPath = config().value("soundfontpath", "") ;
+        QSettings config();
+        config().beginGroup( configGroup );
+        // 
+        // FIX-manually-(GW), add:
+        // config().endGroup();		// corresponding to: config().beginGroup( configGroup );
+        //  
+
 
         KMessageBox::error(mainWidget(),
                            i18n("Failed to load soundfont %1").arg(soundFontPath));
