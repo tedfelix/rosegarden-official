@@ -222,7 +222,7 @@ void PlayList::save()
         item = dynamic_cast<PlayListViewItem*>(item->nextSibling());
     }
 
-    QSettings *kc = KGlobal::config();
+    KConfig *kc = KGlobal::config();
     KConfigGroupSaver cs(kc, PlayListConfigGroup);
     kc->writeEntry("Playlist Files", urlList);
 
@@ -231,7 +231,7 @@ void PlayList::save()
 
 void PlayList::restore()
 {
-    QSettings *kc = KGlobal::config();
+    KConfig *kc = KGlobal::config();
     getListView()->restoreLayout(kc, PlayListConfigGroup);
 
     KConfigGroupSaver cs(kc, PlayListConfigGroup);

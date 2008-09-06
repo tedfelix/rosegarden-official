@@ -1483,18 +1483,9 @@ void EditView::slotTranspose()
     if (!m_currentEventSelection)
         return ;
 
-    m_config->beginGroup( EditViewConfigGroup );
+    m_config->setGroup(EditViewConfigGroup);
 
-    // 
-
-    // manually-FIX, add:
-
-    // m_config->endGroup();		// corresponding to: m_config->beginGroup( EditViewConfigGroup );
-
-    //  
-;
-
-    int dialogDefault = m_config->value("lasttransposition", 0).toInt() ;
+    int dialogDefault = m_config->readNumEntry("lasttransposition", 0);
 
     bool ok = false;
     int semitones = QInputDialog::getInteger
@@ -1503,16 +1494,7 @@ void EditView::slotTranspose()
                      dialogDefault, -127, 127, 1, &ok, this);
     if (!ok || semitones == 0) return;
 
-    m_config->beginGroup( EditViewConfigGroup );
-
-    // 
-
-    // manually-FIX, add:
-
-    // m_config->endGroup();		// corresponding to: m_config->beginGroup( EditViewConfigGroup );
-
-    //  
-;
+    m_config->setGroup(EditViewConfigGroup);
     m_config->writeEntry("lasttransposition", semitones);
 
     KTmpStatusMsg msg(i18n("Transposing..."), this);
@@ -1525,35 +1507,17 @@ void EditView::slotDiatonicTranspose()
     if (!m_currentEventSelection)
         return ;
 
-    m_config->beginGroup( EditViewConfigGroup );
-
-    // 
-
-    // manually-FIX, add:
-
-    // m_config->endGroup();		// corresponding to: m_config->beginGroup( EditViewConfigGroup );
-
-    //  
-;
+    m_config->setGroup(EditViewConfigGroup);
 
     IntervalDialog intervalDialog(this);
     int ok = intervalDialog.exec();
-	//int dialogDefault = m_config->value("lasttransposition", 0).toInt() ;
+	//int dialogDefault = m_config->readNumEntry("lasttransposition", 0);
     int semitones = intervalDialog.getChromaticDistance();
     int steps = intervalDialog.getDiatonicDistance();
 
     if (!ok || (semitones == 0 && steps == 0)) return;
 
-    m_config->beginGroup( EditViewConfigGroup );
-
-    // 
-
-    // manually-FIX, add:
-
-    // m_config->endGroup();		// corresponding to: m_config->beginGroup( EditViewConfigGroup );
-
-    //  
-;
+    m_config->setGroup(EditViewConfigGroup);
 
     KTmpStatusMsg msg(i18n("Transposing..."), this);
     if (intervalDialog.getChangeKey())

@@ -97,6 +97,7 @@ IntervalDialog::IntervalDialog(QDialogButtonBox::QWidget *parent, bool askChange
     {
         m_transposeSegmentBack = new QCheckBox(i18n("Adjust segment transposition in opposite direction (maintain audible pitch)"), vBox );
         vBoxLayout->addWidget(m_transposeSegmentBack);
+        vBox->setLayout(vBoxLayout);
         m_transposeSegmentBack->setTristate(false);
         m_transposeSegmentBack->setChecked(false);
     }
@@ -104,8 +105,6 @@ IntervalDialog::IntervalDialog(QDialogButtonBox::QWidget *parent, bool askChange
     {
         m_transposeSegmentBack = NULL;
     }
-
-    vBox->setLayout(vBoxLayout);
 
     connect(m_referencenote, SIGNAL(noteChanged(int,int,int)),
             this, SLOT(slotSetReferenceNote(int,int,int)));

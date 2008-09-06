@@ -50,17 +50,12 @@ NoteFontFactory::getFontNames(bool forceRescan)
     if (!m_fontNames.empty())
         return m_fontNames;
 
-    QSettings *config = kapp->config();
-    config->beginGroup( NotationViewConfigGroup );
-    // 
-    // manually-FIX, add:
-    // config->endGroup();		// corresponding to: config->beginGroup( NotationViewConfigGroup );
-    //  
-;
+    KConfig *config = kapp->config();
+    config->setGroup(NotationViewConfigGroup);
 
     QString fontNameList = "";
     if (!forceRescan) {
-        fontNameList = config->value("notefontlist") ;
+        fontNameList = config->readEntry("notefontlist");
     }
 
     NOTATION_DEBUG << "NoteFontFactory::getFontNames: read from cache: " << fontNameList << endl;

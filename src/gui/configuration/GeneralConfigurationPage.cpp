@@ -51,7 +51,7 @@ namespace Rosegarden
 {
 
 GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
-        QSettings *cfg,
+        KConfig *cfg,
         QWidget *parent, const char *name)
         : TabbedConfigurationPage(cfg, parent, name),
         m_doc(doc),
@@ -60,12 +60,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
         m_nameStyle(0),
         m_appendLabel(0)
 {
-    m_cfg->beginGroup( GeneralOptionsConfigGroup );
-    // 
-    // manually-FIX, add:
-    // m_cfg->endGroup();		// corresponding to: m_cfg->beginGroup( GeneralOptionsConfigGroup );
-    //  
-;
+    m_cfg->setGroup(GeneralOptionsConfigGroup);
 
     QFrame *frame;
     QGridLayout *layout;
@@ -90,7 +85,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
     m_client->addItem(i18n("Notation editor"));
     m_client->addItem(i18n("Matrix editor"));
     m_client->addItem(i18n("Event List editor"));
-    m_client->setCurrentIndex( m_cfg->value("doubleclickclient", NotationView).toUInt() );
+    m_client->setCurrentIndex(m_cfg->readUnsignedNumEntry("doubleclickclient", NotationView));
 
     layout->addWidget(m_client, row, 1, row- row+1, 2);
     ++row;
@@ -99,7 +94,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
                                  frame), row, 0);
 
     m_countIn = new QSpinBox(frame);
-    m_countIn->setValue( m_cfg->value("countinbars", 0).toUInt() );
+    m_countIn->setValue(m_cfg->readUnsignedNumEntry("countinbars", 0));
     m_countIn->setMaximum(10);
     m_countIn->setMinimum(0);
     layout->addWidget(m_countIn, row, 1, row- row+1, 2);
@@ -114,8 +109,8 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
     m_autoSave->addItem(i18n("Every half an hour"));
     m_autoSave->addItem(i18n("Never"));
 
-    bool doAutoSave = qStrToBool( m_cfg->value("autosave", "true" ) ) ;
-    int autoSaveInterval = m_cfg->value("autosaveinterval", 300).toUInt() ;
+    bool doAutoSave = m_cfg->readBoolEntry("autosave", true);
+    int autoSaveInterval = m_cfg->readUnsignedNumEntry("autosaveinterval", 300);
     if (!doAutoSave || autoSaveInterval == 0) {
         m_autoSave->setCurrentIndex(4); // off
     } else if (autoSaveInterval < 45) {
@@ -135,19 +130,14 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
     layout->addWidget(label, row, 0);
 
     m_appendLabel = new QCheckBox(frame);
-    m_appendLabel->setChecked( qStrToBool( m_cfg->value("appendlabel", "true" ) ) );
+    m_appendLabel->setChecked(m_cfg->readBoolEntry("appendlabel", true));
     layout->addWidget(m_appendLabel, row, 1, row- row+1, 2);
     row++;
 
     // JACK Transport
     //
 #ifdef HAVE_LIBJACK
-    m_cfg->beginGroup( SequencerOptionsConfigGroup );
-    // 
-    // manually-FIX, add:
-    // m_cfg->endGroup();		// corresponding to: m_cfg->beginGroup( SequencerOptionsConfigGroup );
-    //  
-;
+    m_cfg->setGroup(SequencerOptionsConfigGroup);
 
     label = new QLabel(i18n("Use JACK transport"), frame);
     layout->addWidget(label, row, 0);
@@ -162,8 +152,8 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
         m_jackTransport->addItem(i18n("Sync, and offer timebase master"));
     */
 
-    bool jackMaster = qStrToBool( m_cfg->value("jackmaster", "false" ) ) ;
-    bool jackTransport = qStrToBool( m_cfg->value("jacktransport", "false" ) ) ;
+    bool jackMaster = m_cfg->readBoolEntry("jackmaster", false);
+    bool jackTransport = m_cfg->readBoolEntry("jacktransport", false);
 /*
     if (jackTransport)
         m_jackTransport->setCurrentIndex(1);
@@ -174,16 +164,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
 
     ++row;
 
-    m_cfg->beginGroup( GeneralOptionsConfigGroup );
-
-    // 
-
-    // manually-FIX, add:
-
-    // m_cfg->endGroup();		// corresponding to: m_cfg->beginGroup( GeneralOptionsConfigGroup );
-
-    //  
-;
+    m_cfg->setGroup(GeneralOptionsConfigGroup);
 #endif
 
     layout->setRowSpacing(row, 20);
@@ -246,8 +227,8 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
     m_sidebarStyle->addItem(i18n("Tabbed"),
                                RosegardenParameterArea::TAB_BOX_STYLE);
 
-    m_sidebarStyle->setCurrentIndex( m_cfg->value("sidebarstyle",
-                                   0).toUInt() );
+    m_sidebarStyle->setCurrentIndex(m_cfg->readUnsignedNumEntry("sidebarstyle",
+                                   0));
     layout->addWidget(m_sidebarStyle, row, 1, row- row+1, 3);
     ++row;
 
@@ -257,7 +238,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
     m_nameStyle = new QComboBox(frame);
     m_nameStyle->addItem(i18n("Always use US names (e.g. quarter, 8th)"));
     m_nameStyle->addItem(i18n("Localized (where available)"));
-    m_nameStyle->setCurrentIndex( m_cfg->value("notenamestyle", Local).toUInt() );
+    m_nameStyle->setCurrentIndex(m_cfg->readUnsignedNumEntry("notenamestyle", Local));
     layout->addWidget(m_nameStyle, row, 1, row- row+1, 3);
     ++row;
 /*
@@ -284,32 +265,13 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
     m_backgroundTextures->setChecked(m_cfg->readBoolEntry
                                      ("backgroundtextures", true));
 
-    m_cfg->beginGroup( MatrixViewConfigGroup );
-
-    // 
-
-    // manually-FIX, add:
-
-    // m_cfg->endGroup();		// corresponding to: m_cfg->beginGroup( MatrixViewConfigGroup );
-
-    //  
-;
+    m_cfg->setGroup(MatrixViewConfigGroup);
     m_matrixBackgroundTextures->setChecked(m_cfg->readBoolEntry
                                            ("backgroundtextures-1.6-plus", true));
-    m_cfg->beginGroup( NotationViewConfigGroup );
-    // 
-    // manually-FIX, add:
-    // m_cfg->endGroup();		// corresponding to: m_cfg->beginGroup( NotationViewConfigGroup );
-    //  
-;
+    m_cfg->setGroup(NotationViewConfigGroup);
     m_notationBackgroundTextures->setChecked(m_cfg->readBoolEntry
                                              ("backgroundtextures", true));
-    m_cfg->beginGroup( GeneralOptionsConfigGroup );
-    // 
-    // manually-FIX, add:
-    // m_cfg->endGroup();		// corresponding to: m_cfg->beginGroup( GeneralOptionsConfigGroup );
-    //  
-;
+    m_cfg->setGroup(GeneralOptionsConfigGroup);
     ++row;
 
     layout->addWidget(new QLabel(i18n("Use bundled Klearlook theme"), frame), row, 0);
@@ -317,7 +279,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
     m_globalStyle->addItem(i18n("Never"));
     m_globalStyle->addItem(i18n("When not running under KDE"));
     m_globalStyle->addItem(i18n("Always"));
-    m_globalStyle->setCurrentIndex( m_cfg->value("Install Own Theme", 1).toUInt() );
+    m_globalStyle->setCurrentIndex(m_cfg->readUnsignedNumEntry("Install Own Theme", 1));
     layout->addWidget(m_globalStyle, row, 1, row- row+1, 3);
 
     ++row;
@@ -337,12 +299,7 @@ GeneralConfigurationPage::slotShowStatus()
 
 void GeneralConfigurationPage::apply()
 {
-    m_cfg->beginGroup( GeneralOptionsConfigGroup );
-    // 
-    // manually-FIX, add:
-    // m_cfg->endGroup();		// corresponding to: m_cfg->beginGroup( GeneralOptionsConfigGroup );
-    //  
-;
+    m_cfg->setGroup(GeneralOptionsConfigGroup);
 
     int countIn = getCountInSpin();
     m_cfg->writeEntry("countinbars", countIn);
@@ -360,87 +317,36 @@ void GeneralConfigurationPage::apply()
 */
     bool texturesChanged = false;
     bool mainTextureChanged = false;
-    m_cfg->beginGroup( GeneralOptionsConfigGroup );
-    // 
-    // manually-FIX, add:
-    // m_cfg->endGroup();		// corresponding to: m_cfg->beginGroup( GeneralOptionsConfigGroup );
-    //  
-;
+    m_cfg->setGroup(GeneralOptionsConfigGroup);
 
-    if ( qStrToBool( m_cfg->value("backgroundtextures", "true" ) )  !=
+    if (m_cfg->readBoolEntry("backgroundtextures", true) !=
         m_backgroundTextures->isChecked()) {
         texturesChanged = true;
         mainTextureChanged = true;
     } else {
-        m_cfg->beginGroup( MatrixViewConfigGroup );
-        // 
-        // manually-FIX, add:
-        // m_cfg->endGroup();		// corresponding to: m_cfg->beginGroup( MatrixViewConfigGroup );
-        //  
-;
-        if ( qStrToBool( m_cfg->value("backgroundtextures-1.6-plus", "false" ) )  !=
+        m_cfg->setGroup(MatrixViewConfigGroup);
+        if (m_cfg->readBoolEntry("backgroundtextures-1.6-plus", false) !=
             m_matrixBackgroundTextures->isChecked()) {
             texturesChanged = true;
         } else {
-            m_cfg->beginGroup( NotationViewConfigGroup );
-            // 
-            // manually-FIX, add:
-            // m_cfg->endGroup();		// corresponding to: m_cfg->beginGroup( NotationViewConfigGroup );
-            //  
-;
-            if ( qStrToBool( m_cfg->value("backgroundtextures", "true" ) )  !=
+            m_cfg->setGroup(NotationViewConfigGroup);
+            if (m_cfg->readBoolEntry("backgroundtextures", true) !=
                 m_notationBackgroundTextures->isChecked()) {
                 texturesChanged = true;
             }
         }
     }
 
-    m_cfg->beginGroup( GeneralOptionsConfigGroup );
-
-    // 
-
-    // manually-FIX, add:
-
-    // m_cfg->endGroup();		// corresponding to: m_cfg->beginGroup( GeneralOptionsConfigGroup );
-
-    //  
-;
+    m_cfg->setGroup(GeneralOptionsConfigGroup);
     m_cfg->writeEntry("backgroundtextures", m_backgroundTextures->isChecked());
 
-    m_cfg->beginGroup( MatrixViewConfigGroup );
-
-    // 
-
-    // manually-FIX, add:
-
-    // m_cfg->endGroup();		// corresponding to: m_cfg->beginGroup( MatrixViewConfigGroup );
-
-    //  
-;
+    m_cfg->setGroup(MatrixViewConfigGroup);
     m_cfg->writeEntry("backgroundtextures-1.6-plus", m_matrixBackgroundTextures->isChecked());
 
-    m_cfg->beginGroup( NotationViewConfigGroup );
-
-    // 
-
-    // manually-FIX, add:
-
-    // m_cfg->endGroup();		// corresponding to: m_cfg->beginGroup( NotationViewConfigGroup );
-
-    //  
-;
+    m_cfg->setGroup(NotationViewConfigGroup);
     m_cfg->writeEntry("backgroundtextures", m_notationBackgroundTextures->isChecked());
 
-    m_cfg->beginGroup( GeneralOptionsConfigGroup );
-
-    // 
-
-    // manually-FIX, add:
-
-    // m_cfg->endGroup();		// corresponding to: m_cfg->beginGroup( GeneralOptionsConfigGroup );
-
-    //  
-;
+    m_cfg->setGroup(GeneralOptionsConfigGroup);
 
     int sidebarStyle = m_sidebarStyle->currentIndex();
     m_cfg->writeEntry("sidebarstyle", sidebarStyle);
@@ -469,12 +375,7 @@ void GeneralConfigurationPage::apply()
     m_cfg->writeEntry("appendlabel", appendLabel);
 
 #ifdef HAVE_LIBJACK
-    m_cfg->beginGroup( SequencerOptionsConfigGroup );
-    // 
-    // manually-FIX, add:
-    // m_cfg->endGroup();		// corresponding to: m_cfg->beginGroup( SequencerOptionsConfigGroup );
-    //  
-;
+    m_cfg->setGroup(SequencerOptionsConfigGroup);
 
     // Write the JACK entry
     //

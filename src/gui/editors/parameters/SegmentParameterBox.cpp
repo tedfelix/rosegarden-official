@@ -1006,14 +1006,9 @@ SegmentParameterBox::updateHighLow()
     Pitch highest(m_highestPlayable, accidental);
     Pitch lowest(m_lowestPlayable, accidental);
 
-    QSettings *config = kapp->config();
-    config->beginGroup( GeneralOptionsConfigGroup );
-    // 
-    // manually-FIX, add:
-    // config->endGroup();		// corresponding to: config->beginGroup( GeneralOptionsConfigGroup );
-    //  
-;
-    int base = config->value("midipitchoctave", -2).toInt() ;
+    KConfig *config = kapp->config();
+    config->setGroup(GeneralOptionsConfigGroup);
+    int base = config->readNumEntry("midipitchoctave", -2);
     //!!! FIXME this code is broken, and needs to be fixed after the fashion of
     //the TPB, but I'm not bothering with that at this time, because they are
     //going to be hidden for 1.3 anyway

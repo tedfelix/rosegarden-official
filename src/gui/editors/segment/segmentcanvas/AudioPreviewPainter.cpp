@@ -140,15 +140,10 @@ void AudioPreviewPainter::paintPreviewImage()
 	haveTempoChange = true;
     }
 
-    QSettings *config = kapp->config();
-    config->beginGroup( GeneralOptionsConfigGroup );
-    // 
-    // manually-FIX, add:
-    // config->endGroup();		// corresponding to: config->beginGroup( GeneralOptionsConfigGroup );
-    //  
-;
+    KConfig* config = kapp->config();
+    config->setGroup(GeneralOptionsConfigGroup);
 
-    bool meterLevels = (config->value("audiopreviewstyle", 1).toUInt() 
+    bool meterLevels = (config->readUnsignedNumEntry("audiopreviewstyle", 1)
 			== 1);
 
     for (int i = 0; i < m_rect.getBaseWidth(); ++i) {

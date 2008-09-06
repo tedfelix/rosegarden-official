@@ -45,11 +45,9 @@ namespace Rosegarden
 
 HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
 	RosegardenGUIDoc *doc) :
-	QWidget(parent),
+	QVBox(parent),
 	m_doc(doc)
 {
-    QVBoxLayout *layout = new QVBoxLayout;
-
     //
     // LilyPond export: Printable headers
     //
@@ -57,7 +55,6 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
     QGroupBox *headersBox = new QGroupBox
                            (1, Horizontal,
                             i18n("Printable headers"), this);
-    layout->addWidget(headersBox);
     QFrame *frameHeaders = new QFrame(headersBox);
     QGridLayout *layoutHeaders = new QGridLayout(frameHeaders, 10, 6, 10, 5);
 
@@ -157,27 +154,15 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
     //
 
     // set default expansion to false for this group -- what a faff
-    QSettings *config = kapp->config();
+    KConfig *config = kapp->config();
     QString groupTemp = config->group();
-    config->beginGroup( "CollapsingFrame" );
-    // 
-    // manually-FIX, add:
-    // config->endGroup();		// corresponding to: config->beginGroup( "CollapsingFrame" );
-    //  
-;
-    bool expanded = qStrToBool( config->value("nonprintableheaders", "false" ) ) ;
+    config->setGroup("CollapsingFrame");
+    bool expanded = config->readBoolEntry("nonprintableheaders", false);
     config->writeEntry("nonprintableheaders", expanded);
-    config->beginGroup( groupTemp );
-    // 
-    // manually-FIX, add:
-    // config->endGroup();		// corresponding to: config->beginGroup( groupTemp );
-    //  
-;
+    config->setGroup(groupTemp);
 
     CollapsingFrame *otherHeadersBox = new CollapsingFrame
         (i18n("Non-printable headers"), this, "nonprintableheaders");
-    layout->addWidget(otherHeadersBox);
-    setLayout(layout);
     QFrame *frameOtherHeaders = new QFrame(otherHeadersBox);
     otherHeadersBox->setWidgetFill(true);
     QFont font(otherHeadersBox->font());
@@ -259,13 +244,8 @@ HeadersConfigurationPage::slotDeleteProperty()
 
 void HeadersConfigurationPage::apply()
 {
-    QSettings *config = kapp->config();
-    config->beginGroup( NotationViewConfigGroup );
-    // 
-    // manually-FIX, add:
-    // config->endGroup();		// corresponding to: config->beginGroup( NotationViewConfigGroup );
-    //  
-;
+    KConfig *config = kapp->config();
+    config->setGroup(NotationViewConfigGroup);
 
     // If one of the items still has focus, it won't remember edits.
     // Switch between two fields in order to lose the current focus.

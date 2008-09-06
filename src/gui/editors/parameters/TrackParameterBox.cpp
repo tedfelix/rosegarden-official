@@ -101,28 +101,18 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     title_font.setBold(true);
 
     // Set up default expansions for the collapsing elements
-    QSettings *config = kapp->config();
+    KConfig *config = kapp->config();
     QString groupTemp = config->group();
-    config->beginGroup( "CollapsingFrame" );
-    // 
-    // manually-FIX, add:
-    // config->endGroup();		// corresponding to: config->beginGroup( "CollapsingFrame" );
-    //  
-;
-    bool expanded = qStrToBool( config->value("trackparametersplayback", "true" ) ) ;
+    config->setGroup("CollapsingFrame");
+    bool expanded = config->readBoolEntry("trackparametersplayback", true);
     config->writeEntry("trackparametersplayback", expanded);
-    expanded = qStrToBool( config->value("trackparametersrecord", "false" ) ) ;
+    expanded = config->readBoolEntry("trackparametersrecord", false);
     config->writeEntry("trackparametersrecord", expanded);
-    expanded = qStrToBool( config->value("trackparametersdefaults", "false" ) ) ;
+    expanded = config->readBoolEntry("trackparametersdefaults", false);
     config->writeEntry("trackparametersdefaults", expanded);
-    expanded = qStrToBool( config->value("trackstaffgroup", "false" ) ) ;
+    expanded = config->readBoolEntry("trackstaffgroup", false);
     config->writeEntry("trackstaffgroup", expanded);
-    config->beginGroup( groupTemp );
-    // 
-    // manually-FIX, add:
-    // config->endGroup();		// corresponding to: config->beginGroup( groupTemp );
-    //  
-;
+    config->setGroup(groupTemp);
 
     QGridLayout *mainLayout = new QGridLayout(this, 5, 1, 2, 1);
 
@@ -598,14 +588,9 @@ TrackParameterBox::updateHighLow()
     Pitch highest(m_highestPlayable, accidental);
     Pitch lowest(m_lowestPlayable, accidental);
 
-    QSettings *config = kapp->config();
-    config->beginGroup( GeneralOptionsConfigGroup );
-    // 
-    // manually-FIX, add:
-    // config->endGroup();		// corresponding to: config->beginGroup( GeneralOptionsConfigGroup );
-    //  
-;
-    int base = config->value("midipitchoctave", -2).toInt() ;
+    KConfig *config = kapp->config();
+    config->setGroup(GeneralOptionsConfigGroup);
+    int base = config->readNumEntry("midipitchoctave", -2);
     bool useSharps = true;
     bool includeOctave = true;
 

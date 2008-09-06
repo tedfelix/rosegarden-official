@@ -310,17 +310,8 @@ EventView::applyLayout(int /*staffNo*/)
     //
     m_eventList->clear();
 
-    m_config->beginGroup( EventViewConfigGroup );
-
-    // 
-
-    // manually-FIX, add:
-
-    // m_config->endGroup();		// corresponding to: m_config->beginGroup( EventViewConfigGroup );
-
-    //  
-;
-    int timeMode = m_config->value("timemode", 0).toInt() ;
+    m_config->setGroup(EventViewConfigGroup);
+    int timeMode = m_config->readNumEntry("timemode", 0);
 
     for (unsigned int i = 0; i < m_segments.size(); i++) {
         SegmentPerformanceHelper helper(*m_segments[i]);
@@ -1161,17 +1152,8 @@ EventView::setupActions()
                 SLOT(slotClearSelection()), actionCollection(),
                 "clear_selection");
 
-    m_config->beginGroup( EventViewConfigGroup );
-
-    // 
-
-    // manually-FIX, add:
-
-    // m_config->endGroup();		// corresponding to: m_config->beginGroup( EventViewConfigGroup );
-
-    //  
-;
-    int timeMode = m_config->value("timemode", 0).toInt() ;
+    m_config->setGroup(EventViewConfigGroup);
+    int timeMode = m_config->readNumEntry("timemode", 0);
 
     KRadioAction *action;
 
@@ -1257,26 +1239,16 @@ EventView::setViewSize(QSize s)
 void
 EventView::readOptions()
 {
-    m_config->beginGroup( EventViewConfigGroup );
-    // 
-    // manually-FIX, add:
-    // m_config->endGroup();		// corresponding to: m_config->beginGroup( EventViewConfigGroup );
-    //  
-;
+    m_config->setGroup(EventViewConfigGroup);
     EditViewBase::readOptions();
-    m_eventFilter = m_config->value("eventfilter", m_eventFilter).toInt() ;
+    m_eventFilter = m_config->readNumEntry("eventfilter", m_eventFilter);
     m_eventList->restoreLayout(m_config, EventViewLayoutConfigGroupName);
 }
 
 void
 EventView::slotSaveOptions()
 {
-    m_config->beginGroup( EventViewConfigGroup );
-    // 
-    // manually-FIX, add:
-    // m_config->endGroup();		// corresponding to: m_config->beginGroup( EventViewConfigGroup );
-    //  
-;
+    m_config->setGroup(EventViewConfigGroup);
     m_config->writeEntry("eventfilter", m_eventFilter);
     m_eventList->saveLayout(m_config, EventViewLayoutConfigGroupName);
 }
@@ -1468,12 +1440,7 @@ EventView::setButtonsToFilter()
 void
 EventView::slotMusicalTime()
 {
-    m_config->beginGroup( EventViewConfigGroup );
-    // 
-    // manually-FIX, add:
-    // m_config->endGroup();		// corresponding to: m_config->beginGroup( EventViewConfigGroup );
-    //  
-;
+    m_config->setGroup(EventViewConfigGroup);
     m_config->writeEntry("timemode", 0);
     applyLayout();
 }
@@ -1481,12 +1448,7 @@ EventView::slotMusicalTime()
 void
 EventView::slotRealTime()
 {
-    m_config->beginGroup( EventViewConfigGroup );
-    // 
-    // manually-FIX, add:
-    // m_config->endGroup();		// corresponding to: m_config->beginGroup( EventViewConfigGroup );
-    //  
-;
+    m_config->setGroup(EventViewConfigGroup);
     m_config->writeEntry("timemode", 1);
     applyLayout();
 }
@@ -1494,12 +1456,7 @@ EventView::slotRealTime()
 void
 EventView::slotRawTime()
 {
-    m_config->beginGroup( EventViewConfigGroup );
-    // 
-    // manually-FIX, add:
-    // m_config->endGroup();		// corresponding to: m_config->beginGroup( EventViewConfigGroup );
-    //  
-;
+    m_config->setGroup(EventViewConfigGroup);
     m_config->writeEntry("timemode", 2);
     applyLayout();
 }

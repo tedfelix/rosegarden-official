@@ -68,14 +68,9 @@ NotationHLayout::NotationHLayout(Composition *c, NotePixmapFactory *npf,
 {
     //    NOTATION_DEBUG << "NotationHLayout::NotationHLayout()" << endl;
 
-    QSettings *config = kapp->config();
-    config->beginGroup( "Notation Options" );
-    // 
-    // manually-FIX, add:
-    // config->endGroup();		// corresponding to: config->beginGroup( "Notation Options" );
-    //  
-;
-    m_keySigCancelMode = config->value("keysigcancelmode", 1).toInt() ;
+    KConfig *config = kapp->config();
+    config->setGroup("Notation Options");
+    m_keySigCancelMode = config->readNumEntry("keysigcancelmode", 1);
 }
 
 NotationHLayout::~NotationHLayout()
@@ -253,27 +248,22 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 
     NOTATION_DEBUG << "ottava shift at start:" << ottavaShift << ", ottavaEnd " << ottavaEnd << endl;
 
-    QSettings *config = kapp->config();
-    config->beginGroup( "Notation Options" );
-    // 
-    // manually-FIX, add:
-    // config->endGroup();		// corresponding to: config->beginGroup( "Notation Options" );
-    //  
-;
+    KConfig *config = kapp->config();
+    config->setGroup("Notation Options");
 
-    int accOctaveMode = config->value("accidentaloctavemode", 1).toInt() ;
+    int accOctaveMode = config->readNumEntry("accidentaloctavemode", 1);
     AccidentalTable::OctaveType octaveType =
         (accOctaveMode == 0 ? AccidentalTable::OctavesIndependent :
          accOctaveMode == 1 ? AccidentalTable::OctavesCautionary :
          AccidentalTable::OctavesEquivalent);
 
-    int accBarMode = config->value("accidentalbarmode", 0).toInt() ;
+    int accBarMode = config->readNumEntry("accidentalbarmode", 0);
     AccidentalTable::BarResetType barResetType =
         (accBarMode == 0 ? AccidentalTable::BarResetNone :
          accBarMode == 1 ? AccidentalTable::BarResetCautionary :
          AccidentalTable::BarResetExplicit);
 
-    bool showInvisibles = qStrToBool( config->value("showinvisibles", "true" ) ) ;
+    bool showInvisibles = config->readBoolEntry("showinvisibles", true);
 
     if (barResetType != AccidentalTable::BarResetNone) {
         //!!! very crude and expensive way of making sure we see the
@@ -1269,14 +1259,9 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
     int startBar = getComposition()->getBarNumber(startTime);
 
-    QSettings *config = kapp->config();
-    config->beginGroup( "Notation Options" );
-    // 
-    // manually-FIX, add:
-    // config->endGroup();		// corresponding to: config->beginGroup( "Notation Options" );
-    //  
-;
-    bool showInvisibles = qStrToBool( config->value("showinvisibles", "true" ) ) ;
+    KConfig *config = kapp->config();
+    config->setGroup("Notation Options");
+    bool showInvisibles = config->readBoolEntry("showinvisibles", true);
 
     for (BarPositionList::iterator bpi = m_barPositions.begin();
             bpi != m_barPositions.end(); ++bpi) {

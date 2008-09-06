@@ -43,14 +43,9 @@ MidiPitchLabel::MidiPitchLabel(int pitch)
 
     } else {
 
-        QSettings *config = kapp->config();
-        config->beginGroup( GeneralOptionsConfigGroup );
-        // 
-        // manually-FIX, add:
-        // config->endGroup();		// corresponding to: config->beginGroup( GeneralOptionsConfigGroup );
-        //  
-;
-        int baseOctave = config->value("midipitchoctave", -2).toInt() ;
+        KConfig *config = kapp->config();
+        config->setGroup(GeneralOptionsConfigGroup);
+        int baseOctave = config->readNumEntry("midipitchoctave", -2);
 
         int octave = (int)(((float)pitch) / 12.0) + baseOctave;
         m_midiNote = notes[pitch % 12].arg(octave);

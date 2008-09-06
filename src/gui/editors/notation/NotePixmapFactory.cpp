@@ -220,13 +220,8 @@ NotePixmapFactory::init(std::string fontName, int size)
     // sizes only and we want pixels
     QFont timeSigFont(defaultTimeSigFontFamily),
         textFont(defaultSerifFontFamily);
-    QSettings *config = kapp->config();
-    config->beginGroup( NotationViewConfigGroup );
-    // 
-    // manually-FIX, add:
-    // config->endGroup();		// corresponding to: config->beginGroup( NotationViewConfigGroup );
-    //  
-;
+    KConfig* config = kapp->config();
+    config->setGroup(NotationViewConfigGroup);
 
     m_timeSigFont = config->readFontEntry("timesigfont", &timeSigFont);
     m_timeSigFont.setBold(true);
@@ -3219,7 +3214,7 @@ NotePixmapFactory::getTextFont(const Text &text) const
         tiny = true;
     }
     
-    QSettings *config = kapp->config();
+    KConfig* config = kapp->config();
 
     QFont textFont;
 

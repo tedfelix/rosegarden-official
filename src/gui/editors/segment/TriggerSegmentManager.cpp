@@ -203,17 +203,8 @@ TriggerSegmentManager::slotUpdate()
 
     Composition::triggersegmentcontainerconstiterator it;
 
-    kapp->config()->beginGroup( TriggerManagerConfigGroup );
-
-    // 
-
-    // manually-FIX, add:
-
-    // kapp->config()->endGroup();		// corresponding to: kapp->config()->beginGroup( TriggerManagerConfigGroup );
-
-    //  
-;
-    int timeMode = kapp->config()->value("timemode", 0).toInt() ;
+    kapp->config()->setGroup(TriggerManagerConfigGroup);
+    int timeMode = kapp->config()->readNumEntry("timemode", 0);
 
     int i = 0;
 
@@ -408,17 +399,8 @@ TriggerSegmentManager::setupActions()
                 SLOT(slotPasteAsNew()), actionCollection(),
                 "paste_to_trigger_segment");
 
-    kapp->config()->beginGroup( TriggerManagerConfigGroup );
-
-    // 
-
-    // manually-FIX, add:
-
-    // kapp->config()->endGroup();		// corresponding to: kapp->config()->beginGroup( TriggerManagerConfigGroup );
-
-    //  
-;
-    int timeMode = kapp->config()->value("timemode", 0).toInt() ;
+    kapp->config()->setGroup(TriggerManagerConfigGroup);
+    int timeMode = kapp->config()->readNumEntry("timemode", 0);
 
     KRadioAction *action;
 
@@ -567,12 +549,7 @@ TriggerSegmentManager::makeDurationString(timeT time,
 void
 TriggerSegmentManager::slotMusicalTime()
 {
-    kapp->config()->beginGroup( TriggerManagerConfigGroup );
-    // 
-    // manually-FIX, add:
-    // kapp->config()->endGroup();		// corresponding to: kapp->config()->beginGroup( TriggerManagerConfigGroup );
-    //  
-;
+    kapp->config()->setGroup(TriggerManagerConfigGroup);
     kapp->config()->writeEntry("timemode", 0);
     slotUpdate();
 }
@@ -580,12 +557,7 @@ TriggerSegmentManager::slotMusicalTime()
 void
 TriggerSegmentManager::slotRealTime()
 {
-    kapp->config()->beginGroup( TriggerManagerConfigGroup );
-    // 
-    // manually-FIX, add:
-    // kapp->config()->endGroup();		// corresponding to: kapp->config()->beginGroup( TriggerManagerConfigGroup );
-    //  
-;
+    kapp->config()->setGroup(TriggerManagerConfigGroup);
     kapp->config()->writeEntry("timemode", 1);
     slotUpdate();
 }
@@ -593,12 +565,7 @@ TriggerSegmentManager::slotRealTime()
 void
 TriggerSegmentManager::slotRawTime()
 {
-    kapp->config()->beginGroup( TriggerManagerConfigGroup );
-    // 
-    // manually-FIX, add:
-    // kapp->config()->endGroup();		// corresponding to: kapp->config()->beginGroup( TriggerManagerConfigGroup );
-    //  
-;
+    kapp->config()->setGroup(TriggerManagerConfigGroup);
     kapp->config()->writeEntry("timemode", 2);
     slotUpdate();
 }

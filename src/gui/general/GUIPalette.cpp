@@ -30,13 +30,8 @@ namespace Rosegarden
 
 QColor GUIPalette::getColour(const char* const colourName)
 {
-    QSettings *config = kapp->config();
-    config->beginGroup( ColoursConfigGroup );
-    // 
-    // manually-FIX, add:
-    // config->endGroup();		// corresponding to: config->beginGroup( ColoursConfigGroup );
-    //  
-;
+    KConfig* config = kapp->config();
+    config->setGroup(ColoursConfigGroup);
 
     QColor res = getInstance()->m_defaultsMap[colourName];
     config->readColorEntry(colourName, &res);

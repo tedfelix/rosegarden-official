@@ -187,17 +187,8 @@ TempoView::applyLayout(int /*staffNo*/)
 
     Composition *comp = &getDocument()->getComposition();
 
-    m_config->beginGroup( TempoViewConfigGroup );
-
-    // 
-
-    // manually-FIX, add:
-
-    // m_config->endGroup();		// corresponding to: m_config->beginGroup( TempoViewConfigGroup );
-
-    //  
-;
-    int timeMode = m_config->value("timemode", 0).toInt() ;
+    m_config->setGroup(TempoViewConfigGroup);
+    int timeMode = m_config->readNumEntry("timemode", 0);
 
     if (m_filter & TimeSignature) {
         for (int i = 0; i < comp->getTimeSignatureCount(); ++i) {
@@ -614,17 +605,8 @@ TempoView::setupActions()
                 SLOT(slotClearSelection()), actionCollection(),
                 "clear_selection");
 
-    m_config->beginGroup( TempoViewConfigGroup );
-
-    // 
-
-    // manually-FIX, add:
-
-    // m_config->endGroup();		// corresponding to: m_config->beginGroup( TempoViewConfigGroup );
-
-    //  
-;
-    int timeMode = m_config->value("timemode", 0).toInt() ;
+    m_config->setGroup(TempoViewConfigGroup);
+    int timeMode = m_config->readNumEntry("timemode", 0);
 
     KRadioAction *action;
 
@@ -687,26 +669,16 @@ TempoView::setViewSize(QSize s)
 void
 TempoView::readOptions()
 {
-    m_config->beginGroup( TempoViewConfigGroup );
-    // 
-    // manually-FIX, add:
-    // m_config->endGroup();		// corresponding to: m_config->beginGroup( TempoViewConfigGroup );
-    //  
-;
+    m_config->setGroup(TempoViewConfigGroup);
     EditViewBase::readOptions();
-    m_filter = m_config->value("filter", m_filter).toInt() ;
+    m_filter = m_config->readNumEntry("filter", m_filter);
     m_list->restoreLayout(m_config, TempoViewLayoutConfigGroupName);
 }
 
 void
 TempoView::slotSaveOptions()
 {
-    m_config->beginGroup( TempoViewConfigGroup );
-    // 
-    // manually-FIX, add:
-    // m_config->endGroup();		// corresponding to: m_config->beginGroup( TempoViewConfigGroup );
-    //  
-;
+    m_config->setGroup(TempoViewConfigGroup);
     m_config->writeEntry("filter", m_filter);
     m_list->saveLayout(m_config, TempoViewLayoutConfigGroupName);
 }
@@ -770,12 +742,7 @@ TempoView::setButtonsToFilter()
 void
 TempoView::slotMusicalTime()
 {
-    m_config->beginGroup( TempoViewConfigGroup );
-    // 
-    // manually-FIX, add:
-    // m_config->endGroup();		// corresponding to: m_config->beginGroup( TempoViewConfigGroup );
-    //  
-;
+    m_config->setGroup(TempoViewConfigGroup);
     m_config->writeEntry("timemode", 0);
     applyLayout();
 }
@@ -783,12 +750,7 @@ TempoView::slotMusicalTime()
 void
 TempoView::slotRealTime()
 {
-    m_config->beginGroup( TempoViewConfigGroup );
-    // 
-    // manually-FIX, add:
-    // m_config->endGroup();		// corresponding to: m_config->beginGroup( TempoViewConfigGroup );
-    //  
-;
+    m_config->setGroup(TempoViewConfigGroup);
     m_config->writeEntry("timemode", 1);
     applyLayout();
 }
@@ -796,12 +758,7 @@ TempoView::slotRealTime()
 void
 TempoView::slotRawTime()
 {
-    m_config->beginGroup( TempoViewConfigGroup );
-    // 
-    // manually-FIX, add:
-    // m_config->endGroup();		// corresponding to: m_config->beginGroup( TempoViewConfigGroup );
-    //  
-;
+    m_config->setGroup(TempoViewConfigGroup);
     m_config->writeEntry("timemode", 2);
     applyLayout();
 }
