@@ -210,9 +210,9 @@ ImportDeviceDialog::slotOk()
     // config.endGroup();		// corresponding to: config.beginGroup( GeneralOptionsConfigGroup );
     //  
 
-    config->writeEntry("importbanksoverwrite", v == 1);
+    config.setValue("importbanksoverwrite", v == 1);
     if (m_rename)
-        config->writeEntry("importbanksrename", m_rename->isChecked());
+        config.setValue("importbanksrename", m_rename->isChecked());
     accept();
 }
 

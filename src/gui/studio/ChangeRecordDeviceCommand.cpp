@@ -49,7 +49,7 @@ ChangeRecordDeviceCommand::swap()
             if(devList.contains(sdevice))
                 devList.remove(sdevice);
         }
-        config->writeEntry("midirecorddevice", devList);
+        config.setValue("midirecorddevice", devList);
 
         // send the selected device to the sequencer
         Rosegarden::MappedEvent mEdevice

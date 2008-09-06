@@ -618,9 +618,9 @@ void MatrixView::slotSaveOptions()
     //  
 
 
-    m_config->writeEntry("Show Chord Name Ruler", getToggleAction("show_chords_ruler")->isChecked());
-    m_config->writeEntry("Show Tempo Ruler", getToggleAction("show_tempo_ruler")->isChecked());
-    m_config->writeEntry("Show Parameters", m_dockVisible);
+    m_config.setValue("Show Chord Name Ruler", getToggleAction("show_chords_ruler")->isChecked());
+    m_config.setValue("Show Tempo Ruler", getToggleAction("show_tempo_ruler")->isChecked());
+    m_config.setValue("Show Parameters", m_dockVisible);
     //getToggleAction("m_dockLeft->isVisible());
 
     m_config->sync();
@@ -2131,7 +2131,7 @@ MatrixView::slotSetSnap(timeT t)
 
     //  
 
-    m_config->writeEntry("Snap Grid Size", t);
+    m_config.setValue("Snap Grid Size", t);
 
     updateView();
 }
@@ -2360,7 +2360,7 @@ MatrixView::slotChangeHorizontalZoom(int)
 
     //  
 
-    m_config->writeEntry("Zoom Level", zoomValue);
+    m_config.setValue("Zoom Level", zoomValue);
 
     // If you do adjust the viewsize then please remember to
     // either re-center() or remember old scrollbar position

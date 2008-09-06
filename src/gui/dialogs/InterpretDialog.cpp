@@ -116,11 +116,11 @@ InterpretDialog::getInterpretations()
     //  
 
 
-    config->writeEntry("interpretall", m_allInterpretations->isChecked());
-    config->writeEntry("interprettextdynamics", m_applyTextDynamics->isChecked());
-    config->writeEntry("interprethairpins", m_applyHairpins->isChecked());
-    config->writeEntry("interpretstressbeats", m_stressBeats->isChecked());
-    config->writeEntry("interpretarticulate", m_articulate->isChecked());
+    config.setValue("interpretall", m_allInterpretations->isChecked());
+    config.setValue("interprettextdynamics", m_applyTextDynamics->isChecked());
+    config.setValue("interprethairpins", m_applyHairpins->isChecked());
+    config.setValue("interpretstressbeats", m_stressBeats->isChecked());
+    config.setValue("interpretarticulate", m_articulate->isChecked());
 
     if (m_allInterpretations->isChecked()) {
         return InterpretCommand::AllInterpretations;

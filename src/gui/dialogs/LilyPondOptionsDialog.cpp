@@ -325,22 +325,22 @@ LilyPondOptionsDialog::slotApply()
     //  
 
 
-    config->writeEntry("lilylanguage", m_lilyLanguage->currentIndex());
-    config->writeEntry("lilypapersize", m_lilyPaperSize->currentIndex());
-    config->writeEntry("lilypaperlandscape", m_lilyPaperLandscape->isChecked());
-    config->writeEntry("lilyfontsize", m_lilyFontSize->currentIndex());
-    config->writeEntry("lilyraggedbottom", m_lilyRaggedBottom->isChecked());
-    config->writeEntry("lilychordnamesmode", m_lilyChordNamesMode->isChecked());
-    config->writeEntry("lilyexportlyrics", m_lilyExportLyrics->isChecked());
-    config->writeEntry("lilyexportmidi", m_lilyExportMidi->isChecked());
-    config->writeEntry("lilyexporttempomarks", m_lilyTempoMarks->currentIndex());
-    config->writeEntry("lilyexportselection", m_lilyExportSelection->currentIndex());
-    config->writeEntry("lilyexportpointandclick", m_lilyExportPointAndClick->isChecked());
-    config->writeEntry("lilyexportbeamings", m_lilyExportBeams->isChecked());
-    config->writeEntry("lilyexportstaffmerge", m_lilyExportStaffMerge->isChecked());
-    config->writeEntry("lilyexportstaffbrackets", m_lilyExportStaffGroup->isChecked());
-    config->writeEntry("lilylyricshalignment", m_lilyLyricsHAlignment->currentIndex());
-    config->writeEntry("lilyexportmarkermode", m_lilyMarkerMode->currentIndex());
+    config.setValue("lilylanguage", m_lilyLanguage->currentIndex());
+    config.setValue("lilypapersize", m_lilyPaperSize->currentIndex());
+    config.setValue("lilypaperlandscape", m_lilyPaperLandscape->isChecked());
+    config.setValue("lilyfontsize", m_lilyFontSize->currentIndex());
+    config.setValue("lilyraggedbottom", m_lilyRaggedBottom->isChecked());
+    config.setValue("lilychordnamesmode", m_lilyChordNamesMode->isChecked());
+    config.setValue("lilyexportlyrics", m_lilyExportLyrics->isChecked());
+    config.setValue("lilyexportmidi", m_lilyExportMidi->isChecked());
+    config.setValue("lilyexporttempomarks", m_lilyTempoMarks->currentIndex());
+    config.setValue("lilyexportselection", m_lilyExportSelection->currentIndex());
+    config.setValue("lilyexportpointandclick", m_lilyExportPointAndClick->isChecked());
+    config.setValue("lilyexportbeamings", m_lilyExportBeams->isChecked());
+    config.setValue("lilyexportstaffmerge", m_lilyExportStaffMerge->isChecked());
+    config.setValue("lilyexportstaffbrackets", m_lilyExportStaffGroup->isChecked());
+    config.setValue("lilylyricshalignment", m_lilyLyricsHAlignment->currentIndex());
+    config.setValue("lilyexportmarkermode", m_lilyMarkerMode->currentIndex());
     m_headersPage->apply();
 }
  
@@ -386,7 +386,7 @@ LilyPondOptionsDialog::setDefaultLilyPondVersion(QString version)
         std::cerr << "\nWARNING: Unstable LilyPond version detected, selecting next language version up\n" << std::endl;
     }
     if (index >= 0) {
-        config->writeEntry("lilylanguage", index);
+        config.setValue("lilylanguage", index);
     }
 }
 

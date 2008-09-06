@@ -146,7 +146,7 @@ CollapsingFrame::toggle()
         // config.endGroup();		// corresponding to: config.beginGroup( "CollapsingFrame" );
         //  
 
-        config->writeEntry(name(), !m_collapsed);
+        config.setValue(name(), !m_collapsed);
         QSettings config;
         config.beginGroup( groupTemp );
         // 

@@ -258,10 +258,10 @@ UseOrnamentDialog::slotOk()
     //  
 
 
-    config->writeEntry("useornamentmark", strtoqstr(getMark()));
-    config->writeEntry("useornamenttiming", strtoqstr(getTimeAdjust()));
-    config->writeEntry("useornamentretune", m_retune->isChecked());
-    config->writeEntry("useornamentlastornament", m_ornament->currentIndex());
+    config.setValue("useornamentmark", strtoqstr(getMark()));
+    config.setValue("useornamenttiming", strtoqstr(getTimeAdjust()));
+    config.setValue("useornamentretune", m_retune->isChecked());
+    config.setValue("useornamentlastornament", m_ornament->currentIndex());
 
     accept();
 }

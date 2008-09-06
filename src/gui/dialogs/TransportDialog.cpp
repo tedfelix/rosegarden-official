@@ -270,8 +270,8 @@ TransportDialog::~TransportDialog()
         // config.endGroup();		// corresponding to: config.beginGroup( GeneralOptionsConfigGroup );
         //  
 
-        config->writeEntry("transportx", x());
-        config->writeEntry("transporty", y());
+        config.setValue("transportx", x());
+        config.setValue("transporty", y());
     }
 }
 
@@ -343,8 +343,8 @@ TransportDialog::hide()
         // config.endGroup();		// corresponding to: config.beginGroup( GeneralOptionsConfigGroup );
         //  
 
-        config->writeEntry("transportx", x());
-        config->writeEntry("transporty", y());
+        config.setValue("transportx", x());
+        config.setValue("transporty", y());
     }
     QWidget::hide();
 }

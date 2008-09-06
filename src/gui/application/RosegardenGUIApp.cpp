@@ -1943,16 +1943,16 @@ void RosegardenGUIApp::slotSaveOptions()
 
     //  
 
-    confq4->writeEntry("Show Transport", m_viewTransport->isChecked());
-    confq4->writeEntry("Expanded Transport", m_transport ? getTransport()->isExpanded() : true);
-    confq4->writeEntry("Show Track labels", m_viewTrackLabels->isChecked());
-    confq4->writeEntry("Show Rulers", m_viewRulers->isChecked());
-    confq4->writeEntry("Show Tempo Ruler", m_viewTempoRuler->isChecked());
-    confq4->writeEntry("Show Chord Name Ruler", m_viewChordNameRuler->isChecked());
-    confq4->writeEntry("Show Previews", m_viewPreviews->isChecked());
-    confq4->writeEntry("Show Segment Labels", m_viewSegmentLabels->isChecked());
-    confq4->writeEntry("Show Parameters", m_dockVisible);
-    confq4->writeEntry("MIDI Thru Routing", m_enableMIDIrouting->isChecked());
+    confq4.setValue("Show Transport", m_viewTransport->isChecked());
+    confq4.setValue("Expanded Transport", m_transport ? getTransport()->isExpanded() : true);
+    confq4.setValue("Show Track labels", m_viewTrackLabels->isChecked());
+    confq4.setValue("Show Rulers", m_viewRulers->isChecked());
+    confq4.setValue("Show Tempo Ruler", m_viewTempoRuler->isChecked());
+    confq4.setValue("Show Chord Name Ruler", m_viewChordNameRuler->isChecked());
+    confq4.setValue("Show Previews", m_viewPreviews->isChecked());
+    confq4.setValue("Show Segment Labels", m_viewSegmentLabels->isChecked());
+    confq4.setValue("Show Parameters", m_dockVisible);
+    confq4.setValue("MIDI Thru Routing", m_enableMIDIrouting->isChecked());
 
 #ifdef SETTING_LOG_DEBUG
 
@@ -1992,16 +1992,16 @@ void RosegardenGUIApp::setupFileDialogSpeedbar()
 
         unsigned int n = config.value("Number of Entries", 0).toUInt() ;
 
-        config->writeEntry(QString("Description_%1").arg(n), i18n("Example Files"));
-        config->writeEntry(QString("IconGroup_%1").arg(n), 4);
-        config->writeEntry(QString("Icon_%1").arg(n), "folder");
-        config->writeEntry(QString("URL_%1").arg(n),
+        config.setValue(QString("Description_%1").arg(n), i18n("Example Files"));
+        config.setValue(QString("IconGroup_%1").arg(n), 4);
+        config.setValue(QString("Icon_%1").arg(n), "folder");
+        config.setValue(QString("URL_%1").arg(n),
                            KGlobal::dirs()->findResource("appdata", "examples/"));
 
         RG_DEBUG << "wrote url " << config->readEntry(QString("URL_%1").arg(n)) << endl;
 
-        config->writeEntry("Examples Set", true);
-        config->writeEntry("Number of Entries", n + 1);
+        config.setValue("Examples Set", true);
+        config.setValue("Number of Entries", n + 1);
         config->sync();
     }
 
@@ -2111,8 +2111,8 @@ void RosegardenGUIApp::saveGlobalProperties(QSettings cfg)
         // saving to tempfile not necessary
     } else {
         QString filename = m_doc->getAbsFilePath();
-        cfg->writeEntry("filename", filename);
-        cfg->writeEntry("modified", m_doc->isModified());
+        cfg.setValue("filename", filename);
+        cfg.setValue("modified", m_doc->isModified());
 
         QString tempname = kapp->tempSaveName(filename);
         QString errMsg;
@@ -2317,7 +2317,7 @@ void RosegardenGUIApp::slotFileOpen()
         //  
 
         QString recentString = confq4.value("ROSEGARDEN", "") ;
-        confq4->writeEntry
+        confq4.setValue
         ("ROSEGARDEN", QString("file:%1,%2").arg(examplesDir).arg(recentString));
     }
 
@@ -2344,7 +2344,7 @@ void RosegardenGUIApp::slotFileOpen()
 
     //  
 
-    confq4->writeEntry("Last File Opened Version", VERSION);
+    confq4.setValue("Last File Opened Version", VERSION);
 
     openURL(url);
 }

@@ -380,23 +380,23 @@ MIDIConfigurationPage::apply()
     //  
 
 
-    m_cfg->writeEntry("alwayssendcontrollers",
+    m_cfg.setValue("alwayssendcontrollers",
                       m_sendControllersAtPlay->isChecked());
 
-    m_cfg->writeEntry("sfxloadenabled", m_sfxLoadEnabled->isChecked());
-    m_cfg->writeEntry("sfxloadpath", m_sfxLoadPath->text());
-    m_cfg->writeEntry("soundfontpath", m_soundFontPath->text());
+    m_cfg.setValue("sfxloadenabled", m_sfxLoadEnabled->isChecked());
+    m_cfg.setValue("sfxloadpath", m_sfxLoadPath->text());
+    m_cfg.setValue("soundfontpath", m_soundFontPath->text());
 
-    m_cfg->writeEntry("timer", m_timer->currentText());
+    m_cfg.setValue("timer", m_timer->currentText());
     if (m_timer->currentText() != m_origTimer) {
         m_doc->setCurrentTimer(m_timer->currentText());
     }
 
     // Write the entries
     //
-    m_cfg->writeEntry("mmcmode", m_mmcTransport->currentIndex());
-    m_cfg->writeEntry("mtcmode", m_mtcTransport->currentIndex());
-    m_cfg->writeEntry("midisyncautoconnect", m_midiSyncAuto->isChecked());
+    m_cfg.setValue("mmcmode", m_mmcTransport->currentIndex());
+    m_cfg.setValue("mtcmode", m_mtcTransport->currentIndex());
+    m_cfg.setValue("midisyncautoconnect", m_midiSyncAuto->isChecked());
 
     // Now send
     //
@@ -422,7 +422,7 @@ MIDIConfigurationPage::apply()
     // ------------- MIDI Clock and System messages ------------
     //
     int midiClock = m_midiSync->currentIndex();
-    m_cfg->writeEntry("midiclock", midiClock);
+    m_cfg.setValue("midiclock", midiClock);
 
     // Now send it (OLD METHOD - to be removed)
     //!!! No, don't remove -- this controls SPP as well doesn't it?
@@ -460,10 +460,10 @@ MIDIConfigurationPage::apply()
 
 
     bool deftstudio = getUseDefaultStudio();
-    m_cfg->writeEntry("alwaysusedefaultstudio", deftstudio);
+    m_cfg.setValue("alwaysusedefaultstudio", deftstudio);
 
     int octave = m_midiPitchOctave->value();
-    m_cfg->writeEntry("midipitchoctave", octave);
+    m_cfg.setValue("midipitchoctave", octave);
 }
 
 }

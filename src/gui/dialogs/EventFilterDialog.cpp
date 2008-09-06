@@ -322,17 +322,17 @@ EventFilterDialog::slotOk()
     //  
 
 
-    cfg->writeEntry("pitchinclude", m_notePitchIncludeComboBox->currentIndex());
-    cfg->writeEntry("pitchfrom", m_pitchFromSpinBox->value());
-    cfg->writeEntry("pitchto", m_pitchToSpinBox->value());
+    cfg.setValue("pitchinclude", m_notePitchIncludeComboBox->currentIndex());
+    cfg.setValue("pitchfrom", m_pitchFromSpinBox->value());
+    cfg.setValue("pitchto", m_pitchToSpinBox->value());
 
-    cfg->writeEntry("velocityinclude", m_noteVelocityIncludeComboBox->currentIndex());
-    cfg->writeEntry("velocityfrom", m_velocityFromSpinBox->value());
-    cfg->writeEntry("velocityto", m_velocityToSpinBox->value());
+    cfg.setValue("velocityinclude", m_noteVelocityIncludeComboBox->currentIndex());
+    cfg.setValue("velocityfrom", m_velocityFromSpinBox->value());
+    cfg.setValue("velocityto", m_velocityToSpinBox->value());
 
-    cfg->writeEntry("durationinclude", m_noteDurationIncludeComboBox->currentIndex());
-    cfg->writeEntry("durationfrom", m_noteDurationFromComboBox->currentIndex());
-    cfg->writeEntry("durationto", m_noteDurationToComboBox->currentIndex());
+    cfg.setValue("durationinclude", m_noteDurationIncludeComboBox->currentIndex());
+    cfg.setValue("durationfrom", m_noteDurationFromComboBox->currentIndex());
+    cfg.setValue("durationto", m_noteDurationToComboBox->currentIndex());
 
     accept();
 }

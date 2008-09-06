@@ -106,7 +106,7 @@ RescaleDialog::shouldCloseGap()
         // config.endGroup();		// corresponding to: config.beginGroup( GeneralOptionsConfigGroup );
         //  
 
-        config->writeEntry("rescaledialogadjusttimes", m_closeGap->isChecked());
+        config.setValue("rescaledialogadjusttimes", m_closeGap->isChecked());
         return m_closeGap->isChecked();
     } else {
         return true;

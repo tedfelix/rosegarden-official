@@ -223,10 +223,10 @@ TimeSignatureDialog::getTimeSignature() const
     //  
 
 
-    config->writeEntry("timesigdialogmakehidden", m_hideSignatureButton->isChecked());
-    config->writeEntry("timesigdialogmakehiddenbars", m_hideBarsButton->isChecked());
-    config->writeEntry("timesigdialogshowcommon", m_commonTimeButton->isChecked());
-    config->writeEntry("timesigdialognormalize", m_normalizeRestsButton->isChecked());
+    config.setValue("timesigdialogmakehidden", m_hideSignatureButton->isChecked());
+    config.setValue("timesigdialogmakehiddenbars", m_hideBarsButton->isChecked());
+    config.setValue("timesigdialogshowcommon", m_commonTimeButton->isChecked());
+    config.setValue("timesigdialognormalize", m_normalizeRestsButton->isChecked());
 
     TimeSignature ts(m_timeSignature.getNumerator(),
                      m_timeSignature.getDenominator(),

@@ -176,9 +176,9 @@ TriggerSegmentDialog::slotOk()
     //  
 
 
-    config->writeEntry("triggersegmenttiming", strtoqstr(getTimeAdjust()));
-    config->writeEntry("triggersegmentretune", m_retune->isChecked());
-    config->writeEntry("triggersegmentlastornament", m_segment->currentIndex());
+    config.setValue("triggersegmenttiming", strtoqstr(getTimeAdjust()));
+    config.setValue("triggersegmentretune", m_retune->isChecked());
+    config.setValue("triggersegmentlastornament", m_segment->currentIndex());
 
     accept();
 }

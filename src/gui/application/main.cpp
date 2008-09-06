@@ -508,7 +508,7 @@ int main(int argc, char *argv[])
     bool newVersion = (lastVersion != VERSION);
     if (newVersion) {
 	std::cerr << "*** This is the first time running this Rosegarden version" << std::endl;
-	config->writeEntry("lastversion", VERSION);
+	config.setValue("lastversion", VERSION);
     }
 
     // If there is no config setting for the startup window size, set
@@ -568,7 +568,7 @@ int main(int argc, char *argv[])
 
     //  
 
-    config->writeEntry("action/help_report_bug", false);
+    config.setValue("action/help_report_bug", false);
 
     QSettings config;
 

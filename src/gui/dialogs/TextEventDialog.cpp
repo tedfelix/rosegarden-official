@@ -537,23 +537,23 @@ TextEventDialog::slotOK()
     //  
 
 
-    config->writeEntry("dynamic_shortcut", m_dynamicShortcutCombo->currentIndex());
-    config->writeEntry("direction_shortcut", m_directionShortcutCombo->currentIndex());
-    config->writeEntry("local_direction_shortcut", m_localDirectionShortcutCombo->currentIndex());
-    config->writeEntry("tempo_shortcut", m_tempoShortcutCombo->currentIndex());
-    config->writeEntry("local_tempo_shortcut", m_localTempoShortcutCombo->currentIndex());
+    config.setValue("dynamic_shortcut", m_dynamicShortcutCombo->currentIndex());
+    config.setValue("direction_shortcut", m_directionShortcutCombo->currentIndex());
+    config.setValue("local_direction_shortcut", m_localDirectionShortcutCombo->currentIndex());
+    config.setValue("tempo_shortcut", m_tempoShortcutCombo->currentIndex());
+    config.setValue("local_tempo_shortcut", m_localTempoShortcutCombo->currentIndex());
     // temporary home:
-    config->writeEntry("lilyPond_directive_combo", m_lilyPondDirectiveCombo->currentIndex());
+    config.setValue("lilyPond_directive_combo", m_lilyPondDirectiveCombo->currentIndex());
 
     // store  last chord, lyric, annotation, depending on what's currently in
     // the text entry widget
     int index = m_typeCombo->currentIndex();
     if (index == 5)
-        config->writeEntry("previous_chord", m_text->text());
+        config.setValue("previous_chord", m_text->text());
     else if (index == 6)
-        config->writeEntry("previous_lyric", m_text->text());
+        config.setValue("previous_lyric", m_text->text());
     else if (index == 7)
-        config->writeEntry("previous_annotation", m_text->text());
+        config.setValue("previous_annotation", m_text->text());
 }
 
 void

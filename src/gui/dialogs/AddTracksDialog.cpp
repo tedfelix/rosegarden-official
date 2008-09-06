@@ -110,7 +110,7 @@ AddTracksDialog::getInsertPosition()
     // config.endGroup();		// corresponding to: config.beginGroup( GeneralOptionsConfigGroup );
     //  
 
-    config->writeEntry("lastaddtracksposition", opt);
+    config.setValue("lastaddtracksposition", opt);
 
     int pos = 0;
 

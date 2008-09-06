@@ -1458,11 +1458,11 @@ void NotationView::slotSaveOptions()
     //  
 
 
-    m_config->writeEntry("Show Chord Name Ruler", getToggleAction("show_chords_ruler")->isChecked());
-    m_config->writeEntry("Show Raw Note Ruler", getToggleAction("show_raw_note_ruler")->isChecked());
-    m_config->writeEntry("Show Tempo Ruler", getToggleAction("show_tempo_ruler")->isChecked());
-    m_config->writeEntry("Show Annotations", m_annotationsVisible);
-    m_config->writeEntry("Show LilyPond Directives", m_lilyPondDirectivesVisible);
+    m_config.setValue("Show Chord Name Ruler", getToggleAction("show_chords_ruler")->isChecked());
+    m_config.setValue("Show Raw Note Ruler", getToggleAction("show_raw_note_ruler")->isChecked());
+    m_config.setValue("Show Tempo Ruler", getToggleAction("show_tempo_ruler")->isChecked());
+    m_config.setValue("Show Annotations", m_annotationsVisible);
+    m_config.setValue("Show LilyPond Directives", m_lilyPondDirectivesVisible);
 
     m_config->sync();
 }
@@ -4560,7 +4560,7 @@ void NotationView::slotEditGeneralPaste()
             // config.endGroup();		// corresponding to: config.beginGroup( NotationViewConfigGroup );
             //  
 
-            config->writeEntry("pastetype", type);
+            config.setValue("pastetype", type);
         }
 
         timeT insertionTime = getInsertionTime();

@@ -168,7 +168,7 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
     //  
 
     bool expanded = qStrToBool( config.value("nonprintableheaders", "false" ) ) ;
-    config->writeEntry("nonprintableheaders", expanded);
+    config.setValue("nonprintableheaders", expanded);
     QSettings config;
     config.beginGroup( groupTemp );
     // 

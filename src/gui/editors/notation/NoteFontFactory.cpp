@@ -111,7 +111,7 @@ NoteFontFactory::getFontNames(bool forceRescan)
         savedNames += *i;
     }
 
-    config->writeEntry("notefontlist", savedNames);
+    config.setValue("notefontlist", savedNames);
 
     return m_fontNames;
 }

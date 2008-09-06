@@ -578,7 +578,7 @@ TriggerSegmentManager::slotMusicalTime()
     // confq4.endGroup();		// corresponding to: confq4.beginGroup( TriggerManagerConfigGroup );
     //  
 
-    confq4->writeEntry("timemode", 0);
+    confq4.setValue("timemode", 0);
     slotUpdate();
 }
 
@@ -592,7 +592,7 @@ TriggerSegmentManager::slotRealTime()
     // confq4.endGroup();		// corresponding to: confq4.beginGroup( TriggerManagerConfigGroup );
     //  
 
-    confq4->writeEntry("timemode", 1);
+    confq4.setValue("timemode", 1);
     slotUpdate();
 }
 
@@ -606,7 +606,7 @@ TriggerSegmentManager::slotRawTime()
     // confq4.endGroup();		// corresponding to: confq4.beginGroup( TriggerManagerConfigGroup );
     //  
 
-    confq4->writeEntry("timemode", 2);
+    confq4.setValue("timemode", 2);
     slotUpdate();
 }
 

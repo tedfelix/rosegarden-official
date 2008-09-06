@@ -1283,7 +1283,7 @@ EventView::slotSaveOptions()
     // m_config.endGroup();		// corresponding to: m_config.beginGroup( EventViewConfigGroup );
     //  
 
-    m_config->writeEntry("eventfilter", m_eventFilter);
+    m_config.setValue("eventfilter", m_eventFilter);
     m_eventList->saveLayout(m_config, EventViewLayoutConfigGroupName);
 }
 
@@ -1481,7 +1481,7 @@ EventView::slotMusicalTime()
     // m_config.endGroup();		// corresponding to: m_config.beginGroup( EventViewConfigGroup );
     //  
 
-    m_config->writeEntry("timemode", 0);
+    m_config.setValue("timemode", 0);
     applyLayout();
 }
 
@@ -1495,7 +1495,7 @@ EventView::slotRealTime()
     // m_config.endGroup();		// corresponding to: m_config.beginGroup( EventViewConfigGroup );
     //  
 
-    m_config->writeEntry("timemode", 1);
+    m_config.setValue("timemode", 1);
     applyLayout();
 }
 
@@ -1509,7 +1509,7 @@ EventView::slotRawTime()
     // m_config.endGroup();		// corresponding to: m_config.beginGroup( EventViewConfigGroup );
     //  
 
-    m_config->writeEntry("timemode", 2);
+    m_config.setValue("timemode", 2);
     applyLayout();
 }
 

@@ -275,15 +275,15 @@ PresetHandlerDialog::slotOk()
     // m_config.endGroup();		// corresponding to: m_config.beginGroup( GeneralOptionsConfigGroup );
     //  
 
-    m_config->writeEntry("category_combo_index", m_categoryCombo->currentIndex());
-    m_config->writeEntry("instrument_combo_index", m_instrumentCombo->currentIndex());
-    m_config->writeEntry("player_combo_index", m_playerCombo->currentIndex());
+    m_config.setValue("category_combo_index", m_categoryCombo->currentIndex());
+    m_config.setValue("instrument_combo_index", m_instrumentCombo->currentIndex());
+    m_config.setValue("player_combo_index", m_playerCombo->currentIndex());
 
     if (m_fromNotation) {
-        m_config->writeEntry("convert_all_segments", m_convertAllSegments->isChecked());
+        m_config.setValue("convert_all_segments", m_convertAllSegments->isChecked());
     }
     else {
-        m_config->writeEntry("convert_segments", m_convertSegments->isChecked());
+        m_config.setValue("convert_segments", m_convertSegments->isChecked());
     }
     
     QDialog::accept();

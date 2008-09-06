@@ -713,7 +713,7 @@ TempoView::slotSaveOptions()
     // m_config.endGroup();		// corresponding to: m_config.beginGroup( TempoViewConfigGroup );
     //  
 
-    m_config->writeEntry("filter", m_filter);
+    m_config.setValue("filter", m_filter);
     m_list->saveLayout(m_config, TempoViewLayoutConfigGroupName);
 }
 
@@ -783,7 +783,7 @@ TempoView::slotMusicalTime()
     // m_config.endGroup();		// corresponding to: m_config.beginGroup( TempoViewConfigGroup );
     //  
 
-    m_config->writeEntry("timemode", 0);
+    m_config.setValue("timemode", 0);
     applyLayout();
 }
 
@@ -797,7 +797,7 @@ TempoView::slotRealTime()
     // m_config.endGroup();		// corresponding to: m_config.beginGroup( TempoViewConfigGroup );
     //  
 
-    m_config->writeEntry("timemode", 1);
+    m_config.setValue("timemode", 1);
     applyLayout();
 }
 
@@ -811,7 +811,7 @@ TempoView::slotRawTime()
     // m_config.endGroup();		// corresponding to: m_config.beginGroup( TempoViewConfigGroup );
     //  
 
-    m_config->writeEntry("timemode", 2);
+    m_config.setValue("timemode", 2);
     applyLayout();
 }
 

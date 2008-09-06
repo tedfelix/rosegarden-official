@@ -136,12 +136,12 @@ void LatencyConfigurationPage::apply()
 #ifdef HAVE_LIBJACK
 
     int jackPlayback = getJACKPlaybackValue();
-    m_cfg->writeEntry("jackplaybacklatencysec", jackPlayback / 1000);
-    m_cfg->writeEntry("jackplaybacklatencyusec", jackPlayback * 1000);
+    m_cfg.setValue("jackplaybacklatencysec", jackPlayback / 1000);
+    m_cfg.setValue("jackplaybacklatencyusec", jackPlayback * 1000);
 
     int jackRecord = getJACKRecordValue();
-    m_cfg->writeEntry("jackrecordlatencysec", jackRecord / 1000);
-    m_cfg->writeEntry("jackrecordlatencyusec", jackRecord * 1000);
+    m_cfg.setValue("jackrecordlatencysec", jackRecord / 1000);
+    m_cfg.setValue("jackrecordlatencyusec", jackRecord * 1000);
 
 #endif  // HAVE_LIBJACK
 }

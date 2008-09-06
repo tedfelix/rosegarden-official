@@ -224,7 +224,7 @@ void PlayList::save()
 
     QSettings kc ; // was: KGlobal::config()
     KConfigGroupSaver cs(kc, PlayListConfigGroup);
-    kc->writeEntry("Playlist Files", urlList);
+    kc.setValue("Playlist Files", urlList);
 
     getListView()->saveLayout(kc, PlayListConfigGroup);
 }

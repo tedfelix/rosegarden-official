@@ -158,7 +158,7 @@ AudioConfigurationPage::AudioConfigurationPage(
 
     if (externalAudioEditor == "") {
         externalAudioEditor = defaultAudioEditor;
-        m_cfg->writeEntry("externalaudioeditor", externalAudioEditor);
+        m_cfg.setValue("externalaudioeditor", externalAudioEditor);
     }
 
     m_externalAudioEditorPath = new QLineEdit(externalAudioEditor, frame);
@@ -282,15 +282,15 @@ AudioConfigurationPage::apply()
 #ifdef OFFER_JACK_START_OPTION
     // Jack control
     //
-    m_cfg->writeEntry("jackstart", m_startJack->isChecked());
-    m_cfg->writeEntry("jackcommand", m_jackPath->text());
+    m_cfg.setValue("jackstart", m_startJack->isChecked());
+    m_cfg.setValue("jackcommand", m_jackPath->text());
 #endif // OFFER_JACK_START_OPTION
 
     // Jack audio inputs
     //
-    m_cfg->writeEntry("audiofaderouts", m_createFaderOuts->isChecked());
-    m_cfg->writeEntry("audiosubmasterouts", m_createSubmasterOuts->isChecked());
-    m_cfg->writeEntry("audiorecordfileformat", m_audioRecFormat->currentIndex());
+    m_cfg.setValue("audiofaderouts", m_createFaderOuts->isChecked());
+    m_cfg.setValue("audiosubmasterouts", m_createSubmasterOuts->isChecked());
+    m_cfg.setValue("audiorecordfileformat", m_audioRecFormat->currentIndex());
 #endif
 
     QSettings m_cfg;
@@ -307,7 +307,7 @@ AudioConfigurationPage::apply()
 
 
     int previewstyle = m_previewStyle->currentIndex();
-    m_cfg->writeEntry("audiopreviewstyle", previewstyle);
+    m_cfg.setValue("audiopreviewstyle", previewstyle);
 
     QString externalAudioEditor = getExternalAudioEditor();
 
@@ -319,12 +319,12 @@ AudioConfigurationPage::apply()
         QFileInfo info(extpath);
         if (!info.exists() || !info.isExecutable()) {
             KMessageBox::error(0, i18n("External audio editor \"%1\" not found or not executable").arg(extpath));
-            m_cfg->writeEntry("externalaudioeditor", "");
+            m_cfg.setValue("externalaudioeditor", "");
         } else {
-            m_cfg->writeEntry("externalaudioeditor", externalAudioEditor);
+            m_cfg.setValue("externalaudioeditor", externalAudioEditor);
         }
     } else {
-        m_cfg->writeEntry("externalaudioeditor", "");
+        m_cfg.setValue("externalaudioeditor", "");
     }
 }
 

@@ -419,28 +419,28 @@ QuantizeParameters::getQuantizer() const
         // config.endGroup();		// corresponding to: config.beginGroup( m_configCategory );
         //  
 
-        config->writeEntry("quantizetype", type);
-        config->writeEntry("quantizeunit", unit);
-        config->writeEntry("quantizeswing", swing);
-        config->writeEntry("quantizeiterate", iterate);
-        config->writeEntry("quantizenotationonly",
+        config.setValue("quantizetype", type);
+        config.setValue("quantizeunit", unit);
+        config.setValue("quantizeswing", swing);
+        config.setValue("quantizeiterate", iterate);
+        config.setValue("quantizenotationonly",
                            m_notationTarget->isChecked());
         if (type == 0) {
-            config->writeEntry("quantizedurations",
+            config.setValue("quantizedurations",
                                m_durationCheckBox->isChecked());
         } else {
-            config->writeEntry("quantizesimplicity",
+            config.setValue("quantizesimplicity",
                                m_simplicityCombo->currentIndex() + 11);
-            config->writeEntry("quantizemaxtuplet",
+            config.setValue("quantizemaxtuplet",
                                m_maxTuplet->currentIndex() + 1);
-            config->writeEntry("quantizecounterpoint",
+            config.setValue("quantizecounterpoint",
                                m_counterpoint->isChecked());
-            config->writeEntry("quantizearticulate",
+            config.setValue("quantizearticulate",
                                m_articulate->isChecked());
         }
-        config->writeEntry("quantizerebeam", m_rebeam->isChecked());
-        config->writeEntry("quantizemakeviable", m_makeViable->isChecked());
-        config->writeEntry("quantizedecounterpoint", m_deCounterpoint->isChecked());
+        config.setValue("quantizerebeam", m_rebeam->isChecked());
+        config.setValue("quantizemakeviable", m_makeViable->isChecked());
+        config.setValue("quantizedecounterpoint", m_deCounterpoint->isChecked());
     }
 
     return quantizer;

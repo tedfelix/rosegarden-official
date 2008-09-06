@@ -111,13 +111,13 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     //  
 
     bool expanded = qStrToBool( config.value("trackparametersplayback", "true" ) ) ;
-    config->writeEntry("trackparametersplayback", expanded);
+    config.setValue("trackparametersplayback", expanded);
     expanded = qStrToBool( config.value("trackparametersrecord", "false" ) ) ;
-    config->writeEntry("trackparametersrecord", expanded);
+    config.setValue("trackparametersrecord", expanded);
     expanded = qStrToBool( config.value("trackparametersdefaults", "false" ) ) ;
-    config->writeEntry("trackparametersdefaults", expanded);
+    config.setValue("trackparametersdefaults", expanded);
     expanded = qStrToBool( config.value("trackstaffgroup", "false" ) ) ;
-    config->writeEntry("trackstaffgroup", expanded);
+    config.setValue("trackstaffgroup", expanded);
     QSettings config;
     config.beginGroup( groupTemp );
     // 

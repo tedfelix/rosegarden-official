@@ -1517,7 +1517,7 @@ void EditView::slotTranspose()
 
     //  
 
-    m_config->writeEntry("lasttransposition", semitones);
+    m_config.setValue("lasttransposition", semitones);
 
     KTmpStatusMsg msg(i18n("Transposing..."), this);
     addCommandToHistory(new TransposeCommand

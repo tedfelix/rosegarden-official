@@ -406,8 +406,8 @@ NotationConfigurationPage::NotationConfigurationPage(QSettings cfg,
 
     // force to default of 2 if not used before
     int quantizeType = m_cfg.value("quantizetype", 2).toInt() ;
-    m_cfg->writeEntry("quantizetype", quantizeType);
-    m_cfg->writeEntry("quantizenotationonly", true);
+    m_cfg.setValue("quantizetype", quantizeType);
+    m_cfg.setValue("quantizenotationonly", true);
 
     m_quantizeFrame = new QuantizeParameters
                       (m_tabWidget, QuantizeParameters::Notation,
@@ -700,45 +700,45 @@ NotationConfigurationPage::apply()
     //  
 
 
-    m_cfg->writeEntry("notefont", m_untranslatedFont[m_font->currentIndex()]);
-    m_cfg->writeEntry("singlestaffnotesize",
+    m_cfg.setValue("notefont", m_untranslatedFont[m_font->currentIndex()]);
+    m_cfg.setValue("singlestaffnotesize",
                       m_singleStaffSize->currentText().toUInt());
-    m_cfg->writeEntry("multistaffnotesize",
+    m_cfg.setValue("multistaffnotesize",
                       m_multiStaffSize->currentText().toUInt());
-    m_cfg->writeEntry("printingnotesize",
+    m_cfg.setValue("printingnotesize",
                       m_printingSize->currentText().toUInt());
-    m_cfg->writeEntry("textfont",
+    m_cfg.setValue("textfont",
                       m_textFont->font());
-    m_cfg->writeEntry("sansfont",
+    m_cfg.setValue("sansfont",
                       m_sansFont->font());
 /*!!!
-    m_cfg->writeEntry("timesigfont",
+    m_cfg.setValue("timesigfont",
                       m_timeSigFont->font());
 */
     std::vector<int> s = NotationHLayout::getAvailableSpacings();
-    m_cfg->writeEntry("spacing", s[m_spacing->currentIndex()]);
+    m_cfg.setValue("spacing", s[m_spacing->currentIndex()]);
 
     s = NotationHLayout::getAvailableProportions();
-    m_cfg->writeEntry("proportion", s[m_proportion->currentIndex()]);
+    m_cfg.setValue("proportion", s[m_proportion->currentIndex()]);
 
-    m_cfg->writeEntry("layoutmode", m_layoutMode->currentIndex());
-    m_cfg->writeEntry("colourquantize", m_colourQuantize->isChecked());
-    m_cfg->writeEntry("showunknowns", m_showUnknowns->isChecked());
-    m_cfg->writeEntry("showinvisibles", m_showInvisibles->isChecked());
-    m_cfg->writeEntry("showranges", m_showRanges->isChecked());
-    m_cfg->writeEntry("showcollisions", m_showCollisions->isChecked());
-    m_cfg->writeEntry("shownotationheader",
+    m_cfg.setValue("layoutmode", m_layoutMode->currentIndex());
+    m_cfg.setValue("colourquantize", m_colourQuantize->isChecked());
+    m_cfg.setValue("showunknowns", m_showUnknowns->isChecked());
+    m_cfg.setValue("showinvisibles", m_showInvisibles->isChecked());
+    m_cfg.setValue("showranges", m_showRanges->isChecked());
+    m_cfg.setValue("showcollisions", m_showCollisions->isChecked());
+    m_cfg.setValue("shownotationheader",
                        m_showTrackHeaders->currentIndex());
-    m_cfg->writeEntry("style", m_untranslatedNoteStyle[m_noteStyle->currentIndex()]);
-    m_cfg->writeEntry("inserttype", m_insertType->currentIndex());
-    m_cfg->writeEntry("autobeam", m_autoBeam->isChecked());
-    m_cfg->writeEntry("collapse", m_collapseRests->isChecked());
-    m_cfg->writeEntry("pastetype", m_pasteType->currentIndex());
-    m_cfg->writeEntry("accidentaloctavemode", m_accOctavePolicy->currentIndex());
-    m_cfg->writeEntry("accidentalbarmode", m_accBarPolicy->currentIndex());
-    m_cfg->writeEntry("keysigcancelmode", m_keySigCancelMode->currentIndex());
+    m_cfg.setValue("style", m_untranslatedNoteStyle[m_noteStyle->currentIndex()]);
+    m_cfg.setValue("inserttype", m_insertType->currentIndex());
+    m_cfg.setValue("autobeam", m_autoBeam->isChecked());
+    m_cfg.setValue("collapse", m_collapseRests->isChecked());
+    m_cfg.setValue("pastetype", m_pasteType->currentIndex());
+    m_cfg.setValue("accidentaloctavemode", m_accOctavePolicy->currentIndex());
+    m_cfg.setValue("accidentalbarmode", m_accBarPolicy->currentIndex());
+    m_cfg.setValue("keysigcancelmode", m_keySigCancelMode->currentIndex());
 
-    m_cfg->writeEntry("quantizemakeviable", m_splitAndTie->isChecked());
+    m_cfg.setValue("quantizemakeviable", m_splitAndTie->isChecked());
 
 //    (void)m_quantizeFrame->getQuantizer(); // this also writes to the config
 }

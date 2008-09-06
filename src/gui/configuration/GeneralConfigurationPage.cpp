@@ -354,18 +354,18 @@ void GeneralConfigurationPage::apply()
 
 
     int countIn = getCountInSpin();
-    m_cfg->writeEntry("countinbars", countIn);
+    m_cfg.setValue("countinbars", countIn);
 
     int client = getDblClickClient();
-    m_cfg->writeEntry("doubleclickclient", client);
+    m_cfg.setValue("doubleclickclient", client);
 
     int globalstyle = m_globalStyle->currentIndex();
-    m_cfg->writeEntry("Install Own Theme", globalstyle);
+    m_cfg.setValue("Install Own Theme", globalstyle);
 
     int namestyle = getNoteNameStyle();
-    m_cfg->writeEntry("notenamestyle", namestyle);
+    m_cfg.setValue("notenamestyle", namestyle);
 /*
-    m_cfg->writeEntry("toolcontexthelp", m_toolContextHelp->isChecked());
+    m_cfg.setValue("toolcontexthelp", m_toolContextHelp->isChecked());
 */
     bool texturesChanged = false;
     bool mainTextureChanged = false;
@@ -419,7 +419,7 @@ void GeneralConfigurationPage::apply()
 
     //  
 
-    m_cfg->writeEntry("backgroundtextures", m_backgroundTextures->isChecked());
+    m_cfg.setValue("backgroundtextures", m_backgroundTextures->isChecked());
 
     QSettings m_cfg;
 
@@ -433,7 +433,7 @@ void GeneralConfigurationPage::apply()
 
     //  
 
-    m_cfg->writeEntry("backgroundtextures-1.6-plus", m_matrixBackgroundTextures->isChecked());
+    m_cfg.setValue("backgroundtextures-1.6-plus", m_matrixBackgroundTextures->isChecked());
 
     QSettings m_cfg;
 
@@ -447,7 +447,7 @@ void GeneralConfigurationPage::apply()
 
     //  
 
-    m_cfg->writeEntry("backgroundtextures", m_notationBackgroundTextures->isChecked());
+    m_cfg.setValue("backgroundtextures", m_notationBackgroundTextures->isChecked());
 
     QSettings m_cfg;
 
@@ -463,15 +463,15 @@ void GeneralConfigurationPage::apply()
 
 
     int sidebarStyle = m_sidebarStyle->currentIndex();
-    m_cfg->writeEntry("sidebarstyle", sidebarStyle);
+    m_cfg.setValue("sidebarstyle", sidebarStyle);
     emit updateSidebarStyle(sidebarStyle);
 
     unsigned int interval = 0;
 
     if (m_autoSave->currentIndex() == 4) {
-        m_cfg->writeEntry("autosave", false);
+        m_cfg.setValue("autosave", false);
     } else {
-        m_cfg->writeEntry("autosave", true);
+        m_cfg.setValue("autosave", true);
         if (m_autoSave->currentIndex() == 0) {
             interval = 30;
         } else if (m_autoSave->currentIndex() == 1) {
@@ -481,12 +481,12 @@ void GeneralConfigurationPage::apply()
         } else {
             interval = 1800;
         }
-        m_cfg->writeEntry("autosaveinterval", interval);
+        m_cfg.setValue("autosaveinterval", interval);
         emit updateAutoSaveInterval(interval);
     }
 
     bool appendLabel = getAppendLabel();
-    m_cfg->writeEntry("appendlabel", appendLabel);
+    m_cfg.setValue("appendlabel", appendLabel);
 
 #ifdef HAVE_LIBJACK
     QSettings m_cfg;
@@ -532,8 +532,8 @@ void GeneralConfigurationPage::apply()
 
     // Write the items
     //
-    m_cfg->writeEntry("jacktransport", jackTransport);
-    m_cfg->writeEntry("jackmaster", jackMaster);
+    m_cfg.setValue("jacktransport", jackTransport);
+    m_cfg.setValue("jackmaster", jackMaster);
 
     // Now send it
     //
