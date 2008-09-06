@@ -31,6 +31,7 @@
 #include "gui/studio/StudioControl.h"
 #include "sound/MappedEvent.h"
 #include "TabbedConfigurationPage.h"
+#include "misc/Strings.h"
 #include <QComboBox>
 #include <kconfig.h>
 #include <kfiledialog.h>
