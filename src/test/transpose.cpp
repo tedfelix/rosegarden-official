@@ -3,6 +3,7 @@
 
 #include "NotationTypes.h"
 #include "gui/dialogs/IntervalDialog.h"
+#include "misc/Strings.h"
 
 using namespace Rosegarden;
 using std::cout;
