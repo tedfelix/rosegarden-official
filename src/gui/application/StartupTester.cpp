@@ -18,6 +18,7 @@
 
 #include "StartupTester.h"
 
+#include "misc/Strings.h"
 #include "misc/Debug.h"
 #include "gui/dialogs/LilyPondOptionsDialog.h"
 
