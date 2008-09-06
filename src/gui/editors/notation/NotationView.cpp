@@ -4495,7 +4495,7 @@ void NotationView::slotEditPaste()
         (clipboard->getSingleSegment()->getEndTime() -
          clipboard->getSingleSegment()->getStartTime());
 
-    QSettings config ; // was: kapp->config()
+    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( NotationViewConfigGroup );
     // 
@@ -4535,7 +4535,7 @@ void NotationView::slotEditGeneralPaste()
     LinedStaff *staff = getCurrentLinedStaff();
     Segment &segment = staff->getSegment();
 
-    QSettings config ; // was: kapp->config()
+    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( NotationViewConfigGroup );
     // 

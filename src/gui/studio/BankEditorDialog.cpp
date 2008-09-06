@@ -129,7 +129,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     m_listView->setRootIsDecorated(true);
     m_listView->setShowSortIndicator(true);
     m_listView->setItemsRenameable(true);
-    m_listView->restoreLayout(kapp->config(), BankEditorConfigGroup);
+    m_listView->restoreLayout(confq4, BankEditorConfigGroup);
 
     QFrame *bankBox = new QFrame( leftPart );
     leftPartLayout->addWidget(bankBox);
@@ -297,7 +297,7 @@ BankEditorDialog::~BankEditorDialog()
 {
     RG_DEBUG << "~BankEditorDialog()\n";
 
-    m_listView->saveLayout(kapp->config(), BankEditorConfigGroup);
+    m_listView->saveLayout(confq4, BankEditorConfigGroup);
 
     if (m_doc) // see slotFileClose() for an explanation on why we need to test m_doc
         m_doc->getCommandHistory()->detachView(actionCollection());

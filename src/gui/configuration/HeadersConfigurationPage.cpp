@@ -158,7 +158,7 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
     //
 
     // set default expansion to false for this group -- what a faff
-    QSettings config ; // was: kapp->config()
+    QSettings config ; // was: confq4
     QString groupTemp = config->group();
     QSettings config;
     config.beginGroup( "CollapsingFrame" );
@@ -264,7 +264,7 @@ HeadersConfigurationPage::slotDeleteProperty()
 
 void HeadersConfigurationPage::apply()
 {
-    QSettings config ; // was: kapp->config()
+    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( NotationViewConfigGroup );
     // 

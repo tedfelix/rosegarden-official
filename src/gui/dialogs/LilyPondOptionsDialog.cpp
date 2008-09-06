@@ -57,7 +57,7 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QDialogButtonBox::QWidget *parent,
 {
     setHelp("file-printing");
 
-    QSettings config ; // was: kapp->config()
+    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( NotationViewConfigGroup );
     // 
@@ -316,7 +316,7 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QDialogButtonBox::QWidget *parent,
 void
 LilyPondOptionsDialog::slotApply()
 {
-    QSettings config ; // was: kapp->config()
+    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( NotationViewConfigGroup );
     // 
@@ -354,7 +354,7 @@ LilyPondOptionsDialog::slotOk()
 void
 LilyPondOptionsDialog::setDefaultLilyPondVersion(QString version)
 {
-    QSettings config ; // was: kapp->config()
+    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( NotationViewConfigGroup );
     // 

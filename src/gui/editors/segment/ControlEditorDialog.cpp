@@ -112,7 +112,7 @@ ControlEditorDialog::ControlEditorDialog(QWidget *parent,
     for (int i = 1; i < 9; ++i)
         m_listView->setColumnAlignment(i, Qt::AlignHCenter);
 
-    m_listView->restoreLayout(kapp->config(), ControlEditorConfigGroup);
+    m_listView->restoreLayout(confq4, ControlEditorConfigGroup);
 
     QFrame *btnBox = new QFrame( mainFrame );
     mainFrameLayout->addWidget(btnBox);
@@ -177,7 +177,7 @@ ControlEditorDialog::~ControlEditorDialog()
 {
     RG_DEBUG << "\n*** ControlEditorDialog::~ControlEditorDialog\n" << endl;
 
-    m_listView->saveLayout(kapp->config(), ControlEditorConfigGroup);
+    m_listView->saveLayout(confq4, ControlEditorConfigGroup);
 
     if (m_doc)
         m_doc->getCommandHistory()->detachView(actionCollection());

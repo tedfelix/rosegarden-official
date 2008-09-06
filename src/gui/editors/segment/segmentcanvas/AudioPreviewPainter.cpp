@@ -140,7 +140,7 @@ void AudioPreviewPainter::paintPreviewImage()
 	haveTempoChange = true;
     }
 
-    QSettings config ; // was: kapp->config()
+    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( GeneralOptionsConfigGroup );
     // 

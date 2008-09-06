@@ -163,7 +163,7 @@ RosegardenGUIDoc::~RosegardenGUIDoc()
 unsigned int
 RosegardenGUIDoc::getAutoSavePeriod() const
 {
-    QSettings config ; // was: kapp->config()
+    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( GeneralOptionsConfigGroup );
     // 
@@ -1102,7 +1102,7 @@ void RosegardenGUIDoc::initialiseStudio()
     // Now commit all the remaining changes
     StudioControl::setStudioObjectProperties(ids, properties, values);
 
-    QSettings config ; // was: kapp->config()
+    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( SequencerOptionsConfigGroup );
     // 
@@ -1967,7 +1967,7 @@ RosegardenGUIDoc::insertRecordedMidi(const MappedComposition &mC)
 
         if (haveNotes) {
 
-            QSettings config ; // was: kapp->config()
+            QSettings config ; // was: confq4
             QSettings config;
             config.beginGroup( GeneralOptionsConfigGroup );
             // 
@@ -2296,15 +2296,15 @@ RosegardenGUIDoc::syncDevices()
     // when changed in the configuration dialog.
     static bool setTimer = false;
     if (!setTimer) {
-        QSettings kapp->config();
-        kapp->config().beginGroup( SequencerOptionsConfigGroup );
+        QSettings confq4;
+        confq4.beginGroup( SequencerOptionsConfigGroup );
         // 
         // FIX-manually-(GW), add:
-        // kapp->config().endGroup();		// corresponding to: kapp->config().beginGroup( SequencerOptionsConfigGroup );
+        // confq4.endGroup();		// corresponding to: confq4.beginGroup( SequencerOptionsConfigGroup );
         //  
 
         QString currentTimer = getCurrentTimer();
-        currentTimer = kapp->config().value("timer", currentTimer) ;
+        currentTimer = confq4.value("timer", currentTimer) ;
         setCurrentTimer(currentTimer);
         setTimer = true;
     }
@@ -2327,14 +2327,14 @@ RosegardenGUIDoc::syncDevices()
 
     // Force update of view on current track selection
     //
-    QSettings kapp->config();
-    kapp->config().beginGroup( GeneralOptionsConfigGroup );
+    QSettings confq4;
+    confq4.beginGroup( GeneralOptionsConfigGroup );
     // 
     // FIX-manually-(GW), add:
-    // kapp->config().endGroup();		// corresponding to: kapp->config().beginGroup( GeneralOptionsConfigGroup );
+    // confq4.endGroup();		// corresponding to: confq4.beginGroup( GeneralOptionsConfigGroup );
     //  
 
-    bool opt = qStrToBool( kapp->config().value("Show Track labels", "true" ) ) ;
+    bool opt = qStrToBool( confq4.value("Show Track labels", "true" ) ) ;
     TrackLabel::InstrumentTrackLabels labels = TrackLabel::ShowInstrument;
     if (opt)
         labels = TrackLabel::ShowTrack;

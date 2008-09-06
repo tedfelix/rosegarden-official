@@ -321,7 +321,7 @@ TextEventDialog::TextEventDialog(QDialogButtonBox::QWidget *parent,
     m_staffBelowLabel->setPixmap(map);
 
     // restore last setting for shortcut combos
-    QSettings config ; // was: kapp->config()
+    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( NotationViewConfigGroup );
     // 
@@ -528,7 +528,7 @@ void
 TextEventDialog::slotOK()
 {
     // store last setting for shortcut combos
-    QSettings config ; // was: kapp->config()
+    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( NotationViewConfigGroup );
     // 

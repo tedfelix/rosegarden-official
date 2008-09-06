@@ -280,7 +280,7 @@ DeviceManagerDialog::populate()
 {
     DeviceList *devices = m_studio->getDevices();
 
-    //QSettings config ; // was: kapp->config()
+    //QSettings config ; // was: confq4
     QSettings //config;
     //config.beginGroup( SequencerOptionsConfigGroup );
     // 

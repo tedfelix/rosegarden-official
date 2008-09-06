@@ -95,7 +95,7 @@ NotationStaff::NotationStaff(Q3Canvas *canvas, Segment *segment,
         m_ready(false),
         m_lastRenderedBar(0)
 {
-    QSettings config ; // was: kapp->config()
+    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( NotationViewConfigGroup );
     // 
@@ -436,7 +436,7 @@ NotationStaff::getNoteNameAtCanvasCoords(double x, int y,
     ::Rosegarden::Key key;
     getClefAndKeyAtCanvasCoords(x, y, clef, key);
 
-    QSettings config ; // was: kapp->config()
+    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( GeneralOptionsConfigGroup );
     // 
@@ -926,7 +926,7 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
             <Bool>(BaseProperties::INVISIBLE, invisible) && invisible) {
         if (m_printPainter)
             return ;
-        QSettings config ; // was: kapp->config()
+        QSettings config ; // was: confq4
         QSettings config;
         config.beginGroup( "Notation Options" );
         // 

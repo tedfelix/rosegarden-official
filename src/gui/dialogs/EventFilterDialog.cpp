@@ -61,7 +61,7 @@ EventFilterDialog::EventFilterDialog(QWidget* parent)
         : KDialogBase(parent, "eventfilerdialog", true, i18n("Event Filter"), Ok | Cancel, Ok),
         m_standardQuantizations(BasicQuantizer::getStandardQuantizations())
 {
-    cfg = kapp->config();
+    cfg = confq4;
     initDialog();
 }
 

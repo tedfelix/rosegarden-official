@@ -490,7 +490,7 @@ int main(int argc, char *argv[])
         testInstalledVersion();
     }
 
-    QSettings config ; // was: kapp->config()
+    QSettings config ; // was: confq4
 
     QSettings config;
 

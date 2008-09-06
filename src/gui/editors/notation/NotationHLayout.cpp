@@ -68,7 +68,7 @@ NotationHLayout::NotationHLayout(Composition *c, NotePixmapFactory *npf,
 {
     //    NOTATION_DEBUG << "NotationHLayout::NotationHLayout()" << endl;
 
-    QSettings config ; // was: kapp->config()
+    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( "Notation Options" );
     // 
@@ -254,7 +254,7 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 
     NOTATION_DEBUG << "ottava shift at start:" << ottavaShift << ", ottavaEnd " << ottavaEnd << endl;
 
-    QSettings config ; // was: kapp->config()
+    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( "Notation Options" );
     // 
@@ -1271,7 +1271,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
     int startBar = getComposition()->getBarNumber(startTime);
 
-    QSettings config ; // was: kapp->config()
+    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( "Notation Options" );
     // 

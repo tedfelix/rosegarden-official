@@ -88,7 +88,7 @@ TriggerSegmentDialog::TriggerSegmentDialog(QDialogButtonBox::QWidget *parent,
 void
 TriggerSegmentDialog::setupFromConfig()
 {
-    QSettings config ; // was: kapp->config()
+    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( GeneralOptionsConfigGroup );
     // 
@@ -167,7 +167,7 @@ TriggerSegmentDialog::getTimeAdjust() const
 void
 TriggerSegmentDialog::slotOk()
 {
-    QSettings config ; // was: kapp->config()
+    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( GeneralOptionsConfigGroup );
     // 

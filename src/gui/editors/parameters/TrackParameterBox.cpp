@@ -101,7 +101,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     title_font.setBold(true);
 
     // Set up default expansions for the collapsing elements
-    QSettings config ; // was: kapp->config()
+    QSettings config ; // was: confq4
     QString groupTemp = config->group();
     QSettings config;
     config.beginGroup( "CollapsingFrame" );
@@ -600,7 +600,7 @@ TrackParameterBox::updateHighLow()
     Pitch highest(m_highestPlayable, accidental);
     Pitch lowest(m_lowestPlayable, accidental);
 
-    QSettings config ; // was: kapp->config()
+    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( GeneralOptionsConfigGroup );
     // 

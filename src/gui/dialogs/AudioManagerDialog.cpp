@@ -178,7 +178,7 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     m_fileList->setColumnAlignment(4, Qt::AlignHCenter);
     m_fileList->setColumnAlignment(5, Qt::AlignHCenter);
 
-    m_fileList->restoreLayout(kapp->config(), m_listViewLayoutName);
+    m_fileList->restoreLayout(confq4, m_listViewLayoutName);
 
     // a minimum width for the list box
     //m_fileList->setMinimumWidth(300);
@@ -230,7 +230,7 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
 AudioManagerDialog::~AudioManagerDialog()
 {
     RG_DEBUG << "\n*** AudioManagerDialog::~AudioManagerDialog\n" << endl;
-    m_fileList->saveLayout(kapp->config(), m_listViewLayoutName);
+    m_fileList->saveLayout(confq4, m_listViewLayoutName);
     //saveDialogSize(AudioManagerDialogConfigGroup);
 }
 

@@ -75,7 +75,7 @@ AddTracksDialog::AddTracksDialog(QDialogButtonBox::QWidget *parent, int currentT
     m_position->addItem(i18n("TicksBelow the current selected track"));
     m_position->addItem(i18n("At the bottom"));
 
-    QSettings config ; // was: kapp->config()
+    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( GeneralOptionsConfigGroup );
     // 
@@ -102,7 +102,7 @@ AddTracksDialog::getInsertPosition()
 {
     int opt = m_position->currentIndex();
 
-    QSettings config ; // was: kapp->config()
+    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( GeneralOptionsConfigGroup );
     // 

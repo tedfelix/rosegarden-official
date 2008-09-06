@@ -96,7 +96,7 @@ CollapsingFrame::setWidget(QWidget *widget)
 
     bool expanded = true;
     if (name(0)) {
-        QSettings config ; // was: kapp->config()
+        QSettings config ; // was: confq4
         QString groupTemp = config->group();
         QSettings config;
         config.beginGroup( "CollapsingFrame" );
@@ -137,7 +137,7 @@ CollapsingFrame::toggle()
     }
 
     if (name(0)) {
-        QSettings config ; // was: kapp->config()
+        QSettings config ; // was: confq4
         QString groupTemp = config->group();
         QSettings config;
         config.beginGroup( "CollapsingFrame" );

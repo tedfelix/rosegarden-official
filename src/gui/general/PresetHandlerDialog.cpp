@@ -48,7 +48,7 @@ namespace Rosegarden
 
 PresetHandlerDialog::PresetHandlerDialog(QDialogButtonBox::QWidget *parent, bool fromNotation)
         : KDialogBase(parent, "presethandlerdialog", true, i18n("Load track parameters preset"), Ok | Cancel, Ok),
-        m_config(kapp->config()),
+        m_config(confq4),
         m_fromNotation(fromNotation)
 {
     m_presets = new PresetGroup();

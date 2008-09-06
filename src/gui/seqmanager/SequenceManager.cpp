@@ -307,7 +307,7 @@ SequenceManager::play()
     if (comp.isLooping())
         startPos = comp.getElapsedRealTime(comp.getLoopStart());
 
-    QSettings config ; // was: kapp->config()
+    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( SequencerOptionsConfigGroup );
     // 
@@ -548,7 +548,7 @@ SequenceManager::record(bool toggled)
 
     Composition &comp = m_doc->getComposition();
     Studio &studio = m_doc->getStudio();
-    QSettings config ; // was: kapp->config()
+    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( GeneralOptionsConfigGroup );
     // 
@@ -944,7 +944,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                 //
                 m_doc->syncDevices();
 
-                /*QSettings config ; // was: kapp->config()
+                /*QSettings config ; // was: confq4
                   		QSettings config;
                   		config.beginGroup( SequencerOptionsConfigGroup );
                   		// 
@@ -1207,7 +1207,7 @@ SequenceManager::setLoop(const timeT &lhs, const timeT &rhs)
     // do not set a loop if JACK transport sync is enabled, because this is
     // completely broken, and apparently broken due to a limitation of JACK
     // transport itself.  #1240039 - DMM
-    //    QSettings config ; // was: kapp->config()
+    //    QSettings config ; // was: confq4
     QSettings //    config;
     //    config.beginGroup( SequencerOptionsConfigGroup );
     // 
@@ -1447,7 +1447,7 @@ SequenceManager::sendMIDIRecordingDevice(const QString recordDeviceStr)
 void
 SequenceManager::restoreRecordSubscriptions()
 {
-    QSettings config ; // was: kapp->config()
+    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( SequencerOptionsConfigGroup );
     // 
@@ -1468,7 +1468,7 @@ SequenceManager::restoreRecordSubscriptions()
 void
 SequenceManager::reinitialiseSequencerStudio()
 {
-    QSettings config ; // was: kapp->config()
+    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( SequencerOptionsConfigGroup );
     // 
@@ -1950,7 +1950,7 @@ void SequenceManager::tempoChanged(const Composition *c)
 void
 SequenceManager::sendTransportControlStatuses()
 {
-    QSettings config ; // was: kapp->config()
+    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( SequencerOptionsConfigGroup );
     // 
@@ -2062,14 +2062,14 @@ SequenceManager::getSampleRate()
 bool
 SequenceManager::shouldWarnForImpreciseTimer()
 {
-    QSettings kapp->config();
-    kapp->config().beginGroup( SequencerOptionsConfigGroup );
+    QSettings confq4;
+    confq4.beginGroup( SequencerOptionsConfigGroup );
     // 
     // FIX-manually-(GW), add:
-    // kapp->config().endGroup();		// corresponding to: kapp->config().beginGroup( SequencerOptionsConfigGroup );
+    // confq4.endGroup();		// corresponding to: confq4.beginGroup( SequencerOptionsConfigGroup );
     //  
 
-    QString timer = kapp->config().value("timer") ;
+    QString timer = confq4.value("timer") ;
     if (timer == "(auto)" || timer == "") return true;
     else return false; // if the user has chosen the timer, leave them alone
 }

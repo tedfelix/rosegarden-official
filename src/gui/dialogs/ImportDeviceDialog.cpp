@@ -167,7 +167,7 @@ ImportDeviceDialog::doImport()
     m_mergeBanks = new QRadioButton(i18n("Merge banks"), m_buttonGroup);
     m_overwriteBanks = new QRadioButton(i18n("Overwrite banks"), m_buttonGroup);
 
-    QSettings config ; // was: kapp->config()
+    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( GeneralOptionsConfigGroup );
     // 
@@ -202,7 +202,7 @@ ImportDeviceDialog::slotOk()
     m_device = m_devices[index];
 
     int v = m_buttonGroup->id(m_buttonGroup->selected());
-    QSettings config ; // was: kapp->config()
+    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( GeneralOptionsConfigGroup );
     // 

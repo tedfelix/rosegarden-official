@@ -115,7 +115,7 @@ void
 LilyPondExporter::readConfigVariables(void)
 {
     // grab config info
-    QSettings cfg ; // was: kapp->config()
+    QSettings cfg ; // was: confq4
     QSettings cfg;
     cfg.beginGroup( NotationViewConfigGroup );
     // 

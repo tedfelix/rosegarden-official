@@ -40,7 +40,7 @@ NotationEraser::NotationEraser(NotationView* view)
         : NotationTool("NotationEraser", view),
         m_collapseRest(false)
 {
-    QSettings config ; // was: kapp->config()
+    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( NotationViewConfigGroup );
     // 

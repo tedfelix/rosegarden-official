@@ -1323,14 +1323,14 @@ bool CompositionView::event(QEvent* e)
 
 void CompositionView::enterEvent(QEvent *e)
 {
-    QSettings kapp->config();
-    kapp->config().beginGroup( GeneralOptionsConfigGroup );
+    QSettings confq4;
+    confq4.beginGroup( GeneralOptionsConfigGroup );
     // 
     // FIX-manually-(GW), add:
-    // kapp->config().endGroup();		// corresponding to: kapp->config().beginGroup( GeneralOptionsConfigGroup );
+    // confq4.endGroup();		// corresponding to: confq4.beginGroup( GeneralOptionsConfigGroup );
     //  
 
-    if (! qStrToBool( kapp->config().value("toolcontexthelp", "true" ) ) ) return;
+    if (! qStrToBool( confq4.value("toolcontexthelp", "true" ) ) ) return;
 
     emit showContextHelp(m_toolContextHelp);
     m_contextHelpShown = true;
@@ -1347,19 +1347,19 @@ void CompositionView::slotToolHelpChanged(const QString &text)
     if (m_toolContextHelp == text) return;
     m_toolContextHelp = text;
 
-    QSettings kapp->config();
+    QSettings confq4;
 
-    kapp->config().beginGroup( GeneralOptionsConfigGroup );
+    confq4.beginGroup( GeneralOptionsConfigGroup );
 
     // 
 
     // FIX-manually-(GW), add:
 
-    // kapp->config().endGroup();		// corresponding to: kapp->config().beginGroup( GeneralOptionsConfigGroup );
+    // confq4.endGroup();		// corresponding to: confq4.beginGroup( GeneralOptionsConfigGroup );
 
     //  
 
-    if (! qStrToBool( kapp->config().value("toolcontexthelp", "true" ) ) ) return;
+    if (! qStrToBool( confq4.value("toolcontexthelp", "true" ) ) ) return;
 
     if (m_contextHelpShown) emit showContextHelp(text);
 }

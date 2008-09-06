@@ -97,7 +97,7 @@ MetronomeMmapper::MetronomeMmapper(RosegardenGUIDoc* doc)
         }
     }
 
-    QSettings config ; // was: kapp->config()
+    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( SequencerOptionsConfigGroup );
     // 
@@ -225,7 +225,7 @@ void MetronomeMmapper::sortTicks()
 
 size_t MetronomeMmapper::computeMmappedSize()
 {
-    QSettings config ; // was: kapp->config()
+    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( Rosegarden::SequencerOptionsConfigGroup );
     // 

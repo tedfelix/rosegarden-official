@@ -342,7 +342,7 @@ void RosegardenGUIView::slotEditSegment(Segment* segment)
         slotEditSegmentAudio(segment);
     } else {
 
-        QSettings config ; // was: kapp->config()
+        QSettings config ; // was: confq4
         QSettings config;
         config.beginGroup( GeneralOptionsConfigGroup );
         // 
@@ -831,7 +831,7 @@ void RosegardenGUIView::slotEditSegmentAudio(Segment *segment)
     std::cout << "RosegardenGUIView::slotEditSegmentAudio() - "
     << "starting external audio editor" << std::endl;
 
-    QSettings config ; // was: kapp->config()
+    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( GeneralOptionsConfigGroup );
     // 
@@ -1743,7 +1743,7 @@ RosegardenGUIView::slotUpdateRecordingSegment(Segment *segment,
         return ;
     lastRecordingSegment = segment;
 
-    QSettings config ; // was: kapp->config()
+    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( GeneralOptionsConfigGroup );
     // 
