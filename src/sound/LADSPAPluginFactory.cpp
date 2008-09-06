@@ -16,6 +16,7 @@
 #include "LADSPAPluginFactory.h"
 #include <iostream>
 #include <cstdlib>
+#include "misc/Strings.h"
 
 #ifdef HAVE_LADSPA
 
