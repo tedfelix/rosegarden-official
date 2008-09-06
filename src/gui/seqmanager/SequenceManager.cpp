@@ -20,6 +20,7 @@
 
 #include "sound/Midi.h"
 #include "misc/Debug.h"
+#include "misc/Strings.h"
 #include "document/ConfigGroups.h"
 #include "base/Composition.h"
 #include "base/Device.h"
