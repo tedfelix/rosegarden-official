@@ -18,6 +18,7 @@
 #include "MappedStudio.h"
 #include "SoundDriver.h"
 #include "PluginFactory.h"
+#include "misc/Strings.h"
 
 #include <pthread.h> // for mutex
 
