@@ -341,7 +341,7 @@ bool RosegardenGUIDoc::saveIfModified()
             completed = saveDocument(getAbsFilePath(), errMsg);
 
             if (!completed) {
-                if (errMsg) {
+                if (!errMsg.isEmpty()) {
                     KMessageBox::error(0, i18n(QString("Could not save document at %1\n(%2)")
                                                .arg(getAbsFilePath()).arg(errMsg)));
                 } else {
