@@ -977,7 +977,7 @@ protected:
     QLabel *m_lilyPondDirectivesLabel;
 
     /// Displayed in the status bar, shows value() of current operation
-    ProgressBar *m_value()Bar;
+    ProgressBar *m_progressBar;
 
     /// Displayed in the status bar, holds the pixmap of the current note
     QLabel* m_currentNotePixmap;

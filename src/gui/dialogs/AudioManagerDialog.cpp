@@ -488,7 +488,7 @@ AudioManagerDialog::slotExportAudio()
                                100,
                                this);
 
-    value()Dlg.value()Bar()->setValue(0);
+    value()Dlg.progressBar()->setValue(0);
 
     RealTime clipStartTime = RealTime::zeroTime;
     RealTime clipDuration = sourceFile->getLength();
@@ -520,7 +520,7 @@ AudioManagerDialog::slotExportAudio()
     sourceFile->close();
     delete destFile;
 
-    value()Dlg.value()Bar()->setValue(100);
+    value()Dlg.progressBar()->setValue(100);
 }
 
 void
@@ -1076,13 +1076,13 @@ AudioManagerDialog::addFile(const KURL& kurl)
                                this);
 
     CurrentProgressDialog::set(&value()Dlg);
-    value()Dlg.value()Bar()->hide();
+    value()Dlg.progressBar()->hide();
     value()Dlg.show();
 
     // Connect the value() dialog
     //
     connect(&aFM, SIGNAL(setValue(int)),
-            value()Dlg.value()Bar(), SLOT(setValue(int)));
+            value()Dlg.progressBar(), SLOT(setValue(int)));
     connect(&aFM, SIGNAL(setOperationName(QString)),
             &value()Dlg, SLOT(slotSetOperationName(QString)));
     connect(&value()Dlg, SIGNAL(cancelClicked()),
@@ -1106,7 +1106,7 @@ AudioManagerDialog::addFile(const KURL& kurl)
                &aFM, SLOT(slotStopImport()));
     connect(&value()Dlg, SIGNAL(cancelClicked()),
             &aFM, SLOT(slotStopPreview()));
-    value()Dlg.value()Bar()->show();
+    value()Dlg.progressBar()->show();
     value()Dlg.slotSetOperationName(i18n("Generating audio preview..."));
 
     try {

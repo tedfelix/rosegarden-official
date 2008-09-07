@@ -690,7 +690,7 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
     value()Dlg.setLabel(i18n("Generating audio previews..."));
 
     connect(&m_audioFileManager, SIGNAL(setValue(int)),
-            value()Dlg.value()Bar(), SLOT(setValue(int)));
+            value()Dlg.progressBar(), SLOT(setValue(int)));
     try {
         // generate any audio previews after loading the files
         m_audioFileManager.generatePreviews();
@@ -1229,7 +1229,7 @@ bool RosegardenGUIDoc::saveDocumentActual(const QString& filename,
         value()Dlg = new ProgressDialog(i18n("Saving file..."),
                                          100,
                                          (QWidget*)parent());
-        value() = value()Dlg->value()Bar();
+        value() = value()Dlg->progressBar();
 
         value()Dlg->setMinimumDuration(500);
         value()Dlg->setAutoReset(true);
@@ -1582,11 +1582,11 @@ RosegardenGUIDoc::xmlParse(QString fileContents, QString &errMsg,
 
     if (value()) {
         connect(&handler, SIGNAL(setValue(int)),
-                value()->value()Bar(), SLOT(setValue(int)));
+                value()->progressBar(), SLOT(setValue(int)));
         connect(&handler, SIGNAL(setOperationName(QString)),
                 value(), SLOT(slotSetOperationName(QString)));
         connect(&handler, SIGNAL(incrementProgress(int)),
-                value()->value()Bar(), SLOT(advance(int)));
+                value()->progressBar(), SLOT(advance(int)));
         connect(value(), SIGNAL(cancelClicked()),
                 &handler, SLOT(slotCancel()));
     }
@@ -2729,7 +2729,7 @@ RosegardenGUIDoc::finalizeAudioFile(InstrumentId iid)
             &m_audioFileManager, SLOT(slotStopPreview()));
 
     connect(&m_audioFileManager, SIGNAL(setValue(int)),
-            value()Dlg->value()Bar(), SLOT(setValue(int)));
+            value()Dlg->progressBar(), SLOT(setValue(int)));
 
     try {
         m_audioFileManager.generatePreview(newAudioFile->getId());

@@ -303,7 +303,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
         m_insertModeLabel(0),
         m_annotationsLabel(0),
         m_lilyPondDirectivesLabel(0),
-        m_value()Bar(0),
+        m_progressBar()(0),
         m_currentNotePixmap(0),
         m_hoveredOverNoteName(0),
         m_hoveredOverAbsoluteTime(0),
@@ -2429,9 +2429,9 @@ void NotationView::initStatusBar()
     m_selectionCounter = new QLabel(sb);
     sb->addWidget(m_selectionCounter);
 
-    m_value()Bar = new ProgressBar(100, true, sb);
-    m_value()Bar->setMinimumWidth(100);
-    sb->addWidget(m_value()Bar);
+    m_progressBar() = new ProgressBar(100, true, sb);
+    m_progressBar()->setMinimumWidth(100);
+    sb->addWidget(m_progressBar());
 }
 
 QSize NotationView::getViewSize()
@@ -3830,7 +3830,7 @@ void NotationView::setupProgress(ProgressDialog* dialog)
     disconnectProgress();
 
     if (dialog) {
-        setupProgress(dialog->value()Bar());
+        setupProgress(dialog->progressBar());
 
         connect(dialog, SIGNAL(cancelClicked()),
                 m_hlayout, SLOT(slotCancel()));
@@ -3876,7 +3876,7 @@ void NotationView::setupDefaultProgress()
     if (m_value()Displayer != PROGRESS_BAR) {
         NOTATION_DEBUG << "NotationView::setupDefaultProgress()" << endl;
         disconnectProgress();
-        setupProgress(m_value()Bar);
+        setupProgress(m_progressBar());
         m_value()Displayer = PROGRESS_BAR;
     }
 }
@@ -4406,10 +4406,10 @@ bool NotationView::exportLilyPondFile(QString file, bool forPreview)
     LilyPondExporter e(this, m_doc, std::string(QFile::encodeName(file)));
 
     connect(&e, SIGNAL(setValue(int)),
-            value()Dlg.value()Bar(), SLOT(setValue(int)));
+            value()Dlg.progressBar(), SLOT(setValue(int)));
 
     connect(&e, SIGNAL(incrementProgress(int)),
-            value()Dlg.value()Bar(), SLOT(advance(int)));
+            value()Dlg.progressBar(), SLOT(advance(int)));
 
     if (!e.write()) {
         // CurrentProgressDialog::freeze();

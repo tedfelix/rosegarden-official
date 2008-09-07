@@ -38,8 +38,8 @@ CountdownDialog::CountdownDialog(QWidget *parent, int seconds):
         QDialog(parent, "", false, WStyle_StaysOnTop | WStyle_DialogBorder),
         m_pastEndMode(false),
         m_totalTime(seconds),
-        m_value()BarWidth(150),
-        m_value()BarHeight(15)
+        m_progressBar()Width(150),
+        m_progressBar()Height(15)
 {
     QBoxLayout *layout = new QBoxLayout(this, QBoxLayout::TopToBottom, 10, 14);
     setCaption(i18n("Recording..."));
@@ -55,17 +55,17 @@ CountdownDialog::CountdownDialog(QWidget *parent, int seconds):
     layout->addWidget(hBox, 0, AlignCenter);
 
     m_label->setText(i18n("Recording time remaining:  "));
-    m_value()Bar =
-        new CountdownBar(this, m_value()BarWidth, m_value()BarHeight);
+    m_progressBar() =
+        new CountdownBar(this, m_progressBar()Width, m_progressBar()Height);
 
-    m_value()Bar->setFixedSize(m_value()BarWidth, m_value()BarHeight);
+    m_progressBar()->setFixedSize(m_progressBar()Width, m_progressBar()Height);
 
     // Simply re-emit from Stop button
     //
     m_stopButton = new QPushButton(i18n("Stop"), this);
     m_stopButton->setFixedWidth(60);
 
-    layout->addWidget(m_value()Bar, 0, AlignCenter);
+    layout->addWidget(m_progressBar(), 0, AlignCenter);
     layout->addWidget(m_stopButton, 0, AlignRight);
 
     connect (m_stopButton, SIGNAL(released()), this, SIGNAL(stopped()));
@@ -120,7 +120,7 @@ CountdownDialog::setElapsedTime(int elapsedSeconds)
     // Draw the value() bar
     //
     if (m_pastEndMode) {
-        m_value()Bar->setPosition(m_value()BarWidth);
+        m_progressBar()->setPosition(m_progressBar()Width);
     } else {
         // Attempt a simplistic fix for #1838190.  In the context of an isolated
 	// test example, I'm fairly sure m_totalTime was 0, causing a divide by
@@ -130,9 +130,9 @@ CountdownDialog::setElapsedTime(int elapsedSeconds)
 	    RG_DEBUG << "CountdownDialog::setElapsedTime: FAILSAFE CODE FIRED, see bug #1838190 for details" << endl;
 	    m_totalTime = 1;
 	}
-        int barPosition = m_value()BarWidth -
-                          (elapsedSeconds * m_value()BarWidth) / m_totalTime;
-        m_value()Bar->setPosition(barPosition);
+        int barPosition = m_progressBar()Width -
+                          (elapsedSeconds * m_progressBar()Width) / m_totalTime;
+        m_progressBar()->setPosition(barPosition);
     }
 
     // Dialog complete if the display time is zero

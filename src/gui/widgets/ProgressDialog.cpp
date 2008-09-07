@@ -47,7 +47,7 @@ ProgressDialog::ProgressDialog(QWidget *creator,
     RG_DEBUG << "ProgressDialog::ProgressDialog type 1 - "
     << labelText() << " - modal : " << modal << endl;
 
-    connect(value()Bar(), SIGNAL(percentageChanged (int)),
+    connect(progressBar(), SIGNAL(percentageChanged (int)),
             this, SLOT(slotCheckShow(int)));
 
     m_chrono.start();
@@ -73,12 +73,12 @@ ProgressDialog::ProgressDialog(
         m_frozen(false),
         m_modal(modal)
 {
-    value()Bar()->setTotalSteps(totalSteps);
+    progressBar()->setTotalSteps(totalSteps);
 
     RG_DEBUG << "ProgressDialog::ProgressDialog type 2 - "
     << labelText << " - modal : " << modal << endl;
 
-    connect(value()Bar(), SIGNAL(percentageChanged (int)),
+    connect(progressBar(), SIGNAL(percentageChanged (int)),
             this, SLOT(slotCheckShow(int)));
 
     m_chrono.start();

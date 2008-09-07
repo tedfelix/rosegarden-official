@@ -1550,13 +1550,13 @@ RosegardenGUIView::slotDroppedNewAudio(QString audioDesc)
                                this);
 
     CurrentProgressDialog::set(&value()Dlg);
-    value()Dlg.value()Bar()->hide();
+    value()Dlg.progressBar()->hide();
     value()Dlg.show();
 
     // Connect the value() dialog
     //
     connect(&aFM, SIGNAL(setValue(int)),
-            value()Dlg.value()Bar(), SLOT(setValue(int)));
+            value()Dlg.progressBar(), SLOT(setValue(int)));
     connect(&aFM, SIGNAL(setOperationName(QString)),
             &value()Dlg, SLOT(slotSetOperationName(QString)));
     connect(&value()Dlg, SIGNAL(cancelClicked()),
@@ -1580,7 +1580,7 @@ RosegardenGUIView::slotDroppedNewAudio(QString audioDesc)
                &aFM, SLOT(slotStopImport()));
     connect(&value()Dlg, SIGNAL(cancelClicked()),
             &aFM, SLOT(slotStopPreview()));
-    value()Dlg.value()Bar()->show();
+    value()Dlg.progressBar()->show();
     value()Dlg.slotSetOperationName(i18n("Generating audio preview..."));
 
     try {

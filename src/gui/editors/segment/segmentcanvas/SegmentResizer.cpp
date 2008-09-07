@@ -173,7 +173,7 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent *e)
                     value()Dlg.setLabel(i18n("Generating audio preview..."));
                     command->disconnectProgressDialog(&value()Dlg);
                     connect(&m_doc->getAudioFileManager(), SIGNAL(setValue(int)),
-                            value()Dlg.value()Bar(), SLOT(setValue(int)));
+                            value()Dlg.progressBar(), SLOT(setValue(int)));
                     connect(&value()Dlg, SIGNAL(cancelClicked()),
                             &m_doc->getAudioFileManager(), SLOT(slotStopPreview()));
 
