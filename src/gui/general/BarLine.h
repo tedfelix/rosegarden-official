@@ -22,7 +22,6 @@
 #include <Q3Canvas>
 #include <Q3CanvasPolygonalItem>
 #include "LinedStaff.h"
-#include <qcanvas.h>
 
 namespace Rosegarden {
 
