@@ -30,7 +30,7 @@
 #include <kdockwidget.h>
 #include <QString>
 #include <QVector>
-
+#include <QSettings>
 
 class QWidget;
 class QTimer;

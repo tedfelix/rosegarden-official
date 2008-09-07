@@ -37,11 +37,13 @@
 #include <vector>
 #include "base/Event.h"
 
+#include <QProgressBar>
+#include <QProgressDialog>
 
 class QWidget;
 class QTextStream;
 class NoteOnRecSet;
-class KProgress;
+//class QProgressBar;
 
 
 namespace Rosegarden
@@ -565,7 +567,7 @@ protected:
     /**
      * Save one segment to the given text stream
      */
-    void saveSegment(QTextStream&, Segment*, KProgress*,
+    void saveSegment(QTextStream&, Segment*, QProgressBar*,
                      long totalNbOfEvents, long &count,
                      QString extraAttributes = QString::null);
 

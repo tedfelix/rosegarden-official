@@ -17,6 +17,8 @@
 #include "document/ConfigGroups.h"
 #include "kconfig.h"
 #include "kapp.h"
+#include <QSettings>
+#include "misc/Strings.h"
 
 namespace Rosegarden 
 {

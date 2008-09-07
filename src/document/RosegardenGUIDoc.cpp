@@ -85,12 +85,13 @@
 #include "sound/PluginIdentifier.h"
 #include "sound/SoundDriver.h"
 #include "document/Command.h"
-#include <kconfig.h>
+#include <QSettings>
 #include <kfilterdev.h>
 #include <kglobal.h>
 #include <kmessagebox.h>
 #include <QProcess>
-#include <kprogress.h>
+#include <QProgressBar>
+#include <QProgressDialog>
 #include <ktempfile.h>
 #include <QByteArray>
 #include <QDataStream>
@@ -104,6 +105,7 @@
 #include <QTextStream>
 #include <QWidget>
 #include "gui/widgets/ProgressBar.h"
+#include <QSettings>
 
 
 namespace Rosegarden
@@ -1220,7 +1222,7 @@ bool RosegardenGUIDoc::saveDocumentActual(const QString& filename,
     << "\">\n";
 
     ProgressDialog *progressDlg = 0;
-    KProgress *progress = 0;
+    QProgressBar *progress = 0;
 
     if (!autosave) {
 
@@ -1376,7 +1378,7 @@ bool RosegardenGUIDoc::exportStudio(const QString& filename,
 }
 
 void RosegardenGUIDoc::saveSegment(QTextStream& outStream, Segment *segment,
-                                   KProgress* progress, long totalEvents, long &count,
+                                   QProgressBar* progress, long totalEvents, long &count,
                                    QString extraAttributes)
 {
     QString time;
