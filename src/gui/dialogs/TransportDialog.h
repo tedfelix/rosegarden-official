@@ -19,7 +19,7 @@
 #define _RG_ROSEGARDENTRANSPORTDIALOG_H_
 
 #include <map>
-#include <kdockwidget.h>
+#include <QDockWidget>
 #include <QColor>
 #include <QPixmap>
 #include "base/Composition.h" // for tempoT

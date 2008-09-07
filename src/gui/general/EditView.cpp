@@ -78,7 +78,7 @@
 #include "RosegardenCanvasView.h"
 #include <kaction.h>
 #include "document/Command.h"
-#include <kdockwidget.h>
+#include <QDockWidget>
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <kstandarddirs.h>

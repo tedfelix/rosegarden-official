@@ -41,7 +41,7 @@
 #include <kaction.h>
 #include "document/Command.h"
 #include <kconfig.h>
-#include <kdockwidget.h>
+#include <QDockWidget>
 #include <kedittoolbar.h>
 #include <kglobal.h>
 #include <kkeydialog.h>
@@ -97,9 +97,9 @@ EditViewBase::EditViewBase(RosegardenGUIDoc *doc,
     m_mainDockWidget = createDockWidget("Rosegarden EditView DockWidget", dummyPixmap,
                                         0L, "editview_dock_widget");
     // allow others to dock to the left and right sides only
-    m_mainDockWidget->setDockSite(KDockWidget::DockLeft | KDockWidget::DockRight);
+    m_mainDockWidget->setDockSite(QDockWidget::DockLeft | QDockWidget::DockRight);
     // forbit docking abilities of m_mainDockWidget itself
-    m_mainDockWidget->setEnableDocking(KDockWidget::DockNone);
+    m_mainDockWidget->setEnableDocking(QDockWidget::DockNone);
     setView(m_mainDockWidget); // central widget in a KDE mainwindow
     setMainDockWidget(m_mainDockWidget); // master dockwidget
 

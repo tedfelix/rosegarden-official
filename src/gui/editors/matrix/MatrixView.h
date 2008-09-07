@@ -28,7 +28,7 @@
 #include "MatrixHLayout.h"
 #include "MatrixVLayout.h"
 #include "MatrixCanvasView.h"
-#include <kdockwidget.h>
+#include <QDockWidget>
 #include <QPoint>
 #include <QSize>
 #include <vector>
@@ -493,7 +493,7 @@ protected slots:
     /**
      * The parameters box was docked back
      */
-    void slotParametersDockedBack(KDockWidget*, KDockWidget::DockPosition);
+    void slotParametersDockedBack(QDockWidget*, QDockWidget::DockPosition);
 
     /**
      * The instrument for this track may have changed
@@ -606,7 +606,7 @@ protected:
      */
     int m_previousEvPitch;
 
-    KDockWidget         *m_dockLeft;
+    QDockWidget         *m_dockLeft;
     MatrixCanvasView    *m_canvasView;
     QDeferScrollView    *m_pianoView;
     PitchRuler          *m_pitchRuler;

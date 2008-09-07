@@ -27,7 +27,7 @@
 #include "base/Event.h"
 #include "sound/AudioFile.h"
 #include "sound/Midi.h"
-#include <kdockwidget.h>
+#include <QDockWidget>
 #include <QString>
 #include <QVector>
 #include <QSettings>
@@ -1199,7 +1199,7 @@ public slots:
     /**
      * The parameters box was docked back
      */
-    void slotParametersDockedBack(KDockWidget*, KDockWidget::DockPosition);
+    void slotParametersDockedBack(QDockWidget*, QDockWidget::DockPosition);
 
     /**
      * Display tip-of-day dialog on demand
@@ -1549,8 +1549,8 @@ private:
     RosegardenGUIView* m_view;
     RosegardenGUIView* m_swapView;
 
-    KDockWidget* m_mainDockWidget;
-    KDockWidget* m_dockLeft;
+    QDockWidget* m_mainDockWidget;
+    QDockWidget* m_dockLeft;
 
     /**
      * doc represents your actual document and is created only

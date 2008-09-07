@@ -104,7 +104,7 @@
 #include <kaction.h>
 #include <QComboBox>
 #include <kconfig.h>
-#include <kdockwidget.h>
+#include <QDockWidget>
 #include <kglobal.h>
 #include <kmessagebox.h>
 #include <kstatusbar.h>
@@ -169,7 +169,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     m_dockLeft = createDockWidget("params dock", matrixPixmap, 0L,
                                   i18n("Instrument Parameters"));
     m_dockLeft->manualDock(m_mainDockWidget,             // dock target
-                           KDockWidget::DockLeft,  // dock site
+                           QDockWidget::DockLeft,  // dock site
                            20);                   // relation target/this (in percent)
 
     connect(m_dockLeft, SIGNAL(iMBeingClosed()),
@@ -178,8 +178,8 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
             this, SLOT(slotParametersClosed()));
     // Apparently, hasUndocked() is emitted when the dock widget's
     // 'close' button on the dock handle is clicked.
-    connect(m_mainDockWidget, SIGNAL(docking(KDockWidget*, KDockWidget::DockPosition)),
-            this, SLOT(slotParametersDockedBack(KDockWidget*, KDockWidget::DockPosition)));
+    connect(m_mainDockWidget, SIGNAL(docking(QDockWidget*, QDockWidget::DockPosition)),
+            this, SLOT(slotParametersDockedBack(QDockWidget*, QDockWidget::DockPosition)));
 
     Composition &comp = doc->getComposition();
 
@@ -987,7 +987,7 @@ void MatrixView::slotParametersClosed()
     m_dockVisible = false;
 }
 
-void MatrixView::slotParametersDockedBack(KDockWidget* dw, KDockWidget::DockPosition)
+void MatrixView::slotParametersDockedBack(QDockWidget* dw, QDockWidget::DockPosition)
 {
     if (dw == m_dockLeft) {
         stateChanged("parametersbox_closed", KXMLGUIClient::StateReverse);

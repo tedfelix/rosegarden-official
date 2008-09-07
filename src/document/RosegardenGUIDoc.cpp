@@ -1236,8 +1236,9 @@ bool RosegardenGUIDoc::saveDocumentActual(const QString& filename,
         progressDlg = new ProgressDialog(i18n("Saving file..."),
                                          100,
                                          (QWidget*)parent());
-        progress = progressDlg->progressBar();
-
+		//progress = progressDlg->progressBar();
+		progress = progressDlg;
+		
         progressDlg->setMinimumDuration(500);
         progressDlg->setAutoReset(true);
 

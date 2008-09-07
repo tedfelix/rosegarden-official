@@ -161,7 +161,7 @@
 #include <kdialogbase.h>
 #include <kdialog.h>
 #include <kdiskfreesp.h>
-#include <kdockwidget.h>
+#include <QDockWidget>
 #include <kedittoolbar.h>
 #include <kfiledialog.h>
 #include <kfile.h>

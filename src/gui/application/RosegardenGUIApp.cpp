@@ -174,7 +174,7 @@
 #include <kaction.h>
 #include <kconfig.h>
 #include <kdcopactionproxy.h>
-#include <kdockwidget.h>
+#include <QDockWidget>
 #include <kedittoolbar.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
@@ -339,16 +339,16 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     QPixmap dummyPixmap; // any icon will do
     m_mainDockWidget = createDockWidget("Rosegarden MainDockWidget", dummyPixmap, 0L, "main_dock_widget");
     // allow others to dock to the left and right sides only
-    m_mainDockWidget->setDockSite(KDockWidget::DockLeft | KDockWidget::DockRight);
+    m_mainDockWidget->setDockSite(QDockWidget::DockLeft | QDockWidget::DockRight);
     // forbit docking abilities of m_mainDockWidget itself
-    m_mainDockWidget->setEnableDocking(KDockWidget::DockNone);
+    m_mainDockWidget->setEnableDocking(QDockWidget::DockNone);
     setView(m_mainDockWidget); // central widget in a KDE mainwindow
     setMainDockWidget(m_mainDockWidget); // master dockwidget
 
     m_dockLeft = createDockWidget("params dock", dummyPixmap, 0L,
                                   i18n("Special Parameters"));
     m_dockLeft->manualDock(m_mainDockWidget,             // dock target
-                           KDockWidget::DockLeft,  // dock site
+                           QDockWidget::DockLeft,  // dock site
                            20);                   // relation target/this (in percent)
 
     connect(m_dockLeft, SIGNAL(iMBeingClosed()),
@@ -357,8 +357,8 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
             this, SLOT(slotParametersClosed()));
     // Apparently, hasUndocked() is emitted when the dock widget's
     // 'close' button on the dock handle is clicked.
-    connect(m_mainDockWidget, SIGNAL(docking(KDockWidget*, KDockWidget::DockPosition)),
-            this, SLOT(slotParametersDockedBack(KDockWidget*, KDockWidget::DockPosition)));
+    connect(m_mainDockWidget, SIGNAL(docking(QDockWidget*, QDockWidget::DockPosition)),
+            this, SLOT(slotParametersDockedBack(QDockWidget*, QDockWidget::DockPosition)));
 
     stateChanged("parametersbox_closed", KXMLGUIClient::StateReverse);
 
@@ -3499,7 +3499,7 @@ void RosegardenGUIApp::slotParametersClosed()
     m_dockVisible = false;
 }
 
-void RosegardenGUIApp::slotParametersDockedBack(KDockWidget* dw, KDockWidget::DockPosition)
+void RosegardenGUIApp::slotParametersDockedBack(QDockWidget* dw, QDockWidget::DockPosition)
 {
     if (dw == m_dockLeft) {
         stateChanged("parametersbox_closed", KXMLGUIClient::StateReverse);

@@ -20,7 +20,7 @@
 
 #include <set>
 #include <string>
-#include <kdockwidget.h>
+#include <QDockWidget>
 #include <QString>
 #include <vector>
 #include "base/Event.h"
@@ -363,7 +363,7 @@ protected:
     EditTool*    m_tool;
     EditToolBox* m_toolBox;
 
-    KDockWidget *m_mainDockWidget;
+    QDockWidget *m_mainDockWidget;
     QFrame      *m_centralFrame;
     QGridLayout *m_grid;
 
