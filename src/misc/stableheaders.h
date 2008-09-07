@@ -46,7 +46,7 @@
 #include <QBuffer>
 #include <QGroupBox>
 #include <qbutton.h>
-#include <qcanvas.h>
+#include <Q3Canvas>
 #include <QCheckBox>
 #include <QColor>
 #include <QComboBox>

@@ -27,7 +27,7 @@
 #include <Q3CanvasSprite>
 #include <Q3CanvasText>
 #include <Q3CanvasView>
-#include <qcanvas.h>
+#include <Q3Canvas>
 
 class QCanvasItemGroup;
 

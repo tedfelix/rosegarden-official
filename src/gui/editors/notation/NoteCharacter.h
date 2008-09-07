@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -22,7 +21,7 @@
 #include <Q3CanvasPixmap>
 #include <QPixmap>
 #include <QPoint>
-#include <qpointarray.h>
+#include <QPolygon>
 
 
 class QPainter;
@@ -31,10 +30,10 @@ class Q3CanvasPixmap;
 namespace Rosegarden
 {
 
-class NoteCharacterDrawRep : public QPointArray
+class NoteCharacterDrawRep : public QPolygon
 {
 public:
-    NoteCharacterDrawRep(int size = 0) : QPointArray(size) { }
+    NoteCharacterDrawRep(int size = 0) : QPolygon(size) { }
 };
 
 

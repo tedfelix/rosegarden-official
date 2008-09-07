@@ -21,7 +21,7 @@
 
 #include <Q3Canvas>
 #include <Q3CanvasRectangle>
-#include <qcanvas.h>
+#include <Q3Canvas>
 
 
 namespace Rosegarden

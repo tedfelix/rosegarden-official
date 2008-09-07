@@ -21,7 +21,7 @@
 #include <Q3CanvasItemList>
 #include "base/Event.h"
 #include "document/BasicCommand.h"
-#include <qcanvas.h>
+#include <Q3Canvas>
 
 namespace Rosegarden
 {

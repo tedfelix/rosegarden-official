@@ -23,7 +23,7 @@
 #include <Q3CanvasRectangle>
 #include "base/ViewElement.h"
 #include <QBrush>
-#include <qcanvas.h>
+#include <Q3Canvas>
 #include "QCanvasMatrixRectangle.h"
 
 class QColor;

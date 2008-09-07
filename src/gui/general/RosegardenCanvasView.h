@@ -23,7 +23,7 @@
 #include <Q3CanvasView>
 #include <QPoint>
 #include <QTimer>
-#include <qcanvas.h>
+#include <Q3Canvas>
 #include <QDateTime>
 #include <QMatrix>
 

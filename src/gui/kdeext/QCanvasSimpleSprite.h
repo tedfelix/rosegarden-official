@@ -21,7 +21,7 @@
 #include <Q3CanvasPixmapArray>
 #include <Q3CanvasSprite>
 #include <QMatrix>
-#include <qcanvas.h>
+#include <Q3Canvas>
 
 #include "gui/editors/notation/NotePixmapFactory.h"
 
