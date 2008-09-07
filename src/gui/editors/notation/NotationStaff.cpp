@@ -457,7 +457,7 @@ NotationStaff::renderElements(NotationElementList::iterator from,
     Profiler profiler("NotationStaff::renderElements");
 
     emit setOperationName(i18n("Rendering staff %1...", getId() + 1));
-    emit setProgress(0);
+    emit setValue(0);
 
     throwIfCancelled();
 
@@ -502,7 +502,7 @@ NotationStaff::renderElements(NotationElementList::iterator from,
                 (++elementCount % 200 == 0)) {
 
             timeT myTime = (*it)->getViewAbsoluteTime();
-            emit setProgress((myTime - startTime) * 100 / (endTime - startTime));
+            emit setValue((myTime - startTime) * 100 / (endTime - startTime));
             throwIfCancelled();
         }
     }
@@ -520,7 +520,7 @@ NotationStaff::renderPrintable(timeT from, timeT to)
     Profiler profiler("NotationStaff::renderElements");
 
     emit setOperationName(i18n("Rendering notes on staff %1...", getId() + 1));
-    emit setProgress(0);
+    emit setValue(0);
 
     throwIfCancelled();
 
@@ -555,7 +555,7 @@ NotationStaff::renderPrintable(timeT from, timeT to)
         if ((to > from) && (++elementCount % 200 == 0)) {
 
             timeT myTime = (*it)->getViewAbsoluteTime();
-            emit setProgress((myTime - from) * 100 / (to - from));
+            emit setValue((myTime - from) * 100 / (to - from));
             throwIfCancelled();
         }
     }
@@ -588,7 +588,7 @@ NotationStaff::positionElements(timeT from, timeT to)
     if (to == from) return;
 
     emit setOperationName(i18n("Positioning staff %1...", getId() + 1));
-    emit setProgress(0);
+    emit setValue(0);
     throwIfCancelled();
 
     const NotationProperties &properties(getProperties());
@@ -720,7 +720,7 @@ NotationStaff::positionElements(timeT from, timeT to)
         if ((to > from) &&
                 (++elementsPositioned % 300 == 0)) {
             timeT myTime = el->getViewAbsoluteTime();
-            emit setProgress((myTime - from) * 100 / (to - from));
+            emit setValue((myTime - from) * 100 / (to - from));
             throwIfCancelled();
         }
     }

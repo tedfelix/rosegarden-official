@@ -65,7 +65,7 @@ public:
     //
     virtual bool write();
 
-    // Write the file, emit progress signal and process app events
+    // Write the file, emit value() signal and process app events
     //
     virtual bool write(unsigned short updatePercentage);
 
@@ -122,7 +122,7 @@ public:
     void setProcessingPeaks(bool value) { m_keepProcessing = value; }
 
 signals:
-    void setProgress(int);
+    void setValue(int);
     
 protected:
     // Write the peak header and the peaks themselves

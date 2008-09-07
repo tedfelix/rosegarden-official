@@ -65,12 +65,12 @@ protected:
 
     QLabel       *m_label;
     QLabel       *m_time;
-    CountdownBar *m_progressBar;
+    CountdownBar *m_value()Bar;
 
     QPushButton  *m_stopButton;
 
-    int           m_progressBarWidth;
-    int           m_progressBarHeight;
+    int           m_value()BarWidth;
+    int           m_value()BarHeight;
 
     QShortcut       *m_shortcuterators;
 };

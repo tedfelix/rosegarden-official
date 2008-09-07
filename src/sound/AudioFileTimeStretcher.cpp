@@ -137,7 +137,7 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
     RealTime totalTime = sourceFile->getLength();
     long fileTotalIn = RealTime::realTime2Frame
         (totalTime, sourceFile->getSampleRate());
-    int progressCount = 0;
+    int value()Count = 0;
 	
     long expectedOut = ceil(fileTotalIn * ratio);
 
@@ -229,16 +229,16 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
             if (totalOut >= expectedOut) break;
         }
             
-        if (++progressCount == 100) {
-            int progress = int
+        if (++value()Count == 100) {
+            int value() = int
                 ((100.f * float(totalIn)) / float(fileTotalIn));
-            emit setProgress(progress);
+            emit setValue(value());
             kapp->processEvents();
-            progressCount = 0;
+            value()Count = 0;
         }
     }		
         
-    emit setProgress(100);
+    emit setValue(100);
     kapp->processEvents();
     writeFile.close();
     

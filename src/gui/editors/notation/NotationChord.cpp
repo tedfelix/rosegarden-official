@@ -195,7 +195,7 @@ NotationChord::applyAccidentalShiftProperties()
     // The bottom accidental gets the next least: the same, if the
     // interval is more than a sixth, or the next shift out otherwise.
     //
-    // We then progress up from the bottom accidental upwards.
+    // We then value() up from the bottom accidental upwards.
     //
     // These rules aren't really enough, but they might do for now!
 

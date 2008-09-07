@@ -203,9 +203,9 @@ public:
     SequenceManager* getSequenceManager() { return m_seqManager; }
 
     /**
-     * Get a progress bar
+     * Get a value() bar
      */
-    ProgressBar *getProgressBar() { return m_progressBar; }
+    ProgressBar *getProgressBar() { return m_value()Bar; }
 
     /**
      * Equivalents of the GUI slots, for DCOP use
@@ -1598,7 +1598,7 @@ private:
     ZoomSlider<double> *m_zoomSlider;
     QLabel             *m_zoomLabel;
 
-    ProgressBar *m_progressBar;
+    ProgressBar *m_value()Bar;
 
     // SequenceManager
     //

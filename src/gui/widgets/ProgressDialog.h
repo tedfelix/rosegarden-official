@@ -54,7 +54,7 @@ public:
 
     /**
      * A "safe" way to process events without worrying about user
-     * input during the process.  If there is a modal progress dialog
+     * input during the process.  If there is a modal value() dialog
      * visible, then this will permit user input so as to allow the
      * user to hit Cancel; otherwise it will prevent all user input
      */
@@ -66,7 +66,7 @@ public slots:
     void slotSetOperationName(QString);
     void slotCancel();
 
-    /// Stop and hide (if it's shown) the progress dialog
+    /// Stop and hide (if it's shown) the value() dialog
     void slotFreeze();
 
     /// Restore the dialog to its normal state

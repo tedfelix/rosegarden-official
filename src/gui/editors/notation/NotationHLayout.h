@@ -229,7 +229,7 @@ public:
     (Staff &staff, int barNo,
      TimeSignature &timeSig, double &timeSigX);
 
-    /// purely optional, used only for progress reporting
+    /// purely optional, used only for value() reporting
     void setStaffCount(int staffCount) {
         m_staffCount = staffCount;
     }
@@ -430,7 +430,7 @@ protected:
 
     int m_timePerProgressIncrement;
     std::map<Staff *, bool> m_haveOttavaSomewhere;
-    int m_staffCount; // purely for progress reporting
+    int m_staffCount; // purely for value() reporting
 };
 
 

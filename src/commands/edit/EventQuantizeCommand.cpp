@@ -149,12 +149,12 @@ EventQuantizeCommand::modifySegment()
                               segment.findTime(getEndTime()));
     }
 
-    if (m_progressTotal > 0) {
+    if (m_value()Total > 0) {
         if (rebeam || makeviable || decounterpoint) {
-            emit incrementProgress(m_progressTotal / 2);
+            emit incrementProgress(m_value()Total / 2);
             rgapp->refreshGUI(50);
         } else {
-            emit incrementProgress(m_progressTotal);
+            emit incrementProgress(m_value()Total);
             rgapp->refreshGUI(50);
         }
     }
@@ -187,9 +187,9 @@ EventQuantizeCommand::modifySegment()
         }
     }
 
-    if (m_progressTotal > 0) {
+    if (m_value()Total > 0) {
         if (rebeam || makeviable || decounterpoint) {
-            emit incrementProgress(m_progressTotal / 2);
+            emit incrementProgress(m_value()Total / 2);
             rgapp->refreshGUI(50);
         }
     }

@@ -47,7 +47,7 @@ ProgressDialog::ProgressDialog(QWidget *creator,
     RG_DEBUG << "ProgressDialog::ProgressDialog type 1 - "
     << labelText() << " - modal : " << modal << endl;
 
-    connect(progressBar(), SIGNAL(percentageChanged (int)),
+    connect(value()Bar(), SIGNAL(percentageChanged (int)),
             this, SLOT(slotCheckShow(int)));
 
     m_chrono.start();
@@ -73,12 +73,12 @@ ProgressDialog::ProgressDialog(
         m_frozen(false),
         m_modal(modal)
 {
-    progressBar()->setTotalSteps(totalSteps);
+    value()Bar()->setTotalSteps(totalSteps);
 
     RG_DEBUG << "ProgressDialog::ProgressDialog type 2 - "
     << labelText << " - modal : " << modal << endl;
 
-    connect(progressBar(), SIGNAL(percentageChanged (int)),
+    connect(value()Bar(), SIGNAL(percentageChanged (int)),
             this, SLOT(slotCheckShow(int)));
 
     m_chrono.start();
@@ -164,7 +164,7 @@ void ProgressDialog::slotFreeze()
 
     // This is also a convenient place to ensure the wait cursor (if
     // currently shown) returns to the original cursor to ensure that
-    // the user can respond to whatever's freezing the progress dialog
+    // the user can respond to whatever's freezing the value() dialog
     QApplication::restoreOverrideCursor();
 
     mShowTimer->stop();

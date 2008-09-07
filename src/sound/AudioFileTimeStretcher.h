@@ -50,7 +50,7 @@ public:
     };
 
 signals:
-    void setProgress(int);
+    void setValue(int);
 
 public slots:
     /**

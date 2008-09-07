@@ -202,7 +202,7 @@
 #include <kxmlguifactory.h>
 
 #define private protected // fugly
-#include <kprogress.h>
+#include <kvalue().h>
 #undef private
 
 #endif /*STABLEHEADERS_H_*/

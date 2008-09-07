@@ -343,7 +343,7 @@ MusicXmlExporter::write()
         }
         str << "\t\t</score-part>" << std::endl;
 
-        emit setProgress(int(double(trackNo++) / double(tracks.size()) * 20.0));
+        emit setValue(int(double(trackNo++) / double(tracks.size()) * 20.0));
         rgapp->refreshGUI(50);
 
     } // end track iterator
@@ -535,7 +535,7 @@ MusicXmlExporter::write()
             str << "\t</part>" << std::endl;
         }
 
-        emit setProgress(20 +
+        emit setValue(20 +
                          int(double(trackNo++) / double(tracks.size()) * 80.0));
         rgapp->refreshGUI(50);
     }

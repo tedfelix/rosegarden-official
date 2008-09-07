@@ -210,7 +210,7 @@ public slots:
 
 signals:
     void signalSelectProgramNoSend(int,int,int);
-    void setProgress(int);
+    void setValue(int);
     void incrementProgress(int);
 
     void insertableNoteOnReceived(int pitch, int velocity);

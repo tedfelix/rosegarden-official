@@ -280,7 +280,7 @@ AnalysisHelper::guessHarmonies(CompositionTimeSliceAdapter &c, Segment &s)
     makeHarmonyGuessList(c, l);
 
     // 2. Refine the list of possible harmonies by preferring chords in the
-    //    current key and looking for familiar progressions and
+    //    current key and looking for familiar value()ions and
     //    tonicizations.
     refineHarmonyGuessList(c, l, s);
 
@@ -496,7 +496,7 @@ AnalysisHelper::refineHarmonyGuessList(CompositionTimeSliceAdapter &/* c */,
 
                 //    std::cerr << currentScore << std::endl;
 
-                // Is this a familiar progression? Bonus if so.
+                // Is this a familiar value()ion? Bonus if so.
 
                 bool isFamiliar = false;
 
@@ -504,13 +504,13 @@ AnalysisHelper::refineHarmonyGuessList(CompositionTimeSliceAdapter &/* c */,
                 //      also, does this code belong here?
 
                 ProgressionMap::iterator pmi =
-                    m_progressionMap.lower_bound(
+                    m_value()ionMap.lower_bound(
                         ChordProgression(k->second, l->second)
                     );
 
                 // no initialization
                 for ( ;
-                     pmi != m_progressionMap.end()
+                     pmi != m_value()ionMap.end()
                      && pmi->first == k->second
                      && pmi->second == l->second;
                      ++pmi)
@@ -530,7 +530,7 @@ AnalysisHelper::refineHarmonyGuessList(CompositionTimeSliceAdapter &/* c */,
 
                 // Is this better than any pair examined so far? If so, set
                 // some variables that should end up holding the best chord
-                // progression
+                // value()ion
                 if (currentScore > highestScore)
                 {
                     bestGuessForFirstChord  = k->second;
@@ -554,12 +554,12 @@ AnalysisHelper::refineHarmonyGuessList(CompositionTimeSliceAdapter &/* c */,
 
             // If not, is it a secondary function?
                 // If so, change the current key
-                // If not, set an "implausible progression" flag
+                // If not, set an "implausible value()ion" flag
 
         // (Is the score of the best pair of chords reasonable?
         // If not, set the flag.)
 
-        // Was the progression plausible?
+        // Was the value()ion plausible?
 
             // If so, replace the ten or so chords in the first guess with the
             // first chord of the best pair, set
@@ -636,14 +636,14 @@ AnalysisHelper::checkHarmonyTable()
 
 }
 
-AnalysisHelper::ProgressionMap AnalysisHelper::m_progressionMap;
+AnalysisHelper::ProgressionMap AnalysisHelper::m_value()ionMap;
 
 void
 AnalysisHelper::checkProgressionMap()
 {
-    if (!m_progressionMap.empty()) return;
+    if (!m_value()ionMap.empty()) return;
     // majorProgressionFirsts[0] = 5, majorProgressionSeconds[0]=1, so 5->1 is
-    // a valid progression. Note that the chord numbers are 1-based, like the
+    // a valid value()ion. Note that the chord numbers are 1-based, like the
     // Roman numeral symbols
     const int majorProgressionFirsts[9] =
         {5, 2, 6, 3, 7, 4, 4, 3, 5};
@@ -655,7 +655,7 @@ AnalysisHelper::checkProgressionMap()
     {
         // Make the key
         Key k(0, false); // tonicPitch = i, isMinor = false
-        // Add the common progressions
+        // Add the common value()ions
         for (int j = 0; j < 9; ++j)
         {
             std::cerr << majorProgressionFirsts[j] << ", " << majorProgressionSeconds[j] << std::endl;
@@ -668,7 +668,7 @@ AnalysisHelper::checkProgressionMap()
         {
             addProgressionToMap(k, 1, j);
         }
-        // (Add the progressions involving seventh chords)
+        // (Add the value()ions involving seventh chords)
         // (Add I->seventh chords)
     }
     // (For each minor key)
@@ -705,7 +705,7 @@ AnalysisHelper::addProgressionToMap(Key k,
             (majorScalePitches[secondChordNumber] + offset) % 12
         );
         ChordProgression p(firstChord, secondChord, k);
-        m_progressionMap.insert(p);
+        m_value()ionMap.insert(p);
     }
     // else handle minor-key chords
 

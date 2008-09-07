@@ -303,7 +303,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
         m_insertModeLabel(0),
         m_annotationsLabel(0),
         m_lilyPondDirectivesLabel(0),
-        m_progressBar(0),
+        m_value()Bar(0),
         m_currentNotePixmap(0),
         m_hoveredOverNoteName(0),
         m_hoveredOverAbsoluteTime(0),
@@ -338,7 +338,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
         m_pannerDialog(new ScrollBoxDialog(this, ScrollBox::FixHeight)),
         m_renderTimer(0),
         m_playTracking(true),
-        m_progressDisplayer(PROGRESS_NONE),
+        m_value()Displayer(PROGRESS_NONE),
         m_inhibitRefresh(true),
         m_ok(false),
         m_printMode(false),
@@ -509,23 +509,23 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     //
     // layout
     //
-    ProgressDialog* progressDlg = 0;
+    ProgressDialog* value()Dlg = 0;
 
     if (showProgressive)
     {
         show();
         ProgressDialog::processEvents();
 
-        NOTATION_DEBUG << "NotationView : setting up progress dialog" << endl;
+        NOTATION_DEBUG << "NotationView : setting up value() dialog" << endl;
 
-        progressDlg = new ProgressDialog(i18n("Starting..."),
+        value()Dlg = new ProgressDialog(i18n("Starting..."),
                                          100, this);
-        progressDlg->setAutoClose(false);
-        progressDlg->setAutoReset(true);
-        progressDlg->setMinimumDuration(1000);
-        setupProgress(progressDlg);
+        value()Dlg->setAutoClose(false);
+        value()Dlg->setAutoReset(true);
+        value()Dlg->setMinimumDuration(1000);
+        setupProgress(value()Dlg);
 
-        m_progressDisplayer = PROGRESS_DIALOG;
+        m_value()Displayer = PROGRESS_DIALOG;
     }
 
     m_chordNameRuler->setStudio(&getDocument()->getStudio());
@@ -573,7 +573,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     NOTATION_DEBUG << "NotationView ctor : m_ok = " << m_ok << endl;
 
-    delete progressDlg;
+    delete value()Dlg;
 
     // at this point we can return if operation was cancelled
     if (!isOK())
@@ -808,7 +808,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
         m_pannerDialog(0),
         m_renderTimer(0),
         m_playTracking(false),
-        m_progressDisplayer(PROGRESS_NONE),
+        m_value()Displayer(PROGRESS_NONE),
         m_inhibitRefresh(true),
         m_ok(false),
         m_printMode(true),
@@ -896,23 +896,23 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_currentStaff = 0;
     m_staffs[0]->setCurrent(true);
 
-    ProgressDialog* progressDlg = 0;
+    ProgressDialog* value()Dlg = 0;
 
     if (parent)
     {
 
         ProgressDialog::processEvents();
 
-        NOTATION_DEBUG << "NotationView : setting up progress dialog" << endl;
+        NOTATION_DEBUG << "NotationView : setting up value() dialog" << endl;
 
-        progressDlg = new ProgressDialog(i18n("Preparing to print..."),
+        value()Dlg = new ProgressDialog(i18n("Preparing to print..."),
                                          100, parent);
-        progressDlg->setAutoClose(false);
-        progressDlg->setAutoReset(true);
-        progressDlg->setMinimumDuration(1000);
-        setupProgress(progressDlg);
+        value()Dlg->setAutoClose(false);
+        value()Dlg->setAutoReset(true);
+        value()Dlg->setMinimumDuration(1000);
+        setupProgress(value()Dlg);
 
-        m_progressDisplayer = PROGRESS_DIALOG;
+        m_value()Displayer = PROGRESS_DIALOG;
     }
 
     try
@@ -935,7 +935,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
     NOTATION_DEBUG << "NotationView ctor : m_ok = " << m_ok << endl;
 
-    delete progressDlg;
+    delete value()Dlg;
 
     if (!isOK())
     {
@@ -2429,9 +2429,9 @@ void NotationView::initStatusBar()
     m_selectionCounter = new QLabel(sb);
     sb->addWidget(m_selectionCounter);
 
-    m_progressBar = new ProgressBar(100, true, sb);
-    m_progressBar->setMinimumWidth(100);
-    sb->addWidget(m_progressBar);
+    m_value()Bar = new ProgressBar(100, true, sb);
+    m_value()Bar->setMinimumWidth(100);
+    sb->addWidget(m_value()Bar);
 }
 
 QSize NotationView::getViewSize()
@@ -3584,9 +3584,9 @@ void NotationView::setMenuStates()
 }
 
 #define UPDATE_PROGRESS(n) \
-	progressCount += (n); \
-	if (progressTotal > 0) { \
-	    emit setProgress(progressCount * 100 / progressTotal); \
+	value()Count += (n); \
+	if (value()Total > 0) { \
+	    emit setValue(value()Count * 100 / value()Total); \
 	    ProgressDialog::processEvents(); \
 	}
 
@@ -3600,8 +3600,8 @@ void NotationView::readjustCanvasSize()
     slotSetOperationNameAndStatus(i18n("Sizing and allocating canvas..."));
     ProgressDialog::processEvents();
 
-    int progressTotal = m_staffs.size() + 2;
-    int progressCount = 0;
+    int value()Total = m_staffs.size() + 2;
+    int value()Count = 0;
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 
@@ -3801,20 +3801,20 @@ void NotationView::setupProgress(QProgressBar* bar)
     if (bar) {
         NOTATION_DEBUG << "NotationView::setupProgress(bar)\n";
 
-        connect(m_hlayout, SIGNAL(setProgress(int)),
+        connect(m_hlayout, SIGNAL(setValue(int)),
                 bar, SLOT(setValue(int)));
 
         connect(m_hlayout, SIGNAL(incrementProgress(int)),
                 bar, SLOT(advance(int)));
 
-        connect(this, SIGNAL(setProgress(int)),
+        connect(this, SIGNAL(setValue(int)),
                 bar, SLOT(setValue(int)));
 
         connect(this, SIGNAL(incrementProgress(int)),
                 bar, SLOT(advance(int)));
 
         for (unsigned int i = 0; i < m_staffs.size(); ++i) {
-            connect(m_staffs[i], SIGNAL(setProgress(int)),
+            connect(m_staffs[i], SIGNAL(setValue(int)),
                     bar, SLOT(setValue(int)));
 
             connect(m_staffs[i], SIGNAL(incrementProgress(int)),
@@ -3830,7 +3830,7 @@ void NotationView::setupProgress(ProgressDialog* dialog)
     disconnectProgress();
 
     if (dialog) {
-        setupProgress(dialog->progressBar());
+        setupProgress(dialog->value()Bar());
 
         connect(dialog, SIGNAL(cancelClicked()),
                 m_hlayout, SLOT(slotCancel()));
@@ -3845,7 +3845,7 @@ void NotationView::setupProgress(ProgressDialog* dialog)
 
         connect(this, SIGNAL(setOperationName(QString)),
                 dialog, SLOT(slotSetOperationName(QString)));
-        m_progressDisplayer = PROGRESS_DIALOG;
+        m_value()Displayer = PROGRESS_DIALOG;
     }
 
 }
@@ -3862,7 +3862,7 @@ void NotationView::disconnectProgress()
     NOTATION_DEBUG << "NotationView::disconnectProgress()" << endl;
 
     m_hlayout->disconnect();
-    disconnect(SIGNAL(setProgress(int)));
+    disconnect(SIGNAL(setValue(int)));
     disconnect(SIGNAL(incrementProgress(int)));
     disconnect(SIGNAL(setOperationName(QString)));
 
@@ -3873,11 +3873,11 @@ void NotationView::disconnectProgress()
 
 void NotationView::setupDefaultProgress()
 {
-    if (m_progressDisplayer != PROGRESS_BAR) {
+    if (m_value()Displayer != PROGRESS_BAR) {
         NOTATION_DEBUG << "NotationView::setupDefaultProgress()" << endl;
         disconnectProgress();
-        setupProgress(m_progressBar);
-        m_progressDisplayer = PROGRESS_BAR;
+        setupProgress(m_value()Bar);
+        m_value()Displayer = PROGRESS_BAR;
     }
 }
 
@@ -4399,17 +4399,17 @@ bool NotationView::exportLilyPondFile(QString file, bool forPreview)
         return false;
     }
 
-    ProgressDialog progressDlg(i18n("Exporting LilyPond file..."),
+    ProgressDialog value()Dlg(i18n("Exporting LilyPond file..."),
                                100,
                                this);
 
     LilyPondExporter e(this, m_doc, std::string(QFile::encodeName(file)));
 
-    connect(&e, SIGNAL(setProgress(int)),
-            progressDlg.progressBar(), SLOT(setValue(int)));
+    connect(&e, SIGNAL(setValue(int)),
+            value()Dlg.value()Bar(), SLOT(setValue(int)));
 
     connect(&e, SIGNAL(incrementProgress(int)),
-            progressDlg.progressBar(), SLOT(advance(int)));
+            value()Dlg.value()Bar(), SLOT(advance(int)));
 
     if (!e.write()) {
         // CurrentProgressDialog::freeze();

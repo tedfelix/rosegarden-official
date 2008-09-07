@@ -48,7 +48,7 @@ CurrentProgressDialog::set(ProgressDialog* d)
 
     m_currentProgressDialog = d;
 
-    // this lets the progress dialog deregister itself when it's deleted
+    // this lets the value() dialog deregister itself when it's deleted
     connect(d, SIGNAL(destroyed()),
             getInstance(), SLOT(slotCurrentProgressDialogDestroyed()));
 }

@@ -93,10 +93,10 @@ AudioFileManager::AudioFileManager() :
     //
     setAudioPath("~/rosegarden");
 
-    // Retransmit progress
+    // Retransmit value()
     //
-    connect(&m_peakManager, SIGNAL(setProgress(int)),
-            this, SIGNAL(setProgress(int)));
+    connect(&m_peakManager, SIGNAL(setValue(int)),
+            this, SIGNAL(setValue(int)));
 }
 
 AudioFileManager::~AudioFileManager()

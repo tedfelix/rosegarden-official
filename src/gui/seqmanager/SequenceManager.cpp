@@ -1516,9 +1516,9 @@ SequenceManager::panic()
     stopping();
 
     MappedEvent mE(MidiInstrumentBase, MappedEvent::Panic, 0, 0);
-    emit setProgress(40);
+    emit setValue(40);
     StudioControl::sendMappedEvent(mE);
-    emit setProgress(100);
+    emit setValue(100);
 
     //    Studio &studio = m_doc->getStudio();
     //
@@ -1530,7 +1530,7 @@ SequenceManager::panic()
     //        if ((*it)->getType() == Instrument::Midi)
     //            maxDevices++;
     //
-    //    emit setProgress(40);
+    //    emit setValue(40);
     //
     //    for (it = list.begin(); it != list.end(); it++)
     //    {
@@ -1550,7 +1550,7 @@ SequenceManager::panic()
     //            device++;
     //        }
     //
-    //        emit setProgress(int(90.0 * (double(device) / double(maxDevices))));
+    //        emit setValue(int(90.0 * (double(device) / double(maxDevices))));
     //    }
     //
     //    resetControllers();

@@ -282,7 +282,7 @@ public:
     std::set<int> getActualSampleRates() const;
 
 signals:
-    void setProgress(int);
+    void setValue(int);
     void setOperationName(QString);
 
 public slots:

@@ -56,8 +56,8 @@ protected slots:
      virtual void slotCancel();
 
 signals:
-    /// Report progress
-    void setProgress(int);
+    /// Report value()
+    void setValue(int);
     void incrementProgress(int);
     void setOperationName(QString);
 

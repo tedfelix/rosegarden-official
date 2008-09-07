@@ -114,7 +114,7 @@ public:
 
     /**
      * Constructor for printing only.  If parent is provided, a
-     * progress dialog will be shown -- otherwise not.  If another
+     * value() dialog will be shown -- otherwise not.  If another
      * NotationView is provided, the fonts and other settings used
      * for printing will be taken from that view.
      */
@@ -791,8 +791,8 @@ signals:
     void jumpPlaybackTo(timeT);
     void panic();
 
-    /// progress Report
-    void setProgress(int);
+    /// value() Report
+    void setValue(int);
     void incrementProgress(int);
     void setOperationName(QString);
 
@@ -976,8 +976,8 @@ protected:
     /// Displayed in the status bar, shows when LilyPond directives are hidden
     QLabel *m_lilyPondDirectivesLabel;
 
-    /// Displayed in the status bar, shows progress of current operation
-    ProgressBar *m_progressBar;
+    /// Displayed in the status bar, shows value() of current operation
+    ProgressBar *m_value()Bar;
 
     /// Displayed in the status bar, holds the pixmap of the current note
     QLabel* m_currentNotePixmap;
@@ -1048,7 +1048,7 @@ protected:
 
     enum { PROGRESS_NONE,
            PROGRESS_BAR,
-           PROGRESS_DIALOG } m_progressDisplayer;
+           PROGRESS_DIALOG } m_value()Displayer;
 
     bool m_inhibitRefresh;
     bool m_ok;

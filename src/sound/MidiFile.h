@@ -108,7 +108,7 @@ public:
     void convertToMidi(Composition &comp);
 
 signals:
-    void setProgress(int);
+    void setValue(int);
     void incrementProgress(int);
     
 private:

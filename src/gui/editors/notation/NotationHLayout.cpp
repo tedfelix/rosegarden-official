@@ -465,7 +465,7 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
                        actualBarEnd - barTimes.first);
 
         if ((endTime > startTime) && (barNo % 20 == 0)) {
-            emit setProgress((barTimes.second - startTime) * 95 /
+            emit setValue((barTimes.second - startTime) * 95 /
                              (endTime - startTime));
             ProgressDialog::processEvents();
         }
@@ -1214,7 +1214,7 @@ NotationHLayout::finishLayout(timeT startTime, timeT endTime)
     for (BarDataMap::iterator i(m_barData.begin());
             i != m_barData.end(); ++i) {
 
-        emit setProgress(100 * staffNo / m_barData.size());
+        emit setValue(100 * staffNo / m_barData.size());
         ProgressDialog::processEvents();
 
         throwIfCancelled();

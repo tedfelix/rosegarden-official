@@ -484,11 +484,11 @@ AudioManagerDialog::slotExportAudio()
     if (saveFile.contains(".") == 0)
         saveFile += ".wav";
 
-    ProgressDialog progressDlg(i18n("Exporting audio file..."),
+    ProgressDialog value()Dlg(i18n("Exporting audio file..."),
                                100,
                                this);
 
-    progressDlg.progressBar()->setProgress(0);
+    value()Dlg.value()Bar()->setValue(0);
 
     RealTime clipStartTime = RealTime::zeroTime;
     RealTime clipDuration = sourceFile->getLength();
@@ -520,7 +520,7 @@ AudioManagerDialog::slotExportAudio()
     sourceFile->close();
     delete destFile;
 
-    progressDlg.progressBar()->setProgress(100);
+    value()Dlg.value()Bar()->setValue(100);
 }
 
 void
@@ -1071,21 +1071,21 @@ AudioManagerDialog::addFile(const KURL& kurl)
         if (!RosegardenGUIApp::self()->testAudioPath(i18n("importing an audio file that needs to be converted or resampled"))) return false;
     }
 
-    ProgressDialog progressDlg(i18n("Adding audio file..."),
+    ProgressDialog value()Dlg(i18n("Adding audio file..."),
                                100,
                                this);
 
-    CurrentProgressDialog::set(&progressDlg);
-    progressDlg.progressBar()->hide();
-    progressDlg.show();
+    CurrentProgressDialog::set(&value()Dlg);
+    value()Dlg.value()Bar()->hide();
+    value()Dlg.show();
 
-    // Connect the progress dialog
+    // Connect the value() dialog
     //
-    connect(&aFM, SIGNAL(setProgress(int)),
-            progressDlg.progressBar(), SLOT(setValue(int)));
+    connect(&aFM, SIGNAL(setValue(int)),
+            value()Dlg.value()Bar(), SLOT(setValue(int)));
     connect(&aFM, SIGNAL(setOperationName(QString)),
-            &progressDlg, SLOT(slotSetOperationName(QString)));
-    connect(&progressDlg, SIGNAL(cancelClicked()),
+            &value()Dlg, SLOT(slotSetOperationName(QString)));
+    connect(&value()Dlg, SIGNAL(cancelClicked()),
             &aFM, SLOT(slotStopImport()));
 
     try {
@@ -1102,12 +1102,12 @@ AudioManagerDialog::addFile(const KURL& kurl)
         return false;
     }
             
-    disconnect(&progressDlg, SIGNAL(cancelClicked()),
+    disconnect(&value()Dlg, SIGNAL(cancelClicked()),
                &aFM, SLOT(slotStopImport()));
-    connect(&progressDlg, SIGNAL(cancelClicked()),
+    connect(&value()Dlg, SIGNAL(cancelClicked()),
             &aFM, SLOT(slotStopPreview()));
-    progressDlg.progressBar()->show();
-    progressDlg.slotSetOperationName(i18n("Generating audio preview..."));
+    value()Dlg.value()Bar()->show();
+    value()Dlg.slotSetOperationName(i18n("Generating audio preview..."));
 
     try {
         aFM.generatePreview(id);
@@ -1119,7 +1119,7 @@ AudioManagerDialog::addFile(const KURL& kurl)
         KMessageBox::information(this, message);
     }
 
-    disconnect(&progressDlg, SIGNAL(cancelClicked()),
+    disconnect(&value()Dlg, SIGNAL(cancelClicked()),
                &aFM, SLOT(slotStopPreview()));
 
     slotPopulateFileList();

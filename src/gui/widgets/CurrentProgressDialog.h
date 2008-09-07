@@ -40,20 +40,20 @@ public:
     static void set(ProgressDialog*);
 
     /**
-     * Block the current progress so that it won't appear
+     * Block the current value() so that it won't appear
      * regardless of passing time and occurring events.
      * This is useful when you want to show another dialog
-     * and you want to make sure the progress dialog is out of the way
+     * and you want to make sure the value() dialog is out of the way
      */
     static void freeze();
 
     /**
-     * Restores the progress dialog to its normal state atfer a freeze()
+     * Restores the value() dialog to its normal state atfer a freeze()
      */
     static void thaw();
 
 public slots:
-    /// Called then the current progress dialog is being destroyed
+    /// Called then the current value() dialog is being destroyed
     void slotCurrentProgressDialogDestroyed();
 
 protected:

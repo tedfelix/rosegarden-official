@@ -502,7 +502,7 @@ PeakFile::writePeaks(unsigned short /*updatePercentage*/,
     if (bytes == 3 || bytes == 4) // 24-bit PCM or 32-bit float
         m_format = 2; // write 16-bit PCM instead
 
-    // for the progress dialog
+    // for the value() dialog
     unsigned int apprxTotalBytes = m_audioFile->getSize();
     unsigned int byteCount = 0;
 
@@ -534,7 +534,7 @@ PeakFile::writePeaks(unsigned short /*updatePercentage*/,
 
         byteCount += samples.length();
 
-        emit setProgress((int)(double(byteCount) /
+        emit setValue((int)(double(byteCount) /
                                double(apprxTotalBytes) * 100.0));
         kapp->processEvents();
 

@@ -299,13 +299,13 @@ public:
     void insertRecordedMidi(const MappedComposition &mc);
 
     /**
-     * Update the recording progress -- called regularly from
+     * Update the recording value() -- called regularly from
      * RosegardenGUIApp::slotUpdatePlaybackPosition() while recording
      */
     void updateRecordingMIDISegment();
 
     /**
-     * Update the recording progress for audio
+     * Update the recording value() for audio
      */
     void updateRecordingAudioSegments();
 
@@ -532,7 +532,7 @@ protected:
      * @see RoseXmlHandler
      */
     bool xmlParse(QString fileContents, QString &errMsg,
-                  ProgressDialog *progress,
+                  ProgressDialog *value(),
                   unsigned int elementCount,
                   bool permanent,
                   bool &cancelled);

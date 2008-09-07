@@ -1545,21 +1545,21 @@ RosegardenGUIView::slotDroppedNewAudio(QString audioDesc)
 	if (!RosegardenGUIApp::self()->testAudioPath(i18n("importing an audio file that needs to be converted or resampled"))) return;
     }
 
-    ProgressDialog progressDlg(i18n("Adding audio file..."),
+    ProgressDialog value()Dlg(i18n("Adding audio file..."),
                                100,
                                this);
 
-    CurrentProgressDialog::set(&progressDlg);
-    progressDlg.progressBar()->hide();
-    progressDlg.show();
+    CurrentProgressDialog::set(&value()Dlg);
+    value()Dlg.value()Bar()->hide();
+    value()Dlg.show();
 
-    // Connect the progress dialog
+    // Connect the value() dialog
     //
-    connect(&aFM, SIGNAL(setProgress(int)),
-            progressDlg.progressBar(), SLOT(setValue(int)));
+    connect(&aFM, SIGNAL(setValue(int)),
+            value()Dlg.value()Bar(), SLOT(setValue(int)));
     connect(&aFM, SIGNAL(setOperationName(QString)),
-            &progressDlg, SLOT(slotSetOperationName(QString)));
-    connect(&progressDlg, SIGNAL(cancelClicked()),
+            &value()Dlg, SLOT(slotSetOperationName(QString)));
+    connect(&value()Dlg, SIGNAL(cancelClicked()),
             &aFM, SLOT(slotStopImport()));
 
     try {
@@ -1576,12 +1576,12 @@ RosegardenGUIView::slotDroppedNewAudio(QString audioDesc)
         return ;
     }
              
-    disconnect(&progressDlg, SIGNAL(cancelClicked()),
+    disconnect(&value()Dlg, SIGNAL(cancelClicked()),
                &aFM, SLOT(slotStopImport()));
-    connect(&progressDlg, SIGNAL(cancelClicked()),
+    connect(&value()Dlg, SIGNAL(cancelClicked()),
             &aFM, SLOT(slotStopPreview()));
-    progressDlg.progressBar()->show();
-    progressDlg.slotSetOperationName(i18n("Generating audio preview..."));
+    value()Dlg.value()Bar()->show();
+    value()Dlg.slotSetOperationName(i18n("Generating audio preview..."));
 
     try {
         aFM.generatePreview(audioFileId);
@@ -1593,7 +1593,7 @@ RosegardenGUIView::slotDroppedNewAudio(QString audioDesc)
         //return false;
     }
 
-    disconnect(&progressDlg, SIGNAL(cancelClicked()),
+    disconnect(&value()Dlg, SIGNAL(cancelClicked()),
                &aFM, SLOT(slotStopPreview()));
 
     // add the file at the sequencer

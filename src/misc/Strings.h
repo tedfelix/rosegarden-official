@@ -27,7 +27,7 @@ extern QString strtoqstr(const Rosegarden::PropertyName &);
 extern std::string qstrtostr(const QString &);
 extern double strtodouble(const std::string &);
 extern double qstrtodouble(const QString &);
-bool qStrToBool(const QString &s);
+extern bool qStrToBool(const QString &s);
 
 class QTextCodec;
 extern std::string convertFromCodec(std::string, QTextCodec *);

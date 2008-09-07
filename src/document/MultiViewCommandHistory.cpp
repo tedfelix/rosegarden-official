@@ -261,7 +261,7 @@ MultiViewCommandHistory::addToCompound(Command *command, bool execute)
     std::cerr << "MultiViewCommandHistory::addToCompound: " << command->getName().toLocal8Bit().data() << std::endl;
 #endif
     if (!m_currentCompound) {
-	std::cerr << "MultiViewCommandHistory::addToCompound: ERROR: no compound operation in progress!" << std::endl;
+	std::cerr << "MultiViewCommandHistory::addToCompound: ERROR: no compound operation in value()!" << std::endl;
         return;
     }
 
@@ -273,7 +273,7 @@ void
 MultiViewCommandHistory::startCompoundOperation(QString name, bool execute)
 {
     if (m_currentCompound) {
-	std::cerr << "MultiViewCommandHistory::startCompoundOperation: ERROR: compound operation already in progress!" << std::endl;
+	std::cerr << "MultiViewCommandHistory::startCompoundOperation: ERROR: compound operation already in value()!" << std::endl;
 	std::cerr << "(name is " << m_currentCompound->getName().toLocal8Bit().data() << ")" << std::endl;
         return;
     }
@@ -288,7 +288,7 @@ void
 MultiViewCommandHistory::endCompoundOperation()
 {
     if (!m_currentCompound) {
-	std::cerr << "MultiViewCommandHistory::endCompoundOperation: ERROR: no compound operation in progress!" << std::endl;
+	std::cerr << "MultiViewCommandHistory::endCompoundOperation: ERROR: no compound operation in value()!" << std::endl;
         return;
     }
 

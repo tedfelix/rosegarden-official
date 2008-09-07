@@ -284,7 +284,7 @@ LilyPondExporter::handleEndingPreEvents(eventendlist &preEventsInProgress,
         eventendlist::iterator l(k);
         ++l;
 
-        // Handle and remove all the relevant events in progress
+        // Handle and remove all the relevant events in value()
         // This assumes all deferred events are indications
 
         try {
@@ -336,7 +336,7 @@ LilyPondExporter::handleEndingPostEvents(eventendlist &postEventsInProgress,
         eventendlist::iterator l(k);
         ++l;
 
-        // Handle and remove all the relevant events in progress
+        // Handle and remove all the relevant events in value()
         // This assumes all deferred events are indications
 
         try {
@@ -958,7 +958,7 @@ LilyPondExporter::write()
 		    << std::endl;
 	    }
 
-            emit setProgress(int(double(trackPos) /
+            emit setValue(int(double(trackPos) /
                                  double(m_composition->getNbTracks()) * 100.0));
             rgapp->refreshGUI(50);
             

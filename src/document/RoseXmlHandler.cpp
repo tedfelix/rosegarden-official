@@ -288,7 +288,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                              const QString& localName,
                              const QString& qName, const QXmlAttributes& atts)
 {
-    // First check if user pressed cancel button on the progress
+    // First check if user pressed cancel button on the value()
     // dialog
     //
     if (isOperationCancelled()) {
@@ -1022,7 +1022,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                     insertFile(qstrtostr(label),
                                qstrtostr(file), id.toInt()) == false) {
 
-                // Freeze the progress dialog
+                // Freeze the value() dialog
                 CurrentProgressDialog::freeze();
 
                 // Hide splash screen if present on startup
@@ -1071,7 +1071,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
                 getAudioFileManager().print();
 
-                // Restore progress dialog's normal state
+                // Restore value() dialog's normal state
                 CurrentProgressDialog::thaw();
             } else {
                 // AudioPath is modified so set a document post modify flag
@@ -2090,7 +2090,7 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
     if ((m_totalElements > m_elementsSoFar) &&
             (++m_elementsSoFar % 300 == 0)) {
 
-        emit setProgress(int(double(m_elementsSoFar) / double(m_totalElements) * 100.0));
+        emit setValue(int(double(m_elementsSoFar) / double(m_totalElements) * 100.0));
         ProgressDialog::processEvents();
     }
 

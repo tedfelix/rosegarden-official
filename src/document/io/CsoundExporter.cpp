@@ -74,7 +74,7 @@ CsoundExporter::write()
     for (Composition::iterator i = m_composition->begin();
             i != m_composition->end(); ++i) {
 
-        emit setProgress(int(double(trackNo++) / double(m_composition->getNbTracks()) * 100.0));
+        emit setValue(int(double(trackNo++) / double(m_composition->getNbTracks()) * 100.0));
         rgapp->refreshGUI(50);
 
         str << "\n;; Segment: \"" << (*i)->getLabel() << "\"\n";
