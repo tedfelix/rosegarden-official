@@ -21,7 +21,7 @@
 #include "CanvasCursor.h"
 
 #include "GUIPalette.h"
-#include <qcanvas.h>
+#include <Q3Canvas>
 #include <QPen>
 
 

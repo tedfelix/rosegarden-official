@@ -37,7 +37,7 @@
 #include "gui/general/EditViewBase.h"
 #include "gui/widgets/TextFloat.h"
 #include "gui/general/LinedStaff.h"
-#include <qcanvas.h>
+#include <Q3Canvas>
 #include <QColor>
 #include <QPoint>
 #include <QString>

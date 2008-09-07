@@ -38,7 +38,7 @@
 #include "gui/general/RosegardenCanvasView.h"
 #include "gui/widgets/TextFloat.h"
 #include <kmainwindow.h>
-#include <qcanvas.h>
+#include <Q3Canvas>
 #include <QColor>
 #include <QCursor>
 #include <QPoint>

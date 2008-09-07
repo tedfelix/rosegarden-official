@@ -21,7 +21,7 @@
 
 #include "MatrixElement.h"
 #include "QCanvasMatrixRectangle.h"
-#include <qcanvas.h>
+#include <Q3Canvas>
 #include <QPainter>
 #include <qpointarray.h>
 #include <QPoint>

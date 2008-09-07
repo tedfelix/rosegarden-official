@@ -23,7 +23,7 @@
 #include <Q3CanvasRectangle>
 #include <Q3CanvasSprite>
 #include <Q3CanvasText>
-#include <qcanvas.h>
+#include <Q3Canvas>
 #include "misc/Debug.h"
 
 #include "QCanvasGroupableItem.h"

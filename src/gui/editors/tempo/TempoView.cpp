@@ -53,7 +53,7 @@
 #include <QSize>
 #include <QString>
 #include <QLayout>
-#include <qcanvas.h>
+#include <Q3Canvas>
 #include <kstatusbar.h>
 
 

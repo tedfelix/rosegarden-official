@@ -26,7 +26,7 @@
 #include "base/NotationTypes.h"
 #include "base/ViewElement.h"
 
-#include <qcanvas.h>
+#include <Q3Canvas>
 
 namespace Rosegarden
 {

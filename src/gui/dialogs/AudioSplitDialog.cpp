@@ -36,7 +36,7 @@
 #include "sound/AudioFileManager.h"
 #include <QDialog>
 #include <QDialogButtonBox>
-#include <qcanvas.h>
+#include <Q3Canvas>
 #include <QLabel>
 #include <QPalette>
 #include <qscrollview.h>

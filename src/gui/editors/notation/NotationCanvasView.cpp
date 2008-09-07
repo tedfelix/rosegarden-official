@@ -32,7 +32,7 @@
 #include "NotationElement.h"
 #include "NotationProperties.h"
 #include "NotationStaff.h"
-#include <qcanvas.h>
+#include <Q3Canvas>
 #include <QColor>
 #include <QPainter>
 #include <QPen>

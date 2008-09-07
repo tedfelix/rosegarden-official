@@ -34,7 +34,7 @@
 #include "base/ViewElement.h"
 #include "GUIPalette.h"
 #include "BarLine.h"
-#include <qcanvas.h>
+#include <Q3Canvas>
 #include <QColor>
 #include <QFont>
 #include <QFontMetrics>

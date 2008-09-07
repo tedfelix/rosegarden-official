@@ -40,7 +40,7 @@
 #include "MatrixElement.h"
 #include "MatrixView.h"
 #include "MatrixVLayout.h"
-#include <qcanvas.h>
+#include <Q3Canvas>
 
 
 namespace Rosegarden

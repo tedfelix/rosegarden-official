@@ -59,7 +59,7 @@
 #include <QToolTip>
 #include <QWidget>
 #include <QVBoxLayout>
-#include <qcanvas.h>
+#include <Q3Canvas>
 
 
 namespace Rosegarden

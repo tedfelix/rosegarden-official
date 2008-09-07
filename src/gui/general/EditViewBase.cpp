@@ -51,7 +51,7 @@
 #include <kstandardaction.h>
 #include <kxmlguiclient.h>
 #include <qshortcut.h>
-#include <qcanvas.h>
+#include <Q3Canvas>
 #include <QDialog>
 #include <QFrame>
 #include <QIcon>

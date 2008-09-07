@@ -21,7 +21,7 @@
 #include "QCanvasMatrixRectangle.h"
 
 #include "MatrixElement.h"
-#include <qcanvas.h>
+#include <Q3Canvas>
 
 
 namespace Rosegarden

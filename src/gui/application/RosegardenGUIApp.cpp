@@ -196,7 +196,7 @@
 #include <kurl.h>
 #include <kxmlguiclient.h>
 #include <qshortcut.h>
-#include <qcanvas.h>
+#include <Q3Canvas>
 #include <QByteArray>
 #include <QCursor>
 #include <QDataStream>

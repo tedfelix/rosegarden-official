@@ -167,7 +167,7 @@
 #include <ktoolbar.h>
 #include <kxmlguiclient.h>
 #include <QBrush>
-#include <qcanvas.h>
+#include <Q3Canvas>
 #include <QCursor>
 #include <QDialog>
 #include <QEvent>

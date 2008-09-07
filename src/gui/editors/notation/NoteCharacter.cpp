@@ -22,7 +22,7 @@
 #include <QPainter>
 #include <QPixmap>
 #include <QPoint>
-#include <qcanvas.h>
+#include <Q3Canvas>
 #include <QBitmap>
 
 

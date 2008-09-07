@@ -61,7 +61,7 @@
 #include "NoteStyleFactory.h"
 #include <kconfig.h>
 #include <kmessagebox.h>
-#include <qcanvas.h>
+#include <Q3Canvas>
 #include <QPainter>
 #include <QPoint>
 #include <QRect>

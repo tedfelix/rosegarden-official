@@ -22,7 +22,7 @@
 #include "base/NotationRules.h"
 #include "base/NotationTypes.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
-#include <qcanvas.h>
+#include <Q3Canvas>
 #include <QPainter>
 #include <QPixmap>
 #include <QSize>

@@ -63,7 +63,7 @@
 #include <klistview.h>
 #include <kxmlguiclient.h>
 #include <QGroupBox>
-#include <qcanvas.h>
+#include <Q3Canvas>
 #include <QCheckBox>
 #include <QDialog>
 #include <QFrame>

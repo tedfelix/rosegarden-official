@@ -29,7 +29,7 @@
 #include "QCanvasMatrixDiamond.h"
 #include "QCanvasMatrixRectangle.h"
 #include <QBrush>
-#include <qcanvas.h>
+#include <Q3Canvas>
 #include <QColor>
 
 

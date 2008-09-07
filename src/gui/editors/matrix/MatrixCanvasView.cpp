@@ -28,7 +28,7 @@
 #include "MatrixStaff.h"
 #include "QCanvasMatrixRectangle.h"
 #include "QCanvasMatrixDiamond.h"
-#include <qcanvas.h>
+#include <Q3Canvas>
 #include <QPoint>
 #include <QWidget>
 #include "misc/Debug.h"

@@ -23,7 +23,7 @@
 
 #include "misc/Debug.h"
 #include "gui/general/CanvasItemGC.h"
-#include <qcanvas.h>
+#include <Q3Canvas>
 #include <QCursor>
 #include <QPoint>
 #include <QRect>

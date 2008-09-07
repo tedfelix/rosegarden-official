@@ -110,7 +110,7 @@
 #include <kstatusbar.h>
 #include <ktoolbar.h>
 #include <kxmlguiclient.h>
-#include <qcanvas.h>
+#include <Q3Canvas>
 #include <QCursor>
 #include <QDialog>
 #include <QLayout>
