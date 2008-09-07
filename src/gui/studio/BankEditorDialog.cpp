@@ -1048,7 +1048,7 @@ BankEditorDialog::slotAddKeyMapping()
             if (n == 1)
                 name = i18n("<new mapping>");
             else
-                name = i18n("<new mapping %1>").arg(n);
+                name = i18n("<new mapping %1>", n);
         }
 
         MidiKeyMapping newKeyMapping(qstrtostr(name));

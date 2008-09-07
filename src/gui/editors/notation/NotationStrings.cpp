@@ -42,14 +42,14 @@ NotationStrings::addDots(QString s, int dots,
     if (internationalize) {
         if (dots > 1) {
             if (hyphenate)
-                return i18n("%1-dotted-%2").arg(dots).arg(s);
+                return i18n("%1-dotted-%2", dots, s);
             else
-                return i18n("%1-dotted %2").arg(dots).arg(s);
+                return i18n("%1-dotted %2", dots, s);
         } else {
             if (hyphenate)
-                return i18n("dotted-%1").arg(s);
+                return i18n("dotted-%1", s);
             else
-                return i18n("dotted %1").arg(s);
+                return i18n("dotted %1", s);
         }
     } else {
         if (dots > 1) {
@@ -86,11 +86,11 @@ NotationStrings::getNoteName(Note note, bool plural, bool triplet)
                                          };
 
     if (plural && triplet) {
-        return addDots(i18n("%1 triplets").arg(names[type]), dots, false, true); // TODO PLURAL - this is broken because it assumes there's only 1 plural form
+        return addDots(i18n("%1 triplets", names[type]), dots, false, true); // TODO PLURAL - this is broken because it assumes there's only 1 plural form
     } else if (plural) {
         return addDots(pluralnames[type], dots, false, true);
     } else if (triplet) {
-        return addDots(i18n("%1 triplet").arg(names[type]), dots, false, true);
+        return addDots(i18n("%1 triplet", names[type]), dots, false, true);
     } else {
         return addDots(names[type], dots, false, true);
     }
@@ -144,11 +144,11 @@ NotationStrings::getShortNoteName(Note note, bool plural, bool triplet)
                                          };
 
     if (plural && triplet) {
-        return addDots(i18n("%1 triplets").arg(names[type]), dots, false, true); // TODO - this is broken because it assumes there's only 1 plural form
+        return addDots(i18n("%1 triplets", names[type]), dots, false, true); // TODO - this is broken because it assumes there's only 1 plural form
     } else if (plural) {
         return addDots(pluralnames[type], dots, false, true);
     } else if (triplet) {
-        return addDots(i18n("%1 triplet").arg(names[type]), dots, false, true);
+        return addDots(i18n("%1 triplet", names[type]), dots, false, true);
     } else {
         return addDots(names[type], dots, false, true);
     }
@@ -276,7 +276,7 @@ NotationStrings::makeNoteMenuLabel(timeT duration,
         } else if ((wholeNote /(duration*2/3)) * (duration*2/3) == wholeNote) {
             return QString("3/%1").arg(wholeNote / (duration*1/3));
         } else {
-            return i18n("%1 ticks").arg(duration);
+            return i18n("%1 ticks", duration);
             plural = false;
         }
 

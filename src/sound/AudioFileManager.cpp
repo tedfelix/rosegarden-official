@@ -651,11 +651,11 @@ AudioFileManager::importURL(const KURL &url, int sampleRate)
 
     std::cerr << "AudioFileManager::importURL("<< url.prettyURL() << ", " << sampleRate << ")" << std::endl;
 
-    emit setOperationName(i18n("Downloading file %1").arg(url.prettyURL()));
+    emit setOperationName(i18n("Downloading file %1", url.prettyURL()));
 
     QString localPath = "";
     if (!KIO::NetAccess::download(url, localPath)) {
-	KMessageBox::error(0, i18n("Cannot download file %1").arg(url.prettyURL()));
+	KMessageBox::error(0, i18n("Cannot download file %1", url.prettyURL()));
 	throw SoundFile::BadSoundFileException(url.prettyURL());
     }
     

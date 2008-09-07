@@ -122,10 +122,10 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QDialogButtonBox::QWidget *parent,
 
     m_lilyLanguage = new QComboBox(frameBasic);
     // See also setDefaultLilyPondVersion below
-    m_lilyLanguage->addItem(i18n("LilyPond %1").arg("2.6"));
-    m_lilyLanguage->addItem(i18n("LilyPond %1").arg("2.8"));
-    m_lilyLanguage->addItem(i18n("LilyPond %1").arg("2.10"));
-    m_lilyLanguage->addItem(i18n("LilyPond %1").arg("2.12"));
+    m_lilyLanguage->addItem(LITERAL_i18n("LilyPond %1", "2.6"));
+    m_lilyLanguage->addItem(LITERAL_i18n("LilyPond %1", "2.8"));
+    m_lilyLanguage->addItem(LITERAL_i18n("LilyPond %1", "2.10"));
+    m_lilyLanguage->addItem(LITERAL_i18n("LilyPond %1", "2.12"));
     m_lilyLanguage->setCurrentIndex( config.value("lilylanguage", 0).toUInt() );
     layoutBasic->addWidget(m_lilyLanguage, 0, 1);
 
@@ -162,7 +162,7 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QDialogButtonBox::QWidget *parent,
     m_lilyFontSize = new QComboBox(frameBasic);
     int sizes[] = { 11, 13, 16, 19, 20, 23, 26 };
     for (int i = 0; i < sizeof(sizes)/sizeof(sizes[0]); ++i) {
-        m_lilyFontSize->addItem(i18n("%1 pt").arg(sizes[i]));
+        m_lilyFontSize->addItem(i18n("%1 pt", sizes[i]));
     }
     m_lilyFontSize->setCurrentIndex(config->readUnsignedNumEntry
                                    ("lilyfontsize", 4));

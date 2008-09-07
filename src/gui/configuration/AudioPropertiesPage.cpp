@@ -103,10 +103,10 @@ AudioPropertiesPage::slotFoundMountPoint(const QString&,
         unsigned long /*kBUsed*/,
         unsigned long kBAvail )
 {
-    m_diskSpace->setText(i18n("%1 out of %2 (%3% used)")
-                         .arg(KIO::convertSizeFromKB(kBAvail))
-                         .arg(KIO::convertSizeFromKB(kBSize))
-                         .arg( 100 - (int)(100.0 * kBAvail / kBSize) ));
+    m_diskSpace->setText(i18n("%1 out of %2 (%3% used)",
+                          KIO::convertSizeFromKB(kBAvail),
+                          KIO::convertSizeFromKB(kBSize),
+                           100 - (int)(100.0 * kBAvail / kBSize) ));
 
 
     AudioPluginManager *apm = m_doc->getPluginManager();

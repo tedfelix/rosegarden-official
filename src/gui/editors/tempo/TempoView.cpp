@@ -247,8 +247,8 @@ TempoView::applyLayout(int /*staffNo*/)
             Rosegarden::TimeSignature sig = comp->getTimeSignatureAt(tempo.first);
             if (sig.getBeatDuration() ==
                     Note(Note::Crotchet).getDuration()) {
-                desc = i18n("%1.%2%3").
-                       arg(qpmUnits).arg(qpmTenths).arg(qpmHundredths);
+                desc = i18n("%1.%2%3", 
+                       qpmUnits, qpmTenths, qpmHundredths);
             } else {
                 float bpm = (qpm *
                              Note(Note::Crotchet).getDuration()) /
@@ -257,9 +257,9 @@ TempoView::applyLayout(int /*staffNo*/)
                 int bpmTenths = int((bpm - bpmUnits) * 10 + 0.001);
                 int bpmHundredths = int((bpm - bpmUnits - bpmTenths / 10.0) * 100 + 0.001);
 
-                desc = i18n("%1.%2%3 qpm (%4.%5%6 bpm)   ").
-                       arg(qpmUnits).arg(qpmTenths).arg(qpmHundredths).
-                       arg(bpmUnits).arg(bpmTenths).arg(bpmHundredths);
+                desc = i18n("%1.%2%3 qpm (%4.%5%6 bpm)   ", 
+                       qpmUnits, qpmTenths, qpmHundredths, 
+                       bpmUnits, bpmTenths, bpmHundredths);
             }
 
             QString timeString = makeTimeString(tempo.first, timeMode);
@@ -877,8 +877,8 @@ TempoView::slotPopupEditor(QListViewItem *qitem)
 void
 TempoView::updateViewCaption()
 {
-    setCaption(i18n("%1 - Tempo and Time Signature Editor")
-               .arg(getDocument()->getTitle()));
+    setCaption(i18n("%1 - Tempo and Time Signature Editor",
+                getDocument()->getTitle()));
 }
 
 }

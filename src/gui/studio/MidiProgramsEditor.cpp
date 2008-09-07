@@ -244,7 +244,7 @@ MidiProgramsEditor::populate(QListViewItem* item)
                     getEntryButton(i)->setPixmap(keyPixmap);
                     QToolTip::add
                         (getEntryButton(i),
-                                i18n("Key Mapping: %1").arg(
+                                i18n("Key Mapping: %1", 
                                     strtoqstr(m_device->getKeyMappingForProgram(*it)->getName())));
                 }
 
@@ -531,7 +531,7 @@ MidiProgramsEditor::slotEntryMenuItemSelected(int i)
             btn->setPixmap(QPixmap(file));
         }
         QToolTip::add
-            (btn, i18n("Key Mapping: %1").arg(strtoqstr(newMapping)));
+            (btn, i18n("Key Mapping: %1", strtoqstr(newMapping)));
     }
     btn->setEnabled(haveKeyMappings);
 }

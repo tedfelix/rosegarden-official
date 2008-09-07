@@ -438,8 +438,8 @@ EventEditDialog::slotPropertyDeleted()
     if (KMessageBox::warningContinueCancel
             (this,
              i18n("Are you sure you want to delete the \"%1\" property?\n\n"
-                  "Removing necessary properties may cause unexpected behavior.").
-             arg(propertyName),
+                  "Removing necessary properties may cause unexpected behavior.", 
+             propertyName),
              i18n("Edit Event"),
              i18n("&Delete")) != KMessageBox::Continue)
         return ;
@@ -471,8 +471,8 @@ EventEditDialog::slotPropertyMadePersistent()
             (this,
              i18n("Are you sure you want to make the \"%1\" property persistent?\n\n"
                   "This could cause problems if it overrides a different "
-                  "computed value later on.").
-             arg(propertyName),
+                  "computed value later on.", 
+             propertyName),
              i18n("Edit Event"),
              i18n("Make &Persistent")) != KMessageBox::Continue)
         return ;

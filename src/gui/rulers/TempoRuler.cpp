@@ -578,15 +578,15 @@ TempoRuler::showTextFloat(tempoT tempo, tempoT target,
             int b0 = int(bpm * 10 + 0.0001) % 10;
             int b00 = int(bpm * 100 + 0.0001) % 10;
 
-            tempoText = i18n("%1.%2%3 (%4.%5%6 bpm)")
-                        .arg(qi).arg(q0).arg(q00)
-                        .arg(bi).arg(b0).arg(b00);
+            tempoText = i18n("%1.%2%3 (%4.%5%6 bpm)",
+                         qi, q0, q00,
+                         bi, b0, b00);
             haveSet = true;
         }
     }
 
     if (!haveSet) {
-        tempoText = i18n("%1.%2%3 bpm").arg(qi).arg(q0).arg(q00);
+        tempoText = i18n("%1.%2%3 bpm", qi, q0, q00);
     }
 
     if (target > 0 && target != tempo) {
@@ -594,7 +594,7 @@ TempoRuler::showTextFloat(tempoT tempo, tempoT target,
         int tqi = int(tq + 0.0001);
         int tq0 = int(tq * 10 + 0.0001) % 10;
         int tq00 = int(tq * 100 + 0.0001) % 10;
-        tempoText = i18n("%1 - %2.%3%4").arg(tempoText).arg(tqi).arg(tq0).arg(tq00);
+        tempoText = i18n("%1 - %2.%3%4", tempoText, tqi, tq0, tq00);
     }
 
     if (showTime && time >= 0) {

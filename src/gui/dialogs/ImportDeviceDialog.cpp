@@ -78,7 +78,7 @@ ImportDeviceDialog::doImport()
 
     QString target;
     if (KIO::NetAccess::download(m_url, target) == false) {
-        KMessageBox::error(this, i18n("Cannot download file %1").arg(m_url.prettyURL()));
+        KMessageBox::error(this, i18n("Cannot download file %1", m_url.prettyURL()));
         return false;
     }
 
@@ -90,14 +90,14 @@ ImportDeviceDialog::doImport()
     }
     if (!fileRead) {
         KMessageBox::error
-        (this, i18n("Cannot open file %1").arg(m_url.prettyURL()));
+        (this, i18n("Cannot open file %1", m_url.prettyURL()));
         reject();
         close();
         return false;
     }
     if (m_devices.size() == 0) {
         KMessageBox::sorry
-        (this, i18n("No devices found in file %1").arg(m_url.prettyURL()));
+        (this, i18n("No devices found in file %1", m_url.prettyURL()));
         reject();
         close();
         return false;
@@ -134,7 +134,7 @@ ImportDeviceDialog::doImport()
         if ((*i)->getName() != "") {
             showRenameOption = true;
         } else {
-            (*i)->setName(qstrtostr(i18n("Device %1").arg(count)));
+            (*i)->setName(qstrtostr(i18n("Device %1", count)));
         }
         if (m_devices.size() > 1) {
             m_deviceCombo->addItem(strtoqstr((*i)->getName()));
@@ -375,7 +375,7 @@ ImportDeviceDialog::importFromSF2(QString filename)
 
         MidiBank bank
         (msb == 1, msb, lsb,
-         qstrtostr(i18n("Bank %1:%2").arg(msb).arg(lsb)));
+         qstrtostr(i18n("Bank %1:%2", msb, lsb)));
 
         banks.push_back(bank);
 

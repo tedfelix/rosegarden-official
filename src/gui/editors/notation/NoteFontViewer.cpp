@@ -80,7 +80,7 @@ NoteFontViewer::NoteFontViewer(QWidget *parent, QString noteFontName,
         QDialog(parent)
 {
     setModal(true);
-    setWindowTitle(i18n("Note Font Viewer: %1").arg(noteFontName));
+    setWindowTitle(i18n("Note Font Viewer: %1", noteFontName));
 
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);

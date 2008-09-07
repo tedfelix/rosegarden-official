@@ -140,7 +140,7 @@ SegmentAutoSplitCommand::execute()
             Segment *newSegment = new Segment();
             newSegment->setTrack(m_segment->getTrack());
             std::string label = m_segment->getLabel();
-            newSegment->setLabel(appendLabel(label, qstrtostr(i18n("(part %1)").arg(split + 1))));
+            newSegment->setLabel(appendLabel(label, qstrtostr(i18n("(part %1)", split + 1))));
             newSegment->setColourIndex(m_segment->getColourIndex());
 
             timeT startTime = segmentStart;

@@ -860,7 +860,7 @@ AudioManagerDialog::slotDeleteUnused()
         if (names.size() > 0) {
 
             QString question =
-                i18n("<qt>About to delete 1 audio file permanently from the hard disk.<br>This action cannot be undone, and there will be no way to recover this file.<br>Are you sure?</qt>\n", "<qt>About to delete %n audio files permanently from the hard disk.<br>This action cannot be undone, and there will be no way to recover these files.<br>Are you sure?</qt>", names.size());
+                i18np("<qt>About to delete 1 audio file permanently from the hard disk.<br>This action cannot be undone, and there will be no way to recover this file.<br>Are you sure?</qt>\n", "<qt>About to delete %1 audio files permanently from the hard disk.<br>This action cannot be undone, and there will be no way to recover these files.<br>Are you sure?</qt>", names.size());
 
             int reply = KMessageBox::warningContinueCancel(this, question);
 
@@ -873,7 +873,7 @@ AudioManagerDialog::slotDeleteUnused()
                 std::cerr << i << ": " << names[i] << std::endl;
                 QFile file(names[i]);
                 if (!file.remove()) {
-                    KMessageBox::error(this, i18n("File %1 could not be deleted.").arg(names[i]));
+                    KMessageBox::error(this, i18n("File %1 could not be deleted.", names[i]));
                 } else {
                     if (nameMap.find(names[i]) != nameMap.end()) {
                         m_doc->getAudioFileManager().removeFile(nameMap[names[i]]);

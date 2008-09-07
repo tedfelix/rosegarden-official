@@ -57,10 +57,10 @@ static QString durationToString(Rosegarden::Composition &comp,
 				Rosegarden::timeT duration,
 				Rosegarden::RealTime rt)
 {
-    return i18n("%1 minutes %2.%3%4 seconds (%5 units, %6 measures)") // TODO - PLURAL
-	.arg(rt.sec / 60).arg(rt.sec % 60)
-	.arg(rt.msec() / 100).arg((rt.msec() / 10) % 10)
-	.arg(duration).arg(comp.getBarNumber(absTime + duration) -
+    return i18n("%1 minutes %2.%3%4 seconds (%5 units, %6 measures)", // TODO - PLURAL
+	 rt.sec / 60, rt.sec % 60,
+	 rt.msec() / 100, (rt.msec() / 10) % 10,
+	 duration, comp.getBarNumber(absTime + duration) -
 			   comp.getBarNumber(absTime));
 }
 
@@ -137,16 +137,16 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
     layout->addWidget(new QLabel(durationToString(comp, 0, d, rtd), frame), 2, 1);
 
     layout->addWidget(new QLabel(i18n("Tracks:"), frame), 3, 0);
-    layout->addWidget(new QLabel(i18n("%1 used, %2 total")
-                                 .arg(usedTracks.size())
-                                 .arg(comp.getNbTracks()),
+    layout->addWidget(new QLabel(i18n("%1 used, %2 total",
+                                  usedTracks.size(),
+                                  comp.getNbTracks()),
                                  frame), 3, 1);
 
     layout->addWidget(new QLabel(i18n("Segments:"), frame), 4, 0);
-    layout->addWidget(new QLabel(i18n("%1 MIDI, %2 audio, %3 total")
-                                 .arg(internalSegments)
-                                 .arg(audioSegments)
-                                 .arg(internalSegments + audioSegments),
+    layout->addWidget(new QLabel(i18n("%1 MIDI, %2 audio, %3 total",
+                                  internalSegments,
+                                  audioSegments,
+                                  internalSegments + audioSegments),
                                  frame), 4, 1);
 
     layout->setRowStretch(5, 2);

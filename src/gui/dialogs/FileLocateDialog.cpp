@@ -49,7 +49,7 @@ FileLocateDialog::FileLocateDialog(QDialogButtonBox::QWidget *parent,
     QHBox *w = makeHBoxMainWidget();
     QString label =
         i18n("Can't find file \"%1\".\n"
-             "Would you like to try and locate this file or skip it?").arg(m_file);
+             "Would you like to try and locate this file or skip it?", m_file);
 
     QLabel *labelW = new QLabel(label, w);
     labelW->setAlignment(Qt::AlignCenter);
@@ -62,9 +62,9 @@ FileLocateDialog::slotUser3()
     if (!m_file.isEmpty()) {
         m_file = KFileDialog::getOpenFileName
                  (":WAVS",
-                  i18n("%1|Requested file (%2)\n*.wav|WAV files (*.wav)")
-                  .arg(QFileInfo(m_file).fileName())
-                  .arg(QFileInfo(m_file).fileName()),
+                  i18n("%1|Requested file (%2)\n*.wav|WAV files (*.wav)",
+                   QFileInfo(m_file).fileName(),
+                   QFileInfo(m_file).fileName()),
                   this, i18n("Select an Audio File"));
 
         RG_DEBUG << "FileLocateDialog::slotUser3() : m_file = " << m_file << endl;

@@ -273,17 +273,17 @@ TempoDialog::populateTempo()
     RealTime tempoTime = comp.getElapsedRealTime(m_tempoTime);
     QString milliSeconds;
     milliSeconds.sprintf("%03d", tempoTime.msec());
-    m_tempoTimeLabel->setText(i18n("%1.%2 s,").arg(tempoTime.sec)
-                              .arg(milliSeconds));
+    m_tempoTimeLabel->setText(i18n("%1.%2 s,", tempoTime.sec,
+                               milliSeconds));
 
     int barNo = comp.getBarNumber(m_tempoTime);
     if (comp.getBarStart(barNo) == m_tempoTime) {
         m_tempoBarLabel->setText
-        (i18n("at the start of measure %1.").arg(barNo + 1));
+        (i18n("at the start of measure %1.", barNo + 1));
         m_tempoChangeStartOfBar->setEnabled(false);
     } else {
         m_tempoBarLabel->setText(
-            i18n("in the middle of measure %1.").arg(barNo + 1));
+            i18n("in the middle of measure %1.", barNo + 1));
         m_tempoChangeStartOfBar->setEnabled(true);
     }
 
@@ -302,8 +302,8 @@ TempoDialog::populateTempo()
             lastms.sprintf("%03d", lastRT.msec());
             int lastBar = comp.getBarNumber(lastTempoTime);
             m_tempoChangeBeforeAt->setText
-            (i18n("        (at %1.%2 s, in measure %3)").arg(lastRT.sec)
-             .arg(lastms).arg(lastBar + 1));
+            (i18n("        (at %1.%2 s, in measure %3)", lastRT.sec,
+              lastms, lastBar + 1));
             m_tempoChangeBeforeAt->show();
 
             m_tempoChangeBefore->setEnabled(true);

@@ -56,8 +56,8 @@ EventParameterDialog::EventParameterDialog(
     QLabel *explainLabel = new QLabel( topBox );
     topBoxLayout->addWidget(explainLabel);
     topBox->setLayout(topBoxLayout);
-    QString text = i18n("Set the %1 property of the event selection:").
-                   arg(strtoqstr(property));
+    QString text = i18n("Set the %1 property of the event selection:", 
+                   strtoqstr(property));
     explainLabel->setText(text);
 
     QLabel *child_10 = new QLabel(i18n("Pattern"), patternBox );
@@ -68,23 +68,23 @@ EventParameterDialog::EventParameterDialog(
 
     // create options
     // 0 flat
-    text = i18n("Flat - set %1 to value").arg(strtoqstr(property));
+    text = i18n("Flat - set %1 to value", strtoqstr(property));
     m_patternCombo->addItem(text);
 
     // 1 alternating
-    text = i18n("Alternating - set %1 to max and min on alternate events").arg(strtoqstr(property));
+    text = i18n("Alternating - set %1 to max and min on alternate events", strtoqstr(property));
     m_patternCombo->addItem(text);
 
     // 2 crescendo
-    text = i18n("Crescendo - set %1 rising from min to max").arg(strtoqstr(property));
+    text = i18n("Crescendo - set %1 rising from min to max", strtoqstr(property));
     m_patternCombo->addItem(text);
 
     // 3 diminuendo
-    text = i18n("Diminuendo - set %1 falling from max to min").arg(strtoqstr(property));
+    text = i18n("Diminuendo - set %1 falling from max to min", strtoqstr(property));
     m_patternCombo->addItem(text);
 
     // 4 ringing
-    text = i18n("Ringing - set %1 alternating from max to min with both dying to zero").arg(strtoqstr(property));
+    text = i18n("Ringing - set %1 alternating from max to min with both dying to zero", strtoqstr(property));
     m_patternCombo->addItem(text);
 
     connect(m_patternCombo, SIGNAL(activated(int)),

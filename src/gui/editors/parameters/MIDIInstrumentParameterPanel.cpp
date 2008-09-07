@@ -234,13 +234,13 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
     //
     QString connection(strtoqstr(md->getConnection()));
     if (connection == "") {
-        m_connectionLabel->setText(i18n("[ %1 ]").arg(i18n("No connection")));
+        m_connectionLabel->setText(i18n("[ %1 ]", i18n("No connection")));
     } else {
 
         // remove trailing "(duplex)", "(read only)", "(write only)" etc
         connection.replace(QRegExp("\\s*\\([^)0-9]+\\)\\s*$"), "");
 
-        QString text = i18n("[ %1 ]").arg(connection);
+        QString text = i18n("[ %1 ]", connection);
         /*QString origText(text);
 
         QFontMetrics metrics(m_connectionLabel->fontMetrics());

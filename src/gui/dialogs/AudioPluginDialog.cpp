@@ -452,7 +452,7 @@ AudioPluginDialog::slotPluginSelected(int i)
 
     if (plugin) {
         setCaption(caption + plugin->getName());
-        m_pluginId->setText(i18n("Id: %1").arg(plugin->getUniqueId()));
+        m_pluginId->setText(i18n("Id: %1", plugin->getUniqueId()));
 
         QString pluginInfo = plugin->getAuthor() + QString("\n") +
             plugin->getCopyright();
@@ -508,7 +508,7 @@ AudioPluginDialog::slotPluginSelected(int i)
         else if (ins == 2 && outs == 2)
             m_insOuts->setText(i18n("stereo"));
         else
-            m_insOuts->setText(i18n("%1 in, %2 out").arg(ins).arg(outs));
+            m_insOuts->setText(i18n("%1 in, %2 out", ins, outs));
 
         QString shortName(plugin->getName());
         int parenIdx = shortName.find(" (");

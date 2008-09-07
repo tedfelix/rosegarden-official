@@ -53,7 +53,7 @@ public:
 
     static QString getGlobalName(Key *key = 0) {
         if (key) {
-            return i18n("Change all to &Key %1...").arg(strtoqstr(key->getName()));
+            return i18n("Change all to &Key %1...", strtoqstr(key->getName()));
         } else {
             return i18n("Add &Key Change...");
         }

@@ -85,8 +85,8 @@ PresetGroup::PresetGroup() :
                 RG_DEBUG << "Failed to open " << presetFileName << endl;
 
                 throw PresetFileReadFailed
-                (qstrtostr(i18n("Can't open preset file %1").
-                           arg(presetFileName)));
+                (qstrtostr(i18n("Can't open preset file %1", 
+                           presetFileName)));
             }
         }
     }

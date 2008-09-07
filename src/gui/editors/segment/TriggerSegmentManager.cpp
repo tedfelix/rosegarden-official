@@ -253,9 +253,9 @@ TriggerSegmentManager::slotUpdate()
         if (label == "")
             label = i18n("<no label>");
 
-        QString used = i18n("%1 on 1 track",
-                            "%1 on %n tracks",
-                            tracks.size()).arg(uses);
+        QString used = i18np("%2 on 1 track",
+                            "%2 on %1 tracks",
+                            tracks.size(), uses);
 
         QString pitch = QString("%1 (%2)")
                         .arg(MidiPitchLabel((*it)->getBasePitch()).getQString())
@@ -341,8 +341,8 @@ TriggerSegmentManager::slotDelete()
         return ;
 
     if (item->getUsage() > 0) {
-        if (KMessageBox::warningContinueCancel(this, i18n("This triggered segment is used 1 time in the current composition.  Are you sure you want to remove it?",
-                                               "This triggered segment is used %n times in the current composition.  Are you sure you want to remove it?", item->getUsage())) != KMessageBox::Continue)
+        if (KMessageBox::warningContinueCancel(this, i18np("This triggered segment is used 1 time in the current composition.  Are you sure you want to remove it?",
+                                               "This triggered segment is used %1 times in the current composition.  Are you sure you want to remove it?", item->getUsage())) != KMessageBox::Continue)
             return ;
     }
 

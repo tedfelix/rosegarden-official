@@ -537,7 +537,7 @@ LilyPondExporter::write()
         CurrentProgressDialog::freeze();
         int reply = KMessageBox::warningContinueCancel(
                         0, i18n("LilyPond does not allow spaces or backslashes in filenames.\n\n"
-                                "Would you like to use\n\n %1\n\n instead?").arg(baseName));
+                                "Would you like to use\n\n %1\n\n instead?", baseName));
         if (reply != KMessageBox::Continue)
             return false;
     }

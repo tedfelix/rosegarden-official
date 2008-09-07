@@ -57,7 +57,7 @@ AddFingeringMarkCommand::getGlobalName(std::string fingering)
     } else if (fingering == "0") {
         return i18n("Add Fingering &0 (Thumb)");
     } else {
-        return i18n("Add Fingering &%1").arg(strtoqstr(fingering));
+        return i18n("Add Fingering &%1", strtoqstr(fingering));
     }
 }
 

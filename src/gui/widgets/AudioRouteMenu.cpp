@@ -224,11 +224,11 @@ AudioRouteMenu::getEntryText(int entry)
 
             if (stereo) {
                 if (entry < recordIns) {
-                    return i18n("In %1").arg(entry + 1);
+                    return i18n("In %1", entry + 1);
                 } else if (entry == recordIns) {
                     return i18n("Master");
                 } else {
-                    return i18n("Sub %1").arg(entry - recordIns);
+                    return i18n("Sub %1", entry - recordIns);
                 }
             } else {
                 int channel = entry % 2;
@@ -251,7 +251,7 @@ AudioRouteMenu::getEntryText(int entry)
         if (entry == 0)
             return i18n("Master");
         else
-            return i18n("Sub %1").arg(entry);
+            return i18n("Sub %1", entry);
     }
 
     return QString();

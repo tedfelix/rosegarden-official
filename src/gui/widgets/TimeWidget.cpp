@@ -220,7 +220,7 @@ TimeWidget::init(bool editable)
         layout->addWidget(m_beatLabel, 1, 3);
     }
 
-    label = new QLabel(i18n("%1:").arg(NotationStrings::getShortNoteName
+    label = new QLabel(i18n("%1:", NotationStrings::getShortNoteName
                                        (Note
                                         (Note::Shortest), true)),
                        frame);
@@ -397,8 +397,8 @@ TimeWidget::populate()
             m_fractionLabel->setText(QString("%1").arg(hemidemis));
         }
 
-        m_timeSig->setText(i18n("(%1/%2 time)").arg(timeSig.getNumerator()).
-                           arg(timeSig.getDenominator()));
+        m_timeSig->setText(i18n("(%1/%2 time)", timeSig.getNumerator(), 
+                           timeSig.getDenominator()));
 
         timeT endTime = m_startTime + m_time;
 
@@ -442,27 +442,27 @@ TimeWidget::populate()
         }
         if (change) {
             if (bpmc != qpmc) {
-                m_tempo->setText(i18n("(starting %1.%2 qpm, %2.%3 bpm)").
-                                 arg(qpmc / 100).
-                                 arg(qpmc % 100).
-                                 arg(bpmc / 100).
-                                 arg(bpmc % 100));
+                m_tempo->setText(i18n("(starting %1.%2 qpm, %2.%3 bpm)", 
+                                 qpmc / 100, 
+                                 qpmc % 100, 
+                                 bpmc / 100, 
+                                 bpmc % 100));
             } else {
-                m_tempo->setText(i18n("(starting %1.%2 bpm)").
-                                 arg(bpmc / 100).
-                                 arg(bpmc % 100));
+                m_tempo->setText(i18n("(starting %1.%2 bpm)", 
+                                 bpmc / 100, 
+                                 bpmc % 100));
             }
         } else {
             if (bpmc != qpmc) {
-                m_tempo->setText(i18n("(%1.%2 qpm, %2.%3 bpm)").
-                                 arg(qpmc / 100).
-                                 arg(qpmc % 100).
-                                 arg(bpmc / 100).
-                                 arg(bpmc % 100));
+                m_tempo->setText(i18n("(%1.%2 qpm, %2.%3 bpm)", 
+                                 qpmc / 100, 
+                                 qpmc % 100, 
+                                 bpmc / 100, 
+                                 bpmc % 100));
             } else {
-                m_tempo->setText(i18n("(%1.%2 bpm)").
-                                 arg(bpmc / 100).
-                                 arg(bpmc % 100));
+                m_tempo->setText(i18n("(%1.%2 bpm)", 
+                                 bpmc / 100, 
+                                 bpmc % 100));
             }
         }
 
@@ -521,8 +521,8 @@ TimeWidget::populate()
             m_fractionLabel->setText(QString("%1").arg(hemidemis));
         }
 
-        m_timeSig->setText(i18n("(%1/%2 time)").arg(timeSig.getNumerator()).
-                           arg(timeSig.getDenominator()));
+        m_timeSig->setText(i18n("(%1/%2 time)", timeSig.getNumerator(), 
+                           timeSig.getDenominator()));
 
         RealTime rt = m_composition->getElapsedRealTime(m_time);
 

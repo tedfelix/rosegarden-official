@@ -674,7 +674,7 @@ TrackParameterBox::slotSelectedTrackNameChanged()
     else
         m_trackName.truncate(20);
     int trackNum = trk->getPosition() + 1;
-    m_trackLabel->setText(i18n("[ Track %1 - %2 ]").arg(trackNum).arg(m_trackName));
+    m_trackLabel->setText(i18n("[ Track %1 - %2 ]", trackNum, m_trackName));
 }
 
 void

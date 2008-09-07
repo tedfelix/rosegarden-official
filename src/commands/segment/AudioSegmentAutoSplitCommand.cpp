@@ -139,7 +139,7 @@ AudioSegmentAutoSplitCommand::execute()
             sprintf(splitNumber, "%d", splitCount++);
             std::string label = m_segment->getLabel();
             newSegment->setLabel(appendLabel(label, qstrtostr(
-                    i18n("(part %1)").arg(splitCount))));
+                    i18n("(part %1)", splitCount))));
 
             newSegment->setColourIndex(m_segment->getColourIndex());
 

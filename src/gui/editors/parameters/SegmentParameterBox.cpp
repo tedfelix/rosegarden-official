@@ -356,7 +356,7 @@ SegmentParameterBox::initBox()
     for (int i = 0; i < 10; i++) {
         int rtd = (i < 5 ? ((i + 1) * 10) : ((i - 3) * 50));
         m_realTimeDelays.push_back(rtd);
-        m_delayValue->addItem(i18n("%1 ms").arg(rtd));
+        m_delayValue->addItem(i18n("%1 ms", rtd));
     }
 
     // set delay blank initially
@@ -687,7 +687,7 @@ SegmentParameterBox::populateBoxFromSegments()
 
         } else if (delayLevel < 0) {
 
-            m_delayValue->setCurrentIndex(i18n("%1 ms").arg( -delayLevel),
+            m_delayValue->setCurrentIndex(i18n("%1 ms",  -delayLevel),
                                          true);
         }
 

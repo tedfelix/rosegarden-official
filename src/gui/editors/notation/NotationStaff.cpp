@@ -458,7 +458,7 @@ NotationStaff::renderElements(NotationElementList::iterator from,
     //    NOTATION_DEBUG << "NotationStaff " << this << "::renderElements()" << endl;
     Profiler profiler("NotationStaff::renderElements");
 
-    emit setOperationName(i18n("Rendering staff %1...").arg(getId() + 1));
+    emit setOperationName(i18n("Rendering staff %1...", getId() + 1));
     emit setProgress(0);
 
     throwIfCancelled();
@@ -521,7 +521,7 @@ NotationStaff::renderPrintable(timeT from, timeT to)
 
     Profiler profiler("NotationStaff::renderElements");
 
-    emit setOperationName(i18n("Rendering notes on staff %1...").arg(getId() + 1));
+    emit setOperationName(i18n("Rendering notes on staff %1...", getId() + 1));
     emit setProgress(0);
 
     throwIfCancelled();
@@ -589,7 +589,7 @@ NotationStaff::positionElements(timeT from, timeT to)
     if (to < startTime) to = startTime;
     if (to == from) return;
 
-    emit setOperationName(i18n("Positioning staff %1...").arg(getId() + 1));
+    emit setOperationName(i18n("Positioning staff %1...", getId() + 1));
     emit setProgress(0);
     throwIfCancelled();
 

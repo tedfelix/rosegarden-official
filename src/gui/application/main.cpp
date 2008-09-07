@@ -374,7 +374,7 @@ void testInstalledVersion()
               " 2. The upgrade was installed in a non-standard directory,\n"
               "     and an old version was found in a standard directory.  If so,\n"
               "     you will need to add the correct directory to your KDEDIRS\n"
-              "     environment variable before you can run it.").arg(VERSION).arg(installedVersion),
+              "     environment variable before you can run it.", VERSION, installedVersion),
          i18n("Installation problem"));
 
     } else {

@@ -892,9 +892,9 @@ EditView::setupAddControlRulerMenu()
                 QString hexValue;
                 hexValue.sprintf("(0x%x)", it->getControllerValue());
 
-                itemStr = i18n("%1 Controller %2 %3").arg(strtoqstr(it->getName()))
-                          .arg(it->getControllerValue())
-                          .arg(hexValue);
+                itemStr = i18n("%1 Controller %2 %3", strtoqstr(it->getName()),
+                           it->getControllerValue(),
+                           hexValue);
 
             } else if (it->getType() == PitchBend::EventType)
                 itemStr = i18n("Pitch Bend");

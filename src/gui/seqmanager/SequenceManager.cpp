@@ -1266,7 +1266,7 @@ SequenceManager::checkSoundDriverStatus(bool warnUser)
     if (text != "") {
         RosegardenGUIApp::self()->awaitDialogClearance();
         KMessageBox::error(RosegardenGUIApp::self(),
-                           i18n("<h3>Sequencer startup failed</h3>%1").arg(text));
+                           i18n("<h3>Sequencer startup failed</h3>%1", text));
         CurrentProgressDialog::thaw();
         return;
     }

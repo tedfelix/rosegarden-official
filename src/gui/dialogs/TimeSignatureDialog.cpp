@@ -157,19 +157,19 @@ TimeSignatureDialog::TimeSignatureDialog(QDialogButtonBox::QWidget *parent,
 
             new QLabel(scopeText, groupBox);
             m_asGivenButton = new QRadioButton
-                              (i18n("Start measure %1 here").arg(barNo + 2), groupBox);
+                              (i18n("Start measure %1 here", barNo + 2), groupBox);
 
             if (!atStartOfBar) {
                 m_startOfBarButton = new QRadioButton
-                                     (i18n("Change time from start of measure %1")
-                                      .arg(barNo + 1), groupBox);
+                                     (i18n("Change time from start of measure %1",
+                                       barNo + 1), groupBox);
                 m_startOfBarButton->setChecked(true);
             } else {
                 m_asGivenButton->setChecked(true);
             }
         } else {
-            new QLabel(i18n("Time change will take effect at the start of measure %1.")
-                       .arg(barNo + 1), groupBox);
+            new QLabel(i18n("Time change will take effect at the start of measure %1.",
+                        barNo + 1), groupBox);
         }
     }
 

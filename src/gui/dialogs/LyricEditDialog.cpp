@@ -296,7 +296,7 @@ LyricEditDialog::verseDialogRepopulate()
     m_verseNumber->clear();
 
     for (int i = 0; i < m_verseCount; ++i) {
-        m_verseNumber->addItem(i18n("Verse %1").arg(i + 1));
+        m_verseNumber->addItem(i18n("Verse %1", i + 1));
     }
 
     if (m_verseCount == 12)

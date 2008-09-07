@@ -939,7 +939,7 @@ void MatrixView::setupActions()
             QString actionName = QString("snap_%1").arg(int((crotchetDuration * 4) / d));
             if (d == (crotchetDuration * 3) / 4) actionName = "snap_dotted_8";
             if (d == (crotchetDuration * 3) / 2) actionName = "snap_dotted_4";
-            new KAction(i18n("Snap to %1").arg(label), pixmap, cut, this,
+            new KAction(i18n("Snap to %1", label), pixmap, cut, this,
                         SLOT(slotSetSnapFromAction()), actionCollection(),
                         actionName);
         }
@@ -1285,8 +1285,8 @@ void MatrixView::setCurrentSelection(EventSelection* s, bool preview,
 
         int eventsSelected = s->getSegmentEvents().size();
         m_selectionCounter->setText
-        (i18n("  1 event selected ",
-              "  %n events selected ", eventsSelected));
+        (i18np("  1 event selected ",
+              "  %1 events selected ", eventsSelected));
 
     } else {
         m_selectionCounter->setText(i18n("  No selection "));
@@ -1524,23 +1524,23 @@ MatrixView::slotHoveredOverNoteChanged(int evPitch,
             getDocument()->getComposition().getElapsedRealTime(evTime);
         long ms = rt.msec();
 
-        QString msg = i18n("Note: %1 (%2.%3s)")
-                  .arg(QString("%1-%2-%3-%4")
+        QString msg = i18n("Note: %1 (%2.%3s)",
+                   QString("%1-%2-%3-%4")
                        .arg(QString("%1").arg(bar + 1).rightJustify(3, '0'))
                        .arg(QString("%1").arg(beat).rightJustify(2, '0'))
                        .arg(QString("%1").arg(fraction).rightJustify(2, '0'))
-                       .arg(QString("%1").arg(remainder).rightJustify(2, '0')))
-                  .arg(rt.sec)
-                  .arg(QString("%1").arg(ms).rightJustify(3, '0'));
+                       .arg(QString("%1").arg(remainder).rightJustify(2, '0')),
+                   rt.sec,
+                   QString("%1").arg(ms).rightJustify(3, '0'));
 
         m_hoveredOverAbsoluteTime->setText(msg);
     }
 
     m_haveHoveredOverNote = false;
 
-    m_hoveredOverNoteName->setText(i18n("%1 (%2)")
-                                   .arg(label.getQString())
-                                   .arg(evPitch));
+    m_hoveredOverNoteName->setText(i18n("%1 (%2)",
+                                    label.getQString(),
+                                    evPitch));
 
     m_pitchRuler->drawHoverNote(evPitch);
 }
@@ -1579,14 +1579,14 @@ MatrixView::slotHoveredOverAbsoluteTimeChanged(unsigned int time)
     // we replaced this    QString format("%ld (%ld.%03lds)");
     // to support Unicode
 
-    QString message = i18n("Time: %1 (%2.%3s)")
-                      .arg(QString("%1-%2-%3-%4")
+    QString message = i18n("Time: %1 (%2.%3s)",
+                       QString("%1-%2-%3-%4")
                            .arg(QString("%1").arg(bar + 1).rightJustify(3, '0'))
                            .arg(QString("%1").arg(beat).rightJustify(2, '0'))
                            .arg(QString("%1").arg(fraction).rightJustify(2, '0'))
-                           .arg(QString("%1").arg(remainder).rightJustify(2, '0')))
-                      .arg(rt.sec)
-                      .arg(QString("%1").arg(ms).rightJustify(3, '0'));
+                           .arg(QString("%1").arg(remainder).rightJustify(2, '0')),
+                       rt.sec,
+                       QString("%1").arg(ms).rightJustify(3, '0'));
 
     m_hoveredOverAbsoluteTime->setText(message);
 }
@@ -1890,7 +1890,7 @@ void MatrixView::slotInsertNoteFromAction()
     } catch (...) {
 
         KMessageBox::sorry
-        (this, i18n("Unknown note insert action %1").arg(name));
+        (this, i18n("Unknown note insert action %1", name));
         return ;
     }
 
@@ -2311,7 +2311,7 @@ MatrixView::slotChangeHorizontalZoom(int)
     double zoomValue = m_hZoomSlider->getCurrentSize();
 
     //     m_zoomLabel->setText(i18n("%1%").arg(zoomValue*100.0 * 2)); // GROSS HACK - see in matrixstaff.h - BREAKS MATRIX VIEW, see bug 1000595
-    m_zoomLabel->setText(i18n("%1%").arg(zoomValue*100.0));
+    m_zoomLabel->setText(i18n("%1%", zoomValue*100.0));
 
     MATRIX_DEBUG << "MatrixView::slotChangeHorizontalZoom() : zoom factor = "
     << zoomValue << endl;
@@ -2805,24 +2805,24 @@ MatrixView::updateViewCaption()
         if (track)
             trackPosition = track->getPosition();
 
-        setCaption(i18n("%1 - Segment Track #%2 - %3")
-                   .arg(getDocument()->getTitle())
-                   .arg(trackPosition + 1)
-                   .arg(view));
+        setCaption(i18n("%1 - Segment Track #%2 - %3",
+                    getDocument()->getTitle(),
+                    trackPosition + 1,
+                    view));
 
     } else if (m_segments.size() == getDocument()->getComposition().getNbSegments()) {
 
-        setCaption(i18n("%1 - All Segments - %2")
-                   .arg(getDocument()->getTitle())
-                   .arg(view));
+        setCaption(i18n("%1 - All Segments - %2",
+                    getDocument()->getTitle(),
+                    view));
 
     } else {
 
-        setCaption(i18n("%1 - 1 Segment - %2",
-                        "%1 - %n Segments - %2",
-                        m_segments.size())
-                   .arg(getDocument()->getTitle())
-                   .arg(view));
+        setCaption(i18np("%2 - 1 Segment - %3",
+                        "%2 - %1 Segments - %3",
+                        m_segments.size(),
+                    getDocument()->getTitle(),
+                    view));
     }
 }
 

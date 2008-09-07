@@ -174,7 +174,7 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
 
     for (int i = 1; i <= 16; i *= 2) {
         action =
-            new KRadioAction(i18n("1 Input", "%n Inputs", i),
+            new KRadioAction(i18np("1 Input", "%1 Inputs", i),
                              0, this,
                              SLOT(slotSetInputCountFromAction()), actionCollection(),
                              QString("inputs_%1").arg(i));
@@ -193,7 +193,7 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
 
     for (int i = 2; i <= 8; i *= 2) {
         action = new KRadioAction
-                 (i18n("1 Submaster", "%n Submasters", i),
+                 (i18np("1 Submaster", "%1 Submasters", i),
                   0, this,
                   SLOT(slotSetSubmasterCountFromAction()), actionCollection(),
                   QString("submasters_%1").arg(i));
@@ -390,11 +390,11 @@ AudioMixerWindow::populate()
         QLabel *idLabel;
         QString idString;
         if ((*i)->getType() == Instrument::Audio) {
-            idString = i18n("Audio %1").arg((*i)->getId() -
+            idString = i18n("Audio %1", (*i)->getId() -
                                             AudioInstrumentBase + 1);
             idLabel = new QLabel(idString, m_mainBox, "audioIdLabel");
         } else {
-            idString = i18n("Synth %1").arg((*i)->getId() -
+            idString = i18n("Synth %1", (*i)->getId() -
                                             SoftSynthInstrumentBase + 1);
             idLabel = new QLabel(idString, m_mainBox, "synthIdLabel");
         }
@@ -518,7 +518,7 @@ AudioMixerWindow::populate()
                     this, SLOT(slotSelectPlugin()));
         }
 
-        QLabel *idLabel = new QLabel(i18n("Sub %1").arg(count), m_mainBox, "subMaster");
+        QLabel *idLabel = new QLabel(i18n("Sub %1", count), m_mainBox, "subMaster");
         idLabel->setFont(boldFont);
 
         //	mainLayout->addWidget(idLabel, 2, col, Qt::AlignCenter);

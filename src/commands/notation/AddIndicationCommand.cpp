@@ -239,7 +239,7 @@ AddIndicationCommand::getGlobalName(std::string indicationType)
         return i18n("Add &Glissando");
     }
 
-    QString n = i18n("Add &%1%2").arg((char)toupper(indicationType[0])).arg(strtoqstr(indicationType.substr(1)));
+    QString n = i18n("Add &%1%2", (char)toupper(indicationType[0]), strtoqstr(indicationType.substr(1)));
     return n;
 }
 

@@ -222,7 +222,7 @@ IntervalDialog::getIntervalName(int intervalDiatonic, int intervalChromatic)
            else if (deviation == 0)
                textIntervalDeviated += i18n("a perfect");
            else
-               textIntervalDeviated += i18n("an (unknown, %1)").arg(deviation);
+               textIntervalDeviated += i18n("an (unknown, %1)", deviation);
            break;
         // Then the major/minor:
         case 1: // second
@@ -250,7 +250,7 @@ IntervalDialog::getIntervalName(int intervalDiatonic, int intervalChromatic)
            else if (deviation == 0)
                textIntervalDeviated += i18n("a perfect");
            else
-               textIntervalDeviated += i18n("an (unknown, %1)").arg(deviation);
+               textIntervalDeviated += i18n("an (unknown, %1)", deviation);
            break;
         default:
            textIntervalDeviated += i18n("an (unknown)");
@@ -262,35 +262,35 @@ IntervalDialog::getIntervalName(int intervalDiatonic, int intervalChromatic)
 	    // "1 octave and a diminished octave" is better than
 	    // "2 octaves and a diminished unison"
 	    if (octaves > 0) {
-	      textInterval += i18n("%1 octave").arg(textIntervalDeviated);
+	      textInterval += i18n("%1 octave", textIntervalDeviated);
 	      octaves--;
 	    } else if (octaves < 0) {
-	      textInterval += i18n("%1 octave").arg(textIntervalDeviated);
+	      textInterval += i18n("%1 octave", textIntervalDeviated);
 	      octaves++;
 	    } else {
-	      textInterval += i18n("%1 unison").arg(textIntervalDeviated);
+	      textInterval += i18n("%1 unison", textIntervalDeviated);
 	    }
 	    break;
 	case 1:
-	    textInterval += i18n("%1 second").arg(textIntervalDeviated);
+	    textInterval += i18n("%1 second", textIntervalDeviated);
 	    break;
 	case 2:
-	    textInterval += i18n("%1 third").arg(textIntervalDeviated);
+	    textInterval += i18n("%1 third", textIntervalDeviated);
 	    break;
 	case 3:
-	    textInterval += i18n("%1 fourth").arg(textIntervalDeviated);
+	    textInterval += i18n("%1 fourth", textIntervalDeviated);
 	    break;
 	case 4:
-	    textInterval += i18n("%1 fifth").arg(textIntervalDeviated);
+	    textInterval += i18n("%1 fifth", textIntervalDeviated);
 	    break;
 	case 5:
-	    textInterval += i18n("%1 sixth").arg(textIntervalDeviated);
+	    textInterval += i18n("%1 sixth", textIntervalDeviated);
 	    break;
 	case 6:
-	    textInterval += i18n("%1 seventh").arg(textIntervalDeviated);
+	    textInterval += i18n("%1 seventh", textIntervalDeviated);
 	    break;
         default:
-	    textInterval += i18n("%1").arg(textIntervalDeviated);
+	    textInterval += i18n("%1", textIntervalDeviated);
         }
     }
     
@@ -300,32 +300,32 @@ IntervalDialog::getIntervalName(int intervalDiatonic, int intervalChromatic)
         {
 	    if (octaves != 0) {
 		if (showStep) {
-		    return i18n("up 1 octave and %1",
-		           "up %n octaves and %1",
-			   octaves).arg(textInterval);
+		    return i18np("up 1 octave and %2",
+		           "up %1 octaves and %2",
+			   octaves, textInterval);
 		} else {
-		    return i18n("up 1 octave",
-		           "up %n octaves",
+		    return i18np("up 1 octave",
+		           "up %1 octaves",
 			   octaves);
 		}
 	    } else {
-		return i18n("up %1").arg(textInterval);
+		return i18n("up %1", textInterval);
 	    }
         }
         else
         {
 	    if (octaves != 0) {
 		if (showStep) {
-		    return i18n("down 1 octave and %1",
-		           "down %n octaves and %1",
-			   octaves).arg(textInterval);
+		    return i18np("down 1 octave and %2",
+		           "down %1 octaves and %2",
+			   octaves, textInterval);
 		} else {
-		    return i18n("down 1 octave",
-		           "down %n octaves",
+		    return i18np("down 1 octave",
+		           "down %1 octaves",
 			   octaves);
 		}
 	    } else {
-		return i18n("down %1").arg(textInterval);
+		return i18n("down %1", textInterval);
 	    }
         }
     } else {

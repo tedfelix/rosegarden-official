@@ -42,7 +42,7 @@ ExportDeviceDialog::ExportDeviceDialog(QDialogButtonBox::QWidget *parent, QStrin
                                         vbox);
     m_exportAll = new QRadioButton(i18n("Export all devices"), bg);
     m_exportOne = new QRadioButton(i18n("Export selected device only"), bg);
-    new QLabel(i18n("         (\"%1\")").arg(deviceName), bg);
+    new QLabel(i18n("         (\"%1\")", deviceName), bg);
 
     m_exportOne->setChecked(true);
 }

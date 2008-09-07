@@ -68,12 +68,12 @@ NoteFontMap::NoteFontMap(std::string name) :
         if (!mapFileLowerInfo.isReadable()) {
             if (mapFileLowerName != mapFileMixedName) {
                 throw MappingFileReadFailed
-                (qstrtostr(i18n("Can't open font mapping file %1 or %2").
-                           arg(mapFileMixedName).arg(mapFileLowerName)));
+                (qstrtostr(i18n("Can't open font mapping file %1 or %2", 
+                           mapFileMixedName, mapFileLowerName)));
             } else {
                 throw MappingFileReadFailed
-                (qstrtostr(i18n("Can't open font mapping file %1").
-                           arg(mapFileMixedName)));
+                (qstrtostr(i18n("Can't open font mapping file %1", 
+                           mapFileMixedName)));
             }
         } else {
             mapFileName = mapFileLowerName;

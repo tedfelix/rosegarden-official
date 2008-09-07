@@ -90,8 +90,8 @@ ControlEditorDialog::ControlEditorDialog(QWidget *parent,
 
     // spacing hack!
     new QLabel("", mainFrame);
-    new QLabel(i18n("  Control Events for %1 (device %2)").arg(deviceName).
-               arg(device), mainFrame);
+    new QLabel(i18n("  Control Events for %1 (device %2)", deviceName, 
+               device), mainFrame);
     new QLabel("", mainFrame);
 
     m_listView = new KListView( mainFrame );

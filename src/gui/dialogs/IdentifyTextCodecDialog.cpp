@@ -117,13 +117,13 @@ IdentifyTextCodecDialog::IdentifyTextCodecDialog(QDialogButtonBox::QWidget *pare
         QString description = codecDescriptions[name];
         if (description == "") {
             if (strtoqstr(name).left(3) == "CP ") {
-                description = i18n("Microsoft Code Page %1").
-                              arg(strtoqstr(name).right(name.length() - 3));
+                description = i18n("Microsoft Code Page %1", 
+                              strtoqstr(name).right(name.length() - 3));
             }
         }
 
         if (description != "") {
-            description = i18n("%1 (%2)").arg(strtoqstr(name)).arg(description);
+            description = i18n("%1 (%2)", strtoqstr(name), description);
         } else {
             description = strtoqstr(name);
         }

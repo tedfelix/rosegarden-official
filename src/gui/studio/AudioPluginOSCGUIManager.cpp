@@ -437,10 +437,10 @@ AudioPluginOSCGUIManager::getFriendlyName(InstrumentId instrument, int position,
         return i18n("Rosegarden Plugin");
     else {
         if (position == int(Instrument::SYNTH_PLUGIN_POSITION)) {
-            return i18n("Rosegarden: %1").arg(strtoqstr(container->getPresentationName()));
+            return i18n("Rosegarden: %1", strtoqstr(container->getPresentationName()));
         } else {
-            return i18n("Rosegarden: %1: %2").arg(strtoqstr(container->getPresentationName()))
-                   .arg(i18n("Plugin slot %1").arg(position));
+            return i18n("Rosegarden: %1: %2", strtoqstr(container->getPresentationName()),
+                    i18n("Plugin slot %1", position));
         }
     }
 }

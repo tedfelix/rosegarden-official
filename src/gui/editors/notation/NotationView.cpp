@@ -2262,7 +2262,7 @@ NotationView::setupFontSizeMenu(std::string oldFontName)
 
         if (!sizeAction) {
             sizeAction =
-                new KToggleAction(i18n("1 pixel", "%n pixels", sizes[i]),
+                new KToggleAction(i18np("1 pixel", "%1 pixels", sizes[i]),
                                   0, this,
                                   SLOT(slotChangeFontSizeFromAction()),
                                   actionCollection(), actionName);
@@ -2339,8 +2339,8 @@ void NotationView::initLayoutToolbar()
 
     if (!foundFont) {
         KMessageBox::sorry
-        (this, i18n("Unknown font \"%1\", using default").arg
-         (strtoqstr(m_fontName)));
+        (this, i18n("Unknown font \"%1\", using default", 
+         strtoqstr(m_fontName)));
         m_fontName = NoteFontFactory::getDefaultFontName();
     }
 
@@ -2709,7 +2709,7 @@ bool NotationView::applyLayout(int staffNo, timeT startTime, timeT endTime)
         if (staffNo >= 0 && (int)i != staffNo)
             continue;
 
-        slotSetOperationNameAndStatus(i18n("Laying out staff %1...").arg(i + 1));
+        slotSetOperationNameAndStatus(i18n("Laying out staff %1...", i + 1));
         ProgressDialog::processEvents();
 
         m_hlayout->resetStaff(*m_staffs[i], startTime, endTime);
@@ -2944,8 +2944,8 @@ void NotationView::setCurrentSelection(EventSelection* s, bool preview,
     if (s) {
         int eventsSelected = s->getSegmentEvents().size();
         m_selectionCounter->setText
-        (i18n("  1 event selected ",
-              "  %n events selected ", eventsSelected));
+        (i18np("  1 event selected ",
+              "  %1 events selected ", eventsSelected));
     } else {
         m_selectionCounter->setText(i18n("  No selection "));
     }
@@ -3892,19 +3892,19 @@ void NotationView::updateViewCaption()
         if (track)
             trackPosition = track->getPosition();
         //	std::cout << std::endl << std::endl << std::endl << "DEBUG TITLE BAR: " << getDocument()->getTitle() << std::endl << std::endl << std::endl;
-        setCaption(i18n("%1 - Segment Track #%2 - Notation")
-                   .arg(getDocument()->getTitle())
-                   .arg(trackPosition + 1));
+        setCaption(i18n("%1 - Segment Track #%2 - Notation",
+                    getDocument()->getTitle(),
+                    trackPosition + 1));
 
     } else if (m_segments.size() == getDocument()->getComposition().getNbSegments()) {
 
-        setCaption(i18n("%1 - All Segments - Notation")
-                   .arg(getDocument()->getTitle()));
+        setCaption(i18n("%1 - All Segments - Notation",
+                    getDocument()->getTitle()));
 
     } else {
 
-        setCaption(i18n("%1 - Segment - Notation", "%1 - %n Segments - Notation", m_segments.size())
-                   .arg(getDocument()->getTitle()));
+        setCaption(i18np("%2 - Segment - Notation", "%2 - %1 Segments - Notation", m_segments.size(),
+                    getDocument()->getTitle()));
 
     }
 }
@@ -3926,15 +3926,15 @@ NotationView::slotUpdateInsertModeStatus()
     QString message;
 
     if (isInTripletMode()) {
-        message = i18n("%1 %2").arg(message).arg(tripletMessage);
+        message = i18n("%1 %2", message, tripletMessage);
     }
 
     if (isInChordMode()) {
-        message = i18n("%1 %2").arg(message).arg(chordMessage);
+        message = i18n("%1 %2", message, chordMessage);
     }
 
     if (isInGraceMode()) {
-        message = i18n("%1 %2").arg(message).arg(graceMessage);
+        message = i18n("%1 %2", message, graceMessage);
     }
 
     m_insertModeLabel->setText(message);
@@ -4005,7 +4005,7 @@ NotationView::slotChangeSpacingFromAction()
 
     } else {
         KMessageBox::sorry
-        (this, i18n("Unknown spacing action %1").arg(name));
+        (this, i18n("Unknown spacing action %1", name));
     }
 }
 
@@ -4063,7 +4063,7 @@ NotationView::slotChangeProportionFromAction()
 
     } else {
         KMessageBox::sorry
-        (this, i18n("Unknown proportion action %1").arg(name));
+        (this, i18n("Unknown proportion action %1", name));
     }
 }
 
@@ -4110,7 +4110,7 @@ NotationView::slotChangeFontFromAction()
         slotChangeFont(name);
     } else {
         KMessageBox::sorry
-        (this, i18n("Unknown font action %1").arg(name));
+        (this, i18n("Unknown font action %1", name));
     }
 }
 
@@ -4128,11 +4128,11 @@ NotationView::slotChangeFontSizeFromAction()
             slotChangeFont(m_fontName, size);
         else {
             KMessageBox::sorry
-            (this, i18n("Unknown font size %1").arg(name));
+            (this, i18n("Unknown font size %1", name));
         }
     } else {
         KMessageBox::sorry
-        (this, i18n("Unknown font size action %1").arg(name));
+        (this, i18n("Unknown font size action %1", name));
     }
 }
 
@@ -4997,7 +4997,7 @@ void NotationView::slotInsertNoteFromAction()
     } catch (...) {
 
         KMessageBox::sorry
-            (this, i18n("Unknown note insert action %1").arg(name));
+            (this, i18n("Unknown note insert action %1", name));
         return ;
     }
 
@@ -5229,9 +5229,9 @@ NotationView::slotMakeOrnament()
     QString name;
     int barNo = segment.getComposition()->getBarNumber(absTime);
     if (track) {
-        name = QString(i18n("Ornament track %1 bar %2").arg(track->getPosition() + 1).arg(barNo + 1));
+        name = QString(i18n("Ornament track %1 bar %2", track->getPosition() + 1, barNo + 1));
     } else {
-        name = QString(i18n("Ornament bar %1").arg(barNo + 1));
+        name = QString(i18n("Ornament bar %1", barNo + 1));
     }
 
     MakeOrnamentDialog dialog(this, name, basePitch);
@@ -6445,14 +6445,14 @@ NotationView::slotHoveredOverAbsoluteTimeChanged(unsigned int time)
     //    format = i18n("Time: %1").arg(format);
     //    message.sprintf(format, t, rt.sec, ms);
 
-    QString message = i18n("Time: %1 (%2.%3s)")
-        .arg(QString("%1-%2-%3-%4")
+    QString message = i18n("Time: %1 (%2.%3s)",
+         QString("%1-%2-%3-%4")
              .arg(QString("%1").arg(bar + 1).rightJustify(3, '0'))
              .arg(QString("%1").arg(beat).rightJustify(2, '0'))
              .arg(QString("%1").arg(fraction).rightJustify(2, '0'))
-             .arg(QString("%1").arg(remainder).rightJustify(2, '0')))
-        .arg(rt.sec)
-        .arg(QString("%1").arg(ms).rightJustify(3, '0'));
+             .arg(QString("%1").arg(remainder).rightJustify(2, '0')),
+         rt.sec,
+         QString("%1").arg(ms).rightJustify(3, '0'));
 
     m_hoveredOverAbsoluteTime->setText(message);
 }

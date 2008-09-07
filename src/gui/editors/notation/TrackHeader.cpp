@@ -103,13 +103,13 @@ TrackHeader::TrackHeader(QWidget *parent, TrackId trackId, int height, int ypos)
     Track *track = comp->getTrackById(m_track);
     int trackPos = comp->getTrackPositionById(m_track);
 
-    QString toolTipText = QString(i18n("Track %1 : \"%2\"")
-                            .arg(trackPos + 1)
-                            .arg(strtoqstr(track->getLabel())));
+    QString toolTipText = QString(i18n("Track %1 : \"%2\"",
+                             trackPos + 1,
+                             strtoqstr(track->getLabel())));
 
     QString preset = track->getPresetLabel();
     if (preset != QString(""))
-        toolTipText += QString(i18n("\nNotate for: %1").arg(preset));
+        toolTipText += QString(i18n("\nNotate for: %1", preset));
 
     QString notationSize = i18n("normal");
     switch (track->getStaffSize()) {
@@ -342,10 +342,10 @@ TrackHeader::lookAtStaff(double x, int maxWidth)
     QString noteName;
     transposeValueToName(m_transpose, noteName);
 
-    m_upperText = QString(i18n("%1: %2")
-                                .arg(trackPos + 1)
-                                .arg(strtoqstr(track->getLabel())));
-    if (m_transpose) m_transposeText = i18n(" in %1").arg(noteName);
+    m_upperText = QString(i18n("%1: %2",
+                                 trackPos + 1,
+                                 strtoqstr(track->getLabel())));
+    if (m_transpose) m_transposeText = i18n(" in %1", noteName);
     else             m_transposeText = QString("");
 
     NotePixmapFactory * npf = m_notationView->getNotePixmapFactory();

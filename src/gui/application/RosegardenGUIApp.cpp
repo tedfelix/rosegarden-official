@@ -1793,7 +1793,7 @@ RosegardenGUIApp::createDocument(QString filePath, ImportType importType)
     if (!info.exists()) {
         // can happen with command-line arg, so...
         KStartupLogo::hideIfStillThere();
-        KMessageBox::sorry(this, i18n("File \"%1\" does not exist").arg(filePath));
+        KMessageBox::sorry(this, i18n("File \"%1\" does not exist", filePath));
         return 0;
     }
 
@@ -1808,7 +1808,7 @@ RosegardenGUIApp::createDocument(QString filePath, ImportType importType)
     if (!file.open(QIODevice::ReadOnly)) {
         KStartupLogo::hideIfStillThere();
         QString errStr =
-            i18n("You do not have read permission for \"%1\"").arg(filePath);
+            i18n("You do not have read permission for \"%1\"", filePath);
 
         KMessageBox::sorry(this, errStr);
         return 0;
@@ -2261,7 +2261,7 @@ void RosegardenGUIApp::openURL(const KURL& url)
 
     if (!url.isValid()) {
         QString string;
-        string = i18n( "Malformed URL\n%1").arg(netFile);
+        string = i18n( "Malformed URL\n%1", netFile);
 
         KMessageBox::sorry(this, string);
         return ;
@@ -2270,7 +2270,7 @@ void RosegardenGUIApp::openURL(const KURL& url)
     QString target, caption(url.path());
 
     if (KIO::NetAccess::download(url, target, this) == false) {
-        KMessageBox::error(this, i18n("Cannot download file %1").arg(url.prettyURL()));
+        KMessageBox::error(this, i18n("Cannot download file %1", url.prettyURL()));
         return ;
     }
 
@@ -2363,7 +2363,7 @@ void RosegardenGUIApp::slotMerge()
     QString target;
 
     if (KIO::NetAccess::download(url, target, this) == false) {
-        KMessageBox::error(this, i18n("Cannot download file %1").arg(url.prettyURL()));
+        KMessageBox::error(this, i18n("Cannot download file %1", url.prettyURL()));
         return ;
     }
 
@@ -2901,7 +2901,7 @@ RosegardenGUIApp::testAudioPath(QString op)
     } catch (AudioFileManager::BadAudioPathException) {
         if (KMessageBox::warningContinueCancel
             (this,
-	     i18n("The audio file path does not exist or is not writable.\nYou must set the audio file path to a valid directory in Document Properties before %1.\nWould you like to set it now?").arg(op),
+	     i18n("The audio file path does not exist or is not writable.\nYou must set the audio file path to a valid directory in Document Properties before %1.\nWould you like to set it now?", op),
              i18n("Warning"),
              i18n("Set audio file path")) == KMessageBox::Continue) {
             slotOpenAudioPathSettings();
@@ -3111,8 +3111,8 @@ RosegardenGUIApp::slotSplitSelectionAtTime()
 
     timeT now = m_doc->getComposition().getPosition();
 
-    QString title = i18n("Split Segment at Time",
-                         "Split %n Segments at Time",
+    QString title = i18np("Split Segment at Time",
+                         "Split %1 Segments at Time",
                          selection.size());
 
     TimeDialog dialog(m_view, title,
@@ -3851,7 +3851,7 @@ void RosegardenGUIApp::importProject(QString filePath)
 
     if (!proc->normalExit() || proc->exitStatus()) {
         CurrentProgressDialog::freeze();
-        KMessageBox::sorry(this, i18n("Failed to import project file \"%1\"").arg(filePath));
+        KMessageBox::sorry(this, i18n("Failed to import project file \"%1\"", filePath));
         CurrentProgressDialog::thaw();
         delete proc;
         return ;
@@ -4701,7 +4701,7 @@ void RosegardenGUIApp::slotTestStartupTester()
         } else {
             for (int i = 0; i < missing.count(); ++i) {
 //                if (missingFeatures.count() > 1) {
-                    allMissing.push_back(i18n("%1 - for project file support").arg(missing[i]));
+                    allMissing.push_back(i18n("%1 - for project file support", missing[i]));
 //                } else {
 //                    allMissing.push_back(missing[i]);
 //                }
@@ -4722,7 +4722,7 @@ void RosegardenGUIApp::slotTestStartupTester()
         } else {
             for (int i = 0; i < missing.count(); ++i) {
                 if (missingFeatures.count() > 1) {
-                    allMissing.push_back(i18n("%1 - for LilyPond preview support").arg(missing[i]));
+                    allMissing.push_back(i18n("%1 - for LilyPond preview support", missing[i]));
                 } else {
                     allMissing.push_back(missing[i]);
                 }
@@ -4742,7 +4742,7 @@ void RosegardenGUIApp::slotTestStartupTester()
             } else {
                 for (int i = 0; i < missing.count(); ++i) {
                     if (missingFeatures.count() > 1) {
-                        allMissing.push_back(i18n("%1 - for audio file import").arg(missing[i]));
+                        allMissing.push_back(i18n("%1 - for audio file import", missing[i]));
                     } else {
                         allMissing.push_back(missing[i]);
                     }
@@ -4756,13 +4756,13 @@ void RosegardenGUIApp::slotTestStartupTester()
         QString message = i18n("<h3>Helper programs not found</h3><p>Rosegarden could not find one or more helper programs which it needs to provide some features.  The following features will not be available:</p>");
         message += i18n("<ul>");
         for (int i = 0; i < missingFeatures.count(); ++i) {
-            message += i18n("<li>%1</li>").arg(missingFeatures[i]);
+            message += i18n("<li>%1</li>", missingFeatures[i]);
         }
         message += i18n("</ul>");
         message += i18n("<p>To fix this, you should install the following additional programs:</p>");
         message += i18n("<ul>");
         for (int i = 0; i < allMissing.count(); ++i) {
-            message += i18n("<li>%1</li>").arg(allMissing[i]);
+            message += i18n("<li>%1</li>", allMissing[i]);
         }
         message += i18n("</ul>");
 
@@ -4920,7 +4920,7 @@ void RosegardenGUIApp::slotExportProject()
     QString errMsg;
     if (!m_doc->saveDocument(rgFile, errMsg,
                              true)) { // pretend it's autosave
-        KMessageBox::sorry(this, i18n("Saving Rosegarden file to package failed: %1").arg(errMsg));
+        KMessageBox::sorry(this, i18n("Saving Rosegarden file to package failed: %1", errMsg));
         CurrentProgressDialog::thaw();
         return ;
     }
@@ -4934,7 +4934,7 @@ void RosegardenGUIApp::slotExportProject()
     proc->start(QProcess::Block, QProcess::All);
 
     if (!proc->normalExit() || proc->exitStatus()) {
-        KMessageBox::sorry(this, i18n("Failed to export to project file \"%1\"").arg(fileName));
+        KMessageBox::sorry(this, i18n("Failed to export to project file \"%1\"", fileName));
         CurrentProgressDialog::thaw();
         delete proc;
         return ;
@@ -5841,7 +5841,7 @@ void RosegardenGUIApp::slotChangeZoom(int)
 {
     double duration44 = TimeSignature(4, 4).getBarDuration();
     double value = double(m_zoomSlider->getCurrentSize());
-    m_zoomLabel->setText(i18n("%1%").arg(duration44 / value));
+    m_zoomLabel->setText(i18n("%1%", duration44 / value));
 
     RG_DEBUG << "RosegardenGUIApp::slotChangeZoom : zoom size = "
     << m_zoomSlider->getCurrentSize() << endl;
@@ -5909,7 +5909,7 @@ RosegardenGUIApp::slotChangeTempo(timeT time,
         timeT prevTime = comp.getTempoChange(index).first;
 
         MacroCommand *macro =
-            new MacroCommand(i18n("Replace Tempo Change at %1").arg(time));
+            new MacroCommand(i18n("Replace Tempo Change at %1", time));
 
         macro->addCommand(new RemoveTempoChangeCommand(&comp, index));
         macro->addCommand(new AddTempoChangeCommand(&comp, prevTime, value,
@@ -6399,7 +6399,7 @@ RosegardenGUIApp::slotAddAudioFile(unsigned int id)
         addAudioFile(strtoqstr(aF->getFilename()), aF->getId());
 
     if (!result) {
-        KMessageBox::error(this, i18n("Sequencer failed to add audio file %1").arg(aF->getFilename().c_str()));
+        KMessageBox::error(this, i18n("Sequencer failed to add audio file %1", aF->getFilename().c_str()));
     }
 }
 
@@ -6412,7 +6412,7 @@ RosegardenGUIApp::slotDeleteAudioFile(unsigned int id)
     int result = RosegardenSequencer::getInstance()->removeAudioFile(id);
 
     if (!result) {
-        KMessageBox::error(this, i18n("Sequencer failed to remove audio file id %1").arg(id));
+        KMessageBox::error(this, i18n("Sequencer failed to remove audio file id %1", id));
     }
 }
 
@@ -7799,8 +7799,8 @@ RosegardenGUIApp::slotImportStudio()
 
     QString target;
     if (KIO::NetAccess::download(url, target, this) == false) {
-        KMessageBox::error(this, i18n("Cannot download file %1")
-                           .arg(url.prettyURL()));
+        KMessageBox::error(this, i18n("Cannot download file %1",
+                            url.prettyURL()));
         return ;
     }
 

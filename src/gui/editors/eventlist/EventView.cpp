@@ -463,8 +463,8 @@ EventView::applyLayout(int /*staffNo*/)
                            arg((*it)->get
                                <Int>(PitchBend::LSB));
             } else if ((*it)->has(BaseProperties::BEAMED_GROUP_ID)) {
-                data2Str = i18n("(group %1)  ").
-                           arg((*it)->get
+                data2Str = i18n("(group %1)  ", 
+                           (*it)->get
                                <Int>(BaseProperties::BEAMED_GROUP_ID));
             }
 
@@ -1620,9 +1620,9 @@ EventView::updateViewCaption()
 {
     if (m_isTriggerSegment) {
 
-        setCaption(i18n("%1 - Triggered Segment: %2")
-                   .arg(getDocument()->getTitle())
-                   .arg(strtoqstr(m_segments[0]->getLabel())));
+        setCaption(i18n("%1 - Triggered Segment: %2",
+                    getDocument()->getTitle(),
+                    strtoqstr(m_segments[0]->getLabel())));
 
 
     } else if (m_segments.size() == 1) {
@@ -1635,15 +1635,15 @@ EventView::updateViewCaption()
         if (track)
             trackPosition = track->getPosition();
 
-        setCaption(i18n("%1 - Segment Track #%2 - Event List")
-                   .arg(getDocument()->getTitle())
-                   .arg(trackPosition + 1));
+        setCaption(i18n("%1 - Segment Track #%2 - Event List",
+                    getDocument()->getTitle(),
+                    trackPosition + 1));
 
     } else {
 
-        setCaption(i18n("%1 - %2 Segments - Event List")
-                   .arg(getDocument()->getTitle())
-                   .arg(m_segments.size()));
+        setCaption(i18n("%1 - %2 Segments - Event List",
+                    getDocument()->getTitle(),
+                    m_segments.size()));
     }
 
 }

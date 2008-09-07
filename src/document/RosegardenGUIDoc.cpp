@@ -476,8 +476,8 @@ RosegardenGUIDoc::deleteOrphanedAudioFiles(bool documentWillNotBeSaved)
 
         int reply = KMessageBox::warningYesNoCancel
                     (0,
-                     i18n("Delete the 1 audio file recorded during the unsaved session?",
-                          "Delete the %n audio files recorded during the unsaved session?",
+                     i18np("Delete the 1 audio file recorded during the unsaved session?",
+                          "Delete the %1 audio files recorded during the unsaved session?",
                           recordedOrphans.size()));
 
         switch (reply) {
@@ -514,7 +514,7 @@ RosegardenGUIDoc::deleteOrphanedAudioFiles(bool documentWillNotBeSaved)
         return true;
 
     QString question =
-        i18n("<qt>About to delete 1 audio file permanently from the hard disk.<br>There will be no way to recover this file.<br>Are you sure?</qt>\n", "<qt>About to delete %n audio files permanently from the hard disk.<br>There will be no way to recover these files.<br>Are you sure?</qt>", recordedOrphans.size());
+        i18np("<qt>About to delete 1 audio file permanently from the hard disk.<br>There will be no way to recover this file.<br>Are you sure?</qt>\n", "<qt>About to delete %1 audio files permanently from the hard disk.<br>There will be no way to recover these files.<br>Are you sure?</qt>", recordedOrphans.size());
 
     int reply = KMessageBox::warningContinueCancel(0, question);
 
@@ -522,8 +522,8 @@ RosegardenGUIDoc::deleteOrphanedAudioFiles(bool documentWillNotBeSaved)
         for (size_t i = 0; i < recordedOrphans.size(); ++i) {
             QFile file(recordedOrphans[i]);
             if (!file.remove()) {
-                KMessageBox::error(0, i18n("File %1 could not be deleted.")
-                                   .arg(recordedOrphans[i]));
+                KMessageBox::error(0, i18n("File %1 could not be deleted.",
+                                    recordedOrphans[i]));
             }
 
             QFile peakFile(QString("%1.pk").arg(recordedOrphans[i]));
@@ -577,7 +577,7 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
     // Check if file readable with fileInfo ?
     if (!fileInfo.isReadable() || fileInfo.isDir()) {
         KStartupLogo::hideIfStillThere();
-        QString msg(i18n("Can't open file '%1'").arg(filename));
+        QString msg(i18n("Can't open file '%1'", filename));
         KMessageBox::sorry(0, msg);
         return false;
     }
@@ -638,9 +638,9 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
 
     if (!okay) {
         KStartupLogo::hideIfStillThere();
-        QString msg(i18n("Error when parsing file '%1': \"%2\"")
-                    .arg(filename)
-                    .arg(errMsg));
+        QString msg(i18n("Error when parsing file '%1': \"%2\"",
+                     filename,
+                     errMsg));
 
         CurrentProgressDialog::freeze();
         KMessageBox::sorry(0, msg);
@@ -1666,7 +1666,7 @@ RosegardenGUIDoc::xmlParse(QString fileContents, QString &errMsg,
                 KStartupLogo::hideIfStillThere();
                 CurrentProgressDialog::freeze();
 
-                KMessageBox::information(0, i18n("<h3>Incorrect audio sample rate</h3><p>This composition contains audio files that were recorded or imported with the audio server running at a different sample rate (%1 Hz) from the current JACK server sample rate (%2 Hz).</p><p>Rosegarden will play this composition at the correct speed, but any audio files in it will probably sound awful.</p><p>Please consider re-starting the JACK server at the correct rate (%3 Hz) and re-loading this composition before you do any more work with it.</p>").arg(er).arg(sr).arg(er));
+                KMessageBox::information(0, i18n("<h3>Incorrect audio sample rate</h3><p>This composition contains audio files that were recorded or imported with the audio server running at a different sample rate (%1 Hz) from the current JACK server sample rate (%2 Hz).</p><p>Rosegarden will play this composition at the correct speed, but any audio files in it will probably sound awful.</p><p>Please consider re-starting the JACK server at the correct rate (%3 Hz) and re-loading this composition before you do any more work with it.</p>", er, sr, er));
 
                 CurrentProgressDialog::thaw();
                 shownWarning = true;
@@ -1676,7 +1676,7 @@ RosegardenGUIDoc::xmlParse(QString fileContents, QString &errMsg,
                 KStartupLogo::hideIfStillThere();
                 CurrentProgressDialog::freeze();
                 
-                KMessageBox::information(0, i18n("<h3>Inconsistent audio sample rates</h3><p>This composition contains audio files at more than one sample rate.</p><p>Rosegarden will play them at the correct speed, but any audio files that were recorded or imported at rates different from the current JACK server sample rate (%1 Hz) will probably sound awful.</p><p>Please see the audio file manager dialog for more details, and consider resampling any files that are at the wrong rate.</p>").arg(sr),
+                KMessageBox::information(0, i18n("<h3>Inconsistent audio sample rates</h3><p>This composition contains audio files at more than one sample rate.</p><p>Rosegarden will play them at the correct speed, but any audio files that were recorded or imported at rates different from the current JACK server sample rate (%1 Hz) will probably sound awful.</p><p>Please see the audio file manager dialog for more details, and consider resampling any files that are at the wrong rate.</p>", sr),
                                          i18n("Inconsistent sample rates"),
                                          "file-load-inconsistent-samplerates");
                     
@@ -1699,7 +1699,7 @@ RosegardenGUIDoc::xmlParse(QString fileContents, QString &errMsg,
                     QString type, soName, label;
                     PluginIdentifier::parseIdentifier(ident, type, soName, label);
                     QString pluginFileName = QFileInfo(soName).fileName();
-                    msg += i18n("<li>%1 (from %2)</li>").arg(label).arg(pluginFileName);
+                    msg += i18n("<li>%1 (from %2)</li>", label, pluginFileName);
                 }
                 msg += "</ul>";
                 

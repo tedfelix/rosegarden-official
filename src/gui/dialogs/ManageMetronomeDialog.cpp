@@ -105,9 +105,9 @@ ManageMetronomeDialog::ManageMetronomeDialog(QDialogButtonBox::QWidget *parent,
         QString connection = strtoqstr(dev->getConnection());
 
         if (hasConnection && connection != "") {
-            label = i18n("%1 - %2").arg(label).arg(connection);
+            label = i18n("%1 - %2", label, connection);
         } else if (!hasConnection) {
-            label = i18n("%1 - No connection").arg(label);
+            label = i18n("%1 - No connection", label);
         }
         m_metronomeDevice->addItem(label);
         if (dev->getId() == deviceId) {
@@ -298,7 +298,7 @@ ManageMetronomeDialog::populate(int deviceIndex)
             }
 
             if (pname != "") {
-                text = i18n("%1 (%2)").arg(iname).arg(pname);
+                text = i18n("%1 (%2)", iname, pname);
             } else {
                 text = iname;
             }

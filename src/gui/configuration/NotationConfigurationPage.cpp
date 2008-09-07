@@ -133,7 +133,7 @@ NotationConfigurationPage::NotationConfigurationPage(QSettings cfg,
 
         QString text = QString("%1 %").arg(*i);
         if (*i == 40)
-            text = i18n("%1 % (normal)").arg(*i);
+            text = i18n("%1 % (normal)", *i);
         else if (*i == 0)
             text = i18n("None");
         else if (*i == 100)
@@ -661,10 +661,10 @@ NotationConfigurationPage::slotFontComboChanged(int index)
         m_fontMappedByLabel->setText(i18n(strtoqstr(map.getMappedBy())));
         if (map.isSmooth()) {
             m_fontTypeLabel->setText(
-                i18n("%1 (smooth)").arg(i18n(strtoqstr(map.getType()))));
+                i18n("%1 (smooth)", i18n(strtoqstr(map.getType()))));
         } else {
             m_fontTypeLabel->setText(
-                i18n("%1 (jaggy)").arg(i18n(strtoqstr(map.getType()))));
+                i18n("%1 (jaggy)", i18n(strtoqstr(map.getType()))));
         }
         if (m_viewButton) {
             m_viewButton->setEnabled(map.getSystemFontNames().count() > 0);
