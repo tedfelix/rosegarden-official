@@ -19,7 +19,9 @@
 #ifndef _RG_ROSEGARDENPROGRESSBAR_H_
 #define _RG_ROSEGARDENPROGRESSBAR_H_
 
-#include <kprogress.h>
+#include <QProgressBar>
+#include <QProgressDialog>
+
 
 
 class QWidget;
@@ -30,7 +32,7 @@ namespace Rosegarden
 
 
 
-class ProgressBar : public KProgress
+class ProgressBar : public QProgressBar
 {
     Q_OBJECT
 

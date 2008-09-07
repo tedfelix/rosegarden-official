@@ -16,9 +16,11 @@
 */
 
 
-#include "ProgressBar.h"
+// #include "ProgressBar.h"
 
-#include <kprogress.h>
+#include <QProgressBar>
+#include <QProgressDialog>
+
 #include <QWidget>
 
 
@@ -30,7 +32,7 @@ ProgressBar::ProgressBar(int totalSteps,
                          QWidget *creator,
                          const char *name,
                          WFlags f) :
-        KProgress(totalSteps, creator, name, f)
+        QProgressBar(totalSteps, creator, name, f)
 {}
 
 }

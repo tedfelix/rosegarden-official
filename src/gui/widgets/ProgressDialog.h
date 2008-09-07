@@ -19,10 +19,12 @@
 #ifndef _RG_ROSEGARDENPROGRESSDIALOG_H_
 #define _RG_ROSEGARDENPROGRESSDIALOG_H_
 
-#define private protected // fugly
-#include <kprogress.h>
-#undef private
+
 #include <QDateTime>
+
+#include <QProgressBar>
+#include <QProgressDialog>
+
 
 class QWidget;
 class QString;
@@ -34,7 +36,7 @@ namespace Rosegarden
 
 
 
-class ProgressDialog : public KProgressDialog
+class ProgressDialog : public QProgressDialog
 {
     Q_OBJECT
 public:

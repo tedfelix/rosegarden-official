@@ -37,7 +37,7 @@ bool ProgressDialog::m_modalVisible = false;
 ProgressDialog::ProgressDialog(QWidget *creator,
                                const char *name,
                                bool modal):
-        KProgressDialog(creator, name,
+        QProgressDialog(creator, name,
                         i18n("Processing..."), QString::null, modal),
         m_wasVisible(false),
         m_frozen(false),
@@ -64,7 +64,7 @@ ProgressDialog::ProgressDialog(
     QWidget *creator,
     const char *name,
     bool modal) :
-        KProgressDialog(creator,
+        QProgressDialog(creator,
                         name,
                         i18n("Processing..."),
                         labelText,
@@ -97,7 +97,7 @@ ProgressDialog::~ProgressDialog()
 void
 ProgressDialog::polish()
 {
-    KProgressDialog::polish();
+    QProgressDialog::polish();
 
     if (allowCancel())
         setCursor(Qt::ArrowCursor);
@@ -110,7 +110,7 @@ void ProgressDialog::hideEvent(QHideEvent* e)
     if (!allowCancel())
         QApplication::restoreOverrideCursor();
 
-    KProgressDialog::hideEvent(e);
+    QProgressDialog::hideEvent(e);
     m_modalVisible = false;
 }
 
@@ -131,7 +131,7 @@ ProgressDialog::slotSetOperationName(QString name)
 void ProgressDialog::slotCancel()
 {
     RG_DEBUG << "ProgressDialog::slotCancel()\n";
-    KProgressDialog::slotCancel();
+    QProgressDialog::slotCancel();
     slotFreeze();
 }
 
