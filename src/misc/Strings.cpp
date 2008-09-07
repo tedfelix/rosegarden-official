@@ -48,7 +48,7 @@ double strtodouble(const std::string &s)
 {
     int dp = 0;
     int sign = 1;
-    int i = 0;
+    unsigned int i = 0;
     double result = 0.0;
     size_t len = s.length();
 
@@ -98,8 +98,8 @@ bool qStrToBool(const QString &s)
 {
 	QString tt = s.toLower();
 	tt = tt.trimmed();
-	if ( (tt == 'yes') || (tt == 'true') || (tt == 'on') || (tt == '1') ){
-		return true;
+	if ( (tt == "yes") || (tt == "true") || (tt == "on") || (tt == "1") ){
+            return true;
 	}
 	return false;
 }
