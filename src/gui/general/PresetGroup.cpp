@@ -95,8 +95,8 @@ PresetGroup::PresetGroup() :
 
     QXmlInputSource source(presetFile);
     QXmlSimpleReader reader;
-    reader.setContentHandler(this));
-    reader.setErrorHandler(this));
+    reader.setContentHandler(this);
+    reader.setErrorHandler(this);
     bool ok = reader.parse(source);
     presetFile.close();
 
