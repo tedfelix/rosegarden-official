@@ -35,7 +35,7 @@ namespace Rosegarden
 PitchChooser::PitchChooser(QString title,
                            QWidget *parent,
                            int defaultPitch) :
-        QGroupBox(1, Horizontal, title, parent),
+        QGroupBox(title, parent), //@@@ 
         m_defaultPitch(defaultPitch)
 {
     m_pitchDragLabel = new PitchDragLabel(this, defaultPitch);
