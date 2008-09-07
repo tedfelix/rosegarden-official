@@ -34,6 +34,7 @@
 #include <QMutex>
 
 #include "misc/Debug.h"
+#include "misc/Strings.h"
 #include "MmappedControlBlock.h"
 #include "MmappedSegment.h"
 #include "sound/ControlBlock.h"
