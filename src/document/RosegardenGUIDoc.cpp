@@ -130,8 +130,9 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
 {
     syncDevices();
 
-    m_viewList.setAutoDelete(false);
-    m_editViewList.setAutoDelete(false);
+// FIX-qt4-removed: 
+//    m_viewList.setAutoDelete(false);
+//    m_editViewList.setAutoDelete(false);
 
     connect(m_commandHistory, SIGNAL(commandExecuted(Command *)),
             this, SLOT(slotDocumentModified()));
@@ -165,14 +166,15 @@ RosegardenGUIDoc::~RosegardenGUIDoc()
 unsigned int
 RosegardenGUIDoc::getAutoSavePeriod() const
 {
-    QSettings config;
-    config.beginGroup( GeneralOptionsConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( GeneralOptionsConfigGroup );
-    //  
-
-    return config->readUnsignedNumEntry("autosaveinterval", 60);
+	QSettings config;
+	config.beginGroup( GeneralOptionsConfigGroup );
+	
+	
+	unsigned int ret;
+	ret = config.value("autosaveinterval", 60).toUInt();
+	
+	config.endGroup();		// corresponding to: config.beginGroup( GeneralOptionsConfigGroup );
+	return ret;
 }
 
 void RosegardenGUIDoc::attachView(RosegardenGUIView *view)
@@ -567,7 +569,7 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
     RG_DEBUG << "RosegardenGUIDoc::openDocument("
     << filename << ")" << endl;
 
-    if (!filename || filename.isEmpty())
+    if ( filename.isEmpty() )
         return false;
 
     newDocument();
@@ -583,15 +585,15 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
         return false;
     }
 
-    ProgressDialog value()Dlg(i18n("Reading file..."),
+    ProgressDialog progressDlg(i18n("Reading file..."),
                                100,
                                (QWidget*)parent());
 
-    connect(&value()Dlg, SIGNAL(cancelClicked()),
+    connect(&progressDlg, SIGNAL(cancelClicked()),
             &m_audioFileManager, SLOT(slotStopPreview()));
 
-    value()Dlg.setMinimumDuration(500);
-    value()Dlg.setAutoReset(true); // we're re-using it for the preview generation
+    progressDlg.setMinimumDuration(500);
+    progressDlg.setAutoReset(true); // we're re-using it for the preview generation
     setAbsFilePath(fileInfo.absFilePath());
 
     QString errMsg;
@@ -629,9 +631,9 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
                                baseBuffer.size());
 
         // parse xml file
-        okay = xmlParse(fileContents, errMsg, &value()Dlg,
+        okay = xmlParse(fileContents, errMsg, &progressDlg,
                         elementCount, permanent, cancelled);
-        // 	okay = xmlParse(fileCompressedDevice, errMsg, &value()Dlg,
+        // 	okay = xmlParse(fileCompressedDevice, errMsg, &progressDlg,
         //                         elementCount, permanent, cancelled);
         delete fileCompressedDevice;
 
@@ -687,11 +689,16 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
 
     // We might need a value() dialog when we generate previews,
     // reuse the previous one
-    value()Dlg.setLabel(i18n("Generating audio previews..."));
+    progressDlg.setLabelText(i18n("Generating audio previews..."));
 
-    connect(&m_audioFileManager, SIGNAL(setValue(int)),
-            value()Dlg.progressBar(), SLOT(setValue(int)));
-    try {
+	// old qt3:
+	//connect(&m_audioFileManager, SIGNAL(setValue(int)),
+	//		 progressDlg.progressBar(), SLOT(setValue(int)));
+	// new qt4:
+	connect(&m_audioFileManager, SIGNAL(setValue(int)),
+			 progressDlg, SLOT(setValue(int)));
+	
+	try {
         // generate any audio previews after loading the files
         m_audioFileManager.generatePreviews();
     } catch (Exception e) {
@@ -1221,18 +1228,18 @@ bool RosegardenGUIDoc::saveDocumentActual(const QString& filename,
     << "\" format-version-point=\"" << FILE_FORMAT_VERSION_POINT
     << "\">\n";
 
-    ProgressDialog *value()Dlg = 0;
+    ProgressDialog *progressDlg = 0;
     QProgressBar *value() = 0;
 
     if (!autosave) {
 
-        value()Dlg = new ProgressDialog(i18n("Saving file..."),
+        progressDlg = new ProgressDialog(i18n("Saving file..."),
                                          100,
                                          (QWidget*)parent());
-        value() = value()Dlg->progressBar();
+        value() = progressDlg->progressBar();
 
-        value()Dlg->setMinimumDuration(500);
-        value()Dlg->setAutoReset(true);
+        progressDlg->setMinimumDuration(500);
+        progressDlg->setAutoReset(true);
 
     } else {
 
@@ -1334,7 +1341,7 @@ bool RosegardenGUIDoc::saveDocumentActual(const QString& filename,
         emit documentModified(false);
         setModified(false);
         m_commandHistory->documentSaved();
-        delete value()Dlg;
+        delete progressDlg;
     } else {
         value()->setValue(0);
     }
@@ -2719,17 +2726,17 @@ RosegardenGUIDoc::finalizeAudioFile(InstrumentId iid)
 
     // Create a value() dialog
     //
-    ProgressDialog *value()Dlg = new ProgressDialog
+    ProgressDialog *progressDlg = new ProgressDialog
                                   (i18n("Generating audio preview..."), 100, (QWidget*)parent());
-    value()Dlg->setAutoClose(false);
-    value()Dlg->setAutoReset(false);
-    value()Dlg->show();
+    progressDlg->setAutoClose(false);
+    progressDlg->setAutoReset(false);
+    progressDlg->show();
 
-    connect(value()Dlg, SIGNAL(cancelClicked()),
+    connect(progressDlg, SIGNAL(cancelClicked()),
             &m_audioFileManager, SLOT(slotStopPreview()));
 
     connect(&m_audioFileManager, SIGNAL(setValue(int)),
-            value()Dlg->progressBar(), SLOT(setValue(int)));
+            progressDlg->progressBar(), SLOT(setValue(int)));
 
     try {
         m_audioFileManager.generatePreview(newAudioFile->getId());
@@ -2742,7 +2749,7 @@ RosegardenGUIDoc::finalizeAudioFile(InstrumentId iid)
         CurrentProgressDialog::thaw();
     }
 
-    delete value()Dlg;
+    delete progressDlg;
 
     if (!recordSegment->getComposition()) {
         getComposition().addSegment(recordSegment);
