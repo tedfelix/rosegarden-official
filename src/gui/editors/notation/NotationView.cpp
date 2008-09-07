@@ -160,7 +160,8 @@
 #include <kmessagebox.h>
 #include <kprinter.h>
 #include <QProcess>
-#include <kprogress.h>
+#include <QProgressBar>
+#include <QProgressDialog>
 #include <kstatusbar.h>
 #include <kstandardaction.h>
 #include <ktempfile.h>
@@ -3795,7 +3796,7 @@ void NotationView::initActionDataMaps()
     }
 }
 
-void NotationView::setupProgress(KProgress* bar)
+void NotationView::setupProgress(QProgressBar* bar)
 {
     if (bar) {
         NOTATION_DEBUG << "NotationView::setupProgress(bar)\n";

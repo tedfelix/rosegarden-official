@@ -38,6 +38,8 @@
 #include "base/Event.h"
 #include "gui/general/ClefIndex.h"
 
+#include <QProgressBar>
+#include <QProgressDialog>
 
 class QWidget;
 class QTimer;
@@ -48,7 +50,7 @@ class QLabel;
 class QCursor;
 class Q3CanvasItem;
 class Q3Canvas;
-class KProgress;
+//class QProgressBar;
 class QComboBox;
 class KActionMenu;
 class KAction;
@@ -942,7 +944,7 @@ protected:
 
     void removeViewLocalProperties(Event*);
 
-    void setupProgress(KProgress*);
+    void setupProgress(QProgressBar*);
     void setupProgress(ProgressDialog*);
     void setupDefaultProgress();
     void disconnectProgress();
