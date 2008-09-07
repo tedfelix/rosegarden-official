@@ -1967,8 +1967,6 @@ void RosegardenGUIApp::slotSaveOptions()
 
 void RosegardenGUIApp::setupFileDialogSpeedbar()
 {
-    QSettings config ; // was: confq4
-
     QSettings config;
 
     config.beginGroup( "KFileDialog Speedbar" );
@@ -4818,7 +4816,6 @@ bool RosegardenGUIApp::launchSequencer()
 #ifdef HAVE_LIBJACK
 bool RosegardenGUIApp::launchJack()
 {
-    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( SequencerOptionsConfigGroup );
     // 
@@ -5451,7 +5448,6 @@ void RosegardenGUIApp::slotPlay()
 
     // Send the controllers at start of playback if required
     //
-    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( SequencerOptionsConfigGroup );
     // 
@@ -7938,7 +7934,6 @@ RosegardenGUIApp::slotAutoSave()
         m_seqManager->getTransportStatus() == RECORDING)
         return ;
 
-    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( GeneralOptionsConfigGroup );
     // 

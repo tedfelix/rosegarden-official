@@ -163,7 +163,6 @@ RosegardenGUIDoc::~RosegardenGUIDoc()
 unsigned int
 RosegardenGUIDoc::getAutoSavePeriod() const
 {
-    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( GeneralOptionsConfigGroup );
     // 
@@ -1102,7 +1101,6 @@ void RosegardenGUIDoc::initialiseStudio()
     // Now commit all the remaining changes
     StudioControl::setStudioObjectProperties(ids, properties, values);
 
-    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( SequencerOptionsConfigGroup );
     // 
@@ -1967,7 +1965,6 @@ RosegardenGUIDoc::insertRecordedMidi(const MappedComposition &mC)
 
         if (haveNotes) {
 
-            QSettings config ; // was: confq4
             QSettings config;
             config.beginGroup( GeneralOptionsConfigGroup );
             // 

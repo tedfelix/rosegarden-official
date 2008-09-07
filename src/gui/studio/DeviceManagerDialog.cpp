@@ -280,8 +280,7 @@ DeviceManagerDialog::populate()
 {
     DeviceList *devices = m_studio->getDevices();
 
-    //QSettings config ; // was: confq4
-    QSettings //config;
+    //QSettings //config;
     //config.beginGroup( SequencerOptionsConfigGroup );
     // 
     // FIX-manually-(GW), add:

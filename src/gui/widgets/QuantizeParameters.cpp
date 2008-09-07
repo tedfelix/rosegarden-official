@@ -217,7 +217,6 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     int defaultIterate = 100;
 
     if (!m_configCategory.isEmpty()) {
-        QSettings config ; // was: confq4
         QSettings config;
         config.beginGroup( m_configCategory );
         // 
@@ -413,7 +412,6 @@ QuantizeParameters::getQuantizer() const
     }
 
     if (!m_configCategory.isEmpty()) {
-        QSettings config ; // was: confq4
         QSettings config;
         config.beginGroup( m_configCategory );
         // 

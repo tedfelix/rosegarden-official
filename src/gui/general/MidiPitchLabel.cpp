@@ -43,7 +43,6 @@ MidiPitchLabel::MidiPitchLabel(int pitch)
 
     } else {
 
-        QSettings config ; // was: confq4
         QSettings config;
         config.beginGroup( GeneralOptionsConfigGroup );
         // 

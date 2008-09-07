@@ -50,7 +50,6 @@ NoteFontFactory::getFontNames(bool forceRescan)
     if (!m_fontNames.empty())
         return m_fontNames;
 
-    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( NotationViewConfigGroup );
     // 

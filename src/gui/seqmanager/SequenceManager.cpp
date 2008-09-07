@@ -308,7 +308,6 @@ SequenceManager::play()
     if (comp.isLooping())
         startPos = comp.getElapsedRealTime(comp.getLoopStart());
 
-    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( SequencerOptionsConfigGroup );
     // 
@@ -549,7 +548,6 @@ SequenceManager::record(bool toggled)
 
     Composition &comp = m_doc->getComposition();
     Studio &studio = m_doc->getStudio();
-    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( GeneralOptionsConfigGroup );
     // 
@@ -945,8 +943,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                 //
                 m_doc->syncDevices();
 
-                /*QSettings config ; // was: confq4
-                  		QSettings config;
+                /*QSettings config;
                   		config.beginGroup( SequencerOptionsConfigGroup );
                   		// 
                   		// FIX-manually-(GW), add:
@@ -1208,8 +1205,7 @@ SequenceManager::setLoop(const timeT &lhs, const timeT &rhs)
     // do not set a loop if JACK transport sync is enabled, because this is
     // completely broken, and apparently broken due to a limitation of JACK
     // transport itself.  #1240039 - DMM
-    //    QSettings config ; // was: confq4
-    QSettings //    config;
+    //    QSettings //    config;
     //    config.beginGroup( SequencerOptionsConfigGroup );
     // 
     // FIX-manually-(GW), add:
@@ -1448,7 +1444,6 @@ SequenceManager::sendMIDIRecordingDevice(const QString recordDeviceStr)
 void
 SequenceManager::restoreRecordSubscriptions()
 {
-    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( SequencerOptionsConfigGroup );
     // 
@@ -1469,7 +1464,6 @@ SequenceManager::restoreRecordSubscriptions()
 void
 SequenceManager::reinitialiseSequencerStudio()
 {
-    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( SequencerOptionsConfigGroup );
     // 
@@ -1951,7 +1945,6 @@ void SequenceManager::tempoChanged(const Composition *c)
 void
 SequenceManager::sendTransportControlStatuses()
 {
-    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( SequencerOptionsConfigGroup );
     // 

@@ -127,7 +127,6 @@ EventQuantizeCommand::modifySegment()
 
     if (!m_configGroup.isEmpty()) {
         //!!! need way to decide whether to do these even if no config group (i.e. through args to the command)
-        QSettings config ; // was: confq4
         QSettings config;
         config.beginGroup( m_configGroup );
         // 
@@ -203,7 +202,6 @@ EventQuantizeCommand::makeQuantizer(QString configGroup,
     //!!! Excessive duplication with
     // QuantizeParameters::getQuantizer in widgets.cpp
 
-    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( configGroup );
     // 

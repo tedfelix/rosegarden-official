@@ -490,8 +490,6 @@ int main(int argc, char *argv[])
         testInstalledVersion();
     }
 
-    QSettings config ; // was: confq4
-
     QSettings config;
 
     config.beginGroup( GeneralOptionsConfigGroup );

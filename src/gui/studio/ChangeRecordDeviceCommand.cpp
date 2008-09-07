@@ -29,7 +29,6 @@ void
 ChangeRecordDeviceCommand::swap()
  {
 
-        QSettings config ; // was: confq4
         QSettings config;
         config.beginGroup( Rosegarden::SequencerOptionsConfigGroup );
         // 

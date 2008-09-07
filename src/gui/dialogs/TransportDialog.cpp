@@ -263,7 +263,6 @@ TransportDialog::TransportDialog(QWidget *parent,
 TransportDialog::~TransportDialog()
 {
     if (isVisible()) {
-        QSettings config ; // was: rgapp->config()
         QSettings config;
         config.beginGroup( GeneralOptionsConfigGroup );
         // 
@@ -308,7 +307,6 @@ TransportDialog::initModeMap()
 void
 TransportDialog::show()
 {
-    QSettings config ; // was: rgapp->config()
     QSettings config;
     config.beginGroup( GeneralOptionsConfigGroup );
     // 
@@ -336,7 +334,6 @@ void
 TransportDialog::hide()
 {
     if (isVisible()) {
-        QSettings config ; // was: rgapp->config()
         QSettings config;
         config.beginGroup( GeneralOptionsConfigGroup );
         // 
@@ -1034,8 +1031,7 @@ void
 TransportDialog::slotLoopButtonClicked()
 {
     // disable if JACK transport has been set #1240039 - DMM
-    //    QSettings config ; // was: rgapp->config()
-    QSettings //    config;
+    //    QSettings //    config;
     //    config.beginGroup( SequencerOptionsConfigGroup );
     // 
     // FIX-manually-(GW), add:

@@ -30,7 +30,6 @@ namespace Rosegarden
 
 QColor GUIPalette::getColour(const char* const colourName)
 {
-    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( ColoursConfigGroup );
     // 

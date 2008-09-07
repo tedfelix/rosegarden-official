@@ -26,7 +26,6 @@ appendLabel(const std::string &label, const std::string &suffix)
 {
     using std::string;
 
-    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( GeneralOptionsConfigGroup );
     // 

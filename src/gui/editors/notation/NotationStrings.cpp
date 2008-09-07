@@ -253,7 +253,6 @@ NotationStrings::makeNoteMenuLabel(timeT duration,
         }
     }
 
-    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( GeneralOptionsConfigGroup );
     // 

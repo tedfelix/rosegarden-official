@@ -600,7 +600,6 @@ TrackParameterBox::updateHighLow()
     Pitch highest(m_highestPlayable, accidental);
     Pitch lowest(m_lowestPlayable, accidental);
 
-    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( GeneralOptionsConfigGroup );
     // 

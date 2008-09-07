@@ -174,7 +174,6 @@ TimeSignatureDialog::TimeSignatureDialog(QDialogButtonBox::QWidget *parent,
     }
 
     groupBox = new QGroupBox(1, Horizontal, i18n("Options"), vbox);
-    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( GeneralOptionsConfigGroup );
     // 
@@ -214,7 +213,6 @@ TimeSignatureDialog::TimeSignatureDialog(QDialogButtonBox::QWidget *parent,
 TimeSignature
 TimeSignatureDialog::getTimeSignature() const
 {
-    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( GeneralOptionsConfigGroup );
     // 

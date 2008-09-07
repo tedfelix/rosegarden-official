@@ -64,7 +64,6 @@ NoteInserter::NoteInserter(NotationView* view)
 {
     QIcon icon;
 
-    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( NotationViewConfigGroup );
     // 

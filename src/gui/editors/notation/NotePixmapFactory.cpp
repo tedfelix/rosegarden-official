@@ -220,7 +220,6 @@ NotePixmapFactory::init(std::string fontName, int size)
     // sizes only and we want pixels
     QFont timeSigFont(defaultTimeSigFontFamily),
         textFont(defaultSerifFontFamily);
-    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( NotationViewConfigGroup );
     // 

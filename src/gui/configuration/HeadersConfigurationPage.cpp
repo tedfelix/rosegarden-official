@@ -264,7 +264,6 @@ HeadersConfigurationPage::slotDeleteProperty()
 
 void HeadersConfigurationPage::apply()
 {
-    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( NotationViewConfigGroup );
     // 

@@ -63,7 +63,6 @@ InterpretDialog::InterpretDialog(QDialogButtonBox::QWidget *parent) :
     m_allInterpretations = new QCheckBox
                            (i18n("All available interpretations"), groupBox);
 
-    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( NotationViewConfigGroup );
     // 
@@ -107,7 +106,6 @@ InterpretDialog::slotAllBoxChanged()
 int
 InterpretDialog::getInterpretations()
 {
-    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( NotationViewConfigGroup );
     // 

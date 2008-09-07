@@ -136,7 +136,6 @@ UseOrnamentDialog::UseOrnamentDialog(QDialogButtonBox::QWidget *parent,
 void
 UseOrnamentDialog::setupFromConfig()
 {
-    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( NotationViewConfigGroup );
     // 
@@ -249,7 +248,6 @@ UseOrnamentDialog::slotMarkChanged(int i)
 void
 UseOrnamentDialog::slotOk()
 {
-    QSettings config ; // was: confq4
     QSettings config;
     config.beginGroup( NotationViewConfigGroup );
     // 
