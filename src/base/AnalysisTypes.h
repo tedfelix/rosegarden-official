@@ -204,7 +204,7 @@ protected:
         bool operator<(const ChordProgression& other) const;
         };
     typedef std::set<ChordProgression> ProgressionMap;
-    static ProgressionMap m_value()ionMap;
+    static ProgressionMap m_progressionMap;
 
     /// For use by guessHarmonies (refineHarmonyGuessList)
     void checkProgressionMap();

@@ -504,13 +504,13 @@ AnalysisHelper::refineHarmonyGuessList(CompositionTimeSliceAdapter &/* c */,
                 //      also, does this code belong here?
 
                 ProgressionMap::iterator pmi =
-                    m_value()ionMap.lower_bound(
+                    m_progressionMap.lower_bound(
                         ChordProgression(k->second, l->second)
                     );
 
                 // no initialization
                 for ( ;
-                     pmi != m_value()ionMap.end()
+                     pmi != m_progressionMap.end()
                      && pmi->first == k->second
                      && pmi->second == l->second;
                      ++pmi)
@@ -636,12 +636,12 @@ AnalysisHelper::checkHarmonyTable()
 
 }
 
-AnalysisHelper::ProgressionMap AnalysisHelper::m_value()ionMap;
+AnalysisHelper::ProgressionMap AnalysisHelper::m_progressionMap;
 
 void
 AnalysisHelper::checkProgressionMap()
 {
-    if (!m_value()ionMap.empty()) return;
+    if (!m_progressionMap.empty()) return;
     // majorProgressionFirsts[0] = 5, majorProgressionSeconds[0]=1, so 5->1 is
     // a valid value()ion. Note that the chord numbers are 1-based, like the
     // Roman numeral symbols
@@ -705,7 +705,7 @@ AnalysisHelper::addProgressionToMap(Key k,
             (majorScalePitches[secondChordNumber] + offset) % 12
         );
         ChordProgression p(firstChord, secondChord, k);
-        m_value()ionMap.insert(p);
+        m_progressionMap.insert(p);
     }
     // else handle minor-key chords
 
