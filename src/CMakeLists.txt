@@ -7,7 +7,7 @@ IF(USE_PCH)
 ENDIF(USE_PCH)
 
 LINK_DIRECTORIES(
-    ${KDE3_LIB_DIR} 
+    ${KDE4_LIB_DIR} 
     ${ALSA_LIB_DIR}
     ${JACK_LIB_DIR}
     ${XFT_LIB_DIR}
@@ -19,7 +19,7 @@ LINK_DIRECTORIES(
 
 INCLUDE_DIRECTORIES(AFTER
     ${QT_INCLUDE_DIR} 
-    ${KDE3_INCLUDE_DIR} 
+    ${KDE4_INCLUDE_DIR} 
     ${ALSA_INC_DIR}
     ${JACK_INC_DIR}
     ${XFT_INC_DIR}
@@ -41,7 +41,7 @@ INCLUDE(MiscFileList.txt)
 # Sound sources
 INCLUDE(SoundFileList.txt)
 
-KDE3_AUTOMOC(${common_sound_SRCS})
+QT4_AUTOMOC(${common_sound_SRCS})
 
 ADD_LIBRARY(RosegardenCommon STATIC
     ${base_SRCS}
@@ -65,14 +65,14 @@ ENDIF(WANT_SOUND)
 # gui executable
 INCLUDE(GUIFileList.txt)
 
-KDE3_ADD_DCOP_SKELS(gui_SRCS ${gui_dcop_SRCS})
-KDE3_ADD_DCOP_STUBS(gui_SRCS ${gui_dcop_SRCS}) 
-KDE3_ADD_UI_FILES(gui_SRCS ${ui_SRCS})
-KDE3_AUTOMOC(${gui_SRCS})
-KDE3_AUTOMOC(${segmentcanvas_SRCS})
-KDE3_AUTOMOC(${commands_SRCS})
-KDE3_AUTOMOC(${document_SRCS})
-KDE3_AUTOMOC(${sequencer_SRCS})
+#KDE4_ADD_DCOP_SKELS(gui_SRCS ${gui_dcop_SRCS})
+#KDE4_ADD_DCOP_STUBS(gui_SRCS ${gui_dcop_SRCS}) 
+KDE4_ADD_UI_FILES(gui_SRCS ${ui_SRCS})
+QT4_AUTOMOC(${gui_SRCS})
+QT4_AUTOMOC(${segmentcanvas_SRCS})
+QT4_AUTOMOC(${commands_SRCS})
+QT4_AUTOMOC(${document_SRCS})
+QT4_AUTOMOC(${sequencer_SRCS})
 
 ADD_LIBRARY(RosegardenExtended STATIC
     ${document_SRCS}
@@ -106,7 +106,7 @@ ENDIF(USE_PCH)
 
 
 
-KDE3_ADD_EXECUTABLE(rosegarden 
+KDE4_ADD_EXECUTABLE(rosegarden 
     #${commands_SRCS}
     #${document_SRCS}
     #${gui_SRCS}
@@ -141,19 +141,19 @@ TARGET_LINK_LIBRARIES(rosegarden
 
 # Install targets
 INSTALL(TARGETS rosegarden 
-        RUNTIME DESTINATION ${KDE3EXECDIR} )
+        RUNTIME DESTINATION ${BIN_INSTALL_DIR} )
 
 # Install helper scripts
 INSTALL(PROGRAMS
             helpers/rosegarden-lilypondview
             helpers/rosegarden-project-package
             helpers/rosegarden-audiofile-importer
-        DESTINATION ${KDE3EXECDIR} )
+        DESTINATION ${BIN_INSTALL_DIR} )
 
 # Install GUI resource files
 FILE(GLOB RC_FILES gui/ui/*.rc)
 INSTALL(FILES ${RC_FILES}
-        DESTINATION ${KDE3DATADIR}/rosegarden )
+        DESTINATION ${DATA_INSTALL_DIR}/rosegarden )
 
 IF(WANT_TEST)
     INCLUDE(TestFileList.txt)
@@ -165,7 +165,7 @@ IF(WANT_TEST)
 #        base/test/segmenttransposecommand.cpp
     )
 
-    KDE3_ADD_EXECUTABLE(RosegardenTestDriver
+    KDE4_ADD_EXECUTABLE(RosegardenTestDriver
         RosegardenTestDriver.cpp
         ${tests_SRCS}
     )
