@@ -95,8 +95,8 @@ PresetGroup::PresetGroup() :
 
     QXmlInputSource source(presetFile);
     QXmlSimpleReader reader;
-    reader.setContentHandler(this);
-    reader.setErrorHandler(this);
+    reader.setContentHandler(this));
+    reader.setErrorHandler(this));
     bool ok = reader.parse(source);
     presetFile.close();
 
@@ -113,7 +113,7 @@ PresetGroup::~PresetGroup()
 bool
 PresetGroup::startElement(const QString &, const QString &,
                           const QString &qName,
-                          const QXmlAttributes &attributes)
+                          const QXmlAttributes &attributes))
 {
     QString lcName = qName.toLower();
 
@@ -122,7 +122,7 @@ PresetGroup::startElement(const QString &, const QString &,
     if (lcName == "category") {
 
         QString s = attributes.value("name");
-        if (s) {
+        if (!isEmpty(s)) {
             m_elCategoryName = s;
             // increment the current category number
             m_lastCategory = m_currentCategory;
@@ -144,7 +144,7 @@ PresetGroup::startElement(const QString &, const QString &,
     } else if (lcName == "instrument") {
 
         QString s = attributes.value("name");
-        if (s) {
+        if (!isEmpty(s)) {
             m_elInstrumentName = s;
             m_name = true;
 
@@ -155,13 +155,13 @@ PresetGroup::startElement(const QString &, const QString &,
 
     } else if (lcName == "clef") {
         QString s = attributes.value("type");
-        if (s) {
-        	m_elClef = clefNameToClefIndex(s);
+        if (!isEmpty(s)) {
+        	m_elClef = clefNameToClefIndex(s));
             m_clef = true;
         }
     } else if (lcName == "transpose") {
         QString s = attributes.value("value");
-        if (s) {
+        if (!isEmpty(s)) {
             m_elTranspose = s.toInt();
             m_transpose = true;
         }
@@ -171,7 +171,7 @@ PresetGroup::startElement(const QString &, const QString &,
 
         if (s == "amateur") {
             s = attributes.value("low");
-            if (s) {
+            if (!isEmpty(s)) {
                 m_elLowAm = s.toInt();
                 m_amateur = true;
             }
@@ -185,7 +185,7 @@ PresetGroup::startElement(const QString &, const QString &,
 
         } else if (s == "professional") {
             s = attributes.value("low");
-            if (s) {
+            if (!isEmpty(s)) {
                 m_pro = true;
                 m_elLowPro = s.toInt();
             }
@@ -200,13 +200,6 @@ PresetGroup::startElement(const QString &, const QString &,
             return false;
         }
     }
-
-    //    RG_DEBUG << "PresetGroup::startElement(): accumulating flags:" << endl
-    //	     << "     name: " << (m_name ? "true" : "false") << endl
-    //             << "     clef: " << (m_clef ? "true" : "false") << endl
-    //	     << "transpose: " << (m_transpose ? "true" : "false") << endl
-    //	     << "  am. rng: " << (m_amateur ? "true" : "false") << endl
-    //	     << "  pro rng: " << (m_pro ? "true" : "false") << endl;
 
     // once we have assembled all the bits, create a new PresetElement
     if (m_name && m_clef && m_transpose && m_amateur && m_pro) {
