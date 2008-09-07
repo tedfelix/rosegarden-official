@@ -122,10 +122,11 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QDialogButtonBox::QWidget *parent,
 
     m_lilyLanguage = new QComboBox(frameBasic);
     // See also setDefaultLilyPondVersion below
-    m_lilyLanguage->addItem(LITERAL_i18n("LilyPond %1", "2.6"));
-    m_lilyLanguage->addItem(LITERAL_i18n("LilyPond %1", "2.8"));
-    m_lilyLanguage->addItem(LITERAL_i18n("LilyPond %1", "2.10"));
-    m_lilyLanguage->addItem(LITERAL_i18n("LilyPond %1", "2.12"));
+
+    m_lilyLanguage->addItem(i18n("LilyPond %1", i18n("2.6")));
+    m_lilyLanguage->addItem(i18n("LilyPond %1", i18n("2.8")));
+    m_lilyLanguage->addItem(i18n("LilyPond %1", i18n("2.10")));
+    m_lilyLanguage->addItem(i18n("LilyPond %1", i18n("2.12")));
     m_lilyLanguage->setCurrentIndex( config.value("lilylanguage", 0).toUInt() );
     layoutBasic->addWidget(m_lilyLanguage, 0, 1);
 
