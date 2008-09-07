@@ -19,7 +19,7 @@
 #define _RG_AUDIOLISTITEM_H_
 
 #include <sound/AudioFile.h>
-#include <klistview.h>
+#include <QListView>
 
 namespace Rosegarden
 {
@@ -28,30 +28,30 @@ class Segment;
 
 // Add an Id to a QListViewItem
 //
-class AudioListItem : public KListViewItem
+class AudioListItem : public QListViewItem
 {
 
 public:
 
-    AudioListItem(KListView *parent):KListViewItem(parent),
+    AudioListItem(QListView *parent):QListViewItem(parent),
                                      m_segment(0) {;}
 
-    AudioListItem(KListViewItem *parent):KListViewItem(parent),
+    AudioListItem(QListViewItem *parent):QListViewItem(parent),
                                          m_segment(0) {;}
 
-    AudioListItem(KListView *parent,
+    AudioListItem(QListView *parent,
                   QString label,
                   AudioFileId id):
-                      KListViewItem(parent,
+                      QListViewItem(parent,
                                     label,
                                     "", "", "", "", "", "", ""),
                                     m_id(id),
                                     m_segment(0) {;}
 
-    AudioListItem(KListViewItem *parent, 
+    AudioListItem(QListViewItem *parent, 
                   QString label,
                   AudioFileId id):
-                      KListViewItem(parent,
+                      QListViewItem(parent,
                                     label,
                                     "", "", "", "", "", "", ""),
                                     m_id(id),

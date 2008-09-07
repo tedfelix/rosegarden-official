@@ -25,7 +25,7 @@ MarkerEditorViewItem::compare(QListViewItem * i, int col, bool ascending) const
     MarkerEditorViewItem *ei = 
         dynamic_cast<MarkerEditorViewItem *>(i);
 
-    if (!ei) return KListViewItem::compare(i, col, ascending);
+    if (!ei) return QListViewItem::compare(i, col, ascending);
 
     // Raw time sorting on time column
     //
@@ -36,7 +36,7 @@ MarkerEditorViewItem::compare(QListViewItem * i, int col, bool ascending) const
         else return 0;
 
     } else {
-        return KListViewItem::compare(i, col, ascending);
+        return QListViewItem::compare(i, col, ascending);
     }
 }
 

@@ -19,14 +19,14 @@
 
 namespace Rosegarden {
 
-PlayListViewItem::PlayListViewItem(KListView* parent, KURL kurl)
-    : KListViewItem(parent, kurl.fileName(), kurl.prettyURL()),
+PlayListViewItem::PlayListViewItem(QListView* parent, KURL kurl)
+    : QListViewItem(parent, kurl.fileName(), kurl.prettyURL()),
       m_kurl(kurl)
 {
 }
 
-PlayListViewItem::PlayListViewItem(KListView* parent, QListViewItem* after, KURL kurl)
-    : KListViewItem(parent, after, kurl.fileName(), kurl.prettyURL()),
+PlayListViewItem::PlayListViewItem(QListView* parent, QListViewItem* after, KURL kurl)
+    : QListViewItem(parent, after, kurl.fileName(), kurl.prettyURL()),
       m_kurl(kurl)
 {
 }

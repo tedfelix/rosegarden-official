@@ -37,7 +37,7 @@ class QListViewItem;
 class QLabel;
 class QCheckBox;
 class QGroupBox;
-class KListView;
+class QListView;
 
 
 namespace Rosegarden
@@ -167,7 +167,7 @@ protected:
     QLabel      *m_triggerPitch;
     QLabel      *m_triggerVelocity;
 
-    KListView   *m_eventList;
+    QListView   *m_eventList;
     int          m_eventFilter;
 
     static int   m_lastSetEventFilter;

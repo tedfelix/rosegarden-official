@@ -176,7 +176,7 @@
 #include <kled.h>
 #include <klineeditdlg.h>
 #include <klineedit.h>
-#include <klistview.h>
+#include <QListView>
 #include <klocale.h>
 #include <kmainwindow.h>
 #include <kmessagebox.h>

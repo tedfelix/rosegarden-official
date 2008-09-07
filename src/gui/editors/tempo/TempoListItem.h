@@ -18,7 +18,7 @@
 #ifndef _RG_TEMPOLISTITEM_H_
 #define _RG_TEMPOLISTITEM_H_
 
-#include <klistview.h>
+#include <QListView>
 
 #include "base/Event.h"
 
@@ -26,7 +26,7 @@ namespace Rosegarden {
 
 class Composition;
 
-class TempoListItem : public KListViewItem
+class TempoListItem : public QListViewItem
 {
 public:
     enum Type { TimeSignature, Tempo };
@@ -35,12 +35,12 @@ public:
 		  Type type,
 		  timeT time,
 		  int index,
-		  KListView *parent,
+		  QListView *parent,
 		  QString label1,
 		  QString label2,
 		  QString label3,
 		  QString label4 = QString::null) :
-	KListViewItem(parent, label1, label2, label3, label4),
+	QListViewItem(parent, label1, label2, label3, label4),
 	m_composition(composition),
 	m_type(type),
 	m_time(time),

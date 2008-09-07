@@ -34,7 +34,7 @@ class QListViewItem;
 class QCloseEvent;
 class QCheckBox;
 class QGroupBox;
-class KListView;
+class QListView;
 
 
 namespace Rosegarden
@@ -144,7 +144,7 @@ protected:
     virtual void closeEvent(QCloseEvent *);
 
     //--------------- Data members ---------------------------------
-    KListView   *m_list;
+    QListView   *m_list;
     int          m_filter;
 
     static int   m_lastSetFilter;

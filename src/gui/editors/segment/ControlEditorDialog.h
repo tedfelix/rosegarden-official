@@ -28,7 +28,7 @@ class QWidget;
 class QPushButton;
 class QListViewItem;
 class QCloseEvent;
-class KListView;
+class QListView;
 class Command;
 
 
@@ -101,7 +101,7 @@ protected:
     QPushButton             *m_addButton;
     QPushButton             *m_deleteButton;
 
-    KListView               *m_listView;
+    QListView               *m_listView;
 
     bool                     m_modified;
 

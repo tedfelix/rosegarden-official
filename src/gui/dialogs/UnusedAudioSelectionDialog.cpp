@@ -21,7 +21,7 @@
 #include <klocale.h>
 #include <QDialog>
 #include <QDialogButtonBox>
-#include <klistview.h>
+#include <QListView>
 #include <QFileInfo>
 #include <QLabel>
 #include <QListView>
@@ -50,7 +50,7 @@ UnusedAudioSelectionDialog::UnusedAudioSelectionDialog(QDialogButtonBox::QWidget
 
     new QLabel(introductoryText, vbox);
 
-    m_listView = new KListView( vbox );
+    m_listView = new QListView( vbox );
     vboxLayout->addWidget(m_listView);
     vbox->setLayout(vboxLayout);
 
@@ -67,7 +67,7 @@ UnusedAudioSelectionDialog::UnusedAudioSelectionDialog(QDialogButtonBox::QWidget
             fileSize = QString(" %1 ").arg(info.size());
             fileDate = QString(" %1 ").arg(info.lastModified().toString());
         }
-        QListViewItem *item = new KListViewItem
+        QListViewItem *item = new QListViewItem
                               (m_listView, fileName, fileSize, fileDate);
     }
 

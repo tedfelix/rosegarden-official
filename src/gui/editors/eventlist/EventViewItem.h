@@ -18,7 +18,7 @@
 #ifndef _RG_EVENTVIEWITEM_H_
 #define _RG_EVENTVIEWITEM_H_
 
-#include <klistview.h>
+#include <QListView>
 
 namespace Rosegarden
 {
@@ -29,20 +29,20 @@ class Event;
 // EventView specialisation of a QListViewItem with the
 // addition of a segment pointer
 //
-class EventViewItem : public KListViewItem
+class EventViewItem : public QListViewItem
 {
 public:
     EventViewItem(Rosegarden::Segment *segment,
                   Rosegarden::Event *event,
-                  KListView *parent) : 
-        KListViewItem(parent),
+                  QListView *parent) : 
+        QListViewItem(parent),
         m_segment(segment),
         m_event(event) {;}
     
     EventViewItem(Rosegarden::Segment *segment,
                   Rosegarden::Event *event,
-                  KListViewItem *parent) : 
-        KListViewItem(parent),
+                  QListViewItem *parent) : 
+        QListViewItem(parent),
         m_segment(segment),
         m_event(event) {;}
 
@@ -56,14 +56,14 @@ public:
                   QString label6 = QString::null,
                   QString label7 = QString::null,
                   QString label8 = QString::null) :
-        KListViewItem(parent, label1, label2, label3, label4,
+        QListViewItem(parent, label1, label2, label3, label4,
                       label5, label6, label7, label8),
         m_segment(segment),
         m_event(event) {;}
 
     EventViewItem(Rosegarden::Segment *segment,
                   Rosegarden::Event *event,
-                  KListViewItem *parent, QString label1,
+                  QListViewItem *parent, QString label1,
                   QString label2 = QString::null,
                   QString label3 = QString::null,
                   QString label4 = QString::null,
@@ -71,7 +71,7 @@ public:
                   QString label6 = QString::null,
                   QString label7 = QString::null,
                   QString label8 = QString::null) :
-        KListViewItem(parent, label1, label2, label3, label4,
+        QListViewItem(parent, label1, label2, label3, label4,
                       label5, label6, label7, label8), 
         m_segment(segment),
         m_event(event) {;}

@@ -41,7 +41,7 @@
 #include <kaction.h>
 #include <kglobal.h>
 #include <kconfig.h>
-#include <klistview.h>
+#include <QListView>
 #include <kxmlguiclient.h>
 #include <QGroupBox>
 #include <QCheckBox>
@@ -91,7 +91,7 @@ TempoView::TempoView(RosegardenGUIDoc *doc, QWidget *parent, timeT openTime):
     connect(m_filterGroup, SIGNAL(released(int)),
             SLOT(slotModifyFilter(int)));
 
-    m_list = new KListView(getCentralWidget());
+    m_list = new QListView(getCentralWidget());
     m_list->setItemsRenameable(true);
 
     m_grid->addWidget(m_list, 2, 1);

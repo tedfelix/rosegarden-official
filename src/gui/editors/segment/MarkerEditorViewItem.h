@@ -18,14 +18,14 @@
 #ifndef _RG_MARKEREDITORVIEWITEM_H_
 #define _RG_MARKEREDITORVIEWITEM_H_
 
-#include <klistview.h>
+#include <QListView>
 
 #include "base/Event.h"
 
 namespace Rosegarden {
 
 
-class MarkerEditorViewItem : public KListViewItem
+class MarkerEditorViewItem : public QListViewItem
 {
 public:
     MarkerEditorViewItem(QListView * parent, int id,
@@ -37,7 +37,7 @@ public:
                          QString label6 = QString::null, 
                          QString label7 = QString::null, 
                          QString label8 = QString::null):
-        KListViewItem(parent, label1, label2, label3, label4,
+        QListViewItem(parent, label1, label2, label3, label4,
                       label5, label6, label7, label8),
 	m_rawTime(0), m_fake(false), m_id(id) { ; }
 

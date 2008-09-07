@@ -30,7 +30,7 @@ class QListViewItem;
 class QLabel;
 class QCloseEvent;
 class QShortcut;
-class KListView;
+class QListView;
 class Command;
 
 
@@ -104,7 +104,7 @@ protected:
     QPushButton             *m_deleteButton;
     QPushButton             *m_deleteAllButton;
 
-    KListView               *m_listView;
+    QListView               *m_listView;
 
     bool                     m_modified;
 

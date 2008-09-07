@@ -36,7 +36,7 @@
 #include "gui/general/GUIPalette.h"
 #include "TabbedConfigurationPage.h"
 #include <kconfig.h>
-#include <klistview.h>
+#include <QListView>
 #include <QFrame>
 #include <QLabel>
 #include <QListView>

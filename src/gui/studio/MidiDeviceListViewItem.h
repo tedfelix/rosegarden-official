@@ -20,7 +20,7 @@
 #define _RG_MIDIDEVICELISTVIEWITEM_H_
 
 #include "base/Device.h"
-#include <klistview.h>
+#include <QListView>
 #include <QString>
 
 
@@ -29,7 +29,7 @@ namespace Rosegarden
 
 
 
-class MidiDeviceListViewItem : public KListViewItem
+class MidiDeviceListViewItem : public QListViewItem
 {
 public:
     // Device

@@ -60,7 +60,7 @@
 #include <kstandarddirs.h>
 #include <kglobal.h>
 #include <klineeditdlg.h>
-#include <klistview.h>
+#include <QListView>
 #include <kxmlguiclient.h>
 #include <QGroupBox>
 #include <Q3Canvas>
@@ -140,7 +140,7 @@ EventView::EventView(RosegardenGUIDoc *doc,
     connect(m_filterGroup, SIGNAL(released(int)),
             SLOT(slotModifyFilter(int)));
 
-    m_eventList = new KListView(getCentralWidget());
+    m_eventList = new QListView(getCentralWidget());
     m_eventList->setItemsRenameable(true);
 
     m_grid->addWidget(m_eventList, 2, 1);

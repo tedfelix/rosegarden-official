@@ -41,7 +41,7 @@
 #include <kaction.h>
 #include "document/Command.h"
 #include <kglobal.h>
-#include <klistview.h>
+#include <QListView>
 #include <kmainwindow.h>
 #include <kstandardshortcut.h>
 #include <kstandardaction.h>
@@ -77,7 +77,7 @@ MarkerEditor::MarkerEditor(QWidget *parent,
 
     setCaption(i18n("Manage Markers"));
 
-    m_listView = new KListView( mainFrame );
+    m_listView = new QListView( mainFrame );
     mainFrameLayout->addWidget(m_listView);
     m_listView->addColumn(i18n("Marker time  "));
     m_listView->addColumn(i18n("Marker text  "));

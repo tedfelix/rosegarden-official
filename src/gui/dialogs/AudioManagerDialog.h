@@ -33,7 +33,7 @@ class QDropEvent;
 class QCloseEvent;
 class QShortcut;
 class KURL;
-class KListView;
+class QListView;
 class Command;
 
 
@@ -174,7 +174,7 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    KListView        *m_fileList;
+    QListView        *m_fileList;
     QLabel           *m_wrongSampleRates;
     RosegardenGUIDoc *m_doc;
 

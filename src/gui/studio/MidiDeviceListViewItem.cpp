@@ -29,7 +29,7 @@ namespace Rosegarden
 
 MidiDeviceListViewItem::MidiDeviceListViewItem(DeviceId deviceId,
         QListView* parent, QString name)
-        : KListViewItem(parent, name),
+        : QListViewItem(parent, name),
         m_deviceId(deviceId)
 {}
 
@@ -37,7 +37,7 @@ MidiDeviceListViewItem::MidiDeviceListViewItem(DeviceId deviceId,
         QListViewItem* parent, QString name,
         bool percussion,
         int msb, int lsb)
-        : KListViewItem(parent, name,
+        : QListViewItem(parent, name,
                         QString(percussion ? i18n("Percussion Bank") : i18n("Bank")),
                         QString().setNum(msb), QString().setNum(lsb)),
         m_deviceId(deviceId)
@@ -45,7 +45,7 @@ MidiDeviceListViewItem::MidiDeviceListViewItem(DeviceId deviceId,
 
 MidiDeviceListViewItem::MidiDeviceListViewItem(DeviceId deviceId,
         QListViewItem* parent, QString name)
-: KListViewItem(parent, name, i18n("Key Mapping"), "", ""),
+: QListViewItem(parent, name, i18n("Key Mapping"), "", ""),
 m_deviceId(deviceId)
 {}
 

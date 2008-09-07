@@ -20,14 +20,14 @@
 #define _RG_CONTROLPARAMETERITEM_H_
 
 #include <QString>
-#include <klistview.h>
+#include <QListView>
 
 
 namespace Rosegarden
 {
 
 
-class ControlParameterItem : public KListViewItem
+class ControlParameterItem : public QListViewItem
 {
 public:
     ControlParameterItem(int id,
@@ -41,7 +41,7 @@ public:
                          QString str7,
                          QString str8,
                          QString str9):
-        KListViewItem(parent, str1, str2, str3, str4, str5, str6, str7, str8),
+        QListViewItem(parent, str1, str2, str3, str4, str5, str6, str7, str8),
         m_id(id) { setText(8, str9); }
 
     int getId() const { return m_id; }

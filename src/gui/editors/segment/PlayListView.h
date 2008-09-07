@@ -18,11 +18,11 @@
 #ifndef _RG_PLAYLISTVIEW_H_
 #define _RG_PLAYLISTVIEW_H_
 
-#include <klistview.h>
+#include <QListView>
 
 namespace Rosegarden {
 
-class PlayListView : public KListView
+class PlayListView : public QListView
 {
 public:
     PlayListView(QWidget *parent=0, const char *name=0);

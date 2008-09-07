@@ -45,7 +45,7 @@
 #include "document/Command.h"
 #include <kfiledialog.h>
 #include <kglobal.h>
-#include <klistview.h>
+#include <QListView>
 #include <kmainwindow.h>
 #include <kmessagebox.h>
 #include <kstandardshortcut.h>
@@ -120,7 +120,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     //
     QWidget *leftPart = new QWidget(splitter);
     QVBoxLayout *leftPartLayout = new QVBoxLayout;
-    m_listView = new KListView( leftPart );
+    m_listView = new QListView( leftPart );
     leftPartLayout->addWidget(m_listView);
     m_listView->addColumn(i18n("MIDI Device"));
     m_listView->addColumn(i18n("Type"));

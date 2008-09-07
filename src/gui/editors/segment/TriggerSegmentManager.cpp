@@ -44,7 +44,7 @@
 #include <kaction.h>
 #include "document/Command.h"
 #include <kglobal.h>
-#include <klistview.h>
+#include <QListView>
 #include <kmainwindow.h>
 #include <kmessagebox.h>
 #include <kstandardshortcut.h>
@@ -79,7 +79,7 @@ TriggerSegmentManager::TriggerSegmentManager(QWidget *parent,
 
     setCaption(i18n("Manage Triggered Segments"));
 
-    m_listView = new KListView( mainFrame );
+    m_listView = new QListView( mainFrame );
     mainFrameLayout->addWidget(m_listView);
     m_listView->addColumn("Index");
     m_listView->addColumn(i18n("ID"));

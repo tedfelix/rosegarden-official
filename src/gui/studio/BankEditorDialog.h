@@ -34,7 +34,7 @@ class QListViewItem;
 class QGroupBox;
 class QCloseEvent;
 class QCheckBox;
-class KListView;
+class QListView;
 class Command;
 class QComboBox;
 
@@ -157,7 +157,7 @@ protected:
 
     MidiProgramsEditor      *m_programEditor;
     MidiKeyMappingEditor    *m_keyMappingEditor;
-    KListView               *m_listView;
+    QListView               *m_listView;
 
     QGroupBox               *m_optionBox;
     QCheckBox               *m_variationToggle;

@@ -41,7 +41,7 @@
 #include "document/ConfigGroups.h"
 #include <kaction.h>
 #include "document/Command.h"
-#include <klistview.h>
+#include <QListView>
 #include <kmainwindow.h>
 #include <kstandardshortcut.h>
 #include <kstandardaction.h>
@@ -94,7 +94,7 @@ ControlEditorDialog::ControlEditorDialog(QWidget *parent,
                device), mainFrame);
     new QLabel("", mainFrame);
 
-    m_listView = new KListView( mainFrame );
+    m_listView = new QListView( mainFrame );
     mainFrameLayout->addWidget(m_listView);
     m_listView->addColumn(i18n("Control Event name  "));
     m_listView->addColumn(i18n("Control Event type  "));

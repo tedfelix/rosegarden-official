@@ -53,7 +53,7 @@
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <klineeditdlg.h>
-#include <klistview.h>
+#include <QListView>
 #include <kmainwindow.h>
 #include <kmessagebox.h>
 #include <kstandardaction.h>

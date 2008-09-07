@@ -26,7 +26,7 @@
 
 #include <kapplication.h>
 #include <kconfig.h>
-#include <klistview.h>
+#include <QListView>
 #include <klocale.h>
 #include <QGroupBox>
 #include <QLabel>
@@ -192,7 +192,7 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
 
     QGridLayout *layoutOtherHeaders = new QGridLayout(frameOtherHeaders, 2, 2, 10, 5);
 
-    m_metadata = new KListView(frameOtherHeaders);
+    m_metadata = new QListView(frameOtherHeaders);
     m_metadata->addColumn(i18n("Name"));
     m_metadata->addColumn(i18n("Value"));
     m_metadata->setFullWidth(true);
@@ -215,7 +215,7 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
         // property names stored in lower case
         name = name.left(1).toUpper() + name.right(name.length() - 1);
 
-        new KListViewItem(m_metadata, name,
+        new QListViewItem(m_metadata, name,
                           strtoqstr(metadata.get<String>(names[i])));
 
         shown.insert(names[i]);
@@ -253,7 +253,7 @@ HeadersConfigurationPage::slotAddNewProperty()
         ++i;
     }
 
-    new KListViewItem(m_metadata, propertyName, i18n("{undefined}"));
+    new QListViewItem(m_metadata, propertyName, i18n("{undefined}"));
 }
 
 void
