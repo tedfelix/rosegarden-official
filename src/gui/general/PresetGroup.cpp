@@ -113,7 +113,7 @@ PresetGroup::~PresetGroup()
 bool
 PresetGroup::startElement(const QString &, const QString &,
                           const QString &qName,
-                          const QXmlAttributes &attributes))
+                          const QXmlAttributes &attributes)
 {
     QString lcName = qName.toLower();
 
@@ -122,7 +122,7 @@ PresetGroup::startElement(const QString &, const QString &,
     if (lcName == "category") {
 
         QString s = attributes.value("name");
-        if (!isEmpty(s)) {
+        if (!s.isEmpty()) {
             m_elCategoryName = s;
             // increment the current category number
             m_lastCategory = m_currentCategory;
@@ -144,7 +144,7 @@ PresetGroup::startElement(const QString &, const QString &,
     } else if (lcName == "instrument") {
 
         QString s = attributes.value("name");
-        if (!isEmpty(s)) {
+        if (!s.isEmpty()) {
             m_elInstrumentName = s;
             m_name = true;
 
@@ -155,13 +155,13 @@ PresetGroup::startElement(const QString &, const QString &,
 
     } else if (lcName == "clef") {
         QString s = attributes.value("type");
-        if (!isEmpty(s)) {
-        	m_elClef = clefNameToClefIndex(s));
+        if (!s.isEmpty()) {
+        	m_elClef = clefNameToClefIndex(s);
             m_clef = true;
         }
     } else if (lcName == "transpose") {
         QString s = attributes.value("value");
-        if (!isEmpty(s)) {
+        if (!s.isEmpty()) {
             m_elTranspose = s.toInt();
             m_transpose = true;
         }
@@ -171,13 +171,13 @@ PresetGroup::startElement(const QString &, const QString &,
 
         if (s == "amateur") {
             s = attributes.value("low");
-            if (!isEmpty(s)) {
+            if (!s.isEmpty()) {
                 m_elLowAm = s.toInt();
                 m_amateur = true;
             }
 
             s = attributes.value("high");
-            if (s && m_amateur) {
+            if (!s.isEmpty() && m_amateur) {
                 m_elHighAm = s.toInt();
             } else {
                 return false;
@@ -185,13 +185,13 @@ PresetGroup::startElement(const QString &, const QString &,
 
         } else if (s == "professional") {
             s = attributes.value("low");
-            if (!isEmpty(s)) {
+            if (!s.isEmpty()) {
                 m_pro = true;
                 m_elLowPro = s.toInt();
             }
 
             s = attributes.value("high");
-            if (s && m_pro) {
+            if (!s.isEmpty() && m_pro) {
                 m_elHighPro = s.toInt();
             } else {
                 return false;
