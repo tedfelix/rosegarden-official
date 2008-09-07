@@ -62,13 +62,15 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
     // Plugin box
     //
     QPushButton *plugin;
-    QVBox *pluginVbox = 0;
+    QWidget *pluginVbox = 0;
 
     pluginVbox = new QVBox(this);
-    pluginVbox->setSpacing(2);
+    QVBoxLayout *pluginVboxLayout = new QVBoxLayout;
+    pluginVboxLayout->setSpacing(2);
 
     for (int i = 0; i < 5; i++) {
         plugin = new QPushButton(pluginVbox);
+        pluginVboxLayout->addWidget(plugin);
         plugin->setText(i18n("<no plugin>"));
 
         QToolTip::add
@@ -79,6 +81,7 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
         connect(plugin, SIGNAL(clicked()),
                 m_signalMapper, SLOT(map()));
     }
+    pluginVbox->setLayout(pluginVboxLayout);
 
     m_synthButton = new QPushButton(this);
     m_synthButton->setText(i18n("<no synth>"));
