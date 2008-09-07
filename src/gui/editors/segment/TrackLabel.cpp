@@ -29,7 +29,7 @@
 #include <QTimer>
 #include <QToolTip>
 #include <QWidget>
-#include <qwidgetstack.h>
+#include <QStackedWidget>
 #include <QValidator>
 
 
@@ -40,7 +40,7 @@ TrackLabel::TrackLabel(TrackId id,
                        int position,
                        QWidget *parent,
                        const char *name):
-        QWidgetStack(parent, name),
+		QStackedWidget(parent, name),
         m_instrumentLabel(new QLabel(this)),
         m_trackLabel(new QLabel(this)),
         m_id(id),

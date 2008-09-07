@@ -25,8 +25,10 @@
 #include <QString>
 #include <vector>
 
+#include <QStackedWidget>
 
-class QWidgetStack;
+
+//class QWidgetStack;
 class QWidget;
 class QFrame;
 
@@ -98,7 +100,7 @@ signals:
 protected:
 
     //--------------- Data members ---------------------------------
-    QWidgetStack                    *m_widgetStack;
+	QStackedWidget                  *m_widgetStack;
     QFrame                          *m_noInstrumentParameters;
     MIDIInstrumentParameterPanel    *m_midiInstrumentParameters;
     AudioInstrumentParameterPanel   *m_audioInstrumentParameters;

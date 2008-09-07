@@ -21,7 +21,7 @@
 
 #include "base/Track.h"
 #include <QString>
-#include <qwidgetstack.h>
+#include <QStackedWidget>
 
 
 class QWidget;
@@ -40,7 +40,7 @@ namespace Rosegarden
  * selectable label/label list.  In conjunction with TrackButtons
  * provides a framework for Track selection on the TrackCanvas.
  */
-class TrackLabel : public QWidgetStack
+	class TrackLabel : public QStackedWidget
 {
 Q_OBJECT
 public:

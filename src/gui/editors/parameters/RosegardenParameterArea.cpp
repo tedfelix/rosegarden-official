@@ -31,7 +31,7 @@
 #include <qvgroupbox.h>
 #include <QWidget>
 #include <QVBoxLayout>
-#include <qwidgetstack.h>
+#include <QStackedWidget>
 #include <iostream>
 #include <set>
 
@@ -41,7 +41,7 @@ namespace Rosegarden
 
 RosegardenParameterArea::RosegardenParameterArea(QWidget *parent,
         const char *name, WFlags f)
-        : QWidgetStack(parent, name, f),
+	: QStackedWidget(parent, name, f),
         m_style(RosegardenParameterArea::CLASSIC_STYLE),
         m_scrollView(new QScrollView(this, 0, Qt::WStaticContents)),
         m_classic(new QVBox(m_scrollView->viewport())),

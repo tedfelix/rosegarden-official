@@ -35,7 +35,7 @@
 #include <QString>
 #include <QWidget>
 #include <QVBoxLayout>
-#include <qwidgetstack.h>
+#include <QStackedWidget>
 
 
 namespace Rosegarden
@@ -46,7 +46,7 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
     : RosegardenParameterBox(i18n("Instrument"),
                              i18n("Instrument Parameters"),
                              parent),
-      m_widgetStack(new QWidgetStack(this)),
+      m_widgetStack(new QStackedWidget(this)),
       m_noInstrumentParameters(new QVBox(this)),
       m_midiInstrumentParameters(new MIDIInstrumentParameterPanel(doc, this)),
       m_audioInstrumentParameters(new AudioInstrumentParameterPanel(doc, this)),

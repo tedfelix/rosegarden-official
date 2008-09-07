@@ -54,7 +54,7 @@
 #include <QString>
 #include <QTimer>
 #include <QWidget>
-#include <qwidgetstack.h>
+#include <QStackedWidget>
 #include <QToolTip>
 
 namespace Rosegarden

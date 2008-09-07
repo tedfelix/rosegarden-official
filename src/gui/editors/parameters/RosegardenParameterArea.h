@@ -21,7 +21,7 @@
 #ifndef _RG_ROSEGARDENPARAMETERAREA_H_
 #define _RG_ROSEGARDENPARAMETERAREA_H_
 
-#include <qwidgetstack.h>
+#include <QStackedWidget>
 #include <vector>
 
 
@@ -42,7 +42,7 @@ class RosegardenParameterBox;
  * A widget that arranges a set of Rosegarden parameter-box widgets
  * within a frame, in a dynamically configurable manner.
  */
-class RosegardenParameterArea : public QWidgetStack
+class RosegardenParameterArea : public QStackedWidget
 {
     Q_OBJECT
 public:

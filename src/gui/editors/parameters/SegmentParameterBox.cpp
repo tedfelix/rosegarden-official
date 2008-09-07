@@ -70,7 +70,7 @@
 #include <QToolTip>
 #include <QWidget>
 #include <QVBoxLayout>
-#include <qwidgetstack.h>
+#include <QStackedWidget>
 
 
 namespace Rosegarden

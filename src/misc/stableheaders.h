@@ -133,7 +133,7 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <qwidgetstack.h>
+#include <QStackedWidget>
 #include <QMatrix>
 #include <qxml.h>
 
