@@ -23,13 +23,14 @@
 #include "base/ColourMap.h"
 #include "ColourTableItem.h"
 #include "gui/general/GUIPalette.h"
-#include <kcolordialog.h>
-#include <klineeditdlg.h>
+#include <QColorDialog>
+#include <QInputDialog>
 #include <QColor>
 #include <QPoint>
 #include <QString>
-#include <qtable.h>
+#include <Q3Table>
 #include <QWidget>
+#include <QLineEdit>
 
 
 namespace Rosegarden
@@ -37,10 +38,10 @@ namespace Rosegarden
 
 ColourTable::ColourTable
 (QWidget *parent, ColourMap &input, ColourList &list)
-        : QTable(1, 2, parent, "RColourTable")
+        : Q3Table(1, 2, parent, "RColourTable")
 {
     setSorting(FALSE);
-    setSelectionMode(QTable::SingleRow);
+    setSelectionMode(Q3Table::SingleRow);
     horizontalHeader()->setLabel(0, i18n("Name"));
     horizontalHeader()->setLabel(1, i18n("Color"));
     populate_table(input, list);
@@ -58,8 +59,10 @@ ColourTable::slotEditEntry(int row, int col)
             if (row == 0)
                 return ;
             bool ok = false;
-            QString newName = KLineEditDlg::getText(i18n("Modify Color Name"), i18n("Enter new name"),
-                                                    item(row, col)->text(), &ok);
+            //@@@ QInputDialog replaces KLineEditDlg.  This is not a clean swap,
+            // and this is untested
+            QString newName = QInputDialog::getText(i18n("Modify Color Name"), i18n("Enter new name"),
+                                                    QLineEdit::Normal, item(row, col)->text(), &ok);
 
             if ((ok == true) && (!newName.isEmpty())) {
                 emit entryTextChanged(row, newName);
@@ -69,11 +72,16 @@ ColourTable::slotEditEntry(int row, int col)
         break;
     case 1: {
             QColor temp = m_colours[row];
-            KColorDialog box(this, "", true);
 
-            int result = box.getColor(temp);
+            //@@@ KColorDialog to QColorDialog is a really weird conversion.
+            // This syntax seems to do the equivalent of the old job.  It
+            // returns a QColor.  Test that result for isValid() to see if the
+            // dialog was accepted (else it was cancelled.)  This builds now,
+            // and I'm pretty sure this is the right thing, but I'm flagging it
+            // as a future source of mysterious bugs.
+            QColor result = QColorDialog::getColor(temp);
 
-            if (result == KColorDialog::Accepted) {
+            if (result.isValid()) {
                 emit entryColourChanged(row, temp);
                 return ;
             }
@@ -101,9 +109,9 @@ ColourTable::populate_table(ColourMap &input, ColourList &list)
         else
             name = strtoqstr(it->second.second);
 
-        QTableItem *text = new QTableItem(
-                               dynamic_cast<QTable*>(this),
-                               QTableItem::Never, name);
+        Q3TableItem *text = new Q3TableItem(
+                               dynamic_cast<Q3Table*>(this),
+                               Q3TableItem::Never, name);
 
         setItem(i, 0, text);
 

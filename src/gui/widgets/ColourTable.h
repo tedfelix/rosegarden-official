@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -23,7 +22,7 @@
 #define _RG_ROSEGARDENCOLOURTABLE_H_
 
 #include <map>
-#include <qtable.h>
+#include <Q3Table>
 #include <vector>
 
 
@@ -37,7 +36,7 @@ namespace Rosegarden
 class ColourMap;
 
 
-class ColourTable : public QTable
+class ColourTable : public Q3Table
 {
     Q_OBJECT
 

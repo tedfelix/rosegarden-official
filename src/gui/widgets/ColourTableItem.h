@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -20,9 +19,9 @@
 #define _RG_ROSEGARDENCOLOURTABLEITEM_H_
 
 #include <QColor>
-#include <qtable.h>
+#include <Q3Table>
 
-class QTable;
+class Q3Table;
 class QRect;
 class QPainter;
 class QColorGroup;
@@ -33,11 +32,11 @@ namespace Rosegarden
 
 
 
-class ColourTableItem : public QTableItem
+class ColourTableItem : public Q3TableItem
 {
 public:
-    ColourTableItem(QTable *t, const QColor &input)
-     : QTableItem(t, QTableItem::Never, ""),
+    ColourTableItem(Q3Table *t, const QColor &input)
+     : Q3TableItem(t, Q3TableItem::Never, ""),
        currentColour(input) {}
     void setColor(QColor &input);
     void paint(QPainter *p, const QColorGroup &cg, const QRect &cr, bool selected);
