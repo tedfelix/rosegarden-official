@@ -56,13 +56,15 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
         m_standardQuantizations
         (BasicQuantizer::getStandardQuantizations())
 {
+    bool p = !preamble.isEmpty();
+
     m_mainLayout = new QGridLayout(this,
-                                   preamble ? 3 : 4, 2,
-                                   preamble ? 10 : 0,
-                                   preamble ? 5 : 4);
+                                   p ? 3 : 4, 2,
+                                   p ? 10 : 0,
+                                   p ? 5 : 4);
 
     int zero = 0;
-    if (preamble) {
+    if (p) {
         QLabel *label = new QLabel(preamble, this);
         label->setAlignment(Qt::TextWordWrap);
         m_mainLayout->addWidget(label, 0, 0, 0- 0+1, 1- 1);
@@ -163,7 +165,7 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     m_postProcessingBox = new QGroupBox
                           (1, Horizontal, i18n("After quantization"), this);
 
-    if (preamble) {
+    if (p) {
         m_mainLayout->addWidget(m_postProcessingBox,
                                          zero,
                                          1, zero + 1-
@@ -265,7 +267,7 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
         advanced = false;
     }
 
-    if (preamble || advanced) {
+    if (p || advanced) {
         m_postProcessingBox->show();
     } else {
         m_postProcessingBox->hide();
