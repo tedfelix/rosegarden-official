@@ -83,7 +83,7 @@ TimeSignatureDialog::TimeSignatureDialog(QDialogButtonBox::QWidget *parent,
     QHBoxLayout *denomBoxLayout = new QHBoxLayout;
 
     QLabel *explanatoryLabel = 0;
-    if (explanatoryText) {
+    if (!explanatoryText.isEmpty()) {
         explanatoryLabel = new QLabel(explanatoryText, groupBox);
     }
 

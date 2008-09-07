@@ -616,7 +616,7 @@ DSSIPluginInstance::activate()
         }
     }
 
-    if (m_program) {
+    if (!m_program.isEmpty()) {
 #ifdef DEBUG_DSSI
         std::cerr << "DSSIPluginInstance::activate: restoring program " << m_program << std::endl;
 #endif

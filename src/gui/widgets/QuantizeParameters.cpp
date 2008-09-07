@@ -216,7 +216,7 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     int defaultSwing = 0;
     int defaultIterate = 100;
 
-    if (m_configCategory) {
+    if (!m_configCategory.isEmpty()) {
         QSettings config ; // was: confq4
         QSettings config;
         config.beginGroup( m_configCategory );
@@ -412,7 +412,7 @@ QuantizeParameters::getQuantizer() const
         quantizer = nq;
     }
 
-    if (m_configCategory) {
+    if (!m_configCategory.isEmpty()) {
         QSettings config ; // was: confq4
         QSettings config;
         config.beginGroup( m_configCategory );

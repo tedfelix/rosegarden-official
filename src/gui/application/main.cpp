@@ -345,20 +345,20 @@ void testInstalledVersion()
     QString versionLocation = locate("appdata", "version.txt");
     QString installedVersion;
 
-    if (versionLocation) {
+    if (!versionLocation.isEmpty()) {
         QFile versionFile(versionLocation);
         if (versionFile.open(QIODevice::ReadOnly)) {
             QTextStream text(&versionFile);
             QString s = text.readLine().trimmed();
             versionFile.close();
-            if (s) {
+            if (!s.isEmpty()) {
                 if (s == VERSION) return;
                 installedVersion = s;
             }
         }
     }
 
-    if (installedVersion) {
+    if (!installedVersion.isEmpty()) {
 
         KMessageBox::detailedError
         (0,
@@ -785,7 +785,7 @@ int main(int argc, char *argv[])
 	hbLayout->addWidget(image);
 	image->setAlignment(Qt::AlignTop);
 	QString iconFile = locate("appdata", "pixmaps/misc/welcome-icon.png");
-	if (iconFile) {
+	if (!iconFile.isEmpty()) {
 	    image->setPixmap(QPixmap(iconFile));
 	}
 	QLabel *label = new QLabel( hb );

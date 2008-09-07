@@ -1429,7 +1429,7 @@ void
 SequenceManager::sendMIDIRecordingDevice(const QString recordDeviceStr)
 {
 
-    if (recordDeviceStr) {
+    if (!recordDeviceStr.isEmpty()) {
         int recordDevice = recordDeviceStr.toInt();
 
         if (recordDevice >= 0) {

@@ -96,7 +96,7 @@ KeySignatureDialog::KeySignatureDialog(QDialogButtonBox::QWidget *parent,
     QHBoxLayout *nameBoxLayout = new QHBoxLayout;
 
     QLabel *explanatoryLabel = 0;
-    if (explanatoryText) {
+    if (!explanatoryText.isEmpty()) {
         explanatoryLabel = new QLabel(explanatoryText, keyFrame);
     }
 

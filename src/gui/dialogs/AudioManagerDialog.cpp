@@ -1138,7 +1138,7 @@ AudioManagerDialog::slotDropped(QDropEvent *event, QListViewItem*)
     // see if we can decode a URI.. if not, just ignore it
     if (QUriDrag::decode(event, uri)) {
         // okay, we have a URI.. process it
-        for (QString url = uri.first(); url; url = uri.next()) {
+        for (QString url = uri.first(); !url.isEmpty(); url = uri.next()) { //!!! this one is really weird and uncertain
 
             RG_DEBUG << "AudioManagerDialog::dropEvent() : got "
             << url << endl;

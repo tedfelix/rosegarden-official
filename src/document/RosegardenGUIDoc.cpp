@@ -1387,7 +1387,7 @@ void RosegardenGUIDoc::saveSegment(QTextStream& outStream, Segment *segment,
     .arg(segment->getTrack())
     .arg(segment->getStartTime());
 
-    if (extraAttributes)
+    if (!extraAttributes.isEmpty())
         outStream << extraAttributes << " ";
 
     outStream << "label=\"" <<

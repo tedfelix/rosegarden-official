@@ -125,7 +125,7 @@ EventQuantizeCommand::modifySegment()
     bool makeviable = false;
     bool decounterpoint = false;
 
-    if (m_configGroup) {
+    if (!m_configGroup.isEmpty()) {
         //!!! need way to decide whether to do these even if no config group (i.e. through args to the command)
         QSettings config ; // was: confq4
         QSettings config;

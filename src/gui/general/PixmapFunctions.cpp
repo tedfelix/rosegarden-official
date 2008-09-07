@@ -120,7 +120,7 @@ PixmapFunctions::colourPixmap(const QPixmap &map, int hue, int minimum)
 
     QPixmap rmap;
     rmap.convertFromImage(image);
-    if (map.mask())
+    if (!map.mask().isNull())
         rmap.setMask(*map.mask());
     return rmap;
 }
@@ -149,7 +149,7 @@ PixmapFunctions::shadePixmap(const QPixmap &map)
 
     QPixmap rmap;
     rmap.convertFromImage(image);
-    if (map.mask())
+    if (!map.mask()isNull())
         rmap.setMask(*map.mask());
     return rmap;
 }
@@ -161,7 +161,7 @@ PixmapFunctions::flipVertical(const QPixmap &map)
     QImage i(map.convertToImage());
     rmap.convertFromImage(i.mirror(false, true));
 
-    if (map.mask()) {
+    if (!map.mask().isNull()) {
         QImage im(map.mask()->convertToImage());
         QBitmap newMask;
         newMask.convertFromImage(im.mirror(false, true));
@@ -178,7 +178,7 @@ PixmapFunctions::flipHorizontal(const QPixmap &map)
     QImage i(map.convertToImage());
     rmap.convertFromImage(i.mirror(true, false));
 
-    if (map.mask()) {
+    if (!map.mask().isNull()) {
         QImage im(map.mask()->convertToImage());
         QBitmap newMask;
         newMask.convertFromImage(im.mirror(true, false));

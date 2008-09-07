@@ -298,7 +298,7 @@ AudioPluginDialog::populatePluginList()
 
             if (needCategory) {
                 QString cat = "";
-                if ((*i)->getCategory())
+                if (!(*i)->getCategory().isEmpty())
                     cat = (*i)->getCategory();
                 if (cat != category)
                     continue;
