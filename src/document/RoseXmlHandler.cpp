@@ -114,7 +114,7 @@ bool ConfigurationXmlSubHandler::startElement(const QString&, const QString&,
 	// handle alternative encoding for properties with arbitrary names
 	m_propertyName = atts.value("name");
 	QString value = atts.value("value");
-	if (value) {
+	if (!value.isEmpty()) {
 	    m_propertyType = "String";
 	    m_configuration->set<String>(qstrtostr(m_propertyName),
 					 qstrtostr(value));
@@ -427,7 +427,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
 //        std::cerr << "\n\n\nRosegarden file version = \"" << version << "\"\n\n\n" << std::endl;
 
-        if (smajor) {
+        if (!smajor.isEmpty()) {
 
             int major = smajor.toInt();
             int minor = sminor.toInt();
@@ -471,17 +471,17 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         //
         QString thruStr = atts.value("thrufilter");
 
-        if (thruStr)
+        if (!thruStr.isEmpty())
             getStudio().setMIDIThruFilter(thruStr.toInt());
 
         QString recordStr = atts.value("recordfilter");
 
-        if (recordStr)
+        if (!recordStr.isEmpty())
             getStudio().setMIDIRecordFilter(recordStr.toInt());
 
         QString inputStr = atts.value("audioinputpairs");
 
-        if (inputStr) {
+        if (!inputStr.isEmpty()) {
             int inputs = inputStr.toInt();
             if (inputs < 1)
                 inputs = 1; // we simply don't permit no inputs
@@ -492,14 +492,14 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         QString mixerStr = atts.value("mixerdisplayoptions");
 
-        if (mixerStr) {
+        if (!mixerStr.isEmpty()) {
             unsigned int mixer = mixerStr.toUInt();
             getStudio().setMixerDisplayOptions(mixer);
         }
 
         QString metronomeStr = atts.value("metronomedevice");
 
-        if (metronomeStr) {
+        if (!metronomeStr.isEmpty()) {
             DeviceId metronome = metronomeStr.toUInt();
             getStudio().setMetronomeDevice(metronome);
         }
@@ -513,32 +513,32 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         timeT t = 0;
         QString timeStr = atts.value("time");
-        if (timeStr)
+        if (!timeStr.isEmpty())
             t = timeStr.toInt();
 
         int num = 4;
         QString numStr = atts.value("numerator");
-        if (numStr)
+        if (!numStr.isEmpty())
             num = numStr.toInt();
 
         int denom = 4;
         QString denomStr = atts.value("denominator");
-        if (denomStr)
+        if (!denomStr.isEmpty())
             denom = denomStr.toInt();
 
         bool common = false;
         QString commonStr = atts.value("common");
-        if (commonStr)
+        if (!commonStr.isEmpty())
             common = (commonStr == "true");
 
         bool hidden = false;
         QString hiddenStr = atts.value("hidden");
-        if (hiddenStr)
+        if (!hiddenStr.isEmpty())
             hidden = (hiddenStr == "true");
 
         bool hiddenBars = false;
         QString hiddenBarsStr = atts.value("hiddenbars");
-        if (hiddenBarsStr)
+        if (!hiddenBarsStr.isEmpty())
             hiddenBars = (hiddenBarsStr == "true");
 
         getComposition().addTimeSignature
@@ -548,21 +548,21 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         timeT t = 0;
         QString timeStr = atts.value("time");
-        if (timeStr)
+        if (!timeStr.isEmpty())
             t = timeStr.toInt();
 
         tempoT tempo = Composition::getTempoForQpm(120.0);
         QString tempoStr = atts.value("tempo");
         QString targetStr = atts.value("target");
         QString bphStr = atts.value("bph");
-        if (tempoStr) {
+        if (!tempoStr.isEmpty()) {
             tempo = tempoStr.toInt();
-        } else if (bphStr) {
+        } else if (!bphStr.isEmpty()) {
             tempo = Composition::getTempoForQpm
                     (double(bphStr.toInt()) / 60.0);
         }
 
-        if (targetStr) {
+        if (!targetStr.isEmpty()) {
             getComposition().addTempoAtTime(t, tempo, targetStr.toInt());
         } else {
             getComposition().addTempoAtTime(t, tempo);
@@ -581,12 +581,12 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         // Get and set the record track
         //
         QString recordStr = atts.value("recordtrack");
-        if (recordStr) {
+        if (!recordStr.isEmpty()) {
             getComposition().setTrackRecording(recordStr.toInt(), true);
         }
 
         QString recordPlStr = atts.value("recordtracks");
-        if (recordPlStr) {
+        if (!recordPlStr.isEmpty()) {
             RG_DEBUG << "Record tracks: " << recordPlStr << endl;
             QStringList recordList = QStringList::split(',', recordPlStr);
             for (QStringList::iterator i = recordList.begin();
@@ -600,7 +600,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         //
         int position = 0;
         QString positionStr = atts.value("pointer");
-        if (positionStr) {
+        if (!positionStr.isEmpty()) {
             position = positionStr.toInt();
         }
 
@@ -612,12 +612,12 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         // older defaultTempo.
         //
         QString tempoStr = atts.value("compositionDefaultTempo");
-        if (tempoStr) {
+        if (!tempoStr.isEmpty()) {
             tempoT tempo = tempoT(tempoStr.toInt());
             getComposition().setCompositionDefaultTempo(tempo);
         } else {
             tempoStr = atts.value("defaultTempo");
-            if (tempoStr) {
+            if (!tempoStr.isEmpty()) {
                 double tempo = qstrtodouble(tempoStr);
                 getComposition().setCompositionDefaultTempo
                 (Composition::getTempoForQpm(tempo));
@@ -633,7 +633,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         QString loopStartStr = atts.value("loopstart");
         QString loopEndStr = atts.value("loopend");
 
-        if (loopStartStr && loopEndStr) {
+        if (!loopStartStr.isEmpty() && !loopEndStr.isEmpty()) {
             int loopStart = loopStartStr.toInt();
             int loopEnd = loopEndStr.toInt();
 
@@ -643,7 +643,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         QString selectedTrackStr = atts.value("selected");
 
-        if (selectedTrackStr) {
+        if (!selectedTrackStr.isEmpty()) {
             TrackId selectedTrack =
                 (TrackId)selectedTrackStr.toInt();
 
@@ -651,7 +651,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         }
 
         QString soloTrackStr = atts.value("solo");
-        if (soloTrackStr) {
+        if (!soloTrackStr.isEmpty()) {
             if (soloTrackStr.toInt() == 1)
                 getComposition().setSolo(true);
             else
@@ -660,7 +660,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
 
         QString playMetStr = atts.value("playmetronome");
-        if (playMetStr) {
+        if (!playMetStr.isEmpty()) {
             if (playMetStr.toInt())
                 getComposition().setPlayMetronome(true);
             else
@@ -668,7 +668,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         }
 
         QString recMetStr = atts.value("recordmetronome");
-        if (recMetStr) {
+        if (!recMetStr.isEmpty()) {
             if (recMetStr.toInt())
                 getComposition().setRecordMetronome(true);
             else
@@ -676,23 +676,23 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         }
 
         QString nextTriggerIdStr = atts.value("nexttriggerid");
-        if (nextTriggerIdStr) {
+        if (!nextTriggerIdStr.isEmpty()) {
             getComposition().setNextTriggerSegmentId(nextTriggerIdStr.toInt());
         }
 
         QString copyrightStr = atts.value("copyright");
-        if (copyrightStr) {
+        if (!copyrightStr.isEmpty()) {
             getComposition().setCopyrightNote(qstrtostr(copyrightStr));
         }
 
         QString startMarkerStr = atts.value("startMarker");
         QString endMarkerStr = atts.value("endMarker");
 
-        if (startMarkerStr) {
+        if (!startMarkerStr.isEmpty()) {
             getComposition().setStartMarker(startMarkerStr.toInt());
         }
 
-        if (endMarkerStr) {
+        if (!endMarkerStr.isEmpty()) {
             getComposition().setEndMarker(endMarkerStr.toInt());
         }
 
@@ -710,17 +710,17 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         bool muted = false;
 
         QString trackNbStr = atts.value("id");
-        if (trackNbStr) {
+        if (!trackNbStr.isEmpty()) {
             id = trackNbStr.toInt();
         }
 
         QString labelStr = atts.value("label");
-        if (labelStr) {
+        if (!labelStr.isEmpty()) {
             label = qstrtostr(labelStr);
         }
 
         QString mutedStr = atts.value("muted");
-        if (mutedStr) {
+        if (!mutedStr.isEmpty()) {
             if (mutedStr == "true")
                 muted = true;
             else
@@ -728,12 +728,12 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         }
 
         QString positionStr = atts.value("position");
-        if (positionStr) {
+        if (!positionStr.isEmpty()) {
             position = positionStr.toInt();
         }
 
         QString instrumentStr = atts.value("instrument");
-        if (instrumentStr) {
+        if (!instrumentStr.isEmpty()) {
             instrument = instrumentStr.toInt();
         }
 
@@ -748,42 +748,42 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         // here
         
 	QString presetLabelStr = atts.value("defaultLabel");
-	if (labelStr) {
+	if (!labelStr.isEmpty()) {
 	    track->setPresetLabel(presetLabelStr);
 	}	
 	
         QString clefStr = atts.value("defaultClef");
-        if (clefStr) {
+        if (!clefStr.isEmpty()) {
             track->setClef(clefStr.toInt());
         }
 
         QString transposeStr = atts.value("defaultTranspose");
-        if (transposeStr) {
+        if (!transposeStr.isEmpty()) {
             track->setTranspose(transposeStr.toInt());
         }
 
         QString colorStr = atts.value("defaultColour");
-        if (colorStr) {
+        if (!colorStr.isEmpty()) {
             track->setColor(colorStr.toInt());
         }
 
         QString highplayStr = atts.value("defaultHighestPlayable");
-        if (highplayStr) {
+        if (!highplayStr.isEmpty()) {
             track->setHighestPlayable(highplayStr.toInt());
         }
 
         QString lowplayStr = atts.value("defaultLowestPlayable");
-        if (lowplayStr) {
+        if (!lowplayStr.isEmpty()) {
             track->setLowestPlayable(lowplayStr.toInt());
         }
 
 	QString staffSizeStr = atts.value("staffSize");
-	if (staffSizeStr) {
+	if (!staffSizeStr.isEmpty()) {
 	    track->setStaffSize(staffSizeStr.toInt());
 	}
 
 	QString staffBracketStr = atts.value("staffBracket");
-	if (staffBracketStr) {
+	if (!staffBracketStr.isEmpty()) {
 	    track->setStaffBracket(staffBracketStr.toInt());
 	}
 
@@ -803,17 +803,17 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         int track = -1, startTime = 0;
         unsigned int colourindex = 0;
         QString trackNbStr = atts.value("track");
-        if (trackNbStr) {
+        if (!trackNbStr.isEmpty()) {
             track = trackNbStr.toInt();
         }
 
         QString startIdxStr = atts.value("start");
-        if (startIdxStr) {
+        if (!startIdxStr.isEmpty()) {
             startTime = startIdxStr.toInt();
         }
 
         QString segmentType = (atts.value("type")).toLower();
-        if (segmentType) {
+        if (!segmentType.isEmpty()) {
             if (segmentType == "audio") {
                 int audioFileId = atts.value("file").toInt();
 
@@ -848,7 +848,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         }
 
         QString delayStr = atts.value("delay");
-        if (delayStr) {
+        if (!delayStr.isEmpty()) {
             RG_DEBUG << "Delay string is \"" << delayStr << "\"" << endl;
             long delay = delayStr.toLong();
             RG_DEBUG << "Delay is " << delay << endl;
@@ -859,7 +859,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         QString rtDelayuSec = atts.value("rtdelayusec");
         QString rtDelaySec = atts.value("rtdelaysec");
         if (rtDelaySec && (rtDelaynSec || rtDelayuSec)) {
-            if (rtDelaynSec) {
+            if (!rtDelaynSec.isEmpty()) {
                 m_currentSegment->setRealTimeDelay
                 (RealTime(rtDelaySec.toInt(),
                           rtDelaynSec.toInt()));
@@ -871,31 +871,31 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         }
 
         QString transposeStr = atts.value("transpose");
-        if (transposeStr)
+        if (!transposeStr.isEmpty())
             m_currentSegment->setTranspose(transposeStr.toInt());
 
         // fill in the label
         QString labelStr = atts.value("label");
-        if (labelStr)
+        if (!labelStr.isEmpty())
             m_currentSegment->setLabel(qstrtostr(labelStr));
 
         m_currentSegment->setTrack(track);
         //m_currentSegment->setStartTime(startTime);
 
         QString colourIndStr = atts.value("colourindex");
-        if (colourIndStr) {
+        if (!colourIndStr.isEmpty()) {
             colourindex = colourIndStr.toInt();
         }
 
         m_currentSegment->setColourIndex(colourindex);
 
         QString snapGridSizeStr = atts.value("snapgridsize");
-        if (snapGridSizeStr) {
+        if (!snapGridSizeStr.isEmpty()) {
             m_currentSegment->setSnapGridSize(snapGridSizeStr.toInt());
         }
 
         QString viewFeaturesStr = atts.value("viewfeatures");
-        if (viewFeaturesStr) {
+        if (!viewFeaturesStr.isEmpty()) {
             m_currentSegment->setViewFeatures(viewFeaturesStr.toInt());
         }
 
@@ -907,21 +907,21 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         QString triggerRetuneStr = atts.value("triggerretune");
         QString triggerAdjustTimeStr = atts.value("triggeradjusttimes");
 
-        if (triggerIdStr) {
+        if (!triggerIdStr.isEmpty()) {
             int pitch = -1;
-            if (triggerPitchStr)
+            if (!triggerPitchStr.isEmpty())
                 pitch = triggerPitchStr.toInt();
             int velocity = -1;
-            if (triggerVelocityStr)
+            if (!triggerVelocityStr.isEmpty())
                 velocity = triggerVelocityStr.toInt();
             TriggerSegmentRec *rec =
                 getComposition().addTriggerSegment(m_currentSegment,
                                                    triggerIdStr.toInt(),
                                                    pitch, velocity);
             if (rec) {
-                if (triggerRetuneStr)
+                if (!triggerRetuneStr.isEmpty())
                     rec->setDefaultRetune(triggerRetuneStr.toLower() == "true");
-                if (triggerAdjustTimeStr)
+                if (!triggerAdjustTimeStr.isEmpty())
                     rec->setDefaultTimeAdjust(qstrtostr(triggerAdjustTimeStr));
             }
             m_currentSegment->setStartTimeDataMember(startTime);
@@ -931,7 +931,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         }
 
         QString endMarkerStr = atts.value("endmarker");
-        if (endMarkerStr) {
+        if (!endMarkerStr.isEmpty()) {
             delete m_segmentEndMarkerTime;
             m_segmentEndMarkerTime = new timeT(endMarkerStr.toInt());
         }
@@ -1354,13 +1354,15 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                 QString keyMappingStr = (atts.value("keymapping"));
 
                 // Create a new program
+                bool k = !keyMappingStr.isEmpty();
+
                 MidiProgram program
                 (MidiBank(m_percussion,
                           m_msb,
                           m_lsb),
                  pc,
                  qstrtostr(nameStr),
-                 keyMappingStr ? qstrtostr(keyMappingStr) : "");
+                 k ? qstrtostr(keyMappingStr) : "");
 
                 if (m_device->getType() == Device::Midi) {
                     // Insert the program
@@ -1406,7 +1408,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         if (m_keyMapping) {
             QString numStr = atts.value("number");
             QString namStr = atts.value("name");
-            if (numStr && namStr) {
+            if (!numStr.isEmpty() && !namStr.isEmpty()) {
                 m_keyNameMap[numStr.toInt()] = qstrtostr(namStr);
             }
         }
@@ -1696,7 +1698,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
             std::string program = "";
             QString progStr = atts.value("program");
-            if (progStr) {
+            if (!progStr.isEmpty()) {
                 program = qstrtostr(progStr);
             }
 
@@ -1710,7 +1712,8 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             AudioPluginManager *apm = getAudioPluginManager();
 
             if (!identifier) {
-                if (atts.value("id")) {
+                QString q = atts.value("id");
+                if (!q.isEmpty()) {
                     unsigned long id = atts.value("id").toULong();
                     if (apm)
                         plugin = apm->getPluginByUniqueId(id);
@@ -1744,10 +1747,12 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                 // we shouldn't be halting import of the RG file just because
                 // we can't match a plugin
                 //
-                if (identifier) {
+                QString q = atts.value("id");
+
+                if (!identifier.isEmpty()) {
                     RG_DEBUG << "WARNING: RoseXmlHandler: plugin " << identifier << " not found" << endl;
                     m_pluginsNotFound.insert(identifier);
-                } else if (atts.value("id")) {
+                } else if (!q.isEmpty()) {
                     RG_DEBUG << "WARNING: RoseXmlHandler: plugin uid " << atts.value("id") << " not found" << endl;
                 } else {
                     m_errorString = "No plugin identifier or uid specified";
@@ -1758,7 +1763,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
             if (lcName == "synth") {
                 QString identifier = atts.value("identifier");
-                if (identifier) {
+                if (!identifier.isEmpty()) {
                     RG_DEBUG << "WARNING: RoseXmlHandler: no instrument for plugin " << identifier << endl;
                     m_pluginsNotFound.insert(identifier);
                 }
@@ -1820,19 +1825,32 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
             MidiMetronome metronome(instrument);
 
-            if (atts.value("barpitch"))
+            QString q = atts.value("barpitch");
+            if (!q.isEmpty())
                 metronome.setBarPitch(atts.value("barpitch").toInt());
-            if (atts.value("beatpitch"))
+
+            q = atts.value("beatpitch");    
+            if (!q.isEmpty())
                 metronome.setBeatPitch(atts.value("beatpitch").toInt());
-            if (atts.value("subbeatpitch"))
+            
+            q = atts.value("subbeatpitch");
+            if (!q.isEmpty())
                 metronome.setSubBeatPitch(atts.value("subbeatpitch").toInt());
-            if (atts.value("depth"))
+
+            q = atts.value("depth");
+            if (!q.isEmpty())
                 metronome.setDepth(atts.value("depth").toInt());
-            if (atts.value("barvelocity"))
+
+            q = atts.value("barvelocity");
+            if (!q.isEmpty())
                 metronome.setBarVelocity(atts.value("barvelocity").toInt());
-            if (atts.value("beatvelocity"))
+
+            q = atts.value("beatvelocity");
+            if (!q.isEmpty())
                 metronome.setBeatVelocity(atts.value("beatvelocity").toInt());
-            if (atts.value("subbeatvelocity"))
+
+            q = atts.value("subbeatvelocity");
+            if (!q.isEmpty())
                 metronome.setSubBeatVelocity(atts.value("subbeatvelocity").toInt());
 
             MidiDevice *md = dynamic_cast<MidiDevice *>(m_device);
@@ -1964,7 +1982,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         int channel = atts.value("channel").toInt();
 
         QString type = atts.value("type");
-        if (type) {
+        if (!type.isEmpty()) {
             if (type.toLower() == "buss") {
                 if (m_instrument)
                     m_instrument->setAudioInputToBuss(value, channel);
