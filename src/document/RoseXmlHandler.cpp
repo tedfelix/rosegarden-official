@@ -53,7 +53,7 @@
 #include "gui/widgets/ProgressDialog.h"
 #include "RosegardenGUIDoc.h"
 #include "sound/AudioFileManager.h"
-#include <kfiledialog.h>
+#include <QFileDialog>
 #include <kmessagebox.h>
 #include <QByteArray>
 #include <QDataStream>
@@ -167,7 +167,7 @@ bool ConfigurationXmlSubHandler::characters(const QString& chars)
         return true;
     }
 
-    if (!m_propertyType ||
+    if (m_propertyType.isEmpty() ||
 	m_propertyType == "String") {
         
         m_configuration->set<Rosegarden::String>(qstrtostr(m_propertyName),
@@ -749,7 +749,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         
 	QString presetLabelStr = atts.value("defaultLabel");
 	if (!labelStr.isEmpty()) {
-	    track->setPresetLabel(presetLabelStr);
+	    track->setPresetLabel( qstrtostr(presetLabelStr) );
 	}	
 	
         QString clefStr = atts.value("defaultClef");
@@ -858,11 +858,11 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         QString rtDelaynSec = atts.value("rtdelaynsec");
         QString rtDelayuSec = atts.value("rtdelayusec");
         QString rtDelaySec = atts.value("rtdelaysec");
-        if (rtDelaySec && (rtDelaynSec || rtDelayuSec)) {
+        if ( (!rtDelaySec.isEmpty()) && ((!rtDelaynSec.isEmpty()) || (!rtDelayuSec.isEmpty())) ){
             if (!rtDelaynSec.isEmpty()) {
-                m_currentSegment->setRealTimeDelay
-                (RealTime(rtDelaySec.toInt(),
-                          rtDelaynSec.toInt()));
+                m_currentSegment->setRealTimeDelay(
+                            RealTime(rtDelaySec.toInt(),
+                                          rtDelaynSec.toInt()));
             } else {
                 m_currentSegment->setRealTimeDelay
                 (RealTime(rtDelaySec.toInt(),
@@ -1006,13 +1006,17 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         if (getAudioFileManager().insertFile(qstrtostr(label),
                                              qstrtostr(file),
                                              id.toInt()) == false) {
-            // Ok, now attempt to use the KFileDialog saved default
+            // Ok, now attempt to use the QFileDialog saved default
             // value for the AudioPath.
             //
             QString thing;
-            KURL url = KFileDialog::getStartURL(QString(":WAVS"), thing);
-            getAudioFileManager().setAudioPath(url.path().toLatin1().data());
-
+			//KURL url = QFileDialog::getStartURL(QString(":WAVS"), thing);  // kde3
+			//KURL url = QFileDialog.directory()
+			QString url = QFileDialog::getExistingDirectory(this, i18n(qstrtostr("Open Directory")),
+										"/home", QFileDialog::ShowDirsOnly
+												| QFileDialog::DontResolveSymlinks);			
+			getAudioFileManager().setAudioPath(url);
+			
             /*
             RG_DEBUG << "ATTEMPTING TO FIND IN PATH = " 
                 << url.path() << endl;
@@ -1040,8 +1044,9 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
                 do {
 
-                    FileLocateDialog fL((RosegardenGUIApp *)m_doc->parent(),
-                                        file,
+					//FileLocateDialog fL((RosegardenGUIApp *)m_doc->parent(),
+					FileLocateDialog fL((QWidget *)m_doc->parent(),
+												 file,
                                         QString(getAudioFileManager().getAudioPath().c_str()));
                     int result = fL.exec();
 
@@ -1240,17 +1245,17 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                 skipToNextPlayDevice();
 
                 if (m_device) {
-                    if (nameStr && nameStr != "") {
+					if (!nameStr.isEmpty()) {
                         m_device->setName(qstrtostr(nameStr));
                     }
-                } else if (nameStr && nameStr != "") {
+				} else if (!nameStr.isEmpty()) {
                     addMIDIDevice(nameStr, m_createDevices); // also sets m_device
                 }
             }
 
             QString connection = atts.value("connection");
-            if (m_createDevices && m_device &&
-                    !connection.isNull() && connection != "") {
+			if ((m_createDevices) && (m_device) &&
+						   !connection.isNull() && (!connection.isEmpty()) ) {
                 setMIDIDeviceConnection(connection);
             }
 
@@ -1711,7 +1716,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             AudioPlugin *plugin = 0;
             AudioPluginManager *apm = getAudioPluginManager();
 
-            if (!identifier) {
+            if ( identifier.isEmpty() ) {
                 QString q = atts.value("id");
                 if (!q.isEmpty()) {
                     unsigned long id = atts.value("id").toULong();

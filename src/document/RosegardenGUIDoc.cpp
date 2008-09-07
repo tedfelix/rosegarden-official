@@ -687,7 +687,7 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
     //         ++maxTrackId;
     //     }
 
-    // We might need a value() dialog when we generate previews,
+    // We might need a progress dialog when we generate previews,
     // reuse the previous one
     progressDlg.setLabelText(i18n("Generating audio previews..."));
 
@@ -1229,21 +1229,21 @@ bool RosegardenGUIDoc::saveDocumentActual(const QString& filename,
     << "\">\n";
 
     ProgressDialog *progressDlg = 0;
-    QProgressBar *value() = 0;
+    QProgressBar *progress = 0;
 
     if (!autosave) {
 
         progressDlg = new ProgressDialog(i18n("Saving file..."),
                                          100,
                                          (QWidget*)parent());
-        value() = progressDlg->progressBar();
+        progress = progressDlg->progressBar();
 
         progressDlg->setMinimumDuration(500);
         progressDlg->setAutoReset(true);
 
     } else {
 
-        value() = ((RosegardenGUIApp *)parent())->getProgressBar();
+        progress = ((RosegardenGUIApp *)parent())->getProgressBar();
     }
 
     // Send out Composition (this includes Tracks, Instruments, Tempo
@@ -1280,7 +1280,7 @@ bool RosegardenGUIDoc::saveDocumentActual(const QString& filename,
 
         Segment *segment = *segitr;
 
-        saveSegment(outStream, segment, value(), totalEvents, eventCount);
+        saveSegment(outStream, segment, progress, totalEvents, eventCount);
 
     }
 
@@ -1301,7 +1301,7 @@ bool RosegardenGUIDoc::saveDocumentActual(const QString& filename,
                               .arg(strtoqstr((*ci)->getDefaultTimeAdjust()));
 
         Segment *segment = (*ci)->getSegment();
-        saveSegment(outStream, segment, value(), totalEvents, eventCount, triggerAtts);
+        saveSegment(outStream, segment, progress, totalEvents, eventCount, triggerAtts);
     }
 
     // Put a break in the file
@@ -1343,7 +1343,7 @@ bool RosegardenGUIDoc::saveDocumentActual(const QString& filename,
         m_commandHistory->documentSaved();
         delete progressDlg;
     } else {
-        value()->setValue(0);
+        progress->setValue(0);
     }
 
     setAutoSaved(true);
@@ -1385,7 +1385,7 @@ bool RosegardenGUIDoc::exportStudio(const QString& filename,
 }
 
 void RosegardenGUIDoc::saveSegment(QTextStream& outStream, Segment *segment,
-                                   QProgressBar* value(), long totalEvents, long &count,
+                                   QProgressBar* progress, long totalEvents, long &count,
                                    QString extraAttributes)
 {
     QString time;
@@ -1529,8 +1529,8 @@ void RosegardenGUIDoc::saveSegment(QTextStream& outStream, Segment *segment,
                 expectedTime = absTime + (*i)->getDuration();
             }
 
-            if ((++count % 500 == 0) && value()) {
-                value()->setValue(count * 100 / totalEvents);
+            if ((++count % 500 == 0) && progress) {
+                progress->setValue(count * 100 / totalEvents);
             }
         }
 
@@ -1578,7 +1578,7 @@ bool RosegardenGUIDoc::isSequencerRunning()
 
 bool
 RosegardenGUIDoc::xmlParse(QString fileContents, QString &errMsg,
-                           ProgressDialog *value(),
+                           ProgressDialog *progress,
                            unsigned int elementCount,
                            bool permanent,
                            bool &cancelled)
@@ -1587,14 +1587,16 @@ RosegardenGUIDoc::xmlParse(QString fileContents, QString &errMsg,
 
     RoseXmlHandler handler(this, elementCount, permanent);
 
-    if (value()) {
+    if (progress) {
         connect(&handler, SIGNAL(setValue(int)),
-                value()->progressBar(), SLOT(setValue(int)));
-        connect(&handler, SIGNAL(setOperationName(QString)),
-                value(), SLOT(slotSetOperationName(QString)));
+				 progress, SLOT(setValue(int)));
+				//progress->progressBar(), SLOT(setValue(int)));
+		connect(&handler, SIGNAL(setOperationName(QString)),
+                progress, SLOT(slotSetOperationName(QString)));
         connect(&handler, SIGNAL(incrementProgress(int)),
-                value()->progressBar(), SLOT(advance(int)));
-        connect(value(), SIGNAL(cancelClicked()),
+				 progress, SLOT(advance(int)));
+				//progress->progressBar(), SLOT(advance(int)));
+		connect(progress, SIGNAL(cancelClicked()),
                 &handler, SLOT(slotCancel()));
     }
 
@@ -2310,7 +2312,7 @@ RosegardenGUIDoc::syncDevices()
         //  
 
         QString currentTimer = getCurrentTimer();
-        currentTimer = confq4.value("timer", currentTimer) ;
+        currentTimer = confq4.value("timer", currentTimer).toString();
         setCurrentTimer(currentTimer);
         setTimer = true;
     }
@@ -2724,7 +2726,7 @@ RosegardenGUIDoc::finalizeAudioFile(InstrumentId iid)
         return ;
     }
 
-    // Create a value() dialog
+    // Create a progress dialog
     //
     ProgressDialog *progressDlg = new ProgressDialog
                                   (i18n("Generating audio preview..."), 100, (QWidget*)parent());
@@ -2736,7 +2738,8 @@ RosegardenGUIDoc::finalizeAudioFile(InstrumentId iid)
             &m_audioFileManager, SLOT(slotStopPreview()));
 
     connect(&m_audioFileManager, SIGNAL(setValue(int)),
-            progressDlg->progressBar(), SLOT(setValue(int)));
+			 progressDlg, SLOT(setValue(int)));
+//			progressDlg->progressBar(), SLOT(setValue(int)));
 
     try {
         m_audioFileManager.generatePreview(newAudioFile->getId());
@@ -2928,13 +2931,13 @@ RosegardenGUIDoc::notifyAudioFileRemoval(AudioFileId id)
 
     if (m_audioFileManager.wasAudioFileRecentlyRecorded(id)) {
         file = m_audioFileManager.getAudioFile(id);
-        if (file) addOrphanedRecordedAudioFile(file->getFilename());
+        if (file) addOrphanedRecordedAudioFile( strtoqstr( file->getFilename()) );
         return;
     }
 
     if (m_audioFileManager.wasAudioFileRecentlyDerived(id)) {
         file = m_audioFileManager.getAudioFile(id);
-        if (file) addOrphanedDerivedAudioFile(file->getFilename());
+        if (file) addOrphanedDerivedAudioFile( strtoqstr( file->getFilename()) );
         return;
     }
 }

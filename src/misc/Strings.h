@@ -18,6 +18,7 @@
 #include <string>
 #include <QString>
 #include <iostream>
+#include <QVariant>
 
 #include "PropertyName.h"
 #include "Exception.h"
@@ -28,6 +29,7 @@ extern std::string qstrtostr(const QString &);
 extern double strtodouble(const std::string &);
 extern double qstrtodouble(const QString &);
 extern bool qStrToBool(const QString &s);
+extern bool qStrToBool(const QVariant &v);
 
 class QTextCodec;
 extern std::string convertFromCodec(std::string, QTextCodec *);

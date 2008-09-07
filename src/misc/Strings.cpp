@@ -20,7 +20,7 @@
 #include "base/Event.h"
 
 #include <QTextCodec>
-
+#include <QVariant>
 
 
 QString strtoqstr(const std::string &str)
@@ -103,6 +103,12 @@ bool qStrToBool(const QString &s)
 	}
 	return false;
 }
+
+bool qStrToBool(const QVariant &v)
+{
+	return qStrToBool( v.toString() );
+}
+
 
 
 

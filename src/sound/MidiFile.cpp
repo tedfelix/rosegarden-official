@@ -145,7 +145,7 @@ MidiFile::midiBytesToInt(const string& bytes)
 MidiByte
 MidiFile::getMidiByte(ifstream* midiFile)
 {
-    static int bytesGot = 0; // purely for value() reporting purposes
+    static int bytesGot = 0; // purely for progress reporting purposes
 
     if (midiFile->eof()) {
         throw(Exception("End of MIDI file encountered while reading"));
@@ -160,7 +160,7 @@ MidiFile::getMidiByte(ifstream* midiFile)
 
         --m_trackByteCount;
 
-        // update a value() dialog if we have one
+        // update a progress dialog if we have one
         //
         ++bytesGot;
         if (bytesGot % 2000 == 0) {
@@ -186,7 +186,7 @@ MidiFile::getMidiBytes(ifstream* midiFile, unsigned long numberOfBytes)
 {
     string stringRet;
     char fileMidiByte;
-    static int bytesGot = 0; // purely for value() reporting purposes
+	static int bytesGot = 0; // purely for progress reporting purposes
 
     if (midiFile->eof()) {
 #ifdef MIDI_DEBUG
@@ -239,7 +239,7 @@ MidiFile::getMidiBytes(ifstream* midiFile, unsigned long numberOfBytes)
     if (m_decrementCount)
         m_trackByteCount -= stringRet.length();
 
-    // update a value() dialog if we have one
+    // update a progress dialog if we have one
     //
     bytesGot += numberOfBytes;
     if (bytesGot % 2000 == 0) {
@@ -834,7 +834,7 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
         segmentTime = 0;
         trackName = string("Imported MIDI");
 
-        // value() - 20% total in file import itself and then 80%
+        // progress - 20% total in file import itself and then 80%
         // split over these tracks
         emit setValue(20 +
                          (int)((80.0 * double(i) / double(m_numberOfTracks))));
@@ -2028,8 +2028,8 @@ MidiFile::writeTrack(std::ofstream* midiFile, TrackId trackNumber)
     //
     string trackBuffer;
 
-    long value()Total = m_midiComposition[trackNumber].size();
-    long value()Count = 0;
+	long progressTotal = m_midiComposition[trackNumber].size();
+	long progressCount = 0;
 
     for (midiEvent = m_midiComposition[trackNumber].begin();
             midiEvent != m_midiComposition[trackNumber].end();
@@ -2112,10 +2112,10 @@ MidiFile::writeTrack(std::ofstream* midiFile, TrackId trackNumber)
         // For the moment just keep the app updating until we work
         // out a good way of accounting for this write.
         //
-        ++value()Count;
+		++progressCount;
 
-        if (value()Count % 500 == 0) {
-            emit setValue(value()Count * 100 / value()Total);
+		if (progressCount % 500 == 0) {
+			emit setValue(progressCount * 100 / progressTotal);
             kapp->processEvents(500);
         }
     }
