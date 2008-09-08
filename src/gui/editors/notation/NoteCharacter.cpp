@@ -120,7 +120,7 @@ void
 NoteCharacter::drawMask(QPainter *painter, int x, int y) const
 {
     if (!m_rep && !m_pixmap->mask().isNull()) {
-        painter->drawPixmap(x, y, *(m_pixmap->mask()));
+        painter->drawPixmap(x, y, m_pixmap->mask());
     }
 }
 
