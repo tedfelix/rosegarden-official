@@ -715,14 +715,16 @@ int main(int argc, char *argv[])
         QString soundFontPath = config.value("soundfontpath", "") ;
         QFileInfo sfxLoadInfo(sfxLoadPath), soundFontInfo(soundFontPath);
         if (sfxLoadInfo.isExecutable() && soundFontInfo.isReadable()) {
+            // setup sfxload Process
             QProcess* sfxLoadProcess = new QProcess;
-            (*sfxLoadProcess) << sfxLoadPath << soundFontPath;
+            QStringList sfxLoadProcessArgs;
+
             RG_DEBUG << "Starting sfxload : " << sfxLoadPath << " " << soundFontPath << endl;
 
             QObject::connect(sfxLoadProcess, SIGNAL(processExited(QProcess*)),
                              &app, SLOT(sfxLoadExited(QProcess*)));
 
-            sfxLoadProcess->start();
+            sfxLoadProcess->start(sfxLoadPath, soundFontPath));
         } else {
             RG_DEBUG << "sfxload not executable or soundfont not readable : "
             << sfxLoadPath << " " << soundFontPath << endl;
