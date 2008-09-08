@@ -73,14 +73,14 @@ Rotary::Rotary(QWidget *parent,
         m_tickMode(ticks),
         m_snapToTicks(snapToTicks),
         m_centred(centred),
+        m_logarithmic(logarithmic),
         m_position(initialPosition),
         m_snapPosition(m_position),
         m_initialPosition(initialPosition),
         m_buttonPressed(false),
         m_lastY(0),
         m_lastX(0),
-        m_knobColour(0, 0, 0),
-        m_logarithmic(logarithmic)
+        m_knobColour(0, 0, 0)
 {
     setBackgroundMode(Qt::NoBackground);
 
