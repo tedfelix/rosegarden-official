@@ -706,7 +706,7 @@ AudioFileManager::fileNeedsConversion(const std::string &fileName,
     procArgs << "-w";
     procArgs << fileName.c_str();
 
-    proc->start("rosegarden-audiofile-importer", procArgs);
+    proc->execute("rosegarden-audiofile-importer", procArgs);
 
     int ec = proc->exitCode();
     delete proc;
@@ -735,7 +735,7 @@ AudioFileManager::importFile(const std::string &fileName, int sampleRate)
     procArgs << "-w";
     procArgs << fileName.c_str();
 
-    proc->start("rosegarden-audiofile-importer", procArgs);
+    proc->execute("rosegarden-audiofile-importer", procArgs);
 
     int ec = proc->exitCode();
     delete proc;
@@ -780,19 +780,21 @@ AudioFileManager::importFile(const std::string &fileName, int sampleRate)
 
     //setup "rosegarden-audiofile-importer" process
     m_importProcess = new QProcess;
-    QStringList *m_importProcessArgs = new QStringList;
+    QStringList importProcessArgs;
 	//@@@ FIX: free *m_importProcessArgs !!!
-	
-    *m_importProcessArgs << "rosegarden-audiofile-importer";
+	//@@@ Fixed:  Created importProcess on the Stack
+        //@@@ FIX: free *m_importProcess when execption thrown
+
+    importProcessArgs << "rosegarden-audiofile-importer";
     if (sampleRate > 0) {
-	*m_importProcessArgs << "-r";
-	*m_importProcessArgs << QString("%1").arg(sampleRate);
+	importProcessArgs << "-r";
+	importProcessArgs << QString("%1").arg(sampleRate);
     }
-    *m_importProcessArgs << "-c";
-    *m_importProcessArgs << fileName.c_str();
-    *m_importProcessArgs << (m_audioPath.c_str() + targetName);
+    importProcessArgs << "-c";
+    importProcessArgs << fileName.c_str();
+    importProcessArgs << (m_audioPath.c_str() + targetName);
     
-    m_importProcess->execute("rosegarden-audiofile-importer", *m_importProcessArgs);
+    m_importProcess->start("rosegarden-audiofile-importer", importProcessArgs);
 
     while ((m_importProcess->state() == QProcess::Running) || (m_importProcess->state() == QProcess::Starting)) { //@@@JAS If problems, check here first
 		//@@@ what to do with kapp ????
@@ -808,8 +810,6 @@ AudioFileManager::importFile(const std::string &fileName, int sampleRate)
 
     delete m_importProcess;
     m_importProcess = 0;
-    delete m_importProcessArgs;
-    m_importProcessArgs = 0;
 
     if (ec) {
 	std::cerr << "audio file importer failed" << std::endl;
