@@ -40,6 +40,24 @@ std::string qstrtostr(const QString &qstr)
     return std::string(qstr.toUtf8().data());
 }
 
+
+std::string qStrToStrLocal8(const QString &qstr)
+{
+	return std::string( qstr.toLocal8Bit().data() );
+}
+
+
+const char* qStrToCharPtrUtf8(const QString &qstr)
+{
+	return qstr.toUtf8().data();
+}
+
+const char* qStrToCharPtrLocal8(const QString &qstr)
+{
+	return qstr.toLocal8Bit().data();
+}
+
+
 /**
  * Unlike strtod(3) or QString::toDouble(), this is locale-independent
  * and always uses '.' as a decimal point.  We use it when reading
@@ -100,8 +118,8 @@ bool qStrToBool(const QString &s)
 {
     QString tt = s.toLower();
     tt = tt.trimmed();
-    if ( (tt == "yes") || (tt == "true") || (tt == "on") || (tt == "1") ){
-	return true;
+    if ( (tt == "1") || (tt == "true") || (tt == "yes") || (tt == "on") ){
+        return true;
     }
     return false;
 }
