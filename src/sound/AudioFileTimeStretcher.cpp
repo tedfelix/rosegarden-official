@@ -232,7 +232,7 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
         if (++progressCount == 100) {
             int progress = int
                 ((100.f * float(totalIn)) / float(fileTotalIn));
-            emit setValue(value());
+            emit setValue(progress);
             kapp->processEvents();
             progressCount = 0;
         }

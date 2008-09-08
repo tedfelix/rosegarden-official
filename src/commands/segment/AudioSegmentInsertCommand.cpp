@@ -106,7 +106,7 @@ AudioSegmentInsertCommand::execute()
             std::string label = aF->getName();
             m_segment->setLabel(appendLabel(label, qstrtostr(i18n("(inserted)"))));
         } else {
-            m_segment->setLabel(i18n("unknown audio file"));
+            m_segment->setLabel(qstrtostr( i18n("unknown audio file")) );
         }
         m_composition->addSegment(m_segment);
     } else {

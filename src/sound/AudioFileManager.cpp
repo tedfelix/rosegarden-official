@@ -24,6 +24,7 @@
 #include <cstdio>   // sprintf
 #include <cstdlib>
 #include <pthread.h>
+#include <signal.h>
 
 #if (__GNUC__ < 3)
 #include <strstream>
@@ -32,7 +33,7 @@
 #include <sstream>
 #endif
 
-#include <kapp.h>
+#include <QApplication>
 #include <klocale.h>
 #include <kio/netaccess.h>
 #include <kmessagebox.h>
@@ -546,9 +547,13 @@ AudioFileManager::createRecordingAudioFile()
     // insert file into vector
     WAVAudioFile *aF = 0;
 
+	QString aup( strtoqstr(m_audioPath) );
+	QString fnm(fileName);
+	const std::string fpath = m_audioPath + qstrtostr(fileName);
     try {
-        aF = new WAVAudioFile(newId, fileName.data(), m_audioPath + fileName.data());
-        m_audioFiles.push_back(aF);
+		aF = new WAVAudioFile( static_cast<const unsigned int>(newId), qstrtostr(fileName), fpath );
+		//aF = new WAVAudioFile(newId, fileName.data(), m_audioPath + qstrtostr(fileName) );
+		m_audioFiles.push_back(aF);
         m_recordedAudioFiles.insert(aF);
     } catch (SoundFile::BadSoundFileException e) {
         delete aF;
@@ -620,7 +625,7 @@ AudioFileManager::createDerivedAudioFile(AudioFileId source,
 
         fileName = QString("%1-%2-%3-%4.wav")
 	    .arg(prefix)
-	    .arg(sourceBase)
+	    .arg( strtoqstr(sourceBase) )
 	    .arg(QDateTime::currentDateTime().toString("yyyyMMdd-hhmmss"))
 	    .arg(newId + 1);
 
@@ -635,8 +640,8 @@ AudioFileManager::createDerivedAudioFile(AudioFileId source,
 
     try {
         aF = new WAVAudioFile(newId,
-			      fileName.data(),
-			      m_audioPath + fileName.data());
+			      qstrtostr(fileName),
+			      m_audioPath + qstrtostr(fileName) );
         m_audioFiles.push_back(aF);
 	m_derivedAudioFiles.insert(aF);
     } catch (SoundFile::BadSoundFileException e) {
@@ -653,8 +658,13 @@ AudioFileManager::importURL(const QUrl &url, int sampleRate)
     //!!! Have changed the prototype from KURL to QUrl, but this code still
     // refers to the old KURL API.  Update for Qt4
     
-    if (url.isLocalFile()) return importFile(url.path(), sampleRate);
-
+    //@@@ FIX !!!: QUrl has no method isLocalFile() ... we currently just assume it...
+	return importFile( qstrtostr(url.toLocalFile()), sampleRate );
+	//if (url.isLocalFile()) return importFile(url.path(), sampleRate);
+	
+	/*
+	//@@@ FIX !!! reenable !!!
+	//
     std::cerr << "AudioFileManager::importURL("<< url.prettyURL() << ", " << sampleRate << ")" << std::endl;
 
     emit setOperationName(i18n("Downloading file %1", url.prettyURL()));
@@ -678,6 +688,7 @@ AudioFileManager::importURL(const QUrl &url, int sampleRate)
     }
     
     return id;
+	*/
 }
 
 bool
@@ -769,8 +780,9 @@ AudioFileManager::importFile(const std::string &fileName, int sampleRate)
 
     //setup "rosegarden-audiofile-importer" process
     m_importProcess = new QProcess;
-    m_importProcessArgs = new QStringList;
-
+    QStringList *m_importProcessArgs = new QStringList;
+	//@@@ FIX: free *m_importProcessArgs !!!
+	
     *m_importProcessArgs << "rosegarden-audiofile-importer";
     if (sampleRate > 0) {
 	*m_importProcessArgs << "-r";
@@ -783,7 +795,8 @@ AudioFileManager::importFile(const std::string &fileName, int sampleRate)
     m_importProcess->execute("rosegarden-audiofile-importer", *m_importProcessArgs);
 
     while ((m_importProcess->state() == QProcess::Running) || (m_importProcess->state() == QProcess::Starting)) { //@@@JAS If problems, check here first
-        kapp->processEvents(100); //!!! not safe to do from seq thread
+		//@@@ what to do with kapp ????
+//        kapp->processEvents(100); //!!! not safe to do from seq thread
     }
 
     if (m_importProcess->exitStatus() != QProcess::NormalExit) {
@@ -800,7 +813,7 @@ AudioFileManager::importFile(const std::string &fileName, int sampleRate)
 
     if (ec) {
 	std::cerr << "audio file importer failed" << std::endl;
-	throw SoundFile::BadSoundFileException(fileName, i18n("Failed to convert or resample audio file on import"));
+	throw SoundFile::BadSoundFileException(fileName, qstrtostr( i18n("Failed to convert or resample audio file on import")) );
     } else {
 	std::cerr << "audio file importer succeeded" << std::endl;
     }
@@ -809,8 +822,8 @@ AudioFileManager::importFile(const std::string &fileName, int sampleRate)
     WAVAudioFile *aF = 0;
 
     aF = new WAVAudioFile(newId,
-			  targetName.data(),
-			  m_audioPath + targetName.data());
+			  qstrtostr( targetName ),
+			  m_audioPath + qstrtostr(targetName) );
     m_audioFiles.push_back(aF);
     m_derivedAudioFiles.insert(aF);
     // Don't catch SoundFile::BadSoundFileException
@@ -824,9 +837,9 @@ void
 AudioFileManager::slotStopImport()
 {
     if (m_importProcess) {
-	m_importProcess->kill(SIGTERM);
+	m_importProcess->terminate(); //    SIGTERM
 	sleep(1);
-	m_importProcess->kill(SIGKILL);
+	m_importProcess->kill(); // SIGKILL
     }
 }
 

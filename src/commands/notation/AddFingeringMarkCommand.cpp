@@ -100,7 +100,7 @@ AddFingeringMarkCommand::getArgument(QString actionName,
             bool ok = false;
             QString txt = querier.getText(i18n("Fingering: "), &ok);
             if (!ok) throw CommandCancelled();
-            else return txt;
+            else return qstrtostr(txt);
         } else if (remainder == "plus") {
             return "+";
         } else {

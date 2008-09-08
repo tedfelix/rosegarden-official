@@ -215,7 +215,7 @@ EventQuantizeCommand::makeQuantizer(QString configGroup,
         Note(Note::Demisemiquaver).getDuration();
 
     int type = config.value("quantizetype", notationDefault ? 2 : 0).toInt() ;
-    timeT unit = config.value("quantizeunit", defaultUnit).toInt() ;
+	timeT unit = config.value("quantizeunit",  static_cast<uint>(defaultUnit) ).toInt() ;
     bool notateOnly = qStrToBool( config.value("quantizenotationonly", "notationDefault" ) ) ;
     bool durations = qStrToBool( config.value("quantizedurations", "false" ) ) ;
     int simplicity = config.value("quantizesimplicity", 13).toInt() ;

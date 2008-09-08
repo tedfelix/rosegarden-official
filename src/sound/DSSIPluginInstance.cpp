@@ -21,6 +21,8 @@
 #include "PluginIdentifier.h"
 #include "LADSPAPluginFactory.h"
 
+#include <misc/Strings.h>
+
 #ifdef HAVE_DSSI
 
 //#define DEBUG_DSSI 1
@@ -781,7 +783,7 @@ DSSIPluginInstance::configure(QString key,
     std::cerr << "DSSIPluginInstance::configure(" << key << "," << value << ")" << std::endl;
 #endif
 
-    char *message = m_descriptor->configure(m_instanceHandle, key.data(), value.data());
+    const char *message = qstrtostr( m_descriptor->configure(m_instanceHandle, qstrtostr(key).c_str(), qstrtostr(value).c_str() ) ).c_str();
 
     m_programCacheValid = false;
 
@@ -801,7 +803,9 @@ DSSIPluginInstance::configure(QString key,
             qm = QString(m_descriptor->LADSPA_Plugin->Label) + ": ";
         }
         qm = qm + message;
-        free(message);
+        
+		//free(message);
+		//@@@ pointer to QString ... no free required anymore (?) 
     }
 
     return qm;

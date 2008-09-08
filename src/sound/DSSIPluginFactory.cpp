@@ -290,7 +290,7 @@ DSSIPluginFactory::getLRDFPath(QString &baseUri)
 void
 DSSIPluginFactory::discoverPlugins(QString soName)
 {
-    void *libraryHandle = dlopen(soName.data(), RTLD_LAZY);
+    void *libraryHandle = dlopen( qstrtostr(soName).c_str(), RTLD_LAZY);
 
     if (!libraryHandle) {
         std::cerr << "WARNING: DSSIPluginFactory::discoverPlugins: couldn't dlopen "

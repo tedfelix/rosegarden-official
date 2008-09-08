@@ -21,6 +21,7 @@
 
 #include <QTextCodec>
 #include <QVariant>
+#include <QString>
 
 
 QString strtoqstr(const std::string &str)
@@ -124,6 +125,7 @@ convertFromCodec(std::string text, QTextCodec *codec)
 std::ostream &
 operator<<(std::ostream &target, const QString &str)
 {
-    return target << str.toStdString();
+	return target << qstrtostr(str);		//@@@ was toStdString, is qstrtostr appropr. ?
+	//return target << str.toStdString();	
 }
 
