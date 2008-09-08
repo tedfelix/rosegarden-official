@@ -59,14 +59,16 @@ StartupTester::run()
     m_audioFileImporterMutex.lock();
     m_ready = true;
 
+    //setup "rosegarden-audiofile-importer" process
     QProcess *proc = new QProcess();
+    QStringList procArgs;
+
     m_stdoutBuffer = "";
     QObject::connect(proc, SIGNAL(receivedStdout(QProcess *, char *, int)),
                      this, SLOT(stdoutReceived(QProcess *, char *, int)));
-    *proc << "rosegarden-audiofile-importer";
-    *proc << "--conftest";
-    proc->start(QProcess::Block, QProcess::All);
-    if (!proc->normalExit() || proc->exitStatus()) {
+    procArgs << "--conftest";
+    proc->execute("rosegarden-audiofile-importer", procArgs);
+    if ((proc->exitStatus() != QProcess::NormalExit) || proc->exitCode()) {
         RG_DEBUG << "StartupTester - No audio file importer available" << endl;
         m_haveAudioFileImporter = false;
         parseStdoutBuffer(m_audioFileImporterMissing);
@@ -75,16 +77,17 @@ StartupTester::run()
         m_haveAudioFileImporter = true;
     }
     delete proc;
+    procArgs = QStringList();
     m_audioFileImporterMutex.unlock();
 
+    //setup "rosegarden-project-package" process
     proc = new QProcess;
     m_stdoutBuffer = "";
     QObject::connect(proc, SIGNAL(receivedStdout(QProcess *, char *, int)),
                      this, SLOT(stdoutReceived(QProcess *, char *, int)));
-    *proc << "rosegarden-project-package";
-    *proc << "--conftest";
-    proc->start(QProcess::Block, QProcess::All);
-    if (!proc->normalExit() || proc->exitStatus()) {
+    procArgs << "--conftest";
+    proc->execute("rosegarden-project-package", procArgs);
+    if ((proc->exitStatus() != QProcess::NormalExit) || proc->exitCode()) {
         m_haveProjectPackager = false;
         // rosegarden-project-package ran but exited with an error code
         RG_DEBUG << "StartupTester - No project packager available" << endl;
@@ -95,16 +98,17 @@ StartupTester::run()
         m_haveProjectPackager = true;
     }
     delete proc;
+    procArgs = QStringList();
     m_projectPackagerMutex.unlock();
 
+    //setup "rosegarden-lilypondview" process
     proc = new QProcess();
     m_stdoutBuffer = "";
     QObject::connect(proc, SIGNAL(receivedStdout(QProcess *, char *, int)),
                      this, SLOT(stdoutReceived(QProcess *, char *, int)));
-    *proc << "rosegarden-lilypondview";
-    *proc << "--conftest";
-    proc->start(QProcess::Block, QProcess::All);
-    if (!proc->normalExit() || proc->exitStatus()) {
+    procArgs << "--conftest";
+    proc->start("rosegarden-lilypondview", procArgs);
+    if ((proc->exitStatus() != QProcess::NormalExit) || proc->exitCode()) {
         RG_DEBUG << "StartupTester - No lilypondview available" << endl;
         m_haveLilyPondView = false;
         parseStdoutBuffer(m_lilyPondViewMissing);
