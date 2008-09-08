@@ -107,7 +107,7 @@ StartupTester::run()
     QObject::connect(proc, SIGNAL(receivedStdout(QProcess *, char *, int)),
                      this, SLOT(stdoutReceived(QProcess *, char *, int)));
     procArgs << "--conftest";
-    proc->start("rosegarden-lilypondview", procArgs);
+    proc->execute("rosegarden-lilypondview", procArgs);
     if ((proc->exitStatus() != QProcess::NormalExit) || proc->exitCode()) {
         RG_DEBUG << "StartupTester - No lilypondview available" << endl;
         m_haveLilyPondView = false;
