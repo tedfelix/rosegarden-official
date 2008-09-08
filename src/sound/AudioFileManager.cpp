@@ -782,7 +782,7 @@ AudioFileManager::importFile(const std::string &fileName, int sampleRate)
     
     m_importProcess->execute("rosegarden-audiofile-importer", *m_importProcessArgs);
 
-    while (m_importProcess->state() == QProcess::Running || m_importProcess->state() == QProcess::Starting) { //@@@ If problems check here first--JAS
+    while ((m_importProcess->state() == QProcess::Running) || (m_importProcess->state() == QProcess::Starting)) { //@@@JAS If problems, check here first
         kapp->processEvents(100); //!!! not safe to do from seq thread
     }
 
