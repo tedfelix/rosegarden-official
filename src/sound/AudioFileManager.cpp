@@ -31,10 +31,10 @@
 
 #include <kapp.h>
 #include <klocale.h>
-#include <QProcess>
 #include <kio/netaccess.h>
 #include <kmessagebox.h>
 
+#include <QProcess>
 #include <QPixmap>
 #include <QPainter>
 #include <QDateTime>
@@ -678,21 +678,23 @@ bool
 AudioFileManager::fileNeedsConversion(const std::string &fileName,
                                       int sampleRate)
 {
+    //setup "rosegarden-audiofile-importer" process
     QProcess *proc = new QProcess();
-    *proc << "rosegarden-audiofile-importer";
+    QStringList procArgs;
+
     if (sampleRate > 0) {
-        *proc << "-r";
-        *proc << QString("%1").arg(sampleRate);
+        procArgs << "-r";
+        procArgs << QString("%1").arg(sampleRate);
     }
-    *proc << "-w";
-    *proc << fileName.c_str();
+    procArgs << "-w";
+    procArgs << fileName.c_str();
 
-    proc->start(QProcess::Block, QProcess::NoCommunication);
+    proc->start("rosegarden-audiofile-importer", procArgs);
 
-    int es = proc->exitStatus();
+    int ec = proc->exitCode();
     delete proc;
 
-    if (es == 0 || es == 1) { // 1 == "other error" -- wouldn't be able to convert
+    if (ec == 0 || ec == 1) { // 1 == "other error" -- wouldn't be able to convert
         return false;
     }
     return true;
@@ -705,31 +707,33 @@ AudioFileManager::importFile(const std::string &fileName, int sampleRate)
 
     std::cerr << "AudioFileManager::importFile("<< fileName << ", " << sampleRate << ")" << std::endl;
 
+    //setup "rosegarden-audiofile-importer" process
     QProcess *proc = new QProcess();
-    *proc << "rosegarden-audiofile-importer";
+    QStringList procArgs;
+
     if (sampleRate > 0) {
-	*proc << "-r";
-	*proc << QString("%1").arg(sampleRate);
+	procArgs << "-r";
+	procArgs << QString("%1").arg(sampleRate);
     }
-    *proc << "-w";
-    *proc << fileName.c_str();
+    procArgs << "-w";
+    procArgs << fileName.c_str();
 
-    proc->start(QProcess::Block, QProcess::NoCommunication);
+    proc->start("rosegarden-audiofile-importer", procArgs);
 
-    int es = proc->exitStatus();
+    int ec = proc->exitCode();
     delete proc;
 
-    if (es == 0) {
+    if (ec == 0) {
 	AudioFileId id = addFile(fileName);
 	m_expectedSampleRate = sampleRate;
 	return id;
     }
 
-    if (es == 2) {
+    if (ec == 2) {
 	emit setOperationName(i18n("Converting audio file..."));
-    } else if (es == 3) {
+    } else if (ec == 3) {
 	emit setOperationName(i18n("Resampling audio file..."));
-    } else if (es == 4) {
+    } else if (ec == 4) {
 	emit setOperationName(i18n("Converting and resampling audio file..."));
     } else {
 	emit setOperationName(i18n("Importing audio file..."));
@@ -757,33 +761,38 @@ AudioFileManager::importFile(const std::string &fileName, int sampleRate)
         }
     }
 
+    //setup "rosegarden-audiofile-importer" process
     m_importProcess = new QProcess;
+    m_importProcessArgs = new QStringList;
 
-    *m_importProcess << "rosegarden-audiofile-importer";
+    *m_importProcessArgs << "rosegarden-audiofile-importer";
     if (sampleRate > 0) {
-	*m_importProcess << "-r";
-	*m_importProcess << QString("%1").arg(sampleRate);
+	*m_importProcessArgs << "-r";
+	*m_importProcessArgs << QString("%1").arg(sampleRate);
     }
-    *m_importProcess << "-c";
-    *m_importProcess << fileName.c_str();
-    *m_importProcess << (m_audioPath.c_str() + targetName);
+    *m_importProcessArgs << "-c";
+    *m_importProcessArgs << fileName.c_str();
+    *m_importProcessArgs << (m_audioPath.c_str() + targetName);
     
-    m_importProcess->start(QProcess::NotifyOnExit, QProcess::NoCommunication);
+    m_importProcess->execute("rosegarden-audiofile-importer", *m_importProcessArgs);
 
-    while (m_importProcess->isRunning()) {
+    while (m_importProcess->state() == QProcess::Running || m_importProcess->state() == QProcess::Starting) { //@@@ If problems check here first--JAS
         kapp->processEvents(100); //!!! not safe to do from seq thread
     }
 
-    if (!m_importProcess->normalExit()) {
+    if (m_importProcess->exitStatus() != QProcess::NormalExit) {
 	// interrupted
 	throw SoundFile::BadSoundFileException(fileName, "Import cancelled");
     }
 
-    es = m_importProcess->exitStatus();
+    ec = m_importProcess->exitCode();
+
     delete m_importProcess;
     m_importProcess = 0;
+    delete m_importProcessArgs;
+    m_importProcessArgs = 0;
 
-    if (es) {
+    if (ec) {
 	std::cerr << "audio file importer failed" << std::endl;
 	throw SoundFile::BadSoundFileException(fileName, i18n("Failed to convert or resample audio file on import"));
     } else {
