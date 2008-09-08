@@ -3839,15 +3839,16 @@ void RosegardenGUIApp::slotImportProject()
 
 void RosegardenGUIApp::importProject(QString filePath)
 {
+    //setup "rosegarden-project-package" process
     QProcess *proc = new QProcess;
-    *proc << "rosegarden-project-package";
-    *proc << "--unpack";
-    *proc << filePath;
+    QStringList procArgs;
+    procArgs << "--unpack";
+    procArgs << filePath;
 
     KStartupLogo::hideIfStillThere();
-    proc->start(QProcess::Block, QProcess::All);
+    proc->start("rosegarden-project-package", procArgs);
 
-    if (!proc->normalExit() || proc->exitStatus()) {
+    if ((proc->exitStatus() != QProcess::NormalExit) || proc->exitCode()) {
         CurrentProgressDialog::freeze();
         KMessageBox::sorry(this, i18n("Failed to import project file \"%1\"", filePath));
         CurrentProgressDialog::thaw();
@@ -4847,14 +4848,16 @@ bool RosegardenGUIApp::launchJack()
 
     emit startupStatusMessage(i18n("Clearing down jackd..."));
 
+    //setup "/usr/bin/killall" process
     QProcess *proc = new QProcess; // TODO: do it in a less clumsy way
-    *proc << "/usr/bin/killall";
-    *proc << "-9";
-    *proc << "jackd";
+    QStringList procArgs;
 
-    proc->start(QProcess::Block, QProcess::All);
+    procArgs << "-9";
+    procArgs << "jackd";
 
-    if (proc->exitStatus())
+    proc->start("/usr/bin/killall", procArgs);
+
+    if (proc->exitCode())
         RG_DEBUG << "couldn't kill any jackd processes" << endl;
     else
         RG_DEBUG << "killed old jackd processes" << endl;
@@ -4871,16 +4874,14 @@ bool RosegardenGUIApp::launchJack()
         RG_DEBUG << "RosegardenGUIApp::launchJack() : splitCommand length : "
         << splitCommand.size() << endl;
 
-        // start jack process
+        // setup "jack" process
         m_jackProcess = new QProcess;
 
-        *m_jackProcess << splitCommand;
-
-        m_jackProcess->start();
+        m_jackProcess->execute(splitCommand.takeFirst(), splitCommand);
     }
 
 
-    return m_jackProcess != 0 ? m_jackProcess->isRunning() : true;
+    return m_jackProcess != 0 ? m_jackProcess->state() == QProcess::Running : true;
 }
 #endif
 
@@ -4937,15 +4938,16 @@ void RosegardenGUIApp::slotExportProject()
         return ;
     }
 
+    //setup "rosegarden-project-package" process
     QProcess *proc = new QProcess;
-    *proc << "rosegarden-project-package";
-    *proc << "--pack";
-    *proc << rgFile;
-    *proc << fileName;
+    QStringList procArgs;
+    procArgs << "--pack";
+    procArgs << rgFile;
+    procArgs << fileName;
 
-    proc->start(QProcess::Block, QProcess::All);
+    proc->start("rosegarden-project-package", procArgs);
 
-    if (!proc->normalExit() || proc->exitStatus()) {
+    if ((proc->exitStatus() != QProcess::NormalExit) || proc->exitCode()) {
         KMessageBox::sorry(this, i18n("Failed to export to project file \"%1\"", fileName));
         CurrentProgressDialog::thaw();
         delete proc;
@@ -5091,15 +5093,16 @@ void RosegardenGUIApp::slotPrintLilyPond()
     if (!exportLilyPondFile(file->fileName(), true)) {
         return ;
     }
+    //setup "rosegarden-lilypondview" process
     QProcess *proc = new QProcess;
-    *proc << "rosegarden-lilypondview";
-    *proc << "--graphical";
-    *proc << "--print";
-    *proc << file->fileName();
+    QStringList procArgs;
+    procArgs << "--graphical";
+    procArgs << "--print";
+    procArgs << file->objectName();
     connect(proc, SIGNAL(processExited(QProcess *)),
             this, SLOT(slotLilyPondViewProcessExited(QProcess *)));
     m_lilyTempFileMap[proc] = file;
-    proc->start(QProcess::NotifyOnExit);
+    proc->execute("rosegarden-lilypondview" ,procArgs); //@@@JAS KProcess::NotifyOnExit
 }
 
 void RosegardenGUIApp::slotPreviewLilyPond()
@@ -5116,15 +5119,16 @@ void RosegardenGUIApp::slotPreviewLilyPond()
     if (!exportLilyPondFile(file->fileName(), true)) {
         return ;
     }
+    //setup "rosegarden-lilypondview" process
     QProcess *proc = new QProcess;
-    *proc << "rosegarden-lilypondview";
-    *proc << "--graphical";
-    *proc << "--pdf";
-    *proc << file->fileName();
+    QStringList procArgs;
+    procArgs << "--graphical";
+    procArgs << "--pdf";
+    procArgs << file->objectName();
     connect(proc, SIGNAL(processExited(QProcess *)),
             this, SLOT(slotLilyPondViewProcessExited(QProcess *)));
     m_lilyTempFileMap[proc] = file;
-    proc->start(QProcess::NotifyOnExit);
+    proc->execute("rosegarden-lilypondview", procArgs);
 }
 
 void RosegardenGUIApp::slotLilyPondViewProcessExited(QProcess *p)
