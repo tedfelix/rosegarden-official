@@ -2851,16 +2851,16 @@ void RosegardenGUIApp::slotRescaleSelection()
         }
     }
 
-    ProgressDialog *value()Dlg = 0;
+    ProgressDialog *progressDlg = 0;
 
     if (!asrcs.empty()) {
-        value()Dlg = new ProgressDialog
+        progressDlg = new ProgressDialog
             (i18n("Rescaling audio file..."), 100, this);
-        value()Dlg->setAutoClose(false);
-        value()Dlg->setAutoReset(false);
-        value()Dlg->show();
+        progressDlg->setAutoClose(false);
+        progressDlg->setAutoReset(false);
+        progressDlg->show();
         for (size_t i = 0; i < asrcs.size(); ++i) {
-            asrcs[i]->connectProgressDialog(value()Dlg);
+            asrcs[i]->connectProgressDialog(progressDlg);
         }
     }
 
@@ -2868,15 +2868,15 @@ void RosegardenGUIApp::slotRescaleSelection()
 
     if (!asrcs.empty()) {
 
-        value()Dlg->setLabel(i18n("Generating audio preview..."));
+        progressDlg->setLabel(i18n("Generating audio preview..."));
 
         for (size_t i = 0; i < asrcs.size(); ++i) {
-            asrcs[i]->disconnectProgressDialog(value()Dlg);
+            asrcs[i]->disconnectProgressDialog(progressDlg);
         }
 
         connect(&m_doc->getAudioFileManager(), SIGNAL(setValue(int)),
-                value()Dlg->progressBar(), SLOT(setValue(int)));
-        connect(value()Dlg, SIGNAL(cancelClicked()),
+                progressDlg->progressBar(), SLOT(setValue(int)));
+        connect(progressDlg, SIGNAL(cancelClicked()),
                 &m_doc->getAudioFileManager(), SLOT(slotStopPreview()));
 
         for (size_t i = 0; i < asrcs.size(); ++i) {
@@ -2888,7 +2888,7 @@ void RosegardenGUIApp::slotRescaleSelection()
         }
     }
 
-    if (value()Dlg) delete value()Dlg;
+    if (progressDlg) delete progressDlg;
 }
 
 bool
@@ -3998,18 +3998,18 @@ RosegardenGUIApp::createDocumentFromMIDIFile(QString file)
                       &newDoc->getStudio());
 
     KStartupLogo::hideIfStillThere();
-    ProgressDialog value()Dlg(i18n("Importing MIDI file..."),
+    ProgressDialog progressDlg(i18n("Importing MIDI file..."),
                                200,
                                this);
 
     CurrentProgressDialog::set
-        (&value()Dlg);
+        (&progressDlg);
 
     connect(&midiFile, SIGNAL(setValue(int)),
-            value()Dlg.progressBar(), SLOT(setValue(int)));
+            progressDlg.progressBar(), SLOT(setValue(int)));
 
     connect(&midiFile, SIGNAL(incrementProgress(int)),
-            value()Dlg.progressBar(), SLOT(advance(int)));
+            progressDlg.progressBar(), SLOT(advance(int)));
 
     if (!midiFile.open()) {
         CurrentProgressDialog::freeze();
@@ -4035,7 +4035,7 @@ RosegardenGUIApp::createDocumentFromMIDIFile(QString file)
     // Clean up for notation purposes (after reinitialise, because that
     // sets the composition's end marker time which is needed here)
 
-    value()Dlg.slotSetOperationName(i18n("Calculating notation..."));
+    progressDlg.slotSetOperationName(i18n("Calculating notation..."));
     ProgressDialog::processEvents();
 
     Composition *comp = &newDoc->getComposition();
@@ -4050,7 +4050,7 @@ RosegardenGUIApp::createDocumentFromMIDIFile(QString file)
                        (segment.getStartTime()));
     }
 
-    value()Dlg.progressBar()->setValue(100);
+    progressDlg.progressBar()->setValue(100);
 
     for (Composition::iterator i = comp->begin();
             i != comp->end(); ++i) {
@@ -4078,9 +4078,9 @@ RosegardenGUIApp::createDocumentFromMIDIFile(QString file)
         }
     }
 
-    int value()Per = 100;
+    int progressPer = 100;
     if (comp->getNbSegments() > 0)
-        value()Per = (int)(100.0 / double(comp->getNbSegments()));
+        progressPer = (int)(100.0 / double(comp->getNbSegments()));
 
     MacroCommand *command = new MacroCommand(i18n("Calculate Notation"));
 
@@ -4096,9 +4096,9 @@ RosegardenGUIApp::createDocumentFromMIDIFile(QString file)
         EventQuantizeCommand *subCommand = new EventQuantizeCommand
                                            (segment, startTime, endTime, "Notation Options", true);
 
-        subCommand->setProgressTotal(value()Per + 1);
+        subCommand->setProgressTotal(progressPer + 1);
         QObject::connect(subCommand, SIGNAL(incrementProgress(int)),
-                         value()Dlg.progressBar(), SLOT(advance(int)));
+                         progressDlg.progressBar(), SLOT(advance(int)));
 
         command->addCommand(subCommand);
     }
@@ -4157,11 +4157,11 @@ RosegardenGUIDoc*
 RosegardenGUIApp::createDocumentFromRG21File(QString file)
 {
     KStartupLogo::hideIfStillThere();
-    ProgressDialog value()Dlg(
+    ProgressDialog progressDlg(
         i18n("Importing Rosegarden 2.1 file..."), 100, this);
 
     CurrentProgressDialog::set
-        (&value()Dlg);
+        (&progressDlg);
 
     // Inherent autoload
     //
@@ -4172,14 +4172,14 @@ RosegardenGUIApp::createDocumentFromRG21File(QString file)
     // TODO: make RG21Loader to actually emit these signals
     //
     connect(&rg21Loader, SIGNAL(setValue(int)),
-            value()Dlg.progressBar(), SLOT(setValue(int)));
+            progressDlg.progressBar(), SLOT(setValue(int)));
 
     connect(&rg21Loader, SIGNAL(incrementProgress(int)),
-            value()Dlg.progressBar(), SLOT(advance(int)));
+            progressDlg.progressBar(), SLOT(advance(int)));
 
     // "your starter for 40%" - helps the "freeze" work
     //
-    value()Dlg.progressBar()->advance(40);
+    progressDlg.progressBar()->advance(40);
 
     if (!rg21Loader.load(file, newDoc->getComposition())) {
         CurrentProgressDialog::freeze();
@@ -4244,11 +4244,11 @@ RosegardenGUIDoc*
 RosegardenGUIApp::createDocumentFromHydrogenFile(QString file)
 {
     KStartupLogo::hideIfStillThere();
-    ProgressDialog value()Dlg(
+    ProgressDialog progressDlg(
         i18n("Importing Hydrogen file..."), 100, this);
 
     CurrentProgressDialog::set
-        (&value()Dlg);
+        (&progressDlg);
 
     // Inherent autoload
     //
@@ -4259,14 +4259,14 @@ RosegardenGUIApp::createDocumentFromHydrogenFile(QString file)
     // TODO: make RG21Loader to actually emit these signals
     //
     connect(&hydrogenLoader, SIGNAL(setValue(int)),
-            value()Dlg.progressBar(), SLOT(setValue(int)));
+            progressDlg.progressBar(), SLOT(setValue(int)));
 
     connect(&hydrogenLoader, SIGNAL(incrementProgress(int)),
-            value()Dlg.progressBar(), SLOT(advance(int)));
+            progressDlg.progressBar(), SLOT(advance(int)));
 
     // "your starter for 40%" - helps the "freeze" work
     //
-    value()Dlg.progressBar()->advance(40);
+    progressDlg.progressBar()->advance(40);
 
     if (!hydrogenLoader.load(file, newDoc->getComposition())) {
         CurrentProgressDialog::freeze();
@@ -4957,7 +4957,7 @@ void RosegardenGUIApp::slotExportMIDI()
 
 void RosegardenGUIApp::exportMIDIFile(QString file)
 {
-    ProgressDialog value()Dlg(i18n("Exporting MIDI file..."),
+    ProgressDialog progressDlg(i18n("Exporting MIDI file..."),
                                100,
                                this);
 
@@ -4967,10 +4967,10 @@ void RosegardenGUIApp::exportMIDIFile(QString file)
                       &m_doc->getStudio());
 
     connect(&midiFile, SIGNAL(setValue(int)),
-            value()Dlg.progressBar(), SLOT(setValue(int)));
+            progressDlg.progressBar(), SLOT(setValue(int)));
 
     connect(&midiFile, SIGNAL(incrementProgress(int)),
-            value()Dlg.progressBar(), SLOT(advance(int)));
+            progressDlg.progressBar(), SLOT(advance(int)));
 
     midiFile.convertToMidi(m_doc->getComposition());
 
@@ -4994,17 +4994,17 @@ void RosegardenGUIApp::slotExportCsound()
 
 void RosegardenGUIApp::exportCsoundFile(QString file)
 {
-    ProgressDialog value()Dlg(i18n("Exporting Csound score file..."),
+    ProgressDialog progressDlg(i18n("Exporting Csound score file..."),
                                100,
                                this);
 
     CsoundExporter e(this, &m_doc->getComposition(), std::string(QFile::encodeName(file)));
 
     connect(&e, SIGNAL(setValue(int)),
-            value()Dlg.progressBar(), SLOT(setValue(int)));
+            progressDlg.progressBar(), SLOT(setValue(int)));
 
     connect(&e, SIGNAL(incrementProgress(int)),
-            value()Dlg.progressBar(), SLOT(advance(int)));
+            progressDlg.progressBar(), SLOT(advance(int)));
 
     if (!e.write()) {
         CurrentProgressDialog::freeze();
@@ -5027,17 +5027,17 @@ void RosegardenGUIApp::slotExportMup()
 
 void RosegardenGUIApp::exportMupFile(QString file)
 {
-    ProgressDialog value()Dlg(i18n("Exporting Mup file..."),
+    ProgressDialog progressDlg(i18n("Exporting Mup file..."),
                                100,
                                this);
 
     MupExporter e(this, &m_doc->getComposition(), std::string(QFile::encodeName(file)));
 
     connect(&e, SIGNAL(setValue(int)),
-            value()Dlg.progressBar(), SLOT(setValue(int)));
+            progressDlg.progressBar(), SLOT(setValue(int)));
 
     connect(&e, SIGNAL(incrementProgress(int)),
-            value()Dlg.progressBar(), SLOT(advance(int)));
+            progressDlg.progressBar(), SLOT(advance(int)));
 
     if (!e.write()) {
         CurrentProgressDialog::freeze();
@@ -5131,17 +5131,17 @@ bool RosegardenGUIApp::exportLilyPondFile(QString file, bool forPreview)
         return false;
     }
 
-    ProgressDialog value()Dlg(i18n("Exporting LilyPond file..."),
+    ProgressDialog progressDlg(i18n("Exporting LilyPond file..."),
                                100,
                                this);
 
     LilyPondExporter e(this, m_doc, std::string(QFile::encodeName(file)));
 
     connect(&e, SIGNAL(setValue(int)),
-            value()Dlg.progressBar(), SLOT(setValue(int)));
+            progressDlg.progressBar(), SLOT(setValue(int)));
 
     connect(&e, SIGNAL(incrementProgress(int)),
-            value()Dlg.progressBar(), SLOT(advance(int)));
+            progressDlg.progressBar(), SLOT(advance(int)));
 
     if (!e.write()) {
         CurrentProgressDialog::freeze();
@@ -5168,17 +5168,17 @@ void RosegardenGUIApp::slotExportMusicXml()
 
 void RosegardenGUIApp::exportMusicXmlFile(QString file)
 {
-    ProgressDialog value()Dlg(i18n("Exporting MusicXML file..."),
+    ProgressDialog progressDlg(i18n("Exporting MusicXML file..."),
                                100,
                                this);
 
     MusicXmlExporter e(this, m_doc, std::string(QFile::encodeName(file)));
 
     connect(&e, SIGNAL(setValue(int)),
-            value()Dlg.progressBar(), SLOT(setValue(int)));
+            progressDlg.progressBar(), SLOT(setValue(int)));
 
     connect(&e, SIGNAL(incrementProgress(int)),
-            value()Dlg.progressBar(), SLOT(advance(int)));
+            progressDlg.progressBar(), SLOT(advance(int)));
 
     if (!e.write()) {
         CurrentProgressDialog::freeze();
@@ -7665,17 +7665,17 @@ RosegardenGUIApp::slotPanic()
         //
         slotStop();
 
-        ProgressDialog value()Dlg(i18n("Queueing MIDI panic events for tranmission..."),
+        ProgressDialog progressDlg(i18n("Queueing MIDI panic events for tranmission..."),
                                    100,
                                    this);
         CurrentProgressDialog::set
-            (&value()Dlg);
+            (&progressDlg);
         ProgressDialog::processEvents();
 
         connect(m_seqManager, SIGNAL(setValue(int)),
-                value()Dlg.progressBar(), SLOT(setValue(int)));
+                progressDlg.progressBar(), SLOT(setValue(int)));
         connect(m_seqManager, SIGNAL(incrementProgress(int)),
-                value()Dlg.progressBar(), SLOT(advance(int)));
+                progressDlg.progressBar(), SLOT(advance(int)));
 
         m_seqManager->panic();
 

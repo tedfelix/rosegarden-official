@@ -161,20 +161,20 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent *e)
                         new AudioSegmentRescaleCommand(m_doc, segment, ratio,
                                                        newStartTime, newEndTime);
 
-                    ProgressDialog value()Dlg
+                    ProgressDialog progressDlg
                         (i18n("Rescaling audio file..."), 100, 0);
-                    value()Dlg.setAutoClose(false);
-                    value()Dlg.setAutoReset(false);
-                    value()Dlg.show();
-                    command->connectProgressDialog(&value()Dlg);
+                    progressDlg.setAutoClose(false);
+                    progressDlg.setAutoReset(false);
+                    progressDlg.show();
+                    command->connectProgressDialog(&progressDlg);
                     
                     addCommandToHistory(command);
 
-                    value()Dlg.setLabel(i18n("Generating audio preview..."));
-                    command->disconnectProgressDialog(&value()Dlg);
+                    progressDlg.setLabel(i18n("Generating audio preview..."));
+                    command->disconnectProgressDialog(&progressDlg);
                     connect(&m_doc->getAudioFileManager(), SIGNAL(setValue(int)),
-                            value()Dlg.progressBar(), SLOT(setValue(int)));
-                    connect(&value()Dlg, SIGNAL(cancelClicked()),
+                            progressDlg.progressBar(), SLOT(setValue(int)));
+                    connect(&progressDlg, SIGNAL(cancelClicked()),
                             &m_doc->getAudioFileManager(), SLOT(slotStopPreview()));
 
                     int fid = command->getNewAudioFileId();

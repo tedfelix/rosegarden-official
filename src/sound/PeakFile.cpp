@@ -501,7 +501,7 @@ PeakFile::writePeaks(unsigned short /*updatePercentage*/,
     if (bytes == 3 || bytes == 4) // 24-bit PCM or 32-bit float
         m_format = 2; // write 16-bit PCM instead
 
-    // for the value() dialog
+    // for the progress dialog
     unsigned int apprxTotalBytes = m_audioFile->getSize();
     unsigned int byteCount = 0;
 

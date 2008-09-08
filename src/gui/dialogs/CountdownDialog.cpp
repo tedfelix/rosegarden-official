@@ -117,7 +117,7 @@ CountdownDialog::setElapsedTime(int elapsedSeconds)
         m_time->setText(i18n("Just how big is your hard disk?"));
     }
 
-    // Draw the value() bar
+    // Draw the progress bar
     //
     if (m_pastEndMode) {
         m_progressBar()->setPosition(m_progressBar()Width);

@@ -1026,7 +1026,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                     insertFile(qstrtostr(label),
                                qstrtostr(file), id.toInt()) == false) {
 
-                // Freeze the value() dialog
+                // Freeze the progress dialog
                 CurrentProgressDialog::freeze();
 
                 // Hide splash screen if present on startup
@@ -1076,7 +1076,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
                 getAudioFileManager().print();
 
-                // Restore value() dialog's normal state
+                // Restore progress dialog's normal state
                 CurrentProgressDialog::thaw();
             } else {
                 // AudioPath is modified so set a document post modify flag
