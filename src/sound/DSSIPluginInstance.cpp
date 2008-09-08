@@ -783,7 +783,8 @@ DSSIPluginInstance::configure(QString key,
     std::cerr << "DSSIPluginInstance::configure(" << key << "," << value << ")" << std::endl;
 #endif
 
-    const char *message = qstrtostr( m_descriptor->configure(m_instanceHandle, qstrtostr(key).c_str(), qstrtostr(value).c_str() ) ).c_str();
+    char *message = m_descriptor->configure
+	(m_instanceHandle, key.toLocal8Bit().data(), value.toLocal8Bit().data());
 
     m_programCacheValid = false;
 
@@ -802,10 +803,9 @@ DSSIPluginInstance::configure(QString key,
         if (m_descriptor->LADSPA_Plugin && m_descriptor->LADSPA_Plugin->Label) {
             qm = QString(m_descriptor->LADSPA_Plugin->Label) + ": ";
         }
-        qm = qm + message;
+        qm = qm + QString(message);
         
-		//free(message);
-		//@@@ pointer to QString ... no free required anymore (?) 
+	free(message);
     }
 
     return qm;
