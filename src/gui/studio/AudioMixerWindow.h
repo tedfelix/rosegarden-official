@@ -27,9 +27,8 @@
 
 
 class QWidget;
-class QVBox;
 class QPushButton;
-class QHBox;
+class QHBoxLayout;
 class QFrame;
 
 
@@ -147,11 +146,12 @@ private:
         QPushButton *m_stereoButton;
         bool m_stereoness;
 
-        QVBox *m_pluginBox;
+        QWidget *m_pluginBox;
         std::vector<QPushButton *> m_plugins;
     };
 
-    QHBox *m_surroundBox;
+    QWidget *m_surroundBox;
+    QHBoxLayout *m_surroundBoxLayout;
     QFrame *m_mainBox;
 
     typedef std::map<InstrumentId, FaderRec> FaderMap;

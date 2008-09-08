@@ -85,6 +85,7 @@ static const unsigned int MIXER_OMIT_SYNTH_FADERS      = 1 << 4;
 AudioMixerWindow::AudioMixerWindow(QWidget *parent,
                                    RosegardenGUIDoc *document):
         MixerWindow(parent, document),
+        m_surroundBoxLayout(0),
         m_mainBox (0)
 {
     populate();
@@ -230,6 +231,8 @@ AudioMixerWindow::depopulate()
     m_faders.clear();
     m_submasters.clear();
 
+    if (m_surroundBoxLayout)
+        m_surroundBoxLayout->removeWidget(m_mainBox);   // Needed ???
     delete m_mainBox;
     m_mainBox = 0;
 }
@@ -237,13 +240,16 @@ AudioMixerWindow::depopulate()
 void
 AudioMixerWindow::populate()
 {
+
     if (m_mainBox) {
 
         depopulate();
 
     } else {
 
-        m_surroundBox = new QHBox(this);
+        m_surroundBox = new QWidget(this);
+        m_surroundBoxLayout = new QHBoxLayout;
+        m_surroundBox->setLayout(m_surroundBoxLayout);
         setCentralWidget(m_surroundBox);
     }
 
@@ -256,6 +262,7 @@ AudioMixerWindow::populate()
     boldFont.setBold(true);
 
     m_mainBox = new QFrame(m_surroundBox);
+    m_surroundBoxLayout->addWidget(m_mainBox);
 
     InstrumentList instruments = m_studio->getPresentationInstruments();
     BussList busses = m_studio->getBusses();
@@ -374,10 +381,12 @@ AudioMixerWindow::populate()
         QToolTip::add
             (rec.m_recordButton, i18n("Arm recording"));
 
-        rec.m_pluginBox = new QVBox(m_mainBox);
+        rec.m_pluginBox = new QWidget(m_mainBox);
+        QVBoxLayout *pluginBoxLayout = new QVBoxLayout;
 
         for (int p = 0; p < 5; ++p) {
             QPushButton *plugin = new QPushButton(rec.m_pluginBox, "pluginButton");
+            pluginBoxLayout->addWidget(plugin);
             plugin->setText(i18n("<none>"));
             plugin->setMaximumWidth(45);
             QToolTip::add
@@ -386,6 +395,8 @@ AudioMixerWindow::populate()
             connect(plugin, SIGNAL(clicked()),
                     this, SLOT(slotSelectPlugin()));
         }
+
+        rec.m_pluginBox->setLayout(pluginBoxLayout);
 
         QLabel *idLabel;
         QString idString;
@@ -505,10 +516,12 @@ AudioMixerWindow::populate()
         QToolTip::add
             (rec.m_muteButton, i18n("Mute"));
 
-        rec.m_pluginBox = new QVBox(m_mainBox);
+        rec.m_pluginBox = new QWidget(m_mainBox);
+        QVBoxLayout *pluginBoxLayout = new QVBoxLayout;
 
         for (int p = 0; p < 5; ++p) {
             QPushButton *plugin = new QPushButton(rec.m_pluginBox, "pluginButton");
+            pluginBoxLayout->addWidget(plugin);
             plugin->setText(i18n("<none>"));
             plugin->setMaximumWidth(45);
             QToolTip::add
@@ -517,6 +530,8 @@ AudioMixerWindow::populate()
             connect(plugin, SIGNAL(clicked()),
                     this, SLOT(slotSelectPlugin()));
         }
+
+        rec.m_pluginBox->setLayout(pluginBoxLayout);
 
         QLabel *idLabel = new QLabel(i18n("Sub %1", count), m_mainBox, "subMaster");
         idLabel->setFont(boldFont);
