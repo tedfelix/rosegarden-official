@@ -5098,7 +5098,7 @@ void RosegardenGUIApp::slotPrintLilyPond()
     QStringList procArgs;
     procArgs << "--graphical";
     procArgs << "--print";
-    procArgs << file->objectName();
+    procArgs << file->fileName();
     connect(proc, SIGNAL(processExited(QProcess *)),
             this, SLOT(slotLilyPondViewProcessExited(QProcess *)));
     m_lilyTempFileMap[proc] = file;
