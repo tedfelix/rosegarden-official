@@ -41,7 +41,7 @@ namespace Rosegarden
 {
 
 PlayList::PlayList(QWidget *parent, const char *name)
-        : QVBox(parent, name),
+        : QWidget(parent, name),
         m_listView(new PlayListView(this)),
         m_buttonBar(new QFrame(this)),
         m_barLayout(new QHBoxLayout(m_buttonBar)),
@@ -51,6 +51,12 @@ PlayList::PlayList(QWidget *parent, const char *name)
         m_deleteButton(0),
         m_clearButton(0)
 {
+    QVBoxLayout *vLayout = new QVBoxLayout;
+    vLayout->addWidget(m_listView);
+    vLayout->addWidget(m_buttonBar);
+    vLayout->addWidget(m_barLayout);
+    setLayout(vLayout);
+
     m_openButton = new QPushButton(m_buttonBar);
     m_playButton = new QPushButton(m_buttonBar);
     m_moveUpButton = new QPushButton(m_buttonBar);

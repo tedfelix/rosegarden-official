@@ -20,7 +20,6 @@
 #define _RG_PLAYLIST_H_
 
 #include <QWidget>
-#include <QVBoxLayout>
 
 
 class QWidget;
@@ -37,7 +36,7 @@ namespace Rosegarden
 class PlayListView;
 
 
-class PlayList : public QVBox
+class PlayList : public QWidget
 {
     Q_OBJECT
 
