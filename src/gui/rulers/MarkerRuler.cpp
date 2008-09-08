@@ -44,6 +44,7 @@
 #include <klocale.h>
 #include <kaction.h>
 #include <kstddirs.h>
+#include <kmainwindow.h>
 #include <qtooltip.h>
 
 

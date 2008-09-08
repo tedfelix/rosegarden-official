@@ -26,6 +26,7 @@
 #include "base/MidiDevice.h"
 #include "base/MidiProgram.h"
 #include "document/RosegardenGUIDoc.h"
+#include "gui/application/RosegardenGUIApp.h"
 #include "sound/SF2PatchExtractor.h"
 #include <kcombobox.h>
 #include <kconfig.h>

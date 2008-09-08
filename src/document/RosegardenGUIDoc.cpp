@@ -1126,6 +1126,13 @@ void RosegardenGUIDoc::initialiseStudio()
     StudioControl::sendMappedEvent(mEff);
 }
 
+SequenceManager *
+RosegardenGUIDoc::getSequenceManager()
+{
+    return (dynamic_cast<RosegardenGUIApp*>(parent()))->getSequenceManager();
+}
+
+
 int RosegardenGUIDoc::FILE_FORMAT_VERSION_MAJOR = 1;
 
 int RosegardenGUIDoc::FILE_FORMAT_VERSION_MINOR = 4;
