@@ -21,7 +21,6 @@
 #include <QDialog>
 #include <QDialogButtonBox>
 
-class QHBox;
 class QSpinBox;
 
 namespace Rosegarden {
