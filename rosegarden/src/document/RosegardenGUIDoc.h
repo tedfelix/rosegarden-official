@@ -26,7 +26,6 @@
 #include "base/RealTime.h"
 #include "base/Segment.h"
 #include "base/Studio.h"
-#include "gui/application/RosegardenGUIApp.h"
 #include "gui/editors/segment/segmentcanvas/AudioPreviewThread.h"
 #include <map>
 #include "sound/AudioFileManager.h"
@@ -417,9 +416,7 @@ public:
 
     // Get the sequence manager from the app
     //
-    SequenceManager* getSequenceManager() 
-        { return (dynamic_cast<RosegardenGUIApp*>(parent()))
-                                         ->getSequenceManager(); }
+    SequenceManager* getSequenceManager();
 
     //Obsolete: multitrack MIDI recording. plcl 06/2006.
     //Segment *getRecordMIDISegment() { return m_recordMIDISegment; }
