@@ -49,7 +49,7 @@
 #include <sstream>
 #endif
 
-#include <kapp.h>
+//#include <kapp.h>
 
 namespace Rosegarden
 {

@@ -14,7 +14,6 @@
 */
 
 #include "Strings.h"
-#include "Strings.h"
 
 #include "base/Composition.h"
 #include "base/Segment.h"

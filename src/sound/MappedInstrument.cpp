@@ -13,6 +13,7 @@
 */
 
 #include "MappedInstrument.h"
+#include <misc/Strings.h>
 
 namespace Rosegarden
 {
@@ -83,7 +84,7 @@ operator>>(QDataStream &dS, MappedInstrument *mI)
     mI->setType(Instrument::InstrumentType(type));
     mI->setChannel(MidiByte(channel));
     mI->setId(InstrumentId(id));
-    mI->setName(std::string(name.data()));
+	mI->setName( qStrToStrLocal8(name) );
     mI->setDevice(DeviceId(device));
     mI->setAudioChannels(audioChannels);
 
@@ -106,7 +107,7 @@ operator>>(QDataStream &dS, MappedInstrument &mI)
     mI.setType(Instrument::InstrumentType(type));
     mI.setChannel(MidiByte(channel));
     mI.setId(InstrumentId(id));
-    mI.setName(std::string(name.data()));
+	mI.setName( qStrToStrLocal8(name) );
     mI.setDevice(DeviceId(device));
     mI.setAudioChannels(audioChannels);
 

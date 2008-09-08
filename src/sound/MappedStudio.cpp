@@ -1484,7 +1484,7 @@ MappedPluginSlot::setPropertyList(const MappedObjectProperty &property,
                     studio->getSoundDriver()->configurePlugin(m_instrument,
                             m_position,
                             key, value);
-                if (rv && rv != "") {
+                if ( rv.isEmpty() ) {
                     throw(rv);
                 }
             }

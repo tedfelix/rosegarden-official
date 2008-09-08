@@ -15,6 +15,7 @@
 #include "MappedDevice.h"
 #include "MappedInstrument.h"
 #include <iostream>
+#include <misc/Strings.h>
 
 namespace Rosegarden
 {
@@ -130,8 +131,8 @@ operator>>(QDataStream &dS, MappedDevice *mD)
     dS >> recording;
     mD->setId(id);
     mD->setType(Device::DeviceType(dType));
-    mD->setName(std::string(name.data()));
-    mD->setConnection(connection.data());
+	mD->setName( qStrToStrLocal8(name) );
+	mD->setConnection( qStrToStrLocal8(connection) );
     mD->setDirection(MidiDevice::DeviceDirection(direction));
     mD->setRecording((bool)recording);
 
@@ -175,8 +176,8 @@ operator>>(QDataStream &dS, MappedDevice &mD)
     dS >> recording;
     mD.setId(id);
     mD.setType(Device::DeviceType(dType));
-    mD.setName(std::string(name.data()));
-    mD.setConnection(connection.data());
+	mD.setName( qStrToStrLocal8(name) );
+	mD.setConnection( qStrToStrLocal8(connection) );
     mD.setDirection(MidiDevice::DeviceDirection(direction));
     mD.setRecording((bool)recording);
 

@@ -502,7 +502,7 @@ LADSPAPluginFactory::getLADSPADescriptor(QString identifier)
 void
 LADSPAPluginFactory::loadLibrary(QString soName)
 {
-    void *libraryHandle = dlopen(soName.data(), RTLD_NOW);
+    void *libraryHandle = dlopen( qStrToCharPtrLocal8(soName), RTLD_NOW);
     if (libraryHandle)
         m_libraryHandles[soName] = libraryHandle;
 }
@@ -639,7 +639,7 @@ LADSPAPluginFactory::discoverPlugins()
     for (size_t i = 0; i < lrdfPaths.size(); ++i) {
         QDir dir(lrdfPaths[i], "*.rdf;*.rdfs");
         for (unsigned int j = 0; j < dir.count(); ++j) {
-            if (!lrdf_read_file(QString("file:" + lrdfPaths[i] + "/" + dir[j]).data())) {
+			if (!lrdf_read_file( qStrToCharPtrLocal8( QString("file:" + lrdfPaths[i] + "/" + dir[j]) ))) {
                 //		std::cerr << "LADSPAPluginFactory: read RDF file " << (lrdfPaths[i] + "/" + dir[j]) << std::endl;
                 haveSomething = true;
             }
@@ -675,7 +675,7 @@ LADSPAPluginFactory::discoverPlugins()
 void
 LADSPAPluginFactory::discoverPlugins(QString soName)
 {
-    void *libraryHandle = dlopen(soName.data(), RTLD_LAZY);
+	void *libraryHandle = dlopen( qStrToCharPtrLocal8(soName), RTLD_LAZY);
 
     if (!libraryHandle) {
         std::cerr << "WARNING: LADSPAPluginFactory::discoverPlugins: couldn't dlopen "
@@ -791,14 +791,15 @@ LADSPAPluginFactory::generateFallbackCategories()
                 QTextStream stream(&file);
                 QString line;
 
-                while (!stream.eof()) {
-                    line = stream.readLine();
+				line = stream.readLine();
+				while ( !(stream.atEnd() || line.isNull()) ) {	// note: atEnd() does not work with stdin, use line.isNull() instead
                     //		    std::cerr << "line is: \"" << line << "\"" << std::endl;
                     QString id = line.section("::", 0, 0);
                     QString cat = line.section("::", 1, 1);
                     m_fallbackCategories[id] = cat;
 //                    		    std::cerr << "set id \"" << id << "\" to cat \"" << cat << "\"" << std::endl;
-                }
+					line = stream.readLine();
+				}
             }
         }
     }
@@ -808,7 +809,7 @@ void
 LADSPAPluginFactory::generateTaxonomy(QString uri, QString base)
 {
 #ifdef HAVE_LIBLRDF
-    lrdf_uris *uris = lrdf_get_instances(uri.data());
+    lrdf_uris *uris = lrdf_get_instances( qStrToCharPtrLocal8(uri) );
 
     if (uris != NULL) {
         for (int i = 0; i < uris->count; ++i) {
@@ -817,7 +818,7 @@ LADSPAPluginFactory::generateTaxonomy(QString uri, QString base)
         lrdf_free_uris(uris);
     }
 
-    uris = lrdf_get_subclasses(uri.data());
+	uris = lrdf_get_subclasses( qStrToCharPtrLocal8(uri) );
 
     if (uris != NULL) {
         for (int i = 0; i < uris->count; ++i) {
