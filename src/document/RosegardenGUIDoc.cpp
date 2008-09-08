@@ -92,7 +92,7 @@
 #include <QProcess>
 #include <QProgressBar>
 #include <QProgressDialog>
-#include <ktempfile.h>
+#include <QTemporaryFile>
 #include <QByteArray>
 #include <QDataStream>
 #include <QDialog>
@@ -1181,19 +1181,21 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
         return saveDocumentActual(filename, errMsg, autosave);
     }
 
-    KTempFile temp(filename + ".", "", 0644); // will be umask'd
+    QTemporaryFile temp(filename + ".");
+    //!!! was: KTempFile temp(filename + ".", "", 0644); // will be umask'd
 
-    int status = temp.status();
-    if (status != 0) {
+    temp.setAutoRemove(false);
+
+    if (!temp.open()) { // This creates the file and opens it atomically
         errMsg = i18n(QString("Could not create temporary file in directory of '%1': %2").arg(filename).arg(strerror(status)));
         return false;
     }
 
-    QString tempFileName = temp.name();
+    QString tempFileName = temp.fileName();
 
-    RG_DEBUG << "Temporary file name is: \"" << tempFileName << "\"" << endl;
+    std::cerr << "Temporary file name is: \"" << tempFileName << "\": is this a full path?  We hope so" << std::endl;
 
-    // KTempFile creates a temporary file that is already open: close it
+    // The temporary file is now open: close it (without removing it)
     if (!temp.close()) {
         status = temp.status();
         errMsg = i18n(QString("Failure in temporary file handling for file '%1': %2")

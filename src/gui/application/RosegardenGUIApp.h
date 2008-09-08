@@ -41,7 +41,7 @@ class QLabel;
 class QCursor;
 class QShortcut;
 class KURL;
-class KTempFile;
+class QTemporaryFile;
 class KToggleAction;
 class KRecentFilesAction;
 class QProcess;
@@ -1641,7 +1641,7 @@ private:
 
     static RosegardenGUIApp *m_myself;
 
-    static std::map<QProcess *, KTempFile *> m_lilyTempFileMap;
+    static std::map<QProcess *, QTemporaryFile *> m_lilyTempFileMap;
 
     // Used to fetch the current sequencer position from the mmapped sequencer information file
     //

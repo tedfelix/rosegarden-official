@@ -30,7 +30,6 @@
 #include "NotationCanvasView.h"
 #include <string>
 #include <QProcess>
-#include <ktempfile.h>
 #include <QMap>
 #include <QSize>
 #include <QString>
@@ -50,6 +49,7 @@ class QLabel;
 class QCursor;
 class Q3CanvasItem;
 class Q3Canvas;
+class QTemporaryFile;
 //class QProgressBar;
 class QComboBox;
 class KActionMenu;
@@ -1056,7 +1056,7 @@ protected:
     bool m_printMode;
     int m_printSize;
 
-    static std::map<QProcess *, KTempFile *> m_lilyTempFileMap;
+    static std::map<QProcess *, QTemporaryFile *> m_lilyTempFileMap;
 
     int m_showHeadersGroup;
     QDeferScrollView * m_headersGroupView;

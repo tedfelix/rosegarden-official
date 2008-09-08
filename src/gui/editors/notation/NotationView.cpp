@@ -4329,26 +4329,27 @@ NotationView::slotFilePrintPreview()
     printingView.print(true);
 }
 
-std::map<QProcess *, KTempFile *> NotationView::m_lilyTempFileMap;
+std::map<QProcess *, QTemporaryFile *> NotationView::m_lilyTempFileMap;
 
 void NotationView::slotPrintLilyPond()
 {
     KTmpStatusMsg msg(i18n("Printing LilyPond file..."), this);
-    KTempFile *file = new KTempFile(QString::null, ".ly");
-    file->setAutoDelete(true);
-    if (!file->objectName()) {
-        // CurrentProgressDialog::freeze();
+    QTemporaryFile *file = new QTemporaryFile("XXXXXX.ly");
+    file->setAutoRemove(true);
+    if (!file->open()) {
+        CurrentProgressDialog::freeze();
         KMessageBox::sorry(this, i18n("Failed to open a temporary file for LilyPond export."));
         delete file;
     }
-    if (!exportLilyPondFile(file->objectName(), true)) {
+    file->close(); // we just want the filename
+    if (!exportLilyPondFile(file->fileName(), true)) {
         return ;
     }
     QProcess *proc = new QProcess;
     *proc << "rosegarden-lilypondview";
     *proc << "--graphical";
     *proc << "--print";
-    *proc << file->objectName();
+    *proc << file->fileName();
     connect(proc, SIGNAL(processExited(QProcess *)),
             this, SLOT(slotLilyPondViewProcessExited(QProcess *)));
     m_lilyTempFileMap[proc] = file;
@@ -4358,21 +4359,22 @@ void NotationView::slotPrintLilyPond()
 void NotationView::slotPreviewLilyPond()
 {
     KTmpStatusMsg msg(i18n("Previewing LilyPond file..."), this);
-    KTempFile *file = new KTempFile(QString::null, ".ly");
-    file->setAutoDelete(true);
-    if (!file->objectName()) {
-        // CurrentProgressDialog::freeze();
+    QTemporaryFile *file = new QTemporaryFile("XXXXXX.ly");
+    file->setAutoRemove(true);
+    if (!file->open()) {
+        CurrentProgressDialog::freeze();
         KMessageBox::sorry(this, i18n("Failed to open a temporary file for LilyPond export."));
         delete file;
     }
-    if (!exportLilyPondFile(file->objectName(), true)) {
+    file->close(); // we just want the filename
+    if (!exportLilyPondFile(file->fileName(), true)) {
         return ;
     }
     QProcess *proc = new QProcess;
     *proc << "rosegarden-lilypondview";
     *proc << "--graphical";
     *proc << "--pdf";
-    *proc << file->objectName();
+    *proc << file->fileName();
     connect(proc, SIGNAL(processExited(QProcess *)),
             this, SLOT(slotLilyPondViewProcessExited(QProcess *)));
     m_lilyTempFileMap[proc] = file;
