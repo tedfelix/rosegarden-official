@@ -52,12 +52,13 @@ AudioPluginOSCGUI::AudioPluginOSCGUI(AudioPluginInstance *instance,
     PluginIdentifier::parseIdentifier(identifier, type, soName, label);
     QFileInfo soInfo(soName);
 
+    //setup osc process
     // arguments: osc url, dll name, label, instance tag
 
     m_gui = new QProcess();
-
-    *m_gui << filePath
-    << m_serverUrl
+    QStringList guiArgs;
+   
+    guiArgs << m_serverUrl
     << soInfo.fileName()
     << label
     << friendlyName;
@@ -66,7 +67,8 @@ AudioPluginOSCGUI::AudioPluginOSCGUI(AudioPluginInstance *instance,
     << filePath << " " << m_serverUrl << " "
     << soInfo.fileName() << " " << label << " " << friendlyName << endl;
 
-    if (!m_gui->start(QProcess::NotifyOnExit, QProcess::NoCommunication)) {
+    m_gui->start(filePath, guiArgs);
+    if (!m_gui->waitForStarted()) {  //@@@ JAS Check here first for errors
         RG_DEBUG << "AudioPluginOSCGUI::AudioPluginOSCGUI: Couldn't start process " << filePath << endl;
         delete m_gui;
         m_gui = 0;
