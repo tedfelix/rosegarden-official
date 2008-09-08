@@ -45,7 +45,7 @@ StandardRuler::StandardRuler(RosegardenGUIDoc *doc,
                              QWidget* parent,
                              const char* name,
                              WFlags f):
-        QVBox(parent, name, f),
+        QWidget(parent, name, f),
         m_invert(invert),
         m_loopRulerHeight(10),
         m_currentXOffset(0),
@@ -53,20 +53,26 @@ StandardRuler::StandardRuler(RosegardenGUIDoc *doc,
         m_rulerScale(rulerScale),
         m_hButtonBar(0)
 {
-    setSpacing(0);
+    QVBoxLayout *layout = QVBoxLayout;
+    layout->setSpacing(0);
 
     if (!m_invert) {
         m_hButtonBar = new MarkerRuler
                        (m_doc, m_rulerScale, barHeight - m_loopRulerHeight, xorigin, this);
+        layout->addWidget(m_hButtonBar);
     }
 
     m_loopRuler = new LoopRuler
                   (m_doc, m_rulerScale, m_loopRulerHeight, xorigin, m_invert, this, name);
+    layout->addWidget(m_loopRuler);
 
     if (m_invert) {
         m_hButtonBar = new MarkerRuler
                        (m_doc, m_rulerScale, barHeight - m_loopRulerHeight, xorigin, this);
+        layout->addWidget(m_hButtonBar);
     }
+
+    setLayout(layout);
 
     QObject::connect
         (doc->getCommandHistory(), SIGNAL(commandExecuted()),

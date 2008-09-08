@@ -20,7 +20,6 @@
 #define _RG_STANDARDRULER_H_
 
 #include <QWidget>
-#include <QVBoxLayout>
 #include "base/Event.h"
 
 
@@ -38,7 +37,7 @@ class MarkerRuler;
 class SnapGrid;
 
 
-class StandardRuler : public QVBox
+class StandardRuler : public QWidget
 {
     Q_OBJECT
 
