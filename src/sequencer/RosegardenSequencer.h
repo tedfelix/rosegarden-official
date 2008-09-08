@@ -257,8 +257,6 @@ public:
 
     MappedComposition pullAsynchronousMidiQueue();
 
-    MappedComposition pullAsynchronousMidiQueue();
-
     //
     //
     //
@@ -279,14 +277,6 @@ public:
 
     // Update internal clock and send GUI position pointer movement
     void updateClocks();
-
-//!!!    bool checkExternalTransport();
-
-    // Sends status changes up to GUI
-//!!!    void notifySequencerStatus();
-
-    // Send latest slice information back to GUI for display
-//!!!    void notifyVisuals(MappedComposition *mC);
 
     // These two methods process any pending MIDI or audio
     // and send them up to the gui for storage and display

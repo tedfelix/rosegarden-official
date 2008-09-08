@@ -51,7 +51,6 @@
 #include "gui/widgets/QDeferScrollView.h"
 #include "sound/AudioFile.h"
 #include "TrackButtons.h"
-#include "TrackEditorIface.h"
 #include <dcopobject.h>
 #include "document/Command.h"
 #include <kglobal.h>
@@ -81,7 +80,6 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
                          double initialUnitsPerPixel,
                          QWidget* parent, const char* name,
                          WFlags) :
-    DCOPObject("TrackEditorIface"),
     QWidget(parent, name),
     m_doc(doc),
     m_rulerScale(rulerScale),

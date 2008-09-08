@@ -21,7 +21,6 @@
 
 #include "base/MidiProgram.h"
 #include <map>
-#include "TrackEditorIface.h"
 #include <QString>
 #include <QWidget>
 #include "base/Event.h"
@@ -58,7 +57,7 @@ class StandardRuler;
  *
  * @see CompositionView
  */
-class TrackEditor : public QWidget, virtual public TrackEditorIface
+class TrackEditor : public QWidget
 {
     Q_OBJECT
 public:
