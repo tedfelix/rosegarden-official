@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -38,10 +37,10 @@ class ProgressBar : public QProgressBar
 
 public:
     ProgressBar(int totalSteps,
-                          bool useDelay,
-                          QWidget *creator = 0,
-                          const char *name = 0,
-                          WFlags f = 0);
+                bool useDelay,
+                QWidget *creator = 0,
+                const char *name = 0,
+                WFlags f = 0);
 
 };
 

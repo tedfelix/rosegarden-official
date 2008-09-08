@@ -15,8 +15,7 @@
 #include <string>
 
 #include "document/ConfigGroups.h"
-#include "kconfig.h"
-#include "kapp.h"
+#include <QApplication>
 #include <QSettings>
 #include "misc/Strings.h"
 

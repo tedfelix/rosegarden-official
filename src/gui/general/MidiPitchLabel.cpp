@@ -17,13 +17,13 @@
 
 
 #include "MidiPitchLabel.h"
-#include <kapplication.h>
-
 #include "document/ConfigGroups.h"
-#include <kconfig.h>
-#include <klocale.h>
+
+#include <QApplication>
+#include <QSettings>
 #include <QString>
 
+#include <klocale.h>
 
 namespace Rosegarden
 {

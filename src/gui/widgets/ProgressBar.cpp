@@ -16,7 +16,7 @@
 */
 
 
-// #include "ProgressBar.h"
+#include "ProgressBar.h"
 
 #include <QProgressBar>
 #include <QProgressDialog>
@@ -32,8 +32,15 @@ ProgressBar::ProgressBar(int totalSteps,
                          QWidget *creator,
                          const char *name,
                          WFlags f) :
-        QProgressBar(totalSteps, creator, name, f)
-{}
+        QProgressBar(creator)
+//@@@ QProgressBar is quite different from KProgressWhateverWeReplaced, and its
+// ctor takes only QProgressBar ( QWidget * parent = 0 ).  I think chucking
+// "creator" in here is right, but who knows.
+{
+    // We need some totally rewritten guts here. There's a LOT more to this than
+    // just swapping KWhateverWeReplaced for a QT4 method that has practically
+    // nothing in common with either its QT3 or KDE3 ancestors.
+}
 
 }
 #include "ProgressBar.moc"

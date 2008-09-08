@@ -45,7 +45,7 @@ StaffLine::setHighlighted(bool highlighted)
 
         m_normalPen = pen();
         QPen newPen = m_normalPen;
-        newPen.setColor(red);
+        newPen.setColor(Qt::red);
         setPen(newPen);
 
     } else {
