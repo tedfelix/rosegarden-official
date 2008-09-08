@@ -1,4 +1,5 @@
-// -*- c-basic-offset: 4 -*-
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
+
 /*
     Rosegarden
     A sequencer and musical notation editor.
@@ -97,17 +98,17 @@ double qstrtodouble(const QString &s)
 
 bool qStrToBool(const QString &s)
 {
-	QString tt = s.toLower();
-	tt = tt.trimmed();
-	if ( (tt == "yes") || (tt == "true") || (tt == "on") || (tt == "1") ){
-            return true;
-	}
-	return false;
+    QString tt = s.toLower();
+    tt = tt.trimmed();
+    if ( (tt == "yes") || (tt == "true") || (tt == "on") || (tt == "1") ){
+	return true;
+    }
+    return false;
 }
 
 bool qStrToBool(const QVariant &v)
 {
-	return qStrToBool( v.toString() );
+    return qStrToBool( v.toString() );
 }
 
 
@@ -125,7 +126,6 @@ convertFromCodec(std::string text, QTextCodec *codec)
 std::ostream &
 operator<<(std::ostream &target, const QString &str)
 {
-	return target << qstrtostr(str);		//@@@ was toStdString, is qstrtostr appropr. ?
-	//return target << str.toStdString();	
+    return target << str.toLocal8Bit().data();
 }
 
