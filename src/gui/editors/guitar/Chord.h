@@ -52,7 +52,7 @@ public:
     Event* getAsEvent(timeT absoluteTime) const;
         
     bool isEmpty() const   { return m_root.isEmpty(); }
-    bool operator!() const { return !m_root; }
+    //@@@ bool operator!() const { return !m_root; }
     
     bool isUserChord() const { return m_isUserChord; }
     void setUserChord(bool c) { m_isUserChord = c; }

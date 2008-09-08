@@ -17,6 +17,7 @@
 
 #include "Chord.h"
 #include "base/Event.h"
+#include "misc/Strings.h"
 
 #include <QString>
 
@@ -54,19 +55,19 @@ Chord::Chord(const Event& e)
 
     ok = e.get<String>(RootPropertyName, f);
     if (ok)
-        m_root = f;
+        m_root = strtoqstr(f);
 
     ok = e.get<String>(ExtPropertyName, f);
     if (ok) {
         if (f.length() == 0)
             m_ext = QString::null;
         else
-            m_ext = f;
+            m_ext = strtoqstr(f);
     }
     
     ok = e.get<String>(FingeringPropertyName, f);
     if (ok) {
-        QString qf(f);
+        QString qf(strtoqstr(f));
         QString errString;
     
         Fingering fingering = Fingering::parseFingering(qf, errString);    
@@ -77,8 +78,8 @@ Chord::Chord(const Event& e)
 Event* Chord::getAsEvent(timeT absoluteTime) const
 {
     Event *e = new Event(EventType, absoluteTime, 0, EventSubOrdering);
-    e->set<String>(RootPropertyName, m_root);
-    e->set<String>(ExtPropertyName, m_ext);
+    e->set<String>(RootPropertyName, qstrtostr(m_root));
+    e->set<String>(ExtPropertyName, qstrtostr(m_ext));
     e->set<String>(FingeringPropertyName, getFingering().toString());
     return e;
 }
