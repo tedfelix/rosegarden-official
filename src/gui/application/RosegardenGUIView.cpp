@@ -877,15 +877,15 @@ void RosegardenGUIView::slotEditSegmentAudio(Segment *segment)
     // wait cursor
     QApplication::setOverrideCursor(QCursor(Qt::waitCursor));
 
-    // Prepare the process
+    // Setup the process
     //
     QProcess *process = new QProcess();
-    (*process) << splitCommand;
-    (*process) << QString(aF->getFilename().c_str());
+    splitCommand << QString(aF->getFilename().c_str());
 
     // Start it
     //
-    if (!process->start()) {
+    process->start(splitCommand.takeFirst(), splitCommand);
+    if (!process->waitForStarted()) {  //@@@ JAS Check here first for errors
         std::cerr << "RosegardenGUIView::slotEditSegmentAudio() - "
         << "can't start external editor" << std::endl;
     }
