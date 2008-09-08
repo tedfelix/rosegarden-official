@@ -37,6 +37,7 @@
 #include <QTimer>
 #include <QToolTip>
 #include <QWidget>
+#include <QMouseEvent>
 #include <cmath>
 
 
@@ -198,7 +199,8 @@ Rotary::paintEvent(QPaintEvent *)
     pen.setWidth(2 * scale);
     int pos = indent + (width - 2 * indent) / 8;
     int darkWidth = (width - 2 * indent) * 2 / 3;
-    int darkQuote = (130 * 2 / (darkWidth ? darkWidth : 1)) + 100;
+    //@@@ unused variable:
+    // int darkQuote = (130 * 2 / (darkWidth ? darkWidth : 1)) + 100;
     while (darkWidth) {
         c = c.light(101);
         pen.setColor(c);
@@ -214,7 +216,7 @@ Rotary::paintEvent(QPaintEvent *)
         --darkWidth;
     }
 
-    paint.setBrush(QBrush::NoBrush);
+    paint.setBrush(Qt::NoBrush);
 
     pen.setColor(colorGroup().dark());
     pen.setWidth(scale);
@@ -366,17 +368,17 @@ Rotary::snapPosition()
 void
 Rotary::mousePressEvent(QMouseEvent *e)
 {
-    if (e->button() == LeftButton) {
+    if (e->button() == Qt::LeftButton) {
         m_buttonPressed = true;
         m_lastY = e->y();
         m_lastX = e->x();
-    } else if (e->button() == MidButton) // reset to default
+    } else if (e->button() == Qt::MidButton) // reset to default
     {
         m_position = m_initialPosition;
         snapPosition();
         update();
         emit valueChanged(m_snapPosition);
-    } else if (e->button() == RightButton) // reset to centre position
+    } else if (e->button() == Qt::RightButton) // reset to centre position
     {
         m_position = (m_maximum + m_minimum) / 2.0;
         snapPosition();
@@ -400,7 +402,7 @@ Rotary::mousePressEvent(QMouseEvent *e)
 //    std::cerr << "Rotary::mousePressEvent: logarithmic = " << m_logarithmic
 //              << ", position = " << m_position << std::endl;
 
-    if (e->button() == RightButton || e->button() == MidButton) {
+    if (e->button() == Qt::RightButton || e->button() == Qt::MidButton) {
         // one shot, 500ms
         _floatTimer->start(500, true);
     }
@@ -448,7 +450,7 @@ Rotary::mouseDoubleClickEvent(QMouseEvent * /*e*/)
 void
 Rotary::mouseReleaseEvent(QMouseEvent *e)
 {
-    if (e->button() == LeftButton) {
+    if (e->button() == Qt::LeftButton) {
         m_buttonPressed = false;
         m_lastY = 0;
         m_lastX = 0;
