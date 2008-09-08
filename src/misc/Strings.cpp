@@ -40,6 +40,12 @@ std::string qstrtostr(const QString &qstr)
 }
 
 
+std::string qStrToStrUtf8(const QString &qstr)
+{
+	return qstrtostr( qstr );
+	//return std::string( qstr.toUtf8().data() );
+}
+
 std::string qStrToStrLocal8(const QString &qstr)
 {
 	return std::string( qstr.toLocal8Bit().data() );

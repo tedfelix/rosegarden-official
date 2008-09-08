@@ -31,6 +31,7 @@ extern double qstrtodouble(const QString &);
 extern bool qStrToBool(const QString &s);
 extern bool qStrToBool(const QVariant &v);
 extern std::string qStrToStrLocal8(const QString &qstr);
+extern std::string qStrToStrUtf8(const QString &qstr);
 extern const char* qStrToCharPtrUtf8(const QString &qstr);
 extern const char* qStrToCharPtrLocal8(const QString &qstr);
 

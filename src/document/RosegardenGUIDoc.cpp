@@ -351,11 +351,11 @@ bool RosegardenGUIDoc::saveIfModified()
 
             if (!completed) {
                 if (!errMsg.isEmpty()) {
-                    KMessageBox::error(0, i18n(QString("Could not save document at %1\n(%2)")
-                                               .arg(getAbsFilePath()).arg(errMsg)));
+					KMessageBox::error(0, i18n( qStrToStrUtf8( String("Could not save document at %1\n(%2)")
+                                               .arg(getAbsFilePath()).arg(errMsg)) )  );
                 } else {
-                    KMessageBox::error(0, i18n(QString("Could not save document at %1")
-                                               .arg(getAbsFilePath())));
+					KMessageBox::error(0, i18n( qStrToStrUtf8( QString("Could not save document at %1")
+                                               .arg( strtoqstr(getAbsFilePath()) )) )  );
                 }
             }
         }
@@ -1187,7 +1187,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
     temp.setAutoRemove(false);
 
     if (!temp.open()) { // This creates the file and opens it atomically
-        errMsg = i18n(QString("Could not create temporary file in directory of '%1': %2").arg(filename).arg(strerror(status)));
+		errMsg = i18n( qStrToStrUtf8( QString("Could not create temporary file in directory of '%1': %2").arg(filename).arg(strerror(status)) )  );
         return false;
     }
 
@@ -1212,7 +1212,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 
     QDir dir(QFileInfo(tempFileName).dir());
     if (!dir.rename(tempFileName, filename)) {
-        errMsg = i18n(QString("Failed to rename temporary output file '%1' to desired output file '%2'").arg(tempFileName).arg(filename));
+		errMsg = i18n( qStrToStrUtf8( QString("Failed to rename temporary output file '%1' to desired output file '%2'").arg(tempFileName).arg(filename) )  );
         return false;
     }
 
@@ -1233,7 +1233,7 @@ bool RosegardenGUIDoc::saveDocumentActual(const QString& filename,
 
     if (!rc) {
         // do some error report
-        errMsg = i18n(QString("Could not open file '%1' for writing").arg(filename));
+		errMsg = i18n( qStrToStrUtf8( QString("Could not open file '%1' for writing").arg(filename) ));
         delete fileCompressedDevice;
         return false; // couldn't open file
     }
@@ -1351,7 +1351,7 @@ bool RosegardenGUIDoc::saveDocumentActual(const QString& filename,
     // check that all went ok
     //
     if (fileCompressedDevice->status() != IO_Ok) {
-        errMsg = i18n(QString("Error while writing on '%1'").arg(filename));
+		errMsg = i18n( qStrToStrUtf8( QString("Error while writing on '%1'").arg(filename)) );
         delete fileCompressedDevice;
         return false;
     }

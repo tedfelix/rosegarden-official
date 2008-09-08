@@ -524,7 +524,7 @@ protected:
      * @see RoseXmlHandler
      */
     bool xmlParse(QString fileContents, QString &errMsg,
-                  ProgressDialog *value(),
+                  ProgressDialog *progress,
                   unsigned int elementCount,
                   bool permanent,
                   bool &cancelled);

@@ -22,6 +22,7 @@
 #include "PeakFile.h"
 #include "AudioFile.h"
 #include "Profiler.h"
+#include <misc/Strings.h>
 
 using std::cout;
 using std::cerr;
@@ -290,7 +291,7 @@ PeakFile::close()
                   m_modificationTime.time().second(),
                   m_modificationTime.time().msec());
 
-    std::string dateString(fDate.toStdString());
+    std::string dateString( qStrToStrLocal8( fDate )  );
 
     // Pad with spaces to make up to 28 bytes long and output
     //
@@ -535,7 +536,10 @@ PeakFile::writePeaks(unsigned short /*updatePercentage*/,
 
         emit setValue((int)(double(byteCount) /
                                double(apprxTotalBytes) * 100.0));
-        kapp->processEvents();
+        
+		//kapp->processEvents();
+		qApp->processEvents(QEventLoop::AllEvents);
+		
 
         samplePtr = (unsigned char *)samples.c_str();
 

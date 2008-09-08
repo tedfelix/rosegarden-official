@@ -15,7 +15,7 @@
 
 #include <iostream>
 #include "misc/Debug.h"
-#include <kapplication.h>
+#include <QApplication>
 #include <fstream>
 #include <string>
 #include <cstdio>
@@ -167,7 +167,7 @@ MidiFile::getMidiByte(ifstream* midiFile)
 
             emit setValue((int)(double(midiFile->tellg()) /
                                    double(m_fileSize) * 20.0));
-            kapp->processEvents(50);
+			qApp->processEvents( QEventLoop::AllEvents );	// note: was kapp->processEvents(50)
         }
 
         return (MidiByte)byte;
@@ -245,7 +245,7 @@ MidiFile::getMidiBytes(ifstream* midiFile, unsigned long numberOfBytes)
     if (bytesGot % 2000 == 0) {
         emit setValue((int)(double(midiFile->tellg()) /
                                double(m_fileSize) * 20.0));
-        kapp->processEvents(50);
+		qApp->processEvents(QEventLoop::AllEvents);
     }
 
     return stringRet;
@@ -838,7 +838,7 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
         // split over these tracks
         emit setValue(20 +
                          (int)((80.0 * double(i) / double(m_numberOfTracks))));
-        kapp->processEvents(50);
+		qApp->processEvents(QEventLoop::AllEvents);
 
         // Convert the deltaTime to an absolute time since
         // the start of the segment.  The addTime method
@@ -2116,8 +2116,9 @@ MidiFile::writeTrack(std::ofstream* midiFile, TrackId trackNumber)
 
 		if (progressCount % 500 == 0) {
 			emit setValue(progressCount * 100 / progressTotal);
-            kapp->processEvents(500);
-        }
+            //kapp->processEvents(500);
+			qApp->processEvents(QEventLoop::AllEvents);
+		}
     }
 
     // Now we write the track - First the standard header..

@@ -647,7 +647,7 @@ bool RG21Loader::readNextLine()
 
         m_currentLine = m_stream->readLine();
 
-        if (m_stream->eof())
+        if (m_stream->atEnd())
             return false;
 
         m_currentLine = m_currentLine.simplified();
@@ -679,7 +679,7 @@ bool RG21Loader::load(const QString &fileName, Composition &comp)
 
     m_studio->unassignAllInstruments();
 
-    while (!m_stream->eof()) {
+    while (!m_stream->atEnd()) {
 
         if (!readNextLine())
             break;

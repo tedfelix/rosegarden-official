@@ -1064,7 +1064,7 @@ LilyPondExporter::write()
 		                chord.replace(QRegExp(rxStart), QString("\\1") + QString("4*0"));
                             } else {
 				// Skip improper chords.
-				str << " %{ improper chord: '" << chord.toUtf8() << "' %} ";
+				str << (" %{ improper chord: '") << qStrToStrUtf8(chord) << ("' %} ");
 				continue;
                             }
 
@@ -1077,7 +1077,7 @@ LilyPondExporter::write()
                             if (numberOfChords >= 0) {
 				// The chord intervals are specified with skips.
                                 writeSkip(m_composition->getTimeSignatureAt(myTime), lastTime, myTime - lastTime, false, str);
-                                str << chord.toUtf8() << " ";
+                                str << qStrToStrUtf8(chord) << " ";
 		                numberOfChords++;
                             }
                             lastTime = myTime;
@@ -1431,10 +1431,10 @@ LilyPondExporter::write()
 				str << indent(++col) << "\\override LyricText #'self-alignment-X = #LEFT"
 				    << std::endl;
 			    }
-			    str << indent(col) << "\\set ignoreMelismata = ##t" << std::endl;
-			    str << indent(col) << text.toUtf8() << " " << std::endl;
-			    str << indent(col) << "\\unset ignoreMelismata" << std::endl;
-			    str << indent(--col) << "} % Lyrics " << (currentVerse+1) << std::endl;
+				str << indent(col) << qStrToStrUtf8("\\set ignoreMelismata = ##t") << std::endl;
+				str << indent(col) << qStrToStrUtf8(text) << " " << std::endl;
+				str << indent(col) << qStrToStrUtf8("\\unset ignoreMelismata") << std::endl;
+				str << indent(--col) << qStrToStrUtf8("} % Lyrics ") << (currentVerse+1) << std::endl;
 			    // close the Lyrics context
 		        } // if ( rx.search( text....
 		    } // for (long currentVerse = 0....
@@ -1784,7 +1784,7 @@ LilyPondExporter::writeBar(Segment *s,
 
 	// Test whether the next note is grace note or not.
 	// The start or end of beamed grouping should be put in proper places.
-	str << endGroupBeamingsStr.toUtf8();
+	str << qStrToStrUtf8( endGroupBeamingsStr );
 	if ((*i)->has(IS_GRACE_NOTE) && (*i)->get<Bool>(IS_GRACE_NOTE)) {
 	    if (isGrace == 0) { 
 	        isGrace = 1;
@@ -1796,7 +1796,7 @@ LilyPondExporter::writeBar(Segment *s,
 	    // str << "%{ grace ends %} "; // DEBUG
             str << "} ";
 	}
-	str << startGroupBeamingsStr.toUtf8();
+	str << qStrToStrUtf8(startGroupBeamingsStr);
 
         timeT soundingDuration = -1;
         timeT duration = calculateDuration

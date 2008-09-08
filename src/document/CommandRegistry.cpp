@@ -30,6 +30,7 @@
 
 #include <kglobal.h>
 #include "document/Command.h"
+#include <misc/Strings.h>
 
 namespace Rosegarden {
 
@@ -53,7 +54,7 @@ CommandRegistry::slotInvokeCommand()
     
     if (m_builders.find(actionName) == m_builders.end()) {
         std::cerr << "CommandRegistry::slotInvokeCommand: Unknown actionName \""
-                  << actionName.toStdString() << "\"" << std::endl;
+                  << qStrToStrLocal8(actionName) << "\"" << std::endl;
         return;
     }
 
