@@ -3846,7 +3846,7 @@ void RosegardenGUIApp::importProject(QString filePath)
     procArgs << filePath;
 
     KStartupLogo::hideIfStillThere();
-    proc->start("rosegarden-project-package", procArgs);
+    proc->execute("rosegarden-project-package", procArgs);
 
     if ((proc->exitStatus() != QProcess::NormalExit) || proc->exitCode()) {
         CurrentProgressDialog::freeze();
@@ -4855,7 +4855,7 @@ bool RosegardenGUIApp::launchJack()
     procArgs << "-9";
     procArgs << "jackd";
 
-    proc->start("/usr/bin/killall", procArgs);
+    proc->execute("/usr/bin/killall", procArgs);
 
     if (proc->exitCode())
         RG_DEBUG << "couldn't kill any jackd processes" << endl;
@@ -4877,7 +4877,7 @@ bool RosegardenGUIApp::launchJack()
         // setup "jack" process
         m_jackProcess = new QProcess;
 
-        m_jackProcess->execute(splitCommand.takeFirst(), splitCommand);
+        m_jackProcess->start(splitCommand.takeFirst(), splitCommand);
     }
 
 
@@ -4945,7 +4945,7 @@ void RosegardenGUIApp::slotExportProject()
     procArgs << rgFile;
     procArgs << fileName;
 
-    proc->start("rosegarden-project-package", procArgs);
+    proc->execute("rosegarden-project-package", procArgs);
 
     if ((proc->exitStatus() != QProcess::NormalExit) || proc->exitCode()) {
         KMessageBox::sorry(this, i18n("Failed to export to project file \"%1\"", fileName));
@@ -5102,7 +5102,7 @@ void RosegardenGUIApp::slotPrintLilyPond()
     connect(proc, SIGNAL(processExited(QProcess *)),
             this, SLOT(slotLilyPondViewProcessExited(QProcess *)));
     m_lilyTempFileMap[proc] = file;
-    proc->execute("rosegarden-lilypondview" ,procArgs); //@@@JAS KProcess::NotifyOnExit
+    proc->start("rosegarden-lilypondview" ,procArgs); //@@@JAS KProcess::NotifyOnExit
 }
 
 void RosegardenGUIApp::slotPreviewLilyPond()
