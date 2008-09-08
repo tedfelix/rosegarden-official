@@ -52,7 +52,7 @@
 #include <QToolTip>
 #include <QWidget>
 #include <QHBoxLayout>
-#include <qcheckbox.h>
+#include <QCheckBox>
 
 namespace Rosegarden
 {

@@ -31,7 +31,7 @@
 #include <QToolTip>
 #include <klocale.h>
 #include <kaction.h>
-#include <qpainter.h>
+#include <QPainter>
 #include <qpointarray.h>
 #include "document/RosegardenGUIDoc.h"
 
