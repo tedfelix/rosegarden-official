@@ -23,6 +23,7 @@
 #include <set>
 #include <map>
 
+#include <QStringList>
 #include <QPixmap>
 #include <QObject>
 #include <QUrl>
