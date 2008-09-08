@@ -64,7 +64,7 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
     QPushButton *plugin;
     QWidget *pluginVbox = 0;
 
-    pluginVbox = new QVBox(this);
+    pluginVbox = new QWidget(this);
     QVBoxLayout *pluginVboxLayout = new QVBoxLayout;
     pluginVboxLayout->setSpacing(2);
 
