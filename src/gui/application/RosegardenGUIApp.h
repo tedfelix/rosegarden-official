@@ -263,16 +263,6 @@ public:
      */
     bool isSequencerRunning() { return m_useSequencer && (m_sequencerThread != 0); }
 
-    /**
-     * Set the sequencer status - pass through DCOP as an int
-     */
-//!!!    virtual void notifySequencerStatus(int status);
-
-    /**
-     * Handle some random incoming MIDI events.
-     */
-    virtual void processAsynchronousMidi(const MappedComposition &);
-
     /*
      * The sequencer calls this method when it's running to
      * allow us to sync data with it.

@@ -47,6 +47,9 @@
 #include "gui/application/RosegardenApplication.h" //!!!
 #include "gui/application/RosegardenDCOP.h" //!!!
 
+#include <dcopclient.h> //!!! temporarily
+
+
 
 namespace Rosegarden
 {
@@ -502,13 +505,13 @@ RosegardenSequencer::jumpTo(const RealTime &pos)
 
         // Now prebuffer as in startPlaying:
 
-        m_mC.clear();
-        fetchEvents(m_mC, m_songPosition, m_songPosition + m_readAhead, true);
+        MappedComposition c;
+        fetchEvents(c, m_songPosition, m_songPosition + m_readAhead, true);
 
         // process whether we need to or not as this also processes
         // the audio queue for us
         //
-        m_driver->processEventsOut(m_mC, m_songPosition, m_songPosition + m_readAhead);
+        m_driver->processEventsOut(c, m_songPosition, m_songPosition + m_readAhead);
     }
 
     incrementTransportToken();
@@ -1211,6 +1214,31 @@ void RosegardenSequencer::remapTracks()
     rationalisePlayingAudio();
 }
 
+bool
+RosegardenSequencer::getNextTransportRequest(TransportRequest &request,
+                                             RealTime &time)
+{
+    QMutexLocker locker(&m_transportRequestMutex);
+
+    if (m_transportRequests.empty()) return false;
+    TransportPair pair = *m_transportRequests.begin();
+    m_transportRequests.pop_front();
+    request = pair.first;
+    time = pair.second;
+
+    //!!! review transport token management -- jumpToTime has an
+    // extra incrementTransportToken() below
+}
+
+MappedComposition
+RosegardenSequencer::pullAsynchronousMidiQueue()
+{
+    QMutexLocker locker(&m_asyncQueueMutex);
+    MappedComposition mq = m_asyncQueue;
+    m_asyncQueue = MappedComposition();
+    return mq;
+}
+
 // END of public API
 
 
@@ -1292,13 +1320,13 @@ RosegardenSequencer::startPlaying()
     // ready for new playback
     m_driver->initialisePlayback(m_songPosition);
 
-    m_mC.clear();
-    fetchEvents(m_mC, m_songPosition, m_songPosition + m_readAhead, true);
+    MappedComposition c;
+    fetchEvents(c, m_songPosition, m_songPosition + m_readAhead, true);
 
     // process whether we need to or not as this also processes
     // the audio queue for us
     //
-    m_driver->processEventsOut(m_mC, m_songPosition, m_songPosition + m_readAhead);
+    m_driver->processEventsOut(c, m_songPosition, m_songPosition + m_readAhead);
 
     std::vector<MappedEvent> audioEvents;
     m_metaIterator->getAudioEvents(audioEvents);
@@ -1321,20 +1349,20 @@ RosegardenSequencer::keepPlaying()
 {
     Profiler profiler("RosegardenSequencer::keepPlaying");
 
-    m_mC.clear();
+    MappedComposition c;
 
     RealTime fetchEnd = m_songPosition + m_readAhead;
     if (isLooping() && fetchEnd >= m_loopEnd) {
         fetchEnd = m_loopEnd - RealTime(0, 1);
     }
     if (fetchEnd > m_lastFetchSongPosition) {
-        fetchEvents(m_mC, m_lastFetchSongPosition, fetchEnd, false);
+        fetchEvents(c, m_lastFetchSongPosition, fetchEnd, false);
     }
 
     // Again, process whether we need to or not to keep
     // the Sequencer up-to-date with audio events
     //
-    m_driver->processEventsOut(m_mC, m_lastFetchSongPosition, fetchEnd);
+    m_driver->processEventsOut(c, m_lastFetchSongPosition, fetchEnd);
 
     if (fetchEnd > m_lastFetchSongPosition) {
         m_lastFetchSongPosition = fetchEnd;
@@ -1381,10 +1409,10 @@ RosegardenSequencer::updateClocks()
         //
         m_driver->resetPlayback(oldPosition, m_songPosition);
 
-        m_mC.clear();
-        fetchEvents(m_mC, m_songPosition, m_songPosition + m_readAhead, true);
+        MappedComposition c;
+        fetchEvents(c, m_songPosition, m_songPosition + m_readAhead, true);
 
-        m_driver->processEventsOut(m_mC, m_songPosition, m_songPosition + m_readAhead);
+        m_driver->processEventsOut(c, m_songPosition, m_songPosition + m_readAhead);
 
         m_driver->startClocks();
     } else {
@@ -1440,17 +1468,18 @@ RosegardenSequencer::sleep(const RealTime &rt)
 void
 RosegardenSequencer::processRecordedMidi()
 {
-    MappedComposition *mC = m_driver->getMappedComposition();
+    MappedComposition mC;
+    m_driver->getMappedComposition(mC);
 
-    if (mC->empty() || !m_controlBlockMmapper)
+    if (mC.empty() || !m_controlBlockMmapper)
         return ;
 
-    applyFiltering(mC, m_controlBlockMmapper->getRecordFilter(), false);
-    m_sequencerMapper.updateRecordingBuffer(mC);
+    applyFiltering(&mC, m_controlBlockMmapper->getRecordFilter(), false);
+    m_sequencerMapper.updateRecordingBuffer(&mC);
 
     if (m_controlBlockMmapper->isMidiRoutingEnabled()) {
-        applyFiltering(mC, m_controlBlockMmapper->getThruFilter(), true);
-        routeEvents(mC, false);
+        applyFiltering(&mC, m_controlBlockMmapper->getThruFilter(), true);
+        routeEvents(&mC, false);
     }
 }
 
@@ -1529,35 +1558,21 @@ RosegardenSequencer::processAsynchronousEvents()
         m_sequencerMapper.setControlBlock(m_controlBlockMmapper->getControlBlock());
     }
 
-    MappedComposition *mC = m_driver->getMappedComposition();
-
-    if (mC->empty()) {
+    MappedComposition mC;
+    m_driver->getMappedComposition(mC);
+    
+    if (mC.empty()) {
         m_driver->processPending();
-        return ;
+        return;
     }
-
-    //    std::cerr << "processAsynchronousEvents: have " << mC->size() << " events" << std::endl;
-
-    QByteArray data;
-    QDataStream arg(data, QIODevice::WriteOnly);
-    arg << mC;
+    
+    QMutexLocker locker(&m_asyncQueueMutex);
+    
+    m_asyncQueue.merge(mC);
 
     if (m_controlBlockMmapper->isMidiRoutingEnabled()) {
-        applyFiltering(mC, m_controlBlockMmapper->getThruFilter(), true);
-        routeEvents(mC, true);
-    }
-
-    //    std::cerr << "processAsynchronousEvents: sent " << mC->size() << " events" << std::endl;
-
-    if (!kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
-                                  ROSEGARDEN_GUI_IFACE_NAME,
-                                  "processAsynchronousMidi(MappedComposition)", data)) {
-        SEQUENCER_DEBUG << "RosegardenSequencer::processAsynchronousEvents() - "
-        << "can't call RosegardenGUI client" << endl;
-
-        // Stop the sequencer so we can see if we can try again later
-        //
-        stop();
+        applyFiltering(&mC, m_controlBlockMmapper->getThruFilter(), true);
+        routeEvents(&mC, true);
     }
 
     // Process any pending events (Note Offs or Audio) as part of
@@ -1698,22 +1713,6 @@ RosegardenSequencer::isTransportSyncComplete(TransportToken token)
 
     std::cout << "RosegardenSequencer::isTransportSyncComplete: token " << token << ", current token " << m_transportToken << std::endl;
     return m_transportToken >= token;
-}
-
-bool
-RosegardenSequencer::getNextTransportRequest(TransportRequest &request,
-                                             RealTime &time)
-{
-    QMutexLocker locker(&m_transportRequestMutex);
-
-    if (m_transportRequests.empty()) return false;
-    TransportPair pair = *m_transportRequests.begin();
-    m_transportRequests.pop_front();
-    request = pair.first;
-    time = pair.second;
-
-    //!!! review transport token management -- jumpToTime has an
-    // extra incrementTransportToken() below
 }
 
 /*!!!

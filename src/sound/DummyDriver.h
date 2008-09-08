@@ -1,14 +1,15 @@
-// -*- c-indentation-style:"stroustrup" c-basic-offset: 4 -*-
-/*
-  Rosegarden
-  A sequencer and musical notation editor.
-  Copyright 2000-2008 the Rosegarden development team.
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.  See the file
-  COPYING included with this distribution for more information.
+/*
+    Rosegarden
+    A MIDI and audio sequencer and musical notation editor.
+    Copyright 2000-2008 the Rosegarden development team.
+
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License as
+    published by the Free Software Foundation; either version 2 of the
+    License, or (at your option) any later version.  See the file
+    COPYING included with this distribution for more information.
 */
 
 #include "SoundDriver.h"
@@ -32,7 +33,7 @@ public:
         SoundDriver(studio, std::string("DummyDriver: " + name)) { }
     virtual ~DummyDriver() { }
 
-    virtual bool initialise()  { m_recordComposition.clear(); return true; }
+    virtual bool initialise()  { return true; }
     virtual void initialisePlayback(const RealTime & /*position*/) { }
     virtual void stopPlayback() { }
     virtual void punchOut() { }
@@ -42,8 +43,7 @@ public:
     
     virtual RealTime getSequencerTime() { return RealTime(0, 0);}
 
-    virtual MappedComposition* getMappedComposition()
-        { return &m_recordComposition;}
+    virtual bool getMappedComposition(MappedComposition &) { }
 
     virtual void processEventsOut(const MappedComposition & /*mC*/) { }
 

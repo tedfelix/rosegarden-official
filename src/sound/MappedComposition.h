@@ -1,15 +1,15 @@
-// -*- c-indentation-style:"stroustrup" c-basic-offset: 4 -*-
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
-  Rosegarden
-  A sequencer and musical notation editor.
-  Copyright 2000-2008 the Rosegarden development team.
+    Rosegarden
+    A MIDI and audio sequencer and musical notation editor.
+    Copyright 2000-2008 the Rosegarden development team.
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.  See the file
-  COPYING included with this distribution for more information.
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License as
+    published by the Free Software Foundation; either version 2 of the
+    License, or (at your option) any later version.  See the file
+    COPYING included with this distribution for more information.
 */
 
 
@@ -38,44 +38,18 @@ class MappedComposition : public std::multiset<MappedEvent *,
                           MappedEvent::MappedEventCmp>
 {
 public:
-    MappedComposition():m_startTime(0, 0), m_endTime(0, 0) {;}
-
-    MappedComposition(const RealTime &sT,
-                      const RealTime &eT):
-        m_startTime(sT), m_endTime(eT) {;}
+    MappedComposition() { }
 
     MappedComposition(const MappedComposition &mC);
 
+    void merge(const MappedComposition &mC);
+
+    MappedComposition &operator=(const MappedComposition &mC);
+
     ~MappedComposition();
-
-    const RealTime getStartTime() const { return m_startTime; }
-    const RealTime getEndTime() const { return m_endTime; }
-    void setStartTime(const RealTime &sT) { m_startTime = sT; }
-    void setEndTime(const RealTime &eT) { m_endTime = eT; }
-
-    // When we're looping we want to be able to move the start
-    // time of MappedEvents around in this container
-    //
-    void moveStartTime(const RealTime &mT);
-
-    MappedComposition& operator+(const MappedComposition &mC);
-    MappedComposition& operator=(const MappedComposition &mC);
-
-    // This section is used for serialising this class over DCOP
-    //
-    //
-    friend QDataStream& operator>>(QDataStream &dS, MappedComposition *mC);
-    friend QDataStream& operator<<(QDataStream &dS, MappedComposition *mC);
-    friend QDataStream& operator>>(QDataStream &dS, MappedComposition &mC);
-    friend QDataStream& operator<<(QDataStream &dS, const MappedComposition &mC);
 
     // Clear out
     void clear();
-
-private:
-    RealTime m_startTime;
-    RealTime m_endTime;
-
 };
 
 typedef std::multiset<MappedEvent *, MappedEvent::MappedEventCmp>::iterator MappedCompositionIterator;

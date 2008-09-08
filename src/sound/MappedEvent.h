@@ -1,15 +1,15 @@
-// -*- c-indentation-style:"stroustrup" c-basic-offset: 4 -*-
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
-  Rosegarden
-  A sequencer and musical notation editor.
-  Copyright 2000-2008 the Rosegarden development team.
+    Rosegarden
+    A MIDI and audio sequencer and musical notation editor.
+    Copyright 2000-2008 the Rosegarden development team.
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.  See the file
-  COPYING included with this distribution for more information.
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License as
+    published by the Free Software Foundation; either version 2 of the
+    License, or (at your option) any later version.  See the file
+    COPYING included with this distribution for more information.
 */
 
 #include <QDataStream>
@@ -199,7 +199,6 @@ public:
                    m_duration(0, 0),
                    m_audioStartMarker(0, 0),
                    m_dataBlockId(0),
-                   m_isPersistent(false),
                    m_runtimeSegmentId(-1),
                    m_autoFade(false),
                    m_fadeInTime(RealTime::zeroTime),
@@ -235,7 +234,6 @@ public:
         m_duration(duration),
         m_audioStartMarker(audioStartMarker),
         m_dataBlockId(0),
-        m_isPersistent(false),
         m_runtimeSegmentId(-1),
         m_autoFade(false),
         m_fadeInTime(RealTime::zeroTime),
@@ -259,7 +257,6 @@ public:
          m_duration(duration),
          m_audioStartMarker(audioStartMarker),
          m_dataBlockId(0),
-         m_isPersistent(false),
          m_runtimeSegmentId(-1),
          m_autoFade(false),
          m_fadeInTime(RealTime::zeroTime),
@@ -283,7 +280,6 @@ public:
          m_duration(RealTime(0, 0)),
          m_audioStartMarker(RealTime(0, 0)),
          m_dataBlockId(0),
-         m_isPersistent(false),
          m_runtimeSegmentId(-1),
          m_autoFade(false),
          m_fadeInTime(RealTime::zeroTime),
@@ -303,7 +299,6 @@ public:
         m_duration(RealTime(0, 0)),
         m_audioStartMarker(RealTime(0, 0)),
         m_dataBlockId(0),
-        m_isPersistent(false),
         m_runtimeSegmentId(-1),
         m_autoFade(false),
         m_fadeInTime(RealTime::zeroTime),
@@ -325,7 +320,6 @@ public:
         m_duration(RealTime(0, 0)),
         m_audioStartMarker(RealTime(0, 0)),
         m_dataBlockId(0),
-        m_isPersistent(false),
         m_runtimeSegmentId(-1),
         m_autoFade(false),
         m_fadeInTime(RealTime::zeroTime),
@@ -346,7 +340,6 @@ public:
         m_duration(mE.getDuration()),
         m_audioStartMarker(mE.getAudioStartMarker()),
         m_dataBlockId(mE.getDataBlockId()),
-        m_isPersistent(false),
         m_runtimeSegmentId(mE.getRuntimeSegmentId()),
         m_autoFade(mE.isAutoFading()),
         m_fadeInTime(mE.getFadeInTime()),
@@ -366,7 +359,6 @@ public:
         m_duration(mE->getDuration()),
         m_audioStartMarker(mE->getAudioStartMarker()),
         m_dataBlockId(mE->getDataBlockId()),
-        m_isPersistent(false),
         m_runtimeSegmentId(mE->getRuntimeSegmentId()),
         m_autoFade(mE->isAutoFading()),
         m_fadeInTime(mE->getFadeInTime()),
@@ -452,18 +444,10 @@ public:
 
     MappedEvent& operator=(const MappedEvent &mE);
 
-    friend QDataStream& operator>>(QDataStream &dS, MappedEvent *mE);
-    friend QDataStream& operator<<(QDataStream &dS, MappedEvent *mE);
-    friend QDataStream& operator>>(QDataStream &dS, MappedEvent &mE);
-    friend QDataStream& operator<<(QDataStream &dS, const MappedEvent &mE);
-
     /// Add a single byte to the event's datablock (for SysExs)
     void addDataByte(MidiByte byte);
     /// Add several bytes to the event's datablock
     void addDataString(const std::string& data);
-
-    void setPersistent(bool value) { m_isPersistent = value; }
-    bool isPersistent() const { return m_isPersistent; }
 
     /// Size of a MappedEvent in a stream
     static const size_t streamedSize;
@@ -509,12 +493,6 @@ private:
     // other bytes in this type, e.g. System Exclusive.
     //
     DataBlockRepository::blockid m_dataBlockId;
-
-    // Should a MappedComposition try and delete this MappedEvent or
-    // if it persistent?
-    //
-    bool             m_isPersistent;
-
 
     // Id of the segment that this (audio) event is derived from
     //

@@ -2440,11 +2440,9 @@ AlsaDriver::getAlsaTime()
 // Get all pending input events and turn them into a MappedComposition.
 //
 //
-MappedComposition*
-AlsaDriver::getMappedComposition()
+bool
+AlsaDriver::getMappedComposition(MappedComposition &composition)
 {
-    m_recordComposition.clear();
-
     while (_failureReportReadIndex != _failureReportWriteIndex) {
         MappedEvent::FailureCode code = _failureReports[_failureReportReadIndex];
         //	std::cerr << "AlsaDriver::reportFailure(" << code << ")" << std::endl;
@@ -2458,7 +2456,7 @@ AlsaDriver::getMappedComposition()
     if (!m_returnComposition.empty()) {
         for (MappedComposition::iterator i = m_returnComposition.begin();
                 i != m_returnComposition.end(); ++i) {
-            m_recordComposition.insert(new MappedEvent(**i));
+            composition.insert(new MappedEvent(**i));
         }
         m_returnComposition.clear();
     }
@@ -2466,7 +2464,7 @@ AlsaDriver::getMappedComposition()
     // If the input port hasn't connected we shouldn't poll it
     //
     if (m_midiInputPortConnected == false) {
-        return &m_recordComposition;
+        return true;
     }
 
     RealTime eventTime(0, 0);
@@ -2543,7 +2541,7 @@ AlsaDriver::getMappedComposition()
                 // We shake out the two NOTE Ons after we've recorded
                 // them.
                 //
-                m_recordComposition.insert(new MappedEvent(mE));
+                composition.insert(new MappedEvent(mE));
                 m_noteOnMap[deviceId][chanNoteKey] = mE;
 
                 break;
@@ -2576,7 +2574,7 @@ AlsaDriver::getMappedComposition()
                 mE->setDuration(duration);
 
                 // force shut off of note
-                m_recordComposition.insert(mE);
+                composition.insert(mE);
 
                 // reset the reference
                 //
@@ -2598,7 +2596,7 @@ AlsaDriver::getMappedComposition()
                 mE->setData2(event->data.note.velocity);
                 mE->setRecordedChannel(channel);
                 mE->setRecordedDevice(deviceId);
-                m_recordComposition.insert(mE);
+                composition.insert(mE);
             }
             break;
 
@@ -2610,7 +2608,7 @@ AlsaDriver::getMappedComposition()
                 mE->setData2(event->data.control.value);
                 mE->setRecordedChannel(channel);
                 mE->setRecordedDevice(deviceId);
-                m_recordComposition.insert(mE);
+                composition.insert(mE);
             }
             break;
 
@@ -2621,7 +2619,7 @@ AlsaDriver::getMappedComposition()
                 mE->setData1(event->data.control.value);
                 mE->setRecordedChannel(channel);
                 mE->setRecordedDevice(deviceId);
-                m_recordComposition.insert(mE);
+                composition.insert(mE);
 
             }
             break;
@@ -2642,7 +2640,7 @@ AlsaDriver::getMappedComposition()
                 mE->setData2(d2);
                 mE->setRecordedChannel(channel);
                 mE->setRecordedDevice(deviceId);
-                m_recordComposition.insert(mE);
+                composition.insert(mE);
             }
             break;
 
@@ -2659,7 +2657,7 @@ AlsaDriver::getMappedComposition()
                 mE->setData1(s);
                 mE->setRecordedChannel(channel);
                 mE->setRecordedDevice(deviceId);
-                m_recordComposition.insert(mE);
+                composition.insert(mE);
             }
             break;
 
@@ -2701,7 +2699,7 @@ AlsaDriver::getMappedComposition()
                 // Fix for 674731 by Pedro Lopez-Cabanillas (20030601)
                 DataBlockRepository::setDataBlockForEvent(mE, data.substr(1, data.length() - 2));
                 mE->setEventTime(eventTime);
-                m_recordComposition.insert(mE);
+                composition.insert(mE);
             }
             break;
 
@@ -2832,7 +2830,7 @@ AlsaDriver::getMappedComposition()
         }
     }
 
-    return &m_recordComposition;
+    return true;
 }
 
 static int lock_count = 0;

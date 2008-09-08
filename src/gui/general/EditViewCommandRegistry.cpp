@@ -51,7 +51,7 @@ EditViewCommandRegistry::~EditViewCommandRegistry()
 void
 EditViewCommandRegistry::addAction(QString title,
                                    QString iconName,
-                                   const KShortcut &shortcut, 
+                                   QString shortcut, 
                                    QString actionName,
                                    QString menuTitle,
                                    QString menuActionName)
@@ -59,7 +59,8 @@ EditViewCommandRegistry::addAction(QString title,
     bool haveIcon = (iconName != "");
     QIcon icon;
 
-    QString scs = shortcut.toString();
+//!!!    QString scs = shortcut.toString();
+    QString scs = shortcut; //!!! it would be better to pass in a QKeySequence, but automatic construction from const char * is problematic
     std::cerr << "Adding action: " << title << ", " << ((iconName && iconName != "") ? iconName : "(no icon)") << ", " << ((scs && scs != "") ? scs : "(no shortcut)") << ", " << actionName << std::endl;
 
     if (haveIcon) {

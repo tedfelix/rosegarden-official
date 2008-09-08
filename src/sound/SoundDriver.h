@@ -154,7 +154,7 @@ public:
     
     virtual RealTime getSequencerTime() = 0;
 
-    virtual MappedComposition *getMappedComposition() = 0;
+    virtual bool getMappedComposition(MappedComposition &) = 0;
 
     virtual void startClocks() { }
     virtual void stopClocks() { }
@@ -463,7 +463,6 @@ protected:
 
     DeviceId                                    m_midiRecordDevice;
 
-    MappedComposition                           m_recordComposition;
     MappedComposition                           m_returnComposition;
     RecordStatus                                m_recordStatus;
 

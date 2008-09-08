@@ -34,10 +34,10 @@ void
 MakeAccidentalsCautionaryCommand::registerCommand(CommandRegistry *r)
 {
     r->registerCommand
-        (getGlobalName(true), "", "", "show_cautionary",
+        (getGlobalName(true), "", QKeySequence(), "show_cautionary",
          new ArgumentAndSelectionCommandBuilder<MakeAccidentalsCautionaryCommand>());
     r->registerCommand
-        (getGlobalName(false), "", "", "cancel_cautionary",
+        (getGlobalName(false), "", QKeySequence(), "cancel_cautionary",
          new ArgumentAndSelectionCommandBuilder<MakeAccidentalsCautionaryCommand>());
 }
 

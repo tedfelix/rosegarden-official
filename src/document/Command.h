@@ -49,6 +49,7 @@ public:
     virtual ~NamedCommand() { }
 
     virtual QString getName() const { return m_name; }
+    virtual void setName(QString name) { m_name = name; }
 
 protected:
     QString m_name;

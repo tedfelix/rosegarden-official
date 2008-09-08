@@ -4373,7 +4373,22 @@ RosegardenGUIApp::slotCheckTransportStatus()
                   status == RECORDING) ?
                  KXMLGUIClient::StateReverse : KXMLGUIClient::StateNoReverse);
 
-    if (m_seqManager) m_seqManager->setTransportStatus(status);
+    if (m_seqManager) {
+
+        m_seqManager->setTransportStatus(status);
+
+        MappedComposition asynchronousQueue =
+            RosegardenSequencer::getInstance()->pullAsynchronousMidiQueue();
+
+        if (!asynchronousQueue.empty()) {
+            
+            m_seqManager->processAsynchronousMidi(asynchronousQueue, 0);
+
+            if (m_view && m_seqManager->getSequencerMapper()) {
+                m_view->updateMeters(m_seqManager->getSequencerMapper());
+            }
+        }
+    }
     
     return;
 }
@@ -4797,7 +4812,7 @@ bool RosegardenGUIApp::launchSequencer()
     }
 
     m_sequencerThread = new SequencerThread();
-//!!! not in Qt3 QThread    connect(m_sequencerThread, SIGNAL(finished()), this, SLOT(slotSequencerExited()));
+    connect(m_sequencerThread, SIGNAL(finished()), this, SLOT(slotSequencerExited()));
     m_sequencerThread->start();
 
     // Sync current devices with the sequencer
@@ -5267,31 +5282,6 @@ RosegardenGUIApp::slotSetPlayPosition(timeT time)
         return ;
 
     slotPlay();
-}
-
-/*!!!
-
-void RosegardenGUIApp::notifySequencerStatus(int status)
-{
-    stateChanged("not_playing",
-                 (status == PLAYING ||
-                  status == RECORDING) ?
-                 KXMLGUIClient::StateReverse : KXMLGUIClient::StateNoReverse);
-
-    if (m_seqManager)
-        m_seqManager->setTransportStatus((TransportStatus) status);
-}
-*/
-void RosegardenGUIApp::processAsynchronousMidi(const MappedComposition &mC)
-{
-    if (!m_seqManager) {
-        return ; // probably getting this from a not-yet-killed runaway sequencer
-    }
-
-    m_seqManager->processAsynchronousMidi(mC, 0);
-    SequencerMapper *mapper = m_seqManager->getSequencerMapper();
-    if (mapper)
-        m_view->updateMeters(mapper);
 }
 
 void

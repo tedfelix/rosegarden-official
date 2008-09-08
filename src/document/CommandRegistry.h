@@ -27,9 +27,9 @@
 
 #include <QObject>
 #include <QString>
+#include <QKeySequence>
 #include <qnamespace.h>
 
-#include <kshortcut.h>
 #include "document/Command.h"
 
 #include <map>
@@ -112,7 +112,7 @@ public:
 
     void registerCommand(QString title,
                          QString icon,
-                         const KShortcut &shortcut,
+                         QString shortcut,
                          QString actionName,
                          AbstractCommandBuilder *builder,
                          QString menuTitle = "",
@@ -138,7 +138,7 @@ protected:
 
     virtual void addAction(QString title,
                            QString icon,
-                           const KShortcut &shortcut, 
+                           QString shortcut, 
                            QString actionName,
                            QString menuTitle,
                            QString menuActionName) = 0;

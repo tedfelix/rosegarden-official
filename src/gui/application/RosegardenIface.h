@@ -98,7 +98,7 @@ k_dcop:
     // We can show these on the Transport or on a MIDI Mixer.
     //
     // called from seq in processAsynchronousEvents
-    virtual void processAsynchronousMidi(const MappedComposition &mC) = 0;
+//!!!    virtual void processAsynchronousMidi(const MappedComposition &mC) = 0;
 
     // The sequencer tries to call this action until it can - then
     // we can go on and retrive device information

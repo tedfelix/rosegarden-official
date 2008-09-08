@@ -1,11 +1,10 @@
-// -*- c-indentation-style:"stroustrup" c-basic-offset: 4 -*-
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
     Rosegarden
-    A sequencer and musical notation editor.
+    A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2008 the Rosegarden development team.
-    See the AUTHORS file for more details.
-
+ 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -60,7 +59,7 @@ public:
 
     virtual RealTime getSequencerTime();
 
-    virtual MappedComposition *getMappedComposition();
+    virtual bool getMappedComposition(MappedComposition &composition);
     
     virtual bool record(RecordStatus recordStatus,
                         const std::vector<InstrumentId> *armedInstruments = 0,

@@ -255,6 +255,10 @@ public:
 
     bool getNextTransportRequest(TransportRequest &request, RealTime &time);
 
+    MappedComposition pullAsynchronousMidiQueue();
+
+    MappedComposition pullAsynchronousMidiQueue();
+
     //
     //
     //
@@ -439,7 +443,7 @@ protected:
     MmappedSegmentsMetaIterator* m_metaIterator;
     RealTime m_lastStartTime;
 
-    MappedComposition m_mC;
+    MappedComposition m_asyncQueue;
     MmappedControlBlock *m_controlBlockMmapper;
     SequencerMmapper m_sequencerMapper;
 
@@ -451,6 +455,7 @@ protected:
     
     QMutex m_mutex;
     QMutex m_transportRequestMutex;
+    QMutex m_asyncQueueMutex;
 
     static RosegardenSequencer *m_instance;
     static QMutex m_instanceMutex;
