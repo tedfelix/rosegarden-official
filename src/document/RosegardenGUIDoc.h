@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -26,11 +25,9 @@
 #include "base/RealTime.h"
 #include "base/Segment.h"
 #include "base/Studio.h"
-#include "gui/application/RosegardenGUIApp.h"
 #include "gui/editors/segment/segmentcanvas/AudioPreviewThread.h"
 #include <map>
 #include "sound/AudioFileManager.h"
-// #include <QList>  (fixes problem for Adam Dingle)
 #include <QObject>
 #include <QString>
 #include <QStringList>
@@ -419,12 +416,7 @@ public:
 
     // Get the sequence manager from the app
     //
-    SequenceManager* getSequenceManager() 
-        { return (dynamic_cast<RosegardenGUIApp*>(parent()))
-                                         ->getSequenceManager(); }
-
-    //Obsolete: multitrack MIDI recording. plcl 06/2006.
-    //Segment *getRecordMIDISegment() { return m_recordMIDISegment; }
+    SequenceManager* getSequenceManager();
 
     QStringList getTimers();
     QString getCurrentTimer();

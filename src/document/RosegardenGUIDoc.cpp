@@ -1143,13 +1143,35 @@ void RosegardenGUIDoc::initialiseStudio()
     StudioControl::sendMappedEvent(mEff);
 }
 
+SequenceManager *
+RosegardenGUIDoc::getSequenceManager()
+{
+    return (dynamic_cast<RosegardenGUIApp*>(parent()))->getSequenceManager();
+}
+
+
+// FILE FORMAT VERSION NUMBERS
+//
+// These should be updated when the file format changes.
+//
+// Increment the major version number only for updates so
+// substantial that we shouldn't bother even trying to read a file
+// saved with a newer major version number than our own.
+//
+// Increment the minor version number for updates that may break
+// compatibility such that we should warn when reading a file
+// that was saved with a newer minor version than our own.
+//
+// Increment the point version number for updates that shouldn't
+// break compatibility in either direction, just for informational
+// purposes.
+//
+// When updating major, reset minor to zero; when updating minor,
+// reset point to zero.
+//
 int RosegardenGUIDoc::FILE_FORMAT_VERSION_MAJOR = 1;
-
 int RosegardenGUIDoc::FILE_FORMAT_VERSION_MINOR = 4;
-
 int RosegardenGUIDoc::FILE_FORMAT_VERSION_POINT = 0;
-
-
 
 bool RosegardenGUIDoc::saveDocument(const QString& filename,
                                     QString& errMsg,
