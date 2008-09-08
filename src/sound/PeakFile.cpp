@@ -13,12 +13,11 @@
 
 #include <cmath>
 #include <cstdlib>
-#include <kapplication.h>
 
 #include <QDateTime>
 #include <QStringList>
 #include <QPalette>
-#include <kapp.h>
+#include <QApplication>
 
 #include "PeakFile.h"
 #include "AudioFile.h"
@@ -291,7 +290,7 @@ PeakFile::close()
                   m_modificationTime.time().second(),
                   m_modificationTime.time().msec());
 
-    std::string dateString(fDate.data());
+    std::string dateString(fDate.toStdString());
 
     // Pad with spaces to make up to 28 bytes long and output
     //
