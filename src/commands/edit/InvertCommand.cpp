@@ -35,7 +35,8 @@ InvertCommand::modifySegment()
 {
     EventSelection::eventcontainer::iterator i;
     long highestPitch, lowestPitch;
-
+	highestPitch=0; lowestPitch=0;	// remove compiler warning;
+	
     bool firstNote = true;
     for (i = m_selection->getSegmentEvents().begin();
             i != m_selection->getSegmentEvents().end(); ++i) {

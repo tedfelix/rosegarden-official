@@ -88,7 +88,7 @@
 #include <QSettings>
 #include <kfilterdev.h>
 #include <kglobal.h>
-#include <kmessagebox.h>
+#include <QMessageBox>
 #include <QProcess>
 #include <QProgressBar>
 #include <QProgressDialog>
@@ -179,30 +179,31 @@ RosegardenGUIDoc::getAutoSavePeriod() const
 
 void RosegardenGUIDoc::attachView(RosegardenGUIView *view)
 {
-    m_viewList.append(view);
+    m_viewList.append(*view);
 }
 
 void RosegardenGUIDoc::detachView(RosegardenGUIView *view)
 {
-    m_viewList.remove(view);
+    m_viewList.remove(*view);
 }
 
 void RosegardenGUIDoc::attachEditView(EditViewBase *view)
 {
-    m_editViewList.append(view);
+    m_editViewList.append(*view);
 }
 
 void RosegardenGUIDoc::detachEditView(EditViewBase *view)
 {
     // auto-deletion is disabled, as
     // the editview detaches itself when being deleted
-    m_editViewList.remove(view);
+    m_editViewList.remove(*view);
 }
 
 void RosegardenGUIDoc::deleteEditViews()
 {
     // enabled auto-deletion : edit views will be deleted
-    m_editViewList.setAutoDelete(true);
+    
+	//m_editViewList.setAutoDelete(true);	//@@@ removed QList.setAutoDelete(), so it does compile
     m_editViewList.clear();
 }
 
@@ -229,10 +230,13 @@ const QString& RosegardenGUIDoc::getTitle() const
 void RosegardenGUIDoc::slotUpdateAllViews(RosegardenGUIView *sender)
 {
     RosegardenGUIView *w;
-
-    for (w = m_viewList.first(); w != 0; w = m_viewList.next()) {
-        if (w != sender)
-            w->repaint();
+	
+    //for ((*w) = m_viewList.first(); w != 0; (*w) = *m_viewList.next()) {
+	for (int i=0; i < m_viewList.size(); ++i ){
+		
+		if ( &(m_viewList.at(i)) != sender){	//@@@ valid comparision ??
+			w->repaint();
+		}
     }
 }
 
