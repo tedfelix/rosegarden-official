@@ -1452,7 +1452,7 @@ SequenceManager::restoreRecordSubscriptions()
     //  
 
     //QString recordDeviceStr = config.value("midirecorddevice") ;
-    QStringList devList = config->readListEntry("midirecorddevice");
+    QStringList devList = config.value("midirecorddevice").toStringList();
 
     for ( QStringList::ConstIterator it = devList.begin();
             it != devList.end(); ++it) {
