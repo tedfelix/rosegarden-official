@@ -121,7 +121,7 @@ PixmapFunctions::colourPixmap(const QPixmap &map, int hue, int minimum)
     QPixmap rmap;
     rmap.convertFromImage(image);
     if (!map.mask().isNull())
-        rmap.setMask(*map.mask());
+        rmap.setMask(map.mask());
     return rmap;
 }
 
@@ -149,8 +149,8 @@ PixmapFunctions::shadePixmap(const QPixmap &map)
 
     QPixmap rmap;
     rmap.convertFromImage(image);
-    if (!map.mask()isNull())
-        rmap.setMask(*map.mask());
+    if (!map.mask().isNull())
+        rmap.setMask(map.mask());
     return rmap;
 }
 
@@ -162,7 +162,7 @@ PixmapFunctions::flipVertical(const QPixmap &map)
     rmap.convertFromImage(i.mirror(false, true));
 
     if (!map.mask().isNull()) {
-        QImage im(map.mask()->convertToImage());
+        QImage im(map.mask().convertToImage());
         QBitmap newMask;
         newMask.convertFromImage(im.mirror(false, true));
         rmap.setMask(newMask);
@@ -179,7 +179,7 @@ PixmapFunctions::flipHorizontal(const QPixmap &map)
     rmap.convertFromImage(i.mirror(true, false));
 
     if (!map.mask().isNull()) {
-        QImage im(map.mask()->convertToImage());
+        QImage im(map.mask().convertToImage());
         QBitmap newMask;
         newMask.convertFromImage(im.mirror(true, false));
         rmap.setMask(newMask);
@@ -191,10 +191,11 @@ PixmapFunctions::flipHorizontal(const QPixmap &map)
 std::pair<QPixmap, QPixmap>
 PixmapFunctions::splitPixmap(const QPixmap &pixmap, int x)
 {
-    QPixmap left(x, pixmap.height(), pixmap.depth());
+    //@@@ JAS ?need error check on pixmap.width and x? (x <= width)
+    QPixmap left(x, pixmap.height());
     QBitmap leftMask(left.width(), left.height());
 
-    QPixmap right(pixmap.width() - x, pixmap.height(), pixmap.depth());
+    QPixmap right(pixmap.width() - x, pixmap.height());
     QBitmap rightMask(right.width(), right.height());
 
     QPainter paint;
@@ -204,7 +205,7 @@ PixmapFunctions::splitPixmap(const QPixmap &pixmap, int x)
     paint.end();
 
     paint.begin(&leftMask);
-    paint.drawPixmap(0, 0, *pixmap.mask(), 0, 0, left.width(), left.height());
+    paint.drawPixmap(0, 0, pixmap.mask(), 0, 0, left.width(), left.height());
     paint.end();
 
     left.setMask(leftMask);
@@ -214,7 +215,7 @@ PixmapFunctions::splitPixmap(const QPixmap &pixmap, int x)
     paint.end();
 
     paint.begin(&rightMask);
-    paint.drawPixmap(0, 0, *pixmap.mask(), left.width(), 0, right.width(), right.height());
+    paint.drawPixmap(0, 0, pixmap.mask(), left.width(), 0, right.width(), right.height());
     paint.end();
 
     right.setMask(rightMask);
@@ -230,7 +231,7 @@ PixmapFunctions::drawPixmapMasked(QPixmap &dest, QBitmap &destMask,
     QImage idp(dest.convertToImage());
     QImage idm(destMask.convertToImage());
     QImage isp(src.convertToImage());
-    QImage ism(src.mask()->convertToImage());
+    QImage ism(src.mask().convertToImage());
 
     for (int y = 0; y < isp.height(); ++y) {
         for (int x = 0; x < isp.width(); ++x) {
