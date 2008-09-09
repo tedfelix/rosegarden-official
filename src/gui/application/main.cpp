@@ -579,7 +579,7 @@ int main(int argc, char *argv[])
 
     int install = config.value("Install Own Theme", 1).toInt() ;
     if (install == 2 || (install == 1 && !getenv("KDE_FULL_SESSION"))) {
-	kapp->setStyle(new KlearlookStyle);
+	qApp->setStyle(new KlearlookStyle);
     }
 
     // Show Startup logo
@@ -596,7 +596,7 @@ int main(int argc, char *argv[])
 
     // See if the config wants us to control JACK
     //
-    if ( qStrToBool( config.value("Logo", "true" ) )  && (!kapp->isRestored() && args->isSet("splash")) ) {
+    if ( qStrToBool( config.value("Logo", "true" ) )  && (!qApp->isRestored() && args->isSet("splash")) ) {
         RG_DEBUG << k_funcinfo << "Showing startup logo\n";
         startLogo = KStartupLogo::getInstance();
 	startLogo->setShowTip(!newVersion);
@@ -793,6 +793,6 @@ int main(int argc, char *argv[])
 	CurrentProgressDialog::thaw();
     }
 
-    return kapp->exec();
+    return qApp->exec();
 }
 

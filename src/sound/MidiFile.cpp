@@ -167,7 +167,7 @@ MidiFile::getMidiByte(ifstream* midiFile)
 
             emit setValue((int)(double(midiFile->tellg()) /
                                    double(m_fileSize) * 20.0));
-			qApp->processEvents( QEventLoop::AllEvents );	// note: was kapp->processEvents(50)
+			qApp->processEvents( QEventLoop::AllEvents );	// note: was qApp->processEvents(50)
         }
 
         return (MidiByte)byte;
@@ -2116,7 +2116,7 @@ MidiFile::writeTrack(std::ofstream* midiFile, TrackId trackNumber)
 
 		if (progressCount % 500 == 0) {
 			emit setValue(progressCount * 100 / progressTotal);
-            //kapp->processEvents(500);
+            //qApp->processEvents(500);
 			qApp->processEvents(QEventLoop::AllEvents);
 		}
     }

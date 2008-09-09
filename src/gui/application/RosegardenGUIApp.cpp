@@ -393,7 +393,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     //  
 
     m_parameterArea->setArrangement((RosegardenParameterArea::Arrangement)
-                                    kapp->config( ).value("sidebarstyle",
+                                    qApp->config( ).value("sidebarstyle",
                                                                          RosegardenParameterArea::CLASSIC_STYLE).toUInt() );
 
     m_dockLeft->update();
@@ -1599,13 +1599,13 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
         return ;
 
     emit documentAboutToChange();
-    kapp->processEvents(); // to make sure all opened dialogs (mixer, midi devices...) are closed
+    qApp->processEvents(); // to make sure all opened dialogs (mixer, midi devices...) are closed
 
     // Take care of all subparts which depend on the document
 
     // Caption
     //
-    QString caption = kapp->caption();
+    QString caption = qApp->caption();
     setCaption(caption + ": " + newDocument->getTitle());
 
     //     // reset AudioManagerDialog
@@ -1859,7 +1859,7 @@ RosegardenGUIApp::createDocumentFromRGFile(QString filePath)
     // Check for an autosaved file to recover
     QString effectiveFilePath = filePath;
     bool canRecover = false;
-    QString autoSaveFileName = kapp->checkRecoverFile(filePath, canRecover);
+    QString autoSaveFileName = qApp->checkRecoverFile(filePath, canRecover);
 
     if (canRecover) {
         // First check if the auto-save file is more recent than the doc
@@ -2111,7 +2111,7 @@ void RosegardenGUIApp::saveGlobalProperties(QSettings cfg)
         cfg.setValue("filename", filename);
         cfg.setValue("modified", m_doc->isModified());
 
-        QString tempname = kapp->tempSaveName(filename);
+        QString tempname = qApp->tempSaveName(filename);
         QString errMsg;
         bool res = m_doc->saveDocument(tempname, errMsg);
         if (!res) {
@@ -2132,7 +2132,7 @@ void RosegardenGUIApp::readGlobalProperties(QSettings _cfg)
 
     if (modified) {
         bool canRecover;
-        QString tempname = kapp->checkRecoverFile(filename, canRecover);
+        QString tempname = qApp->checkRecoverFile(filename, canRecover);
 
         if (canRecover) {
             slotEnableTransport(false);
@@ -2151,7 +2151,7 @@ void RosegardenGUIApp::readGlobalProperties(QSettings _cfg)
         }
     }
 
-    QString caption = kapp->caption();
+    QString caption = qApp->caption();
     setCaption(caption + ": " + m_doc->getTitle());
 }
 
@@ -2519,7 +2519,7 @@ bool RosegardenGUIApp::slotFileSaveAs()
 
         m_fileRecent->addURL(newName);
 
-        QString caption = kapp->caption();
+        QString caption = qApp->caption();
         setCaption(caption + ": " + m_doc->getTitle());
         // update the edit view's captions too
         emit compositionStateUpdate();
@@ -7577,14 +7577,14 @@ void
 RosegardenGUIApp::slotTutorial()
 {
     QString tutorialURL = i18n("http://rosegarden.sourceforge.net/tutorial/en/chapter-0.html");
-    kapp->invokeBrowser(tutorialURL);
+    qApp->invokeBrowser(tutorialURL);
 }
 
 void
 RosegardenGUIApp::slotBugGuidelines()
 {
     QString glURL = i18n("http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html");
-    kapp->invokeBrowser(glURL);
+    qApp->invokeBrowser(glURL);
 }
 
 void
@@ -8014,7 +8014,7 @@ RosegardenGUIApp::awaitDialogClearance()
 //        std::cerr << "RosegardenGUIApp::awaitDialogClearance: have dialog = "
 //                  << haveDialog << std::endl;
     
-        if (haveDialog) kapp->processEvents();
+        if (haveDialog) qApp->processEvents();
     }
 
     std::cerr << "RosegardenGUIApp::awaitDialogClearance: exiting" << std::endl;

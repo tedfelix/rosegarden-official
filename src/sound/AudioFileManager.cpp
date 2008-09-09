@@ -798,7 +798,7 @@ AudioFileManager::importFile(const std::string &fileName, int sampleRate)
 
     while ((m_importProcess->state() == QProcess::Running) || (m_importProcess->state() == QProcess::Starting)) { //@@@JAS If problems, check here first
 		//@@@ what to do with kapp ????
-//        kapp->processEvents(100); //!!! not safe to do from seq thread
+//        qApp->processEvents(100); //!!! not safe to do from seq thread
     }
 
     if (m_importProcess->exitStatus() != QProcess::NormalExit) {
@@ -1093,9 +1093,9 @@ AudioFileManager::drawPreview(AudioFileId id,
                                  false);
 
     QPainter painter(pixmap);
-    pixmap->fill(kapp->palette().color(QPalette::Active,
+    pixmap->fill(qApp->palette().color(QPalette::Active,
                                        QColorGroup::Base));
-    painter.setPen(kapp->palette().color(QPalette::Active,
+    painter.setPen(qApp->palette().color(QPalette::Active,
                                          QColorGroup::Dark));
 
     if (values.size() == 0) {
@@ -1174,7 +1174,7 @@ AudioFileManager::drawHighlightedPreview(AudioFileId id,
                          (endTime - startTime)));
 
     QPainter painter(pixmap);
-    pixmap->fill(kapp->palette().color(QPalette::Active,
+    pixmap->fill(qApp->palette().color(QPalette::Active,
                                        QColorGroup::Base));
 
     float yStep = pixmap->height() / 2;
@@ -1199,10 +1199,10 @@ AudioFileManager::drawHighlightedPreview(AudioFileId id,
         }
 
         if (i < startWidth || i > endWidth)
-            painter.setPen(kapp->palette().color(QPalette::Active,
+            painter.setPen(qApp->palette().color(QPalette::Active,
                                                  QColorGroup::Mid));
         else
-            painter.setPen(kapp->palette().color(QPalette::Active,
+            painter.setPen(qApp->palette().color(QPalette::Active,
                                                  QColorGroup::Dark));
 
         painter.drawLine(i, static_cast<int>(yStep - ch1Value * yStep),

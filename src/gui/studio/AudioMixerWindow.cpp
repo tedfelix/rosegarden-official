@@ -693,7 +693,7 @@ AudioMixerWindow::slotPluginSelected(InstrumentId id,
                 (rec.m_plugins[index], i18n("<no plugin>"));
 
             rec.m_plugins[index]->setPaletteBackgroundColor
-            (kapp->palette().
+            (qApp->palette().
              color(QPalette::Active, QColorGroup::Button));
 
         } else {
@@ -702,7 +702,7 @@ AudioMixerWindow::slotPluginSelected(InstrumentId id,
             = m_document->getPluginManager()->getPlugin(plugin);
 
             QColor pluginBgColour =
-                kapp->palette().color(QPalette::Active, QColorGroup::Light);
+                qApp->palette().color(QPalette::Active, QColorGroup::Light);
 
             if (pluginClass) {
                 rec.m_plugins[index]->
@@ -732,7 +732,7 @@ AudioMixerWindow::slotPluginSelected(InstrumentId id,
                 (rec.m_plugins[index], i18n("<no plugin>"));
 
             rec.m_plugins[index]->setPaletteBackgroundColor
-            (kapp->palette().
+            (qApp->palette().
              color(QPalette::Active, QColorGroup::Button));
 
         } else {
@@ -741,7 +741,7 @@ AudioMixerWindow::slotPluginSelected(InstrumentId id,
             = m_document->getPluginManager()->getPlugin(plugin);
 
             QColor pluginBgColour =
-                kapp->palette().color(QPalette::Active, QColorGroup::Light);
+                qApp->palette().color(QPalette::Active, QColorGroup::Light);
 
             if (pluginClass) {
                 rec.m_plugins[index]->
@@ -883,7 +883,7 @@ AudioMixerWindow::updatePluginButtons(int id)
             bool used = false;
             bool bypass = false;
             QColor pluginBgColour =
-                kapp->palette().color(QPalette::Active, QColorGroup::Light);
+                qApp->palette().color(QPalette::Active, QColorGroup::Light);
 
             rec->m_plugins[i]->show();
 
@@ -920,11 +920,11 @@ AudioMixerWindow::updatePluginButtons(int id)
             if (bypass) {
 
                 rec->m_plugins[i]->setPaletteForegroundColor
-                (kapp->palette().
+                (qApp->palette().
                  color(QPalette::Active, QColorGroup::Button));
 
                 rec->m_plugins[i]->setPaletteBackgroundColor
-                (kapp->palette().
+                (qApp->palette().
                  color(QPalette::Active, QColorGroup::ButtonText));
 
             } else if (used) {
@@ -936,11 +936,11 @@ AudioMixerWindow::updatePluginButtons(int id)
             } else {
 
                 rec->m_plugins[i]->setPaletteForegroundColor
-                (kapp->palette().
+                (qApp->palette().
                  color(QPalette::Active, QColorGroup::ButtonText));
 
                 rec->m_plugins[i]->setPaletteBackgroundColor
-                (kapp->palette().
+                (qApp->palette().
                  color(QPalette::Active, QColorGroup::Button));
             }
         }

@@ -290,7 +290,7 @@ QString RosegardenGUIDoc::getAutoSaveFileName()
     if (filename.isEmpty())
         filename = QDir::currentDirPath() + "/" + getTitle();
 
-    QString autoSaveFileName = kapp->tempSaveName(filename);
+    QString autoSaveFileName = qApp->tempSaveName(filename);
 
     return autoSaveFileName;
 }

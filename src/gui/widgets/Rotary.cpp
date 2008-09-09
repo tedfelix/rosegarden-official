@@ -177,7 +177,7 @@ Rotary::paintEvent(QPaintEvent *)
     paint.begin(&map);
 
     QPen pen;
-    pen.setColor(kapp->palette().color(QPalette::Active, QColorGroup::Dark));
+    pen.setColor(qApp->palette().color(QPalette::Active, QColorGroup::Dark));
     pen.setWidth(scale);
     paint.setPen(pen);
 
@@ -185,7 +185,7 @@ Rotary::paintEvent(QPaintEvent *)
         paint.setBrush(m_knobColour);
     } else {
         paint.setBrush(
-            kapp->palette().color(QPalette::Active, QColorGroup::Base));
+            qApp->palette().color(QPalette::Active, QColorGroup::Base));
     }
 
     QColor c(m_knobColour);

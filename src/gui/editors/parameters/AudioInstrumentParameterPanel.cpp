@@ -212,19 +212,19 @@ AudioInstrumentParameterPanel::setButtonColour(
     // Set the bypass colour on the plugin button
     if (bypassState) {
         button->
-        setPaletteForegroundColor(kapp->palette().
+        setPaletteForegroundColor(qApp->palette().
                                   color(QPalette::Active, QColorGroup::Button));
 
         button->
-        setPaletteBackgroundColor(kapp->palette().
+        setPaletteBackgroundColor(qApp->palette().
                                   color(QPalette::Active, QColorGroup::ButtonText));
     } else if (colour == QColor(Qt::black)) {
         button->
-        setPaletteForegroundColor(kapp->palette().
+        setPaletteForegroundColor(qApp->palette().
                                   color(QPalette::Active, QColorGroup::ButtonText));
 
         button->
-        setPaletteBackgroundColor(kapp->palette().
+        setPaletteBackgroundColor(qApp->palette().
                                   color(QPalette::Active, QColorGroup::Button));
     } else {
         button->

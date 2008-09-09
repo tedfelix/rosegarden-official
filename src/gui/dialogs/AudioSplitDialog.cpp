@@ -138,8 +138,8 @@ AudioSplitDialog::drawPreview()
     rect->setX(border);
     rect->setY(border);
     rect->setZ(1);
-    rect->setPen(kapp->palette().color(QPalette::Active, QColorGroup::Dark));
-    rect->setBrush(kapp->palette().color(QPalette::Active, QColorGroup::Base));
+    rect->setPen(qApp->palette().color(QPalette::Active, QColorGroup::Dark));
+    rect->setBrush(qApp->palette().color(QPalette::Active, QColorGroup::Base));
     rect->setVisible(true);
 
     // Get preview in vector form
@@ -157,7 +157,7 @@ AudioSplitDialog::drawPreview()
                                 false);
     } catch (Exception e) {
         Q3CanvasText *text = new Q3CanvasText(m_canvas);
-        text->setColor(kapp->palette().
+        text->setColor(qApp->palette().
                        color(QPalette::Active, QColorGroup::Shadow));
         text->setText(i18n("<no preview generated for this audio file>"));
         text->setX(30);
@@ -208,9 +208,9 @@ AudioSplitDialog::drawPreview()
                         startX + i,
                         endY);
         line->setZ(3);
-        line->setPen(kapp->
+        line->setPen(qApp->
                      palette().color(QPalette::Active, QColorGroup::Shadow));
-        line->setBrush(kapp->
+        line->setBrush(qApp->
                        palette().color(QPalette::Active, QColorGroup::Shadow));
         line->setVisible(true);
 
@@ -222,8 +222,8 @@ AudioSplitDialog::drawPreview()
     rect->setX(startX);
     rect->setY(halfHeight - 1);
     rect->setSize(m_previewWidth, 2);
-    rect->setPen(kapp->palette().color(QPalette::Active, QColorGroup::Shadow));
-    rect->setBrush(kapp->palette().color(QPalette::Active, QColorGroup::Shadow));
+    rect->setPen(qApp->palette().color(QPalette::Active, QColorGroup::Shadow));
+    rect->setBrush(qApp->palette().color(QPalette::Active, QColorGroup::Shadow));
     rect->setZ(4);
     rect->setVisible(true);
 
@@ -236,7 +236,7 @@ AudioSplitDialog::drawPreview()
                         .arg(msecs);
     Q3CanvasText *text = new Q3CanvasText(m_canvas);
     text->setColor(
-        kapp->palette().color(QPalette::Active, QColorGroup::Shadow));
+        qApp->palette().color(QPalette::Active, QColorGroup::Shadow));
     text->setText(startText);
     text->setX(startX - 20);
     text->setY(m_canvasHeight / 2 - m_previewHeight / 2 - 35);
@@ -247,7 +247,7 @@ AudioSplitDialog::drawPreview()
     rect->setX(startX - 1);
     rect->setY(m_canvasHeight / 2 - m_previewHeight / 2 - 14);
     rect->setSize(1, m_previewHeight + 28);
-    rect->setPen(kapp->palette().color(QPalette::Active, QColorGroup::Shadow));
+    rect->setPen(qApp->palette().color(QPalette::Active, QColorGroup::Shadow));
     rect->setZ(3);
     rect->setVisible(true);
 
@@ -259,7 +259,7 @@ AudioSplitDialog::drawPreview()
                       .arg(msecs);
     text = new Q3CanvasText(m_canvas);
     text->setColor(
-        kapp->palette().color(QPalette::Active, QColorGroup::Shadow));
+        qApp->palette().color(QPalette::Active, QColorGroup::Shadow));
     text->setText(endText);
     text->setX(startX + m_previewWidth - 20);
     text->setY(m_canvasHeight / 2 - m_previewHeight / 2 - 35);
@@ -270,7 +270,7 @@ AudioSplitDialog::drawPreview()
     rect->setX(startX + m_previewWidth - 1);
     rect->setY(m_canvasHeight / 2 - m_previewHeight / 2 - 14);
     rect->setSize(1, m_previewHeight + 28);
-    rect->setPen(kapp->palette().color(QPalette::Active, QColorGroup::Shadow));
+    rect->setPen(qApp->palette().color(QPalette::Active, QColorGroup::Shadow));
     rect->setZ(3);
     rect->setVisible(true);
 
@@ -319,9 +319,9 @@ AudioSplitDialog::drawSplits(int threshold)
         rect->setY(halfHeight - m_previewHeight / 2 - overlapHeight / 2);
         rect->setZ(2);
         rect->setSize(x2 - x1, m_previewHeight + overlapHeight);
-        rect->setPen(kapp->
+        rect->setPen(qApp->
                      palette().color(QPalette::Active, QColorGroup::Mid));
-        rect->setBrush(kapp->
+        rect->setBrush(qApp->
                        palette().color(QPalette::Active, QColorGroup::Mid));
         rect->setVisible(true);
         tempRects.push_back(rect);

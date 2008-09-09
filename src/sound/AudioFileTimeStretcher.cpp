@@ -233,13 +233,13 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
             int progress = int
                 ((100.f * float(totalIn)) / float(fileTotalIn));
             emit setValue(progress);
-            kapp->processEvents();
+            qApp->processEvents();
             progressCount = 0;
         }
     }		
         
     emit setValue(100);
-    kapp->processEvents();
+    qApp->processEvents();
     writeFile.close();
     
     std::cerr << "AudioFileTimeStretcher::getStretchedAudioFile: success, id is "

@@ -537,7 +537,7 @@ PeakFile::writePeaks(unsigned short /*updatePercentage*/,
         emit setValue((int)(double(byteCount) /
                                double(apprxTotalBytes) * 100.0));
         
-		//kapp->processEvents();
+		//qApp->processEvents();
 		qApp->processEvents(QEventLoop::AllEvents);
 		
 

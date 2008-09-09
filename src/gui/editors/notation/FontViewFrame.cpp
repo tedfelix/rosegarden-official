@@ -177,8 +177,8 @@ void FontViewFrame::paintEvent( QPaintEvent* e )
             if (i == 0) {
                 if (j == 0)
                     continue;
-                p.setFont(kapp->font());
-                QFontMetrics afm(kapp->font());
+                p.setFont(qApp->font());
+                QFontMetrics afm(qApp->font());
                 QString s = QString("%1").arg(m_row * 256 + (j - 1) * 16);
                 p.drawText(x - afm.width(s), y, s);
                 p.setPen(QColor(190, 190, 255));
@@ -186,7 +186,7 @@ void FontViewFrame::paintEvent( QPaintEvent* e )
                 p.setPen(QColor(Qt::black));
                 continue;
             } else if (j == 0) {
-                p.setFont(kapp->font());
+                p.setFont(qApp->font());
                 QString s = QString("%1").arg(i - 1);
                 p.drawText(x, y, s);
                 p.setPen(QColor(190, 190, 255));

@@ -51,7 +51,7 @@ void RosegardenIface::iFaceDelayedInit(KMainWindow* mainWindow)
 
 DCOPRef RosegardenIface::action(const QByteArray &name)
 {
-    return DCOPRef(kapp->dcopClient()->appId(),
+    return DCOPRef(qApp->dcopClient()->appId(),
                    m_dcopActionProxy->actionObjectId(name));
 }
 

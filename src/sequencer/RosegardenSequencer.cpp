@@ -89,7 +89,7 @@ RosegardenSequencer::RosegardenSequencer() :
     SEQUENCER_DEBUG << "Registering with DCOP server" << endl;
 
     // Without DCOP we are nothing
-    QByteArray realAppId = kapp->dcopClient()->registerAs(kapp->objectName(), false);
+    QByteArray realAppId = qApp->dcopClient()->registerAs(qApp->objectName(), false);
 
     if (realAppId.isNull()) {
         SEQUENCER_DEBUG << "RosegardenSequencer cannot register "
@@ -331,7 +331,7 @@ RosegardenSequencer::record(const RealTime &time,
             QByteArray replyType;
             QDataStream arg(data, QIODevice::WriteOnly);
 
-            if (!kapp->dcopClient()->call(ROSEGARDEN_GUI_APP_NAME,
+            if (!qApp->dcopClient()->call(ROSEGARDEN_GUI_APP_NAME,
                                           ROSEGARDEN_GUI_IFACE_NAME,
                                           "getArmedInstruments()",
                                           data, replyType, replyData, true)) {
@@ -366,7 +366,7 @@ RosegardenSequencer::record(const RealTime &time,
 
             arg << audioInstruments;
 
-            if (!kapp->dcopClient()->call(ROSEGARDEN_GUI_APP_NAME,
+            if (!qApp->dcopClient()->call(ROSEGARDEN_GUI_APP_NAME,
                                           ROSEGARDEN_GUI_IFACE_NAME,
                                           "createRecordAudioFiles(QVector<InstrumentId>)",
                                           data, replyType, replyData, true)) {
@@ -851,7 +851,7 @@ RosegardenSequencer::setMappedPropertyList(int id, const QString &property,
             QByteArray data;
             QDataStream arg(data, QIODevice::WriteOnly);
             arg << err;
-            kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
+            qApp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
                                      ROSEGARDEN_GUI_IFACE_NAME,
                                      "showError(QString)",
                                      data);
@@ -1442,7 +1442,7 @@ RosegardenSequencer::notifySequencerStatus()
 
     arg << (int)m_transportStatus;
 
-    if (!kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
+    if (!qApp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
                                   ROSEGARDEN_GUI_IFACE_NAME,
                                   "notifySequencerStatus(int)",
                                   data)) {
@@ -1734,28 +1734,28 @@ RosegardenSequencer::checkExternalTransport()
             break;
 
         case TransportStop:
-            kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
+            qApp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
                                      ROSEGARDEN_GUI_IFACE_NAME,
                                      "stop()",
                                      data);
             break;
 
         case TransportStart:
-            kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
+            qApp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
                                      ROSEGARDEN_GUI_IFACE_NAME,
                                      "play()",
                                      data);
             break;
 
         case TransportPlay:
-            kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
+            qApp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
                                      ROSEGARDEN_GUI_IFACE_NAME,
                                      "play()",
                                      data);
             break;
 
         case TransportRecord:
-            kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
+            qApp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
                                      ROSEGARDEN_GUI_IFACE_NAME,
                                      "record()",
                                      data);
@@ -1766,7 +1766,7 @@ RosegardenSequencer::checkExternalTransport()
                 arg << (int)pair.second.sec;
                 arg << (int)pair.second.usec();
 
-                kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
+                qApp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
                                          ROSEGARDEN_GUI_IFACE_NAME,
                                          "jumpToTime(int, int)",
                                          data);
@@ -1785,7 +1785,7 @@ RosegardenSequencer::checkExternalTransport()
                 arg << (int)pair.second.sec;
                 arg << (int)pair.second.usec();
 
-                kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
+                qApp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
                                          ROSEGARDEN_GUI_IFACE_NAME,
                                          "startAtTime(int, int)",
                                          data);
@@ -1793,7 +1793,7 @@ RosegardenSequencer::checkExternalTransport()
             }
 
         case TransportStopAtTime: {
-                kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
+                qApp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
                                          ROSEGARDEN_GUI_IFACE_NAME,
                                          "stop()",
                                          data);
@@ -1802,7 +1802,7 @@ RosegardenSequencer::checkExternalTransport()
                 arg << (int)pair.second.sec;
                 arg << (int)pair.second.usec();
 
-                kapp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
+                qApp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
                                          ROSEGARDEN_GUI_IFACE_NAME,
                                          "jumpToTime(int, int)",
                                          data);

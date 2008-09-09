@@ -192,7 +192,7 @@ void ProgressDialog::processEvents()
     //    RG_DEBUG << "ProgressDialog::processEvents: modalVisible is "
     //	     << m_modalVisible << endl;
     if (m_modalVisible) {
-        kapp->processEvents(50);
+        qApp->processEvents(50);
     } else {
         rgapp->refreshGUI(50);
     }

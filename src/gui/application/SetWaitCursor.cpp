@@ -32,7 +32,7 @@ namespace Rosegarden
 {
 
 SetWaitCursor::SetWaitCursor()
-        : m_guiApp(dynamic_cast<RosegardenGUIApp*>(kapp->mainWidget()))
+        : m_guiApp(dynamic_cast<RosegardenGUIApp*>(qApp->mainWidget()))
 {
     if (m_guiApp) {
 
