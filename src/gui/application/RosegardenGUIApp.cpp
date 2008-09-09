@@ -2128,7 +2128,7 @@ void RosegardenGUIApp::saveGlobalProperties(QSettings cfg)
 
 void RosegardenGUIApp::readGlobalProperties(QSettings _cfg)
 {
-    QString filename = _cfg.value("filename", "") ;
+    QString filename = _cfg.value("filename", "").toString();
     bool modified = qStrToBool( _cfg.value("modified", "false" ) ) ;
 
     if (modified) {
@@ -2299,7 +2299,7 @@ void RosegardenGUIApp::slotFileOpen()
     //  
 
 
-    QString lastOpenedVersion =         confq4.value("Last File Opened Version", "none") ;
+    QString lastOpenedVersion = confq4.value("Last File Opened Version", "none").toString().;
 
     if (lastOpenedVersion != VERSION) {
 
@@ -4844,7 +4844,7 @@ bool RosegardenGUIApp::launchJack()
     if (!startJack)
         return true; // we don't do anything
 
-    QString jackPath = config.value("jackcommand", "") ;
+    QString jackPath = config.value("jackcommand", "").toString();
 
     emit startupStatusMessage(i18n("Clearing down jackd..."));
 
