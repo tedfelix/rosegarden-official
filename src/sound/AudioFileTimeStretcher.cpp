@@ -21,7 +21,7 @@
 #include "WAVAudioFile.h"
 #include "base/RealTime.h"
 
-#include <kapplication.h>
+#include <QApplication>
 
 #include <iostream>
 #include <fstream>

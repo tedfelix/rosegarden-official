@@ -37,7 +37,7 @@
 #include "sequencer/RosegardenSequencer.h"
 #include "gui/dialogs/ExportDeviceDialog.h"
 #include "gui/dialogs/ImportDeviceDialog.h"
-#include <kapplication.h>
+#include <QApplication>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kaction.h>

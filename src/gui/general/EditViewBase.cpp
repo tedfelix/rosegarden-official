@@ -19,7 +19,7 @@
 #include <Q3CanvasPixmap>
 #include "EditViewBase.h"
 #include <QLayout>
-#include <kapplication.h>
+#include <QApplication>
 
 #include <klocale.h>
 #include <kstandarddirs.h>

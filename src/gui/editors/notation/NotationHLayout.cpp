@@ -18,7 +18,7 @@
 
 #include "NotationHLayout.h"
 #include "misc/Debug.h"
-#include <kapplication.h>
+#include <QApplication>
 
 #include "base/Composition.h"
 #include "base/LayoutEngine.h"

@@ -17,7 +17,7 @@
 
 
 #include "CollapsingFrame.h"
-#include <kapplication.h>
+#include <QApplication>
 #include <kstandarddirs.h>
 #include <kconfig.h>
 #include <kglobal.h>

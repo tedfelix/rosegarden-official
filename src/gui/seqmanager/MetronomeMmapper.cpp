@@ -18,7 +18,7 @@
 
 #include "MetronomeMmapper.h"
 #include "misc/Debug.h"
-#include <kapplication.h>
+#include <QApplication>
 
 #include "sound/Midi.h"
 #include <kstandarddirs.h>

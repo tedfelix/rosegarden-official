@@ -17,7 +17,7 @@
 
 
 #include "GUIPalette.h"
-#include <kapplication.h>
+#include <QApplication>
 
 #include "base/Colour.h"
 #include "document/ConfigGroups.h"

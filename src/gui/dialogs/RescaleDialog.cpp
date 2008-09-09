@@ -30,7 +30,7 @@
 #include <QString>
 #include <QWidget>
 #include <QVBoxLayout>
-#include <kapplication.h>
+#include <QApplication>
 
 
 namespace Rosegarden

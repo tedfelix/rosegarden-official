@@ -30,7 +30,7 @@
 #include "gui/editors/notation/NotationStrings.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include "document/ConfigGroups.h"
-#include <kapplication.h>
+#include <QApplication>
 #include <kconfig.h>
 #include <QDialog>
 #include <QDialogButtonBox>

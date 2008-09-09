@@ -66,7 +66,7 @@
 #include <QRegExp>
 #include <QString>
 #include <QTextCodec>
-#include <kapplication.h>
+#include <QApplication>
 #include <sstream>
 #include <algorithm>
 

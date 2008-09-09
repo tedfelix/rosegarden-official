@@ -17,7 +17,7 @@
 
 
 #include "AudioManagerDialog.h"
-#include <kapplication.h>
+#include <QApplication>
 
 #include "base/Event.h"
 #include "misc/Debug.h"

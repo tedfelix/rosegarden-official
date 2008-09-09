@@ -18,7 +18,7 @@
 
 #include <Q3Canvas>
 #include "RosegardenGUIView.h"
-#include <kapplication.h>
+#include <QApplication>
 
 #include "sound/Midi.h"
 #include "gui/editors/segment/TrackButtons.h"

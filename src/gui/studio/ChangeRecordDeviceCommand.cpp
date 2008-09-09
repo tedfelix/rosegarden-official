@@ -19,7 +19,7 @@
 #include "StudioControl.h"
 #include "document/ConfigGroups.h"
 #include "sound/MappedEvent.h"
-#include <kapplication.h>
+#include <QApplication>
 #include <kconfig.h>
 
 namespace Rosegarden

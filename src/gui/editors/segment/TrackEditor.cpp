@@ -18,7 +18,7 @@
 
 #include "TrackEditor.h"
 #include <QLayout>
-#include <kapplication.h>
+#include <QApplication>
 
 #include <klocale.h>
 #include <kconfig.h>

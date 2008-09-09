@@ -18,7 +18,7 @@
 
 #include "NoteFontFactory.h"
 #include "misc/Debug.h"
-#include <kapplication.h>
+#include <QApplication>
 
 #include <klocale.h>
 #include <kstandarddirs.h>

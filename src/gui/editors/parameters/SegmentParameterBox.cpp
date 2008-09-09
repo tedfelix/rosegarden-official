@@ -18,7 +18,7 @@
 
 #include "SegmentParameterBox.h"
 #include <QLayout>
-#include <kapplication.h>
+#include <QApplication>
 
 #include <klocale.h>
 #include "misc/Debug.h"

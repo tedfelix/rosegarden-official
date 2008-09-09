@@ -26,7 +26,7 @@
 #include <kcursor.h>
 #include <QCursor>
 #include <QWidget>
-#include <kapplication.h>
+#include <QApplication>
 
 namespace Rosegarden
 {

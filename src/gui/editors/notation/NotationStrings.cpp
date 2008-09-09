@@ -17,7 +17,7 @@
 
 
 #include "NotationStrings.h"
-#include <kapplication.h>
+#include <QApplication>
 
 #include <klocale.h>
 #include "misc/Strings.h"

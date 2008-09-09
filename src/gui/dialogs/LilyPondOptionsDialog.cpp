@@ -21,7 +21,7 @@
 #include "gui/configuration/HeadersConfigurationPage.h"
 
 #include <QLayout>
-#include <kapplication.h>
+#include <QApplication>
 
 #include "document/ConfigGroups.h"
 #include "document/RosegardenGUIDoc.h"

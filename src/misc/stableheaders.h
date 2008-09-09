@@ -146,7 +146,7 @@
 #include <kactioncollection.h>
 #include <kaction.h>
 #include <kapp.h>
-#include <kapplication.h>
+#include <QApplication>
 #include <karrowbutton.h>
 #include <kcmdlineargs.h>
 #include <kcolordialog.h>

@@ -56,7 +56,7 @@
 #include <QSize>
 #include <QString>
 #include <QWidget>
-#include <kapplication.h>
+#include <QApplication>
 #include <kconfig.h>
 #include <algorithm>
 

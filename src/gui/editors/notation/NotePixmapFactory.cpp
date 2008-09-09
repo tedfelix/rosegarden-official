@@ -20,7 +20,7 @@
 #include "NotePixmapFactory.h"
 #include "misc/Debug.h"
 #include "base/NotationRules.h"
-#include <kapplication.h>
+#include <QApplication>
 
 #include <klocale.h>
 #include <kstandarddirs.h>

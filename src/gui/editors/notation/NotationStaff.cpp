@@ -22,7 +22,7 @@
 #include <Q3CanvasRectangle>
 #include "NotationStaff.h"
 #include "misc/Debug.h"
-#include <kapplication.h>
+#include <QApplication>
 
 #include <klocale.h>
 #include "misc/Strings.h"

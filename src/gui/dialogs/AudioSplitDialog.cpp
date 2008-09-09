@@ -23,7 +23,7 @@
 #include <Q3CanvasText>
 #include <Q3CanvasView>
 #include "AudioSplitDialog.h"
-#include <kapplication.h>
+#include <QApplication>
 
 #include <klocale.h>
 #include "misc/Debug.h"

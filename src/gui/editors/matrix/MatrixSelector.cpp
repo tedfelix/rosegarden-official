@@ -45,7 +45,7 @@
 #include "MatrixView.h"
 #include <kaction.h>
 #include <kglobal.h>
-#include <kapplication.h>
+#include <QApplication>
 #include <kconfig.h>
 #include <QDialog>
 #include <QIcon>

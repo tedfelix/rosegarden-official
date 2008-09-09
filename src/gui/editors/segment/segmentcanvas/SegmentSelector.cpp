@@ -39,7 +39,7 @@
 #include "SegmentResizer.h"
 #include "SegmentTool.h"
 #include "SegmentToolBox.h"
-#include <kapplication.h>
+#include <QApplication>
 #include <kconfig.h>
 #include <QCursor>
 #include <QEvent>

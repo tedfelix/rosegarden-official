@@ -18,7 +18,7 @@
 
 #include "NoteInserter.h"
 #include "misc/Debug.h"
-#include <kapplication.h>
+#include <QApplication>
 
 #include "base/BaseProperties.h"
 #include <klocale.h>

@@ -24,7 +24,7 @@
 #include "gui/widgets/CollapsingFrame.h"
 #include "misc/Strings.h"
 
-#include <kapplication.h>
+#include <QApplication>
 #include <kconfig.h>
 #include <QListView>
 #include <klocale.h>

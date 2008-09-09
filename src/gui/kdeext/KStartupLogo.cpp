@@ -17,7 +17,7 @@
 */
 
 #include <unistd.h>
-#include <kapplication.h>
+#include <QApplication>
 
 #include <QPainter>
 #include <QFontMetrics>

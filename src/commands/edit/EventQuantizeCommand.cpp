@@ -34,7 +34,7 @@
 #include <QString>
 #include "base/BaseProperties.h"
 #include "gui/application/RosegardenApplication.h"
-#include <kapplication.h>
+#include <QApplication>
 
 
 namespace Rosegarden

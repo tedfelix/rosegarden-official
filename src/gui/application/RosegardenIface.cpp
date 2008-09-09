@@ -31,7 +31,7 @@
 #include <QByteArray>
 #include <QString>
 #include <QLinkedList>
-#include <kapplication.h>
+#include <QApplication>
 #include <dcopclient.h>
 
 

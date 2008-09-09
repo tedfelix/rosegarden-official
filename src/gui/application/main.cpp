@@ -15,7 +15,7 @@
 
 #include <Q3Canvas>
 #include <QTimer>
-#include <kapplication.h>
+#include <QApplication>
 #include <sys/time.h>
 #include "base/RealTime.h"
 

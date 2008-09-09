@@ -17,7 +17,7 @@
 
 
 #include "FontViewFrame.h"
-#include <kapplication.h>
+#include <QApplication>
 
 #include <klocale.h>
 #include <kmessagebox.h>

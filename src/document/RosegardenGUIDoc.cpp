@@ -17,7 +17,7 @@
 
 
 #include "RosegardenGUIDoc.h"
-#include <kapplication.h>
+#include <QApplication>
 
 #include <qxml.h>
 #include "sound/Midi.h"

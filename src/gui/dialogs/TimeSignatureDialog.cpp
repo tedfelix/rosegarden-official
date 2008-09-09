@@ -17,7 +17,7 @@
 
 
 #include "TimeSignatureDialog.h"
-#include <kapplication.h>
+#include <QApplication>
 
 #include <klocale.h>
 #include "document/ConfigGroups.h"

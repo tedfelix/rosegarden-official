@@ -22,7 +22,7 @@
 #include "gui/dialogs/FloatEdit.h"
 #include "gui/general/GUIPalette.h"
 #include "TextFloat.h"
-#include <kapplication.h>
+#include <QApplication>
 #include <klocale.h>
 #include <QBrush>
 #include <QColor>

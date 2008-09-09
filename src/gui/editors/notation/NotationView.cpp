@@ -25,7 +25,7 @@
 #include <list>
 #include <QLayout>
 #include "misc/Debug.h"
-#include <kapplication.h>
+#include <QApplication>
 
 #include "gui/editors/segment/TrackEditor.h"
 #include "gui/editors/segment/TrackButtons.h"

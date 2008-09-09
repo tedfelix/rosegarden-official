@@ -18,7 +18,7 @@
 
 #include "AudioMixerWindow.h"
 #include <QLayout>
-#include <kapplication.h>
+#include <QApplication>
 
 #include "AudioPlugin.h"
 #include "AudioPluginManager.h"

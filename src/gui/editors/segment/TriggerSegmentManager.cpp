@@ -20,7 +20,7 @@
 #include "TriggerSegmentManager.h"
 #include "TriggerManagerItem.h"
 #include <QLayout>
-#include <kapplication.h>
+#include <QApplication>
 
 #include "base/BaseProperties.h"
 #include <klocale.h>

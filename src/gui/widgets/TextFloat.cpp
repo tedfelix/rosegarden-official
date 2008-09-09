@@ -17,7 +17,7 @@
 
 
 #include "TextFloat.h"
-#include <kapplication.h>
+#include <QApplication>
 
 #include "gui/general/GUIPalette.h"
 #include <QFontMetrics>

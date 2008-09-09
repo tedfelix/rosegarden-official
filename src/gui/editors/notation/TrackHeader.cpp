@@ -41,7 +41,7 @@
 #include <string>
 #include <utility>
 
-#include <kapplication.h>
+#include <QApplication>
 #include <klocale.h>
 #include <QSize>
 #include <QWidget>
