@@ -124,13 +124,18 @@ EditView::EditView(RosegardenGUIDoc *doc,
         m_rulerBox(new QVBoxLayout),  // top ruler box - added to grid later on
         m_rulerBoxFiller(0),          // On the left of m_rulerBox
         m_controlBox(new QVBoxLayout),  // top control ruler box - added to grid later on
-        m_bottomBox(new QVBox(this, "bottomframe")),  // bottom box - added to bottom of canvas view by setCanvasView()
+        m_bottomBox(new QWidget(this, "bottomframe")),  // bottom box - added to bottom of canvas view by setCanvasView()
         m_topStandardRuler(0),
         m_bottomStandardRuler(0),
         m_controlRuler(0),
         m_controlRulers(new KTabWidget(getBottomWidget(), "controlrulers"))
 {
 //!!!kiftsgate    m_commandRegistry = new CommandRegistry(this);
+
+    m_bottomBox->setLayout(new QVBoxLayout);
+    //@@@ Widget should be had to m_bottomBox using something as
+    //@@@         getBottomWidget()->layout()->addWidget(widgetPtr);
+    //@@@ All widgets added or some of them forgotten ?
 
     m_controlRulers->setHoverCloseButton(true);
     m_controlRulers->setHoverCloseButtonDelayed(false);

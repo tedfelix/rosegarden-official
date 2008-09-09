@@ -446,9 +446,11 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     // or the program will crash
     readOptions();
 
-
-    setBottomStandardRuler(new StandardRuler(getDocument(), m_hlayout, m_leftGutter, 25,
-                                       true, getBottomWidget()));
+    StandardRuler *standardRuler = new StandardRuler(getDocument(), m_hlayout,
+                                                     m_leftGutter, 25, true,
+                                                     getBottomWidget());
+    getBottomWidget()->layout()->addWidget(standardRuler);
+    setBottomStandardRuler(standardRuler);
 
     for (unsigned int i = 0; i < segments.size(); ++i)
     {

@@ -32,7 +32,6 @@
 
 class QWidget;
 class QVBoxLayout;
-class QVBox;
 class QPaintEvent;
 class QMouseEvent;
 class Q3CanvasItem;
@@ -205,7 +204,7 @@ public slots:
 protected:
     virtual RulerScale* getHLayout() = 0;
 
-    QVBox* getBottomWidget() { return m_bottomBox; }
+    QWidget* getBottomWidget() { return m_bottomBox; }
 
     virtual void updateBottomWidgetGeometry();
     
@@ -380,7 +379,7 @@ protected:
     QVBoxLayout  *m_rulerBox;
     QLabel       *m_rulerBoxFiller;
     QVBoxLayout  *m_controlBox;
-    QVBox        *m_bottomBox;
+    QWidget      *m_bottomBox;
     StandardRuler   *m_topStandardRuler;
     StandardRuler   *m_bottomStandardRuler;
     ControlRuler *m_controlRuler;
