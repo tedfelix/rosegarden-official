@@ -992,7 +992,7 @@ TrackParameterBox::slotPresetPressed()
         // row/column of the corruption, but I can't be bothered to work
         // that out just at the moment.  Hopefully this code will never
         // execute anyway.
-        QMessageBox::sorry(0, i18n("The instrument preset database is corrupt.  Check your installation."));
+        /* was sorry */ QMessageBox::warning(0, i18n("The instrument preset database is corrupt.  Check your installation."));
     }
 
 }

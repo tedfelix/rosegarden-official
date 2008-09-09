@@ -77,7 +77,7 @@ void RosegardenApplication::sfxLoadExited(QProcess *proc)
         //  
 
 
-        QMessageBox::error(mainWidget(),
+        QMessageBox::critical(mainWidget(),
                            i18n("Failed to load soundfont %1", soundFontPath));
     } else {
         RG_DEBUG << "RosegardenApplication::sfxLoadExited() : sfxload exited normally\n";

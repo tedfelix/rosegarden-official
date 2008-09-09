@@ -187,7 +187,7 @@ NotePixmapFactory::init(std::string fontName, int size)
         m_style = NoteStyleFactory::getStyle(NoteStyleFactory::DefaultStyle);
     } catch (NoteStyleFactory::StyleUnavailable u) {
         KStartupLogo::hideIfStillThere();
-        QMessageBox::error(0, i18n(strtoqstr(u.getMessage())));
+        QMessageBox::critical(0, i18n(strtoqstr(u.getMessage())));
         throw;
     }
 

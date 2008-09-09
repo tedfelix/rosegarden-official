@@ -79,7 +79,7 @@ ImportDeviceDialog::doImport()
 
     QString target;
     if (KIO::NetAccess::download(m_url, target) == false) {
-        QMessageBox::error(this, i18n("Cannot download file %1", m_url.prettyURL()));
+        QMessageBox::critical(this, i18n("Cannot download file %1", m_url.prettyURL()));
         return false;
     }
 
@@ -90,14 +90,14 @@ ImportDeviceDialog::doImport()
         fileRead = importFromRG(target);
     }
     if (!fileRead) {
-        QMessageBox::error
+        QMessageBox::critical
         (this, i18n("Cannot open file %1", m_url.prettyURL()));
         reject();
         close();
         return false;
     }
     if (m_devices.size() == 0) {
-        QMessageBox::sorry
+        /* was sorry */ QMessageBox::warning
         (this, i18n("No devices found in file %1", m_url.prettyURL()));
         reject();
         close();

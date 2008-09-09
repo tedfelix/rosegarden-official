@@ -152,7 +152,7 @@ EditViewCommandRegistry::invokeCommand(QString actionName)
 
     } catch (CommandCancelled) {
     } catch (CommandFailed f) {
-        QMessageBox::sorry(m_view, strtoqstr(f.getMessage()));
+        /* was sorry */ QMessageBox::warning(m_view, strtoqstr(f.getMessage()));
     }
 }
 

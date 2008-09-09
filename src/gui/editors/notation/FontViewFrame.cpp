@@ -90,7 +90,7 @@ FontViewFrame::loadFont()
     FcPatternDestroy(pattern);
 
     if (!match || result != FcResultMatch) {
-        QMessageBox::error(this, i18n("Error: Unable to match font name %1", m_fontName));
+        QMessageBox::critical(this, i18n("Error: Unable to match font name %1", m_fontName));
         return ;
     }
 
@@ -98,7 +98,7 @@ FontViewFrame::loadFont()
     FcPatternGetString(match, FC_FAMILY, 0, &matchFamily);
 
     if (QString((const char *)matchFamily).toLower() != m_fontName.toLower()) {
-        QMessageBox::sorry(this, i18n("Warning: No good match for font name %1 (best is %2)", 
+        /* was sorry */ QMessageBox::warning(this, i18n("Warning: No good match for font name %1 (best is %2)", 
                            m_fontName, QString((const char *)matchFamily)));
         m_fontName = (const char *)matchFamily;
     }
@@ -106,7 +106,7 @@ FontViewFrame::loadFont()
     m_tableFont = XftFontOpenPattern(x11AppDisplay(), match);
 
     if (!m_tableFont) {
-        QMessageBox::error(this, i18n("Error: Unable to open best-match font %1", 
+        QMessageBox::critical(this, i18n("Error: Unable to open best-match font %1", 
                            QString((const char *)matchFamily)));
     }
 #endif

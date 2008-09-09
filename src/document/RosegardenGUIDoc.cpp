@@ -355,10 +355,10 @@ bool RosegardenGUIDoc::saveIfModified()
 
             if (!completed) {
                 if (!errMsg.isEmpty()) {
-					QMessageBox::error(0, i18n( qStrToStrUtf8( String("Could not save document at %1\n(%2)")
+					QMessageBox::critical(0, i18n( qStrToStrUtf8( String("Could not save document at %1\n(%2)")
                                                .arg(getAbsFilePath()).arg(errMsg)) )  );
                 } else {
-					QMessageBox::error(0, i18n( qStrToStrUtf8( QString("Could not save document at %1")
+					QMessageBox::critical(0, i18n( qStrToStrUtf8( QString("Could not save document at %1")
                                                .arg( strtoqstr(getAbsFilePath()) )) )  );
                 }
             }
@@ -529,7 +529,7 @@ RosegardenGUIDoc::deleteOrphanedAudioFiles(bool documentWillNotBeSaved)
         for (size_t i = 0; i < recordedOrphans.size(); ++i) {
             QFile file(recordedOrphans[i]);
             if (!file.remove()) {
-                QMessageBox::error(0, i18n("File %1 could not be deleted.",
+                QMessageBox::critical(0, i18n("File %1 could not be deleted.",
                                     recordedOrphans[i]));
             }
 
@@ -585,7 +585,7 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
     if (!fileInfo.isReadable() || fileInfo.isDir()) {
         KStartupLogo::hideIfStillThere();
         QString msg(i18n("Can't open file '%1'", filename));
-        QMessageBox::sorry(0, msg);
+        /* was sorry */ QMessageBox::warning(0, msg);
         return false;
     }
 
@@ -650,7 +650,7 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
                      errMsg));
 
         CurrentProgressDialog::freeze();
-        QMessageBox::sorry(0, msg);
+        /* was sorry */ QMessageBox::warning(0, msg);
         CurrentProgressDialog::thaw();
 
         return false;
@@ -708,7 +708,7 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
     } catch (Exception e) {
         KStartupLogo::hideIfStillThere();
         CurrentProgressDialog::freeze();
-        QMessageBox::error(0, strtoqstr(e.getMessage()));
+        QMessageBox::critical(0, strtoqstr(e.getMessage()));
         CurrentProgressDialog::thaw();
     }
 
@@ -2777,7 +2777,7 @@ RosegardenGUIDoc::finalizeAudioFile(InstrumentId iid)
     } catch (Exception e) {
         KStartupLogo::hideIfStillThere();
         CurrentProgressDialog::freeze();
-        QMessageBox::error(0, strtoqstr(e.getMessage()));
+        QMessageBox::critical(0, strtoqstr(e.getMessage()));
         CurrentProgressDialog::thaw();
     }
 

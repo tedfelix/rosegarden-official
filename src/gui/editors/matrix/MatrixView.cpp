@@ -448,7 +448,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     bool layoutApplied = applyLayout();
     if (!layoutApplied)
-        QMessageBox::sorry(0, i18n("Couldn't apply piano roll layout"));
+        /* was sorry */ QMessageBox::warning(0, i18n("Couldn't apply piano roll layout"));
     else {
         MATRIX_DEBUG << "MatrixView : rendering elements\n";
         for (unsigned int i = 0; i < m_staffs.size(); ++i) {
@@ -1889,7 +1889,7 @@ void MatrixView::slotInsertNoteFromAction()
 
     } catch (...) {
 
-        QMessageBox::sorry
+        /* was sorry */ QMessageBox::warning
         (this, i18n("Unknown note insert action %1", name));
         return ;
     }
@@ -2967,7 +2967,7 @@ MatrixView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn
         if (showingError)
             return ;
         showingError = true;
-        QMessageBox::sorry(this, i18n("Can't insert note: No grid duration selected"));
+        /* was sorry */ QMessageBox::warning(this, i18n("Can't insert note: No grid duration selected"));
         showingError = false;
         return ;
     }
@@ -3135,7 +3135,7 @@ MatrixView::slotPercussionSetChanged(Instrument * newInstr)
     readjustCanvasSize();
     bool layoutApplied = applyLayout();
     if (!layoutApplied)
-        QMessageBox::sorry(0, i18n("Couldn't apply piano roll layout"));
+        /* was sorry */ QMessageBox::warning(0, i18n("Couldn't apply piano roll layout"));
     else {
         MATRIX_DEBUG << "MatrixView : rendering elements\n";
         m_staffs[0]->positionAllElements();

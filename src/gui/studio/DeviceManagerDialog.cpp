@@ -731,7 +731,7 @@ DeviceManagerDialog::slotExport()
     QFileInfo info(name);
 
     if (info.isDir()) {
-        QMessageBox::sorry(this, i18n("You have specified a directory"));
+        /* was sorry */ QMessageBox::warning(this, i18n("You have specified a directory"));
         return ;
     }
 

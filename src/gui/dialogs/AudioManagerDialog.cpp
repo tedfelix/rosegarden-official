@@ -873,7 +873,7 @@ AudioManagerDialog::slotDeleteUnused()
                 std::cerr << i << ": " << names[i] << std::endl;
                 QFile file(names[i]);
                 if (!file.remove()) {
-                    QMessageBox::error(this, i18n("File %1 could not be deleted.", names[i]));
+                    QMessageBox::critical(this, i18n("File %1 could not be deleted.", names[i]));
                 } else {
                     if (nameMap.find(names[i]) != nameMap.end()) {
                         m_doc->getAudioFileManager().removeFile(nameMap[names[i]]);
@@ -1093,12 +1093,12 @@ AudioManagerDialog::addFile(const KURL& kurl)
     } catch (AudioFileManager::BadAudioPathException e) {
         CurrentProgressDialog::freeze();
         QString errorString = i18n("Failed to add audio file. ") + strtoqstr(e.getMessage());
-        QMessageBox::sorry(this, errorString);
+        /* was sorry */ QMessageBox::warning(this, errorString);
         return false;
     } catch (SoundFile::BadSoundFileException e) {
         CurrentProgressDialog::freeze();
         QString errorString = i18n("Failed to add audio file. ") + strtoqstr(e.getMessage());
-        QMessageBox::sorry(this, errorString);
+        /* was sorry */ QMessageBox::warning(this, errorString);
         return false;
     }
             

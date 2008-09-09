@@ -1489,7 +1489,7 @@ BankEditorDialog::slotImport()
             (m_listView->selectedItem());
 
         if (!deviceItem) {
-            QMessageBox::error(this, "Some internal error: cannot locate selected device");
+            QMessageBox::critical(this, "Some internal error: cannot locate selected device");
             return ;
         }
 
@@ -1640,7 +1640,7 @@ BankEditorDialog::slotExport()
     QFileInfo info(name);
 
     if (info.isDir()) {
-        QMessageBox::sorry(this, i18n("You have specified a directory"));
+        /* was sorry */ QMessageBox::warning(this, i18n("You have specified a directory"));
         return ;
     }
 

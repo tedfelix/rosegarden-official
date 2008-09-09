@@ -2339,7 +2339,7 @@ void NotationView::initLayoutToolbar()
     }
 
     if (!foundFont) {
-        QMessageBox::sorry
+        /* was sorry */ QMessageBox::warning
         (this, i18n("Unknown font \"%1\", using default", 
          strtoqstr(m_fontName)));
         m_fontName = NoteFontFactory::getDefaultFontName();
@@ -2498,7 +2498,7 @@ NotationView::setPageMode(LinedStaff::PageMode pageMode)
 
     bool layoutApplied = applyLayout();
     if (!layoutApplied)
-        QMessageBox::sorry(0, "Couldn't apply layout");
+        /* was sorry */ QMessageBox::warning(0, "Couldn't apply layout");
     else {
         for (unsigned int i = 0; i < m_staffs.size(); ++i) {
             m_staffs[i]->markChanged();
@@ -3217,7 +3217,7 @@ void NotationView::updateView()
 void NotationView::print(bool previewOnly)
 {
     if (m_staffs.size() == 0) {
-        QMessageBox::error(0, "Nothing to print");
+        QMessageBox::critical(0, "Nothing to print");
         return ;
     }
 
@@ -4005,7 +4005,7 @@ NotationView::slotChangeSpacingFromAction()
             slotChangeSpacing(spacing);
 
     } else {
-        QMessageBox::sorry
+        /* was sorry */ QMessageBox::warning
         (this, i18n("Unknown spacing action %1", name));
     }
 }
@@ -4063,7 +4063,7 @@ NotationView::slotChangeProportionFromAction()
         slotChangeProportion(proportion);
 
     } else {
-        QMessageBox::sorry
+        /* was sorry */ QMessageBox::warning
         (this, i18n("Unknown proportion action %1", name));
     }
 }
@@ -4110,7 +4110,7 @@ NotationView::slotChangeFontFromAction()
         name = name.right(name.length() - 10);
         slotChangeFont(name);
     } else {
-        QMessageBox::sorry
+        /* was sorry */ QMessageBox::warning
         (this, i18n("Unknown font action %1", name));
     }
 }
@@ -4128,11 +4128,11 @@ NotationView::slotChangeFontSizeFromAction()
         if (ok)
             slotChangeFont(m_fontName, size);
         else {
-            QMessageBox::sorry
+            /* was sorry */ QMessageBox::warning
             (this, i18n("Unknown font size %1", name));
         }
     } else {
-        QMessageBox::sorry
+        /* was sorry */ QMessageBox::warning
         (this, i18n("Unknown font size action %1", name));
     }
 }
@@ -4283,7 +4283,7 @@ NotationView::slotChangeFont(std::string newName, int newSize)
 
     bool layoutApplied = applyLayout();
     if (!layoutApplied)
-        QMessageBox::sorry(0, "Couldn't apply layout");
+        /* was sorry */ QMessageBox::warning(0, "Couldn't apply layout");
     else {
         for (unsigned int i = 0; i < m_staffs.size(); ++i) {
             m_staffs[i]->markChanged();
@@ -4338,7 +4338,7 @@ void NotationView::slotPrintLilyPond()
     file->setAutoRemove(true);
     if (!file->open()) {
         CurrentProgressDialog::freeze();
-        QMessageBox::sorry(this, i18n("Failed to open a temporary file for LilyPond export."));
+        /* was sorry */ QMessageBox::warning(this, i18n("Failed to open a temporary file for LilyPond export."));
         delete file;
     }
     file->close(); // we just want the filename
@@ -4363,7 +4363,7 @@ void NotationView::slotPreviewLilyPond()
     file->setAutoRemove(true);
     if (!file->open()) {
         CurrentProgressDialog::freeze();
-        QMessageBox::sorry(this, i18n("Failed to open a temporary file for LilyPond export."));
+        /* was sorry */ QMessageBox::warning(this, i18n("Failed to open a temporary file for LilyPond export."));
         delete file;
     }
     file->close(); // we just want the filename
@@ -4415,7 +4415,7 @@ bool NotationView::exportLilyPondFile(QString file, bool forPreview)
 
     if (!e.write()) {
         // CurrentProgressDialog::freeze();
-        QMessageBox::sorry(this, i18n("Export failed.  The file could not be opened for writing."));
+        /* was sorry */ QMessageBox::warning(this, i18n("Export failed.  The file could not be opened for writing."));
         return false;
     }
 
@@ -4979,7 +4979,7 @@ void NotationView::slotInsertNoteFromAction()
 
     NoteInserter *noteInserter = dynamic_cast<NoteInserter *>(m_tool);
     if (!noteInserter) {
-        QMessageBox::sorry(this, i18n("No note duration selected"));
+        /* was sorry */ QMessageBox::warning(this, i18n("No note duration selected"));
         return ;
     }
 
@@ -4997,7 +4997,7 @@ void NotationView::slotInsertNoteFromAction()
 
     } catch (...) {
 
-        QMessageBox::sorry
+        /* was sorry */ QMessageBox::warning
             (this, i18n("Unknown note insert action %1", name));
         return ;
     }
@@ -5020,7 +5020,7 @@ void NotationView::slotInsertRest()
 
         NoteInserter *noteInserter = dynamic_cast<NoteInserter *>(m_tool);
         if (!noteInserter) {
-            QMessageBox::sorry(this, i18n("No note duration selected"));
+            /* was sorry */ QMessageBox::warning(this, i18n("No note duration selected"));
             return ;
         }
 
@@ -5041,7 +5041,7 @@ void NotationView::slotSwitchFromRestToNote()
 {
     RestInserter *restInserter = dynamic_cast<RestInserter *>(m_tool);
     if (!restInserter) {
-        QMessageBox::sorry(this, i18n("No rest duration selected"));
+        /* was sorry */ QMessageBox::warning(this, i18n("No rest duration selected"));
         return ;
     }
 
@@ -5076,7 +5076,7 @@ void NotationView::slotSwitchFromNoteToRest()
 {
     NoteInserter *noteInserter = dynamic_cast<NoteInserter *>(m_tool);
     if (!noteInserter) {
-        QMessageBox::sorry(this, i18n("No note duration selected"));
+        /* was sorry */ QMessageBox::warning(this, i18n("No note duration selected"));
         return ;
     }
 
@@ -5128,7 +5128,7 @@ void NotationView::slotToggleDot()
             noteInserter->slotSetDots(note.getDots() ? 0 : 1);
             setTool(noteInserter);
         } else {
-            QMessageBox::sorry(this, i18n("No note or rest duration selected"));
+            /* was sorry */ QMessageBox::warning(this, i18n("No note or rest duration selected"));
         }
     }
 
@@ -5412,7 +5412,7 @@ void NotationView::slotEditAddSustain(bool down)
         }
     }
 
-    QMessageBox::sorry(this, i18n("There is no sustain controller defined for this device.\nPlease ensure the device is configured correctly in the Manage MIDI Devices dialog in the main window."));
+    /* was sorry */ QMessageBox::warning(this, i18n("There is no sustain controller defined for this device.\nPlease ensure the device is configured correctly in the Manage MIDI Devices dialog in the main window."));
 }
 
 void NotationView::slotEditAddSustainDown()
@@ -6490,7 +6490,7 @@ NotationView::slotInsertableNoteEventReceived(int pitch, int velocity, bool note
         if (showingError)
             return ;
         showingError = true;
-        QMessageBox::sorry(this, i18n("Can't insert note: No note duration selected"));
+        /* was sorry */ QMessageBox::warning(this, i18n("Can't insert note: No note duration selected"));
         showingError = false;
         return ;
     }

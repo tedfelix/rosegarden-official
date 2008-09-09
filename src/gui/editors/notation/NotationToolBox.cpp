@@ -81,7 +81,7 @@ EditTool* NotationToolBox::createTool(const QString& toolName)
         tool = new NotationSelector(m_nParentView);
 
     else {
-        QMessageBox::error(0, QString("NotationToolBox::createTool : unrecognised toolname %1 (%2)")
+        QMessageBox::critical(0, QString("NotationToolBox::createTool : unrecognised toolname %1 (%2)")
                            .arg(toolName).arg(toolNamelc));
         return 0;
     }

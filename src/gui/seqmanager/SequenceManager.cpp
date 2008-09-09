@@ -974,13 +974,13 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 
                     } else if ((*i)->getData1() == MappedEvent::FailureJackRestartFailed) {
 
-                        QMessageBox::error(
+                        QMessageBox::critical(
                             dynamic_cast<QWidget*>(m_doc->parent())->parentWidget(),
                             i18n("The JACK Audio subsystem has failed or it has stopped Rosegarden from processing audio.\nPlease restart Rosegarden to continue working with audio.\nQuitting other running applications may improve Rosegarden's performance."));
 
                     } else if ((*i)->getData1() == MappedEvent::FailureJackRestart) {
 
-                        QMessageBox::error(
+                        QMessageBox::critical(
                             dynamic_cast<QWidget*>(m_doc->parent())->parentWidget(),
                             i18n("The JACK Audio subsystem has stopped Rosegarden from processing audio, probably because of a processing overload.\nAn attempt to restart the audio service has been made, but some problems may remain.\nQuitting other running applications may improve Rosegarden's performance."));
 
@@ -991,7 +991,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 
                         stopping();
 
-                        QMessageBox::error(
+                        QMessageBox::critical(
                             dynamic_cast<QWidget*>(m_doc->parent())->parentWidget(),
                             i18n("Run out of processor power for real-time audio processing.  Cannot continue."));
 
@@ -1110,13 +1110,13 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 
                     if ((*i)->getData1() == MappedEvent::FailureJackRestartFailed) {
 
-                        QMessageBox::error(
+                        QMessageBox::critical(
                             dynamic_cast<QWidget*>(m_doc->parent()),
                             i18n("The JACK Audio subsystem has failed or it has stopped Rosegarden from processing audio.\nPlease restart Rosegarden to continue working with audio.\nQuitting other running applications may improve Rosegarden's performance."));
 
                     } else if ((*i)->getData1() == MappedEvent::FailureJackRestart) {
 
-                        QMessageBox::error(
+                        QMessageBox::critical(
                             dynamic_cast<QWidget*>(m_doc->parent()),
                             i18n("The JACK Audio subsystem has stopped Rosegarden from processing audio, probably because of a processing overload.\nAn attempt to restart the audio service has been made, but some problems may remain.\nQuitting other running applications may improve Rosegarden's performance."));
 
@@ -1261,7 +1261,7 @@ SequenceManager::checkSoundDriverStatus(bool warnUser)
 
     if (text != "") {
         RosegardenGUIApp::self()->awaitDialogClearance();
-        QMessageBox::error(RosegardenGUIApp::self(),
+        QMessageBox::critical(RosegardenGUIApp::self(),
                            i18n("<h3>Sequencer startup failed</h3>%1", text));
         CurrentProgressDialog::thaw();
         return;
