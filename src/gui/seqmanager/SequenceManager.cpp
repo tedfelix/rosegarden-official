@@ -2063,7 +2063,7 @@ SequenceManager::shouldWarnForImpreciseTimer()
     // confq4.endGroup();		// corresponding to: confq4.beginGroup( SequencerOptionsConfigGroup );
     //  
 
-    QString timer = confq4.value("timer") ;
+    QString timer = confq4.value("timer").toString();
     if (timer == "(auto)" || timer == "") return true;
     else return false; // if the user has chosen the timer, leave them alone
 }
