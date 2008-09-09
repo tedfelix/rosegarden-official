@@ -838,7 +838,7 @@ void RosegardenGUIView::slotEditSegmentAudio(Segment *segment)
     //  
 
 
-    QString application = config.value("externalaudioeditor", "") ;
+    QString application = config.value("externalaudioeditor", "").toString();
 
     if (application == "") {
         application = AudioConfigurationPage::getBestAvailableAudioEditor();
