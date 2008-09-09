@@ -502,7 +502,7 @@ int main(int argc, char *argv[])
 
     //  
 
-    QString lastVersion = config.value("lastversion", "") ;
+    QString lastVersion = config.value("lastversion", "").toString();
     bool newVersion = (lastVersion != VERSION);
     if (newVersion) {
 	std::cerr << "*** This is the first time running this Rosegarden version" << std::endl;
@@ -520,7 +520,6 @@ int main(int argc, char *argv[])
     // the sizes of the available desktop (i.e. the whole shebang if
     // under Xinerama).  These are obtained from QDesktopWidget.
 
-    QSettings config;
 
     config.beginGroup( "MainView" );
 
@@ -548,13 +547,12 @@ int main(int argc, char *argv[])
 	}
 	QString widthKey = QString("Width %1").arg(totalRect.width());
 	QString heightKey = QString("Height %1").arg(totalRect.height());
-	windowWidth = config->readUnsignedNumEntry
-	    (widthKey, startupSize.width());
-	windowHeight = config->readUnsignedNumEntry
-	    (heightKey, startupSize.height());
+	windowWidth = config.value
+	    (widthKey, startupSize.width()).toInt();
+	windowHeight = config.value
+	    (heightKey, startupSize.height()).toInt();
     }
 
-    QSettings config;
 
     config.beginGroup( "KDE Action Restrictions" );
 
@@ -568,7 +566,6 @@ int main(int argc, char *argv[])
 
     config.setValue("action/help_report_bug", false);
 
-    QSettings config;
 
     config.beginGroup( GeneralOptionsConfigGroup );
 
@@ -589,7 +586,6 @@ int main(int argc, char *argv[])
     // (this code borrowed from KDevelop 2.0,
     // (c) The KDevelop Development Team
     //
-    QSettings config;
     config.beginGroup( GeneralOptionsConfigGroup );
     // 
     // FIX-manually-(GW), add:
@@ -690,7 +686,6 @@ int main(int argc, char *argv[])
     }
 
 
-    QSettings config;
 
 
     config.beginGroup( SequencerOptionsConfigGroup );
@@ -711,20 +706,19 @@ int main(int argc, char *argv[])
     // See if the config wants us to load a soundfont
     //
     if ( qStrToBool( config.value("sfxloadenabled", "false" ) ) ) {
-        QString sfxLoadPath = config.value("sfxloadpath", "/bin/sfxload") ;
-        QString soundFontPath = config.value("soundfontpath", "") ;
+        QString sfxLoadPath = config.value("sfxloadpath", "/bin/sfxload").toString();
+        QString soundFontPath = config.value("soundfontpath", "").toString();
         QFileInfo sfxLoadInfo(sfxLoadPath), soundFontInfo(soundFontPath);
         if (sfxLoadInfo.isExecutable() && soundFontInfo.isReadable()) {
             // setup sfxload Process
             QProcess* sfxLoadProcess = new QProcess;
-            QStringList sfxLoadProcessArgs;
 
             RG_DEBUG << "Starting sfxload : " << sfxLoadPath << " " << soundFontPath << endl;
 
             QObject::connect(sfxLoadProcess, SIGNAL(processExited(QProcess*)),
                              &app, SLOT(sfxLoadExited(QProcess*)));
 
-            sfxLoadProcess->start(sfxLoadPath, soundFontPath));
+            sfxLoadProcess->start(sfxLoadPath, (QStringList) << soundFontPath);
         } else {
             RG_DEBUG << "sfxload not executable or soundfont not readable : "
             << sfxLoadPath << " " << soundFontPath << endl;
