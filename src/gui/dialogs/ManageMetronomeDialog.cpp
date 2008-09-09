@@ -123,6 +123,7 @@ ManageMetronomeDialog::ManageMetronomeDialog(QDialogButtonBox::QWidget *parent,
 
     QGroupBox *beatBox = new QGroupBox( i18n("Beats"), vbox );
     vboxLayout->addWidget(beatBox);
+    vbox->setLayout(vboxLayout);
 
     frame = new QFrame(beatBox);
     layout = new QGridLayout(frame, 4, 2, 10, 5);
@@ -157,7 +158,8 @@ ManageMetronomeDialog::ManageMetronomeDialog(QDialogButtonBox::QWidget *parent,
     connect(m_metronomeSubBeatVely, SIGNAL(valueChanged(int)), this, SLOT(slotSetModified()));
     layout->addWidget(m_metronomeSubBeatVely, 3, 1);
 
-    vbox = new QVBox( hbox );
+    vbox = new QWidget(hbox);
+    vboxLayout = new QVBoxLayout;
     hboxLayout->addWidget(vbox);
     hbox->setLayout(hboxLayout);
 
