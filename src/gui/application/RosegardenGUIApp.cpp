@@ -1962,7 +1962,7 @@ void RosegardenGUIApp::slotSaveOptions()
     m_fileRecent->saveEntries(confq4);
 
     //     saveMainWindowSettings(confq4, RosegardenGUIApp::MainWindowConfigGroup); - no need to, done by KMainWindow
-    confq4->sync();
+    confq4.sync();
 }
 
 void RosegardenGUIApp::setupFileDialogSpeedbar()
@@ -1996,20 +1996,21 @@ void RosegardenGUIApp::setupFileDialogSpeedbar()
         config.setValue(QString("URL_%1").arg(n),
                            KGlobal::dirs()->findResource("appdata", "examples/"));
 
-        RG_DEBUG << "wrote url " << config->readEntry(QString("URL_%1").arg(n)) << endl;
+        RG_DEBUG << "wrote url " << config.value(QString("URL_%1").arg(n)).toString() << endl;
 
         config.setValue("Examples Set", true);
         config.setValue("Number of Entries", n + 1);
-        config->sync();
+        config.sync();
     }
 
 }
 
 void RosegardenGUIApp::readOptions()
 {
+    QSettings confq4;
     applyMainWindowSettings(confq4, MainWindowConfigGroup);
 
-    confq4->reparseConfiguration();
+    confq4.reparseConfiguration();
 
     // Statusbar and toolbars toggling action status
     //
@@ -2022,8 +2023,6 @@ void RosegardenGUIApp::readOptions()
     m_viewZoomToolBar ->setChecked(!toolBar("Zoom Toolbar") ->isHidden());
 
     bool opt;
-
-    QSettings confq4;
 
     confq4.beginGroup( GeneralOptionsConfigGroup );
 
