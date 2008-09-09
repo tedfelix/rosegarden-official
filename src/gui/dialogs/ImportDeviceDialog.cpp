@@ -32,7 +32,7 @@
 #include <kconfig.h>
 #include <QDialog>
 #include <QDialogButtonBox>
-#include <kmessagebox.h>
+#include <QMessageBox>
 #include <kurl.h>
 #include <kio/netaccess.h>
 #include <QGroupBox>
@@ -79,7 +79,7 @@ ImportDeviceDialog::doImport()
 
     QString target;
     if (KIO::NetAccess::download(m_url, target) == false) {
-        KMessageBox::error(this, i18n("Cannot download file %1", m_url.prettyURL()));
+        QMessageBox::error(this, i18n("Cannot download file %1", m_url.prettyURL()));
         return false;
     }
 
@@ -90,14 +90,14 @@ ImportDeviceDialog::doImport()
         fileRead = importFromRG(target);
     }
     if (!fileRead) {
-        KMessageBox::error
+        QMessageBox::error
         (this, i18n("Cannot open file %1", m_url.prettyURL()));
         reject();
         close();
         return false;
     }
     if (m_devices.size() == 0) {
-        KMessageBox::sorry
+        QMessageBox::sorry
         (this, i18n("No devices found in file %1", m_url.prettyURL()));
         reject();
         close();

@@ -30,7 +30,7 @@
 #include "SegmentResizer.h"
 #include "SegmentSplitter.h"
 #include <QString>
-#include <kmessagebox.h>
+#include <QMessageBox>
 
 namespace Rosegarden
 {
@@ -76,7 +76,7 @@ SegmentTool* SegmentToolBox::createTool(const QString& toolName)
         tool = new SegmentJoiner(m_canvas, m_doc);
 
     else {
-        KMessageBox::error(0, QString("SegmentToolBox::createTool : unrecognised toolname %1 (%2)")
+        QMessageBox::error(0, QString("SegmentToolBox::createTool : unrecognised toolname %1 (%2)")
                            .arg(toolName).arg(toolNamelc));
         return 0;
     }

@@ -49,7 +49,7 @@
 #include "NoteStyleFactory.h"
 #include "NoteStyle.h"
 #include <kglobal.h>
-#include <kmessagebox.h>
+#include <QMessageBox>
 #include <QBitmap>
 #include <QColor>
 #include <QFile>
@@ -187,7 +187,7 @@ NotePixmapFactory::init(std::string fontName, int size)
         m_style = NoteStyleFactory::getStyle(NoteStyleFactory::DefaultStyle);
     } catch (NoteStyleFactory::StyleUnavailable u) {
         KStartupLogo::hideIfStillThere();
-        KMessageBox::error(0, i18n(strtoqstr(u.getMessage())));
+        QMessageBox::error(0, i18n(strtoqstr(u.getMessage())));
         throw;
     }
 

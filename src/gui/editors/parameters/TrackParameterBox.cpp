@@ -56,7 +56,7 @@
 #include <QComboBox>
 #include <kconfig.h>
 #include <klineeditdlg.h>
-#include <kmessagebox.h>
+#include <QMessageBox>
 #include <ksqueezedtextlabel.h>
 #include <ktabwidget.h>
 #include <QColor>
@@ -992,7 +992,7 @@ TrackParameterBox::slotPresetPressed()
         // row/column of the corruption, but I can't be bothered to work
         // that out just at the moment.  Hopefully this code will never
         // execute anyway.
-        KMessageBox::sorry(0, i18n("The instrument preset database is corrupt.  Check your installation."));
+        QMessageBox::sorry(0, i18n("The instrument preset database is corrupt.  Check your installation."));
     }
 
 }

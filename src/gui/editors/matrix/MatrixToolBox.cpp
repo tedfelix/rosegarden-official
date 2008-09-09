@@ -28,7 +28,7 @@
 #include "MatrixResizer.h"
 
 #include <QString>
-#include <kmessagebox.h>
+#include <QMessageBox>
 
 namespace Rosegarden
 {
@@ -65,7 +65,7 @@ EditTool* MatrixToolBox::createTool(const QString& toolName)
         tool = new MatrixResizer(m_mParentView);
 
     else {
-        KMessageBox::error(0, QString("MatrixToolBox::createTool : unrecognised toolname %1 (%2)")
+        QMessageBox::error(0, QString("MatrixToolBox::createTool : unrecognised toolname %1 (%2)")
                            .arg(toolName).arg(toolNamelc));
         return 0;
     }

@@ -60,7 +60,7 @@
 #include "gui/general/ProgressReporter.h"
 #include "gui/widgets/CurrentProgressDialog.h"
 #include <kconfig.h>
-#include <kmessagebox.h>
+#include <QMessageBox>
 #include <QFileInfo>
 #include <QObject>
 #include <QRegExp>
@@ -534,10 +534,10 @@ LilyPondExporter::write()
 
     if (illegalFilename) {
         CurrentProgressDialog::freeze();
-        int reply = KMessageBox::warningContinueCancel(
+        int reply = QMessageBox::warningContinueCancel(
                         0, i18n("LilyPond does not allow spaces or backslashes in filenames.\n\n"
                                 "Would you like to use\n\n %1\n\n instead?", baseName));
-        if (reply != KMessageBox::Continue)
+        if (reply != QMessageBox::Continue)
             return false;
     }
 

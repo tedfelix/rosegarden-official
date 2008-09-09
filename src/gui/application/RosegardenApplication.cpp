@@ -26,7 +26,7 @@
 #include <kcmdlineargs.h>
 #include <klocale.h>
 #include <kmainwindow.h>
-#include <kmessagebox.h>
+#include <QMessageBox>
 #include <QProcess>
 #include <kuniqueapplication.h>
 #include <QByteArray>
@@ -77,7 +77,7 @@ void RosegardenApplication::sfxLoadExited(QProcess *proc)
         //  
 
 
-        KMessageBox::error(mainWidget(),
+        QMessageBox::error(mainWidget(),
                            i18n("Failed to load soundfont %1", soundFontPath));
     } else {
         RG_DEBUG << "RosegardenApplication::sfxLoadExited() : sfxload exited normally\n";

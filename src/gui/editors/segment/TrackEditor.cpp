@@ -54,7 +54,7 @@
 #include <dcopobject.h>
 #include "document/Command.h"
 #include <kglobal.h>
-#include <kmessagebox.h>
+#include <QMessageBox>
 #include <QApplication>
 #include <QCursor>
 #include <QFont>
@@ -812,7 +812,7 @@ void TrackEditor::dropEvent(QDropEvent* event)
 
             } else {
 
-                KMessageBox::sorry(this, i18n("You can't drop files into Rosegarden from this client.  Try using Konqueror instead."));
+                QMessageBox::sorry(this, i18n("You can't drop files into Rosegarden from this client.  Try using Konqueror instead."));
 
             }
 

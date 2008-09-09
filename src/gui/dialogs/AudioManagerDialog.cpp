@@ -55,7 +55,7 @@
 #include <klineeditdlg.h>
 #include <QListView>
 #include <kmainwindow.h>
-#include <kmessagebox.h>
+#include <QMessageBox>
 #include <kstandardaction.h>
 #include <kurl.h>
 #include <kxmlguiclient.h>
@@ -598,9 +598,9 @@ AudioManagerDialog::slotRemove()
                            .arg(QString(audioFile->getFilename().c_str()));
 
         // Ask the question
-        int reply = KMessageBox::warningContinueCancel(this, question);
+        int reply = QMessageBox::warningContinueCancel(this, question);
 
-        if (reply != KMessageBox::Continue)
+        if (reply != QMessageBox::Continue)
             return ;
     }
 
@@ -750,9 +750,9 @@ AudioManagerDialog::slotRemoveAll()
     QString question =
         i18n("This will unload all audio files and remove their associated segments.\nThis action cannot be undone, and associations with these files will be lost.\nFiles will not be removed from your disk.\nAre you sure?");
 
-    int reply = KMessageBox::warningContinueCancel(this, question);
+    int reply = QMessageBox::warningContinueCancel(this, question);
 
-    if (reply != KMessageBox::Continue)
+    if (reply != QMessageBox::Continue)
         return ;
 
     SegmentSelection selection;
@@ -787,9 +787,9 @@ AudioManagerDialog::slotRemoveAllUnused()
     QString question =
         i18n("This will unload all audio files that are not associated with any segments in this composition.\nThis action cannot be undone, and associations with these files will be lost.\nFiles will not be removed from your disk.\nAre you sure?");
 
-    int reply = KMessageBox::warningContinueCancel(this, question);
+    int reply = QMessageBox::warningContinueCancel(this, question);
 
-    if (reply != KMessageBox::Continue)
+    if (reply != QMessageBox::Continue)
         return ;
 
     std::set
@@ -862,9 +862,9 @@ AudioManagerDialog::slotDeleteUnused()
             QString question =
                 i18np("<qt>About to delete 1 audio file permanently from the hard disk.<br>This action cannot be undone, and there will be no way to recover this file.<br>Are you sure?</qt>\n", "<qt>About to delete %1 audio files permanently from the hard disk.<br>This action cannot be undone, and there will be no way to recover these files.<br>Are you sure?</qt>", names.size());
 
-            int reply = KMessageBox::warningContinueCancel(this, question);
+            int reply = QMessageBox::warningContinueCancel(this, question);
 
-            if (reply != KMessageBox::Continue) {
+            if (reply != QMessageBox::Continue) {
                 delete dialog;
                 return ;
             }
@@ -873,7 +873,7 @@ AudioManagerDialog::slotDeleteUnused()
                 std::cerr << i << ": " << names[i] << std::endl;
                 QFile file(names[i]);
                 if (!file.remove()) {
-                    KMessageBox::error(this, i18n("File %1 could not be deleted.", names[i]));
+                    QMessageBox::error(this, i18n("File %1 could not be deleted.", names[i]));
                 } else {
                     if (nameMap.find(names[i]) != nameMap.end()) {
                         m_doc->getAudioFileManager().removeFile(nameMap[names[i]]);
@@ -1093,12 +1093,12 @@ AudioManagerDialog::addFile(const KURL& kurl)
     } catch (AudioFileManager::BadAudioPathException e) {
         CurrentProgressDialog::freeze();
         QString errorString = i18n("Failed to add audio file. ") + strtoqstr(e.getMessage());
-        KMessageBox::sorry(this, errorString);
+        QMessageBox::sorry(this, errorString);
         return false;
     } catch (SoundFile::BadSoundFileException e) {
         CurrentProgressDialog::freeze();
         QString errorString = i18n("Failed to add audio file. ") + strtoqstr(e.getMessage());
-        KMessageBox::sorry(this, errorString);
+        QMessageBox::sorry(this, errorString);
         return false;
     }
             
@@ -1116,7 +1116,7 @@ AudioManagerDialog::addFile(const KURL& kurl)
 
         QString message = strtoqstr(e.getMessage()) + "\n\n" +
                           i18n("Try copying this file to a directory where you have write permission and re-add it");
-        KMessageBox::information(this, message);
+        QMessageBox::information(this, message);
     }
 
     disconnect(&progressDlg, SIGNAL(cancelClicked()),

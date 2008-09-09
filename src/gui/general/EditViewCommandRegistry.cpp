@@ -28,7 +28,7 @@
 #include <kactionclasses.h>
 #include <kstandarddirs.h>
 #include <klocale.h>
-#include <kmessagebox.h>
+#include <QMessageBox>
 
 #include <QFile>
 
@@ -152,7 +152,7 @@ EditViewCommandRegistry::invokeCommand(QString actionName)
 
     } catch (CommandCancelled) {
     } catch (CommandFailed f) {
-        KMessageBox::sorry(m_view, strtoqstr(f.getMessage()));
+        QMessageBox::sorry(m_view, strtoqstr(f.getMessage()));
     }
 }
 

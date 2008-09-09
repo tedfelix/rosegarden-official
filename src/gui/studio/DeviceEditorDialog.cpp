@@ -32,7 +32,7 @@
 #include "sequencer/RosegardenSequencer.h"
 #include <QDialog>
 #include <QDialogButtonBox>
-#include <kmessagebox.h>
+#include <QMessageBox>
 #include <QByteArray>
 #include <QDataStream>
 #include <QPushButton>
@@ -214,10 +214,10 @@ DeviceEditorDialog::slotClose()
 {
     if (m_modified) {
 
-        int reply = KMessageBox::questionYesNo(this,
+        int reply = QMessageBox::questionYesNo(this,
                                                i18n("Apply pending changes?"));
 
-        if (reply == KMessageBox::Yes)
+        if (reply == QMessageBox::Yes)
             slotApply();
     }
 

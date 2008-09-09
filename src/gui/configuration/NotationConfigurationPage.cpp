@@ -39,7 +39,7 @@
 #include <QComboBox>
 #include <kconfig.h>
 #include <kfontrequester.h>
-#include <kmessagebox.h>
+#include <QMessageBox>
 #include <QCheckBox>
 #include <QComboBox>
 #include <QFont>
@@ -592,7 +592,7 @@ NotationConfigurationPage::slotViewButtonPressed()
             (void)viewer->exec(); // no return value
         }
     } catch (Exception f) {
-        KMessageBox::error(0, i18n(strtoqstr(f.getMessage())));
+        QMessageBox::error(0, i18n(strtoqstr(f.getMessage())));
     }
 #endif
 }
@@ -670,7 +670,7 @@ NotationConfigurationPage::slotFontComboChanged(int index)
             m_viewButton->setEnabled(map.getSystemFontNames().count() > 0);
         }
     } catch (Exception f) {
-        KMessageBox::error(0, i18n(strtoqstr(f.getMessage())));
+        QMessageBox::error(0, i18n(strtoqstr(f.getMessage())));
     }
 }
 

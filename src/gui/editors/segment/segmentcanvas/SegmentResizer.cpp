@@ -41,7 +41,7 @@
 #include "gui/widgets/ProgressDialog.h"
 #include "SegmentTool.h"
 #include "document/Command.h"
-#include <kmessagebox.h>
+#include <QMessageBox>
 #include <QCursor>
 #include <QEvent>
 #include <QPoint>
@@ -145,11 +145,11 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent *e)
                     try {
                         m_doc->getAudioFileManager().testAudioPath();
                     } catch (AudioFileManager::BadAudioPathException) {
-                        if (KMessageBox::warningContinueCancel
+                        if (QMessageBox::warningContinueCancel
                             (0,
                              i18n("The audio file path does not exist or is not writable.\nYou must set the audio file path to a valid directory in Document Properties before rescaling an audio file.\nWould you like to set it now?"),
                              i18n("Warning"),
-                             i18n("Set audio file path")) == KMessageBox::Continue) {
+                             i18n("Set audio file path")) == QMessageBox::Continue) {
                             RosegardenGUIApp::self()->slotOpenAudioPathSettings();
                         }
                     }
@@ -265,7 +265,7 @@ int SegmentResizer::handleMouseMove(QMouseEvent *e)
         if (segment->getType() == Segment::Audio)
         {
             m_currentIndex = CompositionItem();
-            KMessageBox::information(m_canvas,
+            QMessageBox::information(m_canvas,
                     i18n("You can't yet resize an audio segment!"));
             return RosegardenCanvasView::NoFollow;
         }

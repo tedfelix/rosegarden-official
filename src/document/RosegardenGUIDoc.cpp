@@ -330,7 +330,7 @@ bool RosegardenGUIDoc::saveIfModified()
 
     RosegardenGUIApp *win = (RosegardenGUIApp *)parent();
 
-    int wantSave = KMessageBox::warningYesNoCancel
+    int wantSave = QMessageBox::warningYesNoCancel
                    (win,
                     i18n("The current file has been modified.\n"
                          "Do you want to save it?"),
@@ -340,7 +340,7 @@ bool RosegardenGUIDoc::saveIfModified()
 
     switch (wantSave) {
 
-    case KMessageBox::Yes:
+    case QMessageBox::Yes:
 
         if (!isRegularDotRGFile()) {
 
@@ -355,10 +355,10 @@ bool RosegardenGUIDoc::saveIfModified()
 
             if (!completed) {
                 if (!errMsg.isEmpty()) {
-					KMessageBox::error(0, i18n( qStrToStrUtf8( String("Could not save document at %1\n(%2)")
+					QMessageBox::error(0, i18n( qStrToStrUtf8( String("Could not save document at %1\n(%2)")
                                                .arg(getAbsFilePath()).arg(errMsg)) )  );
                 } else {
-					KMessageBox::error(0, i18n( qStrToStrUtf8( QString("Could not save document at %1")
+					QMessageBox::error(0, i18n( qStrToStrUtf8( QString("Could not save document at %1")
                                                .arg( strtoqstr(getAbsFilePath()) )) )  );
                 }
             }
@@ -366,7 +366,7 @@ bool RosegardenGUIDoc::saveIfModified()
 
         break;
 
-    case KMessageBox::No:
+    case QMessageBox::No:
         // delete the autosave file so it won't annoy
         // the user when reloading the file.
         QFile::remove
@@ -374,7 +374,7 @@ bool RosegardenGUIDoc::saveIfModified()
         completed = true;
         break;
 
-    case KMessageBox::Cancel:
+    case QMessageBox::Cancel:
         completed = false;
         break;
 
@@ -384,7 +384,7 @@ bool RosegardenGUIDoc::saveIfModified()
     }
 
     if (completed) {
-        completed = deleteOrphanedAudioFiles(wantSave == KMessageBox::No);
+        completed = deleteOrphanedAudioFiles(wantSave == QMessageBox::No);
         if (completed) {
             m_audioFileManager.resetRecentlyCreatedFiles();
         }
@@ -481,7 +481,7 @@ RosegardenGUIDoc::deleteOrphanedAudioFiles(bool documentWillNotBeSaved)
 
     if (documentWillNotBeSaved) {
 
-        int reply = KMessageBox::warningYesNoCancel
+        int reply = QMessageBox::warningYesNoCancel
                     (0,
                      i18np("Delete the 1 audio file recorded during the unsaved session?",
                           "Delete the %1 audio files recorded during the unsaved session?",
@@ -489,14 +489,14 @@ RosegardenGUIDoc::deleteOrphanedAudioFiles(bool documentWillNotBeSaved)
 
         switch (reply) {
 
-        case KMessageBox::Yes:
+        case QMessageBox::Yes:
             break;
 
-        case KMessageBox::No:
+        case QMessageBox::No:
             return true;
 
         default:
-        case KMessageBox::Cancel:
+        case QMessageBox::Cancel:
             return false;
         }
 
@@ -523,13 +523,13 @@ RosegardenGUIDoc::deleteOrphanedAudioFiles(bool documentWillNotBeSaved)
     QString question =
         i18np("<qt>About to delete 1 audio file permanently from the hard disk.<br>There will be no way to recover this file.<br>Are you sure?</qt>\n", "<qt>About to delete %1 audio files permanently from the hard disk.<br>There will be no way to recover these files.<br>Are you sure?</qt>", recordedOrphans.size());
 
-    int reply = KMessageBox::warningContinueCancel(0, question);
+    int reply = QMessageBox::warningContinueCancel(0, question);
 
-    if (reply == KMessageBox::Continue) {
+    if (reply == QMessageBox::Continue) {
         for (size_t i = 0; i < recordedOrphans.size(); ++i) {
             QFile file(recordedOrphans[i]);
             if (!file.remove()) {
-                KMessageBox::error(0, i18n("File %1 could not be deleted.",
+                QMessageBox::error(0, i18n("File %1 could not be deleted.",
                                     recordedOrphans[i]));
             }
 
@@ -585,7 +585,7 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
     if (!fileInfo.isReadable() || fileInfo.isDir()) {
         KStartupLogo::hideIfStillThere();
         QString msg(i18n("Can't open file '%1'", filename));
-        KMessageBox::sorry(0, msg);
+        QMessageBox::sorry(0, msg);
         return false;
     }
 
@@ -650,7 +650,7 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
                      errMsg));
 
         CurrentProgressDialog::freeze();
-        KMessageBox::sorry(0, msg);
+        QMessageBox::sorry(0, msg);
         CurrentProgressDialog::thaw();
 
         return false;
@@ -708,7 +708,7 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
     } catch (Exception e) {
         KStartupLogo::hideIfStillThere();
         CurrentProgressDialog::freeze();
-        KMessageBox::error(0, strtoqstr(e.getMessage()));
+        QMessageBox::error(0, strtoqstr(e.getMessage()));
         CurrentProgressDialog::thaw();
     }
 
@@ -1644,7 +1644,7 @@ RosegardenGUIDoc::xmlParse(QString fileContents, QString &errMsg,
         if (handler.isCancelled()) {
             RG_DEBUG << "File load cancelled\n";
             KStartupLogo::hideIfStillThere();
-            KMessageBox::information(0, i18n("File load cancelled"));
+            QMessageBox::information(0, i18n("File load cancelled"));
             cancelled = true;
             return true;
         } else {
@@ -1663,10 +1663,10 @@ RosegardenGUIDoc::xmlParse(QString fileContents, QString &errMsg,
                 (m_pluginManager && !handler.pluginsNotFound().empty())) {
 
 #ifdef HAVE_LIBJACK
-                KMessageBox::information
+                QMessageBox::information
                     (0, i18n("<h3>Audio and plugins not available</h3><p>This composition uses audio files or plugins, but Rosegarden is currently running without audio because the JACK audio server was not available on startup.</p><p>Please exit Rosegarden, start the JACK audio server and re-start Rosegarden if you wish to load this complete composition.</p><p><b>WARNING:</b> If you re-save this composition, all audio and plugin data and settings in it will be lost.</p>"));
 #else
-                KMessageBox::information
+                QMessageBox::information
                     (0, i18n("<h3>Audio and plugins not available</h3><p>This composition uses audio files or plugins, but you are running a version of Rosegarden that was compiled without audio support.</p><p><b>WARNING:</b> If you re-save this composition from this version of Rosegarden, all audio and plugin data and settings in it will be lost.</p>"));
 #endif
             }
@@ -1704,7 +1704,7 @@ RosegardenGUIDoc::xmlParse(QString fileContents, QString &errMsg,
                 KStartupLogo::hideIfStillThere();
                 CurrentProgressDialog::freeze();
 
-                KMessageBox::information(0, i18n("<h3>Incorrect audio sample rate</h3><p>This composition contains audio files that were recorded or imported with the audio server running at a different sample rate (%1 Hz) from the current JACK server sample rate (%2 Hz).</p><p>Rosegarden will play this composition at the correct speed, but any audio files in it will probably sound awful.</p><p>Please consider re-starting the JACK server at the correct rate (%3 Hz) and re-loading this composition before you do any more work with it.</p>", er, sr, er));
+                QMessageBox::information(0, i18n("<h3>Incorrect audio sample rate</h3><p>This composition contains audio files that were recorded or imported with the audio server running at a different sample rate (%1 Hz) from the current JACK server sample rate (%2 Hz).</p><p>Rosegarden will play this composition at the correct speed, but any audio files in it will probably sound awful.</p><p>Please consider re-starting the JACK server at the correct rate (%3 Hz) and re-loading this composition before you do any more work with it.</p>", er, sr, er));
 
                 CurrentProgressDialog::thaw();
                 shownWarning = true;
@@ -1714,7 +1714,7 @@ RosegardenGUIDoc::xmlParse(QString fileContents, QString &errMsg,
                 KStartupLogo::hideIfStillThere();
                 CurrentProgressDialog::freeze();
                 
-                KMessageBox::information(0, i18n("<h3>Inconsistent audio sample rates</h3><p>This composition contains audio files at more than one sample rate.</p><p>Rosegarden will play them at the correct speed, but any audio files that were recorded or imported at rates different from the current JACK server sample rate (%1 Hz) will probably sound awful.</p><p>Please see the audio file manager dialog for more details, and consider resampling any files that are at the wrong rate.</p>", sr),
+                QMessageBox::information(0, i18n("<h3>Inconsistent audio sample rates</h3><p>This composition contains audio files at more than one sample rate.</p><p>Rosegarden will play them at the correct speed, but any audio files that were recorded or imported at rates different from the current JACK server sample rate (%1 Hz) will probably sound awful.</p><p>Please see the audio file manager dialog for more details, and consider resampling any files that are at the wrong rate.</p>", sr),
                                          i18n("Inconsistent sample rates"),
                                          "file-load-inconsistent-samplerates");
                     
@@ -1743,7 +1743,7 @@ RosegardenGUIDoc::xmlParse(QString fileContents, QString &errMsg,
                 
                 KStartupLogo::hideIfStillThere();
                 CurrentProgressDialog::freeze();
-                KMessageBox::information(0, msg);
+                QMessageBox::information(0, msg);
                 CurrentProgressDialog::thaw();
                 shownWarning = true;
                 
@@ -1756,7 +1756,7 @@ RosegardenGUIDoc::xmlParse(QString fileContents, QString &errMsg,
                 
                 KStartupLogo::hideIfStillThere();
                 CurrentProgressDialog::freeze();
-                KMessageBox::information(0, msg);
+                QMessageBox::information(0, msg);
                 CurrentProgressDialog::thaw();
             }
         }
@@ -2777,7 +2777,7 @@ RosegardenGUIDoc::finalizeAudioFile(InstrumentId iid)
     } catch (Exception e) {
         KStartupLogo::hideIfStillThere();
         CurrentProgressDialog::freeze();
-        KMessageBox::error(0, strtoqstr(e.getMessage()));
+        QMessageBox::error(0, strtoqstr(e.getMessage()));
         CurrentProgressDialog::thaw();
     }
 

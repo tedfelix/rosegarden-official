@@ -54,7 +54,7 @@
 #include "RosegardenGUIDoc.h"
 #include "sound/AudioFileManager.h"
 #include <QFileDialog>
-#include <kmessagebox.h>
+#include <QMessageBox>
 #include <QByteArray>
 #include <QDataStream>
 #include <QDialog>
@@ -443,7 +443,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                 CurrentProgressDialog::freeze();
                 KStartupLogo::hideIfStillThere();
 
-                KMessageBox::information(0, i18n("This file was written by Rosegarden %1, which is more recent than this version.\nThere may be some incompatibilities with the file format.", version));
+                QMessageBox::information(0, i18n("This file was written by Rosegarden %1, which is more recent than this version.\nThere may be some incompatibilities with the file format.", version));
 
                 CurrentProgressDialog::thaw();
             }

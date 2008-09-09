@@ -60,7 +60,7 @@
 #include "NotePixmapParameters.h"
 #include "NoteStyleFactory.h"
 #include <kconfig.h>
-#include <kmessagebox.h>
+#include <QMessageBox>
 #include <Q3Canvas>
 #include <QPainter>
 #include <QPoint>
@@ -947,7 +947,7 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
 
         static bool warned = false;
         if (!warned) {
-            KMessageBox::error(0, i18n(strtoqstr(u.getMessage())));
+            QMessageBox::error(0, i18n(strtoqstr(u.getMessage())));
             warned = true;
         }
     }

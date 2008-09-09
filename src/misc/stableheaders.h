@@ -179,7 +179,7 @@
 #include <QListView>
 #include <klocale.h>
 #include <kmainwindow.h>
-#include <kmessagebox.h>
+#include <QMessageBox>
 #include <kmimetype.h>
 #include <kpixmapeffect.h>
 #include <kpopupmenu.h>

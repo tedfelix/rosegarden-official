@@ -47,7 +47,7 @@
 #include <kglobal.h>
 #include <QListView>
 #include <kmainwindow.h>
-#include <kmessagebox.h>
+#include <QMessageBox>
 #include <kstandardshortcut.h>
 #include <kstandardaction.h>
 #include <kxmlguiclient.h>
@@ -672,7 +672,7 @@ BankEditorDialog::checkModified()
 
     //     // then ask if we want to apply the changes
 
-    //     int reply = KMessageBox::questionYesNo(this,
+    //     int reply = QMessageBox::questionYesNo(this,
     //                                            i18n("Apply pending changes?"));
 
     ModifyDeviceCommand *command = 0;
@@ -1089,9 +1089,9 @@ BankEditorDialog::slotDelete()
         int currentBank = bankItem->getBank();
 
         int reply =
-            KMessageBox::warningYesNo(this, i18n("Really delete this bank?"));
+            QMessageBox::warningYesNo(this, i18n("Really delete this bank?"));
 
-        if (reply == KMessageBox::Yes) {
+        if (reply == QMessageBox::Yes) {
             MidiBank bank = m_bankList[currentBank];
 
             // Copy across all programs that aren't in the doomed bank
@@ -1137,9 +1137,9 @@ BankEditorDialog::slotDelete()
     if (keyItem && device) {
 
         int reply =
-            KMessageBox::warningYesNo(this, i18n("Really delete this key mapping?"));
+            QMessageBox::warningYesNo(this, i18n("Really delete this key mapping?"));
 
-        if (reply == KMessageBox::Yes) {
+        if (reply == QMessageBox::Yes) {
 
             std::string keyMappingName = qstrtostr(keyItem->getName());
 
@@ -1190,9 +1190,9 @@ BankEditorDialog::slotDeleteAll()
     QString question = i18n("Really delete all banks for ") +
                        strtoqstr(device->getName()) + QString(" ?");
 
-    int reply = KMessageBox::warningYesNo(this, question);
+    int reply = QMessageBox::warningYesNo(this, question);
 
-    if (reply == KMessageBox::Yes) {
+    if (reply == QMessageBox::Yes) {
 
         // erase all bank items
         QListViewItem* child = 0;
@@ -1489,7 +1489,7 @@ BankEditorDialog::slotImport()
             (m_listView->selectedItem());
 
         if (!deviceItem) {
-            KMessageBox::error(this, "Some internal error: cannot locate selected device");
+            QMessageBox::error(this, "Some internal error: cannot locate selected device");
             return ;
         }
 
@@ -1640,15 +1640,15 @@ BankEditorDialog::slotExport()
     QFileInfo info(name);
 
     if (info.isDir()) {
-        KMessageBox::sorry(this, i18n("You have specified a directory"));
+        QMessageBox::sorry(this, i18n("You have specified a directory"));
         return ;
     }
 
     if (info.exists()) {
-        int overwrite = KMessageBox::questionYesNo
+        int overwrite = QMessageBox::questionYesNo
                         (this, i18n("The specified file exists.  Overwrite?"));
 
-        if (overwrite != KMessageBox::Yes)
+        if (overwrite != QMessageBox::Yes)
             return ;
 
     }
@@ -1693,18 +1693,18 @@ BankEditorDialog::closeEvent(QCloseEvent *e)
 {
     if (m_modified) {
 
-        int res = KMessageBox::warningYesNoCancel(this,
+        int res = QMessageBox::warningYesNoCancel(this,
                   i18n("There are unsaved changes.\n"
                        "Do you want to apply the changes before exiting "
                        "the Bank Editor or discard the changes ?"),
                   i18n("Unsaved Changes"),
                   i18n("&Apply"),
                   i18n("&Discard"));
-        if (res == KMessageBox::Yes) {
+        if (res == QMessageBox::Yes) {
 
             slotApply();
 
-        } else if (res == KMessageBox::Cancel)
+        } else if (res == QMessageBox::Cancel)
             return ;
     }
 

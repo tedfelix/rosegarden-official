@@ -44,7 +44,7 @@
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kmainwindow.h>
-#include <kmessagebox.h>
+#include <QMessageBox>
 #include <kstandardshortcut.h>
 #include <kstandardaction.h>
 #include <QByteArray>
@@ -731,15 +731,15 @@ DeviceManagerDialog::slotExport()
     QFileInfo info(name);
 
     if (info.isDir()) {
-        KMessageBox::sorry(this, i18n("You have specified a directory"));
+        QMessageBox::sorry(this, i18n("You have specified a directory"));
         return ;
     }
 
     if (info.exists()) {
-        int overwrite = KMessageBox::questionYesNo
+        int overwrite = QMessageBox::questionYesNo
             (this, i18n("The specified file exists.  Overwrite?"));
 
-        if (overwrite != KMessageBox::Yes)
+        if (overwrite != QMessageBox::Yes)
             return ;
 
     }

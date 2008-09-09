@@ -42,7 +42,7 @@
 #include "TrackVUMeter.h"
 #include <kglobal.h>
 #include <kled.h>
-#include <kmessagebox.h>
+#include <QMessageBox>
 #include <QCursor>
 #include <QFrame>
 #include <QIcon>
@@ -405,11 +405,11 @@ TrackButtons::slotToggleRecordTrack(int position)
         try {
             m_doc->getAudioFileManager().testAudioPath();
         } catch (AudioFileManager::BadAudioPathException e) {
-            if (KMessageBox::warningContinueCancel
+            if (QMessageBox::warningContinueCancel
                     (this,
                      i18n("The audio file path does not exist or is not writable.\nPlease set the audio file path to a valid directory in Document Properties before recording audio.\nWould you like to set it now?"),
                      i18n("Warning"),
-                     i18n("Set audio file path")) == KMessageBox::Continue) {
+                     i18n("Set audio file path")) == QMessageBox::Continue) {
                 RosegardenGUIApp::self()->slotOpenAudioPathSettings();
             }
         }

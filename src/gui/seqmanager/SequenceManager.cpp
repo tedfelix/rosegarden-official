@@ -60,7 +60,7 @@
 #include <kstandarddirs.h>
 #include <kconfig.h>
 #include <kglobal.h>
-#include <kmessagebox.h>
+#include <QMessageBox>
 #include <QApplication>
 #include <QByteArray>
 #include <QCursor>
@@ -974,13 +974,13 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 
                     } else if ((*i)->getData1() == MappedEvent::FailureJackRestartFailed) {
 
-                        KMessageBox::error(
+                        QMessageBox::error(
                             dynamic_cast<QWidget*>(m_doc->parent())->parentWidget(),
                             i18n("The JACK Audio subsystem has failed or it has stopped Rosegarden from processing audio.\nPlease restart Rosegarden to continue working with audio.\nQuitting other running applications may improve Rosegarden's performance."));
 
                     } else if ((*i)->getData1() == MappedEvent::FailureJackRestart) {
 
-                        KMessageBox::error(
+                        QMessageBox::error(
                             dynamic_cast<QWidget*>(m_doc->parent())->parentWidget(),
                             i18n("The JACK Audio subsystem has stopped Rosegarden from processing audio, probably because of a processing overload.\nAn attempt to restart the audio service has been made, but some problems may remain.\nQuitting other running applications may improve Rosegarden's performance."));
 
@@ -991,7 +991,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 
                         stopping();
 
-                        KMessageBox::error(
+                        QMessageBox::error(
                             dynamic_cast<QWidget*>(m_doc->parent())->parentWidget(),
                             i18n("Run out of processor power for real-time audio processing.  Cannot continue."));
 
@@ -1022,7 +1022,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                             QString message = i18n("A serious error has occurred in the ALSA MIDI subsystem.  It may not be possible to continue sequencing.  Please check console output for more information.");
                             boolShowingALSAWarning = true;
 
-                            KMessageBox::information(0, message);
+                            QMessageBox::information(0, message);
                             boolShowingALSAWarning = false;
 
                             (void)gettimeofday(&tv, 0);
@@ -1043,7 +1043,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                             QString message = i18n("JACK Audio subsystem is losing sample frames.");
                             boolShowingWarning = true;
 
-                            KMessageBox::information(0, message);
+                            QMessageBox::information(0, message);
                             boolShowingWarning = false;
 
                             (void)gettimeofday(&tv, 0);
@@ -1082,12 +1082,12 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 
 #ifdef REPORT_XRUNS
 
-                        KMessageBox::information(0, message);
+                        QMessageBox::information(0, message);
 #else
 
                         if ((*i)->getData1() == MappedEvent::FailureDiscOverrun) {
                             // the error you can't hear
-                            KMessageBox::information(0, message);
+                            QMessageBox::information(0, message);
                         } else {
                             std::cerr << message << std::endl;
                         }
@@ -1110,13 +1110,13 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 
                     if ((*i)->getData1() == MappedEvent::FailureJackRestartFailed) {
 
-                        KMessageBox::error(
+                        QMessageBox::error(
                             dynamic_cast<QWidget*>(m_doc->parent()),
                             i18n("The JACK Audio subsystem has failed or it has stopped Rosegarden from processing audio.\nPlease restart Rosegarden to continue working with audio.\nQuitting other running applications may improve Rosegarden's performance."));
 
                     } else if ((*i)->getData1() == MappedEvent::FailureJackRestart) {
 
-                        KMessageBox::error(
+                        QMessageBox::error(
                             dynamic_cast<QWidget*>(m_doc->parent()),
                             i18n("The JACK Audio subsystem has stopped Rosegarden from processing audio, probably because of a processing overload.\nAn attempt to restart the audio service has been made, but some problems may remain.\nQuitting other running applications may improve Rosegarden's performance."));
 
@@ -1130,11 +1130,11 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 
                         RosegardenGUIApp::self()->awaitDialogClearance();
 
-                        KMessageBox::information(
+                        QMessageBox::information(
                             dynamic_cast<QWidget*>(m_doc->parent()),
                             i18n("<h3>System timer resolution is too low</h3><p>Rosegarden was unable to find a high-resolution timing source for MIDI performance.</p><p>This may mean you are using a Linux system with the kernel timer resolution set too low.  Please contact your Linux distributor for more information.</p><p>Some Linux distributors already provide low latency kernels, see <a href=\"http://rosegarden.wiki.sourceforge.net/Low+latency+kernels\">http://rosegarden.wiki.sourceforge.net/Low+latency+kernels</a> for instructions.</p>"), 
 			    NULL, NULL, 
-			    KMessageBox::Notify + KMessageBox::AllowLink);
+			    QMessageBox::Notify + QMessageBox::AllowLink);
                         
                         CurrentProgressDialog::thaw();
 
@@ -1148,11 +1148,11 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 
                         RosegardenGUIApp::self()->awaitDialogClearance();
 
-                        KMessageBox::information(
+                        QMessageBox::information(
                             dynamic_cast<QWidget*>(m_doc->parent()),
                             i18n("<h3>System timer resolution is too low</h3><p>Rosegarden was unable to find a high-resolution timing source for MIDI performance.</p><p>You may be able to solve this problem by loading the RTC timer kernel module.  To do this, try running <b>sudo modprobe snd-rtctimer</b> in a terminal window and then restarting Rosegarden.</p><p>Alternatively, check whether your Linux distributor provides a multimedia-optimized kernel.  See <a href=\"http://rosegarden.wiki.sourceforge.net/Low+latency+kernels\">http://rosegarden.wiki.sourceforge.net/Low+latency+kernels</a> for notes about this.</p>"), 
 			    NULL, NULL, 
-			    KMessageBox::Notify + KMessageBox::AllowLink);
+			    QMessageBox::Notify + QMessageBox::AllowLink);
                         
                         CurrentProgressDialog::thaw();
                     }
@@ -1261,7 +1261,7 @@ SequenceManager::checkSoundDriverStatus(bool warnUser)
 
     if (text != "") {
         RosegardenGUIApp::self()->awaitDialogClearance();
-        KMessageBox::error(RosegardenGUIApp::self(),
+        QMessageBox::error(RosegardenGUIApp::self(),
                            i18n("<h3>Sequencer startup failed</h3>%1", text));
         CurrentProgressDialog::thaw();
         return;
@@ -1270,7 +1270,7 @@ SequenceManager::checkSoundDriverStatus(bool warnUser)
 #ifdef HAVE_LIBJACK
     if (!(m_soundDriverStatus & AUDIO_OK)) {
         RosegardenGUIApp::self()->awaitDialogClearance();
-        KMessageBox::information(RosegardenGUIApp::self(), i18n("<h3>Failed to connect to JACK audio server.</h3><p>Rosegarden could not connect to the JACK audio server.  This probably means the JACK server is not running.</p><p>If you want to be able to play or record audio files or use plugins, you should exit Rosegarden and start the JACK server before running Rosegarden again.</p>"),
+        QMessageBox::information(RosegardenGUIApp::self(), i18n("<h3>Failed to connect to JACK audio server.</h3><p>Rosegarden could not connect to the JACK audio server.  This probably means the JACK server is not running.</p><p>If you want to be able to play or record audio files or use plugins, you should exit Rosegarden and start the JACK server before running Rosegarden again.</p>"),
                                  i18n("Failed to connect to JACK"),
                                  "startup-jack-failed");
     }

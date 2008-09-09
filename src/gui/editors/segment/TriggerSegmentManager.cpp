@@ -46,7 +46,7 @@
 #include <kglobal.h>
 #include <QListView>
 #include <kmainwindow.h>
-#include <kmessagebox.h>
+#include <QMessageBox>
 #include <kstandardshortcut.h>
 #include <kstandardaction.h>
 #include <kconfig.h>
@@ -290,7 +290,7 @@ TriggerSegmentManager::slotUpdate()
 void
 TriggerSegmentManager::slotDeleteAll()
 {
-    if (KMessageBox::warningContinueCancel(this, i18n("This will remove all triggered segments from the whole composition.  Are you sure?")) != KMessageBox::Continue)
+    if (QMessageBox::warningContinueCancel(this, i18n("This will remove all triggered segments from the whole composition.  Are you sure?")) != QMessageBox::Continue)
         return ;
 
     RG_DEBUG << "TriggerSegmentManager::slotDeleteAll" << endl;
@@ -341,8 +341,8 @@ TriggerSegmentManager::slotDelete()
         return ;
 
     if (item->getUsage() > 0) {
-        if (KMessageBox::warningContinueCancel(this, i18np("This triggered segment is used 1 time in the current composition.  Are you sure you want to remove it?",
-                                               "This triggered segment is used %1 times in the current composition.  Are you sure you want to remove it?", item->getUsage())) != KMessageBox::Continue)
+        if (QMessageBox::warningContinueCancel(this, i18np("This triggered segment is used 1 time in the current composition.  Are you sure you want to remove it?",
+                                               "This triggered segment is used %1 times in the current composition.  Are you sure you want to remove it?", item->getUsage())) != QMessageBox::Continue)
             return ;
     }
 
@@ -358,7 +358,7 @@ TriggerSegmentManager::slotPasteAsNew()
     Clipboard *clipboard = m_doc->getClipboard();
 
     if (clipboard->isEmpty()) {
-        KMessageBox::information(this, i18n("Clipboard is empty"));
+        QMessageBox::information(this, i18n("Clipboard is empty"));
         return ;
     }
 

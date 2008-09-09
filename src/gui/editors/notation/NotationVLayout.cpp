@@ -34,7 +34,7 @@
 #include "NotationProperties.h"
 #include "NotationStaff.h"
 #include "NotePixmapFactory.h"
-#include <kmessagebox.h>
+#include <QMessageBox>
 #include <QObject>
 #include <QString>
 #include <QWidget>
@@ -482,7 +482,7 @@ NotationVLayout::positionSlur(NotationStaff &staff,
             long h = 0;
             if (!event->get
                     <Int>(m_properties.HEIGHT_ON_STAFF, h)) {
-                KMessageBox::sorry
+                QMessageBox::sorry
                 ((QWidget *)parent(), i18n("Spanned note at %1 has no HEIGHT_ON_STAFF property!\nThis is a bug (the program would previously have crashed by now)", (*scooter)->getViewAbsoluteTime()));
                 event->dump(std::cerr);
             }

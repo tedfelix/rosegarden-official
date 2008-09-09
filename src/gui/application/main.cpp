@@ -24,7 +24,7 @@
 #include <klocale.h>
 #include <dcopclient.h>
 #include <kconfig.h>
-#include <kmessagebox.h>
+#include <QMessageBox>
 #include <kstandarddirs.h>
 #include <ktip.h>
 #include <QProcess>
@@ -360,7 +360,7 @@ void testInstalledVersion()
 
     if (!installedVersion.isEmpty()) {
 
-        KMessageBox::detailedError
+        QMessageBox::detailedError
         (0,
          i18n("Installation contains the wrong version of Rosegarden."),
          i18n(" The wrong versions of Rosegarden's data files were\n"
@@ -379,7 +379,7 @@ void testInstalledVersion()
 
     } else {
 
-        KMessageBox::detailedError
+        QMessageBox::detailedError
         (0,
          i18n("Rosegarden does not appear to have been installed."),
          i18n(" One or more of Rosegarden's data files could not be\n"

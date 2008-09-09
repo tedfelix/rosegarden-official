@@ -30,7 +30,7 @@
 #include "NotationSelector.h"
 
 #include <QString>
-#include <kmessagebox.h>
+#include <QMessageBox>
 
 namespace Rosegarden
 {
@@ -81,7 +81,7 @@ EditTool* NotationToolBox::createTool(const QString& toolName)
         tool = new NotationSelector(m_nParentView);
 
     else {
-        KMessageBox::error(0, QString("NotationToolBox::createTool : unrecognised toolname %1 (%2)")
+        QMessageBox::error(0, QString("NotationToolBox::createTool : unrecognised toolname %1 (%2)")
                            .arg(toolName).arg(toolNamelc));
         return 0;
     }

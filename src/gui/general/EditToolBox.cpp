@@ -23,7 +23,7 @@
 #include "EditView.h"
 #include <QObject>
 #include <QString>
-#include <kmessagebox.h>
+#include <QMessageBox>
 
 namespace Rosegarden
 {
@@ -41,7 +41,7 @@ EditTool* EditToolBox::getTool(const QString& toolName)
 
 EditTool* EditToolBox::createTool(const QString&)
 {
-    KMessageBox::error(0, "EditToolBox::createTool called - this should never happen");
+    QMessageBox::error(0, "EditToolBox::createTool called - this should never happen");
     return 0;
 }
 

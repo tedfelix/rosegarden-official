@@ -39,7 +39,7 @@
 #include "SegmentSelector.h"
 #include "SegmentToolBox.h"
 #include "SegmentTool.h"
-#include <kmessagebox.h>
+#include <QMessageBox>
 #include <QBrush>
 #include <QColor>
 #include <QEvent>
@@ -320,7 +320,7 @@ void CompositionView::slotSetTool(const QString& toolName)
     if (m_tool)
         m_tool->ready();
     else {
-        KMessageBox::error(0, QString("CompositionView::slotSetTool() : unknown tool name %1").arg(toolName));
+        QMessageBox::error(0, QString("CompositionView::slotSetTool() : unknown tool name %1").arg(toolName));
     }
 }
 

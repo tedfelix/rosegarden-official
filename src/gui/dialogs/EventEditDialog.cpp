@@ -28,7 +28,7 @@
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include <QDialog>
 #include <QDialogButtonBox>
-#include <kmessagebox.h>
+#include <QMessageBox>
 #include <QCheckBox>
 #include <QFont>
 #include <qgrid.h>
@@ -435,13 +435,13 @@ EventEditDialog::slotPropertyDeleted()
 
     QString propertyName = pushButton->objectName();
 
-    if (KMessageBox::warningContinueCancel
+    if (QMessageBox::warningContinueCancel
             (this,
              i18n("Are you sure you want to delete the \"%1\" property?\n\n"
                   "Removing necessary properties may cause unexpected behavior.", 
              propertyName),
              i18n("Edit Event"),
-             i18n("&Delete")) != KMessageBox::Continue)
+             i18n("&Delete")) != QMessageBox::Continue)
         return ;
 
     m_modified = true;
@@ -467,14 +467,14 @@ EventEditDialog::slotPropertyMadePersistent()
 
     QString propertyName = pushButton->objectName();
 
-    if (KMessageBox::warningContinueCancel
+    if (QMessageBox::warningContinueCancel
             (this,
              i18n("Are you sure you want to make the \"%1\" property persistent?\n\n"
                   "This could cause problems if it overrides a different "
                   "computed value later on.", 
              propertyName),
              i18n("Edit Event"),
-             i18n("Make &Persistent")) != KMessageBox::Continue)
+             i18n("Make &Persistent")) != QMessageBox::Continue)
         return ;
 
     QObjectList *list = m_nonPersistentGrid->queryList(0, propertyName, false);

@@ -36,7 +36,7 @@
 #include <QApplication>
 #include <klocale.h>
 #include <kio/netaccess.h>
-#include <kmessagebox.h>
+#include <QMessageBox>
 
 #include <QProcess>
 #include <QPixmap>
@@ -671,7 +671,7 @@ AudioFileManager::importURL(const QUrl &url, int sampleRate)
 
     QString localPath = "";
     if (!KIO::NetAccess::download(url, localPath)) {
-	KMessageBox::error(0, i18n("Cannot download file %1", url.prettyURL()));
+	QMessageBox::error(0, i18n("Cannot download file %1", url.prettyURL()));
 	throw SoundFile::BadSoundFileException(url.prettyURL());
     }
     
