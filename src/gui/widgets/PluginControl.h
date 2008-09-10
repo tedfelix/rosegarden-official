@@ -20,11 +20,9 @@
 #define _RG_PLUGINCONTROL_H_
 
 #include <QObject>
-#include <vector>
 
 
 class QWidget;
-class QHBox;
 class QGridLayout;
 
 
@@ -87,9 +85,6 @@ protected:
     int                  m_index;
 
 };
-
-typedef std::vector<PluginControl*>::iterator ControlIterator;
-typedef std::vector<QHBox*>::iterator ControlLineIterator;
 
 
 }

@@ -29,7 +29,6 @@
 #include <QObject>
 #include <QString>
 #include <QWidget>
-#include <QHBoxLayout>
 #include <cmath>
 
 
