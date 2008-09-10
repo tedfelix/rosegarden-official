@@ -33,7 +33,7 @@
 #include "TabbedConfigurationPage.h"
 #include "misc/Strings.h"
 #include <QComboBox>
-#include <kconfig.h>
+#include <QSettings>
 #include <kfiledialog.h>
 #include <QCheckBox>
 #include <QComboBox>

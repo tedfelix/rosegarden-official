@@ -21,7 +21,7 @@
 #include <QApplication>
 
 #include <klocale.h>
-#include <kconfig.h>
+#include <QSettings>
 #include <kstandarddirs.h>
 #include "misc/Debug.h"
 #include "document/ConfigGroups.h"

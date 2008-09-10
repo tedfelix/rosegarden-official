@@ -25,7 +25,7 @@
 #include "misc/Strings.h"
 
 #include <QApplication>
-#include <kconfig.h>
+#include <QSettings>
 #include <QListView>
 #include <klocale.h>
 #include <QGroupBox>

@@ -40,7 +40,7 @@
 #include "gui/kdeext/KTmpStatusMsg.h"
 #include <kaction.h>
 #include "document/Command.h"
-#include <kconfig.h>
+#include <QSettings>
 #include <QDockWidget>
 #include <kedittoolbar.h>
 #include <kglobal.h>

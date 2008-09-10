@@ -29,7 +29,7 @@
 #include "base/TriggerSegment.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include <QComboBox>
-#include <kconfig.h>
+#include <QSettings>
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QCheckBox>

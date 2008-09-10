@@ -39,7 +39,7 @@
 #include "NotationProperties.h"
 #include "NotationStaff.h"
 #include "NotePixmapFactory.h"
-#include <kconfig.h>
+#include <QSettings>
 #include <QObject>
 #include <cmath>
 

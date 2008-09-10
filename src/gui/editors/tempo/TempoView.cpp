@@ -40,7 +40,7 @@
 #include "TempoListItem.h"
 #include <kaction.h>
 #include <kglobal.h>
-#include <kconfig.h>
+#include <QSettings>
 #include <QListView>
 #include <kxmlguiclient.h>
 #include <QGroupBox>

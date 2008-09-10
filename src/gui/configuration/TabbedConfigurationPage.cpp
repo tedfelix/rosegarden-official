@@ -20,7 +20,7 @@
 
 #include "ConfigurationPage.h"
 #include "document/RosegardenGUIDoc.h"
-#include <kconfig.h>
+#include <QSettings>
 #include <kdialog.h>
 #include <QString>
 #include <QTabWidget>

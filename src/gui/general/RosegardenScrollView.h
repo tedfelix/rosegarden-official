@@ -20,7 +20,7 @@
 #define _RG_ROSEGARDENSCROLLVIEW_H_
 
 #include <QPoint>
-#include <qscrollview.h>
+#include <QScrollArea>
 #include <QDateTime>
 #include <QTimer>
 
@@ -41,11 +41,11 @@ namespace Rosegarden
  * and the ability to have a "fixed" (non-scrolling) widget at its bottom,
  * just above the bottom scrollbar.
  */
-class RosegardenScrollView : public QScrollView
+class RosegardenScrollView : public QScrollArea // was:QScrollView
 {
     Q_OBJECT
 public:
-    RosegardenScrollView(QWidget* parent=0, const char* name=0, WFlags f=0);
+    RosegardenScrollView(QWidget* parent=0, const char* name=0); //, WFlags f=0);
 
     /**
      * EditTool::handleMouseMove() returns a OR-ed combination of these

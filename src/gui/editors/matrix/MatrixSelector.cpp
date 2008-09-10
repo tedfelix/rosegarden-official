@@ -46,7 +46,7 @@
 #include <kaction.h>
 #include <kglobal.h>
 #include <QApplication>
-#include <kconfig.h>
+#include <QSettings>
 #include <QDialog>
 #include <QIcon>
 #include <QPoint>

@@ -29,7 +29,7 @@
 #include "gui/editors/notation/NotationStrings.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include <QComboBox>
-#include <kconfig.h>
+#include <QSettings>
 #include <QCheckBox>
 #include <QFrame>
 #include <QGroupBox>

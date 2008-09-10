@@ -40,7 +40,7 @@
 #include "SegmentTool.h"
 #include "SegmentToolBox.h"
 #include <QApplication>
-#include <kconfig.h>
+#include <QSettings>
 #include <QCursor>
 #include <QEvent>
 #include <QPoint>

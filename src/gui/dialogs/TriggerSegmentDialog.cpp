@@ -26,7 +26,7 @@
 #include "base/Composition.h"
 #include "base/TriggerSegment.h"
 #include <QComboBox>
-#include <kconfig.h>
+#include <QSettings>
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QCheckBox>

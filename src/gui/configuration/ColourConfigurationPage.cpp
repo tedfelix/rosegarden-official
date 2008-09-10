@@ -30,7 +30,7 @@
 #include "gui/widgets/ColourTable.h"
 #include "TabbedConfigurationPage.h"
 #include <kcolordialog.h>
-#include <kconfig.h>
+#include <QSettings>
 #include <kinputdialog.h>
 #include <QColor>
 #include <QFrame>

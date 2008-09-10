@@ -37,7 +37,7 @@
 #include "gui/widgets/QuantizeParameters.h"
 #include "TabbedConfigurationPage.h"
 #include <QComboBox>
-#include <kconfig.h>
+#include <QSettings>
 #include <kfontrequester.h>
 #include <QMessageBox>
 #include <QCheckBox>

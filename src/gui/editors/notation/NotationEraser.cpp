@@ -28,7 +28,7 @@
 #include "NotationView.h"
 #include "NotePixmapFactory.h"
 #include <kaction.h>
-#include <kconfig.h>
+#include <QSettings>
 #include <QIcon>
 #include <QString>
 

@@ -59,7 +59,7 @@
 #include "NotePixmapFactory.h"
 #include "NotePixmapParameters.h"
 #include "NoteStyleFactory.h"
-#include <kconfig.h>
+#include <QSettings>
 #include <QMessageBox>
 #include <Q3Canvas>
 #include <QPainter>

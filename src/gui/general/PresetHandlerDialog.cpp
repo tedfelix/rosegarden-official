@@ -30,7 +30,7 @@
 #include "PresetElement.h"
 #include "PresetGroup.h"
 #include <QComboBox>
-#include <kconfig.h>
+#include <QSettings>
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QGroupBox>

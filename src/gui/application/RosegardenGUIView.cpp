@@ -74,7 +74,7 @@
 #include "sound/AudioFileManager.h"
 #include "sound/MappedEvent.h"
 #include "document/Command.h"
-#include <kconfig.h>
+#include <QSettings>
 #include <QMessageBox>
 #include <QProcess>
 #include <QApplication>

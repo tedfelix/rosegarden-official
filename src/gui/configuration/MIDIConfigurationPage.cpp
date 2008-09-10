@@ -32,7 +32,7 @@
 #include "sound/MappedEvent.h"
 #include "TabbedConfigurationPage.h"
 #include <QComboBox>
-#include <kconfig.h>
+#include <QSettings>
 #include <kfiledialog.h>
 #include <QCheckBox>
 #include <QComboBox>

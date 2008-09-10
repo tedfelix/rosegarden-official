@@ -28,7 +28,7 @@
 #include "misc/Strings.h"
 #include <QComboBox>
 #include <klineedit.h>
-#include <kconfig.h>
+#include <QSettings>
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <kglobal.h>

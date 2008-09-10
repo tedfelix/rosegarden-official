@@ -59,7 +59,7 @@ class CompositionView : public RosegardenScrollView
     Q_OBJECT
 public:
     CompositionView(RosegardenGUIDoc*, CompositionModel*,
-                    QWidget * parent=0, const char* name=0, WFlags f=0);
+                    QWidget * parent=0, const char* name=0); //, WFlags f=0);
 
     void setPointerPos(int pos);
     int getPointerPos() { return m_pointerPos; }

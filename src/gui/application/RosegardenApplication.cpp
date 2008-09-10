@@ -34,7 +34,7 @@
 #include <QSessionManager>
 #include <QString>
 #include <dcopclient.h>
-#include <kconfig.h>
+#include <QSettings>
 #include <kstatusbar.h>
 
 

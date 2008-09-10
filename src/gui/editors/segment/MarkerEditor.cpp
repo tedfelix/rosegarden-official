@@ -25,7 +25,7 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kstandardshortcut.h>
-#include <kconfig.h>
+#include <QSettings>
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "base/Composition.h"

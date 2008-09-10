@@ -44,7 +44,7 @@
 #include "NoteStyleFactory.h"
 #include <kaction.h>
 #include "document/Command.h"
-#include <kconfig.h>
+#include <QSettings>
 #include <QIcon>
 #include <QRegExp>
 #include <QString>

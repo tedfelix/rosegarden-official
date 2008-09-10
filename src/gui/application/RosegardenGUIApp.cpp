@@ -168,35 +168,19 @@
 #include "sound/PluginIdentifier.h"
 #include "sound/SoundDriver.h"
 #include "StartupTester.h"
+
 #include <dcopclient.h>
 #include <dcopobject.h>
 #include <dcopref.h>
-#include <kaction.h>
-#include <kconfig.h>
-#include <kdcopactionproxy.h>
-#include <QDockWidget>
-#include <kedittoolbar.h>
-#include <kfiledialog.h>
-#include <kglobal.h>
-#include <kinputdialog.h>
-#include <kio/netaccess.h>
-#include <kkeydialog.h>
-#include <klocale.h>
-#include <kmainwindow.h>
-#include <QMessageBox>
-#include <kmimetype.h>
-#include <QProcess>
-#include <kstatusbar.h>
-#include <kstandardshortcut.h>
-#include <kstandardaction.h>
-#include <kstandarddirs.h>
-#include <QTemporaryFile>
-#include <ktip.h>
-#include <ktoolbar.h>
-#include <kurl.h>
-#include <kxmlguiclient.h>
-#include <qshortcut.h>
+
 #include <Q3Canvas>
+
+#include <QSettings>
+#include <QDockWidget>
+#include <QMessageBox>
+#include <QProcess>
+#include <QTemporaryFile>
+#include <QToolTip>
 #include <QByteArray>
 #include <QCursor>
 #include <QDataStream>
@@ -210,7 +194,7 @@
 #include <QObject>
 #include <QObjectList>
 #include <QPixmap>
-#include <qpopupmenu.h>
+#include <QToolTip>
 #include <QPushButton>
 #include <QRegExp>
 #include <QSlider>
@@ -220,6 +204,27 @@
 #include <QTimer>
 #include <QVector>
 #include <QWidget>
+#include <QMainWindow>
+
+#include <kmimetype.h>
+#include <kaction.h>
+#include <kdcopactionproxy.h>
+#include <kedittoolbar.h>
+#include <kfiledialog.h>
+#include <kglobal.h>
+#include <kinputdialog.h>
+#include <kio/netaccess.h>
+#include <kkeydialog.h>
+#include <klocale.h>
+#include <kmainwindow.h>
+#include <ktip.h>
+#include <ktoolbar.h>
+#include <kurl.h>
+#include <kxmlguiclient.h>
+#include <kstatusbar.h>
+#include <kstandardshortcut.h>
+#include <kstandardaction.h>
+#include <kstandarddirs.h>
 
 #ifdef HAVE_LIBJACK
 #include <jack/jack.h>
@@ -231,7 +236,7 @@ namespace Rosegarden
 
 RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
                                    QObject *startupStatusMessageReceiver)
-        : DCOPObject("RosegardenIface"), RosegardenIface(this), KDockMainWindow(0),
+        : DCOPObject("RosegardenIface"), RosegardenIface(this), QMainWindow(0),
         m_actionsSetup(false),
         m_fileRecent(0),
         m_view(0),
@@ -253,7 +258,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
         m_storedLoopEnd(0),
         m_useSequencer(useSequencer),
         m_dockVisible(true),
-        m_autoSaveTimer(new QTimer(this)),
+		m_autoSaveTimer(new QTimer( static_cast<QObject *>(this) )),
         m_clipboard(new Clipboard),
         m_playList(0),
         m_deviceManager(0),
@@ -267,8 +272,8 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 #ifdef HAVE_LIBLO
         m_pluginGUIManager(new AudioPluginOSCGUIManager(this)),
 #endif
-        m_playTimer(new QTimer(this)),
-        m_stopTimer(new QTimer(this)),
+		m_playTimer(new QTimer( static_cast<QObject *>(this) )),
+		m_stopTimer(new QTimer( static_cast<QObject *>(this) )),
         m_startupTester(0),
 #ifdef HAVE_LIRC
         m_lircClient(0),

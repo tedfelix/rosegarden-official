@@ -23,7 +23,7 @@
 #include <kaboutdata.h>
 #include <klocale.h>
 #include <dcopclient.h>
-#include <kconfig.h>
+#include <QSettings>
 #include <QMessageBox>
 #include <kstandarddirs.h>
 #include <ktip.h>

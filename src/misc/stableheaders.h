@@ -153,7 +153,7 @@
 #include <QComboBox>
 #include "document/Command.h"
 #include <kcompletion.h>
-#include <kconfig.h>
+#include <QSettings>
 #include <kcursor.h>
 #include <kdcopactionproxy.h>
 #include <kdebug.h>

@@ -31,7 +31,7 @@
 #include <QApplication>
 
 #include <kapp.h>
-#include <kconfig.h>
+#include <QSettings>
 
 namespace Rosegarden {
 

@@ -21,7 +21,7 @@
 
 #include "base/Colour.h"
 #include "document/ConfigGroups.h"
-#include <kconfig.h>
+#include <QSettings>
 #include <QColor>
 
 

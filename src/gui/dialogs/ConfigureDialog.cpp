@@ -26,7 +26,7 @@
 #include "gui/configuration/NotationConfigurationPage.h"
 #include "gui/configuration/AudioConfigurationPage.h"
 #include "gui/configuration/MIDIConfigurationPage.h"
-#include <kconfig.h>
+#include <QSettings>
 #include <kdialogbase.h>
 #include <kstandarddirs.h>
 #include <QString>

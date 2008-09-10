@@ -49,7 +49,7 @@
 #include <QMessageBox>
 #include <kstandardshortcut.h>
 #include <kstandardaction.h>
-#include <kconfig.h>
+#include <QSettings>
 #include <qshortcut.h>
 #include <QDialog>
 #include <QFrame>

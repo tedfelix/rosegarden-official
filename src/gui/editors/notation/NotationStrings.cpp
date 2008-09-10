@@ -25,7 +25,7 @@
 #include "base/Exception.h"
 #include "base/NotationTypes.h"
 #include "gui/configuration/GeneralConfigurationPage.h"
-#include <kconfig.h>
+#include <QSettings>
 #include <QString>
 
 

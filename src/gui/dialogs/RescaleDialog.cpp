@@ -22,7 +22,7 @@
 #include "document/ConfigGroups.h"
 #include "base/Composition.h"
 #include "gui/widgets/TimeWidget.h"
-#include <kconfig.h>
+#include <QSettings>
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QCheckBox>

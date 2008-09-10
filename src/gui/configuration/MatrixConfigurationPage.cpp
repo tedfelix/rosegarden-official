@@ -24,7 +24,7 @@
 #include "document/ConfigGroups.h"
 #include "gui/editors/matrix/MatrixView.h"
 #include "TabbedConfigurationPage.h"
-#include <kconfig.h>
+#include <QSettings>
 #include <QFrame>
 #include <QLabel>
 #include <QString>

@@ -22,7 +22,7 @@
 #include <klocale.h>
 #include "document/ConfigGroups.h"
 #include "commands/notation/InterpretCommand.h"
-#include <kconfig.h>
+#include <QSettings>
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QCheckBox>

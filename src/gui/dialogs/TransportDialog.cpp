@@ -33,7 +33,7 @@
 #include "gui/widgets/Label.h"
 #include "sound/MappedEvent.h"
 #include "document/ConfigGroups.h"
-#include <kconfig.h>
+#include <QSettings>
 #include <kglobal.h>
 #include <qshortcut.h>
 #include <QColor>

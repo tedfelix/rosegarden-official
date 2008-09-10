@@ -33,7 +33,7 @@
 #include "document/RosegardenGUIDoc.h"
 #include "SegmentMmapper.h"
 #include "sound/MappedEvent.h"
-#include <kconfig.h>
+#include <QSettings>
 #include <kglobal.h>
 #include <QString>
 #include <algorithm>

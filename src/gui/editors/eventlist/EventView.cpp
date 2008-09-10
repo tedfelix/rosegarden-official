@@ -54,7 +54,7 @@
 #include "gui/kdeext/KTmpStatusMsg.h"
 #include "gui/dialogs/EventFilterDialog.h"
 #include <kaction.h>
-#include <kconfig.h>
+#include <QSettings>
 #include <klocale.h>
 #include <kstatusbar.h>
 #include <kstandarddirs.h>

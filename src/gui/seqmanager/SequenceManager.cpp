@@ -58,7 +58,7 @@
 #include "TimeSigSegmentMmapper.h"
 #include <klocale.h>
 #include <kstandarddirs.h>
-#include <kconfig.h>
+#include <QSettings>
 #include <kglobal.h>
 #include <QMessageBox>
 #include <QApplication>

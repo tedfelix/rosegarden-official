@@ -24,7 +24,7 @@
 
 #include <klocale.h>
 #include <kstandarddirs.h>
-#include <kconfig.h>
+#include <QSettings>
 #include "misc/Strings.h"
 #include "document/ConfigGroups.h"
 #include "base/Exception.h"

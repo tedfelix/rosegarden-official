@@ -20,7 +20,7 @@
 #include "document/ConfigGroups.h"
 #include "sound/MappedEvent.h"
 #include <QApplication>
-#include <kconfig.h>
+#include <QSettings>
 
 namespace Rosegarden
 {

@@ -24,7 +24,7 @@
 
 #include <kapp.h>
 #include <kstandarddirs.h>
-#include <kconfig.h>
+#include <QSettings>
 #include <ktip.h>
 
 #include "KStartupLogo.h"

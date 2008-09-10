@@ -29,7 +29,7 @@
 #include "gui/application/RosegardenGUIApp.h"
 #include "sound/SF2PatchExtractor.h"
 #include <QComboBox>
-#include <kconfig.h>
+#include <QSettings>
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QMessageBox>

@@ -39,8 +39,8 @@ public:
     ProgressBar(int totalSteps,
                 bool useDelay,
                 QWidget *creator = 0,
-                const char *name = 0,
-                WFlags f = 0);
+                const char *name = 0);
+//                WFlags f = 0);
 
 };
 

@@ -25,7 +25,7 @@
 #include "gui/studio/AudioPluginManager.h"
 #include "sound/AudioFileManager.h"
 #include "TabbedConfigurationPage.h"
-#include <kconfig.h>
+#include <QSettings>
 #include <kdiskfreesp.h>
 #include <kfiledialog.h>
 #include <kfile.h>

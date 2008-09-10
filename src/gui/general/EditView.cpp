@@ -24,7 +24,7 @@
 
 #include "base/BaseProperties.h"
 #include <klocale.h>
-#include <kconfig.h>
+#include <QSettings>
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "ActiveItem.h"

@@ -103,7 +103,7 @@
 #include <kstandarddirs.h>
 #include <kaction.h>
 #include <QComboBox>
-#include <kconfig.h>
+#include <QSettings>
 #include <QDockWidget>
 #include <kglobal.h>
 #include <QMessageBox>

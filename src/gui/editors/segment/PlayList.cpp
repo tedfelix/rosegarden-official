@@ -23,7 +23,7 @@
 #include <QLayout>
 
 #include <klocale.h>
-#include <kconfig.h>
+#include <QSettings>
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kurl.h>

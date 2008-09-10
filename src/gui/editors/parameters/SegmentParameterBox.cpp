@@ -51,7 +51,7 @@
 #include <kcolordialog.h>
 #include <QComboBox>
 #include "document/Command.h"
-#include <kconfig.h>
+#include <QSettings>
 #include <klineeditdlg.h>
 #include <ktabwidget.h>
 #include <qbutton.h>

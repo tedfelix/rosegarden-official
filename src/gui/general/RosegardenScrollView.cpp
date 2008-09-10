@@ -24,7 +24,7 @@
 #include <QPoint>
 #include <QRect>
 #include <QScrollBar>
-#include <qscrollview.h>
+#include <QScrollArea>
 #include <QSizePolicy>
 #include <QTimer>
 #include <QWidget>
@@ -43,8 +43,8 @@ const int RosegardenScrollView::MaxScrollDelta = 100;      // max a.scroll speed
 const double RosegardenScrollView::ScrollShortcutValue = 1.04;// shortcuteration rate
 
 RosegardenScrollView::RosegardenScrollView(QWidget* parent,
-        const char* name, WFlags f)
-        : QScrollView(parent, name, f),
+					const char* name) //, WFlags f)
+				: QScrollArea(parent, name), //, f),
         m_bottomWidget(0),
         m_currentBottomWidgetHeight( -1),
         m_smoothScroll(true),

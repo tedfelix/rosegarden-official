@@ -47,8 +47,9 @@ Q_OBJECT
 public:
     TransportDialog(QWidget *parent=0,
                               const char *name=0,
-                              WFlags flags = /*Qt::WStyle_StaysOnTop |*/
-                                             Qt::WStyle_NormalBorder);
+							  Qt::WindowFlags flags = Qt::WindowStaysOnTopHint // note: may also require for X11: 
+										  | Qt::X11BypassWindowManagerHint /*Qt::WStyle_StaysOnTop |*/
+                                          | Qt::WStyle_NormalBorder );
     ~TransportDialog();
 
     enum TimeDisplayMode { RealMode, SMPTEMode, BarMode, BarMetronomeMode, FrameMode };

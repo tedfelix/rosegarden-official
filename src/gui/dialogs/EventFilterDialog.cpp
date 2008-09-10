@@ -31,7 +31,7 @@
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include "document/ConfigGroups.h"
 #include <QApplication>
-#include <kconfig.h>
+#include <QSettings>
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <klocale.h>

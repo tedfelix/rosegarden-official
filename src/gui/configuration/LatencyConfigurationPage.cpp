@@ -23,7 +23,7 @@
 #include "ConfigurationPage.h"
 #include "document/RosegardenGUIDoc.h"
 #include "TabbedConfigurationPage.h"
-#include <kconfig.h>
+#include <QSettings>
 #include <QFrame>
 #include <QLabel>
 #include <QPushButton>

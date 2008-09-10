@@ -34,7 +34,7 @@
 
 
 class RectRanges;
-class CompositionItem;
+//class CompositionItem;
 class AudioPreviewDrawData;
 
 

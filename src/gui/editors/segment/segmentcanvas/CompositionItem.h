@@ -19,15 +19,16 @@
 #ifndef _RG_COMPOSITIONITEM_H_
 #define _RG_COMPOSITIONITEM_H_
 
-#include <qguardedptr.h>
+//#include <qguardedptr.h>
 #include <QObject>
 #include <QRect>
+#include <QPointer>
 
 
 namespace Rosegarden
 {
 
-class _CompositionItem : public QObject {
+class _CompositionItem : public QObject {	
 public:
     virtual bool isRepeating() const = 0;
     virtual QRect rect() const = 0;
@@ -51,8 +52,10 @@ protected:
     mutable QRect m_savedRect;
 };
 
-typedef QPointer<_CompositionItem> CompositionItem;
-bool operator<(const CompositionItem&, const CompositionItem&);
+
+typedef QPointer<_CompositionItem> CompositionItem;  
+
+bool operator<(const CompositionItem& , const CompositionItem& );
 
 
 }

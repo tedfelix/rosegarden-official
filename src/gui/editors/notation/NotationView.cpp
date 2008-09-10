@@ -154,7 +154,7 @@
 #include "HeadersGroup.h"
 #include <kaction.h>
 #include <QComboBox>
-#include <kconfig.h>
+#include <QSettings>
 #include <kglobal.h>
 #include <klineeditdlg.h>
 #include <QMessageBox>

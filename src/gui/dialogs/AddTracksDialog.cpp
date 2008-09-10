@@ -28,7 +28,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <kapp.h>
-#include <kconfig.h>
+#include <QSettings>
 
 #include "document/ConfigGroups.h"
 

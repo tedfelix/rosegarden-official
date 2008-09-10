@@ -28,7 +28,7 @@
 #include "gui/kdeext/KStartupLogo.h"
 #include "NoteFont.h"
 #include "NoteFontMap.h"
-#include <kconfig.h>
+#include <QSettings>
 #include <kglobal.h>
 #include <QMessageBox>
 #include <QDir>

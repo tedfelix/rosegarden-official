@@ -54,7 +54,7 @@
 #include "sound/PluginIdentifier.h"
 #include <kcolordialog.h>
 #include <QComboBox>
-#include <kconfig.h>
+#include <QSettings>
 #include <klineeditdlg.h>
 #include <QMessageBox>
 #include <ksqueezedtextlabel.h>

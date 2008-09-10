@@ -29,7 +29,7 @@
 #include "sound/SoundDriver.h"
 #include "TabbedConfigurationPage.h"
 #include <QComboBox>
-#include <kconfig.h>
+#include <QSettings>
 #include <kfiledialog.h>
 #include <QMessageBox>
 #include <QCheckBox>

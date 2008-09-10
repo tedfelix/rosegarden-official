@@ -52,12 +52,12 @@
 #include <QPoint>
 #include <QRect>
 #include <QScrollBar>
-#include <qscrollview.h>
+#include <QScrollArea>
 #include <QSize>
 #include <QString>
 #include <QWidget>
 #include <QApplication>
-#include <kconfig.h>
+#include <QSettings>
 #include <algorithm>
 
 

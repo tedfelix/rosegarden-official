@@ -25,7 +25,7 @@
 #include "base/NotationTypes.h"
 #include "gui/widgets/TimeWidget.h"
 #include "gui/widgets/BigArrowButton.h"
-#include <kconfig.h>
+#include <QSettings>
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QGroupBox>
