@@ -53,7 +53,7 @@ TextEventDialog::TextEventDialog(QDialogButtonBox::QWidget *parent,
         m_styles(Text::getUserStyles()) /*,
             //m_directives(Text::getLilyPondDirectives()) */
 {
-    setHelp("nv-text");
+    //setHelp("nv-text");
     setModal(true);
     setWindowTitle(i18n("Text"));
 

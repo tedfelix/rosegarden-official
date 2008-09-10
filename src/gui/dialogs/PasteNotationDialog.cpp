@@ -38,7 +38,7 @@ PasteNotationDialog::PasteNotationDialog(QDialogButtonBox::QWidget *parent,
         QDialog(parent),
         m_defaultType(defaultType)
 {
-    setHelp("nv-paste-types");
+    //setHelp("nv-paste-types");
 
     setModal(true);
     setWindowTitle(i18n("Paste"));

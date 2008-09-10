@@ -41,7 +41,7 @@ MidiFilterDialog::MidiFilterDialog(QDialogButtonBox::QWidget *parent,
         m_doc(doc),
         m_modified(true)
 {
-    setHelp("studio-midi-filters");
+    //setHelp("studio-midi-filters");
 
     setModal(true);
     setWindowTitle(i18n("Modify MIDI filters..."));

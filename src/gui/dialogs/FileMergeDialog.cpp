@@ -39,7 +39,14 @@ FileMergeDialog::FileMergeDialog(QDialogButtonBox::QWidget *parent,
                                  bool timingsDiffer) :
         QDialog(parent)
 {
-    setHelp("file-merge");
+    //###
+    //&&&
+    // This one will take some thought.  We're going to have to figure out some
+    // new help system.  This //setHelp() call is from KDialog, which we are no
+    // longer using.  Until we have the new help system sorted, I don't see
+    // anything useful to do with this, so I'm disabling it for now.
+    //
+    ////setHelp("file-merge");
 
     setModal(true);
     setWindowTitle(i18n("Merge File"));

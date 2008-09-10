@@ -76,7 +76,7 @@ AudioPluginDialog::AudioPluginDialog(QDialogButtonBox::QWidget *parent,
     m_generating(true),
     m_guiShown(false)
 {
-    setHelp("studio-plugins");
+    //setHelp("studio-plugins");
 
     setSizePolicy(QSizePolicy(QSizePolicy::Preferred,
                               QSizePolicy::Fixed));

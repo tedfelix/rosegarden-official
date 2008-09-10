@@ -33,7 +33,7 @@ namespace Rosegarden
 QuantizeDialog::QuantizeDialog(QDialogButtonBox::QWidget *parent, bool inNotation) :
         QDialog(parent)
 {
-    setHelp("quantization");
+    //setHelp("quantization");
 
     setModal(true);
     setWindowTitle(i18n("Quantize"));

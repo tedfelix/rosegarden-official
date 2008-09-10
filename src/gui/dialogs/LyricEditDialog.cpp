@@ -48,7 +48,7 @@ LyricEditDialog::LyricEditDialog(QDialogButtonBox::QWidget *parent,
     m_segment(segment),
     m_verseCount(0)
 {
-    setHelp("nv-text-lyrics");
+    //setHelp("nv-text-lyrics");
 
     setModal(true);
     setWindowTitle(i18n("Edit Lyrics"));

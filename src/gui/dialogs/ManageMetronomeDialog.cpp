@@ -59,7 +59,7 @@ ManageMetronomeDialog::ManageMetronomeDialog(QDialogButtonBox::QWidget *parent,
         QDialog(parent),
         m_doc(doc)
 {
-    setHelp("studio-metronome");
+    //setHelp("studio-metronome");
 
     setModal(true);
     setWindowTitle(i18n("Metronome"));

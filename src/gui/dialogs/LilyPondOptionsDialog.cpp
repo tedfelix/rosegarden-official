@@ -55,7 +55,7 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QDialogButtonBox::QWidget *parent,
         QDialog(parent),
 	m_doc(doc)
 {
-    setHelp("file-printing");
+    //setHelp("file-printing");
 
     QSettings config;
     config.beginGroup( NotationViewConfigGroup );

@@ -37,7 +37,7 @@ namespace Rosegarden
 InterpretDialog::InterpretDialog(QDialogButtonBox::QWidget *parent) :
         QDialog(parent)
 {
-    setHelp("nv-interpret");
+    //setHelp("nv-interpret");
 
     setModal(true);
     setWindowTitle(i18n("Interpret"));

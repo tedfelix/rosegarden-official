@@ -51,7 +51,7 @@ TempoDialog::TempoDialog(QDialogButtonBox::QWidget *parent, RosegardenGUIDoc *do
         m_doc(doc),
         m_tempoTime(0)
 {
-    setHelp("tempo");
+    //setHelp("tempo");
 
     setModal(true);
     setWindowTitle(i18n("Insert Tempo Change"));

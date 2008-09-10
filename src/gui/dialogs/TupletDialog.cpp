@@ -45,7 +45,7 @@ TupletDialog::TupletDialog(QDialogButtonBox::QWidget *parent, Note::Type default
         QDialog(parent),
         m_maxDuration(maxDuration)
 {
-    setHelp("nv-tuplets");
+    //setHelp("nv-tuplets");
     setModal(true);
     setWindowTitle(i18n("Tuplet"));
 

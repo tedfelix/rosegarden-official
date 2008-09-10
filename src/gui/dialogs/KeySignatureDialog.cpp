@@ -60,7 +60,7 @@ KeySignatureDialog::KeySignatureDialog(QDialogButtonBox::QWidget *parent,
         m_applyToAllButton(0),
         m_noPercussionCheckBox(0)
 {
-    setHelp("nv-signatures-key");
+    //setHelp("nv-signatures-key");
 
     setModal(true);
     setWindowTitle(i18n("Key Change"));

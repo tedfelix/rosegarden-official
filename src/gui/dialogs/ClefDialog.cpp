@@ -48,7 +48,7 @@ ClefDialog::ClefDialog(QDialogButtonBox::QWidget *parent,
         m_notePixmapFactory(npf),
         m_clef(defaultClef)
 {
-    setHelp("nv-signatures-clef");
+    //setHelp("nv-signatures-clef");
 
     setModal(true);
     setWindowTitle(i18n("Clef"));

@@ -207,7 +207,7 @@ TimeSignatureDialog::TimeSignatureDialog(QDialogButtonBox::QWidget *parent,
     slotUpdateCommonTimeButton();
     m_explanatoryLabel = explanatoryLabel;
 
-    setHelp("time-signature");
+    //setHelp("time-signature");
 }
 
 TimeSignature
