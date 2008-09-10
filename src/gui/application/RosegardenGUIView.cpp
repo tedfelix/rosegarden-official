@@ -115,7 +115,7 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
                                      TrackParameterBox* trackParameterBox,
                                      QWidget *parent,
                                      const char* /*name*/)
-        : QVBox(parent),
+        : QWidget(parent),
         m_rulerScale(0),
         m_trackEditor(0),
         m_segmentParameterBox(segmentParameterBox),
@@ -124,6 +124,7 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
 {
     RosegardenGUIDoc* doc = getDocument();
     Composition *comp = &doc->getComposition();
+    QVBoxLayout *layout = new QVBoxLayout;
 
     double unitsPerPixel =
         TimeSignature(4, 4).getBarDuration() / barWidth44;
@@ -134,6 +135,8 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
     //
     m_trackEditor = new TrackEditor(doc, this,
                                     m_rulerScale, showTrackLabels, unitsPerPixel, this /*hbox*/);
+    layout->addWidget(m_trackEditor);
+    setLayout(layout);
 
     connect(m_trackEditor->getSegmentCanvas(),
             SIGNAL(editSegment(Segment*)),
