@@ -27,7 +27,7 @@
 
 class QWidget;
 class QVGroupBox;
-class QVBox;
+class QVBoxLayout;
 class QScrollView;
 class KTabWidget;
 
@@ -89,7 +89,8 @@ private:
                     RosegardenParameterBox *box);
 
     QScrollView *m_scrollView; // Holds the m_classic container
-    QVBox *m_classic;          // The container widget for m_style==CLASSIC_STYLE.
+    QWidget *m_classic;        // The container widget for m_style==CLASSIC_STYLE.
+    QVBoxLayout *m_classicLayout;
     KTabWidget *m_tabBox;     // The container widget for m_style==TAB_BOX_STYLE.
     QWidget *m_active;         // The current container widget.
     QWidget *m_spacing;

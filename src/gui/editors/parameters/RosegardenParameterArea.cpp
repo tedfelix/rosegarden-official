@@ -44,11 +44,14 @@ RosegardenParameterArea::RosegardenParameterArea(QWidget *parent,
 	: QStackedWidget(parent, name, f),
         m_style(RosegardenParameterArea::CLASSIC_STYLE),
         m_scrollView(new QScrollView(this, 0, Qt::WStaticContents)),
-        m_classic(new QVBox(m_scrollView->viewport())),
+        m_classic(new QWidget(m_scrollView->viewport())),
+        m_classicLayout(new QVBoxLayout),
         m_tabBox(new KTabWidget(this)),
         m_active(0),
         m_spacing(0)
 {
+    m_classic->setLayout(m_classicLayout);
+
     m_scrollView->addChild(m_classic);
     m_scrollView->setHScrollBarMode(QScrollView::AlwaysOff);
     m_scrollView->setVScrollBarMode(QScrollView::Auto);
@@ -87,6 +90,7 @@ void RosegardenParameterArea::addRosegardenParameterBox(
     // parallels the above array of parameter boxes.
 
     QVGroupBox *box = new QVGroupBox(b->getLongLabel(), m_classic);
+    m_classicLayout->addWidget(box);
     box->layout()->setMargin( 4 ); // about half the default value
     QFont f;
     f.setBold( true );
@@ -96,7 +100,8 @@ void RosegardenParameterArea::addRosegardenParameterBox(
     if (m_spacing)
         delete m_spacing;
     m_spacing = new QFrame(m_classic);
-    m_classic->setStretchFactor(m_spacing, 100);
+    m_classicLayout->addWidget(m_spacing);
+    m_classicLayout->setStretchFactor(m_spacing, 100);
 
     // Add the parameter box to the current container of the displayed
     // widgets, unless the current container has been set up yet.
