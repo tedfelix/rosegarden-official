@@ -1543,7 +1543,8 @@ private:
     RosegardenGUIView* m_view;
     RosegardenGUIView* m_swapView;
 
-    QDockWidget* m_mainDockWidget;
+    //QDockWidget* m_mainDockWidget;
+	QDockWidget *m_mainDockWidget;
     QDockWidget* m_dockLeft;
 
     /**

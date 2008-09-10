@@ -204,7 +204,9 @@
 #include <QTimer>
 #include <QVector>
 #include <QWidget>
+#include <QButton>
 #include <QMainWindow>
+
 
 #include <kmimetype.h>
 #include <kaction.h>
@@ -313,7 +315,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
             // try to launch JACK - if the configuration wants us to.
             if (!launchJack()) {
                 KStartupLogo::hideIfStillThere();
-                QMessageBox::critical(this, i18n("Attempted to launch JACK audio daemon failed.  Audio will be disabled.\nPlease check configuration (Settings -> Configure Rosegarden -> Audio -> Startup)\n and restart."));
+                QMessageBox::critical( dynamic_cast<QWidget*>(this), "", i18n("Attempted to launch JACK audio daemon failed.  Audio will be disabled.\nPlease check configuration (Settings -> Configure Rosegarden -> Audio -> Startup)\n and restart."));
             }
         } else {
             //this client was just for testing
@@ -342,20 +344,57 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     initZoomToolbar();
 
     QPixmap dummyPixmap; // any icon will do
-    m_mainDockWidget = createDockWidget("Rosegarden MainDockWidget", dummyPixmap, 0L, "main_dock_widget");
-    // allow others to dock to the left and right sides only
-    m_mainDockWidget->setDockSite(QDockWidget::DockLeft | QDockWidget::DockRight);
+	
+	// create mainDockWidget
+	// old: m_mainDockWidget = createDockWidget("Rosegarden MainDockWidget", dummyPixmap, 0L, "main_dock_widget");
+	m_mainDockWidget = new QDockWidget("Rosegarden MainDockWidget", dynamic_cast<QWidget*>(this), Qt::Tool );
+	//### FIX: deallocate m_mainDockWidget !
+	
+	// allow others to dock to the left and right sides only
+    // old: m_mainDockWidget->setDockSite(QDockWidget::DockLeft | QDockWidget::DockRight);
+	m_mainDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+	
     // forbit docking abilities of m_mainDockWidget itself
-    m_mainDockWidget->setEnableDocking(QDockWidget::DockNone);
-    setView(m_mainDockWidget); // central widget in a KDE mainwindow
-    setMainDockWidget(m_mainDockWidget); // master dockwidget
-
-    m_dockLeft = createDockWidget("params dock", dummyPixmap, 0L,
-                                  i18n("Special Parameters"));
-    m_dockLeft->manualDock(m_mainDockWidget,             // dock target
-                           QDockWidget::DockLeft,  // dock site
-                           20);                   // relation target/this (in percent)
-
+    // old: m_mainDockWidget->setEnableDocking(QDockWidget::DockNone);  //&&& setEnableDocking() not required ?
+	
+	
+	m_mainDockWidget->setFeatures( QDockWidget::DockWidgetMovable
+			| QDockWidget::DockWidgetMovable
+			| QDockWidget::DockWidgetFloatable
+			| QDockWidget::DockWidgetVerticalTitleBar
+			//| QDockWidget::DockWidgetClosable
+			);
+	
+	//setView(m_mainDockWidget); // central widget in a KDE mainwindow
+    //setMainDockWidget(m_mainDockWidget); // master dockwidget
+	
+	
+	// add to QMainWindow, left side
+	this->addDockWidget(Qt::LeftDockWidgetArea, m_mainDockWidget);
+	
+	
+	
+	
+	
+	//old: m_dockLeft = createDockWidget("params dock", dummyPixmap, 0L,
+	//							  i18n("Special Parameters"));
+	m_dockLeft = new QDockWidget(i18n("Special Parameters"),  dynamic_cast<QWidget*>(this), Qt::Tool );
+	//### FIX: deallocate m_DockLeft !
+	
+	
+	// 
+	//###  so what to do here... add to QMainWindow ? 
+	m_dockLeft->manualDock(m_mainDockWidget,             // dock target
+	                      QDockWidget::DockLeft,  // dock site
+	                     20);                   // relation target/this (in percent)
+	
+	// add to m_mainDockWidget, left side
+	//this->addDockWidget(Qt::LeftDockWidgetArea, m_mainDockWidget);
+	
+	
+	
+	
+	
     connect(m_dockLeft, SIGNAL(iMBeingClosed()),
             this, SLOT(slotParametersClosed()));
     connect(m_dockLeft, SIGNAL(hasUndocked()),
@@ -384,21 +423,18 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 
     // Lookup the configuration parameter that specifies the default
     // arrangement, and instantiate it.
-
+	
     QSettings confq4;
-
+	
     confq4.beginGroup( GeneralOptionsConfigGroup );
 
     // 
-
     // FIX-manually-(GW), add:
-
     // confq4.endGroup();		// corresponding to: confq4.beginGroup( GeneralOptionsConfigGroup );
-
     //  
 
     m_parameterArea->setArrangement((RosegardenParameterArea::Arrangement)
-                                    qApp->config( ).value("sidebarstyle",
+                                    confq4.value("sidebarstyle",
                                                                          RosegardenParameterArea::CLASSIC_STYLE).toUInt() );
 
     m_dockLeft->update();
@@ -1511,7 +1547,7 @@ void RosegardenGUIApp::initView()
         } catch (QString s) {
             KStartupLogo::hideIfStillThere();
             CurrentProgressDialog::freeze();
-            QMessageBox::critical(this, s);
+			QMessageBox::critical( dynamic_cast<QWidget*>(this), "", s, QMessageBox::Ok, QMessageBox::Ok);
             CurrentProgressDialog::thaw();
         }
 
@@ -1610,8 +1646,10 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
 
     // Caption
     //
-    QString caption = qApp->caption();
+    //QString caption = qApp->caption();
+	QString caption = qApp->windowTitle(); //qApp->applicationName();
     setCaption(caption + ": " + newDocument->getTitle());
+	
 
     //     // reset AudioManagerDialog
     //     //
@@ -1798,14 +1836,14 @@ RosegardenGUIApp::createDocument(QString filePath, ImportType importType)
     if (!info.exists()) {
         // can happen with command-line arg, so...
         KStartupLogo::hideIfStillThere();
-        /* was sorry */ QMessageBox::warning(this, i18n("File \"%1\" does not exist", filePath));
+        QMessageBox::warning(dynamic_cast<QWidget*>(this), filePath, i18n("File \"%1\" does not exist", QMessageBox::Ok, QMessageBox::Ok ));
         return 0;
     }
-
+	
     if (info.isDir()) {
         KStartupLogo::hideIfStillThere();
-        /* was sorry */ QMessageBox::warning(this, i18n("File \"%1\" is actually a directory"));
-        return 0;
+		QMessageBox::warning(dynamic_cast<QWidget*>(this), filePath, i18n("File \"%1\" is actually a directory"), QMessageBox::Ok, QMessageBox::Ok );
+		return 0;
     }
 
     QFile file(filePath);
@@ -1815,7 +1853,7 @@ RosegardenGUIApp::createDocument(QString filePath, ImportType importType)
         QString errStr =
             i18n("You do not have read permission for \"%1\"", filePath);
 
-        /* was sorry */ QMessageBox::warning(this, errStr);
+        QMessageBox::warning(this, "Failure", errStr, QMessageBox::Ok, QMessageBox::Ok );
         return 0;
     }
 

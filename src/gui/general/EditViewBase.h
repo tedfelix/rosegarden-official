@@ -21,6 +21,7 @@
 #include <set>
 #include <string>
 #include <QDockWidget>
+#include <QMainWindow>
 #include <QString>
 #include <vector>
 #include "base/Event.h"
@@ -50,7 +51,7 @@ class EditToolBox;
 class EditTool;
 
  
-class EditViewBase : public KDockMainWindow
+class EditViewBase : public QMainWindow
 {
 
     Q_OBJECT
