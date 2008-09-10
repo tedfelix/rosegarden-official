@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -49,7 +48,7 @@ class RosegardenCanvasView : public Q3CanvasView
     Q_OBJECT
 public:
     RosegardenCanvasView(Q3Canvas*,
-                         QWidget* parent=0, const char* name=0, WFlags f=0);
+                         QWidget* parent=0);
 
     /**
      * EditTool::handleMouseMove() returns a OR-ed combination of these

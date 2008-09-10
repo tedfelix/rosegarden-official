@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -67,7 +66,7 @@ public:
                  RulerScale*,
                  EditViewBase* parentView,
                  Q3Canvas*,
-                 QWidget* parent=0, const char* name=0, WFlags f=0);
+                 QWidget* parent=0); //###  const char name is obsolete, and I'm almost sure WFlags is obsolete too
     virtual ~ControlRuler();
 
     virtual QString getName() = 0;
