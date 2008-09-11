@@ -21,6 +21,7 @@
 
 #include "ConfigurationPage.h"
 #include <QString>
+#include <QSettings>
 
 
 class QWidget;

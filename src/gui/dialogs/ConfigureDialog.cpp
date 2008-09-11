@@ -26,11 +26,13 @@
 #include "gui/configuration/NotationConfigurationPage.h"
 #include "gui/configuration/AudioConfigurationPage.h"
 #include "gui/configuration/MIDIConfigurationPage.h"
+
 #include <QSettings>
-#include <kdialogbase.h>
-#include <kstandarddirs.h>
 #include <QString>
 #include <QWidget>
+
+#include <kdialogbase.h>
+#include <kstandarddirs.h>
 
 
 namespace Rosegarden

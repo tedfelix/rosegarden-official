@@ -23,7 +23,7 @@
 #define _RG_CONFIGURATIONPAGE_H_
 
 #include <QWidget>
-
+#include <QSettings>
 
 class KConfig;
 

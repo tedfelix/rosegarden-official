@@ -21,6 +21,8 @@
 
 #include "ConfigureDialogBase.h"
 
+#include <QSettings>
+
 
 class QWidget;
 class KConfig;

@@ -20,9 +20,11 @@
 
 #include "TabbedConfigurationPage.h"
 #include <QString>
-#include <klocale.h>
+#include <QSlider>
 #include <QLineEdit>
 #include <QCheckBox>
+
+#include <klocale.h>
 
 
 class QWidget;

@@ -21,8 +21,10 @@
 
 #include "TabbedConfigurationPage.h"
 #include <QString>
-#include <klocale.h>
 #include <QSlider>
+#include <QSettings>
+
+#include <klocale.h>
 
 
 class QWidget;

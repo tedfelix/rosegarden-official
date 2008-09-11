@@ -55,7 +55,7 @@
 #include <QDataStream>
 #include <QDateTime>
 #include <QDialog>
-#include <qdict.h>
+#include <QMap>
 #include <QDir>
 #include <qdom.h>
 #include <qdragobject.h>

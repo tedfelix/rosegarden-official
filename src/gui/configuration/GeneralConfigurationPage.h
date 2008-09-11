@@ -26,6 +26,8 @@
 #include <QSpinBox>
 #include <QComboBox>
 #include <QLineEdit>
+#include <QSettings>
+
 #include <klocale.h>
 #include <kiconloader.h>
 

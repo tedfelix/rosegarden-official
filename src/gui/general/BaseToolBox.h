@@ -19,7 +19,7 @@
 #ifndef _RG_BASETOOLBOX_H_
 #define _RG_BASETOOLBOX_H_
 
-#include <qdict.h>
+#include <QMap>
 #include <QObject>
 
 
@@ -38,6 +38,7 @@ class BaseTool;
  *
  * Tools are fetched from a name
  */
+//class BaseToolBox : public QObject
 class BaseToolBox : public QObject
 {
     Q_OBJECT
@@ -53,7 +54,9 @@ signals:
 protected:
     virtual BaseTool* createTool(const QString& toolName) = 0;
 
-    QDict<BaseTool> m_tools;
+	// was: qdict<BaseTool> m_tools;
+	QMap<QString, BaseTool> m_tools;		// was qdict  //### hm... QMap ..check later
+	
 };
 
 

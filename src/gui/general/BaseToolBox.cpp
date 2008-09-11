@@ -32,7 +32,7 @@ BaseToolBox::BaseToolBox(QWidget* parent)
         m_tools(17,  // default size, from the Qt docs
                 false) // but we want it to be case insensitive
 {
-    //m_tools.setAutoDelete(true);
+    //m_tools.setAutoDelete(true);	//&&&
 }
 
 BaseTool* BaseToolBox::getTool(const QString& toolName)

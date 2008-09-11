@@ -40,8 +40,8 @@ class ScrollBoxDialog : public KDialog
 public:
     ScrollBoxDialog(QWidget *parent = 0,
                     ScrollBox::SizeMode mode = ScrollBox::FixWidth,
-                    const char *name = 0,
-                    WFlags flags = 0);
+                    const char *name = 0);
+//                    WFlags flags = 0);
     ~ScrollBoxDialog();
 
     ScrollBox *scrollbox() { return m_scrollbox; }

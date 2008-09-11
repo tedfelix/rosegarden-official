@@ -22,7 +22,7 @@
 #include <kxmlguifactory.h>
 #include <QCursor>
 #include <QObject>
-#include <qpopupmenu.h>
+#include <QToolTip>
 #include <QString>
 
 

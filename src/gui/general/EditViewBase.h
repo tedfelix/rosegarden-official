@@ -20,12 +20,14 @@
 
 #include <set>
 #include <string>
-#include <QDockWidget>
-#include <QMainWindow>
-#include <QString>
 #include <vector>
 #include "base/Event.h"
 #include "document/CommandRegistry.h"
+
+#include <QDockWidget>
+#include <QMainWindow>
+#include <QString>
+#include <QSettings>
 
 
 class QWidget;

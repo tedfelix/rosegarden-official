@@ -19,7 +19,8 @@
 #ifndef _RG_QDEFERSCROLLVIEW_H_
 #define _RG_QDEFERSCROLLVIEW_H_
 
-#include <qscrollview.h>
+//#include <qscrollview.h>
+#include <QScrollArea>
 
 
 class QWidget;
@@ -46,11 +47,11 @@ namespace Rosegarden
  * @see SegmentCanvas
  * @see TrackEditor::m_trackButtonScroll
  */
-class QDeferScrollView : public QScrollView
+	class QDeferScrollView : public QScrollArea
 {
     Q_OBJECT
 public:
-    QDeferScrollView(QWidget* parent=0, const char *name=0, WFlags f=0);
+    QDeferScrollView(QWidget* parent=0, const char *name=0 ); // WFlags f=0);
 
     void setBottomMargin(int);
 

@@ -20,8 +20,10 @@
 
 #include "TabbedConfigurationPage.h"
 #include <QString>
-#include <klocale.h>
+#include <QSettings>
 #include <QLineEdit>
+
+#include <klocale.h>
 
 class QWidget;
 class QSpinBox;
