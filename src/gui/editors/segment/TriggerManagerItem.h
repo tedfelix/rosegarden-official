@@ -25,10 +25,10 @@
 
 namespace Rosegarden {
 
-class TriggerManagerItem : public QListViewItem
+class TriggerManagerItem : public QListWidgetItem
 {
 public:
-    TriggerManagerItem(QListView * parent, QString label1, 
+    TriggerManagerItem(QListWidget * parent, QString label1, 
 		      QString label2 = QString::null, 
 		      QString label3 = QString::null,
 		      QString label4 = QString::null, 
@@ -36,10 +36,10 @@ public:
 		      QString label6 = QString::null, 
 		      QString label7 = QString::null, 
 		      QString label8 = QString::null):
-        QListViewItem(parent, label1, label2, label3, label4,
+        QListWidgetItem(parent, label1, label2, label3, label4,
                       label5, label6, label7, label8) { ; }
 
-    virtual int compare(QListViewItem * i, int col, bool ascending) const;
+    virtual int compare(QListWidgetItem * i, int col, bool ascending) const;
 
     void setRawDuration(timeT raw) { m_rawDuration = raw; }
     timeT getRawDuration() const { return m_rawDuration; }

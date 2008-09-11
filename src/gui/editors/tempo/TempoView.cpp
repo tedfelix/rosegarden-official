@@ -91,7 +91,7 @@ TempoView::TempoView(RosegardenGUIDoc *doc, QWidget *parent, timeT openTime):
     connect(m_filterGroup, SIGNAL(released(int)),
             SLOT(slotModifyFilter(int)));
 
-    m_list = new QListView(getCentralWidget());
+    m_list = new QListWidget(getCentralWidget());
     m_list->setItemsRenameable(true);
 
     m_grid->addWidget(m_list, 2, 1);
@@ -102,11 +102,11 @@ TempoView::TempoView(RosegardenGUIDoc *doc, QWidget *parent, timeT openTime):
 
     // Connect double clicker
     //
-    connect(m_list, SIGNAL(doubleClicked(QListViewItem*)),
-            SLOT(slotPopupEditor(QListViewItem*)));
+    connect(m_list, SIGNAL(doubleClicked(QListWidgetItem*)),
+            SLOT(slotPopupEditor(QListWidgetItem*)));
 
     m_list->setAllColumnsShowFocus(true);
-    m_list->setSelectionMode(QListView::Extended);
+    m_list->setSelectionMode(QListWidget::Extended);
 
     m_list->addColumn(i18n("Time  "));
     m_list->addColumn(i18n("Type  "));
@@ -168,11 +168,11 @@ TempoView::applyLayout(int /*staffNo*/)
     // of the view.  This code borrowed from EventView.
     //
     if (m_listSelection.size() == 0) {
-        QPtrList<QListViewItem> selection = m_list->selectedItems();
+        QPtrList<QListWidgetItem> selection = m_list->selectedItems();
 
         if (selection.count()) {
-            QPtrListIterator<QListViewItem> it(selection);
-            QListViewItem *listItem;
+            QPtrListIterator<QListWidgetItem> it(selection);
+            QListWidgetItem *listItem;
 
             while ((listItem = it.current()) != 0) {
                 m_listSelection.push_back(m_list->itemIndex(*it));
@@ -272,12 +272,12 @@ TempoView::applyLayout(int /*staffNo*/)
     }
 
     if (m_list->childCount() == 0) {
-        new QListViewItem(m_list,
+        new QListWidgetItem(m_list,
                           i18n("<nothing at this filter level>"));
-        m_list->setSelectionMode(QListView::NoSelection);
+        m_list->setSelectionMode(QListWidget::NoSelection);
         stateChanged("have_selection", KXMLGUIClient::StateReverse);
     } else {
-        m_list->setSelectionMode(QListView::Extended);
+        m_list->setSelectionMode(QListWidget::Extended);
 
         // If no selection then select the first event
         if (m_listSelection.size() == 0)
@@ -420,15 +420,15 @@ TempoView::slotEditPaste()
 void
 TempoView::slotEditDelete()
 {
-    QPtrList<QListViewItem> selection = m_list->selectedItems();
+    QPtrList<QListWidgetItem> selection = m_list->selectedItems();
     if (selection.count() == 0)
         return ;
 
     RG_DEBUG << "TempoView::slotEditDelete - deleting "
     << selection.count() << " items" << endl;
 
-    QPtrListIterator<QListViewItem> it(selection);
-    QListViewItem *listItem;
+    QPtrListIterator<QListWidgetItem> it(selection);
+    QListWidgetItem *listItem;
     TempoListItem *item;
     int itemIndex = -1;
 
@@ -481,7 +481,7 @@ void
 TempoView::slotEditInsertTempo()
 {
     timeT insertTime = 0;
-    QPtrList<QListViewItem> selection = m_list->selectedItems();
+    QPtrList<QListWidgetItem> selection = m_list->selectedItems();
 
     if (selection.count() > 0) {
         TempoListItem *item =
@@ -511,7 +511,7 @@ void
 TempoView::slotEditInsertTimeSignature()
 {
     timeT insertTime = 0;
-    QPtrList<QListViewItem> selection = m_list->selectedItems();
+    QPtrList<QListWidgetItem> selection = m_list->selectedItems();
 
     if (selection.count() > 0) {
         TempoListItem *item =
@@ -546,7 +546,7 @@ TempoView::slotEdit()
 {
     RG_DEBUG << "TempoView::slotEdit" << endl;
 
-    QPtrList<QListViewItem> selection = m_list->selectedItems();
+    QPtrList<QListWidgetItem> selection = m_list->selectedItems();
 
     if (selection.count() > 0) {
         TempoListItem *item =
@@ -816,7 +816,7 @@ TempoView::slotRawTime()
 }
 
 void
-TempoView::slotPopupEditor(QListViewItem *qitem)
+TempoView::slotPopupEditor(QListWidgetItem *qitem)
 {
     TempoListItem *item = dynamic_cast<TempoListItem *>(qitem);
     if (!item)

@@ -97,11 +97,11 @@ PlayList::PlayList(QWidget *parent, const char *name)
     connect(m_moveDownButton, SIGNAL(clicked()),
             SLOT(slotMoveDown()));
 
-    connect(m_listView, SIGNAL(currentChanged(QListViewItem*)),
-            SLOT(slotCurrentItemChanged(QListViewItem*)));
+    connect(m_listView, SIGNAL(currentChanged(QListWidgetItem*)),
+            SLOT(slotCurrentItemChanged(QListWidgetItem*)));
 
-    connect(m_listView, SIGNAL(dropped(QDropEvent*, QListViewItem*)),
-            SLOT(slotDropped(QDropEvent*, QListViewItem*)));
+    connect(m_listView, SIGNAL(dropped(QDropEvent*, QListWidgetItem*)),
+            SLOT(slotDropped(QDropEvent*, QListWidgetItem*)));
 
     restore();
 
@@ -132,7 +132,7 @@ void PlayList::slotOpenFiles()
 }
 
 void
-PlayList::slotDropped(QDropEvent *event, QListViewItem* after)
+PlayList::slotDropped(QDropEvent *event, QListWidgetItem* after)
 {
     QStrList uri;
 
@@ -162,8 +162,8 @@ void PlayList::slotPlay()
 
 void PlayList::slotMoveUp()
 {
-    QListViewItem *currentIndex = m_listView->currentIndex();
-    QListViewItem *previousItem = m_listView->previousSibling(currentIndex);
+    QListWidgetItem *currentIndex = m_listView->currentIndex();
+    QListWidgetItem *previousItem = m_listView->previousSibling(currentIndex);
 
     if (previousItem)
         previousItem->moveItem(currentIndex);
@@ -173,8 +173,8 @@ void PlayList::slotMoveUp()
 
 void PlayList::slotMoveDown()
 {
-    QListViewItem *currentIndex = m_listView->currentIndex();
-    QListViewItem *nextItem = currentIndex->nextSibling();
+    QListWidgetItem *currentIndex = m_listView->currentIndex();
+    QListWidgetItem *nextItem = currentIndex->nextSibling();
 
     if (nextItem)
         currentIndex->moveItem(nextItem);
@@ -190,17 +190,17 @@ void PlayList::slotClear()
 
 void PlayList::slotDeleteCurrent()
 {
-    QListViewItem* currentIndex = m_listView->currentIndex();
+    QListWidgetItem* currentIndex = m_listView->currentIndex();
     if (currentIndex)
         delete currentIndex;
 }
 
-void PlayList::slotCurrentItemChanged(QListViewItem* currentIndex)
+void PlayList::slotCurrentItemChanged(QListWidgetItem* currentIndex)
 {
     enableButtons(currentIndex);
 }
 
-void PlayList::enableButtons(QListViewItem* currentIndex)
+void PlayList::enableButtons(QListWidgetItem* currentIndex)
 {
     bool enable = (currentIndex != 0);
 

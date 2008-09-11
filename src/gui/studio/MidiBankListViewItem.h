@@ -24,7 +24,7 @@
 #include <QString>
 
 
-class QListViewItem;
+class QListWidgetItem;
 
 
 namespace Rosegarden
@@ -37,7 +37,7 @@ class MidiBankListViewItem : public MidiDeviceListViewItem
 public:
     MidiBankListViewItem(DeviceId deviceId,
                          int bankNb,
-                         QListViewItem* parent, QString name,
+                         QListWidgetItem* parent, QString name,
                          bool percussion,
                          int msb, int lsb);
 
@@ -48,7 +48,7 @@ public:
     void setMSB(int msb);
     void setLSB(int msb);
 
-    virtual int compare(QListViewItem *i, int col, bool ascending) const;
+    virtual int compare(QListWidgetItem *i, int col, bool ascending) const;
     
 protected:
 

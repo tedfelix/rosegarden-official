@@ -327,7 +327,7 @@ DocumentMetaConfigurationPage::selectMetadata(QString name)
         CompositionMetadataKeys::getFixedKeys();
     std::vector<PropertyName>::iterator i = fixedKeys.begin();
 
-    for (QListViewItem *item = m_fixed->firstChild();
+    for (QListWidgetItem *item = m_fixed->firstChild();
             item != 0; item = item->nextSibling()) {
 
         if (i == fixedKeys.end())
@@ -342,7 +342,7 @@ DocumentMetaConfigurationPage::selectMetadata(QString name)
         ++i;
     }
 
-    for (QListViewItem *item = m_metadata->firstChild();
+    for (QListWidgetItem *item = m_metadata->firstChild();
             item != 0; item = item->nextSibling()) {
 
         if (item->text(0).toLower() != name)

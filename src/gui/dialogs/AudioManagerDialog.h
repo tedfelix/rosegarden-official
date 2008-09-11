@@ -27,13 +27,13 @@
 class QWidget;
 class QTimer;
 class QString;
-class QListViewItem;
+class QListWidgetItem;
 class QLabel;
 class QDropEvent;
 class QCloseEvent;
 class QShortcut;
 class KURL;
-class QListView;
+class QListWidget;
 class Command;
 
 
@@ -103,7 +103,7 @@ public slots:
     void slotExportAudio();
 
     // get selection
-    void slotSelectionChanged(QListViewItem *);
+    void slotSelectionChanged(QListWidgetItem *);
 
     // Repopulate
     //
@@ -161,20 +161,20 @@ signals:
 
     void closing();
 protected slots:
-    void slotDropped(QDropEvent*, QListViewItem*);
+    void slotDropped(QDropEvent*, QListWidgetItem*);
     void slotCancelPlayingAudio();
 
 protected:
     bool addFile(const KURL& kurl);
     bool isSelectedTrackAudio();
-    void selectFileListItemNoSignal(QListViewItem*);
+    void selectFileListItemNoSignal(QListWidgetItem*);
     void updateActionState(bool haveSelection);
 
     virtual void closeEvent(QCloseEvent *);
 
     //--------------- Data members ---------------------------------
 
-    QListView        *m_fileList;
+    QListWidget        *m_fileList;
     QLabel           *m_wrongSampleRates;
     RosegardenGUIDoc *m_doc;
 

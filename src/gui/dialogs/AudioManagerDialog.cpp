@@ -190,11 +190,11 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     m_fileList->setShowToolTips(true);
 
     // connect selection mechanism
-    connect(m_fileList, SIGNAL(selectionChanged(QListViewItem*)),
-            SLOT(slotSelectionChanged(QListViewItem*)));
+    connect(m_fileList, SIGNAL(selectionChanged(QListWidgetItem*)),
+            SLOT(slotSelectionChanged(QListWidgetItem*)));
 
-    connect(m_fileList, SIGNAL(dropped(QDropEvent*, QListViewItem*)),
-            SLOT(slotDropped(QDropEvent*, QListViewItem*)));
+    connect(m_fileList, SIGNAL(dropped(QDropEvent*, QListWidgetItem*)),
+            SLOT(slotDropped(QDropEvent*, QListWidgetItem*)));
 
     // setup local shortcuterators
     //
@@ -268,7 +268,7 @@ AudioManagerDialog::slotPopulateFileList()
         // Turn off selection and report empty list
         //
         new AudioListItem(m_fileList, i18n("<no audio files>"), 0);
-        m_fileList->setSelectionMode(QListView::NoSelection);
+        m_fileList->setSelectionMode(QListWidget::NoSelection);
         m_fileList->setRootIsDecorated(false);
 
         m_fileList->blockSignals(false);
@@ -280,7 +280,7 @@ AudioManagerDialog::slotPopulateFileList()
     m_fileList->setRootIsDecorated(true);
 
     // enable selection
-    m_fileList->setSelectionMode(QListView::Single);
+    m_fileList->setSelectionMode(QListWidget::Single);
 
     // for the sample file length
     QString msecs, sRate;
@@ -539,7 +539,7 @@ AudioManagerDialog::slotRemove()
     if (item->getSegment()) {
         // Get the next item to highlight
         //
-        QListViewItem *newItem = item->itemBelow();
+        QListWidgetItem *newItem = item->itemBelow();
 
         // Or try above
         //
@@ -919,7 +919,7 @@ AudioManagerDialog::slotRename()
 }
 
 void
-AudioManagerDialog::slotSelectionChanged(QListViewItem *item)
+AudioManagerDialog::slotSelectionChanged(QListWidgetItem *item)
 {
     AudioListItem *aItem = dynamic_cast<AudioListItem*>(item);
 
@@ -940,8 +940,8 @@ AudioManagerDialog::setSelected(AudioFileId id,
                                 const Segment *segment,
                                 bool propagate)
 {
-    QListViewItem *it = m_fileList->firstChild();
-    QListViewItem *chIt = 0;
+    QListWidgetItem *it = m_fileList->firstChild();
+    QListWidgetItem *chIt = 0;
     AudioListItem *aItem;
 
     while (it) {
@@ -985,7 +985,7 @@ AudioManagerDialog::setSelected(AudioFileId id,
 }
 
 void
-AudioManagerDialog::selectFileListItemNoSignal(QListViewItem* it)
+AudioManagerDialog::selectFileListItemNoSignal(QListWidgetItem* it)
 {
     m_fileList->blockSignals(true);
 
@@ -1131,7 +1131,7 @@ AudioManagerDialog::addFile(const KURL& kurl)
 }
 
 void
-AudioManagerDialog::slotDropped(QDropEvent *event, QListViewItem*)
+AudioManagerDialog::slotDropped(QDropEvent *event, QListWidgetItem*)
 {
     QStrList uri;
 

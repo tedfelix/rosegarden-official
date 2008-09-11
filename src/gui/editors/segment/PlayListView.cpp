@@ -23,7 +23,7 @@
 namespace Rosegarden {
 
 PlayListView::PlayListView(QWidget *parent, const char *name)
-    : QListView(parent, name)
+    : QListWidget(parent, name)
 {
     addColumn(i18n("Title"));
     addColumn(i18n("File name"));
@@ -41,13 +41,13 @@ PlayListView::PlayListView(QWidget *parent, const char *name)
 
 bool PlayListView::acceptDrag(QDropEvent* e) const
 {
-    return QUriDrag::canDecode(e) || QListView::acceptDrag(e);
+    return QUriDrag::canDecode(e) || QListWidget::acceptDrag(e);
 }
 
 
-QListViewItem* PlayListView::previousSibling(QListViewItem* item)
+QListWidgetItem* PlayListView::previousSibling(QListWidgetItem* item)
 {
-    QListViewItem* prevSib = firstChild();
+    QListWidgetItem* prevSib = firstChild();
 
     while(prevSib && prevSib->nextSibling() != item)
         prevSib = prevSib->nextSibling();

@@ -79,7 +79,7 @@ TriggerSegmentManager::TriggerSegmentManager(QWidget *parent,
 
     setCaption(i18n("Manage Triggered Segments"));
 
-    m_listView = new QListView( mainFrame );
+    m_listView = new QListWidget( mainFrame );
     mainFrameLayout->addWidget(m_listView);
     m_listView->addColumn("Index");
     m_listView->addColumn(i18n("ID"));
@@ -151,16 +151,16 @@ TriggerSegmentManager::TriggerSegmentManager(QWidget *parent,
     connect(m_doc->getCommandHistory(), SIGNAL(commandExecuted()),
             this, SLOT(slotUpdate()));
 
-    connect(m_listView, SIGNAL(doubleClicked(QListViewItem *)),
-            SLOT(slotEdit(QListViewItem *)));
+    connect(m_listView, SIGNAL(doubleClicked(QListWidgetItem *)),
+            SLOT(slotEdit(QListWidgetItem *)));
 
-    connect(m_listView, SIGNAL(pressed(QListViewItem *)),
-            this, SLOT(slotItemClicked(QListViewItem *)));
+    connect(m_listView, SIGNAL(pressed(QListWidgetItem *)),
+            this, SLOT(slotItemClicked(QListWidgetItem *)));
 
     // Highlight all columns - enable extended selection mode
     //
     m_listView->setAllColumnsShowFocus(true);
-    m_listView->setSelectionMode(QListView::Extended);
+    m_listView->setSelectionMode(QListWidget::Extended);
     m_listView->setItemsRenameable(true);
 
     initDialog();
@@ -277,13 +277,13 @@ TriggerSegmentManager::slotUpdate()
     }
 
     if (m_listView->childCount() == 0) {
-        QListViewItem *item =
+        QListWidgetItem *item =
             new TriggerManagerItem(m_listView, i18n("<none>"));
         m_listView->addItem(item);
 
-        m_listView->setSelectionMode(QListView::NoSelection);
+        m_listView->setSelectionMode(QListWidget::NoSelection);
     } else {
-        m_listView->setSelectionMode(QListView::Extended);
+        m_listView->setSelectionMode(QListWidget::Extended);
     }
 }
 
@@ -296,7 +296,7 @@ TriggerSegmentManager::slotDeleteAll()
     RG_DEBUG << "TriggerSegmentManager::slotDeleteAll" << endl;
     MacroCommand *command = new MacroCommand(i18n("Remove all triggered segments"));
 
-    QListViewItem *it = m_listView->firstChild();
+    QListWidgetItem *it = m_listView->firstChild();
 
     do {
 
@@ -489,7 +489,7 @@ TriggerSegmentManager::checkModified()
 }
 
 void
-TriggerSegmentManager::slotEdit(QListViewItem *i)
+TriggerSegmentManager::slotEdit(QListWidgetItem *i)
 {
     RG_DEBUG << "TriggerSegmentManager::slotEdit" << endl;
 
@@ -524,7 +524,7 @@ TriggerSegmentManager::setDocument(RosegardenGUIDoc *doc)
 }
 
 void
-TriggerSegmentManager::slotItemClicked(QListViewItem *item)
+TriggerSegmentManager::slotItemClicked(QListWidgetItem *item)
 {
     RG_DEBUG << "TriggerSegmentManager::slotItemClicked" << endl;
 }

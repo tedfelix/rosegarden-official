@@ -25,7 +25,7 @@
 
 
 class QWidget;
-class QListView;
+class QListWidget;
 
 
 namespace Rosegarden

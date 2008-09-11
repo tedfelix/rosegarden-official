@@ -26,32 +26,32 @@ namespace Rosegarden
 
 class Segment;
 
-// Add an Id to a QListViewItem
+// Add an Id to a QListWidgetItem
 //
-class AudioListItem : public QListViewItem
+class AudioListItem : public QListWidgetItem
 {
 
 public:
 
-    AudioListItem(QListView *parent):QListViewItem(parent),
+    AudioListItem(QListWidget *parent):QListWidgetItem(parent),
                                      m_segment(0) {;}
 
-    AudioListItem(QListViewItem *parent):QListViewItem(parent),
+    AudioListItem(QListWidgetItem *parent):QListWidgetItem(parent),
                                          m_segment(0) {;}
 
-    AudioListItem(QListView *parent,
+    AudioListItem(QListWidget *parent,
                   QString label,
                   AudioFileId id):
-                      QListViewItem(parent,
+                      QListWidgetItem(parent,
                                     label,
                                     "", "", "", "", "", "", ""),
                                     m_id(id),
                                     m_segment(0) {;}
 
-    AudioListItem(QListViewItem *parent, 
+    AudioListItem(QListWidgetItem *parent, 
                   QString label,
                   AudioFileId id):
-                      QListViewItem(parent,
+                      QListWidgetItem(parent,
                                     label,
                                     "", "", "", "", "", "", ""),
                                     m_id(id),

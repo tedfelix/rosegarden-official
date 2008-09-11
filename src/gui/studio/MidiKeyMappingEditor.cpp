@@ -79,7 +79,7 @@ MidiKeyMappingEditor::clearAll()
 }
 
 void
-MidiKeyMappingEditor::populate(QListViewItem* item)
+MidiKeyMappingEditor::populate(QListWidgetItem* item)
 {
     RG_DEBUG << "MidiKeyMappingEditor::populate\n";
 

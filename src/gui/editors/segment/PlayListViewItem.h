@@ -23,11 +23,11 @@
 
 namespace Rosegarden {
 
-class PlayListViewItem : public QListViewItem
+class PlayListViewItem : public QListWidgetItem
 {
 public:
-    PlayListViewItem(QListView* parent, KURL);
-    PlayListViewItem(QListView* parent, QListViewItem*, KURL);
+    PlayListViewItem(QListWidget* parent, KURL);
+    PlayListViewItem(QListWidget* parent, QListWidgetItem*, KURL);
 
     const KURL& getURL() { return m_kurl; }
 

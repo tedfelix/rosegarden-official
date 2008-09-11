@@ -77,7 +77,7 @@ MarkerEditor::MarkerEditor(QWidget *parent,
 
     setCaption(i18n("Manage Markers"));
 
-    m_listView = new QListView( mainFrame );
+    m_listView = new QListWidget( mainFrame );
     mainFrameLayout->addWidget(m_listView);
     m_listView->addColumn(i18n("Marker time  "));
     m_listView->addColumn(i18n("Marker text  "));
@@ -158,16 +158,16 @@ MarkerEditor::MarkerEditor(QWidget *parent,
     connect(m_doc->getCommandHistory(), SIGNAL(commandExecuted()),
             this, SLOT(slotUpdate()));
 
-    connect(m_listView, SIGNAL(doubleClicked(QListViewItem *)),
-            SLOT(slotEdit(QListViewItem *)));
+    connect(m_listView, SIGNAL(doubleClicked(QListWidgetItem *)),
+            SLOT(slotEdit(QListWidgetItem *)));
 
-    connect(m_listView, SIGNAL(pressed(QListViewItem *)),
-            this, SLOT(slotItemClicked(QListViewItem *)));
+    connect(m_listView, SIGNAL(pressed(QListWidgetItem *)),
+            this, SLOT(slotItemClicked(QListWidgetItem *)));
 
     // Highlight all columns - enable extended selection mode
     //
     m_listView->setAllColumnsShowFocus(true);
-    m_listView->setSelectionMode(QListView::Extended);
+    m_listView->setSelectionMode(QListWidget::Extended);
     m_listView->setItemsRenameable(true);
 
     initDialog();
@@ -242,7 +242,7 @@ MarkerEditor::slotUpdate()
 {
     RG_DEBUG << "MarkerEditor::slotUpdate" << endl;
 
-    //QPtrList<QListViewItem> selection = m_listView->selectedItems();
+    //QPtrList<QListWidgetItem> selection = m_listView->selectedItems();
 
     MarkerEditorViewItem *item;
 
@@ -285,14 +285,14 @@ MarkerEditor::slotUpdate()
     }
 
     if (m_listView->childCount() == 0) {
-        QListViewItem *item =
+        QListWidgetItem *item =
             new MarkerEditorViewItem(m_listView, 0, i18n("<none>"));
         ((MarkerEditorViewItem *)item)->setFake(true);
         m_listView->addItem(item);
 
-        m_listView->setSelectionMode(QListView::NoSelection);
+        m_listView->setSelectionMode(QListWidget::NoSelection);
     } else {
-        m_listView->setSelectionMode(QListView::Extended);
+        m_listView->setSelectionMode(QListWidget::Extended);
     }
 
     updatePosition();
@@ -305,7 +305,7 @@ MarkerEditor::slotDeleteAll()
     RG_DEBUG << "MarkerEditor::slotDeleteAll" << endl;
     MacroCommand *command = new MacroCommand(i18n("Remove all markers"));
 
-    QListViewItem *item = m_listView->firstChild();
+    QListWidgetItem *item = m_listView->firstChild();
 
     do {
         MarkerEditorViewItem *ei =
@@ -343,7 +343,7 @@ void
 MarkerEditor::slotDelete()
 {
     RG_DEBUG << "MarkerEditor::slotDelete" << endl;
-    QListViewItem *item = m_listView->currentIndex();
+    QListWidgetItem *item = m_listView->currentIndex();
 
     MarkerEditorViewItem *ei =
         dynamic_cast<MarkerEditorViewItem *>(item);
@@ -475,11 +475,11 @@ MarkerEditor::checkModified()
 }
 
 void
-MarkerEditor::slotEdit(QListViewItem *i)
+MarkerEditor::slotEdit(QListWidgetItem *i)
 {
     RG_DEBUG << "MarkerEditor::slotEdit" << endl;
 
-    if (m_listView->selectionMode() == QListView::NoSelection) {
+    if (m_listView->selectionMode() == QListWidget::NoSelection) {
         // The marker list is empty, so we shouldn't allow editing the
         // <none> placeholder
         return ;
@@ -532,7 +532,7 @@ MarkerEditor::setDocument(RosegardenGUIDoc *doc)
 }
 
 void
-MarkerEditor::slotItemClicked(QListViewItem *item)
+MarkerEditor::slotItemClicked(QListWidgetItem *item)
 {
     RG_DEBUG << "MarkerEditor::slotItemClicked" << endl;
     MarkerEditorViewItem *ei =

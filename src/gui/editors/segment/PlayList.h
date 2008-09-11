@@ -24,7 +24,7 @@
 
 class QWidget;
 class QPushButton;
-class QListViewItem;
+class QListWidgetItem;
 class QHBoxLayout;
 class QFrame;
 class QDropEvent;
@@ -46,7 +46,7 @@ public:
 
     PlayListView* getListView() { return m_listView; }
 
-    void enableButtons(QListViewItem*);
+    void enableButtons(QListWidgetItem*);
 
 
 signals:
@@ -59,8 +59,8 @@ protected slots:
     void slotMoveDown();
     void slotDeleteCurrent();
     void slotClear();
-    void slotCurrentItemChanged(QListViewItem*);
-    void slotDropped(QDropEvent*, QListViewItem*);
+    void slotCurrentItemChanged(QListWidgetItem*);
+    void slotDropped(QDropEvent*, QListWidgetItem*);
 
 protected:
     void save();

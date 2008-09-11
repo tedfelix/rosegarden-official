@@ -26,7 +26,7 @@ namespace Rosegarden {
 
 class Composition;
 
-class TempoListItem : public QListViewItem
+class TempoListItem : public QListWidgetItem
 {
 public:
     enum Type { TimeSignature, Tempo };
@@ -35,12 +35,12 @@ public:
 		  Type type,
 		  timeT time,
 		  int index,
-		  QListView *parent,
+		  QListWidget *parent,
 		  QString label1,
 		  QString label2,
 		  QString label3,
 		  QString label4 = QString::null) :
-	QListViewItem(parent, label1, label2, label3, label4),
+	QListWidgetItem(parent, label1, label2, label3, label4),
 	m_composition(composition),
 	m_type(type),
 	m_time(time),
@@ -51,7 +51,7 @@ public:
     Rosegarden::timeT getTime() const { return m_time; }
     int getIndex() const { return m_index; }
 
-    virtual int compare(QListViewItem *i, int col, bool ascending) const;
+    virtual int compare(QListWidgetItem *i, int col, bool ascending) const;
 
 protected:
     Rosegarden::Composition *m_composition;

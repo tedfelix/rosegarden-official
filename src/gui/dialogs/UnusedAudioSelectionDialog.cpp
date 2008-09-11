@@ -50,7 +50,7 @@ UnusedAudioSelectionDialog::UnusedAudioSelectionDialog(QDialogButtonBox::QWidget
 
     new QLabel(introductoryText, vbox);
 
-    m_listView = new QListView( vbox );
+    m_listView = new QListWidget( vbox );
     vboxLayout->addWidget(m_listView);
     vbox->setLayout(vboxLayout);
 
@@ -67,11 +67,11 @@ UnusedAudioSelectionDialog::UnusedAudioSelectionDialog(QDialogButtonBox::QWidget
             fileSize = QString(" %1 ").arg(info.size());
             fileDate = QString(" %1 ").arg(info.lastModified().toString());
         }
-        QListViewItem *item = new QListViewItem
+        QListWidgetItem *item = new QListWidgetItem
                               (m_listView, fileName, fileSize, fileDate);
     }
 
-    m_listView->setSelectionMode(QListView::Multi);
+    m_listView->setSelectionMode(QListWidget::Multi);
     QDialogButtonBox *buttonBox = new QDialogButtonBox((QDialogButtonBox::offerCancel ? (QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
@@ -84,7 +84,7 @@ UnusedAudioSelectionDialog::getSelectedAudioFileNames() const
 {
     std::vector<QString> selectedNames;
 
-    QListViewItem *item = m_listView->firstChild();
+    QListWidgetItem *item = m_listView->firstChild();
 
     while (item) {
 

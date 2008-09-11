@@ -94,7 +94,7 @@ ControlEditorDialog::ControlEditorDialog(QWidget *parent,
                device), mainFrame);
     new QLabel("", mainFrame);
 
-    m_listView = new QListView( mainFrame );
+    m_listView = new QListWidget( mainFrame );
     mainFrameLayout->addWidget(m_listView);
     m_listView->addColumn(i18n("Control Event name  "));
     m_listView->addColumn(i18n("Control Event type  "));
@@ -160,13 +160,13 @@ ControlEditorDialog::ControlEditorDialog(QWidget *parent,
     connect(m_doc->getCommandHistory(), SIGNAL(commandExecuted()),
             this, SLOT(slotUpdate()));
 
-    connect(m_listView, SIGNAL(doubleClicked(QListViewItem *)),
-            SLOT(slotEdit(QListViewItem *)));
+    connect(m_listView, SIGNAL(doubleClicked(QListWidgetItem *)),
+            SLOT(slotEdit(QListWidgetItem *)));
 
     // Highlight all columns - enable extended selection mode
     //
     m_listView->setAllColumnsShowFocus(true);
-    m_listView->setSelectionMode(QListView::Extended);
+    m_listView->setSelectionMode(QListWidget::Extended);
 
     initDialog();
 
@@ -195,7 +195,7 @@ ControlEditorDialog::slotUpdate()
 {
     RG_DEBUG << "ControlEditorDialog::slotUpdate" << endl;
 
-    //QPtrList<QListViewItem> selection = m_listView->selectedItems();
+    //QPtrList<QListWidgetItem> selection = m_listView->selectedItems();
 
     MidiDevice *md =
         dynamic_cast<MidiDevice *>(m_studio->getDevice(m_device));
@@ -203,7 +203,7 @@ ControlEditorDialog::slotUpdate()
         return ;
 
     ControlList::const_iterator it = md->beginControllers();
-    QListViewItem *item;
+    QListWidgetItem *item;
     int i = 0;
 
     m_listView->clear();
@@ -263,12 +263,12 @@ ControlEditorDialog::slotUpdate()
     }
 
     if (m_listView->childCount() == 0) {
-        QListViewItem *item = new QListViewItem(m_listView, i18n("<none>"));
+        QListWidgetItem *item = new QListWidgetItem(m_listView, i18n("<none>"));
         m_listView->addItem(item);
 
-        m_listView->setSelectionMode(QListView::NoSelection);
+        m_listView->setSelectionMode(QListWidget::NoSelection);
     } else {
-        m_listView->setSelectionMode(QListView::Extended);
+        m_listView->setSelectionMode(QListWidget::Extended);
     }
 
 
@@ -394,7 +394,7 @@ ControlEditorDialog::slotEdit()
 {}
 
 void
-ControlEditorDialog::slotEdit(QListViewItem *i)
+ControlEditorDialog::slotEdit(QListWidgetItem *i)
 {
     RG_DEBUG << "ControlEditorDialog::slotEdit" << endl;
 

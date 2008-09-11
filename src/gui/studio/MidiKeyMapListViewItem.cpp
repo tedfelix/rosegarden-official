@@ -29,7 +29,7 @@ namespace Rosegarden
 {
 
 MidiKeyMapListViewItem::MidiKeyMapListViewItem(DeviceId deviceId,
-        QListViewItem* parent,
+        QListWidgetItem* parent,
         QString name)
         : MidiDeviceListViewItem(deviceId, parent, name),
         m_name(name)
@@ -37,7 +37,7 @@ MidiKeyMapListViewItem::MidiKeyMapListViewItem(DeviceId deviceId,
     setText(1, i18n("Key Mapping"));
 }
 
-int MidiKeyMapListViewItem::compare(QListViewItem *i, int col, bool ascending) const
+int MidiKeyMapListViewItem::compare(QListWidgetItem *i, int col, bool ascending) const
 {
     if (dynamic_cast<MidiBankListViewItem *>(i)) {
         return 1; // banks before key maps

@@ -26,9 +26,9 @@
 
 class QWidget;
 class QPushButton;
-class QListViewItem;
+class QListWidgetItem;
 class QCloseEvent;
-class QListView;
+class QListWidget;
 class Command;
 
 
@@ -77,7 +77,7 @@ public slots:
     void slotClose();
 
     void slotEdit();
-    void slotEdit(QListViewItem *);
+    void slotEdit(QListWidgetItem *);
 
 signals:
     void closing();
@@ -101,7 +101,7 @@ protected:
     QPushButton             *m_addButton;
     QPushButton             *m_deleteButton;
 
-    QListView               *m_listView;
+    QListWidget               *m_listView;
 
     bool                     m_modified;
 

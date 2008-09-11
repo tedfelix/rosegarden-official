@@ -27,7 +27,7 @@
 
 class QWidget;
 class QPushButton;
-class QListViewItem;
+class QListWidgetItem;
 class QLabel;
 class QGridLayout;
 class QFrame;
@@ -46,7 +46,7 @@ class NameSetEditor : public QVGroupBox
 public:
     virtual void clearAll() = 0;
 
-    virtual void populate(QListViewItem *) = 0;
+    virtual void populate(QListWidgetItem *) = 0;
     virtual void reset() = 0;
 
 public slots:

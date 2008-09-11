@@ -24,7 +24,7 @@
 #include <QString>
 
 
-class QListViewItem;
+class QListWidgetItem;
 
 
 namespace Rosegarden
@@ -36,9 +36,9 @@ class MidiKeyMapListViewItem : public MidiDeviceListViewItem
 {
 public:
     MidiKeyMapListViewItem(DeviceId deviceId,
-                           QListViewItem* parent, QString name);
+                           QListWidgetItem* parent, QString name);
 
-    virtual int compare(QListViewItem *i, int col, bool ascending) const;
+    virtual int compare(QListWidgetItem *i, int col, bool ascending) const;
 
     QString getName() const { return m_name; }
 

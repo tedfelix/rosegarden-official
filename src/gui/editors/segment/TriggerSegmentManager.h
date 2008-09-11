@@ -26,10 +26,10 @@
 
 class QWidget;
 class QPushButton;
-class QListViewItem;
+class QListWidgetItem;
 class QCloseEvent;
 class QShortcut;
-class QListView;
+class QListWidget;
 class Command;
 
 
@@ -69,8 +69,8 @@ public slots:
     void slotDelete();
     void slotDeleteAll();
     void slotClose();
-    void slotEdit(QListViewItem *);
-    void slotItemClicked(QListViewItem *);
+    void slotEdit(QListWidgetItem *);
+    void slotItemClicked(QListWidgetItem *);
     void slotPasteAsNew();
 
     void slotMusicalTime();
@@ -96,7 +96,7 @@ protected:
     QPushButton             *m_deleteButton;
     QPushButton             *m_deleteAllButton;
 
-    QListView               *m_listView;
+    QListWidget               *m_listView;
 
     bool                     m_modified;
 

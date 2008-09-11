@@ -26,7 +26,7 @@
 class QWidget;
 class QString;
 class QSpinBox;
-class QListViewItem;
+class QListWidgetItem;
 class QCheckBox;
 class BankList;
 
@@ -48,7 +48,7 @@ public:
                        const char *name = 0);
 
     void clearAll();
-    void populate(QListViewItem*);
+    void populate(QListWidgetItem*);
     void reset();
 
 public slots:

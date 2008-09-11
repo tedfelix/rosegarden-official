@@ -25,10 +25,10 @@
 namespace Rosegarden {
 
 
-class MarkerEditorViewItem : public QListViewItem
+class MarkerEditorViewItem : public QListWidgetItem
 {
 public:
-    MarkerEditorViewItem(QListView * parent, int id,
+    MarkerEditorViewItem(QListWidget * parent, int id,
                          QString label1, 
                          QString label2 = QString::null, 
                          QString label3 = QString::null,
@@ -37,11 +37,11 @@ public:
                          QString label6 = QString::null, 
                          QString label7 = QString::null, 
                          QString label8 = QString::null):
-        QListViewItem(parent, label1, label2, label3, label4,
+        QListWidgetItem(parent, label1, label2, label3, label4,
                       label5, label6, label7, label8),
 	m_rawTime(0), m_fake(false), m_id(id) { ; }
 
-    virtual int compare(QListViewItem * i, int col, bool ascending) const;
+    virtual int compare(QListWidgetItem * i, int col, bool ascending) const;
 
     void setRawTime(Rosegarden::timeT rawTime) { m_rawTime = rawTime; }
     Rosegarden::timeT getRawTime() const { return m_rawTime; }

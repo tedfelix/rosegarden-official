@@ -28,32 +28,32 @@ namespace Rosegarden
 {
 
 MidiDeviceListViewItem::MidiDeviceListViewItem(DeviceId deviceId,
-        QListView* parent, QString name)
-        : QListViewItem(parent, name),
+        QListWidget* parent, QString name)
+        : QListWidgetItem(parent, name),
         m_deviceId(deviceId)
 {}
 
 MidiDeviceListViewItem::MidiDeviceListViewItem(DeviceId deviceId,
-        QListViewItem* parent, QString name,
+        QListWidgetItem* parent, QString name,
         bool percussion,
         int msb, int lsb)
-        : QListViewItem(parent, name,
+        : QListWidgetItem(parent, name,
                         QString(percussion ? i18n("Percussion Bank") : i18n("Bank")),
                         QString().setNum(msb), QString().setNum(lsb)),
         m_deviceId(deviceId)
 {}
 
 MidiDeviceListViewItem::MidiDeviceListViewItem(DeviceId deviceId,
-        QListViewItem* parent, QString name)
-: QListViewItem(parent, name, i18n("Key Mapping"), "", ""),
+        QListWidgetItem* parent, QString name)
+: QListWidgetItem(parent, name, i18n("Key Mapping"), "", ""),
 m_deviceId(deviceId)
 {}
 
-int MidiDeviceListViewItem::compare(QListViewItem *i, int col, bool ascending) const
+int MidiDeviceListViewItem::compare(QListWidgetItem *i, int col, bool ascending) const
 {
     MidiDeviceListViewItem* item = dynamic_cast<MidiDeviceListViewItem*>(i);
     if (!item)
-        return QListViewItem::compare(i, col, ascending);
+        return QListWidgetItem::compare(i, col, ascending);
     if (col == 0)
         return
             getDeviceId() > item->getDeviceId() ? 1 :

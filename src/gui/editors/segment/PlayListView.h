@@ -22,12 +22,12 @@
 
 namespace Rosegarden {
 
-class PlayListView : public QListView
+class PlayListView : public QListWidget
 {
 public:
     PlayListView(QWidget *parent=0, const char *name=0);
 
-    QListViewItem* previousSibling(QListViewItem*);
+    QListWidgetItem* previousSibling(QListWidgetItem*);
 
 protected:
 //     virtual void dragEnterEvent(QDragEnterEvent *event);

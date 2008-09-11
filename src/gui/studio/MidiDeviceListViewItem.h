@@ -29,26 +29,26 @@ namespace Rosegarden
 
 
 
-class MidiDeviceListViewItem : public QListViewItem
+class MidiDeviceListViewItem : public QListWidgetItem
 {
 public:
     // Device
     MidiDeviceListViewItem(DeviceId id,
-                           QListView* parent, QString name);
+                           QListWidget* parent, QString name);
 
     // Bank
     MidiDeviceListViewItem(DeviceId id,
-                           QListViewItem* parent, QString name,
+                           QListWidgetItem* parent, QString name,
                            bool percussion,
                            int msb, int lsb);
 
     // Key Mapping
     MidiDeviceListViewItem(DeviceId id,
-                           QListViewItem* parent, QString name);
+                           QListWidgetItem* parent, QString name);
 
     DeviceId getDeviceId() const { return m_deviceId; }
 
-    virtual int compare(QListViewItem *i, int col, bool ascending) const;
+    virtual int compare(QListWidgetItem *i, int col, bool ascending) const;
 
 protected:
 

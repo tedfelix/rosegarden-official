@@ -173,7 +173,7 @@ MidiProgramsEditor::clearAll()
 }
 
 void
-MidiProgramsEditor::populate(QListViewItem* item)
+MidiProgramsEditor::populate(QListWidgetItem* item)
 {
     RG_DEBUG << "MidiProgramsEditor::populate\n";
 

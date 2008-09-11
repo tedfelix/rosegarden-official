@@ -30,11 +30,11 @@
 class QWidget;
 class QString;
 class QPushButton;
-class QListViewItem;
+class QListWidgetItem;
 class QGroupBox;
 class QCloseEvent;
 class QCheckBox;
-class QListView;
+class QListWidget;
 class Command;
 class QComboBox;
 
@@ -67,7 +67,7 @@ public:
     //
     void initDialog();
 
-    std::pair<int, int> getFirstFreeBank(QListViewItem*);
+    std::pair<int, int> getFirstFreeBank(QListWidgetItem*);
 
     void addCommandToHistory(Command *command);
     MultiViewCommandHistory* getCommandHistory();
@@ -77,7 +77,7 @@ public:
     // Get a MidiDevice from an index number
     //
     MidiDevice* getMidiDevice(DeviceId);
-    MidiDevice* getMidiDevice(QListViewItem*);
+    MidiDevice* getMidiDevice(QListWidgetItem*);
     MidiDevice* getCurrentMidiDevice();
     BankList&   getBankList()     { return m_bankList; }
     ProgramList&getProgramList()  { return m_programList; }
@@ -98,7 +98,7 @@ public:
     void selectDeviceBankItem(DeviceId device, int bank);
 
 public slots:
-    void slotPopulateDevice(QListViewItem*);
+    void slotPopulateDevice(QListWidgetItem*);
 
     void slotApply();
     void slotReset();
@@ -113,7 +113,7 @@ public slots:
     void slotImport();
     void slotExport();
 
-    void slotModifyDeviceOrBankName(QListViewItem*, const QString&,int);
+    void slotModifyDeviceOrBankName(QListWidgetItem*, const QString&,int);
 
     void slotFileClose();
 
@@ -135,19 +135,19 @@ protected:
 
     void updateDialog();
 
-    void populateDeviceItem(QListViewItem* deviceItem,
+    void populateDeviceItem(QListWidgetItem* deviceItem,
                             MidiDevice* midiDevice);
 
     void updateDeviceItem(MidiDeviceListViewItem* deviceItem);
 
     bool deviceItemHasBank(MidiDeviceListViewItem* deviceItem, int bankNb);
 
-    void clearItemChildren(QListViewItem* deviceItem);
+    void clearItemChildren(QListWidgetItem* deviceItem);
 
-    MidiDeviceListViewItem* getParentDeviceItem(QListViewItem*);
+    MidiDeviceListViewItem* getParentDeviceItem(QListWidgetItem*);
     void keepBankListForNextPopulate() { m_keepBankList = true; }
 
-    void populateDevice(QListViewItem*);
+    void populateDevice(QListWidgetItem*);
 
     void setupActions();
 
@@ -157,7 +157,7 @@ protected:
 
     MidiProgramsEditor      *m_programEditor;
     MidiKeyMappingEditor    *m_keyMappingEditor;
-    QListView               *m_listView;
+    QListWidget               *m_listView;
 
     QGroupBox               *m_optionBox;
     QCheckBox               *m_variationToggle;

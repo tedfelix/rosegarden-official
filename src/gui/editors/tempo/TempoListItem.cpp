@@ -20,10 +20,10 @@
 namespace Rosegarden {
 
 int
-TempoListItem::compare(QListViewItem *i, int col, bool ascending) const
+TempoListItem::compare(QListWidgetItem *i, int col, bool ascending) const
 {
     TempoListItem *ti = dynamic_cast<TempoListItem *>(i);
-    if (!ti) return QListViewItem::compare(i, col, ascending);
+    if (!ti) return QListWidgetItem::compare(i, col, ascending);
 
     if (col == 0) { // time
 	if (m_time == ti->m_time) {

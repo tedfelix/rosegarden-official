@@ -33,11 +33,11 @@
 class QWidget;
 class QPopupMenu;
 class QPoint;
-class QListViewItem;
+class QListWidgetItem;
 class QLabel;
 class QCheckBox;
 class QGroupBox;
-class QListView;
+class QListWidget;
 
 
 namespace Rosegarden
@@ -121,12 +121,12 @@ public slots:
 
     // Show RMB menu
     //
-    void slotPopupMenu(QListViewItem*, const QPoint&, int);
+    void slotPopupMenu(QListWidgetItem*, const QPoint&, int);
     void slotMenuActivated(int);
 
     // on double click on the event list
     //
-    void slotPopupEventEditor(QListViewItem*);
+    void slotPopupEventEditor(QListWidgetItem*);
 
     // Change filter parameters
     //
@@ -167,7 +167,7 @@ protected:
     QLabel      *m_triggerPitch;
     QLabel      *m_triggerVelocity;
 
-    QListView   *m_eventList;
+    QListWidget   *m_eventList;
     int          m_eventFilter;
 
     static int   m_lastSetEventFilter;

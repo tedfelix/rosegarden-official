@@ -192,7 +192,7 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
 
     QGridLayout *layoutOtherHeaders = new QGridLayout(frameOtherHeaders, 2, 2, 10, 5);
 
-    m_metadata = new QListView(frameOtherHeaders);
+    m_metadata = new QListWidget(frameOtherHeaders);
     m_metadata->addColumn(i18n("Name"));
     m_metadata->addColumn(i18n("Value"));
     m_metadata->setFullWidth(true);
@@ -200,7 +200,7 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
     m_metadata->setRenameable(0);
     m_metadata->setRenameable(1);
     m_metadata->setItemMargin(5);
-    m_metadata->setDefaultRenameAction(QListView::Accept);
+    m_metadata->setDefaultRenameAction(QListWidget::Accept);
     m_metadata->setShowSortIndicator(true);
 
     std::vector<std::string> names(metadata.getPropertyNames());
@@ -215,7 +215,7 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
         // property names stored in lower case
         name = name.left(1).toUpper() + name.right(name.length() - 1);
 
-        new QListViewItem(m_metadata, name,
+        new QListWidgetItem(m_metadata, name,
                           strtoqstr(metadata.get<String>(names[i])));
 
         shown.insert(names[i]);
@@ -253,7 +253,7 @@ HeadersConfigurationPage::slotAddNewProperty()
         ++i;
     }
 
-    new QListViewItem(m_metadata, propertyName, i18n("{undefined}"));
+    new QListWidgetItem(m_metadata, propertyName, i18n("{undefined}"));
 }
 
 void
@@ -298,7 +298,7 @@ void HeadersConfigurationPage::apply()
     metadata.set<String>(CompositionMetadataKeys::Copyright, qstrtostr(m_editCopyright->text()));
     metadata.set<String>(CompositionMetadataKeys::Tagline, qstrtostr(m_editTagline->text()));
 
-    for (QListViewItem *item = m_metadata->firstChild();
+    for (QListWidgetItem *item = m_metadata->firstChild();
             item != 0; item = item->nextSibling()) {
 
         metadata.set<String>(qstrtostr(item->text(0).toLower()),

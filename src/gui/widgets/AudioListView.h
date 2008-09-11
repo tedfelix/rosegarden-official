@@ -22,7 +22,7 @@
 
 namespace Rosegarden {
         
-class AudioListView : public QListView
+class AudioListView : public QListWidget
 {
 public:
     AudioListView(QWidget *parent = 0, const char *name = 0);

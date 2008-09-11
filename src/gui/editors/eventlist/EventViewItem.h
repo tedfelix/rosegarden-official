@@ -26,29 +26,29 @@ namespace Rosegarden
 class Segment;
 class Event;
 
-// EventView specialisation of a QListViewItem with the
+// EventView specialisation of a QListWidgetItem with the
 // addition of a segment pointer
 //
-class EventViewItem : public QListViewItem
+class EventViewItem : public QListWidgetItem
 {
 public:
     EventViewItem(Rosegarden::Segment *segment,
                   Rosegarden::Event *event,
-                  QListView *parent) : 
-        QListViewItem(parent),
+                  QListWidget *parent) : 
+        QListWidgetItem(parent),
         m_segment(segment),
         m_event(event) {;}
     
     EventViewItem(Rosegarden::Segment *segment,
                   Rosegarden::Event *event,
-                  QListViewItem *parent) : 
-        QListViewItem(parent),
+                  QListWidgetItem *parent) : 
+        QListWidgetItem(parent),
         m_segment(segment),
         m_event(event) {;}
 
     EventViewItem(Rosegarden::Segment *segment,
                   Rosegarden::Event *event,
-                  QListView *parent, QString label1,
+                  QListWidget *parent, QString label1,
                   QString label2 = QString::null,
                   QString label3 = QString::null,
                   QString label4 = QString::null,
@@ -56,14 +56,14 @@ public:
                   QString label6 = QString::null,
                   QString label7 = QString::null,
                   QString label8 = QString::null) :
-        QListViewItem(parent, label1, label2, label3, label4,
+        QListWidgetItem(parent, label1, label2, label3, label4,
                       label5, label6, label7, label8),
         m_segment(segment),
         m_event(event) {;}
 
     EventViewItem(Rosegarden::Segment *segment,
                   Rosegarden::Event *event,
-                  QListViewItem *parent, QString label1,
+                  QListWidgetItem *parent, QString label1,
                   QString label2 = QString::null,
                   QString label3 = QString::null,
                   QString label4 = QString::null,
@@ -71,7 +71,7 @@ public:
                   QString label6 = QString::null,
                   QString label7 = QString::null,
                   QString label8 = QString::null) :
-        QListViewItem(parent, label1, label2, label3, label4,
+        QListWidgetItem(parent, label1, label2, label3, label4,
                       label5, label6, label7, label8), 
         m_segment(segment),
         m_event(event) {;}
@@ -81,7 +81,7 @@ public:
 
     // Reimplement so that we can sort numerically
     //
-    virtual int compare(QListViewItem *i, int col, bool ascending) const;
+    virtual int compare(QListWidgetItem *i, int col, bool ascending) const;
 
 protected:
 

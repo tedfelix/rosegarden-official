@@ -27,11 +27,11 @@ namespace Rosegarden
 {
 
 
-class ControlParameterItem : public QListViewItem
+class ControlParameterItem : public QListWidgetItem
 {
 public:
     ControlParameterItem(int id,
-                         QListView *parent,
+                         QListWidget *parent,
                          QString str1,
                          QString str2,
                          QString str3,
@@ -41,7 +41,7 @@ public:
                          QString str7,
                          QString str8,
                          QString str9):
-        QListViewItem(parent, str1, str2, str3, str4, str5, str6, str7, str8),
+        QListWidgetItem(parent, str1, str2, str3, str4, str5, str6, str7, str8),
         m_id(id) { setText(8, str9); }
 
     int getId() const { return m_id; }

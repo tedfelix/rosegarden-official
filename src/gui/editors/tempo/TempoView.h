@@ -30,11 +30,11 @@
 
 
 class QWidget;
-class QListViewItem;
+class QListWidgetItem;
 class QCloseEvent;
 class QCheckBox;
 class QGroupBox;
-class QListView;
+class QListWidget;
 
 
 namespace Rosegarden
@@ -123,7 +123,7 @@ public slots:
 
     // on double click on the event list
     //
-    void slotPopupEditor(QListViewItem*);
+    void slotPopupEditor(QListWidgetItem*);
 
     // Change filter parameters
     //
@@ -144,7 +144,7 @@ protected:
     virtual void closeEvent(QCloseEvent *);
 
     //--------------- Data members ---------------------------------
-    QListView   *m_list;
+    QListWidget   *m_list;
     int          m_filter;
 
     static int   m_lastSetFilter;

@@ -25,7 +25,7 @@
 namespace Rosegarden {
         
 AudioListView::AudioListView(QWidget *parent, const char *name)
-    : QListView(parent, name)
+    : QListWidget(parent, name)
 {
     setDragEnabled(true);
     setAcceptDrops(true);
@@ -34,7 +34,7 @@ AudioListView::AudioListView(QWidget *parent, const char *name)
 
 bool AudioListView::acceptDrag(QDropEvent* e) const
 {
-    return QUriDrag::canDecode(e) || QListView::acceptDrag(e);
+    return QUriDrag::canDecode(e) || QListWidget::acceptDrag(e);
 }
 
 QDragObject* AudioListView::dragObject()

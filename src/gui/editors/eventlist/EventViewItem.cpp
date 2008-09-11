@@ -26,10 +26,10 @@ namespace Rosegarden
 // the QString compare().
 //
 int
-EventViewItem::compare(QListViewItem *i, int col, bool ascending) const
+EventViewItem::compare(QListWidgetItem *i, int col, bool ascending) const
 {
     EventViewItem *ei = dynamic_cast<EventViewItem *>(i);
-    if (!ei) return QListViewItem::compare(i, col, ascending);
+    if (!ei) return QListWidgetItem::compare(i, col, ascending);
 
     if (col == 0) { // time
         Rosegarden::Event &e1 = *m_event;
