@@ -1155,7 +1155,7 @@ EventView::setupActions()
                 SLOT(slotFilterSelection()), actionCollection(),
                 "filter_selection");
 
-    new KAction(i18n("Select &All"), Qt::Key_A + CTRL, this,
+    new KAction(i18n("Select &All"), Qt::Key_A + Qt::CTRL, this,
                 SLOT(slotSelectAll()), actionCollection(),
                 "select_all");
 

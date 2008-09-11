@@ -406,7 +406,7 @@ TriggerSegmentManager::setupActions()
                             actionCollection(),
                             KStandardAction::stdName(KStandardAction::Redo));
 
-    new KAction(i18n("Pa&ste as New Triggered Segment"), CTRL + SHIFT + Qt::Key_V, this,
+    new KAction(i18n("Pa&ste as New Triggered Segment"), Qt::CTRL + Qt::SHIFT + Qt::Key_V, this,
                 SLOT(slotPasteAsNew()), actionCollection(),
                 "paste_to_trigger_segment");
 

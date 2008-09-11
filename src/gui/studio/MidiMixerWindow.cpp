@@ -75,7 +75,7 @@ MidiMixerWindow::MidiMixerWindow(QWidget *parent,
                 SIGNAL(play()), actionCollection(), "play");
     // Alternative shortcut for Play
     KShortcut playShortcut = play->shortcut();
-    playShortcut.append( KKey(Key_Return + CTRL) );
+    playShortcut.append( KKey(Key_Return + Qt::CTRL) );
     play->setShortcut(playShortcut);
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
@@ -115,7 +115,7 @@ MidiMixerWindow::MidiMixerWindow(QWidget *parent,
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-panic")));
-    new KAction(i18n("Panic"), icon, Qt::Key_P + CTRL + ALT, this,
+    new KAction(i18n("Panic"), icon, Qt::Key_P + Qt::CTRL + ALT, this,
                 SIGNAL(panic()), actionCollection(),
                 "panic");
 

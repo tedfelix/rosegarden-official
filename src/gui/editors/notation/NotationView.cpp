@@ -1817,15 +1817,15 @@ void NotationView::setupActions()
                 SLOT(slotEditSelectToEnd()), actionCollection(),
                 "select_to_end");
 
-    new KAction(i18n("Select Whole St&aff"), Qt::Key_A + CTRL, this,
+    new KAction(i18n("Select Whole St&aff"), Qt::Key_A + Qt::CTRL, this,
                 SLOT(slotEditSelectWholeStaff()), actionCollection(),
                 "select_whole_staff");
 
-    new KAction(i18n("C&ut and Close"), CTRL + SHIFT + Qt::Key_X, this,
+    new KAction(i18n("C&ut and Close"), Qt::CTRL + Qt::SHIFT + Qt::Key_X, this,
                 SLOT(slotEditCutAndClose()), actionCollection(),
                 "cut_and_close");
 
-    new KAction(i18n("Pa&ste..."), CTRL + SHIFT + Qt::Key_V, this,
+    new KAction(i18n("Pa&ste..."), Qt::CTRL + Qt::SHIFT + Qt::Key_V, this,
                 SLOT(slotEditGeneralPaste()), actionCollection(),
                 "general_paste");
 
@@ -1906,14 +1906,14 @@ void NotationView::setupActions()
            (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                                          ("group-simple-tuplet")));
 
-    new KAction(TupletCommand::getGlobalName(true), icon, Qt::Key_R + CTRL, this,
+    new KAction(TupletCommand::getGlobalName(true), icon, Qt::Key_R + Qt::CTRL, this,
                 SLOT(slotGroupSimpleTuplet()), actionCollection(), "simple_tuplet");
 
     icon = QIcon
            (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                                          ("group-tuplet")));
 
-    new KAction(TupletCommand::getGlobalName(false), icon, Qt::Key_T + CTRL, this,
+    new KAction(TupletCommand::getGlobalName(false), icon, Qt::Key_T + Qt::CTRL, this,
                 SLOT(slotGroupGeneralTuplet()), actionCollection(), "tuplet");
 
     icon = QIcon(NotePixmapFactory::toQPixmap
@@ -1938,11 +1938,11 @@ void NotationView::setupActions()
         setChecked(false);
 
     // setup Transforms menu
-    new KAction(NormalizeRestsCommand::getGlobalName(), Qt::Key_N + CTRL, this,
+    new KAction(NormalizeRestsCommand::getGlobalName(), Qt::Key_N + Qt::CTRL, this,
                 SLOT(slotTransformsNormalizeRests()), actionCollection(),
                 "normalize_rests");
 
-    new KAction(CollapseNotesCommand::getGlobalName(), Qt::Key_Equal + CTRL, this,
+    new KAction(CollapseNotesCommand::getGlobalName(), Qt::Key_Equal + Qt::CTRL, this,
                 SLOT(slotTransformsCollapseNotes()), actionCollection(),
                 "collapse_notes");
 
@@ -2042,27 +2042,27 @@ void NotationView::setupActions()
                 SLOT(slotStepForward()), actionCollection(),
                 "cursor_forward");
 
-    new KAction(i18n("Cursor Ba&ck Bar"), 0, Qt::Key_Left + CTRL, this,
+    new KAction(i18n("Cursor Ba&ck Bar"), 0, Qt::Key_Left + Qt::CTRL, this,
                 SLOT(slotJumpBackward()), actionCollection(),
                 "cursor_back_bar");
 
-    new KAction(i18n("Cursor For&ward Bar"), 0, Qt::Key_Right + CTRL, this,
+    new KAction(i18n("Cursor For&ward Bar"), 0, Qt::Key_Right + Qt::CTRL, this,
                 SLOT(slotJumpForward()), actionCollection(),
                 "cursor_forward_bar");
 
-    new KAction(i18n("Cursor Back and Se&lect"), SHIFT + Qt::Key_Left, this,
+    new KAction(i18n("Cursor Back and Se&lect"), Qt::SHIFT + Qt::Key_Left, this,
                 SLOT(slotExtendSelectionBackward()), actionCollection(),
                 "extend_selection_backward");
 
-    new KAction(i18n("Cursor Forward and &Select"), SHIFT + Qt::Key_Right, this,
+    new KAction(i18n("Cursor Forward and &Select"), Qt::SHIFT + Qt::Key_Right, this,
                 SLOT(slotExtendSelectionForward()), actionCollection(),
                 "extend_selection_forward");
 
-    new KAction(i18n("Cursor Back Bar and Select"), SHIFT + CTRL + Qt::Key_Left, this,
+    new KAction(i18n("Cursor Back Bar and Select"), Qt::SHIFT + Qt::CTRL + Qt::Key_Left, this,
                 SLOT(slotExtendSelectionBackwardBar()), actionCollection(),
                 "extend_selection_backward_bar");
 
-    new KAction(i18n("Cursor Forward Bar and Select"), SHIFT + CTRL + Qt::Key_Right, this,
+    new KAction(i18n("Cursor Forward Bar and Select"), Qt::SHIFT + Qt::CTRL + Qt::Key_Right, this,
                 SLOT(slotExtendSelectionForwardBar()), actionCollection(),
                 "extend_selection_forward_bar");
 
@@ -2074,19 +2074,19 @@ void NotationView::setupActions()
 
     new KAction(i18n("Cursor to St&art"), 0,
                 /* #1025717: conflicting meanings for ctrl+a - dupe with Select All
-                  Qt::Key_A + CTRL, */ this, 
+                  Qt::Key_A + Qt::CTRL, */ this, 
                 SLOT(slotJumpToStart()), actionCollection(),
                 "cursor_start");
 
-    new KAction(i18n("Cursor to &End"), 0, Qt::Key_E + CTRL, this,
+    new KAction(i18n("Cursor to &End"), 0, Qt::Key_E + Qt::CTRL, this,
                 SLOT(slotJumpToEnd()), actionCollection(),
                 "cursor_end");
 
-    new KAction(i18n("Cursor &Up Staff"), 0, Qt::Key_Up + SHIFT, this,
+    new KAction(i18n("Cursor &Up Staff"), 0, Qt::Key_Up + Qt::SHIFT, this,
                 SLOT(slotCurrentStaffUp()), actionCollection(),
                 "cursor_up_staff");
 
-    new KAction(i18n("Cursor &Down Staff"), 0, Qt::Key_Down + SHIFT, this,
+    new KAction(i18n("Cursor &Down Staff"), 0, Qt::Key_Down + Qt::SHIFT, this,
                 SLOT(slotCurrentStaffDown()), actionCollection(),
                 "cursor_down_staff");
 
@@ -2110,7 +2110,7 @@ void NotationView::setupActions()
                 SIGNAL(play()), actionCollection(), "play");
     // Alternative shortcut for Play
     KShortcut playShortcut = play->shortcut();
-    playShortcut.append( KKey(Key_Return + CTRL) );
+    playShortcut.append( KKey(Key_Return + Qt::CTRL) );
     play->setShortcut(playShortcut);
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
@@ -2162,14 +2162,14 @@ void NotationView::setupActions()
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-panic")));
-    new KAction(i18n("Panic"), icon, Qt::Key_P + CTRL + ALT, this,
+    new KAction(i18n("Panic"), icon, Qt::Key_P + Qt::CTRL + ALT, this,
                 SIGNAL(panic()), actionCollection(), "panic");
 
-    new KAction(i18n("Set Loop to Selection"), Qt::Key_Semicolon + CTRL, this,
+    new KAction(i18n("Set Loop to Selection"), Qt::Key_Semicolon + Qt::CTRL, this,
                 SLOT(slotPreviewSelection()), actionCollection(),
                 "preview_selection");
 
-    new KAction(i18n("Clear L&oop"), Qt::Key_Colon + CTRL, this,
+    new KAction(i18n("Clear L&oop"), Qt::Key_Colon + Qt::CTRL, this,
                 SLOT(slotClearLoop()), actionCollection(),
                 "clear_loop");
 
@@ -2180,17 +2180,17 @@ void NotationView::setupActions()
     //    QString pixmapDir =
     //	KGlobal::dirs()->findResource("appdata", "pixmaps/");
     //    icon = QIcon(Q3CanvasPixmap(pixmapDir + "/toolbar/eventfilter.xpm"));
-    new KAction(i18n("&Filter Selection"), "filter", Qt::Key_F + CTRL, this,
+    new KAction(i18n("&Filter Selection"), "filter", Qt::Key_F + Qt::CTRL, this,
                 SLOT(slotFilterSelection()), actionCollection(),
                 "filter_selection");
 
     new KAction(ChangeVelocityCommand::getGlobalName(10), 0,
-                Qt::Key_Up + SHIFT, this,
+                Qt::Key_Up + Qt::SHIFT, this,
                 SLOT(slotVelocityUp()), actionCollection(),
                 "velocity_up");
 
     new KAction(ChangeVelocityCommand::getGlobalName( -10), 0,
-                Qt::Key_Down + SHIFT, this,
+                Qt::Key_Down + Qt::SHIFT, this,
                 SLOT(slotVelocityDown()), actionCollection(),
                 "velocity_down");
 
@@ -2202,11 +2202,11 @@ void NotationView::setupActions()
                 SLOT(slotToggleDot()), actionCollection(),
                 "toggle_dot");
 
-    new KAction(i18n("Add Dot"), Qt::Key_Period + CTRL, this,
+    new KAction(i18n("Add Dot"), Qt::Key_Period + Qt::CTRL, this,
                 SLOT(slotAddDot()), actionCollection(),
                 "add_dot");
 
-    new KAction(i18n("Add Dot"), Qt::Key_Period + CTRL + ALT, this,
+    new KAction(i18n("Add Dot"), Qt::Key_Period + Qt::CTRL + ALT, this,
                 SLOT(slotAddDotNotationOnly()), actionCollection(),
                 "add_notation_dot");
 
@@ -3754,9 +3754,9 @@ void NotationView::initActionDataMaps()
                 }
 
                 int keycode = keys[type - Note::Shortest];
-                if (dots) // keycode += CTRL; -- used below for note change action
+                if (dots) // keycode += Qt::CTRL; -- used below for note change action
                     keycode = 0;
-                if (rest) // keycode += SHIFT; -- can't do shift+numbers
+                if (rest) // keycode += Qt::SHIFT; -- can't do shift+numbers
                     keycode = 0;
 
                 m_noteActionDataMap->insert
@@ -3786,7 +3786,7 @@ void NotationView::initActionDataMaps()
                         titleName.right(titleName.length() - 1);
 
             int keycode = keys[type - Note::Shortest];
-            keycode += CTRL;
+            keycode += Qt::CTRL;
             if (notationOnly)
                 keycode += ALT;
 

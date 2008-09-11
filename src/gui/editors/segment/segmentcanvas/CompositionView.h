@@ -167,7 +167,7 @@ public slots:
     void slotSelectSegments(const SegmentSelection &segment);
 
     // These are sent from the top level app when it gets key
-    // depresses relating to selection add (usually SHIFT) and
+    // depresses relating to selection add (usually Qt::SHIFT) and
     // selection copy (usually CONTROL)
     //
     void slotSetSelectAdd(bool value);

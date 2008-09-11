@@ -747,11 +747,11 @@ EditView::setupActions()
     //
     // Transforms
     //
-    new KAction(i18n("&Halve Durations"), Qt::Key_H + CTRL, this,
+    new KAction(i18n("&Halve Durations"), Qt::Key_H + Qt::CTRL, this,
                 SLOT(slotHalveDurations()), actionCollection(),
                 "halve_durations");
 
-    new KAction(i18n("&Double Durations"), Qt::Key_H + CTRL + SHIFT, this,
+    new KAction(i18n("&Double Durations"), Qt::Key_H + Qt::CTRL + Qt::SHIFT, this,
                 SLOT(slotDoubleDurations()), actionCollection(),
                 "double_durations");
 
@@ -765,7 +765,7 @@ EditView::setupActions()
                 "transpose_up");
 
     new KAction(TransposeCommand::getGlobalName(12), 0,
-                Qt::Key_Up + CTRL, this,
+                Qt::Key_Up + Qt::CTRL, this,
                 SLOT(slotTransposeUpOctave()), actionCollection(),
                 "transpose_up_octave");
 
@@ -775,7 +775,7 @@ EditView::setupActions()
                 "transpose_down");
 
     new KAction(TransposeCommand::getGlobalName( -12), 0,
-                Qt::Key_Down + CTRL, this,
+                Qt::Key_Down + Qt::CTRL, this,
                 SLOT(slotTransposeDownOctave()), actionCollection(),
                 "transpose_down_octave");
 
@@ -1121,7 +1121,7 @@ EditView::createInsertPitchActionMenu()
                 insertPitchAction =
                     new KAction
                     (flat.arg(notePitchNames[i]),
-                     CTRL + SHIFT + notePitchKeys[octave][i],
+                     Qt::CTRL + Qt::SHIFT + notePitchKeys[octave][i],
                      this, SLOT(slotInsertNoteFromAction()), actionCollection(),
                      QString("insert_%1_flat%2").arg(i).arg(octaveSuffix));
 
@@ -1144,7 +1144,7 @@ EditView::createInsertPitchActionMenu()
                 insertPitchAction =
                     new KAction
                     (sharp.arg(notePitchNames[i]),
-                     SHIFT + notePitchKeys[octave][i],
+                     Qt::SHIFT + notePitchKeys[octave][i],
                      this, SLOT(slotInsertNoteFromAction()), actionCollection(),
                      QString("insert_%1_sharp%2").arg(i).arg(octaveSuffix));
 

@@ -54,7 +54,7 @@ public:
 
     // These two alter the behaviour of the selection mode
     //
-    // - SegmentAdd (usually when SHIFT is held down) allows
+    // - SegmentAdd (usually when Qt::SHIFT is held down) allows
     //   multiple selections of Segments.
     //
     // - SegmentCopy (usually CONTROL) allows draw and drop

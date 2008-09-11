@@ -720,7 +720,7 @@ void MatrixView::setupActions()
                 SLOT(slotTransformsRepeatQuantize()), actionCollection(),
                 "repeat_quantize");
 
-    new KAction(CollapseNotesCommand::getGlobalName(), Qt::Key_Equal + CTRL, this,
+    new KAction(CollapseNotesCommand::getGlobalName(), Qt::Key_Equal + Qt::CTRL, this,
                 SLOT(slotTransformsCollapseNotes()), actionCollection(),
                 "collapse_notes");
 
@@ -729,12 +729,12 @@ void MatrixView::setupActions()
                 "legatoize");
 
     new KAction(ChangeVelocityCommand::getGlobalName(10), 0,
-                Qt::Key_Up + SHIFT, this,
+                Qt::Key_Up + Qt::SHIFT, this,
                 SLOT(slotVelocityUp()), actionCollection(),
                 "velocity_up");
 
     new KAction(ChangeVelocityCommand::getGlobalName( -10), 0,
-                Qt::Key_Down + SHIFT, this,
+                Qt::Key_Down + Qt::SHIFT, this,
                 SLOT(slotVelocityDown()), actionCollection(),
                 "velocity_down");
 
@@ -754,7 +754,7 @@ void MatrixView::setupActions()
                 SLOT(slotRemoveTriggers()), actionCollection(),
                 "remove_trigger");
 
-    new KAction(i18n("Select &All"), Qt::Key_A + CTRL, this,
+    new KAction(i18n("Select &All"), Qt::Key_A + Qt::CTRL, this,
                 SLOT(slotSelectAll()), actionCollection(),
                 "select_all");
 
@@ -770,37 +770,37 @@ void MatrixView::setupActions()
                 SLOT(slotStepForward()), actionCollection(),
                 "cursor_forward");
 
-    new KAction(i18n("Cursor Ba&ck Bar"), 0, Qt::Key_Left + CTRL, this,
+    new KAction(i18n("Cursor Ba&ck Bar"), 0, Qt::Key_Left + Qt::CTRL, this,
                 SLOT(slotJumpBackward()), actionCollection(),
                 "cursor_back_bar");
 
-    new KAction(i18n("Cursor For&ward Bar"), 0, Qt::Key_Right + CTRL, this,
+    new KAction(i18n("Cursor For&ward Bar"), 0, Qt::Key_Right + Qt::CTRL, this,
                 SLOT(slotJumpForward()), actionCollection(),
                 "cursor_forward_bar");
 
-    new KAction(i18n("Cursor Back and Se&lect"), SHIFT + Qt::Key_Left, this,
+    new KAction(i18n("Cursor Back and Se&lect"), Qt::SHIFT + Qt::Key_Left, this,
                 SLOT(slotExtendSelectionBackward()), actionCollection(),
                 "extend_selection_backward");
 
-    new KAction(i18n("Cursor Forward and &Select"), SHIFT + Qt::Key_Right, this,
+    new KAction(i18n("Cursor Forward and &Select"), Qt::SHIFT + Qt::Key_Right, this,
                 SLOT(slotExtendSelectionForward()), actionCollection(),
                 "extend_selection_forward");
 
-    new KAction(i18n("Cursor Back Bar and Select"), SHIFT + CTRL + Qt::Key_Left, this,
+    new KAction(i18n("Cursor Back Bar and Select"), Qt::SHIFT + Qt::CTRL + Qt::Key_Left, this,
                 SLOT(slotExtendSelectionBackwardBar()), actionCollection(),
                 "extend_selection_backward_bar");
 
-    new KAction(i18n("Cursor Forward Bar and Select"), SHIFT + CTRL + Qt::Key_Right, this,
+    new KAction(i18n("Cursor Forward Bar and Select"), Qt::SHIFT + Qt::CTRL + Qt::Key_Right, this,
                 SLOT(slotExtendSelectionForwardBar()), actionCollection(),
                 "extend_selection_forward_bar");
 
     new KAction(i18n("Cursor to St&art"), 0,
                 /* #1025717: conflicting meanings for ctrl+a - dupe with Select All
-                  Qt::Key_A + CTRL, */ this, 
+                  Qt::Key_A + Qt::CTRL, */ this, 
                 SLOT(slotJumpToStart()), actionCollection(),
                 "cursor_start");
 
-    new KAction(i18n("Cursor to &End"), 0, Qt::Key_E + CTRL, this,
+    new KAction(i18n("Cursor to &End"), 0, Qt::Key_E + Qt::CTRL, this,
                 SLOT(slotJumpToEnd()), actionCollection(),
                 "cursor_end");
 
@@ -816,7 +816,7 @@ void MatrixView::setupActions()
                 SIGNAL(play()), actionCollection(), "play");
     // Alternative shortcut for Play
     KShortcut playShortcut = play->shortcut();
-    playShortcut.append( KKey(Key_Return + CTRL) );
+    playShortcut.append( KKey(Key_Return + Qt::CTRL) );
     play->setShortcut(playShortcut);
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
@@ -868,14 +868,14 @@ void MatrixView::setupActions()
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-panic")));
-    new KAction(i18n("Panic"), icon, Qt::Key_P + CTRL + ALT, this,
+    new KAction(i18n("Panic"), icon, Qt::Key_P + Qt::CTRL + ALT, this,
                 SIGNAL(panic()), actionCollection(), "panic");
 
-    new KAction(i18n("Set Loop to Selection"), Qt::Key_Semicolon + CTRL, this,
+    new KAction(i18n("Set Loop to Selection"), Qt::Key_Semicolon + Qt::CTRL, this,
                 SLOT(slotPreviewSelection()), actionCollection(),
                 "preview_selection");
 
-    new KAction(i18n("Clear L&oop"), Qt::Key_Colon + CTRL, this,
+    new KAction(i18n("Clear L&oop"), Qt::Key_Colon + Qt::CTRL, this,
                 SLOT(slotClearLoop()), actionCollection(),
                 "clear_loop");
 
@@ -884,7 +884,7 @@ void MatrixView::setupActions()
                 "clear_selection");
 
     //    icon = QIcon(Q3CanvasPixmap(pixmapDir + "/toolbar/eventfilter.xpm"));
-    new KAction(i18n("&Filter Selection"), "filter", Qt::Key_F + CTRL, this,
+    new KAction(i18n("&Filter Selection"), "filter", Qt::Key_F + Qt::CTRL, this,
                 SLOT(slotFilterSelection()), actionCollection(),
                 "filter_selection");
 
