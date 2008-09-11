@@ -583,28 +583,28 @@ TempoView::setupActions()
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
     QIcon icon(QPixmap(pixmapDir + "/toolbar/event-insert-tempo.png"));
 
-    new KAction(AddTempoChangeCommand::getGlobalName(), icon, Key_I, this,
+    new KAction(AddTempoChangeCommand::getGlobalName(), icon, Qt::Key_I, this,
                 SLOT(slotEditInsertTempo()), actionCollection(),
                 "insert_tempo");
 
     Q3CanvasPixmap pixmap(pixmapDir + "/toolbar/event-insert-timesig.png");
     icon = QIcon(pixmap);
 
-    new KAction(AddTimeSignatureCommand::getGlobalName(), icon, Key_G, this,
+    new KAction(AddTimeSignatureCommand::getGlobalName(), icon, Qt::Key_G, this,
                 SLOT(slotEditInsertTimeSignature()), actionCollection(),
                 "insert_timesig");
 
     pixmap.load(pixmapDir + "/toolbar/event-delete.png");
     icon = QIcon(pixmap);
 
-    new KAction(i18n("&Delete"), icon, Key_Delete, this,
+    new KAction(i18n("&Delete"), icon, Qt::Key_Delete, this,
                 SLOT(slotEditDelete()), actionCollection(),
                 "delete");
 
     pixmap.load(pixmapDir + "/toolbar/event-edit.png");
     icon = QIcon(pixmap);
 
-    new KAction(i18n("&Edit Item"), icon, Key_E, this,
+    new KAction(i18n("&Edit Item"), icon, Qt::Key_E, this,
                 SLOT(slotEdit()), actionCollection(),
                 "edit");
 
@@ -612,7 +612,7 @@ TempoView::setupActions()
                 SLOT(slotSelectAll()), actionCollection(),
                 "select_all");
 
-    new KAction(i18n("Clear Selection"), Key_Escape, this,
+    new KAction(i18n("Clear Selection"), Qt::Key_Escape, this,
                 SLOT(slotClearSelection()), actionCollection(),
                 "clear_selection");
 

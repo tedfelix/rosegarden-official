@@ -671,35 +671,35 @@ void MatrixView::setupActions()
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
     QIcon icon(QPixmap(pixmapDir + "/toolbar/select.xpm"));
 
-    toolAction = new KRadioAction(i18n("&Select and Edit"), icon, Key_F2,
+    toolAction = new KRadioAction(i18n("&Select and Edit"), icon, Qt::Key_F2,
                                   this, SLOT(slotSelectSelected()),
                                   actionCollection(), "select");
     toolAction->setExclusiveGroup("tools");
 
-    toolAction = new KRadioAction(i18n("&Draw"), "pencil", Key_F3,
+    toolAction = new KRadioAction(i18n("&Draw"), "pencil", Qt::Key_F3,
                                   this, SLOT(slotPaintSelected()),
                                   actionCollection(), "draw");
     toolAction->setExclusiveGroup("tools");
 
-    toolAction = new KRadioAction(i18n("&Erase"), "eraser", Key_F4,
+    toolAction = new KRadioAction(i18n("&Erase"), "eraser", Qt::Key_F4,
                                   this, SLOT(slotEraseSelected()),
                                   actionCollection(), "erase");
     toolAction->setExclusiveGroup("tools");
 
-    toolAction = new KRadioAction(i18n("&Move"), "move", Key_F5,
+    toolAction = new KRadioAction(i18n("&Move"), "move", Qt::Key_F5,
                                   this, SLOT(slotMoveSelected()),
                                   actionCollection(), "move");
     toolAction->setExclusiveGroup("tools");
 
     Q3CanvasPixmap pixmap(pixmapDir + "/toolbar/resize.xpm");
     icon = QIcon(pixmap);
-    toolAction = new KRadioAction(i18n("Resi&ze"), icon, Key_F6,
+    toolAction = new KRadioAction(i18n("Resi&ze"), icon, Qt::Key_F6,
                                   this, SLOT(slotResizeSelected()),
                                   actionCollection(), "resize");
     toolAction->setExclusiveGroup("tools");
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("chord")));
-    (new KToggleAction(i18n("C&hord Insert Mode"), icon, Key_H,
+    (new KToggleAction(i18n("C&hord Insert Mode"), icon, Qt::Key_H,
                        this, SLOT(slotUpdateInsertModeStatus()),
                        actionCollection(), "chord_mode"))->
     setChecked(false);
@@ -712,29 +712,29 @@ void MatrixView::setupActions()
 
     pixmap.load(pixmapDir + "/toolbar/quantize.png");
     icon = QIcon(pixmap);
-    new KAction(EventQuantizeCommand::getGlobalName(), icon, Key_Equal, this,
+    new KAction(EventQuantizeCommand::getGlobalName(), icon, Qt::Key_Equal, this,
                 SLOT(slotTransformsQuantize()), actionCollection(),
                 "quantize");
 
-    new KAction(i18n("Repeat Last Quantize"), Key_Plus, this,
+    new KAction(i18n("Repeat Last Quantize"), Qt::Key_Plus, this,
                 SLOT(slotTransformsRepeatQuantize()), actionCollection(),
                 "repeat_quantize");
 
-    new KAction(CollapseNotesCommand::getGlobalName(), Key_Equal + CTRL, this,
+    new KAction(CollapseNotesCommand::getGlobalName(), Qt::Key_Equal + CTRL, this,
                 SLOT(slotTransformsCollapseNotes()), actionCollection(),
                 "collapse_notes");
 
-    new KAction(i18n("&Legato"), Key_Minus, this,
+    new KAction(i18n("&Legato"), Qt::Key_Minus, this,
                 SLOT(slotTransformsLegato()), actionCollection(),
                 "legatoize");
 
     new KAction(ChangeVelocityCommand::getGlobalName(10), 0,
-                Key_Up + SHIFT, this,
+                Qt::Key_Up + SHIFT, this,
                 SLOT(slotVelocityUp()), actionCollection(),
                 "velocity_up");
 
     new KAction(ChangeVelocityCommand::getGlobalName( -10), 0,
-                Key_Down + SHIFT, this,
+                Qt::Key_Down + SHIFT, this,
                 SLOT(slotVelocityDown()), actionCollection(),
                 "velocity_down");
 
@@ -754,53 +754,53 @@ void MatrixView::setupActions()
                 SLOT(slotRemoveTriggers()), actionCollection(),
                 "remove_trigger");
 
-    new KAction(i18n("Select &All"), Key_A + CTRL, this,
+    new KAction(i18n("Select &All"), Qt::Key_A + CTRL, this,
                 SLOT(slotSelectAll()), actionCollection(),
                 "select_all");
 
-    new KAction(i18n("&Delete"), Key_Delete, this,
+    new KAction(i18n("&Delete"), Qt::Key_Delete, this,
                 SLOT(slotEditDelete()), actionCollection(),
                 "delete");
 
-    new KAction(i18n("Cursor &Back"), 0, Key_Left, this,
+    new KAction(i18n("Cursor &Back"), 0, Qt::Key_Left, this,
                 SLOT(slotStepBackward()), actionCollection(),
                 "cursor_back");
 
-    new KAction(i18n("Cursor &Forward"), 0, Key_Right, this,
+    new KAction(i18n("Cursor &Forward"), 0, Qt::Key_Right, this,
                 SLOT(slotStepForward()), actionCollection(),
                 "cursor_forward");
 
-    new KAction(i18n("Cursor Ba&ck Bar"), 0, Key_Left + CTRL, this,
+    new KAction(i18n("Cursor Ba&ck Bar"), 0, Qt::Key_Left + CTRL, this,
                 SLOT(slotJumpBackward()), actionCollection(),
                 "cursor_back_bar");
 
-    new KAction(i18n("Cursor For&ward Bar"), 0, Key_Right + CTRL, this,
+    new KAction(i18n("Cursor For&ward Bar"), 0, Qt::Key_Right + CTRL, this,
                 SLOT(slotJumpForward()), actionCollection(),
                 "cursor_forward_bar");
 
-    new KAction(i18n("Cursor Back and Se&lect"), SHIFT + Key_Left, this,
+    new KAction(i18n("Cursor Back and Se&lect"), SHIFT + Qt::Key_Left, this,
                 SLOT(slotExtendSelectionBackward()), actionCollection(),
                 "extend_selection_backward");
 
-    new KAction(i18n("Cursor Forward and &Select"), SHIFT + Key_Right, this,
+    new KAction(i18n("Cursor Forward and &Select"), SHIFT + Qt::Key_Right, this,
                 SLOT(slotExtendSelectionForward()), actionCollection(),
                 "extend_selection_forward");
 
-    new KAction(i18n("Cursor Back Bar and Select"), SHIFT + CTRL + Key_Left, this,
+    new KAction(i18n("Cursor Back Bar and Select"), SHIFT + CTRL + Qt::Key_Left, this,
                 SLOT(slotExtendSelectionBackwardBar()), actionCollection(),
                 "extend_selection_backward_bar");
 
-    new KAction(i18n("Cursor Forward Bar and Select"), SHIFT + CTRL + Key_Right, this,
+    new KAction(i18n("Cursor Forward Bar and Select"), SHIFT + CTRL + Qt::Key_Right, this,
                 SLOT(slotExtendSelectionForwardBar()), actionCollection(),
                 "extend_selection_forward_bar");
 
     new KAction(i18n("Cursor to St&art"), 0,
                 /* #1025717: conflicting meanings for ctrl+a - dupe with Select All
-                  Key_A + CTRL, */ this, 
+                  Qt::Key_A + CTRL, */ this, 
                 SLOT(slotJumpToStart()), actionCollection(),
                 "cursor_start");
 
-    new KAction(i18n("Cursor to &End"), 0, Key_E + CTRL, this,
+    new KAction(i18n("Cursor to &End"), 0, Qt::Key_E + CTRL, this,
                 SLOT(slotJumpToEnd()), actionCollection(),
                 "cursor_end");
 
@@ -812,7 +812,7 @@ void MatrixView::setupActions()
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-play")));
-    KAction *play = new KAction(i18n("&Play"), icon, Key_Enter, this,
+    KAction *play = new KAction(i18n("&Play"), icon, Qt::Key_Enter, this,
                 SIGNAL(play()), actionCollection(), "play");
     // Alternative shortcut for Play
     KShortcut playShortcut = play->shortcut();
@@ -821,18 +821,18 @@ void MatrixView::setupActions()
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-stop")));
-    new KAction(i18n("&Stop"), icon, Key_Insert, this,
+    new KAction(i18n("&Stop"), icon, Qt::Key_Insert, this,
                 SIGNAL(stop()), actionCollection(), "stop");
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-rewind")));
-    new KAction(i18n("Re&wind"), icon, Key_End, this,
+    new KAction(i18n("Re&wind"), icon, Qt::Key_End, this,
                 SIGNAL(rewindPlayback()), actionCollection(),
                 "playback_pointer_back_bar");
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-ffwd")));
-    new KAction(i18n("&Fast Forward"), icon, Key_PageDown, this,
+    new KAction(i18n("&Fast Forward"), icon, Qt::Key_PageDown, this,
                 SIGNAL(fastForwardPlayback()), actionCollection(),
                 "playback_pointer_forward_bar");
 
@@ -862,29 +862,29 @@ void MatrixView::setupActions()
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-tracking")));
-    (new KToggleAction(i18n("Scro&ll to Follow Playback"), icon, Key_Pause, this,
+    (new KToggleAction(i18n("Scro&ll to Follow Playback"), icon, Qt::Key_Pause, this,
                        SLOT(slotToggleTracking()), actionCollection(),
                        "toggle_tracking"))->setChecked(m_playTracking);
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-panic")));
-    new KAction(i18n("Panic"), icon, Key_P + CTRL + ALT, this,
+    new KAction(i18n("Panic"), icon, Qt::Key_P + CTRL + ALT, this,
                 SIGNAL(panic()), actionCollection(), "panic");
 
-    new KAction(i18n("Set Loop to Selection"), Key_Semicolon + CTRL, this,
+    new KAction(i18n("Set Loop to Selection"), Qt::Key_Semicolon + CTRL, this,
                 SLOT(slotPreviewSelection()), actionCollection(),
                 "preview_selection");
 
-    new KAction(i18n("Clear L&oop"), Key_Colon + CTRL, this,
+    new KAction(i18n("Clear L&oop"), Qt::Key_Colon + CTRL, this,
                 SLOT(slotClearLoop()), actionCollection(),
                 "clear_loop");
 
-    new KAction(i18n("Clear Selection"), Key_Escape, this,
+    new KAction(i18n("Clear Selection"), Qt::Key_Escape, this,
                 SLOT(slotClearSelection()), actionCollection(),
                 "clear_selection");
 
     //    icon = QIcon(Q3CanvasPixmap(pixmapDir + "/toolbar/eventfilter.xpm"));
-    new KAction(i18n("&Filter Selection"), "filter", Key_F + CTRL, this,
+    new KAction(i18n("&Filter Selection"), "filter", Qt::Key_F + CTRL, this,
                 SLOT(slotFilterSelection()), actionCollection(),
                 "filter_selection");
 
@@ -915,11 +915,11 @@ void MatrixView::setupActions()
                         actionCollection(), "snap_none");
         } else if (d == SnapGrid::SnapToUnit) {
         } else if (d == SnapGrid::SnapToBeat) {
-            new KAction(i18n("Snap to Bea&t"), Key_1, this,
+            new KAction(i18n("Snap to Bea&t"), Qt::Key_1, this,
                         SLOT(slotSetSnapFromAction()),
                         actionCollection(), "snap_beat");
         } else if (d == SnapGrid::SnapToBar) {
-            new KAction(i18n("Snap to &Bar"), Key_5, this,
+            new KAction(i18n("Snap to &Bar"), Qt::Key_5, this,
                         SLOT(slotSetSnapFromAction()),
                         actionCollection(), "snap_bar");
         } else {
@@ -930,12 +930,12 @@ void MatrixView::setupActions()
                 (NotePixmapFactory::makeNoteMenuPixmap(d, err));
 
             KShortcut cut = 0;
-            if (d == crotchetDuration / 16) cut = Key_0;
-            else if (d == crotchetDuration / 8) cut = Key_3;
-            else if (d == crotchetDuration / 4) cut = Key_6;
-            else if (d == crotchetDuration / 2) cut = Key_8;
-            else if (d == crotchetDuration) cut = Key_4;
-            else if (d == crotchetDuration * 2) cut = Key_2;
+            if (d == crotchetDuration / 16) cut = Qt::Key_0;
+            else if (d == crotchetDuration / 8) cut = Qt::Key_3;
+            else if (d == crotchetDuration / 4) cut = Qt::Key_6;
+            else if (d == crotchetDuration / 2) cut = Qt::Key_8;
+            else if (d == crotchetDuration) cut = Qt::Key_4;
+            else if (d == crotchetDuration * 2) cut = Qt::Key_2;
 
             QString actionName = QString("snap_%1").arg(int((crotchetDuration * 4) / d));
             if (d == (crotchetDuration * 3) / 4) actionName = "snap_dotted_8";

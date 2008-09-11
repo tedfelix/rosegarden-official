@@ -96,7 +96,7 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
 
     QIcon icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                              ("transport-play")));
-    KAction *play = new KAction(i18n("&Play"), icon, Key_Enter, this,
+    KAction *play = new KAction(i18n("&Play"), icon, Qt::Key_Enter, this,
                 SIGNAL(play()), actionCollection(), "play");
     // Alternative shortcut for Play
     KShortcut playShortcut = play->shortcut();
@@ -105,18 +105,18 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-stop")));
-    new KAction(i18n("&Stop"), icon, Key_Insert, this,
+    new KAction(i18n("&Stop"), icon, Qt::Key_Insert, this,
                 SIGNAL(stop()), actionCollection(), "stop");
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-rewind")));
-    new KAction(i18n("Re&wind"), icon, Key_End, this,
+    new KAction(i18n("Re&wind"), icon, Qt::Key_End, this,
                 SIGNAL(rewindPlayback()), actionCollection(),
                 "playback_pointer_back_bar");
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-ffwd")));
-    new KAction(i18n("&Fast Forward"), icon, Key_PageDown, this,
+    new KAction(i18n("&Fast Forward"), icon, Qt::Key_PageDown, this,
                 SIGNAL(fastForwardPlayback()), actionCollection(),
                 "playback_pointer_forward_bar");
 
@@ -140,7 +140,7 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-panic")));
-    new KAction(i18n("Panic"), icon, Key_P + CTRL + ALT, this,
+    new KAction(i18n("Panic"), icon, Qt::Key_P + CTRL + ALT, this,
                 SIGNAL(panic()), actionCollection(),
                 "panic");
 

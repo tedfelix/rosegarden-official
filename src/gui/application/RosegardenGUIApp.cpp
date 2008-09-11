@@ -741,7 +741,7 @@ void RosegardenGUIApp::setupActions()
     m_viewStatusBar = KStandardAction::showStatusbar(this, SLOT(slotToggleStatusBar()),
                       actionCollection(), "show_status_bar");
 
-    m_viewTransport = new KToggleAction(i18n("Show Tra&nsport"), Key_T, this,
+    m_viewTransport = new KToggleAction(i18n("Show Tra&nsport"), Qt::Key_T, this,
                                         SLOT(slotToggleTransport()),
                                         actionCollection(),
                                         "show_transport");
@@ -772,7 +772,7 @@ void RosegardenGUIApp::setupActions()
                                        actionCollection(),
                                        "show_previews");
 
-    new KAction(i18n("Show Special &Parameters"), Key_P, this,
+    new KAction(i18n("Show Special &Parameters"), Qt::Key_P, this,
                 SLOT(slotDockParametersBack()),
                 actionCollection(),
                 "show_inst_segment_parameters");
@@ -806,36 +806,36 @@ void RosegardenGUIApp::setupActions()
     QIcon icon = QIcon(pixmap);
 
     // TODO : add some shortcuts here
-    action = new KRadioAction(i18n("&Select and Edit"), icon, Key_F2,
+    action = new KRadioAction(i18n("&Select and Edit"), icon, Qt::Key_F2,
                               this, SLOT(slotPointerSelected()),
                               actionCollection(), "select");
     action->setExclusiveGroup("segmenttools");
 
-    action = new KRadioAction(i18n("&Draw"), "pencil", Key_F3,
+    action = new KRadioAction(i18n("&Draw"), "pencil", Qt::Key_F3,
                               this, SLOT(slotDrawSelected()),
                               actionCollection(), "draw");
     action->setExclusiveGroup("segmenttools");
 
-    action = new KRadioAction(i18n("&Erase"), "eraser", Key_F4,
+    action = new KRadioAction(i18n("&Erase"), "eraser", Qt::Key_F4,
                               this, SLOT(slotEraseSelected()),
                               actionCollection(), "erase");
     action->setExclusiveGroup("segmenttools");
 
-    action = new KRadioAction(i18n("&Move"), "move", Key_F5,
+    action = new KRadioAction(i18n("&Move"), "move", Qt::Key_F5,
                               this, SLOT(slotMoveSelected()),
                               actionCollection(), "move");
     action->setExclusiveGroup("segmenttools");
 
     pixmap.load(pixmapDir + "/toolbar/resize.xpm");
     icon = QIcon(pixmap);
-    action = new KRadioAction(i18n("&Resize"), icon, Key_F6,
+    action = new KRadioAction(i18n("&Resize"), icon, Qt::Key_F6,
                               this, SLOT(slotResizeSelected()),
                               actionCollection(), "resize");
     action->setExclusiveGroup("segmenttools");
 
     pixmap.load(pixmapDir + "/toolbar/split.xpm");
     icon = QIcon(pixmap);
-    action = new KRadioAction(i18n("&Split"), icon, Key_F7,
+    action = new KRadioAction(i18n("&Split"), icon, Qt::Key_F7,
                               this, SLOT(slotSplitSelected()),
                               actionCollection(), "split");
     action->setExclusiveGroup("segmenttools");
@@ -865,31 +865,31 @@ void RosegardenGUIApp::setupActions()
     //
     // Edit menu
     //
-    new KAction(i18n("Cut Range"), Key_X + CTRL + SHIFT, this,
+    new KAction(i18n("Cut Range"), Qt::Key_X + CTRL + SHIFT, this,
                 SLOT(slotCutRange()), actionCollection(),
                 "cut_range");
 
-    new KAction(i18n("Copy Range"), Key_C + CTRL + SHIFT, this,
+    new KAction(i18n("Copy Range"), Qt::Key_C + CTRL + SHIFT, this,
                 SLOT(slotCopyRange()), actionCollection(),
                 "copy_range");
 
-    new KAction(i18n("Paste Range"), Key_V + CTRL + SHIFT, this,
+    new KAction(i18n("Paste Range"), Qt::Key_V + CTRL + SHIFT, this,
                 SLOT(slotPasteRange()), actionCollection(),
                 "paste_range");
 /*
-    new KAction(i18n("Delete Range"), Key_Delete + SHIFT, this,
+    new KAction(i18n("Delete Range"), Qt::Key_Delete + SHIFT, this,
                 SLOT(slotDeleteRange()), actionCollection(),
                 "delete_range");
 */
-    new KAction(i18n("Insert Range..."), Key_Insert + SHIFT, this,
+    new KAction(i18n("Insert Range..."), Qt::Key_Insert + SHIFT, this,
                 SLOT(slotInsertRange()), actionCollection(),
                 "insert_range");
 
-    new KAction(i18n("De&lete"), Key_Delete, this,
+    new KAction(i18n("De&lete"), Qt::Key_Delete, this,
                 SLOT(slotDeleteSelectedSegments()), actionCollection(),
                 "delete");
 
-    new KAction(i18n("Select &All Segments"), Key_A + CTRL, this,
+    new KAction(i18n("Select &All Segments"), Qt::Key_A + CTRL, this,
                 SLOT(slotSelectAll()), actionCollection(),
                 "select_all");
 
@@ -905,7 +905,7 @@ void RosegardenGUIApp::setupActions()
                 this, SLOT(slotChangeCompositionLength()),
                 actionCollection(), "change_composition_length");
 
-    new KAction(i18n("Edit Mar&kers..."), Key_K + CTRL, this,
+    new KAction(i18n("Edit Mar&kers..."), Qt::Key_K + CTRL, this,
                 SLOT(slotEditMarkers()),
                 actionCollection(), "edit_markers");
 
@@ -917,37 +917,37 @@ void RosegardenGUIApp::setupActions()
     //
     // Segments menu
     //
-    new KAction(i18n("Open in &Default Editor"), Key_Return, this,
+    new KAction(i18n("Open in &Default Editor"), Qt::Key_Return, this,
                 SLOT(slotEdit()), actionCollection(),
                 "edit_default");
 
     pixmap.load(pixmapDir + "/toolbar/matrix.png");
     icon = QIcon(pixmap);
-    new KAction(i18n("Open in Matri&x Editor"), icon, Key_M, this,
+    new KAction(i18n("Open in Matri&x Editor"), icon, Qt::Key_M, this,
                 SLOT(slotEditInMatrix()), actionCollection(),
                 "edit_matrix");
 
     pixmap.load(pixmapDir + "/toolbar/matrix-percussion.png");
     icon = QIcon(pixmap);
-    new KAction(i18n("Open in &Percussion Matrix Editor"), icon, Key_D, this,
+    new KAction(i18n("Open in &Percussion Matrix Editor"), icon, Qt::Key_D, this,
                 SLOT(slotEditInPercussionMatrix()), actionCollection(),
                 "edit_percussion_matrix");
 
     pixmap.load(pixmapDir + "/toolbar/notation.png");
     icon = QIcon(pixmap);
-    new KAction(i18n("Open in &Notation Editor"), icon, Key_N, this,
+    new KAction(i18n("Open in &Notation Editor"), icon, Qt::Key_N, this,
                 SLOT(slotEditAsNotation()), actionCollection(),
                 "edit_notation");
 
     pixmap.load(pixmapDir + "/toolbar/eventlist.png");
     icon = QIcon(pixmap);
-    new KAction(i18n("Open in &Event List Editor"), icon, Key_E, this,
+    new KAction(i18n("Open in &Event List Editor"), icon, Qt::Key_E, this,
                 SLOT(slotEditInEventList()), actionCollection(),
                 "edit_event_list");
 
     pixmap.load(pixmapDir + "/toolbar/quantize.png");
     icon = QIcon(pixmap);
-    new KAction(i18n("&Quantize..."), icon, Key_Equal, this,
+    new KAction(i18n("&Quantize..."), icon, Qt::Key_Equal, this,
                 SLOT(slotQuantizeSelection()), actionCollection(),
                 "quantize_selection");
 
@@ -961,7 +961,7 @@ void RosegardenGUIApp::setupActions()
                 this, SLOT(slotTransposeSegments()),
                 actionCollection(), "transpose");
 
-    new KAction(i18n("Repeat Last Quantize"), Key_Plus, this,
+    new KAction(i18n("Repeat Last Quantize"), Qt::Key_Plus, this,
                 SLOT(slotRepeatQuantizeSelection()), actionCollection(),
                 "repeat_quantize");
 
@@ -985,11 +985,11 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotSplitSelectionAtTime()), actionCollection(),
                 "split_at_time");
 
-    new KAction(i18n("Jog &Left"), Key_Left + ALT, this,
+    new KAction(i18n("Jog &Left"), Qt::Key_Left + ALT, this,
                 SLOT(slotJogLeft()), actionCollection(),
                 "jog_left");
 
-    new KAction(i18n("Jog &Right"), Key_Right + ALT, this,
+    new KAction(i18n("Jog &Right"), Qt::Key_Right + ALT, this,
                 SLOT(slotJogRight()), actionCollection(),
                 "jog_right");
 
@@ -1002,7 +1002,7 @@ void RosegardenGUIApp::setupActions()
                 "set_segment_duration");
 
     new KAction(SegmentJoinCommand::getGlobalName(),
-                Key_J + CTRL,
+                Qt::Key_J + CTRL,
                 this, SLOT(slotJoinSegments()),
                 actionCollection(), "join_segments");
 
@@ -1026,7 +1026,7 @@ void RosegardenGUIApp::setupActions()
     pixmap.load(pixmapDir + "/toolbar/manage-audio-segments.xpm");
     icon = QIcon(pixmap);
     new KAction(i18n("Manage A&udio Files"), icon,
-                Key_U + CTRL,
+                Qt::Key_U + CTRL,
                 this, SLOT(slotAudioManager()),
                 actionCollection(), "audio_manager");
 
@@ -1039,7 +1039,7 @@ void RosegardenGUIApp::setupActions()
     //
     pixmap.load(pixmapDir + "/toolbar/add_tracks.png");
     icon = QIcon(pixmap);
-    new KAction(i18n("Add &Track"), icon, CTRL + Key_T,
+    new KAction(i18n("Add &Track"), icon, CTRL + Qt::Key_T,
                 this, SLOT(slotAddTrack()),
                 actionCollection(), "add_track");
 
@@ -1049,39 +1049,39 @@ void RosegardenGUIApp::setupActions()
 
     pixmap.load(pixmapDir + "/toolbar/delete_track.png");
     icon = QIcon(pixmap);
-    new KAction(i18n("D&elete Track"), icon, CTRL + Key_D,
+    new KAction(i18n("D&elete Track"), icon, CTRL + Qt::Key_D,
                 this, SLOT(slotDeleteTrack()),
                 actionCollection(), "delete_track");
 
     pixmap.load(pixmapDir + "/toolbar/move_track_down.png");
     icon = QIcon(pixmap);
-    new KAction(i18n("Move Track &Down"), icon, SHIFT + Key_Down,
+    new KAction(i18n("Move Track &Down"), icon, SHIFT + Qt::Key_Down,
                 this, SLOT(slotMoveTrackDown()),
                 actionCollection(), "move_track_down");
 
     pixmap.load(pixmapDir + "/toolbar/move_track_up.png");
     icon = QIcon(pixmap);
-    new KAction(i18n("Move Track &Up"), icon, SHIFT + Key_Up,
+    new KAction(i18n("Move Track &Up"), icon, SHIFT + Qt::Key_Up,
                 this, SLOT(slotMoveTrackUp()),
                 actionCollection(), "move_track_up");
 
     new KAction(i18n("Select &Next Track"),
-                Key_Down,
+                Qt::Key_Down,
                 this, SLOT(slotTrackDown()),
                 actionCollection(), "select_next_track");
 
     new KAction(i18n("Select &Previous Track"),
-                Key_Up,
+                Qt::Key_Up,
                 this, SLOT(slotTrackUp()),
                 actionCollection(), "select_previous_track");
 
     new KAction(i18n("Mute or Unmute Track"),
-                Key_U,
+                Qt::Key_U,
                 this, SLOT(slotToggleMutedCurrentTrack()),
                 actionCollection(), "toggle_mute_track");
 
     new KAction(i18n("Arm or Un-arm Track for Record"),
-                Key_R,
+                Qt::Key_R,
                 this, SLOT(slotToggleRecordCurrentTrack()),
                 actionCollection(), "toggle_arm_track");
 
@@ -1158,11 +1158,11 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotResetMidiNetwork()),
                 actionCollection(), "reset_midi_network");
 
-    m_setQuickMarkerAction = new KAction(i18n("Set Quick Marker at Playback Position"), 0, CTRL + Key_1, this,
+    m_setQuickMarkerAction = new KAction(i18n("Set Quick Marker at Playback Position"), 0, CTRL + Qt::Key_1, this,
                 SLOT(slotSetQuickMarker()), actionCollection(),
                 "set_quick_marker");
 
-    m_jumpToQuickMarkerAction = new KAction(i18n("Jump to Quick Marker"), 0, Key_1, this,
+    m_jumpToQuickMarkerAction = new KAction(i18n("Jump to Quick Marker"), 0, Qt::Key_1, this,
                 SLOT(slotJumpToQuickMarker()), actionCollection(),
                 "jump_to_quick_marker");
 
@@ -1195,7 +1195,7 @@ void RosegardenGUIApp::setupActions()
     //
     pixmap.load(pixmapDir + "/toolbar/transport-play.png");
     icon = QIcon(pixmap);
-    m_playTransport = new KAction(i18n("&Play"), icon, Key_Enter, this,
+    m_playTransport = new KAction(i18n("&Play"), icon, Qt::Key_Enter, this,
                                   SLOT(slotPlay()), actionCollection(),
                                   "play");
     // Alternative shortcut for Play
@@ -1212,7 +1212,7 @@ void RosegardenGUIApp::setupActions()
 
     pixmap.load(pixmapDir + "/toolbar/transport-stop.png");
     icon = QIcon(pixmap);
-    m_stopTransport = new KAction(i18n("&Stop"), icon, Key_Insert, this,
+    m_stopTransport = new KAction(i18n("&Stop"), icon, Qt::Key_Insert, this,
                                   SLOT(slotStop()), actionCollection(),
                                   "stop");
     QSettings m_stopTransport;
@@ -1225,7 +1225,7 @@ void RosegardenGUIApp::setupActions()
 
     pixmap.load(pixmapDir + "/toolbar/transport-ffwd.png");
     icon = QIcon(pixmap);
-    m_ffwdTransport = new KAction(i18n("&Fast Forward"), icon, Key_PageDown,
+    m_ffwdTransport = new KAction(i18n("&Fast Forward"), icon, Qt::Key_PageDown,
                                   this,
                                   SLOT(slotFastforward()), actionCollection(),
                                   "fast_forward");
@@ -1239,7 +1239,7 @@ void RosegardenGUIApp::setupActions()
 
     pixmap.load(pixmapDir + "/toolbar/transport-rewind.png");
     icon = QIcon(pixmap);
-    m_rewindTransport = new KAction(i18n("Re&wind"), icon, Key_End, this,
+    m_rewindTransport = new KAction(i18n("Re&wind"), icon, Qt::Key_End, this,
                                     SLOT(slotRewind()), actionCollection(),
                                     "rewind");
     QSettings m_rewindTransport;
@@ -1252,7 +1252,7 @@ void RosegardenGUIApp::setupActions()
 
     pixmap.load(pixmapDir + "/toolbar/transport-record.png");
     icon = QIcon(pixmap);
-    m_recordTransport = new KAction(i18n("P&unch in Record"), icon, Key_Space, this,
+    m_recordTransport = new KAction(i18n("P&unch in Record"), icon, Qt::Key_Space, this,
                                     SLOT(slotToggleRecord()), actionCollection(),
                                     "recordtoggle");
     QSettings m_recordTransport;
@@ -1304,13 +1304,13 @@ void RosegardenGUIApp::setupActions()
 
     pixmap.load(pixmapDir + "/toolbar/transport-tracking.png");
     icon = QIcon(pixmap);
-    (new KToggleAction(i18n("Scro&ll to Follow Playback"), icon, Key_Pause, this,
+    (new KToggleAction(i18n("Scro&ll to Follow Playback"), icon, Qt::Key_Pause, this,
                        SLOT(slotToggleTracking()), actionCollection(),
                        "toggle_tracking"))->setChecked(true);
 
     pixmap.load(pixmapDir + "/toolbar/transport-panic.png");
     icon = QIcon(pixmap);
-    new KAction( i18n("Panic"), icon, Key_P + CTRL + ALT, this, SLOT(slotPanic()),
+    new KAction( i18n("Panic"), icon, Qt::Key_P + CTRL + ALT, this, SLOT(slotPanic()),
                  actionCollection(), "panic");
 
     // DEBUG FACILITY

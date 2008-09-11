@@ -747,11 +747,11 @@ EditView::setupActions()
     //
     // Transforms
     //
-    new KAction(i18n("&Halve Durations"), Key_H + CTRL, this,
+    new KAction(i18n("&Halve Durations"), Qt::Key_H + CTRL, this,
                 SLOT(slotHalveDurations()), actionCollection(),
                 "halve_durations");
 
-    new KAction(i18n("&Double Durations"), Key_H + CTRL + SHIFT, this,
+    new KAction(i18n("&Double Durations"), Qt::Key_H + CTRL + SHIFT, this,
                 SLOT(slotDoubleDurations()), actionCollection(),
                 "double_durations");
 
@@ -760,22 +760,22 @@ EditView::setupActions()
                 "rescale");
 
     new KAction(TransposeCommand::getGlobalName(1), 0,
-                Key_Up, this,
+                Qt::Key_Up, this,
                 SLOT(slotTransposeUp()), actionCollection(),
                 "transpose_up");
 
     new KAction(TransposeCommand::getGlobalName(12), 0,
-                Key_Up + CTRL, this,
+                Qt::Key_Up + CTRL, this,
                 SLOT(slotTransposeUpOctave()), actionCollection(),
                 "transpose_up_octave");
 
     new KAction(TransposeCommand::getGlobalName( -1), 0,
-                Key_Down, this,
+                Qt::Key_Down, this,
                 SLOT(slotTransposeDown()), actionCollection(),
                 "transpose_down");
 
     new KAction(TransposeCommand::getGlobalName( -12), 0,
-                Key_Down + CTRL, this,
+                Qt::Key_Down + CTRL, this,
                 SLOT(slotTransposeDownOctave()), actionCollection(),
                 "transpose_down_octave");
 
@@ -799,11 +799,11 @@ EditView::setupActions()
                 SLOT(slotRetrogradeInvert()), actionCollection(),
                 "retrograde_invert");
 
-    new KAction(i18n("Jog &Left"), Key_Left + ALT, this,
+    new KAction(i18n("Jog &Left"), Qt::Key_Left + ALT, this,
                 SLOT(slotJogLeft()), actionCollection(),
                 "jog_left");
 
-    new KAction(i18n("Jog &Right"), Key_Right + ALT, this,
+    new KAction(i18n("Jog &Right"), Qt::Key_Right + ALT, this,
                 SLOT(slotJogRight()), actionCollection(),
                 "jog_right");
 
@@ -832,7 +832,7 @@ EditView::setupActions()
                 SLOT(slotInsertControlRulerItem()), actionCollection(),
                 "insert_control_ruler_item");
 
-    // This was on Key_Delete, but that conflicts with existing Delete commands
+    // This was on Qt::Key_Delete, but that conflicts with existing Delete commands
     // on individual edit views
     new KAction(i18n("Erase selected items"), 0, this,
                 SLOT(slotEraseControlRulerItem()), actionCollection(),
@@ -846,11 +846,11 @@ EditView::setupActions()
                 SLOT(slotStartControlLineItem()), actionCollection(),
                 "start_control_line_item");
 
-    new KAction(i18n("Flip forward"), Key_BracketRight, this,
+    new KAction(i18n("Flip forward"), Qt::Key_BracketRight, this,
                 SLOT(slotFlipForwards()), actionCollection(),
                 "flip_control_events_forward");
 
-    new KAction(i18n("Flip backwards"), Key_BracketLeft, this,
+    new KAction(i18n("Flip backwards"), Qt::Key_BracketLeft, this,
                 SLOT(slotFlipBackwards()), actionCollection(),
                 "flip_control_events_back");
 
@@ -1077,13 +1077,13 @@ EditView::createInsertPitchActionMenu()
 
     const Key notePitchKeys[3][7] = {
                                         {
-                                            Key_A, Key_S, Key_D, Key_F, Key_J, Key_K, Key_L,
+                                            Qt::Key_A, Qt::Key_S, Qt::Key_D, Qt::Key_F, Qt::Key_J, Qt::Key_K, Qt::Key_L,
                                         },
                                         {
-                                            Key_Q, Key_W, Key_E, Key_R, Key_U, Key_I, Key_O,
+                                            Qt::Key_Q, Qt::Key_W, Qt::Key_E, Qt::Key_R, Qt::Key_U, Qt::Key_I, Qt::Key_O,
                                         },
                                         {
-                                            Key_Z, Key_X, Key_C, Key_V, Key_B, Key_N, Key_M,
+                                            Qt::Key_Z, Qt::Key_X, Qt::Key_C, Qt::Key_V, Qt::Key_B, Qt::Key_N, Qt::Key_M,
                                         },
                                     };
 

@@ -1125,41 +1125,41 @@ EventView::setupActions()
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
     QIcon icon(QPixmap(pixmapDir + "/toolbar/event-insert.png"));
 
-    new KAction(i18n("&Insert Event"), icon, Key_I, this,
+    new KAction(i18n("&Insert Event"), icon, Qt::Key_I, this,
                 SLOT(slotEditInsert()), actionCollection(),
                 "insert");
 
     Q3CanvasPixmap pixmap(pixmapDir + "/toolbar/event-delete.png");
     icon = QIcon(pixmap);
 
-    new KAction(i18n("&Delete Event"), icon, Key_Delete, this,
+    new KAction(i18n("&Delete Event"), icon, Qt::Key_Delete, this,
                 SLOT(slotEditDelete()), actionCollection(),
                 "delete");
 
     pixmap.load(pixmapDir + "/toolbar/event-edit.png");
     icon = QIcon(pixmap);
 
-    new KAction(i18n("&Edit Event"), icon, Key_E, this,
+    new KAction(i18n("&Edit Event"), icon, Qt::Key_E, this,
                 SLOT(slotEditEvent()), actionCollection(),
                 "edit_simple");
 
     pixmap.load(pixmapDir + "/toolbar/event-edit-advanced.png");
     icon = QIcon(pixmap);
 
-    new KAction(i18n("&Advanced Event Editor"), icon, Key_A, this,
+    new KAction(i18n("&Advanced Event Editor"), icon, Qt::Key_A, this,
                 SLOT(slotEditEventAdvanced()), actionCollection(),
                 "edit_advanced");
 
     //    icon = QIcon(Q3CanvasPixmap(pixmapDir + "/toolbar/eventfilter.xpm"));
-    new KAction(i18n("&Filter Selection"), "filter", Key_F, this,
+    new KAction(i18n("&Filter Selection"), "filter", Qt::Key_F, this,
                 SLOT(slotFilterSelection()), actionCollection(),
                 "filter_selection");
 
-    new KAction(i18n("Select &All"), Key_A + CTRL, this,
+    new KAction(i18n("Select &All"), Qt::Key_A + CTRL, this,
                 SLOT(slotSelectAll()), actionCollection(),
                 "select_all");
 
-    new KAction(i18n("Clear Selection"), Key_Escape, this,
+    new KAction(i18n("Clear Selection"), Qt::Key_Escape, this,
                 SLOT(slotClearSelection()), actionCollection(),
                 "clear_selection");
 
