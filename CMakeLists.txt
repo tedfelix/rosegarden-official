@@ -47,7 +47,10 @@ SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 SET(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
 
 # Additional CMake modules for 3rd party library checks reside here
-SET(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_admin")
+# SET(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_admin")
+set(CMAKE_MODULE_PATH "${ROSEGARDEN_SOURCE_DIR}/cmake_admin")
+
+
 
 # Mark as advanced
 MARK_AS_ADVANCED(EXECUTABLE_OUTPUT_PATH 
