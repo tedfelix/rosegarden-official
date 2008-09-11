@@ -1360,13 +1360,13 @@ void EditView::slotShowPropertyControlRuler()
                                       KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok);
         
         KListBox* propList = new KListBox(propChooserDialog.makeVBoxMainWidget());
-        new QListBoxRGProperty(propList, BaseProperties::VELOCITY.c_str());
+        new QListWidgetRGProperty(propList, BaseProperties::VELOCITY.c_str());
      
         int rc = propChooserDialog.exec();
         if (rc == QDialog::Accepted) {
             // fix for KDE 3.0
-            //QListBoxRGProperty* item = dynamic_cast<QListBoxRGProperty*>(propList->selectedItem());
-            QListBoxRGProperty* item = dynamic_cast<QListBoxRGProperty*>
+            //QListWidgetRGProperty* item = dynamic_cast<QListWidgetRGProperty*>(propList->selectedItem());
+            QListWidgetRGProperty* item = dynamic_cast<QListWidgetRGProperty*>
                 (propList->item(propList->currentIndex()));
      
             if (item) {

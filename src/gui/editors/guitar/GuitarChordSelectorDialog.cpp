@@ -47,11 +47,11 @@ GuitarChordSelectorDialog::GuitarChordSelectorDialog(QWidget *parent)
     QGridLayout *topLayout = new QGridLayout(page, 3, 4, spacingHint());
     
     topLayout->addWidget(new QLabel(i18n("Root"), page), 0, 0);
-    m_rootNotesList = new QListBox(page);
+    m_rootNotesList = new QListWidget(page);
     topLayout->addWidget(m_rootNotesList, 1, 0);
     
     topLayout->addWidget(new QLabel(i18n("Extension"), page), 0, 1);
-    m_chordExtList = new QListBox(page);
+    m_chordExtList = new QListWidget(page);
     topLayout->addWidget(m_chordExtList, 1, 1);
     
     m_newFingeringButton = new QPushButton(i18n("New"), page);
@@ -82,7 +82,7 @@ GuitarChordSelectorDialog::GuitarChordSelectorDialog(QWidget *parent)
             this, SLOT(slotEditFingering()));
     
     topLayout->addWidget(new QLabel(i18n("Fingerings"), page), 0, 3);
-    m_fingeringsList = new QListBox(page);
+    m_fingeringsList = new QListWidget(page);
     topLayout->addWidget(m_fingeringsList, 1, 3, 2, 1);
     
     m_fingeringBox = new FingeringBox(false, page);
@@ -92,8 +92,8 @@ GuitarChordSelectorDialog::GuitarChordSelectorDialog(QWidget *parent)
             this, SLOT(slotRootHighlighted(int)));
     connect(m_chordExtList, SIGNAL(highlighted(int)),
             this, SLOT(slotChordExtHighlighted(int)));
-    connect(m_fingeringsList, SIGNAL(highlighted(QListBoxItem*)),
-            this, SLOT(slotFingeringHighlighted(QListBoxItem*)));
+    connect(m_fingeringsList, SIGNAL(highlighted(QListWidgetItem*)),
+            this, SLOT(slotFingeringHighlighted(QListWidgetItem*)));
 }
 
 void
@@ -174,7 +174,7 @@ GuitarChordSelectorDialog::slotChordExtHighlighted(int i)
 }
 
 void
-GuitarChordSelectorDialog::slotFingeringHighlighted(QListBoxItem* listBoxItem)
+GuitarChordSelectorDialog::slotFingeringHighlighted(QListWidgetItem* listBoxItem)
 {
     NOTATION_DEBUG << "GuitarChordSelectorDialog::slotFingeringHighlighted\n";
     
@@ -278,7 +278,7 @@ GuitarChordSelectorDialog::setChord(const Guitar::Chord& chord)
     // select the chord's root
     //
     m_rootNotesList->setCurrentIndex(0);
-    QListBoxItem* correspondingRoot = m_rootNotesList->findItem(chord.getRoot(), Qt::ExactMatch);
+    QListWidgetItem* correspondingRoot = m_rootNotesList->findItem(chord.getRoot(), Qt::ExactMatch);
     if (correspondingRoot)
         m_rootNotesList->setSelected(correspondingRoot, true);
     
@@ -301,7 +301,7 @@ GuitarChordSelectorDialog::setChord(const Guitar::Chord& chord)
         chordExt = "";
         m_chordExtList->setSelected(0, true);
     } else {                
-        QListBoxItem* correspondingExt = m_chordExtList->findItem(chordExt, Qt::ExactMatch);
+        QListWidgetItem* correspondingExt = m_chordExtList->findItem(chordExt, Qt::ExactMatch);
         if (correspondingExt)
             m_chordExtList->setSelected(correspondingExt, true);
     }

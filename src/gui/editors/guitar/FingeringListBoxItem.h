@@ -24,10 +24,10 @@
 
 namespace Rosegarden {
 
-class FingeringListBoxItem : public QListBoxPixmap
+class FingeringListBoxItem : public QListWidgetPixmap
 {
 public:
-    FingeringListBoxItem(const Guitar::Chord& chord, QListBox* parent, QPixmap pixmap, QString fingeringString);
+    FingeringListBoxItem(const Guitar::Chord& chord, QListWidget* parent, QPixmap pixmap, QString fingeringString);
     
     const Guitar::Chord& getChord() { return m_chord; }
 protected:

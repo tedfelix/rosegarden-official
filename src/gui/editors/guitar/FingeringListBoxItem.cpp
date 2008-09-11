@@ -20,8 +20,8 @@
 
 namespace Rosegarden {
     
-FingeringListBoxItem::FingeringListBoxItem(const Guitar::Chord& chord, QListBox* parent, QPixmap pixmap, QString fingeringString)
-    : QListBoxPixmap(parent, pixmap, fingeringString),
+FingeringListBoxItem::FingeringListBoxItem(const Guitar::Chord& chord, QListWidget* parent, QPixmap pixmap, QString fingeringString)
+    : QListWidgetPixmap(parent, pixmap, fingeringString),
       m_chord(chord)
 {
 }
