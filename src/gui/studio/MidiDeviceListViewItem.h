@@ -20,7 +20,7 @@
 #define _RG_MIDIDEVICELISTVIEWITEM_H_
 
 #include "base/Device.h"
-#include <QListView>
+#include <QListWidget>
 #include <QString>
 
 

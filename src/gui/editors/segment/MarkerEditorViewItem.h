@@ -18,7 +18,7 @@
 #ifndef _RG_MARKEREDITORVIEWITEM_H_
 #define _RG_MARKEREDITORVIEWITEM_H_
 
-#include <QListView>
+#include <QListWidget>
 
 #include "base/Event.h"
 

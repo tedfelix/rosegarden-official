@@ -18,7 +18,7 @@
 #ifndef _RG_PLAYLISTVIEWITEM_H_
 #define _RG_PLAYLISTVIEWITEM_H_
 
-#include <QListView>
+#include <QListWidget>
 #include <kurl.h>
 
 namespace Rosegarden {

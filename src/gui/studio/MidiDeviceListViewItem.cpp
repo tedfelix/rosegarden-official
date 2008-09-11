@@ -20,7 +20,7 @@
 
 #include <klocale.h>
 #include "base/Device.h"
-#include <QListView>
+#include <QListWidget>
 #include <QString>
 
 

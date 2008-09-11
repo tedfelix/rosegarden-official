@@ -18,7 +18,7 @@
 #ifndef _RG_EVENTVIEWITEM_H_
 #define _RG_EVENTVIEWITEM_H_
 
-#include <QListView>
+#include <QListWidget>
 
 namespace Rosegarden
 {

@@ -19,7 +19,7 @@
 #define _RG_AUDIOLISTITEM_H_
 
 #include <sound/AudioFile.h>
-#include <QListView>
+#include <QListWidget>
 
 namespace Rosegarden
 {

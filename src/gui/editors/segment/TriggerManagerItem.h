@@ -18,7 +18,7 @@
 #ifndef _RG_TRIGGERMANAGERITEM_H_
 #define _RG_TRIGGERMANAGERITEM_H_
 
-#include <QListView>
+#include <QListWidget>
 
 #include "base/Event.h"
 #include "base/TriggerSegment.h"

@@ -21,10 +21,10 @@
 #include <klocale.h>
 #include <QDialog>
 #include <QDialogButtonBox>
-#include <QListView>
+#include <QListWidget>
 #include <QFileInfo>
 #include <QLabel>
-#include <QListView>
+#include <QListWidget>
 #include <QString>
 #include <QWidget>
 #include <QVBoxLayout>

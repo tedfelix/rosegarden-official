@@ -26,7 +26,7 @@
 
 #include <QApplication>
 #include <QSettings>
-#include <QListView>
+#include <QListWidget>
 #include <klocale.h>
 #include <QGroupBox>
 #include <QLabel>

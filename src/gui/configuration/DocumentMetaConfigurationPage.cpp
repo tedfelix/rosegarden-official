@@ -36,10 +36,10 @@
 #include "gui/general/GUIPalette.h"
 #include "TabbedConfigurationPage.h"
 #include <QSettings>
-#include <QListView>
+#include <QListWidget>
 #include <QFrame>
 #include <QLabel>
-#include <QListView>
+#include <QListWidget>
 #include <QPixmap>
 #include <QPushButton>
 #include <QString>

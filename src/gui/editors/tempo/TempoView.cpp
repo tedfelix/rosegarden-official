@@ -41,13 +41,13 @@
 #include <kaction.h>
 #include <kglobal.h>
 #include <QSettings>
-#include <QListView>
+#include <QListWidget>
 #include <kxmlguiclient.h>
 #include <QGroupBox>
 #include <QCheckBox>
 #include <QDialog>
 #include <QIcon>
-#include <QListView>
+#include <QListWidget>
 #include <QPixmap>
 #include <qptrlist.h>
 #include <QSize>

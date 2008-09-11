@@ -60,7 +60,7 @@
 #include <kstandarddirs.h>
 #include <kglobal.h>
 #include <klineeditdlg.h>
-#include <QListView>
+#include <QListWidget>
 #include <kxmlguiclient.h>
 #include <QGroupBox>
 #include <Q3Canvas>
@@ -71,7 +71,7 @@
 #include <QIcon>
 #include <QLabel>
 #include <QLayout>
-#include <QListView>
+#include <QListWidget>
 #include <QPixmap>
 #include <QPoint>
 #include <qpopupmenu.h>

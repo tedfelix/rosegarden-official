@@ -18,7 +18,7 @@
 
 #include "ControlParameterItem.h"
 
-#include <QListView>
+#include <QListWidget>
 #include <QString>
 
 

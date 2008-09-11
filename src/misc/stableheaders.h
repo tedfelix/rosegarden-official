@@ -80,7 +80,7 @@
 #include <QLayout>
 #include <QLineEdit>
 #include <qlistbox.h>
-#include <QListView>
+#include <QListWidget>
 #include <qmemarray.h>
 #include <QMutex>
 #include <QObject>
@@ -176,7 +176,7 @@
 #include <kled.h>
 #include <klineeditdlg.h>
 #include <klineedit.h>
-#include <QListView>
+#include <QListWidget>
 #include <klocale.h>
 #include <kmainwindow.h>
 #include <QMessageBox>

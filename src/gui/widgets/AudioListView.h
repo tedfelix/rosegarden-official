@@ -18,7 +18,7 @@
 #ifndef _RG_AUDIOLISTVIEW_H_
 #define _RG_AUDIOLISTVIEW_H_
 
-#include <QListView>
+#include <QListWidget>
 
 namespace Rosegarden {
         

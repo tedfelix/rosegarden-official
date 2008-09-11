@@ -41,7 +41,7 @@
 #include "document/ConfigGroups.h"
 #include <kaction.h>
 #include "document/Command.h"
-#include <QListView>
+#include <QListWidget>
 #include <kmainwindow.h>
 #include <kstandardshortcut.h>
 #include <kstandardaction.h>
@@ -49,7 +49,7 @@
 #include <QDialog>
 #include <QFrame>
 #include <QLabel>
-#include <QListView>
+#include <QListWidget>
 #include <QPixmap>
 #include <qptrlist.h>
 #include <QPushButton>

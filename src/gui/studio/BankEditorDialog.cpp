@@ -45,7 +45,7 @@
 #include "document/Command.h"
 #include <kfiledialog.h>
 #include <kglobal.h>
-#include <QListView>
+#include <QListWidget>
 #include <kmainwindow.h>
 #include <QMessageBox>
 #include <kstandardshortcut.h>

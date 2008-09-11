@@ -20,7 +20,7 @@
 #define _RG_CONTROLPARAMETERITEM_H_
 
 #include <QString>
-#include <QListView>
+#include <QListWidget>
 
 
 namespace Rosegarden
