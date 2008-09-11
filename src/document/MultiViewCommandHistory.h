@@ -180,8 +180,9 @@ signals:
      */
     void documentRestored();
 
+	MultiViewCommandHistory();	//### made unprotected (public)
+
 protected:
-    MultiViewCommandHistory();
     static MultiViewCommandHistory *m_instance;
 
     QAction *m_undoAction;

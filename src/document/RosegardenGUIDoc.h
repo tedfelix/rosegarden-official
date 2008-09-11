@@ -425,7 +425,7 @@ public:
     /**
      * return the list of the views currently connected to the document
      */
-    QList<RosegardenGUIView>& getViewList() { return m_viewList; }
+    QList<RosegardenGUIView*>& getViewList() { return m_viewList; } //### prepended *
 
     bool isBeingDestroyed() { return m_beingDestroyed; }
 
@@ -603,7 +603,7 @@ protected:
     /**
      * the list of the views currently connected to the document
      */
-    QList<RosegardenGUIView> m_viewList;        
+	QList<RosegardenGUIView*> m_viewList;		//@@@ shouldn't this be a ptr: QList<RosegardenGUIView*> instead QList<RosegardenGUIView> ? changed !!
 
     /**
      * the list of the edit views currently editing a part of this document
