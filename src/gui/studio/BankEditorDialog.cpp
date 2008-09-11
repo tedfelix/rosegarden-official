@@ -40,7 +40,7 @@
 #include "MidiKeyMapListViewItem.h"
 #include "MidiKeyMappingEditor.h"
 #include "MidiProgramsEditor.h"
-#include <kaction.h>
+#include <QAction>
 #include <QComboBox>
 #include "document/Command.h"
 #include <kfiledialog.h>

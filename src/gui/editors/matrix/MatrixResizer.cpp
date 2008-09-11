@@ -34,7 +34,7 @@
 #include "MatrixStaff.h"
 #include "MatrixTool.h"
 #include "MatrixView.h"
-#include <kaction.h>
+#include <QAction>
 #include <kglobal.h>
 #include <QIcon>
 #include <QPoint>
@@ -54,21 +54,21 @@ MatrixResizer::MatrixResizer(MatrixView* parent)
     Q3CanvasPixmap pixmap(pixmapDir + "/toolbar/select.xpm");
     QIcon icon = QIcon(pixmap);
 
-    new KAction(i18n("Switch to Select Tool"), icon, Qt::Key_F2, this,
-                SLOT(slotSelectSelected()), actionCollection(),
-                "select");
+    QAction *qa_select = new QAction( "Switch to Select Tool", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_select->setIconText(icon); 
+			connect( qa_select, SIGNAL(triggered()), this, SLOT(slotSelectSelected())  );
 
-    new KAction(i18n("Switch to Draw Tool"), "pencil", Qt::Key_F3, this,
-                SLOT(slotDrawSelected()), actionCollection(),
-                "draw");
+    QAction *qa_draw = new QAction( "Switch to Draw Tool", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_draw->setIconText("pencil"); 
+			connect( qa_draw, SIGNAL(triggered()), this, SLOT(slotDrawSelected())  );
 
-    new KAction(i18n("Switch to Erase Tool"), "eraser", Qt::Key_F4, this,
-                SLOT(slotEraseSelected()), actionCollection(),
-                "erase");
+    QAction *qa_erase = new QAction( "Switch to Erase Tool", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_erase->setIconText("eraser"); 
+			connect( qa_erase, SIGNAL(triggered()), this, SLOT(slotEraseSelected())  );
 
-    new KAction(i18n("Switch to Move Tool"), "move", Qt::Key_F5, this,
-                SLOT(slotMoveSelected()), actionCollection(),
-                "move");
+    QAction *qa_move = new QAction( "Switch to Move Tool", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_move->setIconText("move"); 
+			connect( qa_move, SIGNAL(triggered()), this, SLOT(slotMoveSelected())  );
 
     createMenu("matrixresizer.rc");
 }

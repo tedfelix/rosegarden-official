@@ -33,7 +33,7 @@
 #include "gui/general/GUIPalette.h"
 #include "gui/widgets/TextFloat.h"
 #include "TempoColour.h"
-#include <kaction.h>
+#include <QAction>
 #include <kglobal.h>
 #include <kxmlguiclient.h>
 #include <kxmlguifactory.h>
@@ -117,39 +117,39 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
     QIcon icon;
 
     icon = QIcon(QPixmap(pixmapDir + "/toolbar/event-insert-tempo.png"));
-    new KAction(i18n("Insert Tempo Change"), icon, 0, this,
-                 SLOT(slotInsertTempoHere()), actionCollection(),
-                 "insert_tempo_here");
+    QAction *qa_insert_tempo_here = new QAction( "Insert Tempo Change", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_insert_tempo_here->setIconText(icon); 
+			connect( qa_insert_tempo_here, SIGNAL(triggered()), this, SLOT(slotInsertTempoHere())  );
 
-    new KAction(i18n("Insert Tempo Change at Playback Position"), 0, 0, this,
-                 SLOT(slotInsertTempoAtPointer()), actionCollection(),
-                 "insert_tempo_at_pointer");
+    QAction *qa_insert_tempo_at_pointer = new QAction( "Insert Tempo Change at Playback Position", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_insert_tempo_at_pointer->setIconText(0); 
+			connect( qa_insert_tempo_at_pointer, SIGNAL(triggered()), this, SLOT(slotInsertTempoAtPointer())  );
 
     icon = QIcon(QPixmap(pixmapDir + "/toolbar/event-delete.png"));
-    new KAction(i18n("Delete Tempo Change"), icon, 0, this,
-                 SLOT(slotDeleteTempoChange()), actionCollection(),
-                 "delete_tempo");
+    QAction *qa_delete_tempo = new QAction( "Delete Tempo Change", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_delete_tempo->setIconText(icon); 
+			connect( qa_delete_tempo, SIGNAL(triggered()), this, SLOT(slotDeleteTempoChange())  );
 
-    new KAction(i18n("Ramp Tempo to Next Tempo"), 0, 0, this,
-                 SLOT(slotRampToNext()), actionCollection(),
-                 "ramp_to_next");
+    QAction *qa_ramp_to_next = new QAction( "Ramp Tempo to Next Tempo", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_ramp_to_next->setIconText(0); 
+			connect( qa_ramp_to_next, SIGNAL(triggered()), this, SLOT(slotRampToNext())  );
 
-    new KAction(i18n("Un-Ramp Tempo"), 0, 0, this,
-                 SLOT(slotUnramp()), actionCollection(),
-                 "unramp");
+    QAction *qa_unramp = new QAction( "Un-Ramp Tempo", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_unramp->setIconText(0); 
+			connect( qa_unramp, SIGNAL(triggered()), this, SLOT(slotUnramp())  );
 
     icon = QIcon(QPixmap(pixmapDir + "/toolbar/event-edit.png"));
-    new KAction(i18n("Edit Tempo..."), icon, 0, this,
-                 SLOT(slotEditTempo()), actionCollection(),
-                 "edit_tempo");
+    QAction *qa_edit_tempo = new QAction( "Edit Tempo...", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_edit_tempo->setIconText(icon); 
+			connect( qa_edit_tempo, SIGNAL(triggered()), this, SLOT(slotEditTempo())  );
 
-    new KAction(i18n("Edit Time Signature..."), 0, 0, this,
-                 SLOT(slotEditTimeSignature()), actionCollection(),
-                 "edit_time_signature");
+    QAction *qa_edit_time_signature = new QAction( "Edit Time Signature...", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_edit_time_signature->setIconText(0); 
+			connect( qa_edit_time_signature, SIGNAL(triggered()), this, SLOT(slotEditTimeSignature())  );
 
-    new KAction(i18n("Open Tempo and Time Signature Editor"), 0, 0, this,
-                 SLOT(slotEditTempos()), actionCollection(),
-                 "edit_tempos");
+    QAction *qa_edit_tempos = new QAction( "Open Tempo and Time Signature Editor", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_edit_tempos->setIconText(0); 
+			connect( qa_edit_tempos, SIGNAL(triggered()), this, SLOT(slotEditTempos())  );
 
     setMouseTracking(false);
 }

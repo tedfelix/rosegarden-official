@@ -144,7 +144,7 @@
 #include <kaboutdata.h>
 #include <kshortcut.h>
 #include <kactioncollection.h>
-#include <kaction.h>
+#include <QAction>
 #include <kapp.h>
 #include <QApplication>
 #include <karrowbutton.h>

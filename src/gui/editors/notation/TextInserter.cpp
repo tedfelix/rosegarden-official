@@ -32,7 +32,7 @@
 #include "NotationView.h"
 #include "NotePixmapFactory.h"
 #include "NotationElement.h"
-#include <kaction.h>
+#include <QAction>
 #include <QDialog>
 #include <QIcon>
 #include <QString>
@@ -47,20 +47,20 @@ TextInserter::TextInserter(NotationView* view)
 {
     QIcon icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::
                              makeToolbarPixmap("select")));
-    new KAction(i18n("Switch to Select Tool"), icon, 0, this,
-                SLOT(slotSelectSelected()), actionCollection(),
-                "select");
+    QAction *qa_select = new QAction( "Switch to Select Tool", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_select->setIconText(icon); 
+			connect( qa_select, SIGNAL(triggered()), this, SLOT(slotSelectSelected())  );
 
-    new KAction(i18n("Switch to Erase Tool"), "eraser", 0, this,
-                SLOT(slotEraseSelected()), actionCollection(),
-                "erase");
+    QAction *qa_erase = new QAction( "Switch to Erase Tool", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_erase->setIconText("eraser"); 
+			connect( qa_erase, SIGNAL(triggered()), this, SLOT(slotEraseSelected())  );
 
     icon = QIcon
            (NotePixmapFactory::toQPixmap(NotePixmapFactory::
                                          makeToolbarPixmap("crotchet")));
-    new KAction(i18n("Switch to Inserting Notes"), icon, 0, this,
-                SLOT(slotNotesSelected()), actionCollection(),
-                "notes");
+    QAction *qa_notes = new QAction( "Switch to Inserting Notes", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_notes->setIconText(icon); 
+			connect( qa_notes, SIGNAL(triggered()), this, SLOT(slotNotesSelected())  );
 
     createMenu("textinserter.rc");
 }

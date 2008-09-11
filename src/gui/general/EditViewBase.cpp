@@ -38,7 +38,7 @@
 #include "gui/dialogs/TimeDialog.h"
 #include "gui/general/EditViewTimeSigNotifier.h"
 #include "gui/kdeext/KTmpStatusMsg.h"
-#include <kaction.h>
+#include <QAction>
 #include "document/Command.h"
 #include <QSettings>
 #include <QDockWidget>
@@ -196,27 +196,27 @@ void EditViewBase::setupActions(QString rcFileName, bool haveClipboard)
 
     Q3CanvasPixmap pixmap(pixmapDir + "/toolbar/matrix.png");
     QIcon icon = QIcon(pixmap);
-    new KAction(i18n("Open in Matri&x Editor"), icon, 0, this,
-                SLOT(slotOpenInMatrix()), actionCollection(),
-                "open_in_matrix");
+    QAction *qa_open_in_matrix = new QAction( "Open in Matri&x Editor", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_open_in_matrix->setIconText(icon); 
+			connect( qa_open_in_matrix, SIGNAL(triggered()), this, SLOT(slotOpenInMatrix())  );
 
     pixmap.load(pixmapDir + "/toolbar/matrix-percussion.png");
     icon = QIcon(pixmap);
-    new KAction(i18n("Open in &Percussion Matrix Editor"), icon, 0, this,
-                SLOT(slotOpenInPercussionMatrix()), actionCollection(),
-                "open_in_percussion_matrix");
+    QAction *qa_open_in_percussion_matrix = new QAction( "Open in &Percussion Matrix Editor", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_open_in_percussion_matrix->setIconText(icon); 
+			connect( qa_open_in_percussion_matrix, SIGNAL(triggered()), this, SLOT(slotOpenInPercussionMatrix())  );
 
     pixmap.load(pixmapDir + "/toolbar/notation.png");
     icon = QIcon(pixmap);
-    new KAction(i18n("Open in &Notation Editor"), icon, 0, this,
-                SLOT(slotOpenInNotation()), actionCollection(),
-                "open_in_notation");
+    QAction *qa_open_in_notation = new QAction( "Open in &Notation Editor", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_open_in_notation->setIconText(icon); 
+			connect( qa_open_in_notation, SIGNAL(triggered()), this, SLOT(slotOpenInNotation())  );
 
     pixmap.load(pixmapDir + "/toolbar/eventlist.png");
     icon = QIcon(pixmap);
-    new KAction(i18n("Open in &Event List Editor"), icon, 0, this,
-                SLOT(slotOpenInEventList()), actionCollection(),
-                "open_in_event_list");
+    QAction *qa_open_in_event_list = new QAction( "Open in &Event List Editor", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_open_in_event_list->setIconText(icon); 
+			connect( qa_open_in_event_list, SIGNAL(triggered()), this, SLOT(slotOpenInEventList())  );
 
     new KAction(i18n("Set Segment Start Time..."), 0, this,
                 SLOT(slotSetSegmentStartTime()), actionCollection(),

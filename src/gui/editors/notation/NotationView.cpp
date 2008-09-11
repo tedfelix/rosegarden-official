@@ -152,7 +152,7 @@
 #include "TextInserter.h"
 #include "NotationCommandRegistry.h"
 #include "HeadersGroup.h"
-#include <kaction.h>
+#include <QAction>
 #include <QComboBox>
 #include <QSettings>
 #include <kglobal.h>
@@ -1546,13 +1546,13 @@ void NotationView::setupActions()
     KStandardAction::printPreview(this, SLOT(slotFilePrintPreview()),
                              actionCollection());
 
-    new KAction(i18n("Print &with LilyPond..."), 0, 0, this,
-                SLOT(slotPrintLilyPond()), actionCollection(),
-                "file_print_lilypond");
+    QAction *qa_file_print_lilypond = new QAction( "Print &with LilyPond...", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_file_print_lilypond->setIconText(0); 
+			connect( qa_file_print_lilypond, SIGNAL(triggered()), this, SLOT(slotPrintLilyPond())  );
 
-    new KAction(i18n("Preview with Lil&yPond..."), 0, 0, this,
-                SLOT(slotPreviewLilyPond()), actionCollection(),
-                "file_preview_lilypond");
+    QAction *qa_file_preview_lilypond = new QAction( "Preview with Lil&yPond...", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_file_preview_lilypond->setIconText(0); 
+			connect( qa_file_preview_lilypond, SIGNAL(triggered()), this, SLOT(slotPreviewLilyPond())  );
 
     EditViewBase::setupActions("notation.rc");
     EditView::setupActions();
@@ -2034,21 +2034,21 @@ void NotationView::setupActions()
                           actionCollection(), actionsToolbars[i][2]);
     }
 
-    new KAction(i18n("Cursor &Back"), 0, Qt::Key_Left, this,
-                SLOT(slotStepBackward()), actionCollection(),
-                "cursor_back");
+    QAction *qa_cursor_back = new QAction( "Cursor &Back", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_cursor_back->setIconText(0); 
+			connect( qa_cursor_back, SIGNAL(triggered()), this, SLOT(slotStepBackward())  );
 
-    new KAction(i18n("Cursor &Forward"), 0, Qt::Key_Right, this,
-                SLOT(slotStepForward()), actionCollection(),
-                "cursor_forward");
+    QAction *qa_cursor_forward = new QAction( "Cursor &Forward", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_cursor_forward->setIconText(0); 
+			connect( qa_cursor_forward, SIGNAL(triggered()), this, SLOT(slotStepForward())  );
 
-    new KAction(i18n("Cursor Ba&ck Bar"), 0, Qt::Key_Left + Qt::CTRL, this,
-                SLOT(slotJumpBackward()), actionCollection(),
-                "cursor_back_bar");
+    QAction *qa_cursor_back_bar = new QAction( "Cursor Ba&ck Bar", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_cursor_back_bar->setIconText(0); 
+			connect( qa_cursor_back_bar, SIGNAL(triggered()), this, SLOT(slotJumpBackward())  );
 
-    new KAction(i18n("Cursor For&ward Bar"), 0, Qt::Key_Right + Qt::CTRL, this,
-                SLOT(slotJumpForward()), actionCollection(),
-                "cursor_forward_bar");
+    QAction *qa_cursor_forward_bar = new QAction( "Cursor For&ward Bar", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_cursor_forward_bar->setIconText(0); 
+			connect( qa_cursor_forward_bar, SIGNAL(triggered()), this, SLOT(slotJumpForward())  );
 
     new KAction(i18n("Cursor Back and Se&lect"), Qt::SHIFT + Qt::Key_Left, this,
                 SLOT(slotExtendSelectionBackward()), actionCollection(),
@@ -2078,36 +2078,37 @@ void NotationView::setupActions()
                 SLOT(slotJumpToStart()), actionCollection(),
                 "cursor_start");
 
-    new KAction(i18n("Cursor to &End"), 0, Qt::Key_E + Qt::CTRL, this,
-                SLOT(slotJumpToEnd()), actionCollection(),
-                "cursor_end");
+    QAction *qa_cursor_end = new QAction( "Cursor to &End", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_cursor_end->setIconText(0); 
+			connect( qa_cursor_end, SIGNAL(triggered()), this, SLOT(slotJumpToEnd())  );
 
-    new KAction(i18n("Cursor &Up Staff"), 0, Qt::Key_Up + Qt::SHIFT, this,
-                SLOT(slotCurrentStaffUp()), actionCollection(),
-                "cursor_up_staff");
+    QAction *qa_cursor_up_staff = new QAction( "Cursor &Up Staff", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_cursor_up_staff->setIconText(0); 
+			connect( qa_cursor_up_staff, SIGNAL(triggered()), this, SLOT(slotCurrentStaffUp())  );
 
-    new KAction(i18n("Cursor &Down Staff"), 0, Qt::Key_Down + Qt::SHIFT, this,
-                SLOT(slotCurrentStaffDown()), actionCollection(),
-                "cursor_down_staff");
+    QAction *qa_cursor_down_staff = new QAction( "Cursor &Down Staff", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_cursor_down_staff->setIconText(0); 
+			connect( qa_cursor_down_staff, SIGNAL(triggered()), this, SLOT(slotCurrentStaffDown())  );
 
-    new KAction(i18n("Cursor Pre&vious Segment"), 0, Qt::Key_Prior + ALT, this,
-                SLOT(slotCurrentSegmentPrior()), actionCollection(),
-                "cursor_prior_segment");
+    QAction *qa_cursor_prior_segment = new QAction( "Cursor Pre&vious Segment", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_cursor_prior_segment->setIconText(0); 
+			connect( qa_cursor_prior_segment, SIGNAL(triggered()), this, SLOT(slotCurrentSegmentPrior())  );
 
-    new KAction(i18n("Cursor Ne&xt Segment"), 0, Qt::Key_Next + ALT, this,
-                SLOT(slotCurrentSegmentNext()), actionCollection(),
-                "cursor_next_segment");
+    QAction *qa_cursor_next_segment = new QAction( "Cursor Ne&xt Segment", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_cursor_next_segment->setIconText(0); 
+			connect( qa_cursor_next_segment, SIGNAL(triggered()), this, SLOT(slotCurrentSegmentNext())  );
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-cursor-to-pointer")));
-    new KAction(i18n("Cursor to &Playback Pointer"), icon, 0, this,
-                SLOT(slotJumpCursorToPlayback()), actionCollection(),
-                "cursor_to_playback_pointer");
+    QAction *qa_cursor_to_playback_pointer = new QAction( "Cursor to &Playback Pointer", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_cursor_to_playback_pointer->setIconText(icon); 
+			connect( qa_cursor_to_playback_pointer, SIGNAL(triggered()), this, SLOT(slotJumpCursorToPlayback())  );
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-play")));
-    KAction *play = new KAction(i18n("&Play"), icon, Qt::Key_Enter, this,
-                SIGNAL(play()), actionCollection(), "play");
+    KAction *play = QAction *qa_play = new QAction( "&Play", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_play->setIconText(icon); 
+			connect( qa_play, SIGNAL(triggered()), this, SIGNAL(play())  );
     // Alternative shortcut for Play
     KShortcut playShortcut = play->shortcut();
     playShortcut.append( KKey(Key_Return + Qt::CTRL) );
@@ -2115,38 +2116,39 @@ void NotationView::setupActions()
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-stop")));
-    new KAction(i18n("&Stop"), icon, Qt::Key_Insert, this,
-                SIGNAL(stop()), actionCollection(), "stop");
+    QAction *qa_stop = new QAction( "&Stop", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_stop->setIconText(icon); 
+			connect( qa_stop, SIGNAL(triggered()), this, SIGNAL(stop())  );
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-rewind")));
-    new KAction(i18n("Re&wind"), icon, Qt::Key_End, this,
-                SIGNAL(rewindPlayback()), actionCollection(),
-                "playback_pointer_back_bar");
+    QAction *qa_playback_pointer_back_bar = new QAction( "Re&wind", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_playback_pointer_back_bar->setIconText(icon); 
+			connect( qa_playback_pointer_back_bar, SIGNAL(triggered()), this, SIGNAL(rewindPlayback())  );
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-ffwd")));
-    new KAction(i18n("&Fast Forward"), icon, Qt::Key_PageDown, this,
-                SIGNAL(fastForwardPlayback()), actionCollection(),
-                "playback_pointer_forward_bar");
+    QAction *qa_playback_pointer_forward_bar = new QAction( "&Fast Forward", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_playback_pointer_forward_bar->setIconText(icon); 
+			connect( qa_playback_pointer_forward_bar, SIGNAL(triggered()), this, SIGNAL(fastForwardPlayback())  );
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-rewind-end")));
-    new KAction(i18n("Rewind to &Beginning"), icon, 0, this,
-                SIGNAL(rewindPlaybackToBeginning()), actionCollection(),
-                "playback_pointer_start");
+    QAction *qa_playback_pointer_start = new QAction( "Rewind to &Beginning", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_playback_pointer_start->setIconText(icon); 
+			connect( qa_playback_pointer_start, SIGNAL(triggered()), this, SIGNAL(rewindPlaybackToBeginning())  );
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-ffwd-end")));
-    new KAction(i18n("Fast Forward to &End"), icon, 0, this,
-                SIGNAL(fastForwardPlaybackToEnd()), actionCollection(),
-                "playback_pointer_end");
+    QAction *qa_playback_pointer_end = new QAction( "Fast Forward to &End", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_playback_pointer_end->setIconText(icon); 
+			connect( qa_playback_pointer_end, SIGNAL(triggered()), this, SIGNAL(fastForwardPlaybackToEnd())  );
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-pointer-to-cursor")));
-    new KAction(i18n("Playback Pointer to &Cursor"), icon, 0, this,
-                SLOT(slotJumpPlaybackToCursor()), actionCollection(),
-                "playback_pointer_to_cursor");
+    QAction *qa_playback_pointer_to_cursor = new QAction( "Playback Pointer to &Cursor", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_playback_pointer_to_cursor->setIconText(icon); 
+			connect( qa_playback_pointer_to_cursor, SIGNAL(triggered()), this, SLOT(slotJumpPlaybackToCursor())  );
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-solo")));
@@ -2162,8 +2164,9 @@ void NotationView::setupActions()
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-panic")));
-    new KAction(i18n("Panic"), icon, Qt::Key_P + Qt::CTRL + ALT, this,
-                SIGNAL(panic()), actionCollection(), "panic");
+    QAction *qa_panic = new QAction( "Panic", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_panic->setIconText(icon); 
+			connect( qa_panic, SIGNAL(triggered()), this, SIGNAL(panic())  );
 
     new KAction(i18n("Set Loop to Selection"), Qt::Key_Semicolon + Qt::CTRL, this,
                 SLOT(slotPreviewSelection()), actionCollection(),
@@ -2180,9 +2183,9 @@ void NotationView::setupActions()
     //    QString pixmapDir =
     //	KGlobal::dirs()->findResource("appdata", "pixmaps/");
     //    icon = QIcon(Q3CanvasPixmap(pixmapDir + "/toolbar/eventfilter.xpm"));
-    new KAction(i18n("&Filter Selection"), "filter", Qt::Key_F + Qt::CTRL, this,
-                SLOT(slotFilterSelection()), actionCollection(),
-                "filter_selection");
+    QAction *qa_filter_selection = new QAction( "&Filter Selection", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_filter_selection->setIconText("filter"); 
+			connect( qa_filter_selection, SIGNAL(triggered()), this, SLOT(slotFilterSelection())  );
 
     new KAction(ChangeVelocityCommand::getGlobalName(10), 0,
                 Qt::Key_Up + Qt::SHIFT, this,

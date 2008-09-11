@@ -38,7 +38,7 @@
 #include "document/RosegardenGUIDoc.h"
 #include "document/ConfigGroups.h"
 #include "gui/dialogs/MarkerModifyDialog.h"
-#include <kaction.h>
+#include <QAction>
 #include "document/Command.h"
 #include <kglobal.h>
 #include <QListWidget>

@@ -40,7 +40,7 @@
 #include <QApplication>
 #include <klocale.h>
 #include <kstandarddirs.h>
-#include <kaction.h>
+#include <QAction>
 #include <kfiledialog.h>
 #include <kglobal.h>
 #include <kmainwindow.h>

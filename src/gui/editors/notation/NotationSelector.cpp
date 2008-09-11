@@ -43,7 +43,7 @@
 #include "NotationTool.h"
 #include "NotationView.h"
 #include "NotePixmapFactory.h"
-#include <kaction.h>
+#include <QAction>
 #include <QApplication>
 #include <QIcon>
 #include <QRect>
@@ -79,9 +79,9 @@ NotationSelector::NotationSelector(NotationView* view)
                       SLOT(slotInsertSelected()), actionCollection(),
                       "insert");
 
-    new KAction(i18n("Switch to Erase Tool"), "eraser", 0, this,
-                SLOT(slotEraseSelected()), actionCollection(),
-                "erase");
+    QAction *qa_erase = new QAction( "Switch to Erase Tool", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_erase->setIconText("eraser"); 
+			connect( qa_erase, SIGNAL(triggered()), this, SLOT(slotEraseSelected())  );
 
     // (this crashed, and it might be superfluous with ^N anyway, so I'm
     // commenting it out, but leaving it here in case I change my mind about
@@ -90,45 +90,45 @@ NotationSelector::NotationSelector(NotationView* view)
     //                SLOT(slotCollapseRests()), actionCollection(),
     //                "collapse_rests");
 
-    new KAction(i18n("Collapse Rests"), 0, 0, this,
-                SLOT(slotCollapseRestsHard()), actionCollection(),
-                "collapse_rests_aggressively");
+    QAction *qa_collapse_rests_aggressively = new QAction( "Collapse Rests", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_collapse_rests_aggressively->setIconText(0); 
+			connect( qa_collapse_rests_aggressively, SIGNAL(triggered()), this, SLOT(slotCollapseRestsHard())  );
 
-    new KAction(i18n("Respell as Flat"), 0, 0, this,
-                SLOT(slotRespellFlat()), actionCollection(),
-                "respell_flat");
+    QAction *qa_respell_flat = new QAction( "Respell as Flat", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_respell_flat->setIconText(0); 
+			connect( qa_respell_flat, SIGNAL(triggered()), this, SLOT(slotRespellFlat())  );
 
-    new KAction(i18n("Respell as Sharp"), 0, 0, this,
-                SLOT(slotRespellSharp()), actionCollection(),
-                "respell_sharp");
+    QAction *qa_respell_sharp = new QAction( "Respell as Sharp", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_respell_sharp->setIconText(0); 
+			connect( qa_respell_sharp, SIGNAL(triggered()), this, SLOT(slotRespellSharp())  );
 
-    new KAction(i18n("Respell as Natural"), 0, 0, this,
-                SLOT(slotRespellNatural()), actionCollection(),
-                "respell_natural");
+    QAction *qa_respell_natural = new QAction( "Respell as Natural", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_respell_natural->setIconText(0); 
+			connect( qa_respell_natural, SIGNAL(triggered()), this, SLOT(slotRespellNatural())  );
 
-    new KAction(i18n("Collapse Notes"), 0, 0, this,
-                SLOT(slotCollapseNotes()), actionCollection(),
-                "collapse_notes");
+    QAction *qa_collapse_notes = new QAction( "Collapse Notes", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_collapse_notes->setIconText(0); 
+			connect( qa_collapse_notes, SIGNAL(triggered()), this, SLOT(slotCollapseNotes())  );
 
-    new KAction(i18n("Interpret"), 0, 0, this,
-                SLOT(slotInterpret()), actionCollection(),
-                "interpret");
+    QAction *qa_interpret = new QAction( "Interpret", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_interpret->setIconText(0); 
+			connect( qa_interpret, SIGNAL(triggered()), this, SLOT(slotInterpret())  );
 
-    new KAction(i18n("Move to Staff Above"), 0, 0, this,
-                SLOT(slotStaffAbove()), actionCollection(),
-                "move_events_up_staff");
+    QAction *qa_move_events_up_staff = new QAction( "Move to Staff Above", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_move_events_up_staff->setIconText(0); 
+			connect( qa_move_events_up_staff, SIGNAL(triggered()), this, SLOT(slotStaffAbove())  );
 
-    new KAction(i18n("Move to Staff TicksBelow"), 0, 0, this,
-                SLOT(slotStaffBelow()), actionCollection(),
-                "move_events_down_staff");
+    QAction *qa_move_events_down_staff = new QAction( "Move to Staff TicksBelow", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_move_events_down_staff->setIconText(0); 
+			connect( qa_move_events_down_staff, SIGNAL(triggered()), this, SLOT(slotStaffBelow())  );
 
-    new KAction(i18n("Make Invisible"), 0, 0, this,
-                SLOT(slotMakeInvisible()), actionCollection(),
-                "make_invisible");
+    QAction *qa_make_invisible = new QAction( "Make Invisible", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_make_invisible->setIconText(0); 
+			connect( qa_make_invisible, SIGNAL(triggered()), this, SLOT(slotMakeInvisible())  );
 
-    new KAction(i18n("Make Visible"), 0, 0, this,
-                SLOT(slotMakeVisible()), actionCollection(),
-                "make_visible");
+    QAction *qa_make_visible = new QAction( "Make Visible", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_make_visible->setIconText(0); 
+			connect( qa_make_visible, SIGNAL(triggered()), this, SLOT(slotMakeVisible())  );
 
     createMenu("notationselector.rc");
 }

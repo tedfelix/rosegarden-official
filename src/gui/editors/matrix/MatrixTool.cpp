@@ -20,7 +20,7 @@
 
 #include "gui/general/EditTool.h"
 #include "MatrixView.h"
-#include <kaction.h>
+#include <QAction>
 #include <QString>
 
 

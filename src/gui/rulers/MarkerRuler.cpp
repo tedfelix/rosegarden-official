@@ -42,7 +42,7 @@
 #include <QString>
 #include <QWidget>
 #include <klocale.h>
-#include <kaction.h>
+#include <QAction>
 #include <kstandarddirs.h>
 #include <QToolTip>
 
@@ -90,23 +90,23 @@ MarkerRuler::MarkerRuler(RosegardenGUIDoc *doc,
     // don't become more event-specific in future...
 
     icon = QIcon(QPixmap(pixmapDir + "/toolbar/event-insert.png"));
-    new KAction(i18n("Insert Marker"), icon, 0, this,
-             SLOT(slotInsertMarkerHere()), actionCollection(),
-             "insert_marker_here");
+    QAction *qa_insert_marker_here = new QAction( "Insert Marker", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_insert_marker_here->setIconText(icon); 
+			connect( qa_insert_marker_here, SIGNAL(triggered()), this, SLOT(slotInsertMarkerHere())  );
     
     new KAction(i18n("Insert Marker at Playback Position"), 0, this,
              SLOT(slotInsertMarkerAtPointer()), actionCollection(),
              "insert_marker_at_pointer");
 
     icon = QIcon(QPixmap(pixmapDir + "/toolbar/event-delete.png"));
-    new KAction(i18n("Delete Marker"), icon, 0, this,
-             SLOT(slotDeleteMarker()), actionCollection(),
-             "delete_marker");
+    QAction *qa_delete_marker = new QAction( "Delete Marker", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_delete_marker->setIconText(icon); 
+			connect( qa_delete_marker, SIGNAL(triggered()), this, SLOT(slotDeleteMarker())  );
     
     icon = QIcon(QPixmap(pixmapDir + "/toolbar/event-edit.png"));
-    new KAction(i18n("Edit Marker..."), icon, 0, this,
-                 SLOT(slotEditMarker()), actionCollection(),
-                 "edit_marker");
+    QAction *qa_edit_marker = new QAction( "Edit Marker...", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_edit_marker->setIconText(icon); 
+			connect( qa_edit_marker, SIGNAL(triggered()), this, SLOT(slotEditMarker())  );
 
     QToolTip::add
         (this, i18n("Click on a marker to move the playback pointer.\nShift-click to set a range between markers.\nDouble-click to open the marker editor."));

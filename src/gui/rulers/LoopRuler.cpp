@@ -30,7 +30,7 @@
 #include <QWidget>
 #include <QToolTip>
 #include <klocale.h>
-#include <kaction.h>
+#include <QAction>
 #include <QPainter>
 #include <qpointarray.h>
 #include "document/RosegardenGUIDoc.h"

@@ -47,7 +47,7 @@ class QTemporaryFile;
 class QProcess;
 
 //class KConfig;
-class KAction;
+class QAction;
 class KToggleAction;
 class KRecentFilesAction;
 
@@ -1555,7 +1555,7 @@ private:
     RosegardenGUIDoc* m_doc;
 
     /**
-     * KAction pointers to enable/disable actions
+     * QAction pointers to enable/disable actions
      */
     KRecentFilesAction* m_fileOpenRecent;
 
@@ -1575,13 +1575,13 @@ private:
     KToggleAction* m_viewSegmentLabels;
     KToggleAction* m_enableMIDIrouting;
 
-    KAction *m_playTransport;
-    KAction *m_stopTransport;
-    KAction *m_rewindTransport;
-    KAction *m_ffwdTransport; 
-    KAction *m_recordTransport;
-    KAction *m_rewindEndTransport;
-    KAction *m_ffwdEndTransport;
+    QAction *m_playTransport;
+    QAction *m_stopTransport;
+    QAction *m_rewindTransport;
+    QAction *m_ffwdTransport; 
+    QAction *m_recordTransport;
+    QAction *m_rewindEndTransport;
+    QAction *m_ffwdEndTransport;
 
     SequencerThread *m_sequencerThread;
     bool m_sequencerCheckedIn;
@@ -1660,8 +1660,8 @@ private:
 
     RosegardenParameterArea *m_parameterArea;
 
-    KAction *m_setQuickMarkerAction;
-    KAction *m_jumpToQuickMarkerAction;
+    QAction *m_setQuickMarkerAction;
+    QAction *m_jumpToQuickMarkerAction;
     
 #ifdef HAVE_LIRC        
     LircClient *m_lircClient;

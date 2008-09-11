@@ -27,7 +27,7 @@
 #include "NotationTool.h"
 #include "NotationView.h"
 #include "NotePixmapFactory.h"
-#include <kaction.h>
+#include <QAction>
 #include <QSettings>
 #include <QIcon>
 #include <QString>
@@ -56,15 +56,15 @@ NotationEraser::NotationEraser(NotationView* view)
     QIcon icon
     (NotePixmapFactory::toQPixmap(NotePixmapFactory::
                                   makeToolbarPixmap("crotchet")));
-    new KAction(i18n("Switch to Insert Tool"), icon, 0, this,
-                SLOT(slotInsertSelected()), actionCollection(),
-                "insert");
+    QAction *qa_insert = new QAction( "Switch to Insert Tool", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_insert->setIconText(icon); 
+			connect( qa_insert, SIGNAL(triggered()), this, SLOT(slotInsertSelected())  );
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::
                     makeToolbarPixmap("select")));
-    new KAction(i18n("Switch to Select Tool"), icon, 0, this,
-                SLOT(slotSelectSelected()), actionCollection(),
-                "select");
+    QAction *qa_select = new QAction( "Switch to Select Tool", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_select->setIconText(icon); 
+			connect( qa_select, SIGNAL(triggered()), this, SLOT(slotSelectSelected())  );
 
     createMenu("notationeraser.rc");
 }

@@ -49,7 +49,7 @@
 #include "sound/MappedStudio.h"
 #include <klocale.h>
 #include <kstandarddirs.h>
-#include <kaction.h>
+#include <QAction>
 #include <kglobal.h>
 #include <kmainwindow.h>
 #include <kstandardaction.h>
@@ -96,8 +96,9 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
 
     QIcon icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                              ("transport-play")));
-    KAction *play = new KAction(i18n("&Play"), icon, Qt::Key_Enter, this,
-                SIGNAL(play()), actionCollection(), "play");
+    KAction *play = QAction *qa_play = new QAction( "&Play", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_play->setIconText(icon); 
+			connect( qa_play, SIGNAL(triggered()), this, SIGNAL(play())  );
     // Alternative shortcut for Play
     KShortcut playShortcut = play->shortcut();
     playShortcut.append( KKey(Key_Return + Qt::CTRL) );
@@ -105,44 +106,45 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-stop")));
-    new KAction(i18n("&Stop"), icon, Qt::Key_Insert, this,
-                SIGNAL(stop()), actionCollection(), "stop");
+    QAction *qa_stop = new QAction( "&Stop", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_stop->setIconText(icon); 
+			connect( qa_stop, SIGNAL(triggered()), this, SIGNAL(stop())  );
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-rewind")));
-    new KAction(i18n("Re&wind"), icon, Qt::Key_End, this,
-                SIGNAL(rewindPlayback()), actionCollection(),
-                "playback_pointer_back_bar");
+    QAction *qa_playback_pointer_back_bar = new QAction( "Re&wind", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_playback_pointer_back_bar->setIconText(icon); 
+			connect( qa_playback_pointer_back_bar, SIGNAL(triggered()), this, SIGNAL(rewindPlayback())  );
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-ffwd")));
-    new KAction(i18n("&Fast Forward"), icon, Qt::Key_PageDown, this,
-                SIGNAL(fastForwardPlayback()), actionCollection(),
-                "playback_pointer_forward_bar");
+    QAction *qa_playback_pointer_forward_bar = new QAction( "&Fast Forward", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_playback_pointer_forward_bar->setIconText(icon); 
+			connect( qa_playback_pointer_forward_bar, SIGNAL(triggered()), this, SIGNAL(fastForwardPlayback())  );
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-rewind-end")));
-    new KAction(i18n("Rewind to &Beginning"), icon, 0, this,
-                SIGNAL(rewindPlaybackToBeginning()), actionCollection(),
-                "playback_pointer_start");
+    QAction *qa_playback_pointer_start = new QAction( "Rewind to &Beginning", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_playback_pointer_start->setIconText(icon); 
+			connect( qa_playback_pointer_start, SIGNAL(triggered()), this, SIGNAL(rewindPlaybackToBeginning())  );
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-ffwd-end")));
-    new KAction(i18n("Fast Forward to &End"), icon, 0, this,
-                SIGNAL(fastForwardPlaybackToEnd()), actionCollection(),
-                "playback_pointer_end");
+    QAction *qa_playback_pointer_end = new QAction( "Fast Forward to &End", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_playback_pointer_end->setIconText(icon); 
+			connect( qa_playback_pointer_end, SIGNAL(triggered()), this, SIGNAL(fastForwardPlaybackToEnd())  );
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-record")));
-    new KAction(i18n("&Record"), icon, 0, this,
-                SIGNAL(record()), actionCollection(),
-                "record");
+    QAction *qa_record = new QAction( "&Record", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_record->setIconText(icon); 
+			connect( qa_record, SIGNAL(triggered()), this, SIGNAL(record())  );
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-panic")));
-    new KAction(i18n("Panic"), icon, Qt::Key_P + Qt::CTRL + ALT, this,
-                SIGNAL(panic()), actionCollection(),
-                "panic");
+    QAction *qa_panic = new QAction( "Panic", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_panic->setIconText(icon); 
+			connect( qa_panic, SIGNAL(triggered()), this, SIGNAL(panic())  );
 
     unsigned int mixerOptions = m_studio->getMixerDisplayOptions();
 

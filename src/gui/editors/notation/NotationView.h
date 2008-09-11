@@ -52,8 +52,8 @@ class Q3Canvas;
 class QTemporaryFile;
 //class QProgressBar;
 class QComboBox;
-class KActionMenu;
-class KAction;
+class QActionMenu;
+class QAction;
 
 
 namespace Rosegarden
@@ -1027,7 +1027,7 @@ protected:
     bool m_annotationsVisible;
     bool m_lilyPondDirectivesVisible;
     
-    KAction* m_selectDefaultNote;
+    QAction* m_selectDefaultNote;
 
     typedef QMap<QString, NoteActionData *> NoteActionDataMap;
     static NoteActionDataMap* m_noteActionDataMap;
@@ -1038,7 +1038,7 @@ protected:
     QComboBox       *m_fontCombo;
     QComboBox       *m_fontSizeCombo;
     QComboBox       *m_spacingCombo;
-    KActionMenu     *m_fontSizeActionMenu;
+    QActionMenu     *m_fontSizeActionMenu;
     ScrollBoxDialog *m_pannerDialog;
     QTimer *m_renderTimer;
 
@@ -1063,7 +1063,7 @@ protected:
     HeadersGroup * m_headersGroup;
     QFrame * m_headersTopFrame;
 
-    KAction * m_showHeadersMenuEntry;
+    QAction * m_showHeadersMenuEntry;
 
 };
 

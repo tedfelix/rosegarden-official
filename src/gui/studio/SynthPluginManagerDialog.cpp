@@ -30,7 +30,7 @@
 #include "base/Studio.h"
 #include "document/RosegardenGUIDoc.h"
 #include "document/ConfigGroups.h"
-#include <kaction.h>
+#include <QAction>
 #include <QComboBox>
 #include <kmainwindow.h>
 #include <kstandardaction.h>

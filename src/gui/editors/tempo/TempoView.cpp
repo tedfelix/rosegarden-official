@@ -38,7 +38,7 @@
 #include "gui/general/EditViewBase.h"
 #include "gui/kdeext/KTmpStatusMsg.h"
 #include "TempoListItem.h"
-#include <kaction.h>
+#include <QAction>
 #include <kglobal.h>
 #include <QSettings>
 #include <QListWidget>
@@ -597,16 +597,16 @@ TempoView::setupActions()
     pixmap.load(pixmapDir + "/toolbar/event-delete.png");
     icon = QIcon(pixmap);
 
-    new KAction(i18n("&Delete"), icon, Qt::Key_Delete, this,
-                SLOT(slotEditDelete()), actionCollection(),
-                "delete");
+    QAction *qa_delete = new QAction( "&Delete", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_delete->setIconText(icon); 
+			connect( qa_delete, SIGNAL(triggered()), this, SLOT(slotEditDelete())  );
 
     pixmap.load(pixmapDir + "/toolbar/event-edit.png");
     icon = QIcon(pixmap);
 
-    new KAction(i18n("&Edit Item"), icon, Qt::Key_E, this,
-                SLOT(slotEdit()), actionCollection(),
-                "edit");
+    QAction *qa_edit = new QAction( "&Edit Item", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_edit->setIconText(icon); 
+			connect( qa_edit, SIGNAL(triggered()), this, SLOT(slotEdit())  );
 
     new KAction(i18n("Select &All"), 0, this,
                 SLOT(slotSelectAll()), actionCollection(),

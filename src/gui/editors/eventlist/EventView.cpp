@@ -53,7 +53,7 @@
 #include "gui/general/MidiPitchLabel.h"
 #include "gui/kdeext/KTmpStatusMsg.h"
 #include "gui/dialogs/EventFilterDialog.h"
-#include <kaction.h>
+#include <QAction>
 #include <QSettings>
 #include <klocale.h>
 #include <kstatusbar.h>
@@ -1125,35 +1125,35 @@ EventView::setupActions()
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
     QIcon icon(QPixmap(pixmapDir + "/toolbar/event-insert.png"));
 
-    new KAction(i18n("&Insert Event"), icon, Qt::Key_I, this,
-                SLOT(slotEditInsert()), actionCollection(),
-                "insert");
+    QAction *qa_insert = new QAction( "&Insert Event", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_insert->setIconText(icon); 
+			connect( qa_insert, SIGNAL(triggered()), this, SLOT(slotEditInsert())  );
 
     Q3CanvasPixmap pixmap(pixmapDir + "/toolbar/event-delete.png");
     icon = QIcon(pixmap);
 
-    new KAction(i18n("&Delete Event"), icon, Qt::Key_Delete, this,
-                SLOT(slotEditDelete()), actionCollection(),
-                "delete");
+    QAction *qa_delete = new QAction( "&Delete Event", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_delete->setIconText(icon); 
+			connect( qa_delete, SIGNAL(triggered()), this, SLOT(slotEditDelete())  );
 
     pixmap.load(pixmapDir + "/toolbar/event-edit.png");
     icon = QIcon(pixmap);
 
-    new KAction(i18n("&Edit Event"), icon, Qt::Key_E, this,
-                SLOT(slotEditEvent()), actionCollection(),
-                "edit_simple");
+    QAction *qa_edit_simple = new QAction( "&Edit Event", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_edit_simple->setIconText(icon); 
+			connect( qa_edit_simple, SIGNAL(triggered()), this, SLOT(slotEditEvent())  );
 
     pixmap.load(pixmapDir + "/toolbar/event-edit-advanced.png");
     icon = QIcon(pixmap);
 
-    new KAction(i18n("&Advanced Event Editor"), icon, Qt::Key_A, this,
-                SLOT(slotEditEventAdvanced()), actionCollection(),
-                "edit_advanced");
+    QAction *qa_edit_advanced = new QAction( "&Advanced Event Editor", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_edit_advanced->setIconText(icon); 
+			connect( qa_edit_advanced, SIGNAL(triggered()), this, SLOT(slotEditEventAdvanced())  );
 
     //    icon = QIcon(Q3CanvasPixmap(pixmapDir + "/toolbar/eventfilter.xpm"));
-    new KAction(i18n("&Filter Selection"), "filter", Qt::Key_F, this,
-                SLOT(slotFilterSelection()), actionCollection(),
-                "filter_selection");
+    QAction *qa_filter_selection = new QAction( "&Filter Selection", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_filter_selection->setIconText("filter"); 
+			connect( qa_filter_selection, SIGNAL(triggered()), this, SLOT(slotFilterSelection())  );
 
     new KAction(i18n("Select &All"), Qt::Key_A + Qt::CTRL, this,
                 SLOT(slotSelectAll()), actionCollection(),

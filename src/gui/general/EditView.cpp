@@ -76,7 +76,7 @@
 #include "gui/rulers/ControlRuler.h"
 #include "gui/rulers/PropertyControlRuler.h"
 #include "RosegardenCanvasView.h"
-#include <kaction.h>
+#include <QAction>
 #include "document/Command.h"
 #include <QDockWidget>
 #include <kglobal.h>

@@ -209,7 +209,7 @@
 
 
 #include <kmimetype.h>
-#include <kaction.h>
+#include <QAction>
 #include <kdcopactionproxy.h>
 #include <kedittoolbar.h>
 #include <kfiledialog.h>
@@ -609,84 +609,84 @@ void RosegardenGUIApp::setupActions()
     KStandardAction::print (this, SLOT(slotFilePrint()), actionCollection());
     KStandardAction::printPreview (this, SLOT(slotFilePrintPreview()), actionCollection());
 
-    new KAction(i18n("Import Rosegarden &Project file..."), 0, 0, this,
-                SLOT(slotImportProject()), actionCollection(),
-                "file_import_project");
+    QAction *qa_file_import_project = new QAction( "Import Rosegarden &Project file...", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_file_import_project->setIconText(0); 
+			connect( qa_file_import_project, SIGNAL(triggered()), this, SLOT(slotImportProject())  );
 
-    new KAction(i18n("Import &MIDI file..."), 0, 0, this,
-                SLOT(slotImportMIDI()), actionCollection(),
-                "file_import_midi");
+    QAction *qa_file_import_midi = new QAction( "Import &MIDI file...", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_file_import_midi->setIconText(0); 
+			connect( qa_file_import_midi, SIGNAL(triggered()), this, SLOT(slotImportMIDI())  );
 
-    new KAction(i18n("Import &Rosegarden 2.1 file..."), 0, 0, this,
-                SLOT(slotImportRG21()), actionCollection(),
-                "file_import_rg21");
+    QAction *qa_file_import_rg21 = new QAction( "Import &Rosegarden 2.1 file...", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_file_import_rg21->setIconText(0); 
+			connect( qa_file_import_rg21, SIGNAL(triggered()), this, SLOT(slotImportRG21())  );
 
-    new KAction(i18n("Import &Hydrogen file..."), 0, 0, this,
-                SLOT(slotImportHydrogen()), actionCollection(),
-                "file_import_hydrogen");
+    QAction *qa_file_import_hydrogen = new QAction( "Import &Hydrogen file...", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_file_import_hydrogen->setIconText(0); 
+			connect( qa_file_import_hydrogen, SIGNAL(triggered()), this, SLOT(slotImportHydrogen())  );
 
-    new KAction(i18n("Merge &File..."), 0, 0, this,
-                SLOT(slotMerge()), actionCollection(),
-                "file_merge");
+    QAction *qa_file_merge = new QAction( "Merge &File...", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_file_merge->setIconText(0); 
+			connect( qa_file_merge, SIGNAL(triggered()), this, SLOT(slotMerge())  );
 
-    new KAction(i18n("Merge &MIDI file..."), 0, 0, this,
-                SLOT(slotMergeMIDI()), actionCollection(),
-                "file_merge_midi");
+    QAction *qa_file_merge_midi = new QAction( "Merge &MIDI file...", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_file_merge_midi->setIconText(0); 
+			connect( qa_file_merge_midi, SIGNAL(triggered()), this, SLOT(slotMergeMIDI())  );
 
-    new KAction(i18n("Merge &Rosegarden 2.1 file..."), 0, 0, this,
-                SLOT(slotMergeRG21()), actionCollection(),
-                "file_merge_rg21");
+    QAction *qa_file_merge_rg21 = new QAction( "Merge &Rosegarden 2.1 file...", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_file_merge_rg21->setIconText(0); 
+			connect( qa_file_merge_rg21, SIGNAL(triggered()), this, SLOT(slotMergeRG21())  );
 
-    new KAction(i18n("Merge &Hydrogen file..."), 0, 0, this,
-                SLOT(slotMergeHydrogen()), actionCollection(),
-                "file_merge_hydrogen");
+    QAction *qa_file_merge_hydrogen = new QAction( "Merge &Hydrogen file...", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_file_merge_hydrogen->setIconText(0); 
+			connect( qa_file_merge_hydrogen, SIGNAL(triggered()), this, SLOT(slotMergeHydrogen())  );
 
-    new KAction(i18n("Export Rosegarden &Project file..."), 0, 0, this,
-                SLOT(slotExportProject()), actionCollection(),
-                "file_export_project");
+    QAction *qa_file_export_project = new QAction( "Export Rosegarden &Project file...", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_file_export_project->setIconText(0); 
+			connect( qa_file_export_project, SIGNAL(triggered()), this, SLOT(slotExportProject())  );
 
-    new KAction(i18n("Export &MIDI file..."), 0, 0, this,
-                SLOT(slotExportMIDI()), actionCollection(),
-                "file_export_midi");
+    QAction *qa_file_export_midi = new QAction( "Export &MIDI file...", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_file_export_midi->setIconText(0); 
+			connect( qa_file_export_midi, SIGNAL(triggered()), this, SLOT(slotExportMIDI())  );
 
-    new KAction(i18n("Export &LilyPond file..."), 0, 0, this,
-                SLOT(slotExportLilyPond()), actionCollection(),
-                "file_export_lilypond");
+    QAction *qa_file_export_lilypond = new QAction( "Export &LilyPond file...", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_file_export_lilypond->setIconText(0); 
+			connect( qa_file_export_lilypond, SIGNAL(triggered()), this, SLOT(slotExportLilyPond())  );
 
-    new KAction(i18n("Export Music&XML file..."), 0, 0, this,
-                SLOT(slotExportMusicXml()), actionCollection(),
-                "file_export_musicxml");
+    QAction *qa_file_export_musicxml = new QAction( "Export Music&XML file...", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_file_export_musicxml->setIconText(0); 
+			connect( qa_file_export_musicxml, SIGNAL(triggered()), this, SLOT(slotExportMusicXml())  );
 
-    new KAction(i18n("Export &Csound score file..."), 0, 0, this,
-                SLOT(slotExportCsound()), actionCollection(),
-                "file_export_csound");
+    QAction *qa_file_export_csound = new QAction( "Export &Csound score file...", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_file_export_csound->setIconText(0); 
+			connect( qa_file_export_csound, SIGNAL(triggered()), this, SLOT(slotExportCsound())  );
 
-    new KAction(i18n("Export M&up file..."), 0, 0, this,
-                SLOT(slotExportMup()), actionCollection(),
-                "file_export_mup");
+    QAction *qa_file_export_mup = new QAction( "Export M&up file...", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_file_export_mup->setIconText(0); 
+			connect( qa_file_export_mup, SIGNAL(triggered()), this, SLOT(slotExportMup())  );
 
-    new KAction(i18n("Print &with LilyPond..."), 0, 0, this,
-                SLOT(slotPrintLilyPond()), actionCollection(),
-                "file_print_lilypond");
+    QAction *qa_file_print_lilypond = new QAction( "Print &with LilyPond...", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_file_print_lilypond->setIconText(0); 
+			connect( qa_file_print_lilypond, SIGNAL(triggered()), this, SLOT(slotPrintLilyPond())  );
 
-    new KAction(i18n("Preview with Lil&yPond..."), 0, 0, this,
-                SLOT(slotPreviewLilyPond()), actionCollection(),
-                "file_preview_lilypond");
+    QAction *qa_file_preview_lilypond = new QAction( "Preview with Lil&yPond...", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_file_preview_lilypond->setIconText(0); 
+			connect( qa_file_preview_lilypond, SIGNAL(triggered()), this, SLOT(slotPreviewLilyPond())  );
 
-    new KAction(i18n("Play&list"), 0, 0, this,
-                SLOT(slotPlayList()), actionCollection(),
-                "file_show_playlist");
+    QAction *qa_file_show_playlist = new QAction( "Play&list", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_file_show_playlist->setIconText(0); 
+			connect( qa_file_show_playlist, SIGNAL(triggered()), this, SLOT(slotPlayList())  );
 
     KStandardAction::quit (this, SLOT(slotQuit()), actionCollection());
 
     // help menu
-    new KAction(i18n("Rosegarden &Tutorial"), 0, 0, this,
-                SLOT(slotTutorial()), actionCollection(),
-                "tutorial");
+    QAction *qa_tutorial = new QAction( "Rosegarden &Tutorial", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_tutorial->setIconText(0); 
+			connect( qa_tutorial, SIGNAL(triggered()), this, SLOT(slotTutorial())  );
 
-    new KAction(i18n("&Bug Reporting Guidelines"), 0, 0, this,
-                SLOT(slotBugGuidelines()), actionCollection(),
-                "guidelines");
+    QAction *qa_guidelines = new QAction( "&Bug Reporting Guidelines", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_guidelines->setIconText(0); 
+			connect( qa_guidelines, SIGNAL(triggered()), this, SLOT(slotBugGuidelines())  );
 
     // setup edit menu
     KStandardAction::cut (this, SLOT(slotEditCut()), actionCollection());
@@ -923,33 +923,33 @@ void RosegardenGUIApp::setupActions()
 
     pixmap.load(pixmapDir + "/toolbar/matrix.png");
     icon = QIcon(pixmap);
-    new KAction(i18n("Open in Matri&x Editor"), icon, Qt::Key_M, this,
-                SLOT(slotEditInMatrix()), actionCollection(),
-                "edit_matrix");
+    QAction *qa_edit_matrix = new QAction( "Open in Matri&x Editor", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_edit_matrix->setIconText(icon); 
+			connect( qa_edit_matrix, SIGNAL(triggered()), this, SLOT(slotEditInMatrix())  );
 
     pixmap.load(pixmapDir + "/toolbar/matrix-percussion.png");
     icon = QIcon(pixmap);
-    new KAction(i18n("Open in &Percussion Matrix Editor"), icon, Qt::Key_D, this,
-                SLOT(slotEditInPercussionMatrix()), actionCollection(),
-                "edit_percussion_matrix");
+    QAction *qa_edit_percussion_matrix = new QAction( "Open in &Percussion Matrix Editor", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_edit_percussion_matrix->setIconText(icon); 
+			connect( qa_edit_percussion_matrix, SIGNAL(triggered()), this, SLOT(slotEditInPercussionMatrix())  );
 
     pixmap.load(pixmapDir + "/toolbar/notation.png");
     icon = QIcon(pixmap);
-    new KAction(i18n("Open in &Notation Editor"), icon, Qt::Key_N, this,
-                SLOT(slotEditAsNotation()), actionCollection(),
-                "edit_notation");
+    QAction *qa_edit_notation = new QAction( "Open in &Notation Editor", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_edit_notation->setIconText(icon); 
+			connect( qa_edit_notation, SIGNAL(triggered()), this, SLOT(slotEditAsNotation())  );
 
     pixmap.load(pixmapDir + "/toolbar/eventlist.png");
     icon = QIcon(pixmap);
-    new KAction(i18n("Open in &Event List Editor"), icon, Qt::Key_E, this,
-                SLOT(slotEditInEventList()), actionCollection(),
-                "edit_event_list");
+    QAction *qa_edit_event_list = new QAction( "Open in &Event List Editor", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_edit_event_list->setIconText(icon); 
+			connect( qa_edit_event_list, SIGNAL(triggered()), this, SLOT(slotEditInEventList())  );
 
     pixmap.load(pixmapDir + "/toolbar/quantize.png");
     icon = QIcon(pixmap);
-    new KAction(i18n("&Quantize..."), icon, Qt::Key_Equal, this,
-                SLOT(slotQuantizeSelection()), actionCollection(),
-                "quantize_selection");
+    QAction *qa_quantize_selection = new QAction( "&Quantize...", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_quantize_selection->setIconText(icon); 
+			connect( qa_quantize_selection, SIGNAL(triggered()), this, SLOT(slotQuantizeSelection())  );
 
     new KAction(SegmentLabelCommand::getGlobalName(),
                 0,
@@ -1025,10 +1025,9 @@ void RosegardenGUIApp::setupActions()
 
     pixmap.load(pixmapDir + "/toolbar/manage-audio-segments.xpm");
     icon = QIcon(pixmap);
-    new KAction(i18n("Manage A&udio Files"), icon,
-                Qt::Key_U + Qt::CTRL,
-                this, SLOT(slotAudioManager()),
-                actionCollection(), "audio_manager");
+    QAction *qa_audio_manager = new QAction( "Manage A&udio Files", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_audio_manager->setIconText(icon); 
+			connect( qa_audio_manager, SIGNAL(triggered()), this, SLOT(slotAudioManager())  );
 
     m_viewSegmentLabels = new KToggleAction(i18n("Show Segment Labels"), 0, this,
                                             SLOT(slotToggleSegmentLabels()), actionCollection(),
@@ -1039,9 +1038,9 @@ void RosegardenGUIApp::setupActions()
     //
     pixmap.load(pixmapDir + "/toolbar/add_tracks.png");
     icon = QIcon(pixmap);
-    new KAction(i18n("Add &Track"), icon, Qt::CTRL + Qt::Key_T,
-                this, SLOT(slotAddTrack()),
-                actionCollection(), "add_track");
+    QAction *qa_add_track = new QAction( "Add &Track", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_add_track->setIconText(icon); 
+			connect( qa_add_track, SIGNAL(triggered()), this, SLOT(slotAddTrack())  );
 
     new KAction(i18n("&Add Tracks..."), 0,
                 this, SLOT(slotAddTracks()),
@@ -1049,21 +1048,21 @@ void RosegardenGUIApp::setupActions()
 
     pixmap.load(pixmapDir + "/toolbar/delete_track.png");
     icon = QIcon(pixmap);
-    new KAction(i18n("D&elete Track"), icon, Qt::CTRL + Qt::Key_D,
-                this, SLOT(slotDeleteTrack()),
-                actionCollection(), "delete_track");
+    QAction *qa_delete_track = new QAction( "D&elete Track", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_delete_track->setIconText(icon); 
+			connect( qa_delete_track, SIGNAL(triggered()), this, SLOT(slotDeleteTrack())  );
 
     pixmap.load(pixmapDir + "/toolbar/move_track_down.png");
     icon = QIcon(pixmap);
-    new KAction(i18n("Move Track &Down"), icon, Qt::SHIFT + Qt::Key_Down,
-                this, SLOT(slotMoveTrackDown()),
-                actionCollection(), "move_track_down");
+    QAction *qa_move_track_down = new QAction( "Move Track &Down", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_move_track_down->setIconText(icon); 
+			connect( qa_move_track_down, SIGNAL(triggered()), this, SLOT(slotMoveTrackDown())  );
 
     pixmap.load(pixmapDir + "/toolbar/move_track_up.png");
     icon = QIcon(pixmap);
-    new KAction(i18n("Move Track &Up"), icon, Qt::SHIFT + Qt::Key_Up,
-                this, SLOT(slotMoveTrackUp()),
-                actionCollection(), "move_track_up");
+    QAction *qa_move_track_up = new QAction( "Move Track &Up", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_move_track_up->setIconText(icon); 
+			connect( qa_move_track_up, SIGNAL(triggered()), this, SLOT(slotMoveTrackUp())  );
 
     new KAction(i18n("Select &Next Track"),
                 Qt::Key_Down,
@@ -1087,15 +1086,15 @@ void RosegardenGUIApp::setupActions()
 
     pixmap.load(pixmapDir + "/toolbar/mute-all.png");
     icon = QIcon(pixmap);
-    new KAction(i18n("&Mute all Tracks"), icon, 0,
-                this, SLOT(slotMuteAllTracks()),
-                actionCollection(), "mute_all_tracks");
+    QAction *qa_mute_all_tracks = new QAction( "&Mute all Tracks", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_mute_all_tracks->setIconText(icon); 
+			connect( qa_mute_all_tracks, SIGNAL(triggered()), this, SLOT(slotMuteAllTracks())  );
 
     pixmap.load(pixmapDir + "/toolbar/un-mute-all.png");
     icon = QIcon(pixmap);
-    new KAction(i18n("&Unmute all Tracks"), icon, 0,
-                this, SLOT(slotUnmuteAllTracks()),
-                actionCollection(), "unmute_all_tracks");
+    QAction *qa_unmute_all_tracks = new QAction( "&Unmute all Tracks", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_unmute_all_tracks->setIconText(icon); 
+			connect( qa_unmute_all_tracks, SIGNAL(triggered()), this, SLOT(slotUnmuteAllTracks())  );
 
     new KAction(i18n("&Remap Instruments..."), 0, this,
                 SLOT(slotRemapInstruments()),
@@ -1106,31 +1105,31 @@ void RosegardenGUIApp::setupActions()
     //
     pixmap.load(pixmapDir + "/toolbar/mixer.png");
     icon = QIcon(pixmap);
-    new KAction(i18n("&Audio Mixer"), icon, 0, this,
-                SLOT(slotOpenAudioMixer()),
-                actionCollection(), "audio_mixer");
+    QAction *qa_audio_mixer = new QAction( "&Audio Mixer", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_audio_mixer->setIconText(icon); 
+			connect( qa_audio_mixer, SIGNAL(triggered()), this, SLOT(slotOpenAudioMixer())  );
 
     pixmap.load(pixmapDir + "/toolbar/midimixer.png");
     icon = QIcon(pixmap);
-    new KAction(i18n("Midi Mi&xer"), icon, 0, this,
-                SLOT(slotOpenMidiMixer()),
-                actionCollection(), "midi_mixer");
+    QAction *qa_midi_mixer = new QAction( "Midi Mi&xer", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_midi_mixer->setIconText(icon); 
+			connect( qa_midi_mixer, SIGNAL(triggered()), this, SLOT(slotOpenMidiMixer())  );
 
     pixmap.load(pixmapDir + "/toolbar/manage-midi-devices.xpm");
     icon = QIcon(pixmap);
-    new KAction(i18n("Manage MIDI &Devices"), icon, 0, this,
-                SLOT(slotManageMIDIDevices()),
-                actionCollection(), "manage_devices");
+    QAction *qa_manage_devices = new QAction( "Manage MIDI &Devices", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_manage_devices->setIconText(icon); 
+			connect( qa_manage_devices, SIGNAL(triggered()), this, SLOT(slotManageMIDIDevices())  );
 
     pixmap.load(pixmapDir + "/toolbar/manage-synth-plugins.png");
     icon = QIcon(pixmap);
-    new KAction(i18n("Manage S&ynth Plugins"), icon, 0, this,
-                SLOT(slotManageSynths()),
-                actionCollection(), "manage_synths");
+    QAction *qa_manage_synths = new QAction( "Manage S&ynth Plugins", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_manage_synths->setIconText(icon); 
+			connect( qa_manage_synths, SIGNAL(triggered()), this, SLOT(slotManageSynths())  );
 
-    new KAction(i18n("Modify MIDI &Filters"), "filter", 0, this,
-                SLOT(slotModifyMIDIFilters()),
-                actionCollection(), "modify_midi_filters");
+    QAction *qa_modify_midi_filters = new QAction( "Modify MIDI &Filters", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_modify_midi_filters->setIconText("filter"); 
+			connect( qa_modify_midi_filters, SIGNAL(triggered()), this, SLOT(slotModifyMIDIFilters())  );
 
     m_enableMIDIrouting = new KToggleAction(i18n("MIDI Thru Routing"), 0, this,
                                             SLOT(slotEnableMIDIThruRouting()),
@@ -1158,13 +1157,13 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotResetMidiNetwork()),
                 actionCollection(), "reset_midi_network");
 
-    m_setQuickMarkerAction = new KAction(i18n("Set Quick Marker at Playback Position"), 0, Qt::CTRL + Qt::Key_1, this,
-                SLOT(slotSetQuickMarker()), actionCollection(),
-                "set_quick_marker");
+    m_setQuickMarkerAction = QAction *qa_set_quick_marker = new QAction( "Set Quick Marker at Playback Position", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_set_quick_marker->setIconText(0); 
+			connect( qa_set_quick_marker, SIGNAL(triggered()), this, SLOT(slotSetQuickMarker())  );
 
-    m_jumpToQuickMarkerAction = new KAction(i18n("Jump to Quick Marker"), 0, Qt::Key_1, this,
-                SLOT(slotJumpToQuickMarker()), actionCollection(),
-                "jump_to_quick_marker");
+    m_jumpToQuickMarkerAction = QAction *qa_jump_to_quick_marker = new QAction( "Jump to Quick Marker", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_jump_to_quick_marker->setIconText(0); 
+			connect( qa_jump_to_quick_marker, SIGNAL(triggered()), this, SLOT(slotJumpToQuickMarker())  );
 
     //
     // Marker Ruler popup menu
@@ -1195,9 +1194,9 @@ void RosegardenGUIApp::setupActions()
     //
     pixmap.load(pixmapDir + "/toolbar/transport-play.png");
     icon = QIcon(pixmap);
-    m_playTransport = new KAction(i18n("&Play"), icon, Qt::Key_Enter, this,
-                                  SLOT(slotPlay()), actionCollection(),
-                                  "play");
+    m_playTransport = QAction *qa_play = new QAction( "&Play", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_play->setIconText(icon); 
+			connect( qa_play, SIGNAL(triggered()), this, SLOT(slotPlay())  );
     // Alternative shortcut for Play
     KShortcut playShortcut = m_playTransport->shortcut();
     playShortcut.append( KKey(Key_Return + Qt::CTRL) );
@@ -1212,9 +1211,9 @@ void RosegardenGUIApp::setupActions()
 
     pixmap.load(pixmapDir + "/toolbar/transport-stop.png");
     icon = QIcon(pixmap);
-    m_stopTransport = new KAction(i18n("&Stop"), icon, Qt::Key_Insert, this,
-                                  SLOT(slotStop()), actionCollection(),
-                                  "stop");
+    m_stopTransport = QAction *qa_stop = new QAction( "&Stop", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_stop->setIconText(icon); 
+			connect( qa_stop, SIGNAL(triggered()), this, SLOT(slotStop())  );
     QSettings m_stopTransport;
     m_stopTransport.beginGroup( TransportDialogConfigGroup );
     // 
@@ -1225,10 +1224,9 @@ void RosegardenGUIApp::setupActions()
 
     pixmap.load(pixmapDir + "/toolbar/transport-ffwd.png");
     icon = QIcon(pixmap);
-    m_ffwdTransport = new KAction(i18n("&Fast Forward"), icon, Qt::Key_PageDown,
-                                  this,
-                                  SLOT(slotFastforward()), actionCollection(),
-                                  "fast_forward");
+    m_ffwdTransport = QAction *qa_fast_forward = new QAction( "&Fast Forward", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_fast_forward->setIconText(icon); 
+			connect( qa_fast_forward, SIGNAL(triggered()), this, SLOT(slotFastforward())  );
     QSettings m_ffwdTransport;
     m_ffwdTransport.beginGroup( TransportDialogConfigGroup );
     // 
@@ -1239,9 +1237,9 @@ void RosegardenGUIApp::setupActions()
 
     pixmap.load(pixmapDir + "/toolbar/transport-rewind.png");
     icon = QIcon(pixmap);
-    m_rewindTransport = new KAction(i18n("Re&wind"), icon, Qt::Key_End, this,
-                                    SLOT(slotRewind()), actionCollection(),
-                                    "rewind");
+    m_rewindTransport = QAction *qa_rewind = new QAction( "Re&wind", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_rewind->setIconText(icon); 
+			connect( qa_rewind, SIGNAL(triggered()), this, SLOT(slotRewind())  );
     QSettings m_rewindTransport;
     m_rewindTransport.beginGroup( TransportDialogConfigGroup );
     // 
@@ -1252,9 +1250,9 @@ void RosegardenGUIApp::setupActions()
 
     pixmap.load(pixmapDir + "/toolbar/transport-record.png");
     icon = QIcon(pixmap);
-    m_recordTransport = new KAction(i18n("P&unch in Record"), icon, Qt::Key_Space, this,
-                                    SLOT(slotToggleRecord()), actionCollection(),
-                                    "recordtoggle");
+    m_recordTransport = QAction *qa_recordtoggle = new QAction( "P&unch in Record", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_recordtoggle->setIconText(icon); 
+			connect( qa_recordtoggle, SIGNAL(triggered()), this, SLOT(slotToggleRecord())  );
     QSettings m_recordTransport;
     m_recordTransport.beginGroup( TransportDialogConfigGroup );
     // 
@@ -1265,9 +1263,9 @@ void RosegardenGUIApp::setupActions()
 
     pixmap.load(pixmapDir + "/toolbar/transport-record.png");
     icon = QIcon(pixmap);
-    m_recordTransport = new KAction(i18n("&Record"), icon, 0, this,
-                                    SLOT(slotRecord()), actionCollection(),
-                                    "record");
+    m_recordTransport = QAction *qa_record = new QAction( "&Record", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_record->setIconText(icon); 
+			connect( qa_record, SIGNAL(triggered()), this, SLOT(slotRecord())  );
     QSettings m_recordTransport;
     m_recordTransport.beginGroup( TransportDialogConfigGroup );
     // 
@@ -1278,9 +1276,9 @@ void RosegardenGUIApp::setupActions()
 
     pixmap.load(pixmapDir + "/toolbar/transport-rewind-end.png");
     icon = QIcon(pixmap);
-    m_rewindEndTransport = new KAction(i18n("Rewind to &Beginning"), icon, 0, this,
-                                       SLOT(slotRewindToBeginning()), actionCollection(),
-                                       "rewindtobeginning");
+    m_rewindEndTransport = QAction *qa_rewindtobeginning = new QAction( "Rewind to &Beginning", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_rewindtobeginning->setIconText(icon); 
+			connect( qa_rewindtobeginning, SIGNAL(triggered()), this, SLOT(slotRewindToBeginning())  );
     QSettings m_rewindEndTransport;
     m_rewindEndTransport.beginGroup( TransportDialogConfigGroup );
     // 
@@ -1291,9 +1289,9 @@ void RosegardenGUIApp::setupActions()
 
     pixmap.load(pixmapDir + "/toolbar/transport-ffwd-end.png");
     icon = QIcon(pixmap);
-    m_ffwdEndTransport = new KAction(i18n("Fast Forward to &End"), icon, 0, this,
-                                     SLOT(slotFastForwardToEnd()), actionCollection(),
-                                     "fastforwardtoend");
+    m_ffwdEndTransport = QAction *qa_fastforwardtoend = new QAction( "Fast Forward to &End", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_fastforwardtoend->setIconText(icon); 
+			connect( qa_fastforwardtoend, SIGNAL(triggered()), this, SLOT(slotFastForwardToEnd())  );
     QSettings m_ffwdEndTransport;
     m_ffwdEndTransport.beginGroup( TransportDialogConfigGroup );
     // 
@@ -1310,8 +1308,9 @@ void RosegardenGUIApp::setupActions()
 
     pixmap.load(pixmapDir + "/toolbar/transport-panic.png");
     icon = QIcon(pixmap);
-    new KAction( i18n("Panic"), icon, Qt::Key_P + Qt::CTRL + ALT, this, SLOT(slotPanic()),
-                 actionCollection(), "panic");
+    QAction *qa_panic = new QAction( "Panic", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+			qa_panic->setIconText(icon); 
+			connect( qa_panic, SIGNAL(triggered()), this, SLOT(slotPanic())  );
 
     // DEBUG FACILITY
     new KAction(i18n("Segment Debug Dump "), 0, this,

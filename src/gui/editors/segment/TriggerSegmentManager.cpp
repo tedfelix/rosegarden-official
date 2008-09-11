@@ -41,7 +41,7 @@
 #include "document/ConfigGroups.h"
 #include "gui/dialogs/TimeDialog.h"
 #include "gui/general/MidiPitchLabel.h"
-#include <kaction.h>
+#include <QAction>
 #include "document/Command.h"
 #include <kglobal.h>
 #include <QListWidget>

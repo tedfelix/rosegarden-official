@@ -25,7 +25,7 @@
 #include "sound/MappedComposition.h"
 #include <dcopobject.h>
 #include <dcopref.h>
-#include <kaction.h>
+#include <QAction>
 #include <kdcopactionproxy.h>
 #include <kmainwindow.h>
 #include <QByteArray>
