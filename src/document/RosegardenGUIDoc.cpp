@@ -166,14 +166,13 @@ RosegardenGUIDoc::~RosegardenGUIDoc()
 unsigned int
 RosegardenGUIDoc::getAutoSavePeriod() const
 {
-	QSettings config;
-	config.beginGroup( GeneralOptionsConfigGroup );
-	
-	
+	QSettings settings;
+	settings.beginGroup( GeneralOptionsConfigGroup );
+
 	unsigned int ret;
-	ret = config.value("autosaveinterval", 60).toUInt();
+	ret = settings.value("autosaveinterval", 60).toUInt();
 	
-	config.endGroup();		// corresponding to: config.beginGroup( GeneralOptionsConfigGroup );
+	settings.endGroup();		// corresponding to: settings.beginGroup( GeneralOptionsConfigGroup );
 	return ret;
 }
 
@@ -1113,17 +1112,14 @@ void RosegardenGUIDoc::initialiseStudio()
     // Now commit all the remaining changes
     StudioControl::setStudioObjectProperties(ids, properties, values);
 
-    QSettings config;
-    config.beginGroup( SequencerOptionsConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( SequencerOptionsConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( SequencerOptionsConfigGroup );
 
+    bool faderOuts = qStrToBool( settings.value("audiofaderouts", "false" ) ) ;
+    bool submasterOuts = qStrToBool( settings.value("audiosubmasterouts", "false" ) ) ;
+    unsigned int audioFileFormat = settings.value("audiorecordfileformat", 1).toUInt() ;
 
-    bool faderOuts = qStrToBool( config.value("audiofaderouts", "false" ) ) ;
-    bool submasterOuts = qStrToBool( config.value("audiosubmasterouts", "false" ) ) ;
-    unsigned int audioFileFormat = config.value("audiorecordfileformat", 1).toUInt() ;
+    settings.endGroup();
 
     MidiByte ports = 0;
     if (faderOuts) {
@@ -2013,15 +2009,11 @@ RosegardenGUIDoc::insertRecordedMidi(const MappedComposition &mC)
 
         if (haveNotes) {
 
-            QSettings config;
-            config.beginGroup( GeneralOptionsConfigGroup );
-            // 
-            // FIX-manually-(GW), add:
-            // config.endGroup();		// corresponding to: config.beginGroup( GeneralOptionsConfigGroup );
-            //  
+            QSettings settings;
+            settings.beginGroup( GeneralOptionsConfigGroup );
 
-
-            int tracking = config.value("recordtracking", 0).toUInt() ;
+            int tracking = settings.value("recordtracking", 0).toUInt() ;
+            settings.endGroup();
             if (tracking == 1) { // notation
                 for ( RecordingSegmentMap::const_iterator it = m_recordMIDISegments.begin();
                         it != m_recordMIDISegments.end(); ++it) {
@@ -2341,17 +2333,14 @@ RosegardenGUIDoc::syncDevices()
     // when changed in the configuration dialog.
     static bool setTimer = false;
     if (!setTimer) {
-        QSettings confq4;
-        confq4.beginGroup( SequencerOptionsConfigGroup );
-        // 
-        // FIX-manually-(GW), add:
-        // confq4.endGroup();		// corresponding to: confq4.beginGroup( SequencerOptionsConfigGroup );
-        //  
+        QSettings settings;
+        settings.beginGroup( SequencerOptionsConfigGroup );
 
         QString currentTimer = getCurrentTimer();
-        currentTimer = confq4.value("timer", currentTimer).toString();
+        currentTimer = settings.value("timer", currentTimer).toString();
         setCurrentTimer(currentTimer);
         setTimer = true;
+        settings.endGroup();
     }
 
     unsigned int devices = RosegardenSequencer::getInstance()->getDevices();
@@ -2372,14 +2361,12 @@ RosegardenGUIDoc::syncDevices()
 
     // Force update of view on current track selection
     //
-    QSettings confq4;
-    confq4.beginGroup( GeneralOptionsConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // confq4.endGroup();		// corresponding to: confq4.beginGroup( GeneralOptionsConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( GeneralOptionsConfigGroup );
 
-    bool opt = qStrToBool( confq4.value("Show Track labels", "true" ) ) ;
+    bool opt = qStrToBool( settings.value("Show Track labels", "true" ) ) ;
+    settings.endGroup();
+
     TrackLabel::InstrumentTrackLabels labels = TrackLabel::ShowInstrument;
     if (opt)
         labels = TrackLabel::ShowTrack;
