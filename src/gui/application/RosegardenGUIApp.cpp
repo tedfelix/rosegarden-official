@@ -200,7 +200,8 @@
 #include <QTimer>
 #include <QVector>
 #include <QWidget>
-#include <QButton>
+#include <QPushButton>
+#include <QToolButton>
 #include <QMainWindow>
 
 
