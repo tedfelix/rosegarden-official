@@ -88,7 +88,7 @@ MatrixSelector::MatrixSelector(MatrixView* view)
     QIcon icon = QIcon(pixmap);
 
     QAction *qa_resize = new QAction( "Switch to Resize Tool", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_resize->setIconText(icon); 
+			qa_resize->setIcon(icon); 
 			connect( qa_resize, SIGNAL(triggered()), this, SLOT(slotResizeSelected())  );
 
     createMenu("matrixselector.rc");

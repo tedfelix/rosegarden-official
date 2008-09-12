@@ -198,25 +198,25 @@ void EditViewBase::setupActions(QString rcFileName, bool haveClipboard)
     Q3CanvasPixmap pixmap(pixmapDir + "/toolbar/matrix.png");
     QIcon icon = QIcon(pixmap);
     QAction *qa_open_in_matrix = new QAction( "Open in Matri&x Editor", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_open_in_matrix->setIconText(icon); 
+			qa_open_in_matrix->setIcon(icon); 
 			connect( qa_open_in_matrix, SIGNAL(triggered()), this, SLOT(slotOpenInMatrix())  );
 
     pixmap.load(pixmapDir + "/toolbar/matrix-percussion.png");
     icon = QIcon(pixmap);
     QAction *qa_open_in_percussion_matrix = new QAction( "Open in &Percussion Matrix Editor", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_open_in_percussion_matrix->setIconText(icon); 
+			qa_open_in_percussion_matrix->setIcon(icon); 
 			connect( qa_open_in_percussion_matrix, SIGNAL(triggered()), this, SLOT(slotOpenInPercussionMatrix())  );
 
     pixmap.load(pixmapDir + "/toolbar/notation.png");
     icon = QIcon(pixmap);
     QAction *qa_open_in_notation = new QAction( "Open in &Notation Editor", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_open_in_notation->setIconText(icon); 
+			qa_open_in_notation->setIcon(icon); 
 			connect( qa_open_in_notation, SIGNAL(triggered()), this, SLOT(slotOpenInNotation())  );
 
     pixmap.load(pixmapDir + "/toolbar/eventlist.png");
     icon = QIcon(pixmap);
     QAction *qa_open_in_event_list = new QAction( "Open in &Event List Editor", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_open_in_event_list->setIconText(icon); 
+			qa_open_in_event_list->setIcon(icon); 
 			connect( qa_open_in_event_list, SIGNAL(triggered()), this, SLOT(slotOpenInEventList())  );
 
     new KAction(i18n("Set Segment Start Time..."), 0, this,

@@ -598,14 +598,14 @@ TempoView::setupActions()
     icon = QIcon(pixmap);
 
     QAction *qa_delete = new QAction( "&Delete", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_delete->setIconText(icon); 
+			qa_delete->setIcon(icon); 
 			connect( qa_delete, SIGNAL(triggered()), this, SLOT(slotEditDelete())  );
 
     pixmap.load(pixmapDir + "/toolbar/event-edit.png");
     icon = QIcon(pixmap);
 
     QAction *qa_edit = new QAction( "&Edit Item", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_edit->setIconText(icon); 
+			qa_edit->setIcon(icon); 
 			connect( qa_edit, SIGNAL(triggered()), this, SLOT(slotEdit())  );
 
     new KAction(i18n("Select &All"), 0, this,

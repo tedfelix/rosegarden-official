@@ -57,13 +57,13 @@ NotationEraser::NotationEraser(NotationView* view)
     (NotePixmapFactory::toQPixmap(NotePixmapFactory::
                                   makeToolbarPixmap("crotchet")));
     QAction *qa_insert = new QAction( "Switch to Insert Tool", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_insert->setIconText(icon); 
+			qa_insert->setIcon(icon); 
 			connect( qa_insert, SIGNAL(triggered()), this, SLOT(slotInsertSelected())  );
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::
                     makeToolbarPixmap("select")));
     QAction *qa_select = new QAction( "Switch to Select Tool", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_select->setIconText(icon); 
+			qa_select->setIcon(icon); 
 			connect( qa_select, SIGNAL(triggered()), this, SLOT(slotSelectSelected())  );
 
     createMenu("notationeraser.rc");

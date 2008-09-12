@@ -920,31 +920,31 @@ void RosegardenGUIApp::setupActions()
     pixmap.load(pixmapDir + "/toolbar/matrix.png");
     icon = QIcon(pixmap);
     QAction *qa_edit_matrix = new QAction( "Open in Matri&x Editor", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_edit_matrix->setIconText(icon); 
+			qa_edit_matrix->setIcon(icon); 
 			connect( qa_edit_matrix, SIGNAL(triggered()), this, SLOT(slotEditInMatrix())  );
 
     pixmap.load(pixmapDir + "/toolbar/matrix-percussion.png");
     icon = QIcon(pixmap);
     QAction *qa_edit_percussion_matrix = new QAction( "Open in &Percussion Matrix Editor", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_edit_percussion_matrix->setIconText(icon); 
+			qa_edit_percussion_matrix->setIcon(icon); 
 			connect( qa_edit_percussion_matrix, SIGNAL(triggered()), this, SLOT(slotEditInPercussionMatrix())  );
 
     pixmap.load(pixmapDir + "/toolbar/notation.png");
     icon = QIcon(pixmap);
     QAction *qa_edit_notation = new QAction( "Open in &Notation Editor", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_edit_notation->setIconText(icon); 
+			qa_edit_notation->setIcon(icon); 
 			connect( qa_edit_notation, SIGNAL(triggered()), this, SLOT(slotEditAsNotation())  );
 
     pixmap.load(pixmapDir + "/toolbar/eventlist.png");
     icon = QIcon(pixmap);
     QAction *qa_edit_event_list = new QAction( "Open in &Event List Editor", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_edit_event_list->setIconText(icon); 
+			qa_edit_event_list->setIcon(icon); 
 			connect( qa_edit_event_list, SIGNAL(triggered()), this, SLOT(slotEditInEventList())  );
 
     pixmap.load(pixmapDir + "/toolbar/quantize.png");
     icon = QIcon(pixmap);
     QAction *qa_quantize_selection = new QAction( "&Quantize...", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_quantize_selection->setIconText(icon); 
+			qa_quantize_selection->setIcon(icon); 
 			connect( qa_quantize_selection, SIGNAL(triggered()), this, SLOT(slotQuantizeSelection())  );
 
     new KAction(SegmentLabelCommand::getGlobalName(),
@@ -1022,7 +1022,7 @@ void RosegardenGUIApp::setupActions()
     pixmap.load(pixmapDir + "/toolbar/manage-audio-segments.xpm");
     icon = QIcon(pixmap);
     QAction *qa_audio_manager = new QAction( "Manage A&udio Files", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_audio_manager->setIconText(icon); 
+			qa_audio_manager->setIcon(icon); 
 			connect( qa_audio_manager, SIGNAL(triggered()), this, SLOT(slotAudioManager())  );
 
     m_viewSegmentLabels = new KToggleAction(i18n("Show Segment Labels"), 0, this,
@@ -1035,7 +1035,7 @@ void RosegardenGUIApp::setupActions()
     pixmap.load(pixmapDir + "/toolbar/add_tracks.png");
     icon = QIcon(pixmap);
     QAction *qa_add_track = new QAction( "Add &Track", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_add_track->setIconText(icon); 
+			qa_add_track->setIcon(icon); 
 			connect( qa_add_track, SIGNAL(triggered()), this, SLOT(slotAddTrack())  );
 
     new KAction(i18n("&Add Tracks..."), 0,
@@ -1045,19 +1045,19 @@ void RosegardenGUIApp::setupActions()
     pixmap.load(pixmapDir + "/toolbar/delete_track.png");
     icon = QIcon(pixmap);
     QAction *qa_delete_track = new QAction( "D&elete Track", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_delete_track->setIconText(icon); 
+			qa_delete_track->setIcon(icon); 
 			connect( qa_delete_track, SIGNAL(triggered()), this, SLOT(slotDeleteTrack())  );
 
     pixmap.load(pixmapDir + "/toolbar/move_track_down.png");
     icon = QIcon(pixmap);
     QAction *qa_move_track_down = new QAction( "Move Track &Down", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_move_track_down->setIconText(icon); 
+			qa_move_track_down->setIcon(icon); 
 			connect( qa_move_track_down, SIGNAL(triggered()), this, SLOT(slotMoveTrackDown())  );
 
     pixmap.load(pixmapDir + "/toolbar/move_track_up.png");
     icon = QIcon(pixmap);
     QAction *qa_move_track_up = new QAction( "Move Track &Up", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_move_track_up->setIconText(icon); 
+			qa_move_track_up->setIcon(icon); 
 			connect( qa_move_track_up, SIGNAL(triggered()), this, SLOT(slotMoveTrackUp())  );
 
     new KAction(i18n("Select &Next Track"),
@@ -1083,13 +1083,13 @@ void RosegardenGUIApp::setupActions()
     pixmap.load(pixmapDir + "/toolbar/mute-all.png");
     icon = QIcon(pixmap);
     QAction *qa_mute_all_tracks = new QAction( "&Mute all Tracks", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_mute_all_tracks->setIconText(icon); 
+			qa_mute_all_tracks->setIcon(icon); 
 			connect( qa_mute_all_tracks, SIGNAL(triggered()), this, SLOT(slotMuteAllTracks())  );
 
     pixmap.load(pixmapDir + "/toolbar/un-mute-all.png");
     icon = QIcon(pixmap);
     QAction *qa_unmute_all_tracks = new QAction( "&Unmute all Tracks", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_unmute_all_tracks->setIconText(icon); 
+			qa_unmute_all_tracks->setIcon(icon); 
 			connect( qa_unmute_all_tracks, SIGNAL(triggered()), this, SLOT(slotUnmuteAllTracks())  );
 
     new KAction(i18n("&Remap Instruments..."), 0, this,
@@ -1102,25 +1102,25 @@ void RosegardenGUIApp::setupActions()
     pixmap.load(pixmapDir + "/toolbar/mixer.png");
     icon = QIcon(pixmap);
     QAction *qa_audio_mixer = new QAction( "&Audio Mixer", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_audio_mixer->setIconText(icon); 
+			qa_audio_mixer->setIcon(icon); 
 			connect( qa_audio_mixer, SIGNAL(triggered()), this, SLOT(slotOpenAudioMixer())  );
 
     pixmap.load(pixmapDir + "/toolbar/midimixer.png");
     icon = QIcon(pixmap);
     QAction *qa_midi_mixer = new QAction( "Midi Mi&xer", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_midi_mixer->setIconText(icon); 
+			qa_midi_mixer->setIcon(icon); 
 			connect( qa_midi_mixer, SIGNAL(triggered()), this, SLOT(slotOpenMidiMixer())  );
 
     pixmap.load(pixmapDir + "/toolbar/manage-midi-devices.xpm");
     icon = QIcon(pixmap);
     QAction *qa_manage_devices = new QAction( "Manage MIDI &Devices", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_manage_devices->setIconText(icon); 
+			qa_manage_devices->setIcon(icon); 
 			connect( qa_manage_devices, SIGNAL(triggered()), this, SLOT(slotManageMIDIDevices())  );
 
     pixmap.load(pixmapDir + "/toolbar/manage-synth-plugins.png");
     icon = QIcon(pixmap);
     QAction *qa_manage_synths = new QAction( "Manage S&ynth Plugins", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_manage_synths->setIconText(icon); 
+			qa_manage_synths->setIcon(icon); 
 			connect( qa_manage_synths, SIGNAL(triggered()), this, SLOT(slotManageSynths())  );
 
     QAction *qa_modify_midi_filters = new QAction( "Modify MIDI &Filters", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
@@ -1191,7 +1191,7 @@ void RosegardenGUIApp::setupActions()
     pixmap.load(pixmapDir + "/toolbar/transport-play.png");
     icon = QIcon(pixmap);
     m_playTransport = QAction *qa_play = new QAction( "&Play", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_play->setIconText(icon); 
+			qa_play->setIcon(icon); 
 			connect( qa_play, SIGNAL(triggered()), this, SLOT(slotPlay())  );
     // Alternative shortcut for Play
     KShortcut playShortcut = m_playTransport->shortcut();
@@ -1208,7 +1208,7 @@ void RosegardenGUIApp::setupActions()
     pixmap.load(pixmapDir + "/toolbar/transport-stop.png");
     icon = QIcon(pixmap);
     m_stopTransport = QAction *qa_stop = new QAction( "&Stop", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_stop->setIconText(icon); 
+			qa_stop->setIcon(icon); 
 			connect( qa_stop, SIGNAL(triggered()), this, SLOT(slotStop())  );
     QSettings m_stopTransport;
     m_stopTransport.beginGroup( TransportDialogConfigGroup );
@@ -1221,7 +1221,7 @@ void RosegardenGUIApp::setupActions()
     pixmap.load(pixmapDir + "/toolbar/transport-ffwd.png");
     icon = QIcon(pixmap);
     m_ffwdTransport = QAction *qa_fast_forward = new QAction( "&Fast Forward", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_fast_forward->setIconText(icon); 
+			qa_fast_forward->setIcon(icon); 
 			connect( qa_fast_forward, SIGNAL(triggered()), this, SLOT(slotFastforward())  );
     QSettings m_ffwdTransport;
     m_ffwdTransport.beginGroup( TransportDialogConfigGroup );
@@ -1234,7 +1234,7 @@ void RosegardenGUIApp::setupActions()
     pixmap.load(pixmapDir + "/toolbar/transport-rewind.png");
     icon = QIcon(pixmap);
     m_rewindTransport = QAction *qa_rewind = new QAction( "Re&wind", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_rewind->setIconText(icon); 
+			qa_rewind->setIcon(icon); 
 			connect( qa_rewind, SIGNAL(triggered()), this, SLOT(slotRewind())  );
     QSettings m_rewindTransport;
     m_rewindTransport.beginGroup( TransportDialogConfigGroup );
@@ -1247,7 +1247,7 @@ void RosegardenGUIApp::setupActions()
     pixmap.load(pixmapDir + "/toolbar/transport-record.png");
     icon = QIcon(pixmap);
     m_recordTransport = QAction *qa_recordtoggle = new QAction( "P&unch in Record", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_recordtoggle->setIconText(icon); 
+			qa_recordtoggle->setIcon(icon); 
 			connect( qa_recordtoggle, SIGNAL(triggered()), this, SLOT(slotToggleRecord())  );
     QSettings m_recordTransport;
     m_recordTransport.beginGroup( TransportDialogConfigGroup );
@@ -1260,7 +1260,7 @@ void RosegardenGUIApp::setupActions()
     pixmap.load(pixmapDir + "/toolbar/transport-record.png");
     icon = QIcon(pixmap);
     m_recordTransport = QAction *qa_record = new QAction( "&Record", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_record->setIconText(icon); 
+			qa_record->setIcon(icon); 
 			connect( qa_record, SIGNAL(triggered()), this, SLOT(slotRecord())  );
     QSettings m_recordTransport;
     m_recordTransport.beginGroup( TransportDialogConfigGroup );
@@ -1273,7 +1273,7 @@ void RosegardenGUIApp::setupActions()
     pixmap.load(pixmapDir + "/toolbar/transport-rewind-end.png");
     icon = QIcon(pixmap);
     m_rewindEndTransport = QAction *qa_rewindtobeginning = new QAction( "Rewind to &Beginning", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_rewindtobeginning->setIconText(icon); 
+			qa_rewindtobeginning->setIcon(icon); 
 			connect( qa_rewindtobeginning, SIGNAL(triggered()), this, SLOT(slotRewindToBeginning())  );
     QSettings m_rewindEndTransport;
     m_rewindEndTransport.beginGroup( TransportDialogConfigGroup );
@@ -1286,7 +1286,7 @@ void RosegardenGUIApp::setupActions()
     pixmap.load(pixmapDir + "/toolbar/transport-ffwd-end.png");
     icon = QIcon(pixmap);
     m_ffwdEndTransport = QAction *qa_fastforwardtoend = new QAction( "Fast Forward to &End", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_fastforwardtoend->setIconText(icon); 
+			qa_fastforwardtoend->setIcon(icon); 
 			connect( qa_fastforwardtoend, SIGNAL(triggered()), this, SLOT(slotFastForwardToEnd())  );
     QSettings m_ffwdEndTransport;
     m_ffwdEndTransport.beginGroup( TransportDialogConfigGroup );
@@ -1305,7 +1305,7 @@ void RosegardenGUIApp::setupActions()
     pixmap.load(pixmapDir + "/toolbar/transport-panic.png");
     icon = QIcon(pixmap);
     QAction *qa_panic = new QAction( "Panic", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_panic->setIconText(icon); 
+			qa_panic->setIcon(icon); 
 			connect( qa_panic, SIGNAL(triggered()), this, SLOT(slotPanic())  );
 
     // DEBUG FACILITY

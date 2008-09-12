@@ -92,7 +92,7 @@ MarkerRuler::MarkerRuler(RosegardenGUIDoc *doc,
 
     icon = QIcon(QPixmap(pixmapDir + "/toolbar/event-insert.png"));
     QAction *qa_insert_marker_here = new QAction( "Insert Marker", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_insert_marker_here->setIconText(icon); 
+			qa_insert_marker_here->setIcon(icon); 
 			connect( qa_insert_marker_here, SIGNAL(triggered()), this, SLOT(slotInsertMarkerHere())  );
     
     new KAction(i18n("Insert Marker at Playback Position"), 0, this,
@@ -101,12 +101,12 @@ MarkerRuler::MarkerRuler(RosegardenGUIDoc *doc,
 
     icon = QIcon(QPixmap(pixmapDir + "/toolbar/event-delete.png"));
     QAction *qa_delete_marker = new QAction( "Delete Marker", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_delete_marker->setIconText(icon); 
+			qa_delete_marker->setIcon(icon); 
 			connect( qa_delete_marker, SIGNAL(triggered()), this, SLOT(slotDeleteMarker())  );
     
     icon = QIcon(QPixmap(pixmapDir + "/toolbar/event-edit.png"));
     QAction *qa_edit_marker = new QAction( "Edit Marker...", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_edit_marker->setIconText(icon); 
+			qa_edit_marker->setIcon(icon); 
 			connect( qa_edit_marker, SIGNAL(triggered()), this, SLOT(slotEditMarker())  );
 
     QToolTip::add

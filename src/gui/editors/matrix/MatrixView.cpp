@@ -807,13 +807,13 @@ void MatrixView::setupActions()
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-cursor-to-pointer")));
     QAction *qa_cursor_to_playback_pointer = new QAction( "Cursor to &Playback Pointer", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_cursor_to_playback_pointer->setIconText(icon); 
+			qa_cursor_to_playback_pointer->setIcon(icon); 
 			connect( qa_cursor_to_playback_pointer, SIGNAL(triggered()), this, SLOT(slotJumpCursorToPlayback())  );
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-play")));
     KAction *play = QAction *qa_play = new QAction( "&Play", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_play->setIconText(icon); 
+			qa_play->setIcon(icon); 
 			connect( qa_play, SIGNAL(triggered()), this, SIGNAL(play())  );
     // Alternative shortcut for Play
     KShortcut playShortcut = play->shortcut();
@@ -823,37 +823,37 @@ void MatrixView::setupActions()
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-stop")));
     QAction *qa_stop = new QAction( "&Stop", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_stop->setIconText(icon); 
+			qa_stop->setIcon(icon); 
 			connect( qa_stop, SIGNAL(triggered()), this, SIGNAL(stop())  );
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-rewind")));
     QAction *qa_playback_pointer_back_bar = new QAction( "Re&wind", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_playback_pointer_back_bar->setIconText(icon); 
+			qa_playback_pointer_back_bar->setIcon(icon); 
 			connect( qa_playback_pointer_back_bar, SIGNAL(triggered()), this, SIGNAL(rewindPlayback())  );
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-ffwd")));
     QAction *qa_playback_pointer_forward_bar = new QAction( "&Fast Forward", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_playback_pointer_forward_bar->setIconText(icon); 
+			qa_playback_pointer_forward_bar->setIcon(icon); 
 			connect( qa_playback_pointer_forward_bar, SIGNAL(triggered()), this, SIGNAL(fastForwardPlayback())  );
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-rewind-end")));
     QAction *qa_playback_pointer_start = new QAction( "Rewind to &Beginning", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_playback_pointer_start->setIconText(icon); 
+			qa_playback_pointer_start->setIcon(icon); 
 			connect( qa_playback_pointer_start, SIGNAL(triggered()), this, SIGNAL(rewindPlaybackToBeginning())  );
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-ffwd-end")));
     QAction *qa_playback_pointer_end = new QAction( "Fast Forward to &End", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_playback_pointer_end->setIconText(icon); 
+			qa_playback_pointer_end->setIcon(icon); 
 			connect( qa_playback_pointer_end, SIGNAL(triggered()), this, SIGNAL(fastForwardPlaybackToEnd())  );
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-pointer-to-cursor")));
     QAction *qa_playback_pointer_to_cursor = new QAction( "Playback Pointer to &Cursor", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_playback_pointer_to_cursor->setIconText(icon); 
+			qa_playback_pointer_to_cursor->setIcon(icon); 
 			connect( qa_playback_pointer_to_cursor, SIGNAL(triggered()), this, SLOT(slotJumpPlaybackToCursor())  );
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
@@ -871,7 +871,7 @@ void MatrixView::setupActions()
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-panic")));
     QAction *qa_panic = new QAction( "Panic", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_panic->setIconText(icon); 
+			qa_panic->setIcon(icon); 
 			connect( qa_panic, SIGNAL(triggered()), this, SIGNAL(panic())  );
 
     new KAction(i18n("Set Loop to Selection"), Qt::Key_Semicolon + Qt::CTRL, this,

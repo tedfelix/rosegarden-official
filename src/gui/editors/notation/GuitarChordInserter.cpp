@@ -50,7 +50,7 @@ GuitarChordInserter::GuitarChordInserter(NotationView* view)
                              makeToolbarPixmap("select")));
 
     QAction *qa_select = new QAction( "Switch to Select Tool", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_select->setIconText(icon); 
+			qa_select->setIcon(icon); 
 			connect( qa_select, SIGNAL(triggered()), this, SLOT(slotSelectSelected())  );
 
     QAction *qa_erase = new QAction( "Switch to Erase Tool", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
@@ -62,7 +62,7 @@ GuitarChordInserter::GuitarChordInserter(NotationView* view)
                                          makeToolbarPixmap("crotchet")));
 
     QAction *qa_notes = new QAction( "Switch to Inserting Notes", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_notes->setIconText(icon); 
+			qa_notes->setIcon(icon); 
 			connect( qa_notes, SIGNAL(triggered()), this, SLOT(slotNoteSelected())  );
 
     m_guitarChordSelector = new GuitarChordSelectorDialog(m_nParentView);

@@ -138,7 +138,7 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
 
     icon = QIcon(QPixmap(pixmapDir + "/toolbar/insert_audio_into_track.xpm"));
     QAction *qa_insert_audio = new QAction( "&Insert into Selected Audio Track", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_insert_audio->setIconText(icon); 
+			qa_insert_audio->setIcon(icon); 
 			connect( qa_insert_audio, SIGNAL(triggered()), this, SLOT(slotInsert())  );
 
     QAction *qa_remove_all_audio = new QAction( "Unload &all Audio Files", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 

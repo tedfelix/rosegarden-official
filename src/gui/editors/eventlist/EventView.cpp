@@ -1126,28 +1126,28 @@ EventView::setupActions()
     QIcon icon(QPixmap(pixmapDir + "/toolbar/event-insert.png"));
 
     QAction *qa_insert = new QAction( "&Insert Event", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_insert->setIconText(icon); 
+			qa_insert->setIcon(icon); 
 			connect( qa_insert, SIGNAL(triggered()), this, SLOT(slotEditInsert())  );
 
     Q3CanvasPixmap pixmap(pixmapDir + "/toolbar/event-delete.png");
     icon = QIcon(pixmap);
 
     QAction *qa_delete = new QAction( "&Delete Event", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_delete->setIconText(icon); 
+			qa_delete->setIcon(icon); 
 			connect( qa_delete, SIGNAL(triggered()), this, SLOT(slotEditDelete())  );
 
     pixmap.load(pixmapDir + "/toolbar/event-edit.png");
     icon = QIcon(pixmap);
 
     QAction *qa_edit_simple = new QAction( "&Edit Event", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_edit_simple->setIconText(icon); 
+			qa_edit_simple->setIcon(icon); 
 			connect( qa_edit_simple, SIGNAL(triggered()), this, SLOT(slotEditEvent())  );
 
     pixmap.load(pixmapDir + "/toolbar/event-edit-advanced.png");
     icon = QIcon(pixmap);
 
     QAction *qa_edit_advanced = new QAction( "&Advanced Event Editor", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_edit_advanced->setIconText(icon); 
+			qa_edit_advanced->setIcon(icon); 
 			connect( qa_edit_advanced, SIGNAL(triggered()), this, SLOT(slotEditEventAdvanced())  );
 
     //    icon = QIcon(Q3CanvasPixmap(pixmapDir + "/toolbar/eventfilter.xpm"));

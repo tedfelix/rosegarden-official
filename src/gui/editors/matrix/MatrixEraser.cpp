@@ -46,7 +46,7 @@ MatrixEraser::MatrixEraser(MatrixView* parent)
     QIcon icon = QIcon(pixmap);
 
     QAction *qa_select = new QAction( "Switch to Select Tool", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_select->setIconText(icon); 
+			qa_select->setIcon(icon); 
 			connect( qa_select, SIGNAL(triggered()), this, SLOT(slotSelectSelected())  );
 
     QAction *qa_draw = new QAction( "Switch to Draw Tool", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
@@ -60,7 +60,7 @@ MatrixEraser::MatrixEraser(MatrixView* parent)
     pixmap.load(pixmapDir + "/toolbar/resize.xpm");
     icon = QIcon(pixmap);
     QAction *qa_resize = new QAction( "Switch to Resize Tool", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_resize->setIconText(icon); 
+			qa_resize->setIcon(icon); 
 			connect( qa_resize, SIGNAL(triggered()), this, SLOT(slotResizeSelected())  );
 
     createMenu("matrixeraser.rc");

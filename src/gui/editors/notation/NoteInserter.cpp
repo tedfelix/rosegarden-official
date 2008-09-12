@@ -105,7 +105,7 @@ NoteInserter::NoteInserter(NotationView* view)
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::
                     makeToolbarPixmap("select")));
     QAction *qa_select = new QAction( "Switch to Select Tool", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_select->setIconText(icon); 
+			qa_select->setIcon(icon); 
 			connect( qa_select, SIGNAL(triggered()), this, SLOT(slotSelectSelected())  );
 
     QAction *qa_erase = new QAction( "Switch to Erase Tool", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
@@ -116,7 +116,7 @@ NoteInserter::NoteInserter(NotationView* view)
            (NotePixmapFactory::toQPixmap(NotePixmapFactory::
                                          makeToolbarPixmap("rest-crotchet")));
     QAction *qa_rests = new QAction( "Switch to Inserting Rests", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_rests->setIconText(icon); 
+			qa_rests->setIcon(icon); 
 			connect( qa_rests, SIGNAL(triggered()), this, SLOT(slotRestsSelected())  );
 
     createMenu("noteinserter.rc");

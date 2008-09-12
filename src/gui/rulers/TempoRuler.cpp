@@ -120,7 +120,7 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
 
     icon = QIcon(QPixmap(pixmapDir + "/toolbar/event-insert-tempo.png"));
     QAction *qa_insert_tempo_here = new QAction( "Insert Tempo Change", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_insert_tempo_here->setIconText(icon); 
+			qa_insert_tempo_here->setIcon(icon); 
 			connect( qa_insert_tempo_here, SIGNAL(triggered()), this, SLOT(slotInsertTempoHere())  );
 
     QAction *qa_insert_tempo_at_pointer = new QAction( "Insert Tempo Change at Playback Position", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
@@ -129,7 +129,7 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
 
     icon = QIcon(QPixmap(pixmapDir + "/toolbar/event-delete.png"));
     QAction *qa_delete_tempo = new QAction( "Delete Tempo Change", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_delete_tempo->setIconText(icon); 
+			qa_delete_tempo->setIcon(icon); 
 			connect( qa_delete_tempo, SIGNAL(triggered()), this, SLOT(slotDeleteTempoChange())  );
 
     QAction *qa_ramp_to_next = new QAction( "Ramp Tempo to Next Tempo", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
@@ -142,7 +142,7 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
 
     icon = QIcon(QPixmap(pixmapDir + "/toolbar/event-edit.png"));
     QAction *qa_edit_tempo = new QAction( "Edit Tempo...", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_edit_tempo->setIconText(icon); 
+			qa_edit_tempo->setIcon(icon); 
 			connect( qa_edit_tempo, SIGNAL(triggered()), this, SLOT(slotEditTempo())  );
 
     QAction *qa_edit_time_signature = new QAction( "Edit Time Signature...", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
