@@ -16,6 +16,8 @@
 */
 
 
+#include <QPaintEvent>
+#include <QMouseEvent>
 #include "TempoRuler.h"
 
 #include <klocale.h>

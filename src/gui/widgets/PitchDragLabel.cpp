@@ -16,6 +16,8 @@
 */
 
 
+#include <QWheelEvent>
+#include <QMouseEvent>
 #include <Q3CanvasPixmap>
 #include "PitchDragLabel.h"
 

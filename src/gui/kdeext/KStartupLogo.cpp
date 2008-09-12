@@ -16,6 +16,7 @@
     COPYING included with this distribution for more information.
 */
 
+#include <QDesktopWidget>
 #include <unistd.h>
 #include <QApplication>
 

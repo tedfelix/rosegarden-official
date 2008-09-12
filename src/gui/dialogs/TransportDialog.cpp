@@ -16,6 +16,7 @@
 */
 
 
+#include <QDesktopWidget>
 #include "TransportDialog.h"
 
 #include <klocale.h>

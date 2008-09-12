@@ -20,6 +20,8 @@
 */
 
 
+#include <QMouseEvent>
+#include <QDesktopWidget>
 #include "ScrollBox.h"
 
 #include <QApplication>

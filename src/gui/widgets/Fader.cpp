@@ -16,6 +16,8 @@
 */
 
 
+#include <QWheelEvent>
+#include <QMouseEvent>
 #include "Fader.h"
 #include "TextFloat.h"
 

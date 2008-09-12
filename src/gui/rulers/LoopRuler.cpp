@@ -16,6 +16,8 @@
 */
 
 
+#include <QPaintEvent>
+#include <QMouseEvent>
 #include "LoopRuler.h"
 
 #include "misc/Debug.h"

@@ -16,6 +16,8 @@
 */
 
 
+#include <QWheelEvent>
+#include <QDesktopWidget>
 #include "RosegardenScrollView.h"
 
 #include "misc/Debug.h"

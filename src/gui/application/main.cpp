@@ -13,6 +13,7 @@
     COPYING included with this distribution for more information.
 */
 
+#include <QDesktopWidget>
 #include <Q3Canvas>
 #include <QTimer>
 #include <QApplication>

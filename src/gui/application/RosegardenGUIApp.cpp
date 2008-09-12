@@ -16,6 +16,7 @@
 */
 
 
+#include <QShortcut>
 #include <Q3CanvasPixmap>
 #include "RosegardenGUIApp.h"
 #include <QApplication>

@@ -16,6 +16,7 @@
 */
 
 
+#include <QCloseEvent>
 #include "AudioPluginDialog.h"
 #include <QLayout>
 

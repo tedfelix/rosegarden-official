@@ -16,6 +16,7 @@
 */
 
 
+#include <QPaintEvent>
 #include "PropertyViewRuler.h"
 
 #include "base/Event.h"

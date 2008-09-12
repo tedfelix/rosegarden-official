@@ -16,6 +16,7 @@
 */
 
 
+#include <QPaintEvent>
 #include "ChordNameRuler.h"
 #include "misc/Debug.h"
 

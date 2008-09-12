@@ -16,6 +16,7 @@
 */
 
 
+#include <QPaintEvent>
 #include "CountdownBar.h"
 
 #include "gui/general/GUIPalette.h"

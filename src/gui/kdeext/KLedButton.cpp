@@ -19,6 +19,7 @@
 */
 
 
+#include <QMouseEvent>
 #include "KLedButton.h"
 
 #include <kled.h>

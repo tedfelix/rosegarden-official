@@ -16,6 +16,7 @@
 */
 
 
+#include <QPaintEvent>
 #include "TextRuler.h"
 
 #include "base/Event.h"

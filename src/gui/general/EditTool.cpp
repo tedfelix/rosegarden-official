@@ -16,6 +16,7 @@
 */
 
 
+#include <QMouseEvent>
 #include "EditTool.h"
 
 #include "misc/Debug.h"

@@ -16,6 +16,7 @@
 */
 
 
+#include <QCloseEvent>
 #include "ScrollBoxDialog.h"
 
 #include "ScrollBox.h"

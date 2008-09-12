@@ -16,6 +16,7 @@
 */
 
 
+#include <QPaintEvent>
 #include "PropertyBox.h"
 
 #include "gui/general/GUIPalette.h"

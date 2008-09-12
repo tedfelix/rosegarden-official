@@ -16,6 +16,7 @@
 */
 
 
+#include <QMouseEvent>
 #include <Q3Canvas>
 #include <Q3CanvasItemList>
 #include <Q3CanvasLine>

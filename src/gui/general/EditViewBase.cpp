@@ -16,6 +16,7 @@
 */
 
 
+#include <QCloseEvent>
 #include <Q3CanvasPixmap>
 #include "EditViewBase.h"
 #include <QLayout>

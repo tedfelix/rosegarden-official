@@ -16,6 +16,7 @@
 */
 
 
+#include <QPaintEvent>
 #include "TextFloat.h"
 #include <QApplication>
 

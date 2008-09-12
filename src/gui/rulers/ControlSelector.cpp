@@ -18,6 +18,7 @@
 #ifndef _RG_CONTROLSELECTOR_CPP_
 #define _RG_CONTROLSELECTOR_CPP_
 
+#include <QMouseEvent>
 #include "ControlSelector.h"
 
 namespace Rosegarden {

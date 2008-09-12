@@ -16,6 +16,7 @@
 */
 
 
+#include <QMouseEvent>
 #include "PercussionPitchRuler.h"
 
 #include "misc/Debug.h"

@@ -16,6 +16,7 @@
 */
 
 
+#include <QMouseEvent>
 #include "MarkerRuler.h"
 
 #include "misc/Debug.h"

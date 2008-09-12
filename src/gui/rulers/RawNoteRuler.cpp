@@ -16,6 +16,7 @@
 */
 
 
+#include <QPaintEvent>
 #include "RawNoteRuler.h"
 
 #include "misc/Debug.h"
