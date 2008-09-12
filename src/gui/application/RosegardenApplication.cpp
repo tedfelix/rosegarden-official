@@ -58,26 +58,23 @@ int RosegardenApplication::newInstance()
 
 void RosegardenApplication::sfxLoadExited(QProcess *proc)
 {
-    if (!proc->normalExit()) {
-        QString configGroup = config()->group();
-        QSettings config();
-        config().beginGroup( SequencerOptionsConfigGroup );
-        // 
-        // FIX-manually-(GW), add:
-        // config().endGroup();		// corresponding to: config().beginGroup( SequencerOptionsConfigGroup );
-        //  
+	if (proc->exitStatus() != QProcess::NormalExit ) {
+        QSettings config;
+		config.beginGroup( SequencerOptionsConfigGroup );
 
-        QString soundFontPath = config().value("soundfontpath", "") ;
-        QSettings config();
-        config().beginGroup( configGroup );
+		QString soundFontPath = config.value("soundfontpath", "").toString() ;
+		
+		config.endGroup();		// corresponding to: config().beginGroup( SequencerOptionsConfigGroup );
+		
+		//config.beginGroup( configGroup );
         // 
         // FIX-manually-(GW), add:
         // config().endGroup();		// corresponding to: config().beginGroup( configGroup );
         //  
-
-
-        QMessageBox::critical(mainWidget(),
-                           i18n("Failed to load soundfont %1", soundFontPath));
+        
+		
+		QMessageBox::critical( mainWidget(), soundFontPath, 
+                           i18n("Failed to load soundfont %1" ));
     } else {
         RG_DEBUG << "RosegardenApplication::sfxLoadExited() : sfxload exited normally\n";
     }
@@ -98,9 +95,9 @@ void RosegardenApplication::slotSetStatusMessage(QString msg)
 void
 RosegardenApplication::refreshGUI(int maxTime)
 {
-    eventLoop()->processEvents(QEventLoop::ExcludeUserInput |
-                               QEventLoop::ExcludeSocketNotifiers,
-                               maxTime);
+//    eventLoop()->processEvents(QEventLoop::ExcludeUserInput |			//&&& eventLoop()->processEvents()
+//                               QEventLoop::ExcludeSocketNotifiers,
+   //                            maxTime);
 }
 
 void RosegardenApplication::saveState(QSessionManager& sm)

@@ -443,7 +443,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                 CurrentProgressDialog::freeze();
                 KStartupLogo::hideIfStillThere();
 
-                QMessageBox::information(0, i18n("This file was written by Rosegarden %1, which is more recent than this version.\nThere may be some incompatibilities with the file format.", version));
+                QMessageBox::information(0, "", i18n("This file was written by Rosegarden %1, which is more recent than this version.\nThere may be some incompatibilities with the file format.", version));
 
                 CurrentProgressDialog::thaw();
             }
@@ -1012,10 +1012,11 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             QString thing;
 			//KURL url = QFileDialog::getStartURL(QString(":WAVS"), thing);  // kde3
 			//KURL url = QFileDialog.directory()
-			QString url = QFileDialog::getExistingDirectory(this, i18n(qstrtostr("Open Directory")),
+			QString url = QFileDialog::getExistingDirectory(0, i18n("Open Directory"),
 										"/home", QFileDialog::ShowDirsOnly
 												| QFileDialog::DontResolveSymlinks);			
-			getAudioFileManager().setAudioPath(url);
+			
+			getAudioFileManager().setAudioPath( qstrtostr(url) );
 			
             /*
             RG_DEBUG << "ATTEMPTING TO FIND IN PATH = " 
@@ -1742,7 +1743,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                 } else {
                     m_plugin->setAssigned(true);
                     m_plugin->setBypass(bypassed);
-                    m_plugin->setIdentifier(plugin->getIdentifier().data());
+                    m_plugin->setIdentifier( qstrtostr( plugin->getIdentifier() ) );
 //                    std::cerr << "set identifier to plugin at position " << position << std::endl;
                     if (program != "") {
                         m_plugin->setProgram(program);

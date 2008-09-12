@@ -189,14 +189,14 @@ void RosegardenGUIDoc::detachView(RosegardenGUIView *view)
 
 void RosegardenGUIDoc::attachEditView(EditViewBase *view)
 {
-    m_editViewList.append(*view);
+    m_editViewList.append(view);
 }
 
 void RosegardenGUIDoc::detachEditView(EditViewBase *view)
 {
     // auto-deletion is disabled, as
     // the editview detaches itself when being deleted
-    m_editViewList.remove(*view);
+    m_editViewList.remove(view);
 }
 
 void RosegardenGUIDoc::deleteEditViews()
@@ -290,7 +290,8 @@ QString RosegardenGUIDoc::getAutoSaveFileName()
     if (filename.isEmpty())
         filename = QDir::currentDirPath() + "/" + getTitle();
 
-    QString autoSaveFileName = qApp->tempSaveName(filename);
+//    QString autoSaveFileName = qApp->tempSaveName(filename); //&&& tempSaveName does not exist yet
+	QString autoSaveFileName = "autoSaveFileNameTemp_";
 
     return autoSaveFileName;
 }
@@ -475,7 +476,7 @@ RosegardenGUIDoc::deleteOrphanedAudioFiles(bool documentWillNotBeSaved)
 
     if (documentWillNotBeSaved) {
 
-		int reply = QMessageBox::warning( 0, "recordedOrphans.size()", i18np(static_cast<char*>("Delete the 1 audio file recorded during the unsaved session?"), static_cast<char*>("Delete the %1 audio files recorded during the unsaved session?")), QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, QMessageBox::Cancel );
+		int reply = QMessageBox::warning( 0, "recordedOrphans.size()", i18n(static_cast<char*>("Delete the 1 audio file recorded during the unsaved session?"), static_cast<char*>("Delete the %1 audio files recorded during the unsaved session?")), QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, QMessageBox::Cancel );
 
         switch (reply) {
 
@@ -1063,7 +1064,7 @@ void RosegardenGUIDoc::initialiseStudio()
                 if (error != "") {
                     KStartupLogo::hideIfStillThere();
                     CurrentProgressDialog::freeze();
-                    KMessageBox::sorry(0, error);
+                    QMessageBox::warning(0, "", error);
                     CurrentProgressDialog::thaw();
                 }
 
@@ -1202,8 +1203,8 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 	temp.close();
     if( temp.error() ){
         //status = temp.status();
-        errMsg = i18n(QString("Failure in temporary file handling for file '%1': %2")
-				.arg(tempFileName).arg(temp.errorString() ) ); // .arg(strerror(status))
+        errMsg = i18n( qStrToCharPtrUtf8( QString("Failure in temporary file handling for file '%1': %2")
+				.arg(tempFileName).arg(temp.errorString() )) ); // .arg(strerror(status))
         return false;
     }
 

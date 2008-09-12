@@ -204,6 +204,7 @@
 #include <QToolButton>
 #include <QMainWindow>
 
+#include <ui_RosegardenTransport.h>
 
 #include <kmimetype.h>
 #include <QAction>

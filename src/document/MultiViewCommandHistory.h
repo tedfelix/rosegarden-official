@@ -55,7 +55,9 @@ class MultiViewCommandHistory : public QObject
 public:
     virtual ~MultiViewCommandHistory();
 
-    static MultiViewCommandHistory *getInstance();
+	MultiViewCommandHistory();	//### made unprotected (public)
+	
+	static MultiViewCommandHistory *getInstance();
 
     void clear();
     
@@ -180,7 +182,6 @@ signals:
      */
     void documentRestored();
 
-	MultiViewCommandHistory();	//### made unprotected (public)
 
 protected:
     static MultiViewCommandHistory *m_instance;

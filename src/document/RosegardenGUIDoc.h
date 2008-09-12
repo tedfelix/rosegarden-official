@@ -608,7 +608,7 @@ protected:
     /**
      * the list of the edit views currently editing a part of this document
      */
-    QList<EditViewBase> m_editViewList;
+    QList<EditViewBase*> m_editViewList;	//### added *
 
     /**
      * the modified flag of the current document
