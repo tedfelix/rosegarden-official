@@ -39,15 +39,8 @@ MatrixConfigurationPage::MatrixConfigurationPage(QSettings cfg,
         QWidget *parent,
         const char *name) :
         TabbedConfigurationPage(cfg, parent, name)
+//### JAS update function declaration / definition
 {
-    QSettings m_cfg;
-    m_cfg.beginGroup( MatrixViewConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // m_cfg.endGroup();		// corresponding to: m_cfg.beginGroup( MatrixViewConfigGroup );
-    //  
-
-
     QFrame *frame = new QFrame(m_tabWidget);
     QGridLayout *layout = new QGridLayout(frame,
                                           4, 2,  // nbrow, nbcol
@@ -60,13 +53,9 @@ MatrixConfigurationPage::MatrixConfigurationPage(QSettings cfg,
 
 void MatrixConfigurationPage::apply()
 {
-    QSettings m_cfg;
-    m_cfg.beginGroup( MatrixViewConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // m_cfg.endGroup();		// corresponding to: m_cfg.beginGroup( MatrixViewConfigGroup );
-    //  
-
+    //@@@ Next two lines not need.  Commented out.
+    //@@@ QSettings settings;
+    //@@@ settings.beginGroup( MatrixViewConfigGroup );
 }
 
 }

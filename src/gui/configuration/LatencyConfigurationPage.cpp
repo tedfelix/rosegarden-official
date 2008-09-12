@@ -41,18 +41,12 @@ LatencyConfigurationPage::LatencyConfigurationPage(RosegardenGUIDoc *doc,
         QWidget *parent,
         const char *name)
         : TabbedConfigurationPage(doc, cfg, parent, name)
+//### JAS update function declaration / definition
 {
-    //     Configuration &config = doc->getConfiguration();
-    QSettings m_cfg;
-    m_cfg.beginGroup( LatencyOptionsConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // m_cfg.endGroup();		// corresponding to: m_cfg.beginGroup( LatencyOptionsConfigGroup );
-    //  
-
-
 #ifdef NOT_DEFINED
 #ifdef HAVE_LIBJACK
+    QSettings settings;
+    settings.beginGroup( LatencyOptionsConfigGroup );
 
     frame = new QFrame(m_tabWidget, i18n("JACK latency"));
     layout = new QGridLayout(frame, 6, 5, 10, 10);
@@ -72,10 +66,10 @@ LatencyConfigurationPage::LatencyConfigurationPage(RosegardenGUIDoc *doc,
     connect(m_fetchLatencyValues, SIGNAL(released()),
             SLOT(slotFetchLatencyValues()));
 
-    int jackPlaybackValue = (m_cfg->readLongNumEntry(
-                                 "jackplaybacklatencyusec", 0) / 1000) +
-                            (m_cfg->readLongNumEntry(
-                                 "jackplaybacklatencysec", 0) * 1000);
+    int jackPlaybackValue = (settings.value(
+                                 "jackplaybacklatencyusec", 0) / 1000).toInt() +
+                            (settings.value(
+                                 "jackplaybacklatencysec", 0) * 1000).toInt();
 
     m_jackPlayback = new QSlider(Horizontal, frame);
     m_jackPlayback->setTickPosition(QSlider::TicksBelow);
@@ -95,10 +89,10 @@ LatencyConfigurationPage::LatencyConfigurationPage(RosegardenGUIDoc *doc,
 
     m_jackPlayback->setValue(jackPlaybackValue);
 
-    int jackRecordValue = (m_cfg->readLongNumEntry(
-                               "jackrecordlatencyusec", 0) / 1000) +
-                          (m_cfg->readLongNumEntry(
-                               "jackrecordlatencysec", 0) * 1000);
+    int jackRecordValue = (settings.value(
+                               "jackrecordlatencyusec", 0) / 1000).toInt() +
+                          (settings.value(
+                               "jackrecordlatencysec", 0) * 1000).toInt();
 
     m_jackRecord = new QSlider(Horizontal, frame);
     m_jackRecord->setTickPosition(QSlider::TicksBelow);
@@ -118,31 +112,27 @@ LatencyConfigurationPage::LatencyConfigurationPage(RosegardenGUIDoc *doc,
     layout->addWidget(new QLabel("500", frame), 5, 4, Qt::AlignLeft);
 
     addTab(frame, i18n("JACK Latency"));
+
+    settings.endGroup();
 #endif  // HAVE_LIBJACK
 #endif // NOT_DEFINED
-
 }
 
 void LatencyConfigurationPage::apply()
 {
-    QSettings m_cfg;
-    m_cfg.beginGroup( LatencyOptionsConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // m_cfg.endGroup();		// corresponding to: m_cfg.beginGroup( LatencyOptionsConfigGroup );
-    //  
-
-
 #ifdef HAVE_LIBJACK
+    QSettings settings;
+    settings.beginGroup( LatencyOptionsConfigGroup );
 
     int jackPlayback = getJACKPlaybackValue();
-    m_cfg.setValue("jackplaybacklatencysec", jackPlayback / 1000);
-    m_cfg.setValue("jackplaybacklatencyusec", jackPlayback * 1000);
+    settings.setValue("jackplaybacklatencysec", jackPlayback / 1000);
+    settings.setValue("jackplaybacklatencyusec", jackPlayback * 1000);
 
     int jackRecord = getJACKRecordValue();
-    m_cfg.setValue("jackrecordlatencysec", jackRecord / 1000);
-    m_cfg.setValue("jackrecordlatencyusec", jackRecord * 1000);
+    settings.setValue("jackrecordlatencysec", jackRecord / 1000);
+    settings.setValue("jackrecordlatencyusec", jackRecord * 1000);
 
+    settings.endGroup();
 #endif  // HAVE_LIBJACK
 }
 

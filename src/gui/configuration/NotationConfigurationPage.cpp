@@ -63,14 +63,10 @@ NotationConfigurationPage::NotationConfigurationPage(QSettings cfg,
         QWidget *parent,
         const char *name) :
         TabbedConfigurationPage(cfg, parent, name)
+//### JAS update function declaration / definition
 {
-    QSettings m_cfg;
-    m_cfg.beginGroup( NotationViewConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // m_cfg.endGroup();		// corresponding to: m_cfg.beginGroup( NotationViewConfigGroup );
-    //  
-
+    QSettings settings;
+    settings.beginGroup( NotationViewConfigGroup );
 
     QFrame *frame;
     QGridLayout *layout;
@@ -90,7 +86,7 @@ NotationConfigurationPage::NotationConfigurationPage(QSettings cfg,
     m_layoutMode->addItem(i18n("Linear layout"));
     m_layoutMode->addItem(i18n("Continuous page layout"));
     m_layoutMode->addItem(i18n("Multiple page layout"));
-    int defaultLayoutMode = m_cfg.value("layoutmode", 0).toInt() ;
+    int defaultLayoutMode = settings.value("layoutmode", 0).toInt() ;
     if (defaultLayoutMode >= 0 && defaultLayoutMode <= 2) {
         m_layoutMode->setCurrentIndex(defaultLayoutMode);
     }
@@ -103,7 +99,7 @@ NotationConfigurationPage::NotationConfigurationPage(QSettings cfg,
     m_spacing->setEditable(false);
 
     std::vector<int> s = NotationHLayout::getAvailableSpacings();
-    int defaultSpacing = m_cfg.value("spacing", 100).toInt() ;
+    int defaultSpacing = settings.value("spacing", 100).toInt() ;
 
     for (std::vector<int>::iterator i = s.begin(); i != s.end(); ++i) {
 
@@ -127,7 +123,7 @@ NotationConfigurationPage::NotationConfigurationPage(QSettings cfg,
     m_proportion->setEditable(false);
 
     s = NotationHLayout::getAvailableProportions();
-    int defaultProportion = m_cfg.value("proportion", 60).toInt() ;
+    int defaultProportion = settings.value("proportion", 60).toInt() ;
 
     for (std::vector<int>::iterator i = s.begin(); i != s.end(); ++i) {
 
@@ -156,7 +152,7 @@ NotationConfigurationPage::NotationConfigurationPage(QSettings cfg,
     m_showTrackHeaders->addItem(i18n("Never"), HeadersGroup::ShowNever);
     m_showTrackHeaders->addItem(i18n("When needed"), HeadersGroup::ShowWhenNeeded);
     m_showTrackHeaders->addItem(i18n("Always"), HeadersGroup::ShowAlways);
-    int defaultShowTrackHeaders = m_cfg.value("shownotationheader", 
+    int defaultShowTrackHeaders = settings.value("shownotationheader", 
                                                  HeadersGroup::DefaultShowMode).toInt() ;
     if (HeadersGroup::isValidShowMode(defaultShowTrackHeaders)) {
         m_showTrackHeaders->setCurrentIndex(defaultShowTrackHeaders);
@@ -177,7 +173,7 @@ NotationConfigurationPage::NotationConfigurationPage(QSettings cfg,
          (i18n("Show non-notation events as question marks"), frame),
          row, row, 0, 1);
     m_showUnknowns = new QCheckBox(frame);
-    bool defaultShowUnknowns = qStrToBool( m_cfg.value("showunknowns", "false" ) ) ;
+    bool defaultShowUnknowns = qStrToBool( settings.value("showunknowns", "false" ) ) ;
     m_showUnknowns->setChecked(defaultShowUnknowns);
     layout->addWidget(m_showUnknowns, row, 2);
     ++row;
@@ -187,7 +183,7 @@ NotationConfigurationPage::NotationConfigurationPage(QSettings cfg,
          (i18n("Show notation-quantized notes in a different color"), frame),
          row, row, 0, 1);
     m_colourQuantize = new QCheckBox(frame);
-    bool defaultColourQuantize = qStrToBool( m_cfg.value("colourquantize", "false" ) ) ;
+    bool defaultColourQuantize = qStrToBool( settings.value("colourquantize", "false" ) ) ;
     m_colourQuantize->setChecked(defaultColourQuantize);
     layout->addWidget(m_colourQuantize, row, 2);
     ++row;
@@ -197,7 +193,7 @@ NotationConfigurationPage::NotationConfigurationPage(QSettings cfg,
          (i18n("Show \"invisible\" events in grey"), frame),
          row, row, 0, 1);
     m_showInvisibles = new QCheckBox(frame);
-    bool defaultShowInvisibles = qStrToBool( m_cfg.value("showinvisibles", "true" ) ) ;
+    bool defaultShowInvisibles = qStrToBool( settings.value("showinvisibles", "true" ) ) ;
     m_showInvisibles->setChecked(defaultShowInvisibles);
     layout->addWidget(m_showInvisibles, row, 2);
     ++row;
@@ -207,7 +203,7 @@ NotationConfigurationPage::NotationConfigurationPage(QSettings cfg,
          (i18n("Show notes outside suggested playable range in red"), frame),
          row, row, 0, 1);
     m_showRanges = new QCheckBox(frame);
-    bool defaultShowRanges = qStrToBool( m_cfg.value("showranges", "true" ) ) ;
+    bool defaultShowRanges = qStrToBool( settings.value("showranges", "true" ) ) ;
     m_showRanges->setChecked(defaultShowRanges);
     layout->addWidget(m_showRanges, row, 2);
     ++row;
@@ -217,7 +213,7 @@ NotationConfigurationPage::NotationConfigurationPage(QSettings cfg,
          (i18n("Highlight superimposed notes with a halo effect"), frame),
          row, row, 0, 1);
     m_showCollisions = new QCheckBox(frame);
-    bool defaultShowCollisions = qStrToBool( m_cfg.value("showcollisions", "true" ) ) ;
+    bool defaultShowCollisions = qStrToBool( settings.value("showcollisions", "true" ) ) ;
     m_showCollisions->setChecked(defaultShowCollisions);
     layout->addWidget(m_showCollisions, row, 2);
     ++row;
@@ -230,17 +226,14 @@ NotationConfigurationPage::NotationConfigurationPage(QSettings cfg,
          (i18n("When recording MIDI, split-and-tie long notes at barlines"), frame),
          row, row, 0, 1);
     m_splitAndTie = new QCheckBox(frame);
-    bool defaultSplitAndTie = qStrToBool( m_cfg.value("quantizemakeviable", "false" ) ) ;
+    bool defaultSplitAndTie = qStrToBool( settings.value("quantizemakeviable", "false" ) ) ;
     m_splitAndTie->setChecked(defaultSplitAndTie);
     layout->addWidget(m_splitAndTie, row, 2);
     ++row;
 
     layout->setRowStretch(row, 10);
 
-
     addTab(frame, i18n("Layout"));
-
-
 
     frame = new QFrame(m_tabWidget);
     layout = new QGridLayout(frame, 6, 3, 10, 5);
@@ -260,7 +253,7 @@ NotationConfigurationPage::NotationConfigurationPage(QSettings cfg,
     m_noteStyle->setEditable(false);
     m_untranslatedNoteStyle.clear();
 
-    QString defaultStyle =         m_cfg.value("style", strtoqstr(NoteStyleFactory::DefaultStyle) );
+    QString defaultStyle = settings.value("style", strtoqstr(NoteStyleFactory::DefaultStyle)).toString();
     std::vector<NoteStyleName> styles
     (NoteStyleFactory::getAvailableStyleNames());
 
@@ -284,7 +277,7 @@ NotationConfigurationPage::NotationConfigurationPage(QSettings cfg,
     layout->addWidget
     (new QLabel(i18n("When inserting notes..."), frame), row, 0);
 
-    int defaultInsertType = m_cfg.value("inserttype", 0).toInt() ;
+    int defaultInsertType = settings.value("inserttype", 0).toInt() ;
 
     m_insertType = new QComboBox(frame);
     m_insertType->setEditable(false);
@@ -296,7 +289,7 @@ NotationConfigurationPage::NotationConfigurationPage(QSettings cfg,
     layout->addWidget(m_insertType, row, 1, row- row+1, 2);
     ++row;
 
-    bool autoBeam = qStrToBool( m_cfg.value("autobeam", "true" ) ) ;
+    bool autoBeam = qStrToBool( settings.value("autobeam", "true" ) ) ;
 
     layout->addMultiCellWidget
         (new QLabel
@@ -308,7 +301,7 @@ NotationConfigurationPage::NotationConfigurationPage(QSettings cfg,
 
     ++row;
 
-    bool collapse = qStrToBool( m_cfg.value("collapse", "false" ) ) ;
+    bool collapse = qStrToBool( settings.value("collapse", "false" ) ) ;
 
     layout->addMultiCellWidget
         (new QLabel
@@ -328,8 +321,8 @@ NotationConfigurationPage::NotationConfigurationPage(QSettings cfg,
     m_pasteType = new QComboBox(frame);
     m_pasteType->setEditable(false);
 
-    unsigned int defaultPasteType = m_cfg->readUnsignedNumEntry
-                                    ("pastetype", PasteEventsCommand::Restricted);
+    unsigned int defaultPasteType = settings.value("pastetype",
+            PasteEventsCommand::Restricted).toUInt();
 
     PasteEventsCommand::PasteTypeMap pasteTypes =
         PasteEventsCommand::getPasteTypes();
@@ -347,8 +340,6 @@ NotationConfigurationPage::NotationConfigurationPage(QSettings cfg,
 
     addTab(frame, i18n("Editing"));
 
-
-
     frame = new QFrame(m_tabWidget);
     layout = new QGridLayout(frame, 4, 2, 10, 5);
     
@@ -362,7 +353,7 @@ NotationConfigurationPage::NotationConfigurationPage(QSettings cfg,
     m_accOctavePolicy->addItem(i18n("Affect only that octave"));
     m_accOctavePolicy->addItem(i18n("Require cautionaries in other octaves"));
     m_accOctavePolicy->addItem(i18n("Affect all subsequent octaves"));
-    int accOctaveMode = m_cfg.value("accidentaloctavemode", 1).toInt() ;
+    int accOctaveMode = settings.value("accidentaloctavemode", 1).toInt() ;
     if (accOctaveMode >= 0 && accOctaveMode < 3) {
         m_accOctavePolicy->setCurrentIndex(accOctaveMode);
     }
@@ -374,7 +365,7 @@ NotationConfigurationPage::NotationConfigurationPage(QSettings cfg,
     m_accBarPolicy->addItem(i18n("Affect only that bar"));
     m_accBarPolicy->addItem(i18n("Require cautionary resets in following bar"));
     m_accBarPolicy->addItem(i18n("Require explicit resets in following bar"));
-    int accBarMode = m_cfg.value("accidentalbarmode", 0).toInt() ;
+    int accBarMode = settings.value("accidentalbarmode", 0).toInt() ;
     if (accBarMode >= 0 && accBarMode < 3) {
         m_accBarPolicy->setCurrentIndex(accBarMode);
     }
@@ -386,7 +377,7 @@ NotationConfigurationPage::NotationConfigurationPage(QSettings cfg,
     m_keySigCancelMode->addItem(i18n("Cancel only when entering C major or A minor"));
     m_keySigCancelMode->addItem(i18n("Cancel whenever removing sharps or flats"));
     m_keySigCancelMode->addItem(i18n("Cancel always"));
-    int cancelMode = m_cfg.value("keysigcancelmode", 1).toInt() ;
+    int cancelMode = settings.value("keysigcancelmode", 1).toInt() ;
     if (cancelMode >= 0 && cancelMode < 3) {
         m_keySigCancelMode->setCurrentIndex(cancelMode);
     }
@@ -405,9 +396,9 @@ NotationConfigurationPage::NotationConfigurationPage(QSettings cfg,
               "editing in any of the views except notation."));
 
     // force to default of 2 if not used before
-    int quantizeType = m_cfg.value("quantizetype", 2).toInt() ;
-    m_cfg.setValue("quantizetype", quantizeType);
-    m_cfg.setValue("quantizenotationonly", true);
+    int quantizeType = settings.value("quantizetype", 2).toInt() ;
+    settings.setValue("quantizetype", quantizeType);
+    settings.setValue("quantizenotationonly", true);
 
     m_quantizeFrame = new QuantizeParameters
                       (m_tabWidget, QuantizeParameters::Notation,
@@ -540,7 +531,7 @@ NotationConfigurationPage::NotationConfigurationPage(QSettings cfg,
     layout->addWidget
         (new QLabel(i18n("Text font"), frame), row, 0);
     m_textFont = new KFontRequester(frame);
-    QFont textFont = m_cfg->readFontEntry("textfont", &defaultTextFont);
+    QFont textFont = settings.value("textfont", &defaultTextFont).toString();
     m_textFont->setFont(textFont);
     layout->addWidget(m_textFont, row, 1, row- row+1, 3);
     ++row;
@@ -548,7 +539,7 @@ NotationConfigurationPage::NotationConfigurationPage(QSettings cfg,
     layout->addWidget
         (new QLabel(i18n("Sans-serif font"), frame), row, 0);
     m_sansFont = new KFontRequester(frame);
-    QFont sansFont = m_cfg->readFontEntry("sansfont", &defaultSansFont);
+    QFont sansFont = settings.value("sansfont", &defaultSansFont).toString();
     m_sansFont->setFont(sansFont);
     layout->addWidget(m_sansFont, row, 1, row- row+1, 3);
     ++row;
@@ -560,7 +551,7 @@ NotationConfigurationPage::NotationConfigurationPage(QSettings cfg,
     layout->addWidget
         (new QLabel(i18n("Time Signature font"), frame), row, 0);
     m_timeSigFont = new KFontRequester(frame);
-    QFont timeSigFont = m_cfg->readFontEntry("timesigfont", &defaultTimeSigFont);
+    QFont timeSigFont = settings->readFontEntry("timesigfont", &defaultTimeSigFont);
     m_timeSigFont->setFont(timeSigFont);
     layout->addWidget(m_timeSigFont, row, 1, row- row+1, 3);
     ++row;
@@ -568,8 +559,7 @@ NotationConfigurationPage::NotationConfigurationPage(QSettings cfg,
 
 //    addTab(mainFrame, i18n("Font"));
     addTab(frame, i18n("Font"));
-
-
+    settings.endGroup();
 }
 
 void
@@ -600,8 +590,11 @@ NotationConfigurationPage::slotViewButtonPressed()
 void
 NotationConfigurationPage::slotPopulateFontCombo(bool rescan)
 {
-    QString defaultFont = m_cfg->readEntry
-                          ("notefont", strtoqstr(NoteFontFactory::getDefaultFontName()));
+    QSettings settings;
+    settings.beginGroup( NotationViewConfigGroup );
+
+    QString defaultFont = settings.value("notefont",
+            strtoqstr(NoteFontFactory::getDefaultFontName())).toString();
 
     try {
         (void)NoteFontFactory::getFont
@@ -635,16 +628,17 @@ NotationConfigurationPage::slotFontComboChanged(int index)
 {
     std::string fontStr = qstrtostr(m_untranslatedFont[index]);
 
-    populateSizeCombo(m_singleStaffSize, fontStr,
-                      m_cfg->readUnsignedNumEntry
-                      ("singlestaffnotesize",
-                       NoteFontFactory::getDefaultSize(fontStr)));
-    populateSizeCombo(m_multiStaffSize, fontStr,
-                      m_cfg->readUnsignedNumEntry
-                      ("multistaffnotesize",
-                       NoteFontFactory::getDefaultSize(fontStr)));
+    QSettings settings;
+    settings.beginGroup( NotationViewConfigGroup );
 
-    int printpt = m_cfg.value("printingnotesize", 5).toUInt() ;
+    populateSizeCombo(m_singleStaffSize, fontStr, settings.value(
+            "singlestaffnotesize",
+            NoteFontFactory::getDefaultSize(fontStr)).toInt());
+    populateSizeCombo(m_multiStaffSize, fontStr, settings.value(
+            "multistaffnotesize",
+            NoteFontFactory::getDefaultSize(fontStr)).toInt());
+
+    int printpt = settings.value("printingnotesize", 5).toUInt() ;
     for (int i = 2; i < 16; ++i) {
         m_printingSize->addItem(QString("%1").arg(i));
         if (i == printpt) {
@@ -692,55 +686,51 @@ NotationConfigurationPage::populateSizeCombo(QComboBox *combo,
 void
 NotationConfigurationPage::apply()
 {
-    QSettings m_cfg;
-    m_cfg.beginGroup( NotationViewConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // m_cfg.endGroup();		// corresponding to: m_cfg.beginGroup( NotationViewConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( NotationViewConfigGroup );
 
-
-    m_cfg.setValue("notefont", m_untranslatedFont[m_font->currentIndex()]);
-    m_cfg.setValue("singlestaffnotesize",
+    settings.setValue("notefont", m_untranslatedFont[m_font->currentIndex()]);
+    settings.setValue("singlestaffnotesize",
                       m_singleStaffSize->currentText().toUInt());
-    m_cfg.setValue("multistaffnotesize",
+    settings.setValue("multistaffnotesize",
                       m_multiStaffSize->currentText().toUInt());
-    m_cfg.setValue("printingnotesize",
+    settings.setValue("printingnotesize",
                       m_printingSize->currentText().toUInt());
-    m_cfg.setValue("textfont",
+    settings.setValue("textfont",
                       m_textFont->font());
-    m_cfg.setValue("sansfont",
+    settings.setValue("sansfont",
                       m_sansFont->font());
 /*!!!
-    m_cfg.setValue("timesigfont",
+    settings.setValue("timesigfont",
                       m_timeSigFont->font());
 */
     std::vector<int> s = NotationHLayout::getAvailableSpacings();
-    m_cfg.setValue("spacing", s[m_spacing->currentIndex()]);
+    settings.setValue("spacing", s[m_spacing->currentIndex()]);
 
     s = NotationHLayout::getAvailableProportions();
-    m_cfg.setValue("proportion", s[m_proportion->currentIndex()]);
+    settings.setValue("proportion", s[m_proportion->currentIndex()]);
 
-    m_cfg.setValue("layoutmode", m_layoutMode->currentIndex());
-    m_cfg.setValue("colourquantize", m_colourQuantize->isChecked());
-    m_cfg.setValue("showunknowns", m_showUnknowns->isChecked());
-    m_cfg.setValue("showinvisibles", m_showInvisibles->isChecked());
-    m_cfg.setValue("showranges", m_showRanges->isChecked());
-    m_cfg.setValue("showcollisions", m_showCollisions->isChecked());
-    m_cfg.setValue("shownotationheader",
+    settings.setValue("layoutmode", m_layoutMode->currentIndex());
+    settings.setValue("colourquantize", m_colourQuantize->isChecked());
+    settings.setValue("showunknowns", m_showUnknowns->isChecked());
+    settings.setValue("showinvisibles", m_showInvisibles->isChecked());
+    settings.setValue("showranges", m_showRanges->isChecked());
+    settings.setValue("showcollisions", m_showCollisions->isChecked());
+    settings.setValue("shownotationheader",
                        m_showTrackHeaders->currentIndex());
-    m_cfg.setValue("style", m_untranslatedNoteStyle[m_noteStyle->currentIndex()]);
-    m_cfg.setValue("inserttype", m_insertType->currentIndex());
-    m_cfg.setValue("autobeam", m_autoBeam->isChecked());
-    m_cfg.setValue("collapse", m_collapseRests->isChecked());
-    m_cfg.setValue("pastetype", m_pasteType->currentIndex());
-    m_cfg.setValue("accidentaloctavemode", m_accOctavePolicy->currentIndex());
-    m_cfg.setValue("accidentalbarmode", m_accBarPolicy->currentIndex());
-    m_cfg.setValue("keysigcancelmode", m_keySigCancelMode->currentIndex());
+    settings.setValue("style", m_untranslatedNoteStyle[m_noteStyle->currentIndex()]);
+    settings.setValue("inserttype", m_insertType->currentIndex());
+    settings.setValue("autobeam", m_autoBeam->isChecked());
+    settings.setValue("collapse", m_collapseRests->isChecked());
+    settings.setValue("pastetype", m_pasteType->currentIndex());
+    settings.setValue("accidentaloctavemode", m_accOctavePolicy->currentIndex());
+    settings.setValue("accidentalbarmode", m_accBarPolicy->currentIndex());
+    settings.setValue("keysigcancelmode", m_keySigCancelMode->currentIndex());
 
-    m_cfg.setValue("quantizemakeviable", m_splitAndTie->isChecked());
+    settings.setValue("quantizemakeviable", m_splitAndTie->isChecked());
 
 //    (void)m_quantizeFrame->getQuantizer(); // this also writes to the config
+    settings.endGroup();
 }
 
 }
