@@ -19,9 +19,10 @@
 #include "InterpretDialog.h"
 #include <QApplication>
 
-#include <klocale.h>
+#include <klocale.h> // i18n
 #include "document/ConfigGroups.h"
 #include "commands/notation/InterpretCommand.h"
+#include "misc/Strings.h"
 #include <QSettings>
 #include <QDialog>
 #include <QDialogButtonBox>

@@ -18,14 +18,16 @@
 
 #include "LyricEditDialog.h"
 
+#include <klocale.h> // i18n
+
 #include "base/Event.h"
 #include "base/BaseProperties.h"
-#include <klocale.h>
 #include "misc/Strings.h"
 #include "misc/Debug.h"
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
+
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QGroupBox>
@@ -93,7 +95,15 @@ LyricEditDialog::LyricEditDialog(QDialogButtonBox::QWidget *parent,
     unparse();
     verseDialogRepopulate();
 
-    m_textEdit->setCursorPosition(0,0);
+    //&&& QTextEdit has a new API, and it's not clear what the analog of this
+    // function should be.  Since this setCursorPosition(0,0) looks like a very
+    // default kind of thing, I'm going out on a limb and guessing that this is
+    // probably now superfluous.  I figure something like the cursor position in
+    // the lyric editor being messed up is much easier to address if and when we
+    // can see the problem, so this is a good candidate for outright removal,
+    // flagged appropriately. (dmm)
+    //
+    // m_textEdit->setCursorPosition(0,0);
     m_textEdit->setFocus();
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
     metagrid->addWidget(buttonBox, 1, 0);

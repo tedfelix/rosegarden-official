@@ -31,16 +31,38 @@ namespace Rosegarden
 QColor GUIPalette::getColour(const char* const colourName)
 {
     QSettings config;
-    config.beginGroup( ColoursConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( ColoursConfigGroup );
-    //  
+    config.beginGroup(ColoursConfigGroup);
 
+    //@@@ I'm not really sure what this used to do.  It doesn't make sense. 
+    //
+    // First we getInstance() (of what?  I'm a linguist, not a programmer)
+    // m_defaultsMap[colourName] and then we use this QColor as a key in
+    // KConfig::readColorEntry() which used to be (3.5 API)
+    //
+    // QColor KConfigBase::readColorEntry (const QString &pKey, 
+    //                                     const QColor *pDefault = 0L)
+    //
+    // where pKey   The key to search for. 
+    //   pDefault   A default value (null QColor by default) returned if the key
+    //              was not found or if the value cannot be interpreted.
+    //
+    // So how did that old code work?  It doesn't make sense.  I don't
+    // understand what res being set to getInstance()->m_defaultsMap[colourName]
+    // was supposed to accomplish at all.
+    //
+    // Anyway, I grabbed an example of how to use QSettings to retrieve a
+    // color, and since colourName is already coming in here as a const char*,
+    // which we need to pass to QSettings as a search key, I'm hoping this
+    // modified pasted example code will do the same job as the old,
+    // incomprehensible code did.  If not, that's what this honking huge comment
+    // is for!
+//    QColor res = getInstance()->m_defaultsMap[colourName];
+//    config.readColorEntry(colourName, &res);
+    
+    QColor color = config.value(colourName).value<QColor>();
+    config.endGroup();
 
-    QColor res = getInstance()->m_defaultsMap[colourName];
-    config->readColorEntry(colourName, &res);
-    return res;
+    return color;
 }
 
 Colour GUIPalette::convertColour(const QColor &input)
@@ -134,16 +156,19 @@ GUIPalette::GUIPalette()
     m_defaultsMap[SelectionRectangle] = QColor(103, 128, 211);
     m_defaultsMap[SelectedElement] = QColor(0, 54, 232);
 
-    const int SelectedElementHue = 225;
-    const int SelectedElementMinValue = 220;
-    const int HighlightedElementHue = 25;
-    const int HighlightedElementMinValue = 220;
-    const int QuantizedNoteHue = 69;
-    const int QuantizedNoteMinValue = 140;
-    const int TriggerNoteHue = 4;
-    const int TriggerNoteMinValue = 140;
-    const int OutRangeNoteHue = 0;
-    const int OutRangeNoteMinValue = 200;
+    //@@@  I decided to shut up these compiler warnings about unused variables.
+    // They look like simple cruft to me.
+
+//    const int SelectedElementHue = 225;
+//    const int SelectedElementMinValue = 220;
+//    const int HighlightedElementHue = 25;
+//    const int HighlightedElementMinValue = 220;
+//    const int QuantizedNoteHue = 69;
+//    const int QuantizedNoteMinValue = 140;
+//    const int TriggerNoteHue = 4;
+//    const int TriggerNoteMinValue = 140;
+//    const int OutRangeNoteHue = 0;
+//    const int OutRangeNoteMinValue = 200;
 
     m_defaultsMap[TextAnnotationBackground] = QColor(255, 255, 180);
 
