@@ -213,7 +213,7 @@
 #include <kglobal.h>
 #include <kinputdialog.h>
 #include <kio/netaccess.h>
-#include <kkeydialog.h>
+//#include <kkeydialog.h>	//&&& disabled kkaydialog.h
 #include <klocale.h>
 #include <kmainwindow.h>
 #include <ktip.h>
@@ -593,7 +593,7 @@ void RosegardenGUIApp::setupActions()
 {
     // setup File menu
     // New Window ?
-    KStandardAction::openNew (this, SLOT(slotFileNew()), actionCollection());
+    
     KStandardAction::open (this, SLOT(slotFileOpen()), actionCollection());
     m_fileRecent = KStandardAction::openRecent(this,
                                           SLOT(slotFileOpenRecent(const KURL&)),
@@ -2154,11 +2154,11 @@ void RosegardenGUIApp::saveGlobalProperties(QSettings cfg)
         bool res = m_doc->saveDocument(tempname, errMsg);
         if (!res) {
             if (errMsg)
-                QMessageBox::critical(this, i18n(QString("Could not save document at %1\nError was : %2")
-                                              .arg(tempname).arg(errMsg)));
+                QMessageBox::critical(this, i18n(qStrToCharPtrUtf8( QString("Could not save document at %1\nError was : %2")
+                                              .arg(tempname).arg(errMsg))) );
             else
-                QMessageBox::critical(this, i18n(QString("Could not save document at %1")
-                                              .arg(tempname)));
+                QMessageBox::critical(this, i18n( qStrToCharPtrUtf8( QString("Could not save document at %1")
+                                              .arg(tempname)))  );
         }
     }
 }
@@ -2189,8 +2189,9 @@ void RosegardenGUIApp::readGlobalProperties(QSettings _cfg)
         }
     }
 
-    QString caption = qApp->caption();
-    setCaption(caption + ": " + m_doc->getTitle());
+	//QString caption = qApp->caption();
+	QString caption = qApp->organizationName();
+	setCaption(caption + ": " + m_doc->getTitle());
 }
 
 void RosegardenGUIApp::showEvent(QShowEvent* e)

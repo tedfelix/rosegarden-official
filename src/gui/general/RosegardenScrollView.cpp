@@ -46,7 +46,8 @@ const double RosegardenScrollView::ScrollShortcutValue = 1.04;// shortcuteration
 
 RosegardenScrollView::RosegardenScrollView(QWidget* parent,
 					const char* name) //, WFlags f)
-				: QScrollArea(parent, name), //, f),
+			: QScrollArea(parent, name), //, f),
+		
         m_bottomWidget(0),
         m_currentBottomWidgetHeight( -1),
         m_smoothScroll(true),
@@ -64,6 +65,33 @@ RosegardenScrollView::RosegardenScrollView(QWidget* parent,
     connect( &m_autoScrollTimer, SIGNAL( timeout() ),
              this, SLOT( doAutoScroll() ) );
 }
+
+
+// convenience methods, added for qt4 support
+// they will either use (I'm not shure yet):
+// QRegion QWidget::visibleRegion () 
+// or 
+// <QScrollArea*>this->horizontalScrollBar().value()
+//                  + <QScrollArea*>this->width()
+//
+int RosegardenScrollView::contentsX()	//### todo: when GUI is ready: check the following code
+{
+	return this->horizontalScrollBar().value();
+}
+int RosegardenScrollView::contentsY()
+{
+	return this->verticalScrollBar().value();
+}
+int RosegardenScrollView::visibleWidth()
+{
+	return this->horizontalScrollBar().value() + this->width();
+}
+int RosegardenScrollView::visibleHeight()
+{
+	return this->verticalScrollBar().value() + this->height();
+}
+
+
 
 void RosegardenScrollView::setBottomFixedWidget(QWidget* w)
 {

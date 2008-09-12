@@ -84,6 +84,21 @@ public:
 
     virtual void wheelEvent(QWheelEvent *);
 
+	
+	
+	// convenience methods, added for qt4 support
+	// they will either use (I'm not shure yet):
+	// QRegion QWidget::visibleRegion () 
+	// or 
+	// <QScrollArea*>this->horizontalScrollBar().value()
+	//                  + <QScrollArea*>this->width()
+	//
+	int contentsX();
+	int contentsY();
+	int visibleWidth();
+	int visibleHeight();
+	
+
 public slots:
     /**
      * Scroll horizontally to make the given position visible,

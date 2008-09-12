@@ -150,6 +150,8 @@ public:
     void setBackgroundPixmap(const QPixmap &m);
 
     void endAudioPreviewGeneration();
+	
+	
 
 public slots:
     void scrollRight();
@@ -258,6 +260,15 @@ protected:
 
 protected slots:
     void slotSegmentsDrawBufferNeedsRefresh() {
+		//### qt3-doc: The following code finds the part of the canvas 
+		//### that is visible in this view, i.e. the bounding rectangle
+		// of the view in canvas coordinates.
+		// 
+		// QRect rc = QRect(myCanvasView->contentsX(), 
+		// 					myCanvasView->contentsY(),
+		// 					myCanvasView->visibleWidth(), ... )
+		// 
+		
         m_segmentsDrawBufferRefresh =
             QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight());
     }
@@ -271,15 +282,15 @@ protected slots:
     void slotArtifactsDrawBufferNeedsRefresh() {
         m_artifactsDrawBufferRefresh = 
             QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight());
-        updateContents();
+        update();	// was: updateContents()
     }
 
     void slotArtifactsDrawBufferNeedsRefresh(QRect r) {
         m_artifactsDrawBufferRefresh |=
             (QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight())
              & r);
-        updateContents(r);
-    }
+		update();	// was: updateContents()
+	}
 
     void slotAllDrawBuffersNeedRefresh() {
         slotSegmentsDrawBufferNeedsRefresh();
