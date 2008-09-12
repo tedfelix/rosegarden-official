@@ -30,7 +30,7 @@ class QProcess;
 namespace Rosegarden
 {
 
-class StartupTester : public QObject, public QThread
+class StartupTester : public QThread
 {
     Q_OBJECT
 
