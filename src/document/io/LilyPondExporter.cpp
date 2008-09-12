@@ -114,32 +114,28 @@ LilyPondExporter::LilyPondExporter(NotationView *parent,
 void
 LilyPondExporter::readConfigVariables(void)
 {
-    // grab config info
-    QSettings cfg;
-    cfg.beginGroup( NotationViewConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // cfg.endGroup();		// corresponding to: cfg.beginGroup( NotationViewConfigGroup );
-    //  
+    // grab settings info
+    QSettings settings;
+    settings.beginGroup( NotationViewConfigGroup );
 
+    m_paperSize = settings.value("lilypapersize", PAPER_A4).toUInt() ;
+    m_paperLandscape = qStrToBool( settings.value("lilypaperlandscape", "false" ) ) ;
+    m_fontSize = settings.value("lilyfontsize", FONT_20).toUInt() ;
+    m_raggedBottom = qStrToBool( settings.value("lilyraggedbottom", "false" ) ) ;
+    m_exportSelection = settings.value("lilyexportselection", EXPORT_NONMUTED_TRACKS).toUInt() ;
+    m_exportLyrics = qStrToBool( settings.value("lilyexportlyrics", "true" ) ) ;
+    m_exportMidi = qStrToBool( settings.value("lilyexportmidi", "false" ) ) ;
+    m_exportTempoMarks = settings.value("lilyexporttempomarks", EXPORT_NONE_TEMPO_MARKS).toUInt() ;
+    m_exportPointAndClick = qStrToBool( settings.value("lilyexportpointandclick", "false" ) ) ;
+    m_exportBeams = qStrToBool( settings.value("lilyexportbeamings", "false" ) ) ;
+    m_exportStaffMerge = qStrToBool( settings.value("lilyexportstaffmerge", "false" ) ) ;
+    m_exportStaffGroup = qStrToBool( settings.value("lilyexportstaffbrackets", "true" ) ) ;
+    m_lyricsHAlignment = qStrToBool( settings.value("lilylyricshalignment", "LEFT_ALIGN" ) ) ;
 
-    m_paperSize = cfg.value("lilypapersize", PAPER_A4).toUInt() ;
-    m_paperLandscape = qStrToBool( cfg.value("lilypaperlandscape", "false" ) ) ;
-    m_fontSize = cfg.value("lilyfontsize", FONT_20).toUInt() ;
-    m_raggedBottom = qStrToBool( cfg.value("lilyraggedbottom", "false" ) ) ;
-    m_exportSelection = cfg.value("lilyexportselection", EXPORT_NONMUTED_TRACKS).toUInt() ;
-    m_exportLyrics = qStrToBool( cfg.value("lilyexportlyrics", "true" ) ) ;
-    m_exportMidi = qStrToBool( cfg.value("lilyexportmidi", "false" ) ) ;
-    m_exportTempoMarks = cfg.value("lilyexporttempomarks", EXPORT_NONE_TEMPO_MARKS).toUInt() ;
-    m_exportPointAndClick = qStrToBool( cfg.value("lilyexportpointandclick", "false" ) ) ;
-    m_exportBeams = qStrToBool( cfg.value("lilyexportbeamings", "false" ) ) ;
-    m_exportStaffMerge = qStrToBool( cfg.value("lilyexportstaffmerge", "false" ) ) ;
-    m_exportStaffGroup = qStrToBool( cfg.value("lilyexportstaffbrackets", "true" ) ) ;
-    m_lyricsHAlignment = qStrToBool( cfg.value("lilylyricshalignment", "LEFT_ALIGN" ) ) ;
-
-    m_languageLevel = cfg.value("lilylanguage", LILYPOND_VERSION_2_6).toUInt() ;
-    m_exportMarkerMode = cfg.value("lilyexportmarkermode", EXPORT_NO_MARKERS ).toUInt() ;
-    m_chordNamesMode = qStrToBool( cfg.value("lilychordnamesmode", "false" ) ) ;
+    m_languageLevel = settings.value("lilylanguage", LILYPOND_VERSION_2_6).toUInt() ;
+    m_exportMarkerMode = settings.value("lilyexportmarkermode", EXPORT_NO_MARKERS ).toUInt() ;
+    m_chordNamesMode = qStrToBool( settings.value("lilychordnamesmode", "false" ) ) ;
+    settings.endGroup();
 }
 
 LilyPondExporter::~LilyPondExporter()
@@ -674,7 +670,7 @@ LilyPondExporter::write()
         font = 26;
         break;
     default :
-	font = 20; // if config problem
+	font = 20; // if settings problem
     }
 
     str << indent(col) << "#(set-global-staff-size " << font << ")" << std::endl;
