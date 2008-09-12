@@ -319,6 +319,12 @@ public:
 
     bool testAudioPath(QString op); // and open the dialog to set it if unset
     bool haveAudioImporter() const { return m_haveAudioImporter; }
+	
+	
+	
+	//### qt4 convinience functions (for old qt3)
+	void setAutoSaveSettings( const char* config_group, bool state );
+	void stateChanged( const char*  var1, unsigned int var2 ); // var2 = KXMLGUIClient::state
 
 protected:
 

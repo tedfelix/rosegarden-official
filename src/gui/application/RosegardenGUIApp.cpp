@@ -341,10 +341,26 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 
     QPixmap dummyPixmap; // any icon will do
 	
+	
+	
+	// start of docking code 
+	this->setDockOptions( // QMainWindow::AllowNestedDocks // not required with ::ForceTabbedDocks
+							QMainWindow::AnimatedDocks
+							|QMainWindow::ForceTabbedDocks
+							//|QMainWindow::VerticalTabs
+						);
+	
+	
+	/*
+	//&&& m_mainDockWidget may not be required: QMainWindow serves the mainDock
+	// 
+	// 
 	// create mainDockWidget
 	// old: m_mainDockWidget = createDockWidget("Rosegarden MainDockWidget", dummyPixmap, 0L, "main_dock_widget");
+	// 
 	m_mainDockWidget = new QDockWidget("Rosegarden MainDockWidget", dynamic_cast<QWidget*>(this), Qt::Tool );
 	//### FIX: deallocate m_mainDockWidget !
+	m_mainDockWidget->setMinimumSize( 60, 60 );	//### fix arbitrary value for min-size
 	
 	// allow others to dock to the left and right sides only
     // old: m_mainDockWidget->setDockSite(QDockWidget::DockLeft | QDockWidget::DockRight);
@@ -352,7 +368,6 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 	
     // forbit docking abilities of m_mainDockWidget itself
     // old: m_mainDockWidget->setEnableDocking(QDockWidget::DockNone);  //&&& setEnableDocking() not required ?
-	
 	
 	m_mainDockWidget->setFeatures( QDockWidget::DockWidgetMovable
 			| QDockWidget::DockWidgetMovable
@@ -364,25 +379,32 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 	//setView(m_mainDockWidget); // central widget in a KDE mainwindow
     //setMainDockWidget(m_mainDockWidget); // master dockwidget
 	
-	
 	// add to QMainWindow, left side
 	this->addDockWidget(Qt::LeftDockWidgetArea, m_mainDockWidget);
 	
-	
-	
+	// end disabled m_mainDockWidget
+	*/
 	
 	
 	//old: m_dockLeft = createDockWidget("params dock", dummyPixmap, 0L,
 	//							  i18n("Special Parameters"));
 	m_dockLeft = new QDockWidget(i18n("Special Parameters"),  dynamic_cast<QWidget*>(this), Qt::Tool );
+	m_dockLeft->setMinimumSize( 180, 200 );	//### fix arbitrary value for min-size
 	//### FIX: deallocate m_DockLeft !
 	
+	m_dockLeft->setFeatures( QDockWidget::DockWidgetMovable
+			| QDockWidget::DockWidgetMovable
+			| QDockWidget::DockWidgetFloatable
+			| QDockWidget::DockWidgetVerticalTitleBar
+			//| QDockWidget::DockWidgetClosable
+								 );
 	
-	// 
-	//###  so what to do here... add to QMainWindow ? 
-	m_dockLeft->manualDock(m_mainDockWidget,             // dock target
-	                      QDockWidget::DockLeft,  // dock site
-	                     20);                   // relation target/this (in percent)
+	// add dockLeft to mainDockWidget, left side 
+	//old: m_dockLeft->manualDock(m_mainDockWidget,             // dock target
+	 //                     QDockWidget::DockLeft,  // dock site
+	   //                  20);                   // relation target/this (in percent)
+	//m_mainDockWidget->addDockWidget( Qt::LeftDockWidgetArea, m_dockLeft );
+	this->addDockWidget( Qt::LeftDockWidgetArea, m_dockLeft );
 	
 	// add to m_mainDockWidget, left side
 	//this->addDockWidget(Qt::LeftDockWidgetArea, m_mainDockWidget);
@@ -395,12 +417,16 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
             this, SLOT(slotParametersClosed()));
     connect(m_dockLeft, SIGNAL(hasUndocked()),
             this, SLOT(slotParametersClosed()));
+	
     // Apparently, hasUndocked() is emitted when the dock widget's
     // 'close' button on the dock handle is clicked.
-    connect(m_mainDockWidget, SIGNAL(docking(QDockWidget*, QDockWidget::DockPosition)),
-            this, SLOT(slotParametersDockedBack(QDockWidget*, QDockWidget::DockPosition)));
-
-    stateChanged("parametersbox_closed", KXMLGUIClient::StateReverse);
+	//
+	//&&& disabled mainDockWidget connection, may not be required
+//    connect(m_mainDockWidget, SIGNAL(docking(QDockWidget*, QDockWidget::DockPosition)),
+//            this, SLOT(slotParametersDockedBack(QDockWidget*, QDockWidget::DockPosition)));
+	
+	
+    stateChanged("parametersbox_closed", KXMLGUIClient::StateReverse);	//@@@ whats that ? //&&&
 
     RosegardenGUIDoc* doc = new RosegardenGUIDoc(this, m_pluginManager);
 
@@ -1466,9 +1492,9 @@ void RosegardenGUIApp::initView()
     connect(m_swapView, SIGNAL(toggleSolo(bool)), SLOT(slotToggleSolo(bool)));
 
     m_doc->attachView(m_swapView);
-
-    m_mainDockWidget->setWidget(m_swapView);
-
+	
+    // m_mainDockWidget->setWidget(m_swapView);	//&&& later: check dockWidget code
+	
     //     setCentralWidget(m_swapView);
     setCaption(m_doc->getTitle());
 
@@ -8076,7 +8102,22 @@ RosegardenGUIApp::slotJumpToQuickMarker()
     m_doc->jumpToQuickMarker();
 }
 
+
+void RosegardenGUIApp::setAutoSaveSettings( const char*  config_group, bool state=0 )
+{
+	/* convinience method for qt4 */
+	//### todo: implement: RosegardenGUIApp::setAutoSaveSettings()
+}
+
+void RosegardenGUIApp::stateChanged( const char*  var1, unsigned int var2 ) // var2 = KXMLGUIClient::state
+{
+	/* convinience method for qt4 */
+	//### todo: implement: RosegardenGUIApp::stateChanged()
+}
+
+
 RosegardenGUIApp *RosegardenGUIApp::m_myself = 0;
 
-}
+}// end namespace Rosegarden
+
 #include "RosegardenGUIApp.moc"
