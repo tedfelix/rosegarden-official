@@ -97,15 +97,11 @@ MetronomeMmapper::MetronomeMmapper(RosegardenGUIDoc* doc)
         }
     }
 
-    QSettings config;
-    config.beginGroup( SequencerOptionsConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( SequencerOptionsConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( SequencerOptionsConfigGroup );
 
-    int midiClock = config.value("midiclock", 0).toInt() ;
-    int mtcMode = config.value("mtcmode", 0).toInt() ;
+    int midiClock = settings.value("midiclock", 0).toInt() ;
+    int mtcMode = settings.value("mtcmode", 0).toInt() ;
 
     if (midiClock == 1) {
         timeT quarterNote = Note(Note::Crotchet).getDuration();
@@ -138,6 +134,7 @@ MetronomeMmapper::MetronomeMmapper(RosegardenGUIDoc* doc)
     //         doMmap();
     //         dump();
     //     }
+    settings.endGroup();
 }
 
 MetronomeMmapper::~MetronomeMmapper()
@@ -224,15 +221,11 @@ void MetronomeMmapper::sortTicks()
 
 size_t MetronomeMmapper::computeMmappedSize()
 {
-    QSettings config;
-    config.beginGroup( Rosegarden::SequencerOptionsConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( Rosegarden::SequencerOptionsConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( Rosegarden::SequencerOptionsConfigGroup );
 
-    int midiClock = config.value("midiclock", 0).toInt() ;
-    int mtcMode = config.value("mtcmode", 0).toInt() ;
+    int midiClock = settings.value("midiclock", 0).toInt() ;
+    int mtcMode = settings.value("mtcmode", 0).toInt() ;
 
     // base size for Metronome ticks
     size_t size = m_ticks.size() * sizeof(MappedEvent);
@@ -259,6 +252,7 @@ size_t MetronomeMmapper::computeMmappedSize()
     {
         // Allow room for MTC timing messages (how?)
     }
+    settings.endGroup();
 
     return size;
 }
