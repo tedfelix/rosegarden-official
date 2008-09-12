@@ -158,24 +158,16 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
     //
 
     // set default expansion to false for this group -- what a faff
-    QSettings config ; // was: confq4
-    QString groupTemp = config->group();
-    QSettings config;
-    config.beginGroup( "CollapsingFrame" );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( "CollapsingFrame" );
-    //  
 
-    bool expanded = qStrToBool( config.value("nonprintableheaders", "false" ) ) ;
-    config.setValue("nonprintableheaders", expanded);
-    QSettings config;
-    config.beginGroup( groupTemp );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( groupTemp );
-    //  
+    //@@@ JAS next 2 lines not needed. Commented out
+    //@@@ QSettings settings ; // was: confq4
+    //@@@ QString groupTemp = settings.group();
+    QSettings settings;
+    settings.beginGroup( "CollapsingFrame" );
 
+    bool expanded = qStrToBool( settings.value("nonprintableheaders", "false" ) ) ;
+    settings.setValue("nonprintableheaders", expanded);
+    settings.endGroup();
 
     CollapsingFrame *otherHeadersBox = new CollapsingFrame
         (i18n("Non-printable headers"), this, "nonprintableheaders");
@@ -264,13 +256,9 @@ HeadersConfigurationPage::slotDeleteProperty()
 
 void HeadersConfigurationPage::apply()
 {
-    QSettings config;
-    config.beginGroup( NotationViewConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( NotationViewConfigGroup );
-    //  
-
+    //@@@ Next two lines not needed in this function.  Commented out
+    //@@@ QSettings settings;
+    //@@@ settings.beginGroup( NotationViewConfigGroup );
 
     // If one of the items still has focus, it won't remember edits.
     // Switch between two fields in order to lose the current focus.
