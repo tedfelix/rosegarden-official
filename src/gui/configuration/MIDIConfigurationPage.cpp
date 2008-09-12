@@ -18,6 +18,7 @@
 
 #include "MIDIConfigurationPage.h"
 
+#include "misc/Strings.h"
 #include "sound/Midi.h"
 #include "sound/SoundDriver.h"
 #include "document/ConfigGroups.h"
@@ -64,6 +65,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     const char *name):
         TabbedConfigurationPage(cfg, parent, name),
         m_midiPitchOctave(0)
+//### JAS update function declaration / definition
 {
     // set the document in the super class
     m_doc = doc;
@@ -80,18 +82,8 @@ MIDIConfigurationPage::MIDIConfigurationPage(
 
     QLabel *label = 0;
 
-    QSettings m_cfg;
-
-    m_cfg.beginGroup( GeneralOptionsConfigGroup );
-
-    // 
-
-    // FIX-manually-(GW), add:
-
-    // m_cfg.endGroup();		// corresponding to: m_cfg.beginGroup( GeneralOptionsConfigGroup );
-
-    //  
-
+    QSettings settings;
+    settings.beginGroup( GeneralOptionsConfigGroup );
 
     layout->addMultiCellWidget(new QLabel(i18n("Base octave number for MIDI pitch display"),
 					  frame), row, row, 0, 1);
@@ -99,44 +91,26 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     m_midiPitchOctave = new QSpinBox(frame);
     m_midiPitchOctave->setMaximum(10);
     m_midiPitchOctave->setMinimum( -10);
-    m_midiPitchOctave->setValue( m_cfg.value("midipitchoctave", -2).toInt() );
+    m_midiPitchOctave->setValue( settings.value("midipitchoctave", -2).toInt() );
     layout->addWidget(m_midiPitchOctave, row, 2, row- row+1, 3- 3);
     ++row;
 
     layout->setRowSpacing(row, 20);
     ++row;
 
-    QSettings m_cfg;
-
-    m_cfg.beginGroup( GeneralOptionsConfigGroup );
-
-    // 
-
-    // FIX-manually-(GW), add:
-
-    // m_cfg.endGroup();		// corresponding to: m_cfg.beginGroup( GeneralOptionsConfigGroup );
-
-    //  
-
-
+    //### settings.beginGroup( GeneralOptionsConfigGroup );
     layout->addMultiCellWidget(new QLabel(i18n("Always use default studio when loading files"),
 					  frame), row, row, 0, 1);
 
     m_studio = new QCheckBox(frame);
-    m_studio->setChecked( qStrToBool( m_cfg.value("alwaysusedefaultstudio", "false" ) ) );
+    m_studio->setChecked( qStrToBool( settings.value("alwaysusedefaultstudio", "false" ) ) );
     layout->addWidget(m_studio, row, 2);
     ++row;
+    settings.endGroup();
 
     // Send Controllers
     //
-    QSettings m_cfg;
-    m_cfg.beginGroup( SequencerOptionsConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // m_cfg.endGroup();		// corresponding to: m_cfg.beginGroup( SequencerOptionsConfigGroup );
-    //  
-
-
+    settings.beginGroup( SequencerOptionsConfigGroup );
     label = new QLabel(i18n("Send all MIDI Controllers at start of each playback"), frame);
 
     QString controllerTip = i18n("Rosegarden can send all MIDI Controllers (Pan, Reverb etc) to all MIDI devices every\ntime you hit play if you so wish.  Please note that this option will usually incur a\ndelay at the start of playback due to the amount of data being transmitted.");
@@ -145,7 +119,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     layout->addWidget(label, row, 0, row- row+1, 1- 1);
 
     m_sendControllersAtPlay = new QCheckBox(frame);
-    bool sendControllers = qStrToBool( m_cfg.value("alwayssendcontrollers", "false" ) ) ;
+    bool sendControllers = qStrToBool( settings.value("alwayssendcontrollers", "false" ) ) ;
     m_sendControllersAtPlay->setChecked(sendControllers);
     QToolTip::add
         (m_sendControllersAtPlay, controllerTip);
@@ -154,14 +128,8 @@ MIDIConfigurationPage::MIDIConfigurationPage(
 
     // Timer selection
     //
-    QSettings m_cfg;
-    m_cfg.beginGroup( SequencerOptionsConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // m_cfg.endGroup();		// corresponding to: m_cfg.beginGroup( SequencerOptionsConfigGroup );
-    //  
 
-
+    //### settings.beginGroup( SequencerOptionsConfigGroup );
     label = new QLabel(i18n("Sequencer timing source"), frame);
     layout->addWidget(label, row, 0, row- row+1, 1- 1);
 
@@ -170,7 +138,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(
 
     QStringList timers = m_doc->getTimers();
     m_origTimer = m_doc->getCurrentTimer();
-    QString currentTimer = m_cfg.value("timer", m_origTimer) ;
+    QString currentTimer = settings.value("timer", m_origTimer).toString();
 
     for (unsigned int i = 0; i < timers.size(); ++i) {
         m_timer->addItem(timers[i]);
@@ -183,18 +151,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     layout->setRowSpacing(row, 20);
     ++row;
 
-    QSettings m_cfg;
-
-    m_cfg.beginGroup( SequencerOptionsConfigGroup );
-
-    // 
-
-    // FIX-manually-(GW), add:
-
-    // m_cfg.endGroup();		// corresponding to: m_cfg.beginGroup( SequencerOptionsConfigGroup );
-
-    //  
-
+    //### settings.beginGroup( SequencerOptionsConfigGroup );
 
     // SoundFont loading
     //
@@ -209,20 +166,20 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     ++row;
 
     layout->addWidget(new QLabel(i18n("Path to 'asfxload' or 'sfxload' command"), frame), row, 0);
-    m_sfxLoadPath = new QLineEdit(m_cfg.value("sfxloadpath", "/bin/sfxload") , frame);
+    m_sfxLoadPath = new QLineEdit(settings.value("sfxloadpath", "/bin/sfxload") , frame);
     layout->addWidget(m_sfxLoadPath, row, 1, row- row+1, 2);
     m_sfxLoadChoose = new QPushButton("Choose...", frame);
     layout->addWidget(m_sfxLoadChoose, row, 3);
     ++row;
 
     layout->addWidget(new QLabel(i18n("SoundFont"), frame), row, 0);
-    m_soundFontPath = new QLineEdit(m_cfg.value("soundfontpath", "") , frame);
+    m_soundFontPath = new QLineEdit(settings.value("soundfontpath", "") , frame);
     layout->addWidget(m_soundFontPath, row, 1, row- row+1, 2);
     m_soundFontChoose = new QPushButton("Choose...", frame);
     layout->addWidget(m_soundFontChoose, row, 3);
     ++row;
 
-    bool sfxLoadEnabled = qStrToBool( m_cfg.value("sfxloadenabled", "false" ) ) ;
+    bool sfxLoadEnabled = qStrToBool( settings.value("sfxloadenabled", "false" ) ) ;
     m_sfxLoadEnabled->setChecked(sfxLoadEnabled);
     if (!sfxLoadEnabled) {
         m_sfxLoadPath->setEnabled(false);
@@ -244,18 +201,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(
 
     addTab(frame, i18n("General"));
 
-    QSettings m_cfg;
-
-    m_cfg.beginGroup( SequencerOptionsConfigGroup );
-
-    // 
-
-    // FIX-manually-(GW), add:
-
-    // m_cfg.endGroup();		// corresponding to: m_cfg.beginGroup( SequencerOptionsConfigGroup );
-
-    //  
-
+    //### settings.beginGroup( SequencerOptionsConfigGroup );
 
     //  -------------- Synchronisation tab -----------------
     //
@@ -278,7 +224,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     m_midiSync->addItem(i18n("Send MIDI Clock, Start and Stop"));
     m_midiSync->addItem(i18n("Accept Start, Stop and Continue"));
 
-    int midiClock = m_cfg.value("midiclock", 0).toInt() ;
+    int midiClock = settings.value("midiclock", 0).toInt() ;
     if (midiClock < 0 || midiClock > 2)
         midiClock = 0;
     m_midiSync->setCurrentIndex(midiClock);
@@ -297,7 +243,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     m_mmcTransport->addItem(i18n("MMC Master"));
     m_mmcTransport->addItem(i18n("MMC Slave"));
 
-    int mmcMode = m_cfg.value("mmcmode", 0).toInt() ;
+    int mmcMode = settings.value("mmcmode", 0).toInt() ;
     if (mmcMode < 0 || mmcMode > 2)
         mmcMode = 0;
     m_mmcTransport->setCurrentIndex(mmcMode);
@@ -316,7 +262,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     m_mtcTransport->addItem(i18n("MTC Master"));
     m_mtcTransport->addItem(i18n("MTC Slave"));
 
-    int mtcMode = m_cfg.value("mtcmode", 0).toInt() ;
+    int mtcMode = settings.value("mtcmode", 0).toInt() ;
     if (mtcMode < 0 || mtcMode > 2)
         mtcMode = 0;
     m_mtcTransport->setCurrentIndex(mtcMode);
@@ -336,13 +282,15 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     hbox->setLayout(hboxLayout);
 //    layout->addWidget(m_midiSyncAuto, row, 1);
 
-    m_midiSyncAuto->setChecked( qStrToBool( m_cfg.value("midisyncautoconnect", "false" ) ) );
+    m_midiSyncAuto->setChecked( qStrToBool( settings.value("midisyncautoconnect", "false" ) ) );
 
     ++row;
 
     layout->setRowStretch(row, 10);
 
     addTab(frame, i18n("MIDI Sync"));
+
+    settings.endGroup();
 }
 
 
@@ -372,31 +320,26 @@ MIDIConfigurationPage::slotSoundFontChoose()
 void
 MIDIConfigurationPage::apply()
 {
-    QSettings m_cfg;
-    m_cfg.beginGroup( SequencerOptionsConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // m_cfg.endGroup();		// corresponding to: m_cfg.beginGroup( SequencerOptionsConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( SequencerOptionsConfigGroup );
 
-
-    m_cfg.setValue("alwayssendcontrollers",
+    settings.setValue("alwayssendcontrollers",
                       m_sendControllersAtPlay->isChecked());
 
-    m_cfg.setValue("sfxloadenabled", m_sfxLoadEnabled->isChecked());
-    m_cfg.setValue("sfxloadpath", m_sfxLoadPath->text());
-    m_cfg.setValue("soundfontpath", m_soundFontPath->text());
+    settings.setValue("sfxloadenabled", m_sfxLoadEnabled->isChecked());
+    settings.setValue("sfxloadpath", m_sfxLoadPath->text());
+    settings.setValue("soundfontpath", m_soundFontPath->text());
 
-    m_cfg.setValue("timer", m_timer->currentText());
+    settings.setValue("timer", m_timer->currentText());
     if (m_timer->currentText() != m_origTimer) {
         m_doc->setCurrentTimer(m_timer->currentText());
     }
 
     // Write the entries
     //
-    m_cfg.setValue("mmcmode", m_mmcTransport->currentIndex());
-    m_cfg.setValue("mtcmode", m_mtcTransport->currentIndex());
-    m_cfg.setValue("midisyncautoconnect", m_midiSyncAuto->isChecked());
+    settings.setValue("mmcmode", m_mmcTransport->currentIndex());
+    settings.setValue("mtcmode", m_mtcTransport->currentIndex());
+    settings.setValue("midisyncautoconnect", m_midiSyncAuto->isChecked());
 
     // Now send
     //
@@ -422,7 +365,7 @@ MIDIConfigurationPage::apply()
     // ------------- MIDI Clock and System messages ------------
     //
     int midiClock = m_midiSync->currentIndex();
-    m_cfg.setValue("midiclock", midiClock);
+    settings.setValue("midiclock", midiClock);
 
     // Now send it (OLD METHOD - to be removed)
     //!!! No, don't remove -- this controls SPP as well doesn't it?
@@ -445,25 +388,16 @@ MIDIConfigurationPage::apply()
         InstrumentId instrument = metronome->getInstrument();
         m_doc->getSequenceManager()->metronomeChanged(instrument, true);
     }
-
-    QSettings m_cfg;
-
-    m_cfg.beginGroup( GeneralOptionsConfigGroup );
-
-    // 
-
-    // FIX-manually-(GW), add:
-
-    // m_cfg.endGroup();		// corresponding to: m_cfg.beginGroup( GeneralOptionsConfigGroup );
-
-    //  
-
+    settings.endGroup();
+    settings.beginGroup( GeneralOptionsConfigGroup );
 
     bool deftstudio = getUseDefaultStudio();
-    m_cfg.setValue("alwaysusedefaultstudio", deftstudio);
+    settings.setValue("alwaysusedefaultstudio", deftstudio);
 
     int octave = m_midiPitchOctave->value();
-    m_cfg.setValue("midipitchoctave", octave);
+    settings.setValue("midipitchoctave", octave);
+
+    settings.endGroup();
 }
 
 }
