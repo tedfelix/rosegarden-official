@@ -15,7 +15,6 @@
 #include <string>
 
 #include "document/ConfigGroups.h"
-#include <QApplication>
 #include <QSettings>
 #include "misc/Strings.h"
 
@@ -27,17 +26,20 @@ appendLabel(const std::string &label, const std::string &suffix)
 {
     using std::string;
 
-    QSettings config;
-    config.beginGroup( GeneralOptionsConfigGroup );
+    QSettings settings;
+    settings.beginGroup( GeneralOptionsConfigGroup );
     // 
     // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( GeneralOptionsConfigGroup );
+    // settings.endGroup();		// corresponding to: settings.beginGroup( GeneralOptionsConfigGroup );
     //  
 
 
-    if (! qStrToBool( config.value("appendlabel", "true" ) ) ) {
+    if (! qStrToBool( settings.value("appendlabel", "true" ) ) ) {
+       settings.endGroup();
        return string(label);
     }
+    settings.endGroup();
+
     if (label.length() >= suffix.length()) {
         string::size_type loc = label.find(suffix, label.length() - suffix.length());
         if (loc != string::npos) {
