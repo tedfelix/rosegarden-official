@@ -1162,13 +1162,13 @@ AlsaDriver::renameDevice(DeviceId id, QString name)
         newName = oldName.left(sep + 3) + name;
     }
 
-    snd_seq_port_info_set_name(pinfo, newName.data());
+    snd_seq_port_info_set_name(pinfo, newName.toLocal8Bit().data());
     checkAlsaError(snd_seq_set_port_info(m_midiHandle, i->second, pinfo),
                    "renameDevice");
 
     for (unsigned int i = 0; i < m_devices.size(); ++i) {
         if (m_devices[i]->getId() == id) {
-            m_devices[i]->setName(newName.data());
+            m_devices[i]->setName(qstrtostr(newName));
             break;
         }
     }
@@ -1236,7 +1236,7 @@ AlsaDriver::getConnection(Device::DeviceType type,
     }
 
     if (connectionNo < tempList.size()) {
-        return tempList[connectionNo]->m_name.c_str();
+        return strtoqstr(tempList[connectionNo]->m_name);
     }
 
     return "";
@@ -1246,8 +1246,8 @@ void
 AlsaDriver::setConnectionToDevice(MappedDevice &device, QString connection)
 {
     ClientPortPair pair( -1, -1);
-    if (connection && connection != "") {
-        pair = getPortByName(connection.data());
+    if (connection != "") {
+        pair = getPortByName(qstrtostr(connection));
     }
     setConnectionToDevice(device, connection, pair);
 }
@@ -1256,8 +1256,8 @@ void
 AlsaDriver::setConnectionToDevice(MappedDevice &device, QString connection,
                                   const ClientPortPair &pair)
 {
-    QString prevConnection = device.getConnection().c_str();
-    device.setConnection(connection.data());
+    QString prevConnection = strtoqstr(device.getConnection());
+    device.setConnection(qstrtostr(connection));
 
     if (device.getDirection() == MidiDevice::Play) {
 
@@ -1266,7 +1266,7 @@ AlsaDriver::setConnectionToDevice(MappedDevice &device, QString connection,
         if (j != m_outputPorts.end()) {
 
             if (prevConnection != "") {
-                ClientPortPair prevPair = getPortByName(prevConnection.data());
+                ClientPortPair prevPair = getPortByName(qstrtostr(prevConnection));
                 if (prevPair.first >= 0 && prevPair.second >= 0) {
 
                     std::cerr << "Disconnecting my port " << j->second << " from " << prevPair.first << ":" << prevPair.second << " on reconnection" << std::endl;
@@ -1280,7 +1280,8 @@ AlsaDriver::setConnectionToDevice(MappedDevice &device, QString connection,
                         for (MappedDeviceList::iterator k = m_devices.begin();
                                 k != m_devices.end(); ++k) {
                             if ((*k)->getId() != device.getId()) {
-                                if ((*k)->getConnection() == prevConnection.data()) {
+                                if ((*k)->getConnection() ==
+                                    qstrtostr(prevConnection)) {
                                     foundElsewhere = true;
                                     break;
                                 }
@@ -1317,7 +1318,7 @@ void
 AlsaDriver::setConnection(DeviceId id, QString connection)
 {
     Audit audit;
-    ClientPortPair port(getPortByName(connection.data()));
+    ClientPortPair port(getPortByName(qstrtostr(connection)));
 
     if (port.first != -1 && port.second != -1) {
 
@@ -1343,7 +1344,7 @@ void
 AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection)
 {
     Audit audit;
-    ClientPortPair port(getPortByName(idealConnection.data()));
+    ClientPortPair port(getPortByName(qstrtostr(idealConnection)));
 
     audit << "AlsaDriver::setPlausibleConnection: connection like "
     << idealConnection << " requested for device " << id << std::endl;
@@ -1442,7 +1443,7 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection)
                     }
 
                     if (testName && text != "" &&
-                            !QString(port->m_name.c_str()).contains(text))
+                        !strtoqstr(port->m_name).contains(text))
                         continue;
 
                     if (testUsed) {
@@ -1471,7 +1472,7 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection)
 
                         if (m_devices[i]->getId() == id) {
                             setConnectionToDevice(*m_devices[i],
-                                                  port->m_name.c_str(),
+                                                  strtoqstr(port->m_name),
                                                   m_devicePortMap[id]);
 
                             // in this case we don't request a device resync,
@@ -1587,13 +1588,13 @@ AlsaDriver::getTimer(unsigned int n)
     if (n == 0)
         return AUTO_TIMER_NAME;
     else
-        return m_timers[n -1].name.c_str();
+        return strtoqstr(m_timers[n -1].name);
 }
 
 QString
 AlsaDriver::getCurrentTimer()
 {
-    return m_currentTimer.c_str();
+    return strtoqstr(m_currentTimer);
 }
 
 void
@@ -1606,7 +1607,7 @@ AlsaDriver::setCurrentTimer(QString timer)
 
     std::cerr << "AlsaDriver::setCurrentTimer(" << timer << ")" << std::endl;
 
-    std::string name(timer.data());
+    std::string name(qstrtostr(timer));
 
     if (name == AUTO_TIMER_NAME) {
         name = getAutoTimer(m_doTimerChecks);
@@ -4508,7 +4509,7 @@ AlsaDriver::record(RecordStatus recordStatus,
 #ifdef HAVE_LIBJACK
 
                     if (m_jackDriver &&
-                            m_jackDriver->openRecordFile(id, fileName.data())) {
+                        m_jackDriver->openRecordFile(id, qstrtostr(fileName))) {
                         good = true;
                     }
 #endif
@@ -4773,7 +4774,7 @@ AlsaDriver::checkForNewClients()
 
             audit << (*i)->m_name << std::endl;
 
-            QString portName = (*i)->m_name.c_str();
+            QString portName = strtoqstr((*i)->m_name);
             ClientPortPair portPair = ClientPortPair((*i)->m_client,
                                       (*i)->m_port);
 
@@ -4936,7 +4937,7 @@ AlsaDriver::checkForNewClients()
                     if ((*k)->m_client == firstOther.first &&
                             (*k)->m_port == firstOther.second) {
                         m_devicePortMap[(*i)->getId()] = firstOther;
-                        setConnectionToDevice(**i, (*k)->m_name.c_str(),
+                        setConnectionToDevice(**i, strtoqstr((*k)->m_name),
                                               firstOther);
                         madeChange = true;
                         break;
@@ -5249,7 +5250,7 @@ AlsaDriver::scavengePlugins()
 QString
 AlsaDriver::getStatusLog()
 {
-    return QString::fromUtf8(Audit::getAudit().c_str());
+    return strtoqstr(Audit::getAudit());
 }
 
 
