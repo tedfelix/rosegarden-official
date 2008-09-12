@@ -84,13 +84,13 @@ StudioControl::setStudioObjectProperty(MappedObjectId id,
     return true;
 }
 
-bool
+QString
 StudioControl::setStudioObjectPropertyList(MappedObjectId id,
         const MappedObjectProperty &property,
         const MappedObjectPropertyList &values)
 {
-    RosegardenSequencer::getInstance()->setMappedPropertyList(id, property, values);
-    return true;
+    QString error = RosegardenSequencer::getInstance()->setMappedPropertyList(id, property, values);
+    return error;
 }
 
 MappedObjectId

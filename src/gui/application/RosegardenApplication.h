@@ -53,12 +53,6 @@ public:
     virtual int newInstance();
 
     void refreshGUI(int maxTime);
-/*!!!
-    bool isSequencerRegistered();
-    bool sequencerSend(QByteArray dcopCall, QByteArray params = Empty);
-    bool sequencerCall(QByteArray dcopCall, QByteArray& replyType,
-                       QByteArray& replyData, QByteArray params = Empty, bool useEventLoop = false);
-*/
 
     static RosegardenApplication* rgApp();
 

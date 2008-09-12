@@ -65,8 +65,6 @@ ENDIF(WANT_SOUND)
 # gui executable
 INCLUDE(GUIFileList.txt)
 
-#KDE4_ADD_DCOP_SKELS(gui_SRCS ${gui_dcop_SRCS})
-#KDE4_ADD_DCOP_STUBS(gui_SRCS ${gui_dcop_SRCS}) 
 KDE4_ADD_UI_FILES(gui_SRCS ${ui_SRCS})
 QT4_AUTOMOC(${gui_SRCS})
 QT4_AUTOMOC(${segmentcanvas_SRCS})

@@ -75,11 +75,11 @@ public:
                                         const MappedObjectProperty &property,
                                         const QString &value);
 
-    // Set a value to a string list
+    // Set a value to a string list.  Return value is error if any.
     //
-    static bool setStudioObjectPropertyList(MappedObjectId id,
-                                            const MappedObjectProperty &property,
-                                            const MappedObjectPropertyList &values);
+    static QString setStudioObjectPropertyList(MappedObjectId id,
+					       const MappedObjectProperty &property,
+					       const MappedObjectPropertyList &values);
 
     static void setStudioPluginPort(MappedObjectId pluginId,
                                     unsigned long portId,

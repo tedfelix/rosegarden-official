@@ -154,7 +154,6 @@
 #include "LircClient.h"
 #include "LircCommander.h"
 #include "RosegardenGUIView.h"
-#include "RosegardenIface.h"
 #include "SetWaitCursor.h"
 #include "sequencer/RosegardenSequencer.h"
 #include "sequencer/SequencerThread.h"
@@ -168,10 +167,6 @@
 #include "sound/PluginIdentifier.h"
 #include "sound/SoundDriver.h"
 #include "StartupTester.h"
-
-#include <dcopclient.h>
-#include <dcopobject.h>
-#include <dcopref.h>
 
 #include <Q3Canvas>
 
@@ -210,7 +205,6 @@
 
 #include <kmimetype.h>
 #include <QAction>
-#include <kdcopactionproxy.h>
 #include <kedittoolbar.h>
 #include <kfiledialog.h>
 #include <kglobal.h>
@@ -238,7 +232,7 @@ namespace Rosegarden
 
 RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
                                    QObject *startupStatusMessageReceiver)
-        : DCOPObject("RosegardenIface"), RosegardenIface(this), QMainWindow(0),
+        : QMainWindow(0),
         m_actionsSetup(false),
         m_fileRecent(0),
         m_view(0),
@@ -340,7 +334,6 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     emit startupStatusMessage(i18n("Initializing view..."));
     initStatusBar();
     setupActions();
-    iFaceDelayedInit(this);
     initZoomToolbar();
 
     QPixmap dummyPixmap; // any icon will do
@@ -6212,27 +6205,6 @@ RosegardenGUIApp::setCursor(const QCursor& cursor)
     m_dockLeft->setCursor(cursor);
 }
 
-QString
-RosegardenGUIApp::createNewAudioFile()
-{
-    AudioFile *aF = 0;
-    try {
-        aF = m_doc->getAudioFileManager().createRecordingAudioFile();
-        if (!aF) {
-            // createRecordingAudioFile doesn't actually write to the disk,
-            // and in principle it shouldn't fail
-            std::cerr << "ERROR: RosegardenGUIApp::createNewAudioFile: Failed to create recording audio file" << std::endl;
-            return "";
-        } else {
-            return aF->getFilename().c_str();
-        }
-    } catch (AudioFileManager::BadAudioPathException e) {
-        delete aF;
-        std::cerr << "ERROR: RosegardenGUIApp::createNewAudioFile: Failed to create recording audio file: " << e.getMessage() << std::endl;
-        return "";
-    }
-}
-
 QVector<QString>
 RosegardenGUIApp::createRecordAudioFiles(const QVector<InstrumentId> &recordInstruments)
 {
@@ -7183,10 +7155,13 @@ RosegardenGUIApp::slotPluginSelected(InstrumentId instrumentId,
         config.push_back(strtoqstr(i->first));
         config.push_back(strtoqstr(i->second));
     }
-    StudioControl::setStudioObjectPropertyList
-    (pluginMappedId,
-     MappedPluginSlot::Configuration,
-     config);
+
+    QString error = StudioControl::setStudioObjectPropertyList
+        (pluginMappedId,
+         MappedPluginSlot::Configuration,
+         config);
+
+    if (error != "") showError(error);
 
     // Set the bypass
     //
@@ -7503,10 +7478,12 @@ RosegardenGUIApp::slotChangePluginConfiguration(InstrumentId instrumentId,
 
         RG_DEBUG << "RosegardenGUIApp::slotChangePluginConfiguration: setting new config on mapped id " << inst->getMappedId() << endl;
 
-        StudioControl::setStudioObjectPropertyList
+        QString error = StudioControl::setStudioObjectPropertyList
         (inst->getMappedId(),
          MappedPluginSlot::Configuration,
          config);
+
+        if (error != "") showError(error);
 
         // Set modified
         m_doc->slotDocumentModified();

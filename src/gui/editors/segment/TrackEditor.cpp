@@ -51,7 +51,6 @@
 #include "gui/widgets/QDeferScrollView.h"
 #include "sound/AudioFile.h"
 #include "TrackButtons.h"
-#include <dcopobject.h>
 #include "document/Command.h"
 #include <kglobal.h>
 #include <QMessageBox>

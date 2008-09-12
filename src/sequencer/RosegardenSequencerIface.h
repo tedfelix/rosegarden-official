@@ -214,10 +214,9 @@ public:
 
     // Set a MappedObject to a property list
     //
-    virtual void setMappedPropertyList(
-                               int id,
-                               const QString &property,
-                               const MappedObjectPropertyList &values) = 0;
+    virtual QString setMappedPropertyList(int id,
+                                          const QString &property,
+                                          const MappedObjectPropertyList &values) = 0;
 
     // Get a mapped object id for a object type
     //

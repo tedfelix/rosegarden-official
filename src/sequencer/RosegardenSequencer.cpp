@@ -44,10 +44,8 @@
 #include "base/Profiler.h"
 #include "sound/PluginFactory.h"
 
-#include "gui/application/RosegardenApplication.h" //!!!
-#include "gui/application/RosegardenDCOP.h" //!!!
-
-#include <dcopclient.h> //!!! temporarily
+#include "gui/application/RosegardenApplication.h" 
+#include "gui/application/RosegardenGUIApp.h" 
 
 
 
@@ -86,18 +84,6 @@ RosegardenSequencer::RosegardenSequencer() :
     m_isEndOfCompReached(false),
     m_mutex(true) // recursive
 {
-    SEQUENCER_DEBUG << "Registering with DCOP server" << endl;
-
-    // Without DCOP we are nothing
-    QByteArray realAppId = qApp->dcopClient()->registerAs(qApp->objectName(), false);
-
-    if (realAppId.isNull()) {
-        SEQUENCER_DEBUG << "RosegardenSequencer cannot register "
-                        << "with DCOP server" << endl;
-        m_transportStatus = QUIT;
-        return;
-    }
-
     // Initialise the MappedStudio
     //
     initialiseStudio();
@@ -173,8 +159,6 @@ RosegardenSequencer::quit()
 // basis of our first fetch of events from the GUI core.  Assuming
 // this works we set our internal state to PLAYING and go ahead
 // and play the piece until we get a signal to stop.
-//
-// DCOP wants us to use an int as a return type instead of a bool.
 //
 bool
 RosegardenSequencer::play(const RealTime &time,
@@ -294,12 +278,12 @@ RosegardenSequencer::play(const RealTime &time,
 
 bool
 RosegardenSequencer::record(const RealTime &time,
-                               const RealTime &readAhead,
-                               const RealTime &audioMix,
-                               const RealTime &audioRead,
-                               const RealTime &audioWrite,
-                               long smallFileSize,
-                               long recordMode)
+                            const RealTime &readAhead,
+                            const RealTime &audioMix,
+                            const RealTime &audioRead,
+                            const RealTime &audioWrite,
+                            long smallFileSize,
+                            long recordMode)
 {
     LOCKED;
 
@@ -319,69 +303,35 @@ RosegardenSequencer::record(const RealTime &time,
     // file names from the GUI
     //
     if (localRecordMode == STARTING_TO_RECORD ||
-            localRecordMode == RECORDING) {
+        localRecordMode == RECORDING) {
+
         SEQUENCER_DEBUG << "RosegardenSequencer::record()"
-        << " - starting to record" << endl;
+                        << " - starting to record" << endl;
 
-        QVector<InstrumentId> armedInstruments;
-        QVector<QString> audioFileNames;
+        // This function is (now) called synchronously from the GUI
+        // thread, which is why we needed to obtain the sequencer lock
+        // above.  This means we can safely call back into GUI
+        // functions, so long as we don't call anything that will need
+        // to call any other locking sequencer functions.
 
-        {
-            QByteArray data, replyData;
-            QByteArray replyType;
-            QDataStream arg(data, QIODevice::WriteOnly);
-
-            if (!qApp->dcopClient()->call(ROSEGARDEN_GUI_APP_NAME,
-                                          ROSEGARDEN_GUI_IFACE_NAME,
-                                          "getArmedInstruments()",
-                                          data, replyType, replyData, true)) {
-                SEQUENCER_DEBUG << "RosegardenSequencer::record()"
-                << " - can't call RosegardenGUI client for getArmedInstruments"
-                << endl;
-            }
-
-            QDataStream reply(replyData, QIODevice::ReadOnly);
-            if (replyType == "QVector<InstrumentId>") {
-                reply >> armedInstruments;
-            } else {
-                SEQUENCER_DEBUG << "RosegardenSequencer::record() - "
-                << "unrecognised type returned for getArmedInstruments" << endl;
-            }
-        }
+        QVector<InstrumentId> armedInstruments =
+            RosegardenGUIApp::self()->getArmedInstruments();
 
         QVector<InstrumentId> audioInstruments;
-
         for (unsigned int i = 0; i < armedInstruments.size(); ++i) {
             if (armedInstruments[i] >= AudioInstrumentBase &&
-                    armedInstruments[i] < MidiInstrumentBase) {
+                armedInstruments[i] < MidiInstrumentBase) {
                 audioInstruments.push_back(armedInstruments[i]);
             }
         }
 
+        QVector<QString> audioFileNames;
+
         if (audioInstruments.size() > 0) {
 
-            QByteArray data, replyData;
-            QByteArray replyType;
-            QDataStream arg(data, QIODevice::WriteOnly);
-
-            arg << audioInstruments;
-
-            if (!qApp->dcopClient()->call(ROSEGARDEN_GUI_APP_NAME,
-                                          ROSEGARDEN_GUI_IFACE_NAME,
-                                          "createRecordAudioFiles(QVector<InstrumentId>)",
-                                          data, replyType, replyData, true)) {
-                SEQUENCER_DEBUG << "RosegardenSequencer::record()"
-                << " - can't call RosegardenGUI client for createNewAudioFiles"
-                << endl;
-            }
-
-            QDataStream reply(replyData, QIODevice::ReadOnly);
-            if (replyType == "QVector<QString>") {
-                reply >> audioFileNames;
-            } else {
-                SEQUENCER_DEBUG << "RosegardenSequencer::record() - "
-                << "unrecognised type returned for createNewAudioFiles" << endl;
-            }
+            audioFileNames =
+                RosegardenGUIApp::self()->createRecordAudioFiles
+                (audioInstruments);
 
             if (audioFileNames.size() != audioInstruments.size()) {
                 std::cerr << "ERROR: RosegardenSequencer::record(): Failed to create correct number of audio files (wanted " << audioInstruments.size() << ", got " << audioFileNames.size() << ")" << std::endl;
@@ -832,15 +782,15 @@ RosegardenSequencer::setMappedProperty(int id,
         object->setProperty(property, value);
 }
 
-void
+QString
 RosegardenSequencer::setMappedPropertyList(int id, const QString &property,
         const MappedObjectPropertyList &values)
 {
     LOCKED;
 
     SEQUENCER_DEBUG << "setPropertyList: id = " << id
-    << " : property list size = \"" << values.size()
-    << "\"" << endl;
+                    << " : property list size = \"" << values.size()
+                    << "\"" << endl;
 
     MappedObject *object = m_studio->getObjectById(id);
 
@@ -848,15 +798,12 @@ RosegardenSequencer::setMappedPropertyList(int id, const QString &property,
         try {
             object->setPropertyList(property, values);
         } catch (QString err) {
-            QByteArray data;
-            QDataStream arg(data, QIODevice::WriteOnly);
-            arg << err;
-            qApp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
-                                     ROSEGARDEN_GUI_IFACE_NAME,
-                                     "showError(QString)",
-                                     data);
+            return err;
         }
+        return "";
     }
+
+    return "(object not found)";
 }
 
 int
@@ -1380,8 +1327,6 @@ RosegardenSequencer::updateClocks()
 
     m_driver->runTasks();
 
-//!!!    checkExternalTransport();
-
     //SEQUENCER_DEBUG << "RosegardenSequencer::updateClocks" << endl;
 
     // If we're not playing etc. then that's all we need to do
@@ -1432,30 +1377,7 @@ RosegardenSequencer::updateClocks()
     //
     m_sequencerMapper.updatePositionPointer(newPosition);
 }
-/*!!!
-void
-RosegardenSequencer::notifySequencerStatus()
-{
-    QByteArray data, replyData;
-    QByteArray replyType;
-    QDataStream arg(data, QIODevice::WriteOnly);
 
-    arg << (int)m_transportStatus;
-
-    if (!qApp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
-                                  ROSEGARDEN_GUI_IFACE_NAME,
-                                  "notifySequencerStatus(int)",
-                                  data)) {
-        SEQUENCER_DEBUG << "RosegardenSequencer::notifySequencerStatus()"
-        << " - can't send to RosegardenGUI client"
-        << endl;
-
-        // Stop the sequencer
-        //
-        stop();
-    }
-}
-*/
 void
 RosegardenSequencer::sleep(const RealTime &rt)
 {
@@ -1714,106 +1636,6 @@ RosegardenSequencer::isTransportSyncComplete(TransportToken token)
     std::cout << "RosegardenSequencer::isTransportSyncComplete: token " << token << ", current token " << m_transportToken << std::endl;
     return m_transportToken >= token;
 }
-
-/*!!!
-bool
-RosegardenSequencer::checkExternalTransport()
-{
-    bool rv = (!m_transportRequests.empty());
-
-    while (!m_transportRequests.empty()) {
-
-        TransportPair pair = *m_transportRequests.begin();
-        m_transportRequests.pop_front();
-
-        QByteArray data;
-
-        switch (pair.first) {
-
-        case TransportNoChange:
-            break;
-
-        case TransportStop:
-            qApp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
-                                     ROSEGARDEN_GUI_IFACE_NAME,
-                                     "stop()",
-                                     data);
-            break;
-
-        case TransportStart:
-            qApp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
-                                     ROSEGARDEN_GUI_IFACE_NAME,
-                                     "play()",
-                                     data);
-            break;
-
-        case TransportPlay:
-            qApp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
-                                     ROSEGARDEN_GUI_IFACE_NAME,
-                                     "play()",
-                                     data);
-            break;
-
-        case TransportRecord:
-            qApp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
-                                     ROSEGARDEN_GUI_IFACE_NAME,
-                                     "record()",
-                                     data);
-            break;
-
-        case TransportJumpToTime: {
-                QDataStream arg(data, QIODevice::WriteOnly);
-                arg << (int)pair.second.sec;
-                arg << (int)pair.second.usec();
-
-                qApp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
-                                         ROSEGARDEN_GUI_IFACE_NAME,
-                                         "jumpToTime(int, int)",
-                                         data);
-
-                if (m_transportStatus == PLAYING ||
-                    m_transportStatus != RECORDING) {
-                    jumpTo(pair.second);
-                }
-
-                incrementTransportToken();
-                break;
-            }
-
-        case TransportStartAtTime: {
-                QDataStream arg(data, QIODevice::WriteOnly);
-                arg << (int)pair.second.sec;
-                arg << (int)pair.second.usec();
-
-                qApp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
-                                         ROSEGARDEN_GUI_IFACE_NAME,
-                                         "startAtTime(int, int)",
-                                         data);
-                break;
-            }
-
-        case TransportStopAtTime: {
-                qApp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
-                                         ROSEGARDEN_GUI_IFACE_NAME,
-                                         "stop()",
-                                         data);
-
-                QDataStream arg(data, QIODevice::WriteOnly);
-                arg << (int)pair.second.sec;
-                arg << (int)pair.second.usec();
-
-                qApp->dcopClient()->send(ROSEGARDEN_GUI_APP_NAME,
-                                         ROSEGARDEN_GUI_IFACE_NAME,
-                                         "jumpToTime(int, int)",
-                                         data);
-                break;
-            }
-        }
-    }
-
-    return rv;
-}
-*/
 
 void
 RosegardenSequencer::incrementTransportToken()

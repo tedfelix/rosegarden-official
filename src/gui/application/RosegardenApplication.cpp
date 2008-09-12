@@ -33,7 +33,6 @@
 #include <QEventLoop>
 #include <QSessionManager>
 #include <QString>
-#include <dcopclient.h>
 #include <QSettings>
 #include <kstatusbar.h>
 
@@ -46,8 +45,8 @@ int RosegardenApplication::newInstance()
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
     if (RosegardenGUIApp::self() && args->count() &&
-            RosegardenGUIApp::self()->getDocument() &&
-            RosegardenGUIApp::self()->getDocument()->saveIfModified()) {
+        RosegardenGUIApp::self()->getDocument() &&
+        RosegardenGUIApp::self()->getDocument()->saveIfModified()) {
         // Check for modifications and save if necessary - if cancelled
         // then don't load the new file.
         //

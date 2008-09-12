@@ -1054,10 +1054,18 @@ void RosegardenGUIDoc::initialiseStudio()
                     config.push_back(strtoqstr(i->second));
                 }
 
+                QString error =
                 StudioControl::setStudioObjectPropertyList
-                (pluginMappedId,
-                 MappedPluginSlot::Configuration,
-                 config);
+                    (pluginMappedId,
+                     MappedPluginSlot::Configuration,
+                     config);
+
+                if (error != "") {
+                    KStartupLogo::hideIfStillThere();
+                    CurrentProgressDialog::freeze();
+                    KMessageBox::sorry(0, error);
+                    CurrentProgressDialog::thaw();
+                }
 
                 // Set the bypass
                 //

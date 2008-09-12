@@ -22,7 +22,6 @@
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>
 #include <klocale.h>
-#include <dcopclient.h>
 #include <QSettings>
 #include <QMessageBox>
 #include <kstandarddirs.h>
@@ -45,9 +44,6 @@
 #include "gui/kdeext/KStartupLogo.h"
 
 #include "gui/application/RosegardenApplication.h"
-#include "gui/application/RosegardenDCOP.h"
-
-#include "gui/kdeext/klearlook.h"
 
 using namespace Rosegarden;
 
@@ -272,35 +268,39 @@ other MIDI clients (MIDI IN and OUT hardware ports or ALSA synth devices)
 using any ALSA MIDI Connection Manager.  The Sequencer also supports 
 playing and recording of Audio sample files using \link JackDriver Jack\endlink 
  
-The GUI and Sequencer communicate using the KDE DCOP communication framework.
-Look in:
- - \link rosegardenguiiface.h gui/rosegardenguiiface.h\endlink
- - \link rosegardensequenceriface.h sequencer/rosegardensequenceriface.h\endlink
- 
-for definitions of the DCOP interfaces pertinent to the Sequencer
-and GUI.  The main DCOP operations from the GUI involve starting and
+The GUI and Sequencer were originally implemented as separate processes
+communicating using the KDE DCOP communication framework, but they have
+now been restructured into separate threads of a single process.  The
+original design still explains some of the structure of these classes,
+however.  Generally, the DCOP functions that the GUI used to call in
+the sequencer are now simple public functions of RosegardenSequencer
+that are described in the RosegardenSequencerIface parent class (this
+class is retained purely for descriptive purposes); calls that the
+sequencer used to make back to the GUI have mostly been replaced by
+polling from the GUI to sequencer.
+
+The main operations invoked from the GUI involve starting and
 stopping the Sequencer, playing and recording, fast forwarding and
 rewinding.  Once a play or record cycle is enabled it's the Sequencer
-that does most of the hard work.  Events are read from (or written to, when recording)
-a set of mmapped files. 
+that does most of the hard work.  Events are read from (or written to,
+when recording) a set of mmapped files shared between the threads.
  
 The Sequencer makes use of two libraries libRosegardenSequencer
 and libRosegardenSound:
  
  - libRosegardenSequencer holds everything pertinent to sequencing
-    for Rosegarden including the
-    Sequencer class itself.  This library is only linked into the
-    Rosegarden Sequencer.
+   for Rosegarden including the
+   Sequencer class itself.  This library is only linked into the
+   Rosegarden Sequencer.
  
  - libRosegardenSound holds the MidiFile class (writing and reading
-    MIDI files) and the MappedEvent and MappedComposition classes (the
-    communication class for transferring events back and forth across
-    DCOP).  This library is needed by the GUI as well as the Sequencer.
+   MIDI files) and the MappedEvent and MappedComposition classes (the
+   communication class for transferring events back and forth between
+   sequencer and GUI).  This library is needed by the GUI as well as
+   the Sequencer.
  
 The main Sequencer state machine is a good starting point and clearly
 visible at the bottom of rosegarden/sequencer/main.cpp.
- 
- 
 */
 
 static const char *description =
@@ -458,7 +458,6 @@ int main(int argc, char *argv[])
     aboutData.addCredit("Stephen Torri", I18N_NOOP("Initial guitar chord editing code"), "storri@torri.org");
     aboutData.addCredit("Piotr Sawicki", I18N_NOOP("Polish translation"), "pelle@plusnet.pl");
     aboutData.addCredit("David García-Abad", I18N_NOOP("Basque translation"), "davidgarciabad@telefonica.net");
-    aboutData.addCredit("Joerg C. Koenig, Craig Drummond, Bernhard Rosenkränzer, Preston Brown, Than Ngo", I18N_NOOP("Klearlook theme"), "jck@gmx.org");
 
     aboutData.setTranslator(I18N_NOOP("_: NAME OF TRANSLATORS\nYour names") , I18N_NOOP("_: EMAIL OF TRANSLATORS\nYour emails"));
 
@@ -471,13 +470,9 @@ int main(int argc, char *argv[])
 
     RosegardenApplication app;
 
-    //
     // Ensure quit on last window close
-    // Register main DCOP interface
     //
     QObject::connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
-    app.dcopClient()->registerAs(app.name(), false);
-    app.dcopClient()->setDefaultObject(ROSEGARDEN_GUI_IFACE_NAME);
 
     // Parse cmd line args
     //
@@ -567,20 +562,6 @@ int main(int argc, char *argv[])
     config.setValue("action/help_report_bug", false);
 
 
-    config.beginGroup( GeneralOptionsConfigGroup );
-
-    // 
-
-    // FIX-manually-(GW), add:
-
-    // config.endGroup();		// corresponding to: config.beginGroup( GeneralOptionsConfigGroup );
-
-    //  
-
-    int install = config.value("Install Own Theme", 1).toInt() ;
-    if (install == 2 || (install == 1 && !getenv("KDE_FULL_SESSION"))) {
-	qApp->setStyle(new KlearlookStyle);
-    }
 
     // Show Startup logo
     // (this code borrowed from KDevelop 2.0,

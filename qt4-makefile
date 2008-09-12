@@ -21,9 +21,6 @@ CC		= $(CCACHE) $(CCDIR)/bin/cc
 CXX		= $(CCACHE) $(CCDIR)/bin/c++
 LD		= $(CXX)
 MOC		= $(QTDIR)/bin/moc-qt4
-# don't want to use DCOP any more
-#DCOPIDL		= $(KDEDIR)/bin/dcopidl
-#DCOPIDL2CPP	= $(KDEDIR)/bin/dcopidl2cpp
 UIC		= $(QTDIR)/bin/uic-qt4
 
 CXXFLAGS	= -DQT3_SUPPORT -Wall -O0 -g -DHAVE_ALSA -DHAVE_LIBJACK -DHAVE_DSSI -DHAVE_LADSPA -DHAVE_LIBLO -DHAVE_LIBLRDF -DHAVE_XFT -DDEBUG -D'VERSION="2.0-yeah-whatever-innit"'
@@ -60,10 +57,8 @@ UIHEADERS	= $(patsubst %.ui,%.h,$(UI))
 UISOURCES	= $(patsubst %.ui,%.cpp,$(UI))
 UIMOC		= $(patsubst %.ui,%.moc,$(UI))
 
-#GUISOURCES	= $(filter-out sequencer/%.cpp, $(SOURCES)) gui/application/RosegardenIface_skel.cpp gui/editors/segment/TrackEditorIface_skel.cpp
 GUISOURCES	= $(filter-out sequencer/%.cpp, $(SOURCES))
 GUIOBJECTS	= $(patsubst %.cpp,%.o,$(GUISOURCES))
-#SEQSOURCES	= $(wildcard base/*.cpp misc/*.cpp sound/*.cpp sequencer/*.cpp) sequencer/RosegardenSequencerIface_skel.cpp
 SEQSOURCES	= $(wildcard base/*.cpp misc/*.cpp sound/*.cpp sequencer/*.cpp)
 SEQOBJECTS	= $(patsubst %.cpp,%.o,$(SEQSOURCES))
 
@@ -83,12 +78,6 @@ rosegardensequencer:	$(SEQOBJECTS)
 
 %.moc: %.h
 	$(MOC) $< -o $@
-
-#%.kidl: %.h
-#	$(DCOPIDL) $< > $@
-
-#%_skel.cpp: %.kidl
-#	$(DCOPIDL2CPP) --c++-suffix cpp --no-signals --no-stub $<
 
 %.o: %.cpp
 	$(CXX) -c $(CXXFLAGS) $(INCLUDES) $< -o $@

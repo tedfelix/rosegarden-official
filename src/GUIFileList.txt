@@ -1,11 +1,6 @@
 # to rebuild the list:
 # find commands/ document/ gui/ -iname '*.cpp' -or -iname '*.h' > list.txt
 
-SET(gui_dcop_SRCS
-	gui/application/RosegardenIface.h 
-#	gui/editors/segment/TrackEditorIface.h
-)
-
 SET(ui_SRCS 
 	gui/ui/RosegardenTransport.ui
 )
@@ -363,8 +358,6 @@ SET(gui_SRCS
 	gui/application/RosegardenGUIApp.h
 	gui/application/RosegardenGUIView.cpp
 	gui/application/RosegardenGUIView.h
-	gui/application/RosegardenIface.cpp
-	gui/application/RosegardenIface.h
 	gui/application/SetWaitCursor.cpp
 	gui/application/SetWaitCursor.h
 	gui/application/StartupTester.cpp
@@ -663,8 +656,6 @@ SET(gui_SRCS
 	gui/editors/segment/TrackButtons.h
 	gui/editors/segment/TrackEditor.cpp
 	gui/editors/segment/TrackEditor.h
-#	gui/editors/segment/TrackEditorIface.cpp
-#	gui/editors/segment/TrackEditorIface.h
 	gui/editors/segment/TrackHeader.cpp
 	gui/editors/segment/TrackHeader.h
 	gui/editors/segment/TrackLabel.cpp

@@ -143,14 +143,8 @@ SequencerThread::run()
         //
         seq.updateClocks();
 
-        // we want to process transport changes immediately
-/*!!!
-        if (seq.checkExternalTransport()) {
-            atLeisure = false;
-        } else */
         if (lastSeqStatus != seq.getStatus()) {
             SEQUENCER_DEBUG << "Sequencer status changed from " << lastSeqStatus << " to " << seq.getStatus() << endl;
-//!!!            seq.notifySequencerStatus();
             lastSeqStatus = seq.getStatus();
             atLeisure = false;
         }

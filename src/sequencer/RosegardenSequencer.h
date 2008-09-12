@@ -67,10 +67,9 @@ public:
     void lock();
     void unlock();
 	
-    //      -------- START OF DCOP INTERFACE METHODS --------
+    //      -------- START OF INTERFACE METHODS --------
     //
     //
-
 
     // Quit
     virtual void quit();
@@ -179,9 +178,10 @@ public:
                                    const QString &property,
                                    const QString &value);
 
-    // Set a MappedObject to a property list
+    // Set a MappedObject to a property list.  Return value is
+    // error string if any.
     //
-    virtual void setMappedPropertyList(int id,
+    virtual QString setMappedPropertyList(int id,
                                        const QString &property,
                                        const MappedObjectPropertyList &values);
 
@@ -260,9 +260,7 @@ public:
     //
     //
     //
-    //      -------- END OF DCOP INTERFACE --------
-
-
+    //      -------- END OF INTERFACE --------
 
 
     void setStatus(TransportStatus status)
@@ -322,20 +320,6 @@ public:
     // polled regularly
     void checkForNewClients();
 
-    /*
-    // Audio latencies
-    //
-    RealTime getAudioPlaybackLatency()
-        { return m_audioPlayLatency; }
-    void setAudioPlaybackLatency(const RealTime &latency)
-        { m_audioPlayLatency = latency; }
-
-    RealTime getAudioRecordLatency()
-        { return m_audioRecordLatency; }
-    void setAudioRecordLatency(const RealTime &latency)
-        { m_audioRecordLatency = latency; }
-    */
-
     // Initialise the virtual studio at this end of the link
     //
     void initialiseStudio();
@@ -343,7 +327,7 @@ public:
 
     // --------- EXTERNAL TRANSPORT INTERFACE METHODS --------
     //
-    // Whereas the DCOP interface (above) is for the GUI to call to
+    // Whereas the interface (above) is for the GUI to call to
     // make the sequencer follow its wishes, this interface is for
     // external clients to call (via some low-level audio callback)
     // and requires sychronising with the GUI.
@@ -398,21 +382,6 @@ protected:
     RealTime m_audioRead;
     RealTime m_audioWrite;
     int m_smallFileSize;
-
-    /*
-
-    // Not required at the sequencer
-
-    // Two more latencies for audio play and record - when we 
-    // use an unsynchronised audio and MIDI system such as
-    // ALSA and JACK we need to use these additional values
-    // to help time-keeping.
-    //
-    RealTime m_audioPlayLatency;
-    RealTime m_audioRecordLatency;
-
-    */
-
 
     RealTime m_loopStart;
     RealTime m_loopEnd;
