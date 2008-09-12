@@ -1069,23 +1069,23 @@ void
 EditView::createInsertPitchActionMenu()
 {
     QString notePitchNames[] = {
-                                   i18n("I"), i18n("II"), i18n("III"), i18n("IV"),
-                                   i18n("V"), i18n("VI"), i18n("VII"), i18n("VIII")
-                               };
+        i18n("I"), i18n("II"), i18n("III"), i18n("IV"),
+        i18n("V"), i18n("VI"), i18n("VII"), i18n("VIII")
+    };
     QString flat = i18n("%1 flat");
     QString sharp = i18n("%1 sharp");
 
-    const Key notePitchKeys[3][7] = {
-                                        {
-                                            Qt::Key_A, Qt::Key_S, Qt::Key_D, Qt::Key_F, Qt::Key_J, Qt::Key_K, Qt::Key_L,
-                                        },
-                                        {
-                                            Qt::Key_Q, Qt::Key_W, Qt::Key_E, Qt::Key_R, Qt::Key_U, Qt::Key_I, Qt::Key_O,
-                                        },
-                                        {
-                                            Qt::Key_Z, Qt::Key_X, Qt::Key_C, Qt::Key_V, Qt::Key_B, Qt::Key_N, Qt::Key_M,
-                                        },
-                                    };
+    const Qt::Key notePitchKeys[3][7] = {
+        {
+            Qt::Key_A, Qt::Key_S, Qt::Key_D, Qt::Key_F, Qt::Key_J, Qt::Key_K, Qt::Key_L,
+        },
+        {
+            Qt::Key_Q, Qt::Key_W, Qt::Key_E, Qt::Key_R, Qt::Key_U, Qt::Key_I, Qt::Key_O,
+        },
+        {
+            Qt::Key_Z, Qt::Key_X, Qt::Key_C, Qt::Key_V, Qt::Key_B, Qt::Key_N, Qt::Key_M,
+        },
+    };
 
     KActionMenu *insertPitchActionMenu =
         new KActionMenu(i18n("&Insert Note"), this, "insert_note_actionmenu");
