@@ -70,27 +70,27 @@ EventQuantizeCommand::EventQuantizeCommand(EventSelection &selection,
 EventQuantizeCommand::EventQuantizeCommand(Segment &segment,
         timeT startTime,
         timeT endTime,
-        QString configGroup,
+        QString settingsGroup,
         bool notation):
-        BasicCommand(getGlobalName(makeQuantizer(configGroup, notation)),
+        BasicCommand(getGlobalName(makeQuantizer(settingsGroup, notation)),
                      segment, startTime, endTime,
                      true),  // bruteForceRedo
         m_selection(0),
-        m_configGroup(configGroup)
+        m_settingsGroup(settingsGroup)
 {
     // nothing else -- m_quantizer set by makeQuantizer
 }
 
 EventQuantizeCommand::EventQuantizeCommand(EventSelection &selection,
-        QString configGroup,
+        QString settingsGroup,
         bool notation):
-        BasicCommand(getGlobalName(makeQuantizer(configGroup, notation)),
+        BasicCommand(getGlobalName(makeQuantizer(settingsGroup, notation)),
                      selection.getSegment(),
                      selection.getStartTime(),
                      selection.getEndTime(),
                      true),  // bruteForceRedo
         m_selection(&selection),
-        m_configGroup(configGroup)
+        m_settingsGroup(settingsGroup)
 {
     // nothing else -- m_quantizer set by makeQuantizer
 }
@@ -126,19 +126,15 @@ EventQuantizeCommand::modifySegment()
     bool makeviable = false;
     bool decounterpoint = false;
 
-    if (!m_configGroup.isEmpty()) {
-        //!!! need way to decide whether to do these even if no config group (i.e. through args to the command)
-        QSettings config;
-        config.beginGroup( m_configGroup );
-        // 
-        // FIX-manually-(GW), add:
-        // config.endGroup();		// corresponding to: config.beginGroup( m_configGroup );
-        //  
+    if (!m_settingsGroup.isEmpty()) {
+        //!!! need way to decide whether to do these even if no settings group (i.e. through args to the command)
+        QSettings settings;
+        settings.beginGroup( m_settingsGroup );
 
-
-        rebeam = qStrToBool( config.value("quantizerebeam", "true" ) ) ;
-        makeviable = qStrToBool( config.value("quantizemakeviable", "false" ) ) ;
-        decounterpoint = qStrToBool( config.value("quantizedecounterpoint", "false" ) ) ;
+        rebeam = qStrToBool( settings.value("quantizerebeam", "true" ) ) ;
+        makeviable = qStrToBool( settings.value("quantizemakeviable", "false" ) ) ;
+        decounterpoint = qStrToBool( settings.value("quantizedecounterpoint", "false" ) ) ;
+        settings.endGroup();
     }
 
     if (m_selection) {
@@ -197,33 +193,30 @@ EventQuantizeCommand::modifySegment()
 }
 
 Quantizer *
-EventQuantizeCommand::makeQuantizer(QString configGroup,
+EventQuantizeCommand::makeQuantizer(QString settingsGroup,
                                     bool notationDefault)
 {
     //!!! Excessive duplication with
     // QuantizeParameters::getQuantizer in widgets.cpp
 
-    QSettings config;
-    config.beginGroup( configGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( configGroup );
-    //  
-
+    QSettings settings;
+    settings.beginGroup( settingsGroup );
 
     timeT defaultUnit =
         Note(Note::Demisemiquaver).getDuration();
 
-    int type = config.value("quantizetype", notationDefault ? 2 : 0).toInt() ;
-	timeT unit = config.value("quantizeunit",  static_cast<uint>(defaultUnit) ).toInt() ;
-    bool notateOnly = qStrToBool( config.value("quantizenotationonly", "notationDefault" ) ) ;
-    bool durations = qStrToBool( config.value("quantizedurations", "false" ) ) ;
-    int simplicity = config.value("quantizesimplicity", 13).toInt() ;
-    int maxTuplet = config.value("quantizemaxtuplet", 3).toInt() ;
-    bool counterpoint = config.value("quantizecounterpoint", false).toInt() ;
-    bool articulate = qStrToBool( config.value("quantizearticulate", "true" ) ) ;
-    int swing = config.value("quantizeswing", 0).toInt() ;
-    int iterate = config.value("quantizeiterate", 100).toInt() ;
+    int type = settings.value("quantizetype", notationDefault ? 2 : 0).toInt() ;
+	timeT unit = settings.value("quantizeunit",  static_cast<uint>(defaultUnit) ).toInt() ;
+    bool notateOnly = qStrToBool( settings.value("quantizenotationonly", "notationDefault" ) ) ;
+    bool durations = qStrToBool( settings.value("quantizedurations", "false" ) ) ;
+    int simplicity = settings.value("quantizesimplicity", 13).toInt() ;
+    int maxTuplet = settings.value("quantizemaxtuplet", 3).toInt() ;
+    bool counterpoint = settings.value("quantizecounterpoint", false).toInt() ;
+    bool articulate = qStrToBool( settings.value("quantizearticulate", "true" ) ) ;
+    int swing = settings.value("quantizeswing", 0).toInt() ;
+    int iterate = settings.value("quantizeiterate", 100).toInt() ;
+
+    settings.endGroup();
 
     m_quantizer = 0;
 
