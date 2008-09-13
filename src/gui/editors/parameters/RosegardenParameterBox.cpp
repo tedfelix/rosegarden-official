@@ -19,10 +19,10 @@
 #include "RosegardenParameterBox.h"
 
 #include "RosegardenParameterArea.h"
-#include <ktabwidget.h>
+#include <QTabWidget>
 #include <QFont>
 #include <QFrame>
-#include <qscrollview.h>
+#include <QScrollArea>
 #include <QString>
 #include <QWidget>
 #include <QVBoxLayout>

@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -23,7 +22,8 @@
 #include <QFont>
 #include <QFrame>
 #include <QString>
-#include <klocale.h>
+
+#include <klocale.h> // i18n()
 
 
 class QWidget;
