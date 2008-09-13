@@ -27,7 +27,6 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <kapp.h>
 #include <QSettings>
 
 #include "document/ConfigGroups.h"
@@ -75,19 +74,17 @@ AddTracksDialog::AddTracksDialog(QDialogButtonBox::QWidget *parent, int currentT
     m_position->addItem(i18n("TicksBelow the current selected track"));
     m_position->addItem(i18n("At the bottom"));
 
-    QSettings config;
-    config.beginGroup( GeneralOptionsConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( GeneralOptionsConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( GeneralOptionsConfigGroup );
 
-    m_position->setCurrentIndex( config.value("lastaddtracksposition", 2).toUInt() );
+    m_position->setCurrentIndex( settings.value("lastaddtracksposition", 2).toUInt() );
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+
+    settings.endGroup();
 }
 
 int
@@ -101,14 +98,10 @@ AddTracksDialog::getInsertPosition()
 {
     int opt = m_position->currentIndex();
 
-    QSettings config;
-    config.beginGroup( GeneralOptionsConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( GeneralOptionsConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( GeneralOptionsConfigGroup );
 
-    config.setValue("lastaddtracksposition", opt);
+    settings.setValue("lastaddtracksposition", opt);
 
     int pos = 0;
 
@@ -126,6 +119,8 @@ AddTracksDialog::getInsertPosition()
         pos = -1;
         break;
     }
+
+    settings.endGroup();
 
     return pos;
 }
