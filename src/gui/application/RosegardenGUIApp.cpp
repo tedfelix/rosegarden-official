@@ -446,18 +446,12 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     // Lookup the configuration parameter that specifies the default
     // arrangement, and instantiate it.
 	
-    QSettings confq4;
-	
-    confq4.beginGroup( GeneralOptionsConfigGroup );
-
-    // 
-    // FIX-manually-(GW), add:
-    // confq4.endGroup();		// corresponding to: confq4.beginGroup( GeneralOptionsConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( GeneralOptionsConfigGroup );
 
     m_parameterArea->setArrangement((RosegardenParameterArea::Arrangement)
-                                    confq4.value("sidebarstyle",
-                                                                         RosegardenParameterArea::CLASSIC_STYLE).toUInt() );
+                                    settings.value("sidebarstyle",
+                                    RosegardenParameterArea::CLASSIC_STYLE).toUInt());
 
     m_dockLeft->update();
 
@@ -576,6 +570,8 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     stateChanged("have_project_packager", KXMLGUIClient::StateReverse);
     stateChanged("have_lilypondview", KXMLGUIClient::StateReverse);
     QTimer::singleShot(1000, this, SLOT(slotTestStartupTester()));
+
+    settings.endGroup();
 }
 
 RosegardenGUIApp::~RosegardenGUIApp()
@@ -1179,13 +1175,15 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotResetMidiNetwork()),
                 actionCollection(), "reset_midi_network");
 
-    m_setQuickMarkerAction = QAction *qa_set_quick_marker = new QAction( "Set Quick Marker at Playback Position", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_set_quick_marker->setIconText(0); 
-			connect( qa_set_quick_marker, SIGNAL(triggered()), this, SLOT(slotSetQuickMarker())  );
+    //@@@ JAS Check here first for errors and pointer deallocation
+    m_setQuickMarkerAction = new QAction(i18n("Set Quick Marker at Playback Position"), dynamic_cast<QObject*>(this));
+    m_setQuickMarkerAction->setIconText(0); 
+    connect(m_setQuickMarkerAction, SIGNAL(triggered()), this, SLOT(slotSetQuickMarker()));
 
-    m_jumpToQuickMarkerAction = QAction *qa_jump_to_quick_marker = new QAction( "Jump to Quick Marker", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_jump_to_quick_marker->setIconText(0); 
-			connect( qa_jump_to_quick_marker, SIGNAL(triggered()), this, SLOT(slotJumpToQuickMarker())  );
+    //@@@ JAS Check here first for errors and pointer deallocation
+    m_jumpToQuickMarkerAction = new QAction(i18n("Jump to Quick Marker"), dynamic_cast<QObject*>(this)); 
+    m_jumpToQuickMarkerAction->setIconText(0); 
+    connect( m_jumpToQuickMarkerAction, SIGNAL(triggered()), this, SLOT(slotJumpToQuickMarker()));
 
     //
     // Marker Ruler popup menu
@@ -1216,111 +1214,72 @@ void RosegardenGUIApp::setupActions()
     //
     pixmap.load(pixmapDir + "/toolbar/transport-play.png");
     icon = QIcon(pixmap);
-    m_playTransport = QAction *qa_play = new QAction( "&Play", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_play->setIcon(icon); 
-			connect( qa_play, SIGNAL(triggered()), this, SLOT(slotPlay())  );
+    //@@@ JAS Check here first for errors and pointer deallocation
+    m_playTransport = new QAction(i18n("&Play"), dynamic_cast<QObject*>(this));
+    m_playTransport->setIcon(icon); 
+    connect(m_playTransport, SIGNAL(triggered()), this, SLOT(slotPlay()));
+
     // Alternative shortcut for Play
     KShortcut playShortcut = m_playTransport->shortcut();
     playShortcut.append( KKey(Key_Return + Qt::CTRL) );
     m_playTransport->setShortcut(playShortcut);
-    QSettings m_playTransport;
-    m_playTransport.beginGroup( TransportDialogConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // m_playTransport.endGroup();		// corresponding to: m_playTransport.beginGroup( TransportDialogConfigGroup );
-    //  
-
+    m_playTransport->setActionGroup( TransportDialogConfigGroup );
 
     pixmap.load(pixmapDir + "/toolbar/transport-stop.png");
     icon = QIcon(pixmap);
-    m_stopTransport = QAction *qa_stop = new QAction( "&Stop", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_stop->setIcon(icon); 
-			connect( qa_stop, SIGNAL(triggered()), this, SLOT(slotStop())  );
-    QSettings m_stopTransport;
-    m_stopTransport.beginGroup( TransportDialogConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // m_stopTransport.endGroup();		// corresponding to: m_stopTransport.beginGroup( TransportDialogConfigGroup );
-    //  
-
+    //@@@ JAS Check here first for errors and pointer deallocation
+    m_stopTransport = new QAction(i18n("&Stop"), dynamic_cast<QObject*>(this));
+    m_stopTransport->setIcon(icon); 
+    connect(m_stopTransport, SIGNAL(triggered()), this, SLOT(slotStop()));
+    m_stopTransport->setActionGroup( TransportDialogConfigGroup );
 
     pixmap.load(pixmapDir + "/toolbar/transport-ffwd.png");
     icon = QIcon(pixmap);
-    m_ffwdTransport = QAction *qa_fast_forward = new QAction( "&Fast Forward", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_fast_forward->setIcon(icon); 
-			connect( qa_fast_forward, SIGNAL(triggered()), this, SLOT(slotFastforward())  );
-    QSettings m_ffwdTransport;
-    m_ffwdTransport.beginGroup( TransportDialogConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // m_ffwdTransport.endGroup();		// corresponding to: m_ffwdTransport.beginGroup( TransportDialogConfigGroup );
-    //  
-
+    //@@@ JAS Check here first for errors and pointer deallocation
+    m_ffwdTransport = new QAction(i18n("&Fast Forward"), dynamic_cast<QObject*>(this));
+    m_ffwdTransport->setIcon(icon); 
+    connect(m_ffwdTransport, SIGNAL(triggered()), this, SLOT(slotFastforward()));
+    m_ffwdTransport->setActionGroup( TransportDialogConfigGroup );
 
     pixmap.load(pixmapDir + "/toolbar/transport-rewind.png");
     icon = QIcon(pixmap);
-    m_rewindTransport = QAction *qa_rewind = new QAction( "Re&wind", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_rewind->setIcon(icon); 
-			connect( qa_rewind, SIGNAL(triggered()), this, SLOT(slotRewind())  );
-    QSettings m_rewindTransport;
-    m_rewindTransport.beginGroup( TransportDialogConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // m_rewindTransport.endGroup();		// corresponding to: m_rewindTransport.beginGroup( TransportDialogConfigGroup );
-    //  
-
+    //@@@ JAS Check here first for errors and pointer deallocation
+    m_rewindTransport = new QAction(i18n("Re&wind"), dynamic_cast<QObject*>(this));
+    m_rewindTransport->setIcon(icon); 
+    connect(m_rewindTransport, SIGNAL(triggered()), this, SLOT(slotRewind()));
+    m_rewindTransport->setActionGroup( TransportDialogConfigGroup );
 
     pixmap.load(pixmapDir + "/toolbar/transport-record.png");
     icon = QIcon(pixmap);
-    m_recordTransport = QAction *qa_recordtoggle = new QAction( "P&unch in Record", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_recordtoggle->setIcon(icon); 
-			connect( qa_recordtoggle, SIGNAL(triggered()), this, SLOT(slotToggleRecord())  );
-    QSettings m_recordTransport;
-    m_recordTransport.beginGroup( TransportDialogConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // m_recordTransport.endGroup();		// corresponding to: m_recordTransport.beginGroup( TransportDialogConfigGroup );
-    //  
-
+    //@@@ JAS Check here first for errors and pointer deallocation
+    m_recordTransport = new QAction(i18n("P&unch in Record"), dynamic_cast<QObject*>(this) );
+    m_recordTransport->setIcon(icon); 
+    connect( m_recordTransport, SIGNAL(triggered()), this, SLOT(slotToggleRecord()));
+    m_recordTransport->setActionGroup( TransportDialogConfigGroup );
 
     pixmap.load(pixmapDir + "/toolbar/transport-record.png");
     icon = QIcon(pixmap);
-    m_recordTransport = QAction *qa_record = new QAction( "&Record", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_record->setIcon(icon); 
-			connect( qa_record, SIGNAL(triggered()), this, SLOT(slotRecord())  );
-    QSettings m_recordTransport;
-    m_recordTransport.beginGroup( TransportDialogConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // m_recordTransport.endGroup();		// corresponding to: m_recordTransport.beginGroup( TransportDialogConfigGroup );
-    //  
-
+    //@@@ JAS Check here first for errors and pointer deallocation
+    m_recordTransport = new QAction(i18n("&Record"), dynamic_cast<QObject*>(this) );
+    m_recordTransport->setIcon(icon); 
+    connect(m_recordTransport, SIGNAL(triggered()), this, SLOT(slotRecord()));
+    m_recordTransport->setActionGroup( TransportDialogConfigGroup );
 
     pixmap.load(pixmapDir + "/toolbar/transport-rewind-end.png");
     icon = QIcon(pixmap);
-    m_rewindEndTransport = QAction *qa_rewindtobeginning = new QAction( "Rewind to &Beginning", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_rewindtobeginning->setIcon(icon); 
-			connect( qa_rewindtobeginning, SIGNAL(triggered()), this, SLOT(slotRewindToBeginning())  );
-    QSettings m_rewindEndTransport;
-    m_rewindEndTransport.beginGroup( TransportDialogConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // m_rewindEndTransport.endGroup();		// corresponding to: m_rewindEndTransport.beginGroup( TransportDialogConfigGroup );
-    //  
-
+    //@@@ JAS Check here first for errors and pointer deallocation
+    m_rewindEndTransport new QAction(i18n("Rewind to &Beginning"), dynamic_cast<QObject*>(this));
+    m_rewindEndTransport->setIcon(icon); 
+    connect(m_rewindEndTransport, SIGNAL(triggered()), this, SLOT(slotRewindToBeginning()));
+    m_rewindEndTransport->setActionGroup( TransportDialogConfigGroup );
 
     pixmap.load(pixmapDir + "/toolbar/transport-ffwd-end.png");
     icon = QIcon(pixmap);
-    m_ffwdEndTransport = QAction *qa_fastforwardtoend = new QAction( "Fast Forward to &End", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_fastforwardtoend->setIcon(icon); 
-			connect( qa_fastforwardtoend, SIGNAL(triggered()), this, SLOT(slotFastForwardToEnd())  );
-    QSettings m_ffwdEndTransport;
-    m_ffwdEndTransport.beginGroup( TransportDialogConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // m_ffwdEndTransport.endGroup();		// corresponding to: m_ffwdEndTransport.beginGroup( TransportDialogConfigGroup );
-    //  
-
+    //@@@ JAS Check here first for errors and pointer deallocation
+    m_ffwdEndTransport = new QAction(i18n("Fast Forward to &End"), dynamic_cast<QObject*>(this));
+    m_ffwdEndTransport->setIcon(icon); 
+    connect(m_ffwdEndTransport, SIGNAL(triggered()), this, SLOT(slotFastForwardToEnd()));
+    m_ffwdEndTransport->setActionGroup( TransportDialogConfigGroup );
 
     pixmap.load(pixmapDir + "/toolbar/transport-tracking.png");
     icon = QIcon(pixmap);
@@ -1330,9 +1289,10 @@ void RosegardenGUIApp::setupActions()
 
     pixmap.load(pixmapDir + "/toolbar/transport-panic.png");
     icon = QIcon(pixmap);
-    QAction *qa_panic = new QAction( "Panic", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_panic->setIcon(icon); 
-			connect( qa_panic, SIGNAL(triggered()), this, SLOT(slotPanic())  );
+    //@@@ JAS Check here first for errors and pointer deallocation
+    m_panic = new QAction(i18n("Panic"), dynamic_cast<QObject*>(this)); //@@@ JAS Check to make certain pointer is deallocated
+    m_panic->setIcon(icon); 
+    connect(m_panic, SIGNAL(triggered()), this, SLOT(slotPanic()));
 
     // DEBUG FACILITY
     new KAction(i18n("Segment Debug Dump "), 0, this,
@@ -1431,7 +1391,7 @@ void RosegardenGUIApp::initZoomToolbar()
     connect(m_zoomSlider, SIGNAL(valueChanged(int)),
             this, SLOT(slotChangeZoom(int)));
 
-    // set initial zoom - we might want to make this a config option
+    // set initial zoom - we might want to make this a settings option
     //    m_zoomSlider->setToDefault();
 
 }
@@ -1817,19 +1777,10 @@ RosegardenGUIApp::openFile(QString filePath, ImportType type)
         RG_DEBUG << "RosegardenGUIApp::openFile(): calling slotDocColoursChanged() in doc" << endl;
         doc->slotDocColoursChanged();
 
-        QSettings confq4;
+        QSettings settings;
+        settings.beginGroup( GeneralOptionsConfigGroup );
 
-        confq4.beginGroup( GeneralOptionsConfigGroup );
-
-        // 
-
-        // FIX-manually-(GW), add:
-
-        // confq4.endGroup();		// corresponding to: confq4.beginGroup( GeneralOptionsConfigGroup );
-
-        //  
-
-        if ( qStrToBool( confq4.value("alwaysusedefaultstudio", "false" ) ) ) {
+        if ( qStrToBool( settings.value("alwaysusedefaultstudio", "false" ) ) ) {
 
             QString autoloadFile =
                 KGlobal::dirs()->findResource("appdata", "autoload.rg");
@@ -1845,6 +1796,8 @@ RosegardenGUIApp::openFile(QString filePath, ImportType type)
 
         QFileInfo fInfo(filePath);
         m_fileRecent->addURL(fInfo.absFilePath());
+
+        settings.endGroup();
     }
 }
 
@@ -1995,86 +1948,70 @@ void RosegardenGUIApp::slotSaveOptions()
     _settingLog(QString("SETTING 2 : show track labels = %1").arg(m_viewTrackLabels->isChecked()));
 #endif
 
-    QSettings confq4;
+    QSettings settings;
+    settings.beginGroup( GeneralOptionsConfigGroup );
 
-    confq4.beginGroup( GeneralOptionsConfigGroup );
-
-    // 
-
-    // FIX-manually-(GW), add:
-
-    // confq4.endGroup();		// corresponding to: confq4.beginGroup( GeneralOptionsConfigGroup );
-
-    //  
-
-    confq4.setValue("Show Transport", m_viewTransport->isChecked());
-    confq4.setValue("Expanded Transport", m_transport ? getTransport()->isExpanded() : true);
-    confq4.setValue("Show Track labels", m_viewTrackLabels->isChecked());
-    confq4.setValue("Show Rulers", m_viewRulers->isChecked());
-    confq4.setValue("Show Tempo Ruler", m_viewTempoRuler->isChecked());
-    confq4.setValue("Show Chord Name Ruler", m_viewChordNameRuler->isChecked());
-    confq4.setValue("Show Previews", m_viewPreviews->isChecked());
-    confq4.setValue("Show Segment Labels", m_viewSegmentLabels->isChecked());
-    confq4.setValue("Show Parameters", m_dockVisible);
-    confq4.setValue("MIDI Thru Routing", m_enableMIDIrouting->isChecked());
+    settings.setValue("Show Transport", m_viewTransport->isChecked());
+    settings.setValue("Expanded Transport", m_transport ? getTransport()->isExpanded() : true);
+    settings.setValue("Show Track labels", m_viewTrackLabels->isChecked());
+    settings.setValue("Show Rulers", m_viewRulers->isChecked());
+    settings.setValue("Show Tempo Ruler", m_viewTempoRuler->isChecked());
+    settings.setValue("Show Chord Name Ruler", m_viewChordNameRuler->isChecked());
+    settings.setValue("Show Previews", m_viewPreviews->isChecked());
+    settings.setValue("Show Segment Labels", m_viewSegmentLabels->isChecked());
+    settings.setValue("Show Parameters", m_dockVisible);
+    settings.setValue("MIDI Thru Routing", m_enableMIDIrouting->isChecked());
 
 #ifdef SETTING_LOG_DEBUG
 
     RG_DEBUG << "SHOW PARAMETERS = " << m_dockVisible << endl;
 #endif
 
-    m_fileRecent->saveEntries(confq4);
+    m_fileRecent->saveEntries(settings);
 
-    //     saveMainWindowSettings(confq4, RosegardenGUIApp::MainWindowConfigGroup); - no need to, done by KMainWindow
-    confq4.sync();
+    //     saveMainWindowSettings(settings, RosegardenGUIApp::MainWindowConfigGroup); - no need to, done by KMainWindow
+    settings.sync();
+
+    settings.endGroup();
 }
 
 void RosegardenGUIApp::setupFileDialogSpeedbar()
 {
-    QSettings config;
-
-    config.beginGroup( "KFileDialog Speedbar" );
-
-    // 
-
-    // FIX-manually-(GW), add:
-
-    // config.endGroup();		// corresponding to: config.beginGroup( "KFileDialog Speedbar" );
-
-    //  
-
+    QSettings settings;
+    settings.beginGroup( "KFileDialog Speedbar" );
 
     RG_DEBUG << "RosegardenGUIApp::setupFileDialogSpeedbar" << endl;
 
-    bool hasSetExamplesItem = qStrToBool( config.value("Examples Set", "false" ) ) ;
+    bool hasSetExamplesItem = qStrToBool( settings.value("Examples Set", "false" ) ) ;
 
     RG_DEBUG << "RosegardenGUIApp::setupFileDialogSpeedbar: examples set " << hasSetExamplesItem << endl;
 
     if (!hasSetExamplesItem) {
 
-        unsigned int n = config.value("Number of Entries", 0).toUInt() ;
+        unsigned int n = settings.value("Number of Entries", 0).toUInt() ;
 
-        config.setValue(QString("Description_%1").arg(n), i18n("Example Files"));
-        config.setValue(QString("IconGroup_%1").arg(n), 4);
-        config.setValue(QString("Icon_%1").arg(n), "folder");
-        config.setValue(QString("URL_%1").arg(n),
+        settings.setValue(QString("Description_%1").arg(n), i18n("Example Files"));
+        settings.setValue(QString("IconGroup_%1").arg(n), 4);
+        settings.setValue(QString("Icon_%1").arg(n), "folder");
+        settings.setValue(QString("URL_%1").arg(n),
                            KGlobal::dirs()->findResource("appdata", "examples/"));
 
-        RG_DEBUG << "wrote url " << config.value(QString("URL_%1").arg(n)).toString() << endl;
+        RG_DEBUG << "wrote url " << settings.value(QString("URL_%1").arg(n)).toString() << endl;
 
-        config.setValue("Examples Set", true);
-        config.setValue("Number of Entries", n + 1);
-        config.sync();
+        settings.setValue("Examples Set", true);
+        settings.setValue("Number of Entries", n + 1);
+        settings.sync();
     }
 
+    settings.endGroup();
 }
 
 void RosegardenGUIApp::readOptions()
 {
-    QSettings confq4;
-    applyMainWindowSettings(confq4, MainWindowConfigGroup);
+    QSettings settings;
+    applyMainWindowSettings(settings, MainWindowConfigGroup);
 
-    confq4.reparseConfiguration();
+    settings.reparseConfiguration();
 
     // Statusbar and toolbars toggling action status
     //
@@ -2088,22 +2025,13 @@ void RosegardenGUIApp::readOptions()
 
     bool opt;
 
-    confq4.beginGroup( GeneralOptionsConfigGroup );
+    settings.beginGroup( GeneralOptionsConfigGroup );
 
-    // 
-
-    // FIX-manually-(GW), add:
-
-    // confq4.endGroup();		// corresponding to: confq4.beginGroup( GeneralOptionsConfigGroup );
-
-    //  
-
-
-    opt = qStrToBool( confq4.value("Show Transport", "true" ) ) ;
+    opt = qStrToBool( settings.value("Show Transport", "true" ) ) ;
     m_viewTransport->setChecked(opt);
     slotToggleTransport();
 
-    opt = qStrToBool( confq4.value("Expanded Transport", "true" ) ) ;
+    opt = qStrToBool( settings.value("Expanded Transport", "true" ) ) ;
 
 #ifdef SETTING_LOG_DEBUG
 
@@ -2115,7 +2043,7 @@ void RosegardenGUIApp::readOptions()
     else
         getTransport()->slotPanelCloseButtonClicked();
 
-    opt = qStrToBool( confq4.value("Show Track labels", "true" ) ) ;
+    opt = qStrToBool( settings.value("Show Track labels", "true" ) ) ;
 
 #ifdef SETTING_LOG_DEBUG
 
@@ -2125,27 +2053,27 @@ void RosegardenGUIApp::readOptions()
     m_viewTrackLabels->setChecked(opt);
     slotToggleTrackLabels();
 
-    opt = qStrToBool( confq4.value("Show Rulers", "true" ) ) ;
+    opt = qStrToBool( settings.value("Show Rulers", "true" ) ) ;
     m_viewRulers->setChecked(opt);
     slotToggleRulers();
 
-    opt = qStrToBool( confq4.value("Show Tempo Ruler", "true" ) ) ;
+    opt = qStrToBool( settings.value("Show Tempo Ruler", "true" ) ) ;
     m_viewTempoRuler->setChecked(opt);
     slotToggleTempoRuler();
 
-    opt = qStrToBool( confq4.value("Show Chord Name Ruler", "false" ) ) ;
+    opt = qStrToBool( settings.value("Show Chord Name Ruler", "false" ) ) ;
     m_viewChordNameRuler->setChecked(opt);
     slotToggleChordNameRuler();
 
-    opt = qStrToBool( confq4.value("Show Previews", "true" ) ) ;
+    opt = qStrToBool( settings.value("Show Previews", "true" ) ) ;
     m_viewPreviews->setChecked(opt);
     slotTogglePreviews();
 
-    opt = qStrToBool( confq4.value("Show Segment Labels", "true" ) ) ;
+    opt = qStrToBool( settings.value("Show Segment Labels", "true" ) ) ;
     m_viewSegmentLabels->setChecked(opt);
     slotToggleSegmentLabels();
 
-    opt = qStrToBool( confq4.value("Show Parameters", "true" ) ) ;
+    opt = qStrToBool( settings.value("Show Parameters", "true" ) ) ;
     if (!opt) {
         m_dockLeft->undock();
         m_dockLeft->hide();
@@ -2154,26 +2082,31 @@ void RosegardenGUIApp::readOptions()
     }
 
     // MIDI Thru routing
-    opt = qStrToBool( confq4.value("MIDI Thru Routing", "true" ) ) ;
+    opt = qStrToBool( settings.value("MIDI Thru Routing", "true" ) ) ;
     m_enableMIDIrouting->setChecked(opt);
     slotEnableMIDIThruRouting();
 
+    settings.endGroup();
+
     // initialise the recent file list
     //
-    m_fileRecent->loadEntries(confq4);
+    m_fileRecent->loadEntries(settings);
 
     m_actionsSetup = true;
-
 }
 
 void RosegardenGUIApp::saveGlobalProperties(QSettings cfg)
+//### JAS update function declaration / definition
 {
+    QSettings settings;
+    //@@@ JAS Do we need a settings.startGroup() here?
+
     if (m_doc->getTitle() != i18n("Untitled") && !m_doc->isModified()) {
         // saving to tempfile not necessary
     } else {
         QString filename = m_doc->getAbsFilePath();
-        cfg.setValue("filename", filename);
-        cfg.setValue("modified", m_doc->isModified());
+        settings.setValue("filename", filename);
+        settings.setValue("modified", m_doc->isModified());
 
         QString tempname = qApp->tempSaveName(filename);
         QString errMsg;
@@ -2190,9 +2123,13 @@ void RosegardenGUIApp::saveGlobalProperties(QSettings cfg)
 }
 
 void RosegardenGUIApp::readGlobalProperties(QSettings _cfg)
+//### JAS update function declaration / definition
 {
-    QString filename = _cfg.value("filename", "").toString();
-    bool modified = qStrToBool( _cfg.value("modified", "false" ) ) ;
+    QSettings settings;
+    //@@@ JAS Do we need a settings.startGroup() here?
+
+    QString filename = settings.value("filename", "").toString();
+    bool modified = qStrToBool( settings.value("modified", "false" ) ) ;
 
     if (modified) {
         bool canRecover;
@@ -2350,20 +2287,11 @@ void RosegardenGUIApp::slotFileOpen()
 {
     slotStatusHelpMsg(i18n("Opening file..."));
 
-    QSettings confq4;
+    QSettings settings;
+    settings.beginGroup( GeneralOptionsConfigGroup );
 
-    confq4.beginGroup( GeneralOptionsConfigGroup );
-
-    // 
-
-    // FIX-manually-(GW), add:
-
-    // confq4.endGroup();		// corresponding to: confq4.beginGroup( GeneralOptionsConfigGroup );
-
-    //  
-
-
-    QString lastOpenedVersion = confq4.value("Last File Opened Version", "none").toString().;
+    QString lastOpenedVersion = settings.value("Last File Opened Version", "none").toString();
+    settings.endGroup();
 
     if (lastOpenedVersion != VERSION) {
 
@@ -2371,15 +2299,10 @@ void RosegardenGUIApp::slotFileOpen()
         // program before.  Default to the examples directory.
 
         QString examplesDir = KGlobal::dirs()->findResource("appdata", "examples/");
-        QSettings confq4;
-        confq4.beginGroup( "Recent Dirs" );
-        // 
-        // FIX-manually-(GW), add:
-        // confq4.endGroup();		// corresponding to: confq4.beginGroup( "Recent Dirs" );
-        //  
+        settings.beginGroup( "Recent Dirs" );
 
-        QString recentString = confq4.value("ROSEGARDEN", "") ;
-        confq4.setValue
+        QString recentString = settings.value("ROSEGARDEN", "") ;
+        settings.setValue
         ("ROSEGARDEN", QString("file:%1,%2").arg(examplesDir).arg(recentString));
     }
 
@@ -2394,21 +2317,12 @@ void RosegardenGUIApp::slotFileOpen()
     if (m_doc && !m_doc->saveIfModified())
         return ;
 
-    QSettings confq4;
-
-    confq4.beginGroup( GeneralOptionsConfigGroup );
-
-    // 
-
-    // FIX-manually-(GW), add:
-
-    // confq4.endGroup();		// corresponding to: confq4.beginGroup( GeneralOptionsConfigGroup );
-
-    //  
-
-    confq4.setValue("Last File Opened Version", VERSION);
+    settings.beginGroup( GeneralOptionsConfigGroup );
+    settings.setValue("Last File Opened Version", VERSION);
 
     openURL(url);
+
+    settings.endGroup();
 }
 
 void RosegardenGUIApp::slotMerge()
@@ -4896,19 +4810,17 @@ bool RosegardenGUIApp::launchSequencer()
 #ifdef HAVE_LIBJACK
 bool RosegardenGUIApp::launchJack()
 {
-    QSettings config;
-    config.beginGroup( SequencerOptionsConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( SequencerOptionsConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( SequencerOptionsConfigGroup );
 
+    bool startJack = qStrToBool( settings.value("jackstart", "false" ) ) ;
+    settings.endGroup();
 
-    bool startJack = qStrToBool( config.value("jackstart", "false" ) ) ;
     if (!startJack)
         return true; // we don't do anything
 
-    QString jackPath = config.value("jackcommand", "").toString();
+    settings.beginGroup( SequencerOptionsConfigGroup );
+    QString jackPath = settings.value("jackcommand", "").toString();
 
     emit startupStatusMessage(i18n("Clearing down jackd..."));
 
@@ -4943,7 +4855,7 @@ bool RosegardenGUIApp::launchJack()
 
         m_jackProcess->start(splitCommand.takeFirst(), splitCommand);
     }
-
+    settings.endGroup();
 
     return m_jackProcess != 0 ? m_jackProcess->state() == QProcess::Running : true;
 }
@@ -5507,14 +5419,10 @@ void RosegardenGUIApp::slotPlay()
 
     // Send the controllers at start of playback if required
     //
-    QSettings config;
-    config.beginGroup( SequencerOptionsConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( SequencerOptionsConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( SequencerOptionsConfigGroup );
 
-    bool sendControllers = qStrToBool( config.value("alwayssendcontrollers", "false" ) ) ;
+    bool sendControllers = qStrToBool( settings.value("alwayssendcontrollers", "false" ) ) ;
 
     if (sendControllers)
         m_doc->initialiseControllers();
@@ -5546,6 +5454,7 @@ void RosegardenGUIApp::slotPlay()
         m_stopTimer->start(100);
     }
 
+    settings.endGroup();
 }
 
 void RosegardenGUIApp::slotJumpToTime(RealTime rt)
@@ -5749,7 +5658,7 @@ void RosegardenGUIApp::slotConfigure()
     RG_DEBUG << "RosegardenGUIApp::slotConfigure\n";
 
     ConfigureDialog *configDlg =
-        new ConfigureDialog(m_doc, confq4, this);
+        new ConfigureDialog(m_doc, settings, this);
 
     connect(configDlg, SIGNAL(updateAutoSaveInterval(unsigned int)),
             this, SLOT(slotUpdateAutoSaveInterval(unsigned int)));
@@ -7977,17 +7886,16 @@ RosegardenGUIApp::slotAutoSave()
         m_seqManager->getTransportStatus() == RECORDING)
         return ;
 
-    QSettings config;
-    config.beginGroup( GeneralOptionsConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( GeneralOptionsConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( GeneralOptionsConfigGroup );
 
-    if (! qStrToBool( config.value("autosave", "true" ) ) )
+    if (! qStrToBool( settings.value("autosave", "true" ) ) ) {
+        settings.endGroup();
         return ;
-
+    }
     m_doc->slotAutoSave();
+
+    settings.endGroup();
 }
 
 void

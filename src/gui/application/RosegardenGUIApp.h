@@ -1585,6 +1585,8 @@ private:
     QAction *m_recordTransport;
     QAction *m_rewindEndTransport;
     QAction *m_ffwdEndTransport;
+    QAction *m_ffwdEndTransport;
+    QAction *m_panic; //@@@ JAS Check to make certain pointer is deallocated
 
     SequencerThread *m_sequencerThread;
     bool m_sequencerCheckedIn;
