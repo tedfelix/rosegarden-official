@@ -88,20 +88,13 @@ TriggerSegmentDialog::TriggerSegmentDialog(QDialogButtonBox::QWidget *parent,
 void
 TriggerSegmentDialog::setupFromConfig()
 {
-    QSettings config;
-    config.beginGroup( GeneralOptionsConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( GeneralOptionsConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( GeneralOptionsConfigGroup );
 
-
-    int seg = config.value("triggersegmentlastornament", 0).toInt() ;
-    std::string timing = qstrtostr
-                         (config->readEntry
-                          ("triggersegmenttiming",
-                           strtoqstr(BaseProperties::TRIGGER_SEGMENT_ADJUST_SQUISH)));
-    bool retune = qStrToBool( config.value("triggersegmentretune", "true" ) ) ;
+    int seg = settings.value("triggersegmentlastornament", 0).toInt() ;
+    std::string timing = qstrtostr(settings.value("triggersegmenttiming",
+            strtoqstr(BaseProperties::TRIGGER_SEGMENT_ADJUST_SQUISH)).toString());
+    bool retune = qStrToBool( settings.value("triggersegmentretune", "true" ) ) ;
 
     if (seg >= 0 && seg < m_segment->count())
         m_segment->setCurrentIndex(seg);
@@ -117,6 +110,8 @@ TriggerSegmentDialog::setupFromConfig()
     }
 
     m_retune->setChecked(retune);
+
+    settings.endGroup();
 }
 
 TriggerSegmentId
@@ -166,19 +161,16 @@ TriggerSegmentDialog::getTimeAdjust() const
 void
 TriggerSegmentDialog::slotOk()
 {
-    QSettings config;
-    config.beginGroup( GeneralOptionsConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( GeneralOptionsConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( GeneralOptionsConfigGroup );
 
-
-    config.setValue("triggersegmenttiming", strtoqstr(getTimeAdjust()));
-    config.setValue("triggersegmentretune", m_retune->isChecked());
-    config.setValue("triggersegmentlastornament", m_segment->currentIndex());
+    settings.setValue("triggersegmenttiming", strtoqstr(getTimeAdjust()));
+    settings.setValue("triggersegmentretune", m_retune->isChecked());
+    settings.setValue("triggersegmentlastornament", m_segment->currentIndex());
 
     accept();
+
+    settings.endGroup();
 }
 
 }
