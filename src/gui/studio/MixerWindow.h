@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -20,7 +19,8 @@
 #define _RG_MIXERWINDOW_H_
 
 #include "base/MidiProgram.h"
-#include <kmainwindow.h>
+
+#include <QMainWindow>
 
 
 class QWidget;
@@ -35,7 +35,7 @@ class Studio;
 class RosegardenGUIDoc;
 
 
-class MixerWindow: public KMainWindow
+class MixerWindow: public QMainWindow
 {
     Q_OBJECT
 
