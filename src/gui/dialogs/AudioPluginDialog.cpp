@@ -63,9 +63,6 @@ AudioPluginDialog::AudioPluginDialog(QDialogButtonBox::QWidget *parent,
                                      PluginContainer *pluginContainer,
                                      int index):
     QDialog(parent),
-#else
-                Close | Help),
-#endif
     m_pluginManager(aPM),
 #ifdef HAVE_LIBLO
     m_pluginGUIManager(aGM),
@@ -82,11 +79,6 @@ AudioPluginDialog::AudioPluginDialog(QDialogButtonBox::QWidget *parent,
     setSizePolicy(QSizePolicy(QSizePolicy::Preferred,
                               QSizePolicy::Fixed));
 
-#ifdef HAVE_LIBLO
-
-    setButtonText(Details, i18n("Editor"));
-#endif
-
     setModal(false);
     setWindowTitle(i18n("Audio Plugin"));
 
@@ -102,11 +94,20 @@ AudioPluginDialog::AudioPluginDialog(QDialogButtonBox::QWidget *parent,
     vbox->setLayout(vboxLayout);
 
     makePluginParamsBox(vbox, 0, 10);
+    vboxLayout->addWidget(m_pluginParamsBox);
 
-    m_pluginCategoryBox = new QHBox(pluginSelectionBox);
-    new QLabel(i18n("Category:"), m_pluginCategoryBox);
+    m_pluginCategoryBox = new QWidget(pluginSelectionBox);
+    QHBoxLayout *pluginCategoryBoxLayout = new QHBoxLayout;
+    pluginCategoryBoxLayout->addWidget(new QLabel(i18n("Category:"),
+                                                  m_pluginCategoryBox));
+
     m_pluginCategoryList = new QComboBox(m_pluginCategoryBox);
+    pluginCategoryBoxLayout->addWidget(m_pluginCategoryList);
+    m_pluginCategoryBox->setLayout(pluginCategoryBoxLayout);
     m_pluginCategoryList->setMaxVisibleItems(20);
+
+    QWidget *hbox = new QWidget(pluginSelectionBox);
+    QHBoxLayout *hboxLayout = new QHBoxLayout;
 
     m_pluginLabel = new QLabel(i18n("Plugin:"), hbox );
     hboxLayout->addWidget(m_pluginLabel);
@@ -147,9 +148,12 @@ AudioPluginDialog::AudioPluginDialog(QDialogButtonBox::QWidget *parent,
 
     connect(m_pluginCategoryList, SIGNAL(activated(int)),
             this, SLOT(slotCategorySelected(int)));
+    h->setLayout(hLayout);
 
 // new line
-    h = new QHBox(pluginSelectionBox);
+    h = new QWidget(pluginSelectionBox);
+    hLayout = new QHBoxLayout;
+
     m_copyButton = new QPushButton(i18n("Copy"), h );
     hLayout->addWidget(m_copyButton);
     connect(m_copyButton, SIGNAL(clicked()),
@@ -178,8 +182,14 @@ AudioPluginDialog::AudioPluginDialog(QDialogButtonBox::QWidget *parent,
     m_generating = false;
 
     m_shortcuterators = new QShortcut(this);
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(#ifdef HAVE_LIBLO
-                Close | QDialogButtonBox::Details | QDialogButtonBox::Help);
+
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(
+                 QDialogButtonBox::Close | QDialogButtonBox::Help);
+#ifdef HAVE_LIBLO
+    QPushButton *detailsButton = new QPushButton(i18n("Editor"));
+    buttonBox->addButton(detailsButton, QDialogButtonBox::ActionRole);
+    connect(detailsButton, SIGNAL(clicked(bool)), this, SLOT(slotDetails()));
+#endif
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
@@ -187,7 +197,6 @@ AudioPluginDialog::AudioPluginDialog(QDialogButtonBox::QWidget *parent,
 }
 
 #ifdef HAVE_LIBLO
-
 void
 AudioPluginDialog::slotDetails()
 {
@@ -435,8 +444,11 @@ AudioPluginDialog::slotPluginSelected(int i)
         }
     }
 
+    // Qt4 port : parent should be an old Qt3 QHBox now replaced for a
+    //            QWidget with a QHBoxLayout
     int tooManyPorts = 96;
     makePluginParamsBox(parent, portCount, tooManyPorts);
+    parent->layout()->addWidget(m_pluginParamsBox);
     bool showBounds = (portCount <= 48);
 
     if (portCount > tooManyPorts) {
