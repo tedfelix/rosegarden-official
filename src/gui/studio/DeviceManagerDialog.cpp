@@ -280,15 +280,11 @@ DeviceManagerDialog::populate()
 {
     DeviceList *devices = m_studio->getDevices();
 
-    //QSettings //config;
-    //config.beginGroup( SequencerOptionsConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // //config.endGroup();		// corresponding to: //config.beginGroup( SequencerOptionsConfigGroup );
-    //  
+    //QSettings settings;
+    //settings.beginGroup( SequencerOptionsConfigGroup );
 
-    //DeviceId recordDevice =     //config.value("midirecorddevice").toUInt() ;
-
+    //DeviceId recordDevice = settings.value("midirecorddevice").toUInt();
+    //settings.endGroup();
     m_playDevices.clear();
     m_recordDevices.clear();
 
