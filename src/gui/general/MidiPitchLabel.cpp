@@ -43,17 +43,15 @@ MidiPitchLabel::MidiPitchLabel(int pitch)
 
     } else {
 
-        QSettings config;
-        config.beginGroup( GeneralOptionsConfigGroup );
-        // 
-        // FIX-manually-(GW), add:
-        // config.endGroup();		// corresponding to: config.beginGroup( GeneralOptionsConfigGroup );
-        //  
+        QSettings settings;
+        settings.beginGroup( GeneralOptionsConfigGroup );
 
-        int baseOctave = config.value("midipitchoctave", -2).toInt() ;
+        int baseOctave = settings.value("midipitchoctave", -2).toInt() ;
 
         int octave = (int)(((float)pitch) / 12.0) + baseOctave;
         m_midiNote = notes[pitch % 12].arg(octave);
+
+        settings.endGroup();
     }
 }
 
