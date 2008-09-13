@@ -25,6 +25,7 @@
 #include "base/NotationTypes.h"
 #include "gui/widgets/TimeWidget.h"
 #include "gui/widgets/BigArrowButton.h"
+#include "misc/Strings.h"
 #include <QSettings>
 #include <QDialog>
 #include <QDialogButtonBox>
@@ -174,33 +175,28 @@ TimeSignatureDialog::TimeSignatureDialog(QDialogButtonBox::QWidget *parent,
     }
 
     groupBox = new QGroupBox(1, Horizontal, i18n("Options"), vbox);
-    QSettings config;
-    config.beginGroup( GeneralOptionsConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( GeneralOptionsConfigGroup );
-    //  
-
+    QSettings settings;
+    settings.beginGroup( GeneralOptionsConfigGroup );
 
     m_hideSignatureButton = new QCheckBox
                             (i18n("Hide the time signature"), groupBox);
     m_hideSignatureButton->setChecked
-    ( qStrToBool( config.value("timesigdialogmakehidden", "false" ) ) );
+    ( qStrToBool( settings.value("timesigdialogmakehidden", "false" ) ) );
 
     m_hideBarsButton = new QCheckBox
                        (i18n("Hide the affected bar lines"), groupBox);
     m_hideBarsButton->setChecked
-    ( qStrToBool( config.value("timesigdialogmakehiddenbars", "false" ) ) );
+    ( qStrToBool( settings.value("timesigdialogmakehiddenbars", "false" ) ) );
 
     m_commonTimeButton = new QCheckBox
                          (i18n("Show as common time"), groupBox);
     m_commonTimeButton->setChecked
-    ( qStrToBool( config.value("timesigdialogshowcommon", "true" ) ) );
+    ( qStrToBool( settings.value("timesigdialogshowcommon", "true" ) ) );
 
     m_normalizeRestsButton = new QCheckBox
                              (i18n("Correct the durations of following measures"), groupBox);
     m_normalizeRestsButton->setChecked
-    ( qStrToBool( config.value("timesigdialognormalize", "true" ) ) );
+    ( qStrToBool( settings.value("timesigdialognormalize", "true" ) ) );
 
     QObject::connect(m_hideSignatureButton, SIGNAL(clicked()), this,
                      SLOT(slotUpdateCommonTimeButton()));
@@ -208,23 +204,20 @@ TimeSignatureDialog::TimeSignatureDialog(QDialogButtonBox::QWidget *parent,
     m_explanatoryLabel = explanatoryLabel;
 
     //setHelp("time-signature");
+
+    settings.endGroup();
 }
 
 TimeSignature
 TimeSignatureDialog::getTimeSignature() const
 {
-    QSettings config;
-    config.beginGroup( GeneralOptionsConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( GeneralOptionsConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( GeneralOptionsConfigGroup );
 
-
-    config.setValue("timesigdialogmakehidden", m_hideSignatureButton->isChecked());
-    config.setValue("timesigdialogmakehiddenbars", m_hideBarsButton->isChecked());
-    config.setValue("timesigdialogshowcommon", m_commonTimeButton->isChecked());
-    config.setValue("timesigdialognormalize", m_normalizeRestsButton->isChecked());
+    settings.setValue("timesigdialogmakehidden", m_hideSignatureButton->isChecked());
+    settings.setValue("timesigdialogmakehiddenbars", m_hideBarsButton->isChecked());
+    settings.setValue("timesigdialogshowcommon", m_commonTimeButton->isChecked());
+    settings.setValue("timesigdialognormalize", m_normalizeRestsButton->isChecked());
 
     TimeSignature ts(m_timeSignature.getNumerator(),
                      m_timeSignature.getDenominator(),
@@ -237,6 +230,9 @@ TimeSignatureDialog::getTimeSignature() const
                      (m_hideBarsButton &&
                       m_hideBarsButton->isEnabled() &&
                       m_hideBarsButton->isChecked()));
+
+    settings.endGroup();
+
     return ts;
 }
 
