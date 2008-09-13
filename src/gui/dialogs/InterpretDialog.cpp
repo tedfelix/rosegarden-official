@@ -64,24 +64,19 @@ InterpretDialog::InterpretDialog(QDialogButtonBox::QWidget *parent) :
     m_allInterpretations = new QCheckBox
                            (i18n("All available interpretations"), groupBox);
 
-    QSettings config;
-    config.beginGroup( NotationViewConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( NotationViewConfigGroup );
-    //  
-
+    QSettings settings;
+    settings.beginGroup( NotationViewConfigGroup );
 
     m_allInterpretations->setChecked
-    ( qStrToBool( config.value("interpretall", "true" ) ) );
+    ( qStrToBool( settings.value("interpretall", "true" ) ) );
     m_applyTextDynamics->setChecked
-    ( qStrToBool( config.value("interprettextdynamics", "true" ) ) );
+    ( qStrToBool( settings.value("interprettextdynamics", "true" ) ) );
     m_applyHairpins->setChecked
-    ( qStrToBool( config.value("interprethairpins", "true" ) ) );
+    ( qStrToBool( settings.value("interprethairpins", "true" ) ) );
     m_stressBeats->setChecked
-    ( qStrToBool( config.value("interpretstressbeats", "true" ) ) );
+    ( qStrToBool( settings.value("interpretstressbeats", "true" ) ) );
     m_articulate->setChecked
-    ( qStrToBool( config.value("interpretarticulate", "true" ) ) );
+    ( qStrToBool( settings.value("interpretarticulate", "true" ) ) );
 
     connect(m_allInterpretations,
             SIGNAL(clicked()), this, SLOT(slotAllBoxChanged()));
@@ -92,6 +87,8 @@ InterpretDialog::InterpretDialog(QDialogButtonBox::QWidget *parent) :
     metagrid->setRowStretch(0, 10);
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+
+    settings.endGroup();
 }
 
 void
@@ -107,19 +104,16 @@ InterpretDialog::slotAllBoxChanged()
 int
 InterpretDialog::getInterpretations()
 {
-    QSettings config;
-    config.beginGroup( NotationViewConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( NotationViewConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( NotationViewConfigGroup );
 
+    settings.setValue("interpretall", m_allInterpretations->isChecked());
+    settings.setValue("interprettextdynamics", m_applyTextDynamics->isChecked());
+    settings.setValue("interprethairpins", m_applyHairpins->isChecked());
+    settings.setValue("interpretstressbeats", m_stressBeats->isChecked());
+    settings.setValue("interpretarticulate", m_articulate->isChecked());
 
-    config.setValue("interpretall", m_allInterpretations->isChecked());
-    config.setValue("interprettextdynamics", m_applyTextDynamics->isChecked());
-    config.setValue("interprethairpins", m_applyHairpins->isChecked());
-    config.setValue("interpretstressbeats", m_stressBeats->isChecked());
-    config.setValue("interpretarticulate", m_articulate->isChecked());
+    settings.endGroup();
 
     if (m_allInterpretations->isChecked()) {
         return InterpretCommand::AllInterpretations;
