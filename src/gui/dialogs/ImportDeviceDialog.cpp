@@ -168,27 +168,24 @@ ImportDeviceDialog::doImport()
     m_mergeBanks = new QRadioButton(i18n("Merge banks"), m_buttonGroup);
     m_overwriteBanks = new QRadioButton(i18n("Overwrite banks"), m_buttonGroup);
 
-    QSettings config;
-    config.beginGroup( GeneralOptionsConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( GeneralOptionsConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( GeneralOptionsConfigGroup );
 
+    m_importBanks->setChecked( qStrToBool( settings.value("importbanks", "true" ) ) );
+    m_importKeyMappings->setChecked( qStrToBool( settings.value("importkeymappings", "true" ) ) );
+    m_importControllers->setChecked( qStrToBool( settings.value("importcontrollers", "true" ) ) );
 
-    m_importBanks->setChecked( qStrToBool( config.value("importbanks", "true" ) ) );
-    m_importKeyMappings->setChecked( qStrToBool( config.value("importkeymappings", "true" ) ) );
-    m_importControllers->setChecked( qStrToBool( config.value("importcontrollers", "true" ) ) );
-
-    bool rename = qStrToBool( config.value("importbanksrename", "true" ) ) ;
+    bool rename = qStrToBool( settings.value("importbanksrename", "true" ) ) ;
     if (m_rename)
         m_rename->setChecked(rename);
 
-    bool overwrite = qStrToBool( config.value("importbanksoverwrite", "true" ) ) ;
+    bool overwrite = qStrToBool( settings.value("importbanksoverwrite", "true" ) ) ;
     if (overwrite)
         m_buttonGroup->setButton(1);
     else
         m_buttonGroup->setButton(0);
+
+    settings.endGroup();
 
     return true;
 }
@@ -202,17 +199,15 @@ ImportDeviceDialog::slotOk()
     m_device = m_devices[index];
 
     int v = m_buttonGroup->id(m_buttonGroup->selected());
-    QSettings config;
-    config.beginGroup( GeneralOptionsConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( GeneralOptionsConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( GeneralOptionsConfigGroup );
 
-    config.setValue("importbanksoverwrite", v == 1);
+    settings.setValue("importbanksoverwrite", v == 1);
     if (m_rename)
-        config.setValue("importbanksrename", m_rename->isChecked());
+        settings.setValue("importbanksrename", m_rename->isChecked());
     accept();
+
+    settings.endGroup();
 }
 
 void
