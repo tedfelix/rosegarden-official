@@ -34,7 +34,7 @@ MidiKeyMapListViewItem::MidiKeyMapListViewItem(DeviceId deviceId,
         : MidiDeviceListViewItem(deviceId, parent, name),
         m_name(name)
 {
-    setText(1, i18n("Key Mapping"));
+    setText(i18n("Key Mapping"));
 }
 
 int MidiKeyMapListViewItem::compare(QListWidgetItem *i, int col, bool ascending) const
