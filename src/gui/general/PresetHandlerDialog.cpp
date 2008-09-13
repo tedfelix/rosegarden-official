@@ -24,6 +24,7 @@
 #include <QApplication>
 
 #include <klocale.h>
+#include "misc/Strings.h"
 #include "misc/Debug.h"
 #include "document/ConfigGroups.h"
 #include "CategoryElement.h"
@@ -48,7 +49,6 @@ namespace Rosegarden
 
 PresetHandlerDialog::PresetHandlerDialog(QDialogButtonBox::QWidget *parent, bool fromNotation)
         : KDialogBase(parent, "presethandlerdialog", true, i18n("Load track parameters preset"), Ok | Cancel, Ok),
-        m_config(confq4),
         m_fromNotation(fromNotation)
 {
     m_presets = new PresetGroup();
@@ -119,42 +119,34 @@ PresetHandlerDialog::initDialog()
 
     populateCategoryCombo();
     // try to set to same category used previously
-    QSettings m_config;
-    m_config.beginGroup( GeneralOptionsConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // m_config.endGroup();		// corresponding to: m_config.beginGroup( GeneralOptionsConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( GeneralOptionsConfigGroup );
 
-    m_categoryCombo->setCurrentIndex( m_config.value("category_combo_index", 0).toInt() );
+    m_categoryCombo->setCurrentIndex( settings.value("category_combo_index", 0).toInt() );
 
     // populate the instrument combo
     slotCategoryIndexChanged(m_categoryCombo->currentIndex());
 
     // try to set to same instrument used previously
-    QSettings m_config;
-    m_config.beginGroup( GeneralOptionsConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // m_config.endGroup();		// corresponding to: m_config.beginGroup( GeneralOptionsConfigGroup );
-    //  
 
-    m_instrumentCombo->setCurrentIndex( m_config.value("instrument_combo_index", 0).toInt() );
+    //###settings.beginGroup( GeneralOptionsConfigGroup );
+    m_instrumentCombo->setCurrentIndex( settings.value("instrument_combo_index", 0).toInt() );
 
     // set to same player used previously (this one can't fail, unlike the
     // others, because the contents of this combo are static)
-    m_playerCombo->setCurrentIndex( m_config.value("player_combo_index", 0).toInt() );
+    m_playerCombo->setCurrentIndex( settings.value("player_combo_index", 0).toInt() );
 
     if (m_fromNotation){
-        m_convertAllSegments->setChecked( qStrToBool( m_config.value("convert_all_segments", "0" ) ) );
+        m_convertAllSegments->setChecked( qStrToBool( settings.value("convert_all_segments", "0" ) ) );
     }
     else {
-    	m_convertSegments->setChecked( qStrToBool( m_config.value("convert_segments", "0" ) ) );
+    	m_convertSegments->setChecked( qStrToBool( settings.value("convert_segments", "0" ) ) );
     }
-    	 
     
     connect(m_categoryCombo, SIGNAL(activated(int)),
             SLOT(slotCategoryIndexChanged(int)));
+
+    settings.endGroup();
 }
 
 QString
@@ -268,25 +260,23 @@ PresetHandlerDialog::slotCategoryIndexChanged(int index)
 void
 PresetHandlerDialog::slotOk()
 {
-    QSettings m_config;
-    m_config.beginGroup( GeneralOptionsConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // m_config.endGroup();		// corresponding to: m_config.beginGroup( GeneralOptionsConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( GeneralOptionsConfigGroup );
 
-    m_config.setValue("category_combo_index", m_categoryCombo->currentIndex());
-    m_config.setValue("instrument_combo_index", m_instrumentCombo->currentIndex());
-    m_config.setValue("player_combo_index", m_playerCombo->currentIndex());
+    settings.setValue("category_combo_index", m_categoryCombo->currentIndex());
+    settings.setValue("instrument_combo_index", m_instrumentCombo->currentIndex());
+    settings.setValue("player_combo_index", m_playerCombo->currentIndex());
 
     if (m_fromNotation) {
-        m_config.setValue("convert_all_segments", m_convertAllSegments->isChecked());
+        settings.setValue("convert_all_segments", m_convertAllSegments->isChecked());
     }
     else {
-        m_config.setValue("convert_segments", m_convertSegments->isChecked());
+        settings.setValue("convert_segments", m_convertSegments->isChecked());
     }
     
     QDialog::accept();
+
+    settings.endGroup();
 }
 
 }
