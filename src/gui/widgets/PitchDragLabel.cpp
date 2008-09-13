@@ -39,9 +39,9 @@ PitchDragLabel::PitchDragLabel(QWidget *parent,
                                bool defaultSharps) :
         QWidget(parent),
         m_pitch(defaultPitch),
-        m_usingSharps(defaultSharps),
         m_clickedY(0),
         m_clicked(false),
+        m_usingSharps(defaultSharps),
         m_npf(new NotePixmapFactory())
 {
     calculatePixmap();
@@ -80,7 +80,7 @@ PitchDragLabel::slotSetPitch(int pitch, int octave, int step)
 void
 PitchDragLabel::mousePressEvent(QMouseEvent *e)
 {
-    if (e->button() == LeftButton) {
+    if (e->button() == Qt::LeftButton) {
         m_clickedY = e->y();
         m_clickedPitch = m_pitch;
         m_clicked = true;
