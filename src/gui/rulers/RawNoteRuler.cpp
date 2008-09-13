@@ -28,7 +28,8 @@
 #include "base/Segment.h"
 #include "DefaultVelocityColour.h"
 #include "gui/general/GUIPalette.h"
-#include <klocale.h>
+#include "misc/Strings.h"
+
 #include <QColor>
 #include <QPainter>
 #include <QRect>
@@ -36,6 +37,7 @@
 #include <QToolTip>
 #include <QWidget>
 
+#include <klocale.h> // i18n()
 
 namespace Rosegarden
 {
@@ -446,7 +448,7 @@ RawNoteRuler::paintEvent(QPaintEvent* e)
 
 	QToolTip::add(this,i18n("Track #%1, Segment \"%2\" (runtime id %3)",
 		            trackPosition + 1,
-		            m_segment->getLabel(),
+		            strtoqstr(m_segment->getLabel()),
 		            m_segment->getRuntimeId()));
     }
 
