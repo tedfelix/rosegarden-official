@@ -33,8 +33,6 @@ class QWidget;
 class QSpinBox;
 class QPushButton;
 class QGridLayout;
-class KConfig;
-
 
 namespace Rosegarden
 {
@@ -58,8 +56,6 @@ public:
 
     EventFilterDialog(QWidget* parent);
     ~EventFilterDialog();
-
-    QSettings cfg;
 
     //-------[ accessor functions ]------------------------
 
