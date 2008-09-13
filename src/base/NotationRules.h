@@ -25,7 +25,7 @@
  *   scale_Cmajor[5] = 9
  */
 static int scale_Cmajor[] = { 0, 2, 4, 5, 7, 9, 11 };
-static int scale_Cminor[] = { 0, 2, 3, 5, 7, 8, 10 };
+//static int scale_Cminor[] = { 0, 2, 3, 5, 7, 8, 10 };
 static int scale_Cminor_harmonic[] = { 0, 2, 3, 5, 7, 8, 11 };
 /**
  * Steps of common major and minor scales.
@@ -34,7 +34,7 @@ static int scale_Cminor_harmonic[] = { 0, 2, 3, 5, 7, 8, 11 };
  *   10 - scale_Cmajor[steps_Cmajor[10]] = 10 - 9 = +1
  */
 static int steps_Cmajor[] = { 0, 0, 1, 1, 2, 3, 3, 4, 4, 5, 5, 6 };
-static int steps_Cminor[] = { 0, 0, 1, 2, 2, 3, 3, 4, 5, 5, 6, 6 };
+//static int steps_Cminor[] = { 0, 0, 1, 2, 2, 3, 3, 4, 5, 5, 6, 6 };
 static int steps_Cminor_harmonic[] = { 0, 0, 1, 2, 2, 3, 3, 4, 5, 5, 5, 6 };
 /**
  * Same as previosly, but the use of accidentals is explicitly written.
@@ -43,8 +43,8 @@ static int steps_Cminor_harmonic[] = { 0, 0, 1, 2, 2, 3, 3, 4, 5, 5, 5, 6 };
  *   10 - scale_Cmajor[steps_Cmajor_with_sharps[10]] = 10 - 9 = +1
  *   10 - scale_Cmajor[steps_Cmajor_with_flats[10]] = 10 - 11 = -1
  */
-static int steps_Cmajor_with_sharps[] = { 0, 0, 1, 1, 2, 3, 3, 4, 4, 5, 5, 6 };
-static int steps_Cmajor_with_flats[] = { 0, 1, 1, 2, 2, 3, 4, 4, 5, 5, 6, 6 };
+//static int steps_Cmajor_with_sharps[] = { 0, 0, 1, 1, 2, 3, 3, 4, 4, 5, 5, 6 };
+//static int steps_Cmajor_with_flats[] = { 0, 1, 1, 2, 2, 3, 4, 4, 5, 5, 6, 6 };
 
 namespace Rosegarden
 {

@@ -93,7 +93,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     m_variationValue->setMinimumWidth(width22);
     
     m_connectionLabel->setFixedWidth(width25);
-    m_connectionLabel->setAlignment(Qt::Qt::AlignCenter);
+    m_connectionLabel->setAlignment(Qt::AlignCenter);
     
     
     QString programTip = i18n("<qt>use program changes from an external source to manipulate these controls (only valid for the currently-active track)</qt>");

@@ -175,7 +175,7 @@ PluginControl::PluginControl(QWidget *parent,
         if (!hidden) {
             m_dial->show();
             item = new QWidgetItem(m_dial);
-            item->setAlignment(Qt::Qt::AlignCenter);
+            item->setAlignment(Qt::AlignCenter);
             m_layout->addItem(item);
         } else {
             m_dial->hide();

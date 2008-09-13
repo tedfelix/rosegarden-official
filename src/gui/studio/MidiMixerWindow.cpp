@@ -176,29 +176,29 @@ MidiMixerWindow::setupTabs()
             //.arg(i18n("MIDI Mixer")), m_tabFrame);
 
             QLabel *label = new QLabel("", m_tabFrame);
-            mainLayout->addWidget(label, 0, 0, 0- 0+1, 16- 1, Qt::Qt::AlignCenter);
+            mainLayout->addWidget(label, 0, 0, 0- 0+1, 16- 1, Qt::AlignCenter);
 
             // control labels
             for (unsigned int i = 0; i < controls.size(); ++i) {
                 label = new QLabel(strtoqstr(controls[i].getName()), m_tabFrame);
-                mainLayout->addWidget(label, i + 1, 0, Qt::Qt::AlignCenter);
+                mainLayout->addWidget(label, i + 1, 0, Qt::AlignCenter);
             }
 
             // meter label
             //
             //label = new QLabel(i18n("Meter"), m_tabFrame);
             //mainLayout->addWidget(label,
-            //controls.size() + 1, 0, Qt::Qt::AlignCenter);
+            //controls.size() + 1, 0, Qt::AlignCenter);
 
             // volume label
             label = new QLabel(i18n("Volume"), m_tabFrame);
             mainLayout->addWidget(label, controls.size() + 2, 0,
-                                  Qt::Qt::AlignCenter);
+                                  Qt::AlignCenter);
 
             // instrument label
             label = new QLabel(i18n("Instrument"), m_tabFrame);
             mainLayout->addWidget(label, controls.size() + 3, 0,
-                                  Qt::Qt::AlignCenter);
+                                  Qt::AlignCenter);
 
             int posCount = 1;
             int firstInstrument = -1;
@@ -247,7 +247,7 @@ MidiMixerWindow::setupTabs()
                             this, SLOT(slotControllerChanged(float)));
 
                     mainLayout->addWidget(controller, i + 1, posCount,
-                                          Qt::Qt::AlignCenter);
+                                          Qt::AlignCenter);
 
                     // Store the rotary
                     //
@@ -262,7 +262,7 @@ MidiMixerWindow::setupTabs()
                     new MidiMixerVUMeter(m_tabFrame,
                                          VUMeter::FixedHeightVisiblePeakHold, 6, 30);
                 mainLayout->addWidget(meter, controls.size() + 1,
-                                      posCount, Qt::Qt::AlignCenter);
+                                      posCount, Qt::AlignCenter);
                 m_faders[faderCount]->m_vuMeter = meter;
 
                 // Volume fader
@@ -270,7 +270,7 @@ MidiMixerWindow::setupTabs()
                 Fader *fader =
                     new Fader(0, 127, 100, 20, 80, m_tabFrame);
                 mainLayout->addWidget(fader, controls.size() + 2,
-                                      posCount, Qt::Qt::AlignCenter);
+                                      posCount, Qt::AlignCenter);
                 m_faders[faderCount]->m_volumeFader = fader;
                 //fader->setFader(float((*iIt)->getVolume()));
 
@@ -281,7 +281,7 @@ MidiMixerWindow::setupTabs()
                                              m_tabFrame, "idLabel");
 
                 mainLayout->addWidget(idLabel, controls.size() + 3,
-                                      posCount, Qt::Qt::AlignCenter);
+                                      posCount, Qt::AlignCenter);
 
                 // store id in struct
                 m_faders[faderCount]->m_id = (*iIt)->getId();
