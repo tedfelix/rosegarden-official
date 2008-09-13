@@ -345,18 +345,14 @@ void RosegardenGUIView::slotEditSegment(Segment* segment)
         slotEditSegmentAudio(segment);
     } else {
 
-        QSettings config;
-        config.beginGroup( GeneralOptionsConfigGroup );
-        // 
-        // FIX-manually-(GW), add:
-        // config.endGroup();		// corresponding to: config.beginGroup( GeneralOptionsConfigGroup );
-        //  
+        QSettings settings;
+        settings.beginGroup( GeneralOptionsConfigGroup );
 
         GeneralConfigurationPage::DoubleClickClient
         client =
             (GeneralConfigurationPage::DoubleClickClient)
-            ( config.value("doubleclickclient",
-                                          (unsigned int).toUInt() GeneralConfigurationPage::NotationView));
+            ( settings.value("doubleclickclient",
+                                          (unsigned int) GeneralConfigurationPage::NotationView).toUInt());
 
         if (client == GeneralConfigurationPage::MatrixView) {
 
@@ -381,6 +377,7 @@ void RosegardenGUIView::slotEditSegment(Segment* segment)
         } else {
             slotEditSegmentNotation(segment);
         }
+        settings.endGroup();
     }
 }
 
@@ -833,15 +830,11 @@ void RosegardenGUIView::slotEditSegmentAudio(Segment *segment)
     std::cout << "RosegardenGUIView::slotEditSegmentAudio() - "
     << "starting external audio editor" << std::endl;
 
-    QSettings config;
-    config.beginGroup( GeneralOptionsConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( GeneralOptionsConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( GeneralOptionsConfigGroup );
 
-
-    QString application = config.value("externalaudioeditor", "").toString();
+    QString application = settings.value("externalaudioeditor", "").toString();
+    settings.endGroup();
 
     if (application == "") {
         application = AudioConfigurationPage::getBestAvailableAudioEditor();
@@ -1744,15 +1737,12 @@ RosegardenGUIView::slotUpdateRecordingSegment(Segment *segment,
         return ;
     lastRecordingSegment = segment;
 
-    QSettings config;
-    config.beginGroup( GeneralOptionsConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( GeneralOptionsConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( GeneralOptionsConfigGroup );
 
+    int tracking = settings.value("recordtracking", 0).toUInt() ;
+    settings.endGroup();
 
-    int tracking = config.value("recordtracking", 0).toUInt() ;
     if (tracking != 1)
         return ;
 
