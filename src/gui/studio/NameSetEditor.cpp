@@ -116,7 +116,7 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
                     QLabel *label = new QLabel(numberText, numBox);
                     numBoxLayout->addWidget(label);
                     label->setFixedWidth(40);
-                    label->setAlignment(AlignCenter);
+                    label->setAlignment(Qt::AlignCenter);
                     m_labels.push_back(label);
                 }
 

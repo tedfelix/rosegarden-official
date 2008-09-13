@@ -133,8 +133,8 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     // track label
     //
     m_trackLabel = new KSqueezedTextLabel(i18n("<untitled>"), this);
-    m_trackLabel->setAlignment(Qt::AlignCenter);
-    //mainLayout->addWidget(m_trackLabel, 0, 0, 0- 0+1, 5- 1, AlignCenter);
+    m_trackLabel->setAlignment(Qt::Qt::AlignCenter);
+    //mainLayout->addWidget(m_trackLabel, 0, 0, 0- 0+1, 5- 1, Qt::AlignCenter);
     mainLayout->addWidget(m_trackLabel, 0, 0);
 
     // playback group

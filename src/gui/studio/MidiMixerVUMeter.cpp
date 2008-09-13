@@ -32,7 +32,7 @@ MidiMixerVUMeter::MidiMixerVUMeter(QWidget *parent,
                                    const char *name):
         VUMeter(parent, type, false, false, width, height, VUMeter::Vertical, name)
 {
-    setAlignment(AlignCenter);
+    setAlignment(Qt::AlignCenter);
 }
 
 void

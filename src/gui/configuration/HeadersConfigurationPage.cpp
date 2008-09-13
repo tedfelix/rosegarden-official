@@ -138,7 +138,7 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
 	}
 
 	// editHeader->setReadOnly( true );
-	editHeader->setAlignment( (col == 0 ? Qt::AlignLeft : (col >= 3 ? Qt::AlignRight : Qt::AlignCenter) ));
+	editHeader->setAlignment( (col == 0 ? Qt::AlignLeft : (col >= 3 ? Qt::AlignRight : Qt::Qt::AlignCenter) ));
 
 	layoutHeaders->addMultiCellWidget(editHeader, row, row, col, col+(width-1) );
 
@@ -150,7 +150,7 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
 	shown.insert(key);
     }
     QLabel *separator = new QLabel(i18n("The composition comes here."), frameHeaders);
-    separator->setAlignment( Qt::AlignCenter );
+    separator->setAlignment( Qt::Qt::AlignCenter );
     layoutHeaders->addWidget(separator, 7, 1, 1, 4 - 2);
 
     //

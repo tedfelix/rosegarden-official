@@ -69,7 +69,7 @@ class SegmentDataItem : public QTableItem
 public:
     SegmentDataItem(QTable *t, QString s) :
 	QTableItem(t, QTableItem::Never, s) { }
-    virtual int alignment() const { return Qt::AlignCenter; }
+    virtual int alignment() const { return Qt::Qt::AlignCenter; }
 
     virtual QString key() const {
 

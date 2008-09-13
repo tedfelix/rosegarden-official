@@ -417,14 +417,14 @@ AudioMixerWindow::populate()
             mainLayout->addMultiCellWidget(rec.m_input->getWidget(), 1, 1, col, col + 1);
         }
         mainLayout->addMultiCellWidget(rec.m_output->getWidget(), 2, 2, col, col + 1);
-        //	mainLayout->addWidget(idLabel, 2, col, Qt::AlignCenter);
+        //	mainLayout->addWidget(idLabel, 2, col, Qt::Qt::AlignCenter);
         //	mainLayout->addWidget(rec.m_pan, 2, col+1, Qt::AlignLeft);
 
-        mainLayout->addWidget(idLabel, 0, col, 0- 1, col + 1- col+1, Qt::AlignCenter);
-        mainLayout->addWidget(rec.m_pan, 5, col, Qt::AlignCenter);
+        mainLayout->addWidget(idLabel, 0, col, 0- 1, col + 1- col+1, Qt::Qt::AlignCenter);
+        mainLayout->addWidget(rec.m_pan, 5, col, Qt::Qt::AlignCenter);
 
-        mainLayout->addWidget(rec.m_fader, 3, col, Qt::AlignCenter);
-        mainLayout->addWidget(rec.m_meter, 3, col + 1, Qt::AlignCenter);
+        mainLayout->addWidget(rec.m_fader, 3, col, Qt::Qt::AlignCenter);
+        mainLayout->addWidget(rec.m_meter, 3, col + 1, Qt::Qt::AlignCenter);
 
         // commented out until implemented
         //	mainLayout->addWidget(rec.m_muteButton, 4, col);
@@ -538,14 +538,14 @@ AudioMixerWindow::populate()
         QLabel *idLabel = new QLabel(i18n("Sub %1", count), m_mainBox, "subMaster");
         idLabel->setFont(boldFont);
 
-        //	mainLayout->addWidget(idLabel, 2, col, Qt::AlignCenter);
-        mainLayout->addWidget(idLabel, 0, col, 0- 1, col + 1- col+1, Qt::AlignCenter);
+        //	mainLayout->addWidget(idLabel, 2, col, Qt::Qt::AlignCenter);
+        mainLayout->addWidget(idLabel, 0, col, 0- 1, col + 1- col+1, Qt::Qt::AlignCenter);
 
         //	mainLayout->addWidget(rec.m_pan, 2, col+1, Qt::AlignLeft);
-        mainLayout->addWidget(rec.m_pan, 5, col, 1, col + 1- col+1, Qt::AlignCenter);
+        mainLayout->addWidget(rec.m_pan, 5, col, 1, col + 1- col+1, Qt::Qt::AlignCenter);
 
-        mainLayout->addWidget(rec.m_fader, 3, col, Qt::AlignCenter);
-        mainLayout->addWidget(rec.m_meter, 3, col + 1, Qt::AlignCenter);
+        mainLayout->addWidget(rec.m_fader, 3, col, Qt::Qt::AlignCenter);
+        mainLayout->addWidget(rec.m_meter, 3, col + 1, Qt::Qt::AlignCenter);
 
         //	mainLayout->addWidget(rec.m_muteButton, 4, col, 1, col+1- col+1);
         rec.m_muteButton->hide();
@@ -597,9 +597,9 @@ AudioMixerWindow::populate()
         QLabel *idLabel = new QLabel(i18n("Master"), m_mainBox);
         idLabel->setFont(boldFont);
 
-        mainLayout->addWidget(idLabel, 0, col, 0- 1, col + 1- col+1, Qt::AlignCenter);
-        mainLayout->addWidget(rec.m_fader, 3, col, Qt::AlignCenter);
-        mainLayout->addWidget(rec.m_meter, 3, col + 1, Qt::AlignCenter);
+        mainLayout->addWidget(idLabel, 0, col, 0- 1, col + 1- col+1, Qt::Qt::AlignCenter);
+        mainLayout->addWidget(rec.m_fader, 3, col, Qt::Qt::AlignCenter);
+        mainLayout->addWidget(rec.m_meter, 3, col + 1, Qt::Qt::AlignCenter);
 
         //	mainLayout->addWidget(rec.m_muteButton, 4, col, 1, col+1- col+1);
         rec.m_muteButton->hide();

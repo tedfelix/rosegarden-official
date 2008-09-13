@@ -444,7 +444,7 @@ AudioPluginDialog::slotPluginSelected(int i)
         m_gridLayout->addMultiCellWidget(
             new QLabel(i18n("This plugin has too many controls to edit here."),
                        m_pluginParamsBox),
-            1, 1, 0, m_gridLayout->numCols() - 1, Qt::AlignCenter);
+            1, 1, 0, m_gridLayout->numCols() - 1, Qt::Qt::AlignCenter);
     }
 
     AudioPluginInstance *inst = m_pluginContainer->getPlugin(m_index);

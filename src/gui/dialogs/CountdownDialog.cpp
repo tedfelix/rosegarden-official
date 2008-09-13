@@ -52,7 +52,7 @@ CountdownDialog::CountdownDialog(QWidget *parent, int seconds):
     hBoxLayout->addWidget(m_time);
     hBox->setLayout(hBoxLayout);
 
-    layout->addWidget(hBox, 0, AlignCenter);
+    layout->addWidget(hBox, 0, Qt::AlignCenter);
 
     m_label->setText(i18n("Recording time remaining:  "));
     m_progressBar() =
@@ -65,7 +65,7 @@ CountdownDialog::CountdownDialog(QWidget *parent, int seconds):
     m_stopButton = new QPushButton(i18n("Stop"), this);
     m_stopButton->setFixedWidth(60);
 
-    layout->addWidget(m_progressBar(), 0, AlignCenter);
+    layout->addWidget(m_progressBar(), 0, Qt::AlignCenter);
     layout->addWidget(m_stopButton, 0, AlignRight);
 
     connect (m_stopButton, SIGNAL(released()), this, SIGNAL(stopped()));

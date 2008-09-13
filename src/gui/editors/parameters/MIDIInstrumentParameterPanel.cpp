@@ -93,7 +93,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     m_variationValue->setMinimumWidth(width22);
     
     m_connectionLabel->setFixedWidth(width25);
-    m_connectionLabel->setAlignment(Qt::AlignCenter);
+    m_connectionLabel->setAlignment(Qt::Qt::AlignCenter);
     
     
     QString programTip = i18n("<qt>use program changes from an external source to manipulate these controls (only valid for the currently-active track)</qt>");
@@ -114,8 +114,8 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
 
     m_mainGrid->setColStretch(2, 1);
 
-    m_mainGrid->addWidget(m_instrumentLabel, 0, 0, 0- 0+1, 2- 1, AlignCenter);
-    m_mainGrid->addWidget(m_connectionLabel, 1, 0, 0+1, 2- 1, AlignCenter);
+    m_mainGrid->addWidget(m_instrumentLabel, 0, 0, 0- 0+1, 2- 1, Qt::AlignCenter);
+    m_mainGrid->addWidget(m_connectionLabel, 1, 0, 0+1, 2- 1, Qt::AlignCenter);
 
     m_mainGrid->addWidget(channelLabel, 2, 0, 0+1, 1- 1, AlignLeft);
     m_mainGrid->addWidget(m_channelValue, 2, 2, AlignRight);

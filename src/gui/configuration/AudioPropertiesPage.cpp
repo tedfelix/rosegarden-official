@@ -71,7 +71,7 @@ AudioPropertiesPage::AudioPropertiesPage(RosegardenGUIDoc *doc,
         new QLabel(i18n("Equivalent minutes of 16-bit stereo:"),
                    frame), 2, 0);
 
-    layout->addWidget(m_minutesAtStereo, 2, 1, AlignCenter);
+    layout->addWidget(m_minutesAtStereo, 2, 1, Qt::AlignCenter);
 
     layout->setRowStretch(3, 2);
 

@@ -52,7 +52,7 @@ FileLocateDialog::FileLocateDialog(QDialogButtonBox::QWidget *parent,
              "Would you like to try and locate this file or skip it?", m_file);
 
     QLabel *labelW = new QLabel(label, w);
-    labelW->setAlignment(Qt::AlignCenter);
+    labelW->setAlignment(Qt::Qt::AlignCenter);
     labelW->setMinimumHeight(60);
 }
 

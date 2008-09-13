@@ -74,7 +74,7 @@ IntervalDialog::IntervalDialog(QDialogButtonBox::QWidget *parent, bool askChange
 
     m_intervalLabel = new QLabel(i18n("a perfect unison"), vBox );
     vBoxLayout->addWidget(m_intervalLabel);
-    m_intervalLabel->setAlignment(Qt::AlignCenter);
+    m_intervalLabel->setAlignment(Qt::Qt::AlignCenter);
     QFont font(m_intervalLabel->font());
     font.setItalic(true);
     m_intervalLabel->setFont(font);
