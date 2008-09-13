@@ -262,20 +262,20 @@ TextEventDialog::TextEventDialog(QDialogButtonBox::QWidget *parent,
     // not i18nable, because the directive exporter currently depends on the
     // textual contents of these strings, not some more abstract associated
     // type label
-    m_lilyPondDirectiveCombo->addItem(Text::Segno);
-    m_lilyPondDirectiveCombo->addItem(Text::Coda);
-    m_lilyPondDirectiveCombo->addItem(Text::Alternate1);
-    m_lilyPondDirectiveCombo->addItem(Text::Alternate2);
-    m_lilyPondDirectiveCombo->addItem(Text::BarDouble);
-    m_lilyPondDirectiveCombo->addItem(Text::BarEnd);
-    m_lilyPondDirectiveCombo->addItem(Text::BarDot);
-    m_lilyPondDirectiveCombo->addItem(Text::Gliss);
-    m_lilyPondDirectiveCombo->addItem(Text::Arpeggio);
+    m_lilyPondDirectiveCombo->addItem(strtoqstr(Text::Segno));
+    m_lilyPondDirectiveCombo->addItem(strtoqstr(Text::Coda));
+    m_lilyPondDirectiveCombo->addItem(strtoqstr(Text::Alternate1));
+    m_lilyPondDirectiveCombo->addItem(strtoqstr(Text::Alternate2));
+    m_lilyPondDirectiveCombo->addItem(strtoqstr(Text::BarDouble));
+    m_lilyPondDirectiveCombo->addItem(strtoqstr(Text::BarEnd));
+    m_lilyPondDirectiveCombo->addItem(strtoqstr(Text::BarDot));
+    m_lilyPondDirectiveCombo->addItem(strtoqstr(Text::Gliss));
+    m_lilyPondDirectiveCombo->addItem(strtoqstr(Text::Arpeggio));
     //    m_lilyPondDirectiveCombo->addItem(Text::ArpeggioUp);
     //    m_lilyPondDirectiveCombo->addItem(Text::ArpeggioDn);
-    m_lilyPondDirectiveCombo->addItem(Text::Tiny);
-    m_lilyPondDirectiveCombo->addItem(Text::Small);
-    m_lilyPondDirectiveCombo->addItem(Text::NormalSize);
+    m_lilyPondDirectiveCombo->addItem(strtoqstr(Text::Tiny));
+    m_lilyPondDirectiveCombo->addItem(strtoqstr(Text::Small));
+    m_lilyPondDirectiveCombo->addItem(strtoqstr(Text::NormalSize));
 
     QWidget *exampleVBox = new QWidget(exampleBox);
     QVBoxLayout *exampleVBoxLayout = new QVBoxLayout;
@@ -321,24 +321,19 @@ TextEventDialog::TextEventDialog(QDialogButtonBox::QWidget *parent,
     m_staffBelowLabel->setPixmap(map);
 
     // restore last setting for shortcut combos
-    QSettings config;
-    config.beginGroup( NotationViewConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( NotationViewConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( NotationViewConfigGroup );
 
+    m_dynamicShortcutCombo->setCurrentIndex( settings.value("dynamic_shortcut", 0).toInt() );
+    m_directionShortcutCombo->setCurrentIndex( settings.value("direction_shortcut", 0).toInt() );
+    m_localDirectionShortcutCombo->setCurrentIndex( settings.value("local_direction_shortcut", 0).toInt() );
+    m_tempoShortcutCombo->setCurrentIndex( settings.value("tempo_shortcut", 0).toInt() );
+    m_localTempoShortcutCombo->setCurrentIndex( settings.value("local_tempo_shortcut", 0).toInt() );
+    m_lilyPondDirectiveCombo->setCurrentIndex( settings.value("lilyPond_directive_combo", 0).toInt() );
 
-    m_dynamicShortcutCombo->setCurrentIndex( config.value("dynamic_shortcut", 0).toInt() );
-    m_directionShortcutCombo->setCurrentIndex( config.value("direction_shortcut", 0).toInt() );
-    m_localDirectionShortcutCombo->setCurrentIndex( config.value("local_direction_shortcut", 0).toInt() );
-    m_tempoShortcutCombo->setCurrentIndex( config.value("tempo_shortcut", 0).toInt() );
-    m_localTempoShortcutCombo->setCurrentIndex( config.value("local_tempo_shortcut", 0).toInt() );
-    m_lilyPondDirectiveCombo->setCurrentIndex( config.value("lilyPond_directive_combo", 0).toInt() );
-
-    m_prevChord = config.value("previous_chord", "") ;
-    m_prevLyric = config.value("previous_lyric", "") ;
-    m_prevAnnotation = config.value("previous_annotation", "") ;
+    m_prevChord = settings.value("previous_chord", "").toString();
+    m_prevLyric = settings.value("previous_lyric", "").toString();
+    m_prevAnnotation = settings.value("previous_annotation", "").toString();
 
     QObject::connect(m_text, SIGNAL(textChanged(const QString &)),
                      this, SLOT(slotTextChanged(const QString &)));
@@ -372,6 +367,8 @@ TextEventDialog::TextEventDialog(QDialogButtonBox::QWidget *parent,
     metagrid->setRowStretch(0, 10);
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+
+    settings.endGroup();
 }
 
 Text
@@ -527,38 +524,35 @@ void
 TextEventDialog::slotOK()
 {
     // store last setting for shortcut combos
-    QSettings config;
-    config.beginGroup( NotationViewConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( NotationViewConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( NotationViewConfigGroup );
 
-
-    config.setValue("dynamic_shortcut", m_dynamicShortcutCombo->currentIndex());
-    config.setValue("direction_shortcut", m_directionShortcutCombo->currentIndex());
-    config.setValue("local_direction_shortcut", m_localDirectionShortcutCombo->currentIndex());
-    config.setValue("tempo_shortcut", m_tempoShortcutCombo->currentIndex());
-    config.setValue("local_tempo_shortcut", m_localTempoShortcutCombo->currentIndex());
+    settings.setValue("dynamic_shortcut", m_dynamicShortcutCombo->currentIndex());
+    settings.setValue("direction_shortcut", m_directionShortcutCombo->currentIndex());
+    settings.setValue("local_direction_shortcut", m_localDirectionShortcutCombo->currentIndex());
+    settings.setValue("tempo_shortcut", m_tempoShortcutCombo->currentIndex());
+    settings.setValue("local_tempo_shortcut", m_localTempoShortcutCombo->currentIndex());
     // temporary home:
-    config.setValue("lilyPond_directive_combo", m_lilyPondDirectiveCombo->currentIndex());
+    settings.setValue("lilyPond_directive_combo", m_lilyPondDirectiveCombo->currentIndex());
 
     // store  last chord, lyric, annotation, depending on what's currently in
     // the text entry widget
     int index = m_typeCombo->currentIndex();
     if (index == 5)
-        config.setValue("previous_chord", m_text->text());
+        settings.setValue("previous_chord", m_text->text());
     else if (index == 6)
-        config.setValue("previous_lyric", m_text->text());
+        settings.setValue("previous_lyric", m_text->text());
     else if (index == 7)
-        config.setValue("previous_annotation", m_text->text());
+        settings.setValue("previous_annotation", m_text->text());
+
+    settings.endGroup();
 }
 
 void
 TextEventDialog::slotDynamicShortcutChanged(const QString &text)
 {
     if (text == "" || text == "Sample") {
-        m_text->setText(strtoqstr(m_dynamicShortcutCombo->currentText()));
+        m_text->setText(m_dynamicShortcutCombo->currentText());
     } else {
         m_text->setText(text);
     }
@@ -568,7 +562,7 @@ void
 TextEventDialog::slotDirectionShortcutChanged(const QString &text)
 {
     if (text == "" || text == "Sample") {
-        m_text->setText(strtoqstr(m_directionShortcutCombo->currentText()));
+        m_text->setText(m_directionShortcutCombo->currentText());
     } else {
         m_text->setText(text);
     }
@@ -578,7 +572,7 @@ void
 TextEventDialog::slotLocalDirectionShortcutChanged(const QString &text)
 {
     if (text == "" || text == "Sample") {
-        m_text->setText(strtoqstr(m_localDirectionShortcutCombo->currentText()));
+        m_text->setText(m_localDirectionShortcutCombo->currentText());
     } else {
         m_text->setText(text);
     }
@@ -588,7 +582,7 @@ void
 TextEventDialog::slotTempoShortcutChanged(const QString &text)
 {
     if (text == "" || text == "Sample") {
-        m_text->setText(strtoqstr(m_tempoShortcutCombo->currentText()));
+        m_text->setText(m_tempoShortcutCombo->currentText());
     } else {
         m_text->setText(text);
     }
@@ -598,7 +592,7 @@ void
 TextEventDialog::slotLocalTempoShortcutChanged(const QString &text)
 {
     if (text == "" || text == "Sample") {
-        m_text->setText(strtoqstr(m_localTempoShortcutCombo->currentText()));
+        m_text->setText(m_localTempoShortcutCombo->currentText());
     } else {
         m_text->setText(text);
     }
@@ -607,7 +601,7 @@ TextEventDialog::slotLocalTempoShortcutChanged(const QString &text)
 void
 TextEventDialog::slotLilyPondDirectiveChanged(const QString &)
 {
-    m_text->setText(strtoqstr(m_lilyPondDirectiveCombo->currentText()));
+    m_text->setText(m_lilyPondDirectiveCombo->currentText());
 }
 
 }
