@@ -120,12 +120,13 @@ TransportDialog::TransportDialog(QWidget *parent,
 // Disable the loop button if JACK transport enabled, because this
 // causes a nasty race condition, and it just seems our loops are not JACK compatible
 // #1240039 - DMM
-//    QSettings config ; // was: rgapp->config()
-//    config->setGroup(SequencerOptionsConfigGroup);
-//    if ( qStrToBool( config.value("jacktransport", "false" ) ) )
+//    QSettings settings ; // was: rgapp->config()
+//    settings.beginGroup(SequencerOptionsConfigGroup);
+//    if ( qStrToBool( settings.value("jacktransport", "false" ) ) )
 //    {
 //        m_transport->LoopButton->setEnabled(false);
 //    }
+//      settings.endGroup();
 
     // fix and hold the size of the dialog
     //
@@ -264,15 +265,13 @@ TransportDialog::TransportDialog(QWidget *parent,
 TransportDialog::~TransportDialog()
 {
     if (isVisible()) {
-        QSettings config;
-        config.beginGroup( GeneralOptionsConfigGroup );
-        // 
-        // FIX-manually-(GW), add:
-        // config.endGroup();		// corresponding to: config.beginGroup( GeneralOptionsConfigGroup );
-        //  
+        QSettings settings;
+        settings.beginGroup( GeneralOptionsConfigGroup );
 
-        config.setValue("transportx", x());
-        config.setValue("transporty", y());
+        settings.setValue("transportx", x());
+        settings.setValue("transporty", y());
+
+        settings.endGroup();
     }
 }
 
@@ -308,15 +307,11 @@ TransportDialog::initModeMap()
 void
 TransportDialog::show()
 {
-    QSettings config;
-    config.beginGroup( GeneralOptionsConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( GeneralOptionsConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( GeneralOptionsConfigGroup );
 
-    int x = config.value("transportx", -1).toInt() ;
-    int y = config.value("transporty", -1).toInt() ;
+    int x = settings.value("transportx", -1).toInt() ;
+    int y = settings.value("transporty", -1).toInt() ;
     if (x >= 0 && y >= 0) {
         int dw = QApplication::desktop()->availableGeometry(QPoint(x, y)).width();
         int dh = QApplication::desktop()->availableGeometry(QPoint(x, y)).height();
@@ -329,21 +324,20 @@ TransportDialog::show()
     } else {
         QWidget::show();
     }
+
+    settings.endGroup();
 }
 
 void
 TransportDialog::hide()
 {
     if (isVisible()) {
-        QSettings config;
-        config.beginGroup( GeneralOptionsConfigGroup );
-        // 
-        // FIX-manually-(GW), add:
-        // config.endGroup();		// corresponding to: config.beginGroup( GeneralOptionsConfigGroup );
-        //  
+        QSettings settings;
+        settings.beginGroup( GeneralOptionsConfigGroup );
+        settings.setValue("transportx", x());
+        settings.setValue("transporty", y());
 
-        config.setValue("transportx", x());
-        config.setValue("transporty", y());
+        settings.endGroup();
     }
     QWidget::hide();
 }
@@ -1032,20 +1026,17 @@ void
 TransportDialog::slotLoopButtonClicked()
 {
     // disable if JACK transport has been set #1240039 - DMM
-    //    QSettings //    config;
-    //    config.beginGroup( SequencerOptionsConfigGroup );
+    //    QSettings settings;
+    //    settings.beginGroup( SequencerOptionsConfigGroup );
     // 
-    // FIX-manually-(GW), add:
-    // //    config.endGroup();		// corresponding to: //    config.beginGroup( SequencerOptionsConfigGroup );
-    //  
-
-    //    if ( qStrToBool( config.value("jacktransport", "false" ) ) )
+    //    if ( qStrToBool( settings.value("jacktransport", "false" ) ) )
     //    {
     //    //!!! - this will fail silently
     //    m_transport->LoopButton->setEnabled(false);
     //    m_transport->LoopButton->setOn(false);
     //        return;
     //    }
+    //    settings.endGroup();
 
     if (m_transport->LoopButton->isOn()) {
         emit setLoop();
