@@ -107,7 +107,7 @@ TrackHeader::TrackHeader(QWidget *parent, TrackId trackId, int height, int ypos)
                              trackPos + 1,
                              strtoqstr(track->getLabel())));
 
-    QString preset = track->getPresetLabel();
+    QString preset = strtoqstr(track->getPresetLabel());
     if (preset != QString(""))
         toolTipText += QString(i18n("\nNotate for: %1", preset));
 
