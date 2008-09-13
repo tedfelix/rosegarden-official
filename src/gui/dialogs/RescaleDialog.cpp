@@ -22,6 +22,7 @@
 #include "document/ConfigGroups.h"
 #include "base/Composition.h"
 #include "gui/widgets/TimeWidget.h"
+#include "misc/Strings.h"
 #include <QSettings>
 #include <QDialog>
 #include <QDialogButtonBox>
@@ -64,15 +65,13 @@ RescaleDialog::RescaleDialog(QDialogButtonBox::QWidget *parent,
         vbox->setLayout(vboxLayout);
         m_closeGap = new QCheckBox(i18n("Adjust times of following events accordingly"),
                                    optionBox);
-        QSettings config;
-        config.beginGroup( GeneralOptionsConfigGroup );
-        // 
-        // FIX-manually-(GW), add:
-        // config.endGroup();		// corresponding to: config.beginGroup( GeneralOptionsConfigGroup );
-        //  
+        QSettings settings;
+        settings.beginGroup( GeneralOptionsConfigGroup );
 
         m_closeGap->setChecked
-        ( qStrToBool( config.value("rescaledialogadjusttimes", "true" ) ) );
+        ( qStrToBool( settings.value("rescaledialogadjusttimes", "true" ) ) );
+
+        settings.endGroup();
     } else {
         m_closeGap = 0;
     }
@@ -97,14 +96,12 @@ bool
 RescaleDialog::shouldCloseGap()
 {
     if (m_closeGap) {
-        QSettings config;
-        config.beginGroup( GeneralOptionsConfigGroup );
-        // 
-        // FIX-manually-(GW), add:
-        // config.endGroup();		// corresponding to: config.beginGroup( GeneralOptionsConfigGroup );
-        //  
+        QSettings settings;
+        settings.beginGroup( GeneralOptionsConfigGroup );
 
-        config.setValue("rescaledialogadjusttimes", m_closeGap->isChecked());
+        settings.setValue("rescaledialogadjusttimes", m_closeGap->isChecked());
+        settings.endGroup();
+
         return m_closeGap->isChecked();
     } else {
         return true;
