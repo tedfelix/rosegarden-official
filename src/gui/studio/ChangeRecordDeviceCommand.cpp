@@ -27,38 +27,35 @@ namespace Rosegarden
 
 void
 ChangeRecordDeviceCommand::swap()
- {
+{
 
-        QSettings config;
-        config.beginGroup( Rosegarden::SequencerOptionsConfigGroup );
-        // 
-        // FIX-manually-(GW), add:
-        // config.endGroup();		// corresponding to: config.beginGroup( Rosegarden::SequencerOptionsConfigGroup );
-        //  
+    QSettings settings;
+    settings.beginGroup( Rosegarden::SequencerOptionsConfigGroup );
 
-        QStringList devList = config->readListEntry("midirecorddevice");
-        QString sdevice = QString::number(m_deviceId);
-        if (m_action) 
-        {
-            if(!devList.contains(sdevice))
-                devList.append(sdevice);
-        }
-        else
-        {
-            if(devList.contains(sdevice))
-                devList.remove(sdevice);
-        }
-        config.setValue("midirecorddevice", devList);
+    QStringList devList = settings.value("midirecorddevice").toStringList();
+    QString sdevice = QString::number(m_deviceId);
+    if (m_action) 
+    {
+        if(!devList.contains(sdevice))
+            devList.append(sdevice);
+    }
+    else
+    {
+        if(devList.contains(sdevice))
+            devList.remove(sdevice);
+    }
+    settings.setValue("midirecorddevice", devList);
 
-        // send the selected device to the sequencer
-        Rosegarden::MappedEvent mEdevice
-            (Rosegarden::MidiInstrumentBase, 
-             Rosegarden::MappedEvent::SystemRecordDevice,
-             Rosegarden::MidiByte(m_deviceId),
-             Rosegarden::MidiByte(m_action));
-        Rosegarden::StudioControl::sendMappedEvent(mEdevice);
+    // send the selected device to the sequencer
+    Rosegarden::MappedEvent mEdevice
+        (Rosegarden::MidiInstrumentBase, 
+         Rosegarden::MappedEvent::SystemRecordDevice,
+         Rosegarden::MidiByte(m_deviceId),
+         Rosegarden::MidiByte(m_action));
+    Rosegarden::StudioControl::sendMappedEvent(mEdevice);
 
-        m_action = !m_action;
+    m_action = !m_action;
+    settings.endGroup();
 }
 
 }
