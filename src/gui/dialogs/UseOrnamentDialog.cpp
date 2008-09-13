@@ -136,21 +136,14 @@ UseOrnamentDialog::UseOrnamentDialog(QDialogButtonBox::QWidget *parent,
 void
 UseOrnamentDialog::setupFromConfig()
 {
-    QSettings config;
-    config.beginGroup( NotationViewConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( NotationViewConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( NotationViewConfigGroup );
 
-
-    Mark mark = qstrtostr(config.value("useornamentmark", "trill") );
-    int seg = config.value("useornamentlastornament", 0).toInt() ;
-    std::string timing = qstrtostr
-                         (config->readEntry
-                          ("useornamenttiming",
-                           strtoqstr(BaseProperties::TRIGGER_SEGMENT_ADJUST_SQUISH)));
-    bool retune = qStrToBool( config.value("useornamentretune", "true" ) ) ;
+    Mark mark = qstrtostr(settings.value("useornamentmark", "trill").toString());
+    int seg = settings.value("useornamentlastornament", 0).toInt() ;
+    std::string timing = qstrtostr(settings.value("useornamenttiming",
+            strtoqstr(BaseProperties::TRIGGER_SEGMENT_ADJUST_SQUISH)).toString());
+    bool retune = qStrToBool( settings.value("useornamentretune", "true" ) ) ;
 
     size_t i = 0;
     for (i = 0; i < m_marks.size(); ++i) {
@@ -180,6 +173,8 @@ UseOrnamentDialog::setupFromConfig()
     }
 
     m_retune->setChecked(retune);
+
+    settings.endGroup();
 }
 
 TriggerSegmentId
@@ -248,20 +243,17 @@ UseOrnamentDialog::slotMarkChanged(int i)
 void
 UseOrnamentDialog::slotOk()
 {
-    QSettings config;
-    config.beginGroup( NotationViewConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( NotationViewConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( NotationViewConfigGroup );
 
-
-    config.setValue("useornamentmark", strtoqstr(getMark()));
-    config.setValue("useornamenttiming", strtoqstr(getTimeAdjust()));
-    config.setValue("useornamentretune", m_retune->isChecked());
-    config.setValue("useornamentlastornament", m_ornament->currentIndex());
+    settings.setValue("useornamentmark", strtoqstr(getMark()));
+    settings.setValue("useornamenttiming", strtoqstr(getTimeAdjust()));
+    settings.setValue("useornamentretune", m_retune->isChecked());
+    settings.setValue("useornamentlastornament", m_ornament->currentIndex());
 
     accept();
+
+    settings.endGroup();
 }
 
 }
