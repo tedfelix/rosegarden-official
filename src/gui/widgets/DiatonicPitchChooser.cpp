@@ -35,12 +35,13 @@
 namespace Rosegarden
 {
 
+//### QGroupBox rewrite required in this file to allow it to compile
 DiatonicPitchChooser::DiatonicPitchChooser(QString title,
                            QWidget *parent,
                            int defaultNote,
                            int defaultPitch,
                            int defaultOctave) :
-        QGroupBox(1, Horizontal, title, parent),
+        QGroupBox(1, Qt::Horizontal, title, parent),
         m_defaultPitch(defaultPitch)
 {
     m_pitchDragLabel = new PitchDragLabel(this, defaultPitch);
