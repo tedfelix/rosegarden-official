@@ -596,7 +596,17 @@ RosegardenGUIApp::~RosegardenGUIApp()
 
     delete m_jumpToQuickMarkerAction;
     delete m_setQuickMarkerAction;
-    
+	
+	// delete QAction pointers
+	delete m_playTransport;	//@@@ emru: should these be free'd, if GUIApp quits? Assumed so!
+	delete m_stopTransport;
+	delete m_rewindTransport;
+	delete m_ffwdTransport; 
+	delete m_recordTransport;
+	delete m_rewindEndTransport;
+	delete m_ffwdEndTransport;
+	delete m_panic;
+	
     delete m_transport;
 
     delete m_seqManager;
@@ -1268,7 +1278,7 @@ void RosegardenGUIApp::setupActions()
     pixmap.load(pixmapDir + "/toolbar/transport-rewind-end.png");
     icon = QIcon(pixmap);
     //@@@ JAS Check here first for errors and pointer deallocation
-    m_rewindEndTransport new QAction(i18n("Rewind to &Beginning"), dynamic_cast<QObject*>(this));
+    m_rewindEndTransport = new QAction(i18n("Rewind to &Beginning"), dynamic_cast<QObject*>(this));
     m_rewindEndTransport->setIcon(icon); 
     connect(m_rewindEndTransport, SIGNAL(triggered()), this, SLOT(slotRewindToBeginning()));
     m_rewindEndTransport->setActionGroup( TransportDialogConfigGroup );

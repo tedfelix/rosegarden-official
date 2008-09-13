@@ -1578,6 +1578,7 @@ private:
     KToggleAction* m_viewSegmentLabels;
     KToggleAction* m_enableMIDIrouting;
 
+	// QAction pointers, dealloc. in: RosegardenGUIApp::~RosegardenGUIApp()
     QAction *m_playTransport;
     QAction *m_stopTransport;
     QAction *m_rewindTransport;
@@ -1585,9 +1586,8 @@ private:
     QAction *m_recordTransport;
     QAction *m_rewindEndTransport;
     QAction *m_ffwdEndTransport;
-    QAction *m_ffwdEndTransport;
-    QAction *m_panic; //@@@ JAS Check to make certain pointer is deallocated
-
+	QAction *m_panic; 
+	
     SequencerThread *m_sequencerThread;
     bool m_sequencerCheckedIn;
 
