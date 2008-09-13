@@ -308,15 +308,10 @@ SequenceManager::play()
     if (comp.isLooping())
         startPos = comp.getElapsedRealTime(comp.getLoopStart());
 
-    QSettings config;
-    config.beginGroup( SequencerOptionsConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( SequencerOptionsConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( SequencerOptionsConfigGroup );
 
-
-    bool lowLat = qStrToBool( config.value("audiolowlatencymonitoring", "true" ) ) ;
+    bool lowLat = qStrToBool( settings.value("audiolowlatencymonitoring", "true" ) ) ;
 
     if (lowLat != m_lastLowLatencySwitchSent) {
         RosegardenSequencer::getInstance()->setLowLatencyMode(lowLat);
@@ -358,6 +353,7 @@ SequenceManager::play()
         m_transportStatus = STOPPED;
         std::cerr << "ERROR: SequenceManager::play(): Failed to start playback!" << std::endl;
     }
+    settings.endGroup();
 
     return false;
 }
@@ -548,13 +544,6 @@ SequenceManager::record(bool toggled)
 
     Composition &comp = m_doc->getComposition();
     Studio &studio = m_doc->getStudio();
-    QSettings config;
-    config.beginGroup( GeneralOptionsConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( GeneralOptionsConfigGroup );
-    //  
-
 
     bool punchIn = false; // are we punching in?
 
@@ -698,7 +687,7 @@ punchin:
         else {
             if (m_transportStatus != RECORDING_ARMED && punchIn == false) {
                 int startBar = comp.getBarNumber(comp.getPosition());
-                startBar -= config.value("countinbars", 0).toUInt() ;
+                startBar -= settings.value("countinbars", 0).toUInt() ;
                 m_doc->slotSetPointerPosition(comp.getBarRange(startBar).first);
             }
         }
@@ -752,7 +741,11 @@ punchin:
         RealTime startPos =
             comp.getElapsedRealTime(comp.getPosition());
 
-        bool lowLat = qStrToBool( config.value("audiolowlatencymonitoring", "true" ) ) ;
+        QSettings settings;
+        settings.beginGroup( GeneralOptionsConfigGroup );
+
+        bool lowLat = qStrToBool( settings.value("audiolowlatencymonitoring", "true" ) ) ;
+        settings.endGroup();
 
         if (lowLat != m_lastLowLatencySwitchSent) {
             RosegardenSequencer::getInstance()->setLowLatencyMode(lowLat);
@@ -943,15 +936,12 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                 //
                 m_doc->syncDevices();
 
-                /*QSettings config;
-                  		config.beginGroup( SequencerOptionsConfigGroup );
-                  		// 
-                  		// FIX-manually-(GW), add:
-                  		// config.endGroup();		// corresponding to: config.beginGroup( SequencerOptionsConfigGroup );
-                  		//  
+                /*QSettings settings;
+                settings.beginGroup( SequencerOptionsConfigGroup );
 
-                QString recordDeviceStr = config.value("midirecorddevice") ;
-                sendMIDIRecordingDevice(recordDeviceStr);*/
+                QString recordDeviceStr = settings.value("midirecorddevice").toString() ;
+                sendMIDIRecordingDevice(recordDeviceStr);
+                settings.endGroup();*/
                 restoreRecordSubscriptions();
             }
 
@@ -1205,18 +1195,16 @@ SequenceManager::setLoop(const timeT &lhs, const timeT &rhs)
     // do not set a loop if JACK transport sync is enabled, because this is
     // completely broken, and apparently broken due to a limitation of JACK
     // transport itself.  #1240039 - DMM
-    //    QSettings //    config;
-    //    config.beginGroup( SequencerOptionsConfigGroup );
+    //    QSettings settings;
+    //    settings.beginGroup( SequencerOptionsConfigGroup );
     // 
-    // FIX-manually-(GW), add:
-    // //    config.endGroup();		// corresponding to: //    config.beginGroup( SequencerOptionsConfigGroup );
-    //  
 
-    //    if ( qStrToBool( config.value("jacktransport", "false" ) ) )
+    //    if ( qStrToBool( settings.value("jacktransport", "false" ) ) )
     //    {
     //	//!!! message box should go here to inform user of why the loop was
     //	// not set, but I can't add it at the moment due to to the pre-release
     //	// freeze - DMM
+    //    settings.endGroup();
     //	return;
     //    }
 
@@ -1444,43 +1432,35 @@ SequenceManager::sendMIDIRecordingDevice(const QString recordDeviceStr)
 void
 SequenceManager::restoreRecordSubscriptions()
 {
-    QSettings config;
-    config.beginGroup( SequencerOptionsConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( SequencerOptionsConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( SequencerOptionsConfigGroup );
 
-    //QString recordDeviceStr = config.value("midirecorddevice") ;
-    QStringList devList = config.value("midirecorddevice").toStringList();
+    //QString recordDeviceStr = settings.value("midirecorddevice").toString();
+    QStringList devList = settings.value("midirecorddevice").toStringList();
 
     for ( QStringList::ConstIterator it = devList.begin();
             it != devList.end(); ++it) {
         sendMIDIRecordingDevice(*it);
     }
-
+    settings.endGroup();
 }
 
 void
 SequenceManager::reinitialiseSequencerStudio()
 {
-    QSettings config;
-    config.beginGroup( SequencerOptionsConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( SequencerOptionsConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( SequencerOptionsConfigGroup );
 
-    //QString recordDeviceStr = config.value("midirecorddevice") ;
+    //QString recordDeviceStr = settings.value("midirecorddevice").toString();
 
     //sendMIDIRecordingDevice(recordDeviceStr);
     restoreRecordSubscriptions();
 
     // Toggle JACK audio ports appropriately
     //
-    bool submasterOuts = qStrToBool( config.value("audiosubmasterouts", "false" ) ) ;
-    bool faderOuts = qStrToBool( config.value("audiofaderouts", "false" ) ) ;
-    unsigned int audioFileFormat = config.value("audiorecordfileformat", 1).toUInt() ;
+    bool submasterOuts = qStrToBool( settings.value("audiosubmasterouts", "false" ) ) ;
+    bool faderOuts = qStrToBool( settings.value("audiofaderouts", "false" ) ) ;
+    unsigned int audioFileFormat = settings.value("audiorecordfileformat", 1).toUInt() ;
 
     MidiByte ports = 0;
     if (faderOuts) {
@@ -1506,6 +1486,8 @@ SequenceManager::reinitialiseSequencerStudio()
     // Set the studio from the current document
     //
     m_doc->initialiseStudio();
+
+    settings.endGroup();
 }
 
 void
@@ -1945,24 +1927,19 @@ void SequenceManager::tempoChanged(const Composition *c)
 void
 SequenceManager::sendTransportControlStatuses()
 {
-    QSettings config;
-    config.beginGroup( SequencerOptionsConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( SequencerOptionsConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( SequencerOptionsConfigGroup );
 
-
-    // Get the config values
+    // Get the settings values
     //
-    bool jackTransport = qStrToBool( config.value("jacktransport", "false" ) ) ;
-    bool jackMaster = qStrToBool( config.value("jackmaster", "false" ) ) ;
+    bool jackTransport = qStrToBool( settings.value("jacktransport", "false" ) ) ;
+    bool jackMaster = qStrToBool( settings.value("jackmaster", "false" ) ) ;
 
-    int mmcMode = config.value("mmcmode", 0).toInt() ;
-    int mtcMode = config.value("mtcmode", 0).toInt() ;
+    int mmcMode = settings.value("mmcmode", 0).toInt() ;
+    int mtcMode = settings.value("mtcmode", 0).toInt() ;
 
-    int midiClock = config.value("midiclock", 0).toInt() ;
-    bool midiSyncAuto = qStrToBool( config.value("midisyncautoconnect", "false" ) ) ;
+    int midiClock = settings.value("midiclock", 0).toInt() ;
+    bool midiSyncAuto = qStrToBool( settings.value("midisyncautoconnect", "false" ) ) ;
 
     // Send JACK transport
     //
@@ -2017,6 +1994,7 @@ SequenceManager::sendTransportControlStatuses()
 
     StudioControl::sendMappedEvent(mEmidiSyncAuto);
 
+    settings.endGroup();
 }
 
 void
@@ -2056,14 +2034,12 @@ SequenceManager::getSampleRate()
 bool
 SequenceManager::shouldWarnForImpreciseTimer()
 {
-    QSettings confq4;
-    confq4.beginGroup( SequencerOptionsConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // confq4.endGroup();		// corresponding to: confq4.beginGroup( SequencerOptionsConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( SequencerOptionsConfigGroup );
 
-    QString timer = confq4.value("timer").toString();
+    QString timer = settings.value("timer").toString();
+    settings.endGroup();
+
     if (timer == "(auto)" || timer == "") return true;
     else return false; // if the user has chosen the timer, leave them alone
 }
