@@ -22,6 +22,7 @@
 #include <Q3CanvasRectangle>
 #include "MatrixSelector.h"
 
+#include "misc/Strings.h"
 #include "base/BaseProperties.h"
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -551,14 +552,14 @@ EventSelection* MatrixSelector::getSelection()
 
 void MatrixSelector::setContextHelpFor(QPoint p, bool ctrlPressed)
 {
-    QSettings confq4;
-    confq4.beginGroup( GeneralOptionsConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // confq4.endGroup();		// corresponding to: confq4.beginGroup( GeneralOptionsConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( GeneralOptionsConfigGroup );
 
-    if (! qStrToBool( confq4.value("toolcontexthelp", "true" ) ) ) return;
+    if (! qStrToBool( settings.value("toolcontexthelp", "true" ) ) ) {
+        settings.endGroup();
+        return;
+    }
+    settings.endGroup();
 
     p = m_mParentView->inverseMapPoint(p);
 
