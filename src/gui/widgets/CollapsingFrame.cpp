@@ -17,6 +17,7 @@
 
 
 #include "CollapsingFrame.h"
+#include "misc/Strings.h"
 #include <QApplication>
 #include <kstandarddirs.h>
 #include <QSettings>
@@ -96,23 +97,11 @@ CollapsingFrame::setWidget(QWidget *widget)
 
     bool expanded = true;
     if (name(0)) {
-        QSettings config ; // was: confq4
-        QString groupTemp = config->group();
-        QSettings config;
-        config.beginGroup( "CollapsingFrame" );
-        // 
-        // FIX-manually-(GW), add:
-        // config.endGroup();		// corresponding to: config.beginGroup( "CollapsingFrame" );
-        //  
+        QSettings settings;
+        settings.beginGroup( "CollapsingFrame" );
 
-        expanded = qStrToBool( config.value(name(, "" ) ) , true);
-        QSettings config;
-        config.beginGroup( groupTemp );
-        // 
-        // FIX-manually-(GW), add:
-        // config.endGroup();		// corresponding to: config.beginGroup( groupTemp );
-        //  
-
+        expanded = qStrToBool( settings.value(name(), true));
+        settings.endGroup();
     }
     if (expanded != !m_collapsed)
         toggle();
@@ -137,23 +126,11 @@ CollapsingFrame::toggle()
     }
 
     if (name(0)) {
-        QSettings config ; // was: confq4
-        QString groupTemp = config->group();
-        QSettings config;
-        config.beginGroup( "CollapsingFrame" );
-        // 
-        // FIX-manually-(GW), add:
-        // config.endGroup();		// corresponding to: config.beginGroup( "CollapsingFrame" );
-        //  
+        QSettings settings;
+        settings.beginGroup( "CollapsingFrame" );
 
-        config.setValue(name(), !m_collapsed);
-        QSettings config;
-        config.beginGroup( groupTemp );
-        // 
-        // FIX-manually-(GW), add:
-        // config.endGroup();		// corresponding to: config.beginGroup( groupTemp );
-        //  
-
+        settings.setValue(name(), !m_collapsed);
+        settings.endGroup();
     }
 
     m_toggleButton->setIconSet(pixmap);
