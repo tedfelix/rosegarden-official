@@ -223,7 +223,7 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
 
         defaultType = settings.value("quantizetype", (defaultQuantizer == Notation)
                 ? 2 : (defaultQuantizer == Legato) ? 1 : 0).toInt();
-        defaultUnit = settings.value("quantizeunit", (long long) defaultUnit).toInt();
+        defaultUnit = settings.value("quantizeunit", static_cast<unsigned long long>(defaultUnit)).toInt();
         defaultSwing = settings.value("quantizeswing", defaultSwing).toInt();
         defaultIterate = settings.value("quantizeiterate", defaultIterate).toInt();
         m_notationTarget->setChecked(qStrToBool(settings.value
@@ -413,7 +413,7 @@ QuantizeParameters::getQuantizer() const
         settings.beginGroup( m_configCategory );
 
         settings.setValue("quantizetype", type);
-        settings.setValue("quantizeunit", (long long) unit);
+        settings.setValue("quantizeunit", static_cast<unsigned long long>(unit));
         settings.setValue("quantizeswing", swing);
         settings.setValue("quantizeiterate", iterate);
         settings.setValue("quantizenotationonly",

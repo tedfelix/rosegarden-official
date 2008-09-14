@@ -2126,7 +2126,7 @@ MatrixView::slotSetSnap(timeT t)
     QSettings settings;
     settings.beginGroup( MatrixViewConfigGroup );
 
-    settings.setValue("Snap Grid Size", (long long) t);
+    settings.setValue("Snap Grid Size", static_cast<unsigned long long>(t));
     settings.endGroup();
 
     updateView();
