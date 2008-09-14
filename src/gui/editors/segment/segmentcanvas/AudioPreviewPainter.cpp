@@ -30,7 +30,6 @@
 #include <QImage>
 #include <QApplication>
 
-#include <kapp.h>
 #include <QSettings>
 
 namespace Rosegarden {
@@ -140,15 +139,10 @@ void AudioPreviewPainter::paintPreviewImage()
 	haveTempoChange = true;
     }
 
-    QSettings config;
-    config.beginGroup( GeneralOptionsConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( GeneralOptionsConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( GeneralOptionsConfigGroup );
 
-
-    bool meterLevels = (config.value("audiopreviewstyle", 1).toUInt() 
+    bool meterLevels = (settings.value("audiopreviewstyle", 1).toUInt() 
 			== 1);
 
     for (int i = 0; i < m_rect.getBaseWidth(); ++i) {
@@ -282,6 +276,8 @@ void AudioPreviewPainter::paintPreviewImage()
     m_p.end();
     m_pb.end();
 */
+
+    settings.endGroup();
 }
 
 void AudioPreviewPainter::finalizeCurrentSlice()
