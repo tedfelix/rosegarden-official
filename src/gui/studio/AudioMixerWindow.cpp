@@ -148,29 +148,54 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
 
     unsigned int mixerOptions = m_studio->getMixerDisplayOptions();
 
-    (new KToggleAction(i18n("Show Audio &Faders"), 0, this,
-                       SLOT(slotToggleFaders()), actionCollection(),
-                       "show_audio_faders"))->setChecked
+    (QAction* qa_show_audio_faders = new QAction( 0, i18n("Show Audio &Faders"), dynamic_cast<QObject*>(this) );
+	connect( qa_show_audio_faders, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleFaders()) );
+	qa_show_audio_faders->setObjectName( "show_audio_faders" );	//### FIX: deallocate QAction ptr
+	qa_show_audio_faders->setCheckable( true );	//
+	qa_show_audio_faders->setAutoRepeat( false );	//
+	//qa_show_audio_faders->setActionGroup( 0 );	// QActionGroup*
+	qa_show_audio_faders->setChecked( false );	//
+	// )->setChecked
     (!(mixerOptions & MIXER_OMIT_FADERS));
 
-    (new KToggleAction(i18n("Show Synth &Faders"), 0, this,
-                       SLOT(slotToggleSynthFaders()), actionCollection(),
-                       "show_synth_faders"))->setChecked
+    (QAction* qa_show_synth_faders = new QAction( 0, i18n("Show Synth &Faders"), dynamic_cast<QObject*>(this) );
+	connect( qa_show_synth_faders, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleSynthFaders()) );
+	qa_show_synth_faders->setObjectName( "show_synth_faders" );	//### FIX: deallocate QAction ptr
+	qa_show_synth_faders->setCheckable( true );	//
+	qa_show_synth_faders->setAutoRepeat( false );	//
+	//qa_show_synth_faders->setActionGroup( 0 );	// QActionGroup*
+	qa_show_synth_faders->setChecked( false );	//
+	// )->setChecked
     (!(mixerOptions & MIXER_OMIT_SYNTH_FADERS));
 
-    (new KToggleAction(i18n("Show &Submasters"), 0, this,
-                       SLOT(slotToggleSubmasters()), actionCollection(),
-                       "show_audio_submasters"))->setChecked
+    (QAction* qa_show_audio_submasters = new QAction( 0, i18n("Show &Submasters"), dynamic_cast<QObject*>(this) );
+	connect( qa_show_audio_submasters, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleSubmasters()) );
+	qa_show_audio_submasters->setObjectName( "show_audio_submasters" );	//### FIX: deallocate QAction ptr
+	qa_show_audio_submasters->setCheckable( true );	//
+	qa_show_audio_submasters->setAutoRepeat( false );	//
+	//qa_show_audio_submasters->setActionGroup( 0 );	// QActionGroup*
+	qa_show_audio_submasters->setChecked( false );	//
+	// )->setChecked
     (!(mixerOptions & MIXER_OMIT_SUBMASTERS));
 
-    (new KToggleAction(i18n("Show &Plugin Buttons"), 0, this,
-                       SLOT(slotTogglePluginButtons()), actionCollection(),
-                       "show_plugin_buttons"))->setChecked
+    (QAction* qa_show_plugin_buttons = new QAction( 0, i18n("Show &Plugin Buttons"), dynamic_cast<QObject*>(this) );
+	connect( qa_show_plugin_buttons, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotTogglePluginButtons()) );
+	qa_show_plugin_buttons->setObjectName( "show_plugin_buttons" );	//### FIX: deallocate QAction ptr
+	qa_show_plugin_buttons->setCheckable( true );	//
+	qa_show_plugin_buttons->setAutoRepeat( false );	//
+	//qa_show_plugin_buttons->setActionGroup( 0 );	// QActionGroup*
+	qa_show_plugin_buttons->setChecked( false );	//
+	// )->setChecked
     (!(mixerOptions & MIXER_OMIT_PLUGINS));
 
-    (new KToggleAction(i18n("Show &Unassigned Faders"), 0, this,
-                       SLOT(slotToggleUnassignedFaders()), actionCollection(),
-                       "show_unassigned_faders"))->setChecked
+    (QAction* qa_show_unassigned_faders = new QAction( 0, i18n("Show &Unassigned Faders"), dynamic_cast<QObject*>(this) );
+	connect( qa_show_unassigned_faders, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleUnassignedFaders()) );
+	qa_show_unassigned_faders->setObjectName( "show_unassigned_faders" );	//### FIX: deallocate QAction ptr
+	qa_show_unassigned_faders->setCheckable( true );	//
+	qa_show_unassigned_faders->setAutoRepeat( false );	//
+	//qa_show_unassigned_faders->setActionGroup( 0 );	// QActionGroup*
+	qa_show_unassigned_faders->setChecked( false );	//
+	// )->setChecked
     (mixerOptions & MIXER_SHOW_UNASSIGNED_FADERS);
 
     KRadioAction *action = 0;

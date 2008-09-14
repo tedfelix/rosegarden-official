@@ -75,9 +75,14 @@ NotationSelector::NotationSelector(NotationView* view)
     QIcon icon
     (NotePixmapFactory::toQPixmap(NotePixmapFactory::
                                   makeToolbarPixmap("crotchet")));
-    new KToggleAction(i18n("Switch to Insert Tool"), icon, 0, this,
-                      SLOT(slotInsertSelected()), actionCollection(),
-                      "insert");
+    QAction* qa_insert = new QAction( icon, i18n("Switch to Insert Tool"), dynamic_cast<QObject*>(0) );
+	connect( qa_insert, SIGNAL(toggled()), dynamic_cast<QObject*>(0), this );
+	qa_insert->setObjectName( "insert" );	//### FIX: deallocate QAction ptr
+	qa_insert->setCheckable( true );	//
+	qa_insert->setAutoRepeat( false );	//
+	//qa_insert->setActionGroup( 0 );	// QActionGroup*
+	qa_insert->setChecked( false );	//
+	// ;
 
     QAction *qa_erase = new QAction( "Switch to Erase Tool", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_erase->setIconText("eraser"); 

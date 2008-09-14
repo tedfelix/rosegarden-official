@@ -674,16 +674,26 @@ void MatrixView::setupActions()
     toolAction->setExclusiveGroup("tools");
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("chord")));
-    (new KToggleAction(i18n("C&hord Insert Mode"), icon, Qt::Key_H,
-                       this, SLOT(slotUpdateInsertModeStatus()),
-                       actionCollection(), "chord_mode"))->
+    (QAction* qa_chord_mode = new QAction( icon, i18n("C&hord Insert Mode"), dynamic_cast<QObject*>(Qt::Key_H) );
+	connect( qa_chord_mode, SIGNAL(toggled()), dynamic_cast<QObject*>(Qt::Key_H), this, SLOT(slotUpdateInsertModeStatus()) );
+	qa_chord_mode->setObjectName( "chord_mode" );	//### FIX: deallocate QAction ptr
+	qa_chord_mode->setCheckable( true );	//
+	qa_chord_mode->setAutoRepeat( false );	//
+	//qa_chord_mode->setActionGroup( 0 );	// QActionGroup*
+	qa_chord_mode->setChecked( false );	//
+	// )->
     setChecked(false);
 
     pixmap.load(pixmapDir + "/toolbar/step_by_step.xpm");
     icon = QIcon(pixmap);
-    new KToggleAction(i18n("Ste&p Recording"), icon, 0, this,
-                      SLOT(slotToggleStepByStep()), actionCollection(),
-                      "toggle_step_by_step");
+    QAction* qa_toggle_step_by_step = new QAction( icon, i18n("Ste&p Recording"), dynamic_cast<QObject*>(0) );
+	connect( qa_toggle_step_by_step, SIGNAL(toggled()), dynamic_cast<QObject*>(0), this );
+	qa_toggle_step_by_step->setObjectName( "toggle_step_by_step" );	//### FIX: deallocate QAction ptr
+	qa_toggle_step_by_step->setCheckable( true );	//
+	qa_toggle_step_by_step->setAutoRepeat( false );	//
+	//qa_toggle_step_by_step->setActionGroup( 0 );	// QActionGroup*
+	qa_toggle_step_by_step->setChecked( false );	//
+	// ;
 
     pixmap.load(pixmapDir + "/toolbar/quantize.png");
     icon = QIcon(pixmap);
@@ -833,15 +843,25 @@ void MatrixView::setupActions()
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-solo")));
-    new KToggleAction(i18n("&Solo"), icon, 0, this,
-                      SLOT(slotToggleSolo()), actionCollection(),
-                      "toggle_solo");
+    QAction* qa_toggle_solo = new QAction( icon, i18n("&Solo"), dynamic_cast<QObject*>(0) );
+	connect( qa_toggle_solo, SIGNAL(toggled()), dynamic_cast<QObject*>(0), this );
+	qa_toggle_solo->setObjectName( "toggle_solo" );	//### FIX: deallocate QAction ptr
+	qa_toggle_solo->setCheckable( true );	//
+	qa_toggle_solo->setAutoRepeat( false );	//
+	//qa_toggle_solo->setActionGroup( 0 );	// QActionGroup*
+	qa_toggle_solo->setChecked( false );	//
+	// ;
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-tracking")));
-    (new KToggleAction(i18n("Scro&ll to Follow Playback"), icon, Qt::Key_Pause, this,
-                       SLOT(slotToggleTracking()), actionCollection(),
-                       "toggle_tracking"))->setChecked(m_playTracking);
+    (QAction* qa_toggle_tracking = new QAction( icon, i18n("Scro&ll to Follow Playback"), dynamic_cast<QObject*>(Qt::Key_Pause) );
+	connect( qa_toggle_tracking, SIGNAL(toggled()), dynamic_cast<QObject*>(Qt::Key_Pause), this );
+	qa_toggle_tracking->setObjectName( "toggle_tracking" );	//### FIX: deallocate QAction ptr
+	qa_toggle_tracking->setCheckable( true );	//
+	qa_toggle_tracking->setAutoRepeat( false );	//
+	//qa_toggle_tracking->setActionGroup( 0 );	// QActionGroup*
+	qa_toggle_tracking->setChecked( false );	//
+	// )->setChecked(m_playTracking);
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-panic")));
@@ -932,13 +952,23 @@ void MatrixView::setupActions()
                 actionCollection(),
                 "show_inst_parameters");
 
-    new KToggleAction(i18n("Show Ch&ord Name Ruler"), 0, this,
-                      SLOT(slotToggleChordsRuler()),
-                      actionCollection(), "show_chords_ruler");
+    QAction* qa_show_chords_ruler = new QAction( 0, i18n("Show Ch&ord Name Ruler"), dynamic_cast<QObject*>(this) );
+	connect( qa_show_chords_ruler, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleChordsRuler()) );
+	qa_show_chords_ruler->setObjectName( "show_chords_ruler" );	//### FIX: deallocate QAction ptr
+	qa_show_chords_ruler->setCheckable( true );	//
+	qa_show_chords_ruler->setAutoRepeat( false );	//
+	//qa_show_chords_ruler->setActionGroup( 0 );	// QActionGroup*
+	qa_show_chords_ruler->setChecked( false );	//
+	// ;
 
-    new KToggleAction(i18n("Show &Tempo Ruler"), 0, this,
-                      SLOT(slotToggleTempoRuler()),
-                      actionCollection(), "show_tempo_ruler");
+    QAction* qa_show_tempo_ruler = new QAction( 0, i18n("Show &Tempo Ruler"), dynamic_cast<QObject*>(this) );
+	connect( qa_show_tempo_ruler, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleTempoRuler()) );
+	qa_show_tempo_ruler->setObjectName( "show_tempo_ruler" );	//### FIX: deallocate QAction ptr
+	qa_show_tempo_ruler->setCheckable( true );	//
+	qa_show_tempo_ruler->setAutoRepeat( false );	//
+	//qa_show_tempo_ruler->setActionGroup( 0 );	// QActionGroup*
+	qa_show_tempo_ruler->setChecked( false );	//
+	// ;
 
     createGUI(getRCFileName(), false);
 

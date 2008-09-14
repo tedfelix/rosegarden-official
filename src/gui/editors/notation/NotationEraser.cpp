@@ -46,9 +46,14 @@ NotationEraser::NotationEraser(NotationView* view)
 
     m_collapseRest = qStrToBool( settings.value("collapse", "false" ) ) ;
 
-    new KToggleAction(i18n("Collapse rests after erase"), 0, this,
-                      SLOT(slotToggleRestCollapse()), actionCollection(),
-                      "toggle_rest_collapse");
+    QAction* qa_toggle_rest_collapse = new QAction( 0, i18n("Collapse rests after erase"), dynamic_cast<QObject*>(this) );
+	connect( qa_toggle_rest_collapse, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleRestCollapse()) );
+	qa_toggle_rest_collapse->setObjectName( "toggle_rest_collapse" );	//### FIX: deallocate QAction ptr
+	qa_toggle_rest_collapse->setCheckable( true );	//
+	qa_toggle_rest_collapse->setAutoRepeat( false );	//
+	//qa_toggle_rest_collapse->setActionGroup( 0 );	// QActionGroup*
+	qa_toggle_rest_collapse->setChecked( false );	//
+	// ;
 
     QIcon icon
     (NotePixmapFactory::toQPixmap(NotePixmapFactory::

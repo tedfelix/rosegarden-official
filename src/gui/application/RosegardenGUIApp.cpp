@@ -1374,9 +1374,14 @@ void RosegardenGUIApp::setupActions()
 
     pixmap.load(pixmapDir + "/toolbar/transport-tracking.png");
     icon = QIcon(pixmap);
-    (new KToggleAction(i18n("Scro&ll to Follow Playback"), icon, Qt::Key_Pause, this,
-                       SLOT(slotToggleTracking()), actionCollection(),
-                       "toggle_tracking"))->setChecked(true);
+    (QAction* qa_toggle_tracking = new QAction( icon, i18n("Scro&ll to Follow Playback"), dynamic_cast<QObject*>(Qt::Key_Pause) );
+	connect( qa_toggle_tracking, SIGNAL(toggled()), dynamic_cast<QObject*>(Qt::Key_Pause), this );
+	qa_toggle_tracking->setObjectName( "toggle_tracking" );	//### FIX: deallocate QAction ptr
+	qa_toggle_tracking->setCheckable( true );	//
+	qa_toggle_tracking->setAutoRepeat( false );	//
+	//qa_toggle_tracking->setActionGroup( 0 );	// QActionGroup*
+	qa_toggle_tracking->setChecked( false );	//
+	// )->setChecked(true);
 
     pixmap.load(pixmapDir + "/toolbar/transport-panic.png");
     icon = QIcon(pixmap);

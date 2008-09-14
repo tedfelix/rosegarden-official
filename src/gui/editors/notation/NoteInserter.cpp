@@ -108,9 +108,14 @@ NoteInserter::NoteInserter(NotationView* view)
     icon = QIcon
            (NotePixmapFactory::toQPixmap(NotePixmapFactory::
                                          makeToolbarPixmap("dotted-crotchet")));
-    new KToggleAction(i18n("Dotted note"), icon, 0, this,
-                      SLOT(slotToggleDot()), actionCollection(),
-                      "toggle_dot");
+    QAction* qa_toggle_dot = new QAction( icon, i18n("Dotted note"), dynamic_cast<QObject*>(0) );
+	connect( qa_toggle_dot, SIGNAL(toggled()), dynamic_cast<QObject*>(0), this );
+	qa_toggle_dot->setObjectName( "toggle_dot" );	//### FIX: deallocate QAction ptr
+	qa_toggle_dot->setCheckable( true );	//
+	qa_toggle_dot->setAutoRepeat( false );	//
+	//qa_toggle_dot->setActionGroup( 0 );	// QActionGroup*
+	qa_toggle_dot->setChecked( false );	//
+	// ;
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::
                     makeToolbarPixmap("select")));
