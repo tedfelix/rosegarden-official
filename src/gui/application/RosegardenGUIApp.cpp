@@ -535,7 +535,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 
     // Now autoload
     //
-    stateChanged("new_file");
+    stateChanged("new_file", 0);
     stateChanged("have_segments", KXMLGUIClient::StateReverse);
     stateChanged("have_selection", KXMLGUIClient::StateReverse);
     slotTestClipboard();
@@ -726,19 +726,21 @@ void RosegardenGUIApp::setupActions()
     // slots later on, when the current document is set up - see
     // MultiViewCommandHistory::attachView
     //
-    new KToolBarPopupAction(i18n("Und&o"),
-                            "undo",
-                            KStandardShortcut::shortcut(KStandardShortcut::Undo),
-                            actionCollection(),
-                            KStandardAction::stdName(KStandardAction::Undo));
+	QString tmp_name;
+	//
+    QAction* qa_undo = new QAction( i18n("Und&o"), dynamic_cast<QObject*>(this) );
+	//### FIX: deallocate QAction ptr
+	qa_undo->setShortcut( QKeySequence::Undo );
+	qa_undo->setObjectName("undo");
+	//tmp_name = QKeySequence( QKeySequence::Undo ).toString( QKeySequence::NativeText, )
 
-    new KToolBarPopupAction(i18n("Re&do"),
-                            "redo",
-                            KStandardShortcut::shortcut(KStandardShortcut::Redo),
-                            actionCollection(),
-                            KStandardAction::stdName(KStandardAction::Redo));
+	QAction* qa_redo = new QAction( i18n("Re&do"), dynamic_cast<QObject*>(this) );
+	//### FIX: deallocate QAction ptr
+	qa_redo->setShortcut( QKeySequence::Redo );
+	qa_redo->setObjectName("redo");
+	
     /////
-
+	
 
 
     // setup Settings menu
@@ -746,47 +748,40 @@ void RosegardenGUIApp::setupActions()
     m_viewToolBar = KStandardAction::showToolbar (this, SLOT(slotToggleToolBar()), actionCollection(),
                     "show_stock_toolbar");
 
-    m_viewToolsToolBar = new QAction( 0, i18n("Show T&ools Toolbar"), dynamic_cast<QObject*>(this) );
+    m_viewToolsToolBar = new QAction( i18n("Show T&ools Toolbar"), dynamic_cast<QObject*>(this) );
 ;
 
     	connect( m_viewToolsToolBar, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleToolsToolBar()) ); ;
-
-    
-;
-
     	m_viewToolsToolBar->setObjectName("show_tools_toolbar");
-;
-
     	m_viewToolsToolBar->setCheckable( true );	//
-;
-
     	m_viewToolsToolBar->setAutoRepeat( false );	//
-;
-
     	//m_viewToolsToolBar->setActionGroup( 0 );	// QActionGroup*
-
-    m_viewTracksToolBar = new QAction( 0, i18n("Show Trac&ks Toolbar"), dynamic_cast<QObject*>(this) );
+	
+	
+	//QIcon null_icon;
+	
+	m_viewTracksToolBar = new QAction(  i18n("Show Trac&ks Toolbar"), dynamic_cast<QObject*>(this) );
     	connect( m_viewTracksToolBar, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleTracksToolBar()) );     
     	m_viewTracksToolBar->setObjectName("show_tracks_toolbar");
     	m_viewTracksToolBar->setCheckable( true );	//
     	m_viewTracksToolBar->setAutoRepeat( false );	//
     	//m_viewTracksToolBar->setActionGroup( 0 );	// QActionGroup*
 
-    m_viewEditorsToolBar = new QAction( 0, i18n("Show &Editors Toolbar"), dynamic_cast<QObject*>(this) );
+		m_viewEditorsToolBar = new QAction(  i18n("Show &Editors Toolbar"), dynamic_cast<QObject*>(this) );
     	connect( m_viewEditorsToolBar, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleEditorsToolBar()) );     
     	m_viewEditorsToolBar->setObjectName("show_editors_toolbar");
     	m_viewEditorsToolBar->setCheckable( true );	//
     	m_viewEditorsToolBar->setAutoRepeat( false );	//
     	//m_viewEditorsToolBar->setActionGroup( 0 );	// QActionGroup*
 
-    m_viewTransportToolBar = new QAction( 0, i18n("Show Trans&port Toolbar"), dynamic_cast<QObject*>(this) );
+		m_viewTransportToolBar = new QAction(  i18n("Show Trans&port Toolbar"), dynamic_cast<QObject*>(this) );
     	connect( m_viewTransportToolBar, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleTransportToolBar()) );     
     	m_viewTransportToolBar->setObjectName("show_transport_toolbar");
     	m_viewTransportToolBar->setCheckable( true );	//
     	m_viewTransportToolBar->setAutoRepeat( false );	//
     	//m_viewTransportToolBar->setActionGroup( 0 );	// QActionGroup*
 
-    m_viewZoomToolBar = new QAction( 0, i18n("Show &Zoom Toolbar"), dynamic_cast<QObject*>(this) );
+		m_viewZoomToolBar = new QAction(  i18n("Show &Zoom Toolbar"), dynamic_cast<QObject*>(this) );
     	connect( m_viewZoomToolBar, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleZoomToolBar()) );     
     	m_viewZoomToolBar->setObjectName("show_zoom_toolbar");
     	m_viewZoomToolBar->setCheckable( true );	//
@@ -796,47 +791,36 @@ void RosegardenGUIApp::setupActions()
     m_viewStatusBar = KStandardAction::showStatusbar(this, SLOT(slotToggleStatusBar()),
                       actionCollection(), "show_status_bar");
 
-    m_viewTransport = new QAction( Qt::Key_T, i18n("Show Tra&nsport"), dynamic_cast<QObject*>(this) );
-;
-
-    	connect( m_viewTransport, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleTransport()) ); ;
-
-    
-;
-
+    m_viewTransport = new QAction( i18n("Show Tra&nsport"), dynamic_cast<QObject*>(this) );
+    	connect( m_viewTransport, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleTransport()) );
+		m_viewTransport->setShortcut( Qt::Key_T );
     	m_viewTransport->setObjectName("show_transport");
-;
-
     	m_viewTransport->setCheckable( true );	//
-;
-
     	m_viewTransport->setAutoRepeat( false );	//
-;
-
     	//m_viewTransport->setActionGroup( 0 );	// QActionGroup*
 
-    m_viewTrackLabels = new QAction( 0, i18n("Show Track &Labels"), dynamic_cast<QObject*>(this) );
+    m_viewTrackLabels = new QAction(  i18n("Show Track &Labels"), dynamic_cast<QObject*>(this) );
     	connect( m_viewTrackLabels, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleTrackLabels()) );     
     	m_viewTrackLabels->setObjectName("show_tracklabels");
     	m_viewTrackLabels->setCheckable( true );	//
     	m_viewTrackLabels->setAutoRepeat( false );	//
     	//m_viewTrackLabels->setActionGroup( 0 );	// QActionGroup*
 
-    m_viewRulers = new QAction( 0, i18n("Show Playback Position R&uler"), dynamic_cast<QObject*>(this) );
+    m_viewRulers = new QAction(  i18n("Show Playback Position R&uler"), dynamic_cast<QObject*>(this) );
     	connect( m_viewRulers, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleRulers()) );     
     	m_viewRulers->setObjectName("show_rulers");
     	m_viewRulers->setCheckable( true );	//
     	m_viewRulers->setAutoRepeat( false );	//
     	//m_viewRulers->setActionGroup( 0 );	// QActionGroup*
 
-    m_viewTempoRuler = new QAction( 0, i18n("Show Te&mpo Ruler"), dynamic_cast<QObject*>(this) );
+    m_viewTempoRuler = new QAction(  i18n("Show Te&mpo Ruler"), dynamic_cast<QObject*>(this) );
     	connect( m_viewTempoRuler, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleTempoRuler()) );     
     	m_viewTempoRuler->setObjectName("show_tempo_ruler");
     	m_viewTempoRuler->setCheckable( true );	//
     	m_viewTempoRuler->setAutoRepeat( false );	//
     	//m_viewTempoRuler->setActionGroup( 0 );	// QActionGroup*
 
-    m_viewChordNameRuler = new QAction( 0, i18n("Show Cho&rd Name Ruler"), dynamic_cast<QObject*>(this) );
+    m_viewChordNameRuler = new QAction(  i18n("Show Cho&rd Name Ruler"), dynamic_cast<QObject*>(this) );
     	connect( m_viewChordNameRuler, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleChordNameRuler()) );     
     	m_viewChordNameRuler->setObjectName("show_chord_name_ruler");
     	m_viewChordNameRuler->setCheckable( true );	//
@@ -844,17 +828,20 @@ void RosegardenGUIApp::setupActions()
     	//m_viewChordNameRuler->setActionGroup( 0 );	// QActionGroup*
 
 
-    m_viewPreviews = new QAction( 0, i18n("Show Segment Pre&views"), dynamic_cast<QObject*>(this) );
-    	connect( m_viewPreviews, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotTogglePreviews()) );     
+    m_viewPreviews = new QAction(  i18n("Show Segment Pre&views"), dynamic_cast<QObject*>(this) );
+    	connect( m_viewPreviews, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotTogglePreviews()) );
     	m_viewPreviews->setObjectName("show_previews");
     	m_viewPreviews->setCheckable( true );	//
     	m_viewPreviews->setAutoRepeat( false );	//
     	//m_viewPreviews->setActionGroup( 0 );	// QActionGroup*
 
-    new KAction(i18n("Show Special &Parameters"), Qt::Key_P, this,
-                SLOT(slotDockParametersBack()),
-                actionCollection(),
-                "show_inst_segment_parameters");
+		QAction* qa_show_inst_segment_parameters = new QAction(  i18n("Show Special &Parameters"), dynamic_cast<QObject*>(this) );
+		qa_show_inst_segment_parameters->setShortcut( Qt::Key_P );
+		connect( qa_show_inst_segment_parameters, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotDockParametersBack()) );
+		qa_show_inst_segment_parameters->setObjectName("show_inst_segment_parameters");
+		qa_show_inst_segment_parameters->setCheckable( true );	//
+		qa_show_inst_segment_parameters->setAutoRepeat( false );	//
+    	//qa_show_inst_segment_parameters->setActionGroup( 0 );	// QActionGroup*
 
     KStandardAction::tipOfDay( this, SLOT( slotShowTip() ), actionCollection() );
 
@@ -1108,7 +1095,7 @@ void RosegardenGUIApp::setupActions()
 			qa_audio_manager->setIcon(icon); 
 			connect( qa_audio_manager, SIGNAL(triggered()), this, SLOT(slotAudioManager())  );
 
-    m_viewSegmentLabels = new QAction( 0, i18n("Show Segment Labels"), dynamic_cast<QObject*>(this) );
+    m_viewSegmentLabels = new QAction(  i18n("Show Segment Labels"), dynamic_cast<QObject*>(this) );
 ;
 
     	connect( m_viewSegmentLabels, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleSegmentLabels()) ); ;
@@ -1225,7 +1212,7 @@ void RosegardenGUIApp::setupActions()
 			qa_modify_midi_filters->setIconText("filter"); 
 			connect( qa_modify_midi_filters, SIGNAL(triggered()), this, SLOT(slotModifyMIDIFilters())  );
 
-    m_enableMIDIrouting = new QAction( 0, i18n("MIDI Thru Routing"), dynamic_cast<QObject*>(this) );
+    m_enableMIDIrouting = new QAction(  i18n("MIDI Thru Routing"), dynamic_cast<QObject*>(this) );
 ;
 
     	connect( m_enableMIDIrouting, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotEnableMIDIThruRouting()) ); ;
@@ -1303,6 +1290,9 @@ void RosegardenGUIApp::setupActions()
     // use 1 (End) and 3 (Page Down) for Rwd and Ffwd and
     // 0 (insert) and keypad Enter for Play and Stop
     //
+	QActionGroup* qag_TransportDialogConfigGroup = new QActionGroup( dynamic_cast<QObject*>(this) );
+	//### FIX: deallocate QActionGroup
+	//
     pixmap.load(pixmapDir + "/toolbar/transport-play.png");
     icon = QIcon(pixmap);
     //@@@ JAS Check here first for errors and pointer deallocation
@@ -1311,10 +1301,13 @@ void RosegardenGUIApp::setupActions()
     connect(m_playTransport, SIGNAL(triggered()), this, SLOT(slotPlay()));
 
     // Alternative shortcut for Play
-    KShortcut playShortcut = m_playTransport->shortcut();
-    playShortcut.append( KKey(Key_Return + Qt::CTRL) );
+	//### use pointer instead ?:
+	//QShortcut playShortcut = QShortcut( m_playTransport->shortcut(), dynamic_cast<QWidgett*>(this) );
+	QKeySequence playShortcut = m_playTransport->shortcut();
+	
+	playShortcut.append( KKey(Key_Return + Qt::CTRL) );
     m_playTransport->setShortcut(playShortcut);
-    m_playTransport->setActionGroup( TransportDialogConfigGroup );
+	m_playTransport->setActionGroup( qag_TransportDialogConfigGroup );
 
     pixmap.load(pixmapDir + "/toolbar/transport-stop.png");
     icon = QIcon(pixmap);
@@ -1322,7 +1315,7 @@ void RosegardenGUIApp::setupActions()
     m_stopTransport = new QAction(i18n("&Stop"), dynamic_cast<QObject*>(this));
     m_stopTransport->setIcon(icon); 
     connect(m_stopTransport, SIGNAL(triggered()), this, SLOT(slotStop()));
-    m_stopTransport->setActionGroup( TransportDialogConfigGroup );
+	m_stopTransport->setActionGroup( qag_TransportDialogConfigGroup );
 
     pixmap.load(pixmapDir + "/toolbar/transport-ffwd.png");
     icon = QIcon(pixmap);
@@ -1330,7 +1323,7 @@ void RosegardenGUIApp::setupActions()
     m_ffwdTransport = new QAction(i18n("&Fast Forward"), dynamic_cast<QObject*>(this));
     m_ffwdTransport->setIcon(icon); 
     connect(m_ffwdTransport, SIGNAL(triggered()), this, SLOT(slotFastforward()));
-    m_ffwdTransport->setActionGroup( TransportDialogConfigGroup );
+	m_ffwdTransport->setActionGroup( qag_TransportDialogConfigGroup );
 
     pixmap.load(pixmapDir + "/toolbar/transport-rewind.png");
     icon = QIcon(pixmap);
@@ -1338,7 +1331,7 @@ void RosegardenGUIApp::setupActions()
     m_rewindTransport = new QAction(i18n("Re&wind"), dynamic_cast<QObject*>(this));
     m_rewindTransport->setIcon(icon); 
     connect(m_rewindTransport, SIGNAL(triggered()), this, SLOT(slotRewind()));
-    m_rewindTransport->setActionGroup( TransportDialogConfigGroup );
+	m_rewindTransport->setActionGroup( qag_TransportDialogConfigGroup );
 
     pixmap.load(pixmapDir + "/toolbar/transport-record.png");
     icon = QIcon(pixmap);
@@ -1346,7 +1339,7 @@ void RosegardenGUIApp::setupActions()
     m_recordTransport = new QAction(i18n("P&unch in Record"), dynamic_cast<QObject*>(this) );
     m_recordTransport->setIcon(icon); 
     connect( m_recordTransport, SIGNAL(triggered()), this, SLOT(slotToggleRecord()));
-    m_recordTransport->setActionGroup( TransportDialogConfigGroup );
+	m_recordTransport->setActionGroup( qag_TransportDialogConfigGroup );
 
     pixmap.load(pixmapDir + "/toolbar/transport-record.png");
     icon = QIcon(pixmap);
@@ -1354,7 +1347,7 @@ void RosegardenGUIApp::setupActions()
     m_recordTransport = new QAction(i18n("&Record"), dynamic_cast<QObject*>(this) );
     m_recordTransport->setIcon(icon); 
     connect(m_recordTransport, SIGNAL(triggered()), this, SLOT(slotRecord()));
-    m_recordTransport->setActionGroup( TransportDialogConfigGroup );
+	m_recordTransport->setActionGroup( qag_TransportDialogConfigGroup );
 
     pixmap.load(pixmapDir + "/toolbar/transport-rewind-end.png");
     icon = QIcon(pixmap);
@@ -1362,7 +1355,7 @@ void RosegardenGUIApp::setupActions()
     m_rewindEndTransport = new QAction(i18n("Rewind to &Beginning"), dynamic_cast<QObject*>(this));
     m_rewindEndTransport->setIcon(icon); 
     connect(m_rewindEndTransport, SIGNAL(triggered()), this, SLOT(slotRewindToBeginning()));
-    m_rewindEndTransport->setActionGroup( TransportDialogConfigGroup );
+	m_rewindEndTransport->setActionGroup( qag_TransportDialogConfigGroup );
 
     pixmap.load(pixmapDir + "/toolbar/transport-ffwd-end.png");
     icon = QIcon(pixmap);
@@ -1370,18 +1363,17 @@ void RosegardenGUIApp::setupActions()
     m_ffwdEndTransport = new QAction(i18n("Fast Forward to &End"), dynamic_cast<QObject*>(this));
     m_ffwdEndTransport->setIcon(icon); 
     connect(m_ffwdEndTransport, SIGNAL(triggered()), this, SLOT(slotFastForwardToEnd()));
-    m_ffwdEndTransport->setActionGroup( TransportDialogConfigGroup );
+	m_ffwdEndTransport->setActionGroup( qag_TransportDialogConfigGroup );
 
     pixmap.load(pixmapDir + "/toolbar/transport-tracking.png");
     icon = QIcon(pixmap);
-    (QAction* qa_toggle_tracking = new QAction( icon, i18n("Scro&ll to Follow Playback"), dynamic_cast<QObject*>(Qt::Key_Pause) );
+    QAction* qa_toggle_tracking = new QAction( icon, i18n("Scro&ll to Follow Playback"), dynamic_cast<QObject*>(Qt::Key_Pause) );
 	connect( qa_toggle_tracking, SIGNAL(toggled()), dynamic_cast<QObject*>(Qt::Key_Pause), this );
 	qa_toggle_tracking->setObjectName( "toggle_tracking" );	//### FIX: deallocate QAction ptr
 	qa_toggle_tracking->setCheckable( true );	//
 	qa_toggle_tracking->setAutoRepeat( false );	//
 	//qa_toggle_tracking->setActionGroup( 0 );	// QActionGroup*
-	qa_toggle_tracking->setChecked( false );	//
-	// )->setChecked(true);
+	qa_toggle_tracking->setChecked( true );	//
 
     pixmap.load(pixmapDir + "/toolbar/transport-panic.png");
     icon = QIcon(pixmap);
