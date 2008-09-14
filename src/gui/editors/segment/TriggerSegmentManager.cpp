@@ -174,7 +174,8 @@ TriggerSegmentManager::~TriggerSegmentManager()
 {
     RG_DEBUG << "TriggerSegmentManager::~TriggerSegmentManager" << endl;
 
-    m_listView->saveLayout(confq4, TriggerManagerConfigGroup);
+    QSettings settings; //###JAS remove if savelayout changed or not needed.
+    m_listView->saveLayout(settings, TriggerManagerConfigGroup);
 
     if (m_doc)
         m_doc->getCommandHistory()->detachView(actionCollection());
@@ -203,19 +204,11 @@ TriggerSegmentManager::slotUpdate()
 
     Composition::triggersegmentcontainerconstiterator it;
 
-    QSettings confq4;
+    QSettings settings;
 
-    confq4.beginGroup( TriggerManagerConfigGroup );
+    settings.beginGroup( TriggerManagerConfigGroup );
 
-    // 
-
-    // FIX-manually-(GW), add:
-
-    // confq4.endGroup();		// corresponding to: confq4.beginGroup( TriggerManagerConfigGroup );
-
-    //  
-
-    int timeMode = confq4.value("timemode", 0).toInt() ;
+    int timeMode = settings.value("timemode", 0).toInt() ;
 
     int i = 0;
 
@@ -285,6 +278,8 @@ TriggerSegmentManager::slotUpdate()
     } else {
         m_listView->setSelectionMode(QListWidget::Extended);
     }
+
+    settings.endGroup();
 }
 
 void
@@ -410,19 +405,11 @@ TriggerSegmentManager::setupActions()
                 SLOT(slotPasteAsNew()), actionCollection(),
                 "paste_to_trigger_segment");
 
-    QSettings confq4;
+    QSettings settings;
 
-    confq4.beginGroup( TriggerManagerConfigGroup );
+    settings.beginGroup( TriggerManagerConfigGroup );
 
-    // 
-
-    // FIX-manually-(GW), add:
-
-    // confq4.endGroup();		// corresponding to: confq4.beginGroup( TriggerManagerConfigGroup );
-
-    //  
-
-    int timeMode = confq4.value("timemode", 0).toInt() ;
+    int timeMode = settings.value("timemode", 0).toInt() ;
 
     KRadioAction *action;
 
@@ -457,6 +444,8 @@ TriggerSegmentManager::setupActions()
         action->setChecked(true);
 
     createGUI("triggermanager.rc");
+
+    settings.endGroup();
 }
 
 void
@@ -571,43 +560,37 @@ TriggerSegmentManager::makeDurationString(timeT time,
 void
 TriggerSegmentManager::slotMusicalTime()
 {
-    QSettings confq4;
-    confq4.beginGroup( TriggerManagerConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // confq4.endGroup();		// corresponding to: confq4.beginGroup( TriggerManagerConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( TriggerManagerConfigGroup );
 
-    confq4.setValue("timemode", 0);
+    settings.setValue("timemode", 0);
     slotUpdate();
+
+    settings.endGroup();
 }
 
 void
 TriggerSegmentManager::slotRealTime()
 {
-    QSettings confq4;
-    confq4.beginGroup( TriggerManagerConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // confq4.endGroup();		// corresponding to: confq4.beginGroup( TriggerManagerConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( TriggerManagerConfigGroup );
 
-    confq4.setValue("timemode", 1);
+    settings.setValue("timemode", 1);
     slotUpdate();
+
+    settings.endGroup();
 }
 
 void
 TriggerSegmentManager::slotRawTime()
 {
-    QSettings confq4;
-    confq4.beginGroup( TriggerManagerConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // confq4.endGroup();		// corresponding to: confq4.beginGroup( TriggerManagerConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( TriggerManagerConfigGroup );
 
-    confq4.setValue("timemode", 2);
+    settings.setValue("timemode", 2);
     slotUpdate();
+
+    settings.endGroup();
 }
 
 }
