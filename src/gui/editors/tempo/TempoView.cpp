@@ -187,19 +187,11 @@ TempoView::applyLayout(int /*staffNo*/)
 
     Composition *comp = &getDocument()->getComposition();
 
-    QSettings m_config;
+    QSettings settings;
+    settings.beginGroup( TempoViewConfigGroup );
 
-    m_config.beginGroup( TempoViewConfigGroup );
-
-    // 
-
-    // FIX-manually-(GW), add:
-
-    // m_config.endGroup();		// corresponding to: m_config.beginGroup( TempoViewConfigGroup );
-
-    //  
-
-    int timeMode = m_config.value("timemode", 0).toInt() ;
+    int timeMode = settings.value("timemode", 0).toInt() ;
+    settings.endGroup();
 
     if (m_filter & TimeSignature) {
         for (int i = 0; i < comp->getTimeSignatureCount(); ++i) {
@@ -616,19 +608,11 @@ TempoView::setupActions()
                 SLOT(slotClearSelection()), actionCollection(),
                 "clear_selection");
 
-    QSettings m_config;
+    QSettings settings;
+    settings.beginGroup( TempoViewConfigGroup );
 
-    m_config.beginGroup( TempoViewConfigGroup );
-
-    // 
-
-    // FIX-manually-(GW), add:
-
-    // m_config.endGroup();		// corresponding to: m_config.beginGroup( TempoViewConfigGroup );
-
-    //  
-
-    int timeMode = m_config.value("timemode", 0).toInt() ;
+    int timeMode = settings.value("timemode", 0).toInt() ;
+    settings.endGroup();
 
     KRadioAction *action;
 
@@ -691,30 +675,26 @@ TempoView::setViewSize(QSize s)
 void
 TempoView::readOptions()
 {
-    QSettings m_config;
-    m_config.beginGroup( TempoViewConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // m_config.endGroup();		// corresponding to: m_config.beginGroup( TempoViewConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( TempoViewConfigGroup );
 
     EditViewBase::readOptions();
-    m_filter = m_config.value("filter", m_filter).toInt() ;
-    m_list->restoreLayout(m_config, TempoViewLayoutConfigGroupName);
+    m_filter = settings.value("filter", m_filter).toInt() ;
+    m_list->restoreLayout(settings, TempoViewLayoutConfigGroupName);
+
+    settings.endGroup();
 }
 
 void
 TempoView::slotSaveOptions()
 {
-    QSettings m_config;
-    m_config.beginGroup( TempoViewConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // m_config.endGroup();		// corresponding to: m_config.beginGroup( TempoViewConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( TempoViewConfigGroup );
 
-    m_config.setValue("filter", m_filter);
-    m_list->saveLayout(m_config, TempoViewLayoutConfigGroupName);
+    settings.setValue("filter", m_filter);
+    m_list->saveLayout(settings, TempoViewLayoutConfigGroupName);
+
+    settings.endGroup();
 }
 
 void
@@ -776,43 +756,37 @@ TempoView::setButtonsToFilter()
 void
 TempoView::slotMusicalTime()
 {
-    QSettings m_config;
-    m_config.beginGroup( TempoViewConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // m_config.endGroup();		// corresponding to: m_config.beginGroup( TempoViewConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( TempoViewConfigGroup );
 
-    m_config.setValue("timemode", 0);
+    settings.setValue("timemode", 0);
     applyLayout();
+
+    settings.endGroup();
 }
 
 void
 TempoView::slotRealTime()
 {
-    QSettings m_config;
-    m_config.beginGroup( TempoViewConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // m_config.endGroup();		// corresponding to: m_config.beginGroup( TempoViewConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( TempoViewConfigGroup );
 
-    m_config.setValue("timemode", 1);
+    settings.setValue("timemode", 1);
     applyLayout();
+
+    settings.endGroup();
 }
 
 void
 TempoView::slotRawTime()
 {
-    QSettings m_config;
-    m_config.beginGroup( TempoViewConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // m_config.endGroup();		// corresponding to: m_config.beginGroup( TempoViewConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( TempoViewConfigGroup );
 
-    m_config.setValue("timemode", 2);
+    settings.setValue("timemode", 2);
     applyLayout();
+
+    settings.endGroup();
 }
 
 void
