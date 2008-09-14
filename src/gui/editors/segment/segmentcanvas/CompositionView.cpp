@@ -18,6 +18,7 @@
 
 #include "CompositionView.h"
 
+#include "misc/Strings.h"
 #include "misc/Debug.h"
 #include "AudioPreviewThread.h"
 #include "base/RulerScale.h"
@@ -1323,14 +1324,14 @@ bool CompositionView::event(QEvent* e)
 
 void CompositionView::enterEvent(QEvent *e)
 {
-    QSettings confq4;
-    confq4.beginGroup( GeneralOptionsConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // confq4.endGroup();		// corresponding to: confq4.beginGroup( GeneralOptionsConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( GeneralOptionsConfigGroup );
 
-    if (! qStrToBool( confq4.value("toolcontexthelp", "true" ) ) ) return;
+    if (! qStrToBool( settings.value("toolcontexthelp", "true" ) ) ) {
+        settings.endGroup();
+        return;
+    }
+    settings.endGroup();
 
     emit showContextHelp(m_toolContextHelp);
     m_contextHelpShown = true;
@@ -1347,19 +1348,15 @@ void CompositionView::slotToolHelpChanged(const QString &text)
     if (m_toolContextHelp == text) return;
     m_toolContextHelp = text;
 
-    QSettings confq4;
+    QSettings settings;
 
-    confq4.beginGroup( GeneralOptionsConfigGroup );
+    settings.beginGroup( GeneralOptionsConfigGroup );
 
-    // 
-
-    // FIX-manually-(GW), add:
-
-    // confq4.endGroup();		// corresponding to: confq4.beginGroup( GeneralOptionsConfigGroup );
-
-    //  
-
-    if (! qStrToBool( confq4.value("toolcontexthelp", "true" ) ) ) return;
+    if (! qStrToBool( settings.value("toolcontexthelp", "true" ) ) ) {
+        settings.endGroup();
+        return;
+    }
+    settings.endGroup();
 
     if (m_contextHelpShown) emit showContextHelp(text);
 }
