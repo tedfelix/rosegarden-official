@@ -253,17 +253,14 @@ NotationStrings::makeNoteMenuLabel(timeT duration,
         }
     }
 
-    QSettings config;
-    config.beginGroup( GeneralOptionsConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( GeneralOptionsConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( GeneralOptionsConfigGroup );
 
     GeneralConfigurationPage::NoteNameStyle noteNameStyle =
-        (GeneralConfigurationPage::NoteNameStyle)
-        config->readUnsignedNumEntry
-        ("notenamestyle", GeneralConfigurationPage::Local);
+            (GeneralConfigurationPage::NoteNameStyle) settings.value
+            ("notenamestyle", GeneralConfigurationPage::Local).toUInt();
+
+    settings.endGroup();
 
     if (brief) {
 
