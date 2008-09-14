@@ -348,10 +348,6 @@ LilyPondOptionsDialog::setDefaultLilyPondVersion(QString version)
 {
     QSettings settings;
     settings.beginGroup( NotationViewConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // settings.endGroup();		// corresponding to: settings.beginGroup( NotationViewConfigGroup );
-    //  
 
     int index = -1;
     bool unstable = false;
@@ -379,6 +375,8 @@ LilyPondOptionsDialog::setDefaultLilyPondVersion(QString version)
     if (index >= 0) {
         settings.setValue("lilylanguage", index);
     }
+
+    settings.endGroup();
 }
 
 }
