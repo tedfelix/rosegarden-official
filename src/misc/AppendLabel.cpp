@@ -28,11 +28,6 @@ appendLabel(const std::string &label, const std::string &suffix)
 
     QSettings settings;
     settings.beginGroup( GeneralOptionsConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // settings.endGroup();		// corresponding to: settings.beginGroup( GeneralOptionsConfigGroup );
-    //  
-
 
     if (! qStrToBool( settings.value("appendlabel", "true" ) ) ) {
        settings.endGroup();
