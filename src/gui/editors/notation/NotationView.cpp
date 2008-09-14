@@ -2188,11 +2188,18 @@ NotationView::setupFontSizeMenu(std::string oldFontName)
                                     (actionCollection()->action(actionName));
 
         if (!sizeAction) {
-            sizeAction =
-                new KToggleAction(i18np("1 pixel", "%1 pixels", sizes[i]),
-                                  0, this,
-                                  SLOT(slotChangeFontSizeFromAction()),
-                                  actionCollection(), actionName);
+            sizeAction = new QAction( "%1 pixels", i18np("1 pixel", dynamic_cast<QObject*>(sizes[i])) );
+{
+            	connect( sizeAction, SIGNAL(toggled()), dynamic_cast<QObject*>(sizes[i])), 0, this ); {
+            
+{
+            	sizeAction->setObjectName(actionCollection(), actionName);
+{
+            	sizeAction->setCheckable( true );	//
+{
+            	sizeAction->setAutoRepeat( false );	//
+{
+            	//sizeAction->setActionGroup( 0 );	// QActionGroup*
         }
 
         sizeAction->setChecked(sizes[i] == m_fontSize);

@@ -72,10 +72,24 @@ NoteInserter::NoteInserter(NotationView* view)
     m_defaultStyle = qstrtostr(settings.value("style", strtoqstr(NoteStyleFactory::DefaultStyle)).toString());
     settings.endGroup();
 
-    KToggleAction *autoBeamAction =
-        new KToggleAction(i18n("Auto-Beam when appropriate"), 0, this,
-                          SLOT(slotToggleAutoBeam()), actionCollection(),
-                          "toggle_auto_beam");
+    KToggleAction *autoBeamAction = new QAction( 0, i18n("Auto-Beam when appropriate"), dynamic_cast<QObject*>(this) );
+;
+
+    	connect( KToggleAction *autoBeamAction, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleAutoBeam()) ); ;
+
+    
+;
+
+    	KToggleAction *autoBeamAction->setObjectName("toggle_auto_beam");
+;
+
+    	KToggleAction *autoBeamAction->setCheckable( true );	//
+;
+
+    	KToggleAction *autoBeamAction->setAutoRepeat( false );	//
+;
+
+    	//KToggleAction *autoBeamAction->setActionGroup( 0 );	// QActionGroup*
     autoBeamAction->setChecked(m_autoBeam);
 
     for (unsigned int i = 0; i < 6; ++i) {

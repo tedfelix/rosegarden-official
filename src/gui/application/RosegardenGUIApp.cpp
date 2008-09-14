@@ -746,59 +746,110 @@ void RosegardenGUIApp::setupActions()
     m_viewToolBar = KStandardAction::showToolbar (this, SLOT(slotToggleToolBar()), actionCollection(),
                     "show_stock_toolbar");
 
-    m_viewToolsToolBar = new KToggleAction(i18n("Show T&ools Toolbar"), 0, this,
-                                           SLOT(slotToggleToolsToolBar()), actionCollection(),
-                                           "show_tools_toolbar");
+    m_viewToolsToolBar = new QAction( 0, i18n("Show T&ools Toolbar"), dynamic_cast<QObject*>(this) );
+;
 
-    m_viewTracksToolBar = new KToggleAction(i18n("Show Trac&ks Toolbar"), 0, this,
-                                            SLOT(slotToggleTracksToolBar()), actionCollection(),
-                                            "show_tracks_toolbar");
+    	connect( m_viewToolsToolBar, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleToolsToolBar()) ); ;
 
-    m_viewEditorsToolBar = new KToggleAction(i18n("Show &Editors Toolbar"), 0, this,
-                           SLOT(slotToggleEditorsToolBar()), actionCollection(),
-                           "show_editors_toolbar");
+    
+;
 
-    m_viewTransportToolBar = new KToggleAction(i18n("Show Trans&port Toolbar"), 0, this,
-                             SLOT(slotToggleTransportToolBar()), actionCollection(),
-                             "show_transport_toolbar");
+    	m_viewToolsToolBar->setObjectName("show_tools_toolbar");
+;
 
-    m_viewZoomToolBar = new KToggleAction(i18n("Show &Zoom Toolbar"), 0, this,
-                                          SLOT(slotToggleZoomToolBar()), actionCollection(),
-                                          "show_zoom_toolbar");
+    	m_viewToolsToolBar->setCheckable( true );	//
+;
+
+    	m_viewToolsToolBar->setAutoRepeat( false );	//
+;
+
+    	//m_viewToolsToolBar->setActionGroup( 0 );	// QActionGroup*
+
+    m_viewTracksToolBar = new QAction( 0, i18n("Show Trac&ks Toolbar"), dynamic_cast<QObject*>(this) );
+    	connect( m_viewTracksToolBar, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleTracksToolBar()) );     
+    	m_viewTracksToolBar->setObjectName("show_tracks_toolbar");
+    	m_viewTracksToolBar->setCheckable( true );	//
+    	m_viewTracksToolBar->setAutoRepeat( false );	//
+    	//m_viewTracksToolBar->setActionGroup( 0 );	// QActionGroup*
+
+    m_viewEditorsToolBar = new QAction( 0, i18n("Show &Editors Toolbar"), dynamic_cast<QObject*>(this) );
+    	connect( m_viewEditorsToolBar, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleEditorsToolBar()) );     
+    	m_viewEditorsToolBar->setObjectName("show_editors_toolbar");
+    	m_viewEditorsToolBar->setCheckable( true );	//
+    	m_viewEditorsToolBar->setAutoRepeat( false );	//
+    	//m_viewEditorsToolBar->setActionGroup( 0 );	// QActionGroup*
+
+    m_viewTransportToolBar = new QAction( 0, i18n("Show Trans&port Toolbar"), dynamic_cast<QObject*>(this) );
+    	connect( m_viewTransportToolBar, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleTransportToolBar()) );     
+    	m_viewTransportToolBar->setObjectName("show_transport_toolbar");
+    	m_viewTransportToolBar->setCheckable( true );	//
+    	m_viewTransportToolBar->setAutoRepeat( false );	//
+    	//m_viewTransportToolBar->setActionGroup( 0 );	// QActionGroup*
+
+    m_viewZoomToolBar = new QAction( 0, i18n("Show &Zoom Toolbar"), dynamic_cast<QObject*>(this) );
+    	connect( m_viewZoomToolBar, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleZoomToolBar()) );     
+    	m_viewZoomToolBar->setObjectName("show_zoom_toolbar");
+    	m_viewZoomToolBar->setCheckable( true );	//
+    	m_viewZoomToolBar->setAutoRepeat( false );	//
+    	//m_viewZoomToolBar->setActionGroup( 0 );	// QActionGroup*
 
     m_viewStatusBar = KStandardAction::showStatusbar(this, SLOT(slotToggleStatusBar()),
                       actionCollection(), "show_status_bar");
 
-    m_viewTransport = new KToggleAction(i18n("Show Tra&nsport"), Qt::Key_T, this,
-                                        SLOT(slotToggleTransport()),
-                                        actionCollection(),
-                                        "show_transport");
+    m_viewTransport = new QAction( Qt::Key_T, i18n("Show Tra&nsport"), dynamic_cast<QObject*>(this) );
+;
 
-    m_viewTrackLabels = new KToggleAction(i18n("Show Track &Labels"), 0, this,
-                                          SLOT(slotToggleTrackLabels()),
-                                          actionCollection(),
-                                          "show_tracklabels");
+    	connect( m_viewTransport, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleTransport()) ); ;
 
-    m_viewRulers = new KToggleAction(i18n("Show Playback Position R&uler"), 0, this,
-                                     SLOT(slotToggleRulers()),
-                                     actionCollection(),
-                                     "show_rulers");
+    
+;
 
-    m_viewTempoRuler = new KToggleAction(i18n("Show Te&mpo Ruler"), 0, this,
-                                         SLOT(slotToggleTempoRuler()),
-                                         actionCollection(),
-                                         "show_tempo_ruler");
+    	m_viewTransport->setObjectName("show_transport");
+;
 
-    m_viewChordNameRuler = new KToggleAction(i18n("Show Cho&rd Name Ruler"), 0, this,
-                           SLOT(slotToggleChordNameRuler()),
-                           actionCollection(),
-                           "show_chord_name_ruler");
+    	m_viewTransport->setCheckable( true );	//
+;
+
+    	m_viewTransport->setAutoRepeat( false );	//
+;
+
+    	//m_viewTransport->setActionGroup( 0 );	// QActionGroup*
+
+    m_viewTrackLabels = new QAction( 0, i18n("Show Track &Labels"), dynamic_cast<QObject*>(this) );
+    	connect( m_viewTrackLabels, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleTrackLabels()) );     
+    	m_viewTrackLabels->setObjectName("show_tracklabels");
+    	m_viewTrackLabels->setCheckable( true );	//
+    	m_viewTrackLabels->setAutoRepeat( false );	//
+    	//m_viewTrackLabels->setActionGroup( 0 );	// QActionGroup*
+
+    m_viewRulers = new QAction( 0, i18n("Show Playback Position R&uler"), dynamic_cast<QObject*>(this) );
+    	connect( m_viewRulers, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleRulers()) );     
+    	m_viewRulers->setObjectName("show_rulers");
+    	m_viewRulers->setCheckable( true );	//
+    	m_viewRulers->setAutoRepeat( false );	//
+    	//m_viewRulers->setActionGroup( 0 );	// QActionGroup*
+
+    m_viewTempoRuler = new QAction( 0, i18n("Show Te&mpo Ruler"), dynamic_cast<QObject*>(this) );
+    	connect( m_viewTempoRuler, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleTempoRuler()) );     
+    	m_viewTempoRuler->setObjectName("show_tempo_ruler");
+    	m_viewTempoRuler->setCheckable( true );	//
+    	m_viewTempoRuler->setAutoRepeat( false );	//
+    	//m_viewTempoRuler->setActionGroup( 0 );	// QActionGroup*
+
+    m_viewChordNameRuler = new QAction( 0, i18n("Show Cho&rd Name Ruler"), dynamic_cast<QObject*>(this) );
+    	connect( m_viewChordNameRuler, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleChordNameRuler()) );     
+    	m_viewChordNameRuler->setObjectName("show_chord_name_ruler");
+    	m_viewChordNameRuler->setCheckable( true );	//
+    	m_viewChordNameRuler->setAutoRepeat( false );	//
+    	//m_viewChordNameRuler->setActionGroup( 0 );	// QActionGroup*
 
 
-    m_viewPreviews = new KToggleAction(i18n("Show Segment Pre&views"), 0, this,
-                                       SLOT(slotTogglePreviews()),
-                                       actionCollection(),
-                                       "show_previews");
+    m_viewPreviews = new QAction( 0, i18n("Show Segment Pre&views"), dynamic_cast<QObject*>(this) );
+    	connect( m_viewPreviews, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotTogglePreviews()) );     
+    	m_viewPreviews->setObjectName("show_previews");
+    	m_viewPreviews->setCheckable( true );	//
+    	m_viewPreviews->setAutoRepeat( false );	//
+    	//m_viewPreviews->setActionGroup( 0 );	// QActionGroup*
 
     new KAction(i18n("Show Special &Parameters"), Qt::Key_P, this,
                 SLOT(slotDockParametersBack()),
@@ -1057,9 +1108,24 @@ void RosegardenGUIApp::setupActions()
 			qa_audio_manager->setIcon(icon); 
 			connect( qa_audio_manager, SIGNAL(triggered()), this, SLOT(slotAudioManager())  );
 
-    m_viewSegmentLabels = new KToggleAction(i18n("Show Segment Labels"), 0, this,
-                                            SLOT(slotToggleSegmentLabels()), actionCollection(),
-                                            "show_segment_labels");
+    m_viewSegmentLabels = new QAction( 0, i18n("Show Segment Labels"), dynamic_cast<QObject*>(this) );
+;
+
+    	connect( m_viewSegmentLabels, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleSegmentLabels()) ); ;
+
+    
+;
+
+    	m_viewSegmentLabels->setObjectName("show_segment_labels");
+;
+
+    	m_viewSegmentLabels->setCheckable( true );	//
+;
+
+    	m_viewSegmentLabels->setAutoRepeat( false );	//
+;
+
+    	//m_viewSegmentLabels->setActionGroup( 0 );	// QActionGroup*
 
     //
     // Tracks menu
@@ -1159,9 +1225,24 @@ void RosegardenGUIApp::setupActions()
 			qa_modify_midi_filters->setIconText("filter"); 
 			connect( qa_modify_midi_filters, SIGNAL(triggered()), this, SLOT(slotModifyMIDIFilters())  );
 
-    m_enableMIDIrouting = new KToggleAction(i18n("MIDI Thru Routing"), 0, this,
-                                            SLOT(slotEnableMIDIThruRouting()),
-                                            actionCollection(), "enable_midi_routing");
+    m_enableMIDIrouting = new QAction( 0, i18n("MIDI Thru Routing"), dynamic_cast<QObject*>(this) );
+;
+
+    	connect( m_enableMIDIrouting, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotEnableMIDIThruRouting()) ); ;
+
+    
+;
+
+    	m_enableMIDIrouting->setObjectName("enable_midi_routing");
+;
+
+    	m_enableMIDIrouting->setCheckable( true );	//
+;
+
+    	m_enableMIDIrouting->setAutoRepeat( false );	//
+;
+
+    	//m_enableMIDIrouting->setActionGroup( 0 );	// QActionGroup*
 
     pixmap.load(pixmapDir + "/toolbar/time-musical.png");
     icon = QIcon(pixmap);
