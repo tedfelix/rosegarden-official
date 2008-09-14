@@ -310,19 +310,12 @@ EventView::applyLayout(int /*staffNo*/)
     //
     m_eventList->clear();
 
-    QSettings m_config;
+    QSettings settings;
 
-    m_config.beginGroup( EventViewConfigGroup );
+    settings.beginGroup( EventViewConfigGroup );
+    settings.endGroup();
 
-    // 
-
-    // FIX-manually-(GW), add:
-
-    // m_config.endGroup();		// corresponding to: m_config.beginGroup( EventViewConfigGroup );
-
-    //  
-
-    int timeMode = m_config.value("timemode", 0).toInt() ;
+    int timeMode = settings.value("timemode", 0).toInt() ;
 
     for (unsigned int i = 0; i < m_segments.size(); i++) {
         SegmentPerformanceHelper helper(*m_segments[i]);
@@ -1163,19 +1156,12 @@ EventView::setupActions()
                 SLOT(slotClearSelection()), actionCollection(),
                 "clear_selection");
 
-    QSettings m_config;
+    QSettings settings;
 
-    m_config.beginGroup( EventViewConfigGroup );
+    settings.beginGroup( EventViewConfigGroup );
 
-    // 
-
-    // FIX-manually-(GW), add:
-
-    // m_config.endGroup();		// corresponding to: m_config.beginGroup( EventViewConfigGroup );
-
-    //  
-
-    int timeMode = m_config.value("timemode", 0).toInt() ;
+    int timeMode = settings.value("timemode", 0).toInt() ;
+    settings.endGroup();
 
     KRadioAction *action;
 
@@ -1261,30 +1247,26 @@ EventView::setViewSize(QSize s)
 void
 EventView::readOptions()
 {
-    QSettings m_config;
-    m_config.beginGroup( EventViewConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // m_config.endGroup();		// corresponding to: m_config.beginGroup( EventViewConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( EventViewConfigGroup );
 
     EditViewBase::readOptions();
-    m_eventFilter = m_config.value("eventfilter", m_eventFilter).toInt() ;
-    m_eventList->restoreLayout(m_config, EventViewLayoutConfigGroupName);
+    m_eventFilter = settings.value("eventfilter", m_eventFilter).toInt() ;
+    m_eventList->restoreLayout(settings, EventViewLayoutConfigGroupName);
+
+    settings.endGroup();
 }
 
 void
 EventView::slotSaveOptions()
 {
-    QSettings m_config;
-    m_config.beginGroup( EventViewConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // m_config.endGroup();		// corresponding to: m_config.beginGroup( EventViewConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( EventViewConfigGroup );
 
-    m_config.setValue("eventfilter", m_eventFilter);
-    m_eventList->saveLayout(m_config, EventViewLayoutConfigGroupName);
+    settings.setValue("eventfilter", m_eventFilter);
+    m_eventList->saveLayout(settings, EventViewLayoutConfigGroupName);
+
+    settings.endGroup();
 }
 
 Segment *
@@ -1474,43 +1456,37 @@ EventView::setButtonsToFilter()
 void
 EventView::slotMusicalTime()
 {
-    QSettings m_config;
-    m_config.beginGroup( EventViewConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // m_config.endGroup();		// corresponding to: m_config.beginGroup( EventViewConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( EventViewConfigGroup );
 
-    m_config.setValue("timemode", 0);
+    settings.setValue("timemode", 0);
     applyLayout();
+
+    settings.endGroup();
 }
 
 void
 EventView::slotRealTime()
 {
-    QSettings m_config;
-    m_config.beginGroup( EventViewConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // m_config.endGroup();		// corresponding to: m_config.beginGroup( EventViewConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( EventViewConfigGroup );
 
-    m_config.setValue("timemode", 1);
+    settings.setValue("timemode", 1);
     applyLayout();
+
+    settings.endGroup();
 }
 
 void
 EventView::slotRawTime()
 {
-    QSettings m_config;
-    m_config.beginGroup( EventViewConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // m_config.endGroup();		// corresponding to: m_config.beginGroup( EventViewConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( EventViewConfigGroup );
 
-    m_config.setValue("timemode", 2);
+    settings.setValue("timemode", 2);
     applyLayout();
+
+    settings.endGroup();
 }
 
 void
