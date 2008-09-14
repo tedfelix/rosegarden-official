@@ -64,17 +64,13 @@ NoteInserter::NoteInserter(NotationView* view)
 {
     QIcon icon;
 
-    QSettings config;
-    config.beginGroup( NotationViewConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( NotationViewConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( NotationViewConfigGroup );
 
-    m_autoBeam = qStrToBool( config.value("autobeam", "true" ) ) ;
-    m_matrixInsertType = (config.value("inserttype", 0).toInt()  > 0);
-    m_defaultStyle = qstrtostr(config->readEntry
-                               ("style", strtoqstr(NoteStyleFactory::DefaultStyle)));
+    m_autoBeam = qStrToBool( settings.value("autobeam", "true" ) ) ;
+    m_matrixInsertType = (settings.value("inserttype", 0).toInt()  > 0);
+    m_defaultStyle = qstrtostr(settings.value("style", strtoqstr(NoteStyleFactory::DefaultStyle)).toString());
+    settings.endGroup();
 
     KToggleAction *autoBeamAction =
         new KToggleAction(i18n("Auto-Beam when appropriate"), 0, this,
