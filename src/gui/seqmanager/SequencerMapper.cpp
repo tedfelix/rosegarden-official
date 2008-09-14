@@ -26,8 +26,12 @@
 #include "sound/MappedComposition.h"
 #include "sound/MappedEvent.h"
 #include "sound/SequencerDataBlock.h"
+#include "misc/Strings.h"
+
+
 #include <QFileInfo>
 #include <QString>
+
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -67,7 +71,7 @@ SequencerMapper::map()
     if (m_fd < 0) {
         RG_DEBUG << "SequencerMapper::map() : Couldn't open " << m_filename
         << endl;
-        throw Exception("Couldn't open " + std::string(m_filename.data()));
+        throw Exception("Couldn't open " + std::string(qStrToCharPtrUtf8(m_filename)));
     }
 
     m_mmappedSize = sizeof(SequencerDataBlock);

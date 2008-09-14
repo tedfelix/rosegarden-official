@@ -61,7 +61,7 @@ SequencerMmapper::SequencerMmapper():
     if (m_fd < 0) {
         SEQUENCER_DEBUG << "SequencerMmapper : Couldn't open " << m_fileName
         << endl;
-        throw Exception("Couldn't open " + std::string(m_fileName.data()));
+        throw Exception("Couldn't open " + std::string(qStrToCharPtrUtf8(m_fileName)));
     }
 
     setFileSize(m_mmappedSize);
