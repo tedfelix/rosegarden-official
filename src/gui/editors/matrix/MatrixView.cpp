@@ -192,19 +192,10 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     Q3Canvas *tCanvas = new Q3Canvas(this);
 
-    QSettings m_config;
+    QSettings settings;
+    settings.beginGroup( MatrixViewConfigGroup );
 
-    m_config.beginGroup( MatrixViewConfigGroup );
-
-    // 
-
-    // FIX-manually-(GW), add:
-
-    // m_config.endGroup();		// corresponding to: m_config.beginGroup( MatrixViewConfigGroup );
-
-    //  
-
-    if ( qStrToBool( m_config.value("backgroundtextures-1.6-plus", "true" ) ) ) {
+    if ( qStrToBool( settings.value("backgroundtextures-1.6-plus", "true" ) ) ) {
         QPixmap background;
         QString pixmapDir =
             KGlobal::dirs()->findResource("appdata", "pixmaps/");
@@ -334,15 +325,9 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     if (snapGridSize != -1) {
         m_snapGrid->setSnapTime(snapGridSize);
     } else {
-        QSettings m_config;
-        m_config.beginGroup( MatrixViewConfigGroup );
-        // 
-        // FIX-manually-(GW), add:
-        // m_config.endGroup();		// corresponding to: m_config.beginGroup( MatrixViewConfigGroup );
-        //  
-
-        snapGridSize = m_config->readNumEntry
-            ("Snap Grid Size", SnapGrid::SnapToBeat);
+        //###settings.beginGroup( MatrixViewConfigGroup );
+        snapGridSize = settings.value("Snap Grid Size",
+                SnapGrid::SnapToBeat).toInt();
         m_snapGrid->setSnapTime(snapGridSize);
         m_staffs[0]->getSegment().setSnapGridSize(snapGridSize);
     }
@@ -543,15 +528,10 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     setConfigDialogPageIndex(0);
 
     // default zoom
-    QSettings m_config;
-    m_config.beginGroup( MatrixViewConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // m_config.endGroup();		// corresponding to: m_config.beginGroup( MatrixViewConfigGroup );
-    //  
+    //###settings.beginGroup( MatrixViewConfigGroup );
 
-    double zoom = m_config->readDoubleNumEntry("Zoom Level",
-                                               m_hZoomSlider->getCurrentSize());
+    double zoom = settings.value("Zoom Level",
+            m_hZoomSlider->getCurrentSize()).toDouble();
     m_hZoomSlider->setSize(zoom);
     m_referenceRuler->setHScaleFactor(zoom);
     
@@ -575,6 +555,8 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     setRewFFwdToAutoRepeat();
     slotCompositionStateUpdate();
+
+    settings.endGroup();
 }
 
 MatrixView::~MatrixView()
@@ -611,44 +593,36 @@ MatrixView::~MatrixView()
 
 void MatrixView::slotSaveOptions()
 {
-    QSettings m_config;
-    m_config.beginGroup( MatrixViewConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // m_config.endGroup();		// corresponding to: m_config.beginGroup( MatrixViewConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( MatrixViewConfigGroup );
 
-
-    m_config.setValue("Show Chord Name Ruler", getToggleAction("show_chords_ruler")->isChecked());
-    m_config.setValue("Show Tempo Ruler", getToggleAction("show_tempo_ruler")->isChecked());
-    m_config.setValue("Show Parameters", m_dockVisible);
+    settings.setValue("Show Chord Name Ruler", getToggleAction("show_chords_ruler")->isChecked());
+    settings.setValue("Show Tempo Ruler", getToggleAction("show_tempo_ruler")->isChecked());
+    settings.setValue("Show Parameters", m_dockVisible);
     //getToggleAction("m_dockLeft->isVisible());
 
-    m_config->sync();
+    settings.sync();
+    settings.endGroup();
+
 }
 
 void MatrixView::readOptions()
 {
     EditView::readOptions();
-    QSettings m_config;
-    m_config.beginGroup( MatrixViewConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // m_config.endGroup();		// corresponding to: m_config.beginGroup( MatrixViewConfigGroup );
-    //  
-
+    QSettings settings;
+    settings.beginGroup( MatrixViewConfigGroup );
 
     bool opt = false;
 
-    opt = qStrToBool( m_config.value("Show Chord Name Ruler", "false" ) ) ;
+    opt = qStrToBool( settings.value("Show Chord Name Ruler", "false" ) ) ;
     getToggleAction("show_chords_ruler")->setChecked(opt);
     slotToggleChordsRuler();
 
-    opt = qStrToBool( m_config.value("Show Tempo Ruler", "true" ) ) ;
+    opt = qStrToBool( settings.value("Show Tempo Ruler", "true" ) ) ;
     getToggleAction("show_tempo_ruler")->setChecked(opt);
     slotToggleTempoRuler();
 
-    opt = qStrToBool( m_config.value("Show Parameters", "true" ) ) ;
+    opt = qStrToBool( settings.value("Show Parameters", "true" ) ) ;
     if (!opt) {
         m_dockLeft->undock();
         m_dockLeft->hide();
@@ -656,6 +630,7 @@ void MatrixView::readOptions()
         m_dockVisible = false;
     }
 
+    settings.endGroup();
 }
 
 void MatrixView::setupActions()
@@ -812,13 +787,13 @@ void MatrixView::setupActions()
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-play")));
-    KAction *play = QAction *qa_play = new QAction( "&Play", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+    QAction *qa_play = new QAction( "&Play", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_play->setIcon(icon); 
 			connect( qa_play, SIGNAL(triggered()), this, SIGNAL(play())  );
     // Alternative shortcut for Play
     KShortcut playShortcut = play->shortcut();
     playShortcut.append( KKey(Key_Return + Qt::CTRL) );
-    play->setShortcut(playShortcut);
+    play.setShortcut(playShortcut);
 
     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
                     ("transport-stop")));
@@ -1043,33 +1018,28 @@ void MatrixView::slotToolHelpChanged(const QString &s)
     if (m_toolContextHelp == msg) return;
     m_toolContextHelp = msg;
 
-    QSettings m_config;
+    QSettings settings;
+    settings.beginGroup( GeneralOptionsConfigGroup );
 
-    m_config.beginGroup( GeneralOptionsConfigGroup );
-
-    // 
-
-    // FIX-manually-(GW), add:
-
-    // m_config.endGroup();		// corresponding to: m_config.beginGroup( GeneralOptionsConfigGroup );
-
-    //  
-
-    if (! qStrToBool( m_config.value("toolcontexthelp", "true" ) ) ) return;
+    if (! qStrToBool( settings.value("toolcontexthelp", "true" ) ) ) {
+        settings.endGroup();
+        return;
+    }
+    settings.endGroup();
 
     if (m_mouseInCanvasView) statusBar()->changeItem(m_toolContextHelp, 1);
 }
 
 void MatrixView::slotMouseEnteredCanvasView()
 {
-    QSettings m_config;
-    m_config.beginGroup( GeneralOptionsConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // m_config.endGroup();		// corresponding to: m_config.beginGroup( GeneralOptionsConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( GeneralOptionsConfigGroup );
 
-    if (! qStrToBool( m_config.value("toolcontexthelp", "true" ) ) ) return;
+    if (! qStrToBool( settings.value("toolcontexthelp", "true" ) ) ) {
+        settings.endGroup();
+        return;
+    }
+    settings.endGroup();
 
     m_mouseInCanvasView = true;
     statusBar()->changeItem(m_toolContextHelp, 1);
@@ -2123,19 +2093,11 @@ MatrixView::slotSetSnap(timeT t)
 
     m_segments[0]->setSnapGridSize(t);
 
-    QSettings m_config;
+    QSettings settings;
+    settings.beginGroup( MatrixViewConfigGroup );
 
-    m_config.beginGroup( MatrixViewConfigGroup );
-
-    // 
-
-    // FIX-manually-(GW), add:
-
-    // m_config.endGroup();		// corresponding to: m_config.beginGroup( MatrixViewConfigGroup );
-
-    //  
-
-    m_config.setValue("Snap Grid Size", t);
+    settings.setValue("Snap Grid Size", (long long) t);
+    settings.endGroup();
 
     updateView();
 }
@@ -2352,19 +2314,11 @@ MatrixView::slotChangeHorizontalZoom(int)
     if (m_bottomStandardRuler)
         m_bottomStandardRuler->update();
 
-    QSettings m_config;
+    QSettings settings;
+    settings.beginGroup( MatrixViewConfigGroup );
 
-    m_config.beginGroup( MatrixViewConfigGroup );
-
-    // 
-
-    // FIX-manually-(GW), add:
-
-    // m_config.endGroup();		// corresponding to: m_config.beginGroup( MatrixViewConfigGroup );
-
-    //  
-
-    m_config.setValue("Zoom Level", zoomValue);
+    settings.setValue("Zoom Level", zoomValue);
+    settings.endGroup();
 
     // If you do adjust the viewsize then please remember to
     // either re-center() or remember old scrollbar position
