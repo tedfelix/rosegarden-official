@@ -335,7 +335,7 @@ protected:
 
     /**
      * Make a widget visible depending on the state of a
-     * /* was toggle */ QAction
+     * (toggle) QAction
      */
     virtual void toggleWidget(QWidget* widget, const QString& toggleActionName);
 

@@ -4006,7 +4006,7 @@ NotationView::slotChangeSpacing(int spacing)
     else {
         std::cerr
         << "WARNING: Expected action \"spacing_" << spacing
-        << "\" to be a /* was toggle */ QAction, but it isn't (or doesn't exist)"
+        << "\" to be a QAction, but it isn't (or doesn't exist)"
         << std::endl;
     }
 
@@ -4064,7 +4064,7 @@ NotationView::slotChangeProportion(int proportion)
     else {
         std::cerr
         << "WARNING: Expected action \"proportion_" << proportion
-        << "\" to be a /* was toggle */ QAction, but it isn't (or doesn't exist)"
+        << "\" to be a QAction, but it isn't (or doesn't exist)"
         << std::endl;
     }
 
@@ -4224,7 +4224,7 @@ NotationView::slotChangeFont(std::string newName, int newSize)
         else {
             std::cerr
             << "WARNING: Expected action \"note_font_" << f[i]
-            << "\" to be a /* was toggle */ QAction, but it isn't (or doesn't exist)"
+            << "\" to be a QAction, but it isn't (or doesn't exist)"
             << std::endl;
         }
     }
