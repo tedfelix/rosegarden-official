@@ -23,6 +23,7 @@
 #include <klocale.h>
 #include <QSettings>
 #include <kstandarddirs.h>
+#include "misc/Strings.h"
 #include "misc/Debug.h"
 #include "document/ConfigGroups.h"
 #include "gui/seqmanager/SequenceManager.h"
@@ -160,19 +161,11 @@ TrackEditor::init(QWidget* rosegardenguiview)
 
     m_segmentCanvas = new CompositionView(m_doc, m_compositionModel, this);
 
-    QSettings confq4;
+    QSettings settings;
 
-    confq4.beginGroup( GeneralOptionsConfigGroup );
+    settings.beginGroup( GeneralOptionsConfigGroup );
 
-    // 
-
-    // FIX-manually-(GW), add:
-
-    // confq4.endGroup();		// corresponding to: confq4.beginGroup( GeneralOptionsConfigGroup );
-
-    //  
-
-    if ( qStrToBool( confq4.value("backgroundtextures", "true" ) ) ) {
+    if ( qStrToBool( settings.value("backgroundtextures", "true" ) ) ) {
         QPixmap background;
         QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
         if (background.load(QString("%1/misc/bg-segmentcanvas.xpm").
@@ -322,6 +315,8 @@ TrackEditor::init(QWidget* rosegardenguiview)
     connect(m_doc, SIGNAL(loopChanged(timeT,
                                       timeT)),
             this, SLOT(slotSetLoop(timeT, timeT)));
+
+    settings.endGroup();
 }
 
 void TrackEditor::slotReadjustCanvasSize()
