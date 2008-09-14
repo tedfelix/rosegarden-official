@@ -95,23 +95,21 @@ NotationStaff::NotationStaff(Q3Canvas *canvas, Segment *segment,
         m_ready(false),
         m_lastRenderedBar(0)
 {
-    QSettings config;
-    config.beginGroup( NotationViewConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( NotationViewConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( NotationViewConfigGroup );
 
-    m_colourQuantize = qStrToBool( config.value("colourquantize", "false" ) ) ;
+    m_colourQuantize = qStrToBool( settings.value("colourquantize", "false" ) ) ;
 
     // Shouldn't change these  during the lifetime of the staff, really:
-    m_showUnknowns = qStrToBool( config.value("showunknowns", "false" ) ) ;
-    m_showRanges = qStrToBool( config.value("showranges", "true" ) ) ;
-    m_showCollisions = qStrToBool( config.value("showcollisions", "true" ) ) ;
+    m_showUnknowns = qStrToBool( settings.value("showunknowns", "false" ) ) ;
+    m_showRanges = qStrToBool( settings.value("showranges", "true" ) ) ;
+    m_showCollisions = qStrToBool( settings.value("showcollisions", "true" ) ) ;
 
-    m_keySigCancelMode = config.value("keysigcancelmode", 1).toInt() ;
+    m_keySigCancelMode = settings.value("keysigcancelmode", 1).toInt() ;
 
     changeFont(fontName, resolution);
+
+    settings.endGroup();
 }
 
 NotationStaff::~NotationStaff()
@@ -435,14 +433,11 @@ NotationStaff::getNoteNameAtCanvasCoords(double x, int y,
     ::Rosegarden::Key key;
     getClefAndKeyAtCanvasCoords(x, y, clef, key);
 
-    QSettings config;
-    config.beginGroup( GeneralOptionsConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( GeneralOptionsConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( GeneralOptionsConfigGroup );
 
-    int baseOctave = config.value("midipitchoctave", -2).toInt() ;
+    int baseOctave = settings.value("midipitchoctave", -2).toInt() ;
+    settings.endGroup();
 
     Pitch p(getHeightAtCanvasCoords(x, y), clef, key);
     //!!! i18n() how?
@@ -924,14 +919,12 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
             <Bool>(BaseProperties::INVISIBLE, invisible) && invisible) {
         if (m_printPainter)
             return ;
-        QSettings config;
-        config.beginGroup( "Notation Options" );
-        // 
-        // FIX-manually-(GW), add:
-        // config.endGroup();		// corresponding to: config.beginGroup( "Notation Options" );
-        //  
+        QSettings settings;
+        settings.beginGroup( "Notation Options" );
 
-        bool showInvisibles = qStrToBool( config.value("showinvisibles", "true" ) ) ;
+        bool showInvisibles = qStrToBool( settings.value("showinvisibles", "true" ) ) ;
+        settings.endGroup();
+
         if (!showInvisibles)
             return ;
     }
