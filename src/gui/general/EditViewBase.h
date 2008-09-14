@@ -36,7 +36,7 @@ class QGridLayout;
 class QFrame;
 class QCloseEvent;
 class QShortcut;
-class KToggleAction;
+class /* was toggle */ QAction;
 class KConfig;
 class Command;
 namespace Rosegarden { class EditViewTimeSigNotifier; }
@@ -331,11 +331,11 @@ protected:
     bool getSegmentsOnlyRestsAndClefs();
 
     /// Convenience function around actionCollection()->action()
-    KToggleAction* getToggleAction(const QString& actionName);
+    /* was toggle */ QAction* getToggleAction(const QString& actionName);
 
     /**
      * Make a widget visible depending on the state of a
-     * KToggleAction
+     * /* was toggle */ QAction
      */
     virtual void toggleWidget(QWidget* widget, const QString& toggleActionName);
 

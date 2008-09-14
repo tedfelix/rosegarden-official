@@ -981,7 +981,7 @@ void MatrixView::setupActions()
 bool
 MatrixView::isInChordMode()
 {
-    return ((KToggleAction *)actionCollection()->action("chord_mode"))->
+    return ((/* was toggle */ QAction *)actionCollection()->action("chord_mode"))->
            isChecked();
 }
 
@@ -2901,7 +2901,7 @@ MatrixView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn
         return ;
     }
 
-    KToggleAction *action = dynamic_cast<KToggleAction *>
+    /* was toggle */ QAction *action = dynamic_cast<QAction*>
                             (actionCollection()->action("toggle_step_by_step"));
     if (!action) {
         MATRIX_DEBUG << "WARNING: No toggle_step_by_step action" << endl;
@@ -2987,7 +2987,7 @@ MatrixView::slotInsertableNoteOffReceived(int pitch, int velocity)
 void
 MatrixView::slotToggleStepByStep()
 {
-    KToggleAction *action = dynamic_cast<KToggleAction *>
+    /* was toggle */ QAction *action = dynamic_cast<QAction*>
                             (actionCollection()->action("toggle_step_by_step"));
     if (!action) {
         MATRIX_DEBUG << "WARNING: No toggle_step_by_step action" << endl;
@@ -3015,7 +3015,7 @@ MatrixView::slotUpdateInsertModeStatus()
 void
 MatrixView::slotStepByStepTargetRequested(QObject *obj)
 {
-    KToggleAction *action = dynamic_cast<KToggleAction *>
+    /* was toggle */ QAction *action = dynamic_cast<QAction*>
                             (actionCollection()->action("toggle_step_by_step"));
     if (!action) {
         MATRIX_DEBUG << "WARNING: No toggle_step_by_step action" << endl;

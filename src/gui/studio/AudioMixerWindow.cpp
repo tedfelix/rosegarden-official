@@ -1619,7 +1619,7 @@ AudioMixerWindow::slotUpdateFaderVisibility()
 {
     bool d = !(m_studio->getMixerDisplayOptions() & MIXER_OMIT_FADERS);
 
-    KToggleAction *action = dynamic_cast<KToggleAction *>
+    /* was toggle */ QAction *action = dynamic_cast<QAction*>
                             (actionCollection()->action("show_audio_faders"));
     if (action) {
         action->setChecked(d);
@@ -1651,7 +1651,7 @@ AudioMixerWindow::slotToggleSynthFaders()
 void
 AudioMixerWindow::slotUpdateSynthFaderVisibility()
 {
-    KToggleAction *action = dynamic_cast<KToggleAction *>
+    /* was toggle */ QAction *action = dynamic_cast<QAction*>
                             (actionCollection()->action("show_synth_faders"));
     if (!action)
         return ;
@@ -1683,7 +1683,7 @@ AudioMixerWindow::slotToggleSubmasters()
 void
 AudioMixerWindow::slotUpdateSubmasterVisibility()
 {
-    KToggleAction *action = dynamic_cast<KToggleAction *>
+    /* was toggle */ QAction *action = dynamic_cast<QAction*>
                             (actionCollection()->action("show_audio_submasters"));
     if (!action)
         return ;
@@ -1713,7 +1713,7 @@ AudioMixerWindow::slotTogglePluginButtons()
 void
 AudioMixerWindow::slotUpdatePluginButtonVisibility()
 {
-    KToggleAction *action = dynamic_cast<KToggleAction *>
+    /* was toggle */ QAction *action = dynamic_cast<QAction*>
                             (actionCollection()->action("show_plugin_buttons"));
     if (!action)
         return ;
@@ -1732,7 +1732,7 @@ AudioMixerWindow::slotUpdatePluginButtonVisibility()
 void
 AudioMixerWindow::slotToggleUnassignedFaders()
 {
-    KToggleAction *action = dynamic_cast<KToggleAction *>
+    /* was toggle */ QAction *action = dynamic_cast<QAction*>
                             (actionCollection()->action("show_unassigned_faders"));
     if (!action)
         return ;

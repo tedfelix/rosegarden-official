@@ -1662,7 +1662,7 @@ void RosegardenGUIApp::initView()
     m_view->slotSelectTrackSegments(comp.getSelectedTrack());
 
     // play tracking on in the editor by default: turn off if need be
-    KToggleAction *trackingAction = dynamic_cast<KToggleAction *>
+    /* was toggle */ QAction *trackingAction = dynamic_cast<QAction*>
                                     (actionCollection()->action("toggle_tracking"));
     if (trackingAction && !trackingAction->isChecked()) {
         m_view->getTrackEditor()->slotToggleTracking();
@@ -3402,7 +3402,7 @@ void RosegardenGUIApp::slotTempoToSegmentLength(QWidget* parent)
 
 void RosegardenGUIApp::slotToggleSegmentLabels()
 {
-    KToggleAction* act = dynamic_cast<KToggleAction*>(actionCollection()->action("show_segment_labels"));
+    /* was toggle */ QAction* act = dynamic_cast<QAction*>(actionCollection()->action("show_segment_labels"));
     if (act) {
         m_view->slotShowSegmentLabels(act->isChecked());
     }

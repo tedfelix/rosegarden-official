@@ -547,7 +547,7 @@ bool EditViewBase::getSegmentsOnlyRestsAndClefs()
 void EditViewBase::toggleWidget(QWidget* widget,
                                 const QString& toggleActionName)
 {
-    KToggleAction* toggleAction = getToggleAction(toggleActionName);
+    /* was toggle */ QAction* toggleAction = getToggleAction(toggleActionName);
 
     if (!toggleAction) {
         RG_DEBUG << "!!! Unknown toggle action : " << toggleActionName << endl;
@@ -580,7 +580,7 @@ EditViewBase::slotTestClipboard()
 void
 EditViewBase::slotToggleSolo()
 {
-    KToggleAction* toggleSoloAction = getToggleAction("toggle_solo");
+    /* was toggle */ QAction* toggleSoloAction = getToggleAction("toggle_solo");
     if (!toggleSoloAction)
         return ;
 
@@ -658,7 +658,7 @@ void EditViewBase::slotCompositionStateUpdate()
 {
     // update state of 'solo' toggle
     //
-    KToggleAction* toggleSolo = getToggleAction("toggle_solo");
+    /* was toggle */ QAction* toggleSolo = getToggleAction("toggle_solo");
     if (!toggleSolo)
         return ;
 
@@ -696,9 +696,9 @@ MultiViewCommandHistory* EditViewBase::getCommandHistory()
     return getDocument()->getCommandHistory();
 }
 
-KToggleAction* EditViewBase::getToggleAction(const QString& actionName)
+/* was toggle */ QAction* EditViewBase::getToggleAction(const QString& actionName)
 {
-    return dynamic_cast<KToggleAction*>(actionCollection()->action(actionName));
+    return dynamic_cast<QAction*>(actionCollection()->action(actionName));
 }
 
 }

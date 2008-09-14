@@ -122,7 +122,7 @@ RestInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
 
 void RestInserter::slotSetDots(unsigned int dots)
 {
-    KToggleAction *dotsAction = dynamic_cast<KToggleAction *>
+    /* was toggle */ QAction *dotsAction = dynamic_cast<QAction*>
                                 (actionCollection()->action("toggle_dot"));
     if (dotsAction && m_noteDots != dots) {
         dotsAction->setChecked(dots > 0);

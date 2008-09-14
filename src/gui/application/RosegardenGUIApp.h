@@ -47,7 +47,7 @@ class QProcess;
 
 //class KConfig;
 class QAction;
-class KToggleAction;
+class /* was toggle */ QAction;
 class KRecentFilesAction;
 
 
@@ -1562,21 +1562,21 @@ private:
      */
     KRecentFilesAction* m_fileOpenRecent;
 
-    KToggleAction* m_viewToolBar;
-    KToggleAction* m_viewToolsToolBar;
-    KToggleAction* m_viewTracksToolBar;
-    KToggleAction* m_viewEditorsToolBar;
-    KToggleAction* m_viewZoomToolBar;
-    KToggleAction* m_viewStatusBar;
-    KToggleAction* m_viewTransport;
-    KToggleAction* m_viewTransportToolBar;
-    KToggleAction* m_viewTrackLabels;
-    KToggleAction* m_viewRulers;
-    KToggleAction* m_viewTempoRuler;
-    KToggleAction* m_viewChordNameRuler;
-    KToggleAction* m_viewPreviews;
-    KToggleAction* m_viewSegmentLabels;
-    KToggleAction* m_enableMIDIrouting;
+    /* was toggle */ QAction* m_viewToolBar;
+    /* was toggle */ QAction* m_viewToolsToolBar;
+    /* was toggle */ QAction* m_viewTracksToolBar;
+    /* was toggle */ QAction* m_viewEditorsToolBar;
+    /* was toggle */ QAction* m_viewZoomToolBar;
+    /* was toggle */ QAction* m_viewStatusBar;
+    /* was toggle */ QAction* m_viewTransport;
+    /* was toggle */ QAction* m_viewTransportToolBar;
+    /* was toggle */ QAction* m_viewTrackLabels;
+    /* was toggle */ QAction* m_viewRulers;
+    /* was toggle */ QAction* m_viewTempoRuler;
+    /* was toggle */ QAction* m_viewChordNameRuler;
+    /* was toggle */ QAction* m_viewPreviews;
+    /* was toggle */ QAction* m_viewSegmentLabels;
+    /* was toggle */ QAction* m_enableMIDIrouting;
 
 	// QAction pointers, dealloc. in: RosegardenGUIApp::~RosegardenGUIApp()
     QAction *m_playTransport;

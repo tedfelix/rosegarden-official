@@ -72,24 +72,24 @@ NoteInserter::NoteInserter(NotationView* view)
     m_defaultStyle = qstrtostr(settings.value("style", strtoqstr(NoteStyleFactory::DefaultStyle)).toString());
     settings.endGroup();
 
-    KToggleAction *autoBeamAction = new QAction( 0, i18n("Auto-Beam when appropriate"), dynamic_cast<QObject*>(this) );
+    /* was toggle */ QAction *autoBeamAction = new QAction( 0, i18n("Auto-Beam when appropriate"), dynamic_cast<QObject*>(this) );
 ;
 
-    	connect( KToggleAction *autoBeamAction, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleAutoBeam()) ); ;
+    	connect( /* was toggle */ QAction *autoBeamAction, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleAutoBeam()) ); ;
 
     
 ;
 
-    	KToggleAction *autoBeamAction->setObjectName("toggle_auto_beam");
+    	/* was toggle */ QAction *autoBeamAction->setObjectName("toggle_auto_beam");
 ;
 
-    	KToggleAction *autoBeamAction->setCheckable( true );	//
+    	/* was toggle */ QAction *autoBeamAction->setCheckable( true );	//
 ;
 
-    	KToggleAction *autoBeamAction->setAutoRepeat( false );	//
+    	/* was toggle */ QAction *autoBeamAction->setAutoRepeat( false );	//
 ;
 
-    	//KToggleAction *autoBeamAction->setActionGroup( 0 );	// QActionGroup*
+    	///* was toggle */ QAction *autoBeamAction->setActionGroup( 0 );	// QActionGroup*
     autoBeamAction->setChecked(m_autoBeam);
 
     for (unsigned int i = 0; i < 6; ++i) {
@@ -623,7 +623,7 @@ void NoteInserter::slotSetNote(Note::Type nt)
 
 void NoteInserter::slotSetDots(unsigned int dots)
 {
-    KToggleAction *dotsAction = dynamic_cast<KToggleAction *>
+    /* was toggle */ QAction *dotsAction = dynamic_cast<QAction*>
                                 (actionCollection()->action("toggle_dot"));
     if (dotsAction && m_noteDots != dots) {
         dotsAction->setChecked(dots > 0);

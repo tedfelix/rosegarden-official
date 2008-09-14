@@ -1402,7 +1402,7 @@ void NotationView::slotSaveOptions()
 void NotationView::setOneToolbar(const char *actionName,
                                  const char *toolbarName)
 {
-    KToggleAction *action = getToggleAction(actionName);
+    /* was toggle */ QAction *action = getToggleAction(actionName);
     if (!action) {
         std::cerr << "WARNING: No such action as " << actionName << std::endl;
         return ;
@@ -1494,8 +1494,8 @@ void NotationView::setupActions()
 
         QString fontQName(strtoqstr(*i));
 
-        KToggleAction *fontAction =
-            new KToggleAction
+        /* was toggle */ QAction *fontAction =
+            new /* was toggle */ QAction
             (fontQName, 0, this, SLOT(slotChangeFontFromAction()),
              actionCollection(), "note_font_" + fontQName);
 
@@ -1525,8 +1525,8 @@ void NotationView::setupActions()
     for (std::vector<int>::iterator i = spacings.begin();
             i != spacings.end(); ++i) {
 
-        KToggleAction *spacingAction =
-            new KToggleAction
+        /* was toggle */ QAction *spacingAction =
+            new /* was toggle */ QAction
             (QString("%1%").arg(*i), 0, this,
              SLOT(slotChangeSpacingFromAction()),
              actionCollection(), QString("spacing_%1").arg(*i));
@@ -1551,8 +1551,8 @@ void NotationView::setupActions()
         if (*i == 0)
             name = i18n("None");
 
-        KToggleAction *proportionAction =
-            new KToggleAction
+        /* was toggle */ QAction *proportionAction =
+            new /* was toggle */ QAction
             (name, 0, this,
              SLOT(slotChangeProportionFromAction()),
              actionCollection(), QString("proportion_%1").arg(*i));
@@ -1995,7 +1995,7 @@ void NotationView::setupActions()
 
         icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap(actionsToolbars[i][3])));
 
-        new KToggleAction(actionsToolbars[i][0], icon, 0,
+        new /* was toggle */ QAction(actionsToolbars[i][0], icon, 0,
                           this, actionsToolbars[i][1],
                           actionCollection(), actionsToolbars[i][2]);
     }
@@ -2195,21 +2195,21 @@ void NotationView::setupActions()
 bool
 NotationView::isInChordMode()
 {
-    return ((KToggleAction *)actionCollection()->action("chord_mode"))->
+    return ((/* was toggle */ QAction *)actionCollection()->action("chord_mode"))->
            isChecked();
 }
 
 bool
 NotationView::isInTripletMode()
 {
-    return ((KToggleAction *)actionCollection()->action("triplet_mode"))->
+    return ((/* was toggle */ QAction *)actionCollection()->action("triplet_mode"))->
            isChecked();
 }
 
 bool
 NotationView::isInGraceMode()
 {
-    return ((KToggleAction *)actionCollection()->action("grace_mode"))->
+    return ((/* was toggle */ QAction *)actionCollection()->action("grace_mode"))->
            isChecked();
 }
 
@@ -2239,7 +2239,7 @@ NotationView::setupFontSizeMenu(std::string oldFontName)
 
         QString actionName = QString("note_font_size_%1").arg(sizes[i]);
 
-        KToggleAction *sizeAction = dynamic_cast<KToggleAction *>
+        /* was toggle */ QAction *sizeAction = dynamic_cast<QAction*>
                                     (actionCollection()->action(actionName));
 
         if (!sizeAction) {
@@ -3999,14 +3999,14 @@ NotationView::slotChangeSpacing(int spacing)
 
     //     m_spacingSlider->setSize(spacing);
 
-    KToggleAction *action = dynamic_cast<KToggleAction *>
+    /* was toggle */ QAction *action = dynamic_cast<QAction*>
                             (actionCollection()->action(QString("spacing_%1").arg(spacing)));
     if (action)
         action->setChecked(true);
     else {
         std::cerr
         << "WARNING: Expected action \"spacing_" << spacing
-        << "\" to be a KToggleAction, but it isn't (or doesn't exist)"
+        << "\" to be a /* was toggle */ QAction, but it isn't (or doesn't exist)"
         << std::endl;
     }
 
@@ -4057,14 +4057,14 @@ NotationView::slotChangeProportion(int proportion)
 
     //    m_proportionSlider->setSize(proportion);
 
-    KToggleAction *action = dynamic_cast<KToggleAction *>
+    /* was toggle */ QAction *action = dynamic_cast<QAction*>
                             (actionCollection()->action(QString("proportion_%1").arg(proportion)));
     if (action)
         action->setChecked(true);
     else {
         std::cerr
         << "WARNING: Expected action \"proportion_" << proportion
-        << "\" to be a KToggleAction, but it isn't (or doesn't exist)"
+        << "\" to be a /* was toggle */ QAction, but it isn't (or doesn't exist)"
         << std::endl;
     }
 
@@ -4216,7 +4216,7 @@ NotationView::slotChangeFont(std::string newName, int newSize)
         bool thisOne = (f[i] == m_fontName);
         if (thisOne)
             m_fontCombo->setCurrentIndex(i);
-        KToggleAction *action = dynamic_cast<KToggleAction *>
+        /* was toggle */ QAction *action = dynamic_cast<QAction*>
                                 (actionCollection()->action("note_font_" + strtoqstr(f[i])));
         NOTATION_DEBUG << "inspecting " << f[i] << (action ? ", have action" : ", no action") << endl;
         if (action)
@@ -4224,7 +4224,7 @@ NotationView::slotChangeFont(std::string newName, int newSize)
         else {
             std::cerr
             << "WARNING: Expected action \"note_font_" << f[i]
-            << "\" to be a KToggleAction, but it isn't (or doesn't exist)"
+            << "\" to be a /* was toggle */ QAction, but it isn't (or doesn't exist)"
             << std::endl;
         }
     }
@@ -6450,7 +6450,7 @@ NotationView::slotInsertableNoteEventReceived(int pitch, int velocity, bool note
     //or mixer, etc) is active, and we'll only allow insertion into
     //the most recently activated.  How about that?
 
-    KToggleAction *action = dynamic_cast<KToggleAction *>
+    /* was toggle */ QAction *action = dynamic_cast<QAction*>
         (actionCollection()->action("toggle_step_by_step"));
     if (!action) {
         NOTATION_DEBUG << "WARNING: No toggle_step_by_step action" << endl;
@@ -6580,7 +6580,7 @@ NotationView::slotInsertableTimerElapsed()
 void
 NotationView::slotToggleStepByStep()
 {
-    KToggleAction *action = dynamic_cast<KToggleAction *>
+    /* was toggle */ QAction *action = dynamic_cast<QAction*>
         (actionCollection()->action("toggle_step_by_step"));
     if (!action) {
         NOTATION_DEBUG << "WARNING: No toggle_step_by_step action" << endl;
@@ -6596,7 +6596,7 @@ NotationView::slotToggleStepByStep()
 void
 NotationView::slotStepByStepTargetRequested(QObject *obj)
 {
-    KToggleAction *action = dynamic_cast<KToggleAction *>
+    /* was toggle */ QAction *action = dynamic_cast<QAction*>
         (actionCollection()->action("toggle_step_by_step"));
     if (!action) {
         NOTATION_DEBUG << "WARNING: No toggle_step_by_step action" << endl;
