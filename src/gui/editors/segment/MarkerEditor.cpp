@@ -224,7 +224,8 @@ MarkerEditor::~MarkerEditor()
 {
     RG_DEBUG << "MarkerEditor::~MarkerEditor" << endl;
 
-    m_listView->saveLayout(confq4, MarkerEditorConfigGroup);
+    QSettings settings;  //### JAS remove if saveLayouts doesn't need settings
+    m_listView->saveLayout(settings, MarkerEditorConfigGroup);
 
     if (m_doc)
         m_doc->getCommandHistory()->detachView(actionCollection());
@@ -253,19 +254,10 @@ MarkerEditor::slotUpdate()
 
     Composition::markerconstiterator it;
 
-    QSettings confq4;
+    QSettings settings;
+    settings.beginGroup( MarkerEditorConfigGroup );
 
-    confq4.beginGroup( MarkerEditorConfigGroup );
-
-    // 
-
-    // FIX-manually-(GW), add:
-
-    // confq4.endGroup();		// corresponding to: confq4.beginGroup( MarkerEditorConfigGroup );
-
-    //  
-
-    int timeMode = confq4.value("timemode", 0).toInt() ;
+    int timeMode = settings.value("timemode", 0).toInt() ;
 
     for (it = markers.begin(); it != markers.end(); ++it) {
         QString timeString = makeTimeString((*it)->getTime(), timeMode);
@@ -297,6 +289,7 @@ MarkerEditor::slotUpdate()
 
     updatePosition();
 
+    settings.endGroup();
 }
 
 void
@@ -398,14 +391,11 @@ MarkerEditor::setupActions()
                             KStandardAction::stdName(KStandardAction::Redo));
 
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QSettings confq4;
-    confq4.beginGroup( MarkerEditorConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // confq4.endGroup();		// corresponding to: confq4.beginGroup( MarkerEditorConfigGroup );
-    //  
 
-    int timeMode = confq4.value("timemode", 0).toInt() ;
+    QSettings settings;
+    settings.beginGroup( MarkerEditorConfigGroup );
+
+    int timeMode = settings.value("timemode", 0).toInt() ;
 
     KRadioAction *action;
 
@@ -440,6 +430,8 @@ MarkerEditor::setupActions()
         action->setChecked(true);
 
     createGUI("markereditor.rc");
+
+    settings.endGroup();
 }
 
 void
@@ -585,43 +577,37 @@ MarkerEditor::makeTimeString(timeT time, int timeMode)
 void
 MarkerEditor::slotMusicalTime()
 {
-    QSettings confq4;
-    confq4.beginGroup( MarkerEditorConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // confq4.endGroup();		// corresponding to: confq4.beginGroup( MarkerEditorConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( MarkerEditorConfigGroup );
 
-    confq4.setValue("timemode", 0);
+    settings.setValue("timemode", 0);
     slotUpdate();
+
+    settings.endGroup();
 }
 
 void
 MarkerEditor::slotRealTime()
 {
-    QSettings confq4;
-    confq4.beginGroup( MarkerEditorConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // confq4.endGroup();		// corresponding to: confq4.beginGroup( MarkerEditorConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( MarkerEditorConfigGroup );
 
-    confq4.setValue("timemode", 1);
+    settings.setValue("timemode", 1);
     slotUpdate();
+
+    settings.endGroup();
 }
 
 void
 MarkerEditor::slotRawTime()
 {
-    QSettings confq4;
-    confq4.beginGroup( MarkerEditorConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // confq4.endGroup();		// corresponding to: confq4.beginGroup( MarkerEditorConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( MarkerEditorConfigGroup );
 
-    confq4.setValue("timemode", 2);
+    settings.setValue("timemode", 2);
     slotUpdate();
+
+    settings.endGroup();
 }
 
 }
