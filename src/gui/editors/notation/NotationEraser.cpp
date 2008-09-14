@@ -20,6 +20,7 @@
 #include <QApplication>
 
 #include <klocale.h>
+#include "misc/Strings.h"
 #include "document/ConfigGroups.h"
 #include "base/ViewElement.h"
 #include "commands/notation/EraseEventCommand.h"
@@ -40,14 +41,10 @@ NotationEraser::NotationEraser(NotationView* view)
         : NotationTool("NotationEraser", view),
         m_collapseRest(false)
 {
-    QSettings config;
-    config.beginGroup( NotationViewConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( NotationViewConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( NotationViewConfigGroup );
 
-    m_collapseRest = qStrToBool( config.value("collapse", "false" ) ) ;
+    m_collapseRest = qStrToBool( settings.value("collapse", "false" ) ) ;
 
     new KToggleAction(i18n("Collapse rests after erase"), 0, this,
                       SLOT(slotToggleRestCollapse()), actionCollection(),
@@ -67,6 +64,8 @@ NotationEraser::NotationEraser(NotationView* view)
 			connect( qa_select, SIGNAL(triggered()), this, SLOT(slotSelectSelected())  );
 
     createMenu("notationeraser.rc");
+
+    settings.endGroup();
 }
 
 void NotationEraser::ready()
