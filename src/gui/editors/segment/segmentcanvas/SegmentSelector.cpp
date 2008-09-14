@@ -20,6 +20,7 @@
 
 #include "base/Event.h"
 #include <klocale.h>
+#include "misc/Strings.h"
 #include "misc/Debug.h"
 #include "base/Composition.h"
 #include "base/RealTime.h"
@@ -474,14 +475,14 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 
 void SegmentSelector::setContextHelpFor(QPoint p, bool ctrlPressed)
 {
-    QSettings confq4;
-    confq4.beginGroup( GeneralOptionsConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // confq4.endGroup();		// corresponding to: confq4.beginGroup( GeneralOptionsConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( GeneralOptionsConfigGroup );
 
-    if (! qStrToBool( confq4.value("toolcontexthelp", "true" ) ) ) return;
+    if (! qStrToBool( settings.value("toolcontexthelp", "true" ) ) ) {
+        settings.endGroup();
+        return;
+    }
+    settings.endGroup();
 
     CompositionItem item = m_canvas->getFirstItemAt(p);
 
