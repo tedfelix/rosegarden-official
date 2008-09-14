@@ -101,30 +101,19 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     title_font.setBold(true);
 
     // Set up default expansions for the collapsing elements
-    QSettings config ; // was: confq4
-    QString groupTemp = config->group();
-    QSettings config;
-    config.beginGroup( "CollapsingFrame" );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( "CollapsingFrame" );
-    //  
+    QSettings settings;
+    settings.beginGroup( "CollapsingFrame" );
 
-    bool expanded = qStrToBool( config.value("trackparametersplayback", "true" ) ) ;
-    config.setValue("trackparametersplayback", expanded);
-    expanded = qStrToBool( config.value("trackparametersrecord", "false" ) ) ;
-    config.setValue("trackparametersrecord", expanded);
-    expanded = qStrToBool( config.value("trackparametersdefaults", "false" ) ) ;
-    config.setValue("trackparametersdefaults", expanded);
-    expanded = qStrToBool( config.value("trackstaffgroup", "false" ) ) ;
-    config.setValue("trackstaffgroup", expanded);
-    QSettings config;
-    config.beginGroup( groupTemp );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( groupTemp );
-    //  
+    bool expanded = qStrToBool( settings.value("trackparametersplayback", "true" ) ) ;
+    settings.setValue("trackparametersplayback", expanded);
+    expanded = qStrToBool( settings.value("trackparametersrecord", "false" ) ) ;
+    settings.setValue("trackparametersrecord", expanded);
+    expanded = qStrToBool( settings.value("trackparametersdefaults", "false" ) ) ;
+    settings.setValue("trackparametersdefaults", expanded);
+    expanded = qStrToBool( settings.value("trackstaffgroup", "false" ) ) ;
+    settings.setValue("trackstaffgroup", expanded);
 
+    settings.endGroup();
 
     QGridLayout *mainLayout = new QGridLayout(this, 5, 1, 2, 1);
 
@@ -600,21 +589,19 @@ TrackParameterBox::updateHighLow()
     Pitch highest(m_highestPlayable, accidental);
     Pitch lowest(m_lowestPlayable, accidental);
 
-    QSettings config;
-    config.beginGroup( GeneralOptionsConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( GeneralOptionsConfigGroup );
-    //  
+    QSettings settings;
+    settings.beginGroup( GeneralOptionsConfigGroup );
 
-    int base = config.value("midipitchoctave", -2).toInt() ;
+    int base = settings.value("midipitchoctave", -2).toInt() ;
+    settings.endGroup();
+
     bool useSharps = true;
     bool includeOctave = true;
 
 //    m_highButton->setText(i18n("High: %1").arg(highest.getAsString(useSharps, includeOctave, base)));
 //    m_lowButton->setText(i18n("Low: %1").arg(lowest.getAsString(useSharps, includeOctave, base)));
-    m_highButton->setText(QString("%1").arg(highest.getAsString(useSharps, includeOctave, base)));
-    m_lowButton->setText(QString("%1").arg(lowest.getAsString(useSharps, includeOctave, base)));
+    m_highButton->setText(strtoqstr(highest.getAsString(useSharps, includeOctave, base)));
+    m_lowButton->setText(strtoqstr(lowest.getAsString(useSharps, includeOctave, base)));
 
     m_presetLbl->setEnabled(false);
 }
@@ -640,7 +627,7 @@ TrackParameterBox::slotUpdateControls(int /*dummy*/)
     m_lowestPlayable = trk->getLowestPlayable();
     updateHighLow();
     // set this down here because updateHighLow just disabled the label
-    m_presetLbl->setText(trk->getPresetLabel());
+    m_presetLbl->setText(strtoqstr(trk->getPresetLabel()));
     m_presetLbl->setEnabled(true);
 
     m_staffSizeCombo->setCurrentIndex(trk->getStaffSize());
@@ -667,7 +654,7 @@ TrackParameterBox::slotSelectedTrackNameChanged()
     RG_DEBUG << "TrackParameterBox::sotSelectedTrackNameChanged()\n";
     Composition &comp = m_doc->getComposition();
     Track *trk = comp.getTrackById(m_selectedTrackId);
-    QString m_trackName = trk->getLabel();
+    QString m_trackName = strtoqstr(trk->getLabel());
     if (m_trackName.isEmpty())
         m_trackName = i18n("<untitled>");
     else
@@ -962,7 +949,7 @@ TrackParameterBox::slotPresetPressed()
     try {
         if (dialog.exec() == QDialog::Accepted) {
             m_presetLbl->setText(dialog.getName());
-            trk->setPresetLabel(dialog.getName());
+            trk->setPresetLabel(qstrtostr(dialog.getName()));
             if (dialog.getConvertAllSegments()) {
             	SegmentSyncCommand* command = new SegmentSyncCommand(
             			comp.getSegments(), comp.getSelectedTrack(),
