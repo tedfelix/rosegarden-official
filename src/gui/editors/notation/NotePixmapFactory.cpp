@@ -220,54 +220,52 @@ NotePixmapFactory::init(std::string fontName, int size)
     // sizes only and we want pixels
     QFont timeSigFont(defaultTimeSigFontFamily),
         textFont(defaultSerifFontFamily);
-    QSettings config;
-    config.beginGroup( NotationViewConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( NotationViewConfigGroup );
-    //  
 
+    QSettings settings;
+    settings.beginGroup( NotationViewConfigGroup );
 
-    m_timeSigFont = config->readFontEntry("timesigfont", &timeSigFont);
+    m_timeSigFont = settings.value("timesigfont", &timeSigFont).toString();
     m_timeSigFont.setBold(true);
     m_timeSigFont.setPixelSize(size * 5 / 2);
     m_timeSigFontMetrics = QFontMetrics(m_timeSigFont);
 
-    m_bigTimeSigFont = config->readFontEntry("timesigfont", &timeSigFont);
+    m_bigTimeSigFont = settings.value("timesigfont", &timeSigFont).toString();
     m_bigTimeSigFont.setPixelSize(size * 4 + 2);
     m_bigTimeSigFontMetrics = QFontMetrics(m_bigTimeSigFont);
 
-    m_tupletCountFont = config->readFontEntry("textfont", &textFont);
+    m_tupletCountFont = settings.value("textfont", &textFont).toString();
     m_tupletCountFont.setBold(true);
     m_tupletCountFont.setPixelSize(size * 2);
     m_tupletCountFontMetrics = QFontMetrics(m_tupletCountFont);
 
-    m_textMarkFont = config->readFontEntry("textfont", &textFont);
+    m_textMarkFont = settings.value("textfont", &textFont).toString();
     m_textMarkFont.setBold(true);
     m_textMarkFont.setItalic(true);
     m_textMarkFont.setPixelSize(size * 2);
     m_textMarkFontMetrics = QFontMetrics(m_textMarkFont);
 
-    m_fingeringFont = config->readFontEntry("textfont", &textFont);
+    m_fingeringFont = settings.value("textfont", &textFont).toString();
     m_fingeringFont.setBold(true);
     m_fingeringFont.setPixelSize(size * 5 / 3);
     m_fingeringFontMetrics = QFontMetrics(m_fingeringFont);
 
-    m_ottavaFont = config->readFontEntry("textfont", &textFont);
+    m_ottavaFont = settings.value("textfont", &textFont).toString();
     m_ottavaFont.setPixelSize(size * 2);
     m_ottavaFontMetrics = QFontMetrics(m_ottavaFont);
 
-    m_clefOttavaFont = config->readFontEntry("textfont", &textFont);
+    m_clefOttavaFont = settings.value("textfont", &textFont).toString();
     m_clefOttavaFont.setPixelSize(getLineSpacing() * 3 / 2);
     m_clefOttavaFontMetrics = QFontMetrics(m_clefOttavaFont);
 
-    m_trackHeaderFont = config->readFontEntry("sansfont", &m_trackHeaderFont);
+    m_trackHeaderFont = settings.value("sansfont", &m_trackHeaderFont).toString();
     m_trackHeaderFont.setPixelSize(12);
     m_trackHeaderFontMetrics = QFontMetrics(m_trackHeaderFont);
 
     m_trackHeaderBoldFont = m_trackHeaderFont;
     m_trackHeaderBoldFont.setBold(true);
     m_trackHeaderBoldFontMetrics = QFontMetrics(m_trackHeaderBoldFont);
+
+    settings.endGroup();
 }
 
 NotePixmapFactory::~NotePixmapFactory()
@@ -3219,17 +3217,20 @@ NotePixmapFactory::getTextFont(const Text &text) const
         tiny = true;
     }
     
-    QSettings config ; // was: confq4
+    QSettings settings;
+    //@@@ JAS Check here first for errors.  Added .beginGroup()
+    settings.beginGroup( NotationViewConfigGroup );
 
     QFont textFont;
 
     if (serif) {
         textFont = QFont(defaultSerifFontFamily);
-        textFont = config->readFontEntry("textfont", &textFont);
+        textFont = settings.value("textfont", &textFont).toString();
     } else {
         textFont = QFont(defaultSansSerifFontFamily);
-        textFont = config->readFontEntry("sansfont", &textFont);
+        textFont = settings.value("sansfont", &textFont).toString();
     }
+    settings.endGroup();
 
     textFont.setStyleStrategy(QFont::StyleStrategy(QFont::PreferDefault |
                                                    QFont::PreferMatch));
