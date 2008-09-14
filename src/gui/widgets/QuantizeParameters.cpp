@@ -21,6 +21,7 @@
 #include <QApplication>
 
 #include <klocale.h>
+#include "misc/Strings.h"
 #include "base/NotationTypes.h"
 #include "base/Quantizer.h"
 #include "base/BasicQuantizer.h"
@@ -72,7 +73,7 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     }
 
     QGroupBox *quantizerBox = new QGroupBox
-                              (1, Horizontal, i18n("Quantizer"), this);
+                              (i18n("Quantizer"), this);
 
     m_mainLayout->addWidget(quantizerBox, zero, 0);
     QFrame *typeFrame = new QFrame(quantizerBox);
@@ -163,7 +164,7 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     layout->addWidget(m_durationCheckBox, 3, 0, 0+1, 1- 1);
 
     m_postProcessingBox = new QGroupBox
-                          (1, Horizontal, i18n("After quantization"), this);
+                          (i18n("After quantization"), this);
 
     if (p) {
         m_mainLayout->addWidget(m_postProcessingBox,
@@ -206,7 +207,7 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     timeT defaultUnit =
         Note(Note::Demisemiquaver).getDuration();
 
-    if (!m_configCategory) {
+    if (!m_configCategory.isEmpty()) {
         if (defaultQuantizer == Notation)
             m_configCategory = "Quantize Dialog Notation";
         else
@@ -217,39 +218,35 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     int defaultIterate = 100;
 
     if (!m_configCategory.isEmpty()) {
-        QSettings config;
-        config.beginGroup( m_configCategory );
-        // 
-        // FIX-manually-(GW), add:
-        // config.endGroup();		// corresponding to: config.beginGroup( m_configCategory );
-        //  
+        QSettings settings;
+        settings.beginGroup( m_configCategory );
 
-        defaultType =             config.value("quantizetype",
-                                 (defaultQuantizer == Notation).toInt()  ? 2 :
-                                 (defaultQuantizer == Legato) ? 1 :
-                                 0);
-        defaultUnit =             config.value("quantizeunit", defaultUnit).toInt() ;
-        defaultSwing =             config.value("quantizeswing", defaultSwing).toInt() ;
-        defaultIterate =             config.value("quantizeiterate", defaultIterate).toInt() ;
-        m_notationTarget->setChecked
-        ( qStrToBool( config.value("quantizenotationonly", "                               defaultQuantizer == Notation" ) ) );
-        m_durationCheckBox->setChecked
-        ( qStrToBool( config.value("quantizedurations", "false" ) ) );
-        m_simplicityCombo->setCurrentIndex
-        ( config.value("quantizesimplicity", 13).toInt()  - 11);
-        m_maxTuplet->setCurrentIndex
-        ( config.value("quantizemaxtuplet", 3).toInt()  - 1);
-        m_counterpoint->setChecked
-        ( qStrToBool( config.value("quantizecounterpoint", "false" ) ) );
-        m_rebeam->setChecked
-        ( qStrToBool( config.value("quantizerebeam", "true" ) ) );
-        m_makeViable->setChecked
-        ( qStrToBool( config.value("quantizemakeviable", "false" ) ) );
-        m_deCounterpoint->setChecked
-        ( qStrToBool( config.value("quantizedecounterpoint", "false" ) ) );
-        m_articulate->setChecked
-        ( qStrToBool( config.value("quantizearticulate", "true" ) ) );
-        advanced = qStrToBool( config.value("quantizeshowadvanced", "false" ) ) ;
+        defaultType = settings.value("quantizetype", (defaultQuantizer == Notation)
+                ? 2 : (defaultQuantizer == Legato) ? 1 : 0).toInt();
+        defaultUnit = settings.value("quantizeunit", (long long) defaultUnit).toInt();
+        defaultSwing = settings.value("quantizeswing", defaultSwing).toInt();
+        defaultIterate = settings.value("quantizeiterate", defaultIterate).toInt();
+        m_notationTarget->setChecked(qStrToBool(settings.value
+                ("quantizenotationonly", (defaultQuantizer == Notation))));
+        m_durationCheckBox->setChecked(qStrToBool(settings.value
+                ("quantizedurations", "false")));
+        m_simplicityCombo->setCurrentIndex(settings.value
+                ("quantizesimplicity", 13).toInt()  - 11);
+        m_maxTuplet->setCurrentIndex(settings.value
+                ("quantizemaxtuplet", 3).toInt()  - 1);
+        m_counterpoint->setChecked(qStrToBool(settings.value
+                ("quantizecounterpoint", "false" )));
+        m_rebeam->setChecked(qStrToBool(settings.value
+                ("quantizerebeam", "true")));
+        m_makeViable->setChecked(qStrToBool(settings.value
+                ("quantizemakeviable", "false")));
+        m_deCounterpoint->setChecked(qStrToBool(settings.value
+                ("quantizedecounterpoint", "false")));
+        m_articulate->setChecked(qStrToBool(settings.value
+                ("quantizearticulate", "true")));
+        advanced = qStrToBool(settings.value("quantizeshowadvanced", "false"));
+
+        settings.endGroup();
     } else {
         defaultType =
             (defaultQuantizer == Notation) ? 2 :
@@ -412,35 +409,33 @@ QuantizeParameters::getQuantizer() const
     }
 
     if (!m_configCategory.isEmpty()) {
-        QSettings config;
-        config.beginGroup( m_configCategory );
-        // 
-        // FIX-manually-(GW), add:
-        // config.endGroup();		// corresponding to: config.beginGroup( m_configCategory );
-        //  
+        QSettings settings;
+        settings.beginGroup( m_configCategory );
 
-        config.setValue("quantizetype", type);
-        config.setValue("quantizeunit", unit);
-        config.setValue("quantizeswing", swing);
-        config.setValue("quantizeiterate", iterate);
-        config.setValue("quantizenotationonly",
+        settings.setValue("quantizetype", type);
+        settings.setValue("quantizeunit", (long long) unit);
+        settings.setValue("quantizeswing", swing);
+        settings.setValue("quantizeiterate", iterate);
+        settings.setValue("quantizenotationonly",
                            m_notationTarget->isChecked());
         if (type == 0) {
-            config.setValue("quantizedurations",
+            settings.setValue("quantizedurations",
                                m_durationCheckBox->isChecked());
         } else {
-            config.setValue("quantizesimplicity",
+            settings.setValue("quantizesimplicity",
                                m_simplicityCombo->currentIndex() + 11);
-            config.setValue("quantizemaxtuplet",
+            settings.setValue("quantizemaxtuplet",
                                m_maxTuplet->currentIndex() + 1);
-            config.setValue("quantizecounterpoint",
+            settings.setValue("quantizecounterpoint",
                                m_counterpoint->isChecked());
-            config.setValue("quantizearticulate",
+            settings.setValue("quantizearticulate",
                                m_articulate->isChecked());
         }
-        config.setValue("quantizerebeam", m_rebeam->isChecked());
-        config.setValue("quantizemakeviable", m_makeViable->isChecked());
-        config.setValue("quantizedecounterpoint", m_deCounterpoint->isChecked());
+        settings.setValue("quantizerebeam", m_rebeam->isChecked());
+        settings.setValue("quantizemakeviable", m_makeViable->isChecked());
+        settings.setValue("quantizedecounterpoint", m_deCounterpoint->isChecked());
+
+        settings.endGroup();
     }
 
     return quantizer;
