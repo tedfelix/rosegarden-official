@@ -26,7 +26,7 @@
 #include <set>
 
 class QWidget;
-class QTable;
+class QTableWidget;
 
 
 namespace Rosegarden
@@ -64,7 +64,7 @@ private:
     void makeConnectionList(MidiDevice::DeviceDirection direction, 
 			    QStringList &list);
     
-    QTable *m_table;
+    QTableWidget *m_table;
 
     DeviceList m_devices;
     std::set<DeviceId> m_deletedDevices;

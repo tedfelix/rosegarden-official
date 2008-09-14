@@ -142,7 +142,7 @@ ColourConfigurationPage::slotAddNew()
 void
 ColourConfigurationPage::slotDelete()
 {
-    QTableSelection temp = m_colourtable->selection(0);
+    QTableWidgetSelection temp = m_colourtable->selection(0);
 
     if ((!temp.isActive()) || (temp.topRow() == 0))
         return ;

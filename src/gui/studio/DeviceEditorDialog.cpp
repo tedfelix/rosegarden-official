@@ -39,7 +39,7 @@
 #include <QRegExp>
 #include <QString>
 #include <QStringList>
-#include <qtable.h>
+#include <QTableWidget>
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -59,7 +59,7 @@ DeviceEditorDialog::DeviceEditorDialog(QDialogButtonBox::QWidget *parent,
 {
     QVBox *mainBox = makeVBoxMainWidget();
 
-    m_table = new QTable(0, 4, mainBox);
+    m_table = new QTableWidget(0, 4, mainBox);
     m_table->setSorting(false);
     m_table->setRowMovingEnabled(false);
     m_table->setColumnMovingEnabled(false);
@@ -71,7 +71,7 @@ DeviceEditorDialog::DeviceEditorDialog(QDialogButtonBox::QWidget *parent,
     m_table->horizontalHeader()->show();
     m_table->verticalHeader()->hide();
     m_table->setLeftMargin(0);
-    m_table->setSelectionMode(QTable::SingleRow);
+    m_table->setSelectionMode(QTableWidget::SingleRow);
     m_table->setColumnReadOnly(0, true);
     m_table->setColumnReadOnly(2, true);
 

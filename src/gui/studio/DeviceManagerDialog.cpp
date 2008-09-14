@@ -60,7 +60,7 @@
 #include <QSizePolicy>
 #include <QString>
 #include <QStringList>
-#include <qtable.h>
+#include <QTableWidget>
 #include <QToolTip>
 #include <QWidget>
 
@@ -90,7 +90,7 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
 
     QGroupBox *groupBox = new QGroupBox(2, Horizontal, i18n("Play devices"), mainBox);
 
-    m_playTable = new QTable(0, 2, groupBox);
+    m_playTable = new QTableWidget(0, 2, groupBox);
     m_playTable->setSorting(false);
     m_playTable->setRowMovingEnabled(false);
     m_playTable->setColumnMovingEnabled(false);
@@ -100,7 +100,7 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
     m_playTable->horizontalHeader()->show();
     m_playTable->verticalHeader()->hide();
     m_playTable->setLeftMargin(0);
-    m_playTable->setSelectionMode(QTable::SingleRow);
+    m_playTable->setSelectionMode(QTableWidget::SingleRow);
 
     QFrame *frame = new QFrame(groupBox);
     QVBoxLayout *vlayout = new QVBoxLayout(frame);
@@ -148,7 +148,7 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
     mainLayout->addWidget(groupBox);
     groupBox = new QGroupBox(2, Horizontal, i18n("Record devices"), mainBox);
 
-    m_recordTable = new QTable(0, 3, groupBox);
+    m_recordTable = new QTableWidget(0, 3, groupBox);
     m_recordTable->setSorting(false);
     m_recordTable->setRowMovingEnabled(false);
     m_recordTable->setColumnMovingEnabled(false);
@@ -159,7 +159,7 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
     m_recordTable->horizontalHeader()->show();
     m_recordTable->verticalHeader()->hide();
     m_recordTable->setLeftMargin(0);
-    m_recordTable->setSelectionMode(QTable::SingleRow);
+    m_recordTable->setSelectionMode(QTableWidget::SingleRow);
 
     frame = new QFrame(groupBox);
     vlayout = new QVBoxLayout(frame);

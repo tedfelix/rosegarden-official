@@ -115,7 +115,7 @@
 #include <QString>
 #include <QStringList>
 #include <QStringList>
-#include <qtable.h>
+#include <QTableWidget>
 #include <QTabWidget>
 #include <QTextCodec>
 #include <QTextEdit>

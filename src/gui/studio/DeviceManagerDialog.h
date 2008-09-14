@@ -27,7 +27,7 @@
 
 
 class QWidget;
-class QTable;
+class QTableWidget;
 class QPushButton;
 class QCloseEvent;
 
@@ -96,8 +96,8 @@ private:
     void makeConnectionList(MidiDevice::DeviceDirection direction, 
 			    QStringList &list);
     
-    QTable *m_playTable;
-    QTable *m_recordTable;
+    QTableWidget *m_playTable;
+    QTableWidget *m_recordTable;
 
     typedef std::vector<MidiDevice *> MidiDeviceList;
     MidiDeviceList m_playDevices;

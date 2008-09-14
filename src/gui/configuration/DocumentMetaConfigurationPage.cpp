@@ -43,7 +43,7 @@
 #include <QPixmap>
 #include <QPushButton>
 #include <QString>
-#include <qtable.h>
+#include <QTableWidget>
 #include <QTabWidget>
 #include <QWidget>
 #include <QLayout>
@@ -64,11 +64,11 @@ static QString durationToString(Rosegarden::Composition &comp,
 			   comp.getBarNumber(absTime));
 }
 
-class SegmentDataItem : public QTableItem
+class SegmentDataItem : public QTableWidgetItem
 {
 public:
-    SegmentDataItem(QTable *t, QString s) :
-	QTableItem(t, QTableItem::Never, s) { }
+    SegmentDataItem(QTableWidget *t, QString s) :
+	QTableWidgetItem(t, QTableWidgetItem::Never, s) { }
     virtual int alignment() const { return Qt::AlignCenter; }
 
     virtual QString key() const {
@@ -156,8 +156,8 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
     frame = new QFrame(m_tabWidget);
     layout = new QGridLayout(frame, 1, 1, 10, 5);
 
-    QTable *table = new QTable(1, 11, frame, "Segment Table");
-    table->setSelectionMode(QTable::NoSelection);
+    QTableWidget *table = new QTableWidget(1, 11, frame, "Segment Table");
+    table->setSelectionMode(QTableWidget::NoSelection);
     table->setSorting(true);
     table->horizontalHeader()->setLabel(0, i18n("Type"));
     table->horizontalHeader()->setLabel(1, i18n("Track"));
@@ -206,7 +206,7 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
         colourPixmap.fill(GUIPalette::convertColour(colour));
 
         table->setItem(i, 2,
-                       new QTableItem(table, QTableItem::Never,
+                       new QTableWidgetItem(table, QTableWidgetItem::Never,
                                       strtoqstr(s->getLabel()),
                                       colourPixmap));
 
