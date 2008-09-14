@@ -50,18 +50,14 @@ NoteFontFactory::getFontNames(bool forceRescan)
     if (!m_fontNames.empty())
         return m_fontNames;
 
-    QSettings config;
-    config.beginGroup( NotationViewConfigGroup );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( NotationViewConfigGroup );
-    //  
-
+    QSettings settings;
+    settings.beginGroup( NotationViewConfigGroup );
 
     QString fontNameList = "";
     if (!forceRescan) {
-        fontNameList = config.value("notefontlist") ;
+        fontNameList = settings.value("notefontlist", "").toString();
     }
+    settings.endGroup();
 
     NOTATION_DEBUG << "NoteFontFactory::getFontNames: read from cache: " << fontNameList << endl;
 
@@ -110,7 +106,9 @@ NoteFontFactory::getFontNames(bool forceRescan)
         savedNames += *i;
     }
 
-    config.setValue("notefontlist", savedNames);
+    settings.beginGroup( NotationViewConfigGroup );
+    settings.setValue("notefontlist", savedNames);
+    settings.endGroup();
 
     return m_fontNames;
 }
