@@ -17,6 +17,7 @@
 
 
 #include "NotationHLayout.h"
+#include "misc/Strings.h"
 #include "misc/Debug.h"
 #include <QApplication>
 
@@ -68,14 +69,11 @@ NotationHLayout::NotationHLayout(Composition *c, NotePixmapFactory *npf,
 {
     //    NOTATION_DEBUG << "NotationHLayout::NotationHLayout()" << endl;
 
-    QSettings config;
-    config.beginGroup( "Notation Options" );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( "Notation Options" );
-    //  
+    QSettings settings;
+    settings.beginGroup( "Notation Options" );
 
-    m_keySigCancelMode = config.value("keysigcancelmode", 1).toInt() ;
+    m_keySigCancelMode = settings.value("keysigcancelmode", 1).toInt() ;
+    settings.endGroup();
 }
 
 NotationHLayout::~NotationHLayout()
@@ -253,27 +251,23 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 
     NOTATION_DEBUG << "ottava shift at start:" << ottavaShift << ", ottavaEnd " << ottavaEnd << endl;
 
-    QSettings config;
-    config.beginGroup( "Notation Options" );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( "Notation Options" );
-    //  
+    QSettings settings;
+    settings.beginGroup( "Notation Options" );
 
-
-    int accOctaveMode = config.value("accidentaloctavemode", 1).toInt() ;
+    int accOctaveMode = settings.value("accidentaloctavemode", 1).toInt() ;
     AccidentalTable::OctaveType octaveType =
         (accOctaveMode == 0 ? AccidentalTable::OctavesIndependent :
          accOctaveMode == 1 ? AccidentalTable::OctavesCautionary :
          AccidentalTable::OctavesEquivalent);
 
-    int accBarMode = config.value("accidentalbarmode", 0).toInt() ;
+    int accBarMode = settings.value("accidentalbarmode", 0).toInt() ;
     AccidentalTable::BarResetType barResetType =
         (accBarMode == 0 ? AccidentalTable::BarResetNone :
          accBarMode == 1 ? AccidentalTable::BarResetCautionary :
          AccidentalTable::BarResetExplicit);
 
-    bool showInvisibles = qStrToBool( config.value("showinvisibles", "true" ) ) ;
+    bool showInvisibles = qStrToBool( settings.value("showinvisibles", "true" ) ) ;
+    settings.endGroup();
 
     if (barResetType != AccidentalTable::BarResetNone) {
         //!!! very crude and expensive way of making sure we see the
@@ -1269,14 +1263,11 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
     int startBar = getComposition()->getBarNumber(startTime);
 
-    QSettings config;
-    config.beginGroup( "Notation Options" );
-    // 
-    // FIX-manually-(GW), add:
-    // config.endGroup();		// corresponding to: config.beginGroup( "Notation Options" );
-    //  
+    QSettings settings;
+    settings.beginGroup( "Notation Options" );
 
-    bool showInvisibles = qStrToBool( config.value("showinvisibles", "true" ) ) ;
+    bool showInvisibles = qStrToBool( settings.value("showinvisibles", "true" ) ) ;
+    settings.endGroup();
 
     for (BarPositionList::iterator bpi = m_barPositions.begin();
             bpi != m_barPositions.end(); ++bpi) {
