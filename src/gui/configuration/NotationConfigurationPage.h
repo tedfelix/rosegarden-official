@@ -32,7 +32,6 @@ class QLabel;
 class QComboBox;
 class QCheckBox;
 class KFontRequester;
-class KConfig;
 
 
 namespace Rosegarden
@@ -49,8 +48,7 @@ class NotationConfigurationPage : public TabbedConfigurationPage
     Q_OBJECT
 
 public:
-    NotationConfigurationPage(QSettings cfg,
-                              QWidget *parent = 0, const char *name=0);
+    NotationConfigurationPage(QWidget *parent = 0, const char *name=0);
 
     virtual void apply();
 
