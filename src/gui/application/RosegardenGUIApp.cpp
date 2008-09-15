@@ -203,6 +203,9 @@
 #include <QPushButton>
 #include <QToolButton>
 #include <QMainWindow>
+#include <QMenu>
+#include <QMenuBar>
+#include <QAction>
 
 #include <ui_RosegardenTransport.h>
 
@@ -221,8 +224,8 @@
 #include <kurl.h>
 #include <kxmlguiclient.h>
 #include <kstatusbar.h>
-#include <kstandardshortcut.h>
-#include <kstandardaction.h>
+//#include <kstandardshortcut.h>
+//#include <kstandardaction.h>
 #include <kstandarddirs.h>
 
 #ifdef HAVE_LIBJACK
@@ -597,6 +600,16 @@ RosegardenGUIApp::~RosegardenGUIApp()
     delete m_jumpToQuickMarkerAction;
     delete m_setQuickMarkerAction;
 	
+	// delete QMenus
+	delete m_menuFile;
+	delete m_menuEdit;
+	delete m_menuComposition;
+	delete m_menuStudio;
+	delete m_menuSettings;
+	
+	// delete QMenuBar
+	delete m_menuBarMain;
+	
 	// delete QAction pointers
 	delete m_playTransport;	//@@@ emru: should these be free'd, if GUIApp quits? Assumed so!
 	delete m_stopTransport;
@@ -626,7 +639,94 @@ void RosegardenGUIApp::setupActions()
     // setup File menu
     // New Window ?
     
-    KStandardAction::open (this, SLOT(slotFileOpen()), actionCollection());
+	QAction* qa_open = new QAction( "&Open", this );
+	connect( qa_open, SIGNAL(toggled()), this, SLOT(slotFileOpen()) ); ;
+	//qa_open->setCheckable( true );	//
+	qa_open->setAutoRepeat( false );	//
+	//qa_open->setObjectName("");
+	//qa_open->setActionGroup( 0 );	// QActionGroup*
+	
+	QAction* qa_openRecent = new QAction( "Open recently &used...", this );
+	connect( qa_openRecent, SIGNAL(toggled()), this, SLOT(slotFileOpenRecent(const QUrl&)) ); ;
+	//qa_openRecent->setCheckable( true );	//
+	qa_openRecent->setAutoRepeat( false );	//
+	//qa_openRecent->setObjectName("");
+	//qa_openRecent->setActionGroup( 0 );	// QActionGroup*
+	
+	QAction* qa_save = new QAction( "&Save", this );
+	connect( qa_save, SIGNAL(toggled()), this, SLOT(slotFileSave()) ); ;
+	//qa_save->setCheckable( true );	//
+	qa_save->setAutoRepeat( false );	//
+	//qa_save->setObjectName("");
+	//qa_save->setActionGroup( 0 );	// QActionGroup*
+	
+	QAction* qa_saveAs = new QAction( "Save &as... ", this );
+	connect( qa_saveAs, SIGNAL(toggled()), this, SLOT(slotFileSaveAs()) ); ;
+	//qa_saveAs->setCheckable( true );	//
+	qa_saveAs->setAutoRepeat( false );	//
+	//qa_saveAs->setObjectName("");
+	//qa_saveAs->setActionGroup( 0 );	// QActionGroup*
+	
+	QAction* qa_revert = new QAction( "&Revert to last saved Version", this );
+	connect( qa_revert, SIGNAL(toggled()), this, SLOT(slotRevertToSaved()) ); ;
+	//qa_revert->setCheckable( true );	//
+	qa_revert->setAutoRepeat( false );	//
+	//qa_revert->setObjectName("");
+	//qa_revert->setActionGroup( 0 );	// QActionGroup*
+	
+	QAction* qa_close = new QAction( "&Close File", this );
+	connect( qa_close, SIGNAL(toggled()), this, SLOT(slotFileClose()) ); ;
+	//qa_close->setCheckable( true );	//
+	qa_close->setAutoRepeat( false );	//
+	//qa_close->setObjectName("");
+	//qa_close->setActionGroup( 0 );	// QActionGroup*
+	
+	QAction* qa_print = new QAction( "&Print", this );
+	connect( qa_print, SIGNAL(toggled()), this, SLOT(slotFilePrint()) ); ;
+	//qa_print->setCheckable( true );	//
+	qa_print->setAutoRepeat( false );	//
+	//qa_print->setObjectName("");
+	//qa_print->setActionGroup( 0 );	// QActionGroup*
+	
+	QAction* qa_printPreview = new QAction( "Show Print Pre&view", this );
+	connect( qa_printPreview, SIGNAL(toggled()), this, SLOT(slotFilePrintPreview()) ); ;
+	//qa_printPreview->setCheckable( true );	//
+	qa_printPreview->setAutoRepeat( false );	//
+	//qa_printPreview->setObjectName("");
+	//qa_printPreview->setActionGroup( 0 );	// QActionGroup*
+	
+	QAction* qa_quit = new QAction( "&Quit the Rosegarden", this );
+	connect( qa_quit, SIGNAL(toggled()), this, SLOT(slotQuit()) ); ;
+	//qa_quit->setCheckable( true );	//
+	qa_quit->setAutoRepeat( false );	//
+	//qa_quit->setObjectName("");
+	//qa_quit->setActionGroup( 0 );	// QActionGroup*
+	
+	m_menuBarMain = this->menuBar(); // create and return main menu bar
+	
+	/* create sub-menus */
+	/********************/
+	m_menuFile = m_menuBarMain->addMenu(tr("&File"));
+	m_menuEdit = m_menuBarMain->addMenu(tr("&Edit"));
+	m_menuComposition = m_menuBarMain->addMenu(tr("&Composition"));
+	m_menuStudio = m_menuBarMain->addMenu(tr("&Studio"));
+	m_menuSettings = m_menuBarMain->addMenu(tr("Se&ttings"));
+	
+	// add actions
+	m_menuFile->addAction(qa_open);
+	m_menuFile->addAction(qa_openRecent);
+	m_menuFile->addAction(qa_save);
+	m_menuFile->addAction(qa_saveAs);
+	m_menuFile->addAction(qa_revert);
+	m_menuFile->addAction(qa_close);
+	m_menuFile->addAction(qa_print);
+	m_menuFile->addAction(qa_printPreview);
+	m_menuFile->addAction(qa_quit);
+	
+	
+	/*
+	// old:
+	KStandardAction::open (this, SLOT(slotFileOpen()), actionCollection());
     m_fileRecent = KStandardAction::openRecent(this,
                                           SLOT(slotFileOpenRecent(const KURL&)),
                                           actionCollection());
@@ -636,7 +736,10 @@ void RosegardenGUIApp::setupActions()
     KStandardAction::close (this, SLOT(slotFileClose()), actionCollection());
     KStandardAction::print (this, SLOT(slotFilePrint()), actionCollection());
     KStandardAction::printPreview (this, SLOT(slotFilePrintPreview()), actionCollection());
-
+	KStandardAction::quit (this, SLOT(slotQuit()), actionCollection());
+	*/
+	
+	
     QAction *qa_file_import_project = new QAction( "Import Rosegarden &Project file...", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_file_import_project->setIconText(0); 
 			connect( qa_file_import_project, SIGNAL(triggered()), this, SLOT(slotImportProject())  );
@@ -705,7 +808,6 @@ void RosegardenGUIApp::setupActions()
 			qa_file_show_playlist->setIconText(0); 
 			connect( qa_file_show_playlist, SIGNAL(triggered()), this, SLOT(slotPlayList())  );
 
-    KStandardAction::quit (this, SLOT(slotQuit()), actionCollection());
 
     // help menu
     QAction *qa_tutorial = new QAction( "Rosegarden &Tutorial", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
@@ -716,11 +818,40 @@ void RosegardenGUIApp::setupActions()
 			qa_guidelines->setIconText(0); 
 			connect( qa_guidelines, SIGNAL(triggered()), this, SLOT(slotBugGuidelines())  );
 
-    // setup edit menu
+    
+			
+	// setup edit menu
+	/*
+	// old:
     KStandardAction::cut (this, SLOT(slotEditCut()), actionCollection());
     KStandardAction::copy (this, SLOT(slotEditCopy()), actionCollection());
     KStandardAction::paste (this, SLOT(slotEditPaste()), actionCollection());
-
+	*/
+	
+	QAction* qa_cut = new QAction( "Cu&t", this );
+	connect( qa_cut, SIGNAL(toggled()), this, SLOT(slotEditCut()) ); ;
+	//qa_cut->setCheckable( true );	//
+	qa_cut->setAutoRepeat( false );	//
+	//qa_cut->setObjectName("");
+	//qa_cut->setActionGroup( 0 );	// QActionGroup*
+	
+	QAction* qa_copy = new QAction( "&Copy", this );
+	connect( qa_copy, SIGNAL(toggled()), this, SLOT(slotEditCopy()) ); ;
+	//qa_copy->setCheckable( true );	//
+	qa_copy->setAutoRepeat( false );	//
+	//qa_copy->setObjectName("");
+	//qa_copy->setActionGroup( 0 );	// QActionGroup*
+	
+	QAction* qa_paste = new QAction( "&Paste", this );
+	connect( qa_paste, SIGNAL(toggled()), this, SLOT(slotEditPaste()) ); ;
+	//qa_paste->setCheckable( true );	//
+	qa_paste->setAutoRepeat( false );	//
+	//qa_paste->setObjectName("");
+	//qa_paste->setActionGroup( 0 );	// QActionGroup*
+	
+	m_menuEdit->addAction(qa_cut);
+	m_menuEdit->addAction(qa_copy);
+	m_menuEdit->addAction(qa_paste);
     //
     // undo/redo actions are special in that they are connected to
     // slots later on, when the current document is set up - see
@@ -745,10 +876,19 @@ void RosegardenGUIApp::setupActions()
 
     // setup Settings menu
     //
-    m_viewToolBar = KStandardAction::showToolbar (this, SLOT(slotToggleToolBar()), actionCollection(),
-                    "show_stock_toolbar");
+    //  old: m_viewToolBar = KStandardAction::showToolbar (this, SLOT(slotToggleToolBar()), actionCollection(),
+   //                 "show_stock_toolbar");
 
-    m_viewToolsToolBar = new QAction( i18n("Show T&ools Toolbar"), dynamic_cast<QObject*>(this) );
+	QAction* qa_showToolbar = new QAction( "Show &Toolbar", this );
+	connect( qa_showToolbar, SIGNAL(toggled()), this, SLOT(slotToggleToolBar()) ); ;
+	qa_quit->setCheckable( true );	//
+	qa_showToolbar->setAutoRepeat( false );	//
+	//qa_showToolbar->setObjectName("");
+	//qa_showToolbar->setActionGroup( 0 );	// QActionGroup*
+	
+	m_menuSettings->addAction(qa_showToolbar);
+	
+	m_viewToolsToolBar = new QAction( i18n("Show T&ools Toolbar"), dynamic_cast<QObject*>(this) );
 ;
 
     	connect( m_viewToolsToolBar, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleToolsToolBar()) ); ;
@@ -788,10 +928,20 @@ void RosegardenGUIApp::setupActions()
     	m_viewZoomToolBar->setAutoRepeat( false );	//
     	//m_viewZoomToolBar->setActionGroup( 0 );	// QActionGroup*
 
-    m_viewStatusBar = KStandardAction::showStatusbar(this, SLOT(slotToggleStatusBar()),
-                      actionCollection(), "show_status_bar");
+// old:    m_viewStatusBar = KStandardAction::showStatusbar(this, SLOT(slotToggleStatusBar()),
+//                      actionCollection(), "show_status_bar");
 
-    m_viewTransport = new QAction( i18n("Show Tra&nsport"), dynamic_cast<QObject*>(this) );
+	QAction* qa_showStatusbar = new QAction( "Show the &Statusbar", this );
+	connect( qa_showStatusbar, SIGNAL(toggled()), this, SLOT(slotToggleStatusBar()) ); ;
+	qa_showStatusbar->setCheckable( true );	//
+	qa_showStatusbar->setAutoRepeat( false );	//
+	//qa_showStatusbar->setObjectName("");
+	//qa_showStatusbar->setActionGroup( 0 );	// QActionGroup*
+	
+	m_menuSettings->addAction(qa_showStatusbar);
+	
+	
+	m_viewTransport = new QAction( i18n("Show Tra&nsport"), dynamic_cast<QObject*>(this) );
     	connect( m_viewTransport, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleTransport()) );
 		m_viewTransport->setShortcut( Qt::Key_T );
     	m_viewTransport->setObjectName("show_transport");
@@ -843,10 +993,21 @@ void RosegardenGUIApp::setupActions()
 		qa_show_inst_segment_parameters->setAutoRepeat( false );	//
     	//qa_show_inst_segment_parameters->setActionGroup( 0 );	// QActionGroup*
 
-    KStandardAction::tipOfDay( this, SLOT( slotShowTip() ), actionCollection() );
+// old:    KStandardAction::tipOfDay( this, SLOT( slotShowTip() ), actionCollection() );
 
+	QAction* qa_tipOfDay = new QAction( "Show the tip of &day", this );
+	connect( qa_tipOfDay, SIGNAL(toggled()), this, SLOT(slotShowTip()) ); ;
+	//qa_tipOfDay->setCheckable( true );	//
+	qa_tipOfDay->setAutoRepeat( false );	//
+	//qa_tipOfDay->setObjectName("");
+	//qa_tipOfDay->setActionGroup( 0 );	// QActionGroup*
+	
+	m_menuSettings->addAction(qa_tipOfDay);
+	
     // Standard Actions
     //
+	/*
+	// old:
     KStandardAction::saveOptions(this,
                             SLOT(slotSaveOptions()),
                             actionCollection());
@@ -862,9 +1023,45 @@ void RosegardenGUIApp::setupActions()
     KStandardAction::configureToolbars(this,
                                   SLOT(slotEditToolbars()),
                                   actionCollection());
-
-    KRadioAction *action = 0;
-
+	*/
+	
+	QAction* qa_saveOptions = new QAction( "&Save current Options", this );
+	connect( qa_saveOptions, SIGNAL(toggled()), this, SLOT(slotSaveOptions()) ); ;
+	//qa_saveOptions->setCheckable( true );	//
+	qa_saveOptions->setAutoRepeat( false );	//
+	//qa_saveOptions->setObjectName("");
+	//qa_saveOptions->setActionGroup( 0 );	// QActionGroup*
+	
+	QAction* qa_configureRg = new QAction( "&Configure Rosegarden", this );
+	connect( qa_configureRg, SIGNAL(toggled()), this, SLOT(slotConfigure()) ); ;
+	//qa_configureRg->setCheckable( true );	//
+	qa_configureRg->setAutoRepeat( false );	//
+	//qa_configureRg->setObjectName("");
+	//qa_configureRg->setActionGroup( 0 );	// QActionGroup*
+	
+	QAction* qa_editShortcuts = new QAction( "Edit Key-&Shortcuts", this );
+	connect( qa_editShortcuts, SIGNAL(toggled()), this, SLOT(slotEditKeys()) ); ;
+	//qa_editShortcuts->setCheckable( true );	//
+	qa_editShortcuts->setAutoRepeat( false );	//
+	//qa_editShortcuts->setObjectName("");
+	//qa_editShortcuts->setActionGroup( 0 );	// QActionGroup*
+	
+	QAction* qa_editToolbars = new QAction( "Configure &Toolbars", this );
+	connect( qa_editToolbars, SIGNAL(toggled()), this, SLOT(slotEditToolbars()) ); ;
+	//qa_editToolbars->setCheckable( true );	//
+	qa_editToolbars->setAutoRepeat( false );	//
+	//qa_editToolbars->setObjectName("");
+	//qa_editToolbars->setActionGroup( 0 );	// QActionGroup*
+	
+	m_menuSettings->addAction(qa_saveOptions);
+	m_menuSettings->addAction(qa_configureRg);
+	m_menuSettings->addAction(qa_editShortcuts);
+	m_menuSettings->addAction(qa_editToolbars);
+	
+	
+	
+    QAction *action = 0;	// was KRadioAction
+	
     // Create the select icon
     //
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
@@ -1400,7 +1597,8 @@ void RosegardenGUIApp::setupActions()
     //
     //toolBar("Transport Toolbar")->hide();
 
-    QPopupMenu* setTrackInstrumentMenu = dynamic_cast<QPopupMenu*>(factory()->container("set_track_instrument", this));
+	// was QPopupMenu
+	QMenu* setTrackInstrumentMenu = dynamic_cast<QMenu*>(factory()->container("set_track_instrument", this));
 
     if (setTrackInstrumentMenu) {
         connect(setTrackInstrumentMenu, SIGNAL(aboutToShow()),

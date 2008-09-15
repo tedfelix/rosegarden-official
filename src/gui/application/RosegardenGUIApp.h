@@ -32,6 +32,9 @@
 #include <QVector>
 #include <QSettings>
 #include <QMainWindow>
+#include <QMenu>
+#include <QMenuBar>
+#include <QAction>
 
 class QWidget;
 class QTimer;
@@ -1556,7 +1559,19 @@ private:
      * serialization of your files.
      */
     RosegardenGUIDoc* m_doc;
-
+	
+	
+	/**
+	*	Menus
+	*/
+	QMenuBar* m_menuBarMain;
+	
+	QMenu* m_menuFile;
+	QMenu* m_menuEdit;
+	QMenu* m_menuComposition;
+	QMenu* m_menuStudio;
+	QMenu* m_menuSettings;
+	
     /**
      * QAction pointers to enable/disable actions
      */
