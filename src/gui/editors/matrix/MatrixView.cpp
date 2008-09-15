@@ -697,55 +697,125 @@ void MatrixView::setupActions()
 
     pixmap.load(pixmapDir + "/toolbar/quantize.png");
     icon = QIcon(pixmap);
-    new KAction(EventQuantizeCommand::getGlobalName(), icon, Qt::Key_Equal, this,
-                SLOT(slotTransformsQuantize()), actionCollection(),
-                "quantize");
+    QAction* qa_quantize = new QAction(  EventQuantizeCommand::getGlobalName(), dynamic_cast<QObject*>(Qt::Key_Equal) );
+			connect( qa_quantize, SIGNAL(toggled()), dynamic_cast<QObject*>(Qt::Key_Equal), this );
+			qa_quantize->setObjectName( "quantize" );		//
+			//qa_quantize->setCheckable( true );		//
+			qa_quantize->setAutoRepeat( false );	//
+			//qa_quantize->setActionGroup( 0 );		// QActionGroup*
+			//qa_quantize->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Repeat Last Quantize"), Qt::Key_Plus, this,
-                SLOT(slotTransformsRepeatQuantize()), actionCollection(),
-                "repeat_quantize");
+    QAction* qa_repeat_quantize = new QAction(  i18n("Repeat Last Quantize"), dynamic_cast<QObject*>(this) );
+			connect( qa_repeat_quantize, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotTransformsRepeatQuantize()) );
+			qa_repeat_quantize->setObjectName( "repeat_quantize" );		//
+			//qa_repeat_quantize->setCheckable( true );		//
+			qa_repeat_quantize->setAutoRepeat( false );	//
+			//qa_repeat_quantize->setActionGroup( 0 );		// QActionGroup*
+			//qa_repeat_quantize->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(CollapseNotesCommand::getGlobalName(), Qt::Key_Equal + Qt::CTRL, this,
-                SLOT(slotTransformsCollapseNotes()), actionCollection(),
-                "collapse_notes");
+    QAction* qa_collapse_notes = new QAction(  CollapseNotesCommand::getGlobalName(), dynamic_cast<QObject*>(this) );
+			connect( qa_collapse_notes, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotTransformsCollapseNotes()) );
+			qa_collapse_notes->setObjectName( "collapse_notes" );		//
+			//qa_collapse_notes->setCheckable( true );		//
+			qa_collapse_notes->setAutoRepeat( false );	//
+			//qa_collapse_notes->setActionGroup( 0 );		// QActionGroup*
+			//qa_collapse_notes->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("&Legato"), Qt::Key_Minus, this,
-                SLOT(slotTransformsLegato()), actionCollection(),
-                "legatoize");
+    QAction* qa_legatoize = new QAction(  i18n("&Legato"), dynamic_cast<QObject*>(this) );
+			connect( qa_legatoize, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotTransformsLegato()) );
+			qa_legatoize->setObjectName( "legatoize" );		//
+			//qa_legatoize->setCheckable( true );		//
+			qa_legatoize->setAutoRepeat( false );	//
+			//qa_legatoize->setActionGroup( 0 );		// QActionGroup*
+			//qa_legatoize->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(ChangeVelocityCommand::getGlobalName(10), 0,
-                Qt::Key_Up + Qt::SHIFT, this,
-                SLOT(slotVelocityUp()), actionCollection(),
-                "velocity_up");
+    QAction* qa_velocity_up = new QAction(  ChangeVelocityCommand::getGlobalName(10), dynamic_cast<QObject*>(Qt::Key_Up + Qt::SHIFT) );
+			connect( qa_velocity_up, SIGNAL(toggled()), dynamic_cast<QObject*>(Qt::Key_Up + Qt::SHIFT), this );
+			qa_velocity_up->setObjectName( "velocity_up" );		//
+			//qa_velocity_up->setCheckable( true );		//
+			qa_velocity_up->setAutoRepeat( false );	//
+			//qa_velocity_up->setActionGroup( 0 );		// QActionGroup*
+			//qa_velocity_up->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(ChangeVelocityCommand::getGlobalName( -10), 0,
-                Qt::Key_Down + Qt::SHIFT, this,
-                SLOT(slotVelocityDown()), actionCollection(),
-                "velocity_down");
+    QAction* qa_velocity_down = new QAction(  ChangeVelocityCommand::getGlobalName( -10), dynamic_cast<QObject*>(Qt::Key_Down + Qt::SHIFT) );
+			connect( qa_velocity_down, SIGNAL(toggled()), dynamic_cast<QObject*>(Qt::Key_Down + Qt::SHIFT), this );
+			qa_velocity_down->setObjectName( "velocity_down" );		//
+			//qa_velocity_down->setCheckable( true );		//
+			qa_velocity_down->setAutoRepeat( false );	//
+			//qa_velocity_down->setActionGroup( 0 );		// QActionGroup*
+			//qa_velocity_down->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Set to Current Velocity"), 0, this,
-                SLOT(slotSetVelocitiesToCurrent()), actionCollection(),
-                "set_to_current_velocity");
+    QAction* qa_set_to_current_velocity = new QAction(  i18n("Set to Current Velocity"), dynamic_cast<QObject*>(this) );
+			connect( qa_set_to_current_velocity, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotSetVelocitiesToCurrent()) );
+			qa_set_to_current_velocity->setObjectName( "set_to_current_velocity" );		//
+			//qa_set_to_current_velocity->setCheckable( true );		//
+			qa_set_to_current_velocity->setAutoRepeat( false );	//
+			//qa_set_to_current_velocity->setActionGroup( 0 );		// QActionGroup*
+			//qa_set_to_current_velocity->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Set Event &Velocities..."), 0, this,
-                SLOT(slotSetVelocities()), actionCollection(),
-                "set_velocities");
+    QAction* qa_set_velocities = new QAction(  i18n("Set Event &Velocities..."), dynamic_cast<QObject*>(this) );
+			connect( qa_set_velocities, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotSetVelocities()) );
+			qa_set_velocities->setObjectName( "set_velocities" );		//
+			//qa_set_velocities->setCheckable( true );		//
+			qa_set_velocities->setAutoRepeat( false );	//
+			//qa_set_velocities->setActionGroup( 0 );		// QActionGroup*
+			//qa_set_velocities->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Trigger Se&gment..."), 0, this,
-                SLOT(slotTriggerSegment()), actionCollection(),
-                "trigger_segment");
+    QAction* qa_trigger_segment = new QAction(  i18n("Trigger Se&gment..."), dynamic_cast<QObject*>(this) );
+			connect( qa_trigger_segment, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotTriggerSegment()) );
+			qa_trigger_segment->setObjectName( "trigger_segment" );		//
+			//qa_trigger_segment->setCheckable( true );		//
+			qa_trigger_segment->setAutoRepeat( false );	//
+			//qa_trigger_segment->setActionGroup( 0 );		// QActionGroup*
+			//qa_trigger_segment->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Remove Triggers..."), 0, this,
-                SLOT(slotRemoveTriggers()), actionCollection(),
-                "remove_trigger");
+    QAction* qa_remove_trigger = new QAction(  i18n("Remove Triggers..."), dynamic_cast<QObject*>(this) );
+			connect( qa_remove_trigger, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotRemoveTriggers()) );
+			qa_remove_trigger->setObjectName( "remove_trigger" );		//
+			//qa_remove_trigger->setCheckable( true );		//
+			qa_remove_trigger->setAutoRepeat( false );	//
+			//qa_remove_trigger->setActionGroup( 0 );		// QActionGroup*
+			//qa_remove_trigger->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Select &All"), Qt::Key_A + Qt::CTRL, this,
-                SLOT(slotSelectAll()), actionCollection(),
-                "select_all");
+    QAction* qa_select_all = new QAction(  i18n("Select &All"), dynamic_cast<QObject*>(this) );
+			connect( qa_select_all, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotSelectAll()) );
+			qa_select_all->setObjectName( "select_all" );		//
+			//qa_select_all->setCheckable( true );		//
+			qa_select_all->setAutoRepeat( false );	//
+			//qa_select_all->setActionGroup( 0 );		// QActionGroup*
+			//qa_select_all->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("&Delete"), Qt::Key_Delete, this,
-                SLOT(slotEditDelete()), actionCollection(),
-                "delete");
+    QAction* qa_delete = new QAction(  i18n("&Delete"), dynamic_cast<QObject*>(this) );
+			connect( qa_delete, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotEditDelete()) );
+			qa_delete->setObjectName( "delete" );		//
+			//qa_delete->setCheckable( true );		//
+			qa_delete->setAutoRepeat( false );	//
+			//qa_delete->setActionGroup( 0 );		// QActionGroup*
+			//qa_delete->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
     QAction *qa_cursor_back = new QAction( "Cursor &Back", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_cursor_back->setIconText(0); 
@@ -763,21 +833,45 @@ void MatrixView::setupActions()
 			qa_cursor_forward_bar->setIconText(0); 
 			connect( qa_cursor_forward_bar, SIGNAL(triggered()), this, SLOT(slotJumpForward())  );
 
-    new KAction(i18n("Cursor Back and Se&lect"), Qt::SHIFT + Qt::Key_Left, this,
-                SLOT(slotExtendSelectionBackward()), actionCollection(),
-                "extend_selection_backward");
+    QAction* qa_extend_selection_backward = new QAction(  i18n("Cursor Back and Se&lect"), dynamic_cast<QObject*>(this) );
+			connect( qa_extend_selection_backward, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotExtendSelectionBackward()) );
+			qa_extend_selection_backward->setObjectName( "extend_selection_backward" );		//
+			//qa_extend_selection_backward->setCheckable( true );		//
+			qa_extend_selection_backward->setAutoRepeat( false );	//
+			//qa_extend_selection_backward->setActionGroup( 0 );		// QActionGroup*
+			//qa_extend_selection_backward->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Cursor Forward and &Select"), Qt::SHIFT + Qt::Key_Right, this,
-                SLOT(slotExtendSelectionForward()), actionCollection(),
-                "extend_selection_forward");
+    QAction* qa_extend_selection_forward = new QAction(  i18n("Cursor Forward and &Select"), dynamic_cast<QObject*>(this) );
+			connect( qa_extend_selection_forward, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotExtendSelectionForward()) );
+			qa_extend_selection_forward->setObjectName( "extend_selection_forward" );		//
+			//qa_extend_selection_forward->setCheckable( true );		//
+			qa_extend_selection_forward->setAutoRepeat( false );	//
+			//qa_extend_selection_forward->setActionGroup( 0 );		// QActionGroup*
+			//qa_extend_selection_forward->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Cursor Back Bar and Select"), Qt::SHIFT + Qt::CTRL + Qt::Key_Left, this,
-                SLOT(slotExtendSelectionBackwardBar()), actionCollection(),
-                "extend_selection_backward_bar");
+    QAction* qa_extend_selection_backward_bar = new QAction(  i18n("Cursor Back Bar and Select"), dynamic_cast<QObject*>(this) );
+			connect( qa_extend_selection_backward_bar, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotExtendSelectionBackwardBar()) );
+			qa_extend_selection_backward_bar->setObjectName( "extend_selection_backward_bar" );		//
+			//qa_extend_selection_backward_bar->setCheckable( true );		//
+			qa_extend_selection_backward_bar->setAutoRepeat( false );	//
+			//qa_extend_selection_backward_bar->setActionGroup( 0 );		// QActionGroup*
+			//qa_extend_selection_backward_bar->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Cursor Forward Bar and Select"), Qt::SHIFT + Qt::CTRL + Qt::Key_Right, this,
-                SLOT(slotExtendSelectionForwardBar()), actionCollection(),
-                "extend_selection_forward_bar");
+    QAction* qa_extend_selection_forward_bar = new QAction(  i18n("Cursor Forward Bar and Select"), dynamic_cast<QObject*>(this) );
+			connect( qa_extend_selection_forward_bar, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotExtendSelectionForwardBar()) );
+			qa_extend_selection_forward_bar->setObjectName( "extend_selection_forward_bar" );		//
+			//qa_extend_selection_forward_bar->setCheckable( true );		//
+			qa_extend_selection_forward_bar->setAutoRepeat( false );	//
+			//qa_extend_selection_forward_bar->setActionGroup( 0 );		// QActionGroup*
+			//qa_extend_selection_forward_bar->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
     new KAction(i18n("Cursor to St&art"), 0,
                 /* #1025717: conflicting meanings for ctrl+a - dupe with Select All
@@ -869,17 +963,35 @@ void MatrixView::setupActions()
 			qa_panic->setIcon(icon); 
 			connect( qa_panic, SIGNAL(triggered()), this, SIGNAL(panic())  );
 
-    new KAction(i18n("Set Loop to Selection"), Qt::Key_Semicolon + Qt::CTRL, this,
-                SLOT(slotPreviewSelection()), actionCollection(),
-                "preview_selection");
+    QAction* qa_preview_selection = new QAction(  i18n("Set Loop to Selection"), dynamic_cast<QObject*>(this) );
+			connect( qa_preview_selection, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotPreviewSelection()) );
+			qa_preview_selection->setObjectName( "preview_selection" );		//
+			//qa_preview_selection->setCheckable( true );		//
+			qa_preview_selection->setAutoRepeat( false );	//
+			//qa_preview_selection->setActionGroup( 0 );		// QActionGroup*
+			//qa_preview_selection->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Clear L&oop"), Qt::Key_Colon + Qt::CTRL, this,
-                SLOT(slotClearLoop()), actionCollection(),
-                "clear_loop");
+    QAction* qa_clear_loop = new QAction(  i18n("Clear L&oop"), dynamic_cast<QObject*>(this) );
+			connect( qa_clear_loop, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotClearLoop()) );
+			qa_clear_loop->setObjectName( "clear_loop" );		//
+			//qa_clear_loop->setCheckable( true );		//
+			qa_clear_loop->setAutoRepeat( false );	//
+			//qa_clear_loop->setActionGroup( 0 );		// QActionGroup*
+			//qa_clear_loop->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Clear Selection"), Qt::Key_Escape, this,
-                SLOT(slotClearSelection()), actionCollection(),
-                "clear_selection");
+    QAction* qa_clear_selection = new QAction(  i18n("Clear Selection"), dynamic_cast<QObject*>(this) );
+			connect( qa_clear_selection, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotClearSelection()) );
+			qa_clear_selection->setObjectName( "clear_selection" );		//
+			//qa_clear_selection->setCheckable( true );		//
+			qa_clear_selection->setAutoRepeat( false );	//
+			//qa_clear_selection->setActionGroup( 0 );		// QActionGroup*
+			//qa_clear_selection->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
     //    icon = QIcon(Q3CanvasPixmap(pixmapDir + "/toolbar/eventfilter.xpm"));
     QAction *qa_filter_selection = new QAction( "&Filter Selection", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
@@ -908,18 +1020,36 @@ void MatrixView::setupActions()
         timeT d = m_snapValues[i];
 
         if (d == SnapGrid::NoSnap) {
-            new KAction(i18n("&No Snap"), 0, this,
-                        SLOT(slotSetSnapFromAction()),
-                        actionCollection(), "snap_none");
+            QAction* qa_snap_none = new QAction(  i18n("&No Snap"), dynamic_cast<QObject*>(this) );
+			connect( qa_snap_none, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotSetSnapFromAction()) );
+			qa_snap_none->setObjectName( "snap_none" );		//
+			//qa_snap_none->setCheckable( true );		//
+			qa_snap_none->setAutoRepeat( false );	//
+			//qa_snap_none->setActionGroup( 0 );		// QActionGroup*
+			//qa_snap_none->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
         } else if (d == SnapGrid::SnapToUnit) {
         } else if (d == SnapGrid::SnapToBeat) {
-            new KAction(i18n("Snap to Bea&t"), Qt::Key_1, this,
-                        SLOT(slotSetSnapFromAction()),
-                        actionCollection(), "snap_beat");
+            QAction* qa_snap_beat = new QAction(  i18n("Snap to Bea&t"), dynamic_cast<QObject*>(this) );
+			connect( qa_snap_beat, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotSetSnapFromAction()) );
+			qa_snap_beat->setObjectName( "snap_beat" );		//
+			//qa_snap_beat->setCheckable( true );		//
+			qa_snap_beat->setAutoRepeat( false );	//
+			//qa_snap_beat->setActionGroup( 0 );		// QActionGroup*
+			//qa_snap_beat->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
         } else if (d == SnapGrid::SnapToBar) {
-            new KAction(i18n("Snap to &Bar"), Qt::Key_5, this,
-                        SLOT(slotSetSnapFromAction()),
-                        actionCollection(), "snap_bar");
+            QAction* qa_snap_bar = new QAction(  i18n("Snap to &Bar"), dynamic_cast<QObject*>(this) );
+			connect( qa_snap_bar, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotSetSnapFromAction()) );
+			qa_snap_bar->setObjectName( "snap_bar" );		//
+			//qa_snap_bar->setCheckable( true );		//
+			qa_snap_bar->setAutoRepeat( false );	//
+			//qa_snap_bar->setActionGroup( 0 );		// QActionGroup*
+			//qa_snap_bar->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
         } else {
 
             timeT err = 0;
@@ -947,10 +1077,15 @@ void MatrixView::setupActions()
     //
     // Settings menu
     //
-    new KAction(i18n("Show Instrument Parameters"), 0, this,
-                SLOT(slotDockParametersBack()),
-                actionCollection(),
-                "show_inst_parameters");
+    QAction* qa_show_inst_parameters = new QAction(  i18n("Show Instrument Parameters"), dynamic_cast<QObject*>(this) );
+			connect( qa_show_inst_parameters, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotDockParametersBack()) );
+			qa_show_inst_parameters->setObjectName( "show_inst_parameters" );		//
+			//qa_show_inst_parameters->setCheckable( true );		//
+			qa_show_inst_parameters->setAutoRepeat( false );	//
+			//qa_show_inst_parameters->setActionGroup( 0 );		// QActionGroup*
+			//qa_show_inst_parameters->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
     QAction* qa_show_chords_ruler = new QAction( 0, i18n("Show Ch&ord Name Ruler"), dynamic_cast<QObject*>(this) );
 	connect( qa_show_chords_ruler, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleChordsRuler()) );

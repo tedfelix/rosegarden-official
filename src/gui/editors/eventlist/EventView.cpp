@@ -1148,13 +1148,25 @@ EventView::setupActions()
 			qa_filter_selection->setIconText("filter"); 
 			connect( qa_filter_selection, SIGNAL(triggered()), this, SLOT(slotFilterSelection())  );
 
-    new KAction(i18n("Select &All"), Qt::Key_A + Qt::CTRL, this,
-                SLOT(slotSelectAll()), actionCollection(),
-                "select_all");
+    QAction* qa_select_all = new QAction(  i18n("Select &All"), dynamic_cast<QObject*>(this) );
+			connect( qa_select_all, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotSelectAll()) );
+			qa_select_all->setObjectName( "select_all" );		//
+			//qa_select_all->setCheckable( true );		//
+			qa_select_all->setAutoRepeat( false );	//
+			//qa_select_all->setActionGroup( 0 );		// QActionGroup*
+			//qa_select_all->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Clear Selection"), Qt::Key_Escape, this,
-                SLOT(slotClearSelection()), actionCollection(),
-                "clear_selection");
+    QAction* qa_clear_selection = new QAction(  i18n("Clear Selection"), dynamic_cast<QObject*>(this) );
+			connect( qa_clear_selection, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotClearSelection()) );
+			qa_clear_selection->setObjectName( "clear_selection" );		//
+			//qa_clear_selection->setCheckable( true );		//
+			qa_clear_selection->setAutoRepeat( false );	//
+			//qa_clear_selection->setActionGroup( 0 );		// QActionGroup*
+			//qa_clear_selection->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
     QSettings settings;
 

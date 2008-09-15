@@ -732,91 +732,193 @@ EditView::setupActions()
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
     Q3CanvasPixmap pixmap(pixmapDir + "/toolbar/event-insert-tempo.png");
     QIcon icon = QIcon(pixmap);
-    new KAction(AddTempoChangeCommand::getGlobalName(),
-		icon, 0,
-		this, SLOT(slotAddTempo()),
-		actionCollection(), "add_tempo");
+    QAction* qa_add_tempo = new QAction(  AddTempoChangeCommand::getGlobalName(), dynamic_cast<QObject*>(0) );
+			connect( qa_add_tempo, SIGNAL(toggled()), dynamic_cast<QObject*>(0), this, SLOT(slotAddTempo()) );
+			qa_add_tempo->setObjectName( "add_tempo" );		//
+			//qa_add_tempo->setCheckable( true );		//
+			qa_add_tempo->setAutoRepeat( false );	//
+			//qa_add_tempo->setActionGroup( 0 );		// QActionGroup*
+			//qa_add_tempo->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
     pixmap.load(pixmapDir + "/toolbar/event-insert-timesig.png");
     icon = QIcon(pixmap);
-    new KAction(AddTimeSignatureCommand::getGlobalName(),
-		icon, 0,
-		this, SLOT(slotAddTimeSignature()),
-		actionCollection(), "add_time_signature");
+    QAction* qa_add_time_signature = new QAction(  AddTimeSignatureCommand::getGlobalName(), dynamic_cast<QObject*>(0) );
+			connect( qa_add_time_signature, SIGNAL(toggled()), dynamic_cast<QObject*>(0), this, SLOT(slotAddTimeSignature()) );
+			qa_add_time_signature->setObjectName( "add_time_signature" );		//
+			//qa_add_time_signature->setCheckable( true );		//
+			qa_add_time_signature->setAutoRepeat( false );	//
+			//qa_add_time_signature->setActionGroup( 0 );		// QActionGroup*
+			//qa_add_time_signature->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
     //
     // Transforms
     //
-    new KAction(i18n("&Halve Durations"), Qt::Key_H + Qt::CTRL, this,
-                SLOT(slotHalveDurations()), actionCollection(),
-                "halve_durations");
+    QAction* qa_halve_durations = new QAction(  i18n("&Halve Durations"), dynamic_cast<QObject*>(this) );
+			connect( qa_halve_durations, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotHalveDurations()) );
+			qa_halve_durations->setObjectName( "halve_durations" );		//
+			//qa_halve_durations->setCheckable( true );		//
+			qa_halve_durations->setAutoRepeat( false );	//
+			//qa_halve_durations->setActionGroup( 0 );		// QActionGroup*
+			//qa_halve_durations->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("&Double Durations"), Qt::Key_H + Qt::CTRL + Qt::SHIFT, this,
-                SLOT(slotDoubleDurations()), actionCollection(),
-                "double_durations");
+    QAction* qa_double_durations = new QAction(  i18n("&Double Durations"), dynamic_cast<QObject*>(this) );
+			connect( qa_double_durations, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotDoubleDurations()) );
+			qa_double_durations->setObjectName( "double_durations" );		//
+			//qa_double_durations->setCheckable( true );		//
+			qa_double_durations->setAutoRepeat( false );	//
+			//qa_double_durations->setActionGroup( 0 );		// QActionGroup*
+			//qa_double_durations->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(RescaleCommand::getGlobalName(), 0, this,
-                SLOT(slotRescale()), actionCollection(),
-                "rescale");
+    QAction* qa_rescale = new QAction(  RescaleCommand::getGlobalName(), dynamic_cast<QObject*>(this) );
+			connect( qa_rescale, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotRescale()) );
+			qa_rescale->setObjectName( "rescale" );		//
+			//qa_rescale->setCheckable( true );		//
+			qa_rescale->setAutoRepeat( false );	//
+			//qa_rescale->setActionGroup( 0 );		// QActionGroup*
+			//qa_rescale->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(TransposeCommand::getGlobalName(1), 0,
-                Qt::Key_Up, this,
-                SLOT(slotTransposeUp()), actionCollection(),
-                "transpose_up");
+    QAction* qa_transpose_up = new QAction(  TransposeCommand::getGlobalName(1), dynamic_cast<QObject*>(Qt::Key_Up) );
+			connect( qa_transpose_up, SIGNAL(toggled()), dynamic_cast<QObject*>(Qt::Key_Up), this );
+			qa_transpose_up->setObjectName( "transpose_up" );		//
+			//qa_transpose_up->setCheckable( true );		//
+			qa_transpose_up->setAutoRepeat( false );	//
+			//qa_transpose_up->setActionGroup( 0 );		// QActionGroup*
+			//qa_transpose_up->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(TransposeCommand::getGlobalName(12), 0,
-                Qt::Key_Up + Qt::CTRL, this,
-                SLOT(slotTransposeUpOctave()), actionCollection(),
-                "transpose_up_octave");
+    QAction* qa_transpose_up_octave = new QAction(  TransposeCommand::getGlobalName(12), dynamic_cast<QObject*>(Qt::Key_Up + Qt::CTRL) );
+			connect( qa_transpose_up_octave, SIGNAL(toggled()), dynamic_cast<QObject*>(Qt::Key_Up + Qt::CTRL), this );
+			qa_transpose_up_octave->setObjectName( "transpose_up_octave" );		//
+			//qa_transpose_up_octave->setCheckable( true );		//
+			qa_transpose_up_octave->setAutoRepeat( false );	//
+			//qa_transpose_up_octave->setActionGroup( 0 );		// QActionGroup*
+			//qa_transpose_up_octave->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(TransposeCommand::getGlobalName( -1), 0,
-                Qt::Key_Down, this,
-                SLOT(slotTransposeDown()), actionCollection(),
-                "transpose_down");
+    QAction* qa_transpose_down = new QAction(  TransposeCommand::getGlobalName( -1), dynamic_cast<QObject*>(Qt::Key_Down) );
+			connect( qa_transpose_down, SIGNAL(toggled()), dynamic_cast<QObject*>(Qt::Key_Down), this );
+			qa_transpose_down->setObjectName( "transpose_down" );		//
+			//qa_transpose_down->setCheckable( true );		//
+			qa_transpose_down->setAutoRepeat( false );	//
+			//qa_transpose_down->setActionGroup( 0 );		// QActionGroup*
+			//qa_transpose_down->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(TransposeCommand::getGlobalName( -12), 0,
-                Qt::Key_Down + Qt::CTRL, this,
-                SLOT(slotTransposeDownOctave()), actionCollection(),
-                "transpose_down_octave");
+    QAction* qa_transpose_down_octave = new QAction(  TransposeCommand::getGlobalName( -12), dynamic_cast<QObject*>(Qt::Key_Down + Qt::CTRL) );
+			connect( qa_transpose_down_octave, SIGNAL(toggled()), dynamic_cast<QObject*>(Qt::Key_Down + Qt::CTRL), this );
+			qa_transpose_down_octave->setObjectName( "transpose_down_octave" );		//
+			//qa_transpose_down_octave->setCheckable( true );		//
+			qa_transpose_down_octave->setAutoRepeat( false );	//
+			//qa_transpose_down_octave->setActionGroup( 0 );		// QActionGroup*
+			//qa_transpose_down_octave->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(TransposeCommand::getGlobalName(0), 0, this,
-                SLOT(slotTranspose()), actionCollection(),
-                "general_transpose");
+    QAction* qa_general_transpose = new QAction(  TransposeCommand::getGlobalName(0), dynamic_cast<QObject*>(this) );
+			connect( qa_general_transpose, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotTranspose()) );
+			qa_general_transpose->setObjectName( "general_transpose" );		//
+			//qa_general_transpose->setCheckable( true );		//
+			qa_general_transpose->setAutoRepeat( false );	//
+			//qa_general_transpose->setActionGroup( 0 );		// QActionGroup*
+			//qa_general_transpose->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(TransposeCommand::getDiatonicGlobalName(0,0), 0, this,
-                SLOT(slotDiatonicTranspose()), actionCollection(),
-                "general_diatonic_transpose");
+    QAction* qa_general_diatonic_transpose = new QAction(  TransposeCommand::getDiatonicGlobalName(0, dynamic_cast<QObject*>(0) );
+			connect( qa_general_diatonic_transpose, SIGNAL(toggled()), dynamic_cast<QObject*>(0), this );
+			qa_general_diatonic_transpose->setObjectName( "general_diatonic_transpose" );		//
+			//qa_general_diatonic_transpose->setCheckable( true );		//
+			qa_general_diatonic_transpose->setAutoRepeat( false );	//
+			//qa_general_diatonic_transpose->setActionGroup( 0 );		// QActionGroup*
+			//qa_general_diatonic_transpose->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(InvertCommand::getGlobalName(0), 0, this,
-                SLOT(slotInvert()), actionCollection(),
-                "invert");
+    QAction* qa_invert = new QAction(  InvertCommand::getGlobalName(0), dynamic_cast<QObject*>(this) );
+			connect( qa_invert, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotInvert()) );
+			qa_invert->setObjectName( "invert" );		//
+			//qa_invert->setCheckable( true );		//
+			qa_invert->setAutoRepeat( false );	//
+			//qa_invert->setActionGroup( 0 );		// QActionGroup*
+			//qa_invert->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(RetrogradeCommand::getGlobalName(0), 0, this,
-                SLOT(slotRetrograde()), actionCollection(),
-                "retrograde");
+    QAction* qa_retrograde = new QAction(  RetrogradeCommand::getGlobalName(0), dynamic_cast<QObject*>(this) );
+			connect( qa_retrograde, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotRetrograde()) );
+			qa_retrograde->setObjectName( "retrograde" );		//
+			//qa_retrograde->setCheckable( true );		//
+			qa_retrograde->setAutoRepeat( false );	//
+			//qa_retrograde->setActionGroup( 0 );		// QActionGroup*
+			//qa_retrograde->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(RetrogradeInvertCommand::getGlobalName(0), 0, this,
-                SLOT(slotRetrogradeInvert()), actionCollection(),
-                "retrograde_invert");
+    QAction* qa_retrograde_invert = new QAction(  RetrogradeInvertCommand::getGlobalName(0), dynamic_cast<QObject*>(this) );
+			connect( qa_retrograde_invert, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotRetrogradeInvert()) );
+			qa_retrograde_invert->setObjectName( "retrograde_invert" );		//
+			//qa_retrograde_invert->setCheckable( true );		//
+			qa_retrograde_invert->setAutoRepeat( false );	//
+			//qa_retrograde_invert->setActionGroup( 0 );		// QActionGroup*
+			//qa_retrograde_invert->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Jog &Left"), Qt::Key_Left + ALT, this,
-                SLOT(slotJogLeft()), actionCollection(),
-                "jog_left");
+    QAction* qa_jog_left = new QAction(  i18n("Jog &Left"), dynamic_cast<QObject*>(this) );
+			connect( qa_jog_left, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotJogLeft()) );
+			qa_jog_left->setObjectName( "jog_left" );		//
+			//qa_jog_left->setCheckable( true );		//
+			qa_jog_left->setAutoRepeat( false );	//
+			//qa_jog_left->setActionGroup( 0 );		// QActionGroup*
+			//qa_jog_left->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Jog &Right"), Qt::Key_Right + ALT, this,
-                SLOT(slotJogRight()), actionCollection(),
-                "jog_right");
+    QAction* qa_jog_right = new QAction(  i18n("Jog &Right"), dynamic_cast<QObject*>(this) );
+			connect( qa_jog_right, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotJogRight()) );
+			qa_jog_right->setObjectName( "jog_right" );		//
+			//qa_jog_right->setCheckable( true );		//
+			qa_jog_right->setAutoRepeat( false );	//
+			//qa_jog_right->setActionGroup( 0 );		// QActionGroup*
+			//qa_jog_right->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
     // Control rulers
     //
-    new KAction(i18n("Show Velocity Property Ruler"), 0, this,
-                SLOT(slotShowVelocityControlRuler()), actionCollection(),
-                "show_velocity_control_ruler");
+    QAction* qa_show_velocity_control_ruler = new QAction(  i18n("Show Velocity Property Ruler"), dynamic_cast<QObject*>(this) );
+			connect( qa_show_velocity_control_ruler, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotShowVelocityControlRuler()) );
+			qa_show_velocity_control_ruler->setObjectName( "show_velocity_control_ruler" );		//
+			//qa_show_velocity_control_ruler->setCheckable( true );		//
+			qa_show_velocity_control_ruler->setAutoRepeat( false );	//
+			//qa_show_velocity_control_ruler->setActionGroup( 0 );		// QActionGroup*
+			//qa_show_velocity_control_ruler->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
     /*
-    new KAction(i18n("Show Controllers Events Ruler"), 0, this,
-                SLOT(slotShowControllerEventsRuler()), actionCollection(),
-                "show_controller_events_ruler");
+    QAction* qa_show_controller_events_ruler = new QAction(  i18n("Show Controllers Events Ruler"), dynamic_cast<QObject*>(this) );
+			connect( qa_show_controller_events_ruler, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotShowControllerEventsRuler()) );
+			qa_show_controller_events_ruler->setObjectName( "show_controller_events_ruler" );		//
+			//qa_show_controller_events_ruler->setCheckable( true );		//
+			qa_show_controller_events_ruler->setAutoRepeat( false );	//
+			//qa_show_controller_events_ruler->setActionGroup( 0 );		// QActionGroup*
+			//qa_show_controller_events_ruler->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
                 */
 
     // Disabled for now
@@ -828,39 +930,87 @@ EditView::setupActions()
     //
     // Control Ruler context menu
     //
-    new KAction(i18n("Insert item"), 0, this,
-                SLOT(slotInsertControlRulerItem()), actionCollection(),
-                "insert_control_ruler_item");
+    QAction* qa_insert_control_ruler_item = new QAction(  i18n("Insert item"), dynamic_cast<QObject*>(this) );
+			connect( qa_insert_control_ruler_item, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotInsertControlRulerItem()) );
+			qa_insert_control_ruler_item->setObjectName( "insert_control_ruler_item" );		//
+			//qa_insert_control_ruler_item->setCheckable( true );		//
+			qa_insert_control_ruler_item->setAutoRepeat( false );	//
+			//qa_insert_control_ruler_item->setActionGroup( 0 );		// QActionGroup*
+			//qa_insert_control_ruler_item->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
     // This was on Qt::Key_Delete, but that conflicts with existing Delete commands
     // on individual edit views
-    new KAction(i18n("Erase selected items"), 0, this,
-                SLOT(slotEraseControlRulerItem()), actionCollection(),
-                "erase_control_ruler_item");
+    QAction* qa_erase_control_ruler_item = new QAction(  i18n("Erase selected items"), dynamic_cast<QObject*>(this) );
+			connect( qa_erase_control_ruler_item, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotEraseControlRulerItem()) );
+			qa_erase_control_ruler_item->setObjectName( "erase_control_ruler_item" );		//
+			//qa_erase_control_ruler_item->setCheckable( true );		//
+			qa_erase_control_ruler_item->setAutoRepeat( false );	//
+			//qa_erase_control_ruler_item->setActionGroup( 0 );		// QActionGroup*
+			//qa_erase_control_ruler_item->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Clear ruler"), 0, this,
-                SLOT(slotClearControlRulerItem()), actionCollection(),
-                "clear_control_ruler_item");
+    QAction* qa_clear_control_ruler_item = new QAction(  i18n("Clear ruler"), dynamic_cast<QObject*>(this) );
+			connect( qa_clear_control_ruler_item, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotClearControlRulerItem()) );
+			qa_clear_control_ruler_item->setObjectName( "clear_control_ruler_item" );		//
+			//qa_clear_control_ruler_item->setCheckable( true );		//
+			qa_clear_control_ruler_item->setAutoRepeat( false );	//
+			//qa_clear_control_ruler_item->setActionGroup( 0 );		// QActionGroup*
+			//qa_clear_control_ruler_item->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Insert line of controllers"), 0, this,
-                SLOT(slotStartControlLineItem()), actionCollection(),
-                "start_control_line_item");
+    QAction* qa_start_control_line_item = new QAction(  i18n("Insert line of controllers"), dynamic_cast<QObject*>(this) );
+			connect( qa_start_control_line_item, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotStartControlLineItem()) );
+			qa_start_control_line_item->setObjectName( "start_control_line_item" );		//
+			//qa_start_control_line_item->setCheckable( true );		//
+			qa_start_control_line_item->setAutoRepeat( false );	//
+			//qa_start_control_line_item->setActionGroup( 0 );		// QActionGroup*
+			//qa_start_control_line_item->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Flip forward"), Qt::Key_BracketRight, this,
-                SLOT(slotFlipForwards()), actionCollection(),
-                "flip_control_events_forward");
+    QAction* qa_flip_control_events_forward = new QAction(  i18n("Flip forward"), dynamic_cast<QObject*>(this) );
+			connect( qa_flip_control_events_forward, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotFlipForwards()) );
+			qa_flip_control_events_forward->setObjectName( "flip_control_events_forward" );		//
+			//qa_flip_control_events_forward->setCheckable( true );		//
+			qa_flip_control_events_forward->setAutoRepeat( false );	//
+			//qa_flip_control_events_forward->setActionGroup( 0 );		// QActionGroup*
+			//qa_flip_control_events_forward->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Flip backwards"), Qt::Key_BracketLeft, this,
-                SLOT(slotFlipBackwards()), actionCollection(),
-                "flip_control_events_back");
+    QAction* qa_flip_control_events_back = new QAction(  i18n("Flip backwards"), dynamic_cast<QObject*>(this) );
+			connect( qa_flip_control_events_back, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotFlipBackwards()) );
+			qa_flip_control_events_back->setObjectName( "flip_control_events_back" );		//
+			//qa_flip_control_events_back->setCheckable( true );		//
+			qa_flip_control_events_back->setAutoRepeat( false );	//
+			//qa_flip_control_events_back->setActionGroup( 0 );		// QActionGroup*
+			//qa_flip_control_events_back->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Draw property line"), 0, this,
-                SLOT(slotDrawPropertyLine()), actionCollection(),
-                "draw_property_line");
+    QAction* qa_draw_property_line = new QAction(  i18n("Draw property line"), dynamic_cast<QObject*>(this) );
+			connect( qa_draw_property_line, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotDrawPropertyLine()) );
+			qa_draw_property_line->setObjectName( "draw_property_line" );		//
+			//qa_draw_property_line->setCheckable( true );		//
+			qa_draw_property_line->setAutoRepeat( false );	//
+			//qa_draw_property_line->setActionGroup( 0 );		// QActionGroup*
+			//qa_draw_property_line->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Select all property values"), 0, this,
-                SLOT(slotSelectAllProperties()), actionCollection(),
-                "select_all_properties");
+    QAction* qa_select_all_properties = new QAction(  i18n("Select all property values"), dynamic_cast<QObject*>(this) );
+			connect( qa_select_all_properties, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotSelectAllProperties()) );
+			qa_select_all_properties->setObjectName( "select_all_properties" );		//
+			//qa_select_all_properties->setCheckable( true );		//
+			qa_select_all_properties->setAutoRepeat( false );	//
+			//qa_select_all_properties->setActionGroup( 0 );		// QActionGroup*
+			//qa_select_all_properties->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 }
 
 void

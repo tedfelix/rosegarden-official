@@ -1111,78 +1111,166 @@ void RosegardenGUIApp::setupActions()
     action->setExclusiveGroup("segmenttools");
 
 
-    new KAction(i18n("&Harmonize"), 0, this,
-                SLOT(slotHarmonizeSelection()), actionCollection(),
-                "harmonize_selection");
+    QAction* qa_harmonize_selection = new QAction(  i18n("&Harmonize"), dynamic_cast<QObject*>(this) );
+			connect( qa_harmonize_selection, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotHarmonizeSelection()) );
+			qa_harmonize_selection->setObjectName( "harmonize_selection" );		//
+			//qa_harmonize_selection->setCheckable( true );		//
+			qa_harmonize_selection->setAutoRepeat( false );	//
+			//qa_harmonize_selection->setActionGroup( 0 );		// QActionGroup*
+			//qa_harmonize_selection->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
     pixmap.load(pixmapDir + "/toolbar/event-insert-timesig.png");
     icon = QIcon(pixmap);
-    new KAction(AddTimeSignatureCommand::getGlobalName(),
-                icon, 0,
-                this, SLOT(slotEditTimeSignature()),
-                actionCollection(), "add_time_signature");
+    QAction* qa_add_time_signature = new QAction(  AddTimeSignatureCommand::getGlobalName(), dynamic_cast<QObject*>(this) );	// note: this was 0
+			connect( qa_add_time_signature, SIGNAL(toggled()), dynamic_cast<QObject*>(0), this, SLOT(slotEditTimeSignature()) );
+			qa_add_time_signature->setObjectName( "add_time_signature" );		//
+			//qa_add_time_signature->setCheckable( true );		//
+			qa_add_time_signature->setAutoRepeat( false );	//
+			//qa_add_time_signature->setActionGroup( 0 );		// QActionGroup*
+			//qa_add_time_signature->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Open Tempo and Time Signature Editor"), 0, this,
-                SLOT(slotEditTempos()), actionCollection(), "edit_tempos");
+    QAction* qa_edit_tempos = new QAction(  i18n("Open Tempo and Time Signature Editor"), dynamic_cast<QObject*>(this) );
+			connect( qa_edit_tempos, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotEditTempos()) );
+			qa_edit_tempos->setObjectName( "edit_tempos" );		//
+			//qa_edit_tempos->setCheckable( true );		//
+			qa_edit_tempos->setAutoRepeat( false );	//
+			//qa_edit_tempos->setActionGroup( 0 );		// QActionGroup*
+			//qa_edit_tempos->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
     //
     // Edit menu
     //
-    new KAction(i18n("Cut Range"), Qt::Key_X + Qt::CTRL + Qt::SHIFT, this,
-                SLOT(slotCutRange()), actionCollection(),
-                "cut_range");
+    QAction* qa_cut_range = new QAction(  i18n("Cut Range"), dynamic_cast<QObject*>(this) );
+			connect( qa_cut_range, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotCutRange()) );
+			qa_cut_range->setObjectName( "cut_range" );		//
+			//qa_cut_range->setCheckable( true );		//
+			qa_cut_range->setAutoRepeat( false );	//
+			//qa_cut_range->setActionGroup( 0 );		// QActionGroup*
+			//qa_cut_range->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Copy Range"), Qt::Key_C + Qt::CTRL + Qt::SHIFT, this,
-                SLOT(slotCopyRange()), actionCollection(),
-                "copy_range");
+    QAction* qa_copy_range = new QAction(  i18n("Copy Range"), dynamic_cast<QObject*>(this) );
+			connect( qa_copy_range, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotCopyRange()) );
+			qa_copy_range->setObjectName( "copy_range" );		//
+			//qa_copy_range->setCheckable( true );		//
+			qa_copy_range->setAutoRepeat( false );	//
+			//qa_copy_range->setActionGroup( 0 );		// QActionGroup*
+			//qa_copy_range->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Paste Range"), Qt::Key_V + Qt::CTRL + Qt::SHIFT, this,
-                SLOT(slotPasteRange()), actionCollection(),
-                "paste_range");
+    QAction* qa_paste_range = new QAction(  i18n("Paste Range"), dynamic_cast<QObject*>(this) );
+			connect( qa_paste_range, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotPasteRange()) );
+			qa_paste_range->setObjectName( "paste_range" );		//
+			//qa_paste_range->setCheckable( true );		//
+			qa_paste_range->setAutoRepeat( false );	//
+			//qa_paste_range->setActionGroup( 0 );		// QActionGroup*
+			//qa_paste_range->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 /*
-    new KAction(i18n("Delete Range"), Qt::Key_Delete + Qt::SHIFT, this,
-                SLOT(slotDeleteRange()), actionCollection(),
-                "delete_range");
+    QAction* qa_delete_range = new QAction(  i18n("Delete Range"), dynamic_cast<QObject*>(this) );
+			connect( qa_delete_range, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotDeleteRange()) );
+			qa_delete_range->setObjectName( "delete_range" );		//
+			//qa_delete_range->setCheckable( true );		//
+			qa_delete_range->setAutoRepeat( false );	//
+			//qa_delete_range->setActionGroup( 0 );		// QActionGroup*
+			//qa_delete_range->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 */
-    new KAction(i18n("Insert Range..."), Qt::Key_Insert + Qt::SHIFT, this,
-                SLOT(slotInsertRange()), actionCollection(),
-                "insert_range");
+    QAction* qa_insert_range = new QAction(  i18n("Insert Range..."), dynamic_cast<QObject*>(this) );
+			connect( qa_insert_range, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotInsertRange()) );
+			qa_insert_range->setObjectName( "insert_range" );		//
+			//qa_insert_range->setCheckable( true );		//
+			qa_insert_range->setAutoRepeat( false );	//
+			//qa_insert_range->setActionGroup( 0 );		// QActionGroup*
+			//qa_insert_range->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("De&lete"), Qt::Key_Delete, this,
-                SLOT(slotDeleteSelectedSegments()), actionCollection(),
-                "delete");
+    QAction* qa_delete = new QAction(  i18n("De&lete"), dynamic_cast<QObject*>(this) );
+			connect( qa_delete, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotDeleteSelectedSegments()) );
+			qa_delete->setObjectName( "delete" );		//
+			//qa_delete->setCheckable( true );		//
+			qa_delete->setAutoRepeat( false );	//
+			//qa_delete->setActionGroup( 0 );		// QActionGroup*
+			//qa_delete->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Select &All Segments"), Qt::Key_A + Qt::CTRL, this,
-                SLOT(slotSelectAll()), actionCollection(),
-                "select_all");
+    QAction* qa_select_all = new QAction(  i18n("Select &All Segments"), dynamic_cast<QObject*>(this) );
+			connect( qa_select_all, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotSelectAll()) );
+			qa_select_all->setObjectName( "select_all" );		//
+			//qa_select_all->setCheckable( true );		//
+			qa_select_all->setAutoRepeat( false );	//
+			//qa_select_all->setActionGroup( 0 );		// QActionGroup*
+			//qa_select_all->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
     pixmap.load(pixmapDir + "/toolbar/event-insert-tempo.png");
     icon = QIcon(pixmap);
-    new KAction(AddTempoChangeCommand::getGlobalName(),
-                icon, 0,
-                this, SLOT(slotEditTempo()),
-                actionCollection(), "add_tempo");
+	QAction* qa_add_tempo = new QAction(  AddTempoChangeCommand::getGlobalName(), dynamic_cast<QObject*>(this) );	// note: this was 0
+			connect( qa_add_tempo, SIGNAL(toggled()), dynamic_cast<QObject*>(0), this, SLOT(slotEditTempo()) );
+			qa_add_tempo->setObjectName( "add_tempo" );		//
+			//qa_add_tempo->setCheckable( true );		//
+			qa_add_tempo->setAutoRepeat( false );	//
+			//qa_add_tempo->setActionGroup( 0 );		// QActionGroup*
+			//qa_add_tempo->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(ChangeCompositionLengthCommand::getGlobalName(),
-                0,
-                this, SLOT(slotChangeCompositionLength()),
-                actionCollection(), "change_composition_length");
+    QAction* qa_change_composition_length = new QAction(  ChangeCompositionLengthCommand::getGlobalName(), dynamic_cast<QObject*>(this) );
+			connect( qa_change_composition_length, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotChangeCompositionLength()) );
+			qa_change_composition_length->setObjectName( "change_composition_length" );		//
+			//qa_change_composition_length->setCheckable( true );		//
+			qa_change_composition_length->setAutoRepeat( false );	//
+			//qa_change_composition_length->setActionGroup( 0 );		// QActionGroup*
+			//qa_change_composition_length->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Edit Mar&kers..."), Qt::Key_K + Qt::CTRL, this,
-                SLOT(slotEditMarkers()),
-                actionCollection(), "edit_markers");
+    QAction* qa_edit_markers = new QAction(  i18n("Edit Mar&kers..."), dynamic_cast<QObject*>(this) );
+			connect( qa_edit_markers, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotEditMarkers()) );
+			qa_edit_markers->setObjectName( "edit_markers" );		//
+			//qa_edit_markers->setCheckable( true );		//
+			qa_edit_markers->setAutoRepeat( false );	//
+			//qa_edit_markers->setActionGroup( 0 );		// QActionGroup*
+			//qa_edit_markers->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Edit Document P&roperties..."), 0, this,
-                SLOT(slotEditDocumentProperties()),
-                actionCollection(), "edit_doc_properties");
+    QAction* qa_edit_doc_properties = new QAction(  i18n("Edit Document P&roperties..."), dynamic_cast<QObject*>(this) );
+			connect( qa_edit_doc_properties, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotEditDocumentProperties()) );
+			qa_edit_doc_properties->setObjectName( "edit_doc_properties" );		//
+			//qa_edit_doc_properties->setCheckable( true );		//
+			qa_edit_doc_properties->setAutoRepeat( false );	//
+			//qa_edit_doc_properties->setActionGroup( 0 );		// QActionGroup*
+			//qa_edit_doc_properties->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
 
     //
     // Segments menu
     //
-    new KAction(i18n("Open in &Default Editor"), Qt::Key_Return, this,
-                SLOT(slotEdit()), actionCollection(),
-                "edit_default");
+    QAction* qa_edit_default = new QAction(  i18n("Open in &Default Editor"), dynamic_cast<QObject*>(this) );
+			connect( qa_edit_default, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotEdit()) );
+			qa_edit_default->setObjectName( "edit_default" );		//
+			//qa_edit_default->setCheckable( true );		//
+			qa_edit_default->setAutoRepeat( false );	//
+			//qa_edit_default->setActionGroup( 0 );		// QActionGroup*
+			//qa_edit_default->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
     pixmap.load(pixmapDir + "/toolbar/matrix.png");
     icon = QIcon(pixmap);
@@ -1214,77 +1302,175 @@ void RosegardenGUIApp::setupActions()
 			qa_quantize_selection->setIcon(icon); 
 			connect( qa_quantize_selection, SIGNAL(triggered()), this, SLOT(slotQuantizeSelection())  );
 
-    new KAction(SegmentLabelCommand::getGlobalName(),
-                0,
-                this, SLOT(slotRelabelSegments()),
-                actionCollection(), "relabel_segment");
+    QAction* qa_relabel_segment = new QAction(  SegmentLabelCommand::getGlobalName(), dynamic_cast<QObject*>(this) );
+			connect( qa_relabel_segment, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotRelabelSegments()) );
+			qa_relabel_segment->setObjectName( "relabel_segment" );		//
+			//qa_relabel_segment->setCheckable( true );		//
+			qa_relabel_segment->setAutoRepeat( false );	//
+			//qa_relabel_segment->setActionGroup( 0 );		// QActionGroup*
+			//qa_relabel_segment->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(SegmentTransposeCommand::getGlobalName(),
-                0,
-                this, SLOT(slotTransposeSegments()),
-                actionCollection(), "transpose");
+    QAction* qa_transpose = new QAction(  SegmentTransposeCommand::getGlobalName(), dynamic_cast<QObject*>(this) );
+			connect( qa_transpose, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotTransposeSegments()) );
+			qa_transpose->setObjectName( "transpose" );		//
+			//qa_transpose->setCheckable( true );		//
+			qa_transpose->setAutoRepeat( false );	//
+			//qa_transpose->setActionGroup( 0 );		// QActionGroup*
+			//qa_transpose->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Repeat Last Quantize"), Qt::Key_Plus, this,
-                SLOT(slotRepeatQuantizeSelection()), actionCollection(),
-                "repeat_quantize");
+    QAction* qa_repeat_quantize = new QAction(  i18n("Repeat Last Quantize"), dynamic_cast<QObject*>(this) );
+			connect( qa_repeat_quantize, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotRepeatQuantizeSelection()) );
+			qa_repeat_quantize->setObjectName( "repeat_quantize" );		//
+			//qa_repeat_quantize->setCheckable( true );		//
+			qa_repeat_quantize->setAutoRepeat( false );	//
+			//qa_repeat_quantize->setActionGroup( 0 );		// QActionGroup*
+			//qa_repeat_quantize->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(SegmentRescaleCommand::getGlobalName(), 0, this,
-                SLOT(slotRescaleSelection()), actionCollection(),
-                "rescale");
+    QAction* qa_rescale = new QAction(  SegmentRescaleCommand::getGlobalName(), dynamic_cast<QObject*>(this) );
+			connect( qa_rescale, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotRescaleSelection()) );
+			qa_rescale->setObjectName( "rescale" );		//
+			//qa_rescale->setCheckable( true );		//
+			qa_rescale->setAutoRepeat( false );	//
+			//qa_rescale->setActionGroup( 0 );		// QActionGroup*
+			//qa_rescale->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(SegmentAutoSplitCommand::getGlobalName(), 0, this,
-                SLOT(slotAutoSplitSelection()), actionCollection(),
-                "auto_split");
+    QAction* qa_auto_split = new QAction(  SegmentAutoSplitCommand::getGlobalName(), dynamic_cast<QObject*>(this) );
+			connect( qa_auto_split, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotAutoSplitSelection()) );
+			qa_auto_split->setObjectName( "auto_split" );		//
+			//qa_auto_split->setCheckable( true );		//
+			qa_auto_split->setAutoRepeat( false );	//
+			//qa_auto_split->setActionGroup( 0 );		// QActionGroup*
+			//qa_auto_split->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(SegmentSplitByPitchCommand::getGlobalName(), 0, this,
-                SLOT(slotSplitSelectionByPitch()), actionCollection(),
-                "split_by_pitch");
+    QAction* qa_split_by_pitch = new QAction(  SegmentSplitByPitchCommand::getGlobalName(), dynamic_cast<QObject*>(this) );
+			connect( qa_split_by_pitch, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotSplitSelectionByPitch()) );
+			qa_split_by_pitch->setObjectName( "split_by_pitch" );		//
+			//qa_split_by_pitch->setCheckable( true );		//
+			qa_split_by_pitch->setAutoRepeat( false );	//
+			//qa_split_by_pitch->setActionGroup( 0 );		// QActionGroup*
+			//qa_split_by_pitch->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(SegmentSplitByRecordingSrcCommand::getGlobalName(), 0, this,
-                SLOT(slotSplitSelectionByRecordedSrc()), actionCollection(),
-                "split_by_recording");
+    QAction* qa_split_by_recording = new QAction(  SegmentSplitByRecordingSrcCommand::getGlobalName(), dynamic_cast<QObject*>(this) );
+			connect( qa_split_by_recording, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotSplitSelectionByRecordedSrc()) );
+			qa_split_by_recording->setObjectName( "split_by_recording" );		//
+			//qa_split_by_recording->setCheckable( true );		//
+			qa_split_by_recording->setAutoRepeat( false );	//
+			//qa_split_by_recording->setActionGroup( 0 );		// QActionGroup*
+			//qa_split_by_recording->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Split at Time..."), 0, this,
-                SLOT(slotSplitSelectionAtTime()), actionCollection(),
-                "split_at_time");
+    QAction* qa_split_at_time = new QAction(  i18n("Split at Time..."), dynamic_cast<QObject*>(this) );
+			connect( qa_split_at_time, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotSplitSelectionAtTime()) );
+			qa_split_at_time->setObjectName( "split_at_time" );		//
+			//qa_split_at_time->setCheckable( true );		//
+			qa_split_at_time->setAutoRepeat( false );	//
+			//qa_split_at_time->setActionGroup( 0 );		// QActionGroup*
+			//qa_split_at_time->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Jog &Left"), Qt::Key_Left + Qt::ALT, this,
-                SLOT(slotJogLeft()), actionCollection(),
-                "jog_left");
+    QAction* qa_jog_left = new QAction(  i18n("Jog &Left"), dynamic_cast<QObject*>(this) );
+			connect( qa_jog_left, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotJogLeft()) );
+			qa_jog_left->setObjectName( "jog_left" );		//
+			//qa_jog_left->setCheckable( true );		//
+			qa_jog_left->setAutoRepeat( false );	//
+			//qa_jog_left->setActionGroup( 0 );		// QActionGroup*
+			//qa_jog_left->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Jog &Right"), Qt::Key_Right + Qt::ALT, this,
-                SLOT(slotJogRight()), actionCollection(),
-                "jog_right");
+    QAction* qa_jog_right = new QAction(  i18n("Jog &Right"), dynamic_cast<QObject*>(this) );
+			connect( qa_jog_right, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotJogRight()) );
+			qa_jog_right->setObjectName( "jog_right" );		//
+			//qa_jog_right->setCheckable( true );		//
+			qa_jog_right->setAutoRepeat( false );	//
+			//qa_jog_right->setActionGroup( 0 );		// QActionGroup*
+			//qa_jog_right->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Set Start Time..."), 0, this,
-                SLOT(slotSetSegmentStartTimes()), actionCollection(),
-                "set_segment_start");
+    QAction* qa_set_segment_start = new QAction(  i18n("Set Start Time..."), dynamic_cast<QObject*>(this) );
+			connect( qa_set_segment_start, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotSetSegmentStartTimes()) );
+			qa_set_segment_start->setObjectName( "set_segment_start" );		//
+			//qa_set_segment_start->setCheckable( true );		//
+			qa_set_segment_start->setAutoRepeat( false );	//
+			//qa_set_segment_start->setActionGroup( 0 );		// QActionGroup*
+			//qa_set_segment_start->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Set Duration..."), 0, this,
-                SLOT(slotSetSegmentDurations()), actionCollection(),
-                "set_segment_duration");
+    QAction* qa_set_segment_duration = new QAction(  i18n("Set Duration..."), dynamic_cast<QObject*>(this) );
+			connect( qa_set_segment_duration, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotSetSegmentDurations()) );
+			qa_set_segment_duration->setObjectName( "set_segment_duration" );		//
+			//qa_set_segment_duration->setCheckable( true );		//
+			qa_set_segment_duration->setAutoRepeat( false );	//
+			//qa_set_segment_duration->setActionGroup( 0 );		// QActionGroup*
+			//qa_set_segment_duration->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(SegmentJoinCommand::getGlobalName(),
-                Qt::Key_J + Qt::CTRL,
-                this, SLOT(slotJoinSegments()),
-                actionCollection(), "join_segments");
+    QAction* qa_join_segments = new QAction(  SegmentJoinCommand::getGlobalName(), dynamic_cast<QObject*>(this) );
+			connect( qa_join_segments, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotJoinSegments()) );
+			qa_join_segments->setObjectName( "join_segments" );		//
+			//qa_join_segments->setCheckable( true );		//
+			qa_join_segments->setAutoRepeat( false );	//
+			//qa_join_segments->setActionGroup( 0 );		// QActionGroup*
+			//qa_join_segments->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Turn Re&peats into Copies"),
-                0,
-                this, SLOT(slotRepeatingSegments()),
-                actionCollection(), "repeats_to_real_copies");
+    QAction* qa_repeats_to_real_copies = new QAction(  i18n("Turn Re&peats into Copies"), dynamic_cast<QObject*>(this) );
+			connect( qa_repeats_to_real_copies, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotRepeatingSegments()) );
+			qa_repeats_to_real_copies->setObjectName( "repeats_to_real_copies" );		//
+			//qa_repeats_to_real_copies->setCheckable( true );		//
+			qa_repeats_to_real_copies->setAutoRepeat( false );	//
+			//qa_repeats_to_real_copies->setActionGroup( 0 );		// QActionGroup*
+			//qa_repeats_to_real_copies->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Manage Tri&ggered Segments"), 0,
-                this, SLOT(slotManageTriggerSegments()),
-                actionCollection(), "manage_trigger_segments");
+    QAction* qa_manage_trigger_segments = new QAction(  i18n("Manage Tri&ggered Segments"), dynamic_cast<QObject*>(this) );
+			connect( qa_manage_trigger_segments, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotManageTriggerSegments()) );
+			qa_manage_trigger_segments->setObjectName( "manage_trigger_segments" );		//
+			//qa_manage_trigger_segments->setCheckable( true );		//
+			qa_manage_trigger_segments->setAutoRepeat( false );	//
+			//qa_manage_trigger_segments->setActionGroup( 0 );		// QActionGroup*
+			//qa_manage_trigger_segments->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Set Tempos from &Beat Segment"), 0, this,
-                SLOT(slotGrooveQuantize()), actionCollection(),
-                "groove_quantize");
+    QAction* qa_groove_quantize = new QAction(  i18n("Set Tempos from &Beat Segment"), dynamic_cast<QObject*>(this) );
+			connect( qa_groove_quantize, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotGrooveQuantize()) );
+			qa_groove_quantize->setObjectName( "groove_quantize" );		//
+			//qa_groove_quantize->setCheckable( true );		//
+			qa_groove_quantize->setAutoRepeat( false );	//
+			//qa_groove_quantize->setActionGroup( 0 );		// QActionGroup*
+			//qa_groove_quantize->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Set &Tempo to Audio Segment Duration"), 0, this,
-                SLOT(slotTempoToSegmentLength()), actionCollection(),
-                "set_tempo_to_segment_length");
+    QAction* qa_set_tempo_to_segment_length = new QAction(  i18n("Set &Tempo to Audio Segment Duration"), dynamic_cast<QObject*>(this) );
+			connect( qa_set_tempo_to_segment_length, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotTempoToSegmentLength()) );
+			qa_set_tempo_to_segment_length->setObjectName( "set_tempo_to_segment_length" );		//
+			//qa_set_tempo_to_segment_length->setCheckable( true );		//
+			qa_set_tempo_to_segment_length->setAutoRepeat( false );	//
+			//qa_set_tempo_to_segment_length->setActionGroup( 0 );		// QActionGroup*
+			//qa_set_tempo_to_segment_length->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
     pixmap.load(pixmapDir + "/toolbar/manage-audio-segments.xpm");
     icon = QIcon(pixmap);
@@ -1320,9 +1506,15 @@ void RosegardenGUIApp::setupActions()
 			qa_add_track->setIcon(icon); 
 			connect( qa_add_track, SIGNAL(triggered()), this, SLOT(slotAddTrack())  );
 
-    new KAction(i18n("&Add Tracks..."), 0,
-                this, SLOT(slotAddTracks()),
-                actionCollection(), "add_tracks");
+    QAction* qa_add_tracks = new QAction(  i18n("&Add Tracks..."), dynamic_cast<QObject*>(this) );
+			connect( qa_add_tracks, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotAddTracks()) );
+			qa_add_tracks->setObjectName( "add_tracks" );		//
+			//qa_add_tracks->setCheckable( true );		//
+			qa_add_tracks->setAutoRepeat( false );	//
+			//qa_add_tracks->setActionGroup( 0 );		// QActionGroup*
+			//qa_add_tracks->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
     pixmap.load(pixmapDir + "/toolbar/delete_track.png");
     icon = QIcon(pixmap);
@@ -1342,25 +1534,45 @@ void RosegardenGUIApp::setupActions()
 			qa_move_track_up->setIcon(icon); 
 			connect( qa_move_track_up, SIGNAL(triggered()), this, SLOT(slotMoveTrackUp())  );
 
-    new KAction(i18n("Select &Next Track"),
-                Qt::Key_Down,
-                this, SLOT(slotTrackDown()),
-                actionCollection(), "select_next_track");
+    QAction* qa_select_next_track = new QAction(  i18n("Select &Next Track"), dynamic_cast<QObject*>(this) );
+			connect( qa_select_next_track, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotTrackDown()) );
+			qa_select_next_track->setObjectName( "select_next_track" );		//
+			//qa_select_next_track->setCheckable( true );		//
+			qa_select_next_track->setAutoRepeat( false );	//
+			//qa_select_next_track->setActionGroup( 0 );		// QActionGroup*
+			//qa_select_next_track->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Select &Previous Track"),
-                Qt::Key_Up,
-                this, SLOT(slotTrackUp()),
-                actionCollection(), "select_previous_track");
+    QAction* qa_select_previous_track = new QAction(  i18n("Select &Previous Track"), dynamic_cast<QObject*>(this) );
+			connect( qa_select_previous_track, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotTrackUp()) );
+			qa_select_previous_track->setObjectName( "select_previous_track" );		//
+			//qa_select_previous_track->setCheckable( true );		//
+			qa_select_previous_track->setAutoRepeat( false );	//
+			//qa_select_previous_track->setActionGroup( 0 );		// QActionGroup*
+			//qa_select_previous_track->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Mute or Unmute Track"),
-                Qt::Key_U,
-                this, SLOT(slotToggleMutedCurrentTrack()),
-                actionCollection(), "toggle_mute_track");
+    QAction* qa_toggle_mute_track = new QAction(  i18n("Mute or Unmute Track"), dynamic_cast<QObject*>(this) );
+			connect( qa_toggle_mute_track, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleMutedCurrentTrack()) );
+			qa_toggle_mute_track->setObjectName( "toggle_mute_track" );		//
+			//qa_toggle_mute_track->setCheckable( true );		//
+			qa_toggle_mute_track->setAutoRepeat( false );	//
+			//qa_toggle_mute_track->setActionGroup( 0 );		// QActionGroup*
+			//qa_toggle_mute_track->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Arm or Un-arm Track for Record"),
-                Qt::Key_R,
-                this, SLOT(slotToggleRecordCurrentTrack()),
-                actionCollection(), "toggle_arm_track");
+    QAction* qa_toggle_arm_track = new QAction(  i18n("Arm or Un-arm Track for Record"), dynamic_cast<QObject*>(this) );
+			connect( qa_toggle_arm_track, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleRecordCurrentTrack()) );
+			qa_toggle_arm_track->setObjectName( "toggle_arm_track" );		//
+			//qa_toggle_arm_track->setCheckable( true );		//
+			qa_toggle_arm_track->setAutoRepeat( false );	//
+			//qa_toggle_arm_track->setActionGroup( 0 );		// QActionGroup*
+			//qa_toggle_arm_track->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
     pixmap.load(pixmapDir + "/toolbar/mute-all.png");
     icon = QIcon(pixmap);
@@ -1374,9 +1586,15 @@ void RosegardenGUIApp::setupActions()
 			qa_unmute_all_tracks->setIcon(icon); 
 			connect( qa_unmute_all_tracks, SIGNAL(triggered()), this, SLOT(slotUnmuteAllTracks())  );
 
-    new KAction(i18n("&Remap Instruments..."), 0, this,
-                SLOT(slotRemapInstruments()),
-                actionCollection(), "remap_instruments");
+    QAction* qa_remap_instruments = new QAction(  i18n("&Remap Instruments..."), dynamic_cast<QObject*>(this) );
+			connect( qa_remap_instruments, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotRemapInstruments()) );
+			qa_remap_instruments->setObjectName( "remap_instruments" );		//
+			//qa_remap_instruments->setCheckable( true );		//
+			qa_remap_instruments->setAutoRepeat( false );	//
+			//qa_remap_instruments->setActionGroup( 0 );		// QActionGroup*
+			//qa_remap_instruments->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
     //
     // Studio menu
@@ -1430,25 +1648,55 @@ void RosegardenGUIApp::setupActions()
 
     pixmap.load(pixmapDir + "/toolbar/time-musical.png");
     icon = QIcon(pixmap);
-    new KAction(i18n("Manage &Metronome"), 0, this,
-                SLOT(slotManageMetronome()),
-                actionCollection(), "manage_metronome");
+    QAction* qa_manage_metronome = new QAction(  i18n("Manage &Metronome"), dynamic_cast<QObject*>(this) );
+			connect( qa_manage_metronome, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotManageMetronome()) );
+			qa_manage_metronome->setObjectName( "manage_metronome" );		//
+			//qa_manage_metronome->setCheckable( true );		//
+			qa_manage_metronome->setAutoRepeat( false );	//
+			//qa_manage_metronome->setActionGroup( 0 );		// QActionGroup*
+			//qa_manage_metronome->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("&Save Current Document as Default Studio"), 0, this,
-                SLOT(slotSaveDefaultStudio()),
-                actionCollection(), "save_default_studio");
+    QAction* qa_save_default_studio = new QAction(  i18n("&Save Current Document as Default Studio"), dynamic_cast<QObject*>(this) );
+			connect( qa_save_default_studio, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotSaveDefaultStudio()) );
+			qa_save_default_studio->setObjectName( "save_default_studio" );		//
+			//qa_save_default_studio->setCheckable( true );		//
+			qa_save_default_studio->setAutoRepeat( false );	//
+			//qa_save_default_studio->setActionGroup( 0 );		// QActionGroup*
+			//qa_save_default_studio->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("&Import Default Studio"), 0, this,
-                SLOT(slotImportDefaultStudio()),
-                actionCollection(), "load_default_studio");
+    QAction* qa_load_default_studio = new QAction(  i18n("&Import Default Studio"), dynamic_cast<QObject*>(this) );
+			connect( qa_load_default_studio, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotImportDefaultStudio()) );
+			qa_load_default_studio->setObjectName( "load_default_studio" );		//
+			//qa_load_default_studio->setCheckable( true );		//
+			qa_load_default_studio->setAutoRepeat( false );	//
+			//qa_load_default_studio->setActionGroup( 0 );		// QActionGroup*
+			//qa_load_default_studio->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Im&port Studio from File..."), 0, this,
-                SLOT(slotImportStudio()),
-                actionCollection(), "load_studio");
+    QAction* qa_load_studio = new QAction(  i18n("Im&port Studio from File..."), dynamic_cast<QObject*>(this) );
+			connect( qa_load_studio, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotImportStudio()) );
+			qa_load_studio->setObjectName( "load_studio" );		//
+			//qa_load_studio->setCheckable( true );		//
+			qa_load_studio->setAutoRepeat( false );	//
+			//qa_load_studio->setActionGroup( 0 );		// QActionGroup*
+			//qa_load_studio->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("&Reset MIDI Network"), 0, this,
-                SLOT(slotResetMidiNetwork()),
-                actionCollection(), "reset_midi_network");
+    QAction* qa_reset_midi_network = new QAction(  i18n("&Reset MIDI Network"), dynamic_cast<QObject*>(this) );
+			connect( qa_reset_midi_network, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotResetMidiNetwork()) );
+			qa_reset_midi_network->setObjectName( "reset_midi_network" );		//
+			//qa_reset_midi_network->setCheckable( true );		//
+			qa_reset_midi_network->setAutoRepeat( false );	//
+			//qa_reset_midi_network->setActionGroup( 0 );		// QActionGroup*
+			//qa_reset_midi_network->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
     //@@@ JAS Check here first for errors and pointer deallocation
     m_setQuickMarkerAction = new QAction(i18n("Set Quick Marker at Playback Position"), dynamic_cast<QObject*>(this));
@@ -1583,9 +1831,15 @@ void RosegardenGUIApp::setupActions()
     connect(m_panic, SIGNAL(triggered()), this, SLOT(slotPanic()));
 
     // DEBUG FACILITY
-    new KAction(i18n("Segment Debug Dump "), 0, this,
-                SLOT(slotDebugDump()), actionCollection(),
-                "debug_dump_segments");
+    QAction* qa_debug_dump_segments = new QAction(  i18n("Segment Debug Dump "), dynamic_cast<QObject*>(this) );
+			connect( qa_debug_dump_segments, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotDebugDump()) );
+			qa_debug_dump_segments->setObjectName( "debug_dump_segments" );		//
+			//qa_debug_dump_segments->setCheckable( true );		//
+			qa_debug_dump_segments->setAutoRepeat( false );	//
+			//qa_debug_dump_segments->setActionGroup( 0 );		// QActionGroup*
+			//qa_debug_dump_segments->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
     // create main gui
     //
@@ -1615,8 +1869,9 @@ void RosegardenGUIApp::setRewFFwdToAutoRepeat()
     QWidget* transportToolbar = factory()->container("Transport Toolbar", this);
 
     if (transportToolbar) {
-        QObjectList *l = transportToolbar->queryList();
-        QObjectListIt it(*l); // iterate over the buttons
+		//### changed var *l from <QObjectList*> to <QList*>
+        QList *l = transportToolbar->queryList();
+        QListItem it(*l); // iterate over the buttons
         QObject *obj;
 		
         while ( (obj = it.current()) != 0 ) {
@@ -3256,7 +3511,7 @@ void RosegardenGUIApp::createAndSetupTransport()
     plugShortcuterators(m_transport, m_transport->getShortcuterators());
 
     m_transport->getShortcuterators()->connectItem
-        (m_transport->getShortcuterators()->addItem(Key_T),
+        (m_transport->getShortcuterators()->addItem(Qt::Key_T),
          this,
          SLOT(slotHideTransport()));
 

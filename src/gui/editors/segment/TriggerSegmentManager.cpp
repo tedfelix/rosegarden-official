@@ -401,9 +401,15 @@ TriggerSegmentManager::setupActions()
                             actionCollection(),
                             KStandardAction::stdName(KStandardAction::Redo));
 
-    new KAction(i18n("Pa&ste as New Triggered Segment"), Qt::CTRL + Qt::SHIFT + Qt::Key_V, this,
-                SLOT(slotPasteAsNew()), actionCollection(),
-                "paste_to_trigger_segment");
+    QAction* qa_paste_to_trigger_segment = new QAction(  i18n("Pa&ste as New Triggered Segment"), dynamic_cast<QObject*>(this) );
+			connect( qa_paste_to_trigger_segment, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotPasteAsNew()) );
+			qa_paste_to_trigger_segment->setObjectName( "paste_to_trigger_segment" );		//
+			//qa_paste_to_trigger_segment->setCheckable( true );		//
+			qa_paste_to_trigger_segment->setAutoRepeat( false );	//
+			//qa_paste_to_trigger_segment->setActionGroup( 0 );		// QActionGroup*
+			//qa_paste_to_trigger_segment->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
     QSettings settings;
 

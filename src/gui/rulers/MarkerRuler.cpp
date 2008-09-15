@@ -95,9 +95,15 @@ MarkerRuler::MarkerRuler(RosegardenGUIDoc *doc,
 			qa_insert_marker_here->setIcon(icon); 
 			connect( qa_insert_marker_here, SIGNAL(triggered()), this, SLOT(slotInsertMarkerHere())  );
     
-    new KAction(i18n("Insert Marker at Playback Position"), 0, this,
-             SLOT(slotInsertMarkerAtPointer()), actionCollection(),
-             "insert_marker_at_pointer");
+    QAction* qa_insert_marker_at_pointer = new QAction(  i18n("Insert Marker at Playback Position"), dynamic_cast<QObject*>(this) );
+			connect( qa_insert_marker_at_pointer, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotInsertMarkerAtPointer()) );
+			qa_insert_marker_at_pointer->setObjectName( "insert_marker_at_pointer" );		//
+			//qa_insert_marker_at_pointer->setCheckable( true );		//
+			qa_insert_marker_at_pointer->setAutoRepeat( false );	//
+			//qa_insert_marker_at_pointer->setActionGroup( 0 );		// QActionGroup*
+			//qa_insert_marker_at_pointer->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
     icon = QIcon(QPixmap(pixmapDir + "/toolbar/event-delete.png"));
     QAction *qa_delete_marker = new QAction( "Delete Marker", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 

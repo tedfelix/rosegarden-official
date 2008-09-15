@@ -219,13 +219,25 @@ void EditViewBase::setupActions(QString rcFileName, bool haveClipboard)
 			qa_open_in_event_list->setIcon(icon); 
 			connect( qa_open_in_event_list, SIGNAL(triggered()), this, SLOT(slotOpenInEventList())  );
 
-    new KAction(i18n("Set Segment Start Time..."), 0, this,
-                SLOT(slotSetSegmentStartTime()), actionCollection(),
-                "set_segment_start");
+    QAction* qa_set_segment_start = new QAction(  i18n("Set Segment Start Time..."), dynamic_cast<QObject*>(this) );
+			connect( qa_set_segment_start, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotSetSegmentStartTime()) );
+			qa_set_segment_start->setObjectName( "set_segment_start" );		//
+			//qa_set_segment_start->setCheckable( true );		//
+			qa_set_segment_start->setAutoRepeat( false );	//
+			//qa_set_segment_start->setActionGroup( 0 );		// QActionGroup*
+			//qa_set_segment_start->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Set Segment Duration..."), 0, this,
-                SLOT(slotSetSegmentDuration()), actionCollection(),
-                "set_segment_duration");
+    QAction* qa_set_segment_duration = new QAction(  i18n("Set Segment Duration..."), dynamic_cast<QObject*>(this) );
+			connect( qa_set_segment_duration, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotSetSegmentDuration()) );
+			qa_set_segment_duration->setObjectName( "set_segment_duration" );		//
+			//qa_set_segment_duration->setCheckable( true );		//
+			qa_set_segment_duration->setAutoRepeat( false );	//
+			//qa_set_segment_duration->setActionGroup( 0 );		// QActionGroup*
+			//qa_set_segment_duration->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
     // add undo and redo to edit menu and toolbar
     getCommandHistory()->attachView(actionCollection());

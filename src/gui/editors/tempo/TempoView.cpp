@@ -575,16 +575,28 @@ TempoView::setupActions()
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
     QIcon icon(QPixmap(pixmapDir + "/toolbar/event-insert-tempo.png"));
 
-    new KAction(AddTempoChangeCommand::getGlobalName(), icon, Qt::Key_I, this,
-                SLOT(slotEditInsertTempo()), actionCollection(),
-                "insert_tempo");
+    QAction* qa_insert_tempo = new QAction(  AddTempoChangeCommand::getGlobalName(), dynamic_cast<QObject*>(Qt::Key_I) );
+			connect( qa_insert_tempo, SIGNAL(toggled()), dynamic_cast<QObject*>(Qt::Key_I), this );
+			qa_insert_tempo->setObjectName( "insert_tempo" );		//
+			//qa_insert_tempo->setCheckable( true );		//
+			qa_insert_tempo->setAutoRepeat( false );	//
+			//qa_insert_tempo->setActionGroup( 0 );		// QActionGroup*
+			//qa_insert_tempo->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
     Q3CanvasPixmap pixmap(pixmapDir + "/toolbar/event-insert-timesig.png");
     icon = QIcon(pixmap);
 
-    new KAction(AddTimeSignatureCommand::getGlobalName(), icon, Qt::Key_G, this,
-                SLOT(slotEditInsertTimeSignature()), actionCollection(),
-                "insert_timesig");
+    QAction* qa_insert_timesig = new QAction(  AddTimeSignatureCommand::getGlobalName(), dynamic_cast<QObject*>(Qt::Key_G) );
+			connect( qa_insert_timesig, SIGNAL(toggled()), dynamic_cast<QObject*>(Qt::Key_G), this );
+			qa_insert_timesig->setObjectName( "insert_timesig" );		//
+			//qa_insert_timesig->setCheckable( true );		//
+			qa_insert_timesig->setAutoRepeat( false );	//
+			//qa_insert_timesig->setActionGroup( 0 );		// QActionGroup*
+			//qa_insert_timesig->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
     pixmap.load(pixmapDir + "/toolbar/event-delete.png");
     icon = QIcon(pixmap);
@@ -600,13 +612,25 @@ TempoView::setupActions()
 			qa_edit->setIcon(icon); 
 			connect( qa_edit, SIGNAL(triggered()), this, SLOT(slotEdit())  );
 
-    new KAction(i18n("Select &All"), 0, this,
-                SLOT(slotSelectAll()), actionCollection(),
-                "select_all");
+    QAction* qa_select_all = new QAction(  i18n("Select &All"), dynamic_cast<QObject*>(this) );
+			connect( qa_select_all, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotSelectAll()) );
+			qa_select_all->setObjectName( "select_all" );		//
+			//qa_select_all->setCheckable( true );		//
+			qa_select_all->setAutoRepeat( false );	//
+			//qa_select_all->setActionGroup( 0 );		// QActionGroup*
+			//qa_select_all->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Clear Selection"), Qt::Key_Escape, this,
-                SLOT(slotClearSelection()), actionCollection(),
-                "clear_selection");
+    QAction* qa_clear_selection = new QAction(  i18n("Clear Selection"), dynamic_cast<QObject*>(this) );
+			connect( qa_clear_selection, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotClearSelection()) );
+			qa_clear_selection->setObjectName( "clear_selection" );		//
+			//qa_clear_selection->setCheckable( true );		//
+			qa_clear_selection->setAutoRepeat( false );	//
+			//qa_clear_selection->setActionGroup( 0 );		// QActionGroup*
+			//qa_clear_selection->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
     QSettings settings;
     settings.beginGroup( TempoViewConfigGroup );
