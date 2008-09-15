@@ -224,8 +224,7 @@ MarkerEditor::~MarkerEditor()
 {
     RG_DEBUG << "MarkerEditor::~MarkerEditor" << endl;
 
-    QSettings settings;  //### JAS remove if saveLayouts doesn't need settings
-    m_listView->saveLayout(settings, MarkerEditorConfigGroup);
+    m_listView->saveLayout(MarkerEditorConfigGroup);
 
     if (m_doc)
         m_doc->getCommandHistory()->detachView(actionCollection());
