@@ -20,7 +20,6 @@
 #define _RG_EXPORTDEVICEDIALOG_H_
 
 #include <QDialog>
-#include <QDialogButtonBox>
 #include <QString>
 
 
@@ -38,7 +37,7 @@ class ExportDeviceDialog : public QDialog
 public:
     enum ExportType { ExportOne, ExportAll };
     
-    ExportDeviceDialog(QDialogButtonBox::QWidget *parent, QString deviceName);
+    ExportDeviceDialog(QWidget *parent, QString deviceName);
     
     ExportType getExportType();
 

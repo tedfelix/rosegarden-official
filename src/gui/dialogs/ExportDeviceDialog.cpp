@@ -32,19 +32,33 @@
 namespace Rosegarden
 {
 
-ExportDeviceDialog::ExportDeviceDialog(QDialogButtonBox::QWidget *parent, QString deviceName) :
-        KDialogBase(parent, "exportdevicedialog", true, i18n("Export Devices..."),
-                    Ok | Cancel, Ok)
+ExportDeviceDialog::ExportDeviceDialog(QWidget *parent, QString deviceName) :
+        QDialog(parent)
 {
-    QVBox *vbox = makeVBoxMainWidget();
-    QGroupBox *bg = new QGroupBox(1, Qt::Horizontal,
-                                        i18n("Export devices"),
-                                        vbox);
-    m_exportAll = new QRadioButton(i18n("Export all devices"), bg);
-    m_exportOne = new QRadioButton(i18n("Export selected device only"), bg);
-    new QLabel(i18n("         (\"%1\")", deviceName), bg);
+    setModal(true);
+    setWindowTitle(i18n("Export Devices..."));
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
+
+    QGroupBox *bg = new QGroupBox("Export devices");
+    QVBoxLayout *bgLayout = new QVBoxLayout;
+    m_exportAll = new QRadioButton(i18n("Export all devices"));
+    bgLayout->addWidget(m_exportAll);
+    m_exportOne = new QRadioButton(i18n("Export selected device only"));
+    bgLayout->addWidget(m_exportOne);
+    bgLayout->addWidget(new QLabel(i18n("         (\"%1\")", deviceName)));
+    bg->setLayout(bgLayout);
 
     m_exportOne->setChecked(true);
+
+    metagrid->addWidget(bg, 0, 0);
+
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok
+                                                     | QDialogButtonBox::Cancel);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 ExportDeviceDialog::ExportType
