@@ -174,8 +174,7 @@ TriggerSegmentManager::~TriggerSegmentManager()
 {
     RG_DEBUG << "TriggerSegmentManager::~TriggerSegmentManager" << endl;
 
-    QSettings settings; //###JAS remove if savelayout changed or not needed.
-    m_listView->saveLayout(settings, TriggerManagerConfigGroup);
+    m_listView->saveLayout(TriggerManagerConfigGroup);
 
     if (m_doc)
         m_doc->getCommandHistory()->detachView(actionCollection());
