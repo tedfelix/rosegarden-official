@@ -267,7 +267,7 @@ AudioConfigurationPage::apply()
     if (extpath != "") {
         QFileInfo info(extpath);
         if (!info.exists() || !info.isExecutable()) {
-            QMessageBox::critical(0, i18n("External audio editor \"%1\" not found or not executable", extpath));
+            QMessageBox::critical(0, "", i18n("External audio editor \"%1\" not found or not executable", extpath));
             settings.setValue("externalaudioeditor", "");
         } else {
             settings.setValue("externalaudioeditor", externalAudioEditor);

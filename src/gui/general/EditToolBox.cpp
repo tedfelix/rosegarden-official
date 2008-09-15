@@ -41,7 +41,7 @@ EditTool* EditToolBox::getTool(const QString& toolName)
 
 EditTool* EditToolBox::createTool(const QString&)
 {
-    QMessageBox::critical(0, "EditToolBox::createTool called - this should never happen");
+    QMessageBox::critical(0, "", i18n("EditToolBox::createTool called - this should never happen"));
     return 0;
 }
 

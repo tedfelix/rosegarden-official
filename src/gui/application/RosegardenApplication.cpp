@@ -59,26 +59,17 @@ int RosegardenApplication::newInstance()
 void RosegardenApplication::sfxLoadExited(QProcess *proc)
 {
 	if (proc->exitStatus() != QProcess::NormalExit ) {
-        QSettings config;
-		config.beginGroup( SequencerOptionsConfigGroup );
+            QSettings settings;
+            settings.beginGroup( SequencerOptionsConfigGroup );
 
-		QString soundFontPath = config.value("soundfontpath", "").toString() ;
-		
-		config.endGroup();		// corresponding to: config().beginGroup( SequencerOptionsConfigGroup );
-		
-		//config.beginGroup( configGroup );
-        // 
-        // FIX-manually-(GW), add:
-        // config().endGroup();		// corresponding to: config().beginGroup( configGroup );
-        //  
-        
-		
-		QMessageBox::critical( mainWidget(), soundFontPath, 
-                           i18n("Failed to load soundfont %1" ));
+            QString soundFontPath = settings.value("soundfontpath", "").toString() ;
+            settings.endGroup();		// corresponding to: settings().beginGroup( SequencerOptionsConfigGroup );
+
+            QMessageBox::critical( mainWidget(), "",  
+                    i18n("Failed to load soundfont %1", soundFontPath ));
     } else {
         RG_DEBUG << "RosegardenApplication::sfxLoadExited() : sfxload exited normally\n";
     }
-
 }
 
 void RosegardenApplication::slotSetStatusMessage(QString msg)
