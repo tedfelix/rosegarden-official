@@ -872,7 +872,7 @@ AudioManagerDialog::slotDeleteUnused()
                 std::cerr << i << ": " << names[i] << std::endl;
                 QFile file(names[i]);
                 if (!file.remove()) {
-                    QMessageBox::critical(this, i18n("File %1 could not be deleted.", names[i]));
+                    QMessageBox::critical(this, "", i18n("File %1 could not be deleted.", names[i]));
                 } else {
                     if (nameMap.find(names[i]) != nameMap.end()) {
                         m_doc->getAudioFileManager().removeFile(nameMap[names[i]]);

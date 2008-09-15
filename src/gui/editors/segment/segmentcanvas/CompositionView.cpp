@@ -321,7 +321,7 @@ void CompositionView::slotSetTool(const QString& toolName)
     if (m_tool)
         m_tool->ready();
     else {
-        QMessageBox::critical(0, QString("CompositionView::slotSetTool() : unknown tool name %1").arg(toolName));
+        QMessageBox::critical(0, "", QString("CompositionView::slotSetTool() : unknown tool name %1").arg(toolName));
     }
 }
 

@@ -76,7 +76,7 @@ SegmentTool* SegmentToolBox::createTool(const QString& toolName)
         tool = new SegmentJoiner(m_canvas, m_doc);
 
     else {
-        QMessageBox::critical(0, QString("SegmentToolBox::createTool : unrecognised toolname %1 (%2)")
+        QMessageBox::critical(0, "", QString("SegmentToolBox::createTool : unrecognised toolname %1 (%2)")
                            .arg(toolName).arg(toolNamelc));
         return 0;
     }
