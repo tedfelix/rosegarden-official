@@ -1489,7 +1489,7 @@ BankEditorDialog::slotImport()
             (m_listView->selectedItem());
 
         if (!deviceItem) {
-            QMessageBox::critical(this, "Some internal error: cannot locate selected device");
+            QMessageBox::critical(this, "", "Some internal error: cannot locate selected device");
             return ;
         }
 
