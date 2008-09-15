@@ -26,13 +26,11 @@
 #include <QSpinBox>
 #include <QComboBox>
 #include <QLineEdit>
-#include <QSettings>
 
 #include <klocale.h>
 #include <kiconloader.h>
 
 class QWidget;
-class KConfig;
 
 
 namespace Rosegarden
@@ -65,7 +63,6 @@ public:
     };
 
     GeneralConfigurationPage(RosegardenGUIDoc *doc,
-                             QSettings cfg,
                              QWidget *parent=0, const char *name=0);
 
     virtual void apply();

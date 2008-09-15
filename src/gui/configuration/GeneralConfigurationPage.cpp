@@ -52,16 +52,14 @@ namespace Rosegarden
 {
 
 GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
-        QSettings cfg,
         QWidget *parent, const char *name)
-        : TabbedConfigurationPage(cfg, parent, name),
+        : TabbedConfigurationPage(parent, name),
         m_doc(doc),
         m_client(0),
         m_countIn(0),
         m_nameStyle(0),
         m_appendLabel(0)
 {
-//### JAS update function declaration / definition
     QSettings settings;
     settings.beginGroup( GeneralOptionsConfigGroup );
 
@@ -267,18 +265,18 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
     m_notationBackgroundTextures = new QCheckBox(i18n("Notation"), frame);
     layout->addWidget(m_notationBackgroundTextures, row, 3);
 
-    m_backgroundTextures->setChecked(settings.value("backgroundtextures", true));
+    m_backgroundTextures->setChecked(qStrToBool(settings.value("backgroundtextures", true)));
 
     settings.endGroup();
     settings.beginGroup( MatrixViewConfigGroup );
 
-    m_matrixBackgroundTextures->setChecked(settings.value(
-            "backgroundtextures-1.6-plus", true));
+    m_matrixBackgroundTextures->setChecked(qStrToBool(settings.value(
+            "backgroundtextures-1.6-plus", true)));
     settings.endGroup();
 
     settings.beginGroup( NotationViewConfigGroup );
-    m_notationBackgroundTextures->setChecked(settings.value(
-            "backgroundtextures", true));
+    m_notationBackgroundTextures->setChecked(qStrToBool(settings.value(
+            "backgroundtextures", true)));
     settings.endGroup();
 
     settings.beginGroup( GeneralOptionsConfigGroup );
