@@ -29,7 +29,6 @@
 #include "CategoryElement.h"
 
 class QWidget;
-class KConfig;
 class QComboBox;
 
 
