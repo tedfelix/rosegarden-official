@@ -1264,7 +1264,7 @@ EventView::readOptions()
 
     EditViewBase::readOptions();
     m_eventFilter = settings.value("eventfilter", m_eventFilter).toInt() ;
-    m_eventList->restoreLayout(settings, EventViewLayoutConfigGroupName);
+    m_eventList->restoreLayout(EventViewLayoutConfigGroupName);
 
     settings.endGroup();
 }
@@ -1276,7 +1276,7 @@ EventView::slotSaveOptions()
     settings.beginGroup( EventViewConfigGroup );
 
     settings.setValue("eventfilter", m_eventFilter);
-    m_eventList->saveLayout(settings, EventViewLayoutConfigGroupName);
+    m_eventList->saveLayout(EventViewLayoutConfigGroupName);
 
     settings.endGroup();
 }
