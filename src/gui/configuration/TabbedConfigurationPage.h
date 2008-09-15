@@ -21,12 +21,9 @@
 
 #include "ConfigurationPage.h"
 #include <QString>
-#include <QSettings>
-
 
 class QWidget;
 class QTabWidget;
-class KConfig;
 
 
 namespace Rosegarden
@@ -47,12 +44,7 @@ public:
     TabbedConfigurationPage(RosegardenGUIDoc *doc,
                             QWidget *parent=0, const char *name=0);
 
-    TabbedConfigurationPage(QSettings cfg,
-                            QWidget *parent=0, const char *name=0);
-
-    TabbedConfigurationPage(RosegardenGUIDoc *doc,
-                            QSettings cfg,
-                            QWidget *parent=0, const char *name=0);
+    TabbedConfigurationPage(QWidget *parent=0, const char *name=0);
 
     static QString iconName() { return "misc"; }
     
