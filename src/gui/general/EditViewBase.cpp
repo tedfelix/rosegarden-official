@@ -76,7 +76,6 @@ EditViewBase::EditViewBase(RosegardenGUIDoc *doc,
     KDockMainWindow(parent, name),
     m_viewNumber( -1),
     m_viewLocalPropertyPrefix(makeViewLocalPropertyPrefix()),
-    m_config(confq4),
     m_doc(doc),
     m_segments(segments),
     m_tool(0),
@@ -247,7 +246,7 @@ void EditViewBase::setupActions(QString rcFileName, bool haveClipboard)
 void EditViewBase::slotConfigure()
 {
     ConfigureDialog *configDlg =
-        new ConfigureDialog(getDocument(), m_config, this);
+        new ConfigureDialog(getDocument(), this);
 
     configDlg->showPage(getConfigDialogPageIndex());
     configDlg->show();

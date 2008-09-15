@@ -27,7 +27,6 @@
 #include <QDockWidget>
 #include <QMainWindow>
 #include <QString>
-#include <QSettings>
 
 
 class QWidget;
@@ -37,7 +36,6 @@ class QFrame;
 class QCloseEvent;
 class QShortcut;
 class /* was toggle */ QAction;
-class KConfig;
 class Command;
 namespace Rosegarden { class EditViewTimeSigNotifier; }
 
@@ -356,8 +354,6 @@ protected:
     std::string makeViewLocalPropertyPrefix();
     int m_viewNumber;
     std::string m_viewLocalPropertyPrefix;
-
-    QSettings m_config;
 
     RosegardenGUIDoc* m_doc;
     std::vector<Segment *> m_segments;
