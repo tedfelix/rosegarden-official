@@ -44,7 +44,6 @@ class QObject;
 class QLabel;
 class QCursor;
 class QShortcut;
-//class KURL;
 class QTemporaryFile;
 class QProcess;
 
@@ -1544,7 +1543,8 @@ private:
 
     bool m_actionsSetup;
 
-    KRecentFilesAction* m_fileRecent;
+	//KRecentFilesAction* m_fileRecent;
+	QAction* m_fileRecent;
 
     /**
      * view is the main widget which represents your working area. The
@@ -1583,7 +1583,8 @@ private:
     /**
      * QAction pointers to enable/disable actions
      */
-    KRecentFilesAction* m_fileOpenRecent;
+	//KRecentFilesAction* m_fileOpenRecent;
+	QAction* m_fileOpenRecent;
 
     /* was toggle */ QAction* m_viewToolBar;
     /* was toggle */ QAction* m_viewToolsToolBar;
