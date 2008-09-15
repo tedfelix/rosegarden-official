@@ -580,7 +580,7 @@ NotationConfigurationPage::slotViewButtonPressed()
             (void)viewer->exec(); // no return value
         }
     } catch (Exception f) {
-        QMessageBox::critical(0, i18n(strtoqstr(f.getMessage())));
+        QMessageBox::critical(0, "", i18n(strtoqstr(f.getMessage())));
     }
 #endif
 }
@@ -662,7 +662,7 @@ NotationConfigurationPage::slotFontComboChanged(int index)
             m_viewButton->setEnabled(map.getSystemFontNames().count() > 0);
         }
     } catch (Exception f) {
-        QMessageBox::critical(0, i18n(strtoqstr(f.getMessage())));
+        QMessageBox::critical(0, "", i18n(strtoqstr(f.getMessage())));
     }
 }
 
