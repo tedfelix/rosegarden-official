@@ -940,7 +940,7 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
 
         static bool warned = false;
         if (!warned) {
-            QMessageBox::critical(0, i18n(strtoqstr(u.getMessage())));
+            QMessageBox::critical(0, "", i18n(strtoqstr(u.getMessage())));
             warned = true;
         }
     }

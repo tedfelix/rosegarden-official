@@ -3446,7 +3446,7 @@ void NotationView::updateView()
 void NotationView::print(bool previewOnly)
 {
     if (m_staffs.size() == 0) {
-        QMessageBox::critical(0, "Nothing to print");
+        QMessageBox::critical(0, "", i18n("Nothing to print"));
         return ;
     }
 

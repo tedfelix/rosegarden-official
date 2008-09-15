@@ -65,7 +65,7 @@ EditTool* MatrixToolBox::createTool(const QString& toolName)
         tool = new MatrixResizer(m_mParentView);
 
     else {
-        QMessageBox::critical(0, QString("MatrixToolBox::createTool : unrecognised toolname %1 (%2)")
+        QMessageBox::critical(0, "", QString("MatrixToolBox::createTool : unrecognised toolname %1 (%2)")
                            .arg(toolName).arg(toolNamelc));
         return 0;
     }

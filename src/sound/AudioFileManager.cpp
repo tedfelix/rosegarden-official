@@ -671,7 +671,7 @@ AudioFileManager::importURL(const QUrl &url, int sampleRate)
 
     QString localPath = "";
     if (!KIO::NetAccess::download(url, localPath)) {
-	QMessageBox::critical(0, i18n("Cannot download file %1", url.prettyURL()));
+	QMessageBox::critical(0, "", i18n("Cannot download file %1", url.prettyURL()));
 	throw SoundFile::BadSoundFileException(url.prettyURL());
     }
     

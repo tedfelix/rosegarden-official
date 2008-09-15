@@ -90,7 +90,7 @@ NoteFontFactory::getFontNames(bool forceRescan)
                         names.append(strtoqstr(map.getName()));
                 } catch (Exception e) {
                     KStartupLogo::hideIfStillThere();
-                    QMessageBox::critical(0, strtoqstr(e.getMessage()));
+                    QMessageBox::critical(0, "", strtoqstr(e.getMessage()));
                     throw;
                 }
             }
@@ -164,7 +164,7 @@ NoteFontFactory::getFont(std::string fontName, int size)
             return font;
         } catch (Exception e) {
             KStartupLogo::hideIfStillThere();
-            QMessageBox::critical(0, strtoqstr(e.getMessage()));
+            QMessageBox::critical(0, "", strtoqstr(e.getMessage()));
             throw;
         }
     } else {
@@ -195,7 +195,7 @@ NoteFontFactory::getDefaultFontName()
         else {
             QString message = i18n("Can't obtain a default font -- no fonts found");
             KStartupLogo::hideIfStillThere();
-            QMessageBox::critical(0, message);
+            QMessageBox::critical(0, "", message);
             throw NoFontsAvailable(qstrtostr(message));
         }
     }
