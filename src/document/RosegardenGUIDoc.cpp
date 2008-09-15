@@ -1185,18 +1185,20 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 
     temp.setAutoRemove(false);
 
-	temp.open();
-    if ( temp.error() ) { // This creates the file and opens it atomically
+    temp.open(); // This creates the file and opens it atomically
+
+    if ( temp.error() ) {
 		errMsg = i18n( qStrToCharPtrUtf8( QString("Could not create temporary file in directory of '%1': %2").arg(filename).arg(temp.errorString()) )  );		//### removed .arg(strerror(status))
         return false;
     }
 
-    QString tempFileName = temp.fileName();
+    QString tempFileName = temp.fileName(); // Must do this before temp.close()
 
     std::cerr << "Temporary file name is: \"" << tempFileName << "\": is this a full path?  We hope so" << std::endl;
 
     // The temporary file is now open: close it (without removing it)
-	temp.close();
+    temp.close();
+
     if( temp.error() ){
         //status = temp.status();
         errMsg = i18n( qStrToCharPtrUtf8( QString("Failure in temporary file handling for file '%1': %2")

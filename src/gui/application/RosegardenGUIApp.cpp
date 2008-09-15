@@ -5706,8 +5706,9 @@ void RosegardenGUIApp::slotPrintLilyPond()
         /* was sorry */ QMessageBox::warning(this, i18n("Failed to open a temporary file for LilyPond export."));
         delete file;
     }
+    QString filename = file->fileName(); // must call this before close()
     file->close(); // we just want the filename
-    if (!exportLilyPondFile(file->fileName(), true)) {
+    if (!exportLilyPondFile(filename, true)) {
         return ;
     }
     //setup "rosegarden-lilypondview" process
@@ -5715,7 +5716,7 @@ void RosegardenGUIApp::slotPrintLilyPond()
     QStringList procArgs;
     procArgs << "--graphical";
     procArgs << "--print";
-    procArgs << file->fileName();
+    procArgs << filename;
     connect(proc, SIGNAL(processExited(QProcess *)),
             this, SLOT(slotLilyPondViewProcessExited(QProcess *)));
     m_lilyTempFileMap[proc] = file;
@@ -5732,8 +5733,9 @@ void RosegardenGUIApp::slotPreviewLilyPond()
         /* was sorry */ QMessageBox::warning(this, i18n("Failed to open a temporary file for LilyPond export."));
         delete file;
     }
+    QString filename = file->fileName(); // must call this before close()
     file->close(); // we just want the filename
-    if (!exportLilyPondFile(file->fileName(), true)) {
+    if (!exportLilyPondFile(filename, true)) {
         return ;
     }
     //setup "rosegarden-lilypondview" process
@@ -5741,7 +5743,7 @@ void RosegardenGUIApp::slotPreviewLilyPond()
     QStringList procArgs;
     procArgs << "--graphical";
     procArgs << "--pdf";
-    procArgs << file->objectName();
+    procArgs << filename;
     connect(proc, SIGNAL(processExited(QProcess *)),
             this, SLOT(slotLilyPondViewProcessExited(QProcess *)));
     m_lilyTempFileMap[proc] = file;

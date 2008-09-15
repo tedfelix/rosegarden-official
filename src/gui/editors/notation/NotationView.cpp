@@ -164,7 +164,6 @@
 #include <QProgressDialog>
 #include <kstatusbar.h>
 #include <kstandardaction.h>
-#include <ktempfile.h>
 #include <ktoolbar.h>
 #include <kxmlguiclient.h>
 #include <QBrush>
@@ -4567,8 +4566,9 @@ void NotationView::slotPrintLilyPond()
         /* was sorry */ QMessageBox::warning(this, i18n("Failed to open a temporary file for LilyPond export."));
         delete file;
     }
+    QString filename = file->fileName();
     file->close(); // we just want the filename
-    if (!exportLilyPondFile(file->fileName(), true)) {
+    if (!exportLilyPondFile(filename, true)) {
         return ;
     }
 
@@ -4578,7 +4578,7 @@ void NotationView::slotPrintLilyPond()
 
     procArgs << "--graphical";
     procArgs << "--print";
-    procArgs << file->fileName();
+    procArgs << filename;
     connect(proc, SIGNAL(processExited(QProcess *)),
             this, SLOT(slotLilyPondViewProcessExited(QProcess *)));
     m_lilyTempFileMap[proc] = file;
@@ -4595,8 +4595,9 @@ void NotationView::slotPreviewLilyPond()
         /* was sorry */ QMessageBox::warning(this, i18n("Failed to open a temporary file for LilyPond export."));
         delete file;
     }
+    QString filename = file->fileName();
     file->close(); // we just want the filename
-    if (!exportLilyPondFile(file->fileName(), true)) {
+    if (!exportLilyPondFile(filename, true)) {
         return ;
     }
     //setup "rosegarden-lilypondview" QProcess
@@ -4604,7 +4605,7 @@ void NotationView::slotPreviewLilyPond()
     QStringList procArgs;
     procArgs << "--graphical";
     procArgs << "--pdf";
-    procArgs << file->fileName();
+    procArgs << filename;
     connect(proc, SIGNAL(processExited(QProcess *)),
             this, SLOT(slotLilyPondViewProcessExited(QProcess *)));
     m_lilyTempFileMap[proc] = file;
