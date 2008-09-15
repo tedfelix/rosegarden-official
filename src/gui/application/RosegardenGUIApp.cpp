@@ -1051,11 +1051,11 @@ void RosegardenGUIApp::setupActions()
                 SLOT(slotSplitSelectionAtTime()), actionCollection(),
                 "split_at_time");
 
-    new KAction(i18n("Jog &Left"), Qt::Key_Left + ALT, this,
+    new KAction(i18n("Jog &Left"), Qt::Key_Left + Qt::ALT, this,
                 SLOT(slotJogLeft()), actionCollection(),
                 "jog_left");
 
-    new KAction(i18n("Jog &Right"), Qt::Key_Right + ALT, this,
+    new KAction(i18n("Jog &Right"), Qt::Key_Right + Qt::ALT, this,
                 SLOT(slotJogRight()), actionCollection(),
                 "jog_right");
 
@@ -1303,10 +1303,12 @@ void RosegardenGUIApp::setupActions()
     // Alternative shortcut for Play
 	//### use pointer instead ?:
 	//QShortcut playShortcut = QShortcut( m_playTransport->shortcut(), dynamic_cast<QWidgett*>(this) );
-	QKeySequence playShortcut = m_playTransport->shortcut();
+	QList<QKeySequence> playShortcuts;
+	//QKeySequence playShortcut = m_playTransport->shortcut();
+	playShortcuts.append( m_playTransport->shortcut() );
+	playShortcuts.append( QKeySequence(Qt::Key_Return + Qt::CTRL) );
 	
-	playShortcut.append( KKey(Key_Return + Qt::CTRL) );
-    m_playTransport->setShortcut(playShortcut);
+    m_playTransport->setShortcuts(playShortcuts);
 	m_playTransport->setActionGroup( qag_TransportDialogConfigGroup );
 
     pixmap.load(pixmapDir + "/toolbar/transport-stop.png");
@@ -1367,10 +1369,11 @@ void RosegardenGUIApp::setupActions()
 
     pixmap.load(pixmapDir + "/toolbar/transport-tracking.png");
     icon = QIcon(pixmap);
-    QAction* qa_toggle_tracking = new QAction( icon, i18n("Scro&ll to Follow Playback"), dynamic_cast<QObject*>(Qt::Key_Pause) );
-	connect( qa_toggle_tracking, SIGNAL(toggled()), dynamic_cast<QObject*>(Qt::Key_Pause), this );
+    QAction* qa_toggle_tracking = new QAction( icon, i18n("Scro&ll to Follow Playback"), dynamic_cast<QObject*>(this) );
+	connect( qa_toggle_tracking, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(???) );
 	qa_toggle_tracking->setObjectName( "toggle_tracking" );	//### FIX: deallocate QAction ptr
 	qa_toggle_tracking->setCheckable( true );	//
+	qa_toggle_tracking->setShortcut( Qt::Key_Pause );
 	qa_toggle_tracking->setAutoRepeat( false );	//
 	//qa_toggle_tracking->setActionGroup( 0 );	// QActionGroup*
 	qa_toggle_tracking->setChecked( true );	//
@@ -1417,7 +1420,7 @@ void RosegardenGUIApp::setRewFFwdToAutoRepeat()
         QObjectList *l = transportToolbar->queryList();
         QObjectListIt it(*l); // iterate over the buttons
         QObject *obj;
-
+		
         while ( (obj = it.current()) != 0 ) {
             // for each found object...
             ++it;
@@ -1425,7 +1428,7 @@ void RosegardenGUIApp::setRewFFwdToAutoRepeat()
             QString objName = obj->objectName();
 
             if (objName.endsWith("rewind") || objName.endsWith("fast_forward")) {
-                QButton* btn = dynamic_cast<QButton*>(obj);
+                QPushButton* btn = dynamic_cast<QPushButton*>(obj);
                 if (!btn) {
                     RG_DEBUG << "Very strange - found widgets in transport_toolbar which aren't buttons\n";
 
@@ -1492,12 +1495,12 @@ void RosegardenGUIApp::initStatusBar()
     statusBar()->setItemAlignment(KTmpStatusMsg::getDefaultId(),
                                   AlignLeft | AlignVCenter);
 
-    m_progressBar() = new ProgressBar(100, true, statusBar());
+    m_progressBar = new ProgressBar(100, true, statusBar());
     //    m_progressBar()->setMinimumWidth(100);
-    m_progressBar()->setFixedWidth(60);
-    m_progressBar()->setFixedHeight(18);
-    m_progressBar()->setTextEnabled(false);
-    statusBar()->addWidget(m_progressBar());
+    m_progressBar->setFixedWidth(60);
+    m_progressBar->setFixedHeight(18);
+    m_progressBar->setTextEnabled(false);
+    statusBar->addWidget(m_progressBar());
 }
 
 void RosegardenGUIApp::initView()
@@ -1691,7 +1694,7 @@ void RosegardenGUIApp::initView()
 
     //slotChangeZoom(int(m_zoomSlider->getCurrentSize()));
 
-    stateChanged("new_file");
+    stateChanged("new_file",0);
 
     ProgressDialog::processEvents();
 
@@ -1716,7 +1719,9 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
     // Caption
     //
     //QString caption = qApp->caption();
-	QString caption = qApp->windowTitle(); //qApp->applicationName();
+	//QString caption = qApp->windowTitle();
+	QString caption = qApp->applicationName();
+	
     setCaption(caption + ": " + newDocument->getTitle());
 	
 
@@ -1897,13 +1902,13 @@ RosegardenGUIApp::createDocument(QString filePath, ImportType importType)
 
     if (!info.exists()) {
         // can happen with command-line arg, so...
-        KStartupLogo::hideIfStillThere();
+//        KStartupLogo::hideIfStillThere();  //&&& TODO: use QSplashScreen instead
         QMessageBox::warning(dynamic_cast<QWidget*>(this), filePath, i18n("File \"%1\" does not exist", QMessageBox::Ok, QMessageBox::Ok ));
         return 0;
     }
 	
     if (info.isDir()) {
-        KStartupLogo::hideIfStillThere();
+//		KStartupLogo::hideIfStillThere();  //&&& TODO: use QSplashScreen instead
 		QMessageBox::warning(dynamic_cast<QWidget*>(this), filePath, i18n("File \"%1\" is actually a directory"), QMessageBox::Ok, QMessageBox::Ok );
 		return 0;
     }
@@ -1911,7 +1916,7 @@ RosegardenGUIApp::createDocument(QString filePath, ImportType importType)
     QFile file(filePath);
 
     if (!file.open(QIODevice::ReadOnly)) {
-        KStartupLogo::hideIfStillThere();
+//		KStartupLogo::hideIfStillThere();  //&&& TODO: use QSplashScreen instead
         QString errStr =
             i18n("You do not have read permission for \"%1\"", filePath);
 
@@ -1980,8 +1985,8 @@ RosegardenGUIApp::createDocumentFromRGFile(QString filePath)
             KStartupLogo::hideIfStillThere();
 
             // It is, so ask the user if he wants to use the autosave file
-            int reply = QMessageBox::questionYesNo(this,
-                                                   i18n("An auto-save file for this document has been found\nDo you want to open it instead ?"));
+            int reply = QMessageBox::question(this, "",
+											  i18n("An auto-save file for this document has been found\nDo you want to open it instead ?"), QMessageBox::Yes | QMessageBox::No );
 
             if (reply == QMessageBox::Yes)
                 // open the autosave file instead
@@ -2099,7 +2104,7 @@ void RosegardenGUIApp::readOptions()
     QSettings settings;
     applyMainWindowSettings(settings, MainWindowConfigGroup);
 
-    settings.reparseConfiguration();
+//    settings.reparseConfiguration();  //&&& may not be required: reparseConfig..()
 
     // Statusbar and toolbars toggling action status
     //
@@ -2201,11 +2206,9 @@ void RosegardenGUIApp::saveGlobalProperties(QSettings cfg)
         bool res = m_doc->saveDocument(tempname, errMsg);
         if (!res) {
             if (errMsg)
-                QMessageBox::critical(this, i18n(qStrToCharPtrUtf8( QString("Could not save document at %1\nError was : %2")
-                                              .arg(tempname).arg(errMsg))) );
+                QMessageBox::critical(this, "", i18n(qStrToCharPtrUtf8( QString("Could not save document at %1\nError was : %2").arg(tempname).arg(errMsg))) );
             else
-                QMessageBox::critical(this, i18n( qStrToCharPtrUtf8( QString("Could not save document at %1")
-                                              .arg(tempname)))  );
+                QMessageBox::critical(this, "", i18n( qStrToCharPtrUtf8( QString("Could not save document at %1").arg(tempname)))  );
         }
     }
 }
@@ -6111,27 +6114,27 @@ void
 RosegardenGUIApp::plugShortcuterators(QWidget *widget, QShortcut *acc)
 {
 
-    acc->connectItem(acc->addItem(Key_Enter),
+    acc->connectItem(acc->addItem(Qt::Key_Enter),
                      this,
                      SLOT(slotPlay()));
     // Alternative shortcut for Play
-    acc->connectItem(acc->addItem(Key_Return + Qt::CTRL),
+	acc->connectItem(acc->addItem(Qt::Key_Return + Qt::CTRL),
                      this,
                      SLOT(slotPlay()));
 
-    acc->connectItem(acc->addItem(Key_Insert),
+	acc->connectItem(acc->addItem(Qt::Key_Insert),
                      this,
                      SLOT(slotStop()));
 
-    acc->connectItem(acc->addItem(Key_PageDown),
+	acc->connectItem(acc->addItem(Qt::Key_PageDown),
                      this,
                      SLOT(slotFastforward()));
 
-    acc->connectItem(acc->addItem(Key_End),
+	acc->connectItem(acc->addItem(Qt::Key_End),
                      this,
                      SLOT(slotRewind()));
 
-    acc->connectItem(acc->addItem(Key_Space),
+	acc->connectItem(acc->addItem(Qt::Key_Space),
                      this,
                      SLOT(slotToggleRecord()));
 
@@ -6430,7 +6433,7 @@ RosegardenGUIApp::slotAddAudioFile(unsigned int id)
         addAudioFile(strtoqstr(aF->getFilename()), aF->getId());
 
     if (!result) {
-        QMessageBox::critical(this, i18n("Sequencer failed to add audio file %1", aF->getFilename().c_str()));
+        QMessageBox::critical(this, "", i18n("Sequencer failed to add audio file %1", aF->getFilename().c_str()) );
     }
 }
 
@@ -6443,7 +6446,7 @@ RosegardenGUIApp::slotDeleteAudioFile(unsigned int id)
     int result = RosegardenSequencer::getInstance()->removeAudioFile(id);
 
     if (!result) {
-        QMessageBox::critical(this, i18n("Sequencer failed to remove audio file id %1", id));
+        QMessageBox::critical(this, id, i18n("Sequencer failed to remove audio file id %1" ));
     }
 }
 
@@ -7780,11 +7783,11 @@ RosegardenGUIApp::slotSaveDefaultStudio()
     bool res = m_doc->saveDocument(autoloadFile, errMsg);
     if (!res) {
         if (errMsg)
-            QMessageBox::critical(this, i18n(QString("Could not auto-save document at %1\nError was : %2")
-                                          .arg(autoloadFile).arg(errMsg)));
+            QMessageBox::critical(this, i18n(qStrToCharPtrUtf8(QString("Could not auto-save document at %1\nError was : %2")
+                                          .arg(autoloadFile).arg(errMsg))) );
         else
-            QMessageBox::critical(this, i18n(QString("Could not auto-save document at %1")
-                                          .arg(autoloadFile)));
+			QMessageBox::critical(this, i18n(qStrToCharPtrUtf8(QString("Could not auto-save document at %1")
+                                          .arg(autoloadFile))) );
 
     }
 }
@@ -7792,8 +7795,8 @@ RosegardenGUIApp::slotSaveDefaultStudio()
 void
 RosegardenGUIApp::slotImportDefaultStudio()
 {
-    int reply = QMessageBox::warningYesNo
-                (this, i18n("Are you sure you want to import your default studio and lose the current one?"));
+    int reply = QMessageBox::warning
+			(this, "", i18n("Are you sure you want to import your default studio and lose the current one?"), QMessageBox::Yes | QMessageBox::No );
 
     if (reply != QMessageBox::Yes)
         return ;
