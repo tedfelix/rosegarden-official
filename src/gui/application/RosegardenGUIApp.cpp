@@ -6072,7 +6072,7 @@ RosegardenGUIApp::slotSetLoop(timeT lhs, timeT rhs)
             stateChanged("have_range", KXMLGUIClient::StateReverse);
         }
     } catch (QString s) {
-        QMessageBox::critical(this, s);
+        QMessageBox::critical(this, "", s);
     }
 }
 
@@ -7049,7 +7049,7 @@ RosegardenGUIApp::slotDeleteAudioFile(unsigned int id)
     int result = RosegardenSequencer::getInstance()->removeAudioFile(id);
 
     if (!result) {
-        QMessageBox::critical(this, id, i18n("Sequencer failed to remove audio file id %1" ));
+        QMessageBox::critical(this, "", i18n("Sequencer failed to remove audio file id %1", id));
     }
 }
 
