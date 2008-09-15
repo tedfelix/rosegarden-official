@@ -23,9 +23,6 @@
 #define _RG_CONFIGURATIONPAGE_H_
 
 #include <QWidget>
-#include <QSettings>
-
-class KConfig;
 
 
 namespace Rosegarden
@@ -43,17 +40,12 @@ class ConfigurationPage : public QWidget
     Q_OBJECT
 
 public:
-    ConfigurationPage(RosegardenGUIDoc *doc,
-                      QWidget *parent=0, const char *name=0)
-        : QWidget(parent, name), m_doc(doc), m_cfg(0), m_pageIndex(0) {}
+    ConfigurationPage(QWidget *parent=0, const char *name=0)
+        : QWidget(parent, name), m_doc(0), m_pageIndex(0) {}
 
-    ConfigurationPage(QSettings cfg,
-                      QWidget *parent=0, const char *name=0)
-        : QWidget(parent, name), m_doc(0), m_cfg(cfg), m_pageIndex(0) {}
-
-    ConfigurationPage(RosegardenGUIDoc *doc, QSettings cfg,
-                      QWidget *parent=0, const char *name=0)
-        : QWidget(parent, name), m_doc(doc), m_cfg(cfg), m_pageIndex(0) {}
+    ConfigurationPage(RosegardenGUIDoc *doc, QWidget *parent=0,
+                      const char *name=0)
+        : QWidget(parent, name), m_doc(doc), m_pageIndex(0) {}
 
     virtual ~ConfigurationPage() {};
 
@@ -86,7 +78,6 @@ protected:
     //--------------- Data members ---------------------------------
 
     RosegardenGUIDoc* m_doc;
-    QSettings m_cfg;
 
     int m_pageIndex;
 };
