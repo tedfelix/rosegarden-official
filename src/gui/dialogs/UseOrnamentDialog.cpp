@@ -45,24 +45,33 @@
 namespace Rosegarden
 {
 
-UseOrnamentDialog::UseOrnamentDialog(QDialogButtonBox::QWidget *parent,
+UseOrnamentDialog::UseOrnamentDialog(QWidget *parent,
                                      Composition *composition) :
-        KDialogBase(parent, "useornamentdialog", true, i18n("Use Ornament"),
-                    Ok | Cancel, Ok),
+        QDialog(parent),
         m_composition(composition)
 {
-    QVBox *vbox = makeVBoxMainWidget();
+    setModal(true);
+    setWindowTitle(i18n("Use Ornament"));
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
+    QWidget *vbox = new QWidget(this);
+    QVBoxLayout *vboxLayout = new QVBoxLayout;
+    metagrid->addWidget(vbox, 0, 0);
+
+
     QLabel *label;
 
-    QGroupBox *notationBox = new QGroupBox(1, Horizontal, i18n("Notation"), vbox);
+    QGroupBox *notationBox = new QGroupBox(i18n("Notation"));
+    vboxLayout->addWidget(notationBox);
 
-    QFrame *frame = new QFrame(notationBox);
-    QGridLayout *layout = new QGridLayout(frame, 4, 1, 5, 5);
+    notationBox->setContentsMargins(5, 5, 5, 5);
+    QGridLayout *layout = new QGridLayout;
+    layout->setSpacing(5);
 
-    label = new QLabel(i18n("Display as:  "), frame);
+    label = new QLabel(i18n("Display as:  "));
     layout->addWidget(label, 0, 0);
 
-    m_mark = new QComboBox(frame);
+    m_mark = new QComboBox;
     layout->addWidget(m_mark, 0, 1);
 
     m_marks.push_back(Marks::Trill);
@@ -89,21 +98,25 @@ UseOrnamentDialog::UseOrnamentDialog(QDialogButtonBox::QWidget *parent,
 
     connect(m_mark, SIGNAL(activated(int)), this, SLOT(slotMarkChanged(int)));
 
-    m_textLabel = new QLabel(i18n("   Text:  "), frame);
+    m_textLabel = new QLabel(i18n("   Text:  "));
     layout->addWidget(m_textLabel, 0, 2);
 
-    m_text = new QLineEdit(frame);
+    m_text = new QLineEdit;
     layout->addWidget(m_text, 0, 3);
+    notationBox->setLayout(layout);
 
-    QGroupBox *performBox = new QGroupBox(1, Horizontal, i18n("Performance"), vbox);
+    QGroupBox *performBox = new QGroupBox(i18n("Performance"));
+    vboxLayout->addWidget(performBox);
+    vbox->setLayout(vboxLayout);
 
-    frame = new QFrame(performBox);
-    layout = new QGridLayout(frame, 3, 2, 5, 5);
+    performBox->setContentsMargins(5, 5, 5, 5);
+    layout = new QGridLayout;
+    layout->setSpacing(5);
 
-    label = new QLabel(i18n("Perform using triggered segment: "), frame);
+    label = new QLabel(i18n("Perform using triggered segment: "));
     layout->addWidget(label, 0, 0);
 
-    m_ornament = new QComboBox(frame);
+    m_ornament = new QComboBox;
     layout->addWidget(m_ornament, 0, 1);
 
     int n = 1;
@@ -114,10 +127,10 @@ UseOrnamentDialog::UseOrnamentDialog(QDialogButtonBox::QWidget *parent,
         (QString("%1. %2").arg(n++).arg(strtoqstr((*i)->getSegment()->getLabel())));
     }
 
-    label = new QLabel(i18n("Perform with timing: "), frame);
+    label = new QLabel(i18n("Perform with timing: "));
     layout->addWidget(label, 1, 0);
 
-    m_adjustTime = new QComboBox(frame);
+    m_adjustTime = new QComboBox;
     layout->addWidget(m_adjustTime, 1, 1);
 
     m_adjustTime->addItem(i18n("As stored"));
@@ -125,12 +138,20 @@ UseOrnamentDialog::UseOrnamentDialog(QDialogButtonBox::QWidget *parent,
     m_adjustTime->addItem(i18n("End at same time as note"));
     m_adjustTime->addItem(i18n("Stretch or squash segment to note duration"));
 
-    m_retune = new QCheckBox(i18n("Adjust pitch to note"), frame);
+    m_retune = new QCheckBox(i18n("Adjust pitch to note"));
     m_retune->setChecked(true);
 
     layout->addWidget(m_retune, 2, 1);
+    performBox->setLayout(layout);
 
     setupFromConfig();
+
+    QDialogButtonBox *buttonBox
+        = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 void

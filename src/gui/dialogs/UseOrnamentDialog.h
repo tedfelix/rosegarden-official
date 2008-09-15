@@ -23,7 +23,6 @@
 #include "base/NotationTypes.h"
 #include <string>
 #include <QDialog>
-#include <QDialogButtonBox>
 #include <vector>
 
 
@@ -45,7 +44,7 @@ class UseOrnamentDialog : public QDialog
     Q_OBJECT
 
 public:
-    UseOrnamentDialog(QDialogButtonBox::QWidget *parent, Composition *);
+    UseOrnamentDialog(QWidget *parent, Composition *);
 
     TriggerSegmentId getId() const;
     Mark getMark() const;
@@ -61,13 +60,13 @@ protected:
 
     std::vector<Mark> m_marks;
 
-    Composition  *m_composition;
-    QComboBox                *m_ornament;
-    QComboBox                *m_mark;
-    QLabel                   *m_textLabel;
-    QLineEdit                *m_text;
-    QCheckBox                *m_retune;
-    QComboBox                *m_adjustTime;
+    Composition   *m_composition;
+    QComboBox     *m_ornament;
+    QComboBox     *m_mark;
+    QLabel        *m_textLabel;
+    QLineEdit     *m_text;
+    QCheckBox     *m_retune;
+    QComboBox     *m_adjustTime;
 };
 
 
