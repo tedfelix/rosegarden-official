@@ -35,11 +35,9 @@
 namespace Rosegarden
 {
 
-MatrixConfigurationPage::MatrixConfigurationPage(QSettings cfg,
-        QWidget *parent,
+MatrixConfigurationPage::MatrixConfigurationPage(QWidget *parent,
         const char *name) :
-        TabbedConfigurationPage(cfg, parent, name)
-//### JAS update function declaration / definition
+        TabbedConfigurationPage(parent, name)
 {
     QFrame *frame = new QFrame(m_tabWidget);
     QGridLayout *layout = new QGridLayout(frame,
