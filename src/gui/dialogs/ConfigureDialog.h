@@ -21,11 +21,8 @@
 
 #include "ConfigureDialogBase.h"
 
-#include <QSettings>
-
 
 class QWidget;
-class KConfig;
 
 
 namespace Rosegarden
@@ -39,7 +36,6 @@ class ConfigureDialog : public ConfigureDialogBase
     Q_OBJECT
 public:
     ConfigureDialog(RosegardenGUIDoc *doc,
-                    QSettings cfg,
                     QWidget *parent=0,
                     const char *name=0);
 signals:

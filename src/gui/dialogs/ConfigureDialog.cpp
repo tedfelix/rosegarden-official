@@ -55,7 +55,6 @@ static QPixmap loadIcon(const char *name)
 
 
 ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
-                                 QSettings cfg,
                                  QWidget *parent,
                                  const char *name)
         : ConfigureDialogBase(parent, i18n("Configure Rosegarden"), name)
@@ -70,7 +69,7 @@ ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
                          GeneralConfigurationPage::title(),
                          loadIcon(GeneralConfigurationPage::iconName()));
     vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
-    page = new GeneralConfigurationPage(doc, cfg, pageWidget);
+    page = new GeneralConfigurationPage(doc, pageWidget);
     vlay->addWidget(page);
     page->setPageIndex(pageIndex(pageWidget));
     m_configurationPages.push_back(page);
@@ -84,7 +83,7 @@ ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
                          MIDIConfigurationPage::title(),
                          loadIcon(MIDIConfigurationPage::iconName()));
     vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
-    page = new MIDIConfigurationPage(doc, cfg, pageWidget);
+    page = new MIDIConfigurationPage(doc, pageWidget);
     vlay->addWidget(page);
     page->setPageIndex(pageIndex(pageWidget));
     m_configurationPages.push_back(page);
@@ -93,7 +92,7 @@ ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
                          AudioConfigurationPage::title(),
                          loadIcon(AudioConfigurationPage::iconName()));
     vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
-    page = new AudioConfigurationPage(doc, cfg, pageWidget);
+    page = new AudioConfigurationPage(doc, pageWidget);
     vlay->addWidget(page);
     page->setPageIndex(pageIndex(pageWidget));
     m_configurationPages.push_back(page);
@@ -103,7 +102,7 @@ ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
                          NotationConfigurationPage::title(),
                          loadIcon(NotationConfigurationPage::iconName()));
     vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
-    page = new NotationConfigurationPage(cfg, pageWidget);
+    page = new NotationConfigurationPage(pageWidget);
     vlay->addWidget(page);
     page->setPageIndex(pageIndex(pageWidget));
     m_configurationPages.push_back(page);
