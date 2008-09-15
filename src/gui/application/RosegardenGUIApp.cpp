@@ -2604,9 +2604,9 @@ void RosegardenGUIApp::slotSaveOptions()
     RG_DEBUG << "SHOW PARAMETERS = " << m_dockVisible << endl;
 #endif
 
-    m_fileRecent->saveEntries(settings);
+    m_fileRecent->saveEntries();
 
-    //     saveMainWindowSettings(settings, RosegardenGUIApp::MainWindowConfigGroup); - no need to, done by KMainWindow
+    //     saveMainWindowSettings(RosegardenGUIApp::MainWindowConfigGroup); - no need to, done by KMainWindow
     settings.sync();
 
     settings.endGroup();
@@ -2646,7 +2646,7 @@ void RosegardenGUIApp::setupFileDialogSpeedbar()
 void RosegardenGUIApp::readOptions()
 {
     QSettings settings;
-//    applyMainWindowSettings(settings, MainWindowConfigGroup);	//&&& not required
+//    applyMainWindowSettings(MainWindowConfigGroup);	//&&& not required
 
 //    settings.reparseConfiguration();  //&&& may not be required: reparseConfig..()
 
@@ -2727,13 +2727,12 @@ void RosegardenGUIApp::readOptions()
 
     // initialise the recent file list
     //
-    m_fileRecent->loadEntries(settings);
+    m_fileRecent->loadEntries();
 
     m_actionsSetup = true;
 }
 
-void RosegardenGUIApp::saveGlobalProperties(QSettings cfg)
-//### JAS update function declaration / definition
+void RosegardenGUIApp::saveGlobalProperties()
 {
     QSettings settings;
     //@@@ JAS Do we need a settings.startGroup() here?
@@ -2757,8 +2756,7 @@ void RosegardenGUIApp::saveGlobalProperties(QSettings cfg)
     }
 }
 
-void RosegardenGUIApp::readGlobalProperties(QSettings _cfg)
-//### JAS update function declaration / definition
+void RosegardenGUIApp::readGlobalProperties()
 {
     QSettings settings;
     //@@@ JAS Do we need a settings.startGroup() here?
@@ -6305,7 +6303,7 @@ void RosegardenGUIApp::slotConfigure()
     RG_DEBUG << "RosegardenGUIApp::slotConfigure\n";
 
     ConfigureDialog *configDlg =
-        new ConfigureDialog(m_doc, settings, this);
+        new ConfigureDialog(m_doc, this);
 
     connect(configDlg, SIGNAL(updateAutoSaveInterval(unsigned int)),
             this, SLOT(slotUpdateAutoSaveInterval(unsigned int)));

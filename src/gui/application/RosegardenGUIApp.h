@@ -30,7 +30,6 @@
 #include <QDockWidget>
 #include <QString>
 #include <QVector>
-#include <QSettings>
 #include <QMainWindow>
 #include <QMenu>
 #include <QMenuBar>
@@ -49,7 +48,6 @@ class QShortcut;
 class QTemporaryFile;
 class QProcess;
 
-//class KConfig;
 class QAction;
 //class /* was toggle */ QAction;
 //class KRecentFilesAction;
@@ -447,7 +445,7 @@ protected:
      *
      * @see KTMainWindow#saveProperties
      */
-    virtual void saveGlobalProperties(QSettings _cfg);
+    virtual void saveGlobalProperties();
 
     /**
      * reads the session config file and restores the application's
@@ -456,7 +454,7 @@ protected:
      *
      * @see KTMainWindow#readProperties
      */
-    virtual void readGlobalProperties(QSettings _cfg);
+    virtual void readGlobalProperties();
 
     QString getAudioFilePath();
 
