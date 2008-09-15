@@ -205,25 +205,34 @@
 #include <QMainWindow>
 #include <QMenu>
 #include <QMenuBar>
+#include <QToolBar>
+#include <QStatusBar>
 #include <QAction>
+#include <QUrl>
+
+#include <QDialog>
+#include <QFileDialog>
+#include <QInputDialog>
+#include <QPrintDialog>
+#include <QColorDialog>
+#include <QFontDialog>
+#include <QPageSetupDialog>
 
 #include <ui_RosegardenTransport.h>
 
 #include <kmimetype.h>
-#include <QAction>
-#include <kedittoolbar.h>
-#include <kfiledialog.h>
-#include <kglobal.h>
-#include <kinputdialog.h>
+//#include <kedittoolbar.h> //
+//#include <kfiledialog.h>
+//#include <kglobal.h>
+//#include <kinputdialog.h>
 #include <kio/netaccess.h>
 //#include <kkeydialog.h>	//&&& disabled kkaydialog.h
 #include <klocale.h>
-#include <kmainwindow.h>
-#include <ktip.h>
-#include <ktoolbar.h>
-#include <kurl.h>
+//#include <kmainwindow.h>
+//#include <ktip.h>
+//#include <ktoolbar.h>
+//#include <kurl.h>
 #include <kxmlguiclient.h>
-#include <kstatusbar.h>
 //#include <kstandardshortcut.h>
 //#include <kstandardaction.h>
 #include <kstandarddirs.h>
@@ -1067,48 +1076,90 @@ void RosegardenGUIApp::setupActions()
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
     Q3CanvasPixmap pixmap(pixmapDir + "/toolbar/select.xpm");
     QIcon icon = QIcon(pixmap);
-
+	
+	QObject* qa_parent = dynamic_cast<QObject*>(this);
+	
+	QActionGroup* qag_segmenttools = new QActionGroup( qa_parent );
+	
     // TODO : add some shortcuts here
-    action = new KRadioAction(i18n("&Select and Edit"), icon, Qt::Key_F2,
-                              this, SLOT(slotPointerSelected()),
-                              actionCollection(), "select");
-    action->setExclusiveGroup("segmenttools");
+	QAction* qa_select = new QAction( icon, i18n("&Select and Edit"), qa_parent );
+			connect( qa_select, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotPointerSelected()) );
+			qa_select->setObjectName( "select" );
+			qa_select->setCheckable( true );		//
+			qa_select->setChecked( false );			//
+			qa_select->setAutoRepeat( false );		//
+			qa_select->setActionGroup( qag_segmenttools );	// QActionGroup*
+			//### FIX: deallocate QAction ptr
 
-    action = new KRadioAction(i18n("&Draw"), "pencil", Qt::Key_F3,
-                              this, SLOT(slotDrawSelected()),
-                              actionCollection(), "draw");
-    action->setExclusiveGroup("segmenttools");
 
-    action = new KRadioAction(i18n("&Erase"), "eraser", Qt::Key_F4,
-                              this, SLOT(slotEraseSelected()),
-                              actionCollection(), "erase");
-    action->setExclusiveGroup("segmenttools");
+	QAction* qa_draw = new QAction( i18n("&Draw"), qa_parent );
+			connect( qa_draw, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotDrawSelected()) );
+			qa_draw->setObjectName( "draw" );
+			// qa_draw->setIcon( "pencil" );	//### FIX icon
+			qa_draw->setCheckable( true );		//
+			qa_draw->setChecked( false );			//
+			qa_draw->setAutoRepeat( false );		//
+			qa_draw->setActionGroup( qag_segmenttools );	// QActionGroup*
+			//### FIX: deallocate QAction ptr
 
-    action = new KRadioAction(i18n("&Move"), "move", Qt::Key_F5,
-                              this, SLOT(slotMoveSelected()),
-                              actionCollection(), "move");
-    action->setExclusiveGroup("segmenttools");
+
+	QAction* qa_erase = new QAction( i18n("&Erase"), qa_parent );
+			connect( qa_erase, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotEraseSelected()) );
+			qa_erase->setObjectName( "erase" );
+			// qa_erase->setIcon( "eraser" );	//### FIX icon
+			qa_erase->setCheckable( true );		//
+			qa_erase->setChecked( false );			//
+			qa_erase->setAutoRepeat( false );		//
+			qa_erase->setActionGroup( qag_segmenttools );	// QActionGroup*
+			//### FIX: deallocate QAction ptr
+
+
+	QAction* qa_move = new QAction( i18n("&Move"), qa_parent );
+			connect( qa_move, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotMoveSelected()) );
+			qa_move->setObjectName( "move" );
+			// qa_move->setIcon( "move" );	//### FIX icon
+			qa_move->setCheckable( true );		//
+			qa_move->setChecked( false );			//
+			qa_move->setAutoRepeat( false );		//
+			qa_move->setActionGroup( qag_segmenttools );	// QActionGroup*
+			//### FIX: deallocate QAction ptr
+
 
     pixmap.load(pixmapDir + "/toolbar/resize.xpm");
     icon = QIcon(pixmap);
-    action = new KRadioAction(i18n("&Resize"), icon, Qt::Key_F6,
-                              this, SLOT(slotResizeSelected()),
-                              actionCollection(), "resize");
-    action->setExclusiveGroup("segmenttools");
+	QAction* qa_resize = new QAction( icon, i18n("&Resize"), qa_parent );
+			connect( qa_resize, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotResizeSelected()) );
+			qa_resize->setObjectName( "resize" );
+			qa_resize->setCheckable( true );		//
+			qa_resize->setChecked( false );			//
+			qa_resize->setAutoRepeat( false );		//
+			qa_resize->setActionGroup( qag_segmenttools );	// QActionGroup*
+			//### FIX: deallocate QAction ptr
+
 
     pixmap.load(pixmapDir + "/toolbar/split.xpm");
     icon = QIcon(pixmap);
-    action = new KRadioAction(i18n("&Split"), icon, Qt::Key_F7,
-                              this, SLOT(slotSplitSelected()),
-                              actionCollection(), "split");
-    action->setExclusiveGroup("segmenttools");
+	QAction* qa_split = new QAction( icon, i18n("&Split"), qa_parent );
+			connect( qa_split, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotSplitSelected()) );
+			qa_split->setObjectName( "split" );
+			qa_split->setCheckable( true );		//
+			qa_split->setChecked( false );			//
+			qa_split->setAutoRepeat( false );		//
+			qa_split->setActionGroup( qag_segmenttools );	// QActionGroup*
+			//### FIX: deallocate QAction ptr
+
 
     pixmap.load(pixmapDir + "/toolbar/join.xpm");
     icon = QIcon(pixmap);
-    action = new KRadioAction(i18n("&Join"), icon, 0,
-                              this, SLOT(slotJoinSelected()),
-                              actionCollection(), "join");
-    action->setExclusiveGroup("segmenttools");
+	QAction* qa_join = new QAction( icon, i18n("&Join"), qa_parent );
+			connect( qa_join, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotJoinSelected()) );
+			qa_join->setObjectName( "join" );
+			qa_join->setCheckable( true );		//
+			qa_join->setChecked( false );			//
+			qa_join->setAutoRepeat( false );		//
+			qa_join->setActionGroup( qag_segmenttools );	// QActionGroup*
+			//### FIX: deallocate QAction ptr
+
 
 
     QAction* qa_harmonize_selection = new QAction(  i18n("&Harmonize"), dynamic_cast<QObject*>(this) );
@@ -1124,7 +1175,7 @@ void RosegardenGUIApp::setupActions()
     pixmap.load(pixmapDir + "/toolbar/event-insert-timesig.png");
     icon = QIcon(pixmap);
     QAction* qa_add_time_signature = new QAction(  AddTimeSignatureCommand::getGlobalName(), dynamic_cast<QObject*>(this) );	// note: this was 0
-			connect( qa_add_time_signature, SIGNAL(toggled()), dynamic_cast<QObject*>(0), this, SLOT(slotEditTimeSignature()) );
+			connect( qa_add_time_signature, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotEditTimeSignature()) );
 			qa_add_time_signature->setObjectName( "add_time_signature" );		//
 			//qa_add_time_signature->setCheckable( true );		//
 			qa_add_time_signature->setAutoRepeat( false );	//
@@ -1219,7 +1270,7 @@ void RosegardenGUIApp::setupActions()
     pixmap.load(pixmapDir + "/toolbar/event-insert-tempo.png");
     icon = QIcon(pixmap);
 	QAction* qa_add_tempo = new QAction(  AddTempoChangeCommand::getGlobalName(), dynamic_cast<QObject*>(this) );	// note: this was 0
-			connect( qa_add_tempo, SIGNAL(toggled()), dynamic_cast<QObject*>(0), this, SLOT(slotEditTempo()) );
+			connect( qa_add_tempo, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotEditTempo()) );
 			qa_add_tempo->setObjectName( "add_tempo" );		//
 			//qa_add_tempo->setCheckable( true );		//
 			qa_add_tempo->setAutoRepeat( false );	//
@@ -1869,10 +1920,10 @@ void RosegardenGUIApp::setRewFFwdToAutoRepeat()
     QWidget* transportToolbar = factory()->container("Transport Toolbar", this);
 
     if (transportToolbar) {
-		//### changed var *l from <QObjectList*> to <QList*>
-        QList *l = transportToolbar->queryList();
-        QListItem it(*l); // iterate over the buttons
-        QObject *obj;
+		//### changed var *l from <QObjectList*> to <QListWidget*>
+		QListWidget *l = transportToolbar->queryList();		//###################### FIX next
+		QListWidgetItem it(*l); // iterate over the buttons
+		QObject *obj;
 		
         while ( (obj = it.current()) != 0 ) {
             // for each found object...
@@ -1902,7 +1953,7 @@ void RosegardenGUIApp::setRewFFwdToAutoRepeat()
 
 void RosegardenGUIApp::initZoomToolbar()
 {
-    KToolBar *zoomToolbar = toolBar("Zoom Toolbar");
+    QToolBar *zoomToolbar = this->addToolBar("Zoom Toolbar");
     if (!zoomToolbar) {
         RG_DEBUG << "RosegardenGUIApp::initZoomToolbar() : "
         << "zoom toolbar not found" << endl;
@@ -1926,7 +1977,7 @@ void RosegardenGUIApp::initZoomToolbar()
     QString maxZoom = QString("%1%").arg(factors[(sizeof(factors) / sizeof(factors[0])) - 1] * 100.0);
 
     m_zoomSlider = new ZoomSlider<double>
-                   (zoomSizes, -1, QSlider::Horizontal, zoomToolbar, "kde toolbar widget");
+                   (zoomSizes, -1, Qt::Horizontal, zoomToolbar, "kde toolbar widget");
     m_zoomSlider->setTracking(true);
     m_zoomSlider->setFocusPolicy(Qt::NoFocus);
     m_zoomLabel = new QLabel(minZoom, zoomToolbar, "kde toolbar widget");
@@ -1943,17 +1994,39 @@ void RosegardenGUIApp::initZoomToolbar()
 void RosegardenGUIApp::initStatusBar()
 {
     KTmpStatusMsg::setDefaultMsg("");
-    statusBar()->addItem(KTmpStatusMsg::getDefaultMsg(),
-                            KTmpStatusMsg::getDefaultId(), 1);
-    statusBar()->setItemAlignment(KTmpStatusMsg::getDefaultId(),
-                                  AlignLeft | AlignVCenter);
+	// QStatusBar::addPermanentWidget ( QWidget * widget, int stretch = 0 )
+//	statusBar()->addPermanentWidget( KTmpStatusMsg::getDefaultMsg(),
+//			  KTmpStatusMsg::getDefaultId(), 1);
+//	statusBar()->setItemAlignment(KTmpStatusMsg::getDefaultId(),
+//			  AlignLeft | AlignVCenter);
+	m_statusBarLabel1 = new QLabel( "status", this );
+	
+	statusBar()->addPermanentWidget( m_statusBarLabel1 );
+//	statusBar()->setItemAlignment(KTmpStatusMsg::getDefaultId(),
+//			  AlignLeft | AlignVCenter);
 
     m_progressBar = new ProgressBar(100, true, statusBar());
     //    m_progressBar()->setMinimumWidth(100);
     m_progressBar->setFixedWidth(60);
     m_progressBar->setFixedHeight(18);
-    m_progressBar->setTextEnabled(false);
-    statusBar->addWidget(m_progressBar());
+//    m_progressBar->setTextEnabled(false);  //&&&
+    statusBar()->addPermanentWidget( m_progressBar );
+	
+	
+	/* init toolbar */
+	/****************/
+	
+	m_toolBarMain = new QToolBar( "Main Toolbar", this );
+	this->addToolBar( Qt::TopToolBarArea, m_toolBarMain );
+}
+
+
+QToolBar* RosegardenGUIApp::toolBar( const char* name="\0" ){
+	/* convenience method qt3 -> qt4 */
+	if( name == "" ){
+		return m_toolBarMain;
+	}
+	return this->findChild<QToolBar*>( name );
 }
 
 void RosegardenGUIApp::initView()
@@ -2110,9 +2183,14 @@ void RosegardenGUIApp::initView()
     m_view->slotSelectTrackSegments(comp.getSelectedTrack());
 
     // play tracking on in the editor by default: turn off if need be
-    /* was toggle */ QAction *trackingAction = dynamic_cast<QAction*>
-                                    (actionCollection()->action("toggle_tracking"));
-    if (trackingAction && !trackingAction->isChecked()) {
+    /* was toggle */ 
+	// old. QAction *trackingAction = dynamic_cast<QAction*>
+	//                                (actionCollection()->action("toggle_tracking"));
+	QAction *trackingAction = findChild<QAction*>( QString("toggle_tracking") );
+	// note: findChild not avail. in MSVC_6 (ms-windows), use qFindChild() instead 
+	
+	
+	if (trackingAction && !trackingAction->isChecked()) {
         m_view->getTrackEditor()->slotToggleTracking();
     }
 
@@ -2131,16 +2209,28 @@ void RosegardenGUIApp::initView()
     // created but its tool won't be set, even though it will appear
     // to be selected.
     //
-    actionCollection()->action("move")->activate();
-    if (m_doc->getComposition().getNbSegments() > 0)
-        actionCollection()->action("select")->activate();
-    else
-        actionCollection()->action("draw")->activate();
-
-    int zoomLevel = m_doc->getConfiguration().
+    // old: actionCollection()->action("move")->activate();
+	QAction *actionx = this->findChild<QAction*>( QString("move") );
+	actionx->setEnabled(true);
+	
+	if (m_doc->getComposition().getNbSegments() > 0){
+		//actionCollection()->action("select")->activate();
+		QAction *actionx = this->findChild<QAction*>( QString("select") );
+		actionx->setEnabled(true);
+	}else {
+		//actionCollection()->action("draw")->activate();
+		QAction *actionx = this->findChild<QAction*>( QString("draw") );
+		actionx->setEnabled(true);
+	}
+	
+	
+/*    int zoomLevel = m_doc->getConfiguration().
                     get
                         <Int>
                         (DocumentConfiguration::ZoomLevel);
+	*/
+	//QSettings settings;
+	int zoomLevel = m_doc->getConfiguration().get<Int>(DocumentConfiguration::ZoomLevel);
 
     m_zoomSlider->setSize(double(zoomLevel) / 1000.0);
     slotChangeZoom(zoomLevel);
@@ -2235,7 +2325,7 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
     connect(m_doc, SIGNAL(loopChanged(timeT, timeT)),
             this, SLOT(slotSetLoop(timeT, timeT)));
 
-    m_doc->getCommandHistory()->attachView(actionCollection());
+//    m_doc->getCommandHistory()->attachView( actionCollection() );		//&&& needed ? how to ?
 
     connect(m_doc->getCommandHistory(), SIGNAL(commandExecuted()),
             SLOT(update()));
@@ -2270,7 +2360,7 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
     m_doc->clearModifiedStatus();
 
     if (newDocument->getStudio().haveMidiDevices()) {
-        stateChanged("got_midi_devices");
+        stateChanged("got_midi_devices", 0);
     } else {
         stateChanged("got_midi_devices", KXMLGUIClient::StateReverse);
     }
@@ -2385,7 +2475,8 @@ RosegardenGUIApp::createDocument(QString filePath, ImportType importType)
     slotEnableTransport(false);
 
     if (importType == ImportCheckType) {
-        KMimeType::Ptr fileMimeType = KMimeType::findByPath(filePath);
+        KMimeType::Ptr fileMimeType = KMimeType::findByPath(filePath);	//@@@ how to get mime type ? investigate !
+		
         if (fileMimeType->objectName() == "audio/x-midi")
             importType = ImportMIDI;
         else if (fileMimeType->objectName() == "audio/x-rosegarden")
@@ -2524,7 +2615,7 @@ void RosegardenGUIApp::slotSaveOptions()
 void RosegardenGUIApp::setupFileDialogSpeedbar()
 {
     QSettings settings;
-    settings.beginGroup( "KFileDialog Speedbar" );
+    settings.beginGroup( "QFileDialog Speedbar" );
 
     RG_DEBUG << "RosegardenGUIApp::setupFileDialogSpeedbar" << endl;
 
@@ -2555,7 +2646,7 @@ void RosegardenGUIApp::setupFileDialogSpeedbar()
 void RosegardenGUIApp::readOptions()
 {
     QSettings settings;
-    applyMainWindowSettings(settings, MainWindowConfigGroup);
+//    applyMainWindowSettings(settings, MainWindowConfigGroup);	//&&& not required
 
 //    settings.reparseConfiguration();  //&&& may not be required: reparseConfig..()
 
@@ -2658,7 +2749,7 @@ void RosegardenGUIApp::saveGlobalProperties(QSettings cfg)
         QString errMsg;
         bool res = m_doc->saveDocument(tempname, errMsg);
         if (!res) {
-            if (errMsg)
+            if ( !errMsg.isEmpty() )
                 QMessageBox::critical(this, "", i18n(qStrToCharPtrUtf8( QString("Could not save document at %1\nError was : %2").arg(tempname).arg(errMsg))) );
             else
                 QMessageBox::critical(this, "", i18n( qStrToCharPtrUtf8( QString("Could not save document at %1").arg(tempname)))  );
@@ -2706,7 +2797,9 @@ void RosegardenGUIApp::showEvent(QShowEvent* e)
     RG_DEBUG << "RosegardenGUIApp::showEvent()\n";
 
     getTransport()->raise();
-    KMainWindow::showEvent(e);
+    
+	//KMainWindow::showEvent(e);  //&&& disabled. a debug function ?
+	//QMainWindow::showEvent( e );
 }
 
 bool RosegardenGUIApp::queryClose()
@@ -2786,27 +2879,27 @@ void RosegardenGUIApp::slotOpenDroppedURL(QString url)
     if (!m_doc->saveIfModified())
         return ;
 
-    openURL(KURL(url));
+    openURL(QUrl(url));
 }
 
 void RosegardenGUIApp::openURL(QString url)
 {
     RG_DEBUG << "RosegardenGUIApp::openURL: QString " << url << endl;
-    openURL(KURL(url));
+    openURL(QUrl(url));
 }
 
-void RosegardenGUIApp::openURL(const KURL& url)
+void RosegardenGUIApp::openURL(const QUrl& url)
 {
     SetWaitCursor waitCursor;
 
     QString netFile = url.prettyURL();
-    RG_DEBUG << "RosegardenGUIApp::openURL: KURL " << netFile << endl;
+    RG_DEBUG << "RosegardenGUIApp::openURL: QUrl " << netFile << endl;
 
     if (!url.isValid()) {
         QString string;
         string = i18n( "Malformed URL\n%1", netFile);
 
-        /* was sorry */ QMessageBox::warning(this, string);
+        /* was sorry */ QMessageBox::warning(this, "", string);
         return ;
     }
 
@@ -2845,12 +2938,12 @@ void RosegardenGUIApp::slotFileOpen()
         QString examplesDir = KGlobal::dirs()->findResource("appdata", "examples/");
         settings.beginGroup( "Recent Dirs" );
 
-        QString recentString = settings.value("ROSEGARDEN", "") ;
+        QString recentString = settings.value("ROSEGARDEN", "").toString() ;
         settings.setValue
         ("ROSEGARDEN", QString("file:%1,%2").arg(examplesDir).arg(recentString));
     }
 
-    KURL url = KFileDialog::getOpenURL
+    QUrl url = QFileDialog::getOpenURL
                (":ROSEGARDEN",
                 "audio/x-rosegarden audio/x-midi audio/x-rosegarden21", this,
                 i18n("Open File"));
@@ -2871,7 +2964,7 @@ void RosegardenGUIApp::slotFileOpen()
 
 void RosegardenGUIApp::slotMerge()
 {
-    KURL url = KFileDialog::getOpenURL
+    QUrl url = QFileDialog::getOpenURL
                (":ROSEGARDEN",
                 "audio/x-rosegarden audio/x-midi audio/x-rosegarden21", this,
                 i18n("Open File"));
@@ -2892,7 +2985,7 @@ void RosegardenGUIApp::slotMerge()
     KIO::NetAccess::removeTempFile( target );
 }
 
-void RosegardenGUIApp::slotFileOpenRecent(const KURL &url)
+void RosegardenGUIApp::slotFileOpenRecent(const QUrl &url)
 {
     KTmpStatusMsg msg(i18n("Opening file..."), this);
 
@@ -2929,11 +3022,11 @@ void RosegardenGUIApp::slotFileSave()
         bool res = m_doc->saveDocument(docFilePath, errMsg);
         if (!res) {
             if (errMsg)
-                QMessageBox::critical(this, i18n(QString("Could not save document at %1\nError was : %2")
-                                              .arg(docFilePath).arg(errMsg)));
+                QMessageBox::critical(this, "", i18n( qStrToCharPtrUtf8(QString("Could not save document at %1\nError was : %2")
+                                              .arg(docFilePath).arg(errMsg))) );
             else
-                QMessageBox::critical(this, i18n(QString("Could not save document at %1")
-                                              .arg(docFilePath)));
+                QMessageBox::critical(this, "", i18n( qStrToCharPtrUtf8(QString("Could not save document at %1")
+                                              .arg(docFilePath))) );
         }
     }
 }
@@ -2950,9 +3043,9 @@ RosegardenGUIApp::getValidWriteFile(QString descriptiveExtension,
     RG_DEBUG << "RosegardenGUIApp::getValidWriteFile() : extension = " << extension << endl;
 
     // It's too bad there isn't this functionality within
-    // KFileDialog::getSaveFileName
-    KFileDialog saveFileDialog(":ROSEGARDEN", descriptiveExtension, this, label, true);
-    saveFileDialog.setOperationMode(KFileDialog::Saving);
+    // QFileDialog::getSaveFileName
+    QFileDialog saveFileDialog(":ROSEGARDEN", descriptiveExtension, this, label, true);
+    saveFileDialog.setOperationMode(QFileDialog::Saving);
     if (m_doc) {
         QString saveFileName = m_doc->getAbsFilePath();
         // Show filename without the old extension
@@ -2965,7 +3058,7 @@ RosegardenGUIApp::getValidWriteFile(QString descriptiveExtension,
     saveFileDialog.exec();
     QString name = saveFileDialog.selectedFile();
 
-    //     RG_DEBUG << "RosegardenGUIApp::getValidWriteFile() : KFileDialog::getSaveFileName returned "
+    //     RG_DEBUG << "RosegardenGUIApp::getValidWriteFile() : QFileDialog::getSaveFileName returned "
     //              << name << endl;
 
 
@@ -2981,28 +3074,30 @@ RosegardenGUIApp::getValidWriteFile(QString descriptiveExtension,
         }
     }
 
-    KURL *u = new KURL(name);
+    QUrl *u = new QUrl(name);
 
     if (!u->isValid()) {
-        /* was sorry */ QMessageBox::warning(this, i18n("This is not a valid filename.\n"));
+        /* was sorry */ QMessageBox::warning(this, "", i18n("This is not a valid filename.\n"));
         return "";
     }
 
     if (!u->isLocalFile()) {
-        /* was sorry */ QMessageBox::warning(this, i18n("This is not a local file.\n"));
+        /* was sorry */ QMessageBox::warning(this, "",  i18n("This is not a local file.\n"));
         return "";
     }
 
     QFileInfo info(name);
 
     if (info.isDir()) {
-        /* was sorry */ QMessageBox::warning(this, i18n("You have specified a directory"));
+        /* was sorry */ QMessageBox::warning(this, "", i18n("You have specified a directory"));
         return "";
     }
 
     if (info.exists()) {
-        int overwrite = QMessageBox::questionYesNo
-                        (this, i18n("The specified file exists.  Overwrite?"));
+        int overwrite = QMessageBox::question
+				(this, "", i18n("The specified file exists.  Overwrite?"), 
+				 QMessageBox::Yes | QMessageBox::No,
+				 QMessageBox::No );
 
         if (overwrite != QMessageBox::Yes)
             return "";
@@ -3031,18 +3126,18 @@ bool RosegardenGUIApp::slotFileSaveAs()
     QString errMsg;
     bool res = m_doc->saveDocument(newName, errMsg);
     if (!res) {
-        if (errMsg)
-            QMessageBox::critical(this, i18n(QString("Could not save document at %1\nError was : %2")
-                                          .arg(newName).arg(errMsg)));
+        if ( !errMsg.isEmpty() )
+            QMessageBox::critical(this, "", i18n(qStrToCharPtrUtf8(QString("Could not save document at %1\nError was : %2")
+                                          .arg(newName).arg(errMsg))) );
         else
-            QMessageBox::critical(this, i18n(QString("Could not save document at %1")
-                                          .arg(newName)));
+            QMessageBox::critical(this, "", i18n(qStrToCharPtrUtf8(QString("Could not save document at %1")
+                                          .arg(newName))) );
 
     } else {
 
         m_fileRecent->addURL(newName);
 
-        QString caption = qApp->caption();
+        QString caption = qApp->applicationName();
         setCaption(caption + ": " + m_doc->getTitle());
         // update the edit view's captions too
         emit compositionStateUpdate();
@@ -3071,7 +3166,7 @@ void RosegardenGUIApp::slotFileClose()
 void RosegardenGUIApp::slotFilePrint()
 {
     if (m_doc->getComposition().getNbSegments() == 0) {
-        /* was sorry */ QMessageBox::warning(0, "Please create some tracks first (until we implement menu state management)");
+        /* was sorry */ QMessageBox::warning(this, "", "Please create some tracks first (until we implement menu state management)");
         return ;
     }
 
@@ -3083,7 +3178,7 @@ void RosegardenGUIApp::slotFilePrint()
 void RosegardenGUIApp::slotFilePrintPreview()
 {
     if (m_doc->getComposition().getNbSegments() == 0) {
-        /* was sorry */ QMessageBox::warning(0, "Please create some tracks first (until we implement menu state management)");
+        /* was sorry */ QMessageBox::warning(this, "", "Please create some tracks first (until we implement menu state management)");
         return ;
     }
 
@@ -3285,7 +3380,7 @@ void RosegardenGUIApp::slotGrooveQuantize()
     SegmentSelection selection = m_view->getSelection();
 
     if (selection.size() != 1) {
-        /* was sorry */ QMessageBox::warning(this, i18n("This function needs no more than one segment to be selected."));
+        /* was sorry */ QMessageBox::warning(this, "", i18n("This function needs no more than one segment to be selected."));
         return ;
     }
 
@@ -3308,7 +3403,7 @@ void RosegardenGUIApp::slotJoinSegments()
     for (SegmentSelection::iterator i = selection.begin();
             i != selection.end(); ++i) {
         if ((*i)->getType() != Segment::Internal) {
-            /* was sorry */ QMessageBox::warning(this, i18n("Can't join Audio segments"));
+            /* was sorry */ QMessageBox::warning(this, "", i18n("Can't join Audio segments"));
             return ;
         }
     }
@@ -3392,12 +3487,12 @@ void RosegardenGUIApp::slotRescaleSelection()
 
         progressDlg->setLabel(i18n("Generating audio preview..."));
 
-        for (size_t i = 0; i < asrcs.size(); ++i) {
-            asrcs[i]->disconnectProgressDialog(progressDlg);
-        }
+//        for (size_t i = 0; i < asrcs.size(); ++i) {
+//            asrcs[i]->disconnectProgressDialog(progressDlg);	//&&& obsolete (?)
+//        }
 
         connect(&m_doc->getAudioFileManager(), SIGNAL(setValue(int)),
-                progressDlg->progressBar(), SLOT(setValue(int)));
+				 m_progressBar, SLOT(setValue(int)));	// was progressDlg->progressBar()
         connect(progressDlg, SIGNAL(cancelClicked()),
                 &m_doc->getAudioFileManager(), SLOT(slotStopPreview()));
 
@@ -3419,11 +3514,13 @@ RosegardenGUIApp::testAudioPath(QString op)
     try {
         m_doc->getAudioFileManager().testAudioPath();
     } catch (AudioFileManager::BadAudioPathException) {
-        if (QMessageBox::warningContinueCancel
-            (this,
-	     i18n("The audio file path does not exist or is not writable.\nYou must set the audio file path to a valid directory in Document Properties before %1.\nWould you like to set it now?", op),
-             i18n("Warning"),
-             i18n("Set audio file path")) == QMessageBox::Continue) {
+        if ( QMessageBox::warning
+				(this, i18n("Warning"),
+	     i18n("The audio file path does not exist or is not writable.\nYou must set the audio file path to a valid directory in Document Properties before %1.\nWould you like to set it now?", op ),
+				QMessageBox::Ok | QMessageBox::Cancel,
+	 			QMessageBox::Cancel 
+				) == QMessageBox::Ok 
+		   ){
             slotOpenAudioPathSettings();
         }
 	return false;
@@ -4328,7 +4425,7 @@ void RosegardenGUIApp::slotRevertToSaved()
 
     if (m_doc->isModified()) {
         int revert =
-            QMessageBox::questionYesNo(this,
+            QMessageBox::question(this, "", 
                                        i18n("Revert modified document to previous saved version?"));
 
         if (revert == QMessageBox::No)
@@ -4343,7 +4440,7 @@ void RosegardenGUIApp::slotImportProject()
     if (m_doc && !m_doc->saveIfModified())
         return ;
 
-    KURL url = KFileDialog::getOpenURL
+    QUrl url = QFileDialog::getOpenURL
                (":RGPROJECT",
                 i18n("*.rgp|Rosegarden Project files\n*|All files"), this,
                 i18n("Import Rosegarden Project File"));
@@ -4372,7 +4469,7 @@ void RosegardenGUIApp::importProject(QString filePath)
 
     if ((proc->exitStatus() != QProcess::NormalExit) || proc->exitCode()) {
         CurrentProgressDialog::freeze();
-        /* was sorry */ QMessageBox::warning(this, i18n("Failed to import project file \"%1\"", filePath));
+        /* was sorry */ QMessageBox::warning(this, filePath, i18n("Failed to import project file \"%1\""));
         CurrentProgressDialog::thaw();
         delete proc;
         return ;
@@ -4391,7 +4488,7 @@ void RosegardenGUIApp::slotImportMIDI()
     if (m_doc && !m_doc->saveIfModified())
         return ;
 
-    KURL url = KFileDialog::getOpenURL
+    QUrl url = QFileDialog::getOpenURL
                (":MIDI",
                 "audio/x-midi", this,
                 i18n("Open MIDI File"));
@@ -4408,7 +4505,7 @@ void RosegardenGUIApp::slotImportMIDI()
 
 void RosegardenGUIApp::slotMergeMIDI()
 {
-    KURL url = KFileDialog::getOpenURL
+    QUrl url = QFileDialog::getOpenURL
                (":MIDI",
                 "audio/x-midi", this,
                 i18n("Merge MIDI File"));
@@ -4536,7 +4633,7 @@ RosegardenGUIApp::createDocumentFromMIDIFile(QString file)
 
     if (!midiFile.open()) {
         CurrentProgressDialog::freeze();
-        QMessageBox::critical(this, strtoqstr(midiFile.getError())); //!!! i18n
+        QMessageBox::critical(this, "", strtoqstr(midiFile.getError()) ); //!!! i18n
         delete newDoc;
         return 0;
     }
@@ -4573,7 +4670,8 @@ RosegardenGUIApp::createDocumentFromMIDIFile(QString file)
                        (segment.getStartTime()));
     }
 
-    progressDlg.progressBar()->setValue(100);
+    //was: progressDlg.progressBar()
+	m_progressBar->setValue(100);
 
     for (Composition::iterator i = comp->begin();
             i != comp->end(); ++i) {
@@ -4644,7 +4742,7 @@ void RosegardenGUIApp::slotImportRG21()
     if (m_doc && !m_doc->saveIfModified())
         return ;
 
-    KURL url = KFileDialog::getOpenURL
+    QUrl url = QFileDialog::getOpenURL
                (":ROSEGARDEN21",
                 i18n("*.rose|Rosegarden-2 files\n*|All files"), this,
                 i18n("Open Rosegarden 2.1 File"));
@@ -4661,7 +4759,7 @@ void RosegardenGUIApp::slotImportRG21()
 
 void RosegardenGUIApp::slotMergeRG21()
 {
-    KURL url = KFileDialog::getOpenURL
+    QUrl url = QFileDialog::getOpenURL
                (":ROSEGARDEN21",
                 i18n("*.rose|Rosegarden-2 files\n*|All files"), this,
                 i18n("Open Rosegarden 2.1 File"));
@@ -4695,18 +4793,19 @@ RosegardenGUIApp::createDocumentFromRG21File(QString file)
     // TODO: make RG21Loader to actually emit these signals
     //
     connect(&rg21Loader, SIGNAL(setValue(int)),
-            progressDlg.progressBar(), SLOT(setValue(int)));
+            m_progressBar, SLOT(setValue(int)));
 
     connect(&rg21Loader, SIGNAL(incrementProgress(int)),
-            progressDlg.progressBar(), SLOT(advance(int)));
+            m_progressBar, SLOT(advance(int)));
 
     // "your starter for 40%" - helps the "freeze" work
     //
-    progressDlg.progressBar()->advance(40);
+    //progressDlg.progressBar()->advance(40);
+	m_progressBar->advance(40);
 
     if (!rg21Loader.load(file, newDoc->getComposition())) {
         CurrentProgressDialog::freeze();
-        QMessageBox::critical(this,
+        QMessageBox::critical(this, "", 
                            i18n("Can't load Rosegarden 2.1 file.  It appears to be corrupted."));
         delete newDoc;
         return 0;
@@ -4731,7 +4830,7 @@ RosegardenGUIApp::slotImportHydrogen()
     if (m_doc && !m_doc->saveIfModified())
         return ;
 
-    KURL url = KFileDialog::getOpenURL
+    QUrl url = QFileDialog::getOpenURL
                (":HYDROGEN",
                 i18n("*.h2song|Hydrogen files\n*|All files"), this,
                 i18n("Open Hydrogen File"));
@@ -4748,7 +4847,7 @@ RosegardenGUIApp::slotImportHydrogen()
 
 void RosegardenGUIApp::slotMergeHydrogen()
 {
-    KURL url = KFileDialog::getOpenURL
+    QUrl url = QFileDialog::getOpenURL
                (":HYDROGEN",
                 i18n("*.h2song|Hydrogen files\n*|All files"), this,
                 i18n("Open Hydrogen File"));
@@ -4793,7 +4892,7 @@ RosegardenGUIApp::createDocumentFromHydrogenFile(QString file)
 
     if (!hydrogenLoader.load(file, newDoc->getComposition())) {
         CurrentProgressDialog::freeze();
-        QMessageBox::critical(this,
+        QMessageBox::critical(this, "",
                            i18n("Can't load Hydrogen file.  It appears to be corrupted."));
         delete newDoc;
         return 0;
@@ -5018,8 +5117,8 @@ RosegardenGUIApp::slotUpdateCPUMeter(bool playing)
 
         if (m_progressBar()) {
             if (!modified) {
-                m_progressBar()->setTextEnabled(true);
-                m_progressBar()->setFormat("CPU");
+                m_progressBar->setTextEnabled(true);
+                m_progressBar->setFormat("CPU");
             }
             m_progressBar()->setValue(count);
         }
@@ -5027,10 +5126,10 @@ RosegardenGUIApp::slotUpdateCPUMeter(bool playing)
         modified = true;
 
     } else if (modified) {
-        if (m_progressBar()) {
-            m_progressBar()->setTextEnabled(false);
-            m_progressBar()->setFormat("%p%");
-            m_progressBar()->setValue(0);
+        if (m_progressBar) {
+            m_progressBar->setTextEnabled(false);
+            m_progressBar->setFormat("%p%");
+            m_progressBar->setValue(0);
         }
         modified = false;
     }
@@ -5093,7 +5192,7 @@ void RosegardenGUIApp::slotSetPointerPosition(timeT t)
 	            m_seqManager->sendSequencerJump(comp.getElapsedRealTime(t));
 	        }
 	    } catch (QString s) {
-	        QMessageBox::critical(this, s);
+	        QMessageBox::critical(this, "", s);
 	    }
     }
 
@@ -5343,7 +5442,7 @@ bool RosegardenGUIApp::launchSequencer()
     if (m_doc) m_doc->syncDevices();
 
     if (m_doc && m_doc->getStudio().haveMidiDevices()) {
-        stateChanged("got_midi_devices");
+        stateChanged("got_midi_devices", 0);
     } else {
         stateChanged("got_midi_devices", KXMLGUIClient::StateReverse);
     }
@@ -5419,11 +5518,11 @@ void RosegardenGUIApp::slotSequencerExited(QProcess*)
 
     if (m_sequencerCheckedIn) {
 
-        QMessageBox::critical(0, i18n("The Rosegarden sequencer process has exited unexpectedly.  Sound and recording will no longer be available for this session.\nPlease exit and restart Rosegarden to restore sound capability."));
+        QMessageBox::critical( this, "", i18n("The Rosegarden sequencer process has exited unexpectedly.  Sound and recording will no longer be available for this session.\nPlease exit and restart Rosegarden to restore sound capability."));
 
     } else {
 
-        QMessageBox::critical(0, i18n("The Rosegarden sequencer could not be started, so sound and recording will be unavailable for this session.\nFor assistance with correct audio and MIDI configuration, go to http://rosegardenmusic.com."));
+		QMessageBox::critical( this, "", i18n("The Rosegarden sequencer could not be started, so sound and recording will be unavailable for this session.\nFor assistance with correct audio and MIDI configuration, go to http://rosegardenmusic.com."));
     }
 
     delete m_sequencerThread;
@@ -5453,7 +5552,7 @@ void RosegardenGUIApp::slotExportProject()
     QString errMsg;
     if (!m_doc->saveDocument(rgFile, errMsg,
                              true)) { // pretend it's autosave
-        /* was sorry */ QMessageBox::warning(this, i18n("Saving Rosegarden file to package failed: %1", errMsg));
+        /* was sorry */ QMessageBox::warning(this, "", i18n("Saving Rosegarden file to package failed: %1", errMsg));
         CurrentProgressDialog::thaw();
         return ;
     }
@@ -5468,7 +5567,7 @@ void RosegardenGUIApp::slotExportProject()
     proc->execute("rosegarden-project-package", procArgs);
 
     if ((proc->exitStatus() != QProcess::NormalExit) || proc->exitCode()) {
-        /* was sorry */ QMessageBox::warning(this, i18n("Failed to export to project file \"%1\"", fileName));
+        /* was sorry */ QMessageBox::warning(this, "", i18n("Failed to export to project file \"%1\"", fileName));
         CurrentProgressDialog::thaw();
         delete proc;
         return ;
@@ -5513,7 +5612,7 @@ void RosegardenGUIApp::exportMIDIFile(QString file)
 
     if (!midiFile.write()) {
         CurrentProgressDialog::freeze();
-        /* was sorry */ QMessageBox::warning(this, i18n("Export failed.  The file could not be opened for writing."));
+        /* was sorry */ QMessageBox::warning(this, "", i18n("Export failed.  The file could not be opened for writing."));
     }
 }
 
@@ -5545,7 +5644,7 @@ void RosegardenGUIApp::exportCsoundFile(QString file)
 
     if (!e.write()) {
         CurrentProgressDialog::freeze();
-        /* was sorry */ QMessageBox::warning(this, i18n("Export failed.  The file could not be opened for writing."));
+        /* was sorry */ QMessageBox::warning(this, "", i18n("Export failed.  The file could not be opened for writing."));
     }
 }
 
@@ -5578,7 +5677,7 @@ void RosegardenGUIApp::exportMupFile(QString file)
 
     if (!e.write()) {
         CurrentProgressDialog::freeze();
-        /* was sorry */ QMessageBox::warning(this, i18n("Export failed.  The file could not be opened for writing."));
+        /* was sorry */ QMessageBox::warning(this, "", i18n("Export failed.  The file could not be opened for writing."));
     }
 }
 
@@ -5685,7 +5784,7 @@ bool RosegardenGUIApp::exportLilyPondFile(QString file, bool forPreview)
 
     if (!e.write()) {
         CurrentProgressDialog::freeze();
-        /* was sorry */ QMessageBox::warning(this, i18n("Export failed.  The file could not be opened for writing."));
+        /* was sorry */ QMessageBox::warning(this, "", i18n("Export failed.  The file could not be opened for writing."));
         return false;
     }
 
@@ -5722,7 +5821,7 @@ void RosegardenGUIApp::exportMusicXmlFile(QString file)
 
     if (!e.write()) {
         CurrentProgressDialog::freeze();
-        /* was sorry */ QMessageBox::warning(this, i18n("Export failed.  The file could not be opened for writing."));
+        /* was sorry */ QMessageBox::warning(this, "", i18n("Export failed.  The file could not be opened for writing."));
     }
 }
 
@@ -5838,20 +5937,24 @@ RosegardenGUIApp::slotRecord()
         // We should already be stopped by this point so just unset
         // the buttons after clicking the dialog.
         //
-        QMessageBox::critical(this, s);
+        QMessageBox::critical(this, "", s);
 
         getTransport()->MetronomeButton()->setOn(false);
         getTransport()->RecordButton()->setOn(false);
         getTransport()->PlayButton()->setOn(false);
         return ;
     } catch (AudioFileManager::BadAudioPathException e) {
-        if (QMessageBox::warningContinueCancel
-                (this,
+	        if (QMessageBox::warning
+					(this, i18n("Warning"),
                  i18n("The audio file path does not exist or is not writable.\nPlease set the audio file path to a valid directory in Document Properties before recording audio.\nWould you like to set it now?"),
-                 i18n("Warning"),
-                 i18n("Set audio file path")) == QMessageBox::Continue) {
-            slotOpenAudioPathSettings();
-        }
+					  QMessageBox::Yes | QMessageBox::Cancel, 
+	   						QMessageBox::Cancel ) // default button
+                 //i18n("Set audio file path")) == QMessageBox::Continue) {
+				== QMessageBox::Yes )
+			{
+				slotOpenAudioPathSettings();
+			}//end if
+        
         getTransport()->MetronomeButton()->setOn(false);
         getTransport()->RecordButton()->setOn(false);
         getTransport()->PlayButton()->setOn(false);
@@ -8281,7 +8384,7 @@ RosegardenGUIApp::slotImportStudio()
         studioDir = "file://" + studioDir;
     }
 
-    KURL url = KFileDialog::getOpenURL
+    QUrl url = QFileDialog::getOpenURL
                (studioDir,
                 "audio/x-rosegarden-device audio/x-rosegarden",
                 this, i18n("Import Studio from File"));

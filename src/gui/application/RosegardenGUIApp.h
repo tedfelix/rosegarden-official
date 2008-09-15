@@ -35,6 +35,7 @@
 #include <QMenu>
 #include <QMenuBar>
 #include <QAction>
+#include <QToolBar>
 
 class QWidget;
 class QTimer;
@@ -44,14 +45,14 @@ class QObject;
 class QLabel;
 class QCursor;
 class QShortcut;
-class KURL;
+//class KURL;
 class QTemporaryFile;
 class QProcess;
 
 //class KConfig;
 class QAction;
-class /* was toggle */ QAction;
-class KRecentFilesAction;
+//class /* was toggle */ QAction;
+//class KRecentFilesAction;
 
 
 namespace Rosegarden
@@ -129,6 +130,11 @@ public:
      */
     static RosegardenGUIApp *self() { return m_myself; }
     
+	/**
+	 * Return current Main Toolbar
+	 */
+	QToolBar* toolBar( const char* name="\0" );
+	
     /**
      * returns a pointer to the current document connected to the
      * KTMainWindow instance and is used by * the View class to access
@@ -175,7 +181,7 @@ public:
     /**
      * open a URL
      */
-    void openURL(const KURL &url);
+    void openURL(const QUrl &url);
 
     /**
      * export a MIDI file
@@ -339,7 +345,9 @@ protected:
      * Create document from a file
      */
     RosegardenGUIDoc* createDocument(QString filePath, ImportType type = ImportRG4);
-
+	
+	
+	
     /**
      * Create a document from RG file
      */
@@ -382,7 +390,7 @@ protected:
     void readOptions();
 
     /**
-     * add an item pointing to the example files in the KFileDialog speedbar
+     * add an item pointing to the example files in the QFileDialog speedbar
      */
     void setupFileDialogSpeedbar();
 
@@ -556,7 +564,7 @@ public slots:
     /**
      * opens a file from the recent files menu
      */
-    void slotFileOpenRecent(const KURL&);
+    void slotFileOpenRecent(const QUrl&);
 
     /**
      * save a document
@@ -1566,6 +1574,8 @@ private:
 	*/
 	QMenuBar* m_menuBarMain;
 	
+	QToolBar* m_toolBarMain;
+	
 	QMenu* m_menuFile;
 	QMenu* m_menuEdit;
 	QMenu* m_menuComposition;
@@ -1614,7 +1624,9 @@ private:
     QLabel             *m_zoomLabel;
 
     ProgressBar *m_progressBar;
-
+	
+	
+	QLabel* m_statusBarLabel1;
     // SequenceManager
     //
     SequenceManager *m_seqManager;

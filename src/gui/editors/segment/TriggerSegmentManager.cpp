@@ -421,30 +421,45 @@ TriggerSegmentManager::setupActions()
     Q3CanvasPixmap pixmap(pixmapDir + "/toolbar/time-musical.png");
     QIcon icon(pixmap);
 
-    action = new KRadioAction(i18n("&Musical Times"), icon, 0, this,
-                              SLOT(slotMusicalTime()),
-                              actionCollection(), "time_musical");
-    action->setExclusiveGroup("timeMode");
+    action = QAction* qa_time_musical = new QAction( icon, i18n("&Musical Times"), qa_parent );
+			connect( qa_time_musical, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotMusicalTime()) );
+			qa_time_musical->setObjectName( "time_musical" );
+			qa_time_musical->setCheckable( true );		//
+			qa_time_musical->setChecked( false );			//
+			qa_time_musical->setAutoRepeat( false );		//
+			qa_time_musical->setActionGroup( qag_timeMode );	// QActionGroup*
+			//### FIX: deallocate QAction ptr
+
     if (timeMode == 0)
         action->setChecked(true);
 
     pixmap.load(pixmapDir + "/toolbar/time-real.png");
     icon = QIcon(pixmap);
 
-    action = new KRadioAction(i18n("&Real Times"), icon, 0, this,
-                              SLOT(slotRealTime()),
-                              actionCollection(), "time_real");
-    action->setExclusiveGroup("timeMode");
+    action = QAction* qa_time_real = new QAction( icon, i18n("&Real Times"), qa_parent );
+			connect( qa_time_real, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotRealTime()) );
+			qa_time_real->setObjectName( "time_real" );
+			qa_time_real->setCheckable( true );		//
+			qa_time_real->setChecked( false );			//
+			qa_time_real->setAutoRepeat( false );		//
+			qa_time_real->setActionGroup( qag_timeMode );	// QActionGroup*
+			//### FIX: deallocate QAction ptr
+
     if (timeMode == 1)
         action->setChecked(true);
 
     pixmap.load(pixmapDir + "/toolbar/time-raw.png");
     icon = QIcon(pixmap);
 
-    action = new KRadioAction(i18n("Ra&w Times"), icon, 0, this,
-                              SLOT(slotRawTime()),
-                              actionCollection(), "time_raw");
-    action->setExclusiveGroup("timeMode");
+    action = QAction* qa_time_raw = new QAction( icon, i18n("Ra&w Times"), qa_parent );
+			connect( qa_time_raw, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotRawTime()) );
+			qa_time_raw->setObjectName( "time_raw" );
+			qa_time_raw->setCheckable( true );		//
+			qa_time_raw->setChecked( false );			//
+			qa_time_raw->setAutoRepeat( false );		//
+			qa_time_raw->setActionGroup( qag_timeMode );	// QActionGroup*
+			//### FIX: deallocate QAction ptr
+
     if (timeMode == 2)
         action->setChecked(true);
 
