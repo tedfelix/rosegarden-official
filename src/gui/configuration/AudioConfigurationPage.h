@@ -32,7 +32,6 @@ class QPushButton;
 class QLabel;
 class QComboBox;
 class QCheckBox;
-class KConfig;
 class QComboBox;
 
 
@@ -47,7 +46,6 @@ class AudioConfigurationPage : public TabbedConfigurationPage
     Q_OBJECT
 public:
     AudioConfigurationPage(RosegardenGUIDoc *doc,
-                               QSettings cfg,
                                QWidget *parent=0,
                                const char *name=0);
 

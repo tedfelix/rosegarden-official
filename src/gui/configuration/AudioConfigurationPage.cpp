@@ -60,12 +60,10 @@ namespace Rosegarden
 
 AudioConfigurationPage::AudioConfigurationPage(
     RosegardenGUIDoc *doc,
-    QSettings cfg,
     QWidget *parent,
     const char *name):
-    TabbedConfigurationPage(cfg, parent, name),
+    TabbedConfigurationPage(parent, name),
     m_externalAudioEditorPath(0)
-//### JAS update function declaration / definition
 {
     // set the document in the super class
     m_doc = doc;
