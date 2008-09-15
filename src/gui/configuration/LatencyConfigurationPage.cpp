@@ -37,11 +37,9 @@ namespace Rosegarden
 {
 
 LatencyConfigurationPage::LatencyConfigurationPage(RosegardenGUIDoc *doc,
-        QSettings cfg,
         QWidget *parent,
         const char *name)
-        : TabbedConfigurationPage(doc, cfg, parent, name)
-//### JAS update function declaration / definition
+        : TabbedConfigurationPage(doc, parent, name)
 {
 #ifdef NOT_DEFINED
 #ifdef HAVE_LIBJACK

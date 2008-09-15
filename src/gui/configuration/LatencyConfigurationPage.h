@@ -22,14 +22,12 @@
 #include "TabbedConfigurationPage.h"
 #include <QString>
 #include <QSlider>
-#include <QSettings>
 
 #include <klocale.h>
 
 
 class QWidget;
 class QPushButton;
-class KConfig;
 
 
 namespace Rosegarden
@@ -49,7 +47,6 @@ class LatencyConfigurationPage : public TabbedConfigurationPage
 
 public:
     LatencyConfigurationPage(RosegardenGUIDoc *doc,
-                             QSettings cfg,
                              QWidget *parent=0, const char *name=0);
 
     virtual void apply();
