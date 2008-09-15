@@ -704,7 +704,7 @@ TempoView::readOptions()
 
     EditViewBase::readOptions();
     m_filter = settings.value("filter", m_filter).toInt() ;
-    m_list->restoreLayout(settings, TempoViewLayoutConfigGroupName);
+    m_list->restoreLayout(TempoViewLayoutConfigGroupName);
 
     settings.endGroup();
 }
@@ -716,7 +716,7 @@ TempoView::slotSaveOptions()
     settings.beginGroup( TempoViewConfigGroup );
 
     settings.setValue("filter", m_filter);
-    m_list->saveLayout(settings, TempoViewLayoutConfigGroupName);
+    m_list->saveLayout(TempoViewLayoutConfigGroupName);
 
     settings.endGroup();
 }
