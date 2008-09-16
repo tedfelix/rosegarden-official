@@ -46,7 +46,7 @@ const double RosegardenScrollView::ScrollShortcutValue = 1.04;// shortcuteration
 
 RosegardenScrollView::RosegardenScrollView(QWidget* parent,
 					const char* name) //, WFlags f)
-			: QScrollArea(parent, name), //, f),
+			: QScrollArea(parent), // name), //, f),
 		
         m_bottomWidget(0),
         m_currentBottomWidgetHeight( -1),
