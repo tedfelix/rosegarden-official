@@ -41,18 +41,25 @@
 namespace Rosegarden
 {
 
-TriggerSegmentDialog::TriggerSegmentDialog(QDialogButtonBox::QWidget *parent,
+TriggerSegmentDialog::TriggerSegmentDialog(QWidget *parent,
         Composition *composition) :
-        KDialogBase(parent, "triggersegmentdialog", true, i18n("Trigger Segment"),
-                    Ok | Cancel, Ok),
+        QDialog(parent),
         m_composition(composition)
 {
-    QVBox *vbox = makeVBoxMainWidget();
+    setModal(true);
+    setWindowTitle(i18n("Trigger Segment"));
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
 
-    QFrame *frame = new QFrame(vbox);
-    QGridLayout *layout = new QGridLayout(frame, 3, 2, 5, 5);
+    QFrame *frame = new QFrame(this);
+    metagrid->addWidget(frame, 0, 0);
 
-    QLabel *label = new QLabel(i18n("Trigger segment: "), frame);
+    frame->setContentsMargins(5, 5, 5, 5);
+    QGridLayout *layout = new QGridLayout;
+    layout->setSpacing(5);
+
+
+    QLabel *label = new QLabel(i18n("Trigger segment: "));
     layout->addWidget(label, 0, 0);
 
     m_segment = new QComboBox(frame);
@@ -66,10 +73,10 @@ TriggerSegmentDialog::TriggerSegmentDialog(QDialogButtonBox::QWidget *parent,
         (QString("%1. %2").arg(n++).arg(strtoqstr((*i)->getSegment()->getLabel())));
     }
 
-    label = new QLabel(i18n("Perform with timing: "), frame);
+    label = new QLabel(i18n("Perform with timing: "));
     layout->addWidget(label, 1, 0);
 
-    m_adjustTime = new QComboBox(frame);
+    m_adjustTime = new QComboBox;
     layout->addWidget(m_adjustTime, 1, 1);
 
     m_adjustTime->addItem(i18n("As stored"));
@@ -77,12 +84,20 @@ TriggerSegmentDialog::TriggerSegmentDialog(QDialogButtonBox::QWidget *parent,
     m_adjustTime->addItem(i18n("End at same time as note"));
     m_adjustTime->addItem(i18n("Stretch or squash segment to note duration"));
 
-    m_retune = new QCheckBox(i18n("Adjust pitch to note"), frame);
+    m_retune = new QCheckBox(i18n("Adjust pitch to note"));
     m_retune->setChecked(true);
 
     layout->addWidget(m_retune, 2, 1);
+    frame->setLayout(layout);
 
     setupFromConfig();
+
+    QDialogButtonBox *buttonBox
+        = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 void

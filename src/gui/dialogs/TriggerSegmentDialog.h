@@ -22,7 +22,6 @@
 #include "base/TriggerSegment.h"
 #include <string>
 #include <QDialog>
-#include <QDialogButtonBox>
 
 
 class QWidget;
@@ -41,7 +40,7 @@ class TriggerSegmentDialog : public QDialog
     Q_OBJECT
 
 public:
-    TriggerSegmentDialog(QDialogButtonBox::QWidget *parent, Composition *);
+    TriggerSegmentDialog(QWidget *parent, Composition *);
 
     TriggerSegmentId getId() const;
     bool getRetune() const;

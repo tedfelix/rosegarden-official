@@ -20,7 +20,6 @@
 #define _RG_MAKEORNAMENTDIALOG_H_
 
 #include <QDialog>
-#include <QDialogButtonBox>
 #include <QString>
 
 
@@ -39,7 +38,7 @@ class MakeOrnamentDialog : public QDialog
     Q_OBJECT
 
 public:
-    MakeOrnamentDialog(QDialogButtonBox::QWidget *parent, QString defaultName, int defaultBasePitch);
+    MakeOrnamentDialog(QWidget *parent, QString defaultName, int defaultBasePitch);
     
     QString getName() const;
     int getBasePitch() const;

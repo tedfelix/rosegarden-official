@@ -38,12 +38,15 @@ FloatEdit::FloatEdit(QDialogButtonBox::QWidget *parent,
                      float max,
                      float value,
                      float step):
-        KDialogBase(parent, "rosegardenFloatEdit", true, title, Ok | Cancel, Ok)
+        QDialog(parent)
 {
-    QVBox *vbox = makeVBoxMainWidget();
-    QGroupBox *groupBox = new QGroupBox(1, Horizontal, text, vbox);
-    QWidget *inVbox = new QWidget(groupBox);
-    QVBoxLayout *inVboxLayout = new QVBoxLayout;
+    setModal(true);
+    setWindowTitle(title);
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
+    QGroupBox *groupBox = new QGroupBox();
+    QVBoxLayout *groupBoxLayout = new QVBoxLayout;
+    metagrid->addWidget(groupBox, 0, 0);
 
     // Calculate decimal points according to the step size
     //
@@ -53,10 +56,19 @@ FloatEdit::FloatEdit(QDialogButtonBox::QWidget *parent,
         dps = int( -calDP);
     //std::cout << "CAL DP = " << calDP << ", dps = " << dps << std::endl;
 
-    m_spin = new HSpinBox( inVbox , dps);
-    inVboxLayout->addWidget(m_spin);
-    inVbox->setLayout(inVboxLayout);
-    new QLabel(QString("(min: %1, max: %2)").arg(min).arg(max), inVbox);
+    m_spin = new HSpinBox( groupBox , dps);
+    groupBoxLayout->addWidget(m_spin);
+
+    groupBoxLayout->addWidget(
+        new QLabel(QString("(min: %1, max: %2)").arg(min).arg(max)));
+    groupBox->setLayout(groupBoxLayout);
+
+    QDialogButtonBox *buttonBox
+        = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 float

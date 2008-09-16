@@ -20,7 +20,6 @@
 #define _RG_ROSEGARDENFLOATEDIT_H_
 
 #include <QDialog>
-#include <QDialogButtonBox>
 
 
 class QWidget;
@@ -39,13 +38,13 @@ class FloatEdit : public QDialog
     Q_OBJECT
 
 public:
-    FloatEdit(QDialogButtonBox::QWidget *parent,
-                        const QString &title,
-                        const QString &text,
-                        float min,
-                        float max,
-                        float value,
-                        float step);
+    FloatEdit(QWidget *parent,
+              const QString &title,
+              const QString &text,
+              float min,
+              float max,
+              float value,
+              float step);
 
     float getValue() const;
 
