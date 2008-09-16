@@ -20,14 +20,17 @@
 
 #include "base/Device.h"
 #include "base/MidiDevice.h"
-#include <kmainwindow.h>
+
+#include <QMainWindow>
 #include <QString>
 #include <QStringList>
+#include <Q3Table>
+
 #include <vector>
 
 
 class QWidget;
-class QTableWidget;
+class Q3Table;
 class QPushButton;
 class QCloseEvent;
 
@@ -40,7 +43,7 @@ class RosegardenGUIDoc;
 class MidiDevice;
 
 
-class DeviceManagerDialog : public KMainWindow
+class DeviceManagerDialog : public QMainWindow
 {
     Q_OBJECT
 public:
@@ -96,8 +99,8 @@ private:
     void makeConnectionList(MidiDevice::DeviceDirection direction, 
 			    QStringList &list);
     
-    QTableWidget *m_playTable;
-    QTableWidget *m_recordTable;
+    Q3Table *m_playTable;
+    Q3Table *m_recordTable;
 
     typedef std::vector<MidiDevice *> MidiDeviceList;
     MidiDeviceList m_playDevices;

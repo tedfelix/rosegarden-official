@@ -37,33 +37,34 @@
 #include "sequencer/RosegardenSequencer.h"
 #include "gui/dialogs/ExportDeviceDialog.h"
 #include "gui/dialogs/ImportDeviceDialog.h"
+
 #include <QApplication>
-#include <klocale.h>
 #include <kstandarddirs.h>
 #include <QAction>
-#include <kfiledialog.h>
-#include <kglobal.h>
-#include <kmainwindow.h>
+#include <QFileDialog>
+#include <QMainWindow>
 #include <QMessageBox>
-#include <kstandardshortcut.h>
-#include <kstandardaction.h>
 #include <QByteArray>
 #include <QDataStream>
 #include <QDialog>
 #include <QDir>
 #include <QFileInfo>
 #include <QFrame>
-#include <qgrid.h>
+//#include <qgrid.h> //### rewrite required;  I actually rewrote that, and accidentally lost it.  Great.
 #include <QGroupBox>
 #include <QLayout>
 #include <QPushButton>
 #include <QSizePolicy>
 #include <QString>
 #include <QStringList>
-#include <QTableWidget>
+#include <Q3Table> //### switching to Q3Table will be complex, so screw that for now.
 #include <QToolTip>
 #include <QWidget>
 
+#include <klocale.h>
+#include <kglobal.h>
+#include <kstandardshortcut.h>
+#include <kstandardaction.h>
 
 namespace Rosegarden
 {
@@ -78,7 +79,7 @@ static const int RECORD_CONNECTION_COL = 2;
 
 DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
             RosegardenGUIDoc *document) :
-            KMainWindow(parent, "deviceeditordialog"),
+            QMainWindow(parent, "deviceeditordialog"),
             m_document(document),
             m_studio(&document->getStudio())
 {
@@ -90,7 +91,7 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
 
     QGroupBox *groupBox = new QGroupBox(2, Horizontal, i18n("Play devices"), mainBox);
 
-    m_playTable = new QTableWidget(0, 2, groupBox);
+    m_playTable = new Q3Table(0, 2, groupBox);
     m_playTable->setSorting(false);
     m_playTable->setRowMovingEnabled(false);
     m_playTable->setColumnMovingEnabled(false);
@@ -100,7 +101,7 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
     m_playTable->horizontalHeader()->show();
     m_playTable->verticalHeader()->hide();
     m_playTable->setLeftMargin(0);
-    m_playTable->setSelectionMode(QTableWidget::SingleRow);
+    m_playTable->setSelectionMode(Q3Table::SingleRow);
 
     QFrame *frame = new QFrame(groupBox);
     QVBoxLayout *vlayout = new QVBoxLayout(frame);
@@ -148,7 +149,7 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
     mainLayout->addWidget(groupBox);
     groupBox = new QGroupBox(2, Horizontal, i18n("Record devices"), mainBox);
 
-    m_recordTable = new QTableWidget(0, 3, groupBox);
+    m_recordTable = new Q3Table(0, 3, groupBox);
     m_recordTable->setSorting(false);
     m_recordTable->setRowMovingEnabled(false);
     m_recordTable->setColumnMovingEnabled(false);
@@ -159,7 +160,7 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
     m_recordTable->horizontalHeader()->show();
     m_recordTable->verticalHeader()->hide();
     m_recordTable->setLeftMargin(0);
-    m_recordTable->setSelectionMode(QTableWidget::SingleRow);
+    m_recordTable->setSelectionMode(Q3Table::SingleRow);
 
     frame = new QFrame(groupBox);
     vlayout = new QVBoxLayout(frame);
@@ -329,7 +330,7 @@ DeviceManagerDialog::populate()
                 currentConnectionIndex = i;
         }
 
-        QComboTableItem *item = new QComboTableItem(m_playTable, m_playConnections, false);
+        Q3ComboTableItem *item = new Q3ComboTableItem(m_playTable, m_playConnections, false);
         item->setCurrentIndex(currentConnectionIndex);
         m_playTable->setItem(deviceCount, PLAY_CONNECTION_COL, item);
 
@@ -363,11 +364,11 @@ DeviceManagerDialog::populate()
                 currentConnectionIndex = i;
         }
 
-        QComboTableItem *item = new QComboTableItem(m_recordTable, m_recordConnections, false);
+        Q3ComboTableItem *item = new Q3ComboTableItem(m_recordTable, m_recordConnections, false);
         item->setCurrentIndex(currentConnectionIndex);
         m_recordTable->setItem(deviceCount, RECORD_CONNECTION_COL, item);
 
-        QCheckTableItem *check = new QCheckTableItem(m_recordTable, QString());
+        Q3CheckTableItem *check = new Q3CheckTableItem(m_recordTable, QString());
         //check->setChecked((*it)->getId() == recordDevice);
         //check->setText(((*it)->getId() == recordDevice) ?
         //	       i18n("Yes") : i18n("No"));
@@ -412,7 +413,7 @@ void
 DeviceManagerDialog::closeEvent(QCloseEvent *e)
 {
     emit closing();
-    KMainWindow::closeEvent(e);
+    QMainWindow::closeEvent(e);
 }
 
 DeviceId
@@ -577,8 +578,8 @@ DeviceManagerDialog::slotRecordValueChanged(int row, int col)
     case RECORD_CURRENT_COL: {
         m_recordTable->blockSignals(true);
 
-        QCheckTableItem *check =
-            dynamic_cast<QCheckTableItem *>(m_recordTable->item(row, col));
+        Q3CheckTableItem *check =
+            dynamic_cast<Q3CheckTableItem *>(m_recordTable->item(row, col));
         if (!check)
             return ;
 
@@ -727,13 +728,21 @@ DeviceManagerDialog::slotExport()
     QFileInfo info(name);
 
     if (info.isDir()) {
-        /* was sorry */ QMessageBox::warning(this, i18n("You have specified a directory"));
+        QMessageBox::warning
+            (dynamic_cast<QWidget*>(this),
+            "", /* stupid extra parameter because pure Qt sucks */
+            i18n("You have specified a directory"),
+            QMessageBox::Ok,
+            QMessageBox::Ok);
         return ;
     }
 
     if (info.exists()) {
-        int overwrite = QMessageBox::questionYesNo
-            (this, i18n("The specified file exists.  Overwrite?"));
+        int overwrite = QMessageBox::question
+            (dynamic_cast<QWidget*>(this),
+            "", /* stupid extra parameter because pure Qt sucks */
+            i18n("The specified file exists.  Overwrite?"),
+            QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
 
         if (overwrite != QMessageBox::Yes)
             return ;
