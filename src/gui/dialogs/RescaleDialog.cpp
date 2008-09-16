@@ -55,7 +55,8 @@ RescaleDialog::RescaleDialog(QDialogButtonBox::QWidget *parent,
     metagrid->addWidget(vbox, 0, 0);
 
 
-    m_newDuration = new TimeWidget(i18n("Duration of selection"), vbox ,
+    m_newDuration = new TimeWidget(i18n("Duration of selection"), vbox,
+                     composition, startTime, originalDuration, true,
                      constrainToCompositionDuration);
     vboxLayout->addWidget(m_newDuration);
 
@@ -76,10 +77,9 @@ RescaleDialog::RescaleDialog(QDialogButtonBox::QWidget *parent,
         m_closeGap = 0;
     }
 
-    setButtonText(User1, i18n("Reset"));
-    connect(this, SIGNAL(user1Clicked()),
+    connect(this, SIGNAL(ResetClicked()),
             m_newDuration, SLOT(slotResetToDefault()));
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::User1 | QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Reset | QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
