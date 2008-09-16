@@ -55,7 +55,7 @@ PropertyControlRuler::PropertyControlRuler(PropertyName propertyName,
         Q3Canvas* c, QWidget* parent,
         const char* name, WFlags f) :
         ControlRuler(&(staff->getSegment()), rulerScale,
-                     parentView, c, parent, name, f),
+                     parentView, c, parent), // name, f),
         m_propertyName(propertyName),
         m_staff(staff),
         m_propertyLine(new Q3CanvasLine(canvas())),
