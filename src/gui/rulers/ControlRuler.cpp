@@ -63,9 +63,8 @@ const int ControlRuler::ItemHeightRange = 64;
 ControlRuler::ControlRuler(Segment *segment,
                            RulerScale* rulerScale,
                            EditViewBase* parentView,
-                           Q3Canvas* c, QWidget* parent,
-                           const char* name, WFlags f) :
-        RosegardenCanvasView(c, parent, name, f),
+                           Q3Canvas* c, QWidget* parent) :
+        RosegardenCanvasView(c, parent), // name, f),
         m_parentEditView(parentView),
         m_mainHorizontalScrollBar(0),
         m_rulerScale(rulerScale),
