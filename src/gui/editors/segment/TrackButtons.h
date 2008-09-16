@@ -1,5 +1,5 @@
 
-/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
+/* -*- c-basic-offset: QMenu indent-tabs-mode: nil -*- vi:set ts=8 sts=QMenu sw=QMenu: */
 
 /*
     Rosegarden
@@ -98,7 +98,7 @@ public:
      *
      * @see RosegardenGUIApp#slotPopulateTrackInstrumentPopup()
      */
-    void populateInstrumentPopup(Instrument *thisTrackInstr, QPopupMenu* instrumentPopup);
+    void populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrumentPopup);
 
 signals:
     // to emit what Track has been selected

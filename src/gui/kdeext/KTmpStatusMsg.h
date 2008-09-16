@@ -16,7 +16,49 @@
 #ifndef KTMPSTATUSMSG_H
 #define KTMPSTATUSMSG_H
 
-class KMainWindow;
+#include <QUrl>
+
+class QMainWindow;
+
+
+
+/*****************************************************************/
+
+
+class RgTempQtIV
+{
+public:
+	RgTempQtIV();
+	
+	// simulate qApp->checkRecoverFile(filename);
+	QString checkRecoverFile(QString &filePath, bool canRecover);
+	
+	// simulate qApp->tempSaveName(filename);
+	QString tempSaveName(QString &filePath);
+
+	void createGUI( const char* xml_rcfile, bool var1 );
+	
+	void invokeBrowser( QString url );
+};
+extern RgTempQtIV* rgTempQtIV;
+
+
+class RgRecentFileClass
+{
+public:
+
+	RgRecentFileClass();
+	
+	void addURL( QString &url );
+	void saveEntries();
+	void loadEntries();
+//protected:
+
+};
+
+/*******************************************************************/
+
+
 
 /**
  * A class to create a temporary message on KMainWindow's status bar
@@ -39,7 +81,7 @@ public:
      * of the specified KMainWindow.
      * The id of the text widget in the status bar can be specified
      */
-    KTmpStatusMsg(const QString& msg, KMainWindow*, int id = m_defaultId);
+    KTmpStatusMsg(const QString& msg, QMainWindow*, int id = m_defaultId);
 
     ~KTmpStatusMsg();
 
@@ -71,7 +113,7 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    KMainWindow* m_mainWindow;
+    QMainWindow* m_mainWindow;
     int m_id;
 
     static int m_defaultId;

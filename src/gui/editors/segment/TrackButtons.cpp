@@ -596,7 +596,7 @@ TrackButtons::slotInstrumentSelection(int trackId)
     // Device/Bank dialog then we reload the whole menu here.
     //
 
-    QPopupMenu instrumentPopup(this);
+    QMenu instrumentPopup(this);
 
     populateInstrumentPopup(instrument, &instrumentPopup);
 
@@ -627,7 +627,7 @@ TrackButtons::slotInstrumentSelection(int trackId)
 }
 
 void
-TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QPopupMenu* instrumentPopup)
+TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrumentPopup)
 {
     static QPixmap connectedPixmap, unconnectedPixmap,
     connectedUsedPixmap, unconnectedUsedPixmap,
@@ -661,7 +661,7 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QPopupMenu* in
     // clear the popup
     instrumentPopup->clear();
 
-    std::vector<QPopupMenu*> instrumentSubMenus;
+    std::vector<QMenu*> instrumentSubMenus;
 
     // position index
     int i = 0;
@@ -755,7 +755,7 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QPopupMenu* in
 
             currentDevId = int(devId);
 
-            QPopupMenu *subMenu = new QPopupMenu(instrumentPopup);
+            QMenu *subMenu = new QMenu(instrumentPopup);
             QString deviceName = strtoqstr(device->getName());
             instrumentPopup->addItem(iconSet, deviceName, subMenu);
             instrumentSubMenus.push_back(subMenu);

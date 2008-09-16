@@ -36,6 +36,8 @@
 #include <QAction>
 #include <QToolBar>
 
+#include <gui/kdeext/KTmpStatusMsg.h>
+
 class QWidget;
 class QTimer;
 class QTextCodec;
@@ -1544,7 +1546,7 @@ private:
     bool m_actionsSetup;
 
 	//KRecentFilesAction* m_fileRecent;
-	QAction* m_fileRecent;
+	RgRecentFileClass* m_fileRecent;
 
     /**
      * view is the main widget which represents your working area. The
