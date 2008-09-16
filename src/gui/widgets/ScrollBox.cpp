@@ -48,15 +48,15 @@ ScrollBox::ScrollBox(QWidget* parent, SizeMode sizeMode, const char* name) :
 void ScrollBox::mousePressEvent(QMouseEvent* e)
 {
     m_mouse = e->pos();
-    if (e->button() == RightButton)
+    if (e->button() == Qt::RightButton)
         emit button3Pressed();
-    if (e->button() == MidButton)
+    if (e->button() == Qt::MidButton)
         emit button2Pressed();
 }
 
 void ScrollBox::mouseMoveEvent(QMouseEvent* e)
 {
-    if (e->state() != LeftButton)
+    if (e->state() != Qt::LeftButton)
         return ;
 
     int dx = (e->pos().x() - m_mouse.x()) * m_pagesize.width() / width();
@@ -147,7 +147,7 @@ void ScrollBox::setViewY(int y)
 
 void ScrollBox::setThumbnail(QPixmap img)
 {
-    setPaletteBackgroundPixmap(img.convertToImage().smoothScale(size()));
+    setPaletteBackgroundPixmap(img.fromImage(img.toImage().smoothScale(size())));
 }
 
 }
