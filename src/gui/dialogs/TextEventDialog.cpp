@@ -430,7 +430,7 @@ TextEventDialog::slotTypeChanged(const QString &)
     if (type == Text::Dynamic) {
         m_dynamicShortcutLabel->show();
         m_dynamicShortcutCombo->show();
-        slotDynamicShortcutChanged(text);
+        slotDynamicShortcutChanged(strtoqstr(text));
     } else {
         m_dynamicShortcutLabel->hide();
         m_dynamicShortcutCombo->hide();
@@ -439,7 +439,7 @@ TextEventDialog::slotTypeChanged(const QString &)
     if (type == Text::Direction) {
         m_directionShortcutLabel->show();
         m_directionShortcutCombo->show();
-        slotDirectionShortcutChanged(text);
+        slotDirectionShortcutChanged(strtoqstr(text));
     } else {
         m_directionShortcutLabel->hide();
         m_directionShortcutCombo->hide();
@@ -448,7 +448,7 @@ TextEventDialog::slotTypeChanged(const QString &)
     if (type == Text::LocalDirection) {
         m_localDirectionShortcutLabel->show();
         m_localDirectionShortcutCombo->show();
-        slotLocalDirectionShortcutChanged(text);
+        slotLocalDirectionShortcutChanged(strtoqstr(text));
     } else {
         m_localDirectionShortcutLabel->hide();
         m_localDirectionShortcutCombo->hide();
@@ -457,7 +457,7 @@ TextEventDialog::slotTypeChanged(const QString &)
     if (type == Text::Tempo) {
         m_tempoShortcutLabel->show();
         m_tempoShortcutCombo->show();
-        slotTempoShortcutChanged(text);
+        slotTempoShortcutChanged(strtoqstr(text));
     } else {
         m_tempoShortcutLabel->hide();
         m_tempoShortcutCombo->hide();
@@ -466,7 +466,7 @@ TextEventDialog::slotTypeChanged(const QString &)
     if (type == Text::LocalTempo) {
         m_localTempoShortcutLabel->show();
         m_localTempoShortcutCombo->show();
-        slotLocalTempoShortcutChanged(text);
+        slotLocalTempoShortcutChanged(strtoqstr(text));
     } else {
         m_localTempoShortcutLabel->hide();
         m_localTempoShortcutCombo->hide();
@@ -491,7 +491,7 @@ TextEventDialog::slotTypeChanged(const QString &)
         m_staffBelowLabel->show();
         m_text->setReadOnly(true);
         m_text->setEnabled(false);
-        slotLilyPondDirectiveChanged(text);
+        slotLilyPondDirectiveChanged(strtoqstr(text));
     } else {
         m_lilyPondDirectiveCombo->hide();
         m_directiveLabel->hide();
