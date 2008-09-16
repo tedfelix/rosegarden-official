@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -23,16 +22,22 @@
 #include "base/SnapGrid.h"
 #include "CompositionModel.h"
 #include "CompositionRect.h"
-#include <map>
 #include "SegmentOrderer.h"
-#include <set>
-#include <QColor>
-#include <QPoint>
-#include <qptrdict.h>
-#include <QRect>
-#include <vector>
 #include "base/Event.h"
 
+#include <map>
+#include <set>
+
+#include <QColor>
+#include <QPoint>
+
+//### QPtrDict becomes Q3PtrDict. We're supposed to rewrite to use QHash or
+// QMultiHash, but I made a quick attempt at that, and much brokenness resulted.
+// I'm switching it over to the Q3 class to keep the old code working for now.
+// 
+#include <Q3PtrDict>
+#include <QRect>
+#include <vector>
 
 class RectRanges;
 class CompositionItem;
@@ -199,8 +204,8 @@ protected:
 
     AudioPreviewThread*          m_audioPreviewThread;
 
-    typedef QPtrDict<rectlist> NotationPreviewDataCache;
-    typedef QPtrDict<AudioPreviewData>    AudioPreviewDataCache;
+    typedef Q3PtrDict<rectlist> NotationPreviewDataCache;
+    typedef Q3PtrDict<AudioPreviewData>    AudioPreviewDataCache;
 
     NotationPreviewDataCache     m_notationPreviewDataCache;
     AudioPreviewDataCache        m_audioPreviewDataCache;
