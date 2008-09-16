@@ -201,8 +201,8 @@ MarkerRuler::slotDeleteMarker()
     if (marker)
         emit deleteMarker(marker->getID(),
                           marker->getTime(),
-                          marker->getName(),
-                          marker->getDescription());                          
+                          strtoqstr(marker->getName()),
+                          strtoqstr(marker->getDescription()));                          
 }
 
 void
@@ -372,7 +372,7 @@ MarkerRuler::paintEvent(QPaintEvent*)
         } else {
             const QPen normalPen = painter.pen();
             ;
-            QPen endPen(black, 2);
+            QPen endPen(Qt::black, 2);
             painter.setPen(endPen);
             painter.drawLine(static_cast<int>(x), 0, static_cast<int>(x), m_barHeight);
             painter.setPen(normalPen);
