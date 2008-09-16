@@ -20,7 +20,6 @@
 #define _RG_BEATSBARSDIALOG_H_
 
 #include <QDialog>
-#include <QDialogButtonBox>
 #include <QSpinBox>
 #include <QComboBox>
 
