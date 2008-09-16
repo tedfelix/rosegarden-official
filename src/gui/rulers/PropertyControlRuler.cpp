@@ -235,7 +235,7 @@ PropertyControlRuler::contentsMousePressEvent(QMouseEvent *e)
     RG_DEBUG << "PropertyControlRuler::contentsMousePressEvent\n";
 
     if (!m_propertyLineShowing) {
-        if (e->button() == MidButton)
+        if (e->button() == Qt::MidButton)
             m_lastEventPos = inverseMapPoint(e->pos());
 
         ControlRuler::contentsMousePressEvent(e); // send super
@@ -244,7 +244,7 @@ PropertyControlRuler::contentsMousePressEvent(QMouseEvent *e)
     }
 
     // cancel control line mode
-    if (e->button() == RightButton) {
+    if (e->button() == Qt::RightButton) {
         m_propertyLineShowing = false;
         m_propertyLine->hide();
 
@@ -252,7 +252,7 @@ PropertyControlRuler::contentsMousePressEvent(QMouseEvent *e)
         return ;
     }
 
-    if (e->button() == LeftButton) {
+    if (e->button() == Qt::LeftButton) {
         QPoint p = inverseMapPoint(e->pos());
 
         m_propertyLine->show();
@@ -318,7 +318,7 @@ PropertyControlRuler::contentsMouseMoveEvent(QMouseEvent *e)
     if (!m_propertyLineShowing) {
         // Don't send super if we're using the middle button
         //
-        if (e->button() == MidButton) {
+        if (e->button() == Qt::MidButton) {
             m_lastEventPos = inverseMapPoint(e->pos());
             return ;
         }
