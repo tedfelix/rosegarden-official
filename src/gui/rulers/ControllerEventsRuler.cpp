@@ -339,7 +339,7 @@ void ControllerEventsRuler::startControlLine()
 void ControllerEventsRuler::contentsMousePressEvent(QMouseEvent *e)
 {
     if (!m_controlLineShowing) {
-        if (e->button() == MidButton)
+        if (e->button() == Qt::MidButton)
             m_lastEventPos = inverseMapPoint(e->pos());
 
         ControlRuler::contentsMousePressEvent(e); // send super
@@ -348,7 +348,7 @@ void ControllerEventsRuler::contentsMousePressEvent(QMouseEvent *e)
     }
 
     // cancel control line mode
-    if (e->button() == RightButton) {
+    if (e->button() == Qt::RightButton) {
         m_controlLineShowing = false;
         m_controlLine->hide();
 
@@ -356,7 +356,7 @@ void ControllerEventsRuler::contentsMousePressEvent(QMouseEvent *e)
         return ;
     }
 
-    if (e->button() == LeftButton) {
+    if (e->button() == Qt::LeftButton) {
         QPoint p = inverseMapPoint(e->pos());
 
         m_controlLine->show();
@@ -370,7 +370,7 @@ void ControllerEventsRuler::contentsMousePressEvent(QMouseEvent *e)
 void ControllerEventsRuler::contentsMouseReleaseEvent(QMouseEvent *e)
 {
     if (!m_controlLineShowing) {
-        if (e->button() == MidButton)
+        if (e->button() == Qt::MidButton)
             insertControllerEvent();
 
         ControlRuler::contentsMouseReleaseEvent(e); // send super
@@ -406,7 +406,7 @@ void ControllerEventsRuler::contentsMouseMoveEvent(QMouseEvent *e)
     if (!m_controlLineShowing) {
         // Don't send super if we're using the middle button
         //
-        if (e->button() == MidButton) {
+        if (e->button() == Qt::MidButton) {
             m_lastEventPos = inverseMapPoint(e->pos());
             return ;
         }
