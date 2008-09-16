@@ -59,7 +59,7 @@ ControllerEventsRuler::ControllerEventsRuler(Segment *segment,
         QWidget* parent,
         const ControlParameter *controller,
         const char* name, WFlags f)
-        : ControlRuler(segment, rulerScale, parentView, c, parent, name, f),
+        : ControlRuler(segment, rulerScale, parentView, c, parent), // name, f),
         m_defaultItemWidth(20),
         m_controlLine(new Q3CanvasLine(canvas())),
         m_controlLineShowing(false),
