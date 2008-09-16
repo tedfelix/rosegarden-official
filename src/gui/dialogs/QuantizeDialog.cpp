@@ -45,18 +45,24 @@ QuantizeDialog::QuantizeDialog(QDialogButtonBox::QWidget *parent, bool inNotatio
     metagrid->addWidget(vbox, 0, 0);
 
 
-    m_quantizeFrame = new QuantizeParameters( vbox , 0);
+    m_quantizeFrame = new QuantizeParameters( vbox , inNotation ?
+            QuantizeParameters::Notation : QuantizeParameters::Grid,
+            true, false, 0);
     vboxLayout->addWidget(m_quantizeFrame);
     vbox->setLayout(vboxLayout);
 
-    setButtonText(Details, i18n("Advanced"));
-    setDetailsWidget(m_quantizeFrame->getAdvancedWidget());
+    setDetailsWidget(m_quantizeFrame->getAdvancedWidget());  //### FIX-ME
     m_quantizeFrame->getAdvancedWidget()->hide();
 
     m_quantizeFrame->adjustSize();
     vbox->adjustSize();
     adjustSize();
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Details | QDialogButtonBox::Help);
+
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+
+    QPushButton *details = buttonBox->addButton(i18n("Advanced"), QDialogButtonBox::ActionRole);
+    buttonBox->addButton(QDialogButtonBox::Help);
+
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
