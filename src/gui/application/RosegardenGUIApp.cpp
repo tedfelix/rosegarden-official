@@ -6143,7 +6143,7 @@ void RosegardenGUIApp::slotPlay()
         m_playTimer->stop();
         m_stopTimer->start(100);
     } catch (Exception e) {
-        QMessageBox::critical(this, "", e.getMessage());
+        QMessageBox::critical(this, "", strtoqstr(e.getMessage()));
         m_playTimer->stop();
         m_stopTimer->start(100);
     }
