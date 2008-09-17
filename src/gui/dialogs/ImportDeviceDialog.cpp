@@ -28,13 +28,13 @@
 #include "document/RosegardenGUIDoc.h"
 #include "gui/application/RosegardenGUIApp.h"
 #include "sound/SF2PatchExtractor.h"
+#include "gui/general/FileSource.h"
 #include <QComboBox>
 #include <QSettings>
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QMessageBox>
 #include <kurl.h>
-#include <kio/netaccess.h>
 #include <QGroupBox>
 #include <QCheckBox>
 #include <QGroupBox>
@@ -78,27 +78,32 @@ ImportDeviceDialog::doImport()
     }
 
     QString target;
-    if (KIO::NetAccess::download(m_url, target) == false) {
-        QMessageBox::critical(this, "", i18n("Cannot download file %1", m_url.prettyURL()));
+    FileSource source(m_url);
+    if (!source.isAvailable()) {
+        QMessageBox::critical(this, "", i18n("Cannot download file %1", m_url.toString()));
         return false;
     }
 
+    source.waitForData();
+    target = source.getLocalFilename();
+    std::string filename = qStrToCharPtrLocal8(target);
+
     bool fileRead = false;
-    if (SF2PatchExtractor::isSF2File(target.data())) {
+    if (SF2PatchExtractor::isSF2File(filename)) {
         fileRead = importFromSF2(target);
     } else {
         fileRead = importFromRG(target);
     }
     if (!fileRead) {
         QMessageBox::critical
-        (this, i18n("Cannot open file %1", m_url.prettyURL()));
+            (this, i18n("Cannot open file %1", m_url.toString()));
         reject();
         close();
         return false;
     }
     if (m_devices.size() == 0) {
         /* was sorry */ QMessageBox::warning
-        (this, i18n("No devices found in file %1", m_url.prettyURL()));
+            (this, i18n("No devices found in file %1", m_url.toString()));
         reject();
         close();
         return false;

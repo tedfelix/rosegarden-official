@@ -27,13 +27,13 @@
 class QWidget;
 class QRadioButton;
 class QGroupBox;
-class Command;
 class QComboBox;
 
 
 namespace Rosegarden
 {
 
+class Command;
 
 class RosegardenGUIDoc;
 class MultiViewCommandHistory;

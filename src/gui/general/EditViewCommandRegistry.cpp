@@ -33,6 +33,7 @@
 #include <QFile>
 
 #include "gui/general/EditView.h"
+#include "gui/general/IconLoader.h"
 #include "misc/Strings.h"
 
 namespace Rosegarden
@@ -64,16 +65,12 @@ EditViewCommandRegistry::addAction(QString title,
     std::cerr << "Adding action: " << title << ", " << ((iconName && iconName != "") ? iconName : "(no icon)") << ", " << ((scs && scs != "") ? scs : "(no shortcut)") << ", " << actionName << std::endl;
 
     if (haveIcon) {
-        QString pixmapDir =
-            KGlobal::dirs()->findResource("appdata", "pixmaps/");
-        QString fileBase = pixmapDir + "/toolbar/";
-        fileBase += iconName;
-        if (QFile(fileBase + ".png").exists()) {
-            icon = QIcon(QPixmap(fileBase + ".png"));
-        } else if (QFile(fileBase + ".xpm").exists()) {
-            icon = QIcon(QPixmap(fileBase + ".xpm"));
-        } else {
+        IconLoader il;
+        icon = il.load(iconName);
+        if (icon.isNull()) {
             haveIcon = findIcon(iconName, icon);
+        } else {
+            haveIcon = true;
         }
     }
 

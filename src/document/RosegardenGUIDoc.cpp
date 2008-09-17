@@ -289,6 +289,11 @@ QString RosegardenGUIDoc::getAutoSaveFileName()
     if (filename.isEmpty())
         filename = QDir::currentDirPath() + "/" + getTitle();
 
+    //!!! NB this should _not_ use the new TempDirectory class -- that
+    //!!! is for files that are more temporary than this.  Its files
+    //!!! are cleaned up after a crash, the next time RG is started,
+    //!!! so they aren't appropriate for recovery purposes.
+
 //    QString autoSaveFileName = qApp->tempSaveName(filename); //&&& tempSaveName does not exist yet
 	QString autoSaveFileName = "autoSaveFileNameTemp_";
 

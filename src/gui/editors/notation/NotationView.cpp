@@ -30,6 +30,7 @@
 #include "gui/editors/segment/TrackEditor.h"
 #include "gui/editors/segment/TrackButtons.h"
 #include "gui/editors/parameters/TrackParameterBox.h"
+#include "gui/general/IconLoader.h"
 #include "base/BaseProperties.h"
 #include <klocale.h>
 #include <kstandarddirs.h>
@@ -1650,11 +1651,12 @@ void NotationView::setupActions()
             { i18n("Double flat"), "1slotDoubleFlat()", "double_flat_accidental", "accidental-doubleflat" }
         };
 
+    IconLoader il;
+
     for (unsigned int i = 0;
             i < sizeof(actionsAccidental) / sizeof(actionsAccidental[0]); ++i) {
 
-        icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                        (actionsAccidental[i][3])));
+        icon = il.load(actionsAccidental[i][3]);
         noteAction = new KRadioAction(actionsAccidental[i][0], icon, 0, this,
                                       actionsAccidental[i][1],
                                       actionCollection(), actionsAccidental[i][2]);
@@ -1667,47 +1669,47 @@ void NotationView::setupActions()
     //
 
     // Treble
-    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("clef-treble")));
+    icon = il.load("clef-treble");
     noteAction = new KRadioAction(i18n("&Treble Clef"), icon, 0, this,
                                   SLOT(slotTrebleClef()),
                                   actionCollection(), "treble_clef");
     noteAction->setExclusiveGroup("notes");
 
     // Alto
-    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("clef-alto")));
+    icon = il.load("clef-alto");
     noteAction = new KRadioAction(i18n("&Alto Clef"), icon, 0, this,
                                   SLOT(slotAltoClef()),
                                   actionCollection(), "alto_clef");
     noteAction->setExclusiveGroup("notes");
 
     // Tenor
-    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("clef-tenor")));
+    icon = il.load("clef-tenor");
     noteAction = new KRadioAction(i18n("Te&nor Clef"), icon, 0, this,
                                   SLOT(slotTenorClef()),
                                   actionCollection(), "tenor_clef");
     noteAction->setExclusiveGroup("notes");
 
     // Bass
-    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("clef-bass")));
+    icon = il.load("clef-bass");
     noteAction = new KRadioAction(i18n("&Bass Clef"), icon, 0, this,
                                   SLOT(slotBassClef()),
                                   actionCollection(), "bass_clef");
     noteAction->setExclusiveGroup("notes");
 
 
-    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("text")));
+    icon = il.load("text");
     noteAction = new KRadioAction(i18n("&Text"), icon, Qt::Key_F8, this,
                                   SLOT(slotText()),
                                   actionCollection(), "text");
     noteAction->setExclusiveGroup("notes");
 
-    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("guitarchord")));
+    icon = il.load("guitarchord");
     noteAction = new KRadioAction(i18n("&Guitar Chord"), icon, Qt::Key_F9, this,
                                   SLOT(slotGuitarChord()),
                                   actionCollection(), "guitarchord");
     noteAction->setExclusiveGroup("notes");
 
-    /*    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("lilypond")));
+    /*    icon = il.load("lilypond");
         noteAction = new KRadioAction(i18n("Lil&ypond Directive"), icon, Qt::Key_F9, this,
                                       SLOT(slotLilyPondDirective()),
                                       actionCollection(), "lilypond_directive");
@@ -1722,13 +1724,13 @@ void NotationView::setupActions()
                                   actionCollection(), "erase");
     noteAction->setExclusiveGroup("notes");
 
-    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("select")));
+    icon = il.load("select");
     noteAction = new KRadioAction(i18n("&Select and Edit"), icon, Qt::Key_F2,
                                   this, SLOT(slotSelectSelected()),
                                   actionCollection(), "select");
     noteAction->setExclusiveGroup("notes");
 
-    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("step_by_step")));
+    icon = il.load("step_by_step");
     QAction* qa_toggle_step_by_step = new QAction( icon, i18n("Ste&p Recording"), dynamic_cast<QObject*>(0) );
 	connect( qa_toggle_step_by_step, SIGNAL(toggled()), dynamic_cast<QObject*>(0), this );
 	qa_toggle_step_by_step->setObjectName( "toggle_step_by_step" );	//### FIX: deallocate QAction ptr
@@ -1913,9 +1915,8 @@ void NotationView::setupActions()
     // Group menu
     //
 
-    icon = QIcon
-           (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                                         ("group-simple-tuplet")));
+    icon = il.load
+                                         ("group-simple-tuplet");
 
     QAction* qa_simple_tuplet = new QAction(  TupletCommand::getGlobalName(true), dynamic_cast<QObject*>(Qt::Key_R + Qt::CTRL) );
 			connect( qa_simple_tuplet, SIGNAL(toggled()), dynamic_cast<QObject*>(Qt::Key_R + Qt::CTRL), this );
@@ -1927,9 +1928,8 @@ void NotationView::setupActions()
 			//### FIX: deallocate QAction ptr
 			
 
-    icon = QIcon
-           (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                                         ("group-tuplet")));
+    icon = il.load
+                                         ("group-tuplet");
 
     QAction* qa_tuplet = new QAction(  TupletCommand::getGlobalName(false), dynamic_cast<QObject*>(Qt::Key_T + Qt::CTRL) );
 			connect( qa_tuplet, SIGNAL(toggled()), dynamic_cast<QObject*>(Qt::Key_T + Qt::CTRL), this );
@@ -1941,8 +1941,7 @@ void NotationView::setupActions()
 			//### FIX: deallocate QAction ptr
 			
 
-    icon = QIcon(NotePixmapFactory::toQPixmap
-                    (NotePixmapFactory::makeToolbarPixmap("triplet")));
+    icon = il.load("triplet");
     (QAction* qa_triplet_mode = new QAction( icon, i18n("Trip&let Insert Mode"), dynamic_cast<QObject*>(Qt::Key_G) );
 	connect( qa_triplet_mode, SIGNAL(toggled()), dynamic_cast<QObject*>(Qt::Key_G), this, SLOT(slotUpdateInsertModeStatus()) );
 	qa_triplet_mode->setObjectName( "triplet_mode" );	//### FIX: deallocate QAction ptr
@@ -1953,8 +1952,7 @@ void NotationView::setupActions()
 	// )->
         setChecked(false);
 
-    icon = QIcon(NotePixmapFactory::toQPixmap
-                    (NotePixmapFactory::makeToolbarPixmap("chord")));
+    icon = il.load("chord");
     (QAction* qa_chord_mode = new QAction( icon, i18n("C&hord Insert Mode"), dynamic_cast<QObject*>(Qt::Key_H) );
 	connect( qa_chord_mode, SIGNAL(toggled()), dynamic_cast<QObject*>(Qt::Key_H), this, SLOT(slotUpdateInsertModeStatus()) );
 	qa_chord_mode->setObjectName( "chord_mode" );	//### FIX: deallocate QAction ptr
@@ -1965,8 +1963,7 @@ void NotationView::setupActions()
 	// )->
         setChecked(false);
 
-    icon = QIcon(NotePixmapFactory::toQPixmap
-                    (NotePixmapFactory::makeToolbarPixmap("group-grace")));
+    icon = il.load("group-grace");
     (QAction* qa_grace_mode = new QAction( icon, i18n("Grace Insert Mode"), dynamic_cast<QObject*>(0) );
 	connect( qa_grace_mode, SIGNAL(toggled()), dynamic_cast<QObject*>(0), this, SLOT(slotUpdateInsertModeStatus()) );
 	qa_grace_mode->setObjectName( "grace_mode" );	//### FIX: deallocate QAction ptr
@@ -1998,9 +1995,8 @@ void NotationView::setupActions()
 			//### FIX: deallocate QAction ptr
 			
 
-    icon = QIcon
-           (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                                         ("quantize")));
+    icon = il.load
+                                         ("quantize");
 
     QAction* qa_quantize = new QAction(  EventQuantizeCommand::getGlobalName(), dynamic_cast<QObject*>(Qt::Key_Equal) );
 			connect( qa_quantize, SIGNAL(toggled()), dynamic_cast<QObject*>(Qt::Key_Equal), this );
@@ -2033,9 +2029,8 @@ void NotationView::setupActions()
 			
 
 
-    icon = QIcon
-           (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                                         ("text-mark")));
+    icon = il.load
+                                         ("text-mark");
 
     QAction* qa_make_ornament = new QAction(  i18n("Ma&ke Ornament..."), dynamic_cast<QObject*>(this) );
 			connect( qa_make_ornament, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotMakeOrnament()) );
@@ -2152,7 +2147,7 @@ void NotationView::setupActions()
     for (unsigned int i = 0;
             i < sizeof(actionsToolbars) / sizeof(actionsToolbars[0]); ++i) {
 
-        icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap(actionsToolbars[i][3])));
+        icon = il.load(actionsToolbars[i][3])));
 
         new /* was toggle */ QAction(actionsToolbars[i][0], icon, 0,
                           this, actionsToolbars[i][1],
@@ -2253,14 +2248,14 @@ void NotationView::setupActions()
 			qa_cursor_next_segment->setIconText(0); 
 			connect( qa_cursor_next_segment, SIGNAL(triggered()), this, SLOT(slotCurrentSegmentNext())  );
 
-    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                    ("transport-cursor-to-pointer")));
+    icon = il.load
+                    ("transport-cursor-to-pointer");
     QAction *qa_cursor_to_playback_pointer = new QAction( "Cursor to &Playback Pointer", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_cursor_to_playback_pointer->setIcon(icon); 
 			connect( qa_cursor_to_playback_pointer, SIGNAL(triggered()), this, SLOT(slotJumpCursorToPlayback())  );
 
-    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                    ("transport-play")));
+    icon = il.load
+                    ("transport-play");
     QAction *qa_play = new QAction( "&Play", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_play->setIcon(icon); 
 			connect( qa_play, SIGNAL(triggered()), this, SIGNAL(play())  );
@@ -2269,44 +2264,44 @@ void NotationView::setupActions()
     playShortcut.append( KKey(Key_Return + Qt::CTRL) );
     qa_play->setShortcut(playShortcut);
 
-    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                    ("transport-stop")));
+    icon = il.load
+                    ("transport-stop");
     QAction *qa_stop = new QAction( "&Stop", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_stop->setIcon(icon); 
 			connect( qa_stop, SIGNAL(triggered()), this, SIGNAL(stop())  );
 
-    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                    ("transport-rewind")));
+    icon = il.load
+                    ("transport-rewind");
     QAction *qa_playback_pointer_back_bar = new QAction( "Re&wind", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_playback_pointer_back_bar->setIcon(icon); 
 			connect( qa_playback_pointer_back_bar, SIGNAL(triggered()), this, SIGNAL(rewindPlayback())  );
 
-    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                    ("transport-ffwd")));
+    icon = il.load
+                    ("transport-ffwd");
     QAction *qa_playback_pointer_forward_bar = new QAction( "&Fast Forward", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_playback_pointer_forward_bar->setIcon(icon); 
 			connect( qa_playback_pointer_forward_bar, SIGNAL(triggered()), this, SIGNAL(fastForwardPlayback())  );
 
-    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                    ("transport-rewind-end")));
+    icon = il.load
+                    ("transport-rewind-end");
     QAction *qa_playback_pointer_start = new QAction( "Rewind to &Beginning", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_playback_pointer_start->setIcon(icon); 
 			connect( qa_playback_pointer_start, SIGNAL(triggered()), this, SIGNAL(rewindPlaybackToBeginning())  );
 
-    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                    ("transport-ffwd-end")));
+    icon = il.load
+                    ("transport-ffwd-end");
     QAction *qa_playback_pointer_end = new QAction( "Fast Forward to &End", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_playback_pointer_end->setIcon(icon); 
 			connect( qa_playback_pointer_end, SIGNAL(triggered()), this, SIGNAL(fastForwardPlaybackToEnd())  );
 
-    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                    ("transport-pointer-to-cursor")));
+    icon = il.load
+                    ("transport-pointer-to-cursor");
     QAction *qa_playback_pointer_to_cursor = new QAction( "Playback Pointer to &Cursor", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_playback_pointer_to_cursor->setIcon(icon); 
 			connect( qa_playback_pointer_to_cursor, SIGNAL(triggered()), this, SLOT(slotJumpPlaybackToCursor())  );
 
-    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                    ("transport-solo")));
+    icon = il.load
+                    ("transport-solo");
     QAction* qa_toggle_solo = new QAction( icon, i18n("&Solo"), dynamic_cast<QObject*>(0) );
 	connect( qa_toggle_solo, SIGNAL(toggled()), dynamic_cast<QObject*>(0), this );
 	qa_toggle_solo->setObjectName( "toggle_solo" );	//### FIX: deallocate QAction ptr
@@ -2316,8 +2311,8 @@ void NotationView::setupActions()
 	qa_toggle_solo->setChecked( false );	//
 	// ;
 
-    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                    ("transport-tracking")));
+    icon = il.load
+                    ("transport-tracking");
     (QAction* qa_toggle_tracking = new QAction( icon, i18n("Scro&ll to Follow Playback"), dynamic_cast<QObject*>(Qt::Key_Pause) );
 	connect( qa_toggle_tracking, SIGNAL(toggled()), dynamic_cast<QObject*>(Qt::Key_Pause), this );
 	qa_toggle_tracking->setObjectName( "toggle_tracking" );	//### FIX: deallocate QAction ptr
@@ -2327,7 +2322,7 @@ void NotationView::setupActions()
 	qa_toggle_tracking->setChecked( false );	//
 	// )->setChecked(m_playTracking);
 
-    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+    icon = il.load
                     ("transport-panic")));
     QAction *qa_panic = new QAction( "Panic", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_panic->setIcon(icon); 
@@ -2366,7 +2361,8 @@ void NotationView::setupActions()
     //    QString pixmapDir =
     //	KGlobal::dirs()->findResource("appdata", "pixmaps/");
     //    icon = QIcon(Q3CanvasPixmap(pixmapDir + "/toolbar/eventfilter.xpm"));
-    QAction *qa_filter_selection = new QAction( "&Filter Selection", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+    icon = il.load("eventfilter");
+    QAction *qa_filter_selection = new QAction( "&Filter Selection", icon, dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_filter_selection->setIconText("filter"); 
 			connect( qa_filter_selection, SIGNAL(triggered()), this, SLOT(slotFilterSelection())  );
 

@@ -75,6 +75,7 @@
 #include "gui/general/EditView.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/MidiPitchLabel.h"
+#include "gui/general/IconLoader.h"
 #include "gui/kdeext/KTmpStatusMsg.h"
 #include "gui/rulers/ChordNameRuler.h"
 #include "gui/rulers/LoopRuler.h"
@@ -643,8 +644,9 @@ void MatrixView::setupActions()
     //
     KRadioAction* toolAction = 0;
 
-    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QIcon icon(QPixmap(pixmapDir + "/toolbar/select.xpm"));
+    IconLoader il;
+
+    QIcon icon = il.load("select");
 
     toolAction = new KRadioAction(i18n("&Select and Edit"), icon, Qt::Key_F2,
                                   this, SLOT(slotSelectSelected()),
@@ -666,14 +668,13 @@ void MatrixView::setupActions()
                                   actionCollection(), "move");
     toolAction->setExclusiveGroup("tools");
 
-    Q3CanvasPixmap pixmap(pixmapDir + "/toolbar/resize.xpm");
-    icon = QIcon(pixmap);
+    icon = il.load("resize");
     toolAction = new KRadioAction(i18n("Resi&ze"), icon, Qt::Key_F6,
                                   this, SLOT(slotResizeSelected()),
                                   actionCollection(), "resize");
     toolAction->setExclusiveGroup("tools");
 
-    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("chord")));
+    icon = il.load("chord");
     (QAction* qa_chord_mode = new QAction( icon, i18n("C&hord Insert Mode"), dynamic_cast<QObject*>(Qt::Key_H) );
 	connect( qa_chord_mode, SIGNAL(toggled()), dynamic_cast<QObject*>(Qt::Key_H), this, SLOT(slotUpdateInsertModeStatus()) );
 	qa_chord_mode->setObjectName( "chord_mode" );	//### FIX: deallocate QAction ptr
@@ -684,8 +685,7 @@ void MatrixView::setupActions()
 	// )->
     setChecked(false);
 
-    pixmap.load(pixmapDir + "/toolbar/step_by_step.xpm");
-    icon = QIcon(pixmap);
+     icon = il.load("step_by_step");
     QAction* qa_toggle_step_by_step = new QAction( icon, i18n("Ste&p Recording"), dynamic_cast<QObject*>(0) );
 	connect( qa_toggle_step_by_step, SIGNAL(toggled()), dynamic_cast<QObject*>(0), this );
 	qa_toggle_step_by_step->setObjectName( "toggle_step_by_step" );	//### FIX: deallocate QAction ptr
@@ -695,8 +695,7 @@ void MatrixView::setupActions()
 	qa_toggle_step_by_step->setChecked( false );	//
 	// ;
 
-    pixmap.load(pixmapDir + "/toolbar/quantize.png");
-    icon = QIcon(pixmap);
+     icon = il.load("quantize");
     QAction* qa_quantize = new QAction(  EventQuantizeCommand::getGlobalName(), dynamic_cast<QObject*>(Qt::Key_Equal) );
 			connect( qa_quantize, SIGNAL(toggled()), dynamic_cast<QObject*>(Qt::Key_Equal), this );
 			qa_quantize->setObjectName( "quantize" );		//
@@ -883,14 +882,14 @@ void MatrixView::setupActions()
 			qa_cursor_end->setIconText(0); 
 			connect( qa_cursor_end, SIGNAL(triggered()), this, SLOT(slotJumpToEnd())  );
 
-    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                    ("transport-cursor-to-pointer")));
+    icon = il.load
+                    ("transport-cursor-to-pointer");
     QAction *qa_cursor_to_playback_pointer = new QAction( "Cursor to &Playback Pointer", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_cursor_to_playback_pointer->setIcon(icon); 
 			connect( qa_cursor_to_playback_pointer, SIGNAL(triggered()), this, SLOT(slotJumpCursorToPlayback())  );
 
-    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                    ("transport-play")));
+    icon = il.load
+                    ("transport-play");
     QAction *qa_play = new QAction( "&Play", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_play->setIcon(icon); 
 			connect( qa_play, SIGNAL(triggered()), this, SIGNAL(play())  );
@@ -899,44 +898,44 @@ void MatrixView::setupActions()
     playShortcut.append( KKey(Key_Return + Qt::CTRL) );
     play.setShortcut(playShortcut);
 
-    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                    ("transport-stop")));
+    icon = il.load
+                    ("transport-stop");
     QAction *qa_stop = new QAction( "&Stop", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_stop->setIcon(icon); 
 			connect( qa_stop, SIGNAL(triggered()), this, SIGNAL(stop())  );
 
-    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                    ("transport-rewind")));
+    icon = il.load
+                    ("transport-rewind");
     QAction *qa_playback_pointer_back_bar = new QAction( "Re&wind", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_playback_pointer_back_bar->setIcon(icon); 
 			connect( qa_playback_pointer_back_bar, SIGNAL(triggered()), this, SIGNAL(rewindPlayback())  );
 
-    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                    ("transport-ffwd")));
+    icon = il.load
+                    ("transport-ffwd");
     QAction *qa_playback_pointer_forward_bar = new QAction( "&Fast Forward", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_playback_pointer_forward_bar->setIcon(icon); 
 			connect( qa_playback_pointer_forward_bar, SIGNAL(triggered()), this, SIGNAL(fastForwardPlayback())  );
 
-    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                    ("transport-rewind-end")));
+    icon = il.load
+                    ("transport-rewind-end");
     QAction *qa_playback_pointer_start = new QAction( "Rewind to &Beginning", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_playback_pointer_start->setIcon(icon); 
 			connect( qa_playback_pointer_start, SIGNAL(triggered()), this, SIGNAL(rewindPlaybackToBeginning())  );
 
-    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                    ("transport-ffwd-end")));
+    icon = il.load
+                    ("transport-ffwd-end");
     QAction *qa_playback_pointer_end = new QAction( "Fast Forward to &End", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_playback_pointer_end->setIcon(icon); 
 			connect( qa_playback_pointer_end, SIGNAL(triggered()), this, SIGNAL(fastForwardPlaybackToEnd())  );
 
-    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                    ("transport-pointer-to-cursor")));
+    icon = il.load
+                    ("transport-pointer-to-cursor");
     QAction *qa_playback_pointer_to_cursor = new QAction( "Playback Pointer to &Cursor", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_playback_pointer_to_cursor->setIcon(icon); 
 			connect( qa_playback_pointer_to_cursor, SIGNAL(triggered()), this, SLOT(slotJumpPlaybackToCursor())  );
 
-    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                    ("transport-solo")));
+    icon = il.load
+                    ("transport-solo");
     QAction* qa_toggle_solo = new QAction( icon, i18n("&Solo"), dynamic_cast<QObject*>(0) );
 	connect( qa_toggle_solo, SIGNAL(toggled()), dynamic_cast<QObject*>(0), this );
 	qa_toggle_solo->setObjectName( "toggle_solo" );	//### FIX: deallocate QAction ptr
@@ -946,8 +945,8 @@ void MatrixView::setupActions()
 	qa_toggle_solo->setChecked( false );	//
 	// ;
 
-    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                    ("transport-tracking")));
+    icon = il.load
+                    ("transport-tracking");
     (QAction* qa_toggle_tracking = new QAction( icon, i18n("Scro&ll to Follow Playback"), dynamic_cast<QObject*>(Qt::Key_Pause) );
 	connect( qa_toggle_tracking, SIGNAL(toggled()), dynamic_cast<QObject*>(Qt::Key_Pause), this );
 	qa_toggle_tracking->setObjectName( "toggle_tracking" );	//### FIX: deallocate QAction ptr
@@ -957,8 +956,8 @@ void MatrixView::setupActions()
 	qa_toggle_tracking->setChecked( false );	//
 	// )->setChecked(m_playTracking);
 
-    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                    ("transport-panic")));
+    icon = il.load
+                    ("transport-panic");
     QAction *qa_panic = new QAction( "Panic", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_panic->setIcon(icon); 
 			connect( qa_panic, SIGNAL(triggered()), this, SIGNAL(panic())  );

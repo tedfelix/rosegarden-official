@@ -35,13 +35,13 @@ class QGroupBox;
 class QCloseEvent;
 class QCheckBox;
 class QListWidget;
-class Command;
 class QComboBox;
 
 
 namespace Rosegarden
 {
 
+class Command;
 class Studio;
 class RosegardenGUIDoc;
 class MultiViewCommandHistory;

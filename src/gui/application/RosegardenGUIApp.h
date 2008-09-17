@@ -23,6 +23,7 @@
 #include "base/MidiProgram.h"
 #include "gui/dialogs/TempoDialog.h"
 #include "gui/widgets/ZoomSlider.h"
+#include "gui/general/RecentFiles.h"
 #include "base/Event.h"
 #include "sound/AudioFile.h"
 #include "sound/Midi.h"
@@ -398,6 +399,8 @@ protected:
      */
     void setupActions();
 
+    void setupRecentFilesMenu();
+
     /**
      * sets up the zoom toolbar
      */
@@ -561,9 +564,9 @@ public slots:
     void slotFileOpen();
 
     /**
-     * opens a file from the recent files menu
+     * opens a file from the recent files menu (according to action name)
      */
-    void slotFileOpenRecent(const QUrl&);
+    void slotFileOpenRecent();
 
     /**
      * save a document
@@ -1545,9 +1548,6 @@ private:
 
     bool m_actionsSetup;
 
-	//KRecentFilesAction* m_fileRecent;
-	RgRecentFileClass* m_fileRecent;
-
     /**
      * view is the main widget which represents your working area. The
      * View class should handle all events of the view widget.  It is
@@ -1569,19 +1569,23 @@ private:
     RosegardenGUIDoc* m_doc;
 	
 	
-	/**
-	*	Menus
-	*/
-	QMenuBar* m_menuBarMain;
+    /**
+     *	Menus
+     */
+    QMenuBar* m_menuBarMain;
 	
-	QToolBar* m_toolBarMain;
+    QToolBar* m_toolBarMain;
 	
-	QMenu* m_menuFile;
-	QMenu* m_menuEdit;
-	QMenu* m_menuComposition;
-	QMenu* m_menuStudio;
-	QMenu* m_menuSettings;
-	
+    QMenu* m_menuFile;
+
+    QMenu *m_menuRecent;
+    RecentFiles m_recentFiles;
+
+    QMenu* m_menuEdit;
+    QMenu* m_menuComposition;
+    QMenu* m_menuStudio;
+    QMenu* m_menuSettings;
+    
     /**
      * QAction pointers to enable/disable actions
      */
@@ -1612,7 +1616,7 @@ private:
     QAction *m_recordTransport;
     QAction *m_rewindEndTransport;
     QAction *m_ffwdEndTransport;
-	QAction *m_panic; 
+    QAction *m_panic; 
 	
     SequencerThread *m_sequencerThread;
     bool m_sequencerCheckedIn;

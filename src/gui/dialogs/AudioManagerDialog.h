@@ -34,7 +34,6 @@ class QCloseEvent;
 class QShortcut;
 class KURL;
 class QListWidget;
-class Command;
 
 
 namespace Rosegarden
@@ -47,6 +46,7 @@ class RealTime;
 class MultiViewCommandHistory;
 class AudioPlayingDialog;
 class AudioFile;
+class Command;
 
 
 class AudioManagerDialog : public KMainWindow

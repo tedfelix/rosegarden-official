@@ -35,7 +35,6 @@
 
 #include <QApplication>
 #include <klocale.h>
-#include <kio/netaccess.h>
 #include <QMessageBox>
 
 #include <QProcess>
@@ -43,6 +42,8 @@
 #include <QPainter>
 #include <QDateTime>
 #include <QFile>
+
+#include "gui/general/FileSource.h"
 
 #include "AudioFile.h"
 #include "AudioFileManager.h"
@@ -655,40 +656,16 @@ AudioFileManager::createDerivedAudioFile(AudioFileId source,
 AudioFileId
 AudioFileManager::importURL(const QUrl &url, int sampleRate)
 {
-    //!!! Have changed the prototype from KURL to QUrl, but this code still
-    // refers to the old KURL API.  Update for Qt4
-    
-    //@@@ FIX !!!: QUrl has no method isLocalFile() ... we currently just assume it...
-	return importFile( qstrtostr(url.toLocalFile()), sampleRate );
-	//if (url.isLocalFile()) return importFile(url.path(), sampleRate);
-	
-	/*
-	//@@@ FIX !!! reenable !!!
-	//
-    std::cerr << "AudioFileManager::importURL("<< url.prettyURL() << ", " << sampleRate << ")" << std::endl;
-
-    emit setOperationName(i18n("Downloading file %1", url.prettyURL()));
-
-    QString localPath = "";
-    if (!KIO::NetAccess::download(url, localPath)) {
-	QMessageBox::critical(0, "", i18n("Cannot download file %1", url.prettyURL()));
-	throw SoundFile::BadSoundFileException(url.prettyURL());
+    FileSource source(url);
+    if (!source.isAvailable()) {
+	QMessageBox::critical(0, "", i18n("Cannot download file %1", url.toString()));
+	throw SoundFile::BadSoundFileException(qstrtostr(url.toString()));
     }
-    
-    AudioFileId id = 0;
 
-    try {
-	id = importFile(localPath.data(), sampleRate);
-    } catch (BadAudioPathException ape) {
-	KIO::NetAccess::removeTempFile(localPath);
-	throw ape;
-    } catch (SoundFile::BadSoundFileException bse) {
-	KIO::NetAccess::removeTempFile(localPath);
-	throw bse;
-    }
-    
-    return id;
-	*/
+    source.waitForData();
+
+    return importFile(qStrToCharPtrLocal8(source.getLocalFilename()),
+                      sampleRate);
 }
 
 bool

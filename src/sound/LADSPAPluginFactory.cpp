@@ -818,13 +818,14 @@ LADSPAPluginFactory::generateTaxonomy(QString uri, QString base)
         lrdf_free_uris(uris);
     }
 
-	uris = lrdf_get_subclasses( qStrToCharPtrLocal8(uri) );
+    uris = lrdf_get_subclasses( qStrToCharPtrLocal8(uri) );
 
     if (uris != NULL) {
         for (int i = 0; i < uris->count; ++i) {
             char *label = lrdf_get_label(uris->items[i]);
             generateTaxonomy(uris->items[i],
-                             base + (base.length() > 0 ? " > " : "") + label);
+                             base + QString(base.length() > 0 ? " > " : "")
+			     + QString(label));
         }
         lrdf_free_uris(uris);
     }

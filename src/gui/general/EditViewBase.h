@@ -36,13 +36,13 @@ class QFrame;
 class QCloseEvent;
 class QShortcut;
 class /* was toggle */ QAction;
-class Command;
 namespace Rosegarden { class EditViewTimeSigNotifier; }
 
 
 namespace Rosegarden
 {
 
+class Command;
 class Segment;
 class RosegardenGUIDoc;
 class MultiViewCommandHistory;

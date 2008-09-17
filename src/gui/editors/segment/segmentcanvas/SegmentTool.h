@@ -27,12 +27,12 @@
 
 
 class QMouseEvent;
-class Command;
 
 
 namespace Rosegarden
 {
 
+class Command;
 class SegmentToolBox;
 class RosegardenGUIDoc;
 class CompositionView;

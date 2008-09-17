@@ -697,10 +697,14 @@ SET(gui_SRCS
 	gui/general/EditViewCommandRegistry.cpp
 	gui/general/EditViewCommandRegistry.h
 	gui/general/EditViewTimeSigNotifier.h
+	gui/general/FileSource.cpp
+	gui/general/FileSource.h
 	gui/general/GUIPalette.cpp
 	gui/general/GUIPalette.h
 	gui/general/HZoomable.cpp
 	gui/general/HZoomable.h
+	gui/general/IconLoader.h
+	gui/general/IconLoader.cpp
 	gui/general/LinedStaff.cpp
 	gui/general/LinedStaff.h
 	gui/general/LinedStaffManager.cpp
@@ -717,6 +721,8 @@ SET(gui_SRCS
 	gui/general/PresetHandlerDialog.h
 	gui/general/ProgressReporter.cpp
 	gui/general/ProgressReporter.h
+ 	gui/general/RecentFiles.cpp
+	gui/general/RecentFiles.h
 	gui/general/RosegardenCanvasView.cpp
 	gui/general/RosegardenCanvasView.h
 	gui/general/RosegardenScrollView.cpp
@@ -725,6 +731,8 @@ SET(gui_SRCS
 	gui/general/Spline.h
 	gui/general/StaffLine.cpp
 	gui/general/StaffLine.h
+	gui/general/TempDirectory.cpp
+	gui/general/TempDirectory.h
 	gui/kdeext/KLedButton.cpp
 	gui/kdeext/KLedButton.h
 	gui/kdeext/KStartupLogo.cpp

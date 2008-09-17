@@ -30,12 +30,12 @@ class QListWidgetItem;
 class QCloseEvent;
 class QShortcut;
 class QListWidget;
-class Command;
 
 
 namespace Rosegarden
 {
 
+class Command;
 class RosegardenGUIDoc;
 class MultiViewCommandHistory;
 

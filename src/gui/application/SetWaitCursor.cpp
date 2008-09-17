@@ -23,7 +23,6 @@
 #include "misc/Debug.h"
 #include "RosegardenGUIApp.h"
 #include "RosegardenGUIView.h"
-#include <kcursor.h>
 #include <QCursor>
 #include <QWidget>
 #include <QApplication>
@@ -49,7 +48,7 @@ SetWaitCursor::SetWaitCursor()
         RG_DEBUG << "SetWaitCursor::SetWaitCursor() : setting waitCursor\n";
         m_saveCursor = m_guiApp->cursor();
 
-        m_guiApp->setCursor(KCursor::waitCursor());
+        m_guiApp->setCursor(Qt::WaitCursor);
     }
 }
 
@@ -72,7 +71,7 @@ SetWaitCursor::~SetWaitCursor()
         m_guiApp->setCursor(m_saveCursor);
 
         if (viewport) {
-            if (currentSegmentCanvasCursor.shape() == KCursor::waitCursor().shape()) {
+            if (currentSegmentCanvasCursor.shape() == Qt::WaitCursor) {
                 viewport->setCursor(m_saveSegmentCanvasCursor);
             } else {
                 viewport->setCursor(currentSegmentCanvasCursor); // because m_guiApp->setCursor() has replaced it

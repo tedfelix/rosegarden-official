@@ -30,12 +30,12 @@
 class QPaintEvent;
 class QDropEvent;
 class QDragEnterEvent;
-class Command;
 
 
 namespace Rosegarden
 {
 
+class Command;
 class TrackButtons;
 class TempoRuler;
 class Segment;

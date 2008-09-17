@@ -34,13 +34,13 @@ class QSpinBox;
 class QPushButton;
 class QLabel;
 class QCheckBox;
-class Command;
 class QComboBox;
 
 
 namespace Rosegarden
 {
 
+class Command;
 class TristateCheckBox;
 class SegmentSelection;
 class Segment;

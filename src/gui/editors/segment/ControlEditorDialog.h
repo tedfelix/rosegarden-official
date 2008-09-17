@@ -29,12 +29,12 @@ class QPushButton;
 class QListWidgetItem;
 class QCloseEvent;
 class QListWidget;
-class Command;
 
 
 namespace Rosegarden
 {
 
+class Command;
 class Studio;
 class RosegardenGUIDoc;
 class MultiViewCommandHistory;
