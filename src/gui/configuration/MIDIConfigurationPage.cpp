@@ -34,7 +34,7 @@
 #include "TabbedConfigurationPage.h"
 #include <QComboBox>
 #include <QSettings>
-#include <kfiledialog.h>
+#include <QFileDialog>
 #include <QCheckBox>
 #include <QComboBox>
 #include <QByteArray>
@@ -164,14 +164,14 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     ++row;
 
     layout->addWidget(new QLabel(i18n("Path to 'asfxload' or 'sfxload' command"), frame), row, 0);
-    m_sfxLoadPath = new QLineEdit(settings.value("sfxloadpath", "/bin/sfxload") , frame);
+    m_sfxLoadPath = new QLineEdit(settings.value("sfxloadpath", "/bin/sfxload").toString() , frame);
     layout->addWidget(m_sfxLoadPath, row, 1, row- row+1, 2);
     m_sfxLoadChoose = new QPushButton("Choose...", frame);
     layout->addWidget(m_sfxLoadChoose, row, 3);
     ++row;
 
     layout->addWidget(new QLabel(i18n("SoundFont"), frame), row, 0);
-    m_soundFontPath = new QLineEdit(settings.value("soundfontpath", "") , frame);
+	m_soundFontPath = new QLineEdit(settings.value("soundfontpath", "").toString() , frame);
     layout->addWidget(m_soundFontPath, row, 1, row- row+1, 2);
     m_soundFontChoose = new QPushButton("Choose...", frame);
     layout->addWidget(m_soundFontChoose, row, 3);
@@ -304,14 +304,14 @@ MIDIConfigurationPage::slotSoundFontToggled(bool isChecked)
 void
 MIDIConfigurationPage::slotSfxLoadPathChoose()
 {
-    QString path = KFileDialog::getOpenFileName(":SFXLOAD", QString::null, this, i18n("sfxload path"));
+	QString path = QFileDialog::getOpenFileName(this, i18n("sfxload path"), QDir::currentPath() ); //":SFXLOAD"
     m_sfxLoadPath->setText(path);
 }
 
 void
 MIDIConfigurationPage::slotSoundFontChoose()
 {
-    QString path = KFileDialog::getOpenFileName(":SOUNDFONTS", "*.sb *.sf2 *.SF2 *.SB", this, i18n("Soundfont path"));
+	QString path = QFileDialog::getOpenFileName(this, i18n("Soundfont path"), QDir::currentPath(), "*.sb *.sf2 *.SF2 *.SB" ); // ":SOUNDFONTS"
     m_soundFontPath->setText(path);
 }
 

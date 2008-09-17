@@ -23,12 +23,16 @@
 #include "document/RosegardenGUIDoc.h"
 #include "sequencer/RosegardenSequencer.h"
 #include "gui/studio/AudioPluginManager.h"
+#include "gui/general/FileSource.h"
 #include "sound/AudioFileManager.h"
 #include "TabbedConfigurationPage.h"
 #include <QSettings>
-#include <kdiskfreesp.h>
-#include <kfiledialog.h>
-#include <kfile.h>
+
+//#include <kdiskfreesp.h>
+#include <kdiskfreespace.h>	// note: a kde4 include
+
+#include <QFileDialog>
+#include <QFile>
 #include <QByteArray>
 #include <QDataStream>
 #include <QDialog>
@@ -88,8 +92,12 @@ AudioPropertiesPage::calculateStats()
 {
     // This stolen from KDE libs kfile/kpropertiesdialog.cpp
     //
-    QString mountPoint = KIO::findPathMountPoint(m_path->text());
-    KDiskFreeSp * job = new KDiskFreeSp;
+	QString mountPoint = KIO::findPathMountPoint(m_path->text());
+	
+	//FileSource source( m_path->text() );
+	//
+	
+    KDiskFreeSpace * job = new KDiskFreeSpace();
     connect(job, SIGNAL(foundMountPoint(const QString&, unsigned long, unsigned long,
                                         unsigned long)),
             this, SLOT(slotFoundMountPoint(const QString&, unsigned long, unsigned long,
@@ -133,11 +141,10 @@ AudioPropertiesPage::slotFileDialog()
 {
     AudioFileManager &afm = m_doc->getAudioFileManager();
 
-    KFileDialog *fileDialog = new KFileDialog(QString(afm.getAudioPath().c_str()),
-                              QString::null,
-                              this, "file dialog", true);
-    fileDialog->setMode(KFile::Directory);
-
+    QFileDialog *fileDialog = new QFileDialog(this, QString(afm.getAudioPath().c_str()),
+                              "file dialog");
+	fileDialog->setFileMode( QFileDialog::Directory );
+	
     connect(fileDialog, SIGNAL(fileSelected(const QString&)),
             SLOT(slotFileSelected(const QString&)));
 

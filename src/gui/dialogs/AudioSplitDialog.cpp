@@ -39,7 +39,7 @@
 #include <Q3Canvas>
 #include <QLabel>
 #include <QPalette>
-#include <qscrollview.h>
+#include <QScrollArea>
 #include <QSpinBox>
 #include <QString>
 #include <QWidget>
@@ -85,8 +85,8 @@ AudioSplitDialog::AudioSplitDialog(QDialogButtonBox::QWidget *parent,
     m_canvasView->setFixedWidth(m_canvasWidth);
     m_canvasView->setFixedHeight(m_canvasHeight);
 
-    m_canvasView->setHScrollBarMode(QScrollView::AlwaysOff);
-    m_canvasView->setVScrollBarMode(QScrollView::AlwaysOff);
+    m_canvasView->setHScrollBarMode(QScrollArea::AlwaysOff);
+    m_canvasView->setVScrollBarMode(QScrollArea::AlwaysOff);
     m_canvasView->setDragAutoScroll(false);
 
     QWidget *hbox = new QWidget( w );

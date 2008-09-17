@@ -31,7 +31,7 @@
 #include <QComboBox>
 #include <QDialog>
 #include <QDialogButtonBox>
-#include <kfiledialog.h>
+#include <QFileDialog>
 #include <klocale.h>
 #include <QCheckBox>
 #include <QDialog>

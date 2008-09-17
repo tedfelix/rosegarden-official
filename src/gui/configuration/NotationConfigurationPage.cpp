@@ -580,7 +580,7 @@ NotationConfigurationPage::slotViewButtonPressed()
             (void)viewer->exec(); // no return value
         }
     } catch (Exception f) {
-        QMessageBox::critical(0, "", i18n(strtoqstr(f.getMessage())));
+        QMessageBox::critical(0, "", i18n(f.getMessage().c_str()) );
     }
 #endif
 }
@@ -648,21 +648,21 @@ NotationConfigurationPage::slotFontComboChanged(int index)
         NoteFont *noteFont = NoteFontFactory::getFont
                              (fontStr, NoteFontFactory::getDefaultSize(fontStr));
         const NoteFontMap &map(noteFont->getNoteFontMap());
-        m_fontOriginLabel->setText(i18n(strtoqstr(map.getOrigin())));
-        m_fontCopyrightLabel->setText(i18n(strtoqstr(map.getCopyright())));
-        m_fontMappedByLabel->setText(i18n(strtoqstr(map.getMappedBy())));
+		m_fontOriginLabel->setText( i18n( map.getOrigin().c_str() ) );
+		m_fontCopyrightLabel->setText( i18n( map.getCopyright().c_str() ) );
+		m_fontMappedByLabel->setText( i18n( map.getMappedBy().c_str() ) );
         if (map.isSmooth()) {
             m_fontTypeLabel->setText(
-                i18n("%1 (smooth)", i18n(strtoqstr(map.getType()))));
+									 i18n("%1 (smooth)", i18n( map.getType().c_str() )) );
         } else {
             m_fontTypeLabel->setText(
-                i18n("%1 (jaggy)", i18n(strtoqstr(map.getType()))));
+									 i18n("%1 (jaggy)", i18n( map.getType().c_str() )) );
         }
         if (m_viewButton) {
             m_viewButton->setEnabled(map.getSystemFontNames().count() > 0);
         }
     } catch (Exception f) {
-        QMessageBox::critical(0, "", i18n(strtoqstr(f.getMessage())));
+		QMessageBox::critical(0, "", i18n( f.getMessage().c_str() ) );
     }
 }
 

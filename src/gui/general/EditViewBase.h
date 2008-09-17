@@ -28,14 +28,16 @@
 #include <QMainWindow>
 #include <QString>
 
+#include <QFrame>
+#include <QAction>
+#include <QWidget>
 
-class QWidget;
+//class QFrame;
+//class QWidget;
 class QPaintEvent;
 class QGridLayout;
-class QFrame;
 class QCloseEvent;
 class QShortcut;
-class /* was toggle */ QAction;
 namespace Rosegarden { class EditViewTimeSigNotifier; }
 
 
@@ -315,7 +317,7 @@ protected slots:
     virtual void slotUpdateToolbars();
 
 protected:
-    QWidget* getCentralWidget() { return m_centralFrame; }
+    QWidget* getCentralWidget() { return dynamic_cast<QWidget*>(m_centralFrame); }
 
     void initSegmentRefreshStatusIds();
 

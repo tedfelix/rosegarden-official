@@ -224,7 +224,7 @@
 
 //#include <kmimetype.h>
 //#include <kedittoolbar.h> //
-//#include <kfiledialog.h>
+//#include <QFileDialog>
 //#include <kglobal.h>
 //#include <kinputdialog.h>
 //#include <kkeydialog.h>	//&&& disabled kkaydialog.h

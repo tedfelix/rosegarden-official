@@ -50,7 +50,7 @@
 #include <kstandarddirs.h>
 #include <QAction>
 #include "document/Command.h"
-#include <kfiledialog.h>
+#include <QFileDialog>
 #include <kglobal.h>
 #include <klineeditdlg.h>
 #include <QListWidget>
@@ -597,12 +597,12 @@ AudioManagerDialog::slotRemove()
                            .arg(QString(audioFile->getFilename().c_str()));
 
         // Ask the question
-        int reply = QMessageBox::warningContinueCancel(this, question);
-
-        if (reply != QMessageBox::Continue)
+		int reply = QMessageBox::warning(this, "", question, QMessageBox::Yes | QMessageBox::Cancel , QMessageBox::Cancel );
+		
+        if (reply != QMessageBox::Yes)
             return ;
     }
-
+	
     for (Composition::iterator it = comp.begin(); it != comp.end(); ++it) {
         if ((*it)->getType() == Segment::Audio &&
                 (*it)->getAudioFileId() == id)
@@ -749,9 +749,9 @@ AudioManagerDialog::slotRemoveAll()
     QString question =
         i18n("This will unload all audio files and remove their associated segments.\nThis action cannot be undone, and associations with these files will be lost.\nFiles will not be removed from your disk.\nAre you sure?");
 
-    int reply = QMessageBox::warningContinueCancel(this, question);
+	int reply = QMessageBox::warning(this, "", question, QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel);
 
-    if (reply != QMessageBox::Continue)
+    if (reply != QMessageBox::Yes)
         return ;
 
     SegmentSelection selection;
@@ -786,9 +786,9 @@ AudioManagerDialog::slotRemoveAllUnused()
     QString question =
         i18n("This will unload all audio files that are not associated with any segments in this composition.\nThis action cannot be undone, and associations with these files will be lost.\nFiles will not be removed from your disk.\nAre you sure?");
 
-    int reply = QMessageBox::warningContinueCancel(this, question);
+	int reply = QMessageBox::warning(this, "", question,QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel );
 
-    if (reply != QMessageBox::Continue)
+    if (reply != QMessageBox::Yes)
         return ;
 
     std::set
@@ -861,9 +861,9 @@ AudioManagerDialog::slotDeleteUnused()
             QString question =
                 i18np("<qt>About to delete 1 audio file permanently from the hard disk.<br>This action cannot be undone, and there will be no way to recover this file.<br>Are you sure?</qt>\n", "<qt>About to delete %1 audio files permanently from the hard disk.<br>This action cannot be undone, and there will be no way to recover these files.<br>Are you sure?</qt>", names.size());
 
-            int reply = QMessageBox::warningContinueCancel(this, question);
+			int reply = QMessageBox::warning(this, "", question, QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel );
 
-            if (reply != QMessageBox::Continue) {
+            if (reply != QMessageBox::Yes) {
                 delete dialog;
                 return ;
             }
@@ -1092,12 +1092,12 @@ AudioManagerDialog::addFile(const KURL& kurl)
     } catch (AudioFileManager::BadAudioPathException e) {
         CurrentProgressDialog::freeze();
         QString errorString = i18n("Failed to add audio file. ") + strtoqstr(e.getMessage());
-        /* was sorry */ QMessageBox::warning(this, errorString);
+        /* was sorry */ QMessageBox::warning(this, "", errorString);
         return false;
     } catch (SoundFile::BadSoundFileException e) {
         CurrentProgressDialog::freeze();
         QString errorString = i18n("Failed to add audio file. ") + strtoqstr(e.getMessage());
-        /* was sorry */ QMessageBox::warning(this, errorString);
+        /* was sorry */ QMessageBox::warning(this, "", errorString);
         return false;
     }
             
@@ -1115,7 +1115,7 @@ AudioManagerDialog::addFile(const KURL& kurl)
 
         QString message = strtoqstr(e.getMessage()) + "\n\n" +
                           i18n("Try copying this file to a directory where you have write permission and re-add it");
-        QMessageBox::information(this, message);
+        QMessageBox::information(this, "", message);
     }
 
     disconnect(&progressDlg, SIGNAL(cancelClicked()),
@@ -1132,7 +1132,8 @@ AudioManagerDialog::addFile(const KURL& kurl)
 void
 AudioManagerDialog::slotDropped(QDropEvent *event, QListWidgetItem*)
 {
-    QStrList uri;
+	//QStrList uri;
+	QList<QString> uri;
 
     // see if we can decode a URI.. if not, just ignore it
     if (QUriDrag::decode(event, uri)) {

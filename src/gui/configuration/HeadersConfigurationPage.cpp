@@ -55,7 +55,7 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
     //
 
     QGroupBox *headersBox = new QGroupBox
-                           (1, Horizontal,
+                           (1, Qt::Horizontal,
                             i18n("Printable headers"), this);
     
     layout->addWidget(headersBox);

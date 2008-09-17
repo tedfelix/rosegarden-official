@@ -163,8 +163,8 @@
 #include <kdiskfreesp.h>
 #include <QDockWidget>
 #include <kedittoolbar.h>
-#include <kfiledialog.h>
-#include <kfile.h>
+#include <QFileDialog>
+#include <QFile>
 #include <kfilterdev.h>
 #include <kfontrequester.h>
 #include <kglobal.h>

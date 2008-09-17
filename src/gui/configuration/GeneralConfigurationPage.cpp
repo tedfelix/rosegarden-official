@@ -31,7 +31,7 @@
 #include "TabbedConfigurationPage.h"
 #include <QComboBox>
 #include <QSettings>
-#include <kfiledialog.h>
+#include <QFileDialog>
 #include <QMessageBox>
 #include <QCheckBox>
 #include <QComboBox>
@@ -449,7 +449,7 @@ void GeneralConfigurationPage::apply()
 #endif // HAVE_LIBJACK
 
     if (mainTextureChanged) {
-        QMessageBox::information(this, i18n("Changes to the textured background in the main window will not take effect until you restart Rosegarden."));
+        QMessageBox::information(this, "", i18n("Changes to the textured background in the main window will not take effect until you restart Rosegarden."));
     }
 
 }

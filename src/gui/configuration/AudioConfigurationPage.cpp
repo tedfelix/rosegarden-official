@@ -32,9 +32,10 @@
 #include "sound/MappedEvent.h"
 #include "TabbedConfigurationPage.h"
 #include "misc/Strings.h"
+
 #include <QComboBox>
 #include <QSettings>
-#include <kfiledialog.h>
+#include <QFileDialog>
 #include <QCheckBox>
 #include <QComboBox>
 #include <QByteArray>
@@ -227,7 +228,7 @@ AudioConfigurationPage::AudioConfigurationPage(
 void
 AudioConfigurationPage::slotFileDialog()
 {
-    QString path = KFileDialog::getOpenFileName(QString::null, QString::null, this, i18n("External audio editor path"));
+	QString path = QFileDialog::getOpenFileName(this, i18n("External audio editor path"), QDir::currentPath() );
     m_externalAudioEditorPath->setText(path);
 }
 

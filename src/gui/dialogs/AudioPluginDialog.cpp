@@ -417,7 +417,7 @@ AudioPluginDialog::slotPluginSelected(int i)
         m_insOuts->setText(i18n("<ports>"));
         m_pluginId->setText(i18n("<id>"));
 
-        QToolTip::hide();
+        QToolTip::setVisible(false);
         QToolTip::remove
             (m_pluginList);
 
@@ -470,13 +470,13 @@ AudioPluginDialog::slotPluginSelected(int i)
         QString pluginInfo = plugin->getAuthor() + QString("\n") +
             plugin->getCopyright();
 
-        QToolTip::hide();
+        QToolTip::setVisible(false);
         QToolTip::remove
             (m_pluginList);
         QToolTip::add
             (m_pluginList, pluginInfo);
 
-        std::string identifier = plugin->getIdentifier().data();
+        std::string identifier = qstrtostr( plugin->getIdentifier() );
 
         // Only clear ports &c if this method is accessed by user
         // action (after the constructor)

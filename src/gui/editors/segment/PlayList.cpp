@@ -24,7 +24,7 @@
 
 #include <klocale.h>
 #include <QSettings>
-#include <kfiledialog.h>
+#include <QFileDialog>
 #include <kglobal.h>
 #include <kurl.h>
 #include <QFrame>

@@ -29,9 +29,10 @@
 #include "gui/general/GUIPalette.h"
 #include "gui/widgets/ColourTable.h"
 #include "TabbedConfigurationPage.h"
-#include <kcolordialog.h>
+
+#include <QColorDialog>
 #include <QSettings>
-#include <kinputdialog.h>
+#include <QInputDialog>
 #include <QColor>
 #include <QFrame>
 #include <QPushButton>
@@ -118,17 +119,21 @@ ColourConfigurationPage::slotAddNew()
 
     bool ok = false;
 
-    QString newName = KInputDialog::getText(i18n("New Color Name"),
-                                            i18n("Enter new name"),
+    QString newName = QInputDialog::getText(this, i18n("New Color Name"),
+											i18n("Enter new name"), QLineEdit::Normal,
                                             i18n("New"),
-                                            &ok);
-
+                                            &ok, 0);
+	
+	bool c_ok;
+	
     if ((ok == true) && (!newName.isEmpty())) {
-        KColorDialog box(this, "", true);
+        //QColorDialog box(this, "", true);
 
-        int result = box.getColor( temp );
-
-        if (result == KColorDialog::Accepted) {
+        //int result = box.getColor( temp );
+		//QColor col = QColorDialog::getColor();
+		QRgb rgba = QColorDialog::getRgba( 0xFFFFFFFF, &c_ok, 0 );	// 0 == parent
+		
+		if ( c_ok ) {
             Colour temp2 = GUIPalette::convertColour(temp);
             m_map.addItem(temp2, qstrtostr(newName));
             m_colourtable->populate_table(m_map, m_listmap);
