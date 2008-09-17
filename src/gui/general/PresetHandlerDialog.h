@@ -23,7 +23,6 @@
 #define _RG_PRESETHANDLERDIALOG_H_
 
 #include <QDialog>
-#include <QDialogButtonBox>
 #include <QRadioButton>
 #include <QString>
 #include "CategoryElement.h"

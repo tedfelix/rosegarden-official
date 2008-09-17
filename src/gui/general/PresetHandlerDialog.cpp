@@ -35,9 +35,7 @@
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QGroupBox>
-#include <QDialog>
 #include <QFrame>
-#include <QGroupBox>
 #include <QLabel>
 #include <QString>
 #include <QWidget>
@@ -47,13 +45,14 @@
 namespace Rosegarden
 {
 
-PresetHandlerDialog::PresetHandlerDialog(QDialogButtonBox::QWidget *parent, bool fromNotation)
-        : KDialogBase(parent, "presethandlerdialog", true, i18n("Load track parameters preset"), Ok | Cancel, Ok),
+PresetHandlerDialog::PresetHandlerDialog(QDialogButtonBox::QWidget *parent,
+                                         bool fromNotation)
+        : QDialog(parent),
         m_fromNotation(fromNotation)
 {
     m_presets = new PresetGroup();
     m_categories = m_presets->getCategories();
-    if (m_fromNotation) setCaption(i18n("Convert notation for..."));
+    if (m_fromNotation) setWindowTitle(i18n("Convert notation for..."));
 
     initDialog();
 }
@@ -71,11 +70,18 @@ PresetHandlerDialog::initDialog()
 {
     RG_DEBUG << "PresetHandlerDialog::initDialog()" << endl;
 
-    QVBox *vBox = makeVBoxMainWidget();
+    setModal(true);
+    setWindowTitle(i18n("Load track parameters preset"));
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
 
-    QFrame *frame = new QFrame(vBox);
+    QFrame *frame = new QFrame;
+    frame->setContentsMargins(10, 10, 10, 10);
+    QGridLayout *layout = new QGridLayout;
+    layout->setSpacing(5);
+    frame->setLayout(layout);
 
-    QGridLayout *layout = new QGridLayout(frame, 6, 5, 10, 5);
+    metagrid->addWidget(frame, 0, 0);
 
     QLabel *title = new QLabel(i18n("Select preset track parameters for:"), frame);
     if (m_fromNotation) title->setText(i18n("Create appropriate notation for:"));
@@ -91,31 +97,36 @@ PresetHandlerDialog::initDialog()
     m_playerCombo->addItem(i18n("Amateur"));
     m_playerCombo->addItem(i18n("Professional"));
 
-    QGroupBox *scopeBox = new QGroupBox
-        (1, Horizontal, i18n("Scope"), frame);
+    QGroupBox *scopeBox = new QGroupBox(i18n("Scope"));
+    QVBoxLayout *scopeBoxLayout = new QVBoxLayout;
     if (m_fromNotation) {
         QRadioButton *onlySelectedSegments = new
-            QRadioButton(i18n("Only selected segments"), scopeBox);
+            QRadioButton(i18n("Only selected segments"));
+        scopeBoxLayout->addWidget(onlySelectedSegments);
         m_convertAllSegments = new 
-            QRadioButton(i18n("All segments in this track"), scopeBox);
+            QRadioButton(i18n("All segments in this track"));
+        scopeBoxLayout->addWidget(m_convertAllSegments);
         onlySelectedSegments->setChecked(true);
     }
     else {
         QRadioButton *onlyNewSegments = new 
-            QRadioButton(i18n("Only for new segments"), scopeBox);
+            QRadioButton(i18n("Only for new segments"));
+        scopeBoxLayout->addWidget(onlyNewSegments);
         m_convertSegments = new 
-            QRadioButton(i18n("Convert existing segments"), scopeBox);
+            QRadioButton(i18n("Convert existing segments"));
+        scopeBoxLayout->addWidget(m_convertSegments);
         onlyNewSegments->setChecked(true);
     }
-    
-    layout->addWidget(title, 0, 0, 0- 0+1, 1- 1, AlignLeft);
-    layout->addWidget(catlabel, 1, 0, AlignRight);
+    scopeBox->setLayout(scopeBoxLayout);
+
+    layout->addWidget(title, 0, 0, 0- 0+1, 1- 1, Qt::AlignLeft);
+    layout->addWidget(catlabel, 1, 0, Qt::AlignRight);
     layout->addWidget(m_categoryCombo, 1, 1);
-    layout->addWidget(inslabel, 2, 0, AlignRight);
+    layout->addWidget(inslabel, 2, 0, Qt::AlignRight);
     layout->addWidget(m_instrumentCombo, 2, 1);
-    layout->addWidget(plylabel, 3, 0, AlignRight);
+    layout->addWidget(plylabel, 3, 0, Qt::AlignRight);
     layout->addWidget(m_playerCombo, 3, 1);
-    layout->addWidget(scopeBox, 4, 0, 0+1, 1- 1, AlignLeft);
+    layout->addWidget(scopeBox, 4, 0, 0+1, 1- 1, Qt::AlignLeft);
 
     populateCategoryCombo();
     // try to set to same category used previously
@@ -147,6 +158,13 @@ PresetHandlerDialog::initDialog()
             SLOT(slotCategoryIndexChanged(int)));
 
     settings.endGroup();
+
+    QDialogButtonBox *buttonBox
+        = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 QString
