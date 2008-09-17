@@ -35,6 +35,8 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QLabel>
+#include <QDialog>
+#include <QDialogButtonBox>
 
 #include "document/ConfigGroups.h"
 #include "misc/Strings.h"
@@ -702,30 +704,42 @@ int main(int argc, char *argv[])
     }
 
     if (newVersion) {
-	KStartupLogo::hideIfStillThere();
-	CurrentProgressDialog::freeze();
+        KStartupLogo::hideIfStillThere();
+        CurrentProgressDialog::freeze();
 
-	KDialogBase *dialog = new KDialogBase(rosegardengui, "welcome",
-					      true, i18n("Welcome!"),
-					      KDialogBase::Ok,
-					      KDialogBase::Ok, false);
-	QVBox *mw = dialog->makeVBoxMainWidget();
-	QWidget *hb = new QWidget(mw);
-	QHBoxLayout *hbLayout = new QHBoxLayout;
-	QLabel *image = new QLabel( hb );
-	hbLayout->addWidget(image);
-	image->setAlignment(Qt::AlignTop);
-	QString iconFile = locate("appdata", "pixmaps/misc/welcome-icon.png");
-	if (!iconFile.isEmpty()) {
-	    image->setPixmap(QPixmap(iconFile));
-	}
-	QLabel *label = new QLabel( hb );
-	hbLayout->addWidget(label);
-	hb->setLayout(hbLayout);
-	label->setText(i18n("<h2>Welcome to Rosegarden!</h2><p>Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.</p><ul><li>If you have not already done so, you may wish to install some DSSI synth plugins, or a separate synth program such as QSynth.  Rosegarden does not synthesize sounds from MIDI on its own, so without these you will hear nothing.</li><br><br><li>Rosegarden uses the JACK audio server for recording and playback of audio, and for playback from DSSI synth plugins.  These features will only be available if the JACK server is running.</li><br><br><li>Rosegarden has comprehensive documentation: see the Help menu for the handbook, tutorials, and other information!</li></ul><p>Rosegarden was brought to you by a team of volunteers across the world.  To learn more, go to <a href=\"http://www.rosegardenmusic.com/\">http://www.rosegardenmusic.com/</a>.</p>"));
-	dialog->showButtonOK(true);
-	rosegardengui->awaitDialogClearance();
-	dialog->exec();
+        QDialog *dialog = new QDialog;
+        dialog->setModal(true);
+        dialog->setWindowTitle(i18n("Welcome!"));
+        QGridLayout *metagrid = new QGridLayout;
+        dialog->setLayout(metagrid);
+
+        QWidget *hb = new QWidget;
+        QHBoxLayout *hbLayout = new QHBoxLayout;
+        metagrid->addWidget(hb, 0, 0);
+
+        QLabel *image = new QLabel;
+        hbLayout->addWidget(image);
+        image->setAlignment(Qt::AlignTop);
+        QString iconFile = locate("appdata", "pixmaps/misc/welcome-icon.png");
+        if (!iconFile.isEmpty()) {
+            image->setPixmap(QPixmap(iconFile));
+        }
+
+        QLabel *label = new QLabel;
+        hbLayout->addWidget(label);
+        label->setText(i18n("<h2>Welcome to Rosegarden!</h2><p>Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.</p><ul><li>If you have not already done so, you may wish to install some DSSI synth plugins, or a separate synth program such as QSynth.  Rosegarden does not synthesize sounds from MIDI on its own, so without these you will hear nothing.</li><br><br><li>Rosegarden uses the JACK audio server for recording and playback of audio, and for playback from DSSI synth plugins.  These features will only be available if the JACK server is running.</li><br><br><li>Rosegarden has comprehensive documentation: see the Help menu for the handbook, tutorials, and other information!</li></ul><p>Rosegarden was brought to you by a team of volunteers across the world.  To learn more, go to <a href=\"http://www.rosegardenmusic.com/\">http://www.rosegardenmusic.com/</a>.</p>"));
+        label->setWordWrap(true);
+
+        hb->setLayout(hbLayout);
+
+        QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok);
+        metagrid->addWidget(buttonBox, 1, 0);
+        metagrid->setRowStretch(0, 10);
+        connect(buttonBox, SIGNAL(accepted()), dialog, SLOT(accept()));
+        connect(buttonBox, SIGNAL(rejected()), dialog, SLOT(reject()));
+
+        rosegardengui->awaitDialogClearance();
+        dialog->exec();
 
 	CurrentProgressDialog::thaw();
     }
