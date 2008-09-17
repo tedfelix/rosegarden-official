@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -25,7 +24,7 @@
 #include <QDialogButtonBox>
 #include <QString>
 #include <vector>
-#include <kurl.h>
+#include <QUrl>
 
 
 class QWidget;
@@ -51,7 +50,7 @@ class ImportDeviceDialog : public QDialog
     Q_OBJECT
 
 public:
-    ImportDeviceDialog(QDialogButtonBox::QWidget *parent, KURL url);
+    ImportDeviceDialog(QDialogButtonBox::QWidget *parent, QUrl url);
     virtual ~ImportDeviceDialog();
 
     bool doImport();
@@ -79,7 +78,7 @@ protected:
     bool importFromRG(QString fileName);
     bool importFromSF2(QString fileName);
 
-    KURL               m_url;
+    QUrl               m_url;
 
     QComboBox          *m_deviceCombo;
     QLabel             *m_deviceLabel;

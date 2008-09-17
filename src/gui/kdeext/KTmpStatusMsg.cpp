@@ -35,7 +35,8 @@
 RgTempQtIV::RgTempQtIV()
 {
 	// pass
-{
+}
+
 QString RgTempQtIV::checkRecoverFile(QString &filePath, bool canRecover)
 {
 	//### TODO: implement 
@@ -43,11 +44,6 @@ QString RgTempQtIV::checkRecoverFile(QString &filePath, bool canRecover)
 
 // simulate qApp->tempSaveName(filename);
 QString RgTempQtIV::tempSaveName(QString &filePath)
-{
-	//### TODO: implement 
-}
-
-void RgTempQtIV::invokeBrowser( QString url )
 {
 	//### TODO: implement 
 }
@@ -65,24 +61,6 @@ RgTempQtIV* rgTempQtIV = &__mm;
 
 /****************************************************************/
 
-
-// class RgRecentFileClass 
-RgRecentFileClass::KTmpStatusMsg()
-{
-	// pass
-{
-void RgRecentFileClass::addURL( QString &url )
-{
-	//### TODO: implement 
-{
-void RgRecentFileClass::loadEntries()
-{
-	//### TODO: implement 
-{
-void RgRecentFileClass::saveEntries()
-{
-	//### TODO: implement 
-{
 
 /**********************************************************************/
 /**********************************************************************/

@@ -38,25 +38,8 @@ public:
 
 	void createGUI( const char* xml_rcfile, bool var1 );
 	
-	void invokeBrowser( QString url );
 };
 extern RgTempQtIV* rgTempQtIV;
-
-
-class RgRecentFileClass
-{
-public:
-
-	RgRecentFileClass();
-	
-	void addURL( QString &url );
-	void saveEntries();
-	void loadEntries();
-//protected:
-
-};
-
-/*******************************************************************/
 
 
 

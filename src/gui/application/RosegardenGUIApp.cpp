@@ -8349,18 +8349,58 @@ RosegardenGUIApp::slotPlayListClosed()
     m_playList = 0;
 }
 
+static void
+invokeBrowser(QString url)
+{
+    // This is mostly lifted from Qt Assistant source code
+
+    QProcess *process = new QProcess;
+    QObject::connect(process, SIGNAL(finished(int)), process, SLOT(deleteLater()));
+
+    QStringList args;
+
+#ifdef Q_OS_MAC
+    args.append(url);
+    process->start("open", args);
+#else
+#ifdef Q_OS_WIN32
+
+    QString pf(getenv("ProgramFiles"));
+    QString command = pf + QString("\\Internet Explorer\\IEXPLORE.EXE");
+
+    args.append(url);
+    process->start(command, args);
+
+#else
+#ifdef Q_WS_X11
+    if (!qgetenv("KDE_FULL_SESSION").isEmpty()) {
+        args.append("exec");
+        args.append(url);
+        process->start("kfmclient", args);
+    } else if (!qgetenv("BROWSER").isEmpty()) {
+        args.append(url);
+        process->start(qgetenv("BROWSER"), args);
+    } else {
+        args.append(url);
+        process->start("firefox", args);
+    }
+#endif
+#endif
+#endif
+}
+
 void
 RosegardenGUIApp::slotTutorial()
 {
     QString tutorialURL = i18n("http://rosegarden.sourceforge.net/tutorial/en/chapter-0.html");
-	rgTempQtIV->invokeBrowser(tutorialURL);
+    invokeBrowser(tutorialURL);
 }
 
 void
 RosegardenGUIApp::slotBugGuidelines()
 {
     QString glURL = i18n("http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html");
-	rgTempQtIV->invokeBrowser(glURL);
+    invokeBrowser(glURL);
 }
 
 void

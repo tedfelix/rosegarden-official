@@ -34,7 +34,6 @@
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QMessageBox>
-#include <kurl.h>
 #include <QGroupBox>
 #include <QCheckBox>
 #include <QGroupBox>
@@ -49,7 +48,7 @@
 namespace Rosegarden
 {
 
-ImportDeviceDialog::ImportDeviceDialog(QDialogButtonBox::QWidget *parent, KURL url) :
+ImportDeviceDialog::ImportDeviceDialog(QDialogButtonBox::QWidget *parent, QUrl url) :
         KDialogBase(parent, "importdevicedialog", true,
                     i18n("Import from Device..."),
                     Ok | Cancel, Ok),
