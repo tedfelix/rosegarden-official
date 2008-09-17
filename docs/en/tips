@@ -314,3 +314,9 @@ dragging its right edge with the Ctrl key pressed?</p>
 <p>...that you can set the tempo to match the duration of an audio segment if you know it's an exact number of bars or beats long?<br><br>Just select the audio segment and use <b>Composition -> Tempo and Time Signature -> Set Tempo to Audio Segment Duration</b>.</p>
 </html>
 </tip>
+</tip>
+<tip category="Rosegarden|General"> 	 
+<html> 	 
+<p>...that you can set your own keyboard shortcuts for your favourite actions.<br><br>Just go to <b>Settings -> Configure shortcuts</b> and set up your shortcuts.<br>They will show up in the menus just as if they were native Rosegarden shortcuts.</p>
+</html>
+</tip>

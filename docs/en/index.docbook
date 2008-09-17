@@ -251,6 +251,8 @@
         <surname>Lopez-Cabanillas</surname>
         <firstname>Heikki</firstname>
         <surname>Junes</surname>
+	<firstname>Shelagh</firstname>
+	<surname>Manton</surname>
       </author>
       <!-- TRANS:ROLES_OF_TRANSLATORS -->
     </authorgroup>
@@ -258,7 +260,7 @@
     <copyright>
       <year>2002-2008</year>
       <holder>Chris Cannam, Richard Bown, Guillaume Laurent, D. Michael
-      McIntyre, Pedro Lopez-Cabanillas, Heikki Junes</holder>
+      McIntyre, Pedro Lopez-Cabanillas, Heikki Junes, Shelagh Manton</holder>
     </copyright>
 
     <date>2008-05-05</date>
@@ -393,7 +395,7 @@
 	      <imagedata fileref="rg-shortcut-editor.png" format="PNG"/>
 	    </imageobject>
 	    <textobject>
-	      <phrase>Shorcut editor showing a sample shortcut for the lyric editor.</phrase>
+	      <phrase>Shortcut editor showing a sample shortcut for the lyric editor.</phrase>
 	    </textobject>
 	  </mediaobject>
 	</screenshot>
@@ -402,7 +404,17 @@
 let you know if that shortcut is already taken. If you want a key combination just press
 those keys. Click on <guibutton>OK</guibutton> to accept.  The nice thing about this is
 that the shortcut you've made will show up on the menu just like the built-in
-ones.</para></sect2>
+ones.</para>
+<para>Each of the editors has its own set of keyboard shortcuts. For instance in the
+notation editor, <keycap>E</keycap> is used for <link
+linkend="matrix-insertion-keyboard">entering notes</link>, whereas <keycap>E</keycap> is
+normally used to open the event list editor. You can use this to your advantage however,
+as you can make a keyboard shortcut from the notation editor's
+<guimenuitem>Settings</guimenuitem> menu, say
+<keycombo><keycap>Alt</keycap><keycap>E</keycap></keycombo> to open the event list editor
+from within the notation editor.</para> <!-- This is going to complicate writing up a
+table for keyboard shortcuts-SOM -->
+</sect2>
 
 
     <sect2 id="intro-optional">
@@ -1451,7 +1463,7 @@ ones.</para></sect2>
 		<imagedata fileref="rg-tempotime-editor.png" format="PNG" />
 	      </imageobject>
 	      <textobject>
-		<phrase>Rosegarden's tempo and time signature editor</phrase>
+		<phrase>&rosegarden;'s tempo and time signature editor</phrase>
 	      </textobject>
 	    </mediaobject>
 	  </screenshot>
@@ -1480,13 +1492,13 @@ ones.</para></sect2>
 	  <screenshot>
 	    <mediaobject>
 	      <imageobject>
-		<imagedata fileref="rg-tempodialog.png" format="PNG" />
-	      </imageobject>
-	      <textobject>
-		<phrase>Rosegarden's tempo dialog</phrase>
-	      </textobject>
-	    </mediaobject>
-	  </screenshot>
+		<imagedata fileref="rg-tempodialog.png" format="PNG"/>
+	</imageobject>
+	  <textobject>
+	    <phrase>&rosegarden;'s tempo dialog</phrase>
+	  </textobject>
+	</mediaobject>
+	</screenshot>
 	</para>
 	<para>To set a new tempo, either dial it into the numeric tempo spinbox at the
 	top, or else click repeatedly on the <guibutton>Tap</guibutton> button at approximately the speed you
@@ -3951,13 +3963,12 @@ ones.</para></sect2>
 	    <term>Double-clicking on segments</term>
 	    <listitem>
 	      
-	      <para>The most obvious way is just to double-click on
-		a segment in the main canvas.  This opens the segment
-		in whatever you have configured <!-- !!!Link --> as
-		the default editor (notation, matrix, or event list),
-		and by default this is the notation editor.  So
-		double-clicking a single segment will open it as a
-		single staff in a notation editor window.</para>
+	      <para>The most obvious way is just to double-click on a segment in the main
+		canvas.  This opens the segment in whatever you have configured <!--
+		!!!Link SOM in my yet to be finished section on the configure rosegarden
+		--> as the default editor (notation, matrix, or event list), and by
+		default this is the notation editor.  So double-clicking a single segment
+		will open it as a single staff in a notation editor window.</para>
 	      
 	      <para>You can also open a multi-staff editor this way:
 		holding down the <keycap>Shift</keycap> key, select (with a single
@@ -4830,10 +4841,10 @@ ones.</para></sect2>
 	      above the staff in a small bold roman type.
         </para></listitem></varlistentry>
 
-	<varlistentry id="chord-text"><term>Chord</term><listitem><para> Used
-	      to indicate chord changes for guitarists, etc.  Shown
-	      above the staff in a small bold roman type.
-	    </para></listitem></varlistentry>
+	<varlistentry id="chord-text"><term>Chord</term><listitem><para> Used to indicate
+	chord changes for guitarists, etc.  Shown above the staff in a small bold roman
+	type. You can also create chord shapes, see <link linkend="lead-sheets">Lead Sheets.</link>
+	</para></listitem></varlistentry>
 
 	<varlistentry><term>Lyric</term><listitem><para> Although
 	      lyrics are usually created in the <link
@@ -4931,8 +4942,46 @@ ones.</para></sect2>
 	the last verse without syllables, or make it empty, it is removed from the list of
 	verses next time you open the lyrics editor.
 	  </para>
+           </sect2>
+ <sect2 id="lead-sheets"> 
+ <!-- seems sensible to put it here. Any thoughts? SOM -->
+ <title>Lead Sheets</title>
+ <para> 
+   Lead sheets are simple music sheets with a single staff for melody, often with lyrics,
+   and with chord names over the staff. You can have the Ignatzek jazz style
+   of chords that LilyPond uses or the simple text chord names that are native to &rosegarden;.
+ </para>
+ <para>
+   Choose <menuchoice><shortcut><keycap>F8</keycap></shortcut><guimenu
+   lang="en">Tools</guimenu><guimenuitem>Text</guimenuitem></menuchoice>. The cursor
+   changes to a cross icon and any note that you select causes the <guibutton>insert text dialog</guibutton> to
+   automatically appear. Make sure that the <guibutton>Chord</guibutton> is selected and
+   enter the chord name that you want in the text box.
+ </para>
+ <para> If you wish to use the LilyPond style chord names you need to use a special
+ syntax. First the name of the chord (for example <userinput>c</userinput>) followed by it's
+ pitch-change (for example <userinput>cis</userinput>, meaning
+ <userinput>is</userinput> = sharp).
 
-      </sect2>
+<note><para>LilyPond uses the Dutch notation for sharps and flats by default, and thus, so does the
+&rosegarden; exporter. <userinput>is</userinput> sharpens a note and
+<userinput>es</userinput> flattens a note. Write them twice to give you a double sharp
+or double flat. </para></note>  This might be enough for your needs but if you want modifiers such as
+<userinput>m</userinput> (minor), <userinput>dim</userinput>,
+<userinput>sus</userinput>, or <userinput>aug</userinput> you need
+to insert a <userinput>:</userinput> followed by your modifier (for example;
+<userinput>g:m7</userinput> or gis:sus4). For a fuller description of the syntax go to <ulink
+url="http://www.rosegardenmusic.com/wiki/chord_names_for_lilypond_export">this
+explanation.</ulink> <!-- I'll change the url later when the page is done. SOM-->
+ </para>
+<para>There is one final step to do. Before you print or preview the LilyPond export
+<menuchoice><guimenu lang="en">File</guimenu><guisubmenu>Print with
+LilyPond</guisubmenu></menuchoice> or <guimenuitem>Preview with LilyPond</guimenuitem>, a
+<link linkend="lilypond-options">dialog</link> will appear that allows you to change some
+options. Go to the <guimenuitem>Advanced options</guimenuitem> and tick
+<guilabel>Interprete chord texts as lead sheets chord names</guilabel>. Then you can print
+or preview the glory that is LilyPond chord names.</para>
+ </sect2>
       <sect2 id="nv-lilypond-directives">
 	  <!-- text has a link here because the reading chain is:
 	  intro -> lilypond directives, which puts you at a point well away
@@ -5926,7 +5975,7 @@ SOM - why has this section been commented out? It looks like it's obsolete? Can 
   </chapter>
 
   <chapter id="event-view">
-    <title>The Event List editor</title>
+    <title>The Event List Editor</title>
     <sect1 id="ev-introduction">
       <title>Introduction</title>
 
@@ -5947,12 +5996,135 @@ SOM - why has this section been commented out? It looks like it's obsolete? Can 
       </mediaobject>
       </screenshot>
       </para>
-    </sect1>
-  </chapter>
-
-  <!-- Isn't there something more we can write about this? SOM -->
+   
 
 
+      <sect2 id="ev-functions">
+        <title>Things to do with the Event List Editor</title>
+        <para>
+  	There are a number of things that you can do in this editor, where you can fine
+  	tune your midi tracks. There are three views of the event editor which can be
+  	accessed using icons on the menu bar or by accessing
+  	the <menuchoice><guimenu lang="en">View</guimenu></menuchoice> menu. They show the
+  	times of each event. 
+<variablelist>
+<varlistentry>
+  	<term>Metronome icon</term>
+<listitem><para>
+  	 <inlinemediaobject>
+  	      <imageobject>
+  		<imagedata fileref="time-musical.png" format="PNG" />
+  		</imageobject>
+  	      </inlinemediaobject>
+  	     lists the time in beats and subbeats</para></listitem>
+</varlistentry>
+<varlistentry><term>Clock icon</term>
+<listitem>
+<para>
+  	 <inlinemediaobject>
+  	      <imageobject>
+  		<imagedata fileref="time-real.png" format="PNG" />
+  		</imageobject>
+  	      </inlinemediaobject>
+  	     lists the time in seconds
+	     </para></listitem>
+	     </varlistentry>
+<varlistentry><term>List icon</term>
+<listitem><para>
+ <inlinemediaobject>
+  	      <imageobject>
+  		<imagedata fileref="time-raw.png" format="PNG" />
+  		</imageobject>
+  	      </inlinemediaobject>
+  	    lists the time in &rosegarden;'s
+  	  internal time format.
+	</para></listitem>
+</varlistentry>
+</variablelist>
+  
+        </para>
+     
+
+<!-- The icons don't show up SOM - WHY!!! Even where I'm not trying to do something dodgy.  -->
+        <para>The other icons represent easy access to the various functions the &rosegarden;
+  	event list editor provides.</para>
+  
+  <variablelist> 
+  <varlistentry> 
+  <term> Insert event </term> 
+  <listitem>
+  	<para>
+	<inlinemediaobject><imageobject><imagedata fileref="event-insert.png"
+	format="PNG" /></imageobject></inlinemediaobject> brings up a dialog with a
+	drop-down selection of <guibutton>event types</guibutton>. Each event type has its
+	own set of parameters to fill out.
+	</para> 
+	</listitem> 
+  </varlistentry>
+ 
+  
+    <varlistentry>
+      <term><inlinemediaobject>
+        <imageobject>
+  	<imagedata fileref="event-delete.png" format="PNG" />
+        </imageobject>
+      </inlinemediaobject></term>
+      <listitem><para>delete the selected event.</para></listitem>
+    </varlistentry>
+  
+    <varlistentry>
+      <term><inlinemediaobject>
+        <imageobject>
+  	<imagedata fileref="event-edit.png" format="PNG" />
+        </imageobject>
+      </inlinemediaobject></term>
+      <listitem><para>delete selected item.</para></listitem>
+    </varlistentry>
+  
+    <varlistentry><term><inlinemediaobject>
+      <imageobject>
+        <imagedata fileref="event-edit.png" format="PNG" />
+      </imageobject>
+    </inlinemediaobject></term>
+    <listitem><para>edit selected event.</para></listitem>
+    </varlistentry>
+  
+    <varlistentry><term><inlinemediaobject>
+      <imageobject>
+        <imagedata fileref="event-edit-advanced.png" format="PNG" />
+      </imageobject>
+    </inlinemediaobject></term>
+    <listitem><para>advance edit selected event, for those who
+    live on the edge or at least know what they are
+    doing.</para></listitem></varlistentry>
+    
+    <varlistentry><term><inlinemediaobject>
+      <imageobject>
+        <imagedata fileref="event-filter.png" format="PNG" />
+      </imageobject>
+    </inlinemediaobject></term>
+    <listitem><para>is the the <link
+    linkend="matrix-selectionfilter">note event
+    filter</link> - it's the same event filter that's available for the other editors.</para>
+    </listitem>
+    </varlistentry>
+  </variablelist>
+
+  
+  <para>The event filters down the side can be ticked to show/hide types of events. It
+  makes it easier to find a particular event without the noise of other event
+  types. Each of the tick boxes can be quickly toggled using <keycap>Alt</keycap> and
+  the accelerator key (underlined letter in the label). </para>
+        </sect2>
+         </sect1>
+
+  
+</chapter>
+  
+ <!-- layout, icons, property filters, url for tutorial on using event list editor SOM-->
+
+<!-- Also I want to introduce a new configuration section, one that is for non-developers,
+just a run-down on the Settings configure rosegarden dialogs. What should it be called? -->
   <!--
   **********************************
   
