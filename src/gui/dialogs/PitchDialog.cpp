@@ -25,12 +25,13 @@
 #include <QString>
 #include <QWidget>
 #include <QVBoxLayout>
+#include <QPushButton>
 
 
 namespace Rosegarden
 {
 
-PitchDialog::PitchDialog(QDialogButtonBox::QWidget *parent, QString title, int defaultPitch) :
+PitchDialog::PitchDialog(QWidget *parent, QString title, int defaultPitch) :
         QDialog(parent)
 {
     setModal(true);
@@ -46,12 +47,13 @@ PitchDialog::PitchDialog(QDialogButtonBox::QWidget *parent, QString title, int d
     vboxLayout->addWidget(m_pitchChooser);
     vbox->setLayout(vboxLayout);
 
-    setButtonText(User1, i18n("Reset"));
-    connect(this, SIGNAL(user1Clicked()),
-            m_pitchChooser, SLOT(slotResetToDefault()));
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::User1 | QDialogButtonBox::Ok);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok);
+    QPushButton *user1
+        = buttonBox->addButton(i18n("Reset"), QDialogButtonBox::ActionRole);
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
+    connect(user1, SIGNAL(clicked(bool)),
+            m_pitchChooser, SLOT(slotResetToDefault()));
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
