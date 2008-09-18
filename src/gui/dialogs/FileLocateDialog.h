@@ -20,7 +20,6 @@
 #define _RG_FILELOCATEDIALOG_H_
 
 #include <QDialog>
-#include <QDialogButtonBox>
 #include <QString>
 
 
@@ -37,7 +36,7 @@ class FileLocateDialog : public QDialog
     Q_OBJECT
 
 public:
-    FileLocateDialog(QDialogButtonBox::QWidget *parent,
+    FileLocateDialog(QWidget *parent,
                      const QString &file,
                      const QString &path);
 

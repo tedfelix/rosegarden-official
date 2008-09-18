@@ -28,6 +28,8 @@
 #include <QString>
 #include <QWidget>
 #include <QHBoxLayout>
+#include <QGridLayout>
+#include <QPushButton>
 
 
 namespace Rosegarden
@@ -36,24 +38,45 @@ namespace Rosegarden
 FileLocateDialog::FileLocateDialog(QDialogButtonBox::QWidget *parent,
                                    const QString &file,
                                    const QString & /*path*/):
-        KDialogBase(parent, 0, true,
-                    i18n("Locate audio file"),
-                    User1 | User2 | User3,
-                    Ok,
-                    false,
-                    i18n("&Skip"),
-                    i18n("Skip &All"),
-                    i18n("&Locate")),
+        QDialog(parent),
         m_file(file)
 {
-    QHBox *w = makeHBoxMainWidget();
+    setModal(true);
+    setWindowTitle(i18n("Locate audio file"));
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
+    QWidget *w = new QWidget(this);
+    QHBoxLayout *wLayout = new QHBoxLayout;
+    metagrid->addWidget(w, 0, 0);
+
     QString label =
         i18n("Can't find file \"%1\".\n"
              "Would you like to try and locate this file or skip it?", m_file);
 
     QLabel *labelW = new QLabel(label, w);
+    wLayout->addWidget(labelW);
     labelW->setAlignment(Qt::AlignCenter);
     labelW->setMinimumHeight(60);
+    w->setLayout(wLayout);
+
+    QDialogButtonBox *buttonBox = new QDialogButtonBox;
+
+    QPushButton *user1 = new QPushButton(i18n("&Skip"));
+    buttonBox->addButton(user1, QDialogButtonBox::ActionRole);
+    connect(user1, SIGNAL(clicked(bool)), this, SLOT(slotUser1()));
+
+    QPushButton *user2 = new QPushButton(i18n("Skip &All"));
+    buttonBox->addButton(user2, QDialogButtonBox::ActionRole);
+    connect(user2, SIGNAL(clicked(bool)), this, SLOT(slotUser2()));
+
+    QPushButton *user3 = new QPushButton(i18n("&Locate"));
+    buttonBox->addButton(user3, QDialogButtonBox::ActionRole);
+    connect(user3, SIGNAL(clicked(bool)), this, SLOT(slotUser3()));
+
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 void
@@ -74,7 +97,7 @@ FileLocateDialog::slotUser3()
             reject();
         } else {
             QFileInfo fileInfo(m_file);
-            m_path = fileInfo.dirPath();
+            m_path = fileInfo.path();
             accept();
         }
 
