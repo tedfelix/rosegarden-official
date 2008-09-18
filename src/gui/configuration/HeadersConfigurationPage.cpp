@@ -27,7 +27,7 @@
 #include <QApplication>
 #include <QSettings>
 #include <QListWidget>
-#include <klocale.h>
+#include <QTableWidget>
 #include <QGroupBox>
 #include <QLabel>
 #include <QLayout>
@@ -39,6 +39,8 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QFont>
+
+#include <klocale.h>
 
 namespace Rosegarden
 {
@@ -184,9 +186,10 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
 
     QGridLayout *layoutOtherHeaders = new QGridLayout(frameOtherHeaders, 2, 2, 10, 5);
 
-    m_metadata = new QListWidget(frameOtherHeaders);
-    m_metadata->addColumn(i18n("Name"));
-    m_metadata->addColumn(i18n("Value"));
+	m_metadata = new QTableWidget( 2, 2, frameOtherHeaders ); // rows, columns
+	
+	m_metadata->setItem( 0, 0, QTableWidgetItem(i18n("Name"))  ); // row, column, item
+	m_metadata->setItem( 0, 2, QTableWidgetItem(i18n("Value"))  ); // row, column, item
     m_metadata->setFullWidth(true);
     m_metadata->setItemsRenameable(true);
     m_metadata->setRenameable(0);

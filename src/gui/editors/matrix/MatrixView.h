@@ -493,7 +493,7 @@ protected slots:
     /**
      * The parameters box was docked back
      */
-    void slotParametersDockedBack(QDockWidget*, QDockWidget::DockPosition);
+	void slotParametersDockedBack(QDockWidget*, Qt::DockWidgetAreas );
 
     /**
      * The instrument for this track may have changed

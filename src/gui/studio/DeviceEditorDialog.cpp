@@ -64,10 +64,10 @@ DeviceEditorDialog::DeviceEditorDialog(QDialogButtonBox::QWidget *parent,
     m_table->setRowMovingEnabled(false);
     m_table->setColumnMovingEnabled(false);
     m_table->setShowGrid(false);
-    m_table->horizontalHeader()->setLabel(0, i18n("Device"));
-    m_table->horizontalHeader()->setLabel(1, i18n("Name"));
-    m_table->horizontalHeader()->setLabel(2, i18n("Type"));
-    m_table->horizontalHeader()->setLabel(3, i18n("Connection"));
+    m_table->setHorizontalHeaderItem( 0, i18n("Device"));
+    m_table->setHorizontalHeaderItem( 1, i18n("Name"));
+    m_table->setHorizontalHeaderItem( 2, i18n("Type"));
+    m_table->setHorizontalHeaderItem( 3, i18n("Connection"));
     m_table->horizontalHeader()->show();
     m_table->verticalHeader()->hide();
     m_table->setLeftMargin(0);

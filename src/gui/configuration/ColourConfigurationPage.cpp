@@ -37,7 +37,9 @@
 #include <QFrame>
 #include <QPushButton>
 #include <QString>
-#include <QTabWidget>
+#include <QTabBar>
+#include <QTableWidget>
+#include <QTableWidgetItem>
 #include <QWidget>
 #include <QLayout>
 
@@ -147,12 +149,13 @@ ColourConfigurationPage::slotAddNew()
 void
 ColourConfigurationPage::slotDelete()
 {
-    QTableWidgetSelection temp = m_colourtable->selection(0);
+    //old: QTableWidgetSelection temp = m_colourtable->selection(0);
+	QList<QTableWidgetItem *> temp =  m_colourtable->selectedItems();
+	
+//    if ((!temp.isActive()) || (temp.topRow() == 0))	//&&& check re-implementation
+//        return ;
 
-    if ((!temp.isActive()) || (temp.topRow() == 0))
-        return ;
-
-    unsigned int toDel = temp.topRow();
+    unsigned int toDel = (*temp[0]).row();
 
     m_map.deleteItemByIndex(m_listmap[toDel]);
     m_colourtable->populate_table(m_map, m_listmap);

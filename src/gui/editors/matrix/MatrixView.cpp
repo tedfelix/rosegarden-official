@@ -179,9 +179,11 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
             this, SLOT(slotParametersClosed()));
     // Apparently, hasUndocked() is emitted when the dock widget's
     // 'close' button on the dock handle is clicked.
-    connect(m_mainDockWidget, SIGNAL(docking(QDockWidget*, QDockWidget::DockPosition)),
-            this, SLOT(slotParametersDockedBack(QDockWidget*, QDockWidget::DockPosition)));
-
+	connect(m_mainDockWidget, SIGNAL(docking(QDockWidget*, Qt::DockWidgetAreas )),
+			this, SLOT(slotParametersDockedBack(QDockWidget*, Qt::DockWidgetAreas )));
+	//### qt4 note: docking signal is now:| void QDockWidget::topLevelChanged ( bool topLevel ) 
+	
+	
     Composition &comp = doc->getComposition();
 
     m_toolBox = new MatrixToolBox(this);

@@ -23,7 +23,7 @@
 
 class QWidget;
 class QLineEdit;
-class QListWidget;
+class QTableWidget;
 
 namespace Rosegarden
 {
@@ -63,7 +63,7 @@ protected:
     QLineEdit *m_editCopyright;
     QLineEdit *m_editTagline;
 
-    QListWidget *m_metadata;
+    QTableWidget *m_metadata;
 };
 
 

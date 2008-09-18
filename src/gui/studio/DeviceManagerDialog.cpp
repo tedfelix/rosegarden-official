@@ -96,8 +96,8 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
     m_playTable->setRowMovingEnabled(false);
     m_playTable->setColumnMovingEnabled(false);
     m_playTable->setShowGrid(false);
-    m_playTable->horizontalHeader()->setLabel(PLAY_NAME_COL, i18n("Device"));
-    m_playTable->horizontalHeader()->setLabel(PLAY_CONNECTION_COL, i18n("Connection"));
+    m_playTable->setHorizontalHeaderItem( PLAY_NAME_COL, i18n("Device"));
+    m_playTable->setHorizontalHeaderItem( PLAY_CONNECTION_COL, i18n("Connection"));
     m_playTable->horizontalHeader()->show();
     m_playTable->verticalHeader()->hide();
     m_playTable->setLeftMargin(0);
@@ -154,9 +154,9 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
     m_recordTable->setRowMovingEnabled(false);
     m_recordTable->setColumnMovingEnabled(false);
     m_recordTable->setShowGrid(false);
-    m_recordTable->horizontalHeader()->setLabel(RECORD_NAME_COL, i18n("Device"));
-    m_recordTable->horizontalHeader()->setLabel(RECORD_CURRENT_COL, i18n("Current"));
-    m_recordTable->horizontalHeader()->setLabel(RECORD_CONNECTION_COL, i18n("Connection"));
+    m_recordTable->setHorizontalHeaderItem( RECORD_NAME_COL, i18n("Device"));
+    m_recordTable->setHorizontalHeaderItem( RECORD_CURRENT_COL, i18n("Current"));
+    m_recordTable->setHorizontalHeaderItem( RECORD_CONNECTION_COL, i18n("Connection"));
     m_recordTable->horizontalHeader()->show();
     m_recordTable->verticalHeader()->hide();
     m_recordTable->setLeftMargin(0);

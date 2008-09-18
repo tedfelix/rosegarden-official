@@ -67,8 +67,8 @@ static QString durationToString(Rosegarden::Composition &comp,
 class SegmentDataItem : public QTableWidgetItem
 {
 public:
-    SegmentDataItem(QTableWidget *t, QString s) :
-	QTableWidgetItem(t, QTableWidgetItem::Never, s) { }
+    SegmentDataItem(QTableWidget *t, QString s) : QTableWidgetItem(s) { }	//### removed t from p-class
+	
     virtual int alignment() const { return Qt::AlignCenter; }
 
     virtual QString key() const {
@@ -156,21 +156,26 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
     frame = new QFrame(m_tabWidget);
     layout = new QGridLayout(frame, 1, 1, 10, 5);
 
-    QTableWidget *table = new QTableWidget(1, 11, frame, "Segment Table");
-    table->setSelectionMode(QTableWidget::NoSelection);
-    table->setSorting(true);
-    table->horizontalHeader()->setLabel(0, i18n("Type"));
-    table->horizontalHeader()->setLabel(1, i18n("Track"));
-    table->horizontalHeader()->setLabel(2, i18n("Label"));
-    table->horizontalHeader()->setLabel(3, i18n("Time"));
-    table->horizontalHeader()->setLabel(4, i18n("Duration"));
-    table->horizontalHeader()->setLabel(5, i18n("Events"));
-    table->horizontalHeader()->setLabel(6, i18n("Polyphony"));
-    table->horizontalHeader()->setLabel(7, i18n("Repeat"));
-    table->horizontalHeader()->setLabel(8, i18n("Quantize"));
-    table->horizontalHeader()->setLabel(9, i18n("Transpose"));
-    table->horizontalHeader()->setLabel(10, i18n("Delay"));
-    table->setNumRows(audioSegments + internalSegments);
+	QTableWidget *table = new QTableWidget(1, 11, frame); // , "Segment Table"
+	//table->setSelectionMode(QTableWidget::NoSelection);
+	table->setSelectionBehavior( QAbstractItemView::SelectRows );
+	table->setSelectionMode( QAbstractItemView::SingleSelection );
+	table->setSortingEnabled(true);
+	
+	table->setHorizontalHeaderItem( 0, new QTableWidgetItem( i18n("Type")));	// p1=column
+	table->setHorizontalHeaderItem( 1, new QTableWidgetItem( i18n("Track")));
+	table->setHorizontalHeaderItem( 2, new QTableWidgetItem( i18n("Label")));
+	table->setHorizontalHeaderItem( 3, new QTableWidgetItem( i18n("Time")));
+	table->setHorizontalHeaderItem( 4, new QTableWidgetItem( i18n("Duration")));
+	table->setHorizontalHeaderItem( 5, new QTableWidgetItem( i18n("Events")));
+	table->setHorizontalHeaderItem( 6, new QTableWidgetItem( i18n("Polyphony")));
+	table->setHorizontalHeaderItem( 7, new QTableWidgetItem( i18n("Repeat")));
+	table->setHorizontalHeaderItem( 8, new QTableWidgetItem( i18n("Quantize")));
+	table->setHorizontalHeaderItem( 9, new QTableWidgetItem( i18n("Transpose")));
+	table->setHorizontalHeaderItem( 10, new QTableWidgetItem( i18n("Delay")));
+	
+	//table->setNumRows(audioSegments + internalSegments);
+	table->setRowCount(audioSegments + internalSegments);
 
     table->setColumnWidth(0, 50);
     table->setColumnWidth(1, 50);
@@ -206,9 +211,10 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
         colourPixmap.fill(GUIPalette::convertColour(colour));
 
         table->setItem(i, 2,
-                       new QTableWidgetItem(table, QTableWidgetItem::Never,
-                                      strtoqstr(s->getLabel()),
-                                      colourPixmap));
+					   new QTableWidgetItem( colourPixmap, strtoqstr(s->getLabel())) );
+//		new QTableWidgetItem(table, QTableWidgetItem::Never,
+	//						 strtoqstr(s->getLabel()),
+		//							   colourPixmap));
 
         table->setItem(i, 3, new SegmentDataItem
                        (table,

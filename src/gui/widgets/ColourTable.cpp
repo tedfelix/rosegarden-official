@@ -28,7 +28,7 @@
 #include <QColor>
 #include <QPoint>
 #include <QString>
-#include <Q3Table>
+#include <QTableWidget>
 #include <QWidget>
 #include <QLineEdit>
 
@@ -38,10 +38,10 @@ namespace Rosegarden
 
 ColourTable::ColourTable
 (QWidget *parent, ColourMap &input, ColourList &list)
-        : Q3Table(1, 2, parent, "RColourTable")
+	: QTableWidget(1, 2, parent, "RColourTable")
 {
     setSorting(FALSE);
-    setSelectionMode(Q3Table::SingleRow);
+	setSelectionMode(QTableWidget::SingleRow);
     horizontalHeader()->setLabel(0, i18n("Name"));
     horizontalHeader()->setLabel(1, i18n("Color"));
     populate_table(input, list);
@@ -109,9 +109,9 @@ ColourTable::populate_table(ColourMap &input, ColourList &list)
         else
             name = strtoqstr(it->second.second);
 
-        Q3TableItem *text = new Q3TableItem(
+        QTableWidgetItem *text = new QTableWidgetItem(
                                dynamic_cast<Q3Table*>(this),
-                               Q3TableItem::Never, name);
+                               QTableWidgetItem::Never, name);
 
         setItem(i, 0, text);
 

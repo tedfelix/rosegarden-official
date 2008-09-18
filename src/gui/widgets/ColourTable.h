@@ -22,7 +22,7 @@
 #define _RG_ROSEGARDENCOLOURTABLE_H_
 
 #include <map>
-#include <Q3Table>
+#include <QTableWidget>
 #include <vector>
 
 
@@ -36,7 +36,7 @@ namespace Rosegarden
 class ColourMap;
 
 
-class ColourTable : public Q3Table
+class ColourTable : public QTableWidget
 {
     Q_OBJECT
 

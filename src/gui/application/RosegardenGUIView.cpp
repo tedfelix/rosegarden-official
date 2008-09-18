@@ -1535,7 +1535,7 @@ RosegardenGUIView::slotDroppedNewAudio(QString audioDesc)
     }
 
     QUrl kurl(url);
-    if (!kurl.isLocalFile()) {
+    if (! QFile::exists(kurl.toLocalFile()) ) {
         if (!RosegardenGUIApp::self()->testAudioPath(i18n("importing a remote audio file"))) return;
     } else if (aFM.fileNeedsConversion(qstrtostr(kurl.path()), sampleRate)) {
 	if (!RosegardenGUIApp::self()->testAudioPath(i18n("importing an audio file that needs to be converted or resampled"))) return;

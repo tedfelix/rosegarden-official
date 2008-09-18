@@ -23,6 +23,7 @@
 #include <klocale.h>
 #include <QCursor>
 #include <QProgressDialog>
+#include <QProgressBar>
 #include <QString>
 #include <QTimer>
 #include <QWidget>
@@ -58,6 +59,14 @@ ProgressDialog::ProgressDialog(QWidget *creator,
     setMinimumDuration(500); // set a default value for this
 }
 
+
+QProgressBar* ProgressDialog::progressBar()
+{	/* return the progress bar created in constructor */
+	return m_progressBar;
+}
+
+
+
 ProgressDialog::ProgressDialog(
     const QString &labelText,
     int totalSteps,
@@ -73,6 +82,12 @@ ProgressDialog::ProgressDialog(
         m_frozen(false),
         m_modal(modal)
 {
+	
+	// qt4 note: progressBar() doesn't exist anymore. 
+	// one can call setBar(QProgressBar*) but not retrieve it 
+	m_progressBar = new QProgressBar();
+	setBar( m_progressBar );
+	
     progressBar()->setTotalSteps(totalSteps);
 
     RG_DEBUG << "ProgressDialog::ProgressDialog type 2 - "

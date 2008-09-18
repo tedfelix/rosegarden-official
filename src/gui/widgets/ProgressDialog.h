@@ -51,7 +51,10 @@ public:
                              bool modal = true);
 
     ~ProgressDialog();
-
+	
+	/** return the QProgressBar created in constructor */
+	QProgressBar* progressBar();
+	
     /**
      * A "safe" way to process events without worrying about user
      * input during the process.  If there is a modal value() dialog
@@ -79,7 +82,10 @@ protected:
     virtual void hideEvent(QHideEvent*);
 
     //--------------- Data members ---------------------------------
-
+	
+	
+	QProgressBar* m_progressBar;
+	
     QTime m_chrono;
     bool m_wasVisible;
     bool m_frozen;
