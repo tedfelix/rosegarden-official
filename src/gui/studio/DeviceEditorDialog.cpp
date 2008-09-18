@@ -51,16 +51,21 @@ namespace Rosegarden
 
 DeviceEditorDialog::DeviceEditorDialog(QDialogButtonBox::QWidget *parent,
                                        RosegardenGUIDoc *document) :
-        KDialogBase(parent, "deviceeditordialog", true,
-                    i18n("Manage MIDI Devices"), Ok | Apply | Close, Ok, true),
+        QDialog(parent),
         m_document(document),
         m_studio(&document->getStudio()),
         m_modified(false)
 {
-    QVBox *mainBox = makeVBoxMainWidget();
+    setModal(true);
+    setWindowTitle(i18n("Manage MIDI Devices"));
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
+    QWidget *mainBox = new QWidget(this);
+    QVBoxLayout *mainBoxLayout = new QVBoxLayout;
+    metagrid->addWidget(mainBox, 0, 0);
 
     m_table = new QTableWidget(0, 4, mainBox);
-    m_table->setSorting(false);
+    m_table->setSortingEnabled(false);
     m_table->setRowMovingEnabled(false);
     m_table->setColumnMovingEnabled(false);
     m_table->setShowGrid(false);
@@ -74,6 +79,7 @@ DeviceEditorDialog::DeviceEditorDialog(QDialogButtonBox::QWidget *parent,
     m_table->setSelectionMode(QTableWidget::SingleRow);
     m_table->setColumnReadOnly(0, true);
     m_table->setColumnReadOnly(2, true);
+    mainBoxLayout->addWidget(m_table);
 
     makeConnectionList(MidiDevice::Play, m_playConnections);
     makeConnectionList(MidiDevice::Record, m_recordConnections);
@@ -89,6 +95,8 @@ DeviceEditorDialog::DeviceEditorDialog(QDialogButtonBox::QWidget *parent,
     QPushButton *deleteButton = new QPushButton(i18n("Delete Device"), hbox );
     hboxLayout->addWidget(deleteButton);
     hbox->setLayout(hboxLayout);
+    mainBoxLayout->setLayout(mainBoxLayout);
+
     connect(addButton, SIGNAL(clicked()), this, SLOT(slotAddPlayDevice()));
     connect(addRButton, SIGNAL(clicked()), this, SLOT(slotAddRecordDevice()));
     connect(deleteButton, SIGNAL(clicked()), this, SLOT(slotDeleteDevice()));
@@ -99,6 +107,14 @@ DeviceEditorDialog::DeviceEditorDialog(QDialogButtonBox::QWidget *parent,
 
     enableButtonOK(false);
     enableButtonApply(false);
+
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(  QDialogButtonBox::Ok
+                                                       | QDialogButtonBox::Apply
+                                                       | QDialogButtonBox::Close);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 DeviceEditorDialog::~DeviceEditorDialog()

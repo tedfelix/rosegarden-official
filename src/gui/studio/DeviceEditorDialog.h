@@ -21,7 +21,6 @@
 #include "base/Studio.h"
 #include "base/MidiDevice.h"
 #include <QDialog>
-#include <QDialogButtonBox>
 #include <QStringList>
 #include <set>
 
@@ -40,7 +39,7 @@ class DeviceEditorDialog : public QDialog
 {
     Q_OBJECT
 public:
-    DeviceEditorDialog(QDialogButtonBox::QWidget *parent, RosegardenGUIDoc *document);
+    DeviceEditorDialog(QWidget *parent, RosegardenGUIDoc *document);
     ~DeviceEditorDialog();
 
     void setModified(bool value);
