@@ -34,7 +34,6 @@
 #include <qscrollview.h>
 #include <QString>
 #include <QWidget>
-#include <QVBoxLayout>
 #include <QStackedWidget>
 
 
@@ -47,7 +46,7 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
                              i18n("Instrument Parameters"),
                              parent),
       m_widgetStack(new QStackedWidget(this)),
-      m_noInstrumentParameters(new QVBox(this)),
+      m_noInstrumentParameters(new QFrame(this)),
       m_midiInstrumentParameters(new MIDIInstrumentParameterPanel(doc, this)),
       m_audioInstrumentParameters(new AudioInstrumentParameterPanel(doc, this)),
       m_selectedInstrument(-1),
