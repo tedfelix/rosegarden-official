@@ -21,7 +21,6 @@
 
 #include "base/NotationTypes.h"
 #include <QDialog>
-#include <QDialogButtonBox>
 #include <QString>
 #include "base/Event.h"
 
@@ -44,7 +43,7 @@ class TimeSignatureDialog : public QDialog
     Q_OBJECT
 
 public:
-    TimeSignatureDialog(QDialogButtonBox::QWidget *parent,
+    TimeSignatureDialog(QWidget *parent,
                         Composition *composition,
                         timeT insertionTime,
                         TimeSignature defaultSig =

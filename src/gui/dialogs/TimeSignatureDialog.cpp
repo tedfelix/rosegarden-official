@@ -32,7 +32,6 @@
 #include <QGroupBox>
 #include <QCheckBox>
 #include <QFont>
-#include <QGroupBox>
 #include <QLabel>
 #include <QObject>
 #include <QRadioButton>
@@ -45,12 +44,12 @@
 namespace Rosegarden
 {
 
-TimeSignatureDialog::TimeSignatureDialog(QDialogButtonBox::QWidget *parent,
-        Composition *composition,
-        timeT insertionTime,
-        TimeSignature sig,
-        bool timeEditable,
-        QString explanatoryText) :
+TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
+                                         Composition *composition,
+                                         timeT insertionTime,
+                                         TimeSignature sig,
+                                         bool timeEditable,
+                                         QString explanatoryText) :
         QDialog(parent),
         m_composition(composition),
         m_timeSignature(sig),
@@ -68,8 +67,6 @@ TimeSignatureDialog::TimeSignatureDialog(QDialogButtonBox::QWidget *parent,
     setModal(true);
     setWindowTitle(i18n("Time Signature"));
 
-#warning Dialog needs QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help)
-
     static QFont *timeSigFont = 0;
 
     if (timeSigFont == 0) {
@@ -77,16 +74,30 @@ TimeSignatureDialog::TimeSignatureDialog(QDialogButtonBox::QWidget *parent,
         timeSigFont->setPixelSize(20);
     }
 
-    QVBox *vbox = makeVBoxMainWidget();
-    QGroupBox *groupBox = new QGroupBox
-                          (1, Horizontal, i18n("Time signature"), vbox);
-    QWidget *denomBox = new QWidget(groupBox);
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
+    QWidget *vbox = new QWidget(this);
+    QVBoxLayout *vboxLayout = new QVBoxLayout;
+    metagrid->addWidget(vbox, 0, 0);
+
+    QGroupBox *groupBox = new QGroupBox(i18n("Time signature"));
+    QHBoxLayout *groupBoxLayout = new QHBoxLayout;
+    vboxLayout->addWidget(groupBox);
+
+    QWidget *numBox = new QWidget;
+    QHBoxLayout *numBoxLayout = new QHBoxLayout;
+    groupBoxLayout->addWidget(numBox);
+
+    QWidget *denomBox = new QWidget;
     QHBoxLayout *denomBoxLayout = new QHBoxLayout;
+    groupBoxLayout->addWidget(denomBox);
 
     QLabel *explanatoryLabel = 0;
     if (!explanatoryText.isEmpty()) {
         explanatoryLabel = new QLabel(explanatoryText, groupBox);
+        groupBoxLayout->addWidget(explanatoryLabel);
     }
+    groupBox->setLayout(groupBoxLayout);
 
     BigArrowButton *numDown = new BigArrowButton( numBox , Qt::LeftArrow);
     numBoxLayout->addWidget(numDown);
@@ -98,8 +109,8 @@ TimeSignatureDialog::TimeSignatureDialog(QDialogButtonBox::QWidget *parent,
     m_denomLabel = new QLabel(QString("%1").arg(m_timeSignature.getDenominator()), denomBox );
     denomBoxLayout->addWidget(m_denomLabel);
 
-    m_numLabel->setAlignment(AlignHCenter | AlignVCenter);
-    m_denomLabel->setAlignment(AlignHCenter | AlignVCenter);
+    m_numLabel->setAlignment(Qt::AlignCenter);
+    m_denomLabel->setAlignment(Qt::AlignCenter);
 
     m_numLabel->setFont(*timeSigFont);
     m_denomLabel->setFont(*timeSigFont);
@@ -124,7 +135,7 @@ TimeSignatureDialog::TimeSignatureDialog(QDialogButtonBox::QWidget *parent,
                         composition,
                         m_time,
                         true);
-
+        vboxLayout->addWidget(m_timeEditor);
         m_asGivenButton = 0;
         m_startOfBarButton = 0;
 
@@ -132,7 +143,9 @@ TimeSignatureDialog::TimeSignatureDialog(QDialogButtonBox::QWidget *parent,
 
         m_timeEditor = 0;
 
-        groupBox = new QGroupBox(1, Horizontal, i18n("Scope"), vbox);
+        groupBox = new QGroupBox(i18n("Scope"));
+        groupBoxLayout = new QHBoxLayout;
+        vboxLayout->addWidget(groupBox);
 
         int barNo = composition->getBarNumber(m_time);
         bool atStartOfBar = (m_time == composition->getBarStart(barNo));
@@ -156,47 +169,55 @@ TimeSignatureDialog::TimeSignatureDialog(QDialogButtonBox::QWidget *parent,
                             (i18n("Insertion point is at start of composition."));
             }
 
-            new QLabel(scopeText, groupBox);
+            groupBoxLayout->addWidget(new QLabel(scopeText));
             m_asGivenButton = new QRadioButton
                               (i18n("Start measure %1 here", barNo + 2), groupBox);
-
+            groupBoxLayout->addWidget(m_asGivenButton);
             if (!atStartOfBar) {
                 m_startOfBarButton = new QRadioButton
                                      (i18n("Change time from start of measure %1",
                                        barNo + 1), groupBox);
+                groupBoxLayout->addWidget(m_startOfBarButton);
                 m_startOfBarButton->setChecked(true);
             } else {
                 m_asGivenButton->setChecked(true);
             }
         } else {
-            new QLabel(i18n("Time change will take effect at the start of measure %1.",
-                        barNo + 1), groupBox);
+            groupBoxLayout->addWidget(
+                new QLabel(i18n("Time change will take effect at the start of"
+                                " measure %1.", barNo + 1)));
         }
     }
+    groupBox->setLayout(groupBoxLayout);
 
-    groupBox = new QGroupBox(1, Horizontal, i18n("Options"), vbox);
+    groupBox = new QGroupBox(i18n("Options"));
+    groupBoxLayout = new QHBoxLayout;
+    vboxLayout->addWidget(groupBox);
     QSettings settings;
     settings.beginGroup( GeneralOptionsConfigGroup );
 
-    m_hideSignatureButton = new QCheckBox
-                            (i18n("Hide the time signature"), groupBox);
+    m_hideSignatureButton = new QCheckBox(i18n("Hide the time signature"));
+    groupBoxLayout->addWidget(m_hideSignatureButton);
     m_hideSignatureButton->setChecked
     ( qStrToBool( settings.value("timesigdialogmakehidden", "false" ) ) );
 
-    m_hideBarsButton = new QCheckBox
-                       (i18n("Hide the affected bar lines"), groupBox);
+    m_hideBarsButton = new QCheckBox(i18n("Hide the affected bar lines"));
+    groupBoxLayout->addWidget(m_hideBarsButton);
     m_hideBarsButton->setChecked
     ( qStrToBool( settings.value("timesigdialogmakehiddenbars", "false" ) ) );
 
-    m_commonTimeButton = new QCheckBox
-                         (i18n("Show as common time"), groupBox);
+    m_commonTimeButton = new QCheckBox(i18n("Show as common time"));
+    groupBoxLayout->addWidget(m_hideBarsButton);
     m_commonTimeButton->setChecked
     ( qStrToBool( settings.value("timesigdialogshowcommon", "true" ) ) );
 
     m_normalizeRestsButton = new QCheckBox
-                             (i18n("Correct the durations of following measures"), groupBox);
+                             (i18n("Correct the durations of following measures"));
+    groupBoxLayout->addWidget(m_normalizeRestsButton);
     m_normalizeRestsButton->setChecked
     ( qStrToBool( settings.value("timesigdialognormalize", "true" ) ) );
+
+    groupBox->setLayout(groupBoxLayout);
 
     QObject::connect(m_hideSignatureButton, SIGNAL(clicked()), this,
                      SLOT(slotUpdateCommonTimeButton()));
@@ -206,6 +227,17 @@ TimeSignatureDialog::TimeSignatureDialog(QDialogButtonBox::QWidget *parent,
     //setHelp("time-signature");
 
     settings.endGroup();
+
+    vbox->setLayout(vboxLayout);
+
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(  QDialogButtonBox::Ok
+                                                       | QDialogButtonBox::Cancel
+                                                       | QDialogButtonBox::Help);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+
 }
 
 TimeSignature
