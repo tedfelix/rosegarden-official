@@ -20,7 +20,6 @@
 #define _RG_MARKERMODIFYDIALOG_H_
 
 #include <QDialog>
-#include <QDialogButtonBox>
 #include <QString>
 #include <QLineEdit>
 
@@ -40,7 +39,7 @@ class MarkerModifyDialog : public QDialog
 {
     Q_OBJECT
 public:
-    MarkerModifyDialog(QDialogButtonBox::QWidget *parent,
+    MarkerModifyDialog(QWidget *parent,
                        Composition *composition,
                        int time,
                        const QString &name,

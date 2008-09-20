@@ -33,6 +33,7 @@
 #include <QString>
 #include <QWidget>
 #include <QVBoxLayout>
+#include <QHBoxLayout>
 #include "misc/Strings.h"
 
 
@@ -46,11 +47,6 @@ MarkerModifyDialog::MarkerModifyDialog(QDialogButtonBox::QWidget *parent,
                                        const QString &des):
     QDialog(parent)
 {
-    setModal(true);
-    setWindowTitle(i18n("Edit Marker"));
-
-#warning Dialog needs QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel)
-
     initialise(composition, time, name, des);
 }
 
@@ -59,11 +55,6 @@ MarkerModifyDialog::MarkerModifyDialog(QWidget *parent,
                                        Marker *marker) :
     QDialog(parent)
 {
-    setModal(true);
-    setWindowTitle(i18n("Edit Marker"));
-
-#warning Dialog needs QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel)
-
     initialise(composition, marker->getTime(),
                strtoqstr(marker->getName()),
                strtoqstr(marker->getDescription()));
@@ -75,12 +66,20 @@ MarkerModifyDialog::initialise(Composition *composition,
                                const QString &name,
                                const QString &des)
 {
+
     m_originalTime = time;
 
-    QVBox *vbox = makeVBoxMainWidget();
+    setModal(true);
+    setWindowTitle(i18n("Edit Marker"));
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
+    QWidget *vbox = new QWidget(this);
+    QVBoxLayout *vboxLayout = new QVBoxLayout;
+    metagrid->addWidget(vbox, 0, 0);
 
     m_timeEdit = new TimeWidget(i18n("Marker Time"), vbox, composition,
                                 time);
+    vboxLayout->addWidget(m_timeEdit);
 
     /*!!!
      
@@ -94,12 +93,16 @@ MarkerModifyDialog::initialise(Composition *composition,
                 Note(Note::Shortest).getDuration());
         m_timeEdit->setValue(time);
     */
-    QGroupBox *groupBox = new QGroupBox
-                          (1, Horizontal, i18n("Marker Properties"), vbox);
+
+    QGroupBox *groupBox = new QGroupBox(i18n("Marker Properties"));
+    QHBoxLayout *groupBoxLayout = new QHBoxLayout;
+    vboxLayout->addWidget(groupBox);
 
     QFrame *frame = new QFrame(groupBox);
-
-    QGridLayout *layout = new QGridLayout(frame, 2, 2, 5, 5);
+    frame->setContentsMargins(5, 5, 5, 5);
+    QGridLayout *layout = new QGridLayout(frame);
+    layout->setSpacing(5);
+    groupBoxLayout->addWidget(frame);
 
     layout->addWidget(new QLabel(i18n("Text:"), frame), 0, 0);
     m_nameEdit = new QLineEdit(name, frame);
@@ -111,6 +114,17 @@ MarkerModifyDialog::initialise(Composition *composition,
 
     m_nameEdit->selectAll();
     m_nameEdit->setFocus();
+
+    frame->setLayout(layout);
+    groupBox->setLayout(groupBoxLayout);
+    vbox->setLayout(vboxLayout);
+
+    QDialogButtonBox *buttonBox
+        = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 }
