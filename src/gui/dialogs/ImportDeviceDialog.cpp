@@ -36,22 +36,20 @@
 #include <QMessageBox>
 #include <QGroupBox>
 #include <QCheckBox>
-#include <QGroupBox>
 #include <QLabel>
 #include <QRadioButton>
 #include <QString>
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QButtonGroup>
 
 
 namespace Rosegarden
 {
 
-ImportDeviceDialog::ImportDeviceDialog(QDialogButtonBox::QWidget *parent, QUrl url) :
-        KDialogBase(parent, "importdevicedialog", true,
-                    i18n("Import from Device..."),
-                    Ok | Cancel, Ok),
+ImportDeviceDialog::ImportDeviceDialog(QWidget *parent, QUrl url) :
+        QDialog(parent),
         m_url(url),
         m_fileDoc(0),
         m_device(0)
@@ -69,7 +67,13 @@ ImportDeviceDialog::~ImportDeviceDialog()
 bool
 ImportDeviceDialog::doImport()
 {
-    QVBox *mainFrame = makeVBoxMainWidget();
+    setModal(true);
+    setWindowTitle(i18n("Import from Device..."));
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
+    QWidget *mainFrame = new QWidget(this);
+    QVBoxLayout *mainFrameLayout = new QVBoxLayout;
+    metagrid->addWidget(mainFrame, 0, 0);
 
     if (m_url.isEmpty()) {
         reject();
@@ -108,30 +112,29 @@ ImportDeviceDialog::doImport()
         return false;
     }
 
-    QGroupBox *groupBox = new QGroupBox(2, Qt::Horizontal,
-                                        i18n("Source device"),
-                                        mainFrame);
+    QGroupBox *groupBox = new QGroupBox(i18n("Source device"));
+    QHBoxLayout *groupBoxLayout = new QHBoxLayout;
+    mainFrameLayout->addWidget(groupBox);
 
-    QHBoxLayout *bl = new QHBoxLayout( deviceBox );
-    deviceBoxLayout->addWidget(bl);
-    bl->addWidget(new QLabel(i18n("Import from: "), deviceBox));
+    QWidget *deviceBox = new QWidget(groupBox);
+    QHBoxLayout *deviceBoxLayout = new QHBoxLayout( deviceBox );
+    groupBoxLayout->addWidget(deviceBox);
+
+    deviceBoxLayout->addWidget(new QLabel(i18n("Import from: "), deviceBox));
 
     bool showRenameOption = false;
 
     if (m_devices.size() > 1) {
+        m_deviceLabel = 0;
         m_deviceCombo = new QComboBox( deviceBox );
         deviceBoxLayout->addWidget(m_deviceCombo);
-        m_deviceLabel = 0;
-        bl->addWidget(m_deviceCombo);
     } else {
         m_deviceCombo = 0;
         m_deviceLabel = new QLabel( deviceBox );
         deviceBoxLayout->addWidget(m_deviceLabel);
-        deviceBox->setLayout(deviceBoxLayout);
-        bl->addWidget(m_deviceLabel);
     }
 
-    bl->addStretch(10);
+    deviceBoxLayout->addStretch(10);
 
     int count = 1;
     for (std::vector<MidiDevice *>::iterator i = m_devices.begin();
@@ -151,26 +154,45 @@ ImportDeviceDialog::doImport()
 
     QWidget *optionsBox = new QWidget(mainFrame);
     QHBoxLayout *optionsBoxLayout = new QHBoxLayout;
+    mainFrameLayout->addWidget(optionsBox);
 
-    QGroupBox *gb = new QGroupBox( i18n("Options"), optionsBox );
+    QGroupBox *gb = new QGroupBox(i18n("Options"));
+    QHBoxLayout *gbLayout = new QHBoxLayout;
     optionsBoxLayout->addWidget(gb);
 
     m_importBanks = new QCheckBox(i18n("Import banks"), gb);
+    gbLayout->addWidget(m_importBanks);
     m_importKeyMappings = new QCheckBox(i18n("Import key mappings"), gb);
+    gbLayout->addWidget(m_importKeyMappings);
     m_importControllers = new QCheckBox(i18n("Import controllers"), gb);
+    gbLayout->addWidget(m_importControllers);
 
     if (showRenameOption) {
         m_rename = new QCheckBox(i18n("Import device name"), gb);
+        gbLayout->addWidget(m_rename);
     } else {
         m_rename = 0;
     }
 
-    m_buttonGroup = new QGroupBox(
-                                     i18n("Bank import behavior"), optionsBox );
-    optionsBoxLayout->addWidget(m_buttonGroup);
+    QGroupBox *buttonGroupBox = new QGroupBox(i18n("Bank import behavior"));
+    QHBoxLayout *buttonGroupBoxLayout = new QHBoxLayout;
+    optionsBoxLayout->addWidget(buttonGroupBox);
+    m_buttonGroup = new QButtonGroup(buttonGroupBox);
+
+    m_mergeBanks = new QRadioButton(i18n("Merge banks"));
+    buttonGroupBoxLayout->addWidget(m_mergeBanks);
+    m_buttonGroup->addButton(m_mergeBanks, 0);
+
+    m_overwriteBanks = new QRadioButton(i18n("Overwrite banks"));
+    buttonGroupBoxLayout->addWidget(m_overwriteBanks);
+    m_buttonGroup->addButton(m_overwriteBanks, 1);
+
+    gb->setLayout(gbLayout);
+    buttonGroupBox->setLayout(buttonGroupBoxLayout);
     optionsBox->setLayout(optionsBoxLayout);
-    m_mergeBanks = new QRadioButton(i18n("Merge banks"), m_buttonGroup);
-    m_overwriteBanks = new QRadioButton(i18n("Overwrite banks"), m_buttonGroup);
+    deviceBox->setLayout(deviceBoxLayout);
+    groupBox->setLayout(groupBoxLayout);
+    mainFrame->setLayout(mainFrameLayout);
 
     QSettings settings;
     settings.beginGroup( GeneralOptionsConfigGroup );
@@ -185,11 +207,18 @@ ImportDeviceDialog::doImport()
 
     bool overwrite = qStrToBool( settings.value("importbanksoverwrite", "true" ) ) ;
     if (overwrite)
-        m_buttonGroup->setButton(1);
+        m_buttonGroup->button(1)->setChecked(true);
     else
-        m_buttonGroup->setButton(0);
+        m_buttonGroup->button(0)->setChecked(true);
 
     settings.endGroup();
+
+    QDialogButtonBox *buttonBox
+        = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(slotOk()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(slotCancel()));
 
     return true;
 }
@@ -202,7 +231,7 @@ ImportDeviceDialog::slotOk()
         index = m_deviceCombo->currentIndex();
     m_device = m_devices[index];
 
-    int v = m_buttonGroup->id(m_buttonGroup->selected());
+    int v = m_buttonGroup->checkedId();
     QSettings settings;
     settings.beginGroup( GeneralOptionsConfigGroup );
 
@@ -282,7 +311,7 @@ ImportDeviceDialog::shouldImportControllers() const
 bool
 ImportDeviceDialog::shouldOverwriteBanks() const
 {
-    return m_buttonGroup->id(m_buttonGroup->selected()) != 0;
+    return m_buttonGroup->checkedId() != 0;
 }
 
 bool

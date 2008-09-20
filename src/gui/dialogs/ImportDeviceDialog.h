@@ -21,7 +21,6 @@
 #include "base/MidiDevice.h"
 #include <string>
 #include <QDialog>
-#include <QDialogButtonBox>
 #include <QString>
 #include <vector>
 #include <QUrl>
@@ -31,7 +30,7 @@ class QWidget;
 class QRadioButton;
 class QLabel;
 class QCheckBox;
-class QGroupBox;
+class QButtonGroup;
 class ProgramList;
 class KeyMappingList;
 class QComboBox;
@@ -50,7 +49,7 @@ class ImportDeviceDialog : public QDialog
     Q_OBJECT
 
 public:
-    ImportDeviceDialog(QDialogButtonBox::QWidget *parent, QUrl url);
+    ImportDeviceDialog(QWidget *parent, QUrl url);
     virtual ~ImportDeviceDialog();
 
     bool doImport();
@@ -88,7 +87,7 @@ protected:
     QCheckBox          *m_importControllers;
     QCheckBox          *m_rename;
 
-    QGroupBox       *m_buttonGroup;
+    QButtonGroup       *m_buttonGroup;
     QRadioButton       *m_mergeBanks;
     QRadioButton       *m_overwriteBanks;
 
