@@ -376,11 +376,11 @@ void testInstalledVersion()
               " (I am %1, but the installed files are for version %2.)\n\n"
               " This may mean one of the following:\n\n"
               " 1. This is a new upgrade of Rosegarden, and it has not yet been\n"
-              "     installed.  If you compiled it yourself, check that you have\n"
-              "     run \"make install\" and that the procedure completed\n"
-              "     successfully.\n\n"
+              "    installed.  If you compiled it yourself, check that you have\n"
+              "    run \"make install\" and that the procedure completed\n"
+              "    successfully.\n\n"
               " 2. The upgrade was installed in a non-standard directory,\n"
-              "     and an old version was found in a standard directory.",
+              "    and an old version was found in a standard directory.",
               VERSION, installedVersion);
 
          box.setDetailedText(blather);
@@ -396,16 +396,12 @@ void testInstalledVersion()
 
          QString blather = 
          i18n(" One or more of Rosegarden's data files could not be\n"
-              " found in the standard KDE installation directories.\n\n"
-              " This may mean one of the following:\n\n"
+              " found. This may mean one of the following:\n\n"
               " 1. Rosegarden has not been correctly installed.  If you compiled\n"
-              "     it yourself, check that you have run \"make install\" and that\n"
-              "     the procedure completed successfully.\n\n"
+              "    it yourself, check that you have run \"make install\" and that\n"
+              "    the procedure completed successfully.\n\n"
               " 2. Rosegarden has been installed in a non-standard directory,\n"
-              "     and you need to add this directory to your KDEDIRS environment\n"
-              "     variable before you can run it.  This may be the case if you\n"
-              "     installed into $HOME or a local third-party package directory\n"
-              "     like /usr/local or /opt.");
+              "    like /usr/local or /opt.");
 
           box.setDetailedText(blather);
     }
