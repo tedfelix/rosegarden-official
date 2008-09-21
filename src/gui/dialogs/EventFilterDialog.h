@@ -22,7 +22,6 @@
 #define _RG_EVENTFILTERDIALOG_H_
 
 #include <QDialog>
-#include <QDialogButtonBox>
 #include <utility>
 #include <vector>
 #include "base/Event.h"

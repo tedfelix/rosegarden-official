@@ -38,7 +38,6 @@
 #include <klocale.h>
 #include <QCheckBox>
 #include <QComboBox>
-#include <QDialog>
 #include <QFrame>
 #include <QGroupBox>
 #include <QLabel>
@@ -59,7 +58,7 @@ namespace Rosegarden
 {
 
 EventFilterDialog::EventFilterDialog(QWidget* parent)
-        : KDialogBase(parent, "eventfilerdialog", true, i18n("Event Filter"), Ok | Cancel, Ok),
+        : QDialog(parent),
         m_standardQuantizations(BasicQuantizer::getStandardQuantizations())
 {
     //###JAS next line not needed.  Commented out.
@@ -75,14 +74,22 @@ EventFilterDialog::~EventFilterDialog()
 void
 EventFilterDialog::initDialog()
 {
-    QVBox* mainWidget = makeVBoxMainWidget();
-
+    setModal(true);
+    setWindowTitle(i18n("Event Filter"));
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
+    QWidget *mainWidget = new QWidget(this);
+    QVBoxLayout *mainWidgetLayout = new QVBoxLayout;
+    metagrid->addWidget(mainWidget, 0, 0);
 
     //----------[ Note Filter Widgets ]-------------------------
 
     // Frame
-    QGroupBox* noteFrame = new QGroupBox(i18n("Note Events"), mainWidget);
-    QGridLayout* noteFrameLayout = new QGridLayout(noteFrame, 1, 1, 20, 6);
+    QGroupBox* noteFrame = new QGroupBox(i18n("Note Events"));
+    noteFrame->setContentsMargins(20, 20, 20, 20);
+    QGridLayout* noteFrameLayout = new QGridLayout;
+    noteFrameLayout->setSpacing(6);
+    mainWidgetLayout->addWidget(noteFrame);
 
     // Labels
     QLabel* pitchFromLabel = new QLabel(i18n("lowest:"), noteFrame);
@@ -101,7 +108,8 @@ EventFilterDialog::initDialog()
     noteFrameLayout->addWidget(durationLabel, 3, 1);
 
     // Include Boxes
-    m_notePitchIncludeComboBox = new QComboBox(0, noteFrame);
+    m_notePitchIncludeComboBox = new QComboBox(noteFrame);
+    m_notePitchIncludeComboBox->setEditable(false);
     m_notePitchIncludeComboBox->addItem(i18n("include"));
     m_notePitchIncludeComboBox->addItem(i18n("exclude"));
     QSettings settings;
@@ -110,7 +118,8 @@ EventFilterDialog::initDialog()
     m_notePitchIncludeComboBox->setCurrentIndex( qStrToBool( settings.value("pitchinclude", "0" ) ) );
     noteFrameLayout->addWidget(m_notePitchIncludeComboBox, 1, 0);
 
-    m_noteVelocityIncludeComboBox = new QComboBox(0, noteFrame);
+    m_noteVelocityIncludeComboBox = new QComboBox(noteFrame);
+    m_noteVelocityIncludeComboBox->setEditable(false);
     m_noteVelocityIncludeComboBox->addItem(i18n("include"));
     m_noteVelocityIncludeComboBox->addItem(i18n("exclude"));
 
@@ -118,7 +127,8 @@ EventFilterDialog::initDialog()
     m_noteVelocityIncludeComboBox->setCurrentIndex( qStrToBool( settings.value("velocityinclude", "0" ) ) );
     noteFrameLayout->addWidget(m_noteVelocityIncludeComboBox, 2, 0);
 
-    m_noteDurationIncludeComboBox = new QComboBox(0, noteFrame);
+    m_noteDurationIncludeComboBox = new QComboBox(noteFrame);
+    m_noteDurationIncludeComboBox->setEditable(false);
     m_noteDurationIncludeComboBox->addItem(i18n("include"));
     m_noteDurationIncludeComboBox->addItem(i18n("exclude"));
 
@@ -137,11 +147,10 @@ EventFilterDialog::initDialog()
             SLOT(slotPitchFromChanged(int)));
 
     m_pitchFromChooserButton = new QPushButton(i18n("edit"), noteFrame);
-    m_pitchFromChooserButton->setSizePolicy(QSizePolicy((QSizePolicy::SizeType)0,
-                                            (QSizePolicy::SizeType)0, 0, 0, m_pitchFromChooserButton->
-                                            sizePolicy().hasHeightForWidth()));
-    QToolTip::add
-        (m_pitchFromChooserButton, i18n("choose a pitch using a staff"));
+    m_pitchFromChooserButton->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,
+                                                        QSizePolicy::Fixed,
+                                                        QSizePolicy::PushButton));
+    m_pitchFromChooserButton->setToolTip(i18n("choose a pitch using a staff"));
     noteFrameLayout->addWidget(m_pitchFromChooserButton, 1, 3);
     connect(m_pitchFromChooserButton, SIGNAL(clicked()),
             SLOT(slotPitchFromChooser()));
@@ -158,8 +167,7 @@ EventFilterDialog::initDialog()
             SLOT(slotPitchToChanged(int)));
 
     m_pitchToChooserButton = new QPushButton(i18n("edit"), noteFrame);
-    QToolTip::add
-        (m_pitchToChooserButton, i18n("choose a pitch using a staff"));
+    m_pitchToChooserButton->setToolTip(i18n("choose a pitch using a staff"));
     noteFrameLayout->addWidget(m_pitchToChooserButton, 1, 5);
     connect(m_pitchToChooserButton, SIGNAL(clicked()),
             SLOT(slotPitchToChooser()));
@@ -185,13 +193,15 @@ EventFilterDialog::initDialog()
 
 
     // Duration From/To
-    m_noteDurationFromComboBox = new QComboBox(0, noteFrame);
+    m_noteDurationFromComboBox = new QComboBox(noteFrame);
+    m_noteDurationFromComboBox->setEditable(false);
     m_noteDurationFromComboBox->addItem(i18n("longest"));
     noteFrameLayout->addWidget(m_noteDurationFromComboBox, 3, 2);
     connect(m_noteDurationFromComboBox, SIGNAL(activated(int)),
             SLOT(slotDurationFromChanged(int)));
 
-    m_noteDurationToComboBox = new QComboBox(0, noteFrame);
+    m_noteDurationToComboBox = new QComboBox(noteFrame);
+    m_noteDurationToComboBox->setEditable(false);
     m_noteDurationToComboBox->addItem(i18n("longest"));
     noteFrameLayout->addWidget(m_noteDurationToComboBox, 3, 4);
     connect(m_noteDurationToComboBox, SIGNAL(activated(int)),
@@ -202,24 +212,36 @@ EventFilterDialog::initDialog()
 
     //---------[ Buttons ]--------------------------------------
     QFrame* privateLayoutWidget = new QFrame(mainWidget);
-    QGridLayout* buttonLayout = new QGridLayout(privateLayoutWidget, 1, 1, 20, 6);
+    privateLayoutWidget->setContentsMargins(20, 20, 20, 20);
+    QGridLayout* buttonLayout = new QGridLayout;
+    buttonLayout->setSpacing(6);
+    mainWidgetLayout->addWidget(privateLayoutWidget);
 
     m_buttonAll = new QPushButton(i18n("Include all"), privateLayoutWidget);
     m_buttonAll->setAutoDefault(true);
-    QToolTip::add
-        (m_buttonAll, i18n("Include entire range of values"));
+    m_buttonAll->setToolTip(i18n("Include entire range of values"));
     buttonLayout->addWidget( m_buttonAll, 0, 0 );
 
     m_buttonNone = new QPushButton(i18n("Exclude all"), privateLayoutWidget);
     m_buttonNone->setAutoDefault(true);
-    QToolTip::add
-        (m_buttonNone, i18n("Exclude entire range of values"));
+    m_buttonNone->setToolTip(i18n("Exclude entire range of values"));
     buttonLayout->addWidget( m_buttonNone, 0, 1 );
 
     connect(m_buttonAll, SIGNAL(clicked()), this, SLOT(slotToggleAll()));
     connect(m_buttonNone, SIGNAL(clicked()), this, SLOT(slotToggleNone()));
 
     settings.endGroup();
+
+    privateLayoutWidget->setLayout(buttonLayout);
+    noteFrame->setLayout(noteFrameLayout);
+    mainWidget->setLayout(mainWidgetLayout);
+
+    QDialogButtonBox *buttonBox
+        = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 void
