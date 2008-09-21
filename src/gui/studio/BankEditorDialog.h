@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -21,9 +20,11 @@
 
 #include "base/Device.h"
 #include "base/MidiProgram.h"
+
+#include <QMainWindow>
+
 #include <map>
 #include <string>
-#include <kmainwindow.h>
 #include <utility>
 
 

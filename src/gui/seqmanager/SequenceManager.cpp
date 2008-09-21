@@ -1012,7 +1012,12 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                             QString message = i18n("A serious error has occurred in the ALSA MIDI subsystem.  It may not be possible to continue sequencing.  Please check console output for more information.");
                             boolShowingALSAWarning = true;
 
-                            QMessageBox::information(0, message);
+                            QMessageBox::information(
+                              0,
+                              "", /* no title */
+                              message,
+                              QMessageBox::Ok,
+                              QMessageBox::Ok);
                             boolShowingALSAWarning = false;
 
                             (void)gettimeofday(&tv, 0);
@@ -1077,7 +1082,12 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 
                         if ((*i)->getData1() == MappedEvent::FailureDiscOverrun) {
                             // the error you can't hear
-                            QMessageBox::information(0, message);
+                            QMessageBox::information(
+                              0,
+                              "", /* no title */
+                              message,
+                              QMessageBox::Ok,
+                              QMessageBox::Ok);
                         } else {
                             std::cerr << message << std::endl;
                         }
@@ -1121,10 +1131,11 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                         RosegardenGUIApp::self()->awaitDialogClearance();
 
                         QMessageBox::information(
-                            dynamic_cast<QWidget*>(m_doc->parent()),
-                            i18n("<h3>System timer resolution is too low</h3><p>Rosegarden was unable to find a high-resolution timing source for MIDI performance.</p><p>This may mean you are using a Linux system with the kernel timer resolution set too low.  Please contact your Linux distributor for more information.</p><p>Some Linux distributors already provide low latency kernels, see <a href=\"http://rosegarden.wiki.sourceforge.net/Low+latency+kernels\">http://rosegarden.wiki.sourceforge.net/Low+latency+kernels</a> for instructions.</p>"), 
-			    NULL, NULL, 
-			    QMessageBox::Notify + QMessageBox::AllowLink);
+                          dynamic_cast<QWidget*>(m_doc->parent()),
+                          "", /* no title  */
+                          i18n("<h3>System timer resolution is too low</h3><p>Rosegarden was unable to find a high-resolution timing source for MIDI performance.</p><p>This may mean you are using a Linux system with the kernel timer resolution set too low.  Please contact your Linux distributor for more information.</p><p>Some Linux distributors already provide low latency kernels, see <a href=\"http://rosegarden.wiki.sourceforge.net/Low+latency+kernels\">http://rosegarden.wiki.sourceforge.net/Low+latency+kernels</a> for instructions.</p>"), 
+                          QMessageBox::Ok,
+                          QMessageBox::Ok);
                         
                         CurrentProgressDialog::thaw();
 
@@ -1139,10 +1150,11 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                         RosegardenGUIApp::self()->awaitDialogClearance();
 
                         QMessageBox::information(
-                            dynamic_cast<QWidget*>(m_doc->parent()),
-                            i18n("<h3>System timer resolution is too low</h3><p>Rosegarden was unable to find a high-resolution timing source for MIDI performance.</p><p>You may be able to solve this problem by loading the RTC timer kernel module.  To do this, try running <b>sudo modprobe snd-rtctimer</b> in a terminal window and then restarting Rosegarden.</p><p>Alternatively, check whether your Linux distributor provides a multimedia-optimized kernel.  See <a href=\"http://rosegarden.wiki.sourceforge.net/Low+latency+kernels\">http://rosegarden.wiki.sourceforge.net/Low+latency+kernels</a> for notes about this.</p>"), 
-			    NULL, NULL, 
-			    QMessageBox::Notify + QMessageBox::AllowLink);
+                          dynamic_cast<QWidget*>(m_doc->parent()),
+                          "", /* no title */
+                          i18n("<h3>System timer resolution is too low</h3><p>Rosegarden was unable to find a high-resolution timing source for MIDI performance.</p><p>You may be able to solve this problem by loading the RTC timer kernel module.  To do this, try running <b>sudo modprobe snd-rtctimer</b> in a terminal window and then restarting Rosegarden.</p><p>Alternatively, check whether your Linux distributor provides a multimedia-optimized kernel.  See <a href=\"http://rosegarden.wiki.sourceforge.net/Low+latency+kernels\">http://rosegarden.wiki.sourceforge.net/Low+latency+kernels</a> for notes about this.</p>"),
+                          QMessageBox::Ok,
+                          QMessageBox::Ok);
                         
                         CurrentProgressDialog::thaw();
                     }

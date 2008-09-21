@@ -363,11 +363,16 @@ void testInstalledVersion()
 
     if (!installedVersion.isEmpty()) {
 
-        QMessageBox::detailedError
-        (0,
-         i18n("Installation contains the wrong version of Rosegarden."),
-         i18n(" The wrong versions of Rosegarden's data files were\n"
-              " found in the standard KDE installation directories.\n"
+        QMessageBox box = QMessageBox::critical(
+          dynamic_cast<QWidget*>(0),
+          i18n("Installation problem"),
+          i18n("Installation contains the wrong version of Rosegarden."),
+          QMessageBox::Ok,
+          QMessageBox::Ok);
+
+        QString blather = i18n(
+              " The wrong versions of Rosegarden's data files were\n"
+              " found.\n"
               " (I am %1, but the installed files are for version %2.)\n\n"
               " This may mean one of the following:\n\n"
               " 1. This is a new upgrade of Rosegarden, and it has not yet been\n"
@@ -375,16 +380,21 @@ void testInstalledVersion()
               "     run \"make install\" and that the procedure completed\n"
               "     successfully.\n\n"
               " 2. The upgrade was installed in a non-standard directory,\n"
-              "     and an old version was found in a standard directory.  If so,\n"
-              "     you will need to add the correct directory to your KDEDIRS\n"
-              "     environment variable before you can run it.", VERSION, installedVersion),
-         i18n("Installation problem"));
+              "     and an old version was found in a standard directory.",
+              VERSION, installedVersion);
+
+         box.setDetailedText(blather);
 
     } else {
 
-        QMessageBox::detailedError
-        (0,
-         i18n("Rosegarden does not appear to have been installed."),
+        QMessageBox box = QMessageBox::critical(
+          dynamic_cast<QWidget*>(0),
+          i18n("Installation problem"),
+          i18n("Rosegarden does not appear to have been installed."),
+          QMessageBox::Ok,
+          QMessageBox::Ok);
+
+         QString blather = 
          i18n(" One or more of Rosegarden's data files could not be\n"
               " found in the standard KDE installation directories.\n\n"
               " This may mean one of the following:\n\n"
@@ -395,8 +405,9 @@ void testInstalledVersion()
               "     and you need to add this directory to your KDEDIRS environment\n"
               "     variable before you can run it.  This may be the case if you\n"
               "     installed into $HOME or a local third-party package directory\n"
-              "     like /usr/local or /opt."),
-         i18n("Installation problem"));
+              "     like /usr/local or /opt.");
+
+          box.setDetailedText(blather);
     }
 
     exit(1);

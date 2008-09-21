@@ -17,11 +17,7 @@
 
 
 #include "BankEditorDialog.h"
-#include <QLayout>
-#include <QApplication>
 
-#include <klocale.h>
-#include <kstandarddirs.h>
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "base/Device.h"
@@ -40,17 +36,16 @@
 #include "MidiKeyMapListViewItem.h"
 #include "MidiKeyMappingEditor.h"
 #include "MidiProgramsEditor.h"
+#include "document/Command.h"
+
+#include <QLayout>
+#include <QApplication>
 #include <QAction>
 #include <QComboBox>
-#include "document/Command.h"
 #include <QFileDialog>
-#include <kglobal.h>
 #include <QListWidget>
-#include <kmainwindow.h>
+#include <QMainWindow>
 #include <QMessageBox>
-#include <kstandardshortcut.h>
-#include <kstandardaction.h>
-#include <kxmlguiclient.h>
 #include <QCheckBox>
 #include <QDialog>
 #include <QDir>
@@ -62,10 +57,17 @@
 #include <QSplitter>
 #include <QString>
 #include <QToolTip>
-#include <qvgroupbox.h>
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+//&&& #include <qvgroupbox.h>
+
+#include <klocale.h>  // i18n()
+#include <kstandarddirs.h>
+#include <kstandardshortcut.h>
+#include <kstandardaction.h>
+#include <kxmlguiclient.h>
+#include <kglobal.h>
 
 
 namespace Rosegarden
@@ -74,7 +76,7 @@ namespace Rosegarden
 BankEditorDialog::BankEditorDialog(QWidget *parent,
                                    RosegardenGUIDoc *doc,
                                    DeviceId defaultDevice):
-        KMainWindow(parent, "bankeditordialog"),
+        QMainWindow(parent, "bankeditordialog"),
         m_studio(&doc->getStudio()),
         m_doc(doc),
         m_copyBank(Device::NO_DEVICE, -1),
@@ -670,10 +672,8 @@ BankEditorDialog::checkModified()
 
     setModified(false);
 
-    //     // then ask if we want to apply the changes
-
-    //     int reply = QMessageBox::questionYesNo(this,
-    //                                            i18n("Apply pending changes?"));
+    //!!! deleted comment referred to commented message box using obsolete x3
+    // API, so I (dmm) deleted the comment to avoid future confusion
 
     ModifyDeviceCommand *command = 0;
     MidiDevice *device = getMidiDevice(m_lastDevice);
@@ -1089,7 +1089,12 @@ BankEditorDialog::slotDelete()
         int currentBank = bankItem->getBank();
 
         int reply =
-            QMessageBox::warningYesNo(this, i18n("Really delete this bank?"));
+            QMessageBox::warning(
+              dynamic_cast<QWidget*>(this),
+              "", /* no title */
+              i18n("Really delete this bank?"),
+              QMessageBox::Yes | QMessageBox::No,
+              QMessageBox::No);
 
         if (reply == QMessageBox::Yes) {
             MidiBank bank = m_bankList[currentBank];
@@ -1137,7 +1142,12 @@ BankEditorDialog::slotDelete()
     if (keyItem && device) {
 
         int reply =
-            QMessageBox::warningYesNo(this, i18n("Really delete this key mapping?"));
+            QMessageBox::warning(
+              dynamic_cast<QWidget*>(this),
+              "", /* no title */
+              i18n("Really delete this key mapping?"),
+              QMessageBox::Yes | QMessageBox::No,
+              QMessageBox::No);
 
         if (reply == QMessageBox::Yes) {
 
@@ -1190,7 +1200,12 @@ BankEditorDialog::slotDeleteAll()
     QString question = i18n("Really delete all banks for ") +
                        strtoqstr(device->getName()) + QString(" ?");
 
-    int reply = QMessageBox::warningYesNo(this, question);
+    int reply = QMessageBox::warning(
+                  dynamic_cast<QWidget*>(this),
+                  "", /* no title */
+                  question,
+                  QMessageBox::Yes | QMessageBox::No,
+                  QMessageBox::No);
 
     if (reply == QMessageBox::Yes) {
 
@@ -1473,7 +1488,29 @@ BankEditorDialog::slotImport()
         deviceDir = "file://" + deviceDir;
     }
 
-    KURL url = KFileDialog::getOpenURL
+/* //###
+ * 
+ * KDE3:
+ * KURL KFileDialog::getOpenURL   (  const QString &   startDir = QString::null,
+ *   const QString &   filter = QString::null,
+ *     QWidget *   parent = 0,
+ *       const QString &   caption = QString::null
+ *         )   [static]
+ *
+ * KDE4:
+ * KUrl KFileDialog::getOpenUrl   (  const KUrl &   startDir = KUrl(), 
+ *   const QString &   filter = QString(), 
+ *   QWidget *   parent = 0, 
+ *   const QString &   caption = QString()   
+ *    )   [static]
+ *
+ * Qt4:
+ * no apparent analog to getOpenURL at all QFileDialog, but at least
+ * QFileDialogs are incredibly crappy looking and disgustingly GNOMEish to make
+ * up for the reduced functionality.  Oh, wait.
+ */
+
+    QUrl url = QFileDialog::getOpenURL
                (deviceDir,
                 "audio/x-rosegarden-device audio/x-rosegarden audio/x-soundfont",
                 this, i18n("Import Banks from Device in File"));
@@ -1489,7 +1526,12 @@ BankEditorDialog::slotImport()
             (m_listView->selectedItem());
 
         if (!deviceItem) {
-            QMessageBox::critical(this, "", "Some internal error: cannot locate selected device");
+            QMessageBox::critical(
+              dynamic_cast<QWidget*>(this),
+              "", /* no title */
+              i18n("Some internal error: cannot locate selected device"),
+              QMessageBox::Ok,
+              QMessageBox::Ok);
             return ;
         }
 
@@ -1619,11 +1661,27 @@ BankEditorDialog::slotExport()
 {
     QString extension = "rgd";
 
+/*
+ * Qt4:
+ * QString getSaveFileName ( QWidget * parent = 0, const QString & caption =
+ * QString(), const QString & dir = QString(), const QString & filter =
+ * QString(), QString * selectedFilter = 0, Options options = 0 )
+ *
+ * KDE3:
+ * QString KFileDialog::getSaveFileName   (  const QString &   startDir =
+ * QString::null, 
+ *   const QString &   filter = QString::null, 
+ *     QWidget *   parent = 0, 
+ *       const QString &   caption = QString::null   
+ *         )   [static]
+ *
+ */
+
     QString name =
-        KFileDialog::getSaveFileName(":ROSEGARDEN",
-                                     (extension.isEmpty() ? QString("*") : ("*." + extension)),
-                                     this,
-                                     i18n("Export Device as..."));
+        QFileDialog::getSaveFileName(this,
+                                     i18n("Export Device as..."),
+                                     ":ROSEGARDEN",
+                                     (extension.isEmpty() ? QString("*") : ("*." + extension)));
 
     // Check for the existence of the name
     if (name.isEmpty())
@@ -1640,17 +1698,25 @@ BankEditorDialog::slotExport()
     QFileInfo info(name);
 
     if (info.isDir()) {
-        /* was sorry */ QMessageBox::warning(this, i18n("You have specified a directory"));
+        QMessageBox::warning(
+          dynamic_cast<QWidget*>(this),
+          "", /* no title */
+          i18n("You have specified a directory"),
+          QMessageBox::Ok,
+          QMessageBox::Ok);
         return ;
     }
 
     if (info.exists()) {
-        int overwrite = QMessageBox::questionYesNo
-                        (this, i18n("The specified file exists.  Overwrite?"));
-
+        int overwrite = QMessageBox::question(
+                          dynamic_cast<QWidget*>(this),
+                          "", /* no title */
+                          i18n("The specified file exists.  Overwrite?"),
+                          QMessageBox::Yes | QMessageBox::No,
+                          QMessageBox::No);
+ 
         if (overwrite != QMessageBox::Yes)
             return ;
-
     }
 
     MidiDeviceListViewItem* deviceItem =
@@ -1692,24 +1758,22 @@ void
 BankEditorDialog::closeEvent(QCloseEvent *e)
 {
     if (m_modified) {
-
-        int res = QMessageBox::warningYesNoCancel(this,
-                  i18n("There are unsaved changes.\n"
-                       "Do you want to apply the changes before exiting "
-                       "the Bank Editor or discard the changes ?"),
-                  i18n("Unsaved Changes"),
-                  i18n("&Apply"),
-                  i18n("&Discard"));
+        int res = QMessageBox::warning(
+                    dynamic_cast<QWidget*>(this),
+                    i18n("Unsaved Changes"),
+                    i18n("There are unsaved changes.\n"
+                         "Do you want to apply the changes before exiting "
+                         "the Bank Editor?"),
+                    QMessageBox::Yes | QMessageBox::No,
+                    QMessageBox::No);
         if (res == QMessageBox::Yes) {
-
             slotApply();
-
-        } else if (res == QMessageBox::Cancel)
+        } else if (res == QMessageBox::Cancel||res == QMessageBox::No)
             return ;
     }
 
     emit closing();
-    KMainWindow::closeEvent(e);
+    QMainWindow::closeEvent(e);
 }
 
 }

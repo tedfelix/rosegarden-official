@@ -230,8 +230,12 @@ DeviceEditorDialog::slotClose()
 {
     if (m_modified) {
 
-        int reply = QMessageBox::questionYesNo(this,
-                                               i18n("Apply pending changes?"));
+        int reply = QMessageBox::question(
+                      dynamic_cast<QWidget*>(this),
+                      "", /* no title */
+                      i18n("Apply pending changes?"),
+                      QMessageBox::Yes | QMessageBox::No,
+                      QMessageBox::No);
 
         if (reply == QMessageBox::Yes)
             slotApply();

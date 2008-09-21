@@ -15,12 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-
 #include "ImportDeviceDialog.h"
-#include <QLayout>
-#include <QApplication>
 
-#include <klocale.h>
 #include "misc/Strings.h"
 #include "document/ConfigGroups.h"
 #include "base/MidiDevice.h"
@@ -29,6 +25,9 @@
 #include "gui/application/RosegardenGUIApp.h"
 #include "sound/SF2PatchExtractor.h"
 #include "gui/general/FileSource.h"
+
+#include <QLayout>
+#include <QApplication>
 #include <QComboBox>
 #include <QSettings>
 #include <QDialog>
@@ -44,6 +43,7 @@
 #include <QHBoxLayout>
 #include <QButtonGroup>
 
+#include <klocale.h> // i18n()
 
 namespace Rosegarden
 {
@@ -83,7 +83,12 @@ ImportDeviceDialog::doImport()
     QString target;
     FileSource source(m_url);
     if (!source.isAvailable()) {
-        QMessageBox::critical(this, "", i18n("Cannot download file %1", m_url.toString()));
+        QMessageBox::critical(
+          dynamic_cast<QWidget*>(this),
+          "", /* no title */
+          i18n("Cannot download file %1", m_url.toString()),
+          QMessageBox::Ok,
+          QMessageBox::Ok);
         return false;
     }
 
@@ -98,15 +103,23 @@ ImportDeviceDialog::doImport()
         fileRead = importFromRG(target);
     }
     if (!fileRead) {
-        QMessageBox::critical
-            (this, i18n("Cannot open file %1", m_url.toString()));
+        QMessageBox::critical(
+          dynamic_cast<QWidget*>(this),
+          "", /* no title */
+          i18n("Cannot open file %1", m_url.toString()),
+          QMessageBox::Ok,
+          QMessageBox::Ok);
         reject();
         close();
         return false;
     }
     if (m_devices.size() == 0) {
-        /* was sorry */ QMessageBox::warning
-            (this, i18n("No devices found in file %1", m_url.toString()));
+        QMessageBox::warning(
+          dynamic_cast<QWidget*>(this),
+          "", /* no title */
+          i18n("No devices found in file %1", m_url.toString()),
+          QMessageBox::Ok,
+          QMessageBox::Ok);
         reject();
         close();
         return false;
