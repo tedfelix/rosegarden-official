@@ -84,24 +84,24 @@ ClefDialog::ClefDialog(QDialogButtonBox::QWidget *parent,
         (m_octaveUp, i18n("Up an Octave"));
 
     m_clefLabel = new QLabel(i18n("Clef"), clefLabelBox);
-    clefLabelBoxLayout->addWidget(m_clefLabel);
-    m_clefLabel->setAlignment(AlignVCenter | AlignHCenter);
+	clefLabelBoxLayout->addWidget(m_clefLabel, Qt::AlignHCenter | Qt::AlignVCenter );
+//    m_clefLabel->setAlignment(AlignVCenter | AlignHCenter);
 
     m_octaveDown = new BigArrowButton(clefLabelBox, Qt::DownArrow);
     clefLabelBoxLayout->addWidget(m_octaveDown);
-    QToolTip::add
-        (m_octaveDown, i18n("Down an Octave"));
+	m_octaveDown->setToolTip( i18n("Down an Octave") );
+//    QToolTip::add(m_octaveDown, i18n("Down an Octave"));
 
     BigArrowButton *clefUp = new BigArrowButton( clefBox , Qt::RightArrow);
     clefBoxLayout->addWidget(clefUp);
     clefBox->setLayout(clefBoxLayout);
-    QToolTip::add
-        (clefUp, i18n("Higher clef"));
+	clefUp->setToolTip( i18n("Higher clef") );
+//    QToolTip::add(clefUp, i18n("Higher clef"));
 
     m_clefNameLabel = new QLabel(i18n("Clef"), clefLabelBox);
-    clefLabelBoxLayout->addWidget(m_clefNameLabel);
-    clefLabelBox->setLayout(clefLabelBoxLayout);
-    m_clefNameLabel->setAlignment(AlignVCenter | AlignHCenter);
+	clefLabelBoxLayout->addWidget(m_clefNameLabel, Qt::AlignHCenter | Qt::AlignVCenter );
+	clefLabelBox->setLayout(clefLabelBoxLayout);
+//    m_clefNameLabel->setAlignment(AlignVCenter | AlignHCenter);
 
     if (showConversionOptions) {
         m_noConversionButton =

@@ -31,7 +31,7 @@
 #include <QString>
 #include <QWidget>
 
-#include <kdialogbase.h>
+//#include <kdialogbase.h>
 #include <kstandarddirs.h>
 
 

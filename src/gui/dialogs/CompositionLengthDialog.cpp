@@ -43,13 +43,12 @@ CompositionLengthDialog::CompositionLengthDialog(
 
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
-    QWidget *vBox = new QWidget(this);
-    QVBoxLayout *vBoxLayout = new QVBoxLayout;
-    metagrid->addWidget(vBox, 0, 0);
+	QWidget *startBox = new QWidget(this);
+	QVBoxLayout *startBoxLayout = new QVBoxLayout;
+	metagrid->addWidget(startBox, 0, 0);
 
 
-    new QLabel(i18n("Set the Start and End bar markers for this Composition"),
-               vBox);
+    new QLabel(i18n("Set the Start and End bar markers for this Composition"), startBox );
 
     QLabel *child_7 = new QLabel(i18n("Start Bar"), startBox );
     startBoxLayout->addWidget(child_7);
@@ -61,9 +60,9 @@ CompositionLengthDialog::CompositionLengthDialog(
     m_startMarkerSpinBox->setValue(
         m_composition->getBarNumber(m_composition->getStartMarker()) + 1);
 
-    QWidget *endBox = new QWidget( vBox );
-    vBoxLayout->addWidget(endBox);
-    vBox->setLayout(vBoxLayout);
+	QWidget *endBox = new QWidget( startBox );
+	startBoxLayout->addWidget(endBox);
+	startBox->setLayout(startBoxLayout);
     QHBoxLayout *endBoxLayout = new QHBoxLayout;
     QLabel *child_4 = new QLabel(i18n("End Bar"), endBox );
     endBoxLayout->addWidget(child_4);

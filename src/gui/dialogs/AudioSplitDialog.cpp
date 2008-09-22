@@ -78,15 +78,17 @@ AudioSplitDialog::AudioSplitDialog(QDialogButtonBox::QWidget *parent,
                strtoqstr(m_segment->getLabel()) + QString("\""), w);
 
     m_canvas = new Q3Canvas( w );
-    wLayout->addWidget(m_canvas);
+    wLayout->addWidget( dynamic_cast<QWidget*>(m_canvas), 0, 0 );
     m_canvas->resize(m_canvasWidth, m_canvasHeight);
+	
     m_canvasView = new Q3CanvasView(m_canvas, w );
-    wLayout->addWidget(m_canvasView);
+    wLayout->addWidget(m_canvasView, 0, 0 );
     m_canvasView->setFixedWidth(m_canvasWidth);
     m_canvasView->setFixedHeight(m_canvasHeight);
 
-    m_canvasView->setHScrollBarMode(QScrollArea::AlwaysOff);
-    m_canvasView->setVScrollBarMode(QScrollArea::AlwaysOff);
+//    m_canvasView->setHScrollBarMode(QScrollArea::AlwaysOff);	//&&&
+//    m_canvasView->setVScrollBarMode(QScrollArea::AlwaysOff);
+	
     m_canvasView->setDragAutoScroll(false);
 
     QWidget *hbox = new QWidget( w );

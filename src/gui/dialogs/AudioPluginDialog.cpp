@@ -132,14 +132,14 @@ AudioPluginDialog::AudioPluginDialog(QDialogButtonBox::QWidget *parent,
 
 
     m_insOuts = new QLabel(i18n("<ports>"), h );
-    hLayout->addWidget(m_insOuts);
-    m_insOuts->setAlignment(AlignRight);
+	hLayout->addWidget(m_insOuts, Qt::AlignRight );
+//    m_insOuts->setAlignment(AlignRight);
     QToolTip::add
         (m_insOuts, i18n("Input and output port counts."));
 
     m_pluginId = new QLabel(i18n("<id>"), h );
-    hLayout->addWidget(m_pluginId);
-    m_pluginId->setAlignment(AlignRight);
+	hLayout->addWidget(m_pluginId, Qt::AlignRight );
+//    m_pluginId->setAlignment(AlignRight);
     QToolTip::add
         (m_pluginId, i18n("Unique ID of plugin."));
 
@@ -417,13 +417,11 @@ AudioPluginDialog::slotPluginSelected(int i)
         m_insOuts->setText(i18n("<ports>"));
         m_pluginId->setText(i18n("<id>"));
 
-        QToolTip::setVisible(false);
-        QToolTip::remove
-            (m_pluginList);
-
-        QToolTip::add
-            (m_pluginList, i18n("Select a plugin from this list."));
-    }
+//        QToolTip::hideText(false);
+//        QToolTip::remove(m_pluginList);
+//        QToolTip::add(m_pluginList, i18n("Select a plugin from this list."));
+	      m_pluginList->setToolTip( i18n("Select a plugin from this list.") );
+	}
 
     AudioPlugin *plugin = m_pluginManager->getPlugin(number - 1);
 
@@ -470,11 +468,10 @@ AudioPluginDialog::slotPluginSelected(int i)
         QString pluginInfo = plugin->getAuthor() + QString("\n") +
             plugin->getCopyright();
 
-        QToolTip::setVisible(false);
-        QToolTip::remove
-            (m_pluginList);
-        QToolTip::add
-            (m_pluginList, pluginInfo);
+//        QToolTip::setVisible(false);
+//        QToolTip::remove(m_pluginList);
+//        QToolTip::add(m_pluginList, pluginInfo);
+		m_pluginList->setToolTip( pluginInfo );
 
         std::string identifier = qstrtostr( plugin->getIdentifier() );
 
@@ -605,7 +602,7 @@ AudioPluginDialog::slotPluginSelected(int i)
 
 #ifdef HAVE_LIBLO
     bool gui = m_pluginGUIManager->hasGUI(m_containerId, m_index);
-    actionButton(Details)->setEnabled(gui);
+//    actionButton(Details)->setEnabled(gui);	//
 #endif
 
 }
@@ -702,7 +699,7 @@ AudioPluginDialog::updatePluginProgramControl()
         std::string program = inst->getProgram();
         if (m_programCombo) {
             m_programCombo->blockSignals(true);
-            m_programCombo->setItemText(strtoqstr(program));
+			m_programCombo->setItemText( m_index, strtoqstr(program) );	//@@@ m_index param correct ? (=index-nr)
             m_programCombo->blockSignals(false);
         }
         for (std::vector<PluginControl *>::iterator i = m_pluginWidgets.begin();
@@ -897,7 +894,7 @@ AudioPluginDialog::slotPaste()
         // and set the program
         //
         if (m_programCombo && clipboard->m_program != "") {
-            m_programCombo->setItemText(strtoqstr(clipboard->m_program));
+			m_programCombo->setItemText( count, strtoqstr(clipboard->m_program));
             slotPluginProgramChanged(strtoqstr(clipboard->m_program));
         }
 

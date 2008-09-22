@@ -22,6 +22,25 @@
 
 namespace Rosegarden {
         
+
+class BigArrowButton : public QPushButton	//&&& use a button now, re-implemented BigArrow, FIX: use QPixmap/QIcon
+{
+public:
+	BigArrowButton( QWidget *parent = 0, Qt::ArrowType arrow = Qt::UpArrow, const char* name=0 ) : QPushButton( "", parent )
+	{ 
+		if( arrow == Qt::UpArrow ){
+			this->setText( "UP" );
+			//this->setIcon();
+		}
+		if( arrow == Qt::DownArrow ){
+			this->setText( "DOWN" );
+			//this->setIcon();
+		}
+	
+	}
+};
+	
+/*		
 class BigArrowButton : public KArrowButton
 {
 public:
@@ -34,7 +53,8 @@ public:
         return QSize(20, 20);
     }
 };
-
+*/
+	
 }
 
 #endif /*BIGARROWBUTTON_H_*/
