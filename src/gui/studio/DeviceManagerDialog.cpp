@@ -115,24 +115,12 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
     vlayout->addWidget(buttons);
     vlayout->addStretch(10);
 
-    QToolTip::add
-        (addButton,
-         i18n("Create a new Play device"));
-    QToolTip::add
-        (m_deletePlayButton,
-         i18n("Delete the selected device"));
-    QToolTip::add
-        (m_importButton,
-         i18n("Import Bank, Program and Controller data from a Rosegarden file to the selected device"));
-    QToolTip::add
-        (m_exportButton,
-         i18n("Export Bank and Controller data to a Rosegarden interchange file"));
-    QToolTip::add
-        (m_banksButton,
-         i18n("View and edit Banks and Programs for the selected device"));
-    QToolTip::add
-        (m_controllersButton,
-         i18n("View and edit Control Events for the selected device - these are special Event types that you can define against your device and control through Control Rulers or the Instrument Parameter Box "));
+    addButton->setToolTip(i18n("Create a new Play device"));
+    m_deletePlayButton->setToolTip(i18n("Delete the selected device"));
+    m_importButton->setToolTip(i18n("Import Bank, Program and Controller data from a Rosegarden file to the selected device"));
+    m_exportButton->setToolTip(i18n("Export Bank and Controller data to a Rosegarden interchange file"));
+    m_banksButton->setToolTip(i18n("View and edit Banks and Programs for the selected device"));
+    m_controllersButton->setToolTip(i18n("View and edit Control Events for the selected device - these are special Event types that you can define against your device and control through Control Rulers or the Instrument Parameter Box "));
 
     connect(addButton, SIGNAL(clicked()), this, SLOT(slotAddPlayDevice()));
     connect(m_deletePlayButton, SIGNAL(clicked()), this, SLOT(slotDeletePlayDevice()));
@@ -170,12 +158,8 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
     vlayout->addWidget(buttons);
     vlayout->addStretch(10);
 
-    QToolTip::add
-        (addButton,
-         i18n("Create a new Record device"));
-    QToolTip::add
-        (m_deleteRecordButton,
-         i18n("Delete the selected device"));
+    addButton->setToolTip(i18n("Create a new Record device"));
+    m_deleteRecordButton->setToolTip(i18n("Delete the selected device"));
 
     connect(addButton, SIGNAL(clicked()), this, SLOT(slotAddRecordDevice()));
     connect(m_deleteRecordButton, SIGNAL(clicked()), this, SLOT(slotDeleteRecordDevice()));

@@ -416,8 +416,7 @@ AudioMixerWindow::populate()
             pluginBoxLayout->addWidget(plugin);
             plugin->setText(i18n("<none>"));
             plugin->setMaximumWidth(45);
-            QToolTip::add
-                (plugin, i18n("Audio plugin button"));
+            plugin->setToolTip(i18n("Audio plugin button"));
             rec.m_plugins.push_back(plugin);
             connect(plugin, SIGNAL(clicked()),
                     this, SLOT(slotSelectPlugin()));
@@ -551,8 +550,7 @@ AudioMixerWindow::populate()
             pluginBoxLayout->addWidget(plugin);
             plugin->setText(i18n("<none>"));
             plugin->setMaximumWidth(45);
-            QToolTip::add
-                (plugin, i18n("Audio plugin button"));
+            plugin->setToolTip(i18n("Audio plugin button"));
             rec.m_plugins.push_back(plugin);
             connect(plugin, SIGNAL(clicked()),
                     this, SLOT(slotSelectPlugin()));

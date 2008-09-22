@@ -149,7 +149,7 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
 	//
 	// ToolTips
 	//
-	QToolTip::add( editHeader, trName );
+	editHeader->setToolTip(trName );
 
 	shown.insert(key);
     }

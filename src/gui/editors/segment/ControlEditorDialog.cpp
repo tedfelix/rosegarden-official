@@ -128,17 +128,11 @@ ControlEditorDialog::ControlEditorDialog(QWidget *parent,
 
     m_closeButton = new QPushButton(i18n("Close"), btnBox);
 
-    QToolTip::add
-        (m_addButton,
-                i18n("Add a Control Parameter to the Studio"));
+    m_addButton->setToolTip(i18n("Add a Control Parameter to the Studio"));
 
-    QToolTip::add
-        (m_deleteButton,
-                i18n("Delete a Control Parameter from the Studio"));
+    m_deleteButton->setToolTip(i18n("Delete a Control Parameter from the Studio"));
 
-    QToolTip::add
-        (m_closeButton,
-                i18n("Close the Control Parameter editor"));
+    m_closeButton->setToolTip(i18n("Close the Control Parameter editor"));
 
     layout->addStretch(10);
     layout->addWidget(m_addButton);

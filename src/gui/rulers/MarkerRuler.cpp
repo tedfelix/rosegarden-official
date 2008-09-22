@@ -115,8 +115,7 @@ MarkerRuler::MarkerRuler(RosegardenGUIDoc *doc,
 			qa_edit_marker->setIcon(icon); 
 			connect( qa_edit_marker, SIGNAL(triggered()), this, SLOT(slotEditMarker())  );
 
-    QToolTip::add
-        (this, i18n("Click on a marker to move the playback pointer.\nShift-click to set a range between markers.\nDouble-click to open the marker editor."));
+    this->setToolTip(i18n("Click on a marker to move the playback pointer.\nShift-click to set a range between markers.\nDouble-click to open the marker editor."));
 }
 
 MarkerRuler::~MarkerRuler()

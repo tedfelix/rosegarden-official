@@ -115,21 +115,13 @@ MarkerEditor::MarkerEditor(QWidget *parent,
 
     m_closeButton = new QPushButton(i18n("Close"), btnBox);
 
-    QToolTip::add
-        (m_addButton,
-                i18n("Add a Marker"));
+    m_addButton->setToolTip(i18n("Add a Marker"));
 
-    QToolTip::add
-        (m_deleteButton,
-                i18n("Delete a Marker"));
+    m_deleteButton->setToolTip(i18n("Delete a Marker"));
 
-    QToolTip::add
-        (m_deleteAllButton,
-                i18n("Delete All Markers"));
+    m_deleteAllButton->setToolTip(i18n("Delete All Markers"));
 
-    QToolTip::add
-        (m_closeButton,
-                i18n("Close the Marker Editor"));
+    m_closeButton->setToolTip(i18n("Close the Marker Editor"));
 
     layout->addStretch(10);
     layout->addWidget(m_addButton);

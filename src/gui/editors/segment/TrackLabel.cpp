@@ -66,8 +66,7 @@ TrackLabel::TrackLabel(TrackId id,
     connect(m_pressTimer, SIGNAL(timeout()),
             this, SIGNAL(changeToInstrumentList()));
 
-    QToolTip::add
-        (this, i18n("Click and hold with left mouse button to assign this Track to an Instrument."));
+    this->setToolTip(i18n("Click and hold with left mouse button to assign this Track to an Instrument."));
 
 }
 

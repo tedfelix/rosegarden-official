@@ -186,8 +186,7 @@ EventEditDialog::EventEditDialog(QDialogButtonBox::QWidget *parent,
             new QLabel(strtoqstr(event.getAsString(*i)), m_nonPersistentGrid, strtoqstr(*i));
             QPushButton *button = new QPushButton("P", m_nonPersistentGrid, strtoqstr(*i));
             button->setFixedSize(QSize(24, 24));
-            QToolTip::add
-                (button, i18n("Make persistent"));
+            button->setToolTip(i18n("Make persistent"));
             QObject::connect(button, SIGNAL(clicked()),
                              this, SLOT(slotPropertyMadePersistent()));
         }
@@ -295,8 +294,7 @@ case UInt: {
     QPushButton *button = new QPushButton("X", m_persistentGrid,
                                           strtoqstr(name));
     button->setFixedSize(QSize(24, 24));
-    QToolTip::add
-        (button, i18n("Delete this property"));
+    button->setToolTip(i18n("Delete this property"));
     QObject::connect(button, SIGNAL(clicked()),
                      this, SLOT(slotPropertyDeleted()));
     button->show();

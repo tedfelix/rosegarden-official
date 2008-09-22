@@ -102,8 +102,7 @@ KeySignatureDialog::KeySignatureDialog(QDialogButtonBox::QWidget *parent,
 
     BigArrowButton *keyDown = new BigArrowButton(keyBox, Qt::LeftArrow);
     keyBoxLayout->addWidget(keyDown);
-    QToolTip::add
-        (keyDown, i18n("Flatten"));
+    keyDown->setToolTip(i18n("Flatten"));
 
     m_keyLabel = new QLabel(i18n("Key"), keyBox);
     keyBoxLayout->addWidget(m_keyLabel);
@@ -112,8 +111,7 @@ KeySignatureDialog::KeySignatureDialog(QDialogButtonBox::QWidget *parent,
     BigArrowButton *keyUp = new BigArrowButton(keyBox, Qt::RightArrow);
     keyBoxLayout->addWidget(keyUp);
     keyBox->setLayout(keyBoxLayout);
-    QToolTip::add
-        (keyUp, i18n("Sharpen"));
+    keyUp->setToolTip(i18n("Sharpen"));
 
     m_keyCombo = new QComboBox(nameBox);
     nameBoxLayout->addWidget(m_keyCombo);

@@ -149,21 +149,13 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 
     // Tips
     //
-    QToolTip::add
-        (m_addBank,
-                i18n("Add a Bank to the current device"));
+    m_addBank->setToolTip(i18n("Add a Bank to the current device"));
 
-    QToolTip::add
-        (m_addKeyMapping,
-                i18n("Add a Percussion Key Mapping to the current device"));
+    m_addKeyMapping->setToolTip(i18n("Add a Percussion Key Mapping to the current device"));
 
-    QToolTip::add
-        (m_delete,
-                i18n("Delete the current Bank or Key Mapping"));
+    m_delete->setToolTip(i18n("Delete the current Bank or Key Mapping"));
 
-    QToolTip::add
-        (m_deleteAll,
-                i18n("Delete all Banks and Key Mappings from the current Device"));
+    m_deleteAll->setToolTip(i18n("Delete all Banks and Key Mappings from the current Device"));
 
     m_importBanks = new QPushButton(i18n("Import..."), bankBox);
     m_exportBanks = new QPushButton(i18n("Export..."), bankBox);
@@ -172,12 +164,8 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 
     // Tips
     //
-    QToolTip::add
-        (m_importBanks,
-                i18n("Import Bank and Program data from a Rosegarden file to the current Device"));
-    QToolTip::add
-        (m_exportBanks,
-                i18n("Export all Device and Bank information to a Rosegarden format  interchange file"));
+    m_importBanks->setToolTip(i18n("Import Bank and Program data from a Rosegarden file to the current Device"));
+    m_exportBanks->setToolTip(i18n("Export all Device and Bank information to a Rosegarden format  interchange file"));
 
     m_copyPrograms = new QPushButton(i18n("Copy"), bankBox);
     m_pastePrograms = new QPushButton(i18n("Paste"), bankBox);
@@ -186,13 +174,9 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 
     // Tips
     //
-    QToolTip::add
-        (m_copyPrograms,
-                i18n("Copy all Program names from current Bank to clipboard"));
+    m_copyPrograms->setToolTip(i18n("Copy all Program names from current Bank to clipboard"));
 
-    QToolTip::add
-        (m_pastePrograms,
-                i18n("Paste Program names from clipboard to current Bank"));
+    m_pastePrograms->setToolTip(i18n("Paste Program names from clipboard to current Bank"));
 
     connect(m_listView, SIGNAL(currentChanged(QListWidgetItem*)),
             this, SLOT(slotPopulateDevice(QListWidgetItem*)));

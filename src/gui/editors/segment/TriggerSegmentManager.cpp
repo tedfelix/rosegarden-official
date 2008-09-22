@@ -108,21 +108,13 @@ TriggerSegmentManager::TriggerSegmentManager(QWidget *parent,
 
     m_closeButton = new QPushButton(i18n("Close"), btnBox);
 
-    QToolTip::add
-        (m_addButton,
-                i18n("Add a Triggered Segment"));
+    m_addButton->setToolTip(i18n("Add a Triggered Segment"));
 
-    QToolTip::add
-        (m_deleteButton,
-                i18n("Delete a Triggered Segment"));
+    m_deleteButton->setToolTip(i18n("Delete a Triggered Segment"));
 
-    QToolTip::add
-        (m_deleteAllButton,
-                i18n("Delete All Triggered Segments"));
+    m_deleteAllButton->setToolTip(i18n("Delete All Triggered Segments"));
 
-    QToolTip::add
-        (m_closeButton,
-                i18n("Close the Triggered Segment Manager"));
+    m_closeButton->setToolTip(i18n("Close the Triggered Segment Manager"));
 
     layout->addStretch(10);
     layout->addWidget(m_addButton);

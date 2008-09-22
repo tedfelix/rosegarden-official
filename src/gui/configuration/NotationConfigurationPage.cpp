@@ -155,7 +155,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent,
     if (HeadersGroup::isValidShowMode(defaultShowTrackHeaders)) {
         m_showTrackHeaders->setCurrentIndex(defaultShowTrackHeaders);
     }
-    QToolTip::add(m_showTrackHeaders, QString(i18n(
+    m_showTrackHeaders->setToolTip(QString(i18n(
         "\"Always\" and \"Never\" mean what they usually mean\n"
         "\"When needed\" means \"when staves are too many to all fit"
         " in the current window\"")));

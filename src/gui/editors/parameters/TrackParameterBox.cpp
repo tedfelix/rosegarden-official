@@ -321,15 +321,13 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     groupLayout->addWidget(new QLabel(i18n("Lowest"), m_defaultsGroup), row, 1, AlignRight);
 
     m_lowButton = new QPushButton(i18n("---"), m_defaultsGroup);
-    QToolTip::add
-        (m_lowButton, i18n("Choose the lowest suggested playable note, using a staff"));
+    m_lowButton->setToolTip(i18n("Choose the lowest suggested playable note, using a staff"));
     groupLayout->addWidget(m_lowButton, row, 2, row- row+1, 1);
 
     groupLayout->addWidget(new QLabel(i18n("Highest"), m_defaultsGroup), row, 3, AlignRight);
 
     m_highButton = new QPushButton(i18n("---"), m_defaultsGroup);
-    QToolTip::add
-        (m_highButton, i18n("Choose the highest suggested playable note, using a staff"));
+    m_highButton->setToolTip(i18n("Choose the highest suggested playable note, using a staff"));
     groupLayout->addWidget(m_highButton, row, 4, row- row+1, 5- 5);
 
     updateHighLow();

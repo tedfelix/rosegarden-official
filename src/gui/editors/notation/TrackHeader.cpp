@@ -188,7 +188,7 @@ TrackHeader::TrackHeader(QWidget *parent, TrackId trackId, int height, int ypos)
         }
     }
 
-    QToolTip::add(this, toolTipText);
+    this->setToolTip(toolTipText);
 
     m_firstSeg = *segments.begin();
     m_firstSegStartTime = m_firstSeg->getStartTime();

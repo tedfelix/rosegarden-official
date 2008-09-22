@@ -99,11 +99,11 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     QString programTip = i18n("<qt>use program changes from an external source to manipulate these controls (only valid for the currently-active track)</qt>");
     m_evalMidiPrgChgCheckBox = new QCheckBox(this); 
     m_evalMidiPrgChgLabel = new QLabel(i18n("Receive external"), this);
-    QToolTip::add(m_evalMidiPrgChgLabel, programTip);
+    m_evalMidiPrgChgLabel->setToolTip(programTip);
     
     m_evalMidiPrgChgCheckBox->setDisabled(false);
     m_evalMidiPrgChgCheckBox->setChecked(false);
-    QToolTip::add(m_evalMidiPrgChgCheckBox, programTip);
+    m_evalMidiPrgChgCheckBox->setToolTip(programTip);
     m_evalMidiPrgChgCheckBox->setShortcut((QKeySequence)"Shift+P");
     
     

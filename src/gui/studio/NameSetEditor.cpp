@@ -68,9 +68,7 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
     new QLabel(i18n("Email"), groupBox);
     m_librarianEmail = new QLabel(groupBox);
 
-    QToolTip::add
-        (groupBox,
-                i18n("The librarian maintains the Rosegarden device data for this device.\nIf you've made modifications to suit your own device, it might be worth\nliaising with the librarian in order to publish your information for the benefit\nof others."));
+    groupBox->setToolTip(i18n("The librarian maintains the Rosegarden device data for this device.\nIf you've made modifications to suit your own device, it might be worth\nliaising with the librarian in order to publish your information for the benefit\nof others."));
 
     QTabWidget* tabw = new QTabWidget(this);
 

@@ -131,8 +131,7 @@ AudioInstrumentParameterPanel::slotPluginSelected(InstrumentId instrumentId,
     if (plugin == -1) {
 
         button->setText(noneText);
-        QToolTip::add
-            (button, noneText);
+        button->setToolTip(noneText);
 
     } else {
 
@@ -141,8 +140,7 @@ AudioInstrumentParameterPanel::slotPluginSelected(InstrumentId instrumentId,
         if (pluginClass) {
             button->setText(pluginClass->getLabel());
 
-            QToolTip::add
-                (button, pluginClass->getLabel());
+            button->setToolTip(pluginClass->getLabel());
 
             pluginBackgroundColour = pluginClass->getColour();
         }
@@ -366,15 +364,13 @@ AudioInstrumentParameterPanel::setupForInstrument(Instrument* instrument)
 
             if (pluginClass) {
                 button->setText(pluginClass->getLabel());
-                QToolTip::add
-                    (button, pluginClass->getLabel());
+                button->setToolTip(pluginClass->getLabel());
                 setButtonColour(index, inst->isBypassed(),
                                 pluginClass->getColour());
             }
         } else {
             button->setText(noneText);
-            QToolTip::add
-                (button, noneText);
+            button->setToolTip(noneText);
             setButtonColour(index, inst ? inst->isBypassed() : false, QColor(Qt::black));
         }
     }

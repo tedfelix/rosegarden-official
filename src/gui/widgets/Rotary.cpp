@@ -97,9 +97,7 @@ Rotary::Rotary(QWidget *parent,
             SLOT(slotFloatTimeout()));
     _float->hide();
 
-    QToolTip::add
-        (this,
-                i18n("Click and drag up and down or left and right to modify.\nDouble click to edit value directly."));
+    this->setToolTip(i18n("Click and drag up and down or left and right to modify.\nDouble click to edit value directly."));
     setFixedSize(size, size);
 
     emit valueChanged(m_snapPosition);

@@ -57,7 +57,7 @@ RawNoteRuler::RawNoteRuler(RulerScale *rulerScale,
         m_rulerScale(rulerScale)
 {
     setBackgroundColor(GUIPalette::getColour(GUIPalette::RawNoteRulerBackground));
-    QToolTip::add(this,"");
+    this->setToolTip("");
 }
 
 RawNoteRuler::~RawNoteRuler()
@@ -446,7 +446,7 @@ RawNoteRuler::paintEvent(QPaintEvent* e)
         if (track)
             trackPosition = track->getPosition();
 
-	QToolTip::add(this,i18n("Track #%1, Segment \"%2\" (runtime id %3)",
+	this->setToolTip(i18n("Track #%1, Segment \"%2\" (runtime id %3)",
 		            trackPosition + 1,
 		            strtoqstr(m_segment->getLabel()),
 		            m_segment->getRuntimeId()));

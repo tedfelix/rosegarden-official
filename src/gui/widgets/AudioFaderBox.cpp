@@ -73,8 +73,7 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
         pluginVboxLayout->addWidget(plugin);
         plugin->setText(i18n("<no plugin>"));
 
-        QToolTip::add
-            (plugin, i18n("Audio plugin button"));
+        plugin->setToolTip(i18n("Audio plugin button"));
 
         m_plugins.push_back(plugin);
         m_signalMapper->setMapping(plugin, i);
@@ -85,8 +84,7 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
 
     m_synthButton = new QPushButton(this);
     m_synthButton->setText(i18n("<no synth>"));
-    QToolTip::add
-        (m_synthButton, i18n("Synth plugin button"));
+    m_synthButton->setToolTip(i18n("Synth plugin button"));
 
     // VU meter and fader
     //
@@ -155,18 +153,12 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
         m_audioOutput = 0;
     }
 
-    QToolTip::add
-        (m_pan, i18n("Set the audio pan position in the stereo field"));
-    QToolTip::add
-        (m_synthGUIButton, i18n("Open synth plugin's native editor"));
-    QToolTip::add
-        (m_stereoButton, i18n("Mono or Stereo Instrument"));
-    QToolTip::add
-        (m_recordFader, i18n("Record level"));
-    QToolTip::add
-        (m_fader, i18n("Playback level"));
-    QToolTip::add
-        (m_vuMeter, i18n("Audio level"));
+    m_pan->setToolTip(i18n("Set the audio pan position in the stereo field"));
+    m_synthGUIButton->setToolTip(i18n("Open synth plugin's native editor"));
+    m_stereoButton->setToolTip(i18n("Mono or Stereo Instrument"));
+    m_recordFader->setToolTip(i18n("Record level"));
+    m_fader->setToolTip(i18n("Playback level"));
+    m_vuMeter->setToolTip(i18n("Audio level"));
 
     QGridLayout *grid = new QGridLayout(this, 3, 6, 4, 4);
 

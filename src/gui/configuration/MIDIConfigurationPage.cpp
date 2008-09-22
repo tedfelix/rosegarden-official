@@ -112,15 +112,13 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     label = new QLabel(i18n("Send all MIDI Controllers at start of each playback"), frame);
 
     QString controllerTip = i18n("Rosegarden can send all MIDI Controllers (Pan, Reverb etc) to all MIDI devices every\ntime you hit play if you so wish.  Please note that this option will usually incur a\ndelay at the start of playback due to the amount of data being transmitted.");
-    QToolTip::add
-        (label, controllerTip);
+    label->setToolTip(controllerTip);
     layout->addWidget(label, row, 0, row- row+1, 1- 1);
 
     m_sendControllersAtPlay = new QCheckBox(frame);
     bool sendControllers = qStrToBool( settings.value("alwayssendcontrollers", "false" ) ) ;
     m_sendControllersAtPlay->setChecked(sendControllers);
-    QToolTip::add
-        (m_sendControllersAtPlay, controllerTip);
+    m_sendControllersAtPlay->setToolTip(controllerTip);
     layout->addWidget(m_sendControllersAtPlay, row, 2);
     ++row;
 
@@ -155,12 +153,12 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     //
     QLabel* lbl = new QLabel(i18n("Load SoundFont to SoundBlaster card at startup"), frame);
     QString tooltip = i18n("Check this box to enable soundfont loading on EMU10K-based cards when Rosegarden is launched");
-    QToolTip::add(lbl, tooltip);
+    lbl->setToolTip(tooltip);
     layout->addWidget(lbl, row, 0, row- row+1, 1- 1);
 
     m_sfxLoadEnabled = new QCheckBox(frame);
     layout->addWidget(m_sfxLoadEnabled, row, 2);
-    QToolTip::add(m_sfxLoadEnabled, tooltip);
+    m_sfxLoadEnabled->setToolTip(tooltip);
     ++row;
 
     layout->addWidget(new QLabel(i18n("Path to 'asfxload' or 'sfxload' command"), frame), row, 0);
