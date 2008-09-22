@@ -48,14 +48,18 @@ AddTracksDialog::AddTracksDialog(QDialogButtonBox::QWidget *parent, int currentT
     QVBoxLayout *vBoxLayout = new QVBoxLayout;
     metagrid->addWidget(vBox, 0, 0);
 
-
-    countBoxLayout->setSpacing(4);
-    QLabel *child_8 = new QLabel(i18n("How many tracks do you want to add?"), countBox );
+	QVBoxLayout* countBoxLayout;
+	countBoxLayout = vBoxLayout;		// assigned alias
+//    countBoxLayout->setSpacing(4);
+	vBox->setLayout( countBoxLayout );
+	
+    QLabel *child_8 = new QLabel(i18n("How many tracks do you want to add?") );
     countBoxLayout->addWidget(child_8);
-    m_count = new QSpinBox( countBox );
+	
+    m_count = new QSpinBox();
     countBoxLayout->addWidget(m_count);
-    countBox->setLayout(countBoxLayout);
-    m_count->setMinimum(1);
+    
+	m_count->setMinimum(1);
     m_count->setMaximum(32);
     m_count->setValue(1);
 

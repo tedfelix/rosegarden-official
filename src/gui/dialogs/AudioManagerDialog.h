@@ -20,20 +20,22 @@
 #define _RG_AUDIOMANAGERDIALOG_H_
 
 #include "sound/AudioFile.h"
-#include <kmainwindow.h>
+#include <QMainWindow>
 #include "document/ConfigGroups.h"
 
 
 class QWidget;
 class QTimer;
 class QString;
-class QListWidgetItem;
+class QTreeWidget;
+class QTreeWidgetItem;
 class QLabel;
 class QDropEvent;
 class QCloseEvent;
 class QShortcut;
-class KURL;
-class QListWidget;
+class QUrl;
+
+//class KURL;
 
 
 namespace Rosegarden
@@ -49,7 +51,7 @@ class AudioFile;
 class Command;
 
 
-class AudioManagerDialog : public KMainWindow
+class AudioManagerDialog : public QMainWindow
 {
     Q_OBJECT
 
@@ -103,7 +105,7 @@ public slots:
     void slotExportAudio();
 
     // get selection
-    void slotSelectionChanged(QListWidgetItem *);
+    void slotSelectionChanged(QTreeWidgetItem *);
 
     // Repopulate
     //
@@ -161,20 +163,20 @@ signals:
 
     void closing();
 protected slots:
-    void slotDropped(QDropEvent*, QListWidgetItem*);
+    void slotDropped(QDropEvent*, QTreeWidgetItem*);
     void slotCancelPlayingAudio();
 
 protected:
-    bool addFile(const KURL& kurl);
+    bool addFile(const QUrl& kurl);
     bool isSelectedTrackAudio();
-    void selectFileListItemNoSignal(QListWidgetItem*);
+    void selectFileListItemNoSignal(QTreeWidgetItem*);
     void updateActionState(bool haveSelection);
 
     virtual void closeEvent(QCloseEvent *);
 
     //--------------- Data members ---------------------------------
 
-    QListWidget        *m_fileList;
+    QTreeWidget        *m_fileList;
     QLabel           *m_wrongSampleRates;
     RosegardenGUIDoc *m_doc;
 

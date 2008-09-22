@@ -20,12 +20,13 @@
 
 #include "misc/Debug.h"
 #include "gui/widgets/AudioListItem.h"
-#include "qdragobject.h"
+
+#include "<Q3DragObject>"
 
 namespace Rosegarden {
         
 AudioListView::AudioListView(QWidget *parent, const char *name)
-    : QListWidget(parent, name)
+    : QTreeWidget(parent, name)
 {
     setDragEnabled(true);
     setAcceptDrops(true);
@@ -34,7 +35,7 @@ AudioListView::AudioListView(QWidget *parent, const char *name)
 
 bool AudioListView::acceptDrag(QDropEvent* e) const
 {
-    return QUriDrag::canDecode(e) || QListWidget::acceptDrag(e);
+    return QUriDrag::canDecode(e) || QTreeWidget::acceptDrag(e);
 }
 
 QDragObject* AudioListView::dragObject()

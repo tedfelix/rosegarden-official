@@ -440,7 +440,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 //            this, SLOT(slotParametersDockedBack(QDockWidget*, QDockWidget::DockPosition)));
 	
 	
-    stateChanged("parametersbox_closed", KXMLGUIClient::StateReverse);	//@@@ whats that ? //&&&
+	rgTempQtIV->stateChanged("parametersbox_closed", KXMLGUIClient::StateReverse);	//@@@ whats that ? //&&&
 
     RosegardenGUIDoc* doc = new RosegardenGUIDoc(this, m_pluginManager);
 
@@ -549,15 +549,15 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 
     // Now autoload
     //
-    stateChanged("new_file", 0);
-    stateChanged("have_segments", KXMLGUIClient::StateReverse);
-    stateChanged("have_selection", KXMLGUIClient::StateReverse);
+	rgTempQtIV->stateChanged("new_file", 0);
+	rgTempQtIV->stateChanged("have_segments", KXMLGUIClient::StateReverse);
+	rgTempQtIV->stateChanged("have_selection", KXMLGUIClient::StateReverse);
     slotTestClipboard();
 
     // Check for lack of MIDI devices and disable Studio options accordingly
     //
     if (!m_doc->getStudio().haveMidiDevices())
-        stateChanged("got_midi_devices", KXMLGUIClient::StateReverse);
+		rgTempQtIV->stateChanged("got_midi_devices", KXMLGUIClient::StateReverse);
 
     emit startupStatusMessage(i18n("Starting..."));
 
@@ -565,7 +565,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     readOptions();
 
     // All toolbars should be created before this is called
-    setAutoSaveSettings(MainWindowConfigGroup, true);
+	rgTempQtIV->setAutoSaveSettings(MainWindowConfigGroup, true);
 
 #ifdef HAVE_LIRC
 
@@ -581,8 +581,8 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     }
 #endif
 
-    stateChanged("have_project_packager", KXMLGUIClient::StateReverse);
-    stateChanged("have_lilypondview", KXMLGUIClient::StateReverse);
+	rgTempQtIV->stateChanged("have_project_packager", KXMLGUIClient::StateReverse);
+	rgTempQtIV->stateChanged("have_lilypondview", KXMLGUIClient::StateReverse);
     QTimer::singleShot(1000, this, SLOT(slotTestStartupTester()));
 
     settings.endGroup();
@@ -2164,7 +2164,7 @@ void RosegardenGUIApp::initView()
         try {
             if (isUsingSequencer())
                 m_seqManager->setLoop(0, 0);
-            stateChanged("have_range", KXMLGUIClient::StateReverse);
+			rgTempQtIV->stateChanged("have_range", KXMLGUIClient::StateReverse);
         } catch (QString s) {
             KStartupLogo::hideIfStillThere();
             CurrentProgressDialog::freeze();
@@ -2260,7 +2260,7 @@ void RosegardenGUIApp::initView()
 
     //slotChangeZoom(int(m_zoomSlider->getCurrentSize()));
 
-    stateChanged("new_file",0);
+	rgTempQtIV->stateChanged("new_file",0);
 
     ProgressDialog::processEvents();
 
@@ -2383,9 +2383,9 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
     m_doc->clearModifiedStatus();
 
     if (newDocument->getStudio().haveMidiDevices()) {
-        stateChanged("got_midi_devices", 0);
+		rgTempQtIV->stateChanged("got_midi_devices", 0);
     } else {
-        stateChanged("got_midi_devices", KXMLGUIClient::StateReverse);
+		rgTempQtIV->stateChanged("got_midi_devices", KXMLGUIClient::StateReverse);
     }
 
     // Ensure the sequencer knows about any audio files
@@ -2743,7 +2743,7 @@ void RosegardenGUIApp::readOptions()
 		m_dockLeft->setFloating( true );
         //m_dockLeft->hide();
 		m_dockLeft->setVisible( false );
-        stateChanged("parametersbox_closed", KXMLGUIClient::StateNoReverse);
+		rgTempQtIV->stateChanged("parametersbox_closed", KXMLGUIClient::StateNoReverse);
         m_dockVisible = false;
     }
 
@@ -4210,14 +4210,14 @@ void RosegardenGUIApp::slotDockParametersBack()
 
 void RosegardenGUIApp::slotParametersClosed()
 {
-    stateChanged("parametersbox_closed",0);
+	rgTempQtIV->stateChanged("parametersbox_closed",0);
     m_dockVisible = false;
 }
 
 void RosegardenGUIApp::slotParametersDockedBack(QDockWidget* dw, int ) //qt4: Qt::DockWidgetAreas //qt3 was: QDockWidget::DockPosition)
 {
     if (dw == m_dockLeft) {
-        stateChanged("parametersbox_closed", KXMLGUIClient::StateReverse);
+		rgTempQtIV->stateChanged("parametersbox_closed", KXMLGUIClient::StateReverse);
         m_dockVisible = true;
     }
 }
@@ -5130,7 +5130,7 @@ RosegardenGUIApp::slotCheckTransportStatus()
     TransportStatus status = RosegardenSequencer::getInstance()->
         getStatus();
     
-    stateChanged("not_playing",
+	rgTempQtIV->stateChanged("not_playing",
                  (status == PLAYING ||
                   status == RECORDING) ?
                  KXMLGUIClient::StateReverse : KXMLGUIClient::StateNoReverse);
@@ -5467,7 +5467,7 @@ void RosegardenGUIApp::slotTestStartupTester()
     QStringList missing;
     bool have = m_startupTester->haveProjectPackager(&missing);
 
-    stateChanged("have_project_packager",
+	rgTempQtIV->stateChanged("have_project_packager",
                  have ?
                  KXMLGUIClient::StateNoReverse : KXMLGUIClient::StateReverse);
 
@@ -5488,7 +5488,7 @@ void RosegardenGUIApp::slotTestStartupTester()
 
     have = m_startupTester->haveLilyPondView(&missing);
 
-    stateChanged("have_lilypondview",
+	rgTempQtIV->stateChanged("have_lilypondview",
                  have ?
                  KXMLGUIClient::StateNoReverse : KXMLGUIClient::StateReverse);
 
@@ -5584,9 +5584,9 @@ bool RosegardenGUIApp::launchSequencer()
     if (m_doc) m_doc->syncDevices();
 
     if (m_doc && m_doc->getStudio().haveMidiDevices()) {
-        stateChanged("got_midi_devices", 0);
+		rgTempQtIV->stateChanged("got_midi_devices", 0);
     } else {
-        stateChanged("got_midi_devices", KXMLGUIClient::StateReverse);
+		rgTempQtIV->stateChanged("got_midi_devices", KXMLGUIClient::StateReverse);
     }
 
     return true;
@@ -6169,10 +6169,10 @@ RosegardenGUIApp::slotSetLoop(timeT lhs, timeT rhs)
         // toggle the loop button
         if (lhs != rhs) {
             getTransport()->LoopButton()->setOn(true);
-            stateChanged("have_range", KXMLGUIClient::StateNoReverse);
+			rgTempQtIV->stateChanged("have_range", KXMLGUIClient::StateNoReverse);
         } else {
             getTransport()->LoopButton()->setOn(false);
-            stateChanged("have_range", KXMLGUIClient::StateReverse);
+			rgTempQtIV->stateChanged("have_range", KXMLGUIClient::StateReverse);
         }
     } catch (QString s) {
         QMessageBox::critical(this, "", s);
@@ -6185,9 +6185,9 @@ void RosegardenGUIApp::alive()
         m_doc->syncDevices();
 
     if (m_doc && m_doc->getStudio().haveMidiDevices()) {
-        stateChanged("got_midi_devices", 0);
+		rgTempQtIV->stateChanged("got_midi_devices", 0);
     } else {
-        stateChanged("got_midi_devices", KXMLGUIClient::StateReverse);
+		rgTempQtIV->stateChanged("got_midi_devices", KXMLGUIClient::StateReverse);
     }
 }
 
@@ -6801,7 +6801,7 @@ RosegardenGUIApp::slotStateChanged(QString s,
     //     RG_DEBUG << "RosegardenGUIApp::slotStateChanged " << s << "," << noReverse << endl;
 
 //	stateChanged(s, noReverse ? KXMLGUIClient::StateNoReverse : KXMLGUIClient::StateReverse); 
-	stateChanged( qStrToCharPtrUtf8(s), 0);  //### check later
+	rgTempQtIV->stateChanged( qStrToCharPtrUtf8(s), 0);  //### check later
 }
 
 void
@@ -6812,12 +6812,12 @@ RosegardenGUIApp::slotTestClipboard()
 	//QString originalText = clipboard->text();
 
     if (m_clipboard->isEmpty()) {
-        stateChanged("have_clipboard", KXMLGUIClient::StateReverse);
-        stateChanged("have_clipboard_single_segment",
+		rgTempQtIV->stateChanged("have_clipboard", KXMLGUIClient::StateReverse);
+		rgTempQtIV->stateChanged("have_clipboard_single_segment",
                      KXMLGUIClient::StateReverse);
     } else {
-        stateChanged("have_clipboard", KXMLGUIClient::StateNoReverse);
-        stateChanged("have_clipboard_single_segment",
+		rgTempQtIV->stateChanged("have_clipboard", KXMLGUIClient::StateNoReverse);
+		rgTempQtIV->stateChanged("have_clipboard_single_segment",
                      (m_clipboard->isSingleSegment() ?
                       KXMLGUIClient::StateNoReverse :
                       KXMLGUIClient::StateReverse));
@@ -8884,17 +8884,7 @@ RosegardenGUIApp::slotJumpToQuickMarker()
 }
 
 
-void RosegardenGUIApp::setAutoSaveSettings( const char*  config_group, bool state=0 )
-{
-	/* convinience method for qt4 */
-	//### todo: implement: RosegardenGUIApp::setAutoSaveSettings()
-}
 
-void RosegardenGUIApp::stateChanged( const char*  var1, unsigned int var2 ) // var2 = KXMLGUIClient::state
-{
-	/* convinience method for qt4 */
-	//### todo: implement: RosegardenGUIApp::stateChanged()
-}
 
 
 RosegardenGUIApp *RosegardenGUIApp::m_myself = 0;

@@ -42,10 +42,21 @@ QString RgTempQtIV::checkRecoverFile(QString &filePath, bool canRecover)
 	//### TODO: implement 
 }
 
+void  RgTempQtIV::stateChanged( const char*  var1, unsigned int var2 ){ // var2 = KXMLGUIClient::state
+	//
+}
+
 // simulate qApp->tempSaveName(filename);
 QString RgTempQtIV::tempSaveName(QString &filePath)
 {
 	//### TODO: implement 
+}
+
+void RgTempQtIV::setAutoSaveSettings( const char*  config_group, bool state=0 )
+{
+	// used in RosegardenGUIApp
+	/* convinience method for qt4 */
+	//### TODO: implement
 }
 
 

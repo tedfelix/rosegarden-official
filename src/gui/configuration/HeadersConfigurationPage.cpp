@@ -28,6 +28,8 @@
 #include <QSettings>
 #include <QListWidget>
 #include <QTableWidget>
+#include <QTableWidgetItem>
+
 #include <QGroupBox>
 #include <QLabel>
 #include <QLayout>
@@ -56,9 +58,9 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
     // LilyPond export: Printable headers
     //
 
-    QGroupBox *headersBox = new QGroupBox
-                           (1, Qt::Horizontal,
-                            i18n("Printable headers"), this);
+//old:	QGroupBox *headersBox = new QGroupBox(1, Qt::Horizontal,
+//										  i18n("Printable headers"), this);
+	QGroupBox *headersBox = new QGroupBox( i18n("Printable headers"), this );
     
     layout->addWidget(headersBox);
     QFrame *frameHeaders = new QFrame(headersBox);
@@ -188,19 +190,25 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
 
 	m_metadata = new QTableWidget( 2, 2, frameOtherHeaders ); // rows, columns
 	
-	m_metadata->setItem( 0, 0, QTableWidgetItem(i18n("Name"))  ); // row, column, item
-	m_metadata->setItem( 0, 2, QTableWidgetItem(i18n("Value"))  ); // row, column, item
-    m_metadata->setFullWidth(true);
-    m_metadata->setItemsRenameable(true);
-    m_metadata->setRenameable(0);
-    m_metadata->setRenameable(1);
-    m_metadata->setItemMargin(5);
-    m_metadata->setDefaultRenameAction(QListWidget::Accept);
-    m_metadata->setShowSortIndicator(true);
+	m_metadata->setItem( 0, 0, new QTableWidgetItem(i18n("Name"))  ); // row, column, item
+	m_metadata->setItem( 0, 2, new QTableWidgetItem(i18n("Value"))  ); // row, column, item
+//    m_metadata->setFullWidth(true);
+	m_metadata->setMinimumSize( 40, 40 ); // width, height
+//    m_metadata->setItemsRenameable(true);  //&&& disabled item renaming  ||use: openPersistentEditor ( QTableWidgetItem * item )
+//    m_metadata->setRenameable(0);
+//    m_metadata->setRenameable(1);
+//    m_metadata->setItemMargin(5);
+//    m_metadata->setDefaultRenameAction(QListWidget::Accept);
+//    m_metadata->setShowSortIndicator(true);
 
     std::vector<std::string> names(metadata.getPropertyNames());
-
-    for (unsigned int i = 0; i < names.size(); ++i) {
+	
+	QTableWidgetItem* tabItem;
+	int row = m_metadata->rowCount();
+	int col = 0;
+	m_metadata->setRowCount( row + 1 );
+    
+	for (unsigned int i = 0; i < names.size(); ++i) {
 
         if (shown.find(names[i]) != shown.end())
             continue;
@@ -210,8 +218,10 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
         // property names stored in lower case
         name = name.left(1).toUpper() + name.right(name.length() - 1);
 
-        new QListWidgetItem(m_metadata, name,
-                          strtoqstr(metadata.get<String>(names[i])));
+//		new QListWidgetItem( m_metadata, name, strtoqstr(metadata.get<String>(names[i])) );
+		// qt4: icon, text, type
+		tabItem = new QTableWidgetItem( strtoqstr(metadata.get<String>(names[i])) );
+		m_metadata->setItem( row, col, tabItem );
 
         shown.insert(names[i]);
     }
@@ -238,23 +248,33 @@ HeadersConfigurationPage::slotAddNewProperty()
 {
     QString propertyName;
     int i = 0;
-
+	
+	QList<QTableWidgetItem*> foundItems;
     while (1) {
         propertyName =
             (i > 0 ? i18n("{new property %1}", i) : i18n("{new property}"));
-        if (!m_doc->getComposition().getMetadata().has(qstrtostr(propertyName)) &&
-	    m_metadata->findItem(qstrtostr(propertyName),0) == 0)
+		//<QTableWidgetItem*>
+		foundItems = m_metadata->findItems( propertyName, Qt::MatchContains | Qt::MatchCaseSensitive );
+	
+		if ( !m_doc->getComposition().getMetadata().has(qstrtostr(propertyName)) &&
+					 foundItems.isEmpty() ){
             break;
+		}
         ++i;
     }
 
-    new QListWidgetItem(m_metadata, propertyName, i18n("{undefined}"));
+	//new QTableWidgetItem(m_metadata, propertyName, i18n("{undefined}"));
+	int rc = m_metadata->rowCount();
+	int col = 0;
+	m_metadata->setRowCount( rc + 1 );
+	m_metadata->setItem( rc, col, new QTableWidgetItem(propertyName) );
 }
 
 void
 HeadersConfigurationPage::slotDeleteProperty()
 {
-    delete m_metadata->currentIndex();
+	//delete m_metadata->currentIndex();
+	m_metadata->removeRow( m_metadata->currentRow() );
 }
 
 void HeadersConfigurationPage::apply()
@@ -289,12 +309,24 @@ void HeadersConfigurationPage::apply()
     metadata.set<String>(CompositionMetadataKeys::Copyright, qstrtostr(m_editCopyright->text()));
     metadata.set<String>(CompositionMetadataKeys::Tagline, qstrtostr(m_editTagline->text()));
 
-    for (QListWidgetItem *item = m_metadata->firstChild();
-            item != 0; item = item->nextSibling()) {
-
-        metadata.set<String>(qstrtostr(item->text(0).toLower()),
-                             qstrtostr(item->text(1)));
-    }
+//	for (QTableWidgetItem *item = m_metadata->firstChild();
+//			item != 0; item = item->nextSibling()) {
+	
+	QTableWidgetItem* tabItem;
+	QTableWidgetItem* tabItem2;
+	int c = 0;
+	for( int r=0; r < m_metadata->rowCount(); r++ ){
+		//for( int c=0; c < m_metadata->columnCount(); c++ ){
+			
+		tabItem = m_metadata->item( r, c );
+		tabItem2 = m_metadata->item( r, c+1 );
+			
+		metadata.set<String>( qstrtostr(tabItem->text().toLower()),
+							  qstrtostr(tabItem2->text()) );
+//		metadata.set<String>(qstrtostr(item->text(0).toLower()),
+//							 qstrtostr(item->text(1)));
+		//}//end for(c)
+	}//end for(r)
 
     m_doc->slotDocumentModified();
 }
