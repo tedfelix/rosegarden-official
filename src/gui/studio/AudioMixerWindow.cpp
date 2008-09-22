@@ -334,8 +334,7 @@ AudioMixerWindow::populate()
                                              AudioRouteMenu::In,
                                              AudioRouteMenu::Compact,
                                              m_studio, *i);
-            QToolTip::add
-                (rec.m_input->getWidget(), i18n("Record input source"));
+            rec.m_input->getWidget()->setToolTip(i18n("Record input source"));
             rec.m_input->getWidget()->setMaximumWidth(45);
         } else {
             rec.m_input = 0;
@@ -345,8 +344,7 @@ AudioMixerWindow::populate()
                                           AudioRouteMenu::Out,
                                           AudioRouteMenu::Compact,
                                           m_studio, *i);
-        QToolTip::add
-            (rec.m_output->getWidget(), i18n("Output destination"));
+        rec.m_output->getWidget()->setToolTip(i18n("Output destination"));
         rec.m_output->getWidget()->setMaximumWidth(45);
 
         rec.m_pan = new Rotary
@@ -359,8 +357,7 @@ AudioMixerWindow::populate()
             rec.m_pan->setKnobColour(GUIPalette::getColour(GUIPalette::RotaryPastelYellow));
         }
 
-        QToolTip::add
-            (rec.m_pan, i18n("Pan"));
+        rec.m_pan->setToolTip(i18n("Pan"));
 
         rec.m_fader = new Fader
                       (AudioLevel::LongFader, 20, 240, m_mainBox);
@@ -368,18 +365,15 @@ AudioMixerWindow::populate()
                       (m_mainBox, VUMeter::AudioPeakHoldIECLong, true, rec.m_input != 0,
                        20, 240);
 
-        QToolTip::add
-            (rec.m_fader, i18n("Audio level"));
-        QToolTip::add
-            (rec.m_meter, i18n("Audio level"));
+        rec.m_fader->setToolTip(i18n("Audio level"));
+        rec.m_meter->setToolTip(i18n("Audio level"));
 
         rec.m_stereoButton = new QPushButton(m_mainBox);
         rec.m_stereoButton->setPixmap(m_monoPixmap);
         rec.m_stereoButton->setFixedSize(20, 20);
         rec.m_stereoButton->setFlat(true);
         rec.m_stereoness = false;
-        QToolTip::add
-            (rec.m_stereoButton, i18n("Mono or stereo"));
+        rec.m_stereoButton->setToolTip(i18n("Mono or stereo"));
 
         rec.m_muteButton = new QPushButton(m_mainBox);
         rec.m_muteButton->setText("M");
@@ -387,8 +381,7 @@ AudioMixerWindow::populate()
         rec.m_muteButton->setFixedWidth(rec.m_stereoButton->width());
         rec.m_muteButton->setFixedHeight(rec.m_stereoButton->height());
         rec.m_muteButton->setFlat(true);
-        QToolTip::add
-            (rec.m_muteButton, i18n("Mute"));
+        rec.m_muteButton->setToolTip(i18n("Mute"));
 
         rec.m_soloButton = new QPushButton(m_mainBox);
         rec.m_soloButton->setText("S");
@@ -396,8 +389,7 @@ AudioMixerWindow::populate()
         rec.m_soloButton->setFixedWidth(rec.m_stereoButton->width());
         rec.m_soloButton->setFixedHeight(rec.m_stereoButton->height());
         rec.m_soloButton->setFlat(true);
-        QToolTip::add
-            (rec.m_soloButton, i18n("Solo"));
+        rec.m_soloButton->setToolTip(i18n("Solo"));
 
         rec.m_recordButton = new QPushButton(m_mainBox);
         rec.m_recordButton->setText("R");
@@ -405,8 +397,7 @@ AudioMixerWindow::populate()
         rec.m_recordButton->setFixedWidth(rec.m_stereoButton->width());
         rec.m_recordButton->setFixedHeight(rec.m_stereoButton->height());
         rec.m_recordButton->setFlat(true);
-        QToolTip::add
-            (rec.m_recordButton, i18n("Arm recording"));
+        rec.m_recordButton->setToolTip(i18n("Arm recording"));
 
         rec.m_pluginBox = new QWidget(m_mainBox);
         QVBoxLayout *pluginBoxLayout = new QVBoxLayout;
@@ -521,26 +512,22 @@ AudioMixerWindow::populate()
                      Rotary::NoTicks, false, true);
         rec.m_pan->setKnobColour(GUIPalette::getColour(GUIPalette::RotaryPastelBlue));
 
-        QToolTip::add
-            (rec.m_pan, i18n("Pan"));
+        rec.m_pan->setToolTip(i18n("Pan"));
 
         rec.m_fader = new Fader
                       (AudioLevel::LongFader, 20, 240, m_mainBox);
         rec.m_meter = new AudioVUMeter
                       (m_mainBox, VUMeter::AudioPeakHoldIECLong, true, false, 20, 240);
 
-        QToolTip::add
-            (rec.m_fader, i18n("Audio level"));
-        QToolTip::add
-            (rec.m_meter, i18n("Audio level"));
+        rec.m_fader->setToolTip(i18n("Audio level"));
+        rec.m_meter->setToolTip(i18n("Audio level"));
 
         rec.m_muteButton = new QPushButton(m_mainBox);
         rec.m_muteButton->setText("M");
         rec.m_muteButton->setToggleButton(true);
         rec.m_muteButton->setFlat(true);
 
-        QToolTip::add
-            (rec.m_muteButton, i18n("Mute"));
+        rec.m_muteButton->setToolTip(i18n("Mute"));
 
         rec.m_pluginBox = new QWidget(m_mainBox);
         QVBoxLayout *pluginBoxLayout = new QVBoxLayout;
@@ -607,10 +594,8 @@ AudioMixerWindow::populate()
         rec.m_meter = new AudioVUMeter
                       (m_mainBox, VUMeter::AudioPeakHoldIEC, true, false, 20, 240);
 
-        QToolTip::add
-            (rec.m_fader, i18n("Audio master output level"));
-        QToolTip::add
-            (rec.m_meter, i18n("Audio master output level"));
+        rec.m_fader->setToolTip(i18n("Audio master output level"));
+        rec.m_meter->setToolTip(i18n("Audio master output level"));
 
         rec.m_muteButton = new QPushButton(m_mainBox);
         rec.m_muteButton->setText("M");
@@ -714,8 +699,7 @@ AudioMixerWindow::slotPluginSelected(InstrumentId id,
         if (plugin == -1) {
 
             rec.m_plugins[index]->setText(i18n("<none>"));
-            QToolTip::add
-                (rec.m_plugins[index], i18n("<no plugin>"));
+            rec.m_plugins[index]->setToolTip(i18n("<no plugin>"));
 
             rec.m_plugins[index]->setPaletteBackgroundColor
             (qApp->palette().
@@ -732,8 +716,7 @@ AudioMixerWindow::slotPluginSelected(InstrumentId id,
             if (pluginClass) {
                 rec.m_plugins[index]->
                 setText(pluginClass->getLabel());
-                QToolTip::add
-                    (rec.m_plugins[index], pluginClass->getLabel());
+                rec.m_plugins[index]->setToolTip(pluginClass->getLabel());
 
                 pluginBgColour = pluginClass->getColour();
             }
@@ -753,8 +736,7 @@ AudioMixerWindow::slotPluginSelected(InstrumentId id,
         if (plugin == -1) {
 
             rec.m_plugins[index]->setText(i18n("<none>"));
-            QToolTip::add
-                (rec.m_plugins[index], i18n("<no plugin>"));
+            rec.m_plugins[index]->setToolTip(i18n("<no plugin>"));
 
             rec.m_plugins[index]->setPaletteBackgroundColor
             (qApp->palette().
@@ -771,8 +753,7 @@ AudioMixerWindow::slotPluginSelected(InstrumentId id,
             if (pluginClass) {
                 rec.m_plugins[index]->
                 setText(pluginClass->getLabel());
-                QToolTip::add
-                    (rec.m_plugins[index], pluginClass->getLabel());
+                rec.m_plugins[index]->setToolTip(pluginClass->getLabel());
 
                 pluginBgColour = pluginClass->getColour();
             }
@@ -923,8 +904,7 @@ AudioMixerWindow::updatePluginButtons(int id)
 
                 if (pluginClass) {
                     rec->m_plugins[i]->setText(pluginClass->getLabel());
-                    QToolTip::add
-                        (rec->m_plugins[i], pluginClass->getLabel());
+                    rec->m_plugins[i]->setToolTip(pluginClass->getLabel());
 
                     pluginBgColour = pluginClass->getColour();
                 }
@@ -935,8 +915,7 @@ AudioMixerWindow::updatePluginButtons(int id)
             } else {
 
                 rec->m_plugins[i]->setText(i18n("<none>"));
-                QToolTip::add
-                    (rec->m_plugins[i], i18n("<no plugin>"));
+                rec->m_plugins[i]->setToolTip(i18n("<no plugin>"));
 
                 if (inst)
                     bypass = inst->isBypassed();

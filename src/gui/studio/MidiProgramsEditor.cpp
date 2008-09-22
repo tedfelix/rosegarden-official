@@ -226,8 +226,9 @@ MidiProgramsEditor::populate(QListWidgetItem* item)
         m_names[i]->clear();
         getEntryButton(i)->setEnabled(haveKeyMappings);
         getEntryButton(i)->setPixmap(noKeyPixmap);
-        QToolTip::remove
-            ( getEntryButton(i) );
+        // QToolTip::remove
+        //    ( getEntryButton(i) );
+        getEntryButton(i)->setToolTip(QString(""));  //@@@ Usefull ?
 
         for (it = programSubset.begin(); it != programSubset.end(); it++) {
             if (it->getProgram() == i) {
@@ -238,9 +239,7 @@ MidiProgramsEditor::populate(QListWidgetItem* item)
 
                 if (m_device->getKeyMappingForProgram(*it)) {
                     getEntryButton(i)->setPixmap(keyPixmap);
-                    QToolTip::add
-                        (getEntryButton(i),
-                                i18n("Key Mapping: %1", 
+                    getEntryButton(i)->setToolTip(i18n("Key Mapping: %1", 
                                     strtoqstr(m_device->getKeyMappingForProgram(*it)->getName())));
                 }
 
@@ -519,8 +518,8 @@ MidiProgramsEditor::slotEntryMenuItemSelected(int i)
         if (QFile(file).exists()) {
             btn->setPixmap(QPixmap(file));
         }
-        QToolTip::remove
-            (btn);
+        // QToolTip::remove(btn);
+        btn->setToolTip(Qstring(""));       //@@@ Usefull ?
     } else {
         QString file = pixmapDir + "/toolbar/key-green.png";
         if (QFile(file).exists()) {

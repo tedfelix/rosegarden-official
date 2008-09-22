@@ -62,7 +62,7 @@ RawNoteRuler::RawNoteRuler(RulerScale *rulerScale,
 
 RawNoteRuler::~RawNoteRuler()
 {
-    QToolTip::remove(this);
+    // QToolTip::remove(this);
     // nothing else
 }
 
@@ -438,7 +438,7 @@ RawNoteRuler::paintEvent(QPaintEvent* e)
 
     // Tooltips
     {
-	QToolTip::remove(this);
+	// QToolTip::remove(this);
 	TrackId trackId = m_segment->getTrack();
 	Track *track =
 	    m_segment->getComposition()->getTrackById(trackId);
