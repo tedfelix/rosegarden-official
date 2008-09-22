@@ -72,16 +72,14 @@ ClefDialog::ClefDialog(QDialogButtonBox::QWidget *parent,
 
     BigArrowButton *clefDown = new BigArrowButton( clefBox , Qt::LeftArrow);
     clefBoxLayout->addWidget(clefDown);
-    QToolTip::add
-        (clefDown, i18n("Lower clef"));
+    clefDown->setToolTip(i18n("Lower clef"));
 
     QWidget *clefLabelBox = new QWidget(clefBox);
     QVBoxLayout *clefLabelBoxLayout = new QVBoxLayout;
 
     m_octaveUp = new BigArrowButton(clefLabelBox, Qt::UpArrow);
     clefLabelBoxLayout->addWidget(m_octaveUp);
-    QToolTip::add
-        (m_octaveUp, i18n("Up an Octave"));
+    m_octaveUp->setToolTip(i18n("Up an Octave"));
 
     m_clefLabel = new QLabel(i18n("Clef"), clefLabelBox);
 	clefLabelBoxLayout->addWidget(m_clefLabel, Qt::AlignHCenter | Qt::AlignVCenter );

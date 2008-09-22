@@ -115,8 +115,7 @@ AudioPluginDialog::AudioPluginDialog(QDialogButtonBox::QWidget *parent,
     hboxLayout->addWidget(m_pluginList);
     hbox->setLayout(hboxLayout);
     m_pluginList->setMaxVisibleItems(20);
-    QToolTip::add
-        (m_pluginList, i18n("Select a plugin from this list."));
+    m_pluginList->setToolTip(i18n("Select a plugin from this list."));
 
     QWidget *h = new QWidget(pluginSelectionBox);
     QHBoxLayout *hLayout = new QHBoxLayout;
@@ -124,8 +123,7 @@ AudioPluginDialog::AudioPluginDialog(QDialogButtonBox::QWidget *parent,
 // top line
     m_bypass = new QCheckBox(i18n("Bypass"), h );
     hLayout->addWidget(m_bypass);
-    QToolTip::add
-        (m_bypass, i18n("Bypass this plugin."));
+    m_bypass->setToolTip(i18n("Bypass this plugin."));
 
     connect(m_bypass, SIGNAL(toggled(bool)),
             this, SLOT(slotBypassChanged(bool)));
@@ -134,14 +132,12 @@ AudioPluginDialog::AudioPluginDialog(QDialogButtonBox::QWidget *parent,
     m_insOuts = new QLabel(i18n("<ports>"), h );
 	hLayout->addWidget(m_insOuts, Qt::AlignRight );
 //    m_insOuts->setAlignment(AlignRight);
-    QToolTip::add
-        (m_insOuts, i18n("Input and output port counts."));
+    m_insOuts->setToolTip(i18n("Input and output port counts."));
 
     m_pluginId = new QLabel(i18n("<id>"), h );
 	hLayout->addWidget(m_pluginId, Qt::AlignRight );
 //    m_pluginId->setAlignment(AlignRight);
-    QToolTip::add
-        (m_pluginId, i18n("Unique ID of plugin."));
+    m_pluginId->setToolTip(i18n("Unique ID of plugin."));
 
     connect(m_pluginList, SIGNAL(activated(int)),
             this, SLOT(slotPluginSelected(int)));
@@ -158,23 +154,20 @@ AudioPluginDialog::AudioPluginDialog(QDialogButtonBox::QWidget *parent,
     hLayout->addWidget(m_copyButton);
     connect(m_copyButton, SIGNAL(clicked()),
             this, SLOT(slotCopy()));
-    QToolTip::add
-        (m_copyButton, i18n("Copy plugin parameters"));
+    m_copyButton->setToolTip(i18n("Copy plugin parameters"));
 
     m_pasteButton = new QPushButton(i18n("Paste"), h );
     hLayout->addWidget(m_pasteButton);
     connect(m_pasteButton, SIGNAL(clicked()),
             this, SLOT(slotPaste()));
-    QToolTip::add
-        (m_pasteButton, i18n("Paste plugin parameters"));
+    m_pasteButton->setToolTip(i18n("Paste plugin parameters"));
 
     m_defaultButton = new QPushButton(i18n("Default"), h );
     hLayout->addWidget(m_defaultButton);
     h->setLayout(hLayout);
     connect(m_defaultButton, SIGNAL(clicked()),
             this, SLOT(slotDefault()));
-    QToolTip::add
-        (m_defaultButton, i18n("Set to defaults"));
+    m_defaultButton->setToolTip(i18n("Set to defaults"));
 
     populatePluginCategoryList();
     populatePluginList();
