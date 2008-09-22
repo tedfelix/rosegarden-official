@@ -16,79 +16,50 @@
 #ifndef ROSEDEBUG_H
 #define ROSEDEBUG_H
 
-#include <string>
-#include <iostream>
-#include <kdebug.h>
-#include <kdeversion.h>
+#include <QDebug>
 
-#if KDE_VERSION < KDE_MAKE_VERSION(3,2,0)
-class QDateTime;
-class QDate;
-class QTime;
-class QPoint;
-class QSize;
-class QRect;
-class QRegion;
-class KURL;
-class QStringList;
-class QColor;
-class QPen;
-class QBrush;
-#endif
-
-namespace Rosegarden { class Event; class Segment; class RealTime; class Colour; namespace Guitar { class Chord; } }
-
-#define KDEBUG_AREA                 200000
-#define KDEBUG_AREA_NOTATION        200001
-#define KDEBUG_AREA_MATRIX          200002
-#define KDEBUG_AREA_SEQUENCER       200003
-#define KDEBUG_AREA_SEQUENCEMANAGER 200004
-
-#define RG_DEBUG        kdDebug(KDEBUG_AREA)
-#define NOTATION_DEBUG  kdDebug(KDEBUG_AREA_NOTATION)
-#define MATRIX_DEBUG    kdDebug(KDEBUG_AREA_MATRIX)
-#define SEQUENCER_DEBUG kdDebug(KDEBUG_AREA_SEQUENCER)
-#define SEQMAN_DEBUG    kdDebug(KDEBUG_AREA_SEQUENCEMANAGER)
+namespace Rosegarden {
+    class Event;
+    class Segment;
+    class RealTime;
+    class Colour;
+    namespace Guitar {
+	class Chord;
+    }
+}
 
 #ifndef NDEBUG
 
-kdbgstream&
-operator<<(kdbgstream&, const std::string&);
+QDebug &operator<<(QDebug &, const std::string &);
+QDebug &operator<<(QDebug &, const Rosegarden::Event &);
+QDebug &operator<<(QDebug &, const Rosegarden::Segment &);
+QDebug &operator<<(QDebug &, const Rosegarden::RealTime &);
+QDebug &operator<<(QDebug &, const Rosegarden::Colour &);
+QDebug &operator<<(QDebug &, const Rosegarden::Guitar::Chord &);
 
-kdbgstream&
-operator<<(kdbgstream&, const Rosegarden::Event&);
-
-kdbgstream&
-operator<<(kdbgstream&, const Rosegarden::Segment&);
-
-kdbgstream&
-operator<<(kdbgstream&, const Rosegarden::RealTime&);
-
-kdbgstream&
-operator<<(kdbgstream&, const Rosegarden::Colour&);
-
-kdbgstream&
-operator<<(kdbgstream&, const Rosegarden::Guitar::Chord&);
+#define RG_DEBUG        QDebug(QtDebugMsg) << "[generic] "
+#define NOTATION_DEBUG  QDebug(QtDebugMsg) << "[notation] "
+#define MATRIX_DEBUG    QDebug(QtDebugMsg) << "[matrix] "
+#define SEQUENCER_DEBUG QDebug(QtDebugMsg) << "[sequencer] "
+#define SEQMAN_DEBUG    QDebug(QtDebugMsg) << "[seqman] "
 
 #else
 
-inline kndbgstream&
-operator<<(kndbgstream &s, const std::string&) { return s; }
+class RGNoDebug
+{
+public:
+    inline RGNoDebug() {}
+    inline ~RGNoDebug(){}
 
-inline kndbgstream&
-operator<<(kndbgstream &s, const Rosegarden::Event&) { return s; }
+    template <typename T>
+    inline RGNoDebug &operator<<(const T &) { return *this; }
+};
 
-inline kndbgstream&
-operator<<(kndbgstream &s, const Rosegarden::Segment&) { return s; }
-
-inline kndbgstream&
-operator<<(kndbgstream &s, const Rosegarden::RealTime&) { return s; }
-
-inline kndbgstream&
-operator<<(kndbgstream &s, const Rosegarden::Colour&) { return s; }
-
-inline kndbgstream&
-operator<<(kndbgstream &s, const Rosegarden::Guitar::Chord&) { return s; }
+#define RG_DEBUG        RGNoDebug()
+#define NOTATION_DEBUG  RGNoDebug()
+#define MATRIX_DEBUG    RGNoDebug()
+#define SEQUENCER_DEBUG RGNoDebug()
+#define SEQMAN_DEBUG    RGNoDebug()
 
 #endif
 
@@ -111,50 +82,5 @@ operator<<(kndbgstream &s, const Rosegarden::Guitar::Chord&) { return s; }
 #define PRINT_ELAPSED(n)
 
 #endif
-
-
-
-
-// This doesn't work - keeping it just in case I somehow get it
-// working someday
-
-#ifdef NOT_DEFINED
-
-// can't be bothered to even get this to compile with gcc-3.0 at the
-// moment
-
-class kdbgostreamAdapter : public std::ostream
-{
-public:
-    kdbgostreamAdapter(kdbgstream &e) : m_kdbgStream(e) {}
-
-    std::ostream& operator<<(bool i);
-    std::ostream& operator<<(short i);
-    std::ostream& operator<<(unsigned short i);
-    std::ostream& operator<<(char i);
-    std::ostream& operator<<(unsigned char i);
-    std::ostream& operator<<(int i);
-    std::ostream& operator<<(unsigned int i);
-    std::ostream& operator<<(long i);
-    std::ostream& operator<<(unsigned long i);
-    std::ostream& operator<<(const QString& str);
-    std::ostream& operator<<(const char *str);
-    std::ostream& operator<<(const QByteArray& str);
-    std::ostream& operator<<(void * p);
-    std::ostream& operator<<(KDBGFUNC f);
-    std::ostream& operator<<(double d);
-
-    kdbgstream& dbgStream() { return m_kdbgStream; }
-
-protected:
-    kdbgstream &m_kdbgStream;
-};
-
-#endif
-
-// std::ostream& endl(std::ostream& s);
-
-void DBCheckThrow();
-
 
 #endif

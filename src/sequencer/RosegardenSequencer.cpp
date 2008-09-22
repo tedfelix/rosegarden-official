@@ -97,7 +97,7 @@ RosegardenSequencer::RosegardenSequencer() :
 
     if (!m_driver) {
         SEQUENCER_DEBUG << "RosegardenSequencer object could not be allocated"
-        << endl;
+                        << endl;
         m_transportStatus = QUIT;
         return;
     }
