@@ -17,6 +17,7 @@
 #define ROSEDEBUG_H
 
 #include <QDebug>
+#include <string>
 
 namespace Rosegarden {
     class Event;
