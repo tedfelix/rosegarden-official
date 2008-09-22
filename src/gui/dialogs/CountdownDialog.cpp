@@ -35,11 +35,12 @@ namespace Rosegarden
 {
 
 CountdownDialog::CountdownDialog(QWidget *parent, int seconds):
-        QDialog(parent, "", false, WStyle_StaysOnTop | WStyle_DialogBorder),
+		QDialog(parent, Qt::WindowStaysOnTopHint | Qt::Dialog ),
         m_pastEndMode(false),
         m_totalTime(seconds),
-        m_progressBar()Width(150),
-        m_progressBar()Height(15)
+        m_progressBarWidth(150),
+        m_progressBarHeight(15)
+
 {
     QBoxLayout *layout = new QBoxLayout(this, QBoxLayout::TopToBottom, 10, 14);
     setCaption(i18n("Recording..."));
@@ -55,18 +56,18 @@ CountdownDialog::CountdownDialog(QWidget *parent, int seconds):
     layout->addWidget(hBox, 0, Qt::AlignCenter);
 
     m_label->setText(i18n("Recording time remaining:  "));
-    m_progressBar() =
-        new CountdownBar(this, m_progressBar()Width, m_progressBar()Height);
+    m_progressBar =
+        new CountdownBar(this, m_progressBarWidth, m_progressBarHeight);
 
-    m_progressBar()->setFixedSize(m_progressBar()Width, m_progressBar()Height);
+    m_progressBar->setFixedSize(m_progressBarWidth, m_progressBarHeight);
 
     // Simply re-emit from Stop button
     //
     m_stopButton = new QPushButton(i18n("Stop"), this);
     m_stopButton->setFixedWidth(60);
 
-    layout->addWidget(m_progressBar(), 0, Qt::AlignCenter);
-    layout->addWidget(m_stopButton, 0, AlignRight);
+    layout->addWidget(m_progressBar, 0, Qt::AlignCenter);
+    layout->addWidget(m_stopButton, 0, Qt::AlignRight);
 
     connect (m_stopButton, SIGNAL(released()), this, SIGNAL(stopped()));
 
@@ -120,7 +121,7 @@ CountdownDialog::setElapsedTime(int elapsedSeconds)
     // Draw the progress bar
     //
     if (m_pastEndMode) {
-        m_progressBar()->setPosition(m_progressBar()Width);
+        m_progressBar->setPosition(m_progressBarWidth);
     } else {
         // Attempt a simplistic fix for #1838190.  In the context of an isolated
 	// test example, I'm fairly sure m_totalTime was 0, causing a divide by
@@ -130,9 +131,9 @@ CountdownDialog::setElapsedTime(int elapsedSeconds)
 	    RG_DEBUG << "CountdownDialog::setElapsedTime: FAILSAFE CODE FIRED, see bug #1838190 for details" << endl;
 	    m_totalTime = 1;
 	}
-        int barPosition = m_progressBar()Width -
-                          (elapsedSeconds * m_progressBar()Width) / m_totalTime;
-        m_progressBar()->setPosition(barPosition);
+        int barPosition = m_progressBarWidth -
+                          (elapsedSeconds * m_progressBarWidth) / m_totalTime;
+        m_progressBar->setPosition(barPosition);
     }
 
     // Dialog complete if the display time is zero

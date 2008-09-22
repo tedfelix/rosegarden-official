@@ -22,10 +22,13 @@
 #include <klocale.h>
 #include "ConfigureDialogBase.h"
 #include "document/RosegardenGUIDoc.h"
+#include "gui/configuration/ConfigurationPage.h"
 #include "gui/configuration/GeneralConfigurationPage.h"
 #include "gui/configuration/NotationConfigurationPage.h"
 #include "gui/configuration/AudioConfigurationPage.h"
 #include "gui/configuration/MIDIConfigurationPage.h"
+#include "gui/general/IconLoader.h"
+
 
 #include <QSettings>
 #include <QString>
@@ -38,6 +41,8 @@
 namespace Rosegarden
 {
 
+/*
+// this should not be required anymore, since we have gui/general/IconLoader.h now
 static QPixmap loadIcon(const char *name)
 {
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
@@ -52,7 +57,7 @@ static QPixmap loadIcon(const char *name)
         ->loadIcon(QString::fromLatin1(name), KIcon::NoGroup, KIcon::SizeMedium);
     return pmap;
 }
-
+*/
 
 ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
                                  QWidget *parent,
@@ -65,9 +70,10 @@ ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
 
     // General Page
     //
+	IconLoader il;
     pageWidget = addPage(GeneralConfigurationPage::iconLabel(),
                          GeneralConfigurationPage::title(),
-                         loadIcon(GeneralConfigurationPage::iconName()));
+                         il.load( GeneralConfigurationPage::iconName()) );
     vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
     page = new GeneralConfigurationPage(doc, pageWidget);
     vlay->addWidget(page);
@@ -79,9 +85,10 @@ ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
     connect(page, SIGNAL(updateSidebarStyle(unsigned int)),
             this, SIGNAL(updateSidebarStyle(unsigned int)));
 
+//	IconLoader il;
     pageWidget = addPage(MIDIConfigurationPage::iconLabel(),
                          MIDIConfigurationPage::title(),
-                         loadIcon(MIDIConfigurationPage::iconName()));
+                         il.load( MIDIConfigurationPage::iconName()) );
     vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
     page = new MIDIConfigurationPage(doc, pageWidget);
     vlay->addWidget(page);
@@ -90,7 +97,7 @@ ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
 
     pageWidget = addPage(AudioConfigurationPage::iconLabel(),
                          AudioConfigurationPage::title(),
-                         loadIcon(AudioConfigurationPage::iconName()));
+                         il.load(AudioConfigurationPage::iconName()));
     vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
     page = new AudioConfigurationPage(doc, pageWidget);
     vlay->addWidget(page);
@@ -100,7 +107,7 @@ ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
     // Notation Page
     pageWidget = addPage(NotationConfigurationPage::iconLabel(),
                          NotationConfigurationPage::title(),
-                         loadIcon(NotationConfigurationPage::iconName()));
+                         il.load(NotationConfigurationPage::iconName()));
     vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
     page = new NotationConfigurationPage(pageWidget);
     vlay->addWidget(page);

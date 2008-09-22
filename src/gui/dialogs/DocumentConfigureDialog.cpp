@@ -17,23 +17,27 @@
 
 
 #include "DocumentConfigureDialog.h"
-#include <QLayout>
-
-#include <klocale.h>
 #include "ConfigureDialogBase.h"
 #include "document/RosegardenGUIDoc.h"
 #include "gui/configuration/AudioPropertiesPage.h"
 #include "gui/configuration/ColourConfigurationPage.h"
 #include "gui/configuration/DocumentMetaConfigurationPage.h"
 #include "gui/configuration/GeneralConfigurationPage.h"
-#include <kdialogbase.h>
+#include "gui/general/IconLoader.h"
+
+#include <QLayout>
 #include <QString>
 #include <QWidget>
-#include <kstandarddirs.h>
+
+//#include <kdialogbase.h>
+#include <klocale.h>
+//#include <kstandarddirs.h>
 
 
 namespace Rosegarden
 {
+/*
+// may not be required, use gui/general/IconLoader.h instead	
 static QPixmap loadIcon(const char *name)
 {
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
@@ -47,9 +51,11 @@ static QPixmap loadIcon(const char *name)
 
     QPixmap pmap = KGlobal::instance()->iconLoader()
         ->loadIcon(QString::fromLatin1(name), KIcon::NoGroup, KIcon::SizeMedium);
+//	IconLoader il;
+//	il.load( QString::fromLatin1(name) );
     return pmap;
 }
-
+*/
 
 DocumentConfigureDialog::DocumentConfigureDialog(RosegardenGUIDoc *doc,
         QWidget *parent,
@@ -62,9 +68,10 @@ DocumentConfigureDialog::DocumentConfigureDialog(RosegardenGUIDoc *doc,
 
     // Document Meta Page
     //
+	IconLoader il;
     pageWidget = addPage(DocumentMetaConfigurationPage::iconLabel(),
                          DocumentMetaConfigurationPage::title(),
-                         loadIcon(DocumentMetaConfigurationPage::iconName()));
+                         il.load( DocumentMetaConfigurationPage::iconName()) );
     vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
     page = new DocumentMetaConfigurationPage(doc, pageWidget);
     vlay->addWidget(page);
@@ -75,7 +82,7 @@ DocumentConfigureDialog::DocumentConfigureDialog(RosegardenGUIDoc *doc,
     //
     pageWidget = addPage(AudioPropertiesPage::iconLabel(),
                          AudioPropertiesPage::title(),
-                         loadIcon(AudioPropertiesPage::iconName()));
+                         il.load(AudioPropertiesPage::iconName()));
     vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
     page = new AudioPropertiesPage(doc, pageWidget);
     vlay->addWidget(page);
@@ -85,7 +92,7 @@ DocumentConfigureDialog::DocumentConfigureDialog(RosegardenGUIDoc *doc,
     // Colour Page
     pageWidget = addPage(ColourConfigurationPage::iconLabel(),
                          ColourConfigurationPage::title(),
-                         loadIcon(ColourConfigurationPage::iconName()));
+                         il.load(ColourConfigurationPage::iconName()));
 
     vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
     page = new ColourConfigurationPage(doc, pageWidget);

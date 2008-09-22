@@ -35,7 +35,8 @@ ConfigureDialogBase::ConfigureDialogBase(QDialogButtonBox::QWidget *parent,
         KDialogBase(IconList, !label.isEmpty() ? label : i18n("Configure"), Help | Apply | Ok | Cancel,
                     Ok, parent, name, true) // modal
 {
-    setWFlags(WDestructiveClose);
+//    setWFlags(WDestructiveClose);
+	this->setAttribute( Qt::WA_DeleteOnClose );
 }
 
 ConfigureDialogBase::~ConfigureDialogBase()

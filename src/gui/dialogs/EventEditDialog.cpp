@@ -18,7 +18,6 @@
 
 #include "EventEditDialog.h"
 
-#include <klocale.h>
 #include "misc/Strings.h"
 #include "base/Event.h"
 #include "base/MidiTypes.h"
@@ -26,19 +25,19 @@
 #include "base/PropertyName.h"
 #include "base/RealTime.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
+
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QMessageBox>
 #include <QCheckBox>
 #include <QFont>
-#include <qgrid.h>
 #include <QGroupBox>
 #include <QLabel>
 #include <QLineEdit>
 #include <QObject>
 #include <QObjectList>
 #include <QPushButton>
-#include <qscrollview.h>
+#include <QScrollArea>
 #include <QSize>
 #include <QSpinBox>
 #include <QString>
@@ -46,6 +45,9 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+
+#include <qgrid.h>
+#include <klocale.h>
 
 
 namespace Rosegarden
