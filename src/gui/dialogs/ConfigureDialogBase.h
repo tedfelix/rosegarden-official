@@ -19,6 +19,7 @@
 #ifndef _RG_CONFIGUREDIALOGBASE_H_
 #define _RG_CONFIGUREDIALOGBASE_H_
 
+#include <QMessageBox>
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QString>
@@ -26,7 +27,7 @@
 
 
 class QWidget;
-
+class QTabWidget;
 
 namespace Rosegarden
 {
@@ -38,13 +39,20 @@ class ConfigureDialogBase : public QDialog
 {
     Q_OBJECT
 public:
-    ConfigureDialogBase(QDialogButtonBox::QWidget *parent=0,
-                        QString label = 0,
-                        const char *name=0);
-    virtual ~ConfigureDialogBase();
+//	ConfigureDialogBase(QDialogButtonBox::QWidget *parent=0,
+//						QString label = 0,
+//	  const char *name=0);
+	ConfigureDialogBase( QWidget *parent=0, QString label = 0, const char *name=0 );
+//	  , QMessageBox::StandardButtons = QMessageBox::Apply|QMessageBox::Ok|QMessageBox::Cancel );
+	
+    //virtual 
+	~ConfigureDialogBase();
 
     typedef std::vector<ConfigurationPage*> configurationpages;
 
+	QWidget* addPage( const QString& iconLabel, const QString& title, const QIcon& icon );
+	
+	
 protected slots:
     virtual void slotOk();
     virtual void slotApply();
@@ -55,6 +63,8 @@ protected slots:
 protected:
 
     configurationpages m_configurationPages;
+	
+	QTabWidget* m_tabWidget;
 };
 
 

@@ -104,7 +104,8 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
         m_audiblePreview(true)
 {
     setCaption(i18n("Audio File Manager"));
-//    setWFlags(WDestructiveClose);	//&&&
+//    setWFlags(WDestructiveClose);	
+	this->setAttribute( Qt::WA_DeleteOnClose );
 
     QWidget *box = new QWidget(this);
     QVBoxLayout *boxLayout = new QVBoxLayout;

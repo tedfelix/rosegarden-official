@@ -24,20 +24,58 @@
 #include <QDialogButtonBox>
 #include <QString>
 #include <QWidget>
+#include <QTabWidget>
+#include <QPushButton>
+#include <QMessageBox>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 
 
 namespace Rosegarden
 {
-
+/*
 ConfigureDialogBase::ConfigureDialogBase(QDialogButtonBox::QWidget *parent,
         QString label,
         const char *name):
         KDialogBase(IconList, !label.isEmpty() ? label : i18n("Configure"), Help | Apply | Ok | Cancel,
                     Ok, parent, name, true) // modal
+*/
+ConfigureDialogBase::	ConfigureDialogBase( QWidget *parent, QString label, const char *name  ):QDialog(parent)
+//		, QMessageBox::StandardButtons buttons ) :QDialog(parent)
 {
 //    setWFlags(WDestructiveClose);
 	this->setAttribute( Qt::WA_DeleteOnClose );
+	
+	this->setWindowTitle( i18n("Configure Rosegarden") );
+//	this->setObjectName( (name) );
+	
+	QVBoxLayout *dlgLay = new QVBoxLayout( this );
+	QTabWidget *m_tabWidget = new QTabWidget( this );
+    // tab-widget, that conains the misc config option pages
+	dlgLay->addWidget( m_tabWidget );
+	
+	QWidget *buttWidget = new QWidget( this );
+	dlgLay->addWidget( buttWidget );
+	
+	QPushButton *applyButt = new QPushButton();
+	QPushButton *okButt = new QPushButton();
+	QPushButton *cancelButt = new QPushButton();
+	
+	QHBoxLayout *buttLay = new QHBoxLayout( buttWidget );
+	buttLay->addWidget( applyButt );
+	buttLay->addWidget( okButt );
+	buttLay->addWidget( cancelButt );
+	
+
 }
+
+QWidget* ConfigureDialogBase::addPage( const QString& iconLabel, const QString& label, const QIcon& icon ){
+	/**	 add a configuration options tab to the tabWidget ; return the tab-page <QWidget*>  */
+	QWidget *page = new QWidget();
+	this->m_tabWidget->addTab( page, icon, label );
+	return page;
+}
+
 
 ConfigureDialogBase::~ConfigureDialogBase()
 {}

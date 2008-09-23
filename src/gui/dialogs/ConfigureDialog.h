@@ -20,9 +20,11 @@
 #define _RG_CONFIGUREDIALOG_H_
 
 #include "ConfigureDialogBase.h"
-
+#include <QMessageBox>
 
 class QWidget;
+class QDialog;
+class QTabWidget;
 
 
 namespace Rosegarden
@@ -37,10 +39,15 @@ class ConfigureDialog : public ConfigureDialogBase
 public:
     ConfigureDialog(RosegardenGUIDoc *doc,
                     QWidget *parent=0,
-                    const char *name=0);
+					const char *name=0 );
+//	~ConfigureDialog();
+	
+	
 signals:
     void updateAutoSaveInterval(unsigned int);
     void updateSidebarStyle(unsigned int);
+	
+protected:
 };
 
 

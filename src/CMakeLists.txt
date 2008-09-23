@@ -191,3 +191,12 @@ IF(WANT_TEST)
     ENDFOREACH(currenttest ${tests_SRCS})
 ENDIF(WANT_TEST)
 
+
+
+# set(CMAKE_CXX_COMPILE_OBJECT "${CMAKE_CXX_COMPILER} <SOURCE> -o <OBJECT> <FLAGS>")
+#
+# from man-page: CMAKE_<LANG>_COMPILE_OBJECT
+# Rule variable to compile a single object file.
+# This is a rule variable that tells CMake how to compile a single object file
+
+

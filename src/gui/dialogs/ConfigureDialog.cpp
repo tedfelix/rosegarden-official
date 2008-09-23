@@ -17,9 +17,6 @@
 
 
 #include "ConfigureDialog.h"
-#include <QLayout>
-
-#include <klocale.h>
 #include "ConfigureDialogBase.h"
 #include "document/RosegardenGUIDoc.h"
 #include "gui/configuration/ConfigurationPage.h"
@@ -30,12 +27,15 @@
 #include "gui/general/IconLoader.h"
 
 
+#include <QLayout>
 #include <QSettings>
 #include <QString>
 #include <QWidget>
+#include <QTabWidget>
 
 //#include <kdialogbase.h>
 #include <kstandarddirs.h>
+#include <klocale.h>
 
 
 namespace Rosegarden
@@ -59,26 +59,39 @@ static QPixmap loadIcon(const char *name)
 }
 */
 
+
 ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
                                  QWidget *parent,
-                                 const char *name)
-        : ConfigureDialogBase(parent, i18n("Configure Rosegarden"), name)
+								 const char *name)
+			//: QDialog(parent) //, i18n("Configure Rosegarden"), name)
+	: ConfigureDialogBase(parent, i18n("Configure Rosegarden"), name )
 {
-    QWidget *pageWidget = 0;
+	
+//  set in parent constr.
+//	this->setWindowTitle( i18n("Configure Rosegarden") );
+//	this->setObjectName( objName );
+	
+	QWidget *pageWidget = 0;
     QVBoxLayout *vlay = 0;
-    ConfigurationPage* page = 0;
-
+//	ConfigurationPage* page = 0;
+	QWidget* page = 0;
+	
     // General Page
     //
 	IconLoader il;
+	
+	
     pageWidget = addPage(GeneralConfigurationPage::iconLabel(),
                          GeneralConfigurationPage::title(),
                          il.load( GeneralConfigurationPage::iconName()) );
-    vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
+	
+	
+    vlay = new QVBoxLayout(pageWidget); //, 0, spacingHint());
     page = new GeneralConfigurationPage(doc, pageWidget);
     vlay->addWidget(page);
-    page->setPageIndex(pageIndex(pageWidget));
-    m_configurationPages.push_back(page);
+	//page->setPageIndex(pageIndex(pageWidget));
+	m_tabWidget->setCurrentIndex( m_tabWidget->indexOf(pageWidget) );
+	//m_configurationPages.push_back(page);
 
     connect(page, SIGNAL(updateAutoSaveInterval(unsigned int)),
             this, SIGNAL(updateAutoSaveInterval(unsigned int)));
@@ -89,31 +102,37 @@ ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
     pageWidget = addPage(MIDIConfigurationPage::iconLabel(),
                          MIDIConfigurationPage::title(),
                          il.load( MIDIConfigurationPage::iconName()) );
-    vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
+    vlay = new QVBoxLayout(pageWidget); //, 0, spacingHint());
     page = new MIDIConfigurationPage(doc, pageWidget);
     vlay->addWidget(page);
-    page->setPageIndex(pageIndex(pageWidget));
-    m_configurationPages.push_back(page);
+    //page->setPageIndex(pageIndex(pageWidget));
+	m_tabWidget->setCurrentIndex( m_tabWidget->indexOf(pageWidget) );
+	//m_configurationPages.push_back(page);
 
     pageWidget = addPage(AudioConfigurationPage::iconLabel(),
                          AudioConfigurationPage::title(),
                          il.load(AudioConfigurationPage::iconName()));
-    vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
+    vlay = new QVBoxLayout(pageWidget); //, 0, spacingHint());
     page = new AudioConfigurationPage(doc, pageWidget);
     vlay->addWidget(page);
-    page->setPageIndex(pageIndex(pageWidget));
-    m_configurationPages.push_back(page);
+    //page->setPageIndex(pageIndex(pageWidget));
+	m_tabWidget->setCurrentIndex( m_tabWidget->indexOf(pageWidget) );
+	//m_configurationPages.push_back(page);
 
     // Notation Page
     pageWidget = addPage(NotationConfigurationPage::iconLabel(),
                          NotationConfigurationPage::title(),
                          il.load(NotationConfigurationPage::iconName()));
-    vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
+    vlay = new QVBoxLayout(pageWidget); //, 0, spacingHint());
     page = new NotationConfigurationPage(pageWidget);
     vlay->addWidget(page);
-    page->setPageIndex(pageIndex(pageWidget));
-    m_configurationPages.push_back(page);
+    //page->setPageIndex(pageIndex(pageWidget));
+	m_tabWidget->setCurrentIndex( m_tabWidget->indexOf(pageWidget) );
+	//m_configurationPages.push_back(page);
 }
+
+
+
 
 }
 #include "ConfigureDialog.moc"

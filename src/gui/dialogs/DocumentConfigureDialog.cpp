@@ -60,7 +60,7 @@ static QPixmap loadIcon(const char *name)
 DocumentConfigureDialog::DocumentConfigureDialog(RosegardenGUIDoc *doc,
         QWidget *parent,
         const char *name)
-        : ConfigureDialogBase(parent, i18n("Document Properties"), name)
+	: ConfigureDialogBase(parent, i18n("Document Properties"), name )//, QMessageBox::StandardButtons buttons )
 {
     QWidget *pageWidget = 0;
     QVBoxLayout *vlay = 0;
@@ -72,33 +72,36 @@ DocumentConfigureDialog::DocumentConfigureDialog(RosegardenGUIDoc *doc,
     pageWidget = addPage(DocumentMetaConfigurationPage::iconLabel(),
                          DocumentMetaConfigurationPage::title(),
                          il.load( DocumentMetaConfigurationPage::iconName()) );
-    vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
+    vlay = new QVBoxLayout(pageWidget); //, 0, spacingHint());
     page = new DocumentMetaConfigurationPage(doc, pageWidget);
     vlay->addWidget(page);
-    page->setPageIndex(pageIndex(pageWidget));
-    m_configurationPages.push_back(page);
+//    page->setPageIndex(pageIndex(pageWidget));
+	m_tabWidget->setCurrentIndex( m_tabWidget->indexOf(pageWidget) );
+	m_configurationPages.push_back(page);
 
     // Audio Page
     //
     pageWidget = addPage(AudioPropertiesPage::iconLabel(),
                          AudioPropertiesPage::title(),
                          il.load(AudioPropertiesPage::iconName()));
-    vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
+    vlay = new QVBoxLayout(pageWidget); //, 0, spacingHint());
     page = new AudioPropertiesPage(doc, pageWidget);
     vlay->addWidget(page);
-    page->setPageIndex(pageIndex(pageWidget));
-    m_configurationPages.push_back(page);
+    //page->setPageIndex(pageIndex(pageWidget));
+	m_tabWidget->setCurrentIndex( m_tabWidget->indexOf(pageWidget) );
+	m_configurationPages.push_back(page);
 
     // Colour Page
     pageWidget = addPage(ColourConfigurationPage::iconLabel(),
                          ColourConfigurationPage::title(),
                          il.load(ColourConfigurationPage::iconName()));
 
-    vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
+    vlay = new QVBoxLayout(pageWidget); //, 0, spacingHint());
     page = new ColourConfigurationPage(doc, pageWidget);
     vlay->addWidget(page);
-    page->setPageIndex(pageIndex(pageWidget));
-    m_configurationPages.push_back(page);
+    //page->setPageIndex(pageIndex(pageWidget));
+	m_tabWidget->setCurrentIndex( m_tabWidget->indexOf(pageWidget) );
+	m_configurationPages.push_back(page);
 
     resize(minimumSize());
 }
@@ -119,8 +122,9 @@ DocumentConfigureDialog::showAudioPage()
             continue;
         }
 
-        showPage(index);
-        return ;
+        //showPage(index);
+		m_tabWidget->setCurrentIndex( index );
+		return ;
     }
 }
 
