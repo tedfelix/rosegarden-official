@@ -56,7 +56,7 @@ namespace Rosegarden
 EventEditDialog::EventEditDialog(QDialogButtonBox::QWidget *parent,
                                  const Event &event,
                                  bool editable) :
-        QDialog(parent) : Ok)),
+        QDialog(parent),
         m_durationDisplay(0),
         m_durationDisplayAux(0),
         m_persistentGrid(0),
