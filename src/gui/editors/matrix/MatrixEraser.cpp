@@ -32,6 +32,7 @@
 #include <kglobal.h>
 #include <QIcon>
 #include <QString>
+#include <QMouseEvent>
 
 
 namespace Rosegarden

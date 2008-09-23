@@ -47,6 +47,7 @@
 #include <QPoint>
 #include <QRect>
 #include <QString>
+#include <QMouseEvent>
 
 
 namespace Rosegarden

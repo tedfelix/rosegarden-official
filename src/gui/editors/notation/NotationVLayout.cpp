@@ -18,6 +18,7 @@
 #include <cmath>
 #include "NotationVLayout.h"
 #include "misc/Debug.h"
+#include "misc/Strings.h"
 
 #include <klocale.h>
 #include "base/Composition.h"

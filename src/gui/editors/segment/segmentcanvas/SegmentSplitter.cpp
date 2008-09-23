@@ -34,6 +34,7 @@
 #include <QRect>
 #include <QString>
 #include <klocale.h>
+#include <QMouseEvent>
 
 
 namespace Rosegarden

@@ -16,6 +16,7 @@
 */
 
 #include "misc/Debug.h"
+#include "misc/Strings.h"
 #include "ChordMap.h"
 
 #include <QFile>
@@ -70,7 +71,8 @@ ChordMap::getRootList() const
     static QStringList rootNotes;
     
     if (rootNotes.count() == 0) {
-        rootNotes = ".split(QString(", QString::SkipEmptyParts), "A,A#/Bb,B,C,C#/Db,D,D#/Eb,E,F,F#/Gb,G,G#/Ab");
+        rootNotes = QString("A,A#/Bb,B,C,C#/Db,D,D#/Eb,E,F,F#/Gb,G,G#/Ab")
+            .split(",", QString::SkipEmptyParts);
     }
     
     // extract roots from map itself - not a very good idea

@@ -19,6 +19,7 @@
 #include <QString>
 #include <iostream>
 #include <QVariant>
+#include <QTextStream>
 
 #include "PropertyName.h"
 #include "Exception.h"
@@ -35,11 +36,13 @@ extern std::string qStrToStrUtf8(const QString &qstr);
 extern const char* qStrToCharPtrUtf8(const QString &qstr);
 extern const char* qStrToCharPtrLocal8(const QString &qstr);
 
-
 class QTextCodec;
 extern std::string convertFromCodec(std::string, QTextCodec *);
 
 std::ostream &
 operator<<(std::ostream &, const QString &);
+
+QTextStream &
+operator<<(QTextStream &, const std::string &);
 
 #endif

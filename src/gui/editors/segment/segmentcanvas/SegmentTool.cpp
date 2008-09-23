@@ -29,6 +29,7 @@
 #include <kmainwindow.h>
 #include <QPoint>
 #include <qpopupmenu.h>
+#include <QMouseEvent>
 
 
 namespace Rosegarden

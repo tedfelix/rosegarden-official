@@ -28,10 +28,6 @@
 
 #include "misc/Debug.h"
 
-using std::cout;
-using std::cerr;
-using std::endl;
-
 namespace Rosegarden
 {
 
@@ -117,6 +113,7 @@ SequencerThread::run()
             // stop, because this arises from a call from the GUI
             // direct to roseSeq to start with
             seq.setStatus(STOPPED);
+
             SEQUENCER_DEBUG << "RosegardenSequencer - Stopped" << endl;
             break;
 

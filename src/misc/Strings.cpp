@@ -152,3 +152,10 @@ operator<<(std::ostream &target, const QString &str)
     return target << str.toLocal8Bit().data();
 }
 
+QTextStream &
+operator<<(QTextStream &target, const std::string &str)
+{
+    return target << QString(str.c_str());
+}
+
+

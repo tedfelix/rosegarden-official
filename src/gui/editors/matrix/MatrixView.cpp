@@ -125,6 +125,7 @@
 #include <QString>
 #include <QWidget>
 #include <QMatrix>
+#include <QMouseEvent>
 
 
 namespace Rosegarden

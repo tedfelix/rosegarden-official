@@ -31,6 +31,7 @@
 #include <Q3Canvas>
 #include <QPoint>
 #include <QWidget>
+#include <QMouseEvent>
 #include "misc/Debug.h"
 
 

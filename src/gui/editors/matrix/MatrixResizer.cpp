@@ -40,6 +40,7 @@
 #include <QPoint>
 #include <QString>
 #include "misc/Debug.h"
+#include <QMouseEvent>
 
 
 namespace Rosegarden
