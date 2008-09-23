@@ -60,7 +60,6 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-//&&& #include <qvgroupbox.h>
 
 #include <klocale.h>  // i18n()
 #include <kstandarddirs.h>
@@ -99,7 +98,9 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 
     btnBox->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed));
 
-    QHBoxLayout* layout = new QHBoxLayout(btnBox, 4, 10);
+    btnBox->setContentsMargins(4, 4, 4, 4);
+    QHBoxLayout* layout = new QHBoxLayout(btnBox);
+    layout->setSpacing(10);
 
     m_closeButton = new QPushButton(btnBox);
     m_applyButton = new QPushButton(i18n("Apply"), btnBox);
@@ -111,6 +112,8 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     layout->addSpacing(15);
     layout->addWidget(m_closeButton);
     layout->addSpacing(5);
+
+    btnBox->setLayout(layout);
 
     connect(m_applyButton, SIGNAL(clicked()),
             this, SLOT(slotApply()));
@@ -136,7 +139,9 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     QFrame *bankBox = new QFrame( leftPart );
     leftPartLayout->addWidget(bankBox);
     leftPart->setLayout(leftPartLayout);
-    QGridLayout *gridLayout = new QGridLayout(bankBox, 4, 2, 6, 6);
+    bankBox->setContentsMargins(6, 6, 6, 6);
+    QGridLayout *gridLayout = new QGridLayout(bankBox);
+    gridLayout->setSpacing(6);
 
     m_addBank = new QPushButton(i18n("Add Bank"), bankBox);
     m_addKeyMapping = new QPushButton(i18n("Add Key Mapping"), bankBox);
@@ -172,6 +177,8 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     gridLayout->addWidget(m_copyPrograms, 3, 0);
     gridLayout->addWidget(m_pastePrograms, 3, 1);
 
+    bankBox->setLayout(gridLayout);
+
     // Tips
     //
     m_copyPrograms->setToolTip(i18n("Copy all Program names from current Bank to clipboard"));
@@ -182,7 +189,9 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
             this, SLOT(slotPopulateDevice(QListWidgetItem*)));
 
     QFrame *vbox = new QFrame(splitter);
-    QVBoxLayout *vboxLayout = new QVBoxLayout(vbox, 8, 6);
+    vbox->setContentsMargins(8, 8, 8, 8);
+    QVBoxLayout *vboxLayout = new QVBoxLayout(vbox);
+    vboxLayout->setSpacing(6);
 
     m_programEditor = new MidiProgramsEditor(this, vbox);
     vboxLayout->addWidget(m_programEditor);
@@ -194,11 +203,16 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     m_programEditor->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred));
     m_keyMappingEditor->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred));
 
-    m_optionBox = new QVGroupBox(i18n("Options"), vbox);
+    m_optionBox = new QGroupBox(i18n("Options"), vbox);
+    QVBoxLayout *optionBoxLayout = new QVBoxLayout;
     vboxLayout->addWidget(m_optionBox);
+
+    vbox->setLayout(vboxLayout);
 
     QWidget *variationBox = new QWidget(m_optionBox);
     QHBoxLayout *variationBoxLayout = new QHBoxLayout;
+    optionBoxLayout->addWidget(variationBox);
+
     m_variationToggle = new QCheckBox(i18n("Show Variation list based on "), variationBox );
     variationBoxLayout->addWidget(m_variationToggle);
     m_variationCombo = new QComboBox( variationBox );
@@ -206,6 +220,8 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     variationBox->setLayout(variationBoxLayout);
     m_variationCombo->addItem(i18n("LSB"));
     m_variationCombo->addItem(i18n("MSB"));
+
+    m_optionBox->setLayout(optionBoxLayout);
 
     // device/bank modification
     connect(m_listView, SIGNAL(itemRenamed (QListWidgetItem*, const QString&, int)),

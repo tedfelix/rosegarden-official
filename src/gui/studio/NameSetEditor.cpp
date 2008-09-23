@@ -30,7 +30,6 @@
 #include <QString>
 #include <QTabWidget>
 #include <QToolTip>
-#include <qvgroupbox.h>
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -45,32 +44,40 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
                              const char* name,
                              QString headingPrefix,
                              bool showEntryButtons)
-        : QVGroupBox(title, parent, name),
+        : QGroupBox(title, parent),
         m_bankEditor(bankEditor),
         m_mainFrame(new QFrame(this))
 {
-    m_mainLayout = new QGridLayout(m_mainFrame,
-                                   4,   // rows
-                                   6,   // cols
-                                   2); // margin
+    QVBoxLayout *layout = new QVBoxLayout;
+
+    m_mainFrame->setContentsMargins(2, 2, 2, 2);
+    m_mainLayout = new QGridLayout(m_mainFrame);
+    m_mainFrame->setLayout(m_mainLayout);
+    layout->addWidget(m_mainFrame);
 
     // Librarian
     //
-    QGroupBox *groupBox = new QGroupBox(2,
-                                        Qt::Horizontal,
-                                        i18n("Librarian"),
-                                        m_mainFrame);
+    QGroupBox *groupBox = new QGroupBox(i18n("Librarian"), m_mainFrame);
+    QHBoxLayout *groupBoxLayout = new QHBoxLayout;
+
     m_mainLayout->addWidget(groupBox, 0, 3, 2- 1, 5- 4);
 
-    new QLabel(i18n("Name"), groupBox);
+    groupBoxLayout->addWidget(new QLabel(i18n("Name")));
     m_librarian = new QLabel(groupBox);
+    groupBoxLayout->addWidget(m_librarian);
 
-    new QLabel(i18n("Email"), groupBox);
+    groupBoxLayout->addWidget(new QLabel(i18n("Email")));
     m_librarianEmail = new QLabel(groupBox);
+    groupBoxLayout->addWidget(m_librarianEmail);
 
+    groupBox->setLayout(groupBoxLayout);
     groupBox->setToolTip(i18n("The librarian maintains the Rosegarden device data for this device.\nIf you've made modifications to suit your own device, it might be worth\nliaising with the librarian in order to publish your information for the benefit\nof others."));
 
     QTabWidget* tabw = new QTabWidget(this);
+    layout->addWidget(tabw);
+
+    setLayout(layout);
+    m_mainLayout->setSpacing(layout->spacing());
 
     tabw->setMargin(10);
 

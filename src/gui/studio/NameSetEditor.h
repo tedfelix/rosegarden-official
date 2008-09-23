@@ -21,7 +21,7 @@
 
 #include <kcompletion.h>
 #include <QString>
-#include <qvgroupbox.h>
+#include <QGroupBox>
 #include <vector>
 
 
@@ -40,7 +40,7 @@ namespace Rosegarden
 class BankEditorDialog;
 
 
-class NameSetEditor : public QVGroupBox
+class NameSetEditor : public QGroupBox
 {
     Q_OBJECT
 public:

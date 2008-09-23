@@ -36,7 +36,6 @@
 #include <QObjectList>
 #include <QPushButton>
 #include <QString>
-#include <qvgroupbox.h>
 #include <QWidget>
 
 
