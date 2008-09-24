@@ -17,9 +17,6 @@
 
 
 #include "ManageMetronomeDialog.h"
-#include <QLayout>
-
-#include <klocale.h>
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "base/Composition.h"
@@ -37,6 +34,7 @@
 #include "gui/widgets/PitchChooser.h"
 #include "sound/MappedEvent.h"
 #include "sound/PluginIdentifier.h"
+
 #include <QComboBox>
 #include <QDialog>
 #include <QDialogButtonBox>
@@ -49,6 +47,10 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QLayout>
+#include <QPushButton>
+
+#include <klocale.h>
 
 
 namespace Rosegarden
@@ -194,6 +196,7 @@ ManageMetronomeDialog::ManageMetronomeDialog(QDialogButtonBox::QWidget *parent,
 
     setModified(false);
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Apply | QDialogButtonBox::Close | QDialogButtonBox::Help);
+	buttonBox->setObjectName( "buttonBox1" );
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
@@ -384,12 +387,16 @@ ManageMetronomeDialog::setModified(bool value)
 {
     if (m_modified == value)
         return ;
-
+	
+	QDialogButtonBox *bbox = this->findChild<QDialogButtonBox*>( "buttonBox1" );
+	QPushButton *butt = bbox->button( QDialogButtonBox::Apply );
     if (value) {
-        enableButtonApply(true);
-    } else {
-        enableButtonApply(false);
-    }
+//		enableButtonApply(true);
+		butt->setEnabled(true);
+	} else {
+//         enableButtonApply(false);
+		butt->setEnabled(false);
+	}
 
     m_modified = value;
 }

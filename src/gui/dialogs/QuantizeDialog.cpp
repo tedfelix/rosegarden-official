@@ -25,7 +25,7 @@
 #include <QDialogButtonBox>
 #include <QWidget>
 #include <QVBoxLayout>
-
+#include <QPushButton>
 
 namespace Rosegarden
 {
@@ -51,8 +51,9 @@ QuantizeDialog::QuantizeDialog(QDialogButtonBox::QWidget *parent, bool inNotatio
     vboxLayout->addWidget(m_quantizeFrame);
     vbox->setLayout(vboxLayout);
 
-    setDetailsWidget(m_quantizeFrame->getAdvancedWidget());  //### FIX-ME
-    m_quantizeFrame->getAdvancedWidget()->hide();
+    setDetailsWidget(m_quantizeFrame->getAdvancedWidget());  //
+	
+	m_quantizeFrame->getAdvancedWidget()->hide();
 
     m_quantizeFrame->adjustSize();
     vbox->adjustSize();
@@ -61,12 +62,25 @@ QuantizeDialog::QuantizeDialog(QDialogButtonBox::QWidget *parent, bool inNotatio
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
     QPushButton *details = buttonBox->addButton(i18n("Advanced"), QDialogButtonBox::ActionRole);
-    buttonBox->addButton(QDialogButtonBox::Help);
-
+	details->setObjectName( "detailsButton" );
+	connect(details, SIGNAL(clicked()), this, SLOT(slotShowDetails(bool)));
+	buttonBox->addButton(QDialogButtonBox::Help);
+	
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+}
+
+void QuantizeDialog::setDetailsWidget( QWidget* wid ){
+	//QPushButton* butt = this->findChild<QPushButton*>( "detailsButton" );
+	m_detailsWidget = wid;
+//	wid->setObjectName( "detailsWidget" );
+}
+
+void QuantizeDialog::slotShowDetails( bool checked ){
+	bool vis = m_detailsWidget->isVisible();
+	m_detailsWidget->setVisible( ! vis );
 }
 
 Quantizer *

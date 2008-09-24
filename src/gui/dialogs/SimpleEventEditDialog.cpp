@@ -17,8 +17,6 @@
 
 
 #include "SimpleEventEditDialog.h"
-#include <QLayout>
-
 #include "base/BaseProperties.h"
 #include "base/Event.h"
 #include "base/MidiTypes.h"
@@ -28,11 +26,11 @@
 #include "misc/Strings.h"
 #include "PitchDialog.h"
 #include "TimeDialog.h"
+
 #include <QComboBox>
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QFileDialog>
-#include <klocale.h>
 #include <QCheckBox>
 #include <QDialog>
 #include <QFile>
@@ -45,6 +43,9 @@
 #include <QString>
 #include <QWidget>
 #include <QVBoxLayout>
+#include <QLayout>
+
+#include <klocale.h>
 
 
 namespace Rosegarden
@@ -156,7 +157,7 @@ SimpleEventEditDialog::SimpleEventEditDialog(QDialogButtonBox::QWidget *parent,
 
     m_controllerLabel = new QLabel(i18n("Controller name:"), frame);
     m_controllerLabelValue = new QLabel(i18n("<none>"), frame);
-    m_controllerLabelValue->setAlignment(QLabel::AlignRight);
+    m_controllerLabelValue->setAlignment( Qt::AlignRight );
 
     layout->addWidget(m_controllerLabel, 4, 0);
     layout->addWidget(m_controllerLabelValue, 4, 1);
@@ -1026,9 +1027,10 @@ SimpleEventEditDialog::slotEditPitch()
 void
 SimpleEventEditDialog::slotSysexLoad()
 {
-    QString path = KFileDialog::getOpenFileName(":SYSTEMEXCLUSIVE",
-                   i18n("*.syx|System exclusive files (*.syx)"),
-                   this, i18n("Load System Exclusive data in File"));
+    QString path = QFileDialog::getOpenFileName( this,//":SYSTEMEXCLUSIVE",
+			i18n("Load System Exclusive data in File"),
+			i18n("*.syx|System exclusive files (*.syx)")
+			);
     if (path.isNull())
         return ;
 
@@ -1051,9 +1053,10 @@ SimpleEventEditDialog::slotSysexLoad()
 void
 SimpleEventEditDialog::slotSysexSave()
 {
-    QString path = KFileDialog::getSaveFileName(":SYSTEMEXCLUSIVE",
-                   i18n("*.syx|System exclusive files (*.syx)"),
-                   this, i18n("Save System Exclusive data to..."));
+    QString path = QFileDialog::getSaveFileName( this, //":SYSTEMEXCLUSIVE",
+			i18n("Save System Exclusive data to..."),
+					i18n("*.syx|System exclusive files (*.syx)")
+					);
     if (path.isNull())
         return ;
 

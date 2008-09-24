@@ -42,9 +42,15 @@ public:
     
     /// Returned quantizer object is on heap -- caller must delete
     Quantizer *getQuantizer() const;
+	
+	void setDetailsWidget( QWidget* wid );
+	
+public slots:
+	void slotShowDetails( bool checked );
 
 protected:
     QuantizeParameters *m_quantizeFrame;
+	QWidget *m_detailsWidget;
 };
 
 
