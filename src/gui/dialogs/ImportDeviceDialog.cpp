@@ -391,7 +391,7 @@ ImportDeviceDialog::importFromSF2(QString filename)
 {
     SF2PatchExtractor::Device sf2device;
     try {
-        sf2device = SF2PatchExtractor::read(filename.data());
+        sf2device = SF2PatchExtractor::read( qstrtostr(filename) );
 
         // These exceptions shouldn't happen -- the isSF2File call before this
         // one should have weeded them out

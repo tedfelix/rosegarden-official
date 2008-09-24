@@ -96,16 +96,19 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QDialogButtonBox::QWidget *parent,
     m_headersPage = new HeadersConfigurationPage(this, m_doc);
     tabWidget->addTab(m_headersPage, i18n("Headers"));
 
-    m_headersPage->setSpacing(5);
-    m_headersPage->setMargin(5);
-
+//     m_headersPage->setSpacing(5);
+//     m_headersPage->setMargin(5);
+	advancedGrid->setSpacing(5);
+	advancedGrid->setMargin(5);
+	
+	
     //
     // LilyPond export: Basic options
     //
 
-    QGroupBox *basicOptionsBox = new QGroupBox
-                           (1, Horizontal,
-                            i18n("Basic options"), generalFrame);
+	QGroupBox *basicOptionsBox = new QGroupBox(i18n("Basic options"), generalFrame);
+		//	(1, Horizontal,i18n("Basic options"), generalFrame);
+	
     generalGrid->addWidget(basicOptionsBox, 0, 0);
 
     QFrame *frameBasic = new QFrame(basicOptionsBox);
@@ -166,9 +169,9 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QDialogButtonBox::QWidget *parent,
     // LilyPond export: Staff level options
     //
 
-    QGroupBox *staffOptionsBox = new QGroupBox
-                           (1, Horizontal,
-                            i18n("Staff level options"), generalFrame);
+	QGroupBox *staffOptionsBox = new QGroupBox( i18n("Staff level options"), generalFrame);
+				// (1, Horizontal,i18n("Staff level options"), generalFrame);
+	
     generalGrid->addWidget(staffOptionsBox, 1, 0);
 
     QFrame *frameStaff = new QFrame(staffOptionsBox);
@@ -195,9 +198,8 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QDialogButtonBox::QWidget *parent,
     // LilyPond export: Notation options
     //
 
-    QGroupBox *notationOptionsBox = new QGroupBox
-                           (1, Horizontal,
-                            i18n("Notation options"), generalFrame);
+	QGroupBox *notationOptionsBox = new QGroupBox(i18n("Notation options"), generalFrame);
+                   //        (1, Horizontal,i18n("Notation options"), generalFrame);
     generalGrid->addWidget(notationOptionsBox, 2, 0);
 
     QFrame *frameNotation = new QFrame(notationOptionsBox);
@@ -241,9 +243,8 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QDialogButtonBox::QWidget *parent,
     // LilyPond export: Advanced options
     //
 
-    QGroupBox *advancedLayoutOptionsBox = new QGroupBox
-                           (1, Horizontal,
-                            i18n("Layout options"), advancedFrame);
+	QGroupBox *advancedLayoutOptionsBox = new QGroupBox( i18n("Layout options"), advancedFrame);
+                       //    (1, Horizontal,i18n("Layout options"), advancedFrame);
     advancedGrid->addWidget(advancedLayoutOptionsBox, 0, 0);
 
     QFrame *frameAdvancedLayout = new QFrame(advancedLayoutOptionsBox);
@@ -269,9 +270,8 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QDialogButtonBox::QWidget *parent,
     m_lilyChordNamesMode->setChecked( qStrToBool( settings.value("lilychordnamesmode", "false" ) ) );
     layoutAdvancedLayout->addWidget(m_lilyChordNamesMode, 2, 0, 0+1, 1- 1);
 
-    QGroupBox *miscOptionsBox = new QGroupBox
-                           (1, Horizontal,
-                            i18n("Miscellaneous options"), advancedFrame);
+	QGroupBox *miscOptionsBox = new QGroupBox(i18n("Miscellaneous options"), advancedFrame);
+                      //     (1, Horizontal, i18n("Miscellaneous options"), advancedFrame);
     advancedGrid->addWidget(miscOptionsBox, 1, 0);
 
     QFrame *frameMisc = new QFrame(miscOptionsBox);

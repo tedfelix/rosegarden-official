@@ -58,7 +58,7 @@ IdentifyTextCodecDialog::IdentifyTextCodecDialog(QDialogButtonBox::QWidget *pare
     QTextCodec *cc = QTextCodec::codecForContent(text.c_str(), text.length());
     QTextCodec *codec = 0;
 
-    std::cerr << "cc is " << (cc ? cc->name() : "null") << std::endl;
+    std::cerr << "cc is " << (cc ? cc->name().data() : "null") << std::endl;
 
     std::map<std::string, QString> codecDescriptions;
     codecDescriptions["SJIS"] = i18n("Japanese Shift-JIS");
@@ -91,26 +91,26 @@ IdentifyTextCodecDialog::IdentifyTextCodecDialog(QDialogButtonBox::QWidget *pare
     if (cc) {
 //        selectedProbability = cc->heuristicContentMatch
 //            (m_text.c_str(), m_text.length());
-		selectedProbability = codec->codecForName( m_text.c_str() );	//@@@ codec->heuristicContentMatch ==> codecForName ????? FIX
+		selectedProbability = codec->canEncode( m_text.c_str() );	//@@@ codec->heuristicContentMatch ==> canEncode ????? FIX
 	}
 
     while ((codec = QTextCodec::codecForIndex(i)) != 0) {
 
 //		int probability = codec->heuristicContentMatch
 //				(m_text.c_str(), m_text.length());
-		int probability = codec->codecForName( m_text.c_str() );	//@@@ codec->heuristicContentMatch ==> codecForName ????? FIX
+		int probability = codec->canEncode( m_text.c_str() );	//@@@ codec->heuristicContentMatch ==> canEncode ????? FIX
 
         if (probability <= 0) {
             ++i;
             continue;
         }
 
-		std::string name = codec->name(); //codec->objectName();
+		std::string name = qstrtostr(codec->name().data()); //codec->objectName();
 
         std::cerr << "codec " << name << " probability " << probability << std::endl;
 
         if (name == "UTF-8" && 
-            (!cc || (cc->objectName() != name)) &&
+			(!cc || (qstrtostr(cc->name().data()) != name)) &&
             probability > selectedProbability/2) {
             std::cerr << "UTF-8 has a decent probability, selecting it instead to promote global harmony" << std::endl;
             cc = codec;
@@ -134,7 +134,7 @@ IdentifyTextCodecDialog::IdentifyTextCodecDialog(QDialogButtonBox::QWidget *pare
         m_codecs.push_front(name);
         if (current >= 0) ++current;
 
-        if (cc && (name == cc->name()) ) {
+		if (cc && (name == qstrtostr(cc->name().data())) ) {
             current = 0;
         }
 

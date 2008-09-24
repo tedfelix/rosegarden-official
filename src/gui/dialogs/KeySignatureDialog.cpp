@@ -78,12 +78,13 @@ KeySignatureDialog::KeySignatureDialog(QDialogButtonBox::QWidget *parent,
     QGroupBox *keyFrame = new QGroupBox( i18n("Key signature"), vbox );
     vboxLayout->addWidget(keyFrame);
 
-    QGroupBox *transposeFrame = new QGroupBox
-                                (1, Horizontal, i18n("Key transposition"), vbox);
+	QGroupBox *transposeFrame = new QGroupBox( i18n("Key transposition"), vbox);
+                                //(1, Horizontal, i18n("Key transposition"), vbox);
+// 	transposeFrame->
     vboxLayout->addWidget(transposeFrame);
 
-    QGroupBox *buttonFrame = new QGroupBox
-                             (1, Horizontal, i18n("Scope"), vbox);
+	QGroupBox *buttonFrame = new QGroupBox(i18n("Scope"), vbox);
+//                             (1, Horizontal, i18n("Scope"), vbox);
     vboxLayout->addWidget(buttonFrame);
 
     QGroupBox *conversionFrame = new QGroupBox( i18n("Existing notes following key change"), vbox );
@@ -106,7 +107,7 @@ KeySignatureDialog::KeySignatureDialog(QDialogButtonBox::QWidget *parent,
 
     m_keyLabel = new QLabel(i18n("Key"), keyBox);
     keyBoxLayout->addWidget(m_keyLabel);
-    m_keyLabel->setAlignment(AlignVCenter | AlignHCenter);
+    m_keyLabel->setAlignment( Qt::AlignVCenter | Qt::AlignHCenter);
 
     BigArrowButton *keyUp = new BigArrowButton(keyBox, Qt::RightArrow);
     keyBoxLayout->addWidget(keyUp);
@@ -401,7 +402,8 @@ void
 KeySignatureDialog::setValid(bool valid)
 {
     m_valid = valid;
-    enableButton(Ok, m_valid);
+	//enableButton( Ok, m_valid);	//&&& which button to enable here ????
+	//m_valid.setEnabled(true);
 }
 
 std::string
