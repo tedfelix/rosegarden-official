@@ -17,9 +17,6 @@
 
 
 #include "TempoDialog.h"
-#include <QLayout>
-
-#include <klocale.h>
 #include "misc/Debug.h"
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
@@ -28,6 +25,7 @@
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include "gui/widgets/TimeWidget.h"
 #include "gui/widgets/HSpinBox.h"
+
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QGroupBox>
@@ -40,6 +38,9 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QLayout>
+
+#include <klocale.h>
 
 
 namespace Rosegarden
@@ -56,10 +57,12 @@ TempoDialog::TempoDialog(QDialogButtonBox::QWidget *parent, RosegardenGUIDoc *do
     setModal(true);
     setWindowTitle(i18n("Insert Tempo Change"));
 
-    QGridLayout *metagrid = new QGridLayout;
-    setLayout(metagrid);
-    metagrid->addWidget(vbox, 0, 0);
+	QWidget* vbox = dynamic_cast<QWidget*>( this );
+	QVBoxLayout *vboxLayout = new QVBoxLayout;
+	vbox->setLayout(vboxLayout);
+    //metagrid->addWidget(vbox, 0, 0);
 
+	// group box for tempo
     QGroupBox *groupBox = new QGroupBox( i18n("Tempo"), vbox );
     vboxLayout->addWidget(groupBox);
 
@@ -117,24 +120,39 @@ TempoDialog::TempoDialog(QDialogButtonBox::QWidget *parent, RosegardenGUIDoc *do
     m_timeEditor = 0;
 
     if (timeEditable) {
-        m_timeEditor = new TimeWidget(i18n("Time of tempo change"), vbox , true);
+		
+		/* declaration of:
+		TimeWidget( QString title,
+		QWidget *parent,
+		Composition *composition, // for bar/beat/msec
+		timeT initialTime,
+		bool editable = true,
+		bool constrainToCompositionDuration = true );
+		*/
+        m_timeEditor = new TimeWidget(i18n("Time of tempo change"), vbox, 0, true);	//@@@ FIX !!! 3. param, 
         vboxLayout->addWidget(m_timeEditor);
         populateTempo();
         return ;
     }
 
-    // Scope Box
-    QGroupBox *scopeGroup = new QGroupBox(
-                                                i18n("Scope"), vbox );
-    vboxLayout->addWidget(scopeGroup);
-    vbox->setLayout(vboxLayout);
+	
+	
+	// group box for scope (area)
+	QGroupBox *scopeGroup = new QGroupBox( i18n("Scope"), vbox );
+	vboxLayout->addWidget(scopeGroup);
+    //vbox->setLayout(vboxLayout);	// already done
 
 //    new QLabel(scopeBox);
 
+ 	QVBoxLayout * scopeBoxLayout = new QVBoxLayout( scopeGroup );
+	scopeBoxLayout->setSpacing(5);
+	scopeBoxLayout->setMargin(5);
+// 	vboxLayout->setSpacing(5);
+// 	vboxLayout->setMargin(5);
 
-    scopeBoxLayout->setSpacing(5);
-    scopeBoxLayout->setMargin(5);
-
+	QVBoxLayout * currentBoxLayout = scopeBoxLayout;
+	QWidget * currentBox = scopeGroup;
+	
     QLabel *child_15 = new QLabel(i18n("The pointer is currently at "), currentBox );
     currentBoxLayout->addWidget(child_15);
     m_tempoTimeLabel = new QLabel( currentBox );
@@ -146,14 +164,18 @@ TempoDialog::TempoDialog(QDialogButtonBox::QWidget *parent, RosegardenGUIDoc *do
     currentBox->setLayout(currentBoxLayout);
     currentBoxLayout->setStretchFactor(spare, 20);
 
-    m_tempoStatusLabel = new QLabel( scopeBox );
+	m_tempoStatusLabel = new QLabel( scopeGroup );
     scopeBoxLayout->addWidget(m_tempoStatusLabel);
-    scopeBox->setLayout(scopeBoxLayout);
+	scopeGroup->setLayout(scopeBoxLayout);
 
 //    new QLabel(scopeBox);
-
+	
+	QWidget * changeWhereBox = scopeGroup;
+	QVBoxLayout * changeWhereBoxLayout = scopeBoxLayout;
+	
     spare = new QLabel("      ", changeWhereBox );
     changeWhereBoxLayout->addWidget(spare);
+	
     QWidget *changeWhereVBox = new QWidget(changeWhereBox);
     QVBoxLayout *changeWhereVBoxLayout = new QVBoxLayout;
     changeWhereBoxLayout->addWidget(changeWhereVBox);
@@ -205,9 +227,11 @@ TempoDialog::TempoDialog(QDialogButtonBox::QWidget *parent, RosegardenGUIDoc *do
     m_defaultBox->setEnabled(false);
 
     populateTempo();
+	
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
-    metagrid->addWidget(buttonBox, 1, 0);
-    metagrid->setRowStretch(0, 10);
+	vboxLayout->addWidget(buttonBox, 1, 0);
+//	vboxLayout->setRowStretch(0, 10);
+	
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
@@ -457,7 +481,7 @@ TempoDialog::slotOk()
                          action);
     }
 
-    KDialogBase::slotOk();
+//    KDialogBase::slotOk();	//&&& FIX
 }
 
 void

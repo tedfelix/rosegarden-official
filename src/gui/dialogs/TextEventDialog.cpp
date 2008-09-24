@@ -17,19 +17,17 @@
 
 
 #include "TextEventDialog.h"
-#include <QApplication>
-
-#include <klocale.h>
 #include "misc/Strings.h"
 #include "document/ConfigGroups.h"
 #include "base/NotationTypes.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
+
 #include <QComboBox>
 #include <QSettings>
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QBitmap>
-#include <qgrid.h>
+#include <QGridLayout>
 #include <QGroupBox>
 #include <QLabel>
 #include <QLineEdit>
@@ -40,6 +38,9 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QSpinBox>
+#include <QApplication>
+
+#include <klocale.h>
 
 namespace Rosegarden
 {
@@ -57,26 +58,30 @@ TextEventDialog::TextEventDialog(QDialogButtonBox::QWidget *parent,
     setModal(true);
     setWindowTitle(i18n("Text"));
 
-    QGridLayout *metagrid = new QGridLayout;
-    setLayout(metagrid);
-    QWidget *vbox = new QWidget(this);
+//    QGridLayout *metagrid = new QGridLayout;
+//    setLayout(metagrid);
+//    metagrid->addWidget(vbox, 0, 0);
+	
     QVBoxLayout *vboxLayout = new QVBoxLayout;
-    metagrid->addWidget(vbox, 0, 0);
-
+//	QWidget *vbox = new QWidget(this);
+	QWidget *vbox = dynamic_cast<QWidget*>( this );
+	vbox->setLayout( vboxLayout );
 
     QGroupBox *entryBox = new QGroupBox( i18n("Specification"), vbox );
     vboxLayout->addWidget(entryBox);
     QGroupBox *exampleBox = new QGroupBox( i18n("Preview"), vbox );
     vboxLayout->addWidget(exampleBox);
-    vbox->setLayout(vboxLayout);
-
-    QGrid *entryGrid = new QGrid(2, QGrid::Horizontal, entryBox);
+    
+//    QGrid *entryGrid = new QGrid(2, QGrid::Horizontal, entryBox);
+	QWidget *entryGrid = new QWidget( vbox );
+	QVBoxLayout *entryGridLay = new QVBoxLayout( entryGrid );
 
     new QLabel(i18n("Text:  "), entryGrid);
     m_text = new QLineEdit(entryGrid);
     m_text->setText(strtoqstr(defaultText.getText()));
     if (maxLength > 0)
         m_text->setMaxLength(maxLength);
+	
 
     // style combo
     new QLabel(i18n("Style:  "), entryGrid);
@@ -364,9 +369,11 @@ TextEventDialog::TextEventDialog(QDialogButtonBox::QWidget *parent,
     // extreme, but it works, and it costs little, and other solutions I can
     // imagine would cost so much more.
     m_text->setText(strtoqstr(defaultText.getText()));
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
-    metagrid->addWidget(buttonBox, 1, 0);
-    metagrid->setRowStretch(0, 10);
+    
+	QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
+    vboxLayout->addWidget(buttonBox, 1, 0);
+    //vboxLayout->setRowStretch(0, 10);
+	
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 

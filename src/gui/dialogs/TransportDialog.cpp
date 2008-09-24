@@ -55,9 +55,11 @@ namespace Rosegarden
 {
 
 TransportDialog::TransportDialog(QWidget *parent,
-                                 const char *name,
-                                 WFlags flags):
-    QWidget(parent, name, WType_TopLevel | WStyle_DialogBorder | WStyle_Minimize | WStyle_SysMenu | WDestructiveClose),
+                                 const char *name ): 
+//                                 WFlags flags):
+    QDialog(
+			parent, name, WType_TopLevel | WStyle_DialogBorder | WStyle_Minimize | WStyle_SysMenu | WDestructiveClose 
+		   ),
     m_transport(0),
     m_lastTenHours(0),
     m_lastUnitHours(0),
