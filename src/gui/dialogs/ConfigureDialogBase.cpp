@@ -47,7 +47,7 @@ ConfigureDialogBase::	ConfigureDialogBase( QWidget *parent, QString label, const
 	this->setAttribute( Qt::WA_DeleteOnClose );
 	
 	this->setWindowTitle( i18n("Configure Rosegarden") );
-//	this->setObjectName( (name) );
+	this->setObjectName( (name) );
 	
 	QVBoxLayout *dlgLay = new QVBoxLayout( this );
 	QTabWidget *m_tabWidget = new QTabWidget( this );

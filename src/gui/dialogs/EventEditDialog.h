@@ -28,9 +28,9 @@
 
 class QWidget;
 class QString;
-class QScrollView;
+class QScrollArea;
 class QLabel;
-class QGrid;
+//class QGrid;
 
 
 namespace Rosegarden
@@ -81,10 +81,10 @@ protected:
     QLabel *m_durationDisplay;
     QLabel *m_durationDisplayAux;
 
-    QGrid *m_persistentGrid;
-    QGrid *m_nonPersistentGrid;
+    QWidget		*m_persistentGrid;
+    QWidget		*m_nonPersistentGrid;
 
-    QScrollView *m_nonPersistentView;
+    QScrollArea *m_nonPersistentView;
 
     const Event &m_originalEvent;
     Event m_event;
