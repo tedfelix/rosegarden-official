@@ -58,7 +58,7 @@ IdentifyTextCodecDialog::IdentifyTextCodecDialog(QDialogButtonBox::QWidget *pare
     QTextCodec *cc = QTextCodec::codecForContent(text.c_str(), text.length());
     QTextCodec *codec = 0;
 
-    std::cerr << "cc is " << (cc ? cc->objectName() : "null") << std::endl;
+    std::cerr << "cc is " << (cc ? cc->name() : "null") << std::endl;
 
     std::map<std::string, QString> codecDescriptions;
     codecDescriptions["SJIS"] = i18n("Japanese Shift-JIS");
@@ -89,21 +89,23 @@ IdentifyTextCodecDialog::IdentifyTextCodecDialog(QDialogButtonBox::QWidget *pare
 
     int selectedProbability = 0;
     if (cc) {
-        selectedProbability = cc->heuristicContentMatch
-            (m_text.c_str(), m_text.length());
-    }
+//        selectedProbability = cc->heuristicContentMatch
+//            (m_text.c_str(), m_text.length());
+		selectedProbability = codec->codecForName( m_text.c_str() );	//@@@ codec->heuristicContentMatch ==> codecForName ????? FIX
+	}
 
     while ((codec = QTextCodec::codecForIndex(i)) != 0) {
 
-        int probability = codec->heuristicContentMatch
-            (m_text.c_str(), m_text.length());
+//		int probability = codec->heuristicContentMatch
+//				(m_text.c_str(), m_text.length());
+		int probability = codec->codecForName( m_text.c_str() );	//@@@ codec->heuristicContentMatch ==> codecForName ????? FIX
 
         if (probability <= 0) {
             ++i;
             continue;
         }
 
-        std::string name = codec->objectName();
+		std::string name = codec->name(); //codec->objectName();
 
         std::cerr << "codec " << name << " probability " << probability << std::endl;
 
@@ -132,7 +134,7 @@ IdentifyTextCodecDialog::IdentifyTextCodecDialog(QDialogButtonBox::QWidget *pare
         m_codecs.push_front(name);
         if (current >= 0) ++current;
 
-        if (cc && (name == cc->objectName())) {
+        if (cc && (name == cc->name()) ) {
             current = 0;
         }
 
@@ -170,9 +172,9 @@ IdentifyTextCodecDialog::slotCodecSelected(int i)
 //    std::cerr << "codecs: ";
 //    for (int j = 0; j < m_codecs.size(); ++j) std::cerr << m_codecs[j] << " ";
 //    std::cerr << std::endl;
-    QTextCodec *codec = QTextCodec::codecForName(strtoqstr(name));
+    QTextCodec *codec = QTextCodec::codecForName( qStrToCharPtrUtf8(strtoqstr(name)) );
     if (!codec) return;
-    m_codec = qstrtostr(codec->objectName());
+    m_codec = qstrtostr( codec->name() );
     std::cerr << "Applying codec " << m_codec << std::endl;
     QString outText = codec->toUnicode(m_text.c_str(), m_text.length());
     if (outText.length() > 80) outText = outText.left(80);

@@ -512,14 +512,17 @@ EventEditDialog::slotPropertyDeleted()
 
     m_modified = true;
 	//QObjectList *list = m_persistentGrid->queryList(0, propertyName, false);
-	QObjectList *list = m_persistentGrid->queryList( static_cast<const char*>(0), qstrtostr(propertyName), false, true);
-	QObjectListIt i(*list);
-    QObject *obj;
-    while ((obj = i.current()) != 0) {
-        ++i;
-        delete obj;
+	QObjectList list = m_persistentGrid->queryList( static_cast<const char*>(0), qStrToCharPtrUtf8(propertyName), false, true);
+	
+	//QObjectListIt i(*list);
+    //QObject *obj;
+//    while ((obj = i.current()) != 0) {
+	while( ! list.isEmpty() ){
+		delete list.takeFirst();
+	    //++i;
+        //delete obj;
     }
-    delete list;
+//    delete list;
 
     m_event.unset(qstrtostr(propertyName));
 }
@@ -545,14 +548,17 @@ EventEditDialog::slotPropertyMadePersistent()
              ) != QMessageBox::Ok )
         return ;
 
-    QObjectList *list = m_nonPersistentGrid->queryList( static_cast<const char*>(0), qstrtostr(propertyName), false, true );
-    QObjectListIt i(*list);
-    QObject *obj;
-    while ((obj = i.current()) != 0) {
-        ++i;
-        delete obj;
-    }
-    delete list;
+	QObjectList list = m_nonPersistentGrid->queryList( static_cast<const char*>(0), qStrToCharPtrUtf8(propertyName), false, true );
+    
+// 	QObjectListIt i(*list);
+//     QObject *obj;
+//     while ((obj = i.current()) != 0) {
+//         ++i;
+//         delete obj;
+	while( ! list.isEmpty() ){
+		delete list.takeFirst();
+	}
+//    delete list;
 
     m_modified = true;
     addPersistentProperty(qstrtostr(propertyName));

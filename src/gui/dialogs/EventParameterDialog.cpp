@@ -48,23 +48,30 @@ EventParameterDialog::EventParameterDialog(
 
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
-    QWidget *vBox = new QWidget(this);
-    QVBoxLayout *vBoxLayout = new QVBoxLayout;
-    metagrid->addWidget(vBox, 0, 0);
-
+	
+    
+	QWidget *topBox = new QWidget(this);
+	metagrid->addWidget(topBox, 0, 0);
+	QVBoxLayout *topBoxLayout = new QVBoxLayout;
+	topBox->setLayout(topBoxLayout);
+    
 
     QLabel *explainLabel = new QLabel( topBox );
     topBoxLayout->addWidget(explainLabel);
-    topBox->setLayout(topBoxLayout);
     QString text = i18n("Set the %1 property of the event selection:", 
                    strtoqstr(property));
     explainLabel->setText(text);
 
-    QLabel *child_10 = new QLabel(i18n("Pattern"), patternBox );
+	
+	QWidget *patternBox = new QWidget(this);
+	metagrid->addWidget(patternBox, 0, 0);
+	QVBoxLayout *patternBoxLayout = new QVBoxLayout;
+	patternBox->setLayout(topBoxLayout);
+	
+	QLabel *child_10 = new QLabel(i18n("Pattern"), patternBox );
     patternBoxLayout->addWidget(child_10);
     m_patternCombo = new QComboBox( patternBox );
     patternBoxLayout->addWidget(m_patternCombo);
-    patternBox->setLayout(patternBoxLayout);
 
     // create options
     // 0 flat
@@ -90,9 +97,9 @@ EventParameterDialog::EventParameterDialog(
     connect(m_patternCombo, SIGNAL(activated(int)),
             this, SLOT(slotPatternSelected(int)));
 
-    QWidget *value1Box = new QWidget( vBox );
-    vBoxLayout->addWidget(value1Box);
-    vBox->setLayout(vBoxLayout);
+	QWidget *value1Box = new QWidget( topBox );
+	topBoxLayout->addWidget(value1Box);
+//    topBox->setLayout(topBoxLayout);
     QHBoxLayout *value1BoxLayout = new QHBoxLayout;
     m_value1Label = new QLabel(i18n("Value"), value1Box );
     value1BoxLayout->addWidget(m_value1Label);
@@ -100,11 +107,11 @@ EventParameterDialog::EventParameterDialog(
     value1BoxLayout->addWidget(m_value1Combo);
     value1Box->setLayout(value1BoxLayout);
 
-    m_value2Label = new QLabel(i18n("Value"), value2Box );
-    value2BoxLayout->addWidget(m_value2Label);
-    m_value2Combo = new QComboBox( value2Box );
-    value2BoxLayout->addWidget(m_value2Combo);
-    value2Box->setLayout(value2BoxLayout);
+	m_value2Label = new QLabel(i18n("Value"), topBox );
+	topBoxLayout->addWidget(m_value2Label);
+	m_value2Combo = new QComboBox( topBox );
+	topBoxLayout->addWidget(m_value2Combo);
+	topBox->setLayout(topBoxLayout);
 
     for (unsigned int i = 0; i < 128; i++) {
         m_value1Combo->addItem(QString("%1").arg(i));
