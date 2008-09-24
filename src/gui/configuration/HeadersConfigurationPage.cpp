@@ -52,19 +52,21 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
 	QWidget(parent),
 	m_doc(doc)
 {
-	QVBoxLayout *layout = new QVBoxLayout;
-	
+    QVBoxLayout *layout = new QVBoxLayout;
+
     //
     // LilyPond export: Printable headers
     //
 
-//old:	QGroupBox *headersBox = new QGroupBox(1, Qt::Horizontal,
-//										  i18n("Printable headers"), this);
-	QGroupBox *headersBox = new QGroupBox( i18n("Printable headers"), this );
-    
+    QGroupBox *headersBox = new QGroupBox( i18n("Printable headers"), this );
+    QHBoxLayout *headersBoxLayout = new QHBoxLayout;
     layout->addWidget(headersBox);
     QFrame *frameHeaders = new QFrame(headersBox);
-    QGridLayout *layoutHeaders = new QGridLayout(frameHeaders, 10, 6, 10, 5);
+    frameHeaders->setContentsMargins(10, 10, 10, 10);
+    QGridLayout *layoutHeaders = new QGridLayout(frameHeaders);
+    layoutHeaders->setSpacing(5);
+    headersBoxLayout->addWidget(frameHeaders);
+    headersBox->setLayout(headersBoxLayout);
 
     // grab user headers from metadata
     Configuration metadata = (&m_doc->getComposition())->getMetadata();
@@ -144,7 +146,7 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
 	// editHeader->setReadOnly( true );
 	editHeader->setAlignment( (col == 0 ? Qt::AlignLeft : (col >= 3 ? Qt::AlignRight : Qt::AlignCenter) ));
 
-	layoutHeaders->addMultiCellWidget(editHeader, row, row, col, col+(width-1) );
+	layoutHeaders->addWidget(editHeader, row, col, 1, width);
 
 	//
 	// ToolTips
@@ -156,6 +158,9 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
     QLabel *separator = new QLabel(i18n("The composition comes here."), frameHeaders);
     separator->setAlignment( Qt::AlignCenter );
     layoutHeaders->addWidget(separator, 7, 1, 1, 4 - 2);
+
+    frameHeaders->setLayout(layoutHeaders);
+
 
     //
     // LilyPond export: Non-printable headers
@@ -186,7 +191,9 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
     otherHeadersBox->setFont(font);
     otherHeadersBox->setWidget(frameOtherHeaders);
 
-    QGridLayout *layoutOtherHeaders = new QGridLayout(frameOtherHeaders, 2, 2, 10, 5);
+    frameOtherHeaders->setContentsMargins(10, 10, 10, 10);
+    QGridLayout *layoutOtherHeaders = new QGridLayout(frameOtherHeaders);
+    layoutOtherHeaders->setSpacing(5);
 
 	m_metadata = new QTableWidget( 2, 2, frameOtherHeaders ); // rows, columns
 	
@@ -235,6 +242,8 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
     QPushButton* deletePropButton = new QPushButton(i18n("Delete Property"),
                                     frameOtherHeaders);
     layoutOtherHeaders->addWidget(deletePropButton, 1, 1, Qt::AlignHCenter);
+
+    frameOtherHeaders->setLayout(layoutOtherHeaders);
 
     connect(addPropButton, SIGNAL(clicked()),
             this, SLOT(slotAddNewProperty()));
