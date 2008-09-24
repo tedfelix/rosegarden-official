@@ -15,12 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
-
-#include <QDesktopWidget>
 #include "TransportDialog.h"
-
-#include <klocale.h>
-#include <kstandarddirs.h>
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
 #include "base/RealTime.h"
@@ -34,9 +29,9 @@
 #include "gui/widgets/Label.h"
 #include "sound/MappedEvent.h"
 #include "document/ConfigGroups.h"
+
 #include <QSettings>
-#include <kglobal.h>
-#include <qshortcut.h>
+#include <QShortcut>
 #include <QColor>
 #include <QByteArray>
 #include <QDataStream>
@@ -49,16 +44,21 @@
 #include <QTimer>
 #include <QWidget>
 #include <QHBoxLayout>
+#include <QDesktopWidget>
+
+//#include <kglobal.h>
+#include <klocale.h>
+//#include <kstandarddirs.h>
 
 
 namespace Rosegarden
 {
 
 TransportDialog::TransportDialog(QWidget *parent,
-                                 const char *name ): 
-//                                 WFlags flags):
-    QDialog(
-			parent, name, WType_TopLevel | WStyle_DialogBorder | WStyle_Minimize | WStyle_SysMenu | WDestructiveClose 
+                                 const char *name,
+						Qt::WindowFlags flags):
+    QDialog( 
+			parent, flags //WType_TopLevel | WStyle_DialogBorder | WStyle_Minimize | WStyle_SysMenu | WDestructiveClose 
 		   ),
     m_transport(0),
     m_lastTenHours(0),
@@ -84,8 +84,13 @@ TransportDialog::TransportDialog(QWidget *parent,
     m_isBackgroundSet(false),
     m_sampleRate(0)
 {
-    m_transport = new RosegardenTransport(this);
-
+	
+	QVBoxLayout *vboxLay = new QVBoxLayout();
+	setLayout( vboxLay );
+	
+	m_transport = new Ui_RosegardenTransport(); //*this);
+	vboxLay->addWidget( dynamic_cast<QWidget*>(m_transport) );
+	
     setCaption(i18n("Rosegarden Transport"));
 
     resetFonts();
@@ -206,10 +211,10 @@ TransportDialog::TransportDialog(QWidget *parent,
     pal.setColor(QColorGroup::Foreground, QColor(192, 216, 255));
 
     m_transport->TempoDisplay->setPalette(pal);
-    m_transport->TempoDisplay->setAlignment(int(QLabel::AlignVCenter | QLabel::AlignRight));
+    m_transport->TempoDisplay->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
 
     m_transport->TimeSigDisplay->setPalette(pal);
-    m_transport->TimeSigDisplay->setAlignment(int(QLabel::AlignVCenter | QLabel::AlignRight));
+    m_transport->TimeSigDisplay->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
 
     QFont localFont(m_transport->OutDisplay->font() );
     localFont.setFamily( "lucida" );
@@ -954,7 +959,7 @@ TransportDialog::setMidiInLabel(const MappedEvent *mE)
 void
 TransportDialog::slotClearMidiInLabel()
 {
-    m_transport->InDisplay->setText(i18n(QString("NO EVENTS")));
+    m_transport->InDisplay->setText( qStrToCharPtrUtf8( i18n("NO EVENTS"))  );
 
     // also, just to be sure:
     slotResetBackground();
@@ -1014,7 +1019,7 @@ TransportDialog::setMidiOutLabel(const MappedEvent *mE)
 void
 TransportDialog::slotClearMidiOutLabel()
 {
-    m_transport->OutDisplay->setText(i18n(QString("NO EVENTS")));
+	m_transport->OutDisplay->setText( qStrToCharPtrUtf8( i18n("NO EVENTS")) ); 
 }
 
 void

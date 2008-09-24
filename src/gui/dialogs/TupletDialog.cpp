@@ -28,7 +28,7 @@
 #include <QDialogButtonBox>
 #include <QCheckBox>
 #include <QFrame>
-#include <qgrid.h>
+#include <QGridLayout>
 #include <QGroupBox>
 #include <QLabel>
 #include <QObject>
@@ -116,7 +116,11 @@ TupletDialog::TupletDialog(QDialogButtonBox::QWidget *parent, Note::Type default
     vboxLayout->addWidget(m_timingDisplayBox);
     vbox->setLayout(vboxLayout);
 
-    QGrid *timingDisplayGrid = new QGrid(3, QGrid::Horizontal, m_timingDisplayBox);
+	QWidget *timingDisplayGrid = new QWidget(m_timingDisplayBox);
+	QGridLayout *m_timingDisplayLayout = new QGridLayout(m_timingDisplayBox)
+		//3, QGrid::Horizontal, m_timingDisplayBox);
+	m_timingDisplayLayout->addWidget( timingDisplayGrid );
+	
 
     if (maxDuration > 0) {
 
