@@ -26,7 +26,8 @@
 
 
 class QWidget;
-class QListWidget;
+class QTableWidget;
+class QTableWidgetItem;
 
 
 namespace Rosegarden
@@ -45,7 +46,7 @@ public:
     std::vector<QString> getSelectedAudioFileNames() const;
 
 protected:
-    QListWidget *m_listView;
+    QTableWidget *m_listView;
 };
 
 

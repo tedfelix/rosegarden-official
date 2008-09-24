@@ -117,7 +117,7 @@ TupletDialog::TupletDialog(QDialogButtonBox::QWidget *parent, Note::Type default
     vbox->setLayout(vboxLayout);
 
 	QWidget *timingDisplayGrid = new QWidget(m_timingDisplayBox);
-	QGridLayout *m_timingDisplayLayout = new QGridLayout(m_timingDisplayBox)
+	QGridLayout *m_timingDisplayLayout = new QGridLayout(m_timingDisplayBox);
 		//3, QGrid::Horizontal, m_timingDisplayBox);
 	m_timingDisplayLayout->addWidget( timingDisplayGrid );
 	
@@ -127,8 +127,8 @@ TupletDialog::TupletDialog(QDialogButtonBox::QWidget *parent, Note::Type default
         new QLabel(i18n("Selected region:"), timingDisplayGrid);
         new QLabel("", timingDisplayGrid);
         m_selectionDurationDisplay = new QLabel("x", timingDisplayGrid);
-        m_selectionDurationDisplay->setAlignment(int(QLabel::AlignVCenter |
-                QLabel::AlignRight));
+        m_selectionDurationDisplay->setAlignment(Qt::AlignVCenter |
+                Qt::AlignRight);
     } else {
         m_selectionDurationDisplay = 0;
     }
@@ -136,20 +136,20 @@ TupletDialog::TupletDialog(QDialogButtonBox::QWidget *parent, Note::Type default
     new QLabel(i18n("Group with current timing:"), timingDisplayGrid);
     m_untupledDurationCalculationDisplay = new QLabel("x", timingDisplayGrid);
     m_untupledDurationDisplay = new QLabel("x", timingDisplayGrid);
-    m_untupledDurationDisplay->setAlignment(int(QLabel::AlignVCenter |
-                                            QLabel::AlignRight));
+    m_untupledDurationDisplay->setAlignment(int(Qt::AlignVCenter |
+                                            Qt::AlignRight));
 
     new QLabel(i18n("Group with new timing:"), timingDisplayGrid);
     m_tupledDurationCalculationDisplay = new QLabel("x", timingDisplayGrid);
     m_tupledDurationDisplay = new QLabel("x", timingDisplayGrid);
-    m_tupledDurationDisplay->setAlignment(int(QLabel::AlignVCenter |
-                                          QLabel::AlignRight));
+    m_tupledDurationDisplay->setAlignment(int(Qt::AlignVCenter |
+                                          Qt::AlignRight));
 
     new QLabel(i18n("Gap created by timing change:"), timingDisplayGrid);
     m_newGapDurationCalculationDisplay = new QLabel("x", timingDisplayGrid);
     m_newGapDurationDisplay = new QLabel("x", timingDisplayGrid);
-    m_newGapDurationDisplay->setAlignment(int(QLabel::AlignVCenter |
-                                          QLabel::AlignRight));
+    m_newGapDurationDisplay->setAlignment(int(Qt::AlignVCenter |
+                                          Qt::AlignRight));
 
     if (maxDuration > 0) {
 
@@ -157,8 +157,8 @@ TupletDialog::TupletDialog(QDialogButtonBox::QWidget *parent, Note::Type default
         m_unchangedDurationCalculationDisplay = new QLabel
                                                 ("x", timingDisplayGrid);
         m_unchangedDurationDisplay = new QLabel("x", timingDisplayGrid);
-        m_unchangedDurationDisplay->setAlignment(int(QLabel::AlignVCenter |
-                QLabel::AlignRight));
+        m_unchangedDurationDisplay->setAlignment(int(Qt::AlignVCenter |
+                Qt::AlignRight));
 
     } else {
         m_unchangedDurationDisplay = 0;
