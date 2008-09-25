@@ -18,7 +18,8 @@
 #ifndef _RG_EVENTVIEWITEM_H_
 #define _RG_EVENTVIEWITEM_H_
 
-#include <QListWidget>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
 
 namespace Rosegarden
 {
@@ -26,54 +27,71 @@ namespace Rosegarden
 class Segment;
 class Event;
 
-// EventView specialisation of a QListWidgetItem with the
+
+// EventView specialisation of a QTreeWidgetItem with the
 // addition of a segment pointer
 //
-class EventViewItem : public QListWidgetItem
+class EventViewItem : public QTreeWidgetItem
 {
 public:
     EventViewItem(Rosegarden::Segment *segment,
                   Rosegarden::Event *event,
-                  QListWidget *parent) : 
-        QListWidgetItem(parent),
+                  QTreeWidget *parent
+		): 
+        QTreeWidgetItem(parent),
         m_segment(segment),
         m_event(event) {;}
     
     EventViewItem(Rosegarden::Segment *segment,
                   Rosegarden::Event *event,
-                  QListWidgetItem *parent) : 
-        QListWidgetItem(parent),
-        m_segment(segment),
-        m_event(event) {;}
+                  QTreeWidgetItem *parent
+				): 
+        QTreeWidgetItem(parent),
+	    m_segment(segment),
+	    m_event(event) {;}
 
     EventViewItem(Rosegarden::Segment *segment,
                   Rosegarden::Event *event,
-                  QListWidget *parent, QString label1,
+                  QTreeWidget *parent, 
+				  QStringList &strings
+				  
+				  /*
+				  // qt4 note: uses QStringList instead
+				  QString label1,
                   QString label2 = QString::null,
                   QString label3 = QString::null,
                   QString label4 = QString::null,
                   QString label5 = QString::null,
                   QString label6 = QString::null,
                   QString label7 = QString::null,
-                  QString label8 = QString::null) :
-        QListWidgetItem(parent, label1, label2, label3, label4,
-                      label5, label6, label7, label8),
+                  QString label8 = QString::null
+				  */
+				 ):
+//		QTreeWidgetItem ( QTreeWidget * parent, const QStringList & strings, int type = Type )
+        QTreeWidgetItem(parent, strings),
         m_segment(segment),
         m_event(event) {;}
 
     EventViewItem(Rosegarden::Segment *segment,
                   Rosegarden::Event *event,
-                  QListWidgetItem *parent, QString label1,
+                  QTreeWidgetItem *parent, 
+				  QStringList &strings
+				  
+				  /*
+				QString label1,
                   QString label2 = QString::null,
                   QString label3 = QString::null,
                   QString label4 = QString::null,
                   QString label5 = QString::null,
                   QString label6 = QString::null,
                   QString label7 = QString::null,
-                  QString label8 = QString::null) :
-        QListWidgetItem(parent, label1, label2, label3, label4,
-                      label5, label6, label7, label8), 
-        m_segment(segment),
+                  QString label8 = QString::null
+				 */
+				 ):
+		QTreeWidgetItem( parent, strings ), 
+// 	   QTreeWidgetItem(parent, label1, label2, label3, label4,
+// 					   label5, label6, label7, label8), 
+		m_segment(segment),
         m_event(event) {;}
 
     Rosegarden::Segment* getSegment() { return m_segment; }
@@ -81,7 +99,7 @@ public:
 
     // Reimplement so that we can sort numerically
     //
-    virtual int compare(QListWidgetItem *i, int col, bool ascending) const;
+    virtual int compare(QTreeWidgetItem *i, int col, bool ascending) const;
 
 protected:
 

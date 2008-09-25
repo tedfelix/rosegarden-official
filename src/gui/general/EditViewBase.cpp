@@ -15,15 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-
-#include <QCloseEvent>
-#include <Q3CanvasPixmap>
 #include "EditViewBase.h"
-#include <QLayout>
-#include <QApplication>
 
-#include <klocale.h>
-#include <kstandarddirs.h>
 #include "misc/Debug.h"
 #include "base/Clipboard.h"
 #include "base/Event.h"
@@ -39,20 +32,12 @@
 #include "gui/dialogs/TimeDialog.h"
 #include "gui/general/EditViewTimeSigNotifier.h"
 #include "gui/kdeext/KTmpStatusMsg.h"
-#include <QAction>
 #include "document/Command.h"
+
 #include <QSettings>
 #include <QDockWidget>
-#include <kedittoolbar.h>
-#include <kglobal.h>
-#include <kkeydialog.h>
-#include <kmainwindow.h>
-#include <kstatusbar.h>
-#include <kstandardshortcut.h>
-#include <kstandardaction.h>
-#include <kxmlguiclient.h>
-#include <qshortcut.h>
-#include <Q3Canvas>
+#include <QAction>
+#include <QShortcut>
 #include <QDialog>
 #include <QFrame>
 #include <QIcon>
@@ -60,6 +45,26 @@
 #include <QPixmap>
 #include <QString>
 #include <QWidget>
+#include <QStatusBar>
+#include <QMainWindow>
+#include <QCloseEvent>
+#include <QLayout>
+#include <QApplication>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
+
+#include <Q3CanvasPixmap>
+#include <Q3Canvas>
+
+#include <klocale.h>
+#include <kxmlguiclient.h>
+#include <kkeydialog.h>
+//#include <kstandarddirs.h>
+//#include <kedittoolbar.h>
+//#include <kglobal.h>
+//#include <kstandardshortcut.h>
+//#include <kstandardaction.h>
+
 
 
 namespace Rosegarden
@@ -69,12 +74,16 @@ bool EditViewBase::m_inPaintEvent = false;
 const unsigned int EditViewBase::ID_STATUS_MSG = 1;
 const unsigned int EditViewBase::NbLayoutRows = 6;
 
-EditViewBase::EditViewBase(RosegardenGUIDoc *doc,
+
+EditViewBase::EditViewBase(
+						   RosegardenGUIDoc *doc,
                            std::vector<Segment *> segments,
                            unsigned int cols,
-                           QWidget *parent, const char *name) :
-    KDockMainWindow(parent, name),
-    m_viewNumber( -1),
+                           QWidget *parent, const char *name
+						  ) :
+	//KDockMainWindow(parent, name),
+	QMainWindow(parent, name),
+	m_viewNumber( -1),
     m_viewLocalPropertyPrefix(makeViewLocalPropertyPrefix()),
     m_doc(doc),
     m_segments(segments),
@@ -94,7 +103,8 @@ EditViewBase::EditViewBase(RosegardenGUIDoc *doc,
     m_timeSigNotifier(new EditViewTimeSigNotifier(doc))
 {
     QPixmap dummyPixmap; // any icon will do
-    m_mainDockWidget = createDockWidget("Rosegarden EditView DockWidget", dummyPixmap,
+    
+	m_mainDockWidget = createDockWidget("Rosegarden EditView DockWidget", dummyPixmap,
                                         0L, "editview_dock_widget");
     // allow others to dock to the left and right sides only
     m_mainDockWidget->setDockSite(QDockWidget::DockLeft | QDockWidget::DockRight);

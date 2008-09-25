@@ -23,15 +23,17 @@
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
 #include "gui/general/EditViewBase.h"
+#include "base/Event.h"
+
 #include <set>
+#include <vector>
+
 #include <QSize>
 #include <QString>
-#include <vector>
-#include "base/Event.h"
 
 
 class QWidget;
-class QPopupMenu;
+class QMenu;
 class QPoint;
 class QTreeWidget;
 class QTreeWidgetItem;
@@ -189,7 +191,7 @@ protected:
     std::vector<int> m_listSelection;
     std::set<Event *> m_deletedEvents; // deleted since last refresh
 
-    QPopupMenu     *m_menu;
+    QMenu          *m_menu;
 
 };
 

@@ -18,6 +18,9 @@
 #include "EventViewItem.h"
 #include "base/Event.h"
 
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
+
 namespace Rosegarden
 {
 
@@ -26,10 +29,13 @@ namespace Rosegarden
 // the QString compare().
 //
 int
-EventViewItem::compare(QListWidgetItem *i, int col, bool ascending) const
+EventViewItem::compare(QTreeWidgetItem *i, int col, bool ascending) const
 {
     EventViewItem *ei = dynamic_cast<EventViewItem *>(i);
-    if (!ei) return QListWidgetItem::compare(i, col, ascending);
+
+	//    if (!ei) return QTreeWidgetItem::compare(i, col, ascending);  //&&& compare does not exist in QTreeWidgetItem
+	if (!ei) return 0;	// fix
+	
 
     if (col == 0) { // time
         Rosegarden::Event &e1 = *m_event;

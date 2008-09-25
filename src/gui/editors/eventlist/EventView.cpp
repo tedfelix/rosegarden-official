@@ -50,6 +50,7 @@
 #include "gui/dialogs/SimpleEventEditDialog.h"
 #include "gui/general/EditViewBase.h"
 #include "gui/general/MidiPitchLabel.h"
+#include "gui/general/IconLoader.h"
 #include "gui/kdeext/KTmpStatusMsg.h"
 #include "gui/dialogs/EventFilterDialog.h"
 #include <algorithm>
@@ -127,8 +128,9 @@ EventView::EventView(RosegardenGUIDoc *doc,
 
     // define some note filtering buttons in a group
     //
-    m_filterGroup =
-        new QGroupBox(1, Horizontal, i18n("Event filters"), getCentralWidget());
+	m_filterGroup = new QGroupBox( i18n("Event filters"), getCentralWidget() );
+		//1, Horizontal, 
+	m_filterGroup->setAlignment( Qt::AlignHorizontal_Mask );
 
     m_noteCheckBox = new QCheckBox(i18n("Note"), m_filterGroup);
     m_programCheckBox = new QCheckBox(i18n("Program Change"), m_filterGroup);
@@ -149,7 +151,9 @@ EventView::EventView(RosegardenGUIDoc *doc,
             SLOT(slotModifyFilter(int)));
 
     m_eventList = new QTreeWidget(getCentralWidget());
-    m_eventList->setItemsRenameable(true);
+    
+	//m_eventList->setItemsRenameable(true); //&&& use item->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEditable );
+	
 
     m_grid->addWidget(m_eventList, 2, 1);
 
@@ -159,8 +163,9 @@ EventView::EventView(RosegardenGUIDoc *doc,
         TriggerSegmentRec *rec =
             segments[0]->getComposition()->getTriggerSegmentRec(id);
 
-        QGroupBox *groupBox = new QGroupBox
-                              (1, Horizontal, i18n("Triggered Segment Properties"), getCentralWidget());
+		QGroupBox *groupBox = new QGroupBox( i18n("Triggered Segment Properties"), getCentralWidget() );
+        //      (1, Horizontal, 
+		groupBox->setAlignment( Qt::AlignHorizontal_Mask );
 
         QFrame *frame = new QFrame(groupBox);
         QGridLayout *layout = new QGridLayout(frame, 5, 3, 5, 5);
@@ -242,8 +247,9 @@ EventView::EventView(RosegardenGUIDoc *doc,
             SLOT(slotPopupMenu(QTreeWidgetItem*, const QPoint&, int)));
 
     m_eventList->setAllColumnsShowFocus(true);
-    m_eventList->setSelectionMode(QTreeWidget::Extended);
+	m_eventList->setSelectionMode( QAbstractItemView::ExtendedSelection );
 
+	/*
     m_eventList->addColumn(i18n("Time  "));
     m_eventList->addColumn(i18n("Duration  "));
     m_eventList->addColumn(i18n("Event Type  "));
@@ -251,9 +257,21 @@ EventView::EventView(RosegardenGUIDoc *doc,
     m_eventList->addColumn(i18n("Velocity  "));
     m_eventList->addColumn(i18n("Type (Data1)  "));
     m_eventList->addColumn(i18n("Value (Data2)  "));
-
-    for (int col = 0; col < m_eventList->columns(); ++col)
-        m_eventList->setRenameable(col, true);
+	*/
+	QStringList sl;
+	sl << i18n("Time  ");
+	sl << i18n("Duration  ");
+	sl << i18n("Event Type  ");
+	sl << i18n("Pitch  ");
+	sl << i18n("Velocity  ");
+	sl << i18n("Type (Data1)  ");
+	sl << i18n("Type (Data1)  ");
+	sl << i18n("Value (Data2)  ");
+	
+	m_eventList->setHeaderLabels ( sl );
+	
+//    for (int col = 0; col < m_eventList->columns(); ++col)
+//		m_eventList->setRenameable(col, true); //&&& use item->setFlags( Qt::ItemIsSelectable |
 
     readOptions();
     setButtonsToFilter();
@@ -300,6 +318,8 @@ EventView::applyLayout(int /*staffNo*/)
     // already set and try to replicate this after the rebuild
     // of the view.
     //
+	/*
+	old qt3 code:
     if (m_listSelection.size() == 0) {
         QPtrList<QTreeWidgetItem> selection = m_eventList->selectedItems();
 
@@ -313,7 +333,27 @@ EventView::applyLayout(int /*staffNo*/)
             }
         }
     }
-
+	*/
+	// new qt4:
+	if (m_listSelection.size() == 0) {
+		
+		QList<QTreeWidgetItem*> selection = m_eventList->selectedItems();
+		
+		if( selection.count() ){
+			QTreeWidgetItem *listItem;
+			
+			//while ((listItem = it.current()) != 0) {
+			//for( int i=0; i< m_eventList->topLevelItemCount(); i++ ) {
+			for( int i=0; i< selection.count(); i++ ) {
+				
+//				listItem = m_eventList->topLevelItem( int index );
+				listItem = selection.at(i);
+				m_listSelection.push_back( m_eventList->indexOfTopLevelItem(listItem) );
+				
+			}
+		}// end if selection.count()
+	}// end if m_listSel..
+	
     // Ok, recreate list
     //
     m_eventList->clear();
@@ -505,37 +545,41 @@ EventView::applyLayout(int /*staffNo*/)
 
             QString timeStr = makeTimeString(eventTime, timeMode);
 
+			QStringList sl;
+			sl << timeStr
+			<< durationStr
+			<< strtoqstr( (*it)->getType() )
+			<< pitchStr
+			<< velyStr
+			<< data1Str
+			<< data2Str;
+			
             new EventViewItem(m_segments[i],
                               *it,
                               m_eventList,
-                              timeStr,
-                              durationStr,
-                              strtoqstr((*it)->getType()),
-                              pitchStr,
-                              velyStr,
-                              data1Str,
-                              data2Str);
+							  sl
+       						);
         }
     }
 
 
-    if (m_eventList->childCount() == 0) {
+	if ( m_eventList->topLevelItemCount() == 0 ) {
         if (m_segments.size())
             new QTreeWidgetItem(m_eventList,
-                              i18n("<no events at this filter level>"));
+                              QStringList( i18n("<no events at this filter level>")) );
         else
-            new QTreeWidgetItem(m_eventList, i18n("<no events>"));
+			new QTreeWidgetItem(m_eventList, QStringList( i18n("<no events>")) );
 
         m_eventList->setSelectionMode(QTreeWidget::NoSelection);
-        stateChanged("have_selection", KXMLGUIClient::StateReverse);
+        rgTempQtIV->stateChanged("have_selection", KXMLGUIClient::StateReverse);
     } else {
-        m_eventList->setSelectionMode(QTreeWidget::Extended);
+		m_eventList->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
         // If no selection then select the first event
         if (m_listSelection.size() == 0)
             m_listSelection.push_back(0);
 
-        stateChanged("have_selection", KXMLGUIClient::StateNoReverse);
+		rgTempQtIV->stateChanged("have_selection", KXMLGUIClient::StateNoReverse);
     }
 
     // Set a selection from a range of indexes
@@ -546,14 +590,15 @@ EventView::applyLayout(int /*staffNo*/)
     for (; sIt != m_listSelection.end(); ++sIt) {
         index = *sIt;
 
-        while (index > 0 && !m_eventList->itemAtIndex(index))
+		while (index > 0 && !m_eventList->topLevelItem(index))		// was itemAtIndex
             index--;
 
-        m_eventList->setSelected(m_eventList->itemAtIndex(index), true);
-        m_eventList->setCurrentIndex(m_eventList->itemAtIndex(index));
+//		m_eventList->setSelected(m_eventList->topLevelItem(index), true);
+		m_eventList->setCurrentItem( m_eventList->topLevelItem(index) );
+//		m_eventList->setCurrentIndex(m_eventList->topLevelItem(index));
 
         // ensure visible
-        m_eventList->ensureItemVisible(m_eventList->itemAtIndex(index));
+		m_eventList->scrollToItem(m_eventList->topLevelItem(index));
     }
 
     m_listSelection.clear();
@@ -571,10 +616,13 @@ EventView::makeInitialSelection(timeT time)
     int goodItemNo = 0;
 
     int i = 0;
-
-    for (QTreeWidgetItem *child = m_eventList->firstChild();
-            child;
-            child = child->nextSibling()) {
+	QTreeWidgetItem *child = 0;
+	
+//    for (QTreeWidgetItem *child = m_eventList->firstChild();
+//            child;
+//            child = child->nextSibling()) {
+	for( i=0; i< m_eventList->topLevelItemCount(); i++ ){
+		child = m_eventList->topLevelItem(i);
 
         EventViewItem * item = dynamic_cast<EventViewItem *>(child);
 
@@ -602,8 +650,9 @@ EventView::makeInitialSelection(timeT time)
     */
     if (goodItem) {
         m_listSelection.push_back(goodItemNo);
-        m_eventList->setSelected(goodItem, true);
-        m_eventList->ensureItemVisible(goodItem);
+//        m_eventList->setSelected(goodItem, true);
+		m_eventList->setCurrentItem( goodItem );
+        m_eventList->scrollToItem(goodItem);
     }
 }
 
@@ -699,9 +748,13 @@ void
 EventView::slotEditTriggerName()
 {
     bool ok = false;
-    QString newLabel = KLineEditDlg::getText(i18n("Segment label"), i18n("Label:"),
-                       strtoqstr(m_segments[0]->getLabel()),
-                       &ok, this);
+    QString newLabel = QInputDialog::getText(this, 
+						i18n("Segment label"),
+						i18n("Label:"),
+						QLineEdit::Normal,
+						strtoqstr(m_segments[0]->getLabel()),
+						&ok
+					);
 
     if (ok) {
         SegmentSelection selection;
@@ -795,7 +848,7 @@ EventView::slotTriggerRetuneChanged()
 void
 EventView::slotEditCut()
 {
-    QPtrList<QTreeWidgetItem> selection = m_eventList->selectedItems();
+    QList<QTreeWidgetItem*> selection = m_eventList->selectedItems();
 
     if (selection.count() == 0)
         return ;
@@ -803,17 +856,22 @@ EventView::slotEditCut()
     RG_DEBUG << "EventView::slotEditCut - cutting "
     << selection.count() << " items" << endl;
 
-    QPtrListIterator<QTreeWidgetItem> it(selection);
+//    QPtrListIterator<QTreeWidgetItem> it(selection);
     QTreeWidgetItem *listItem;
     EventViewItem *item;
     EventSelection *cutSelection = 0;
     int itemIndex = -1;
 
-    while ((listItem = it.current()) != 0) {
-        item = dynamic_cast<EventViewItem*>((*it));
+//    while ((listItem = it.current()) != 0) {
+	for( int i=0; i< selection.size(); i++ ){
+		listItem = selection.at(i);
+	
+//		item = dynamic_cast<EventViewItem*>((*it));
+		item = dynamic_cast<EventViewItem*>(listItem);
 
         if (itemIndex == -1)
-            itemIndex = m_eventList->itemIndex(*it);
+			itemIndex = m_eventList->indexOfTopLevelItem(listItem);
+			//itemIndex = m_eventList->itemIndex(*it);
 
         if (item) {
             if (cutSelection == 0)
@@ -822,7 +880,7 @@ EventView::slotEditCut()
 
             cutSelection->addEvent(item->getEvent());
         }
-        ++it;
+//        ++it;
     }
 
     if (cutSelection) {
@@ -839,7 +897,7 @@ EventView::slotEditCut()
 void
 EventView::slotEditCopy()
 {
-    QPtrList<QTreeWidgetItem> selection = m_eventList->selectedItems();
+    QList<QTreeWidgetItem*> selection = m_eventList->selectedItems();
 
     if (selection.count() == 0)
         return ;
@@ -847,7 +905,7 @@ EventView::slotEditCopy()
     RG_DEBUG << "EventView::slotEditCopy - copying "
     << selection.count() << " items" << endl;
 
-    QPtrListIterator<QTreeWidgetItem> it(selection);
+//    QPtrListIterator<QTreeWidgetItem> it(selection);
     QTreeWidgetItem *listItem;
     EventViewItem *item;
     EventSelection *copySelection = 0;
@@ -856,10 +914,15 @@ EventView::slotEditCopy()
     //
     m_listSelection.clear();
 
-    while ((listItem = it.current()) != 0) {
-        item = dynamic_cast<EventViewItem*>((*it));
+//    while ((listItem = it.current()) != 0) {
+	for( int i=0; i< selection.size(); i++ ){
+		listItem = selection.at(i);
+		
+// 		item = dynamic_cast<EventViewItem*>((*it));
+		item = dynamic_cast<EventViewItem*>(listItem);
 
-        m_listSelection.push_back(m_eventList->itemIndex(*it));
+// 		m_listSelection.push_back(m_eventList->itemIndex(*it));
+		m_listSelection.push_back(m_eventList->indexOfTopLevelItem(listItem));
 
         if (item) {
             if (copySelection == 0)
@@ -868,7 +931,7 @@ EventView::slotEditCopy()
 
             copySelection->addEvent(item->getEvent());
         }
-        ++it;
+//         ++it;
     }
 
     if (copySelection) {
@@ -889,7 +952,8 @@ EventView::slotEditPaste()
 
     timeT insertionTime = 0;
 
-    QPtrList<QTreeWidgetItem> selection = m_eventList->selectedItems();
+    QList<QTreeWidgetItem*> selection = m_eventList->selectedItems();
+	
     if (selection.count()) {
         EventViewItem *item = dynamic_cast<EventViewItem*>(selection.at(0));
 
@@ -900,12 +964,15 @@ EventView::slotEditPaste()
         //
         m_listSelection.clear();
 
-        QPtrListIterator<QTreeWidgetItem> it(selection);
+//        QPtrListIterator<QTreeWidgetItem> it(selection);
         QTreeWidgetItem *listItem;
 
-        while ((listItem = it.current()) != 0) {
-            m_listSelection.push_back(m_eventList->itemIndex(*it));
-            ++it;
+//        while ((listItem = it.current()) != 0) {
+		for( int i=0; i< selection.size(); i++ ){
+			listItem = selection.at(i);
+			
+			m_listSelection.push_back(m_eventList->indexOfTopLevelItem(listItem));
+//             ++it;
         }
     }
 
@@ -926,28 +993,33 @@ EventView::slotEditPaste()
 void
 EventView::slotEditDelete()
 {
-    QPtrList<QTreeWidgetItem> selection = m_eventList->selectedItems();
+    QList<QTreeWidgetItem*> selection = m_eventList->selectedItems();
     if (selection.count() == 0)
         return ;
 
     RG_DEBUG << "EventView::slotEditDelete - deleting "
     << selection.count() << " items" << endl;
 
-    QPtrListIterator<QTreeWidgetItem> it(selection);
+//    QPtrListIterator<QTreeWidgetItem> it(selection);
     QTreeWidgetItem *listItem;
     EventViewItem *item;
     EventSelection *deleteSelection = 0;
     int itemIndex = -1;
 
-    while ((listItem = it.current()) != 0) {
-        item = dynamic_cast<EventViewItem*>((*it));
+//    while ((listItem = it.current()) != 0) {
+	for( int i=0; i< selection.size(); i++ ){
+		listItem = selection.at(i);
+			
+// 		item = dynamic_cast<EventViewItem*>((*it));
+		item = dynamic_cast<EventViewItem*>(listItem);
 
         if (itemIndex == -1)
-            itemIndex = m_eventList->itemIndex(*it);
+			itemIndex = m_eventList->indexOfTopLevelItem(listItem);
+			//itemIndex = m_eventList->itemIndex(*it);
 
         if (item) {
             if (m_deletedEvents.find(item->getEvent()) != m_deletedEvents.end()) {
-                ++it;
+//                ++it;
                 continue;
             }
 
@@ -957,7 +1029,7 @@ EventView::slotEditDelete()
 
             deleteSelection->addEvent(item->getEvent());
         }
-        ++it;
+//         ++it;
     }
 
     if (deleteSelection) {
@@ -980,11 +1052,11 @@ EventView::slotEditInsert()
     timeT insertTime = m_segments[0]->getStartTime();
     timeT insertDuration = 960;
 
-    QPtrList<QTreeWidgetItem> selection = m_eventList->selectedItems();
+    QList<QTreeWidgetItem*> selection = m_eventList->selectedItems();
 
     if (selection.count() > 0) {
         EventViewItem *item =
-            dynamic_cast<EventViewItem*>(selection.getFirst());
+            dynamic_cast<EventViewItem*>(selection.first());
 
         if (item) {
             insertTime = item->getEvent()->getAbsoluteTime();
@@ -1018,11 +1090,11 @@ EventView::slotEditEvent()
 {
     RG_DEBUG << "EventView::slotEditEvent" << endl;
 
-    QPtrList<QTreeWidgetItem> selection = m_eventList->selectedItems();
+    QList<QTreeWidgetItem*> selection = m_eventList->selectedItems();
 
     if (selection.count() > 0) {
         EventViewItem *item =
-            dynamic_cast<EventViewItem*>(selection.getFirst());
+            dynamic_cast<EventViewItem*>(selection.first());
 
         if (item) {
             Event *event = item->getEvent();
@@ -1045,11 +1117,11 @@ EventView::slotEditEventAdvanced()
 {
     RG_DEBUG << "EventView::slotEditEventAdvanced" << endl;
 
-    QPtrList<QTreeWidgetItem> selection = m_eventList->selectedItems();
+    QList<QTreeWidgetItem*> selection = m_eventList->selectedItems();
 
     if (selection.count() > 0) {
         EventViewItem *item =
-            dynamic_cast<EventViewItem*>(selection.getFirst());
+            dynamic_cast<EventViewItem*>(selection.first());
 
         if (item) {
             Event *event = item->getEvent();
@@ -1071,49 +1143,56 @@ void
 EventView::slotSelectAll()
 {
     m_listSelection.clear();
-    for (int i = 0; m_eventList->itemAtIndex(i); ++i) {
+    for (int i = 0; m_eventList->topLevelItem(i); ++i) {
         m_listSelection.push_back(i);
-        m_eventList->setSelected(m_eventList->itemAtIndex(i), true);
-    }
+		//m_eventList->setSelected(m_eventList->topLevelItem(i), true);
+		m_eventList->setCurrentItem(m_eventList->topLevelItem(i));
+	}
 }
 
 void
 EventView::slotClearSelection()
 {
     m_listSelection.clear();
-    for (int i = 0; m_eventList->itemAtIndex(i); ++i) {
-        m_eventList->setSelected(m_eventList->itemAtIndex(i), false);
-    }
+	for (int i = 0; m_eventList->topLevelItem(i); ++i) {
+		//m_eventList->setSelected(m_eventList->topLevelItem(i), false);
+		m_eventList->setCurrentItem(m_eventList->topLevelItem(i));
+	}
 }
 
 void
 EventView::slotFilterSelection()
 {
     m_listSelection.clear();
-    QPtrList<QTreeWidgetItem> selection = m_eventList->selectedItems();
+    QList<QTreeWidgetItem*> selection = m_eventList->selectedItems();
     if (selection.count() == 0)
         return ;
 
     EventFilterDialog dialog(this);
     if (dialog.exec() == QDialog::Accepted) {
 
-        QPtrListIterator<QTreeWidgetItem> it(selection);
+//         QPtrListIterator<QTreeWidgetItem> it(selection);
         QTreeWidgetItem *listItem;
 
-        while ((listItem = it.current()) != 0) {
+//         while ((listItem = it.current()) != 0) {
+		for( int i=0; i< selection.size(); i++ ){
+			listItem = selection.at(i);
 
-            EventViewItem * item = dynamic_cast<EventViewItem*>(*it);
-            if (!item) {
-                ++it;
+// 			EventViewItem * item = dynamic_cast<EventViewItem*>(*it);
+			EventViewItem * item = dynamic_cast<EventViewItem*>(listItem);
+			if (!item) {
+//                 ++it;
                 continue;
             }
 
             if (!dialog.keepEvent(item->getEvent())) {
-                m_listSelection.push_back(m_eventList->itemIndex(*it));
-                m_eventList->setSelected(item, false);
-            }
+				//m_listSelection.push_back(m_eventList->itemIndex(*it));
+				m_listSelection.push_back(m_eventList->indexOfTopLevelItem(listItem));
+				//m_eventList->setSelected(item, false);
+				m_eventList->setCurrentItem(item);
+			}
 
-            ++it;
+//             ++it;
         }
     }
 }
@@ -1123,29 +1202,35 @@ EventView::setupActions()
 {
     EditViewBase::setupActions("eventlist.rc");
 
-    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QIcon icon(QPixmap(pixmapDir + "/toolbar/event-insert.png"));
+//    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+//    QIcon icon(QPixmap(pixmapDir + "/toolbar/event-insert.png"));
+	
+	IconLoader il;
+	QIcon icon = il.load("event-insert");
 
     QAction *qa_insert = new QAction( "&Insert Event", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_insert->setIcon(icon); 
 			connect( qa_insert, SIGNAL(triggered()), this, SLOT(slotEditInsert())  );
 
-    Q3CanvasPixmap pixmap(pixmapDir + "/toolbar/event-delete.png");
-    icon = QIcon(pixmap);
+//     Q3CanvasPixmap pixmap(pixmapDir + "/toolbar/event-delete.png");
+//     icon = QIcon(pixmap);
+	icon = il.load("event-delete");
 
     QAction *qa_delete = new QAction( "&Delete Event", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_delete->setIcon(icon); 
 			connect( qa_delete, SIGNAL(triggered()), this, SLOT(slotEditDelete())  );
 
-    pixmap.load(pixmapDir + "/toolbar/event-edit.png");
-    icon = QIcon(pixmap);
+//     pixmap.load(pixmapDir + "/toolbar/event-edit.png");
+//     icon = QIcon(pixmap);
+	icon = il.load("event-edit");
 
     QAction *qa_edit_simple = new QAction( "&Edit Event", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_edit_simple->setIcon(icon); 
 			connect( qa_edit_simple, SIGNAL(triggered()), this, SLOT(slotEditEvent())  );
 
-    pixmap.load(pixmapDir + "/toolbar/event-edit-advanced.png");
-    icon = QIcon(pixmap);
+//     pixmap.load(pixmapDir + "/toolbar/event-edit-advanced.png");
+//     icon = QIcon(pixmap);
+	icon = il.load("event-edit-advanced");
 
     QAction *qa_edit_advanced = new QAction( "&Advanced Event Editor", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_edit_advanced->setIcon(icon); 
@@ -1183,12 +1268,20 @@ EventView::setupActions()
     int timeMode = settings.value("timemode", 0).toInt() ;
     settings.endGroup();
 
-    KRadioAction *action;
+    QAction *action;
 
-    pixmap.load(pixmapDir + "/toolbar/time-musical.png");
-    icon = QIcon(pixmap);
-
-    action = QAction* qa_time_musical = new QAction( icon, i18n("&Musical Times"), qa_parent );
+//     pixmap.load(pixmapDir + "/toolbar/time-musical.png");
+//     icon = QIcon(pixmap);
+	icon = il.load("time-musical");
+	
+	// set parent for QActions
+	QWidget* qa_parent = this;
+	
+	// create QActionGroups
+	QActionGroup *qag_timeMode = new QActionGroup(qa_parent);
+	
+    //action = 
+	QAction* qa_time_musical = new QAction( icon, i18n("&Musical Times"), qa_parent );
 			connect( qa_time_musical, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotMusicalTime()) );
 			qa_time_musical->setObjectName( "time_musical" );
 			qa_time_musical->setCheckable( true );		//
@@ -1200,10 +1293,12 @@ EventView::setupActions()
     if (timeMode == 0)
         action->setChecked(true);
 
-    pixmap.load(pixmapDir + "/toolbar/time-real.png");
-    icon = QIcon(pixmap);
+//     pixmap.load(pixmapDir + "/toolbar/time-real.png");
+//     icon = QIcon(pixmap);
+	icon = il.load("time-real");
 
-    action = QAction* qa_time_real = new QAction( icon, i18n("&Real Times"), qa_parent );
+//     action = 
+	QAction* qa_time_real = new QAction( icon, i18n("&Real Times"), qa_parent );
 			connect( qa_time_real, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotRealTime()) );
 			qa_time_real->setObjectName( "time_real" );
 			qa_time_real->setCheckable( true );		//
@@ -1215,10 +1310,12 @@ EventView::setupActions()
     if (timeMode == 1)
         action->setChecked(true);
 
-    pixmap.load(pixmapDir + "/toolbar/time-raw.png");
-    icon = QIcon(pixmap);
+//     pixmap.load(pixmapDir + "/toolbar/time-raw.png");
+//     icon = QIcon(pixmap);
+	icon = il.load("time-raw");
 
-    action = QAction* qa_time_raw = new QAction( icon, i18n("Ra&w Times"), qa_parent );
+//     action = 
+	QAction* qa_time_raw = new QAction( icon, i18n("Ra&w Times"), qa_parent );
 			connect( qa_time_raw, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotRawTime()) );
 			qa_time_raw->setObjectName( "time_raw" );
 			qa_time_raw->setCheckable( true );		//
@@ -1231,21 +1328,24 @@ EventView::setupActions()
         action->setChecked(true);
 
     if (m_isTriggerSegment) {
-        KAction *action = actionCollection()->action("open_in_matrix");
+		/*
+		//&&& may be obsolete: kAction code:
+        QAction *action = actionCollection()->action("open_in_matrix");
         if (action)
             delete action;
         action = actionCollection()->action("open_in_notation");
         if (action)
             delete action;
+		*/
     }
 
-    createGUI(getRCFileName());
+    rgTempQtIV->createGUI( qStrToCharPtrUtf8( getRCFileName() ), 0 );
 }
 
 void
 EventView::initStatusBar()
 {
-    KStatusBar* sb = statusBar();
+    QStatusBar* sb = statusBar();
 
     /*
     m_hoveredOverNoteName      = new QLabel(sb);
@@ -1258,10 +1358,16 @@ EventView::initStatusBar()
     sb->addWidget(m_hoveredOverNoteName);
     */
 
-    sb->addItem(KTmpStatusMsg::getDefaultMsg(),
-                   KTmpStatusMsg::getDefaultId(), 1);
-    sb->setItemAlignment(KTmpStatusMsg::getDefaultId(),
-                         AlignLeft | AlignVCenter);
+	// qt4 note:
+	// addItem becomes addWidget (left aligned) or addPremanentWidget (right aligned)
+	// or showMessage
+	//	
+	sb->showMessage( KTmpStatusMsg::getDefaultMsg() );
+	
+// 	sb->setItem(KTmpStatusMsg::getDefaultMsg(),
+// 				KTmpStatusMsg::getDefaultId(), 1);
+//     sb->setItemAlignment(KTmpStatusMsg::getDefaultId(),
+//                          Qt::AlignLeft | Qt::AlignVCenter);
 
     //m_selectionCounter = new QLabel(sb);
     //sb->addWidget(m_selectionCounter);
@@ -1286,8 +1392,11 @@ EventView::readOptions()
     settings.beginGroup( EventViewConfigGroup );
 
     EditViewBase::readOptions();
-    m_eventFilter = settings.value("eventfilter", m_eventFilter).toInt() ;
-    m_eventList->restoreLayout(EventViewLayoutConfigGroupName);
+    m_eventFilter = settings.value("eventfilter", m_eventFilter).toInt();
+	
+	QByteArray qba = settings.value(EventViewLayoutConfigGroupName).toByteArray();
+// 	m_eventList->restoreLayout(EventViewLayoutConfigGroupName);
+	m_eventList->restoreGeometry(qba);
 
     settings.endGroup();
 }
@@ -1299,7 +1408,8 @@ EventView::slotSaveOptions()
     settings.beginGroup( EventViewConfigGroup );
 
     settings.setValue("eventfilter", m_eventFilter);
-    m_eventList->saveLayout(EventViewLayoutConfigGroupName);
+//    m_eventList->saveLayout(EventViewLayoutConfigGroupName);
+	settings.setValue(EventViewLayoutConfigGroupName, m_eventList->saveGeometry() );
 
     settings.endGroup();
 }
@@ -1571,9 +1681,10 @@ EventView::slotPopupMenu(QTreeWidgetItem *item, const QPoint &pos, int)
 void
 EventView::createMenu()
 {
-    m_menu = new QPopupMenu(this);
-    m_menu->addItem(i18n("Open in Event Editor"), 0);
-    m_menu->addItem(i18n("Open in Expert Event Editor"), 1);
+	//m_menu = new QPopupMenu(this);
+	m_menu = new QMenu(this);
+	m_menu->addAction( i18n("Open in Event Editor") );
+    m_menu->addAction( i18n("Open in Expert Event Editor") );
 
     connect(m_menu, SIGNAL(activated(int)),
             SLOT(slotMenuActivated(int)));
@@ -1585,8 +1696,7 @@ EventView::slotMenuActivated(int value)
     RG_DEBUG << "EventView::slotMenuActivated - value = " << value << endl;
 
     if (value == 0) {
-        EventViewItem *eItem = dynamic_cast<EventViewItem*>
-                               (m_eventList->currentIndex());
+        EventViewItem *eItem = dynamic_cast<EventViewItem*>(m_eventList->currentItem());
 
         if (eItem) {
             Event *event = eItem->getEvent();
@@ -1604,8 +1714,7 @@ EventView::slotMenuActivated(int value)
 
         }
     } else if (value == 1) {
-        EventViewItem *eItem = dynamic_cast<EventViewItem*>
-                               (m_eventList->currentIndex());
+        EventViewItem *eItem = dynamic_cast<EventViewItem*>(m_eventList->currentItem());
 
         if (eItem) {
             Event *event = eItem->getEvent();
