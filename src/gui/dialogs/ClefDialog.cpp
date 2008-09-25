@@ -25,7 +25,6 @@
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QGroupBox>
-#include <QGroupBox>
 #include <QLabel>
 #include <QObject>
 #include <QPixmap>
@@ -61,14 +60,16 @@ ClefDialog::ClefDialog(QDialogButtonBox::QWidget *parent,
 
 
     QGroupBox *clefFrame = new QGroupBox( i18n("Clef"), vbox );
+    QVBoxLayout *clefFrameLayout = new QVBoxLayout;
     vboxLayout->addWidget(clefFrame);
 
     QGroupBox *conversionFrame = new QGroupBox( i18n("Existing notes following clef change"), vbox );
+    QVBoxLayout *conversionFrameLayout = new QVBoxLayout;
     vboxLayout->addWidget(conversionFrame);
-    vbox->setLayout(vboxLayout);
 
     QWidget *clefBox = new QWidget(clefFrame);
     QHBoxLayout *clefBoxLayout = new QHBoxLayout;
+    clefFrameLayout->addWidget(clefBox);
 
     BigArrowButton *clefDown = new BigArrowButton( clefBox , Qt::LeftArrow);
     clefBoxLayout->addWidget(clefDown);
@@ -87,14 +88,12 @@ ClefDialog::ClefDialog(QDialogButtonBox::QWidget *parent,
 
     m_octaveDown = new BigArrowButton(clefLabelBox, Qt::DownArrow);
     clefLabelBoxLayout->addWidget(m_octaveDown);
-	m_octaveDown->setToolTip( i18n("Down an Octave") );
-//    QToolTip::add(m_octaveDown, i18n("Down an Octave"));
+    m_octaveDown->setToolTip( i18n("Down an Octave") );
 
     BigArrowButton *clefUp = new BigArrowButton( clefBox , Qt::RightArrow);
     clefBoxLayout->addWidget(clefUp);
     clefBox->setLayout(clefBoxLayout);
-	clefUp->setToolTip( i18n("Higher clef") );
-//    QToolTip::add(clefUp, i18n("Higher clef"));
+    clefUp->setToolTip( i18n("Higher clef") );
 
     m_clefNameLabel = new QLabel(i18n("Clef"), clefLabelBox);
 	clefLabelBoxLayout->addWidget(m_clefNameLabel, Qt::AlignHCenter | Qt::AlignVCenter );
@@ -105,9 +104,11 @@ ClefDialog::ClefDialog(QDialogButtonBox::QWidget *parent,
         m_noConversionButton =
             new QRadioButton
             (i18n("Maintain current pitches"), conversionFrame);
+        conversionFrameLayout->addWidget(m_noConversionButton);
         m_changeOctaveButton =
             new QRadioButton
             (i18n("Transpose into appropriate octave"), conversionFrame);
+        conversionFrameLayout->addWidget(m_changeOctaveButton);
         m_transposeButton = 0;
 
         //!!! why aren't we offering this option? does it not work? too difficult to describe?
@@ -121,6 +122,10 @@ ClefDialog::ClefDialog(QDialogButtonBox::QWidget *parent,
         m_transposeButton = 0;
         conversionFrame->hide();
     }
+
+    clefFrame->setLayout(clefFrameLayout);
+    conversionFrame->setLayout(conversionFrameLayout);
+    vbox->setLayout(vboxLayout);
 
     QObject::connect(clefUp, SIGNAL(clicked()), this, SLOT(slotClefUp()));
     QObject::connect(clefDown, SIGNAL(clicked()), this, SLOT(slotClefDown()));
