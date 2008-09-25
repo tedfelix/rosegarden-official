@@ -371,13 +371,11 @@ AudioPluginDialog::makePluginParamsBox(QWidget *parent, int portCount,
         perColumn = 2;
     }
 
-    m_gridLayout = new QGridLayout(m_pluginParamsBox,
-                                   1,   // rows (will expand)
-                                   columns * perColumn,
-                                   5); // margin
+    m_pluginParamsBox->setContentsMargins(5, 5, 5, 5);
+    m_gridLayout = new QGridLayout(m_pluginParamsBox);
 
-    m_gridLayout->setColStretch(3, 2);
-    m_gridLayout->setColStretch(7, 2);
+    m_gridLayout->setColumnStretch(3, 2);
+    m_gridLayout->setColumnStretch(7, 2);
 }
 
 void
@@ -406,7 +404,7 @@ AudioPluginDialog::slotPluginSelected(int i)
         QString(" [ %1 ] - ").arg(m_index + 1);
 
     if (number == 0) {
-        setCaption(caption + i18n("<no plugin>"));
+        setWindowTitle(caption + i18n("<no plugin>"));
         m_insOuts->setText(i18n("<ports>"));
         m_pluginId->setText(i18n("<id>"));
 
@@ -444,10 +442,10 @@ AudioPluginDialog::slotPluginSelected(int i)
 
     if (portCount > tooManyPorts) {
 
-        m_gridLayout->addMultiCellWidget(
+        m_gridLayout->addWidget(
             new QLabel(i18n("This plugin has too many controls to edit here."),
-                       m_pluginParamsBox),
-            1, 1, 0, m_gridLayout->numCols() - 1, Qt::AlignCenter);
+                            m_pluginParamsBox),
+                       1, 0, 1, -1, Qt::AlignCenter);
     }
 
     AudioPluginInstance *inst = m_pluginContainer->getPlugin(m_index);
@@ -455,7 +453,7 @@ AudioPluginDialog::slotPluginSelected(int i)
         return ;
 
     if (plugin) {
-        setCaption(caption + plugin->getName());
+        setWindowTitle(caption + plugin->getName());
         m_pluginId->setText(i18n("Id: %1", plugin->getUniqueId()));
 
         QString pluginInfo = plugin->getAuthor() + QString("\n") +
@@ -543,9 +541,7 @@ AudioPluginDialog::slotPluginSelected(int i)
             m_gridLayout->addWidget(m_programLabel,
                                              0, 0, 0-
                                              0+1, 0- 1, Qt::AlignRight);
-            m_gridLayout->addMultiCellWidget(m_programCombo,
-                                             0, 0, 1, m_gridLayout->numCols() - 1,
-                                             Qt::AlignLeft);
+            m_gridLayout->addWidget(m_programCombo, 0, 1, 1, -1, Qt::AlignLeft);
             connect(m_programCombo, SIGNAL(activated(const QString &)),
                     this, SLOT(slotPluginProgramChanged(const QString &)));
 
@@ -730,9 +726,7 @@ AudioPluginDialog::updatePluginProgramList()
             m_gridLayout->addWidget(m_programLabel,
                                              0, 0, 0-
                                              0+1, 0- 1, Qt::AlignRight);
-            m_gridLayout->addMultiCellWidget(m_programCombo,
-                                             0, 0, 1, m_gridLayout->numCols() - 1,
-                                             Qt::AlignLeft);
+            m_gridLayout->addWidget(m_programCombo, 0, 1, 1, -1, Qt::AlignLeft);
 
             m_programCombo->clear();
             m_programCombo->addItem(i18n("<none selected>"));
