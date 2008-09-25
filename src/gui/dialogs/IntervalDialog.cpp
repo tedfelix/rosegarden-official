@@ -32,7 +32,6 @@
 #include <QCheckBox>
 #include <QLabel>
 #include <QRadioButton>
-#include <QGroupBox>
 #include <QSizePolicy>
 #include <QString>
 #include <QWidget>
@@ -82,10 +81,14 @@ IntervalDialog::IntervalDialog(QDialogButtonBox::QWidget *parent, bool askChange
     if (askChangeKey)
     {
         QGroupBox *affectKeyGroup = new QGroupBox( i18n("Effect on Key"), vBox );
+        QVBoxLayout *affectKeyGroupLayout = new QVBoxLayout;
         vBoxLayout->addWidget(affectKeyGroup);
-        m_transposeWithinKey = new QRadioButton(i18n("Transpose within key"), affectKeyGroup);
+        m_transposeWithinKey = new QRadioButton(i18n("Transpose within key"));
+        affectKeyGroupLayout->addWidget(m_transposeWithinKey);
         m_transposeWithinKey->setChecked(true);
-        m_transposeChangingKey = new QRadioButton(i18n("Change key for selection"), affectKeyGroup);
+        m_transposeChangingKey = new QRadioButton(i18n("Change key for selection"));
+        affectKeyGroupLayout->addWidget(m_transposeChangingKey);
+        affectKeyGroup->setLayout(affectKeyGroupLayout);
     }
     else
     {
