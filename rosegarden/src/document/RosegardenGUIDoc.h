@@ -600,6 +600,8 @@ protected:
      * Insert a recorded event in one or several segments
      */
     void insertRecordedEvent(Event *ev, int device, int channel, bool isNoteOn);
+	
+    void transposeRecordedNote(Segment *s, Segment::iterator it);
 
     //--------------- Data members ---------------------------------
 
