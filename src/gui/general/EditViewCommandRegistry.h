@@ -26,6 +26,7 @@
 #define _RG_EDITVIEWCOMMANDREGISTRY_H_
 
 #include "document/CommandRegistry.h"
+#include <QShortcut>
 
 class QIcon;
 
@@ -44,7 +45,7 @@ protected:
 
     virtual void addAction(QString title,
                            QString icon,
-                           const KShortcut &shortcut, 
+                           const QShortcut &shortcut, 
                            QString actionName,
                            QString menuTitle,
                            QString menuActionName);

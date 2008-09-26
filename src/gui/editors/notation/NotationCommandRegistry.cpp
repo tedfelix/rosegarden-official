@@ -57,11 +57,13 @@
 #include "commands/notation/TieNotesCommand.h"
 #include "commands/notation/UnTupletCommand.h"
 #include "commands/notation/UntieNotesCommand.h"
+#include "misc/Strings.h"
 
 #include "NoteFontFactory.h"
 #include "NoteFont.h"
 #include "NoteCharacter.h"
 #include "NoteStyleFactory.h"
+
 
 #include <QIcon>
 
@@ -127,7 +129,7 @@ NotationCommandRegistry::findIcon(QString iconName, QIcon &icon)
     NoteCharacter character;
     bool found = font->getCharacter
         (NoteStyleFactory::getStyle(NoteStyleFactory::DefaultStyle)->
-         getSomeCharName(iconName),
+         getSomeCharName( qstrtostr(iconName) ),
          character);
 
     if (found) {

@@ -49,7 +49,7 @@ Q3PointArray QCanvasMatrixDiamond::areaPoints() const
 	int pw = (pen().width() + 1) / 2;
     if ( pw < 1 )
         pw = 1;
-    if ( pen() == NoPen )
+    if ( pen() == Qt::NoPen) //@@@ check: was NoPen
         pw = 0;
     pa[0] = QPoint((int)x() - height() / 2 - pw, (int)y() - pw);
     pa[1] = pa[0] + QPoint(height() + pw * 2, 0);

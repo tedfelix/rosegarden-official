@@ -481,10 +481,12 @@ NotationVLayout::positionSlur(NotationStaff &staff,
         if (event->isa(Note::EventType)) {
 
             long h = 0;
-            if (!event->get
-                    <Int>(m_properties.HEIGHT_ON_STAFF, h)) {
-                /* was sorry */ QMessageBox::warning
-                ((QWidget *)parent(), i18n("Spanned note at %1 has no HEIGHT_ON_STAFF property!\nThis is a bug (the program would previously have crashed by now)", (*scooter)->getViewAbsoluteTime()));
+            if (!event->get<Int>(m_properties.HEIGHT_ON_STAFF, h)) {
+				QMessageBox::warning
+					( dynamic_cast<QWidget *>(parent()), 
+					"", 
+	 				i18n("Spanned note at %1 has no HEIGHT_ON_STAFF property!\nThis is a bug (the program would previously have crashed by now)", (*scooter)->getViewAbsoluteTime())
+					);
                 event->dump(std::cerr);
             }
 

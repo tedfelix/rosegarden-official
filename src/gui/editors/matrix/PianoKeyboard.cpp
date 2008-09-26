@@ -24,6 +24,7 @@
 #include "gui/rulers/PitchRuler.h"
 #include "MatrixStaff.h"
 #include "MatrixView.h"
+
 #include <QColor>
 #include <QCursor>
 #include <QEvent>
@@ -31,6 +32,7 @@
 #include <QPainter>
 #include <QSize>
 #include <QWidget>
+#include <QMouseEvent>
 
 
 namespace Rosegarden
@@ -267,7 +269,7 @@ void PianoKeyboard::mousePressEvent(QMouseEvent *e)
 {
     Qt::ButtonState bs = e->state();
 
-    if (e->button() == LeftButton) {
+    if (e->button() == Qt::LeftButton) {
         m_mouseDown = true;
         m_selecting = (bs & Qt::ShiftModifier);
         m_lastKeyPressed = e->y();
@@ -281,7 +283,7 @@ void PianoKeyboard::mousePressEvent(QMouseEvent *e)
 
 void PianoKeyboard::mouseReleaseEvent(QMouseEvent *e)
 {
-    if (e->button() == LeftButton) {
+    if (e->button() == Qt::LeftButton) {
         m_mouseDown = false;
         m_selecting = false;
         emit keyReleased(e->y(), false);

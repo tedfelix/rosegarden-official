@@ -32,7 +32,7 @@
 #include "NotationElement.h"
 #include "NotationProperties.h"
 #include "NotationStaff.h"
-#include <Q3Canvas>
+
 #include <QColor>
 #include <QPainter>
 #include <QPen>
@@ -41,15 +41,17 @@
 #include <QSize>
 #include <QString>
 #include <QWidget>
-
+#include <QMouseEvent>
+#include <QPaintEvent>
 
 namespace Rosegarden
 {
 
 NotationCanvasView::NotationCanvasView(const LinedStaffManager &staffmgr,
                                        Q3Canvas *viewing, QWidget *parent,
-                                       const char *name, WFlags f) :
-        RosegardenCanvasView(viewing, parent, name, f),
+                                       const char *name
+					): //, WFlags f) :
+        RosegardenCanvasView(viewing, parent, name), // f),
         m_linedStaffManager(staffmgr),
         m_lastYPosNearStaff(0),
         m_currentStaff(0),

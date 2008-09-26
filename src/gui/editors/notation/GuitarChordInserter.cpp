@@ -19,6 +19,7 @@
 #include "GuitarChordInserter.h"
 
 #include <klocale.h>
+
 #include "base/Event.h"
 #include "base/Exception.h"
 #include "base/Staff.h"
@@ -33,11 +34,12 @@
 #include "NotationTool.h"
 #include "NotationView.h"
 #include "NotePixmapFactory.h"
+
 #include <QAction>
 #include <QDialog>
 #include <QIcon>
 #include <QString>
-
+#include <QMouseEvent>
 
 namespace Rosegarden
 {

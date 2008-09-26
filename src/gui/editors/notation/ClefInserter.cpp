@@ -19,6 +19,7 @@
 #include "ClefInserter.h"
 
 #include <klocale.h>
+
 #include "base/Event.h"
 #include "base/NotationTypes.h"
 #include "base/ViewElement.h"
@@ -29,10 +30,11 @@
 #include "NotationTool.h"
 #include "NotationView.h"
 #include "NotePixmapFactory.h"
+
 #include <QAction>
 #include <QIcon>
 #include <QString>
-
+#include <QMouseEvent>
 
 namespace Rosegarden
 {

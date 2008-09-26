@@ -330,9 +330,8 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
         m_snapGrid->setSnapTime(snapGridSize);
     } else {
         //###settings.beginGroup( MatrixViewConfigGroup );
-        snapGridSize = settings.value("Snap Grid Size",
-                SnapGrid::SnapToBeat).toInt();
-        m_snapGrid->setSnapTime(snapGridSize);
+        snapGridSize = settings.value("Snap Grid Size", SnapGrid::SnapToBeat).toInt();
+        m_snapGrid->setSnapTime( snapGridSize.toString() );
         m_staffs[0]->getSegment().setSnapGridSize(snapGridSize);
     }
 
@@ -437,7 +436,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     bool layoutApplied = applyLayout();
     if (!layoutApplied)
-        /* was sorry */ QMessageBox::warning(0, i18n("Couldn't apply piano roll layout"));
+        /* was sorry */ QMessageBox::warning(0, "", i18n("Couldn't apply piano roll layout"));
     else {
         MATRIX_DEBUG << "MatrixView : rendering elements\n";
         for (unsigned int i = 0; i < m_staffs.size(); ++i) {
@@ -2031,7 +2030,7 @@ void MatrixView::slotInsertNoteFromAction()
     } catch (...) {
 
         /* was sorry */ QMessageBox::warning
-        (this, i18n("Unknown note insert action %1", name));
+        (this, "", i18n("Unknown note insert action %1", name) );
         return ;
     }
 
@@ -3092,7 +3091,7 @@ MatrixView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn
         if (showingError)
             return ;
         showingError = true;
-        /* was sorry */ QMessageBox::warning(this, i18n("Can't insert note: No grid duration selected"));
+        /* was sorry */ QMessageBox::warning(this, "", i18n("Can't insert note: No grid duration selected"));
         showingError = false;
         return ;
     }
@@ -3260,7 +3259,7 @@ MatrixView::slotPercussionSetChanged(Instrument * newInstr)
     readjustCanvasSize();
     bool layoutApplied = applyLayout();
     if (!layoutApplied)
-        /* was sorry */ QMessageBox::warning(0, i18n("Couldn't apply piano roll layout"));
+        /* was sorry */ QMessageBox::warning(0, "", i18n("Couldn't apply piano roll layout"));
     else {
         MATRIX_DEBUG << "MatrixView : rendering elements\n";
         m_staffs[0]->positionAllElements();

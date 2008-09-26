@@ -98,8 +98,8 @@ FontViewFrame::loadFont()
     FcPatternGetString(match, FC_FAMILY, 0, &matchFamily);
 
     if (QString((const char *)matchFamily).toLower() != m_fontName.toLower()) {
-        /* was sorry */ QMessageBox::warning(this, i18n("Warning: No good match for font name %1 (best is %2)", 
-                           m_fontName, QString((const char *)matchFamily)));
+        /* was sorry */ QMessageBox::warning(this, "", i18n("Warning: No good match for font name %1 (best is %2)", 
+                           m_fontName, QString((const char *)matchFamily)) );
         m_fontName = (const char *)matchFamily;
     }
 

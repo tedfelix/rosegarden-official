@@ -140,7 +140,7 @@ NoteFontMap::startElement(const QString &, const QString &,
         QString s;
 
         s = attributes.value("name");
-        if (s) {
+        if ( ! s.isEmpty() ) {
             m_name = qstrtostr(s);
             m_srcDirectory = m_name;
         }
@@ -150,28 +150,28 @@ NoteFontMap::startElement(const QString &, const QString &,
         QString s;
 
         s = attributes.value("origin");
-        if (s)
+		if ( ! s.isEmpty() )
             m_origin = qstrtostr(s);
 
         s = attributes.value("copyright");
-        if (s)
+		if ( ! s.isEmpty() )
             m_copyright = qstrtostr(s);
 
         s = attributes.value("mapped-by");
-        if (s)
+		if ( ! s.isEmpty() )
             m_mappedBy = qstrtostr(s);
 
         s = attributes.value("type");
-        if (s)
+		if ( ! s.isEmpty() )
             m_type = qstrtostr(s);
 
         s = attributes.value("autocrop");
-        if (s) {
+		if ( ! s.isEmpty() ) {
             std::cerr << "Warning: autocrop attribute in note font mapping file is no longer supported\n(all fonts are now always autocropped)" << std::endl;
         }
 
         s = attributes.value("smooth");
-        if (s)
+		if ( ! s.isEmpty() )
             m_smooth = (s.toLower() == "true");
 
     } else if (lcName == "font-sizes") {
@@ -179,7 +179,7 @@ NoteFontMap::startElement(const QString &, const QString &,
     else if (lcName == "font-size") {
 
         QString s = attributes.value("note-height");
-        if (!s) {
+		if (s.isEmpty() ) {
             m_errorString = "note-height is a required attribute of font-size";
             return false;
         }
@@ -188,46 +188,46 @@ NoteFontMap::startElement(const QString &, const QString &,
         SizeData &sizeData = m_sizes[noteHeight];
 
         s = attributes.value("staff-line-thickness");
-        if (s)
+		if ( ! s.isEmpty() )
             sizeData.setStaffLineThickness(s.toInt());
 
         s = attributes.value("leger-line-thickness");
-        if (s)
+		if ( ! s.isEmpty() )
             sizeData.setLegerLineThickness(s.toInt());
 
         s = attributes.value("stem-thickness");
-        if (s)
+		if ( ! s.isEmpty() )
             sizeData.setStemThickness(s.toInt());
 
         s = attributes.value("beam-thickness");
-        if (s)
+		if ( ! s.isEmpty() )
             sizeData.setBeamThickness(s.toInt());
 
         s = attributes.value("stem-length");
-        if (s)
+		if ( ! s.isEmpty() )
             sizeData.setStemLength(s.toInt());
 
         s = attributes.value("flag-spacing");
-        if (s)
+		if ( ! s.isEmpty() )
             sizeData.setFlagSpacing(s.toInt());
 
         s = attributes.value("border-x");
-        if (s) {
+		if ( ! s.isEmpty() ) {
             std::cerr << "Warning: border-x attribute in note font mapping file is no longer supported\n(use hotspot-x for note head or flag)" << std::endl;
         }
 
         s = attributes.value("border-y");
-        if (s) {
+		if ( ! s.isEmpty() ) {
             std::cerr << "Warning: border-y attribute in note font mapping file is no longer supported" << std::endl;
         }
 
         int fontId = 0;
         s = attributes.value("font-id");
-        if (s)
+		if ( ! s.isEmpty() )
             fontId = s.toInt();
 
         s = attributes.value("font-height");
-        if (s)
+		if ( ! s.isEmpty() )
             sizeData.setFontHeight(fontId, s.toInt());
 
     } else if (lcName == "font-scale") {
@@ -243,7 +243,7 @@ NoteFontMap::startElement(const QString &, const QString &,
         QString s;
 
         s = attributes.value("font-height");
-        if (s)
+		if ( ! s.isEmpty() )
             fontHeight = qstrtodouble(s);
         else {
             m_errorString = "font-height is a required attribute of font-scale";
@@ -251,32 +251,32 @@ NoteFontMap::startElement(const QString &, const QString &,
         }
 
         s = attributes.value("staff-line-thickness");
-        if (s)
+		if ( ! s.isEmpty() )
             staffLineThickness = qstrtodouble(s);
 
         s = attributes.value("leger-line-thickness");
-        if (s)
+		if ( ! s.isEmpty() )
             legerLineThickness = qstrtodouble(s);
 
         s = attributes.value("stem-thickness");
-        if (s)
+		if ( ! s.isEmpty() )
             stemThickness = qstrtodouble(s);
 
         s = attributes.value("beam-thickness");
-        if (s)
+		if ( ! s.isEmpty() )
             beamThickness = qstrtodouble(s);
 
         s = attributes.value("stem-length");
-        if (s)
+		if ( ! s.isEmpty() )
             stemLength = qstrtodouble(s);
 
         s = attributes.value("flag-spacing");
-        if (s)
+		if ( ! s.isEmpty() )
             flagSpacing = qstrtodouble(s);
 
         int fontId = 0;
         s = attributes.value("font-id");
-        if (s)
+		if ( ! s.isEmpty() )
             fontId = s.toInt();
 
         //!!! need to be able to calculate max size -- checkFont needs
@@ -328,7 +328,7 @@ NoteFontMap::startElement(const QString &, const QString &,
     else if (lcName == "src-directory") {
 
         QString d = attributes.value("name");
-        if (!d) {
+        if ( d.isEmpty() ) {
             m_errorString = "name is a required attribute of src-directory";
             return false;
         }
@@ -340,7 +340,7 @@ NoteFontMap::startElement(const QString &, const QString &,
         int bn = 0, fn = 0;
         bool ok;
         QString base = attributes.value("base");
-        if (!base) {
+        if ( base.isEmpty() ) {
             m_errorString = "base is a required attribute of codebase";
             return false;
         }
@@ -353,7 +353,7 @@ NoteFontMap::startElement(const QString &, const QString &,
         }
 
         QString fontId = attributes.value("font-id");
-        if (!fontId) {
+		if (fontId.isEmpty()) {
             m_errorString = "font-id is a required attribute of codebase";
             return false;
         }
@@ -370,7 +370,7 @@ NoteFontMap::startElement(const QString &, const QString &,
     } else if (lcName == "symbol") {
 
         QString symbolName = attributes.value("name");
-        if (!symbolName) {
+		if (symbolName.isEmpty()) {
             m_errorString = "name is a required attribute of symbol";
             return false;
         }
@@ -382,7 +382,7 @@ NoteFontMap::startElement(const QString &, const QString &,
 
         int icode = -1;
         bool ok = false;
-        if (code) {
+		if ( ! code.isEmpty()) {
             icode = code.trimmed().toInt(&ok);
             if (!ok || icode < 0) {
                 m_errorString =
@@ -395,7 +395,7 @@ NoteFontMap::startElement(const QString &, const QString &,
 
         int iglyph = -1;
         ok = false;
-        if (glyph) {
+		if ( ! glyph.isEmpty()) {
             iglyph = glyph.trimmed().toInt(&ok);
             if (!ok || iglyph < 0) {
                 m_errorString =
@@ -406,19 +406,19 @@ NoteFontMap::startElement(const QString &, const QString &,
             symbolData.setGlyph(iglyph);
         }
 
-        if (!src && icode < 0 && iglyph < 0) {
+        if (src.isEmpty() && icode < 0 && iglyph < 0) {
             m_errorString = "symbol must have either src, code, or glyph attribute";
             return false;
         }
-        if (src)
+		if ( ! src.isEmpty())
             symbolData.setSrc(qstrtostr(src));
 
         QString inversionSrc = attributes.value("inversion-src");
-        if (inversionSrc)
+		if ( ! inversionSrc.isEmpty())
             symbolData.setInversionSrc(qstrtostr(inversionSrc));
 
         QString inversionCode = attributes.value("inversion-code");
-        if (inversionCode) {
+		if ( ! inversionCode.isEmpty()) {
             icode = inversionCode.trimmed().toInt(&ok);
             if (!ok || icode < 0) {
                 m_errorString =
@@ -430,7 +430,7 @@ NoteFontMap::startElement(const QString &, const QString &,
         }
 
         QString inversionGlyph = attributes.value("inversion-glyph");
-        if (inversionGlyph) {
+		if ( ! inversionGlyph.isEmpty()) {
             iglyph = inversionGlyph.trimmed().toInt(&ok);
             if (!ok || iglyph < 0) {
                 m_errorString =
@@ -442,7 +442,7 @@ NoteFontMap::startElement(const QString &, const QString &,
         }
 
         QString fontId = attributes.value("font-id");
-        if (fontId) {
+		if ( ! fontId.isEmpty()) {
             int n = fontId.trimmed().toInt(&ok);
             if (!ok || n < 0) {
                 m_errorString =
@@ -460,7 +460,7 @@ NoteFontMap::startElement(const QString &, const QString &,
     else if (lcName == "hotspot") {
 
         QString s = attributes.value("name");
-        if (!s) {
+		if (s.isEmpty()) {
             m_errorString = "name is a required attribute of hotspot";
             return false;
         }
@@ -475,11 +475,11 @@ NoteFontMap::startElement(const QString &, const QString &,
 
         QString s = attributes.value("x");
         double x = -1.0;
-        if (s)
+		if (! s.isEmpty())
             x = qstrtodouble(s);
 
         s = attributes.value("y");
-        if (!s) {
+		if ( s.isEmpty()) {
             m_errorString = "y is a required attribute of scaled";
             return false;
         }
@@ -502,12 +502,12 @@ NoteFontMap::startElement(const QString &, const QString &,
 
         QString s = attributes.value("x");
         int x = 0;
-        if (s)
+		if ( ! s.isEmpty())
             x = s.toInt();
 
         s = attributes.value("y");
         int y = 0;
-        if (s)
+		if ( ! s.isEmpty())
             y = s.toInt();
 
         HotspotDataMap::iterator i = m_hotspots.find(m_hotspotCharName);
@@ -526,7 +526,7 @@ NoteFontMap::startElement(const QString &, const QString &,
         }
 
         QString s = attributes.value("note-height");
-        if (!s) {
+		if ( s.isEmpty()) {
             m_errorString = "note-height is a required attribute of when";
             return false;
         }
@@ -534,11 +534,11 @@ NoteFontMap::startElement(const QString &, const QString &,
 
         s = attributes.value("x");
         int x = 0;
-        if (s)
+		if ( ! s.isEmpty())
             x = s.toInt();
 
         s = attributes.value("y");
-        if (!s) {
+		if ( s.isEmpty()) {
             m_errorString = "y is a required attribute of when";
             return false;
         }
@@ -559,7 +559,7 @@ NoteFontMap::startElement(const QString &, const QString &,
         QString id = attributes.value("font-id");
         int n = -1;
         bool ok = false;
-        if (id) {
+		if ( ! id.isEmpty()) {
             n = id.trimmed().toInt(&ok);
             if (!ok) {
                 m_errorString =
@@ -575,8 +575,8 @@ NoteFontMap::startElement(const QString &, const QString &,
         QString name = attributes.value("name");
         QString names = attributes.value("names");
 
-        if (name) {
-            if (names) {
+		if ( ! name.isEmpty()) {
+			if ( ! names.isEmpty()) {
                 m_errorString = "font-requirement may have name or names attribute, but not both";
                 return false;
             }
@@ -592,7 +592,7 @@ NoteFontMap::startElement(const QString &, const QString &,
                 m_ok = false;
             }
 
-        } else if (names) {
+		} else if ( ! names.isEmpty()) {
 
             bool have = false;
             QStringList list = QStringList::split(",", names, false);
@@ -620,7 +620,7 @@ NoteFontMap::startElement(const QString &, const QString &,
         QString s = attributes.value("strategy").toLower();
         SystemFont::Strategy strategy = SystemFont::PreferGlyphs;
 
-        if (s) {
+		if ( ! s.isEmpty()) {
             if (s == "prefer-glyphs")
                 strategy = SystemFont::PreferGlyphs;
             else if (s == "prefer-codes")

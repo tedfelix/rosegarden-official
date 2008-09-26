@@ -15,25 +15,31 @@
     COPYING included with this distribution for more information.
 */
 
+#include <klocale.h>
+#include <kxmlguiclient.h>
+//#include <kprinter.h>
+
+//#include <kstatusbar.h>
+//#include <kstandardaction.h>
+//#include <ktoolbar.h>
+//#include <kglobal.h>
+//#include <kstandarddirs.h>
 
 #include <Q3Canvas>
 #include <Q3CanvasItem>
 #include <Q3CanvasPixmap>
 #include <Q3CanvasRectangle>
 #include <Q3CanvasText>
-#include "NotationView.h"
-#include <list>
-#include <QLayout>
-#include "misc/Debug.h"
-#include <QApplication>
 
+#include "NotationView.h"
+
+#include <list>
+#include "misc/Debug.h"
 #include "gui/editors/segment/TrackEditor.h"
 #include "gui/editors/segment/TrackButtons.h"
 #include "gui/editors/parameters/TrackParameterBox.h"
 #include "gui/general/IconLoader.h"
 #include "base/BaseProperties.h"
-#include <klocale.h>
-#include <kstandarddirs.h>
 #include "misc/Strings.h"
 #include "base/AnalysisTypes.h"
 #include "base/Clipboard.h"
@@ -153,22 +159,21 @@
 #include "TextInserter.h"
 #include "NotationCommandRegistry.h"
 #include "HeadersGroup.h"
+#include <algorithm>
+
+//#include <qpaintdevicemetrics.h>
+#include <QApplication>
 #include <QAction>
 #include <QComboBox>
 #include <QSettings>
-#include <kglobal.h>
-#include <klineeditdlg.h>
+#include <QInputDialog>
 #include <QMessageBox>
-#include <kprinter.h>
 #include <QProcess>
 #include <QProgressBar>
 #include <QProgressDialog>
-#include <kstatusbar.h>
-#include <kstandardaction.h>
-#include <ktoolbar.h>
-#include <kxmlguiclient.h>
+#include <QStatusBar>
+#include <QToolBar>
 #include <QBrush>
-#include <Q3Canvas>
 #include <QCursor>
 #include <QDialog>
 #include <QEvent>
@@ -177,7 +182,6 @@
 #include <QIcon>
 #include <QLabel>
 #include <QObject>
-#include <qpaintdevicemetrics.h>
 #include <QPainter>
 #include <QPixmap>
 #include <QPoint>
@@ -188,9 +192,10 @@
 #include <QString>
 #include <QTimer>
 #include <QWidget>
+#include <QLayout>
 #include <QHBoxLayout>
+#include <QVBoxLayout>
 #include <QValidator>
-#include <algorithm>
 #include <QPushButton>
 #include <QToolTip>
 

@@ -162,7 +162,7 @@ void NotationSelector::handleLeftButtonPress(timeT t,
 
     delete m_selectionToMerge;
     const EventSelection *selectionToMerge = 0;
-    if (e->state() & ShiftButton) {
+    if (e->state() & Qt::ShiftButton) {
         m_clickedShift = true;
         selectionToMerge = m_nParentView->getCurrentSelection();
     } else {
