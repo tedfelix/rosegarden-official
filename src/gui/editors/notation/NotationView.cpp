@@ -198,7 +198,7 @@
 #include <QValidator>
 #include <QPushButton>
 #include <QToolTip>
-
+#include <QScrollArea>
 
 namespace Rosegarden
 {

@@ -16,19 +16,20 @@
 */
 
 
-#include <QMouseEvent>
 #include "EditTool.h"
-
 #include "misc/Debug.h"
 #include "base/Event.h"
 #include "BaseTool.h"
 #include "base/ViewElement.h"
 #include "EditView.h"
 #include "RosegardenCanvasView.h"
-#include <kxmlguiclient.h>
+
 #include <QEvent>
-#include <qpopupmenu.h>
+#include <QMouseEvent>
+#include <QMenu>
 #include <QString>
+
+#include <kxmlguiclient.h>
 
 
 namespace Rosegarden

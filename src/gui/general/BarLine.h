@@ -19,9 +19,13 @@
 #ifndef _RG_BARLINE_H_
 #define _RG_BARLINE_H_
 
+#include <Q3PointArray>
 #include <Q3Canvas>
 #include <Q3CanvasPolygonalItem>
+
 #include "LinedStaff.h"
+
+
 
 namespace Rosegarden {
 
@@ -41,7 +45,7 @@ public:
 
     double getLayoutX() const { return m_layoutX; }
     
-    virtual QPointArray areaPoints() const;
+    virtual Q3PointArray areaPoints() const;
     virtual void drawShape(QPainter &);
 
 protected:

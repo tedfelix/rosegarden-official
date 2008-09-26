@@ -16,15 +16,15 @@
 */
 
 
-#include <QWheelEvent>
 #include <Q3Canvas>
 #include <Q3CanvasItemList>
 #include <Q3CanvasView>
-#include "RosegardenCanvasView.h"
 
+#include "RosegardenCanvasView.h"
 #include "misc/Debug.h"
 #include "gui/general/CanvasItemGC.h"
-#include <Q3Canvas>
+
+
 #include <QCursor>
 #include <QPoint>
 #include <QRect>
@@ -33,6 +33,9 @@
 #include <QSizePolicy>
 #include <QTimer>
 #include <QWidget>
+//#include <QAction>
+#include <QEvent>
+#include <QWheelEvent>
 
 
 namespace Rosegarden
@@ -400,7 +403,7 @@ void RosegardenCanvasView::updateBottomWidgetGeometry()
 
     int leftWidgetWidth = 0;
     if (m_leftWidget && m_leftWidget->isVisible()) {
-        QScrollView * qsv = dynamic_cast<QScrollView *>(m_leftWidget);
+        QScrollArea * qsv = dynamic_cast<QScrollView *>(m_leftWidget);
         leftWidgetWidth = qsv->contentsWidth()+2;
         qsv->setFixedWidth(leftWidgetWidth);
     }
@@ -458,7 +461,7 @@ void RosegardenCanvasView::updateLeftWidgetGeometry()
 
     int leftWidgetWidth = 0;
     if (m_leftWidget->isVisible()) {
-        QScrollView * qsv = dynamic_cast<QScrollView *>(m_leftWidget);
+        QScrollArea * qsv = dynamic_cast<QScrollView *>(m_leftWidget);
         leftWidgetWidth = qsv->contentsWidth() + 2;
     }
     m_leftWidget->setFixedWidth(leftWidgetWidth);

@@ -37,7 +37,7 @@ public:
     QStringList getResourceFiles(QString resourceCat, QString fileExt);
 
 protected:
-    QString _getResourceDir(QString &subDir);
+    QString _getResourceDir(QString subDir);
     
     QPixmap loadPixmap(QString dir, QString name);
 };

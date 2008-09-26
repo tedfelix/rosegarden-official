@@ -21,6 +21,7 @@
 #include <QApplication>
 #include <QPainter>
 #include <QPalette>
+#include <QDir>
 
 namespace Rosegarden
 {
@@ -152,13 +153,13 @@ QString IconLoader::getResourcePath( QString res ){
 		res is something like: "chords/user_chords.xml"
 	**/
 	QString ret;
-	ret = _getResourceDir();
+	ret = _getResourceDir("");
 	return ret + res;
 }
 
 
 
-QString IconLoader::_getResourceDir(QString &subDir)
+QString IconLoader::_getResourceDir(QString subDir)
 {
 	/** with subDir empty, returns the root directory for resources for this application.
 		with subDir set, returns the resource directory (root dir + subDir)
@@ -194,12 +195,12 @@ QStringList IconLoader::getResourceFiles(QString resourceCat, QString fileExt)
 	QStringList sl;
 	
 	QStringList filters;
-	filters << fileType;
+	filters << fileExt;
 	
 	QDir dirx;
 	dirx.setPath(resourceDir); 
 	
-	if( ! QDir::exists(resourceDir) )
+	if( ! dirx.exists() )
 		return sl;
 	
 //	QDir::entryInfoList ( const QStringList & nameFilters, Filters filters = NoFilter, SortFlags sort = NoSort )

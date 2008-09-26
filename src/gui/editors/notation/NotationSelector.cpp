@@ -239,7 +239,7 @@ void NotationSelector::handleMouseDoubleClick(timeT,
         return ;
     m_selectedStaff = staff;
 
-    bool advanced = (e->state() & ShiftButton);
+    bool advanced = (e->state() & Qt::ShiftButton);
 
     if (m_clickedElement) {
 
