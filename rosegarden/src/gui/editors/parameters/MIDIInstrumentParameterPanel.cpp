@@ -98,7 +98,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     
     QString programTip = i18n("<qt>use program changes from an external source to manipulate these controls (only valid for the currently-active track)</qt>");
     m_evalMidiPrgChgCheckBox = new QCheckBox(this); 
-    m_evalMidiPrgChgLabel = new QLabel(i18n("Receive external"), this);
+    m_evalMidiPrgChgLabel = new QLabel(i18n("Receive external program changes"), this);
     QToolTip::add(m_evalMidiPrgChgLabel, programTip);
     
     m_evalMidiPrgChgCheckBox->setDisabled(false);
@@ -114,29 +114,29 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
 
     m_mainGrid->setColStretch(2, 1);
 
-    m_mainGrid->addMultiCellWidget(m_instrumentLabel, 0, 0, 0, 2, AlignCenter);
-    m_mainGrid->addMultiCellWidget(m_connectionLabel, 1, 1, 0, 2, AlignCenter);
+    m_mainGrid->addMultiCellWidget(m_instrumentLabel, 0, 0, 0, 3, AlignCenter);
+    m_mainGrid->addMultiCellWidget(m_connectionLabel, 1, 1, 0, 3, AlignCenter);
 
     m_mainGrid->addMultiCellWidget(channelLabel, 2, 2, 0, 1, AlignLeft);
-    m_mainGrid->addWidget(m_channelValue, 2, 2, AlignRight);
+    m_mainGrid->addWidget(m_channelValue, 2, 3, AlignRight);
 
     m_mainGrid->addMultiCellWidget(percussionLabel, 3, 3, 0, 1, AlignLeft);
-    m_mainGrid->addWidget(m_percussionCheckBox, 3, 2, AlignRight);
+    m_mainGrid->addWidget(m_percussionCheckBox, 3, 3, AlignRight);
 
     m_mainGrid->addWidget(m_bankLabel, 4, 0, AlignLeft);
     m_mainGrid->addWidget(m_bankCheckBox, 4, 1, AlignRight);
-    m_mainGrid->addWidget(m_bankValue, 4, 2, AlignRight);
+    m_mainGrid->addMultiCellWidget(m_bankValue, 4, 4, 2, 3, AlignRight);
 
     m_mainGrid->addWidget(m_programLabel, 5, 0, AlignLeft);
     m_mainGrid->addWidget(m_programCheckBox, 5, 1, AlignRight);
-    m_mainGrid->addWidget(m_programValue, 5, 2, AlignRight);
+    m_mainGrid->addMultiCellWidget(m_programValue, 5, 5, 2, 3, AlignRight);
 
     m_mainGrid->addWidget(m_variationLabel, 6, 0);
     m_mainGrid->addWidget(m_variationCheckBox, 6, 1);
-    m_mainGrid->addWidget(m_variationValue, 6, 2, AlignRight);
+    m_mainGrid->addMultiCellWidget(m_variationValue, 6, 6, 2, 3, AlignRight);
       
-    m_mainGrid->addWidget(m_evalMidiPrgChgLabel, 7, 0, AlignLeft);
-    m_mainGrid->addWidget(m_evalMidiPrgChgCheckBox, 7, 2, AlignRight);	
+    m_mainGrid->addMultiCellWidget(m_evalMidiPrgChgLabel, 7, 7, 0, 2, AlignLeft);
+    m_mainGrid->addWidget(m_evalMidiPrgChgCheckBox, 7, 3, AlignRight);	
     
     
     // Populate channel lists
