@@ -1126,13 +1126,6 @@ void RosegardenGUIDoc::initialiseStudio()
     StudioControl::sendMappedEvent(mEff);
 }
 
-SequenceManager *
-RosegardenGUIDoc::getSequenceManager()
-{
-    return (dynamic_cast<RosegardenGUIApp*>(parent()))->getSequenceManager();
-}
-
-
 int RosegardenGUIDoc::FILE_FORMAT_VERSION_MAJOR = 1;
 
 int RosegardenGUIDoc::FILE_FORMAT_VERSION_MINOR = 4;
@@ -1809,7 +1802,18 @@ RosegardenGUIDoc::insertRecordedMidi(const MappedComposition &mC)
                 // adjust the notation by the opposite of track transpose so the
                 // resulting recording will play correctly, and notation will
                 // read correctly; tentative fix for #1597279
-                pitch = (*i)->getPitch() - track->getTranspose();
+                //
+                // Fix #2122004.  Avoid a crash trying to access a non-existent
+                // track on the other side of a null pointer.
+                //
+                // Testing the pointer first is good coding practice, but I
+                // think there is still a ghost in the machine somewhere,
+                // because why did (*i)->getTrackId() return a 0 in the first
+                // place when 0 isn't a valid TrackId?
+                //
+                if (track) {
+                    pitch = (*i)->getPitch() - track->getTranspose();
+                }
 
                 if ((*i)->getDuration() < RealTime::zeroTime) {
 
