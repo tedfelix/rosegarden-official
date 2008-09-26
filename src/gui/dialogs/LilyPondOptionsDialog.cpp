@@ -16,34 +16,36 @@
 */
 
 
-#include "LilyPondOptionsDialog.h"
-#include "document/io/LilyPondExporter.h"
-#include "gui/configuration/HeadersConfigurationPage.h"
-
-#include <QLayout>
-#include <QApplication>
-
 #include "document/ConfigGroups.h"
+#include "document/io/LilyPondExporter.h"
 #include "document/RosegardenGUIDoc.h"
+#include "gui/configuration/HeadersConfigurationPage.h"
+#include "LilyPondOptionsDialog.h"
 #include "misc/Strings.h"
-#include <QComboBox>
-#include <klineedit.h>
-#include <QSettings>
-#include <QDialog>
-#include <QDialogButtonBox>
+
 #include <kglobal.h>
+#include <klineedit.h>
 #include <klocale.h>
+
+#include <QApplication>
 #include <QCheckBox>
 #include <QComboBox>
+#include <QDialog>
+#include <QDialogButtonBox>
 #include <QFrame>
+#include <QGridLayout>
 #include <QGroupBox>
 #include <QLabel>
+#include <QLayout>
+#include <QSettings>
 #include <QString>
 #include <QTabWidget>
 #include <QToolTip>
-#include <QWidget>
 #include <QVBoxLayout>
+#include <QWidget>
+
 #include <iostream>
+
 
 namespace Rosegarden
 {
@@ -86,12 +88,16 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QDialogButtonBox::QWidget *parent,
     generalFrame = new QFrame();
     tabWidget->addTab(generalFrame, i18n("General options"));
 
-    generalGrid = new QGridLayout(generalFrame, 1, 1, 5, 5);
+    generalFrame->setContentsMargins(5, 5, 5, 5);
+    generalGrid = new QGridLayout(generalFrame);
+    generalGrid->setSpacing(5);
 
     advancedFrame = new QFrame();
     tabWidget->addTab(advancedFrame, i18n("Advanced options"));
 
-    advancedGrid = new QGridLayout(advancedFrame, 1, 1, 5, 5);
+    advancedFrame->setContentsMargins(5, 5, 5, 5);
+    advancedGrid = new QGridLayout(advancedFrame);
+    advancedGrid->setSpacing(5);
 
     m_headersPage = new HeadersConfigurationPage(this, m_doc);
     tabWidget->addTab(m_headersPage, i18n("Headers"));
@@ -106,13 +112,16 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QDialogButtonBox::QWidget *parent,
     // LilyPond export: Basic options
     //
 
-	QGroupBox *basicOptionsBox = new QGroupBox(i18n("Basic options"), generalFrame);
-		//	(1, Horizontal,i18n("Basic options"), generalFrame);
-	
+    QGroupBox *basicOptionsBox = new QGroupBox(i18n("Basic options"), generalFrame);
+    QVBoxLayout *basicOptionsBoxLayout = new QVBoxLayout;
+
     generalGrid->addWidget(basicOptionsBox, 0, 0);
 
     QFrame *frameBasic = new QFrame(basicOptionsBox);
-    QGridLayout *layoutBasic = new QGridLayout(frameBasic, 3, 2, 10, 5);
+    frameBasic->setContentsMargins(10, 10, 10, 10);
+    QGridLayout *layoutBasic = new QGridLayout(frameBasic);
+    layoutBasic->setSpacing(5);
+    basicOptionsBoxLayout->addWidget(frameBasic);
 
     layoutBasic->addWidget(new QLabel(
                           i18n("Compatibility level"), frameBasic), 0, 0);
@@ -159,23 +168,28 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QDialogButtonBox::QWidget *parent,
 
     m_lilyFontSize = new QComboBox(frameBasic);
     int sizes[] = { 11, 13, 16, 19, 20, 23, 26 };
-    for (int i = 0; i < sizeof(sizes)/sizeof(sizes[0]); ++i) {
+    for (unsigned int i = 0; i < sizeof(sizes)/sizeof(sizes[0]); ++i) {
         m_lilyFontSize->addItem(i18n("%1 pt", sizes[i]));
     }
     m_lilyFontSize->setCurrentIndex(settings.value("lilyfontsize", 4).toUInt());
     layoutBasic->addWidget(m_lilyFontSize, 2, 1);
 
+    frameBasic->setLayout(layoutBasic);
+
     //
     // LilyPond export: Staff level options
     //
 
-	QGroupBox *staffOptionsBox = new QGroupBox( i18n("Staff level options"), generalFrame);
-				// (1, Horizontal,i18n("Staff level options"), generalFrame);
-	
+    QGroupBox *staffOptionsBox = new QGroupBox( i18n("Staff level options"), generalFrame);
+    QVBoxLayout *staffOptionsBoxLayout = new QVBoxLayout;
+
     generalGrid->addWidget(staffOptionsBox, 1, 0);
 
     QFrame *frameStaff = new QFrame(staffOptionsBox);
-    QGridLayout *layoutStaff = new QGridLayout(frameStaff, 2, 2, 10, 5);
+    frameStaff->setContentsMargins(10, 10, 10, 10);
+    QGridLayout *layoutStaff = new QGridLayout(frameStaff);
+    layoutStaff->setSpacing(5);
+    staffOptionsBoxLayout->addWidget(frameStaff);
 
     layoutStaff->addWidget(new QLabel(
                           i18n("Export content"), frameStaff), 0, 0);
@@ -194,16 +208,21 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QDialogButtonBox::QWidget *parent,
     m_lilyExportStaffMerge->setChecked( qStrToBool( settings.value("lilyexportstaffmerge", "false" ) ) );
     layoutStaff->addWidget(m_lilyExportStaffMerge, 1, 0, 0+1, 1- 1);
 
+    frameStaff->setLayout(layoutStaff);
+
     //
     // LilyPond export: Notation options
     //
 
-	QGroupBox *notationOptionsBox = new QGroupBox(i18n("Notation options"), generalFrame);
-                   //        (1, Horizontal,i18n("Notation options"), generalFrame);
+    QGroupBox *notationOptionsBox = new QGroupBox(i18n("Notation options"), generalFrame);
+    QVBoxLayout *notationOptionsBoxLayout = new QVBoxLayout;
     generalGrid->addWidget(notationOptionsBox, 2, 0);
 
     QFrame *frameNotation = new QFrame(notationOptionsBox);
-    QGridLayout *layoutNotation = new QGridLayout(frameNotation, 4, 2, 10, 5);
+    frameNotation->setContentsMargins(10, 10, 10, 10);
+    QGridLayout *layoutNotation = new QGridLayout(frameNotation);
+    layoutNotation->setSpacing(5);
+    notationOptionsBoxLayout->addWidget(frameNotation);
 
     m_lilyTempoMarks = new QComboBox( frameNotation );
     m_lilyTempoMarks->addItem(i18n("None"));
@@ -237,18 +256,23 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QDialogButtonBox::QWidget *parent,
     m_lilyExportStaffGroup->setChecked( qStrToBool( settings.value("lilyexportstaffbrackets", "true" ) ) );
     layoutNotation->addWidget(m_lilyExportStaffGroup, 3, 0, 0+1, 1- 1); 
 
+    frameNotation->setLayout(layoutNotation);
+
     generalGrid->setRowStretch(4, 10);
 
     //
     // LilyPond export: Advanced options
     //
 
-	QGroupBox *advancedLayoutOptionsBox = new QGroupBox( i18n("Layout options"), advancedFrame);
-                       //    (1, Horizontal,i18n("Layout options"), advancedFrame);
+    QGroupBox *advancedLayoutOptionsBox = new QGroupBox( i18n("Layout options"), advancedFrame);
+    QVBoxLayout *advancedLayoutOptionsBoxLayout = new QVBoxLayout;
     advancedGrid->addWidget(advancedLayoutOptionsBox, 0, 0);
 
     QFrame *frameAdvancedLayout = new QFrame(advancedLayoutOptionsBox);
-    QGridLayout *layoutAdvancedLayout = new QGridLayout(frameAdvancedLayout, 3, 2, 10, 5);
+    frameAdvancedLayout->setContentsMargins(10, 10, 10, 10);
+    QGridLayout *layoutAdvancedLayout = new QGridLayout(frameAdvancedLayout);
+    layoutAdvancedLayout->setSpacing(5);
+    advancedLayoutOptionsBoxLayout->addWidget(frameAdvancedLayout);
 
     m_lilyLyricsHAlignment = new QComboBox( frameAdvancedLayout );
     m_lilyLyricsHAlignment->addItem(i18n("Left"));
@@ -270,12 +294,17 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QDialogButtonBox::QWidget *parent,
     m_lilyChordNamesMode->setChecked( qStrToBool( settings.value("lilychordnamesmode", "false" ) ) );
     layoutAdvancedLayout->addWidget(m_lilyChordNamesMode, 2, 0, 0+1, 1- 1);
 
-	QGroupBox *miscOptionsBox = new QGroupBox(i18n("Miscellaneous options"), advancedFrame);
-                      //     (1, Horizontal, i18n("Miscellaneous options"), advancedFrame);
+    frameAdvancedLayout->setLayout(layoutAdvancedLayout);
+
+    QGroupBox *miscOptionsBox = new QGroupBox(i18n("Miscellaneous options"), advancedFrame);
+    QVBoxLayout *miscOptionsBoxLayout = new QVBoxLayout;
     advancedGrid->addWidget(miscOptionsBox, 1, 0);
 
     QFrame *frameMisc = new QFrame(miscOptionsBox);
-    QGridLayout *layoutMisc = new QGridLayout(frameMisc, 2, 2, 10, 5);
+    frameMisc->setContentsMargins(10, 10, 10, 10);
+    QGridLayout *layoutMisc = new QGridLayout(frameMisc);
+    layoutMisc->setSpacing(5);
+    miscOptionsBoxLayout->addWidget(frameMisc);
 
     m_lilyExportPointAndClick = new QCheckBox(
                                     i18n("Enable \"point and click\" debugging"), frameMisc);
@@ -296,8 +325,19 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QDialogButtonBox::QWidget *parent,
     layoutMisc->addWidget( new QLabel( 
                              i18n("Export markers"), frameMisc),2, 0 );
     layoutMisc->addWidget(m_lilyMarkerMode, 2, 1);
-    
+
+    frameMisc->setLayout(layoutMisc);
+
     advancedGrid->setRowStretch(2, 10);
+
+    basicOptionsBox->setLayout(basicOptionsBoxLayout);
+    advancedLayoutOptionsBox->setLayout(advancedLayoutOptionsBoxLayout);
+    miscOptionsBox->setLayout(miscOptionsBoxLayout);
+    notationOptionsBox->setLayout(notationOptionsBoxLayout);
+    staffOptionsBox->setLayout(staffOptionsBoxLayout);
+
+    generalFrame->setLayout(generalGrid);
+    advancedFrame->setLayout(advancedGrid);
 
     resize(minimumSize());
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Apply | QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
