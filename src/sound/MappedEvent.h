@@ -14,7 +14,8 @@
 
 #include <qdatastream.h>
 
-#include "Composition.h" // for RealTime
+#include "RealTime.h"
+#include "Track.h"
 #include "Event.h"
 
 
@@ -190,7 +191,7 @@ public:
         WarningImpreciseTimerTryRTC = 11,
     } FailureCode;      
 
-    MappedEvent(): m_trackId(0),
+    MappedEvent(): m_trackId(NO_TRACK),
                    m_instrument(0),
                    m_type(MidiNote),
                    m_data1(0),
@@ -226,7 +227,7 @@ public:
                 const RealTime &absTime,
                 const RealTime &duration,
                 const RealTime &audioStartMarker):
-        m_trackId(0),
+        m_trackId(NO_TRACK),
         m_instrument(id),
         m_type(type),
         m_data1(pitch),
@@ -250,7 +251,7 @@ public:
                 const RealTime &eventTime,
                 const RealTime &duration,
                 const RealTime &audioStartMarker):
-         m_trackId(0),
+         m_trackId(NO_TRACK),
          m_instrument(id),
          m_type(Audio),
          m_data1(audioID % 256),
@@ -274,7 +275,7 @@ public:
                 MappedEventType type,
                 MidiByte data1,
                 MidiByte data2):
-         m_trackId(0),
+         m_trackId(NO_TRACK),
          m_instrument(id),
          m_type(type),
          m_data1(data1),
@@ -294,7 +295,7 @@ public:
     MappedEvent(InstrumentId id,
                 MappedEventType type,
                 MidiByte data1):
-        m_trackId(0),
+        m_trackId(NO_TRACK),
         m_instrument(id),
         m_type(type),
         m_data1(data1),
@@ -316,7 +317,7 @@ public:
     //
     MappedEvent(InstrumentId id,
                 MappedEventType type):
-        m_trackId(0),
+        m_trackId(NO_TRACK),
         m_instrument(id),
         m_type(type),
         m_data1(0),

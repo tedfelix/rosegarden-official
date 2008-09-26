@@ -1539,6 +1539,13 @@ Track* Composition::getTrackById(TrackId track) const
     return 0;
 }
 
+bool
+Composition::haveTrack(TrackId track) const
+{
+    trackconstiterator i = m_tracks.find(track);
+    return (i != m_tracks.end());
+}
+
 // Move a track object to a new id and position in the container -
 // used when deleting and undoing deletion of tracks.
 //
@@ -1653,6 +1660,7 @@ bool Composition::detachTrack(Rosegarden::Track *track)
     m_tracks.erase(it);
     updateRefreshStatuses();
     checkSelectedAndRecordTracks();
+    notifyTrackDeleted(track->getId());
 
     return true;
 }
