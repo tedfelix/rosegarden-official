@@ -63,11 +63,13 @@ LyricEditDialog::LyricEditDialog(QDialogButtonBox::QWidget *parent,
 
 
     QGroupBox *groupBox = new QGroupBox( i18n("Lyrics for this segment"), vbox );
+    QVBoxLayout *groupBoxLayout = new QVBoxLayout;
     vboxLayout->addWidget(groupBox);
     vbox->setLayout(vboxLayout);
 
     QWidget *hbox = new QWidget(groupBox);
     QHBoxLayout *hboxLayout = new QHBoxLayout;
+    groupBoxLayout->addWidget(hbox);
     hboxLayout->setSpacing(5);
 //    new QLabel(i18n("Verse:"), hbox);
     m_verseNumber = new QComboBox( hbox );
@@ -86,6 +88,7 @@ LyricEditDialog::LyricEditDialog(QDialogButtonBox::QWidget *parent,
     hboxLayout->setStretchFactor(f, 10);
 
     m_textEdit = new QTextEdit(groupBox);
+    groupBoxLayout->addWidget(m_textEdit);
     m_textEdit->setTextFormat(Qt::PlainText);
 
     m_textEdit->setMinimumWidth(300);
@@ -105,6 +108,9 @@ LyricEditDialog::LyricEditDialog(QDialogButtonBox::QWidget *parent,
     //
     // m_textEdit->setCursorPosition(0,0);
     m_textEdit->setFocus();
+
+    groupBox->setLayout(groupBoxLayout);
+
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
