@@ -27,7 +27,6 @@
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QGroupBox>
-#include <QGroupBox>
 #include <QLabel>
 #include <QObject>
 #include <QPixmap>
@@ -76,30 +75,36 @@ KeySignatureDialog::KeySignatureDialog(QDialogButtonBox::QWidget *parent,
     QWidget *nameBox = 0;
 
     QGroupBox *keyFrame = new QGroupBox( i18n("Key signature"), vbox );
+    QVBoxLayout *keyFrameLayout = new QVBoxLayout;
     vboxLayout->addWidget(keyFrame);
 
-	QGroupBox *transposeFrame = new QGroupBox( i18n("Key transposition"), vbox);
-                                //(1, Horizontal, i18n("Key transposition"), vbox);
-// 	transposeFrame->
+    QGroupBox *transposeFrame = new QGroupBox( i18n("Key transposition"), vbox);
+    QVBoxLayout *transposeFrameLayout = new QVBoxLayout;
     vboxLayout->addWidget(transposeFrame);
 
-	QGroupBox *buttonFrame = new QGroupBox(i18n("Scope"), vbox);
-//                             (1, Horizontal, i18n("Scope"), vbox);
+    QGroupBox *buttonFrame = new QGroupBox(i18n("Scope"), vbox);
+    QVBoxLayout *buttonFrameLayout = new QVBoxLayout;
     vboxLayout->addWidget(buttonFrame);
 
     QGroupBox *conversionFrame = new QGroupBox( i18n("Existing notes following key change"), vbox );
+    QVBoxLayout *conversionFrameLayout = new QVBoxLayout;
     vboxLayout->addWidget(conversionFrame);
     vbox->setLayout(vboxLayout);
 
     keyBox = new QWidget(keyFrame);
     QHBoxLayout *keyBoxLayout = new QHBoxLayout;
+    keyFrameLayout->addWidget(keyBox);
     nameBox = new QWidget(keyFrame);
     QHBoxLayout *nameBoxLayout = new QHBoxLayout;
+    keyFrameLayout->addWidget(nameBox);
 
     QLabel *explanatoryLabel = 0;
     if (!explanatoryText.isEmpty()) {
         explanatoryLabel = new QLabel(explanatoryText, keyFrame);
+        keyFrameLayout->addWidget(explanatoryLabel);
     }
+
+    keyFrame->setLayout(keyFrameLayout);
 
     BigArrowButton *keyDown = new BigArrowButton(keyBox, Qt::LeftArrow);
     keyBoxLayout->addWidget(keyDown);
@@ -135,40 +140,51 @@ KeySignatureDialog::KeySignatureDialog(QDialogButtonBox::QWidget *parent,
     m_yesTransposeButton =
         new QRadioButton(i18n("Transpose key according to segment transposition"),
                          transposeFrame);
+    transposeFrameLayout->addWidget(m_yesTransposeButton);
     QRadioButton *noTransposeButton =
         new QRadioButton(i18n("Use specified key.  Do not transpose"), transposeFrame);
+    transposeFrameLayout->addWidget(noTransposeButton);
     m_yesTransposeButton->setChecked(true);
 
     // just to shut up the compiler warning about unused variable:
     noTransposeButton->setChecked(false);
 
+    transposeFrame->setLayout(transposeFrameLayout);
+
     if (showApplyToAll) {
         QRadioButton *applyToOneButton =
             new QRadioButton(i18n("Apply to current segment only"),
                              buttonFrame);
+        buttonFrameLayout->addWidget(applyToOneButton);
         m_applyToAllButton =
             new QRadioButton(i18n("Apply to all segments at this time"),
                              buttonFrame);
+        buttonFrameLayout->addWidget(m_applyToAllButton);
         applyToOneButton->setChecked(true);
         m_noPercussionCheckBox =
             new QCheckBox(i18n("Exclude percussion segments"), buttonFrame);
+        buttonFrameLayout->addWidget(m_noPercussionCheckBox);
         m_noPercussionCheckBox->setChecked(true);
-        
     } else {
         m_applyToAllButton = 0;
         buttonFrame->hide();
     }
 
+    buttonFrame->setLayout(buttonFrameLayout);
+
     if (showConversionOptions) {
         m_noConversionButton =
             new QRadioButton
             (i18n("Maintain current pitches"), conversionFrame);
+        conversionFrameLayout->addWidget(m_noConversionButton);
         m_convertButton =
             new QRadioButton
             (i18n("Maintain current accidentals"), conversionFrame);
+        conversionFrameLayout->addWidget(m_convertButton);
         m_transposeButton =
             new QRadioButton
             (i18n("Transpose into this key"), conversionFrame);
+        conversionFrameLayout->addWidget(m_transposeButton);
         m_noConversionButton->setChecked(true);
     } else {
         m_noConversionButton = 0;
@@ -176,6 +192,8 @@ KeySignatureDialog::KeySignatureDialog(QDialogButtonBox::QWidget *parent,
         m_transposeButton = 0;
         conversionFrame->hide();
     }
+
+    conversionFrame->setLayout(conversionFrameLayout);
 
     QObject::connect(keyUp, SIGNAL(clicked()), this, SLOT(slotKeyUp()));
     QObject::connect(keyDown, SIGNAL(clicked()), this, SLOT(slotKeyDown()));
@@ -308,7 +326,7 @@ KeySignatureDialog::regenerateKeyCombo()
             i != keys.end(); ++i) {
 
         QString name(strtoqstr(i->getName()));
-        int space = name.find(' ');
+        int space = name.indexOf(' ');
         if (space > 0)
             name = name.left(space);
 
