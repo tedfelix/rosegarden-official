@@ -20,6 +20,8 @@
 #ifndef _RG_SYMBOLS_H_
 #define _RG_SYMBOLS_H_
 
+#include <string>
+
 #include <QBrush>
 #include <QPainter>
 

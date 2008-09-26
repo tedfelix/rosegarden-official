@@ -40,8 +40,8 @@ namespace Rosegarden
 
 RosegardenCanvasView::RosegardenCanvasView(Q3Canvas* canvas,
         QWidget* parent,
-        const char* name, WFlags f)
-        : Q3CanvasView(canvas, parent, name, f),
+        const char* name) //, WFlags f)
+        : Q3CanvasView(canvas, parent, name),//, f),
         m_bottomWidget(0),
         m_currentBottomWidgetHeight( -1),
         m_leftWidget(0),

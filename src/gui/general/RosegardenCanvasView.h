@@ -48,7 +48,7 @@ class RosegardenCanvasView : public Q3CanvasView
     Q_OBJECT
 public:
     RosegardenCanvasView(Q3Canvas*,
-                         QWidget* parent=0);
+						 QWidget* parent=0, const char* name="view" );
 
     /**
      * EditTool::handleMouseMove() returns a OR-ed combination of these

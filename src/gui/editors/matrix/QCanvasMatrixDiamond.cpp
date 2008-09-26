@@ -16,15 +16,18 @@
 */
 
 
-#include <Q3Canvas>
-#include "QCanvasMatrixDiamond.h"
-
 #include "MatrixElement.h"
-#include "QCanvasMatrixRectangle.h"
+
 #include <Q3Canvas>
+
+#include "QCanvasMatrixDiamond.h"
+#include "QCanvasMatrixRectangle.h"
+
 #include <QPainter>
-#include <qpointarray.h>
 #include <QPoint>
+#include <QPolygon>
+#include <Q3PointArray>
+//#include <qpointarray.h>
 
 
 namespace Rosegarden
@@ -40,10 +43,10 @@ QCanvasMatrixDiamond::~QCanvasMatrixDiamond()
     hide();
 }
 
-QPointArray QCanvasMatrixDiamond::areaPoints() const
+Q3PointArray QCanvasMatrixDiamond::areaPoints() const
 {
-    QPointArray pa(4);
-    int pw = (pen().width() + 1) / 2;
+	Q3PointArray pa(4);
+	int pw = (pen().width() + 1) / 2;
     if ( pw < 1 )
         pw = 1;
     if ( pen() == NoPen )
@@ -60,7 +63,7 @@ void QCanvasMatrixDiamond::drawShape(QPainter & p)
     p.save();
     p.setWorldXForm(false);
 
-    QPointArray pa(4);
+    Q3PointArray pa(4);
     int q = height() / 2 + 2;
     QPoint mapPos = p.worldMatrix().map(QPoint(int(x()), int(y())));
 

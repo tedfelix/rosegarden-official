@@ -119,7 +119,7 @@
 #include <QLabel>
 #include <QPixmap>
 #include <QPoint>
-#include <qscrollview.h>
+#include <QScrollArea>
 #include <QSize>
 #include <QSlider>
 #include <QString>

@@ -19,9 +19,12 @@
 #ifndef _RG_QCANVASMATRIXDIAMOND_H_
 #define _RG_QCANVASMATRIXDIAMOND_H_
 
-#include <Q3Canvas>
 #include "QCanvasMatrixRectangle.h"
-#include <qpointarray.h>
+
+#include <Q3Canvas>
+#include <QPolygon>
+#include <Q3PointArray>
+//#include <qpointarray.h>
 
 
 class QPainter;
@@ -43,7 +46,8 @@ public:
     QCanvasMatrixDiamond(MatrixElement&, Q3Canvas *);
     ~QCanvasMatrixDiamond();
 
-    QPointArray areaPoints() const;
+ 	Q3PointArray areaPoints() const;
+//	QPolygon areaPoints() const;
 
 protected:
     void drawShape(QPainter &);

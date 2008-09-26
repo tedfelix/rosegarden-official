@@ -30,15 +30,16 @@ TrivialVelocityDialog::TrivialVelocityDialog(QWidget *parent, QString label, int
         setModal(true);
     setWindowTitle(label);
 
-    QGridLayout *metagrid = new QGridLayout;
-    setLayout(metagrid);
+    //QGridLayout *
+	m_metagrid = new QGridLayout;
+    setLayout(m_metagrid);
     QWidget *hbox = new QWidget(this);
     QHBoxLayout *hboxLayout = new QHBoxLayout;
-    metagrid->addWidget(hbox, 0, 0);
+    m_metagrid->addWidget(hbox, 0, 0);
 
         QLabel *child_3 = new QLabel(label, hbox );
         hboxLayout->addWidget(child_3);
-        m_spin = new QSpinBox( 1, hbox );
+        m_spin = new QSpinBox( hbox );
         hboxLayout->addWidget(m_spin);
         hbox->setLayout(hboxLayout);
         m_spin->setValue(deft);
@@ -49,8 +50,8 @@ TrivialVelocityDialog::getVelocity()
 {
     return m_spin->value();
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-    metagrid->addWidget(buttonBox, 1, 0);
-    metagrid->setRowStretch(0, 10);
+    m_metagrid->addWidget(buttonBox, 1, 0);
+    m_metagrid->setRowStretch(0, 10);
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }

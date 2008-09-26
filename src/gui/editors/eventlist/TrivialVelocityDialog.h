@@ -22,6 +22,7 @@
 #include <QDialogButtonBox>
 
 class QSpinBox;
+class QGridLayout;
 
 namespace Rosegarden {
         
@@ -34,6 +35,7 @@ public:
 
 protected:
     QSpinBox *m_spin;
+	QGridLayout *m_metagrid;
 };
 
 }

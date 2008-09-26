@@ -584,14 +584,14 @@ EditViewBase::slotTestClipboard()
     if (getDocument()->getClipboard()->isEmpty()) {
         RG_DEBUG << "EditViewBase::slotTestClipboard(): empty" << endl;
 
-        stateChanged("have_clipboard", KXMLGUIClient::StateReverse);
-        stateChanged("have_clipboard_single_segment",
+        rgTempQtIV->stateChanged("have_clipboard", KXMLGUIClient::StateReverse);
+		rgTempQtIV->stateChanged("have_clipboard_single_segment",
                      KXMLGUIClient::StateReverse);
     } else {
         RG_DEBUG << "EditViewBase::slotTestClipboard(): not empty" << endl;
 
-        stateChanged("have_clipboard", KXMLGUIClient::StateNoReverse);
-        stateChanged("have_clipboard_single_segment",
+		rgTempQtIV->stateChanged("have_clipboard", KXMLGUIClient::StateNoReverse);
+		rgTempQtIV->stateChanged("have_clipboard_single_segment",
                      (getDocument()->getClipboard()->isSingleSegment() ?
                       KXMLGUIClient::StateNoReverse :
                       KXMLGUIClient::StateReverse));
@@ -621,7 +621,7 @@ EditViewBase::slotStateChanged(const QString& s,
                                bool noReverse)
 {
     RG_DEBUG << "EditViewBase::slotStateChanged " << s << ", " << noReverse << endl;
-    stateChanged(s, noReverse ? KXMLGUIClient::StateNoReverse : KXMLGUIClient::StateReverse);
+	rgTempQtIV->stateChanged(s, noReverse ? KXMLGUIClient::StateNoReverse : KXMLGUIClient::StateReverse);
 }
 
 void

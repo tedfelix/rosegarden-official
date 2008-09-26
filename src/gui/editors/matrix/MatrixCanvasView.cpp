@@ -43,8 +43,9 @@ MatrixCanvasView::MatrixCanvasView(MatrixStaff& staff,
                                    SnapGrid *snapGrid,
                                    bool drumMode,
                                    Q3Canvas *viewing, QWidget *parent,
-                                   const char *name, WFlags f)
-        : RosegardenCanvasView(viewing, parent, name, f),
+                                   const char *name
+								  )
+        : RosegardenCanvasView(viewing, parent, name),
         m_staff(staff),
         m_snapGrid(snapGrid),
         m_drumMode(drumMode),

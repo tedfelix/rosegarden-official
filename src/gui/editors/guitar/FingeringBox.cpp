@@ -21,10 +21,18 @@
 
 #include "misc/Debug.h"
 
+#include <QMouseEvent>
+
 namespace Rosegarden
 {
 
-FingeringBox::FingeringBox(unsigned int nbFrets, unsigned int nbStrings, bool editable, QWidget *parent, const char* name)
+FingeringBox::FingeringBox(
+		unsigned int nbFrets,
+		unsigned int nbStrings, 
+		bool editable, 
+		QWidget *parent, 
+		const char* name
+	)
     : QFrame(parent, name),
     m_nbFretsDisplayed(nbFrets),
     m_startFret(1),
@@ -53,7 +61,9 @@ FingeringBox::init()
 {
     setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     setFixedSize(IMG_WIDTH, IMG_HEIGHT);
-    setBackgroundMode(PaletteBase);
+	
+    //setBackgroundMode(PaletteBase);
+	setBackgroundRole( QPalette::Base );
     if (m_editable)
         setMouseTracking(true);
     
@@ -176,7 +186,7 @@ FingeringBox::mousePressEvent(QMouseEvent *event)
     if (!m_editable)
         return;
         
-    if((event->button() == LeftButton) && m_editable) {
+	if((event->button() == Qt::LeftButton) && m_editable) {
 
         // Find string position
         m_press_string_num = getStringNumber(event->pos());

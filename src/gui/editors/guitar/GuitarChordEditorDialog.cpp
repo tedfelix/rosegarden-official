@@ -43,8 +43,11 @@ GuitarChordEditorDialog::GuitarChordEditorDialog(Guitar::Chord& chord, const Gui
 #warning Dialog needs QDialogButtonBox(Ok|QDialogButtonBox::Cancel)
 
     QWidget *page = new QWidget(this);
-    setMainWidget(page);
-    QGridLayout *topLayout = new QGridLayout(page, 7, 2, spacingHint());
+//    setMainWidget(page);
+	QVBoxLayout *mainLayout = new QVBoxLayout(this);
+	mainLayout->addWidget(page);
+	
+    QGridLayout *topLayout = new QGridLayout(page, 7, 2); //, spacingHint());
 
     topLayout->addWidget(new QLabel(i18n("Start fret"), page), 0, 1);
     m_startFret = new QSpinBox(1, 24, 1, page);
@@ -97,7 +100,9 @@ GuitarChordEditorDialog::slotOk()
     m_chord.setExt(m_ext->currentText());
     m_chord.setRoot(m_rootNotesList->currentText());
     m_chord.setUserChord(true);            
-    KDialogBase::slotOk();
+	
+//    KDialogBase::slotOk();
+	accept();
 }
 
 

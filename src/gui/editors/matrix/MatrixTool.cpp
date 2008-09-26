@@ -35,31 +35,45 @@ MatrixTool::MatrixTool(const QString& menuName, MatrixView* parent)
 void
 MatrixTool::slotSelectSelected()
 {
-    m_parentView->actionCollection()->action("select")->activate();
+//	m_parentView->actionCollection()->action("select")->activate();
+// 	QList<QAction*> al = m_parentView->findChildren("select");
+//	m_parentView->qa_select->activate();
+	
+	//@@@ fix: method to find QActions could be too slow
+	QAction* ac = m_parentView->findChild<QAction*>("select");
+	ac->setEnabled(true);
 }
 
 void
 MatrixTool::slotMoveSelected()
 {
-    m_parentView->actionCollection()->action("move")->activate();
+//     m_parentView->actionCollection()->action("move")->activate();
+	QAction* ac = m_parentView->findChild<QAction*>("move");
+	ac->setEnabled(true);
 }
 
 void
 MatrixTool::slotEraseSelected()
 {
-    m_parentView->actionCollection()->action("erase")->activate();
+//     m_parentView->actionCollection()->action("erase")->activate();
+	QAction* ac = m_parentView->findChild<QAction*>("erase");
+	ac->setEnabled(true);
 }
 
 void
 MatrixTool::slotResizeSelected()
 {
-    m_parentView->actionCollection()->action("resize")->activate();
+//     m_parentView->actionCollection()->action("resize")->activate();
+	QAction* ac = m_parentView->findChild<QAction*>("resize");
+	ac->setEnabled(true);
 }
 
 void
 MatrixTool::slotDrawSelected()
 {
-    m_parentView->actionCollection()->action("draw")->activate();
+//     m_parentView->actionCollection()->action("draw")->activate();
+	QAction* ac = m_parentView->findChild<QAction*>("draw");
+	ac->setEnabled(true);
 }
 
 const SnapGrid &
