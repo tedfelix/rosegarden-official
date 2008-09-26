@@ -60,6 +60,7 @@ MakeOrnamentDialog::MakeOrnamentDialog(QDialogButtonBox::QWidget *parent,
     QWidget *hbox = new QWidget;
     QHBoxLayout *hboxLayout = new QHBoxLayout;
     nameBoxLayout->addWidget(hbox);
+    nameBox->setLayout(nameBoxLayout);
 
     QLabel *child_3 = new QLabel(i18n("Name:  "));
     hboxLayout->addWidget(child_3);
