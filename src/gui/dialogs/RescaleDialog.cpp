@@ -62,10 +62,14 @@ RescaleDialog::RescaleDialog(QDialogButtonBox::QWidget *parent,
 
     if (showCloseGapOption) {
         QGroupBox *optionBox = new QGroupBox( i18n("Options"), vbox );
+        QVBoxLayout *optionBoxLayout = new QVBoxLayout;
         vboxLayout->addWidget(optionBox);
         vbox->setLayout(vboxLayout);
         m_closeGap = new QCheckBox(i18n("Adjust times of following events accordingly"),
                                    optionBox);
+        optionBoxLayout->addWidget(m_closeGap);
+        optionBox->setLayout(optionBoxLayout);
+
         QSettings settings;
         settings.beginGroup( GeneralOptionsConfigGroup );
 
