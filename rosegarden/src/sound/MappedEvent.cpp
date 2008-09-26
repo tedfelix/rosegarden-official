@@ -22,6 +22,9 @@
 #include "BaseProperties.h"
 #include "Midi.h"
 #include "MidiTypes.h"
+#include "NotationTypes.h" // for Note::EventType
+
+#include <cassert>
 
 #define DEBUG_MAPPEDEVENT 1
 
@@ -32,7 +35,7 @@ MappedEvent::MappedEvent(InstrumentId id,
                          const Event &e,
                          const RealTime &eventTime,
                          const RealTime &duration):
-        m_trackId(0),
+        m_trackId(NO_TRACK),
         m_instrument(id),
         m_type(MidiNote),
         m_data1(0),

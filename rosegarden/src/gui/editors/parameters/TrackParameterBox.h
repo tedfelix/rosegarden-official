@@ -31,6 +31,7 @@
 #include <qstring.h>
 #include <qcheckbox.h> // #include <QCheckBox> in QT4, thinking ahead
 #include <vector>
+#include "Composition.h"
 
 
 class QWidget;
@@ -47,7 +48,8 @@ namespace Rosegarden
 class RosegardenGUIDoc;
 
 
-class TrackParameterBox : public RosegardenParameterBox
+class TrackParameterBox : public RosegardenParameterBox,
+                          public CompositionObserver
 {
 Q_OBJECT
         
@@ -61,6 +63,10 @@ public:
     virtual void showAdditionalControls(bool showThem);
 
     virtual QString getPreviousBox(RosegardenParameterArea::Arrangement) const;
+
+    // CompositionObserver interface
+    //
+    virtual void trackDeleted(const Composition *, TrackId);
 
 public slots:
     void slotSelectedTrackChanged();

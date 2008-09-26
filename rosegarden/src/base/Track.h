@@ -27,6 +27,9 @@
 #include "Instrument.h"
 #include "Device.h"
 
+#define NO_TRACK 0xDEADBEEF
+
+
 namespace Rosegarden
 {
 class Composition;
