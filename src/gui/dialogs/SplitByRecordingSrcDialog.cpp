@@ -52,13 +52,14 @@ SplitByRecordingSrcDialog::SplitByRecordingSrcDialog(QDialogButtonBox::QWidget *
 
 
     QGroupBox *groupBox = new QGroupBox( i18n("Recording Source"), vBox );
+    groupBox->setContentsMargins(10, 10, 10, 10);
+    QGridLayout *layout = new QGridLayout(groupBox);
+    layout->setSpacing(5);
     vBoxLayout->addWidget(groupBox);
     vBox->setLayout(vBoxLayout);
-    QFrame *frame = new QFrame(groupBox);
-    QGridLayout *layout = new QGridLayout(frame, 2, 2, 10, 5);
 
-    layout->addWidget(new QLabel( i18n("Channel:"), frame ), 0, 0);
-    m_channel = new QComboBox( frame );
+    layout->addWidget(new QLabel( i18n("Channel:"), groupBox ), 0, 0);
+    m_channel = new QComboBox( groupBox );
     m_channel->setMaxVisibleItems( 17 );
     layout->addWidget(m_channel, 0, 1);
     QSpacerItem *spacer = new QSpacerItem( 1, 1, QSizePolicy::Expanding, QSizePolicy::Minimum );
@@ -69,8 +70,8 @@ SplitByRecordingSrcDialog::SplitByRecordingSrcDialog(QDialogButtonBox::QWidget *
         m_channel->addItem(QString::number(i));
     }
 
-    layout->addWidget(new QLabel( i18n("Device:"), frame ), 1, 0);
-    m_device = new QComboBox( frame );
+    layout->addWidget(new QLabel( i18n("Device:"), groupBox ), 1, 0);
+    m_device = new QComboBox( groupBox );
     layout->addWidget( m_device, 1, 1, 1, 2 - 2);
 
     m_deviceIds.clear();
@@ -99,6 +100,9 @@ SplitByRecordingSrcDialog::SplitByRecordingSrcDialog(QDialogButtonBox::QWidget *
 
     m_channel->setCurrentIndex(0);
     m_device->setCurrentIndex(0);
+
+    groupBox->setLayout(layout);
+
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel );
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
