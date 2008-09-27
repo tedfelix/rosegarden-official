@@ -1050,14 +1050,17 @@ SimpleEventEditDialog::slotSysexLoad()
     QFile file(path);
     file.open(QIODevice::ReadOnly);
     std::string s;
-    unsigned char c;
-    while (((c = (unsigned char)file.getch()) != 0xf0) && (file.status() == IO_Ok))
-        ;
-    while ( file.status() == IO_Ok ) {
+    char c;
+    bool ioOk;
+
+    while (ioOk = file.getChar(&c)) {
+        if (c == static_cast<char>(0xf0)) break;
+    }
+    while (ioOk) {
         s += c;
-        if (c == 0xf7 )
+        if (c == static_cast<char>(0xf7))
             break;
-        c = (unsigned char)file.getch();
+        ioOk = file.getChar(&c);
     }
     file.close();
     m_metaEdit->setText(strtoqstr(SystemExclusive::toHex(s)));
@@ -1076,7 +1079,8 @@ SimpleEventEditDialog::slotSysexSave()
     QFile file(path);
     file.open(QIODevice::WriteOnly);
     SystemExclusive sysEx(m_event);
-    file.writeBlock(sysEx.getRawData().c_str(), sysEx.getRawData().length());
+    file.write(sysEx.getRawData().c_str(),
+               static_cast<qint64>(sysEx.getRawData().length()));
     file.close();
 }
 
