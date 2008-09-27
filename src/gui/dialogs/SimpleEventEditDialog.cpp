@@ -32,10 +32,9 @@
 #include <QDialogButtonBox>
 #include <QFileDialog>
 #include <QCheckBox>
-#include <QDialog>
 #include <QFile>
-#include <QFrame>
 #include <QGroupBox>
+#include <QGridLayout>
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
@@ -73,12 +72,11 @@ SimpleEventEditDialog::SimpleEventEditDialog(QDialogButtonBox::QWidget *parent,
     metagrid->addWidget(vbox, 0, 0);
 
 
-    QGroupBox *groupBox = new QGroupBox( i18n("Event Properties"), vbox );
-    vboxLayout->addWidget(groupBox);
-
-    QFrame *frame = new QFrame(groupBox);
-
-    QGridLayout *layout = new QGridLayout(frame, 7, 3, 5, 5);
+    QGroupBox *frame = new QGroupBox( i18n("Event Properties"), vbox );
+    frame->setContentsMargins(5, 5, 5, 5);
+    QGridLayout *layout = new QGridLayout(frame);
+    layout->setSpacing(5);
+    vboxLayout->addWidget(frame);
 
     layout->addWidget(new QLabel(i18n("Event type:"), frame), 0, 0);
 
@@ -118,7 +116,10 @@ SimpleEventEditDialog::SimpleEventEditDialog(QDialogButtonBox::QWidget *parent,
 
     m_timeLabel = new QLabel(i18n("Absolute time:"), frame);
     layout->addWidget(m_timeLabel, 1, 0);
-    m_timeSpinBox = new QSpinBox(INT_MIN, INT_MAX, Note(Note::Shortest).getDuration(), frame);
+    m_timeSpinBox = new QSpinBox(frame);
+    m_timeSpinBox->setMinimum(INT_MIN);
+    m_timeSpinBox->setMaximum(INT_MAX);
+    m_timeSpinBox->setSingleStep(Note(Note::Shortest).getDuration());
     m_timeEditButton = new QPushButton("edit", frame);
     layout->addWidget(m_timeSpinBox, 1, 1);
     layout->addWidget(m_timeEditButton, 1, 2);
@@ -130,7 +131,10 @@ SimpleEventEditDialog::SimpleEventEditDialog(QDialogButtonBox::QWidget *parent,
 
     m_durationLabel = new QLabel(i18n("Duration:"), frame);
     layout->addWidget(m_durationLabel, 2, 0);
-    m_durationSpinBox = new QSpinBox(0, INT_MAX, Note(Note::Shortest).getDuration(), frame);
+    m_durationSpinBox = new QSpinBox(frame);
+    m_durationSpinBox->setMinimum(0);
+    m_durationSpinBox->setMaximum(INT_MAX);
+    m_durationSpinBox->setSingleStep(Note(Note::Shortest).getDuration());
     m_durationEditButton = new QPushButton("edit", frame);
     layout->addWidget(m_durationSpinBox, 2, 1);
     layout->addWidget(m_durationEditButton, 2, 2);
@@ -183,6 +187,8 @@ SimpleEventEditDialog::SimpleEventEditDialog(QDialogButtonBox::QWidget *parent,
     m_sysexSaveButton = new QPushButton(i18n("Save data"), frame);
     layout->addWidget(m_sysexSaveButton, 4, 2);
 
+    frame->setLayout(layout);
+
     connect(m_metaEdit, SIGNAL(textChanged(const QString &)),
             SLOT(slotMetaChanged(const QString &)));
     connect(m_sysexLoadButton, SIGNAL(released()),
@@ -191,24 +197,26 @@ SimpleEventEditDialog::SimpleEventEditDialog(QDialogButtonBox::QWidget *parent,
             SLOT(slotSysexSave()));
 
     m_notationGroupBox = new QGroupBox( i18n("Notation Properties"), vbox );
+    m_notationGroupBox->setContentsMargins(5, 5, 5, 5);
+    layout = new QGridLayout(m_notationGroupBox);
+    layout->setSpacing(5);
     vboxLayout->addWidget(m_notationGroupBox);
     vbox->setLayout(vboxLayout);
 
-    frame = new QFrame(m_notationGroupBox);
-
-    layout = new QGridLayout(frame, 3, 3, 5, 5);
-
-    m_lockNotationValues = new QCheckBox(i18n("Lock to changes in performed values"), frame);
+    m_lockNotationValues = new QCheckBox(i18n("Lock to changes in performed values"), m_notationGroupBox);
     layout->addWidget(m_lockNotationValues, 0, 0, 0- 0+1, 2- 1);
     m_lockNotationValues->setChecked(true);
 
     connect(m_lockNotationValues, SIGNAL(released()),
             SLOT(slotLockNotationChanged()));
 
-    m_notationTimeLabel = new QLabel(i18n("Notation time:"), frame);
+    m_notationTimeLabel = new QLabel(i18n("Notation time:"), m_notationGroupBox);
     layout->addWidget(m_notationTimeLabel, 1, 0);
-    m_notationTimeSpinBox = new QSpinBox(INT_MIN, INT_MAX, Note(Note::Shortest).getDuration(), frame);
-    m_notationTimeEditButton = new QPushButton("edit", frame);
+    m_notationTimeSpinBox = new QSpinBox(m_notationGroupBox);
+    m_notationTimeSpinBox->setMinimum(INT_MIN);
+    m_notationTimeSpinBox->setMaximum(INT_MAX);
+    m_notationTimeSpinBox->setSingleStep(Note(Note::Shortest).getDuration());
+    m_notationTimeEditButton = new QPushButton("edit", m_notationGroupBox);
     layout->addWidget(m_notationTimeSpinBox, 1, 1);
     layout->addWidget(m_notationTimeEditButton, 1, 2);
 
@@ -217,12 +225,17 @@ SimpleEventEditDialog::SimpleEventEditDialog(QDialogButtonBox::QWidget *parent,
     connect(m_notationTimeEditButton, SIGNAL(released()),
             SLOT(slotEditNotationAbsoluteTime()));
 
-    m_notationDurationLabel = new QLabel(i18n("Notation duration:"), frame);
+    m_notationDurationLabel = new QLabel(i18n("Notation duration:"), m_notationGroupBox);
     layout->addWidget(m_notationDurationLabel, 2, 0);
-    m_notationDurationSpinBox = new QSpinBox(0, INT_MAX, Note(Note::Shortest).getDuration(), frame);
-    m_notationDurationEditButton = new QPushButton("edit", frame);
+    m_notationDurationSpinBox = new QSpinBox(m_notationGroupBox);
+    m_notationDurationSpinBox->setMinimum(0);
+    m_notationDurationSpinBox->setMaximum(INT_MAX);
+    m_notationDurationSpinBox->setSingleStep(Note(Note::Shortest).getDuration());
+    m_notationDurationEditButton = new QPushButton("edit", m_notationGroupBox);
     layout->addWidget(m_notationDurationSpinBox, 2, 1);
     layout->addWidget(m_notationDurationEditButton, 2, 2);
+
+    m_notationGroupBox->setLayout(layout);
 
     connect(m_notationDurationSpinBox, SIGNAL(valueChanged(int)),
             SLOT(slotNotationDurationChanged(int)));
@@ -843,7 +856,7 @@ SimpleEventEditDialog::getEvent()
 void
 SimpleEventEditDialog::slotEventTypeChanged(int value)
 {
-    m_type = qstrtostr(m_typeCombo->text(value));
+    m_type = qstrtostr(m_typeCombo->itemText(value));
     m_modified = true;
 
     if (m_type != m_event.getType())
