@@ -51,6 +51,7 @@ PasteNotationDialog::PasteNotationDialog(QDialogButtonBox::QWidget *parent,
 
 
     QGroupBox *pasteTypeGroup = new QGroupBox( i18n("Paste type"), vbox );
+    QVBoxLayout *pasteTypeGroupLayout = new QVBoxLayout;
     vboxLayout->addWidget(pasteTypeGroup);
 
     PasteEventsCommand::PasteTypeMap pasteTypes =
@@ -60,20 +61,27 @@ PasteNotationDialog::PasteNotationDialog(QDialogButtonBox::QWidget *parent,
             i != pasteTypes.end(); ++i) {
 
         QRadioButton *button = new QRadioButton(i->second, pasteTypeGroup);
+        pasteTypeGroupLayout->addWidget(button);
         button->setChecked(m_defaultType == i->first);
         QObject::connect(button, SIGNAL(clicked()),
                          this, SLOT(slotPasteTypeChanged()));
 
         m_pasteTypeButtons.push_back(button);
     }
+    pasteTypeGroup->setLayout(pasteTypeGroupLayout);
+
 
     QGroupBox *setAsDefaultGroup = new QGroupBox( i18n("Options"), vbox );
+    QVBoxLayout *setAsDefaultGroupLayout = new QVBoxLayout;
     vboxLayout->addWidget(setAsDefaultGroup);
     vbox->setLayout(vboxLayout);
 
     m_setAsDefaultButton = new QCheckBox
                            (i18n("Make this the default paste type"), setAsDefaultGroup);
+    setAsDefaultGroupLayout->addWidget(m_setAsDefaultButton);
     m_setAsDefaultButton->setChecked(true);
+    setAsDefaultGroup->setLayout(setAsDefaultGroupLayout);
+
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help );
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
