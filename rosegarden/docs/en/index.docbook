@@ -829,7 +829,13 @@ table for keyboard shortcuts-SOM -->
 		When there are only a few staffs, this option places the
 		extra vertical space at the bottom of the page.</para>
 	    </listitem>
-	</varlistentry>	<varlistentry>
+	</varlistentry>
+	<varlistentry> <term>Interpret chord texts as lead sheet chord names</term>
+	  <listitem><para> Tick this item if you wish to turn on the fancy LilyPond jazz
+	  chords for <link linkend="lead-sheets">Lead Sheets.</link> instead of the
+	  standard &rosegarden; chords.</para> </listitem> </varlistentry>
+
+	    <varlistentry>
 	  <term>Enable <quote>point-and-click</quote> debugging</term>
 	    <listitem><para>
 		If you export the LilyPond source with 
@@ -4970,7 +4976,7 @@ or double flat. </para></note>  This might be enough for your needs but if you w
 <userinput>m</userinput> (minor), <userinput>dim</userinput>,
 <userinput>sus</userinput>, or <userinput>aug</userinput> you need
 to insert a <userinput>:</userinput> followed by your modifier (for example;
-<userinput>g:m7</userinput> or gis:sus4). For a fuller description of the syntax go to <ulink
+<userinput>g:m7</userinput> or <userinput>gis:sus4</userinput>). For a fuller description of the syntax go to <ulink
 url="http://www.rosegardenmusic.com/wiki/chord_names_for_lilypond_export">this
 explanation.</ulink> <!-- I'll change the url later when the page is done. SOM-->
  </para>
