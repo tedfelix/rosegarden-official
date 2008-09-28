@@ -19,7 +19,8 @@
 #ifndef _RG_BASETOOLBOX_H_
 #define _RG_BASETOOLBOX_H_
 
-#include <QMap>
+//#include <QMap>
+#include <QHash>
 #include <QObject>
 
 
@@ -55,7 +56,7 @@ protected:
     virtual BaseTool* createTool(const QString& toolName) = 0;
 
 	// was: qdict<BaseTool> m_tools;
-	QMap<QString, BaseTool> m_tools;		// was qdict  //### hm... QMap ..check later
+	QHash<QString, BaseTool*> m_tools;		// was qdict  //### hm... QMap ..check later
 	
 };
 

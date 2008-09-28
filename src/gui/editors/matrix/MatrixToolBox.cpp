@@ -70,7 +70,8 @@ EditTool* MatrixToolBox::createTool(const QString& toolName)
         return 0;
     }
 
-    m_tools.insert(toolName, tool);
+//	m_tools.insert(toolName, tool);
+	m_tools[toolName] = dynamic_cast<BaseTool*>( tool );
 
     return tool;
     

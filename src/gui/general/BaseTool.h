@@ -23,7 +23,7 @@
 #include <QString>
 
 
-class QPopupMenu;
+class QMenu;
 class KXMLGUIFactory;
 
 
@@ -90,8 +90,8 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    QString m_menuName;
-    QPopupMenu* m_menu;
+    QString 	m_menuName;
+    QMenu*		m_menu;
 
     KXMLGUIFactory* m_parentFactory;
 

@@ -17,7 +17,6 @@
 
 
 #include "AudioPropertiesPage.h"
-
 #include "misc/Strings.h"
 #include "ConfigurationPage.h"
 #include "document/RosegardenGUIDoc.h"
@@ -26,11 +25,11 @@
 #include "gui/general/FileSource.h"
 #include "sound/AudioFileManager.h"
 #include "TabbedConfigurationPage.h"
-#include <QSettings>
 
 //#include <kdiskfreesp.h>
-#include <kdiskfreespace.h>	// note: a kde4 include
+//#include <kdiskfreespace.h>	// note: a kde4 include
 
+#include <QSettings>
 #include <QFileDialog>
 #include <QFile>
 #include <QByteArray>
@@ -43,6 +42,26 @@
 #include <QTabWidget>
 #include <QWidget>
 #include <QLayout>
+
+// for finding out free disk-space:
+#include <sys/vfs.h> 
+// or 
+//#include <sys/statfs.h>
+
+/*	// related:
+struct statfs {
+   long    f_type;     // type of filesystem (see below) 
+   long    f_bsize;    // optimal transfer block size 
+   long    f_blocks;   // total data blocks in file system 
+   long    f_bfree;    // free blocks in fs 
+   long    f_bavail;   // free blocks avail to non-superuser 
+   long    f_files;    // total file nodes in file system 
+   long    f_ffree;    // free file nodes in fs 
+   fsid_t  f_fsid;     // file system id 
+   long    f_namelen;  // maximum length of filenames 
+};
+*/
+
 
 
 namespace Rosegarden
@@ -92,17 +111,45 @@ AudioPropertiesPage::calculateStats()
 {
     // This stolen from KDE libs kfile/kpropertiesdialog.cpp
     //
-	QString mountPoint = KIO::findPathMountPoint(m_path->text());
+//	QString mountPoint = KIO::findPathMountPoint(m_path->text());
 	
 	//FileSource source( m_path->text() );
 	//
+	//@@@ check re-implementation of calc stat (free disk-space)
+	struct statfs fiData;	// NOTE: or statfs64 for 64bit systems
+	//struct statfs *fpData;
+	char fnPath[128];
+	int err;
+	unsigned long long spaceTotal;
+	unsigned long long spaceFree;
+	unsigned long long spaceFilled;
+	strcpy( fnPath, qStrToCharPtrLocal8(m_path->text()) );
 	
+	// get stat
+	err = statfs( fnPath, &fiData );
+	// ms-windows: GetDiskFreeSpaceEx()
+	
+	if ( err != 0 ){
+		// stat error
+	}
+	spaceFree = ((unsigned long long) fiData.f_bavail) * ((unsigned long long) fiData.f_bsize);
+	spaceTotal = ((unsigned long long) fiData.f_blocks) * ((unsigned long long) fiData.f_bsize);
+	spaceFilled = spaceTotal - spaceFree;
+	// bytes to kilo bytes:
+	spaceFree = spaceFree / 1024;
+	spaceTotal = spaceTotal / 1024;
+	spaceFilled = spaceFilled / 1024;
+	slotFoundMountPoint( m_path->text(), spaceTotal, spaceFilled, spaceFree );
+	
+	
+	/*
     KDiskFreeSpace * job = new KDiskFreeSpace();
     connect(job, SIGNAL(foundMountPoint(const QString&, unsigned long, unsigned long,
                                         unsigned long)),
             this, SLOT(slotFoundMountPoint(const QString&, unsigned long, unsigned long,
                                            unsigned long)));
     job->readDF(mountPoint);
+	*/
 }
 
 void
@@ -111,9 +158,11 @@ AudioPropertiesPage::slotFoundMountPoint(const QString&,
         unsigned long /*kBUsed*/,
         unsigned long kBAvail )
 {
-    m_diskSpace->setText(i18n("%1 out of %2 (%3% used)",
-                          KIO::convertSizeFromKB(kBAvail),
-                          KIO::convertSizeFromKB(kBSize),
+    m_diskSpace->setText(i18n("%1 kB out of %2 kB (%3% kB used)",
+                          //KIO::convertSizeFromKB
+								  (kBAvail),
+                          //KIO::convertSizeFromKB
+								   (kBSize),
                            100 - (int)(100.0 * kBAvail / kBSize) ));
 
 

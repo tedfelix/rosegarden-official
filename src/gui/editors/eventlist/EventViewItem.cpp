@@ -33,7 +33,12 @@ EventViewItem::compare(QTreeWidgetItem *i, int col, bool ascending) const
 {
     EventViewItem *ei = dynamic_cast<EventViewItem *>(i);
 
-	//    if (!ei) return QTreeWidgetItem::compare(i, col, ascending);  //&&& compare does not exist in QTreeWidgetItem
+	return 0;
+	//&&& reimplement compare ?? required ??
+	//
+	//    if (!ei) return QTreeWidgetItem::compare(i, col, ascending);  // compare does not exist in QTreeWidgetItem
+	/*
+	
 	if (!ei) return 0;	// fix
 	
 
@@ -62,6 +67,7 @@ EventViewItem::compare(QTreeWidgetItem *i, int col, bool ascending) const
     } else {               // numeric comparison
         return key(col, ascending).toInt() - i->key(col, ascending).toInt();
     }
+	*/
 }
 
 }

@@ -22,15 +22,15 @@
 #include <QObject>
 #include <QString>
 #include <QWidget>
-
+//#include <QHash>
 
 namespace Rosegarden
 {
 
 BaseToolBox::BaseToolBox(QWidget* parent)
         : QObject(parent),
-        m_tools(17,  // default size, from the Qt docs
-                false) // but we want it to be case insensitive
+        m_tools()//17,  // default size, from the Qt docs
+                //false) // but we want it to be case insensitive
 {
     //m_tools.setAutoDelete(true);	//&&&
 }
