@@ -2015,27 +2015,49 @@ RosegardenGUIDoc::updateRecordingMIDISegment()
 }
 
 void
-RosegardenGUIDoc::transposeRecordedNote(Segment *s, Segment::iterator i)
+RosegardenGUIDoc::transposeRecordedSegment(Segment *s)
 {
-    if ((*i)->isa(Note::EventType)) {
-        Composition *c = s->getComposition();
-        if (!c) return;
-        Track *t = c->getTrackById(s->getTrack());
-        if (!t) return;
-        int transpose = t->getTranspose();
-        if (transpose != 0) {
-            // adjust the notation by the opposite of track transpose so the
-            // resulting recording will play correctly, and notation will
-            // read correctly; tentative fix for #1597279
-            if (!(*i)->has(PITCH)) {
-                std::cerr << "WARNING! RosegardenGUIDoc::transposeRecordedNote: Note has no pitch" << std::endl;
-            } else {
-                int pitch = (*i)->get<Int>(PITCH) - transpose;
-                std::cerr << "pitch = " << pitch << " after transpose = " << transpose << " (for track " << s->getTrack() << ")" << std::endl;
-                (*i)->set<Int>(PITCH, pitch);
-            }
+        // get a selection of all the events in the segment, since we apparently
+        // can't just iterate through a segment's events without one.  (?)
+        EventSelection *selectedWholeSegment = new EventSelection(
+            *s,
+            s->getStartTime(),
+            s->getEndMarkerTime());
+
+         // Say we've got a recorded segment destined for a Bb trumpet track.
+         // It will have transpose of -2, and we want to move the notation +2 to
+         // compensate, so the user hears the same thing she just recorded
+         //
+         // (All debate over whether this is the right way to go with this whole
+         // issue is now officially settled, and no longer tentative.)
+         Composition *c = s->getComposition();
+         if (c) {
+             Track *t = c->getTrackById(s->getTrack());
+             if (t) {
+                 // pull transpose from the destination track
+                 int semitones = t->getTranspose();
+
+                 for (EventSelection::eventcontainer::iterator i =
+                      selectedWholeSegment->getSegmentEvents().begin();
+                     i != selectedWholeSegment->getSegmentEvents().end(); ++i) {
+                     
+                     if ((*i)->isa(Note::EventType)) {
+                         if (semitones != 0) {
+                            if (!(*i)->has(PITCH)) {
+                                std::cerr << "WARNING! RosegardenGUIDoc::transposeRecordedSegment: Note has no pitch!  Andy says \"Oh noes!!!  ZOMFG!!!\"" << std::endl;
+                            } else {
+                                int pitch = (*i)->get<Int>(PITCH) - semitones;
+                                std::cerr << "pitch = " << pitch
+                                          << " after transpose = "
+                                          << semitones << " (for track "
+                                          << s->getTrack() << ")" << std::endl;
+                                (*i)->set<Int>(PITCH, pitch);
+                            }
+                        }
+                    }
+                 }
+             }
         }
-    }
 } 
 
 RosegardenGUIDoc::NoteOnRecSet *
@@ -2064,11 +2086,7 @@ RosegardenGUIDoc::storeNoteOnEvent(Segment *s, Segment::iterator it, int device,
 
     int pitch = (*it)->get<Int>(PITCH);
 
-    // store against the un-transposed pitch, because that's what
-    // will be looked up when the next event comes in
     m_noteOnEvents[device][channel][pitch].push_back(record);
-
-    transposeRecordedNote(s, it);
 }
 
 void
@@ -2236,6 +2254,16 @@ RosegardenGUIDoc::stopRecordingMidi()
 
         command->addCommand(new SegmentRecordCommand(s));
 
+        // Transpose the entire recorded segment as a unit, rather than
+        // transposing its individual events one time.  This allows the same
+        // source recording to be transposed to multiple destination tracks in
+        // different transpositions as part of one simultaneous operation from
+        // the user's perspective.  This wasn't done as a command, because it
+        // will be undone if the segment itself is undone, and I wanted to avoid
+        // writing a new command at a time when we've got something completely
+        // different over in the new Qt4 branch; to facilitate porting.
+        transposeRecordedSegment(s);
+        
         m_commandHistory->addCommand(command);
     }
 
@@ -2578,11 +2606,11 @@ RosegardenGUIDoc::addRecordMIDISegment(TrackId tid)
     recordMIDISegment->setLabel(appendLabel(label,
             qstrtostr(i18n("(recorded)"))));
 
+    // set segment transpose, color, highest/lowest playable from track parameters
     Clef clef = clefIndexToClef(track->getClef());
     recordMIDISegment->insert(clef.getAsEvent
-                              (recordMIDISegment->getStartTime()));
+                            (recordMIDISegment->getStartTime()));
 
-    // set segment transpose, color, highest/lowest playable from track parameters
     recordMIDISegment->setTranspose(track->getTranspose());
     recordMIDISegment->setColourIndex(track->getColor());
     recordMIDISegment->setHighestPlayable(track->getHighestPlayable());
