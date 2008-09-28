@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-30 08:14-0400\n"
+"POT-Creation-Date: 2008-09-27 22:44-0400\n"
 "PO-Revision-Date: 2008-09-01 11:03+0300\n"
 "Last-Translator: Heikki Junes\n"
 "Language-Team:  <fi@li.org>\n"
@@ -78,7 +78,7 @@ msgid "Document Properties"
 msgstr "Dokumentin ominaisuudet"
 
 #: ../src/gui/dialogs/MakeOrnamentDialog.cpp:38
-#: ../src/gui/editors/notation/NotationView.cpp:6126
+#: ../src/gui/editors/notation/NotationView.cpp:6139
 msgid "Make Ornament"
 msgstr "Tee koru"
 
@@ -160,7 +160,7 @@ msgid "Lyric"
 msgstr "Sanoitus"
 
 #: ../src/gui/dialogs/TextEventDialog.cpp:101
-#: ../src/gui/editors/notation/NotationView.cpp:4255
+#: ../src/gui/editors/notation/NotationView.cpp:4268
 msgid "Chord"
 msgstr "Sointu"
 
@@ -509,7 +509,7 @@ msgstr "korkein sävelkorkeus"
 
 #: ../src/gui/dialogs/UseOrnamentDialog.cpp:49
 #: ../src/gui/editors/notation/NotationView.cpp:1616
-#: ../src/gui/editors/notation/NotationView.cpp:6166
+#: ../src/gui/editors/notation/NotationView.cpp:6179
 msgid "Use Ornament"
 msgstr "Käytä korua"
 
@@ -717,7 +717,7 @@ msgstr "Tarkkuus"
 #: ../src/gui/configuration/NotationConfigurationPage.cpp:132
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:198
 #: ../src/gui/dialogs/ManageMetronomeDialog.cpp:121
-#: ../src/gui/editors/matrix/MatrixView.cpp:2130
+#: ../src/gui/editors/matrix/MatrixView.cpp:2139
 #: ../src/gui/editors/notation/NotationView.cpp:1579
 #: ../src/gui/widgets/QuantizeParameters.cpp:121
 #: ../src/gui/widgets/QuantizeParameters.cpp:294
@@ -1415,8 +1415,10 @@ msgid "Change key for selection"
 msgstr "Vaihda sävellajia valinnalle"
 
 #: ../src/gui/dialogs/IntervalDialog.cpp:82
-msgid "Adjust segment transposition in opposite direction (maintain audible pitch)"
-msgstr "Tee osan siirrot vastakkaiseen suuntaan (säilyttäen nuottien soittokorkeudet)"
+msgid ""
+"Adjust segment transposition in opposite direction (maintain audible pitch)"
+msgstr ""
+"Tee osan siirrot vastakkaiseen suuntaan (säilyttäen nuottien soittokorkeudet)"
 
 #: ../src/gui/dialogs/IntervalDialog.cpp:183
 #: ../src/gui/dialogs/IntervalDialog.cpp:213
@@ -1689,72 +1691,72 @@ msgstr "Liittämistyyppi"
 msgid "Make this the default paste type"
 msgstr "Tee tästä oletus-liittämistyyppi"
 
-#: ../src/gui/dialogs/ImportDeviceDialog.cpp:52
+#: ../src/gui/dialogs/ImportDeviceDialog.cpp:53
 msgid "Import from Device..."
 msgstr "Tuo laitteelta..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:2166
 #: ../src/gui/application/RosegardenGUIApp.cpp:2232
 #: ../src/gui/application/RosegardenGUIApp.cpp:7783
-#: ../src/gui/dialogs/ImportDeviceDialog.cpp:80
+#: ../src/gui/dialogs/ImportDeviceDialog.cpp:81
 #: ../src/sound/AudioFileManager.cpp:657
 #, c-format
 msgid "Cannot download file %1"
 msgstr "Ei voitu poimia tiedostoa %1"
 
-#: ../src/gui/dialogs/ImportDeviceDialog.cpp:92
+#: ../src/gui/dialogs/ImportDeviceDialog.cpp:93
 #, c-format
 msgid "Cannot open file %1"
 msgstr "Ei voitu avata tiedostoa %1"
 
-#: ../src/gui/dialogs/ImportDeviceDialog.cpp:99
+#: ../src/gui/dialogs/ImportDeviceDialog.cpp:100
 #, c-format
 msgid "No devices found in file %1"
 msgstr "Tiedostosta %1 ei löytynyt laitteita"
 
-#: ../src/gui/dialogs/ImportDeviceDialog.cpp:106
+#: ../src/gui/dialogs/ImportDeviceDialog.cpp:107
 msgid "Source device"
 msgstr "Lähdelaite"
 
-#: ../src/gui/dialogs/ImportDeviceDialog.cpp:111
+#: ../src/gui/dialogs/ImportDeviceDialog.cpp:112
 msgid "Import from: "
 msgstr "Tuo lähteestä: "
 
-#: ../src/gui/dialogs/ImportDeviceDialog.cpp:133
+#: ../src/gui/dialogs/ImportDeviceDialog.cpp:134
 #: ../src/gui/studio/DeviceEditorDialog.cpp:141
 #, c-format
 msgid "Device %1"
 msgstr "Laite %1"
 
-#: ../src/gui/dialogs/ImportDeviceDialog.cpp:148
+#: ../src/gui/dialogs/ImportDeviceDialog.cpp:149
 msgid "Import banks"
 msgstr "Tuo pankit"
 
-#: ../src/gui/dialogs/ImportDeviceDialog.cpp:149
+#: ../src/gui/dialogs/ImportDeviceDialog.cpp:150
 msgid "Import key mappings"
 msgstr "Tuo näppäimistökartoitukset"
 
-#: ../src/gui/dialogs/ImportDeviceDialog.cpp:150
+#: ../src/gui/dialogs/ImportDeviceDialog.cpp:151
 msgid "Import controllers"
 msgstr "Tuo ohjaimet"
 
-#: ../src/gui/dialogs/ImportDeviceDialog.cpp:153
+#: ../src/gui/dialogs/ImportDeviceDialog.cpp:154
 msgid "Import device name"
 msgstr "Tuo laitenimi"
 
-#: ../src/gui/dialogs/ImportDeviceDialog.cpp:159
+#: ../src/gui/dialogs/ImportDeviceDialog.cpp:160
 msgid "Bank import behavior"
 msgstr "Pankin tuonnin käytös"
 
-#: ../src/gui/dialogs/ImportDeviceDialog.cpp:161
+#: ../src/gui/dialogs/ImportDeviceDialog.cpp:162
 msgid "Merge banks"
 msgstr "Sulauta pankit"
 
-#: ../src/gui/dialogs/ImportDeviceDialog.cpp:162
+#: ../src/gui/dialogs/ImportDeviceDialog.cpp:163
 msgid "Overwrite banks"
 msgstr "Kirjoita pankkien päälle"
 
-#: ../src/gui/dialogs/ImportDeviceDialog.cpp:360
+#: ../src/gui/dialogs/ImportDeviceDialog.cpp:361
 msgid "Bank %1:%2"
 msgstr "Pankki %1:%2"
 
@@ -1991,7 +1993,7 @@ msgstr ""
 "toimintoa ei voida perua, eikä tapoja palauttaa näitä tiedostoja ole. "
 "<br>Oletko varma?</qt>"
 
-#: ../src/document/RosegardenGUIDoc.cpp:519
+#: ../src/document/RosegardenGUIDoc.cpp:521
 #: ../src/gui/dialogs/AudioManagerDialog.cpp:881
 msgid "File %1 could not be deleted."
 msgstr "Tiedostoa %1 ei voitu poistaa."
@@ -2028,7 +2030,7 @@ msgstr "Lisätään äänitiedosto..."
 msgid "Failed to add audio file. "
 msgstr "Äänitiedoston lisääminen epäonnistui. "
 
-#: ../src/document/RosegardenGUIDoc.cpp:2781
+#: ../src/document/RosegardenGUIDoc.cpp:2838
 #: ../src/gui/application/RosegardenGUIApp.cpp:2739
 #: ../src/gui/application/RosegardenGUIView.cpp:1573
 #: ../src/gui/dialogs/AudioManagerDialog.cpp:1115
@@ -2235,8 +2237,8 @@ msgid "First"
 msgstr "Ensimmäinen"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:200
-#: ../src/gui/editors/parameters/TrackParameterBox.cpp:531
-#: ../src/gui/editors/parameters/TrackParameterBox.cpp:550
+#: ../src/gui/editors/parameters/TrackParameterBox.cpp:535
+#: ../src/gui/editors/parameters/TrackParameterBox.cpp:554
 msgid "All"
 msgstr "Kaikki"
 
@@ -2450,7 +2452,8 @@ msgstr "Alennus - aseta %1 arvoksi"
 
 #: ../src/gui/dialogs/EventParameterDialog.cpp:63
 msgid "Alternating - set %1 to max and min on alternate events"
-msgstr "Vaihteleva - aseta %1 suurimmaksi ja pienimmäksi vaihtelevissa tapahtumissa"
+msgstr ""
+"Vaihteleva - aseta %1 suurimmaksi ja pienimmäksi vaihtelevissa tapahtumissa"
 
 #: ../src/gui/dialogs/EventParameterDialog.cpp:67
 msgid "Crescendo - set %1 rising from min to max"
@@ -2577,7 +2580,7 @@ msgid "Playing audio file \"%1\""
 msgstr "Soitetaan äänitiedosto \"%1\""
 
 #: ../src/gui/dialogs/TriggerSegmentDialog.cpp:45
-#: ../src/gui/editors/matrix/MatrixView.cpp:2653
+#: ../src/gui/editors/matrix/MatrixView.cpp:2662
 msgid "Trigger Segment"
 msgstr "Sysäävä osa"
 
@@ -2994,12 +2997,12 @@ msgid "Split at Time..."
 msgstr "Jaa ajan kohdalla..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:935
-#: ../src/gui/general/EditView.cpp:789
+#: ../src/gui/general/EditView.cpp:790
 msgid "Jog &Left"
 msgstr "Tönäise &vasemmalle"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:939
-#: ../src/gui/general/EditView.cpp:793
+#: ../src/gui/general/EditView.cpp:794
 msgid "Jog &Right"
 msgstr "Tönäise &oikealle"
 
@@ -3266,7 +3269,7 @@ msgstr "Tiedoston avaus..."
 msgid "Open File"
 msgstr "Avaa tiedosto"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1219
+#: ../src/document/RosegardenGUIDoc.cpp:1228
 #: ../src/gui/application/RosegardenGUIApp.cpp:2261
 msgid "Saving file..."
 msgstr "Tiedoston tallennus..."
@@ -3318,12 +3321,12 @@ msgid "Closing file..."
 msgstr "Suljetaan tiedosto..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:2424
-#: ../src/gui/editors/notation/NotationView.cpp:4631
+#: ../src/gui/editors/notation/NotationView.cpp:4644
 msgid "Printing..."
 msgstr "Tulostetaan..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:2436
-#: ../src/gui/editors/notation/NotationView.cpp:4648
+#: ../src/gui/editors/notation/NotationView.cpp:4661
 msgid "Previewing..."
 msgstr "Esikatsellaan..."
 
@@ -3336,25 +3339,25 @@ msgid "Cutting selection..."
 msgstr "Leikataan valintaa..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:2477
-#: ../src/gui/editors/matrix/MatrixView.cpp:1609
-#: ../src/gui/editors/notation/NotationView.cpp:4776
+#: ../src/gui/editors/matrix/MatrixView.cpp:1614
+#: ../src/gui/editors/notation/NotationView.cpp:4789
 msgid "Copying selection to clipboard..."
 msgstr "Kopioidaan valintaa leikepöydälle..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:2487
 #: ../src/gui/editors/eventlist/EventView.cpp:871
-#: ../src/gui/editors/matrix/MatrixView.cpp:1620
-#: ../src/gui/editors/notation/NotationView.cpp:4809
-#: ../src/gui/editors/notation/NotationView.cpp:4854
+#: ../src/gui/editors/matrix/MatrixView.cpp:1625
+#: ../src/gui/editors/notation/NotationView.cpp:4822
+#: ../src/gui/editors/notation/NotationView.cpp:4867
 #: ../src/gui/editors/segment/TriggerSegmentManager.cpp:345
 msgid "Clipboard is empty"
 msgstr "Leikepöytä on tyhjä"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:2490
 #: ../src/gui/editors/eventlist/EventView.cpp:875
-#: ../src/gui/editors/matrix/MatrixView.cpp:1624
-#: ../src/gui/editors/notation/NotationView.cpp:4817
-#: ../src/gui/editors/notation/NotationView.cpp:4858
+#: ../src/gui/editors/matrix/MatrixView.cpp:1629
+#: ../src/gui/editors/notation/NotationView.cpp:4830
+#: ../src/gui/editors/notation/NotationView.cpp:4871
 msgid "Inserting clipboard contents..."
 msgstr "Syötetään leikepöydän tietoja..."
 
@@ -3394,7 +3397,7 @@ msgstr ""
 #: ../src/gui/application/RosegardenGUIApp.cpp:2772
 #: ../src/gui/application/RosegardenGUIApp.cpp:5294
 #: ../src/gui/application/RosegardenGUIApp.cpp:5342
-#: ../src/gui/editors/segment/TrackButtons.cpp:412
+#: ../src/gui/editors/segment/TrackButtons.cpp:415
 #: ../src/gui/editors/segment/segmentcanvas/SegmentResizer.cpp:152
 msgid "Set audio file path"
 msgstr "Aseta äänitiedostopolku"
@@ -3555,7 +3558,8 @@ msgstr "Tuo Rosegarden 2.1 -tiedosto..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:4055
 msgid "Can't load Rosegarden 2.1 file.  It appears to be corrupted."
-msgstr "Ei voitu ladata Rosegarden 2.1 -tiedostoa.  Se näyttää olevan viallinen."
+msgstr ""
+"Ei voitu ladata Rosegarden 2.1 -tiedostoa.  Se näyttää olevan viallinen."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:4081
 #: ../src/gui/application/RosegardenGUIApp.cpp:4098
@@ -3641,7 +3645,8 @@ msgid "</ul>"
 msgstr "</ul>"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:4594
-msgid "<p>To fix this, you should install the following additional programs:</p>"
+msgid ""
+"<p>To fix this, you should install the following additional programs:</p>"
 msgstr "<p>Korjataksesi tämän sinun täytyy asentaa seuraavat lisäohjelmat:</p>"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:4606
@@ -3727,7 +3732,7 @@ msgstr "Vakiomuotoiset MIDI-tiedostot\n"
 #: ../src/gui/application/RosegardenGUIApp.cpp:5002
 #: ../src/gui/application/RosegardenGUIApp.cpp:5106
 #: ../src/gui/application/RosegardenGUIApp.cpp:5143
-#: ../src/gui/editors/notation/NotationView.cpp:4746
+#: ../src/gui/editors/notation/NotationView.cpp:4759
 msgid "Export failed.  The file could not be opened for writing."
 msgstr "Vienti epäonnistui.  Tiedostoa ei voitu avata kirjoittamista varten."
 
@@ -3747,7 +3752,7 @@ msgstr "Mup-tiedostot\n"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5008
 #: ../src/gui/application/RosegardenGUIApp.cpp:5092
-#: ../src/gui/editors/notation/NotationView.cpp:4732
+#: ../src/gui/editors/notation/NotationView.cpp:4745
 msgid "Exporting LilyPond file..."
 msgstr "Viedään LilyPond-tiedosto..."
 
@@ -3756,29 +3761,29 @@ msgid "LilyPond files"
 msgstr "LilyPond-tiedostot"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5026
-#: ../src/gui/editors/notation/NotationView.cpp:4666
+#: ../src/gui/editors/notation/NotationView.cpp:4679
 msgid "Printing LilyPond file..."
 msgstr "Tulostetaan LilyPond-tiedosto..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5031
 #: ../src/gui/application/RosegardenGUIApp.cpp:5055
-#: ../src/gui/editors/notation/NotationView.cpp:4671
-#: ../src/gui/editors/notation/NotationView.cpp:4695
+#: ../src/gui/editors/notation/NotationView.cpp:4684
+#: ../src/gui/editors/notation/NotationView.cpp:4708
 msgid "Failed to open a temporary file for LilyPond export."
 msgstr "LilyPond-viennin väliaikaisen tiedoston lataaminen epäonnistui."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5050
-#: ../src/gui/editors/notation/NotationView.cpp:4690
+#: ../src/gui/editors/notation/NotationView.cpp:4703
 msgid "Previewing LilyPond file..."
 msgstr "Esikatsellaan LilyPond-tiedostoa..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5083
-#: ../src/gui/editors/notation/NotationView.cpp:4723
+#: ../src/gui/editors/notation/NotationView.cpp:4736
 msgid "LilyPond Preview Options"
 msgstr "LilyPond-esikatselun ominaisuudet"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5084
-#: ../src/gui/editors/notation/NotationView.cpp:4724
+#: ../src/gui/editors/notation/NotationView.cpp:4737
 msgid "LilyPond preview options"
 msgstr "LilyPond-esikatselun ominaisuudet"
 
@@ -3792,7 +3797,7 @@ msgid "XML files"
 msgstr "XML-tiedostot"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5292
-#: ../src/gui/editors/segment/TrackButtons.cpp:410
+#: ../src/gui/editors/segment/TrackButtons.cpp:413
 msgid ""
 "The audio file path does not exist or is not writable.\n"
 "Please set the audio file path to a valid directory in Document Properties "
@@ -3821,7 +3826,7 @@ msgid "Move playback pointer to time"
 msgstr "Siirrä toisto-osoitin ajankohtaan"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5796
-#: ../src/gui/editors/matrix/MatrixView.cpp:2238
+#: ../src/gui/editors/matrix/MatrixView.cpp:2247
 msgid "%1%"
 msgstr "%1%"
 
@@ -3895,8 +3900,10 @@ msgid "Saving current document as default studio..."
 msgstr "Tallennetaan nykyinen dokumentti oletusstudioksi..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:7741
-msgid "Are you sure you want to import your default studio and lose the current one?"
-msgstr "Haluatko todella tuoda oletusstudiosi ja hävittää tämänhetkisen studion?"
+msgid ""
+"Are you sure you want to import your default studio and lose the current one?"
+msgstr ""
+"Haluatko todella tuoda oletusstudiosi ja hävittää tämänhetkisen studion?"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:7776
 msgid "Import Studio from File"
@@ -4282,8 +4289,8 @@ msgstr ""
 msgid "Can't add dropped file. "
 msgstr "Ei voitu lisätä tiputettua tiedostoa. "
 
-#: ../src/gui/seqmanager/SequenceManager.cpp:1017
-#: ../src/gui/seqmanager/SequenceManager.cpp:1153
+#: ../src/gui/seqmanager/SequenceManager.cpp:1039
+#: ../src/gui/seqmanager/SequenceManager.cpp:1175
 msgid ""
 "The JACK Audio subsystem has failed or it has stopped Rosegarden from "
 "processing audio.\n"
@@ -4296,8 +4303,8 @@ msgstr ""
 "työskentelyä.\n"
 "Toisten ohjelmien lopettaminen saattaa parantaa Rosegardenin suorituskykyä."
 
-#: ../src/gui/seqmanager/SequenceManager.cpp:1023
-#: ../src/gui/seqmanager/SequenceManager.cpp:1159
+#: ../src/gui/seqmanager/SequenceManager.cpp:1045
+#: ../src/gui/seqmanager/SequenceManager.cpp:1181
 msgid ""
 "The JACK Audio subsystem has stopped Rosegarden from processing audio, "
 "probably because of a processing overload.\n"
@@ -4311,13 +4318,14 @@ msgstr ""
 "vielä esiintyä.\n"
 "Toisten ohjelmien lopettaminen saattaa parantaa Rosegardenin suorituskykyä."
 
-#: ../src/gui/seqmanager/SequenceManager.cpp:1034
-msgid "Run out of processor power for real-time audio processing.  Cannot continue."
+#: ../src/gui/seqmanager/SequenceManager.cpp:1056
+msgid ""
+"Run out of processor power for real-time audio processing.  Cannot continue."
 msgstr ""
 "Prosessorin teho ei riittänyt reaaliaikaiseen äänenkäsittelyyn.  Ei voida "
 "jatkaa."
 
-#: ../src/gui/seqmanager/SequenceManager.cpp:1060
+#: ../src/gui/seqmanager/SequenceManager.cpp:1082
 msgid ""
 "A serious error has occurred in the ALSA MIDI subsystem.  It may not be "
 "possible to continue sequencing.  Please check console output for more "
@@ -4327,17 +4335,18 @@ msgstr ""
 "voitane jatkaa.  Ole hyvä ja tarkista komentorivin tuloste saadaksesi lisää "
 "tietoa."
 
-#: ../src/gui/seqmanager/SequenceManager.cpp:1081
+#: ../src/gui/seqmanager/SequenceManager.cpp:1103
 msgid "JACK Audio subsystem is losing sample frames."
 msgstr "JACK-ääni -alijärjestelmä hukkaa näytteiden kehyksiä."
 
-#: ../src/gui/seqmanager/SequenceManager.cpp:1099
-msgid "Failed to read audio data from disc in time to service the audio subsystem."
+#: ../src/gui/seqmanager/SequenceManager.cpp:1121
+msgid ""
+"Failed to read audio data from disc in time to service the audio subsystem."
 msgstr ""
 "Äänitietojen lukeminen ajantasaisesti ääni-alijärjestelmää varten "
 "epäonnistui."
 
-#: ../src/gui/seqmanager/SequenceManager.cpp:1103
+#: ../src/gui/seqmanager/SequenceManager.cpp:1125
 msgid ""
 "Failed to write audio data to disc fast enough to service the audio "
 "subsystem."
@@ -4345,19 +4354,19 @@ msgstr ""
 "Ei pystytty kirjoittamaan levylle äänitietoja niin nopeasti kuin ääni-"
 "alijärjestelmä vaatisi."
 
-#: ../src/gui/seqmanager/SequenceManager.cpp:1107
+#: ../src/gui/seqmanager/SequenceManager.cpp:1129
 msgid "The audio mixing subsystem is failing to keep up."
 msgstr "Äänisekoitin -alijärjestelmä ei pysy pystyssä."
 
-#: ../src/gui/seqmanager/SequenceManager.cpp:1111
+#: ../src/gui/seqmanager/SequenceManager.cpp:1133
 msgid "The audio subsystem is failing to keep up."
 msgstr "Ääni-alijärjestelmä ei pysy pystyssä."
 
-#: ../src/gui/seqmanager/SequenceManager.cpp:1115
+#: ../src/gui/seqmanager/SequenceManager.cpp:1137
 msgid "Unknown sequencer failure mode!"
 msgstr "Tuntematon sekvensserin virhetila!"
 
-#: ../src/gui/seqmanager/SequenceManager.cpp:1173
+#: ../src/gui/seqmanager/SequenceManager.cpp:1195
 msgid ""
 "<h3>System timer resolution is too low</h3><p>Rosegarden was unable to find "
 "a high-resolution timing source for MIDI performance.</p><p>This may mean "
@@ -4376,7 +4385,7 @@ msgstr ""
 "href=\"http://rosegarden.wiki.sourceforge.net/Low+latency+kernels\">http://"
 "rosegarden.wiki.sourceforge.net/Low+latency+kernels</a>.</p>"
 
-#: ../src/gui/seqmanager/SequenceManager.cpp:1191
+#: ../src/gui/seqmanager/SequenceManager.cpp:1213
 msgid ""
 "<h3>System timer resolution is too low</h3><p>Rosegarden was unable to find "
 "a high-resolution timing source for MIDI performance.</p><p>You may be able "
@@ -4397,7 +4406,7 @@ msgstr ""
 "\">http://rosegarden.wiki.sourceforge.net/Low+latency+kernels</a> on kerätty "
 "tietoja tästä.</p>"
 
-#: ../src/gui/seqmanager/SequenceManager.cpp:1315
+#: ../src/gui/seqmanager/SequenceManager.cpp:1337
 msgid ""
 "<p>Both MIDI and Audio subsystems have failed to initialize.</p><p>You may "
 "continue without the sequencer, but we suggest closing Rosegarden, running "
@@ -4412,7 +4421,7 @@ msgstr ""
 "sekvensseriä, käytä \"rosegarden --nosequencer\" välttääksesi jatkossa tämän "
 "virheilmoituksen näkemisen.</p>"
 
-#: ../src/gui/seqmanager/SequenceManager.cpp:1317
+#: ../src/gui/seqmanager/SequenceManager.cpp:1339
 msgid ""
 "<p>The MIDI subsystem has failed to initialize.</p><p>You may continue "
 "without the sequencer, but we suggest closing Rosegarden, running \"modprobe "
@@ -4427,7 +4436,7 @@ msgstr ""
 "\"rosegarden --nosequencer\" välttääksesi jatkossa tämän virheilmoituksen "
 "näkemisen.</p>"
 
-#: ../src/gui/seqmanager/SequenceManager.cpp:1319
+#: ../src/gui/seqmanager/SequenceManager.cpp:1341
 msgid ""
 "<p>The Rosegarden sequencer module version does not match the GUI module "
 "version.</p><p>You have probably mixed up files from two different versions "
@@ -4438,12 +4447,12 @@ msgstr ""
 "sekoittanut tiedostot kahdesta Rosegardenin versiosta.  Ole hyvä ja tarkista "
 "asennus.</p>"
 
-#: ../src/gui/seqmanager/SequenceManager.cpp:1325
+#: ../src/gui/seqmanager/SequenceManager.cpp:1347
 #, c-format
 msgid "<h3>Sequencer startup failed</h3>%1"
 msgstr "<h3>Sekvensserin aloitus epäonnistui</h3> %1"
 
-#: ../src/gui/seqmanager/SequenceManager.cpp:1333
+#: ../src/gui/seqmanager/SequenceManager.cpp:1355
 msgid ""
 "<h3>Failed to connect to JACK audio server.</h3><p>Rosegarden could not "
 "connect to the JACK audio server.  This probably means the JACK server is "
@@ -4458,7 +4467,7 @@ msgstr ""
 "Rosegarden ja käynnistää JACK-palvelin ennen Rosegardenin käynnistämistä "
 "uudelleen.</p>"
 
-#: ../src/gui/seqmanager/SequenceManager.cpp:1334
+#: ../src/gui/seqmanager/SequenceManager.cpp:1356
 msgid "Failed to connect to JACK"
 msgstr "Yhdistäminen JACK-palvelimeen epäonnistui"
 
@@ -4495,7 +4504,7 @@ msgid "Channel Pressure"
 msgstr "Kanavan paine"
 
 #: ../src/gui/editors/eventlist/EventView.cpp:127
-#: ../src/gui/general/EditView.cpp:892
+#: ../src/gui/general/EditView.cpp:893
 #: ../src/gui/rulers/ControllerEventsRuler.cpp:191
 #: ../src/gui/seqmanager/MidiFilterDialog.cpp:57
 #: ../src/gui/seqmanager/MidiFilterDialog.cpp:93
@@ -4794,7 +4803,7 @@ msgstr "Muuta värin nimeä"
 
 #: ../src/gui/configuration/ColourConfigurationPage.cpp:122
 #: ../src/gui/editors/parameters/SegmentParameterBox.cpp:976
-#: ../src/gui/editors/parameters/TrackParameterBox.cpp:875
+#: ../src/gui/editors/parameters/TrackParameterBox.cpp:917
 #: ../src/gui/widgets/ColourTable.cpp:61
 msgid "Enter new name"
 msgstr "Syötä uusi nimi"
@@ -4885,7 +4894,7 @@ msgstr "Tuplettitaso:"
 msgid "2-in-the-time-of-3"
 msgstr "2 ajassa 3"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4254
+#: ../src/gui/editors/notation/NotationView.cpp:4267
 #: ../src/gui/widgets/QuantizeParameters.cpp:123
 msgid "Triplet"
 msgstr "Tripletti"
@@ -4953,7 +4962,7 @@ msgstr "Piilota edistyneet ominaisuudet"
 #: ../src/gui/configuration/GeneralConfigurationPage.cpp:259
 #: ../src/gui/configuration/MatrixConfigurationPage.h:49
 #: ../src/gui/configuration/MatrixConfigurationPage.h:50
-#: ../src/gui/editors/matrix/MatrixView.cpp:2707
+#: ../src/gui/editors/matrix/MatrixView.cpp:2716
 msgid "Matrix"
 msgstr "Matriisi"
 
@@ -5273,7 +5282,8 @@ msgstr "MTC seurain"
 
 #: ../src/gui/configuration/MIDIConfigurationPage.cpp:274
 msgid "Automatically connect sync output to all devices in use"
-msgstr "Yhdistä automaattisesti sync-ulostulo kaikkiin käytössä oleviin laitteisiin"
+msgstr ""
+"Yhdistä automaattisesti sync-ulostulo kaikkiin käytössä oleviin laitteisiin"
 
 #: ../src/gui/configuration/MIDIConfigurationPage.cpp:285
 msgid "MIDI Sync"
@@ -5359,7 +5369,7 @@ msgstr "Kertaus"
 #: ../src/gui/configuration/DocumentMetaConfigurationPage.cpp:171
 #: ../src/gui/editors/parameters/SegmentParameterBox.cpp:121
 #: ../src/gui/editors/parameters/TrackParameterBox.cpp:298
-#: ../src/gui/general/EditView.cpp:1484
+#: ../src/gui/general/EditView.cpp:1498
 msgid "Transpose"
 msgstr "Siirrä"
 
@@ -5371,8 +5381,8 @@ msgstr "Viive"
 #: ../src/gui/configuration/AudioConfigurationPage.h:54
 #: ../src/gui/configuration/AudioPropertiesPage.h:51
 #: ../src/gui/configuration/DocumentMetaConfigurationPage.cpp:197
-#: ../src/gui/editors/parameters/TrackParameterBox.cpp:516
-#: ../src/gui/editors/parameters/TrackParameterBox.cpp:517
+#: ../src/gui/editors/parameters/TrackParameterBox.cpp:520
+#: ../src/gui/editors/parameters/TrackParameterBox.cpp:521
 msgid "Audio"
 msgstr "Ääni"
 
@@ -5768,7 +5778,7 @@ msgstr "Ulkoista äänieditoria \"%1\" ei löytynyt tai se ei ole suoritettaviss
 
 #: ../src/gui/configuration/ColourConfigurationPage.cpp:63
 #: ../src/gui/editors/parameters/SegmentParameterBox.cpp:441
-#: ../src/gui/editors/parameters/TrackParameterBox.cpp:856
+#: ../src/gui/editors/parameters/TrackParameterBox.cpp:893
 msgid "Add New Color"
 msgstr "Lisää uusi väri"
 
@@ -5782,14 +5792,14 @@ msgstr "Värikartta"
 
 #: ../src/gui/configuration/ColourConfigurationPage.cpp:121
 #: ../src/gui/editors/parameters/SegmentParameterBox.cpp:976
-#: ../src/gui/editors/parameters/TrackParameterBox.cpp:875
+#: ../src/gui/editors/parameters/TrackParameterBox.cpp:917
 msgid "New Color Name"
 msgstr "Uusi värinimi"
 
 #: ../src/gui/configuration/ColourConfigurationPage.cpp:123
 #: ../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp:52
 #: ../src/gui/editors/parameters/SegmentParameterBox.cpp:977
-#: ../src/gui/editors/parameters/TrackParameterBox.cpp:876
+#: ../src/gui/editors/parameters/TrackParameterBox.cpp:918
 #: ../src/gui/studio/DeviceManagerDialog.cpp:108
 #: ../src/gui/studio/DeviceManagerDialog.cpp:167
 msgid "New"
@@ -5865,14 +5875,17 @@ msgid "Export..."
 msgstr "Vie..."
 
 #: ../src/gui/studio/BankEditorDialog.cpp:169
-msgid "Import Bank and Program data from a Rosegarden file to the current Device"
-msgstr "Tuo pankki- ja ohjelmadataa Rosegarden-tiedostosta nykyiselle laitteelle"
+msgid ""
+"Import Bank and Program data from a Rosegarden file to the current Device"
+msgstr ""
+"Tuo pankki- ja ohjelmadataa Rosegarden-tiedostosta nykyiselle laitteelle"
 
 #: ../src/gui/studio/BankEditorDialog.cpp:172
 msgid ""
 "Export all Device and Bank information to a Rosegarden format  interchange "
 "file"
-msgstr "Vie kaikki laite- ja pankkitieto Rosegardenin formaattivaihto-tiedostoon"
+msgstr ""
+"Vie kaikki laite- ja pankkitieto Rosegardenin formaattivaihto-tiedostoon"
 
 #: ../src/gui/studio/BankEditorDialog.cpp:183
 msgid "Copy all Program names from current Bank to clipboard"
@@ -6060,7 +6073,8 @@ msgstr "Laite tai instrumentti"
 
 #: ../src/gui/studio/RemapInstrumentDialog.cpp:58
 msgid "Remap Tracks by all Instruments on a Device or by single Instrument"
-msgstr "Merkitse raidat laitteen kaikilla instrumenteilla tai yhdellä instrumentilla"
+msgstr ""
+"Merkitse raidat laitteen kaikilla instrumenteilla tai yhdellä instrumentilla"
 
 #: ../src/gui/studio/RemapInstrumentDialog.cpp:67
 msgid "Choose Source and Destination"
@@ -6196,7 +6210,7 @@ msgstr "Pankin ja ohjelman yksityiskohdat"
 msgid "Programs"
 msgstr "Ohjelmat"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2709
+#: ../src/gui/editors/matrix/MatrixView.cpp:2718
 #: ../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp:83
 #: ../src/gui/studio/MidiProgramsEditor.cpp:86
 msgid "Percussion"
@@ -6355,7 +6369,8 @@ msgstr ""
 
 #: ../src/gui/editors/segment/segmentcanvas/SegmentResizer.cpp:377
 #: ../src/gui/editors/segment/segmentcanvas/SegmentSelector.cpp:500
-msgid "Click and drag to resize a segment; hold Ctrl as well to rescale its contents"
+msgid ""
+"Click and drag to resize a segment; hold Ctrl as well to rescale its contents"
 msgstr ""
 "Klikkaa ja vedä muuttaaksesi osan kokoa, pidä myös Ctrl pohjassa "
 "mitoittaaksesi uudelleen myös sisällön"
@@ -6423,10 +6438,12 @@ msgstr "Nauhoita tai pudoa ääntä tähän"
 msgid ""
 "Click and drag to draw an empty segment.  Control+Alt click and drag to draw "
 "in overlap mode."
-msgstr "Klikkaa ja vedä tyhjä osa.  Ctrl+Alt -klikkaa ja vedä päällekkäistilassa."
+msgstr ""
+"Klikkaa ja vedä tyhjä osa.  Ctrl+Alt -klikkaa ja vedä päällekkäistilassa."
 
 #: ../src/gui/editors/segment/TrackLabel.cpp:70
-msgid "Click and hold with left mouse button to assign this Track to an Instrument."
+msgid ""
+"Click and hold with left mouse button to assign this Track to an Instrument."
 msgstr ""
 "Napauta ja pidä vasenta hiiren korvaa pohjassa liittääksesi instrumentin "
 "tälle raidalle."
@@ -6505,7 +6522,8 @@ msgstr ""
 msgid ""
 "This will remove all triggered segments from the whole composition.  Are you "
 "sure?"
-msgstr "Tämä poistaa kaikki sysäistävät osat koko sävellyksestä.  Oletko varma?"
+msgstr ""
+"Tämä poistaa kaikki sysäistävät osat koko sävellyksestä.  Oletko varma?"
 
 #: ../src/gui/editors/segment/TriggerSegmentManager.cpp:281
 msgid "Remove all triggered segments"
@@ -6723,34 +6741,34 @@ msgid "<default>"
 msgstr "<oletus>"
 
 #: ../src/gui/editors/segment/TrackButtons.cpp:202
-#: ../src/gui/editors/segment/TrackButtons.cpp:578
-#: ../src/gui/editors/segment/TrackButtons.cpp:928
-#: ../src/gui/editors/segment/TrackButtons.cpp:1120
+#: ../src/gui/editors/segment/TrackButtons.cpp:581
+#: ../src/gui/editors/segment/TrackButtons.cpp:931
+#: ../src/gui/editors/segment/TrackButtons.cpp:1125
 msgid "<no instrument>"
 msgstr "<ei instrumenttia>"
 
-#: ../src/gui/editors/segment/TrackButtons.cpp:345
-#: ../src/gui/editors/segment/TrackButtons.cpp:1087
+#: ../src/gui/editors/segment/TrackButtons.cpp:347
+#: ../src/gui/editors/segment/TrackButtons.cpp:1092
 msgid "<untitled audio>"
 msgstr "<nimeämätön ääni>"
 
 #: ../src/gui/editors/parameters/TrackParameterBox.cpp:123
-#: ../src/gui/editors/parameters/TrackParameterBox.cpp:655
-#: ../src/gui/editors/segment/TrackButtons.cpp:347
-#: ../src/gui/editors/segment/TrackButtons.cpp:1089
+#: ../src/gui/editors/parameters/TrackParameterBox.cpp:674
+#: ../src/gui/editors/segment/TrackButtons.cpp:349
+#: ../src/gui/editors/segment/TrackButtons.cpp:1094
 msgid "<untitled>"
 msgstr "<ei nimeä>"
 
-#: ../src/gui/editors/segment/TrackButtons.cpp:1051
+#: ../src/gui/editors/segment/TrackButtons.cpp:1056
 msgid "Mute track"
 msgstr "Vaienna raita"
 
-#: ../src/gui/editors/segment/TrackButtons.cpp:1056
+#: ../src/gui/editors/segment/TrackButtons.cpp:1061
 msgid "Record on this track"
 msgstr "Nauhoita tälle raidalle"
 
 #: ../src/gui/editors/parameters/SegmentParameterBox.cpp:81
-#: ../src/gui/editors/parameters/TrackParameterBox.cpp:1008
+#: ../src/gui/editors/parameters/TrackParameterBox.cpp:1076
 msgid "Segment"
 msgstr "Osa"
 
@@ -6764,12 +6782,12 @@ msgid "%1 ms"
 msgstr "%1 ms"
 
 #: ../src/gui/editors/parameters/SegmentParameterBox.cpp:1024
-#: ../src/gui/editors/parameters/TrackParameterBox.cpp:903
+#: ../src/gui/editors/parameters/TrackParameterBox.cpp:949
 msgid "Highest playable note"
 msgstr "Korkein soiva nuotti"
 
 #: ../src/gui/editors/parameters/SegmentParameterBox.cpp:1044
-#: ../src/gui/editors/parameters/TrackParameterBox.cpp:923
+#: ../src/gui/editors/parameters/TrackParameterBox.cpp:973
 msgid "Lowest playable note"
 msgstr "Alin soiva nuotti"
 
@@ -6938,13 +6956,14 @@ msgstr "Korkein"
 msgid "Choose the highest suggested playable note, using a staff"
 msgstr "Valitse korkein ehdotettu soiva nuotti, joka on viivastolla"
 
-#: ../src/gui/editors/parameters/TrackParameterBox.cpp:659
+#: ../src/gui/editors/parameters/TrackParameterBox.cpp:678
 msgid "[ Track %1 - %2 ]"
 msgstr "[ Raita %1 - %2 ]"
 
-#: ../src/gui/editors/parameters/TrackParameterBox.cpp:978
+#: ../src/gui/editors/parameters/TrackParameterBox.cpp:1032
 msgid "The instrument preset database is corrupt.  Check your installation."
-msgstr "Instrumentin esiasetus-tietokanta on turmeltunut.  Tarkista asennuksesi."
+msgstr ""
+"Instrumentin esiasetus-tietokanta on turmeltunut.  Tarkista asennuksesi."
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:166
 #: ../src/gui/editors/parameters/InstrumentParameterBox.cpp:47
@@ -6972,7 +6991,8 @@ msgstr ""
 "(pätee vain nyt aktiivisena olevalle raidalle)</qt>"
 
 #: ../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp:101
-msgid "Receive external"
+#, fuzzy
+msgid "Receive external program changes"
 msgstr "Vastaanota ulkoinen"
 
 #: ../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp:237
@@ -7114,7 +7134,7 @@ msgid "Click and drag to draw a note"
 msgstr "Klikkaa ja vedä piirtääksesi nuotin"
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:430
-#: ../src/gui/editors/matrix/MatrixView.cpp:3051
+#: ../src/gui/editors/matrix/MatrixView.cpp:3060
 msgid "Couldn't apply piano roll layout"
 msgstr "Ei voitu soveltaa pianorulla-taittoa"
 
@@ -7295,13 +7315,13 @@ msgstr "  Ei valintaa "
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:1343
 #: ../src/gui/editors/matrix/MatrixView.cpp:1355
-#: ../src/gui/editors/matrix/MatrixView.cpp:2077
-#: ../src/gui/editors/notation/NotationView.cpp:5947
+#: ../src/gui/editors/matrix/MatrixView.cpp:2086
+#: ../src/gui/editors/notation/NotationView.cpp:5960
 msgid "Quantizing..."
 msgstr "Yksiköidään..."
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:1365
-#: ../src/gui/editors/notation/NotationView.cpp:5484
+#: ../src/gui/editors/notation/NotationView.cpp:5497
 msgid "Collapsing notes..."
 msgstr "Luhista kasaan nuotit..."
 
@@ -7314,100 +7334,100 @@ msgid "Note: %1 (%2.%3s)"
 msgstr "Nuotti: %1 (%2.%3s)"
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:1526
-#: ../src/gui/editors/notation/NotationView.cpp:7330
+#: ../src/gui/editors/notation/NotationView.cpp:7343
 msgid "Time: %1 (%2.%3s)"
 msgstr "Aika: %1 (%2.%3s)"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:1599
-#: ../src/gui/editors/notation/NotationView.cpp:4757
-#: ../src/gui/editors/notation/NotationView.cpp:4786
+#: ../src/gui/editors/matrix/MatrixView.cpp:1604
+#: ../src/gui/editors/notation/NotationView.cpp:4770
+#: ../src/gui/editors/notation/NotationView.cpp:4799
 msgid "Cutting selection to clipboard..."
 msgstr "Leikataan valinta leikepöydälle..."
 
 #: ../src/gui/editors/eventlist/EventView.cpp:905
-#: ../src/gui/editors/matrix/MatrixView.cpp:1631
+#: ../src/gui/editors/matrix/MatrixView.cpp:1636
 #: ../src/gui/editors/notation/NotationSelectionPaster.cpp:75
 msgid "Couldn't paste at this point"
 msgstr "Ei voitu liittää tähän kohtaan"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:1642
-#: ../src/gui/editors/notation/NotationView.cpp:4767
+#: ../src/gui/editors/matrix/MatrixView.cpp:1647
+#: ../src/gui/editors/notation/NotationView.cpp:4780
 msgid "Deleting selection..."
 msgstr "Poistetaan valinta..."
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:1828
-#: ../src/gui/editors/notation/NotationView.cpp:5694
+#: ../src/gui/editors/matrix/MatrixView.cpp:1837
+#: ../src/gui/editors/notation/NotationView.cpp:5707
 #, c-format
 msgid "Unknown note insert action %1"
 msgstr "Tuntematon nuotinsyöttötoiminto %1"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:1832
-#: ../src/gui/editors/matrix/MatrixView.cpp:2855
-#: ../src/gui/editors/notation/NotationView.cpp:5698
+#: ../src/gui/editors/matrix/MatrixView.cpp:1841
+#: ../src/gui/editors/matrix/MatrixView.cpp:2864
+#: ../src/gui/editors/notation/NotationView.cpp:5711
 msgid "Inserting note"
 msgstr "Nuotin syöttö"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2089
+#: ../src/gui/editors/matrix/MatrixView.cpp:2098
 msgid "Unquantizing..."
 msgstr "Poistetaan yksiköinti..."
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2118
+#: ../src/gui/editors/matrix/MatrixView.cpp:2127
 msgid " Grid: "
 msgstr " Ruudukko: "
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2132
+#: ../src/gui/editors/matrix/MatrixView.cpp:2141
 msgid "Unit"
 msgstr "Yksikkö"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2134
+#: ../src/gui/editors/matrix/MatrixView.cpp:2143
 msgid "Beat"
 msgstr "Isku"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2136
+#: ../src/gui/editors/matrix/MatrixView.cpp:2145
 msgid "Bar"
 msgstr "Tahti"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2157
+#: ../src/gui/editors/matrix/MatrixView.cpp:2166
 msgid " Velocity: "
 msgstr " Nopeus: "
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2168
+#: ../src/gui/editors/matrix/MatrixView.cpp:2177
 msgid " Quantize: "
 msgstr " Yksiköi: "
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2582
-#: ../src/gui/editors/notation/NotationView.cpp:5120
+#: ../src/gui/editors/matrix/MatrixView.cpp:2591
+#: ../src/gui/editors/notation/NotationView.cpp:5133
 msgid "Raising velocities..."
 msgstr "Nopeuksien nosto..."
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2594
-#: ../src/gui/editors/notation/NotationView.cpp:5130
+#: ../src/gui/editors/matrix/MatrixView.cpp:2603
+#: ../src/gui/editors/notation/NotationView.cpp:5143
 msgid "Lowering velocities..."
 msgstr "Nopeuksien lasku..."
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2609
-#: ../src/gui/editors/notation/NotationView.cpp:5165
+#: ../src/gui/editors/matrix/MatrixView.cpp:2618
+#: ../src/gui/editors/notation/NotationView.cpp:5178
 msgid "Set Event Velocities"
 msgstr "Aseta tapahtuman nopeudet"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2614
-#: ../src/gui/editors/notation/NotationView.cpp:5170
+#: ../src/gui/editors/matrix/MatrixView.cpp:2623
+#: ../src/gui/editors/notation/NotationView.cpp:5183
 msgid "Setting Velocities..."
 msgstr "Aseta nopeudet..."
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2663
+#: ../src/gui/editors/matrix/MatrixView.cpp:2672
 msgid "Remove Triggers"
 msgstr "Poista sysääjät"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2721
+#: ../src/gui/editors/matrix/MatrixView.cpp:2730
 msgid "%1 - Segment Track #%2 - %3"
 msgstr "%1 - Osa raidalla #%2 - %3"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2728
+#: ../src/gui/editors/matrix/MatrixView.cpp:2737
 msgid "%1 - All Segments - %2"
 msgstr "%1 - Kaikki osat - %2"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2735
+#: ../src/gui/editors/matrix/MatrixView.cpp:2744
 msgid ""
 "_n: %1 - 1 Segment - %2\n"
 "%1 - %n Segments - %2"
@@ -7415,11 +7435,11 @@ msgstr ""
 "%1 - 1 osa - %2\n"
 "%1 - %2 osaa - %2"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2883
+#: ../src/gui/editors/matrix/MatrixView.cpp:2892
 msgid "Can't insert note: No grid duration selected"
 msgstr "Ei voitu syöttää nuotti: Ruudukon kestoa ei oltu valittu"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2933
+#: ../src/gui/editors/matrix/MatrixView.cpp:2942
 msgid " Chord "
 msgstr " Sointu "
 
@@ -7873,7 +7893,7 @@ msgid "  Spacing:  "
 msgstr "  Välit:  "
 
 #: ../src/gui/editors/notation/NotationView.cpp:3004
-#: ../src/gui/editors/notation/NotationView.cpp:3831
+#: ../src/gui/editors/notation/NotationView.cpp:3844
 msgid "  Ready."
 msgstr "  Valmis."
 
@@ -7889,27 +7909,27 @@ msgstr "Taitetaan viviastoa %1..."
 msgid "Reconciling staffs..."
 msgstr "Sovitellaan viivastoja..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:3898
+#: ../src/gui/editors/notation/NotationView.cpp:3911
 msgid "Sizing and allocating canvas..."
 msgstr "Mitoitetaan ja jaksotetaan kangasta..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:4063
+#: ../src/gui/editors/notation/NotationView.cpp:4076
 msgid "note"
 msgstr "nuotti"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4063
+#: ../src/gui/editors/notation/NotationView.cpp:4076
 msgid "rest"
 msgstr "tauko"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4224
+#: ../src/gui/editors/notation/NotationView.cpp:4237
 msgid "%1 - Segment Track #%2 - Notation"
 msgstr "%1 - Osa raidalla #%2 - Nuotinnus"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4230
+#: ../src/gui/editors/notation/NotationView.cpp:4243
 msgid "%1 - All Segments - Notation"
 msgstr "%1 - Kaikki osat - Nuotinnus"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4235
+#: ../src/gui/editors/notation/NotationView.cpp:4248
 msgid ""
 "_n: %1 - Segment - Notation\n"
 "%1 - %n Segments - Notation"
@@ -7917,50 +7937,50 @@ msgstr ""
 "%1 - osa - nuotinnus\n"
 "%1 - %2 osaa - nuotinnus"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4256
+#: ../src/gui/editors/notation/NotationView.cpp:4269
 msgid "Grace"
 msgstr "Grave"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4260
-#: ../src/gui/editors/notation/NotationView.cpp:4264
-#: ../src/gui/editors/notation/NotationView.cpp:4268
+#: ../src/gui/editors/notation/NotationView.cpp:4273
+#: ../src/gui/editors/notation/NotationView.cpp:4277
+#: ../src/gui/editors/notation/NotationView.cpp:4281
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4284
+#: ../src/gui/editors/notation/NotationView.cpp:4297
 msgid "Hidden annotations"
 msgstr "Piiloitetut huomautukset"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4306
+#: ../src/gui/editors/notation/NotationView.cpp:4319
 msgid "Hidden LilyPond directives"
 msgstr "Piilota LilyPond-käskyt"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4339
+#: ../src/gui/editors/notation/NotationView.cpp:4352
 #, c-format
 msgid "Unknown spacing action %1"
 msgstr "Tuntematon välistystoiminto %1"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4397
+#: ../src/gui/editors/notation/NotationView.cpp:4410
 #, c-format
 msgid "Unknown proportion action %1"
 msgstr "Tuntematon mittasuhdetoiminto %1"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4444
+#: ../src/gui/editors/notation/NotationView.cpp:4457
 #, c-format
 msgid "Unknown font action %1"
 msgstr "Tuntematon kirjasintoiminto %1"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4462
+#: ../src/gui/editors/notation/NotationView.cpp:4475
 #, c-format
 msgid "Unknown font size %1"
 msgstr "Tuntomaton kirjasinkoko %1"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4466
+#: ../src/gui/editors/notation/NotationView.cpp:4479
 #, c-format
 msgid "Unknown font size action %1"
 msgstr "Tuntematon kirjasinkokotoiminto %1"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4793
+#: ../src/gui/editors/notation/NotationView.cpp:4806
 msgid ""
 "The Restricted paste type requires enough empty space (containing only "
 "rests) at the paste position to hold all of the events to be pasted.\n"
@@ -7976,277 +7996,277 @@ msgstr ""
 "\"Muokkaa\"-valikon \"Liitä...\"-valinnasta.  Voit myös vaihtaa "
 "oletusliitäntätyypin joksikin muuksi kuin Rajoitettu, jos haluat."
 
-#: ../src/gui/editors/notation/NotationView.cpp:4813
+#: ../src/gui/editors/notation/NotationView.cpp:4826
 msgid "Can't paste multiple Segments into one"
 msgstr "Ei voitu liittää useita osia yhteen"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4841
-#: ../src/gui/editors/notation/NotationView.cpp:4890
+#: ../src/gui/editors/notation/NotationView.cpp:4854
+#: ../src/gui/editors/notation/NotationView.cpp:4903
 msgid "Couldn't paste at this point."
 msgstr "Ei voitu liittää tähän paikkaan."
 
-#: ../src/gui/editors/notation/NotationView.cpp:4909
+#: ../src/gui/editors/notation/NotationView.cpp:4922
 msgid "Move Events to Staff Above"
 msgstr "Siirrä tapahtumat ylläolevaan viivastoon"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4937
+#: ../src/gui/editors/notation/NotationView.cpp:4950
 msgid "Move Events to Staff Below"
 msgstr "Siirrä tapahtumat allaolevaan viivastoon"
 
-#: ../src/gui/editors/notation/NotationView.cpp:5049
+#: ../src/gui/editors/notation/NotationView.cpp:5062
 msgid "Pushing selection left..."
 msgstr "Työnnetään valintaa vasemmalle..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5060
+#: ../src/gui/editors/notation/NotationView.cpp:5073
 msgid "Pushing selection right..."
 msgstr "Työnnetään valintaa oikealle..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5071
+#: ../src/gui/editors/notation/NotationView.cpp:5084
 msgid "Pushing selection up..."
 msgstr "Työnnetään valintaa ylös..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5082
+#: ../src/gui/editors/notation/NotationView.cpp:5095
 msgid "Pushing selection down..."
 msgstr "Työnnetään valintaa alas..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5093
+#: ../src/gui/editors/notation/NotationView.cpp:5106
 msgid "Restoring computed positions..."
 msgstr "Palautetaan lasketut sijainnit..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5102
+#: ../src/gui/editors/notation/NotationView.cpp:5115
 msgid "Making visible..."
 msgstr "Tehdään näkyväksi..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5111
+#: ../src/gui/editors/notation/NotationView.cpp:5124
 msgid "Making invisible..."
 msgstr "Tehdään näkymättömäksi..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5262
+#: ../src/gui/editors/notation/NotationView.cpp:5275
 msgid "Beaming group..."
 msgstr "Palkkiryhmä..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5272
+#: ../src/gui/editors/notation/NotationView.cpp:5285
 msgid "Auto-beaming selection..."
 msgstr "Valinnan automaattinen palkitus..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5282
+#: ../src/gui/editors/notation/NotationView.cpp:5295
 msgid "Breaking groups..."
 msgstr "Murretaan ryhmät..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5370
+#: ../src/gui/editors/notation/NotationView.cpp:5383
 msgid "Untupleting..."
 msgstr "Irroitetaan tupletti..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5378
+#: ../src/gui/editors/notation/NotationView.cpp:5391
 msgid "Adding slur..."
 msgstr "Lisätään kaari..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5379
+#: ../src/gui/editors/notation/NotationView.cpp:5392
 msgid "slur"
 msgstr "kaari"
 
-#: ../src/gui/editors/notation/NotationView.cpp:5384
+#: ../src/gui/editors/notation/NotationView.cpp:5397
 msgid "Adding phrasing slur..."
 msgstr "Lisätään muotoilukaari..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5385
+#: ../src/gui/editors/notation/NotationView.cpp:5398
 msgid "phrasing slur"
 msgstr "muotoilukaari"
 
-#: ../src/gui/editors/notation/NotationView.cpp:5390
+#: ../src/gui/editors/notation/NotationView.cpp:5403
 msgid "Adding glissando..."
 msgstr "Lisää liukuen..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5391
+#: ../src/gui/editors/notation/NotationView.cpp:5404
 msgid "glissando"
 msgstr "liukuen"
 
-#: ../src/gui/editors/notation/NotationView.cpp:5396
+#: ../src/gui/editors/notation/NotationView.cpp:5409
 msgid "Adding crescendo..."
 msgstr "Lisää kasvaen..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5397
-#: ../src/gui/editors/notation/NotationView.cpp:5403
+#: ../src/gui/editors/notation/NotationView.cpp:5410
+#: ../src/gui/editors/notation/NotationView.cpp:5416
 msgid "dynamic"
 msgstr "voimakkuusmerkintä"
 
-#: ../src/gui/editors/notation/NotationView.cpp:5402
+#: ../src/gui/editors/notation/NotationView.cpp:5415
 msgid "Adding decrescendo..."
 msgstr "Lisää heikentyen..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5408
-#: ../src/gui/editors/notation/NotationView.cpp:5414
-#: ../src/gui/editors/notation/NotationView.cpp:5420
-#: ../src/gui/editors/notation/NotationView.cpp:5426
+#: ../src/gui/editors/notation/NotationView.cpp:5421
+#: ../src/gui/editors/notation/NotationView.cpp:5427
+#: ../src/gui/editors/notation/NotationView.cpp:5433
+#: ../src/gui/editors/notation/NotationView.cpp:5439
 msgid "Adding octave..."
 msgstr "Lisätään oktaavimerkintä..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5409
-#: ../src/gui/editors/notation/NotationView.cpp:5415
-#: ../src/gui/editors/notation/NotationView.cpp:5421
-#: ../src/gui/editors/notation/NotationView.cpp:5427
+#: ../src/gui/editors/notation/NotationView.cpp:5422
+#: ../src/gui/editors/notation/NotationView.cpp:5428
+#: ../src/gui/editors/notation/NotationView.cpp:5434
+#: ../src/gui/editors/notation/NotationView.cpp:5440
 msgid "ottava"
 msgstr "ottava"
 
-#: ../src/gui/editors/notation/NotationView.cpp:5443
+#: ../src/gui/editors/notation/NotationView.cpp:5456
 msgid "Can't add overlapping %1 indications"
 msgstr "Ei voitu lisätä limittyviä %1 merkintöjä"
 
-#: ../src/gui/editors/notation/NotationView.cpp:5452
+#: ../src/gui/editors/notation/NotationView.cpp:5465
 msgid "Making chord..."
 msgstr "Tehdään sointu..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5464
+#: ../src/gui/editors/notation/NotationView.cpp:5477
 msgid "Normalizing rests..."
 msgstr "Normalisoidaan tauot..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5474
+#: ../src/gui/editors/notation/NotationView.cpp:5487
 msgid "Collapsing rests..."
 msgstr "Luhistetaan yhteen tauot..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5494
+#: ../src/gui/editors/notation/NotationView.cpp:5507
 msgid "Tying notes..."
 msgstr "Sidotaan nuotit..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5504
+#: ../src/gui/editors/notation/NotationView.cpp:5517
 msgid "Untying notes..."
 msgstr "Puretaan nuottien siteet..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5514
+#: ../src/gui/editors/notation/NotationView.cpp:5527
 msgid "Making notes viable..."
 msgstr "Tehdään nuotit toimiviksi..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5524
+#: ../src/gui/editors/notation/NotationView.cpp:5537
 msgid "Removing counterpoint..."
 msgstr "Poistetaan vastaääni..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5534
+#: ../src/gui/editors/notation/NotationView.cpp:5547
 msgid "Pointing stems up..."
 msgstr "Käännetään varret ylös..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5544
+#: ../src/gui/editors/notation/NotationView.cpp:5557
 msgid "Pointing stems down..."
 msgstr "Käännetään varret alas..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5555
+#: ../src/gui/editors/notation/NotationView.cpp:5568
 msgid "Restoring computed stem directions..."
 msgstr "Palautetaan lasketut varsisuunnat..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5565
-#: ../src/gui/editors/notation/NotationView.cpp:5575
+#: ../src/gui/editors/notation/NotationView.cpp:5578
+#: ../src/gui/editors/notation/NotationView.cpp:5588
 msgid "Positioning slurs..."
 msgstr "Sijoitetaan kaaret..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5586
+#: ../src/gui/editors/notation/NotationView.cpp:5599
 msgid "Restoring slur positions..."
 msgstr "Palautetaan kaarten sijainnit..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5596
-#: ../src/gui/editors/notation/NotationView.cpp:5606
+#: ../src/gui/editors/notation/NotationView.cpp:5609
+#: ../src/gui/editors/notation/NotationView.cpp:5619
 msgid "Positioning ties..."
 msgstr "Sijoitetaan sidontoja..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5617
+#: ../src/gui/editors/notation/NotationView.cpp:5630
 msgid "Restoring tie positions..."
 msgstr "Palautetaan sidontoja sijainnit..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5627
+#: ../src/gui/editors/notation/NotationView.cpp:5640
 msgid "Fixing notation quantization..."
 msgstr "Korjataan nuottien yksiköintiä..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5637
+#: ../src/gui/editors/notation/NotationView.cpp:5650
 msgid "Removing notation quantization..."
 msgstr "Poistetaan nuottien yksiköinti..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5654
+#: ../src/gui/editors/notation/NotationView.cpp:5667
 msgid "Changing to %1 style..."
 msgstr "Vaihdetaan %1-tyyliin..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5662
+#: ../src/gui/editors/notation/NotationView.cpp:5675
 #, c-format
 msgid "Unknown style action %1"
 msgstr "Tuntematon tyylitoiminto %1"
 
-#: ../src/gui/editors/notation/NotationView.cpp:5675
-#: ../src/gui/editors/notation/NotationView.cpp:5716
-#: ../src/gui/editors/notation/NotationView.cpp:5772
+#: ../src/gui/editors/notation/NotationView.cpp:5688
+#: ../src/gui/editors/notation/NotationView.cpp:5729
+#: ../src/gui/editors/notation/NotationView.cpp:5785
 msgid "No note duration selected"
 msgstr "Nuotin kestoa ei oltu valittu"
 
-#: ../src/gui/editors/notation/NotationView.cpp:5737
+#: ../src/gui/editors/notation/NotationView.cpp:5750
 msgid "No rest duration selected"
 msgstr "Tauon kestoa ei oltu valittu"
 
-#: ../src/gui/editors/notation/NotationView.cpp:5824
+#: ../src/gui/editors/notation/NotationView.cpp:5837
 msgid "No note or rest duration selected"
 msgstr "Nuotin tai tauon kestoa ei oltu valittu"
 
-#: ../src/gui/editors/notation/NotationView.cpp:5835
-#: ../src/gui/editors/notation/NotationView.cpp:5846
-#: ../src/gui/editors/notation/NotationView.cpp:5857
-#: ../src/gui/editors/notation/NotationView.cpp:5868
-#: ../src/gui/editors/notation/NotationView.cpp:5879
-#: ../src/gui/editors/notation/NotationView.cpp:5890
-#: ../src/gui/editors/notation/NotationView.cpp:5901
+#: ../src/gui/editors/notation/NotationView.cpp:5848
+#: ../src/gui/editors/notation/NotationView.cpp:5859
+#: ../src/gui/editors/notation/NotationView.cpp:5870
+#: ../src/gui/editors/notation/NotationView.cpp:5881
+#: ../src/gui/editors/notation/NotationView.cpp:5892
+#: ../src/gui/editors/notation/NotationView.cpp:5903
+#: ../src/gui/editors/notation/NotationView.cpp:5914
 msgid "Forcing accidentals..."
 msgstr "Pakotetaan etumerkit..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5912
+#: ../src/gui/editors/notation/NotationView.cpp:5925
 msgid "Restoring accidentals..."
 msgstr "Palautetaan etumerkit..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5923
+#: ../src/gui/editors/notation/NotationView.cpp:5936
 msgid "Showing cautionary accidentals..."
 msgstr "Näytetään varoitusetumerkit..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5933
+#: ../src/gui/editors/notation/NotationView.cpp:5946
 msgid "Cancelling cautionary accidentals..."
 msgstr "Peruutetaan varoitusetumerkit..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5962
+#: ../src/gui/editors/notation/NotationView.cpp:5975
 msgid "Interpreting selection..."
 msgstr "Tulkitaan valintaa..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5974
+#: ../src/gui/editors/notation/NotationView.cpp:5987
 msgid "Setting note durations..."
 msgstr "Asetaan nuottien kestot..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5982
-#: ../src/gui/editors/notation/NotationView.cpp:5990
+#: ../src/gui/editors/notation/NotationView.cpp:5995
+#: ../src/gui/editors/notation/NotationView.cpp:6003
 msgid "Adding dot..."
 msgstr "Lisätään piste..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:6012
+#: ../src/gui/editors/notation/NotationView.cpp:6025
 msgid "Text: "
 msgstr "Teksti: "
 
-#: ../src/gui/editors/notation/NotationView.cpp:6026
+#: ../src/gui/editors/notation/NotationView.cpp:6039
 msgid "Fingering: "
 msgstr "Sormitus: "
 
-#: ../src/gui/editors/notation/NotationView.cpp:6114
+#: ../src/gui/editors/notation/NotationView.cpp:6127
 msgid "Ornament track %1 bar %2"
 msgstr "Koru raidalla %1 tahdissa %2"
 
-#: ../src/gui/editors/notation/NotationView.cpp:6116
+#: ../src/gui/editors/notation/NotationView.cpp:6129
 #, c-format
 msgid "Ornament bar %1"
 msgstr "Koru tahdissa %1"
 
-#: ../src/gui/editors/notation/NotationView.cpp:6176
+#: ../src/gui/editors/notation/NotationView.cpp:6189
 msgid "Remove Ornaments"
 msgstr "Poista korukuviot"
 
-#: ../src/gui/editors/notation/NotationView.cpp:6223
+#: ../src/gui/editors/notation/NotationView.cpp:6236
 msgid "Estimated key signature shown"
 msgstr "Näytetty arvioitu sävellajimerkintä"
 
 #: ../src/gui/editors/notation/NotationStaff.cpp:1242
-#: ../src/gui/editors/notation/NotationView.cpp:6280
+#: ../src/gui/editors/notation/NotationView.cpp:6293
 msgid "Sustain"
 msgstr "Pedaali"
 
-#: ../src/gui/editors/notation/NotationView.cpp:6296
+#: ../src/gui/editors/notation/NotationView.cpp:6309
 msgid ""
 "There is no sustain controller defined for this device.\n"
 "Please ensure the device is configured correctly in the Manage MIDI Devices "
@@ -8256,7 +8276,7 @@ msgstr ""
 "Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse "
 "MIDI-laitteita -valikossa."
 
-#: ../src/gui/editors/notation/NotationView.cpp:7374
+#: ../src/gui/editors/notation/NotationView.cpp:7387
 msgid "Can't insert note: No note duration selected"
 msgstr "Ei voitu lisätä nuottia: Kestoa ei oltu valittu"
 
@@ -8583,7 +8603,8 @@ msgid "global element must precede note elements"
 msgstr "kaiken kattavien elementtien täytyy edeltää nuottielementtejä"
 
 #: ../src/gui/editors/notation/NoteStyleFileReader.cpp:130
-msgid "global and note elements may have shape or charname attribute, but not both"
+msgid ""
+"global and note elements may have shape or charname attribute, but not both"
 msgstr ""
 "kaikenkattavilla ja nuottielementeillä voi olla muoto- tai merkkinimi-"
 "ominaisuus, mutta ei molempia"
@@ -8800,23 +8821,23 @@ msgstr "Raita #%1, Osa \"%2\" (ajo-id %3)"
 msgid "%1 controller"
 msgstr "%1 -ohjain"
 
-#: ../src/gui/rulers/MarkerRuler.cpp:93
+#: ../src/gui/rulers/MarkerRuler.cpp:94
 msgid "Insert Marker"
 msgstr "Syötä merkintä"
 
-#: ../src/gui/rulers/MarkerRuler.cpp:97
+#: ../src/gui/rulers/MarkerRuler.cpp:98
 msgid "Insert Marker at Playback Position"
 msgstr "Syötä merkintä toisto-osoittimen kohdalle"
 
-#: ../src/gui/rulers/MarkerRuler.cpp:102
+#: ../src/gui/rulers/MarkerRuler.cpp:103
 msgid "Delete Marker"
 msgstr "Poista merkintä"
 
-#: ../src/gui/rulers/MarkerRuler.cpp:107
+#: ../src/gui/rulers/MarkerRuler.cpp:108
 msgid "Edit Marker..."
 msgstr "Muokkaa merkintää..."
 
-#: ../src/gui/rulers/MarkerRuler.cpp:112
+#: ../src/gui/rulers/MarkerRuler.cpp:113
 msgid ""
 "Click on a marker to move the playback pointer.\n"
 "Shift-click to set a range between markers.\n"
@@ -8838,7 +8859,7 @@ msgstr ""
 msgid "Erase Controller Event(s)"
 msgstr "Poista ohjaintapahtum(i)a"
 
-#: ../src/gui/general/EditView.cpp:894
+#: ../src/gui/general/EditView.cpp:895
 #: ../src/gui/rulers/ControllerEventsRuler.cpp:181
 msgid "Unsupported Event Type"
 msgstr "Tukematon tapahtumatyyppi"
@@ -8988,163 +9009,163 @@ msgstr "B%1"
 msgid "Can't open preset file %1"
 msgstr "Ei voitu avata esiasetustiedostoa %1"
 
-#: ../src/gui/general/EditView.cpp:737
+#: ../src/gui/general/EditView.cpp:738
 msgid "&Halve Durations"
 msgstr "&Puolita kestot"
 
-#: ../src/gui/general/EditView.cpp:741
+#: ../src/gui/general/EditView.cpp:742
 msgid "&Double Durations"
 msgstr "Kahdenna kestot"
 
-#: ../src/gui/general/EditView.cpp:799
+#: ../src/gui/general/EditView.cpp:800
 msgid "Show Velocity Property Ruler"
 msgstr "Näytä Nopeusmuuttujat-viivain"
 
-#: ../src/gui/general/EditView.cpp:818
+#: ../src/gui/general/EditView.cpp:819
 msgid "Insert item"
 msgstr "Lisää yksikkö"
 
-#: ../src/gui/general/EditView.cpp:824
+#: ../src/gui/general/EditView.cpp:825
 msgid "Erase selected items"
 msgstr "Poista valitut yksiköt"
 
-#: ../src/gui/general/EditView.cpp:828
+#: ../src/gui/general/EditView.cpp:829
 msgid "Clear ruler"
 msgstr "Tyhjää viivain"
 
-#: ../src/gui/general/EditView.cpp:832
+#: ../src/gui/general/EditView.cpp:833
 msgid "Insert line of controllers"
 msgstr "Lisää ohjainrivi"
 
-#: ../src/gui/general/EditView.cpp:836
+#: ../src/gui/general/EditView.cpp:837
 msgid "Flip forward"
 msgstr "Toimita eteenpäin"
 
-#: ../src/gui/general/EditView.cpp:840
+#: ../src/gui/general/EditView.cpp:841
 msgid "Flip backwards"
 msgstr "Toimita taaksepäin"
 
-#: ../src/gui/general/EditView.cpp:844
+#: ../src/gui/general/EditView.cpp:845
 msgid "Draw property line"
 msgstr "Piirrä ominaisuusviiva"
 
-#: ../src/gui/general/EditView.cpp:848
+#: ../src/gui/general/EditView.cpp:849
 msgid "Select all property values"
 msgstr "Valitse kaikki ominaisuuksien arvot"
 
-#: ../src/gui/general/EditView.cpp:887
+#: ../src/gui/general/EditView.cpp:888
 msgid "%1 Controller %2 %3"
 msgstr "%1 -ohjain %2 %3"
 
-#: ../src/gui/general/EditView.cpp:1059
+#: ../src/gui/general/EditView.cpp:1060
 msgid "I"
 msgstr "I"
 
-#: ../src/gui/general/EditView.cpp:1059
+#: ../src/gui/general/EditView.cpp:1060
 msgid "II"
 msgstr "II"
 
-#: ../src/gui/general/EditView.cpp:1059
+#: ../src/gui/general/EditView.cpp:1060
 msgid "III"
 msgstr "III"
 
-#: ../src/gui/general/EditView.cpp:1059
+#: ../src/gui/general/EditView.cpp:1060
 msgid "IV"
 msgstr "IV"
 
-#: ../src/gui/general/EditView.cpp:1060
+#: ../src/gui/general/EditView.cpp:1061
 msgid "V"
 msgstr "V"
 
-#: ../src/gui/general/EditView.cpp:1060
+#: ../src/gui/general/EditView.cpp:1061
 msgid "VI"
 msgstr "VI"
 
-#: ../src/gui/general/EditView.cpp:1060
+#: ../src/gui/general/EditView.cpp:1061
 msgid "VII"
 msgstr "VII"
 
-#: ../src/gui/general/EditView.cpp:1060
+#: ../src/gui/general/EditView.cpp:1061
 msgid "VIII"
 msgstr "VIII"
 
-#: ../src/gui/general/EditView.cpp:1062
+#: ../src/gui/general/EditView.cpp:1063
 msgid "%1 flat"
 msgstr "%1 alennettu"
 
-#: ../src/gui/general/EditView.cpp:1063
+#: ../src/gui/general/EditView.cpp:1064
 msgid "%1 sharp"
 msgstr "%1 korotettu"
 
-#: ../src/gui/general/EditView.cpp:1078
+#: ../src/gui/general/EditView.cpp:1079
 msgid "&Insert Note"
 msgstr "&Syötä nuotti"
 
-#: ../src/gui/general/EditView.cpp:1084
+#: ../src/gui/general/EditView.cpp:1085
 msgid "&Upper Octave"
 msgstr "&Ylempi oktaavi"
 
-#: ../src/gui/general/EditView.cpp:1089
+#: ../src/gui/general/EditView.cpp:1090
 msgid "&Lower Octave"
 msgstr "&Alempi oktaavi"
 
-#: ../src/gui/general/EditView.cpp:1264
+#: ../src/gui/general/EditView.cpp:1278
 msgid "Estimated time signature shown"
 msgstr "Näytetään arvioitu tahtilaji"
 
-#: ../src/gui/general/EditView.cpp:1427
+#: ../src/gui/general/EditView.cpp:1441
 msgid "Halving durations..."
 msgstr "Puolita kestot..."
 
-#: ../src/gui/general/EditView.cpp:1441
+#: ../src/gui/general/EditView.cpp:1455
 msgid "Doubling durations..."
 msgstr "Tuplaa kestot..."
 
-#: ../src/gui/general/EditView.cpp:1465
+#: ../src/gui/general/EditView.cpp:1479
 msgid "Rescaling..."
 msgstr "Määritetään koko uudelleen..."
 
-#: ../src/gui/general/EditView.cpp:1485
+#: ../src/gui/general/EditView.cpp:1499
 msgid "By number of semitones: "
 msgstr "Puolisävelten määrällä: "
 
-#: ../src/gui/general/EditView.cpp:1492 ../src/gui/general/EditView.cpp:1514
+#: ../src/gui/general/EditView.cpp:1506 ../src/gui/general/EditView.cpp:1528
 msgid "Transposing..."
 msgstr "Siirretään..."
 
-#: ../src/gui/general/EditView.cpp:1532
+#: ../src/gui/general/EditView.cpp:1546
 msgid "Transposing up one semitone..."
 msgstr "Siirrä ylös yksi puolisävelaskel..."
 
-#: ../src/gui/general/EditView.cpp:1541
+#: ../src/gui/general/EditView.cpp:1555
 msgid "Transposing up one octave..."
 msgstr "Siirrä ylös yksi oktaavi..."
 
-#: ../src/gui/general/EditView.cpp:1550
+#: ../src/gui/general/EditView.cpp:1564
 msgid "Transposing down one semitone..."
 msgstr "Siirrä alas yksi puolisävelaskel..."
 
-#: ../src/gui/general/EditView.cpp:1559
+#: ../src/gui/general/EditView.cpp:1573
 msgid "Transposing down one octave..."
 msgstr "Siirretään alas yksi oktaavi..."
 
-#: ../src/gui/general/EditView.cpp:1571
+#: ../src/gui/general/EditView.cpp:1585
 msgid "Inverting..."
 msgstr "Käännetään ylösalaisin..."
 
-#: ../src/gui/general/EditView.cpp:1583
+#: ../src/gui/general/EditView.cpp:1597
 msgid "Retrograding..."
 msgstr "Käännetään edestakaisin..."
 
-#: ../src/gui/general/EditView.cpp:1595
+#: ../src/gui/general/EditView.cpp:1609
 msgid "Retrograde inverting..."
 msgstr "Käännetään edestakaisin ja ylösalaisin..."
 
-#: ../src/gui/general/EditView.cpp:1604
+#: ../src/gui/general/EditView.cpp:1618
 msgid "Jogging left..."
 msgstr "Hypätään vasemmalle..."
 
-#: ../src/gui/general/EditView.cpp:1619
+#: ../src/gui/general/EditView.cpp:1633
 msgid "Jogging right..."
 msgstr "Hypätään oikealle..."
 
@@ -9454,7 +9475,8 @@ msgstr "Liitä olemassaolevaan väliin [\"rajoitettu\"]"
 
 #: ../src/commands/edit/PasteEventsCommand.cpp:93
 msgid "Erase existing events to make room [\"simple\"]"
-msgstr "Poista olemassa olevat tapahtumat tilan lisäämiseksi [\"yksinkertainen\"]"
+msgstr ""
+"Poista olemassa olevat tapahtumat tilan lisäämiseksi [\"yksinkertainen\"]"
 
 #: ../src/commands/edit/PasteEventsCommand.cpp:95
 msgid "Move existing events out of the way [\"open-n-paste\"]"
@@ -10004,11 +10026,11 @@ msgstr ""
 "\n"
 " sen sijaan?"
 
-#: ../src/document/io/LilyPondExporter.cpp:2311
+#: ../src/document/io/LilyPondExporter.cpp:2320
 msgid "warning: overlong bar truncated here"
 msgstr "varoitus: ylipitkä tahti katkaistiin tässä"
 
-#: ../src/document/io/LilyPondExporter.cpp:2317
+#: ../src/document/io/LilyPondExporter.cpp:2326
 msgid "warning: bar too short, padding with rests"
 msgstr "varoitus: liian lyhyt tahti, täytetään tauoilla"
 
@@ -10032,7 +10054,7 @@ msgstr "Ku&moa %1"
 msgid "Re&do %1"
 msgstr "Pa&lauta %1"
 
-#: ../src/document/RosegardenGUIDoc.cpp:322
+#: ../src/document/RosegardenGUIDoc.cpp:324
 msgid ""
 "The current file has been modified.\n"
 "Do you want to save it?"
@@ -10040,7 +10062,7 @@ msgstr ""
 "Nykyistä tiedostoa on muokattu.\n"
 "Haluatko tallentaa sen?"
 
-#: ../src/document/RosegardenGUIDoc.cpp:474
+#: ../src/document/RosegardenGUIDoc.cpp:476
 #, c-format
 msgid ""
 "_n: Delete the 1 audio file recorded during the unsaved session?\n"
@@ -10051,7 +10073,7 @@ msgstr ""
 "Poista %n äänitiedostoa, jotka nauhoitettiin tallentamattoman session "
 "yhteydessä?"
 
-#: ../src/document/RosegardenGUIDoc.cpp:495
+#: ../src/document/RosegardenGUIDoc.cpp:497
 msgid ""
 "The following audio files were recorded during this session but have been "
 "unloaded\n"
@@ -10072,7 +10094,7 @@ msgstr ""
 "Ole hyvä ja valitse halutessasi mikä tahansa niistä poistaaksesi sen "
 "pysyvästi kovalevyltä.\n"
 
-#: ../src/document/RosegardenGUIDoc.cpp:511
+#: ../src/document/RosegardenGUIDoc.cpp:513
 #, c-format
 msgid ""
 "_n: <qt>About to delete 1 audio file permanently from the hard disk."
@@ -10087,35 +10109,35 @@ msgstr ""
 "<qt>Ollaan poistamassa %n äänitiedostoa pysyvästi kovalevyltä.<br>Tapoja "
 "palauttaa näitä tiedostoja takaisin ei ole.<br>Oletko varma?</qt>"
 
-#: ../src/document/RosegardenGUIDoc.cpp:574
+#: ../src/document/RosegardenGUIDoc.cpp:576
 msgid "Can't open file '%1'"
 msgstr "Ei voitu avata tiedostoa '%1'"
 
-#: ../src/document/RosegardenGUIDoc.cpp:579
+#: ../src/document/RosegardenGUIDoc.cpp:581
 msgid "Reading file..."
 msgstr "Luetaan tiedostoa..."
 
-#: ../src/document/RosegardenGUIDoc.cpp:597
+#: ../src/document/RosegardenGUIDoc.cpp:599
 msgid "Could not open Rosegarden file"
 msgstr "Ei voitu avata Rosegarden-tiedostoa"
 
-#: ../src/document/RosegardenGUIDoc.cpp:635
+#: ../src/document/RosegardenGUIDoc.cpp:637
 msgid "Error when parsing file '%1': \"%2\""
 msgstr "Virhe jäsennettäessä tiedostoa '%1': \"%2\""
 
-#: ../src/document/RosegardenGUIDoc.cpp:683
+#: ../src/document/RosegardenGUIDoc.cpp:685
 msgid "Generating audio previews..."
 msgstr "Luodaan ääniesikatseluita..."
 
-#: ../src/document/RosegardenGUIDoc.cpp:715
+#: ../src/document/RosegardenGUIDoc.cpp:717
 msgid "Merge"
 msgstr "Sulauta"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1599
+#: ../src/document/RosegardenGUIDoc.cpp:1608
 msgid "File load cancelled"
 msgstr "Tiedoston lataaminen keskeytettiin"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1619
+#: ../src/document/RosegardenGUIDoc.cpp:1628
 msgid ""
 "<h3>Audio and plugins not available</h3><p>This composition uses audio files "
 "or plugins, but Rosegarden is currently running without audio because the "
@@ -10132,7 +10154,7 @@ msgstr ""
 "p><p><b>VAROITUS:</b> Jos tallennat tämän sävellyksen uudelleen, sen kaikki "
 "ääni- ja lisäosatiedot ja asetukset häviävät.</p>"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1622
+#: ../src/document/RosegardenGUIDoc.cpp:1631
 msgid ""
 "<h3>Audio and plugins not available</h3><p>This composition uses audio files "
 "or plugins, but you are running a version of Rosegarden that was compiled "
@@ -10146,7 +10168,7 @@ msgstr ""
 "sävellyksen uudelleen tällä Rosegardenin versiolla, sen kaikki ääni- ja "
 "lisäosatiedot ja asetukset häviävät.</p>"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1659
+#: ../src/document/RosegardenGUIDoc.cpp:1668
 msgid ""
 "<h3>Incorrect audio sample rate</h3><p>This composition contains audio files "
 "that were recorded or imported with the audio server running at a different "
@@ -10165,7 +10187,7 @@ msgstr ""
 "uudelleen oikealla taajuudella (%3 Hz) ja lataa tämä sävellys uudelleen "
 "ennen kuin teet mitään lisätyötä sen kanssa.</p>"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1669
+#: ../src/document/RosegardenGUIDoc.cpp:1678
 msgid ""
 "<h3>Inconsistent audio sample rates</h3><p>This composition contains audio "
 "files at more than one sample rate.</p><p>Rosegarden will play them at the "
@@ -10183,21 +10205,22 @@ msgstr ""
 "harkitse niiden tiedostojen näytteenottotaajuuden muuttamista, jotka ovat "
 "väärällä taajuudella.</p>"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1670
+#: ../src/document/RosegardenGUIDoc.cpp:1679
 msgid "Inconsistent sample rates"
 msgstr "Yhteensopimattomia näytteenottotaajuuksia"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1684
+#: ../src/document/RosegardenGUIDoc.cpp:1693
 msgid ""
 "<h3>Plugins not found</h3><p>The following audio plugins could not be loaded:"
 "</p><ul>"
-msgstr "<h3>Lisäosia ei löytynyt</h3><p>Seuraavaa ääni-lisäosaa ei ladattu:</p><ul>"
+msgstr ""
+"<h3>Lisäosia ei löytynyt</h3><p>Seuraavaa ääni-lisäosaa ei ladattu:</p><ul>"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1692
+#: ../src/document/RosegardenGUIDoc.cpp:1701
 msgid "<li>%1 (from %2)</li>"
 msgstr "<li>%1 (paikasta %2)</li>"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1706
+#: ../src/document/RosegardenGUIDoc.cpp:1715
 msgid ""
 "This file contains one or more old element types that are now deprecated.\n"
 "Support for these elements may disappear in future versions of Rosegarden.\n"
@@ -10210,12 +10233,12 @@ msgstr ""
 "Suosittelemme, että talletat tämän tiedoston tällä Rosegarden-versiolla "
 "varmistaaksesi, että se voidaan ladata vielä tulevissa versioissa."
 
-#: ../src/document/RosegardenGUIDoc.cpp:2201
+#: ../src/document/RosegardenGUIDoc.cpp:2248
 msgid "Insert Recorded MIDI"
 msgstr "Syötä nauhoitettu MIDI"
 
-#: ../src/document/RosegardenGUIDoc.cpp:2557
-#: ../src/document/RosegardenGUIDoc.cpp:2637
+#: ../src/document/RosegardenGUIDoc.cpp:2614
+#: ../src/document/RosegardenGUIDoc.cpp:2694
 msgid "(recorded)"
 msgstr "(nauhoitettu)"
 
@@ -11365,6 +11388,15 @@ msgstr ""
 "ääniosa ja käytä <b>Sävellys -> Tempo- ja aikamerkintä -> aseta Tempo "
 "ääniosan kestoon</b>.</p>\n"
 
+#: ../docs/en/tips.cpp:323
+msgid ""
+" \t \n"
+"<p>...that you can set your own keyboard shortcuts for your favourite "
+"actions.<br><br>Just go to <b>Settings -> Configure shortcuts</b> and set up "
+"your shortcuts.<br>They will show up in the menus just as if they were "
+"native Rosegarden shortcuts.</p>\n"
+msgstr ""
+
 #: ../data/fonts/mappings/fonts.cpp:1
 msgid "Feta Pixmaps"
 msgstr "Feta-pikselikartat"
@@ -11424,7 +11456,8 @@ msgstr "Inkpen"
 
 #: ../data/fonts/mappings/fonts.cpp:17
 msgid "Inkpen is part of Sibelius, but other fonts may use the same mappings."
-msgstr "Inkpen on osa Sibelius:ta, mutta muut kirjasimet voivat käyttää sen karttaa."
+msgstr ""
+"Inkpen on osa Sibelius:ta, mutta muut kirjasimet voivat käyttää sen karttaa."
 
 #: ../data/fonts/mappings/fonts.cpp:18 ../data/fonts/mappings/fonts.cpp:28
 msgid "Copyright Sibelius Software Ltd"
@@ -11436,7 +11469,8 @@ msgstr "Maestro"
 
 #: ../data/fonts/mappings/fonts.cpp:22
 msgid "Maestro is part of Finale, but other fonts use the same mappings."
-msgstr "Maestro on osa Finale:a, mutta muut kirjasimet voivat käyttää sen karttaa."
+msgstr ""
+"Maestro on osa Finale:a, mutta muut kirjasimet voivat käyttää sen karttaa."
 
 #: ../data/fonts/mappings/fonts.cpp:23 ../data/fonts/mappings/fonts.cpp:33
 msgid "Copyright Coda Inc"
@@ -11444,7 +11478,8 @@ msgstr "Copyright Coda Inc"
 
 #: ../data/fonts/mappings/fonts.cpp:27
 msgid "Opus is part of Sibelius, but other fonts may use the same mappings."
-msgstr "Opus on osa Sibelius:ta, mutta muut kirjasimet voivat käyttää sen karttaa."
+msgstr ""
+"Opus on osa Sibelius:ta, mutta muut kirjasimet voivat käyttää sen karttaa."
 
 #: ../data/fonts/mappings/fonts.cpp:31
 msgid "Petrucci"
@@ -11452,7 +11487,8 @@ msgstr "Petrucci"
 
 #: ../data/fonts/mappings/fonts.cpp:32
 msgid "Petrucci is part of Finale, but other fonts use the same mappings."
-msgstr "Petrucci on osa Finale:a, mutta muut kirjasimet voivat käyttää sen karttaa."
+msgstr ""
+"Petrucci on osa Finale:a, mutta muut kirjasimet voivat käyttää sen karttaa."
 
 #: ../data/fonts/mappings/fonts.cpp:36
 msgid "RG21"
@@ -11517,4 +11553,3 @@ msgstr "Mensuraali"
 #: ../data/styles/styles.cpp:4
 msgid "Triangle"
 msgstr "Kolmio"
-
