@@ -46,7 +46,7 @@ NotationEraser::NotationEraser(NotationView* view)
 
     m_collapseRest = qStrToBool( settings.value("collapse", "false" ) ) ;
 
-    QAction* qa_toggle_rest_collapse = new QAction( 0, i18n("Collapse rests after erase"), dynamic_cast<QObject*>(this) );
+    QAction* qa_toggle_rest_collapse = new QAction( i18n("Collapse rests after erase"), dynamic_cast<QObject*>(this) );
 	connect( qa_toggle_rest_collapse, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleRestCollapse()) );
 	qa_toggle_rest_collapse->setObjectName( "toggle_rest_collapse" );	//### FIX: deallocate QAction ptr
 	qa_toggle_rest_collapse->setCheckable( true );	//
@@ -108,7 +108,9 @@ void NotationEraser::slotInsertSelected()
 
 void NotationEraser::slotSelectSelected()
 {
-    m_parentView->actionCollection()->action("select")->activate();
+//     m_parentView->actionCollection()->action("select")->activate();
+	QAction* tac = this->findChild<QAction*>( "select" );
+	tac->setEnabled( true );
 }
 
 const QString NotationEraser::ToolName   = "notationeraser";

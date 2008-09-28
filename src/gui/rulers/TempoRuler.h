@@ -20,21 +20,24 @@
 #define _RG_TEMPORULER_H_
 
 #include "gui/dialogs/TempoDialog.h"
-#include <kxmlguiclient.h>
+
+#include "base/Event.h"
+
 #include <QFont>
 #include <QFontMetrics>
 #include <QPixmap>
 #include <QSize>
 #include <QWidget>
-#include "base/Event.h"
+
+#include <kxmlguiclient.h>
 
 
 class QWheelEvent;
-class QPopupMenu;
+class QMenu;
 class QPaintEvent;
 class QMouseEvent;
 class QEvent;
-class KMainWindow;
+class QMainWindow;
 
 
 namespace Rosegarden
@@ -65,7 +68,7 @@ public:
      */
     TempoRuler(RulerScale *rulerScale,
                RosegardenGUIDoc *doc,
-               KMainWindow *parentMainWindow,
+               QMainWindow *parentMainWindow,
                double xorigin = 0.0,
                int height = 0,
                bool small = false,
@@ -156,15 +159,15 @@ private:
                        bool showTime = false);
 
     Composition *m_composition;
-    RulerScale *m_rulerScale;
-    TextFloat *m_textFloat;
-    QPopupMenu *m_menu;
-    KMainWindow *m_parentMainWindow;
+    RulerScale 	*m_rulerScale;
+    TextFloat 	*m_textFloat;
+    QMenu 		*m_menu;
+    QMainWindow *m_parentMainWindow;
 
-    QFont m_font;
-    QFont m_boldFont;
+    QFont 		m_font;
+    QFont 		m_boldFont;
     QFontMetrics m_fontMetrics;
-    QPixmap m_buffer;
+    QPixmap 	m_buffer;
 };
 
 

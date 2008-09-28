@@ -16,12 +16,8 @@
 */
 
 
-#include <QPaintEvent>
-#include <QMouseEvent>
 #include "TempoRuler.h"
 
-#include <klocale.h>
-#include <kstandarddirs.h>
 #include "misc/Debug.h"
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
@@ -35,10 +31,8 @@
 #include "gui/general/GUIPalette.h"
 #include "gui/widgets/TextFloat.h"
 #include "TempoColour.h"
-#include <QAction>
-#include <kglobal.h>
-#include <kxmlguiclient.h>
-#include <kxmlguifactory.h>
+
+#include <QMainWindow>
 #include <QColor>
 #include <QCursor>
 #include <QEvent>
@@ -49,11 +43,23 @@
 #include <QPainter>
 #include <QPixmap>
 #include <QPoint>
-#include <qpopupmenu.h>
+#include <QMenu>
 #include <QRect>
 #include <QSize>
 #include <QString>
 #include <QWidget>
+#include <QAction>
+#include <QEvent>
+#include <QPaintEvent>
+#include <QMouseEvent>
+
+
+
+#include <klocale.h>
+//#include <kstandarddirs.h>
+//#include <kglobal.h>
+#include <kxmlguiclient.h>
+#include <kxmlguifactory.h>
 
 
 namespace Rosegarden
@@ -61,7 +67,7 @@ namespace Rosegarden
 
 TempoRuler::TempoRuler(RulerScale *rulerScale,
                        RosegardenGUIDoc *doc,
-                       KMainWindow *parentMainWindow,
+                       QMainWindow *parentMainWindow,
                        double xorigin,
                        int height,
                        bool small,
@@ -1074,7 +1080,7 @@ TempoRuler::createMenu()
 
     QWidget* tmp = factory->container("tempo_ruler_menu", this);
 
-    m_menu = dynamic_cast<QPopupMenu*>(tmp);
+    m_menu = dynamic_cast<QMenu*>(tmp);
         
     if (!m_menu) {
         RG_DEBUG << "MarkerRuler::createMenu() failed\n";

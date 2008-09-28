@@ -20,6 +20,7 @@
 #define _RG_MATRIXVIEW_H_
 
 #include <Q3Canvas>
+
 #include "base/MidiProgram.h"
 #include "base/PropertyName.h"
 #include "base/SnapGrid.h"
@@ -28,13 +29,16 @@
 #include "MatrixHLayout.h"
 #include "MatrixVLayout.h"
 #include "MatrixCanvasView.h"
+#include "base/Event.h"
+#include "document/ConfigGroups.h"
+#include <vector>
+
 #include <QDockWidget>
 #include <QPoint>
 #include <QSize>
-#include <vector>
-#include "base/Event.h"
-#include "document/ConfigGroups.h"
+#include <QSize>
 
+class Q3Canvas;
 
 class QWidget;
 class QPaintEvent;
@@ -42,9 +46,8 @@ class QObject;
 class QMouseEvent;
 class QLabel;
 class QCursor;
-class Q3Canvas;
 class QComboBox;
-
+class QScrollArea;
 
 namespace Rosegarden
 {
@@ -493,7 +496,7 @@ protected slots:
     /**
      * The parameters box was docked back
      */
-	void slotParametersDockedBack(QDockWidget*, Qt::DockWidgetAreas );
+	void slotParametersDockedBack(QDockWidget*, int );// Qt::DockWidgetAreas );
 
     /**
      * The instrument for this track may have changed
@@ -584,7 +587,11 @@ protected:
     void extendKeyMapping();
 
     //--------------- Data members ---------------------------------
-
+	
+// 	QSlider*	m_zoomToolBar;
+	QToolBar*	m_zoomToolBar;
+	QToolBar*	m_actionsToolBar;
+	
     std::vector<MatrixStaff*> m_staffs;
 
     MatrixHLayout             m_hlayout;
@@ -608,8 +615,9 @@ protected:
 
     QDockWidget         *m_dockLeft;
     MatrixCanvasView    *m_canvasView;
-    QDeferScrollView    *m_pianoView;
-    PitchRuler          *m_pitchRuler;
+// 	QDeferScrollView    *m_pianoView;
+	QScrollArea   		*m_pianoView;
+	PitchRuler          *m_pitchRuler;
 
     MidiKeyMapping *m_localMapping;
 

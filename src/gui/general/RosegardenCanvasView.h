@@ -30,7 +30,7 @@ class QWidget;
 class QWheelEvent;
 class QScrollBar;
 class QResizeEvent;
-
+class QToolBar;
 
 namespace Rosegarden
 {
@@ -156,7 +156,9 @@ protected:
     QWidget* m_bottomWidget;
     int m_currentBottomWidgetHeight;
 
-    QWidget* m_leftWidget;
+    QWidget*	m_leftWidget;
+	
+	QToolBar*	m_mainToolBar;
 
     bool m_smoothScroll;
     int m_smoothScrollTimeInterval;

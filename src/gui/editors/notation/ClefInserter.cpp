@@ -70,12 +70,16 @@ void ClefInserter::slotNotesSelected()
 
 void ClefInserter::slotEraseSelected()
 {
-    m_parentView->actionCollection()->action("erase")->activate();
+//     m_parentView->actionCollection()->action("erase")->activate();
+	QAction* tac = this->findChild<QAction*>( "erase" );
+	tac->setEnabled( true );
 }
 
 void ClefInserter::slotSelectSelected()
 {
-    m_parentView->actionCollection()->action("select")->activate();
+//     m_parentView->actionCollection()->action("select")->activate();
+	QAction* tac = this->findChild<QAction*>( "select" );
+	tac->setEnabled( true );
 }
 
 void ClefInserter::ready()

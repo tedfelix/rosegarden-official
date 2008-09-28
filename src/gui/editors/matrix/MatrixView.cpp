@@ -20,6 +20,7 @@
 #include <Q3CanvasItem>
 #include <Q3CanvasPixmap>
 #include <Q3CanvasView>
+
 #include "MatrixView.h"
 
 #include "base/BaseProperties.h"
@@ -100,18 +101,12 @@
 #include "PianoKeyboard.h"
 #include "sound/MappedEvent.h"
 #include "sound/SequencerDataBlock.h"
-#include <klocale.h>
-#include <kstandarddirs.h>
+
 #include <QAction>
 #include <QComboBox>
 #include <QSettings>
 #include <QDockWidget>
-#include <kglobal.h>
 #include <QMessageBox>
-#include <kstatusbar.h>
-#include <ktoolbar.h>
-#include <kxmlguiclient.h>
-#include <Q3Canvas>
 #include <QCursor>
 #include <QDialog>
 #include <QLayout>
@@ -126,6 +121,15 @@
 #include <QWidget>
 #include <QMatrix>
 #include <QMouseEvent>
+#include <QStatusBar>
+#include <QToolBar>
+#include <QShortcut>
+#include <QKeySequence>
+
+#include <klocale.h>
+//#include <kglobal.h>
+//#include <kstandarddirs.h>
+#include <kxmlguiclient.h>
 
 
 namespace Rosegarden
@@ -165,19 +169,50 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 {
     RG_DEBUG << "MatrixView ctor: drumMode " << drumMode << "\n";
 
-    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/toolbar");
-    QPixmap matrixPixmap(pixmapDir + "/matrix.xpm");
-
+//     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/toolbar");
+//     QPixmap matrixPixmap(pixmapDir + "/matrix.xpm");
+	IconLoader il;
+	QPixmap matrixPixmap = il.loadPixmap( "matrix" );
+	
+	m_actionsToolBar = new QToolBar( "Action Tools", this );
+	m_zoomToolBar = new QToolBar( "Zoom Tool", this );
+// 	m_zoomToolBar = new QSlider( Qt::Horizontal, this );
+	addToolBar( m_actionsToolBar );
+	addToolBar( m_zoomToolBar );
+	
+	/*
     m_dockLeft = createDockWidget("params dock", matrixPixmap, 0L,
                                   i18n("Instrument Parameters"));
+	
     m_dockLeft->manualDock(m_mainDockWidget,             // dock target
                            QDockWidget::DockLeft,  // dock site
                            20);                   // relation target/this (in percent)
-
+	*/
+	
+	m_dockLeft = new QDockWidget( i18n("Instrument Parameters"),  this );
+	m_dockLeft->setAllowedAreas( Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea );
+	m_dockLeft->setFeatures( QDockWidget::AllDockWidgetFeatures );
+	this->addDockWidget( Qt::LeftDockWidgetArea, m_dockLeft ); // optional 3. param: Qt::Horizontal
+	
+	/*
+	// old:
     connect(m_dockLeft, SIGNAL(iMBeingClosed()),
             this, SLOT(slotParametersClosed()));
     connect(m_dockLeft, SIGNAL(hasUndocked()),
             this, SLOT(slotParametersClosed()));
+	*/
+	
+	/*
+	// new qt4:
+	//&&& dockLeft connection - not required ?
+	connect(m_dockLeft, SIGNAL(visibilityChanged(bool)),
+			this, SLOT(slotParametersClosed()));
+	
+	connect(m_dockLeft, SIGNAL(topLevelChanged(bool)),
+			this, SLOT(slotParametersClosed()));
+	*/
+	
+	
     // Apparently, hasUndocked() is emitted when the dock widget's
     // 'close' button on the dock handle is clicked.
 	connect(m_mainDockWidget, SIGNAL(docking(QDockWidget*, Qt::DockWidgetAreas )),
@@ -198,16 +233,21 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     QSettings settings;
     settings.beginGroup( MatrixViewConfigGroup );
+	
+// 	IconLoader il;
 
     if ( qStrToBool( settings.value("backgroundtextures-1.6-plus", "true" ) ) ) {
         QPixmap background;
-        QString pixmapDir =
-            KGlobal::dirs()->findResource("appdata", "pixmaps/");
+//         QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+		QString pixmapDir = il.getResourcePath( "pixmaps" );
+		
 	// We now use a lined background for the non-percussion matrix,
 	// suggested and supplied by Alessandro Preziosi
 	QString backgroundPixmap = isDrumMode() ? "bg-paper-white.xpm" : "bg-matrix-lines.xpm";
-        if (background.load(QString("%1/misc/%2").
-                            arg(pixmapDir, backgroundPixmap))) {
+        if (
+			background.load(QString("%1/misc/%2").arg(pixmapDir, backgroundPixmap))
+		){
+			
             tCanvas->setBackgroundPixmap(background);
         }
     }
@@ -256,7 +296,8 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
         }
     }
 
-    m_pianoView = new QDeferScrollView(getCentralWidget());
+//	m_pianoView = new QDeferScrollView(getCentralWidget());
+	m_pianoView = new QScrollArea(getCentralWidget());
 
     QWidget* vport = m_pianoView->viewport();
 
@@ -269,11 +310,28 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
         m_pitchRuler = new PianoKeyboard(vport);
     }
 
-    m_pianoView->setVScrollBarMode(QScrollView::AlwaysOff);
-    m_pianoView->setHScrollBarMode(QScrollView::AlwaysOff);
-    m_pianoView->addChild(m_pitchRuler);
-    m_pianoView->setFixedWidth(m_pianoView->contentsWidth());
-
+	// old:
+//     m_pianoView->setVScrollBarMode(QScrollView::AlwaysOff);
+//     m_pianoView->setHScrollBarMode(QScrollView::AlwaysOff);
+	
+	// new:
+// 	m_pianoView->verticalScrollBar()->setEnabled( false );
+// 	m_pianoView->horizontalScrollBar()->setEnabled( false );
+	m_pianoView->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+	m_pianoView->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+	
+// 	m_pianoView->addChild(m_pitchRuler);
+	QWidget *scrollMainWidget = new QWidget();
+	scrollMainWidget->setLayout( new QHBoxLayout() );
+	
+	// widget to scroll
+	m_pianoView->setWidget(scrollMainWidget);
+	
+	scrollMainWidget->layout()->addWidget( m_pitchRuler );
+// 	m_pianoView->setFixedWidth( m_pianoView->contentsWidth() );
+// 	m_pianoView->setFixedWidth( m_pianoView->maximumViewportSize().width() );
+	
+	
     m_grid->addWidget(m_pianoView, CANVASVIEW_ROW, 1);
 
     m_parameterBox = new InstrumentParameterBox(getDocument(), m_dockLeft);
@@ -330,8 +388,8 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
         m_snapGrid->setSnapTime(snapGridSize);
     } else {
         //###settings.beginGroup( MatrixViewConfigGroup );
-        snapGridSize = settings.value("Snap Grid Size", SnapGrid::SnapToBeat).toInt();
-        m_snapGrid->setSnapTime( snapGridSize.toString() );
+        snapGridSize = settings.value("Snap Grid Size", static_cast<int>(SnapGrid::SnapToBeat) ).toInt();
+        m_snapGrid->setSnapTime( snapGridSize );
         m_staffs[0]->getSegment().setSnapGridSize(snapGridSize);
     }
 
@@ -346,7 +404,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     setupActions();
     setupAddControlRulerMenu();
 
-    stateChanged("parametersbox_closed", KXMLGUIClient::StateReverse);
+    rgTempQtIV->stateChanged("parametersbox_closed", KXMLGUIClient::StateReverse);
 
     // tool bars
     initActionsToolbar();
@@ -516,7 +574,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     static_cast<TempoRuler *>(m_tempoRuler)->connectSignals();
     addRuler(m_tempoRuler);
 
-    stateChanged("have_selection", KXMLGUIClient::StateReverse);
+	rgTempQtIV->stateChanged("have_selection", KXMLGUIClient::StateReverse);
     slotTestClipboard();
 
     timeT start = doc->getComposition().getLoopStart();
@@ -545,7 +603,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     slotSetPointerPosition(comp.getPosition());
 
     // All toolbars should be created before this is called
-    setAutoSaveSettings("MatrixView", true);
+//     setAutoSaveSettings("MatrixView", true);	//&&& does not exist. use saveGeometry() ?? + custum var autoSave
 
     readOptions();
     setOutOfCtor();
@@ -627,9 +685,11 @@ void MatrixView::readOptions()
 
     opt = qStrToBool( settings.value("Show Parameters", "true" ) ) ;
     if (!opt) {
-        m_dockLeft->undock();
-        m_dockLeft->hide();
-        stateChanged("parametersbox_closed", KXMLGUIClient::StateNoReverse);
+//         m_dockLeft->undock();
+//         m_dockLeft->hide();
+		m_dockLeft->setFloating( false );
+		m_dockLeft->setVisible( false );
+		rgTempQtIV->stateChanged("parametersbox_closed", KXMLGUIClient::StateNoReverse);
         m_dockVisible = false;
     }
 
@@ -644,52 +704,66 @@ void MatrixView::setupActions()
     //
     // Edition tools (eraser, selector...)
     //
-    KRadioAction* toolAction = 0;
-
+// 	KRadioAction* toolAction = 0;
+	QAction* toolAction = 0;
+	
+	QActionGroup *qag_tools = new QActionGroup( this );//, i18n("Tools") );
+	
     IconLoader il;
 
-    QIcon icon = il.load("select");
+    QIcon icon;
+	
+	
+	icon = il.load("select");
+	toolAction = new QAction( icon, i18n("&Select and Edit"), this);// Qt::Key_F2,
+	connect( toolAction, SIGNAL(triggered()), this, SLOT(slotSelectSelected()) );
+//                                   actionCollection(), "select");
+//     toolAction->setExclusiveGroup("tools");
+	qag_tools->addAction( toolAction );
 
-    toolAction = new KRadioAction(i18n("&Select and Edit"), icon, Qt::Key_F2,
-                                  this, SLOT(slotSelectSelected()),
-                                  actionCollection(), "select");
-    toolAction->setExclusiveGroup("tools");
+	icon = il.load("pencil");
+	toolAction = new QAction( icon, i18n("&Draw"), this );// "pencil", Qt::Key_F3,
+	connect( toolAction, SIGNAL(triggered()), this, SLOT(slotPaintSelected()) );
+//                                   actionCollection(), "draw");
+//     toolAction->setExclusiveGroup("tools");
+	qag_tools->addAction( toolAction );
 
-    toolAction = new KRadioAction(i18n("&Draw"), "pencil", Qt::Key_F3,
-                                  this, SLOT(slotPaintSelected()),
-                                  actionCollection(), "draw");
-    toolAction->setExclusiveGroup("tools");
+	icon = il.load("eraser");
+	toolAction = new QAction( icon, i18n("&Erase"), this );//"eraser", Qt::Key_F4,
+	connect( toolAction, SIGNAL(triggered()), this, SLOT(slotEraseSelected()) );
+//                                   actionCollection(), "erase");
+//     toolAction->setExclusiveGroup("tools");
+	qag_tools->addAction( toolAction );
 
-    toolAction = new KRadioAction(i18n("&Erase"), "eraser", Qt::Key_F4,
-                                  this, SLOT(slotEraseSelected()),
-                                  actionCollection(), "erase");
-    toolAction->setExclusiveGroup("tools");
-
-    toolAction = new KRadioAction(i18n("&Move"), "move", Qt::Key_F5,
-                                  this, SLOT(slotMoveSelected()),
-                                  actionCollection(), "move");
-    toolAction->setExclusiveGroup("tools");
+	icon = il.load("move");
+	toolAction = new QAction( icon, i18n("&Move"), this );//"move", Qt::Key_F5,
+	connect( toolAction, SIGNAL(triggered()), this, SLOT(slotMoveSelected()) );
+//                                   actionCollection(), "move");
+//     toolAction->setExclusiveGroup("tools");
+	qag_tools->addAction( toolAction );
 
     icon = il.load("resize");
-    toolAction = new KRadioAction(i18n("Resi&ze"), icon, Qt::Key_F6,
-                                  this, SLOT(slotResizeSelected()),
-                                  actionCollection(), "resize");
-    toolAction->setExclusiveGroup("tools");
+	toolAction = new QAction( icon, i18n("Resi&ze"), this );//icon, Qt::Key_F6,
+	connect( toolAction, SIGNAL(triggered()), this, SLOT(slotResizeSelected()) );
+//                                   actionCollection(), "resize");
+//     toolAction->setExclusiveGroup("tools");
+	qag_tools->addAction( toolAction );
 
     icon = il.load("chord");
-    (QAction* qa_chord_mode = new QAction( icon, i18n("C&hord Insert Mode"), dynamic_cast<QObject*>(Qt::Key_H) );
-	connect( qa_chord_mode, SIGNAL(toggled()), dynamic_cast<QObject*>(Qt::Key_H), this, SLOT(slotUpdateInsertModeStatus()) );
+    QAction* qa_chord_mode = new QAction( icon, i18n("C&hord Insert Mode"), dynamic_cast<QObject*>(this) ); //(Qt::Key_H) );
+	connect( qa_chord_mode, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotUpdateInsertModeStatus()) );
 	qa_chord_mode->setObjectName( "chord_mode" );	//### FIX: deallocate QAction ptr
 	qa_chord_mode->setCheckable( true );	//
 	qa_chord_mode->setAutoRepeat( false );	//
+	qa_chord_mode->setShortcut( QKeySequence(Qt::Key_H) );
 	//qa_chord_mode->setActionGroup( 0 );	// QActionGroup*
 	qa_chord_mode->setChecked( false );	//
 	// )->
-    setChecked(false);
+//     setChecked(false);
 
-     icon = il.load("step_by_step");
-    QAction* qa_toggle_step_by_step = new QAction( icon, i18n("Ste&p Recording"), dynamic_cast<QObject*>(0) );
-	connect( qa_toggle_step_by_step, SIGNAL(toggled()), dynamic_cast<QObject*>(0), this );
+    icon = il.load("step_by_step");
+    QAction* qa_toggle_step_by_step = new QAction( icon, i18n("Ste&p Recording"), dynamic_cast<QObject*>(this) );
+	connect( qa_toggle_step_by_step, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleStepByStep()) );
 	qa_toggle_step_by_step->setObjectName( "toggle_step_by_step" );	//### FIX: deallocate QAction ptr
 	qa_toggle_step_by_step->setCheckable( true );	//
 	qa_toggle_step_by_step->setAutoRepeat( false );	//
@@ -697,9 +771,9 @@ void MatrixView::setupActions()
 	qa_toggle_step_by_step->setChecked( false );	//
 	// ;
 
-     icon = il.load("quantize");
-    QAction* qa_quantize = new QAction(  EventQuantizeCommand::getGlobalName(), dynamic_cast<QObject*>(Qt::Key_Equal) );
-			connect( qa_quantize, SIGNAL(toggled()), dynamic_cast<QObject*>(Qt::Key_Equal), this );
+    icon = il.load("quantize");
+	QAction* qa_quantize = new QAction( icon, i18n("Event Quantize Command"), this ); //EventQuantizeCommand::getGlobalName(), dynamic_cast<QObject*>(Qt::Key_Equal) );
+			connect( qa_quantize, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotQuantizeSelection()) );
 			qa_quantize->setObjectName( "quantize" );		//
 			//qa_quantize->setCheckable( true );		//
 			qa_quantize->setAutoRepeat( false );	//
@@ -708,7 +782,8 @@ void MatrixView::setupActions()
 			//### FIX: deallocate QAction ptr
 			
 
-    QAction* qa_repeat_quantize = new QAction(  i18n("Repeat Last Quantize"), dynamic_cast<QObject*>(this) );
+	icon = il.load("repeat_quantize");
+	QAction* qa_repeat_quantize = new QAction( i18n("Repeat Last Quantize"), dynamic_cast<QObject*>(this) );
 			connect( qa_repeat_quantize, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotTransformsRepeatQuantize()) );
 			qa_repeat_quantize->setObjectName( "repeat_quantize" );		//
 			//qa_repeat_quantize->setCheckable( true );		//
@@ -718,6 +793,8 @@ void MatrixView::setupActions()
 			//### FIX: deallocate QAction ptr
 			
 
+			
+	icon = il.load("collapse_notes");
     QAction* qa_collapse_notes = new QAction(  CollapseNotesCommand::getGlobalName(), dynamic_cast<QObject*>(this) );
 			connect( qa_collapse_notes, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotTransformsCollapseNotes()) );
 			qa_collapse_notes->setObjectName( "collapse_notes" );		//
@@ -727,7 +804,8 @@ void MatrixView::setupActions()
 			//qa_collapse_notes->setChecked( false );		//
 			//### FIX: deallocate QAction ptr
 			
-
+	
+	icon = il.load("legatoize");
     QAction* qa_legatoize = new QAction(  i18n("&Legato"), dynamic_cast<QObject*>(this) );
 			connect( qa_legatoize, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotTransformsLegato()) );
 			qa_legatoize->setObjectName( "legatoize" );		//
@@ -737,9 +815,10 @@ void MatrixView::setupActions()
 			//qa_legatoize->setChecked( false );		//
 			//### FIX: deallocate QAction ptr
 			
-
-    QAction* qa_velocity_up = new QAction(  ChangeVelocityCommand::getGlobalName(10), dynamic_cast<QObject*>(Qt::Key_Up + Qt::SHIFT) );
-			connect( qa_velocity_up, SIGNAL(toggled()), dynamic_cast<QObject*>(Qt::Key_Up + Qt::SHIFT), this );
+	
+	icon = il.load("velocity_up");
+	QAction* qa_velocity_up = new QAction( icon, i18n("Increase Velocity"), this );  //ChangeVelocityCommand::getGlobalName(10), dynamic_cast<QObject*>(Qt::Key_Up + Qt::SHIFT) );
+			connect( qa_velocity_up, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotVelocityUp()) );
 			qa_velocity_up->setObjectName( "velocity_up" );		//
 			//qa_velocity_up->setCheckable( true );		//
 			qa_velocity_up->setAutoRepeat( false );	//
@@ -747,9 +826,10 @@ void MatrixView::setupActions()
 			//qa_velocity_up->setChecked( false );		//
 			//### FIX: deallocate QAction ptr
 			
-
-    QAction* qa_velocity_down = new QAction(  ChangeVelocityCommand::getGlobalName( -10), dynamic_cast<QObject*>(Qt::Key_Down + Qt::SHIFT) );
-			connect( qa_velocity_down, SIGNAL(toggled()), dynamic_cast<QObject*>(Qt::Key_Down + Qt::SHIFT), this );
+	
+	icon = il.load("velocity_down");
+	QAction* qa_velocity_down = new QAction( icon, i18n("Decrease Velocity"), this );  //ChangeVelocityCommand::getGlobalName( -10), dynamic_cast<QObject*>(Qt::Key_Down + Qt::SHIFT) );
+			connect( qa_velocity_down, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotVelocityDown()) );
 			qa_velocity_down->setObjectName( "velocity_down" );		//
 			//qa_velocity_down->setCheckable( true );		//
 			qa_velocity_down->setAutoRepeat( false );	//
@@ -757,8 +837,9 @@ void MatrixView::setupActions()
 			//qa_velocity_down->setChecked( false );		//
 			//### FIX: deallocate QAction ptr
 			
-
-    QAction* qa_set_to_current_velocity = new QAction(  i18n("Set to Current Velocity"), dynamic_cast<QObject*>(this) );
+			
+	icon = il.load("set_to_current_velocity");
+	QAction* qa_set_to_current_velocity = new QAction(  i18n("Set to Current Velocity"), dynamic_cast<QObject*>(this) );
 			connect( qa_set_to_current_velocity, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotSetVelocitiesToCurrent()) );
 			qa_set_to_current_velocity->setObjectName( "set_to_current_velocity" );		//
 			//qa_set_to_current_velocity->setCheckable( true );		//
@@ -767,7 +848,8 @@ void MatrixView::setupActions()
 			//qa_set_to_current_velocity->setChecked( false );		//
 			//### FIX: deallocate QAction ptr
 			
-
+			
+	icon = il.load("set_velocities");
     QAction* qa_set_velocities = new QAction(  i18n("Set Event &Velocities..."), dynamic_cast<QObject*>(this) );
 			connect( qa_set_velocities, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotSetVelocities()) );
 			qa_set_velocities->setObjectName( "set_velocities" );		//
@@ -777,7 +859,8 @@ void MatrixView::setupActions()
 			//qa_set_velocities->setChecked( false );		//
 			//### FIX: deallocate QAction ptr
 			
-
+			
+	icon = il.load("trigger_segment");
     QAction* qa_trigger_segment = new QAction(  i18n("Trigger Se&gment..."), dynamic_cast<QObject*>(this) );
 			connect( qa_trigger_segment, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotTriggerSegment()) );
 			qa_trigger_segment->setObjectName( "trigger_segment" );		//
@@ -787,7 +870,8 @@ void MatrixView::setupActions()
 			//qa_trigger_segment->setChecked( false );		//
 			//### FIX: deallocate QAction ptr
 			
-
+			
+	icon = il.load("remove_trigger");
     QAction* qa_remove_trigger = new QAction(  i18n("Remove Triggers..."), dynamic_cast<QObject*>(this) );
 			connect( qa_remove_trigger, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotRemoveTriggers()) );
 			qa_remove_trigger->setObjectName( "remove_trigger" );		//
@@ -797,7 +881,8 @@ void MatrixView::setupActions()
 			//qa_remove_trigger->setChecked( false );		//
 			//### FIX: deallocate QAction ptr
 			
-
+			
+	icon = il.load("select_all");
     QAction* qa_select_all = new QAction(  i18n("Select &All"), dynamic_cast<QObject*>(this) );
 			connect( qa_select_all, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotSelectAll()) );
 			qa_select_all->setObjectName( "select_all" );		//
@@ -807,8 +892,10 @@ void MatrixView::setupActions()
 			//qa_select_all->setChecked( false );		//
 			//### FIX: deallocate QAction ptr
 			
-
-    QAction* qa_delete = new QAction(  i18n("&Delete"), dynamic_cast<QObject*>(this) );
+			
+	
+	icon = il.load("delete");
+    QAction* qa_delete = new QAction( icon, i18n("&Delete"), dynamic_cast<QObject*>(this) );
 			connect( qa_delete, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotEditDelete()) );
 			qa_delete->setObjectName( "delete" );		//
 			//qa_delete->setCheckable( true );		//
@@ -874,18 +961,20 @@ void MatrixView::setupActions()
 			//### FIX: deallocate QAction ptr
 			
 
-    new KAction(i18n("Cursor to St&art"), 0,
+    QAction * qa_cursor_start = new QAction( i18n("Cursor to St&art"), this );
                 /* #1025717: conflicting meanings for ctrl+a - dupe with Select All
-                  Qt::Key_A + Qt::CTRL, */ this, 
-                SLOT(slotJumpToStart()), actionCollection(),
-                "cursor_start");
+                  Qt::Key_A + Qt::CTRL, */
+	connect( qa_cursor_start,SIGNAL(triggered()), this, SLOT(slotJumpToStart()) ); //, actionCollection(),
+//                "cursor_start");
+	
 
-    QAction *qa_cursor_end = new QAction( "Cursor to &End", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+    QAction *qa_cursor_end = new QAction( i18n("Cursor to &End"), dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_cursor_end->setIconText(0); 
 			connect( qa_cursor_end, SIGNAL(triggered()), this, SLOT(slotJumpToEnd())  );
 
-    icon = il.load
-                    ("transport-cursor-to-pointer");
+			
+	
+    icon = il.load("transport-cursor-to-pointer");
     QAction *qa_cursor_to_playback_pointer = new QAction( "Cursor to &Playback Pointer", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_cursor_to_playback_pointer->setIcon(icon); 
 			connect( qa_cursor_to_playback_pointer, SIGNAL(triggered()), this, SLOT(slotJumpCursorToPlayback())  );
@@ -895,10 +984,12 @@ void MatrixView::setupActions()
     QAction *qa_play = new QAction( "&Play", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_play->setIcon(icon); 
 			connect( qa_play, SIGNAL(triggered()), this, SIGNAL(play())  );
-    // Alternative shortcut for Play
-    KShortcut playShortcut = play->shortcut();
-    playShortcut.append( KKey(Key_Return + Qt::CTRL) );
-    play.setShortcut(playShortcut);
+    
+	// Alternative shortcut for Play
+	qa_play->setShortcut( QKeySequence(Qt::Key_Return + Qt::CTRL) );
+	//QShortcut playShortcut = play->shortcut();
+    //playShortcut.append( QKeySequence( Qt::Key_Return + Qt::CTRL) );
+    //play.setShortcut(playShortcut);
 
     icon = il.load
                     ("transport-stop");
@@ -938,8 +1029,8 @@ void MatrixView::setupActions()
 
     icon = il.load
                     ("transport-solo");
-    QAction* qa_toggle_solo = new QAction( icon, i18n("&Solo"), dynamic_cast<QObject*>(0) );
-	connect( qa_toggle_solo, SIGNAL(toggled()), dynamic_cast<QObject*>(0), this );
+    QAction* qa_toggle_solo = new QAction( icon, i18n("&Solo"), dynamic_cast<QObject*>(this) );
+	connect( qa_toggle_solo, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleSolo()) );
 	qa_toggle_solo->setObjectName( "toggle_solo" );	//### FIX: deallocate QAction ptr
 	qa_toggle_solo->setCheckable( true );	//
 	qa_toggle_solo->setAutoRepeat( false );	//
@@ -949,8 +1040,8 @@ void MatrixView::setupActions()
 
     icon = il.load
                     ("transport-tracking");
-    (QAction* qa_toggle_tracking = new QAction( icon, i18n("Scro&ll to Follow Playback"), dynamic_cast<QObject*>(Qt::Key_Pause) );
-	connect( qa_toggle_tracking, SIGNAL(toggled()), dynamic_cast<QObject*>(Qt::Key_Pause), this );
+    QAction* qa_toggle_tracking = new QAction( icon, i18n("Scro&ll to Follow Playback"), this ); // dynamic_cast<QObject*>(Qt::Key_Pause) );
+	connect( qa_toggle_tracking, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleTracking()) );
 	qa_toggle_tracking->setObjectName( "toggle_tracking" );	//### FIX: deallocate QAction ptr
 	qa_toggle_tracking->setCheckable( true );	//
 	qa_toggle_tracking->setAutoRepeat( false );	//
@@ -962,7 +1053,7 @@ void MatrixView::setupActions()
                     ("transport-panic");
     QAction *qa_panic = new QAction( "Panic", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_panic->setIcon(icon); 
-			connect( qa_panic, SIGNAL(triggered()), this, SIGNAL(panic())  );
+			connect( qa_panic, SIGNAL(triggered()), this, SLOT(panic())  );
 
     QAction* qa_preview_selection = new QAction(  i18n("Set Loop to Selection"), dynamic_cast<QObject*>(this) );
 			connect( qa_preview_selection, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotPreviewSelection()) );
@@ -1058,8 +1149,9 @@ void MatrixView::setupActions()
             QPixmap pixmap = NotePixmapFactory::toQPixmap
                 (NotePixmapFactory::makeNoteMenuPixmap(d, err));
 
-            KShortcut cut = 0;
-            if (d == crotchetDuration / 16) cut = Qt::Key_0;
+// 			QShortcut cut = 0;
+			QKeySequence cut;// = 0;
+			if (d == crotchetDuration / 16) cut = Qt::Key_0;
             else if (d == crotchetDuration / 8) cut = Qt::Key_3;
             else if (d == crotchetDuration / 4) cut = Qt::Key_6;
             else if (d == crotchetDuration / 2) cut = Qt::Key_8;
@@ -1069,9 +1161,13 @@ void MatrixView::setupActions()
             QString actionName = QString("snap_%1").arg(int((crotchetDuration * 4) / d));
             if (d == (crotchetDuration * 3) / 4) actionName = "snap_dotted_8";
             if (d == (crotchetDuration * 3) / 2) actionName = "snap_dotted_4";
-            new KAction(i18n("Snap to %1", label), pixmap, cut, this,
-                        SLOT(slotSetSnapFromAction()), actionCollection(),
-                        actionName);
+			
+			
+            QAction *tac = new QAction( QIcon(pixmap), i18n("Snap to %1", label), this );// pixmap, cut, this,
+            connect( tac, SIGNAL(triggered()), this, SLOT(slotSetSnapFromAction()) ); 
+			// actionCollection(), actionName);
+			tac->setObjectName( actionName );
+			tac->setShortcut( cut );
         }
     }
 
@@ -1088,7 +1184,7 @@ void MatrixView::setupActions()
 			//### FIX: deallocate QAction ptr
 			
 
-    QAction* qa_show_chords_ruler = new QAction( 0, i18n("Show Ch&ord Name Ruler"), dynamic_cast<QObject*>(this) );
+    QAction* qa_show_chords_ruler = new QAction( i18n("Show Ch&ord Name Ruler"), dynamic_cast<QObject*>(this) );
 	connect( qa_show_chords_ruler, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleChordsRuler()) );
 	qa_show_chords_ruler->setObjectName( "show_chords_ruler" );	//### FIX: deallocate QAction ptr
 	qa_show_chords_ruler->setCheckable( true );	//
@@ -1097,7 +1193,7 @@ void MatrixView::setupActions()
 	qa_show_chords_ruler->setChecked( false );	//
 	// ;
 
-    QAction* qa_show_tempo_ruler = new QAction( 0, i18n("Show &Tempo Ruler"), dynamic_cast<QObject*>(this) );
+    QAction* qa_show_tempo_ruler = new QAction( i18n("Show &Tempo Ruler"), dynamic_cast<QObject*>(this) );
 	connect( qa_show_tempo_ruler, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleTempoRuler()) );
 	qa_show_tempo_ruler->setObjectName( "show_tempo_ruler" );	//### FIX: deallocate QAction ptr
 	qa_show_tempo_ruler->setCheckable( true );	//
@@ -1106,36 +1202,46 @@ void MatrixView::setupActions()
 	qa_show_tempo_ruler->setChecked( false );	//
 	// ;
 
-    createGUI(getRCFileName(), false);
+    rgTempQtIV->createGUI( qStrToCharPtrUtf8(getRCFileName()), false);
 
-    if (getSegmentsOnlyRestsAndClefs())
-        actionCollection()->action("draw")->activate();
-    else
-        actionCollection()->action("select")->activate();
+	QAction *tac = 0;
+    if (getSegmentsOnlyRestsAndClefs()){
+		tac = this->findChild<QAction*>( "draw" );
+		tac->setEnabled(true);
+//         actionCollection()->action("draw")->activate();
+	}else{
+		tac = this->findChild<QAction*>( "select" );
+		tac->setEnabled(true);
+// 		actionCollection()->action("select")->activate();
+		
+	}
 }
 
 bool
 MatrixView::isInChordMode()
 {
-    return ((/* was toggle */ QAction *)actionCollection()->action("chord_mode"))->
-           isChecked();
+	QAction * tac = this->findChild<QAction*>( "chord_mode" );
+	return tac->isChecked();
+			
+// 	((/* was toggle */ QAction *)actionCollection()->action("chord_mode"))->
+//            isChecked();
 }
 
 void MatrixView::slotDockParametersBack()
 {
-    m_dockLeft->dockBack();
+//     m_dockLeft->dockBack();		//&&& not required ?
 }
 
 void MatrixView::slotParametersClosed()
 {
-    stateChanged("parametersbox_closed");
+	rgTempQtIV->stateChanged("parametersbox_closed", 0);
     m_dockVisible = false;
 }
 
-void MatrixView::slotParametersDockedBack(QDockWidget* dw, QDockWidget::DockPosition)
+void MatrixView::slotParametersDockedBack(QDockWidget* dw, int )//QDockWidget::DockPosition)
 {
     if (dw == m_dockLeft) {
-        stateChanged("parametersbox_closed", KXMLGUIClient::StateReverse);
+		rgTempQtIV->stateChanged("parametersbox_closed", KXMLGUIClient::StateReverse);
         m_dockVisible = true;
     }
 }
@@ -1154,7 +1260,7 @@ void MatrixView::slotCheckTrackAssignments()
 
 void MatrixView::initStatusBar()
 {
-    KStatusBar* sb = statusBar();
+    QStatusBar* sb = statusBar();
 
     m_hoveredOverAbsoluteTime = new QLabel(sb);
     m_hoveredOverNoteName = new QLabel(sb);
@@ -1169,11 +1275,13 @@ void MatrixView::initStatusBar()
     m_insertModeLabel->setMinimumWidth(20);
     sb->addWidget(m_insertModeLabel);
 
+	/*
     sb->addItem(KTmpStatusMsg::getDefaultMsg(),
                    KTmpStatusMsg::getDefaultId(), 1);
     sb->setItemAlignment(KTmpStatusMsg::getDefaultId(),
                          AlignLeft | AlignVCenter);
-
+	*/
+	
     m_selectionCounter = new QLabel(sb);
     sb->addWidget(m_selectionCounter);
 }
@@ -1193,7 +1301,8 @@ void MatrixView::slotToolHelpChanged(const QString &s)
     }
     settings.endGroup();
 
-    if (m_mouseInCanvasView) statusBar()->changeItem(m_toolContextHelp, 1);
+// 	if (m_mouseInCanvasView) statusBar()->changeItem(m_toolContextHelp, 1);
+	if (m_mouseInCanvasView) statusBar()->showMessage(m_toolContextHelp);
 }
 
 void MatrixView::slotMouseEnteredCanvasView()
@@ -1208,13 +1317,15 @@ void MatrixView::slotMouseEnteredCanvasView()
     settings.endGroup();
 
     m_mouseInCanvasView = true;
-    statusBar()->changeItem(m_toolContextHelp, 1);
+//     statusBar()->changeItem(m_toolContextHelp, 1);
+	statusBar()->showMessage(m_toolContextHelp);
 }
 
 void MatrixView::slotMouseLeftCanvasView()
 {
     m_mouseInCanvasView = false;
-    statusBar()->changeItem(KTmpStatusMsg::getDefaultMsg(), 1);
+//     statusBar()->changeItem(KTmpStatusMsg::getDefaultMsg(), 1);
+	statusBar()->showMessage( "default message" );	//### fix default message
 }
 
 bool MatrixView::applyLayout(int staffNo,
@@ -1439,18 +1550,18 @@ void MatrixView::setCurrentSelection(EventSelection* s, bool preview,
     // Clear states first, then enter only those ones that apply
     // (so as to avoid ever clearing one after entering another, in
     // case the two overlap at all)
-    stateChanged("have_selection", KXMLGUIClient::StateReverse);
-    stateChanged("have_notes_in_selection", KXMLGUIClient::StateReverse);
-    stateChanged("have_rests_in_selection", KXMLGUIClient::StateReverse);
+	rgTempQtIV->stateChanged("have_selection", KXMLGUIClient::StateReverse);
+	rgTempQtIV->stateChanged("have_notes_in_selection", KXMLGUIClient::StateReverse);
+	rgTempQtIV->stateChanged("have_rests_in_selection", KXMLGUIClient::StateReverse);
 
     if (s) {
-        stateChanged("have_selection", KXMLGUIClient::StateNoReverse);
+		rgTempQtIV->stateChanged("have_selection", KXMLGUIClient::StateNoReverse);
         if (s->contains(Note::EventType)) {
-            stateChanged("have_notes_in_selection",
+			rgTempQtIV->stateChanged("have_notes_in_selection",
                          KXMLGUIClient::StateNoReverse);
         }
         if (s->contains(Note::EventRestType)) {
-            stateChanged("have_rests_in_selection",
+			rgTempQtIV->stateChanged("have_rests_in_selection",
                          KXMLGUIClient::StateNoReverse);
         }
     }
@@ -1589,7 +1700,7 @@ void MatrixView::slotMousePressed(timeT time, int pitch,
 
     m_tool->handleMousePress(time, pitch, 0, e, el);
 
-    if (e->button() != RightButton) {
+    if (e->button() != Qt::RightButton) {
         getCanvasView()->startAutoScroll();
     }
 
@@ -2000,8 +2111,10 @@ void MatrixView::slotKeyReleased(unsigned int y, bool repeating)
 
 void MatrixView::slotVerticalScrollPianoKeyboard(int y)
 {
-    if (m_pianoView) // check that the piano view still exists (see dtor)
-        m_pianoView->setContentsPos(0, y);
+    if (m_pianoView){ // check that the piano view still exists (see dtor)
+//         m_pianoView->setContentsPos(0, y);
+		m_pianoView->ensureVisible( 0, y );
+	}
 }
 
 void MatrixView::slotInsertNoteFromAction()
@@ -2313,7 +2426,8 @@ MatrixView::initActionsToolbar()
 {
     MATRIX_DEBUG << "MatrixView::initActionsToolbar" << endl;
 
-    KToolBar *actionsToolbar = toolBar("Actions Toolbar");
+// 	QToolBar *actionsToolbar = toolBar("Actions Toolbar");
+	QToolBar *actionsToolbar = m_actionsToolBar;
 
     if (!actionsToolbar) {
         MATRIX_DEBUG << "MatrixView::initActionsToolbar - "
@@ -2398,7 +2512,9 @@ MatrixView::initZoomToolbar()
 {
     MATRIX_DEBUG << "MatrixView::initZoomToolbar" << endl;
 
-    KToolBar *zoomToolbar = toolBar("Zoom Toolbar");
+//     QToolBar *zoomToolbar = toolBar("Zoom Toolbar");
+// 	QSlider *zoomToolbar = m_zoomToolBar;
+	QToolBar *zoomToolbar = m_zoomToolBar;
 
     if (!zoomToolbar) {
         MATRIX_DEBUG << "MatrixView::initZoomToolbar - "
@@ -2421,9 +2537,10 @@ MatrixView::initZoomToolbar()
 //         zoomSizes.push_back(factors[i] / 2); // GROSS HACK - see in matrixstaff.h - BREAKS MATRIX VIEW, see bug 1000595
         zoomSizes.push_back(factors[i]);
     }
-
+	
+	// ZoomSlider( sizes, default val, orientation, parent, name );
     m_hZoomSlider = new ZoomSlider<double>
-                    (zoomSizes, -1, QSlider::Horizontal, zoomToolbar, "kde toolbar widget");
+                    (zoomSizes, -1, Qt::Horizontal, zoomToolbar, "kde toolbar widget");
     m_hZoomSlider->setTracking(true);
     m_hZoomSlider->setFocusPolicy(Qt::NoFocus);
 
@@ -3037,8 +3154,10 @@ MatrixView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn
         return ;
     }
 
-    /* was toggle */ QAction *action = dynamic_cast<QAction*>
-                            (actionCollection()->action("toggle_step_by_step"));
+//     QAction *action = dynamic_cast<QAction*>
+//                             (actionCollection()->action("toggle_step_by_step"));
+	QAction *action = this->findChild<QAction*>( "toggle_step_by_step" );
+
     if (!action) {
         MATRIX_DEBUG << "WARNING: No toggle_step_by_step action" << endl;
         return ;
@@ -3123,8 +3242,10 @@ MatrixView::slotInsertableNoteOffReceived(int pitch, int velocity)
 void
 MatrixView::slotToggleStepByStep()
 {
-    /* was toggle */ QAction *action = dynamic_cast<QAction*>
-                            (actionCollection()->action("toggle_step_by_step"));
+//     QAction *action = dynamic_cast<QAction*>
+//                             (actionCollection()->action("toggle_step_by_step"));
+	QAction *action = this->findChild<QAction*>( "toggle_step_by_step" );
+	
     if (!action) {
         MATRIX_DEBUG << "WARNING: No toggle_step_by_step action" << endl;
         return ;
@@ -3151,8 +3272,11 @@ MatrixView::slotUpdateInsertModeStatus()
 void
 MatrixView::slotStepByStepTargetRequested(QObject *obj)
 {
-    /* was toggle */ QAction *action = dynamic_cast<QAction*>
-                            (actionCollection()->action("toggle_step_by_step"));
+    /* was toggle */ 
+// 	QAction *action = dynamic_cast<QAction*>
+//                             (actionCollection()->action("toggle_step_by_step"));
+	QAction *action = this->findChild<QAction*>( "toggle_step_by_step" );
+	
     if (!action) {
         MATRIX_DEBUG << "WARNING: No toggle_step_by_step action" << endl;
         return ;
@@ -3251,8 +3375,9 @@ MatrixView::slotPercussionSetChanged(Instrument * newInstr)
 
     // Replace the old pitchruler widget
     m_pitchRuler = pitchRuler;
-    m_pianoView->addChild(m_pitchRuler);
-    m_pitchRuler->show();
+// 	m_pianoView->addChild(m_pitchRuler);
+	m_pianoView->layout()->addWidget(m_pitchRuler);
+	m_pitchRuler->show();
     m_pianoView->setFixedWidth(pitchRuler->sizeHint().width());
 
     // Update matrix canvas
@@ -3272,8 +3397,10 @@ MatrixView::slotPercussionSetChanged(Instrument * newInstr)
 void
 MatrixView::slotCanvasBottomWidgetHeightChanged(int newHeight)
 {
-    m_pianoView->setBottomMargin(newHeight +
-                                 m_canvasView->horizontalScrollBar()->height());
+	int newH;
+	newH = newHeight + m_canvasView->horizontalScrollBar()->height();
+//     m_pianoView->setBottomMargin( newH );
+	m_pianoView->setContentsMargins ( 0, 0, 0, newH );
 }
 
 MatrixCanvasView* MatrixView::getCanvasView()

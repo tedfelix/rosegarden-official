@@ -75,8 +75,8 @@ NotationSelector::NotationSelector(NotationView* view)
     QIcon icon
     (NotePixmapFactory::toQPixmap(NotePixmapFactory::
                                   makeToolbarPixmap("crotchet")));
-    QAction* qa_insert = new QAction( icon, i18n("Switch to Insert Tool"), dynamic_cast<QObject*>(0) );
-	connect( qa_insert, SIGNAL(toggled()), dynamic_cast<QObject*>(0), this );
+    QAction* qa_insert = new QAction( icon, i18n("Switch to Insert Tool"), dynamic_cast<QObject*>(view) );
+	connect( qa_insert, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT() );	//@@@ //### slot unknown
 	qa_insert->setObjectName( "insert" );	//### FIX: deallocate QAction ptr
 	qa_insert->setCheckable( true );	//
 	qa_insert->setAutoRepeat( false );	//
@@ -738,57 +738,79 @@ void NotationSelector::slotInsertSelected()
 
 void NotationSelector::slotEraseSelected()
 {
-    m_parentView->actionCollection()->action("erase")->activate();
+//     m_parentView->actionCollection()->action("erase")->activate();
+	QAction* tac = this->findChild<QAction*>( "erase" );
+	tac->setEnabled( true );
 }
 
 void NotationSelector::slotCollapseRestsHard()
 {
-    m_parentView->actionCollection()->action("collapse_rests_aggressively")->activate();
+//     m_parentView->actionCollection()->action("collapse_rests_aggressively")->activate();
+	QAction* tac = this->findChild<QAction*>( "collapse_rests_aggressively" );
+	tac->setEnabled( true );
 }
 
 void NotationSelector::slotRespellFlat()
 {
-    m_parentView->actionCollection()->action("respell_flat")->activate();
+//     m_parentView->actionCollection()->action("respell_flat")->activate();
+	QAction* tac = this->findChild<QAction*>( "respell_flat" );
+	tac->setEnabled( true );
 }
 
 void NotationSelector::slotRespellSharp()
 {
-    m_parentView->actionCollection()->action("respell_sharp")->activate();
+//     m_parentView->actionCollection()->action("respell_sharp")->activate();
+	QAction* tac = this->findChild<QAction*>( "respell_sharp" );
+	tac->setEnabled( true );
 }
 
 void NotationSelector::slotRespellNatural()
 {
-    m_parentView->actionCollection()->action("respell_natural")->activate();
+//     m_parentView->actionCollection()->action("respell_natural")->activate();
+	QAction* tac = this->findChild<QAction*>( "respell_natural" );
+	tac->setEnabled( true );
 }
 
 void NotationSelector::slotCollapseNotes()
 {
-    m_parentView->actionCollection()->action("collapse_notes")->activate();
+//     m_parentView->actionCollection()->action("collapse_notes")->activate();
+	QAction* tac = this->findChild<QAction*>( "collapse_notes" );
+	tac->setEnabled( true );
 }
 
 void NotationSelector::slotInterpret()
 {
-    m_parentView->actionCollection()->action("interpret")->activate();
+//     m_parentView->actionCollection()->action("interpret")->activate();
+	QAction* tac = this->findChild<QAction*>( "interpret" );
+	tac->setEnabled( true );
 }
 
 void NotationSelector::slotStaffAbove()
 {
-    m_parentView->actionCollection()->action("move_events_up_staff")->activate();
+//     m_parentView->actionCollection()->action("move_events_up_staff")->activate();
+	QAction* tac = this->findChild<QAction*>( "move_events_up_staff" );
+	tac->setEnabled( true );
 }
 
 void NotationSelector::slotStaffBelow()
 {
-    m_parentView->actionCollection()->action("move_events_down_staff")->activate();
+//     m_parentView->actionCollection()->action("move_events_down_staff")->activate();
+	QAction* tac = this->findChild<QAction*>( "move_events_down_staff" );
+	tac->setEnabled( true );
 }
 
 void NotationSelector::slotMakeInvisible()
 {
-    m_parentView->actionCollection()->action("make_invisible")->activate();
+//     m_parentView->actionCollection()->action("make_invisible")->activate();
+	QAction* tac = this->findChild<QAction*>( "make_invisible" );
+	tac->setEnabled( true );
 }
 
 void NotationSelector::slotMakeVisible()
 {
-    m_parentView->actionCollection()->action("make_visible")->activate();
+//     m_parentView->actionCollection()->action("make_visible")->activate();
+	QAction* tac = this->findChild<QAction*>( "make_visible" );
+	tac->setEnabled( true );
 }
 
 void NotationSelector::setViewCurrentSelection(bool preview)

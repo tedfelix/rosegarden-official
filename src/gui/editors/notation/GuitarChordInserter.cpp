@@ -80,12 +80,16 @@ void GuitarChordInserter::slotGuitarChordSelected()
 
 void GuitarChordInserter::slotEraseSelected()
 {
-    m_parentView->actionCollection()->action("erase")->activate();
+//     m_parentView->actionCollection()->action("erase")->activate();
+	QAction* tac = this->findChild<QAction*>( "erase" );
+	tac->setEnabled( true );
 }
 
 void GuitarChordInserter::slotSelectSelected()
 {
-    m_parentView->actionCollection()->action("select")->activate();
+//     m_parentView->actionCollection()->action("select")->activate();
+	QAction* tac = this->findChild<QAction*>( "select" );
+	tac->setEnabled( true );
 }
 
 void GuitarChordInserter::handleLeftButtonPress(timeT,
