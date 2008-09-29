@@ -31,7 +31,6 @@
 #include <QGroupBox>
 #include <QCheckBox>
 #include <QFrame>
-#include <QGroupBox>
 #include <QLabel>
 #include <QRadioButton>
 #include <QString>
@@ -62,12 +61,12 @@ TempoDialog::TempoDialog(QDialogButtonBox::QWidget *parent, RosegardenGUIDoc *do
 	vbox->setLayout(vboxLayout);
     //metagrid->addWidget(vbox, 0, 0);
 
-	// group box for tempo
-    QGroupBox *groupBox = new QGroupBox( i18n("Tempo"), vbox );
-    vboxLayout->addWidget(groupBox);
-
-    QFrame *frame = new QFrame(groupBox);
-    QGridLayout *layout = new QGridLayout(frame, 4, 3, 5, 5);
+    // group box for tempo
+    QGroupBox *frame = new QGroupBox( i18n("Tempo"), vbox );
+    frame->setContentsMargins(5, 5, 5, 5);
+    QGridLayout *layout = new QGridLayout;
+    layout->setSpacing(5);
+    vboxLayout->addWidget(frame);
 
     // Set tempo
     layout->addWidget(new QLabel(i18n("New tempo:"), frame), 0, 1);
@@ -116,6 +115,8 @@ TempoDialog::TempoDialog(QDialogButtonBox::QWidget *parent, RosegardenGUIDoc *do
 
     m_tempoBeatsPerMinute = new QLabel(frame);
     layout->addWidget(m_tempoBeatsPerMinute, 0, 6);
+
+    frame->setLayout(layout);
 
     m_timeEditor = 0;
 
