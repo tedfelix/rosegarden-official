@@ -41,6 +41,7 @@
 #include "ExternalTransport.h"
 
 #include <QRegExp>
+
 #include <pthread.h>
 
 
@@ -976,7 +977,7 @@ AlsaDriver::createMidiDevice(AlsaPortDescription *port,
 
         int outputPort = checkAlsaError(snd_seq_create_simple_port
                                         (m_midiHandle,
-                                         portName,
+                                         portName.toLocal8Bit(),
                                          SND_SEQ_PORT_CAP_READ |
                                          SND_SEQ_PORT_CAP_SUBS_READ,
                                          SND_SEQ_PORT_TYPE_APPLICATION),

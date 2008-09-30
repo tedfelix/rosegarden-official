@@ -44,7 +44,7 @@ FontViewFrame::FontViewFrame( int pixelSize, QWidget* parent, const char* name )
         m_fontSize(pixelSize),
         m_tableFont(0)
 {
-    setBackgroundMode(PaletteBase);
+    setBackgroundMode(Qt::PaletteBase);
     setFrameStyle(Panel | Sunken);
     setMargin(8);
     setRow(0);

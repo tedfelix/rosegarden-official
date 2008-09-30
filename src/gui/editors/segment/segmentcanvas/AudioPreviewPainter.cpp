@@ -23,14 +23,13 @@
 #include "base/Track.h"
 #include "base/AudioLevel.h"
 #include "base/Studio.h"
-
 #include "misc/Debug.h"
 #include "document/ConfigGroups.h"
 
 #include <QImage>
 #include <QApplication>
-
 #include <QSettings>
+#include <QDesktopWidget>
 
 namespace Rosegarden {
 
@@ -52,7 +51,7 @@ AudioPreviewPainter::AudioPreviewPainter(CompositionModelImpl& model,
     m_image = QImage(pixWidth, m_rect.height(), 8, 4);
     m_image.setAlphaBuffer(true);
 
-    m_penWidth = (std::max(1U, m_rect.getPen().width()) * 2);
+    m_penWidth = (std::max(1U, (unsigned int)m_rect.getPen().width()) * 2);
     m_halfRectHeight = m_model.grid().getYSnap()/2 - m_penWidth / 2 - 2;
 }
 

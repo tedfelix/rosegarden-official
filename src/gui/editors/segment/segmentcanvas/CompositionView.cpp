@@ -40,13 +40,14 @@
 #include "SegmentSelector.h"
 #include "SegmentToolBox.h"
 #include "SegmentTool.h"
+
 #include <QMessageBox>
 #include <QBrush>
 #include <QColor>
 #include <QEvent>
 #include <QFont>
 #include <QFontMetrics>
-#include <qmemarray.h>
+#include <QVector>
 #include <QPainter>
 #include <QPen>
 #include <QPixmap>
@@ -59,6 +60,8 @@
 #include <QWidget>
 #include <QApplication>
 #include <QSettings>
+#include <QMouseEvent>
+
 #include <algorithm>
 
 
@@ -489,7 +492,7 @@ void CompositionView::resizeEvent(QResizeEvent* e)
 
 void CompositionView::viewportPaintEvent(QPaintEvent* e)
 {
-    QMemArray<QRect> rects = e->region().rects();
+    QVector<QRect> rects = e->region().rects();
 
     for (unsigned int i = 0; i < rects.size(); ++i) {
         viewportPaintRect(rects[i]);
@@ -978,7 +981,7 @@ void CompositionView::drawCompRect(const CompositionRect& r, QPainter *p, const 
         // now draw the 'repeat' marks
         //
         p->setPen(CompositionColourCache::getInstance()->RepeatSegmentBorder);
-        int penWidth = std::max(r.getPen().width(), 1u);
+        int penWidth = std::max((unsigned int)r.getPen().width(), 1u);
 
         for (unsigned int i = 0; i < repeatMarks.size(); ++i) {
             int pos = repeatMarks[i];
@@ -1275,7 +1278,7 @@ void CompositionView::drawTextFloat(QPainter *p, const QRect& clipRect)
 {
     QFontMetrics metrics(p->fontMetrics());
 
-    QRect bound = p->boundingRect(0, 0, 300, metrics.height() + 6, AlignLeft, m_textFloatText);
+    QRect bound = p->boundingRect(0, 0, 300, metrics.height() + 6, Qt::AlignLeft, m_textFloatText);
 
     p->save();
 
@@ -1370,8 +1373,8 @@ void CompositionView::contentsMousePressEvent(QMouseEvent* e)
     slotSetPencilOverExisting((bs & Qt::AltModifier + Qt::ControlModifier) != 0);
 
     switch (e->button()) {
-    case LeftButton:
-    case MidButton:
+    case Qt::LeftButton:
+    case Qt::MidButton:
         startAutoScroll();
 
         if (m_tool)
@@ -1380,7 +1383,7 @@ void CompositionView::contentsMousePressEvent(QMouseEvent* e)
             RG_DEBUG << "CompositionView::contentsMousePressEvent() :"
             << this << " no tool\n";
         break;
-    case RightButton:
+    case Qt::RightButton:
         if (m_tool)
             m_tool->handleRightButtonPress(e);
         else
@@ -1401,8 +1404,8 @@ void CompositionView::contentsMouseReleaseEvent(QMouseEvent* e)
     if (!m_tool)
         return ;
 
-    if (e->button() == LeftButton ||
-        e->button() == MidButton )
+    if (e->button() == Qt::LeftButton ||
+        e->button() == Qt::MidButton )
         m_tool->handleMouseButtonRelease(e);
 }
 

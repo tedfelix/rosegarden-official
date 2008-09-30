@@ -70,7 +70,7 @@ void AudioPreviewUpdater::update()
 
     RG_DEBUG << "AudioPreviewUpdater(" << this << ")::update() - for file id "
     << m_segment->getAudioFileId() << " requesting values - thread running : "
-    << m_thread.running() << " - thread finished : " << m_thread.finished() << endl;
+    << m_thread.isRunning() << " - thread finished : " << m_thread.isFinished() << endl;
 
     AudioPreviewThread::Request request;
     request.audioFileId = m_segment->getAudioFileId();
