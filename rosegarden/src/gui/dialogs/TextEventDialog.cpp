@@ -452,6 +452,14 @@ TextEventDialog::slotTypeChanged(const QString &)
         m_localTempoShortcutCombo->hide();
     }
 
+    if (type == Text::Lyric) {
+        m_verseLabel->show();
+        m_verseSpin->show();
+    } else {
+        m_verseLabel->hide();
+        m_verseSpin->hide();
+    }
+
     // restore previous text of appropriate type
     if (type == Text::Lyric)
         m_text->setText(m_prevLyric);
@@ -491,11 +499,6 @@ TextEventDialog::slotTypeChanged(const QString &)
             m_staffAboveLabel->hide();
             m_staffBelowLabel->show();
 
-        }
-
-        if (type == Text::Lyric) {
-            m_verseLabel->show();
-            m_verseSpin->show();
         }
     }
 }
