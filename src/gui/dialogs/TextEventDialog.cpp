@@ -36,6 +36,7 @@
 #include <QPixmap>
 #include <QString>
 #include <QWidget>
+#include <QStackedWidget>
 #include <QVBoxLayout>
 #include <QSpinBox>
 #include <QApplication>
@@ -70,22 +71,34 @@ TextEventDialog::TextEventDialog(QDialogButtonBox::QWidget *parent,
     QGroupBox *entryBox = new QGroupBox( i18n("Specification"), vbox );
     vboxLayout->addWidget(entryBox);
     QGroupBox *exampleBox = new QGroupBox( i18n("Preview"), vbox );
+    QVBoxLayout *exampleVBoxLayout = new QVBoxLayout;
     vboxLayout->addWidget(exampleBox);
-    
-//    QGrid *entryGrid = new QGrid(2, QGrid::Horizontal, entryBox);
-	QWidget *entryGrid = new QWidget( vbox );
-	QVBoxLayout *entryGridLay = new QVBoxLayout( entryGrid );
 
-    new QLabel(i18n("Text:  "), entryGrid);
-    m_text = new QLineEdit(entryGrid);
+    QGridLayout *entryGridLay = new QGridLayout;
+    entryGridLay->addWidget(new QLabel(i18n("Text:  ")), 0, 0);
+    m_text = new QLineEdit;
     m_text->setText(strtoqstr(defaultText.getText()));
     if (maxLength > 0)
         m_text->setMaxLength(maxLength);
-	
+    entryGridLay->addWidget(m_text, 0, 1);
 
     // style combo
-    new QLabel(i18n("Style:  "), entryGrid);
-    m_typeCombo = new QComboBox(entryGrid);
+    entryGridLay->addWidget(new QLabel(i18n("Style:  ")), 1, 0);
+    m_typeCombo = new QComboBox;
+    entryGridLay->addWidget(m_typeCombo, 1, 1);
+
+    // Optional widget
+    m_optionLabel = new QStackedWidget;
+    m_optionWidget = new QStackedWidget;
+    entryGridLay->addWidget(m_optionLabel, 2, 0);
+    entryGridLay->addWidget(m_optionWidget, 2, 1);
+
+    m_blankLabel = new QLabel(" ");
+    m_blankWidget = new QLabel(" ");
+    m_optionLabel->addWidget(m_blankLabel);
+    m_optionWidget->addWidget(m_blankWidget);
+    m_optionLabel->setCurrentWidget(m_blankLabel);
+    m_optionWidget->setCurrentWidget(m_blankWidget);
 
     for (unsigned int i = 0; i < m_styles.size(); ++i)
     {
@@ -143,20 +156,21 @@ TextEventDialog::TextEventDialog(QDialogButtonBox::QWidget *parent,
         }
     }
 
-    m_verseLabel = new QLabel(i18n("Verse:  "), entryGrid);
-    m_verseLabel->hide();
-    m_verseSpin = new QSpinBox(entryGrid);
+    m_verseLabel = new QLabel(i18n("Verse:  "));
+    m_optionLabel->addWidget(m_verseLabel);
+    m_verseSpin = new QSpinBox;
+    m_optionWidget->addWidget(m_verseSpin);
     m_verseSpin->setMinimum(1);
     m_verseSpin->setMaximum(12);
     m_verseSpin->setSingleStep(1);
     m_verseSpin->setValue(defaultText.getVerse() + 1);
-    m_verseSpin->hide();
 
     // dynamic shortcuts combo
-    m_dynamicShortcutLabel = new QLabel(i18n("Dynamic:  "), entryGrid);
-    m_dynamicShortcutLabel->hide();
+    m_dynamicShortcutLabel = new QLabel(i18n("Dynamic:  "));
+    m_optionLabel->addWidget(m_dynamicShortcutLabel);
 
-    m_dynamicShortcutCombo = new QComboBox(entryGrid);
+    m_dynamicShortcutCombo = new QComboBox;
+    m_optionWidget->addWidget(m_dynamicShortcutCombo);
     m_dynamicShortcutCombo->addItem(i18n("ppp"));
     m_dynamicShortcutCombo->addItem(i18n("pp"));
     m_dynamicShortcutCombo->addItem(i18n("p"));
@@ -167,13 +181,13 @@ TextEventDialog::TextEventDialog(QDialogButtonBox::QWidget *parent,
     m_dynamicShortcutCombo->addItem(i18n("fff"));
     m_dynamicShortcutCombo->addItem(i18n("rfz"));
     m_dynamicShortcutCombo->addItem(i18n("sf"));
-    m_dynamicShortcutCombo->hide();
 
     // direction shortcuts combo
-    m_directionShortcutLabel = new QLabel(i18n("Direction:  "), entryGrid);
-    m_directionShortcutLabel->hide();
+    m_directionShortcutLabel = new QLabel(i18n("Direction:  "));
+    m_optionLabel->addWidget(m_directionShortcutLabel);
 
-    m_directionShortcutCombo = new QComboBox(entryGrid);
+    m_directionShortcutCombo = new QComboBox;
+    m_optionWidget->addWidget(m_directionShortcutCombo);
     // note, the "  ," is a breath mark; the extra spaces are a cheap hack to
     // try to improve the probability of Rosegarden drawing the blasted thing
     // where it's supposed to go, without the need to micro-diddle each and
@@ -186,13 +200,13 @@ TextEventDialog::TextEventDialog(QDialogButtonBox::QWidget *parent,
     m_directionShortcutCombo->addItem(i18n("D.S. al Coda"));
     m_directionShortcutCombo->addItem(i18n("to Coda"));
     m_directionShortcutCombo->addItem(i18n("Coda"));
-    m_directionShortcutCombo->hide();
 
     // local direction shortcuts combo
-    m_localDirectionShortcutLabel = new QLabel(i18n("Local Direction:  "), entryGrid);
-    m_localDirectionShortcutLabel->hide();
+    m_localDirectionShortcutLabel = new QLabel(i18n("Local Direction:  "));
+    m_optionLabel->addWidget(m_localDirectionShortcutLabel);
 
-    m_localDirectionShortcutCombo = new QComboBox(entryGrid);
+    m_localDirectionShortcutCombo = new QComboBox;
+    m_optionWidget->addWidget(m_localDirectionShortcutCombo);
     m_localDirectionShortcutCombo->addItem(i18n("shortcut."));
     m_localDirectionShortcutCombo->addItem(i18n("ritard."));
     m_localDirectionShortcutCombo->addItem(i18n("ralletando"));
@@ -212,13 +226,13 @@ TextEventDialog::TextEventDialog(QDialogButtonBox::QWidget *parent,
     m_localDirectionShortcutCombo->addItem(i18n("volti subito "));
     m_localDirectionShortcutCombo->addItem(i18n("soli"));
     m_localDirectionShortcutCombo->addItem(i18n("div."));
-    m_localDirectionShortcutCombo->hide();
 
     // tempo shortcuts combo
-    m_tempoShortcutLabel = new QLabel(i18n("Tempo:  "), entryGrid);
-    m_tempoShortcutLabel->hide();
+    m_tempoShortcutLabel = new QLabel(i18n("Tempo:  "));
+    m_optionLabel->addWidget(m_tempoShortcutLabel);
 
-    m_tempoShortcutCombo = new QComboBox(entryGrid);
+    m_tempoShortcutCombo = new QComboBox;
+    m_optionWidget->addWidget(m_tempoShortcutCombo);
     m_tempoShortcutCombo->addItem(i18n("Grave"));
     m_tempoShortcutCombo->addItem(i18n("Adagio"));
     m_tempoShortcutCombo->addItem(i18n("Largo"));
@@ -233,16 +247,16 @@ TextEventDialog::TextEventDialog(QDialogButtonBox::QWidget *parent,
     m_tempoShortcutCombo->addItem(i18n("Maestoso"));
     m_tempoShortcutCombo->addItem(i18n("Sostenuto"));
     m_tempoShortcutCombo->addItem(i18n("Tempo Primo"));
-    m_tempoShortcutCombo->hide();
 
     // local tempo shortcuts combo (duplicates the non-local version, because
     // nobody is actually sure what is supposed to distinguish Tempo from
     // Local Tempo, or what this text style is supposed to be good for in the
     // way of standard notation)
-    m_localTempoShortcutLabel = new QLabel(i18n("Local Tempo:  "), entryGrid);
-    m_localTempoShortcutLabel->hide();
+    m_localTempoShortcutLabel = new QLabel(i18n("Local Tempo:  "));
+    m_optionLabel->addWidget(m_localTempoShortcutLabel);
 
-    m_localTempoShortcutCombo = new QComboBox(entryGrid);
+    m_localTempoShortcutCombo = new QComboBox;
+    m_optionWidget->addWidget(m_localTempoShortcutCombo);
     m_localTempoShortcutCombo->addItem(i18n("Grave"));
     m_localTempoShortcutCombo->addItem(i18n("Adagio"));
     m_localTempoShortcutCombo->addItem(i18n("Largo"));
@@ -257,14 +271,13 @@ TextEventDialog::TextEventDialog(QDialogButtonBox::QWidget *parent,
     m_localTempoShortcutCombo->addItem(i18n("Maestoso"));
     m_localTempoShortcutCombo->addItem(i18n("Sostenuto"));
     m_localTempoShortcutCombo->addItem(i18n("Tempo Primo"));
-    m_localTempoShortcutCombo->hide();
 
     // LilyPond directive combo
-    m_directiveLabel = new QLabel(i18n("Directive:  "), entryGrid);
-    m_directiveLabel->hide();
+    m_directiveLabel = new QLabel(i18n("Directive:  "));
+    m_optionLabel->addWidget(m_directiveLabel);
 
-    m_lilyPondDirectiveCombo = new QComboBox(entryGrid);
-    m_lilyPondDirectiveCombo->hide();
+    m_lilyPondDirectiveCombo = new QComboBox;
+    m_optionWidget->addWidget(m_lilyPondDirectiveCombo);
 
     // not i18nable, because the directive exporter currently depends on the
     // textual contents of these strings, not some more abstract associated
@@ -284,8 +297,7 @@ TextEventDialog::TextEventDialog(QDialogButtonBox::QWidget *parent,
     m_lilyPondDirectiveCombo->addItem(strtoqstr(Text::Small));
     m_lilyPondDirectiveCombo->addItem(strtoqstr(Text::NormalSize));
 
-    QWidget *exampleVBox = new QWidget(exampleBox);
-    QVBoxLayout *exampleVBoxLayout = new QVBoxLayout;
+    entryBox->setLayout(entryGridLay);
 
     int ls = m_notePixmapFactory->getLineSpacing();
 
@@ -315,17 +327,18 @@ TextEventDialog::TextEventDialog(QDialogButtonBox::QWidget *parent,
 
     map.setMask(mask);
 
-    m_staffAboveLabel = new QLabel("staff", exampleVBox );
+    m_staffAboveLabel = new QLabel("staff", exampleBox );
     exampleVBoxLayout->addWidget(m_staffAboveLabel);
     m_staffAboveLabel->setPixmap(map);
 
-    m_textExampleLabel = new QLabel(i18n("Example"), exampleVBox );
+    m_textExampleLabel = new QLabel(i18n("Example"), exampleBox );
     exampleVBoxLayout->addWidget(m_textExampleLabel);
 
-    m_staffBelowLabel = new QLabel("staff", exampleVBox );
+    m_staffBelowLabel = new QLabel("staff", exampleBox );
     exampleVBoxLayout->addWidget(m_staffBelowLabel);
-    exampleVBox->setLayout(exampleVBoxLayout);
     m_staffBelowLabel->setPixmap(map);
+
+    exampleBox->setLayout(exampleVBoxLayout);
 
     // restore last setting for shortcut combos
     QSettings settings;
@@ -437,48 +450,46 @@ TextEventDialog::slotTypeChanged(const QString &)
     // swap widgets in and out, depending on the current text type
     //
     if (type == Text::Dynamic) {
-        m_dynamicShortcutLabel->show();
-        m_dynamicShortcutCombo->show();
+        m_optionLabel->setCurrentWidget(m_dynamicShortcutLabel);
+        m_optionWidget->setCurrentWidget(m_dynamicShortcutCombo);
         slotDynamicShortcutChanged(strtoqstr(text));
-    } else {
-        m_dynamicShortcutLabel->hide();
-        m_dynamicShortcutCombo->hide();
     }
 
     if (type == Text::Direction) {
-        m_directionShortcutLabel->show();
-        m_directionShortcutCombo->show();
+        m_optionLabel->setCurrentWidget(m_directionShortcutLabel);
+        m_optionWidget->setCurrentWidget(m_directionShortcutCombo);
         slotDirectionShortcutChanged(strtoqstr(text));
-    } else {
-        m_directionShortcutLabel->hide();
-        m_directionShortcutCombo->hide();
     }
 
     if (type == Text::LocalDirection) {
-        m_localDirectionShortcutLabel->show();
-        m_localDirectionShortcutCombo->show();
+        m_optionLabel->setCurrentWidget(m_localDirectionShortcutLabel);
+        m_optionWidget->setCurrentWidget(m_localDirectionShortcutCombo);
         slotLocalDirectionShortcutChanged(strtoqstr(text));
-    } else {
-        m_localDirectionShortcutLabel->hide();
-        m_localDirectionShortcutCombo->hide();
     }
 
     if (type == Text::Tempo) {
-        m_tempoShortcutLabel->show();
-        m_tempoShortcutCombo->show();
+        m_optionLabel->setCurrentWidget(m_tempoShortcutLabel);
+        m_optionWidget->setCurrentWidget(m_tempoShortcutCombo);
         slotTempoShortcutChanged(strtoqstr(text));
-    } else {
-        m_tempoShortcutLabel->hide();
-        m_tempoShortcutCombo->hide();
     }
 
     if (type == Text::LocalTempo) {
-        m_localTempoShortcutLabel->show();
-        m_localTempoShortcutCombo->show();
+        m_optionLabel->setCurrentWidget(m_localTempoShortcutLabel);
+        m_optionWidget->setCurrentWidget(m_localTempoShortcutCombo);
         slotLocalTempoShortcutChanged(strtoqstr(text));
-    } else {
-        m_localTempoShortcutLabel->hide();
-        m_localTempoShortcutCombo->hide();
+    }
+
+    if (type == Text::Lyric) {
+        m_optionLabel->setCurrentWidget(m_verseLabel);
+        m_optionWidget->setCurrentWidget(m_verseSpin);
+    }
+
+    if (type == Text::Annotation ||
+        type == Text::Chord ||
+        type == Text::UnspecifiedType) {
+
+        m_optionLabel->setCurrentWidget(m_blankLabel);
+        m_optionWidget->setCurrentWidget(m_blankWidget);
     }
 
     // restore previous text of appropriate type
@@ -494,16 +505,14 @@ TextEventDialog::slotTypeChanged(const QString &)
     // into some new class eventually
     //
     if (type == Text::LilyPondDirective) {
-        m_lilyPondDirectiveCombo->show();
-        m_directiveLabel->show();
+        m_optionWidget->setCurrentWidget(m_lilyPondDirectiveCombo);
+        m_optionLabel->setCurrentWidget(m_directiveLabel);
         m_staffAboveLabel->hide();
         m_staffBelowLabel->show();
         m_text->setReadOnly(true);
         m_text->setEnabled(false);
         slotLilyPondDirectiveChanged(strtoqstr(text));
     } else {
-        m_lilyPondDirectiveCombo->hide();
-        m_directiveLabel->hide();
         m_text->setReadOnly(false);
         m_text->setEnabled(true);
 
@@ -519,12 +528,6 @@ TextEventDialog::slotTypeChanged(const QString &)
         } else {
             m_staffAboveLabel->hide();
             m_staffBelowLabel->show();
-
-        }
-
-        if (type == Text::Lyric) {
-            m_verseLabel->show();
-            m_verseSpin->show();
         }
     }
 }

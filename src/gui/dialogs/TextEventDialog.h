@@ -32,6 +32,7 @@ class QLineEdit;
 class QLabel;
 class QComboBox;
 class QSpinBox;
+class QStackedWidget;
 
 namespace Rosegarden
 {
@@ -90,6 +91,7 @@ protected:
     QComboBox *m_localDirectionShortcutCombo;
     QComboBox *m_tempoShortcutCombo;
     QComboBox *m_localTempoShortcutCombo;
+    QLabel *m_blankWidget;
     // temporary home:
     QComboBox *m_lilyPondDirectiveCombo;
 
@@ -103,8 +105,12 @@ protected:
     QLabel *m_tempoShortcutLabel;
     QLabel *m_localTempoShortcutLabel;
     QLabel *m_verseLabel;
+    QLabel *m_blankLabel;
     // temporary home:
     QLabel *m_directiveLabel;
+
+    QStackedWidget *m_optionLabel;
+    QStackedWidget *m_optionWidget;
 
     QString m_prevChord;
     QString m_prevLyric;
