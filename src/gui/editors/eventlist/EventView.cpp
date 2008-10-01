@@ -19,9 +19,8 @@
 #include "EventView.h"
 #include "EventViewItem.h"
 #include "TrivialVelocityDialog.h"
+
 #include "base/BaseProperties.h"
-#include "misc/Debug.h"
-#include "misc/Strings.h"
 #include "base/Clipboard.h"
 #include "base/Event.h"
 #include "base/MidiTypes.h"
@@ -36,52 +35,52 @@
 #include "commands/edit/CutCommand.h"
 #include "commands/edit/EraseCommand.h"
 #include "commands/edit/EventEditCommand.h"
-#include "commands/edit/PasteEventsCommand.h"
 #include "commands/edit/EventInsertionCommand.h"
+#include "commands/edit/PasteEventsCommand.h"
 #include "commands/segment/SegmentLabelCommand.h"
 #include "commands/segment/SetTriggerSegmentBasePitchCommand.h"
 #include "commands/segment/SetTriggerSegmentBaseVelocityCommand.h"
 #include "commands/segment/SetTriggerSegmentDefaultRetuneCommand.h"
 #include "commands/segment/SetTriggerSegmentDefaultTimeAdjustCommand.h"
-#include "document/RosegardenGUIDoc.h"
 #include "document/ConfigGroups.h"
+#include "document/RosegardenGUIDoc.h"
 #include "gui/dialogs/EventEditDialog.h"
+#include "gui/dialogs/EventFilterDialog.h"
 #include "gui/dialogs/PitchDialog.h"
 #include "gui/dialogs/SimpleEventEditDialog.h"
 #include "gui/general/EditViewBase.h"
-#include "gui/general/MidiPitchLabel.h"
 #include "gui/general/IconLoader.h"
+#include "gui/general/MidiPitchLabel.h"
 #include "gui/kdeext/KTmpStatusMsg.h"
-#include "gui/dialogs/EventFilterDialog.h"
+#include "misc/Debug.h"
+#include "misc/Strings.h"
+
 #include <algorithm>
 
+#include <Q3Canvas>
+#include <Q3CanvasPixmap>
 #include <QAction>
-#include <QSettings>
-#include <QTreeWidget>
-#include <QGroupBox>
 #include <QCheckBox>
 #include <QDialog>
 #include <QFrame>
 #include <QGroupBox>
+#include <QHBoxLayout>
 #include <QIcon>
+#include <QInputDialog>
 #include <QLabel>
 #include <QLayout>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
-#include <QTreeWidget>
-#include <QTreeWidgetItem>
+#include <QMenu>
 #include <QPixmap>
 #include <QPoint>
 #include <QPushButton>
+#include <QSettings>
 #include <QSize>
-#include <QString>
-#include <QWidget>
-#include <QMenu>
 #include <QStatusBar>
-#include <QInputDialog>
-
-#include <Q3CanvasPixmap>
-#include <Q3Canvas>
+#include <QString>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
+#include <QVBoxLayout>
+#include <QWidget>
 
 #include <klocale.h>
 #include <kxmlguiclient.h>
@@ -128,8 +127,8 @@ EventView::EventView(RosegardenGUIDoc *doc,
 
     // define some note filtering buttons in a group
     //
-	m_filterGroup = new QGroupBox( i18n("Event filters"), getCentralWidget() );
-		//1, Horizontal, 
+    m_filterGroup = new QGroupBox( i18n("Event filters"), getCentralWidget() );
+    QVBoxLayout *filterGroupLayout = new QVBoxLayout;
 	m_filterGroup->setAlignment( Qt::AlignHorizontal_Mask );
 
     m_noteCheckBox = new QCheckBox(i18n("Note"), m_filterGroup);
@@ -143,6 +142,20 @@ EventView::EventView(RosegardenGUIDoc *doc,
     m_indicationCheckBox = new QCheckBox(i18n("Indication"), m_filterGroup);
     m_textCheckBox = new QCheckBox(i18n("Text"), m_filterGroup);
     m_otherCheckBox = new QCheckBox(i18n("Other"), m_filterGroup);
+
+    filterGroupLayout->addWidget(m_noteCheckBox);
+    filterGroupLayout->addWidget(m_programCheckBox);
+    filterGroupLayout->addWidget(m_controllerCheckBox);
+    filterGroupLayout->addWidget(m_pitchBendCheckBox);
+    filterGroupLayout->addWidget(m_sysExCheckBox);
+    filterGroupLayout->addWidget(m_keyPressureCheckBox);
+    filterGroupLayout->addWidget(m_channelPressureCheckBox);
+    filterGroupLayout->addWidget(m_restCheckBox);
+    filterGroupLayout->addWidget(m_indicationCheckBox);
+    filterGroupLayout->addWidget(m_textCheckBox);
+    filterGroupLayout->addWidget(m_otherCheckBox);
+    m_filterGroup->setLayout(filterGroupLayout);
+
     m_grid->addWidget(m_filterGroup, 2, 0);
 
     // Connect up
@@ -163,12 +176,11 @@ EventView::EventView(RosegardenGUIDoc *doc,
         TriggerSegmentRec *rec =
             segments[0]->getComposition()->getTriggerSegmentRec(id);
 
-		QGroupBox *groupBox = new QGroupBox( i18n("Triggered Segment Properties"), getCentralWidget() );
-        //      (1, Horizontal, 
-		groupBox->setAlignment( Qt::AlignHorizontal_Mask );
-
-        QFrame *frame = new QFrame(groupBox);
-        QGridLayout *layout = new QGridLayout(frame, 5, 3, 5, 5);
+        QGroupBox *frame = new QGroupBox( i18n("Triggered Segment Properties"), getCentralWidget() );
+		frame->setAlignment( Qt::AlignHorizontal_Mask );
+        frame->setContentsMargins(5, 5, 5, 5);
+        QGridLayout *layout = new QGridLayout(frame);
+        layout->setSpacing(5);
 
         layout->addWidget(new QLabel(i18n("Label:  "), frame), 0, 0);
         QString label = strtoqstr(segments[0]->getLabel());
@@ -227,7 +239,8 @@ EventView::EventView(RosegardenGUIDoc *doc,
 
         */
 
-        m_grid->addWidget(groupBox, 2, 2);
+        frame->setLayout(layout);
+        m_grid->addWidget(frame, 2, 2);
 
     }
 
@@ -1740,9 +1753,9 @@ EventView::updateViewCaption()
 {
     if (m_isTriggerSegment) {
 
-        setCaption(i18n("%1 - Triggered Segment: %2",
-                    getDocument()->getTitle(),
-                    strtoqstr(m_segments[0]->getLabel())));
+        setWindowTitle(i18n("%1 - Triggered Segment: %2",
+                       getDocument()->getTitle(),
+                       strtoqstr(m_segments[0]->getLabel())));
 
 
     } else if (m_segments.size() == 1) {
@@ -1755,15 +1768,15 @@ EventView::updateViewCaption()
         if (track)
             trackPosition = track->getPosition();
 
-        setCaption(i18n("%1 - Segment Track #%2 - Event List",
-                    getDocument()->getTitle(),
-                    trackPosition + 1));
+        setWindowTitle(i18n("%1 - Segment Track #%2 - Event List",
+                       getDocument()->getTitle(),
+                       trackPosition + 1));
 
     } else {
 
-        setCaption(i18n("%1 - %2 Segments - Event List",
-                    getDocument()->getTitle(),
-                    m_segments.size()));
+        setWindowTitle(i18n("%1 - %2 Segments - Event List",
+                       getDocument()->getTitle(),
+                       m_segments.size()));
     }
 
 }
