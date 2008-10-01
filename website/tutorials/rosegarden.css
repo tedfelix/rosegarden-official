@@ -1,0 +1,20 @@
+     body {
+     text-align: center;
+     min-width: 75%;
+         }
+
+     
+     #main {
+     width: 90%;
+     margin: 0 auto;
+     text-align: left;
+     }	
+     img {
+     align: center;
+     max-width: 100%;
+     }
+     #heading {
+     height: 104;
+     width: 100%;
+     }
+     

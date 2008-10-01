@@ -1,0 +1,3 @@
+REMINDER: committing to SVN does not update the web site directly.  Chris runs a
+script to pull SVN and publish it to the rosegardenmusic.com site every hour or
+so.  If your update still isn't published after two hours, get with Chris.

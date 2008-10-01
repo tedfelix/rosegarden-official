@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>The Rosegarden Notation Challenge</title>
+  </head>
+  <body>
+
+    <div id="heading" STYLE="background: #000000">
+	<img src="../../roses.png" alt="" width="183"
+	height="104"><img src="../../title-using-rosegarden.png"
+	    alt="Learning Rosegarden"></div>
+
+
+    <div id="main">
+        <h1>The Rosegarden Notation Challenge</h1>
+	<h4>Copyright &copy; 2008 D. Michael McIntyre</h4>
+	<h5>This tutorial was written using a pre-release version of Rosegarden
+	1.7.0.</h5>
+
+        <h1>Let Rosegarden Help You Adapt Parts for Real Instruments</h1>
+
+        <p>This is more of a footnote than something that really belongs here in
+        the Notation Challenge, but I randomly stumbled across this example
+        while I was hunting for something else.  <a href="data/ultima.rg">This
+        file</a> presents a great opportunity to play with one of 1.7.0's cooler
+        features.  I wrote the thing for Eriadain, an apparently abandoned
+        attempt at remaking Ultima IX.  It was intended to be computer game
+        music, and I didn't give the slightest care to playability on real
+        instruments.</p>
+
+        <p>It so happens that the flute part, in particular, is completely
+        insane.  Rosegarden has had a segment parameter preset database since I
+        came up with the idea in 2006, but it was impossible to use it for
+        situations like this, because they could only be used when creating
+        future segments.  Now in 1.7.0 it is finally possible to use them to
+        help you sort out messes like this one.</p>
+
+        <p>So...  Open <a href="data/ultima.rg">the file</a> and let's have a
+        look at that flute part (open in a notation view, and scroll to bar 42):</p>
+
+        <p align=center>
+        <img src="pixmaps/clean00.png">
+        </p>
+
+        <p>That looks really high.  Is that playable?  I play a flute, and I
+        don't think that's playable unless maybe in the hands of some bleeding
+        edge avant garde player using alternate fingering.  But let's prove it.
+        Go to <b>Track Parameters</b>, enable the <b>Create segments with</b>
+        controls...</p>
+
+        <p align=center>
+        <img src="pixmaps/clean01.png">
+        </p>
+
+        <p>Then click the Load button, and dial up a flute:</p>
+
+        <p align=center>
+        <img src="pixmaps/clean02.png">
+        </p>
+
+        <p>Pay special attention to make sure you <img src="pixmaps/clean03.png"> and
+        then go have another look in a notation view:</p>
+
+
+        <p align=center>
+        <img src="pixmaps/clean04.png">
+        </p>
+
+        <p>Ouch!</p>
+
+        <p>So what happens if we change this for a piccolo instead?  Go back to
+        the Load button and pick a piccolo.  The notation view updates
+        instantly, taking a new transposing clef, and we see that this part is
+        well within the capabilities of that instrument.</p>
+
+        <p align=center>
+        <img src="pixmaps/clean05.png">
+        </p>
+
+        <p>Now, how about the bassoon?  Out of the box, it's hard to say.  It
+        looks like the part might be a little too low, but I don't play
+        bassoon.</p>
+
+        <p align=center>
+        <img src="pixmaps/clean06.png">
+        </p>
+
+        <p>Rosegarden says yes, that's right.  It's a little too low.  Either
+        this part comes up, or it has to be aimed at a contrabassoon
+        instead.</p>
+
+        <p align=center>
+        <img src="pixmaps/clean07.png">
+        </p>
+
+        <p>Changing to a contrabassoon is as easy as picking something else off
+        the Load button, but let's be realistic.  It's hard enough to get
+        somebody to play your work (if you were eating on what you make as a
+        composer, you probably wouldn't be using Rosegarden after all!) and a
+        cheap student contrabassoon is over $8,000. Ouch.  If you don't know
+        someone, who has one of these monsters in the closet somewhere, you are
+        probably best off to transpose the entire piece to a key that puts these
+        bassoon notes in line.</p>
+
+        <p>Back up to the beginning, and <b>Segment -> Add Key Change</b>...</p>
+
+        <p align=center>
+        <img src="pixmaps/clean08.png">
+        </p>
+
+        <p>Take special note of all three options sections, because we want this
+        key change in all non-percussion segments at this time, and we want to
+        transpose everything into this key.</p>
+
+        <p align=center>
+        <img src="pixmaps/clean09.png">
+        </p>
+        <p align=center>
+        <img src="pixmaps/clean10.png">
+        </p>
+        <p align=center>
+        <img src="pixmaps/clean11.png">
+        </p>
+
+        <p>It turns out that going to four sharps still didn't do the
+        trick.</p>
+
+        <p align=center>
+        <img src="pixmaps/clean12.png">
+        </p>
+
+        <p>Normal humans hate to play in more than four sharps, so what if we go to
+        four flats?  Now that there is a key change present, you can go back and
+        double click on it for a different version of the dialog.</p>
+
+        <p align=center>
+        <img src="pixmaps/clean13.png">
+        </p>
+
+        <p>As it happens, I never found a key that made me happy, and I am now
+        officially bored with this example.  You get the idea though.  Have
+        fun!</p>
+
+</div>
+</body>
+</html>

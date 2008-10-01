@@ -1,0 +1,62 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>The Rosegarden Notation Challenge</title>
+  </head>
+  <body>
+
+    <div id="heading" STYLE="background: #000000">
+	<img src="../../roses.png" alt="" width="183"
+	height="104"><img src="../../title-using-rosegarden.png"
+	    alt="Learning Rosegarden"></div>
+
+
+    <div id="main">
+        <h1>The Rosegarden Notation Challenge</h1>
+	<h4>Copyright &copy; 2008 D. Michael McIntyre</h4>
+	<h5>This tutorial was written using a pre-release version of Rosegarden
+	1.7.0.</h5>
+
+        <h1>Played Grace Notes Rendered as Chords</h1>
+
+        <p>I promised to publish a recipe for dealing with the scenario in this
+        <a
+        href="https://sourceforge.net/tracker/index.php?func=detail&aid=1160944&group_id=4932&atid=104932">old
+        bug report</a>.</p>
+
+        <p>First, load the <a href="data/gracenote.rg">file from that report</a>
+        and have a look at bar 5 in a notation view.</p>
+
+        <p align=center>
+        <img src="pixmaps/grace00.png">
+        </p>
+
+        <p>Ugly.  What's going on here?  The raw note ruler at the top only
+        gives a tiny hint, and we probably need to have a look in the matrix for
+        this one.</p>
+
+        <p align=center>
+        <img src="pixmaps/grace01.png">
+        </p>
+
+        <p>There's the culprit.  The little &quot;grace&quot; note coming ahead
+        of the beat, and straddling the barline.  Rosegarden is not sure what to
+        do with this at all (although, helpfully, at least we circle the note
+        now, which is an improvement over when this report was filed three years
+        ago.)</p>
+
+        <p>The best solution I can think of is to delete the little G#4 from the
+        matrix, then go back to a notation view, go into <img
+        src="pixmaps/grace02.png"> grace insert mode, and stick the note back in
+        ahead of the longer note.</p>
+
+        <p align=center>
+        <img src="pixmaps/grace03.png">
+        </p>
+
+        <p>We'll just gloss over the fact that the # didn't show up, and all the
+        weird rest problems that remain.  Nothing to see here.  Move along.
+        These aren't the droids you're looking for.</p>
+</div>
+</body>
+</html>

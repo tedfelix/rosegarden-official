@@ -1,0 +1,249 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; CHARSET=iso-iso-8859-1">
+<STYLE TYPE="text/css"><!--
+BODY { font-family: sans-serif }
+H1 { font-family: sans-serif }
+H2 { font-family: sans-serif }
+H3 { font-family: sans-serif }
+H4 { font-family: sans-serif }
+H5 { font-family: sans-serif }
+H6 { font-family: sans-serif }
+SUB { font-size: smaller }
+SUP { font-size: smaller }
+PRE { font-family: monospace }
+A { text-decoration: none }
+--></STYLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff" TEXT="#000000" LINK="#0000ff" VLINK="#0000ff" ALINK="#0000ff">
+<A HREF="chapter-0.html">Contents</A>
+<A HREF="chapter-2.html">Next</A>
+<HR>
+<H1 STYLE="border: none; padding: 0in; page-break-before: always">1 <A NAME="1">
+</A> Introduction</H1>
+<H2 CLASS="western" STYLE="border: none; padding: 0in">1.1 <A NAME="1_1">
+</A> What is Rosegarden?</H2>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal">
+ Rosegarden-4, hereafter referred to as simply Rosegarden, is a
+ versatile, open source music creation tool. It combines aspects of a
+ MIDI (Musical Instrument Digital Interface) sequencer, an audio
+ sequencer, and a notation editor into one convenient, powerful, easy to
+ use package that provides users with a consistent and intuitive
+ interface.</P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ Rosegarden makes use of two powerful and flexible subsystems available
+ to Linux. For MIDI operations, Rosegarden employs the<A HREF="http://www.alsa-project.org/">
+ ALSA</A> (Advanced Linux Sound Architecture) MIDI sequencer
+ infrastructure for routing in-coming and out-going MIDI events. It can
+ record from any number of inputs simultaneously, and out-going events
+ can be routed to any of myriad MIDI clients.</P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ For audio recording and playback, Rosegarden is one of numerous
+ applications that make use of the Jack Audio Connection Kit, or<A HREF="http://jackit.sourceforge.net/">
+ JACK</A>, a low-latency sound server designed from the ground up to
+ meet the demands of professional musicians. Hand in hand with JACK,
+ Rosegarden can apply<A HREF="http://www.ladspa.org/"> LADSPA</A> (Linux
+ Audio Developer's Simple Plugin API) plugins to audio streams on the
+ fly, providing effects ranging from EQ to reverb and virtually
+ everything in between. These plugins can be layered on top of each
+ other for yet more possibilities.</P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ Bridging the gap between these two technologies, Rosegarden is the
+ first MIDI sequencer to employ the new<A HREF="http://dssi.sourceforge.net/">
+ DSSI</A> (Disposable Soft Synth Interface) plugin architecture. MIDI
+ events are routed through ALSA into DSSI synth plugins, and audio
+ produced by these plugins can in turn be routed through LADSPA plugins
+ and thence to JACK.</P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ Rosegarden provides three distinct ways of viewing, editing, and
+ entering MIDI events, including a powerful notation editor that
+ provides many advanced features not typically found in the notation
+ facility of MIDI sequencers. Underneath these three editors, Rosegarden
+ provides a segment-based mechanism for arranging blocks of MIDI and
+ audio data on a canvas that brings the potential of a layer-based image
+ editing program to the realm of music.</P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ All of this flexibility means you can use Rosegarden as the center of a
+ very powerful home studio and music composition solution for Linux.</P>
+<H2 CLASS="western" STYLE="border: none; padding: 0in"><A NAME="1_2">
+1.2 About This Guide</A></H2>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal">
+ This guide is part manual, part tutorial. I attempt to showcase
+ Rosegarden's most significant features, and give you suggestions for
+ how to use these features in order to achieve your musical goals.</P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal">
+ This guide is generally arranged to be read from cover to cover, and to
+ proceed through Rosegarden's feature set window by window in a logical
+ way. If you wish to home straight in on a specific topic, the table of
+ contents is thorough, and the web version is fully hyperlinked.</P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal">
+ Each chapter is loosely divided into two parts. The first half details
+ the mechanical side of making use of various controls in order to
+ manipulate data in some way. The latter half focuses on demonstrating
+ how to use these controls to achieve common musical goals.</P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal">
+ Menu options and references to some dialog pages or tabs are formatted
+ in bold, with arrows indicating the progression through the layers of
+ menus. For example, if I say to use<B> File -&gt; Import -&gt; Import MIDI
+ File</B> this means to begin at the &quot;File&quot; menu, find &quot;Import&quot; on this
+ menu and hover on it until the submenu opens out, then click on &quot;Import
+ MIDI File.&quot;</P>
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic1" SRC="../pixmaps/menu-file.png"
+></P>
+<H2 CLASS="western" STYLE="border: none; padding: 0in">1.3 <A NAME="1_3">
+</A> Version and System Requirements</H2>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ This document describes Rosegarden-4, the latest in this venerable line
+ of applications. Some distributions still carry the older Rosegarden 2,
+ last updated in 1997. Rosegarden-4 is a completely modern KDE
+ application, and version 1.0 was released in 2004.</P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ The new Rosegarden is a native KDE application that can run on any
+ system that has the KDE and QT libraries installed, and currently
+ requires a minimum of KDE/QT 3.1 in order to run. Rosegarden depends on
+ a number of libraries and architectural features that are currently
+ only found in Linux. A few brave individuals are interested in porting
+ it to FreeBSD and OS-X, but at this time no one has been successful,
+ and Rosegarden remains, effectively, an application only for Linux.</P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ Rosegarden requires several fairly new libraries in order for all of
+ its features to work correctly. Synth plugins, especially, require a
+ library that not many distros were carrying at this writing. If
+ anything documented in this book seems not to exist, please ask your
+ distro package maintainers to pick up the requisite libraries and
+ compile Rosegarden against them. Unfortunately, building Rosegarden
+ from source is well beyond the scope of this book.</P>
+<H3 CLASS="western"><A NAME="1_3_1">1.3.1 Linux Version</A></H3>
+<P>The more recent your distribution, the better. Rosegarden and many
+ related, interdependent applications are all very new. We at Rosegarden
+ suggest that you run the very latest release version of the
+ distribution of your choice, at a minimum. We further suggest that a
+ distribution with special emphasis on Linux audio, such as<A HREF="http://www.agnula.org/">
+ AGNULA</A> or<A HREF="http://ccrma.stanford.edu/planetccrma/software/introduction.html">
+ Planet CCRMA</A> might well be worth your consideration if you find
+ yourself having trouble getting all of these things to cooperate. Linux
+ audio is a bit of an arcane and complex area at the present, and these
+ special distributions seek to remove much of the sting. I've attained
+ acceptable, if not ideal results using off the shelf Debian Sarge on a
+ fast computer, but this is more due to my stubbornness than any matter
+ of practicality. I heartily recommend that you make use of the Planet
+ or AGNULA.</P>
+<H3 CLASS="western"><A NAME="1_3_2">1.3.2 Equipment and Software
+ Required</A></H3>
+<P>Many people are running Rosegarden successfully on older, slower
+ hardware. However, your CPU can't be too fast, and you can't have too
+ much RAM or hard disk space. The more resources your computer can bring
+ to the table, the more you will be able to do successfully with
+ Rosegarden. The following is a quick list of basic requirements you
+ will need to satisfy in order to be able to do different kinds of work
+ with Rosegarden.</P>
+<UL>
+<P>For MIDI recording:</P>
+<UL>
+<LI>
+<P>a MIDI capable keyboard, guitar, or other device, along with:</P>
+<UL>
+<LI>
+<P>an ALSA-supported, properly-configured hardware MIDI interface for
+ connecting MIDI devices to your computer, such as:</P>
+<UL>
+<LI>
+<P>a soundcard joystick port MIDI box or Y cable, and/or</P>
+</LI>
+<LI>
+<P>a dedicated MIDI port card, and/or</P>
+</LI>
+<LI>
+<P>a USB MIDI interface</P>
+</LI>
+</UL>
+</LI>
+</UL>
+</LI>
+<LI>
+<P>or a virtual keyboard such as<A HREF="http://packages.debian.org/stable/sound/vkeybd">
+ vkeybd</A></P>
+</LI>
+</UL>
+<P>For MIDI playback:</P>
+<UL>
+<LI>
+<P>a properly-configured, ALSA-compatible soundcard or MIDI interface,
+ and</P>
+</LI>
+<LI>
+<P>an external MIDI device such as a keyboard or sound module, and/or</P>
+</LI>
+<LI>
+<P>an ALSA-supported hardware synth, such as the Sound Blaster Live!
+ (emu10k1) and its descendants, with an appropriate soundfont loaded
+ into it, and/or</P>
+</LI>
+<LI>
+<P>an ALSA software synth, such a QSynth with an appropriate soundfont
+ loaded into it (audio output via ALSA or, preferably, JACK), and/or</P>
+</LI>
+<LI>
+<P>a DSSI synth plugin such as the FluidSynth DSSI plugin, with an
+ appropriate soundfont loaded into it, and/or the Xsynth-DSSI (analog
+ synthno soundfont required) plugin, both of which require a working
+ JACK server for audio output</P>
+</LI>
+</UL>
+<P>For audio recording:</P>
+<UL>
+<LI>
+<P>a properly-configured, running JACK server, and</P>
+</LI>
+<LI>
+<P>a JACK-compatible soundcard, and</P>
+</LI>
+<LI>
+<P>a microphone, or one or more devices capable of producing sound and
+ piping it into an appropriate jack on the soundcard, and</P>
+</LI>
+<LI>
+<P>plenty of available hard disk space</P>
+</LI>
+</UL>
+<P>For audio playback:</P>
+<UL>
+<LI>
+<P>a properly-configured, running JACK server, and</P>
+</LI>
+<LI>
+<P>a JACK-compatible soundcard</P>
+</LI>
+</UL>
+</UL>
+<H2 CLASS="western"><A NAME="1_4">1.4 Special Thanks</A></H2>
+<P>Thanks to the following...</P>
+<P>Chris Cannam, Rich Bown, Guillaume Laurent  for giving me something
+ to write about, and helping me at various points along the way</P>
+<P>Shelagh, Daniel Krippner  for helping me ensure that this whole thing
+ was actually useful to people</P>
+<P>Pedro Lopez-Cabanillas  for info about USB MIDI and sysex</P>
+<P>Brendon Oliver  for some Perl magic to fix up my document build
+ system</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+<BR>
+<BR></P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+<BR>
+<BR></P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+<BR>
+<BR></P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+<BR>
+<BR></P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+<BR>
+<BR></P>
+<HR>
+<A HREF="chapter-0.html">Contents</A>
+<A HREF="chapter-2.html">Next</A>
+</BODY>
+</HTML>

@@ -1,0 +1,442 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; CHARSET=iso-iso-8859-1">
+<STYLE TYPE="text/css"><!--
+BODY { font-family: sans-serif }
+H1 { font-family: sans-serif }
+H2 { font-family: sans-serif }
+H3 { font-family: sans-serif }
+H4 { font-family: sans-serif }
+H5 { font-family: sans-serif }
+H6 { font-family: sans-serif }
+SUB { font-size: smaller }
+SUP { font-size: smaller }
+PRE { font-family: monospace }
+A { text-decoration: none }
+--></STYLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff" TEXT="#000000" LINK="#0000ff" VLINK="#0000ff" ALINK="#0000ff">
+<A HREF="chapter-0.html">Contents</A>
+<A HREF="chapter-2.html">Previous</A>
+<A HREF="chapter-4.html">Next</A>
+<HR>
+<H1><A NAME="3">3 A First Look</A></H1>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ Let's begin by starting Rosegarden, and having a look at the main
+ window. This is where you get an overall view of your work, and control
+ a number of settings and parameters.</P>
+<H2 CLASS="western">3.1 <A NAME="2_1"></A>The Main Window</H2>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ A Rosegarden document is called a composition. The main window is
+ primarily dedicated to editing at the composition level, so most of
+ these tools affect your document in a broad way. This is where you name
+ tracks and assign instruments to them, create and manipulate segments,
+ and watch a broad overview of playback. (I will explain these concepts
+ in more detail later on.) This is also where you configure segment
+ parameters such as label and color. Tempo and time signature settings
+ exist a composition level, and they may be edited here in the main
+ window using the tempo ruler.</P>
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic4" SRC="../pixmaps/main-screenshot.png"
+></P>
+<H2 CLASS="western">3.2 <A NAME="2_2"></A>Special Toolbars</H2>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">One of the
+ first things you might notice about Rosegarden is that there are
+ several toolbars at the top of the main window. In addition to the
+ usual standard controls shared by most KDE applications,</P>
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic24" SRC="../pixmaps/using-rosegarden_html_mef09e44.png"
+></P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+ there are several toolbars specific to Rosegarden. You'll choose
+ various tools for selecting and manipulating segments from the Tools
+ Toolbar (Select, Move, Resize, New, Erase, Split),</P>
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic32" SRC="../pixmaps/using-rosegarden_html_m32c71324.png"
+></P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+ a subset of transport tools available in the Transport Toolbar (toggled
+ off by default)<B>,</B></P>
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic41" SRC="../pixmaps/mini-transport.png"
+></P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+ tracks can be added, deleted or moved with the Tracks Toolbar,</P>
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic39" SRC="../pixmaps/using-rosegarden_html_m7a769b12.png"
+></P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+ and once a segment has been created, you can use the Editors Toolbar to
+ open it in one of the three available editors. You'll also find icons
+ to start the Quantizer, the Studio configuration dialog, the Synth
+ Plugin manager, the audio file manager, and the MIDI and audio mixers.</P>
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic5" SRC="../pixmaps/editor-mixer-toolbar.png"
+></P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+ At the end of it all is the Zoom Slider, which is used to change the
+ magnification of the Segment Canvas:</P>
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic29" SRC="../pixmaps/using-rosegarden_html_47dd4a5.png"
+></P>
+<H2 CLASS="western"><A NAME="3_3">3.3 The Tracklist</A></H2>
+<P>Rosegarden is a track-based sequencer. Each entry in the tracklist is
+ a separate track that can have individualized settings for several
+ different parameters. Each track has a label and an output assignment,
+ and can be used to record, play, and manipulate either MIDI or audio
+ data, but never both.</P>
+<H3 CLASS="western"><A NAME="3_3_1">3.3.1 Instrument vs. Name</A></H3>
+<P STYLE="margin-bottom: 0.2in">The tracklist can be configured to
+ display either the name you've assigned to the track, or the name of
+ the instrument to which it is connected. Toggle this behavior with<B>
+ Settings -&gt; Show Track Labels</B>. I will explain more about this later
+ on, in<A HREF="../en/chapter-4.html#5 Managing Instruments (under construction)|outline">
+ Managing Instrument Parameters</A>.</P>
+<P STYLE="margin-bottom: 0.2in">Here we see how instrument assignments
+ are displayed on the tracklist. In this example, the tracks are
+ configured to play using instruments #1 and #2, respectively, on the
+ &quot;Roland SC-33&quot; device.</P>
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in"><IMG ALIGN="BOTTOM" BORDER="0"
+NAME="Graphic3" SRC="../pixmaps/track-list-connections.png" >
+</P>
+<H3 CLASS="western"><A NAME="3_3_2">3.3.2 Track LEDs</A></H3>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in">Here we see the labels. One
+ track has not yet had a name assigned, so it remains &quot;&lt;untitled&gt;&quot;.</P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in">Each track has two LEDs.
+ The blue one is the track mute. If the blue LED is glowing, the track
+ will be heard during playback. All of the blue LEDs can be turned on or
+ off all at once with<B> Tracks -&gt; Mute All</B> and<B> -&gt; Un-Mute All</B>
+.</P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in">The red LED lights up to
+ indicate that the affected track is armed as the destination for
+ recording operations.</P>
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in"><IMG ALIGN="BOTTOM" BORDER="0"
+NAME="Graphic10" SRC="../pixmaps/track-list-names.png" ></P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+<BR>
+<BR></P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+<I> TIP: The mute LEDs can also be used to control which tracks are
+ included when exporting the composition into another format. Muted
+ tracks will typically be ignored during export, though this varies
+ slightly by the export method chosen.</I></P>
+<H3 CLASS="western">3.3.3 <A NAME="2_6_4"></A>Changing the Track Name</H3>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">To change
+ the track name, double click on the label. A dialog should appear,
+ allowing you to enter a new name.</P>
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic43" SRC="../pixmaps/using-rosegarden_html_m3266770c.png"
+></P>
+<H3 CLASS="western"><A NAME="3_3_4">3.3.4 Adding, Removing, Moving
+ Tracks</A></H3>
+<P>The tools on the Tracks Toolbar <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic9" SRC="../pixmaps/using-rosegarden_html_m7a769b12.png" >
+ can be used to move tracks up and down, to delete them, or to create
+ new tracks. It is not possible to copy an entire track.</P>
+<H2 CLASS="western" STYLE="border: none; padding: 0in">3.4 <A NAME="2_3">
+</A> Segments and Segment Parameters</H2>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Rosegarden
+ compositions are made up of<B> segments</B>, and editing at the
+ composition level involves dragging them around and rearranging them
+ within tracks. Segments are a universal container that may hold either
+ MIDI events or audio data. Segments are rather similar to layers in an
+ image editing program such as the GIMP. They can be cut, pasted, split,
+ re-combined, overlapped and pretty much rearranged at will, and are
+ very flexible. While there are, understandably, some differences in the
+ way audio and MIDI segments behave, they can be manipulated in almost
+ exactly the same way within the composition. The only real limitations
+ are that audio segments and MIDI segments cannot both play in the same
+ track, and that audio segment cannot be resized.</P>
+<H3 CLASS="western"><A NAME="3_4_1">3.4.1 Creating a New Segment</A></H3>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+ You can begin recording (audio or MIDI) to create a segment, but I'll
+ get into that a bit later. For now, why not draw one from scratch?</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+ Use the <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic65" SRC="../pixmaps/using-rosegarden_html_4c452e31.png"
+> tool to create a new segment. Click and drag it out to the
+ desired length:</P>
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic66" SRC="../pixmaps/using-rosegarden_html_3c571111.png"
+></P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Now that a
+ segment exists, you can open it with one of the three editors. I will
+ return to that idea later on.</P>
+<H3 CLASS="western"><A NAME="3_4_2">3.4.2 Moving and Copying</A></H3>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+ Use the <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic67" SRC="../pixmaps/using-rosegarden_html_5b745bd6.png"
+> cursor to select a segment:</P>
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic68" SRC="../pixmaps/using-rosegarden_html_1a3ae2b8.png"
+></P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal; font-weight: medium">
+ Drag it to a new track:</P>
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic70" SRC="../pixmaps/using-rosegarden_html_m7008681b.png"
+></P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal; font-weight: medium">
+ Hold down Ctrl while dragging it back,and make a copy:</P>
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic71" SRC="../pixmaps/using-rosegarden_html_m5ec59c8b.png"
+></P>
+<H3 CLASS="western"><A NAME="3_4_3">3.4.3 Splitting and Joining</A></H3>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal; font-weight: medium">
+ Use the <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic72" SRC="../pixmaps/using-rosegarden_html_79e4c412.png"
+> cursor to split one of the segments, then switch to the <IMG ALIGN="BOTTOM"
+BORDER="0" NAME="Graphic42" SRC="../pixmaps/using-rosegarden_html_5b745bd6.png"
+> and drag one of the pieces so that it overlaps the segment
+ on the other track. By default, this will snap to whole beat positions
+ within the bar, but you can override that behavior by holding down the
+ shift key while dragging.</P>
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic73" SRC="../pixmaps/using-rosegarden_html_m744cffee.png"
+></P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal; font-weight: medium">
+ Highlighting the smaller of two overlapping segments can sometimes be a
+ bit tricky, but once accomplished, you can use<B> Segments -&gt; Join</B>
+ to combine several segments into one, rather like flattening the layers
+ in an image editing program.</P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal; font-weight: medium">
+ This can also merge MIDI events from several different tracks into a
+ single segment. The events will combine, and merge onto a segment on
+ whichever track is currently active.</P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal; font-weight: medium">
+ Audio segments can be split, but they cannot be resized, joined or
+ merged. If you split an audio segment, you can undo that operation to
+ revert it to its original state, but you cannot, for example, cut out
+ the middle and splice the ends back together. Neither can you merge two
+ overlapping audio segments into one, nor merge audio and MIDI segments
+ together.</P>
+<H4 CLASS="western"><A NAME="3_4_3_1">3.4.3.1 Split by Pitch</A></H4>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal; font-weight: medium">
+ If you have a segment where the treble and bass parts are jumbled
+ together, you might wish to split this at middle C or thereabouts. You
+ can use<B> Segments -&gt; Split and Join -&gt; Split by Pitch</B> and then
+ make your selections for split point, clef handling, etc. from the
+ resulting dialog. By default, this feature attempts to split the
+ segment intelligently, so that you can hopefully avoid winding up with
+ treble notes in the bass part, and bass notes in the treble part.</P>
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic8" SRC="../pixmaps/main-split-by-pitch.png"
+></P>
+<P>Once split, the two segments will overlap exactly on the same track.
+ It is impossible to select a segment that lies completely underneath
+ another segment, so it is probably a good idea to move one of the two
+ halves into a different track.</P>
+<H3 CLASS="western"><A NAME="3_4_4">3.4.4 Segment Previews</A></H3>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ You can get some sense of what that bit of music is like just by
+ looking at the segment display, which is a useful visual aid when
+ dragging things around. If this feature is not turned on, turn it on
+ with<B> Settings -&gt; Segment Previews</B>. This displays a miniature
+ piano roll for MIDI segments, and a drawing of the wave form for audio
+ segments.</P>
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; text-decoration: none">
+ <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic1" SRC="../pixmaps/segment-previews.png"
+></P>
+<H3 CLASS="western"><A NAME="3_4_5">3.4.5 Segment Parameters</A></H3>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">After you
+ have created a segment, you can edit various parameters from the<B>
+ Segment Parameters</B> box to the left:</P>
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic6" SRC="../pixmaps/segment-parameters.png"
+></P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ Every segment can have a unique label and color. In this example, I've
+ chosen the most obvious color to use for this French horn part, but
+ colors are entirely user-configurable, and these defaults are only
+ suggestions. I'll explain how to configure custom colors later on, in
+ the Studio chapter.</P>
+<H3 CLASS="western"><A NAME="3_4_6">3.4.6 Repeats</A></H3>
+<P>Every segment can be made to repeat. It will keep repeating until the
+ end of the document, or until another segment is encountered in the
+ track; whichever comes first. These are displayed between repeat signs
+ ( |: :| ) in the notation editor.</P>
+<P>You can turn all repeats into copies at once with<B> Segments -&gt; Turn
+ Repeats into Copies</B>, or you can turn individual repeats into copies
+ by double clicking on the light colored repeat rectangles.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic7"
+SRC="../pixmaps/segment-repeats-copies.png" ></P>
+<H3 CLASS="western"><A NAME="3_4_7">3.4.7 Segment Quantizer</A></H3>
+<P>Changing the setting in this box will immediately quantize all notes
+ in this segment to the selected grid position. It will move the start
+ times forward or back to align them with the next closest beat at the
+ desired resolution. It will not change note durations in any way.</P>
+<H3 CLASS="western"><A NAME="3_4_8">3.4.8 Transposing Instruments</A></H3>
+<P>If you wish to write notation for transposing instruments, you can
+ dial a transposition setting into the<B> Transpose</B> box. This will
+ cause the part to sound in a different range from written. A typical Bb
+ trumpet part, for example, should have -2 here. I'll cover this subject
+ in more depth later on, in the Notation chapter.</P>
+<H3 CLASS="western"><A NAME="3_4_9">3.4.9 Delay</A></H3>
+<P>The<B> Delay</B> setting allows you to knock the timing of a segment
+ out of sync on purpose. This can be useful in various ways, and it's
+ especially amusing for transforming a nicely performed MIDI file into a
+ simulation of a middle school band concert.</P>
+<H2 CLASS="western"><A NAME="3_5">3.5 Getting Around in the Composition</A>
+</H2>
+<P STYLE="font-weight: medium">If you've been following along thus far,
+ you don't actually have anything useful to play. This might be a good
+ time to load one of the sample files from the Rosegarden Library. The
+ first time you use the<B> File -&gt; Open</B> menu, you should be looking
+ at the Library. If not, there should be an icon in the SpeedBar that
+ will direct you to these files.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic27"
+SRC="../pixmaps/file-example-files.png" ></P>
+<P ALIGN="LEFT" STYLE="font-weight: medium"><I>PLUG: The highlighted
+ file is my own creation. &quot;Perfect Moment&quot; is the name of a yellow rose,
+ incidentally. As it happens, that is actually the only original
+ composition I have ever done with Rosegarden. I have spent so much time
+ writing, programming, and testing that I have had little time for my
+ own musical pursuits. This file uses the new XSynth-DSSI analog synth
+ plugin for two parts.</I></P>
+<H3 CLASS="western"><A NAME="3_5_1">3.5.1 The Playback Pointer</A></H3>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+ Notice that there's a vertical blue bar running vertically across the
+ segment canvas. That bar is the playback pointer, and as it sweeps
+ across the canvas, you'll hear the events as it passes over them.</P>
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic31" SRC="../pixmaps/playback-pointer.png"
+></P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+ While you can't grab it and move it around directly, you can position
+ it at any arbitrary point in the composition by clicking along the dark
+ gray portion of the ruler at the top, or you can use the transport to
+ move it around. If you don't see it, play with the transport or the
+ ruler until you coax it out of hiding.</P>
+<H3 CLASS="western"><A NAME="3_5_2">3.5.2 Loops</A></H3>
+<P>You can loop a portion of the composition. Set the loop region by
+ holding shift and clicking on the gray portion of the ruler, then
+ dragging the white bar.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic28"
+SRC="../pixmaps/ruler-loops.png" ></P>
+<H3 CLASS="western"><A NAME="3_5_3">3.5.3 The Transport</A></H3>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+ You should have a separate, floating Transport window like this one. If
+ it's not visible, then toggle it on with<B> Settings -&gt; Show Transport</B>
+.</P>
+<P ALIGN="CENTER" STYLE="margin-bottom: 0.2in; border: none; padding: 0in">
+ <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic11" SRC="../pixmaps/transport.png"
+></P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Most of
+ these should be self-explanatory. If you can't figure out what any of
+ the buttons do, hover over them a bit, and context-sensitive help will
+ pop up.</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+ The <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic30" SRC="../pixmaps/transport-switch-modes.png"
+> button switches between various display modes, including a
+ visual metronome that flashes beats at you in color.</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">Of special
+ note are the panic, metronome, and solo buttons.</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in">If they're
+ missing, toggle the extra controls via the <IMG ALIGN="BOTTOM" BORDER="0"
+NAME="Graphic33" SRC="../pixmaps/transport-flap.png" ></P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal">
+ The panic button will stop any instruments that have gotten stuck
+ droning for some reason (as sometimes happens when a synth loses track
+ of the state of its sustain controller, for example).</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+ The metronome does what you'd probably expect. You can turn the
+ metronome on during normal playback, as well as recording, and it is a
+ useful tool to use when practicing playing along with your composition.
+ Configure it via<B> Composition -&gt; Studio -&gt; Manage Metronome</B>.</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+ The solo button forces the Transport to play only whatever track is
+ currently selected at the moment, independent of its mute state. (To
+ &quot;solo&quot; more than one part, you'll need to set the mute for tracks
+ individually, or by using<B> Tracks -&gt; Mute All Tracks</B> and then
+ un-muting the parts you desire.)</P>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-weight: medium">
+ The loop button causes the Transport to loop within the region defined
+ on the ruler.</P>
+<H2 CLASS="western"><A NAME="3_6">3.6 Time and Tempo</A></H2>
+<P>As I mentioned, the time signature and tempo are global to the entire
+ composition. I'll discuss another way to manipulate these in<A HREF="chapter-7.html">
+ Chapter 7</A>, but here and now you can manipulate both time signature
+ and tempo to your heart's content from the main window.</P>
+<P>The tempo ruler changes color to indicate changes in tempo. When a
+ change occurs, the tempo is displayed along the top half of the ruler,
+ and the time signature is displayed across the bottom. If you double
+ click this ruler, the Tempo and Time Signature editor will appear.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic12"
+SRC="../pixmaps/time-tempo-editor.png" ></P>
+<H3 CLASS="western"><A NAME="3_6_1">3.6.1 New Tempo</A></H3>
+<P>To add a new tempo, click the <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic2" SRC="../pixmaps/tempo-icon.png" > icon, and you'll be
+ presented with a dialog like this:</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic13"
+SRC="../pixmaps/tempo-add.png" ></P>
+<P ALIGN="LEFT">By default, new events you add here will be inserted at
+ the point in time where you clicked to open the Tempo and Time
+ Signature editor. You can change this by adjusting the &quot;Time of tempo
+ change&quot; parameters, if you wish.</P>
+<H3 CLASS="western"><A NAME="3_6_2">3.6.2 New Time Signature</A></H3>
+<P>Use the <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic14" SRC="../pixmaps/tempo-time-icon.png"
+> icon, and you'll be presented with a dialog like:</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic15"
+SRC="../pixmaps/tempo-time-dialog.png" ></P>
+<P ALIGN="LEFT">You can display the time signature as cut or common
+ time, and make the time signature hidden. You should probably always
+ leave &quot;Correct the durations of the following measures&quot; checked unless
+ you have a good reason to do otherwise.</P>
+<H2 CLASS="western"><A NAME="3_7">3.7 Document Markers</A></H2>
+<P>Markers are special events that can be used to mark of particular
+ passages in the music at a composition level. They appear on the ruler,
+ and can be edited from<B> Composition -&gt; Edit Markers</B>... Issuing
+ this command summons the marker editor dialog. In this example, I've
+ already created a sample pair. The &quot;Marker Name&quot; portion is what
+ appears on the ruler, and the &quot;Marker description&quot; is for the
+ informational purposes of the composer only.</P>
+<H3 CLASS="western"><A NAME="3_7_1">3.7.1 The Manage Markers Dialog</A></H3>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic34"
+SRC="../pixmaps/document-markers.png" ></P>
+<H3 CLASS="western"><A NAME="3_7_2">3.7.2 Creating a New Marker</A></H3>
+<P>Click on the<B> Add</B> button to create a new marker. A raw default
+ marker will appear on the list spontaneously.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic35"
+SRC="../pixmaps/document-markers-add-marker.png" ></P>
+<P ALIGN="LEFT" STYLE="font-weight: medium">To edit it, or to edit an
+ existing marker, double click on it. An editor like this will appear,
+ allowing you to set the name and description, and adjust the time at
+ which this marker will display.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic36"
+SRC="../pixmaps/document-markers-edit-marker.png" ></P>
+<P ALIGN="LEFT" STYLE="font-weight: medium"><I>NOTE: Markers cannot be
+ dragged around or otherwise edited from the ruler. They must be
+ positioned and edited from this pair of dialogs, using the above
+ controls.</I></P>
+<H3 CLASS="western"><A NAME="3_7_3">3.7.3 Markers In Position</A></H3>
+<P>After closing out the manager dialog, the markers you created will
+ appear on the ruler.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic37"
+SRC="../pixmaps/document-markers-on-ruler.png" ></P>
+<H2 CLASS="western"><A NAME="3_8">3.8 Miscellany</A></H2>
+<P>There are a few main window features that don't quite fit in anywhere
+ else, yet which bear special mention.</P>
+<H3 CLASS="western"><A NAME="3_8_1">3.8.1 Importing and Merging Other
+ Compositions</A></H3>
+<P STYLE="font-weight: medium">Several options are available for
+ importing and merging material from other sources. On the<B> File -&gt;
+ Import</B> menu, you can import standard MIDI files (<B>*.mid</B>) and
+ Hydrogen<B> (*.h2song)</B> files. On the<B> File -&gt; Merge</B> menu, you
+ can merge these and other data sources (including native Rosegarden
+ composition (<B>*.rg</B>) files) into the existing composition.</P>
+<H3 CLASS="western"><A NAME="3_8_2">3.8.2 Autosave</A></H3>
+<P STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal">
+ If you have a power outage or the like, the next time you start
+ Rosegarden and attempt to load the file you were working on, you'll be
+ presented with the option of loading the autosave file instead. If you
+ hadn't yet saved the file, you'll find it in your ~/autosave directory
+ with a basic name of &quot;untitled.&quot;</P>
+<P ALIGN="LEFT" STYLE="margin-bottom: 0.2in; border: none; padding: 0in; font-style: normal; font-weight: medium">
+ The autosave interval defaults to 60 seconds. Configure it via the
+ Settings menu. If you notice Rosegarden grabbing a lot of your CPU time
+ for no apparent reason, it's probably autosave, and you might want to
+ increase the interval, or turn this feature completely off. It can
+ become quite cumbersome when working on very large compositions. This
+ feature was frankly more useful when Rosegarden was young, and
+ unstable.</P>
+<HR>
+<A HREF="chapter-0.html">Contents</A>
+<A HREF="chapter-2.html">Previous</A>
+<A HREF="chapter-4.html">Next</A>
+</BODY>
+</HTML>

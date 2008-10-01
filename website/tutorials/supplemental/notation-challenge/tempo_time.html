@@ -1,0 +1,173 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>The Rosegarden Notation Challenge</title>
+  </head>
+  <body>
+
+    <div id="heading" STYLE="background: #000000">
+	<img src="../../roses.png" alt="" width="183"
+	height="104"><img src="../../title-using-rosegarden.png"
+	    alt="Learning Rosegarden"></div>
+
+
+    <div id="main">
+        <h1>The Rosegarden Notation Challenge</h1>
+	<h4>Copyright &copy; 2008 D. Michael McIntyre</h4>
+	<h5>This tutorial was written using a pre-release version of Rosegarden
+	1.7.1/1.8.0 (tba).</h5>
+
+        <h1>Copying Tempo and Time Signature Changes</h1>
+
+        <p>I found this question on the user list this morning:</p>
+
+        <blockquote><tt><p>Hello,</p>
+
+        <p>My music is often composed of sequences of Time Signatures which follows
+        one to another. For example: 7/8 9/8 9/8 7/8 7/8 7/8 7/8 9/8.
+        I've never found a way to copy this "time signatures pattern" so that I
+        don't have to set the 8 signatures in every sequence (if the sequence is
+        repeating 8 times, it begins to be a bit boring).</p>
+
+        <p>Actually, the result is that I have been writing some sequences only one
+        time when I want thstrong to be played twice or more, and I've told the
+        musicians how it worked.</p>
+
+        <p>But I now must fix the .rg files so that we can play on it as a
+        metronome/"t&eacute;moin" for recording. Thus, I have to know how to propagate
+        this "time signatures patterns", and, moreover, I have to figure out how
+        to slide bunches of segments/time signatures changes/tempo changes,
+        and so on some bars further.</p>
+
+        <p>Could someone help me on this?</p>
+
+        <p>Thank you very much.</p></blockquote></tt>
+
+        <h2>Example Copied</h2>
+
+        <p>Let's begin by implementing the suggested example time signature
+        pattern of <tt>&quot;7/8 9/8 9/8 7/8 7/8 7/8 7/8 9/8.&quot;</tt>  For
+        illustrative purposes, we'll also insert tempo changes with each time
+        change, to demonstrate how both of these can benefit from the same
+        mechanism, and to make it easier to see the time blocks at a glance.</p>
+
+        <p>I entered everything with the Tempo and Time Signature Editor,
+        yielding the following result:</p>
+        
+        <p align=center>
+        <img src="pixmaps/tt01.png">
+        </p>
+
+        <p>From here, the final <tt>9/8</tt> continues to the end of the
+        document in perpetuity.  If we want to repeat this pattern of time (and
+        tempo) changes to begin anew at bar 9, we can do it the hard way, by
+        repeating the series of steps that lead us to this current result, or we
+        can exploit the range copy/paste mechanism to make the process less
+        tedious.  (There was a nasty bug in this mechanism in 1.7.0, so I
+        suggest using a version either earlier or later than this, which as of
+        this writing means 1.6.1 or a recent build of the SVN trunk.)</p>
+
+        <p>First, we need to define a range that spans the eight bars in
+        question.  There are two ways to accomplish this.  You can
+        <strong>Shift+Click</strong> and drag on the ruler to draw out the white
+        loop/range selection bar, or you can position the blue playback cursor
+        at the start of the range, then use the <img src="pixmaps/tt02.png">
+        button on the transport, and finally reposition the cursor to the end of
+        the range, and use the <img src="pixmaps/tt03.png"> button to finish the
+        loop/range.</p>
+
+        <p align=center>
+        <img src="pixmaps/tt04.png">
+        </p>
+
+        <p><i>Or you can cheat and just load <a href="data/tempo_time.rg">this
+        file</a></i></p>
+
+        <p>Having thus defined the range, we can now copy it with <strong>Edit ->
+        Copy Range</strong> or <strong>Ctrl+Shift+C</strong></p>
+
+        <p align=center>
+        <img src="pixmaps/tt05.png">
+        </p>
+
+        <p>Now move the blue cursor to the start of bar 9 (if it isn't already
+        there) and <strong>Edit -> Paste Range</strong> or
+        <strong>Ctrl+Shift+V</strong> to paste it.</p>
+
+        <p align=center>
+        <img src="pixmaps/tt06.png">
+        </p>
+
+        <p>The pattern of time and tempo changes has been duplicated
+        successfully from 9 to 16.  Now repeat as required to achieve the
+        desired result.  <em>NOTE: The range copy/paste mechanism not only grabs
+        tempo and time signature changes as demonstrated here in this otherwise
+        empty composition, but also events in all segments on all tracks in the
+        area defined by the range.</em></p>
+
+        <h2>Inserting a Copied Range</h2>
+
+        <p>Moving on from the preceding example, let's say we want to insert a
+        block of time and tempo changes (and any other events in all segments on
+        all tracks occurring at this time) at bar 5, sliding the existing events
+        out of the way.</p>
+
+        <p>First, let's draw a segment from 1 to 17 in order to make it easier
+        to see the results of the operation to follow:</p>
+
+        <p align=center>
+        <img src="pixmaps/tt07.png">
+        </p>
+
+        <p>Now let's define a range from 8 to 11, and copy it:</p>
+
+        <p align=center>
+        <img src="pixmaps/tt08.png">
+        </p>
+
+        <p>Now move the blue cursor to bar 5, and paste the range:</p>
+
+        <p align=center>
+        <img src="pixmaps/tt09.png">
+        </p>
+
+        <p>This segment is empty, and there are no audible results, but we can
+        see that the original segment has been cut into three pieces, with a
+        copy of a bit of itself inserted beginning at bar 5.  The tempo and time
+        signature changes have been copied and inserted here as well.</p>
+
+        <p align=center>
+        <img src="pixmaps/tt10.png">
+        </p>
+
+        <h2>Inserting an Empty Range</h2>
+
+        <p>The final use for this feature is to insert some empty space at an
+        arbitrary point in the middle of something else.  Let's say we want to
+        insert three empty bars starting at bar 3.</p>
+
+        <p>First, move the blue cursor to bar 3.  Then use <strong>Edit ->
+        Insert Range</strong> or <strong>Shift+Insert</strong>, which will
+        produce a &quot;Duration of empty range to insert&quot; dialog.  I have
+        set my dialog to insert the three empty measures just discussed:</p>
+        
+        <p align=center>
+        <img src="pixmaps/tt11.png">
+        </p>
+
+        <p>In the final result, we can see that there is now a three-bar hole in
+        the example segment, showing us where the empty range has gone.
+        <em>NOTE: the empty range will have whatever time signature is in effect
+        at the point of insertion.  It is not possible to insert an empty range
+        that contains multiple time signatures.  To do this, copy a block of
+        time signatures from somewhere else, and paste them here to insert them
+        instead.</em></p>
+
+        <p align=center>
+        <img src="pixmaps/tt12.png">
+        </p>
+
+        <p>The end!  I hope this answered your question in a satisfactory manner.</p>
+</div>
+</body>
+</html>

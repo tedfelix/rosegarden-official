@@ -1,0 +1,417 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; CHARSET=iso-iso-8859-1">
+<STYLE TYPE="text/css"><!--
+BODY { font-family: sans-serif }
+H1 { font-family: sans-serif }
+H2 { font-family: sans-serif }
+H3 { font-family: sans-serif }
+H4 { font-family: sans-serif }
+H5 { font-family: sans-serif }
+H6 { font-family: sans-serif }
+SUB { font-size: smaller }
+SUP { font-size: smaller }
+PRE { font-family: monospace }
+A { text-decoration: none }
+--></STYLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff" TEXT="#000000" LINK="#0000ff" VLINK="#0000ff" ALINK="#0000ff">
+<A HREF="chapter-0.html">Contents</A>
+<A HREF="chapter-1.html">Previous</A>
+<A HREF="chapter-3.html">Next</A>
+<HR>
+<H1><A NAME="2">2 Producing Sound</A></H1>
+<P>Many users have written to ask why they are unable to get Rosegarden
+ to make any noise. It is the most common question asked on the
+ rosegarden-user mailing list by far, and is especially troublesome for
+ those newly migrating to Linux from Windows. Before we start Rosegarden
+ for the first time, I want to explain what is necessary to pave the
+ way, and have a good first experience. Some of you already know all
+ this, and those of you who do are invited to jump ahead to the next
+ chapter, where the interesting part begins.</P>
+<P>The topic of sound covers two distinct areas that may or may not be
+ codependent, depending on the hardware and software you have available.
+ One the one hand, there are several requirements that must be met in
+ order to play MIDI with Rosegarden, and on the other, it's necessary to
+ get the JACK server up and running reliably in order to make use of
+ Rosegarden's audio features. A working JACK server is also required to
+ play MIDI with synth plugins, or to play more than one ALSA software
+ synth at a time. Getting Rosegarden to make noise can be a complicated
+ business, but hopefully I can help you deal with whatever set of
+ circumstances you have before you. I cannot, however, cover every
+ detail of getting every card working with every distribution. I'm
+ afraid I have to leave some questions unanswered, lest this chapter
+ become a book unto itself.</P>
+<P>Here is a roadmap showing all the possible ways to produce sound with
+ Rosegarden at a glance. It's quite daunting, I know, but I hope I can
+ help you make sense of it:</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic16"
+SRC="../pixmaps/sound-diagram-master.jpg" ></P>
+<H2 CLASS="western"><A NAME="2_1">2.1 Playing MIDI</A></H2>
+<P>MIDI under Linux is quite a complicated subject. The available
+ hardware falls into three broad categories, each with its own special
+ considerations.<FONT COLOR="#0000ff"> External MIDI hardware</FONT>,<FONT
+COLOR="#5c8526"> internal hardware with ALSA support</FONT>, and
+ internal hardware without ALSA support. The latter category splits into<FONT
+COLOR="#9966cc"> ALSA soft synths</FONT> and<FONT COLOR="#5e11a6"> synth
+ plugins</FONT>, which are similar, but slightly different.</P>
+<H3 CLASS="western"><A NAME="2_1_1">2.1.1 What's in My Computer?</A></H3>
+<P>If you have no idea what you have inside your box, and you have no
+ idea how to configure any of this stuff, one good place to start is to
+ have a look and see how far your distro has gotten you for free. Most
+ modern distros should load ALSA in preference to OSS (the old sound
+ system), and they should detect and configure a wide variety of
+ soundcards for you automatically. KDE has a useful information center
+ that can display information about your sound configuration. It will
+ typically be found on the KDE menu under<B> System -&gt; Info Center</B>,
+ or you can run it manually by typing &quot;kinfocenter&quot; into an<B> alt</B>+<B>
+F2</B> run command box.</P>
+<P STYLE="font-weight: medium">Here is a sample of its output, with
+ explanations superimposed on the screenshot:</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic1"
+SRC="../pixmaps/sound-kinfocenter.png" ></P>
+<P ALIGN="LEFT" STYLE="font-weight: medium">Different soundcards will
+ have different features. Most of them, for example, will list nothing
+ for &quot;Synth devices.&quot;</P>
+<H3 CLASS="western"><A NAME="2_1_2">2.1.2 External MIDI Interfaces</A></H3>
+<P>By far the least complicated, and most expensive way to play MIDI
+ under Linux is to use real MIDI equipment. This can include keyboards,
+ sound modules, and perhaps even MIDI guitars. A wide range of equipment
+ is available for this purpose, ranging from comparatively inexpensive
+ consumer keyboards to professional quality gear. The cost ranges from
+ hundreds to thousands of dollars however, and this is not the way to go
+ unless you are serious about MIDI.</P>
+<P>If you're fortunate enough to have such equipment, then you probably
+ already have some idea how to hook it up to your computer. If the
+ equipment has the ability to produce sound on its own, as some MIDI
+ keyboards do, then you may wish to use those speakers for MIDI
+ playback. If your MIDI equipment has no speakers, or if you intend to
+ record the audio output from this equipment, you may wish to connect
+ the audio output from your keyboard or sound module to an audio input
+ jack on your soundcard. This will allow you to route everything through
+ the<FONT COLOR="#ff8080"> soundcard's mixer</FONT>. There are several
+ choices for external MIDI interfaces.</P>
+<H4 CLASS="western"><A NAME="2_1_2_1">2.1.2.1 Joystick Port MIDI
+ Adapters</A></H4>
+<P>The simplest, least expensive route is the joystick port MIDI
+ adapter. These are found on many common, low-end soundcards, such as
+ the Sound Blaster PCI 128 (snd-ens1371). It can be somewhat difficult
+ to obtain a suitable Y-cable or MIDI box to connect to these, and you
+ will probably have to procure one online. With the right adapter in
+ hand, all that remains is to connect your equipment to the box or cable
+ using standard 5-pin DIN MIDI cables. With the snd-ens1371 driver, and
+ those for many similar cards, it's only a matter of making sure the <FONT
+FACE="courier 10 pitch">snd-seq-midi</FONT> and <FONT FACE="courier 10 pitch">
+snd-rawmidi</FONT> modules are loaded (using whatever mechanism your
+ particular distribution provides for that function.)</P>
+<H4 CLASS="western"><A NAME="2_1_2_2">2.1.2.2 USB MIDI</A></H4>
+<P>USB is supplanting traditional MIDI cabling, and several
+ manufacturers are producing keyboards that plug directly into your
+ computer using standard USB cables. There are also devices available
+ which provide multi-port MIDI interfaces. These interfaces attach to
+ your computer using a USB cable, and they provide several traditional
+ 5-pin MIDI sockets.</P>
+<H5 CLASS="western"><A NAME="2_1_2_2_1">2.1.2.2.1 USB Keyboards</A></H5>
+<P><A HREF="http://www.evolution.co.uk/">Evolution</A> manufactures
+ several models that are known to conform to the standard USB MIDI
+ specification, which are therefore compatible with Linux. Chris Cannam,
+ one of the core Rosegarden developers, uses an Evolution-2 keyboard,
+ and reports that it works using the <FONT FACE="courier 10 pitch">
+snd-usb-audio</FONT> module, which should probably be loaded
+ automatically by hotplug. He imagines that most other manufacturers'
+ wares are similar.</P>
+<H5 CLASS="western"><A NAME="2_1_2_2_2">2.1.2.2.2 USB MIDI Interfaces</A>
+</H5>
+<P>The Edriol UM-2 and mAudio MidiSport 2x2 are known to work under
+ Linux. I have no experience with such things myself, I'm afraid, so I
+ can only provide second-hand information.</P>
+<P>Pedro Lopez-Cabanillas, a contributing Rosegarden developer, reports
+ that getting the Edriol UM-2 working is as simple as plugging in the
+ USB cable and loading the <FONT FACE="courier 10 pitch">snd-usb-audio</FONT>
+ module, which should probably be loaded automatically by hotplug.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic2"
+SRC="../pixmaps/usbmidi-PLC.jpg" ></P>
+<P ALIGN="CENTER"><I>Pedro's USB MIDI Interfaces...</I></P>
+<P>Pedro and Chris both report that the mAudio MidiSport interfaces are
+ more difficult to get working. Pedro reports that &quot;some of them require
+ a firmware program to be loaded into the device's RAM before you can
+ use it. There are GPL firmwares (package ezusbmidi) for the 1-port and
+ 2-port devices (up to Midisport2x2), they are provided as RPM packages
+ for Red Hat by<A HREF="http://ccrma.stanford.edu/planetccrma/software/">
+ CCRMA,</A> and for Mandrake by<A HREF="http://rpm.nyvalls.se/"> Thac</A>
+. There are also ready to use packages from AGNULA/Debian and Gentoo. Or
+ you can tweak and compile the firmware from its sources.&quot; Chris reports
+ that users with 2.6-series kernels may have difficulty using these
+ devices. Pedro suggests that you have a look at the<A HREF="http://ccrma.stanford.edu/planetccrma/software/usbmidi.html">
+ zero config environment</A> information available from CCRMA if you are
+ running Red Hat or Fedora.</P>
+<H3 CLASS="western"><A NAME="2_1_3">2.1.3 MIDI without External Hardware</A>
+</H3>
+<P>For those without external hardware to use, there are two remaining
+ categories. A few soundcards have built-in MIDI infrastructure that
+ ALSA can use. Everyone else will have to use some kind of software
+ synth.</P>
+<H4 CLASS="western"><A NAME="2_1_3_1">2.1.3.1 Cards with Synth Support
+ under ALSA</A></H4>
+<P>This is the next easiest way to get MIDI working. So far as I know,
+ this category only applies to those with soundcards based on an Emu
+ chipset, such as the Sound Blaster Live!/Audigy series (snd-emu10k1),
+ and the AWE 32/64 (snd-emu8000). I have a Sound Blaster Live! Value
+ Edition myself, and can report that it's easy to get working, and it
+ sounds reasonably decent.</P>
+<H5 CLASS="western"><A NAME="2_1_3_1_1">2.1.3.1.1 SB Live! Modules</A></H5>
+<P>First, you'll need to ensure you have the proper kernel modules
+ loaded, and that you are using the ALSA modules, which have &quot;snd&quot; in
+ the name. If your distro has a nice utility for this purpose, use it. I
+ have been unable to locate a graphical module-reporting utility that's
+ universally-available. The only alternative I can give you that's
+ assured of working across all distros is to head for the dreaded
+ command line to issue a command like:</P>
+<P STYLE="margin-left: 0.49in"><FONT FACE="courier 10 pitch">lsmod |
+ grep snd</FONT></P>
+<P>I have the following modules loaded for my own SB Live!:</P>
+<P STYLE="margin-left: 0.79in"><FONT FACE="courier 10 pitch">snd-seq-oss
+ snd-seq-midi snd-emu10k1-synth snd-emux-synth</FONT></P>
+<P STYLE="margin-left: 0.79in"><FONT FACE="courier 10 pitch">
+snd-seq-midi-emul snd-seq-virmidi snd-seq-midi-event snd-seq</FONT></P>
+<P STYLE="margin-left: 0.79in"><FONT FACE="courier 10 pitch">snd-emu10k1
+ snd-pcm-oss snd-mixer-oss snd-pcm snd-timer</FONT></P>
+<P STYLE="margin-left: 0.79in"><FONT FACE="courier 10 pitch">snd-hwdep
+ snd-util-mem snd-page-alloc snd-ac97-codec</FONT></P>
+<P STYLE="margin-left: 0.79in"><FONT FACE="courier 10 pitch">snd-rawmidi
+ snd-seq-device snd soundcore</FONT></P>
+<P><FONT FACE="arial, sans-serif"><I>If you don't see &quot;snd&quot; you almost
+ certainly have the wrong (OSS, the old sound system) modules loaded, or
+ no sound modules at all. Addressing that is beyond the scope of this
+ book, due to there being so many differences between distros. I fear I
+ have to refer you to whatever help resources your distro provides in
+ that event.</I></FONT></P>
+<H5 CLASS="western"><A NAME="2_1_3_1_2">2.1.3.1.2 Set the Mixer Volume</A>
+</H5>
+<P>Next, you'll need to check to make sure you've turned up your mixer
+ volumes. I will cover this card's rather complicated mixer in detail
+ when I talk about managing various inputs and outputs for the purpose
+ of audio recording. For the moment, it should be sufficient to ensure
+ the &quot;Music&quot; channel volume is turned up. My mixer of preference is<A HREF="http://www.suse.de/~mana/kalsatools.html">
+ KAmix</A>. Unfortunately, it is not widely available outside of SuSE,
+ and you may have to compile it yourself. (I had to go to quite a lot of
+ trouble to compile it myself for Debian.) It isn't the prettiest mixer,
+ but it's the only one I've found that lets me control my SB Live!
+ consistently and efficiently to get the results I want.</P>
+<H5 CLASS="western"><A NAME="2_1_3_1_3">2.1.3.1.3 Load a SoundFont</A></H5>
+<P>Finally, you'll need to load a soundfont into the card. These cards
+ use .sf2 soundfonts that are readily available. I'm not aware of a
+ soundfont free enough to be included with any distribution of Linux, so
+ you will most likely have to obtain one from the web, or perhaps from
+ the CDs that came with your soundcard. I have had good luck with
+ soundfonts from the<A HREF="http://www.personalcopy.com/linuxfiles.htm">
+ Personal Copy</A> website, but I make no warranty expressed or implied
+ about the suitability or legality of their soundfonts, or any other
+ soundfonts you might obtain on the web for any particular purpose.</P>
+<P>Once you have obtained a soundfont, you need to load it into the
+ card. There isn't currently any user-friendly way of managing this. I'm
+ developing a utility for this very purpose, but I did not have time to
+ finish it before releasing this book, and so I will make no further
+ reference to it. In the meantime, your two choices are to run the
+ command line utility<B> <FONT FACE="courier 10 pitch">asfxload</FONT></B>
+, or to configure Rosegarden to load a soundfont for you at startup, via<B>
+ Settings -&gt; Configure Rosegarden -&gt; Sequencer -&gt; General</B></P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic17"
+SRC="../pixmaps/configure-soundfont.png" ></P>
+<P ALIGN="CENTER">
+<BR>
+<BR></P>
+<H4 CLASS="western"><A NAME="2_1_3_2">2.1.3.2 Cards without Synth
+ Support under ALSA</A></H4>
+<P>This is really the &quot;everything else&quot; category. It includes too many
+ soundcards to list; each with its own set of modules. The Sound Blaster
+ PCI and Ensoniq AudioPCI cards (ens-1370, ens-1371, ens-1373), and
+ integrated snd-intel8x0 and snd-via82xx are probably the most common,
+ but soundcards that fall into this category are legion. The process for
+ getting them to play MIDI is similar in all cases.</P>
+<H5 CLASS="western"><A NAME="2_1_3_2_1">2.1.3.2.1 Check your Modules</A></H5>
+<P>First, you need to ensure you have the necessary ALSA MIDI
+ infrastructure by loading the following modules in addition to whatever
+ other modules you require for your particular hardware:</P>
+<P STYLE="margin-left: 0.79in"><FONT FACE="courier 10 pitch">
+snd-seq-midi snd-seq-virmidi snd-seq-midi-event snd-seq</FONT></P>
+<P STYLE="margin-left: 0.79in"><FONT FACE="courier 10 pitch">snd-timer
+ snd-rawmidi snd soundcore</FONT></P>
+<P><I>(The above list was extrapolated from the previous SB Live!
+ example, and may contain modules that won't actually load with your
+ particular hardware. If loading one or more of the above modules fails,
+ don't worry about it unless you later find your MIDI subsystem doesn't
+ work.)</I></P>
+<H5 CLASS="western"><A NAME="2_1_3_2_2">2.1.3.2.2 QSynth</A></H5>
+<P>The least complicated way to get one of these cards to play MIDI is
+ to use<A HREF="http://qsynth.sourceforge.net/"> QSynth</A>. It is a
+ simple to use ALSA soft synth that takes MIDI data as input and uses<B>
+ .sf2</B> format soundfonts to produce audio output. In its simplest
+ configuration, it can use ALSA for audio output, avoiding the need to
+ run JACK. If you already need or want to run JACK, it can connect its
+ output to JACK instead. In this configuration, you can also use a
+ variety of other ALSA soft synths such as<A HREF="http://hydrogen.sourceforge.net/">
+ Hydrogen</A> and<A HREF="http://zynaddsubfx.sourceforge.net/">
+ ZynAddSubFX</A>, all sharing the same audio output. QSynth is the most
+ useful for general music production, and so it is my focus here.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic19"
+SRC="../pixmaps/qsynth-main.png" ></P>
+<H6 CLASS="western"><A NAME="2_1_3_2_2_1">2.1.3.2.2.1 Configure the
+ Audio Driver</A></H6>
+<P>The first decision you need to make is whether to use ALSA or JACK
+ for output. I will cover starting and configuring JACK in detail in a
+ moment. No matter which option you choose, both are configured via the<B>
+ Setup</B> button. In this example, I'm using JACK. Take special note
+ that I have adjusted the sample rate to match the sample rate I'm using
+ with JACK, which is 48,000 Hz (for reasons I will explain directly.)
+ Also note that I have checked<B> [x] Auto Connect JACK Outputs</B>.
+ This allows QSynth to make its own default connection with JACK, which
+ is very convenient.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic18"
+SRC="../pixmaps/qsynth-audio-setup.png" ></P>
+<H6 CLASS="western"><A NAME="2_1_3_2_2_2">2.1.3.2.2.2 Loading a
+ SoundFont</A></H6>
+<P>Finally, it's necessary to load at least one soundfont. These are the
+ same<B> .sf2</B> soundfonts used by the SB Live! series of cards, and
+ they are loaded via a different tab on the same setup page.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic20"
+SRC="../pixmaps/qsynth-soundfonts.png" ></P>
+<H5 CLASS="western"><A NAME="2_1_3_2_3">2.1.3.2.3 SynthPlugins</A></H5>
+<P>It is also possible to play using synth plugins. There is a
+ FluidSynth-DSSI plugin that provides essentially the same functionality
+ as QSynth, except that it's integrated directly into Rosegarden. I will
+ describe it in detail when I talk about assigning instruments to
+ tracks, because its configuration and use is entirely internal to
+ Rosegarden. For the moment it is sufficient to know that it exists, and
+ that it requires a working JACK server in order to function.</P>
+<H2 CLASS="western"><A NAME="2_2">2.2 Playing Audio</A></H2>
+<P>In order to play audio you will need to run JACK.</P>
+<H3 CLASS="western"><A NAME="2_2_1">2.2.1 What is JACK?</A></H3>
+<P>JACK is short for the Jack Audio Connection Kit. JACK is a flexible
+ audio server that allows its client applications to share the audio
+ hardware seamlessly, and to share a common transport. It provides
+ flexible mechanisms for routing inputs and outputs to and from client
+ applications using a jack-and-cable metaphor. It is geared toward the
+ audio professional who wants to get the lowest possible latency and the
+ best possible performance out of his or her hardware, but professional
+ or not, it's something you need to come to terms with JACK if you want
+ to play audio with Rosegarden.</P>
+<H3 CLASS="western"><A NAME="2_2_2">2.2.2 Obtaining a Suitable Kernel</A>
+</H3>
+<P>It is theoretically possible to run JACK and Rosegarden with an
+ ordinary kernel, but I have never obtained acceptable results, even on
+ machine with fairly high specs. CPU power and abundant RAM are
+ insufficient to guarantee reliable performance, and you will,
+ unfortunately, need to run a specialized kernel. Fortunately, the likes
+ of<A HREF="http://www.agnula.org/"> AGNULA</A> make it much easier than
+ it used to be. It is now possible to do quality audio work in Linux
+ without having to become an expert kernel hacker. I have to admit that
+ I was impressed with this when I finally came around to trying it for
+ myself. If you read any of the pre-release versions of this book, you
+ may remember various rants I wrote about Linux audio along the way. I
+ can now report that a happy JACK can be as simple as downloading one of
+ AGNULA's (or CCRMA's presumably) kernels, installing it, and rebooting.
+ The particular vagaries of installing the kernel are beyond the scope
+ of this book, but I am running with these packages on my Debian box
+ (laptop users might need to snag the PCMCIA modules as well):</P>
+<P STYLE="margin-left: 0.49in"><FONT FACE="courier 10 pitch">
+alsa-modules-2.4.25-1-multimedia-686</FONT></P>
+<P STYLE="margin-left: 0.49in"><FONT FACE="courier 10 pitch">
+kernel-image-2.4.25-1-multimedia-686</FONT></P>
+<P><FONT FACE="times new roman"><I>NOTE: Your mileage may vary if you
+ want to use a newer 2.6-series kernel. As of this writing (2.6.8 is
+ currently in Debian unstable), I have not yet heard of anyone having
+ good results doing audio work with the new kernels. Some of the
+ features patched into the AGNULA kernel have been incorporated into the
+ mainline 2.6 tree, but not all of them. I recommend that you stick with
+ a 2.4 series kernel for now.</I></FONT></P>
+<H3 CLASS="western"><A NAME="2_2_3">2.2.3 Starting and Tweaking JACK</A></H3>
+<P>The simplest way to control your JACK server is to use<A HREF="http://qjackctl.sourceforge.net/">
+ <FONT FACE="courier 10 pitch">qjackctl</FONT></A>. It is a very useful
+ utility that provides a convenient way to start and stop your JACK
+ server, to play with various configuration parameters to find the best
+ combination for your hardware, and to manage JACK connections between
+ applications.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic21"
+SRC="../pixmaps/qjackctl-overview.png" ></P>
+<H3 CLASS="western"><A NAME="2_2_4">2.2.4 Configuring the JACK Server</A>
+</H3>
+<P ALIGN="LEFT" STYLE="font-weight: medium">To change how your JACK
+ server is configured, use the<B> Setup</B> button. The process that
+ follows will probably be tedious and time-consuming, but once you have
+ discovered the &quot;magic numbers&quot; for your hardware, everything should
+ continue to work thereafter. The patched kernel you installed allows
+ JACK to have higher than normal priority, and this requires root
+ privileges. You should configure JACK to start using &quot;jackstart&quot; so
+ that you can run Rosegarden and JACK as an ordinary user.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic25"
+SRC="../pixmaps/qjackctl-silvan.png" ></P>
+<P ALIGN="LEFT" STYLE="font-weight: medium">The settings displayed are
+ those that work best for me on my Sound Blaster Live!, and you may well
+ have some fiddling to do from here. If you have more than one
+ soundcard, you may need to twiddle the &quot;Interface&quot; setting. I don't
+ actually have any experience in such a situation, so you are on your
+ own to experiment in that case.</P>
+<P ALIGN="LEFT" STYLE="font-weight: medium">Discovering the best
+ combination is a process of playing with the &quot;Frames/Period&quot;, &quot;Sample
+ Rate&quot; and &quot;Periods/Buffer&quot; settings. Your objective here is to find the
+ lowest possible latency, as reported in the lower right-hand corner of
+ the dialog. As you change settings, this number will show the results
+ yielded by that combination. You want the sample rate high, and the
+ frames/periods and periods/buffer low.</P>
+<P ALIGN="LEFT" STYLE="font-weight: medium">I suggest you dial up the
+ lowest possible latency, click on<B> OK</B>, then try to start the JACK
+ server with the<B> Start</B> button on the main dialog. If the server
+ fails to start, come back to this dialog and keep working up, one
+ setting at a time, until you find a combination that works. Many
+ combinations of settings will probably cause JACK to fail immediately.
+ You should quickly begin to get an idea of the range of possible values
+ you can use that will actually work, and then you can home in on the
+ ideal settings from there. (For example, it isn't possible to start
+ JACK on my hardware with a periods/buffer other than two, so there is
+ nothing for it but to use that setting and move on to a different
+ parameter.)</P>
+<H4 CLASS="western"><A NAME="2_2_4_1">2.2.4.1 The Evil XRUN</A></H4>
+<P ALIGN="LEFT" STYLE="font-weight: medium">It's very important to avoid
+ xruns. If you find a combination of low-latency settings that allow the
+ JACK server to start, but which produce a flood of xruns, you're aiming
+ too high. Xruns are reported in the main QJackCtl dialog. Ideally, you
+ should see this:</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic22"
+SRC="../pixmaps/JACK-no-xruns.png" ></P>
+<P ALIGN="LEFT" STYLE="font-weight: medium">If, on the other hand, you
+ see something like this, you have trouble ahead:</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic23"
+SRC="../pixmaps/JACK-know-xruns.png" ></P>
+<P ALIGN="LEFT" STYLE="font-weight: medium">You never want to see this
+ much red. Seeing any red at all is really unacceptable, but you can
+ probably get by so long as your xruns are few and far between. Xruns
+ cause audio dropouts; clicks, pops, distortions, flanger-like effects.
+ If you get more than two or three in the course of a day, you probably
+ need to de-tune JACK a notch and trade some performance for
+ reliability.</P>
+<H3 CLASS="western"><A NAME="2_2_5">2.2.5 Managing JACK Connections</A></H3>
+<P>Rosegarden will establish sane default connections automatically. So
+ will QSynth and Hydrogen, if you've configured them to do so.
+ ZynAddSubFX and perhaps other JACK-aware applications do not do this.
+ To see and change the connections, click on the<B> Connections</B>
+ button. Making or breaking connections is a process of highlighting one
+ or more items in the left pane and one or more items in the right pane,
+ then using the<B> Connect</B> or<B> Disconnect</B> buttons as required.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic26"
+SRC="../pixmaps/qjackctl-connections.png" ></P>
+<P ALIGN="LEFT" STYLE="font-weight: medium"><I>NOTE: You can also use
+ QJackCtl to manage ALSA MIDI connections. I do not recommend that you
+ do so while you are running Rosegarden. Rosegarden has its own internal
+ MIDI router, and it doesn't work properly if you change MIDI
+ connections externally. However, if, for example, you want to play your
+ Sound Blaster Live! or QSynth with your MIDI keyboard without running
+ Rosegarden, you can use QJackCtl's MIDI connection manager to hook it
+ up.</I></P>
+<HR>
+<A HREF="chapter-0.html">Contents</A>
+<A HREF="chapter-1.html">Previous</A>
+<A HREF="chapter-3.html">Next</A>
+</BODY>
+</HTML>

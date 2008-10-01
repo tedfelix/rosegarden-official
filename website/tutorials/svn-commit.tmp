@@ -1,0 +1,16 @@
+
+--This line, and those below, will be ignored--
+
+A    supplemental/chordnames
+A    supplemental/chordnames/pixmaps
+AM   supplemental/chordnames/pixmaps/raiselower.preview.png
+AM   supplemental/chordnames/pixmaps/inversions.preview.png
+AM   supplemental/chordnames/pixmaps/1.preview.png
+AM   supplemental/chordnames/pixmaps/modchords.preview.png
+AM   supplemental/chordnames/pixmaps/sticky.png
+AM   supplemental/chordnames/pixmaps/sharpsflats.preview.png
+AM   supplemental/chordnames/pixmaps/addednotes.preview.png
+AM   supplemental/chordnames/pixmaps/Screenshot-1.png
+A    supplemental/chordnames/schemas.xml
+A    supplemental/chordnames/data
+A    supplemental/chordnames/index.html

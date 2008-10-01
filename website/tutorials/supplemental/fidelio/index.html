@@ -1,0 +1,487 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+  <head>
+    <title>A Romantic Overture</title>
+  </head>
+  <body>
+
+    <div id="heading" STYLE="background: #000000">
+	<img src="../../roses.png" alt="" width="183"
+	height="104"><img src="../../title-using-rosegarden.png"
+	    alt="Learning Rosegarden"></div>
+
+
+    <div id="main">
+        <h1>A Romantic Overture</h1>
+	<h4>Copyright &copy; 2008 D. Michael McIntyre</h4>
+
+	<h5>This tutorial was written using a pre-release version of Rosegarden
+	1.7.0, and it specifically showcases some features new to this
+	version.</h5>
+
+        <p>
+	In this tutorial, we will start with a public domain MIDI file taken
+	from the <a
+	href="http://mutopiaproject.org/cgibin/piece-info.cgi?id=889">Mutopia
+	Project</a>.  Beethoven's Fidelio Overture is the &quot;worst case scenario&quot; I used when
+	I put together the new LilyPond extension that allows the export of
+	staff brackets based on track parameters.  I thought it would be useful
+	to show everyone what I did to put together the example file, and then
+	take all of that a little further, and show how it is possible to use
+	Rosegarden to print both a conductor score and individual player parts.
+	</p>
+	
+
+	<h1>The Import</h1>
+
+	<p>
+	To get started, right click on <a href="data/fidelio.mid">this
+	link</a> and choose &quot;Open with Rosegarden&quot; from the context
+	menu.  Rosegarden can import the file right from the web!  If that
+	doesn't work for some reason, you may have to save it to disk, start
+	Rosegarden, then load it manually.  (Either <b>File -> Load</b> or
+	<b>File -> Import -> Import MIDI File</b> will work equally well.) </p>
+	
+	<p align=center>
+	<img src="pixmaps/001.png" >
+	</p>
+
+	<p>
+	The first track appears to be some kind of control track, just like in
+	the <a href="../piano/index.html">piano tutorial</a>, and is
+	useless for our purposes.  Rather than delete it, we will first use the
+	<img src="pixmaps/eraser.png"> tool to delete the segment, and then
+	double click on the label to rename the track for informational
+	purposes:
+	</p>
+	
+	<p align=center>
+	<img src="pixmaps/002.png">
+	</p>
+
+	<h1>Track Labels</h1>
+
+	<p>
+	Next, we'll go down and use the <img src="pixmaps/add_tracks.png"> icon
+	to add tracks, and then create new labels to mark off the various
+	sections.  The track gets added below the current one, so begin on the
+	&quot;fagotti&quot; track, and so on:
+	</p>
+	
+	<p align=center>
+	<img src="pixmaps/003.png">
+	</p>
+
+        <p>
+	Finally, we'll refer to the <a href="data/fidelio-let.pdf">original
+	LilyPond score</a> to make the track labels match the score.  It seems
+	we need to use the <img src="pixmaps/move_track_down.png"> icon to move
+	the track called &quot;trumpet&quot; down below the horns, and to move
+	the viola below the violins:
+	</p>
+	
+	<p align=center>
+	<img src="pixmaps/004.png" >
+	</p>
+
+	<p><i>NOTE: The original score has abbreviated labels on 
+	subsequent pages, and that is one thing that is definitely impossible to
+	replicate with Rosegarden.</i></p>
+
+	<h1>Brackets</h1>
+
+	<p>Now that we have the labels, we need to match the brackets.  The new
+	bracket export feature is very simple to use, but should be used with
+	care.  There is no sanity checking to close open brackets, or to ensure
+	that nested combinations make sense, and so it is quite easy to create
+	an impossible situation by mistake.  If the exported LilyPond doesn't
+	render without errors, that is the first thing to check.
+	</p>
+
+	<p>If they are not already visible, you will want to click on the <img
+	src="pixmaps/005.png"> to enable the new controls.</p>
+
+	<p align=center>
+	<img src="pixmaps/006.png">
+	</p>
+
+	<p>There are several types of bracket start and end markers available,
+	covering several combinations.  Markers that have { or [ in them are
+	used to begin a bracket, and markers that have ] or } in them are used
+	to end one, while the ----- marker is just a space filler.</p>
+
+	<p align=center>
+	<img src="pixmaps/007.png">
+	</p>
+
+	<p>So, to begin, we want a square bracket around the woodwinds, so we
+	select the &quot;Flauti&quot; track, and begin the bracket:</p>
+
+	<p align=center>
+	<img src="pixmaps/008.png">
+	</p>
+
+	<p>Then we move to &quot;Fagotti&quot; and close it:</p>
+
+	<p align=center>
+	<img src="pixmaps/009.png">
+	</p>
+
+	<p>Next, we want another square bracket around the entire brass section,
+	and a curly piano-style bracket around the two horns and the two
+	trombones.  Since the top staff in the brass section is a horn staff, we
+	need to begin both types of brackets here:</p>
+
+	<p align=center>
+	<img src="pixmaps/010.png">
+	</p>
+
+	<p>Then we need to close the curly bracket on the second horn track:</p>
+
+	<p align=center>
+	<img src="pixmaps/011.png">
+	</p>
+
+	<p>Then open a new curly bracket on the first trombone track:</p>
+
+	<p align=center>
+	<img src="pixmaps/012.png">
+	</p>
+
+	<p>And finally close both curly and square brackets to end the
+	section</p>
+
+	<p align=center>
+	<img src="pixmaps/013.png">
+	</p>
+
+	<p>The timpani staff should have its own square bracket that both begins
+	and ends here.  Rosegarden has a bracket type for this that exports
+	reasonable looking LilyPond code, but this code does not work correctly
+	in LilyPond 2.10, which might be a LilyPond bug.  We have the type in
+	the hope that it might eventually start to work:</p>
+
+	<p align=center>
+	<img src="pixmaps/014.png">
+	</p>
+
+	<p>Finally, the string section is put together just like the brass
+	section, with a curly bracket around the two violins, and around the
+	cello and contrabass:</p>
+
+	<p align=center>
+	<img src="pixmaps/015.png">
+	</p>
+
+	<h1>Notation Tweaks</h1>
+
+	<p>Now that the brackets are set, we need to tweak the notation
+	slightly.  When I created the sample file that inspired this tutorial, I
+	built everything from scratch using this Mutopia file for inspiration.
+	Now that we are starting with imported MIDI, there are some interesting
+	problems.  MIDI apparently carries key signature information, but not
+	transpose information.  As a result, the clarinet part has a transposed
+	key signature, but the actual notation is based on concert pitch notes,
+	because MIDI is a performance format. There are a lot of spurious
+	accidentals here, and none of this would sound correctly on a real
+	clarinet in A as written.</p>
+
+	<p>The new fast and easy way to handle situations like this is to take
+	advantage of Arnout Engelen's clever new extension to the track preset
+	segment parameters.  These normally only affect segments that haven't
+	been created yet, and I wanted some way to sync existing segments to
+	these parameters, for situations exactly like this.  Arnout decided the
+	place to hang that feature was right inside the Load Preset dialog.  It
+	makes use of the undersold transpose by interval feature he introduced
+	some time back, and this combination is perfect for correcting little
+	mishaps like this one.</p>
+
+	<p>So, to begin, go up to the &quot;Flauti&quot; track, make sure the
+	<img src="pixmaps/016.png"> controls are enabled, and click the <img
+	src="pixmaps/018.png"> button.  Set up the controls like the following,
+	being sure to choose &quot;Convert existing segments&quot; as
+	depicted.  (There isn't anything to convert on this staff, but it's good
+	practice to leave the dialog in this state, which it will remember for
+	later.)</p>
+
+	<p align=center>
+	<img src="pixmaps/019.png">
+	</p>
+
+	<p>Now, in order to help remember where we've been, let's change the
+	color for this segment:</p>
+
+	<p align=center>
+	<img src="pixmaps/020.png" >
+	</p>
+
+	<p>Next, we do the Oboe track:</p>
+
+	<p align=center>
+	<img src="pixmaps/021.png">
+	</p>
+
+	<p>And so on...  All of these instruments are in the track parameter
+	preset database kindly provided to us by E. Magnus Johansson, from the A
+	clarinet to the French horn in E, and so forth.  (If your Italian is a
+	little shaky but your English is OK, look at the segment labels for
+	clues.  A &quot;fagotti&quot; is a bassoon, and a &quot;trombe&quot; is
+	a trumpet, for example.)</p>
+
+	<p>Loading each preset will transpose the notation and the playback
+	appropriately, alter any key signatures as necessary, and change out the
+	clefs.  In some cases, it might replace a clef you wanted with the clef
+	in the database (for instruments that sometimes read bass and sometimes
+	read tenor, for instance) but this is definitely useful more often than
+	it goes wrong, and such errors are easy to adjust (as we shall see
+	shortly.)</p>
+
+	<p>When you get to the &quot;Trombone tenore&quot; part, it is a good
+	idea to go ahead and address another potential problem. The trombones do
+	not enter until measure 230, but the beginning of the score should be
+	padded out with rests to account for all this time.  Scroll to bar 230,
+	and use the <img src="pixmaps/022.png"> cursor to drag the beginning of
+	the segments back to the start of the composition.  Then load the
+	parameters, and change the colors as before...</p>
+
+	<p align=center>
+	<img src="pixmaps/023.png">
+	</p>
+
+	<p>...finally finishing with the &quot;Contrabasso&quot; track:</p>
+
+	<p align=center>
+	<img src="pixmaps/024.png">
+	</p>
+
+	<p>Now <b>Ctrl+A</b> and <b>N</b> to open a combined notation view:</p>
+
+	<p align=center>
+	<img src="pixmaps/025.png" width="780">
+	</p>
+
+	<p>Unfortunately, we see that the key signatures and accidentals are
+	still out of whack.  This was probably caused by the unusual situation
+	we started with, where the actual notation did not match its key
+	signature.  The alternative transpose method is not as reliable with
+	respect to octaves, but we will have to try our luck with that at this
+	stage.  Select and delete the key signature in the first track (so that
+	we have the option of applying a new change to all tracks, and getting
+	it adjusted relative to segment transpose (my own feature,) which we have
+	already corrected,) then go to <b>Segment->Add Key Change</b> and set up
+	the following options (being sure to leave existing pitch alone, since
+	it is fine in this case):</p>
+
+	<p align=center>
+	<img src="pixmaps/026.png">
+	</p>
+
+	<p>Having a look at the result made me realize that we moved the left
+	edges of the trombone segments, but did not move the clefs and key
+	signatures, which are still parked at bar 230.  So go select them...</p>
+
+	<p align=center>
+	<img src="pixmaps/027.png" >
+	</p>
+
+	<p>...then move them to the first bar.  You'll have to do each track one
+	by one, as it is not possible to perform cut and paste operations on
+	more than one segment at a time (unless you perform them on all
+	segments, using the <a
+	href="http://www.rosegardenmusic.com/doc/en/markers-ranges-loops.html#ranges-loops">range
+	cut/copy/paste features</a>, which would not be appropriate here.)
+	After this step, the result seems to match the original score
+	closely:</p>
+
+	<p align=center>
+	<img src="pixmaps/028.png" >
+	</p>
+
+	<p>One problem is that the tenor trombone part calls for a tenor clef,
+	but the database specifies a bass clef.  To match the score, double
+	click on the bass clef in the tenor trombone part, and select a tenor
+	clef instead, being sure to leave the existing pitches intact:</p>
+
+	<p align=center>
+	<img src="pixmaps/029.png">
+	</p>
+
+	<p>Next, the trumpet part in the original apparently has no key
+	signature at all, so select it and hit <b>Delete</b> to remove it.</p>
+
+	<p align=center>
+	<img src="pixmaps/030.png" >
+	</p>
+
+	<p>Finally, the original score displays cut common time, instead of 2/2.
+	To correct this, double click the tempo and time signature ruler to open
+	the Tempo and Time Signature Editor dialog, then double click on the
+	existing time signature, and be sure to check the cut common time
+	option:</p>
+
+	<p align=center>
+	<img src="pixmaps/031.png" >
+	</p>
+
+	<p>After a long bit of processing, the new time signature appears in the
+	notation view:</p>
+
+	<p align=center>
+	<img src="pixmaps/032.png">
+	</p>
+
+	<p>At this stage, the results are substantially similar to the original.
+	There are numerous dynamics, tempo and performance indications missing,
+	phrasing slurs, and the entire score should be surveyed for voice
+	overlap problems such as those described in the <a
+	href="../piano/index.html">piano tutorial</a>, but we are far
+	enough along for the purpose of this demonstration, as can be confirmed
+	by having a look at <b>File->Preview with LilyPond</b>.  This is a good
+	time to edit the header information, to supply the title and so forth...</p>
+
+	<p align=center>
+	<img src="pixmaps/033.png" >
+	</p>
+
+	<p>...and the results are looking good:</p>
+
+	<p align=center>
+	<img src="pixmaps/034.png" >
+	</p>
+
+<!--	<p><i>NOTE: There are a few interesting notation problems to look at while we're
+	here, but I don't want to spend the time to correct everything.  You
+	might check out the <a href="../howthebleep/">How the @#$%</a> tutorial
+	to see some of these in action.</i></p>  -->
+
+	<h1>Player Parts</h1>
+
+	<p>Unfortunately, Rosegarden doesn't have any kind of handy feature to
+	decompose a conductor score into player parts, and nothing like that is
+	on the horizon for the foreseeable future.  This does require some extra
+	work on your part, but it's not impossible.  At this stage of
+	development, I'm afraid we at Rosegarden often have to settle for
+	&quot;it's not totally impossible&quot; as good enough.</p>
+
+	<p>Looking ahead at the original score from Mutopia, all the individual
+	instruments have separate parts, except that the first and second horns
+	and third and fourth horns share a single staff (as they do in our file
+	as it stands right now.)  This means all we need to do is export the
+	staffs one by one to create individual player parts.  Except now that we
+	have created brackets, we will export broken LilyPond code if we try
+	this.  Unfortunately, this means we need to maintain a separate copy of
+	all the parts for individual player purposes.</p>
+	
+	<p><i>UPDATE: I won't revisit this tutorial to explore the new
+	possibilities, but I put the old &quot;Export staff group bracket&quot;
+	option back, renamed, recycled, and bent to a slightly new purpose.  If
+	you turn this off, you can actually just export the parts directly from
+	the master score, one by one.  You will still need an alternate set of
+	parts for much of what is to follow in this tutorial, but you can now
+	ignore the step of manually reverting all the staff settings to
+	defaults.  I will discuss this new option in more detail
+	elsewhere.</i></p>
+
+	<p>I tried, but was unable to come up with anything more clever than
+	just using <b>File -> Save As...</b> to save a copy of the file under a
+	different name, with one file for the conductor score, and one file for
+	the player parts.  That was less tedious than copying everything and
+	setting the track labels back up, as there is no way to copy and paste
+	whole tracks, and the <b>File -> Merge File</b> option doesn't copy this
+	information either, for what proved to be arcane and tricky reasons.</p>
+
+	<p align=center>
+	<img src="pixmaps/036.png">
+	</p>
+
+	<p>Now simply revert all the staff settings to ----- and go track by
+	track to export and print player parts.  The only really tricky thing to
+	deal with from here is all the tempo indications, and anything else that
+	should be present in every player's part.  I didn't enter these into the
+	conductor score, but this is how they appear in the original score, with
+	our versions entered into the flute part via the text tool:</p>
+
+	<p align=center>
+	<img src="pixmaps/038.png" >
+	</p>
+
+	<p>The double barline occurs in every part, so this is another good
+	thing to add here.  Double barlines are another LilyPond extension, and
+	these run off the same text tool used to enter the tempo indications.
+	They should be inserted anywhere in the bar before you want the special
+	barline to occur, which is bar 4 in this case (it helps with placement
+	of these LilyPond Directives if you click the text tool on a note head
+	in the bar somewhere):</p>
+
+	<p align=center>
+	<img src="pixmaps/039.png">
+	</p>
+
+	<p>Now that we have a template for text that should be in every part, we
+	can select these three events (I'm just dealing with these three on the
+	first page for the purpose of this demonstration) <i>(note to self: it
+	would be convenient to be able to use the selection event filter to wind
+	up with only the text events selected, and that would be a good example
+	of why a tool copied directly from Cakewalk has never really fit very
+	well in Rosegarden, and what a true Rosegarden selection event filter
+	ought always have done</i>) and <b>Ctrl+X</b> to cut them right back
+	out:</p>
+
+	<p align=center>
+	<img src="pixmaps/040.png">
+	</p>
+
+	<p>Then create a new track, and <b>Ctrl+V</b> to paste them into it:</p>
+
+
+	<p align=center>
+	<img src="pixmaps/041.png">
+	</p>
+
+	<p>Now we can go through a rather (but not unbearably) tedious process of <b>Ctrl</b>
+	dragging a copy of the segment onto each of the other segments one by
+	one.</p>
+
+	<p align=center>
+	<img src="pixmaps/042.png">
+	</p>
+
+	<p>Now click on a track, we'll start with Trombone Tenore, to select all of its
+	segments.  <b>Ctrl+J</b> to merge the two segments, and now we're ready
+	to do a <b>File -> Preview with LilyPond</b> from inside a notation view
+	of this staff to see the result.  Be sure to export selected segments
+	this time.</p>
+
+	<p align=center>
+	<img src="pixmaps/043.png">
+	</p>
+
+	<p>It seems the double barline has caused a small export glitch, which
+	has resulted in the initial four-bar rest being broken into three and a
+	whole rest, where the double barline LilyPond Directive was.  This is
+	not going to be fixed, and you will have to hand edit the result to
+	correct this small glitch if you desire.  On the bright side, the result
+	of our effort here actually looks better than the Mutopia original,
+	which has pages and pages of whole rests!</p>
+
+	<p align=center>
+	<img src="pixmaps/044.png" >
+	</p>
+
+	<p>Rosegarden automatically exports rests in such a way that they try to
+	collapse as much as possible.  If you export this trombone part beside
+	one of the horn parts (as a totally random and meaningless example) the
+	rests only collapse where both parts are silent:</p>
+
+	<p align=center>
+	<img src="pixmaps/045.png">
+	</p>
+
+	<h2>Conclusion</h2>
+	<p>That's it in a nutshell, I think.  If I've missed something worth
+	addressing, please do send me a line.  I'm sure you know where to find
+	me.  :) </p>
+</div>
+</body>
+</html>

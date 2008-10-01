@@ -1,0 +1,911 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=iso-8859-1">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="OpenOffice.org 2.0  (Linux)">
+	<META NAME="CREATED" CONTENT="20051109;10524700">
+	<META NAME="CHANGED" CONTENT="20051109;11281600">
+	<STYLE>
+	<!--
+		H1 { color: #000000; font-family: sans-serif }
+		P { color: #000000; font-family: sans-serif }
+		H3 { color: #000000; font-family: sans-serif }
+		A:link { color: #0000ff; text-decoration: none }
+		A:visited { color: #0000ff; text-decoration: none }
+	-->
+	</STYLE>
+</HEAD>
+<BODY LANG="en-US" TEXT="#000000" LINK="#0000ff" VLINK="#0000ff" BGCOLOR="#ffffff" DIR="LTR">
+<H1 ALIGN=CENTER>Free Companion</H1> <H3 ALIGN=CENTER>Copyright &copy;
+2002-2005 D. Michael McIntyre.  All rights reserved.</h3>
+<H3>An expanded and more complete version of this text is now available as 
+            <a
+	    href="http://www.amazon.com/gp/product/2915925186?ie=UTF8&tag=httprosegardc-20&linkCode=as2&camp=1
+	    789&creative=9325&creativeASIN=2915925186"><img
+	    src="../pixmaps/english-cover-small.png" alt="rosegarden companion book cover"></a><img
+	    src="http://www.assoc-amazon.com/e/ir?t=httprosegardc-20&l=as2&o=1&a=2915925186"
+	    width="1" he
+	    ight="1" border="0" alt="" style="border:none !important; margin:0px
+	    !important;" />
+
+
+<I>Rosegarden Companion</I></A><SPAN STYLE="font-style: normal">,
+published in July 2005 by Bomots.de.</SPAN></H3>
+<HR>
+<H1 ALIGN=CENTER><A NAME="CONTENTS"></A>Contents</H1>
+<P><BR><BR><A HREF="chapter-1.html#1"><B>1 Introduction</B></A> 
+</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-1.html#1_1">1.1
+	What is Rosegarden?</A> 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-1.html#1_2">1.2
+	About This Guide</A> 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-1.html#1_3">1.3
+	Version and System Requirements</A> 
+	</P>
+	<UL>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-1.html#1_3_1">1.3.1
+		Linux Version</A> 
+		</P>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-1.html#1_3_2">1.3.2
+		Equipment and Software Required</A> 
+		</P>
+	</UL>
+	<LI><P><A HREF="chapter-1.html#1_4">1.4 Special Thanks</A> 
+	</P>
+</UL>
+<P><A HREF="chapter-2.html#2"><B>2 Producing Sound</B></A> 
+</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-2.html#2_1">2.1
+	Playing MIDI</A> 
+	</P>
+	<UL>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-2.html#2_1_1">2.1.1
+		What's in My Computer?</A> 
+		</P>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-2.html#2_1_2">2.1.2
+		External MIDI Interfaces</A> 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-2.html#2_1_2_1">2.1.2.1
+			Joystick Port MIDI Adapters</A> 
+			</P>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-2.html#2_1_2_2">2.1.2.2
+			USB MIDI</A> 
+			</P>
+			<UL>
+				<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-2.html#2_1_2_2_1">2.1.2.2.1
+				USB Keyboards</A> 
+				</P>
+				<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-2.html#2_1_2_2_2">2.1.2.2.2
+				USB MIDI Interfaces</A> 
+				</P>
+			</UL>
+		</UL>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-2.html#2_1_3">2.1.3
+		MIDI without External Hardware</A> 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-2.html#2_1_3_1">2.1.3.1
+			Cards with Synth Support under ALSA</A> 
+			</P>
+			<UL>
+				<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-2.html#2_1_3_1_1">2.1.3.1.1
+				SB Live! Modules</A> 
+				</P>
+				<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-2.html#2_1_3_1_2">2.1.3.1.2
+				Set the Mixer Volume</A> 
+				</P>
+				<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-2.html#2_1_3_1_3">2.1.3.1.3
+				Load a SoundFont</A> 
+				</P>
+			</UL>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-2.html#2_1_3_2">2.1.3.2
+			Cards without Synth Support under ALSA</A> 
+			</P>
+			<UL>
+				<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-2.html#2_1_3_2_1">2.1.3.2.1
+				Check your Modules</A> 
+				</P>
+				<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-2.html#2_1_3_2_2">2.1.3.2.2
+				QSynth</A> 
+				</P>
+				<UL>
+					<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-2.html#2_1_3_2_2_1">2.1.3.2.2.1
+					Configure the Audio Driver</A> 
+					</P>
+					<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-2.html#2_1_3_2_2_2">2.1.3.2.2.2
+					Loading a SoundFont</A> 
+					</P>
+				</UL>
+				<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-2.html#2_1_3_2_3">2.1.3.2.3
+				SynthPlugins</A> 
+				</P>
+			</UL>
+		</UL>
+	</UL>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-3.html#2_2">2.2
+	Playing Audio</A> 
+	</P>
+	<UL>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-2.html#2_2_1">2.2.1
+		What is JACK?</A> 
+		</P>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-2.html#2_2_2">2.2.2
+		Obtaining a Suitable Kernel</A> 
+		</P>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-2.html#2_2_3">2.2.3
+		Starting and Tweaking JACK</A> 
+		</P>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-2.html#2_2_4">2.2.4
+		Configuring the JACK Server</A> 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-2.html#2_2_4_1">2.2.4.1
+			The Evil XRUN</A> 
+			</P>
+		</UL>
+		<LI><P><A HREF="chapter-2.html#2_2_5">2.2.5 Managing JACK
+		Connections</A> 
+		</P>
+	</UL>
+</UL>
+<P><A HREF="chapter-3.html#3"><B>3 A First Look</B></A> 
+</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-2.html#2_1">3.1
+	The Main Window</A> 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-3.html#2_2">3.2
+	Special Toolbars</A> 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-3.html#3_3">3.3
+	The Tracklist</A> 
+	</P>
+	<UL>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-3.html#3_3_1">3.3.1
+		Instrument vs. Name</A> 
+		</P>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-3.html#3_3_2">3.3.2
+		Track LEDs</A> 
+		</P>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-3.html#2_6_4">3.3.3
+		Changing the Track Name</A> 
+		</P>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-3.html#3_3_4">3.3.4
+		Adding, Removing, Moving Tracks</A> 
+		</P>
+	</UL>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-3.html#2_3">3.4
+	Segments and Segment Parameters</A> 
+	</P>
+	<UL>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-3.html#3_4_1">3.4.1
+		Creating a New Segment</A> 
+		</P>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-3.html#3_4_2">3.4.2
+		Moving and Copying</A> 
+		</P>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-3.html#3_4_3">3.4.3
+		Splitting and Joining</A> 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-3.html#3_4_3_1">3.4.3.1
+			Split by Pitch</A> 
+			</P>
+		</UL>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-3.html#3_4_4">3.4.4
+		Segment Previews</A> 
+		</P>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-3.html#3_4_5">3.4.5
+		Segment Parameters</A> 
+		</P>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-3.html#3_4_6">3.4.6
+		Repeats</A> 
+		</P>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-3.html#3_4_7">3.4.7
+		Segment Quantizer</A> 
+		</P>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-3.html#3_4_8">3.4.8
+		Transposing Instruments</A> 
+		</P>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-3.html#3_4_9">3.4.9
+		Delay</A> 
+		</P>
+	</UL>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-3.html#3_5">3.5
+	Getting Around in the Composition</A> 
+	</P>
+	<UL>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-3.html#3_5_1">3.5.1
+		The Playback Pointer</A> 
+		</P>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-3.html#3_5_2">3.5.2
+		Loops</A> 
+		</P>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-3.html#3_5_3">3.5.3
+		The Transport</A> 
+		</P>
+	</UL>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-3.html#3_6">3.6
+	Time and Tempo</A> 
+	</P>
+	<UL>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-3.html#3_6_1">3.6.1
+		New Tempo</A> 
+		</P>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-3.html#3_6_2">3.6.2
+		New Time Signature</A> 
+		</P>
+	</UL>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-3.html#3_7">3.7
+	Document Markers</A> 
+	</P>
+	<UL>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-3.html#3_7_1">3.7.1
+		The Manage Markers Dialog</A> 
+		</P>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-3.html#3_7_2">3.7.2
+		Creating a New Marker</A> 
+		</P>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-3.html#3_7_3">3.7.3
+		Markers In Position</A> 
+		</P>
+	</UL>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-3.html#3_8">3.8
+	Miscellany</A> 
+	</P>
+	<UL>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-3.html#3_8_1">3.8.1
+		Importing and Merging Other Compositions</A> 
+		</P>
+		<LI><P><A HREF="chapter-3.html#3_8_2">3.8.2 Autosave</A> 
+		</P>
+	</UL>
+</UL>
+<P><A HREF="chapter-4.html#4"><B>4 The Studio</B></A> 
+</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-4.html#4_1">4.1
+	What is a Studio?</A> 
+	</P>
+	<UL>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-4.html#4_1_1">4.1.1
+		What is a Connection?</A> 
+		</P>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-4.html#4_1_2">4.1.2
+		What is a Device?</A> 
+		</P>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-4.html#4_1_3">4.1.3
+		Putting Connections and Devices Together</A> 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-4.html#4_1_3_1">4.1.3.1
+			A Simple Sound Blaster Live! Studio</A> 
+			</P>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-4.html#4_1_3_2">4.1.3.2
+			A Typical QSynth Studio</A> 
+			</P>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-4.html#4_1_3_3">4.1.3.3
+			A More Complex Studio</A> 
+			</P>
+		</UL>
+	</UL>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-4.html#4_2">4.2
+	Enough Theory Already! How Do I Configure MY Studio?</A> 
+	</P>
+	<UL>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-4.html#4_2_1">4.2.1
+		Connections</A> 
+		</P>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-4.html#4_2_2">4.2.2
+		Record Devices</A> 
+		</P>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-4.html#4_2_3">4.2.3
+		Play Devices</A> 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-4.html#4_2_3_1">4.2.3.1
+			The Easy Road (General MIDI Only)</A> 
+			</P>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-4.html#4_2_3_2">4.2.3.2
+			The Harder Road (Loading Device Definitions from the Library)</A> 
+			</P>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-4.html#4_2_3_3">4.2.3.3
+			Loading a Device from the Library</A> 
+			</P>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-4.html#4_2_3_4">4.2.3.4
+			Turning a SoundFont into a Device</A> 
+			</P>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-4.html#4_2_3_5">4.2.3.5
+			Once You've Made Your Choice</A> 
+			</P>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-4.html#2_5_4">4.2.3.6
+			The Hardest Road: Creating a List of Programs from Scratch</A> 
+			</P>
+			<UL>
+				<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-4.html#4_2_3_6_1">4.2.3.6.1
+				Naming the Device</A> 
+				</P>
+				<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-4.html#4_2_3_6_2">4.2.3.6.2
+				Why Name Programs and Controllers?</A> 
+				</P>
+				<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-4.html#4_2_3_6_3">4.2.3.6.3
+				Gathering Information</A> 
+				</P>
+				<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-4.html#4_2_3_6_4">4.2.3.6.4
+				Variations</A> 
+				</P>
+				<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-4.html#4_2_3_6_5">4.2.3.6.5
+				The Percussion Checkbox</A> 
+				</P>
+				<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-4.html#4_2_3_6_6">4.2.3.6.6
+				Send in Your Device Descriptions</A> 
+				</P>
+			</UL>
+		</UL>
+	</UL>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-4.html#4_3">4.3
+	Custom Controllers</A> 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-4.html#4_4">4.4
+	Default Document Properties</A> 
+	</P>
+	<UL>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-4.html#4_4_1">4.4.1
+		Lilypond Headers</A> 
+		</P>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-4.html#4_4_2">4.4.2
+		Audio Directory</A> 
+		</P>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-4.html#4_4_3">4.4.3
+		Custom Colors</A> 
+		</P>
+	</UL>
+	<LI><P><A HREF="chapter-4.html#2_5_5">4.5 Saving Your Studio as the
+	Default</A> 
+	</P>
+</UL>
+<P><A HREF="chapter-5.html#5"><B>5 Managing Instruments</B></A> 
+</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-5.html#5_1">5.1
+	Instruments</A> 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-5.html#5_2">5.2
+	Routing a Track to a Device and Instrument</A> 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-5.html#5_3">5.3
+	MIDI Instrument Parameters</A> 
+	</P>
+	<UL>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-5.html#5_3_1">5.3.1
+		Simple General MIDI Instruments</A> 
+		</P>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-5.html#5_3_2">5.3.2
+		GS Program and Variation Instruments</A> 
+		</P>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-5.html#5_3_3">5.3.3
+		Drum Instruments</A> 
+		</P>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-5.html#5_3_4">5.3.4
+		GS Drum Kits</A> 
+		</P>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-5.html#5_3_5">5.3.5
+		Alternate Drums in Separate Banks</A> 
+		</P>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-5.html#5_3_6">5.3.6
+		Controller Knobs</A> 
+		</P>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-5.html#5_3_7">5.3.7
+		Setting Initial Track Volume and Other Parameters</A> 
+		</P>
+	</UL>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-5.html#5_4">5.4 </A>
+	</P>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-5.html#5_5">5.5
+	Audio Instrument Parameters</A> 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-5.html#5_6">5.6
+	Audio Instrument Parameters</A> 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-5.html#5_7">5.7
+	Synth Plugin Instrument Parameters</A> 
+	</P>
+	<UL>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-5.html#5_7_1">5.7.1
+		Select a Synth Plugin</A> 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-5.html#5_7_1_1">5.7.1.1
+			Xsynth</A> 
+			</P>
+			<UL>
+				<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-5.html#5_7_1_1_1">5.7.1.1.1
+				Xsynth's External Editor</A> 
+				</P>
+			</UL>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-5.html#5_7_1_2">5.7.1.2
+			FluidSynth</A> 
+			</P>
+			<UL>
+				<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-5.html#5_7_1_2_1">5.7.1.2.1
+				FluidSynth's External Editor</A> 
+				</P>
+				<LI><P><A HREF="chapter-5.html#5_7_1_2_2">5.7.1.2.2 Selecting a
+				Program</A> 
+				</P>
+			</UL>
+		</UL>
+	</UL>
+</UL>
+<P><A HREF="chapter-6.html#6"><B>6 Recording</B></A> 
+</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-6.html#6_1">6.1
+	Recording MIDI</A> 
+	</P>
+	<UL>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-6.html#6_1_1">6.1.1
+		Create a MIDI Track</A> 
+		</P>
+	</UL>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-6.html#6_2">6.2
+	Recording Audio</A> 
+	</P>
+	<UL>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-6.html#6_2_1">6.2.1
+		Set a New Audio Path!</A> 
+		</P>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-6.html#6_2_2">6.2.2
+		Create an Audio Track</A> 
+		</P>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-6.html#6_2_3">6.2.3
+		Configure the Mixer</A> 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-6.html#6_2_3_1">6.2.3.1
+			Capture vs. Playback</A> 
+			</P>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-6.html#6_2_3_2">6.2.3.2
+			Mixing for Results</A> 
+			</P>
+			<UL>
+				<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-6.html#6_2_3_2_1">6.2.3.2.1
+				Clipping</A> 
+				</P>
+				<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-6.html#6_2_3_2_2">6.2.3.2.2
+				Other Unintended Consequences</A> 
+				</P>
+			</UL>
+		</UL>
+	</UL>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-6.html#6_3">6.3
+	Check Your Configuration</A> 
+	</P>
+	<UL>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-6.html#6_3_1">6.3.1
+		The Finite Composition</A> 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-6.html#6_3_1_1">6.3.1.1
+			Audio Recording Time</A> 
+			</P>
+		</UL>
+	</UL>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-6.html#6_4">6.4
+	Play Something!</A> 
+	</P>
+	<UL>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-6.html#6_4_1">6.4.1
+		Previews</A> 
+		</P>
+	</UL>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-6.html#6_5">6.5
+	Punch In</A> 
+	</P>
+	<LI><P><A HREF="chapter-6.html#6_6">6.6 </A>
+	</P>
+</UL>
+<P><A HREF="chapter-7.html#7"><B>7 A Different View</B></A> 
+</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-7.html#7_1">7.1
+	The Event List Editor</A> 
+	</P>
+	<UL>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-7.html#7_1_1">7.1.1
+		Events and Properties</A> 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-7.html#7_1_1_1">7.1.1.1
+			Opening and Event List View</A> 
+			</P>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-7.html#7_1_1_2">7.1.1.2
+			Changing the Time Base</A> 
+			</P>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-7.html#7_1_1_3">7.1.1.3
+			Filtering Events from View</A> 
+			</P>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-7.html#7_1_1_4">7.1.1.4
+			Filtering Events out of a Selection</A> 
+			</P>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-7.html#7_1_1_5">7.1.1.5
+			Creating a New Event</A> 
+			</P>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-7.html#7_1_1_6">7.1.1.6
+			Editing Existing Events</A> 
+			</P>
+		</UL>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-7.html#7_1_2">7.1.2
+		Example Uses</A> 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-7.html#7_1_2_1">7.1.2.1
+			Inserting a Mid-Composition Program Change</A> 
+			</P>
+			<UL>
+				<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-7.html#7_1_2_1_1">7.1.2.1.1
+				Determine the Insertion Point</A> 
+				</P>
+				<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-7.html#7_1_2_1_2">7.1.2.1.2
+				Open the Editor, Create an Event</A> 
+				</P>
+				<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-7.html#7_1_2_1_3">7.1.2.1.3
+				Create the Program Change</A> 
+				</P>
+				<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-7.html#7_1_2_1_4">7.1.2.1.4
+				Changing an Event Time</A> 
+				</P>
+			</UL>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-7.html#7_1_2_2">7.1.2.2
+			Managing System Exclusive Data</A> 
+			</P>
+		</UL>
+	</UL>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-7.html#7_2">7.2
+	The Matrix Editor</A> 
+	</P>
+	<UL>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-7.html#7_2_1">7.2.1
+		Special Considerations of Performance vs. Display</A> 
+		</P>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-7.html#7_2_2">7.2.2
+		Overview</A> 
+		</P>
+	</UL>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-7.html#7_3">7.3
+	The Local Cursor</A> 
+	</P>
+	<UL>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-7.html#7_3_1">7.3.1
+		Entering New Notes</A> 
+		</P>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-7.html#7_3_2">7.3.2
+		Adjusting Existing Notes</A> 
+		</P>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-7.html#7_3_3">7.3.3
+		Selecting and Acting on Multiple Notes</A> 
+		</P>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-7.html#7_3_4">7.3.4
+		Velocity</A> 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-7.html#7_3_4_1">7.3.4.1
+			Showing the Velocity Ruler</A> 
+			</P>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-7.html#7_3_4_2">7.3.4.2
+			Setting Multiple Velocity Properties</A> 
+			</P>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-7.html#7_3_4_3">7.3.4.3
+			</A>
+			</P>
+		</UL>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-7.html#7_3_5">7.3.5
+		Controllers</A> 
+		</P>
+	</UL>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-7.html#7_4">7.4
+	Example Uses</A> 
+	</P>
+	<UL>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-7.html#7_4_1">7.4.1
+		Sequencing a Drum Pattern</A> 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-7.html#7_4_1_1">7.4.1.1
+			Create a New Segment</A> 
+			</P>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-7.html#7_4_1_2">7.4.1.2
+			Route the Track to a Percussion Instrument</A> 
+			</P>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-7.html#7_4_1_3">7.4.1.3
+			Set the Grid and Loop Points</A> 
+			</P>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-7.html#7_4_1_4">7.4.1.4
+			Sequence the Pattern</A> 
+			</P>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-7.html#7_4_1_5">7.4.1.5
+			Copy the Pattern</A> 
+			</P>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-7.html#7_4_1_6">7.4.1.6
+			Finish with a Fill</A> 
+			</P>
+		</UL>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-7.html#7_4_2">7.4.2
+		Adjusting Velocities with the Selection Event Filter</A> 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-7.html#7_4_2_1">7.4.2.1
+			Make a Selection</A> 
+			</P>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-7.html#7_4_2_2">7.4.2.2
+			Configure the Selection Event Filter</A> 
+			</P>
+			<LI><P><A HREF="chapter-7.html#7_4_2_3">7.4.2.3 Adjust the
+			Velocities</A> 
+			</P>
+		</UL>
+	</UL>
+</UL>
+<P><A HREF="chapter-8.html#8"><B>8 Notation</B></A> 
+</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_1">8.1
+	Notation Editor Overview</A> 
+	</P>
+	<UL>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_1_1">8.1.1
+		Notation Toolbars</A> 
+		</P>
+	</UL>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_2">8.2
+	Opening Multiple Staffs</A> 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_3">8.3
+	Notation Basics</A> 
+	</P>
+	<UL>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_3_1">8.3.1
+		Notation Rulers</A> 
+		</P>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_3_2">8.3.2
+		Clefs</A> 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_3_2_1">8.3.2.1
+			Key Signatures</A> 
+			</P>
+		</UL>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_3_3">8.3.3
+		Tempo and Time Signature</A> 
+		</P>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_3_4">8.3.4
+		Entering Notes and Rests</A> 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_3_4_1">8.3.4.1
+			Notes</A> 
+			</P>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_3_4_2">8.3.4.2
+			Rests</A> 
+			</P>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_3_4_3">8.3.4.3
+			Chords</A> 
+			</P>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_3_4_4">8.3.4.4
+			Nudging an Incorrect Pitch</A> 
+			</P>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_3_4_5">8.3.4.5
+			</A>
+			</P>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_3_4_6">8.3.4.6
+			Erasing Notes</A> 
+			</P>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_3_4_7">8.3.4.7
+			Avoiding Multiple Voices</A> 
+			</P>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_3_4_8">8.3.4.8
+			Making Selections</A> 
+			</P>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_3_4_9">8.3.4.9
+			Collapsing Rests</A> 
+			</P>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_3_4_10">8.3.4.10
+			Accidentals</A> 
+			</P>
+			<UL>
+				<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_3_4_10_1">8.3.4.10.1
+				Respelling</A> 
+				</P>
+				<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_3_4_10_2">8.3.4.10.2
+				Cautionary Accidentals</A> 
+				</P>
+			</UL>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_3_4_11">8.3.4.11
+			Triplets and Tuplets</A> 
+			</P>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_3_4_12">8.3.4.12
+			Keyboard Entry</A> 
+			</P>
+			<UL>
+				<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_3_4_12_1">8.3.4.12.1
+				Select a Duration</A> 
+				</P>
+				<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_3_4_12_2">8.3.4.12.2
+				Dots and Double Dots</A> 
+				</P>
+				<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_3_4_12_3">8.3.4.12.3
+				Quicker Triplets</A> 
+				</P>
+				<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_3_4_12_4">8.3.4.12.4
+				Chord Mode</A> 
+				</P>
+				<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_3_4_12_5">8.3.4.12.5
+				Quick Pitch (Do Re Mi) Mode</A> 
+				</P>
+				<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_3_4_12_6">8.3.4.12.6
+				Rest Mode</A> 
+				</P>
+				<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_3_4_12_7">8.3.4.12.7
+				Step Recording Mode</A> 
+				</P>
+				<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_3_4_12_8">8.3.4.12.8
+				Changing Incorrect Note Durations</A> 
+				</P>
+			</UL>
+		</UL>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_3_5">8.3.5
+		Ties, Slurs, and Other Groups</A> 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_3_5_1">8.3.5.1
+			Slurs</A> 
+			</P>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_3_5_2">8.3.5.2
+			Stem Direction</A> 
+			</P>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_3_5_3">8.3.5.3
+			Micro-Positioning of Notation Elements</A> 
+			</P>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_3_5_4">8.3.5.4
+			Moving Notes</A> 
+			</P>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_3_5_5">8.3.5.5
+			Ties</A> 
+			</P>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_3_5_6">8.3.5.6
+			Beaming</A> 
+			</P>
+		</UL>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_3_6">8.3.6
+		Marks, Slashes and Fingerings</A> 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_3_6_1">8.3.6.1
+			Slashes</A> 
+			</P>
+			<UL>
+				<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_3_6_1_1">8.3.6.1.1
+				Piano Fingerings</A> 
+				</P>
+				<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_3_7_0_1">8.3.7.0.1
+				</A>
+				</P>
+			</UL>
+		</UL>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_3_7">8.3.7
+		Hairpins</A> 
+		</P>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_3_8">8.3.8
+		Text Events</A> 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_3_8_1">8.3.8.1
+			Text Styles</A> 
+			</P>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_3_8_2">8.3.8.2
+			Annotations</A> 
+			</P>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_3_8_3">8.3.8.3
+			Lyrics</A> 
+			</P>
+			<UL>
+				<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_3_8_3_1">8.3.8.3.1
+				The Lyric Editor</A> 
+				</P>
+			</UL>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_3_8_4">8.3.8.4
+			I ii iii IV</A> 
+			</P>
+		</UL>
+	</UL>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_4">8.4
+	Legible Notation from Performance Data</A> 
+	</P>
+	<UL>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_4_1">8.4.1
+		The Quantizer</A> 
+		</P>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_4_2">8.4.2
+		Triggered Segments and Ornaments</A> 
+		</P>
+		<UL>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_4_2_1">8.4.2.1
+			Before</A> 
+			</P>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_4_2_2">8.4.2.2
+			The First Try</A> 
+			</P>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_4_2_3">8.4.2.3
+			The Second Try</A> 
+			</P>
+			<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_4_2_4">8.4.2.4
+			Reusing Ornaments</A> 
+			</P>
+		</UL>
+	</UL>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_5">8.5
+	Tweaking Parts with the Selection Filter</A> 
+	</P>
+	<UL>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-8.html#8_5_1">8.5.1
+		Bringing Parts into Range</A> 
+		</P>
+		<LI><P><A HREF="chapter-8.html#8_5_2">8.5.2 Correcting Odd
+		Durations</A> 
+		</P>
+	</UL>
+</UL>
+<P><A HREF="chapter-9.html#9"><B>9 In The Next Edition</B></A> <BR><BR><A HREF="chapter-97.html#10"><B>10
+The A-Maze-Ing Composition</B></A> <BR><BR><A HREF="chapter-98.html#11"><B>11
+Appendix A: MIDI Primer</B></A> 
+</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-98.html#11_1">11.1
+	Channels</A> 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-98.html#11_2">11.2
+	Programs</A> 
+	</P>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-98.html#11_3">11.3
+	Banks</A> 
+	</P>
+	<LI><P><A HREF="chapter-98.html#11_4">11.4 Controllers</A> 
+	</P>
+</UL>
+<P><A HREF="chapter-99.html#12"><B>12 Appendix B: Addendum</B></A> 
+</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-99.html#12_1">12.1
+	My Studio</A> 
+	</P>
+	<UL>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-99.html#12_1_1">12.1.1
+		My Computer and Software</A> 
+		</P>
+		<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-99.html#12_1_2">12.1.2
+		How I Have it Hooked Up</A> 
+		</P>
+	</UL>
+	<LI><P><A HREF="chapter-99.html#12_2">12.2 Who Are You? Why Are You
+	Writing This?</A> 
+	</P>
+</UL>
+<P><A HREF="chapter-100.html#13"><B>13 Appendix C: General MIDI
+Program Names</B></A> <BR><BR><B><A HREF="chapter-101.html#14">14
+Appendix D: History and License</A> </B>
+</P>
+<UL>
+	<LI><P STYLE="margin-bottom: 0in"><A HREF="chapter-101.html#1_5">14.1
+	History</A> 
+	</P>
+	<LI><P><A HREF="chapter-101.html#1_7">14.2 Copyright and License</A>
+		</P>
+</UL>
+</BODY>
+</HTML>

@@ -19,24 +19,28 @@
 	<p>Some things that may be of interest include:
 
 	<ul>
-	<li><a href="/wiki/Frequently_Asked_Questions">Frequently asked questions</a> about Rosegarden.  If you have any problems installing or using Rosegarden, please read these first.</li>
-	<li>D. Michael McIntyre has written a book, and a series of detailed
-	online <a
-	href="http://rosegarden.sourceforge.net/tutorial/">tutorials</a> to
-	demonstrate Rosegarden's overall basics, and then move into advanced
-	notation topics in his trademark friendly style.</li>
-	<li>The <a href="/doc/en/">Rosegarden Handbook</a>, the reference manual and help text for Rosegarden available from within the program.</li>
+	<li><a href="/wiki/Frequently_Asked_Questions">Frequently Asked Questions</a> about Rosegarden.  If you have any problems installing or using Rosegarden, please read these first.</li>
+	<li><a href="/tutorials/">Tutorials</a>.  These tutorials, including
+        most of the classic introduction <i>Rosegarden Companion</i>, cover most
+        of the quesitons that have ever been asked on the user list in a
+        friendly, hands-on style.</li>
+	<li><a href="/doc/en/">The Rosegarden Handbook</a>, our authoritative
+        technical reference manual, is available online
+        for your convenience, and ours.</li>
         <li><a
         href="/wiki/Users_Helping_Users">Users
         Helping Users</a> is a new place to collect tips and tricks from users
         for other users.  It's part of the <a href="/wiki/">Rosegarden Wiki</a>.</li>
-	<li>Have you found a bug?  Please read these <a
-	    href="http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html">guidelines</a>
+	<li><a
+        href="http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html">Bug
+        Submission Guidelines.</a> Think you've found a bug?  Please read these
 	to learn the proper procedure for filing a bug report.  Thanks!</li>
-	<li>Do you want to request a new feature?  Please read these <a
-	    href="http://rosegarden.sourceforge.net/tutorial/RFE-guidelines.html">guidelines</a>
-	for suggestions about how to improve the chances that someone will
-	implement your idea.</li>
+	<li><a
+        href="http://rosegarden.sourceforge.net/tutorial/RFE-guidelines.html">Feature
+        Request Submission Guidelines.</a> Want to request a new feature?  Please
+        read these for suggestions about how to improve the chances that someone will
+	implement your idea. (Currently very low.  Patches are the best feature
+        requests of all.)</li>
 	<li><a href="/resources/links/">Links to other sites</a> including composers who use Rosegarden, other software, and Linux audio community sites.</li>
 	<li><a href="/resources/documents/">Various other documents</a> for users and tweakers.</li>
 <!--	<li><a href="/resources/authors/">About the authors.</a></li> -->

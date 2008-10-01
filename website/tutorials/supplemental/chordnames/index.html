@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!--<link rel="stylesheet" type="text/css" href="../../rosegarden.css" media="screen"/>-->
+<link rel="stylesheet" type="text/css" href="../../print.css" media="print"/>
+
+
+<html>
+  <head>
+    <title>LilyPond Chordnames Syntax</title>
+  </head>
+  <body>
+
+    <div id="heading" style="background: black;">
+	<img src="../../roses.png" alt="" width="183"
+	height="104"><img class="textimg" src="../../title-using-rosegarden.png"
+	    alt="Learning Rosegarden"></div>
+
+<div id="wrapper">
+    <div id="main">
+
+        <h1>Lead Sheets with LilyPond</h1>
+	<h4>Copyright &copy; 2008 Shelagh Manton</h4>
+	<h5>This tutorial was written with a pre-release version of Rosegarden
+	1.7.2</h5>
+
+	
+	<h1>LilyPond Chord Names Styles for your Leadsheets</h1>
+
+	<p align=center>
+	<img src="pixmaps/1.preview.png" alt="picture of lilypond chords">
+	</p>
+<p> Lead sheets are useful for learning the melody and words of a song as well as for
+giving you hints on chords for guitar playing or for other musicians who can improvise
+with chords. </p>
+<p> Rosegarden can easily do lead sheets using the text tool with chords options in the notation editor.</p>
+<p> Rosegarden has it's own native style of naming chords which is a simple text in a nice font placed over the relevant note in the staff. If you wish to use the default LilyPond Ignatzek style chord names you can do that too. But you must use the LilyPond syntax to do so.</p>
+<p align="center" page-break-before="never">
+<img width="100%" src="pixmaps/Screenshot-1.png" alt="What it looks like to enter a chord name.">
+</p>
+<hr page-break-after="always">
+<h2>LilyPond Recipe for Chords</h2>
+<ul>
+  <li>Use letters from <code>a</code> &ndash; <code>g</code>. So far nothing scary, or unexpected.</li> 
+  <img  src="pixmaps/sticky.png" alt="a sticky note showing sharps and flats" align="right" width="20%"> <br clear="left">
+  <li>Next put in any pitch shifting notation. This would be <code>is</code> for sharp and <code>es</code> for flats. Now this is something which needs explaining! LilyPond uses Dutch notation terms by default. As the original programmers are Dutch, this is not too surprising. But because of this, Rosegarden also uses the Dutch terminology. You may need to write it on a sticky note and put it somewhere where you can always see it.</li> 
+  <li>If you need double sharps or flats, just write out the note like this <code>cisis</code> or <code>ceses</code> I have included the chords as LilyPond sees them in the pictures to give you a better idea of whether the syntax produces the chord you meant to produce. </li>
+<img  src="pixmaps/sharpsflats.preview.png" alt="double sharps and flats">
+  <li>Now comes the interesting stuff. If you want to show diminished or minor chords or any modification such as including the seventh note in a chord you will now need to write a  <code>:</code> semicolon. So far our chord could look like this <code>cis:</code>. </li>
+  <li>Simply put your modification after the colon like so; <code>c:7</code>, <code>c:maj7</code>, <code>c:m</code>, <code>c:sus4</code>, <code> c:aug</code>, or <code>c:dim</code></li>
+  <img  src="pixmaps/modchords.preview.png" alt="shows what modified lilypond chords look like.">
+  <li><h3>But wait there's more!</h3>
+  <li>You may need to add on extra notes to your chords. This is how its done. Note the dot if you just want to add only the extra note and not all the ones in between. This is what they look like;  <code>c:11</code>, <code>c:5.11</code>, <code>c:m9</code>, <code>c:13</code>, <code>c:aug2.7</code>, or <code>c:dim5.9</code>.  </li>
+  <img  src="pixmaps/addednotes.preview.png" alt="shows what added notes look like.">
+  <li>If the notes you want to add are raised or lowered? This is how to do it. Also if you wish to raise or lower a note already in your chord just name it with its number and <code>+</code> and <code>-</code> it to your heart's content. <code>c:7+</code>, <code>c:5-.9+</code>, <code>c:5.11-</code>, or <code>c:7-</code> </li>
+  <img  src="pixmaps/raiselower.preview.png" alt="raising and lowering additional notes">
+  <li>and finally, if you want to show an inversion you can do this;  <code>c</code> <code>c:/g</code>  <code>c:5-/e</code> <code>c:m/g</code> <code>cis:m/e</code> </li>
+  <img src="pixmaps/inversions.preview.png" alt="showing some chordnames with inversions.">
+  <li>Some of you may have read up on chordname syntax on your own. In Rosegarden you do not need to show the duration of the chord as you will be attaching it to a note and LilyPond will not need to work out the spacings for the chordname itself. So <em>you</em> do not need to worry about durations.</li>
+</ul>
+<h1 align=center> Have fun!</h1>
+<!--
+    </div>
+    <div id="nav">
+      <h3><a href="../chordnames/index.html" class="nav">Lead Sheets with
+	  LilyPond</a></h3>
+       <h3><a href="../piano/index.html" class="nav">Piano Notation by
+      Example</a></h3> <h3><a href="../fidelio/index.html" class="nav">A Romantic
+      Overture</a></h3>
+       <h3><a href="../notation-challenge/index.html" class="nav">The Rosegarden Notation
+      Challenge</a></h3>
+       <h3><a href="../zyn/zyn.html" class="nav">Working with ZynAddSubFX</a></h3>
+       <h3><a href="../hydrogen/index.html"  class="nav">Working with Hydrogen</a></h3>
+        <h3><a href="http://rosegardenmusic.com/wiki/users_helping_users" class="nav">Users
+    Helping Users</a></h3>
+	<h3><a href="http://rosegarden.sourceforge.net/tutorial/index.html" class="nav">Tutorials Home Page</link>
+	    </div> -->
+       </div>
+</body>
+</html>

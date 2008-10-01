@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>The Rosegarden Notation Challenge</title>
+  </head>
+  <body>
+
+    <div id="heading" STYLE="background: #000000">
+	<img src="../../roses.png" alt="" width="183"
+	height="104"><img src="../../title-using-rosegarden.png"
+	    alt="Learning Rosegarden"></div>
+
+
+    <div id="main">
+        <h1>The Rosegarden Notation Challenge</h1>
+	<h4>Copyright &copy; 2008 D. Michael McIntyre</h4>
+	<h5>This tutorial was written using Rosegarden 1.7.1.</h5>
+
+	<h1>Musical Flow Control with Rosegarden and LilyPond</h1>
+
+	<p>Rosegarden is a sequencer merged with score editor in a novel way
+        that has never been done anywhere else.  It is actually very difficult
+        to merge a sequencer as capable as Rosegarden with a notation editor as
+        capable as Rosegarden.  We have been very successful at accomplishing
+        things that seemed downright crazy on the surface, but we have been
+        unable to come up with a tidy resolution to one large conflict of
+        interest between the sequencer domain and the notation domain.</p>
+
+        <p>Namely, how do we handle &quot;flow control&quot; in Rosegarden?  How
+        do we make repeats with alternate endings, segnos, codas, and that sort
+        of thing work?  We considered many different ideas, but in the end, we
+        never implemented any of them, because they were too mind-bendingly
+        difficult and complicated.  In a pure notation editor, this job is easy,
+        because an application like <a
+        href="http://http://mscore.sourceforge.net/">MusE Score</a> or <a
+        href="https://canorus.berlios.de/wiki/index.php/About_Canorus">Canorus</a>
+        stores notation events as symbols on a page, and then interprets them
+        into MIDI at playback time.  Rosegarden stores metaevents that contain
+        both MIDI-related and notation-related properties, and it is not
+        possible to have one without the other.  The disadvantage of the
+        Rosegarden approach becomes especially apparent when dealing with the
+        issue of flow control, but the extra burden this places on the composer
+        is offset by the power Rosegarden offers to produce one composition file
+        that both sounds appealing to the ear and looks good to the eye;
+        particularly with the help of our good friend LilyPond.</p>
+
+        <p>In order to deal with flow control (as well as a number of other
+        special cases) I hijacked the Text tool in the notation editor, and
+        added a special new class of text events called &quot;LilyPond
+        Directives.&quote;  These directives are interpreted at export time in
+        order to produce appropriate music notation by way of LilyPond.
+        Unfortunately, in order to hear how a composition will actually sound,
+        it is necessary to maintain two separate copies of the events.  One
+        compressed version for printing, and one version that is stretched out
+        on the time axis for proper playback.</b>
+
+	<p align=center>
+	<img src="pixmaps/000.png">
+	</p>
+
+        <p>
+	This must be accomplished using two voices, so there are two sets of
+	whole notes, and two phrasing slurs.  It is easiest to work with the
+	voices on separate tracks initially, so let's create two segments each
+	four bars long on adjacent tracks:
+	</p>
+
+	<p align=center>
+	<img src="pixmaps/001.png">
+	</p>
+
+	<p>Now <b>Ctrl+A</b> and <b>N</b> to open in a combined notation
+	view:</p>
+
+	<p align=center>
+	<img src="pixmaps/002.png">
+	</p>
+
+	<p>Now enter the whole notes in each staff:</p>
+
+	<p align=center>
+	<img src="pixmaps/003.png">
+	</p>
+
+	<p>Finally, select all the whole notes on the top staff...</p>
+
+	<p align=center>
+	<img src="pixmaps/004.png">
+	</p>
+
+	<p>Then use <b>Ctrl+)</b> or <b>Phrase -> Add Phrasing Slur</b> on the
+	top staff, then the bottom:</p>
+
+	<p align=center>
+	<img src="pixmaps/005.png">
+	</p>
+
+	<p>With the bottom still selected, use <b>Phrase -> Slur Position ->
+	Slur Below</b> (there is no shortcut for this one) to flip the lower
+	slur down:</p>
+
+	<p align=center>
+	<img src="pixmaps/006.png">
+	</p>
+
+	<p>Finally, drag the lower segment on top of the upper one, then
+	<b>Ctrl+A</b> and <b>N</b> again to view the segments overlapping on the
+	same staff, and do a <b>File -> Preview with LilyPond</b> to confirm the
+	match:</p>
+
+	<p align=center>
+	<img src="pixmaps/007.png">
+	</p>
+
+	<h1>The "zu 2" Dynamic</h1>
+
+	<p>The Fidelio example also includes an unusual dynamic.  I just
+	doctored the LilyPond export to make it possible to export arbitrary
+	texts like this as a markup, instead of filtering out dynamic types that
+	LilyPond doesn't recognize.</p>
+
+	<p align=center>
+	<img src="pixmaps/008.png">
+	</p>
+
+</div>
+</body>
+</html>

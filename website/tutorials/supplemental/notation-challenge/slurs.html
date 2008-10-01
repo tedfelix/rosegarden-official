@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <title>The Rosegarden Notation Challenge</title>
+  </head>
+  <body>
+
+    <div id="heading" STYLE="background: #000000">
+	<img src="../../roses.png" alt="" width="183"
+	height="104"><img src="../../title-using-rosegarden.png"
+	    alt="Learning Rosegarden"></div>
+
+
+    <div id="main">
+        <h1>The Rosegarden Notation Challenge</h1>
+	<h4>Copyright &copy; 2008 D. Michael McIntyre</h4>
+	<h5>This tutorial was written using a pre-release version of Rosegarden
+	1.7.0.</h5>
+
+	<h1>Opposing Phrasing Slurs</h1>
+
+	<p>From Beethoven's Fidelio Overture:</p>
+
+	<p align=center>
+	<img src="pixmaps/000.png">
+	</p>
+
+        <p>
+	This must be accomplished using two voices, so there are two sets of
+	whole notes, and two phrasing slurs.  It is easiest to work with the
+	voices on separate tracks initially, so let's create two segments each
+	four bars long on adjacent tracks:
+	</p>
+
+	<p align=center>
+	<img src="pixmaps/001.png">
+	</p>
+
+	<p>Now <b>Ctrl+A</b> and <b>N</b> to open in a combined notation
+	view:</p>
+
+	<p align=center>
+	<img src="pixmaps/002.png">
+	</p>
+
+	<p>Now enter the whole notes in each staff:</p>
+
+	<p align=center>
+	<img src="pixmaps/003.png">
+	</p>
+
+	<p>Finally, select all the whole notes on the top staff...</p>
+
+	<p align=center>
+	<img src="pixmaps/004.png">
+	</p>
+
+	<p>Then use <b>Ctrl+)</b> or <b>Phrase -> Add Phrasing Slur</b> on the
+	top staff, then the bottom:</p>
+
+	<p align=center>
+	<img src="pixmaps/005.png">
+	</p>
+
+	<p>With the bottom still selected, use <b>Phrase -> Slur Position ->
+	Slur Below</b> (there is no shortcut for this one) to flip the lower
+	slur down:</p>
+
+	<p align=center>
+	<img src="pixmaps/006.png">
+	</p>
+
+	<p>Finally, drag the lower segment on top of the upper one, then
+	<b>Ctrl+A</b> and <b>N</b> again to view the segments overlapping on the
+	same staff, and do a <b>File -> Preview with LilyPond</b> to confirm the
+	match:</p>
+
+	<p align=center>
+	<img src="pixmaps/007.png">
+	</p>
+
+	<h1>The "zu 2" Dynamic</h1>
+
+	<p>The Fidelio example also includes an unusual dynamic.  I just
+	doctored the LilyPond export to make it possible to export arbitrary
+	texts like this as a markup, instead of filtering out dynamic types that
+	LilyPond doesn't recognize.</p>
+
+	<p align=center>
+	<img src="pixmaps/008.png">
+	</p>
+
+</div>
+</body>
+</html>

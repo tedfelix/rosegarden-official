@@ -1,0 +1,611 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; CHARSET=iso-iso-8859-1">
+<STYLE TYPE="text/css"><!--
+BODY { font-family: sans-serif }
+H1 { font-family: sans-serif }
+H2 { font-family: sans-serif }
+H3 { font-family: sans-serif }
+H4 { font-family: sans-serif }
+H5 { font-family: sans-serif }
+H6 { font-family: sans-serif }
+SUB { font-size: smaller }
+SUP { font-size: smaller }
+PRE { font-family: monospace }
+A { text-decoration: none }
+--></STYLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff" TEXT="#000000" LINK="#0000ff" VLINK="#0000ff" ALINK="#0000ff">
+<A HREF="chapter-0.html">Contents</A>
+<A HREF="chapter-6.html">Previous</A>
+<A HREF="chapter-8.html">Next</A>
+<HR>
+<H1 STYLE="font-style: normal"><A NAME="7">7 <FONT FACE="arial">A
+ Different View</FONT></A></H1>
+<P STYLE="border: none; padding: 0in">So far, we've only looked at the
+ main window, and have not really edited anything. Rosegarden provides
+ three different editors, each with its own unique view of the data. You
+ can view the raw Rosegarden events with the Event List Editor, you can
+ work with a piano roll metaphor with the matrix Editor, or you can see
+ your data as notation with the Notation Editor. Each of these editors
+ works on a segment level, so you must have at least one segment
+ selected in order to open one. If you wish to start with an editor from
+ scratch, you must first create an empty segment with the pencil tool,
+ as I described in chapter 2, and then select it.</P>
+<H2 CLASS="western"><A NAME="7_1">7.1 The Event List Editor</A></H2>
+<P STYLE="border: none; padding: 0in">The event list editor is for
+ editing the composition at the event level. This is the most raw of the
+ three edit views, and the most difficult editor to use.</P>
+<H3 CLASS="western"><A NAME="7_1_1">7.1.1 Events and Properties</A></H3>
+<P>Rosegarden is not a pure MIDI sequencer, and it does not store raw
+ MIDI events; instead, it uses its own internal format, which is both
+ more powerful and more flexible. There are many kinds of events in
+ Rosegarden. As you would expect, MIDI notes, controllers and the like
+ are events, but so are hairpins, dynamics, performance directions,
+ clefs and key signatures, etc. Each class of event has its own set of
+ unique properties.</P>
+<P>Here are just a few examples of types of events with a few their
+ properties. All of these can be edited from here in the event list
+ editor, although you probably will find little occasion to tear an
+ event apart and rearrange its insides.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic25"
+SRC="../pixmaps/some-events-diagram.jpg" ></P>
+<H4 CLASS="western"><A NAME="7_1_1_1">7.1.1.1 Opening and Event List
+ View</A></H4>
+<P STYLE="border: none; padding: 0in">Out of the box, the notation
+ editor is the default, but that editor is a chapter unto itself. For
+ the moment, let us begin with the simplest of the three. Pick a
+ segment, and then right click on it. Choose &quot;Open in Event List Editor&quot;
+ from the resulting context menu.</P>
+<P ALIGN="CENTER" STYLE="border: none; padding: 0in"><IMG ALIGN="BOTTOM" BORDER="0"
+NAME="Graphic1" SRC="../pixmaps/open-in-event-editor.png" ></P>
+<P ALIGN="LEFT" STYLE="border: none; padding: 0in">If you've started
+ with a blank segment, as I did, there's not much to see here:</P>
+<P ALIGN="CENTER" STYLE="border: none; padding: 0in"><IMG ALIGN="BOTTOM" BORDER="0"
+NAME="Graphic2" SRC="../pixmaps/event-editor.png" ></P>
+<H4 CLASS="western"><A NAME="7_1_1_2">7.1.1.2 Changing the Time Base</A></H4>
+<P>You can change the way Rosegarden displays the timing of events using
+ the <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic43" SRC="../pixmaps/event-list-change-time-base.png"
+> buttons, displaying time as Musical, Real, or Raw.</P>
+<H4 CLASS="western"><A NAME="7_1_1_3">7.1.1.3 Filtering Events from View</A>
+</H4>
+<P ALIGN="LEFT" STYLE="border: none; padding: 0in">If you have a more
+ complex segment than the one depicted above, you may wish to use
+ filters to focus in on the classes of events that most interest you.
+ Simply check or uncheck boxes from the<B> Event filters</B> box.</P>
+<P ALIGN="CENTER" STYLE="border: none; padding: 0in"><IMG ALIGN="BOTTOM" BORDER="0"
+NAME="Graphic34" SRC="../pixmaps/event-list-event-filters.png" >
+</P>
+<H4 CLASS="western"><A NAME="7_1_1_4">7.1.1.4 Filtering Events out of a
+ Selection</A></H4>
+<P ALIGN="LEFT" STYLE="border: none; padding: 0in; font-weight: medium">
+ You can also use the selection event filter <IMG ALIGN="BOTTOM" BORDER="0"
+NAME="Graphic41" SRC="../pixmaps/event-list-filter-selection.png" >
+. Make a selection of events, then use the filter to weed out unwanted
+ events from the selection. Everything the filter misses will still be
+ selected after it has been applied.</P>
+<P ALIGN="CENTER" STYLE="border: none; padding: 0in"><IMG ALIGN="BOTTOM" BORDER="0"
+NAME="Graphic42" SRC="../pixmaps/matrix-event-filter.png" ></P>
+<H4 CLASS="western"><A NAME="7_1_1_5">7.1.1.5 Creating a New Event</A></H4>
+<P ALIGN="LEFT" STYLE="border: none; padding: 0in">The truly brave among
+ you might want to experiment with creating something entirely from
+ scratch.</P>
+<P ALIGN="LEFT" STYLE="border: none; padding: 0in">If you click on the <IMG
+ALIGN="BOTTOM" BORDER="0" NAME="Graphic35" SRC="../pixmaps/event-list-new-event.png"
+> icon, you'll be presented with a dialog like this that
+ allows you to make your own event out of whole cloth:</P>
+<P ALIGN="CENTER" STYLE="border: none; padding: 0in"><IMG ALIGN="BOTTOM" BORDER="0"
+NAME="Graphic3" SRC="../pixmaps/insert-event.png" ></P>
+<H4 CLASS="western"><A NAME="7_1_1_6">7.1.1.6 Editing Existing Events</A>
+</H4>
+<P ALIGN="LEFT" STYLE="border: none; padding: 0in">You may edit existing
+ events using either the simple <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic36" SRC="../pixmaps/event-list-simple-editor.png" >
+ editor...</P>
+<P ALIGN="LEFT" STYLE="border: none; padding: 0in"><IMG ALIGN="BOTTOM" BORDER="0"
+NAME="Graphic39" SRC="../pixmaps/event-list-simple-edit.png" >
+</P>
+<P ALIGN="LEFT" STYLE="border: none; padding: 0in">..or the advanced <IMG
+ALIGN="BOTTOM" BORDER="0" NAME="Graphic37" SRC="../pixmaps/event-list-advanced-editor.png"
+> editor.</P>
+<P ALIGN="RIGHT" STYLE="border: none; padding: 0in"><IMG ALIGN="BOTTOM" BORDER="0"
+NAME="Graphic40" SRC="../pixmaps/event-list-advanced-edit.png" >
+</P>
+<P ALIGN="LEFT" STYLE="border: none; padding: 0in">You may delete events
+ using the <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic38" SRC="../pixmaps/event-list-delete-event.png"
+> icon.</P>
+<H3 CLASS="western"><A NAME="7_1_2">7.1.2 Example Uses</A></H3>
+<P>I have elected to demonstrate only those uses which I judge are most
+ difficult for you to figure out on your own. While I am only covering a
+ select few types of events, the process for creating (or changing) all
+ of them is similar.</P>
+<H4 CLASS="western"><A NAME="7_1_2_1">7.1.2.1 Inserting a
+ Mid-Composition Program Change</A></H4>
+<P>One thing that can only be done from the event editor is the
+ insertion of a mid-track program change. This might be useful, for
+ example, if you wish to switch a string part from playing normally to
+ playing pizzicato and back without having to write the parts on
+ different tracks to assign them to different instruments.</P>
+<P>In version 1.0 of Rosegarden, the facility for entering program
+ changes is rather crude and unwieldy. It may see improvement in future
+ versions, but for the moment, the only mechanism provided is the entry
+ of program changes by number. There is no facility for changing the
+ bank anywhere except at the instrument level, so any program changes
+ you insert directly into segments will be done within the same bank the
+ track's instrument uses.</P>
+<P>If you want to change a &quot;strings&quot; instrument to play using a
+ &quot;pizzicato&quot; program at a particular point...</P>
+<H5 CLASS="western"><A NAME="7_1_2_1_1">7.1.2.1.1 Determine the
+ Insertion Point</A></H5>
+<P>The easiest thing to do is move the playback pointer to the desired
+ insertion point. In this example, I've done it using the transport in
+ beat:bar mode to ensure I'm in exactly the desired spot to insert a
+ program change at bar 2, beat 1, tick 0.</P>
+<P STYLE="text-decoration: none"><I>Remember that the <IMG ALIGN="BOTTOM"
+BORDER="0" NAME="Graphic30" SRC="../pixmaps/transport-switch-modes.png" >
+ button changes display modes on the transport.</I></P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic26"
+SRC="../pixmaps/event-list-add-program-change-set-insert-point.png" ></P>
+<H5 CLASS="western"><A NAME="7_1_2_1_2">7.1.2.1.2 Open the Editor,
+ Create an Event</A></H5>
+<P>If you right click on this segment and choose to open it in the event
+ list view, your cursor should already be at the right spot to insert a
+ program change at the desired time. In this sample, there happens to
+ already be a note at that particular time, but that will not prevent
+ you from inserting a program change event here at the same time. In
+ fact, if you are inserting a program change into otherwise empty space,
+ you will have to set its time manually.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic27"
+SRC="../pixmaps/event-list-add-program-change-open-editor.png" ></P>
+<P>Click on the <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic28"
+SRC="../pixmaps/event-list-new-event.png" > icon to insert a new event.
+ The dialog will open out to a default event type of &quot;note.&quot; You want to
+ dial &quot;programchange&quot; into the &quot;Event type&quot; combo box to make this event
+ into a program change.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic29"
+SRC="../pixmaps/event-list-new-event-dialog.png" ></P>
+<H5 CLASS="western"><A NAME="7_1_2_1_3">7.1.2.1.3 Create the Program
+ Change</A></H5>
+<P>Now you should have a dialog like this. Except, of course, I have
+ already twiddled the settings in this particular example.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic32"
+SRC="../pixmaps/event-list-new-program.png" ></P>
+<P ALIGN="LEFT">Now you need to dial in the program change by number.
+ Unlike the numbers used elsewhere in Rosegarden (which appear out
+ beside the name when changing programs in the<B> Instrument Parameters</B>
+ box, for example), these are zero-based, rather than one-based. If the
+ program &quot;Acoustic Grand Piano&quot; shows up as program 1 in your studio,
+ you'll have to subtract one from that and use 0. I've included a
+ zero-based list of General MIDI program numbers in<A HREF="../chapter-100.html">
+ Appendix C</A> for your convenience. In this case, &quot;Pizzicato&quot; is
+ program number 45.</P>
+<H5 CLASS="western"><A NAME="7_1_2_1_4">7.1.2.1.4 Changing an Event Time</A>
+</H5>
+<P>You may have some occasion to change the time of the event.</P>
+<P>Click on the <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic31"
+SRC="../pixmaps/dot-dot-dot-button.png" > button out beside &quot;Absolute
+ time&quot; and you will be presented with a dialog that allows you to
+ re-assert the fact that you want this event at 2:1:0. You'll need to
+ dial in the Measure (2) beat (1) and 64ths (0) to get the event to come
+ in at the desire time. If this does become necessary, at least you
+ already know what time to aim for, having used the playback pointer and
+ transport to get the &quot;address&quot; of this particular moment in time.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic33"
+SRC="../pixmaps/event-list-add-program-change-time.png" ></P>
+<P>
+<BR>
+<BR></P>
+<H4 CLASS="western"><A NAME="7_1_2_2">7.1.2.2 Managing System Exclusive
+ Data</A></H4>
+<P>I don't have time to do a proper job of discussing this rather
+ involved and arcane subject at the moment, and I may remove this before
+ publishing the final draft of this book. In the meantime, here is a
+ message from Pedro Lopez Cabanillas, author of most of these features,
+ on the subject of sysex in Rosegarden:</P>
+<P>&gt; Would you mind giving me a rundown?</P>
+<P>About your question: System Exclusive messages can be recorded,
+ played, exported to Standard MIDI Files and imported from them as any
+ other MIDI event. It's not worth to mention that, IMO, as that's what
+ everybody expects from a MIDI sequencer. But you know that was a hard
+ way to reach this place.</P>
+<P>You need to use the Event List editor for any editing on System
+ Exclusive events.</P>
+<P>To create a new SysEx event from scratch:</P>
+<OL>
+<LI>
+<P>insert Event (star button, or menu Edit-&gt;insert event)</P>
+</LI>
+<LI>
+<P>select &quot;systemexclusive&quot; in the event type combo.</P>
+</LI>
+</OL>
+<P>3. fill the &quot;Data&quot; field, write some Hex values starting with &quot;F0&quot;
+ and ending with &quot;F7&quot;. Alternatively, you can use the &quot;Load Data&quot; button
+ to import the payload from a &quot;SYX&quot; file.</P>
+<P>The load function only imports the first sysex block from the file,
+ if there is more than one. SYX Files created with Cakewalk can be
+ loaded into RG.</P>
+<P>Use the &quot;Save Data&quot; button to store the payload of an existing SysEx
+ event into an external &quot;SYX&quot; file.</P>
+<H2 CLASS="western"><A NAME="7_2">7.2 The Matrix Editor</A></H2>
+<P>The matrix editor is based around the familiar piano roll metaphor
+ you have probably seen in other packages. It is useful for taking a
+ hands on approach to tweaking notes where their performance is more
+ important than their visual appearance as notation. The matrix is my
+ preferred method of sequencing percussion parts, and I use it whenever
+ the notation editor is simply unable to cope with my data, and needs a
+ bit of a brute force shove to get things to come out right. There
+ hasn't been a quantizer written yet that can make consistently good
+ decisions in the face of the kind of mistakes I tend to make while
+ playing my keyboard, and I spend quite a lot of time flipping back and
+ forth between matrix and notation views.</P>
+<H3 CLASS="western"><A NAME="7_2_1">7.2.1 Special Considerations of
+ Performance vs. Display</A></H3>
+<P STYLE="font-style: normal">It is important to note that Rosegarden is
+ not purely a MIDI sequencer, and at no time can you ever directly edit
+ raw MIDI events. It stores events using an internal meta format that
+ includes quite a bit of information about each note. Rosegarden's
+ events do of course cover the fundamentals of pitch, velocity and
+ duration, but they also include such attributes as stem direction, beam
+ state, accidental state, ties, slurs, slashes, accents and so forth. Of
+ special note, every Rosegarden event maintains independent duration
+ values for performance and display. This makes it possible to create a
+ composition that looks good printed on paper, and yet preserves all of
+ the slight human imperfections that give a performance its character.</P>
+<P STYLE="font-style: normal">In version 1.0, the matrix can only edit<B>
+ performance</B> attributes. This can create interesting challenges both
+ for performance and notation. If you are working on a human
+ performance, and you draw notes to their full length here in the
+ matrix, you may damage the character of the performance slightly. On
+ the other hand, if you draw slightly long or short notes here, or knock
+ the timing off the grid lines intentionally, you will create ugly
+ notation in the process. In either case, you can make adjustments to
+ massage away these differences from the Notation Editor, as I will
+ explain in the next chapter.</P>
+<P STYLE="font-style: normal; font-weight: medium">One particularly
+ noteworthy side effect of the way Rosegarden stores events is that tied
+ notes are a series of discrete dashes here on the matrix. It is really
+ not possible to determine whether a series of notes at the same pitch
+ will sound as one note or several without looking at the affected area
+ from the Notation Editor.</P>
+<H3 CLASS="western"><A NAME="7_2_2">7.2.2 Overview</A></H3>
+<P>Let's start with an empty segment one measure long, and I'll show you
+ the basics. Draw your segment, select it, and then right click on it
+ and choose &quot;Open in Matrix Editor&quot; from the resulting context menu.
+ You'll see something like this:</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic4"
+SRC="../pixmaps/matrix-overview.png" ></P>
+<H2 CLASS="western"><A NAME="7_3">7.3 The Local Cursor</A></H2>
+<P>I will go into more detail about the local cursor in the notation
+ chapter, but it does have its uses here in the matrix as well. If you
+ take a second look at the rulers, you should see that the one toward
+ the top of the screen has a magenta cast. This ruler is for controlling
+ the local cursor, which is a magenta version of the playback pointer.
+ You can set it in the same fashion you set the playback pointer, and
+ the two cursors function independently of each other. The local
+ cursor's main function here in the matrix seems to be to set the
+ destination location for paste operations.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic51"
+SRC="../pixmaps/matrix-two-cursors.png" ></P>
+<H3 CLASS="western"><A NAME="7_3_1">7.3.1 Entering New Notes</A></H3>
+<P>Now let's do a little one bar loop for demonstration purposes. Just
+ like on the main view, the <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic65"
+SRC="../pixmaps/using-rosegarden_html_4c452e31.png" > cursor is used to
+ create something new from scratch. In this case, of course, we're
+ entering a note. Let's pepper this thing with a few well placed random
+ pitches:</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic5"
+SRC="../pixmaps/matrix-new-notes.png" ></P>
+<P ALIGN="LEFT">You may have noticed that those came out as quarter
+ notes. In order to control the default length of new notes, you must
+ change the grid setting. Let's enter eight 8<SUP>th</SUP> notes. First
+ dial in the 8<SUP>th</SUP> note on the grid button:</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic6"
+SRC="../pixmaps/matrix-dial-grid.png" ></P>
+<P ALIGN="LEFT">Now new notes you enter will take this duration by
+ default:</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic7"
+SRC="../pixmaps/matrix-8th-notes.png" ></P>
+<P>It's obviously a bit tedious, but you can enter an entire composition
+ this way if you desire.</P>
+<H3 CLASS="western"><A NAME="7_3_2">7.3.2 Adjusting Existing Notes</A></H3>
+<P>You can move notes around with the <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic8" SRC="../pixmaps/matrix-move-cursor.png" > cursor.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic9"
+SRC="../pixmaps/matrix-move-notes.png" ></P>
+<P ALIGN="LEFT">You can resize notes with the <IMG ALIGN="BOTTOM" BORDER="0"
+NAME="Graphic11" SRC="../pixmaps/matrix-resize-cursor.png" >
+ cursor, by clicking on a note and dragging it.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic10"
+SRC="../pixmaps/matrix-resize-notes.png" ></P>
+<P ALIGN="LEFT">By default, resize operations snap to grid lines. If you
+ wish to drag the note to some arbitrary length, do so by holding the
+ shift key while dragging the note.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic12"
+SRC="../pixmaps/matrix-arbitrary-resize.png" ></P>
+<H3 CLASS="western"><A NAME="7_3_3">7.3.3 Selecting and Acting on
+ Multiple Notes</A></H3>
+<P>All of these operations can be performed on more than one note at a
+ time. In order to do so, you need to make a selection.</P>
+<P> You can use the <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic13"
+SRC="../pixmaps/matrix-arrow-cursor.png" > cursor to select individual
+ notes one by one while holding down the shift key.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic14"
+SRC="../pixmaps/matrix-select-individual-notes.png" ></P>
+<P ALIGN="LEFT">If you wish to select a broad range of notes, you can
+ select every note of a given pitch by selecting the arrow cursor and
+ shift clicking on the individual notes on the piano keyboard. Each
+ click will select every note of the desired pitch, and you can select
+ any number of pitches in this fashion.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic15"
+SRC="../pixmaps/matrix-select-pitch.png" ></P>
+<P ALIGN="LEFT">It is also possible to select a band or several bands of
+ notes by sweeping the arrow cursor across the keys while holding shift.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic16"
+SRC="../pixmaps/matrix-sweep-selection.png" ></P>
+<P ALIGN="LEFT">Finally, if you have some need to select ranges of notes
+ within an area less than the entire segment, you can use the selection
+ event filter. Start by making a broad selection, and then click on the
+ filter icon to summon the dialog. You can then dial in various criteria
+ for the notes you wish to remain selected after the filter is applied.
+ I'll demonstrate one use for it later on in this chapter.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic17"
+SRC="../pixmaps/matrix-event-filter.png" ></P>
+<P ALIGN="LEFT"><I>NOTE: If you ever find a good use for this dialog's
+ ability to filter on controller or wheel events, please let me know. I
+ implemented this dialog before Rosegarden had control rulers, when the
+ only way to get to these outside the event list editor, which didn't
+ actually work at that time, was to manipulate them as little question
+ marks in the notation view. I'm not convinced these last two event
+ categories are actually still useful, and I expect to remove them from
+ the dialog for Rosegarden 1.1 unless I get feedback requesting
+ otherwise.</I></P>
+<H3 CLASS="western"><A NAME="7_3_4">7.3.4 Velocity</A></H3>
+<P>Velocity is a MIDI parameter that describes how hard a note was hit
+ on the keyboard or other device. It allows for finer expression of
+ volume than what can be accomplished merely by adjusting the volume
+ parameter for the MIDI channel. If you have a velocity sensitive
+ keyboard, this parameter will be recorded as you play. Under certain
+ other circumstances, you may end up with events that have no velocity
+ property at all, or a default velocity of 100. Regardless of how it did
+ (or didn't) get there, it's a simple matter to tweak it to suit your
+ needs.</P>
+<H4 CLASS="western"><A NAME="7_3_4_1">7.3.4.1 Showing the Velocity Ruler</A>
+</H4>
+<P>If the events you're editing have velocity properties, you can edit
+ them with the Velocity Ruler. If it's not visible, turn it on from the
+ View menu with<B> View -&gt; Show Velocity Property Ruler</B>.</P>
+<P STYLE="font-weight: medium">In this example, all the events have a
+ velocity of 100, and they show up as orange bars on the ruler.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic19"
+SRC="../pixmaps/matrix-default-velocity-ruler.png" ></P>
+<P ALIGN="LEFT" STYLE="font-weight: medium">They can be changed by
+ dragging them up and down, and the bars change colors to reflect their
+ value. Here I've arranged them so that you can see each bar. Notice
+ that the notes on the matrix itself change to reflect these same
+ colors.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic20"
+SRC="../pixmaps/matrix-arranged-velocity.png" ></P>
+<P ALIGN="LEFT" STYLE="font-weight: medium"><I>NOTE: It can indeed be
+ somewhat tricky to know which note you're adjusting if there are
+ several notes of the same duration at the same time. When multiple
+ notes occur at the same time, use the</I><B> [</B><I> and</I><B> ]</B><I>
+ keys to flip through the available choices, then watch the matrix above
+ for the color change that reveals which note you are adjusting.</I></P>
+<H4 CLASS="western"><A NAME="7_3_4_2">7.3.4.2 Setting Multiple Velocity
+ Properties</A></H4>
+<P>It is possible to adjust the velocities for an entire selection of
+ notes.<B> Adjust -&gt; Velocity -&gt; Set Event Velocities</B> presents you
+ with a dialog box that allows you to choose from several different
+ patterns. The Value ranges from 0, which is the softest possible key
+ strike, to 127, which is the most forceful.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic18"
+SRC="../pixmaps/matrix-adjust-velocities.png" ></P>
+<P ALIGN="LEFT"><I>TIP: If you find that you have notes that don't have
+ velocity properties for some reason (there are no bars on the velocity
+ ruler for those notes), you can also use<B> Set Event Velocities</B> to
+ create new ones.</I></P>
+<H4 CLASS="western"><A NAME="7_3_4_3">7.3.4.3 
+<BR>
+<BR></A></H4>
+<H3 CLASS="western"><A NAME="7_3_5">7.3.5 Controllers</A></H3>
+<P>It's possible to transmit controllers from here in the matrix with
+ the various control rulers. Let's add a Modulation ruler. Choose<B>
+ View -&gt; Add Event Ruler -&gt; Modulation Controller</B> and you should now
+ have a new tab at the bottom of your matrix.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic21"
+SRC="../pixmaps/matrix-mod-ruler.png" ></P>
+<P ALIGN="LEFT" STYLE="font-weight: medium">If you right click on the
+ ruler you can insert a controller event, or even an entire line of
+ them.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic22"
+SRC="../pixmaps/matrix-mod-ruler-line.png" ></P>
+<P ALIGN="LEFT" STYLE="font-weight: medium">In this example, I have
+ elected to insert a line of controllers. It's impossible to capture X
+ cursors, and I'm far too lazy to try to draw that little pointing
+ finger, so I will instead describe what I did. After making the
+ selection from the menu, the cursor changed to a pointing finger. I
+ picked a start point with this finger, and continued to hold the button
+ down while dragging the resulting line up and to the right. After I
+ released the button, it produced this line of controllers:</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic23"
+SRC="../pixmaps/matrix-line-of-mods.png" ></P>
+<P ALIGN="LEFT" STYLE="font-weight: medium">You can move individual
+ controllers up and down, or you can select and move them in groups.
+ It's rather less obvious than selections elsewhere, but if you look
+ closely, you can see that selected controller bars are each outlined in
+ red.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic24"
+SRC="../pixmaps/matrix-selected-controllers.png" ></P>
+<P ALIGN="LEFT" STYLE="font-weight: medium">If you hold down shift and
+ drag these up and down as a group, they all move at once.</P>
+<H2 CLASS="western"><A NAME="7_4">7.4 Example Uses</A></H2>
+<H3 CLASS="western" STYLE="font-style: normal"><A NAME="7_4_1">7.4.1 <FONT
+FACE="arial">Sequencing a Drum Pattern</FONT></A></H3>
+<P STYLE="font-style: normal"><FONT FACE="arial">I find it rather
+ difficult and tedious to do drums with the notation editor for several
+ reasons. It does not yet support standard percussion notation, and it
+ is yet very well capable of handling multi-voice parts with different
+ rhythms in different lines within the same segment. For this reason,
+ the matrix is my editor of choice for drum parts.</FONT></P>
+<P><FONT FACE="arial"><I>NOTE: For more complicated parts, I favor doing
+ them with Hydrogen, and then importing the patterns. However, this can
+ present special challenges too, as Hydrogen's drum kits rarely map out
+ to the General MIDI standard. That leaves me with the hard choice of
+ rearranging the patterns to play on my GM and GS equipment, by
+ physically moving all the notes to different places, or assigning
+ affected tracks to an instrument that's connected to Hydrogen, and
+ letting it do the playing. In this last case, there is no way to change
+ the drum kit Hydrogen is using without manipulating its GUI, so it
+ isn't really possible to save a Rosegarden composition whose Hydrogen
+ drums are guaranteed to play correctly without manual user
+ intervention. Muddying the waters further, Rosegarden doesn't really
+ provide any good , built-in facility for my letting others know what
+ they need to go do to Hydrogen in order to play my files. As a result,
+ I do tend to do most of my drum work with Rosegarden's admittedly less
+ capable facilities, if only for the sake of convenience in distributing
+ the results to others.</I></FONT></P>
+<H4 CLASS="western"><A NAME="7_4_1_1">7.4.1.1 Create a New Segment</A></H4>
+<P>In order to have some place to put the drums, create a new segment
+ four bars long.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic44"
+SRC="../pixmaps/matrix-new-segment.png" ></P>
+<P ALIGN="LEFT"><FONT FACE="arial"><I>NOTE: I'm leaving this mistake in
+ for the amusement value. I was about to submit a bug report documenting
+ how I created a segment four bars long, opened it in the matrix, and
+ could only edit three bars. Can you spot the reason why that happened?
+ :)</I></FONT></P>
+<H4 CLASS="western"><A NAME="7_4_1_2">7.4.1.2 Route the Track to a
+ Percussion Instrument</A></H4>
+<P>In order to hear drums, you need to route this track to a percussion
+ instrument from the main window. If you have General MIDI-compliant
+ equipment, all that should be necessary is to route this track to the
+ instrument #10 belonging to a suitable device.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic45"
+SRC="../pixmaps/matrix-route-sb-live.png" ></P>
+<P>In this particular example, I want to use the TR-808 drum kit that's
+ part of the soundfont I'm using on my Sound Blaster Live!, so I need to
+ dial up bank 1 0 (where the extra drums are) and set the program to &quot;TR
+ 808.&quot; (Notice that I do not have the<B> [x] Percussion</B> box checked.
+ That's because I'm not using a GS device that has drum kits in the same
+ 0 0 bank as the General MIDI programs. Instead, this device has the
+ alternate drum kits in bank 1 0.)</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic46"
+SRC="../pixmaps/matrix-pick-tr-808.png" ></P>
+<H4 CLASS="western"><A NAME="7_4_1_3">7.4.1.3 Set the Grid and Loop
+ Points</A></H4>
+<P>Now that the track is routed to play using suitable sounds, head back
+ to the matrix window. It's probably a good idea to pick a finer
+ resolution than the standard quarter note for the matrix grid. For this
+ part, 16<SUP>th</SUP> notes were convenient, so I dialed 1/16<SUP>th</SUP>
+ into the<B> Grid</B> combo box.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic48"
+SRC="../pixmaps/matrix-grid-16th.png" ></P>
+<P>To make it easier to get the pattern right, set the first bar to loop
+ using the ruler on the bottom. (Notice that the ruler on top has a
+ purplish cast. It's for controlling the local cursor, which I will
+ discuss in the notation chapter. The ruler at the bottom is for setting
+ loops, and moving the blue playback pointer.)</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic47"
+SRC="../pixmaps/matrix-set-loop.png" ></P>
+<H4 CLASS="western"><A NAME="7_4_1_4">7.4.1.4 Sequence the Pattern</A></H4>
+<P>The rest is trial and error. Set the main transport window to loop
+ mode <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic49" SRC="../pixmaps/transport-loop.png"
+> and hit play. Use the edit tools to insert, remove, and move
+ notes until you get a pattern you like. Rosegarden provides no facility
+ for labeling which keys play which drums, so you may need to putter
+ around a bit before you figure out where they are. This example uses a
+ bass, a snare, and a couple of hi-hats, and I have completed my pattern
+ in this snapshot.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic50"
+SRC="../pixmaps/matrix-first-bar.png" ></P>
+<H4 CLASS="western"><A NAME="7_4_1_5">7.4.1.5 Copy the Pattern</A></H4>
+<P>Select all the events and paste them three times. Use the top ruler
+ to set the local cursor to the destination for each paste operation.
+ You should wind up with something like this:</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic52"
+SRC="../pixmaps/matrix-after-copies.png" ></P>
+<H4 CLASS="western"><A NAME="7_4_1_6">7.4.1.6 Finish with a Fill</A></H4>
+<P>Now set only the last bar to loop, then adjust the pattern to make a
+ little fill.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic53"
+SRC="../pixmaps/matrix-fill.png" ></P>
+<P><I>TIP: I found it a trifle fiddly using copy and paste to make these
+ copies. I didn't get the placement of the local cursor quite right, and
+ I had to quantize the results. The next time I had to do this, I
+ started with a segment one bar long, looped it, then when the time came
+ to copy it three times, I marked it as repeating in the<B> Segment
+ Parameters</B> box, then double clicked on three of the copies,
+ selected all four segments, and used<B> Segments -&gt; Splint and Join -&gt;
+ Join</B> to join them back into one; then I finished by un-checking
+ repeat for the segment. It's a toss-up whether method B is faster, but
+ it's definitely more precise.</I></P>
+<H3 CLASS="western"><A NAME="7_4_2">7.4.2 Adjusting Velocities with the
+ Selection Event Filter</A></H3>
+<P>One place where the selection event filter shines is in its ability
+ to quickly focus in on a particular range of notes within a selection.
+ In this example, I had an arpeggiated part that I entered with flat
+ velocities, and I wanted to add some life to the performance by
+ accenting the top and bottom notes, while bringing down the velocity in
+ the middle. As the part cycled up and down through several chords, it
+ was impossible to use the click-on-the-keyboard method I described
+ earlier in this chapter to select only the events I wanted.</P>
+<H4 CLASS="western"><A NAME="7_4_2_1">7.4.2.1 Make a Selection</A></H4>
+<P>The first step is to select all the events in the four bars of the
+ first chord using the <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic55"
+SRC="../pixmaps/matrix-arrow-cursor.png" > tool.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic54"
+SRC="../pixmaps/matrix-event-filter-A.png" ></P>
+<H4 CLASS="western"><A NAME="7_4_2_2">7.4.2.2 Configure the Selection
+ Event Filter</A></H4>
+<P>Next, I wanted to catch the middle notes notes, so I used the <IMG ALIGN="BOTTOM"
+BORDER="0" NAME="Graphic56" SRC="../pixmaps/event-list-filter-selection.png"
+> icon to summon the event filter dialog.</P>
+<P>Then I used the <IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic57"
+SRC="../pixmaps/dot-dot-dot-button.png" > icon to pop up the pitch
+ chooser for the f<B>rom:</B> pitch. In this case, E3.</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic58"
+SRC="../pixmaps/matrix-event-filter-B.png" ></P>
+<P ALIGN="LEFT" STYLE="font-weight: medium"><I>TIP: I find it a bit
+ tricky to use the pitch picker in this dialog from the matrix view
+ because I'm comparing a constantly changing clef and staff to a pitch
+ on a piano keyboard. I find it error prone, personally, and so I have
+ taken to looking at the status bar at the bottom of the window as I
+ hover over notes. It shows the absolute MIDI pitch, and makes it a
+ breeze dialing the values I want straight in.</I></P>
+<P ALIGN="LEFT" STYLE="font-weight: medium">I repeated the process for
+ the<B> to:</B> pitch, selecting B#3. Since I wanted to select the notes
+ in between these two extremes first, I left the associated combo box
+ set to &quot;include.&quot; This caused it to include all the notes between E3
+ and B#3. Since I wanted to grab notes irrespective of duration or
+ velocity, I left these filters at all-inclusive settings.</P>
+<H4 ALIGN="LEFT" CLASS="western" STYLE="font-weight: medium"><A NAME="7_4_2_3">
+7.4.2.3 Adjust the Velocities</A></H4>
+<P ALIGN="LEFT">After clicking OK to apply the filter, the following
+ selection resulted:</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic59"
+SRC="../pixmaps/matrix-event-filter-C.png" ></P>
+<P ALIGN="LEFT"><I>NOTE: If you didn't get quite what you were after,
+ hit the filter again. It remembers the last settings you used, and you
+ can fine tune it on subsequent runs until you get it just right.</I></P>
+<P>Now that I had filtered the selection to the range of notes I wanted
+ to affect, I used<B> shift+down</B> to lower all of these velocities at
+ once, producing the following result:</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic60"
+SRC="../pixmaps/matrix-event-filter-D.png" ></P>
+<P ALIGN="LEFT">I could have used the filter the other way as well. By
+ setting the combo box to &quot;exclude&quot; the range, I could have selected and
+ adjusted the high and low notes to a higher velocity...</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic61"
+SRC="../pixmaps/matrix-event-filter-E1.png" ></P>
+<P ALIGN="LEFT">With the following result...</P>
+<P ALIGN="CENTER"><IMG ALIGN="BOTTOM" BORDER="0" NAME="Graphic62"
+SRC="../pixmaps/matrix-event-filter-E2.png" ></P>
+<P>
+<BR>
+<BR></P>
+<HR>
+<A HREF="chapter-0.html">Contents</A>
+<A HREF="chapter-6.html">Previous</A>
+<A HREF="chapter-8.html">Next</A>
+</BODY>
+</HTML>
