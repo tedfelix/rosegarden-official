@@ -1376,7 +1376,7 @@ NotationStaff::setPainterClipping(QPainter *painter, double lx, int ly,
                 }
                 QRect clip(clipLeft, coords.second - getRowSpacing() / 2,
                            clipWidth, getRowSpacing());
-                painter->setClipRect(clip, QPainter::CoordPainter);
+				painter->setClipRect(clip, Qt::ReplaceClip); //QPainter::CoordPainter);
                 coords.first -= dx;
             }
             if (fit) {

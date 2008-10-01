@@ -16,15 +16,16 @@
 */
 
 #include <Q3CanvasPixmap>
+#include <Q3PointArray>
+
+#include <klocale.h>
+//#include <kstandarddirs.h>
+//#include <kglobal.h>
+
 #include <cmath>
 #include "NotePixmapFactory.h"
 #include "misc/Debug.h"
 #include "base/NotationRules.h"
-#include <QApplication>
-
-#include <klocale.h>
-#include <kstandarddirs.h>
-#include <QSettings>
 #include "misc/Strings.h"
 #include "document/ConfigGroups.h"
 #include "base/Exception.h"
@@ -48,7 +49,9 @@
 #include "NotePixmapPainter.h"
 #include "NoteStyleFactory.h"
 #include "NoteStyle.h"
-#include <kglobal.h>
+
+#include <QApplication>
+#include <QSettings>
 #include <QMessageBox>
 #include <QBitmap>
 #include <QColor>
@@ -59,11 +62,12 @@
 #include <QPainter>
 #include <QPen>
 #include <QPixmap>
-#include <qpointarray.h>
+#include <QPolygon>
 #include <QPoint>
 #include <QRect>
 #include <QString>
 #include <QMatrix>
+
 
 
 namespace Rosegarden
@@ -1333,7 +1337,7 @@ NotePixmapFactory::drawShallowLine(int x0, int y0, int x1, int y1,
             }
         } else {
             Profiler profiler("NotePixmapFactory::drawShallowLine(polygon)");
-            QPointArray qp(4);
+            Q3PointArray qp(4);
             qp.setPoint(0, x0, y0);
             qp.setPoint(1, x0, y0 + thickness);
             qp.setPoint(2, x1, y1 + thickness);
@@ -1973,7 +1977,7 @@ Q3CanvasPixmap *
 NotePixmapFactory::makeMarkMenuPixmap(Mark mark)
 {
     if (mark == Marks::Sforzando || mark == Marks::Rinforzando) {
-        return makeToolbarPixmap(mark.c_str());
+        return makeToolbarPixmap( mark.c_str(), true );
     } else {
         NoteFont *font = 0;
         try {
@@ -2796,7 +2800,7 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above,
         	}
         */
         int ppc = polyPoints->size();
-        QPointArray qp(ppc);
+        Q3PointArray qp(ppc);
 
         for (int j = 0; j < ppc; ++j) {
             qp.setPoint(j, (*polyPoints)[j].x(), (*polyPoints)[j].y());
@@ -2977,7 +2981,7 @@ NotePixmapFactory::drawBracket(int length, bool left, bool curly, int x, int y)
                                         (QPoint(off0, 0), QPoint(off0, length - 1), pl, topLeft, bottomRight);
 
         int ppc = polyPoints->size();
-        QPointArray qp(ppc);
+        Q3PointArray qp(ppc);
         /*
         	NOTATION_DEBUG << "bracket spline polypoints: " << endl;
         	for (int j = 0; j < ppc; ++j) {

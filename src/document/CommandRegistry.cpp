@@ -27,10 +27,12 @@
 #include <QIcon>
 #include <QPixmap>
 #include <QFile>
+#include <QAction>
 
-#include <kglobal.h>
+//#include <kglobal.h>
 #include "document/Command.h"
 #include <misc/Strings.h>
+#include "gui/general/IconLoader.h"
 
 namespace Rosegarden {
 
@@ -44,6 +46,30 @@ CommandRegistry::~CommandRegistry()
          i != m_builders.end(); ++i) {
         delete i->second;
     }
+}
+
+
+
+void CommandRegistry::addAction
+	(
+	QString title,	
+	QString icon,
+	QString shortcut, 
+	QString actionName,
+	QString menuTitle,
+	QString menuActionName 
+	)
+{
+	IconLoader il;
+	QIcon iconx;
+	iconx = il.load( icon );
+	
+	QAction* tac = new QAction( iconx, title, this );
+// 	tac->setIcon( iconx );
+// 	tac->setText( title );
+	tac->setObjectName( actionName );
+	tac->setShortcut( QKeySequence(shortcut) );
+	
 }
 
 void

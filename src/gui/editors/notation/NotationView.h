@@ -21,24 +21,26 @@
 #include <Q3Canvas>
 #include <Q3CanvasItem>
 #include <Q3CanvasText>
+
 #include "base/NotationTypes.h"
 #include "base/Track.h"
+#include "base/Event.h"
 #include "gui/general/EditView.h"
 #include "gui/general/LinedStaff.h"
 #include "gui/general/LinedStaffManager.h"
+#include "gui/general/ClefIndex.h"
 #include "NotationProperties.h"
 #include "NotationCanvasView.h"
 #include <string>
+#include <vector>
+
 #include <QProcess>
 #include <QMap>
 #include <QSize>
 #include <QString>
-#include <vector>
-#include "base/Event.h"
-#include "gui/general/ClefIndex.h"
-
 #include <QProgressBar>
 #include <QProgressDialog>
+
 
 class QWidget;
 class QTimer;
@@ -52,7 +54,7 @@ class Q3Canvas;
 class QTemporaryFile;
 //class QProgressBar;
 class QComboBox;
-class QActionMenu;
+// class QActionMenu;
 class QAction;
 
 
@@ -1038,9 +1040,10 @@ protected:
     QComboBox       *m_fontCombo;
     QComboBox       *m_fontSizeCombo;
     QComboBox       *m_spacingCombo;
-    QActionMenu     *m_fontSizeActionMenu;
-    ScrollBoxDialog *m_pannerDialog;
-    QTimer *m_renderTimer;
+// 	QActionMenu     *m_fontSizeActionMenu;
+	QMenu			*m_fontSizeActionMenu;
+	ScrollBoxDialog *m_pannerDialog;
+    QTimer 			*m_renderTimer;
 
     bool m_playTracking;
 
@@ -1059,8 +1062,11 @@ protected:
     static std::map<QProcess *, QTemporaryFile *> m_lilyTempFileMap;
 
     int m_showHeadersGroup;
-    QDeferScrollView * m_headersGroupView;
-    HeadersGroup * m_headersGroup;
+	
+ 	QDeferScrollView * m_headersGroupView;
+//	QScrollArea * m_headersGroupView;
+	
+	HeadersGroup * m_headersGroup;
     QFrame * m_headersTopFrame;
 
     QAction * m_showHeadersMenuEntry;

@@ -44,9 +44,11 @@ FontViewFrame::FontViewFrame( int pixelSize, QWidget* parent, const char* name )
         m_fontSize(pixelSize),
         m_tableFont(0)
 {
-    setBackgroundMode(Qt::PaletteBase);
+//     setBackgroundMode(PaletteBase);
+	setBackgroundRole( QPalette::Base );
     setFrameStyle(Panel | Sunken);
-    setMargin(8);
+//     setMargin(8);
+	setContentsMargins( 8,8,8,8 );
     setRow(0);
 }
 
@@ -120,8 +122,14 @@ void FontViewFrame::setGlyphs(bool glyphs)
 
 QSize FontViewFrame::sizeHint() const
 {
-    return QSize(16 * m_fontSize * 3 / 2 + margin() + 2 * frameWidth(),
-                 16 * m_fontSize * 3 / 2 + margin() + 2 * frameWidth());
+	int top,right,left,bottom;
+	getContentsMargins ( &left, &top, &right, &bottom );
+	
+	return QSize(16 * m_fontSize * 3 / 2 + left + 2 * frameWidth(),
+				 16 * m_fontSize * 3 / 2 + left + 2 * frameWidth());
+	
+// 	old: return QSize(16 * m_fontSize * 3 / 2 + margin() + 2 * frameWidth(),
+// 				 16 * m_fontSize * 3 / 2 + margin() + 2 * frameWidth());
 }
 
 QSize FontViewFrame::cellSize() const
@@ -139,9 +147,13 @@ void FontViewFrame::paintEvent( QPaintEvent* e )
     QFrame::paintEvent(e);
     QPainter p(this);
 
-    int ll = 25;
-    int ml = frameWidth() + margin() + ll + 1;
-    int mt = frameWidth() + margin();
+	int top,right,left,bottom;
+	getContentsMargins ( &left, &top, &right, &bottom );
+	
+	
+	int ll = 25;
+    int ml = frameWidth() + left + ll + 1;
+    int mt = frameWidth() + top;
     QSize cell((width() - 16 - ml) / 17, (height() - 16 - mt) / 17);
 
     if ( !cell.width() || !cell.height() )

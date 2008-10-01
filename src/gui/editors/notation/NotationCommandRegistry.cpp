@@ -114,6 +114,8 @@ NotationCommandRegistry::~NotationCommandRegistry()
 bool
 NotationCommandRegistry::findIcon(QString iconName, QIcon &icon)
 {
+	//@@@ keep NotationCommandRegistry::findIcon ? although we have IconLoader ?
+	
     NoteFont *font = 0;
     try {
         font = NoteFontFactory::getFont

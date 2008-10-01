@@ -32,11 +32,12 @@ namespace Rosegarden {
 class NotationCommandRegistry : public EditViewCommandRegistry
 {
 public:
-    NotationCommandRegistry(EditView *v);
-    virtual ~NotationCommandRegistry();
+	NotationCommandRegistry(EditView *v);
+	~NotationCommandRegistry();
 
 protected:
-    virtual bool findIcon(QString iconName, QIcon &icon);
+    //virtual 
+	bool findIcon(QString iconName, QIcon &icon);
 };
 
 }

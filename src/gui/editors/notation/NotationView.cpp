@@ -408,7 +408,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     initLayoutToolbar();
     initStatusBar();
 
-    setBackgroundMode(PaletteBase);
+//     setBackgroundMode(PaletteBase);
+	setBackgroundRole( QPalette::Base );
 
     Q3Canvas *tCanvas = new Q3Canvas(this);
     tCanvas->resize(width() * 2, height() * 2);
@@ -435,7 +436,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_rawNoteRuler->show();
 
     // All toolbars should be created before this is called
-    setAutoSaveSettings("NotationView", true);
+//     setAutoSaveSettings("NotationView", true);	//&&& FIX: save manually ??
 
     // All rulers must have been created before this is called,
     // or the program will crash
@@ -460,10 +461,15 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_headersGroupView = new QDeferScrollView(getCentralWidget());
     QWidget * vport = m_headersGroupView->viewport();
     m_headersGroup = new HeadersGroup(vport, this, &doc->getComposition());
-    m_headersGroupView->setVScrollBarMode(QScrollView::AlwaysOff);
-    m_headersGroupView->setHScrollBarMode(QScrollView::AlwaysOff);
-    m_headersGroupView->setFixedWidth(m_headersGroupView->contentsWidth());
-    m_canvasView->setLeftFixedWidget(m_headersGroupView);
+	
+//     m_headersGroupView->setVScrollBarMode(QScrollView::AlwaysOff);
+//     m_headersGroupView->setHScrollBarMode(QScrollView::AlwaysOff);
+	m_headersGroupView->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+	m_headersGroupView->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+	
+// 	m_headersGroupView->setFixedWidth(m_headersGroupView->contentsWidth());
+	m_headersGroupView->setFixedWidth( m_headersGroupView->widget()->width() );
+	m_canvasView->setLeftFixedWidget(m_headersGroupView);
 
     // Add a close button just above the track headers.
     // The grid layout is only here to maintain the button in a
@@ -471,9 +477,14 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_headersTopFrame = new QFrame(getCentralWidget());
     QGridLayout * headersTopGrid
         = new QGridLayout(m_headersTopFrame, 2, 2);
-    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    Q3CanvasPixmap pixmap(pixmapDir + "/misc/close.xpm");
-    QPushButton * hideHeadersButton
+	
+//     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+//     Q3CanvasPixmap pixmap(pixmapDir + "/misc/close.xpm");
+	IconLoader il;
+	QPixmap qp = il.loadPixmap( "close" );
+	Q3CanvasPixmap pixmap( qp );
+	
+	QPushButton * hideHeadersButton
         = new QPushButton(m_headersTopFrame);
     headersTopGrid->addWidget(hideHeadersButton, 1, 1,
                                         Qt::AlignRight | Qt::AlignBottom);
@@ -686,24 +697,26 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     QObject::connect(hideHeadersButton, SIGNAL(clicked()), 
                                   this, SLOT(slotHideHeadersGroup()));
 
-    stateChanged("have_selection", KXMLGUIClient::StateReverse);
-    stateChanged("have_notes_in_selection", KXMLGUIClient::StateReverse);
-    stateChanged("have_rests_in_selection", KXMLGUIClient::StateReverse);
-    stateChanged("have_multiple_staffs",
+    rgTempQtIV->stateChanged("have_selection", KXMLGUIClient::StateReverse);
+	rgTempQtIV->stateChanged("have_notes_in_selection", KXMLGUIClient::StateReverse);
+	rgTempQtIV->stateChanged("have_rests_in_selection", KXMLGUIClient::StateReverse);
+	rgTempQtIV->stateChanged("have_multiple_staffs",
                  (m_staffs.size() > 1 ? KXMLGUIClient::StateNoReverse :
                   KXMLGUIClient::StateReverse));
-    stateChanged("rest_insert_tool_current", KXMLGUIClient::StateReverse);
+	rgTempQtIV->stateChanged("rest_insert_tool_current", KXMLGUIClient::StateReverse);
     slotTestClipboard();
-
+	
+	QAction* tac;
     if (getSegmentsOnlyRestsAndClefs())
     {
-        m_selectDefaultNote->activate();
-        stateChanged("note_insert_tool_current",
+        m_selectDefaultNote->setEnabled(true);		//activate();
+		rgTempQtIV->stateChanged("note_insert_tool_current",
                      KXMLGUIClient::StateNoReverse);
     } else
     {
-        actionCollection()->action("select")->activate();
-        stateChanged("note_insert_tool_current",
+		tac = findChild<QAction*>( "select" );
+		tac->setEnabled( true );
+		rgTempQtIV->stateChanged("note_insert_tool_current",
                      KXMLGUIClient::StateReverse);
     }
 
@@ -849,7 +862,8 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_hlayout->setNotePixmapFactory(m_notePixmapFactory);
     m_vlayout->setNotePixmapFactory(m_notePixmapFactory);
 
-    setBackgroundMode(PaletteBase);
+//     setBackgroundMode(PaletteBase);
+	setBackgroundRole( QPalette::Base );
 
     Q3Canvas *tCanvas = new Q3Canvas(this);
     tCanvas->resize(width() * 2, height() * 2); //!!!
@@ -1262,7 +1276,8 @@ void NotationView::positionStaffs()
 
             m_headersGroup->completeToHeight(canvas()->height());
 
-            m_headersGroupView->addChild(m_headersGroup);
+// 			m_headersGroupView->addChild(m_headersGroup);
+			m_headersGroupView->layout()->addWidget(m_headersGroup);
 
             getCanvasView()->updateLeftWidgetGeometry();
 
@@ -1302,17 +1317,22 @@ void NotationView::positionPages()
 
     QSettings settings;
     settings.beginGroup( NotationViewConfigGroup );
-
+	QString pixmapDir = "";
+	IconLoader il;
     if ( qStrToBool( settings.value("backgroundtextures", "true" ) ) ) {
-        QString pixmapDir =
-            KGlobal::dirs()->findResource("appdata", "pixmaps/");
-        if (background.load(QString("%1/misc/bg-paper-cream.xpm").
-                            arg(pixmapDir))) {
-            haveBackground = true;
+//         QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+		pixmapDir = il.getResourcePath("bg-paper-cream.xpm");
+		
+// 		if (background.load(QString("%1/misc/bg-paper-cream.xpm").
+// 				  arg(pixmapDir))) {
+		if (background.load( pixmapDir )) {
+				haveBackground = true;
         }
         // we're happy to ignore errors from this one:
-        deskBackground.load(QString("%1/misc/bg-desktop.xpm").arg(pixmapDir));
-    }
+		pixmapDir = il.getResourcePath("misc/bg-desktop-cream.xpm");
+        deskBackground.load( pixmapDir );
+//         deskBackground.load(QString("%1/misc/bg-desktop.xpm").arg(pixmapDir));
+	}
     settings.endGroup();
 
     int pageWidth = getPageWidth();
@@ -1412,8 +1432,10 @@ void NotationView::setOneToolbar(const char *actionName,
         std::cerr << "WARNING: No such action as " << actionName << std::endl;
         return ;
     }
-    QWidget *toolbar = toolBar(toolbarName);
-    if (!toolbar) {
+// 	QWidget *toolbar = toolBar(toolbarName);
+	QWidget *toolbar = findChild<QToolBar*>( toolbarName );
+	
+	if (!toolbar) {
         std::cerr << "WARNING: No such toolbar as " << toolbarName << std::endl;
         return ;
     }
@@ -1468,56 +1490,86 @@ void NotationView::readOptions()
 
 void NotationView::setupActions()
 {
-    KStandardAction::print(this, SLOT(slotFilePrint()), actionCollection());
-    KStandardAction::printPreview(this, SLOT(slotFilePrintPreview()),
-                             actionCollection());
+    
+	
+	QAction *tac = 0;
+	QWidget *qac_parent = dynamic_cast<QWidget*>(this);
+	QWidget *qac_receiver = dynamic_cast<QWidget*>(this);
+	
+// 	KStandardAction::print(this, SLOT(slotFilePrint()), actionCollection());
+	tac = new QAction( "&Print File", qac_parent );
+	tac->setObjectName( "print_file" );
+	connect( tac, SIGNAL(triggered(bool)), qac_receiver, SLOT(slotFilePrint()) );
+	
+//     KStandardAction::printPreview(this, SLOT(slotFilePrintPreview()),
+//                              actionCollection());
+	tac = new QAction( "Show Print Pre&view", qac_parent );
+	tac->setObjectName( "show_print_preview" );
+	connect( tac, SIGNAL(triggered(bool)), qac_receiver, SLOT(slotFilePrintPreview()) );
 
     QAction *qa_file_print_lilypond = new QAction( "Print &with LilyPond...", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_file_print_lilypond->setIconText(0); 
-			connect( qa_file_print_lilypond, SIGNAL(triggered()), this, SLOT(slotPrintLilyPond())  );
+// 		qa_file_print_lilypond->setIconText(0); 
+	connect( qa_file_print_lilypond, SIGNAL(triggered()), this, SLOT(slotPrintLilyPond())  );
 
     QAction *qa_file_preview_lilypond = new QAction( "Preview with Lil&yPond...", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_file_preview_lilypond->setIconText(0); 
+// 			qa_file_preview_lilypond->setIconText(0); 
 			connect( qa_file_preview_lilypond, SIGNAL(triggered()), this, SLOT(slotPreviewLilyPond())  );
 
     EditViewBase::setupActions("notation.rc");
     EditView::setupActions();
 
-    KRadioAction* noteAction = 0;
+    QAction* noteAction = 0;
 
     // View menu stuff
 
-    KActionMenu *fontActionMenu =
-        new KActionMenu(i18n("Note &Font"), this, "note_font_actionmenu");
+//     KActionMenu *fontActionMenu =
+//         new KActionMenu(i18n("Note &Font"), this, "note_font_actionmenu");
+	QMenu *fontActionMenu = new QMenu( i18n("Note &Font"), this ); 
+	fontActionMenu->setObjectName( "note_font_actionmenu" );
+	
+// 	tac = new QAction( i18n("Note &Font"), qac_parent );
+// 	tac->setObjectName( "note_font_actionmenu" );
+// 	connect( tac, SIGNAL(triggered(bool)), qac_receiver, SLOT(slotFilePrint()) );
+
 
     std::set
         <std::string> fs(NoteFontFactory::getFontNames());
     std::vector<std::string> f(fs.begin(), fs.end());
     std::sort(f.begin(), f.end());
-
+	
+	QActionGroup *fontActionGroup = new QActionGroup( this );
+	
     for (std::vector<std::string>::iterator i = f.begin(); i != f.end(); ++i) {
 
         QString fontQName(strtoqstr(*i));
 
-        /* was toggle */ QAction *fontAction =
-            new /* was toggle */ QAction
-            (fontQName, 0, this, SLOT(slotChangeFontFromAction()),
-             actionCollection(), "note_font_" + fontQName);
+        /* was toggle */ 
+		QAction *fontAction = new QAction( "note_font_" + fontQName, this );
+		fontAction->setObjectName( "note_font_" + fontQName );
+//             (fontQName, 0, this, SLOT(slotChangeFontFromAction()),
+//              actionCollection(), "note_font_" + fontQName);
+		connect( fontAction, SIGNAL(triggered(bool)), this, SLOT(slotChangeFontFromAction()) );
 
         fontAction->setChecked(*i == m_fontName);
-        fontActionMenu->insert(fontAction);
+//         fontActionMenu->insert(fontAction);
+		fontActionMenu->addAction( fontAction );
     }
-
-    actionCollection()->insert(fontActionMenu);
-
-    m_fontSizeActionMenu =
-        new KActionMenu(i18n("Si&ze"), this, "note_font_size_actionmenu");
+	
+//     actionCollection()->insert(fontActionMenu);
+	menuBar()->addMenu( fontActionMenu );
+	
+// 	m_fontSizeActionMenu = new KActionMenu(i18n("Si&ze"), this, "note_font_size_actionmenu");
+	m_fontSizeActionMenu = new QMenu( i18n("Si&ze"), this );
+	m_fontSizeActionMenu->setObjectName( "note_font_size_actionmenu");
+	
+	
     setupFontSizeMenu();
 
-    actionCollection()->insert(m_fontSizeActionMenu);
+//     actionCollection()->insert(m_fontSizeActionMenu);
+	menuBar()->addMenu( m_fontSizeActionMenu );
 
-    m_showHeadersMenuEntry
-        = QAction* qa_show_track_headers = new QAction(  i18n("Show Track Headers"), dynamic_cast<QObject*>(this) );
+//     m_showHeadersMenuEntry = 
+	QAction* qa_show_track_headers = new QAction(  i18n("Show Track Headers"), dynamic_cast<QObject*>(this) );
 			connect( qa_show_track_headers, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotShowHeadersGroup()) );
 			qa_show_track_headers->setObjectName( "show_track_headers" );		//
 			//qa_show_track_headers->setCheckable( true );		//
@@ -1525,10 +1577,14 @@ void NotationView::setupActions()
 			//qa_show_track_headers->setActionGroup( 0 );		// QActionGroup*
 			//qa_show_track_headers->setChecked( false );		//
 			//### FIX: deallocate QAction ptr
-			
-
-    KActionMenu *spacingActionMenu =
-        new KActionMenu(i18n("S&pacing"), this, "stretch_actionmenu");
+	
+	m_showHeadersMenuEntry = qa_show_track_headers;
+	
+	
+// 	KActionMenu *spacingActionMenu =
+// 			new KActionMenu(i18n("S&pacing"), this, "stretch_actionmenu");
+	QMenu *spacingActionMenu = new QMenu( i18n("S&pacing"), this );
+	spacingActionMenu->setObjectName( "stretch_actionmenu" );
 
     int defaultSpacing = m_hlayout->getSpacing();
     std::vector<int> spacings = NotationHLayout::getAvailableSpacings();
@@ -1536,21 +1592,28 @@ void NotationView::setupActions()
     for (std::vector<int>::iterator i = spacings.begin();
             i != spacings.end(); ++i) {
 
-        /* was toggle */ QAction *spacingAction =
-            new /* was toggle */ QAction
-            (QString("%1%").arg(*i), 0, this,
-             SLOT(slotChangeSpacingFromAction()),
-             actionCollection(), QString("spacing_%1").arg(*i));
+        /* was toggle */
+		QAction *spacingAction = new QAction( QString("spacing_%1").arg(*i), this );
+//             (QString("%1%").arg(*i), 0, this,
+//              SLOT(slotChangeSpacingFromAction()),
+//              actionCollection(), QString("spacing_%1").arg(*i));
+		spacingAction->setObjectName( QString("%1%").arg(*i) );
+		connect( spacingAction, SIGNAL(toggled(bool)), this, SLOT(slotChangeSpacingFromAction()) );
 
-        spacingAction->setExclusiveGroup("spacing");
+//         spacingAction->setExclusiveGroup("spacing");	//&&&
+		
         spacingAction->setChecked(*i == defaultSpacing);
-        spacingActionMenu->insert(spacingAction);
+        spacingActionMenu->addAction(spacingAction);
     }
 
-    actionCollection()->insert(spacingActionMenu);
+//     actionCollection()->insert(spacingActionMenu);
+	menuBar()->addMenu( spacingActionMenu );
 
-    KActionMenu *proportionActionMenu =
-        new KActionMenu(i18n("Du&ration Factor"), this, "proportion_actionmenu");
+//     KActionMenu *proportionActionMenu =
+//         new KActionMenu(i18n("Du&ration Factor"), this, "proportion_actionmenu");
+	QMenu *proportionActionMenu =
+		new QMenu( i18n("Du&ration Factor"), this );
+	proportionActionMenu->setObjectName( "proportion_actionmenu" );
 
     int defaultProportion = m_hlayout->getProportion();
     std::vector<int> proportions = NotationHLayout::getAvailableProportions();
@@ -1562,59 +1625,82 @@ void NotationView::setupActions()
         if (*i == 0)
             name = i18n("None");
 
-        /* was toggle */ QAction *proportionAction =
-            new /* was toggle */ QAction
-            (name, 0, this,
-             SLOT(slotChangeProportionFromAction()),
-             actionCollection(), QString("proportion_%1").arg(*i));
+        /* was toggle */
+		QAction *proportionAction = new QAction( QString("proportion_%1").arg(*i), this );
+//             (name, 0, this,
+//              SLOT(slotChangeProportionFromAction()),
+//              actionCollection(), QString("proportion_%1").arg(*i));
+		//
+// 		proportionAction->setObjectName( name );
+		connect( proportionAction, SIGNAL(triggered(bool)), this, SLOT(slotChangeProportionFromAction()) ); 
+		
 
-        proportionAction->setExclusiveGroup("proportion");
+//         proportionAction->setExclusiveGroup("proportion");
         proportionAction->setChecked(*i == defaultProportion);
-        proportionActionMenu->insert(proportionAction);
+        proportionActionMenu->addAction( proportionAction );
     }
 
-    actionCollection()->insert(proportionActionMenu);
+//     actionCollection()->insert(proportionActionMenu);
+	menuBar()->addMenu( proportionActionMenu );
 
-    KActionMenu *ornamentActionMenu =
-        new KActionMenu(i18n("Use Ornament"), this, "ornament_actionmenu");
+//     KActionMenu *ornamentActionMenu =
+//         new KActionMenu(i18n("Use Ornament"), this, "ornament_actionmenu");
+	QMenu *ornamentActionMenu =
+		new QMenu( i18n("Use Ornament"), this );
+	ornamentActionMenu->setObjectName("ornament_actionmenu");
 
 
 
-    new KAction
-    (i18n("Insert Rest"), Qt::Key_P, this, SLOT(slotInsertRest()),
-     actionCollection(), QString("insert_rest"));
+//     new KAction
+//     (i18n("Insert Rest"), Qt::Key_P, this, SLOT(slotInsertRest()),
+//      actionCollection(), QString("insert_rest"));
+	tac = new QAction( i18n("Insert Rest"), qac_parent );
+	tac->setObjectName( "insert_rest" );
+	tac->setShortcut( QKeySequence(Qt::Key_P) );
+	connect( tac, SIGNAL(triggered(bool)), qac_receiver, SLOT(slotInsertRest()) );
+	
 
-    new KAction
-    (i18n("Switch from Note to Rest"), Qt::Key_T, this,
-     SLOT(slotSwitchFromNoteToRest()),
-     actionCollection(), QString("switch_from_note_to_rest"));
+//     new KAction
+//     (i18n("Switch from Note to Rest"), Qt::Key_T, this,
+//      SLOT(slotSwitchFromNoteToRest()),
+//      actionCollection(), QString("switch_from_note_to_rest"));
+	tac = new QAction( i18n("Switch from Note to Rest"), qac_parent );
+	tac->setObjectName( "switch_from_note_to_rest" );
+	tac->setShortcut( QKeySequence(Qt::Key_T) );
+	connect( tac, SIGNAL(triggered(bool)), qac_receiver, SLOT(slotSwitchFromNoteToRest()) );
+	
 
-    new KAction
-    (i18n("Switch from Rest to Note"), Qt::Key_Y, this,
-     SLOT(slotSwitchFromRestToNote()),
-     actionCollection(), QString("switch_from_rest_to_note"));
+//     new KAction
+//     (i18n("Switch from Rest to Note"), Qt::Key_Y, this,
+//      SLOT(slotSwitchFromRestToNote()),
+//      actionCollection(), QString("switch_from_rest_to_note"));
+	tac = new QAction( i18n("Switch from Rest to Note"), qac_parent );
+	tac->setObjectName( "switch_from_rest_to_note" );
+	tac->setShortcut( QKeySequence(Qt::Key_Y) );
+	connect( tac, SIGNAL(triggered(bool)), qac_receiver, SLOT(slotSwitchFromRestToNote()) );
+	
 
 
     // setup Notes menu & toolbar
     QIcon icon;
-
+	IconLoader il;
+	
     for (NoteActionDataMap::Iterator actionDataIter = m_noteActionDataMap->begin();
             actionDataIter != m_noteActionDataMap->end();
             ++actionDataIter) {
 
         NoteActionData noteActionData = **actionDataIter;
 
-        icon = QIcon
-               (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                                             (noteActionData.pixmapName)));
-        noteAction = new KRadioAction(noteActionData.title,
-                                      icon,
-                                      noteActionData.keycode,
-                                      this,
-                                      SLOT(slotNoteAction()),
-                                      actionCollection(),
-                                      noteActionData.actionName);
-        noteAction->setExclusiveGroup("notes");
+//         icon = QIcon
+//                (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+//                                              (noteActionData.pixmapName)));
+		icon = il.load( noteActionData.pixmapName );
+		
+		noteAction = new QAction( icon, noteActionData.title, this );
+		noteAction->setShortcut( noteActionData.keycode );
+		noteAction->setObjectName( noteActionData.actionName );
+// 		noteAction->setExclusiveGroup("notes");
+		connect( noteAction, SIGNAL(triggered(bool)), this, SLOT(slotNoteAction()) );
 
         if (noteActionData.noteType == Note::Crotchet &&
                 noteActionData.dots == 0 && !noteActionData.rest) {
@@ -1629,17 +1715,16 @@ void NotationView::setupActions()
 
         NoteChangeActionData data = **actionDataIter;
 
-        icon = QIcon
-               (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                                             (data.pixmapName)));
-
-        KAction *action = new KAction(data.title,
-                                      icon,
-                                      data.keycode,
-                                      this,
-                                      SLOT(slotNoteChangeAction()),
-                                      actionCollection(),
-                                      data.actionName);
+//         icon = QIcon
+//                (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+//                                              (data.pixmapName)));
+		icon = il.load( data.pixmapName );
+		
+		QAction *action = new QAction( icon, data.title, this );
+		action->setShortcut( data.keycode );
+		connect( action, SIGNAL(triggered(bool)), this, SLOT(slotNoteChangeAction()) );
+		action->setObjectName( data.actionName );
+		
     }
 
     //
@@ -1656,63 +1741,82 @@ void NotationView::setupActions()
             { i18n("Double flat"), "1slotDoubleFlat()", "double_flat_accidental", "accidental-doubleflat" }
         };
 
-    IconLoader il;
+//     IconLoader il;
 
     for (unsigned int i = 0;
             i < sizeof(actionsAccidental) / sizeof(actionsAccidental[0]); ++i) {
 
         icon = il.load(actionsAccidental[i][3]);
-        noteAction = new KRadioAction(actionsAccidental[i][0], icon, 0, this,
-                                      actionsAccidental[i][1],
-                                      actionCollection(), actionsAccidental[i][2]);
-        noteAction->setExclusiveGroup("accidentals");
+        noteAction = new QAction( icon, actionsAccidental[i][0], this );
+		
+		connect( noteAction, SIGNAL(triggered(bool)), this, SLOT(actionsAccidental[i][1]) );
+		noteAction->setObjectName( actionsAccidental[i][2] );
+		
+//         noteAction->setExclusiveGroup("accidentals");
     }
 
 
     //
     // Clefs
     //
-
+	
+	QActionGroup * qag_notes = new QActionGroup( this );
+	
     // Treble
     icon = il.load("clef-treble");
-    noteAction = new KRadioAction(i18n("&Treble Clef"), icon, 0, this,
-                                  SLOT(slotTrebleClef()),
-                                  actionCollection(), "treble_clef");
-    noteAction->setExclusiveGroup("notes");
+    noteAction = new QAction( icon, i18n("&Treble Clef"), this );
+	connect( noteAction, SIGNAL(triggered(bool)), this,
+                                  SLOT(slotTrebleClef()) );
+    noteAction->setObjectName("treble_clef");
+//     noteAction->setExclusiveGroup("notes");
+	qag_notes->addAction( noteAction );
 
     // Alto
     icon = il.load("clef-alto");
-    noteAction = new KRadioAction(i18n("&Alto Clef"), icon, 0, this,
-                                  SLOT(slotAltoClef()),
-                                  actionCollection(), "alto_clef");
-    noteAction->setExclusiveGroup("notes");
+    noteAction = new QAction(icon, i18n("&Alto Clef"), this );
+	connect( noteAction, SIGNAL(triggered(bool)), this,
+							   SLOT(slotAltoClef()) );
+	noteAction->setObjectName("alto_clef");
+//     noteAction->setExclusiveGroup("notes");
+	qag_notes->addAction( noteAction );
 
     // Tenor
     icon = il.load("clef-tenor");
-    noteAction = new KRadioAction(i18n("Te&nor Clef"), icon, 0, this,
-                                  SLOT(slotTenorClef()),
-                                  actionCollection(), "tenor_clef");
-    noteAction->setExclusiveGroup("notes");
+    noteAction = new QAction( icon, i18n("Te&nor Clef"), this );
+	connect( noteAction, SIGNAL(triggered(bool)), this,
+							   SLOT(slotTenorClef()) );
+	noteAction->setObjectName("tenor_clef");
+//     noteAction->setExclusiveGroup("notes");
+	qag_notes->addAction( noteAction );
 
     // Bass
     icon = il.load("clef-bass");
-    noteAction = new KRadioAction(i18n("&Bass Clef"), icon, 0, this,
-                                  SLOT(slotBassClef()),
-                                  actionCollection(), "bass_clef");
-    noteAction->setExclusiveGroup("notes");
+    noteAction = new QAction( icon, i18n("&Bass Clef"), this );
+	connect( noteAction, SIGNAL(triggered(bool)), this,
+                                  SLOT(slotBassClef()) );
+	noteAction->setObjectName("bass_clef");
+//     noteAction->setExclusiveGroup("notes");
+	qag_notes->addAction( noteAction );
 
 
     icon = il.load("text");
-    noteAction = new KRadioAction(i18n("&Text"), icon, Qt::Key_F8, this,
-                                  SLOT(slotText()),
-                                  actionCollection(), "text");
-    noteAction->setExclusiveGroup("notes");
+    noteAction = new QAction( icon, i18n("&Text"), this );
+	noteAction->setShortcut( QKeySequence( Qt::Key_F8 ));
+	connect( noteAction, SIGNAL(triggered(bool)), this,
+		  SLOT(slotText()) );
+	noteAction->setObjectName("text");
+//     noteAction->setExclusiveGroup("notes");
+	qag_notes->addAction( noteAction );
 
+	
     icon = il.load("guitarchord");
-    noteAction = new KRadioAction(i18n("&Guitar Chord"), icon, Qt::Key_F9, this,
-                                  SLOT(slotGuitarChord()),
-                                  actionCollection(), "guitarchord");
-    noteAction->setExclusiveGroup("notes");
+    noteAction = new QAction( icon, i18n("&Guitar Chord"), this );
+	noteAction->setShortcut( QKeySequence(Qt::Key_F9));
+	connect( noteAction, SIGNAL(triggered(bool)), this,
+			 SLOT(slotGuitarChord()) );
+	noteAction->setObjectName("guitarchord");
+//     noteAction->setExclusiveGroup("notes");
+	qag_notes->addAction( noteAction );
 
     /*    icon = il.load("lilypond");
         noteAction = new KRadioAction(i18n("Lil&ypond Directive"), icon, Qt::Key_F9, this,
@@ -1724,20 +1828,27 @@ void NotationView::setupActions()
     //
     // Edition tools (eraser, selector...)
     //
-    noteAction = new KRadioAction(i18n("&Erase"), "eraser", Qt::Key_F4,
-                                  this, SLOT(slotEraseSelected()),
-                                  actionCollection(), "erase");
-    noteAction->setExclusiveGroup("notes");
+    noteAction = new QAction( il.load("eraser"), i18n("&Erase"), this );
+	noteAction->setShortcut( QKeySequence( Qt::Key_F4 ));
+	connect( noteAction, SIGNAL(triggered(bool)), this,
+			  SLOT(slotEraseSelected()) );
+	noteAction->setObjectName("erase");
+//     noteAction->setExclusiveGroup("notes");
+	qag_notes->addAction( noteAction );
 
     icon = il.load("select");
-    noteAction = new KRadioAction(i18n("&Select and Edit"), icon, Qt::Key_F2,
-                                  this, SLOT(slotSelectSelected()),
-                                  actionCollection(), "select");
-    noteAction->setExclusiveGroup("notes");
+    noteAction = new QAction( icon, i18n("&Select and Edit"), this );
+	noteAction->setShortcut( QKeySequence( Qt::Key_F2 ));
+	connect( noteAction, SIGNAL(triggered(bool)), this,
+			  SLOT(slotSelectSelected()) );
+	noteAction->setObjectName("select");
+//     noteAction->setExclusiveGroup("notes");
+	qag_notes->addAction( noteAction );
 
+	
     icon = il.load("step_by_step");
-    QAction* qa_toggle_step_by_step = new QAction( icon, i18n("Ste&p Recording"), dynamic_cast<QObject*>(0) );
-	connect( qa_toggle_step_by_step, SIGNAL(toggled()), dynamic_cast<QObject*>(0), this );
+    QAction* qa_toggle_step_by_step = new QAction( icon, i18n("Ste&p Recording"), dynamic_cast<QObject*>(this) );
+	connect( qa_toggle_step_by_step, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleStepByStep()) );
 	qa_toggle_step_by_step->setObjectName( "toggle_step_by_step" );	//### FIX: deallocate QAction ptr
 	qa_toggle_step_by_step->setCheckable( true );	//
 	qa_toggle_step_by_step->setAutoRepeat( false );	//
@@ -1830,38 +1941,52 @@ void NotationView::setupActions()
     //
     // Settings menu
     //
+	QSettings settings;
+	QActionGroup *qag_layoutMode = new QActionGroup(this);
+	
     int layoutMode = settings.value("layoutmode", 0).toInt() ;
 
-    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-
-    Q3CanvasPixmap pixmap(pixmapDir + "/toolbar/linear-layout.xpm");
-    icon = QIcon(pixmap);
-    KRadioAction *linearModeAction = new KRadioAction
-                                     (i18n("&Linear Layout"), icon, 0, this, SLOT(slotLinearMode()),
-                                      actionCollection(), "linear_mode");
-    linearModeAction->setExclusiveGroup("layoutMode");
+//     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+//     Q3CanvasPixmap pixmap(pixmapDir + "/toolbar/linear-layout.xpm");
+// 		
+	//QString pixmapDir = il.getResourcePath( "toolbar/linear-layout.xpm" );
+//     icon = QIcon(pixmap);
+	
+	icon = il.load( "linear-layout" );
+    QAction *linearModeAction = new QAction( icon, i18n("&Linear Layout"), this );
+	connect( noteAction, SIGNAL(triggered(bool)), this,
+			 SLOT(slotLinearMode()) );
+	linearModeAction->setObjectName("linear_mode");
+//     linearModeAction->setExclusiveGroup("layoutMode");
+	qag_layoutMode->addAction(linearModeAction);
     if (layoutMode == 0)
         linearModeAction->setChecked(true);
 
-    pixmap.load(pixmapDir + "/toolbar/continuous-page-mode.xpm");
-    icon = QIcon(pixmap);
-    KRadioAction *continuousPageModeAction = new KRadioAction
-            (i18n("&Continuous Page Layout"), icon, 0, this, SLOT(slotContinuousPageMode()),
-             actionCollection(), "continuous_page_mode");
-    continuousPageModeAction->setExclusiveGroup("layoutMode");
-    if (layoutMode == 1)
+//     pixmap.load(pixmapDir + "/toolbar/continuous-page-mode.xpm");
+	icon = il.load( "continuous-page-mode" );
+    QAction *continuousPageModeAction = new QAction( icon,
+            i18n("&Continuous Page Layout"), this );
+	connect( noteAction, SIGNAL(triggered(bool)), this,
+			 SLOT(slotContinuousPageMode()) );
+	noteAction->setObjectName("continuous_page_mode");
+//     continuousPageModeAction->setExclusiveGroup("layoutMode");
+	qag_layoutMode->addAction(continuousPageModeAction);
+	if (layoutMode == 1)
         continuousPageModeAction->setChecked(true);
 
-    pixmap.load(pixmapDir + "/toolbar/multi-page-mode.xpm");
-    icon = QIcon(pixmap);
-    KRadioAction *multiPageModeAction = new KRadioAction
-                                        (i18n("&Multiple Page Layout"), icon, 0, this, SLOT(slotMultiPageMode()),
-                                         actionCollection(), "multi_page_mode");
-    multiPageModeAction->setExclusiveGroup("layoutMode");
-    if (layoutMode == 2)
+//     pixmap.load(pixmapDir + "/toolbar/multi-page-mode.xpm");
+	icon = il.load( "multi-page-mode" );
+    QAction *multiPageModeAction = new QAction
+                                        ( icon, i18n("&Multiple Page Layout"), this );
+	connect( noteAction, SIGNAL(triggered(bool)), this,
+			 SLOT(slotMultiPageMode()) );
+    noteAction->setObjectName("multi_page_mode");
+//     multiPageModeAction->setExclusiveGroup("layoutMode");
+	qag_layoutMode->addAction(multiPageModeAction);
+	if (layoutMode == 2)
         multiPageModeAction->setChecked(true);
 
-    QAction* qa_show_chords_ruler = new QAction( 0, i18n("Show Ch&ord Name Ruler"), dynamic_cast<QObject*>(this) );
+    QAction* qa_show_chords_ruler = new QAction( i18n("Show Ch&ord Name Ruler"), dynamic_cast<QObject*>(this) );
 	connect( qa_show_chords_ruler, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleChordsRuler()) );
 	qa_show_chords_ruler->setObjectName( "show_chords_ruler" );	//### FIX: deallocate QAction ptr
 	qa_show_chords_ruler->setCheckable( true );	//
@@ -1870,7 +1995,7 @@ void NotationView::setupActions()
 	qa_show_chords_ruler->setChecked( false );	//
 	// ;
 
-    QAction* qa_show_raw_note_ruler = new QAction( 0, i18n("Show Ra&w Note Ruler"), dynamic_cast<QObject*>(this) );
+    QAction* qa_show_raw_note_ruler = new QAction( i18n("Show Ra&w Note Ruler"), dynamic_cast<QObject*>(this) );
 	connect( qa_show_raw_note_ruler, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleRawNoteRuler()) );
 	qa_show_raw_note_ruler->setObjectName( "show_raw_note_ruler" );	//### FIX: deallocate QAction ptr
 	qa_show_raw_note_ruler->setCheckable( true );	//
@@ -1879,7 +2004,7 @@ void NotationView::setupActions()
 	qa_show_raw_note_ruler->setChecked( false );	//
 	// ;
 
-    QAction* qa_show_tempo_ruler = new QAction( 0, i18n("Show &Tempo Ruler"), dynamic_cast<QObject*>(this) );
+    QAction* qa_show_tempo_ruler = new QAction( i18n("Show &Tempo Ruler"), dynamic_cast<QObject*>(this) );
 	connect( qa_show_tempo_ruler, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleTempoRuler()) );
 	qa_show_tempo_ruler->setObjectName( "show_tempo_ruler" );	//### FIX: deallocate QAction ptr
 	qa_show_tempo_ruler->setCheckable( true );	//
@@ -1888,7 +2013,7 @@ void NotationView::setupActions()
 	qa_show_tempo_ruler->setChecked( false );	//
 	// ;
 
-    QAction* qa_show_annotations = new QAction( 0, i18n("Show &Annotations"), dynamic_cast<QObject*>(this) );
+    QAction* qa_show_annotations = new QAction(  i18n("Show &Annotations"), dynamic_cast<QObject*>(this) );
 	connect( qa_show_annotations, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleAnnotations()) );
 	qa_show_annotations->setObjectName( "show_annotations" );	//### FIX: deallocate QAction ptr
 	qa_show_annotations->setCheckable( true );	//
@@ -1897,7 +2022,7 @@ void NotationView::setupActions()
 	qa_show_annotations->setChecked( false );	//
 	// ;
 
-    QAction* qa_show_lilypond_directives = new QAction( 0, i18n("Show Lily&Pond Directives"), dynamic_cast<QObject*>(this) );
+    QAction* qa_show_lilypond_directives = new QAction(  i18n("Show Lily&Pond Directives"), dynamic_cast<QObject*>(this) );
 	connect( qa_show_lilypond_directives, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleLilyPondDirectives()) );
 	qa_show_lilypond_directives->setObjectName( "show_lilypond_directives" );	//### FIX: deallocate QAction ptr
 	qa_show_lilypond_directives->setCheckable( true );	//
@@ -1920,11 +2045,11 @@ void NotationView::setupActions()
     // Group menu
     //
 
-    icon = il.load
-                                         ("group-simple-tuplet");
+    icon = il.load("group-simple-tuplet");
 
-    QAction* qa_simple_tuplet = new QAction(  TupletCommand::getGlobalName(true), dynamic_cast<QObject*>(Qt::Key_R + Qt::CTRL) );
-			connect( qa_simple_tuplet, SIGNAL(toggled()), dynamic_cast<QObject*>(Qt::Key_R + Qt::CTRL), this );
+    QAction* qa_simple_tuplet = new QAction( icon, i18n("Group simple tuplets"), this );  //TupletCommand::getGlobalName(true), dynamic_cast<QObject*>
+	qa_simple_tuplet->setShortcut( QKeySequence(Qt::Key_R + Qt::CTRL) );
+			connect( qa_simple_tuplet, SIGNAL(toggled(bool)), dynamic_cast<QObject*>(this), SLOT(slotGroupSimpleTuplet()) );
 			qa_simple_tuplet->setObjectName( "simple_tuplet" );		//
 			//qa_simple_tuplet->setCheckable( true );		//
 			qa_simple_tuplet->setAutoRepeat( false );	//
@@ -1933,11 +2058,12 @@ void NotationView::setupActions()
 			//### FIX: deallocate QAction ptr
 			
 
-    icon = il.load
-                                         ("group-tuplet");
+    icon = il.load("group-tuplet");
 
-    QAction* qa_tuplet = new QAction(  TupletCommand::getGlobalName(false), dynamic_cast<QObject*>(Qt::Key_T + Qt::CTRL) );
-			connect( qa_tuplet, SIGNAL(toggled()), dynamic_cast<QObject*>(Qt::Key_T + Qt::CTRL), this );
+    QAction* qa_tuplet = new QAction( icon, i18n("Group Tuplet"), this );
+	//TupletCommand::getGlobalName(false), dynamic_cast<QObject*>
+	qa_tuplet->setShortcut( QKeySequence(Qt::Key_T + Qt::CTRL) );
+			connect( qa_tuplet, SIGNAL(toggled(bool)), dynamic_cast<QObject*>(this), SLOT(slotGroupTuplet(bool)) );
 			qa_tuplet->setObjectName( "tuplet" );		//
 			//qa_tuplet->setCheckable( true );		//
 			qa_tuplet->setAutoRepeat( false );	//
@@ -1947,40 +2073,39 @@ void NotationView::setupActions()
 			
 
     icon = il.load("triplet");
-    (QAction* qa_triplet_mode = new QAction( icon, i18n("Trip&let Insert Mode"), dynamic_cast<QObject*>(Qt::Key_G) );
-	connect( qa_triplet_mode, SIGNAL(toggled()), dynamic_cast<QObject*>(Qt::Key_G), this, SLOT(slotUpdateInsertModeStatus()) );
+    QAction* qa_triplet_mode = new QAction( icon, i18n("Trip&let Insert Mode"), dynamic_cast<QObject*>(this) );
+	qa_triplet_mode->setShortcut( QKeySequence(Qt::Key_G) );
+	connect( qa_triplet_mode, SIGNAL(toggled()), dynamic_cast<QObject*>(this),  SLOT(slotUpdateInsertModeStatus()) );
 	qa_triplet_mode->setObjectName( "triplet_mode" );	//### FIX: deallocate QAction ptr
 	qa_triplet_mode->setCheckable( true );	//
 	qa_triplet_mode->setAutoRepeat( false );	//
 	//qa_triplet_mode->setActionGroup( 0 );	// QActionGroup*
 	qa_triplet_mode->setChecked( false );	//
-	// )->
-        setChecked(false);
+	// )->setChecked(false);
 
     icon = il.load("chord");
-    (QAction* qa_chord_mode = new QAction( icon, i18n("C&hord Insert Mode"), dynamic_cast<QObject*>(Qt::Key_H) );
-	connect( qa_chord_mode, SIGNAL(toggled()), dynamic_cast<QObject*>(Qt::Key_H), this, SLOT(slotUpdateInsertModeStatus()) );
+    QAction* qa_chord_mode = new QAction( icon, i18n("C&hord Insert Mode"), dynamic_cast<QObject*>(this));
+	qa_chord_mode->setShortcut( QKeySequence(Qt::Key_H) );
+	connect( qa_chord_mode, SIGNAL(toggled()), dynamic_cast<QObject*>(this),  SLOT(slotUpdateInsertModeStatus()) );
 	qa_chord_mode->setObjectName( "chord_mode" );	//### FIX: deallocate QAction ptr
 	qa_chord_mode->setCheckable( true );	//
 	qa_chord_mode->setAutoRepeat( false );	//
 	//qa_chord_mode->setActionGroup( 0 );	// QActionGroup*
 	qa_chord_mode->setChecked( false );	//
-	// )->
-        setChecked(false);
+	// )->setChecked(false);
 
     icon = il.load("group-grace");
-    (QAction* qa_grace_mode = new QAction( icon, i18n("Grace Insert Mode"), dynamic_cast<QObject*>(0) );
-	connect( qa_grace_mode, SIGNAL(toggled()), dynamic_cast<QObject*>(0), this, SLOT(slotUpdateInsertModeStatus()) );
+    QAction* qa_grace_mode = new QAction( icon, i18n("Grace Insert Mode"), dynamic_cast<QObject*>(this) );
+	connect( qa_grace_mode, SIGNAL(toggled()), dynamic_cast<QObject*>(this),  SLOT(slotUpdateInsertModeStatus()) );
 	qa_grace_mode->setObjectName( "grace_mode" );	//### FIX: deallocate QAction ptr
 	qa_grace_mode->setCheckable( true );	//
 	qa_grace_mode->setAutoRepeat( false );	//
 	//qa_grace_mode->setActionGroup( 0 );	// QActionGroup*
 	qa_grace_mode->setChecked( false );	//
-	// )->
-        setChecked(false);
+	// )->setChecked(false);
 
     // setup Transforms menu
-    QAction* qa_normalize_rests = new QAction(  NormalizeRestsCommand::getGlobalName(), dynamic_cast<QObject*>(this) );
+    QAction* qa_normalize_rests = new QAction( i18n("Normalize Rests"), this ); //NormalizeRestsCommand::getGlobalName(), dynamic_cast<QObject*>(this) );
 			connect( qa_normalize_rests, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotTransformsNormalizeRests()) );
 			qa_normalize_rests->setObjectName( "normalize_rests" );		//
 			//qa_normalize_rests->setCheckable( true );		//
@@ -1990,7 +2115,7 @@ void NotationView::setupActions()
 			//### FIX: deallocate QAction ptr
 			
 
-    QAction* qa_collapse_notes = new QAction(  CollapseNotesCommand::getGlobalName(), dynamic_cast<QObject*>(this) );
+    QAction* qa_collapse_notes = new QAction( i18n("Collapse Notes"), this ); //CollapseNotesCommand::getGlobalName(), dynamic_cast<QObject*>(this) );
 			connect( qa_collapse_notes, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotTransformsCollapseNotes()) );
 			qa_collapse_notes->setObjectName( "collapse_notes" );		//
 			//qa_collapse_notes->setCheckable( true );		//
@@ -2000,11 +2125,12 @@ void NotationView::setupActions()
 			//### FIX: deallocate QAction ptr
 			
 
-    icon = il.load
-                                         ("quantize");
+    icon = il.load("quantize");
 
-    QAction* qa_quantize = new QAction(  EventQuantizeCommand::getGlobalName(), dynamic_cast<QObject*>(Qt::Key_Equal) );
-			connect( qa_quantize, SIGNAL(toggled()), dynamic_cast<QObject*>(Qt::Key_Equal), this );
+    QAction* qa_quantize = new QAction( i18n("Quantize"), this );
+	 //EventQuantizeCommand::getGlobalName(), dynamic_cast<QObject*>
+	qa_quantize->setShortcut( QKeySequence(Qt::Key_Equal) );
+			connect( qa_quantize, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(None) ); //### slot unknown //@@@ FIX
 			qa_quantize->setObjectName( "quantize" );		//
 			//qa_quantize->setCheckable( true );		//
 			qa_quantize->setAutoRepeat( false );	//
@@ -2013,7 +2139,7 @@ void NotationView::setupActions()
 			//### FIX: deallocate QAction ptr
 			
 
-    QAction* qa_interpret = new QAction(  InterpretCommand::getGlobalName(), dynamic_cast<QObject*>(this) );
+    QAction* qa_interpret = new QAction( i18n("Interpret"), this );  //InterpretCommand::getGlobalName(), dynamic_cast<QObject*>(this) );
 			connect( qa_interpret, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotTransformsInterpret()) );
 			qa_interpret->setObjectName( "interpret" );		//
 			//qa_interpret->setCheckable( true );		//
@@ -2034,8 +2160,7 @@ void NotationView::setupActions()
 			
 
 
-    icon = il.load
-                                         ("text-mark");
+    icon = il.load("text-mark");
 
     QAction* qa_make_ornament = new QAction(  i18n("Ma&ke Ornament..."), dynamic_cast<QObject*>(this) );
 			connect( qa_make_ornament, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotMakeOrnament()) );
@@ -2148,15 +2273,17 @@ void NotationView::setupActions()
             { i18n("Show M&eta Toolbar"), "1slotToggleMetaToolBar()", "show_meta_toolbar",
               "palette-meta" }
         };
+	
+	unsigned int i = 0;
+    for( i=0; i < (sizeof(actionsToolbars) / sizeof(actionsToolbars[0]) ); ++i )
+	{
 
-    for (unsigned int i = 0;
-            i < sizeof(actionsToolbars) / sizeof(actionsToolbars[0]); ++i) {
+        icon = il.load( actionsToolbars[i][3] );
 
-        icon = il.load(actionsToolbars[i][3])));
-
-        new /* was toggle */ QAction(actionsToolbars[i][0], icon, 0,
-                          this, actionsToolbars[i][1],
-                          actionCollection(), actionsToolbars[i][2]);
+        tac = new QAction( icon, actionsToolbars[i][0], this );
+//                           this, actionsToolbars[i][1],
+//                           actionCollection(), 
+		tac->setObjectName( actionsToolbars[i][2] );
     }
 
     QAction *qa_cursor_back = new QAction( "Cursor &Back", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
@@ -2227,11 +2354,12 @@ void NotationView::setupActions()
 			
     */
 
-    new KAction(i18n("Cursor to St&art"), 0,
+    tac = new QAction( i18n("Cursor to St&art"), this );
                 /* #1025717: conflicting meanings for ctrl+a - dupe with Select All
-                  Qt::Key_A + Qt::CTRL, */ this, 
-                SLOT(slotJumpToStart()), actionCollection(),
-                "cursor_start");
+                  Qt::Key_A + Qt::CTRL, */ 
+	connect( tac, SIGNAL(triggered(bool)), this, 
+                SLOT(slotJumpToStart()) ); 
+    tac->setObjectName("cursor_start");
 
     QAction *qa_cursor_end = new QAction( "Cursor to &End", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_cursor_end->setIconText(0); 
@@ -2265,9 +2393,9 @@ void NotationView::setupActions()
 			qa_play->setIcon(icon); 
 			connect( qa_play, SIGNAL(triggered()), this, SIGNAL(play())  );
     // Alternative shortcut for Play
-    KShortcut playShortcut = play->shortcut();
-    playShortcut.append( KKey(Key_Return + Qt::CTRL) );
-    qa_play->setShortcut(playShortcut);
+//     KShortcut playShortcut = play->shortcut();
+//     playShortcut.append( KKey(Key_Return + Qt::CTRL) );
+			qa_play->setShortcut( QKeySequence(Qt::Key_Return + Qt::CTRL) );
 
     icon = il.load
                     ("transport-stop");
@@ -2307,8 +2435,8 @@ void NotationView::setupActions()
 
     icon = il.load
                     ("transport-solo");
-    QAction* qa_toggle_solo = new QAction( icon, i18n("&Solo"), dynamic_cast<QObject*>(0) );
-	connect( qa_toggle_solo, SIGNAL(toggled()), dynamic_cast<QObject*>(0), this );
+    QAction* qa_toggle_solo = new QAction( icon, i18n("&Solo"), dynamic_cast<QObject*>(this) );
+	connect( qa_toggle_solo, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleSolo()) );
 	qa_toggle_solo->setObjectName( "toggle_solo" );	//### FIX: deallocate QAction ptr
 	qa_toggle_solo->setCheckable( true );	//
 	qa_toggle_solo->setAutoRepeat( false );	//
@@ -2316,10 +2444,10 @@ void NotationView::setupActions()
 	qa_toggle_solo->setChecked( false );	//
 	// ;
 
-    icon = il.load
-                    ("transport-tracking");
-    (QAction* qa_toggle_tracking = new QAction( icon, i18n("Scro&ll to Follow Playback"), dynamic_cast<QObject*>(Qt::Key_Pause) );
-	connect( qa_toggle_tracking, SIGNAL(toggled()), dynamic_cast<QObject*>(Qt::Key_Pause), this );
+    icon = il.load("transport-tracking");
+    QAction* qa_toggle_tracking = new QAction( icon, i18n("Scro&ll to Follow Playback"), this ); 
+	qa_toggle_tracking->setShortcut( QKeySequence(Qt::Key_Pause) );
+	connect( qa_toggle_tracking, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleTracking()) );
 	qa_toggle_tracking->setObjectName( "toggle_tracking" );	//### FIX: deallocate QAction ptr
 	qa_toggle_tracking->setCheckable( true );	//
 	qa_toggle_tracking->setAutoRepeat( false );	//
@@ -2327,8 +2455,7 @@ void NotationView::setupActions()
 	qa_toggle_tracking->setChecked( false );	//
 	// )->setChecked(m_playTracking);
 
-    icon = il.load
-                    ("transport-panic")));
+    icon = il.load("transport-panic");
     QAction *qa_panic = new QAction( "Panic", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_panic->setIcon(icon); 
 			connect( qa_panic, SIGNAL(triggered()), this, SIGNAL(panic())  );
@@ -2367,12 +2494,14 @@ void NotationView::setupActions()
     //	KGlobal::dirs()->findResource("appdata", "pixmaps/");
     //    icon = QIcon(Q3CanvasPixmap(pixmapDir + "/toolbar/eventfilter.xpm"));
     icon = il.load("eventfilter");
-    QAction *qa_filter_selection = new QAction( "&Filter Selection", icon, dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+    QAction *qa_filter_selection = new QAction( icon, i18n("&Filter Selection"),  dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_filter_selection->setIconText("filter"); 
 			connect( qa_filter_selection, SIGNAL(triggered()), this, SLOT(slotFilterSelection())  );
 
-    QAction* qa_velocity_up = new QAction(  ChangeVelocityCommand::getGlobalName(10), dynamic_cast<QObject*>(Qt::Key_Up + Qt::SHIFT) );
-			connect( qa_velocity_up, SIGNAL(toggled()), dynamic_cast<QObject*>(Qt::Key_Up + Qt::SHIFT), this );
+    QAction* qa_velocity_up = new QAction( i18n("&Increase Velocity"), this );
+	 //ChangeVelocityCommand::getGlobalName(10), dynamic_cast<QObject*>(this) );
+	qa_velocity_up->setShortcut( QKeySequence(Qt::Key_Up + Qt::SHIFT) );
+			connect( qa_velocity_up, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotVelocityUp()) );
 			qa_velocity_up->setObjectName( "velocity_up" );		//
 			//qa_velocity_up->setCheckable( true );		//
 			qa_velocity_up->setAutoRepeat( false );	//
@@ -2381,8 +2510,10 @@ void NotationView::setupActions()
 			//### FIX: deallocate QAction ptr
 			
 
-    QAction* qa_velocity_down = new QAction(  ChangeVelocityCommand::getGlobalName( -10), dynamic_cast<QObject*>(Qt::Key_Down + Qt::SHIFT) );
-			connect( qa_velocity_down, SIGNAL(toggled()), dynamic_cast<QObject*>(Qt::Key_Down + Qt::SHIFT), this );
+    QAction* qa_velocity_down = new QAction( i18n("&Decrease Velocity"), this );
+	//ChangeVelocityCommand::getGlobalName( -10), dynamic_cast<QObject*>
+	qa_velocity_down->setShortcut( QKeySequence(Qt::Key_Down + Qt::SHIFT) );
+			connect( qa_velocity_down, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotVelocityDown()) );
 			qa_velocity_down->setObjectName( "velocity_down" );		//
 			//qa_velocity_down->setCheckable( true );		//
 			qa_velocity_down->setAutoRepeat( false );	//
@@ -2431,28 +2562,34 @@ void NotationView::setupActions()
 			//### FIX: deallocate QAction ptr
 			
 
-    createGUI(getRCFileName(), false);
+    rgTempQtIV->createGUI( qStrToCharPtrUtf8(getRCFileName()), false);
 }
 
 bool
 NotationView::isInChordMode()
 {
-    return ((/* was toggle */ QAction *)actionCollection()->action("chord_mode"))->
-           isChecked();
+	QAction* tac = findChild<QAction*>("chord_mode");
+	return tac->isChecked();
+//     return ((/* was toggle */ QAction *)actionCollection()->action("chord_mode"))->
+//            isChecked();
 }
 
 bool
 NotationView::isInTripletMode()
 {
-    return ((/* was toggle */ QAction *)actionCollection()->action("triplet_mode"))->
-           isChecked();
+	QAction* tac = findChild<QAction*>("triplet_mode");
+	return tac->isChecked();
+// 	return ((/* was toggle */ QAction *)actionCollection()->action("triplet_mode"))->
+//            isChecked();
 }
 
 bool
 NotationView::isInGraceMode()
 {
-    return ((/* was toggle */ QAction *)actionCollection()->action("grace_mode"))->
-           isChecked();
+	QAction* tac = findChild<QAction*>("grace_mode");
+	return tac->isChecked();
+// 	return ((/* was toggle */ QAction *)actionCollection()->action("grace_mode"))->
+//            isChecked();
 }
 
 void
@@ -2463,11 +2600,11 @@ NotationView::setupFontSizeMenu(std::string oldFontName)
         std::vector<int> sizes = NoteFontFactory::getScreenSizes(oldFontName);
 
         for (unsigned int i = 0; i < sizes.size(); ++i) {
-            KAction *action =
-                actionCollection()->action
-                (QString("note_font_size_%1").arg(sizes[i]));
-            m_fontSizeActionMenu->remove
-            (action);
+			QAction *action = findChild<QAction*>( QString("note_font_size_%1").arg(sizes[i]) );
+//                 actionCollection()->action
+//                 (QString("note_font_size_%1").arg(sizes[i]));
+			
+            m_fontSizeActionMenu->removeAction(action);
 
             // Don't delete -- that could cause a crash when this
             // function is called from the action itself.  Instead
@@ -2481,27 +2618,26 @@ NotationView::setupFontSizeMenu(std::string oldFontName)
 
         QString actionName = QString("note_font_size_%1").arg(sizes[i]);
 
-        /* was toggle */ QAction *sizeAction = dynamic_cast<QAction*>
-                                    (actionCollection()->action(actionName));
+        /* was toggle */ 
+// 		QAction *sizeAction = dynamic_cast<QAction*>
+//                                     (actionCollection()->action(actionName));
+		QAction *sizeAction = findChild<QAction*>(actionName);
 
+		//@@@ //### FIX: this code is likely broken
         if (!sizeAction) {
-            sizeAction = new QAction( "%1 pixels", i18np("1 pixel", dynamic_cast<QObject*>(sizes[i])) );
-{
-            	connect( sizeAction, SIGNAL(toggled()), dynamic_cast<QObject*>(sizes[i])), 0, this ); {
-            
-{
-            	sizeAction->setObjectName(actionCollection(), actionName);
-{
+// 			sizeAction = new QAction( "%1 pixels", i18np("1 pixel", dynamic_cast<QObject*>(sizes[i])) );
+			sizeAction = new QAction( i18n("1 pixel"), this );	
+			//, dynamic_cast<QObject*>(sizes[i])), this );
+            connect( sizeAction, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(None) );	//### slot unknown
+			sizeAction->setObjectName(actionName);// sizes[i])
             	sizeAction->setCheckable( true );	//
-{
             	sizeAction->setAutoRepeat( false );	//
-{
             	//sizeAction->setActionGroup( 0 );	// QActionGroup*
-        }
 
         sizeAction->setChecked(sizes[i] == m_fontSize);
-        m_fontSizeActionMenu->insert(sizeAction);
-    }
+        m_fontSizeActionMenu->addAction( sizeAction );
+    	}
+	}
 }
 
 LinedStaff *
@@ -2533,7 +2669,8 @@ bool NotationView::isCurrentStaff(int i)
 
 void NotationView::initLayoutToolbar()
 {
-    KToolBar *layoutToolbar = toolBar("Layout Toolbar");
+// 	KToolBar *layoutToolbar = toolBar("Layout Toolbar");
+	QToolBar *layoutToolbar = findChild<QToolBar*>("Layout Toolbar");
 
     if (!layoutToolbar) {
         std::cerr
@@ -2570,8 +2707,8 @@ void NotationView::initLayoutToolbar()
 
     if (!foundFont) {
         /* was sorry */ QMessageBox::warning
-        (this, i18n("Unknown font \"%1\", using default", 
-         strtoqstr(m_fontName)));
+        (this, "", i18n("Unknown font \"%1\", using default", 
+         strtoqstr(m_fontName)) );
         m_fontName = NoteFontFactory::getDefaultFontName();
     }
 
@@ -2626,7 +2763,7 @@ void NotationView::initLayoutToolbar()
 
 void NotationView::initStatusBar()
 {
-    KStatusBar* sb = statusBar();
+    QStatusBar* sb = statusBar();
 
     m_hoveredOverNoteName = new QLabel(sb);
     m_hoveredOverNoteName->setMinimumWidth(32);
@@ -2653,15 +2790,16 @@ void NotationView::initStatusBar()
 
     sb->addItem(KTmpStatusMsg::getDefaultMsg(),
                    KTmpStatusMsg::getDefaultId(), 1);
+	
     sb->setItemAlignment(KTmpStatusMsg::getDefaultId(),
                          AlignLeft | AlignVCenter);
 
     m_selectionCounter = new QLabel(sb);
     sb->addWidget(m_selectionCounter);
 
-    m_progressBar() = new ProgressBar(100, true, sb);
-    m_progressBar()->setMinimumWidth(100);
-    sb->addWidget(m_progressBar());
+    m_progressBar = new ProgressBar(100, true, sb);
+    m_progressBar->setMinimumWidth(100);
+    sb->addWidget(m_progressBar);
 }
 
 QSize NotationView::getViewSize()
@@ -2710,7 +2848,7 @@ NotationView::setPageMode(LinedStaff::PageMode pageMode)
         showHeadersGroup();
     }
 
-    stateChanged("linear_mode",
+	rgTempQtIV->stateChanged("linear_mode",
                  (pageMode == LinedStaff::LinearMode ? KXMLGUIClient::StateNoReverse :
                   KXMLGUIClient::StateReverse));
 
@@ -2728,7 +2866,8 @@ NotationView::setPageMode(LinedStaff::PageMode pageMode)
 
     bool layoutApplied = applyLayout();
     if (!layoutApplied)
-        /* was sorry */ QMessageBox::warning(0, "Couldn't apply layout");
+        /* was sorry */ 
+		QMessageBox::warning(this, "", "Couldn't apply layout");
     else {
         for (unsigned int i = 0; i < m_staffs.size(); ++i) {
             m_staffs[i]->markChanged();
@@ -3025,7 +3164,7 @@ void NotationView::setCurrentSelectedNote(const char *pixmapName,
 
 void NotationView::setCurrentSelectedNote(const NoteActionData &noteAction)
 {
-    setCurrentSelectedNote(noteAction.pixmapName,
+    setCurrentSelectedNote( qStrToCharPtrUtf8(noteAction.pixmapName),
                            noteAction.rest,
                            noteAction.noteType,
                            noteAction.dots);
@@ -3468,9 +3607,9 @@ void NotationView::print(bool previewOnly)
             maxPageCount = pageCount;
     }
 
-    KPrinter printer(true, QPrinter::HighResolution);
+    QPrinter printer(true, QPrinter::HighResolution);
 
-    printer.setPageSelection(KPrinter::ApplicationSide);
+    printer.setPageSelection( QPrinter::ApplicationSide );
     printer.setMinMax(1, maxPageCount + 1);
 
     if (previewOnly)
@@ -3762,23 +3901,23 @@ void NotationView::setMenuStates()
     // Clear states first, then enter only those ones that apply
     // (so as to avoid ever clearing one after entering another, in
     // case the two overlap at all)
-    stateChanged("have_selection", KXMLGUIClient::StateReverse);
-    stateChanged("have_notes_in_selection", KXMLGUIClient::StateReverse);
-    stateChanged("have_rests_in_selection", KXMLGUIClient::StateReverse);
+	rgTempQtIV->stateChanged("have_selection", KXMLGUIClient::StateReverse);
+	rgTempQtIV->stateChanged("have_notes_in_selection", KXMLGUIClient::StateReverse);
+	rgTempQtIV->stateChanged("have_rests_in_selection", KXMLGUIClient::StateReverse);
 
     if (m_currentEventSelection) {
 
         NOTATION_DEBUG << "NotationView::setMenuStates: Have selection; it's " << m_currentEventSelection << " covering range from " << m_currentEventSelection->getStartTime() << " to " << m_currentEventSelection->getEndTime() << " (" << m_currentEventSelection->getSegmentEvents().size() << " events)" << endl;
 
-        stateChanged("have_selection", KXMLGUIClient::StateNoReverse);
+		rgTempQtIV->stateChanged("have_selection", KXMLGUIClient::StateNoReverse);
         if (m_currentEventSelection->contains
                 (Note::EventType)) {
-            stateChanged("have_notes_in_selection",
+			rgTempQtIV->stateChanged("have_notes_in_selection",
                          KXMLGUIClient::StateNoReverse);
         }
         if (m_currentEventSelection->contains
                 (Note::EventRestType)) {
-            stateChanged("have_rests_in_selection",
+			rgTempQtIV->stateChanged("have_rests_in_selection",
                          KXMLGUIClient::StateNoReverse);
         }
     }
@@ -3789,18 +3928,21 @@ void NotationView::setMenuStates()
     // need to test dynamic_cast<RestInserter *> before
     // dynamic_cast<NoteInserter *> (which will succeed for both)
 
-    if (dynamic_cast<RestInserter *>(m_tool)) {
+	int StateReverse = 0x100;	//@@@ //### FIX: I've set these arbitrarily
+	int StateNoReverse = 0x200;
+	
+	if (dynamic_cast<RestInserter *>(m_tool)) {
         NOTATION_DEBUG << "Have rest inserter " << endl;
-        stateChanged("note_insert_tool_current", StateReverse);
-        stateChanged("rest_insert_tool_current", StateNoReverse);
+		rgTempQtIV->stateChanged("note_insert_tool_current", StateReverse);
+		rgTempQtIV->stateChanged("rest_insert_tool_current", StateNoReverse);
     } else if (dynamic_cast<NoteInserter *>(m_tool)) {
         NOTATION_DEBUG << "Have note inserter " << endl;
-        stateChanged("note_insert_tool_current", StateNoReverse);
-        stateChanged("rest_insert_tool_current", StateReverse);
+		rgTempQtIV->stateChanged("note_insert_tool_current", StateNoReverse);
+		rgTempQtIV->stateChanged("rest_insert_tool_current", StateReverse);
     } else {
         NOTATION_DEBUG << "Have neither inserter " << endl;
-        stateChanged("note_insert_tool_current", StateReverse);
-        stateChanged("rest_insert_tool_current", StateReverse);
+		rgTempQtIV->stateChanged("note_insert_tool_current", StateReverse);
+		rgTempQtIV->stateChanged("rest_insert_tool_current", StateReverse);
     }
 }
 
@@ -3911,8 +4053,10 @@ void NotationView::slotNoteAction()
 
 void NotationView::slotLastNoteAction()
 {
-    KAction *action = actionCollection()->action(m_lastNoteAction);
-    if (!action)
+// 	QAction *action = actionCollection()->action(m_lastNoteAction);
+	QAction *action = findChild<QAction*>(m_lastNoteAction);
+	
+	if (!action)
         action = actionCollection()->action("crotchet");
 
     if (action) {
@@ -4007,7 +4151,7 @@ void NotationView::initActionDataMaps()
             int keycode = keys[type - Note::Shortest];
             keycode += Qt::CTRL;
             if (notationOnly)
-                keycode += ALT;
+                keycode += Qt::ALT;
 
             m_noteChangeActionDataMap->insert
                 (shortName, new NoteChangeActionData
@@ -4097,7 +4241,7 @@ void NotationView::setupDefaultProgress()
     if (m_progressDisplayer != PROGRESS_BAR) {
         NOTATION_DEBUG << "NotationView::setupDefaultProgress()" << endl;
         disconnectProgress();
-        setupProgress(m_progressBar());
+        setupProgress(m_progressBar);
         m_progressDisplayer = PROGRESS_BAR;
     }
 }
@@ -4227,7 +4371,7 @@ NotationView::slotChangeSpacingFromAction()
 
     } else {
         /* was sorry */ QMessageBox::warning
-        (this, i18n("Unknown spacing action %1", name));
+        (this, "", i18n("Unknown spacing action %1", name));
     }
 }
 
@@ -4285,7 +4429,7 @@ NotationView::slotChangeProportionFromAction()
 
     } else {
         /* was sorry */ QMessageBox::warning
-        (this, i18n("Unknown proportion action %1", name));
+        (this, "",  i18n("Unknown proportion action %1", name));
     }
 }
 
@@ -4299,8 +4443,11 @@ NotationView::slotChangeProportion(int proportion)
 
     //    m_proportionSlider->setSize(proportion);
 
-    /* was toggle */ QAction *action = dynamic_cast<QAction*>
-                            (actionCollection()->action(QString("proportion_%1").arg(proportion)));
+    /* was toggle */ 
+// 	QAction *action = dynamic_cast<QAction*>
+//                             (actionCollection()->action(QString("proportion_%1").arg(proportion)));
+	QAction *action = findChild<QAction*>( QString("proportion_%1").arg(proportion) );
+	
     if (action)
         action->setChecked(true);
     else {
@@ -4332,7 +4479,7 @@ NotationView::slotChangeFontFromAction()
         slotChangeFont(name);
     } else {
         /* was sorry */ QMessageBox::warning
-        (this, i18n("Unknown font action %1", name));
+        (this, "", i18n("Unknown font action %1", name));
     }
 }
 
@@ -4350,11 +4497,11 @@ NotationView::slotChangeFontSizeFromAction()
             slotChangeFont(m_fontName, size);
         else {
             /* was sorry */ QMessageBox::warning
-            (this, i18n("Unknown font size %1", name));
+            (this, "", i18n("Unknown font size %1", name));
         }
     } else {
         /* was sorry */ QMessageBox::warning
-        (this, i18n("Unknown font size action %1", name));
+        (this, "", i18n("Unknown font size action %1", name));
     }
 }
 
@@ -4458,8 +4605,11 @@ NotationView::slotChangeFont(std::string newName, int newSize)
         bool thisOne = (f[i] == m_fontName);
         if (thisOne)
             m_fontCombo->setCurrentIndex(i);
-        /* was toggle */ QAction *action = dynamic_cast<QAction*>
-                                (actionCollection()->action("note_font_" + strtoqstr(f[i])));
+        /* was toggle */ 
+// 		QAction *action = dynamic_cast<QAction*>
+//                                 (actionCollection()->action("note_font_" + strtoqstr(f[i])));
+		QAction *action = findChild<QAction*>( "note_font_" + strtoqstr(f[i]) );
+		
         NOTATION_DEBUG << "inspecting " << f[i] << (action ? ", have action" : ", no action") << endl;
         if (action)
             action->setChecked(thisOne);
@@ -4509,7 +4659,7 @@ NotationView::slotChangeFont(std::string newName, int newSize)
 
     bool layoutApplied = applyLayout();
     if (!layoutApplied)
-        /* was sorry */ QMessageBox::warning(0, "Couldn't apply layout");
+        /* was sorry */ QMessageBox::warning(this, "", "Couldn't apply layout");
     else {
         for (unsigned int i = 0; i < m_staffs.size(); ++i) {
             m_staffs[i]->markChanged();
@@ -4564,7 +4714,8 @@ void NotationView::slotPrintLilyPond()
     file->setAutoRemove(true);
     if (!file->open()) {
         CurrentProgressDialog::freeze();
-        /* was sorry */ QMessageBox::warning(this, i18n("Failed to open a temporary file for LilyPond export."));
+        /* was sorry */ 
+		QMessageBox::warning(this, "", i18n("Failed to open a temporary file for LilyPond export."));
         delete file;
     }
     QString filename = file->fileName();
@@ -4593,7 +4744,8 @@ void NotationView::slotPreviewLilyPond()
     file->setAutoRemove(true);
     if (!file->open()) {
         CurrentProgressDialog::freeze();
-        /* was sorry */ QMessageBox::warning(this, i18n("Failed to open a temporary file for LilyPond export."));
+        /* was sorry */ 
+		QMessageBox::warning(this, "", i18n("Failed to open a temporary file for LilyPond export."));
         delete file;
     }
     QString filename = file->fileName();
@@ -4647,7 +4799,8 @@ bool NotationView::exportLilyPondFile(QString file, bool forPreview)
 
     if (!e.write()) {
         // CurrentProgressDialog::freeze();
-        /* was sorry */ QMessageBox::warning(this, i18n("Export failed.  The file could not be opened for writing."));
+        /* was sorry */ 
+		QMessageBox::warning(this, "", i18n("Export failed.  The file could not be opened for writing."));
         return false;
     }
 
@@ -4741,9 +4894,9 @@ void NotationView::slotEditPaste()
         (segment, clipboard, insertionTime, defaultType);
 
     if (!command->isPossible()) {
-        QMessageBox::detailedError
-            (this,
-             i18n("Couldn't paste at this point."), RESTRICTED_PASTE_FAILED_DESCRIPTION);
+        QMessageBox::warning	//detailedError
+				(this, RESTRICTED_PASTE_FAILED_DESCRIPTION, 
+             i18n("Couldn't paste at this point.") );
     } else {
         addCommandToHistory(command);
         setCurrentSelection(new EventSelection(command->getPastedEvents()));
@@ -4792,10 +4945,9 @@ void NotationView::slotEditGeneralPaste()
             (segment, clipboard, insertionTime, type);
 
         if (!command->isPossible()) {
-            QMessageBox::detailedError
-                (this,
-                 i18n("Couldn't paste at this point."),
-                 i18n(RESTRICTED_PASTE_FAILED_DESCRIPTION));
+            QMessageBox::warning	//detailedError
+					(this, RESTRICTED_PASTE_FAILED_DESCRIPTION, 
+                 i18n("Couldn't paste at this point.") );
         } else {
             addCommandToHistory(command);
             setCurrentSelection(new EventSelection
@@ -5200,7 +5352,7 @@ void NotationView::slotInsertNoteFromAction()
 
     NoteInserter *noteInserter = dynamic_cast<NoteInserter *>(m_tool);
     if (!noteInserter) {
-        /* was sorry */ QMessageBox::warning(this, i18n("No note duration selected"));
+        /* was sorry */ QMessageBox::warning(this, "", i18n("No note duration selected"));
         return ;
     }
 
@@ -5219,7 +5371,7 @@ void NotationView::slotInsertNoteFromAction()
     } catch (...) {
 
         /* was sorry */ QMessageBox::warning
-            (this, i18n("Unknown note insert action %1", name));
+            (this,"",  i18n("Unknown note insert action %1", name));
         return ;
     }
 
@@ -5241,7 +5393,7 @@ void NotationView::slotInsertRest()
 
         NoteInserter *noteInserter = dynamic_cast<NoteInserter *>(m_tool);
         if (!noteInserter) {
-            /* was sorry */ QMessageBox::warning(this, i18n("No note duration selected"));
+            /* was sorry */ QMessageBox::warning(this, "", i18n("No note duration selected"));
             return ;
         }
 
@@ -5262,7 +5414,7 @@ void NotationView::slotSwitchFromRestToNote()
 {
     RestInserter *restInserter = dynamic_cast<RestInserter *>(m_tool);
     if (!restInserter) {
-        /* was sorry */ QMessageBox::warning(this, i18n("No rest duration selected"));
+        /* was sorry */ QMessageBox::warning(this, "", i18n("No rest duration selected"));
         return ;
     }
 
@@ -5271,8 +5423,9 @@ void NotationView::slotSwitchFromRestToNote()
     QString actionName = NotationStrings::getReferenceName(note, false);
     actionName = actionName.replace("-", "_");
 
-    KRadioAction *action = dynamic_cast<KRadioAction *>
-        (actionCollection()->action(actionName));
+//     KRadioAction *action = dynamic_cast<KRadioAction *>
+//         (actionCollection()->action(actionName));	
+	QAction *action = findChild<QAction*>( actionName );
 
     if (!action) {
         std::cerr << "WARNING: Failed to find note action \""
@@ -5297,7 +5450,7 @@ void NotationView::slotSwitchFromNoteToRest()
 {
     NoteInserter *noteInserter = dynamic_cast<NoteInserter *>(m_tool);
     if (!noteInserter) {
-        /* was sorry */ QMessageBox::warning(this, i18n("No note duration selected"));
+        /* was sorry */ QMessageBox::warning(this, "", i18n("No note duration selected"));
         return ;
     }
 
@@ -5306,8 +5459,9 @@ void NotationView::slotSwitchFromNoteToRest()
     QString actionName = NotationStrings::getReferenceName(note, true);
     actionName = actionName.replace("-", "_");
 
-    KRadioAction *action = dynamic_cast<KRadioAction *>
-        (actionCollection()->action(actionName));
+//     KRadioAction *action = dynamic_cast<KRadioAction *>
+//         (actionCollection()->action(actionName));
+	QAction *action = findChild<QAction*>( actionName );
 
     if (!action) {
         std::cerr << "WARNING: Failed to find rest action \""
@@ -5349,7 +5503,7 @@ void NotationView::slotToggleDot()
             noteInserter->slotSetDots(note.getDots() ? 0 : 1);
             setTool(noteInserter);
         } else {
-            /* was sorry */ QMessageBox::warning(this, i18n("No note or rest duration selected"));
+            /* was sorry */ QMessageBox::warning(this, "", i18n("No note or rest duration selected"));
         }
     }
 
@@ -5633,7 +5787,7 @@ void NotationView::slotEditAddSustain(bool down)
         }
     }
 
-    /* was sorry */ QMessageBox::warning(this, i18n("There is no sustain controller defined for this device.\nPlease ensure the device is configured correctly in the Manage MIDI Devices dialog in the main window."));
+    /* was sorry */ QMessageBox::warning(this, "", i18n("There is no sustain controller defined for this device.\nPlease ensure the device is configured correctly in the Manage MIDI Devices dialog in the main window."));
 }
 
 void NotationView::slotEditAddSustainDown()
@@ -6694,8 +6848,10 @@ NotationView::slotInsertableNoteEventReceived(int pitch, int velocity, bool note
     //or mixer, etc) is active, and we'll only allow insertion into
     //the most recently activated.  How about that?
 
-    /* was toggle */ QAction *action = dynamic_cast<QAction*>
-        (actionCollection()->action("toggle_step_by_step"));
+    /* was toggle */
+// 	QAction *action = dynamic_cast<QAction*>
+//         (actionCollection()->action("toggle_step_by_step"));
+	QAction *action = findChild<QAction*>("toggle_step_by_step");
     if (!action) {
         NOTATION_DEBUG << "WARNING: No toggle_step_by_step action" << endl;
         return ;
@@ -6711,7 +6867,7 @@ NotationView::slotInsertableNoteEventReceived(int pitch, int velocity, bool note
         if (showingError)
             return ;
         showingError = true;
-        /* was sorry */ QMessageBox::warning(this, i18n("Can't insert note: No note duration selected"));
+        /* was sorry */ QMessageBox::warning(this, "", i18n("Can't insert note: No note duration selected"));
         showingError = false;
         return ;
     }

@@ -19,16 +19,19 @@
 #define _RG_NOTEPIXMAPFACTORY_H_
 
 #include <Q3CanvasPixmap>
+#include <Q3PointArray>
+
 #include "base/NotationTypes.h"
-#include <map>
 #include "NoteCharacter.h"
+#include "base/Event.h"
+#include "gui/editors/notation/NoteCharacterNames.h"
+#include <map>
 #include <string>
+
 #include <QFont>
 #include <QFontMetrics>
 #include <QPixmap>
 #include <QPoint>
-#include "base/Event.h"
-#include "gui/editors/notation/NoteCharacterNames.h"
 
 
 class QPainter;
