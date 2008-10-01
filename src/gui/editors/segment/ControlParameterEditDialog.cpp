@@ -68,13 +68,12 @@ ControlParameterEditDialog::ControlParameterEditDialog(
     metagrid->addWidget(vbox, 0, 0);
 
 
-    QGroupBox *groupBox = new QGroupBox( i18n("Control Event Properties"), vbox );
-    vboxLayout->addWidget(groupBox);
+    QGroupBox *frame = new QGroupBox( i18n("Control Event Properties"), vbox );
+    vboxLayout->addWidget(frame);
     vbox->setLayout(vboxLayout);
-
-    QFrame *frame = new QFrame(groupBox);
-
-    QGridLayout *layout = new QGridLayout(frame, 4, 3, 10, 5);
+    frame->setContentsMargins(10, 10, 10, 10);
+    QGridLayout *layout = new QGridLayout(frame);
+    layout->setSpacing(5);
 
     layout->addWidget(new QLabel(i18n("Name:"), frame), 0, 0);
     m_nameEdit = new QLineEdit(frame);
@@ -115,6 +114,8 @@ ControlParameterEditDialog::ControlParameterEditDialog(
     layout->addWidget(new QLabel(i18n("Instrument Parameter Box position:"), frame), 8, 0);
     m_ipbPosition = new QComboBox(frame);
     layout->addWidget(m_ipbPosition, 8, 1, 1, 2);
+
+    frame->setLayout(layout);
 
     connect(m_nameEdit, SIGNAL(textChanged(const QString&)),
             SLOT(slotNameChanged(const QString&)));
@@ -269,7 +270,7 @@ void
 ControlParameterEditDialog::slotTypeChanged(int value)
 {
     RG_DEBUG << "ControlParameterEditDialog::slotTypeChanged" << endl;
-    m_dialogControl.setType(qstrtostr(m_typeCombo->text(value)));
+    m_dialogControl.setType(qstrtostr(m_typeCombo->itemText(value)));
 
     populate();
 }
