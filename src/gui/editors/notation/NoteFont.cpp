@@ -26,7 +26,6 @@
 #include "NoteFontMap.h"
 #include "SystemFont.h"
 #include <QBitmap>
-#include <qgarray.h>
 #include <QImage>
 #include <QPainter>
 #include <QPixmap>
@@ -34,6 +33,7 @@
 #include <QString>
 #include <QStringList>
 
+//#include <qgarray.h>
 
 namespace Rosegarden
 {
@@ -224,7 +224,7 @@ NoteFont::lookupDrawRep(QPixmap *pixmap) const
 
                 if (!pixel) {
                     if (startx < xi) {
-                        a->resize(a->size() + 2, QGArray::SpeedOptim);
+//                         a->resize(a->size() + 2, QGArray::SpeedOptim );	//&&& whats QGArray
                         a->setPoint(a->size() - 2, startx, yi);
                         a->setPoint(a->size() - 1, xi - 1, yi);
                     }
@@ -277,8 +277,9 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
         found = new QPixmap(strtoqstr(src));
 
         if (!found->isNull()) {
-
-            if (found->mask() == 0) {
+ 			QBitmap bmask = found->mask();
+			
+            if ( bmask.isNull() ) {
                 std::cerr << "NoteFont::getPixmap: Warning: No automatic mask "
                 << "for character \"" << charName << "\""
                 << (inverted ? " (inverted)" : "") << " in font \""

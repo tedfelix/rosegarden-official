@@ -34,8 +34,8 @@
 namespace Rosegarden
 {
 
-void
-NoteFontViewer::slotViewChanged(QDialogButtonBox::int i)
+// 	void NoteFontViewer::slotViewChanged( QDialogButtonBox::int i )
+void NoteFontViewer::slotViewChanged( int i )
 {
     m_frame->setGlyphs(i == 0);
 
@@ -90,7 +90,8 @@ NoteFontViewer::NoteFontViewer(QWidget *parent, QString noteFontName,
 
     KToolBar *controls = new KToolBar( box );
     boxLayout->addWidget(controls);
-    controls->setMargin(3);
+// 	controls->setMargin(3);
+	controls->setContentsMargins(3,3,3,3);
 
     (void) new QLabel(i18n("  Component: "), controls);
     m_font = new QComboBox(controls);

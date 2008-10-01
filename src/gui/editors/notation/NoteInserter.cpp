@@ -72,25 +72,15 @@ NoteInserter::NoteInserter(NotationView* view)
     m_defaultStyle = qstrtostr(settings.value("style", strtoqstr(NoteStyleFactory::DefaultStyle)).toString());
     settings.endGroup();
 
-    /* was toggle */ QAction *autoBeamAction = new QAction( 0, i18n("Auto-Beam when appropriate"), dynamic_cast<QObject*>(this) );
-;
+    /* was toggle */ 
+	QAction *autoBeamAction = new QAction(  i18n("Auto-Beam when appropriate"), dynamic_cast<QObject*>(this) );
+   	connect( autoBeamAction, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleAutoBeam()) ); 
 
-    	connect( /* was toggle */ QAction *autoBeamAction, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleAutoBeam()) ); ;
-
-    
-;
-
-    	/* was toggle */ QAction *autoBeamAction->setObjectName("toggle_auto_beam");
-;
-
-    	/* was toggle */ QAction *autoBeamAction->setCheckable( true );	//
-;
-
-    	/* was toggle */ QAction *autoBeamAction->setAutoRepeat( false );	//
-;
-
-    	///* was toggle */ QAction *autoBeamAction->setActionGroup( 0 );	// QActionGroup*
-    autoBeamAction->setChecked(m_autoBeam);
+	autoBeamAction->setObjectName("toggle_auto_beam");
+	autoBeamAction->setCheckable( true );	//
+	autoBeamAction->setAutoRepeat( false );	//
+    // autoBeamAction->setActionGroup( 0 );	// QActionGroup*
+    autoBeamAction->setChecked( m_autoBeam );
 
     for (unsigned int i = 0; i < 6; ++i) {
 
@@ -108,8 +98,8 @@ NoteInserter::NoteInserter(NotationView* view)
     icon = QIcon
            (NotePixmapFactory::toQPixmap(NotePixmapFactory::
                                          makeToolbarPixmap("dotted-crotchet")));
-    QAction* qa_toggle_dot = new QAction( icon, i18n("Dotted note"), dynamic_cast<QObject*>(0) );
-	connect( qa_toggle_dot, SIGNAL(toggled()), dynamic_cast<QObject*>(0), this );
+    QAction* qa_toggle_dot = new QAction( icon, i18n("Dotted note"), dynamic_cast<QObject*>(this) );
+	connect( qa_toggle_dot, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToogleDot()) );//@@@ slot exists ?	
 	qa_toggle_dot->setObjectName( "toggle_dot" );	//### FIX: deallocate QAction ptr
 	qa_toggle_dot->setCheckable( true );	//
 	qa_toggle_dot->setAutoRepeat( false );	//
