@@ -21,6 +21,8 @@
 
 #include <QColor>
 #include <QRect>
+#include <QImage>
+
 #include <vector>
 
 
