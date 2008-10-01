@@ -38,6 +38,7 @@
 #include "gui/general/GUIPalette.h"
 #include "gui/general/PixmapFunctions.h"
 #include "gui/general/Spline.h"
+#include "gui/general/IconLoader.h"
 #include "gui/kdeext/KStartupLogo.h"
 #include "NotationStrings.h"
 #include "NotationView.h"
@@ -191,7 +192,7 @@ NotePixmapFactory::init(std::string fontName, int size)
         m_style = NoteStyleFactory::getStyle(NoteStyleFactory::DefaultStyle);
     } catch (NoteStyleFactory::StyleUnavailable u) {
         KStartupLogo::hideIfStillThere();
-        QMessageBox::critical(0, "", i18n(strtoqstr(u.getMessage())));
+        QMessageBox::critical(0, "", i18n( u.getMessage().c_str() )  );
         throw;
     }
 
@@ -1932,9 +1933,13 @@ NotePixmapFactory::makeUnknownPixmap()
 Q3CanvasPixmap*
 NotePixmapFactory::makeToolbarPixmap(const char *name, bool menuSize)
 {
-    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QString fileBase = pixmapDir + "/toolbar/";
-    if (menuSize) fileBase += "menu-";
+//     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+//     QString fileBase = pixmapDir + "/toolbar/";
+	
+	IconLoader il;
+	QString fileBase = il.getResourcePath( "toolbar" );
+	
+	if (menuSize) fileBase += "menu-";
     fileBase += name;
     if (QFile(fileBase + ".png").exists()) {
         return new Q3CanvasPixmap(fileBase + ".png");
@@ -1970,7 +1975,7 @@ NotePixmapFactory::makeNoteMenuPixmap(timeT duration,
     if (triplet)
         noteName = "3-" + noteName;
     noteName = "menu-" + noteName;
-    return makeToolbarPixmap(noteName);
+    return makeToolbarPixmap( qStrToCharPtrUtf8(noteName), true );
 }
 
 Q3CanvasPixmap *
@@ -2670,8 +2675,8 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above,
                                bool smooth, bool flat, bool phrasing,
                                QPoint &hotspot, QPainter *painter, int x, int y)
 {
-    QMatrix::TransformationMode mode = QMatrix::transformationMode();
-    QMatrix::setTransformationMode(QMatrix::Points);
+//     QMatrix::TransformationMode mode = QMatrix::transformationMode();	//&&&
+//     QMatrix::setTransformationMode(QMatrix::Points);
 
     int thickness = getStaffLineThickness() * 2;
     if (phrasing)
@@ -2838,7 +2843,7 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above,
         m_p->painter().setPen(QColor(Qt::black));
     }
 
-    QMatrix::setTransformationMode(mode);
+//     QMatrix::setTransformationMode(mode);	//&&&
 
     if (painter) {
         painter->restore();

@@ -20,6 +20,8 @@
 #define _RG_NOTEPIXMAPPAINTER_H_
 
 #include <QPainter>
+#include <Q3PointArray>
+
 
 namespace Rosegarden {
 
@@ -54,13 +56,13 @@ public:
 
 	if (mask) {
 	    m_useMask = true;
-	    m_maskPainter.begin(mask, unclipped);
+	    m_maskPainter.begin(mask);//, unclipped);
 	} else {
 	    m_useMask = false;
 	}
 
 	m_painter = &m_myPainter;
-	return m_painter->begin(device, unclipped);
+	return m_painter->begin(device);//, unclipped);
     }
 
     bool end() {
@@ -96,22 +98,24 @@ public:
 	if (m_useMask) m_maskPainter.drawArc(x, y, w, h, a, alen);
     }
 
-    void drawPolygon(const QPointArray &a, bool winding = false,
+    void drawPolygon(const Q3PointArray &a, bool winding = false,
 		     int index = 0, int n = -1) {
 	m_painter->drawPolygon(a, winding, index, n);
 	if (m_useMask) m_maskPainter.drawPolygon(a, winding, index, n);
     }
 
-    void drawPolyline(const QPointArray &a, int index = 0, int n = -1) {
+    void drawPolyline(const Q3PointArray &a, int index = 0, int n = -1) {
 	m_painter->drawPolyline(a, index, n);
 	if (m_useMask) m_maskPainter.drawPolyline(a, index, n);
     }
 
     void drawPixmap(int x, int y, const QPixmap &pm,
-		    int sx = 0, int sy = 0, int sw = -1, int sh = -1) {
-	m_painter->drawPixmap(x, y, pm, sx, sy, sw, sh);
-	if (m_useMask) m_maskPainter.drawPixmap(x, y, *(pm.mask()), sx, sy, sw, sh);
-    }
+		    				int sx = 0, int sy = 0, int sw = -1, int sh = -1) {
+		
+		m_painter->drawPixmap(x, y, pm, sx, sy, sw, sh);
+// 		if (m_useMask) m_maskPainter.drawPixmap(x, y, *(pm.mask()), sx, sy, sw, sh);
+		if (m_useMask) m_maskPainter.drawPixmap(x, y, (pm.mask()), sx, sy, sw, sh);	//### removed *
+	}
 
     void drawText(int x, int y, const QString &string) {
 	m_painter->drawText(x, y, string);

@@ -18,17 +18,19 @@
 #include "NoteStyleFileReader.h"
 
 #include <string>
-#include "NoteStyle.h"
-#include <QFileInfo>
-#include <QDir>
-
-#include <kglobal.h>
-#include <kstandarddirs.h>
-#include <klocale.h>
-
 #include "misc/Strings.h"
 #include "NotationStrings.h"
 #include "misc/Debug.h"
+#include "gui/general/IconLoader.h"
+#include "NoteStyle.h"
+
+#include <QFileInfo>
+#include <QDir>
+
+//#include <kglobal.h>
+//#include <kstandarddirs.h>
+#include <klocale.h>
+
 
 namespace Rosegarden {
 
@@ -37,9 +39,11 @@ NoteStyleFileReader::NoteStyleFileReader(std::string name) :
     m_style(new NoteStyle(name)),
     m_haveNote(false)
 {
-    QString styleDirectory =
-	KGlobal::dirs()->findResource("appdata", "styles/");
-
+	IconLoader il;
+//     QString styleDirectory =
+//	KGlobal::dirs()->findResource("appdata", "styles/");
+	QString styleDirectory = il.getResourcePath( "styles" );
+	
     QString styleFileName =
 	QString("%1/%2.xml").arg(styleDirectory).arg(strtoqstr(name));
 
@@ -74,14 +78,14 @@ NoteStyleFileReader::startElement(const QString &, const QString &,
     if (lcName == "rosegarden-note-style") {
 
 	QString s = attributes.value("base-style");
-	if (s) m_style->setBaseStyle(qstrtostr(s));
+	if ( !s.isEmpty() ) m_style->setBaseStyle(qstrtostr(s));
 
     } else if (lcName == "note") {
 
 	m_haveNote = true;
 	
 	QString s = attributes.value("type");
-	if (!s) {
+	if (s.isEmpty() ) {
 	    m_errorString = i18n("type is a required attribute of note");
 	    return false;
 	}
@@ -119,13 +123,13 @@ NoteStyleFileReader::setFromAttributes(Note::Type type,
     bool haveShape = false;
 
     s = attributes.value("shape");
-    if (s) {
+	if (!s.isEmpty() ) {
 	m_style->setShape(type, qstrtostr(s.toLower()));
 	haveShape = true;
     }
     
     s = attributes.value("charname");
-    if (s) {
+	if (!s.isEmpty() ) {
 	if (haveShape) {
 	    m_errorString = i18n("global and note elements may have shape "
 				 "or charname attribute, but not both");
@@ -136,16 +140,16 @@ NoteStyleFileReader::setFromAttributes(Note::Type type,
     }
 
     s = attributes.value("filled");
-    if (s) m_style->setFilled(type, s.toLower() == "true");
+	if (!s.isEmpty() ) m_style->setFilled(type, s.toLower() == "true");
     
     s = attributes.value("stem");
-    if (s) m_style->setStem(type, s.toLower() == "true");
+	if (!s.isEmpty() ) m_style->setStem(type, s.toLower() == "true");
     
     s = attributes.value("flags");
-    if (s) m_style->setFlagCount(type, s.toInt());
+	if (!s.isEmpty() ) m_style->setFlagCount(type, s.toInt());
     
     s = attributes.value("slashes");
-    if (s) m_style->setSlashCount(type, s.toInt());
+	if (!s.isEmpty() ) m_style->setSlashCount(type, s.toInt());
 
     NoteStyle::HFixPoint hfix;
     NoteStyle::VFixPoint vfix;
@@ -154,7 +158,7 @@ NoteStyleFileReader::setFromAttributes(Note::Type type,
     bool haveVFix = false;
 
     s = attributes.value("hfixpoint");
-    if (s) {
+	if (!s.isEmpty() ) {
 	s = s.toLower();
 	haveHFix = true;
 	if (s == "normal") hfix = NoteStyle::Normal;
@@ -164,7 +168,7 @@ NoteStyleFileReader::setFromAttributes(Note::Type type,
     }
 
     s = attributes.value("vfixpoint");
-    if (s) {
+	if (!s.isEmpty() ) {
 	s = s.toLower();
 	haveVFix = true;
 	if (s == "near") vfix = NoteStyle::Near;

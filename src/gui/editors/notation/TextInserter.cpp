@@ -72,12 +72,16 @@ void TextInserter::slotNotesSelected()
 
 void TextInserter::slotEraseSelected()
 {
-    m_parentView->actionCollection()->action("erase")->activate();
+//     m_parentView->actionCollection()->action("erase")->activate();
+	QAction *tac = findChild<QAction*>( "erase" );
+	tac->setEnabled(true);
 }
 
 void TextInserter::slotSelectSelected()
 {
-    m_parentView->actionCollection()->action("select")->activate();
+//     m_parentView->actionCollection()->action("select")->activate();
+	QAction *tac = findChild<QAction*>( "select" );
+	tac->setEnabled(true);
 }
 
 void TextInserter::ready()
@@ -139,8 +143,10 @@ void TextInserter::handleLeftButtonPress(timeT,
             (staff->getSegment(), insertionTime, m_text);
 
         if (eraseEvent) {
-            MacroCommand *macroCommand = new MacroCommand(command->objectName());
-            macroCommand->addCommand(new EraseEventCommand(staff->getSegment(),
+// 			MacroCommand *macroCommand = new MacroCommand(command->objectName());
+			MacroCommand *macroCommand = new MacroCommand( "macro_command_29533" );	//@@@
+			
+			macroCommand->addCommand(new EraseEventCommand(staff->getSegment(),
                                      eraseEvent, false));
             macroCommand->addCommand(command);
             m_nParentView->addCommandToHistory(macroCommand);

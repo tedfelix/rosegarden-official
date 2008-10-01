@@ -17,10 +17,9 @@
 
 
 #include "SegmentParameterBox.h"
-#include <QLayout>
-#include <QApplication>
 
 #include <klocale.h>
+
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "document/ConfigGroups.h"
@@ -48,13 +47,17 @@
 #include "gui/widgets/TristateCheckBox.h"
 #include "RosegardenParameterArea.h"
 #include "RosegardenParameterBox.h"
-#include <kcolordialog.h>
-#include <QComboBox>
 #include "document/Command.h"
+
+
+#include <QColorDialog>
+#include <QLayout>
+#include <QApplication>
+#include <QComboBox>
 #include <QSettings>
-#include <klineeditdlg.h>
-#include <ktabwidget.h>
-#include <qbutton.h>
+#include <QInputDialog>
+#include <QTabWidget>
+#include <QPushButton>
 #include <QCheckBox>
 #include <QColor>
 #include <QDialog>
@@ -64,11 +67,13 @@
 #include <QLabel>
 #include <QPixmap>
 #include <QPushButton>
-#include <qscrollview.h>
+#include <QScrollArea>
 #include <QSpinBox>
 #include <QString>
 #include <QToolTip>
 #include <QWidget>
+#include <QLayout>
+#include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QStackedWidget>
 

@@ -26,10 +26,12 @@
 
 
 class QWidget;
-class QVGroupBox;
+//class QVGroupBox;
+class QGroupBox;
+class QHBoxLayout;
 class QVBoxLayout;
-class QScrollView;
-class KTabWidget;
+class QScrollArea;
+class QTabWidget;
 
 
 namespace Rosegarden
@@ -88,10 +90,10 @@ private:
     void moveWidget(QWidget *old_container, QWidget *new_container,
                     RosegardenParameterBox *box);
 
-    QScrollView *m_scrollView; // Holds the m_classic container
+    QScrollArea *m_scrollView; // Holds the m_classic container
     QWidget *m_classic;        // The container widget for m_style==CLASSIC_STYLE.
     QVBoxLayout *m_classicLayout;
-    KTabWidget *m_tabBox;     // The container widget for m_style==TAB_BOX_STYLE.
+    QTabWidget *m_tabBox;     // The container widget for m_style==TAB_BOX_STYLE.
     QWidget *m_active;         // The current container widget.
     QWidget *m_spacing;
 };

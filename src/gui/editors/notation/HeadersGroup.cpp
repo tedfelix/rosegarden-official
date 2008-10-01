@@ -20,15 +20,18 @@
 
 
 #include <limits>
-#include <QSize>
-#include <QWidget>
-#include <QVBoxLayout>
-#include <QLabel>
 
 #include "HeadersGroup.h"
 #include "TrackHeader.h"
 #include "NotationView.h"
 #include "NotePixmapFactory.h"
+
+#include <QSize>
+#include <QWidget>
+#include <QLayout>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QLabel>
 
 
 namespace Rosegarden

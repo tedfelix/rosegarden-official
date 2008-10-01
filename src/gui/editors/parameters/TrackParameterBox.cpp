@@ -21,10 +21,10 @@
 
 
 #include "TrackParameterBox.h"
-#include <QLayout>
-#include <QApplication>
 
 #include <klocale.h>
+//#include <ksqueezedtextlabel.h>
+
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "gui/general/ClefIndex.h"
@@ -52,13 +52,15 @@
 #include "RosegardenParameterArea.h"
 #include "RosegardenParameterBox.h"
 #include "sound/PluginIdentifier.h"
-#include <kcolordialog.h>
+
+#include <QColorDialog>
+#include <QLayout>
+#include <QApplication>
 #include <QComboBox>
 #include <QSettings>
-#include <klineeditdlg.h>
+#include <QInputDialog>
 #include <QMessageBox>
-#include <ksqueezedtextlabel.h>
-#include <ktabwidget.h>
+#include <QTabWidget>
 #include <QColor>
 #include <QDialog>
 #include <QFont>
@@ -68,7 +70,7 @@
 #include <QPixmap>
 #include <QPushButton>
 #include <QRegExp>
-#include <qscrollview.h>
+#include <QScrollArea>
 #include <QString>
 #include <QToolTip>
 #include <QWidget>
@@ -874,10 +876,12 @@ TrackParameterBox::slotColorChanged(int index)
         ColourMap newMap = m_doc->getComposition().getSegmentColourMap();
         QColor newColour;
         bool ok = false;
-        QString newName = KLineEditDlg::getText(i18n("New Color Name"), i18n("Enter new name"),
-                                                i18n("New"), &ok);
+        
+		QString newName = QInputDialog::getText(0, i18n("New Color Name"), i18n("Enter new name"),
+				QLineEdit::Normal, i18n("New"), &ok );
+		
         if ((ok == true) && (!newName.isEmpty())) {
-            KColorDialog box(this, "", true);
+            QColorDialog box(this, "", true);
 
             int result = box.getColor(newColour);
 
@@ -957,8 +961,10 @@ TrackParameterBox::slotPresetPressed()
                 m_doc->getCommandHistory()->addCommand(command);
             }
             m_defClef->setCurrentIndex(dialog.getClef());
-            m_defTranspose->setCurrentIndex(QString("%1").arg
-                                           (dialog.getTranspose()), true);
+// 			m_defTranspose->setCurrentIndex(QString("%1").arg
+// 					(dialog.getTranspose()), true);
+			m_defTranspose->setCurrentText( QString("%1").arg
+					(dialog.getTranspose()) );
 
             m_highestPlayable = dialog.getHighRange();
             m_lowestPlayable = dialog.getLowRange();
@@ -977,7 +983,7 @@ TrackParameterBox::slotPresetPressed()
         // row/column of the corruption, but I can't be bothered to work
         // that out just at the moment.  Hopefully this code will never
         // execute anyway.
-        /* was sorry */ QMessageBox::warning(0, i18n("The instrument preset database is corrupt.  Check your installation."));
+        /* was sorry */ QMessageBox::warning(0, "", i18n("The instrument preset database is corrupt.  Check your installation."));
     }
 
 }

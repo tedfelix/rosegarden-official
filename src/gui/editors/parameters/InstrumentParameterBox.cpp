@@ -17,9 +17,9 @@
 
 
 #include "InstrumentParameterBox.h"
-#include <QLayout>
 
 #include <klocale.h>
+
 #include "misc/Debug.h"
 #include "AudioInstrumentParameterPanel.h"
 #include "base/Instrument.h"
@@ -28,13 +28,15 @@
 #include "MIDIInstrumentParameterPanel.h"
 #include "RosegardenParameterArea.h"
 #include "RosegardenParameterBox.h"
-#include <ktabwidget.h>
+
+#include <QTabWidget>
 #include <QFont>
 #include <QFrame>
-#include <qscrollview.h>
+#include <QScrollArea>
 #include <QString>
 #include <QWidget>
 #include <QStackedWidget>
+#include <QLayout>
 
 
 namespace Rosegarden

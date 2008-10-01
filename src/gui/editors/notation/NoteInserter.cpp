@@ -18,10 +18,10 @@
 
 #include "NoteInserter.h"
 #include "misc/Debug.h"
-#include <QApplication>
+
+#include <klocale.h>
 
 #include "base/BaseProperties.h"
-#include <klocale.h>
 #include "misc/Strings.h"
 #include "document/ConfigGroups.h"
 #include "base/Event.h"
@@ -34,6 +34,7 @@
 #include "commands/notation/TupletCommand.h"
 #include "gui/general/EditTool.h"
 #include "gui/general/LinedStaff.h"
+#include "gui/general/IconLoader.h"
 #include "gui/general/RosegardenCanvasView.h"
 #include "NotationProperties.h"
 #include "NotationStrings.h"
@@ -42,12 +43,14 @@
 #include "NotationStaff.h"
 #include "NotePixmapFactory.h"
 #include "NoteStyleFactory.h"
-#include <QAction>
 #include "document/Command.h"
+
+#include <QAction>
 #include <QSettings>
 #include <QIcon>
 #include <QRegExp>
 #include <QString>
+#include <QApplication>
 
 
 namespace Rosegarden
@@ -81,23 +84,27 @@ NoteInserter::NoteInserter(NotationView* view)
 	autoBeamAction->setAutoRepeat( false );	//
     // autoBeamAction->setActionGroup( 0 );	// QActionGroup*
     autoBeamAction->setChecked( m_autoBeam );
-
+	
+	QActionGroup *qag_accidentals = new QActionGroup(this);
+	
+	IconLoader il;
     for (unsigned int i = 0; i < 6; ++i) {
 
-        icon = QIcon
-               (NotePixmapFactory::toQPixmap(NotePixmapFactory::
-                                             makeToolbarPixmap(m_actionsAccidental[i][3])));
-        KRadioAction* noteAction = new KRadioAction(i18n(m_actionsAccidental[i][0]),
-                                   icon, 0, this,
-                                   m_actionsAccidental[i][1],
-                                   actionCollection(),
-                                   m_actionsAccidental[i][2]);
-        noteAction->setExclusiveGroup("accidentals");
+//         icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::
+//                                              makeToolbarPixmap(m_actionsAccidental[i][3])));
+		icon = il.load( m_actionsAccidental[i][3] );
+        QAction* noteAction = new QAction( icon, i18n(m_actionsAccidental[i][0]), this );
+        connect( noteAction, SIGNAL(triggered(bool)), this,
+                                   SLOT(m_actionsAccidental[i][1]) );
+        noteAction->setObjectName( m_actionsAccidental[i][2] );
+//         noteAction->setExclusiveGroup("accidentals");
+		qag_accidentals->addAction( noteAction );
     }
 
-    icon = QIcon
-           (NotePixmapFactory::toQPixmap(NotePixmapFactory::
-                                         makeToolbarPixmap("dotted-crotchet")));
+//     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::
+//                                          makeToolbarPixmap("dotted-crotchet")));
+	
+	icon = il.load("dotted-crotchet");
     QAction* qa_toggle_dot = new QAction( icon, i18n("Dotted note"), dynamic_cast<QObject*>(this) );
 	connect( qa_toggle_dot, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToogleDot()) );//@@@ slot exists ?	
 	qa_toggle_dot->setObjectName( "toggle_dot" );	//### FIX: deallocate QAction ptr
@@ -130,7 +137,9 @@ NoteInserter::NoteInserter(NotationView* view)
             this, SLOT(slotSetAccidental(Accidental, bool)));
 
     // Push down the default RadioAction on Accidentals.
-    m_parentView->actionCollection()->action("no_accidental")->activate();
+	QAction *tac = m_parentView->findChild<QAction*>( "no_accidental" );
+	tac->setEnabled(true);
+//     m_parentView->actionCollection()->action("no_accidental")->activate();
 }
 
 NoteInserter::NoteInserter(const QString& menuName, NotationView* view)
@@ -147,7 +156,9 @@ NoteInserter::NoteInserter(const QString& menuName, NotationView* view)
             this, SLOT(slotSetAccidental(Accidental, bool)));
 
     // Push down the default RadioAction on Accidentals.
-    m_parentView->actionCollection()->action("no_accidental")->activate();
+	QAction* tac = m_parentView->findChild<QAction*>( "no_accidental" );
+	tac->setEnabled(true);
+// 	m_parentView->actionCollection()->action("no_accidental")->activate();
 }
 
 NoteInserter::~NoteInserter()
@@ -539,9 +550,9 @@ NoteInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
         noteEnd = time + (note.getDuration() * 2 / 3);
     }
 
-    if (time < segment.getStartTime() ||
-        endTime > segment.getEndMarkerTime() ||
-        noteEnd > segment.getEndMarkerTime()) {
+    if ( time < segment.getStartTime() ||
+        	endTime > segment.getEndMarkerTime() ||
+        	noteEnd > segment.getEndMarkerTime() ){
         return 0;
     }
 
@@ -574,7 +585,8 @@ NoteInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
         if (i != segment.end() &&
             !(*i)->has(BaseProperties::BEAMED_GROUP_TUPLET_BASE)) {
             
-            MacroCommand *command = new MacroCommand(insertionCommand->objectName());
+// 			MacroCommand *command = new MacroCommand(insertionCommand->objectName());
+			MacroCommand *command = new MacroCommand( "insertion_command" );	//@@@
 
             //## Attempted fix to bug reported on rg-user by SlowPic
             //## <slowpic@web.de> 28/02/2005 22:32:56 UTC: Triplet input error
@@ -613,8 +625,12 @@ void NoteInserter::slotSetNote(Note::Type nt)
 
 void NoteInserter::slotSetDots(unsigned int dots)
 {
-    /* was toggle */ QAction *dotsAction = dynamic_cast<QAction*>
-                                (actionCollection()->action("toggle_dot"));
+    /* was toggle */ 
+// 	QAction *dotsAction = dynamic_cast<QAction*>
+//                                 (actionCollection()->action("toggle_dot"));
+	
+	QAction* dotsAction = m_parentView->findChild<QAction*>( "toggle_dot" );
+	
     if (dotsAction && m_noteDots != dots) {
         dotsAction->setChecked(dots > 0);
         slotToggleDot();
@@ -633,37 +649,51 @@ void NoteInserter::slotSetAccidental(Accidental accidental,
 
 void NoteInserter::slotNoAccidental()
 {
-    m_parentView->actionCollection()->action("no_accidental")->activate();
+//     m_parentView->actionCollection()->action("no_accidental")->activate();
+	QAction* tac = m_parentView->findChild<QAction*>( "no_accidental" );
+	tac->setEnabled(true);
 }
 
 void NoteInserter::slotFollowAccidental()
 {
-    m_parentView->actionCollection()->action("follow_accidental")->activate();
+//     m_parentView->actionCollection()->action("follow_accidental")->activate();
+	QAction* tac = m_parentView->findChild<QAction*>( "follow_accidental" );
+	tac->setEnabled(true);
 }
 
 void NoteInserter::slotSharp()
 {
-    m_parentView->actionCollection()->action("sharp_accidental")->activate();
+//     m_parentView->actionCollection()->action("sharp_accidental")->activate();
+	QAction* tac = m_parentView->findChild<QAction*>( "sharp_accidental" );
+	tac->setEnabled(true);
 }
 
 void NoteInserter::slotFlat()
 {
-    m_parentView->actionCollection()->action("flat_accidental")->activate();
+//     m_parentView->actionCollection()->action("flat_accidental")->activate();
+	QAction* tac = m_parentView->findChild<QAction*>( "flat_accidental" );
+	tac->setEnabled(true);
 }
 
 void NoteInserter::slotNatural()
 {
-    m_parentView->actionCollection()->action("natural_accidental")->activate();
+//     m_parentView->actionCollection()->action("natural_accidental")->activate();
+	QAction* tac = m_parentView->findChild<QAction*>( "natural_accidental" );
+	tac->setEnabled(true);
 }
 
 void NoteInserter::slotDoubleSharp()
 {
-    m_parentView->actionCollection()->action("double_sharp_accidental")->activate();
+//     m_parentView->actionCollection()->action("double_sharp_accidental")->activate();
+	QAction* tac = m_parentView->findChild<QAction*>( "double_sharp_accidental" );
+	tac->setEnabled(true);
 }
 
 void NoteInserter::slotDoubleFlat()
 {
-    m_parentView->actionCollection()->action("double_flat_accidental")->activate();
+//     m_parentView->actionCollection()->action("double_flat_accidental")->activate();
+	QAction* tac = m_parentView->findChild<QAction*>( "double_flat_accidental" );
+	tac->setEnabled(true);
 }
 
 void NoteInserter::slotToggleDot()
@@ -672,11 +702,14 @@ void NoteInserter::slotToggleDot()
     Note note(m_noteType, m_noteDots);
     QString actionName(NotationStrings::getReferenceName(note));
     actionName.replace(QRegExp("-"), "_");
-    KAction *action = m_parentView->actionCollection()->action(actionName);
+	
+//     KAction *action = m_parentView->actionCollection()->action(actionName);
+	QAction* action = m_parentView->findChild<QAction*>( actionName );
+	
     if (!action) {
         std::cerr << "WARNING: No such action as " << actionName << std::endl;
     } else {
-        action->activate();
+        action->setEnabled(true);
     }
 }
 
@@ -687,12 +720,16 @@ void NoteInserter::slotToggleAutoBeam()
 
 void NoteInserter::slotEraseSelected()
 {
-    m_parentView->actionCollection()->action("erase")->activate();
+//     m_parentView->actionCollection()->action("erase")->activate();
+	QAction* tac = m_parentView->findChild<QAction*>( "erase" );
+	tac->setEnabled(true);
 }
 
 void NoteInserter::slotSelectSelected()
 {
-    m_parentView->actionCollection()->action("select")->activate();
+//     m_parentView->actionCollection()->action("select")->activate();
+	QAction* tac = m_parentView->findChild<QAction*>( "select" );
+	tac->setEnabled(true);
 }
 
 void NoteInserter::slotRestsSelected()
@@ -700,11 +737,14 @@ void NoteInserter::slotRestsSelected()
     Note note(m_noteType, m_noteDots);
     QString actionName(NotationStrings::getReferenceName(note, true));
     actionName.replace(QRegExp("-"), "_");
-    KAction *action = m_parentView->actionCollection()->action(actionName);
+	
+//     KAction *action = m_parentView->actionCollection()->action(actionName);
+	QAction* action = this->findChild<QAction*>( actionName );
+	
     if (!action) {
         std::cerr << "WARNING: No such action as " << actionName << std::endl;
     } else {
-        action->activate();
+        action->setEnabled(true);
     }
 }
 

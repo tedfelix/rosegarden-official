@@ -21,19 +21,20 @@
 #include "RosegardenParameterArea.h"
 
 #include "RosegardenParameterBox.h"
-#include <ktabwidget.h>
+#include <iostream>
+#include <set>
+
+#include <QTabWidget>
 #include <QFont>
 #include <QFrame>
 #include <QPoint>
-#include <qscrollview.h>
+#include <QScrollArea>
 #include <QString>
 #include <QLayout>
-#include <qvgroupbox.h>
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QStackedWidget>
-#include <iostream>
-#include <set>
+#include <QGroupBox>
 
 
 namespace Rosegarden
@@ -46,7 +47,7 @@ RosegardenParameterArea::RosegardenParameterArea(QWidget *parent,
         m_scrollView(new QScrollView(this, 0, Qt::WStaticContents)),
         m_classic(new QWidget(m_scrollView->viewport())),
         m_classicLayout(new QVBoxLayout),
-        m_tabBox(new KTabWidget(this)),
+        m_tabBox(new QTabWidget(this)),
         m_active(0),
         m_spacing(0)
 {
