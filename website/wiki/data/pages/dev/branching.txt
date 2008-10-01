@@ -20,6 +20,12 @@ Replace <user> with your sforge username and lilypond_everywhere with the branch
 <code>
 svn co my_branch
 </code>
+
+The full command to checkout my_branch using username is
+<code>
+svn checkout https://username@rosegarden.svn.sourceforge.net/svnroot/rosegarden/branches/my_branch my_branch
+</code>
+
 =====3 Committing changes to the branch=====
 
 Working with branches is as easy as working with the trunk. Commit the changes from the root directory of the branch.
@@ -29,7 +35,12 @@ svn commit -m "Text which describes the updates."
 </code>
 =====4 Merging changes from trunk to the branch=====
 
-If you would like to merge changes since svn version 8115, do
+You may check the Last Changed revision of the branch with command
+<code>
+svn info
+</code>
+Let us suppose that the last changed svn version was 8114. Then you would like to 
+merge all changes since svn version 8115. You may do it with command
 <code>
 svn merge -r 8115:HEAD https://rosegarden.svn.sourceforge.net/svnroot/rosegarden/trunk/rosegarden
 </code>

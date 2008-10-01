@@ -1,42 +1,63 @@
+ROSEGARDEN 1.7.2 RELEASED 2008-09-03/9-3-2008
 
-======Things To Do for 1.8.0======
+The Rosegarden team is proud to announce the release of version 1.7.2
+of Rosegarden, an audio and MIDI sequencer and musical notation editor
+for Linux.
 
+  http://www.rosegardenmusic.com/
 
+This is a maintenance release that follows close on the heels of 1.7.1.  It includes some comparatively small but really interesting new features and usability improvements, which mostly concern lyrics, and a new lead sheet LilyPond export mode that lets you make lead sheets by using LilyPond format chord texts (eg. g:maj7) over top of your lead line.  None of these features have been documented yet, unfortunately.
 
-=====Planned=====
+Heikki Junes deserves the lion's share of credit for this release.  All the features and most of the bug fixes have his name written all over them.  Thanks, Heikki!
 
-  *
-
-
-
-=====Implemented=====
-
-
+We're also releasing with several translations that are 100% complete, and many that are 80% or more, which is a big improvement over 1.7.1, which released with no translation updates at all.
 
 ====New Features====
 
-  * Blah (Billy-Ray, since rev xxxx)
+  * Use the same order of menu items in the right-mouse button menu for both note insertion and rest insertion (Heikki, rev. 8977)
+  * Make changing between non-dotted notes and dotted rests on the various notation editor toolbars more sensible (Heikki, rev. 8979)
+  * New LilyPond export option to interpret chord texts as lead sheet chord names (Heikki, rev. 8983)
+  * Place the chords above the staff in the notation view (works for the first segment in the track) (Heikki, rev. 8984)
+  * Fix the placing of the chords if the segment does not start from first bar (Heikki, rev. 8984)
+  * Allow lead sheets with only a single chord (Heikki, rev. 8984)
+  * Lyrics editing improvements:
+    - A newline can be used as an alternative way to separate syllables in lyrics.
+    - If a full list of syllables is copied and pasted into an emptied lyrics editor, the syllables will not just be entered to the first bar, as used to be the case, but instead they will be be distributed over the whole melody (Heikki, rev. 9009)
+    - Allow removing a verse even when there is only one verse left (Heikki, rev. 9013)
+    - Set cursor position in the beginning of the text when opening the lyric edit dialog (Heikki, rev. 9021)
+    - Allow spaces in the syllables of lyrics to be exported to LilyPond (Heikki, rev. 9022)
+
+
 
 ====Significant Bug Fixes====
+  * Edit cursor now displayed correctly when editing multiple staffs in the same notation view (Yves, rev 8876)*
+  * Parameters areas now update correctly when using “Convert notation for…” function from notation view (Yves, rev 8878)*
+  * Prevent crash when changing from the rest insertion to the note insertion in NotationView using the right-mouse button menu (Heikki, rev. 8977)
+  * Fix updating the note/rest duration buttons in NotationView when changing the dotting of notes or rests with the period (`.') button (Heikki, rev. 8977)
+  * Fix broken export of invisible key signatures to LilyPond (Michael, rev. 8989)
+  * The notation editor now comes up with its default accidental entry mode ("No accidental") shown to be in effect, instead of leaving it to be assumed (Heikki, rev 8995))
 
-  * Blah (Billy-Ray, since rev xxxx)
-
-
-====New Members====
-
-We'd like to thank the following for their continuing quality contributions, and welcome them to the Rosegarden team!
-
-  *
+*   omitted from release notes for 1.7.1
 
 
 
 ====Thanks to====
+Active translators for this release:
+  * Heikki Junes (Finnish)
+  * D. Michael McIntyre (Spanish, French, British English)
+  * Oota Toshiya (Japanese)
+  * Emanuel Rumpf (German)
+  * Alexandre Prokoudine (Russian)
 
 Other people who contributed to Rosegarden development:
 
-  *
+  * Daniel Weber*
+
+    (*) omitted from release notes for 1.7.1
 
 People who contributed device files to the Rosegarden Library
 
-  *
+  * Ryno Louw
+  * Daniel F. Smith
+  * Renate Neumayer
 

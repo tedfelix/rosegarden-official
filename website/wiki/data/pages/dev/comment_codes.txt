@@ -1,0 +1,8 @@
+====== Source Code Comment Flags ======
+  * indicates code that has been temporarily disabled in order to get a file to compile.  **use very sparingly!**<code>//&&&</code>
+  * indicates places in the code where the person doing the porting wasn't completely certain about the right thing to do, and made a best guess.  If these guesses are incorrect, there could be problems after the code is running, and these comments are the first place to look for solutions to weird problems.<code>//@@@</code>
+  * indicates an inline port-related comment.  Use these to show relevant research into a problem you have investigated, but either can't or don't have time to solve yourself, so whoever follows doesn't have to repeat the legwork.  These can also be used for other general port-related comments.<code>//###</code>
+  * a traditional comment flag that can mean either TODO or "this code is probably crap."  These are old, and likely of no real concern to us during the port.<code>//!!!</code>
+
+  * **find** very-critical debug **messages** with the commands - (**list files:**)<code>grep -lir "@@@" * | egrep "cpp$"</code> and (**list lines:**)<code> grep -nir "@@@" *</code>
+  

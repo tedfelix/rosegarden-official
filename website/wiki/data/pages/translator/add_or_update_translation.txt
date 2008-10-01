@@ -5,7 +5,7 @@ This page is about translating Rosegarden to your language. For developers, ther
 
 
 
-This is the current state of translations (see date below) :
+This is the current state of translations as of this writing (see date below) :
 <code>
 branches/stable_1_7/po$ bash ../scripts/po-stats
 Translation status report for Rosegarden project
@@ -35,7 +35,7 @@ en 	 2322 	 0 	 0 	2322	 [     ]
 
 Report produced at Thu, 01 May 2008 11:55:52 +0100
 </code>
-If you plan to update the translation of your language, download the release tarball, or pick it from http://rosegarden.svn.sourceforge.net/viewvc/rosegarden/branches/stable_1_7/po/ and just translate the strings. You may get hints of the procedure from the instructions in this page.
+If you plan to update the translation of your language, download the release tarball, or pick it from http://rosegarden.svn.sourceforge.net/viewvc/rosegarden/branches/stable_1_7_2/po/ and just translate the strings. You may get hints of the procedure from the instructions in this page.
 
 
 

@@ -7,3 +7,8 @@ Complete articles written by users for users.
 
   * [[Using Lilypond to merge four part staffs ]]: a quick and dirty guide
 
+  * [[Setting up the FluidR3_GM.sf2 for timidity]]: may need some tweaking. SOM
+
+  * [[Chord names for LilyPond export]]: Syntax to use when entering chord names for LilyPond Export. SOM
+
+  * [[Keystrokes]]: Using keystrokes for workflow continuity.

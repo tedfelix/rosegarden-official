@@ -1,0 +1,69 @@
+====== Using FluidR3_GM.sf2 in Timidity++ ======
+
+Someone has suggested that timidity++ is not up to it when it comes to being a nice midi synth for use with Rosegarden. I investigated ways to improve its sound by using the FluidR3_GM.sf2 soundfont which can be found in the package repositories of many distributions these days. Timidity is ideal for those who do not want to use jackd to set up softsynths such as fluidsynth or the dssi set of softsynths. If you only work in midi and have no wish to do audio work maybe the following advice might be your best bet for getting quality sound out of Rosegarden.
+
+You will need admin privileges to do the following. On Red Hat based distros you are not always set up to use sudo, you might have to su  to a privileged shell, instead.
+----
+
+
+First install the soundfont
+
+''sudo apt-get install FluidR3_GM.sf2'' \\
+or\\
+''sudo yum install FluidR3_GM.sf2'' (if you're on a Red Hat based distro)
+
+Other people you're on your own. :-D
+
+You will find it in ''/usr/share/sounds/sf2/''  (Ubuntu, possibly all debian derivs)\\
+or\\
+''/usr/share/soundfonts/'' (redhat)
+
+Then open /etc/timidity/timidity.cfg
+
+''sudo gedit /etc/timidity/timidity.cfg''
+
+There will be a line at the bottom of the config file which reads
+
+''source freepats.cfg'' 
+
+replace that with the following
+
+(Ubuntu)
+
+''dir /usr/share/sounds/sf2/''\\
+''soundfont FluidR3_GM.sf2''
+
+(Red Hat)
+
+''dir /usr/share/soundfonts/''\\
+''soundfont FluidR3_GM.sf2''
+
+save the file...
+
+And then in a terminal do
+
+''sudo /etc/init.d/timidity restart''\\
+for Ubuntu and friends
+
+For Fedora you might need to install timidity++ and set it up to run as a daemon as it is done in Ubuntu. This is beyond my knowledge. Perhaps you know how to do this? I know that CCRMA has timidity++ in its list of applications.\\
+See\\
+http://ccrma.stanford.edu/planetccrma/software/soundapps.html.
+
+====== The Second Part: What happens in Rosegarden ======
+
+When you start up Rosegarden and open an rg file, you may still be disappointed that you don't get sound out of the box. 
+
+What you need to do is go to Studio -> Manage Midi Devices\\
+There will be a series of midi ports as in the following picture.
+
+{{:managemididevices1.png|}}
+
+These need to be changed to the following.
+
+{{:managemididevices2.png|}}
+
+Click on the ''14:0 Midi Through Port-0 (duplex)'' and change to ''128:0 TiMidity port 0 (write)''.
+
+Then play the song and hear the music. You might save this as your default studio for new files.
+
+SOM

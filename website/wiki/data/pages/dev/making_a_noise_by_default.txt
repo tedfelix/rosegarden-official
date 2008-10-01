@@ -19,6 +19,8 @@ We need to fix the first two, and preferably all three, of these things if the r
   * //a proper kernel, which becomes the default after the next reboot//
   * //Rosegarden, JACK and friends (eg. QAMix)//
   * //TiMidity + Freepats set up to run as a quasi system daemon (and is apparently slated to upgrade to FluidSynth + fluid-soundfont for Hardy or whatever comes after Hardy)//
+  (SOM- see my tutorial on setting this up for yourselves\\
+ http://www.rosegardenmusic.com/wiki/setting_up_the_fluidr3_gm.sf2_for_timidity?do=index)\\ 
   * //sundry other goodies//
 
 
@@ -54,4 +56,4 @@ My experiments with this kind of thing in STG suggest that getting any external 
 
 
 
-//It's probably the cheapest and most free way to get some kind of MIDI working using stock distro packages, but without depending on DSSI plugins, and it runs as an ALSA sequencer client. I just haven't traditionally recommended it, because I think it sounds inferior to QSynth with a good, big soundfont. Though anyway, my thinking away from DSSI is probably colored by its traditional association with JACK, and all the extra trouble that entails. If DSSI could come up working on any bog standard non-audio distro, that might be the best way to go indeed. We could try that route first, and see how it fares on old hardware. Most of our users seem to want to run Rosegarden on an 800 MHz PIII, because "Linux runs great on old computers." We might even go so far as to put up some "You're pissing in the wind with this fossil" warning dialog about low CPU power and low RAM too. Just look at my own futile resistance to JACK, and stubborn insistence on getting all of this to work on a vanilla distro. I only enjoyed success once I finally relented.//
+//It's probably the cheapest and most free way to get some kind of MIDI working using stock distro packages, but without depending on DSSI plugins, and it runs as an ALSA sequencer client. I just haven't traditionally recommended it, because I think it sounds inferior to QSynth with a good, big soundfont. Though anyway, my thinking away from DSSI is probably colored by its traditional association with JACK, and all the extra trouble that entails. If DSSI could come up working on any bog standard non-audio distro, that might be the best way to go indeed. We could try that route first, and see how it fares on old hardware. Most of our users seem to want to run Rosegarden on an 800 MHz PIII, because "Linux runs great on old computers." We might even go so far as to put up some "You're pissing in the wind with this fossil" warning dialog about low CPU power and low RAM too. Just look at my own futile resistance to JACK, and stubborn insistence on getting all of this to work on a vanilla distro. I only enjoyed success once I finally relented.//[[Internal Link]]

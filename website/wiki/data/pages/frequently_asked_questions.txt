@@ -110,6 +110,10 @@ On the main window go to //Settings->View Track Labels//
 Either click with the right mouse button, or click and hold with the left mouse button, on the track/instrument label. A pop-up will appear from which you can choose a new instrument for the track.
 
 
+====How do I listen to a piece at half speed?====
+
+Assuming that there are many complex tempo changes already in the piece, I don't know.  Anyone?
+
 
 ====How do I rename a segment?====
 

@@ -5,13 +5,17 @@ See also:
 
   * [[http://doc.trolltech.com/4.1/porting4.html|Porting from Qt3 to Qt4]]
   * [[http://websvn.kde.org/*checkout*/trunk/KDE/kdelibs/KDE4PORTING.html|Porting from KDE3 to KDE4]]
-
+  * [[cases_that_we_know_require_hand_coding|Cases we know will require hand editing of the code]]
+  * [[dev:notes_on_porting_to_qt4_examples|Porting RG, qt3->qt4 *Examples*]]
+  * [[dev:rg_qt4_task_list|List of current and completed developer tasks for RG QT4 port]]
+=====Work so far=====
+[[dev:rg_qt4_task_list|List of current and completed developer tasks for RG QT4 port]]
 =====Structuring the work=====
 
 Four sorts of work here:
 
-  - Preliminary or refactoring work that does not depend on any major Qt4 conversion slog (but that some Qt4 conversion slog may depend on).  For example, making the sequencer a thread rather than a process (if we did that).
-  - Major Qt4 conversion slog that can be scripted.  See [[A Programme For Tedium]].
+  - <del>Preliminary or refactoring work that does not depend on any major Qt4 conversion slog (but that some Qt4 conversion slog may depend on).  For example, making the sequencer a thread rather than a process (if we did that).</del>
+  - <del>Major Qt4 conversion slog that can be scripted.  See [[A Programme For Tedium]].</del>
   - Major Qt4 conversion slog that can't be scripted (dull manual tasks).
   - The "rewrite bits" -- work that takes serious thought and depends on already having a Qt4 backbone, such as the notation editor canvas.
 
@@ -87,6 +91,8 @@ At a glance, it looks like KBabel can handle the QT stuff, but not vice versa.
 The most recent linguist-qt4 I have doesn't know what to do with .po files,
 but the most recent KBabel I have does apparently know how to handle .ts
 files.
+
+COMMENTS: Either option looks evil, but if we're definitely allowing KDE classes in, I'm (dmm) just more comfortable with the i18n option for no really specific and highly justifiable reason.  tr() just seems comparatively lame.
 
 ====DCOP====
 
@@ -217,12 +223,17 @@ world, but native printing is pure evil to me, and I wouldn't miss it a bit.
 
 **Arguments against:**
 
-1) There are still a few things LilyPond does not export at all.  Pedal marks,
-ottavas, C vs. 4/4 per user preference,
+1) There are still a few things LilyPond does not export at all.  Pedal marks
+(FIXED), ottavas (FIXED), C vs. 4/4 per user preference (FIXED),
 
 2) The whole rosegarden-lilypondview thing is still rather fragile, and we
 never have done an adequate job of coming up with some way to make sure users
 have the right helper applications in place.
+
+3) One of the reasons I work here is because it used to be (and maybe still is) the case that NoteEdit (now Canorus) could only print with external help, whereas Rosegarden could just print and be done with it.  (Similar feelings about their old dependency on the TSE3 library.)  That impression was formed long ago in a different age when everything worked more poorly than it does now, but I still have a little nostalgia for the idea that we can do our own printing in house.
+
+It's probably a lot more sensible just to ditch it though, and focus attention on the remaining LilyPond edge cases that still allow a user to draw X on the screen but force him to print Y.  (One such that springs to mind is [[http://sourceforge.net/tracker/index.php?func=detail&aid=1560372&group_id=4932&atid=104932]])
+
 ====Help====
 
 Qt4 includes a help module starting in Qt4.4 (http://doc.trolltech.com/4.4/qthelp.html).  I haven't tried to use it.  I think the help is expected to be represented as a set of HTML files.  I'm a bit suspicious about how far the Qt classes actually get you -- I don't really want to be firing up "Qt Assistant" as a help browser -- we want to either have desktop integration (i.e. use the same help browser as KDE, or even a standard web browser) or have our own built-in help window (which it seems can be done without too much trouble using QTextBrowser).
@@ -236,6 +247,12 @@ I'm no great fan of the KDE3 help window; half the time it doesn't even show up 
 As far as that goes, I wouldn't much object to converting the whole thing to HTML or something, and doing away with the Docbook.  Docbook can offer lots of cool things, but we don't really care, and it's off-putting.  We've recently had two different people run away screaming after looking at the source for the manual.//
 
 I totally agree about losing Docbook. (Chris)
+
+And then (Michael) we have the complication of someone having taken it under her wing to face lift the thing, and who has agreed to take it upon herself (Shelagh) to wrestle with the evil Docbook syntax for the furtherment of all humankind and stuff.  If KDE4 uses Docbook still, we might ought to just leave well enough alone. (Shelagh) Hey I don't care what you use for the manual, I'd still be happy to do the documentation whatever evil markup you decide to use.
+
+I should check into this.  I currently have KDE4 installed and runnable, but I'm only looking at the -4 apps from my -3 desktop, rather than actually suffering with the whole experience.  (And many of the apps, if not most, are totally broken in this environment, incidentally.)  (I haven't tried the 4.1 beta yet either.  I think it's 4.1 isn't it?  I'm waiting for it to get out of beta before I mess with it at all.)
+
+I have to say this entire overriding issue is almost enough to send me to Windows or, to Guillaume's great delight, OS-X at this point.  Of course I'm still here because I took a 66% pay cut and I'm having to liquidate my life to try to keep out of bankruptcy court, so on the other hand, beer free software is good software.
 
 =====Breakdown of individual classes=====
 
@@ -275,7 +292,7 @@ then later discovering that doesn't work.
 | |KListViewItem| |
 | |KMainWindow| |
 | |KMessageBox| |
-| |KProcess| |
+|Partially|KProcess| Changed from KDE3 and QProcess has changed from QT3.  Port to QT4, but this looks like it can only be partially mechanized. |
 | |KProgress| |
 | |KProgressDialog| |
 | |KRadioAction| |
@@ -369,7 +386,7 @@ then later discovering that doesn't work.
 | |QPushButton| |
 | |QRadioButton| |
 | |QRect| |
-| |QRegExp| |
+|No|QRegExp|We need to replace search() with indexIn(), which is a simple swap in four files, but this conflicts with QString::search() among possible others, and it would take more effort to try to script this than it would to just go make the four changes by hand. |
 | |QRegion| |
 | |QResizeEvent| |
 | |QRgb| |
@@ -410,7 +427,7 @@ then later discovering that doesn't work.
 | |QToolTip| |
 | |QUriDrag| |
 | |QValueList| |
-| |QValueVector| |
+|Yes|QValueVector|Changes to QVector in QT4, with syntactical changes that don't seem to affect us |
 | |QWheelEvent| |
 | |QWidget| |
 | |QWidgetItem| |

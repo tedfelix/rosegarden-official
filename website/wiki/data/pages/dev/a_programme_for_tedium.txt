@@ -108,6 +108,8 @@ and then reading the file.  Errors worth ignoring at this stage include:
 
   * Anything to do with DCOP
   * Anything with QCanvas in it
+  * Anything in the src/gui/kdeext directory
+  * src/gui/widgets/Rotary.cpp and .h -- this has already been ported in SV and should be ported back from there
   * Anything that turns out to need some actual code, not just simple search and replace.  (Though if you get as far as finding out that it needs real code, it might be worth adding a comment in convert.pl to say that you at least looked into it.)
 
 ===== What to commit =====
@@ -118,6 +120,6 @@ At this stage, try to avoid committing your actual code changes.  It's simpler j
   $ svn commit convert.pl
 </code>
 
-(If you think it would be better to commit all the code as we go along, say so.  I've changed my mind about this more than once already.)
+(If you think it would be better to commit all the code as we go along, say so.  I've changed my mind about this more than once already.) (Michael says:  "No.  Just commit to convert.pl.  It's the way to go.  Since we have some considerable amount of active work in trunk/ to merge in, what I'm aiming to try to do is use this branch in its current states as a testbed for convert.pl, and then try running it on an updated/merged branch that pulls in all the changes from trunk/ one last time before we finally have to do a hard fork.  After that hard fork, porting in people's ongoing work on the old QT3 code will become increasingly tedious and undesirable to deal with.")
 
 And finally, **tell the rosegarden-devel list** all about what you've done, no matter how trivial.  Let's keep the noise up!

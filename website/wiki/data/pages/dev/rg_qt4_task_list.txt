@@ -1,0 +1,164 @@
+====== RG QT4 Port Development Task List ======
+
+See also: [[dev:notes_on_porting_to_qt4|Thoughts on porting to Qt4/KDE4]]
+
+[[dev:directories_compiled|Directories that compile 100%]]
+
+===== Summary =====
+This page is for the developers involved in the Rosegarden QT4 port.  The intent is to track each developers current task and to log their accomplishments.  Let's hope this works easily for everyone involved.
+
+**NOTE** that Qt4 porting work is now happening in the ''qt4'' branch.  The ''qt4-mechanised'' and ''rg_qt4_01'' branches are no longer being actively used.
+
+Avoid Q3... (Support-) Classes !
+
+.
+
+===== Devel Notes =====
+We're using a variety of comment flags that have special meanings.  Please see the [[dev:comment_codes|comment codes list]] if you're not already familiar with <code>//@@@ //### //&&&</code> and so on.
+
+===== Open Tasks =====
+
+
+==== Current ====
+  * #3002: fix uses of **QProgressDialog** / QProgressBar
+  * #3003: qscrollview =>  **QScrollArea**
+  * #3004: qguardedptr => **QPointer**
+  * #3005: qdict.h, qdict => QMap 
+  * #3006: kkeydialog => ????
+  * #3007: qpopupmenu => **QToolTip** (or QMenu ?)
+  * #3008: qptrdict.h => **QHash**
+  * #3009: qmemarray.h => ????
+  * #3011: fix **QListWidget** (same obj. that are QListWidget now, should maybe be QTreeWidget)
+  * #3012: fix QShortcut
+  * #3013    (Emanuel) **QAction** stuff
+  * #3014    (Julie) remove QSettings from functions
+  * #3015: restoreLayout/saveLayout
+  * -
+  * ktempfile.h
+  * klistview.h     (a.o. in src/gui/studio/MidiDeviceListViewItem.h)
+  * klineeditdlg.h  (a.o. in src/gui/widgets/ColourTable.cpp)
+  * kdockwidget.h
+  * -
+  * KDockWidget
+  * KDockMainWindow
+  * KProgressDialog
+  * KApplication
+  * -
+  * - 
+  * **QPointArray** changes to what? (see note on devel list) (**QPolygon** or Q3PointArray are the choices; probably QPolygon, but I haven't really looked yet; just notating something while I see it, but moving on and trying to make myself stay on track instead of wandering and heaping too many things on my plate at once)
+  * -
+
+==== Later ====
+  * - 
+  * re-enable deactivated code
+  * remove include <QApplication> where unnecessary
+  * evtl. reenable QDialog->setHelp() (commit Revision: 9207)
+  * -
+  * - 
+  * investigate / replace qStrToBool() -> .toBool() for QSetting::value call.
+  * code cleanup
+  * test runs
+  * - 
+===== Developers =====
+==== Chris ====
+=== Current Tasks ===
+
+  * Replace KXMLGUI with something (more KXMLGUI? hard coding the menu structures? any opinions anyone?)
+
+  * Review build log and look for "difficult" fixes
+
+=== Recently Completed Tasks ===
+
+  * Fix debug stream stuff in misc/Debug.h (original code only works with -DDEBUG, not -DNDEBUG, and we would probably like to lose the KDE dependencey as well)
+
+  * Replace KDE implementations of recent-files list, network I/O for file retrieval, pixmap locator, and browser invocation with our own implementations (from SV).  See gui/general (RecentFiles, FileSource/TempDirectory, IconLoader) and invokeBrowser() in RGApp.cpp
+
+  * Handle KTempFile (QTemporaryFile is the general replacement, but I want to be a bit careful about this one)
+
+  * Go back and finish the DCOP removal work in threads branch, and then merge the results to the qt4 branch.
+
+  * Fix errors streaming MappedEvent to/from QDataStream -- it's likely that the need for this may be eliminated when DCOP is completely removed
+
+  * Fix a bunch of compile errors in calls to CommandRegistry::registerCommand -- these arise from changes to shortcut handling, and appeared as a result of the Kiftsgate branch merge
+
+==== Michael ====
+=== Current Tasks ===
+  * completing an all-new set of icons for the notation editor like I started to do a couple years ago, and got frustrated arguing with Chris over minuscule details.
+
+This set passes the Chris test.  Notes, clefs, and accidentals are done.  It would have been easier to do these with Inkscape, working with huge, sharp renderings of the font glyphs, but after an insanely long number of hours experimenting to get the best results, it turned out the only way to get crisp, crystal clear tiny little note pictures was to do them as bitmap graphics.  Scaled vector graphics can be wonderful, but they aren't very suitable for these shapes at these sizes, it turns out.  The only way we could ensure a good, crisp rendering would be to use much larger icons, and screen real estate is at too much of a premium for that.  So I've been staying up ridiculously late grinding pixels in the mill and redoing all of these things the old fashioned way.
+
+(I'm used up and burned out on the code, but at least I'm finding some way to make the next Rosegarden better.)
+
+
+=== Recently Completed Tasks ===
+  * skeet shooting (taking random potshots at easy looking bugs) (there are none left)
+  * fix remaining uses of QMessageBox calls
+  * A few additions to QT4 Mechanised branch
+  * We have quite a lot of tests that assume you can cast from QString to bool (to test for emptiness), which is no longer the case
+  * We had some parallel QPixmap::mask() bool issues I *think* I fixed by testing against isNul() in like fashion to the above
+  * i18n changeover is as complete at it can get without subsequent field testing (thanks to script from KDE4 SVN)
+  * Fixed problems with PresetGroup and friends.  All the presets-related code builds now.
+
+==== Emanuel ====
+=== Current Tasks ===
+  * investigate, fix QListWidget, QTreeWidget, QTableWidget
+  * - 
+  * #3010: KDockMainWindow => QMainWindow 
+  * fix uses of qApp->anyFunc() calls
+
+=== Planned next Tasks ===
+  * investigate QProgress stuff
+
+=== Waiting ===
+
+  * -
+  * remove QSettings from Constructors and Function calls, (declare "QSettings confq4;" instead.) 
+  * think about how to efficiently fix string conversion errors....
+
+=== Recently Completed Tasks ===
+  * fixed most of RosegardenGUIApp, now it finally compiles
+  * transform/fix remaining KAction calls
+  * fixed RosegardenTransport.h
+  * transformed KMessageBox (phase 1/2)
+  * KToggleAction phase 1,2,3
+  * substitued key constants
+  * fixed cmake
+  * replaced many kheaders
+  * kapp->config()
+  * readXXXEntry()
+  * writeXXXEntry()
+  * KConfig* => QSettings
+
+==== Yves ====
+=== Current Tasks ===
+  * Port QGroupBox
+  * Port QGridLayout
+
+=== Planned Next Tasks ===
+  * Port the few remaining KDialogBase 
+
+=== Recently Completed Tasks ===
+  * manually fix the remaining QHBox and QVBox
+  * Port QToolTip
+
+==== Julie ===
+=== Current Tasks ===
+    * Skeet Shooting, again.
+
+=== Recently Completed Tasks ===
+  * #3014 Remove QSettings argument from function declarations / definitions in .h / .cpp files. (Like Emanuel)
+  * #3001: **fix endGroup**: in svn-sources search for: "FIX-manually-(GW)" and add "xxxx.endGroup();" **after** the group has been used (after xxxx.value() or xxxx.setValue() statements). Finally change the comment from "FIX-manually-(GW)" to "FIX-manually-(FXD)" (or remove it), so we do not find the same location again.
+    * Match .startGroup/.endGroup.
+    * Unify variable names for QSettings to "settings" where appropriate.  (Old nomenclature was inconstant or just wrong in places.)
+  * Hunt for QProcess conversions.
+  * Fix "conversion from ‘QVariant’ to" errors.
+  * Investigate "<<" overload operator errors.
+    * convert affected QProcess sections.
+    * add missing #includes.
+
+==== David Willis ====
+=== Current Tasks ===
+   * fix CMake build system
+      * first pass at this submitted as patches for CMakeLists files
+      * work out why the build behaviour of QDebug operator << differs between qt4-makefile and that generated by CMake
+.

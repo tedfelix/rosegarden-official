@@ -1,0 +1,66 @@
+=====Cases we know require hand coding=====
+    * QComboBox::text() becomes itemText(), but I'm sure the word "text" appears umpty scadillion times, and I'm immediately relegating these cases to hand correction
+    * QRegExp no longer has search() and searchRev(), which have been replaced with 
+indexIn() and lastIndexIn() in QT4.
+
+We seem to use only search(), but there is also QString::search() among 
+possible others.  I find four files with QRegExp, but seven files 
+with "search(" and there is no easy common thread among the four files, and I 
+can devise no sensible way to weed out the search() calls that pertain to 
+QRegExp but not QString or whatever else.
+
+Since there are only four affected files, it makes the most sense to just go 
+change this by hand after we start working with post-converted files.
+
+src/document/io/LilyPondExporter.cpp:1200: error: ‘class QRegExp’ has no 
+member named ‘search’
+src/gui/application/StartupTester.cpp:121: error: ‘class QRegExp’ has no 
+member named ‘search’
+src/gui/application/StartupTester.cpp:157: error: ‘class QRegExp’ has no 
+member named ‘search’
+src/gui/studio/DeviceEditorDialog.cpp:346: error: ‘class QRegExp’ has no 
+member named ‘search’
+
+    * OK, the guide is here:
+
+[[http://doc.trolltech.com/4.3/qstring-qt3.html]]
+
+If you read up on the individual methods in the QT3-compatibility library, it 
+shows you what to switch to what in the port (so we could make the switches 
+ourselves to avoid using the hack library.)  For instance, QString::lower() 
+has become QString::toLower(), and so on.
+
+I picked a few of these at random, and if these can be automated, I don't have 
+enough experience with batch text manipulation to pull it off.  For every 
+term that needs to be replaced, there are at least twice as many occurrences 
+of that term as there are errors about QString not having that 
+member.  "latin1" for instance.  What else is using "latin1" and are all the 
+other classes switching from "latin1" to "toLatin1" like QString is?  Maybe, 
+maybe not.
+
+I'm moving on to the next one.
+
+    * We have another QString problem that might could be mechanized by somebody who 
+actually knows Perl.
+
+In RoseXmlHandler and probably elsewhere, we make frequent use of this idiom:
+
+        QString transposeStr = atts.value("defaultTranspose");
+        if (transposeStr) {
+            track->setTranspose(transposeStr.toInt());
+        }
+
+This depends on transposeStr being null if nothing was returned, 
+but "Comparisons between QStrings and NULL in order to determine whether 
+strings are empty are no longer allowed. Use isEmpty() instead."
+
+So all we need to do to this code snippet to make it work is rewrite it 
+thusly:
+
+        QString transposeStr = atts.value("defaultTranspose");
+        if (!transposeStr.isEmpty()) {
+            track->setTranspose(transposeStr.toInt());
+        }
+
+It might be easier to just fix these by hand than to try to whip up scripty 
+magic.  Especially for me.

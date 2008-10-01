@@ -7,3 +7,68 @@ A low latency kernel is included as part of [[https://help.ubuntu.com/community/
 
 
 After installation, reboot and be sure to choose the lowlatency kernel from the boot menu at startup, if it is not already the default.
+----
+ 
+=====Other Setups======
+
+If you don't use ubuntustudio or another specialized studio distribution, you may need to tweak certain things in your rt-kernel by hand. 
+
+First things:
+
+1. Add yourself to the audio group. This is the group that owns the /dev/snd/* set of files and joining this group means that you too are part-owner of the audio real-estate. I suppose it might be worthwhile checking that in your setup the group ownership of the /dev/snd/* are the audio group.
+
+In debian variants the cli command is:
+
+''adduser yourusername audio''
+
+If you know the commands for other distros, please update this page.
+
+2. Open the ''/etc/security/limits.conf'' (you will need to have admin privileges for this)
+
+It should have a section which looks like this somewhere near the end. If it doesn't, add it.
+
+''@audio		  rtprio  		 99'' \\
+''@audio 		  nice 			 -15'' \\
+''@audio                    memlock             250000'' \\
+
+This means that members (including devices) of the audio group have real time privileges and that devices in the audio group are not "nice" at all. They arbitrarily push other processes out of the queue to use the kernel. This is of course necessary for audio work so that you don't hear delays and clicks in your music.
+
+These are the main ones for assuring that you can use jackd in the real-time mode. If you have further problems, you may need to search through the [[http://lowlatency.linuxaudio.org/]] website to see what things they have to say about irq interrupts and other such arcane matters.
+
+  * http://rt.wiki.kernel.org/index.php/Main_Page
+
+  * http://rt.wiki.kernel.org/index.php/RT_PREEMPT_HOWTO
+
+  * http://proaudio.tuxfamily.org/wiki/index.php?title=Howto_RT_Kernel
+
+  * http://irc.esben-stien.name/mediawiki/index.php/Setting_Up_Real_Time_Operation_on_GNU/Linux_Systems
+
+This page was brought to you by someone who has a very **basic** knowledge of what to do with an rt-kernel. I hope that someone reads this who has **more** knowledge and improves and updates it. Thanks to the good people on the [[https://lists.sourceforge.net/lists/listinfo/rosegarden-user][rosegarden-user]] mailing list who responded with much of the information on this page.
+
+ --- //[[shelagh.manton@gmail.com|Shelagh Manton]] 2008/08/21 19:28//
+
+----
+
+This is directly lifted from a mail on rosegarden-user that talks about these settings.
+
+Other settings which might improve the audio performance are found in:
+
+''### in /etc/sysctl.conf,''
+
+''### dev.rtc.max-user-freq=1024'' \\
+''### dev.hpet.max-user-freq=1024'' \\
+''### dev.rtc.max-user-freq=2048'' \\
+''### dev.hpet.max-user-freq=2048'' \\
+''dev.rtc.max-user-freq=3072'' \\
+''dev.hpet.max-user-freq=3072'' \\
+
+Aside: If they aren't in that file, put them in and uncomment those you want to try out.
+
+You are free to try with different values, but some of those changes will require a new login session, and/or a reboot to take effect.  So if you are not sure, a reboot would be better, and also ensures that it does the same thing if you do need to reboot from time to time.  You can also experiment to learn about those. 
+
+Of course after all those, jackd command line parameters will be crucial for xruns issues.  I use mainly onboad/built-in audio chips (snd_intel8x0 module), I also use a SoundBlaster Live! card.  Here are the parameters I use for the SoundBlaster Live! card, I believe it also works fine with the Intel onboard audio chipset.
+
+   /usr/bin/jackd -R -P10 -dalsa -dhw:1 -r44100 -p128 -n2
+
+ --- //[[shelagh.manton@gmail.com|Shelagh Manton]] 2008/08/21 19:28//
+----

@@ -1,0 +1,10 @@
+If you want to use the default LilyPond jazz chord names in your exported LilyPond file, you need to learn the proper syntax for entering chord names.
+
+Firstly you need to write the pitch which is any of the letters that make up the music alphabet ''a'' through ''g''.
+Then you may add the sharps and flats, if needed.
+
+**Rosegarden** uses the standard **LilyPond** way of changing pitch with Dutch terms, this may confuse non-Dutch speaking users. "''is''" means sharp and "''es''" means flat. So a //c-sharp// will look like this - ''cis'', //c-flat// looks like this - ''ces''. Write it down and put it somewhere easy to find! 
+
+You can make a double sharp by simply writing ''cisis'' and a double flat by writing ''ceses''.
+
+(to be continued)

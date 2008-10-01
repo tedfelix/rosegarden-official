@@ -1,0 +1,5 @@
+====== Directories that Compile 100% ======
+Lately, I've been looking at problems on a per-directory level.  Some are easier than others in general.  Unsurprisingly, our first 100% directory is base.
+
+  * base/  (except base/test, which has some obscure public vs. private friend class problem that doesn't look related to QT4 at all; I'm just skipping it, because base/test can totally wait until much later)
+  * src/misc 

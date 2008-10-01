@@ -1,0 +1,83 @@
+====== How to convert . qt3->qt4 . kde3->kde4 ======
+
+This may be a help, for new contributors to the qt4/kde4 port of rosegarden. It may also serve to see, what could be replaced with "search'n replace scripts". If possible, **avoid to use the Q3Support** and includes. Use the new Qt4 classes instead. Reason: Q3Support doesn't work as well, as it one might expect and we need to move to Qt4 anyway.
+
+
+===== examples =====
+
+(if you find something new, add it on the top !)
+
+(if you find something wrong, tell how it would be better.)
+
+-------------------------------------------------------
+
+<code>
+
+errMsg = i18n(QString("Could not open") );
+==>
+errMsg = i18n(QString("Could not open").toUtf8() );
+or
+errMsg = i18n(QString("Could not open").toUtf8().data() );
+(?)
+
+Casting std::string to (const char*)
+==>
+const char * s = st.c_str()
+
+
+string.lower()
+==>
+string.toLower()
+
+
+outStream.setEncoding('UTF-8')
+==>
+outStream.setCodec( (char*)"UTF-8" );
+
+
+
+QProgressBar->setProgress(9)
+==>
+QProgressBar->setValue(9)
+
+
+
+if (extraAttributes)		// where extraAttributes is QString
+==>
+if ( ! extraAttributes.isEmpty() )
+
+
+
+
+KConfig* config = KGlobal::config();
+config->setGroup(GeneralOptionsConfigGroup);
+v = config->readUnsignedNumEntry( .. )
+==>
+// default group:
+KConfigGroup gconfig = KGlobal::config()->group("");
+// or custom:
+KConfigGroup  config = KGlobal::config()->group( GeneralOptionsConfigGrou p);
+// 
+// Note the dot instead of "->"
+v = (unsigned int) config.readEntry( .. )
+
+
+
+QStringList::split(',', recordStr);
+==>
+recordStr.split(,);
+
+
+QVBox *vbox = new QVBox;
+QPushButton *child1 = new QPushButton(vbox);
+==>
+QWidget *vbox = new QWidget;
+QPushButton *child1 = new QPushButton;
+//
+QVBoxLayout *layout = new QVBoxLayout;
+layout->addWidget(child1);
+vbox->setLayout(layout);
+
+
+</code>  
+

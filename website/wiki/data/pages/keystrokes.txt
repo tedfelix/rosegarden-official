@@ -1,0 +1,208 @@
+**Keystrokes and Workflow.**
+
+Rosegarden is well equipped not only for mouse users, but those who prefer, or are more comfortable with keystrokes, focused instead on using the qwerty and a midi keyboard as a workflow default.
+This article is just one suggestion for KS workflow using the tools and KS actions we currently have, and relates, in the main, to the matrix editor.
+
+**Input.**
+
+Inputting in the matrix editor is a fairly simple process, with mouse, icons, and keystrokes, to aid the user in this often time consuming task. Using mouse and icons is fairly quick, but with some planning, and importantly, practise, the RG keystroke set goes a long way towards making input workflow more efficient, and taking some of the donkey work out of this process.
+
+Planning is everything in this case, and there are a couple of questions the user should themselves before setting out their particular KS set.
+
+//Am i left or right handed?//
+
+Qwertys, by their very layout nature, are right handed, and coupled with a midi input device like a keyboard, present a quick and efficient means of input. But which is the 'best' hand for you? Do you step input with the midi keyboard with your left or right hand? Which one tends to sit over the qwerty more often than not, and how can you set up a KS set that will give you both hands working as quickly and efficiently as possible?
+
+//What's the most natural hand span i can use, instinctively?//
+
+Which fingers do you use to operate modifers, like the control, shift, or alt keys, coupled with a normal key? Ctl+K might be natural for one user, but awkard for another. When setting out KS sets for a task, it's useful to consider this, and: just how you type, where your hands tend to sit, how long your fingers are, handshape etc..
+
+These ergonomic factors, determined in the beginning of the KS mapping process, will help further down the line, as the KS set in RG expands, and offers more opportunity to work in a KS environment.
+
+**The KS set.**
+
+
+We're going to set this up for the matrix editor in this article, but the principles are just as valid for other components within RG.
+For the sake of continuity, i will call each KS component an 'action'.
+
+//Navigation.//
+
+Once a segment has been created, and we want to input into a matrix editor, we can highlight the segment and use a keystroke to open the editor.
+
+The action in the main window configure shortcuts is called: **Open in Matrix Editor** (referred to from here as the ME), and the default KS is "**M**".
+
+Once the ME is open, we then have a further, more specifically defined shortcut menu with actions directly related to the ME, in addition to more general actions.
+
+The basics:
+
+__Grid Durations__
+
+The grid durations in the ME are called "Snap to <something>." I include in this list my added KS for non default KS settings.
+
+Action           **KS**
+
+  * Snap to 1/12        **7**
+
+
+  * Snap to 1/16        **6**
+
+
+  * Snap to 1/2         **2**
+
+
+  * Snap to 1/24        **9**
+
+
+  * Snap to 1/32        **3**
+
+
+  * Snap to 1/4         **4**
+
+
+  * Snap to 1/48        **Ctl+0**
+
+
+  * Snap to 1/64        **0**
+
+  * Snap to 1/8         **8**
+
+
+  * Snap to 3/16        **Alt+6**
+
+
+  * Snap to 3/8         **Alt+8**
+
+
+  * Snap to Bar         **5**
+
+
+
+  * Snap to Beat        **1**
+
+
+
+These actions determine grid duration, and with a bit of practice are quick for inputting. There are two other actions that go with these naturally, changing the length by double, and half, to give the user many more combinations for inserted event or note length, as part of a KS workflow.
+
+
+Double Durations   **ctl+shift+H**
+
+Halve Durations    **shift+H**
+
+
+//Example: you want to input a dotted crotchet. (Use the action for 3/8)  But if you want to input or change the dotted crotchet to a dotted minim (double the length of a dotted crotchet) you use the "Double Duration" KS to achieve this for the active or highlighted note. Please take note here, if you have more than one note active, then the action will double the note length for ALL highlighted notes.//
+
+
+More basics:
+
+Increase Velocity  **shift+up arrow**
+
+Decrease Velocity  **shift+down arrow**
+
+At the initial input stage in the ME, these two actions save a lot of work. As you input, and while the note is active, you can adjust the velocity, by units of 10. So if your initial velocity at input is set to 100, then a single shift+down arrow will reduce the velocity of the active note to 90. I have found this highly useful when building coarse crescendos and decrescendos, and doing it at the initial input stage saves a lot of work in later tweaking sessions.
+
+
+Cursor to playback pointer  **Alt+]**
+
+Playback to cursor pointer  **Alt+[**
+
+When the ME is initially opened, each time, the edit cursor is set at zero, or the beginning of the selected segment. If the segment is 8 bars long, but the playback cursor is on bar 5, then we need a means of quickly moving the edit cursor to the playback cursor, or pointer. We do this with the "Cursor to playback pointer' action, and it becomes habit fairly quickly, to use this KS as soon as the Me opens. The edit cursor defines where your intended input note goes, so if you leave the EC at the beginning of the segment, then that's what you'll get. The mate of this action, "Playback to cursor pointer", moves the playhead to the edit cursor, which is useful for auditioning the part or section you've just inputted.
+
+
+Up a semitone  **Up arrow**
+
+Down a semitone **Down arrow**
+
+These two actions are obvious, but it's worth remembering they only work for the active or highlighted note.
+
+Up an Octave **Ctl+Up arrow**
+
+Down an Octave **Ctl+Down arrow**
+
+Panic  **Alt+Ctl+P**
+
+Copy  **Ctl+C**
+
+Paste  **Ctl+V**
+
+Step input **Ctl+'**
+
+This action enables your midi keyboard as a means of directly step inputting by pitch. Provided you have the midi keyboard set as 'Yes' in the midi port/input matrix, you'll be able to use it as a quick and effective means of input, saving yourself a lot of additional work as a result.
+
+
+
+These are basic requirements, and will be sufficient in this particular workflow article for most KS input needs.
+
+
+-----------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------
+
+
+
+
+__**The Process**__
+
+
+After opening a segment into the ME, we're ready to input. Although this may not be a complete KS workflow, it's pretty close, with only non grid note length, and non grid note movement, still requiring the use of a mouse, and moving the edit cursor by grid durations other than beat or bar. (This has been feature requested recently, so may be possible in the future.) Our work is often based on percentages, and it's true here too. If 80% of the inputting process can be done quickly, then manual intervention is reduced, time saved, etc.....
+
+Here's a basic pic of the matrix editor, showing the black playback line on Bar 3, and the pink edit cursor on the second beat of bar 3. Note the grid setting is 1/16, velocity is at 100, and quantize is Off.
+
+
+
+
+
+{{:matrix1.png|}}
+
+In the following pic, a note has been inputted, with the grid length designated as 1/16. ( Action: Snap to 1/16 KS **6**. Midi keyboard/Step input G#3)
+
+{{:matrix2.png|}}
+
+So now we want to increase the note length (double), and use the "Double Durations" KS (**Ctl+shift+H**) to do this.
+
+{{:matrix3.png|}}
+
+
+So far, so easy, and all done with KS and midi keyboard (MK) Step input. Remembering here that input is always at the edit cursor, we can add 2 new notes to make a chord. We can do this in one go with MK step input, but if we want to input additional notes at a later stage, then we simply position the edit cursor and step play the notes in.
+
+
+{{:matrix4.png|}}
+
+
+At this current stage in the rapid RG development, it's not possible to manually move the edit cursor to the end of the pictured inputted notes, and input some more, unless the last note coincides with a bar or beat. So you'll need to do this bit with a mouse. But if you are inputting as you go, moving forward in a steady flow, then you can, as input will work by grid adjacently, and the edit cursor will follow.
+
+An example:
+
+{{:matrix5.png|
+}}
+
+Note the 16th notes are in sequence, and were inputted by step input. Note also the last note is a crotchet (1/4), and this was inputted by selecting the grid duration before putting the note in.
+
+Once the notes are in, and mindful of the bar and beat only nature of the edit cursor (at this stage), we can then manually adjust the velocities of the notes quickly and easily. Using the Shift key, plus left and right arrows, we can make the inputted notes active, a beat at a time, and then adjust the velocities with shift+up/down arrows. 
+
+Firstly, the inputted notes being highlighted with **Shift+left arrow**.
+
+{{:matrix6.png|}}
+
+
+Now, the same section after velocity has been adjusted, with **Shift+down arrow**, and then the notes rendered inactive, with the escape key.
+
+
+
+{{:matrix7.png|}}
+
+
+Note the change in colour of the velocity adjusted notes, and in the top right of the pic, the reduction in velocity to 70. We can readjust this at any time by simply making the notes active with Shift+left/right moving the edit cursor, and Shift+Up/Down arrows to readjust the velocity. Here's the previous example pic, with the last beat, adjusted further, with velocity reduced.
+
+
+{{:matrix9.png|}}
+
+
+
+
+
+
+
+
+
+
+
+(Work in progress.........)

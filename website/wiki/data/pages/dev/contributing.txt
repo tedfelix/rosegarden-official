@@ -26,13 +26,13 @@ Let's proceed on and follow steps on howto prepare a patch for Rosegarden...
 ====1. Check out the current Subversion trunk====
 
 ===1.A) As an anonymous user===
-<code bash>
+
 svn co [[https://rosegarden.svn.sourceforge.net/svnroot/rosegarden/trunk|https://rosegarden.svn.sourceforge.net/svnroot/rosegarden/trunk/rosegarden]]
-</code>
+
 ===1.B) As a sourceforge user===
-<code bash>
+
 svn co [[https://user@rosegarden.svn.sourceforge.net/svnroot/rosegarden/trunk|https://<user>@rosegarden.svn.sourceforge.net/svnroot/rosegarden/trunk/rosegarden]]
-</code>
+
 ====2. Compile source (be prepared to install missing dependencies in first compile)====
 
 $ cmake .
@@ -65,13 +65,13 @@ svn commit [ -m "What part of the program is patched: add/change/fix/enable/disa
 
 ===5.B) as a fix to a bug, not being yet a RG developer===
 
-Create new [[http://sourceforge.net/tracker/?group_id=4932&atid=104932|bug report]] (if there is not an existing one), and include the patch as a resulution to the bug.
+Create new [[http://sourceforge.net/tracker/?group_id=4932&atid=104932|bug report]] (if there is not an existing one), and include the patch as a resolution to the bug.
 
-===5.B) as an implementation of a feature request, not being yet a RG developer===
+===5.B) as an implementation of a feature request, not yet being a RG developer===
 
-Create new [[http://sourceforge.net/tracker/?group_id=4932&atid=354932|feature request]] (if there is not an existing one), and include the patch as a fullfillment of the request.
+Create new [[http://sourceforge.net/tracker/?group_id=4932&atid=354932|feature request]] (if there is not an existing one), and include the patch as a fulfillment of the request.
 
-===5.B) as a follower of RG development discussion list: rosegarden-devel AT lists DOT sourceforge DOT net===
+===5.B) as a follower of the RG development discussion list: rosegarden-devel AT lists DOT sourceforge DOT net===
 
 Describe your problem in a mail to the list and add the patch as an attachment.
 
@@ -81,6 +81,8 @@ Your patch will be reviewed by one or more Rosegarden developers. Be prepared to
 
 
 
-===See also: [[Branching|Working with branches]]===
+===See also: ===
+[[Branching|Working with branches]]
 
-===See also: [[Stable from svn|Installing the latest stable version from svn in different distributions]]===
+===See also: ===
+[[Stable from svn|Installing the latest stable version from svn in different distributions]]
