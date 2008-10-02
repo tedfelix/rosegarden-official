@@ -17,10 +17,11 @@
 
 
 #include "MIDIInstrumentParameterPanel.h"
-#include <QLayout>
+
+#include <klocale.h>
+#include <ksqueezedtextlabel.h>
 
 #include "sound/Midi.h"
-#include <klocale.h>
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "base/Colour.h"
@@ -35,8 +36,9 @@
 #include "InstrumentParameterPanel.h"
 #include "sound/MappedEvent.h"
 #include "sound/MappedInstrument.h"
+#include <algorithm>
+
 #include <QComboBox>
-#include <ksqueezedtextlabel.h>
 #include <QCheckBox>
 #include <QColor>
 #include <QFontMetrics>
@@ -46,9 +48,8 @@
 #include <QSignalMapper>
 #include <QString>
 #include <QWidget>
+#include <QLayout>
 #include <QHBoxLayout>
-#include <algorithm>
-
 #include <QToolTip>
 
 
@@ -117,26 +118,26 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     m_mainGrid->addWidget(m_instrumentLabel, 0, 0, 0- 0+1, 2- 1, Qt::AlignCenter);
     m_mainGrid->addWidget(m_connectionLabel, 1, 0, 0+1, 2- 1, Qt::AlignCenter);
 
-    m_mainGrid->addWidget(channelLabel, 2, 0, 0+1, 1- 1, AlignLeft);
-    m_mainGrid->addWidget(m_channelValue, 2, 2, AlignRight);
+    m_mainGrid->addWidget(channelLabel, 2, 0, 0+1, 1- 1, Qt::AlignLeft);
+    m_mainGrid->addWidget(m_channelValue, 2, 2, Qt::AlignRight);
 
-    m_mainGrid->addWidget(percussionLabel, 3, 0, 0+1, 1- 1, AlignLeft);
-    m_mainGrid->addWidget(m_percussionCheckBox, 3, 2, AlignRight);
+	m_mainGrid->addWidget(percussionLabel, 3, 0, 0+1, 1- 1, Qt::AlignLeft);
+	m_mainGrid->addWidget(m_percussionCheckBox, 3, 2, Qt::AlignRight);
 
-    m_mainGrid->addWidget(m_bankLabel, 4, 0, AlignLeft);
-    m_mainGrid->addWidget(m_bankCheckBox, 4, 1, AlignRight);
-    m_mainGrid->addWidget(m_bankValue, 4, 2, AlignRight);
+	m_mainGrid->addWidget(m_bankLabel, 4, 0, Qt::AlignLeft);
+	m_mainGrid->addWidget(m_bankCheckBox, 4, 1, Qt::AlignRight);
+	m_mainGrid->addWidget(m_bankValue, 4, 2, Qt::AlignRight);
 
-    m_mainGrid->addWidget(m_programLabel, 5, 0, AlignLeft);
-    m_mainGrid->addWidget(m_programCheckBox, 5, 1, AlignRight);
-    m_mainGrid->addWidget(m_programValue, 5, 2, AlignRight);
+	m_mainGrid->addWidget(m_programLabel, 5, 0, Qt::AlignLeft);
+	m_mainGrid->addWidget(m_programCheckBox, 5, 1, Qt::AlignRight);
+	m_mainGrid->addWidget(m_programValue, 5, 2, Qt::AlignRight);
 
     m_mainGrid->addWidget(m_variationLabel, 6, 0);
     m_mainGrid->addWidget(m_variationCheckBox, 6, 1);
-    m_mainGrid->addWidget(m_variationValue, 6, 2, AlignRight);
+	m_mainGrid->addWidget(m_variationValue, 6, 2, Qt::AlignRight);
       
-    m_mainGrid->addWidget(m_evalMidiPrgChgLabel, 7, 0, AlignLeft);
-    m_mainGrid->addWidget(m_evalMidiPrgChgCheckBox, 7, 2, AlignRight);	
+	m_mainGrid->addWidget(m_evalMidiPrgChgLabel, 7, 0, Qt::AlignLeft);
+	m_mainGrid->addWidget(m_evalMidiPrgChgCheckBox, 7, 2, Qt::AlignRight);	
     
     
     // Populate channel lists
@@ -422,7 +423,7 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
 
             // Add the compound widget
             //
-            m_rotaryGrid->addWidget(hbox, count / 2, (count % 2) * 2, AlignLeft);
+            m_rotaryGrid->addWidget(hbox, count / 2, (count % 2) * 2, Qt::AlignLeft);
             hbox->show();
 
             // Add to list

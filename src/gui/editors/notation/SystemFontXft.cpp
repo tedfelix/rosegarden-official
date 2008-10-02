@@ -15,12 +15,18 @@
     COPYING included with this distribution for more information.
 */
 
-#include "SystemFontXft.h"
 
 #ifdef HAVE_XFT
 
+// include this first:
+#include <QTextStream>
+
+#include "SystemFontXft.h"
+
 #include "misc/Debug.h"
 #include "gui/general/PixmapFunctions.h"
+
+
 
 namespace Rosegarden {
 

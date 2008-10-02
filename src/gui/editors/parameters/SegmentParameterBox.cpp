@@ -273,14 +273,14 @@ SegmentParameterBox::initBox()
     gridLayout->addWidget(repeatLabel, row, 0); //, AlignRight);
     gridLayout->addWidget(m_repeatValue, row, 1); //, AlignLeft);
 
-    gridLayout->addWidget(transposeLabel, row, 2, row- row+1, 3- 3, AlignRight);
+	gridLayout->addWidget(transposeLabel, row, 2, row- row+1, 3- 3, Qt::AlignRight);
     gridLayout->addWidget(m_transposeValue, row, 4, row- row+1, 5- 5);
     ++row;
 
     gridLayout->addWidget(quantizeLabel, row, 0); //, AlignRight);
     gridLayout->addWidget(m_quantizeValue, row, 1, row- row+1, 2); //, AlignLeft);
 
-    gridLayout->addWidget(delayLabel, row, 3, AlignRight);
+	gridLayout->addWidget(delayLabel, row, 3, Qt::AlignRight);
     gridLayout->addWidget(m_delayValue, row, 4, row- row+1, 5- 5);
     ++row;
 
@@ -664,17 +664,20 @@ SegmentParameterBox::populateBoxFromSegments()
         // 2nd arg of "true" means "add if necessary"
     case All:
         m_transposeValue->
-        setCurrentIndex(QString("%1").arg(transposeLevel), true);
-        break;
+// 		setCurrentIndex(QString("%1").arg(transposeLevel), true);
+		setCurrentText( QString("%1").arg(transposeLevel) );
+		break;
 
     case Some:
-        m_transposeValue->setCurrentIndex(QString(""), true);
-        break;
+// 		m_transposeValue->setCurrentIndex(QString(""), true);
+		m_transposeValue->setCurrentText(QString(""));
+		break;
 
     case None:
     default:
-        m_transposeValue->setCurrentIndex("0");
-        break;
+// 		m_transposeValue->setCurrentIndex("0");
+		m_transposeValue->setCurrentText("0");
+		break;
     }
 
     m_transposeValue->setEnabled(transposed != NotApplicable);
@@ -688,19 +691,21 @@ SegmentParameterBox::populateBoxFromSegments()
             QString label = NotationStrings::makeNoteMenuLabel(delayLevel,
                             true,
                             error);
-            m_delayValue->setCurrentIndex(label, true);
+// 			m_delayValue->setCurrentIndex(label, true);
+			m_delayValue->setCurrentText(label);
 
         } else if (delayLevel < 0) {
 
-            m_delayValue->setCurrentIndex(i18n("%1 ms",  -delayLevel),
-                                         true);
-        }
+// 			m_delayValue->setCurrentIndex(i18n("%1 ms",  -delayLevel),true);
+			m_delayValue->setCurrentText( i18n("%1 ms",  -delayLevel) );
+		}
 
         break;
 
     case Some:
-        m_delayValue->setCurrentIndex("", true);
-        break;
+// 		m_delayValue->setCurrentIndex("", true);
+		m_delayValue->setCurrentText("");
+		break;
 
     case None:
     default:
@@ -978,14 +983,15 @@ SegmentParameterBox::slotColourSelected(int value)
         ColourMap newMap = m_doc->getComposition().getSegmentColourMap();
         QColor newColour;
         bool ok = false;
-        QString newName = KLineEditDlg::getText(i18n("New Color Name"), i18n("Enter new name"),
-                                                i18n("New"), &ok);
+        QString newName = QInputDialog::getText(this, i18n("New Color Name"), i18n("Enter new name"),
+									QLineEdit::Normal,
+									i18n("New"), &ok);
         if ((ok == true) && (!newName.isEmpty())) {
-            KColorDialog box(this, "", true);
+            QColorDialog box(this, "", true);
 
             int result = box.getColor(newColour);
 
-            if (result == KColorDialog::Accepted) {
+            if (result == QColorDialog::Accepted) {
                 Colour newRColour = GUIPalette::convertColour(newColour);
                 newMap.addItem(newRColour, qstrtostr(newName));
                 SegmentColourMapCommand *command = new SegmentColourMapCommand(m_doc, newMap);
@@ -1095,11 +1101,10 @@ SegmentParameterBox::slotEditSegmentLabel()
     if (label == "*")
         label = "";
 
-    QString newLabel = KLineEditDlg::getText(editLabel,
-                       i18n("Enter new label"),
+    QString newLabel = QInputDialog::getText( this, 
+											  i18n("Enter new label"), editLabel, QLineEdit::Normal,
                        m_label->text(),
-                       &ok,
-                       this);
+                       &ok );
 
     if (ok) {
         SegmentSelection segments;

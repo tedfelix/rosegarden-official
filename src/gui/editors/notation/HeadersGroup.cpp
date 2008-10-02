@@ -32,6 +32,8 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QEvent>
+#include <QResizeEvent>
 
 
 namespace Rosegarden
@@ -47,7 +49,7 @@ HeadersGroup(QWidget *parent, NotationView * nv, Composition * comp) :
         m_filler(0),
         m_lastX(INT_MIN),
         m_lastWidth(-1),
-        m_layout(new QVBoxLayout)
+        m_layout( new QVBoxLayout(this) )
 {
 }
 
@@ -157,7 +159,7 @@ HeadersGroup::resizeEvent(QResizeEvent * ev)
 {
     // Needed to avoid gray zone at the right of headers
     // when width is decreasing
-    emit headersResized(ev->size().width());
+    emit headersResized( ev->size().width() );
 }
 
 }

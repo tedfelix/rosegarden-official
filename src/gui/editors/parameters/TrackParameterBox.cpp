@@ -46,9 +46,11 @@
 #include "document/RosegardenGUIDoc.h"
 #include "gui/dialogs/PitchPickerDialog.h"
 #include "gui/general/GUIPalette.h"
+#include "gui/general/KTmpStatusMsg.h"
 #include "gui/general/PresetHandlerDialog.h"
 #include "gui/widgets/CollapsingFrame.h"
 #include "gui/widgets/ColourTable.h"
+#include "gui/general/GUIPalette.h"
 #include "RosegardenParameterArea.h"
 #include "RosegardenParameterBox.h"
 #include "sound/PluginIdentifier.h"
@@ -123,7 +125,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
 
     // track label
     //
-    m_trackLabel = new KSqueezedTextLabel(i18n("<untitled>"), this);
+    m_trackLabel = new SqueezedLabel(i18n("<untitled>"), this);
     m_trackLabel->setAlignment(Qt::AlignCenter);
     //mainLayout->addWidget(m_trackLabel, 0, 0, 0- 0+1, 5- 1, Qt::AlignCenter);
     mainLayout->addWidget(m_trackLabel, 0, 0);
@@ -214,7 +216,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     // LilyPond documentation has no idea how to do, so we settle for this,
     // which is not as nice, but actually a lot easier to implement.
     m_staffGrpLbl = new QLabel(i18n("Notation size:"), m_staffGroup);
-    groupLayout->addWidget(m_staffGrpLbl, row, 0, AlignLeft);
+    groupLayout->addWidget(m_staffGrpLbl, row, 0, Qt::AlignLeft);
     m_staffSizeCombo = new QComboBox(m_staffGroup);
     m_staffSizeCombo->setMinimumWidth(width11);
     m_staffSizeCombo->addItem(i18n("Normal"), StaffTypes::Normal);
@@ -227,7 +229,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     // rendering would be nice in the future!) //!!! 
     row++;
     m_grandStaffLbl = new QLabel(i18n("Bracket type:"), m_staffGroup);
-    groupLayout->addWidget(m_grandStaffLbl, row, 0, AlignLeft);
+    groupLayout->addWidget(m_grandStaffLbl, row, 0, Qt::AlignLeft);
     m_staffBracketCombo = new QComboBox(m_staffGroup);
     m_staffBracketCombo->setMinimumWidth(width11);
     m_staffBracketCombo->addItem(i18n("-----"), Brackets::None);
@@ -258,7 +260,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
 
     // preset picker
     m_psetLbl = new QLabel(i18n("Preset"), m_defaultsGroup);
-    groupLayout->addWidget(m_psetLbl, row, 0, AlignLeft);
+    groupLayout->addWidget(m_psetLbl, row, 0, Qt::AlignLeft);
 
     m_presetLbl = new QLabel(i18n("<none>"), m_defaultsGroup);
     m_presetLbl->setFrameStyle(QFrame::Panel | QFrame::Sunken);
@@ -272,7 +274,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     //
     row++;
     m_clefLbl = new QLabel(i18n("Clef"), m_defaultsGroup);
-    groupLayout->addWidget(m_clefLbl, row, 0, AlignLeft);
+    groupLayout->addWidget(m_clefLbl, row, 0, Qt::AlignLeft);
     m_defClef = new QComboBox(m_defaultsGroup);
     m_defClef->setMinimumWidth(width11);
     m_defClef->addItem(i18n("treble"), TrebleClef);
@@ -299,7 +301,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     // default transpose
     //
     m_transpLbl = new QLabel(i18n("Transpose"), m_defaultsGroup);
-    groupLayout->addWidget(m_transpLbl, row, 3, row- row+1, 4- 4, AlignRight);
+	groupLayout->addWidget(m_transpLbl, row, 3, row- row+1, 4- 4, Qt::AlignRight);
     m_defTranspose = new QComboBox(m_defaultsGroup);
 
     connect(m_defTranspose, SIGNAL(activated(int)),
@@ -320,13 +322,13 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     m_rangeLbl = new QLabel(i18n("Pitch"), m_defaultsGroup);
     groupLayout->addWidget(m_rangeLbl, row, 0, row- row+1, 0- 1);
 
-    groupLayout->addWidget(new QLabel(i18n("Lowest"), m_defaultsGroup), row, 1, AlignRight);
+    groupLayout->addWidget(new QLabel(i18n("Lowest"), m_defaultsGroup), row, 1, Qt::AlignRight);
 
     m_lowButton = new QPushButton(i18n("---"), m_defaultsGroup);
     m_lowButton->setToolTip(i18n("Choose the lowest suggested playable note, using a staff"));
     groupLayout->addWidget(m_lowButton, row, 2, row- row+1, 1);
 
-    groupLayout->addWidget(new QLabel(i18n("Highest"), m_defaultsGroup), row, 3, AlignRight);
+    groupLayout->addWidget(new QLabel(i18n("Highest"), m_defaultsGroup), row, 3, Qt::AlignRight);
 
     m_highButton = new QPushButton(i18n("---"), m_defaultsGroup);
     m_highButton->setToolTip(i18n("Choose the highest suggested playable note, using a staff"));
@@ -338,7 +340,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     //
     row++;
     m_colorLbl = new QLabel(i18n("Color"), m_defaultsGroup);
-    groupLayout->addWidget(m_colorLbl, row, 0, AlignLeft);
+    groupLayout->addWidget(m_colorLbl, row, 0, Qt::AlignLeft);
     m_defColor = new QComboBox(false, m_defaultsGroup);
     m_defColor->setMaxVisibleItems(20);
     groupLayout->addWidget(m_defColor, row, 1, row- row+1, 5);
@@ -621,8 +623,9 @@ TrackParameterBox::slotUpdateControls(int /*dummy*/)
         return ;
 
     m_defClef->setCurrentIndex(trk->getClef());
-    m_defTranspose->setCurrentIndex(QString("%1").arg(trk->getTranspose()), true);
-    m_defColor->setCurrentIndex(trk->getColor());
+// 	m_defTranspose->setCurrentIndex(QString("%1").arg(trk->getTranspose()), true);
+	m_defTranspose->setCurrentText( QString("%1").arg(trk->getTranspose()) );
+	m_defColor->setCurrentIndex(trk->getColor());
     m_highestPlayable = trk->getHighestPlayable();
     m_lowestPlayable = trk->getLowestPlayable();
     updateHighLow();
@@ -885,7 +888,7 @@ TrackParameterBox::slotColorChanged(int index)
 
             int result = box.getColor(newColour);
 
-            if (result == KColorDialog::Accepted) {
+            if (result == QColorDialog::Accepted) {
                 Colour newRColour = GUIPalette::convertColour(newColour);
                 newMap.addItem(newRColour, qstrtostr(newName));
                 slotDocColoursChanged();

@@ -17,10 +17,12 @@
 
 
 #include "ControlEditorDialog.h"
-#include <QLayout>
-#include <QApplication>
 
 #include <klocale.h>
+// #include <kmainwindow.h>
+// #include <kstandardshortcut.h>
+// #include <kstandardaction.h>
+
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "base/Colour.h"
@@ -39,19 +41,20 @@
 #include "document/MultiViewCommandHistory.h"
 #include "document/RosegardenGUIDoc.h"
 #include "document/ConfigGroups.h"
-#include <QAction>
 #include "document/Command.h"
+
+#include <QShortcut>
+#include <QMainWindow>
+#include <QLayout>
+#include <QApplication>
+#include <QAction>
 #include <QListWidget>
-#include <kmainwindow.h>
-#include <kstandardshortcut.h>
-#include <kstandardaction.h>
 #include <QColor>
 #include <QDialog>
 #include <QFrame>
 #include <QLabel>
 #include <QListWidget>
 #include <QPixmap>
-#include <qptrlist.h>
 #include <QPushButton>
 #include <QSizePolicy>
 #include <QString>
@@ -59,16 +62,21 @@
 #include <QWidget>
 #include <QVBoxLayout>
 
+#include <QList>
+// #include <qptrlist.h>
 
 namespace Rosegarden
 {
 
 const QString notShowing(i18n("<not showing>"));
 
-ControlEditorDialog::ControlEditorDialog(QWidget *parent,
-        RosegardenGUIDoc *doc,
-        DeviceId device):
-        KMainWindow(parent, "controleditordialog"),
+ControlEditorDialog::ControlEditorDialog
+		(
+			QWidget *parent,
+			RosegardenGUIDoc *doc,
+			DeviceId device
+		):
+        QMainWindow(parent, "controleditordialog"),
         m_studio(&doc->getStudio()),
         m_doc(doc),
         m_device(device),

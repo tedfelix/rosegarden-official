@@ -28,7 +28,7 @@
 #include <vector>
 #include <QSize>
 #include <QWidget>
-
+#include <QVBoxLayout>
 
 class QLabel;
 class QResizeEvent;
@@ -41,7 +41,7 @@ namespace Rosegarden
 class NotationView;
 class Composition;
 class TrackHeader;
-class QVBoxLayout;
+//class QVBoxLayout;
 
 
 class HeadersGroup : public QWidget

@@ -83,7 +83,7 @@ private:
     // corresponding parameter box widget needs to be enclosed by a
     // titled outline.
 
-    std::vector<QVGroupBox *> m_groupBoxes;
+    std::vector<QGroupBox *> m_groupBoxes;
 
     // Move a RosegardenParameterBox widget from one container to another.
 

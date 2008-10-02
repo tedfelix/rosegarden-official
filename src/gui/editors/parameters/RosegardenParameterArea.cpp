@@ -41,10 +41,10 @@ namespace Rosegarden
 {
 
 RosegardenParameterArea::RosegardenParameterArea(QWidget *parent,
-        const char *name, WFlags f)
-	: QStackedWidget(parent, name, f),
+	const char *name)	//, WFlags f)
+	: QStackedWidget(parent, name),//, f),
         m_style(RosegardenParameterArea::CLASSIC_STYLE),
-        m_scrollView(new QScrollView(this, 0, Qt::WStaticContents)),
+        m_scrollView(new QScrollArea(this, 0, Qt::WStaticContents)),
         m_classic(new QWidget(m_scrollView->viewport())),
         m_classicLayout(new QVBoxLayout),
         m_tabBox(new QTabWidget(this)),
@@ -54,9 +54,9 @@ RosegardenParameterArea::RosegardenParameterArea(QWidget *parent,
     m_classic->setLayout(m_classicLayout);
 
     m_scrollView->addChild(m_classic);
-    m_scrollView->setHScrollBarMode(QScrollView::AlwaysOff);
-    m_scrollView->setVScrollBarMode(QScrollView::Auto);
-    m_scrollView->setResizePolicy(QScrollView::AutoOneFit);
+    m_scrollView->setHScrollBarMode(QScrollArea::AlwaysOff);
+    m_scrollView->setVScrollBarMode(QScrollArea::Auto);
+    m_scrollView->setResizePolicy(QScrollArea::AutoOneFit);
 
     // Install the classic-style VBox widget in the widget-stack.
 
@@ -90,7 +90,9 @@ void RosegardenParameterArea::addRosegardenParameterBox(
     // and outline, in classic mode. Add this container to an array that
     // parallels the above array of parameter boxes.
 
-    QVGroupBox *box = new QVGroupBox(b->getLongLabel(), m_classic);
+    QGroupBox *box = new QGroupBox(b->getLongLabel(), m_classic);
+	box->setLayout( new QVBoxLayout(box) );
+	
     m_classicLayout->addWidget(box);
     box->layout()->setMargin( 4 ); // about half the default value
     QFont f;
@@ -180,7 +182,7 @@ void RosegardenParameterArea::setArrangement(Arrangement style)
 
         // Switch the widget stack to displaying the new container.
 
-        raiseWidget(style);
+        setCurrentWidget( dynamic_cast<QWidget*>(style) );
     }
 
     // Record the identity of the active container, and the associated

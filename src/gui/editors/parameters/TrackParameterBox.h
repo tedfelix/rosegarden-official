@@ -25,12 +25,14 @@
 #include "base/MidiProgram.h"
 #include "base/Track.h"
 #include "gui/widgets/ColourTable.h"
-#include <map>
 #include "RosegardenParameterArea.h"
 #include "RosegardenParameterBox.h"
+#include <map>
+#include <vector>
+
 #include <QString>
 #include <QCheckBox> // #include <QCheckBox> in QT4, thinking ahead
-#include <vector>
+
 
 
 class QWidget;
@@ -39,7 +41,7 @@ class QLabel;
 class QFrame;
 class QComboBox;
 class QCheckBox;
-
+//class SqueezedLabel;
 
 namespace Rosegarden
 {

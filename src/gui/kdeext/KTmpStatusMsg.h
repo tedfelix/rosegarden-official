@@ -17,12 +17,20 @@
 #define KTMPSTATUSMSG_H
 
 #include <QUrl>
+#include <QLabel>
 
 class QMainWindow;
-
+//class QLabel;
 
 
 /*****************************************************************/
+
+
+class SqueezedLabel: public QLabel
+{
+	public:
+	SqueezedLabel();
+};
 
 
 class RgTempQtIV

@@ -190,7 +190,7 @@ InstrumentParameterBox::useInstrument(Instrument *instrument)
     RG_DEBUG << "useInstrument() - populate Instrument\n";
 
     if (instrument == 0) {
-        m_widgetStack->raiseWidget(m_noInstrumentParameters);
+        m_widgetStack->setCurrentWidget(m_noInstrumentParameters);	// was raiseWidget
         emit instrumentPercussionSetChanged(instrument);
         return ;
     }
@@ -208,13 +208,14 @@ InstrumentParameterBox::useInstrument(Instrument *instrument)
         instrument->getType() == Instrument::SoftSynth) {
 
         m_audioInstrumentParameters->setupForInstrument(getSelectedInstrument());
-        m_widgetStack->raiseWidget(m_audioInstrumentParameters);
+		m_widgetStack->setCurrentWidget(m_audioInstrumentParameters);
+// 		m_widgetStack->raiseWidget(m_audioInstrumentParameters);
 
     } else { // Midi
 
         m_midiInstrumentParameters->setupForInstrument(getSelectedInstrument());
         m_midiInstrumentParameters->showAdditionalControls(m_lastShowAdditionalControlsArg);
-        m_widgetStack->raiseWidget(m_midiInstrumentParameters);
+		m_widgetStack->setCurrentWidget(m_midiInstrumentParameters);
         emit instrumentPercussionSetChanged(instrument);
 
     }

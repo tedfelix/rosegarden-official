@@ -21,7 +21,8 @@
 
 #include "base/Device.h"
 #include "base/MidiDevice.h"
-#include <kmainwindow.h>
+
+#include <QMainWindow>
 
 
 class QWidget;
@@ -40,7 +41,7 @@ class RosegardenGUIDoc;
 class MultiViewCommandHistory;
 
 
-class ControlEditorDialog : public KMainWindow
+class ControlEditorDialog : public QMainWindow
 {
     Q_OBJECT
 

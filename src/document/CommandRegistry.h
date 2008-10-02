@@ -140,12 +140,12 @@ protected:
     typedef std::map<QString, AbstractCommandBuilder *> ActionBuilderMap;
     ActionBuilderMap m_builders;
 	
-    virtual void addAction(QString title,	
+    void addAction(QString title,	
                            QString icon,
                            QString shortcut, 
                            QString actionName,
                            QString menuTitle,
-                           QString menuActionName) = 0;
+                           QString menuActionName);// = 0;
 	
     virtual void invokeCommand(QString actionName) = 0;
 

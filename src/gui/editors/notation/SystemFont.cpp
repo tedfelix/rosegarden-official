@@ -16,14 +16,19 @@
 */
 
 
+//#include <kstandarddirs.h>
+
+//include  this first:
+#include <QTextStream>
+
 #include "SystemFont.h"
 #include "SystemFontQt.h"
 #include "SystemFontXft.h"
 
 #include "misc/Debug.h"
-
-#include <kstandarddirs.h>
+#include "gui/general/IconLoader.h"
 #include "NoteFontMap.h"
+
 #include <QFont>
 #include <QFontInfo>
 #include <QPixmap>
@@ -53,6 +58,7 @@ SystemFont::loadSystemFont(const SystemFontSpec &spec)
     FcResult result;
     FcChar8 *matchFamily;
     XftFont *xfont = 0;
+	IconLoader il;
 
     Display *dpy = QPaintDevice::x11AppDisplay();
     static bool haveFcDirectory = false;
@@ -61,9 +67,12 @@ SystemFont::loadSystemFont(const SystemFontSpec &spec)
         std::cerr << "SystemFont::loadSystemFont[Xft]: Xft support requested but no X11 display available!" << std::endl;
         goto qfont;
     }
-
+	
     if (!haveFcDirectory) {
-        QString fontDir = KGlobal::dirs()->findResource("appdata", "fonts/");
+// 		QString fontDir = KGlobal::dirs()->findResource("appdata", "fonts/");
+ 		QString fontDir = il.getResourcePath( "fonts" );
+		
+		
         if (!FcConfigAppFontAddDir(FcConfigGetCurrent(),
                                    (const FcChar8 *)fontDir.toLatin1().data())) {
             NOTATION_DEBUG << "SystemFont::loadSystemFont[Xft]: Failed to add font directory " << fontDir << " to fontconfig, continuing without it" << endl;

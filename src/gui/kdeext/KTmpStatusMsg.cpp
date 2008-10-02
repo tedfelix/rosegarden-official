@@ -19,6 +19,8 @@
 #include <QMainWindow>
 #include <QStatusBar>
 #include <QString>
+#include <QLabel>
+
 #include <klocale.h>
 
 #include "KTmpStatusMsg.h"
@@ -71,6 +73,20 @@ RgTempQtIV* rgTempQtIV = &__mm;
 //RgTempQtIV* rgTempQtIV = new RgTempQtIV();
 
 /****************************************************************/
+
+
+
+/** ksqueezedtextlabel.h replacement: */
+SqueezedLabel::SqueezedLabel(
+	): QLabel
+{
+	//### maybe fix: not really the same as KSqueezedTextLabel,
+	//    but should work for now.
+	this->setScaledContents( true );
+}
+//SqueezedLabel::~SqueezedLabel(){
+	//
+//}
 
 
 /**********************************************************************/
