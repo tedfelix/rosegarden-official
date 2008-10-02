@@ -43,24 +43,9 @@
 #include <QWidget>
 #include <QLayout>
 
-// for finding out free disk-space:
-#include <sys/vfs.h> 
-// or 
-//#include <sys/statfs.h>
-
-/*	// related:
-struct statfs {
-   long    f_type;     // type of filesystem (see below) 
-   long    f_bsize;    // optimal transfer block size 
-   long    f_blocks;   // total data blocks in file system 
-   long    f_bfree;    // free blocks in fs 
-   long    f_bavail;   // free blocks avail to non-superuser 
-   long    f_files;    // total file nodes in file system 
-   long    f_ffree;    // free file nodes in fs 
-   fsid_t  f_fsid;     // file system id 
-   long    f_namelen;  // maximum length of filenames 
-};
-*/
+#ifndef WIN32
+#include <sys/statvfs.h>
+#endif
 
 
 
@@ -109,47 +94,34 @@ AudioPropertiesPage::AudioPropertiesPage(RosegardenGUIDoc *doc,
 void
 AudioPropertiesPage::calculateStats()
 {
-    // This stolen from KDE libs kfile/kpropertiesdialog.cpp
-    //
-//	QString mountPoint = KIO::findPathMountPoint(m_path->text());
-	
-	//FileSource source( m_path->text() );
-	//
-	//@@@ check re-implementation of calc stat (free disk-space)
-	struct statfs fiData;	// NOTE: or statfs64 for 64bit systems
-	//struct statfs *fpData;
-	char fnPath[128];
-	int err;
-	unsigned long long spaceTotal;
-	unsigned long long spaceFree;
-	unsigned long long spaceFilled;
-	strcpy( fnPath, qStrToCharPtrLocal8(m_path->text()) );
-	
-	// get stat
-	err = statfs( fnPath, &fiData );
-	// ms-windows: GetDiskFreeSpaceEx()
-	
-	if ( err != 0 ){
-		// stat error
-	}
-	spaceFree = ((unsigned long long) fiData.f_bavail) * ((unsigned long long) fiData.f_bsize);
-	spaceTotal = ((unsigned long long) fiData.f_blocks) * ((unsigned long long) fiData.f_bsize);
-	spaceFilled = spaceTotal - spaceFree;
-	// bytes to kilo bytes:
-	spaceFree = spaceFree / 1024;
-	spaceTotal = spaceTotal / 1024;
-	spaceFilled = spaceFilled / 1024;
-	slotFoundMountPoint( m_path->text(), spaceTotal, spaceFilled, spaceFree );
-	
-	
-	/*
-    KDiskFreeSpace * job = new KDiskFreeSpace();
-    connect(job, SIGNAL(foundMountPoint(const QString&, unsigned long, unsigned long,
-                                        unsigned long)),
-            this, SLOT(slotFoundMountPoint(const QString&, unsigned long, unsigned long,
-                                           unsigned long)));
-    job->readDF(mountPoint);
-	*/
+#ifdef WIN32
+    ULARGE_INTEGER available, total, totalFree;
+    if (GetDiskFreeSpaceExA(m_path->text().toLocal8Bit().data(),
+                            &available, &total, &totalFree)) {
+        __int64 a = available.QuadPart;
+        __int64 t = total.QuadPart;
+        __int64 u = 0;
+        if (t > a) u = t - a;
+        slotFoundMountPoint(m_path->text(), t / 1024, u / 1024, a / 1024);
+    } else {
+        std::cerr << "WARNING: GetDiskFreeSpaceEx failed: error code "
+                  << GetLastError() << std::endl;
+    }
+#else
+    struct statvfs buf;
+    if (!statvfs(m_path->text().toLocal8Bit().data(), &buf)) {
+        // do the multiplies and divides in this order to reduce the
+        // likelihood of arithmetic overflow
+        std::cerr << "statvfs(" << m_path->text().toLocal8Bit().data() << ") says available: " << buf.f_bavail << ", total: " << buf.f_blocks << ", block size: " << buf.f_bsize << std::endl;
+        uint64_t available = ((buf.f_bavail / 1024) * buf.f_bsize);
+        uint64_t total = ((buf.f_blocks / 1024) * buf.f_bsize);
+        uint64_t used = 0;
+        if (total > available) used = total - available;
+        slotFoundMountPoint(m_path->text(), total, used, available);
+    } else {
+        perror("statvfs failed");
+    }
+#endif
 }
 
 void
