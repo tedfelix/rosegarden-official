@@ -48,30 +48,6 @@ CommandRegistry::~CommandRegistry()
     }
 }
 
-
-
-void CommandRegistry::addAction
-	(
-	QString title,	
-	QString icon,
-	QString shortcut, 
-	QString actionName,
-	QString menuTitle,
-	QString menuActionName 
-	)
-{
-	IconLoader il;
-	QIcon iconx;
-	iconx = il.load( icon );
-	
-	QAction* tac = new QAction( iconx, title, this );
-// 	tac->setIcon( iconx );
-// 	tac->setText( title );
-	tac->setObjectName( actionName );
-	tac->setShortcut( QKeySequence(shortcut) );
-	
-}
-
 void
 CommandRegistry::slotInvokeCommand()
 {
