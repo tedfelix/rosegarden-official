@@ -50,7 +50,7 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QFrame>
-//#include <qgrid.h> //### rewrite required;  I actually rewrote that, and accidentally lost it.  Great.
+#include <QGridLayout>
 #include <QGroupBox>
 #include <QLayout>
 #include <QPushButton>
@@ -79,17 +79,21 @@ static const int RECORD_CONNECTION_COL = 2;
 
 DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
             RosegardenGUIDoc *document) :
-            QMainWindow(parent, "deviceeditordialog"),
+            QMainWindow(parent),
             m_document(document),
             m_studio(&document->getStudio())
 {
     QFrame * mainBox = new QFrame(this);
     setCentralWidget(mainBox);
-    QVBoxLayout *mainLayout = new QVBoxLayout(mainBox, 10, 10);
+    mainBox->setContentsMargins(10, 10, 10, 10);
+    QVBoxLayout *mainLayout = new QVBoxLayout(mainBox);
+    mainLayout->setSpacing(10);
 
-    setCaption(i18n("Manage MIDI Devices"));
+    setWindowTitle(i18n("Manage MIDI Devices"));
 
-    QGroupBox *groupBox = new QGroupBox(2, Horizontal, i18n("Play devices"), mainBox);
+    QGroupBox *groupBox = new QGroupBox(i18n("Play devices"), mainBox);
+    QHBoxLayout *groupBoxLayout = new QHBoxLayout;
+    mainLayout->addWidget(groupBox);
 
     m_playTable = new Q3Table(0, 2, groupBox);
     m_playTable->setSorting(false);
@@ -102,18 +106,30 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
     m_playTable->verticalHeader()->hide();
     m_playTable->setLeftMargin(0);
     m_playTable->setSelectionMode(Q3Table::SingleRow);
+    groupBoxLayout->addWidget(m_playTable);
 
     QFrame *frame = new QFrame(groupBox);
-    QVBoxLayout *vlayout = new QVBoxLayout(frame);
-    QGrid *buttons = new QGrid(2, Horizontal, frame);
-    QPushButton *addButton = new QPushButton(i18n("New"), buttons);
-    m_deletePlayButton = new QPushButton(i18n("Delete"), buttons);
-    m_importButton = new QPushButton(i18n("Import..."), buttons);
-    m_exportButton = new QPushButton(i18n("Export..."), buttons);
-    m_banksButton = new QPushButton(i18n("Banks..."), buttons);
-    m_controllersButton = new QPushButton(i18n("Control Events..."), buttons);
-    vlayout->addWidget(buttons);
-    vlayout->addStretch(10);
+    QGridLayout *vlayout = new QGridLayout(frame);
+    groupBoxLayout->addWidget(frame);
+
+    QPushButton *addButton = new QPushButton(i18n("New"));
+    m_deletePlayButton = new QPushButton(i18n("Delete"));
+    m_importButton = new QPushButton(i18n("Import..."));
+    m_exportButton = new QPushButton(i18n("Export..."));
+    m_banksButton = new QPushButton(i18n("Banks..."));
+    m_controllersButton = new QPushButton(i18n("Control Events..."));
+
+    vlayout->addWidget(addButton, 0, 0);
+    vlayout->addWidget(m_deletePlayButton, 0, 1);
+    vlayout->addWidget(m_importButton, 1, 0);
+    vlayout->addWidget(m_exportButton, 1, 1);
+    vlayout->addWidget(m_banksButton, 2, 0);
+    vlayout->addWidget(m_controllersButton, 2, 1);
+    vlayout->addWidget(new QLabel(" "), 3, 0, 1, 2);
+    vlayout->setRowStretch(3, 10);
+
+    frame->setLayout(vlayout);
+    groupBox->setLayout(groupBoxLayout);
 
     addButton->setToolTip(i18n("Create a new Play device"));
     m_deletePlayButton->setToolTip(i18n("Delete the selected device"));
@@ -134,8 +150,9 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
     connect(m_playTable, SIGNAL(currentChanged(int, int)),
             this, SLOT(slotPlayDeviceSelected (int, int)));
 
+    groupBox = new QGroupBox(i18n("Record devices"), mainBox);
+    groupBoxLayout = new QHBoxLayout;
     mainLayout->addWidget(groupBox);
-    groupBox = new QGroupBox(2, Horizontal, i18n("Record devices"), mainBox);
 
     m_recordTable = new Q3Table(0, 3, groupBox);
     m_recordTable->setSorting(false);
@@ -149,14 +166,22 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
     m_recordTable->verticalHeader()->hide();
     m_recordTable->setLeftMargin(0);
     m_recordTable->setSelectionMode(Q3Table::SingleRow);
+    groupBoxLayout->addWidget(m_recordTable);
 
     frame = new QFrame(groupBox);
-    vlayout = new QVBoxLayout(frame);
-    buttons = new QGrid(2, Horizontal, frame);
-    addButton = new QPushButton(i18n("New"), buttons);
-    m_deleteRecordButton = new QPushButton(i18n("Delete"), buttons);
-    vlayout->addWidget(buttons);
-    vlayout->addStretch(10);
+    vlayout = new QGridLayout(frame);
+    groupBoxLayout->addWidget(frame);
+
+    addButton = new QPushButton(i18n("New"), frame);
+    m_deleteRecordButton = new QPushButton(i18n("Delete"), frame);
+
+    vlayout->addWidget(addButton, 0, 0);
+    vlayout->addWidget(m_deleteRecordButton, 0, 1);
+    vlayout->addWidget(new QLabel(" "), 1, 0, 1, 2);
+    vlayout->setRowStretch(1, 10);
+
+    frame->setLayout(vlayout);
+    groupBox->setLayout(groupBoxLayout);
 
     addButton->setToolTip(i18n("Create a new Record device"));
     m_deleteRecordButton->setToolTip(i18n("Delete the selected device"));
@@ -178,16 +203,17 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
     setMinimumHeight(400);
     setMinimumWidth(600);
 
-    mainLayout->addWidget(groupBox);
-
     QFrame* btnBox = new QFrame(mainBox);
+    btnBox->setContentsMargins(0, 0, 0, 0);
+    QHBoxLayout* layout = new QHBoxLayout(btnBox);
+    layout->setSpacing(10);
+    mainLayout->addWidget(btnBox);
 
     btnBox->setSizePolicy(
         QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed));
 
     QPushButton *closeButton = new QPushButton(i18n("Close"), btnBox);
 
-    QHBoxLayout* layout = new QHBoxLayout(btnBox, 0, 10);
     layout->addStretch(10);
     layout->addWidget(closeButton);
     layout->addSpacing(5);
@@ -199,7 +225,7 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
     closeButton->setText(close->text());
     connect(closeButton, SIGNAL(clicked()), this, SLOT(slotClose()));
 
-    mainLayout->addWidget(btnBox);
+    mainBox->setLayout(mainLayout);
 
     // some adjustments
     new KToolBarPopupAction(i18n("Und&o"),
