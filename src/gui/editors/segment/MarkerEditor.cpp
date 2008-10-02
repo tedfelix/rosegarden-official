@@ -87,18 +87,24 @@ MarkerEditor::MarkerEditor(QWidget *parent,
     for (int i = 0; i < 3; ++i)
         m_listView->setColumnAlignment(i, Qt::AlignHCenter);
 
-    QGroupBox *posGroup = new QGroupBox(
-                                        i18n("Pointer position"), mainFrame );
+    QGroupBox *posGroup = new QGroupBox(i18n("Pointer position"), mainFrame);
     mainFrameLayout->addWidget(posGroup);
 
-    new QLabel(i18n("Absolute time:"), posGroup);
-    m_absoluteTime = new QLabel(posGroup);
+    QGridLayout *posGroupLayout = new QGridLayout;
 
-    new QLabel(i18n("Real time:"), posGroup);
-    m_realTime = new QLabel(posGroup);
+    posGroupLayout->addWidget(new QLabel(i18n("Absolute time:")), 0, 0);
+    m_absoluteTime = new QLabel;
+    posGroupLayout->addWidget(m_absoluteTime, 0, 1);
 
-    new QLabel(i18n("In measure:"), posGroup);
-    m_barTime = new QLabel(posGroup);
+    posGroupLayout->addWidget(new QLabel(i18n("Real time:")), 1, 0);
+    m_realTime = new QLabel;
+    posGroupLayout->addWidget(m_realTime, 1, 1);
+
+    posGroupLayout->addWidget(new QLabel(i18n("In measure:")), 2, 0);
+    m_barTime = new QLabel;
+    posGroupLayout->addWidget(m_barTime, 2, 1);
+
+    posGroup->setLayout(posGroupLayout);
 
     QFrame *btnBox = new QFrame( mainFrame );
     mainFrameLayout->addWidget(btnBox);
@@ -107,7 +113,9 @@ MarkerEditor::MarkerEditor(QWidget *parent,
     btnBox->setSizePolicy(
         QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed));
 
-    QHBoxLayout* layout = new QHBoxLayout(btnBox, 4, 10);
+    btnBox->setContentsMargins(4, 4, 4, 4);
+    QHBoxLayout* layout = new QHBoxLayout(btnBox);
+    layout->setSpacing(10);
 
     m_addButton = new QPushButton(i18n("Add"), btnBox);
     m_deleteButton = new QPushButton(i18n("Delete"), btnBox);
@@ -131,6 +139,8 @@ MarkerEditor::MarkerEditor(QWidget *parent,
 
     layout->addWidget(m_closeButton);
     layout->addSpacing(5);
+
+    btnBox->setLayout(layout);
 
     connect(m_addButton, SIGNAL(released()),
             SLOT(slotAdd()));

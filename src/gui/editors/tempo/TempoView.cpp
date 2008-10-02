@@ -53,6 +53,7 @@
 #include <QSize>
 #include <QString>
 #include <QLayout>
+#include <QVBoxLayout>
 #include <Q3Canvas>
 #include <kstatusbar.h>
 
@@ -81,9 +82,15 @@ TempoView::TempoView(RosegardenGUIDoc *doc, QWidget *parent, timeT openTime):
     //
     m_filterGroup =
         new QGroupBox(1, Horizontal, i18n("Filter"), getCentralWidget());
+    QVBoxLayout *filterGroupLayout = new QVBoxLayout;
 
     m_tempoCheckBox = new QCheckBox(i18n("Tempo"), m_filterGroup);
+    filterGroupLayout->addWidget(m_tempoCheckBox);
+
     m_timeSigCheckBox = new QCheckBox(i18n("Time Signature"), m_filterGroup);
+    filterGroupLayout->addWidget(m_timeSigCheckBox);
+
+    m_filterGroup->setLayout(filterGroupLayout);
     m_grid->addWidget(m_filterGroup, 2, 0);
 
     // Connect up
@@ -890,7 +897,7 @@ TempoView::slotPopupEditor(QListWidgetItem *qitem)
 void
 TempoView::updateViewCaption()
 {
-    setCaption(i18n("%1 - Tempo and Time Signature Editor",
+    setWindowTitle(i18n("%1 - Tempo and Time Signature Editor",
                 getDocument()->getTitle()));
 }
 
