@@ -17,15 +17,23 @@
 
 #include "MarkerEditorViewItem.h"
 
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
+
+
 namespace Rosegarden {
 
 int
-MarkerEditorViewItem::compare(QListWidgetItem * i, int col, bool ascending) const
+MarkerEditorViewItem::compare(QTreeWidgetItem * i, int col, bool ascending) const
 {
+	return 0;
+	//MarkerEditorViewItem::compare //&&& FIX : QTreeWidgetItem::compare does not exist
+	
+	/*
     MarkerEditorViewItem *ei = 
         dynamic_cast<MarkerEditorViewItem *>(i);
 
-    if (!ei) return QListWidgetItem::compare(i, col, ascending);
+    if (!ei) return QTreeWidgetItem::compare(i, col, ascending);
 
     // Raw time sorting on time column
     //
@@ -36,8 +44,9 @@ MarkerEditorViewItem::compare(QListWidgetItem * i, int col, bool ascending) cons
         else return 0;
 
     } else {
-        return QListWidgetItem::compare(i, col, ascending);
+        return QTreeWidgetItem::compare(i, col, ascending);
     }
+	*/
 }
 
 }

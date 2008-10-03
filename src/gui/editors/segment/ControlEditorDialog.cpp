@@ -379,19 +379,28 @@ ControlEditorDialog::setupActions()
 	
     m_closeButton->setText( close->text() );
     connect(m_closeButton, SIGNAL(released()), this, SLOT(slotClose()));
-
+	
+	
+	QAction *tac;
+	
     // some adjustments
-    new KToolBarPopupAction(i18n("Und&o"),
-                            "undo",
-                            KStandardShortcut::key(KStandardShortcut::Undo),
-                            actionCollection(),
-                            KStandardAction::stdName(KStandardAction::Undo));
+//     new KToolBarPopupAction(i18n("Und&o"),
+//                             "undo",
+//                             KStandardShortcut::key(KStandardShortcut::Undo),
+//                             actionCollection(),
+//                             KStandardAction::stdName(KStandardAction::Undo));
+	tac = new QAction( i18n("Und&o"), this );
+	tac->setObjectName( "undo" );
+	tac->setShortcut( QKeySequence::Undo );
 
-    new KToolBarPopupAction(i18n("Re&do"),
-                            "redo",
-                            KStandardShortcut::key(KStandardShortcut::Redo),
-                            actionCollection(),
-                            KStandardAction::stdName(KStandardAction::Redo));
+//     new KToolBarPopupAction(i18n("Re&do"),
+//                             "redo",
+//                             KStandardShortcut::key(KStandardShortcut::Redo),
+//                             actionCollection(),
+//                             KStandardAction::stdName(KStandardAction::Redo));
+	tac = new QAction( i18n("Re&do"), this );
+	tac->setObjectName( "redo" );
+	tac->setShortcut( QKeySequence::Redo );
 
     rgTempQtIV->createGUI("controleditor.rc", 0);
 }

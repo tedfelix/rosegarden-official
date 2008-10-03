@@ -19,18 +19,19 @@
 #ifndef _RG_MARKEREDITOR_H_
 #define _RG_MARKEREDITOR_H_
 
-#include <kmainwindow.h>
+#include <QMainWindow>
 #include <QString>
+
 #include "base/Event.h"
 
 
 class QWidget;
 class QPushButton;
-class QListWidgetItem;
+class QTreeWidget;
+class QTreeWidgetItem;
 class QLabel;
 class QCloseEvent;
 class QShortcut;
-class QListWidget;
 
 
 namespace Rosegarden
@@ -41,7 +42,7 @@ class RosegardenGUIDoc;
 class MultiViewCommandHistory;
 
 
-class MarkerEditor : public KMainWindow
+class MarkerEditor : public QMainWindow
 {
     Q_OBJECT
 
@@ -73,8 +74,8 @@ public slots:
     void slotDelete();
     void slotDeleteAll();
     void slotClose();
-    void slotEdit(QListWidgetItem *);
-    void slotItemClicked(QListWidgetItem *);
+    void slotEdit(QTreeWidgetItem *);
+    void slotItemClicked(QTreeWidgetItem *);
 
     void slotMusicalTime();
     void slotRealTime();
@@ -104,7 +105,7 @@ protected:
     QPushButton             *m_deleteButton;
     QPushButton             *m_deleteAllButton;
 
-    QListWidget               *m_listView;
+    QTreeWidget               *m_listView;
 
     bool                     m_modified;
 
