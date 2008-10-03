@@ -987,11 +987,14 @@ SegmentParameterBox::slotColourSelected(int value)
 									QLineEdit::Normal,
 									i18n("New"), &ok);
         if ((ok == true) && (!newName.isEmpty())) {
-            QColorDialog box(this, "", true);
+//             QColorDialog box(this, "", true);
+			
+			//QRgb QColorDialog::getRgba( 0xffffffff, &ok, this );
+			QColor newColor = QColorDialog::getColor( Qt::white, this );
 
-            int result = box.getColor(newColour);
+//             int result = box.getColor(newColour);
 
-            if (result == QColorDialog::Accepted) {
+            if( newColor.isValid() ) {
                 Colour newRColour = GUIPalette::convertColour(newColour);
                 newMap.addItem(newRColour, qstrtostr(newName));
                 SegmentColourMapCommand *command = new SegmentColourMapCommand(m_doc, newMap);

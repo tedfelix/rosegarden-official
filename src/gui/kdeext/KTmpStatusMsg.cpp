@@ -77,8 +77,11 @@ RgTempQtIV* rgTempQtIV = &__mm;
 
 
 /** ksqueezedtextlabel.h replacement: */
-SqueezedLabel::SqueezedLabel(
-	): QLabel
+SqueezedLabel::SqueezedLabel
+	( 
+	QString label, QWidget* parent
+	)
+	: QLabel(label, parent)
 {
 	//### maybe fix: not really the same as KSqueezedTextLabel,
 	//    but should work for now.

@@ -20,6 +20,8 @@
 #include <QLabel>
 
 class QMainWindow;
+class QWidget;
+class QString;
 //class QLabel;
 
 
@@ -29,7 +31,7 @@ class QMainWindow;
 class SqueezedLabel: public QLabel
 {
 	public:
-	SqueezedLabel();
+	SqueezedLabel( QString label="", QWidget* parent=0 );
 };
 
 

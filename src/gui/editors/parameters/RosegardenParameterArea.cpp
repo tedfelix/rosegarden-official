@@ -40,31 +40,40 @@
 namespace Rosegarden
 {
 
-RosegardenParameterArea::RosegardenParameterArea(QWidget *parent,
-	const char *name)	//, WFlags f)
-	: QStackedWidget(parent, name),//, f),
+RosegardenParameterArea::RosegardenParameterArea(
+	QWidget *parent,
+	const char *name
+	)	//, WFlags f)
+	: QStackedWidget(parent),//, name),//, f),
         m_style(RosegardenParameterArea::CLASSIC_STYLE),
-        m_scrollView(new QScrollArea(this, 0, Qt::WStaticContents)),
+        m_scrollView(new QScrollArea(this)), //, 0, Qt::WStaticContents)),
         m_classic(new QWidget(m_scrollView->viewport())),
         m_classicLayout(new QVBoxLayout),
         m_tabBox(new QTabWidget(this)),
         m_active(0),
         m_spacing(0)
 {
+	this->setObjectName( name );
+	
     m_classic->setLayout(m_classicLayout);
-
-    m_scrollView->addChild(m_classic);
-    m_scrollView->setHScrollBarMode(QScrollArea::AlwaysOff);
-    m_scrollView->setVScrollBarMode(QScrollArea::Auto);
-    m_scrollView->setResizePolicy(QScrollArea::AutoOneFit);
-
+	m_scrollView->setWidget(m_classic);
+	
+	m_scrollView->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+	m_scrollView->setVerticalScrollBarPolicy( Qt::ScrollBarAsNeeded );
+	
+	QSizePolicy poli;
+// 	m_scrollView->setResizePolicy(QScrollArea::AutoOneFit);
+	poli.setVerticalPolicy( QSizePolicy::MinimumExpanding );		//@@@ was AutoOneFit
+	poli.setHorizontalPolicy( QSizePolicy::MinimumExpanding );
+	m_scrollView->setSizePolicy( poli );
+	
+	
+	// add 2 wigets as stacked widgets
     // Install the classic-style VBox widget in the widget-stack.
-
-    addWidget(m_scrollView, CLASSIC_STYLE);
+	this->addWidget(m_scrollView);//, CLASSIC_STYLE);	//&&& 
 
     // Install the widget that implements the tab-style to the widget-stack.
-
-    addWidget(m_tabBox, TAB_BOX_STYLE);
+	this->addWidget(m_tabBox); //, TAB_BOX_STYLE);
 
 }
 
@@ -182,7 +191,7 @@ void RosegardenParameterArea::setArrangement(Arrangement style)
 
         // Switch the widget stack to displaying the new container.
 
-        setCurrentWidget( dynamic_cast<QWidget*>(style) );
+		setCurrentWidget( dynamic_cast<QWidget*>(container) );	//@@@ verify if gui works
     }
 
     // Record the identity of the active container, and the associated

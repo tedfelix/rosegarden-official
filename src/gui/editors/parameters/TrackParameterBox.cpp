@@ -42,11 +42,11 @@
 #include "base/Studio.h"
 #include "base/Track.h"
 #include "base/StaffExportTypes.h"
+#include "gui/kdeext/KTmpStatusMsg.h"
 #include "commands/segment/SegmentSyncCommand.h"
 #include "document/RosegardenGUIDoc.h"
 #include "gui/dialogs/PitchPickerDialog.h"
 #include "gui/general/GUIPalette.h"
-#include "gui/general/KTmpStatusMsg.h"
 #include "gui/general/PresetHandlerDialog.h"
 #include "gui/widgets/CollapsingFrame.h"
 #include "gui/widgets/ColourTable.h"
@@ -125,7 +125,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
 
     // track label
     //
-    m_trackLabel = new SqueezedLabel(i18n("<untitled>"), this);
+    m_trackLabel = new SqueezedLabel (i18n("<untitled>"), this );
     m_trackLabel->setAlignment(Qt::AlignCenter);
     //mainLayout->addWidget(m_trackLabel, 0, 0, 0- 0+1, 5- 1, Qt::AlignCenter);
     mainLayout->addWidget(m_trackLabel, 0, 0);
@@ -884,11 +884,13 @@ TrackParameterBox::slotColorChanged(int index)
 				QLineEdit::Normal, i18n("New"), &ok );
 		
         if ((ok == true) && (!newName.isEmpty())) {
-            QColorDialog box(this, "", true);
+//             QColorDialog box(this, "", true);
+//             int result = box.getColor(newColour);
+			
+			//QRgb QColorDialog::getRgba( 0xffffffff, &ok, this );
+			QColor newColor = QColorDialog::getColor( Qt::white, this );
 
-            int result = box.getColor(newColour);
-
-            if (result == QColorDialog::Accepted) {
+            if ( newColor.isValid() ) {
                 Colour newRColour = GUIPalette::convertColour(newColour);
                 newMap.addItem(newRColour, qstrtostr(newName));
                 slotDocColoursChanged();
