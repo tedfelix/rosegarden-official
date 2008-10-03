@@ -20,9 +20,9 @@
 #define _RG_ROSEGARDENPITCHCHOOSER_H_
 
 #include <QGroupBox>
-#include <QString>
 
 
+class QString;
 class QWidget;
 class QSpinBox;
 class QLabel;
@@ -39,8 +39,8 @@ class PitchChooser : public QGroupBox
     Q_OBJECT
 public:
     PitchChooser(QString title,
-                           QWidget *parent,
-                           int defaultPitch = 60);
+                 QWidget *parent,
+                 int defaultPitch = 60);
     
     int getPitch() const;
 

@@ -27,6 +27,7 @@
 #include <QString>
 #include <QWidget>
 #include <QHBoxLayout>
+#include <QVBoxLayout>
 
 
 namespace Rosegarden
@@ -35,14 +36,18 @@ namespace Rosegarden
 PitchChooser::PitchChooser(QString title,
                            QWidget *parent,
                            int defaultPitch) :
-        QGroupBox(title, parent), //@@@ 
+        QGroupBox(title, parent),
         m_defaultPitch(defaultPitch)
 {
+    QVBoxLayout *layout = new QVBoxLayout;
+
     m_pitchDragLabel = new PitchDragLabel(this, defaultPitch);
+    layout->addWidget(m_pitchDragLabel);
 
     QWidget *hbox = new QWidget(this);
     QHBoxLayout *hboxLayout = new QHBoxLayout;
     hboxLayout->setSpacing(6);
+    layout->addWidget(hbox);
 
     QLabel *child_4 = new QLabel(i18n("Pitch:"), hbox );
     hboxLayout->addWidget(child_4);
@@ -58,6 +63,8 @@ PitchChooser::PitchChooser(QString title,
     hboxLayout->addWidget(m_pitchLabel);
     hbox->setLayout(hboxLayout);
     m_pitchLabel->setMinimumWidth(40);
+
+    setLayout(layout);
 
     connect(m_pitch, SIGNAL(valueChanged(int)),
             this, SLOT(slotSetPitch(int)));
