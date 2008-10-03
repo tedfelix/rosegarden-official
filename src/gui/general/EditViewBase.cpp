@@ -722,5 +722,30 @@ MultiViewCommandHistory* EditViewBase::getCommandHistory()
     return dynamic_cast<QAction*>(actionCollection()->action(actionName));
 }
 
+QAction *
+EditViewBase::newAction(QString actionName)
+{
+    QAction *action = new QAction(this);
+    action->setObjectName(actionName);
+    return action;
+}
+
+void
+EditViewBase::enterActionState(QString stateName)
+{
+    //&&& implement
+#pragma warning("Implement enterActionState");
+    std::cerr << "ERROR: enterActionState not implemented" << std::endl;
+}
+
+void
+EditViewBase::leaveActionState(QString stateName)
+{
+    //&&& implement
+#pragma warning("Implement leaveActionState");
+    std::cerr << "ERROR: leaveActionState not implemented" << std::endl;
+}
+
+
 }
 #include "EditViewBase.moc"

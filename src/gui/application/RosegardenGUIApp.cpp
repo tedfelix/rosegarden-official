@@ -8884,6 +8884,30 @@ RosegardenGUIApp::slotJumpToQuickMarker()
 }
 
 
+QAction *
+RosegardenGUIApp::newAction(QString actionName)
+{
+    QAction *action = new QAction(this);
+    action->setObjectName(actionName);
+    return action;
+}
+
+void
+RosegardenGUIApp::enterActionState(QString stateName)
+{
+    //&&& implement
+#pragma warning("Implement enterActionState");
+    std::cerr << "ERROR: enterActionState not implemented" << std::endl;
+}
+
+void
+RosegardenGUIApp::leaveActionState(QString stateName)
+{
+    //&&& implement
+#pragma warning("Implement leaveActionState");
+    std::cerr << "ERROR: leaveActionState not implemented" << std::endl;
+}
+
 
 
 

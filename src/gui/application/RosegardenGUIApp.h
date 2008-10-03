@@ -1538,6 +1538,12 @@ public slots:
     
     void slotJumpToQuickMarker();    
 
+
+    QAction *newAction(QString actionName);
+    void enterActionState(QString stateName);
+    void leaveActionState(QString stateName);
+
+
 private:
 
 

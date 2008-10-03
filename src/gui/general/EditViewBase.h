@@ -349,6 +349,10 @@ protected:
     void setConfigDialogPageIndex(int p) { m_configDialogPageIndex = p; }
     int getConfigDialogPageIndex()       { return m_configDialogPageIndex; }
 
+    QAction *newAction(QString actionName);
+    void enterActionState(QString stateName);
+    void leaveActionState(QString stateName);
+
     //--------------- Data members ---------------------------------
     QString m_rcFileName;
 
