@@ -20,9 +20,9 @@
 #define _RG_ROSEGARDENDIATONICPITCHCHOOSER_H_
 
 #include <QGroupBox>
-#include <QString>
 
 
+class QString;
 class QWidget;
 class QSpinBox;
 class QComboBox;

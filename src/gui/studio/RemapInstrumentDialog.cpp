@@ -34,7 +34,6 @@
 #include <QDialogButtonBox>
 #include <klocale.h>
 #include <QGroupBox>
-#include <QGroupBox>
 #include <QLabel>
 #include <QRadioButton>
 #include <QWidget>
@@ -44,7 +43,7 @@
 namespace Rosegarden
 {
 
-RemapInstrumentDialog::RemapInstrumentDialog(QDialogButtonBox::QWidget *parent,
+RemapInstrumentDialog::RemapInstrumentDialog(QWidget *parent,
         RosegardenGUIDoc *doc):
         QDialog(parent),
         m_doc(doc)
@@ -59,31 +58,43 @@ RemapInstrumentDialog::RemapInstrumentDialog(QDialogButtonBox::QWidget *parent,
     metagrid->addWidget(vBox, 0, 0);
 
 
-    m_buttonGroup = new QGroupBox(
-                                     i18n("Device or Instrument"), vBox );
-    vBoxLayout->addWidget(m_buttonGroup);
+    QGroupBox *buttonGroup = new QGroupBox(i18n("Device or Instrument"));
+    QVBoxLayout *buttonGroupLayout = new QVBoxLayout;
+    vBoxLayout->addWidget(buttonGroup);
 
-    new QLabel(i18n("Remap Tracks by all Instruments on a Device or by single Instrument"), m_buttonGroup);
-    m_deviceButton = new QRadioButton(i18n("Device"), m_buttonGroup);
-    m_instrumentButton = new QRadioButton(i18n("Instrument"), m_buttonGroup);
+    buttonGroupLayout->addWidget(new QLabel(i18n("Remap Tracks by all "
+                            "Instruments on a Device or by single Instrument")));
+    m_deviceButton = new QRadioButton(i18n("Device"));
+    buttonGroupLayout->addWidget(m_deviceButton);
+    m_instrumentButton = new QRadioButton(i18n("Instrument"));
+    buttonGroupLayout->addWidget(m_instrumentButton);
+    buttonGroup->setLayout(buttonGroupLayout);
 
+    connect(m_deviceButton, SIGNAL(released()),
+            this, SLOT(slotRemapReleased()));
+    connect(m_instrumentButton, SIGNAL(released()),
+            this, SLOT(slotRemapReleased()));
 
-    connect(m_buttonGroup, SIGNAL(released(int)),
-            this, SLOT(slotRemapReleased(int)));
-
-    QGroupBox *groupBox = new QGroupBox(
-                                        i18n("Choose Source and Destination"), vBox );
+    QGroupBox *groupBox = new QGroupBox(i18n("Choose Source and Destination"));
+    QGridLayout *groupBoxLayout = new QGridLayout;
     vBoxLayout->addWidget(groupBox);
+
+    groupBoxLayout->addWidget(new QLabel(i18n("From")), 0, 0);
+    groupBoxLayout->addWidget(new QLabel(i18n("To")), 0, 1);
+    m_fromCombo = new QComboBox(groupBox);
+    groupBoxLayout->addWidget(m_fromCombo, 1, 0);
+    m_toCombo = new QComboBox(groupBox);
+    groupBoxLayout->addWidget(m_toCombo, 1, 1);
+    groupBox->setLayout(groupBoxLayout);
+
     vBox->setLayout(vBoxLayout);
 
-    new QLabel(i18n("From"), groupBox);
-    new QLabel(i18n("To"), groupBox);
-    m_fromCombo = new QComboBox(groupBox);
-    m_toCombo = new QComboBox(groupBox);
-
-    m_buttonGroup->setButton(0);
-    populateCombo(0);
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Apply | QDialogButtonBox::Cancel);
+    /// m_buttonGroup->setButton(0);
+    m_deviceButton->setChecked(true);
+    populateCombo();
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok |
+                                                       QDialogButtonBox::Apply |
+                                                       QDialogButtonBox::Cancel);
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
@@ -91,13 +102,13 @@ RemapInstrumentDialog::RemapInstrumentDialog(QDialogButtonBox::QWidget *parent,
 }
 
 void
-RemapInstrumentDialog::populateCombo(int id)
+RemapInstrumentDialog::populateCombo()
 {
     m_fromCombo->clear();
     m_toCombo->clear();
     Studio *studio = &m_doc->getStudio();
 
-    if (id == 0) {
+    if (m_deviceButton->isChecked()) {
         DeviceList *devices = studio->getDevices();
         DeviceListIterator it;
         m_devices.clear();
@@ -139,9 +150,9 @@ RemapInstrumentDialog::populateCombo(int id)
 }
 
 void
-RemapInstrumentDialog::slotRemapReleased(int id)
+RemapInstrumentDialog::slotRemapReleased()
 {
-    populateCombo(id);
+    populateCombo();
 }
 
 void
@@ -154,7 +165,7 @@ RemapInstrumentDialog::slotOk()
 void
 RemapInstrumentDialog::slotApply()
 {
-    if (m_buttonGroup->id(m_buttonGroup->selected()) == 0) // devices
+    if (m_deviceButton->isChecked()) // devices
     {
         ModifyDeviceMappingCommand *command =
             new ModifyDeviceMappingCommand

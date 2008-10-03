@@ -31,24 +31,28 @@
 #include <QString>
 #include <QWidget>
 #include <QHBoxLayout>
+#include <QVBoxLayout>
 
 namespace Rosegarden
 {
 
-//### QGroupBox rewrite required in this file to allow it to compile
 DiatonicPitchChooser::DiatonicPitchChooser(QString title,
                            QWidget *parent,
                            int defaultNote,
                            int defaultPitch,
                            int defaultOctave) :
-        QGroupBox(1, Qt::Horizontal, title, parent),
+        QGroupBox(title, parent),
         m_defaultPitch(defaultPitch)
 {
+    QVBoxLayout *layout = new QVBoxLayout;
+
     m_pitchDragLabel = new PitchDragLabel(this, defaultPitch);
+    layout->addWidget(m_pitchDragLabel);
 
     QWidget *hbox = new QWidget(this);
     QHBoxLayout *hboxLayout = new QHBoxLayout;
     hboxLayout->setSpacing(6);
+    layout->addWidget(hbox);
 
     m_step = new QComboBox( hbox );
     hboxLayout->addWidget(m_step);
@@ -87,9 +91,10 @@ DiatonicPitchChooser::DiatonicPitchChooser(QString title,
 
     m_pitchLabel = new QLabel(QString("%1").arg(getPitch()), hbox );
     hboxLayout->addWidget(m_pitchLabel);
-    hbox->setLayout(hboxLayout);
-    
     m_pitchLabel->setMinimumWidth(40);
+
+    hbox->setLayout(hboxLayout);
+    setLayout(layout);
 
     connect(m_accidental, SIGNAL(activated(int)),
             this, SLOT(slotSetAccidental(int)));

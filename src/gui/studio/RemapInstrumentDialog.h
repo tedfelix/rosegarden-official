@@ -21,12 +21,10 @@
 
 #include "base/Studio.h"
 #include <QDialog>
-#include <QDialogButtonBox>
 
 
 class QWidget;
 class QRadioButton;
-class QGroupBox;
 class QComboBox;
 
 
@@ -43,19 +41,22 @@ class RemapInstrumentDialog : public QDialog
 {
     Q_OBJECT
 public:
-    RemapInstrumentDialog(QDialogButtonBox::QWidget *parent,
+    RemapInstrumentDialog(QWidget *parent,
                           RosegardenGUIDoc *doc);
 
-    void populateCombo(int id);
+    void populateCombo();
 
     void addCommandToHistory(Command *command);
     MultiViewCommandHistory* getCommandHistory();
 
 public slots:
-    void slotRemapReleased(int id);
+    void slotRemapReleased();
 
     void slotOk();
     void slotApply();
+
+signals:
+    void applyClicked();
 
 protected:
 
@@ -64,7 +65,6 @@ protected:
     QRadioButton        *m_deviceButton;
     QRadioButton        *m_instrumentButton;
 
-    QGroupBox        *m_buttonGroup;
     QComboBox           *m_fromCombo;
     QComboBox           *m_toCombo;
 
