@@ -42,18 +42,19 @@
 #include "document/RosegardenGUIDoc.h"
 #include "document/ConfigGroups.h"
 #include "document/Command.h"
+#include "gui/kdeext/KTmpStatusMsg.h"
 
 #include <QShortcut>
 #include <QMainWindow>
 #include <QLayout>
 #include <QApplication>
 #include <QAction>
-#include <QListWidget>
+#include <QTreeWidget>
 #include <QColor>
 #include <QDialog>
 #include <QFrame>
 #include <QLabel>
-#include <QListWidget>
+#include <QTreeWidget>
 #include <QPixmap>
 #include <QPushButton>
 #include <QSizePolicy>
@@ -102,8 +103,8 @@ ControlEditorDialog::ControlEditorDialog
                device), mainFrame);
     new QLabel("", mainFrame);
 
-    m_listView = new QListWidget( mainFrame );
-    mainFrameLayout->addWidget(m_listView);
+	
+	/*
     m_listView->addColumn(i18n("Control Event name  "));
     m_listView->addColumn(i18n("Control Event type  "));
     m_listView->addColumn(i18n("Control Event value  "));
@@ -113,15 +114,35 @@ ControlEditorDialog::ControlEditorDialog
     m_listView->addColumn(i18n("Default  "));
     m_listView->addColumn(i18n("Color  "));
     m_listView->addColumn(i18n("Position on instrument panel"));
-
-    m_listView->setColumnAlignment(0, Qt::AlignLeft);
-
+	*/
+	
+	QStringList sl;
+	sl	<< i18n("Control Event name  ")
+		<< i18n("Control Event type  ")
+		<< i18n("Control Event value  ")
+		<< i18n("Description  ")
+		<< i18n("Min  ")
+		<< i18n("Max  ")
+		<< i18n("Default  ")
+		<< i18n("Color  ")
+		<< i18n("Position on instrument panel");
+	
+	m_listView = new QTreeWidget( mainFrame );
+	m_listView->setHeaderLabels( sl );
+	
+// 	m_listView->setColumnAlignment(0, Qt::AlignLeft);	//&&& align per item now:
+// 	m_listViewItem->setTextAlignment(0, Qt::AlignLeft);	
+	
+		
+	mainFrameLayout->addWidget(m_listView);
+	
     // Align remaining columns centrally
-    for (int i = 1; i < 9; ++i)
-        m_listView->setColumnAlignment(i, Qt::AlignHCenter);
-
-    m_listView->restoreLayout(ControlEditorConfigGroup);
-
+//     for (int i = 1; i < 9; ++i)
+//         m_listView->setColumnAlignment(i, Qt::AlignHCenter);	//&&& align per item now
+	
+	
+//     m_listView->restoreLayout(ControlEditorConfigGroup);	//&&&
+	
     QFrame *btnBox = new QFrame( mainFrame );
     mainFrameLayout->addWidget(btnBox);
     mainFrame->setLayout(mainFrameLayout);
@@ -158,31 +179,35 @@ ControlEditorDialog::ControlEditorDialog
 
     setupActions();
 
-    m_doc->getCommandHistory()->attachView(actionCollection());
+//     m_doc->getCommandHistory()->attachView( actionCollection() );	//&&&
+	
     connect(m_doc->getCommandHistory(), SIGNAL(commandExecuted()),
             this, SLOT(slotUpdate()));
 
-    connect(m_listView, SIGNAL(doubleClicked(QListWidgetItem *)),
-            SLOT(slotEdit(QListWidgetItem *)));
+    connect(m_listView, SIGNAL(doubleClicked(QTreeWidgetItem *)),
+            SLOT(slotEdit(QTreeWidgetItem *)));
 
     // Highlight all columns - enable extended selection mode
     //
     m_listView->setAllColumnsShowFocus(true);
-    m_listView->setSelectionMode(QListWidget::Extended);
+	
+	m_listView->setSelectionMode( QAbstractItemView::ExtendedSelection );
+// 	m_listView->setSelectionBehavior( QAbstractItemView::SelectRows );
 
     initDialog();
 
-    setAutoSaveSettings(ControlEditorConfigGroup, true);
+//     setAutoSaveSettings(ControlEditorConfigGroup, true);	//&&&
 }
 
 ControlEditorDialog::~ControlEditorDialog()
 {
     RG_DEBUG << "\n*** ControlEditorDialog::~ControlEditorDialog\n" << endl;
 
-    m_listView->saveLayout(ControlEditorConfigGroup);
+//     m_listView->saveLayout(ControlEditorConfigGroup);	//&&&
 
-    if (m_doc)
-        m_doc->getCommandHistory()->detachView(actionCollection());
+//     if (m_doc)
+//         m_doc->getCommandHistory()->detachView( actionCollection() );	//&&&
+	
 }
 
 void
@@ -197,7 +222,7 @@ ControlEditorDialog::slotUpdate()
 {
     RG_DEBUG << "ControlEditorDialog::slotUpdate" << endl;
 
-    //QPtrList<QListWidgetItem> selection = m_listView->selectedItems();
+    //QPtrList<QTreeWidgetItem> selection = m_listView->selectedItems();
 
     MidiDevice *md =
         dynamic_cast<MidiDevice *>(m_studio->getDevice(m_device));
@@ -205,7 +230,7 @@ ControlEditorDialog::slotUpdate()
         return ;
 
     ControlList::const_iterator it = md->beginControllers();
-    QListWidgetItem *item;
+    QTreeWidgetItem *item;
     int i = 0;
 
     m_listView->clear();
@@ -228,29 +253,35 @@ ControlEditorDialog::slotUpdate()
                       it->getControllerValue());
 
         if (it->getType() == PitchBend::EventType) {
-            item = new ControlParameterItem(i++,
-                                            m_listView,
-                                            strtoqstr(it->getName()),
-                                            strtoqstr(it->getType()),
-                                            QString("-"),
-                                            strtoqstr(it->getDescription()),
-                                            QString("%1").arg(it->getMin()),
-                                            QString("%1").arg(it->getMax()),
-                                            QString("%1").arg(it->getDefault()),
-                                            colour,
-                                            position);
+            item = new ControlParameterItem(
+											i++,
+											m_listView,
+											QStringList()
+                                            	<< strtoqstr(it->getName())
+                                            	<< strtoqstr(it->getType())
+                                            	<< QString("-")
+                                            	<< strtoqstr(it->getDescription())
+                                            	<< QString("%1").arg(it->getMin())
+                                            	<< QString("%1").arg(it->getMax())
+                                            	<< QString("%1").arg(it->getDefault())
+                                            	<< colour
+                                            	<< position 
+										   );
         } else {
-            item = new ControlParameterItem(i++,
-                                            m_listView,
-                                            strtoqstr(it->getName()),
-                                            strtoqstr(it->getType()),
-                                            value,
-                                            strtoqstr(it->getDescription()),
-                                            QString("%1").arg(it->getMin()),
-                                            QString("%1").arg(it->getMax()),
-                                            QString("%1").arg(it->getDefault()),
-                                            colour,
-                                            position);
+            item = new ControlParameterItem(
+							i++,
+							m_listView,
+							QStringList()
+								<< strtoqstr(it->getName())
+								<< strtoqstr(it->getType())
+								<< value
+								<< strtoqstr(it->getDescription())
+								<< QString("%1").arg(it->getMin())
+								<< QString("%1").arg(it->getMax())
+								<< QString("%1").arg(it->getDefault())
+								<< colour
+								<< position
+							);
         }
 
 
@@ -259,18 +290,20 @@ ControlEditorDialog::slotUpdate()
         QPixmap colourPixmap(16, 16);
         Colour c = comp.getGeneralColourMap().getColourByIndex(it->getColourIndex());
         colourPixmap.fill(QColor(c.getRed(), c.getGreen(), c.getBlue()));
-        item->setPixmap(7, colourPixmap);
+		
+// 		item->setPixmap(7, colourPixmap);
+		item->setIcon(7, QIcon(colourPixmap) );
 
-        m_listView->addItem(item);
+		m_listView->addTopLevelItem(item);
     }
 
-    if (m_listView->childCount() == 0) {
-        QListWidgetItem *item = new QListWidgetItem(m_listView, i18n("<none>"));
-        m_listView->addItem(item);
+    if( m_listView->topLevelItemCount() == 0 ) {
+        QTreeWidgetItem *item = new QTreeWidgetItem(m_listView, QStringList( i18n("<none>")) );
+		m_listView->addTopLevelItem(item);
 
-        m_listView->setSelectionMode(QListWidget::NoSelection);
+		m_listView->setSelectionMode( QAbstractItemView::NoSelection );
     } else {
-        m_listView->setSelectionMode(QListWidget::Extended);
+		m_listView->setSelectionMode( QAbstractItemView::ExtendedSelection );
     }
 
 
@@ -307,11 +340,12 @@ ControlEditorDialog::slotDelete()
 {
     RG_DEBUG << "ControlEditorDialog::slotDelete" << endl;
 
-    if (!m_listView->currentIndex())
-        return ;
+// 	if (!m_listView->currentIndex())
+	if( ! m_listView->currentItem() )
+		return ;
 
     ControlParameterItem *item =
-        dynamic_cast<ControlParameterItem*>(m_listView->currentIndex());
+        dynamic_cast<ControlParameterItem*>( m_listView->currentItem() );
 
     if (item) {
         RemoveControlParameterCommand *command =
@@ -326,8 +360,8 @@ ControlEditorDialog::slotClose()
 {
     RG_DEBUG << "ControlEditorDialog::slotClose" << endl;
 
-    if (m_doc)
-        m_doc->getCommandHistory()->detachView(actionCollection());
+//     if (m_doc)
+//         m_doc->getCommandHistory()->detachView(actionCollection());	//&&&
     m_doc = 0;
 
     close();
@@ -336,11 +370,14 @@ ControlEditorDialog::slotClose()
 void
 ControlEditorDialog::setupActions()
 {
-    KAction* close = KStandardAction::close(this,
-                                       SLOT(slotClose()),
-                                       actionCollection());
-
-    m_closeButton->setText(close->text());
+//     KAction* close = KStandardAction::close(this,
+//                                        SLOT(slotClose()),
+//                                        actionCollection());
+	
+ 	QAction* close = new QAction( i18n("&Close"), this );
+//  	connect( close, SIGNAL(close()), this, SLOT(slotClose()) );
+	
+    m_closeButton->setText( close->text() );
     connect(m_closeButton, SIGNAL(released()), this, SLOT(slotClose()));
 
     // some adjustments
@@ -356,7 +393,7 @@ ControlEditorDialog::setupActions()
                             actionCollection(),
                             KStandardAction::stdName(KStandardAction::Redo));
 
-    createGUI("controleditor.rc");
+    rgTempQtIV->createGUI("controleditor.rc", 0);
 }
 
 void
@@ -396,7 +433,7 @@ ControlEditorDialog::slotEdit()
 {}
 
 void
-ControlEditorDialog::slotEdit(QListWidgetItem *i)
+ControlEditorDialog::slotEdit(QTreeWidgetItem *i)
 {
     RG_DEBUG << "ControlEditorDialog::slotEdit" << endl;
 
@@ -427,7 +464,8 @@ void
 ControlEditorDialog::closeEvent(QCloseEvent *e)
 {
     emit closing();
-    KMainWindow::closeEvent(e);
+	close();
+//     KMainWindow::closeEvent(e);
 }
 
 void

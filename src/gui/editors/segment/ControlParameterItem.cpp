@@ -18,7 +18,8 @@
 
 #include "ControlParameterItem.h"
 
-#include <QListWidget>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
 #include <QString>
 
 

@@ -17,15 +17,19 @@
 
 
 #include <Q3CanvasPixmap>
+#include <Q3Canvas>
+
 #include "MarkerEditor.h"
 #include "MarkerEditorViewItem.h"
-#include <QLayout>
-#include <QApplication>
 
+// #include <kglobal.h>
+// #include <kmainwindow.h>
+// #include <kstandardshortcut.h>
+// #include <kstandardaction.h>
 #include <klocale.h>
-#include <kstandarddirs.h>
-#include <kstandardshortcut.h>
-#include <QSettings>
+// #include <kstandarddirs.h>
+// #include <kstandardshortcut.h>
+
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "base/Composition.h"
@@ -37,29 +41,33 @@
 #include "document/MultiViewCommandHistory.h"
 #include "document/RosegardenGUIDoc.h"
 #include "document/ConfigGroups.h"
-#include "gui/dialogs/MarkerModifyDialog.h"
-#include <QAction>
 #include "document/Command.h"
-#include <kglobal.h>
+#include "gui/dialogs/MarkerModifyDialog.h"
+
+
+#include <QApplication>
+#include <QMainWindow>
+#include <QLayout>
+#include <QVBoxLayout>
+// #include <QHBoxLayout>
+#include <QAction>
 #include <QListWidget>
-#include <kmainwindow.h>
-#include <kstandardshortcut.h>
-#include <kstandardaction.h>
-#include <qshortcut.h>
+#include <QShortcut>
 #include <QDialog>
 #include <QFrame>
 #include <QGroupBox>
 #include <QIcon>
 #include <QLabel>
-#include <QListWidget>
-#include <qptrlist.h>
+#include <QTreeWidget>
 #include <QPushButton>
 #include <QSizePolicy>
 #include <QString>
 #include <QToolTip>
 #include <QWidget>
-#include <QVBoxLayout>
-#include <Q3Canvas>
+#include <QSettings>
+
+#include <QList>
+// #include <qptrlist.h>
 
 
 namespace Rosegarden

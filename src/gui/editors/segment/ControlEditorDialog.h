@@ -27,9 +27,9 @@
 
 class QWidget;
 class QPushButton;
-class QListWidgetItem;
 class QCloseEvent;
-class QListWidget;
+class QTreeWidget;
+class QTreeWidgetItem;
 
 
 namespace Rosegarden
@@ -78,7 +78,7 @@ public slots:
     void slotClose();
 
     void slotEdit();
-    void slotEdit(QListWidgetItem *);
+    void slotEdit(QTreeWidgetItem *);
 
 signals:
     void closing();
@@ -102,7 +102,7 @@ protected:
     QPushButton             *m_addButton;
     QPushButton             *m_deleteButton;
 
-    QListWidget               *m_listView;
+    QTreeWidget               *m_listView;
 
     bool                     m_modified;
 

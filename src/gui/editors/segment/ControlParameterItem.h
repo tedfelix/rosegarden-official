@@ -20,29 +20,36 @@
 #define _RG_CONTROLPARAMETERITEM_H_
 
 #include <QString>
-#include <QListWidget>
+#include <QStringList>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
 
 
 namespace Rosegarden
 {
 
 
-class ControlParameterItem : public QListWidgetItem
+class ControlParameterItem : public QTreeWidgetItem
 {
 public:
     ControlParameterItem(int id,
-                         QListWidget *parent,
-                         QString str1,
-                         QString str2,
-                         QString str3,
-                         QString str4,
-                         QString str5,
-                         QString str6,
-                         QString str7,
-                         QString str8,
-                         QString str9):
-        QListWidgetItem(parent, str1, str2, str3, str4, str5, str6, str7, str8),
-        m_id(id) { setText(8, str9); }
+                         QTreeWidget *parent,
+						 QStringList &strlist
+//                          QString str1,
+//                          QString str2,
+//                          QString str3,
+//                          QString str4,
+//                          QString str5,
+//                          QString str6,
+//                          QString str7,
+//                          QString str8,
+//                          QString str9
+		)
+		: QTreeWidgetItem(parent, strlist),	//str1, str2, str3, str4, str5, str6, str7, str8),
+        m_id(id) {
+// 			setText(8, str9);
+			setText(8, strlist[8]);
+		}
 
     int getId() const { return m_id; }
 
