@@ -59,28 +59,28 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
 {
     bool p = !preamble.isEmpty();
 
-    m_mainLayout = new QGridLayout(this,
-                                   p ? 3 : 4, 2,
-                                   p ? 10 : 0,
-                                   p ? 5 : 4);
+    int margin = p ? 10 : 0;
+    setContentsMargins(margin, margin, margin, margin);
+    m_mainLayout = new QGridLayout(this);
+    m_mainLayout->setSpacing(p ? 5 : 4);
 
     int zero = 0;
     if (p) {
         QLabel *label = new QLabel(preamble, this);
-        label->setAlignment(Qt::TextWordWrap);
+        label->setWordWrap(true);
         m_mainLayout->addWidget(label, 0, 0, 0- 0+1, 1- 1);
         zero = 1;
     }
 
     QGroupBox *quantizerBox = new QGroupBox
                               (i18n("Quantizer"), this);
-
+    quantizerBox->setContentsMargins(5, 5, 5, 5);
+    QGridLayout *layout = new QGridLayout(quantizerBox);
+    layout->setSpacing(3);
     m_mainLayout->addWidget(quantizerBox, zero, 0);
-    QFrame *typeFrame = new QFrame(quantizerBox);
 
-    QGridLayout *layout = new QGridLayout(typeFrame, 2, 2, 5, 3);
-    layout->addWidget(new QLabel(i18n("Quantizer type:"), typeFrame), 0, 0);
-    m_typeCombo = new QComboBox(typeFrame);
+    layout->addWidget(new QLabel(i18n("Quantizer type:"), quantizerBox), 0, 0);
+    m_typeCombo = new QComboBox(quantizerBox);
     m_typeCombo->addItem(i18n("Grid quantizer"));
     m_typeCombo->addItem(i18n("Legato quantizer"));
     m_typeCombo->addItem(i18n("Heuristic notation quantizer"));
@@ -88,30 +88,31 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
 
     m_notationTarget = new QCheckBox
                        (i18n("Quantize for notation only (leave performance unchanged)"),
-                        typeFrame);
+                        quantizerBox);
     layout->addWidget(m_notationTarget, 1, 0, 0+1, 1- 1);
     if (!showNotationOption)
         m_notationTarget->hide();
+    quantizerBox->setLayout(layout);
 
     QWidget *parameterBox = new QWidget(this);
     QHBoxLayout *parameterBoxLayout = new QHBoxLayout;
     m_mainLayout->addWidget(parameterBox, zero + 1, 0);
 
     m_notationBox = new QGroupBox( i18n("Notation parameters"), parameterBox );
+    m_notationBox->setContentsMargins(5, 5, 5, 5);
+    layout = new QGridLayout(m_notationBox);
+    layout->setSpacing(3);
     parameterBoxLayout->addWidget(m_notationBox);
-    QFrame *notationFrame = new QFrame(m_notationBox);
 
-    layout = new QGridLayout(notationFrame, 4, 2, 5, 3);
-
-    layout->addWidget(new QLabel(i18n("Base grid unit:"), notationFrame),
+    layout->addWidget(new QLabel(i18n("Base grid unit:"), m_notationBox),
                       1, 0);
-    m_notationUnitCombo = new QComboBox(notationFrame);
+    m_notationUnitCombo = new QComboBox(m_notationBox);
     layout->addWidget(m_notationUnitCombo, 1, 1);
 
     layout->addWidget(new QLabel(i18n("Complexity:"),
-                                 notationFrame), 0, 0);
+                                 m_notationBox), 0, 0);
 
-    m_simplicityCombo = new QComboBox(notationFrame);
+    m_simplicityCombo = new QComboBox(m_notationBox);
     m_simplicityCombo->addItem(i18n("Very high"));
     m_simplicityCombo->addItem(i18n("High"));
     m_simplicityCombo->addItem(i18n("Normal"));
@@ -120,8 +121,8 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     layout->addWidget(m_simplicityCombo, 0, 1);
 
     layout->addWidget(new QLabel(i18n("Tuplet level:"),
-                                 notationFrame), 2, 0);
-    m_maxTuplet = new QComboBox(notationFrame);
+                                 m_notationBox), 2, 0);
+    m_maxTuplet = new QComboBox(m_notationBox);
     m_maxTuplet->addItem(i18n("None"));
     m_maxTuplet->addItem(i18n("2-in-the-time-of-3"));
     m_maxTuplet->addItem(i18n("Triplet"));
@@ -135,36 +136,43 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     m_maxTuplet->addItem(i18n("Any"));
     layout->addWidget(m_maxTuplet, 2, 1);
 
-    m_counterpoint = new QCheckBox(i18n("Permit counterpoint"), notationFrame);
+    m_counterpoint = new QCheckBox(i18n("Permit counterpoint"), m_notationBox);
     layout->addWidget(m_counterpoint, 3, 0, 0+1, 1- 1);
 
+    m_notationBox->setLayout(layout);
+
     m_gridBox = new QGroupBox( i18n("Grid parameters"), parameterBox );
+    m_gridBox->setContentsMargins(5, 5, 5, 5);
+    layout = new QGridLayout(m_gridBox);
+    layout->setSpacing(3);
     parameterBoxLayout->addWidget(m_gridBox);
-    parameterBox->setLayout(parameterBoxLayout);
-    QFrame *gridFrame = new QFrame(m_gridBox);
 
-    layout = new QGridLayout(gridFrame, 4, 2, 5, 3);
-
-    layout->addWidget(new QLabel(i18n("Base grid unit:"), gridFrame), 0, 0);
-    m_gridUnitCombo = new QComboBox(gridFrame);
+    layout->addWidget(new QLabel(i18n("Base grid unit:"), m_gridBox), 0, 0);
+    m_gridUnitCombo = new QComboBox(m_gridBox);
     layout->addWidget(m_gridUnitCombo, 0, 1);
 
-    m_swingLabel = new QLabel(i18n("Swing:"), gridFrame);
+    m_swingLabel = new QLabel(i18n("Swing:"), m_gridBox);
     layout->addWidget(m_swingLabel, 1, 0);
-    m_swingCombo = new QComboBox(gridFrame);
+    m_swingCombo = new QComboBox(m_gridBox);
     layout->addWidget(m_swingCombo, 1, 1);
 
-    m_iterativeLabel = new QLabel(i18n("Iterative amount:"), gridFrame);
+    m_iterativeLabel = new QLabel(i18n("Iterative amount:"), m_gridBox);
     layout->addWidget(m_iterativeLabel, 2, 0);
-    m_iterativeCombo = new QComboBox(gridFrame);
+    m_iterativeCombo = new QComboBox(m_gridBox);
     layout->addWidget(m_iterativeCombo, 2, 1);
 
     m_durationCheckBox = new QCheckBox
-                         (i18n("Quantize durations as well as start times"), gridFrame);
+                         (i18n("Quantize durations as well as start times"), m_gridBox);
     layout->addWidget(m_durationCheckBox, 3, 0, 0+1, 1- 1);
+
+    m_gridBox->setLayout(layout);
+    parameterBox->setLayout(parameterBoxLayout);
 
     m_postProcessingBox = new QGroupBox
                           (i18n("After quantization"), this);
+    m_postProcessingBox->setContentsMargins(5, 5, 5, 5);
+    layout = new QGridLayout(m_postProcessingBox);
+    layout->setSpacing(3);
 
     if (p) {
         m_mainLayout->addWidget(m_postProcessingBox,
@@ -186,19 +194,20 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
                          this, SLOT(slotAdvancedChanged()));
     }
 
-    QFrame *postFrame = new QFrame(m_postProcessingBox);
-
-    layout = new QGridLayout(postFrame, 4, 1, 5, 3);
-    m_rebeam = new QCheckBox(i18n("Re-beam"), postFrame);
+    m_rebeam = new QCheckBox(i18n("Re-beam"), m_postProcessingBox);
     m_articulate = new QCheckBox
-                   (i18n("Add articulations (staccato, tenuto, slurs)"), postFrame);
-    m_makeViable = new QCheckBox(i18n("Tie notes at barlines etc"), postFrame);
-    m_deCounterpoint = new QCheckBox(i18n("Split-and-tie overlapping chords"), postFrame);
+                   (i18n("Add articulations (staccato, tenuto, slurs)"), m_postProcessingBox);
+    m_makeViable = new QCheckBox(i18n("Tie notes at barlines etc"), m_postProcessingBox);
+    m_deCounterpoint = new QCheckBox(i18n("Split-and-tie overlapping chords"), m_postProcessingBox);
 
     layout->addWidget(m_rebeam, 0, 0);
     layout->addWidget(m_articulate, 1, 0);
     layout->addWidget(m_makeViable, 2, 0);
     layout->addWidget(m_deCounterpoint, 3, 0);
+
+    m_postProcessingBox->setLayout(layout);
+
+    setLayout(m_mainLayout);
 
     QPixmap noMap = NotePixmapFactory::toQPixmap
                     (NotePixmapFactory::makeToolbarPixmap("menu-no-note"));
