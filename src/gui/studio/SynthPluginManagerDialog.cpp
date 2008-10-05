@@ -32,7 +32,7 @@
 #include "document/ConfigGroups.h"
 #include <QAction>
 #include <QComboBox>
-#include <kmainwindow.h>
+#include <QMainWindow>
 #include <kstandardaction.h>
 #include <QFrame>
 #include <QGroupBox>
@@ -42,6 +42,8 @@
 #include <QSizePolicy>
 #include <QString>
 #include <QWidget>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 
 
 namespace Rosegarden
@@ -53,7 +55,7 @@ SynthPluginManagerDialog::SynthPluginManagerDialog(QWidget *parent,
             , AudioPluginOSCGUIManager *guiManager
 #endif
                                                       ) :
-            KMainWindow(parent, "synthpluginmanagerdialog"),
+            QMainWindow(parent),
             m_document(doc),
             m_studio(&doc->getStudio()),
             m_pluginManager(doc->getPluginManager())
@@ -61,18 +63,22 @@ SynthPluginManagerDialog::SynthPluginManagerDialog(QWidget *parent,
             , m_guiManager(guiManager)
 #endif
     {
-        setCaption(i18n("Manage Synth Plugins"));
+        setWindowTitle(i18n("Manage Synth Plugins"));
 
         QFrame *mainBox = new QFrame(this);
         setCentralWidget(mainBox);
 
-        QVBoxLayout *mainLayout = new QVBoxLayout(mainBox, 10, 10);
+        mainBox->setContentsMargins(10, 10, 10, 10);
+        QVBoxLayout *mainLayout = new QVBoxLayout(mainBox);
+        mainLayout->setSpacing(10);
 
-        QGroupBox *groupBox = new QGroupBox(1, Horizontal, i18n("Synth plugins"), mainBox);
-        mainLayout->addWidget(groupBox);
+        QGroupBox *pluginFrame = new QGroupBox(i18n("Synth plugins"), mainBox);
+        pluginFrame->setContentsMargins(3, 3, 3, 3);
+        QGridLayout *pluginLayout = new QGridLayout(pluginFrame);
+        pluginLayout->setSpacing(3);
 
-        QFrame *pluginFrame = new QFrame(groupBox);
-        QGridLayout *pluginLayout = new QGridLayout(pluginFrame, 1, 4, 3, 3);
+        mainLayout->addWidget(pluginFrame);
+
 
         m_synthPlugins.clear();
         m_synthPlugins.push_back( -1);
@@ -89,7 +95,7 @@ SynthPluginManagerDialog::SynthPluginManagerDialog(QWidget *parent,
             ++count;
         }
 
-        for (int i = 0; i < SoftSynthInstrumentCount; ++i) {
+        for (unsigned int i = 0; i < SoftSynthInstrumentCount; ++i) {
 
             InstrumentId id = SoftSynthInstrumentBase + i;
             Instrument *instrument = m_studio->getInstrumentById(id);
@@ -152,6 +158,8 @@ SynthPluginManagerDialog::SynthPluginManagerDialog(QWidget *parent,
 
         }
 
+        pluginFrame->setLayout(pluginLayout);
+
         QFrame* btnBox = new QFrame(mainBox);
 
         btnBox->setSizePolicy(
@@ -159,7 +167,9 @@ SynthPluginManagerDialog::SynthPluginManagerDialog(QWidget *parent,
 
         QPushButton *closeButton = new QPushButton(i18n("Close"), btnBox);
 
-        QHBoxLayout* layout = new QHBoxLayout(btnBox, 0, 10);
+        btnBox->setContentsMargins(0,0,0,0);
+        QHBoxLayout* layout = new QHBoxLayout(btnBox);
+        layout->setSpacing(10);
         layout->addStretch(10);
         layout->addWidget(closeButton);
         layout->addSpacing(5);
@@ -220,7 +230,7 @@ SynthPluginManagerDialog::SynthPluginManagerDialog(QWidget *parent,
     SynthPluginManagerDialog::closeEvent(QCloseEvent *e)
     {
         emit closing();
-        KMainWindow::closeEvent(e);
+        QMainWindow::closeEvent(e);
     }
 
     void
