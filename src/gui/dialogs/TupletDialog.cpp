@@ -40,7 +40,7 @@
 namespace Rosegarden
 {
 
-TupletDialog::TupletDialog(QDialogButtonBox::QWidget *parent, Note::Type defaultUnitType,
+TupletDialog::TupletDialog(QWidget *parent, Note::Type defaultUnitType,
                            timeT maxDuration) :
         QDialog(parent),
         m_maxDuration(maxDuration)
@@ -57,6 +57,9 @@ TupletDialog::TupletDialog(QDialogButtonBox::QWidget *parent, Note::Type default
 
 
     QGroupBox *timingBox = new QGroupBox( i18n("New timing for tuplet group"), vbox );
+    timingBox->setContentsMargins(5, 5, 5, 5);
+    QGridLayout *timingLayout = new QGridLayout(timingBox);
+    timingLayout->setSpacing(5);
     vboxLayout->addWidget(timingBox);
 
     if (m_maxDuration > 0) {
@@ -72,15 +75,12 @@ TupletDialog::TupletDialog(QDialogButtonBox::QWidget *parent, Note::Type default
             defaultUnitType = maxUnitType;
     }
 
-    QFrame *timingFrame = new QFrame(timingBox);
-    QGridLayout *timingLayout = new QGridLayout(timingFrame, 3, 3, 5, 5);
+    timingLayout->addWidget(new QLabel(i18n("Play "), timingBox), 0, 0);
 
-    timingLayout->addWidget(new QLabel(i18n("Play "), timingFrame), 0, 0);
-
-    m_untupledCombo = new QComboBox(timingFrame);
+    m_untupledCombo = new QComboBox(timingBox);
     timingLayout->addWidget(m_untupledCombo, 0, 1);
 
-    m_unitCombo = new QComboBox(timingFrame);
+    m_unitCombo = new QComboBox(timingBox);
     timingLayout->addWidget(m_unitCombo, 0, 2);
 
     for (Note::Type t = Note::Shortest; t <= Note::Longest; ++t) {
@@ -97,72 +97,95 @@ TupletDialog::TupletDialog(QDialogButtonBox::QWidget *parent, Note::Type default
         }
     }
 
-    timingLayout->addWidget(new QLabel(i18n("in the time of  "), timingFrame), 1, 0);
+    timingLayout->addWidget(new QLabel(i18n("in the time of  "), timingBox), 1, 0);
 
-    m_tupledCombo = new QComboBox(timingFrame);
+    m_tupledCombo = new QComboBox(timingBox);
     timingLayout->addWidget(m_tupledCombo, 1, 1);
 
     m_hasTimingAlready = new QCheckBox
-                         (i18n("Timing is already correct: update display only"), timingFrame);
+                         (i18n("Timing is already correct: update display only"), timingBox);
     m_hasTimingAlready->setChecked(false);
     timingLayout->addWidget(m_hasTimingAlready, 2, 0, 0+1, 2- 1);
+
+    timingBox->setLayout(timingLayout);
 
     connect(m_hasTimingAlready, SIGNAL(clicked()), this, SLOT(slotHasTimingChanged()));
 
     updateUntupledCombo();
     updateTupledCombo();
 
-    m_timingDisplayBox = new QGroupBox( i18n("Timing calculations"), vbox );
-    vboxLayout->addWidget(m_timingDisplayBox);
-    vbox->setLayout(vboxLayout);
+    m_timingDisplayGrid = new QGroupBox( i18n("Timing calculations"), vbox );
+    QGridLayout *m_timingDisplayLayout = new QGridLayout(m_timingDisplayGrid);
+    vboxLayout->addWidget(m_timingDisplayGrid);
 
-	QWidget *timingDisplayGrid = new QWidget(m_timingDisplayBox);
-	QGridLayout *m_timingDisplayLayout = new QGridLayout(m_timingDisplayBox);
-		//3, QGrid::Horizontal, m_timingDisplayBox);
-	m_timingDisplayLayout->addWidget( timingDisplayGrid );
-	
+    int row = 0;
 
     if (maxDuration > 0) {
 
-        new QLabel(i18n("Selected region:"), timingDisplayGrid);
-        new QLabel("", timingDisplayGrid);
-        m_selectionDurationDisplay = new QLabel("x", timingDisplayGrid);
+        m_timingDisplayLayout->addWidget(new QLabel(i18n("Selected region:")),
+                                         row, 0);
+        m_timingDisplayLayout->addWidget(new QLabel(""), row, 1);
+        m_selectionDurationDisplay = new QLabel("x");
+        m_timingDisplayLayout->addWidget(m_selectionDurationDisplay, row, 2);
         m_selectionDurationDisplay->setAlignment(Qt::AlignVCenter |
                 Qt::AlignRight);
+        row++;
     } else {
         m_selectionDurationDisplay = 0;
     }
 
-    new QLabel(i18n("Group with current timing:"), timingDisplayGrid);
-    m_untupledDurationCalculationDisplay = new QLabel("x", timingDisplayGrid);
-    m_untupledDurationDisplay = new QLabel("x", timingDisplayGrid);
-    m_untupledDurationDisplay->setAlignment(int(Qt::AlignVCenter |
-                                            Qt::AlignRight));
+    m_timingDisplayLayout->addWidget(new QLabel(i18n("Group with current timing:")),
+                                     row, 0);
+    m_untupledDurationCalculationDisplay = new QLabel("x");
+    m_timingDisplayLayout->addWidget(m_untupledDurationCalculationDisplay,
+                                     row, 1);
+    m_untupledDurationDisplay = new QLabel("x");
+    m_untupledDurationDisplay->setAlignment(Qt::AlignVCenter |
+                                            Qt::AlignRight);
+    m_timingDisplayLayout->addWidget(m_untupledDurationDisplay, row, 2);
+    row++;
 
-    new QLabel(i18n("Group with new timing:"), timingDisplayGrid);
-    m_tupledDurationCalculationDisplay = new QLabel("x", timingDisplayGrid);
-    m_tupledDurationDisplay = new QLabel("x", timingDisplayGrid);
-    m_tupledDurationDisplay->setAlignment(int(Qt::AlignVCenter |
-                                          Qt::AlignRight));
+    m_timingDisplayLayout->addWidget(new QLabel(i18n("Group with new timing:")),
+                                     row, 0);
+    m_tupledDurationCalculationDisplay = new QLabel("x");
+    m_timingDisplayLayout->addWidget(m_tupledDurationCalculationDisplay,
+                                     row, 1);
+    m_tupledDurationDisplay = new QLabel("x");
+    m_tupledDurationDisplay->setAlignment(Qt::AlignVCenter |
+                                          Qt::AlignRight);
+    m_timingDisplayLayout->addWidget(m_tupledDurationDisplay, row, 2);
+    row++;
 
-    new QLabel(i18n("Gap created by timing change:"), timingDisplayGrid);
-    m_newGapDurationCalculationDisplay = new QLabel("x", timingDisplayGrid);
-    m_newGapDurationDisplay = new QLabel("x", timingDisplayGrid);
-    m_newGapDurationDisplay->setAlignment(int(Qt::AlignVCenter |
-                                          Qt::AlignRight));
+    m_timingDisplayLayout->addWidget(new QLabel(i18n("Gap created by timing change:")),
+                                     row, 0);
+    m_newGapDurationCalculationDisplay = new QLabel("x");
+    m_timingDisplayLayout->addWidget(m_newGapDurationCalculationDisplay,
+                                     row, 1);
+    m_newGapDurationDisplay = new QLabel("x");
+    m_newGapDurationDisplay->setAlignment(Qt::AlignVCenter |
+                                          Qt::AlignRight);
+    m_timingDisplayLayout->addWidget(m_newGapDurationDisplay, row, 2);
+    row++;
 
     if (maxDuration > 0) {
 
-        new QLabel(i18n("Unchanged at end of selection:"), timingDisplayGrid);
-        m_unchangedDurationCalculationDisplay = new QLabel
-                                                ("x", timingDisplayGrid);
-        m_unchangedDurationDisplay = new QLabel("x", timingDisplayGrid);
-        m_unchangedDurationDisplay->setAlignment(int(Qt::AlignVCenter |
-                Qt::AlignRight));
+        m_timingDisplayLayout->addWidget(new QLabel(i18n("Unchanged at end of selection:")),
+                                         row, 0);
+        m_unchangedDurationCalculationDisplay = new QLabel("x");
+        m_timingDisplayLayout->addWidget(m_unchangedDurationCalculationDisplay,
+                                         row, 1);
+        m_unchangedDurationDisplay = new QLabel("x");
+        m_unchangedDurationDisplay->setAlignment(Qt::AlignVCenter |
+                                                 Qt::AlignRight);
+        m_timingDisplayLayout->addWidget(m_unchangedDurationDisplay, row, 2);
 
     } else {
         m_unchangedDurationDisplay = 0;
     }
+
+    m_timingDisplayGrid->setLayout(m_timingDisplayLayout);
+
+    vbox->setLayout(vboxLayout);
 
     updateTimingDisplays();
 
@@ -190,7 +213,7 @@ TupletDialog::slotHasTimingChanged()
 {
     updateUntupledCombo();
     updateTupledCombo();
-    m_timingDisplayBox->setEnabled(!m_hasTimingAlready->isChecked());
+    m_timingDisplayGrid->setEnabled(!m_hasTimingAlready->isChecked());
 }
 
 Note::Type

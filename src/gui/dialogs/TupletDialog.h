@@ -21,7 +21,6 @@
 
 #include "base/NotationTypes.h"
 #include <QDialog>
-#include <QDialogButtonBox>
 #include "base/Event.h"
 
 
@@ -43,7 +42,7 @@ class TupletDialog : public QDialog
     Q_OBJECT
 
 public:
-    TupletDialog(QDialogButtonBox::QWidget *parent,
+    TupletDialog(QWidget *parent,
                  Note::Type defaultUnitType,
                  timeT maxDuration = 0);
 
@@ -72,7 +71,7 @@ protected:
 
     QCheckBox *m_hasTimingAlready;
 
-    QGroupBox *m_timingDisplayBox;
+    QGroupBox *m_timingDisplayGrid;
     QLabel *m_selectionDurationDisplay;
     QLabel *m_untupledDurationCalculationDisplay;
     QLabel *m_untupledDurationDisplay;
