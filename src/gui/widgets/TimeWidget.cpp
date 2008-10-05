@@ -46,7 +46,7 @@ TimeWidget::TimeWidget(QString title,
                        timeT absTime,
                        bool editable,
                        bool constrainToCompositionDuration) :
-        QGroupBox(1, Horizontal, title, parent),
+        QGroupBox(title, parent),
         m_composition(composition),
         m_isDuration(false),
         m_constrain(constrainToCompositionDuration),
@@ -64,7 +64,7 @@ TimeWidget::TimeWidget(QString title,
                        timeT duration,
                        bool editable,
                        bool constrainToCompositionDuration) :
-        QGroupBox(1, Horizontal, title, parent),
+        QGroupBox(title, parent),
         m_composition(composition),
         m_isDuration(true),
         m_constrain(constrainToCompositionDuration),
@@ -85,18 +85,19 @@ TimeWidget::init(bool editable)
     bool savedEditable = editable;
     editable = true;
 
-    QFrame *frame = new QFrame(this);
-    QGridLayout *layout = new QGridLayout(frame, 7, 3, 5, 5);
+    setContentsMargins(5, 5, 5, 5);
+    QGridLayout *layout = new QGridLayout;
+    layout->setSpacing(5);
     QLabel *label = 0;
 
     if (m_isDuration) {
 
-        label = new QLabel(i18n("Note:"), frame);
+        label = new QLabel(i18n("Note:"));
         label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
         layout->addWidget(label, 0, 0);
 
         if (editable) {
-            m_note = new QComboBox(frame);
+            m_note = new QComboBox;
             m_noteDurations.push_back(0);
             m_note->addItem(i18n("<inexact>"));
             for (size_t i = 0; i < sizeof(denoms) / sizeof(denoms[0]); ++i) {
@@ -136,17 +137,17 @@ TimeWidget::init(bool editable)
                             (m_time, false, error);
             if (error != 0)
                 label = i18n("<inexact>");
-            QLineEdit *le = new QLineEdit(label, frame);
+            QLineEdit *le = new QLineEdit(label);
             le->setReadOnly(true);
             layout->addWidget(le, 0, 1, 0- 1, 3);
         }
 
-        label = new QLabel(i18n("Units:"), frame);
+        label = new QLabel(i18n("Units:"));
         label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
         layout->addWidget(label, 0, 4);
 
         if (editable) {
-            m_timeT = new QSpinBox(frame);
+            m_timeT = new QSpinBox;
             m_timeT->setSingleStep
             (Note(Note::Shortest).getDuration());
             connect(m_timeT, SIGNAL(valueChanged(int)),
@@ -154,7 +155,7 @@ TimeWidget::init(bool editable)
             layout->addWidget(m_timeT, 0, 5);
         } else {
             m_timeT = 0;
-            QLineEdit *le = new QLineEdit(QString("%1").arg(m_time), frame);
+            QLineEdit *le = new QLineEdit(QString("%1").arg(m_time));
             le->setReadOnly(true);
             layout->addWidget(le, 0, 5);
         }
@@ -163,33 +164,33 @@ TimeWidget::init(bool editable)
 
         m_note = 0;
 
-        label = new QLabel(i18n("Time:"), frame);
+        label = new QLabel(i18n("Time:"));
         label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
         layout->addWidget(label, 0, 0);
 
         if (editable) {
-            m_timeT = new QSpinBox(frame);
+            m_timeT = new QSpinBox;
             m_timeT->setSingleStep
             (Note(Note::Shortest).getDuration());
             connect(m_timeT, SIGNAL(valueChanged(int)),
                     this, SLOT(slotTimeTChanged(int)));
             layout->addWidget(m_timeT, 0, 1);
-            layout->addWidget(new QLabel(i18n("units"), frame), 0, 2);
+            layout->addWidget(new QLabel(i18n("units")), 0, 2);
         } else {
             m_timeT = 0;
-            QLineEdit *le = new QLineEdit(QString("%1").arg(m_time), frame);
+            QLineEdit *le = new QLineEdit(QString("%1").arg(m_time));
             le->setReadOnly(true);
             layout->addWidget(le, 0, 2);
         }
     }
 
-    label = new QLabel(m_isDuration ? i18n("Measures:") : i18n("Measure:"), frame);
+    label = new QLabel(m_isDuration ? i18n("Measures:") : i18n("Measure:"));
     label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     layout->addWidget(label, 1, 0);
 
     if (editable) {
         m_barLabel = 0;
-        m_bar = new QSpinBox(frame);
+        m_bar = new QSpinBox;
         if (m_isDuration)
             m_bar->setMinimum(0);
         connect(m_bar, SIGNAL(valueChanged(int)),
@@ -197,60 +198,58 @@ TimeWidget::init(bool editable)
         layout->addWidget(m_bar, 1, 1);
     } else {
         m_bar = 0;
-        m_barLabel = new QLineEdit(frame);
+        m_barLabel = new QLineEdit;
         m_barLabel->setReadOnly(true);
         layout->addWidget(m_barLabel, 1, 1);
     }
 
-    label = new QLabel(m_isDuration ? i18n("beats:") : i18n("beat:"), frame);
+    label = new QLabel(m_isDuration ? i18n("beats:") : i18n("beat:"));
     label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     layout->addWidget(label, 1, 2);
 
     if (editable) {
         m_beatLabel = 0;
-        m_beat = new QSpinBox(frame);
+        m_beat = new QSpinBox;
         m_beat->setMinimum(1);
         connect(m_beat, SIGNAL(valueChanged(int)),
                 this, SLOT(slotBarBeatOrFractionChanged(int)));
         layout->addWidget(m_beat, 1, 3);
     } else {
         m_beat = 0;
-        m_beatLabel = new QLineEdit(frame);
+        m_beatLabel = new QLineEdit;
         m_beatLabel->setReadOnly(true);
         layout->addWidget(m_beatLabel, 1, 3);
     }
 
     label = new QLabel(i18n("%1:", NotationStrings::getShortNoteName
-                                       (Note
-                                        (Note::Shortest), true)),
-                       frame);
+                                            (Note(Note::Shortest), true)));
     label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     layout->addWidget(label, 1, 4);
 
     if (editable) {
         m_fractionLabel = 0;
-        m_fraction = new QSpinBox(frame);
+        m_fraction = new QSpinBox;
         m_fraction->setMinimum(1);
         connect(m_fraction, SIGNAL(valueChanged(int)),
                 this, SLOT(slotBarBeatOrFractionChanged(int)));
         layout->addWidget(m_fraction, 1, 5);
     } else {
         m_fraction = 0;
-        m_fractionLabel = new QLineEdit(frame);
+        m_fractionLabel = new QLineEdit;
         m_fractionLabel->setReadOnly(true);
         layout->addWidget(m_fractionLabel, 1, 5);
     }
 
-    m_timeSig = new QLabel(frame);
+    m_timeSig = new QLabel;
     layout->addWidget(m_timeSig, 1, 6);
 
-    label = new QLabel(i18n("Seconds:"), frame);
+    label = new QLabel(i18n("Seconds:"));
     label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     layout->addWidget(label, 2, 0);
 
     if (editable) {
         m_secLabel = 0;
-        m_sec = new QSpinBox(frame);
+        m_sec = new QSpinBox;
         if (m_isDuration)
             m_sec->setMinimum(0);
         connect(m_sec, SIGNAL(valueChanged(int)),
@@ -258,18 +257,18 @@ TimeWidget::init(bool editable)
         layout->addWidget(m_sec, 2, 1);
     } else {
         m_sec = 0;
-        m_secLabel = new QLineEdit(frame);
+        m_secLabel = new QLineEdit;
         m_secLabel->setReadOnly(true);
         layout->addWidget(m_secLabel, 2, 1);
     }
 
-    label = new QLabel(i18n("msec:"), frame);
+    label = new QLabel(i18n("msec:"));
     label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     layout->addWidget(label, 2, 2);
 
     if (editable) {
         m_msecLabel = 0;
-        m_msec = new QSpinBox(frame);
+        m_msec = new QSpinBox;
         m_msec->setMinimum(0);
         m_msec->setSingleStep(10);
         connect(m_msec, SIGNAL(valueChanged(int)),
@@ -277,17 +276,19 @@ TimeWidget::init(bool editable)
         layout->addWidget(m_msec, 2, 3);
     } else {
         m_msec = 0;
-        m_msecLabel = new QLineEdit(frame);
+        m_msecLabel = new QLineEdit;
         m_msecLabel->setReadOnly(true);
         layout->addWidget(m_msecLabel, 2, 3);
     }
 
     if (m_isDuration) {
-        m_tempo = new QLabel(frame);
+        m_tempo = new QLabel;
         layout->addWidget(m_tempo, 2, 6);
     } else {
         m_tempo = 0;
     }
+
+    setLayout(layout);
 
     if (!savedEditable) {
         if (m_note)
