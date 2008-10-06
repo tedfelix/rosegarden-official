@@ -76,8 +76,8 @@ class NotationHLayout;
 class NotationElement;
 class NoteActionData;
 class NoteActionDataMap;
-class NoteChangeActionData;
-class NoteChangeActionDataMap;
+//!!!class NoteChangeActionData;
+//!!!class NoteChangeActionDataMap;
 class Key;
 class EventSelection;
 class Event;
@@ -551,8 +551,8 @@ public slots:
     void slotUseOrnament();
     void slotRemoveOrnament();
 
-    void slotNoteChangeAction();
-    void slotSetNoteDurations(Note::Type, bool notationOnly);
+//!!!    void slotNoteChangeAction();
+//!!!    void slotSetNoteDurations(Note::Type, bool notationOnly);
     void slotAddDot();
     void slotAddDotNotationOnly();
 
@@ -1034,8 +1034,8 @@ protected:
     typedef QMap<QString, NoteActionData *> NoteActionDataMap;
     static NoteActionDataMap* m_noteActionDataMap;
 
-    typedef QMap<QString, NoteChangeActionData *> NoteChangeActionDataMap;
-    static NoteChangeActionDataMap* m_noteChangeActionDataMap;
+//!!!    typedef QMap<QString, NoteChangeActionData *> NoteChangeActionDataMap;
+//!!!    static NoteChangeActionDataMap* m_noteChangeActionDataMap;
 
     QComboBox       *m_fontCombo;
     QComboBox       *m_fontSizeCombo;

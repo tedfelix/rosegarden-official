@@ -111,37 +111,6 @@ NotationCommandRegistry::~NotationCommandRegistry()
 {
 }
 
-bool
-NotationCommandRegistry::findIcon(QString iconName, QIcon &icon)
-{
-	//@@@ keep NotationCommandRegistry::findIcon ? although we have IconLoader ?
-	
-    NoteFont *font = 0;
-    try {
-        font = NoteFontFactory::getFont
-            (NoteFontFactory::getDefaultFontName(), 6);
-    } catch (Exception) {
-        font = NoteFontFactory::getFont
-            (NoteFontFactory::getDefaultFontName(),
-             NoteFontFactory::getDefaultSize(NoteFontFactory::getDefaultFontName()));
-    }
-
-    if (!font) return false;
-
-    NoteCharacter character;
-    bool found = font->getCharacter
-        (NoteStyleFactory::getStyle(NoteStyleFactory::DefaultStyle)->
-         getSomeCharName( qstrtostr(iconName) ),
-         character);
-
-    if (found) {
-        QPixmap *pixmap = character.getPixmap();
-        if (pixmap) icon = QIcon(*pixmap);
-        else found = false;
-    }
-
-    return found;
-}
 
 }
 

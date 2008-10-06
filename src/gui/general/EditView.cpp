@@ -79,19 +79,18 @@
 #include <QAction>
 #include "document/Command.h"
 #include <QDockWidget>
-#include <kglobal.h>
-#include <kiconloader.h>
-#include <kstandarddirs.h>
+//#include <kglobal.h>
+//#include <kiconloader.h>
+//#include <kstandarddirs.h>
 #include <ktabwidget.h>
-#include <kxmlguiclient.h>
-#include <qshortcut.h>
-#include <qbutton.h>
+//#include <kxmlguiclient.h>
+#include <QPushButton>
 #include <QDialog>
 #include <QFrame>
 #include <QInputDialog>
 #include <QLabel>
 #include <QObjectList>
-#include <qpopupmenu.h>
+#include <QMenu>
 #include <QSize>
 #include <QString>
 #include <QTabWidget>
@@ -327,7 +326,7 @@ void EditView::setRewFFwdToAutoRepeat()
             QString objName = obj->objectName();
 
             if (objName.endsWith("playback_pointer_back_bar") || objName.endsWith("playback_pointer_forward_bar")) {
-                QButton* btn = dynamic_cast<QButton*>(obj);
+                QPushButton* btn = dynamic_cast<QPushButton*>(obj);
                 if (!btn) {
                     RG_DEBUG << "Very strange - found widgets in Transport Toolbar which aren't buttons\n";
 
@@ -379,8 +378,11 @@ void EditView::addControlRuler(ControlRuler* ruler)
 
     connect(ruler, SIGNAL(stateChange(const QString&, bool)),
             this, SLOT(slotStateChanged(const QString&, bool)));
-
-    stateChanged("have_control_ruler", KXMLGUIClient::StateReverse);
+    
+    //!!! This looks wrong -- surely we're entering this state?  But
+    // this is definitely what the old code says
+    leaveActionState("have_control_ruler");
+//    stateChanged("have_control_ruler", KXMLGUIClient::StateReverse);
 }
 
 void EditView::readjustViewSize(QSize requestedSize, bool exact)
@@ -726,6 +728,37 @@ EditView::setupActions()
 {
     createInsertPitchActionMenu();
 
+    createAction("add_tempo", SLOT(slotAddTempo()));
+    createAction("add_time_signature", SLOT(slotAddTimeSignature()));
+    createAction("halve_durations", SLOT(slotHalveDurations()));
+    createAction("double_durations", SLOT(slotDoubleDurations()));
+    createAction("rescale", SLOT(slotRescale()));
+    createAction("transpose_up", SLOT(slotTransposeUp()));
+    createAction("transpose_up_octave", SLOT(slotTransposeUpOctave()));
+    createAction("transpose_down", SLOT(slotTransposeDown()));
+    createAction("transpose_down_octave", SLOT(slotTransposeDownOctave()));
+    createAction("general_transpose", SLOT(slotTranspose()));
+    createAction("general_diatonic_transpose", SLOT(slotDiatonicTranspose()));
+    createAction("invert", SLOT(slotInvert()));
+    createAction("retrograde", SLOT(slotRetrograde()));
+    createAction("retrograde_invert", SLOT(slotRetrogradeInvert()));
+    createAction("jog_left", SLOT(slotJogLeft()));
+    createAction("jog_right", SLOT(slotJogRight()));
+    createAction("show_velocity_control_ruler", SLOT(slotShowVelocityControlRuler()));
+// was disabled in kde3 version:
+// createAction("show_controller_events_ruler", SLOT(slotShowControllerEventsRuler()));
+// was disabled in kde3 version:
+// createAction("add_control_ruler", SLOT(slotShowPropertyControlRuler()));
+    createAction("insert_control_ruler_item", SLOT(slotInsertControlRulerItem()));
+    createAction("erase_control_ruler_item", SLOT(slotEraseControlRulerItem()));
+    createAction("clear_control_ruler_item", SLOT(slotClearControlRulerItem()));
+    createAction("start_control_line_item", SLOT(slotStartControlLineItem()));
+    createAction("flip_control_events_forward", SLOT(slotFlipForwards()));
+    createAction("flip_control_events_back", SLOT(slotFlipBackwards()));
+    createAction("draw_property_line", SLOT(slotDrawPropertyLine()));
+    createAction("select_all_properties", SLOT(slotSelectAllProperties()));
+
+/*
     //
     // Tempo and time signature changes
     //
@@ -909,24 +942,6 @@ EditView::setupActions()
 			//### FIX: deallocate QAction ptr
 			
 
-    /*
-    QAction* qa_show_controller_events_ruler = new QAction(  i18n("Show Controllers Events Ruler"), dynamic_cast<QObject*>(this) );
-			connect( qa_show_controller_events_ruler, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotShowControllerEventsRuler()) );
-			qa_show_controller_events_ruler->setObjectName( "show_controller_events_ruler" );		//
-			//qa_show_controller_events_ruler->setCheckable( true );		//
-			qa_show_controller_events_ruler->setAutoRepeat( false );	//
-			//qa_show_controller_events_ruler->setActionGroup( 0 );		// QActionGroup*
-			//qa_show_controller_events_ruler->setChecked( false );		//
-			//### FIX: deallocate QAction ptr
-			
-                */
-
-    // Disabled for now
-    //
-    //     new KAction(i18n("Add Control Ruler..."), 0, this,
-    //                 SLOT(slotShowPropertyControlRuler()), actionCollection(),
-    //                 "add_control_ruler");
-
     //
     // Control Ruler context menu
     //
@@ -1010,7 +1025,7 @@ EditView::setupActions()
 			//qa_select_all_properties->setActionGroup( 0 );		// QActionGroup*
 			//qa_select_all_properties->setChecked( false );		//
 			//### FIX: deallocate QAction ptr
-			
+			*/
 }
 
 void
@@ -1018,8 +1033,8 @@ EditView::setupAddControlRulerMenu()
 {
     RG_DEBUG << "EditView::setupAddControlRulerMenu" << endl;
 
-    QPopupMenu* addControlRulerMenu = dynamic_cast<QPopupMenu*>
-                                      (factory()->container("add_control_ruler", this));
+    QMenu* addControlRulerMenu = dynamic_cast<QMenu*>
+        (factory()->container("add_control_ruler", this));
 
     if (addControlRulerMenu) {
 
@@ -1237,76 +1252,77 @@ EditView::createInsertPitchActionMenu()
         },
     };
 
-    KActionMenu *insertPitchActionMenu =
-        new KActionMenu(i18n("&Insert Note"), this, "insert_note_actionmenu");
+    QMenu *insertPitchActionMenu = new QMenu(i18n("&Insert Note"), this);
+    insertPitchActionMenu->setObjectName("insert_note_actionmenu");
 
     for (int octave = 0; octave <= 2; ++octave) {
 
-        KActionMenu *menu = insertPitchActionMenu;
+        QMenu *menu = insertPitchActionMenu;
         if (octave == 1) {
-            menu = new KActionMenu(i18n("&Upper Octave"), this,
-                                   "insert_note_actionmenu_upper_octave");
-            insertPitchActionMenu->insert(new KActionSeparator(this));
-            insertPitchActionMenu->insert(menu);
+            menu = new QMenu(i18n("&Upper Octave"), this);
+            menu->setObjectName("insert_note_actionmenu_upper_octave");
+            insertPitchActionMenu->addSeparator();
+            insertPitchActionMenu->addMenu(menu);
         } else if (octave == 2) {
-            menu = new KActionMenu(i18n("&Lower Octave"), this,
-                                   "insert_note_actionmenu_lower_octave");
-            insertPitchActionMenu->insert(menu);
+            menu = new QMenu(i18n("&Lower Octave"), this);
+            menu->setObjectName("insert_note_actionmenu_lower_octave");
+            insertPitchActionMenu->addMenu(menu);
         }
 
         for (unsigned int i = 0; i < 7; ++i) {
 
-            KAction *insertPitchAction = 0;
+            QAction *insertPitchAction = 0;
 
             QString octaveSuffix;
-            if (octave == 1)
-                octaveSuffix = "_high";
-            else if (octave == 2)
-                octaveSuffix = "_low";
+            if (octave == 1) octaveSuffix = "_high";
+            else if (octave == 2) octaveSuffix = "_low";
 
             // do and fa lack a flat
 
             if (i != 0 && i != 3) {
 
-                insertPitchAction =
-                    new KAction
-                    (flat.arg(notePitchNames[i]),
-                     Qt::CTRL + Qt::SHIFT + notePitchKeys[octave][i],
-                     this, SLOT(slotInsertNoteFromAction()), actionCollection(),
-                     QString("insert_%1_flat%2").arg(i).arg(octaveSuffix));
+                insertPitchAction = createAction
+                    (QString("insert_%1_flat%2").arg(i).arg(octaveSuffix),
+                     SLOT(slotInsertNoteFromAction()));
 
-                menu->insert(insertPitchAction);
+                insertPitchAction->setText(flat.arg(notePitchNames[i]));
+                insertPitchAction->setShortcut
+                    (Qt::CTRL + Qt::SHIFT + notePitchKeys[octave][i]);
+                     
+                menu->addAction(insertPitchAction);
             }
 
-            insertPitchAction =
-                new KAction
-                (notePitchNames[i],
-                 notePitchKeys[octave][i],
-                 this, SLOT(slotInsertNoteFromAction()), actionCollection(),
-                 QString("insert_%1%2").arg(i).arg(octaveSuffix));
+            insertPitchAction = createAction
+                (QString("insert_%1%2").arg(i).arg(octaveSuffix),
+                 SLOT(slotInsertNoteFromAction()));
 
-            menu->insert(insertPitchAction);
+            insertPitchAction->setText(notePitchNames[i]);
+            insertPitchAction->setShortcut(notePitchKeys[octave][i]);
+            
+            menu->addAction(insertPitchAction);
 
             // and mi and ti lack a sharp
 
             if (i != 2 && i != 6) {
 
-                insertPitchAction =
-                    new KAction
-                    (sharp.arg(notePitchNames[i]),
-                     Qt::SHIFT + notePitchKeys[octave][i],
-                     this, SLOT(slotInsertNoteFromAction()), actionCollection(),
-                     QString("insert_%1_sharp%2").arg(i).arg(octaveSuffix));
+                insertPitchAction = createAction
+                    (QString("insert_%1_sharp%2").arg(i).arg(octaveSuffix),
+                     SLOT(slotInsertNoteFromAction()));
 
-                menu->insert(insertPitchAction);
+                insertPitchAction->setText(sharp.arg(notePitchNames[i]));
+                insertPitchAction->setShortcut
+                    (Qt::SHIFT + notePitchKeys[octave][i]);
+                     
+                menu->addAction(insertPitchAction);
             }
 
-            if (i < 6)
-                menu->insert(new KActionSeparator(this));
+            if (i < 6) {
+                menu->addSeparator();
+            }
         }
     }
 
-    actionCollection()->insert(insertPitchActionMenu);
+    //&&& Ensure insertPitchActionMenu goes into the proper super-menu
 }
 
 int

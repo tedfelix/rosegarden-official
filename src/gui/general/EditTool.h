@@ -25,7 +25,7 @@
 #include "base/Event.h"
 
 
-#include <QMouseEvent>;
+#include <QMouseEvent>
 
 
 namespace Rosegarden

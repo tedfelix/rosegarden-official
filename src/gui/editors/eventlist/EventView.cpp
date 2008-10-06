@@ -576,23 +576,24 @@ EventView::applyLayout(int /*staffNo*/)
     }
 
 
-	if ( m_eventList->topLevelItemCount() == 0 ) {
+    if ( m_eventList->topLevelItemCount() == 0 ) {
         if (m_segments.size())
             new QTreeWidgetItem(m_eventList,
-                              QStringList( i18n("<no events at this filter level>")) );
+                                QStringList( i18n("<no events at this filter level>")) );
         else
-			new QTreeWidgetItem(m_eventList, QStringList( i18n("<no events>")) );
+            new QTreeWidgetItem(m_eventList, QStringList( i18n("<no events>")) );
 
         m_eventList->setSelectionMode(QTreeWidget::NoSelection);
-        rgTempQtIV->stateChanged("have_selection", KXMLGUIClient::StateReverse);
+        leaveActionState("have_selection");
     } else {
-		m_eventList->setSelectionMode(QAbstractItemView::ExtendedSelection);
+        
+        m_eventList->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
         // If no selection then select the first event
         if (m_listSelection.size() == 0)
             m_listSelection.push_back(0);
 
-		rgTempQtIV->stateChanged("have_selection", KXMLGUIClient::StateNoReverse);
+        enterActionState("have_selection");
     }
 
     // Set a selection from a range of indexes
@@ -1215,6 +1216,38 @@ EventView::setupActions()
 {
     EditViewBase::setupActions("eventlist.rc");
 
+    createAction("insert", SLOT(slotEditInsert()));
+    createAction("delete", SLOT(slotEditDelete()));
+    createAction("edit_simple", SLOT(slotEditEvent()));
+    createAction("edit_advanced", SLOT(slotEditEventAdvanced()));
+    createAction("filter_selection", SLOT(slotFilterSelection()));
+    createAction("select_all", SLOT(slotSelectAll()));
+    createAction("clear_selection", SLOT(slotClearSelection()));
+
+    QAction *musical = createAction("time_musical", SLOT(slotMusicalTime()));
+    QAction *real = createAction("time_real", SLOT(slotRealTime()));
+    QAction *raw = createAction("time_raw", SLOT(slotRawTime()));
+
+    createGUI(getRCFileName());
+
+    QSettings settings;
+    settings.beginGroup( EventViewConfigGroup );
+    int timeMode = settings.value("timemode", 0).toInt() ;
+    settings.endGroup();
+
+    if (timeMode == 0) musical->setChecked(true);
+    else if (timeMode == 1) real->setChecked(true);
+    else if (timeMode == 2) raw->setChecked(true);
+
+    if (m_isTriggerSegment) {
+        QAction *action = findAction("open_in_matrix");
+        if (action) delete action;
+        action = findAction("open_in_notation");
+        if (action) delete action;
+    }
+
+
+/*!!!
 //    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
 //    QIcon icon(QPixmap(pixmapDir + "/toolbar/event-insert.png"));
 	
@@ -1341,7 +1374,7 @@ EventView::setupActions()
         action->setChecked(true);
 
     if (m_isTriggerSegment) {
-		/*
+		// *
 		//&&& may be obsolete: kAction code:
         QAction *action = actionCollection()->action("open_in_matrix");
         if (action)
@@ -1349,10 +1382,11 @@ EventView::setupActions()
         action = actionCollection()->action("open_in_notation");
         if (action)
             delete action;
-		*/
+		// *
     }
 
     rgTempQtIV->createGUI( qStrToCharPtrUtf8( getRCFileName() ), 0 );
+*/
 }
 
 void

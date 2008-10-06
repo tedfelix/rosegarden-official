@@ -209,6 +209,8 @@ namespace Rosegarden
 {
 
 class NoteActionData
+//!!! This will be totally overspecified if we complete the dynamic
+//!!! action properties plan
 {
 public:
     NoteActionData();
@@ -258,6 +260,10 @@ NoteActionData::NoteActionData(const QString& _title,
 }
 
 
+/*!!! I'm almost completely convinced that this is never in fact used!
+      The actions are created, but they don't appear in the GUI.  Correct
+      me if I'm wrong, please!
+
 class NoteChangeActionData
 {
 public:
@@ -301,7 +307,7 @@ NoteChangeActionData::NoteChangeActionData(const QString& _title,
       noteType(_noteType)
 {
 }
-
+*/
 
 NotationView::NotationView(RosegardenGUIDoc *doc,
                            std::vector<Segment *> segments,
@@ -702,27 +708,26 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     QObject::connect(hideHeadersButton, SIGNAL(clicked()), 
                                   this, SLOT(slotHideHeadersGroup()));
 
-    rgTempQtIV->stateChanged("have_selection", KXMLGUIClient::StateReverse);
-	rgTempQtIV->stateChanged("have_notes_in_selection", KXMLGUIClient::StateReverse);
-	rgTempQtIV->stateChanged("have_rests_in_selection", KXMLGUIClient::StateReverse);
-	rgTempQtIV->stateChanged("have_multiple_staffs",
-                 (m_staffs.size() > 1 ? KXMLGUIClient::StateNoReverse :
-                  KXMLGUIClient::StateReverse));
-	rgTempQtIV->stateChanged("rest_insert_tool_current", KXMLGUIClient::StateReverse);
+    leaveActionState("have_selection");
+    leaveActionState("have_notes_in_selection");
+    leaveActionState("have_rests_in_selection");
+
+    if (m_staffs.size() > 1) {
+        enterActionState("have_multiple_staffs");
+    } else {
+        leaveActionState("have_multiple_staffs");
+    }
+    
+    leaveActionState("rest_insert_tool_current");
     slotTestClipboard();
 	
-	QAction* tac;
-    if (getSegmentsOnlyRestsAndClefs())
-    {
-        m_selectDefaultNote->setEnabled(true);		//activate();
-		rgTempQtIV->stateChanged("note_insert_tool_current",
-                     KXMLGUIClient::StateNoReverse);
-    } else
-    {
-		tac = findChild<QAction*>( "select" );
-		tac->setEnabled( true );
-		rgTempQtIV->stateChanged("note_insert_tool_current",
-                     KXMLGUIClient::StateReverse);
+    if (getSegmentsOnlyRestsAndClefs()) {
+        m_selectDefaultNote->setChecked(true);
+        enterActionState("note_insert_tool_current");
+    } else {
+        QAction *tac = findAction("select");
+        tac->setChecked(true);
+        leaveActionState("note_insert_tool_current");
     }
 
     timeT start = doc->getComposition().getLoopStart();
@@ -1033,7 +1038,9 @@ void NotationView::positionStaffs()
 
         //###settings.beginGroup( NotationViewConfigGroup );
 
-        QFont font = settings.value("textfont", &defaultFont).toString();
+        QVariant fv = settings.value("textfont", defaultFont);
+        QFont font(defaultFont);
+        if (fv.canConvert(QVariant::Font)) font = fv.value<QFont>();
 
         font.setPixelSize(m_fontSize * 5);
         QFontMetrics metrics(font);
@@ -1418,9 +1425,9 @@ void NotationView::slotSaveOptions()
     QSettings settings;
     settings.beginGroup( NotationViewConfigGroup );
 
-    settings.setValue("Show Chord Name Ruler", getToggleAction("show_chords_ruler")->isChecked());
-    settings.setValue("Show Raw Note Ruler", getToggleAction("show_raw_note_ruler")->isChecked());
-    settings.setValue("Show Tempo Ruler", getToggleAction("show_tempo_ruler")->isChecked());
+    settings.setValue("Show Chord Name Ruler", findAction("show_chords_ruler")->isChecked());
+    settings.setValue("Show Raw Note Ruler", findAction("show_raw_note_ruler")->isChecked());
+    settings.setValue("Show Tempo Ruler", findAction("show_tempo_ruler")->isChecked());
     settings.setValue("Show Annotations", m_annotationsVisible);
     settings.setValue("Show LilyPond Directives", m_lilyPondDirectivesVisible);
 
@@ -1432,7 +1439,7 @@ void NotationView::slotSaveOptions()
 void NotationView::setOneToolbar(const char *actionName,
                                  const char *toolbarName)
 {
-    /* was toggle */ QAction *action = getToggleAction(actionName);
+    /* was toggle */ QAction *action = findAction(actionName);
     if (!action) {
         std::cerr << "WARNING: No such action as " << actionName << std::endl;
         return ;
@@ -1468,26 +1475,26 @@ void NotationView::readOptions()
     bool opt;
 
     opt = qStrToBool( settings.value("Show Chord Name Ruler", "false" ) ) ;
-    getToggleAction("show_chords_ruler")->setChecked(opt);
+    findAction("show_chords_ruler")->setChecked(opt);
     slotToggleChordsRuler();
 
     opt = qStrToBool( settings.value("Show Raw Note Ruler", "true" ) ) ;
-    getToggleAction("show_raw_note_ruler")->setChecked(opt);
+    findAction("show_raw_note_ruler")->setChecked(opt);
     slotToggleRawNoteRuler();
 
     opt = qStrToBool( settings.value("Show Tempo Ruler", "true" ) ) ;
-    getToggleAction("show_tempo_ruler")->setChecked(opt);
+    findAction("show_tempo_ruler")->setChecked(opt);
     slotToggleTempoRuler();
 
     opt = qStrToBool( settings.value("Show Annotations", "true" ) ) ;
     m_annotationsVisible = opt;
-    getToggleAction("show_annotations")->setChecked(opt);
+    findAction("show_annotations")->setChecked(opt);
     slotUpdateAnnotationsStatus();
     //    slotToggleAnnotations();
 
     opt = qStrToBool( settings.value("Show LilyPond Directives", "true" ) ) ;
     m_lilyPondDirectivesVisible = opt;
-    getToggleAction("show_lilypond_directives")->setChecked(opt);
+    findAction("show_lilypond_directives")->setChecked(opt);
     slotUpdateLilyPondDirectivesStatus();
 
     settings.endGroup();
@@ -1495,8 +1502,241 @@ void NotationView::readOptions()
 
 void NotationView::setupActions()
 {
+    EditViewBase::setupActions("notation.rc");
+    EditView::setupActions();
+
+    createAction("file_print", SLOT(slotFilePrint()));
+    createAction("file_print_preview", SLOT(slotFilePrintPreview()));
+    createAction("file_print_lilypond", SLOT(slotPrintLilyPond()));
+    createAction("file_preview_lilypond", SLOT(slotPreviewLilyPond()));
+    createAction("show_track_headers", SLOT(slotShowHeadersGroup()));
+    createAction("no_accidental", SLOT(slotNoAccidental()));
+    createAction("follow_accidental", SLOT(slotFollowAccidental()));
+    createAction("sharp_accidental", SLOT(slotSharp()));
+    createAction("flat_accidental", SLOT(slotFlat()));
+    createAction("natural_accidental", SLOT(slotNatural()));
+    createAction("double_sharp_accidental", SLOT(slotDoubleSharp()));
+    createAction("double_flat_accidental", SLOT(slotDoubleFlat()));
+    createAction("treble_clef", SLOT(slotTrebleClef()));
+    createAction("alto_clef", SLOT(slotAltoClef()));
+    createAction("tenor_clef", SLOT(slotTenorClef()));
+    createAction("bass_clef", SLOT(slotBassClef()));
+    createAction("text", SLOT(slotText()));
+    createAction("guitarchord", SLOT(slotGuitarChord()));
+    createAction("lilypond_directive", SLOT(slotLilyPondDirective()));
+    createAction("erase", SLOT(slotEraseSelected()));
+    createAction("select", SLOT(slotSelectSelected()));
+    createAction("toggle_step_by_step", SLOT(slotToggleStepByStep()));
+    createAction("select_from_start", SLOT(slotEditSelectFromStart()));
+    createAction("select_to_end", SLOT(slotEditSelectToEnd()));
+    createAction("select_whole_staff", SLOT(slotEditSelectWholeStaff()));
+    createAction("cut_and_close", SLOT(slotEditCutAndClose()));
+    createAction("general_paste", SLOT(slotEditGeneralPaste()));
+    createAction("delete", SLOT(slotEditDelete()));
+    createAction("move_events_up_staff", SLOT(slotMoveEventsUpStaff()));
+    createAction("move_events_down_staff", SLOT(slotMoveEventsDownStaff()));
+    createAction("linear_mode", SLOT(slotLinearMode()));
+    createAction("continuous_page_mode", SLOT(slotContinuousPageMode()));
+    createAction("multi_page_mode", SLOT(slotMultiPageMode()));
+    createAction("show_chords_ruler", SLOT(slotToggleChordsRuler()));
+    createAction("show_raw_note_ruler", SLOT(slotToggleRawNoteRuler()));
+    createAction("show_tempo_ruler", SLOT(slotToggleTempoRuler()));
+    createAction("show_annotations", SLOT(slotToggleAnnotations()));
+    createAction("show_lilypond_directives", SLOT(slotToggleLilyPondDirectives()));
+    createAction("lyric_editor", SLOT(slotEditLyrics()));
+    createAction("simple_tuplet", SLOT(slotGroupSimpleTuplet()));
+    createAction("tuplet", SLOT(slotGroupGeneralTuplet()));
+    createAction("triplet_mode", SLOT(slotUpdateInsertModeStatus()));
+    createAction("chord_mode", SLOT(slotUpdateInsertModeStatus()));
+    createAction("grace_mode", SLOT(slotUpdateInsertModeStatus()));
+    createAction("normalize_rests", SLOT(slotTransformsNormalizeRests()));
+    createAction("collapse_notes", SLOT(slotTransformsCollapseNotes()));
+    createAction("quantize", SLOT(slotTransformsQuantize()));
+    createAction("interpret", SLOT(slotTransformsInterpret()));
+    createAction("debug_dump", SLOT(slotDebugDump()));
+    createAction("make_ornament", SLOT(slotMakeOrnament()));
+    createAction("use_ornament", SLOT(slotUseOrnament()));
+    createAction("remove_ornament", SLOT(slotRemoveOrnament()));
+    createAction("add_clef", SLOT(slotEditAddClef()));
+    createAction("add_key_signature", SLOT(slotEditAddKeySignature()));
+    createAction("add_sustain_down", SLOT(slotEditAddSustainDown()));
+    createAction("add_sustain_up", SLOT(slotEditAddSustainUp()));
+    createAction("transpose_segment", SLOT(slotEditTranspose()));
+    createAction("switch_preset", SLOT(slotEditSwitchPreset()));
+    createAction("show_tools_toolbar", SLOT(slotToggleToolsToolBar()));
+    createAction("show_notes_toolbar", SLOT(slotToggleNotesToolBar()));
+    createAction("show_rests_toolbar", SLOT(slotToggleRestsToolBar()));
+    createAction("show_accidentals_toolbar", SLOT(slotToggleAccidentalsToolBar()));
+    createAction("show_clefs_toolbar", SLOT(slotToggleClefsToolBar()));
+    createAction("show_marks_toolbar", SLOT(slotToggleMarksToolBar()));
+    createAction("show_group_toolbar", SLOT(slotToggleGroupToolBar()));
+    createAction("show_layout_toolbar", SLOT(slotToggleLayoutToolBar()));
+    createAction("show_transport_toolbar", SLOT(slotToggleTransportToolBar()));
+    createAction("show_meta_toolbar", SLOT(slotToggleMetaToolBar()));
+    createAction("cursor_back", SLOT(slotStepBackward()));
+    createAction("cursor_forward", SLOT(slotStepForward()));
+    createAction("cursor_back_bar", SLOT(slotJumpBackward()));
+    createAction("cursor_forward_bar", SLOT(slotJumpForward()));
+    createAction("extend_selection_backward", SLOT(slotExtendSelectionBackward()));
+    createAction("extend_selection_forward", SLOT(slotExtendSelectionForward()));
+    createAction("extend_selection_backward_bar", SLOT(slotExtendSelectionBackwardBar()));
+    createAction("extend_selection_forward_bar", SLOT(slotExtendSelectionForwardBar()));
+    //!!! not here yet createAction("move_selection_left", SLOT(slotMoveSelectionLeft()));
+    createAction("cursor_start", SLOT(slotJumpToStart()));
+    createAction("cursor_end", SLOT(slotJumpToEnd()));
+    createAction("cursor_up_staff", SLOT(slotCurrentStaffUp()));
+    createAction("cursor_down_staff", SLOT(slotCurrentStaffDown()));
+    createAction("cursor_prior_segment", SLOT(slotCurrentSegmentPrior()));
+    createAction("cursor_next_segment", SLOT(slotCurrentSegmentNext()));
+    createAction("cursor_to_playback_pointer", SLOT(slotJumpCursorToPlayback()));
+    //&&& NB Play has two shortcuts (Enter and Ctrl+Return) -- need to
+    // ensure both get carried across somehow
+    createAction("play", SIGNAL(play()));
+    createAction("stop", SIGNAL(stop()));
+    createAction("playback_pointer_back_bar", SIGNAL(rewindPlayback()));
+    createAction("playback_pointer_forward_bar", SIGNAL(fastForwardPlayback()));
+    createAction("playback_pointer_start", SIGNAL(rewindPlaybackToBeginning()));
+    createAction("playback_pointer_end", SIGNAL(fastForwardPlaybackToEnd()));
+    createAction("playback_pointer_to_cursor", SLOT(slotJumpPlaybackToCursor()));
+    createAction("toggle_solo", SLOT(slotToggleSolo()));
+    createAction("toggle_tracking", SLOT(slotToggleTracking()));
+    createAction("panic", SIGNAL(panic()));
+    createAction("preview_selection", SLOT(slotPreviewSelection()));
+    createAction("clear_loop", SLOT(slotClearLoop()));
+    createAction("clear_selection", SLOT(slotClearSelection()));
+    createAction("filter_selection", SLOT(slotFilterSelection()));
+    createAction("velocity_up", SLOT(slotVelocityUp()));
+    createAction("velocity_down", SLOT(slotVelocityDown()));
+    createAction("set_velocities", SLOT(slotSetVelocities()));
+    createAction("toggle_dot", SLOT(slotToggleDot()));
+    createAction("add_dot", SLOT(slotAddDot()));
+    createAction("add_notation_dot", SLOT(slotAddDotNotationOnly()));
+
     
-	
+    std::set<std::string> fs(NoteFontFactory::getFontNames());
+    std::vector<std::string> f(fs.begin(), fs.end());
+    std::sort(f.begin(), f.end());
+
+    QMenu *fontActionMenu = new QMenu(i18n("Note &Font"), this); 
+    fontActionMenu->setObjectName("note_font_actionmenu");
+
+    QActionGroup *ag = new QActionGroup(this);
+
+    for (std::vector<std::string>::iterator i = f.begin(); i != f.end(); ++i) {
+
+        QString fontQName(strtoqstr(*i));
+
+        QAction *a = createAction("note_font_" + fontQName,
+                                  SLOT(slotChangeFontFromAction()));
+
+        ag->addAction(a);
+
+        a->setText(fontQName);
+        a->setCheckable(true);
+        a->setChecked(*i == m_fontName);
+
+        fontActionMenu->addAction(a);
+    }
+
+    //&&& add fontActionMenu to the appropriate super-menu
+
+    m_fontSizeActionMenu = new QMenu(i18n("Si&ze"), this);
+    m_fontSizeActionMenu->setObjectName("note_font_size_actionmenu");
+
+    setupFontSizeMenu();
+
+    //&&& add m_fontSizeActionMenu to the appropriate super-menu
+
+
+    QMenu *spacingActionMenu = new QMenu(i18n("S&pacing"), this);
+    spacingActionMenu->setObjectName("stretch_actionmenu");
+
+    int defaultSpacing = m_hlayout->getSpacing();
+    std::vector<int> spacings = NotationHLayout::getAvailableSpacings();
+
+    ag = new QActionGroup(this);
+
+    for (std::vector<int>::iterator i = spacings.begin();
+         i != spacings.end(); ++i) {
+
+        QAction *a = createAction(QString("spacing_%1").arg(*i),
+                                  SLOT(slotChangeSpacingFromAction()));
+
+        ag->addAction(a);
+        a->setText(QString("%1%").arg(*i));
+        a->setCheckable(true);
+        a->setChecked(*i == defaultSpacing);
+
+        spacingActionMenu->addAction(a);
+    }
+
+    //&&& add spacingActionMenu to the appropriate super-menu
+
+
+    QMenu *proportionActionMenu = new QMenu(i18n("Du&ration Factor"), this);
+    proportionActionMenu->setObjectName("proportion_actionmenu");
+
+    int defaultProportion = m_hlayout->getProportion();
+    std::vector<int> proportions = NotationHLayout::getAvailableProportions();
+
+    ag = new QActionGroup(this);
+
+    for (std::vector<int>::iterator i = proportions.begin();
+         i != proportions.end(); ++i) {
+
+        QString name = QString("%1%").arg(*i);
+        if (*i == 0) name = i18n("None");
+
+        QAction *a = createAction(QString("proportion_%1").arg(*i),
+                                  SLOT(slotChangeSpacingFromAction()));
+
+        ag->addAction(a);
+        a->setText(name);
+        a->setCheckable(true);
+        a->setChecked(*i == defaultProportion);
+
+        proportionActionMenu->addAction(a);
+    }
+
+    //&&& add proportionActionMenu to the appropriate super-menu
+
+
+//!!!
+// I believe this one was never actually used:
+//    KActionMenu *ornamentActionMenu =
+//        new KActionMenu(i18n("Use Ornament"), this, "ornament_actionmenu");
+
+
+    ag = new QActionGroup(this);
+
+    for (NoteActionDataMap::iterator actionDataIter = m_noteActionDataMap->begin();
+         actionDataIter != m_noteActionDataMap->end();
+         ++actionDataIter) {
+
+        NoteActionData noteActionData = **actionDataIter;
+
+        QAction *a = createAction(noteActionData.actionName,
+                                  SLOT(slotNoteAction()));
+        
+        ag->addAction(a);
+        a->setCheckable(true);
+
+        if (noteActionData.noteType == Note::Crotchet &&
+            noteActionData.dots == 0 && !noteActionData.rest) {
+            m_selectDefaultNote = a;
+        }
+    }
+
+
+    //!!! NoteChangeActionData also never used, I think
+
+
+
+    createGUI(getRCFileName());
+
+
+    
+    /*	
 	QAction *tac = 0;
 	QWidget *qac_parent = dynamic_cast<QWidget*>(this);
 	QWidget *qac_receiver = dynamic_cast<QWidget*>(this);
@@ -1548,7 +1788,7 @@ void NotationView::setupActions()
 
         QString fontQName(strtoqstr(*i));
 
-        /* was toggle */ 
+        // was toggle 
 		QAction *fontAction = new QAction( "note_font_" + fontQName, this );
 		fontAction->setObjectName( "note_font_" + fontQName );
 //             (fontQName, 0, this, SLOT(slotChangeFontFromAction()),
@@ -1597,7 +1837,7 @@ void NotationView::setupActions()
     for (std::vector<int>::iterator i = spacings.begin();
             i != spacings.end(); ++i) {
 
-        /* was toggle */
+            // was toggle 
 		QAction *spacingAction = new QAction( QString("spacing_%1").arg(*i), this );
 //             (QString("%1%").arg(*i), 0, this,
 //              SLOT(slotChangeSpacingFromAction()),
@@ -1630,7 +1870,7 @@ void NotationView::setupActions()
         if (*i == 0)
             name = i18n("None");
 
-        /* was toggle */
+            // was toggle 
 		QAction *proportionAction = new QAction( QString("proportion_%1").arg(*i), this );
 //             (name, 0, this,
 //              SLOT(slotChangeProportionFromAction()),
@@ -1823,11 +2063,12 @@ void NotationView::setupActions()
 //     noteAction->setExclusiveGroup("notes");
 	qag_notes->addAction( noteAction );
 
-    /*    icon = il.load("lilypond");
+        // *
+    icon = il.load("lilypond");
         noteAction = new KRadioAction(i18n("Lil&ypond Directive"), icon, Qt::Key_F9, this,
                                       SLOT(slotLilyPondDirective()),
                                       actionCollection(), "lilypond_directive");
-        noteAction->setExclusiveGroup("notes"); */
+        noteAction->setExclusiveGroup("notes"); * //
 
 
     //
@@ -2347,7 +2588,8 @@ void NotationView::setupActions()
 			//### FIX: deallocate QAction ptr
 			
 
-    /*!!! not here yet
+    // !!! not here yet
+// *
         QAction* qa_move_selection_left = new QAction(  i18n("Move Selection Left"), dynamic_cast<QObject*>(this) );
 			connect( qa_move_selection_left, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotMoveSelectionLeft()) );
 			qa_move_selection_left->setObjectName( "move_selection_left" );		//
@@ -2357,11 +2599,11 @@ void NotationView::setupActions()
 			//qa_move_selection_left->setChecked( false );		//
 			//### FIX: deallocate QAction ptr
 			
-    */
+    * //
 
     tac = new QAction( i18n("Cursor to St&art"), this );
-                /* #1025717: conflicting meanings for ctrl+a - dupe with Select All
-                  Qt::Key_A + Qt::CTRL, */ 
+    // #1025717: conflicting meanings for ctrl+a - dupe with Select All
+    // Qt::Key_A + Qt::CTRL, 
 	connect( tac, SIGNAL(triggered(bool)), this, 
                 SLOT(slotJumpToStart()) ); 
     tac->setObjectName("cursor_start");
@@ -2568,6 +2810,7 @@ void NotationView::setupActions()
 			
 
     rgTempQtIV->createGUI( qStrToCharPtrUtf8(getRCFileName()), false);
+    */
 }
 
 bool
@@ -2605,10 +2848,9 @@ NotationView::setupFontSizeMenu(std::string oldFontName)
         std::vector<int> sizes = NoteFontFactory::getScreenSizes(oldFontName);
 
         for (unsigned int i = 0; i < sizes.size(); ++i) {
-			QAction *action = findChild<QAction*>( QString("note_font_size_%1").arg(sizes[i]) );
-//                 actionCollection()->action
-//                 (QString("note_font_size_%1").arg(sizes[i]));
-			
+
+            QAction *action = findAction
+                (QString("note_font_size_%1").arg(sizes[i]));
             m_fontSizeActionMenu->removeAction(action);
 
             // Don't delete -- that could cause a crash when this
@@ -2623,26 +2865,18 @@ NotationView::setupFontSizeMenu(std::string oldFontName)
 
         QString actionName = QString("note_font_size_%1").arg(sizes[i]);
 
-        /* was toggle */ 
-// 		QAction *sizeAction = dynamic_cast<QAction*>
-//                                     (actionCollection()->action(actionName));
-		QAction *sizeAction = findChild<QAction*>(actionName);
+        QAction *sizeAction = findAction(actionName);
 
-		//@@@ //### FIX: this code is likely broken
         if (!sizeAction) {
-// 			sizeAction = new QAction( "%1 pixels", i18np("1 pixel", dynamic_cast<QObject*>(sizes[i])) );
-			sizeAction = new QAction( i18n("1 pixel"), this );	
-			//, dynamic_cast<QObject*>(sizes[i])), this );
-            connect( sizeAction, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(None) );	//### slot unknown
-			sizeAction->setObjectName(actionName);// sizes[i])
-            	sizeAction->setCheckable( true );	//
-            	sizeAction->setAutoRepeat( false );	//
-            	//sizeAction->setActionGroup( 0 );	// QActionGroup*
+            sizeAction = createAction
+                (actionName, SLOT(slotChangeFontSizeFromStringValue()));
+            sizeAction->setText(i18n("1 pixel", "%n pixels", sizes[i]));
+            sizeAction->setCheckable(true);
+        }
 
         sizeAction->setChecked(sizes[i] == m_fontSize);
-        m_fontSizeActionMenu->addAction( sizeAction );
-    	}
-	}
+        m_fontSizeActionMenu->addAction(sizeAction);
+    }
 }
 
 LinedStaff *
@@ -2848,18 +3082,20 @@ NotationView::setPageMode(LinedStaff::PageMode pageMode)
             m_topStandardRuler->show();
         if (m_bottomStandardRuler)
             m_bottomStandardRuler->show();
-        if (m_chordNameRuler && getToggleAction("show_chords_ruler")->isChecked())
+        if (m_chordNameRuler && findAction("show_chords_ruler")->isChecked())
             m_chordNameRuler->show();
-        if (m_rawNoteRuler && getToggleAction("show_raw_note_ruler")->isChecked())
+        if (m_rawNoteRuler && findAction("show_raw_note_ruler")->isChecked())
             m_rawNoteRuler->show();
-        if (m_tempoRuler && getToggleAction("show_tempo_ruler")->isChecked())
+        if (m_tempoRuler && findAction("show_tempo_ruler")->isChecked())
             m_tempoRuler->show();
         showHeadersGroup();
     }
-
-	rgTempQtIV->stateChanged("linear_mode",
-                 (pageMode == LinedStaff::LinearMode ? KXMLGUIClient::StateNoReverse :
-                  KXMLGUIClient::StateReverse));
+    
+    if (pageMode == LinedStaff::LinearMode) {
+        enterActionState("linear_mode");
+    } else {
+        leaveActionState("linear_mode");
+    }
 
     int pageWidth = getPageWidth();
     int topMargin = 0, leftMargin = 0;
@@ -3925,24 +4161,20 @@ void NotationView::setMenuStates()
     // Clear states first, then enter only those ones that apply
     // (so as to avoid ever clearing one after entering another, in
     // case the two overlap at all)
-	rgTempQtIV->stateChanged("have_selection", KXMLGUIClient::StateReverse);
-	rgTempQtIV->stateChanged("have_notes_in_selection", KXMLGUIClient::StateReverse);
-	rgTempQtIV->stateChanged("have_rests_in_selection", KXMLGUIClient::StateReverse);
+    leaveActionState("have_selection");
+    leaveActionState("have_notes_in_selection");
+    leaveActionState("have_rests_in_selection");
 
     if (m_currentEventSelection) {
 
         NOTATION_DEBUG << "NotationView::setMenuStates: Have selection; it's " << m_currentEventSelection << " covering range from " << m_currentEventSelection->getStartTime() << " to " << m_currentEventSelection->getEndTime() << " (" << m_currentEventSelection->getSegmentEvents().size() << " events)" << endl;
 
-		rgTempQtIV->stateChanged("have_selection", KXMLGUIClient::StateNoReverse);
-        if (m_currentEventSelection->contains
-                (Note::EventType)) {
-			rgTempQtIV->stateChanged("have_notes_in_selection",
-                         KXMLGUIClient::StateNoReverse);
+        enterActionState("have_selection");
+        if (m_currentEventSelection->contains(Note::EventType)) {
+            enterActionState("have_notes_in_selection");
         }
-        if (m_currentEventSelection->contains
-                (Note::EventRestType)) {
-			rgTempQtIV->stateChanged("have_rests_in_selection",
-                         KXMLGUIClient::StateNoReverse);
+        if (m_currentEventSelection->contains(Note::EventRestType)) {
+            enterActionState("have_rests_in_selection");
         }
     }
 
@@ -3952,21 +4184,18 @@ void NotationView::setMenuStates()
     // need to test dynamic_cast<RestInserter *> before
     // dynamic_cast<NoteInserter *> (which will succeed for both)
 
-	int StateReverse = 0x100;	//@@@ //### FIX: I've set these arbitrarily
-	int StateNoReverse = 0x200;
-	
-	if (dynamic_cast<RestInserter *>(m_tool)) {
+    if (dynamic_cast<RestInserter *>(m_tool)) {
         NOTATION_DEBUG << "Have rest inserter " << endl;
-		rgTempQtIV->stateChanged("note_insert_tool_current", StateReverse);
-		rgTempQtIV->stateChanged("rest_insert_tool_current", StateNoReverse);
+        leaveActionState("note_insert_tool_current");
+        enterActionState("rest_insert_tool_current");
     } else if (dynamic_cast<NoteInserter *>(m_tool)) {
         NOTATION_DEBUG << "Have note inserter " << endl;
-		rgTempQtIV->stateChanged("note_insert_tool_current", StateNoReverse);
-		rgTempQtIV->stateChanged("rest_insert_tool_current", StateReverse);
+        leaveActionState("rest_insert_tool_current");
+        enterActionState("note_insert_tool_current");
     } else {
         NOTATION_DEBUG << "Have neither inserter " << endl;
-		rgTempQtIV->stateChanged("note_insert_tool_current", StateReverse);
-		rgTempQtIV->stateChanged("rest_insert_tool_current", StateReverse);
+        leaveActionState("note_insert_tool_current");
+        leaveActionState("rest_insert_tool_current");
     }
 }
 
@@ -4090,7 +4319,7 @@ void NotationView::slotLastNoteAction()
         << m_lastNoteAction << "' or 'crotchet'\n";
     }
 }
-
+/*!!!
 void NotationView::slotNoteChangeAction()
 {
     const QObject* sigSender = sender();
@@ -4105,6 +4334,7 @@ void NotationView::slotNoteChangeAction()
         << sigSender->objectName() << "'\n";
     }
 }
+*/
 
 void NotationView::initActionDataMaps()
 {
@@ -4154,6 +4384,7 @@ void NotationView::initActionDataMaps()
         }
     }
 
+/*!!!
     m_noteChangeActionDataMap = new NoteChangeActionDataMap;
 
     for (int notationOnly = 0; notationOnly <= 1; ++notationOnly) {
@@ -4183,6 +4414,7 @@ void NotationView::initActionDataMaps()
                   notationOnly ? true : false, type));
         }
     }
+*/
 }
 
 void NotationView::setupProgress(QProgressBar* bar)
@@ -4301,7 +4533,7 @@ void NotationView::updateViewCaption()
 
 NotationView::NoteActionDataMap* NotationView::m_noteActionDataMap = 0;
 
-NotationView::NoteChangeActionDataMap* NotationView::m_noteChangeActionDataMap = 0;
+//!!!NotationView::NoteChangeActionDataMap* NotationView::m_noteChangeActionDataMap = 0;
 
 
 /// SLOTS
@@ -4347,7 +4579,7 @@ NotationView::slotUpdateAnnotationsStatus()
         }
     }
     m_annotationsLabel->setText("");
-    getToggleAction("show_annotations")->setChecked(areAnnotationsVisible());
+    findAction("show_annotations")->setChecked(areAnnotationsVisible());
 }
 
 void
@@ -4369,7 +4601,7 @@ NotationView::slotUpdateLilyPondDirectivesStatus()
         }
     }
     m_lilyPondDirectivesLabel->setText("");
-    getToggleAction("show_lilypond_directives")->setChecked(areLilyPondDirectivesVisible());
+    findAction("show_lilypond_directives")->setChecked(areLilyPondDirectivesVisible());
 }
 
 void
@@ -5572,6 +5804,7 @@ void NotationView::slotTransformsInterpret()
     }
 }
 
+/*!!!
 void NotationView::slotSetNoteDurations(Note::Type type, bool notationOnly)
 {
     if (!m_currentEventSelection)
@@ -5579,6 +5812,7 @@ void NotationView::slotSetNoteDurations(Note::Type type, bool notationOnly)
     KTmpStatusMsg msg(i18n("Setting note durations..."), this);
     addCommandToHistory(new SetNoteTypeCommand(*m_currentEventSelection, type, notationOnly));
 }
+*/
 
 void NotationView::slotAddDot()
 {

@@ -1539,9 +1539,12 @@ public slots:
     void slotJumpToQuickMarker();    
 
 
-    QAction *newAction(QString actionName);
+
+    QAction *createAction(QString actionName, QString connection);
+    QAction *findAction(QString actionName);
     void enterActionState(QString stateName);
     void leaveActionState(QString stateName);
+    bool createGUI(QString rcname);
 
 
 private:

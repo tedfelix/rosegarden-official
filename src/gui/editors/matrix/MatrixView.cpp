@@ -127,9 +127,6 @@
 #include <QKeySequence>
 
 #include <klocale.h>
-//#include <kglobal.h>
-//#include <kstandarddirs.h>
-#include <kxmlguiclient.h>
 
 
 namespace Rosegarden
@@ -144,7 +141,6 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
                        bool drumMode)
         : EditView(doc, segments, 3, parent, "matrixview"),
         m_hlayout(&doc->getComposition()),
-        m_referenceRuler(new ZoomableMatrixHLayoutRulerScale(m_hlayout)),
         m_vlayout(),
         m_snapGrid(new SnapGrid(&m_hlayout)),
         m_lastEndMarkerTime(0),
@@ -162,6 +158,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
         m_quantizations(BasicQuantizer::getStandardQuantizations()),
         m_chordNameRuler(0),
         m_tempoRuler(0),
+        m_referenceRuler(new ZoomableMatrixHLayoutRulerScale(m_hlayout)),
         m_playTracking(true),
         m_dockVisible(true),
         m_drumMode(drumMode),
@@ -404,7 +401,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     setupActions();
     setupAddControlRulerMenu();
 
-    rgTempQtIV->stateChanged("parametersbox_closed", KXMLGUIClient::StateReverse);
+    leaveActionState("parametersbox_closed");
 
     // tool bars
     initActionsToolbar();
@@ -574,7 +571,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     static_cast<TempoRuler *>(m_tempoRuler)->connectSignals();
     addRuler(m_tempoRuler);
 
-	rgTempQtIV->stateChanged("have_selection", KXMLGUIClient::StateReverse);
+    leaveActionState("have_selection");
     slotTestClipboard();
 
     timeT start = doc->getComposition().getLoopStart();
@@ -687,9 +684,9 @@ void MatrixView::readOptions()
     if (!opt) {
 //         m_dockLeft->undock();
 //         m_dockLeft->hide();
-		m_dockLeft->setFloating( false );
-		m_dockLeft->setVisible( false );
-		rgTempQtIV->stateChanged("parametersbox_closed", KXMLGUIClient::StateNoReverse);
+        m_dockLeft->setFloating( false );
+        m_dockLeft->setVisible( false );
+        enterActionState("parametersbox_closed");
         m_dockVisible = false;
     }
 
@@ -700,6 +697,105 @@ void MatrixView::setupActions()
 {
     EditViewBase::setupActions("matrix.rc");
     EditView::setupActions();
+
+    createAction("select", SLOT(slotSelectSelected()));
+    createAction("draw", SLOT(slotPaintSelected()));
+    createAction("erase", SLOT(slotEraseSelected()));
+    createAction("move", SLOT(slotMoveSelected()));
+    createAction("resize", SLOT(slotResizeSelected()));
+    createAction("chord_mode", SLOT(slotUpdateInsertModeStatus()));
+    createAction("toggle_step_by_step", SLOT(slotToggleStepByStep()));
+    createAction("quantize", SLOT(slotTransformsQuantize()));
+    createAction("repeat_quantize", SLOT(slotTransformsRepeatQuantize()));
+    createAction("collapse_notes", SLOT(slotTransformsCollapseNotes()));
+    createAction("legatoize", SLOT(slotTransformsLegato()));
+    createAction("velocity_up", SLOT(slotVelocityUp()));
+    createAction("velocity_down", SLOT(slotVelocityDown()));
+    createAction("set_to_current_velocity", SLOT(slotSetVelocitiesToCurrent()));
+    createAction("set_velocities", SLOT(slotSetVelocities()));
+    createAction("trigger_segment", SLOT(slotTriggerSegment()));
+    createAction("remove_trigger", SLOT(slotRemoveTriggers()));
+    createAction("select_all", SLOT(slotSelectAll()));
+    createAction("delete", SLOT(slotEditDelete()));
+    createAction("cursor_back", SLOT(slotStepBackward()));
+    createAction("cursor_forward", SLOT(slotStepForward()));
+    createAction("cursor_back_bar", SLOT(slotJumpBackward()));
+    createAction("cursor_forward_bar", SLOT(slotJumpForward()));
+    createAction("extend_selection_backward", SLOT(slotExtendSelectionBackward()));
+    createAction("extend_selection_forward", SLOT(slotExtendSelectionForward()));
+    createAction("extend_selection_backward_bar", SLOT(slotExtendSelectionBackwardBar()));
+    createAction("extend_selection_forward_bar", SLOT(slotExtendSelectionForwardBar()));
+    createAction("cursor_start", SLOT(slotJumpToStart()));
+    createAction("cursor_end", SLOT(slotJumpToEnd()));
+    createAction("cursor_to_playback_pointer", SLOT(slotJumpCursorToPlayback()));
+    //&&& NB Play has two shortcuts (Enter and Ctrl+Return) -- need to
+    // ensure both get carried across somehow
+    createAction("play", SIGNAL(play()));
+    createAction("stop", SIGNAL(stop()));
+    createAction("playback_pointer_back_bar", SIGNAL(rewindPlayback()));
+    createAction("playback_pointer_forward_bar", SIGNAL(fastForwardPlayback()));
+    createAction("playback_pointer_start", SIGNAL(rewindPlaybackToBeginning()));
+    createAction("playback_pointer_end", SIGNAL(fastForwardPlaybackToEnd()));
+    createAction("playback_pointer_to_cursor", SLOT(slotJumpPlaybackToCursor()));
+    createAction("toggle_solo", SLOT(slotToggleSolo()));
+    createAction("toggle_tracking", SLOT(slotToggleTracking()));
+    createAction("panic", SIGNAL(panic()));
+    createAction("preview_selection", SLOT(slotPreviewSelection()));
+    createAction("clear_loop", SLOT(slotClearLoop()));
+    createAction("clear_selection", SLOT(slotClearSelection()));
+    createAction("filter_selection", SLOT(slotFilterSelection()));
+
+    timeT crotchetDuration = Note(Note::Crotchet).getDuration();
+    m_snapValues.clear();
+    m_snapValues.push_back(SnapGrid::NoSnap);
+    m_snapValues.push_back(SnapGrid::SnapToUnit);
+    m_snapValues.push_back(crotchetDuration / 16);
+    m_snapValues.push_back(crotchetDuration / 12);
+    m_snapValues.push_back(crotchetDuration / 8);
+    m_snapValues.push_back(crotchetDuration / 6);
+    m_snapValues.push_back(crotchetDuration / 4);
+    m_snapValues.push_back(crotchetDuration / 3);
+    m_snapValues.push_back(crotchetDuration / 2);
+    m_snapValues.push_back((crotchetDuration * 3) / 4);
+    m_snapValues.push_back(crotchetDuration);
+    m_snapValues.push_back((crotchetDuration * 3) / 2);
+    m_snapValues.push_back(crotchetDuration * 2);
+    m_snapValues.push_back(SnapGrid::SnapToBeat);
+    m_snapValues.push_back(SnapGrid::SnapToBar);
+
+    for (unsigned int i = 0; i < m_snapValues.size(); i++) {
+
+        timeT d = m_snapValues[i];
+
+        if (d == SnapGrid::NoSnap) {
+            createAction("snap_none", SLOT(slotSetSnapFromAction()));
+        } else if (d == SnapGrid::SnapToUnit) {
+        } else if (d == SnapGrid::SnapToBeat) {
+            createAction("snap_beat", SLOT(slotSetSnapFromAction()));
+        } else if (d == SnapGrid::SnapToBar) {
+            createAction("snap_bar", SLOT(slotSetSnapFromAction()));
+        } else {
+            QString actionName = QString("snap_%1").arg(int((crotchetDuration * 4) / d));
+            if (d == (crotchetDuration * 3) / 4) actionName = "snap_dotted_8";
+            if (d == (crotchetDuration * 3) / 2) actionName = "snap_dotted_4";
+            createAction(actionName, SLOT(slotSetSnapFromAction()));
+        }
+    }
+
+    createAction("show_inst_parameters", SLOT(slotDockParametersBack()));
+    createAction("show_chords_ruler", SLOT(slotToggleChordsRuler()));
+    createAction("show_tempo_ruler", SLOT(slotToggleTempoRuler()));
+
+    createGUI(getRCFileName());
+
+    if (getSegmentsOnlyRestsAndClefs()) {
+        findAction("draw")->trigger();
+    } else {
+        findAction("select")->trigger();
+    }
+
+/* explicit action creation: leaving this in in case the streamlined
+   version fails
 
     //
     // Edition tools (eraser, selector...)
@@ -962,8 +1058,8 @@ void MatrixView::setupActions()
 			
 
     QAction * qa_cursor_start = new QAction( i18n("Cursor to St&art"), this );
-                /* #1025717: conflicting meanings for ctrl+a - dupe with Select All
-                  Qt::Key_A + Qt::CTRL, */
+    // #1025717: conflicting meanings for ctrl+a - dupe with Select All
+    // Qt::Key_A + Qt::CTRL, 
 	connect( qa_cursor_start,SIGNAL(triggered()), this, SLOT(slotJumpToStart()) ); //, actionCollection(),
 //                "cursor_start");
 	
@@ -1215,16 +1311,13 @@ void MatrixView::setupActions()
 // 		actionCollection()->action("select")->activate();
 		
 	}
+*/
 }
 
 bool
 MatrixView::isInChordMode()
 {
-	QAction * tac = this->findChild<QAction*>( "chord_mode" );
-	return tac->isChecked();
-			
-// 	((/* was toggle */ QAction *)actionCollection()->action("chord_mode"))->
-//            isChecked();
+    return findAction("chord_mode")->isChecked();
 }
 
 void MatrixView::slotDockParametersBack()
@@ -1234,14 +1327,14 @@ void MatrixView::slotDockParametersBack()
 
 void MatrixView::slotParametersClosed()
 {
-	rgTempQtIV->stateChanged("parametersbox_closed", 0);
+    enterActionState("parametersbox_closed");
     m_dockVisible = false;
 }
 
 void MatrixView::slotParametersDockedBack(QDockWidget* dw, int )//QDockWidget::DockPosition)
 {
     if (dw == m_dockLeft) {
-		rgTempQtIV->stateChanged("parametersbox_closed", KXMLGUIClient::StateReverse);
+        leaveActionState("parametersbox_closed");
         m_dockVisible = true;
     }
 }
@@ -1550,19 +1643,17 @@ void MatrixView::setCurrentSelection(EventSelection* s, bool preview,
     // Clear states first, then enter only those ones that apply
     // (so as to avoid ever clearing one after entering another, in
     // case the two overlap at all)
-	rgTempQtIV->stateChanged("have_selection", KXMLGUIClient::StateReverse);
-	rgTempQtIV->stateChanged("have_notes_in_selection", KXMLGUIClient::StateReverse);
-	rgTempQtIV->stateChanged("have_rests_in_selection", KXMLGUIClient::StateReverse);
+    leaveActionState("have_selection");
+    leaveActionState("have_notes_in_selection");
+    leaveActionState("have_rests_in_selection");
 
     if (s) {
-		rgTempQtIV->stateChanged("have_selection", KXMLGUIClient::StateNoReverse);
+        enterActionState("have_selection");
         if (s->contains(Note::EventType)) {
-			rgTempQtIV->stateChanged("have_notes_in_selection",
-                         KXMLGUIClient::StateNoReverse);
+            enterActionState("have_notes_in_selection");
         }
         if (s->contains(Note::EventRestType)) {
-			rgTempQtIV->stateChanged("have_rests_in_selection",
-                         KXMLGUIClient::StateNoReverse);
+            enterActionState("have_rests_in_selection");
         }
     }
 
@@ -3154,9 +3245,7 @@ MatrixView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn
         return ;
     }
 
-//     QAction *action = dynamic_cast<QAction*>
-//                             (actionCollection()->action("toggle_step_by_step"));
-	QAction *action = this->findChild<QAction*>( "toggle_step_by_step" );
+    QAction *action = findAction("toggle_step_by_step");
 
     if (!action) {
         MATRIX_DEBUG << "WARNING: No toggle_step_by_step action" << endl;
@@ -3242,10 +3331,8 @@ MatrixView::slotInsertableNoteOffReceived(int pitch, int velocity)
 void
 MatrixView::slotToggleStepByStep()
 {
-//     QAction *action = dynamic_cast<QAction*>
-//                             (actionCollection()->action("toggle_step_by_step"));
-	QAction *action = this->findChild<QAction*>( "toggle_step_by_step" );
-	
+    QAction *action = findAction("toggle_step_by_step");
+        
     if (!action) {
         MATRIX_DEBUG << "WARNING: No toggle_step_by_step action" << endl;
         return ;
@@ -3272,10 +3359,7 @@ MatrixView::slotUpdateInsertModeStatus()
 void
 MatrixView::slotStepByStepTargetRequested(QObject *obj)
 {
-    /* was toggle */ 
-// 	QAction *action = dynamic_cast<QAction*>
-//                             (actionCollection()->action("toggle_step_by_step"));
-	QAction *action = this->findChild<QAction*>( "toggle_step_by_step" );
+    QAction *action = findAction("toggle_step_by_step");
 	
     if (!action) {
         MATRIX_DEBUG << "WARNING: No toggle_step_by_step action" << endl;

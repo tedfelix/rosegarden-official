@@ -120,13 +120,13 @@ public:
                          QString actionName,
                          AbstractCommandBuilder *builder,
                          QString menuTitle = "",
-                         QString menuActionName = "") {
+                         QString menuName = "") {
         addAction(title,
                   icon,
                   shortcut,
                   actionName,
                   menuTitle,
-                  menuActionName);
+                  menuName);
 
         m_builders[actionName] = builder;
     }
@@ -145,7 +145,7 @@ protected:
                            QString shortcut, 
                            QString actionName,
                            QString menuTitle,
-                           QString menuActionName) = 0;
+                           QString menuName) = 0;
 	
     virtual void invokeCommand(QString actionName) = 0;
 

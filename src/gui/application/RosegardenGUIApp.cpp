@@ -293,8 +293,8 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     m_lircClient(0),
     m_lircCommander(0),
 #endif
-    m_haveAudioImporter(false),
     m_firstRun(false),
+    m_haveAudioImporter(false),
     m_parameterArea(0)
 {
     m_myself = this;
@@ -647,6 +647,224 @@ RosegardenGUIApp::~RosegardenGUIApp()
 
 void RosegardenGUIApp::setupActions()
 {
+	
+	/*
+	// old:
+	KStandardAction::open (this, SLOT(slotFileOpen()), actionCollection());
+    m_fileRecent = KStandardAction::openRecent(this,
+                                          SLOT(slotFileOpenRecent(const KURL&)),
+                                          actionCollection());
+    KStandardAction::save (this, SLOT(slotFileSave()), actionCollection());
+    KStandardAction::saveAs(this, SLOT(slotFileSaveAs()), actionCollection());
+    KStandardAction::revert(this, SLOT(slotRevertToSaved()), actionCollection());
+    KStandardAction::close (this, SLOT(slotFileClose()), actionCollection());
+    KStandardAction::print (this, SLOT(slotFilePrint()), actionCollection());
+    KStandardAction::printPreview (this, SLOT(slotFilePrintPreview()), actionCollection());
+	KStandardAction::quit (this, SLOT(slotQuit()), actionCollection());
+	*/
+	/*
+	// old:
+    KStandardAction::cut (this, SLOT(slotEditCut()), actionCollection());
+    KStandardAction::copy (this, SLOT(slotEditCopy()), actionCollection());
+    KStandardAction::paste (this, SLOT(slotEditPaste()), actionCollection());
+	*/
+	/*
+	// old:
+    KStandardAction::saveOptions(this,
+                            SLOT(slotSaveOptions()),
+                            actionCollection());
+
+    KStandardAction::preferences(this,
+                            SLOT(slotConfigure()),
+                            actionCollection());
+
+    KStandardAction::keyBindings(this,
+                            SLOT(slotEditKeys()),
+                            actionCollection());
+
+    KStandardAction::configureToolbars(this,
+                                  SLOT(slotEditToolbars()),
+                                  actionCollection());
+	*/
+
+    createAction("file_open", SLOT(slotFileOpen()));
+    createAction("file_save", SLOT(slotFileSave()));
+    createAction("file_save_as", SLOT(slotFileSaveAs()));
+    createAction("file_revert", SLOT(slotRevertToSaved()));
+    createAction("file_close", SLOT(slotFileClose()));
+    createAction("file_print", SLOT(slotFilePrint()));
+    createAction("file_print_preview", SLOT(slotFilePrintPreview()));
+    createAction("file_quit", SLOT(slotQuit()));
+
+    createAction("edit_cut", SLOT(slotEditCut()));
+    createAction("edit_copy", SLOT(slotEditCopy()));
+    createAction("edit_paste", SLOT(slotEditPaste()));
+
+    //!!! I don't like Save Settings -- I think we should lose it, and
+    // just always save them
+    createAction("options_save_options", SLOT(slotSaveOptions()));
+
+    createAction("options_configure", SLOT(slotConfigure()));
+
+    //&&&
+//    createAction("options_configure_toolbars", SLOT(slotEditToolbars()));
+//    createAction("options_configure_keybinding", SLOT(slotEditKeys()));
+
+    // Recent files menu -- see here and below.  The KDE standard action name is/was file_open_recent.
+    //&&& Restore this when it is clear how we'll be enquiring for a
+    //menu by name
+//    m_fileRecent = KStandardAction::openRecent(this,
+//                                          SLOT(slotFileOpenRecent(const KURL&)),
+//                                          actionCollection());
+    m_menuRecent = 0;
+    
+    createAction("file_import_project", SLOT(slotImportProject()));
+    createAction("file_import_midi", SLOT(slotImportMIDI()));
+    createAction("file_import_rg21", SLOT(slotImportRG21()));
+    createAction("file_import_hydrogen", SLOT(slotImportHydrogen()));
+    createAction("file_merge", SLOT(slotMerge()));
+    createAction("file_merge_midi", SLOT(slotMergeMIDI()));
+    createAction("file_merge_rg21", SLOT(slotMergeRG21()));
+    createAction("file_merge_hydrogen", SLOT(slotMergeHydrogen()));
+    createAction("file_export_project", SLOT(slotExportProject()));
+    createAction("file_export_midi", SLOT(slotExportMIDI()));
+    createAction("file_export_lilypond", SLOT(slotExportLilyPond()));
+    createAction("file_export_musicxml", SLOT(slotExportMusicXml()));
+    createAction("file_export_csound", SLOT(slotExportCsound()));
+    createAction("file_export_mup", SLOT(slotExportMup()));
+    createAction("file_print_lilypond", SLOT(slotPrintLilyPond()));
+    createAction("file_preview_lilypond", SLOT(slotPreviewLilyPond()));
+    createAction("file_show_playlist", SLOT(slotPlayList()));
+    createAction("tutorial", SLOT(slotTutorial()));
+    createAction("guidelines", SLOT(slotBugGuidelines()));
+
+    //&&& Connect MultiViewCommandHistory to the edit menu and toolbar
+    // (looking up the menu & toolbar by name)
+//    new KToolBarPopupAction(i18n("Und&o"), "undo", KStdAccel::shortcut(KStdAccel::Undo), actionCollection(), KStdAction::stdName(KStdAction::Undo));
+//    new KToolBarPopupAction(i18n("Re&do"), "redo", KStdAccel::shortcut(KStdAccel::Redo), actionCollection(), KStdAction::stdName(KStdAction::Redo));
+
+    createAction("show_tools_toolbar", SLOT(slotToggleToolsToolBar()));
+    createAction("show_tracks_toolbar", SLOT(slotToggleTracksToolBar()));
+    createAction("show_editors_toolbar", SLOT(slotToggleEditorsToolBar()));
+    createAction("show_transport_toolbar", SLOT(slotToggleTransportToolBar()));
+    createAction("show_zoom_toolbar", SLOT(slotToggleZoomToolBar()));
+    createAction("show_transport", SLOT(slotToggleTransport()));
+    createAction("show_tracklabels", SLOT(slotToggleTrackLabels()));
+    createAction("show_rulers", SLOT(slotToggleRulers()));
+    createAction("show_tempo_ruler", SLOT(slotToggleTempoRuler()));
+    createAction("show_chord_name_ruler", SLOT(slotToggleChordNameRuler()));
+    createAction("show_previews", SLOT(slotTogglePreviews()));
+    createAction("show_inst_segment_parameters", SLOT(slotDockParametersBack()));
+    createAction("select", SLOT(slotPointerSelected()));
+    createAction("draw", SLOT(slotDrawSelected()));
+    createAction("erase", SLOT(slotEraseSelected()));
+    createAction("move", SLOT(slotMoveSelected()));
+    createAction("resize", SLOT(slotResizeSelected()));
+    createAction("split", SLOT(slotSplitSelected()));
+    createAction("join", SLOT(slotJoinSelected()));
+    createAction("harmonize_selection", SLOT(slotHarmonizeSelection()));
+    createAction("add_time_signature", SLOT(slotEditTimeSignature()));
+    createAction("edit_tempos", SLOT(slotEditTempos()));
+    createAction("cut_range", SLOT(slotCutRange()));
+    createAction("copy_range", SLOT(slotCopyRange()));
+    createAction("paste_range", SLOT(slotPasteRange()));
+    createAction("delete_range", SLOT(slotDeleteRange()));
+    createAction("insert_range", SLOT(slotInsertRange()));
+    createAction("delete", SLOT(slotDeleteSelectedSegments()));
+    createAction("select_all", SLOT(slotSelectAll()));
+    createAction("add_tempo", SLOT(slotEditTempo()));
+    createAction("change_composition_length", SLOT(slotChangeCompositionLength()));
+    createAction("edit_markers", SLOT(slotEditMarkers()));
+    createAction("edit_doc_properties", SLOT(slotEditDocumentProperties()));
+    createAction("edit_default", SLOT(slotEdit()));
+    createAction("edit_matrix", SLOT(slotEditInMatrix()));
+    createAction("edit_percussion_matrix", SLOT(slotEditInPercussionMatrix()));
+    createAction("edit_notation", SLOT(slotEditAsNotation()));
+    createAction("edit_event_list", SLOT(slotEditInEventList()));
+    createAction("quantize_selection", SLOT(slotQuantizeSelection()));
+    createAction("relabel_segment", SLOT(slotRelabelSegments()));
+    createAction("transpose", SLOT(slotTransposeSegments()));
+    createAction("repeat_quantize", SLOT(slotRepeatQuantizeSelection()));
+    createAction("rescale", SLOT(slotRescaleSelection()));
+    createAction("auto_split", SLOT(slotAutoSplitSelection()));
+    createAction("split_by_pitch", SLOT(slotSplitSelectionByPitch()));
+    createAction("split_by_recording", SLOT(slotSplitSelectionByRecordedSrc()));
+    createAction("split_at_time", SLOT(slotSplitSelectionAtTime()));
+    createAction("jog_left", SLOT(slotJogLeft()));
+    createAction("jog_right", SLOT(slotJogRight()));
+    createAction("set_segment_start", SLOT(slotSetSegmentStartTimes()));
+    createAction("set_segment_duration", SLOT(slotSetSegmentDurations()));
+    createAction("join_segments", SLOT(slotJoinSegments()));
+    createAction("repeats_to_real_copies", SLOT(slotRepeatingSegments()));
+    createAction("manage_trigger_segments", SLOT(slotManageTriggerSegments()));
+    createAction("groove_quantize", SLOT(slotGrooveQuantize()));
+    createAction("set_tempo_to_segment_length", SLOT(slotTempoToSegmentLength()));
+    createAction("audio_manager", SLOT(slotAudioManager()));
+    createAction("show_segment_labels", SLOT(slotToggleSegmentLabels()));
+    createAction("add_track", SLOT(slotAddTrack()));
+    createAction("add_tracks", SLOT(slotAddTracks()));
+    createAction("delete_track", SLOT(slotDeleteTrack()));
+    createAction("move_track_down", SLOT(slotMoveTrackDown()));
+    createAction("move_track_up", SLOT(slotMoveTrackUp()));
+    createAction("select_next_track", SLOT(slotTrackDown()));
+    createAction("select_previous_track", SLOT(slotTrackUp()));
+    createAction("toggle_mute_track", SLOT(slotToggleMutedCurrentTrack()));
+    createAction("toggle_arm_track", SLOT(slotToggleRecordCurrentTrack()));
+    createAction("mute_all_tracks", SLOT(slotMuteAllTracks()));
+    createAction("unmute_all_tracks", SLOT(slotUnmuteAllTracks()));
+    createAction("remap_instruments", SLOT(slotRemapInstruments()));
+    createAction("audio_mixer", SLOT(slotOpenAudioMixer()));
+    createAction("midi_mixer", SLOT(slotOpenMidiMixer()));
+    createAction("manage_devices", SLOT(slotManageMIDIDevices()));
+    createAction("manage_synths", SLOT(slotManageSynths()));
+    createAction("modify_midi_filters", SLOT(slotModifyMIDIFilters()));
+    createAction("enable_midi_routing", SLOT(slotEnableMIDIThruRouting()));
+    createAction("manage_metronome", SLOT(slotManageMetronome()));
+    createAction("save_default_studio", SLOT(slotSaveDefaultStudio()));
+    createAction("load_default_studio", SLOT(slotImportDefaultStudio()));
+    createAction("load_studio", SLOT(slotImportStudio()));
+    createAction("reset_midi_network", SLOT(slotResetMidiNetwork()));
+    createAction("set_quick_marker", SLOT(slotSetQuickMarker()));
+    createAction("jump_to_quick_marker", SLOT(slotJumpToQuickMarker()));
+
+// These were commented out in the old KDE3 code as well
+//    createAction("insert_marker_here", SLOT(slotInsertMarkerHere()));
+//    createAction("insert_marker_at_pointer", SLOT(slotInsertMarkerAtPointer()));
+//    createAction("delete_marker", SLOT(slotDeleteMarker()));
+
+    createAction("play", SLOT(slotPlay()));
+    createAction("stop", SLOT(slotStop()));
+    createAction("fast_forward", SLOT(slotFastforward()));
+    createAction("rewind", SLOT(slotRewind()));
+    createAction("recordtoggle", SLOT(slotToggleRecord()));
+    createAction("record", SLOT(slotRecord()));
+    createAction("rewindtobeginning", SLOT(slotRewindToBeginning()));
+    createAction("fastforwardtoend", SLOT(slotFastForwardToEnd()));
+    createAction("toggle_tracking", SLOT(slotToggleTracking()));
+    createAction("panic", SLOT(slotPanic()));
+    createAction("debug_dump_segments", SLOT(slotDebugDump()));
+
+    createGUI("rosegardenui.rc");
+
+    createAndSetupTransport();
+
+    // transport toolbar is hidden by default - TODO : this should be in options
+    //
+    //toolBar("Transport Toolbar")->hide();
+
+    // was QPopupMenu
+    QMenu* setTrackInstrumentMenu = this->findChild<QMenu*>("set_track_instrument");
+
+    if (setTrackInstrumentMenu) {
+        connect(setTrackInstrumentMenu, SIGNAL(aboutToShow()),
+                this, SLOT(slotPopulateTrackInstrumentPopup()));
+    } else {
+        RG_DEBUG << "RosegardenGUIApp::setupActions() : couldn't find set_track_instrument menu - check rosegardenui.rcn\n";
+    }
+
+    setRewFFwdToAutoRepeat();
+
+/*
     // setup File menu
     // New Window ?
 
@@ -718,8 +936,7 @@ void RosegardenGUIApp::setupActions()
 	
 	m_menuBarMain = this->menuBar(); // create and return main menu bar
 	
-	/* create sub-menus */
-	/********************/
+	// create sub-menus 
 	m_menuFile = m_menuBarMain->addMenu(i18n("&File"));
 	m_menuEdit = m_menuBarMain->addMenu(i18n("&Edit"));
 	m_menuComposition = m_menuBarMain->addMenu(i18n("&Composition"));
@@ -736,21 +953,6 @@ void RosegardenGUIApp::setupActions()
 	m_menuFile->addAction(qa_printPreview);
 	m_menuFile->addAction(qa_quit);
 	
-	
-	/*
-	// old:
-	KStandardAction::open (this, SLOT(slotFileOpen()), actionCollection());
-    m_fileRecent = KStandardAction::openRecent(this,
-                                          SLOT(slotFileOpenRecent(const KURL&)),
-                                          actionCollection());
-    KStandardAction::save (this, SLOT(slotFileSave()), actionCollection());
-    KStandardAction::saveAs(this, SLOT(slotFileSaveAs()), actionCollection());
-    KStandardAction::revert(this, SLOT(slotRevertToSaved()), actionCollection());
-    KStandardAction::close (this, SLOT(slotFileClose()), actionCollection());
-    KStandardAction::print (this, SLOT(slotFilePrint()), actionCollection());
-    KStandardAction::printPreview (this, SLOT(slotFilePrintPreview()), actionCollection());
-	KStandardAction::quit (this, SLOT(slotQuit()), actionCollection());
-	*/
 	
     QAction *qa_file_import_project = new QAction(i18n("Import Rosegarden &Project file..."), dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_file_import_project->setIconText(0); 
@@ -833,12 +1035,6 @@ void RosegardenGUIApp::setupActions()
     
 			
 	// setup edit menu
-	/*
-	// old:
-    KStandardAction::cut (this, SLOT(slotEditCut()), actionCollection());
-    KStandardAction::copy (this, SLOT(slotEditCopy()), actionCollection());
-    KStandardAction::paste (this, SLOT(slotEditPaste()), actionCollection());
-	*/
 	
 	QAction* qa_cut = new QAction(i18n("Cu&t"), this );
 	connect( qa_cut, SIGNAL(toggled()), this, SLOT(slotEditCut()) ); ;
@@ -1018,24 +1214,6 @@ void RosegardenGUIApp::setupActions()
 	
     // Standard Actions
     //
-	/*
-	// old:
-    KStandardAction::saveOptions(this,
-                            SLOT(slotSaveOptions()),
-                            actionCollection());
-
-    KStandardAction::preferences(this,
-                            SLOT(slotConfigure()),
-                            actionCollection());
-
-    KStandardAction::keyBindings(this,
-                            SLOT(slotEditKeys()),
-                            actionCollection());
-
-    KStandardAction::configureToolbars(this,
-                                  SLOT(slotEditToolbars()),
-                                  actionCollection());
-	*/
 	
 	QAction* qa_saveOptions = new QAction(i18n("&Save current Options"), this );
 	connect( qa_saveOptions, SIGNAL(toggled()), this, SLOT(slotSaveOptions()) ); ;
@@ -1225,17 +1403,7 @@ void RosegardenGUIApp::setupActions()
 			//qa_paste_range->setChecked( false );		//
 			//### FIX: deallocate QAction ptr
 			
-/*
-    QAction* qa_delete_range = new QAction(  i18n("Delete Range"), dynamic_cast<QObject*>(this) );
-			connect( qa_delete_range, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotDeleteRange()) );
-			qa_delete_range->setObjectName( "delete_range" );		//
-			//qa_delete_range->setCheckable( true );		//
-			qa_delete_range->setAutoRepeat( false );	//
-			//qa_delete_range->setActionGroup( 0 );		// QActionGroup*
-			//qa_delete_range->setChecked( false );		//
-			//### FIX: deallocate QAction ptr
-			
-*/
+
     QAction* qa_insert_range = new QAction(  i18n("Insert Range..."), dynamic_cast<QObject*>(this) );
 			connect( qa_insert_range, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotInsertRange()) );
 			qa_insert_range->setObjectName( "insert_range" );		//
@@ -1911,12 +2079,17 @@ void RosegardenGUIApp::setupActions()
     }
 
     setRewFFwdToAutoRepeat();
+*/
 }
 
 
 void
 RosegardenGUIApp::setupRecentFilesMenu()
 {
+    if (!m_menuRecent) {
+        std::cerr << "ERROR: RosegardenGUIApp::setupRecentFilesMenu: No recent files menu!" << std::endl;
+        return;
+    }
     m_menuRecent->clear();
     std::vector<QString> files = m_recentFiles.getRecent();
     for (size_t i = 0; i < files.size(); ++i) {
@@ -6488,11 +6661,13 @@ void RosegardenGUIApp::slotOpenAudioPathSettings()
 
 void RosegardenGUIApp::slotEditKeys()
 {
+    //&&&
  //   KKeyDialog::configure(actionCollection());	//&&& disabled KKeyDialog for now
 }
 
 void RosegardenGUIApp::slotEditToolbars()
 {
+    //&&&
 // KEditToolbar dlg(actionCollection(), "rosegardenui.rc");	//&&& disabled Toolbar config. no qt4 equival.
 	/*
 	QToolBar dlg;
@@ -8884,12 +9059,20 @@ RosegardenGUIApp::slotJumpToQuickMarker()
 }
 
 
+
 QAction *
-RosegardenGUIApp::newAction(QString actionName)
+RosegardenGUIApp::createAction(QString actionName, QString connection)
 {
     QAction *action = new QAction(this);
     action->setObjectName(actionName);
+    connect(action, SIGNAL(triggered()), this, connection);
     return action;
+}
+
+QAction *
+RosegardenGUIApp::findAction(QString actionName)
+{
+    return findChild<QAction *>(actionName);
 }
 
 void
@@ -8908,6 +9091,14 @@ RosegardenGUIApp::leaveActionState(QString stateName)
     std::cerr << "ERROR: leaveActionState not implemented" << std::endl;
 }
 
+bool
+RosegardenGUIApp::createGUI(QString rcFileName)
+{
+    //&&& implement
+#pragma warning("Implement createGUI");
+    std::cerr << "ERROR: createGUI not implemented" << std::endl;
+    return false;
+}
 
 
 

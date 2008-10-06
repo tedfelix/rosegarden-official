@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -141,7 +140,7 @@ template <class T>
 void
 ZoomSlider<T>::increment()
 {
-    if (value() + 1 >= m_sizes.size()) return;
+    if (value() + 1 >= int(m_sizes.size())) return;
     setValue(value() + 1);
 }
 

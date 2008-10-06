@@ -480,7 +480,11 @@ RosegardenGUIDoc::deleteOrphanedAudioFiles(bool documentWillNotBeSaved)
 
     if (documentWillNotBeSaved) {
 
-		int reply = QMessageBox::warning( 0, "recordedOrphans.size()", i18n(static_cast<char*>("Delete the 1 audio file recorded during the unsaved session?"), static_cast<char*>("Delete the %1 audio files recorded during the unsaved session?")), QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, QMessageBox::Cancel );
+        int reply = QMessageBox::warning
+            (0, "Warning",
+             i18np("Delete the 1 audio file recorded during the unsaved session?", "Delete the %1 audio files recorded during the unsaved session?", recordedOrphans.size()),
+             QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
+             QMessageBox::Cancel);
 
         switch (reply) {
 
@@ -2160,15 +2164,15 @@ RosegardenGUIDoc::stopRecordingMidi()
 
         bool meaningless = true;
 
-        for (Segment::iterator i = s->begin(); i != s->end(); ++i) {
+        for (Segment::iterator si = s->begin(); si != s->end(); ++si) {
 
-            if ((*i)->isa(Clef::EventType)) continue;
+            if ((*si)->isa(Clef::EventType)) continue;
 
             // no rests in the segment yet, so anything else is meaningful
             meaningless = false;
 
-            if (!haveMeaning || (*i)->getAbsoluteTime() < earliestMeaning) {
-                earliestMeaning = (*i)->getAbsoluteTime();
+            if (!haveMeaning || (*si)->getAbsoluteTime() < earliestMeaning) {
+                earliestMeaning = (*si)->getAbsoluteTime();
             }
 
             haveMeaning = true;

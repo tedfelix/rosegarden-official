@@ -45,14 +45,12 @@ protected:
 
     virtual void addAction(QString title,
                            QString icon,
-                           const QShortcut &shortcut, 
+                           QString shortcut, 
                            QString actionName,
                            QString menuTitle,
                            QString menuActionName);
 
     virtual void invokeCommand(QString actionName);
-
-    virtual bool findIcon(QString iconName, QIcon &icon) { return false; }
 };
 
 }

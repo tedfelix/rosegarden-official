@@ -529,7 +529,10 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent,
     layout->addWidget
         (new QLabel(i18n("Text font"), frame), row, 0);
     m_textFont = new KFontRequester(frame);
-    QFont textFont = settings.value("textfont", &defaultTextFont).toString();
+    QFont textFont = defaultTextFont;
+    QVariant fv = settings.value("textfont", textFont);
+    if (fv.canConvert(QVariant::Font)) textFont = fv.value<QFont>();
+
     m_textFont->setFont(textFont);
     layout->addWidget(m_textFont, row, 1, row- row+1, 3);
     ++row;
@@ -537,7 +540,9 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent,
     layout->addWidget
         (new QLabel(i18n("Sans-serif font"), frame), row, 0);
     m_sansFont = new KFontRequester(frame);
-    QFont sansFont = settings.value("sansfont", &defaultSansFont).toString();
+    QFont sansFont = defaultTextFont;
+    fv = settings.value("sansfont", sansFont);
+    if (fv.canConvert(QVariant::Font)) sansFont = fv.value<QFont>();
     m_sansFont->setFont(sansFont);
     layout->addWidget(m_sansFont, row, 1, row- row+1, 3);
     ++row;

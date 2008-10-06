@@ -44,7 +44,7 @@
 #include <QColor>
 #include <QCursor>
 #include <QPoint>
-#include <qpopupmenu.h>
+#include <QMenu>
 #include <QScrollBar>
 #include <qscrollview.h>
 #include <QString>
@@ -395,7 +395,7 @@ void ControlRuler::createMenu()
     KMainWindow* parentMainWindow = dynamic_cast<KMainWindow*>(topLevelWidget());
 
     if (parentMainWindow && parentMainWindow->factory()) {
-        m_menu = static_cast<QPopupMenu*>(parentMainWindow->factory()->container(m_menuName, parentMainWindow));
+        m_menu = static_cast<QMenu*>(parentMainWindow->factory()->container(m_menuName, parentMainWindow));
 
         if (!m_menu) {
             RG_DEBUG << "ControlRuler::createMenu() failed\n";

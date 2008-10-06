@@ -24,13 +24,11 @@
 
 #include "EditViewCommandRegistry.h"
 
-#include <kinputdialog.h>
-#include <kactionclasses.h>
-#include <kstandarddirs.h>
 #include <klocale.h>
 #include <QMessageBox>
-
+#include <QInputDialog>
 #include <QFile>
+#include <QMenu>
 
 #include "gui/general/EditView.h"
 #include "gui/general/IconLoader.h"
@@ -55,58 +53,53 @@ EditViewCommandRegistry::addAction(QString title,
                                    QString shortcut, 
                                    QString actionName,
                                    QString menuTitle,
-                                   QString menuActionName)
+                                   QString menuName)
 {
+//!!! Trim this drastically (to just actionName and menuName) if the dynamic
+//!!! gui stuff pans out OK
+
     bool haveIcon = (iconName != "");
     QIcon icon;
 
-//!!!    QString scs = shortcut.toString();
-    QString scs = shortcut; //!!! it would be better to pass in a QKeySequence, but automatic construction from const char * is problematic
-    std::cerr << "Adding action: " << title << ", " << ((iconName && iconName != "") ? iconName : "(no icon)") << ", " << ((scs && scs != "") ? scs : "(no shortcut)") << ", " << actionName << std::endl;
+    std::cerr << "Adding action: " << title << ", " << ((iconName != "") ? iconName : "(no icon)") << ", " << ((shortcut != "") ? shortcut : "(no shortcut)") << ", " << actionName << std::endl;
 
     if (haveIcon) {
         IconLoader il;
         icon = il.load(iconName);
-        if (icon.isNull()) {
-            haveIcon = findIcon(iconName, icon);
-        } else {
-            haveIcon = true;
+        haveIcon = !icon.isNull();
+    }
+
+    QMenu *menu = 0;
+
+    if (menuName != "") {
+
+        menu = m_view->findChild<QMenu *>(menuName);
+
+        if (!menu) {
+            menu = new QMenu(menuTitle, m_view);
+            menu->setObjectName(menuName);
+            //!!! do we need to do something further with the menu here?
+            // do any commands actually use this menu name field?
         }
     }
 
-    KActionMenu *menuAction = 0;
+    QAction *action = 0;
 
-    if (menuActionName != "") {
+    action = new QAction(m_view);
+    action->setObjectName(actionName);
+    action->setText(title);
 
-        menuAction = dynamic_cast<KActionMenu *>
-            (m_view->actionCollection()->action(menuActionName));
-
-        if (!menuAction) {
-            menuAction = new KActionMenu(menuTitle, this, menuActionName);
-            m_view->actionCollection()->insert(menuAction);
-        }
+    if (shortcut != "") {
+        action->setShortcut(shortcut);
     }
-
-    KAction *action = 0;
 
     if (haveIcon) {
-        action = new KAction(title,
-                             icon,
-                             shortcut,
-                             this,
-                             SLOT(slotInvokeCommand()),
-                             m_view->actionCollection(),
-                             actionName);
-    } else {
-        action = new KAction(title,
-                             shortcut,
-                             this,
-                             SLOT(slotInvokeCommand()),
-                             m_view->actionCollection(),
-                             actionName);
+        action->setIcon(icon);
     }
 
-    if (menuAction) menuAction->insert(action);
+    connect(action, SIGNAL(triggered()), this, SLOT(slotInvokeCommand()));
+
+    if (menu) menu->addAction(action);
 }    
 
 class EditViewCommandArgumentQuerier : public CommandArgumentQuerier
@@ -114,8 +107,9 @@ class EditViewCommandArgumentQuerier : public CommandArgumentQuerier
 public:
     EditViewCommandArgumentQuerier(EditView *view) : m_view(view) { }
     QString getText(QString message, bool *ok) {
-        return KInputDialog::getText(i18n("Rosegarden - Query"),
-                                     message, "", ok, m_view);
+        return QInputDialog::getText(m_view,
+                                     i18n("Rosegarden - Query"),
+                                     message, QLineEdit::Normal, "", ok);
     }
 
 protected:
@@ -149,12 +143,11 @@ EditViewCommandRegistry::invokeCommand(QString actionName)
 
     } catch (CommandCancelled) {
     } catch (CommandFailed f) {
-        QMessageBox::warning(
-          dynamic_cast<QWidget*>(m_view),
-          "", /* no title */
-          strtoqstr(f.getMessage()),
-          QMessageBox::Ok,
-          QMessageBox::Ok);
+
+        QMessageBox::warning(m_view,
+                             i18n("Rosegarden - Warning"),
+                             strtoqstr(f.getMessage()),
+                             QMessageBox::Ok);
     }
 }
 

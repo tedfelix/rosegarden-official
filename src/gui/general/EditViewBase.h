@@ -330,9 +330,6 @@ protected:
      */
     bool getSegmentsOnlyRestsAndClefs();
 
-    /// Convenience function around actionCollection()->action()
-    /* was toggle */ QAction* getToggleAction(const QString& actionName);
-
     /**
      * Make a widget visible depending on the state of a
      * (toggle) QAction
@@ -349,9 +346,11 @@ protected:
     void setConfigDialogPageIndex(int p) { m_configDialogPageIndex = p; }
     int getConfigDialogPageIndex()       { return m_configDialogPageIndex; }
 
-    QAction *newAction(QString actionName);
+    QAction *createAction(QString actionName, QString connection);
+    QAction *findAction(QString actionName);
     void enterActionState(QString stateName);
     void leaveActionState(QString stateName);
+    bool createGUI(QString rcname);
 
     //--------------- Data members ---------------------------------
     QString m_rcFileName;

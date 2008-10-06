@@ -57,8 +57,8 @@
 #include <Q3Canvas>
 
 #include <klocale.h>
-#include <kxmlguiclient.h>
-#include <kkeydialog.h>
+//#include <kxmlguiclient.h>
+//#include <kkeydialog.h>
 //#include <kstandarddirs.h>
 //#include <kedittoolbar.h>
 //#include <kglobal.h>
@@ -75,12 +75,10 @@ const unsigned int EditViewBase::ID_STATUS_MSG = 1;
 const unsigned int EditViewBase::NbLayoutRows = 6;
 
 
-EditViewBase::EditViewBase(
-						   RosegardenGUIDoc *doc,
+EditViewBase::EditViewBase(RosegardenGUIDoc *doc,
                            std::vector<Segment *> segments,
                            unsigned int cols,
-                           QWidget *parent, const char *name
-						  ) :
+                           QWidget *parent, const char *name) :
 	//KDockMainWindow(parent, name),
 	QMainWindow(parent, name),
 	m_viewNumber( -1),
@@ -141,7 +139,8 @@ EditViewBase::~EditViewBase()
 
     m_doc->detachEditView(this);
 
-    getCommandHistory()->detachView(actionCollection());
+//&&& Detact MultiViewCommandHistory
+//    getCommandHistory()->detachView(actionCollection());
     m_viewNumberPool.erase(m_viewNumber);
     slotSaveOptions();
 }
@@ -151,8 +150,11 @@ void EditViewBase::slotSaveOptions()
 
 void EditViewBase::readOptions()
 {
-    getToggleAction("options_show_statusbar")->setChecked(!statusBar()->isHidden());
-    getToggleAction("options_show_toolbar")->setChecked(!toolBar()->isHidden());
+    QAction *a = findAction("options_show_statusbar");
+    if (a) a->setChecked(!statusBar()->isHidden());
+
+    a = findAction("options_show_toolbar");
+    if (a) a->setChecked(!toolBar()->isHidden());
 }
 
 void EditViewBase::setupActions(QString rcFileName, bool haveClipboard)
@@ -161,34 +163,24 @@ void EditViewBase::setupActions(QString rcFileName, bool haveClipboard)
 
     // Actions all edit views will have
 
-    KStandardAction::showToolbar(this, SLOT(slotToggleToolBar()),
-                            actionCollection(), "options_show_toolbar");
+    createAction("options_show_toolbar", SLOT(slotToggleToolBar()));
+    createAction("options_show_statusbar", SLOT(slotToggleStatusBar()));
+    createAction("options_configure", SLOT(slotConfigure()));
+//    createAction("options_configure_keybindings", SLOT(slotEditKeys()));
+//    createAction("options_configure_toolbars", SLOT(slotEditToolbars()));
 
-    KStandardAction::showStatusbar(this, SLOT(slotToggleStatusBar()),
-                              actionCollection(), "options_show_statusbar");
+    createAction("file_save", SIGNAL(saveFile()));
+    createAction("file_close", SLOT(slotCloseWindow()));
 
-    KStandardAction::preferences(this,
-                            SLOT(slotConfigure()),
-                            actionCollection());
-
-    KStandardAction::keyBindings(this,
-                            SLOT(slotEditKeys()),
-                            actionCollection());
-
-    KStandardAction::configureToolbars(this,
-                                  SLOT(slotEditToolbars()),
-                                  actionCollection());
-
-
-    // File menu
-    KStandardAction::save (this, SIGNAL(saveFile()), actionCollection());
-    KStandardAction::close(this, SLOT(slotCloseWindow()), actionCollection());
 
     if (haveClipboard) {
-        KStandardAction::cut (this, SLOT(slotEditCut()), actionCollection());
-        KStandardAction::copy (this, SLOT(slotEditCopy()), actionCollection());
-        KStandardAction::paste (this, SLOT(slotEditPaste()), actionCollection());
+        createAction("edit_cut", SLOT(slotEditCut()));
+        createAction("edit_copy", SLOT(slotEditCopy()));
+        createAction("edit_paste", SLOT(slotEditPaste()));
     }
+
+/*&&&
+  Connect up MultiViewCommandHistory appropriately
 
     new KToolBarPopupAction(i18n("Und&o"),
                             "undo",
@@ -201,6 +193,17 @@ void EditViewBase::setupActions(QString rcFileName, bool haveClipboard)
                             KStandardShortcut::key(KStandardShortcut::Redo),
                             actionCollection(),
                             KStandardAction::stdName(KStandardAction::Redo));
+*/
+
+    createAction("open_in_matrix", SLOT(slotOpenInMatrix()));
+    createAction("open_in_percussion_matrix", SLOT(slotOpenInPercussionMatrix()));
+    createAction("open_in_notation", SLOT(slotOpenInNotation()));
+    createAction("open_in_event_list", SLOT(slotOpenInEventList()));
+    createAction("set_segment_start", SLOT(slotSetSegmentStartTime()));
+    createAction("set_segment_duration", SLOT(slotSetSegmentDuration()));
+
+
+/*!!!
 
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
 
@@ -250,7 +253,7 @@ void EditViewBase::setupActions(QString rcFileName, bool haveClipboard)
 
     // add undo and redo to edit menu and toolbar
     getCommandHistory()->attachView(actionCollection());
-
+*/
 }
 
 void EditViewBase::slotConfigure()
@@ -264,17 +267,18 @@ void EditViewBase::slotConfigure()
 
 void EditViewBase::slotEditKeys()
 {
-    KKeyDialog::configure(actionCollection());
+//&&&    KKeyDialog::configure(actionCollection());
 }
 
 void EditViewBase::slotEditToolbars()
 {
-    KEditToolbar dlg(actionCollection(), getRCFileName());
+//&&&
+//    KEditToolbar dlg(actionCollection(), getRCFileName());
 
-    connect(&dlg, SIGNAL(newToolbarConfig()),
-            SLOT(slotUpdateToolbars()));
+//    connect(&dlg, SIGNAL(newToolbarConfig()),
+//            SLOT(slotUpdateToolbars()));
 
-    dlg.exec();
+//    dlg.exec();
 }
 
 void EditViewBase::slotUpdateToolbars()
@@ -568,7 +572,7 @@ bool EditViewBase::getSegmentsOnlyRestsAndClefs()
 void EditViewBase::toggleWidget(QWidget* widget,
                                 const QString& toggleActionName)
 {
-    /* was toggle */ QAction* toggleAction = getToggleAction(toggleActionName);
+    QAction *toggleAction = findAction(toggleActionName);
 
     if (!toggleAction) {
         RG_DEBUG << "!!! Unknown toggle action : " << toggleActionName << endl;
@@ -583,27 +587,24 @@ EditViewBase::slotTestClipboard()
 {
     if (getDocument()->getClipboard()->isEmpty()) {
         RG_DEBUG << "EditViewBase::slotTestClipboard(): empty" << endl;
-
-        rgTempQtIV->stateChanged("have_clipboard", KXMLGUIClient::StateReverse);
-		rgTempQtIV->stateChanged("have_clipboard_single_segment",
-                     KXMLGUIClient::StateReverse);
+        leaveActionState("have_clipboard");
+	leaveActionState("have_clipboard_single_segment");
     } else {
         RG_DEBUG << "EditViewBase::slotTestClipboard(): not empty" << endl;
-
-		rgTempQtIV->stateChanged("have_clipboard", KXMLGUIClient::StateNoReverse);
-		rgTempQtIV->stateChanged("have_clipboard_single_segment",
-                     (getDocument()->getClipboard()->isSingleSegment() ?
-                      KXMLGUIClient::StateNoReverse :
-                      KXMLGUIClient::StateReverse));
+        enterActionState("have_clipboard");
+        if (getDocument()->getClipboard()->isSingleSegment()) {
+            enterActionState("have_clipboard_single_segment");
+        } else {
+            leaveActionState("have_clipboard_single_segment");
+        }           
     }
 }
 
 void
 EditViewBase::slotToggleSolo()
 {
-    /* was toggle */ QAction* toggleSoloAction = getToggleAction("toggle_solo");
-    if (!toggleSoloAction)
-        return ;
+    QAction *toggleSoloAction = findAction("toggle_solo");
+    if (!toggleSoloAction) return;
 
     bool newSoloState = toggleSoloAction->isChecked();
 
@@ -613,7 +614,6 @@ EditViewBase::slotToggleSolo()
     if (newSoloState) {
         emit selectTrack(getCurrentSegment()->getTrack());
     }
-
 }
 
 void
@@ -621,7 +621,11 @@ EditViewBase::slotStateChanged(const QString& s,
                                bool noReverse)
 {
     RG_DEBUG << "EditViewBase::slotStateChanged " << s << ", " << noReverse << endl;
-	rgTempQtIV->stateChanged(s, noReverse ? KXMLGUIClient::StateNoReverse : KXMLGUIClient::StateReverse);
+    if (noReverse) {
+        enterActionState(s);
+    } else {
+        leaveActionState(s);
+    }
 }
 
 void
@@ -679,9 +683,8 @@ void EditViewBase::slotCompositionStateUpdate()
 {
     // update state of 'solo' toggle
     //
-    /* was toggle */ QAction* toggleSolo = getToggleAction("toggle_solo");
-    if (!toggleSolo)
-        return ;
+    QAction *toggleSolo = findAction("toggle_solo");
+    if (!toggleSolo) return;
 
     if (getDocument()->getComposition().isSolo()) {
         bool s = m_segments[0]->getTrack() == getDocument()->getComposition().getSelectedTrack();
@@ -717,17 +720,19 @@ MultiViewCommandHistory* EditViewBase::getCommandHistory()
     return getDocument()->getCommandHistory();
 }
 
-/* was toggle */ QAction* EditViewBase::getToggleAction(const QString& actionName)
-{
-    return dynamic_cast<QAction*>(actionCollection()->action(actionName));
-}
-
 QAction *
-EditViewBase::newAction(QString actionName)
+EditViewBase::createAction(QString actionName, QString connection)
 {
     QAction *action = new QAction(this);
     action->setObjectName(actionName);
+    connect(action, SIGNAL(triggered()), this, connection);
     return action;
+}
+
+QAction *
+EditViewBase::findAction(QString actionName)
+{
+    return findChild<QAction *>(actionName);
 }
 
 void
@@ -744,6 +749,15 @@ EditViewBase::leaveActionState(QString stateName)
     //&&& implement
 #pragma warning("Implement leaveActionState");
     std::cerr << "ERROR: leaveActionState not implemented" << std::endl;
+}
+
+bool
+EditViewBase::createGUI(QString rcFileName)
+{
+    //&&& implement
+#pragma warning("Implement createGUI");
+    std::cerr << "ERROR: createGUI not implemented" << std::endl;
+    return false;
 }
 
 
