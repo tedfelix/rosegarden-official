@@ -16,31 +16,40 @@
 */
 
 
+#include <klocale.h>
+// #include <kglobal.h>
+// #include <kurl.h>
+
+//#include <Q3DragObject>
+
 #include "PlayList.h"
 #include "PlayListView.h"
 #include "PlayListViewItem.h"
 #include "document/ConfigGroups.h"
-#include <QLayout>
 
-#include <klocale.h>
+#include <QLayout>
 #include <QSettings>
 #include <QFileDialog>
-#include <kglobal.h>
-#include <kurl.h>
 #include <QFrame>
 #include <QPushButton>
 #include <QString>
 #include <QStringList>
-#include <QStringList>
 #include <QWidget>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
 #include <QVBoxLayout>
-#include <qdragobject.h>
+#include <QUrl>
+#include <QMimeData>	// replaces Q3UriDrag and Q3DragObject
+
 
 
 namespace Rosegarden
 {
 
-PlayList::PlayList(QWidget *parent, const char *name)
+PlayList::PlayList
+		(
+		QWidget *parent, const char *name
+		)
         : QWidget(parent, name),
         m_listView(new PlayListView(this)),
         m_buttonBar(new QFrame(this)),
@@ -54,7 +63,7 @@ PlayList::PlayList(QWidget *parent, const char *name)
     QVBoxLayout *vLayout = new QVBoxLayout;
     vLayout->addWidget(m_listView);
     vLayout->addWidget(m_buttonBar);
-    vLayout->addWidget(m_barLayout);
+//     vLayout->addWidget(m_barLayout);
     setLayout(vLayout);
 
     m_openButton = new QPushButton(m_buttonBar);
@@ -97,11 +106,11 @@ PlayList::PlayList(QWidget *parent, const char *name)
     connect(m_moveDownButton, SIGNAL(clicked()),
             SLOT(slotMoveDown()));
 
-    connect(m_listView, SIGNAL(currentChanged(QListWidgetItem*)),
-            SLOT(slotCurrentItemChanged(QListWidgetItem*)));
+    connect(m_listView, SIGNAL(currentChanged(QTreeWidgetItem*)),
+            SLOT(slotCurrentItemChanged(QTreeWidgetItem*)));
 
-    connect(m_listView, SIGNAL(dropped(QDropEvent*, QListWidgetItem*)),
-            SLOT(slotDropped(QDropEvent*, QListWidgetItem*)));
+    connect(m_listView, SIGNAL(dropped(QDropEvent*, QTreeWidgetItem*)),
+            SLOT(slotDropped(QDropEvent*, QTreeWidgetItem*)));
 
     restore();
 
@@ -116,68 +125,105 @@ PlayList::~PlayList()
 
 void PlayList::slotOpenFiles()
 {
-    KURL::List kurlList =
+	/*
+    QUrl::List kurlList =
         KFileDialog::getOpenURLs(":ROSEGARDEN",
                                  "audio/x-rosegarden audio/x-midi audio/x-rosegarden21",
                                  this,
                                  i18n("Select one or more Rosegarden files"));
 
-    KURL::List::iterator it;
-
-    for (it = kurlList.begin(); it != kurlList.end(); ++it) {
-        new PlayListViewItem(m_listView, *it);
+    QUrl::List::iterator it;
+	*/
+	
+	QStringList files = QFileDialog::getOpenFileNames( this, i18n("Select one or more Rosegarden files"), QDir::currentPath(), 0, 0);
+	
+	QString fname;
+	
+//    for (it = kurlList.begin(); it != kurlList.end(); ++it) {
+	for( int i=0; i< files.size(); i++ ){
+		fname = files.at( i );
+		new PlayListViewItem(m_listView, QUrl(fname) );
     }
-
-    enableButtons(m_listView->currentIndex());
+	
+    enableButtons( m_listView->currentItem() );
 }
 
 void
-PlayList::slotDropped(QDropEvent *event, QListWidgetItem* after)
+PlayList::slotDropped(QDropEvent *event, QTreeWidgetItem* after)
 {
-    QStrList uri;
-
+    QStringList uri;
+	QMimeData md;
+	
     // see if we can decode a URI.. if not, just ignore it
-    if (QUriDrag::decode(event, uri)) {
-
+// 	if (QUriDrag::decode(event, uri)) {
+	
+// 	if( ! md.formats().isEmpty() ){		//list of formats supported
+	if( md.hasUrls() ){
+		
         // okay, we have a URI.. process it
         // weed out non-rg files
         //
-        for (QString url = uri.first(); url; url = uri.next()) {
-            if (url.right(3).toLower() == ".rg")
-                new PlayListViewItem(m_listView, after, KURL(url));
+		QList<QUrl> urls = md.urls();
+		QUrl url;
+		
+		for( int i=0; i< urls.count(); i++ ){
+			url = urls.at( i );
+            if (url.toString().right(3).toLower() == ".rg")
+                new PlayListViewItem( m_listView, after, url );
 
         }
     }
 
-    enableButtons(m_listView->currentIndex());
+    enableButtons( m_listView->currentItem() );
 }
 
 void PlayList::slotPlay()
 {
-    PlayListViewItem *currentIndex = dynamic_cast<PlayListViewItem*>(m_listView->currentIndex());
+    PlayListViewItem *currentIndex = dynamic_cast<PlayListViewItem*>( m_listView->currentItem() );
 
     if (currentIndex)
-        emit play(currentIndex->getURL().url());
+        emit play( currentIndex->getURL().toString() );
 }
 
 void PlayList::slotMoveUp()
 {
-    QListWidgetItem *currentIndex = m_listView->currentIndex();
-    QListWidgetItem *previousItem = m_listView->previousSibling(currentIndex);
-
-    if (previousItem)
-        previousItem->moveItem(currentIndex);
+// 	QTreeWidgetItem *currentIndex = m_listView->currentItem();
+// 	QTreeWidgetItem *previousItem = m_listView->previousSibling( currentIndex );
+	
+	QTreeWidgetItem *currentIndex = m_listView->currentItem();
+	QTreeWidgetItem *previousItem = m_listView->itemAbove( currentIndex );
+	QTreeWidgetItem *ti;
+	int ix = m_listView->indexOfTopLevelItem( currentIndex );
+	
+    if (previousItem){
+//         previousItem->moveItem(currentIndex);
+		ti = m_listView->takeTopLevelItem( ix );
+		m_listView->insertTopLevelItem( ix -1, ti );
+	}
 
     enableButtons(currentIndex);
 }
 
 void PlayList::slotMoveDown()
 {
-    QListWidgetItem *currentIndex = m_listView->currentIndex();
-    QListWidgetItem *nextItem = currentIndex->nextSibling();
+	/*
+    QTreeWidgetItem *currentIndex = m_listView->currentItem();
+    QTreeWidgetItem *nextItem = currentIndex->nextSibling();
 
     if (nextItem)
         currentIndex->moveItem(nextItem);
+	*/
+	
+	QTreeWidgetItem *currentIndex = m_listView->currentItem();
+	QTreeWidgetItem *nextItem = m_listView->itemBelow( currentIndex );
+	QTreeWidgetItem *ti;
+	int ix = m_listView->indexOfTopLevelItem( currentIndex );
+	
+	if (nextItem){
+//         previousItem->moveItem(currentIndex);
+		ti = m_listView->takeTopLevelItem( ix );
+		m_listView->insertTopLevelItem( ix +1, ti );
+	}
 
     enableButtons(currentIndex);
 }
@@ -190,63 +236,85 @@ void PlayList::slotClear()
 
 void PlayList::slotDeleteCurrent()
 {
-    QListWidgetItem* currentIndex = m_listView->currentIndex();
+    QTreeWidgetItem* currentIndex = m_listView->currentItem();
     if (currentIndex)
         delete currentIndex;
 }
 
-void PlayList::slotCurrentItemChanged(QListWidgetItem* currentIndex)
+void PlayList::slotCurrentItemChanged(QTreeWidgetItem* currentIndex)
 {
     enableButtons(currentIndex);
 }
 
-void PlayList::enableButtons(QListWidgetItem* currentIndex)
+void PlayList::enableButtons(QTreeWidgetItem* currentIndex)
 {
     bool enable = (currentIndex != 0);
 
     m_playButton->setEnabled(enable);
     m_deleteButton->setEnabled(enable);
-
+	
+	
+	int cAll = m_listView->topLevelItemCount();
+// 	int cCurr = m_listView->indexOfTopLevelItem( m_listView.currentItem() );
+	int cCurr = m_listView->indexOfTopLevelItem( currentIndex );
+	
     if (currentIndex) {
-        m_moveUpButton->setEnabled(currentIndex != m_listView->firstChild());
-        m_moveDownButton->setEnabled(currentIndex != m_listView->lastItem());
-    } else {
+//         m_moveUpButton->setEnabled(currentIndex != m_listView->firstChild());
+//         m_moveDownButton->setEnabled(currentIndex != m_listView->lastItem());
+         m_moveUpButton->setEnabled( cCurr != 0 );
+         m_moveDownButton->setEnabled( cCurr != cAll );
+	} else {
         m_moveUpButton->setEnabled(false);
         m_moveDownButton->setEnabled(false);
     }
 
-    m_clearButton->setEnabled(m_listView->childCount() > 0);
+// 	m_clearButton->setEnabled( m_listView->childCount() > 0 );
+	m_clearButton->setEnabled( cAll > 0 );
 }
 
 void PlayList::save()
 {
     QStringList urlList;
-    PlayListViewItem* item = dynamic_cast<PlayListViewItem*>(getListView()->firstChild());
+	
+    PlayListViewItem* item = dynamic_cast<PlayListViewItem*>( getListView()->topLevelItem(0) );
 
     while (item) {
-        urlList << item->getURL().url();
-        item = dynamic_cast<PlayListViewItem*>(item->nextSibling());
-    }
+        urlList << item->getURL().toString();
+// 		item = dynamic_cast<PlayListViewItem*>( item->nextSibling() );
+		item = dynamic_cast<PlayListViewItem*>( getListView()->itemBelow( item ) );
+	}
 
     QSettings kc ; // was: KGlobal::config()
-    KConfigGroupSaver cs(kc, PlayListConfigGroup);
+	
+//     KConfigGroupSaver cs(kc, PlayListConfigGroup);	//&&&
+	kc.beginGroup( PlayListConfigGroup );
     kc.setValue("Playlist Files", urlList);
 
-    getListView()->saveLayout(kc, PlayListConfigGroup);
+//     getListView()->saveLayout(kc, PlayListConfigGroup);	//&&&
+	kc.endGroup();
 }
 
 void PlayList::restore()
 {
     QSettings kc ; // was: KGlobal::config()
-    getListView()->restoreLayout(kc, PlayListConfigGroup);
+//     getListView()->restoreLayout(kc, PlayListConfigGroup);	//&&&
 
-    KConfigGroupSaver cs(kc, PlayListConfigGroup);
-    QStringList urlList = kc->readListEntry("Playlist Files");
-
+//     KConfigGroupSaver cs(kc, PlayListConfigGroup);
+	kc.beginGroup(PlayListConfigGroup);
+    QStringList urlList = kc.value("Playlist Files").toStringList();
+	QString ss;
+	
+	for( int i=0; i< urlList.count(); i ++ ){
+		ss = urlList.at( i );
+		new PlayListViewItem( getListView(), QUrl(ss) );
+	}
+	/*
     for (QStringList::Iterator it = urlList.begin();
             it != urlList.end(); ++it) {
-        new PlayListViewItem(getListView(), KURL(*it));
+        new PlayListViewItem(getListView(), QUrl(*it));
     }
+	*/
+	kc.endGroup();
 }
 
 }

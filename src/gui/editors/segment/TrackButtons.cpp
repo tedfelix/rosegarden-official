@@ -66,9 +66,9 @@ TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
                            bool showTrackLabels,
                            int overallHeight,
                            QWidget* parent,
-                           const char* name,
-                           WFlags f)
-        : QFrame(parent, name, f),
+                           const char* name )
+//                            WFlags f)
+        : QFrame(parent, name), //, f),
         m_doc(doc),
         m_layout(new QVBoxLayout(this)),
         m_recordSigMapper(new QSignalMapper(this)),
@@ -405,13 +405,17 @@ TrackButtons::slotToggleRecordTrack(int position)
         try {
             m_doc->getAudioFileManager().testAudioPath();
         } catch (AudioFileManager::BadAudioPathException e) {
-            if (QMessageBox::warningContinueCancel
-                    (this,
-                     i18n("The audio file path does not exist or is not writable.\nPlease set the audio file path to a valid directory in Document Properties before recording audio.\nWould you like to set it now?"),
-                     i18n("Warning"),
-                     i18n("Set audio file path")) == QMessageBox::Continue) {
-                RosegardenGUIApp::self()->slotOpenAudioPathSettings();
-            }
+            if (QMessageBox::warning( //ContinueCancel
+                    this,
+					i18n("Warning"),
+					//i18n("Set audio file path")) 
+					i18n("The audio file path does not exist or is not writable.\nPlease set the audio file path to a valid directory in Document Properties before recording audio.\nWould you like to set it now?"),
+					QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel
+					)
+				== QMessageBox::Yes
+				){
+                	RosegardenGUIApp::self()->slotOpenAudioPathSettings();
+            	}
         }
     }
 

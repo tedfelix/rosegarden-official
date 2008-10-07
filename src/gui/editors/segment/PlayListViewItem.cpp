@@ -17,18 +17,29 @@
 
 #include "PlayListViewItem.h"
 
+#include <QFile>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
+#include <QUrl>
+
+
 namespace Rosegarden {
 
-PlayListViewItem::PlayListViewItem(QListWidget* parent, KURL kurl)
-    : QListWidgetItem(parent, kurl.fileName(), kurl.prettyURL()),
+PlayListViewItem::PlayListViewItem(QTreeWidget* parent, QUrl kurl)
+    : QTreeWidgetItem(parent, QStringList() << QFile(kurl.toLocalFile()).fileName() << kurl.toString() ),
       m_kurl(kurl)
 {
 }
 
-PlayListViewItem::PlayListViewItem(QListWidget* parent, QListWidgetItem* after, KURL kurl)
-    : QListWidgetItem(parent, after, kurl.fileName(), kurl.prettyURL()),
-      m_kurl(kurl)
+PlayListViewItem::PlayListViewItem(QTreeWidget* parent, QTreeWidgetItem* after, QUrl kurl)
+// 	: QTreeWidgetItem(parent, after, QStringList() << QFile(kurl.toLocalFile()).fileName() << kurl.toString() ),
+//       m_kurl(kurl)
 {
+	QTreeWidgetItem *it = new QTreeWidgetItem( parent, QStringList() << QFile(kurl.toLocalFile()).fileName() << kurl.toString() );
+	
+	parent->insertTopLevelItem( parent->indexOfTopLevelItem(after)+1, it );
+	
+	this->m_kurl = kurl;
 }
 
 }

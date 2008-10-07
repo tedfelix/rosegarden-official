@@ -24,20 +24,28 @@
 #include <QDialogButtonBox>
 #include <QString>
 #include <QWidget>
-
+#include <QDialog>
 
 namespace Rosegarden
 {
 
-PlayListDialog::PlayListDialog(QDialogButtonBox::QString caption,
+PlayListDialog::PlayListDialog( QString caption,
                                QWidget* parent, const char* name)
-        : KDialogBase(parent, name, false, caption,
-                      KDialogBase::Close,  // standard buttons
-                      KDialogBase::Close,  // default button
-                      true),
-        m_playList(new PlayList(this))
+	: KDialogBase(parent, name, false, caption,
+	  KDialogBase::Close,  // standard buttons
+	  KDialogBase::Close,  // default button
+   true),
+   /*
+	: KDialogBase(parent, name, false, caption,
+	  KDialogBase::Close,  // standard buttons
+	  KDialogBase::Close,  // default button
+   true),
+   */
+   m_playList(new PlayList(this))
 {
-    setWFlags(WDestructiveClose);
+//     setWFlags(WDestructiveClose);
+	this->setAttribute( Qt::WA_DeleteOnClose );
+	
     setMainWidget(m_playList);
     restore();
 }
@@ -56,14 +64,16 @@ void PlayListDialog::closeEvent(QCloseEvent *e)
 {
     save();
     emit closing();
-    KDialogBase::closeEvent(e);
+	close();
+//     KDialogBase::closeEvent(e);
 }
 
 void PlayListDialog::slotClose()
 {
     save();
     emit closing();
-    KDialogBase::slotClose();
+	close();
+//     KDialogBase::slotClose();
 }
 
 }

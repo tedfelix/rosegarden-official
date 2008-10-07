@@ -806,7 +806,7 @@ void TrackEditor::dropEvent(QDropEvent* event)
 
             } else {
 
-                /* was sorry */ QMessageBox::warning(this, i18n("You can't drop files into Rosegarden from this client.  Try using Konqueror instead."));
+                /* was sorry */ QMessageBox::warning(this, "", i18n("You can't drop files into Rosegarden from this client.  Try using Konqueror instead."));
 
             }
 
