@@ -23,15 +23,15 @@
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include <string>
 #include <QDialog>
-#include <QDialogButtonBox>
 
 
 class QWidget;
 class QString;
 class QScrollArea;
 class QLabel;
-//class QGrid;
-
+class QGridLayout;
+class QFrame;
+class QGroupBox;
 
 namespace Rosegarden
 {
@@ -81,8 +81,11 @@ protected:
     QLabel *m_durationDisplay;
     QLabel *m_durationDisplayAux;
 
-    QWidget		*m_persistentGrid;
-    QWidget		*m_nonPersistentGrid;
+    QGroupBox	*m_persistentGrid;
+    QGridLayout *m_persistentGridLay;
+    int          m_persistentGridRow;
+
+    QFrame      *m_nonPersistentGrid;
 
     QScrollArea *m_nonPersistentView;
 
