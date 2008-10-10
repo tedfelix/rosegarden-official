@@ -41,11 +41,11 @@ class ConfigurationPage : public QWidget
 
 public:
     ConfigurationPage(QWidget *parent=0, const char *name=0)
-        : QWidget(parent, name), m_doc(0), m_pageIndex(0) {}
+        : QWidget(parent), m_doc(0), m_pageIndex(0) {}
 
     ConfigurationPage(RosegardenGUIDoc *doc, QWidget *parent=0,
                       const char *name=0)
-        : QWidget(parent, name), m_doc(doc), m_pageIndex(0) {}
+        : QWidget(parent), m_doc(doc), m_pageIndex(0) {}
 
     virtual ~ConfigurationPage() {};
 
