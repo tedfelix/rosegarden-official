@@ -3435,10 +3435,7 @@ table for keyboard shortcuts-SOM -->
       in matrix or notation editors.  This shows you a dialog in which
       you can select the precise quantization parameters you need, and
       then it applies these to all of the selected segments or notes.
-      <!-- 
-       (You can also quickly reach this dialog by pressing the <keycap>=</keycap>
-       key.)
-        -->
+      
     </para>
 
     <para>
@@ -4977,8 +4974,8 @@ or double flat. </para></note>  This might be enough for your needs but if you w
 <userinput>sus</userinput>, or <userinput>aug</userinput> you need
 to insert a <userinput>:</userinput> followed by your modifier (for example;
 <userinput>g:m7</userinput> or <userinput>gis:sus4</userinput>). For a fuller description of the syntax go to <ulink
-url="http://www.rosegardenmusic.com/wiki/chord_names_for_lilypond_export">this
-explanation.</ulink> <!-- I'll change the url later when the page is done. SOM-->
+url="http://www.rosegardenmusic.com/tutorials/supplemental/chordnames/index.html">this
+explanation.</ulink> 
  </para>
 <para>There is one final step to do. Before you print or preview the LilyPond export
 <menuchoice><guimenu lang="en">File</guimenu><guisubmenu>Print with
@@ -6051,19 +6048,17 @@ SOM - why has this section been commented out? It looks like it's obsolete? Can 
         </para>
      
 
-<!-- The icons don't show up SOM - WHY!!! Even where I'm not trying to do something dodgy.  -->
         <para>The other icons represent easy access to the various functions the &rosegarden;
   	event list editor provides.</para>
   
   <variablelist> 
   <varlistentry> 
-  <term> Insert event </term> 
+  <term><inlinemediaobject><imageobject><imagedata fileref="event-insert.png"
+	format="PNG" /></imageobject></inlinemediaobject> </term> 
   <listitem>
   	<para>
-	<inlinemediaobject><imageobject><imagedata fileref="event-insert.png"
-	format="PNG" /></imageobject></inlinemediaobject> brings up a dialog with a
-	drop-down selection of <guibutton>event types</guibutton>. Each event type has its
-	own set of parameters to fill out.
+	inserts an event. It brings up a dialog with a drop-down selection of <guibutton>event
+	types</guibutton>. Each event type has its own set of parameters to fill out.
 	</para> 
 	</listitem> 
   </varlistentry>
@@ -6078,15 +6073,7 @@ SOM - why has this section been commented out? It looks like it's obsolete? Can 
       <listitem><para>delete the selected event.</para></listitem>
     </varlistentry>
   
-    <varlistentry>
-      <term><inlinemediaobject>
-        <imageobject>
-  	<imagedata fileref="event-edit.png" format="PNG" />
-        </imageobject>
-      </inlinemediaobject></term>
-      <listitem><para>delete selected item.</para></listitem>
-    </varlistentry>
-  
+    
     <varlistentry><term><inlinemediaobject>
       <imageobject>
         <imagedata fileref="event-edit.png" format="PNG" />
@@ -6106,19 +6093,19 @@ SOM - why has this section been commented out? It looks like it's obsolete? Can 
     
     <varlistentry><term><inlinemediaobject>
       <imageobject>
-        <imagedata fileref="event-filter.png" format="PNG" />
+        <imagedata fileref="rg-eventfilter.png" format="PNG" />
       </imageobject>
     </inlinemediaobject></term>
-    <listitem><para>is the the <link
-    linkend="matrix-selectionfilter">note event
-    filter</link> - it's the same event filter that's available for the other editors.</para>
+    <listitem><para>is the the <link linkend="matrix-selectionfilter">note event
+    filter</link> &ndash; it's the same event filter that's available for the other
+    editors.</para>
     </listitem>
     </varlistentry>
   </variablelist>
 
   
   <para>The event filters down the side can be ticked to show/hide types of events. It
-  makes it easier to find a particular event without the noise of other event
+  makes it easier to find a particular event without the distraction of other event
   types. Each of the tick boxes can be quickly toggled using <keycap>Alt</keycap> and
   the accelerator key (underlined letter in the label). </para>
         </sect2>
