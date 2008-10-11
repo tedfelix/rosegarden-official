@@ -654,10 +654,10 @@ void MatrixView::slotSaveOptions()
     QSettings settings;
     settings.beginGroup( MatrixViewConfigGroup );
 
-    settings.setValue("Show Chord Name Ruler", getToggleAction("show_chords_ruler")->isChecked());
-    settings.setValue("Show Tempo Ruler", getToggleAction("show_tempo_ruler")->isChecked());
+    settings.setValue("Show Chord Name Ruler", findAction("show_chords_ruler")->isChecked());
+    settings.setValue("Show Tempo Ruler", findAction("show_tempo_ruler")->isChecked());
     settings.setValue("Show Parameters", m_dockVisible);
-    //getToggleAction("m_dockLeft->isVisible());
+    //findAction("m_dockLeft->isVisible());
 
     settings.sync();
     settings.endGroup();
@@ -673,11 +673,11 @@ void MatrixView::readOptions()
     bool opt = false;
 
     opt = qStrToBool( settings.value("Show Chord Name Ruler", "false" ) ) ;
-    getToggleAction("show_chords_ruler")->setChecked(opt);
+    findAction("show_chords_ruler")->setChecked(opt);
     slotToggleChordsRuler();
 
     opt = qStrToBool( settings.value("Show Tempo Ruler", "true" ) ) ;
-    getToggleAction("show_tempo_ruler")->setChecked(opt);
+    findAction("show_tempo_ruler")->setChecked(opt);
     slotToggleTempoRuler();
 
     opt = qStrToBool( settings.value("Show Parameters", "true" ) ) ;

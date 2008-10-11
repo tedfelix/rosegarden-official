@@ -25,16 +25,18 @@
 #include <QString>
 #include <QWidget>
 #include <QDialog>
+#include <QLayout>
+#include <QSettings>
+#include <QMainWindow>
 
 namespace Rosegarden
 {
 
 PlayListDialog::PlayListDialog( QString caption,
                                QWidget* parent, const char* name)
-	: KDialogBase(parent, name, false, caption,
-	  KDialogBase::Close,  // standard buttons
-	  KDialogBase::Close,  // default button
-   true),
+	: QMainWindow(parent),
+// 	: QDialog(parent),
+		
    /*
 	: KDialogBase(parent, name, false, caption,
 	  KDialogBase::Close,  // standard buttons
@@ -43,22 +45,53 @@ PlayListDialog::PlayListDialog( QString caption,
    */
    m_playList(new PlayList(this))
 {
+	this->setObjectName( name );
+	this->setCaption( caption );
+	
 //     setWFlags(WDestructiveClose);
 	this->setAttribute( Qt::WA_DeleteOnClose );
 	
-    setMainWidget(m_playList);
+	
+	
+	
+	QDialogButtonBox* buttonBox = new QDialogButtonBox( QDialogButtonBox::Close , Qt::Horizontal, this );
+// 										| QDialogButtonBox::Cancel );
+	buttonBox->setObjectName("playlist_dialog_button_box");
+	
+	this->layout()->addWidget( buttonBox );
+	
+	//### FIX: connect buttons :
+	connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+	connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+	
+	
+	
+	setCentralWidget(m_playList);
     restore();
 }
 
-void PlayListDialog::save()
+void PlayListDialog::save()	//@@@ new implementation:
 {
-    saveDialogSize(PlayListConfigGroup);
+//     saveDialogSize(PlayListConfigGroup);
+	
+	QSettings settings;
+	settings.beginGroup(PlayListConfigGroup);
+	
+	settings.setValue( "geometry", this->saveGeometry() );
+	settings.endGroup();
 }
 
-void PlayListDialog::restore()
+
+void PlayListDialog::restore()	//@@@ new implementation:
 {
-    setInitialSize(configDialogSize(PlayListConfigGroup));
+//     setInitialSize(configDialogSize(PlayListConfigGroup));
+	
+	QSettings settings;
+	settings.beginGroup(PlayListConfigGroup);
+	this->restoreGeometry( settings.value("geometry").toByteArray() );
+	settings.endGroup();
 }
+
 
 void PlayListDialog::closeEvent(QCloseEvent *e)
 {

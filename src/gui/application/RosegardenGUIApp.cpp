@@ -9065,8 +9065,9 @@ RosegardenGUIApp::createAction(QString actionName, QString connection)
 {
     QAction *action = new QAction(this);
     action->setObjectName(actionName);
-    connect(action, SIGNAL(triggered()), this, connection);
-    return action;
+//	connect(action, SIGNAL(triggered()), this, SLOT(connection) );
+ 	connect(action, SIGNAL(triggered()), this, qStrToCharPtrUtf8(connection) );
+	return action;
 }
 
 QAction *

@@ -39,13 +39,15 @@ PlayListView::PlayListView(QWidget *parent, const char *name)
 	
     setDragEnabled(true);
     setAcceptDrops(true);
-    setDropVisualizer(true);
-
-    setShowToolTips(true);
-    setShowSortIndicator(true);
     setAllColumnsShowFocus(true);
-    setItemsMovable(true);
+	
+	/*
+	setDropVisualizer(true);
+	setShowToolTips(true);		//&&& disabled a few property inits
+	setShowSortIndicator(true);
+	setItemsMovable(true);
     setSorting(-1);
+	*/
 }
 
 bool PlayListView::acceptDrag(QDropEvent* e) const

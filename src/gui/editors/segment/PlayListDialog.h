@@ -19,6 +19,7 @@
 #ifndef _RG_PLAYLISTDIALOG_H_
 #define _RG_PLAYLISTDIALOG_H_
 
+#include <QMainWindow>
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QString>
@@ -34,7 +35,7 @@ namespace Rosegarden
 class PlayList;
 
 
-class PlayListDialog : public QDialog
+class PlayListDialog : public QMainWindow //QDialog
 {
     Q_OBJECT
 

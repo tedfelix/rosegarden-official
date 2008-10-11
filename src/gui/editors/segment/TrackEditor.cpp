@@ -17,12 +17,11 @@
 
 
 #include "TrackEditor.h"
-#include <QLayout>
-#include <QApplication>
 
 #include <klocale.h>
-#include <QSettings>
-#include <kstandarddirs.h>
+// #include <kstandarddirs.h>
+// #include <kglobal.h>
+
 #include "misc/Strings.h"
 #include "misc/Debug.h"
 #include "document/ConfigGroups.h"
@@ -48,26 +47,40 @@
 #include "gui/rulers/ChordNameRuler.h"
 #include "gui/rulers/TempoRuler.h"
 #include "gui/rulers/LoopRuler.h"
+#include "gui/general/IconLoader.h"
 #include "gui/widgets/ProgressDialog.h"
 #include "gui/widgets/QDeferScrollView.h"
 #include "sound/AudioFile.h"
 #include "TrackButtons.h"
 #include "document/Command.h"
-#include <kglobal.h>
+
+#include <QSettings>
+#include <QLayout>
+#include <QApplication>
 #include <QMessageBox>
 #include <QApplication>
 #include <QCursor>
 #include <QFont>
 #include <QPixmap>
 #include <QPoint>
-#include <qscrollview.h>
+#include <QScrollArea>
+#include <QScrollBar>
 #include <QString>
 #include <QStringList>
 #include <QStringList>
 #include <QWidget>
 #include <QValidator>
-#include <qdragobject.h>
 #include <QTextStream>
+#include <QEvent>
+#include <QDragEnterEvent>
+#include <QDragLeaveEvent>
+#include <QDragMoveEvent>
+#include <QDropEvent>
+
+//#include <QMimeData>	// replaces Q3DragObject
+#include <Q3DragObject>
+#include <Q3UriDrag>
+#include <Q3TextDrag>
 
 
 namespace Rosegarden
@@ -78,8 +91,9 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
                          RulerScale *rulerScale,
                          bool showTrackLabels,
                          double initialUnitsPerPixel,
-                         QWidget* parent, const char* name,
-                         WFlags) :
+                         QWidget* parent, const char* name
+//                         WFlags
+	) :
     QWidget(parent, name),
     m_doc(doc),
     m_rulerScale(rulerScale),
@@ -161,13 +175,17 @@ TrackEditor::init(QWidget* rosegardenguiview)
 
     m_segmentCanvas = new CompositionView(m_doc, m_compositionModel, this);
 
+	IconLoader il;
+	
     QSettings settings;
-
     settings.beginGroup( GeneralOptionsConfigGroup );
 
     if ( qStrToBool( settings.value("backgroundtextures", "true" ) ) ) {
         QPixmap background;
-        QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+		
+//         QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+		QString pixmapDir = il.getResourcePath( "" );
+		
         if (background.load(QString("%1/misc/bg-segmentcanvas.xpm").
                             arg(pixmapDir))) {
             m_segmentCanvas->setBackgroundPixmap(background);
@@ -209,10 +227,20 @@ TrackEditor::init(QWidget* rosegardenguiview)
                                       m_showTrackLabels,
                                       canvasHeight,
                                       m_trackButtonScroll->viewport());
-    m_trackButtonScroll->addChild(m_trackButtons);
-    m_trackButtonScroll->setHScrollBarMode(QScrollView::AlwaysOff);
-    m_trackButtonScroll->setVScrollBarMode(QScrollView::AlwaysOff);
-    m_trackButtonScroll->setResizePolicy(QScrollView::AutoOneFit);
+// 	m_trackButtonScroll->addChild(m_trackButtons);
+	m_trackButtonScroll->layout()->addWidget(m_trackButtons);
+	
+// 		m_trackButtonScroll->setHScrollBarMode(QScrollView::AlwaysOff);
+//     m_trackButtonScroll->setVScrollBarMode(QScrollView::AlwaysOff);
+	m_trackButtonScroll->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+	m_trackButtonScroll->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+	
+//     m_trackButtonScroll->setResizePolicy(QScrollView::AutoOneFit);
+	QSizePolicy poli;
+	poli.setVerticalPolicy( QSizePolicy::MinimumExpanding );
+	poli.setHorizontalPolicy( QSizePolicy::MinimumExpanding );
+	m_trackButtonScroll->setSizePolicy( poli );
+	
     m_trackButtonScroll->setBottomMargin(m_bottomStandardRuler->height() +
                                          m_segmentCanvas->horizontalScrollBar()->height());
 
@@ -249,7 +277,7 @@ TrackEditor::init(QWidget* rosegardenguiview)
 
     // Synchronize bar buttons' scrollview with segment canvas' scrollbar
     //
-    connect(m_segmentCanvas->verticalScrollBar(), SIGNAL(valueChanged(int)),
+    connect( dynamic_cast<QObject*>( m_segmentCanvas->verticalScrollBar()), SIGNAL(valueChanged(int)),
             this, SLOT(slotVerticalScrollTrackButtons(int)));
 
     connect(m_segmentCanvas->verticalScrollBar(), SIGNAL(sliderMoved(int)),
@@ -384,7 +412,9 @@ void TrackEditor::paintEvent(QPaintEvent* e)
         slotReadjustCanvasSize();
         m_trackButtons->slotUpdateTracks();
         m_segmentCanvas->clearSegmentRectsCache(true);
-        m_segmentCanvas->updateContents();
+		
+//         m_segmentCanvas->updateContents();
+		m_segmentCanvas->update();
 
         Composition &composition = m_doc->getComposition();
 
@@ -660,18 +690,21 @@ TrackEditor::slotTurnRepeatingSegmentToRealCopies()
 void
 TrackEditor::slotVerticalScrollTrackButtons(int y)
 {
-    m_trackButtonScroll->setContentsPos(0, y);
+//     m_trackButtonScroll->setContentsPos(0, y);
+	
+// 	ensureVisible ( int x, int y, int xmargin = 50, int ymargin = 50 )
+	m_trackButtonScroll->ensureVisible ( 0, y, 50, 20 );
 }
 
 void TrackEditor::dragEnterEvent(QDragEnterEvent *event)
 {
-    event->accept(QUriDrag::canDecode(event) ||
-                  QTextDrag::canDecode(event));
+    event->accept(Q3UriDrag::canDecode(event) ||
+                  Q3TextDrag::canDecode(event));
 }
 
 void TrackEditor::dropEvent(QDropEvent* event)
 {
-    QStrList uri;
+    QStringList uri;
     QString text;
 
     int heightAdjust = 0;
@@ -688,10 +721,19 @@ void TrackEditor::dropEvent(QDropEvent* event)
     if (m_chordNameRuler && m_chordNameRuler->isVisible())
         heightAdjust += m_chordNameRuler->height();
 
-    QPoint posInSegmentCanvas =
-        m_segmentCanvas->viewportToContents
-        (m_segmentCanvas->
-         viewport()->mapFrom(this, event->pos()));
+//     QPoint posInSegmentCanvas =
+//         m_segmentCanvas->viewportToContents(m_segmentCanvas->
+//          								viewport()->mapFrom(this, event->pos()));	
+	// 
+	QPoint posInSegmentCanvas;
+	QPoint pt;
+	
+	pt = this->mapToGlobal( event->pos() );			//@@@
+	pt = m_segmentCanvas->mapFromGlobal( pt );
+	posInSegmentCanvas = pt;
+	// note: Base of m_segmentCanvas is CompositionView, RosegardenScrollView, [[QScrollArea]]
+	
+	
 
     int trackPos = m_segmentCanvas->grid().getYBin(posInSegmentCanvas.y());
 
@@ -701,7 +743,7 @@ void TrackEditor::dropEvent(QDropEvent* event)
         m_segmentCanvas->grid().snapX(posInSegmentCanvas.x());
 
 
-    if (QUriDrag::decode(event, uri)) {
+    if (Q3UriDrag::decode(event, uri)) {
         RG_DEBUG << "TrackEditor::dropEvent() : got URI :"
         << uri.first() << endl;
         QString uriPath = uri.first();
@@ -710,9 +752,9 @@ void TrackEditor::dropEvent(QDropEvent* event)
             emit droppedDocument(uriPath);
         } else {
 
-            QStrList uris;
+            QStringList uris;
             QString uri;
-            if (QUriDrag::decode(event, uris)) uri = uris.first();
+            if (Q3UriDrag::decode(event, uris)) uri = uris.first();
 //            QUriDrag::decodeLocalFiles(event, files);
 //            QString filePath = files.first();
 
@@ -743,7 +785,7 @@ void TrackEditor::dropEvent(QDropEvent* event)
 
         }
 
-    } else if (QTextDrag::decode(event, text)) {
+    } else if (Q3TextDrag::decode(event, text)) {
         RG_DEBUG << "TrackEditor::dropEvent() : got text info " << endl;
         //<< text << endl;
 

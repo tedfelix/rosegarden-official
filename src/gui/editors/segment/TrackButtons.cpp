@@ -17,10 +17,12 @@
 
 
 #include "TrackButtons.h"
-#include <QLayout>
 
 #include <klocale.h>
-#include <kstandarddirs.h>
+#include <kled.h>
+// #include <kstandarddirs.h>
+// #include <kglobal.h>
+
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "base/AudioPluginInstance.h"
@@ -35,13 +37,14 @@
 #include "document/MultiViewCommandHistory.h"
 #include "gui/application/RosegardenGUIApp.h"
 #include "gui/general/GUIPalette.h"
+#include "gui/general/IconLoader.h"
 #include "gui/kdeext/KLedButton.h"
 #include "sound/AudioFileManager.h"
 #include "sound/PluginIdentifier.h"
 #include "TrackLabel.h"
 #include "TrackVUMeter.h"
-#include <kglobal.h>
-#include <kled.h>
+
+#include <QLayout>
 #include <QMessageBox>
 #include <QCursor>
 #include <QFrame>
@@ -49,13 +52,14 @@
 #include <QLabel>
 #include <QObject>
 #include <QPixmap>
-#include <qpopupmenu.h>
+#include <QMenu>
 #include <QSignalMapper>
 #include <QString>
 #include <QTimer>
 #include <QWidget>
 #include <QStackedWidget>
 #include <QToolTip>
+
 
 namespace Rosegarden
 {
@@ -637,11 +641,14 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
     connectedUsedPixmap, unconnectedUsedPixmap,
     connectedSelectedPixmap, unconnectedSelectedPixmap;
     static bool havePixmaps = false;
-
+	
+	IconLoader il;
+	
     if (!havePixmaps) {
 
-        QString pixmapDir =
-            KGlobal::dirs()->findResource("appdata", "pixmaps/");
+//         QString pixmapDir =
+//             KGlobal::dirs()->findResource("appdata", "pixmaps/");
+		QString pixmapDir = il.getResourcePath( "" );
 
         connectedPixmap.load
             (QString("%1/misc/connected.xpm").arg(pixmapDir));
@@ -675,6 +682,7 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
     InstrumentList::iterator it;
     int currentDevId = -1;
     bool deviceUsedByAnyone = false;
+	QMenu* tempMenu = 0;
 
     for (it = list.begin(); it != list.end(); it++) {
 
@@ -761,8 +769,14 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
 
             QMenu *subMenu = new QMenu(instrumentPopup);
             QString deviceName = strtoqstr(device->getName());
-            instrumentPopup->addItem(iconSet, deviceName, subMenu);
-            instrumentSubMenus.push_back(subMenu);
+			
+//             instrumentPopup->addItem(iconSet, deviceName, subMenu);
+			subMenu->setObjectName( deviceName );
+			subMenu->setTitle( deviceName );
+			subMenu->setIcon( iconSet );
+			
+			instrumentPopup->addMenu( subMenu );
+			instrumentSubMenus.push_back(subMenu);
 
             // Connect up the submenu
             //
@@ -795,9 +809,15 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
 
         if (pname != "")
             iname += " (" + pname + ")";
-
-        instrumentSubMenus[instrumentSubMenus.size() - 1]->addItem(iconSet, iname, i++);
-    }
+		
+		
+		tempMenu = new QMenu(instrumentPopup);
+		tempMenu->setIcon( iconSet );
+		tempMenu->setTitle( iname );
+		tempMenu->setObjectName( iname + QString(i++) );
+		instrumentSubMenus[instrumentSubMenus.size() - 1]->addMenu( tempMenu );
+// 		instrumentSubMenus[instrumentSubMenus.size() - 1]->addItem(iconSet, iname, i++);
+	}
 
 }
 

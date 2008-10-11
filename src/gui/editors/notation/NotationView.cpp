@@ -2870,8 +2870,9 @@ NotationView::setupFontSizeMenu(std::string oldFontName)
         if (!sizeAction) {
             sizeAction = createAction
                 (actionName, SLOT(slotChangeFontSizeFromStringValue()));
-            sizeAction->setText(i18n("1 pixel", "%n pixels", sizes[i]));
-            sizeAction->setCheckable(true);
+// 			sizeAction->setText(i18n("1 pixel", "%n pixels", sizes[i]));
+			sizeAction->setText( i18np("1 pixel", "%n pixels", sizes[i]) );
+			sizeAction->setCheckable(true);
         }
 
         sizeAction->setChecked(sizes[i] == m_fontSize);

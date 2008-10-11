@@ -20,7 +20,8 @@
 
 #include <klocale.h>
 #include "base/Track.h"
-#include <klineeditdlg.h>
+
+#include <QInputDialog>
 #include <QFont>
 #include <QFrame>
 #include <QLabel>
@@ -31,7 +32,10 @@
 #include <QWidget>
 #include <QStackedWidget>
 #include <QValidator>
-
+#include <QLayout>
+#include <QHBoxLayout>
+// #include <QEvent>
+#include <QMouseEvent>
 
 namespace Rosegarden
 {
@@ -40,12 +44,14 @@ TrackLabel::TrackLabel(TrackId id,
                        int position,
                        QWidget *parent,
                        const char *name):
-		QStackedWidget(parent, name),
+		QStackedWidget(parent),
         m_instrumentLabel(new QLabel(this)),
         m_trackLabel(new QLabel(this)),
         m_id(id),
         m_position(position)
 {
+	this->setObjectName( name );
+	
     QFont font;
     font.setPointSize(font.pointSize() * 95 / 100);
     if (font.pixelSize() > 14)
@@ -53,11 +59,18 @@ TrackLabel::TrackLabel(TrackId id,
     font.setBold(false);
     m_instrumentLabel->setFont(font);
     m_trackLabel->setFont(font);
-
-    addWidget(m_instrumentLabel, ShowInstrument);
-    addWidget(m_trackLabel, ShowTrack);
-    raiseWidget(ShowTrack);
-
+	
+	this->setLayout( new QHBoxLayout() );
+	
+	m_instrumentLabel->setObjectName( "InstrumentLabel" );
+	m_trackLabel->setObjectName( "TrackLabel" );
+	
+    layout()->addWidget(m_instrumentLabel);		//, ShowInstrument);
+	layout()->addWidget(m_trackLabel);			//, ShowTrack);
+	
+// 	raiseWidget(ShowTrack);
+	setCurrentWidget( m_trackLabel );
+	
     m_instrumentLabel->setFrameShape(QFrame::NoFrame);
     m_trackLabel->setFrameShape(QFrame::NoFrame);
 
@@ -107,7 +120,14 @@ void TrackLabel::clearAlternativeLabel()
 
 void TrackLabel::showLabel(InstrumentTrackLabels l)
 {
-    raiseWidget(l);
+// 	raiseWidget(l);
+	if( l == ShowTrack ){
+		setCurrentWidget( m_trackLabel );
+		
+	} else if( l == ShowInstrument ){
+		setCurrentWidget( m_instrumentLabel );
+		
+	}
 }
 
 void
@@ -129,19 +149,20 @@ TrackLabel::setSelected(bool on)
         m_instrumentLabel->setPaletteForegroundColor(colorGroup().text());
         m_trackLabel->setPaletteForegroundColor(colorGroup().text());
     }
-    if (visibleWidget())
-        visibleWidget()->update();
+    if( currentWidget() ){
+        currentWidget()->update();
+	}
 }
 
 void
 TrackLabel::mousePressEvent(QMouseEvent *e)
 {
-    if (e->button() == RightButton) {
+    if (e->button() == Qt::RightButton) {
 
         emit clicked();
         emit changeToInstrumentList();
 
-    } else if (e->button() == LeftButton) {
+    } else if (e->button() == Qt::LeftButton) {
 
         // start a timer on this hold
         m_pressTimer->start(200, true); // 200ms, single shot
@@ -155,7 +176,7 @@ TrackLabel::mouseReleaseEvent(QMouseEvent *e)
     if (m_pressTimer->isActive())
         m_pressTimer->stop();
 
-    if (e->button() == LeftButton) {
+    if (e->button() == Qt::LeftButton) {
         emit clicked();
     }
 }
@@ -163,7 +184,7 @@ TrackLabel::mouseReleaseEvent(QMouseEvent *e)
 void
 TrackLabel::mouseDoubleClickEvent(QMouseEvent *e)
 {
-    if (e->button() != LeftButton)
+    if (e->button() != Qt::LeftButton)
         return ;
 
     // Highlight this label alone and cheat using
@@ -180,12 +201,14 @@ TrackLabel::mouseDoubleClickEvent(QMouseEvent *e)
 
     QRegExpValidator validator(QRegExp(".*"), this); // empty is OK
 
-    QString newText = KLineEditDlg::getText(i18n("Change track name"),
+    QString newText = QInputDialog::getText(this,
+										   i18n("Change track name"),
                                             i18n("Enter new track name"),
+													QLineEdit::Normal,
                                             m_trackLabel->text(),
-                                            &ok,
-                                            this,
-                                            &validator);
+                                            &ok
+										   );
+//                                             &validator);
 
     if ( ok )
         emit renameTrack(newText, m_id);

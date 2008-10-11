@@ -19,11 +19,13 @@
 #ifndef _RG_TRACKHEADER_H_
 #define _RG_TRACKHEADER_H_
 
-#include <qheader.h>
+#include <Q3Header>
 
+#include <QHeaderView>	// replaces Q3Header
+#include <QPaintEvent>
 
 class QWidget;
-class QPaintEvent;
+// class QPaintEvent;
 
 
 namespace Rosegarden
@@ -31,15 +33,25 @@ namespace Rosegarden
 
 
 
-class TrackHeader : public QHeader
+class TrackHeader : public Q3Header		//QHeaderView
 {
 
 public:
     TrackHeader(int number,
                           QWidget *parent=0,
-                          const char *name=0 ):
-                            QHeader(number, parent, name) {;}
-    ~TrackHeader();
+                          const char *name=0
+			   ):
+				Q3Header(number, parent, name) {;}
+	
+	/*
+	QHeader(Qt::Horizontal, parent) 
+	{
+		this->setObjectName(name);
+		this->setNumber();
+	}
+	*/
+	
+	~TrackHeader();
 
 protected:
     virtual void paintEvent(QPaintEvent *pe);
