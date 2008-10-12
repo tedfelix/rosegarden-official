@@ -20,10 +20,14 @@
 namespace Rosegarden {
 
 int
-TempoListItem::compare(QListWidgetItem *i, int col, bool ascending) const
+TempoListItem::compare(QTreeWidgetItem *i, int col, bool ascending) const
 {
+	//&&& FIX: disabled TempoListItem::compare function
+	return 1;
+	
+	/*
     TempoListItem *ti = dynamic_cast<TempoListItem *>(i);
-    if (!ti) return QListWidgetItem::compare(i, col, ascending);
+    if (!ti) return QTreeWidgetItem::compare(i, col, ascending);
 
     if (col == 0) { // time
 	if (m_time == ti->m_time) {
@@ -40,6 +44,7 @@ TempoListItem::compare(QListWidgetItem *i, int col, bool ascending) const
     } else {
 	return key(col, ascending).compare(i->key(col, ascending));
     }
+	*/
 }
 
 }

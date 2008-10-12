@@ -24,6 +24,7 @@
 #include <QObject>
 #include <QToolTip>
 #include <QString>
+#include <QMenu>
 
 
 namespace Rosegarden

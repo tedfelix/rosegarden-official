@@ -20,12 +20,16 @@
 namespace Rosegarden {
 
 int
-TriggerManagerItem::compare(QListWidgetItem * i, int col, bool ascending) const
+TriggerManagerItem::compare(QTreeWidgetItem * i, int col, bool ascending) const
 {
+	return 1;
+	//&&& FIX: disabled TriggerManagerItem::compare function
+	
+	/*
     TriggerManagerItem *ei = 
         dynamic_cast<TriggerManagerItem *>(i);
 
-    if (!ei) return QListWidgetItem::compare(i, col, ascending);
+    if (!ei) return QTreeWidgetItem::compare(i, col, ascending);
 
     // col 0 -> index -- numeric compare
     // col 1 -> ID -- numeric compare
@@ -36,7 +40,7 @@ TriggerManagerItem::compare(QListWidgetItem * i, int col, bool ascending) const
     // col 6 -> usage count -- numeric compare
     //
     if (col == 2) {  
-        return QListWidgetItem::compare(i, col, ascending);
+        return QTreeWidgetItem::compare(i, col, ascending);
     } else if (col == 3) {
         if (m_rawDuration < ei->getRawDuration()) return -1;
         else if (ei->getRawDuration() < m_rawDuration) return 1;
@@ -48,6 +52,7 @@ TriggerManagerItem::compare(QListWidgetItem * i, int col, bool ascending) const
     } else {
         return key(col, ascending).toInt() - i->key(col, ascending).toInt();
     }
+	*/
 }
 
 }

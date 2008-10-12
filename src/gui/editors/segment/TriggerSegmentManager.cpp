@@ -16,15 +16,20 @@
 */
 
 
+#include <Q3Canvas>
 #include <Q3CanvasPixmap>
+
+#include <klocale.h>
+// #include <kglobal.h>
+// #include <kmainwindow.h>
+// #include <kstandardshortcut.h>
+// #include <kstandardaction.h>
+// #include <kstandarddirs.h>
+
 #include "TriggerSegmentManager.h"
 #include "TriggerManagerItem.h"
-#include <QLayout>
-#include <QApplication>
 
 #include "base/BaseProperties.h"
-#include <klocale.h>
-#include <kstandarddirs.h>
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "base/Clipboard.h"
@@ -41,27 +46,28 @@
 #include "document/ConfigGroups.h"
 #include "gui/dialogs/TimeDialog.h"
 #include "gui/general/MidiPitchLabel.h"
-#include <QAction>
+#include "gui/general/IconLoader.h"
+#include "gui/kdeext/KTmpStatusMsg.h"
 #include "document/Command.h"
-#include <kglobal.h>
-#include <QListWidget>
-#include <kmainwindow.h>
+
+#include <QLayout>
+#include <QApplication>
+#include <QAction>
+#include <QTreeWidget>
 #include <QMessageBox>
-#include <kstandardshortcut.h>
-#include <kstandardaction.h>
 #include <QSettings>
-#include <qshortcut.h>
+#include <QShortcut>
 #include <QDialog>
 #include <QFrame>
 #include <QIcon>
-#include <QListWidget>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
 #include <QPushButton>
 #include <QSizePolicy>
 #include <QString>
 #include <QToolTip>
 #include <QWidget>
 #include <QVBoxLayout>
-#include <Q3Canvas>
 
 
 namespace Rosegarden
@@ -69,29 +75,51 @@ namespace Rosegarden
 
 TriggerSegmentManager::TriggerSegmentManager(QWidget *parent,
         RosegardenGUIDoc *doc):
-        KMainWindow(parent, "triggereditordialog"),
+        QMainWindow(parent),	//, "triggereditordialog"),
         m_doc(doc),
         m_modified(false)
 {
+	
+	this->setObjectName( "triggereditordialog" );
+	
     QWidget *mainFrame = new QWidget(this);
     QVBoxLayout *mainFrameLayout = new QVBoxLayout;
     setCentralWidget(mainFrame);
 
     setCaption(i18n("Manage Triggered Segments"));
 
-    m_listView = new QListWidget( mainFrame );
+    m_listView = new QTreeWidget( mainFrame );
     mainFrameLayout->addWidget(m_listView);
-    m_listView->addColumn("Index");
+	
+	QStringList sl;
+	sl 		<< "Index"
+			<< i18n("ID")
+			<< i18n("Label")
+			<< i18n("Duration")
+			<< i18n("Base pitch")
+			<< i18n("Base velocity")
+			<< i18n("Triggers");
+	
+	m_listView->setColumnCount( 7 );
+	m_listView->setHeaderLabels( sl );
+	
+	/*
+	m_listView->addColumn("Index");
     m_listView->addColumn(i18n("ID"));
     m_listView->addColumn(i18n("Label"));
     m_listView->addColumn(i18n("Duration"));
     m_listView->addColumn(i18n("Base pitch"));
     m_listView->addColumn(i18n("Base velocity"));
     m_listView->addColumn(i18n("Triggers"));
-
+	*/
+	
     // Align centrally
-    for (int i = 0; i < 2; ++i)
-        m_listView->setColumnAlignment(i, Qt::AlignHCenter);
+//     for (int i = 0; i < 2; ++i)
+//         m_listView->setColumnAlignment(i, Qt::AlignHCenter);		//&&& note:
+	
+	// NOTE: use QTreeWidgetItem::setTextAlignment( int column, Qt::AlignHCenter ) instead
+	//
+	
 
     QFrame *btnBox = new QFrame( mainFrame );
     mainFrameLayout->addWidget(btnBox);
@@ -139,25 +167,29 @@ TriggerSegmentManager::TriggerSegmentManager(QWidget *parent,
 
     setupActions();
 
-    m_doc->getCommandHistory()->attachView(actionCollection());
+//     m_doc->getCommandHistory()->attachView(actionCollection());	//&&&
+	
     connect(m_doc->getCommandHistory(), SIGNAL(commandExecuted()),
             this, SLOT(slotUpdate()));
 
-    connect(m_listView, SIGNAL(doubleClicked(QListWidgetItem *)),
-            SLOT(slotEdit(QListWidgetItem *)));
+    connect(m_listView, SIGNAL(doubleClicked(QTreeWidgetItem *)),
+            SLOT(slotEdit(QTreeWidgetItem *)));
 
-    connect(m_listView, SIGNAL(pressed(QListWidgetItem *)),
-            this, SLOT(slotItemClicked(QListWidgetItem *)));
+    connect(m_listView, SIGNAL(pressed(QTreeWidgetItem *)),
+            this, SLOT(slotItemClicked(QTreeWidgetItem *)));
 
     // Highlight all columns - enable extended selection mode
     //
     m_listView->setAllColumnsShowFocus(true);
-    m_listView->setSelectionMode(QListWidget::Extended);
-    m_listView->setItemsRenameable(true);
+//     m_listView->setSelectionMode(QTreeWidget::Extended);
+	m_listView->setSelectionMode( QAbstractItemView::ExtendedSelection );
+// 	m_listView->setSelectionBehavior( QAbstractItemView::SelectRows );
+	
+//     m_listView->setItemsRenameable(true);	//&&&
 
     initDialog();
 
-    setAutoSaveSettings(TriggerManagerConfigGroup, true);
+//     setAutoSaveSettings(TriggerManagerConfigGroup, true);	//&&&
 
     m_shortcuterators = new QShortcut(this);
 }
@@ -166,10 +198,10 @@ TriggerSegmentManager::~TriggerSegmentManager()
 {
     RG_DEBUG << "TriggerSegmentManager::~TriggerSegmentManager" << endl;
 
-    m_listView->saveLayout(TriggerManagerConfigGroup);
+//     m_listView->saveLayout(TriggerManagerConfigGroup);	//&&&
 
-    if (m_doc)
-        m_doc->getCommandHistory()->detachView(actionCollection());
+//     if (m_doc)
+//         m_doc->getCommandHistory()->detachView(actionCollection());
 }
 
 void
@@ -247,27 +279,33 @@ TriggerSegmentManager::slotUpdate()
 
         QString velocity = QString("%1").arg((*it)->getBaseVelocity());
 
-        item = new TriggerManagerItem
-               (m_listView, QString("%1").arg(i + 1), QString("%1").arg((*it)->getId()),
-                label, timeString, pitch, velocity, used);
+        item = new TriggerManagerItem(
+               			m_listView, 
+				  			QStringList() 
+							<< QString("%1").arg(i + 1)
+							<< QString("%1").arg((*it)->getId())
+							<< label << timeString << pitch << velocity << used );
 
         item->setRawDuration(duration);
         item->setId((*it)->getId());
         item->setUsage(uses);
         item->setPitch((*it)->getBasePitch());
 
-        m_listView->addItem(item);
+        m_listView->addTopLevelItem(item);
         ++i;
     }
 
-    if (m_listView->childCount() == 0) {
-        QListWidgetItem *item =
-            new TriggerManagerItem(m_listView, i18n("<none>"));
-        m_listView->addItem(item);
+    if (m_listView->topLevelItemCount() == 0) {
+        QTreeWidgetItem *item =
+            new TriggerManagerItem(m_listView, QStringList() << i18n("<none>") );
+        m_listView->addTopLevelItem(item);
 
-        m_listView->setSelectionMode(QListWidget::NoSelection);
+//         m_listView->setSelectionMode(QTreeWidget::NoSelection);
+		m_listView->setSelectionMode( QAbstractItemView::NoSelection );
     } else {
-        m_listView->setSelectionMode(QListWidget::Extended);
+//         m_listView->setSelectionMode(QTreeWidget::Extended);
+		m_listView->setSelectionMode( QAbstractItemView::ExtendedSelection );
+
     }
 
     settings.endGroup();
@@ -276,13 +314,14 @@ TriggerSegmentManager::slotUpdate()
 void
 TriggerSegmentManager::slotDeleteAll()
 {
-    if (QMessageBox::warningContinueCancel(this, i18n("This will remove all triggered segments from the whole composition.  Are you sure?")) != QMessageBox::Continue)
+	if (QMessageBox::warning(this, "", i18n("This will remove all triggered segments from the whole composition.  Are you sure?"), QMessageBox::Yes|QMessageBox::Cancel, QMessageBox::Cancel ) != QMessageBox::Yes )
         return ;
 
     RG_DEBUG << "TriggerSegmentManager::slotDeleteAll" << endl;
     MacroCommand *command = new MacroCommand(i18n("Remove all triggered segments"));
 
-    QListWidgetItem *it = m_listView->firstChild();
+// 	QTreeWidgetItem *it = m_listView->firstChild();
+	QTreeWidgetItem *it = m_listView->topLevelItem(0);
 
     do {
 
@@ -297,7 +336,7 @@ TriggerSegmentManager::slotDeleteAll()
                                             item->getId());
         command->addCommand(c);
 
-    } while ((it = it->nextSibling()));
+	} while ( (it = m_listView->itemBelow( it )) );
 
     addCommandToHistory(command);
 }
@@ -321,14 +360,16 @@ TriggerSegmentManager::slotDelete()
     RG_DEBUG << "TriggerSegmentManager::slotDelete" << endl;
 
     TriggerManagerItem *item =
-        dynamic_cast<TriggerManagerItem*>(m_listView->currentIndex());
+        dynamic_cast<TriggerManagerItem*>( m_listView->currentItem() );
 
     if (!item)
         return ;
 
     if (item->getUsage() > 0) {
-        if (QMessageBox::warningContinueCancel(this, i18np("This triggered segment is used 1 time in the current composition.  Are you sure you want to remove it?",
-                                               "This triggered segment is used %1 times in the current composition.  Are you sure you want to remove it?", item->getUsage())) != QMessageBox::Continue)
+        if (QMessageBox::warning(this, "", i18np("This triggered segment is used 1 time in the current composition.  Are you sure you want to remove it?",
+                                               "This triggered segment is used %1 times in the current composition.  Are you sure you want to remove it?", item->getUsage()),
+										QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel
+		   					) != QMessageBox::Yes )
             return ;
     }
 
@@ -344,7 +385,7 @@ TriggerSegmentManager::slotPasteAsNew()
     Clipboard *clipboard = m_doc->getClipboard();
 
     if (clipboard->isEmpty()) {
-        QMessageBox::information(this, i18n("Clipboard is empty"));
+        QMessageBox::information(this, "", i18n("Clipboard is empty"));
         return ;
     }
 
@@ -360,8 +401,8 @@ TriggerSegmentManager::slotClose()
 {
     RG_DEBUG << "TriggerSegmentManager::slotClose" << endl;
 
-    if (m_doc)
-        m_doc->getCommandHistory()->detachView(actionCollection());
+//     if (m_doc)
+//         m_doc->getCommandHistory()->detachView(actionCollection());	//&&&
     m_doc = 0;
 
     close();
@@ -370,28 +411,36 @@ TriggerSegmentManager::slotClose()
 void
 TriggerSegmentManager::setupActions()
 {
-    KAction* close = KStandardAction::close(this,
-                                       SLOT(slotClose()),
-                                       actionCollection());
+//     KAction* close = KStandardAction::close(this,
+//                                        SLOT(slotClose()),
+//                                        actionCollection());
+	createAction( "file_close", SLOT(slotClose()) );
+	createAction( "edit_undo" );
+	createAction( "edit_redo" );
 
-    m_closeButton->setText(close->text());
+    m_closeButton->setText( findAction("file_close")->text() );
     connect(m_closeButton, SIGNAL(released()), this, SLOT(slotClose()));
 
-    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+//     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+	IconLoader il;
+	QString pixmapDir = il.getResourcePath("");
 
     // some adjustments
-    new KToolBarPopupAction(i18n("Und&o"),
-                            "undo",
-                            KStandardShortcut::key(KStandardShortcut::Undo),
-                            actionCollection(),
-                            KStandardAction::stdName(KStandardAction::Undo));
+//     new KToolBarPopupAction(i18n("Und&o"),
+//                             "undo",
+//                             KStandardShortcut::key(KStandardShortcut::Undo),
+//                             actionCollection(),
+//                             KStandardAction::stdName(KStandardAction::Undo));
 
-    new KToolBarPopupAction(i18n("Re&do"),
-                            "redo",
-                            KStandardShortcut::key(KStandardShortcut::Redo),
-                            actionCollection(),
-                            KStandardAction::stdName(KStandardAction::Redo));
 
+//     new KToolBarPopupAction(i18n("Re&do"),
+//                             "redo",
+//                             KStandardShortcut::key(KStandardShortcut::Redo),
+//                             actionCollection(),
+//                             KStandardAction::stdName(KStandardAction::Redo));
+
+	
+	
     QAction* qa_paste_to_trigger_segment = new QAction(  i18n("Pa&ste as New Triggered Segment"), dynamic_cast<QObject*>(this) );
 			connect( qa_paste_to_trigger_segment, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotPasteAsNew()) );
 			qa_paste_to_trigger_segment->setObjectName( "paste_to_trigger_segment" );		//
@@ -408,54 +457,54 @@ TriggerSegmentManager::setupActions()
 
     int timeMode = settings.value("timemode", 0).toInt() ;
 
-    KRadioAction *action;
+//     KRadioAction *action;
 
     Q3CanvasPixmap pixmap(pixmapDir + "/toolbar/time-musical.png");
     QIcon icon(pixmap);
 
-    action = QAction* qa_time_musical = new QAction( icon, i18n("&Musical Times"), qa_parent );
+    QAction* qa_time_musical = new QAction( icon, i18n("&Musical Times"), this );
 			connect( qa_time_musical, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotMusicalTime()) );
 			qa_time_musical->setObjectName( "time_musical" );
 			qa_time_musical->setCheckable( true );		//
 			qa_time_musical->setChecked( false );			//
 			qa_time_musical->setAutoRepeat( false );		//
-			qa_time_musical->setActionGroup( qag_timeMode );	// QActionGroup*
+// 			qa_time_musical->setActionGroup( qag_timeMode );	// QActionGroup*
 			//### FIX: deallocate QAction ptr
 
     if (timeMode == 0)
-        action->setChecked(true);
+		qa_time_musical->setChecked(true);
 
     pixmap.load(pixmapDir + "/toolbar/time-real.png");
     icon = QIcon(pixmap);
 
-    action = QAction* qa_time_real = new QAction( icon, i18n("&Real Times"), qa_parent );
+    QAction* qa_time_real = new QAction( icon, i18n("&Real Times"), this );
 			connect( qa_time_real, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotRealTime()) );
 			qa_time_real->setObjectName( "time_real" );
 			qa_time_real->setCheckable( true );		//
 			qa_time_real->setChecked( false );			//
 			qa_time_real->setAutoRepeat( false );		//
-			qa_time_real->setActionGroup( qag_timeMode );	// QActionGroup*
+// 			qa_time_real->setActionGroup( qag_timeMode );	// QActionGroup*
 			//### FIX: deallocate QAction ptr
 
     if (timeMode == 1)
-        action->setChecked(true);
+		qa_time_real->setChecked(true);
 
     pixmap.load(pixmapDir + "/toolbar/time-raw.png");
     icon = QIcon(pixmap);
 
-    action = QAction* qa_time_raw = new QAction( icon, i18n("Ra&w Times"), qa_parent );
+    QAction* qa_time_raw = new QAction( icon, i18n("Ra&w Times"), this );
 			connect( qa_time_raw, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotRawTime()) );
 			qa_time_raw->setObjectName( "time_raw" );
 			qa_time_raw->setCheckable( true );		//
 			qa_time_raw->setChecked( false );			//
 			qa_time_raw->setAutoRepeat( false );		//
-			qa_time_raw->setActionGroup( qag_timeMode );	// QActionGroup*
+// 			qa_time_raw->setActionGroup( qag_timeMode );	// QActionGroup*
 			//### FIX: deallocate QAction ptr
 
     if (timeMode == 2)
-        action->setChecked(true);
+		qa_time_raw->setChecked(true);
 
-    createGUI("triggermanager.rc");
+    rgTempQtIV->createGUI("triggermanager.rc", 0);
 
     settings.endGroup();
 }
@@ -490,7 +539,7 @@ TriggerSegmentManager::checkModified()
 }
 
 void
-TriggerSegmentManager::slotEdit(QListWidgetItem *i)
+TriggerSegmentManager::slotEdit(QTreeWidgetItem *i)
 {
     RG_DEBUG << "TriggerSegmentManager::slotEdit" << endl;
 
@@ -511,7 +560,8 @@ void
 TriggerSegmentManager::closeEvent(QCloseEvent *e)
 {
     emit closing();
-    KMainWindow::closeEvent(e);
+	close();
+//     KMainWindow::closeEvent(e);
 }
 
 void
@@ -525,7 +575,7 @@ TriggerSegmentManager::setDocument(RosegardenGUIDoc *doc)
 }
 
 void
-TriggerSegmentManager::slotItemClicked(QListWidgetItem *item)
+TriggerSegmentManager::slotItemClicked(QTreeWidgetItem *item)
 {
     RG_DEBUG << "TriggerSegmentManager::slotItemClicked" << endl;
 }

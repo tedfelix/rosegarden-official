@@ -19,17 +19,20 @@
 #ifndef _RG_TRIGGERSEGMENTMANAGER_H_
 #define _RG_TRIGGERSEGMENTMANAGER_H_
 
-#include <kmainwindow.h>
-#include <QString>
 #include "base/Event.h"
+
+#include <QMainWindow>
+#include <QString>
+// #include <QTreeWidget>
+// #include <QTreeWidgetItem>
 
 
 class QWidget;
 class QPushButton;
-class QListWidgetItem;
+class QTreeWidget;
+class QTreeWidgetItem;
 class QCloseEvent;
 class QShortcut;
-class QListWidget;
 
 
 namespace Rosegarden
@@ -40,7 +43,7 @@ class RosegardenGUIDoc;
 class MultiViewCommandHistory;
 
 
-class TriggerSegmentManager : public KMainWindow
+class TriggerSegmentManager : public QMainWindow
 {
     Q_OBJECT
 
@@ -69,8 +72,8 @@ public slots:
     void slotDelete();
     void slotDeleteAll();
     void slotClose();
-    void slotEdit(QListWidgetItem *);
-    void slotItemClicked(QListWidgetItem *);
+    void slotEdit(QTreeWidgetItem *);
+    void slotItemClicked(QTreeWidgetItem *);
     void slotPasteAsNew();
 
     void slotMusicalTime();
@@ -96,7 +99,7 @@ protected:
     QPushButton             *m_deleteButton;
     QPushButton             *m_deleteAllButton;
 
-    QListWidget               *m_listView;
+    QTreeWidget               *m_listView;
 
     bool                     m_modified;
 

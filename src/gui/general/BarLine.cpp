@@ -19,6 +19,8 @@
 
 #include <QPainter>
 
+#include <Q3PointArray>
+
 namespace Rosegarden {
         
 void
@@ -106,7 +108,7 @@ BarLine::drawShape(QPainter &painter)
     }
 }
 
-QPointArray
+Q3PointArray
 BarLine::areaPoints() const
 {
     int bx = int(x());
@@ -147,7 +149,7 @@ BarLine::areaPoints() const
         break;
     }
 
-    QPointArray p(4);
+    Q3PointArray p(4);
     p[0] = QPoint(x0, y0);
     p[1] = QPoint(x1, y0);
     p[2] = QPoint(x1, y1);

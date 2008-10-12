@@ -16,11 +16,15 @@
 */
 
 
+#include <Q3Canvas>
 #include <Q3CanvasPixmap>
 #include "TempoView.h"
 
 #include <klocale.h>
-#include <kstandarddirs.h>
+// #include <kstandarddirs.h>
+// #include <kglobal.h>
+// #include <kxmlguiclient.h>
+
 #include "misc/Debug.h"
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
@@ -36,26 +40,27 @@
 #include "gui/dialogs/TempoDialog.h"
 #include "gui/dialogs/TimeSignatureDialog.h"
 #include "gui/general/EditViewBase.h"
+#include "gui/general/IconLoader.h"
 #include "gui/kdeext/KTmpStatusMsg.h"
+#include "misc/Strings.h"
 #include "TempoListItem.h"
+
 #include <QAction>
-#include <kglobal.h>
 #include <QSettings>
-#include <QListWidget>
-#include <kxmlguiclient.h>
+#include <QTreeWidget>
 #include <QGroupBox>
 #include <QCheckBox>
 #include <QDialog>
 #include <QIcon>
-#include <QListWidget>
 #include <QPixmap>
-#include <qptrlist.h>
 #include <QSize>
 #include <QString>
 #include <QLayout>
 #include <QVBoxLayout>
-#include <Q3Canvas>
-#include <kstatusbar.h>
+#include <QStatusBar>
+#include <QList>
+
+// #include <qptrlist.h>
 
 
 namespace Rosegarden
@@ -80,9 +85,10 @@ TempoView::TempoView(RosegardenGUIDoc *doc, QWidget *parent, timeT openTime):
 
     // define some note filtering buttons in a group
     //
-    m_filterGroup =
-        new QGroupBox(1, Horizontal, i18n("Filter"), getCentralWidget());
-    QVBoxLayout *filterGroupLayout = new QVBoxLayout;
+// 	m_filterGroup = new QGroupBox(1, Qt::Horizontal, i18n("Filter"), getCentralWidget());
+	m_filterGroup = new QGroupBox( i18n("Filter"), getCentralWidget() );
+	QHBoxLayout *filterGroupLayout = new QHBoxLayout;
+	m_filterGroup->setLayout( filterGroupLayout );
 
     m_tempoCheckBox = new QCheckBox(i18n("Tempo"), m_filterGroup);
     filterGroupLayout->addWidget(m_tempoCheckBox);
@@ -98,8 +104,9 @@ TempoView::TempoView(RosegardenGUIDoc *doc, QWidget *parent, timeT openTime):
     connect(m_filterGroup, SIGNAL(released(int)),
             SLOT(slotModifyFilter(int)));
 
-    m_list = new QListWidget(getCentralWidget());
-    m_list->setItemsRenameable(true);
+    m_list = new QTreeWidget(getCentralWidget());
+	
+//     m_list->setItemsRenameable(true);	//&&&
 
     m_grid->addWidget(m_list, 2, 1);
 
@@ -109,20 +116,36 @@ TempoView::TempoView(RosegardenGUIDoc *doc, QWidget *parent, timeT openTime):
 
     // Connect double clicker
     //
-    connect(m_list, SIGNAL(doubleClicked(QListWidgetItem*)),
-            SLOT(slotPopupEditor(QListWidgetItem*)));
+    connect(m_list, SIGNAL(doubleClicked(QTreeWidgetItem*)),
+            SLOT(slotPopupEditor(QTreeWidgetItem*)));
 
     m_list->setAllColumnsShowFocus(true);
-    m_list->setSelectionMode(QListWidget::Extended);
-
+//     m_list->setSelectionMode(QTreeWidget::Extended);
+	m_list->setSelectionMode( QAbstractItemView::ExtendedSelection );
+// 	m_list->setSelectionBehavior( QAbstractItemView::SelectRows );
+	
+	/*
     m_list->addColumn(i18n("Time  "));
     m_list->addColumn(i18n("Type  "));
     m_list->addColumn(i18n("Value  "));
     m_list->addColumn(i18n("Properties  "));
+	*/
+	
+	
+	QStringList sl;
+	sl 		<< i18n("Time  ")
+			<< i18n("Type  ")
+			<< i18n("Value  ")
+			<< i18n("Properties  ")
+			;
+	
+	m_list->setColumnCount( 4 );
+	m_list->setHeaderLabels( sl );
+	
 
-    for (int col = 0; col < m_list->columns(); ++col)
-        m_list->setRenameable(col, true);
-
+//     for (int col = 0; col < m_list->columnCount(); ++col)
+//         m_list->setRenameable(col, true);	//&&&
+	
     readOptions();
     setButtonsToFilter();
     applyLayout();
@@ -175,16 +198,29 @@ TempoView::applyLayout(int /*staffNo*/)
     // of the view.  This code borrowed from EventView.
     //
     if (m_listSelection.size() == 0) {
-        QPtrList<QListWidgetItem> selection = m_list->selectedItems();
+        QList<QTreeWidgetItem*> selection = m_list->selectedItems();
 
-        if (selection.count()) {
-            QPtrListIterator<QListWidgetItem> it(selection);
-            QListWidgetItem *listItem;
-
+        if( selection.count() ){
+//             QPtrListIterator<QTreeWidgetItem> it(selection);
+			QTreeWidgetItem *listItem;
+			QTreeWidgetItem *it;
+			
+			it = m_list->topLevelItem(0);
+			if( it != 0 ){
+				do {
+					m_listSelection.push_back( m_list->indexOfTopLevelItem(it) );
+					++it;
+				} while ( (it = m_list->itemBelow(it) ) != 0 );
+			}
+			
+		
+			
+			/*
             while ((listItem = it.current()) != 0) {
-                m_listSelection.push_back(m_list->itemIndex(*it));
+                m_listSelection.push_back( m_list->itemIndex(*it) );
                 ++it;
             }
+			*/
         }
     }
 
@@ -220,11 +256,13 @@ TempoView::applyLayout(int /*staffNo*/)
             QString timeString = makeTimeString(sig.first, timeMode);
 
             new TempoListItem(comp, TempoListItem::TimeSignature,
-                              sig.first, i, m_list, timeString,
-                              i18n("Time Signature   "),
-                              QString("%1/%2   ").arg(sig.second.getNumerator()).
-                              arg(sig.second.getDenominator()),
-                              properties);
+                              sig.first, i, m_list, 
+							QStringList()
+							<< timeString
+                              << i18n("Time Signature   ")
+                              << QString("%1/%2   ").arg(sig.second.getNumerator()).
+                              				arg(sig.second.getDenominator())
+                              << properties );
         }
     }
 
@@ -264,24 +302,23 @@ TempoView::applyLayout(int /*staffNo*/)
             QString timeString = makeTimeString(tempo.first, timeMode);
 
             new TempoListItem(comp, TempoListItem::Tempo,
-                              tempo.first, i, m_list, timeString,
-                              i18n("Tempo   "),
-                              desc);
+                              tempo.first, i, m_list, QStringList() << timeString
+                              << i18n("Tempo   ")
+                              << desc );
         }
     }
 
-    if (m_list->childCount() == 0) {
-        new QListWidgetItem(m_list,
-                          i18n("<nothing at this filter level>"));
-        m_list->setSelectionMode(QListWidget::NoSelection);
-        stateChanged("have_selection", KXMLGUIClient::StateReverse);
+    if (m_list->topLevelItemCount() == 0) {
+        new QTreeWidgetItem( m_list, QStringList() << i18n("<nothing at this filter level>") );
+        m_list->setSelectionMode(QTreeWidget::NoSelection);
+		leaveActionState("have_selection");
     } else {
-        m_list->setSelectionMode(QListWidget::Extended);
+		m_list->setSelectionMode( QAbstractItemView::ExtendedSelection );
 
         // If no selection then select the first event
         if (m_listSelection.size() == 0)
             m_listSelection.push_back(0);
-        stateChanged("have_selection", KXMLGUIClient::StateNoReverse);
+		enterActionState("have_selection");
     }
 
     // Set a selection from a range of indexes
@@ -292,15 +329,18 @@ TempoView::applyLayout(int /*staffNo*/)
     for (; sIt != m_listSelection.end(); ++sIt) {
         index = *sIt;
 
-        while (index > 0 && !m_list->itemAtIndex(index))
+        while (index > 0 && !m_list->topLevelItem(index))
             index--;
 
-        m_list->setSelected(m_list->itemAtIndex(index), true);
-        m_list->setCurrentIndex(m_list->itemAtIndex(index));
+// 		m_list->setSelected(m_list->topLevelItem(index), true);
+		m_list->topLevelItem(index)->setSelected( true );
+// 		m_list->setCurrentIndex( m_list->topLevelItem(index) );
+		m_list->setCurrentItem(  m_list->topLevelItem(index)  );
 
         // ensure visible
-        m_list->ensureItemVisible(m_list->itemAtIndex(index));
-    }
+// 		m_list->ensureItemVisible(m_list->topLevelItem(index));
+		m_list->scrollToItem( m_list->topLevelItem(index) );
+	}
 
     m_listSelection.clear();
 
@@ -315,12 +355,13 @@ TempoView::makeInitialSelection(timeT time)
     TempoListItem *goodItem = 0;
     int goodItemNo = 0;
 
-    for (int i = 0; m_list->itemAtIndex(i); ++i) {
+    for (int i = 0; m_list->topLevelItem(i); ++i) {
 
         TempoListItem *item = dynamic_cast<TempoListItem *>
-                              (m_list->itemAtIndex(i));
+								(m_list->topLevelItem(i));
 
-        m_list->setSelected(item, false);
+//         m_list->setSelected(item, false);
+		item->setSelected( false );
 
         if (item) {
             if (item->getTime() > time)
@@ -332,8 +373,10 @@ TempoView::makeInitialSelection(timeT time)
 
     if (goodItem) {
         m_listSelection.push_back(goodItemNo);
-        m_list->setSelected(goodItem, true);
-        m_list->ensureItemVisible(goodItem);
+//         m_list->setSelected(goodItem, true);
+		goodItem->setSelected( true );
+//         m_list->ensureItemVisible(goodItem);
+		m_list->scrollToItem( goodItem );
     }
 }
 
@@ -419,16 +462,20 @@ TempoView::slotEditPaste()
 void
 TempoView::slotEditDelete()
 {
-    QPtrList<QListWidgetItem> selection = m_list->selectedItems();
+    QList<QTreeWidgetItem*> selection = m_list->selectedItems();
+	
     if (selection.count() == 0)
         return ;
 
     RG_DEBUG << "TempoView::slotEditDelete - deleting "
     << selection.count() << " items" << endl;
 
-    QPtrListIterator<QListWidgetItem> it(selection);
-    QListWidgetItem *listItem;
-    TempoListItem *item;
+//     QPtrListIterator<QTreeWidgetItem> it(selection);
+    
+	QTreeWidgetItem *listItem;
+	QTreeWidgetItem *it;
+	
+	TempoListItem *item;
     int itemIndex = -1;
 
     m_ignoreUpdates = true;
@@ -440,11 +487,14 @@ TempoView::slotEditDelete()
     // them off again.
     std::vector<Command *> commands;
 
-    while ((listItem = it.current()) != 0) {
-        item = dynamic_cast<TempoListItem*>((*it));
+//     while ((listItem = it.current()) != 0) 
+	it = m_list->topLevelItem(0);
+	do {
+        //item = dynamic_cast<TempoListItem*>((*it));
+		item = dynamic_cast<TempoListItem*>(it);
 
         if (itemIndex == -1)
-            itemIndex = m_list->itemIndex(*it);
+            itemIndex = m_list->indexOfTopLevelItem(it);
 
         if (item) {
             if (item->getType() == TempoListItem::TimeSignature) {
@@ -459,9 +509,11 @@ TempoView::slotEditDelete()
                 haveSomething = true;
             }
         }
-        ++it;
-    }
+       //++it;
+    }while (  (it = m_list->itemBelow(it))  );
 
+	
+	
     if (haveSomething) {
         MacroCommand *command = new MacroCommand
                                  (i18n("Delete Tempo or Time Signature"));
@@ -480,11 +532,11 @@ void
 TempoView::slotEditInsertTempo()
 {
     timeT insertTime = 0;
-    QPtrList<QListWidgetItem> selection = m_list->selectedItems();
+    QList<QTreeWidgetItem*> selection = m_list->selectedItems();
 
     if (selection.count() > 0) {
         TempoListItem *item =
-            dynamic_cast<TempoListItem*>(selection.getFirst());
+            dynamic_cast<TempoListItem*>(selection.first());
         if (item)
             insertTime = item->getTime();
     }
@@ -510,11 +562,11 @@ void
 TempoView::slotEditInsertTimeSignature()
 {
     timeT insertTime = 0;
-    QPtrList<QListWidgetItem> selection = m_list->selectedItems();
+    QList<QTreeWidgetItem*> selection = m_list->selectedItems();
 
     if (selection.count() > 0) {
         TempoListItem *item =
-            dynamic_cast<TempoListItem*>(selection.getFirst());
+            dynamic_cast<TempoListItem*>(selection.first());
         if (item)
             insertTime = item->getTime();
     }
@@ -545,11 +597,11 @@ TempoView::slotEdit()
 {
     RG_DEBUG << "TempoView::slotEdit" << endl;
 
-    QPtrList<QListWidgetItem> selection = m_list->selectedItems();
+    QList<QTreeWidgetItem*> selection = m_list->selectedItems();
 
     if (selection.count() > 0) {
         TempoListItem *item =
-            dynamic_cast<TempoListItem*>(selection.getFirst());
+            dynamic_cast<TempoListItem*>(selection.first());
         if (item)
             slotPopupEditor(item);
     }
@@ -559,19 +611,21 @@ void
 TempoView::slotSelectAll()
 {
     m_listSelection.clear();
-    for (int i = 0; m_list->itemAtIndex(i); ++i) {
+	for (int i = 0; m_list->topLevelItem(i); ++i) {
         m_listSelection.push_back(i);
-        m_list->setSelected(m_list->itemAtIndex(i), true);
-    }
+// 		m_list->setSelected(m_list->topLevelItem(i), true);
+		m_list->topLevelItem(i)->setSelected( true );
+	}
 }
 
 void
 TempoView::slotClearSelection()
 {
     m_listSelection.clear();
-    for (int i = 0; m_list->itemAtIndex(i); ++i) {
-        m_list->setSelected(m_list->itemAtIndex(i), false);
-    }
+	for (int i = 0; m_list->topLevelItem(i); ++i) {
+// 		m_list->setSelected(m_list->topLevelItem(i), false);
+		m_list->topLevelItem(i)->setSelected( false );
+	}
 }
 
 void
@@ -579,11 +633,16 @@ TempoView::setupActions()
 {
     EditViewBase::setupActions("tempoview.rc", false);
 
-    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QIcon icon(QPixmap(pixmapDir + "/toolbar/event-insert-tempo.png"));
+	IconLoader il;
+	QIcon icon;
+	
+//     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+// 	QIcon icon(QPixmap(pixmapDir + "/toolbar/event-insert-tempo.png"));
+	icon = il.load( "event-insert-tempo" );
 
-    QAction* qa_insert_tempo = new QAction(  AddTempoChangeCommand::getGlobalName(), dynamic_cast<QObject*>(Qt::Key_I) );
-			connect( qa_insert_tempo, SIGNAL(toggled()), dynamic_cast<QObject*>(Qt::Key_I), this );
+    QAction* qa_insert_tempo = new QAction(  AddTempoChangeCommand::getGlobalName(), dynamic_cast<QObject*>(this) );
+			connect( qa_insert_tempo, SIGNAL(toggled()), this, SLOT(slotEditInsertTempo()) );
+			qa_insert_tempo->setShortcut( QKeySequence(Qt::Key_I) );
 			qa_insert_tempo->setObjectName( "insert_tempo" );		//
 			//qa_insert_tempo->setCheckable( true );		//
 			qa_insert_tempo->setAutoRepeat( false );	//
@@ -592,11 +651,13 @@ TempoView::setupActions()
 			//### FIX: deallocate QAction ptr
 			
 
-    Q3CanvasPixmap pixmap(pixmapDir + "/toolbar/event-insert-timesig.png");
-    icon = QIcon(pixmap);
+//     Q3CanvasPixmap pixmap(pixmapDir + "/toolbar/event-insert-timesig.png");
+//     icon = QIcon(pixmap);
+	icon = il.load( "event-insert-timesig" );
 
-    QAction* qa_insert_timesig = new QAction(  AddTimeSignatureCommand::getGlobalName(), dynamic_cast<QObject*>(Qt::Key_G) );
-			connect( qa_insert_timesig, SIGNAL(toggled()), dynamic_cast<QObject*>(Qt::Key_G), this );
+    QAction* qa_insert_timesig = new QAction(  AddTimeSignatureCommand::getGlobalName(), dynamic_cast<QObject*>(this) );
+			connect( qa_insert_timesig, SIGNAL(toggled()), this, SLOT(slotEditInsertTimeSignature()) );
+			qa_insert_timesig->setShortcut( QKeySequence(Qt::Key_G) );
 			qa_insert_timesig->setObjectName( "insert_timesig" );		//
 			//qa_insert_timesig->setCheckable( true );		//
 			qa_insert_timesig->setAutoRepeat( false );	//
@@ -605,15 +666,19 @@ TempoView::setupActions()
 			//### FIX: deallocate QAction ptr
 			
 
-    pixmap.load(pixmapDir + "/toolbar/event-delete.png");
-    icon = QIcon(pixmap);
+//     pixmap.load(pixmapDir + "/toolbar/event-delete.png");
+//     icon = QIcon(pixmap);
+	icon = il.load( "event-delete" );
+
 
     QAction *qa_delete = new QAction( "&Delete", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_delete->setIcon(icon); 
 			connect( qa_delete, SIGNAL(triggered()), this, SLOT(slotEditDelete())  );
-
-    pixmap.load(pixmapDir + "/toolbar/event-edit.png");
-    icon = QIcon(pixmap);
+	
+	
+//     pixmap.load(pixmapDir + "/toolbar/event-edit.png");
+//     icon = QIcon(pixmap);
+	icon = il.load( "event-edit" );
 
     QAction *qa_edit = new QAction( "&Edit Item", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_edit->setIcon(icon); 
@@ -645,65 +710,70 @@ TempoView::setupActions()
     int timeMode = settings.value("timemode", 0).toInt() ;
     settings.endGroup();
 
-    KRadioAction *action;
+//     KRadioAction *action;
 
-    pixmap.load(pixmapDir + "/toolbar/time-musical.png");
-    icon = QIcon(pixmap);
+//     pixmap.load(pixmapDir + "/toolbar/time-musical.png");
+//     icon = QIcon(pixmap);
+	icon = il.load( "time-musical" );
 
-    action = QAction* qa_time_musical = new QAction( icon, i18n("&Musical Times"), qa_parent );
+    QAction* qa_time_musical = new QAction( icon, i18n("&Musical Times"), this );
 			connect( qa_time_musical, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotMusicalTime()) );
 			qa_time_musical->setObjectName( "time_musical" );
 			qa_time_musical->setCheckable( true );		//
 			qa_time_musical->setChecked( false );			//
 			qa_time_musical->setAutoRepeat( false );		//
-			qa_time_musical->setActionGroup( qag_timeMode );	// QActionGroup*
+// 			qa_time_musical->setActionGroup( qag_timeMode );	// QActionGroup*
 			//### FIX: deallocate QAction ptr
 
     if (timeMode == 0)
-        action->setChecked(true);
+		qa_time_musical->setChecked(true);
 
-    pixmap.load(pixmapDir + "/toolbar/time-real.png");
-    icon = QIcon(pixmap);
+//     pixmap.load(pixmapDir + "/toolbar/time-real.png");
+//     icon = QIcon(pixmap);
+	icon = il.load( "time-real" );
 
-    action = QAction* qa_time_real = new QAction( icon, i18n("&Real Times"), qa_parent );
+    QAction* qa_time_real = new QAction( icon, i18n("&Real Times"), this );
 			connect( qa_time_real, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotRealTime()) );
 			qa_time_real->setObjectName( "time_real" );
 			qa_time_real->setCheckable( true );		//
 			qa_time_real->setChecked( false );			//
 			qa_time_real->setAutoRepeat( false );		//
-			qa_time_real->setActionGroup( qag_timeMode );	// QActionGroup*
+// 			qa_time_real->setActionGroup( qag_timeMode );	// QActionGroup*
 			//### FIX: deallocate QAction ptr
 
     if (timeMode == 1)
-        action->setChecked(true);
+		qa_time_real->setChecked(true);
 
-    pixmap.load(pixmapDir + "/toolbar/time-raw.png");
-    icon = QIcon(pixmap);
+//     pixmap.load(pixmapDir + "/toolbar/time-raw.png");
+//     icon = QIcon(pixmap);
+	icon = il.load( "time-raw" );
 
-    action = QAction* qa_time_raw = new QAction( icon, i18n("Ra&w Times"), qa_parent );
+    QAction* qa_time_raw = new QAction( icon, i18n("Ra&w Times"), this );
 			connect( qa_time_raw, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotRawTime()) );
 			qa_time_raw->setObjectName( "time_raw" );
 			qa_time_raw->setCheckable( true );		//
 			qa_time_raw->setChecked( false );			//
 			qa_time_raw->setAutoRepeat( false );		//
-			qa_time_raw->setActionGroup( qag_timeMode );	// QActionGroup*
+// 			qa_time_raw->setActionGroup( qag_timeMode );	// QActionGroup*
 			//### FIX: deallocate QAction ptr
 
     if (timeMode == 2)
-        action->setChecked(true);
+		qa_time_raw->setChecked(true);
 
-    createGUI(getRCFileName());
+    rgTempQtIV->createGUI( qStrToCharPtrUtf8(getRCFileName()), 0);
 }
 
 void
 TempoView::initStatusBar()
 {
-    KStatusBar* sb = statusBar();
+    QStatusBar* sb = statusBar();
 
-    sb->addItem(KTmpStatusMsg::getDefaultMsg(),
-                   KTmpStatusMsg::getDefaultId(), 1);
-    sb->setItemAlignment(KTmpStatusMsg::getDefaultId(),
-                         AlignLeft | AlignVCenter);
+	sb->showMessage( KTmpStatusMsg::getDefaultMsg() );
+	
+// 	sb->addItem(KTmpStatusMsg::getDefaultMsg(),
+//                    KTmpStatusMsg::getDefaultId(), 1);
+//     sb->setItemAlignment(KTmpStatusMsg::getDefaultId(),
+//                          AlignLeft | AlignVCenter);
 }
 
 QSize
@@ -726,7 +796,8 @@ TempoView::readOptions()
 
     EditViewBase::readOptions();
     m_filter = settings.value("filter", m_filter).toInt() ;
-    m_list->restoreLayout(TempoViewLayoutConfigGroupName);
+	
+//     m_list->restoreLayout(TempoViewLayoutConfigGroupName);	//&&&
 
     settings.endGroup();
 }
@@ -738,7 +809,8 @@ TempoView::slotSaveOptions()
     settings.beginGroup( TempoViewConfigGroup );
 
     settings.setValue("filter", m_filter);
-    m_list->saveLayout(TempoViewLayoutConfigGroupName);
+	
+//     m_list->saveLayout(TempoViewLayoutConfigGroupName);	//&&&
 
     settings.endGroup();
 }
@@ -836,7 +908,7 @@ TempoView::slotRawTime()
 }
 
 void
-TempoView::slotPopupEditor(QListWidgetItem *qitem)
+TempoView::slotPopupEditor(QTreeWidgetItem *qitem)
 {
     TempoListItem *item = dynamic_cast<TempoListItem *>(qitem);
     if (!item)

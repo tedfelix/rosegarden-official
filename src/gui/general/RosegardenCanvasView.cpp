@@ -28,6 +28,7 @@
 #include <QCursor>
 #include <QPoint>
 #include <QRect>
+#include <QScrollArea>
 #include <QScrollBar>
 #include <QSize>
 #include <QSizePolicy>

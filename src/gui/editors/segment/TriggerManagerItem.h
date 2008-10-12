@@ -18,28 +18,26 @@
 #ifndef _RG_TRIGGERMANAGERITEM_H_
 #define _RG_TRIGGERMANAGERITEM_H_
 
-#include <QListWidget>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
+
 
 #include "base/Event.h"
 #include "base/TriggerSegment.h"
 
+
 namespace Rosegarden {
 
-class TriggerManagerItem : public QListWidgetItem
+class TriggerManagerItem : public QTreeWidgetItem
 {
 public:
-    TriggerManagerItem(QListWidget * parent, QString label1, 
-		      QString label2 = QString::null, 
-		      QString label3 = QString::null,
-		      QString label4 = QString::null, 
-		      QString label5 = QString::null, 
-		      QString label6 = QString::null, 
-		      QString label7 = QString::null, 
-		      QString label8 = QString::null):
-        QListWidgetItem(parent, label1, label2, label3, label4,
-                      label5, label6, label7, label8) { ; }
+    TriggerManagerItem(QTreeWidget * parent, 
+						QStringList labels
+					  ):
+        QTreeWidgetItem(parent, labels ){ ; }
+	
 
-    virtual int compare(QListWidgetItem * i, int col, bool ascending) const;
+    virtual int compare(QTreeWidgetItem * i, int col, bool ascending) const;
 
     void setRawDuration(timeT raw) { m_rawDuration = raw; }
     timeT getRawDuration() const { return m_rawDuration; }

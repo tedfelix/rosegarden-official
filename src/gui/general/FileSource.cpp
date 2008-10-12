@@ -65,7 +65,7 @@ FileSource::FileSource(QString fileOrUrl, QProgressDialog *progress) :
 #endif
 
     if (!canHandleScheme(m_url)) {
-        std::cerr << "FileSource::FileSource: ERROR: Unsupported scheme in URL \"" << m_url.toString().toStdString() << "\"" << std::endl;
+        std::cerr << "FileSource::FileSource: ERROR: Unsupported scheme in URL \"" << qstrtostr(m_url.toString()) << "\"" << std::endl;
         m_errorString = tr("Unsupported scheme in URL");
         return;
     }
@@ -84,7 +84,7 @@ FileSource::FileSource(QString fileOrUrl, QProgressDialog *progress) :
             // was human-readable.  Let's try again, this time
             // assuming it was already encoded.
             std::cerr << "FileSource::FileSource: Failed to retrieve URL \""
-                      << fileOrUrl.toStdString() 
+                      << qstrtostr( fileOrUrl )
                       << "\" as human-readable URL; "
                       << "trying again treating it as encoded URL"
                       << std::endl;
@@ -125,11 +125,11 @@ FileSource::FileSource(QUrl url, QProgressDialog *progress) :
     m_refCounted(false)
 {
 #ifdef DEBUG_FILE_SOURCE
-    std::cerr << "FileSource::FileSource(" << url.toString().toStdString() << ") [as url]" << std::endl;
+    std::cerr << "FileSource::FileSource(" << qstrtostr(url.toString()) << ") [as url]" << std::endl;
 #endif
 
     if (!canHandleScheme(m_url)) {
-        std::cerr << "FileSource::FileSource: ERROR: Unsupported scheme in URL \"" << m_url.toString().toStdString() << "\"" << std::endl;
+        std::cerr << "FileSource::FileSource: ERROR: Unsupported scheme in URL \"" << qstrtostr(m_url.toString()) << "\"" << std::endl;
         m_errorString = tr("Unsupported scheme in URL");
         return;
     }
@@ -152,11 +152,11 @@ FileSource::FileSource(const FileSource &rf) :
     m_refCounted(false)
 {
 #ifdef DEBUG_FILE_SOURCE
-    std::cerr << "FileSource::FileSource(" << m_url.toString().toStdString() << ") [copy ctor]" << std::endl;
+    std::cerr << "FileSource::FileSource(" << qstrtostr(m_url.toString()) << ") [copy ctor]" << std::endl;
 #endif
 
     if (!canHandleScheme(m_url)) {
-        std::cerr << "FileSource::FileSource: ERROR: Unsupported scheme in URL \"" << m_url.toString().toStdString() << "\"" << std::endl;
+        std::cerr << "FileSource::FileSource: ERROR: Unsupported scheme in URL \"" << qstrtostr(m_url.toString()) << "\"" << std::endl;
         m_errorString = tr("Unsupported scheme in URL");
         return;
     }
@@ -188,7 +188,7 @@ FileSource::FileSource(const FileSource &rf) :
 FileSource::~FileSource()
 {
 #ifdef DEBUG_FILE_SOURCE
-    std::cerr << "FileSource(" << m_url.toString().toStdString() << ")::~FileSource" << std::endl;
+    std::cerr << "FileSource(" << qstrtostr(m_url.toString()) << ")::~FileSource" << std::endl;
 #endif
 
     cleanup();
