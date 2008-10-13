@@ -1,0 +1,41 @@
+ROSEGARDEN 1.7.3 (to be) RELEASED
+
+The Rosegarden team is proud to announce the release of version 1.7.3
+of Rosegarden, an audio and MIDI sequencer and musical notation editor
+for Linux.
+
+  http://www.rosegardenmusic.com/
+
+This is a bug fix release.
+
+====New Features====
+  * Emanuel 9051: Rosegarden can respond to live program and bank changes transmitted from, eg. your MIDI keyboard
+  * Rosegarden Handbook updates from Shelagh Manton
+  * (should I release the notation editor icons, or save them for 2.0?  I'm inclined to save them really, but that would be more work)
+
+
+====Significant Bug Fixes====
+ 
+  * Michael 9440: Fix multiple and single transposing recordings
+     * When recording to multiple transposing tracks simultaneously (eg. an Eb cornet, a Bb trumpet and an F horn, as set up in Track Parameters) the performance is now adjusted correctly for all tracks, rather than just the first track
+     * Fix a crash associated with the previous incorrect behavior
+  * Chris 9442: Harden up TrackId handling to avoid assorted crashes related to deletion of track 1 (ID 0)
+     * Make unset track IDs in MappedEvent etc default to something recognisably wrong, not just 0
+     * Handle disappeared track ID in track parameter box.
+     * Ensure track parameters box gets updated when a track is deleted
+     * Fix a bug in Composition -- track deleted notification should have happened when a track was detached as well, not just when it was deleted and destroyed
+  * Yves 9447: Fix a bug in TextEventDialog
+     * The problem occurred when "Lyric" was selected in the text combo. Selecting anything else in this combo didn't remove the verse spinbox.
+
+
+====Thanks to====
+Active translators for this release:
+  * N/A
+
+Other people who contributed to Rosegarden development:
+
+  * N/A
+
+People who contributed device files to the Rosegarden Library
+
+  * Greg Lyons

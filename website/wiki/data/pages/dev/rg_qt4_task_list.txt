@@ -1,8 +1,12 @@
-====== RG QT4 Port Development Task List ======
+====== RG Qt4 Port Development Task List ======
 
-See also: [[dev:notes_on_porting_to_qt4|Thoughts on porting to Qt4/KDE4]]
+See also:
 
-[[dev:directories_compiled|Directories that compile 100%]]
+  * [[dev:notes_on_porting_to_qt4|Thoughts on porting to Qt4/KDE4]]
+
+  * [[dev:directories_compiled|Directories that compile 100%]]
+
+  * [[dev:rg_qt4_action_management|Managing construction and property setup for menu actions etc]]
 
 ===== Summary =====
 This page is for the developers involved in the Rosegarden QT4 port.  The intent is to track each developers current task and to log their accomplishments.  Let's hope this works easily for everyone involved.
@@ -63,7 +67,7 @@ We're using a variety of comment flags that have special meanings.  Please see t
 ==== Chris ====
 === Current Tasks ===
 
-  * Replace KXMLGUI with something (more KXMLGUI? hard coding the menu structures? any opinions anyone?)
+  * Developer A and C roles in [[dev:rg_qt4_action_management]]
 
   * Review build log and look for "difficult" fixes
 
@@ -131,7 +135,6 @@ This set passes the Chris test.  Notes, clefs, and accidentals are done.  It wou
 
 ==== Yves ====
 === Current Tasks ===
-  * Port QGroupBox
   * Port QGridLayout
 
 === Planned Next Tasks ===
@@ -140,10 +143,13 @@ This set passes the Chris test.  Notes, clefs, and accidentals are done.  It wou
 === Recently Completed Tasks ===
   * manually fix the remaining QHBox and QVBox
   * Port QToolTip
+  * Port QGroupBox
 
 ==== Julie ===
 === Current Tasks ===
-    * Skeet Shooting, again.
+
+  * "Developer B" role described in [[dev:rg_qt4_action_management]]?
+  * Skeet Shooting, again.
 
 === Recently Completed Tasks ===
   * #3014 Remove QSettings argument from function declarations / definitions in .h / .cpp files. (Like Emanuel)

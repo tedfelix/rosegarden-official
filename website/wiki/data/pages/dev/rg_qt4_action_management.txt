@@ -1,0 +1,69 @@
+
+=====A plan for managing construction and property setup on QActions for menus and toolbars=====
+
+There are three "developer roles" here which can readily be done by different people with very little interaction -- so I suggest we do that, unless we can't find three, erm, "volunteers".
+
+====Developer A: Boilerplate code.====
+
+**Currently handled by: Chris** (I think I can mostly script this, in fact)
+
+**This task is almost complete -- I'll look at the Developer C task and then return to tidy up some loose ends later**
+
+Go through the code, particularly RosegardenGUIApp, MatrixView and NotationView.  Find all the cases where actions are constructed with fixed data (not the completely dynamic actions such as the note font menu -- those will need to continue having a full setup in the code).
+
+For each of these fixed actions, replace all the existing action setup code with the lines
+<code>
+   createAction("action_name", SLOT(slotWhatever()));
+</code>
+where ''"action_name"'' is the object name of the action and ''slotWhatever()'' is the slot that it invokes.  These must be the same as they were in the KDE3 version (particularly the action name, which Developer B will be relying on).
+
+Remove any code that sets the action label, icon, shortcut, action group, or toggleable status for these actions.  Remove any code that places the actions into menus or toolbars (unless it looks like it's doing something clever!).
+
+Where we used to call ''KStandardAction'' functions to create the standard e.g. file menu actions, we will need new actions created explicitly using the ''newAction'' function as above, and connected to the same slots.  These should have the same action names as the old KDE3 actions, which you can see here:
+
+[[http://developer.kde.org/documentation/library/3.3-api/kdeui/html/kstdaction__p_8h-source.html]]
+
+(see the ''psName'' field of each structure definition).  That way we ensure consistency with other action names and across files, and make sure everyone knows what they are (once again, Developer B will need to know these).
+
+Finally, calls to ''stateChanged("state_name", KXMLGUIClient::StateReverse)'' please change to ''leaveActionState("state_name");'' and calls to ''stateChanged("state_name", KXMLGUIClient::StateNoReverse)'' please
+change to ''enterActionState("state_name")''.
+
+If anything is not clear about what to do with any of the actions, please discuss it -- it's possible there will be all sorts of special cases and problems.
+
+
+====Developer B: GUI definition files.====
+
+**Currently handled by: Julie**
+
+For each of the .rc files in ''src/gui/ui'', but first and foremost ''rosegardenui.rc'', ''matrix.rc'' and ''notation.rc'', find the first occurrence of each named action, and add new XML attributes describing the label, icon name, shortcut, action (radio) group if necessary, and toggleable status if necessary, as follows:
+
+Change e.g.
+<code>
+<Action name="open_in_event_list"/>
+</code>
+to e.g.
+<code>
+<Action name="open_in_event_list" text="Open in &amp;Event List Editor" icon="eventlist"/>
+</code>
+That example does not have a shortcut or radio group and is not toggleable.  If the action has a shortcut, add a ''shortcut="text"'' attribute where text is a shortcut description using the syntax accepted by ''QKeySequence'', e.g. "Ctrl+L".  If the action is in a radio group (i.e. appears in the GUI as one of a set of mutually exclusive actions), add a ''group="group_name"'' attribute where group_name is something that you can make up that is vaguely relevant to the group and not used for any other group.  If the action is checkable (toggleable), add ''checkable="true"'' (avoids ambiguity about spelling of "toggleable"!).
+
+The labels, icons and key sequences must match those used in the existing Rosegarden in US English locale.  Gleaning these from the source code can sometimes be tricky; they're quite dispersed.  For the labels in particular the easiest thing may even be to run up RG in US English and just copy what you see in the GUI (don't forget to put &amp; before the underscored letter, and make sure you include "..." at the end where it appears in the GUI and nowhere else).
+
+Some actions appear in the menus but not in the .rc files.  Many of these will be KDE standard actions (File|Open etc).  These need to be added to the .rc files in the proper places using the action names, labels, and icon names found here:
+
+[[http://developer.kde.org/documentation/library/3.3-api/kdeui/html/kstdaction__p_8h-source.html]]
+
+and the shortcuts that appear in the GUI.
+
+Where an action appears in the file more than once (e.g. in a menubar and toolbar, or in a menubar and <State> element), leave the second and subsequent occurrences just as they are -- all this extra information only needs to appear the first time.  Leave the <State> elements completely unchanged, in fact (for the moment).
+
+
+====Developer C: Action loading code.====
+
+**Currently handled by: Chris**
+
+Implement the ''createAction'', ''enterActionState'' and ''leaveActionState'' functions for use by Developer A.
+
+Implement a new ''createGUI'' function that loads the XML and sets up the actions into menus and so on appropriately.
+
+

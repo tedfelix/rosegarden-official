@@ -25,17 +25,15 @@ Rosegarden uses the ALSA (Advanced Linux Sound Architecture) soundcard drivers. 
 
 ====Is it available in my language?====
 
-Translations are included for Russian, German, Spanish, French, Italian, Estonian, Welsh, Swedish, Dutch, Japanese, simplified Chinese, Czech, Catalan and Finnish.
+Fully complete translations are usually provided for British English, Finnish, French, Japanese and Spanish with each public release.  Translations for Czech, Dutch, Italian, Swedish, and Russian are usually substantially complete.  Translations for several other languages exist in various states of disrepair, with German tending to be toward the more complete end of the spectrum, and Welsh at rock bottom with no updates since before Rosegarden 1.0 was released.
 
-These translations are provided and maintained by volunteer contributors, and so they may not always be up to date with the current state of the GUI.
+These translations are provided and maintained by volunteer contributors, and most contributors tend to come and go pretty randomly.  We have had real trouble attracting and keeping translators, and the most complete translations are usually updated by Rosegarden developers who have to double as translators on top of their other responsibilities.
 
 If you can help out with translating musical or technical documentation (no programming required, but it's quite hard work), please let us know!
 
 You may look at the wiki page dedicated to [[translator:Add or update translation|adding or updating translation]].
 
 See also docs/howtos/i18n.txt in SVN if you are interested in the technical aspects of translation.
-
-
 
 ====Rosegarden apparently saves in a binary format, where can I find the format definition ?====
 

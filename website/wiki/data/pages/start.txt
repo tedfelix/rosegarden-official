@@ -6,14 +6,15 @@ If you wish to add any new documentation or update anything in here, please crea
 
 Note that developer pages are in the "dev:" namespace, and pages for translators are in the "translator:" namespace.  General user pages do not have any particular namespace; call them whatever you like.
 
-===== The QT4 Port =====
-We are trying to wind down activity on the main QT3/KDE3 line of code in trunk/, and encourage everyone with an interest in Rosegarden to join in with the effort to port to QT4 (probably with some KDE4 classes, although we might eventually wind up with pure QT4, depending on how things go.)  QT4 has been out for some time, and now that KDE4 is finally  out, it won't be long before distros dump support for QT3 and KDE3 libraries.  When that happens, Rosegarden is screwed.
+===== The Qt4 Port =====
+
+We are trying to wind down activity on the main Qt3/KDE3 line of code in trunk/, and encourage everyone with an interest in Rosegarden to join in with the effort to port to Qt4 (probably with some KDE4 classes, although we might eventually wind up with pure Qt4, depending on how things go.)  Qt4 has been out for some time, and now that KDE4 is finally  out, it won't be long before distros dump support for Qt3 and KDE3 libraries.  When that happens, Rosegarden is screwed.
 
 While it is more fun to talk about how we should improve the mute function or add new widgets to the GUI to do exciting and useful new things, the bottom line is that none of that serves any purpose over time if the whole of Rosegarden is allowed to fall into a state where it can't run on contemporary distros.
 
 It is easier for people who aren't core developers to sit back and wait for this to get done, so they can see the result, but the fact is we don't have enough core developers, and the developers we have don't have enough spare time. This port will not get done without a lot of help, and there is no body of developers out there in the world who will come riding along on white stallions to rescue this project.  Teams of people work on KDE itself, but we are not a part of KDE, and they will not help us.  Teams of people work on the distros that include us among their packages, but they will not help us either.  We have to help ourselves, and this means we need you!
 
-Start here:  [[dev:notes_on_porting_to_qt4|The QT4 Rewrite Slog]]
+Start here:  [[dev:notes_on_porting_to_qt4|The Qt4 Rewrite Slog]]
 
 ===== Pages for Users =====
 
@@ -40,10 +41,11 @@ Start here:  [[dev:notes_on_porting_to_qt4|The QT4 Rewrite Slog]]
 
   * [[dev:Future Plans|Future Plans]]
   
-  * Plans for [[dev:2.0]]
-  * Plans for [[dev:1.8.0|1.7.2]]
-  * Things Done For [[dev:1.7.0]]
-  * Things Done For [[dev:1.6.0]]
+  * Future release notes for [[dev:2.0|200]]
+  * Future release notes for [[dev:1.7.3]]
+  * Release notes for [[dev:1.8.0|1.7.2]]
+  * Release notes for [[dev:1.7.0]]
+  * Release notes for [[dev:1.6.0]]
 
 **Metrics**
 

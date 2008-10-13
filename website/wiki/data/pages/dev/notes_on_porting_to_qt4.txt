@@ -7,9 +7,12 @@ See also:
   * [[http://websvn.kde.org/*checkout*/trunk/KDE/kdelibs/KDE4PORTING.html|Porting from KDE3 to KDE4]]
   * [[cases_that_we_know_require_hand_coding|Cases we know will require hand editing of the code]]
   * [[dev:notes_on_porting_to_qt4_examples|Porting RG, qt3->qt4 *Examples*]]
-  * [[dev:rg_qt4_task_list|List of current and completed developer tasks for RG QT4 port]]
+  * [[dev:rg_qt4_task_list|List of current and completed developer tasks for RG Qt4 port]]
+  * [[dev:rg_qt4_dialogs|Comments on dialogs and the buttons in them]]
+
 =====Work so far=====
-[[dev:rg_qt4_task_list|List of current and completed developer tasks for RG QT4 port]]
+[[dev:rg_qt4_task_list|List of current and completed developer tasks for RG Qt4 port]]
+
 =====Structuring the work=====
 
 Four sorts of work here:

@@ -9,6 +9,4 @@ Complete articles written by users for users.
 
   * [[Setting up the FluidR3_GM.sf2 for timidity]]: may need some tweaking. SOM
 
-  * [[Chord names for LilyPond export]]: Syntax to use when entering chord names for LilyPond Export. SOM
-
   * [[Keystrokes]]: Using keystrokes for workflow continuity.

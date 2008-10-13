@@ -1,0 +1,34 @@
+
+=====Comments on our use of dialogs, with regard to the Qt4 port=====
+
+(Michael wrote)
+<code>
+>  I don't care about KDialog vs. QDialog though, and if possible, could we get
+>  rid of all the stupid [redacted] Apply buttons except for the ones that actually
+>  make sense?  KDE3 is full of Apply buttons that are totally stupid, just like
+>  Windows.  I know dozens of people who think they have to click Apply and then
+>  OK instead of just clicking the [redacted] OK button.  It drives me nuts, and
+>  we're full of this kind of nonsense too, which I always assumed was from
+>  KDialogBase.
+</code>
+
+If you're making a "settings" dialog -- anything where you may want to fiddle with something, try it (or save it half-completed for paranoia purposes), fiddle with it again etc -- then you only really have two choices: instant-apply (changes take effect as soon as you make them) à la Gnome and OS/X, or a separate non-closing Apply button à la KDE
+and Windows.  In the first case, you should have a single Close button; in the second, you need Apply, OK and Cancel.  If you just give the user OK and Cancel, they have no way to find out what their change will do until it's too late and the dialog has gone.
+
+In many of our "settings" dialogs we do Apply/OK/Cancel and make it so that nothing actually changes until you Apply (config dialogs, metronome dialog etc).  We're not consistent though -- e.g. the Manage MIDI Devices dialog is instant-apply (changes take effect as soon as you make them).  And the bank editor has Apply, Reset and Close, which
+even confuses me.  Of those, the metronome and bank editor should probably be instant-apply (though I'm not sure where that would leave Undo, in the case of the bank editor... that whole dialog is so horrible that it's hard to know where to begin).
+
+The other sort of dialog is the "action" dialog, the sort that doesn't have any effect until you finish describing what you want and OK it -- e.g. inserting a clef, or exporting to a file format.  In that situation OK/Cancel is right.  Most of the time we get that one right -- it's easier than the settings case.  Not always though: see Remap
+Instruments, which has OK, Apply and Cancel where it should have OK and Cancel (and even if the buttons were right, they'd still be in the wrong order).
+
+So it all depends on the dialog... we should list the dialogs that are "wrong" and try to sort them out.
+
+Note that QDialog also does the cunning trick of re-ordering the buttons if running under GNOME or on a Mac where people expect OK to be on the right.  I assume the KDE4 KDialog will also inherit that behaviour.
+
+====Which dialogs will eventually need fixing?====
+
+  * The Bank editor -- Apply, Reset and Close -- huh?  How should this have been done?
+
+  * Remap Instruments -- OK, Apply and Cancel, should be OK and Cancel
+
+  * //What else...?//
