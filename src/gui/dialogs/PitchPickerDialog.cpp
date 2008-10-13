@@ -47,7 +47,9 @@ PitchPickerDialog::PitchPickerDialog(QDialogButtonBox::QWidget *parent, int init
     vBoxLayout->addWidget(frame);
     vBox->setLayout(vBoxLayout);
 
-    QGridLayout *layout = new QGridLayout(frame, 4, 3, 10, 5);
+    frame->setContentsMargins(10, 10, 10, 10);
+    QGridLayout *layout = new QGridLayout(frame);
+    layout->setSpacing(5);
 
     m_pitch = new PitchChooser(text, frame, initialPitch);
     layout->addWidget(m_pitch, 0, 0, 0- 0+1, 2- 1, Qt::AlignHCenter);

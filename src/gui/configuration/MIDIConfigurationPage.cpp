@@ -71,11 +71,13 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     // ---------------- General tab ------------------
     //
     QFrame *frame = new QFrame(m_tabWidget);
-    QGridLayout *layout = new QGridLayout(frame, 9, 4, 10, 5);
+    frame->setContentsMargins(10, 10, 10, 10);
+    QGridLayout *layout = new QGridLayout(frame);
+    layout->setSpacing(5);
 
     int row = 0;
 
-    layout->setRowSpacing(row, 15);
+    layout->setRowMinimumHeight(row, 15);
     ++row;
 
     QLabel *label = 0;
@@ -83,8 +85,8 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     QSettings settings;
     settings.beginGroup( GeneralOptionsConfigGroup );
 
-    layout->addMultiCellWidget(new QLabel(i18n("Base octave number for MIDI pitch display"),
-					  frame), row, row, 0, 1);
+    layout->addWidget(new QLabel(i18n("Base octave number for MIDI pitch display"),
+                                 frame), row, 0, 1, 2);
     
     m_midiPitchOctave = new QSpinBox(frame);
     m_midiPitchOctave->setMaximum(10);
@@ -93,12 +95,12 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     layout->addWidget(m_midiPitchOctave, row, 2, row- row+1, 3- 3);
     ++row;
 
-    layout->setRowSpacing(row, 20);
+    layout->setRowMinimumHeight(row, 20);
     ++row;
 
     //### settings.beginGroup( GeneralOptionsConfigGroup );
-    layout->addMultiCellWidget(new QLabel(i18n("Always use default studio when loading files"),
-					  frame), row, row, 0, 1);
+    layout->addWidget(new QLabel(i18n("Always use default studio when loading files"),
+                                      frame), row, 0, 1, 2);
 
     m_studio = new QCheckBox(frame);
     m_studio->setChecked( qStrToBool( settings.value("alwaysusedefaultstudio", "false" ) ) );
@@ -136,7 +138,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     m_origTimer = m_doc->getCurrentTimer();
     QString currentTimer = settings.value("timer", m_origTimer).toString();
 
-    for (unsigned int i = 0; i < timers.size(); ++i) {
+    for (int i = 0; i < timers.size(); ++i) {
         m_timer->addItem(timers[i]);
         if (timers[i] == currentTimer)
             m_timer->setCurrentIndex(i);
@@ -144,7 +146,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(
 
     ++row;
 
-    layout->setRowSpacing(row, 20);
+    layout->setRowMinimumHeight(row, 20);
     ++row;
 
     //### settings.beginGroup( SequencerOptionsConfigGroup );
@@ -202,11 +204,13 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     //  -------------- Synchronisation tab -----------------
     //
     frame = new QFrame(m_tabWidget);
-    layout = new QGridLayout(frame, 7, 2, 10, 5);
+    frame->setContentsMargins(10, 10, 10, 10);
+    layout = new QGridLayout(frame);
+    layout->setSpacing(5);
 
     row = 0;
 
-    layout->setRowSpacing(row, 15);
+    layout->setRowMinimumHeight(row, 15);
     ++row;
 
     // MIDI Clock and System Realtime Messages

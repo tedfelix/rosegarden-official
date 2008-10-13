@@ -53,8 +53,9 @@ ColourConfigurationPage::ColourConfigurationPage(RosegardenGUIDoc *doc,
         : TabbedConfigurationPage(doc, parent, name)
 {
     QFrame *frame = new QFrame(m_tabWidget);
-    QGridLayout *layout = new QGridLayout(frame, 2, 2,
-                                          10, 5);
+    frame->setContentsMargins(10, 10, 10, 10);
+    QGridLayout *layout = new QGridLayout(frame);
+    layout->setSpacing(5);
 
     m_map = m_doc->getComposition().getSegmentColourMap();
 
@@ -93,7 +94,7 @@ ColourConfigurationPage::ColourConfigurationPage(RosegardenGUIDoc *doc,
 void
 ColourConfigurationPage::slotTextChanged(unsigned int index, QString string)
 {
-    m_map.modifyNameByIndex(m_listmap[index], string.ascii());
+    m_map.modifyNameByIndex(m_listmap[index], std::string(string.toAscii()));
     m_colourtable->populate_table(m_map, m_listmap);
 }
 

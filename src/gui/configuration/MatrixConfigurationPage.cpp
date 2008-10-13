@@ -40,9 +40,9 @@ MatrixConfigurationPage::MatrixConfigurationPage(QWidget *parent,
         TabbedConfigurationPage(parent, name)
 {
     QFrame *frame = new QFrame(m_tabWidget);
-    QGridLayout *layout = new QGridLayout(frame,
-                                          4, 2,  // nbrow, nbcol
-                                          10, 5);
+    frame->setContentsMargins(10, 10, 10, 10);
+    QGridLayout *layout = new QGridLayout(frame);
+    layout->setSpacing(5);
 
     layout->addWidget(new QLabel("Nothing here yet", frame), 0, 0);
 

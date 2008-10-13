@@ -60,7 +60,9 @@ AudioPropertiesPage::AudioPropertiesPage(RosegardenGUIDoc *doc,
     AudioFileManager &afm = doc->getAudioFileManager();
 
     QFrame *frame = new QFrame(m_tabWidget);
-    QGridLayout *layout = new QGridLayout(frame, 4, 3, 10, 5);
+    frame->setContentsMargins(10, 10, 10, 10);
+    QGridLayout *layout = new QGridLayout(frame);
+    layout->setSpacing(5);
     layout->addWidget(new QLabel(i18n("Audio file path:"), frame), 0, 0);
     m_path = new QLabel(QString(afm.getAudioPath().c_str()), frame);
     layout->addWidget(m_path, 0, 1);
@@ -82,6 +84,7 @@ AudioPropertiesPage::AudioPropertiesPage(RosegardenGUIDoc *doc,
     layout->addWidget(m_minutesAtStereo, 2, 1, Qt::AlignCenter);
 
     layout->setRowStretch(3, 2);
+    frame->setLayout(layout);
 
     calculateStats();
 

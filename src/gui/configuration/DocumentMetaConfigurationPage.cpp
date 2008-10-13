@@ -119,9 +119,9 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
     }
 
     QFrame *frame = new QFrame(m_tabWidget);
-    QGridLayout *layout = new QGridLayout(frame,
-                             6, 2,
-                             10, 5);
+    frame->setContentsMargins(10, 10, 10, 10);
+    QGridLayout *layout = new QGridLayout(frame);
+    layout->setSpacing(5);
 
     layout->addWidget(new QLabel(i18n("Filename:"), frame), 0, 0);
     layout->addWidget(new QLabel(doc->getTitle(), frame), 0, 1);
@@ -154,7 +154,9 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
     addTab(frame, i18n("Statistics"));
 
     frame = new QFrame(m_tabWidget);
-    layout = new QGridLayout(frame, 1, 1, 10, 5);
+    frame->setContentsMargins(10, 10, 10, 10);
+    layout = new QGridLayout(frame);
+    layout->setSpacing(5);
 
 	QTableWidget *table = new QTableWidget(1, 11, frame); // , "Segment Table"
 	//table->setSelectionMode(QTableWidget::NoSelection);

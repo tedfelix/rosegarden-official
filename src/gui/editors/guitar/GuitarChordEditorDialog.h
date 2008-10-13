@@ -19,7 +19,6 @@
 #define _RG_GUITARCHORDEDITOR2_H_
 
 #include <QDialog>
-#include <QDialogButtonBox>
 
 #include "Chord.h"
 #include "ChordMap.h"

@@ -28,6 +28,7 @@
 #include <kstandarddirs.h>
 #include <QLayout>
 #include <QLabel>
+#include <QDialogButtonBox>
 
 namespace Rosegarden
 {
@@ -39,18 +40,16 @@ GuitarChordEditorDialog::GuitarChordEditorDialog(Guitar::Chord& chord, const Gui
 {
     setModal(true);
     setWindowTitle(i18n("Guitar Chord Editor"));
-
-#warning Dialog needs QDialogButtonBox(Ok|QDialogButtonBox::Cancel)
-
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
     QWidget *page = new QWidget(this);
-//    setMainWidget(page);
-	QVBoxLayout *mainLayout = new QVBoxLayout(this);
-	mainLayout->addWidget(page);
-	
-    QGridLayout *topLayout = new QGridLayout(page, 7, 2); //, spacingHint());
+    QGridLayout *topLayout = new QGridLayout(page);
+    metagrid->addWidget(page, 0, 0);
 
     topLayout->addWidget(new QLabel(i18n("Start fret"), page), 0, 1);
-    m_startFret = new QSpinBox(1, 24, 1, page);
+    m_startFret = new QSpinBox(page);
+    m_startFret->setRange(1, 24);
+    m_startFret->setSingleStep(1);
     topLayout->addWidget(m_startFret, 1, 1);
     
     connect(m_startFret, SIGNAL(valueChanged(int)),
@@ -61,7 +60,8 @@ GuitarChordEditorDialog::GuitarChordEditorDialog(Guitar::Chord& chord, const Gui
     topLayout->addWidget(m_rootNotesList, 3, 1);
     
     topLayout->addWidget(new QLabel(i18n("Extension"), page), 4, 1);
-    m_ext = new QComboBox(true, page);
+    m_ext = new QComboBox(page);
+    m_ext->setEditable(true);
     topLayout->addWidget(m_ext, 5, 1);
 
     topLayout->addItem(new QSpacerItem(1, 1), 6, 1);
@@ -76,15 +76,21 @@ GuitarChordEditorDialog::GuitarChordEditorDialog(Guitar::Chord& chord, const Gui
     QStringList rootList = m_chordMap.getRootList();
     if (rootList.count() > 0) {
         m_rootNotesList->addItems(rootList);
-        m_rootNotesList->setCurrentIndex(rootList.findIndex(m_chord.getRoot()));
+        m_rootNotesList->setCurrentIndex(rootList.indexOf(m_chord.getRoot()));
     }
     
     QStringList extList = m_chordMap.getExtList(m_chord.getRoot());
     if (extList.count() > 0) {
         m_ext->addItems(extList);
-        m_ext->setCurrentIndex(extList.findIndex(m_chord.getExt()));
+        m_ext->setCurrentIndex(extList.indexOf(m_chord.getExt()));
     }
-    
+
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok |
+                                                       QDialogButtonBox::Cancel);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 void

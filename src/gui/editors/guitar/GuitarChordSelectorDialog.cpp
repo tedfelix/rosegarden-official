@@ -31,6 +31,7 @@
 #include <QPushButton>
 #include <QLabel>
 #include <QMessageBox>
+#include <QDialogButtonBox>
 
 #include <klocale.h>
 //#include <kstandarddirs.h>
@@ -43,15 +44,11 @@ GuitarChordSelectorDialog::GuitarChordSelectorDialog(QWidget *parent)
 {
     setModal(true);
     setWindowTitle(i18n("Guitar Chord Selector"));
-
-#warning Dialog needs QDialogButtonBox(Ok|QDialogButtonBox::Cancel)
-
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
     QWidget *page = new QWidget(this);
-	QVBoxLayout *mainLayout = new QVBoxLayout();
-	mainLayout->addWidget(page);
-//    setMainWidget(page);
-    
-	QGridLayout *topLayout = new QGridLayout(page, 3, 4); //, spacingHint());
+    QGridLayout *topLayout = new QGridLayout(page);
+    metagrid->addWidget(page, 0, 0);
     
     topLayout->addWidget(new QLabel(i18n("Root"), page), 0, 0);
     m_rootNotesList = new QListWidget(page);
@@ -72,10 +69,11 @@ GuitarChordSelectorDialog::GuitarChordSelectorDialog(QWidget *parent)
     
     connect(m_chordComplexityCombo, SIGNAL(activated(int)),
             this, SLOT(slotComplexityChanged(int)));
-    
-    QVBoxLayout* vboxLayout = new QVBoxLayout(page, 5);
-    topLayout->addMultiCellLayout(vboxLayout, 1, 3, 2, 2);
-    vboxLayout->addWidget(m_chordComplexityCombo);    
+
+    page->setContentsMargins(5, 5, 5, 5);
+    QVBoxLayout* vboxLayout = new QVBoxLayout(page);
+    topLayout->addLayout(vboxLayout, 1, 2, 3, 1);
+    vboxLayout->addWidget(m_chordComplexityCombo);
     vboxLayout->addStretch(10);
     vboxLayout->addWidget(m_newFingeringButton); 
     vboxLayout->addWidget(m_deleteFingeringButton); 
@@ -101,6 +99,13 @@ GuitarChordSelectorDialog::GuitarChordSelectorDialog(QWidget *parent)
             this, SLOT(slotChordExtHighlighted(int)));
     connect(m_fingeringsList, SIGNAL(highlighted(QListWidgetItem*)),
             this, SLOT(slotFingeringHighlighted(QListWidgetItem*)));
+
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok |
+                                                       QDialogButtonBox::Cancel);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 void

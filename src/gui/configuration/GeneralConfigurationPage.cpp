@@ -72,11 +72,11 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
     // "Behavior" tab
     //
     frame = new QFrame(m_tabWidget);
-    layout = new QGridLayout(frame,
-                             6, 2,  // nbrow, nbcol
-                             10, 5);
+    frame->setContentsMargins(10, 10, 10, 10);
+    layout = new QGridLayout(frame);
+    layout->setSpacing(5);
 
-    layout->setRowSpacing(row, 15);
+    layout->setRowMinimumHeight(row, 15);
     ++row;
 
     layout->addWidget(new QLabel(i18n("Double-click opens segment in"),
@@ -170,7 +170,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
 #endif
     settings.beginGroup( GeneralOptionsConfigGroup );
 
-    layout->setRowSpacing(row, 20);
+    layout->setRowMinimumHeight(row, 20);
     ++row;
 
     layout->addWidget(new QLabel(i18n("Sequencer status"), frame), row, 0);
@@ -212,13 +212,13 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
     // "Appearance" tab
     //
     frame = new QFrame(m_tabWidget);
-    layout = new QGridLayout(frame,
-                                          7, 4,  // nbrow, nbcol -- one extra row improves layout
-                                          10, 5);
+    frame->setContentsMargins(10, 10, 10, 10);
+    layout = new QGridLayout(frame);
+    layout->setSpacing(5);
 
     row = 0;
 
-    layout->setRowSpacing(row, 15);
+    layout->setRowMinimumHeight(row, 15);
     ++row;
 
     layout->addWidget(new QLabel(i18n("Side-bar parameter box layout"),

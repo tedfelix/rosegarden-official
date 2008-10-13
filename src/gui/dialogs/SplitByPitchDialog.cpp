@@ -53,15 +53,17 @@ SplitByPitchDialog::SplitByPitchDialog(QDialogButtonBox::QWidget *parent) :
     vBoxLayout->addWidget(frame);
     vBox->setLayout(vBoxLayout);
 
-    QGridLayout *layout = new QGridLayout(frame, 4, 3, 10, 5);
+    frame->setContentsMargins(10, 10, 10, 10);
+    QGridLayout *layout = new QGridLayout(frame);
+    layout->setSpacing(5);
 
     m_pitch = new PitchChooser(i18n("Starting split pitch"), frame, 60);
     layout->addWidget(m_pitch, 0, 0, 0- 0+1, 2- 1, Qt::AlignHCenter);
 
     m_range = new QCheckBox(i18n("Range up and down to follow music"), frame);
-    layout->addMultiCellWidget(m_range,
-                               1, 1,  // fromRow, toRow
-                               0, 2  // fromCol, toCol
+    layout->addWidget(m_range,
+                               1, 0,  // fromRow, fromCol
+                               1, 3   // rowSpan, colSpan
                               );
 
     m_duplicate = new QCheckBox(i18n("Duplicate non-note events"), frame);

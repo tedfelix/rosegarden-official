@@ -23,7 +23,6 @@
 #include "ChordMap.h"
 
 #include <QDialog>
-#include <QDialogButtonBox>
 #include <QString>
 #include <vector>
 
@@ -44,7 +43,7 @@ class GuitarChordSelectorDialog : public QDialog
     enum { COMPLEXITY_BEGINNER, COMPLEXITY_COMMON, COMPLEXITY_ALL };
     
 public:
-	GuitarChordSelectorDialog(QDialogButtonBox::QWidget *parent=0);
+    GuitarChordSelectorDialog(QWidget *parent=0);
 
     void init();
 

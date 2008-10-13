@@ -74,7 +74,9 @@ AudioConfigurationPage::AudioConfigurationPage(
     //@@@ settings.beginGroup( SequencerOptionsConfigGroup );
 
     QFrame *frame = new QFrame(m_tabWidget);
-    QGridLayout *layout = new QGridLayout(frame, 7, 2, 10, 5);
+    frame->setContentsMargins(10, 10, 10, 10);
+    QGridLayout *layout = new QGridLayout(frame);
+    layout->setSpacing(5);
 
     QLabel *label = 0;
 
@@ -82,7 +84,7 @@ AudioConfigurationPage::AudioConfigurationPage(
 
     settings.beginGroup( GeneralOptionsConfigGroup );
 
-    layout->setRowSpacing(row, 15);
+    layout->setRowMinimumHeight(row, 15);
     ++row;
 
     layout->addWidget(new QLabel(i18n("Audio preview scale"),
@@ -177,15 +179,17 @@ AudioConfigurationPage::AudioConfigurationPage(
 #ifdef OFFER_JACK_START_OPTION
 
     frame = new QFrame(m_tabWidget);
-    layout = new QGridLayout(frame, 8, 4, 10, 5);
+    frame->setContentsMargins(10, 10, 10, 10);
+    layout = new QGridLayout(frame);
+    layout->setSpacing(5);
 
     row = 0;
 
-    layout->setRowSpacing(row, 15);
+    layout->setRowMinimumHeight(row, 15);
     ++row;
 
     label = new QLabel(i18n("Rosegarden can start the JACK audio daemon (jackd) for you automatically if it isn't already running when Rosegarden starts.\n\nThis is recommended for beginners and those who use Rosegarden as their main audio application, but it might not be to the liking of advanced users.\n\nIf you want to start JACK automatically, make sure the command includes a full path where necessary as well as any command-line arguments you want to use.\n\nFor example: /usr/local/bin/jackd -d alsa -d hw -r44100 -p 2048 -n 2\n\n"), frame);
-    label->setAlignment(Qt::TextWordWrap);
+    label->setWordWrap(true);
 
     layout->addWidget(label, row, 0, row- row+1, 3- 1);
     ++row;
@@ -300,7 +304,7 @@ AudioConfigurationPage::getBestAvailableAudioEditor()
         "audacity"
     };
 
-    for (int i = 0;
+    for (unsigned int i = 0;
          i < sizeof(candidates)/sizeof(candidates[0]) && result == "";
          i++) {
 
