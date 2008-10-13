@@ -1,0 +1,42 @@
+<html><head><title>Paste types</title><link rel="stylesheet" href="kde-default.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.67.2"><meta name="keywords" content="Rosegarden, sequencer, MIDI, audio, music, notation, score, KDE"><link rel="start" href="index.html" title="The Rosegarden Handbook"><link rel="up" href="notation-view.html" title="Chapter 10. The Notation editor"><link rel="prev" href="nv-tuplets.html" title="Triplets and other tuplets"><link rel="next" href="nv-adjustments.html" title="Adjusting Notation"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="GENERATOR" content="KDE XSL Stylesheet V1.13 using libxslt"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div style="background-image: url(top-middle.png); width: 100%; height: 131px;"><div style="position: absolute;                      right: 0px;"><img src="top-right-konqueror.png" style="margin: 0px" alt=""></div><div style="position: absolute;                         top: 25px;                          right: 100px;                          text-align: right;                          font-size: xx-large;                          font-weight: bold;                          text-shadow: #fff 0px 0px 5px;                          color: #444">Paste types</div></div><div style="margin-top: 20px; background-color: #white;                        color: black;                       margin-left: 20px;                        margin-right: 20px;"><div style="position: absolute;                          left: 20px;"><a accesskey="p" href="nv-tuplets.html">Prev</a></div><div style="position: absolute;                          right: 20px;"><a accesskey="n" href="nv-adjustments.html">Next</a></div><div class="navCenter">The Notation editor</div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="nv-paste-types"></a>Paste types</h2></div></div></div><p>
+	The meaning of “<span class="quote">cut and paste</span>” is less obvious for a music
+	editing program than it is for something like a word
+	processor in which the letters and words go in a simple
+	linear order.  Accordingly, <span class="application">Rosegarden</span>'s Notation editor
+	offers several different types of Paste operation, as well
+	as separate Cut and Cut and
+	  Close functions.
+      </p><p>
+	<div class="screenshot"><div xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="mediaobject"><hr><img src="rg-pastedialog.png" alt="Rosegarden's paste-type dialog"><hr></div></div>
+
+	The types of Paste operation are:</p><div class="variablelist"><dl><dt><span class="term">Restricted</span></dt><dd><p>Requires an existing gap (containing nothing but
+	      rests) of enough duration to completely contain the
+	      clipboard's contents.  The contents are pasted into
+	      the gap.  If there is no gap long enough, the paste
+	      is not carried out.
+	    </p><p>
+	      This is the default paste type.
+	    </p></dd><dt><span class="term">Simple</span></dt><dd><p>Erases enough events to make a gap long enough to
+	      paste into, and then pastes into that.  The pasted 
+	      events therefore completely replace any existing ones 
+	      in the time covered by the paste.
+	    </p></dd><dt><span class="term">Open and Paste</span></dt><dd><p>The opposite of Cut and
+		Close.  Makes room for the paste by moving all of the
+	      subsequent events further towards the end of the
+	      composition.
+	    </p></dd><dt><span class="term">Note Overlay</span></dt><dd><p>Carries out a paste in the way that it would
+	      happen if you entered each of the notes in the clipboard
+	      yourself using the notation editor: if there are other
+	      notes overlapping with them, the new or existing notes
+	      will be split into ties appropriately.
+	    </p></dd><dt><span class="term">Matrix Overlay</span></dt><dd><p>Carries out a paste in the way that it would
+	      happen if you entered each of the notes in the clipboard
+	      yourself using the matrix editor: the notes presently
+	      in the way of the paste will be ignored, allowing the new 
+	      notes to overlap arbitrarily with them.
+	    </p></dd></dl></div><p>All of these take effect at the current position of the 
+	insert cursor on the current staff.  To choose between the various 
+	paste types, use the Paste...
+	menu option (with dots) on the Edit menu.
+      </p></div><div style="background-color: #white; color: black;                  margin-top: 20px; margin-left: 20px;                  margin-right: 20px;"><div style="position: absolute; left: 20px;"><a accesskey="p" href="nv-tuplets.html">Prev</a></div><div style="position: absolute; right: 20px;"><a accesskey="n" href="nv-adjustments.html">Next</a></div><div align="center"><a accesskey="h" href="index.html">Home</a></div></div><div style="background-color: #white;   color: black;         margin-left: 20px;   margin-right: 20px;"><div class="navLeft">Triplets and other tuplets </div><div class="navRight"> Adjusting Notation</div><div class="navCenter"><a accesskey="u" href="notation-view.html">Up</a></div></div><br><br><div class="bannerBottom" style="background-image: url(bottom-middle.png);                                        background-repeat: x-repeat;                                         width: 100%;                                         height: 100px;                                         bottom:0px;"><div class="BannerBottomRight"><img src="bottom-right.png" style="margin: 0px" alt=""></div><div class="bannerBottomLeft"><img src="bottom-left.png" style="margin: 0px;" alt=""></div><div id="comments" style="position:relative; top: 5px; left: 1em; height:85px; width: 50%; color: #cfe1f6"><p>
+        </p></div></div></body></html>

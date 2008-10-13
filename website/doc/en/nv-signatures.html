@@ -1,0 +1,89 @@
+<html><head><title>Clef and key</title><link rel="stylesheet" href="kde-default.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.67.2"><meta name="keywords" content="Rosegarden, sequencer, MIDI, audio, music, notation, score, KDE"><link rel="start" href="index.html" title="The Rosegarden Handbook"><link rel="up" href="notation-view.html" title="Chapter 10. The Notation editor"><link rel="prev" href="nv-insertion.html" title="Inserting notes and rests"><link rel="next" href="nv-text.html" title="Text, Lyrics, and LilyPond directives"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="GENERATOR" content="KDE XSL Stylesheet V1.13 using libxslt"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div style="background-image: url(top-middle.png); width: 100%; height: 131px;"><div style="position: absolute;                      right: 0px;"><img src="top-right-konqueror.png" style="margin: 0px" alt=""></div><div style="position: absolute;                         top: 25px;                          right: 100px;                          text-align: right;                          font-size: xx-large;                          font-weight: bold;                          text-shadow: #fff 0px 0px 5px;                          color: #444">Clef and key</div></div><div style="margin-top: 20px; background-color: #white;                        color: black;                       margin-left: 20px;                        margin-right: 20px;"><div style="position: absolute;                          left: 20px;"><a accesskey="p" href="nv-insertion.html">Prev</a></div><div style="position: absolute;                          right: 20px;"><a accesskey="n" href="nv-text.html">Next</a></div><div class="navCenter">The Notation editor</div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="nv-signatures"></a>Clef and key</h2></div></div></div><p>The first thing to know about the way <span class="application">Rosegarden</span> handles
+	these is that time-related changes (tempos and time
+	signatures) are treated entirely differently from clefs and
+	keys. In order to simplify managing playback and recording as
+	well as notation, <span class="application">Rosegarden</span> requires that when the tempo or
+	time signature changes, it does so in all staffs at once.  You
+	can't have one staff in 2/4 and another in 6/8 simultaneously,
+	or one staff playing at 120 to the beat and another at 90.
+	This applies only to time: there is no such restriction on the
+	use of clef and key changes.  See also <a href="segment-view-tempo-timesig.html#tempo" title="Tempo in Rosegarden">Tempo in Rosegarden</a>.</p><p>To change the clef, key, tempo or time signature within a
+      notation editor window, position the <a href="nv-rulers.html" title="Rulers and cursors">insert cursor</a> at the point where you
+      want the change to happen, and use one of the Edit menu's Add
+      Clef Change..., Add Key Change..., Add Tempo Change... and Add
+      Time Signature Change... functions.  You will then see a dialog
+      box in which you can choose the particular clef, key, tempo or
+      time signature setting you want to apply, as follows.</p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="nv-signatures-clef"></a>Clef</h3></div></div></div><p>
+	  <div class="screenshot"><div xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="mediaobject"><hr><img src="rg-clefdialog.png" alt="Rosegarden's clef dialog"><hr></div></div>
+	</p><p>The dialog allows you to choose a clef, but also
+	  to choose how you want the clef to be applied, in
+	  cases where there are already some notes following
+	  the point where the clef is to be inserted.  You
+	  must choose one of the following:
+
+	  <div class="variablelist"><dl><dt><span class="term">Maintain current pitches</span></dt><dd><p>
+		  Any notes following the clef will keep
+		  their current performance pitches.
+		</p><p>
+		  For example, inserting a
+		  tenor clef in the middle of a previously
+		  treble-clef section will cause the notes following
+		  the clef to be moved an octave
+		  higher up the staff, because they will still have
+		  their treble-clef pitches.
+		</p></dd><dt><span class="term">Transpose into appropriate octave</span></dt><dd><p>
+		  Any notes following the clef will
+		  retain their pitch within the octave, but
+		  may be moved into a different octave to
+		  match the new clef, and therefore will play
+		  at a new pitch.
+		</p><p>
+		  For example, inserting a tenor clef in the
+		  middle of a previously treble-clef section
+		  will cause the notes following the clef to
+		  move by one staff line only to adjust to the new
+		  clef, but to play an octave lower than before.
+		</p></dd></dl></div>
+	  
+	</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="nv-signatures-key"></a>Key</h3></div></div></div><p>
+	  <div class="screenshot"><div xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="mediaobject"><hr><img src="rg-keysigdialog.png" alt="Rosegarden's key signature dialog"><hr></div></div>
+	</p><p>The dialog allows you to choose a key signature, but also
+	  to choose how you want the key signature to be applied.  You
+	  must choose among the following:
+	</p><div class="variablelist"><dl><dt><span class="term">Key signature</span></dt><dd><p>
+		  Used to dial up the actual key signature.  The dialog will
+		  attempt to analyze the tonality of the piece, and guess at
+		  the key signature if no key is already in effect at that
+		  point in the notation.
+		</p></dd><dt><span class="term">Key transposition</span></dt><dd><p>You must choose whether to transpose the key according
+		    to segment transposition, or to use the key exactly as
+		    specified.
+		</p><p>
+		  For example, if you are inserting a key of Bb major into a
+		  transposed Bb trumpet part that's sounding at a
+		  transposition of -2, you use this option to tell
+		  <span class="application">Rosegarden</span> whether the key of Bb you have entered should
+		  be written as a Bb (concert Ab), or should be transposed
+		  against the segment to result in the trumpet key of C major
+		  (concert Bb).
+		</p></dd><dt><span class="term">Scope</span></dt><dd><p>
+			You must choose whether to apply this key signature to
+			the current segment only, or to all segments, on all
+			tracks, at this time.
+		    </p><p>
+			If you elect to apply the change to all segments at
+			this time, the previous key transposition choice will
+			govern whether all segments receive the specified key,
+			or a key appropriately transposed segment by segment.
+			(This is a convenient way to deal with notation for
+			transposing instruments, because it frees you to think
+			of all keys in concert pitch, and allow <span class="application">Rosegarden</span>
+			to work out what key is used for what transposition.)
+		    </p></dd><dt><span class="term">Existing notes following key change</span></dt><dd><p>
+			You must choose whether any existing notes following
+			this key change will maintain their current pitches,
+			maintain their current accidentals in the key, or
+			whether Rosegarden should make an attempt to transpose
+			the part into the new key.
+		    </p></dd></dl></div></div></div><div style="background-color: #white; color: black;                  margin-top: 20px; margin-left: 20px;                  margin-right: 20px;"><div style="position: absolute; left: 20px;"><a accesskey="p" href="nv-insertion.html">Prev</a></div><div style="position: absolute; right: 20px;"><a accesskey="n" href="nv-text.html">Next</a></div><div align="center"><a accesskey="h" href="index.html">Home</a></div></div><div style="background-color: #white;   color: black;         margin-left: 20px;   margin-right: 20px;"><div class="navLeft">Inserting notes and rests </div><div class="navRight"> Text, Lyrics, and LilyPond directives</div><div class="navCenter"><a accesskey="u" href="notation-view.html">Up</a></div></div><br><br><div class="bannerBottom" style="background-image: url(bottom-middle.png);                                        background-repeat: x-repeat;                                         width: 100%;                                         height: 100px;                                         bottom:0px;"><div class="BannerBottomRight"><img src="bottom-right.png" style="margin: 0px" alt=""></div><div class="bannerBottomLeft"><img src="bottom-left.png" style="margin: 0px;" alt=""></div><div id="comments" style="position:relative; top: 5px; left: 1em; height:85px; width: 50%; color: #cfe1f6"><p>
+        </p></div></div></body></html>

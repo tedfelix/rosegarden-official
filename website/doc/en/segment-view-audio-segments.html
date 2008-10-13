@@ -1,0 +1,38 @@
+<html><head><title>Audio segments</title><link rel="stylesheet" href="kde-default.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.67.2"><meta name="keywords" content="Rosegarden, sequencer, MIDI, audio, music, notation, score, KDE"><link rel="start" href="index.html" title="The Rosegarden Handbook"><link rel="up" href="segment-view.html" title="Chapter 3. The Track Editor"><link rel="prev" href="segment-view-creating.html" title="Creating segments"><link rel="next" href="segment-view-manipulating.html" title="Manipulating segments"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="GENERATOR" content="KDE XSL Stylesheet V1.13 using libxslt"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div style="background-image: url(top-middle.png); width: 100%; height: 131px;"><div style="position: absolute;                      right: 0px;"><img src="top-right-konqueror.png" style="margin: 0px" alt=""></div><div style="position: absolute;                         top: 25px;                          right: 100px;                          text-align: right;                          font-size: xx-large;                          font-weight: bold;                          text-shadow: #fff 0px 0px 5px;                          color: #444">Audio segments</div></div><div style="margin-top: 20px; background-color: #white;                        color: black;                       margin-left: 20px;                        margin-right: 20px;"><div style="position: absolute;                          left: 20px;"><a accesskey="p" href="segment-view-creating.html">Prev</a></div><div style="position: absolute;                          right: 20px;"><a accesskey="n" href="segment-view-manipulating.html">Next</a></div><div class="navCenter">The Track Editor</div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="segment-view-audio-segments"></a>Audio segments</h2></div></div></div><p>
+	An audio segment contains recorded or sampled audio data,
+	instead of editable note-event data.  Rosegarden allows you to
+	record, play, arrange and split audio segments, but does not
+	contain audio waveform editing facilities.
+	</p><p>To create an audio segment, you can <a href="recording.html" title="Recording">record</a> from an audio source onto a
+      track assigned to an audio instrument, or you can work with
+      existing WAV files.  To do this, you need to use the audio
+      manager dialog (reached via <span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">File</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Manage Audio Files</span></span>).
+	</p><p>
+        <div class="screenshot"><div xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="mediaobject"><hr><img src="rg-audiofilemanager.png" alt="The audio file manager"><hr></div></div>
+      </p><p>You can drag-and-drop audio files from the KDE file
+      browser or your KDE desktop into the audio file manager, or you
+      can open them using its File menu.  Then you can either
+      drag-and-drop them onto Rosegarden's track canvas, or use the
+      audio file manager's <span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">Action</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Insert into Selected
+	    Audio Track</span></span> menu function, provided the current
+      selected track in the main window is assigned to an audio
+      instrument.  Newly-recorded audio segments also appear in the
+      audio file manager dialog.</p><p>Details of the audio files associated with a particular
+      composition are saved with that composition, but the audio files
+      themselves are not.  You should ensure your document has a
+      sensible audio file search path (via <span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">Composition</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Edit Document
+      Properties...</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Audio</span></span>)
+      so as to keep your audio files accessible together.  You can also export
+      your project to a <span class="application">Rosegarden</span> project package file (.rgp) via
+      <span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">File</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Export</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Export Rosegarden Project File
+      </span></span> to collect any scattered audio files
+      together in one place.</p><p>The audio manager dialog also shows the sample-rate and
+      other information for each audio file, and marks with an
+      asterisk any audio file whose sample rate does not match that of
+      the current JACK audio session that Rosegarden is using.
+      Rosegarden will resample these files at playback time using a
+      very low quality zero order hold resampler.  You are advised to
+      resample them separately using a separate dedicated audio editor
+      instead.
+      </p></div><div style="background-color: #white; color: black;                  margin-top: 20px; margin-left: 20px;                  margin-right: 20px;"><div style="position: absolute; left: 20px;"><a accesskey="p" href="segment-view-creating.html">Prev</a></div><div style="position: absolute; right: 20px;"><a accesskey="n" href="segment-view-manipulating.html">Next</a></div><div align="center"><a accesskey="h" href="index.html">Home</a></div></div><div style="background-color: #white;   color: black;         margin-left: 20px;   margin-right: 20px;"><div class="navLeft">Creating segments </div><div class="navRight"> Manipulating segments</div><div class="navCenter"><a accesskey="u" href="segment-view.html">Up</a></div></div><br><br><div class="bannerBottom" style="background-image: url(bottom-middle.png);                                        background-repeat: x-repeat;                                         width: 100%;                                         height: 100px;                                         bottom:0px;"><div class="BannerBottomRight"><img src="bottom-right.png" style="margin: 0px" alt=""></div><div class="bannerBottomLeft"><img src="bottom-left.png" style="margin: 0px;" alt=""></div><div id="comments" style="position:relative; top: 5px; left: 1em; height:85px; width: 50%; color: #cfe1f6"><p>
+        </p></div></div></body></html>

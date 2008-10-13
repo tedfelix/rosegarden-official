@@ -1,0 +1,44 @@
+<html><head><title>Recording</title><link rel="stylesheet" href="kde-default.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.67.2"><meta name="keywords" content="Rosegarden, sequencer, MIDI, audio, music, notation, score, KDE"><link rel="start" href="index.html" title="The Rosegarden Handbook"><link rel="up" href="transport.html" title="Chapter 4. The Transport"><link rel="prev" href="transport.html" title="Chapter 4. The Transport"><link rel="next" href="transport-external.html" title="Synchronising to external transports"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="GENERATOR" content="KDE XSL Stylesheet V1.13 using libxslt"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div style="background-image: url(top-middle.png); width: 100%; height: 131px;"><div style="position: absolute;                      right: 0px;"><img src="top-right-konqueror.png" style="margin: 0px" alt=""></div><div style="position: absolute;                         top: 25px;                          right: 100px;                          text-align: right;                          font-size: xx-large;                          font-weight: bold;                          text-shadow: #fff 0px 0px 5px;                          color: #444">Recording</div></div><div style="margin-top: 20px; background-color: #white;                        color: black;                       margin-left: 20px;                        margin-right: 20px;"><div style="position: absolute;                          left: 20px;"><a accesskey="p" href="transport.html">Prev</a></div><div style="position: absolute;                          right: 20px;"><a accesskey="n" href="transport-external.html">Next</a></div><div class="navCenter">The Transport</div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="recording"></a>Recording</h2></div></div></div><p>
+        <div class="screenshot"><div xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="mediaobject"><hr><img src="rg-trackbuttons.png" alt="Track buttons in various states of recording readiness"><hr></div></div>
+      </p><p>
+	To record a new segment into a track, first make sure the
+	right tracks are armed for recording by selecting the red
+	(for audio tracks) or yellow (for MIDI tracks) LED-style
+	buttons on the track labels, and then use the <a href="transport.html#transport-overview" title="Overview">Transport's</a> record
+	control.  This has the effect of both starting the transport,
+	thus playing the existing composition, and recording into the
+	appropriate track, or tracks.
+      </p><p>
+	You can record any number of <span class="acronym">MIDI</span> and audio tracks at once so long
+	as your computer is powerful enough, and you have enough disk space.
+	Be careful not to accidentally leave tracks selected when you have
+	finished using them and are trying to record somewhere else.
+      </p><p>
+	Alternatively you can use punch-in record to separate the acts
+	of starting the transport and entering record mode.  Punch-in
+	record is toggled with the <span><strong class="keycap">Space</strong></span> bar.  You can press
+	<span><strong class="keycap">Space</strong></span>
+	while playing a composition to switch instantly between
+	playback and recording without stopping the transport, or you
+	can use <span><strong class="keycap">Space</strong></span> to arm for recording when the transport is
+	stopped, so that a subsequent Play will in fact record as
+	well.  (The latter is handy when synchronising to an <a href="transport-external.html" title="Synchronising to external transports">external transport</a>.)
+      </p><p>
+	If you record to MIDI tracks, you will record from the 
+	MIDI devices that are selected for recording in the
+	<a href="studio-device-editor.html" title="Managing MIDI devices">MIDI device
+        manager</a>, as filtered through the <a href="segment-instrument-parameters.html#track-recording-filters" title="Track recording filters">track level recording filter</a>
+        and the global <a href="studio-midi-filters.html" title="MIDI filters">MIDI filters</a>.
+      </p><p>
+	If you record to audio tracks, your recording to each track
+	will be from the input currently selected for that track's
+	instrument in the <a href="segment-view-instrumentparameterbox.html" title="The Instrument Parameter Box">instrument
+	parameter box</a>.  This will either be an external audio
+	input or an audio submaster or master (for performing
+	mixdowns).  If it's an external input, it will by default
+	record from your soundcard's first available physical record
+	in.  You may wish to use a JACK connection tool to
+	connect some other JACK audio application to the input
+	instead.  See also <a href="studio-audio-routing.html" title="Audio Routing">Audio Routing</a>.
+      </p></div><div style="background-color: #white; color: black;                  margin-top: 20px; margin-left: 20px;                  margin-right: 20px;"><div style="position: absolute; left: 20px;"><a accesskey="p" href="transport.html">Prev</a></div><div style="position: absolute; right: 20px;"><a accesskey="n" href="transport-external.html">Next</a></div><div align="center"><a accesskey="h" href="index.html">Home</a></div></div><div style="background-color: #white;   color: black;         margin-left: 20px;   margin-right: 20px;"><div class="navLeft">The Transport </div><div class="navRight"> Synchronising to external transports</div><div class="navCenter"><a accesskey="u" href="transport.html">Up</a></div></div><br><br><div class="bannerBottom" style="background-image: url(bottom-middle.png);                                        background-repeat: x-repeat;                                         width: 100%;                                         height: 100px;                                         bottom:0px;"><div class="BannerBottomRight"><img src="bottom-right.png" style="margin: 0px" alt=""></div><div class="bannerBottomLeft"><img src="bottom-left.png" style="margin: 0px;" alt=""></div><div id="comments" style="position:relative; top: 5px; left: 1em; height:85px; width: 50%; color: #cfe1f6"><p>
+        </p></div></div></body></html>

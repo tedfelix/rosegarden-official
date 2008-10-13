@@ -1,0 +1,32 @@
+<html><head><title>Tracks and instruments</title><link rel="stylesheet" href="kde-default.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.67.2"><meta name="keywords" content="Rosegarden, sequencer, MIDI, audio, music, notation, score, KDE"><link rel="start" href="index.html" title="The Rosegarden Handbook"><link rel="up" href="segment-view.html" title="Chapter 3. The Track Editor"><link rel="prev" href="segment-view.html" title="Chapter 3. The Track Editor"><link rel="next" href="segment-view-creating.html" title="Creating segments"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="GENERATOR" content="KDE XSL Stylesheet V1.13 using libxslt"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div style="background-image: url(top-middle.png); width: 100%; height: 131px;"><div style="position: absolute;                      right: 0px;"><img src="top-right-konqueror.png" style="margin: 0px" alt=""></div><div style="position: absolute;                         top: 25px;                          right: 100px;                          text-align: right;                          font-size: xx-large;                          font-weight: bold;                          text-shadow: #fff 0px 0px 5px;                          color: #444">Tracks and instruments</div></div><div style="margin-top: 20px; background-color: #white;                        color: black;                       margin-left: 20px;                        margin-right: 20px;"><div style="position: absolute;                          left: 20px;"><a accesskey="p" href="segment-view.html">Prev</a></div><div style="position: absolute;                          right: 20px;"><a accesskey="n" href="segment-view-creating.html">Next</a></div><div class="navCenter">The Track Editor</div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="segment-view-instruments"></a>Tracks and instruments</h2></div></div></div><p>
+	Each track must have an instrument assigned to it, in order to
+	be heard.  By default the first 16 tracks are assigned to the
+	16 instruments of the first available MIDI device, and the
+	next 16 tracks are assigned to audio.</p><p>To change the instrument assignment for a track,
+      right-click on the track label: a pop-up menu will appear from
+      which you can select among all the available instruments.
+      </p><p>
+	<div class="screenshot"><div xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="mediaobject"><hr><img src="rg-trackbutton-instrumentmenu.png" alt="Rosegarden's Instrument menu"><hr></div></div>
+      </p><p>
+	An instrument can be understood as a single channel on a
+	<span class="acronym">MIDI</span> device, or as a mono or stereo audio output or an audio
+	synth plugin.  Tracks containing note data should be assigned
+	to <span class="acronym">MIDI</span> or synth plugin instruments, and those containing
+	audio to audio instruments.  You can assign more than one
+	track to the same instrument, in which case the multiple
+	tracks will produce sounds in the same way (<span class="acronym">MIDI</span> tracks playing
+	panned to the left with a flute, or audio tracks playing with the same
+	volume levels, through the same stack of <a href="studio-plugins.html" title="Audio Plugins">
+	plugins</a>.)
+      </p><p>
+	You can change various properties of the instrument
+	associated with a track using the <a href="segment-view-instrumentparameterbox.html" title="The Instrument Parameter Box">Instrument
+	  Parameter Box</a>.  This is where, for example, you would
+	set a MIDI instrument to use a particular patch and so
+	produce a particular sound (piano, strings etc).
+      </p><p>
+	See the
+	<a href="studio.html#studio-introduction" title="Devices, instruments and connections">Studio</a> section
+	for more about instruments.
+      </p></div><div style="background-color: #white; color: black;                  margin-top: 20px; margin-left: 20px;                  margin-right: 20px;"><div style="position: absolute; left: 20px;"><a accesskey="p" href="segment-view.html">Prev</a></div><div style="position: absolute; right: 20px;"><a accesskey="n" href="segment-view-creating.html">Next</a></div><div align="center"><a accesskey="h" href="index.html">Home</a></div></div><div style="background-color: #white;   color: black;         margin-left: 20px;   margin-right: 20px;"><div class="navLeft">The Track Editor </div><div class="navRight"> Creating segments</div><div class="navCenter"><a accesskey="u" href="segment-view.html">Up</a></div></div><br><br><div class="bannerBottom" style="background-image: url(bottom-middle.png);                                        background-repeat: x-repeat;                                         width: 100%;                                         height: 100px;                                         bottom:0px;"><div class="BannerBottomRight"><img src="bottom-right.png" style="margin: 0px" alt=""></div><div class="bannerBottomLeft"><img src="bottom-left.png" style="margin: 0px;" alt=""></div><div id="comments" style="position:relative; top: 5px; left: 1em; height:85px; width: 50%; color: #cfe1f6"><p>
+        </p></div></div></body></html>

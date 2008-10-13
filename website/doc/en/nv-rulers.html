@@ -1,0 +1,64 @@
+<html><head><title>Rulers and cursors</title><link rel="stylesheet" href="kde-default.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.67.2"><meta name="keywords" content="Rosegarden, sequencer, MIDI, audio, music, notation, score, KDE"><link rel="start" href="index.html" title="The Rosegarden Handbook"><link rel="up" href="notation-view.html" title="Chapter 10. The Notation editor"><link rel="prev" href="nv-layout.html" title="Linear and page layouts"><link rel="next" href="nv-tools-selections.html" title="Tools and selections"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="GENERATOR" content="KDE XSL Stylesheet V1.13 using libxslt"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div style="background-image: url(top-middle.png); width: 100%; height: 131px;"><div style="position: absolute;                      right: 0px;"><img src="top-right-konqueror.png" style="margin: 0px" alt=""></div><div style="position: absolute;                         top: 25px;                          right: 100px;                          text-align: right;                          font-size: xx-large;                          font-weight: bold;                          text-shadow: #fff 0px 0px 5px;                          color: #444">Rulers and cursors</div></div><div style="margin-top: 20px; background-color: #white;                        color: black;                       margin-left: 20px;                        margin-right: 20px;"><div style="position: absolute;                          left: 20px;"><a accesskey="p" href="nv-layout.html">Prev</a></div><div style="position: absolute;                          right: 20px;"><a accesskey="n" href="nv-tools-selections.html">Next</a></div><div class="navCenter">The Notation editor</div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="nv-rulers"></a>Rulers and cursors</h2></div></div></div><p>
+	The <span class="application">Rosegarden</span> Notation editor window includes two graduated rulers,
+	each associated with its own cursor.  The rulers are the horizontal strips
+	divided up with tickmarks at top and bottom of the main
+	notation canvas, and the cursors are the coloured vertical
+	lines shown initially at the start of the top staff in the
+	editor.  In addition to these main two, there are the <span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">chord
+	    name</span></span> ruler, the <span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">tempo</span></span> ruler,
+	and the <span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">raw note</span></span> ruler.
+    </p><p>
+	Note that the rulers are only shown in <a href="nv-layout.html" title="Linear and page layouts">Linear layout</a> mode, and several of them
+      are not displayed by default.
+      </p><p>
+      <div class="screenshot"><div xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="mediaobject"><hr><img src="rg-cursors.png" alt="The notation editor's two cursors"><hr></div></div>
+    </p><p>
+	The purple cursor is the insert cursor.  It shows the point
+	at which operations such as insert and paste will take
+	place.  You can reposition the insert cursor by clicking or
+	dragging on the top ruler, or by clicking with the Select
+	tool on an empty part of the staff (avoiding any events), or
+	by clicking anywhere with <span><strong class="keycap">Ctrl</strong></span> held down.
+      </p><p>You can also use the left and right arrow keys to move
+	the insert cursor one event at a time.  If you hold <span><strong class="keycap">Ctrl</strong></span> while
+	pressing the arrow keys, the cursor will move a whole bar at a
+	time; if you hold Shift, the cursor will <a href="nv-tools-selections.html" title="Tools and selections">select the events</a> as it
+	passes over them.
+      </p><p>
+	The blue cursor is the playback pointer.  Just like the
+	similar cursors in the main window and the matrix views,
+	this shows the location of the current playback or record
+	position, and it sweeps across the notation while the transport is
+	rolling.  It can be repositioned using the bottom ruler.
+      </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="nv-raw-note-ruler"></a>The raw note ruler</h3></div></div></div><p>The raw note ruler is particularly
+	      useful when editing <a href="nv-quantization.html" title="Notation from performance data">quantized
+		  notation</a> where the display duration on the page
+	      differs from the duration of the actual performance.
+	      Enabled via
+	      <span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">Settings</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Rulers</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Show Raw Note Ruler</span></span>, it draws a small bar above
+	      each note, similar to the way notes appear in the matrix.  In this
+	      example screenshot, you can see how interpreted, quantized notes
+	      appear on this ruler.  The tenuto notes have full performance
+	      durations, while the staccato notes are considerably shorter, and
+	      the accented notes have a higher velocity (more red colour) than
+	      their neighbors.
+	  </p><p>
+	      Raw note ruler marks only notes in the selected segment in the track.
+	      The colour of the selected segment is used in the background of
+	      the raw note ruler between the start and end time of the segment.
+	  </p><p>
+	      <div class="screenshot"><div xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="mediaobject"><hr><img src="rg-rawnoteruler.png" alt="The raw note ruler,
+			showing notation whose performance duration value differs
+			from what appears on the staff"><hr></div></div>
+	  </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="nv-chord-name-ruler"></a>The chord name ruler</h3></div></div></div><p>The chord name ruler analyzes the tonality of the piece, and
+	    attempts to display which chords are sounding.  This is for
+	    informational purposes only, and you can neither print nor edit the
+	    contents of this ruler.
+	    
+	</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="nv-tempo-ruler"></a>The tempo ruler</h3></div></div></div><p>The tempo ruler displays
+	the global tempo, and provides a vehicle for entering,
+	editing, and manipulating it.  It works the same way as the
+	tempo rulers in the main window and the matrix editor.  See
+	<a href="segment-view-tempo-timesig.html#tempo-ruler" title="Tempo rulers">Tempo Rulers</a> for more
+	information.</p></div></div><div style="background-color: #white; color: black;                  margin-top: 20px; margin-left: 20px;                  margin-right: 20px;"><div style="position: absolute; left: 20px;"><a accesskey="p" href="nv-layout.html">Prev</a></div><div style="position: absolute; right: 20px;"><a accesskey="n" href="nv-tools-selections.html">Next</a></div><div align="center"><a accesskey="h" href="index.html">Home</a></div></div><div style="background-color: #white;   color: black;         margin-left: 20px;   margin-right: 20px;"><div class="navLeft">Linear and page layouts </div><div class="navRight"> Tools and selections</div><div class="navCenter"><a accesskey="u" href="notation-view.html">Up</a></div></div><br><br><div class="bannerBottom" style="background-image: url(bottom-middle.png);                                        background-repeat: x-repeat;                                         width: 100%;                                         height: 100px;                                         bottom:0px;"><div class="BannerBottomRight"><img src="bottom-right.png" style="margin: 0px" alt=""></div><div class="bannerBottomLeft"><img src="bottom-left.png" style="margin: 0px;" alt=""></div><div id="comments" style="position:relative; top: 5px; left: 1em; height:85px; width: 50%; color: #cfe1f6"><p>
+        </p></div></div></body></html>

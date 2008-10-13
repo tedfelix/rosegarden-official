@@ -1,0 +1,34 @@
+<html><head><title>Metronomes</title><link rel="stylesheet" href="kde-default.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.67.2"><meta name="keywords" content="Rosegarden, sequencer, MIDI, audio, music, notation, score, KDE"><link rel="start" href="index.html" title="The Rosegarden Handbook"><link rel="up" href="studio.html" title="Chapter 5. The Studio"><link rel="prev" href="studio-plugins.html" title="Audio Plugins"><link rel="next" href="studio-midi-filters.html" title="MIDI filters"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="GENERATOR" content="KDE XSL Stylesheet V1.13 using libxslt"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div style="background-image: url(top-middle.png); width: 100%; height: 131px;"><div style="position: absolute;                      right: 0px;"><img src="top-right-konqueror.png" style="margin: 0px" alt=""></div><div style="position: absolute;                         top: 25px;                          right: 100px;                          text-align: right;                          font-size: xx-large;                          font-weight: bold;                          text-shadow: #fff 0px 0px 5px;                          color: #444">Metronomes</div></div><div style="margin-top: 20px; background-color: #white;                        color: black;                       margin-left: 20px;                        margin-right: 20px;"><div style="position: absolute;                          left: 20px;"><a accesskey="p" href="studio-plugins.html">Prev</a></div><div style="position: absolute;                          right: 20px;"><a accesskey="n" href="studio-midi-filters.html">Next</a></div><div class="navCenter">The Studio</div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="studio-metronome"></a>Metronomes</h2></div></div></div><p>
+	Rosegarden has two built-in metronomes, one for use during
+	recording and one that can be switched on during normal
+	playback.  They work by sending notes to a MIDI instrument,
+	and both metronomes use the same instrument, pitch and
+	velocity information.
+      </p><p>
+	<div class="screenshot"><div xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="mediaobject"><hr><img src="rg-metronome.png" alt="Rosegarden's metronome configuration dialog"><hr></div></div>
+      </p><p>
+	To configure the metronomes, use
+	<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">Studio</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Manage Metronome</span></span>
+	to bring up the metronome dialog.
+	Here you can select a MIDI instrument for the metronome and
+	choose the metronome's resolution (whether it should tick
+	once per beat, once per subdivision of a beat, or only once
+	per bar), pitch, and velocities.  Properties such as the
+	actual voice the MIDI synth uses for the metronome tick
+	depend on the instrument selected, just as the voice used
+	for a MIDI track depends on the instrument that track is
+	assigned to.  You can configure the instrument by assigning
+	a track to it on the main window and selecting the correct
+	program from the instrument parameter box.
+      </p><p>
+	The record and play metronomes can be switched on or off
+	from the Transport window, using the metronome button.  This
+	button controls the record metronome when recording is armed
+	or in progress, and the play metronome at other times.  By
+	default, the record metronome is switched on and the play
+	metronome switched off.
+      </p><p>
+	Rosegarden also has a "visual metronome": the transport window
+	can be told to flash brightly to mark each beat.  See <a href="transport.html" title="Chapter 4. The Transport">the Transport section</a> for more
+	details.</p></div><div style="background-color: #white; color: black;                  margin-top: 20px; margin-left: 20px;                  margin-right: 20px;"><div style="position: absolute; left: 20px;"><a accesskey="p" href="studio-plugins.html">Prev</a></div><div style="position: absolute; right: 20px;"><a accesskey="n" href="studio-midi-filters.html">Next</a></div><div align="center"><a accesskey="h" href="index.html">Home</a></div></div><div style="background-color: #white;   color: black;         margin-left: 20px;   margin-right: 20px;"><div class="navLeft">Audio Plugins </div><div class="navRight"> MIDI filters</div><div class="navCenter"><a accesskey="u" href="studio.html">Up</a></div></div><br><br><div class="bannerBottom" style="background-image: url(bottom-middle.png);                                        background-repeat: x-repeat;                                         width: 100%;                                         height: 100px;                                         bottom:0px;"><div class="BannerBottomRight"><img src="bottom-right.png" style="margin: 0px" alt=""></div><div class="bannerBottomLeft"><img src="bottom-left.png" style="margin: 0px;" alt=""></div><div id="comments" style="position:relative; top: 5px; left: 1em; height:85px; width: 50%; color: #cfe1f6"><p>
+        </p></div></div></body></html>

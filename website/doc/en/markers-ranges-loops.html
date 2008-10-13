@@ -1,0 +1,73 @@
+<html><head><title>Markers, ranges, and loops</title><link rel="stylesheet" href="kde-default.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.67.2"><meta name="keywords" content="Rosegarden, sequencer, MIDI, audio, music, notation, score, KDE"><link rel="start" href="index.html" title="The Rosegarden Handbook"><link rel="up" href="segment-view.html" title="Chapter 3. The Track Editor"><link rel="prev" href="segment-view-tempo-timesig.html" title="Tempo and Time Signature"><link rel="next" href="triggered-segments.html" title="Triggered segments"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="GENERATOR" content="KDE XSL Stylesheet V1.13 using libxslt"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div style="background-image: url(top-middle.png); width: 100%; height: 131px;"><div style="position: absolute;                      right: 0px;"><img src="top-right-konqueror.png" style="margin: 0px" alt=""></div><div style="position: absolute;                         top: 25px;                          right: 100px;                          text-align: right;                          font-size: xx-large;                          font-weight: bold;                          text-shadow: #fff 0px 0px 5px;                          color: #444">Markers, ranges, and loops</div></div><div style="margin-top: 20px; background-color: #white;                        color: black;                       margin-left: 20px;                        margin-right: 20px;"><div style="position: absolute;                          left: 20px;"><a accesskey="p" href="segment-view-tempo-timesig.html">Prev</a></div><div style="position: absolute;                          right: 20px;"><a accesskey="n" href="triggered-segments.html">Next</a></div><div class="navCenter">The Track Editor</div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="markers-ranges-loops"></a>Markers, ranges, and loops</h2></div></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="markers"></a>Markers</h3></div></div></div><p>Markers are moments in time that have labels.  You can
+	create any number of markers in your <span class="application">Rosegarden</span> composition,
+	to define particular points that you wish to remember the
+	locations of.  Marker positions and labels will be saved in
+	your <span class="application">Rosegarden</span> file.</p><p>Markers are shown in the main ruler at the top of each
+	of <span class="application">Rosegarden</span>'s editor windows.</p><p>
+	<div class="screenshot"><div xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="mediaobject"><hr><img src="rg-markerloop.png" alt="A marker and a loop range"><hr></div></div>
+      </p><p>To add
+	a new marker, double-click on the marker area (top half) of
+	the ruler to open the marker editor.  Make sure <span class="application">Rosegarden</span>'s
+	playback pointer (see <a href="transport.html" title="Chapter 4. The Transport">The
+	Transport</a>) is in the location you want to add the
+	marker at, and then click the Add button to add a new marker
+	at the playback position.  You can then double-click on the
+	marker's entry in the marker editor window to edit its name or
+	adjust its location.</p><p>Click on the text of a marker in the marker ruler to
+	move the playback pointer directly to that marker.</p><p>You can set a <a href="markers-ranges-loops.html#ranges-loops" title="Ranges and loops">loop range</a>
+	between two marker positions, by clicking in the area between
+	the markers in the marker ruler with the Shift key
+	pressed.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="quick_marker"></a>Quick Marker</h3></div></div></div><p>The quick marker is a special moment in time that can be defined
+    on the fly with a single key (by default Ctrl-1) from the main window
+    (track editor). Once defined it appears as a red line in the loop ruler 
+    (it does not appear among other markers, since it does not have a label).
+    At any time when in the track editor you can jump to the quick marker
+    position with a single key (by default simply 1).
+    <div class="screenshot"><div xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="mediaobject"><hr><img src="rg-quickmarker.png" alt="Quick Marker at the start of the third bar"><hr></div></div>
+    </p><p>A typical use of the quick marker is when you want to record the same bars
+    on different instruments: after setting the quick marker at the first bar of 
+    the working interval, it is easy to jump to the quick marker each time you need
+    to record a new part.</p><p>Note that the quick marker position is not saved in your <span class="application">Rosegarden</span> file.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="ranges-loops"></a>Ranges and loops</h3></div></div></div><p>
+	  <span class="application">Rosegarden</span> allows you to highlight a period of time in the
+	  main ruler, which will be used as a "range" for editing
+	  operations and which will be looped during playback.
+	</p><p>To set the current range, click and drag with the Shift
+	key pressed on the subdivided area of the main ruler at the
+	top of the editing window.  The range that you drag will be
+	highlighted in white as you drag it, and will snap to the
+	nearest beat boundary at both ends.  Any subsequent playback
+	will then be constrained to looping this range.
+	</p><p>You can also set a range between two <a href="markers-ranges-loops.html#markers" title="Markers">markers</a> by shift-clicking between the
+	marker positions in the marker ruler, or set a range using the
+	<a href="transport.html#transport-overview" title="Overview">Transport</a> window.
+	The Transport contains small buttons to set the start and end
+	of the current range to the current playback pointer position.
+	Either of these methods allows you to set more precise end
+	points for your range than you can with click-drag.</p><p>To clear a range and restore normal playback, click on
+	the subdivided area of the main ruler with the Shift key
+	pressed, or toggle the loop button on the Transport.</p><p>Note that playback looping when a range is defined is
+	not the same thing as the <a href="segment-view-segmentparameterbox.html" title="The Segment Parameter Box">repeating
+	segment</a> function available in the segment parameters
+	(which seamlessly repeats individual segments rather than
+	causing the transport to jump).</p><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="range-operations"></a>Range editing</h4></div></div></div><p>You can carry out edits
+	    on the current range in order to cut and paste sections
+	    of music that include the relevant parts of all
+	    segments, tempos and time signatures within the range.
+	  </p><p>Set a range and then use the <span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">Edit</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Cut
+	  Range</span></span> or
+	  <span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Copy
+	  Range</span></span> menu functions to cut or
+	  copy the range to the clipboard.</p><p>You can paste a range using the standard <span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">Edit</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Paste</span></span> menu function
+	  to overlay its contents onto the rest of the composition at
+	  the current playback pointer position, or you can use
+	  <span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">Edit</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Paste Range</span></span> to
+	  insert the range from the clipboard into the composition at
+	  the current playback pointer position.</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="range-insert"></a>Inserting a range</h4></div></div></div><p>You can also insert an empty range at the current
+          playback position using the <span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">Edit</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Insert
+          Range</span></span> menu function.  You can
+          specify how much space you want to insert, and then all of
+          the segment content, tempos and time signatures following
+          the playback position will be pushed along in time by that
+          duration to leave an empty space.
+          </p></div></div></div><div style="background-color: #white; color: black;                  margin-top: 20px; margin-left: 20px;                  margin-right: 20px;"><div style="position: absolute; left: 20px;"><a accesskey="p" href="segment-view-tempo-timesig.html">Prev</a></div><div style="position: absolute; right: 20px;"><a accesskey="n" href="triggered-segments.html">Next</a></div><div align="center"><a accesskey="h" href="index.html">Home</a></div></div><div style="background-color: #white;   color: black;         margin-left: 20px;   margin-right: 20px;"><div class="navLeft">Tempo and Time Signature </div><div class="navRight"> Triggered segments</div><div class="navCenter"><a accesskey="u" href="segment-view.html">Up</a></div></div><br><br><div class="bannerBottom" style="background-image: url(bottom-middle.png);                                        background-repeat: x-repeat;                                         width: 100%;                                         height: 100px;                                         bottom:0px;"><div class="BannerBottomRight"><img src="bottom-right.png" style="margin: 0px" alt=""></div><div class="bannerBottomLeft"><img src="bottom-left.png" style="margin: 0px;" alt=""></div><div id="comments" style="position:relative; top: 5px; left: 1em; height:85px; width: 50%; color: #cfe1f6"><p>
+        </p></div></div></body></html>

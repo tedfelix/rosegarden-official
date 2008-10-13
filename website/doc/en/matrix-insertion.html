@@ -1,0 +1,58 @@
+<html><head><title>Inserting notes</title><link rel="stylesheet" href="kde-default.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.67.2"><meta name="keywords" content="Rosegarden, sequencer, MIDI, audio, music, notation, score, KDE"><link rel="start" href="index.html" title="The Rosegarden Handbook"><link rel="up" href="matrix-view.html" title="Chapter 8. The Matrix editor"><link rel="prev" href="matrix-view.html" title="Chapter 8. The Matrix editor"><link rel="next" href="matrix-selection.html" title="Selecting notes"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="GENERATOR" content="KDE XSL Stylesheet V1.13 using libxslt"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div style="background-image: url(top-middle.png); width: 100%; height: 131px;"><div style="position: absolute;                      right: 0px;"><img src="top-right-konqueror.png" style="margin: 0px" alt=""></div><div style="position: absolute;                         top: 25px;                          right: 100px;                          text-align: right;                          font-size: xx-large;                          font-weight: bold;                          text-shadow: #fff 0px 0px 5px;                          color: #444">Inserting notes</div></div><div style="margin-top: 20px; background-color: #white;                        color: black;                       margin-left: 20px;                        margin-right: 20px;"><div style="position: absolute;                          left: 20px;"><a accesskey="p" href="matrix-view.html">Prev</a></div><div style="position: absolute;                          right: 20px;"><a accesskey="n" href="matrix-selection.html">Next</a></div><div class="navCenter">The Matrix editor</div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="matrix-insertion"></a>Inserting notes</h2></div></div></div><p>
+	The simplest way to enter a note in the matrix view is to
+	use the mouse.  To do this, select the pencil tool on the
+	toolbar, and then click and drag on the matrix editor.  The
+	note will be entered at the time and pitch corresponding to
+	the point you click at, and will have a duration
+	corresponding to the distance you drag before releasing the
+	mouse button.</p><p>You can also draw notes using the Select tool (the
+	arrow), by clicking and dragging either with the middle mouse
+	button, or with the left mouse button and Ctrl pressed.</p><p>By default, the time and duration are snapped to a
+	particular grid unit, according to the Grid setting on the
+	View menu or the toolbar.  You can prevent this effect by
+	holding down Shift while clicking and dragging.
+      </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="matrix-insertion-keyboard"></a>Typing notes with the PC keyboard</h3></div></div></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2557692"></a>Duration</h4></div></div></div><p>The durations of notes entered from the keyboard are
+	    controlled by the Grid setting on the View menu or
+	    toolbar.  You can set this using the number keys:</p><div class="itemizedlist"><ul type="disc"><li><p><span><strong class="keycap">5</strong></span> – Whole bar</p></li><li><p><span><strong class="keycap">1</strong></span> – Beat</p></li><li><p><span><strong class="keycap">2</strong></span> – Half note (minim)</p></li><li><p><span><strong class="keycap">4</strong></span> – Quarter note (crotchet)</p></li><li><p><span><strong class="keycap">8</strong></span> – Eighth note (quaver)</p></li><li><p><span><strong class="keycap">6</strong></span> – Sixteenth note (semiquaver)</p></li><li><p><span><strong class="keycap">3</strong></span> – Thirty-second note (demisemiquaver)</p></li><li><p><span><strong class="keycap">0</strong></span> – Sixty-fourth note (hemidemisemiquaver)</p></li></ul></div></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2557779"></a>Pitch</h4></div></div></div><p>Once the correct duration is selected in the Grid
+	    menu, you can insert a note at the current position of the
+	    <a href="nv-rulers.html" title="Rulers and cursors">insert cursor</a> by pressing
+	    one of the pitch keys:</p><div class="itemizedlist"><ul type="disc"><li><p><span><strong class="keycap">A</strong></span> – Do (the tonic of the current key in the current clef)</p></li><li><p><span><strong class="keycap">S</strong></span> – Re</p></li><li><p><span><strong class="keycap">D</strong></span> – Mi</p></li><li><p><span><strong class="keycap">F</strong></span> – Fa</p></li><li><p><span><strong class="keycap">J</strong></span> – So</p></li><li><p><span><strong class="keycap">K</strong></span> – La</p></li><li><p><span><strong class="keycap">L</strong></span> – Ti</p></li></ul></div><p>Holding <span><strong class="keycap">Shift</strong></span> while pressing a key
+	    will sharpen the note (except for Mi and Ti, which don't
+	    have sharpened versions) and holding <span><strong class="keycap">Shift</strong></span>
+	    and <span><strong class="keycap">Ctrl</strong></span> together will flatten it (except
+	    for Fa and Do).</p><p>To enter notes an octave higher, use the corresponding
+	    keys on the next row up: <span><strong class="keycap">Q</strong></span>,
+	    <span><strong class="keycap">W</strong></span>, <span><strong class="keycap">E</strong></span>, <span><strong class="keycap">R</strong></span>,
+	    <span><strong class="keycap">U</strong></span>, <span><strong class="keycap">I</strong></span>, and
+	    <span><strong class="keycap">O</strong></span>.  Likewise to enter notes an octave
+	    lower, use <span><strong class="keycap">Z</strong></span>, <span><strong class="keycap">X</strong></span>,
+	    <span><strong class="keycap">C</strong></span>, <span><strong class="keycap">V</strong></span>, <span><strong class="keycap">B</strong></span>,
+	    <span><strong class="keycap">N</strong></span> and <span><strong class="keycap">M</strong></span>.</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2557945"></a>Other remarks</h4></div></div></div><p>All of the insertion commands are also available on a
+	    submenu of the Tools menu.  It's unlikely you'd ever want to
+	    navigate the menus just to insert a single note, but the
+	    menus show the keyboard shortcuts and so provide a useful
+	    reference in case you forget which key is which.</p><p>The keyboard shortcuts are currently designed for use
+	    with a QWERTY-layout keyboard.  There is not yet any way to
+	    remap the keys for another layout, short of reassigning each
+	    key individually using <span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">Settings</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Configure Shortcuts...</span></span>.</p></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="matrix-insertion-midi"></a>Entering notes using a MIDI keyboard</h3></div></div></div><p>
+	  You can enter notes into the matrix editor one at a time
+	  using a MIDI keyboard or other MIDI control device.  The
+	  matrix editor uses the pitches you play on the keyboard,
+	  but the durations you have selected in the Grid setting of
+	  the editor itself.  This is known as "step recording".
+	</p><p>
+	  To start entering notes from a MIDI keyboard, first make
+	  sure the keyboard is configured as a MIDI
+	  record device.  Then make sure you have the right Grid
+	  setting in the View menu or toolbar, as this controls the
+	  note duration.  Then press the  step recording button on the matrix editor's toolbar,
+	  or select Step Recording from the Tools menu.  From that
+	  point on all notes pressed on the MIDI keyboard will be
+	  inserted at the current insertion time in that window,
+	  until step recording is switched off again or activated in
+	  a different window or the window is closed.
+	</p><p>
+	  You can change the Grid setting while step recording is in
+	  progress, in order to insert notes of different durations.
+	</p></div></div><div style="background-color: #white; color: black;                  margin-top: 20px; margin-left: 20px;                  margin-right: 20px;"><div style="position: absolute; left: 20px;"><a accesskey="p" href="matrix-view.html">Prev</a></div><div style="position: absolute; right: 20px;"><a accesskey="n" href="matrix-selection.html">Next</a></div><div align="center"><a accesskey="h" href="index.html">Home</a></div></div><div style="background-color: #white;   color: black;         margin-left: 20px;   margin-right: 20px;"><div class="navLeft">The Matrix editor </div><div class="navRight"> Selecting notes</div><div class="navCenter"><a accesskey="u" href="matrix-view.html">Up</a></div></div><br><br><div class="bannerBottom" style="background-image: url(bottom-middle.png);                                        background-repeat: x-repeat;                                         width: 100%;                                         height: 100px;                                         bottom:0px;"><div class="BannerBottomRight"><img src="bottom-right.png" style="margin: 0px" alt=""></div><div class="bannerBottomLeft"><img src="bottom-left.png" style="margin: 0px;" alt=""></div><div id="comments" style="position:relative; top: 5px; left: 1em; height:85px; width: 50%; color: #cfe1f6"><p>
+        </p></div></div></body></html>

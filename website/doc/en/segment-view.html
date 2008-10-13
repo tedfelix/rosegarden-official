@@ -1,0 +1,42 @@
+<html><head><title>Chapter 3. The Track Editor</title><link rel="stylesheet" href="kde-default.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.67.2"><meta name="keywords" content="Rosegarden, sequencer, MIDI, audio, music, notation, score, KDE"><link rel="start" href="index.html" title="The Rosegarden Handbook"><link rel="up" href="index.html" title="The Rosegarden Handbook"><link rel="prev" href="lilypond-options.html" title="LilyPond options"><link rel="next" href="segment-view-instruments.html" title="Tracks and instruments"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="GENERATOR" content="KDE XSL Stylesheet V1.13 using libxslt"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div style="background-image: url(top-middle.png); width: 100%; height: 131px;"><div style="position: absolute;                      right: 0px;"><img src="top-right-konqueror.png" style="margin: 0px" alt=""></div><div style="position: absolute;                         top: 25px;                          right: 100px;                          text-align: right;                          font-size: xx-large;                          font-weight: bold;                          text-shadow: #fff 0px 0px 5px;                          color: #444">The Track Editor</div></div><div style="margin-top: 20px; background-color: #white;                        color: black;                       margin-left: 20px;                        margin-right: 20px;"><div style="position: absolute;                          left: 20px;"><a accesskey="p" href="lilypond-options.html">Prev</a></div><div style="position: absolute;                          right: 20px;"><a accesskey="n" href="segment-view-instruments.html">Next</a></div><div class="navCenter"> </div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="segment-view"></a>Chapter 3. The Track Editor</h2></div></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="segment-view-overview"></a>Overview</h2></div></div></div><p>
+	<span class="application">Rosegarden</span>'s main layout is similar to many
+	other popular sequencers.  It is based on a track
+	structure — the main window shows a track editor with
+	a list of tracks and their associated instruments down the
+	left hand side.  You can manipulate and move blocks of
+	music data (referred to as “segments”) on the
+	track editor as well as opening the segments themselves in
+	specialised editors (<a href="notation-view.html" title="Chapter 10. The Notation editor">notation</a>, <a href="matrix-view.html" title="Chapter 8. The Matrix editor">matrix</a>, <a href="percussion-matrix-view.html" title="Chapter 9. The Percussion Matrix editor">percussion matrix</a>, and <a href="event-view.html" title="Chapter 11. The Event List editor">event list</a>).
+      </p><p>
+	<div class="screenshot"><div xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="mediaobject"><hr><img src="rg-trackeditor.png" alt="Rosegarden's Track Editor showing two segments of music data"><hr></div></div>
+      </p><p>
+	Tracks govern what sort of segment you can create in a particular
+	place.  If you create a segment on an audio track, it will be an audio
+	segment, no matter where that segment subsequently moves.  If you
+	create a segment on a <span class="acronym">MIDI</span> track, it will always be a <span class="acronym">MIDI</span>
+	segment.  You can set <a href="segment-instrument-parameters.html#track-parameters" title="The Track Parameter Box">
+	track parameters</a> to pre-select various segment properties at the track
+	level, and to exercise fine control over <span class="acronym">MIDI</span> recording.
+      </p><p>
+	Tracks can be assigned to a range of <span class="acronym">MIDI</span>, plugin synth, or
+	audio instruments.  In the picture above we see three segments
+	in the track editor on tracks assigned to General MIDI
+	instruments.
+      </p><p>
+	<div class="screenshot"><div xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="mediaobject"><hr><img src="rg-trackbutton-labels.png" alt="Rosegarden's Track buttons showing track labels"><hr></div></div>
+      </p><p>
+	The button area to the left of the segment canvas shows you
+	the track number, mute and record status, and the label of the
+	track.  You can mute or unmute a track by clicking on the blue
+	LED-style button, and select a particular track as a record
+	target by clicking on the red one.  To change the track label,
+	double-click on it.
+      </p><p>
+	<div class="screenshot"><div xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="mediaobject"><hr><img src="rg-trackbutton-instruments.png" alt="Rosegarden's Track buttons showing instrument assignments"><hr></div></div>
+      </p><p>
+	Track labels are only shown if the
+	<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">Settings</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Show Track Labels</span></span>
+	menu option is enabled.
+	Otherwise, as in this picture, the instrument assignments for
+	the tracks are shown instead.</p></div></div><div style="background-color: #white; color: black;                  margin-top: 20px; margin-left: 20px;                  margin-right: 20px;"><div style="position: absolute; left: 20px;"><a accesskey="p" href="lilypond-options.html">Prev</a></div><div style="position: absolute; right: 20px;"><a accesskey="n" href="segment-view-instruments.html">Next</a></div><div align="center"><a accesskey="h" href="index.html">Home</a></div></div><div style="background-color: #white;   color: black;         margin-left: 20px;   margin-right: 20px;"><div class="navLeft">LilyPond options </div><div class="navRight"> Tracks and instruments</div><div class="navCenter"><a accesskey="u" href="index.html">Up</a></div></div><br><br><div class="bannerBottom" style="background-image: url(bottom-middle.png);                                        background-repeat: x-repeat;                                         width: 100%;                                         height: 100px;                                         bottom:0px;"><div class="BannerBottomRight"><img src="bottom-right.png" style="margin: 0px" alt=""></div><div class="bannerBottomLeft"><img src="bottom-left.png" style="margin: 0px;" alt=""></div><div id="comments" style="position:relative; top: 5px; left: 1em; height:85px; width: 50%; color: #cfe1f6"><p>
+        </p></div></div></body></html>

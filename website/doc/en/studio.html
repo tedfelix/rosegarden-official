@@ -1,0 +1,57 @@
+<html><head><title>Chapter 5. The Studio</title><link rel="stylesheet" href="kde-default.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.67.2"><meta name="keywords" content="Rosegarden, sequencer, MIDI, audio, music, notation, score, KDE"><link rel="start" href="index.html" title="The Rosegarden Handbook"><link rel="up" href="index.html" title="The Rosegarden Handbook"><link rel="prev" href="infrared-remote-controls.html" title="Infrared Remote Controls"><link rel="next" href="studio-device-editor.html" title="Managing MIDI devices"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="GENERATOR" content="KDE XSL Stylesheet V1.13 using libxslt"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div style="background-image: url(top-middle.png); width: 100%; height: 131px;"><div style="position: absolute;                      right: 0px;"><img src="top-right-konqueror.png" style="margin: 0px" alt=""></div><div style="position: absolute;                         top: 25px;                          right: 100px;                          text-align: right;                          font-size: xx-large;                          font-weight: bold;                          text-shadow: #fff 0px 0px 5px;                          color: #444">The Studio</div></div><div style="margin-top: 20px; background-color: #white;                        color: black;                       margin-left: 20px;                        margin-right: 20px;"><div style="position: absolute;                          left: 20px;"><a accesskey="p" href="infrared-remote-controls.html">Prev</a></div><div style="position: absolute;                          right: 20px;"><a accesskey="n" href="studio-device-editor.html">Next</a></div><div class="navCenter"> </div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="studio"></a>Chapter 5. The Studio</h2></div></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="studio-introduction"></a>Devices, instruments and connections</h2></div></div></div><p>Rosegarden uses the term Studio to refer to everything it
+      knows about the sound systems attached to the computer.  This
+      may include <span class="acronym">MIDI</span> and audio hardware and other sound software,
+      and includes information about connections, configuration,
+      <span class="acronym">MIDI</span> patches and so on.  The Studio is built-in to every
+      composition you create with Rosegarden.</p><p>Three pieces of terminology are essential here:
+
+	<div class="variablelist"><dl><dt><span class="term">Device</span></dt><dd><p>A “<span class="quote">device</span>”, as far as Rosegarden is
+	      concerned, is simply something capable of producing
+	      sounds.  This may be a MIDI or audio device.  MIDI
+	      devices do not necessarily correspond directly to
+	      physical MIDI ports: they are just things with names
+	      that you can refer to, expected to work in particular
+	      ways.  Configuration information such as MIDI patch maps
+	      can be attached to devices.
+	      </p></dd><dt><span class="term">Instrument</span></dt><dd><p>Each device has a number of
+		“<span class="quote">instruments</span>”, each of which is assumed
+		to make a particular sound.  These are the things that
+		you can assign tracks to in order to choose which
+		sound they play.  By default, a device contains 16
+		instruments, created for you at startup: if the device
+		is a MIDI device, then these will each be initialised
+		to one of the 16 MIDI channels.  The instrument is
+		where you set all the properties of a particular
+		voice, such as program settings, reverb, volume etc.
+	      </p></dd><dt><span class="term">Connection</span></dt><dd><p>While a MIDI device is simply a name and a
+	      collection of configuration information, the
+	      “<span class="quote">connection</span>” specifies which MIDI port it
+	      is physically attached to.  This can be configured in
+	      the <a href="studio-device-editor.html" title="Managing MIDI devices">MIDI device
+	      manager</a>.  (Audio and synth plugin devices do not
+	      have connections in the same way.)
+	      </p></dd></dl></div>
+      </p><p>For example, imagine a setup consisting of a PC with two
+	physical MIDI ports, one of which has an external synth
+	attached to it.  Here you would normally configure Rosegarden
+	so as to have one MIDI device, corresponding to the synth.
+	You could then configure this device with the correct name and
+	patch map, and then specify a connection for it that
+	corresponded to the relevant MIDI port on your soundcard.
+	Each of the 16 default instruments on the device could then be
+	configured with a suitable program, and you would then assign
+	tracks to those.</p><p>
+	In practice, Rosegarden will by default create a device for
+	each of the available connections on startup.  So in the
+	example above, two MIDI devices will be created by default
+	even though you only need one.  You would generally then
+	rename and apply patch maps to the first, and delete or
+	simply not use the second.  Remember that there is no way
+	for Rosegarden to know what synths you actually have plugged
+	in to the MIDI ports on your computer: for this reason, the
+	devices created at startup are just intended to be a default
+	set, and it's up to you to ensure that the devices you
+	configure match those you are really using.
+      </p><p>Once configured, the studio setup is stored with every
+	Rosegarden-format file you save.</p></div></div><div style="background-color: #white; color: black;                  margin-top: 20px; margin-left: 20px;                  margin-right: 20px;"><div style="position: absolute; left: 20px;"><a accesskey="p" href="infrared-remote-controls.html">Prev</a></div><div style="position: absolute; right: 20px;"><a accesskey="n" href="studio-device-editor.html">Next</a></div><div align="center"><a accesskey="h" href="index.html">Home</a></div></div><div style="background-color: #white;   color: black;         margin-left: 20px;   margin-right: 20px;"><div class="navLeft">Infrared Remote Controls </div><div class="navRight"> Managing MIDI devices</div><div class="navCenter"><a accesskey="u" href="index.html">Up</a></div></div><br><br><div class="bannerBottom" style="background-image: url(bottom-middle.png);                                        background-repeat: x-repeat;                                         width: 100%;                                         height: 100px;                                         bottom:0px;"><div class="BannerBottomRight"><img src="bottom-right.png" style="margin: 0px" alt=""></div><div class="bannerBottomLeft"><img src="bottom-left.png" style="margin: 0px;" alt=""></div><div id="comments" style="position:relative; top: 5px; left: 1em; height:85px; width: 50%; color: #cfe1f6"><p>
+        </p></div></div></body></html>

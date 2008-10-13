@@ -1,0 +1,28 @@
+<html><head><title>Managing MIDI devices</title><link rel="stylesheet" href="kde-default.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.67.2"><meta name="keywords" content="Rosegarden, sequencer, MIDI, audio, music, notation, score, KDE"><link rel="start" href="index.html" title="The Rosegarden Handbook"><link rel="up" href="studio.html" title="Chapter 5. The Studio"><link rel="prev" href="studio.html" title="Chapter 5. The Studio"><link rel="next" href="studio-bank-editor.html" title="Managing banks and programs for MIDI devices"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="GENERATOR" content="KDE XSL Stylesheet V1.13 using libxslt"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div style="background-image: url(top-middle.png); width: 100%; height: 131px;"><div style="position: absolute;                      right: 0px;"><img src="top-right-konqueror.png" style="margin: 0px" alt=""></div><div style="position: absolute;                         top: 25px;                          right: 100px;                          text-align: right;                          font-size: xx-large;                          font-weight: bold;                          text-shadow: #fff 0px 0px 5px;                          color: #444">Managing MIDI devices</div></div><div style="margin-top: 20px; background-color: #white;                        color: black;                       margin-left: 20px;                        margin-right: 20px;"><div style="position: absolute;                          left: 20px;"><a accesskey="p" href="studio.html">Prev</a></div><div style="position: absolute;                          right: 20px;"><a accesskey="n" href="studio-bank-editor.html">Next</a></div><div class="navCenter">The Studio</div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="studio-device-editor"></a>Managing MIDI devices</h2></div></div></div><p>
+        <div class="screenshot"><div xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="mediaobject"><hr><img src="rg-devicemanager.png" alt="The MIDI device manager"><hr></div></div>
+      </p><p>
+	The MIDI device manager dialog shows you the MIDI devices
+	that you currently have available to you, and where they are
+	connected.  To reach this dialog, use	<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">Studio</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Manage MIDI Devices</span></span>.
+      </p><p>
+	As described in the <a href="studio.html#studio-introduction" title="Devices, instruments and connections">Devices, Instruments and
+	  Connections</a> section, by default Rosegarden tries to
+	provide a plausible set of devices for you at startup, and
+	to make sensible connections for those devices.  But the
+	default configuration might not always be suitable, and so
+	this dialog allows you to rename devices and modify their
+	connections and play/record direction.
+      </p><p>
+	Each of the Play devices listed here provides a target for
+	MIDI tracks to talk to: if you add a new Play device, you
+	will then have 16 new instruments on this device which you
+	can assign tracks to.  If you then assign a connection for
+	that device, the tracks assigned to it will play to the
+	appropriate channel (depending on the instrument) of any
+	MIDI synth attached to that connection.
+      </p><p> The Record devices listed here represent possible
+	sources for recording MIDI.  You can make one or more of them
+	current (so that Rosegarden will listen to them when
+	recording) using the checkboxes on each line, as shown in this
+	dialog.  </p></div><div style="background-color: #white; color: black;                  margin-top: 20px; margin-left: 20px;                  margin-right: 20px;"><div style="position: absolute; left: 20px;"><a accesskey="p" href="studio.html">Prev</a></div><div style="position: absolute; right: 20px;"><a accesskey="n" href="studio-bank-editor.html">Next</a></div><div align="center"><a accesskey="h" href="index.html">Home</a></div></div><div style="background-color: #white;   color: black;         margin-left: 20px;   margin-right: 20px;"><div class="navLeft">The Studio </div><div class="navRight"> Managing banks and programs for MIDI devices</div><div class="navCenter"><a accesskey="u" href="studio.html">Up</a></div></div><br><br><div class="bannerBottom" style="background-image: url(bottom-middle.png);                                        background-repeat: x-repeat;                                         width: 100%;                                         height: 100px;                                         bottom:0px;"><div class="BannerBottomRight"><img src="bottom-right.png" style="margin: 0px" alt=""></div><div class="bannerBottomLeft"><img src="bottom-left.png" style="margin: 0px;" alt=""></div><div id="comments" style="position:relative; top: 5px; left: 1em; height:85px; width: 50%; color: #cfe1f6"><p>
+        </p></div></div></body></html>

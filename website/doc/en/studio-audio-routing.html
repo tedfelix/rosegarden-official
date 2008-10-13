@@ -1,0 +1,42 @@
+<html><head><title>Audio Routing</title><link rel="stylesheet" href="kde-default.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.67.2"><meta name="keywords" content="Rosegarden, sequencer, MIDI, audio, music, notation, score, KDE"><link rel="start" href="index.html" title="The Rosegarden Handbook"><link rel="up" href="studio.html" title="Chapter 5. The Studio"><link rel="prev" href="studio-bank-editor.html" title="Managing banks and programs for MIDI devices"><link rel="next" href="studio-midi-routing.html" title="MIDI Routing"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="GENERATOR" content="KDE XSL Stylesheet V1.13 using libxslt"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div style="background-image: url(top-middle.png); width: 100%; height: 131px;"><div style="position: absolute;                      right: 0px;"><img src="top-right-konqueror.png" style="margin: 0px" alt=""></div><div style="position: absolute;                         top: 25px;                          right: 100px;                          text-align: right;                          font-size: xx-large;                          font-weight: bold;                          text-shadow: #fff 0px 0px 5px;                          color: #444">Audio Routing</div></div><div style="margin-top: 20px; background-color: #white;                        color: black;                       margin-left: 20px;                        margin-right: 20px;"><div style="position: absolute;                          left: 20px;"><a accesskey="p" href="studio-bank-editor.html">Prev</a></div><div style="position: absolute;                          right: 20px;"><a accesskey="n" href="studio-midi-routing.html">Next</a></div><div class="navCenter">The Studio</div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="studio-audio-routing"></a>Audio Routing</h2></div></div></div><p>
+	Any Rosegarden track assigned to an audio or synth plugin
+	instrument becomes part of Rosegarden's audio routing
+	architecture.  There are 16 audio instruments and 16 synth
+	plugin instruments, and each of these has a set of adjustable
+	parameters including fader level, pan, effects and so on.
+	These are generally configurable in the <a href="segment-view-instrumentparameterbox.html" title="The Instrument Parameter Box">Instrument
+	Parameter Box</a> or <a href="studio-audio-mixer.html" title="The Audio Mixer">audio mixer</a>.  Each audio
+	instrument also has an input connection, and both audio and
+	synth plugin instruments have an output connection.
+      </p><p>An instrument's input connection defines where Rosegarden
+      will read audio data from when recording to this instrument.
+      The most usual setting would be to one of Rosegarden's external
+      audio inputs, the number of which is configurable in the <a href="studio-audio-mixer.html" title="The Audio Mixer">audio mixer</a>.  These
+      correspond to JACK audio ports exposed by Rosegarden, to which
+      you can connect outputs from any other JACK audio application or
+      soundcard capture ports using an external JACK router
+      application such as <a href="http://qjackctl.sf.net/" target="_top">QJackCtl</a>.  You can also
+      set an instrument's audio input to the output of one of
+      Rosegarden's built-in audio submasters or master output for
+      mixdowns.
+      </p><p>An instrument's output connection defines where the audio
+      goes when played.  Instruments default to sending their audio to
+      Rosegarden's master output, which is another (stereo pair of)
+      external JACK port(s) that can then be connected up using the
+      same external JACK router.  However, Rosegarden also supports up
+      to eight internal submaster busses, to which you can send
+      instrument outputs instead so as to group instruments into
+      related categories.  You can control the number and routing of
+      these in the <a href="studio-audio-mixer.html" title="The Audio Mixer">audio
+      mixer</a>.
+      </p><p>
+	Rosegarden currently supports effects using a set of pre-fader
+	insert effects slots for each audio instrument.  You cannot
+	yet assign effects to the submaster busses, and Rosegarden
+	does not yet support send effects, although you can obtain
+	similar results using an external JACK effects and mixing
+	architecture.
+      </p><p>Some further details of audio routing configuration,
+      mixing, and effects are discussed in the <a href="studio-audio-mixer.html" title="The Audio Mixer">audio mixer</a>, <a href="segment-view-instrumentparameterbox.html" title="The Instrument Parameter Box">instrument
+      parameter box</a> and <a href="studio-plugins.html" title="Audio Plugins">audio plugins</a> sections.</p></div><div style="background-color: #white; color: black;                  margin-top: 20px; margin-left: 20px;                  margin-right: 20px;"><div style="position: absolute; left: 20px;"><a accesskey="p" href="studio-bank-editor.html">Prev</a></div><div style="position: absolute; right: 20px;"><a accesskey="n" href="studio-midi-routing.html">Next</a></div><div align="center"><a accesskey="h" href="index.html">Home</a></div></div><div style="background-color: #white;   color: black;         margin-left: 20px;   margin-right: 20px;"><div class="navLeft">Managing banks and programs for MIDI devices </div><div class="navRight"> MIDI Routing</div><div class="navCenter"><a accesskey="u" href="studio.html">Up</a></div></div><br><br><div class="bannerBottom" style="background-image: url(bottom-middle.png);                                        background-repeat: x-repeat;                                         width: 100%;                                         height: 100px;                                         bottom:0px;"><div class="BannerBottomRight"><img src="bottom-right.png" style="margin: 0px" alt=""></div><div class="bannerBottomLeft"><img src="bottom-left.png" style="margin: 0px;" alt=""></div><div id="comments" style="position:relative; top: 5px; left: 1em; height:85px; width: 50%; color: #cfe1f6"><p>
+        </p></div></div></body></html>

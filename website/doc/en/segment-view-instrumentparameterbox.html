@@ -1,0 +1,70 @@
+<html><head><title>The Instrument Parameter Box</title><link rel="stylesheet" href="kde-default.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.67.2"><meta name="keywords" content="Rosegarden, sequencer, MIDI, audio, music, notation, score, KDE"><link rel="start" href="index.html" title="The Rosegarden Handbook"><link rel="up" href="segment-instrument-parameters.html" title="Chapter 6. Special Parameters"><link rel="prev" href="segment-view-segmentparameterbox.html" title="The Segment Parameter Box"><link rel="next" href="quantization.html" title="Chapter 7. Quantization"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="GENERATOR" content="KDE XSL Stylesheet V1.13 using libxslt"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div style="background-image: url(top-middle.png); width: 100%; height: 131px;"><div style="position: absolute;                      right: 0px;"><img src="top-right-konqueror.png" style="margin: 0px" alt=""></div><div style="position: absolute;                         top: 25px;                          right: 100px;                          text-align: right;                          font-size: xx-large;                          font-weight: bold;                          text-shadow: #fff 0px 0px 5px;                          color: #444">The Instrument Parameter Box</div></div><div style="margin-top: 20px; background-color: #white;                        color: black;                       margin-left: 20px;                        margin-right: 20px;"><div style="position: absolute;                          left: 20px;"><a accesskey="p" href="segment-view-segmentparameterbox.html">Prev</a></div><div style="position: absolute;                          right: 20px;"><a accesskey="n" href="quantization.html">Next</a></div><div class="navCenter">Special Parameters</div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="segment-view-instrumentparameterbox"></a>The Instrument Parameter Box</h2></div></div></div><p>
+	The instrument parameter box can be found at the left side of
+	the Rosegarden main window, near the <a href="segment-view-segmentparameterbox.html" title="The Segment Parameter Box">Segment Parameter
+	Box</a>.  (If you can't see it, try using
+	<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">Settings</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Show Special
+	Parameters</span></span>.)</p><p>It shows you
+	which instrument is assigned to the current selected track,
+	and contains all of the editable controls for that instrument.
+	Remember that because any number of tracks can be assigned to
+	the same instrument, the settings in this box may affect more
+	than one track at a time.</p><p>The layout and contents of the instrument
+	parameter box depend on the type of instrument: MIDI, audio,
+	or synth plugin.
+      </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="segment-view-instrumentparameterbox-midi"></a>MIDI Instrument Parameters</h3></div></div></div><p>
+	<div class="screenshot"><div xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="mediaobject"><hr><img src="rg-ipb-midi.png" alt="Rosegarden's instrument parameter box for a MIDI instrument"><hr></div></div>
+      </p><p>When you select a track assigned to a MIDI instrument,
+	the instrument parameter box shows MIDI parameters.
+	</p><p>At the top, this box
+	shows the name of the instrument and the connection that its
+	device is using.
+	</p><p>Below that, you can see and edit the MIDI
+	channel number and the <a href="studio-bank-editor.html" title="Managing banks and programs for MIDI devices">bank
+	and program</a> settings that should be sent to the
+	instrument at the start of playback (including a "percussion"
+	toggle that controls whether only percussion programs should
+	be offered in these settings).</p><p>Finally this box shows you the  controllers available
+	for this device (those for a General MIDI device are shown
+	above).  Any settings you make here will be sent to this
+	instrument's channel at the start of playback.</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="segment-view-instrumentparameterbox-audio"></a>Audio Instrument Parameters</h3></div></div></div><p>
+	<div class="screenshot"><div xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="mediaobject"><hr><img src="rg-ipb-audio.png" alt="Rosegarden's instrument parameter box for an audio instrument"><hr></div></div>
+      </p><p>
+	  When you select an audio track, the instrument parameter
+	  box shows audio parameters.
+	</p><p>
+	  The box has two main faders, one with a blue surround for
+	  playback level and the other with a red surround for the
+	  record level when recording to this instrument.  Between
+	  them is a playback level meter.
+	</p><p>The two menus at the top of the box are used to select
+	the input and output <a href="studio-audio-routing.html" title="Audio Routing">audio routing</a> for this
+	instrument.  Below them you can select whether the instrument
+	is mono or stereo, and the pan setting for position in the
+	stereo field.  (Audio instruments are always ultimately
+	stereo, because the pan setting is always applied.  But if you
+	set the instrument to mono, it will reduce any audio data and
+	effect outputs to mono before applying pan.)
+	  </p><p>The column of five buttons at lower left are the effects
+	slots.  Click on them to select and activate plugin effects
+	for this audio instrument, and to control them using the <a href="studio-plugins.html" title="Audio Plugins">plugin editor dialog</a>.  These are insert effects,
+	applied in order from top to bottom before the fader and pan.
+	</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="segment-view-instrumentparameterbox-synth"></a>Synth Plugin Instrument Parameters</h3></div></div></div><p>
+	<div class="screenshot"><div xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="mediaobject"><hr><img src="rg-ipb-synth.png" alt="Rosegarden's instrument parameter box for a synth plugin instrument"><hr></div></div>
+      </p><p>When you select a track assigned to a synth plugin
+	instrument, the instrument parameter box shows synth
+	parameters.  You will notice that although a synth plugin
+	track uses segments with MIDI data in them, in terms of
+	control and routing it behaves more like an audio track.
+	</p><p>The most important control here is the button at top
+	left (saying Xsynth in the above picture) which shows the name
+	of the synth plugin in use for this instrument.  Click this to
+	select a particular synth and control it in the standard
+	Rosegarden <a href="studio-plugins.html" title="Audio Plugins">plugin editor dialog</a>.  Once
+	you've selected a plugin, you may also be able to click the
+	Editor button below it in order to open a dedicated GUI editor
+	for the particular plugin (if the plugin has one).
+	</p><p>The remaining controls here are the same as for audio
+	instruments: the playback fader, playback level, output
+	routing, mono/stereo and pan settings and effects slots are
+	all exactly the same.</p></div></div><div style="background-color: #white; color: black;                  margin-top: 20px; margin-left: 20px;                  margin-right: 20px;"><div style="position: absolute; left: 20px;"><a accesskey="p" href="segment-view-segmentparameterbox.html">Prev</a></div><div style="position: absolute; right: 20px;"><a accesskey="n" href="quantization.html">Next</a></div><div align="center"><a accesskey="h" href="index.html">Home</a></div></div><div style="background-color: #white;   color: black;         margin-left: 20px;   margin-right: 20px;"><div class="navLeft">The Segment Parameter Box </div><div class="navRight"> Quantization</div><div class="navCenter"><a accesskey="u" href="segment-instrument-parameters.html">Up</a></div></div><br><br><div class="bannerBottom" style="background-image: url(bottom-middle.png);                                        background-repeat: x-repeat;                                         width: 100%;                                         height: 100px;                                         bottom:0px;"><div class="BannerBottomRight"><img src="bottom-right.png" style="margin: 0px" alt=""></div><div class="bannerBottomLeft"><img src="bottom-left.png" style="margin: 0px;" alt=""></div><div id="comments" style="position:relative; top: 5px; left: 1em; height:85px; width: 50%; color: #cfe1f6"><p>
+        </p></div></div></body></html>

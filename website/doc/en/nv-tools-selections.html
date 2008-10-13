@@ -1,0 +1,94 @@
+<html><head><title>Tools and selections</title><link rel="stylesheet" href="kde-default.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.67.2"><meta name="keywords" content="Rosegarden, sequencer, MIDI, audio, music, notation, score, KDE"><link rel="start" href="index.html" title="The Rosegarden Handbook"><link rel="up" href="notation-view.html" title="Chapter 10. The Notation editor"><link rel="prev" href="nv-rulers.html" title="Rulers and cursors"><link rel="next" href="nv-insertion.html" title="Inserting notes and rests"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="GENERATOR" content="KDE XSL Stylesheet V1.13 using libxslt"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div style="background-image: url(top-middle.png); width: 100%; height: 131px;"><div style="position: absolute;                      right: 0px;"><img src="top-right-konqueror.png" style="margin: 0px" alt=""></div><div style="position: absolute;                         top: 25px;                          right: 100px;                          text-align: right;                          font-size: xx-large;                          font-weight: bold;                          text-shadow: #fff 0px 0px 5px;                          color: #444">Tools and selections</div></div><div style="margin-top: 20px; background-color: #white;                        color: black;                       margin-left: 20px;                        margin-right: 20px;"><div style="position: absolute;                          left: 20px;"><a accesskey="p" href="nv-rulers.html">Prev</a></div><div style="position: absolute;                          right: 20px;"><a accesskey="n" href="nv-insertion.html">Next</a></div><div class="navCenter">The Notation editor</div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="nv-tools-selections"></a>Tools and selections</h2></div></div></div><p>
+	Most of the menu and toolbar editing functions in the
+	<span class="application">Rosegarden</span> Notation editor fall into one of three
+	categories: “<span class="quote">tools</span>”, “<span class="quote">functions that
+	  operate on selections</span>”, and “<span class="quote">drag
+	  operations</span>”.
+      </p><div class="variablelist"><dl><dt><span class="term">Tools</span></dt><dd><p>
+	      The basic tools are the selection tool, the erase
+	      tool, and those for inserting notes, rests, text and so
+	      on, which are usually accessed from the toolbar buttons.
+	  </p><p>
+	      <div class="screenshot"><div xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="mediaobject"><hr><img src="rg-notationtools.png" alt="The insert, erase, text, and guitar chord tools"><hr></div></div>
+	  </p><p>
+	      Choosing a tool changes the default behaviour of the
+	      mouse buttons on the main notation canvas, at least
+	      until another tool is chosen instead.  For example,
+	      choosing the selection tool allows you to make
+	      selections and so to use the selection-based functions
+	      (below); choosing an insertion tool (such as one of the
+	      notes) switches the <span class="acronym">GUI</span>'s behaviour so as to insert
+	      notes by clicking on the canvas; choosing the erase tool
+	      allows you to remove events by clicking on them.
+	    </p><p>
+	      You can also change the current tool using the Tools menu.
+	    </p></dd><dt><span class="term">Functions that operate on selections</span></dt><dd><p>
+	      The majority of the remaining menu functions require a
+	      selection to be made on the canvas before they can be
+	      used. Some of them (such as <span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Cut</span></span> 
+	      or the <span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Note Style</span></span>
+	      functions) will operate on any selected events; others
+	      (<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Stem Directions</span></span> function)
+	      will refuse to work unless the selection contains 
+	      some notes.
+	    </p><p>
+	      To select some events on the canvas, switch to the
+	      Select (arrow) tool and then outline a rectangular area
+	      containing the events you want to select. The selected
+	      events will then be highlighted in blue. If you click
+	      on a single event, just that event will be selected <sup>[<a name="id2559056" href="#ftn.id2559056">4</a>]</sup>).
+	    </p><p>If you hold 
+	      <span><strong class="keycap">Shift</strong></span> while dragging
+	      out a rectangle, its contents will be added to any
+	      existing selection instead of replacing it.
+	    </p><p>
+	      To select a whole bar, double-click with the Select tool
+	      on some empty space within that bar; to select the whole
+	      staff, click three times. The Edit menu carries
+	      functions for selecting extended areas based on the
+	      location of the insert cursor, and you can also select
+	      events around the insert cursor by holding Shift and
+	      pressing the left or right arrow keys.
+	    </p><p>
+	      It is not possible to select events from more than
+	      one staff at once.
+	    </p><p>After selecting some events, you can filter your selection further using the <span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">Edit</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Filter Selection</span></span> function.  For more details, refer to <a href="matrix-selection.html#matrix-selectionfilter" title="Filtering the selection">the corresponding function in the matrix editor</a>.
+	        </p></dd><dt><span class="term">Drag operations</span></dt><dd><p>
+	      You can also do a certain amount of editing just by
+	      dragging things around.  Switch to the Select (arrow)
+	      tool, and then you can change the pitch of notes by
+	      just click-and-dragging their heads up or down, and
+	      change the times of notes and other events by dragging
+	      them left or right.  (You can't drag rests or time
+	      signatures, but you can drag everything else.  If you
+	      have more than one event selected, the whole selection
+	      will be dragged at once.)
+	    </p><p>
+	      Dragging is usually a less accurate way of editing
+	      things than using the menu or toolbar functions, but
+	      it can be easier.
+	    </p></dd></dl></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2559156"></a>Transposing</h3></div></div></div><p>
+	  <div class="screenshot"><div xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="mediaobject"><hr><img src="transpose-by-interval.png" alt="Transposing by interval"><hr></div></div>
+	</p><p>
+	  In Notation view menu there are two functions which can be
+	  used to transpose notes by an arbitrary interval, namely
+	    <span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">Adjust</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Transpose</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Transpose by Semitones</span></span>
+	  function which asks just the number of semitones to be
+	  transposed, and
+	    <span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">Adjust</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Transpose</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Transpose by Interval</span></span>
+	  function which shows a neat dialog that can be used to 
+	  transpose notes. In the latter, the dialog shows an example 
+	  notes before and after transposing and expresses the
+	  interval in written form. The interval may be changed either
+	  by dragging the notes shown by the dialog or by changing
+	  separately the base note, its octavation and accidentals.
+	</p><p>
+	  In Segment view, Notation view, and Track view there is also
+	    <span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">Segment(s)</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Transpose by Interval</span></span>
+	  function which makes a transpose to entire segment. In this
+	  dialog you may also choose whether only the notes are
+	  transposed or the keys of the segment are transposed also.
+	</p></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a name="ftn.id2559056" href="#id2559056">4</a>] </sup> You can also double-click on a single event to open an
+		  editing dialog for that event, but that's got nothing to
+		  do with selections.</p></div></div></div><div style="background-color: #white; color: black;                  margin-top: 20px; margin-left: 20px;                  margin-right: 20px;"><div style="position: absolute; left: 20px;"><a accesskey="p" href="nv-rulers.html">Prev</a></div><div style="position: absolute; right: 20px;"><a accesskey="n" href="nv-insertion.html">Next</a></div><div align="center"><a accesskey="h" href="index.html">Home</a></div></div><div style="background-color: #white;   color: black;         margin-left: 20px;   margin-right: 20px;"><div class="navLeft">Rulers and cursors </div><div class="navRight"> Inserting notes and rests</div><div class="navCenter"><a accesskey="u" href="notation-view.html">Up</a></div></div><br><br><div class="bannerBottom" style="background-image: url(bottom-middle.png);                                        background-repeat: x-repeat;                                         width: 100%;                                         height: 100px;                                         bottom:0px;"><div class="BannerBottomRight"><img src="bottom-right.png" style="margin: 0px" alt=""></div><div class="bannerBottomLeft"><img src="bottom-left.png" style="margin: 0px;" alt=""></div><div id="comments" style="position:relative; top: 5px; left: 1em; height:85px; width: 50%; color: #cfe1f6"><p>
+        </p></div></div></body></html>

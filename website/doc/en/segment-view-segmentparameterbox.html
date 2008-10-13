@@ -1,0 +1,60 @@
+<html><head><title>The Segment Parameter Box</title><link rel="stylesheet" href="kde-default.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.67.2"><meta name="keywords" content="Rosegarden, sequencer, MIDI, audio, music, notation, score, KDE"><link rel="start" href="index.html" title="The Rosegarden Handbook"><link rel="up" href="segment-instrument-parameters.html" title="Chapter 6. Special Parameters"><link rel="prev" href="segment-instrument-parameters.html" title="Chapter 6. Special Parameters"><link rel="next" href="segment-view-instrumentparameterbox.html" title="The Instrument Parameter Box"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="GENERATOR" content="KDE XSL Stylesheet V1.13 using libxslt"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div style="background-image: url(top-middle.png); width: 100%; height: 131px;"><div style="position: absolute;                      right: 0px;"><img src="top-right-konqueror.png" style="margin: 0px" alt=""></div><div style="position: absolute;                         top: 25px;                          right: 100px;                          text-align: right;                          font-size: xx-large;                          font-weight: bold;                          text-shadow: #fff 0px 0px 5px;                          color: #444">The Segment Parameter Box</div></div><div style="margin-top: 20px; background-color: #white;                        color: black;                       margin-left: 20px;                        margin-right: 20px;"><div style="position: absolute;                          left: 20px;"><a accesskey="p" href="segment-instrument-parameters.html">Prev</a></div><div style="position: absolute;                          right: 20px;"><a accesskey="n" href="segment-view-instrumentparameterbox.html">Next</a></div><div class="navCenter">Special Parameters</div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="segment-view-segmentparameterbox"></a>The Segment Parameter Box</h2></div></div></div><p>
+	<div class="screenshot"><div xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="mediaobject"><hr><img src="rg-segmentparameterbox.png" alt="Rosegarden's segment parameter box"><hr></div></div>
+      </p><p>
+	The segment parameter box can be found at the left side of the Rosegarden main window.  (If you can't see it, try using 	<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">Settings</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Show Special Parameters</span></span>.)
+ It allows you to modify some aspects of the
+	selected segments.</p><p>If a single segment is currently selected, its
+	parameters will be shown in the segment parameter box and can be
+	edited there.  If several segments are selected, the parameter box
+	will only show the current values where they are the same for all
+	of the selected segments -- but you can still edit them, and your
+	changes will apply to the whole selection.
+
+	<div class="variablelist"><dl><dt><span class="term">Label</span></dt><dd><p>Shows the label of the selected segment (or segments, if
+		they all have the same label).  Click the "Edit" button to edit
+		the label.</p></dd><dt><span class="term">Repeat</span></dt><dd><p>Switches repeat on or off for the selected segments.  A
+		repeating segment will repeat until the start of the following
+		segment on the same track, or until the end of the composition
+		if there is no following segment.</p><p>The repeated parts of a repeating segment are shown on
+		the main canvas in a fainter colour than the original segment.
+		You can turn them into real editable copies of the original
+		segment either by using
+	<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">Segments</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Turn Repeats into Copies</span></span>, or simply by double-clicking on the
+		individual repeating blocks.</p></dd><dt><span class="term">Quantize</span></dt><dd><p>
+		Shows the quantization setting for the selected
+		segments.  You can change this to quickly quantize
+		the start times of all their notes.  For more
+		advanced quantization, use <span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">Segments</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Quantize...</span></span>.  See <a href="quantization.html" title="Chapter 7. Quantization">Quantization</a> for more
+		details.
+	      </p></dd><dt><span class="term">Transpose</span></dt><dd><p>Shows the transposition (in semitones) currently applied
+		to the selected segments.  This transposition is applied when
+		the segment is played, and is not shown in the notes displayed
+		in the matrix, notation or event list editors.  You can use
+		this to quickly change the pitch of part or all of a
+		composition, and it is commonly used with segments containing
+		notation written for transposing instruments, such as the
+		clarinet.</p></dd><dt><span class="term">Delay</span></dt><dd><p>Shows the delay currently in effect on the selected
+		segments.  You can set a delay here in order to cause an entire
+		segment to play later than written.  This delay is applied when
+		the segment is played, and is not shown in the notes displayed
+		in the matrix, notation or event list editors.
+	      </p><p>
+		You can set a delay either in musical time (by
+		choosing a note duration from the delay dropdown),
+		in which time the exact delay will depend on the
+		tempo, or in real time (by choosing a time in
+		milliseconds from the dropdown).
+	      </p></dd><dt><span class="term">Colour</span></dt><dd><p>Shows the colour being used for the display of the
+		selected segments.  You can choose another colour from the
+		dropdown, or choose the "Add New Colour" option if you want a
+		colour not in the dropdown.
+	      </p><p>
+		You can also manage and rename colours using
+<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">Composition</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Edit Document Properties...</span></span>
+		(then choose the Colour page on the document properties
+		dialog).  The modified colour palette will be saved
+		with the composition in the Rosegarden file.
+		<div class="screenshot"><div xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="mediaobject"><hr><img src="rg-colours.png" alt="Rosegarden's colour manager"><hr></div></div>
+	      </p></dd></dl></div>
+      </p></div><div style="background-color: #white; color: black;                  margin-top: 20px; margin-left: 20px;                  margin-right: 20px;"><div style="position: absolute; left: 20px;"><a accesskey="p" href="segment-instrument-parameters.html">Prev</a></div><div style="position: absolute; right: 20px;"><a accesskey="n" href="segment-view-instrumentparameterbox.html">Next</a></div><div align="center"><a accesskey="h" href="index.html">Home</a></div></div><div style="background-color: #white;   color: black;         margin-left: 20px;   margin-right: 20px;"><div class="navLeft">Special Parameters </div><div class="navRight"> The Instrument Parameter Box</div><div class="navCenter"><a accesskey="u" href="segment-instrument-parameters.html">Up</a></div></div><br><br><div class="bannerBottom" style="background-image: url(bottom-middle.png);                                        background-repeat: x-repeat;                                         width: 100%;                                         height: 100px;                                         bottom:0px;"><div class="BannerBottomRight"><img src="bottom-right.png" style="margin: 0px" alt=""></div><div class="bannerBottomLeft"><img src="bottom-left.png" style="margin: 0px;" alt=""></div><div id="comments" style="position:relative; top: 5px; left: 1em; height:85px; width: 50%; color: #cfe1f6"><p>
+        </p></div></div></body></html>

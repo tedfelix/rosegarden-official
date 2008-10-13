@@ -1,0 +1,97 @@
+<html><head><title>Inserting notes and rests</title><link rel="stylesheet" href="kde-default.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.67.2"><meta name="keywords" content="Rosegarden, sequencer, MIDI, audio, music, notation, score, KDE"><link rel="start" href="index.html" title="The Rosegarden Handbook"><link rel="up" href="notation-view.html" title="Chapter 10. The Notation editor"><link rel="prev" href="nv-tools-selections.html" title="Tools and selections"><link rel="next" href="nv-signatures.html" title="Clef and key"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="GENERATOR" content="KDE XSL Stylesheet V1.13 using libxslt"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div style="background-image: url(top-middle.png); width: 100%; height: 131px;"><div style="position: absolute;                      right: 0px;"><img src="top-right-konqueror.png" style="margin: 0px" alt=""></div><div style="position: absolute;                         top: 25px;                          right: 100px;                          text-align: right;                          font-size: xx-large;                          font-weight: bold;                          text-shadow: #fff 0px 0px 5px;                          color: #444">Inserting notes and rests</div></div><div style="margin-top: 20px; background-color: #white;                        color: black;                       margin-left: 20px;                        margin-right: 20px;"><div style="position: absolute;                          left: 20px;"><a accesskey="p" href="nv-tools-selections.html">Prev</a></div><div style="position: absolute;                          right: 20px;"><a accesskey="n" href="nv-signatures.html">Next</a></div><div class="navCenter">The Notation editor</div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="nv-insertion"></a>Inserting notes and rests</h2></div></div></div><p>To insert a note, select one of the note tools by clicking
+      on a particular duration of note on the toolbar, and then click
+      on the staff at the point where you want to add the note.</p><p>
+	  <div class="screenshot"><div xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="mediaobject"><hr><img src="rg-notation-toolbars.png" alt="The duration, rests, and accidentals toolbars"><hr></div></div>
+      </p><p>You can also select one of the accidentals on the toolbar
+      to insert sharpened or flattened notes.  If no accidental is
+      selected, the note inserted will follow the key signature.
+      Alternatively, you can select the "Follow previous accidental"
+      icon (shown as a note with an arrow pointing back from where the
+      accidental would appear) to make the note follow whatever
+      accidental was last used at the same height on the staff.</p><p>If you add a note at the same time as an existing note of
+	different duration, the editor will generally assume that you
+	want to create chords and will split the existing or new note
+	accordingly so as to create one or more chords with ties.  If
+	you really do want to chord two different durations, you can
+	select the tied noteheads and use the Collapse Equal-Pitch Notes
+	function to merge them together. Alternatively, the default
+	behaviour can be changed in the <span class="application">Rosegarden</span> configuration dialog
+	so as not to do the split at all.</p><p>If you add a note exactly over an existing note of
+	different duration (i.e. at the same pitch), the duration of the
+	existing note will be changed to that of the new one.</p><p>If you add a rest at the same time as an existing note,
+	the note will be silenced for the duration of the rest,
+	shortening or possibly removing it altogether.</p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="nv-insertion-keyboard"></a>Typing notes and rests with the PC keyboard</h3></div></div></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2559379"></a>Duration</h4></div></div></div><p>First, ensure a notation tool is selected to indicate
+	    the duration of note (or rest) you wish to insert.  You can
+	    select the various note types using the number keys:</p><div class="itemizedlist"><ul type="disc"><li><p><span><strong class="keycap">5</strong></span> – Breve</p></li><li><p><span><strong class="keycap">1</strong></span> – Whole note (semibreve)</p></li><li><p><span><strong class="keycap">2</strong></span> – Half note (minim)</p></li><li><p><span><strong class="keycap">4</strong></span> – Quarter note (crotchet)</p></li><li><p><span><strong class="keycap">8</strong></span> – Eighth note (quaver)</p></li><li><p><span><strong class="keycap">6</strong></span> – Sixteenth note (semiquaver)</p></li><li><p><span><strong class="keycap">3</strong></span> – Thirty-second note (demisemiquaver)</p></li><li><p><span><strong class="keycap">0</strong></span> – Sixty-fourth note (hemidemisemiquaver)</p></li></ul></div><p>You can switch to a triplet version of the note
+	    duration by pressing the <span><strong class="keycap">G</strong></span> key.  Pressing it
+	    again will switch back to the normal duration.  The status
+	    bar at the bottom of the window will notify you of when a
+	    triplet duration is active.</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2559475"></a>Pitch</h4></div></div></div><p>Once a notation tool is selected, you can insert a
+	    note at the current position of the <a href="nv-rulers.html" title="Rulers and cursors">insert cursor</a> by pressing one of
+	    the pitch keys:</p><div class="itemizedlist"><ul type="disc"><li><p><span><strong class="keycap">A</strong></span> – Do (the tonic of the current key in the current clef)</p></li><li><p><span><strong class="keycap">S</strong></span> – Re</p></li><li><p><span><strong class="keycap">D</strong></span> – Mi</p></li><li><p><span><strong class="keycap">F</strong></span> – Fa</p></li><li><p><span><strong class="keycap">J</strong></span> – So</p></li><li><p><span><strong class="keycap">K</strong></span> – La</p></li><li><p><span><strong class="keycap">L</strong></span> – Ti</p></li></ul></div><p>Press the "." key to togggle between dotted and
+	  undotted durations.</p><p>Holding <span><strong class="keycap">Shift</strong></span> while pressing a key
+	    will sharpen the note (except for Mi and Ti, which don't
+	    have sharpened versions) and holding <span><strong class="keycap">Shift</strong></span>
+	    and <span><strong class="keycap">Ctrl</strong></span> together will flatten it (except
+	    for Fa and Do).</p><p>To enter notes an octave higher, use the corresponding
+	    keys on the next row up: <span><strong class="keycap">Q</strong></span>,
+	    <span><strong class="keycap">W</strong></span>, <span><strong class="keycap">E</strong></span>, <span><strong class="keycap">R</strong></span>,
+	    <span><strong class="keycap">U</strong></span>, <span><strong class="keycap">I</strong></span>, and
+	    <span><strong class="keycap">O</strong></span>.  Likewise to enter notes an octave
+	    lower, use <span><strong class="keycap">Z</strong></span>, <span><strong class="keycap">X</strong></span>,
+	    <span><strong class="keycap">C</strong></span>, <span><strong class="keycap">V</strong></span>, <span><strong class="keycap">B</strong></span>,
+	    <span><strong class="keycap">N</strong></span> and <span><strong class="keycap">M</strong></span>.</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2559644"></a>Rests</h4></div></div></div><p>To insert a rest instead of a note, press
+	    <span><strong class="keycap">P</strong></span>.  Alternatively, you can use the
+	    <span><strong class="keycap">T</strong></span> and <span><strong class="keycap">Y</strong></span> keys to switch the
+	    current tool to a rest tool and back to a note tool again.</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2559670"></a>Chords</h4></div></div></div><p>The default behaviour of the notation editor is to
+	    move the insert cursor forward after inserting a note, so as
+	    to be ready to insert another note after it in a melody;
+	    this can be changed using the <span><strong class="keycap">H</strong></span> key, which
+	    switches to chord mode so that subsequent insertions occur
+	    at the same time as the last one.  Pressing
+	    <span><strong class="keycap">H</strong></span> again switches back to the melody
+	    insertion behaviour.</p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2559697"></a>Changing note durations</h4></div></div></div><p>You can use the keyboard to change the durations of
+	  notes that you've already entered.  Make sure the notes you
+	  want to change are selected, and then press
+	  <span><strong class="keycap">Ctrl</strong></span> plus the number key for the note you
+	  want.  You can also add or remove dots, by pressing
+	  <span><strong class="keycap">Ctrl</strong></span> plus "." — use this repeatedly to
+	  select between one dot, two dots and no dots.</p><p>If you also hold <span><strong class="keycap">Alt</strong></span> as well as
+	  <span><strong class="keycap">Ctrl</strong></span>, you will change the durations of the
+	  notes as displayed in the notation editor without changing
+	  their performed durations.  This can be very useful for
+	  tidying up a score: see also <a href="nv-quantization.html" title="Notation from performance data">notation from performance
+	  data</a>.
+	  </p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="id2559746"></a>Other remarks</h4></div></div></div><p>All of the insertion commands are also available on a
+	    submenu of the Tools menu.  It's unlikely you'd ever want to
+	    navigate the menus just to insert a single note, but the
+	    menus show the keyboard shortcuts and so provide a useful
+	    reference in case you forget which key is which.</p><p>The keyboard shortcuts are currently designed for use
+	    with a QWERTY-layout keyboard.  There is not yet any way to
+	    remap the keys for another layout, short of reassigning each
+	    key individually using the "Configure Shortcuts..." option
+	    on the Settings menu.</p><p>Holding the <span><strong class="keycap">Ctrl</strong></span> key while pressing a
+	    number will select the corresponding dotted-note
+	    tool.</p></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="nv-insertion-midi"></a>Entering notes using a MIDI keyboard</h3></div></div></div><p>
+	  You can enter notes into the notation editor one at a time
+	  using a MIDI keyboard or other MIDI control device — a
+	  process known as step recording.  The notation editor uses
+	  the pitches you play on the keyboard, but the durations you
+	  have selected in the editor itself.
+	</p><p>
+	  To start entering notes from a MIDI keyboard, first make
+	  sure the keyboard is configured as your default MIDI
+	  record device.  Then make sure a notation tool is selected
+	  to set a duration.  Then press the  step recording button on the notation editor's
+	  toolbar, or select Step Recording from the Tools menu.
+	  From that point on all notes pressed on the MIDI keyboard
+	  will be inserted at the current insertion time in that
+	  notation window, until step recording is switched off
+	  again or activated in a different window or the window is
+	  closed.
+	</p><p>
+	  You can select another notation tool while step recording
+	  is in progress, in order to insert notes of different
+	  durations; and you can also switch into Chord mode  to insert chords.
+	</p></div></div><div style="background-color: #white; color: black;                  margin-top: 20px; margin-left: 20px;                  margin-right: 20px;"><div style="position: absolute; left: 20px;"><a accesskey="p" href="nv-tools-selections.html">Prev</a></div><div style="position: absolute; right: 20px;"><a accesskey="n" href="nv-signatures.html">Next</a></div><div align="center"><a accesskey="h" href="index.html">Home</a></div></div><div style="background-color: #white;   color: black;         margin-left: 20px;   margin-right: 20px;"><div class="navLeft">Tools and selections </div><div class="navRight"> Clef and key</div><div class="navCenter"><a accesskey="u" href="notation-view.html">Up</a></div></div><br><br><div class="bannerBottom" style="background-image: url(bottom-middle.png);                                        background-repeat: x-repeat;                                         width: 100%;                                         height: 100px;                                         bottom:0px;"><div class="BannerBottomRight"><img src="bottom-right.png" style="margin: 0px" alt=""></div><div class="bannerBottomLeft"><img src="bottom-left.png" style="margin: 0px;" alt=""></div><div id="comments" style="position:relative; top: 5px; left: 1em; height:85px; width: 50%; color: #cfe1f6"><p>
+        </p></div></div></body></html>

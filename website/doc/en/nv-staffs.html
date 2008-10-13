@@ -1,0 +1,48 @@
+<html><head><title>Single and multiple staffs</title><link rel="stylesheet" href="kde-default.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.67.2"><meta name="keywords" content="Rosegarden, sequencer, MIDI, audio, music, notation, score, KDE"><link rel="start" href="index.html" title="The Rosegarden Handbook"><link rel="up" href="notation-view.html" title="Chapter 10. The Notation editor"><link rel="prev" href="notation-view.html" title="Chapter 10. The Notation editor"><link rel="next" href="nv-layout.html" title="Linear and page layouts"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="GENERATOR" content="KDE XSL Stylesheet V1.13 using libxslt"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div style="background-image: url(top-middle.png); width: 100%; height: 131px;"><div style="position: absolute;                      right: 0px;"><img src="top-right-konqueror.png" style="margin: 0px" alt=""></div><div style="position: absolute;                         top: 25px;                          right: 100px;                          text-align: right;                          font-size: xx-large;                          font-weight: bold;                          text-shadow: #fff 0px 0px 5px;                          color: #444">Single and multiple staffs</div></div><div style="margin-top: 20px; background-color: #white;                        color: black;                       margin-left: 20px;                        margin-right: 20px;"><div style="position: absolute;                          left: 20px;"><a accesskey="p" href="notation-view.html">Prev</a></div><div style="position: absolute;                          right: 20px;"><a accesskey="n" href="nv-layout.html">Next</a></div><div class="navCenter">The Notation editor</div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="nv-staffs"></a>Single and multiple staffs</h2></div></div></div><p>
+	There are three ways to open a notation editor from the
+	<span class="application">Rosegarden</span> main window.  (They all require that you
+	have some existing segments in the main window first,
+	so if you're starting a new composition, you should
+	create your segments before you start thinking about
+	how to edit them.)
+
+	<div class="variablelist"><dl><dt><span class="term">Double-clicking on segments</span></dt><dd><p>The most obvious way is just to double-click on
+		a segment in the main canvas.  This opens the segment
+		in whatever you have configured  as
+		the default editor (notation, matrix, or event list),
+		and by default this is the notation editor.  So
+		double-clicking a single segment will open it as a
+		single staff in a Notation editor window.</p><p>You can also open a multi-staff editor this way:
+		holding down the Shift key, select (with a single
+		mouse click) each of the segments on the main view
+		that you want to open, but double-click on the last
+		one.  All of the selected segments will then be opened
+		together in a single notation window.</p></dd><dt><span class="term">The Open in Default Editor menu function (the Return key)</span></dt><dd><p>The Return key is a shortcut for the Open in
+		Default Editor menu function, which does much the same
+		thing as double-clicking: opens all of the currently
+		selected segments together in a notation editor, or in
+		whichever other editor you have configured as your
+		default. </p></dd><dt><span class="term">The Open in Notation Editor menu functions</span></dt><dd><p>Alternatively, you can use the main window's
+		Open in
+		Notation Editor menu function, either on
+		the Segments menu or on the right-button popup menu on
+		a segment in the canvas.  Select the segments you want
+		to edit (by shift-clicking as above, or by using the
+		Select All Segments function) and
+		then select Open in
+		Notation Editor.</p></dd></dl></div>
+
+      </p><p>
+	If you have more than one staff (i.e. segment) visible in the notation
+	editor, only one of them can be "current" at once.  The
+	current staff can be distinguished because it has the insert
+	cursor on it (see <a href="nv-rulers.html" title="Rulers and cursors">Rulers and
+	  Cursors</a>), and this is the staff on which any editing
+	operations that use the insert cursor will take place.  The
+	topmost staff is the current one by default, but you can
+	switch to a different staff by ctrl-clicking on it, or by using the
+	<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">Tools</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Local
+	  Cursor</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Cursor Up Staff</span></span> and
+	<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Cursor Down Staff</span></span> menu functions.
+      </p></div><div style="background-color: #white; color: black;                  margin-top: 20px; margin-left: 20px;                  margin-right: 20px;"><div style="position: absolute; left: 20px;"><a accesskey="p" href="notation-view.html">Prev</a></div><div style="position: absolute; right: 20px;"><a accesskey="n" href="nv-layout.html">Next</a></div><div align="center"><a accesskey="h" href="index.html">Home</a></div></div><div style="background-color: #white;   color: black;         margin-left: 20px;   margin-right: 20px;"><div class="navLeft">The Notation editor </div><div class="navRight"> Linear and page layouts</div><div class="navCenter"><a accesskey="u" href="notation-view.html">Up</a></div></div><br><br><div class="bannerBottom" style="background-image: url(bottom-middle.png);                                        background-repeat: x-repeat;                                         width: 100%;                                         height: 100px;                                         bottom:0px;"><div class="BannerBottomRight"><img src="bottom-right.png" style="margin: 0px" alt=""></div><div class="bannerBottomLeft"><img src="bottom-left.png" style="margin: 0px;" alt=""></div><div id="comments" style="position:relative; top: 5px; left: 1em; height:85px; width: 50%; color: #cfe1f6"><p>
+        </p></div></div></body></html>

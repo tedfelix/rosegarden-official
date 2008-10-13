@@ -1,0 +1,118 @@
+<html><head><title>Managing banks and programs for MIDI devices</title><link rel="stylesheet" href="kde-default.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.67.2"><meta name="keywords" content="Rosegarden, sequencer, MIDI, audio, music, notation, score, KDE"><link rel="start" href="index.html" title="The Rosegarden Handbook"><link rel="up" href="studio.html" title="Chapter 5. The Studio"><link rel="prev" href="studio-device-editor.html" title="Managing MIDI devices"><link rel="next" href="studio-audio-routing.html" title="Audio Routing"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="GENERATOR" content="KDE XSL Stylesheet V1.13 using libxslt"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div style="background-image: url(top-middle.png); width: 100%; height: 131px;"><div style="position: absolute;                      right: 0px;"><img src="top-right-konqueror.png" style="margin: 0px" alt=""></div><div style="position: absolute;                         top: 25px;                          right: 100px;                          text-align: right;                          font-size: xx-large;                          font-weight: bold;                          text-shadow: #fff 0px 0px 5px;                          color: #444">Managing banks and programs for MIDI devices</div></div><div style="margin-top: 20px; background-color: #white;                        color: black;                       margin-left: 20px;                        margin-right: 20px;"><div style="position: absolute;                          left: 20px;"><a accesskey="p" href="studio-device-editor.html">Prev</a></div><div style="position: absolute;                          right: 20px;"><a accesskey="n" href="studio-audio-routing.html">Next</a></div><div class="navCenter">The Studio</div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="studio-bank-editor"></a>Managing banks and programs for MIDI devices</h2></div></div></div><p>
+        <div class="screenshot"><div xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="mediaobject"><hr><img src="rg-bankeditor.png" alt="The MIDI bank and program editor"><hr></div></div>
+      </p><p>
+	Remember that each MIDI device contains a number of
+	instruments, and that you can assign tracks to those
+	instruments.  In MIDI terms, each instrument corresponds to
+	a single channel on your MIDI synth.  You can choose which
+	of the available voices (sounds) on your synth each
+	instrument uses, but in order to do this, you need to let
+	Rosegarden know the names for all of the available voices.
+      </p><p>
+	This dialog allows you to attach banks of programs (names for
+	voices) to your MIDI devices, thus permitting each
+	instrument on a device to be set to use one of those voices
+	in the <a href="segment-view-instrumentparameterbox.html" title="The Instrument Parameter Box">Instrument
+	  Parameter Box</a>.
+      </p><p>
+	The usual way to set up the program names for a device is
+	simply to import them from one of the supplied device
+	(".rgd") files.  To do this, select a device in the list on
+	the left of the dialog, then click the Import button below
+	the list and choose the .rgd file corresponding to your
+	synth.
+      </p><p>
+        If there is no current .rgd file available for your synth,
+        then you can use this dialog to create a new bank.  To do this
+        you will have to find the program map in your synth's MIDI
+        Implementation Chart and enter all the names by hand: you can
+        then Export them to a .rgd file to share with other Rosegarden
+        users.  Contact the rosegarden-user mailing list if you have
+        made a new .rgd file and would like to share it.  (This is how
+        all of the existing .rgd files have come to be included with
+        Rosegarden: other users have contributed them.)
+      </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="studio-keymappings"></a>Percussion Key Mappings</h3></div></div></div><p>
+	  Many MIDI synthesizers have at least one percussion program,
+	  in which each "pitch" plays a different type of sound.
+	  Rosegarden contains a dedicated percussion matrix editor to
+	  view and edit notes against a scale consisting of the
+	  correct names for the pitches, instead of against the
+	  conventional piano keyboard pitch scale.
+	</p><p>
+	  The key mappings available for a particular MIDI device are
+	  also defined in the Rosegarden device (".rgd") file.  Each
+	  MIDI program that is defined as a percussion program can
+	  have a key mapping associated with it; if there is one, then
+	  it will be used by default in any track that is assigned to
+	  this program.  Like program and bank definitions, key
+	  mappings can be imported from and exported to .rgd files.
+	</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="studio-soundfonts"></a>SoundFonts</h3></div></div></div><p>
+	  If you happen to be using a soft-synth or soundcard synth
+	  that uses SoundFont (.sf2) files, you can simply load the
+	  correct program names directly from your .sf2 file into this
+	  dialog.  Just ask to Import as normal, and then choose the
+	  .sf2 file that you are using instead of a .rgd file.
+	</p><p>Note that the Studio only manages information about
+	  existing MIDI devices for Rosegarden, it does not actually
+	  handle tasks such as loading a SoundFont to your soundcard in
+	  the first place.  If you want to make sure a SoundFont is
+	  loaded to your soundcard when Rosegarden starts up, you should
+	  use the special "Load SoundFont to SoundBlaster card at
+	  startup" option in the sequencer configuration in
+	<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">Settings</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Configure Rosegarden...</span></span>.
+	</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="studio-variations"></a>Variations</h3></div></div></div><p>
+	  Some MIDI devices (for example, those from Roland)
+	  organise their program names using a scheme known as
+	  "variations".  For these devices, you generally want to
+	  select a program by first selecting the basic program name
+	  — such as a piano — and then selecting one
+	  of a set of variations on that program — such as an
+	  electric piano.  This is in contrast to General MIDI-based
+	  synths, which organise their programs into banks and
+	  expect you to choose a bank first and then a program from
+	  that bank.
+	</p><p>
+	  Rosegarden can support devices that use variations, but
+	  you still have to enter the program names in a bank
+	  format.  Internally, devices that use variations still use
+	  MIDI bank select controllers to choose between the
+	  variations; you need to find out from your synth's
+	  documentation whether your device uses the LSB or MSB bank
+	  select to choose variations, and which bank number
+	  corresponds to which variation.  You can then enter the
+	  banks as normal, and use the "Show Variation list based on
+	  MSB/LSB" option on the bank dialog to tell Rosegarden to
+	  show variations instead of banks when displaying that
+	  device in an instrument parameter box.
+	</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="studio-midi-import"></a>Program mapping on <span class="acronym">MIDI</span> import</h3></div></div></div><p>
+	
+	When you import a <span class="acronym">MIDI</span> file into a composition, <span class="application">Rosegarden</span>
+	uses the existing studio setup to determine how to map the
+	<span class="acronym">MIDI</span> programs onto <span class="application">Rosegarden</span> instruments.  The aim is to
+	ensure that every <span class="acronym">MIDI</span> program gets mapped to an instrument
+	that really exists in your studio (and thus is actually
+	attached to your computer), so that all the <span class="acronym">MIDI</span> tracks
+	can be heard.
+
+      </p><p>
+
+	The <span class="acronym">MIDI</span> program-change and bank-select events found in the
+	imported file are used when importing, but only as an aid to
+	help find the appropriate instrument for each <span class="acronym">MIDI</span> track
+	from the set of instruments in your studio.  So, for
+	example, if your studio is currently set up to contain only
+	<span class="acronym">GM</span> instruments, and you import a <span class="acronym">MIDI</span> file with <span class="acronym">GS</span> program
+	changes onto it, <span class="application">Rosegarden</span> will remap the <span class="acronym">GS</span> banks back
+	onto <span class="acronym">GM</span> because they're all it knows that you have at the
+	time you import the file.  It doesn't remember the original
+	<span class="acronym">GS</span> program numbers.
+
+      </p><p>
+
+	This means that you should always ensure that your studio is
+	correctly configured for the devices you actually have,
+	before you import the <span class="acronym">MIDI</span> file.  Otherwise the program data
+	in the <span class="acronym">MIDI</span> file may be lost.
+
+      </p></div></div><div style="background-color: #white; color: black;                  margin-top: 20px; margin-left: 20px;                  margin-right: 20px;"><div style="position: absolute; left: 20px;"><a accesskey="p" href="studio-device-editor.html">Prev</a></div><div style="position: absolute; right: 20px;"><a accesskey="n" href="studio-audio-routing.html">Next</a></div><div align="center"><a accesskey="h" href="index.html">Home</a></div></div><div style="background-color: #white;   color: black;         margin-left: 20px;   margin-right: 20px;"><div class="navLeft">Managing MIDI devices </div><div class="navRight"> Audio Routing</div><div class="navCenter"><a accesskey="u" href="studio.html">Up</a></div></div><br><br><div class="bannerBottom" style="background-image: url(bottom-middle.png);                                        background-repeat: x-repeat;                                         width: 100%;                                         height: 100px;                                         bottom:0px;"><div class="BannerBottomRight"><img src="bottom-right.png" style="margin: 0px" alt=""></div><div class="bannerBottomLeft"><img src="bottom-left.png" style="margin: 0px;" alt=""></div><div id="comments" style="position:relative; top: 5px; left: 1em; height:85px; width: 50%; color: #cfe1f6"><p>
+        </p></div></div></body></html>

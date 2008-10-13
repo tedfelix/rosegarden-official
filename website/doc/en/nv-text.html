@@ -1,0 +1,170 @@
+<html><head><title>Text, Lyrics, and LilyPond directives</title><link rel="stylesheet" href="kde-default.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.67.2"><meta name="keywords" content="Rosegarden, sequencer, MIDI, audio, music, notation, score, KDE"><link rel="start" href="index.html" title="The Rosegarden Handbook"><link rel="up" href="notation-view.html" title="Chapter 10. The Notation editor"><link rel="prev" href="nv-signatures.html" title="Clef and key"><link rel="next" href="nv-guitarchords.html" title="Guitar Chords"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="GENERATOR" content="KDE XSL Stylesheet V1.13 using libxslt"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div style="background-image: url(top-middle.png); width: 100%; height: 131px;"><div style="position: absolute;                      right: 0px;"><img src="top-right-konqueror.png" style="margin: 0px" alt=""></div><div style="position: absolute;                         top: 25px;                          right: 100px;                          text-align: right;                          font-size: xx-large;                          font-weight: bold;                          text-shadow: #fff 0px 0px 5px;                          color: #444">Text, Lyrics, and LilyPond directives</div></div><div style="margin-top: 20px; background-color: #white;                        color: black;                       margin-left: 20px;                        margin-right: 20px;"><div style="position: absolute;                          left: 20px;"><a accesskey="p" href="nv-signatures.html">Prev</a></div><div style="position: absolute;                          right: 20px;"><a accesskey="n" href="nv-guitarchords.html">Next</a></div><div class="navCenter">The Notation editor</div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="nv-text"></a>Text, Lyrics, and LilyPond directives</h2></div></div></div><p>A staff can contain various sorts of text, in text
+	events.  There are two basic classes of user-editable text event: single
+	text items used for point annotations etc., and lyrics, plus a third
+	type used especially for tweaking LilyPond export.  User-editable
+	types can be created (and so associated with a particular
+	time in the staff) using the Text tool, which is available on
+	the
+	<span class="inlinemediaobject"><img src="rg-text-cursor.png"></span>
+	button in the toolbar.  Lyrics can
+	also be created this way, but are more easily created using
+	the <a href="nv-text.html#nv-text-lyrics" title="Editing lyrics">lyric editor</a>.</p><p>To add a piece of text, select the Text tool and click
+	at the point where you want to add it.  If you want the text
+	associated with a particular note or rest, it may be helpful to click
+	the T cursor directly on that note, so as to ensure proper placement
+	in time.  A dialog box will appear, into which you can type the text
+	and choose its intended purpose.  (Rosegarden prefers to store what
+	the text is for, rather than how it should look; this is so that in
+	future we may be able to configure how the various sorts of text are
+	presented for each individual user.)
+
+	  <div class="screenshot"><div xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="mediaobject"><hr><img src="rg-textdialog.png" alt="Rosegarden's text dialog"><hr></div></div>
+	
+	The available
+	purposes (or styles) are:</p><div class="variablelist"><dl><dt><span class="term">Dynamic</span></dt><dd><p> Used for
+	      minor local indications such as the dynamic marks "p", "mf"
+	      etc. Shown below the staff in small italic
+	      type.  </p></dd><dt><span class="term">Direction</span></dt><dd><p> Used
+	      when indicating significant changes in style or mood.  Shown
+	      above the staff in large roman type.
+	    </p></dd><dt><span class="term">Local Direction</span></dt><dd><p>
+	      Used to indicate less significant changes in style or mood.
+	      Shown below the staff in a smaller bold-italic roman
+	      type. </p></dd><dt><span class="term">Tempo</span></dt><dd><p> Used to
+	      indicate significant changes in tempo.  Shown above the
+	      staff in large bold roman type.
+	    </p></dd><dt><span class="term">Local Tempo</span></dt><dd><p> Used
+	      to indicate more minor or local changes in tempo.  Shown
+	      above the staff in a small bold roman type.
+        </p></dd><dt><span class="term">Chord</span></dt><dd><p> Used
+	      to indicate chord changes for guitarists, etc.  Shown
+	      above the staff in a small bold roman type.
+	    </p></dd><dt><span class="term">Lyric</span></dt><dd><p> Although
+	      lyrics are usually created in the <a href="nv-text.html#nv-text-lyrics" title="Editing lyrics">lyric editor</a>, they can also
+	      be entered word by word if necessary using this style.  This
+	      style is shown below the text in a small roman typet.
+	      (Warning: if you enter lyrics this way and later
+	      edit the staff's lyrics using the lyric editor, any lyrics
+	      entered this way may be modified or moved if their
+	      positioning is not compatible with that expected by the
+	      lyric editor.)  </p></dd><dt><span class="term">Annotation</span></dt><dd><p> Used
+	      for helpful text that is not strictly considered part of the
+	      score.  Shown below the staff, boxed-out in a yellow
+	      sticky-label-style box.  These may not be visible
+	      initially, and can be turned on via
+	      <span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">Settings</span></span>
+	      <span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Show Annotations</span></span>
+	    </p></dd><dt><span class="term">LilyPond Directive</span></dt><dd><p> Used
+	      as the mechanism for exporting special tags that are
+	      only understood by the LilyPond exporter.  These
+	      provide a means to extend <span class="application">Rosegarden</span>'s capabilities
+	      beyond what it can do within its own native interface.
+	      Shown above the staff, in a green box.  These may not be visible
+	      initially, and can be turned on via
+	      <span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">Settings</span></span>
+	      <span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Show LilyPond Directives</span></span>
+	    </p></dd></dl></div><p>For many of the styles, a new combo box will appear that allows
+	  you to select from a variety of commonly-used texts appropriate for
+	  that style, such as "Allegro" and "ritardando."  Selecting one of
+	  these texts saves typing, but in no way impedes your ability to type
+	  your own text by hand, should you so desire.
+      </p><p>You can also edit text after creating it, by clicking on
+	the existing text with the text tool.</p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="nv-text-lyrics"></a>Editing lyrics</h3></div></div></div><p>The Lyric editor, available from the 
+	  <span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">View</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Open Lyric Editor</span></span>
+	  function, allows you to edit all of
+	  the lyric events for a single staff at once, using a fairly
+	  rudimentary textual editing system.  To use it, just
+	  activate the menu option, edit the lyric text in the
+	  resulting dialog, and then hit OK.</p><p>The lyrics you enter should follow a particular
+	  format.  Bar lines are vital to avoid the editor getting
+	  confused, and are represented with a slash ("/").  Within
+	  each bar the individual syllables are separated by spaces
+	  (at least one space: the editor doesn't care about any extra
+	  whitespace). Each syllable in turn will be attached to the
+	  next subsequent note or chord within that bar (although at
+	  the moment the editor can get quite confused by chords that
+	  are not exact, i.e. that require smoothing or
+	  quantizing).</p><p>If you want a note to have no syllable attached to it,
+	  you need to provide a dot (".") as the syllable for that
+	  note.  (This is why the default lyric text for a segment is
+	  usually full of dots.)  Remember to separate the dots with
+	  spaces, so that they are clearly separate syllables.</p><p>If you want more than one syllable on the same note,
+	  with a space between them, use a tilde ("~") instead of the
+	  space.  It will be shown as a space on the score.</p><p>If you want to split a syllable across two notes, with
+	  a hyphen, you need to enter a space following the hyphen so
+	  the editor knows to treat it as two syllables.  (Hyphens get
+	  no special treatment within syllables.)</p><p>Syllables consisting only of numbers surrounded by
+	  square brackets (like "[29]") will be ignored; this is the
+	  format used for the automatically-generated bar numbers
+	  shown in the editor.</p><p>You should also be aware that the textual format of
+	  lyrics is only used for editing:  the lyrics are actually
+	  stored as distinct text events (one per syllable).  This
+	  means that the text format may potentially change in the
+	  future to accommodate more advanced editing capabilities,
+	  although the event format should not change and so your
+	  saved files should continue to be compatible.</p><p><span class="application">Rosegarden</span> supports also multiple lines of lyrics.
+	  You may always attach one more verse into a single staff
+	  by clicking Add Verse in the lyrics editor.  All the verses
+	  are entered with the same syntax.  If you leave the last verse
+	  without syllables, or make it empty, it is removed from
+	  the list of verses next time you open the lyrics editor.
+	  </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="nv-lilypond-directives"></a>Using special LilyPond directives</h3></div></div></div><p>LilyPond directives are a special kind of <a href="nv-text.html" title="Text, Lyrics, and LilyPond directives">text</a> that you can
+	      use to export .ly files that take advantage of
+	      functionality not yet available directly through <span class="application">Rosegarden</span>'s
+	      own native interface.
+	  </p><p>Some of these are a bit fiddly with respect to how their
+	      placement in time affects their function.  It is not always
+	      immediately apparent at a glance just where they are, or what notes
+	      or barlines they will affect, so I have made placement suggestions
+	      to help ease the process of getting them in the right spot.
+	  </p><p>
+	  	These directives are:
+	  </p><div class="variablelist"><dl><dt><span class="term">Segno</span></dt><dd><p>used to export a 
+		    <span class="inlinemediaobject"><img src="rg-segno.png"></span>
+		   </p></dd><dt><span class="term">Coda</span></dt><dd><p>used to export a 
+		    <span class="inlinemediaobject"><img src="rg-coda.png"></span>
+		   </p></dd><dt><span class="term">Alt1</span></dt><dd><p>Placed anywhere in a
+			  measure, designates that the measure(s)
+			  that follow this one should be exported as the
+			  first alternate ending (see file 
+			  lilypond-alternative-endings.rg for example)
+		   </p></dd><dt><span class="term">Alt2</span></dt><dd><p>Placed anywhere in a
+			  measure, designates that the measure(s)
+			  that follow this one should be exported as the
+			  second alternate ending (see file 
+			  lilypond-alterantive-endings.rg for example)
+		   </p></dd><dt><span class="term">|| -&gt;</span></dt><dd><p>Placed anywhere in a
+			  measure, designates that the next calculated barline will be
+			  rendered as a double barline (see file
+			  lilypond-directives.rg for example)
+		   </p></dd><dt><span class="term">|. -&gt;</span></dt><dd><p>Placed anywhere in a
+			  measure, designates that the next calculated barline will be
+			  rendered as a terminating barline (see file
+			  lilypond-directives.rg for example)
+		   </p></dd><dt><span class="term">: -&gt;</span></dt><dd><p>Placed anywhere in a
+			  measure, designates that the next calculated barline will be
+			  rendered as a dashed barline (see file
+			  lilypond-directives.rg for example)
+		   </p></dd><dt><span class="term">Gliss.</span></dt><dd><p>Placed by clicking
+			  directly on a notehead, draws a glissando between
+			  the target note and the note immediately following (see file
+			  lilypond-directives.rg for example)
+		   </p></dd><dt><span class="term">Arp.</span></dt><dd><p>Placed by clicking
+			  directly on a chord, draws a wavy line arpeggio
+			  symbol immediately to the left of the affected chord (see file
+			  lilypond-directives.rg for example)
+		   </p></dd><dt><span class="term">Tiny -&gt;.</span></dt><dd><p>Placed anywhere,
+			  designates that notation immediately following this
+			  directive should be rendered at the "tiny" size (see file
+			  lilypond-directives.rg for example)
+		   </p></dd><dt><span class="term">Small -&gt;.</span></dt><dd><p>Placed anywhere,
+			  designates that notation immediately following this
+			  directive should be rendered at the "small" size (see file
+			  lilypond-directives.rg for example)
+		   </p></dd><dt><span class="term">Norm. -&gt;.</span></dt><dd><p>Placed anywhere,
+			  designates that notation immediately following this
+			  directive should be rendered at the normal size;
+			  usually used to cancel a Tiny -&gt; or Small -&gt;. (see file
+			  lilypond-directives.rg for example)
+		   </p></dd></dl></div></div></div><div style="background-color: #white; color: black;                  margin-top: 20px; margin-left: 20px;                  margin-right: 20px;"><div style="position: absolute; left: 20px;"><a accesskey="p" href="nv-signatures.html">Prev</a></div><div style="position: absolute; right: 20px;"><a accesskey="n" href="nv-guitarchords.html">Next</a></div><div align="center"><a accesskey="h" href="index.html">Home</a></div></div><div style="background-color: #white;   color: black;         margin-left: 20px;   margin-right: 20px;"><div class="navLeft">Clef and key </div><div class="navRight"> Guitar Chords</div><div class="navCenter"><a accesskey="u" href="notation-view.html">Up</a></div></div><br><br><div class="bannerBottom" style="background-image: url(bottom-middle.png);                                        background-repeat: x-repeat;                                         width: 100%;                                         height: 100px;                                         bottom:0px;"><div class="BannerBottomRight"><img src="bottom-right.png" style="margin: 0px" alt=""></div><div class="bannerBottomLeft"><img src="bottom-left.png" style="margin: 0px;" alt=""></div><div id="comments" style="position:relative; top: 5px; left: 1em; height:85px; width: 50%; color: #cfe1f6"><p>
+        </p></div></div></body></html>

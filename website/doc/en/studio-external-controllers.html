@@ -1,0 +1,23 @@
+<html><head><title>External MIDI control surfaces</title><link rel="stylesheet" href="kde-default.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.67.2"><meta name="keywords" content="Rosegarden, sequencer, MIDI, audio, music, notation, score, KDE"><link rel="start" href="index.html" title="The Rosegarden Handbook"><link rel="up" href="studio.html" title="Chapter 5. The Studio"><link rel="prev" href="studio-midi-filters.html" title="MIDI filters"><link rel="next" href="segment-instrument-parameters.html" title="Chapter 6. Special Parameters"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="GENERATOR" content="KDE XSL Stylesheet V1.13 using libxslt"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div style="background-image: url(top-middle.png); width: 100%; height: 131px;"><div style="position: absolute;                      right: 0px;"><img src="top-right-konqueror.png" style="margin: 0px" alt=""></div><div style="position: absolute;                         top: 25px;                          right: 100px;                          text-align: right;                          font-size: xx-large;                          font-weight: bold;                          text-shadow: #fff 0px 0px 5px;                          color: #444">External MIDI control surfaces</div></div><div style="margin-top: 20px; background-color: #white;                        color: black;                       margin-left: 20px;                        margin-right: 20px;"><div style="position: absolute;                          left: 20px;"><a accesskey="p" href="studio-midi-filters.html">Prev</a></div><div style="position: absolute;                          right: 20px;"><a accesskey="n" href="segment-instrument-parameters.html">Next</a></div><div class="navCenter">The Studio</div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="studio-external-controllers"></a>External MIDI control surfaces</h2></div></div></div><p>
+	Rosegarden's audio and MIDI mixer windows and main canvas can
+	also be controlled to some degree by an external MIDI device.
+	To set this up, you will need to use an ALSA MIDI connection
+	manager such as qjackctl to connect your MIDI controller
+	device to Rosegarden's "external controller" input and output
+	MIDI ports.
+      </p><p>
+	Rosegarden accepts MIDI control change messages to adjust the
+	mixer track corresponding to the incoming MIDI channel on each
+	controller event, and also sends out MIDI messages when
+	something is changed in a mixer track in order to support
+	controllers with powered faders or knobs.
+      </p><p>Rosegarden accepts MIDI controller number 81 to change the
+      currently active window.  Send controller 81 with data value 0-9
+      to select the main window, 10-19 to select the audio mixer
+      window or 20-29 to select the MIDI mixer window.</p><p>Rosegarden accepts MIDI controller number 82 to change the
+      currently selected track in the main window.  The stepping of
+      this controller depends on the number of tracks in the window --
+      the ratio of controller data value to track number will be
+      calculated so as to use the full MIDI controller data range,
+      provided there are no more than 128 tracks in the window.</p></div><div style="background-color: #white; color: black;                  margin-top: 20px; margin-left: 20px;                  margin-right: 20px;"><div style="position: absolute; left: 20px;"><a accesskey="p" href="studio-midi-filters.html">Prev</a></div><div style="position: absolute; right: 20px;"><a accesskey="n" href="segment-instrument-parameters.html">Next</a></div><div align="center"><a accesskey="h" href="index.html">Home</a></div></div><div style="background-color: #white;   color: black;         margin-left: 20px;   margin-right: 20px;"><div class="navLeft">MIDI filters </div><div class="navRight"> Special Parameters</div><div class="navCenter"><a accesskey="u" href="studio.html">Up</a></div></div><br><br><div class="bannerBottom" style="background-image: url(bottom-middle.png);                                        background-repeat: x-repeat;                                         width: 100%;                                         height: 100px;                                         bottom:0px;"><div class="BannerBottomRight"><img src="bottom-right.png" style="margin: 0px" alt=""></div><div class="bannerBottomLeft"><img src="bottom-left.png" style="margin: 0px;" alt=""></div><div id="comments" style="position:relative; top: 5px; left: 1em; height:85px; width: 50%; color: #cfe1f6"><p>
+        </p></div></div></body></html>

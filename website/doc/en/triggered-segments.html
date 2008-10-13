@@ -1,0 +1,57 @@
+<html><head><title>Triggered segments</title><link rel="stylesheet" href="kde-default.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.67.2"><meta name="keywords" content="Rosegarden, sequencer, MIDI, audio, music, notation, score, KDE"><link rel="start" href="index.html" title="The Rosegarden Handbook"><link rel="up" href="segment-view.html" title="Chapter 3. The Track Editor"><link rel="prev" href="markers-ranges-loops.html" title="Markers, ranges, and loops"><link rel="next" href="transport.html" title="Chapter 4. The Transport"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="GENERATOR" content="KDE XSL Stylesheet V1.13 using libxslt"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div style="background-image: url(top-middle.png); width: 100%; height: 131px;"><div style="position: absolute;                      right: 0px;"><img src="top-right-konqueror.png" style="margin: 0px" alt=""></div><div style="position: absolute;                         top: 25px;                          right: 100px;                          text-align: right;                          font-size: xx-large;                          font-weight: bold;                          text-shadow: #fff 0px 0px 5px;                          color: #444">Triggered segments</div></div><div style="margin-top: 20px; background-color: #white;                        color: black;                       margin-left: 20px;                        margin-right: 20px;"><div style="position: absolute;                          left: 20px;"><a accesskey="p" href="markers-ranges-loops.html">Prev</a></div><div style="position: absolute;                          right: 20px;"><a accesskey="n" href="transport.html">Next</a></div><div class="navCenter">The Track Editor</div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="triggered-segments"></a>Triggered segments</h2></div></div></div><p>A triggered segment is a segment that does not appear on
+	the main canvas and is not positioned at a particular time or
+	on any particular instrument, but is instead triggered during
+	playback by one or more notes in other segments.  These
+	triggering notes serve as a shorthand for the full triggered
+	segment, in the same way as written ornaments such as trills
+	in notation serve as shorthand for the notes that make up the
+	trill.  One use of triggered segments is in fact for
+	<a href="nv-ornaments.html" title="Playing ornaments">playing ornaments</a>.</p><p>Rosegarden can optionally stretch or squash each triggered
+    segment to match the duration of the note that triggers it, and
+    can raise or lower the pitch and velocity of the segment likewise
+    to match.  A triggered segment is played on the same instrument as
+    its triggering event.</p><p>
+	<div class="screenshot"><div xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="mediaobject"><hr><img src="rg-triggersegment.png" alt="Rosegarden's Trigger Segment dialog, as reached from the matrix editor"><hr></div></div>
+      </p><p>Triggered segments are managed through a window available
+    via the <span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">Segments</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Manage Triggered
+    Segments</span></span> option in the main segment
+    canvas.  To make a new triggered segment, copy a segment or part
+    of a segment to Rosegarden's clipboard, then use the <span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">Edit</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Paste as New
+    Triggered Segment</span></span> menu option in this
+    manager window.  You can then set a particular note to play this
+    triggered segment instead of the original note, using the
+    <span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">Adjust</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Trigger Segment...</span></span>
+    function in the matrix or <span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">Note</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Ornaments</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Trigger
+    Ornament...</span></span> function in the notation
+    editor.</p><p>When triggering a segment, you will be offered a choice for
+    how it is played in terms of timing, because the triggered segment
+    (or ornament) may have a different underlying duration from your
+    triggering note.  The options for playback timing are:</p><div class="variablelist"><dl><dt><span class="term">As stored</span></dt><dd><p>Play the triggered segment with a start time
+	  coinciding with that of the note, and at the original speed.
+	  Keep playing the triggered segment until it ends, even if it
+	  is longer than the triggering note.
+	  </p></dd><dt><span class="term">Truncate if longer than note</span></dt><dd><p>Play the triggered segment with a start time
+	  coinciding with that of the note, and at the original speed.
+	  If the triggered segment is longer than the triggering note,
+	  truncate it so that it ends at the end time of the note.
+	  </p></dd><dt><span class="term">End at same time as note</span></dt><dd><p>Play the triggered segment with its end time
+	  coinciding with the end of the note, and at the original
+	  speed.  This means the start of the triggered segment may be
+	  chopped off if it is longer than the triggering note.
+	  </p></dd><dt><span class="term">Stretch or squash segment to note duration</span></dt><dd><p>Speed up or slow down the triggered segment so that it
+	  fits exactly into the duration of the triggering note.  This
+	  is the default.
+	  </p></dd></dl></div><p>A triggered segment may contain silence at the start or end,
+    and this will be "played" (and stretched or squashed if
+    appropriate) as well as the notes and other events in the segment.</p><p>It is not currently possible to make a triggered segment
+    start playing before the start time of its triggering note. You
+    also can't trigger a segment from within another triggered
+    segment, and you can't trigger audio segments.</p><p>To edit the contents of a triggered segment, either
+    double-click on it in the Manage Triggered Segments window, or
+    double-click on any note that triggers it.  Apart from editing the
+    notes in the segment, you can also change the duration of the
+    segment itself from the Edit menu of the resulting event list
+    view.  Remember that editing a triggered segment will affect all
+    the notes that trigger it, not just the one that you
+    double-clicked to get to the editing window.</p></div><div style="background-color: #white; color: black;                  margin-top: 20px; margin-left: 20px;                  margin-right: 20px;"><div style="position: absolute; left: 20px;"><a accesskey="p" href="markers-ranges-loops.html">Prev</a></div><div style="position: absolute; right: 20px;"><a accesskey="n" href="transport.html">Next</a></div><div align="center"><a accesskey="h" href="index.html">Home</a></div></div><div style="background-color: #white;   color: black;         margin-left: 20px;   margin-right: 20px;"><div class="navLeft">Markers, ranges, and loops </div><div class="navRight"> The Transport</div><div class="navCenter"><a accesskey="u" href="segment-view.html">Up</a></div></div><br><br><div class="bannerBottom" style="background-image: url(bottom-middle.png);                                        background-repeat: x-repeat;                                         width: 100%;                                         height: 100px;                                         bottom:0px;"><div class="BannerBottomRight"><img src="bottom-right.png" style="margin: 0px" alt=""></div><div class="bannerBottomLeft"><img src="bottom-left.png" style="margin: 0px;" alt=""></div><div id="comments" style="position:relative; top: 5px; left: 1em; height:85px; width: 50%; color: #cfe1f6"><p>
+        </p></div></div></body></html>

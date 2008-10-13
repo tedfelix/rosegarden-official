@@ -1,0 +1,46 @@
+<html><head><title>Adjusting Notation</title><link rel="stylesheet" href="kde-default.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.67.2"><meta name="keywords" content="Rosegarden, sequencer, MIDI, audio, music, notation, score, KDE"><link rel="start" href="index.html" title="The Rosegarden Handbook"><link rel="up" href="notation-view.html" title="Chapter 10. The Notation editor"><link rel="prev" href="nv-paste-types.html" title="Paste types"><link rel="next" href="nv-interpret.html" title="Interpreting Performance Cues in Notation"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="GENERATOR" content="KDE XSL Stylesheet V1.13 using libxslt"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div style="background-image: url(top-middle.png); width: 100%; height: 131px;"><div style="position: absolute;                      right: 0px;"><img src="top-right-konqueror.png" style="margin: 0px" alt=""></div><div style="position: absolute;                         top: 25px;                          right: 100px;                          text-align: right;                          font-size: xx-large;                          font-weight: bold;                          text-shadow: #fff 0px 0px 5px;                          color: #444">Adjusting Notation</div></div><div style="margin-top: 20px; background-color: #white;                        color: black;                       margin-left: 20px;                        margin-right: 20px;"><div style="position: absolute;                          left: 20px;"><a accesskey="p" href="nv-paste-types.html">Prev</a></div><div style="position: absolute;                          right: 20px;"><a accesskey="n" href="nv-interpret.html">Next</a></div><div class="navCenter">The Notation editor</div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="nv-adjustments"></a>Adjusting Notation</h2></div></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="nv-adjustments-note-rest-durations"></a>Adjusting note and rest durations</h3></div></div></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="nv-normalize-rests"></a>Normalizing rests</h4></div></div></div><p>Sometimes as a result of editing or quantization
+	  operations, a piece of notation can end up with incorrect
+	  rest durations for the current time signature.  You can use
+	  the <span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">Adjust</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Rests</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Normalize Rests</span></span> function to
+	  fix these.  This examines each sequence of
+	  consecutive rests found in the selection, and adjusts,
+	  splits and merges rests as necessary to ensure that the
+	  rests have theoretically correct durations and fall on the
+	  correct boundaries.
+	  </p><p>For example, a 4/4 bar containing a crotchet
+	    (quarter-note), then a minim (half-note) rest and a
+	    crotchet rest will be rearranged to place the crotchet
+	    rest first, as the minim rest should not cross the
+	    central beat boundary of the bar.
+	  </p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="nv-make-viable"></a>Splitting very long notes</h4></div></div></div><p>The
+	  <span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">Adjust</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Notes</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Tie Notes at
+	  Barlines</span></span> is intended to deal
+	  with notes that have excessively long durations, and
+	  therefore overflow barlines or are too long to be
+	  displayed as a single note.  It takes any such notes and
+	  splits them into shorter, tied notes.
+	  </p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="nv-de-counterpoint"></a>Splitting overlapping notes</h4></div></div></div><p>The 
+<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">Adjust</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Notes</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Split-and-Tie Overlapping Chords</span></span> function can be used to turn "counterpoint" notes into a series of split-and-tied notes and chords.</p><p>It can be applied to a selection that contains
+	  overlapping notes.  It will split overlapping notes at the
+	  point where they overlap, and tie together the resulting
+	  split notes, ensuring that the music takes the form of a
+	  series of chords and/or single notes starting and ending in
+	  neat blocks, with some notes possibly tied.
+	  </p></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="nv-rescale"></a>Rescaling note durations</h4></div></div></div><p>The 
+	  <span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">Adjust</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Rescale</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Halve
+	  Durations</span></span> and
+	  <span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">Adjust</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Rescale</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Double
+	  Durations</span></span> functions can be
+	  used to perform the most simple rescaling functions.
+	  </p><p>For more elaborate rescalings, use the
+	  <span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">Adjust</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Rescale</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Stretch
+	  or Squash...</span></span> function with
+	  which you scale the total lenth of the selection.
+	  </p></div></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="id2561666"></a>Repositioning notation elements</h3></div></div></div><p>
+	      You may occasionally wish to to nudge the positioning of some
+	      element of notation that Rosegarden's layout algorithm has not
+	      placed in an optimal location.  Use Ctrl-click and drag to move slurs, hairpins,
+	      text events, and several other sorts of events.  You may not reposition notes in
+	      this fashion.
+	  </p></div></div><div style="background-color: #white; color: black;                  margin-top: 20px; margin-left: 20px;                  margin-right: 20px;"><div style="position: absolute; left: 20px;"><a accesskey="p" href="nv-paste-types.html">Prev</a></div><div style="position: absolute; right: 20px;"><a accesskey="n" href="nv-interpret.html">Next</a></div><div align="center"><a accesskey="h" href="index.html">Home</a></div></div><div style="background-color: #white;   color: black;         margin-left: 20px;   margin-right: 20px;"><div class="navLeft">Paste types </div><div class="navRight"> Interpreting Performance Cues in Notation</div><div class="navCenter"><a accesskey="u" href="notation-view.html">Up</a></div></div><br><br><div class="bannerBottom" style="background-image: url(bottom-middle.png);                                        background-repeat: x-repeat;                                         width: 100%;                                         height: 100px;                                         bottom:0px;"><div class="BannerBottomRight"><img src="bottom-right.png" style="margin: 0px" alt=""></div><div class="bannerBottomLeft"><img src="bottom-left.png" style="margin: 0px;" alt=""></div><div id="comments" style="position:relative; top: 5px; left: 1em; height:85px; width: 50%; color: #cfe1f6"><p>
+        </p></div></div></body></html>

@@ -1,0 +1,139 @@
+<html><head><title>Chapter 6. Special Parameters</title><link rel="stylesheet" href="kde-default.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.67.2"><meta name="keywords" content="Rosegarden, sequencer, MIDI, audio, music, notation, score, KDE"><link rel="start" href="index.html" title="The Rosegarden Handbook"><link rel="up" href="index.html" title="The Rosegarden Handbook"><link rel="prev" href="studio-external-controllers.html" title="External MIDI control surfaces"><link rel="next" href="segment-view-segmentparameterbox.html" title="The Segment Parameter Box"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="GENERATOR" content="KDE XSL Stylesheet V1.13 using libxslt"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div style="background-image: url(top-middle.png); width: 100%; height: 131px;"><div style="position: absolute;                      right: 0px;"><img src="top-right-konqueror.png" style="margin: 0px" alt=""></div><div style="position: absolute;                         top: 25px;                          right: 100px;                          text-align: right;                          font-size: xx-large;                          font-weight: bold;                          text-shadow: #fff 0px 0px 5px;                          color: #444">Special Parameters</div></div><div style="margin-top: 20px; background-color: #white;                        color: black;                       margin-left: 20px;                        margin-right: 20px;"><div style="position: absolute;                          left: 20px;"><a accesskey="p" href="studio-external-controllers.html">Prev</a></div><div style="position: absolute;                          right: 20px;"><a accesskey="n" href="segment-view-segmentparameterbox.html">Next</a></div><div class="navCenter"> </div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="segment-instrument-parameters"></a>Chapter 6. Special Parameters</h2></div></div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="track-parameters"></a>The Track Parameter Box</h2></div></div></div><p>
+	<div class="screenshot"><div xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="mediaobject"><hr><img src="rg-trackparameterbox.png" alt="Rosegarden's track parameter box"><hr></div></div>
+      </p><p>
+	  The track parameter box can be found at the left side of the
+	  <span class="application">Rosegarden</span> main window.  It displays the parameters for the
+	  currently selected track.  (If you can't see it, try using 	<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">Settings</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Show Special Parameters</span></span>.)
+    </p><p>
+	It allows you to assign instruments to tracks, control what
+	incoming <span class="acronym">MIDI</span> data from which sources will be recorded to
+	particular tracks, control staff attributes (currently only for LilyPond
+	export,) make selections that govern how <span class="acronym">MIDI</span> segments
+	will be created for each track that is assigned to a non-audio
+	instrument, and apply these selections to existing segments (as when
+	converting a trumpet part from an imported <span class="acronym">MIDI</span> file to be
+	represented as notation playable by a real human on a real instrument,
+	for example.)
+    </p><p>This box is divided into three sections:</p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="track-playback-parameters"></a>Playback parameters</h3></div></div></div><p>
+		These provide an alternative mechanism to the <a href="segment-view-instruments.html" title="Tracks and instruments">menu-based
+		    system</a> of instrument assignment.
+	    </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="track-recording-filters"></a>Track recording filters</h3></div></div></div><p>
+               These provide you a way to control what events are recorded to this track. If you leave the default values ("all") for both parameters, every received event will be stored in the track. This setting is safe and convenient if you are recording only one MIDI track. Otherwise, you should adjust one or both parameters to select only the desired events for the track.
+            </p><div class="variablelist"><dl><dt><span class="term">Device</span></dt><dd><p>You can record from only one of the available devices marked for recording in the  <a href="studio-device-editor.html" title="Managing MIDI devices">device manager</a>, or from all of them simultaneously.</p></dd><dt><span class="term">Channel</span></dt><dd><p>You can record from all channels, or limit recording to only one of the 16 available MIDI channels. In this case, only MIDI channel messages matching the channel number will be recorded, and system messages not having a channel (as system exclusive events) will be discarded.</p></dd></dl></div><p>
+               Both parameters are cummulative: you can filter only a device, only a channel, or both a device and a channel simultaneously. It is not mandatory to ensure mutually exclusive selections for all the armed tracks, but if you don't do so you will find duplicated events at several recorded tracks.
+             </p><p>
+		The recording filters are also used to <a href="studio-midi-routing.html" title="MIDI Routing">route MIDI events </a> to the assigned track instrument when you are recording.
+             </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="track-staff-params"></a>Staff export options</h3></div></div></div><p>
+	        These provide you with a means of exporting notation to render
+		at either normal, small, or tiny size (eg. for printing certain
+		parts at cue size,) and allow you to export a variety of nested
+		brackets.
+	   </p><p>
+	        You are responsible for creating a series of bracket start and
+		end markers that will yield a functional result, and if you make
+		a mistake with these, it is likely that your file will not
+		export or preview correctly in LilyPond.
+	   </p><p>For a detailed, hands-on demonstration of brackets in action,
+	   please see
+	   <a href="http://rosegarden.sourceforge.net/tutorial/supplemental/fidelio/fidelio.html" target="_top">this
+	   online tutorial.</a>
+	   </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="track-create-with"></a>Create segments with</h3></div></div></div><p>
+		These provide you with a means of controlling many of
+		the <a href="segment-view-segmentparameterbox.html" title="The Segment Parameter Box">segment
+		    parameters</a> for segments that don't yet
+		exist.  They are aimed especially at notation users,
+		and they facilitate operations that require you to use
+		more than one segment on a track (as when using
+		repeats, or <a href="nv-text.html#nv-lilypond-directives" title="Using special LilyPond directives">alternative
+		    endings</a>), by allowing you to create a series of new
+		segments that all have the same properties by default.
+	    </p><p>
+		<div class="variablelist"><dl><dt><span class="term">Preset</span></dt><dd><p>
+				The <span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Load</span></span> button
+				launches a dialog that allows you to pick
+				a pre-defined collection of parameters
+				that provide guidelines for how you should
+				write parts for real-world instruments, and
+				optionally convert any existing segments on this
+				track to take on these new parameters.
+				
+			    </p><p>
+			    <span class="inlinemediaobject"><img src="rg-loadpreset.png"></span>
+			    </p><p>
+				You first pick a Category, then an Instrument,
+				and finally choose whether you wish to write a
+				part for an amateur or a professional player.
+				<sup>[<a name="id2556461" href="#ftn.id2556461">2</a>]</sup> The Scope controls
+				allow you to choose whether these parameters
+				will only affect segments that don't yet exist
+				(which you will subsequently record, or draw
+				with the pencil) or should convert any existing
+				segments to take these parameters as well.  (For
+				a demonstration of the latter case in action,
+				please see
+				<a href="http://rosegarden.sourceforge.net/tutorial/supplemental/fidelio/fidelio.html" target="_top">
+				this online tutorial.)</a>
+				Clicking the <span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">OK</span></span>
+				button injects the appropriate parameters into
+				the remaining widgets in this part of the track
+				parameters box, where you can tweak them if you
+				desire.<sup>[<a name="id2556487" href="#ftn.id2556487">3</a>]</sup> </p><p>
+				Once you have loaded a preset, the name of
+				your chosen preset will be used as the label
+				for any segments you subsequently draw or
+				record on this track, even if you change some
+				or all of the associated parameters away from
+				the values you just loaded.
+			    </p></dd><dt><span class="term">Clef</span></dt><dd><p>This lets you choose the clef for any
+				segments you subsequently draw or record on
+				this track.  Clefs are events, not properties.
+				Your segments will be created with an initial
+				clef event of the appropriate type (which you
+				may subsequently alter or delete, should you
+				have some occasion to do so.)
+			    </p><p>
+				The clefs available include a variety of named
+				clefs representing standard clefs with various
+				octave offsets.
+			    </p></dd><dt><span class="term">Transpose</span></dt><dd><p>
+				This causes segments on this track to be
+				created so that their note events sound at a
+				given transposition.  Useful, especially, for
+				writing parts for transposing instruments.
+			    </p></dd><dt><span class="term">Colour</span></dt><dd><p>
+				This causes segments on this track to be
+				created using a given colour.
+			    </p></dd><dt><span class="term">Range</span></dt><dd><p>
+				The <span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Low:</span></span> and 
+				<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">High:</span></span> buttons,
+				launch a dialog that allows you to pick a
+				pitch using a staff.  The lowest and highest pitches
+				you select will then appear right on these
+				buttons.
+			    </p><p>
+				These represent the lowest and highest
+				playable notes, respectively, on the instrument for which you
+				are writing notation.  In some cases, these
+				limits will be hard and fast, like the low B
+				on a Transverse Flute (B foot).  In others,
+				they may only serve as guidelines to help you
+				make good choices for instruments with which
+				you are not intimately familiar.
+			    </p><p>
+				If you enter, record, or import data that has
+				pitches exceeding the values specified, the
+				note heads will appear in red by default.  You
+				can turn this behavior off with
+				<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">Settings</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Configure
+					Rosegarden</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Notation</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Show
+					notes outside playable range in
+					red</span></span>
+			    </p></dd></dl></div>
+	    </p></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a name="ftn.id2556461" href="#id2556461">2</a>] </sup>This database was compiled by
+				Magnus Johansson, who deserves all the special
+				mention we can muster for his outstanding effort
+				on this.</p></div><div class="footnote"><p><sup>[<a name="ftn.id2556487" href="#id2556487">3</a>] </sup>No facility is provided
+				at this time for assembling your own database of
+				presets, or customizing the existing ones in a
+				permanent way.</p></div></div></div><div style="background-color: #white; color: black;                  margin-top: 20px; margin-left: 20px;                  margin-right: 20px;"><div style="position: absolute; left: 20px;"><a accesskey="p" href="studio-external-controllers.html">Prev</a></div><div style="position: absolute; right: 20px;"><a accesskey="n" href="segment-view-segmentparameterbox.html">Next</a></div><div align="center"><a accesskey="h" href="index.html">Home</a></div></div><div style="background-color: #white;   color: black;         margin-left: 20px;   margin-right: 20px;"><div class="navLeft">External MIDI control surfaces </div><div class="navRight"> The Segment Parameter Box</div><div class="navCenter"><a accesskey="u" href="index.html">Up</a></div></div><br><br><div class="bannerBottom" style="background-image: url(bottom-middle.png);                                        background-repeat: x-repeat;                                         width: 100%;                                         height: 100px;                                         bottom:0px;"><div class="BannerBottomRight"><img src="bottom-right.png" style="margin: 0px" alt=""></div><div class="bannerBottomLeft"><img src="bottom-left.png" style="margin: 0px;" alt=""></div><div id="comments" style="position:relative; top: 5px; left: 1em; height:85px; width: 50%; color: #cfe1f6"><p>
+        </p></div></div></body></html>

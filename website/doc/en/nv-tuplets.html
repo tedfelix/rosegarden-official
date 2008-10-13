@@ -1,0 +1,29 @@
+<html><head><title>Triplets and other tuplets</title><link rel="stylesheet" href="kde-default.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.67.2"><meta name="keywords" content="Rosegarden, sequencer, MIDI, audio, music, notation, score, KDE"><link rel="start" href="index.html" title="The Rosegarden Handbook"><link rel="up" href="notation-view.html" title="Chapter 10. The Notation editor"><link rel="prev" href="nv-beamed-groups.html" title="Beams"><link rel="next" href="nv-paste-types.html" title="Paste types"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="GENERATOR" content="KDE XSL Stylesheet V1.13 using libxslt"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div style="background-image: url(top-middle.png); width: 100%; height: 131px;"><div style="position: absolute;                      right: 0px;"><img src="top-right-konqueror.png" style="margin: 0px" alt=""></div><div style="position: absolute;                         top: 25px;                          right: 100px;                          text-align: right;                          font-size: xx-large;                          font-weight: bold;                          text-shadow: #fff 0px 0px 5px;                          color: #444">Triplets and other tuplets</div></div><div style="margin-top: 20px; background-color: #white;                        color: black;                       margin-left: 20px;                        margin-right: 20px;"><div style="position: absolute;                          left: 20px;"><a accesskey="p" href="nv-beamed-groups.html">Prev</a></div><div style="position: absolute;                          right: 20px;"><a accesskey="n" href="nv-paste-types.html">Next</a></div><div class="navCenter">The Notation editor</div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="nv-tuplets"></a>Triplets and other tuplets</h2></div></div></div><p>A triplet group consists of three notes or chords played
+	in the time of two.  (More precisely, it consists of notes
+	with a total duration of three arbitrary units played in the
+	time of two of those units.)</p><p>We use the word “<span class="quote">tuplet</span>” to describe the general
+	situation in which notes with a total duration of any given
+	number of units are played in the time of a different number
+	of those units: nine notes in the time of eight, or six in the
+	time of four, or a crotchet and a quaver in the time of a
+	single crotchet, or even two notes in the time of three.  (At
+	present <span class="application">Rosegarden</span> does not support the last example — tuplet
+	groups must always be played with a shorter duration than
+	written.)</p><p>The triplet and tuplet menu functions work by taking an
+	existing series of notes or rests and squashing them so they
+	play quicker, filling in the left-over space at the end of the
+	series with a final rest and drawing the whole as a tuplet
+	group.  You can therefore create a new series of triplets by
+	entering the first two notes of the series (in their normal
+	form), making them into triplets, and then filling in the rest
+	left over by the triplet operation with the final note of the
+	triplet.  Or you can apply the triplet operation before you
+	enter any notes, thus turning the original rest itself into
+	triplet form, and then insert the notes of the triplet on top
+	of it.  Some examples may help:</p><p>
+	<div class="screenshot"><div xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="mediaobject"><hr><img src="rg-tupletdialog.png" alt="Rosegarden's general tuplet dialog"><hr></div></div>
+      </p><p>To specify a general tuplet group, we need to know what
+	the base note is (for example, if we play three crotchets in
+	the time of two then the base is a crotchet) and the ratio of
+	the number of base notes written to the number played.</p></div><div style="background-color: #white; color: black;                  margin-top: 20px; margin-left: 20px;                  margin-right: 20px;"><div style="position: absolute; left: 20px;"><a accesskey="p" href="nv-beamed-groups.html">Prev</a></div><div style="position: absolute; right: 20px;"><a accesskey="n" href="nv-paste-types.html">Next</a></div><div align="center"><a accesskey="h" href="index.html">Home</a></div></div><div style="background-color: #white;   color: black;         margin-left: 20px;   margin-right: 20px;"><div class="navLeft">Beams </div><div class="navRight"> Paste types</div><div class="navCenter"><a accesskey="u" href="notation-view.html">Up</a></div></div><br><br><div class="bannerBottom" style="background-image: url(bottom-middle.png);                                        background-repeat: x-repeat;                                         width: 100%;                                         height: 100px;                                         bottom:0px;"><div class="BannerBottomRight"><img src="bottom-right.png" style="margin: 0px" alt=""></div><div class="bannerBottomLeft"><img src="bottom-left.png" style="margin: 0px;" alt=""></div><div id="comments" style="position:relative; top: 5px; left: 1em; height:85px; width: 50%; color: #cfe1f6"><p>
+        </p></div></div></body></html>

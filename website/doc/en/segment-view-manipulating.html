@@ -1,0 +1,113 @@
+<html><head><title>Manipulating segments</title><link rel="stylesheet" href="kde-default.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.67.2"><meta name="keywords" content="Rosegarden, sequencer, MIDI, audio, music, notation, score, KDE"><link rel="start" href="index.html" title="The Rosegarden Handbook"><link rel="up" href="segment-view.html" title="Chapter 3. The Track Editor"><link rel="prev" href="segment-view-audio-segments.html" title="Audio segments"><link rel="next" href="segment-view-tempo-timesig.html" title="Tempo and Time Signature"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="GENERATOR" content="KDE XSL Stylesheet V1.13 using libxslt"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div style="background-image: url(top-middle.png); width: 100%; height: 131px;"><div style="position: absolute;                      right: 0px;"><img src="top-right-konqueror.png" style="margin: 0px" alt=""></div><div style="position: absolute;                         top: 25px;                          right: 100px;                          text-align: right;                          font-size: xx-large;                          font-weight: bold;                          text-shadow: #fff 0px 0px 5px;                          color: #444">Manipulating segments</div></div><div style="margin-top: 20px; background-color: #white;                        color: black;                       margin-left: 20px;                        margin-right: 20px;"><div style="position: absolute;                          left: 20px;"><a accesskey="p" href="segment-view-audio-segments.html">Prev</a></div><div style="position: absolute;                          right: 20px;"><a accesskey="n" href="segment-view-tempo-timesig.html">Next</a></div><div class="navCenter">The Track Editor</div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="segment-view-manipulating"></a>Manipulating segments</h2></div></div></div><p>
+	The main window contains a selection of "tools" for editing
+	segments.  These are available from the main toolbar: first
+	select the tool you want from the toolbar, and then click
+	and drag on the segments on the main canvas.
+      </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="segment-view-selector"></a>The Select tool</h3></div></div></div><p>
+	  The select tool	  <span class="inlinemediaobject"><img src="rg-select.png"></span>
+          is actually a
+	  multipurpose tool: it can be used to select, move, copy,
+	  resize and create segments.</p><p>The most obvious use is
+	  selection: select a single segment by clicking on it with
+	  the select tool, or select several by clicking with Shift
+	  held down, or by clicking in an empty area of the window and
+	  dragging out an area.
+	</p><p>To move segments with the select tool, simply click and
+	drag on the segment.  To create copies, click and drag with
+	Ctrl held down.  To resize a segment, click and drag on the
+	right-hand edge of the segment.  To create new segments, click
+	and drag on an empty area either with the middle mouse button
+	or with the left mouse button and Ctrl held down.</p><p>
+	  The select tool doesn't replace the other tools completely,
+	  though — sometimes you need to be more precise about
+	  which operation you intend, particularly when working on small
+	  segments.
+	</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="segment-view-move-resize"></a>Move and Resize tools</h3></div></div></div><p>To move a segment to a different start time or track,
+	  use the move tool	  <span class="inlinemediaobject"><img src="rg-move.png"></span>
+           and click and drag on the segment you want
+	  to move.  If you hold down the Ctrl key while dragging, the
+	  segment will be copied instead of moved.</p><p>To resize a segment, use the resize tool	  <span class="inlinemediaobject"><img src="rg-resize.png"></span>
+           and click and drag on the right-hand end of the segment.
+           Resizing a segment has the effect of extending or
+           shortening it, by subtracting some of its contents or adding
+           silence at the start or end.  If you hold down the Ctrl
+           key, the segment will be <a href="segment-view-manipulating.html#segment-view-rescale" title="Stretching and squashing segments">rescaled</a> (stretched
+           or squashed) instead of extended or shortened.</p><p>For both move and resize you can hold Shift for fine
+	positioning, to avoid snapping to a particular grid position.
+	</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="segment-view-rescale"></a>Stretching and squashing segments</h3></div></div></div><p>Resizing a segment normally makes it shorter or longer
+        by subtracting content or adding some extra space.  However,
+        by holding the Ctrl key while resizing, you can instead
+        stretch or squash the contents of the segment.  You can also do this by selecting the segment and then using <span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">Segments</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Stretch or Squash...</span></span>.</p><p>
+          For segments that contain MIDI events, this re-spaces the
+          events so that they are spread across the new segment's
+          duration, playing back faster or slower than before but in
+          the same relative proportions.
+        </p><p>
+          For audio segments, this time-stretches the audio, altering
+          its played speed without altering its pitch (as would happen
+          if the audio was simply played back faster or slower).
+          Time-stretching usually adds some audible artifacts as well,
+          so the quality of your results may vary.
+        </p><p>
+          <span class="application">Rosegarden</span> does not alter the original audio file when
+          time-stretching an audio segment, and if you rescale the same
+          segment repeatedly it will always work from the original
+          file instead of accumulating timestretching artifacts with
+          each rescale.  You can rescale both mono and stereo audio.
+        </p><p>
+          (For reference, <span class="application">Rosegarden</span> uses a frequency-domain
+          time-stretcher based on a phase vocoder with phase-locking
+          at percussive transients.  This usually produces good
+          results with stable harmonic sounds such as pads and basses
+          as well as purely percussive sounds such as drum loops, but
+          is less effective for composite material or music with soft
+          or breathy note onsets.)
+        </p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="segment-view-split-join"></a>Split tool</h3></div></div></div><p>
+	  You can use the split tool
+	  <span class="inlinemediaobject"><img src="rg-split.png"></span>
+	  to split a single segment
+	  into two separate segments.  To split your segment, select the
+	  split tool and click on the segment you wish to split.
+	</p><p>
+	  By default segments are split on the closest barline to the
+	  cursor, but this can be prevented by holding down Shift
+	  while splitting the segment.
+	</p></div><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="segment-view-split-by-pitch"></a>Other Split functions</h3></div></div></div><p>The Segments menu contains a number of other Split functions.</p><div class="variablelist"><dl><dt><span class="term">Split on Silence</span></dt><dd><p><span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">Segments</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Split</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Split on Silence</span></span>
+	  splits the selected segments on silences.
+		  This function works slightly differently depending
+		  on whether the selected segments contain audio or
+		  MIDI data.  For audio segments, it offers you a
+		  dialog in which you can choose a threshold below
+		  which the segment is considered "silent"; it then
+		  splits the segment whenever its amplitude falls
+		  below this threshold.  For MIDI segments, it simply
+		  splits the segment everywhere that a full bar of
+		  silence occurs.
+	</p></dd><dt><span class="term">Split by Pitch</span></dt><dd><p>
+		<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">Segments</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Split</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Split by Pitch...</span></span>
+		  splits the currently selected segments into higher and
+		    lower parts.
+
+		  This function invokes a dialog allowing you to
+		  choose a pitch as a "split point", and then splits
+		  the selected segments in half with all the notes on
+		  or above that split point in the "higher" segment
+		  and all the notes below it in the "lower".
+
+		</p><p>
+		  If the music in the segment consists of two separate
+		  parts (e.g. left and right hand piano parts) that
+		  are not always completely on either side of a single
+		  split point, you may with to select the "ranging
+		  split-point" option.  If this is selected,
+		  Rosegarden will attempt to track the two parts as
+		  they move up and down, usually doing a slightly
+		  better job of separating out notes that were
+		  intended to lie in the two separate parts.
+
+		</p><p>
+		  The resulting segments are both created on the same
+		  track, with one overlapping the other.
+		  
+		</p></dd><dt><span class="term">Split by Recording Source</span></dt><dd><p><span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">Segments</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Split</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Split by Recording Source...</span></span> splits the currently selected segments according to the MIDI channel and device their events were recorded from.</p><p>If you have recorded events from more than one MIDI channel or device into the a single segment, you can use this function to split them into separate segments afterwards.  Select the channel or device whose events you want to split out, and the segment will be split into two segments, one containing events from the selected channel or device and the other containing the remaining events.  The two segments are both created on the same track, with one overlapping the other.</p><p>See also <a href="recording.html" title="Recording">Recording</a> and <a href="segment-instrument-parameters.html#track-recording-filters" title="Track recording filters">Track recording filters</a> for more details on how to select the source MIDI channel or device for a recording.</p></dd><dt><span class="term">Split at Time</span></dt><dd><p>The <span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">Segments</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Split</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Split at Time...</span></span> function simply splits the currently selected segments into two parts at the time you specify.</p></dd></dl></div></div></div><div style="background-color: #white; color: black;                  margin-top: 20px; margin-left: 20px;                  margin-right: 20px;"><div style="position: absolute; left: 20px;"><a accesskey="p" href="segment-view-audio-segments.html">Prev</a></div><div style="position: absolute; right: 20px;"><a accesskey="n" href="segment-view-tempo-timesig.html">Next</a></div><div align="center"><a accesskey="h" href="index.html">Home</a></div></div><div style="background-color: #white;   color: black;         margin-left: 20px;   margin-right: 20px;"><div class="navLeft">Audio segments </div><div class="navRight"> Tempo and Time Signature</div><div class="navCenter"><a accesskey="u" href="segment-view.html">Up</a></div></div><br><br><div class="bannerBottom" style="background-image: url(bottom-middle.png);                                        background-repeat: x-repeat;                                         width: 100%;                                         height: 100px;                                         bottom:0px;"><div class="BannerBottomRight"><img src="bottom-right.png" style="margin: 0px" alt=""></div><div class="bannerBottomLeft"><img src="bottom-left.png" style="margin: 0px;" alt=""></div><div id="comments" style="position:relative; top: 5px; left: 1em; height:85px; width: 50%; color: #cfe1f6"><p>
+        </p></div></div></body></html>

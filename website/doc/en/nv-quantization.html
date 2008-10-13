@@ -1,0 +1,120 @@
+<html><head><title>Notation from performance data</title><link rel="stylesheet" href="kde-default.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.67.2"><meta name="keywords" content="Rosegarden, sequencer, MIDI, audio, music, notation, score, KDE"><link rel="start" href="index.html" title="The Rosegarden Handbook"><link rel="up" href="notation-view.html" title="Chapter 10. The Notation editor"><link rel="prev" href="nv-interpret.html" title="Interpreting Performance Cues in Notation"><link rel="next" href="nv-ornaments.html" title="Playing ornaments"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="GENERATOR" content="KDE XSL Stylesheet V1.13 using libxslt"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div style="background-image: url(top-middle.png); width: 100%; height: 131px;"><div style="position: absolute;                      right: 0px;"><img src="top-right-konqueror.png" style="margin: 0px" alt=""></div><div style="position: absolute;                         top: 25px;                          right: 100px;                          text-align: right;                          font-size: xx-large;                          font-weight: bold;                          text-shadow: #fff 0px 0px 5px;                          color: #444">Notation from performance data</div></div><div style="margin-top: 20px; background-color: #white;                        color: black;                       margin-left: 20px;                        margin-right: 20px;"><div style="position: absolute;                          left: 20px;"><a accesskey="p" href="nv-interpret.html">Prev</a></div><div style="position: absolute;                          right: 20px;"><a accesskey="n" href="nv-ornaments.html">Next</a></div><div class="navCenter">The Notation editor</div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="nv-quantization"></a>Notation from performance data</h2></div></div></div><p>
+	<span class="application">Rosegarden</span> is a multi-purpose program: it is a notation
+	editor, but it is primarily a sequencer and editor for
+	performed music.  And in performance, of course, the times
+	and durations of notes are rarely as precise as they are on
+	a printed score.
+      </p><p>
+	This means that it's often desirable for <span class="application">Rosegarden</span> to do
+	a lot of tidying of the basic note times and durations when
+	attempting to make meaningful notes to show in the notation
+	editor.  This is a kind of quantization, but a kind that
+	requires a surprising amount of guesswork to do well.
+	<span class="application">Rosegarden</span> includes a quantizer designed to do a slightly
+	better job of this than the plain grid quantizer.
+      </p><p>Applying
+	quantization strictly for notation is rather unimaginatively
+	referred to as “<span class="quote">notation quantization</span>”: it only
+	applies to the notes you see and edit in notation, and
+	doesn't affect the notes that play, or that you edit in
+	other views such as the matrix.  This quantization is
+	automatically applied to music imported or recorded from
+	MIDI, although not all of its possible capabilities are
+	enabled by default.
+      </p><p>
+	There are two ways to see which notes have been quantized
+	for notation.  By default, each notation view contains a <a href="nv-rulers.html#nv-raw-note-ruler" title="The raw note ruler">raw
+	    note ruler</a> (in the group of rulers above the score) showing
+	a rectangular block for each note.  This block is positioned
+	so as to represent the time and duration of the note as
+	performed, but with the top and bottom edges of the
+	rectangle extended or shortened to represent the time after
+	notation quantization.  If this is too much information for
+	you, you can alternatively choose (in the configuration
+	dialog) to show in a green colour all note heads in the
+	score that have had their timings altered by notation
+	quantization.
+      </p><p>
+
+	<div class="screenshot"><div xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="mediaobject"><hr><img src="rg-notationquantizer.png" alt="Rosegarden's notation quantize dialog"><hr></div></div>
+	</p><p>
+	If the quantization <span class="application">Rosegarden</span> has used is not suitable,
+	either for the entire score or for a selection of notes, you
+	can choose to use a different level of quantization or none
+	at all.  To apply a different quantization to some notes,
+	select the notes and use the Quantize...
+	menu function (tick the box labelled “<span class="quote">Quantize for
+	  notation only</span>”).  The quantization level or type used
+	by default can be changed in the configuration dialog.
+      </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="nv-quantization-parameters"></a>Configurable parameters for the heuristic notation quantizer</h3></div></div></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="nv-quantization-parameters-during"></a>Parameters for quantization itself</h4></div></div></div><div class="variablelist"><dl><dt><span class="term">Complexity</span></dt><dd><p>The "complexity" of a notation quantizer is its
+		  most fundamental parameter.  A "complex" quantizer
+		  will be more prepared to accept that complex-looking
+		  music is in fact intended to be complex, whereas a
+		  "simple" quantizer is more likely to assume that
+		  complex-looking music results from an imprecise
+		  performance of simple music.
+		</p><p>The default setting is intended to produce
+		  reasonable results for a fairly wide range of music.
+		</p></dd><dt><span class="term">Base grid unit</span></dt><dd><p>The base grid unit (set to a note duration
+		  value) specifies the absolute minimum unit of note
+		  that will be permitted to remain in the score after
+		  quantization.  For example, if set to a semiquaver,
+		  all notes will be placed on boundaries of a multiple
+		  of a semiquaver, with durations also a multiple of a
+		  semiquaver.
+		</p><p>The setting of the base grid unit is not quite
+		  as significant for a notation quantizer as it is for a
+		  plain grid quantizer, because all it does is impose an
+		  absolute limit on the level of precision permitted by
+		  the complexity parameter.  Mostly, when you find a
+		  case in which increasing the grid unit produces better
+		  results, you've actually found a case in which the
+		  quantizer simply didn't do as good a job as it should
+		  have been able to with the smaller unit.
+		</p></dd><dt><span class="term">Tuplet level</span></dt><dd><p>The notation quantizer is capable of identifying
+		  tuplets (triplets and other time-squashed groups),
+		  within reasonable limits.  This parameter controls how
+		  ambitious it will attempt to be when looking for
+		  tuplets, by setting a limit on how many notes per
+		  tuplet group it will attempt to identify.  If it is
+		  set to “<span class="quote">None</span>”, the quantizer will not
+		  attempt to identify tuplets at all.
+		</p></dd></dl></div></div><div class="sect3" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="nv-quantization-parameters-after"></a>Parameters that control tidying up after quantization</h4></div></div></div><div class="variablelist"><dl><dt><span class="term">Re-beam</span></dt><dd><p>
+		  Causes the notes to be re-beamed into groups
+		  appropriately after quantization.  This is usually
+		  desirable.
+		</p></dd><dt><span class="term">Add articulations (staccato, tenuto,
+		slurs)</span></dt><dd><p>
+		  Causes the quantizer to attempt to identify, based
+		  on the durations of individual and consecutive
+		  notes, which notes should be notated with staccato
+		  marks (for notes that fall significantly short of
+		  the following note, but not apparently short
+		  enough to merit a rest), tenuto (for notes that
+		  almost or just overlap the following note) and
+		  slurs (for series of notes that meet or overlap).
+		</p></dd><dt><span class="term">Tie notes at barlines etc</span></dt><dd><p>Causes any notes that are still found after
+		  quantization to overlap barlines or to have
+		  durations not exactly expressible with single note
+		  heads to be split into multiple notes appropriately,
+		  and tied.  This has the same effect as applying the
+		   "Tie Notes at Barlines" function
+		  in the notation view.
+		</p><p>
+		  This parameter is not set by default because it
+		  changes the number of note events, which is
+		  undesirable when using <span class="application">Rosegarden</span> partly or
+		  principally as a MIDI sequencer.
+		</p></dd><dt><span class="term">Split-and-tie overlapping chords</span></dt><dd><p>
+		  Causes overlapping notes to be split and tied, so
+		  as to make strict chords with individual noteheads
+		  tied as necessary.  This has the same effect as
+		  applying the  "Split-and-Tie
+		  Overlapping Chords" function in the notation view.
+		</p><p>
+		  This parameter is not set by default partly because
+		  it changes the number of note events, which is
+		  undesirable when using <span class="application">Rosegarden</span> partly or
+		  principally as a MIDI sequencer.
+		</p></dd></dl></div></div></div></div><div style="background-color: #white; color: black;                  margin-top: 20px; margin-left: 20px;                  margin-right: 20px;"><div style="position: absolute; left: 20px;"><a accesskey="p" href="nv-interpret.html">Prev</a></div><div style="position: absolute; right: 20px;"><a accesskey="n" href="nv-ornaments.html">Next</a></div><div align="center"><a accesskey="h" href="index.html">Home</a></div></div><div style="background-color: #white;   color: black;         margin-left: 20px;   margin-right: 20px;"><div class="navLeft">Interpreting Performance Cues in Notation </div><div class="navRight"> Playing ornaments</div><div class="navCenter"><a accesskey="u" href="notation-view.html">Up</a></div></div><br><br><div class="bannerBottom" style="background-image: url(bottom-middle.png);                                        background-repeat: x-repeat;                                         width: 100%;                                         height: 100px;                                         bottom:0px;"><div class="BannerBottomRight"><img src="bottom-right.png" style="margin: 0px" alt=""></div><div class="bannerBottomLeft"><img src="bottom-left.png" style="margin: 0px;" alt=""></div><div id="comments" style="position:relative; top: 5px; left: 1em; height:85px; width: 50%; color: #cfe1f6"><p>
+        </p></div></div></body></html>

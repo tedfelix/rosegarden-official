@@ -1,0 +1,42 @@
+<html><head><title>Selecting notes</title><link rel="stylesheet" href="kde-default.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.67.2"><meta name="keywords" content="Rosegarden, sequencer, MIDI, audio, music, notation, score, KDE"><link rel="start" href="index.html" title="The Rosegarden Handbook"><link rel="up" href="matrix-view.html" title="Chapter 8. The Matrix editor"><link rel="prev" href="matrix-insertion.html" title="Inserting notes"><link rel="next" href="matrix-editing.html" title="Moving and copying notes"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="GENERATOR" content="KDE XSL Stylesheet V1.13 using libxslt"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div style="background-image: url(top-middle.png); width: 100%; height: 131px;"><div style="position: absolute;                      right: 0px;"><img src="top-right-konqueror.png" style="margin: 0px" alt=""></div><div style="position: absolute;                         top: 25px;                          right: 100px;                          text-align: right;                          font-size: xx-large;                          font-weight: bold;                          text-shadow: #fff 0px 0px 5px;                          color: #444">Selecting notes</div></div><div style="margin-top: 20px; background-color: #white;                        color: black;                       margin-left: 20px;                        margin-right: 20px;"><div style="position: absolute;                          left: 20px;"><a accesskey="p" href="matrix-insertion.html">Prev</a></div><div style="position: absolute;                          right: 20px;"><a accesskey="n" href="matrix-editing.html">Next</a></div><div class="navCenter">The Matrix editor</div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="matrix-selection"></a>Selecting notes</h2></div></div></div><p>To select notes in the
+	matrix editor, switch to the Select (arrow) tool and then
+	outline a rectangular area containing the notes you want to
+	select.  The selected events will then be highlighted in blue.
+	If you instead click on a single event, just that event will
+	be selected.
+
+      </p><p>If you hold <span><strong class="keycap">Shift</strong></span> while dragging
+	out a rectangle or clicking on a note, the new selection will
+	be added to any existing selection instead of replacing it.
+      </p><p>
+	To clear a selection, click in an empty space on the matrix
+	editor, or hit the Escape key.</p><p>You can also select all of the notes of a given pitch,
+	by shift-clicking on a key in the piano keyboard down the left
+	side of the matrix editor.  You can also shift-click and drag
+	to select a range of pitches.  This selection is added to any
+	existing selection you have, so if you want a clean new
+	selection, clear the old one first.
+      </p><div class="sect2" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="matrix-selectionfilter"></a>Filtering the selection</h3></div></div></div><p>The <span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">Edit</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Filter Selection</span></span> function offers you the ability to filter a range of events in
+		  any of several categories out of your selection.  You can use this to refine the selection, if you want some action to apply to only certain events in it.
+	        </p><p>
+		  <div class="screenshot"><div xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="mediaobject"><hr><img src="rg-eventfilter.png" alt="The event filter dialog"><hr></div></div>
+	        </p><p>
+		  All ranges may be either inclusive or exclusive.
+		</p><p>
+		  An inclusive range will remove events on either side of it
+		  from the selection.  You can use this, for example, to
+		  filter everything below middle C and above the A above
+		  middle C out of your selection.
+		</p><p>
+		  An exclusive range will remove the events within the range
+		  itself, leaving everything on either side of it selected.
+		  Using the same search points as in the previous example,
+		  you would use an exclusive range to remove everything
+		  between middle C and the A above middle C from your
+		  selection, while leaving everything above and below that
+		  range selected.
+		</p><p>
+		  Once your selection has been filtered, you can manipulate
+		  it by any conventional means.
+		</p></div></div><div style="background-color: #white; color: black;                  margin-top: 20px; margin-left: 20px;                  margin-right: 20px;"><div style="position: absolute; left: 20px;"><a accesskey="p" href="matrix-insertion.html">Prev</a></div><div style="position: absolute; right: 20px;"><a accesskey="n" href="matrix-editing.html">Next</a></div><div align="center"><a accesskey="h" href="index.html">Home</a></div></div><div style="background-color: #white;   color: black;         margin-left: 20px;   margin-right: 20px;"><div class="navLeft">Inserting notes </div><div class="navRight"> Moving and copying notes</div><div class="navCenter"><a accesskey="u" href="matrix-view.html">Up</a></div></div><br><br><div class="bannerBottom" style="background-image: url(bottom-middle.png);                                        background-repeat: x-repeat;                                         width: 100%;                                         height: 100px;                                         bottom:0px;"><div class="BannerBottomRight"><img src="bottom-right.png" style="margin: 0px" alt=""></div><div class="bannerBottomLeft"><img src="bottom-left.png" style="margin: 0px;" alt=""></div><div id="comments" style="position:relative; top: 5px; left: 1em; height:85px; width: 50%; color: #cfe1f6"><p>
+        </p></div></div></body></html>

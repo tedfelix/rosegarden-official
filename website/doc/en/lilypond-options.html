@@ -1,0 +1,69 @@
+<html><head><title>LilyPond options</title><link rel="stylesheet" href="kde-default.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.67.2"><meta name="keywords" content="Rosegarden, sequencer, MIDI, audio, music, notation, score, KDE"><link rel="start" href="index.html" title="The Rosegarden Handbook"><link rel="up" href="file-operations.html" title="Chapter 2. Rosegarden Files and Documents"><link rel="prev" href="file-printing.html" title="Printing"><link rel="next" href="segment-view.html" title="Chapter 3. The Track Editor"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="GENERATOR" content="KDE XSL Stylesheet V1.13 using libxslt"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div style="background-image: url(top-middle.png); width: 100%; height: 131px;"><div style="position: absolute;                      right: 0px;"><img src="top-right-konqueror.png" style="margin: 0px" alt=""></div><div style="position: absolute;                         top: 25px;                          right: 100px;                          text-align: right;                          font-size: xx-large;                          font-weight: bold;                          text-shadow: #fff 0px 0px 5px;                          color: #444">LilyPond options</div></div><div style="margin-top: 20px; background-color: #white;                        color: black;                       margin-left: 20px;                        margin-right: 20px;"><div style="position: absolute;                          left: 20px;"><a accesskey="p" href="file-printing.html">Prev</a></div><div style="position: absolute;                          right: 20px;"><a accesskey="n" href="segment-view.html">Next</a></div><div class="navCenter">Rosegarden Files and Documents</div></div><div class="sect1" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="lilypond-options"></a>LilyPond options</h2></div></div></div><p>If one of the LilyPond export functions is invoked, there will
+	  appear a dialog in which options specific to LilyPond export may be
+	  altered.
+      </p><div class="variablelist"><dl><dt><span class="term">LilyPond version</span></dt><dd><p>
+		LilyPond version installed into the system should be automatically
+		detected in the dialog, but it is possible to export to any other
+		LilyPond version since 2.6.  Historically, LilyPond's syntax has
+		changed somewhat over time, but since LilyPond version 2.6 changes
+		have have been less radical and more maintainable.</p></dd><dt><span class="term">Paper size and Landscape</span></dt><dd><p>
+		Paper size can be A3, A4, A5, A6, Legal, US Letter, and Tabloid.
+		All paper sizes may also be used in Landscape mode.</p></dd><dt><span class="term">Font size</span></dt><dd><p>
+		Font size affects the size of the notes.  If you want to fit more
+		staffs into the paper, you should decrease the font size.</p></dd><dt><span class="term">Export content</span></dt><dd><p>
+		Export content concerns tracks that have segments in them, which
+		are the tracks that are not empty.
+		It is possible to export All tracks, Non-muted tracks, the current
+		Selected track, or Selected segments.  If LilyPond export is
+		launched from the Notation view, Selected segments include
+		the same selection which was used in opening the Notation view.</p></dd><dt><span class="term">Merge tracks that have the same name</span></dt><dd><p>
+		It is possible to Merge tracks that have the same name.
+		This options allows for example to make a piano score with 
+		several independent voices.  You may give first three tracks
+		name "Right" and three next tracks "Left" and then merge
+		them in LilyPond export.  (This provides an easier way to manage
+		overlapping segments with the price that the top and bottom
+		parts will have different names on the page.  If you wish both
+		of them to be named, eg. "Piano," then you will have to keep all
+		of the segments on the same pair of staffs. Consult <a href="http://rosegarden.sourceforge.net/tutorial/supplemental/piano/" target="_top">Piano
+		by Example</a> for a hands-on demonstration of this.) 
+	  <span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">Adjust</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Fine Positioning</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Push Right/Left</span></span>.</p></dd><dt><span class="term">Export tempo marks</span></dt><dd><p>
+		Tempo marks are not exported by default.  If tempo changes
+		rarely, you may want to export all tempo marks, but if
+		tempo changes too often, you may export only the first mark.</p></dd><dt><span class="term">Export lyrics</span></dt><dd><p>
+		<a href="nv-text.html#nv-text-lyrics" title="Editing lyrics">Lyrics</a> is exported if this
+		option is checked.  Text is entered in Unicode, which
+		makes it possible to enter lyrics in all languages.  Multiple
+		lines of lyrics per staff is also possible, see the section
+		on <a href="nv-text.html#nv-text-lyrics" title="Editing lyrics">Editing lyrics</a>.</p></dd><dt><span class="term">Export beamings</span></dt><dd><p>
+		<a href="nv-beamed-groups.html" title="Beams">Beams</a> defined in
+		<span class="application">Rosegarden</span> can be exported, or the default
+		beam grouping of LilyPond can be used.  Future versions
+		of <span class="application">Rosegarden</span> may support nested note grouping.</p></dd><dt><span class="term">Lyrics alignment</span></dt><dd><p>
+		Lyrics is aligned Left by default.  Sometimes Center or
+		Right alignment provides results and more pleasant output.</p></dd><dt><span class="term">Ragged bottom</span></dt><dd><p>
+		The staffs normally cover the whole page from top to bottom.
+		When there are only a few staffs, this option places the
+		extra vertical space at the bottom of the page instead.</p></dd><dt><span class="term">Enable "point-and-click" debugging</span></dt><dd><p>
+		If you export the LilyPond source with the 
+	  <span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">File</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Export</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Export LilyPond</span></span>
+		function, you may open the LilyPond source by clicking
+		notes in the PDF output.  Consult <a href="http://lilypond.org/doc/v2.10/Documentation/user/lilypond/Point-and-click#Point-and-click" target="_top">LilyPond documentation</a> for more
+		information.
+</p></dd><dt><span class="term">Export \midi block</span></dt><dd><p>
+		LilyPond is also capable of producing MIDI output.  Check this
+		option if you wish the LilyPond source to use this option.
+		Note however that MIDI output which you obtain via <span class="application">Rosegarden</span>
+		sequencer, via
+	  <span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">File</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Export</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Export MIDI file</span></span>,
+		and via LilyPond's MIDI output may differ considerably.</p></dd><dt><span class="term">Headers</span></dt><dd><p>
+		Headers can be edited both in LilyPond export dialog and through the
+	  <span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenu">Composition</span></span>-&gt;<span xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="guiitem"><span class="guimenuitem">Edit Document Properties</span></span> function.</p><p>Some of the headers will appear
+		only in LilyPond output.
+		The position of the Printable headers match roughly with
+		the positions of the headers in the printed output.
+		Below is shown an example with all headers and lyrics
+		entered with Unicode text.</p><p>
+	<div class="screenshot"><div xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" class="mediaobject"><hr><img src="headers-and-unicode-lyrics.png" alt="LilyPond's output showing all headers and Unicode lyrics."><hr></div></div>
+	</p></dd></dl></div></div><div style="background-color: #white; color: black;                  margin-top: 20px; margin-left: 20px;                  margin-right: 20px;"><div style="position: absolute; left: 20px;"><a accesskey="p" href="file-printing.html">Prev</a></div><div style="position: absolute; right: 20px;"><a accesskey="n" href="segment-view.html">Next</a></div><div align="center"><a accesskey="h" href="index.html">Home</a></div></div><div style="background-color: #white;   color: black;         margin-left: 20px;   margin-right: 20px;"><div class="navLeft">Printing </div><div class="navRight"> The Track Editor</div><div class="navCenter"><a accesskey="u" href="file-operations.html">Up</a></div></div><br><br><div class="bannerBottom" style="background-image: url(bottom-middle.png);                                        background-repeat: x-repeat;                                         width: 100%;                                         height: 100px;                                         bottom:0px;"><div class="BannerBottomRight"><img src="bottom-right.png" style="margin: 0px" alt=""></div><div class="bannerBottomLeft"><img src="bottom-left.png" style="margin: 0px;" alt=""></div><div id="comments" style="position:relative; top: 5px; left: 1em; height:85px; width: 50%; color: #cfe1f6"><p>
+        </p></div></div></body></html>
