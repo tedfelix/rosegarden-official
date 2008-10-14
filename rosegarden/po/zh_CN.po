@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rosegarden4 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-27 22:44-0400\n"
+"POT-Creation-Date: 2008-10-14 09:43-0400\n"
 "PO-Revision-Date: 2005-02-01 19:15+0800\n"
 "Last-Translator: Liu Songhe <jack@linux.net.cn>\n"
 "Language-Team: Simplified Chinese <i18n-translation@lists.linux.net.cn>\n"
@@ -2030,7 +2030,7 @@ msgid ""
 "<br>Are you sure?</qt>"
 msgstr ""
 
-#: ../src/document/RosegardenGUIDoc.cpp:521
+#: ../src/document/RosegardenGUIDoc.cpp:519
 #: ../src/gui/dialogs/AudioManagerDialog.cpp:881
 #, fuzzy
 msgid "File %1 could not be deleted."
@@ -2069,7 +2069,7 @@ msgstr "正在导出音频文件..."
 msgid "Failed to add audio file. "
 msgstr "无法载入声音字体 %1"
 
-#: ../src/document/RosegardenGUIDoc.cpp:2838
+#: ../src/document/RosegardenGUIDoc.cpp:2831
 #: ../src/gui/application/RosegardenGUIApp.cpp:2739
 #: ../src/gui/application/RosegardenGUIView.cpp:1573
 #: ../src/gui/dialogs/AudioManagerDialog.cpp:1115
@@ -3369,7 +3369,7 @@ msgstr "正在打开文件..."
 msgid "Open File"
 msgstr "打开文件"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1228
+#: ../src/document/RosegardenGUIDoc.cpp:1226
 #: ../src/gui/application/RosegardenGUIApp.cpp:2261
 msgid "Saving file..."
 msgstr "正在保存文件..."
@@ -3499,7 +3499,7 @@ msgstr ""
 #: ../src/gui/application/RosegardenGUIApp.cpp:2772
 #: ../src/gui/application/RosegardenGUIApp.cpp:5294
 #: ../src/gui/application/RosegardenGUIApp.cpp:5342
-#: ../src/gui/editors/segment/TrackButtons.cpp:415
+#: ../src/gui/editors/segment/TrackButtons.cpp:412
 #: ../src/gui/editors/segment/segmentcanvas/SegmentResizer.cpp:152
 #, fuzzy
 msgid "Set audio file path"
@@ -3911,7 +3911,7 @@ msgid "XML files"
 msgstr "XML 文件"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5292
-#: ../src/gui/editors/segment/TrackButtons.cpp:413
+#: ../src/gui/editors/segment/TrackButtons.cpp:410
 msgid ""
 "The audio file path does not exist or is not writable.\n"
 "Please set the audio file path to a valid directory in Document Properties "
@@ -6790,31 +6790,31 @@ msgid "<default>"
 msgstr "<默认>"
 
 #: ../src/gui/editors/segment/TrackButtons.cpp:202
-#: ../src/gui/editors/segment/TrackButtons.cpp:581
-#: ../src/gui/editors/segment/TrackButtons.cpp:931
-#: ../src/gui/editors/segment/TrackButtons.cpp:1125
+#: ../src/gui/editors/segment/TrackButtons.cpp:578
+#: ../src/gui/editors/segment/TrackButtons.cpp:928
+#: ../src/gui/editors/segment/TrackButtons.cpp:1120
 msgid "<no instrument>"
 msgstr "<没有乐器>"
 
-#: ../src/gui/editors/segment/TrackButtons.cpp:347
-#: ../src/gui/editors/segment/TrackButtons.cpp:1092
+#: ../src/gui/editors/segment/TrackButtons.cpp:345
+#: ../src/gui/editors/segment/TrackButtons.cpp:1087
 #, fuzzy
 msgid "<untitled audio>"
 msgstr "<未命名>"
 
 #: ../src/gui/editors/parameters/TrackParameterBox.cpp:123
 #: ../src/gui/editors/parameters/TrackParameterBox.cpp:674
-#: ../src/gui/editors/segment/TrackButtons.cpp:349
-#: ../src/gui/editors/segment/TrackButtons.cpp:1094
+#: ../src/gui/editors/segment/TrackButtons.cpp:347
+#: ../src/gui/editors/segment/TrackButtons.cpp:1089
 msgid "<untitled>"
 msgstr "<未命名>"
 
-#: ../src/gui/editors/segment/TrackButtons.cpp:1056
+#: ../src/gui/editors/segment/TrackButtons.cpp:1051
 #, fuzzy
 msgid "Mute track"
 msgstr "冲击"
 
-#: ../src/gui/editors/segment/TrackButtons.cpp:1061
+#: ../src/gui/editors/segment/TrackButtons.cpp:1056
 msgid "Record on this track"
 msgstr ""
 
@@ -10298,13 +10298,9 @@ msgstr ""
 "\n"
 " 来代替吗？"
 
-#: ../src/document/io/LilyPondExporter.cpp:2320
+#: ../src/document/io/LilyPondExporter.cpp:2360
 msgid "warning: overlong bar truncated here"
 msgstr "警告：过长的进程条截断于此处"
-
-#: ../src/document/io/LilyPondExporter.cpp:2326
-msgid "warning: bar too short, padding with rests"
-msgstr "警告：进程条太短，以休止符填充"
 
 #: ../src/document/MultiViewCommandHistory.cpp:311
 msgid "Nothing to undo"
@@ -10326,7 +10322,7 @@ msgstr "撤销(&O) %1"
 msgid "Re&do %1"
 msgstr "重做(&D) %1"
 
-#: ../src/document/RosegardenGUIDoc.cpp:324
+#: ../src/document/RosegardenGUIDoc.cpp:322
 msgid ""
 "The current file has been modified.\n"
 "Do you want to save it?"
@@ -10334,14 +10330,14 @@ msgstr ""
 "当前文件已被修改。\n"
 "您想保存它吗？"
 
-#: ../src/document/RosegardenGUIDoc.cpp:476
+#: ../src/document/RosegardenGUIDoc.cpp:474
 #, c-format
 msgid ""
 "_n: Delete the 1 audio file recorded during the unsaved session?\n"
 "Delete the %n audio files recorded during the unsaved session?"
 msgstr ""
 
-#: ../src/document/RosegardenGUIDoc.cpp:497
+#: ../src/document/RosegardenGUIDoc.cpp:495
 msgid ""
 "The following audio files were recorded during this session but have been "
 "unloaded\n"
@@ -10353,7 +10349,7 @@ msgid ""
 "Please select any you wish to delete permanently from the hard disk.\n"
 msgstr ""
 
-#: ../src/document/RosegardenGUIDoc.cpp:513
+#: ../src/document/RosegardenGUIDoc.cpp:511
 #, c-format
 msgid ""
 "_n: <qt>About to delete 1 audio file permanently from the hard disk."
@@ -10363,38 +10359,38 @@ msgid ""
 "will be no way to recover these files.<br>Are you sure?</qt>"
 msgstr ""
 
-#: ../src/document/RosegardenGUIDoc.cpp:576
+#: ../src/document/RosegardenGUIDoc.cpp:574
 msgid "Can't open file '%1'"
 msgstr "无法打开文件“%1”"
 
-#: ../src/document/RosegardenGUIDoc.cpp:581
+#: ../src/document/RosegardenGUIDoc.cpp:579
 msgid "Reading file..."
 msgstr "正在读取文件..."
 
-#: ../src/document/RosegardenGUIDoc.cpp:599
+#: ../src/document/RosegardenGUIDoc.cpp:597
 #, fuzzy
 msgid "Could not open Rosegarden file"
 msgstr "不是 玫瑰园-4 文件"
 
-#: ../src/document/RosegardenGUIDoc.cpp:637
+#: ../src/document/RosegardenGUIDoc.cpp:635
 msgid "Error when parsing file '%1': \"%2\""
 msgstr "解析文件“%1”时出错：“%2”"
 
-#: ../src/document/RosegardenGUIDoc.cpp:685
+#: ../src/document/RosegardenGUIDoc.cpp:683
 msgid "Generating audio previews..."
 msgstr "正在生成音频预览..."
 
-#: ../src/document/RosegardenGUIDoc.cpp:717
+#: ../src/document/RosegardenGUIDoc.cpp:715
 #, fuzzy
 msgid "Merge"
 msgstr "合并(&M)"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1608
+#: ../src/document/RosegardenGUIDoc.cpp:1606
 #, fuzzy
 msgid "File load cancelled"
 msgstr "文件载入已取消"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1628
+#: ../src/document/RosegardenGUIDoc.cpp:1626
 msgid ""
 "<h3>Audio and plugins not available</h3><p>This composition uses audio files "
 "or plugins, but Rosegarden is currently running without audio because the "
@@ -10404,7 +10400,7 @@ msgid ""
 "composition, all audio and plugin data and settings in it will be lost.</p>"
 msgstr ""
 
-#: ../src/document/RosegardenGUIDoc.cpp:1631
+#: ../src/document/RosegardenGUIDoc.cpp:1629
 msgid ""
 "<h3>Audio and plugins not available</h3><p>This composition uses audio files "
 "or plugins, but you are running a version of Rosegarden that was compiled "
@@ -10413,7 +10409,7 @@ msgid ""
 "it will be lost.</p>"
 msgstr ""
 
-#: ../src/document/RosegardenGUIDoc.cpp:1668
+#: ../src/document/RosegardenGUIDoc.cpp:1666
 msgid ""
 "<h3>Incorrect audio sample rate</h3><p>This composition contains audio files "
 "that were recorded or imported with the audio server running at a different "
@@ -10424,7 +10420,7 @@ msgid ""
 "composition before you do any more work with it.</p>"
 msgstr ""
 
-#: ../src/document/RosegardenGUIDoc.cpp:1678
+#: ../src/document/RosegardenGUIDoc.cpp:1676
 msgid ""
 "<h3>Inconsistent audio sample rates</h3><p>This composition contains audio "
 "files at more than one sample rate.</p><p>Rosegarden will play them at the "
@@ -10434,23 +10430,23 @@ msgid ""
 "details, and consider resampling any files that are at the wrong rate.</p>"
 msgstr ""
 
-#: ../src/document/RosegardenGUIDoc.cpp:1679
+#: ../src/document/RosegardenGUIDoc.cpp:1677
 #, fuzzy
 msgid "Inconsistent sample rates"
 msgstr "元素属性"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1693
+#: ../src/document/RosegardenGUIDoc.cpp:1691
 msgid ""
 "<h3>Plugins not found</h3><p>The following audio plugins could not be loaded:"
 "</p><ul>"
 msgstr ""
 
-#: ../src/document/RosegardenGUIDoc.cpp:1701
+#: ../src/document/RosegardenGUIDoc.cpp:1699
 #, fuzzy
 msgid "<li>%1 (from %2)</li>"
 msgstr "--  %1 (从 %2)\n"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1715
+#: ../src/document/RosegardenGUIDoc.cpp:1713
 msgid ""
 "This file contains one or more old element types that are now deprecated.\n"
 "Support for these elements may disappear in future versions of Rosegarden.\n"
@@ -10458,12 +10454,12 @@ msgid ""
 "that it can still be re-loaded in future versions."
 msgstr ""
 
-#: ../src/document/RosegardenGUIDoc.cpp:2248
+#: ../src/document/RosegardenGUIDoc.cpp:2241
 msgid "Insert Recorded MIDI"
 msgstr "插入录制好的 MIDI"
 
-#: ../src/document/RosegardenGUIDoc.cpp:2614
-#: ../src/document/RosegardenGUIDoc.cpp:2694
+#: ../src/document/RosegardenGUIDoc.cpp:2607
+#: ../src/document/RosegardenGUIDoc.cpp:2687
 #, fuzzy
 msgid "(recorded)"
 msgstr "%1 (已录制)"
@@ -11540,6 +11536,9 @@ msgstr "常规"
 #, fuzzy
 msgid "Triangle"
 msgstr "三连音"
+
+#~ msgid "warning: bar too short, padding with rests"
+#~ msgstr "警告：进程条太短，以休止符填充"
 
 #~ msgid "%1 (rescaled)"
 #~ msgstr "%1 (已自动调整)"

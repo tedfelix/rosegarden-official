@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cs\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-27 22:44-0400\n"
+"POT-Creation-Date: 2008-10-14 09:43-0400\n"
 "PO-Revision-Date: 2008-04-20 12:41+0200\n"
 "Last-Translator: Jan Bína <jbina@mbtrans.cz>\n"
 "Language-Team:  <cs@li.org>\n"
@@ -1999,7 +1999,7 @@ msgstr ""
 "<br> Tuto akci nelze vrátit zpět a neexistuje způsob, jak tyto soubory "
 "později obnovit.<br>Skutečně chcete pokračovat?</qt>"
 
-#: ../src/document/RosegardenGUIDoc.cpp:521
+#: ../src/document/RosegardenGUIDoc.cpp:519
 #: ../src/gui/dialogs/AudioManagerDialog.cpp:881
 msgid "File %1 could not be deleted."
 msgstr "Soubor %1 nelze odstranit."
@@ -2035,7 +2035,7 @@ msgstr "Probíhá přidání zvukového souboru..."
 msgid "Failed to add audio file. "
 msgstr "Přidání zvukového souboru selhalo."
 
-#: ../src/document/RosegardenGUIDoc.cpp:2838
+#: ../src/document/RosegardenGUIDoc.cpp:2831
 #: ../src/gui/application/RosegardenGUIApp.cpp:2739
 #: ../src/gui/application/RosegardenGUIView.cpp:1573
 #: ../src/gui/dialogs/AudioManagerDialog.cpp:1115
@@ -3274,7 +3274,7 @@ msgstr "Otevírá se soubor..."
 msgid "Open File"
 msgstr "Otevřít soubor"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1228
+#: ../src/document/RosegardenGUIDoc.cpp:1226
 #: ../src/gui/application/RosegardenGUIApp.cpp:2261
 msgid "Saving file..."
 msgstr "Ukládá se soubor..."
@@ -3402,7 +3402,7 @@ msgstr ""
 #: ../src/gui/application/RosegardenGUIApp.cpp:2772
 #: ../src/gui/application/RosegardenGUIApp.cpp:5294
 #: ../src/gui/application/RosegardenGUIApp.cpp:5342
-#: ../src/gui/editors/segment/TrackButtons.cpp:415
+#: ../src/gui/editors/segment/TrackButtons.cpp:412
 #: ../src/gui/editors/segment/segmentcanvas/SegmentResizer.cpp:152
 msgid "Set audio file path"
 msgstr "Nastavit cestu ke zvukovému souboru"
@@ -3802,7 +3802,7 @@ msgid "XML files"
 msgstr "Soubory XML"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5292
-#: ../src/gui/editors/segment/TrackButtons.cpp:413
+#: ../src/gui/editors/segment/TrackButtons.cpp:410
 msgid ""
 "The audio file path does not exist or is not writable.\n"
 "Please set the audio file path to a valid directory in Document Properties "
@@ -6753,29 +6753,29 @@ msgid "<default>"
 msgstr "<výchozí>"
 
 #: ../src/gui/editors/segment/TrackButtons.cpp:202
-#: ../src/gui/editors/segment/TrackButtons.cpp:581
-#: ../src/gui/editors/segment/TrackButtons.cpp:931
-#: ../src/gui/editors/segment/TrackButtons.cpp:1125
+#: ../src/gui/editors/segment/TrackButtons.cpp:578
+#: ../src/gui/editors/segment/TrackButtons.cpp:928
+#: ../src/gui/editors/segment/TrackButtons.cpp:1120
 msgid "<no instrument>"
 msgstr "<žádný nástroj>"
 
-#: ../src/gui/editors/segment/TrackButtons.cpp:347
-#: ../src/gui/editors/segment/TrackButtons.cpp:1092
+#: ../src/gui/editors/segment/TrackButtons.cpp:345
+#: ../src/gui/editors/segment/TrackButtons.cpp:1087
 msgid "<untitled audio>"
 msgstr "<zvuk bez názvu>"
 
 #: ../src/gui/editors/parameters/TrackParameterBox.cpp:123
 #: ../src/gui/editors/parameters/TrackParameterBox.cpp:674
-#: ../src/gui/editors/segment/TrackButtons.cpp:349
-#: ../src/gui/editors/segment/TrackButtons.cpp:1094
+#: ../src/gui/editors/segment/TrackButtons.cpp:347
+#: ../src/gui/editors/segment/TrackButtons.cpp:1089
 msgid "<untitled>"
 msgstr "<bez názvu>"
 
-#: ../src/gui/editors/segment/TrackButtons.cpp:1056
+#: ../src/gui/editors/segment/TrackButtons.cpp:1051
 msgid "Mute track"
 msgstr "Ztlumit stopu"
 
-#: ../src/gui/editors/segment/TrackButtons.cpp:1061
+#: ../src/gui/editors/segment/TrackButtons.cpp:1056
 msgid "Record on this track"
 msgstr "Zaznamenat na tuto stopu"
 
@@ -10039,13 +10039,9 @@ msgstr ""
 "\n"
 " namísto těchto znaků?"
 
-#: ../src/document/io/LilyPondExporter.cpp:2320
+#: ../src/document/io/LilyPondExporter.cpp:2360
 msgid "warning: overlong bar truncated here"
 msgstr "varování: příliš dlouhý takt byl zde zkrácen"
-
-#: ../src/document/io/LilyPondExporter.cpp:2326
-msgid "warning: bar too short, padding with rests"
-msgstr "varování: takt je příliš krátký, bude doplněn pomlkami"
 
 #: ../src/document/MultiViewCommandHistory.cpp:311
 msgid "Nothing to undo"
@@ -10067,7 +10063,7 @@ msgstr "&Vrátit akci zpět - %1"
 msgid "Re&do %1"
 msgstr "&Zrušit vrácení akce zpět - %1"
 
-#: ../src/document/RosegardenGUIDoc.cpp:324
+#: ../src/document/RosegardenGUIDoc.cpp:322
 msgid ""
 "The current file has been modified.\n"
 "Do you want to save it?"
@@ -10075,7 +10071,7 @@ msgstr ""
 "Aktuální soubor byl změněn.\n"
 "Chcete jej uložit?"
 
-#: ../src/document/RosegardenGUIDoc.cpp:476
+#: ../src/document/RosegardenGUIDoc.cpp:474
 #, c-format
 msgid ""
 "_n: Delete the 1 audio file recorded during the unsaved session?\n"
@@ -10085,7 +10081,7 @@ msgstr ""
 "Chcete odstranit %n zvukové(ých) soubory(ů) nahrané(ých) během neuložené "
 "relace?"
 
-#: ../src/document/RosegardenGUIDoc.cpp:497
+#: ../src/document/RosegardenGUIDoc.cpp:495
 msgid ""
 "The following audio files were recorded during this session but have been "
 "unloaded\n"
@@ -10105,7 +10101,7 @@ msgstr ""
 "\n"
 "Vyberte kterékoli z těch, které chcete z pevného disku trvale odstranit.\n"
 
-#: ../src/document/RosegardenGUIDoc.cpp:513
+#: ../src/document/RosegardenGUIDoc.cpp:511
 #, c-format
 msgid ""
 "_n: <qt>About to delete 1 audio file permanently from the hard disk."
@@ -10122,35 +10118,35 @@ msgstr ""
 "<br>Neexistuje způsob, jak tyto soubory později obnovit.<br>Skutečně chcete "
 "pokračovat?</qt>"
 
-#: ../src/document/RosegardenGUIDoc.cpp:576
+#: ../src/document/RosegardenGUIDoc.cpp:574
 msgid "Can't open file '%1'"
 msgstr "Nelze otevřít soubor '%1'"
 
-#: ../src/document/RosegardenGUIDoc.cpp:581
+#: ../src/document/RosegardenGUIDoc.cpp:579
 msgid "Reading file..."
 msgstr "Probíhá čtení souboru..."
 
-#: ../src/document/RosegardenGUIDoc.cpp:599
+#: ../src/document/RosegardenGUIDoc.cpp:597
 msgid "Could not open Rosegarden file"
 msgstr "Nebylo možné otevřít soubor aplikace Rosegarden"
 
-#: ../src/document/RosegardenGUIDoc.cpp:637
+#: ../src/document/RosegardenGUIDoc.cpp:635
 msgid "Error when parsing file '%1': \"%2\""
 msgstr "Chyba při syntaktické analýze souboru '%1': \"%2\""
 
-#: ../src/document/RosegardenGUIDoc.cpp:685
+#: ../src/document/RosegardenGUIDoc.cpp:683
 msgid "Generating audio previews..."
 msgstr "Probíhá vytváření zvukových ukázek..."
 
-#: ../src/document/RosegardenGUIDoc.cpp:717
+#: ../src/document/RosegardenGUIDoc.cpp:715
 msgid "Merge"
 msgstr "Připojit"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1608
+#: ../src/document/RosegardenGUIDoc.cpp:1606
 msgid "File load cancelled"
 msgstr "Načítání souboru bylo zrušeno"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1628
+#: ../src/document/RosegardenGUIDoc.cpp:1626
 msgid ""
 "<h3>Audio and plugins not available</h3><p>This composition uses audio files "
 "or plugins, but Rosegarden is currently running without audio because the "
@@ -10167,7 +10163,7 @@ msgstr ""
 "p><p><b>VAROVÁNÍ:</b> Pokud tuto skladbu znovu uložíte, bude ztracen veškerý "
 "zvukový obsah i data zásuvných modulů s nastaveními.</p>"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1631
+#: ../src/document/RosegardenGUIDoc.cpp:1629
 msgid ""
 "<h3>Audio and plugins not available</h3><p>This composition uses audio files "
 "or plugins, but you are running a version of Rosegarden that was compiled "
@@ -10181,7 +10177,7 @@ msgstr ""
 "skladbu znovu uložíte, bude ztracen veškerý zvukový obsah i data zásuvných "
 "modulů s nastaveními.</p>"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1668
+#: ../src/document/RosegardenGUIDoc.cpp:1666
 msgid ""
 "<h3>Incorrect audio sample rate</h3><p>This composition contains audio files "
 "that were recorded or imported with the audio server running at a different "
@@ -10200,7 +10196,7 @@ msgstr ""
 "nespustit server JACK se správnou frekvencí (%3 Hz) a nenačíst tuto skladbu "
 "před jakoukoli další prací s ní znovu.</p>"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1678
+#: ../src/document/RosegardenGUIDoc.cpp:1676
 msgid ""
 "<h3>Inconsistent audio sample rates</h3><p>This composition contains audio "
 "files at more than one sample rate.</p><p>Rosegarden will play them at the "
@@ -10218,11 +10214,11 @@ msgstr ""
 "také možnost převzorkování všech souborů, které mají nyní chybnou frekvenci."
 "</p>"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1679
+#: ../src/document/RosegardenGUIDoc.cpp:1677
 msgid "Inconsistent sample rates"
 msgstr "Nekonzistentní vzorkovací frekvence"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1693
+#: ../src/document/RosegardenGUIDoc.cpp:1691
 msgid ""
 "<h3>Plugins not found</h3><p>The following audio plugins could not be loaded:"
 "</p><ul>"
@@ -10230,11 +10226,11 @@ msgstr ""
 "<h3>Zásuvné moduly nenalezeny</h3><p>Následující zásuvné moduly nebylo možné "
 "načíst: </p><ul>"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1701
+#: ../src/document/RosegardenGUIDoc.cpp:1699
 msgid "<li>%1 (from %2)</li>"
 msgstr "<li>%1 (od %2)</li>"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1715
+#: ../src/document/RosegardenGUIDoc.cpp:1713
 msgid ""
 "This file contains one or more old element types that are now deprecated.\n"
 "Support for these elements may disappear in future versions of Rosegarden.\n"
@@ -10248,12 +10244,12 @@ msgstr ""
 "Doporučujeme, abyste znovu uložili tento soubor v této verzi aplikace "
 "Rosegarden a zajistili si tak možnost načíst jej v budoucích verzích."
 
-#: ../src/document/RosegardenGUIDoc.cpp:2248
+#: ../src/document/RosegardenGUIDoc.cpp:2241
 msgid "Insert Recorded MIDI"
 msgstr "Vložit zaznamenané MIDI"
 
-#: ../src/document/RosegardenGUIDoc.cpp:2614
-#: ../src/document/RosegardenGUIDoc.cpp:2694
+#: ../src/document/RosegardenGUIDoc.cpp:2607
+#: ../src/document/RosegardenGUIDoc.cpp:2687
 #, fuzzy
 msgid "(recorded)"
 msgstr "%1 (zaznamenáno)"
@@ -11594,6 +11590,9 @@ msgstr "Menzurální"
 #: ../data/styles/styles.cpp:4
 msgid "Triangle"
 msgstr "Trojúhelníkový"
+
+#~ msgid "warning: bar too short, padding with rests"
+#~ msgstr "varování: takt je příliš krátký, bude doplněn pomlkami"
 
 #~ msgid "%1 (rescaled)"
 #~ msgstr "%1 (změněna délka)"
