@@ -1533,7 +1533,7 @@ Track* Composition::getTrackById(TrackId track) const
 	      << __FILE__ << ":" << __LINE__ << std::endl;
     std::cerr << "Available track ids are: " << std::endl;
     for (trackconstiterator i = m_tracks.begin(); i != m_tracks.end(); ++i) {
-	std::cerr << (*i).second->getId() << std::endl;
+	std::cerr << (int)(*i).second->getId() << std::endl;
     }
 
     return 0;

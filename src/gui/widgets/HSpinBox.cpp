@@ -22,13 +22,15 @@
 #include <cmath>
 #include <algorithm>
 
+#include <iostream>
+
 namespace Rosegarden
 {
 
 QString HSpinBox::mapValueToText(int j)
 {
-    QString str;
-    str.sprintf(m_format, float(j) / m_scaleFactor);
+    QString str = QString("%1").arg(double(j) / m_scaleFactor,
+                                    m_digits + 3, 'f', m_digits);
     return str;
 }
 
@@ -41,7 +43,9 @@ int HSpinBox::mapTextToValue( bool* ok )
   
 HSpinBox::HSpinBox( int minV, int maxV, int step, QWidget* parent,
               double bottom, double top, int decimals, float initialValue)
-      : QSpinBox(minV,maxV,step,parent)
+    : QSpinBox(minV,maxV,step,parent),
+      m_scaleFactor(1),
+      m_digits(0)
 {
     setValidator(new QDoubleValidator(bottom,top,decimals,this));
     initialize(decimals);
@@ -53,7 +57,9 @@ HSpinBox::HSpinBox( QWidget* parent,  float initialValue, int step,
               double bottom, double top, int decimals,
               const QObject* recv, const char* mem)
       : QSpinBox((int)(bottom*pow(10.0, decimals)), 
-                 (int)(top*pow(10.0, decimals)), step, parent)
+                 (int)(top*pow(10.0, decimals)), step, parent),
+      m_scaleFactor(1),
+      m_digits(0)
 {
     setValidator(new QDoubleValidator(bottom,top,decimals,this));
     initialize(decimals);
@@ -66,8 +72,8 @@ float HSpinBox::valuef() { return float(value()) / m_scaleFactor; }
 void HSpinBox::setValuef(float v) { setValue(static_cast<int>(v * m_scaleFactor)); }
 
 void HSpinBox::initialize(int digits) {
+    m_digits = digits;
     m_scaleFactor = pow(10.0, digits);
-    sprintf(m_format, "%c%1i.%1if", '%', digits+3, digits);
 }
         
         
