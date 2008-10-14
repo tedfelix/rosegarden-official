@@ -15,14 +15,13 @@
     COPYING included with this distribution for more information.
 */
 
-
-#include <QMouseEvent>
 #include <Q3Canvas>
 #include <Q3CanvasItemList>
 #include <Q3CanvasLine>
 #include "ControllerEventsRuler.h"
 
 #include <klocale.h>
+
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "base/ControlParameter.h"
@@ -40,8 +39,9 @@
 #include "ControlRulerEventEraseCommand.h"
 #include "gui/general/EditViewBase.h"
 #include "gui/widgets/TextFloat.h"
-#include <klineeditdlg.h>
-#include <Q3Canvas>
+
+#include <QMouseEvent>
+#include <QInputDialog>
 #include <QColor>
 #include <QPoint>
 #include <QString>
@@ -58,7 +58,7 @@ ControllerEventsRuler::ControllerEventsRuler(Segment *segment,
         Q3Canvas* c,
         QWidget* parent,
         const ControlParameter *controller,
-        const char* name, WFlags f)
+        const char* name) //, WFlags f)
         : ControlRuler(segment, rulerScale, parentView, c, parent), // name, f),
         m_defaultItemWidth(20),
         m_controlLine(new Q3CanvasLine(canvas())),
@@ -272,8 +272,11 @@ void ControllerEventsRuler::insertControllerEvent()
     } else {
         bool ok = false;
         QIntValidator intValidator(0, 128, this);
-        QString res = KLineEditDlg::getText(i18n("Controller Event Number"), "0",
-                                            &ok, this, &intValidator);
+//         QString res = KLineEditDlg::getText(i18n("Controller Event Number"), "0",
+//                                             &ok, this, &intValidator);
+		QString res = QInputDialog::getText( this, "", i18n("Controller Event Number"),
+											 QLineEdit::Normal, "0", &ok );
+		
         if (ok)
             number = res.toULong();
     }

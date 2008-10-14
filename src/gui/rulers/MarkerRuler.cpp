@@ -16,8 +16,10 @@
 */
 
 
-#include <QMouseEvent>
 #include "MarkerRuler.h"
+
+#include <klocale.h>
+// #include <kxmlguifactory.h>
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"
@@ -26,10 +28,12 @@
 #include "document/RosegardenGUIDoc.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/HZoomable.h"
+#include "gui/general/IconLoader.h"
 #include "gui/dialogs/MarkerModifyDialog.h"
 #include "commands/edit/ModifyMarkerCommand.h"
 #include "document/MultiViewCommandHistory.h"
-#include <kxmlguifactory.h>
+
+#include <QMouseEvent>
 #include <QBrush>
 #include <QCursor>
 #include <QFont>
@@ -37,16 +41,14 @@
 #include <QPainter>
 #include <QPen>
 #include <QPoint>
-#include <qpopupmenu.h>
+#include <QMenu>
 #include <QRect>
 #include <QSize>
 #include <QString>
 #include <QWidget>
-#include <klocale.h>
 #include <QAction>
-#include <kstandarddirs.h>
 #include <QToolTip>
-
+#include <QMainWindow>
 
 namespace Rosegarden
 {
@@ -56,9 +58,9 @@ MarkerRuler::MarkerRuler(RosegardenGUIDoc *doc,
                          int barHeight,
                          double xorigin,
                          QWidget* parent,
-                         const char* name,
-                         WFlags f)
-        : QWidget(parent, name, f),
+                         const char* name)
+                         //WFlags f)
+        : QWidget(parent), //, f),
         m_barHeight(barHeight),
         m_xorigin(xorigin),
         m_currentXOffset(0),
@@ -67,30 +69,35 @@ MarkerRuler::MarkerRuler(RosegardenGUIDoc *doc,
         m_menu(0),
         m_doc(doc),
         m_rulerScale(rulerScale),
-        m_parentMainWindow(dynamic_cast<KMainWindow*>(doc->parent()))
+        m_parentMainWindow( dynamic_cast<QMainWindow*>(doc->parent()) )
 {
     // If the parent window has a main window above it, we need to use
     // that as the parent main window, not the document's parent.
     // Otherwise we'll end up adding all actions to the same
     // (document-level) action collection regardless of which window
     // we're in.
+	
+	this->setObjectName( name );
     QObject *probe = parent;
-    while (probe && !dynamic_cast<KMainWindow *>(probe)) probe = probe->parent();
-    if (probe) m_parentMainWindow = dynamic_cast<KMainWindow *>(probe);
+    while (probe && !dynamic_cast<QMainWindow *>(probe)) probe = probe->parent();
+    if (probe) m_parentMainWindow = dynamic_cast<QMainWindow *>(probe);
 
     //    m_barFont = new QFont("helvetica", 12);
     //    m_barFont->setPixelSize(12);
     m_barFont = new QFont();
     m_barFont->setPointSize(10);
 
-    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+//     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+	IconLoader il;
     QIcon icon;
-
+// 	QString pixmapDir = il.getResourcePath( "" );
+	
     // Use the event insert, delete, edit icons because they are
     // actually generic enough to serve for anything.  Let's hope they
     // don't become more event-specific in future...
 
-    icon = QIcon(QPixmap(pixmapDir + "/toolbar/event-insert.png"));
+//     icon = QIcon(QPixmap(pixmapDir + "/toolbar/event-insert.png"));
+	icon = il.load( "event-insert" );
     QAction *qa_insert_marker_here = new QAction( "Insert Marker", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_insert_marker_here->setIcon(icon); 
 			connect( qa_insert_marker_here, SIGNAL(triggered()), this, SLOT(slotInsertMarkerHere())  );
@@ -105,13 +112,15 @@ MarkerRuler::MarkerRuler(RosegardenGUIDoc *doc,
 			//### FIX: deallocate QAction ptr
 			
 
-    icon = QIcon(QPixmap(pixmapDir + "/toolbar/event-delete.png"));
-    QAction *qa_delete_marker = new QAction( "Delete Marker", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+//     icon = QIcon(QPixmap(pixmapDir + "/toolbar/event-delete.png"));
+	icon = il.load( "event-delete" );
+	QAction *qa_delete_marker = new QAction( "Delete Marker", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_delete_marker->setIcon(icon); 
 			connect( qa_delete_marker, SIGNAL(triggered()), this, SLOT(slotDeleteMarker())  );
     
-    icon = QIcon(QPixmap(pixmapDir + "/toolbar/event-edit.png"));
-    QAction *qa_edit_marker = new QAction( "Edit Marker...", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+//     icon = QIcon(QPixmap(pixmapDir + "/toolbar/event-edit.png"));
+	icon = il.load( "event-edit" );
+	QAction *qa_edit_marker = new QAction( "Edit Marker...", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_edit_marker->setIcon(icon); 
 			connect( qa_edit_marker, SIGNAL(triggered()), this, SLOT(slotEditMarker())  );
 
@@ -143,7 +152,7 @@ MarkerRuler::createMenu()
 //                 << domDocument().toString(4) << endl;
 //    }
     
-    m_menu = dynamic_cast<QPopupMenu*>(tmp);
+    m_menu = dynamic_cast<QMenu*>(tmp);
     
     if (!m_menu) {
         RG_DEBUG << "MarkerRuler::createMenu() failed\n";
@@ -431,7 +440,7 @@ MarkerRuler::mousePressEvent(QMouseEvent *e)
     
     // if right-click, show popup menu
     //
-    if (e->button() == RightButton) {
+    if (e->button() == Qt::RightButton) {
         if (!m_menu)
             createMenu();
         if (m_menu) {

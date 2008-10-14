@@ -417,6 +417,9 @@ TriggerSegmentManager::setupActions()
 	createAction( "file_close", SLOT(slotClose()) );
 	createAction( "edit_undo" );
 	createAction( "edit_redo" );
+	
+	QActionGroup *qag_timeMode = new QActionGroup(this);
+	qag_timeMode->setExclusive( true );
 
     m_closeButton->setText( findAction("file_close")->text() );
     connect(m_closeButton, SIGNAL(released()), this, SLOT(slotClose()));
@@ -468,7 +471,7 @@ TriggerSegmentManager::setupActions()
 			qa_time_musical->setCheckable( true );		//
 			qa_time_musical->setChecked( false );			//
 			qa_time_musical->setAutoRepeat( false );		//
-// 			qa_time_musical->setActionGroup( qag_timeMode );	// QActionGroup*
+			qa_time_musical->setActionGroup( qag_timeMode );	// QActionGroup*
 			//### FIX: deallocate QAction ptr
 
     if (timeMode == 0)
@@ -483,7 +486,7 @@ TriggerSegmentManager::setupActions()
 			qa_time_real->setCheckable( true );		//
 			qa_time_real->setChecked( false );			//
 			qa_time_real->setAutoRepeat( false );		//
-// 			qa_time_real->setActionGroup( qag_timeMode );	// QActionGroup*
+			qa_time_real->setActionGroup( qag_timeMode );	// QActionGroup*
 			//### FIX: deallocate QAction ptr
 
     if (timeMode == 1)
@@ -498,7 +501,7 @@ TriggerSegmentManager::setupActions()
 			qa_time_raw->setCheckable( true );		//
 			qa_time_raw->setChecked( false );			//
 			qa_time_raw->setAutoRepeat( false );		//
-// 			qa_time_raw->setActionGroup( qag_timeMode );	// QActionGroup*
+			qa_time_raw->setActionGroup( qag_timeMode );	// QActionGroup*
 			//### FIX: deallocate QAction ptr
 
     if (timeMode == 2)

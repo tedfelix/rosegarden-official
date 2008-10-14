@@ -125,12 +125,24 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     //
     QWidget *leftPart = new QWidget(splitter);
     QVBoxLayout *leftPartLayout = new QVBoxLayout;
-    m_listView = new QTreeWidget( leftPart );
-    leftPartLayout->addWidget(m_listView);
-    m_listView->addColumn(i18n("MIDI Device"));
+	
+	m_listView = new QTreeWidget( leftPart );
+	leftPartLayout->addWidget(m_listView);
+	
+	m_listView->setColumnCount( 4 );
+	QStringList sl 
+			<< i18n("MIDI Device")
+			<< i18n("Type")
+			<< i18n("MSB")
+			<< i18n("LSB");
+	m_listView->setHeaderLabels( sl );
+	/*
+	m_listView->addColumn(i18n("MIDI Device"));
     m_listView->addColumn(i18n("Type"));
     m_listView->addColumn(i18n("MSB"));
     m_listView->addColumn(i18n("LSB"));
+	*/
+	
     m_listView->setRootIsDecorated(true);
     m_listView->setShowSortIndicator(true);
     m_listView->setItemsRenameable(true);

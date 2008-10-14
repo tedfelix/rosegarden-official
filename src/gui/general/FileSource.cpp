@@ -16,6 +16,7 @@
 #include "FileSource.h"
 
 #include "TempDirectory.h"
+#include "misc/Strings.h"
 
 #include <QHttp>
 #include <QFtp>

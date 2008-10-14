@@ -55,7 +55,7 @@ public:
                           Q3Canvas*,
                           QWidget* parent=0,
                           const ControlParameter *controller = 0,
-                          const char* name=0, WFlags f=0);
+                          const char* name=0 );	//, WFlags f=0);
 
     virtual ~ControllerEventsRuler();
 

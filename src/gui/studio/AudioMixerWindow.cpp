@@ -17,8 +17,12 @@
 
 
 #include "AudioMixerWindow.h"
-#include <QLayout>
-#include <QApplication>
+
+#include <klocale.h>
+// #include <kstandarddirs.h>
+// #include <kglobal.h>
+// #include <kmainwindow.h>
+// #include <kstandardaction.h>
 
 #include "AudioPlugin.h"
 #include "AudioPluginManager.h"
@@ -37,6 +41,8 @@
 #include "document/RosegardenGUIDoc.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include "gui/general/GUIPalette.h"
+#include "gui/general/IconLoader.h"
+// #include "misc/Strings.h"
 #include "gui/seqmanager/SequencerMapper.h"
 #include "gui/seqmanager/SequenceManager.h"
 #include "gui/widgets/AudioRouteMenu.h"
@@ -47,13 +53,12 @@
 #include "sound/MappedCommon.h"
 #include "sound/MappedEvent.h"
 #include "sound/MappedStudio.h"
-#include <klocale.h>
-#include <kstandarddirs.h>
+
+#include <QLayout>
+#include <QApplication>
+#include <QMainWindow>
+#include <QShortcut>
 #include <QAction>
-#include <kglobal.h>
-#include <kmainwindow.h>
-#include <kstandardaction.h>
-#include <qshortcut.h>
 #include <QColor>
 #include <QFont>
 #include <QFrame>
@@ -90,59 +95,73 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
 {
     populate();
 
-    KStandardAction::close(this,
-                      SLOT(slotClose()),
-                      actionCollection());
-
-    QIcon icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                             ("transport-play")));
-    KAction *play = QAction *qa_play = new QAction( "&Play", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+//     KStandardAction::close(this,
+//                       SLOT(slotClose()),
+//                       actionCollection());
+	createAction( "file_close", SLOT(slotClose() );
+	
+	IconLoader il;
+	QIcon icon;
+	
+//     QIcon icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+	icon = il.load("transport-play");
+	
+	QAction *qa_play = new QAction( "&Play", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_play->setIcon(icon); 
 			connect( qa_play, SIGNAL(triggered()), this, SIGNAL(play())  );
+	
     // Alternative shortcut for Play
-    KShortcut playShortcut = play->shortcut();
-    playShortcut.append( KKey(Key_Return + Qt::CTRL) );
-    play->setShortcut(playShortcut);
-
-    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                    ("transport-stop")));
-    QAction *qa_stop = new QAction( "&Stop", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+    QShortcut playShortcut = qa_play->shortcut();
+    playShortcut.append( QKeySequence(Qt::Key_Return + Qt::CTRL) );
+    qa_play->setShortcut(playShortcut);
+	
+	
+//     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+//                     ("transport-stop")));
+	icon = il.load("transport-stop");
+	QAction *qa_stop = new QAction( "&Stop", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_stop->setIcon(icon); 
 			connect( qa_stop, SIGNAL(triggered()), this, SIGNAL(stop())  );
 
-    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                    ("transport-rewind")));
-    QAction *qa_playback_pointer_back_bar = new QAction( "Re&wind", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+//     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+//                     ("transport-rewind")));
+	icon = il.load("transport-rewind");
+	QAction *qa_playback_pointer_back_bar = new QAction( "Re&wind", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_playback_pointer_back_bar->setIcon(icon); 
 			connect( qa_playback_pointer_back_bar, SIGNAL(triggered()), this, SIGNAL(rewindPlayback())  );
 
-    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                    ("transport-ffwd")));
-    QAction *qa_playback_pointer_forward_bar = new QAction( "&Fast Forward", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+//     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+//                     ("transport-ffwd")));
+	icon = il.load("transport-ffwd");
+	QAction *qa_playback_pointer_forward_bar = new QAction( "&Fast Forward", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_playback_pointer_forward_bar->setIcon(icon); 
 			connect( qa_playback_pointer_forward_bar, SIGNAL(triggered()), this, SIGNAL(fastForwardPlayback())  );
 
-    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                    ("transport-rewind-end")));
-    QAction *qa_playback_pointer_start = new QAction( "Rewind to &Beginning", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+//     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+//                     ("transport-rewind-end")));
+	icon = il.load("transport-rewind-end");
+	QAction *qa_playback_pointer_start = new QAction( "Rewind to &Beginning", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_playback_pointer_start->setIcon(icon); 
 			connect( qa_playback_pointer_start, SIGNAL(triggered()), this, SIGNAL(rewindPlaybackToBeginning())  );
 
-    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                    ("transport-ffwd-end")));
-    QAction *qa_playback_pointer_end = new QAction( "Fast Forward to &End", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+//     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+//                     ("transport-ffwd-end")));
+	icon = il.load("transport-ffwd-end");
+	QAction *qa_playback_pointer_end = new QAction( "Fast Forward to &End", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_playback_pointer_end->setIcon(icon); 
 			connect( qa_playback_pointer_end, SIGNAL(triggered()), this, SIGNAL(fastForwardPlaybackToEnd())  );
 
-    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                    ("transport-record")));
-    QAction *qa_record = new QAction( "&Record", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+//     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+//                     ("transport-record")));
+	icon = il.load("transport-record");
+	QAction *qa_record = new QAction( "&Record", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_record->setIcon(icon); 
 			connect( qa_record, SIGNAL(triggered()), this, SIGNAL(record())  );
 
-    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                    ("transport-panic")));
-    QAction *qa_panic = new QAction( "Panic", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+//     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
+//                     ("transport-panic")));
+	icon = il.load("transport-panic");
+	QAction *qa_panic = new QAction( "Panic", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_panic->setIcon(icon); 
 			connect( qa_panic, SIGNAL(triggered()), this, SIGNAL(panic())  );
 
@@ -198,7 +217,7 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
 	// )->setChecked
     (mixerOptions & MIXER_SHOW_UNASSIGNED_FADERS);
 
-    KRadioAction *action = 0;
+    QAction *action = 0;
 
     for (int i = 1; i <= 16; i *= 2) {
         action =

@@ -30,6 +30,7 @@
 
 
 class QWidget;
+class QMenu;
 class QWheelEvent;
 class QScrollBar;
 class QMouseEvent;
@@ -163,7 +164,7 @@ protected:
     Q3CanvasRectangle* m_selectionRect;
 
     QString m_menuName;
-    QMenu* m_menu;
+    QMenu* 	m_menu;
 
     TextFloat  *m_numberFloat;
 

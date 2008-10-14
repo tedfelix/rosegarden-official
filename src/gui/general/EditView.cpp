@@ -19,12 +19,16 @@
 #include <Q3Canvas>
 #include <Q3CanvasItem>
 #include <Q3CanvasPixmap>
+
+//#include <kglobal.h>
+//#include <kiconloader.h>
+//#include <kstandarddirs.h>
+//#include <kxmlguiclient.h>
+#include <klocale.h>
+
 #include "EditView.h"
-#include <QLayout>
 
 #include "base/BaseProperties.h"
-#include <klocale.h>
-#include <QSettings>
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "ActiveItem.h"
@@ -75,15 +79,15 @@
 #include "gui/rulers/ControllerEventsRuler.h"
 #include "gui/rulers/ControlRuler.h"
 #include "gui/rulers/PropertyControlRuler.h"
+#include "gui/general/IconLoader.h"
 #include "RosegardenCanvasView.h"
-#include <QAction>
 #include "document/Command.h"
+
+#include <QSettings>
+#include <QLayout>
+#include <QAction>
 #include <QDockWidget>
-//#include <kglobal.h>
-//#include <kiconloader.h>
-//#include <kstandarddirs.h>
-#include <ktabwidget.h>
-//#include <kxmlguiclient.h>
+#include <QTabWidget>
 #include <QPushButton>
 #include <QDialog>
 #include <QFrame>
@@ -127,7 +131,7 @@ EditView::EditView(RosegardenGUIDoc *doc,
         m_topStandardRuler(0),
         m_bottomStandardRuler(0),
         m_controlRuler(0),
-        m_controlRulers(new KTabWidget(getBottomWidget(), "controlrulers"))
+        m_controlRulers(new QTabWidget(getBottomWidget(), "controlrulers"))
 {
 //!!!kiftsgate    m_commandRegistry = new CommandRegistry(this);
     m_bottomBox->setObjectName("bottomframe");
@@ -241,7 +245,7 @@ void EditView::setControlRulersCurrentSegment()
     bool visible = m_controlRulers->isVisible();
 
     delete m_controlRulers;
-    m_controlRulers = new KTabWidget(getBottomWidget(), "controlrulers");
+    m_controlRulers = new QTabWidget(getBottomWidget(), "controlrulers");
 
     bool haveTabs = setupControllerTabs();
     setupAddControlRulerMenu();
@@ -313,9 +317,12 @@ void EditView::setBottomStandardRuler(StandardRuler* w)
 void EditView::setRewFFwdToAutoRepeat()
 {
     QWidget* transportToolbar = factory()->container("Transport Toolbar", this);
-
+	QObjectList obl;
+	QObjectList *l = &obl;
+	
     if (transportToolbar) {
-        QObjectList *l = transportToolbar->queryList();
+        obl = transportToolbar->queryList();
+		l = &obl;
         QObjectListIt it(*l); // iterate over the buttons
         QObject *obj;
 
@@ -365,8 +372,13 @@ void EditView::addPropertyBox(QWidget *w)
 void EditView::addControlRuler(ControlRuler* ruler)
 {
     ruler->setWorldMatrix(m_currentRulerZoomMatrix);
-    m_controlRulers->addTab(ruler, KGlobal::iconLoader()->loadIconSet("fileclose", KIcon::Small),
-                            ruler->getName());
+	
+//     m_controlRulers->addTab(ruler, KGlobal::iconLoader()->loadIconSet("fileclose", KIcon::Small),
+//                             ruler->getName());
+	IconLoader il;
+	QIcon icon = il.load( "fileclose" );
+	m_controlRulers->addTab( ruler, icon, ruler->getName() );
+	
     m_controlRulers->showPage(ruler);
 
     if (m_canvasView) {

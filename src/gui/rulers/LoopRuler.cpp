@@ -15,9 +15,9 @@
     COPYING included with this distribution for more information.
 */
 
+#include <Q3PointArray>
+#include <klocale.h>
 
-#include <QPaintEvent>
-#include <QMouseEvent>
 #include "LoopRuler.h"
 
 #include "misc/Debug.h"
@@ -26,16 +26,17 @@
 #include "gui/general/GUIPalette.h"
 #include "gui/general/HZoomable.h"
 #include "gui/general/RosegardenCanvasView.h"
+#include "document/RosegardenGUIDoc.h"
+
 #include <QPainter>
 #include <QRect>
 #include <QSize>
 #include <QWidget>
 #include <QToolTip>
-#include <klocale.h>
 #include <QAction>
 #include <QPainter>
-#include <qpointarray.h>
-#include "document/RosegardenGUIDoc.h"
+#include <QPaintEvent>
+#include <QMouseEvent>
 
 
 namespace Rosegarden
@@ -252,7 +253,7 @@ LoopRuler::mousePressEvent(QMouseEvent *mE)
     Qt::ButtonState bs = mE->state();
     setLoopingMode((bs & Qt::ShiftModifier) != 0);
 
-    if (mE->button() == LeftButton) {
+    if (mE->button() == Qt::LeftButton) {
         double x = mE->pos().x() / getHScaleFactor() - m_currentXOffset - m_xorigin;
 
         if (m_loopingMode) {
@@ -274,7 +275,7 @@ LoopRuler::mousePressEvent(QMouseEvent *mE)
 void
 LoopRuler::mouseReleaseEvent(QMouseEvent *mE)
 {
-    if (mE->button() == LeftButton) {
+	if (mE->button() == Qt::LeftButton) {
         if (m_loopingMode) {
             // Cancel the loop if there was no drag
             //
@@ -315,7 +316,7 @@ LoopRuler::mouseDoubleClickEvent(QMouseEvent *mE)
 
     RG_DEBUG << "LoopRuler::mouseDoubleClickEvent: x = " << x << ", looping = " << m_loopingMode << endl;
 
-    if (mE->button() == LeftButton && !m_loopingMode)
+	if (mE->button() == Qt::LeftButton && !m_loopingMode)
         emit setPlayPosition(m_grid->snapX(x));
 }
 

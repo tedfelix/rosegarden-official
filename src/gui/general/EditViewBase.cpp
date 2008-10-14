@@ -31,6 +31,7 @@
 #include "gui/dialogs/ConfigureDialog.h"
 #include "gui/dialogs/TimeDialog.h"
 #include "gui/general/EditViewTimeSigNotifier.h"
+#include "misc/Strings.h"
 #include "gui/kdeext/KTmpStatusMsg.h"
 #include "document/Command.h"
 
@@ -52,6 +53,7 @@
 #include <QApplication>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
+#include <QToolBar>
 
 #include <Q3CanvasPixmap>
 #include <Q3Canvas>
@@ -102,15 +104,28 @@ EditViewBase::EditViewBase(RosegardenGUIDoc *doc,
 {
     QPixmap dummyPixmap; // any icon will do
     
-	m_mainDockWidget = createDockWidget("Rosegarden EditView DockWidget", dummyPixmap,
-                                        0L, "editview_dock_widget");
+// 	m_mainDockWidget = createDockWidget("Rosegarden EditView DockWidget", dummyPixmap,
+//                                         0L, "editview_dock_widget");
+	
     // allow others to dock to the left and right sides only
-    m_mainDockWidget->setDockSite(QDockWidget::DockLeft | QDockWidget::DockRight);
+//     m_mainDockWidget->setDockSite(QDockWidget::DockLeft | QDockWidget::DockRight);
+	
     // forbit docking abilities of m_mainDockWidget itself
-    m_mainDockWidget->setEnableDocking(QDockWidget::DockNone);
-    setView(m_mainDockWidget); // central widget in a KDE mainwindow
-    setMainDockWidget(m_mainDockWidget); // master dockwidget
-
+//     m_mainDockWidget->setEnableDocking(QDockWidget::DockNone);
+	
+	m_mainDockWidget = new QDockWidget( "Rosegarden EditView DockWidget", this );
+	m_mainDockWidget->setAllowedAreas( Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea );
+	m_mainDockWidget->setFeatures( QDockWidget::AllDockWidgetFeatures );
+	
+	addDockWidget( Qt::LeftDockWidgetArea, m_mainDockWidget, Qt::Horizontal );
+	
+	
+//     setView(m_mainDockWidget); // central widget in a KDE mainwindow
+//     setMainDockWidget(m_mainDockWidget); // master dockwidget
+	
+	m_toolBar = new QToolBar( "Tool Bar", this );
+	addToolBar( Qt::TopToolBarArea, m_toolBar );
+	
     m_centralFrame = new QFrame(m_mainDockWidget);
     m_centralFrame->setObjectName("centralframe");
     m_grid = new QGridLayout(m_centralFrame);
@@ -152,10 +167,10 @@ void EditViewBase::slotSaveOptions()
 void EditViewBase::readOptions()
 {
     QAction *a = findAction("options_show_statusbar");
-    if (a) a->setChecked(!statusBar()->isHidden());
+    if (a) a->setChecked( ! statusBar()->isHidden() );
 
     a = findAction("options_show_toolbar");
-    if (a) a->setChecked(!toolBar()->isHidden());
+    if (a) a->setChecked( ! m_toolBar->isHidden());
 }
 
 void EditViewBase::setupActions(QString rcFileName, bool haveClipboard)
@@ -437,8 +452,10 @@ void EditViewBase::paintEvent(QPaintEvent* e)
         refreshSegment(singleSegment, updateStart, updateEnd);
     }
 
-    if (e)
-        KMainWindow::paintEvent(e);
+    if (e){
+// 		KMainWindow::paintEvent(e);
+		update();	//@@@
+	}
 
     // moved this to the end of the method so that things called
     // from this method can still test whether the composition had
@@ -466,7 +483,8 @@ void EditViewBase::closeEvent(QCloseEvent* e)
         RG_DEBUG << "EditViewBase::closeEvent() : is in ctor, ignoring close event\n";
         e->ignore();
     } else {
-        KMainWindow::closeEvent(e);
+//         KMainWindow::closeEvent(e);
+		close(e);
     }
 }
 
@@ -496,10 +514,10 @@ void EditViewBase::slotToggleToolBar()
 {
     KTmpStatusMsg msg(i18n("Toggle the toolbar..."), this);
 
-    if (toolBar()->isVisible())
-        toolBar()->hide();
+    if (m_toolBar->isVisible())
+		m_toolBar->hide();
     else
-        toolBar()->show();
+		m_toolBar->show();
 }
 
 void EditViewBase::slotToggleStatusBar()
@@ -517,7 +535,7 @@ void EditViewBase::slotStatusMsg(const QString &text)
     ///////////////////////////////////////////////////////////////////
     // change status message permanently
     statusBar()->clear();
-    statusBar()->changeItem(text, ID_STATUS_MSG);
+    statusBar()->showMessage(text);	//, ID_STATUS_MSG);
 }
 
 void EditViewBase::slotStatusHelpMsg(const QString &text)
@@ -726,7 +744,7 @@ EditViewBase::createAction(QString actionName, QString connection)
 {
     QAction *action = new QAction(this);
     action->setObjectName(actionName);
-    connect(action, SIGNAL(triggered()), this, connection);
+    connect(action, SIGNAL(triggered()), this, qStrToCharPtrUtf8(connection) );
     return action;
 }
 

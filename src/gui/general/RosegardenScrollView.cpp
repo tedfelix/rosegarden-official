@@ -382,7 +382,7 @@ void RosegardenScrollView::slotSetScrollPos(const QPoint &pos)
 
 void RosegardenScrollView::resizeEvent(QResizeEvent* e)
 {
-    QScrollView::resizeEvent(e);
+    QScrollArea::resizeEvent(e);
     if (!horizontalScrollBar()->isVisible())
         updateBottomWidgetGeometry();
 
@@ -390,7 +390,7 @@ void RosegardenScrollView::resizeEvent(QResizeEvent* e)
 
 void RosegardenScrollView::setHBarGeometry(QScrollBar &hbar, int x, int y, int w, int h)
 {
-    QScrollView::setHBarGeometry(hbar, x, y, w, h);
+    QScrollArea::setHBarGeometry(hbar, x, y, w, h);
     updateBottomWidgetGeometry();
 }
 
@@ -432,7 +432,7 @@ void RosegardenScrollView::wheelEvent(QWheelEvent *e)
             emit zoomOut();
         return ;
     }
-    QScrollView::wheelEvent(e);
+    QScrollArea::wheelEvent(e);
 }
 
 }

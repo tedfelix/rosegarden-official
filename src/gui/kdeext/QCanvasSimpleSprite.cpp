@@ -80,13 +80,13 @@ QCanvasSimpleSprite::~QCanvasSimpleSprite()
 Q3CanvasPixmapArray*
 QCanvasSimpleSprite::makePixmapArray(QPixmap *pixmap)
 {
-    QList<QPixmap> pixlist;
+    QList<QPixmap*> pixlist;
     pixlist.setAutoDelete(true); // the Q3CanvasPixmapArray creates its
     // own copies of the pixmaps, so we
     // can delete the one we're passed
     pixlist.append(pixmap);
 
-    QList<QPoint> spotlist;
+    QList<QPoint*> spotlist;
     spotlist.setAutoDelete(true);
     spotlist.append(new QPoint(0, 0));
 
@@ -96,13 +96,13 @@ QCanvasSimpleSprite::makePixmapArray(QPixmap *pixmap)
 Q3CanvasPixmapArray*
 QCanvasSimpleSprite::makePixmapArray(Q3CanvasPixmap *pixmap)
 {
-    QList<QPixmap> pixlist;
+    QList<QPixmap*> pixlist;
     pixlist.setAutoDelete(true); // the Q3CanvasPixmapArray creates its
     // own copies of the pixmaps, so we
     // can delete the one we're passed
     pixlist.append(pixmap);
 
-    QList<QPoint> spotlist;
+    QList<QPoint*> spotlist;
     spotlist.setAutoDelete(true);
     spotlist.append(new QPoint(pixmap->offsetX(), pixmap->offsetY()));
 

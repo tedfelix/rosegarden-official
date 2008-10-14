@@ -29,7 +29,7 @@
 #include <QMenu>
 #include <QString>
 
-#include <kxmlguiclient.h>
+//#include <kxmlguiclient.h>
 
 
 namespace Rosegarden
@@ -127,7 +127,7 @@ void EditTool::createMenu()
         << ") : menu creation failed (name : "
         << m_menuName << ")\n";
 
-    m_menu = dynamic_cast<QPopupMenu*>(tmp);
+    m_menu = dynamic_cast<QMenu*>(tmp);
 }
 
 bool EditTool::hasMenu()

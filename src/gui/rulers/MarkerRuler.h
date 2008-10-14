@@ -29,8 +29,8 @@
 class QPaintEvent;
 class QMouseEvent;
 class QFont;
-class QPopupMenu;
-class KMainWindow;
+class QMenu;
+class QMainWindow;
 
 namespace Rosegarden
 {
@@ -50,8 +50,8 @@ public:
                      int buttonHeight,
                      double xorigin = 0.0,
                      QWidget* parent = 0,
-                     const char* name = 0,
-                     WFlags f=0);
+                     const char* name = 0);
+//                      WFlags f=0);
 
     virtual ~MarkerRuler();
     
@@ -99,12 +99,12 @@ protected:
     int m_width;
     int m_clickX;
     
-    QFont *m_barFont;
-    QPopupMenu *m_menu;
+    QFont 	*m_barFont;
+    QMenu 	*m_menu;
     
     RosegardenGUIDoc *m_doc;
     RulerScale *m_rulerScale;
-    KMainWindow* m_parentMainWindow;
+    QMainWindow* m_parentMainWindow;
 
 };
 

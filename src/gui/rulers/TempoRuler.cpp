@@ -29,6 +29,7 @@
 #include "gui/application/RosegardenGUIApp.h"
 #include "gui/dialogs/TempoDialog.h"
 #include "gui/general/GUIPalette.h"
+#include "gui/general/IconLoader.h"
 #include "gui/widgets/TextFloat.h"
 #include "TempoColour.h"
 
@@ -121,10 +122,13 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
     (doc->getCommandHistory(), SIGNAL(commandExecuted()),
      this, SLOT(update()));
 
-    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+//     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
     QIcon icon;
+	IconLoader il;
+	QString pixmapDir = il.getResourcePath( "" );
 
-    icon = QIcon(QPixmap(pixmapDir + "/toolbar/event-insert-tempo.png"));
+//     icon = QIcon(QPixmap(pixmapDir + "/toolbar/event-insert-tempo.png"));
+	icon = il.load( "event-insert-tempo" );
     QAction *qa_insert_tempo_here = new QAction( "Insert Tempo Change", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_insert_tempo_here->setIcon(icon); 
 			connect( qa_insert_tempo_here, SIGNAL(triggered()), this, SLOT(slotInsertTempoHere())  );
@@ -133,8 +137,9 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
 			qa_insert_tempo_at_pointer->setIconText(0); 
 			connect( qa_insert_tempo_at_pointer, SIGNAL(triggered()), this, SLOT(slotInsertTempoAtPointer())  );
 
-    icon = QIcon(QPixmap(pixmapDir + "/toolbar/event-delete.png"));
-    QAction *qa_delete_tempo = new QAction( "Delete Tempo Change", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
+//     icon = QIcon(QPixmap(pixmapDir + "/toolbar/event-delete.png"));
+	icon = il.load( "event-delete" );
+	QAction *qa_delete_tempo = new QAction( "Delete Tempo Change", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
 			qa_delete_tempo->setIcon(icon); 
 			connect( qa_delete_tempo, SIGNAL(triggered()), this, SLOT(slotDeleteTempoChange())  );
 
@@ -242,7 +247,7 @@ TempoRuler::slotScrollHoriz(int x)
 void
 TempoRuler::mousePressEvent(QMouseEvent *e)
 {
-    if (e->button() == LeftButton) {
+    if (e->button() == Qt::LeftButton) {
 
         if (e->type() == QEvent::MouseButtonDblClick) {
             timeT t = m_rulerScale->getTimeForX
@@ -294,7 +299,7 @@ TempoRuler::mousePressEvent(QMouseEvent *e)
             m_dragHoriz = false;
         }
 
-    } else if (e->button() == RightButton) {
+    } else if (e->button() == Qt::RightButton) {
 
         m_clickX = e->x();
         if (!m_menu)

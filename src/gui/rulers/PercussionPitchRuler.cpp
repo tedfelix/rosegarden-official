@@ -174,7 +174,7 @@ void PercussionPitchRuler::mousePressEvent(QMouseEvent *e)
 {
     Qt::ButtonState bs = e->state();
 
-    if (e->button() == LeftButton) {
+	if (e->button() == Qt::LeftButton) {
 
         m_mouseDown = true;
         m_selecting = (bs & Qt::ShiftModifier);
@@ -188,7 +188,7 @@ void PercussionPitchRuler::mousePressEvent(QMouseEvent *e)
 
 void PercussionPitchRuler::mouseReleaseEvent(QMouseEvent *e)
 {
-    if (e->button() == LeftButton) {
+	if (e->button() == Qt::LeftButton) {
         m_mouseDown = false;
         m_selecting = false;
     }

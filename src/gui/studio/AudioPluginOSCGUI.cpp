@@ -44,7 +44,7 @@ AudioPluginOSCGUI::AudioPluginOSCGUI(AudioPluginInstance *instance,
     QString identifier = strtoqstr(instance->getIdentifier());
 
     QString filePath = getGUIFilePath(identifier);
-    if (!filePath) {
+    if ( filePath.isEmpty() ) {
         throw Exception("No GUI found");
     }
 
@@ -159,13 +159,13 @@ AudioPluginOSCGUI::setGUIUrl(QString url)
     if (m_address)
         lo_address_free(m_address);
 
-    char *host = lo_url_get_hostname(url);
-    char *port = lo_url_get_port(url);
+    char *host = lo_url_get_hostname( qStrToCharPtrUtf8(url));
+	char *port = lo_url_get_port( qStrToCharPtrUtf8(url));
     m_address = lo_address_new(host, port);
     free(host);
     free(port);
 
-    m_basePath = lo_url_get_path(url);
+	m_basePath = lo_url_get_path( qStrToCharPtrUtf8(url));
 }
 
 void
@@ -176,7 +176,7 @@ AudioPluginOSCGUI::show()
     if (!m_address)
         return ;
     QString path = m_basePath + "/show";
-    lo_send(m_address, path, "");
+	lo_send(m_address, path,  qStrToCharPtrUtf8(""));
 }
 
 void
@@ -185,7 +185,7 @@ AudioPluginOSCGUI::hide()
     if (!m_address)
         return ;
     QString path = m_basePath + "/hide";
-    lo_send(m_address, path, "");
+	lo_send(m_address, path,  qStrToCharPtrUtf8(""));
 }
 
 void
@@ -203,7 +203,7 @@ AudioPluginOSCGUI::sendProgram(int bank, int program)
     if (!m_address)
         return ;
     QString path = m_basePath + "/program";
-    lo_send(m_address, path, "ii", bank, program);
+	lo_send(m_address, path,  qStrToCharPtrUtf8("ii"), bank, program);
 }
 
 void
@@ -212,7 +212,7 @@ AudioPluginOSCGUI::sendPortValue(int port, float value)
     if (!m_address)
         return ;
     QString path = m_basePath + "/control";
-    lo_send(m_address, path, "if", port, value);
+	lo_send(m_address, path,  qStrToCharPtrUtf8("if"), port, value);
 }
 
 void
@@ -221,7 +221,7 @@ AudioPluginOSCGUI::sendConfiguration(QString key, QString value)
     if (!m_address)
         return ;
     QString path = m_basePath + "/configure";
-    lo_send(m_address, path, "ss", key.data(), value.data());
+	lo_send(m_address, path,  qStrToCharPtrUtf8("ss"), key.data(), value.data());
 }
 
 }

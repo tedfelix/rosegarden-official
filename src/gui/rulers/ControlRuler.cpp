@@ -16,8 +16,6 @@
 */
 
 
-#include <QMouseEvent>
-#include <QContextMenuEvent>
 #include <Q3Canvas>
 #include <Q3CanvasItem>
 #include <Q3CanvasItemList>
@@ -39,17 +37,20 @@
 #include "gui/general/EditView.h"
 #include "gui/general/RosegardenCanvasView.h"
 #include "gui/widgets/TextFloat.h"
-#include <kmainwindow.h>
+#include <algorithm>
+
+#include <QMainWindow>
 #include <Q3Canvas>
 #include <QColor>
 #include <QCursor>
 #include <QPoint>
 #include <QMenu>
 #include <QScrollBar>
-#include <qscrollview.h>
+#include <QScrollArea>
 #include <QString>
 #include <QWidget>
-#include <algorithm>
+#include <QMouseEvent>
+#include <QContextMenuEvent>
 
 
 namespace Rosegarden
@@ -81,7 +82,7 @@ ControlRuler::ControlRuler(Segment *segment,
         m_selectionRect(new Q3CanvasRectangle(canvas())),
         m_menu(0)
 {
-    setHScrollBarMode(QScrollView::AlwaysOff);
+    setHScrollBarMode(QScrollArea::AlwaysOff);
 
     m_selectionRect->setPen(QColor(Qt::red));
 
@@ -392,7 +393,7 @@ void ControlRuler::createMenu()
 {
     RG_DEBUG << "ControlRuler::createMenu()\n";
 
-    KMainWindow* parentMainWindow = dynamic_cast<KMainWindow*>(topLevelWidget());
+    QMainWindow* parentMainWindow = dynamic_cast<QMainWindow*>(topLevelWidget());
 
     if (parentMainWindow && parentMainWindow->factory()) {
         m_menu = static_cast<QMenu*>(parentMainWindow->factory()->container(m_menuName, parentMainWindow));

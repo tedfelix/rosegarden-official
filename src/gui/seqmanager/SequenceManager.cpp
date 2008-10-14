@@ -16,6 +16,9 @@
 */
 
 
+#include <klocale.h>
+// #include <kstandarddirs.h>
+
 #include "SequenceManager.h"
 
 #include "sound/Midi.h"
@@ -56,10 +59,9 @@
 #include "sound/SoundDriver.h"
 #include "TempoSegmentMmapper.h"
 #include "TimeSigSegmentMmapper.h"
-#include <klocale.h>
-#include <kstandarddirs.h>
+#include <algorithm>
+
 #include <QSettings>
-#include <kglobal.h>
 #include <QMessageBox>
 #include <QApplication>
 #include <QByteArray>
@@ -71,7 +73,6 @@
 #include <QString>
 #include <QStringList>
 #include <QTimer>
-#include <algorithm>
 
 
 namespace Rosegarden
@@ -677,7 +678,11 @@ punchin:
         m_controlBlockMmapper->updateMetronomeData
         (m_metronomeMmapper->getMetronomeInstrument());
         m_controlBlockMmapper->updateMetronomeForRecord();
-
+		
+		
+		
+		QSettings settings;
+		
         // If we are looping then jump to start of loop and start recording,
         // if we're not take off the number of count-in bars and start
         // recording.
@@ -741,7 +746,7 @@ punchin:
         RealTime startPos =
             comp.getElapsedRealTime(comp.getPosition());
 
-        QSettings settings;
+//         QSettings settings;
         settings.beginGroup( GeneralOptionsConfigGroup );
 
         bool lowLat = qStrToBool( settings.value("audiolowlatencymonitoring", "true" ) ) ;
@@ -1364,7 +1369,8 @@ void
 SequenceManager::sendAudioLevel(MappedEvent *mE)
 {
     RosegardenGUIView *v;
-    QList<RosegardenGUIView>& viewList = m_doc->getViewList();
+// 	QList<RosegardenGUIView>& viewList = m_doc->getViewList();
+	QList<RosegardenGUIView*> viewList = m_doc->getViewList();
 
     for (v = viewList.first(); v != 0; v = viewList.next()) {
         v->showVisuals(mE);

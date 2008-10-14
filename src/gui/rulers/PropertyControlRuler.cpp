@@ -53,7 +53,8 @@ PropertyControlRuler::PropertyControlRuler(PropertyName propertyName,
         RulerScale* rulerScale,
         EditViewBase* parentView,
         Q3Canvas* c, QWidget* parent,
-        const char* name, WFlags f) :
+        const char* name	//, WFlags f) :
+		):
         ControlRuler(&(staff->getSegment()), rulerScale,
                      parentView, c, parent), // name, f),
         m_propertyName(propertyName),

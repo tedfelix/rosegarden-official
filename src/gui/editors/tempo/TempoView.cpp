@@ -710,19 +710,27 @@ TempoView::setupActions()
     int timeMode = settings.value("timemode", 0).toInt() ;
     settings.endGroup();
 
+	
+	
+	//### //@@@  FIX: this should use a global QActionGroup !!!
+	// (in editors/segment/TriggerSegmentManager.cpp too )
+	//
+	// QActionGroup for the Time Mode
+	QActionGroup *qag_timeMode = new QActionGroup(this);
+	qag_timeMode->setExclusive( true );
+	
 //     KRadioAction *action;
-
 //     pixmap.load(pixmapDir + "/toolbar/time-musical.png");
 //     icon = QIcon(pixmap);
 	icon = il.load( "time-musical" );
-
+	
     QAction* qa_time_musical = new QAction( icon, i18n("&Musical Times"), this );
 			connect( qa_time_musical, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotMusicalTime()) );
 			qa_time_musical->setObjectName( "time_musical" );
 			qa_time_musical->setCheckable( true );		//
 			qa_time_musical->setChecked( false );			//
 			qa_time_musical->setAutoRepeat( false );		//
-// 			qa_time_musical->setActionGroup( qag_timeMode );	// QActionGroup*
+			qa_time_musical->setActionGroup( qag_timeMode );	// QActionGroup*
 			//### FIX: deallocate QAction ptr
 
     if (timeMode == 0)
@@ -738,7 +746,7 @@ TempoView::setupActions()
 			qa_time_real->setCheckable( true );		//
 			qa_time_real->setChecked( false );			//
 			qa_time_real->setAutoRepeat( false );		//
-// 			qa_time_real->setActionGroup( qag_timeMode );	// QActionGroup*
+			qa_time_real->setActionGroup( qag_timeMode );	// QActionGroup*
 			//### FIX: deallocate QAction ptr
 
     if (timeMode == 1)
@@ -754,7 +762,7 @@ TempoView::setupActions()
 			qa_time_raw->setCheckable( true );		//
 			qa_time_raw->setChecked( false );			//
 			qa_time_raw->setAutoRepeat( false );		//
-// 			qa_time_raw->setActionGroup( qag_timeMode );	// QActionGroup*
+			qa_time_raw->setActionGroup( qag_timeMode );	// QActionGroup*
 			//### FIX: deallocate QAction ptr
 
     if (timeMode == 2)

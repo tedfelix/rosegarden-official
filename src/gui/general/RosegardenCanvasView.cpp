@@ -404,7 +404,7 @@ void RosegardenCanvasView::updateBottomWidgetGeometry()
 
     int leftWidgetWidth = 0;
     if (m_leftWidget && m_leftWidget->isVisible()) {
-        QScrollArea * qsv = dynamic_cast<QScrollView *>(m_leftWidget);
+        QScrollArea * qsv = dynamic_cast<QScrollArea *>(m_leftWidget);
         leftWidgetWidth = qsv->contentsWidth()+2;
         qsv->setFixedWidth(leftWidgetWidth);
     }
@@ -434,7 +434,7 @@ void RosegardenCanvasView::updateBottomWidgetGeometry()
 
 void RosegardenCanvasView::wheelEvent(QWheelEvent *e)
 {
-    if (e->state() & ControlButton) {
+    if (e->state() & Qt::CTRL ){ //@@@	//	was: ControlButton) {
         if (e->delta() > 0)
             emit zoomIn();
         else if (e->delta() < 0)
@@ -462,7 +462,7 @@ void RosegardenCanvasView::updateLeftWidgetGeometry()
 
     int leftWidgetWidth = 0;
     if (m_leftWidget->isVisible()) {
-        QScrollArea * qsv = dynamic_cast<QScrollView *>(m_leftWidget);
+        QScrollArea * qsv = dynamic_cast<QScrollArea *>(m_leftWidget);
         leftWidgetWidth = qsv->contentsWidth() + 2;
     }
     m_leftWidget->setFixedWidth(leftWidgetWidth);

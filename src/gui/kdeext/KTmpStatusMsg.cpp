@@ -54,7 +54,7 @@ QString RgTempQtIV::tempSaveName(QString &filePath)
 	//### TODO: implement 
 }
 
-void RgTempQtIV::setAutoSaveSettings( const char*  config_group, bool state=0 )
+void RgTempQtIV::setAutoSaveSettings( const char*  config_group, bool state )
 {
 	// used in RosegardenGUIApp
 	/* convinience method for qt4 */

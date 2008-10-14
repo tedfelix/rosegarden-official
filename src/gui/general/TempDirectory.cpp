@@ -16,6 +16,7 @@
 */
 
 #include "TempDirectory.h"
+#include "misc/Strings.h"
 
 #include <QDir>
 #include <QFile>
@@ -202,7 +203,7 @@ TempDirectory::cleanupDirectory(QString tmpdir)
             if (!QFile(fi.absoluteFilePath()).remove()) {
                 std::cerr << "WARNING: TempDirectory::cleanup: "
                           << "Failed to unlink file \""
-                          << fi.absoluteFilePath().toStdString() << "\""
+                          << qstrtostr(fi.absoluteFilePath()) << "\""
                           << std::endl;
             }
         }
@@ -213,13 +214,13 @@ TempDirectory::cleanupDirectory(QString tmpdir)
         if (!dir.cdUp()) {
             std::cerr << "WARNING: TempDirectory::cleanup: "
                       << "Failed to cd to parent directory of "
-                      << tmpdir.toStdString() << std::endl;
+					<< qstrtostr(tmpdir) << std::endl;
             return;
         }
         if (!dir.rmdir(dirname)) {
             std::cerr << "WARNING: TempDirectory::cleanup: "
                       << "Failed to remove directory "
-                      << dirname.toStdString() << std::endl;
+					<< qstrtostr(dirname) << std::endl;
         } 
     }
 
@@ -248,7 +249,7 @@ TempDirectory::cleanupAbandonedDirectories(QString rgDir)
                 std::cerr << "INFO: Found abandoned temporary directory from "
                           << "a previous, defunct process\n(pid=" << pid
                           << ", directory=\""
-                          << dir.filePath(dir[i]).toStdString()
+						<< qstrtostr( dir.filePath(dir[i]) )
                           << "\").  Removing it..." << std::endl;
                 cleanupDirectory(dir.filePath(dir[i]));
                 std::cerr << "...done." << std::endl;

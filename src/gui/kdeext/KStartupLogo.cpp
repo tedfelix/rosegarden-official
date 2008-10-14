@@ -16,20 +16,23 @@
     COPYING included with this distribution for more information.
 */
 
-#include <QDesktopWidget>
+
+// #include <ktip.h>
+// #include <kstandarddirs.h>
+
 #include <unistd.h>
-#include <QApplication>
-
-#include <QPainter>
-#include <QFontMetrics>
-
-#include <kapp.h>
-#include <kstandarddirs.h>
-#include <QSettings>
-#include <ktip.h>
-
 #include "KStartupLogo.h"
 #include "misc/Debug.h"
+#include "gui/general/IconLoader.h"
+
+#include <QApplication>
+#include <QDesktopWidget>
+#include <QPainter>
+#include <QFontMetrics>
+#include <QSettings>
+
+
+// NOTE: use QSplashScreen instead ??
 
 KStartupLogo::KStartupLogo(QWidget * parent, const char *name)
         : QWidget(parent, name,
@@ -43,7 +46,10 @@ KStartupLogo::KStartupLogo(QWidget * parent, const char *name)
 	  m_readyToHide(false),
 	  m_showTip(true)
 {
-    QString pixmapFile = locate("appdata", "pixmaps/splash.png");
+//     QString pixmapFile = locate("appdata", "pixmaps/splash.png");
+	IconLoader il;
+	QString pixmapFile = il.getResourcePath( "splash.png" );
+	
     if (!pixmapFile)
         return ;
     m_pixmap.load(pixmapFile);

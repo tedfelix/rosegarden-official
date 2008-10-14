@@ -30,12 +30,13 @@
 #include "base/Event.h"
 
 
+class Q3CanvasItem;
+
 class QWidget;
 class QVBoxLayout;
 class QPaintEvent;
 class QMouseEvent;
-class Q3CanvasItem;
-class KTabWidget;
+class QTabWidget;
 class Accidental;
 
 
@@ -383,7 +384,7 @@ protected:
     StandardRuler   *m_topStandardRuler;
     StandardRuler   *m_bottomStandardRuler;
     ControlRuler *m_controlRuler;
-    KTabWidget   *m_controlRulers;
+    QTabWidget   *m_controlRulers;
     QMatrix      m_currentRulerZoomMatrix;
 
     CommandRegistry *m_commandRegistry;

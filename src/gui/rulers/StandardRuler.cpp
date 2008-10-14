@@ -28,6 +28,7 @@
 #include "gui/general/GUIPalette.h"
 #include "gui/rulers/LoopRuler.h"
 #include "document/RosegardenGUIDoc.h"
+
 #include <QObject>
 #include <QToolTip>
 #include <QWidget>
@@ -43,9 +44,10 @@ StandardRuler::StandardRuler(RosegardenGUIDoc *doc,
                              int barHeight,
                              bool invert,
                              QWidget* parent,
-                             const char* name,
-                             WFlags f):
-        QWidget(parent, name, f),
+                             const char* name
+//                              WFlags f):
+		):
+        QWidget(parent, name),
         m_invert(invert),
         m_loopRulerHeight(10),
         m_currentXOffset(0),
@@ -53,9 +55,10 @@ StandardRuler::StandardRuler(RosegardenGUIDoc *doc,
         m_rulerScale(rulerScale),
         m_hButtonBar(0)
 {
-    QVBoxLayout *layout = QVBoxLayout;
-    layout->setSpacing(0);
-
+    QVBoxLayout *layout = new QVBoxLayout(this);
+	layout->setSpacing(0);
+	setLayout(layout);
+	
     if (!m_invert) {
         m_hButtonBar = new MarkerRuler
                        (m_doc, m_rulerScale, barHeight - m_loopRulerHeight, xorigin, this);
@@ -72,7 +75,6 @@ StandardRuler::StandardRuler(RosegardenGUIDoc *doc,
         layout->addWidget(m_hButtonBar);
     }
 
-    setLayout(layout);
 
     QObject::connect
         (doc->getCommandHistory(), SIGNAL(commandExecuted()),

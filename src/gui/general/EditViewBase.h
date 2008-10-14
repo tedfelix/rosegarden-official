@@ -366,6 +366,8 @@ protected:
 
     EditTool*    m_tool;
     EditToolBox* m_toolBox;
+	
+	QToolBar 	*m_toolBar;
 
     QDockWidget *m_mainDockWidget;
     QFrame      *m_centralFrame;
