@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: it\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-27 22:44-0400\n"
+"POT-Creation-Date: 2008-10-14 09:43-0400\n"
 "PO-Revision-Date: 2008-04-21 11:03+0200\n"
 "Last-Translator: Alessandro Musesti <musesti@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -1991,7 +1991,7 @@ msgstr ""
 "<qt>Sto cancellando definitivamente %n file audio dal disco.<br>L'azione è "
 "irreversibile, e non ci sarà modo di recuperare i file.<br>Sei sicuro?</qt>"
 
-#: ../src/document/RosegardenGUIDoc.cpp:521
+#: ../src/document/RosegardenGUIDoc.cpp:519
 #: ../src/gui/dialogs/AudioManagerDialog.cpp:881
 msgid "File %1 could not be deleted."
 msgstr "Il file %1 non può essere cancellato."
@@ -2027,7 +2027,7 @@ msgstr "Aggiunta file audio..."
 msgid "Failed to add audio file. "
 msgstr "Impossibile aggiungere il file audio"
 
-#: ../src/document/RosegardenGUIDoc.cpp:2838
+#: ../src/document/RosegardenGUIDoc.cpp:2831
 #: ../src/gui/application/RosegardenGUIApp.cpp:2739
 #: ../src/gui/application/RosegardenGUIView.cpp:1573
 #: ../src/gui/dialogs/AudioManagerDialog.cpp:1115
@@ -3265,7 +3265,7 @@ msgstr "Apertura file in corso..."
 msgid "Open File"
 msgstr "Apri file"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1228
+#: ../src/document/RosegardenGUIDoc.cpp:1226
 #: ../src/gui/application/RosegardenGUIApp.cpp:2261
 msgid "Saving file..."
 msgstr "Salvataggio file in corso..."
@@ -3393,7 +3393,7 @@ msgstr ""
 #: ../src/gui/application/RosegardenGUIApp.cpp:2772
 #: ../src/gui/application/RosegardenGUIApp.cpp:5294
 #: ../src/gui/application/RosegardenGUIApp.cpp:5342
-#: ../src/gui/editors/segment/TrackButtons.cpp:415
+#: ../src/gui/editors/segment/TrackButtons.cpp:412
 #: ../src/gui/editors/segment/segmentcanvas/SegmentResizer.cpp:152
 msgid "Set audio file path"
 msgstr "Imposta percorso del file audio"
@@ -3793,7 +3793,7 @@ msgid "XML files"
 msgstr "File XML"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5292
-#: ../src/gui/editors/segment/TrackButtons.cpp:413
+#: ../src/gui/editors/segment/TrackButtons.cpp:410
 msgid ""
 "The audio file path does not exist or is not writable.\n"
 "Please set the audio file path to a valid directory in Document Properties "
@@ -6746,29 +6746,29 @@ msgid "<default>"
 msgstr "<predefinito>"
 
 #: ../src/gui/editors/segment/TrackButtons.cpp:202
-#: ../src/gui/editors/segment/TrackButtons.cpp:581
-#: ../src/gui/editors/segment/TrackButtons.cpp:931
-#: ../src/gui/editors/segment/TrackButtons.cpp:1125
+#: ../src/gui/editors/segment/TrackButtons.cpp:578
+#: ../src/gui/editors/segment/TrackButtons.cpp:928
+#: ../src/gui/editors/segment/TrackButtons.cpp:1120
 msgid "<no instrument>"
 msgstr "<nesssuno strumento>"
 
-#: ../src/gui/editors/segment/TrackButtons.cpp:347
-#: ../src/gui/editors/segment/TrackButtons.cpp:1092
+#: ../src/gui/editors/segment/TrackButtons.cpp:345
+#: ../src/gui/editors/segment/TrackButtons.cpp:1087
 msgid "<untitled audio>"
 msgstr "<audio senza titolo>"
 
 #: ../src/gui/editors/parameters/TrackParameterBox.cpp:123
 #: ../src/gui/editors/parameters/TrackParameterBox.cpp:674
-#: ../src/gui/editors/segment/TrackButtons.cpp:349
-#: ../src/gui/editors/segment/TrackButtons.cpp:1094
+#: ../src/gui/editors/segment/TrackButtons.cpp:347
+#: ../src/gui/editors/segment/TrackButtons.cpp:1089
 msgid "<untitled>"
 msgstr "<senza titolo>"
 
-#: ../src/gui/editors/segment/TrackButtons.cpp:1056
+#: ../src/gui/editors/segment/TrackButtons.cpp:1051
 msgid "Mute track"
 msgstr "Zittisci la traccia"
 
-#: ../src/gui/editors/segment/TrackButtons.cpp:1061
+#: ../src/gui/editors/segment/TrackButtons.cpp:1056
 msgid "Record on this track"
 msgstr "Registra su questa traccia"
 
@@ -10035,13 +10035,9 @@ msgstr ""
 "\n"
 " piuttosto?"
 
-#: ../src/document/io/LilyPondExporter.cpp:2320
+#: ../src/document/io/LilyPondExporter.cpp:2360
 msgid "warning: overlong bar truncated here"
 msgstr "attenzione: battuta troppo lunga troncata qui"
-
-#: ../src/document/io/LilyPondExporter.cpp:2326
-msgid "warning: bar too short, padding with rests"
-msgstr "attenzione: battuta troppo breve, riempita con silenzio"
 
 #: ../src/document/MultiViewCommandHistory.cpp:311
 msgid "Nothing to undo"
@@ -10063,7 +10059,7 @@ msgstr "&Annulla %1"
 msgid "Re&do %1"
 msgstr "Ripri&stina %1"
 
-#: ../src/document/RosegardenGUIDoc.cpp:324
+#: ../src/document/RosegardenGUIDoc.cpp:322
 msgid ""
 "The current file has been modified.\n"
 "Do you want to save it?"
@@ -10071,7 +10067,7 @@ msgstr ""
 "Il file corrente è stato modificato.\n"
 "Vuoi salvarlo?"
 
-#: ../src/document/RosegardenGUIDoc.cpp:476
+#: ../src/document/RosegardenGUIDoc.cpp:474
 #, c-format
 msgid ""
 "_n: Delete the 1 audio file recorded during the unsaved session?\n"
@@ -10080,7 +10076,7 @@ msgstr ""
 "Cancello 1 file audio registrato durante la sessione non salvata?\n"
 "Cancello i %n file audio registrati durante la sessione non salvata?"
 
-#: ../src/document/RosegardenGUIDoc.cpp:497
+#: ../src/document/RosegardenGUIDoc.cpp:495
 msgid ""
 "The following audio files were recorded during this session but have been "
 "unloaded\n"
@@ -10098,7 +10094,7 @@ msgstr ""
 "\n"
 "Scegli quelli che vuoi cancellare definitivamente dal disco fisso.\n"
 
-#: ../src/document/RosegardenGUIDoc.cpp:513
+#: ../src/document/RosegardenGUIDoc.cpp:511
 #, c-format
 msgid ""
 "_n: <qt>About to delete 1 audio file permanently from the hard disk."
@@ -10112,35 +10108,35 @@ msgstr ""
 "Sto per rimuovere definitivamente %n file audio dal disco.<br>Non ci sarà "
 "modo di recuperare i file.<br> Sei sicuro?</qt>"
 
-#: ../src/document/RosegardenGUIDoc.cpp:576
+#: ../src/document/RosegardenGUIDoc.cpp:574
 msgid "Can't open file '%1'"
 msgstr "Impossibile aprire il file '%1'"
 
-#: ../src/document/RosegardenGUIDoc.cpp:581
+#: ../src/document/RosegardenGUIDoc.cpp:579
 msgid "Reading file..."
 msgstr "Lettura file..."
 
-#: ../src/document/RosegardenGUIDoc.cpp:599
+#: ../src/document/RosegardenGUIDoc.cpp:597
 msgid "Could not open Rosegarden file"
 msgstr "Non riesco ad aprire il file di Rosegarden"
 
-#: ../src/document/RosegardenGUIDoc.cpp:637
+#: ../src/document/RosegardenGUIDoc.cpp:635
 msgid "Error when parsing file '%1': \"%2\""
 msgstr "Errore durante il controllo del file '%1': \"%2\""
 
-#: ../src/document/RosegardenGUIDoc.cpp:685
+#: ../src/document/RosegardenGUIDoc.cpp:683
 msgid "Generating audio previews..."
 msgstr "Generazione anteprima audio..."
 
-#: ../src/document/RosegardenGUIDoc.cpp:717
+#: ../src/document/RosegardenGUIDoc.cpp:715
 msgid "Merge"
 msgstr "Inserisci"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1608
+#: ../src/document/RosegardenGUIDoc.cpp:1606
 msgid "File load cancelled"
 msgstr "Annullato caricamento file"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1628
+#: ../src/document/RosegardenGUIDoc.cpp:1626
 msgid ""
 "<h3>Audio and plugins not available</h3><p>This composition uses audio files "
 "or plugins, but Rosegarden is currently running without audio because the "
@@ -10156,7 +10152,7 @@ msgstr ""
 "caricare questa composizione completa.</p><p><b>ATTENZIONE:</b> se salvate "
 "questa composizione, tutti i dati audio e dei plugin andranno perduti.</p>"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1631
+#: ../src/document/RosegardenGUIDoc.cpp:1629
 msgid ""
 "<h3>Audio and plugins not available</h3><p>This composition uses audio files "
 "or plugins, but you are running a version of Rosegarden that was compiled "
@@ -10170,7 +10166,7 @@ msgstr ""
 "questa versione di Rosegarden, tutti i dati audio e dei plugin in essa "
 "contenuti andranno perduti.</p>"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1668
+#: ../src/document/RosegardenGUIDoc.cpp:1666
 msgid ""
 "<h3>Incorrect audio sample rate</h3><p>This composition contains audio files "
 "that were recorded or imported with the audio server running at a different "
@@ -10188,7 +10184,7 @@ msgstr ""
 "server JACK alla velocità corretta (%3 Hz) e a ricaricare la composizione "
 "prima di continuare a lavorarci.</p>"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1678
+#: ../src/document/RosegardenGUIDoc.cpp:1676
 msgid ""
 "<h3>Inconsistent audio sample rates</h3><p>This composition contains audio "
 "files at more than one sample rate.</p><p>Rosegarden will play them at the "
@@ -10205,11 +10201,11 @@ msgstr ""
 "gestore file audio per avere più dettagli, e valuta la possibilità di "
 "ricampionare i file che hanno le frequenze errate.</p>"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1679
+#: ../src/document/RosegardenGUIDoc.cpp:1677
 msgid "Inconsistent sample rates"
 msgstr "Valori di campionamento inconsistenti"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1693
+#: ../src/document/RosegardenGUIDoc.cpp:1691
 msgid ""
 "<h3>Plugins not found</h3><p>The following audio plugins could not be loaded:"
 "</p><ul>"
@@ -10217,11 +10213,11 @@ msgstr ""
 "<h3>Plugin non trovati</h3><p>I seguenti plugin audio non possono essere "
 "caricati:</p><ul>"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1701
+#: ../src/document/RosegardenGUIDoc.cpp:1699
 msgid "<li>%1 (from %2)</li>"
 msgstr "<li>%1 (da %2)</li>"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1715
+#: ../src/document/RosegardenGUIDoc.cpp:1713
 msgid ""
 "This file contains one or more old element types that are now deprecated.\n"
 "Support for these elements may disappear in future versions of Rosegarden.\n"
@@ -10234,12 +10230,12 @@ msgstr ""
 "Raccomandiamo di risalvare questo file in questa versione di Rosegarden,\n"
 "affinché sia ancora leggibile nelle prossime versioni."
 
-#: ../src/document/RosegardenGUIDoc.cpp:2248
+#: ../src/document/RosegardenGUIDoc.cpp:2241
 msgid "Insert Recorded MIDI"
 msgstr "Inserisci un file MIDI registrato"
 
-#: ../src/document/RosegardenGUIDoc.cpp:2614
-#: ../src/document/RosegardenGUIDoc.cpp:2694
+#: ../src/document/RosegardenGUIDoc.cpp:2607
+#: ../src/document/RosegardenGUIDoc.cpp:2687
 #, fuzzy
 msgid "(recorded)"
 msgstr "%1 (registrato)"
@@ -11549,6 +11545,9 @@ msgstr "Mensurale"
 #: ../data/styles/styles.cpp:4
 msgid "Triangle"
 msgstr "Triangolo"
+
+#~ msgid "warning: bar too short, padding with rests"
+#~ msgstr "attenzione: battuta troppo breve, riempita con silenzio"
 
 #~ msgid "%1 (rescaled)"
 #~ msgstr "%1 (riscalato)"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-27 22:44-0400\n"
+"POT-Creation-Date: 2008-10-14 09:43-0400\n"
 "PO-Revision-Date: 2008-09-01 11:03+0300\n"
 "Last-Translator: Heikki Junes\n"
 "Language-Team:  <fi@li.org>\n"
@@ -1993,7 +1993,7 @@ msgstr ""
 "toimintoa ei voida perua, eikä tapoja palauttaa näitä tiedostoja ole. "
 "<br>Oletko varma?</qt>"
 
-#: ../src/document/RosegardenGUIDoc.cpp:521
+#: ../src/document/RosegardenGUIDoc.cpp:519
 #: ../src/gui/dialogs/AudioManagerDialog.cpp:881
 msgid "File %1 could not be deleted."
 msgstr "Tiedostoa %1 ei voitu poistaa."
@@ -2030,7 +2030,7 @@ msgstr "Lisätään äänitiedosto..."
 msgid "Failed to add audio file. "
 msgstr "Äänitiedoston lisääminen epäonnistui. "
 
-#: ../src/document/RosegardenGUIDoc.cpp:2838
+#: ../src/document/RosegardenGUIDoc.cpp:2831
 #: ../src/gui/application/RosegardenGUIApp.cpp:2739
 #: ../src/gui/application/RosegardenGUIView.cpp:1573
 #: ../src/gui/dialogs/AudioManagerDialog.cpp:1115
@@ -3269,7 +3269,7 @@ msgstr "Tiedoston avaus..."
 msgid "Open File"
 msgstr "Avaa tiedosto"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1228
+#: ../src/document/RosegardenGUIDoc.cpp:1226
 #: ../src/gui/application/RosegardenGUIApp.cpp:2261
 msgid "Saving file..."
 msgstr "Tiedoston tallennus..."
@@ -3397,7 +3397,7 @@ msgstr ""
 #: ../src/gui/application/RosegardenGUIApp.cpp:2772
 #: ../src/gui/application/RosegardenGUIApp.cpp:5294
 #: ../src/gui/application/RosegardenGUIApp.cpp:5342
-#: ../src/gui/editors/segment/TrackButtons.cpp:415
+#: ../src/gui/editors/segment/TrackButtons.cpp:412
 #: ../src/gui/editors/segment/segmentcanvas/SegmentResizer.cpp:152
 msgid "Set audio file path"
 msgstr "Aseta äänitiedostopolku"
@@ -3797,7 +3797,7 @@ msgid "XML files"
 msgstr "XML-tiedostot"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5292
-#: ../src/gui/editors/segment/TrackButtons.cpp:413
+#: ../src/gui/editors/segment/TrackButtons.cpp:410
 msgid ""
 "The audio file path does not exist or is not writable.\n"
 "Please set the audio file path to a valid directory in Document Properties "
@@ -6741,29 +6741,29 @@ msgid "<default>"
 msgstr "<oletus>"
 
 #: ../src/gui/editors/segment/TrackButtons.cpp:202
-#: ../src/gui/editors/segment/TrackButtons.cpp:581
-#: ../src/gui/editors/segment/TrackButtons.cpp:931
-#: ../src/gui/editors/segment/TrackButtons.cpp:1125
+#: ../src/gui/editors/segment/TrackButtons.cpp:578
+#: ../src/gui/editors/segment/TrackButtons.cpp:928
+#: ../src/gui/editors/segment/TrackButtons.cpp:1120
 msgid "<no instrument>"
 msgstr "<ei instrumenttia>"
 
-#: ../src/gui/editors/segment/TrackButtons.cpp:347
-#: ../src/gui/editors/segment/TrackButtons.cpp:1092
+#: ../src/gui/editors/segment/TrackButtons.cpp:345
+#: ../src/gui/editors/segment/TrackButtons.cpp:1087
 msgid "<untitled audio>"
 msgstr "<nimeämätön ääni>"
 
 #: ../src/gui/editors/parameters/TrackParameterBox.cpp:123
 #: ../src/gui/editors/parameters/TrackParameterBox.cpp:674
-#: ../src/gui/editors/segment/TrackButtons.cpp:349
-#: ../src/gui/editors/segment/TrackButtons.cpp:1094
+#: ../src/gui/editors/segment/TrackButtons.cpp:347
+#: ../src/gui/editors/segment/TrackButtons.cpp:1089
 msgid "<untitled>"
 msgstr "<ei nimeä>"
 
-#: ../src/gui/editors/segment/TrackButtons.cpp:1056
+#: ../src/gui/editors/segment/TrackButtons.cpp:1051
 msgid "Mute track"
 msgstr "Vaienna raita"
 
-#: ../src/gui/editors/segment/TrackButtons.cpp:1061
+#: ../src/gui/editors/segment/TrackButtons.cpp:1056
 msgid "Record on this track"
 msgstr "Nauhoita tälle raidalle"
 
@@ -10026,13 +10026,9 @@ msgstr ""
 "\n"
 " sen sijaan?"
 
-#: ../src/document/io/LilyPondExporter.cpp:2320
+#: ../src/document/io/LilyPondExporter.cpp:2360
 msgid "warning: overlong bar truncated here"
 msgstr "varoitus: ylipitkä tahti katkaistiin tässä"
-
-#: ../src/document/io/LilyPondExporter.cpp:2326
-msgid "warning: bar too short, padding with rests"
-msgstr "varoitus: liian lyhyt tahti, täytetään tauoilla"
 
 #: ../src/document/MultiViewCommandHistory.cpp:311
 msgid "Nothing to undo"
@@ -10054,7 +10050,7 @@ msgstr "Ku&moa %1"
 msgid "Re&do %1"
 msgstr "Pa&lauta %1"
 
-#: ../src/document/RosegardenGUIDoc.cpp:324
+#: ../src/document/RosegardenGUIDoc.cpp:322
 msgid ""
 "The current file has been modified.\n"
 "Do you want to save it?"
@@ -10062,7 +10058,7 @@ msgstr ""
 "Nykyistä tiedostoa on muokattu.\n"
 "Haluatko tallentaa sen?"
 
-#: ../src/document/RosegardenGUIDoc.cpp:476
+#: ../src/document/RosegardenGUIDoc.cpp:474
 #, c-format
 msgid ""
 "_n: Delete the 1 audio file recorded during the unsaved session?\n"
@@ -10073,7 +10069,7 @@ msgstr ""
 "Poista %n äänitiedostoa, jotka nauhoitettiin tallentamattoman session "
 "yhteydessä?"
 
-#: ../src/document/RosegardenGUIDoc.cpp:497
+#: ../src/document/RosegardenGUIDoc.cpp:495
 msgid ""
 "The following audio files were recorded during this session but have been "
 "unloaded\n"
@@ -10094,7 +10090,7 @@ msgstr ""
 "Ole hyvä ja valitse halutessasi mikä tahansa niistä poistaaksesi sen "
 "pysyvästi kovalevyltä.\n"
 
-#: ../src/document/RosegardenGUIDoc.cpp:513
+#: ../src/document/RosegardenGUIDoc.cpp:511
 #, c-format
 msgid ""
 "_n: <qt>About to delete 1 audio file permanently from the hard disk."
@@ -10109,35 +10105,35 @@ msgstr ""
 "<qt>Ollaan poistamassa %n äänitiedostoa pysyvästi kovalevyltä.<br>Tapoja "
 "palauttaa näitä tiedostoja takaisin ei ole.<br>Oletko varma?</qt>"
 
-#: ../src/document/RosegardenGUIDoc.cpp:576
+#: ../src/document/RosegardenGUIDoc.cpp:574
 msgid "Can't open file '%1'"
 msgstr "Ei voitu avata tiedostoa '%1'"
 
-#: ../src/document/RosegardenGUIDoc.cpp:581
+#: ../src/document/RosegardenGUIDoc.cpp:579
 msgid "Reading file..."
 msgstr "Luetaan tiedostoa..."
 
-#: ../src/document/RosegardenGUIDoc.cpp:599
+#: ../src/document/RosegardenGUIDoc.cpp:597
 msgid "Could not open Rosegarden file"
 msgstr "Ei voitu avata Rosegarden-tiedostoa"
 
-#: ../src/document/RosegardenGUIDoc.cpp:637
+#: ../src/document/RosegardenGUIDoc.cpp:635
 msgid "Error when parsing file '%1': \"%2\""
 msgstr "Virhe jäsennettäessä tiedostoa '%1': \"%2\""
 
-#: ../src/document/RosegardenGUIDoc.cpp:685
+#: ../src/document/RosegardenGUIDoc.cpp:683
 msgid "Generating audio previews..."
 msgstr "Luodaan ääniesikatseluita..."
 
-#: ../src/document/RosegardenGUIDoc.cpp:717
+#: ../src/document/RosegardenGUIDoc.cpp:715
 msgid "Merge"
 msgstr "Sulauta"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1608
+#: ../src/document/RosegardenGUIDoc.cpp:1606
 msgid "File load cancelled"
 msgstr "Tiedoston lataaminen keskeytettiin"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1628
+#: ../src/document/RosegardenGUIDoc.cpp:1626
 msgid ""
 "<h3>Audio and plugins not available</h3><p>This composition uses audio files "
 "or plugins, but Rosegarden is currently running without audio because the "
@@ -10154,7 +10150,7 @@ msgstr ""
 "p><p><b>VAROITUS:</b> Jos tallennat tämän sävellyksen uudelleen, sen kaikki "
 "ääni- ja lisäosatiedot ja asetukset häviävät.</p>"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1631
+#: ../src/document/RosegardenGUIDoc.cpp:1629
 msgid ""
 "<h3>Audio and plugins not available</h3><p>This composition uses audio files "
 "or plugins, but you are running a version of Rosegarden that was compiled "
@@ -10168,7 +10164,7 @@ msgstr ""
 "sävellyksen uudelleen tällä Rosegardenin versiolla, sen kaikki ääni- ja "
 "lisäosatiedot ja asetukset häviävät.</p>"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1668
+#: ../src/document/RosegardenGUIDoc.cpp:1666
 msgid ""
 "<h3>Incorrect audio sample rate</h3><p>This composition contains audio files "
 "that were recorded or imported with the audio server running at a different "
@@ -10187,7 +10183,7 @@ msgstr ""
 "uudelleen oikealla taajuudella (%3 Hz) ja lataa tämä sävellys uudelleen "
 "ennen kuin teet mitään lisätyötä sen kanssa.</p>"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1678
+#: ../src/document/RosegardenGUIDoc.cpp:1676
 msgid ""
 "<h3>Inconsistent audio sample rates</h3><p>This composition contains audio "
 "files at more than one sample rate.</p><p>Rosegarden will play them at the "
@@ -10205,22 +10201,22 @@ msgstr ""
 "harkitse niiden tiedostojen näytteenottotaajuuden muuttamista, jotka ovat "
 "väärällä taajuudella.</p>"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1679
+#: ../src/document/RosegardenGUIDoc.cpp:1677
 msgid "Inconsistent sample rates"
 msgstr "Yhteensopimattomia näytteenottotaajuuksia"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1693
+#: ../src/document/RosegardenGUIDoc.cpp:1691
 msgid ""
 "<h3>Plugins not found</h3><p>The following audio plugins could not be loaded:"
 "</p><ul>"
 msgstr ""
 "<h3>Lisäosia ei löytynyt</h3><p>Seuraavaa ääni-lisäosaa ei ladattu:</p><ul>"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1701
+#: ../src/document/RosegardenGUIDoc.cpp:1699
 msgid "<li>%1 (from %2)</li>"
 msgstr "<li>%1 (paikasta %2)</li>"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1715
+#: ../src/document/RosegardenGUIDoc.cpp:1713
 msgid ""
 "This file contains one or more old element types that are now deprecated.\n"
 "Support for these elements may disappear in future versions of Rosegarden.\n"
@@ -10233,12 +10229,12 @@ msgstr ""
 "Suosittelemme, että talletat tämän tiedoston tällä Rosegarden-versiolla "
 "varmistaaksesi, että se voidaan ladata vielä tulevissa versioissa."
 
-#: ../src/document/RosegardenGUIDoc.cpp:2248
+#: ../src/document/RosegardenGUIDoc.cpp:2241
 msgid "Insert Recorded MIDI"
 msgstr "Syötä nauhoitettu MIDI"
 
-#: ../src/document/RosegardenGUIDoc.cpp:2614
-#: ../src/document/RosegardenGUIDoc.cpp:2694
+#: ../src/document/RosegardenGUIDoc.cpp:2607
+#: ../src/document/RosegardenGUIDoc.cpp:2687
 msgid "(recorded)"
 msgstr "(nauhoitettu)"
 
@@ -11553,3 +11549,6 @@ msgstr "Mensuraali"
 #: ../data/styles/styles.cpp:4
 msgid "Triangle"
 msgstr "Kolmio"
+
+#~ msgid "warning: bar too short, padding with rests"
+#~ msgstr "varoitus: liian lyhyt tahti, täytetään tauoilla"
