@@ -55,8 +55,6 @@ public:
 
     void showAdditionalControls(bool showThem);
     
-    void slotToggleChangeListOnProgChange(bool val);
-
 signals:
     void changeInstrumentLabel(InstrumentId id, QString label);
     void instrumentParametersChanged(InstrumentId);
@@ -75,6 +73,8 @@ public slots:
     void slotToggleProgramChange(bool value);
     void slotToggleBank(bool value);
     void slotToggleVariation(bool value);
+
+    void slotToggleChangeListOnProgChange(bool val);
 
 protected:
 

@@ -50,7 +50,7 @@ public:
 private: 
 
     float   m_scaleFactor; //scale of the value
-    char    m_format[3];   //text format
+	int m_digits;
   
 };
 
