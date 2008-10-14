@@ -96,7 +96,7 @@ protected:
     Clef m_lastClefFound;
 
     void readConfigVariables(void);
-    void writeBar(Segment *, int barNo, int barStart, int barEnd, int col,
+    void writeBar(Segment *, int barNo, timeT barStart, timeT barEnd, int col,
                   Rosegarden::Key &key, std::string &lilyText,
                   std::string &prevStyle,
                   eventendlist &preEventsInProgress, eventendlist &postEventsInProgress,
