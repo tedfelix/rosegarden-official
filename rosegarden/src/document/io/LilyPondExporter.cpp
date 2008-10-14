@@ -764,9 +764,14 @@ LilyPondExporter::write()
             str << indent(col);
             timeT leftTime = m_composition->getBarStart(leftBar);
             timeT rightTime = m_composition->getBarStart(rightBar + 1);
+            // Check for a partial measure in the beginning of the composition
             if (leftTime < compositionStartTime) {
                 leftTime = compositionStartTime;
             }
+            // Check for a partial measure in the end of the composition
+            if (rightTime > compositionEndTime) {
+                rightTime = compositionEndTime;
+            };
             writeSkip(timeSignature, leftTime, rightTime - leftTime, false, str);
             str << " %% " << (leftBar + 1) << "-" << (rightBar + 1) << std::endl;
 
@@ -1267,8 +1272,13 @@ LilyPondExporter::write()
 
                     timeT barStart = m_composition->getBarStart(barNo);
                     timeT barEnd = m_composition->getBarEnd(barNo);
+		    // Check for a partial measure in the beginning of the composition
                     if (barStart < compositionStartTime) {
                         barStart = compositionStartTime;
+                    }
+		    // Check for a partial measure in the end of the composition
+                    if (barEnd > compositionEndTime) {
+                        barEnd = compositionEndTime;
                     }
 
                     // open \repeat section if this is the first bar in the
@@ -1611,7 +1621,7 @@ LilyPondExporter::calculateDuration(Segment *s,
 
 void
 LilyPondExporter::writeBar(Segment *s,
-                           int barNo, int barStart, int barEnd, int col,
+                           int barNo, timeT barStart, timeT barEnd, int col,
                            Rosegarden::Key &key,
                            std::string &lilyText,
                            std::string &prevStyle,
@@ -2360,36 +2370,30 @@ LilyPondExporter::writeBar(Segment *s,
                   arg(i18n("warning: overlong bar truncated here")));
     }
 
-// This code to pad short bars causes serious problems in one very legitimate
-// real-world situation.  If a piece starts with a pickup of an 8th note in a
-// short bar 0, the final bar should be short by that same 8th note, and padding
-// it is broken, unwanted behavior that actually creates a problem instead of
-// solving one.  There are many situations where this pattern occurs, and I
-// think it is more likely that a short bar is intentional, rather than an
-// accident of the sort this cleanup code is meant to work around.
-//
-// I have elected to begin by simply commenting this code out, rather than
-// adding a new export option to control it.  It may turn out that we discover
-// reasons why it needs to exist under certain circumstances, and if so, we can
-// restore it, and make it optional.  It definitely must be optional, or else
-// smart enough to deduce when to pad and when not to pad correctly.  My
-// instinct here is that we can probably live without this entirely.
-//
-//    if (fractionSmaller(durationRatioSum, barDurationRatio)) {
-//        str << std::endl << indent(col) <<
-//	    qstrtostr(QString("% %1").
-//                arg(i18n("warning: bar too short, padding with rests")));
-//        str << std::endl << indent(col) <<
-//        qstrtostr(QString("% %1/%2 < %3/%4").
-//                  arg(durationRatioSum.first).
-//                  arg(durationRatioSum.second).
-//                  arg(barDurationRatio.first).
-//                  arg(barDurationRatio.second))
-//	    << std::endl << indent(col);
-//        durationRatio = writeSkip(timeSignature, writtenDuration,
-//				  (barEnd - barStart) - writtenDuration, true, str);
-//	durationRatioSum = fractionSum(durationRatioSum,durationRatio);
-//    }
+    //
+    // Pad bars whose notes do not add up to the length of the bar.
+    // This may happen if the note quantization fails somehow. 
+    //
+    if ((barStart + writtenDuration < barEnd) &&
+        fractionSmaller(durationRatioSum, barDurationRatio)) {
+        str << std::endl << indent(col) <<
+	    qstrtostr(QString("% %1").
+                arg(i18n("warning: bar too short, padding with rests")));
+        str << std::endl << indent(col) <<
+        qstrtostr(QString("% %1 + %2 < %3  &&  %4/%5 < %6/%7").
+                  arg(barStart).
+                  arg(writtenDuration).
+                  arg(barEnd).
+                  arg(durationRatioSum.first).
+                  arg(durationRatioSum.second).
+                  arg(barDurationRatio.first).
+                  arg(barDurationRatio.second))
+	    << std::endl << indent(col);
+        
+        durationRatio = writeSkip(timeSignature, writtenDuration,
+				  (barEnd - barStart) - writtenDuration, true, str);
+	durationRatioSum = fractionSum(durationRatioSum,durationRatio);
+    }
     //
     // Export bar and bar checks.
     //
