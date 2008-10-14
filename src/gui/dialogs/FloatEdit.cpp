@@ -18,7 +18,7 @@
 
 #include "FloatEdit.h"
 
-#include "gui/widgets/HSpinBox.h"
+#include <QDoubleSpinBox>
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QGroupBox>
@@ -31,7 +31,7 @@
 namespace Rosegarden
 {
 
-FloatEdit::FloatEdit(QDialogButtonBox::QWidget *parent,
+FloatEdit::FloatEdit(QWidget *parent,
                      const QString &title,
                      const QString &text,
                      float min,
@@ -56,7 +56,12 @@ FloatEdit::FloatEdit(QDialogButtonBox::QWidget *parent,
         dps = int( -calDP);
     //std::cout << "CAL DP = " << calDP << ", dps = " << dps << std::endl;
 
-    m_spin = new HSpinBox( groupBox , dps);
+    m_spin = new QDoubleSpinBox(groupBox);
+    m_spin->setDecimals(dps);
+    m_spin->setMinimum(min);
+    m_spin->setMaximum(max);
+    m_spin->setSingleStep(step);
+    m_spin->setValue(value);
     groupBoxLayout->addWidget(m_spin);
 
     groupBoxLayout->addWidget(
@@ -74,7 +79,7 @@ FloatEdit::FloatEdit(QDialogButtonBox::QWidget *parent,
 float
 FloatEdit::getValue() const
 {
-    return m_spin->valuef();
+    return m_spin->value();
 }
 
 }

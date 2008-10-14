@@ -24,11 +24,11 @@
 #include "document/RosegardenGUIDoc.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include "gui/widgets/TimeWidget.h"
-#include "gui/widgets/HSpinBox.h"
 
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QGroupBox>
+#include <QDoubleSpinBox>
 #include <QCheckBox>
 #include <QFrame>
 #include <QLabel>
@@ -70,11 +70,16 @@ TempoDialog::TempoDialog(QDialogButtonBox::QWidget *parent, RosegardenGUIDoc *do
 
     // Set tempo
     layout->addWidget(new QLabel(i18n("New tempo:"), frame), 0, 1);
-    m_tempoValueSpinBox = new HSpinBox(frame, 0, 100000, 0.0, 1000.0, 5);
+    m_tempoValueSpinBox = new QDoubleSpinBox(frame);
+    m_tempoValueSpinBox->setDecimals(3);
+    m_tempoValueSpinBox->setMaximum(1000);
+    m_tempoValueSpinBox->setMinimum(1);
+    m_tempoValueSpinBox->setSingleStep(1);
+    m_tempoValueSpinBox->setValue(120); // will set properly below
     layout->addWidget(m_tempoValueSpinBox, 0, 2);
 
-    connect(m_tempoValueSpinBox, SIGNAL(valueChanged(const QString &)),
-            SLOT(slotTempoChanged(const QString &)));
+    connect(m_tempoValueSpinBox, SIGNAL(valueChanged(double)),
+            SLOT(slotTempoChanged(double)));
 
     m_tempoTap= new QPushButton(i18n("Tap"), frame);
     layout->addWidget(m_tempoTap, 0, 3);
@@ -86,7 +91,12 @@ TempoDialog::TempoDialog(QDialogButtonBox::QWidget *parent, RosegardenGUIDoc *do
     m_tempoRampToTarget = new QRadioButton(i18n("Tempo ramps to:"), frame);
 
     //    m_tempoTargetCheckBox = new QCheckBox(i18n("Ramping to:"), frame);
-    m_tempoTargetSpinBox = new HSpinBox(frame, 0, 100000, 0.0, 1000.0, 5);
+    m_tempoTargetSpinBox = new QDoubleSpinBox(frame);
+    m_tempoValueSpinBox->setDecimals(3);
+    m_tempoValueSpinBox->setMaximum(1000);
+    m_tempoValueSpinBox->setMinimum(1);
+    m_tempoValueSpinBox->setSingleStep(1);
+    m_tempoValueSpinBox->setValue(120);
 
     //    layout->addWidget(m_tempoTargetCheckBox, 1, 0, 0+1, 1- 1, AlignRight);
     //    layout->addWidget(m_tempoTargetSpinBox, 1, 2);
@@ -104,8 +114,8 @@ TempoDialog::TempoDialog(QDialogButtonBox::QWidget *parent, RosegardenGUIDoc *do
             SLOT(slotTempoRampToNextClicked()));
     connect(m_tempoRampToTarget, SIGNAL(clicked()),
             SLOT(slotTempoRampToTargetClicked()));
-    connect(m_tempoTargetSpinBox, SIGNAL(valueChanged(const QString &)),
-            SLOT(slotTargetChanged(const QString &)));
+    connect(m_tempoTargetSpinBox, SIGNAL(valueChanged(double)),
+            SLOT(slotTargetChanged(double)));
 
     m_tempoBeatLabel = new QLabel(frame);
     layout->addWidget(m_tempoBeatLabel, 0, 4);
@@ -260,26 +270,26 @@ TempoDialog::populateTempo()
         ramping = comp.getTempoRamping(tempoChangeNo, false);
     }
 
-    m_tempoValueSpinBox->setValue(tempo);
+    m_tempoValueSpinBox->setValue(comp.getTempoQpm(tempo));
 
     if (ramping.first) {
         if (ramping.second) {
             m_tempoTargetSpinBox->setEnabled(true);
-            m_tempoTargetSpinBox->setValue(ramping.second);
+            m_tempoTargetSpinBox->setValue(comp.getTempoQpm(ramping.second));
             m_tempoConstant->setChecked(false);
             m_tempoRampToNext->setChecked(false);
             m_tempoRampToTarget->setChecked(true);
         } else {
             ramping = comp.getTempoRamping(tempoChangeNo, true);
             m_tempoTargetSpinBox->setEnabled(false);
-            m_tempoTargetSpinBox->setValue(ramping.second);
+            m_tempoTargetSpinBox->setValue(comp.getTempoQpm(ramping.second));
             m_tempoConstant->setChecked(false);
             m_tempoRampToNext->setChecked(true);
             m_tempoRampToTarget->setChecked(false);
         }
     } else {
         m_tempoTargetSpinBox->setEnabled(false);
-        m_tempoTargetSpinBox->setValue(tempo);
+        m_tempoTargetSpinBox->setValue(comp.getTempoQpm(tempo));
         m_tempoConstant->setChecked(true);
         m_tempoRampToNext->setChecked(false);
         m_tempoRampToTarget->setChecked(false);
@@ -398,13 +408,13 @@ TempoDialog::updateBeatLabels(double qpm)
 }
 
 void
-TempoDialog::slotTempoChanged(const QString &)
+TempoDialog::slotTempoChanged(double val)
 {
-    updateBeatLabels(double(m_tempoValueSpinBox->valuef()));
+    updateBeatLabels(val);
 }
 
 void
-TempoDialog::slotTargetChanged(const QString &)
+TempoDialog::slotTargetChanged(double)
 {
     //...
 }
@@ -442,14 +452,14 @@ TempoDialog::slotActionChanged()
 void
 TempoDialog::slotOk()
 {
-    tempoT tempo = m_tempoValueSpinBox->value();
+    tempoT tempo = Composition::getTempoForQpm(m_tempoValueSpinBox->value());
     RG_DEBUG << "Tempo is " << tempo << endl;
 
     tempoT target = -1;
     if (m_tempoRampToNext->isChecked()) {
         target = 0;
     } else if (m_tempoRampToTarget->isChecked()) {
-        target = m_tempoTargetSpinBox->value();
+        target = Composition::getTempoForQpm(m_tempoTargetSpinBox->value());
     }
 
     RG_DEBUG << "Target is " << target << endl;
@@ -506,7 +516,7 @@ TempoDialog::slotTapClicked()
             }
 
             int bpm = 60000 / msec;
-            m_tempoValueSpinBox->setValue(bpm * 100000);
+            m_tempoValueSpinBox->setValue(bpm);
         }
     }
 

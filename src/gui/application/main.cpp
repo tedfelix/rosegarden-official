@@ -447,7 +447,6 @@ int main(int argc, char *argv[])
     aboutData.addCredit("Hasso Tepper", I18N_NOOP("Estonian translation"), "hasso@estpak.ee");
     aboutData.addCredit("Jelmer Vernooij", I18N_NOOP("Dutch translation"), "jelmer@samba.org");
     aboutData.addCredit("Jasper Stein", I18N_NOOP("Dutch translation"), "jasper.stein@12move.nl");
-    aboutData.addCredit("Kevin Liang", I18N_NOOP("HSpinBox class"), "xkliang@rhpcs.mcmaster.ca");
     aboutData.addCredit("Arnout Engelen", I18N_NOOP("Transposition by interval"));
     aboutData.addCredit("Thorsten Wilms", I18N_NOOP("Original designs for rotary controllers"), "t_w_@freenet.de");
     aboutData.addCredit("Oota Toshiya", I18N_NOOP("Japanese translation"), "ribbon@users.sourceforge.net");

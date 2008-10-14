@@ -25,12 +25,11 @@
 class QWidget;
 class QString;
 class QLabel;
+class QDoubleSpinBox;
 
 
 namespace Rosegarden
 {
-
-class HSpinBox;
 
 
 class FloatEdit : public QDialog
@@ -51,7 +50,7 @@ public:
 protected:
 
     QLabel            *m_text;
-    HSpinBox          *m_spin;
+    QDoubleSpinBox    *m_spin;
 };
 
 

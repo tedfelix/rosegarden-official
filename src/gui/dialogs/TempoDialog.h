@@ -32,6 +32,7 @@ class QString;
 class QRadioButton;
 class QLabel;
 class QCheckBox;
+class QDoubleSpinBox;
 
 
 namespace Rosegarden
@@ -39,7 +40,6 @@ namespace Rosegarden
 
 class TimeWidget;
 class RosegardenGUIDoc;
-class HSpinBox;
 
 
 class TempoDialog : public QDialog
@@ -65,11 +65,11 @@ public:
 public slots:
     virtual void slotOk();
     void slotActionChanged();
-    void slotTempoChanged(const QString &);
+    void slotTempoChanged(double);
     void slotTempoConstantClicked();
     void slotTempoRampToNextClicked();
     void slotTempoRampToTargetClicked();
-    void slotTargetChanged(const QString &);
+    void slotTargetChanged(double);
     void slotTapClicked();
 
 signals:
@@ -88,7 +88,7 @@ protected:
 
     RosegardenGUIDoc     *m_doc;
     timeT                 m_tempoTime;
-    HSpinBox             *m_tempoValueSpinBox;
+    QDoubleSpinBox       *m_tempoValueSpinBox;
     QPushButton          *m_tempoTap;
     QTime                 m_tapMinusTwo;
     QTime                 m_tapMinusOne;
@@ -96,7 +96,7 @@ protected:
     QRadioButton         *m_tempoConstant;
     QRadioButton         *m_tempoRampToNext;
     QRadioButton         *m_tempoRampToTarget;
-    HSpinBox             *m_tempoTargetSpinBox; 
+    QDoubleSpinBox       *m_tempoTargetSpinBox; 
 
     QLabel               *m_tempoBeatLabel;
     QLabel               *m_tempoBeat;

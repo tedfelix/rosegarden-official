@@ -888,8 +888,6 @@ SET(gui_SRCS
 	gui/widgets/DiatonicPitchChooser.h
 	gui/widgets/Fader.cpp
 	gui/widgets/Fader.h
-	gui/widgets/HSpinBox.cpp
-	gui/widgets/HSpinBox.h
 	gui/widgets/Label.cpp
 	gui/widgets/Label.h
 	gui/widgets/MidiFaderWidget.cpp
