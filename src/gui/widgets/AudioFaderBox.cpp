@@ -37,6 +37,7 @@
 #include <QLabel>
 #include <QObject>
 #include <QPixmap>
+#include <QIcon>
 #include <QPushButton>
 #include <QSignalMapper>
 #include <QString>
@@ -54,11 +55,13 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
                              QString id,
                              bool haveInOut,
                              const char *name):
-        QFrame(parent, name),
+        QFrame(parent),
         m_signalMapper(new QSignalMapper(this)),
         m_id(id),
         m_isStereo(false)
 {
+    setObjectName(name);
+
     // Plugin box
     //
     QPushButton *plugin;
@@ -130,7 +133,7 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
     m_pan->setKnobColour(GUIPalette::getColour(GUIPalette::RotaryPastelGreen));
 
     m_stereoButton = new QPushButton(this);
-    m_stereoButton->setPixmap(m_monoPixmap); // default is mono
+    m_stereoButton->setIcon(QIcon(m_monoPixmap)); // default is mono
     m_stereoButton->setFixedSize(24, 24);
 
     connect(m_stereoButton, SIGNAL(clicked()),
@@ -160,17 +163,19 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
     m_fader->setToolTip(i18n("Playback level"));
     m_vuMeter->setToolTip(i18n("Audio level"));
 
-    QGridLayout *grid = new QGridLayout(this, 3, 6, 4, 4);
+    setContentsMargins(4, 4, 4, 4);
+    QGridLayout *grid = new QGridLayout(this);
+    grid->setSpacing(4);
 
     grid->addWidget(m_synthButton, 0, 0, 0- 0+1, 2- 1);
 
     if (haveInOut) {
         m_inputLabel = new QLabel(i18n("In:"), this);
         grid->addWidget(m_inputLabel, 0, 0, Qt::AlignRight);
-        grid->addMultiCellWidget(m_audioInput->getWidget(), 0, 0, 1, 2);
+        grid->addWidget(m_audioInput->getWidget(), 0, 1, 1, 2);
         m_outputLabel = new QLabel(i18n("Out:"), this);
         grid->addWidget(m_outputLabel, 0, 3, Qt::AlignRight);
-        grid->addMultiCellWidget(m_audioOutput->getWidget(), 0, 0, 4, 5);
+        grid->addWidget(m_audioOutput->getWidget(), 0, 4, 1, 2);
     }
 
     grid->addWidget(pluginVbox, 2, 0, 0+1, 2- 1);
@@ -254,13 +259,13 @@ AudioFaderBox::setAudioChannels(int channels)
     switch (channels) {
     case 1:
         if (m_stereoButton)
-            m_stereoButton->setPixmap(m_monoPixmap);
+            m_stereoButton->setIcon(QIcon(m_monoPixmap));
         m_isStereo = false;
         break;
 
     case 2:
         if (m_stereoButton)
-            m_stereoButton->setPixmap(m_stereoPixmap);
+            m_stereoButton->setIcon(QIcon(m_stereoPixmap));
         m_isStereo = true;
         break;
     default:

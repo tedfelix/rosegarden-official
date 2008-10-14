@@ -94,7 +94,7 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
                          QWidget* parent, const char* name
 //                         WFlags
 	) :
-    QWidget(parent, name),
+    QWidget(parent),
     m_doc(doc),
     m_rulerScale(rulerScale),
     m_topStandardRuler(0),
@@ -108,6 +108,8 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
     m_playTracking(true),
     m_initialUnitsPerPixel(initialUnitsPerPixel)
 {
+    setObjectName(name);
+
     // accept dnd
     setAcceptDrops(true);
 
@@ -124,7 +126,7 @@ TrackEditor::~TrackEditor()
 void
 TrackEditor::init(QWidget* rosegardenguiview)
 {
-    QGridLayout *grid = new QGridLayout(this, 4, 2);
+    QGridLayout *grid = new QGridLayout(this);
 
     int trackLabelWidth = 230;
     int barButtonsHeight = 25;
@@ -208,7 +210,7 @@ TrackEditor::init(QWidget* rosegardenguiview)
 
     grid->addWidget(m_segmentCanvas, 3, 1);
 
-    grid->setColStretch(1, 10); // to make sure the seg canvas doesn't leave a "blank" grey space when
+    grid->setColumnStretch(1, 10); // to make sure the seg canvas doesn't leave a "blank" grey space when
     // loading a file which has a low zoom factor
 
     // Track Buttons

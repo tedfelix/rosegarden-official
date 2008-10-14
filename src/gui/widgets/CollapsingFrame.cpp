@@ -36,18 +36,23 @@ namespace Rosegarden
 {
 
 CollapsingFrame::CollapsingFrame(QString label, QWidget *parent, const char *n) :
-        QFrame(parent, n),
+        QFrame(parent),
         m_widget(0),
         m_fill(false),
         m_collapsed(false)
 {
-    m_layout = new QGridLayout(this, 3, 3, 0, 0);
+    setObjectName(n);
+
+    setContentsMargins(0, 0, 0, 0);
+    m_layout = new QGridLayout(this);
+    m_layout->setSpacing(0);
 
     m_toggleButton = new QToolButton(this);
-    m_toggleButton->setTextLabel(label);
-    m_toggleButton->setUsesTextLabel(true);
-    m_toggleButton->setUsesBigPixmap(false);
-    m_toggleButton->setTextPosition(QToolButton::BesideIcon);
+    m_toggleButton->setText(label);
+    m_toggleButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    // m_toggleButton->setUsesTextLabel(true);
+    // m_toggleButton->setUsesBigPixmap(false);
+          // m_toggleButton->setIconSize(???);
     m_toggleButton->setAutoRaise(true);
 
     QFont font(m_toggleButton->font());
@@ -56,7 +61,7 @@ CollapsingFrame::CollapsingFrame(QString label, QWidget *parent, const char *n) 
 
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
     QPixmap pixmap(pixmapDir + "/misc/arrow-expanded.png");
-    m_toggleButton->setIconSet(pixmap);
+    m_toggleButton->setIcon(pixmap);
 
     connect(m_toggleButton, SIGNAL(clicked()), this, SLOT(toggle()));
 
@@ -96,11 +101,11 @@ CollapsingFrame::setWidget(QWidget *widget)
     }
 
     bool expanded = true;
-    if (name(0)) {
+    if (objectName().isEmpty()) {                   // name(0)
         QSettings settings;
         settings.beginGroup( "CollapsingFrame" );
 
-        expanded = qStrToBool( settings.value(name(), true));
+        expanded = qStrToBool( settings.value(objectName(), true));
         settings.endGroup();
     }
     if (expanded != !m_collapsed)
@@ -125,15 +130,15 @@ CollapsingFrame::toggle()
         pixmap = QPixmap(pixmapDir + "/misc/arrow-expanded.png");
     }
 
-    if (name(0)) {
+    if (objectName().isEmpty()) {               // name(0)
         QSettings settings;
         settings.beginGroup( "CollapsingFrame" );
 
-        settings.setValue(name(), !m_collapsed);
+        settings.setValue(objectName(), !m_collapsed);
         settings.endGroup();
     }
 
-    m_toggleButton->setIconSet(pixmap);
+    m_toggleButton->setIcon(pixmap);
 
     m_toggleButton->setMaximumHeight(h);
 }

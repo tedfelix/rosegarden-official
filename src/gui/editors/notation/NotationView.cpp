@@ -486,8 +486,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     // The grid layout is only here to maintain the button in a
     // right place
     m_headersTopFrame = new QFrame(getCentralWidget());
-    QGridLayout * headersTopGrid
-        = new QGridLayout(m_headersTopFrame, 2, 2);
+    QGridLayout * headersTopGrid = new QGridLayout(m_headersTopFrame);
 	
 //     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
 //     Q3CanvasPixmap pixmap(pixmapDir + "/misc/close.xpm");
@@ -499,7 +498,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
         = new QPushButton(m_headersTopFrame);
     headersTopGrid->addWidget(hideHeadersButton, 1, 1,
                                         Qt::AlignRight | Qt::AlignBottom);
-    hideHeadersButton->setIconSet(QIcon(pixmap));
+    hideHeadersButton->setIcon(QIcon(pixmap));
     hideHeadersButton->setFlat(true);
     hideHeadersButton->setToolTip(i18n("Close track headers"));
     headersTopGrid->setMargin(4);
@@ -2919,7 +2918,7 @@ void NotationView::initLayoutToolbar()
         return ;
     }
 
-    new QLabel(i18n("  Font:  "), layoutToolbar, "font label");
+    new QLabel(i18n("  Font:  "), layoutToolbar);
 
     //
     // font combo
@@ -2955,7 +2954,7 @@ void NotationView::initLayoutToolbar()
     connect(m_fontCombo, SIGNAL(activated(const QString &)),
             this, SLOT(slotChangeFont(const QString &)));
 
-    new QLabel(i18n("  Size:  "), layoutToolbar, "size label");
+    new QLabel(i18n("  Size:  "), layoutToolbar);
 
     QString value;
 
@@ -2963,7 +2962,7 @@ void NotationView::initLayoutToolbar()
     // font size combo
     //
     std::vector<int> sizes = NoteFontFactory::getScreenSizes(m_fontName);
-    m_fontSizeCombo = new QComboBox(layoutToolbar, "font size combo");
+    m_fontSizeCombo = new QComboBox(layoutToolbar);
 
     for (std::vector<int>::iterator i = sizes.begin(); i != sizes.end(); ++i) {
 
@@ -2979,7 +2978,7 @@ void NotationView::initLayoutToolbar()
     connect(m_fontSizeCombo, SIGNAL(activated(const QString&)),
             this, SLOT(slotChangeFontSizeFromStringValue(const QString&)));
 
-    new QLabel(i18n("  Spacing:  "), layoutToolbar, "spacing label");
+    new QLabel(i18n("  Spacing:  "), layoutToolbar);
 
     //
     // spacing combo
@@ -2987,7 +2986,7 @@ void NotationView::initLayoutToolbar()
     int defaultSpacing = m_hlayout->getSpacing();
     std::vector<int> spacings = NotationHLayout::getAvailableSpacings();
 
-    m_spacingCombo = new QComboBox(layoutToolbar, "spacing combo");
+    m_spacingCombo = new QComboBox(layoutToolbar);
     for (std::vector<int>::iterator i = spacings.begin(); i != spacings.end(); ++i) {
 
         value.setNum(*i);
@@ -4515,18 +4514,18 @@ void NotationView::updateViewCaption()
         if (track)
             trackPosition = track->getPosition();
         //	std::cout << std::endl << std::endl << std::endl << "DEBUG TITLE BAR: " << getDocument()->getTitle() << std::endl << std::endl << std::endl;
-        setCaption(i18n("%1 - Segment Track #%2 - Notation",
+        setWindowTitle(i18n("%1 - Segment Track #%2 - Notation",
                     getDocument()->getTitle(),
                     trackPosition + 1));
 
     } else if (m_segments.size() == getDocument()->getComposition().getNbSegments()) {
 
-        setCaption(i18n("%1 - All Segments - Notation",
+        setWindowTitle(i18n("%1 - All Segments - Notation",
                     getDocument()->getTitle()));
 
     } else {
 
-        setCaption(i18np("%2 - Segment - Notation", "%2 - %1 Segments - Notation", m_segments.size(),
+        setWindowTitle(i18np("%2 - Segment - Notation", "%2 - %1 Segments - Notation", m_segments.size(),
                     getDocument()->getTitle()));
 
     }
@@ -7096,12 +7095,12 @@ NotationView::slotHoveredOverAbsoluteTimeChanged(unsigned int time)
 
     QString message = i18n("Time: %1 (%2.%3s)",
          QString("%1-%2-%3-%4")
-             .arg(QString("%1").arg(bar + 1).rightJustify(3, '0'))
-             .arg(QString("%1").arg(beat).rightJustify(2, '0'))
-             .arg(QString("%1").arg(fraction).rightJustify(2, '0'))
-             .arg(QString("%1").arg(remainder).rightJustify(2, '0')),
+             .arg(QString("%1").arg(bar + 1).rightJustified(3, '0'))
+             .arg(QString("%1").arg(beat).rightJustified(2, '0'))
+             .arg(QString("%1").arg(fraction).rightJustified(2, '0'))
+             .arg(QString("%1").arg(remainder).rightJustified(2, '0')),
          rt.sec,
-         QString("%1").arg(ms).rightJustify(3, '0'));
+         QString("%1").arg(ms).rightJustified(3, '0'));
 
     m_hoveredOverAbsoluteTime->setText(message);
 }
@@ -7314,7 +7313,8 @@ NotationView::slotCheckRendered(double cx0, double cx1)
             delete m_renderTimer;
         m_renderTimer = new QTimer(this);
         connect(m_renderTimer, SIGNAL(timeout()), SLOT(slotRenderSomething()));
-        m_renderTimer->start(0, true);
+        m_renderTimer->setSingleShot(true);
+        m_renderTimer->start(0);
     }
 
     if (m_deferredCursorMove != NoCursorMoveNeeded)
@@ -7333,7 +7333,8 @@ NotationView::slotRenderSomething()
     if (elapsed < 70) {
         m_renderTimer = new QTimer(this);
         connect(m_renderTimer, SIGNAL(timeout()), SLOT(slotRenderSomething()));
-        m_renderTimer->start(0, true);
+        m_renderTimer->setSingleShot(true);
+        m_renderTimer->start(0);
         return ;
     }
     lastWork = now;
@@ -7344,7 +7345,8 @@ NotationView::slotRenderSomething()
                                       m_staffs[i]->getSegment().getEndTime())) {
             m_renderTimer = new QTimer(this);
             connect(m_renderTimer, SIGNAL(timeout()), SLOT(slotRenderSomething()));
-            m_renderTimer->start(0, true);
+            m_renderTimer->setSingleShot(true);
+            m_renderTimer->start(0);
             return ;
         }
     }

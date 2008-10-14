@@ -119,7 +119,9 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
 
     settings.endGroup();
 
-    QGridLayout *mainLayout = new QGridLayout(this, 5, 1, 2, 1);
+    setContentsMargins(2, 2, 2, 2);
+    QGridLayout *mainLayout = new QGridLayout(this);
+    mainLayout->setSpacing(1);
 
     int row = 0;
 
@@ -136,7 +138,9 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
                               this, "trackparametersplayback");
     m_playbackGroup = new QFrame(cframe);
     cframe->setWidget(m_playbackGroup);
-    QGridLayout *groupLayout = new QGridLayout(m_playbackGroup, 3, 3, 3, 2);
+    m_playbackGroup->setContentsMargins(3, 3, 3, 3);
+    QGridLayout *groupLayout = new QGridLayout(m_playbackGroup);
+    groupLayout->setSpacing(2);
 
     // playback group title
     //
@@ -161,7 +165,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     m_instrument->setMinimumWidth(width22);
     groupLayout->addWidget(m_instrument, row, 2);
 
-    groupLayout->setColStretch(groupLayout->numCols() - 1, 1);
+    groupLayout->setColumnStretch(groupLayout->columnCount() - 1, 1);
 
     mainLayout->addWidget(cframe, 1, 0);
 
@@ -171,7 +175,9 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
                                  "trackparametersrecord");
     m_recordGroup = new QFrame(cframe);
     cframe->setWidget(m_recordGroup);
-    groupLayout = new QGridLayout(m_recordGroup, 3, 3, 3, 2);
+    m_recordGroup->setContentsMargins(3, 3, 3, 3);
+    groupLayout = new QGridLayout(m_recordGroup);
+    groupLayout->setSpacing(2);
 
     // recording group title
     //
@@ -186,13 +192,13 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     // recording channel
     //
     row++;
-    groupLayout->addMultiCellWidget(new QLabel(i18n("Channel"), m_recordGroup), row, row, 0, 1);
+    groupLayout->addWidget(new QLabel(i18n("Channel"), m_recordGroup), row, 0, 1, 2);
     m_recChannel = new QComboBox(m_recordGroup);
     m_recChannel->setMaxVisibleItems( 17 );
     m_recChannel->setMinimumWidth(width11);
     groupLayout->addWidget(m_recChannel, row, 2);
 
-    groupLayout->setColStretch(groupLayout->numCols() - 1, 1);
+    groupLayout->setColumnStretch(groupLayout->columnCount() - 1, 1);
 
     mainLayout->addWidget(cframe, 2, 0);
 
@@ -202,9 +208,10 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
                                  "staffoptions");
     m_staffGroup = new QFrame(cframe);
     cframe->setWidget(m_staffGroup);
-    groupLayout = new QGridLayout(m_staffGroup, 2, 2, 2, 2);
-
-    groupLayout->setColStretch(1, 1);
+    m_staffGroup->setContentsMargins(2, 2, 2, 2);
+    groupLayout = new QGridLayout(m_staffGroup);
+    groupLayout->setSpacing(2);
+    groupLayout->setColumnStretch(1, 1);
 
     row = 0;
 
@@ -252,9 +259,10 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
                                  "trackparametersdefaults");
     m_defaultsGroup = new QFrame(cframe);
     cframe->setWidget(m_defaultsGroup);
-    groupLayout = new QGridLayout(m_defaultsGroup, 6, 6, 3, 2);
-
-    groupLayout->setColStretch(1, 1);
+    m_defaultsGroup->setContentsMargins(3, 3, 3, 3);
+    groupLayout = new QGridLayout(m_defaultsGroup);
+    groupLayout->setSpacing(2);
+    groupLayout->setColumnStretch(1, 1);
 
     row = 0;
 
@@ -341,7 +349,8 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     row++;
     m_colorLbl = new QLabel(i18n("Color"), m_defaultsGroup);
     groupLayout->addWidget(m_colorLbl, row, 0, Qt::AlignLeft);
-    m_defColor = new QComboBox(false, m_defaultsGroup);
+    m_defColor = new QComboBox(m_defaultsGroup);
+    m_defColor->setEditable(false);
     m_defColor->setMaxVisibleItems(20);
     groupLayout->addWidget(m_defColor, row, 1, row- row+1, 5);
 
@@ -354,7 +363,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     // Configure the empty final row to accomodate any extra vertical space.
     //
 //    mainLayout->setColStretch(mainLayout->numCols() - 1, 1);
-    mainLayout->setRowStretch(mainLayout->numRows() - 1, 1);
+    mainLayout->setRowStretch(mainLayout->rowCount() - 1, 1);
 
     // Connections
     connect( m_playDevice, SIGNAL(activated(int)),

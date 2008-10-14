@@ -123,14 +123,14 @@ EditView::EditView(RosegardenGUIDoc *doc,
         m_rulerBox(new QVBoxLayout),  // top ruler box - added to grid later on
         m_rulerBoxFiller(0),          // On the left of m_rulerBox
         m_controlBox(new QVBoxLayout),  // top control ruler box - added to grid later on
-        m_bottomBox(new QWidget(this, "bottomframe")),  // bottom box - added to bottom of canvas view by setCanvasView()
+        m_bottomBox(new QWidget(this)),  // bottom box - added to bottom of canvas view by setCanvasView()
         m_topStandardRuler(0),
         m_bottomStandardRuler(0),
         m_controlRuler(0),
         m_controlRulers(new KTabWidget(getBottomWidget(), "controlrulers"))
 {
 //!!!kiftsgate    m_commandRegistry = new CommandRegistry(this);
-
+    m_bottomBox->setObjectName("bottomframe");
     m_bottomBox->setLayout(new QVBoxLayout);
     //@@@ Widget should be had to m_bottomBox using something as
     //@@@         getBottomWidget()->layout()->addWidget(widgetPtr);
@@ -146,9 +146,9 @@ EditView::EditView(RosegardenGUIDoc *doc,
     // m_rulerBoxFiller is a white label used to keep m_rulerBox exactly
     // above the scrolling part of the view (and never above the
     // RosegardenCanvasView::m_leftWidget).
-    QGridLayout * gl = new QGridLayout(1, 2); 
-    gl->setColStretch(0, 0);
-    gl->setColStretch(1, 1);
+    QGridLayout * gl = new QGridLayout; 
+    gl->setColumnStretch(0, 0);
+    gl->setColumnStretch(1, 1);
     gl->addLayout(m_rulerBox, 0, 1);
     m_rulerBoxFiller = new QLabel(getCentralWidget());
     gl->addWidget(m_rulerBoxFiller, 0, 0);
@@ -156,8 +156,8 @@ EditView::EditView(RosegardenGUIDoc *doc,
 
     m_grid->addLayout(gl, RULERS_ROW, m_mainCol);
 
-    m_grid->addMultiCellLayout(m_controlBox, CONTROLS_ROW, CONTROLS_ROW, 0, 1);
-    m_controlBox->setAlignment(AlignRight);
+    m_grid->addLayout(m_controlBox, CONTROLS_ROW, 0, 1, 2);
+    m_controlBox->setAlignment(Qt::AlignRight);
     //     m_grid->addWidget(m_controlRulers, CONTROLRULER_ROW, 2);
 
     m_controlRulers->hide();
@@ -276,9 +276,9 @@ void EditView::setTopStandardRuler(StandardRuler* w, QWidget *leftBox)
     delete m_topStandardRuler;
     m_topStandardRuler = w;
 
-    QGridLayout * gl = new QGridLayout(1, 2); 
-    gl->setColStretch(0, 0);
-    gl->setColStretch(1, 1);
+    QGridLayout * gl = new QGridLayout;
+    gl->setColumnStretch(0, 0);
+    gl->setColumnStretch(1, 1);
 
     gl->addWidget(w, 0, 1);
     if (leftBox) {

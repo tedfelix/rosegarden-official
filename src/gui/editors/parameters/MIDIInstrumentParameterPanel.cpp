@@ -61,7 +61,9 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
         m_rotaryFrame(0),
         m_rotaryMapper(new QSignalMapper(this))
 {
-    m_mainGrid = new QGridLayout(this, 10, 3, 2, 1);
+    setContentsMargins(2, 2, 2, 2);
+    m_mainGrid = new QGridLayout(this);
+    m_mainGrid->setSpacing(1);
 
     m_connectionLabel = new KSqueezedTextLabel(this);
     m_bankValue = new QComboBox(this);
@@ -110,10 +112,10 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     
     // Configure the empty final row to accomodate any extra vertical space.
     
-    m_mainGrid->setRowStretch(m_mainGrid->numRows() - 1, 1);
+    m_mainGrid->setRowStretch(m_mainGrid->rowCount() - 1, 1);
 
 
-    m_mainGrid->setColStretch(2, 1);
+    m_mainGrid->setColumnStretch(2, 1);
 
     m_mainGrid->addWidget(m_instrumentLabel, 0, 0, 0- 0+1, 2- 1, Qt::AlignCenter);
     m_mainGrid->addWidget(m_connectionLabel, 1, 0, 0+1, 2- 1, Qt::AlignCenter);
@@ -317,7 +319,9 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
     if (!m_rotaryFrame) {
         m_rotaryFrame = new QFrame(this);
         m_mainGrid->addWidget(m_rotaryFrame, 8, 0, 0+1, 2- 1, Qt::AlignHCenter);
-        m_rotaryGrid = new QGridLayout(m_rotaryFrame, 10, 3, 8, 1);
+        m_rotaryFrame->setContentsMargins(8, 8, 8, 8);
+        m_rotaryGrid = new QGridLayout(m_rotaryFrame);
+        m_rotaryGrid->setSpacing(1);
         m_rotaryGrid->addItem(new QSpacerItem(10, 4), 0, 1);
     }
 

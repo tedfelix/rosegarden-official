@@ -111,8 +111,9 @@ EditViewBase::EditViewBase(RosegardenGUIDoc *doc,
     setView(m_mainDockWidget); // central widget in a KDE mainwindow
     setMainDockWidget(m_mainDockWidget); // master dockwidget
 
-    m_centralFrame = new QFrame(m_mainDockWidget, "centralframe");
-    m_grid = new QGridLayout(m_centralFrame, NbLayoutRows, cols);
+    m_centralFrame = new QFrame(m_mainDockWidget);
+    m_centralFrame->setObjectName("centralframe");
+    m_grid = new QGridLayout(m_centralFrame);
 
     m_mainDockWidget->setWidget(m_centralFrame);
 

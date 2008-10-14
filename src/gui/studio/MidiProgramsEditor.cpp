@@ -39,13 +39,14 @@
 #include <QLayout>
 #include <QObjectList>
 #include <QPixmap>
+#include <QIcon>
 #include <QPoint>
 #include <qpopupmenu.h>
 #include <QPushButton>
 #include <QSpinBox>
 #include <QString>
 #include <QToolTip>
-#include <qvgroupbox.h>
+//#include <qvgroupbox.h>
 #include <QWidget>
 #include <algorithm>
 
@@ -78,13 +79,11 @@ MidiProgramsEditor::makeAdditionalWidget(QWidget *parent)
     m_msb = new QSpinBox(frame);
     m_lsb = new QSpinBox(frame);
 
-    QGridLayout *gridLayout = new QGridLayout(frame,
-                              3,   // rows
-                              2,   // cols
-                              2); // margin
+    frame->setContentsMargins(2, 2, 2, 2);
+    QGridLayout *gridLayout = new QGridLayout(frame); // margin
 
     gridLayout->addWidget(new QLabel(i18n("Percussion"), frame),
-                          0, 0, AlignLeft);
+                          0, 0, Qt::AlignLeft);
     gridLayout->addWidget(m_percussion, 0, 1, AlignLeft);
     connect(m_percussion, SIGNAL(clicked()),
             this, SLOT(slotNewPercussion()));
@@ -225,7 +224,7 @@ MidiProgramsEditor::populate(QListWidgetItem* item)
     for (unsigned int i = 0; i < m_names.size(); i++) {
         m_names[i]->clear();
         getEntryButton(i)->setEnabled(haveKeyMappings);
-        getEntryButton(i)->setPixmap(noKeyPixmap);
+        getEntryButton(i)->setIcon(QIcon(noKeyPixmap));
         // QToolTip::remove
         //    ( getEntryButton(i) );
         getEntryButton(i)->setToolTip(QString(""));  //@@@ Usefull ?
@@ -238,7 +237,7 @@ MidiProgramsEditor::populate(QListWidgetItem* item)
                 m_names[i]->setText(programName);
 
                 if (m_device->getKeyMappingForProgram(*it)) {
-                    getEntryButton(i)->setPixmap(keyPixmap);
+                    getEntryButton(i)->setIcon(QIcon(keyPixmap));
                     getEntryButton(i)->setToolTip(i18n("Key Mapping: %1", 
                                     strtoqstr(m_device->getKeyMappingForProgram(*it)->getName())));
                 }
@@ -516,14 +515,14 @@ MidiProgramsEditor::slotEntryMenuItemSelected(int i)
     if (newMapping.empty()) {
         QString file = pixmapDir + "/toolbar/key-white.png";
         if (QFile(file).exists()) {
-            btn->setPixmap(QPixmap(file));
+            btn->setIcon(QIcon(QPixmap(file)));
         }
         // QToolTip::remove(btn);
-        btn->setToolTip(Qstring(""));       //@@@ Usefull ?
+        btn->setToolTip(QString(""));       //@@@ Usefull ?
     } else {
         QString file = pixmapDir + "/toolbar/key-green.png";
         if (QFile(file).exists()) {
-            btn->setPixmap(QPixmap(file));
+            btn->setIcon(QIcon(QPixmap(file)));
         }
         btn->setToolTip(i18n("Key Mapping: %1", strtoqstr(newMapping)));
     }

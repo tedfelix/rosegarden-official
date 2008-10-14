@@ -144,7 +144,7 @@ MidiMixerWindow::setupTabs()
     connect(m_tabWidget, SIGNAL(currentChanged(QWidget *)),
             this, SLOT(slotCurrentTabChanged(QWidget *)));
     m_tabWidget->setTabPosition(QTabWidget::Bottom);
-    setCaption(i18n("MIDI Mixer"));
+    setWindowTitle(i18n("MIDI Mixer"));
 
     for (it = m_studio->begin(); it != m_studio->end(); ++it) {
         dev = dynamic_cast<MidiDevice*>(*it);
@@ -164,10 +164,10 @@ MidiMixerWindow::setupTabs()
 
             m_tabFrame = new QFrame(m_tabWidget);
             m_tabFrame->setFrameStyle(QFrame::StyledPanel);
-            m_tabFrame->setMargin(10);
+            m_tabFrame->setContentsMargins(10, 10, 10, 10);
 
-            QGridLayout *mainLayout = new QGridLayout
-                                      (m_tabFrame, instruments.size() + 4, controls.size() + 4, 5);
+            // m_tabFrame->setContentsMargins(5, 5, 5, 5); ???
+            QGridLayout *mainLayout = new QGridLayout(m_tabFrame);
 
             // MIDI Mixer label
             //
@@ -278,7 +278,8 @@ MidiMixerWindow::setupTabs()
                 //
                 QLabel *idLabel = new QLabel(QString("%1").
                                              arg((*iIt)->getId() - firstInstrument + 1),
-                                             m_tabFrame, "idLabel");
+                                             m_tabFrame);
+                idLabel->setObjectName("idLabel");
 
                 mainLayout->addWidget(idLabel, controls.size() + 3,
                                       posCount, Qt::AlignCenter);

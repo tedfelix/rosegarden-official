@@ -118,7 +118,9 @@ SegmentParameterBox::initBox()
     int width = fontMetrics.width("12345678901234567890");
 
     //    QFrame *frame = new QFrame(this);
-    QGridLayout *gridLayout = new QGridLayout(this, 8, 6, 4, 2);
+    setContentsMargins(4, 4, 4, 4);
+    QGridLayout *gridLayout = new QGridLayout(this);
+    gridLayout->setSpacing(2);
 
     QLabel *label	= new QLabel(i18n("Label"), this);
     QLabel *repeatLabel = new QLabel(i18n("Repeat"), this);
@@ -193,7 +195,8 @@ SegmentParameterBox::initBox()
             SLOT(slotDelayTextChanged(const QString &)));
 
     // set up combo box for colours
-    m_colourValue = new QComboBox(false, this);
+    m_colourValue = new QComboBox(this);
+    m_colourValue->setEditable(false);
     m_colourValue->setFont(font);
     //m_colourValue->setFixedHeight(comboHeight);
     //    m_colourValue->setMaximumWidth(width);
@@ -304,7 +307,7 @@ SegmentParameterBox::initBox()
     */ 
     // Configure the empty final row to accomodate any extra vertical space.
 
-    gridLayout->setRowStretch(gridLayout->numRows() - 1, 1);
+    gridLayout->setRowStretch(gridLayout->rowCount() - 1, 1);
 
     // Configure the empty final column to accomodate any extra horizontal
     // space.
