@@ -197,6 +197,7 @@ public:
      * empty, exports all devices.
      */ 
     bool exportStudio(const QString &filename,
+		      QString &errMsg,
                       std::vector<DeviceId> devices =
                       std::vector<DeviceId>());
 
