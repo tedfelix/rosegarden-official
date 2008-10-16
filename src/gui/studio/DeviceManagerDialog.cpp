@@ -805,7 +805,16 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
             }
         }
 
-        m_document->exportStudio(name, devices);
+        QString errMsg;
+        if (!m_document->exportStudio(name, errMsg, devices)) {
+            if (errMsg != "") {
+                KMessageBox::error(0, i18n(QString("Could not export studio to file at %1\n(%2)")
+                                           .arg(name).arg(errMsg)));
+            } else {
+                KMessageBox::error(0, i18n(QString("Could not export studio to file at %1")
+                                           .arg(name)));
+            }
+        }
     }
 
     void

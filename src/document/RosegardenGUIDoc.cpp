@@ -1342,6 +1342,7 @@ bool RosegardenGUIDoc::saveDocumentActual(const QString& filename,
 }
 
 bool RosegardenGUIDoc::exportStudio(const QString& filename,
+                                    QString &errMsg,
                                     std::vector<DeviceId> devices)
 {
     Profiler profiler("RosegardenGUIDoc::exportStudio");
@@ -1350,7 +1351,13 @@ bool RosegardenGUIDoc::exportStudio(const QString& filename,
 
     KFilterDev* fileCompressedDevice = static_cast<KFilterDev*>(KFilterDev::deviceForFile(filename, "application/x-gzip"));
     fileCompressedDevice->setOrigFileName("audio/x-rosegarden-device");
-    fileCompressedDevice->open(IO_WriteOnly);
+
+    if (!fileCompressedDevice->open(IO_WriteOnly)) {
+        errMsg = i18n(QString("Could not open file '%1' for writing").arg(filename));
+        delete fileCompressedDevice;
+        return false; // couldn't open file
+    }
+
     QTextStream outStream(fileCompressedDevice);
     outStream.setEncoding(QTextStream::UnicodeUTF8);
 
