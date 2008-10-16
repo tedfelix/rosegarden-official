@@ -118,7 +118,12 @@ protected:
     void handleEndingPostEvents(eventendlist &postEventsInProgress,
                                 const Segment::iterator &j, std::ofstream &str);
 
-    // convert note pitch into LilyPond format note string
+    // convert note pitch into LilyPond format note name string
+    std::string convertPitchToLilyNoteName(int pitch,
+                                           Accidental accidental,
+                                           const Rosegarden::Key &key);
+
+    // convert note pitch into LilyPond format note name string with octavation
     std::string convertPitchToLilyNote(int pitch,
                                        Accidental accidental,
                                        const Rosegarden::Key &key);

@@ -371,7 +371,7 @@ LilyPondExporter::handleEndingPostEvents(eventendlist &postEventsInProgress,
 }
 
 std::string
-LilyPondExporter::convertPitchToLilyNote(int pitch, Accidental accidental,
+LilyPondExporter::convertPitchToLilyNoteName(int pitch, Accidental accidental,
         const Rosegarden::Key &key)
 {
     Pitch p(pitch, accidental);
@@ -388,6 +388,39 @@ LilyPondExporter::convertPitchToLilyNote(int pitch, Accidental accidental,
         lilyNote += "is";
     else if (acc == Accidentals::DoubleSharp)
         lilyNote += "isis";
+
+    return lilyNote;
+}
+
+std::string
+LilyPondExporter::convertPitchToLilyNote(int pitch, Accidental accidental,
+        const Rosegarden::Key &key)
+{
+    // calculate note name and write note
+    std::string lilyNote;
+
+    lilyNote = convertPitchToLilyNoteName(pitch, accidental, key);
+
+    // generate and write octave marks
+    std::string octaveMarks = "";
+    int octave = (int)(pitch / 12);
+
+    // tweak the octave break for B# / Cb
+    if ((lilyNote == "bisis") || (lilyNote == "bis")) {
+        octave--;
+    } else if ((lilyNote == "ceses") || (lilyNote == "ces")) {
+        octave++;
+    }
+
+    if (octave < 4) {
+        for (; octave < 4; octave++)
+            octaveMarks += ",";
+    } else {
+        for (; octave > 4; octave--)
+            octaveMarks += "\'";
+    }
+
+    lilyNote += octaveMarks;
 
     return lilyNote;
 }
@@ -2051,95 +2084,43 @@ LilyPondExporter::writeBar(Segment *s,
 		    }
 		    str << "R";
 		} else {
-                     handleEndingPreEvents(preEventsInProgress, i, str);
-                     handleStartingPreEvents(preEventsToStart, str);
+                    handleEndingPreEvents(preEventsInProgress, i, str);
+                    handleStartingPreEvents(preEventsToStart, str);
 
-                     if (offsetRest) {
-                         // use offset height to get an approximate corresponding
-                         // height on staff
-                         //
-                         // sample offset is 4888, height on staff is -2 for C
-                         // through 4 for b, so we need to go from a big integer
-                         // down to a small integer in some reasonable way to
-                         // try to guesstimate at how the internal coordinate
-                         // offset corresponds with a height on staff.
-                         //
-                         // let's divide by 1000 and then add 1 if the remainder
-                         // >= 500
-                         int r = restOffset % 1000;
-                         restOffset /= 1000;
-                         if (r >= 500) restOffset++;
+                    if (offsetRest) {
+			// translate the fine tuning of steps into steps
+			int offset = -(restOffset / 500);
 
-                         // some raw hackery to try to get around a scaling
-                         // problem I keep feeling should be addressable in a
-                         // more methodical way
-                         restOffset *= 2;
-                         Note nt(Note::getNearestNote(duration, MAX_DOTS));
-                         if (nt.getNoteType()  == Note::QuarterNote) restOffset += 2;
+			// accept only even steps to imitate Rosegarden's behaviour
+			if (offset % 2 != 0) {
+			    offset += (offset > 0 ? -1 : 1);
+			}
+			// move the default position of the rest
+			int heightOnStaff = 4 + offset;
 
-                         // now we need to flip the sign and move the opposite
-                         // way from the offset, though I've forgotten why this
-                         // is so
-                         restOffset *= -1;
+			// find out the pitch corresponding to the rest position
+			Clef m_lastClefFound((*s).getClefAtTime((*i)->getAbsoluteTime()));
+			Pitch helper(heightOnStaff, m_lastClefFound, Rosegarden::Key::DefaultKey);
 
-                         // use height on staff to get a MIDI pitch
-                         // get clef from whatever the last clef event was
-                         Rosegarden::Key  k;
-                         Accidental a;
-                         Pitch helper(restOffset, m_lastClefFound, k, a);
+                        // use MIDI pitch to get a named note with octavation
+                        int p = helper.getPerformancePitch();
+                        std::string n = convertPitchToLilyNote(p, Accidentals::NoAccidental, Rosegarden::Key::DefaultKey);
 
-                         // port some code from writePitch() here, rather than
-                         // rewriting writePitch() to do both jobs, which
-                         // somebody could conceivably clean up one day if anyone
-                         // is bored
+                        // write named note
+                        str << n;
 
-                         // use MIDI pitch to get a named note
-                         int p = helper.getPerformancePitch();
-                         std::string n = convertPitchToLilyNote(p, a, k);
+                        std::cout << "Offsetting rest: "
+                                  << "offset = " << offset << ", "
+				  << "heightOnStaff = " << heightOnStaff << ", "
+				  << "pitch = " << p << ", "
+				  << "note = " << n
+                                  << std::endl;
 
-                         // write named note
-                         str << n;
-    
-                         // generate and write octave marks
-                         std::string m = "";
-                         int o = (int)(p / 12);
+                        // defer the \rest until after any duration, because it
+                        // can't come before a duration
+                        // necessary, which is all determined a bit further on
+                        needsSlashRest = true;
 
-                         // don't forget the octave offset for the clef!
-                         // (fixes unfiled bug detected by Mario Moles)
-                         int offset = m_lastClefFound.getOctaveOffset();
-                         o -= offset;
-
-                         // save state of o for future reporting
-                         int f = o;
-
-                         if (o < 4) {
-                             o--;
-                             for (; o < 4; o++)
-                                  m += ",";
-                         } else {
-                             for (; o > 4; o--)
-                                  m += "\'";
-                         }
-
-                         str << m;
-
-                         // defer the \rest until after any duration, because it
-                         // can't come before a duration if a duration change is
-                         // necessary, which is all determined a bit further on
-                         needsSlashRest = true;
-
-
-                         std::cout << "using pitch letter:"
-                                   << n << m
-                                   << " for offset: " 
-                                   << restOffset
-                                   << " for calculated octave: "
-                                   << f
-                                   << " in clef: "
-                                   << m_lastClefFound.getClefType()
-                                   << " with offset: "
-                                   << offset
-                                   << std::endl;
                      } else {
                          str << "r";
                      }
@@ -2153,12 +2134,12 @@ LilyPondExporter::writeBar(Segment *s,
 		    prevDuration = duration;
 		}
 
-                 // have to add \rest to a fake rest note after any required
-                 // duration change
-                 if (needsSlashRest) {
-                     str << "\\rest";
-                     needsSlashRest = false;
-                 }
+                // have to add \rest to a fake rest note after any required
+                // duration change
+                if (needsSlashRest) {
+                    str << "\\rest";
+                    needsSlashRest = false;
+                }
 
 		if (lilyText != "") {
 		    str << lilyText;
@@ -2253,7 +2234,7 @@ LilyPondExporter::writeBar(Segment *s,
 
                     Accidental accidental = Accidentals::NoAccidental;
 
-                    str << convertPitchToLilyNote(key.getTonicPitch(), accidental, key);
+                    str << convertPitchToLilyNoteName(key.getTonicPitch(), accidental, key);
 
                     if (key.isMinor()) {
                         str << " \\minor";
@@ -2610,27 +2591,6 @@ LilyPondExporter::writePitch(const Event *note,
     lilyNote = convertPitchToLilyNote(pitch, accidental, key);
 
     str << lilyNote;
-
-    // generate and write octave marks
-    std::string octaveMarks = "";
-    int octave = (int)(pitch / 12);
-
-    // tweak the octave break for B# / Cb
-    if ((lilyNote == "bisis") || (lilyNote == "bis")) {
-        octave--;
-    } else if ((lilyNote == "ceses") || (lilyNote == "ces")) {
-        octave++;
-    }
-
-    if (octave < 4) {
-        for (; octave < 4; octave++)
-            octaveMarks += ",";
-    } else {
-        for (; octave > 4; octave--)
-            octaveMarks += "\'";
-    }
-
-    str << octaveMarks;
 }
 
 void
