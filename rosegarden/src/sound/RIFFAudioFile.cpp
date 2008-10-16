@@ -650,7 +650,7 @@ RIFFAudioFile::convertBytesToSample(const unsigned char *ubuf)
             unsigned char b2 = ubuf[0];
             unsigned char b1 = ubuf[1];
             unsigned int bits = (b1 << 8) + b2;
-            return (float)(short(bits)) / 32767.0;
+            return (float)(short(bits)) / 32768.0;
         }
 
     case 24: {
@@ -663,7 +663,7 @@ RIFFAudioFile::convertBytesToSample(const unsigned char *ubuf)
             // in the right place; this gives us a 32-bit value,
             // hence the larger float divisor
             unsigned int bits = (b1 << 24) + (b2 << 16) + (b3 << 8);
-            return (float)(int(bits)) / 2147483647.0;
+            return (float)(int(bits)) / 2147483648.0;
         }
 
     case 32: {
