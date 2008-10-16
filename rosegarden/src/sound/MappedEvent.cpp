@@ -25,6 +25,7 @@
 #include "NotationTypes.h" // for Note::EventType
 
 #include <cassert>
+#include <cstdlib>
 
 #define DEBUG_MAPPEDEVENT 1
 
