@@ -42,7 +42,7 @@
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/IconLoader.h"
-// #include "misc/Strings.h"
+#include "misc/Strings.h"
 #include "gui/seqmanager/SequencerMapper.h"
 #include "gui/seqmanager/SequenceManager.h"
 #include "gui/widgets/AudioRouteMenu.h"
@@ -98,7 +98,7 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
 //     KStandardAction::close(this,
 //                       SLOT(slotClose()),
 //                       actionCollection());
-	createAction( "file_close", SLOT(slotClose() );
+	createAction( "file_close", SLOT(slotClose()) );
 	
 	IconLoader il;
 	QIcon icon;
@@ -111,9 +111,10 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
 			connect( qa_play, SIGNAL(triggered()), this, SIGNAL(play())  );
 	
     // Alternative shortcut for Play
-    QShortcut playShortcut = qa_play->shortcut();
-    playShortcut.append( QKeySequence(Qt::Key_Return + Qt::CTRL) );
-    qa_play->setShortcut(playShortcut);
+//     QShortcut playShortcut = qa_play->shortcut();
+//     playShortcut.append
+	qa_play->setShortcut( QKeySequence(Qt::Key_Return + Qt::CTRL) );
+//     qa_play->setShortcut(playShortcut);
 	
 	
 //     icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
@@ -167,7 +168,7 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
 
     unsigned int mixerOptions = m_studio->getMixerDisplayOptions();
 
-    (QAction* qa_show_audio_faders = new QAction( 0, i18n("Show Audio &Faders"), dynamic_cast<QObject*>(this) );
+    QAction* qa_show_audio_faders = new QAction(  i18n("Show Audio &Faders"), dynamic_cast<QObject*>(this) );
 	connect( qa_show_audio_faders, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleFaders()) );
 	qa_show_audio_faders->setObjectName( "show_audio_faders" );	//### FIX: deallocate QAction ptr
 	qa_show_audio_faders->setCheckable( true );	//
@@ -177,7 +178,7 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
 	// )->setChecked
     (!(mixerOptions & MIXER_OMIT_FADERS));
 
-    (QAction* qa_show_synth_faders = new QAction( 0, i18n("Show Synth &Faders"), dynamic_cast<QObject*>(this) );
+    QAction* qa_show_synth_faders = new QAction(  i18n("Show Synth &Faders"), dynamic_cast<QObject*>(this) );
 	connect( qa_show_synth_faders, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleSynthFaders()) );
 	qa_show_synth_faders->setObjectName( "show_synth_faders" );	//### FIX: deallocate QAction ptr
 	qa_show_synth_faders->setCheckable( true );	//
@@ -187,7 +188,7 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
 	// )->setChecked
     (!(mixerOptions & MIXER_OMIT_SYNTH_FADERS));
 
-    (QAction* qa_show_audio_submasters = new QAction( 0, i18n("Show &Submasters"), dynamic_cast<QObject*>(this) );
+    QAction* qa_show_audio_submasters = new QAction(  i18n("Show &Submasters"), dynamic_cast<QObject*>(this) );
 	connect( qa_show_audio_submasters, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleSubmasters()) );
 	qa_show_audio_submasters->setObjectName( "show_audio_submasters" );	//### FIX: deallocate QAction ptr
 	qa_show_audio_submasters->setCheckable( true );	//
@@ -197,7 +198,7 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
 	// )->setChecked
     (!(mixerOptions & MIXER_OMIT_SUBMASTERS));
 
-    (QAction* qa_show_plugin_buttons = new QAction( 0, i18n("Show &Plugin Buttons"), dynamic_cast<QObject*>(this) );
+    QAction* qa_show_plugin_buttons = new QAction(  i18n("Show &Plugin Buttons"), dynamic_cast<QObject*>(this) );
 	connect( qa_show_plugin_buttons, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotTogglePluginButtons()) );
 	qa_show_plugin_buttons->setObjectName( "show_plugin_buttons" );	//### FIX: deallocate QAction ptr
 	qa_show_plugin_buttons->setCheckable( true );	//
@@ -207,7 +208,7 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
 	// )->setChecked
     (!(mixerOptions & MIXER_OMIT_PLUGINS));
 
-    (QAction* qa_show_unassigned_faders = new QAction( 0, i18n("Show &Unassigned Faders"), dynamic_cast<QObject*>(this) );
+    QAction* qa_show_unassigned_faders = new QAction(  i18n("Show &Unassigned Faders"), dynamic_cast<QObject*>(this) );
 	connect( qa_show_unassigned_faders, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleUnassignedFaders()) );
 	qa_show_unassigned_faders->setObjectName( "show_unassigned_faders" );	//### FIX: deallocate QAction ptr
 	qa_show_unassigned_faders->setCheckable( true );	//
@@ -220,16 +221,21 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
     QAction *action = 0;
 
     for (int i = 1; i <= 16; i *= 2) {
+		/*
         action =
             new KRadioAction(i18np("1 Input", "%1 Inputs", i),
                              0, this,
                              SLOT(slotSetInputCountFromAction()), actionCollection(),
                              QString("inputs_%1").arg(i));
-        action->setExclusiveGroup("inputs");
+		*/
+		action = createAction( QString("inputs_%1").arg(i), SLOT(slotSetInputCountFromAction()) );
+// 		action->setExclusiveGroup("inputs");
+		
         if (i == int(m_studio->getRecordIns().size()))
             action->setChecked(true);
     }
 
+	/*
     action = new KRadioAction
              (i18n("No Submasters"),
               0, this,
@@ -237,19 +243,25 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
               QString("submasters_0"));
     action->setExclusiveGroup("submasters");
     action->setChecked(true);
-
+	*/
+	createAction( "submasters_0", SLOT(slotSetSubmasterCountFromAction()) );
+	
     for (int i = 2; i <= 8; i *= 2) {
+		/*
         action = new KRadioAction
                  (i18np("1 Submaster", "%1 Submasters", i),
                   0, this,
                   SLOT(slotSetSubmasterCountFromAction()), actionCollection(),
                   QString("submasters_%1").arg(i));
         action->setExclusiveGroup("submasters");
+		*/
+		action = createAction( QString("submasters_%1").arg(i), SLOT(slotSetSubmasterCountFromAction()) );
+		
         if (i == int(m_studio->getBusses().size()) - 1)
             action->setChecked(true);
     }
 
-    createGUI("mixer.rc");
+    rgTempQtIV->createGUI("mixer.rc");
 }
 
 AudioMixerWindow::~AudioMixerWindow()
@@ -313,7 +325,10 @@ AudioMixerWindow::populate()
     InstrumentList instruments = m_studio->getPresentationInstruments();
     BussList busses = m_studio->getBusses();
 
-    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+//     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+	IconLoader il;
+	QString pixmapDir = il.getResourcePath("");
+	
     m_monoPixmap.load(QString("%1/misc/mono.xpm").arg(pixmapDir));
     m_stereoPixmap.load(QString("%1/misc/stereo.xpm").arg(pixmapDir));
 
@@ -1615,8 +1630,9 @@ AudioMixerWindow::slotUpdateFaderVisibility()
 {
     bool d = !(m_studio->getMixerDisplayOptions() & MIXER_OMIT_FADERS);
 
-    /* was toggle */ QAction *action = dynamic_cast<QAction*>
-                            (actionCollection()->action("show_audio_faders"));
+//    QAction *action = dynamic_cast<QAction*>
+//                             (actionCollection()->action("show_audio_faders"));
+	QAction *action = findAction( "show_audio_faders" );
     if (action) {
         action->setChecked(d);
     }
@@ -1647,9 +1663,10 @@ AudioMixerWindow::slotToggleSynthFaders()
 void
 AudioMixerWindow::slotUpdateSynthFaderVisibility()
 {
-    /* was toggle */ QAction *action = dynamic_cast<QAction*>
-                            (actionCollection()->action("show_synth_faders"));
-    if (!action)
+//     QAction *action = dynamic_cast<QAction*>
+//                             (actionCollection()->action("show_synth_faders"));
+	QAction *action = findAction( "show_synth_faders" );
+	if (!action)
         return ;
 
     action->setChecked(!(m_studio->getMixerDisplayOptions() &
@@ -1679,8 +1696,10 @@ AudioMixerWindow::slotToggleSubmasters()
 void
 AudioMixerWindow::slotUpdateSubmasterVisibility()
 {
-    /* was toggle */ QAction *action = dynamic_cast<QAction*>
-                            (actionCollection()->action("show_audio_submasters"));
+//     QAction *action = dynamic_cast<QAction*>
+//                             (actionCollection()->action("show_audio_submasters"));
+	QAction *action = findAction( "show_audio_submasters" );
+
     if (!action)
         return ;
 
@@ -1709,8 +1728,9 @@ AudioMixerWindow::slotTogglePluginButtons()
 void
 AudioMixerWindow::slotUpdatePluginButtonVisibility()
 {
-    /* was toggle */ QAction *action = dynamic_cast<QAction*>
-                            (actionCollection()->action("show_plugin_buttons"));
+//     QAction *action = dynamic_cast<QAction*>
+//                             (actionCollection()->action("show_plugin_buttons"));
+	QAction *action = findAction( "show_plugin_buttons" );
     if (!action)
         return ;
 
@@ -1728,8 +1748,9 @@ AudioMixerWindow::slotUpdatePluginButtonVisibility()
 void
 AudioMixerWindow::slotToggleUnassignedFaders()
 {
-    /* was toggle */ QAction *action = dynamic_cast<QAction*>
-                            (actionCollection()->action("show_unassigned_faders"));
+//     QAction *action = dynamic_cast<QAction*>
+//                             (actionCollection()->action("show_unassigned_faders"));
+	QAction *action = findAction( "show_unassigned_faders" );
     if (!action)
         return ;
 
@@ -1749,7 +1770,7 @@ AudioMixerWindow::toggleNamedWidgets(bool show, const char* const name)
     QLayoutItem *child;
     while ( (child = it.current()) != 0 ) {
         QWidget * widget = child->widget();
-        if (widget && widget->objectName() && !strcmp(widget->objectName(), name)) {
+        if (widget && (!widget->objectName().isEmpty()) && !strcmp( qStrToCharPtrUtf8(widget->objectName()), name)) {
             if (show)
                 widget->show();
             else

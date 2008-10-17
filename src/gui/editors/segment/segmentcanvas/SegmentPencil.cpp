@@ -80,7 +80,7 @@ void SegmentPencil::slotCanvasScrolled(int newX, int newY)
 
 void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
 {
-    if (e->button() == RightButton)
+    if (e->button() == Qt::RightButton)
         return;
 
     // is user holding Ctrl+Alt? (ugly, but we are running short on available
@@ -147,7 +147,7 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
 
 void SegmentPencil::handleMouseButtonRelease(QMouseEvent* e)
 {
-    if (e->button() == RightButton)
+    if (e->button() == Qt::RightButton)
         return ;
 
     setContextHelpFor(e->pos());
@@ -190,9 +190,9 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent* e)
         segment->setLowestPlayable(track->getLowestPlayable());
         segment->setHighestPlayable(track->getHighestPlayable());
 
-        std::string label = qstrtostr(track->getPresetLabel());
+        std::string label = track->getPresetLabel();
         if (label != "") {
-            segment->setLabel(qstrtostr(track->getPresetLabel()));
+            segment->setLabel( track->getPresetLabel().c_str() );
         }
 
         CompositionItem item = CompositionItemHelper::makeCompositionItem(segment);

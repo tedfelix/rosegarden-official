@@ -20,7 +20,7 @@
 #define _RG_SCROLLBOXDIALOG_H_
 
 #include "ScrollBox.h"
-#include <kdialog.h>
+#include <QDialog>
 
 
 class QWidget;
@@ -33,7 +33,7 @@ namespace Rosegarden
 
 
 
-class ScrollBoxDialog : public KDialog
+class ScrollBoxDialog : public QDialog
 {
     Q_OBJECT
 

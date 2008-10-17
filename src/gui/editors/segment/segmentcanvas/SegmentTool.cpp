@@ -26,9 +26,10 @@
 #include "gui/general/BaseTool.h"
 #include "SegmentToolBox.h"
 #include "document/Command.h"
-#include <kmainwindow.h>
+
+#include <QMainWindow>
 #include <QPoint>
-#include <qpopupmenu.h>
+#include <QMenu>
 #include <QMouseEvent>
 
 
@@ -36,7 +37,7 @@ namespace Rosegarden
 {
 
 SegmentTool::SegmentTool(CompositionView* canvas, RosegardenGUIDoc *doc)
-        : BaseTool("segment_tool_menu", dynamic_cast<KMainWindow*>(doc->parent())->factory(), canvas),
+        : BaseTool("segment_tool_menu", dynamic_cast<QMainWindow*>(doc->parent())->factory(), canvas),
         m_canvas(canvas),
         m_doc(doc),
         m_changeMade(false)

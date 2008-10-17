@@ -323,7 +323,7 @@ void EditView::setRewFFwdToAutoRepeat()
     if (transportToolbar) {
         obl = transportToolbar->queryList();
 		l = &obl;
-        QObjectListIt it(*l); // iterate over the buttons
+        QObjectListIterator it(*l); // iterate over the buttons
         QObject *obj;
 
         while ( (obj = it.current()) != 0 ) {
@@ -1083,8 +1083,9 @@ EditView::setupAddControlRulerMenu()
             else
                 itemStr = i18n("Unsupported Event Type");
 
-            addControlRulerMenu->addItem(itemStr, i++);
-        }
+// 			addControlRulerMenu->addItem(itemStr, i++);
+			addControlRulerMenu->addAction(itemStr); i++;	//@@@
+		}
 
         connect(addControlRulerMenu, SIGNAL(activated(int)),
                 SLOT(slotAddControlRuler(int)));

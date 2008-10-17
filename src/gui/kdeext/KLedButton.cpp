@@ -44,7 +44,7 @@ KLedButton::~KLedButton()
 
 void KLedButton::mousePressEvent( QMouseEvent *e )
 {
-    if (e->button() == LeftButton) {
+    if (e->button() == Qt::LeftButton) {
         toggle();
         emit stateChanged( state() );
     }

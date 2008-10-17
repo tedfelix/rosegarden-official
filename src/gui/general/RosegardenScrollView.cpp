@@ -76,19 +76,19 @@ RosegardenScrollView::RosegardenScrollView(QWidget* parent,
 //
 int RosegardenScrollView::contentsX()	//### todo: when GUI is ready: check the following code
 {
-	return this->horizontalScrollBar().value();
+	return this->horizontalScrollBar()->value();
 }
 int RosegardenScrollView::contentsY()
 {
-	return this->verticalScrollBar().value();
+	return this->verticalScrollBar()->value();
 }
 int RosegardenScrollView::visibleWidth()
 {
-	return this->horizontalScrollBar().value() + this->width();
+	return this->horizontalScrollBar()->value() + this->width();
 }
 int RosegardenScrollView::visibleHeight()
 {
-	return this->verticalScrollBar().value() + this->height();
+	return this->verticalScrollBar()->value() + this->height();
 }
 
 
@@ -99,8 +99,9 @@ void RosegardenScrollView::setBottomFixedWidget(QWidget* w)
     if (m_bottomWidget) {
         m_bottomWidget->reparent(this, 0, QPoint(0, 0));
         m_bottomWidget->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed));
-        setMargins(0, 0, 0, m_bottomWidget->sizeHint().height());
-    }
+// 		setMargins( 0, 0, 0, m_bottomWidget->sizeHint().height() );
+		setContentsMargins( 0, 0, 0, m_bottomWidget->sizeHint().height() );
+	}
 }
 
 void RosegardenScrollView::startAutoScroll()
@@ -184,7 +185,7 @@ void RosegardenScrollView::doAutoScroll()
 
     if ( (dx || dy) &&
             ((scrollDirection == m_currentScrollDirection) || (m_currentScrollDirection == None)) ) {
-        scrollBy(dx, dy);
+        scroll(dx, dy);
         if ( startDecelerating )
             m_minDeltaScroll /= ScrollShortcutValue;
         else
@@ -401,7 +402,7 @@ void RosegardenScrollView::updateBottomWidgetGeometry()
 
     int bottomWidgetHeight = m_bottomWidget->sizeHint().height();
 
-    setMargins(0, 0, 0, bottomWidgetHeight);
+    setContentsMargins(0, 0, 0, bottomWidgetHeight);
     QRect r = frameRect();
     int hScrollBarHeight = 0;
     if (horizontalScrollBar()->isVisible())
@@ -425,8 +426,9 @@ void RosegardenScrollView::updateBottomWidgetGeometry()
 
 void RosegardenScrollView::wheelEvent(QWheelEvent *e)
 {
-    if (e->state() & ControlButton) {
-        if (e->delta() > 0)
+// 	if (e->state() & ControlButton) {
+	if (e->modifiers() & Qt::CTRL ) {
+			if (e->delta() > 0)
             emit zoomIn();
         else if (e->delta() < 0)
             emit zoomOut();

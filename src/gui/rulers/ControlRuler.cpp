@@ -64,7 +64,8 @@ const int ControlRuler::ItemHeightRange = 64;
 ControlRuler::ControlRuler(Segment *segment,
                            RulerScale* rulerScale,
                            EditViewBase* parentView,
-                           Q3Canvas* c, QWidget* parent) :
+                           Q3Canvas* c, QWidget* parent
+						  ) :
         RosegardenCanvasView(c, parent), // name, f),
         m_parentEditView(parentView),
         m_mainHorizontalScrollBar(0),
@@ -82,7 +83,8 @@ ControlRuler::ControlRuler(Segment *segment,
         m_selectionRect(new Q3CanvasRectangle(canvas())),
         m_menu(0)
 {
-    setHScrollBarMode(QScrollArea::AlwaysOff);
+//     setHScrollBarMode(QScrollArea::AlwaysOff);
+	setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
 
     m_selectionRect->setPen(QColor(Qt::red));
 
@@ -186,7 +188,8 @@ void ControlRuler::contentsMousePressEvent(QMouseEvent* e)
 
     // clear selection unless control was pressed, in which case
     // add the event to the current selection
-    if (!(e->state() && QMouseEvent::ControlButton)) {
+// 	if (!(e->state() && QMouseEvent::ControlButton)) {
+	if( ! (e->modifiers() & Qt::CTRL) ){
         clearSelectedItems();
     }
 
@@ -216,7 +219,7 @@ void ControlRuler::contentsMousePressEvent(QMouseEvent* e)
 
             } else { // select it
 
-                if (!(e->state() && QMouseEvent::ControlButton)) {
+                if (!(e->state() && Qt::CTRL ){		//@@@ QMouseEvent::ControlButton)) {
                     if (item->z() > topItem->z())
                         topItem = item;
 

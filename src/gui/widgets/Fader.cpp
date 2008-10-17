@@ -315,7 +315,7 @@ Fader::mousePressEvent(QMouseEvent *e)
 {
     m_clickMousePos = -1;
 
-    if (e->button() == LeftButton) {
+    if (e->button() == Qt::LeftButton) {
 
         if (e->type() == QEvent::MouseButtonDblClick) {
             setFader(0);
@@ -366,7 +366,7 @@ void
 Fader::wheelEvent(QWheelEvent *e)
 {
     int buttonPosition = value_to_position(m_value);
-    if (e->state() & ShiftButton) {
+    if (e->state() & Qt::SHIFT ) {
         if (e->delta() > 0)
             buttonPosition += 10;
         else

@@ -1372,7 +1372,8 @@ SequenceManager::sendAudioLevel(MappedEvent *mE)
 // 	QList<RosegardenGUIView>& viewList = m_doc->getViewList();
 	QList<RosegardenGUIView*> viewList = m_doc->getViewList();
 
-    for (v = viewList.first(); v != 0; v = viewList.next()) {
+//     for (v = viewList.first(); v != 0; v = viewList.next()) {
+	for( int i=0; i< viewList.count(); i++ ){
         v->showVisuals(mE);
     }
 

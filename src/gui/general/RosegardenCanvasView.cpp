@@ -405,7 +405,13 @@ void RosegardenCanvasView::updateBottomWidgetGeometry()
     int leftWidgetWidth = 0;
     if (m_leftWidget && m_leftWidget->isVisible()) {
         QScrollArea * qsv = dynamic_cast<QScrollArea *>(m_leftWidget);
-        leftWidgetWidth = qsv->contentsWidth()+2;
+		
+		//qsv->getContentsMargins ( int * left, int * top, int * right, int * bottom );
+		int contWidth = qsv->widget()->width();
+		
+//         leftWidgetWidth = qsv->contentsWidth()+2;
+		leftWidgetWidth = contWidth + 2;
+		
         qsv->setFixedWidth(leftWidgetWidth);
     }
 
@@ -463,8 +469,11 @@ void RosegardenCanvasView::updateLeftWidgetGeometry()
     int leftWidgetWidth = 0;
     if (m_leftWidget->isVisible()) {
         QScrollArea * qsv = dynamic_cast<QScrollArea *>(m_leftWidget);
-        leftWidgetWidth = qsv->contentsWidth() + 2;
-    }
+		
+		int contWidth = qsv->widget()->width();
+// 		leftWidgetWidth = qsv->contentsWidth() + 2;
+		leftWidgetWidth = contWidth + 2;
+	}
     m_leftWidget->setFixedWidth(leftWidgetWidth);
 
     int bottomWidgetHeight = m_bottomWidget ? 

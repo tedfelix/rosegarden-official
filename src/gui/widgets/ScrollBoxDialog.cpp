@@ -34,11 +34,14 @@ namespace Rosegarden
 
 ScrollBoxDialog::ScrollBoxDialog(QWidget *parent,
                                  ScrollBox::SizeMode sizeMode,
-                                 const char *name,
-                                 WFlags flags) :
-        KDialog(parent, name, flags),
+                                 const char *name
+//                                  WFlags flags
+								) :
+        QDialog(parent),	//, name, flags),
         m_scrollbox(new ScrollBox(this, sizeMode))
-{ }
+{
+	setObjectName( name ); 
+}
 
 
 ScrollBoxDialog::~ScrollBoxDialog()

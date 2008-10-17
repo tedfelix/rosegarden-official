@@ -169,8 +169,8 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
 
         // Add on middle button or ctrl+left - bounding box on rest
         //
-        if (e->button() == MidButton ||
-            (e->button() == LeftButton && (e->state() & Qt::ControlModifier))) {
+        if (e->button() == Qt::MiddleButton ||
+            ((e->button() == Qt::LeftButton) && (e->modifiers() & Qt::ControlModifier))) {
 
             m_dispatchTool = getToolBox()->getTool(SegmentPencil::ToolName);
 

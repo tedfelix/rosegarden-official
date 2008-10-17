@@ -31,6 +31,7 @@
 #include "document/ConfigGroups.h"
 #include "gui/dialogs/ExportDeviceDialog.h"
 #include "gui/dialogs/ImportDeviceDialog.h"
+#include "gui/kdeext/KTmpStatusMsg.h"
 #include "MidiBankListViewItem.h"
 #include "MidiDeviceListViewItem.h"
 #include "MidiKeyMapListViewItem.h"
@@ -60,13 +61,14 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QShortcut>
 
 #include <klocale.h>  // i18n()
-#include <kstandarddirs.h>
-#include <kstandardshortcut.h>
-#include <kstandardaction.h>
-#include <kxmlguiclient.h>
-#include <kglobal.h>
+// #include <kstandarddirs.h>
+// #include <kstandardshortcut.h>
+// #include <kstandardaction.h>
+// #include <kxmlguiclient.h>
+// #include <kglobal.h>
 
 
 namespace Rosegarden
@@ -144,10 +146,13 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 	*/
 	
     m_listView->setRootIsDecorated(true);
-    m_listView->setShowSortIndicator(true);
+	
+	/*	
+    m_listView->setShowSortIndicator(true);		//&&&
     m_listView->setItemsRenameable(true);
     m_listView->restoreLayout(BankEditorConfigGroup);
-
+	*/
+	
     QFrame *bankBox = new QFrame( leftPart );
     leftPartLayout->addWidget(bankBox);
     leftPart->setLayout(leftPartLayout);
@@ -271,7 +276,8 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 
     setupActions();
 
-    m_doc->getCommandHistory()->attachView(actionCollection());
+//     m_doc->getCommandHistory()->attachView(actionCollection());	//&&&
+	
     connect(m_doc->getCommandHistory(), SIGNAL(commandExecuted()),
             this, SLOT(slotUpdate()));
 
@@ -304,34 +310,38 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
         setCurrentDevice(defaultDevice);
     }
 
-    setAutoSaveSettings(BankEditorConfigGroup, true);
+//     setAutoSaveSettings(BankEditorConfigGroup, true);	//&&&
 }
 
 BankEditorDialog::~BankEditorDialog()
 {
     RG_DEBUG << "~BankEditorDialog()\n";
 
-    m_listView->saveLayout(BankEditorConfigGroup);
+//     m_listView->saveLayout(BankEditorConfigGroup);	//&&&
 
-    if (m_doc) // see slotFileClose() for an explanation on why we need to test m_doc
-        m_doc->getCommandHistory()->detachView(actionCollection());
+//     if (m_doc) // see slotFileClose() for an explanation on why we need to test m_doc
+//         m_doc->getCommandHistory()->detachView(actionCollection());
 }
 
 void
 BankEditorDialog::setupActions()
 {
-    KAction* close = KStandardAction::close (this, SLOT(slotFileClose()), actionCollection());
+//     KAction* close = KStandardAction::close (this, SLOT(slotFileClose()), actionCollection());
+	
+	createAction( "file_close", SLOT(slotFileClose() );
 
-    m_closeButton->setText(close->text());
+    m_closeButton->setText( findAction("file_close")->text() );
     connect(m_closeButton, SIGNAL(clicked()),
             this, SLOT(slotFileClose()));
 
-    KStandardAction::copy (this, SLOT(slotEditCopy()), actionCollection());
-    KStandardAction::paste (this, SLOT(slotEditPaste()), actionCollection());
+//     KStandardAction::copy (this, SLOT(slotEditCopy()), actionCollection());
+//     KStandardAction::paste (this, SLOT(slotEditPaste()), actionCollection());
+	createAction( "edit_copy", SLOT(slotEditCopy() );
+	createAction( "edit_paste", SLOT(slotEditPaste() );
 
     // some adjustments
 
-
+/*
     new KToolBarPopupAction(i18n("Und&o"),
                             "undo",
                             KStandardShortcut::key(KStandardShortcut::Undo),
@@ -343,8 +353,11 @@ BankEditorDialog::setupActions()
                             KStandardShortcut::key(KStandardShortcut::Redo),
                             actionCollection(),
                             KStandardAction::stdName(KStandardAction::Redo));
-
-    createGUI("bankeditor.rc");
+	*/
+	createAction( "edit_undo" );
+	createAction( "edit_redo" );
+	
+    rgTempQtIV->createGUI("bankeditor.rc");
 }
 
 void
@@ -387,9 +400,11 @@ BankEditorDialog::initDialog()
 
     // Select the first Device
     //
-    populateDevice(m_listView->firstChild());
-    m_listView->setSelected(m_listView->firstChild(), true);
-
+//     populateDevice(m_listView->firstChild());
+	populateDevice( m_listView->topLevelItem(0) );
+	
+// 	m_listView->setSelected(m_listView->firstChild(), true);
+	m_listView->topLevelItem(0)->setSelected( true );
 }
 
 void
@@ -758,8 +773,9 @@ BankEditorDialog::populateDevice(QTreeWidgetItem* item)
 
     if (keyItem) {
 
-        stateChanged("on_key_item");
-        stateChanged("on_bank_item", KXMLGUIClient::StateReverse);
+//         stateChanged("on_key_item");
+		leaveActionState("on_key_item");
+		leaveActionState("on_bank_item");	//, KXMLGUIClient::StateReverse);
 
         m_delete->setEnabled(true);
 
@@ -783,8 +799,8 @@ BankEditorDialog::populateDevice(QTreeWidgetItem* item)
 
     if (bankItem) {
 
-        stateChanged("on_bank_item");
-        stateChanged("on_key_item", KXMLGUIClient::StateReverse);
+		leaveActionState(("on_bank_item");
+		leaveActionState(("on_key_item");	//, KXMLGUIClient::StateReverse);
 
         m_delete->setEnabled(true);
         m_copyPrograms->setEnabled(true);
@@ -850,8 +866,9 @@ BankEditorDialog::populateDevice(QTreeWidgetItem* item)
     (device->getVariationType() ==
      MidiDevice::VariationFromLSB ? 0 : 1);
 
-    stateChanged("on_bank_item", KXMLGUIClient::StateReverse);
-    stateChanged("on_key_item", KXMLGUIClient::StateReverse);
+	leaveActionState("on_bank_item");	//, KXMLGUIClient::StateReverse);
+	leaveActionState("on_key_item");	//, KXMLGUIClient::StateReverse);
+	
     m_programEditor->clearAll();
     m_keyMappingEditor->clearAll();
 }
@@ -900,7 +917,7 @@ BankEditorDialog::slotApply()
                                           device->getLibrarianEmail());
 
         MidiKeyMapListViewItem *keyItem = dynamic_cast<MidiKeyMapListViewItem*>
-                                          (m_listView->currentIndex());
+                                          (m_listView->currentItem());
         if (keyItem) {
             KeyMappingList kml(device->getKeyMappings());
             for (int i = 0; i < kml.size(); ++i) {
@@ -1004,7 +1021,7 @@ BankEditorDialog::slotAddBank()
     if (!m_listView->currentIndex())
         return ;
 
-    QTreeWidgetItem* currentIndex = m_listView->currentIndex();
+    QTreeWidgetItem* currentIndex = m_listView->currentItem();
 
     MidiDeviceListViewItem* deviceItem = getParentDeviceItem(currentIndex);
     MidiDevice *device = getMidiDevice(currentIndex);
@@ -1043,10 +1060,10 @@ BankEditorDialog::slotAddBank()
 void
 BankEditorDialog::slotAddKeyMapping()
 {
-    if (!m_listView->currentIndex())
+    if (!m_listView->currentItem())
         return ;
 
-    QTreeWidgetItem* currentIndex = m_listView->currentIndex();
+    QTreeWidgetItem* currentIndex = m_listView->currentItem();
 
     MidiDeviceListViewItem* deviceItem = getParentDeviceItem(currentIndex);
     MidiDevice *device = getMidiDevice(currentIndex);
@@ -1088,10 +1105,10 @@ BankEditorDialog::slotAddKeyMapping()
 void
 BankEditorDialog::slotDelete()
 {
-    if (!m_listView->currentIndex())
+    if (!m_listView->currentItem())
         return ;
 
-    QTreeWidgetItem* currentIndex = m_listView->currentIndex();
+    QTreeWidgetItem* currentIndex = m_listView->currentItem();
 
     MidiBankListViewItem* bankItem = dynamic_cast<MidiBankListViewItem*>(currentIndex);
 
@@ -1202,10 +1219,10 @@ BankEditorDialog::slotDelete()
 void
 BankEditorDialog::slotDeleteAll()
 {
-    if (!m_listView->currentIndex())
+    if (!m_listView->currentItem())
         return ;
 
-    QTreeWidgetItem* currentIndex = m_listView->currentIndex();
+    QTreeWidgetItem* currentIndex = m_listView->currentItem();
     MidiDeviceListViewItem* deviceItem = getParentDeviceItem(currentIndex);
     MidiDevice *device = getMidiDevice(deviceItem);
 
@@ -1388,7 +1405,7 @@ BankEditorDialog::slotModifyDeviceOrBankName(QTreeWidgetItem* item, const QStrin
 void
 BankEditorDialog::selectDeviceItem(MidiDevice *device)
 {
-    QTreeWidgetItem *child = m_listView->firstChild();
+    QTreeWidgetItem *child = m_listView->topLevelItem(0);	//firstChild();
     MidiDeviceListViewItem *midiDeviceItem;
     MidiDevice *midiDevice;
 
@@ -1399,12 +1416,14 @@ BankEditorDialog::selectDeviceItem(MidiDevice *device)
             midiDevice = getMidiDevice(midiDeviceItem);
 
             if (midiDevice == device) {
-                m_listView->setSelected(child, true);
+//                 m_listView->setSelected(child, true);
+				child->setSelected( true );
                 return ;
             }
         }
 
-    } while ((child = child->nextSibling()));
+	} while ( (child = m_listView->itemBelow(child)) );
+// 	} while ((child = child->nextSibling()));
 }
 
 void
@@ -1604,7 +1623,7 @@ void
 BankEditorDialog::slotEditCopy()
 {
     MidiBankListViewItem* bankItem
-    = dynamic_cast<MidiBankListViewItem*>(m_listView->currentIndex());
+    = dynamic_cast<MidiBankListViewItem*>( m_listView->currentItem() );
 
     if (bankItem) {
         m_copyBank = std::pair<DeviceId, int>(bankItem->getDeviceId(),
@@ -1617,7 +1636,7 @@ void
 BankEditorDialog::slotEditPaste()
 {
     MidiBankListViewItem* bankItem
-    = dynamic_cast<MidiBankListViewItem*>(m_listView->currentIndex());
+    = dynamic_cast<MidiBankListViewItem*>( m_listView->currentItem() );
 
     if (bankItem) {
         // Get the full program and bank list for the source device

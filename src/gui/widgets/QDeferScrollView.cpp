@@ -26,14 +26,19 @@ namespace Rosegarden
 {
 
 QDeferScrollView::QDeferScrollView(QWidget* parent, const char *name) //, WFlags f)
-        : QScrollArea(parent, name) //, f)
+        : QScrollArea(parent) //, f)
 {
+	setObjectName( name );
     setFocusPolicy(Qt::WheelFocus);
 }
 
 void QDeferScrollView::setBottomMargin(int m)
 {
-    setMargins(leftMargin(), topMargin(), rightMargin(), m);
+	int leftMargin, topMargin, rightMargin, bottomMargin;
+	getContentsMargins( &leftMargin, &topMargin, &rightMargin, &bottomMargin );
+	
+	setContentsMargins(leftMargin, topMargin, rightMargin, m);
+// 	setContentsMargins(leftMargin(), topMargin(), rightMargin(), m);
 }
 
 void QDeferScrollView::contentsWheelEvent(QWheelEvent* e)

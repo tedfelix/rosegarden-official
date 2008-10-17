@@ -18,10 +18,12 @@
 
 #include "NameSetEditor.h"
 #include "BankEditorDialog.h"
-#include <kcompletion.h>
-#include <kglobalsettings.h>
-#include <klineedit.h>
+
 #include <klocale.h>
+#include <kcompletion.h>
+// #include <kglobalsettings.h>
+// #include <klineedit.h>
+
 #include <QFrame>
 #include <QGroupBox>
 #include <QLabel>
@@ -128,8 +130,9 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
 
 
                 if (showEntryButtons) {
-                    QPushButton *button = new QPushButton("", numBox, numberText);
-                    numBoxLayout->addWidget(button);
+// 					QPushButton *button = new QPushButton("", numBox, numberText);
+					QPushButton *button = new QPushButton(numberText, numBox);
+					numBoxLayout->addWidget(button);
                     button->setMaximumWidth(40);
                     button->setMaximumHeight(20);
                     button->setFlat(true);

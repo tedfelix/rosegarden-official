@@ -277,7 +277,9 @@ void EditViewBase::slotConfigure()
     ConfigureDialog *configDlg =
         new ConfigureDialog(getDocument(), this);
 
-    configDlg->showPage(getConfigDialogPageIndex());
+//     configDlg->showPage(getConfigDialogPageIndex());
+	configDlg->setCurrentWidget( getConfigDialogPageIndex() );
+	
     configDlg->show();
 }
 

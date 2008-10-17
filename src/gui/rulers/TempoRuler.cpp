@@ -306,8 +306,10 @@ TempoRuler::mousePressEvent(QMouseEvent *e)
             createMenu();
         if (m_menu) {
             // enable 'delete' action only if cursor is actually over a tempo change            
-            actionCollection()->action("delete_tempo")->setEnabled(m_illuminatePoint);
-            m_menu->exec(QCursor::pos());
+// 			actionCollection()->action("delete_tempo")->setEnabled(m_illuminatePoint);
+			findAction("delete_tempo")->setEnabled(m_illuminatePoint);
+			
+			m_menu->exec(QCursor::pos());
         }
 
     }

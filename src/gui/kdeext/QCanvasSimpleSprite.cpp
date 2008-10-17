@@ -86,11 +86,14 @@ QCanvasSimpleSprite::makePixmapArray(QPixmap *pixmap)
     // can delete the one we're passed
     pixlist.append(pixmap);
 
-    QList<QPoint*> spotlist;
+// 	QList<QPoint*> spotlist;
+	QPolygon spotlist;
+	
     spotlist.setAutoDelete(true);
     spotlist.append(new QPoint(0, 0));
 
-    return new Q3CanvasPixmapArray(pixlist, spotlist);
+	return new Q3CanvasPixmapArray(pixlist, spotlist );
+// 	return new Q3CanvasPixmapArray(pixlist, Q3PointArray(spotlist) );
 }
 
 Q3CanvasPixmapArray*

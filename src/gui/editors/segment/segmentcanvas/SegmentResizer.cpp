@@ -146,11 +146,11 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent *e)
                     try {
                         m_doc->getAudioFileManager().testAudioPath();
                     } catch (AudioFileManager::BadAudioPathException) {
-                        if (QMessageBox::warningContinueCancel
-                            (0,
-                             i18n("The audio file path does not exist or is not writable.\nYou must set the audio file path to a valid directory in Document Properties before rescaling an audio file.\nWould you like to set it now?"),
-                             i18n("Warning"),
-                             i18n("Set audio file path")) == QMessageBox::Continue) {
+						if (QMessageBox::warning( dynamic_cast<QWidget*>(this), i18n("Warning"), //i18n("Set audio file path"), 
+                            	 i18n("The audio file path does not exist or is not writable.\nYou must set the audio file path to a valid directory in Document Properties before rescaling an audio file.\nWould you like to set it now?"),
+								QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel
+								) 
+								== QMessageBox::Yes ) {
                             RosegardenGUIApp::self()->slotOpenAudioPathSettings();
                         }
                     }

@@ -37,9 +37,10 @@
 #include "sequencer/RosegardenSequencer.h"
 #include "gui/dialogs/ExportDeviceDialog.h"
 #include "gui/dialogs/ImportDeviceDialog.h"
+#include "gui/general/IconLoader.h"
+#include "gui/kdeext/KTmpStatusMsg.h"
 
 #include <QApplication>
-#include <kstandarddirs.h>
 #include <QAction>
 #include <QFileDialog>
 #include <QMainWindow>
@@ -60,11 +61,12 @@
 #include <Q3Table> //### switching to Q3Table will be complex, so screw that for now.
 #include <QToolTip>
 #include <QWidget>
+#include <QShortcut>
 
 #include <klocale.h>
-#include <kglobal.h>
-#include <kstandardshortcut.h>
-#include <kstandardaction.h>
+// #include <kglobal.h>
+// #include <kstandardshortcut.h>
+// #include <kstandardaction.h>
 
 namespace Rosegarden
 {
@@ -218,9 +220,12 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
     layout->addWidget(closeButton);
     layout->addSpacing(5);
 
+	/*
     KAction* close = KStandardAction::close(this,
                                        SLOT(slotClose()),
                                        actionCollection());
+	*/
+	QAction *close = createAction("file_close", SLOT(slotClose()) );
 
     closeButton->setText(close->text());
     connect(closeButton, SIGNAL(clicked()), this, SLOT(slotClose()));
@@ -228,6 +233,7 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
     mainBox->setLayout(mainLayout);
 
     // some adjustments
+	/*
     new KToolBarPopupAction(i18n("Und&o"),
                             "undo",
                             KStandardShortcut::shortcut(KStandardShortcut::Undo),
@@ -239,8 +245,12 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
                             KStandardShortcut::shortcut(KStandardShortcut::Redo),
                             actionCollection(),
                             KStandardAction::stdName(KStandardAction::Redo));
-
-    createGUI("devicemanager.rc");
+	*/
+	createAction( "edit_undo" );
+	createAction( "edit_redo" );
+	
+	
+	rgTempQtIV->createGUI("devicemanager.rc");
 
     m_document->getCommandHistory()->attachView(actionCollection());
     connect(m_document->getCommandHistory(), SIGNAL(commandExecuted()),
@@ -717,12 +727,14 @@ DeviceManagerDialog::slotExport()
 {
     QString extension = "rgd";
 
-    QString name =
+	QString name = QFileDialog::getSaveFileName( this, i18n("Export Device as..."), QDir::currentPath(), 
+			(extension.isEmpty() ? QString("*") : ("*." + extension)) );
+			/*
         KFileDialog::getSaveFileName(":ROSEGARDEN",
                                      (extension.isEmpty() ? QString("*") : ("*." + extension)),
                                      this,
                                      i18n("Export Device as..."));
-
+*/
     // Check for the existence of the name
     if (name.isEmpty())
         return ;

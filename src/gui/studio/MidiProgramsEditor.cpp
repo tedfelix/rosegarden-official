@@ -16,6 +16,12 @@
 */
 
 
+#include <klocale.h>
+#include <kcompletion.h>
+// #include <kglobal.h>
+// #include <klineedit.h>
+// #include <kstandarddirs.h>
+
 #include "MidiProgramsEditor.h"
 #include "MidiBankListViewItem.h"
 #include "NameSetEditor.h"
@@ -26,22 +32,19 @@
 #include "base/MidiDevice.h"
 #include "base/MidiProgram.h"
 #include "gui/widgets/RosegardenPopupMenu.h"
-#include <kcompletion.h>
-#include <kglobal.h>
-#include <klineedit.h>
-#include <klocale.h>
-#include <kstandarddirs.h>
+
 #include <QCheckBox>
 #include <QCursor>
 #include <QFile>
 #include <QFrame>
 #include <QLabel>
 #include <QLayout>
+#include <QVBoxLayout>
 #include <QObjectList>
 #include <QPixmap>
 #include <QIcon>
 #include <QPoint>
-#include <qpopupmenu.h>
+#include <QMenu>
 #include <QPushButton>
 #include <QSpinBox>
 #include <QString>
@@ -84,7 +87,7 @@ MidiProgramsEditor::makeAdditionalWidget(QWidget *parent)
 
     gridLayout->addWidget(new QLabel(i18n("Percussion"), frame),
                           0, 0, Qt::AlignLeft);
-    gridLayout->addWidget(m_percussion, 0, 1, AlignLeft);
+    gridLayout->addWidget(m_percussion, 0, 1, Qt::AlignLeft);
     connect(m_percussion, SIGNAL(clicked()),
             this, SLOT(slotNewPercussion()));
 

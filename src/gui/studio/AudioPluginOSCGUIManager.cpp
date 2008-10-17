@@ -139,7 +139,7 @@ AudioPluginOSCGUIManager::hasGUI(InstrumentId instrument, int position)
     try {
         QString filePath = AudioPluginOSCGUI::getGUIFilePath
                            (strtoqstr(pluginInstance->getIdentifier()));
-        return (filePath && filePath != "");
+        return ( !filePath.isEmpty() );
     } catch (Exception e) { // that's OK
         return false;
     }
@@ -382,7 +382,7 @@ AudioPluginOSCGUIManager::parseOSCPath(QString path, InstrumentId &instrument,
     QString label = path.section('/', 3, -2);
     method = path.section('/', -1, -1);
 
-    if (!instrumentStr || !positionStr) {
+    if (instrumentStr.isEmtpy() || positionStr.isEmpty() ) {
         RG_DEBUG << "AudioPluginOSCGUIManager::parseOSCPath: no instrument or position in " << path << endl;
         return false;
     }
