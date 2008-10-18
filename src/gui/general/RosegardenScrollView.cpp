@@ -61,7 +61,9 @@ RosegardenScrollView::RosegardenScrollView(QWidget* parent,
         m_scrollDirectionConstraint(NoFollow),
         m_autoScrolling(false)
 {
-    setDragAutoScroll(true);
+
+//     setDragAutoScroll(true);		//&&& could not find replacement
+	
     connect( &m_autoScrollTimer, SIGNAL( timeout() ),
              this, SLOT( doAutoScroll() ) );
 }
@@ -257,8 +259,12 @@ void RosegardenScrollView::slotScrollHoriz(int hpos)
 
         // returning to zero
         //         hbar->setValue(0);
-        setContentsPos(0, currentContentYPos);
-
+        setContentsPos(0, currentContentYPos);	//@@@
+		
+		// possible replacement: ??
+		//this->widget()->move( 0, currentContentYPos )
+		
+		
     } else if (hpos > (contentsX() +
                        visibleWidth() * 1.6) ||
                hpos < (contentsX() -
@@ -391,7 +397,8 @@ void RosegardenScrollView::resizeEvent(QResizeEvent* e)
 
 void RosegardenScrollView::setHBarGeometry(QScrollBar &hbar, int x, int y, int w, int h)
 {
-    QScrollArea::setHBarGeometry(hbar, x, y, w, h);
+//     QScrollArea::setHBarGeometry(hbar, x, y, w, h);
+	hbar.setGeometry( x,y, w,h );
     updateBottomWidgetGeometry();
 }
 

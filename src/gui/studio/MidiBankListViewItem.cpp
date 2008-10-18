@@ -30,7 +30,7 @@ namespace Rosegarden
 
 MidiBankListViewItem::MidiBankListViewItem(DeviceId deviceId,
         int bankNb,
-        QListWidgetItem* parent,
+        QTreeWidgetItem* parent,
         QString name,
         bool percussion, int msb, int lsb)
         : MidiDeviceListViewItem(deviceId, parent, name, percussion, msb, lsb),
@@ -54,7 +54,7 @@ void MidiBankListViewItem::setLSB(int lsb)
     setText(3, QString().setNum(lsb));
 }
 
-int MidiBankListViewItem::compare(QListWidgetItem *i, int col, bool ascending) const
+int MidiBankListViewItem::compare(QTreeWidgetItem *i, int col, bool ascending) const
 {
     MidiBankListViewItem* bankItem = dynamic_cast<MidiBankListViewItem*>(i);
 

@@ -26,7 +26,7 @@
 
 class QWidget;
 class QString;
-class QListWidgetItem;
+class QTreeWidgetItem;
 
 
 namespace Rosegarden
@@ -46,7 +46,7 @@ public:
                          const char *name = 0);
 
     void clearAll();
-    void populate(QListWidgetItem *);
+    void populate(QTreeWidgetItem *);
     MidiKeyMapping &getMapping() { return m_mapping; }
     void reset();
 

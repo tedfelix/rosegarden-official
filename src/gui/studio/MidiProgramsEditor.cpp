@@ -50,7 +50,10 @@
 #include <QString>
 #include <QToolTip>
 //#include <qvgroupbox.h>
+#include <QLineEdit>
 #include <QWidget>
+#include <QListWidget>
+#include <QListWidgetItem>
 #include <algorithm>
 
 namespace Rosegarden
@@ -92,10 +95,10 @@ MidiProgramsEditor::makeAdditionalWidget(QWidget *parent)
             this, SLOT(slotNewPercussion()));
 
     gridLayout->addWidget(new QLabel(i18n("MSB Value"), frame),
-                          1, 0, AlignLeft);
+                          1, 0, Qt::AlignLeft);
     m_msb->setMinimum(0);
     m_msb->setMaximum(127);
-    gridLayout->addWidget(m_msb, 1, 1, AlignLeft);
+    gridLayout->addWidget(m_msb, 1, 1, Qt::AlignLeft);
 
     m_msb->setToolTip(i18n("Selects a MSB controller Bank number (MSB/LSB pairs are always unique for any Device)"));
 

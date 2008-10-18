@@ -27,11 +27,11 @@
 
 class QWidget;
 class QPushButton;
-class QListWidgetItem;
+class QTreeWidgetItem;
 class QLabel;
 class QGridLayout;
 class QFrame;
-class KLineEdit;
+class QLineEdit;
 
 
 namespace Rosegarden
@@ -46,7 +46,7 @@ class NameSetEditor : public QGroupBox
 public:
     virtual void clearAll() = 0;
 
-    virtual void populate(QListWidgetItem *) = 0;
+    virtual void populate(QTreeWidgetItem *) = 0;
     virtual void reset() = 0;
 
 public slots:
@@ -70,7 +70,7 @@ protected:
     KCompletion              m_completion;
     QPushButton             *m_initialLabel;
     std::vector<QLabel*>     m_labels;
-    std::vector<KLineEdit*>  m_names;
+    std::vector<QLineEdit*>  m_names;
     QFrame                  *m_mainFrame;
     QLabel                  *m_librarian;
     QLabel                  *m_librarianEmail;

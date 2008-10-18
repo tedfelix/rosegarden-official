@@ -24,13 +24,14 @@
 #include <QMainWindow>
 #include <QString>
 #include <QStringList>
-#include <Q3Table>
+// #include <QTableWidget>
 
 #include <vector>
 
 
 class QWidget;
-class Q3Table;
+class QTableWidget;
+class QTableWidgetItem;
 class QPushButton;
 class QCloseEvent;
 
@@ -99,8 +100,8 @@ private:
     void makeConnectionList(MidiDevice::DeviceDirection direction, 
 			    QStringList &list);
     
-    Q3Table *m_playTable;
-    Q3Table *m_recordTable;
+    QTableWidget *m_playTable;
+    QTableWidget *m_recordTable;
 
     typedef std::vector<MidiDevice *> MidiDeviceList;
     MidiDeviceList m_playDevices;

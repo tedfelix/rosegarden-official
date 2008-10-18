@@ -19,6 +19,7 @@
 #include "DeviceEditorDialog.h"
 
 #include <klocale.h>
+
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "base/Device.h"
@@ -30,6 +31,8 @@
 #include "document/RosegardenGUIDoc.h"
 #include "document/MultiViewCommandHistory.h"
 #include "sequencer/RosegardenSequencer.h"
+#include <algorithm>
+
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QMessageBox>
@@ -40,10 +43,14 @@
 #include <QString>
 #include <QStringList>
 #include <QTableWidget>
+#include <QTableWidgetItem>
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <algorithm>
+#include <QHeaderView>
+#include <QComboBox>
+// #include <QTreeWidget>
+// #include <QTreeWidgetItem>
 
 
 namespace Rosegarden
@@ -64,28 +71,45 @@ DeviceEditorDialog::DeviceEditorDialog(QDialogButtonBox::QWidget *parent,
     QVBoxLayout *mainBoxLayout = new QVBoxLayout;
     metagrid->addWidget(mainBox, 0, 0);
 
-    m_table = new QTableWidget(0, 4, mainBox);
+ 	m_table = new QTableWidget(0, 4, mainBox);
+// 	m_table = new QTableWidget(mainBox);
+	
     m_table->setSortingEnabled(false);
-    m_table->setRowMovingEnabled(false);
+	
+	/*
+    m_table->setRowMovingEnabled(false);	//&&&
     m_table->setColumnMovingEnabled(false);
+	*/
     m_table->setShowGrid(false);
 	
-// 	QStringList sl << i18n("Device") << i18n("Name") << i18n("Type") << i18n("Connection");
-// 	m_table->setHeaderLabels( sl );
+// 	m_table->setColumnCount( 4 );
 	
-	m_table->setHorizontalHeaderItem( 0, i18n("Device"));
-    m_table->setHorizontalHeaderItem( 1, i18n("Name"));
-    m_table->setHorizontalHeaderItem( 2, i18n("Type"));
-    m_table->setHorizontalHeaderItem( 3, i18n("Connection"));
+	/*
+	QStringList sl;
+	sl << i18n("Device") << i18n("Name") << i18n("Type") << i18n("Connection");
+	m_table->setHeaderLabels( sl );
+	*/
+	
+	m_table->setHorizontalHeaderItem( 0, new QTableWidgetItem( i18n("Device")));
+	m_table->setHorizontalHeaderItem( 1, new QTableWidgetItem( i18n("Name")));
+	m_table->setHorizontalHeaderItem( 2, new QTableWidgetItem( i18n("Type")));
+	m_table->setHorizontalHeaderItem( 3, new QTableWidgetItem( i18n("Connection")));
 	
 	
     m_table->horizontalHeader()->show();
     m_table->verticalHeader()->hide();
-    m_table->setLeftMargin(0);
-    m_table->setSelectionMode(QTableWidget::SingleRow);
-    m_table->setColumnReadOnly(0, true);
+	//m_table->setLeftMargin(0);
+	m_table->setContentsMargins( 0, 4, 0, 4 );	// left, top, right, bottom
+	
+	
+//     m_table->setSelectionMode(QTableWidget::SingleRow);
+	m_table->setSelectionBehavior( QAbstractItemView::SelectRows );
+	
+	/*
+    m_table->setColumnReadOnly(0, true);	//&&&
     m_table->setColumnReadOnly(2, true);
-    mainBoxLayout->addWidget(m_table);
+	*/
+    mainBox->layout()->addWidget(m_table);
 
     makeConnectionList(MidiDevice::Play, m_playConnections);
     makeConnectionList(MidiDevice::Record, m_recordConnections);
@@ -101,26 +125,31 @@ DeviceEditorDialog::DeviceEditorDialog(QDialogButtonBox::QWidget *parent,
     QPushButton *deleteButton = new QPushButton(i18n("Delete Device"), hbox );
     hboxLayout->addWidget(deleteButton);
     hbox->setLayout(hboxLayout);
-    mainBoxLayout->setLayout(mainBoxLayout);
+	
 
     connect(addButton, SIGNAL(clicked()), this, SLOT(slotAddPlayDevice()));
     connect(addRButton, SIGNAL(clicked()), this, SLOT(slotAddRecordDevice()));
     connect(deleteButton, SIGNAL(clicked()), this, SLOT(slotDeleteDevice()));
     connect(m_table, SIGNAL(valueChanged(int, int)),
-            this, SLOT(slotValueChanged (int, int)));
+            this, SLOT(slotValueChanged (int, int)) );
 
     setMinimumHeight(250);
 
-    enableButtonOK(false);
-    enableButtonApply(false);
-
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(  QDialogButtonBox::Ok
+	
+    //QDialogButtonBox *
+	m_buttonBox = new QDialogButtonBox(  QDialogButtonBox::Ok
                                                        | QDialogButtonBox::Apply
                                                        | QDialogButtonBox::Close);
-    metagrid->addWidget(buttonBox, 1, 0);
+	
+//     enableButtonOK(false);
+//     enableButtonApply(false);
+	m_buttonBox->button( QDialogButtonBox::Ok )->setEnabled( false );
+	m_buttonBox->button( QDialogButtonBox::Apply )->setEnabled( false );
+	
+	metagrid->addWidget(m_buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+	connect(m_buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+	connect(m_buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 DeviceEditorDialog::~DeviceEditorDialog()
@@ -145,8 +174,8 @@ DeviceEditorDialog::populate()
         }
     }
 
-    while (m_table->numRows() > 0) {
-        m_table->removeRow(m_table->numRows() - 1);
+    while (m_table->rowCount() > 0) {
+        m_table->removeRow(m_table->rowCount() - 1);
     }
 
     int deviceCount = 0;
@@ -158,7 +187,8 @@ DeviceEditorDialog::populate()
 
     for (it = m_devices.begin(); it != m_devices.end(); ++it) {
 
-        m_table->insertRows(deviceCount, 1);
+// 		m_table->insertRows(deviceCount, 1);
+		m_table->insertRow( deviceCount );//m_devices.count() );
 
         // we know we only put MidiDevices in m_devices
         MidiDevice *md = static_cast<MidiDevice *>(*it);
@@ -167,12 +197,21 @@ DeviceEditorDialog::populate()
         QString deviceName = i18n("Device %1", md->getId() + 1);
         QString deviceLabel = strtoqstr(md->getName());
         QString connectionName = strtoqstr(md->getConnection());
-
+	
+			
+		/*
         m_table->setText(deviceCount, NAME_COL, deviceName);
         m_table->setText(deviceCount, LABEL_COL, deviceLabel);
         m_table->setText(deviceCount, DIRECTION_COL,
                          (md->getDirection() == MidiDevice::Play ?
                           i18n("Play") : i18n("Record")));
+		*/
+		m_table->setItem(deviceCount, NAME_COL, new QTableWidgetItem(deviceName));
+		m_table->setItem(deviceCount, LABEL_COL, new QTableWidgetItem(deviceLabel));
+		m_table->setItem(deviceCount, DIRECTION_COL, new QTableWidgetItem(
+						 (md->getDirection() == MidiDevice::Play ?
+								 i18n("Play") : i18n("Record")) ));
+		
 
         QStringList &list(md->getDirection() == MidiDevice::Play ?
                           m_playConnections : m_recordConnections);
@@ -181,18 +220,29 @@ DeviceEditorDialog::populate()
             if (list[i] == connectionName)
                 currentConnectionIndex = i;
         }
-
-        QComboTableItem *item = new QComboTableItem(m_table, list, false);
-        item->setCurrentIndex(currentConnectionIndex);
+		
+		/*
+ 		QComboTableItem *item = new QComboTableItem(m_table, list, false);
+		item->setCurrentIndex(currentConnectionIndex);
         m_table->setItem(deviceCount, CONNECTION_COL, item);
-
-        m_table->adjustRow(deviceCount);
+		*/
+		QComboBox* combo = new QComboBox( this );
+		combo->addItems( list );
+		combo->setCurrentIndex( currentConnectionIndex );
+		m_table->setCellWidget( deviceCount, CONNECTION_COL, combo );
+		
+		
+		// m_table->adjustRow(deviceCount);	//&&& use setSizePolicy(QSizePolicy) ? // qt3 desc: Resizes row row so that the row height is tall enough to display the tallest item the row contains.
+		
+		
+		
         ++deviceCount;
     }
 
     int minColumnWidths[] = { 80, 120, 100, 250 };
     for (int i = 0; i < 4; ++i) {
-        m_table->adjustColumn(i);
+//         m_table->adjustColumn(i);	//&&&
+		
         if (m_table->columnWidth(i) < minColumnWidths[i])
             m_table->setColumnWidth(i, minColumnWidths[i]);
     }
@@ -219,8 +269,12 @@ void
 DeviceEditorDialog::setModified(bool m)
 {
     if (m_modified == m) return;
-    enableButtonOK(m);
-    enableButtonApply(m);
+	
+	m_buttonBox->button( QDialogButtonBox::Ok )->setEnabled( m );
+	m_buttonBox->button( QDialogButtonBox::Apply )->setEnabled( m );
+	
+//     enableButtonOK(m);
+//     enableButtonApply(m);
     m_modified = m;
 }
 
@@ -276,17 +330,17 @@ DeviceEditorDialog::slotApply()
     // create the new devices, and rename and/or set connections for
     // any others that have changed
 
-    for (int i = 0; i < m_table->numRows(); ++i) {
+    for (int i = 0; i < m_table->rowCount(); ++i) {
         int deviceId = getDeviceIdAt(i);
         if (deviceId < 0) { // new device
             command->addCommand(new CreateOrDeleteDeviceCommand
                                 (m_studio,
-                                 qstrtostr(m_table->text(i, LABEL_COL)),
+                                 qstrtostr( m_table->item(i, LABEL_COL)->text() ),
                                  Device::Midi,
-                                 m_table->text(i, DIRECTION_COL) == "Play" ?
+								 m_table->item(i, DIRECTION_COL)->text() == "Play" ?
                                  MidiDevice::Play :
                                  MidiDevice::Record,
-                                 qstrtostr(m_table->text(i, CONNECTION_COL))));
+								 qstrtostr( m_table->item(i, CONNECTION_COL)->text() )  ));
         } else { // existing device
             Device *device = m_studio->getDevice(deviceId);
             if (!device) {
@@ -298,8 +352,8 @@ DeviceEditorDialog::slotApply()
                 << std::endl;
                           */
             } else {
-                std::string name = qstrtostr(m_table->text(i, LABEL_COL));
-                std::string conn = qstrtostr(m_table->text(i, CONNECTION_COL));
+				std::string name = qstrtostr(m_table->item(i, LABEL_COL)->text() );
+				std::string conn = qstrtostr(m_table->item(i, CONNECTION_COL)->text() );
                 if (device->getName() != name) {
                     command->addCommand(new RenameDeviceCommand
                                         (m_studio, deviceId, name));
@@ -323,7 +377,7 @@ DeviceEditorDialog::slotApply()
 int
 DeviceEditorDialog::getDeviceIdAt(int row) // -1 for new device w/o an id yet
 {
-    QString t(m_table->text(row, 0));
+	QString t( m_table->item(row, 0)->text() );
 
     QRegExp re("^.*(\\d+).*$");
     re.search(t);
@@ -331,7 +385,7 @@ DeviceEditorDialog::getDeviceIdAt(int row) // -1 for new device w/o an id yet
     QString number = re.cap(1);
     int id = -1;
 
-    if (number && number != "")
+    if ( ! number.isEmpty() )
     {
         id = number.toInt() - 1; // displayed device numbers are 1-based
     }
@@ -342,17 +396,26 @@ DeviceEditorDialog::getDeviceIdAt(int row) // -1 for new device w/o an id yet
 void
 DeviceEditorDialog::slotAddPlayDevice()
 {
-    int n = m_table->numRows();
-    m_table->insertRows(n, 1);
-    m_table->setText(n, 0, i18n("<new device>"));
-    m_table->setText(n, 1, i18n("New Device"));
-    m_table->setText(n, 2, i18n("Play"));
+    int n = m_table->rowCount();
+// 	m_table->insertRows(n, 1);
+	m_table->insertRow( n );
+	
+    m_table->setItem(n, 0, new QTableWidgetItem( i18n("<new device>")));
+	m_table->setItem(n, 1, new QTableWidgetItem( i18n("New Device")));
+	m_table->setItem(n, 2, new QTableWidgetItem( i18n("Play")));
 
+	/*
     QComboTableItem *item =
         new QComboTableItem(m_table, m_playConnections, false);
     item->setCurrentIndex(m_playConnections.size() - 1);
     m_table->setItem(n, 3, item);
-    m_table->adjustRow(n);
+	*/
+	QComboBox *combo;
+	combo->addItems( m_playConnections );
+	combo->setCurrentIndex( m_playConnections.size() - 1 );
+	m_table->setCellWidget( n, 3, combo );
+	
+//     m_table->adjustRow(n);	//&&&
 
     setModified(true);
 }
@@ -360,18 +423,27 @@ DeviceEditorDialog::slotAddPlayDevice()
 void
 DeviceEditorDialog::slotAddRecordDevice()
 {
-    int n = m_table->numRows();
-    m_table->insertRows(n, 1);
-    m_table->setText(n, 0, i18n("<new device>"));
-    m_table->setText(n, 1, i18n("New Device"));
-    m_table->setText(n, 2, i18n("Record"));
+    int n = m_table->rowCount();
+// 	m_table->insertRows(n, 1);
+	m_table->insertRow( n );
+	
+	m_table->setItem(n, 0, new QTableWidgetItem( i18n("<new device>")));
+	m_table->setItem(n, 1, new QTableWidgetItem( i18n("New Device")));
+	m_table->setItem(n, 2, new QTableWidgetItem( i18n("Record")));
 
+	/*
     QComboTableItem *item =
         new QComboTableItem(m_table, m_recordConnections, false);
     item->setCurrentIndex(m_recordConnections.size() - 1);
     m_table->setItem(n, 3, item);
-    m_table->adjustRow(n);
-
+	*/
+	QComboBox *combo;
+	combo->addItems( m_playConnections );
+	combo->setCurrentIndex( m_playConnections.size() - 1 );
+	m_table->setCellWidget( n, 3, combo );
+// 	m_table->adjustRow(n);	//&&&
+	
+	
     setModified(true);
 }
 

@@ -20,7 +20,7 @@
 #define _RG_MIDIDEVICELISTVIEWITEM_H_
 
 #include "base/Device.h"
-#include <QListWidget>
+#include <QTreeWidget>
 #include <QString>
 
 
@@ -29,26 +29,26 @@ namespace Rosegarden
 
 
 
-class MidiDeviceListViewItem : public QListWidgetItem
+class MidiDeviceListViewItem : public QTreeWidgetItem
 {
 public:
     // Device
     MidiDeviceListViewItem(DeviceId id,
-                           QListWidget* parent, QString name);
+                           QTreeWidget* parent, QString name);
 
     // Bank
     MidiDeviceListViewItem(DeviceId id,
-                           QListWidgetItem* parent, QString name,
+                           QTreeWidgetItem* parent, QString name,
                            bool percussion,
                            int msb, int lsb);
 
     // Key Mapping
     MidiDeviceListViewItem(DeviceId id,
-                           QListWidgetItem* parent, QString name);
+                           QTreeWidgetItem* parent, QString name);
 
     DeviceId getDeviceId() const { return m_deviceId; }
 
-    virtual int compare(QListWidgetItem *i, int col, bool ascending) const;
+    virtual int compare(QTreeWidgetItem *i, int col, bool ascending) const;
 
 protected:
 

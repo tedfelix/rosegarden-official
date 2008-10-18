@@ -52,6 +52,7 @@ public:
 
 	QWidget* addPage( const QString& iconLabel, const QString& title, const QIcon& icon );
 	
+	QTabWidget* m_tabWidget;
 	
 protected slots:
     virtual void slotOk();
@@ -64,7 +65,6 @@ protected:
 
     configurationpages m_configurationPages;
 	
-	QTabWidget* m_tabWidget;
 };
 
 

@@ -58,7 +58,9 @@
 #include <QSizePolicy>
 #include <QString>
 #include <QStringList>
-#include <Q3Table> //### switching to Q3Table will be complex, so screw that for now.
+#include <QTableWidget>
+#include <QTableWidgetItem>
+#include <QHeaderView>
 #include <QToolTip>
 #include <QWidget>
 #include <QShortcut>
@@ -97,17 +99,20 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
     QHBoxLayout *groupBoxLayout = new QHBoxLayout;
     mainLayout->addWidget(groupBox);
 
-    m_playTable = new Q3Table(0, 2, groupBox);
-    m_playTable->setSorting(false);
+    m_playTable = new QTableWidget(0, 2, groupBox);
+//     m_playTable->setSorting(false);
+	m_playTable->setSortingEnabled(false);
     m_playTable->setRowMovingEnabled(false);
     m_playTable->setColumnMovingEnabled(false);
     m_playTable->setShowGrid(false);
-    m_playTable->setHorizontalHeaderItem( PLAY_NAME_COL, i18n("Device"));
-    m_playTable->setHorizontalHeaderItem( PLAY_CONNECTION_COL, i18n("Connection"));
+	
+	m_playTable->setHorizontalHeaderItem( PLAY_NAME_COL, new QTableWidgetItem( i18n("Device")));
+	m_playTable->setHorizontalHeaderItem( PLAY_CONNECTION_COL, new QTableWidgetItem( i18n("Connection")));
+	
     m_playTable->horizontalHeader()->show();
     m_playTable->verticalHeader()->hide();
     m_playTable->setLeftMargin(0);
-    m_playTable->setSelectionMode(Q3Table::SingleRow);
+    m_playTable->setSelectionMode(QTableWidget::SingleRow);
     groupBoxLayout->addWidget(m_playTable);
 
     QFrame *frame = new QFrame(groupBox);
@@ -156,8 +161,9 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
     groupBoxLayout = new QHBoxLayout;
     mainLayout->addWidget(groupBox);
 
-    m_recordTable = new Q3Table(0, 3, groupBox);
-    m_recordTable->setSorting(false);
+    m_recordTable = new QTableWidget(0, 3, groupBox);
+//     m_recordTable->setSorting(false);
+	m_playTable->setSortingEnabled(false);
     m_recordTable->setRowMovingEnabled(false);
     m_recordTable->setColumnMovingEnabled(false);
     m_recordTable->setShowGrid(false);
@@ -167,7 +173,7 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
     m_recordTable->horizontalHeader()->show();
     m_recordTable->verticalHeader()->hide();
     m_recordTable->setLeftMargin(0);
-    m_recordTable->setSelectionMode(Q3Table::SingleRow);
+    m_recordTable->setSelectionMode(QTableWidget::SingleRow);
     groupBoxLayout->addWidget(m_recordTable);
 
     frame = new QFrame(groupBox);
@@ -250,9 +256,9 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
 	createAction( "edit_redo" );
 	
 	
-	rgTempQtIV->createGUI("devicemanager.rc");
+	rgTempQtIV->createGUI("devicemanager.rc",0);
 
-    m_document->getCommandHistory()->attachView(actionCollection());
+//     m_document->getCommandHistory()->attachView(actionCollection());	//&&&
     connect(m_document->getCommandHistory(), SIGNAL(commandExecuted()),
             this, SLOT(populate()));
 

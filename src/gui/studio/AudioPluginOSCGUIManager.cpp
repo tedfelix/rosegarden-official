@@ -382,7 +382,7 @@ AudioPluginOSCGUIManager::parseOSCPath(QString path, InstrumentId &instrument,
     QString label = path.section('/', 3, -2);
     method = path.section('/', -1, -1);
 
-    if (instrumentStr.isEmtpy() || positionStr.isEmpty() ) {
+    if (instrumentStr.isEmpty() || positionStr.isEmpty() ) {
         RG_DEBUG << "AudioPluginOSCGUIManager::parseOSCPath: no instrument or position in " << path << endl;
         return false;
     }

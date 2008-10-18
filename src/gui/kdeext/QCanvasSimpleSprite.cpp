@@ -12,11 +12,12 @@
     License, or (at your option) any later version.  See the file
     COPYING included with this distribution for more information.
 */
-
+#include <Q3PtrList>
 #include <Q3Canvas>
 #include <Q3CanvasPixmap>
 #include <Q3CanvasPixmapArray>
 #include <Q3CanvasSprite>
+
 #include <vector>
 #include "misc/Debug.h"
 
@@ -80,36 +81,55 @@ QCanvasSimpleSprite::~QCanvasSimpleSprite()
 Q3CanvasPixmapArray*
 QCanvasSimpleSprite::makePixmapArray(QPixmap *pixmap)
 {
-    QList<QPixmap*> pixlist;
-    pixlist.setAutoDelete(true); // the Q3CanvasPixmapArray creates its
+// 	QList<QPixmap*> pixlist;	// qt4
+	Q3PtrList<QPixmap> pixlist;
+	
+//     pixlist.setAutoDelete(true);	//&&&	
+	// the Q3CanvasPixmapArray creates its
     // own copies of the pixmaps, so we
     // can delete the one we're passed
-    pixlist.append(pixmap);
+	
+    pixlist.append( pixmap );
 
 // 	QList<QPoint*> spotlist;
-	QPolygon spotlist;
+// 	QPolygon spotlist;
+	Q3PtrList<QPoint> spotlist;
 	
-    spotlist.setAutoDelete(true);
-    spotlist.append(new QPoint(0, 0));
+//     spotlist.setAutoDelete(true);	//&&&
+	
+ 	spotlist.append( new QPoint(0, 0) );
+// 	spotlist << QPoint(0, 0);
 
-	return new Q3CanvasPixmapArray(pixlist, spotlist );
-// 	return new Q3CanvasPixmapArray(pixlist, Q3PointArray(spotlist) );
+ 	return new Q3CanvasPixmapArray( pixlist, spotlist );
+	//
+	// possible calls:
+	//return new Q3CanvasPixmapArray(Q3ValueList<QPixmap>, Q3PointArray );
+	//return new Q3CanvasPixmapArray(Q3PtrList<QPixmap>, Q3PtrList<QPoint> );
 }
 
 Q3CanvasPixmapArray*
 QCanvasSimpleSprite::makePixmapArray(Q3CanvasPixmap *pixmap)
 {
-    QList<QPixmap*> pixlist;
-    pixlist.setAutoDelete(true); // the Q3CanvasPixmapArray creates its
+//     QList<QPixmap*> pixlist;		// qt4
+	Q3PtrList<QPixmap> pixlist;
+	
+//     pixlist.setAutoDelete(true);	//&&&
+	// the Q3CanvasPixmapArray creates its
     // own copies of the pixmaps, so we
     // can delete the one we're passed
-    pixlist.append(pixmap);
+	
+	pixlist.append(pixmap);
 
-    QList<QPoint*> spotlist;
-    spotlist.setAutoDelete(true);
-    spotlist.append(new QPoint(pixmap->offsetX(), pixmap->offsetY()));
-
-    return new Q3CanvasPixmapArray(pixlist, spotlist);
+// 	QList<QPoint*> spotlist;
+// 	QPolygon spotlist;
+	Q3PtrList<QPoint> spotlist;
+	
+// 	spotlist.setAutoDelete(true);	//&&&
+	
+ 	spotlist.append(new QPoint(pixmap->offsetX(), pixmap->offsetY()) );
+//	spotlist << QPoint(pixmap->offsetX(), pixmap->offsetY()) ;
+	
+	return new Q3CanvasPixmapArray( pixlist, spotlist );
 }
 
 Q3CanvasPixmapArray*

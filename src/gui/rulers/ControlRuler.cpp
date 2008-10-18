@@ -66,7 +66,7 @@ ControlRuler::ControlRuler(Segment *segment,
                            EditViewBase* parentView,
                            Q3Canvas* c, QWidget* parent
 						  ) :
-        RosegardenCanvasView(c, parent), // name, f),
+		RosegardenCanvasView(c, parent), // name, f),	// note: base class is Q3CanvasView
         m_parentEditView(parentView),
         m_mainHorizontalScrollBar(0),
         m_rulerScale(rulerScale),
@@ -83,8 +83,8 @@ ControlRuler::ControlRuler(Segment *segment,
         m_selectionRect(new Q3CanvasRectangle(canvas())),
         m_menu(0)
 {
-//     setHScrollBarMode(QScrollArea::AlwaysOff);
-	setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+	setHScrollBarMode(Q3ScrollView::AlwaysOff);	// Q3 compatible mode
+// 	setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );	// qt4
 
     m_selectionRect->setPen(QColor(Qt::red));
 
@@ -219,7 +219,7 @@ void ControlRuler::contentsMousePressEvent(QMouseEvent* e)
 
             } else { // select it
 
-                if (!(e->state() && Qt::CTRL ){		//@@@ QMouseEvent::ControlButton)) {
+                if (!(e->state() && Qt::CTRL) ){		//@@@ QMouseEvent::ControlButton)) {
                     if (item->z() > topItem->z())
                         topItem = item;
 
@@ -398,8 +398,9 @@ void ControlRuler::createMenu()
 
     QMainWindow* parentMainWindow = dynamic_cast<QMainWindow*>(topLevelWidget());
 
-    if (parentMainWindow && parentMainWindow->factory()) {
-        m_menu = static_cast<QMenu*>(parentMainWindow->factory()->container(m_menuName, parentMainWindow));
+    if (parentMainWindow ) { 	// parentMainWindow->factory()) {
+// 		m_menu = static_cast<QMenu*>(parentMainWindow->factory()->container(m_menuName, parentMainWindow));
+		m_menu = parentMainWindow->findChild<QMenu*>(m_menuName);
 
         if (!m_menu) {
             RG_DEBUG << "ControlRuler::createMenu() failed\n";

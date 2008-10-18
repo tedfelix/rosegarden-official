@@ -59,8 +59,8 @@
 #include <klocale.h>
 //#include <kstandarddirs.h>
 //#include <kglobal.h>
-#include <kxmlguiclient.h>
-#include <kxmlguifactory.h>
+// #include <kxmlguiclient.h>
+// #include <kxmlguifactory.h>
 
 
 namespace Rosegarden
@@ -1082,10 +1082,11 @@ TempoRuler::createMenu()
 {
     setXMLFile("temporuler.rc");
     
-    KXMLGUIFactory* factory = m_parentMainWindow->factory();
-    factory->addClient(this);
+//     KXMLGUIFactory* factory = m_parentMainWindow->factory();	//&&&
+//     factory->addClient(this);
 
-    QWidget* tmp = factory->container("tempo_ruler_menu", this);
+//     QWidget* tmp = factory->container("tempo_ruler_menu", this);
+	QWidget* tmp = this->findChild<QWidget*>( "tempo_ruler_menu" );
 
     m_menu = dynamic_cast<QMenu*>(tmp);
         

@@ -33,8 +33,11 @@
 #include <QTabWidget>
 #include <QToolTip>
 #include <QWidget>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QLineEdit>
 #include <iostream>
 
 namespace Rosegarden
@@ -141,7 +144,7 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
                     m_entryButtons.push_back(button);
                 }
 
-                KLineEdit* lineEdit = new KLineEdit(numBox, numberText);
+                QLineEdit* lineEdit = new QLineEdit(numBox, numberText);
                 numBoxLayout->addWidget(lineEdit);
                 numBox->setLayout(numBoxLayout);
                 lineEdit->setMinimumWidth(110);

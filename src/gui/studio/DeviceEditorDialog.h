@@ -26,7 +26,7 @@
 
 class QWidget;
 class QTableWidget;
-
+class QDialogButtonBox;
 
 namespace Rosegarden
 {
@@ -64,6 +64,7 @@ private:
 			    QStringList &list);
     
     QTableWidget *m_table;
+	QDialogButtonBox *m_buttonBox;
 
     DeviceList m_devices;
     std::set<DeviceId> m_deletedDevices;

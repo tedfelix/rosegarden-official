@@ -77,10 +77,11 @@
 #include <QDragMoveEvent>
 #include <QDropEvent>
 
-//#include <QMimeData>	// replaces Q3DragObject
+//#include <QMimeData>	// replaces Q3DragObject and Q3UriDrag
 #include <Q3DragObject>
 #include <Q3UriDrag>
 #include <Q3TextDrag>
+#include <Q3StrList>
 
 
 namespace Rosegarden
@@ -706,8 +707,10 @@ void TrackEditor::dragEnterEvent(QDragEnterEvent *event)
 
 void TrackEditor::dropEvent(QDropEvent* event)
 {
-    QStringList uri;
-    QString text;
+// 	QStringList uri;		// qt4
+	QList<QByteArray> uri;	// for Q3StrList
+	
+	QString text;
 
     int heightAdjust = 0;
     //int widthAdjust = 0;
@@ -745,7 +748,7 @@ void TrackEditor::dropEvent(QDropEvent* event)
         m_segmentCanvas->grid().snapX(posInSegmentCanvas.x());
 
 
-    if (Q3UriDrag::decode(event, uri)) {
+    if (Q3UriDrag::decode(event, Q3StrList(uri)) ){
         RG_DEBUG << "TrackEditor::dropEvent() : got URI :"
         << uri.first() << endl;
         QString uriPath = uri.first();
@@ -754,9 +757,10 @@ void TrackEditor::dropEvent(QDropEvent* event)
             emit droppedDocument(uriPath);
         } else {
 
-            QStringList uris;
+//             QStringList uris;	// qt4
+			QList<QByteArray>	uris;	// for Q3StrList
             QString uri;
-            if (Q3UriDrag::decode(event, uris)) uri = uris.first();
+            if (Q3UriDrag::decode(event, Q3StrList(uris))) uri = uris.first();
 //            QUriDrag::decodeLocalFiles(event, files);
 //            QString filePath = files.first();
 
