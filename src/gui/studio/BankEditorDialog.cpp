@@ -1058,7 +1058,7 @@ BankEditorDialog::slotAddBank()
             setProgramList(device);
         }
 
-        std::pair<int, int> bank = getFirstFreeBank(m_listView->currentIndex());
+        std::pair<int, int> bank = getFirstFreeBank(m_listView->currentItem());
 
         MidiBank newBank(false,
                          bank.first, bank.second,
@@ -1579,12 +1579,18 @@ BankEditorDialog::slotImport()
  * QFileDialogs are incredibly crappy looking and disgustingly GNOMEish to make
  * up for the reduced functionality.  Oh, wait.
  */
-
+	
+	/*
     QUrl url = QFileDialog::getOpenURL
                (deviceDir,
                 "audio/x-rosegarden-device audio/x-rosegarden audio/x-soundfont",
                 this, i18n("Import Banks from Device in File"));
-
+	*/
+	
+	//### use simple file dialog for now:
+	QString url_str = QFileDialog::getOpenFileName( this, i18n("Import Banks from Device in File"), deviceDir );
+	QUrl url( url_str );
+	
     if (url.isEmpty())
         return ;
 

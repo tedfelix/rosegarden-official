@@ -63,6 +63,8 @@
 #include <QHeaderView>
 #include <QToolTip>
 #include <QWidget>
+#include <QComboBox>
+#include <QCheckBox>
 #include <QShortcut>
 
 #include <klocale.h>
@@ -102,17 +104,23 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
     m_playTable = new QTableWidget(0, 2, groupBox);
 //     m_playTable->setSorting(false);
 	m_playTable->setSortingEnabled(false);
-    m_playTable->setRowMovingEnabled(false);
+	/*
+    m_playTable->setRowMovingEnabled(false);	//&&&
     m_playTable->setColumnMovingEnabled(false);
-    m_playTable->setShowGrid(false);
+	*/
+	m_playTable->setShowGrid(false);
 	
 	m_playTable->setHorizontalHeaderItem( PLAY_NAME_COL, new QTableWidgetItem( i18n("Device")));
 	m_playTable->setHorizontalHeaderItem( PLAY_CONNECTION_COL, new QTableWidgetItem( i18n("Connection")));
 	
     m_playTable->horizontalHeader()->show();
     m_playTable->verticalHeader()->hide();
-    m_playTable->setLeftMargin(0);
-    m_playTable->setSelectionMode(QTableWidget::SingleRow);
+	
+// 	m_playTable->setLeftMargin(0);
+	m_playTable->setContentsMargins(0, 4, 0, 4);	// left, top, right, bottom
+	
+	//     m_playTable->setSelectionMode(QTableWidget::SingleRow);
+	m_playTable->setSelectionBehavior( QAbstractItemView::SelectRows );
     groupBoxLayout->addWidget(m_playTable);
 
     QFrame *frame = new QFrame(groupBox);
@@ -164,16 +172,26 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
     m_recordTable = new QTableWidget(0, 3, groupBox);
 //     m_recordTable->setSorting(false);
 	m_playTable->setSortingEnabled(false);
-    m_recordTable->setRowMovingEnabled(false);
+	m_recordTable->setShowGrid(false);
+	/*
+    m_recordTable->setRowMovingEnabled(false);		//&&&
     m_recordTable->setColumnMovingEnabled(false);
-    m_recordTable->setShowGrid(false);
-    m_recordTable->setHorizontalHeaderItem( RECORD_NAME_COL, i18n("Device"));
-    m_recordTable->setHorizontalHeaderItem( RECORD_CURRENT_COL, i18n("Current"));
-    m_recordTable->setHorizontalHeaderItem( RECORD_CONNECTION_COL, i18n("Connection"));
+	*/
+	
+    m_recordTable->setHorizontalHeaderItem( RECORD_NAME_COL, new QTableWidgetItem( i18n("Device")));
+	m_recordTable->setHorizontalHeaderItem( RECORD_CURRENT_COL, new QTableWidgetItem( i18n("Current")));
+	m_recordTable->setHorizontalHeaderItem( RECORD_CONNECTION_COL, new QTableWidgetItem( i18n("Connection")));
+	
     m_recordTable->horizontalHeader()->show();
     m_recordTable->verticalHeader()->hide();
-    m_recordTable->setLeftMargin(0);
-    m_recordTable->setSelectionMode(QTableWidget::SingleRow);
+	
+// 	m_recordTable->setLeftMargin(0);
+	m_recordTable->setContentsMargins(0, 4, 0, 4);	// left, top, right, bottom
+	
+//     m_recordTable->setSelectionMode(QTableWidget::SingleRow);
+	m_recordTable->setSelectionBehavior( QAbstractItemView::SelectRows );
+// 	m_recordTable->setSelectionMode( QAbstractItemView::ExtendedSelection );
+	
     groupBoxLayout->addWidget(m_recordTable);
 
     frame = new QFrame(groupBox);
@@ -259,13 +277,13 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
 	rgTempQtIV->createGUI("devicemanager.rc",0);
 
 //     m_document->getCommandHistory()->attachView(actionCollection());	//&&&
-    connect(m_document->getCommandHistory(), SIGNAL(commandExecuted()),
-            this, SLOT(populate()));
+//     connect(m_document->getCommandHistory(), SIGNAL(commandExecuted()),//&&&
+//             this, SLOT(populate()));
 
     m_playTable->setCurrentCell( -1, 0);
     m_recordTable->setCurrentCell( -1, 0);
 
-    setAutoSaveSettings(DeviceManagerConfigGroup, true);
+//     setAutoSaveSettings(DeviceManagerConfigGroup, true);		//&&&
 
     //    enableButtonOK(false);
     //    enableButtonApply(false);
@@ -275,7 +293,7 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
 DeviceManagerDialog::~DeviceManagerDialog()
 {
     if (m_document) {
-        m_document->getCommandHistory()->detachView(actionCollection());
+//         m_document->getCommandHistory()->detachView(actionCollection());		//&&&
         m_document = 0;
     }
     
@@ -286,7 +304,7 @@ void
 DeviceManagerDialog::slotClose()
 {
     if (m_document) {
-        m_document->getCommandHistory()->detachView(actionCollection());
+//         m_document->getCommandHistory()->detachView(actionCollection());	//&&&
         m_document = 0;
     }
 
@@ -330,11 +348,11 @@ DeviceManagerDialog::populate()
         }
     }
 
-    while (m_playTable->numRows() > 0) {
-        m_playTable->removeRow(m_playTable->numRows() - 1);
+	while (m_playTable->rowCount() > 0) {
+        m_playTable->removeRow(m_playTable->rowCount() - 1);
     }
-    while (m_recordTable->numRows() > 0) {
-        m_recordTable->removeRow(m_recordTable->numRows() - 1);
+	while (m_recordTable->rowCount() > 0) {
+		m_recordTable->removeRow(m_recordTable->rowCount() - 1);
     }
 
     int deviceCount = 0;
@@ -342,31 +360,41 @@ DeviceManagerDialog::populate()
     for (MidiDeviceList::iterator it = m_playDevices.begin();
          it != m_playDevices.end(); ++it) {
 
-        m_playTable->insertRows(deviceCount, 1);
-
+// 		 m_playTable->insertRows(deviceCount, 1);
+		 m_playTable->insertRow(deviceCount);
+		
         QString deviceName = i18n("%1", deviceCount + 1);
         QString connectionName = strtoqstr((*it)->getConnection());
 
-        m_playTable->setText(deviceCount, PLAY_NAME_COL,
-                             strtoqstr((*it)->getName()));
-
+// 		m_playTable->setText(deviceCount, PLAY_NAME_COL, strtoqstr((*it)->getName()));
+		m_playTable->item(deviceCount, PLAY_NAME_COL)->setText( strtoqstr((*it)->getName()) );
+		// or:
+		//m_playTable->setItem(deviceCount, PLAY_NAME_COL, new QTableWidgetItem(strtoqstr((*it)->getName())) );
+		
         int currentConnectionIndex = m_playConnections.size() - 1;
         for (unsigned int i = 0; i < m_playConnections.size(); ++i) {
             if (m_playConnections[i] == connectionName)
                 currentConnectionIndex = i;
         }
 
+		/*
         Q3ComboTableItem *item = new Q3ComboTableItem(m_playTable, m_playConnections, false);
         item->setCurrentIndex(currentConnectionIndex);
         m_playTable->setItem(deviceCount, PLAY_CONNECTION_COL, item);
+		*/
+		QComboBox *combo = new QComboBox( m_playTable );
+		combo->addItems( m_playConnections );
+		combo->setCurrentIndex( currentConnectionIndex );
+		m_playTable->setCellWidget( deviceCount, PLAY_CONNECTION_COL, combo );
 
-        m_playTable->adjustRow(deviceCount);
+//         m_playTable->adjustRow(deviceCount);	//&&&
         ++deviceCount;
     }
 
     int minPlayColumnWidths[] = { 250, 270 };
     for (int i = 0; i < 2; ++i) {
-        m_playTable->adjustColumn(i);
+//         m_playTable->adjustColumn(i);	//&&&
+		
         if (m_playTable->columnWidth(i) < minPlayColumnWidths[i])
             m_playTable->setColumnWidth(i, minPlayColumnWidths[i]);
     }
@@ -376,24 +404,36 @@ DeviceManagerDialog::populate()
     for (MidiDeviceList::iterator it = m_recordDevices.begin();
          it != m_recordDevices.end(); ++it) {
 
-        m_recordTable->insertRows(deviceCount, 1);
+// 		 m_recordTable->insertRows(deviceCount, 1);
+		 m_recordTable->insertRow(deviceCount);
 
         QString deviceName = i18n("%1", deviceCount + 1);
         QString connectionName = strtoqstr((*it)->getConnection());
 
-        m_recordTable->setText(deviceCount, RECORD_NAME_COL,
-                               strtoqstr((*it)->getName()));
+//         m_recordTable->setText(deviceCount, RECORD_NAME_COL, strtoqstr((*it)->getName()));
+		m_recordTable->item(deviceCount, RECORD_NAME_COL)->setText( strtoqstr((*it)->getName()) );
+		// or:
+		//m_recordTable->setItem(deviceCount, RECORD_NAME_COL, new QTableWidgetItem(strtoqstr((*it)->getName())) );
+		
 
         int currentConnectionIndex = m_recordConnections.size() - 1;
         for (unsigned int i = 0; i < m_recordConnections.size(); ++i) {
             if (m_recordConnections[i] == connectionName)
                 currentConnectionIndex = i;
         }
-
+		
+		/*
         Q3ComboTableItem *item = new Q3ComboTableItem(m_recordTable, m_recordConnections, false);
         item->setCurrentIndex(currentConnectionIndex);
         m_recordTable->setItem(deviceCount, RECORD_CONNECTION_COL, item);
-
+		*/
+		
+		QComboBox *	combo = new QComboBox( m_recordTable );
+		combo->addItems( m_recordConnections );
+		combo->setCurrentIndex( currentConnectionIndex );
+		m_playTable->setCellWidget( deviceCount, RECORD_CONNECTION_COL, combo );
+		
+		/*
         Q3CheckTableItem *check = new Q3CheckTableItem(m_recordTable, QString());
         //check->setChecked((*it)->getId() == recordDevice);
         //check->setText(((*it)->getId() == recordDevice) ?
@@ -401,14 +441,21 @@ DeviceManagerDialog::populate()
         check->setChecked((*it)->isRecording());
         check->setText((*it)->isRecording() ? i18n("Yes") : i18n("No"));
         m_recordTable->setItem(deviceCount, RECORD_CURRENT_COL, check);
+		*/
 
-        m_recordTable->adjustRow(deviceCount);
+		QCheckBox *check = new QCheckBox( m_recordTable );
+		check->setChecked( (*it)->isRecording() );
+		check->setText( (*it)->isRecording() ? i18n("Yes") : i18n("No") );
+		m_recordTable->setCellWidget( deviceCount, RECORD_CURRENT_COL, check );		
+
+//         m_recordTable->adjustRow(deviceCount);	//&&&
         ++deviceCount;
     }
 
     int minRecordColumnWidths[] = { 180, 70, 270 };
     for (int i = 0; i < 3; ++i) {
-        m_recordTable->adjustColumn(i);
+//         m_recordTable->adjustColumn(i);	//&&&
+		
         if (m_recordTable->columnWidth(i) < minRecordColumnWidths[i])
             m_recordTable->setColumnWidth(i, minRecordColumnWidths[i]);
     }
@@ -533,7 +580,7 @@ DeviceManagerDialog::slotPlayValueChanged(int row, int col)
     switch (col) {
 
     case PLAY_NAME_COL: {
-        std::string name = qstrtostr(m_playTable->text(row, col));
+        std::string name = qstrtostr(m_playTable->item(row, col)->text() );
         if (device->getName() != name) {
 
             m_document->getCommandHistory()->addCommand
@@ -541,13 +588,13 @@ DeviceManagerDialog::slotPlayValueChanged(int row, int col)
             emit deviceNamesChanged();
 
             RosegardenSequencer::getInstance()->
-                renameDevice(id, m_playTable->text(row, col));
+					renameDevice(id, m_playTable->item(row, col)->text() );
         }
     }
         break;
 
     case PLAY_CONNECTION_COL: {
-        std::string connection = qstrtostr(m_playTable->text(row, col));
+		std::string connection = qstrtostr(m_playTable->item(row, col)->text() );
         if (connection == qstrtostr(m_noConnectionString))
             connection = "";
         if (device->getConnection() != connection) {
@@ -579,7 +626,7 @@ DeviceManagerDialog::slotRecordValueChanged(int row, int col)
     switch (col) {
 
     case RECORD_NAME_COL: {
-        std::string name = qstrtostr(m_recordTable->text(row, col));
+		std::string name = qstrtostr(m_recordTable->item(row, col)->text() );
         if (device->getName() != name) {
 
             m_document->getCommandHistory()->addCommand
@@ -587,13 +634,13 @@ DeviceManagerDialog::slotRecordValueChanged(int row, int col)
             emit deviceNamesChanged();
 
             RosegardenSequencer::getInstance()->
-                renameDevice(id, m_recordTable->text(row, col));
+					renameDevice(id, m_recordTable->item(row, col)->text() );
         }
     }
         break;
 
     case RECORD_CONNECTION_COL: {
-        std::string connection = qstrtostr(m_recordTable->text(row, col));
+		std::string connection = qstrtostr(m_recordTable->item(row, col)->text() );
         if (device->getConnection() != connection) {
             m_document->getCommandHistory()->addCommand
                 (new ReconnectDeviceCommand(m_studio, id, connection));
@@ -603,9 +650,11 @@ DeviceManagerDialog::slotRecordValueChanged(int row, int col)
 
     case RECORD_CURRENT_COL: {
         m_recordTable->blockSignals(true);
-
-        Q3CheckTableItem *check =
-            dynamic_cast<Q3CheckTableItem *>(m_recordTable->item(row, col));
+		
+		
+        QCheckBox *check =
+            dynamic_cast<QCheckBox *>(m_recordTable->item(row, col));
+		
         if (!check)
             return ;
 
@@ -659,7 +708,10 @@ DeviceManagerDialog::slotImport()
     if (id == Device::NO_DEVICE)
         return ;
 
-    QString deviceDir = KGlobal::dirs()->findResource("appdata", "library/");
+//     QString deviceDir = KGlobal::dirs()->findResource("appdata", "library/");
+	IconLoader il;
+	QString deviceDir = il.getResourcePath( "library" );
+	
     QDir dir(deviceDir);
     if (!dir.exists()) {
         deviceDir = ":ROSEGARDENDEVICE";
@@ -667,14 +719,21 @@ DeviceManagerDialog::slotImport()
         deviceDir = "file://" + deviceDir;
     }
 
+	/*
     KURL url = KFileDialog::getOpenURL
         (deviceDir,
          "audio/x-rosegarden-device audio/x-rosegarden audio/x-soundfont",
          this, i18n("Import from Device in File"));
+	*/
+	//### use simple file dialog for now:
+	QString url_str = QFileDialog::getOpenFileName( this, i18n("Import from Device in File"), deviceDir );
 
+	QUrl url( url_str );
+	
     if (url.isEmpty())
         return ;
-
+	
+	
     ImportDeviceDialog *dialog = new ImportDeviceDialog(this, url);
     if (dialog->doImport() && dialog->exec() == QDialog::Accepted) {
 
