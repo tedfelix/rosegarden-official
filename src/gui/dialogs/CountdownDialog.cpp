@@ -42,8 +42,11 @@ CountdownDialog::CountdownDialog(QWidget *parent, int seconds):
         m_progressBarHeight(15)
 
 {
-    QBoxLayout *layout = new QBoxLayout(this, QBoxLayout::TopToBottom, 10, 14);
-    setCaption(i18n("Recording..."));
+    setContentsMargins(10, 10, 10, 10);
+    QBoxLayout *layout = new QBoxLayout(QBoxLayout::TopToBottom, this);
+    layout->setSpacing(14);
+
+    setWindowTitle(i18n("Recording..."));
 
     QWidget *hBox = new QWidget(this);
     QHBoxLayout *hBoxLayout = new QHBoxLayout;
@@ -68,6 +71,7 @@ CountdownDialog::CountdownDialog(QWidget *parent, int seconds):
 
     layout->addWidget(m_progressBar, 0, Qt::AlignCenter);
     layout->addWidget(m_stopButton, 0, Qt::AlignRight);
+    setLayout(layout);
 
     connect (m_stopButton, SIGNAL(released()), this, SIGNAL(stopped()));
 

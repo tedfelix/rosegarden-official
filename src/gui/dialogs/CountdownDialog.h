@@ -20,8 +20,6 @@
 #define _RG_COUNTDOWNDIALOG_H_
 
 #include <QDialog>
-#include <QDialogButtonBox>
-#include <QDialog>
 
 
 class QWidget;
@@ -37,12 +35,12 @@ namespace Rosegarden
 class CountdownBar;
 
 
-class CountdownDialog : public QDialog // KDialogBase
+class CountdownDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    CountdownDialog(QDialogButtonBox::QWidget *parent, int seconds = 300);
+    CountdownDialog(QWidget *parent, int seconds = 300);
 
     void setLabel(const QString &label);
     void setElapsedTime(int seconds);
