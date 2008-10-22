@@ -90,8 +90,9 @@ void SegmentMover::handleMouseButtonPress(QMouseEvent *e)
             !m_canvas->getModel()->isSelected(item) && !selector->isSegmentAdding()) {
         m_canvas->getModel()->clearSelected();
         m_canvas->getModel()->signalSelection();
-        m_canvas->updateContents();
-    }
+// 		m_canvas->updateContents();
+		m_canvas->update();
+	}
 
     if (item) {
 
@@ -120,7 +121,8 @@ void SegmentMover::handleMouseButtonPress(QMouseEvent *e)
             m_canvas->getModel()->startChange(item, CompositionModel::ChangeMove);
         }
 
-        m_canvas->updateContents();
+// 		m_canvas->updateContents();
+		m_canvas->update();
 
         m_passedInertiaEdge = false;
 
@@ -130,8 +132,9 @@ void SegmentMover::handleMouseButtonPress(QMouseEvent *e)
         RG_DEBUG << "SegmentMover::handleMouseButtonPress() : clear selection\n";
         m_canvas->getModel()->clearSelected();
         m_canvas->getModel()->signalSelection();
-        m_canvas->updateContents();
-    }
+// 		m_canvas->updateContents();
+		m_canvas->update();
+	}
 
 }
 
@@ -326,7 +329,8 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
         .arg(bar + 1).arg(beat).arg(fraction);
 
     m_canvas->setTextFloat(guideX + 10, guideY - 30, posString);
-    m_canvas->updateContents();
+// 	m_canvas->updateContents();
+	m_canvas->update();
 
     return RosegardenCanvasView::FollowHorizontal | RosegardenCanvasView::FollowVertical;
 }

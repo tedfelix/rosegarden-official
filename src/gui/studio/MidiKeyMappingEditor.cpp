@@ -15,10 +15,11 @@
     COPYING included with this distribution for more information.
 */
 
+#include <kcompletion.h>
+#include <klocale.h>
 
 #include "MidiKeyMappingEditor.h"
 
-#include <klocale.h>
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "BankEditorDialog.h"
@@ -27,8 +28,8 @@
 #include "base/NotationTypes.h"
 #include "MidiKeyMapListViewItem.h"
 #include "NameSetEditor.h"
-#include <kcompletion.h>
-#include <klineedit.h>
+
+#include <QLineEdit>
 #include <QFrame>
 #include <QLayout>
 #include <QLabel>
@@ -37,6 +38,8 @@
 #include <QPushButton>
 #include <QString>
 #include <QWidget>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
 
 
 namespace Rosegarden
@@ -78,7 +81,7 @@ MidiKeyMappingEditor::clearAll()
 }
 
 void
-MidiKeyMappingEditor::populate(QListWidgetItem* item)
+MidiKeyMappingEditor::populate(QTreeWidgetItem* item)
 {
     RG_DEBUG << "MidiKeyMappingEditor::populate\n";
 
@@ -148,7 +151,7 @@ MidiKeyMappingEditor::reset()
 void
 MidiKeyMappingEditor::slotNameChanged(const QString& name)
 {
-    const KLineEdit* lineEdit = dynamic_cast<const KLineEdit*>(sender());
+    const QLineEdit* lineEdit = dynamic_cast<const QLineEdit*>(sender());
     if (!lineEdit) {
         RG_DEBUG << "MidiKeyMappingEditor::slotNameChanged() : %%% ERROR - signal sender is not a KLineEdit\n";
         return ;
@@ -175,8 +178,8 @@ MidiKeyMappingEditor::slotEntryButtonPressed()
 
 void MidiKeyMappingEditor::blockAllSignals(bool block)
 {
-    const QObjectList* allChildren = queryList("KLineEdit", "[0-9]+");
-    QObjectListIt it(*allChildren);
+    const QObjectList allChildren = queryList("QLineEdit", "[0-9]+");
+    QObjectListIterator it(*allChildren);
     QObject *obj;
 
     while ( (obj = it.current()) != 0 ) {

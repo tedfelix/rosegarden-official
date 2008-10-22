@@ -17,9 +17,9 @@
 
 
 #include "SynthPluginManagerDialog.h"
-#include <QLayout>
 
 #include <klocale.h>
+
 #include "misc/Debug.h"
 #include "AudioPlugin.h"
 #include "AudioPluginManager.h"
@@ -30,10 +30,13 @@
 #include "base/Studio.h"
 #include "document/RosegardenGUIDoc.h"
 #include "document/ConfigGroups.h"
+#include "misc/Strings.h"
+
+
 #include <QAction>
+#include <QLayout>
 #include <QComboBox>
 #include <QMainWindow>
-#include <kstandardaction.h>
 #include <QFrame>
 #include <QGroupBox>
 #include <QLabel>
@@ -174,18 +177,21 @@ SynthPluginManagerDialog::SynthPluginManagerDialog(QWidget *parent,
         layout->addWidget(closeButton);
         layout->addSpacing(5);
 
-        KAction* close = KStandardAction::close(this,
-                                           SLOT(slotClose()),
-                                           actionCollection());
+//         KAction* close = KStandardAction::close(this,
+//                                            SLOT(slotClose()),
+//                                            actionCollection());
+		
+		QAction *close;
+		close = createAction( "file_close", SLOT(slotClose()) );
 
         closeButton->setText(close->text());
         connect(closeButton, SIGNAL(clicked()), this, SLOT(slotClose()));
 
         mainLayout->addWidget(btnBox);
 
-        createGUI("synthpluginmanager.rc");
+        rgTempQtIV->createGUI("synthpluginmanager.rc");
 
-        setAutoSaveSettings(SynthPluginManagerConfigGroup, true);
+//         setAutoSaveSettings(SynthPluginManagerConfigGroup, true);	//&&&
     }
 
     SynthPluginManagerDialog::~SynthPluginManagerDialog()
@@ -319,7 +325,7 @@ SynthPluginManagerDialog::SynthPluginManagerDialog(QWidget *parent,
 
                 if (plugin) {
                     RG_DEBUG << "plugin is " << plugin->getIdentifier() << endl;
-                    pluginInstance->setIdentifier(plugin->getIdentifier().data());
+                    pluginInstance->setIdentifier( qstrtostr(plugin->getIdentifier()) );
 
                     // set ports to defaults
 

@@ -21,13 +21,19 @@
 #include "misc/Debug.h"
 #include "gui/widgets/AudioListItem.h"
 
-#include "<Q3DragObject>"
+#include <Q3DragObject>
+#include <Q3UriDrag>
+#include <QTextDrag>
+
+// #include <QMimeData>	// qt4: replaces Q3DragObject and Q3UriDrag
+
 
 namespace Rosegarden {
         
 AudioListView::AudioListView(QWidget *parent, const char *name)
-    : QTreeWidget(parent, name)
+    : QTreeWidget(parent)
 {
+	setObjectName( name );
     setDragEnabled(true);
     setAcceptDrops(true);
     setDropVisualizer(false);
@@ -35,12 +41,12 @@ AudioListView::AudioListView(QWidget *parent, const char *name)
 
 bool AudioListView::acceptDrag(QDropEvent* e) const
 {
-    return QUriDrag::canDecode(e) || QTreeWidget::acceptDrag(e);
+    return Q3UriDrag::canDecode(e) || QTreeWidget::acceptDrag(e);
 }
 
-QDragObject* AudioListView::dragObject()
+Q3DragObject* AudioListView::dragObject()
 {
-    AudioListItem* item = dynamic_cast<AudioListItem*>(currentIndex());
+    AudioListItem* item = dynamic_cast<AudioListItem*>(currentItem());
 
     QString audioData;
     QTextOStream ts(&audioData);

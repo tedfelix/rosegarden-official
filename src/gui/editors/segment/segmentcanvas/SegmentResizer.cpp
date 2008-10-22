@@ -171,8 +171,10 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent *e)
                     
                     addCommandToHistory(command);
 
-                    progressDlg.setLabel(i18n("Generating audio preview..."));
-                    command->disconnectProgressDialog(&progressDlg);
+// 					progressDlg.setLabel( new QLabel(i18n("Generating audio preview..."), this, Qt::Tool) );
+					progressDlg.setLabelText( i18n("Generating audio preview...") );
+					
+					command->disconnectProgressDialog(&progressDlg);
                     connect(&m_doc->getAudioFileManager(), SIGNAL(setValue(int)),
                             progressDlg.progressBar(), SLOT(setValue(int)));
                     connect(&progressDlg, SIGNAL(cancelClicked()),
@@ -227,8 +229,10 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent *e)
     }
 
     m_canvas->getModel()->endChange();
-    m_canvas->updateContents();
-    setChangeMade(false);
+// 	m_canvas->updateContents();
+	m_canvas->update();
+	
+	setChangeMade(false);
     m_currentIndex = CompositionItem();
     setBasicContextHelp();
 }

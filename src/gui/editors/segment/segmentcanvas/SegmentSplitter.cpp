@@ -95,8 +95,10 @@ SegmentSplitter::handleMouseButtonRelease(QMouseEvent *e)
             addCommandToHistory(command);
         }
 
-        m_canvas->updateContents(item->rect());
-        delete item;
+// 		m_canvas->updateContents(item->rect());
+		m_canvas->update(item->rect());
+		
+		delete item;
     }
 
     // Reinstate the cursor
@@ -142,8 +144,11 @@ SegmentSplitter::drawSplitLine(QMouseEvent *e)
 
     QRect updateRect(std::max(0, std::min(x, m_prevX) - 5), y,
                      std::max(m_prevX, x) + 5, m_prevY + m_canvas->grid().getYSnap());
-    m_canvas->updateContents(updateRect);
-    m_prevX = x;
+	
+// 	m_canvas->updateContents(updateRect);
+	m_canvas->update(updateRect);
+	
+	m_prevX = x;
     m_prevY = y;
 }
 

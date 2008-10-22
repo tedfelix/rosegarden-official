@@ -21,7 +21,8 @@
 #include <QColor>
 #include <QPainter>
 #include <QRect>
-#include <Q3Table>
+#include <QTableWidget>
+#include <QTableWidgetItem>
 
 
 namespace Rosegarden
@@ -39,7 +40,7 @@ ColourTableItem::paint(QPainter *p, const QColorGroup &cg, const QRect &cr, bool
     QColorGroup g(cg);
     g.setColor(QColorGroup::Base, currentColour);
     selected = false;
-    Q3TableItem::paint(p, g, cr, selected);
+    QTableWidgetItem::paint(p, g, cr, selected);
 }
 
 }

@@ -30,9 +30,10 @@ namespace Rosegarden
 ProgressBar::ProgressBar(int totalSteps,
                          bool /*useDelay*/,
                          QWidget *creator,
-                         const char *name,
-                         WFlags f) :
-        QProgressBar(creator)
+                         const char *name
+//                          WFlags f
+						) :
+						QProgressBar(creator)
 //@@@ QProgressBar is quite different from KProgressWhateverWeReplaced, and its
 // ctor takes only QProgressBar ( QWidget * parent = 0 ).  I think chucking
 // "creator" in here is right, but who knows.

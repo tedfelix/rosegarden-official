@@ -130,9 +130,10 @@ AudioRouteMenu::slotShowMenu()
 
     for (int i = 0; i < getNumEntries(); ++i) {
 
-        menu->addItem(getEntryText(i), this, SLOT(slotEntrySelected(int)),
-                         0, i);
-        menu->setItemParameter(i, i);
+// 		menu->addItem(getEntryText(i), this, SLOT(slotEntrySelected(int)), 0, i);
+		menu->addAction( createAction( getEntryText(i), SLOT(slotEntrySelected(int)))  );	//@@@
+		
+		menu->setItemParameter(i, i);
     }
 
     int itemHeight = menu->itemHeight(0) + 2;

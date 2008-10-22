@@ -85,7 +85,7 @@ protected:
 
 CompositionView::CompositionView(RosegardenGUIDoc* doc,
                                  CompositionModel* model,
-                                 QWidget * parent, const char * name, WFlags f)
+								QWidget * parent, const char * name)	//, WFlags f)
 #if KDE_VERSION >= KDE_MAKE_VERSION(3,2,0)
         : RosegardenScrollView(parent, name, f | WNoAutoErase | WStaticContents),
 #else
@@ -301,7 +301,8 @@ void CompositionView::updateSelectionContents()
 
 
     QRect selectionRect = getModel()->getSelectionContentsRect();
-    updateContents(selectionRect);
+// 	updateContents(selectionRect);
+	update(selectionRect);
 }
 
 void CompositionView::slotContentsMoving(int x, int y)
@@ -437,7 +438,8 @@ void CompositionView::slotUpdateSegmentsDrawBuffer()
 {
     //     RG_DEBUG << "CompositionView::slotUpdateSegmentsDrawBuffer()\n";
     slotAllDrawBuffersNeedRefresh();
-    updateContents();
+// 	updateContents();
+	update();
 }
 
 void CompositionView::slotUpdateSegmentsDrawBuffer(const QRect& rect)
@@ -448,10 +450,12 @@ void CompositionView::slotUpdateSegmentsDrawBuffer(const QRect& rect)
     slotAllDrawBuffersNeedRefresh(rect);
 
     if (rect.isValid()) {
-        updateContents(rect);
-    } else {
-        updateContents();
-    }
+// 		updateContents(rect);
+		update(rect);
+	} else {
+// 		updateContents();
+		update();
+	}
 }
 
 void CompositionView::slotRefreshColourCache()
@@ -939,11 +943,16 @@ void CompositionView::drawGuides(QPainter * p, const QRect& /*clipRect*/)
 {
     // no need to check for clipping, these guides are meant to follow the mouse cursor
     QPoint guideOrig(m_topGuidePos, m_foreGuidePos);
-
+	
+// 	int contentsHeight = contentsHeight();
+// 	int contentsWidth = contentsWidth();
+	int contentsHeight = this->widget()->height();	//@@@
+	int contentsWidth = this->widget()->width();
+	
     p->save();
     p->setPen(m_guideColor);
-    p->drawLine(guideOrig.x(), 0, guideOrig.x(), contentsHeight());
-    p->drawLine(0, guideOrig.y(), contentsWidth(), guideOrig.y());
+    p->drawLine(guideOrig.x(), 0, guideOrig.x(), contentsHeight);
+    p->drawLine(0, guideOrig.y(), contentsWidth, guideOrig.y());
     p->restore();
 }
 

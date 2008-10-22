@@ -28,6 +28,7 @@
 #include <QGroupBox>
 #include <QLabel>
 #include <QLayout>
+#include <QVBoxLayout>
 #include <QPushButton>
 #include <QString>
 #include <QTabWidget>
@@ -144,12 +145,18 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
                     m_entryButtons.push_back(button);
                 }
 
-                QLineEdit* lineEdit = new QLineEdit(numBox, numberText);
+				QLineEdit* lineEdit = new QLineEdit(numberText, numBox );
                 numBoxLayout->addWidget(lineEdit);
                 numBox->setLayout(numBoxLayout);
                 lineEdit->setMinimumWidth(110);
-                lineEdit->setCompletionMode(KGlobalSettings::CompletionAuto);
-                lineEdit->setCompletionObject(&m_completion);
+				
+//			lineEdit->setCompletionMode(KGlobalSettings::CompletionAuto);//&&& FIX: use setCompleter(..)	
+// 				QCompleter completer;
+// 				completer->setCompletitionMode( QCompleter::InlineCompletion );
+				
+//                 lineEdit->setCompletionObject(&m_completion);
+				lineEdit->setCompleter( &m_completion )
+				
                 m_names.push_back(lineEdit);
 
                 connect(m_names[labelId],

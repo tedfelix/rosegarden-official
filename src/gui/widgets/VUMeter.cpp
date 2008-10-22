@@ -344,7 +344,9 @@ VUMeter::paintEvent(QPaintEvent *e)
         else {
             meterStop();
             drawFrame(&paint);
-            drawContents(&paint); //### old QT3 method with no apparent equivalent; study required
+//             drawContents(&paint); //### old QT3 method with no apparent equivalent; study required
+			repaint();	// use this ???
+			
         }
     } else {
         if (m_fallTimerLeft->isActive()) {
@@ -355,8 +357,10 @@ VUMeter::paintEvent(QPaintEvent *e)
         } else {
             meterStop();
             drawFrame(&paint);
-            drawContents(&paint);
-        }
+			
+//             drawContents(&paint);	//###
+			repaint();	// use this ???
+		}
     }
 }
 

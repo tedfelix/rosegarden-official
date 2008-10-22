@@ -37,13 +37,31 @@ bool ProgressDialog::m_modalVisible = false;
 
 ProgressDialog::ProgressDialog(QWidget *creator,
                                const char *name,
-                               bool modal):
-        QProgressDialog(creator, name,
-                        i18n("Processing..."), QString::null, modal),
+                               bool modal
+		):
+// 		QProgressDialog(creator, name,
+// 						i18n("Processing..."), QString::null, modal),
+		
+// 		QProgressDialog( i18n("Processing..."), QString("Cancel"), creator ),	//modal),
+		QProgressDialog( creator, Qt::Dialog ),		// creator = parent ??
         m_wasVisible(false),
         m_frozen(false),
         m_modal(modal)
 {
+	this->setObjectName( name );
+	if (modal){
+		setWindowModality( Qt::WindowModal );
+	}else{
+		setWindowModality( Qt::NonModal );
+	}
+// 	setMinimum();
+// 	setMaximum();
+// 	setValue();
+// 	setLabelText( i18n("Processing...") );
+	setWindowTitle( i18n("Processing...") );
+	setCancelButtonText( QString("Cancel") );
+	
+	
     setCaption(i18n("Processing..."));
     RG_DEBUG << "ProgressDialog::ProgressDialog type 1 - "
     << labelText() << " - modal : " << modal << endl;
@@ -73,22 +91,42 @@ ProgressDialog::ProgressDialog(
     QWidget *creator,
     const char *name,
     bool modal) :
-        QProgressDialog(creator,
-                        name,
-                        i18n("Processing..."),
-                        labelText,
-                        modal),
-        m_wasVisible(false),
+//         QProgressDialog(creator,
+//                         name,
+//                         i18n("Processing..."),
+//                         labelText,
+//                         modal),
+		
+// 		QProgressDialog( i18n("Processing..."), QString("Cancel"), creator ),	//modal),
+		QProgressDialog( creator, Qt:Dialog ),	//modal),
+		
+		m_wasVisible(false),
         m_frozen(false),
         m_modal(modal)
 {
+	
+	this->setObjectName( name );
+	if (modal){
+		setWindowModality( Qt::WindowModal );
+	}else{
+		setWindowModality( Qt::NonModal );
+	}
+// 	setMinimum();
+// 	setMaximum();
+// 	setValue();
+// 	setLabelText( i18n("Processing...") );
+	setWindowTitle( i18n("Processing...") );
+	setCancelButtonText( QString("Cancel") );
+	
 	
 	// qt4 note: progressBar() doesn't exist anymore. 
 	// one can call setBar(QProgressBar*) but not retrieve it 
 	m_progressBar = new QProgressBar();
 	setBar( m_progressBar );
 	
-    progressBar()->setTotalSteps(totalSteps);
+// 	progressBar()->setTotalSteps(totalSteps);
+	progressBar()->setMaximum(totalSteps);
+	
 
     RG_DEBUG << "ProgressDialog::ProgressDialog type 2 - "
     << labelText << " - modal : " << modal << endl;
@@ -135,7 +173,7 @@ ProgressDialog::slotSetOperationName(QString name)
     //     RG_DEBUG << "ProgressDialog::slotSetOperationName("
     //              << name << ") visible : " << isVisible() << endl;
 
-    setLabel(name);
+    setLabelText(name);
     // Little trick stolen from QProgressDialog
     // increase resize only, never shrink
     int w = QMAX( isVisible() ? width() : 0, sizeHint().width() );

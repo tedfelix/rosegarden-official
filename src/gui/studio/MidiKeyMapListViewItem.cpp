@@ -16,28 +16,33 @@
 */
 
 
+#include <klocale.h>
+
 #include "MidiKeyMapListViewItem.h"
 
 #include "MidiDeviceListViewItem.h"
 #include "MidiBankListViewItem.h"
 #include "base/Device.h"
-#include <klocale.h>
+
 #include <QString>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
+
 
 
 namespace Rosegarden
 {
 
 MidiKeyMapListViewItem::MidiKeyMapListViewItem(DeviceId deviceId,
-        QListWidgetItem* parent,
+        QTreeWidgetItem* parent,
         QString name)
         : MidiDeviceListViewItem(deviceId, parent, name),
         m_name(name)
 {
-    setText(i18n("Key Mapping"));
+    setText( 0, i18n("Key Mapping") );		// which column ? assumed 0
 }
 
-int MidiKeyMapListViewItem::compare(QListWidgetItem *i, int col, bool ascending) const
+int MidiKeyMapListViewItem::compare(QTreeWidgetItem *i, int col, bool ascending) const
 {
     if (dynamic_cast<MidiBankListViewItem *>(i)) {
         return 1; // banks before key maps

@@ -84,9 +84,13 @@ SegmentTool::createMenu()
         dynamic_cast<RosegardenGUIApp*>(m_doc->parent());
 
     if (app) {
-        m_menu = static_cast<QPopupMenu*>
+		/*
+        m_menu = static_cast<QMenu*>
                  //(app->factory()->container("segment_tool_menu", app));
                  (m_parentFactory->container("segment_tool_menu", app));
+		*/
+		m_menu = m_parentFactory->findChild<QMenu*>( "segment_tool_menu" );
+		
 
         if (!m_menu) {
             RG_DEBUG << "SegmentTool::createMenu() failed\n";

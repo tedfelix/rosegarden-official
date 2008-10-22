@@ -368,8 +368,10 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 
         // generate SegmentItem
         //
-        m_canvas->updateContents();
-        m_segmentQuickCopyDone = true;
+// 		m_canvas->updateContents();
+		m_canvas->update();
+		
+		m_segmentQuickCopyDone = true;
     }
 
     m_canvas->setSnapGrain(true);
@@ -465,7 +467,8 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
                             .arg(bar + 1).arg(beat).arg(fraction);
 
         m_canvas->setTextFloat(guideX + 10, guideY - 30, posString);
-        m_canvas->updateContents();
+// 		m_canvas->updateContents();
+		m_canvas->update();
 
     } else {
         // 	RG_DEBUG << "SegmentSelector::handleMouseMove: current item not selected\n";

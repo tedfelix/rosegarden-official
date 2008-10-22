@@ -142,7 +142,8 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
     m_newRect = true;
     m_origPos = e->pos();
 
-    m_canvas->updateContents(tmpRect);
+// 	m_canvas->updateContents(tmpRect);
+	m_canvas->update(tmpRect);
 }
 
 void SegmentPencil::handleMouseButtonRelease(QMouseEvent* e)

@@ -152,41 +152,50 @@ PluginControl::PluginControl(QWidget *parent,
         }
         upp->setFont(plainFont);
 
-        QWidgetItem *item;
+// 		QWidgetItem *item;
+		QWidgetItem *item;
 
         if (!hidden) {
             controlTitle->show();
-            item = new QWidgetItem(controlTitle);
-            item->setAlignment(Qt::AlignRight | Qt::AlignBottom);
-            m_layout->addItem(item);
+ 			item = new QWidgetItem(controlTitle);
+// 			item = new QWidget(controlTitle);
+			item->setAlignment(Qt::AlignRight | Qt::AlignBottom);
+//             m_layout->addItem(item);
+			m_layout->addItem( dynamic_cast<QLayoutItem*>(item) );
         } else {
             controlTitle->hide();
         }
 
         if (showBounds && !hidden) {
             low->show();
-            item = new QWidgetItem(low);
-            item->setAlignment(Qt::AlignRight | Qt::AlignBottom);
-            m_layout->addItem(item);
-        } else {
+			item = new QWidgetItem(low);
+// 			item = new QWidget(low);
+			item->setAlignment(Qt::AlignRight | Qt::AlignBottom);
+//             m_layout->addItem(item);
+			m_layout->addItem( dynamic_cast<QLayoutItem*>(item) );
+		} else {
             low->hide();
         }
 
         if (!hidden) {
             m_dial->show();
-            item = new QWidgetItem(m_dial);
-            item->setAlignment(Qt::AlignCenter);
-            m_layout->addItem(item);
-        } else {
+			item = new QWidgetItem(m_dial);
+// 			item = new QWidget(m_dial);
+			item->setAlignment(Qt::AlignCenter);
+//             m_layout->addItem(item);
+			m_layout->addItem( dynamic_cast<QLayoutItem*>(item) );
+		} else {
             m_dial->hide();
         }
 
         if (showBounds && !hidden) {
             upp->show();
-            item = new QWidgetItem(upp);
-            item->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
-            m_layout->addItem(item);
-        } else {
+			item = new QWidgetItem(upp);
+// 			item = new QWidget(upp);
+			item->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
+//             m_layout->addItem(item);
+			m_layout->addItem( dynamic_cast<QLayoutItem*>(item) );
+		} else {
             upp->hide();
         }
     }

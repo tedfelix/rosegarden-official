@@ -31,6 +31,7 @@
 #include <QTableWidget>
 #include <QWidget>
 #include <QLineEdit>
+#include <QHeaderView>
 
 
 namespace Rosegarden
@@ -38,12 +39,19 @@ namespace Rosegarden
 
 ColourTable::ColourTable
 (QWidget *parent, ColourMap &input, ColourList &list)
-	: QTableWidget(1, 2, parent, "RColourTable")
+	: QTableWidget(1, 2, parent )	//, "RColourTable")
 {
+	this->setObjectName( "RColourTable" );
+	
     setSorting(FALSE);
-	setSelectionMode(QTableWidget::SingleRow);
+	setSelectionBehavior( QAbstractItemView::SelectRows );
+	
+	/*
     horizontalHeader()->setLabel(0, i18n("Name"));
     horizontalHeader()->setLabel(1, i18n("Color"));
+	*/
+	setHorizontalHeaderLabels( QStringList() << i18n("Name") << i18n("Color") );
+	
     populate_table(input, list);
     connect(this, SIGNAL(doubleClicked(int, int, int, const QPoint&)),
             SLOT(slotEditEntry(int, int)));
@@ -97,11 +105,13 @@ void
 ColourTable::populate_table(ColourMap &input, ColourList &list)
 {
     m_colours.reserve(input.size());
-    setNumRows(input.size());
+//     setNumRows(input.size());
+	setRowCount( input.size() );
 
     QString name;
 
     unsigned int i = 0;
+	QStringList vHeaderLabels;
 
     for (RCMap::const_iterator it = input.begin(); it != input.end(); ++it) {
         if (it->second.second == std::string(""))
@@ -109,9 +119,11 @@ ColourTable::populate_table(ColourMap &input, ColourList &list)
         else
             name = strtoqstr(it->second.second);
 
-        QTableWidgetItem *text = new QTableWidgetItem(
-                               dynamic_cast<Q3Table*>(this),
-                               QTableWidgetItem::Never, name);
+// 		QTableWidgetItem *text = new QTableWidgetItem(
+// 				dynamic_cast<QTableWidget *>(this),
+// 											 QTableWidgetItem::Never, name);
+		QTableWidgetItem *text = new QTableWidgetItem( );
+//  		text->setObjectName(name);	//@@@ does not exist for QTreeWidgetItem
 
         setItem(i, 0, text);
 
@@ -121,10 +133,12 @@ ColourTable::populate_table(ColourMap &input, ColourList &list)
         ColourTableItem *temp = new ColourTableItem(this, m_colours[i]);
         setItem(i, 1, temp);
 
-        verticalHeader()->setLabel(i, QString::number(it->first));
+//         verticalHeader()->setLabel(i, QString::number(it->first));
+		vHeaderLabels << QString::number(it->first);
 
         ++i;
     }
+	setVerticalHeaderLabels( vHeaderLabels );
 
 }
 

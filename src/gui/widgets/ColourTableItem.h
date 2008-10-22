@@ -19,9 +19,11 @@
 #define _RG_ROSEGARDENCOLOURTABLEITEM_H_
 
 #include <QColor>
-#include <Q3Table>
+#include <QTableWidget>
+#include <QTableWidgetItem>
 
-class Q3Table;
+// class QTableWidget;
+// class QTableWidgetItem;
 class QRect;
 class QPainter;
 class QColorGroup;
@@ -32,12 +34,22 @@ namespace Rosegarden
 
 
 
-class ColourTableItem : public Q3TableItem
+class ColourTableItem : public QTableWidgetItem
 {
 public:
-    ColourTableItem(Q3Table *t, const QColor &input)
-     : Q3TableItem(t, Q3TableItem::Never, ""),
-       currentColour(input) {}
+    ColourTableItem(
+					QTableWidget *t, 
+	 				const QColor &input
+				   )
+	: QTableWidgetItem( 
+// 					   t, QTableWidgetItem::Never, ""	//### investigate - validate
+						
+					  ),
+	currentColour(input) {
+	
+// 		t->setItem( 0,0, this );
+		
+	}
     void setColor(QColor &input);
     void paint(QPainter *p, const QColorGroup &cg, const QRect &cr, bool selected);
 

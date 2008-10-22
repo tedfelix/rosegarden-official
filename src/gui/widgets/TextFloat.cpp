@@ -62,6 +62,8 @@ TextFloat::reparent(QWidget *newParent)
     QWidget::reparent(newParent,
                       WStyle_Customize | WStyle_NoBorder | WStyle_StaysOnTop,
                       position + QPoint(20, 5));
+	
+// 	newParent->setWindowFlags( Qt::WindowStaysOnTopHint );	// qt4
 }
 
 void

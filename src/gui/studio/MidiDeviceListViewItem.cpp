@@ -20,7 +20,8 @@
 
 #include <klocale.h>
 #include "base/Device.h"
-#include <QListWidget>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
 #include <QString>
 
 
@@ -28,32 +29,47 @@ namespace Rosegarden
 {
 
 MidiDeviceListViewItem::MidiDeviceListViewItem(DeviceId deviceId,
-        QListWidget* parent, QString name)
-        : QListWidgetItem(parent, name),
+        QTreeWidget* parent, QString name)
+        : QTreeWidgetItem(parent),	//, name
         m_deviceId(deviceId)
-{}
+{
+// 	this->setObjectName( name );	//@@@ not supported for QTreeWidgetItem
+}
 
 MidiDeviceListViewItem::MidiDeviceListViewItem(DeviceId deviceId,
-        QListWidgetItem* parent, QString name,
+        QTreeWidgetItem* parent, QString name,
         bool percussion,
         int msb, int lsb)
-        : QListWidgetItem(parent, name,
-                        QString(percussion ? i18n("Percussion Bank") : i18n("Bank")),
-                        QString().setNum(msb), QString().setNum(lsb)),
+        : QTreeWidgetItem(parent, //name,
+							new QTreeWidgetItem( 
+							QStringList()
+                        	<< QString(percussion ? i18n("Percussion Bank") : i18n("Bank"))
+                        	<< QString().setNum(msb)
+							<< QString().setNum(lsb)
+							)
+						),
         m_deviceId(deviceId)
-{}
+{
+// 	this->setObjectName( name );
+}
 
 MidiDeviceListViewItem::MidiDeviceListViewItem(DeviceId deviceId,
-        QListWidgetItem* parent, QString name)
-: QListWidgetItem(parent, name, i18n("Key Mapping"), "", ""),
+        QTreeWidgetItem* parent, QString name)
+	: QTreeWidgetItem(parent, //name, 
+						new QTreeWidgetItem( QStringList() << i18n("Key Mapping") << "" << "")    
+					 ),
 m_deviceId(deviceId)
-{}
+{
+// 	this->setObjectName( name );
+}
 
-int MidiDeviceListViewItem::compare(QListWidgetItem *i, int col, bool ascending) const
+int MidiDeviceListViewItem::compare(QTreeWidgetItem *i, int col, bool ascending) const
 {
     MidiDeviceListViewItem* item = dynamic_cast<MidiDeviceListViewItem*>(i);
-    if (!item)
-        return QListWidgetItem::compare(i, col, ascending);
+    if (!item){
+			return 1;
+//         return QTreeWidgetItem::compare(i, col, ascending);		//### //@@@ FIX : compare function
+	}
     if (col == 0)
         return
             getDeviceId() > item->getDeviceId() ? 1 :

@@ -32,6 +32,8 @@
 #include "base/MidiDevice.h"
 #include "base/MidiProgram.h"
 #include "gui/widgets/RosegardenPopupMenu.h"
+#include "gui/general/IconLoader.h"
+#include <algorithm>
 
 #include <QCheckBox>
 #include <QCursor>
@@ -52,9 +54,10 @@
 //#include <qvgroupbox.h>
 #include <QLineEdit>
 #include <QWidget>
-#include <QListWidget>
-#include <QListWidgetItem>
-#include <algorithm>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
+#include <QFile>
+
 
 namespace Rosegarden
 {
@@ -108,10 +111,10 @@ MidiProgramsEditor::makeAdditionalWidget(QWidget *parent)
             this, SLOT(slotNewMSB(int)));
 
     gridLayout->addWidget(new QLabel(i18n("LSB Value"), frame),
-                          2, 0, AlignLeft);
+                          2, 0, Qt::AlignLeft);
     m_lsb->setMinimum(0);
     m_lsb->setMaximum(127);
-    gridLayout->addWidget(m_lsb, 2, 1, AlignLeft);
+    gridLayout->addWidget(m_lsb, 2, 1, Qt::AlignLeft);
 
     connect(m_lsb, SIGNAL(valueChanged(int)),
             this, SLOT(slotNewLSB(int)));
@@ -174,7 +177,7 @@ MidiProgramsEditor::clearAll()
 }
 
 void
-MidiProgramsEditor::populate(QListWidgetItem* item)
+MidiProgramsEditor::populate(QTreeWidgetItem* item)
 {
     RG_DEBUG << "MidiProgramsEditor::populate\n";
 
@@ -216,8 +219,13 @@ MidiProgramsEditor::populate(QListWidgetItem* item)
     ProgramList::iterator it;
 
     QPixmap noKeyPixmap, keyPixmap;
-    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+//     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+	IconLoader il;
+	QString pixmapDir = il.getResourcePath( "" );
+	
     QString file = pixmapDir + "/toolbar/key-white.png";
+	
+	
     if (QFile(file).exists())
         noKeyPixmap = QPixmap(file);
     file = pixmapDir + "/toolbar/key-green.png";
@@ -378,9 +386,9 @@ struct ProgramCmp
 void
 MidiProgramsEditor::slotNameChanged(const QString& programName)
 {
-    const KLineEdit* lineEdit = dynamic_cast<const KLineEdit*>(sender());
+    const QLineEdit* lineEdit = dynamic_cast<const QLineEdit*>(sender());
     if (!lineEdit) {
-        RG_DEBUG << "MidiProgramsEditor::slotProgramChanged() : %%% ERROR - signal sender is not a KLineEdit\n";
+        RG_DEBUG << "MidiProgramsEditor::slotProgramChanged() : %%% ERROR - signal sender is not a QLineEdit\n";
         return ;
     }
 
@@ -466,14 +474,21 @@ MidiProgramsEditor::slotEntryButtonPressed()
         m_device->getKeyMappingForProgram(*program);
     int currentEntry = 0;
 
-    menu->addItem(i18n("<no key mapping>"), this,
-                     SLOT(slotEntryMenuItemSelected(int)), 0, 0);
+//     menu->addItem( i18n("<no key mapping>"), this,
+//                      SLOT(slotEntryMenuItemSelected(int)), 0, 0);
+	QAction *act = createAction( "no_key_mapping", SLOT(slotEntryMenuItemSelected(int)) );
+	menu->addAction( act );	//@@@
+	
     menu->setItemParameter(0, 0);
 
     for (int i = 0; i < kml.size(); ++i) {
-        menu->addItem(strtoqstr(kml[i].getName()),
-                         this, SLOT(slotEntryMenuItemSelected(int)),
-                         0, i + 1);
+//         menu->addItem(strtoqstr(kml[i].getName()),
+//                          this, SLOT(slotEntryMenuItemSelected(int)),
+//                          0, i + 1);
+		act = createAction( "key_mapping_" + strtoqstr(kml[i].getName()), SLOT(slotEntryMenuItemSelected(int)) );
+		menu->addAction( act );	//@@@
+		
+		
         menu->setItemParameter(i + 1, i + 1);
         if (currentMapping && (kml[i] == *currentMapping))
             currentEntry = i + 1;
@@ -514,21 +529,26 @@ MidiProgramsEditor::slotEntryMenuItemSelected(int i)
     }
 
     m_device->setKeyMappingForProgram(*program, newMapping);
-    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    bool haveKeyMappings = (m_device->getKeyMappings().size() > 0);
+//     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+	IconLoader il;
+	QIcon icon;
+	QString pixmapDir = il.getResourcePath( "" );
+	
     QPushButton *btn = getEntryButton(m_currentMenuProgram);
 
     if (newMapping.empty()) {
-        QString file = pixmapDir + "/toolbar/key-white.png";
-        if (QFile(file).exists()) {
-            btn->setIcon(QIcon(QPixmap(file)));
+//         QString file = pixmapDir + "/toolbar/key-white.png";
+		icon = il.load( "key-white" );
+		if( ! icon.isNull() ){
+            btn->setIcon( icon );
         }
         // QToolTip::remove(btn);
         btn->setToolTip(QString(""));       //@@@ Usefull ?
     } else {
-        QString file = pixmapDir + "/toolbar/key-green.png";
-        if (QFile(file).exists()) {
-            btn->setIcon(QIcon(QPixmap(file)));
+//         QString file = pixmapDir + "/toolbar/key-green.png";
+		icon = il.load( "key-green" );
+		if( ! icon.isNull() ){
+			btn->setIcon( icon );
         }
         btn->setToolTip(i18n("Key Mapping: %1", strtoqstr(newMapping)));
     }
@@ -606,8 +626,8 @@ MidiProgramsEditor::setBankName(const QString& s)
 
 void MidiProgramsEditor::blockAllSignals(bool block)
 {
-    const QObjectList* allChildren = queryList("KLineEdit", "[0-9]+");
-    QObjectListIt it(*allChildren);
+    const QObjectList allChildren = queryList("QLineEdit", "[0-9]+");
+    QObjectListIterator it(*allChildren);
     QObject *obj;
 
     while ( (obj = it.current()) != 0 ) {
