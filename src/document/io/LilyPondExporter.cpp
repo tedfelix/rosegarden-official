@@ -1714,7 +1714,7 @@ LilyPondExporter::writeBar(Segment *s,
     if (absTime > barStart) {
         Note note(Note::getNearestNote(absTime - barStart, MAX_DOTS));
         writtenDuration += note.getDuration();
-        durationRatio = writeSkip(timeSignature, 0, note.getDuration(), true, str);
+        durationRatio = writeSkip(timeSignature, 0, note.getDuration(), false, str);
 	durationRatioSum = fractionSum(durationRatioSum,durationRatio);
         // str << qstrtostr(QString(" %{ %1/%2 %} ").arg(durationRatio.first).arg(durationRatio.second)); // DEBUG
     }
