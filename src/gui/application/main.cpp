@@ -556,7 +556,7 @@ int main(int argc, char *argv[])
 
     // See if the settings wants us to control JACK
     //
-    if ( qStrToBool( settings.value("Logo", "true" ) )  && (!qApp->isRestored() && args->isSet("splash")) ) {
+    if ( qStrToBool( settings.value("Logo", "true" ) )  && (!qApp->isSessionRestored() && args->isSet("splash")) ) {
         RG_DEBUG << k_funcinfo << "Showing startup logo\n";
         startLogo = KStartupLogo::getInstance();
 	startLogo->setShowTip(!newVersion);
@@ -571,7 +571,7 @@ int main(int argc, char *argv[])
     //
     RosegardenGUIApp *rosegardengui = 0;
 
-    if (app.isRestored()) {
+    if (app.isSessionRestored()) {
         RG_DEBUG << "Restoring from session\n";
 
         // RESTORE(RosegardenGUIApp);
