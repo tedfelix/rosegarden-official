@@ -2003,11 +2003,13 @@ LilyPondExporter::writeBar(Segment *s,
             handleEndingPostEvents(postEventsInProgress, i, str);
             handleStartingPostEvents(postEventsToStart, str);
 
-            if (tiedForward)
-	        if (tiedUp) 
+            if (tiedForward) {
+	        if (tiedUp) {
                     str << "^~ ";
-		else
+		} else {
 		    str << "_~ ";
+	        }
+	    }
 
 	    if ( hiddenNote ) {
 	        str << "\\unHideNotes ";
