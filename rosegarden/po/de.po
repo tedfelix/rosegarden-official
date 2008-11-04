@@ -31,11 +31,11 @@ msgstr "Beginn der Tonhöhenaufteilung"
 
 #: ../src/gui/dialogs/SplitByPitchDialog.cpp:50
 msgid "Range up and down to follow music"
-msgstr ""
+msgstr "(Ändere) Bereich hoch und runter, um der Musik zu folgen."
 
 #: ../src/gui/dialogs/SplitByPitchDialog.cpp:56
 msgid "Duplicate non-note events"
-msgstr "Doppelte nicht-Noten-Events"
+msgstr "Verdoppele nicht-Noten-Events \n(sodass sie in beiden Splits enthalten sind)"
 
 #: ../src/gui/dialogs/SplitByPitchDialog.cpp:59
 msgid "Clef handling:"
@@ -495,9 +495,8 @@ msgstr "Gesamten Wertebereich ausschließen"
 
 #: ../src/gui/dialogs/EventFilterDialog.cpp:226
 #: ../src/gui/dialogs/EventFilterDialog.cpp:227
-#, fuzzy
 msgid "shortest"
-msgstr "Pause"
+msgstr "Kürzeste"
 
 #: ../src/gui/dialogs/EventFilterDialog.cpp:326
 msgid "Lowest pitch"
@@ -691,9 +690,8 @@ msgid "%1 - %2"
 msgstr "%1 (%2)"
 
 #: ../src/gui/dialogs/ManageMetronomeDialog.cpp:99
-#, fuzzy
 msgid "%1 - No connection"
-msgstr "Keine Verbindung"
+msgstr "%1 - Keine Verbindung"
 
 #: ../src/gui/configuration/HeadersConfigurationPage.cpp:105
 #: ../src/gui/dialogs/ManageMetronomeDialog.cpp:107
@@ -780,9 +778,8 @@ msgid "Recording"
 msgstr "Aufnahme"
 
 #: ../src/gui/dialogs/ManageMetronomeDialog.cpp:252
-#, fuzzy
 msgid "Synth plugin "
-msgstr "Synth Plugins"
+msgstr "Synth Plugin "
 
 #: ../src/gui/dialogs/IdentifyTextCodecDialog.cpp:116
 #: ../src/gui/dialogs/ManageMetronomeDialog.cpp:281
@@ -1366,12 +1363,11 @@ msgstr "F-Bariton"
 
 #: ../src/gui/dialogs/ClefDialog.cpp:258
 msgid "Bass"
-msgstr "Baß"
+msgstr "Bass"
 
 #: ../src/gui/dialogs/ClefDialog.cpp:260
-#, fuzzy
 msgid "Sub-bass"
-msgstr "Baß"
+msgstr "Sub-Bass"
 
 #: ../src/gui/dialogs/CountdownDialog.cpp:45
 msgid "Recording..."
@@ -1475,14 +1471,12 @@ msgid "an (unknown, %1)"
 msgstr ""
 
 #: ../src/gui/dialogs/IntervalDialog.cpp:209
-#, fuzzy
 msgid "a minor"
-msgstr "moll"
+msgstr "eine kleine (minor)"
 
 #: ../src/gui/dialogs/IntervalDialog.cpp:211
-#, fuzzy
 msgid "a major"
-msgstr "dur"
+msgstr "eine große (major)"
 
 #: ../src/gui/dialogs/IntervalDialog.cpp:232
 #, fuzzy
@@ -1501,34 +1495,28 @@ msgid "%1 unison"
 msgstr "Einheiten"
 
 #: ../src/gui/dialogs/IntervalDialog.cpp:251
-#, fuzzy
 msgid "%1 second"
-msgstr "Sekunden:"
+msgstr "%1 Sekunde/n"
 
 #: ../src/gui/dialogs/IntervalDialog.cpp:254
-#, fuzzy
 msgid "%1 third"
-msgstr "Andere"
+msgstr "%1 Terz"
 
 #: ../src/gui/dialogs/IntervalDialog.cpp:257
-#, fuzzy
 msgid "%1 fourth"
-msgstr "%1 b"
+msgstr "%1 Quarte"
 
 #: ../src/gui/dialogs/IntervalDialog.cpp:260
-#, fuzzy
 msgid "%1 fifth"
-msgstr "Tonhöhe"
+msgstr "%1 Quinte"
 
 #: ../src/gui/dialogs/IntervalDialog.cpp:263
-#, fuzzy
 msgid "%1 sixth"
-msgstr "Tonhöhe"
+msgstr "%1 Sexte/n"
 
 #: ../src/gui/dialogs/IntervalDialog.cpp:266
-#, fuzzy
 msgid "%1 seventh"
-msgstr "Eventgröße verändern"
+msgstr "%1 Septime/n"
 
 #: ../src/gui/dialogs/IntervalDialog.cpp:269
 #: ../src/gui/studio/DeviceManagerDialog.cpp:322
@@ -1551,15 +1539,17 @@ msgid ""
 msgstr ""
 
 #: ../src/gui/dialogs/IntervalDialog.cpp:288
-#, fuzzy, c-format
+#, c-format
 msgid "up %1"
-msgstr "Gruppe %1"
+msgstr "Hoch %1"
 
 #: ../src/gui/dialogs/IntervalDialog.cpp:296
 msgid ""
 "_n: down 1 octave and %1\n"
 "down %n octaves and %1"
 msgstr ""
+"_n: runter 1 Oktave und %1\n"
+"runter %n Oktaven und %1"
 
 #: ../src/gui/dialogs/IntervalDialog.cpp:300
 #, fuzzy, c-format
@@ -1688,9 +1678,8 @@ msgid "Add Verse"
 msgstr "Verse hinzufügen"
 
 #: ../src/gui/dialogs/LyricEditDialog.cpp:65
-#, fuzzy
 msgid "Remove Verse"
-msgstr "Alle Ma&rken löschen"
+msgstr "Entferne den Vers"
 
 #: ../src/gui/dialogs/LyricEditDialog.cpp:278
 #, c-format
@@ -2020,9 +2009,8 @@ msgstr "Neue Bezeichnung eingeben"
 
 #: ../src/gui/application/RosegardenGUIView.cpp:1532
 #: ../src/gui/dialogs/AudioManagerDialog.cpp:1074
-#, fuzzy
 msgid "importing a remote audio file"
-msgstr "Audiodatei wird exportiert..."
+msgstr "importiere eine entfernte (remote) Audiodatei"
 
 #: ../src/gui/application/RosegardenGUIView.cpp:1534
 #: ../src/gui/dialogs/AudioManagerDialog.cpp:1076
@@ -2163,14 +2151,13 @@ msgstr "LilyPond Kompatibilität"
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:111
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:112
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:113
-#, fuzzy, c-format
+#, c-format
 msgid "LilyPond %1"
-msgstr "LilyPond 2.2"
+msgstr "LilyPond %1"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:118
-#, fuzzy
 msgid "Paper size"
-msgstr "je Datei"
+msgstr "Papiergröße"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:122
 msgid "A3"
@@ -2205,9 +2192,8 @@ msgid "do not specify"
 msgstr "keine Angabe"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:145
-#, fuzzy
 msgid "Font size"
-msgstr "Dateigröße:"
+msgstr "Schriftgröße:"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:150
 #, fuzzy
@@ -2245,14 +2231,12 @@ msgid "Merge tracks that have the same name"
 msgstr "Zusammenführen gleichnamiger Spuren"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:191
-#, fuzzy
 msgid "Notation options"
 msgstr "Notationsparameter"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:199
-#, fuzzy
 msgid "First"
-msgstr "Pause"
+msgstr "Nur die Erste"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:200
 #: ../src/gui/editors/parameters/TrackParameterBox.cpp:535
@@ -2278,18 +2262,16 @@ msgid "Export track staff brackets"
 msgstr ""
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:237
-#, fuzzy
 msgid "Layout options"
-msgstr "&Layout-Werkzeugleiste"
+msgstr "Layout-Optionen"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:250
-#, fuzzy
 msgid "Lyrics alignment"
-msgstr "Text für dieses Segment"
+msgstr "Lyriktext-Ausrichtung"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:254
 msgid "Ragged bottom (systems will not be spread vertically across the page)"
-msgstr ""
+msgstr "Flattersatz (Ragged bottom) (Systeme werden nicht vertikal über die Seite verteilt)"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:259
 msgid "Interpret chord texts as lead sheet chord names"
@@ -2318,14 +2300,12 @@ msgid "Rehearsal marks"
 msgstr "Alle Marker entfernen"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:284
-#, fuzzy
 msgid "Marker text"
-msgstr "Marker Zeit"
+msgstr "Marker-Text"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:288
-#, fuzzy
 msgid "Export markers"
-msgstr "Exportieren als..."
+msgstr "Exportiere Markierungen"
 
 #: ../src/gui/dialogs/AudioSplitDialog.cpp:50
 msgid "Autosplit Audio Segment"
@@ -2712,17 +2692,15 @@ msgid "All available interpretations"
 msgstr "All verfübaren Interpretationen"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:309
-#, fuzzy
 msgid ""
 "Attempted to launch JACK audio daemon failed.  Audio will be disabled.\n"
 "Please check configuration (Settings -> Configure Rosegarden -> Audio -> "
 "Startup)\n"
 " and restart."
 msgstr ""
-"Der Versuch, JACK zu starten,ist fehlgeschlagen. Audio wird abgeschaltet."
-"\\n\n"
-"Bitte prüfen Sie die Konfiguration (Einstellungen->Rosegarden einrichten-"
-">Sequncer->Jack Steuerung)\\n\n"
+"Der Versuch den 'JACK server' zu starten ist fehlgeschlagen. Audio wird abgeschaltet.\n"
+"Bitte prüfen Sie die Konfiguration (Einstellungen -> Rosegarden einrichten "
+"-> Audio -> Jack Steuerung)\n"
 " und starten Sie erneut."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:318
@@ -2795,9 +2773,8 @@ msgid "Export &MIDI file..."
 msgstr "&MIDI-Datei exportieren..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:599
-#, fuzzy
 msgid "Export &LilyPond file..."
-msgstr "&Lilypond-Datei exportieren..."
+msgstr "&LilyPond-Datei exportieren..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:603
 msgid "Export Music&XML file..."
@@ -2813,9 +2790,8 @@ msgstr "M&up-Datei exportieren..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:615
 #: ../src/gui/editors/notation/NotationView.cpp:1497
-#, fuzzy
 msgid "Print &with LilyPond..."
-msgstr "Vorschau mit Lil&yPond..."
+msgstr "Druck/Vorschau mit Lil&yPond..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:619
 #: ../src/gui/editors/notation/NotationView.cpp:1501
@@ -3328,9 +3304,8 @@ msgid "Saving file with a new filename..."
 msgstr "Datei wird mit neuem Namen gespeichert..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:2367
-#, fuzzy
 msgid "Rosegarden files"
-msgstr "Rosegarde-4-Dateien"
+msgstr "Rosegarden-Dateien"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:2368
 #: ../src/gui/application/RosegardenGUIApp.cpp:4863
@@ -3632,9 +3607,8 @@ msgid "%1 - for project file support"
 msgstr ""
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:4551
-#, fuzzy
 msgid "Notation previews through LilyPond"
-msgstr "Vorschau mit Lil&yPond..."
+msgstr "Notations-Vorschau über Lil&yPond..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:4553
 msgid "The Rosegarden LilyPondView helper script"
@@ -3654,9 +3628,8 @@ msgid "The Rosegarden Audio File Importer helper script"
 msgstr ""
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:4577
-#, fuzzy
 msgid "%1 - for audio file import"
-msgstr "Pfad für Audiodateien"
+msgstr "%1 - für den Import von Audiodateien"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:4588
 msgid ""
@@ -3797,44 +3770,37 @@ msgstr "Mup-Dateien\n"
 #: ../src/gui/application/RosegardenGUIApp.cpp:5008
 #: ../src/gui/application/RosegardenGUIApp.cpp:5092
 #: ../src/gui/editors/notation/NotationView.cpp:4745
-#, fuzzy
 msgid "Exporting LilyPond file..."
 msgstr "LilyPond-Datei wird exportiert..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5011
-#, fuzzy
 msgid "LilyPond files"
 msgstr "LilyPond-Dateien"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5026
 #: ../src/gui/editors/notation/NotationView.cpp:4679
-#, fuzzy
 msgid "Printing LilyPond file..."
-msgstr "Vorschau der LilyPond-Datei..."
+msgstr "Drucke LilyPond-Datei..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5031
 #: ../src/gui/application/RosegardenGUIApp.cpp:5055
 #: ../src/gui/editors/notation/NotationView.cpp:4684
 #: ../src/gui/editors/notation/NotationView.cpp:4708
-#, fuzzy
 msgid "Failed to open a temporary file for LilyPond export."
-msgstr "Anlegen der temporären Datei für den LilyPond-Export fehlgeschlagen."
+msgstr "Das Anlegen einer temporären Datei für den LilyPond-Export ist fehlgeschlagen."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5050
 #: ../src/gui/editors/notation/NotationView.cpp:4703
-#, fuzzy
 msgid "Previewing LilyPond file..."
 msgstr "Vorschau der LilyPond-Datei..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5083
 #: ../src/gui/editors/notation/NotationView.cpp:4736
-#, fuzzy
 msgid "LilyPond Preview Options"
 msgstr "LilyPond-Vorschau Einstellungen"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5084
 #: ../src/gui/editors/notation/NotationView.cpp:4737
-#, fuzzy
 msgid "LilyPond preview options"
 msgstr "LilyPond-Vorschau Einstellungen"
 
@@ -4362,7 +4328,7 @@ msgid ""
 "Please restart Rosegarden to continue working with audio.\n"
 "Quitting other running applications may improve Rosegarden's performance."
 msgstr ""
-"Das JACK Audio Subsystem hat eine Fehler gemeldet oder Rosegarden "
+"Das JACK Audio Subsystem hat einen Fehler gemeldet oder Rosegarden "
 "anderweitig an der Verarbeitung von Audio gehindert.\n"
 "Bitte starten Sie Rosegarden erneut, wenn Sie mit Audio weiterarbeiten "
 "möchten.\n"
@@ -4378,7 +4344,7 @@ msgid ""
 "remain.\n"
 "Quitting other running applications may improve Rosegarden's performance."
 msgstr ""
-"Das JACK Audio Subsystem hat eine Fehler gemeldet oder Rosegarden "
+"Das JACK Audio Subsystem hat einen Fehler gemeldet oder Rosegarden "
 "anderweitig an der Verarbeitung von Audio gehindert, möglicherweise wegen "
 "Überlastung.\n"
 "Der Audiodienst wurde neu gestartet, aber ev. sind damit nicht alle Probleme "
@@ -7085,10 +7051,12 @@ msgid ""
 "<qt>use program changes from an external source to manipulate these controls "
 "(only valid for the currently-active track)</qt>"
 msgstr ""
+"Empfange \"Program Changes\" von einem externen Gerät, um Bänke oder Programme zu wählen. (SHIFT+P)"
+"(Nur gültig für den momentan gewählten Track)"
 
 #: ../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp:101
 msgid "Receive external program changes"
-msgstr ""
+msgstr "Empfange externe Program-Changes"
 
 #: ../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp:237
 #: ../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp:243
