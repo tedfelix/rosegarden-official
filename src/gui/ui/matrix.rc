@@ -113,6 +113,7 @@
 	<Action name="erase" />
 	<Action name="move" />
         <Action name="resize" />
+        <Action name="velocity" />
 	<Separator/>
     <Menu name="Move">
         <text>Local &amp;Cursor</text>
@@ -180,6 +181,7 @@
   <Action name="erase" />
   <Action name="move" />
   <Action name="resize" />
+  <Action name="velocity" />
   <Separator/>
   <Action name="toggle_step_by_step"/>
   <Action name="filter_selection"/>

@@ -62,6 +62,12 @@ MatrixTool::slotDrawSelected()
     m_parentView->actionCollection()->action("draw")->activate();
 }
 
+void 
+MatrixTool::slotVelocityChangeSelected()
+{
+    m_parentView->actionCollection()->action("velocity")->activate();
+}
+
 const SnapGrid &
 MatrixTool::getSnapGrid() const
 {

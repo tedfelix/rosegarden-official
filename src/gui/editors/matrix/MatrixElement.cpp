@@ -48,10 +48,8 @@ MatrixElement::~MatrixElement()
 {
     //     MATRIX_DEBUG << "MatrixElement " << this << "::~MatrixElement() wrapping "
     //                          << event() << endl;
-
     m_canvasRect->hide();
     delete m_canvasRect;
-
     removeOverlapRectangles();
 }
 

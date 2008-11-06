@@ -536,6 +536,8 @@ SET(gui_SRCS
 	gui/editors/matrix/MatrixToolBox.h
 	gui/editors/matrix/MatrixTool.cpp
 	gui/editors/matrix/MatrixTool.h
+	gui/editors/matrix/MatrixVelocity.cpp
+	gui/editors/matrix/MatrixVelocity.h
 	gui/editors/matrix/MatrixView.cpp
 	gui/editors/matrix/MatrixView.h
 	gui/editors/matrix/MatrixVLayout.cpp

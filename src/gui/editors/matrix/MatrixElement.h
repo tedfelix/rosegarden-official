@@ -115,7 +115,6 @@ public:
 protected:
 
     //--------------- Data members ---------------------------------
-
     QCanvasMatrixRectangle *m_canvasRect;
 
     OverlapRectangles *m_overlapRectangles;

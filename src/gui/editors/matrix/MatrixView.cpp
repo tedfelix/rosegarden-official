@@ -88,6 +88,7 @@
 #include "MatrixMover.h"
 #include "MatrixPainter.h"
 #include "MatrixResizer.h"
+#include "MatrixVelocity.h"
 #include "MatrixSelector.h"
 #include "MatrixStaff.h"
 #include "MatrixToolBox.h"
@@ -657,6 +658,13 @@ void MatrixView::setupActions()
                                   this, SLOT(slotResizeSelected()),
                                   actionCollection(), "resize");
     toolAction->setExclusiveGroup("tools");
+    
+   QCanvasPixmap velocitypixmap(pixmapDir + "/toolbar/velocity.xpm");
+    toolAction = new KRadioAction(i18n("&Velocity"), QIconSet(velocitypixmap), Key_F7,
+                                  this, SLOT(slotVelocityChangeSelected()),
+                                  actionCollection(), "velocity");
+    toolAction->setExclusiveGroup("tools");
+    
 
     icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("chord")));
     (new KToggleAction(i18n("C&hord Insert Mode"), icon, Key_H,
@@ -1330,6 +1338,13 @@ void MatrixView::slotResizeSelected()
     EditTool* resizer = m_toolBox->getTool(MatrixResizer::ToolName);
 
     setTool(resizer);
+}
+
+void MatrixView::slotVelocityChangeSelected()
+{
+    EditTool* velocity = m_toolBox->getTool(MatrixVelocity::ToolName);
+
+    setTool(velocity);
 }
 
 void MatrixView::slotTransformsQuantize()

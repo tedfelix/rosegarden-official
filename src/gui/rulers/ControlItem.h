@@ -35,7 +35,10 @@ public:
     int getValue() const { return m_value; }
 
     void setWidth(int w)  { setSize(w, height()); }
-    void setHeight(int h) { setSize(width(), h); }
+    void setHeight(int h) { 
+	setSize(width(), h); 
+	setZ(50+h);
+    }
     int getHeight()       { return size().height(); }
 
     virtual void draw(QPainter &painter);

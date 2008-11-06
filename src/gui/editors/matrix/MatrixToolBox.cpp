@@ -26,6 +26,7 @@
 #include "MatrixSelector.h"
 #include "MatrixMover.h"
 #include "MatrixResizer.h"
+#include "MatrixVelocity.h"
 
 #include <qstring.h>
 #include <kmessagebox.h>
@@ -64,6 +65,10 @@ EditTool* MatrixToolBox::createTool(const QString& toolName)
 
         tool = new MatrixResizer(m_mParentView);
 
+    else if (toolNamelc == MatrixVelocity::ToolName)
+
+        tool = new MatrixVelocity(m_mParentView);
+    
     else {
         KMessageBox::error(0, QString("MatrixToolBox::createTool : unrecognised toolname %1 (%2)")
                            .arg(toolName).arg(toolNamelc));

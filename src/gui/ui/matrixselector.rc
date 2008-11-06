@@ -7,6 +7,7 @@
   <Action name="move"/>
   <Action name="erase"/>
   <Action name="resize"/>
+  <Action name="velocity"/>
 <!-- <Separator/> -->
 <!-- Defunct: <Action name="halve_durations"/> -->
 <!-- Defunct: <Action name="double_durations"/> -->

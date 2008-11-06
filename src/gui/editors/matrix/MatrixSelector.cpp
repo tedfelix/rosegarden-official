@@ -36,6 +36,7 @@
 #include "MatrixMover.h"
 #include "MatrixPainter.h"
 #include "MatrixResizer.h"
+#include "MatrixVelocity.h"
 #include "MatrixStaff.h"
 #include "MatrixTool.h"
 #include "MatrixView.h"
