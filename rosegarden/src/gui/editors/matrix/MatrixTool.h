@@ -49,6 +49,7 @@ protected slots:
     void slotMoveSelected();
     void slotEraseSelected();
     void slotResizeSelected();
+    void slotVelocityChangeSelected();
     void slotDrawSelected();
 
     const SnapGrid &getSnapGrid() const;

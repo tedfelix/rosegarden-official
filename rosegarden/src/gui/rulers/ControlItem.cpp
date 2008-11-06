@@ -24,7 +24,6 @@ namespace Rosegarden {
 
 const unsigned int ControlItem::BorderThickness = 1;
 const unsigned int ControlItem::DefaultWidth    = 20;
-static int _canvasItemZ = 30;
 
 ControlItem::ControlItem(ControlRuler* ruler, ElementAdapter* elementAdapter,
                          int xx, int width)
@@ -42,7 +41,7 @@ ControlItem::ControlItem(ControlRuler* ruler, ElementAdapter* elementAdapter,
 
     setX(xx);
     setY(canvas()->height());
-    setZ(_canvasItemZ++); // we should make this work against controlruler
+    setZ(50+canvas()->height());
 
     updateFromValue();
     setEnabled(false);
