@@ -82,6 +82,9 @@ public:
 
     RulerScale* getRulerScale() { return m_rulerScale; }
 
+    void assignEventSelection(EventSelection *);
+    bool isEventSelected(Event *);
+    
     // SegmentObserver interface
     virtual void segmentDeleted(const Segment *);
 
@@ -140,7 +143,7 @@ protected:
     EditViewBase*               m_parentEditView;
     QScrollBar*                 m_mainHorizontalScrollBar;
     RulerScale*     m_rulerScale;
-    EventSelection* m_eventSelection;
+    EventSelection* m_eventSelection,*m_assignedEventSelection;
     Segment*        m_segment;
 
     ControlItem* m_currentItem;

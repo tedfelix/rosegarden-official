@@ -72,6 +72,7 @@
 #include "gui/general/GUIPalette.h"
 #include "gui/general/MidiPitchLabel.h"
 #include "gui/kdeext/KTmpStatusMsg.h"
+#include "gui/rulers/ControlRuler.h"
 #include "gui/rulers/ChordNameRuler.h"
 #include "gui/rulers/LoopRuler.h"
 #include "gui/rulers/PercussionPitchRuler.h"
@@ -1116,6 +1117,14 @@ void MatrixView::setCurrentSelection(EventSelection* s, bool preview,
     //!!! rather too much here shared with notationview -- could much of
     // this be in editview?
 
+    /// The assignment of event selection to the ruler needs to be first
+    /// otherwise we get some unsafe thread usages that i had hard to solve.
+    ///  Let's leave this alone as is for now...
+    ControlRuler *ruler=EditView::getCurrentControlRuler();
+    if(ruler)
+	ruler->assignEventSelection(s);
+
+	
     if (m_currentEventSelection == s)	{
         updateQuantizeCombo();
         return ;
@@ -1240,6 +1249,8 @@ void MatrixView::setCurrentSelection(EventSelection* s, bool preview,
         (i18n("  1 event selected ",
               "  %n events selected ", eventsSelected));
 
+	
+		
     } else {
         m_selectionCounter->setText(i18n("  No selection "));
     }

@@ -90,12 +90,16 @@ void ControlItem::draw(QPainter &painter)
 {
     if (!isEnabled())
         updateFromValue();
+    
+    ElementAdapter *ea=getElementAdapter();
 
-    setBrush(m_controlRuler->valueToColour(m_controlRuler->getMaxItemValue(), m_value));
+    if(ea && m_controlRuler->isEventSelected(ea->getEvent()))
+	setBrush(Qt::blue);
+    else
+        setBrush(m_controlRuler->valueToColour(m_controlRuler->getMaxItemValue(), m_value));
 
     QCanvasRectangle::draw(painter);
     
-
     /*
 
     // Attempt to get overlapping rectangles ordered automatically - 

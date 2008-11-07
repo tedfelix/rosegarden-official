@@ -134,6 +134,7 @@
 #include "gui/dialogs/TextEventDialog.h"
 #include "gui/dialogs/TupletDialog.h"
 #include "gui/dialogs/UseOrnamentDialog.h"
+#include "gui/rulers/ControlRuler.h"
 #include "gui/rulers/StandardRuler.h"
 #include "gui/general/ActiveItem.h"
 #include "gui/general/ClefIndex.h"
@@ -3116,6 +3117,10 @@ void NotationView::setCurrentSelection(EventSelection* s, bool preview,
     //!!! rather too much here shared with matrixview -- could much of
     // this be in editview?
 
+    ControlRuler *ruler=EditView::getCurrentControlRuler();
+    if(ruler)
+	ruler->assignEventSelection(s);
+	
     if (m_currentEventSelection == s)
         return ;
     NOTATION_DEBUG << "XXX " << endl;

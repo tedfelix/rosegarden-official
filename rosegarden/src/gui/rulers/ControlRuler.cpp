@@ -63,6 +63,7 @@ ControlRuler::ControlRuler(Segment *segment,
         m_mainHorizontalScrollBar(0),
         m_rulerScale(rulerScale),
         m_eventSelection(new EventSelection(*segment)),
+	m_assignedEventSelection(0),
         m_segment(segment),
         m_currentItem(0),
         m_tool(0),
@@ -147,6 +148,23 @@ void ControlRuler::setControlTool(ControlTool* tool)
     if (m_tool)
         delete m_tool;
     m_tool = tool;
+}
+
+void ControlRuler::assignEventSelection(EventSelection *e) 
+{
+    m_assignedEventSelection=e; // Is this needed to be threadsafe?
+    slotUpdate();
+}
+
+bool ControlRuler::isEventSelected(Event *e) 
+{
+
+    bool flag=false;
+    
+    if(m_assignedEventSelection && e) {
+        flag=m_assignedEventSelection->contains(e);
+    }
+    return flag;
 }
 
 void
