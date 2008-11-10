@@ -29,6 +29,11 @@ PROJECT(ROSEGARDEN)
 # CMake supports KDE checks since this version number
 CMAKE_MINIMUM_REQUIRED(VERSION 2.4.2)
 
+# remove warning: more info with: cmake --help-policy CMP0003
+if(COMMAND cmake_policy)
+	cmake_policy(SET CMP0003 NEW)
+endif(COMMAND cmake_policy)
+
 # Show full commands and messages. It generates a lot of console output.
 # It is necessary for Eclipse warning/error parser, 
 # but it can be enabled anyway with "make VERBOSE=1"
