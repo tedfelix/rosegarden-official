@@ -1270,11 +1270,15 @@ LilyPondExporter::write()
 
                 if (firstBar > 0) {
                     // Add a skip for the duration until the start of the first
-                    // bar in the segment.  If the segment doesn't start on a bar
-                    // line, an additional skip will be written (in the form of
-                    // a series of rests) at the start of writeBar, below.
+                    // bar in the segment.  If the segment doesn't start on a
+                    // bar line, an additional skip will be written at the start
+                    // of writeBar, below.
                     //!!! This doesn't cope correctly yet with time signature changes
                     // during this skipped section.
+                    // dmm - changed this to call writeSkip with false, to avoid
+                    // writing actual rests, and write a skip instead, so
+                    // visible rests do not appear before the start of short
+                    // bars
                     str << std::endl << indent(col);
                     writeSkip(timeSignature, compositionStartTime,
 		              m_composition->getBarStart(firstBar) - compositionStartTime,
@@ -1305,6 +1309,8 @@ LilyPondExporter::write()
 
                     timeT barStart = m_composition->getBarStart(barNo);
                     timeT barEnd = m_composition->getBarEnd(barNo);
+                    timeT currentSegmentStartTime = (*i)->getStartTime();
+                    timeT currentSegmentEndTime = (*i)->getEndMarkerTime();
 		    // Check for a partial measure in the beginning of the composition
                     if (barStart < compositionStartTime) {
                         barStart = compositionStartTime;
@@ -1312,6 +1318,16 @@ LilyPondExporter::write()
 		    // Check for a partial measure in the end of the composition
                     if (barEnd > compositionEndTime) {
                         barEnd = compositionEndTime;
+                    }
+                    // Check for a partial measure beginning in the middle of a
+                    // theoretical bar
+                    if (barStart < currentSegmentStartTime) {
+                        barStart = currentSegmentStartTime;
+                    }
+                    // Check for a partial measure ending in the middle of a
+                    // theoretical bar
+                    if (barEnd > currentSegmentEndTime) {
+                        barEnd = currentSegmentEndTime;
                     }
 
                     // open \repeat section if this is the first bar in the
