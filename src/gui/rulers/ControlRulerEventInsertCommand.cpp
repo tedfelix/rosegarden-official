@@ -25,11 +25,11 @@ namespace Rosegarden
 ControlRulerEventInsertCommand::ControlRulerEventInsertCommand(const std::string &type,
                                                                timeT insertTime,
                                                                long number, long initialValue,
-                                                               Segment &segment)
+                                                               Segment &segment,timeT duration)
     : BasicCommand(i18n("Insert Controller Event"),
                    segment,
                    insertTime, 
-                   (insertTime + Rosegarden::Note(Rosegarden::Note::Quaver).getDuration())), // must have a duration other undo doesn't work
+                   (duration!=0)?(insertTime+duration):(insertTime + Rosegarden::Note(Rosegarden::Note::Quaver).getDuration())), // must have a duration other undo doesn't work
       m_type(type),
       m_number(number),
       m_initialValue(initialValue)
