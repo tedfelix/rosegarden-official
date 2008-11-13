@@ -30,7 +30,8 @@ ControlItem::ControlItem(ControlRuler* ruler, ElementAdapter* elementAdapter,
     : QCanvasRectangle(ruler->canvas()),
       m_value(0),
       m_controlRuler(ruler),
-      m_elementAdapter(elementAdapter)
+      m_elementAdapter(elementAdapter),
+	m_highlighted(false)
 {
     if (width < DefaultWidth/4) {
         width = DefaultWidth/4; // avoid invisible zero-duration items
@@ -91,9 +92,9 @@ void ControlItem::draw(QPainter &painter)
     if (!isEnabled())
         updateFromValue();
     
-    ElementAdapter *ea=getElementAdapter();
-
-    if(ea && m_controlRuler->isEventSelected(ea->getEvent()))
+    //ElementAdapter *ea=getElementAdapter();
+   // if(ea && m_controlRuler->isEventSelected(ea->getEvent()))
+    if(m_highlighted)
 	setBrush(Qt::blue);
     else
         setBrush(m_controlRuler->valueToColour(m_controlRuler->getMaxItemValue(), m_value));

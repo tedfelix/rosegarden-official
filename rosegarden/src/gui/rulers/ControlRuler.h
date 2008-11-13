@@ -20,6 +20,7 @@
 #define _RG_CONTROLRULER_H_
 
 #include "base/Segment.h"
+#include "base/Selection.h"
 #include "gui/general/RosegardenCanvasView.h"
 #include <qcolor.h>
 #include <qpoint.h>
@@ -53,7 +54,7 @@ class EditViewBase;
 /**
  * ControlRuler : base class for Control Rulers
  */
-class ControlRuler : public RosegardenCanvasView, public SegmentObserver
+class ControlRuler : public RosegardenCanvasView, public SegmentObserver, public EventSelectionObserver
 {
     Q_OBJECT
 
@@ -82,8 +83,12 @@ public:
 
     RulerScale* getRulerScale() { return m_rulerScale; }
 
+    /// EventSelectionObserver
+    virtual void eventSelected(EventSelection *,Event *);
+    virtual void eventDeselected(EventSelection *,Event *);    
+    virtual void eventSelectionDestroyed(EventSelection *);
+    
     void assignEventSelection(EventSelection *);
-    bool isEventSelected(Event *);
     
     // SegmentObserver interface
     virtual void segmentDeleted(const Segment *);
@@ -170,6 +175,10 @@ protected:
     TextFloat  *m_numberFloat;
 
     bool m_hposUpdatePending;
+    pthread_mutex_t m_mutex;
+    
+    typedef std::list<Event *> SelectionSet;
+    SelectionSet m_selectedEvents;
 };
 
 

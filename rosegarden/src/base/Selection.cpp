@@ -85,8 +85,21 @@ EventSelection::EventSelection(const EventSelection &sel) :
 
 EventSelection::~EventSelection()
 {
+  // Notify observers of deconstruction
+    for (ObserverSet::const_iterator i = m_observers.begin(); i != m_observers.end(); ++i) {
+	(*i)->eventSelectionDestroyed(this);
+    }
     m_originalSegment.removeObserver(this);
 }
+
+void EventSelection::addObserver(EventSelectionObserver *obs) { 
+    m_observers.push_back(obs); 
+}
+
+void EventSelection::removeObserver(EventSelectionObserver *obs) { 
+    m_observers.remove(obs); 
+}
+
 
 void EventSelection::addEvent(Event *e)
 { 
@@ -103,6 +116,11 @@ void EventSelection::addEvent(Event *e)
 	m_endTime = e->getAbsoluteTime() + eventDuration;
     }
     m_segmentEvents.insert(e);
+    
+    // Notify observers of new selected events
+    for (ObserverSet::const_iterator i = m_observers.begin(); i != m_observers.end(); ++i) {
+	(*i)->eventSelected(this,e);
+    }
 }
 
 void EventSelection::addFromSelection(EventSelection *sel)
@@ -122,7 +140,11 @@ void EventSelection::removeEvent(Event *e)
          it != interval.second; it++)
     {
         if (*it == e) {
-	    m_segmentEvents.erase(it); 
+	    m_segmentEvents.erase(it);
+	    // Notify observers of new selected events
+            for (ObserverSet::const_iterator i = m_observers.begin(); i != m_observers.end(); ++i) {
+	        (*i)->eventDeselected(this,e);
+            }
 	    return;
 	}
     }
