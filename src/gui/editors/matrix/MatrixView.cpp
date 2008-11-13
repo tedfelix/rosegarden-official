@@ -1160,8 +1160,7 @@ void MatrixView::setCurrentSelection(EventSelection* s, bool preview,
     bool updateRequired = true;
 
     if (s) {
-
-        bool foundNewEvent = false;
+         bool foundNewEvent = false;
 
         for (EventSelection::eventcontainer::iterator i =
                     s->getSegmentEvents().begin();
@@ -1240,21 +1239,20 @@ void MatrixView::setCurrentSelection(EventSelection* s, bool preview,
         }
     }
 
-    delete oldSelection;
-
+    
     if (s) {
 
         int eventsSelected = s->getSegmentEvents().size();
         m_selectionCounter->setText
         (i18n("  1 event selected ",
               "  %n events selected ", eventsSelected));
-
-	
 		
     } else {
         m_selectionCounter->setText(i18n("  No selection "));
     }
 
+    delete oldSelection;
+    
     m_selectionCounter->update();
 
     slotSetCurrentVelocityFromSelection();

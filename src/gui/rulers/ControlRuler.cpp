@@ -76,6 +76,8 @@ ControlRuler::ControlRuler(Segment *segment,
         m_selectionRect(new QCanvasRectangle(canvas())),
         m_menu(0)
 {
+    pthread_mutex_t m_mutex = PTHREAD_MUTEX_INITIALIZER;
+
     setHScrollBarMode(QScrollView::AlwaysOff);
 
     m_selectionRect->setPen(Qt::red);
@@ -95,6 +97,10 @@ ControlRuler::ControlRuler(Segment *segment,
 
 ControlRuler::~ControlRuler()
 {
+    pthread_mutex_destroy( &m_mutex);
+    if(m_assignedEventSelection)
+	    m_assignedEventSelection->removeObserver(this);
+    
     if (m_segment) {
         m_segment->removeObserver(this);
     }
@@ -150,21 +156,78 @@ void ControlRuler::setControlTool(ControlTool* tool)
     m_tool = tool;
 }
 
-void ControlRuler::assignEventSelection(EventSelection *e) 
-{
-    m_assignedEventSelection=e; // Is this needed to be threadsafe?
-    slotUpdate();
+void ControlRuler::eventSelected(EventSelection *es,Event *e) {
+    if(es==m_assignedEventSelection) {
+        QCanvasItemList list = canvas()->allItems();
+        QCanvasItemList::Iterator it = list.begin();
+        for (; it != list.end(); ++it) {
+            if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) {
+    		if(item->getElementAdapter()->getEvent()==e) {
+			item->setHighlighted(true);
+			return;
+		}
+	    }
+        }
+    }
 }
 
-bool ControlRuler::isEventSelected(Event *e) 
-{
-
-    bool flag=false;
-    
-    if(m_assignedEventSelection && e) {
-        flag=m_assignedEventSelection->contains(e);
+void ControlRuler::eventDeselected(EventSelection *es,Event *e) {
+    if(es==m_assignedEventSelection) {
+        QCanvasItemList list = canvas()->allItems();
+        QCanvasItemList::Iterator it = list.begin();
+        for (; it != list.end(); ++it) {
+            if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) {
+	        if(item->getElementAdapter()->getEvent()==e) {
+		    item->setHighlighted(false);
+		    return;
+	        }
+            }
+        }
     }
-    return flag;
+}
+
+void ControlRuler::eventSelectionDestroyed(EventSelection *es) {
+	/// Someone destroyed  ES  lets handle that
+	if(es==m_assignedEventSelection)
+		m_assignedEventSelection=NULL;
+}
+    
+
+void ControlRuler::assignEventSelection(EventSelection *es) 
+{
+    // Clear all selected ControllItem
+    QCanvasItemList list = canvas()->allItems();
+    QCanvasItemList::Iterator it = list.begin();
+    for (; it != list.end(); ++it) {
+        if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) 
+	    item->setHighlighted(false);
+    }		
+
+    if(es) {
+	// Dont observe the old selection anymore
+	m_assignedEventSelection=es;
+
+	QCanvasItemList list = canvas()->allItems();
+        const EventSelection::eventcontainer ec=es->getSegmentEvents();
+        for (EventSelection::eventcontainer::iterator e = ec.begin(); e != ec.end(); ++e) {
+	    QCanvasItemList::Iterator it = list.begin();
+	    for (; it != list.end(); ++it) {
+                if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) {
+    		    if(item->getElementAdapter()->getEvent()==*e) {
+			item->setHighlighted(true);
+			break;
+	    	    }
+	        }
+            }
+        } 
+	
+        es->addObserver(this);
+
+    } else {
+	m_assignedEventSelection=NULL;
+    }
+    
+    slotUpdate();
 }
 
 void

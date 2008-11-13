@@ -49,7 +49,7 @@ public:
     virtual void handleMouseWheel(QWheelEvent *e);
 
     virtual void setSelected(bool yes);
-    
+    virtual void setHighlighted(bool yes) { m_highlighted=yes; update(); }
     /// recompute height according to represented value prior to a canvas repaint
     virtual void updateFromValue();
 
@@ -64,7 +64,8 @@ protected:
 
     long m_value;
     bool m_handlingMouseMove;
-    
+    bool m_highlighted;
+
     ControlRuler* m_controlRuler;
     ElementAdapter* m_elementAdapter;
 
