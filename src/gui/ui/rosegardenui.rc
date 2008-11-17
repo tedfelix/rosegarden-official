@@ -65,13 +65,13 @@
     <Action name="edit_redo" text="N&amp;othing to redo" icon="redo" shortcut="Ctrl+Shift+Z" />
   <Separator/>
     <!-- JAS use multiple shorcuts found in QT reference for gnome/KDE -->
-    <Action name="edit_cut" text="Cu&amp;t" icon=editcut" shortcut="Ctrl+X, F20, Shift+Del" />
+    <Action name="edit_cut" text="Cu&amp;t" icon="editcut" shortcut="Ctrl+X, F20, Shift+Del" />
     <Action name="edit_copy" text="&amp;Copy" icon="editcopy" shortcut="Ctrl+C, F16, Ctrl+Ins" />
     <Action nmae="edit_paste" text="&amp;Paste" icon="editpaste" shortcut="Ctrl+V, F18, Shift+Insert" />
     <Action name="delete" text="&amp;Delete" shortcut="Delete, Ctrl+D" />
   <Separator/>
     <Action name="cut_range" text="Cut &amp;Range" shortcut="Ctrl+Shift+X" />
-    <Action name="copy_range" text=Cop&amp;y Range" shortcut="Ctrl+Shift+C" />
+    <Action name="copy_range" text="Cop&amp;y Range" shortcut="Ctrl+Shift+C" />
     <Action name="paste_range" text="Pa&amp;ste Range" shortcut="Ctrl+Shift+V" />
     <Action name="insert_range" text="&amp;Insert Range..." shortcut="Shift+Insert" />
   <Separator/>
