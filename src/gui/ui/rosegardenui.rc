@@ -18,7 +18,7 @@
     <Menu name="merge" append="new_merge">
       <text>&amp;Merge</text>
       <Action name="file_merge" text="Merge &amp;File..." />
-      <Action name="file_merge_midi" text="Merge &MIDI file..." />
+      <Action name="file_merge_midi" text="Merge &amp;MIDI file..." />
       <Action name="file_merge_rg21" text="Merge &amp;Rosegarden 2.1 file..." />
       <Action name="file_merge_hydrogen" text="Merge &amp;Hydrogen file..." />
     </Menu>
@@ -59,6 +59,7 @@
   <Separator/>
     <Action name="file_quit" text="&amp;Quit" icon="exit" shortcut="Ctrl+Q" />
   </Menu>
+
   <Menu name="edit">
     <!-- JAS 'Undo' and 'Redo' use dynamic text.  Put default text for new project in. -->
     <Action name="edit_undo" text="&amp;Nothing to undo" icon="undo" shortcut="Ctrl+Z" />
@@ -77,6 +78,7 @@
   <Separator/>
     <Action name="select_all" text="Select &amp;All Segments" shortcut="Ctrl+A" />
   </Menu>
+
   <Menu name="document">
     <text>&amp;Composition</text>
     <Action name="add_tempo" text="Add Te&amp;mpo Change..." icon="event-insert-tempo" />
@@ -95,6 +97,7 @@
     <Action name="set_quick_marker"/>
     <Action name="jump_to_quick_marker"/>
   </Menu>
+
   <Menu name="Studio">
     <text>&amp;Studio</text>
     <Action name="audio_mixer" text="&amp;Audio Mixer" icon="mixer" />
@@ -114,6 +117,7 @@
     <Action name="load_default_studio" text="&amp;Import Default Studio" />
     <Action name="save_default_studio" text="&amp;Save Current Document as Default Studio" />
   </Menu>
+
   <Menu name="Segments">
     <text>Se&amp;gments</text>
     <Menu name="edit_with">
@@ -150,6 +154,7 @@
   <Separator/>
     <Action name="manage_trigger_segments" text="Manage Tri&amp;ggered Segments" />
   </Menu>
+
   <Menu name="Tracks">
     <text>Trac&amp;ks</text>
     <Action name="add_track" text="Add &amp;Track" icon="add_tracks" shortcut="Ctrl+T" />
@@ -173,6 +178,7 @@
     </Menu>
     <Action name="remap_instruments" text="&amp;Remap Instruments..." />
   </Menu>
+
   <Menu name="Tools">
     <text>&amp;Tools</text>
     <Action name="select" text="&amp;Select and Edit" icon="select" shortcut="F2" group="tools_segment" checked="true" />
@@ -195,6 +201,7 @@
       <Action name="panic" text="P&amp;anic" icon="transport-panic" shortcut="Alt+Ctrl+P" />
     </Menu>
   </Menu>
+
   <Menu name="settings">
     <Menu name="toolbars" append="show_merge">
       <text>&amp;Toolbars</text>
@@ -226,6 +233,7 @@
     <Action name="options_configure_toolbars" text="Configure Tool&amp;bars..." icon="configure_toolbars" />
     <Action name="options_configure" text="&amp;Configure Rosegarden..." icon="configure" />
   </Menu>
+
   <Menu name="help" append="about_merge">
     <text>&amp;Help</text>
     <Action name="help_contents" text="Rosegarden &amp;Handbook" icon="contents" shortcut="F1" />
