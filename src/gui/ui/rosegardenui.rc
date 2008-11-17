@@ -105,7 +105,7 @@
     <Action name="manage_synths" text="Manage S&amp;ynth Plugins" icon="manage-synth-plugins" />
     <Action name="manage_metronome" text="Manage &amp;Metronome" />
   <Separator/>
-    <Action name="modify_midi_filters" text="Modify MIDI &amp;Filters" icon="filter"" />
+    <Action name="modify_midi_filters" text="Modify MIDI &amp;Filters" icon="filter" />
     <Action name="enable_midi_routing" text="MIDI &amp;Thru Routing" checked="true" />
   <Separator/>
     <Action name="reset_midi_network" text="&amp;Reset MIDI Network" />
@@ -222,7 +222,7 @@
     <!-- Action name="toggle_all" append="show_merge" /> -->
   <Separator/>
     <Action name="options_save_options" text="&amp;Save Settings" />
-    <Action name="options_configure_keybinding" text="Configure S&amp;hortcuts..." icon=configure_shortcuts" />
+    <Action name="options_configure_keybinding" text="Configure S&amp;hortcuts..." icon="configure_shortcuts" />
     <Action name="options_configure_toolbars" text="Configure Tool&amp;bars..." icon="configure_toolbars" />
     <Action name="options_configure" text="&amp;Configure Rosegarden..." icon="configure" />
   </Menu>
