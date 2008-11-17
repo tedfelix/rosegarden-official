@@ -69,6 +69,7 @@
     <Action name="edit_cut" text="Cu&amp;t" icon="editcut" shortcut="Ctrl+X, F20, Shift+Del" />
     <Action name="edit_copy" text="&amp;Copy" icon="editcopy" shortcut="Ctrl+C, F16, Ctrl+Ins" />
     <Action nmae="edit_paste" text="&amp;Paste" icon="editpaste" shortcut="Ctrl+V, F18, Shift+Insert" />
+  <Separator/>
     <Action name="delete" text="&amp;Delete" shortcut="Delete, Ctrl+D" />
   <Separator/>
     <Action name="cut_range" text="Cut &amp;Range" shortcut="Ctrl+Shift+X" />
