@@ -102,8 +102,8 @@
   <Menu name="Studio">
     <text>&amp;Studio</text>
     <Action name="audio_mixer" text="&amp;Audio Mixer" icon="mixer" />
-    <!-- JAS typo? should be 'MIDI mixer' not 'midi mixer' -->
-    <Action name="midi_mixer" text="Midi Mi&amp;ixer" icon="midimixer" />
+    <!-- JAS corrected typo old text="midi Mi&amp;ixer" -->
+    <Action name="midi_mixer" text="MIDI Mi&amp;ixer" icon="midimixer" />
   <Separator/>
     <Action name="manage_devices" text="Manage MIDI &amp;Devices" icon="manage-midi-devices" />
     <Action name="manage_synths" text="Manage S&amp;ynth Plugins" icon="manage-synth-plugins" />
@@ -196,9 +196,9 @@
       <!-- JAS need to know how to add Qt::KeypadModifier in Human Readable shortcut for Play 'KP_Enter'-->
       <Action name="play" text="&amp;Play" icon="transport-play" shortcut="KP_Enter" /> 
       <Action name="stop" text="&amp;Stop" icon="transport-stop" shortcut="Ins" /> 
-      <!-- JAS rewind appears before fast-forward in matrix.rc -->
-      <Action name="fast_forward" text="&amp;Fast Forward" icon="transport-ffwd" shortcut="PgDown" /> 
+      <!-- JAS swapped rewind / ffwd to match matrix.rc -->
       <Action name="rewind" text="Re&amp;wind" icon="transport-rewind" shortcut="End" /> 
+      <Action name="fast_forward" text="&amp;Fast Forward" icon="transport-ffwd" shortcut="PgDown" /> 
       <Action name="record" text="&amp;Record" icon="transport-record" />
       <Action name="recordtoggle" text="P&amp;unch in Record" icon="transport-record" shortcut="Space" />
       <Action name="toggle_tracking" text="Scro&amp;ll to Follow Playback" icon="transport-tracking" shortcut="Pause" checked="true" />
@@ -209,12 +209,14 @@
   <Menu name="settings">
     <Menu name="toolbars" append="show_merge">
       <text>&amp;Toolbars</text>
+      <!-- JAS "show_stock_toolbar" is "options_show_toolbar" in matrix.rc and notation .rc -->
       <Action name="show_stock_toolbar" text="Show &amp;Toolbar" checked="true" append="show_merge" />
       <Action name="show_tools_toolbar" text="Show T&amp;ools Toolbar" checked="true" append="show_merge" />
       <Action name="show_tracks_toolbar" text="Show trac&amp;ks Toolbar" checked="true" append="show_merge" />
       <Action name="show_editors_toolbar" text="Show &amp;Editors Toolbar" checked="true" append="show_merge" />
       <Action name="show_transport_toolbar" text="Show Trans&amp;port Toolbar" checked="true" append="show_merge" />
       <Action name="show_zoom_toolbar" text="Show &amp;Zoom Toolbar" checked="true" append="show_merge" />
+      <!-- JAS "show_status_bar" is "options_show_statusbar" in matrix.rc and notation.rc -->
       <Action name="show_status_bar" text="Hide St&amp;atusbar" checked="false" append="show_merge" />
     </Menu>
     <Menu name="rulers" append="show_merge">
