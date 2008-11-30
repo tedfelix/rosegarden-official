@@ -346,7 +346,7 @@
 
 <ToolBar name="Actions Toolbar">
   <text>Actions Toolbar</text>
-  <!-- JAS custom toolbar found at src/gui/editors/matrix/Matrixview.rc -->
+  <!-- JAS custom toolbar found at src/gui/editors/matrix/Matrixview.cpp -->
 </ToolBar>
 
 <ToolBar name="Zoom Toolbar">
