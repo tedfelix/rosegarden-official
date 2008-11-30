@@ -49,47 +49,30 @@
     <!-- JAS original <Action name="note_font_actionmenu" /> -->
     <Menu name="note_font_actionmenu">
       <text>Note &amp;Font</text>
-      <!-- JAS Need action names for these items -->
-      <Action name="" text="&amp;Feta" checked="true" group="note_font" />
-      <Action name="" text="Feta &amp;Pixmaps" checked="false" group="note_font" />
-      <Action name="" text="&amp;RG21" checked="false" group="note_font" />
+      <!-- JAS Custom coded menu actions created based on available fonts -->
+      <!-- JAS See src/gui/editors/notation/NotationView.cpp -->
+      <!-- JAS action name="note_font_" + (font_filename.tolower() - ".xml") -->
     </Menu>
     <!-- JAS original <Action name="note_font_size_actionmenu" /> -->
     <Menu name="note_font_size_actionmenu">
       <text>Si&amp;ze</text>
-      <!-- JAS Need action names for these items -->
-      <Action name="" text="&amp;1 pixel" checked="false" group="note_font_size" />
-      <Action name="" text="&amp;2 pixels" checked="false" group="note_font_size" />
-      <Action name="" text="&amp;4 pixels" checked="false" group="note_font_size" />
-      <Action name="" text="&amp;6 pixels" checked="false" group="note_font_size" />
-      <Action name="" text="&amp;8 pixels" checked="true" group="note_font_size" />
-      <Action name="" text="10 &amp;pixels" checked="false" group="note_font_size" />
-      <Action name="" text="12 p&amp;ixels" checked="false" group="note_font_size" />
-      <Action name="" text="14 pi&amp;xels" checked="false" group="note_font_size" />
-      <Action name="" text="16 pix&amp;els" checked="false" group="note_font_size" />
+      <!-- JAS Custom coded menu actions created based on available font sizes -->
+      <!-- JAS See src/gui/editors/notation/NotationView.cpp -->
+      <!-- JAS action name="note_font_size_" + sizes[i} (1, 2, etc. ) -->
     </Menu>
     <!-- JAS original <Action name="stretch_actionmenu" /> -->
     <Menu name="stretch_actionmenu">
       <text>S&amp;pacing</text>
-      <!-- JAS Need action names for these items -->
-      <Action name="" text="&amp;30%" checked="false" group="note_stretch" />
-      <Action name="" text="&amp;60%" checked="false" group="note_stretch" />
-      <Action name="" text="&amp;85%" checked="false" group="note_stretch" />
-      <Action name="" text="&amp;100%" checked="true" group="note_stretch" />
-      <Action name="" text="13&amp;0%" checked="false" group="note_stretch" />
-      <Action name="" text="1&amp;70%" checked="false" group="note_stretch" />
-      <Action name="" text="&amp;220%" checked="false" group="note_stretch" />
+      <!-- JAS Custom coded menu actions created based on available font sizes -->
+      <!-- JAS See src/gui/editors/notation/NotationView.cpp -->
+      <!-- JAS action name="note_font_size_" + sizes[i} (1, 2, etc. ) -->
     </Menu>
     <!-- JAS original <Action name="proportion_actionmenu" /> -->
     <Menu name="proportion_actionmenu">
       <text>Du&amp;ration Factor</text>
-      <!-- JAS Need action names for these items -->
-      <Action name="" text="&amp;None" checked="false" group="note_proportion" />
-      <Action name="" text="&amp;20%" checked="false" group="note_proportion" />
-      <Action name="" text="&amp;40%" checked="false" group="note_proportion" />
-      <Action name="" text="&amp;60%" checked="true" group="note_proportion" />
-      <Action name="" text="&amp;80%" checked="false" group="note_proportion" />
-      <Action name="" text="&amp;100%" checked="false" group="note_proportion" />
+      <!-- JAS Custom coded menu actions created based on available proportions -->
+      <!-- JAS See src/gui/editors/notation/NotationView.cpp -->
+      <!-- JAS action name="proportion_" + proportions list names (0, 20, 40, etc.) -->
     </Menu>
   <Separator/>
     <Menu name="layout">
@@ -208,11 +191,9 @@
     <!-- JAS original <Action name="note_style_actionmenu" /> -->
     <Menu name="note_style_actionmenu">
       <text>Note &amp;Style</text>
-      <!-- JAS Need action names for these items -->
-      <Action name="" text="&amp;Classical" />
-      <Action name="" text="C&amp;ross" />
-      <Action name="" text="&amp;Mensural" />
-      <Action name="" text="&amp;Triangle" />
+      <!-- JAS Custom coded menu actions created based on available styles -->
+      <!-- JAS See src/commands/notation/ChangeStyleCommand.cpp -->
+      <!-- JAS action name="style_" + NoteStyleName -->
   <Separator/>
     <Menu name="Respell">
       <text>&amp;Accidentals</text>
@@ -362,9 +343,9 @@
   <Menu name="Tools">
     <text>&amp;Tools</text>
     <!-- JAS for 'select' and 'erase' actions, do they belong to same group as matrix.rc and rosegardenui.rc. -->
-    <!-- JAS Other tool in group are not selectable from menu -->
-    <Action name="select" text="&amp;Select and Edit" icon="select" shortcut="F2" group="tools_segment" checked="true" />
-    <Action name="erase" text="&amp;Easer" icon="eraser" shortcut="F4" group="tools_segment" checked="false" />
+    <!-- JAS Other tools in group are not selectable from menu -->
+    <Action name="select" text="&amp;Select and Edit" icon="select" shortcut="F2" group="tools_note" checked="true" />
+    <Action name="erase" text="&amp;Easer" icon="eraser" shortcut="F4" group="tools_note" checked="false" />
     <Menu noMerge="1" name="Notes">
       <text>&amp;Notes</text>
 	    <!-- Reference names, but with _ instead of - -->
@@ -427,8 +408,8 @@
       <Action name="bass_clef" text="&amp;Bass Clef" icon="clef-bass" />
     </Menu>
   <Separator/>
-    <Action name="text" text="&amp;Text" icon="text" shortcut="F8" />
-    <Action name="guitarchord" text="&amp;Guitar Chord" icon="guitarchord" shortcut="F9" />
+    <Action name="text" text="&amp;Text" icon="text" checked="false" group="tools_note" shortcut="F8" />
+    <Action name="guitarchord" text="&amp;Guitar Chord" checked="false" group="tools_note" icon="guitarchord" shortcut="F9" />
   <Separator/>
     <Menu name="Move">
       <text>Local &amp;Cursor</text>
@@ -783,24 +764,24 @@
 </ToolBar>
 
 <Menu noMerge="1" name="controller_events_ruler_menu">
-  <Text>Control Ruler actions</Text>
-  <Action name="insert_control_ruler_item" />
-  <Action name="erase_control_ruler_item" />
-  <Action name="clear_control_ruler_item" />
+  <text>Control Ruler Actions</text>
+  <Action name="insert_control_ruler_item" text="Insert Item" />
+  <Action name="erase_control_ruler_item" text="Erase Selected Items" />
+  <Action name="clear_control_ruler_item" text="Clear Ruler" />
 <Separator/>
-  <Action name="start_control_line_item" />
+  <Action name="start_control_line_item" text="Insert Line of Controllers" />
 <Separator/>
-  <Action name="flip_control_events_forward" />
-  <Action name="flip_control_events_back" />
+  <Action name="flip_control_events_forward" text="Flip Forward" shortcut="]" />
+  <Action name="flip_control_events_back" text="Flip Backwards" shortcut="[" />
 </Menu>
 
 <Menu noMerge="1" name="property_ruler_menu">
-  <Text>Property Ruler actions</Text>
-  <Action name="draw_property_line" />
-  <Action name="select_all_properties" />
+  <text>Property Ruler Actions</text>
+  <Action name="draw_property_line" text="Draw Property Line" />
+  <Action name="select_all_properties" text="Select All Property Values" />
 <Separator/>
-  <Action name="flip_control_events_forward" />
-  <Action name="flip_control_events_back" />
+  <Action name="flip_control_events_forward" text="Flip Forward" shortcut="[" />
+  <Action name="flip_control_events_back" text="Flip Backwards" shortcut="]" />
 </Menu>
 
 <State name="note_insert_tool_current">
