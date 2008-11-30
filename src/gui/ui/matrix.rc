@@ -354,7 +354,7 @@
 </ToolBar>
 
 <Menu noMerge="1" name="controller_events_ruler_menu">
-  <Text>Control Ruler actions</Text>
+  <text>Control Ruler Actions</text>
   <Action name="insert_control_ruler_item" text="Insert Item" />
   <Action name="erase_control_ruler_item" text="Erase Selected Items" />
   <Action name="clear_control_ruler_item" text="Clear Ruler" />
@@ -366,7 +366,7 @@
 </Menu>
 
 <Menu noMerge="1" name="property_ruler_menu">
-  <Text>Property Ruler actions</Text>
+  <text>Property Ruler Actions</text>
   <Action name="draw_property_line" text="Draw Property Line" />
   <Action name="select_all_properties" text="Select All Property Values" />
 <Separator/>
