@@ -4,11 +4,13 @@
   
 <MenuBar>
   <Menu name="file" append="new_merge">
+    <text>&amp;File</text>
     <Action name="file_save" text="&amp;Save" icon="filesave" shortcut="Ctrl+S" />
     <Action name="file_close" text="&amp;Close" icon="fileclose" shortcut="Ctrl+W" />
   </Menu>
 
   <Menu name="edit">
+    <text>&amp;Edit</text>
     <!-- JAS 'Undo' and 'Redo' use dynamic text.  Put default text for new project in. -->
     <Action name="edit_undo" text="&amp;Nothing to undo" icon="undo" shortcut="Ctrl+Z" />
     <Action name="edit_redo" text="N&amp;othing to redo" icon="redo" shortcut="Ctrl+Shift+Z" />
@@ -50,12 +52,13 @@
       <Action name="snap_bar" text="Snap to &amp;Bar" shortcut="5"/>
     </Menu>
   <Separator/>
-    <Action name="show_velocity_control_ruler" text="&amp;Show Velocity Poperty Ruler" checked="false" />
+    <Action name="show_velocity_control_ruler" text="&amp;Show Velocity Poperty Ruler" />
     <!-- JAS don't see any text associated with "show_controller_evnents_ruler" action -->
     <Action name="show_controller_events_ruler" />
 <!--    <Action name="add_control_ruler"/> -->
     <Menu name="add_control_ruler">
       <text>&amp;Add Event Ruler</text>
+      <!-- JAS custom coded menu -->
     </Menu>
   </Menu> 
 
@@ -266,14 +269,15 @@
   </Menu>
 
   <Menu name="settings" append="show_merge">
-    <text>&amp;Settings</text>
+    <text>Sett&amp;ings</text>
     <!-- JAS deviated from RG.svn since menu items are duplicated in "toolbars" submenu -->
     <Menu name="toolbars" append="show_merge">
       <text>&amp;Toolbars</text>
       <Action name="options_show_toolbar" text="Show &amp;Toolbar" checked="true" append="show_merge" />
       <!-- JAS "show_tools_toolbar" not showing up in pulldown menu but should -->
       <Action name="show_tools_toolbar" append="show_merge" />
-      <Action name="options_show_statusbar" text="Hide St&amp;atusbar" checked="false" append="show_merge" />
+      <!-- JAS 'options_show_statusbar' determined by state -->
+      <Action name="options_show_statusbar" text="Hide St&amp;atusbar" append="show_merge" />
     </Menu>
     <Menu name="rulers" append="show_merge">
       <text>&amp;Rulers</text>
