@@ -3,371 +3,446 @@
 <kpartgui name="Rosegarden::Notation" version="1500">
 
 <MenuBar>
-
-<Menu name="file" append="new_merge">
-<Action name="file_print_lilypond" append="print_merge" />
-<Action name="file_preview_lilypond" append="print_merge" />
-</Menu>
-
-<Menu name="edit">
-  <Action name="cut_and_close"/>
-  <Action name="general_paste"/>
-  <Action name="delete"/>
+  <Menu name="file" append="new_merge">
+    <text>&amp;File</text>
+    <Action name="file_save" text="&amp;Save" icon="filesave" shortcut="Ctrl+S" />
   <Separator/>
-    <Action name="move_events_up_staff"/>
-    <Action name="move_events_down_staff"/>
+    <Action name="file_print" text="&amp;Print..." icon="fileprint" />
+    <Action name= "file_print_preview" text="P&amp;rint preview..." icon="filequickprint" />
+    <Action name="file_print_lilypond" text="Print &amp;with LilyPond..." append="print_merge" />
+    <Action name="file_preview_lilypond" text="Preview with Lil&amp;yPond..." append="print_merge" />
   <Separator/>
-  <Action name="select_from_start"/>
-  <Action name="select_to_end"/>
-  <Action name="select_whole_staff"/>
-  <Action name="clear_selection"/>
-  <Action name="filter_selection"/>
-</Menu>
+    <Action name="file_close" text="&amp;Close" icon="fileclose" shortcut="Ctrl+W" />
+  </Menu>
 
-<Menu name="View">
-  <text>&amp;View</text>
+  <Menu name="edit">
+    <text>&amp;Edit</text>
+    <!-- JAS 'Undo' and 'Redo' use dynamic text.  Put default text for new project in. -->
+    <Action name="edit_undo" text="&amp;Nothing to undo" icon="undo" shortcut="Ctrl+Z" />
+    <Action name="edit_redo" text="N&amp;othing to redo" icon="redo" shortcut="Ctrl+Shift+Z" />
+  <Separator/>
+    <!-- JAS use multiple shorcuts found in QT reference for gnome/KDE -->
+    <Action name="edit_cut" text="Cu&amp;t" icon="editcut" shortcut="Ctrl+X, F20, Shift+Del" />
+    <Action name="edit_copy" text="&amp;Copy" icon="editcopy" shortcut="Ctrl+C, F16, Ctrl+Ins" />
+    <Action nmae="edit_paste" text="&amp;Paste" icon="editpaste" shortcut="Ctrl+V, F18, Shift+Ins" />
+  <Separator/>
+    <Action name="cut_and_close" text="C&amp;ut and Close" shortcut="Ctrl+Shift+X" />
+    <Action name="general_paste" text="Pa&amp;ste..." shortcut="Ctrl+Shift+V" />
+    <Action name="delete" text="De&amp;lete" shortcut="Delete" />
+  <Separator/>
+    <Action name="move_events_up_staff" text="&amp;Move to Staff Above" />
+    <Action name="move_events_down_staff" text="Move to Staff &amp;Below" />
+  <Separator/>
+    <Action name="select_from_start" text="Select from Sta&amp;rt" />
+    <Action name="select_to_end" text="Select to &amp;End" />
+    <Action name="select_whole_staff" text="Select Whole St&amp;aff" shortcut="Ctrl+A" />
+    <Action name="clear_selection" text="Clear Select&amp;ion" shortcut="Escape" />
+    <Action name="filter_selection" text="&amp;Filter Selection" icon="filter" shortcut="Ctrl+F" />
+  </Menu>
+
+  <Menu name="View">
+    <text>&amp;View</text>
 <!--
 <Action name="debug_dump"/>
 <Separator/>
 -->
-  <Action name="note_font_actionmenu"/>
-  <Action name="note_font_size_actionmenu"/>
-  <Action name="stretch_actionmenu"/>
-  <Action name="proportion_actionmenu"/>
-<Separator/>
-  <Menu name="layout"><text>&amp;Layout Mode</text>
-    <Action name="linear_mode"/>
-    <Action name="continuous_page_mode"/>
-    <Action name="multi_page_mode"/>
-  </Menu>
-<Separator/>
-  <Action name="lyric_editor"/>
+    <!-- JAS original <Action name="note_font_actionmenu" /> -->
+    <Menu name="note_font_actionmenu">
+      <text>Note &amp;Font</text>
+      <!-- JAS Need action names for these items -->
+      <Action name="" text="&amp;Feta" checked="true" group="note_font" />
+      <Action name="" text="Feta &amp;Pixmaps" checked="false" group="note_font" />
+      <Action name="" text="&amp;RG21" checked="false" group="note_font" />
+    </Menu>
+    <!-- JAS original <Action name="note_font_size_actionmenu" /> -->
+    <Menu name="note_font_size_actionmenu">
+      <text>Si&amp;ze</text>
+      <!-- JAS Need action names for these items -->
+      <Action name="" text="&amp;1 pixel" checked="false" group="note_font_size" />
+      <Action name="" text="&amp;2 pixels" checked="false" group="note_font_size" />
+      <Action name="" text="&amp;4 pixels" checked="false" group="note_font_size" />
+      <Action name="" text="&amp;6 pixels" checked="false" group="note_font_size" />
+      <Action name="" text="&amp;8 pixels" checked="true" group="note_font_size" />
+      <Action name="" text="10 &amp;pixels" checked="false" group="note_font_size" />
+      <Action name="" text="12 p&amp;ixels" checked="false" group="note_font_size" />
+      <Action name="" text="14 pi&amp;xels" checked="false" group="note_font_size" />
+      <Action name="" text="16 pix&amp;els" checked="false" group="note_font_size" />
+    </Menu>
+    <!-- JAS original <Action name="stretch_actionmenu" /> -->
+    <Menu name="stretch_actionmenu">
+      <text>S&amp;pacing</text>
+      <!-- JAS Need action names for these items -->
+      <Action name="" text="&amp;30%" checked="false" group="note_stretch" />
+      <Action name="" text="&amp;60%" checked="false" group="note_stretch" />
+      <Action name="" text="&amp;85%" checked="false" group="note_stretch" />
+      <Action name="" text="&amp;100%" checked="true" group="note_stretch" />
+      <Action name="" text="13&amp;0%" checked="false" group="note_stretch" />
+      <Action name="" text="1&amp;70%" checked="false" group="note_stretch" />
+      <Action name="" text="&amp;220%" checked="false" group="note_stretch" />
+    </Menu>
+    <!-- JAS original <Action name="proportion_actionmenu" /> -->
+    <Menu name="proportion_actionmenu">
+      <text>Du&amp;ration Factor</text>
+      <!-- JAS Need action names for these items -->
+      <Action name="" text="&amp;None" checked="false" group="note_proportion" />
+      <Action name="" text="&amp;20%" checked="false" group="note_proportion" />
+      <Action name="" text="&amp;40%" checked="false" group="note_proportion" />
+      <Action name="" text="&amp;60%" checked="true" group="note_proportion" />
+      <Action name="" text="&amp;80%" checked="false" group="note_proportion" />
+      <Action name="" text="&amp;100%" checked="false" group="note_proportion" />
+    </Menu>
   <Separator/>
-    <Action name="show_velocity_control_ruler"/>
-    <Action name="show_controller_events_ruler"/>
+    <Menu name="layout">
+      <text>&amp;Layout Mode</text>
+      <Action name="linear_mode" text="&amp;Linear Layout" icon="linear-layout" checked="true" group="score_layout" />
+      <Action name="continuous_page_mode" icon="continuous-page-mode" checked="false" group="score_layout" />
+      <Action name="multi_page_mode" icon="multi-page-mode" checked="false" group="score_layout" />
+    </Menu>
+  <Separator/>
+    <Action name="lyric_editor" text="Open L&amp;yric Editor" />
+  <Separator/>
+    <Action name="show_velocity_control_ruler" text="&amp;Show Velocity Poperty Ruler" />
+    <!-- JAS No text in menus for 'show_controller_event_ruler' action name. -->
+    <Action name="show_controller_events_ruler" />
 <!--    <Action name="add_control_ruler"/> -->
-    <Menu name="add_control_ruler"><text>Add Event Ruler</text></Menu>
-    <Separator/>
-    <Action name="show_track_headers"/>
-</Menu>
-
-<Menu name="document">
-  <text>&amp;Composition</text>
-  <Action name="add_tempo"/>
-  <Action name="add_time_signature"/>
-</Menu>
-
-<Menu name="segment">
-  <text>Se&amp;gment</text>
-  <Menu name="open-with">
-	   <text>Edit &amp;With</text>
-	   <Action name="open_in_event_list"/>
-	   <Action name="open_in_matrix"/>
-	   <Action name="open_in_percussion_matrix"/>
+    <Menu name="add_control_ruler">
+      <text>Add Event Ruler</text>
+      <!-- JAS custom coded menu -->
+    </Menu>
+  <Separator/>
+    <!-- JAS 'show_track_headers' is determined by states -->
+    <Action name="show_track_headers" text="Show &amp;track Headers" />
   </Menu>
-  <Separator/>
-  <Action name="add_clef"/>
-  <Action name="add_key_signature"/>
-  <Separator/>
-  <Action name="add_sustain_down"/>
-  <Action name="add_sustain_up"/>
-  <Separator/>
-  <Action name="set_segment_start"/>
-  <Action name="set_segment_duration"/>
-  <Separator/>
-  <Action name="transpose_segment"/>
-  <Action name="switch_preset"/>
-</Menu>
 
+  <Menu name="document">
+    <text>&amp;Composition</text>
+    <Action name="add_tempo" text="Add Te&amp;mpo Change..." icon="event-insert-tempo" />
+    <Action name="add_time_signature" text="Add Time Si&amp;gnature Change..." icon="event-insert-timesig" />
+  </Menu>
 
-<Menu name="Notes">
-	<text>N&amp;ote</text>
-	<Separator/>
-	<Menu name="Marks">
-		<text>Mar&amp;ks</text>
-		<Action name="add_accent"/>
-		<Action name="add_tenuto"/>
-		<Action name="add_staccato"/>
-		<Action name="add_staccatissimo"/>
-		<Action name="add_marcato"/>
-		<Action name="add_text_sf"/>
-		<Action name="add_text_rf"/>
-		<Separator/>
-		<Action name="add_trill"/>
-		<Action name="add_long-trill"/>
-		<Action name="add_trill-line"/>
-		<Action name="add_turn"/>
-		<Action name="add_mordent"/>
-		<Action name="add_mordent-inverted"/>
-		<Action name="add_mordent-long"/>
-		<Action name="add_mordent-long-inverted"/>
-		<Separator/>
-		<Action name="add_up-bow"/>
-		<Action name="add_down-bow"/>
-		<Action name="add_pause"/>
-		<Separator/>
-		<Action name="add_text_mark"/>
-		<Separator/>
-		<Action name="remove_marks"/>
-	</Menu>
-	<Menu name="ornaments">
-		<text>&amp;Ornaments</text>
-		<Action name="use_ornament"/>
-		<Action name="remove_ornament"/>
-		<Action name="make_ornament"/>
-		<Action name="ornament_actionmenu"/>
-	</Menu>
-		<Separator/>
-	<Menu name="Fingering">
-		<text>&amp;Fingerings</text>
-		<Action name="remove_fingering_marks"/>
-		<Separator/>
-		<Action name="add_fingering_0"/>
-		<Action name="add_fingering_1"/>
-		<Action name="add_fingering_2"/>
-		<Action name="add_fingering_3"/>
-		<Action name="add_fingering_4"/>
-		<Action name="add_fingering_5"/>
-		<Action name="add_fingering_plus"/>
-		<Action name="add_fingering_mark"/>
-	</Menu>
-	<Menu name="Slashes">
-		<text>S&amp;lashes</text>
-		<Action name="slashes_0"/>
-		<Action name="slashes_1"/>
-		<Action name="slashes_2"/>
-		<Action name="slashes_3"/>
-		<Action name="slashes_4"/>
-		<Action name="slashes_5"/>
-	</Menu>
-	<Action name="note_style_actionmenu"/>
-		<Separator/>
-	<Menu name="Respell">
-		<text>&amp;Accidentals</text>
-		<Action name="respell_restore"/>
-		<Separator/>
-		<Action name="respell_doubleflat"/>
-		<Action name="respell_flat"/>
-		<Action name="respell_natural"/>
-		<Action name="respell_sharp"/>
-		<Action name="respell_doublesharp"/>
-		<Separator/>
-		<Action name="show_cautionary"/>
-		<Action name="cancel_cautionary"/>
-	</Menu>
-	<Separator/>
-		<Action name="stems_up"/>
-		<Action name="stems_down"/>
-		<Action name="restore_stems"/>
-</Menu>
+  <Menu name="segment">
+    <text>Se&amp;gment</text>
+    <!-- JAS name="edit_with" in rosaegardenui.rc -->
+    <Menu name="open-with">
+      <text>Edit &amp;With</text>
+      <Action name="open_in_event_list" text="Open in &amp;Event List Editor" icon="eventlist" />
+      <Action name="open_in_matrix" text="Open in Matri&amp;x Editor" icon="matrix" />
+      <Action name="open_in_percussion_matrix" text="Open in &amp;Percussion Matrix Editor" icon="matrix-percussion" />
+    </Menu>
+  <Separator/>
+    <Action name="add_clef" text="Add Cle&amp;f Change..." />
+    <Action name="add_key_signature" text="Add &amp;Key Change..." />
+  <Separator/>
+    <Action name="add_sustain_down" text="Add Pedal &amp;Press" />
+    <Action name="add_sustain_up" text="Add Pedal &amp;Release" />
+  <Separator/>
+    <Action name="set_segment_start" text="&amp;Set Segment Start Time..." />
+    <Action name="set_segment_duration" text="Set Segment &amp;Duration..." />
+  <Separator/>
+    <Action name="transpose_segment" text="Transpose by &amp;Inverval..." />
+    <Action name="switch_preset" text="&amp;convert Notation For..." />
+  </Menu>
 
-<Menu name="Phrase">
-	<text>&amp;Phrase</text>
-	<Action name="make_chord"/>
-	<Separator/>
-		    <Action name="beam"/>
-		    <Action name="auto_beam"/>
-		    <Action name="break_group"/>
-	    <Action name="remove_indications"/>
-	<Separator/>
-		<Action name="tuplet"/>
-		<Action name="simple_tuplet"/>
-		<Action name="break_tuplets"/>
-	<Separator/>
-	<Action name="grace"/>
-	    <Separator/>
-  		<Action name="slur"/>
-		<Action name="phrasing_slur"/>
+  <Menu name="Notes">
+    <text>N&amp;ote</text>
+    <Menu name="Marks">
+      <text>Mar&amp;ks</text>
+      <Action name="add_accent" text="Add &amp;Accent" icon="accent" />
+      <Action name="add_tenuto" text="Add T&amp;enuto" icon="tenuto" />
+      <Action name="add_staccato" text="Add Sta&amp;ccato" icon="staccato" />
+      <Action name="add_staccatissimo" text="Add &amp;Staccatissimo" icon="staccatissimo" />
+      <Action name="add_marcato" text="Add &amp;Marcato" icon="marcato" />
+      <Action name="add_text_sf" text="Add S&amp;forzando" icon="text_sf" />
+      <Action name="add_text_rf" text="Add R&amp;inforzando" icon="text_rf" />
+    <Separator/>
+      <Action name="add_trill" text="Add Tri&amp;ll" icon="trill" />
+      <Action name="add_long-trill" text="Add Trill &amp;with Line" icon="trill" />
+      <!-- JAS need line icon for 'add_trill-line' -->
+      <Action name="add_trill-line" text="Add Trill Line" />
+      <Action name="add_turn" text="Add &amp;Turn" icon="turn" />
+      <!-- JAS need line icon for 'add_mordent...' actions -->
+      <Action name="add_mordent" text="Add M&amp;ordent" />
+      <Action name="add_mordent-inverted" text="Add I&amp;nverted Mordent" />
+      <Action name="add_mordent-long" text="Add Long Mordent" />
+      <Action name="add_mordent-long-inverted" text="Add Lon&amp;g Inverted Mordent" />
+    <Separator/>
+      <Action name="add_up-bow" text="Add &amp;Up-Bow" icon="up-bow" />
+      <Action name="add_down-bow" text="Add &amp;Down-Bow" icon="down-bow" />
+      <Action name="add_pause" text="Add &amp;Pause" icon="pause" />
+    <Separator/>
+      <Action name="add_text_mark" text="Add Te&amp;xt Mark..." icon="text-mark" />
+    <Separator/>
+      <Action name="remove_marks" text="&amp;Remove All Marks" />
+    </Menu>
+    <Menu name="ornaments">
+      <text>&amp;Ornaments</text>
+      <Action name="use_ornament" text="Trigger &amp;Ornament..." />
+      <Action name="remove_ornament" text="&amp;Remove Ornament..." />
+      <Action name="make_ornament" text="Ma&amp;ke Ornament..." />
+      <!-- JAS No text in menus for 'ornament_actionmenu' action name. -->
+      <Action name="ornament_actionmenu" />
+    </Menu>
+  <Separator/>
+    <Menu name="Fingering">
+      <text>&amp;Fingerings</text>
+      <Action name="remove_fingering_marks" text="&amp;Remove Fingerings" /> 
+    <Separator/>
+      <Action name="add_fingering_0" text="Add Fingering &amp;0 (Thumb)" shortcut="Alt+0" />
+      <Action name="add_fingering_1" text="Add Fingering &amp;1" shortcut="Alt+1" />
+      <Action name="add_fingering_2" text="Add Fingering &amp;2" shortcut="Alt+2" />
+      <Action name="add_fingering_3" text="Add Fingering &amp;3" shortcut="Alt+3" />
+      <Action name="add_fingering_4" text="Add Fingering &amp;4" shortcut="Alt+4" />
+      <Action name="add_fingering_5" text="Add Fingering &amp;5" shortcut="Alt+5" />
+      <Action name="add_fingering_plus" text="&amp;Add Fingering +" shortcut="Alt+9" />
+      <Action name="add_fingering_mark" text="Add Other &Fingering..." />
+    </Menu>
+    <Menu name="Slashes">
+      <text>S&amp;lashes</text>
+      <Action name="slashes_0" text="&amp;None" />
+      <Action name="slashes_1" text="&amp;1" />
+      <Action name="slashes_2" text="&amp;2" />
+      <Action name="slashes_3" text="&amp;3" />
+      <Action name="slashes_4" text="&amp;4" />
+      <Action name="slashes_5" text="&amp;5" />
+    </Menu>
+    <!-- JAS original <Action name="note_style_actionmenu" /> -->
+    <Menu name="note_style_actionmenu">
+      <text>Note &amp;Style</text>
+      <!-- JAS Need action names for these items -->
+      <Action name="" text="&amp;Classical" />
+      <Action name="" text="C&amp;ross" />
+      <Action name="" text="&amp;Mensural" />
+      <Action name="" text="&amp;Triangle" />
+  <Separator/>
+    <Menu name="Respell">
+      <text>&amp;Accidentals</text>
+      <Action name="respell_restore" text="&amp;Restore Accidentals" />
+    <Separator/>
+      <Action name="respell_doubleflat" text="Respell with Dou&amp;ble Flat" icon="accmenu-doubleflat" />
+      <Action name="respell_flat" text="Respell with &amp;Flat" icon="accmenu-flat" />
+      <Action name="respell_natural" text="Respell with &amp;Natural" icon="accmenu-natural" />
+      <Action name="respell_sharp" text="Respell with &amp;Sharp" icon="accmenu-sharp" />
+      <Action name="respell_doublesharp" text="Respell with Do&amp;uble Sharp" icon="accmenu-doublesharp" />
+    <Separator/>
+      <Action name="show_cautionary" text="Use &amp;Cautionary Accidentals" />
+      <Action name="cancel_cautionary" text="Cancel C&amp;autionary Accidentals" />
+    </Menu>
+  <Separator/>
+    <Action name="stems_up" text="Stem &amp;Up" shortcut="Ctrl+PgUp" />
+    <Action name="stems_down" text="Stem &amp;Down" shortcut="Ctrl+PgDowm" />
+    <Action name="restore_stems" text="&amp;Restore Stems" />
+  </Menu>
+
+  <Menu name="Phrase">
+    <text>&amp;Phrase</text>
+    <!-- JAS need icon name for action 'make_chord" -->
+    <Action name="make_chord" text="&amp;Make Chord" />
+  <Separator/>
+    <Action name="beam" text="&amp;Beam Group" icon="group-beam" shortcut="Ctrl+B" />
+    <Action name="auto_beam" text="&amp;Auto-Beam" />
+    <Action name="break_group" text="&amp;Unbeam" icon="group-unbeam" shortcut="Ctrl+U" />
+    <!-- JAS No text in menus for 'remove_indications' action name. -->
+    <Action name="remove_indications" />
+  <Separator/>
+    <Action name="tuplet" text="Tupl&amp;et..." icon="group-tuplet" shortcut="Ctrl+T" />
+    <Action name="simple_tuplet" text="&amp;triplet" icon="group-simple-tuplet" shortcut="Ctrl+R" />
+    <Action name="break_tuplets" text="U&amp;ntuplet" />
+  <Separator/>
+    <!-- JAS No text in menus for 'grace' action name. -->
+    <Action name="grace" />
+  <Separator/>
+    <Action name="slur" text="Add S&amp;lur" icon="group-slur" shortcut=")" />
+    <Action name="phrasing_slur" text="Add P&amp;hrasing Slur" shortcut="Ctrl+)" />
 	  <!--  <Action name="glissando"/> -->
-	  	<Menu name="Slurs">
-			<text>Slur &amp;Position</text>
-			<Action name="restore_slurs"/>
-			<Separator/>
-	  		<Action name="slurs_above"/>
-			<Action name="slurs_below"/>
-		</Menu>
-		<Separator/>
-		<Action name="tie_notes"/>
-		<Action name="untie_notes"/>
-	  	<Menu name="Ties">
-			<text>Tie &amp;Position</text>
-			<Action name="restore_ties"/>
-			<Separator/>
-	  		<Action name="ties_above"/>
-			<Action name="ties_below"/>
-		</Menu>
-		<Separator/>
-		<Action name="crescendo"/>
-		<Action name="decrescendo"/>
-		<Separator/>
-	    <Menu name="octaves">
-		    <text>&amp;Octaves</text>
-		    <Action name="octave_2up"/>
-		    <Action name="octave_up"/>
-		    <Action name="octave_down"/>
-		    <Action name="octave_2down"/>
-	    </Menu>
-</Menu>
-
-<Menu name="Adjust">
-	<text>Ad&amp;just</text>
-	<Menu name="rests">
-		<text>R&amp;ests</text>
-		<Action name="normalize_rests"/>
-		<Action name="collapse_rests_aggressively"/>
-	</Menu>
-	<Menu name="transform_notes">
-		<text>&amp;Notes</text>
-	        <Action name="collapse_notes"/>
-	        <Action name="make_notes_viable"/>
-	        <Action name="de_counterpoint"/>
-	</Menu>
-	<Separator/>
-	<Menu name="quantize_notes">
-		<text>&amp;Quantize</text>
-	        <Action name="quantize"/>
-  	        <Action name="fix_quantization"/>
-	        <Action name="remove_quantization"/>
-	</Menu>
- 	<Action name="interpret"/>
-        <Separator/>
-	<Menu name="Rescale">
-	      <text>Rescale</text>
-	      <Action name="halve_durations"/>
-	      <Action name="double_durations"/>
-	      <Separator/>
-	      <Action name="rescale"/>
-	</Menu>
-        <Menu name="Transpose">
-	      <text>Trans&amp;pose</text>
-	      <Action name="transpose_up"/>
-	      <Action name="transpose_down"/>
-	      <Separator/>
-	      <Action name="transpose_up_octave"/>
-	      <Action name="transpose_down_octave"/>
-	      <Separator/>
-	      <Action name="general_transpose"/>
-	      <Action name="general_diatonic_transpose"/>
-	</Menu>
-        <Menu name="Convert">
-	      <text>Convert</text>
-	      <Action name="invert"/>
- 	      <Action name="retrograde"/>
-	      <Action name="retrograde_invert"/>
-	</Menu>
-		<Separator/>
-	<Menu name="velocities">
-		<text>Velocities</text>
-		<Action name="velocity_up"/>
-		<Action name="velocity_down"/>
-		<Action name="set_velocities"/>
-	</Menu>
-	<Menu name="fine_positioning">
-		<text>&amp;Fine Positioning</text>
-		<Action name="fine_position_restore"/>
- 		<Separator/>
-		<Action name="fine_position_left"/>
-		<Action name="fine_position_right"/>
-		<Action name="fine_position_up"/>
-		<Action name="fine_position_down"/>
-	</Menu>
-	<Menu name="fine_timing">
-		<text>Fine Ti&amp;ming</text>
-	        <Action name="jog_left"/>
-	        <Action name="jog_right"/>
-	</Menu>
-	<Menu name="visibility">
-		<text>&amp;Visibility</text>
-		<Action name="make_invisible"/>
-		<Action name="make_visible"/>
-	</Menu>
-</Menu>
-
-<Menu name="Tools">
-  <text>&amp;Tools</text>
-	<Action name="select"/>
-	<Action name="erase"/>
-      <Menu noMerge="1" name="Notes">
-	    <text>&amp;Notes</text>
-	    <!-- Reference names, but with _ instead of - -->
-	    <Action name="breve" />
-	    <Action name="semibreve" />
-	    <Action name="minim" />
-	    <Action name="crotchet" />
-	    <Action name="quaver" />
-	    <Action name="semiquaver" />
-	    <Action name="demisemi" />
-	    <Action name="hemidemisemi" />
-	    <Separator/>
-	    <Action name="dotted_semibreve" />
-	    <Action name="dotted_minim" />
-	    <Action name="dotted_crotchet" />
-	    <Action name="dotted_quaver" />
-	    <Action name="dotted_semiquaver" />
-	    <Action name="dotted_demisemi" />
-	    <Separator/>
-	    <Action name="toggle_dot" />
-	    <Action name="switch_from_rest_to_note" />
-      </Menu>
-
-      <Menu noMerge="1" name="Rests">
-	    <text>&amp;Rests</text>
-	    <!-- Reference names, but with _ instead of - -->
-	    <Action name="rest_breve" />
-	    <Action name="rest_semibreve" />
-	    <Action name="rest_minim" />
-	    <Action name="rest_crotchet" />
-	    <Action name="rest_quaver" />
-	    <Action name="rest_semiquaver" />
-	    <Action name="rest_demisemi" />
-	    <Action name="rest_hemidemisemi" />
-	    <Separator/>
-	    <Action name="dotted_rest_semibreve" />
-	    <Action name="dotted_rest_minim" />
-	    <Action name="dotted_rest_crotchet" />
-	    <Action name="dotted_rest_quaver" />
-	    <Action name="dotted_rest_semiquaver" />
-	    <Action name="dotted_rest_demisemi" />
-	    <Separator/>
-	    <Action name="toggle_dot" />
-	    <Action name="switch_from_note_to_rest" />
-      </Menu>
-
-      <Menu noMerge="1" name="Accidentals">
-	    <text>&amp;Accidentals</text>
-	    <Action name="no_accidental" />
-	    <Action name="follow_accidental" />
-	    <Action name="sharp_accidental" />
-	    <Action name="flat_accidental" />
-	    <Action name="natural_accidental" />
-	    <Action name="double_sharp_accidental" />
-	    <Action name="double_flat_accidental" />
-      </Menu>
-
-      <Menu noMerge="1" name="Clefs">
-	    <text>&amp;Clefs</text>
-	    <Action name="treble_clef" />
-	    <Action name="alto_clef" />
-	    <Action name="tenor_clef" />
-	    <Action name="bass_clef" />
-      </Menu>
+    <Menu name="Slurs">
+      <text>Slur &amp;Position</text>
+      <Action name="restore_slurs" text="&amp;restore Slur Positions" />
+    <Separator/>
+      <Action name="slurs_above" text="Slur &amp;Above" />
+      <Action name="slurs_below" text="Slur &amp;Below" />
+    </Menu>
   <Separator/>
-  <Action name="text" />
-  <Action name="guitarchord" />
+    <Action name="tie_notes" text="T&amp;ie" icon="transforms-tie" shortcut="~" />
+    <Action name="untie_notes" text="&amp;Untie" />
+    <Menu name="Ties">
+      <text>Tie &amp;Position</text>
+      <Action name="restore_ties" text="&amp;Restore Tie Position" />
+    <Separator/>
+      <Action name="ties_above" text="Tie &amp;Above" />
+      <Action name="ties_below" text="Tie &amp;Below" />
+    </Menu>
   <Separator/>
-  <Menu name="Move">
-  	<text>Local &amp;Cursor</text>
-	<Action name="cursor_back"/>
-	<Action name="cursor_forward"/>
-	<Action name="cursor_back_bar"/>
-	<Action name="cursor_forward_bar"/>
-	<Action name="cursor_start"/>
-	<Action name="cursor_end"/>
-	<Separator/>
-	<Action name="extend_selection_backward"/>
-	<Action name="extend_selection_forward"/>
-	<Action name="preview_selection"/>
-	<Action name="clear_loop"/>
+    <Action name="crescendo" text="Add &amp;Crescendo" icon="group-crescendo" shortcut="<" />
+    <Action name="decrescendo" text="Add &amp;Decescendo" icon="group-decrescendo" shortcut=">" />
+  <Separator/>
+    <Menu name="octaves">
+      <text>&amp;Octaves</text>
+      <Action name="octave_2up" text="&amp;Add Double-Octave Up" />
+      <Action name="octave_up" text="Add Octave &amp;Up" icon="group-ottava" />
+      <Action name="octave_down" text="Add Octave &amp;Down" />
+      <Action name="octave_2down" text="Add Double &amp;Octave Down" />
+    </Menu>
+  </Menu>
+
+  <Menu name="Adjust">
+    <text>Ad&amp;just</text>
+    <Menu name="rests">
+      <text>R&amp;ests</text>
+      <Action name="normalize_rests" text="&amp;Normalize Rests" shortcut="Ctrl+N" />
+      <Action name="collapse_rests_aggressively" text="&amp;Collapse Rests" />
+    </Menu>
+    <Menu name="transform_notes">
+      <text>&amp;Notes</text>
+      <Action name="collapse_notes" text="Collapse &amp;Equal-Pitch Notes" shortcut="Ctrl+=" />
+      <Action name="make_notes_viable" text="Tie Notes at &amp;Barlines" />
+      <Action name="de_counterpoint" text="Split-and-Tie Overlapping &amp;Chords" icon="transforms-decounterpoint" />
+    </Menu>
+  <Separator/>
+    <Menu name="quantize_notes">
+      <text>&amp;Quantize</text>
+      <Action name="quantize" text="&amp;Quantize..." icon="quantize" shortcut="=" />
+      <Action name="fix_quantization" text="Fi&amp;x Notation Quantization" />
+      <Action name="remove_quantization" text="Remo&amp;ve Notation Quantization" />
+    </Menu>
+    <Action name="interpret" text="&amp;Interpret..." />
+  <Separator/>
+    <Menu name="Rescale">
+      <text>Rescale</text>
+      <Action name="halve_durations" text="&amp;Halve Durations" shortcut="Ctrl+H" />
+      <Action name="double_durations" text="&amp;Double Durations" shortcut=Ctrl+Shift+H" />
+    <Separator/>
+      <Action name="rescale" text="Stretch or S&amp;quash..." />
+    </Menu>
+    <Menu name="Transpose">
+      <text>Trans&amp;pose</text>
+      <Action name="transpose_up" text="&amp;Up a Semitone" shortcut="Up" />
+      <Action name="transpose_down" text="&amp;Down a Semitone" shortcut="Down" />
+    <Separator/>
+      <Action name="transpose_up_octave" text="Up an &amp;Octave" shortcut="Ctrl+Up" />
+      <Action name="transpose_down_octave" text="Down an Octa&amp;ve" shortcut="Ctrl+Down" />
+    <Separator/>
+      <Action name="general_transpose" text="&amp;transpose by Semitones..." />
+      <!-- JAS this action is called "transpose" in rosegardenui.rc.  Is this a different call? -->
+      <Action name="general_diatonic_transpose" text="Transpose by &amp;Interval..." />
+    </Menu>
+    <Menu name="Convert">
+      <text>Convert</text>
+      <Action name="invert" text="&amp;Invert" />
+      <Action name="retrograde" text="&amp;Retrograde" />
+      <Action name="retrograde_invert" text="Re&amp;trograde Invert" />
+    </Menu>
+  <Separator/>
+    <Menu name="velocities">
+      <text>Ve&amp;locities</text>
+      <Action name="velocity_up" text="&amp;Increase Velocity" shortcut="Shift+Up" />
+      <Action name="velocity_down" text="&amp;Reduce Velocity" shortcut="Shift+Down" />
+      <Action name="set_velocities" text="Set Event &amp;Velocities" />
+    </Menu>
+    <Menu name="fine_positioning">
+      <text>&amp;Fine Positioning</text>
+      <Action name="fine_position_restore" text="&amp;Restore Positions" />
+    <Separator/>
+      <Action name="fine_position_left" text="Push &amp;Left" />
+      <Action name="fine_position_right" text="&amp;Push Right" />
+      <Action name="fine_position_up" text="Push &amp;Up" />
+      <Action name="fine_position_down" text="Push &amp;Down" />
+    </Menu>
+    <Menu name="fine_timing">
+      <text>Fine Ti&amp;ming</text>
+      <Action name="jog_left" text="Jog &amp;Left" shortcut="Alt+Left" />
+      <Action name="jog_right" text="Jog &amp;Right" shortcut="Alt+Right" />
+    </Menu>
+    <Menu name="visibility">
+      <text>&amp;Visibility</text>
+      <Action name="make_invisible" text="Make &amp;Invisible" />
+      <Action name="make_visible" text="Make &amp;Visible" />
+    </Menu>
+  </Menu>
+
+  <Menu name="Tools">
+    <text>&amp;Tools</text>
+    <!-- JAS for 'select' and 'erase' actions, do they belong to same group as matrix.rc and rosegardenui.rc. -->
+    <!-- JAS Other tool in group are not selectable from menu -->
+    <Action name="select" text="&amp;Select and Edit" icon="select" shortcut="F2" group="tools_segment" checked="true" />
+    <Action name="erase" text="&amp;Easer" icon="eraser" shortcut="F4" group="tools_segment" checked="false" />
+    <Menu noMerge="1" name="Notes">
+      <text>&amp;Notes</text>
+	    <!-- Reference names, but with _ instead of - -->
+      <Action name="breve" text="&amp;Double Whole Note" icon="menu-breve" shortcut="5" />
+      <Action name="semibreve" text="&amp;Whole Note" icon="menu-semibreve" shortcut="1" />
+      <Action name="minim" text="&amp;Half Note" icon="menu-minim" shortcut="2" />
+      <Action name="crotchet" text="&amp;Quarter Note" icon="menu-crotchet" shortcut="4" />
+      <Action name="quaver" text="&amp;Eighth Note" icon="menu-quaver" shortcut="8" />
+      <Action name="semiquaver" text="&amp;Sixteenth note" icon="semiquaver" shortcut="6" />
+      <Action name="demisemi" text="&amp;Thirty-Second Note" icon="menu-demisemi" shortcut="3" />
+      <Action name="hemidemisemi" text="Sixty-&amp;Fourth Note" icon="menu-hemidemisemi" shortcut="0" />
+    <Separator/>
+      <Action name="dotted_semibreve" text="D&amp;otted Whole Note" icon="menu-dotted-semibreve" />
+      <Action name="dotted_minim" text="Dotted Half &amp;Note" icon="menu-dottedminim" />
+      <Action name="dotted_crotchet" text="Dotted Q&amp;uarter Note" icon="menu-dotted-crotchet" />
+      <Action name="dotted_quaver" text="Dotted E&amp;ighth Note" icon="menu-dotted-quaver" />
+      <Action name="dotted_semiquaver" text="Dotted Si&amp;xteenth Note" icon="menu-dotted-semiquaver" />
+      <Action name="dotted_demisemi" text="Dotted Thirt&amp;y-Second Note" icon="menu-dotted-demisemi" />
+    <Separator/>
+      <Action name="toggle_dot" text="to&amp;ggle Dot" />
+      <Action name="switch_from_rest_to_note" text="Switch from &amp;Rest to Note" shortcut="Y" />
+    </Menu>
+    <Menu noMerge="1" name="Rests">
+      <text>&amp;Rests</text>
+	    <!-- Reference names, but with _ instead of - -->
+      <Action name="rest_breve" text="&amp;Double Whole Rest" icon="rest-breve" shortcut="5" />
+      <Action name="rest_semibreve" text="&amp;Whole Rest" icon="rest-semibreve" shortcut="1" />
+      <Action name="rest_minim" text="&amp;Half Rest" icon="rest-minim" shortcut="2" />
+      <Action name="rest_crotchet" text="&amp;Quarter Rest" icon="rest-crotchet" shortcut="4" />
+      <Action name="rest_quaver" text="&amp;Eighth Rest" icon="rest-quaver" shortcut="8" />
+      <Action name="rest_semiquaver" text="&amp;Sixteenth Rest" icon="rest-semiquaver" shortcut="6" />
+      <Action name="rest_demisemi" text="&amp;Thirty-Second Rest" icon="rest-demisemi" shortcut="3" />
+      <Action name="rest_hemidemisemi" text="Sixty-&amp;Fourth Rest" icon="rest-hemidemisemi" shortcut="0" />
+    <Separator/>
+      <Action name="dotted_rest_semibreve" text="D&amp;otted Whole Rest" icon="dotted-rest-semibreve" />
+      <Action name="dotted_rest_minim" text="Dotted Half &amp;Rest" icon="dotted-rest-minim" />
+      <Action name="dotted_rest_crotchet" text="Dotted Q&amp;uarter Rest" icon="dotted-rest-crotchet" />
+      <Action name="dotted_rest_quaver" text="Dotted E&amp;ighth Rest" icon="dotted-rest-quaver" />
+      <Action name="dotted_rest_semiquaver" text="Dotted Si&amp;xteenth Rest" icon="dotted-rest-semiquaver" />
+      <Action name="dotted_rest_demisemi" text="Dotted Thirt&amp;y-Second Rest" icon="dotted-rest-demisemi" />
+    <Separator/>
+      <Action name="toggle_dot" text="to&amp;ggle Dot" />
+      <Action name="switch_from_note_to_rest" text="Switch from &amp;Note to Rest" shortcut="T" />
+    </Menu>
+    <Menu noMerge="1" name="Accidentals">
+      <text>&amp;Accidentals</text>
+      <Action name="no_accidental" text="&amp;No Accidental" icon="accidental-none" />
+      <Action name="follow_accidental" text="&amp;Follow Previous Accidental" icon="accidental-follow" />
+      <Action name="sharp_accidental" text="&amp;Sharp" icon="accidental-sharp" />
+      <Action name="flat_accidental" text="F&amp;lat" icon="accidental-flat" />
+      <Action name="natural_accidental" text="N&amp;atural" icon="accidental-natural" />
+      <Action name="double_sharp_accidental" text="&amp;Double Sharp" icon="accidental-doublesharp" />
+      <Action name="double_flat_accidental" text="D&amp;ouble Flat" icon="accidental-doubleflat" />
+    </Menu>
+    <Menu noMerge="1" name="Clefs">
+      <text>&amp;Clefs</text>
+      <Action name="treble_clef" text="&amp;treble Clef" icon="clef-treble" />
+      <Action name="alto_clef" text="&amp;Alto Clef" icon="clef-alto" />
+      <Action name="tenor_clef" text="Te&amp;nor Clef" icon="clef-tenor" />
+      <Action name="bass_clef" text="&amp;Bass Clef" icon="clef-bass" />
+    </Menu>
+  <Separator/>
+    <Action name="text" text="&amp;Text" icon="text" shortcut="F8" />
+    <Action name="guitarchord" text="&amp;Guitar Chord" icon="guitarchord" shortcut="F9" />
+  <Separator/>
+    <Menu name="Move">
+      <text>Local &amp;Cursor</text>
+      <Action name="cursor_back" text="Cursor &amp;Back" shortcut="Left" />
+      <Action name="cursor_forward" text="Cursor &amp;Forward" shortcut="Right" />
+      <Action name="cursor_back_bar" text="C&amp;ursor Back Bar" shortcut="Ctrl+Left" />
+      <Action name="cursor_forward_bar" text="Cursor For&amp;ward Bar" shortcut="Ctrl+Right" />
+      <Action name="cursor_start" text="Cursor to St&amp;art" />
+      <Action name="cursor_end" text="Cursor to &amp;End" shortcut="Ctrl+E" />
+    <Separator/>
+      <Action name="extend_selection_backward" text="Cursor back and Se&amp;lect" shortcut="ShiftLeft" />
+      <Action name="extend_selection_forward" text="Cursor Forward and &amp;Select" shortcut="Shift+Right" />
+      <Action name="preview_selection" text="Set Loop &amp;to Selection" shortcut="Chrt+;" />
+      <Action name="clear_loop" text="Clear L&amp;oop" shortcut="Ctrl+:" />
 	<!-- not implemented yet
 	<Separator/>
 	<Action name="move_selection_left"/>
@@ -375,78 +450,185 @@
 	<Action name="copy_selection_left"/>
 	<Action name="copy_selection_right"/>
 	-->
-	<Separator/>
-	<Action name="cursor_to_playback_pointer"/>
-	<Action name="playback_pointer_to_cursor"/>
-	<Separator/>
-	<Action name="cursor_up_staff"/>
-	<Action name="cursor_down_staff"/>
-  	<Action name="cursor_prior_segment"/>
-  	<Action name="cursor_next_segment"/>
-  </Menu>
-
-  <Menu name="Transport">
-        <text>T&amp;ransport</text>
-        <Action name="play"/> 
-        <Action name="stop"/> 
-  	<Action name="playback_pointer_back_bar"/>
-	<Action name="playback_pointer_forward_bar"/>
-	<Action name="playback_pointer_start"/>
-	<Action name="playback_pointer_end"/>
-	<Action name="playback_pointer_to_cursor" />
-	<Action name="cursor_to_playback_pointer" />
-	<Action name="toggle_solo"/>
-	<Action name="toggle_tracking"/>
-	<Action name="panic"/>
-  </Menu>
-
+    <Separator/>
+      <Action name="cursor_to_playback_pointer" />
+      <Action name="playback_pointer_to_cursor" />
+    <Separator/>
+      <Action name="cursor_up_staff" text="Cursor &amp;Up Staff" shortcut="Shift+Up" />
+      <Action name="cursor_down_staff" text="Cursor &amp;Down Staff" shortcut="Shift+Down" />
+      <Action name="cursor_prior_segment" text="Cursor Pre&amp;vious Segment" shortcut="Alt+PgUp" />
+      <Action name="cursor_next_segment" text="Cursor Ne&amp;xt Segment" shortcut="Alt+PgDown" />
+    </Menu>
+    <Menu name="Transport">
+      <text>T&amp;ransport</text>
+      <!-- JAS need to know how to add Qt::KeypadModifier in Human Readable shortcut for Play 'KP_Enter'-->
+      <Action name="play" text="&amp;Play" icon="transport-play" shortcut="KP_Enter" /> 
+      <Action name="stop" text="&amp;Stop" icon="transport-stop" shortcut="Ins" /> 
+      <!-- JAS action called "rewind" in rosegardenui.rc.  Is this the same call? -->
+      <Action name="playback_pointer_back_bar" text="Re&amp;wind" icon="transport-rewind" shortcut="End" />
+      <!-- JAS action called "fast_forward" in rosegardenui.rc.  Is this the same call? -->
+      <Action name="playback_pointer_forward_bar" text="&amp;Fast Forward" icon="transport-ffwd" shortcut="PgDown" /> 
+      <!-- JAS action called "rewindtobeginning" in rosegardenui.rc.  Is this a different call? -->
+      <Action name="playback_pointer_start" text="Rewind to &amp;Beginning" icon="transport-rewind-end" />
+      <!-- JAS action called "fastforwardtoend" in rosegardenui.rc.  Is this a different call? -->
+      <Action name="playback_pointer_end" text="Fast Forward to &amp;End" icon="transport-ffwd-end" />
+      <Action name="playback_pointer_to_cursor" />
+      <Action name="cursor_to_playback_pointer" />
+      <Action name="toggle_solo" text="S&amp;olo" icon="transport-solo" />
+      <Action name="toggle_tracking" text="Scro&amp;ll to Follow Playback" icon="transport-tracking" shortcut="Pause" checked="true" />
+      <Action name="panic" text="P&amp;anic" icon="transport-panic" shortcut="Alt+Ctrl+P" />
+    </Menu>
   <Separator/>
-
-  <Action name="insert_note_actionmenu"/>
-  <Action name="insert_rest"/>
+    <!-- JAS action names for "insert_note_actionmenu" derived from src/gui/general/EditView.cpp -->
+    <!-- JAS original line <Action name="insert_note_actionmenu" /> -->
+    <Menu name="insert_note_actionmenu">
+      <text>&amp;Insert Note</text>
+      <Action name="insert_0" text="&amp;I" shortcut="A" />
+      <Action name="insert_0_sharp" text="I &amp;sharp" shortcut="Shift+A" />
+    <Separator/>
+      <Action name="insert_1_flat" text="II &amp;flat" shortcut="Ctrl+Shift+S" />
+      <Action name="insert_1" text="II" shortcut="S" />
+      <Action name="insert_1_sharp" text="II sh&amp;arp" shortcut="Shift+S" />
+    <Separator/>
+      <Action name="insert_2_flat" text="III flat" shortcut="Ctrl+Shift+D" />
+      <Action name="insert_2" text="III" shortcut="D" />
+    <Separator/>
+      <Action name="insert_3" text="IV" shortcut="F" />
+      <Action name="insert_3_shap" text="IV sha&amp;rp" shortcut="Shift+F" />
+    <Separator/>
+      <Action name="insert_4_flat" text="&amp;V flat" shortcut="Ctrl+Shift+J" />
+      <Action name="insert_4" text="V" shortcut="J" />
+      <Action name="insert_4_sharp" text="V s&amp;harp" shortcut="Shift+J" />
+    <Separator/>
+      <Action name="insert_5_flat" text="VI fla&amp;t" shortcut="Ctrl+Shift+K" />
+      <Action name="insert_5" text="VI" shortcut="K" />
+      <Action name="insert_5_sharp" text="VI shar&amp;p" shortcut="Shift+K" />
+    <Separator/>
+      <Action name="insert_6_flat" text="VII flat" shortcut="Ctrl+Shift+L" />
+      <Action name="insert_6" text="VII" shortcut="L" />
+    <Separator/>
+      <!-- JAS invented "insert_note_upper_octave" name -->
+      <Menu name="insert_note_upper_octave">
+        <text>&amp;Upper Octave</text>
+        <Action name="insert_0_high" text="&amp;I" shortcut="Q" />
+        <Action name="insert_0_sharp_high" text="I &amp;sharp" shortcut="Shift+Q" />
+      <Separator/>
+        <Action name="insert_1_flat_high" text="II &amp;flat" shortcut="Ctrl+Shift+W" />
+        <Action name="insert_1_high" text="II" shortcut="W" />
+        <Action name="insert_1_sharp_high" text="II sh&amp;arp" shortcut="Shift+W" />
+      <Separator/>
+        <Action name="insert_2_flat_high" text="III flat" shortcut="Ctrl+Shift+E" />
+        <Action name="insert_2_high" text="III" shortcut="E" />
+      <Seperator/>
+        <Action name="insert_3_high" text="IV" shortcut="R" />
+        <Action name="insert_3_sharp_high" text="IV sha&amp;rp" shortcut="Shift+R" />
+      <Separator/>
+        <Action name="insert_4_flat_high" text="&amp;V flat" shortcut="Ctrl+Shift+U" />
+        <Action name="insert_4_high" text="V" shortcut="U" />
+        <Action name="insert_4_sharp_high" text="V s&amp;harp" shortcut="Shift+U" />
+      <Separator/>
+        <Action name="insert_5_flat_high" text="VI fla&amp;t" shortcut="Ctrl+Shift+I" />
+        <Action name="insert_5_high" text="VI" shortcut="I" />
+        <Action name="insert_5_sharp_high" text="VI shar&amp;p" shortcut="Shift+I" />
+      <Separator/>
+        <Action name="insert_6_flat_high" text="VII flat" shortcut="Ctrl+Shift+O" />
+        <Action name="insert_6_high" text="VII" shortcut="O" />
+      </Menu>
+      <!-- JAS invented "insert_note_lower_octave" name -->
+      <Menu name="insert_note_lower_octave">
+        <text>&amp;Upper Octave</text>
+        <Action name="insert_0_low" text="&amp;I" shortcut="Z" />
+        <Action name="insert_0_sharp_low" text="I &amp;sharp" shortcut="Shift+Z" />
+      <Separator/>
+        <Action name="insert_1_flat_low" text="II &amp;flat" shortcut="Ctrl+Shift+X" />
+        <Action name="insert_1_low" text="II" shortcut="X" />
+        <Action name="insert_1_sharp_low" text="II sh&amp;arp" shortcut="Shift+X" />
+      <Separator/>
+        <Action name="insert_2_flat_low" text="III flat" shortcut="Ctrl+Shift+C" />
+        <Action name="insert_2_low" text="III" shortcut="C" />
+      <Separator/>
+        <Action name="insert_3_low" text="IV" shortcut="V" />
+        <Action name="insert_3_sharp_low" text="IV sha&amp;rp" shortcut="Shift+V" />
+      <Separator/>
+        <Action name="insert_4_flat_low" text="&amp;V flat" shortcut="Ctrl+Shift+B" />
+        <Action name="insert_4_low" text="V" shortcut="B" />
+        <Action name="insert_4_sharp_low" text="V s&amp;harp" shortcut="Shift+B" />
+      <Separator/>
+        <Action name="insert_5_flat_low" text="VI fla&amp;t" shortcut="Ctrl+Shift+N" />
+        <Action name="insert_5_low" text="VI" shortcut="N" />
+        <Action name="insert_5_sharp_low" text="VI shar&amp;p" shortcut="Shift+N" />
+      <Separator/>
+        <Action name="insert_6_flat_low" text="VII flat" shortcut="Ctrl+Shift+M" />
+        <Action name="insert_6_low" text="VII" shortcut="M" />
+      </Menu>
+    <Action name="insert_rest" text="Insert rest" shortcut="P" />
 
   <!--
   <Action name="insert_melody_mode"/>
   <Action name="insert_chord_mode"/>
   -->
 
-  <Action name="chord_mode"/>
-  <Action name="triplet_mode"/>
-  <Action name="grace_mode"/>
-
+    <Action name="chord_mode" text="C&amp;hord Insert Mode" icon="group-chord" shortcut="H" checked="false" />
+    <Action name="triplet_mode" text="Triplet Insert Mo&amp;de" icon="triplet" shortcut="G" />
+    <Action name="grace_mode" text="Grace Insert &amp;Mode" icon="group-grace" />
   <Separator/>
-  <Action name="toggle_step_by_step"/>
+    <Action name="toggle_step_by_step" text="Ste&amp;p Recording" icon="step-by-step" checked="false" />
+  </Menu>
 
-</Menu>
+  <Menu name="settings">
+    <text>&amp;Settings</text>
+    <!-- JAS deviated from RG.svn since menu items are duplicated in "toolbars" submenu -->
+    <Menu name="toolbars" append="show_merge">
+      <text>&amp;Toolbars</text>
+      <Action name="options_show_toolbar" text="Show &amp;Toolbar" checked="true" append="show_merge" />
+      <Action name="show_tools_toolbar" text="Show T&amp;ools Toolbar" checked="true" append="show_merge" />
+      <Action name="show_notes_toolbar" text="Show &amp;Notes Toolbar" icon="palette-notes" checked="true" append="show_merge" />
+      <Action name="show_rests_toolbar" text="Show &amp;Rest Toolbar" icon="palette-rests" checked=true" append="show_merge" />
+      <Action name="show_accidentals_toolbar" text="Show &amp;Accidentals Toolbar" icon="palette-accidentals" checked="true" append="show_merge" />
+      <Action name="show_clefs_toolbar" text="Show Cle&amp;fs Toolbar" icon="palette-clefs" checked="true" append="show_merge" />
+      <Action name="show_marks_toolbar" text="Show &amp;Marks Toolbar" icon="palette-marks" checked="true" append="show_merge" />
+      <Action name="show_group_toolbar" text="Show &amp;Group Toolbar" icon="palette-group" checked=true" append="show_merge" />
+      <Action name="show_transport_toolbar" text="Show Trans&amp;port Toolbar" checked="true" append="show_merge" />
+      <Action name="show_layout_toolbar" text="Show &amp;Layout Toolbar" checked="false" append="show_merge" />
+      <Action name="show_meta_toolbar" text="Show M&amp;eta Toolbar" checked="false" append="show_merge" />
+      <!-- JAS 'options_show_statusbar' determined by state -->
+      <Action name="options_show_statusbar" text="Hide St&amp;atusbar" append="show_merge" />
+    </Menu>
+    <Menu name="rulers" append="show_merge">
+      <text>&amp;Rulers</text>
+      <Action name="show_chords_ruler" text="Show Cho&amp;rd Name Ruler" checked="false" append="show_merge" />
+      <Action name="show_raw_note_ruler" text="ShowRa&amp;w Note Ruler" checked="false" append="show_merge" />
+      <Action name="show_tempo_ruler" text="Show &amp;Tempo Ruler" checked="true" append="show_merge" />
+    </Menu>
+  <Separator append="show_merge" />
+    <Action name="show_annotations" text="Show &amp;Annotations" checked="true" append="show_merge" />
+    <Action name="show_lilypond_directives" text="Show Lily&amp;Pond Directives" checked="true" append="show_merge" />
+  <Seperator/>
+    <Action name="options_configure_keybinding" text="Configure S&amp;hortcuts..." icon="configure_shortcuts" />
+    <Action name="options_configure_toolbars" text="Configure Tool&amp;bars..." icon="configure_toolbars" />
+    <Action name="options_configure" text="&amp;Configure Rosegarden..." icon="configure" />
+  </Menu> 
 
-<Menu  name="settings">
-	<text>&amp;Settings</text>
-	<Menu name="toolbars"                            append="show_merge"  >
-		<text>&amp;Toolbars</text>
-		<Action name="options_show_toolbar"      append="show_merge" />
-		<Action name="show_tools_toolbar"        append="show_merge" />
-		<Action name="show_notes_toolbar"        append="show_merge" />
-		<Action name="show_rests_toolbar"        append="show_merge" />
-		<Action name="show_accidentals_toolbar"  append="show_merge" />
-		<Action name="show_clefs_toolbar"        append="show_merge" />
-		<Action name="show_marks_toolbar"        append="show_merge" />
-		<Action name="show_group_toolbar"        append="show_merge" />
-		<Action name="show_transport_toolbar"    append="show_merge" />
-		<Action name="show_layout_toolbar"       append="show_merge" />
-		<Action name="show_meta_toolbar"         append="show_merge" />
-		<Action name="options_show_statusbar"    append="show_merge" /> 
-	</Menu>
-		<Menu name="rulers"                      append="show_merge"  >
-		<text>&amp;Rulers</text>
-		<Action name="show_chords_ruler"         append="show_merge" />
-		<Action name="show_raw_note_ruler"       append="show_merge" />
-		<Action name="show_tempo_ruler"          append="show_merge" />
-	</Menu>
-	<Separator                                   append="show_merge" />
-	<Action name="show_annotations"              append="show_merge" />
-	<Action name="show_lilypond_directives"      append="show_merge" />
-</Menu> 
-
+  <Menu name="help" append="about_merge">
+    <text>&amp;Help</text>
+    <Action name="help_contents" text="Rosegarden &amp;Handbook" icon="contents" shortcut="F1" />
+    <Action name="help_whats_this" text="&amp;What's This?" icon="contexthelp" shortcut="Shift+F1" />
+  <Separator/>
+    <Action name="tutorial" text="&amp;Rosegarden tutorial" />
+    <Action name="guidelines" text="&amp;Bug Reporting Guidelines" />
+    <Action name="help_show_tip" text="Tip of the &amp;Day" icon="idea" />
+  <Separator/>
+    <!-- JAS invented "language_switch" action name -->
+    <Action name="language_switch" text="Switch application &amp;language..." />
+  <Separator/>
+    <!-- JAS invented "help_online" action name, and used KDE launch icon: can't fing right one -->
+    <Action name="help_online" text="&amp;Get Help Online" icon="launch" />
+    <!-- JAS invented "language_translate" action name and used KDE translate icon: can't fiond right one -->
+    <Action name="language_translate" text="&amp;Translate This Application" icon="translate" />
+  <Separator/> 
+    <Action name="help_about_app" text="&amp;About Rosegarden" icon="rg-rwb-rose3-16x16" />
+    <Action name="help_about_kde" text="About &amp;KDE" icon="about_kde" />
+  </Menu>
 </MenuBar>
 
 <ToolBar name="Tools Toolbar">
@@ -456,9 +638,9 @@
   <Action name="text" />
   <Action name="guitarchord" />
   <Separator/>
-  <Action name="toggle_step_by_step"/>
-  <Action name="filter_selection"/>
-  <Action name="quantize"/>
+  <Action name="toggle_step_by_step" />
+  <Action name="filter_selection" />
+  <Action name="quantize" />
 </ToolBar>
 
 <ToolBar name="Transport Toolbar">
@@ -471,9 +653,9 @@
   <Action name="stop" />
   <Action name="playback_pointer_to_cursor" />
   <Action name="cursor_to_playback_pointer" />
-  <Action name="toggle_solo"/>
-  <Action name="toggle_tracking"/>
-  <Action name="panic"/>
+  <Action name="toggle_solo" />
+  <Action name="toggle_tracking" />
+  <Action name="panic" />
 </ToolBar>
 
 <ToolBar name="Notes Toolbar" newline="true" hidden="false" position="left">
@@ -488,16 +670,14 @@
   <Action name="semiquaver" />
   <Action name="demisemi" />
   <Action name="hemidemisemi" />
-  <Separator/>
+<Separator/>
   <Action name="dotted_semibreve" />
   <Action name="dotted_minim" />
   <Action name="dotted_crotchet" />
   <Action name="dotted_quaver" />
   <Action name="dotted_semiquaver" />
   <Action name="dotted_demisemi" />
-
-  <Separator/>
-
+<Separator/>
   <Action name="chord_mode"/>
   <Action name="triplet_mode" />
   <Action name="grace_mode" />
@@ -505,7 +685,6 @@
 
 <ToolBar name="Rests Toolbar" hidden="false" position="left">
   <text>Rests Toolbar</text>
-
   <!-- Reference names, but with _ instead of - -->
   <Action name="rest_breve" />
   <Action name="rest_semibreve" />
@@ -515,19 +694,17 @@
   <Action name="rest_semiquaver" />
   <Action name="rest_demisemi" />
   <Action name="rest_hemidemisemi" />
-  <Separator/>
+<Separator/>
   <Action name="dotted_rest_semibreve" />
   <Action name="dotted_rest_minim" />
   <Action name="dotted_rest_crotchet" />
   <Action name="dotted_rest_quaver" />
   <Action name="dotted_rest_semiquaver" />
   <Action name="dotted_rest_demisemi" />
-
 </ToolBar>
 
 <ToolBar name="Clefs Toolbar" hidden="false" position="left" newline="true">
   <text>Clefs Toolbar</text>
-
   <Action name="treble_clef" />
   <Action name="alto_clef" />
   <Action name="tenor_clef" />
@@ -536,7 +713,6 @@
 
 <ToolBar name="Accidentals Toolbar" hidden="false" position="left">
   <text>Accidentals Toolbar</text>
-
   <Action name="no_accidental" />
   <Action name="follow_accidental" />
   <Action name="sharp_accidental" />
@@ -548,89 +724,84 @@
 
 <ToolBar name="Group Toolbar" hidden="false" position="right">
   <text>Group Toolbar</text>
-
-  <Action name="make_chord"/>
-  <Action name="beam"/>
-  <Action name="break_group"/>
-  <Separator/>
-  <Action name="tuplet"/>
-  <Action name="simple_tuplet"/>
+  <Action name="make_chord" />
+  <Action name="beam" />
+  <Action name="break_group" />
+<Separator/>
+  <Action name="tuplet" />
+  <Action name="simple_tuplet" />
 <!--  <Action name="grace"/> -->
-  <Separator/>
-  <Action name="slur"/>
+<Separator/>
+  <Action name="slur" />
 <!--  <Action name="glissando"/> -->
-  <Action name="tie_notes"/>
-  <Action name="de_counterpoint"/>
-  <Separator/>
-  <Action name="crescendo"/>
-  <Action name="decrescendo"/>
-  <Action name="octave_up"/>
+  <Action name="tie_notes" />
+  <Action name="de_counterpoint" />
+<Separator/>
+  <Action name="crescendo" />
+  <Action name="decrescendo" />
+  <Action name="octave_up" />
 </ToolBar>
 
 <ToolBar name="Marks Toolbar" newline="true" hidden="false" position="right">
   <text>Marks Toolbar</text>
-
-    <Action name="add_accent"/>
-    <Action name="add_tenuto"/>
-    <Action name="add_staccato"/>
-    <Action name="add_staccatissimo"/>
-    <Action name="add_marcato"/>
-    <Action name="add_text_sf"/>
-    <Action name="add_text_rf"/>
-    <Action name="add_trill"/>
-    <Action name="add_long-trill"/>
-    <Action name="add_turn"/>
-    <Action name="add_pause"/>
-    <Action name="add_up-bow"/>
-    <Action name="add_down-bow"/>
-    <Action name="add_mordent"/>
-    <Action name="add_mordent-inverted"/>
-    <Action name="add_mordent-long"/>
-    <Action name="add_mordent-long-inverted"/>
-    <Action name="add_text_mark"/>
+  <Action name="add_accent" />
+  <Action name="add_tenuto" />
+  <Action name="add_staccato" />
+  <Action name="add_staccatissimo" />
+  <Action name="add_marcato" />
+  <Action name="add_text_sf" />
+  <Action name="add_text_rf" />
+  <Action name="add_trill" />
+  <Action name="add_long-trill" />
+  <Action name="add_turn" />
+  <Action name="add_pause" />
+  <Action name="add_up-bow" />
+  <Action name="add_down-bow" />
+  <Action name="add_mordent" />
+  <Action name="add_mordent-inverted" />
+  <Action name="add_mordent-long" />
+  <Action name="add_mordent-long-inverted" />
+  <Action name="add_text_mark" />
 </ToolBar>
 
 <ToolBar name="Meta Toolbar" newline="true" hidden="true">
   <text>Meta Toolbar</text>
-
-  <Action name="show_notes_toolbar"        />
-  <Action name="show_rests_toolbar"        />
-  <Action name="show_accidentals_toolbar"  />
-  <Action name="show_clefs_toolbar"        />
-  <Action name="show_marks_toolbar"        />
-  <Action name="show_group_toolbar"        />
+  <Action name="show_notes_toolbar" />
+  <Action name="show_rests_toolbar" />
+  <Action name="show_accidentals_toolbar" />
+  <Action name="show_clefs_toolbar" />
+  <Action name="show_marks_toolbar" />
+  <Action name="show_group_toolbar" />
 </ToolBar>
 
 <ToolBar name="Layout Toolbar" hidden="true">
   <text>Layout Toolbar</text>
-  <Action name="linear_mode"               />
-  <Action name="continuous_page_mode"      />
-  <Action name="multi_page_mode"           />
+  <Action name="linear_mode" />
+  <Action name="continuous_page_mode" />
+  <Action name="multi_page_mode" />
 <!-- the remainder filled at runtime -->
 </ToolBar>
 
 <Menu noMerge="1" name="controller_events_ruler_menu">
-   <Text>Control Ruler actions</Text>
-   <Action name="insert_control_ruler_item"/>
-   <Action name="erase_control_ruler_item"/>
-   <Action name="clear_control_ruler_item"/>
-   <Separator/>
-   <Action name="start_control_line_item"/>
-   <Separator/>
-   <Action name="flip_control_events_forward"/>
-   <Action name="flip_control_events_back"/>
+  <Text>Control Ruler actions</Text>
+  <Action name="insert_control_ruler_item" />
+  <Action name="erase_control_ruler_item" />
+  <Action name="clear_control_ruler_item" />
+<Separator/>
+  <Action name="start_control_line_item" />
+<Separator/>
+  <Action name="flip_control_events_forward" />
+  <Action name="flip_control_events_back" />
 </Menu>
 
 <Menu noMerge="1" name="property_ruler_menu">
-   <Text>Property Ruler actions</Text>
-   <Action name="draw_property_line"/>
-   <Action name="select_all_properties"/>
-   <Separator/>
-   <Action name="flip_control_events_forward"/>
-   <Action name="flip_control_events_back"/>
+  <Text>Property Ruler actions</Text>
+  <Action name="draw_property_line" />
+  <Action name="select_all_properties" />
+<Separator/>
+  <Action name="flip_control_events_forward" />
+  <Action name="flip_control_events_back" />
 </Menu>
-
-
 
 <State name="note_insert_tool_current">
   <enable>
