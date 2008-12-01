@@ -21,6 +21,7 @@
 
 #include "base/Instrument.h"
 #include "base/Studio.h"
+#include "gui/general/EditViewBase.h"
 #include "gui/studio/StudioControl.h"
 #include "gui/widgets/RosegardenPopupMenu.h"
 #include "sound/MappedCommon.h"
