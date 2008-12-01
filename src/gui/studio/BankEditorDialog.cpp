@@ -33,6 +33,7 @@
 #include "gui/dialogs/ImportDeviceDialog.h"
 #include "gui/kdeext/KTmpStatusMsg.h"
 #include "gui/general/IconLoader.h"
+#include "gui/general/EditViewBase.h"
 #include "MidiBankListViewItem.h"
 #include "MidiDeviceListViewItem.h"
 #include "MidiKeyMapListViewItem.h"
