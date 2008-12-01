@@ -29,6 +29,7 @@
 #include "gui/general/GUIPalette.h"
 #include "gui/general/HZoomable.h"
 #include "gui/general/IconLoader.h"
+#include "gui/general/EditViewBase.h"
 #include "gui/dialogs/MarkerModifyDialog.h"
 #include "commands/edit/ModifyMarkerCommand.h"
 #include "document/MultiViewCommandHistory.h"
