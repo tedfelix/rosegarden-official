@@ -47,6 +47,7 @@
 #include "gui/dialogs/TimeDialog.h"
 #include "gui/general/MidiPitchLabel.h"
 #include "gui/general/IconLoader.h"
+#include "gui/general/EditViewBase.h"
 #include "gui/kdeext/KTmpStatusMsg.h"
 #include "document/Command.h"
 
