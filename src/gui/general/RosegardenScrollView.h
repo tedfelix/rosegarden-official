@@ -95,6 +95,7 @@ public:
 	//
 	int contentsX();
 	int contentsY();
+        void setContentsPos(int posX, int posY) //### JAS todo: check for errors later
 	int visibleWidth();
 	int visibleHeight();
 	

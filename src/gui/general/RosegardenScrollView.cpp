@@ -84,6 +84,12 @@ int RosegardenScrollView::contentsY()
 {
 	return this->verticalScrollBar()->value();
 }
+void RosegardenScrollView::setContentsPos(int posX, int posY) //### JAS todo: when GUI is ready: check the following code
+{
+        this->horizontalScrollBar()->setValue(posX);
+        this->verticalScrollBar()->setValue(posY);
+	return;
+}
 int RosegardenScrollView::visibleWidth()
 {
 	return this->horizontalScrollBar()->value() + this->width();
