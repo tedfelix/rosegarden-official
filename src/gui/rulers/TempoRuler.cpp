@@ -30,6 +30,7 @@
 #include "gui/dialogs/TempoDialog.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/IconLoader.h"
+#include "gui/general/EditViewBase.h"
 #include "gui/widgets/TextFloat.h"
 #include "TempoColour.h"
 
