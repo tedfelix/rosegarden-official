@@ -42,6 +42,7 @@
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/IconLoader.h"
+#include "gui/general/EditViewBase.h"
 #include "misc/Strings.h"
 #include "gui/seqmanager/SequencerMapper.h"
 #include "gui/seqmanager/SequenceManager.h"
