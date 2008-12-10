@@ -84,9 +84,9 @@ public:
     //
     void setAudioSubsystemStatus(bool ok);
 
-    // Return the shortcuterator object
+    // Return the shortcut object
     //
-    QShortcut* getShortcuterators() { return m_shortcuterators; }
+    QShortcut* getShortcuts() { return m_shortcuts; }
 
     // Add a new file to the audio file manager
     //
@@ -180,7 +180,7 @@ protected:
     QLabel           *m_wrongSampleRates;
     RosegardenGUIDoc *m_doc;
 
-    QShortcut           *m_shortcuterators;
+    QShortcut           *m_shortcuts;
 
     AudioFileId  m_playingAudioFile;
     AudioPlayingDialog      *m_audioPlayingDialog;

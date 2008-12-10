@@ -192,7 +192,7 @@ TriggerSegmentManager::TriggerSegmentManager(QWidget *parent,
 
 //     setAutoSaveSettings(TriggerManagerConfigGroup, true);	//&&&
 
-    m_shortcuterators = new QShortcut(this);
+    m_shortcuts = new QShortcut(this);
 }
 
 TriggerSegmentManager::~TriggerSegmentManager()

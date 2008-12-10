@@ -97,7 +97,7 @@ EditViewBase::EditViewBase(RosegardenGUIDoc *doc,
     m_needUpdate(false),
     m_pendingPaintEvent(0),
     m_havePendingPaintEvent(false),
-    m_shortcuterators(0),
+    m_shortcuts(0),
     m_configDialogPageIndex(0),
     m_inCtor(true),
     m_timeSigNotifier(new EditViewTimeSigNotifier(doc))
@@ -144,9 +144,9 @@ EditViewBase::EditViewBase(RosegardenGUIDoc *doc,
     (getCommandHistory(), SIGNAL(commandExecuted()),
      this, SLOT(slotTestClipboard()));
 
-    // create shortcuterators
+    // create shortcuts
     //
-    m_shortcuterators = new QShortcut(this);
+    m_shortcuts = new QShortcut(this);
 }
 
 EditViewBase::~EditViewBase()

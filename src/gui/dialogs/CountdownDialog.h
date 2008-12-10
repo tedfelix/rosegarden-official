@@ -48,7 +48,7 @@ public:
     int getTotalTime() const { return m_totalTime; }
     void setTotalTime(int seconds);
 
-    QShortcut* getShortcuterators() { return m_shortcuterators; }
+    QShortcut* getShortcuts() { return m_shortcuts; }
 
 signals:
     void completed(); // m_totalTime has elapsed
@@ -70,7 +70,7 @@ protected:
     int           m_progressBarWidth;
     int           m_progressBarHeight;
 
-    QShortcut       *m_shortcuterators;
+    QShortcut       *m_shortcuts;
 };
 
 

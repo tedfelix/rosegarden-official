@@ -2034,12 +2034,12 @@ RosegardenGUIView::createEventView(std::vector<Segment *> segmentsToEdit)
     connect(eventView, SIGNAL(toggleSolo(bool)),
             RosegardenGUIApp::self(), SLOT(slotToggleSolo(bool)));
 
-    // create keyboard shortcuterators on view
+    // create keyboard shortcuts on view
     //
     RosegardenGUIApp *par = dynamic_cast<RosegardenGUIApp*>(parent());
 
     if (par) {
-        par->plugShortcuterators(eventView, eventView->getShortcuterators());
+        par->plugShortcuts(eventView, eventView->getShortcuts());
     }
 
     return eventView;

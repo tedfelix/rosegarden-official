@@ -79,7 +79,7 @@ CountdownDialog::CountdownDialog(QWidget *parent, int seconds):
     //
     setElapsedTime(0);
 
-    m_shortcuterators = new QShortcut(this);
+    m_shortcuts = new QShortcut(this);
 
 }
 

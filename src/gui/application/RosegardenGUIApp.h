@@ -97,7 +97,7 @@ class SequencerThread;
   * and statusbar. An instance of RosegardenGUIView creates your center view, which is connected
   * to the window's Doc object.
   * RosegardenGUIApp reimplements the methods that KTMainWindow provides for main window handling and supports
-  * full session management as well as keyboard shortcuterator configuration by using KShortcut.
+  * full session management as well as keyboard shortcut configuration by using KShortcut.
   * @see KTMainWindow
   * @see KApplication
   * @see KConfig
@@ -314,9 +314,9 @@ public:
 #endif
 
     /**
-     * Plug a widget into our common shortcuterators
+     * Plug a widget into our common shortcuts
      */
-    void plugShortcuterators(QWidget *widget, QShortcut *shortcut);
+    void plugShortcuts(QWidget *widget, QShortcut *shortcut);
 
     /**
      * Override from QWidget

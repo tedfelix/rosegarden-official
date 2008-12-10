@@ -41,7 +41,7 @@ class MixerWindow: public QMainWindow
 
 public:
     MixerWindow(QWidget *parent, RosegardenGUIDoc *document);
-    QShortcut* getShortcuterators() { return m_shortcuterators; }
+    QShortcut* getShortcuts() { return m_shortcuts; }
 
 signals:
     void closing();
@@ -60,7 +60,7 @@ protected:
     Studio *m_studio;
     InstrumentId m_currentId;
 
-    QShortcut *m_shortcuterators;
+    QShortcut *m_shortcuts;
 
 };
 

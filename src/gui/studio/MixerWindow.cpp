@@ -38,7 +38,7 @@ MixerWindow::MixerWindow(QWidget *parent,
         m_studio(&document->getStudio()),
         m_currentId(0)
 {
-    m_shortcuterators = new QShortcut(this);
+    m_shortcuts = new QShortcut(this);
 }
 
 void

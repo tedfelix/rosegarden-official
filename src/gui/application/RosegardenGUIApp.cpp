@@ -3854,15 +3854,15 @@ void RosegardenGUIApp::jogSelection(timeT amount)
 void RosegardenGUIApp::createAndSetupTransport()
 {
     // create the Transport GUI and add the callbacks to the
-    // buttons and keyboard shortcuterators
+    // buttons and keyboard shortcuts
     //
     m_transport = new TransportDialog(this);
 	
 //
-//    plugShortcuterators(m_transport, m_transport->getShortcuterators());
+//    plugShortcuts(m_transport, m_transport->getShortcuts());
 /*
-    m_transport->getShortcuterators()->connectItem
-        (m_transport->getShortcuterators()->addItem(Qt::Key_T),
+    m_transport->getShortcuts()->connectItem
+        (m_transport->getShortcuts()->addItem(Qt::Key_T),
          this,
          SLOT(slotHideTransport()));
 */	
@@ -6288,9 +6288,9 @@ RosegardenGUIApp::slotRecord()
         return ;
     }
 
-    // plugin the keyboard shortcuterators for focus on this dialog
-    plugShortcuterators(m_seqManager->getCountdownDialog(),
-                     m_seqManager->getCountdownDialog()->getShortcuterators());
+    // plugin the keyboard shortcuts for focus on this dialog
+    plugShortcuts(m_seqManager->getCountdownDialog(),
+                     m_seqManager->getCountdownDialog()->getShortcuts());
 
     connect(m_seqManager->getCountdownDialog(), SIGNAL(stopped()),
             this, SLOT(slotStop()));
@@ -7000,7 +7000,7 @@ RosegardenGUIApp::slotTestClipboard()
 }
 
 void
-RosegardenGUIApp::plugShortcuterators(QWidget *widget, QShortcut *acc)
+RosegardenGUIApp::plugShortcuts(QWidget *widget, QShortcut *acc)
 {
 	// new qt4: 
 	QWidget* sc_parent = this;
@@ -7297,8 +7297,8 @@ RosegardenGUIApp::slotAudioManager()
     m_audioManagerDialog->setAudioSubsystemStatus(
         m_seqManager->getSoundDriverStatus() & AUDIO_OK);
 
-    plugShortcuterators(m_audioManagerDialog,
-                     m_audioManagerDialog->getShortcuterators());
+    plugShortcuts(m_audioManagerDialog,
+                     m_audioManagerDialog->getShortcuts());
 
     m_audioManagerDialog->show();
 }
@@ -7621,7 +7621,7 @@ RosegardenGUIApp::slotOpenAudioMixer()
                 SLOT(slotPluginSelected(InstrumentId, int, int)));
     }
 
-    plugShortcuterators(m_audioMixer, m_audioMixer->getShortcuterators());
+    plugShortcuts(m_audioMixer, m_audioMixer->getShortcuts());
 
     m_audioMixer->show();
 }
@@ -7677,7 +7677,7 @@ RosegardenGUIApp::slotOpenMidiMixer()
             m_midiMixer,
             SLOT(slotUpdateInstrument(InstrumentId)));
 
-    plugShortcuterators(m_midiMixer, m_midiMixer->getShortcuterators());
+    plugShortcuts(m_midiMixer, m_midiMixer->getShortcuts());
 
     m_midiMixer->show();
 }
@@ -7795,7 +7795,7 @@ RosegardenGUIApp::slotEditMarkers()
     connect(m_markerEditor, SIGNAL(jumpToMarker(timeT)),
             m_doc, SLOT(slotSetPointerPosition(timeT)));
 
-    plugShortcuterators(m_markerEditor, m_markerEditor->getShortcuterators());
+    plugShortcuts(m_markerEditor, m_markerEditor->getShortcuts());
 
     m_markerEditor->show();
 }
@@ -7839,7 +7839,7 @@ RosegardenGUIApp::slotEditTempos(timeT t)
 
     connect(m_tempoView, SIGNAL(saveFile()), this, SLOT(slotFileSave()));
 
-    plugShortcuterators(m_tempoView, m_tempoView->getShortcuterators());
+    plugShortcuts(m_tempoView, m_tempoView->getShortcuts());
 
     m_tempoView->show();
 }
@@ -7928,10 +7928,10 @@ RosegardenGUIApp::slotShowPluginDialog(QWidget *parent,
             dialog, SLOT(slotControllerDeviceEventReceived(MappedEvent *, const void *)));
 */
 
-    // Plug the new dialog into the standard keyboard shortcuterators so
+    // Plug the new dialog into the standard keyboard shortcuts so
     // that we can use them still while the plugin has focus.
     //
-    plugShortcuterators(dialog, dialog->getShortcuterators());
+    plugShortcuts(dialog, dialog->getShortcuts());
 
     connect(dialog,
             SIGNAL(pluginSelected(InstrumentId, int, int)),

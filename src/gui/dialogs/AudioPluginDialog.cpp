@@ -174,7 +174,7 @@ AudioPluginDialog::AudioPluginDialog(QDialogButtonBox::QWidget *parent,
 
     m_generating = false;
 
-    m_shortcuterators = new QShortcut(this);
+    m_shortcuts = new QShortcut(this);
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox(
                  QDialogButtonBox::Close | QDialogButtonBox::Help);

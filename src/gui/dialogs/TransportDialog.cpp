@@ -264,9 +264,9 @@ TransportDialog::TransportDialog(QWidget *parent,
     connect(m_transport->ThousandthsPixmap, SIGNAL(doubleClicked()),
             this, SLOT(slotEditTime()));
 
-    // shortcuterator object
+    // shortcut object
     //
-    m_shortcuterators = new QShortcut(this);
+    m_shortcuts = new QShortcut(this);
 }
 
 TransportDialog::~TransportDialog()

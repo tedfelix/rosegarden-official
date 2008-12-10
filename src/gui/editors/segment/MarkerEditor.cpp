@@ -206,7 +206,7 @@ MarkerEditor::MarkerEditor(QWidget *parent,
 
 //     setAutoSaveSettings(MarkerEditorConfigGroup, true);	//&&&
 
-    m_shortcuterators = new QShortcut(this);
+    m_shortcuts = new QShortcut(this);
 }
 
 void

@@ -65,7 +65,7 @@ public:
     // update pointer position
     void updatePosition();
 
-    QShortcut* getShortcuterators() { return m_shortcuterators; }
+    QShortcut* getShortcuts() { return m_shortcuts; }
 
 public slots:
     void slotUpdate();
@@ -109,7 +109,7 @@ protected:
 
     bool                     m_modified;
 
-    QShortcut *m_shortcuterators;
+    QShortcut *m_shortcuts;
 };
 
 

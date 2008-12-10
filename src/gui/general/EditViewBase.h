@@ -109,9 +109,9 @@ public:
     virtual void updateView() = 0;
 
     /**
-     * Return our local shortcuterator object
+     * Return our local shortcut object
      */
-    QShortcut* getShortcuterators() { return m_shortcuterators; }
+    QShortcut* getShortcuts() { return m_shortcuts; }
 
     /**
      * Return a string unique to this view (amongst views currently
@@ -381,7 +381,7 @@ protected:
     bool         m_havePendingPaintEvent;
     static bool  m_inPaintEvent; // true if _any_ edit view is in a paint event
 
-    QShortcut      *m_shortcuterators;
+    QShortcut      *m_shortcuts;
 
     int          m_configDialogPageIndex;
 

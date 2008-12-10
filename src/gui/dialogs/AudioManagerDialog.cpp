@@ -220,16 +220,16 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     connect(m_fileList, SIGNAL(dropped(QDropEvent*, QTreeWidgetItem*)),
             SLOT(slotDropped(QDropEvent*, QTreeWidgetItem*)));
 
-    // setup local shortcuterators
+    // setup local shortcuts
     //
-	m_shortcuterators = new QShortcut( QKeySequence(Qt::Key_Delete), dynamic_cast<QWidget*>(this));
+	m_shortcuts = new QShortcut( QKeySequence(Qt::Key_Delete), dynamic_cast<QWidget*>(this));
 
     // delete
     //
-//    m_shortcuterators->connectItem(m_shortcuterators->addItem( Qt::Key_Delete ),
+//    m_shortcuts->connectItem(m_shortcuts->addItem( Qt::Key_Delete ),
  //                               this,
    //                             SLOT(slotRemove()));
-	connect( m_shortcuterators, SIGNAL(activated()), this, SLOT(slotRemove()) );
+	connect( m_shortcuts, SIGNAL(activated()), this, SLOT(slotRemove()) );
 
     slotPopulateFileList();
 

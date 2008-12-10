@@ -83,9 +83,9 @@ public:
     void setMidiInLabel(const MappedEvent *mE);
     void setMidiOutLabel(const MappedEvent *mE);
 
-    // Return the shortcuterator object
+    // Return the shortcut object
     //
-    QShortcut* getShortcuterators() { return m_shortcuterators; }
+    QShortcut* getShortcuts() { return m_shortcuts; }
 
     // RosegardenTransport member accessors
     QPushButton* MetronomeButton()   { return m_transport->MetronomeButton; }
@@ -209,7 +209,7 @@ private:
 
     void updateTimeDisplay();
 
-    QShortcut *m_shortcuterators;
+    QShortcut *m_shortcuts;
     bool    m_isExpanded;
 
     bool m_haveOriginalBackground;
