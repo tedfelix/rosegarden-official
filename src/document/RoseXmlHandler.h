@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -27,7 +26,7 @@
 #include <string>
 #include <QString>
 #include "base/Event.h"
-#include <qxml.h>
+#include <QXmlDefaultHandler>
 
 
 class QXmlParseException;
