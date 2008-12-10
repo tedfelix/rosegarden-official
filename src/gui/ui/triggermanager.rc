@@ -5,6 +5,7 @@
 <MenuBar>
 
   <Menu name="file">
+    <text>&amp;File</text>
     <!-- JAS name="file_close" in many other major .rc files -->
     <Action name="file_close_discard" text="&amp;Close" icon="fileclose" shortcut="Ctrl+W" />
   </Menu>
