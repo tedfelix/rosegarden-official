@@ -8,7 +8,7 @@
 KDEDIR		= /usr
 QTDIR		= /usr
 
-KDEINC		= $(KDEDIR)/lib/kde4/include
+KDEINC		= $(KDEDIR)/include/kde
 KDELIB		= $(KDEDIR)/lib
 
 QTINC		= $(QTDIR)/include/qt4
