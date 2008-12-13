@@ -22,6 +22,7 @@ CXX		= $(CCACHE) $(CCDIR)/bin/c++
 LD		= $(CXX)
 MOC		= $(QTDIR)/bin/moc-qt4
 UIC		= $(QTDIR)/bin/uic-qt4
+RCC		= $(QTDIR)/bin/rcc
 
 CXXFLAGS	= -DQT3_SUPPORT -Wall -O0 -g -DHAVE_ALSA -DHAVE_LIBJACK -DHAVE_DSSI -DHAVE_LADSPA -DHAVE_LIBLO -DHAVE_LIBLRDF -DHAVE_XFT -DNDEBUG -D'VERSION="2.0-yeah-whatever-innit"'
 LDFLAGS		= 
@@ -47,12 +48,15 @@ LDLIBS		= \
 		-lkdeprint -lkdeui -lkdecore -lQt3Support -lQtGui -lQtXml -lQtNetwork -lQtCore \
 		-ljack -lasound -llo -llrdf -lraptor -llirc_client
 
+RESOURCES	= $(wildcard data/*.qrc data/*/*.qrc src/*.qrc src/*/*.qrc src/*/*/*.qrc src/*/*/*/*.qrc)
+QRCSOURCES	= $(patsubst %.qrc,%.cpp,$(RESOURCES))
 HEADERS		= $(filter-out templates/template.h, $(wildcard src/*.h src/*/*.h src/*/*/*.h src/*/*/*/*.h src/*/*/*/*/*.h))
-SOURCES		= $(filter-out templates/template.cpp, $(wildcard src/*.cpp src/*/*.cpp src/*/*/*.cpp src/*/*/*/*.cpp src/*/*/*/*/*.cpp))
+SOURCES		= $(QRCSOURCES) $(filter-out templates/template.cpp, $(wildcard src/*.cpp src/*/*.cpp src/*/*/*.cpp src/*/*/*/*.cpp src/*/*/*/*/*.cpp))
 QHEADERS	= $(shell fgrep -l Q_OBJECT $(HEADERS))
 OBJECTS		= $(patsubst %.cpp,%.o,$(SOURCES))
 QSOURCES	= $(patsubst %.h,%.moc,$(QHEADERS))
 UI		= $(wildcard gui/ui/*.ui)
+RC		= $(wildcard gui/ui/*.rc)
 UIHEADERS	= $(patsubst %.ui,%.h,$(UI))
 UISOURCES	= $(patsubst %.ui,%.cpp,$(UI))
 UIMOC		= $(patsubst %.ui,%.moc,$(UI))
@@ -78,6 +82,9 @@ rosegardensequencer:	$(SEQOBJECTS)
 
 %.moc: %.h
 	$(MOC) $< -o $@
+
+%.cpp: %.qrc
+	$(RCC) $< -root /$(firstword $(subst ., ,$(lastword $(subst /, ,$<)))) -o $@
 
 %.o: %.cpp
 	$(CXX) -c $(CXXFLAGS) $(INCLUDES) $< -o $@
