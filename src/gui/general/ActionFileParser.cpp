@@ -19,6 +19,9 @@
 
 #include <iostream>
 
+using std::cerr;
+using std::endl;
+
 namespace Rosegarden
 {
    
@@ -44,7 +47,7 @@ ActionFileParser::load(QString actionRcFile)
 bool
 ActionFileParser::startDocument()
 {
-    return false;
+    return true;
 }
 
 bool
@@ -53,7 +56,86 @@ ActionFileParser::startElement(const QString& namespaceURI,
                                const QString& qName,
                                const QXmlAttributes& atts)
 {
-    return false;
+    QString name = qName.toLower();
+
+    if (name == "menubar") {
+        
+        m_inMenuBar = true;
+        
+    } else if (name == "menu") {
+
+        QString menuName = atts.value("name");
+        if (menuName == "") {
+            cerr << "WARNING: ActionFileParser::startElement: No menu name provided in menu element" << endl;
+        }
+        m_currentMenu = menuName;
+
+    } else if (name == "toolbar") {
+
+        QString toolbarName = atts.value("name");
+        if (toolbarName == "") {
+            cerr << "WARNING: ActionFileParser::startElement: No toolbar name provided in toolbar element" << endl;
+        }
+        m_currentToolbar = toolbarName;
+        
+    } else if (name == "text") {
+
+        //!!! used to provide label for menu
+
+    } else if (name == "action") {
+
+        QString actionName = atts.value("name");
+        if (actionName == "") {
+            cerr << "WARNING: ActionFileParser::startElement: No action name provided in action element" << endl;
+        }
+
+        if (m_currentMenu == "" && m_currentToolbar == "" && m_currentState == "") {
+            cerr << "WARNING: ActionFileParser::startElement: Action appears outside (valid) menu, toolbar or state element" << endl;
+        }
+
+        QString text = atts.value("text");
+        QString icon = atts.value("icon");
+        QString shortcut = atts.value("shortcut");
+        QString group = atts.value("group");
+
+        //!!! return values
+        if (text != "") setActionText(actionName, text);
+        if (icon != "") setActionIcon(actionName, icon);
+        if (shortcut != "") setActionShortcut(actionName, shortcut);
+        if (group != "") setActionGroup(actionName, group);
+        
+        //!!! can appear in menu, toolbar, state/enable, state/disable
+
+        if (m_currentMenu != "") addActionToMenu(m_currentMenu, actionName);
+        if (m_currentToolbar != "") addActionToToolbar(m_currentToolbar, actionName);
+
+        if (m_currentState != "") {
+            //!!!
+        }
+
+    } else if (name == "separator") {
+
+        if (m_currentMenu != "") addSeparatorToMenu(m_currentMenu);
+        if (m_currentToolbar != "") addSeparatorToToolbar(m_currentToolbar);
+
+    } else if (name == "state") {
+
+        QString stateName = atts.value("name");
+        if (stateName == "") {
+            cerr << "WARNING: ActionFileParser::startElement: No state name provided in state element" << endl;
+        }
+        m_currentState = stateName;
+
+    } else if (name == "enable") {
+
+        //!!! in state
+
+    } else if (name == "disable") {
+
+        //!!! in state
+    }
+
+    return true;
 }
 
 bool
@@ -61,19 +143,38 @@ ActionFileParser::endElement(const QString& namespaceURI,
                              const QString& localName,
                              const QString& qName)
 {
-    return false;
+    QString name = qName.toLower();
+
+    if (name == "menubar") {
+        
+        m_inMenuBar = false;
+        
+    } else if (name == "menu") {
+
+        m_currentMenu = "";
+
+    } else if (name == "toolbar") {
+
+        m_currentToolbar = "";
+
+    } else if (name == "state") {
+        
+        m_currentState = "";
+    }
+        
+    return true;
 }
 
 bool
 ActionFileParser::characters(const QString &ch)
 {
-    return false;
+    return true;
 }
 
 bool
 ActionFileParser::endDocument()
 {
-    return false;
+    return true;
 }
 
 bool
@@ -103,85 +204,99 @@ ActionFileParser::fatalError(const QXmlParseException &exception)
 bool
 ActionFileParser::setActionText(QString actionName, QString text)
 {
-    return false;
+    if (actionName == "" || text == "") return false;
+    return true;
 }
 
 bool
 ActionFileParser::setActionIcon(QString actionName, QString icon)
 {
-    return false;
+    if (actionName == "" || icon == "") return false;
+    return true;
 }
 
 bool
 ActionFileParser::setActionShortcut(QString actionName, QString shortcut)
 {
-    return false;
+    if (actionName == "" || shortcut == "") return false;
+    return true;
 }
 
 bool
 ActionFileParser::setActionGroup(QString actionName, QString group)
 {
-    return false;
+    if (actionName == "" || group == "") return false;
+    return true;
 }
 
 bool
 ActionFileParser::setMenuText(QString name, QString text)
 {
-    return false;
+    if (name == "" || text == "") return false;
+    return true;
 }
 
 bool
 ActionFileParser::addMenuToMenu(QString parent, QString child)
 {
-    return false;
+    if (parent == "" || child == "") return false;
+    return true;
 }
 
 bool
 ActionFileParser::addActionToMenu(QString menuName, QString actionName)
 {
-    return false;
+    if (menuName == "" || actionName == "") return false;
+    return true;
 }
 
 bool
 ActionFileParser::addSeparatorToMenu(QString menuName)
 {
-    return false;
+    if (menuName == "") return false;
+    return true;
 }
 
 bool
 ActionFileParser::setToolbarText(QString name, QString text)
 {
-    return false;
+    if (name == "" || text == "") return false;
+    return true;
 }
 
 bool
 ActionFileParser::addActionToToolbar(QString toolbarName, QString actionName)
 {
-    return false;
+    if (toolbarName == "" || actionName == "") return false;
+    return true;
 }
 
 bool
 ActionFileParser::addSeparatorToToolbar(QString toolbarName)
 {
-    return false;
+    if (toolbarName == "") return false;
+    return true;
 }
 
 bool
 ActionFileParser::addState(QString name)
 {
-    return false;
+    if (name == "") return false;
+    return true;
 }
 
 bool
 ActionFileParser::enableActionInState(QString stateName, QString actionName)
 {
-    return false;
+    if (stateName == "" || actionName == "") return false;
+    return true;
 }
 
 bool
 ActionFileParser::disableActionInState(QString stateName, QString actionName)
 {
-    return false;
+    if (stateName == "" || actionName == "") return false;
+    return true;
 }
 
 }

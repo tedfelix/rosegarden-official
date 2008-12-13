@@ -71,6 +71,11 @@ protected:
     bool addState(QString name);
     bool enableActionInState(QString stateName, QString actionName);
     bool disableActionInState(QString stateName, QString actionName);
+
+    bool m_inMenuBar;
+    QString m_currentMenu;
+    QString m_currentToolbar;
+    QString m_currentState;
 };
 
 }
