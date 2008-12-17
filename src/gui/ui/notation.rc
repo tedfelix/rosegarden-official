@@ -392,13 +392,13 @@
     </Menu>
     <Menu noMerge="1" name="Accidentals">
       <text>&amp;Accidentals</text>
-      <Action name="no_accidental" text="&amp;No Accidental" icon="accidental-none" />
-      <Action name="follow_accidental" text="&amp;Follow Previous Accidental" icon="accidental-follow" />
-      <Action name="sharp_accidental" text="&amp;Sharp" icon="accidental-sharp" />
-      <Action name="flat_accidental" text="F&amp;lat" icon="accidental-flat" />
-      <Action name="natural_accidental" text="N&amp;atural" icon="accidental-natural" />
-      <Action name="double_sharp_accidental" text="&amp;Double Sharp" icon="accidental-doublesharp" />
-      <Action name="double_flat_accidental" text="D&amp;ouble Flat" icon="accidental-doubleflat" />
+      <Action name="no_accidental" text="&amp;No Accidental" icon="accidental-none" checked="true" group="accidentals" />
+      <Action name="follow_accidental" text="&amp;Follow Previous Accidental" icon="accidental-follow" checked="false" group="accidentals" />
+      <Action name="sharp_accidental" text="&amp;Sharp" icon="accidental-sharp" checked="false" group="accidentals" />
+      <Action name="flat_accidental" text="F&amp;lat" icon="accidental-flat" checked="false" group="accidentals" />
+      <Action name="natural_accidental" text="N&amp;atural" icon="accidental-natural" checked="false" group="accidentals" />
+      <Action name="double_sharp_accidental" text="&amp;Double Sharp" icon="accidental-doublesharp" checked="false" group="accidentals" />
+      <Action name="double_flat_accidental" text="D&amp;ouble Flat" icon="accidental-doubleflat" checked="false" group="accidentals" />
     </Menu>
     <Menu noMerge="1" name="Clefs">
       <text>&amp;Clefs</text>
