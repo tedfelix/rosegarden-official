@@ -3,9 +3,9 @@
 <kpartgui name="Rosegarden::NotationTool" version="1230">
 
 <Menu noMerge="1" name="ClefInserter">
-  <Action name="select" />
-  <Action name="notes" />
-  <Action name="erase" />
+  <Action name="select" text="Switch to Select Tool" icon="select" />
+  <Action name="notes" text="Switch to Inserting Notes" icon="menu-crotchet" />
+  <Action name="erase" text="Switch to Erase Tool" icon="eraser" />
 </Menu>
 
 </kpartgui>
