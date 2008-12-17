@@ -3,31 +3,34 @@
 <kpartgui name="Rosegarden::AudioManagerDialog" version="1230">
   
 <MenuBar>
+  <Menu name="file">
+    <text>&amp;File</text>
+    <Action name="add_audio" text="&amp;Add Audio File..."" icon="fileopen" append="new_merge" />
+    <Action name="export_audio" text="&amp;Export Audio File..."" icon="filesave" append="new_merge" />
+  <Separator/>
+    <Action name="file_close" text="&amp;Close" icon="fileclose" shortcut="Ctrl+W" />
+  </Menu>
 
-<Menu name="file">
-    <Action name="add_audio" append="new_merge"/>
-    <Action name="export_audio" append="new_merge"/>
-</Menu>
+  <Menu name="edit">
+    <text>&amp;Edit</text>
+    <Action name="remove_audio" text="&amp;Unload Audio File" icon="editdelete" />
+    <Action name="remove_all_audio" text="Unload &amp;All Audio Files" />
+    <Action name="remove_all_unused_audio" text="Unload All Unused Audio &amp;Files" />
+  <Separator/>
+    <Action name="delete_unused_audio" text="&amp;Delete Unused Audio Files..."" />
+  </Menu>
 
-<Menu name="edit">
-    <Action name="remove_audio"/>
-    <Action name="remove_all_audio"/>
-    <Action name="remove_all_unused_audio"/>
-    <Separator/>
-    <Action name="delete_unused_audio"/>
-</Menu>
-
-<Menu name="action">
-<Text>&amp;Action</Text>
-    <Action name="preview_audio"/>
-    <Action name="insert_audio"/>
-    <Action name="distribute_audio"/>
-</Menu>
+  <Menu name="action">
+    <Text>&amp;Action</Text>
+    <Action name="preview_audio" text="Play Preview" icon="transport-play" />
+    <Action name="insert_audio" text="Insert Into Slelected Audio track" icon="insert_audio_into_track" />
+    <!-- JAS No text in menus for 'distribute_audio' action name. -->
+    <Action name="distribute_audio" text=""/>
+  </Menu>
 </MenuBar>
 
 <ToolBar name="General Toolbar">
   <text>General Toolbar</text>
-
   <Action name="add_audio" />
   <Action name="export_audio" />
   <Action name="remove_audio" />
