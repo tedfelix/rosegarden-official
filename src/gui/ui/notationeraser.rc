@@ -8,7 +8,7 @@
   <Action name="insert" text="Switch to Inserting Tool" icon="menu-crotchet" />
   <Action name="erase" text="Switch to Erase Tool" icon="eraser" />
 <Separator/>
-  <Action name="toggle_rest_collapse" text="Collapse Rests After Erase" />
+  <Action name="toggle_rest_collapse" text="Collapse Rests After Erase" checked="false" />
 </Menu>
 
 </kpartgui>
