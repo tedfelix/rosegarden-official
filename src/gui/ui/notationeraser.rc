@@ -4,9 +4,7 @@
 
 <Menu name="NotationEraser">
   <Action name="select" text="Switch to Select Tool" icon="select" />
-  <!-- JAS action named 'notes" in clefinserter.rc -->
   <Action name="insert" text="Switch to Inserting Tool" icon="menu-crotchet" />
-  <Action name="erase" text="Switch to Erase Tool" icon="eraser" />
 <Separator/>
   <Action name="toggle_rest_collapse" text="Collapse Rests After Erase" checked="false" />
 </Menu>
