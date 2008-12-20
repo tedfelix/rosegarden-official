@@ -9,7 +9,7 @@
 <Separator/>
   <Action name="toggle_auto_beam" text="Auto-Beam when appropriate"" checked="true" />
   <Separator/>
-  <Action name="toggle_dot" text="Dotted note" icon="menu-dotted-crotchet" checked="false" />
+  <Action name="toggle_dot" text="Dotted Note" icon="menu-dotted-crotchet" checked="false" />
 <Separator/>
   <Action name="no_accidental" text="No Accidental" icon="accidental-none" checked="true" group="accidentals" />
   <Action name="follow_accidental" text="Follow Previous Accidental" icon="accidental-follow" checked="false" group="accidentals" />
