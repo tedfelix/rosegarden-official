@@ -4,48 +4,72 @@
   
 <MenuBar>
 
+  <Menu name="file" append="new_merge">
+    <text>&amp;File</text>
+    <Action name="file_save" text="&amp;Save" icon="filesave" shortcut="Ctrl+S" />
+    <Action name="file_close" text="&amp;Close" icon="fileclose" shortcut="Ctrl+W" />
+  </Menu>
+
   <Menu name="Transport">
-        <text>T&amp;ransport</text>
-  <Action name="play" />
-  <Action name="stop" />
-  <Action name="playback_pointer_back_bar" />
-  <Action name="playback_pointer_forward_bar" />
-  <Action name="playback_pointer_start" />
-  <Action name="playback_pointer_end" />
-  <Action name="record" />
-  <Action name="panic" />
+    <text>T&amp;ransport</text>
+    <!-- JAS need to know how to add Qt::KeypadModifier in Human Readable shortcut for Play 'KP_Enter'-->
+    <Action name="play" text="&amp;Play" icon="transport-play" shortcut="KP_Enter" /> 
+    <Action name="stop" text="&amp;Stop" icon="transport-stop" shortcut="Ins" /> 
+    <!-- JAS action called "rewind" in rosegardenui.rc.  Is this the same call? -->
+    <Action name="playback_pointer_back_bar" text="Re&amp;wind" icon="transport-rewind" shortcut="End" />
+    <!-- JAS action called "fast_forward" in rosegardenui.rc.  Is this the same call? -->
+    <Action name="playback_pointer_forward_bar" text="&amp;Fast Forward" icon="transport-ffwd" shortcut="PgDown" /> 
+    <!-- JAS action called "rewindtobeginning" in rosegardenui.rc.  Is this a different call? -->
+    <Action name="playback_pointer_start" text="Rewind to &amp;Beginning" icon="transport-rewind-end" />
+    <!-- JAS action called "fastforwardtoend" in rosegardenui.rc.  Is this a different call? -->
+    <Action name="playback_pointer_end" text="Fast Forward to &amp;End" icon="transport-ffwd-end" />
+    <Action name="record" text="&amp;Record" icon="transport-record" />
+    <Action name="panic" text="P&amp;anic" icon="transport-panic" shortcut="Alt+Ctrl+P" />
   </Menu>
 
-<Menu name="settings"><text>&amp;Settings</text>
-
-  <Action name="show_midi" append="show_merge" />
-  <Action name="show_audio_faders" append="show_merge" />
-  <Action name="show_synth_faders" append="show_merge" />
-  <Action name="show_audio_submasters" append="show_merge" />
-  <Action name="show_plugin_buttons" append="show_merge" />
-
+  <Menu name="settings">
+    <text>&amp;Settings</text>
+    <Menu name="Inputs">
+      <text>Number of Stereo &amp;Inputs</text>
+      <Action name="inputs_1" text="&amp;1 Input" checked="false" group="inputs" />
+      <Action name="inputs_2" text="&amp;2 Inputs" checked="true" />
+      <Action name="inputs_4" text="&amp;4 Inputs" checked="false" group="inputs" />
+      <Action name="inputs_8" text="&amp;8 Inputs" checked="false" group="inputs" />
+      <Action name="inputs_16" text="1&amp;6 Inputs" checked="false" group="inputs" />
+    </Menu>
+    <Menu name="Submasters">
+      <text>&amp;Number of Submasters</text>
+      <Action name="submasters_0" text="No Submasters" checked="true" group="submasters" />
+      <Action name="submasters_2" text="&amp;2 Submasters" checked="false" group="submasters" />
+      <Action name="submasters_4" text="&amp;4 Submasters" checked="false" group="submasters" />
+      <Action name="submasters_8" text="&amp;8 Submasters" checked="false" group="submasters" />
+    </Menu>
+    <!-- JAS "show_midi" does not appear in pulldown menu. -->
+    <Action name="show_midi" append="show_merge" />
+    <Action name="show_audio_faders" text="" checked="true" append="show_merge" />
+    <Action name="show_synth_faders" text="" checked="true" append="show_merge" />
+    <Action name="show_audio_submasters" text="" checked="true" append="show_merge" />
+    <Action name="show_plugin_buttons" text="" checked="true" append="show_merge" />
   <Separator append="show_merge"/>
+    <Action name="show_unassigned_faders" text="" checked="false" append="show_merge" />
+  </Menu> 
 
-  <Action name="show_unassigned_faders" append="show_merge" />
-
-  <Menu name="Inputs">
-    <text>Number of Stereo &amp;Inputs</text>
-    <Action name="inputs_1"/>
-    <Action name="inputs_2"/>
-    <Action name="inputs_4"/>
-    <Action name="inputs_8"/>
-    <Action name="inputs_16"/>
+  <Menu name="help" append="about_merge">
+    <text>&amp;Help</text>
+    <Action name="help_contents" text="Rosegarden &amp;Handbook" icon="contents" shortcut="F1" />
+    <Action name="help_whats_this" text="&amp;What's This?" icon="contexthelp" shortcut="Shift+F1" />
+  <Separator/>
+    <!-- JAS invented "language_switch" action name -->
+    <Action name="language_switch" text="Switch application &amp;language..." />
+  <Separator/>
+    <!-- JAS invented "help_online" action name, and used KDE launch icon: can't fing right one -->
+    <Action name="help_online" text="&amp;Get Help Online" icon="launch" />
+    <!-- JAS invented "language_translate" action name and used KDE translate icon: can't fiond right one -->
+    <Action name="language_translate" text="&amp;Translate This Application" icon="translate" />
+  <Separator/> 
+    <Action name="help_about_app" text="&amp;About Rosegarden" icon="rg-rwb-rose3-16x16" />
+    <Action name="help_about_kde" text="About &amp;KDE" icon="about_kde" />
   </Menu>
-
-  <Menu name="Submasters">
-    <text>&amp;Number of Submasters</text>
-    <Action name="submasters_0"/>
-    <Action name="submasters_2"/>
-    <Action name="submasters_4"/>
-    <Action name="submasters_8"/>
-  </Menu>
-
-</Menu> 
 
 </MenuBar>
 
