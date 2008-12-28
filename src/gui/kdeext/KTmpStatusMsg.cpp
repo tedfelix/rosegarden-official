@@ -33,6 +33,8 @@
 #include <QSettings>
 #include <QUrl>
 
+/*!!!
+
 // class RgRecentFileClass 
 RgTempQtIV::RgTempQtIV()
 {
@@ -57,7 +59,7 @@ QString RgTempQtIV::tempSaveName(QString &filePath)
 void RgTempQtIV::setAutoSaveSettings( const char*  config_group, bool state )
 {
 	// used in RosegardenGUIApp
-	/* convinience method for qt4 */
+
 	//### TODO: implement
 }
 
@@ -71,6 +73,7 @@ void RgTempQtIV::createGUI( const char* xml_rcfile, bool var1 )
 RgTempQtIV __mm;
 RgTempQtIV* rgTempQtIV = &__mm;
 //RgTempQtIV* rgTempQtIV = new RgTempQtIV();
+*/
 
 /****************************************************************/
 
@@ -85,6 +88,10 @@ SqueezedLabel::SqueezedLabel
 {
 	//### maybe fix: not really the same as KSqueezedTextLabel,
 	//    but should work for now.
+
+    //!!! no, this does something totally different -- implement it,
+    //!!! borrowing SV code for this?
+
 	this->setScaledContents( true );
 }
 //SqueezedLabel::~SqueezedLabel(){

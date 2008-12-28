@@ -35,6 +35,7 @@ class SqueezedLabel: public QLabel
 };
 
 
+/*!!!
 class RgTempQtIV
 {
 public:
@@ -53,7 +54,7 @@ public:
 	
 };
 extern RgTempQtIV* rgTempQtIV;
-
+*/
 
 
 /**

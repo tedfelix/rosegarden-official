@@ -18,6 +18,14 @@
 #include "ActionFileParser.h"
 
 #include <iostream>
+#include <QAction>
+#include <QActionGroup>
+#include <QMenu>
+#include <QToolBar>
+#include <QFileInfo>
+
+#include "IconLoader.h"
+#include "misc/Strings.h"
 
 using std::cerr;
 using std::endl;
@@ -25,7 +33,8 @@ using std::endl;
 namespace Rosegarden
 {
    
-ActionFileParser::ActionFileParser(QObject *actionOwner)
+ActionFileParser::ActionFileParser(QWidget *actionOwner) :
+    m_actionOwner(actionOwner)
 {
 }
 
@@ -33,10 +42,33 @@ ActionFileParser::~ActionFileParser()
 {
 }
 
+QString
+ActionFileParser::findRcFile(QString name)
+{
+    if (QFileInfo(name).exists()) return name;
+
+    QString base = QFileInfo(name).fileName();
+
+    QString tester = QString(":/ui/%1").arg(base);
+    if (QFileInfo(tester).exists()) return tester;
+
+    tester = QString(":/%1").arg(base);
+    if (QFileInfo(tester).exists()) return tester;
+
+    return ""; // that's all we try for now
+}
+
 bool
 ActionFileParser::load(QString actionRcFile)
 {
-    QFile f(actionRcFile); //!!! find it
+    QString location = findRcFile(actionRcFile);
+    if (location == "") {
+        std::cerr << "ActionFileParser::load: Failed to find RC file \""
+                  << actionRcFile << "\"" << std::endl;
+        return false;
+    }
+
+    QFile f(location);
     QXmlInputSource is(&f);
     QXmlSimpleReader reader;
     reader.setContentHandler(this);
@@ -80,7 +112,13 @@ ActionFileParser::startElement(const QString& namespaceURI,
         
     } else if (name == "text") {
 
-        //!!! used to provide label for menu
+        // used to provide label for menu or title for toolbar, but
+        // text comes from characters()
+
+        if (m_currentMenu != "" || m_currentToolbar != "") {
+            m_inText = true;
+            m_currentText = "";
+        }
 
     } else if (name == "action") {
 
@@ -157,6 +195,18 @@ ActionFileParser::endElement(const QString& namespaceURI,
 
         m_currentToolbar = "";
 
+    } else if (name == "text") {
+
+        if (m_inText) {
+            if (m_currentMenu != "") {
+                setMenuText(m_currentMenu, m_currentText);
+            }
+            if (m_currentToolbar != "") {
+                setToolbarText(m_currentToolbar, m_currentText);
+            }
+            m_inText = false;
+        }
+
     } else if (name == "state") {
         
         m_currentState = "";
@@ -168,6 +218,7 @@ ActionFileParser::endElement(const QString& namespaceURI,
 bool
 ActionFileParser::characters(const QString &ch)
 {
+    if (m_inText) m_currentText += ch;
     return true;
 }
 
@@ -201,10 +252,64 @@ ActionFileParser::fatalError(const QXmlParseException &exception)
     return QXmlDefaultHandler::fatalError(exception);
 }
 
+QAction *
+ActionFileParser::findAction(QString actionName)
+{
+    if (!m_actionOwner) return 0;
+    //!!! we could create an action, if it does not yet exist, that
+    //!!! pops up a dialog or something explaining that the action
+    //!!! needs to have been created before the rc file is read
+    return m_actionOwner->findChild<QAction *>(actionName);
+}
+
+QActionGroup *
+ActionFileParser::findGroup(QString groupName)
+{
+    QActionGroup *group = m_actionOwner->findChild<QActionGroup *>(groupName);
+    if (!group) {
+        group = new QActionGroup(m_actionOwner);
+        group->setObjectName(groupName);
+    }
+    return group;
+}
+
+QMenu *
+ActionFileParser::findMenu(QString menuName)
+{
+    QMenu *menu = m_actionOwner->findChild<QMenu *>(menuName);
+    if (!menu) {
+        menu = new QMenu(m_actionOwner);
+        menu->setObjectName(menuName);
+    }
+    return menu;
+}
+
+QToolBar *
+ActionFileParser::findToolbar(QString toolbarName)
+{
+    QToolBar *toolbar = m_actionOwner->findChild<QToolBar *>(toolbarName);
+    if (!toolbar) {
+        toolbar = new QToolBar(toolbarName, m_actionOwner);
+        toolbar->setObjectName(toolbarName);
+    }
+    return toolbar;
+}
+
+QString
+ActionFileParser::translate(QString actionName,
+                            QString text,
+                            QString purpose)
+{
+    return text; //!!! implement!
+}                                       
+
 bool
 ActionFileParser::setActionText(QString actionName, QString text)
 {
     if (actionName == "" || text == "") return false;
+    QAction *action = findAction(actionName);
+    if (!action) return false;
+    action->setText(translate(actionName, text, "text"));
     return true;
 }
 
@@ -212,6 +317,9 @@ bool
 ActionFileParser::setActionIcon(QString actionName, QString icon)
 {
     if (actionName == "" || icon == "") return false;
+    QAction *action = findAction(actionName);
+    if (!action) return false;
+    action->setIcon(IconLoader().load(icon));
     return true;
 }
 
@@ -219,13 +327,20 @@ bool
 ActionFileParser::setActionShortcut(QString actionName, QString shortcut)
 {
     if (actionName == "" || shortcut == "") return false;
+    QAction *action = findAction(actionName);
+    if (!action) return false;
+    action->setShortcut(translate(actionName, shortcut, "shortcut"));
     return true;
 }
 
 bool
-ActionFileParser::setActionGroup(QString actionName, QString group)
+ActionFileParser::setActionGroup(QString actionName, QString groupName)
 {
-    if (actionName == "" || group == "") return false;
+    if (actionName == "" || groupName == "") return false;
+    QAction *action = findAction(actionName);
+    if (!action) return false;
+    QActionGroup *group = findGroup(groupName);
+    action->setActionGroup(group);
     return true;
 }
 
@@ -233,6 +348,9 @@ bool
 ActionFileParser::setMenuText(QString name, QString text)
 {
     if (name == "" || text == "") return false;
+    QMenu *menu = findMenu(name);
+    if (!menu) return false;
+    menu->setTitle(translate(name, text, "menu title"));
     return true;
 }
 
@@ -240,6 +358,10 @@ bool
 ActionFileParser::addMenuToMenu(QString parent, QString child)
 {
     if (parent == "" || child == "") return false;
+    QMenu *parentMenu = findMenu(parent);
+    QMenu *childMenu = findMenu(child);
+    if (!parentMenu || !childMenu) return false;
+    parentMenu->addMenu(childMenu);
     return true;
 }
 
@@ -247,6 +369,11 @@ bool
 ActionFileParser::addActionToMenu(QString menuName, QString actionName)
 {
     if (menuName == "" || actionName == "") return false;
+    QAction *action = findAction(actionName);
+    if (!action) return false;
+    QMenu *menu = findMenu(menuName);
+    if (!menu) return false;
+    menu->addAction(action);
     return true;
 }
 
@@ -254,13 +381,19 @@ bool
 ActionFileParser::addSeparatorToMenu(QString menuName)
 {
     if (menuName == "") return false;
+    QMenu *menu = findMenu(menuName);
+    if (!menu) return false;
+    menu->addSeparator();
     return true;
 }
 
 bool
 ActionFileParser::setToolbarText(QString name, QString text)
 {
-    if (name == "" || text == "") return false;
+    //!!! This doesn't appear to be possible (no QToolBar::setTitle
+    //!!! method), but I don't think that will be a big problem in
+    //!!! practice because we can set a proper title from the ctor (in
+    //!!! findToolbar).  Review
     return true;
 }
 
@@ -268,6 +401,11 @@ bool
 ActionFileParser::addActionToToolbar(QString toolbarName, QString actionName)
 {
     if (toolbarName == "" || actionName == "") return false;
+    QAction *action = findAction(actionName);
+    if (!action) return false;
+    QToolBar *toolbar = findToolbar(toolbarName);
+    if (!toolbar) return false;
+    toolbar->addAction(action);
     return true;
 }
 
@@ -275,6 +413,9 @@ bool
 ActionFileParser::addSeparatorToToolbar(QString toolbarName)
 {
     if (toolbarName == "") return false;
+    QToolBar *toolbar = findToolbar(toolbarName);
+    if (!toolbar) return false;
+    toolbar->addSeparator();
     return true;
 }
 
@@ -282,6 +423,7 @@ bool
 ActionFileParser::addState(QString name)
 {
     if (name == "") return false;
+    //!!! implement
     return true;
 }
 
@@ -289,6 +431,9 @@ bool
 ActionFileParser::enableActionInState(QString stateName, QString actionName)
 {
     if (stateName == "" || actionName == "") return false;
+    QAction *action = findAction(actionName);
+    if (!action) return false;
+    //!!! implement
     return true;
 }
 
@@ -296,6 +441,9 @@ bool
 ActionFileParser::disableActionInState(QString stateName, QString actionName)
 {
     if (stateName == "" || actionName == "") return false;
+    QAction *action = findAction(actionName);
+    if (!action) return false;
+    //!!! implement
     return true;
 }
 

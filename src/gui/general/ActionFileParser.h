@@ -20,6 +20,11 @@
 
 #include <QXmlDefaultHandler>
 
+class QAction;
+class QActionGroup;
+class QMenu;
+class QToolBar;
+
 namespace Rosegarden
 {
 	
@@ -28,7 +33,7 @@ class ActionFileParser : public QXmlDefaultHandler
     Q_OBJECT
     
 public:
-    ActionFileParser(QObject *actionOwner);
+    ActionFileParser(QWidget *actionOwner);
     virtual ~ActionFileParser();
     
     bool load(QString actionRcFile);
@@ -72,10 +77,22 @@ protected:
     bool enableActionInState(QString stateName, QString actionName);
     bool disableActionInState(QString stateName, QString actionName);
 
+    QString translate(QString actionName, QString text, QString purpose);
+
+    QString findRcFile(QString name);
+
+    QAction *findAction(QString name);
+    QActionGroup *findGroup(QString name);
+    QMenu *findMenu(QString name);
+    QToolBar *findToolbar(QString name);
+
+    QWidget *m_actionOwner;
     bool m_inMenuBar;
+    bool m_inText;
     QString m_currentMenu;
     QString m_currentToolbar;
     QString m_currentState;
+    QString m_currentText;
 };
 
 }

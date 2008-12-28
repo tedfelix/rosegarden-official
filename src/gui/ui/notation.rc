@@ -290,7 +290,7 @@
     <Menu name="Rescale">
       <text>Rescale</text>
       <Action name="halve_durations" text="&amp;Halve Durations" shortcut="Ctrl+H" />
-      <Action name="double_durations" text="&amp;Double Durations" shortcut=Ctrl+Shift+H" />
+      <Action name="double_durations" text="&amp;Double Durations" shortcut="Ctrl+Shift+H" />
     <Separator/>
       <Action name="rescale" text="Stretch or S&amp;quash..." />
     </Menu>

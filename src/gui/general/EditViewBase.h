@@ -51,6 +51,7 @@ class MultiViewCommandHistory;
 class Event;
 class EditToolBox;
 class EditTool;
+class ActionFileParser;
 
  
 class EditViewBase : public QMainWindow
@@ -388,6 +389,8 @@ protected:
     bool         m_inCtor;
 
     EditViewTimeSigNotifier *m_timeSigNotifier;
+
+    ActionFileParser *m_actionFileParser;
 };
 
 

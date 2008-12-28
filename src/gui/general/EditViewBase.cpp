@@ -34,6 +34,7 @@
 #include "misc/Strings.h"
 #include "gui/kdeext/KTmpStatusMsg.h"
 #include "document/Command.h"
+#include "ActionFileParser.h"
 
 #include <QSettings>
 #include <QDockWidget>
@@ -81,9 +82,9 @@ EditViewBase::EditViewBase(RosegardenGUIDoc *doc,
                            std::vector<Segment *> segments,
                            unsigned int cols,
                            QWidget *parent, const char *name) :
-	//KDockMainWindow(parent, name),
-	QMainWindow(parent, name),
-	m_viewNumber( -1),
+    //KDockMainWindow(parent, name),
+    QMainWindow(parent, name),
+    m_viewNumber( -1),
     m_viewLocalPropertyPrefix(makeViewLocalPropertyPrefix()),
     m_doc(doc),
     m_segments(segments),
@@ -100,7 +101,8 @@ EditViewBase::EditViewBase(RosegardenGUIDoc *doc,
     m_shortcuts(0),
     m_configDialogPageIndex(0),
     m_inCtor(true),
-    m_timeSigNotifier(new EditViewTimeSigNotifier(doc))
+    m_timeSigNotifier(new EditViewTimeSigNotifier(doc)),
+    m_actionFileParser(0)
 {
     QPixmap dummyPixmap; // any icon will do
     
@@ -775,10 +777,12 @@ EditViewBase::leaveActionState(QString stateName)
 bool
 EditViewBase::createGUI(QString rcFileName)
 {
-    //&&& implement
-#pragma warning("Implement createGUI");
-    std::cerr << "ERROR: createGUI not implemented" << std::endl;
-    return false;
+    if (!m_actionFileParser) m_actionFileParser = new ActionFileParser(this);
+    if (!m_actionFileParser->load(rcFileName)) {
+        std::cerr << "EditViewBase::createGUI: ERROR: Failed to load action file" << std::endl;
+        return false;
+    }
+    return true;
 }
 
 
