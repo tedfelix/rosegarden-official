@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-14 09:43-0400\n"
+"POT-Creation-Date: 2008-12-27 19:18-0500\n"
 "PO-Revision-Date: 2008-10-14 09:58-0400\n"
 "Last-Translator: D. Michael McIntyre <michael.mcintyre@gmail.com>\n"
 "Language-Team:  <en@li.org>\n"
@@ -80,7 +80,7 @@ msgid "Document Properties"
 msgstr "Propiedades del Documento"
 
 #: ../src/gui/dialogs/MakeOrnamentDialog.cpp:38
-#: ../src/gui/editors/notation/NotationView.cpp:6139
+#: ../src/gui/editors/notation/NotationView.cpp:6144
 msgid "Make Ornament"
 msgstr "Crear Ornamento"
 
@@ -162,7 +162,7 @@ msgid "Lyric"
 msgstr "Letra"
 
 #: ../src/gui/dialogs/TextEventDialog.cpp:101
-#: ../src/gui/editors/notation/NotationView.cpp:4268
+#: ../src/gui/editors/notation/NotationView.cpp:4273
 msgid "Chord"
 msgstr " Acorde"
 
@@ -510,8 +510,8 @@ msgid "Highest pitch"
 msgstr "Nota más aguda"
 
 #: ../src/gui/dialogs/UseOrnamentDialog.cpp:49
-#: ../src/gui/editors/notation/NotationView.cpp:1616
-#: ../src/gui/editors/notation/NotationView.cpp:6179
+#: ../src/gui/editors/notation/NotationView.cpp:1617
+#: ../src/gui/editors/notation/NotationView.cpp:6184
 msgid "Use Ornament"
 msgstr "Usar Ornamento"
 
@@ -719,8 +719,8 @@ msgstr "Resolución"
 #: ../src/gui/configuration/NotationConfigurationPage.cpp:132
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:198
 #: ../src/gui/dialogs/ManageMetronomeDialog.cpp:121
-#: ../src/gui/editors/matrix/MatrixView.cpp:2139
-#: ../src/gui/editors/notation/NotationView.cpp:1579
+#: ../src/gui/editors/matrix/MatrixView.cpp:2163
+#: ../src/gui/editors/notation/NotationView.cpp:1580
 #: ../src/gui/widgets/QuantizeParameters.cpp:121
 #: ../src/gui/widgets/QuantizeParameters.cpp:294
 msgid "None"
@@ -785,7 +785,7 @@ msgstr "Plugin de Sintetizador"
 
 #: ../src/gui/dialogs/IdentifyTextCodecDialog.cpp:116
 #: ../src/gui/dialogs/ManageMetronomeDialog.cpp:281
-#: ../src/gui/editors/matrix/MatrixView.cpp:1485
+#: ../src/gui/editors/matrix/MatrixView.cpp:1509
 msgid "%1 (%2)"
 msgstr "%1 (%2)"
 
@@ -1418,8 +1418,10 @@ msgid "Change key for selection"
 msgstr "Cambio de clave para la selección"
 
 #: ../src/gui/dialogs/IntervalDialog.cpp:82
-msgid "Adjust segment transposition in opposite direction (maintain audible pitch)"
-msgstr "Ajustar transposición del segmento en sentido opuesto (mantener tono audible)"
+msgid ""
+"Adjust segment transposition in opposite direction (maintain audible pitch)"
+msgstr ""
+"Ajustar transposición del segmento en sentido opuesto (mantener tono audible)"
 
 #: ../src/gui/dialogs/IntervalDialog.cpp:183
 #: ../src/gui/dialogs/IntervalDialog.cpp:213
@@ -2033,7 +2035,7 @@ msgstr "Añadiendo archivo de audio..."
 msgid "Failed to add audio file. "
 msgstr "Fallo al añadir archivo de audio "
 
-#: ../src/document/RosegardenGUIDoc.cpp:2831
+#: ../src/document/RosegardenGUIDoc.cpp:2838
 #: ../src/gui/application/RosegardenGUIApp.cpp:2739
 #: ../src/gui/application/RosegardenGUIView.cpp:1573
 #: ../src/gui/dialogs/AudioManagerDialog.cpp:1115
@@ -2116,7 +2118,8 @@ msgstr "Cambiar Duración de la Composición"
 
 #: ../src/gui/dialogs/CompositionLengthDialog.cpp:43
 msgid "Set the Start and End bar markers for this Composition"
-msgstr "Establecer los marcadores de compás Inicial y Final para esta Composición"
+msgstr ""
+"Establecer los marcadores de compás Inicial y Final para esta Composición"
 
 #: ../src/gui/dialogs/CompositionLengthDialog.cpp:47
 msgid "Start Bar"
@@ -2275,7 +2278,8 @@ msgstr "Pié irregular (sistemas no repartidos verticalmente en la página)"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:259
 msgid "Interpret chord texts as lead sheet chord names"
-msgstr "Interpretar textos de acorde como nombres de acorde en formato «lead sheet»"
+msgstr ""
+"Interpretar textos de acorde como nombres de acorde en formato «lead sheet»"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:265
 msgid "Miscellaneous options"
@@ -2463,7 +2467,8 @@ msgstr "Crescendo - establecer %1 creciendo desde el mínimo al máximo"
 
 #: ../src/gui/dialogs/EventParameterDialog.cpp:71
 msgid "Diminuendo - set %1 falling from max to min"
-msgstr "Diminuendo - establecer %1 descendiendo desde el máximo hasta el mínimo"
+msgstr ""
+"Diminuendo - establecer %1 descendiendo desde el máximo hasta el mínimo"
 
 #: ../src/gui/dialogs/EventParameterDialog.cpp:75
 msgid "Ringing - set %1 alternating from max to min with both dying to zero"
@@ -2582,7 +2587,7 @@ msgid "Playing audio file \"%1\""
 msgstr "Reproduciendo archivo de audio \"%1\""
 
 #: ../src/gui/dialogs/TriggerSegmentDialog.cpp:45
-#: ../src/gui/editors/matrix/MatrixView.cpp:2662
+#: ../src/gui/editors/matrix/MatrixView.cpp:2686
 msgid "Trigger Segment"
 msgstr "Activar Segmento"
 
@@ -2726,7 +2731,7 @@ msgid "Clearing studio data..."
 msgstr "Limpiando datos del estudio..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:478
-#: ../src/gui/editors/notation/NotationView.cpp:555
+#: ../src/gui/editors/notation/NotationView.cpp:556
 msgid "Starting..."
 msgstr "Iniciando..."
 
@@ -2787,12 +2792,12 @@ msgid "Export M&up file..."
 msgstr "Exportar archivo M&up..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:615
-#: ../src/gui/editors/notation/NotationView.cpp:1497
+#: ../src/gui/editors/notation/NotationView.cpp:1498
 msgid "Print &with LilyPond..."
 msgstr "Imprimir con LilyPond..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:619
-#: ../src/gui/editors/notation/NotationView.cpp:1501
+#: ../src/gui/editors/notation/NotationView.cpp:1502
 msgid "Preview with Lil&yPond..."
 msgstr "Previsualización con LilyPond..."
 
@@ -2829,7 +2834,7 @@ msgid "Re&do"
 msgstr "Re&hacer"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:668
-#: ../src/gui/editors/notation/NotationView.cpp:2294
+#: ../src/gui/editors/notation/NotationView.cpp:2295
 msgid "Show T&ools Toolbar"
 msgstr "M&ostrar barra de herramientas de Herramientas"
 
@@ -2842,7 +2847,7 @@ msgid "Show &Editors Toolbar"
 msgstr "Mostrar barra de herramientas de &Edición"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:680
-#: ../src/gui/editors/notation/NotationView.cpp:2306
+#: ../src/gui/editors/notation/NotationView.cpp:2307
 msgid "Show Trans&port Toolbar"
 msgstr "Mostrar barra de herramientas de &Transporte"
 
@@ -2879,25 +2884,25 @@ msgid "Show Special &Parameters"
 msgstr "Mostrar Parámetros especiales"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:756
-#: ../src/gui/editors/matrix/MatrixView.cpp:634
-#: ../src/gui/editors/notation/NotationView.cpp:1769
+#: ../src/gui/editors/matrix/MatrixView.cpp:636
+#: ../src/gui/editors/notation/NotationView.cpp:1770
 msgid "&Select and Edit"
 msgstr "S&eleccionar y Editar"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:761
-#: ../src/gui/editors/matrix/MatrixView.cpp:639
+#: ../src/gui/editors/matrix/MatrixView.cpp:641
 msgid "&Draw"
 msgstr "&Dibujar"
 
 #: ../src/commands/edit/EraseCommand.h:43
 #: ../src/gui/application/RosegardenGUIApp.cpp:766
-#: ../src/gui/editors/matrix/MatrixView.cpp:644
-#: ../src/gui/editors/notation/NotationView.cpp:1763
+#: ../src/gui/editors/matrix/MatrixView.cpp:646
+#: ../src/gui/editors/notation/NotationView.cpp:1764
 msgid "&Erase"
 msgstr "&Eliminar"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:771
-#: ../src/gui/editors/matrix/MatrixView.cpp:649
+#: ../src/gui/editors/matrix/MatrixView.cpp:651
 msgid "&Move"
 msgstr "&Mover"
 
@@ -2944,7 +2949,7 @@ msgid "Insert Range..."
 msgstr "Insertar Rango..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:835
-#: ../src/gui/editors/notation/NotationView.cpp:1801
+#: ../src/gui/editors/notation/NotationView.cpp:1802
 msgid "De&lete"
 msgstr "E&liminar "
 
@@ -2991,7 +2996,7 @@ msgid "&Quantize..."
 msgstr "Cuanti&ficar..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:911
-#: ../src/gui/editors/matrix/MatrixView.cpp:679
+#: ../src/gui/editors/matrix/MatrixView.cpp:688
 msgid "Repeat Last Quantize"
 msgstr "Repetir la Última Cuantificación"
 
@@ -3142,32 +3147,32 @@ msgid "Jump to Quick Marker"
 msgstr "Saltar al marcador rápido"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:1145
-#: ../src/gui/editors/matrix/MatrixView.cpp:775
-#: ../src/gui/editors/notation/NotationView.cpp:2394
+#: ../src/gui/editors/matrix/MatrixView.cpp:784
+#: ../src/gui/editors/notation/NotationView.cpp:2395
 #: ../src/gui/studio/AudioMixerWindow.cpp:98
 #: ../src/gui/studio/MidiMixerWindow.cpp:74
 msgid "&Play"
 msgstr "&Reproducir"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:1156
-#: ../src/gui/editors/matrix/MatrixView.cpp:784
-#: ../src/gui/editors/notation/NotationView.cpp:2403
+#: ../src/gui/editors/matrix/MatrixView.cpp:793
+#: ../src/gui/editors/notation/NotationView.cpp:2404
 #: ../src/gui/studio/AudioMixerWindow.cpp:107
 #: ../src/gui/studio/MidiMixerWindow.cpp:83
 msgid "&Stop"
 msgstr "&Parar"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:1163
-#: ../src/gui/editors/matrix/MatrixView.cpp:795
-#: ../src/gui/editors/notation/NotationView.cpp:2414
+#: ../src/gui/editors/matrix/MatrixView.cpp:804
+#: ../src/gui/editors/notation/NotationView.cpp:2415
 #: ../src/gui/studio/AudioMixerWindow.cpp:118
 #: ../src/gui/studio/MidiMixerWindow.cpp:94
 msgid "&Fast Forward"
 msgstr "Avance &Rápido"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:1171
-#: ../src/gui/editors/matrix/MatrixView.cpp:789
-#: ../src/gui/editors/notation/NotationView.cpp:2408
+#: ../src/gui/editors/matrix/MatrixView.cpp:798
+#: ../src/gui/editors/notation/NotationView.cpp:2409
 #: ../src/gui/studio/AudioMixerWindow.cpp:112
 #: ../src/gui/studio/MidiMixerWindow.cpp:88
 msgid "Re&wind"
@@ -3184,30 +3189,30 @@ msgid "&Record"
 msgstr "G&rabar"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:1192
-#: ../src/gui/editors/matrix/MatrixView.cpp:801
-#: ../src/gui/editors/notation/NotationView.cpp:2420
+#: ../src/gui/editors/matrix/MatrixView.cpp:810
+#: ../src/gui/editors/notation/NotationView.cpp:2421
 #: ../src/gui/studio/AudioMixerWindow.cpp:124
 #: ../src/gui/studio/MidiMixerWindow.cpp:100
 msgid "Rewind to &Beginning"
 msgstr "Re&bobinar al principio"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:1199
-#: ../src/gui/editors/matrix/MatrixView.cpp:807
-#: ../src/gui/editors/notation/NotationView.cpp:2426
+#: ../src/gui/editors/matrix/MatrixView.cpp:816
+#: ../src/gui/editors/notation/NotationView.cpp:2427
 #: ../src/gui/studio/AudioMixerWindow.cpp:130
 #: ../src/gui/studio/MidiMixerWindow.cpp:106
 msgid "Fast Forward to &End"
 msgstr "Avance Rá&pido al Final"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:1206
-#: ../src/gui/editors/matrix/MatrixView.cpp:825
-#: ../src/gui/editors/notation/NotationView.cpp:2444
+#: ../src/gui/editors/matrix/MatrixView.cpp:834
+#: ../src/gui/editors/notation/NotationView.cpp:2445
 msgid "Scro&ll to Follow Playback"
 msgstr "Desp&lazamiento para Seguir la Reproducción"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:1212
-#: ../src/gui/editors/matrix/MatrixView.cpp:831
-#: ../src/gui/editors/notation/NotationView.cpp:2450
+#: ../src/gui/editors/matrix/MatrixView.cpp:840
+#: ../src/gui/editors/notation/NotationView.cpp:2451
 #: ../src/gui/studio/AudioMixerWindow.cpp:142
 #: ../src/gui/studio/MidiMixerWindow.cpp:118
 msgid "Panic"
@@ -3324,12 +3329,12 @@ msgid "Closing file..."
 msgstr "Cerrando archivo..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:2424
-#: ../src/gui/editors/notation/NotationView.cpp:4644
+#: ../src/gui/editors/notation/NotationView.cpp:4649
 msgid "Printing..."
 msgstr "Imprimiendo..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:2436
-#: ../src/gui/editors/notation/NotationView.cpp:4661
+#: ../src/gui/editors/notation/NotationView.cpp:4666
 msgid "Previewing..."
 msgstr "Pre-visualización..."
 
@@ -3342,25 +3347,25 @@ msgid "Cutting selection..."
 msgstr "Cortando selección..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:2477
-#: ../src/gui/editors/matrix/MatrixView.cpp:1614
-#: ../src/gui/editors/notation/NotationView.cpp:4789
+#: ../src/gui/editors/matrix/MatrixView.cpp:1638
+#: ../src/gui/editors/notation/NotationView.cpp:4794
 msgid "Copying selection to clipboard..."
 msgstr "Copiando la selección al portapapeles..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:2487
 #: ../src/gui/editors/eventlist/EventView.cpp:871
-#: ../src/gui/editors/matrix/MatrixView.cpp:1625
-#: ../src/gui/editors/notation/NotationView.cpp:4822
-#: ../src/gui/editors/notation/NotationView.cpp:4867
+#: ../src/gui/editors/matrix/MatrixView.cpp:1649
+#: ../src/gui/editors/notation/NotationView.cpp:4827
+#: ../src/gui/editors/notation/NotationView.cpp:4872
 #: ../src/gui/editors/segment/TriggerSegmentManager.cpp:345
 msgid "Clipboard is empty"
 msgstr "Portapapeles vacío"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:2490
 #: ../src/gui/editors/eventlist/EventView.cpp:875
-#: ../src/gui/editors/matrix/MatrixView.cpp:1629
-#: ../src/gui/editors/notation/NotationView.cpp:4830
-#: ../src/gui/editors/notation/NotationView.cpp:4871
+#: ../src/gui/editors/matrix/MatrixView.cpp:1653
+#: ../src/gui/editors/notation/NotationView.cpp:4835
+#: ../src/gui/editors/notation/NotationView.cpp:4876
 msgid "Inserting clipboard contents..."
 msgstr "Insertando el contenido del portapapeles..."
 
@@ -3648,7 +3653,8 @@ msgid "</ul>"
 msgstr "</ul>"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:4594
-msgid "<p>To fix this, you should install the following additional programs:</p>"
+msgid ""
+"<p>To fix this, you should install the following additional programs:</p>"
 msgstr ""
 "<p>Para arreglar esto, debes instalar los siguientes programas adicionales:</"
 "p>"
@@ -3736,9 +3742,10 @@ msgstr "Archivos MIDI Estándar\n"
 #: ../src/gui/application/RosegardenGUIApp.cpp:5002
 #: ../src/gui/application/RosegardenGUIApp.cpp:5106
 #: ../src/gui/application/RosegardenGUIApp.cpp:5143
-#: ../src/gui/editors/notation/NotationView.cpp:4759
+#: ../src/gui/editors/notation/NotationView.cpp:4764
 msgid "Export failed.  The file could not be opened for writing."
-msgstr "Ha fallado la exportación. El archivo no se ha podido abrir para escritura."
+msgstr ""
+"Ha fallado la exportación. El archivo no se ha podido abrir para escritura."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:4943
 #: ../src/gui/application/RosegardenGUIApp.cpp:4955
@@ -3756,7 +3763,7 @@ msgstr "Archivos Mup\n"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5008
 #: ../src/gui/application/RosegardenGUIApp.cpp:5092
-#: ../src/gui/editors/notation/NotationView.cpp:4745
+#: ../src/gui/editors/notation/NotationView.cpp:4750
 msgid "Exporting LilyPond file..."
 msgstr "Exportando archivo.LilyPond... "
 
@@ -3765,29 +3772,29 @@ msgid "LilyPond files"
 msgstr "Archivos de LilyPond "
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5026
-#: ../src/gui/editors/notation/NotationView.cpp:4679
+#: ../src/gui/editors/notation/NotationView.cpp:4684
 msgid "Printing LilyPond file..."
 msgstr "Imprimiendo archivo.LilyPond..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5031
 #: ../src/gui/application/RosegardenGUIApp.cpp:5055
-#: ../src/gui/editors/notation/NotationView.cpp:4684
-#: ../src/gui/editors/notation/NotationView.cpp:4708
+#: ../src/gui/editors/notation/NotationView.cpp:4689
+#: ../src/gui/editors/notation/NotationView.cpp:4713
 msgid "Failed to open a temporary file for LilyPond export."
 msgstr "Fallo al abrir un archivo temporario para exportar a LilyPond. "
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5050
-#: ../src/gui/editors/notation/NotationView.cpp:4703
+#: ../src/gui/editors/notation/NotationView.cpp:4708
 msgid "Previewing LilyPond file..."
 msgstr "Previsualizando archivo.LilyPond..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5083
-#: ../src/gui/editors/notation/NotationView.cpp:4736
+#: ../src/gui/editors/notation/NotationView.cpp:4741
 msgid "LilyPond Preview Options"
 msgstr "Opciones de previsualización con LilyPond "
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5084
-#: ../src/gui/editors/notation/NotationView.cpp:4737
+#: ../src/gui/editors/notation/NotationView.cpp:4742
 msgid "LilyPond preview options"
 msgstr "Opciones de previsualización con LilyPond "
 
@@ -3830,7 +3837,7 @@ msgid "Move playback pointer to time"
 msgstr "Mover el apuntador de reproducción al tiempo"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5796
-#: ../src/gui/editors/matrix/MatrixView.cpp:2247
+#: ../src/gui/editors/matrix/MatrixView.cpp:2271
 msgid "%1%"
 msgstr "%1%"
 
@@ -3906,8 +3913,10 @@ msgid "Saving current document as default studio..."
 msgstr "Guardando el documento actual como Estudio predeterminado..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:7741
-msgid "Are you sure you want to import your default studio and lose the current one?"
-msgstr "¿Está seguro de querer importar el estudio por omisión y perder el actual?"
+msgid ""
+"Are you sure you want to import your default studio and lose the current one?"
+msgstr ""
+"¿Está seguro de querer importar el estudio por omisión y perder el actual?"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:7776
 msgid "Import Studio from File"
@@ -4330,7 +4339,8 @@ msgstr ""
 "Rosegarden."
 
 #: ../src/gui/seqmanager/SequenceManager.cpp:1056
-msgid "Run out of processor power for real-time audio processing.  Cannot continue."
+msgid ""
+"Run out of processor power for real-time audio processing.  Cannot continue."
 msgstr ""
 "Se ha sobrepasado la capacidad de proceso para audio en tiempo real. No es "
 "posible continuar."
@@ -4350,7 +4360,8 @@ msgid "JACK Audio subsystem is losing sample frames."
 msgstr "Subsistema de audio JACK está perdiendo muestras."
 
 #: ../src/gui/seqmanager/SequenceManager.cpp:1121
-msgid "Failed to read audio data from disc in time to service the audio subsystem."
+msgid ""
+"Failed to read audio data from disc in time to service the audio subsystem."
 msgstr ""
 "Fallo leyendo datos de audio desde disco a tiempo para servir el subsistema "
 "de audio."
@@ -4513,7 +4524,7 @@ msgstr "Presión de Canal"
 
 #: ../src/gui/editors/eventlist/EventView.cpp:127
 #: ../src/gui/general/EditView.cpp:893
-#: ../src/gui/rulers/ControllerEventsRuler.cpp:191
+#: ../src/gui/rulers/ControllerEventsRuler.cpp:192
 #: ../src/gui/seqmanager/MidiFilterDialog.cpp:57
 #: ../src/gui/seqmanager/MidiFilterDialog.cpp:93
 msgid "Pitch Bend"
@@ -4859,7 +4870,8 @@ msgstr "Cuantificador heurístico de partitura"
 
 #: ../src/gui/widgets/QuantizeParameters.cpp:87
 msgid "Quantize for notation only (leave performance unchanged)"
-msgstr "Cuantificar para la partitura solamente (dejar la interpretación intacta)"
+msgstr ""
+"Cuantificar para la partitura solamente (dejar la interpretación intacta)"
 
 #: ../src/gui/widgets/QuantizeParameters.cpp:97
 msgid "Notation parameters"
@@ -4903,7 +4915,7 @@ msgstr "Nivel de grupo irregular"
 msgid "2-in-the-time-of-3"
 msgstr "Dosillo"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4267
+#: ../src/gui/editors/notation/NotationView.cpp:4272
 #: ../src/gui/widgets/QuantizeParameters.cpp:123
 msgid "Triplet"
 msgstr "Tresillo"
@@ -4971,7 +4983,7 @@ msgstr "Ocultar Opciones Avanzadas"
 #: ../src/gui/configuration/GeneralConfigurationPage.cpp:259
 #: ../src/gui/configuration/MatrixConfigurationPage.h:49
 #: ../src/gui/configuration/MatrixConfigurationPage.h:50
-#: ../src/gui/editors/matrix/MatrixView.cpp:2716
+#: ../src/gui/editors/matrix/MatrixView.cpp:2740
 msgid "Matrix"
 msgstr "Matriz"
 
@@ -5886,7 +5898,8 @@ msgid "Export..."
 msgstr "Exportar..."
 
 #: ../src/gui/studio/BankEditorDialog.cpp:169
-msgid "Import Bank and Program data from a Rosegarden file to the current Device"
+msgid ""
+"Import Bank and Program data from a Rosegarden file to the current Device"
 msgstr ""
 "Importar datos de Banco y Programa desde un archivo de Rosegarden para el "
 "dispositivo actual"
@@ -5944,7 +5957,7 @@ msgstr "Importar bancos del dispositivo en el archivo"
 msgid "Export Device as..."
 msgstr "Exportar dispositivo como..."
 
-#: ../src/gui/studio/BankEditorDialog.cpp:1687
+#: ../src/gui/studio/BankEditorDialog.cpp:1696
 msgid ""
 "There are unsaved changes.\n"
 "Do you want to apply the changes before exiting the Bank Editor or discard "
@@ -5954,7 +5967,7 @@ msgstr ""
 "¿ Quiere aplicar los cambios antes de salir del Editor de Bancos, o "
 "descargar los cambios ?"
 
-#: ../src/gui/studio/BankEditorDialog.cpp:1690
+#: ../src/gui/studio/BankEditorDialog.cpp:1699
 msgid "Unsaved Changes"
 msgstr "Cambios no Guardados"
 
@@ -6226,7 +6239,7 @@ msgstr "Detalles de Bancos y Programas"
 msgid "Programs"
 msgstr "Programas"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2718
+#: ../src/gui/editors/matrix/MatrixView.cpp:2742
 #: ../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp:83
 #: ../src/gui/studio/MidiProgramsEditor.cpp:86
 msgid "Percussion"
@@ -6373,7 +6386,8 @@ msgstr "Mover Segmentos"
 #: ../src/gui/editors/segment/segmentcanvas/SegmentResizer.cpp:248
 #: ../src/gui/editors/segment/segmentcanvas/SegmentSelector.cpp:382
 msgid "Hold Shift to avoid snapping to beat grid"
-msgstr "Pulsar mayúsculas para evitar ajustar el tiempo a la cuadrícula de ritmo"
+msgstr ""
+"Pulsar mayúsculas para evitar ajustar el tiempo a la cuadrícula de ritmo"
 
 #: ../src/gui/editors/segment/segmentcanvas/SegmentSelector.cpp:483
 msgid ""
@@ -6385,7 +6399,8 @@ msgstr ""
 
 #: ../src/gui/editors/segment/segmentcanvas/SegmentResizer.cpp:377
 #: ../src/gui/editors/segment/segmentcanvas/SegmentSelector.cpp:500
-msgid "Click and drag to resize a segment; hold Ctrl as well to rescale its contents"
+msgid ""
+"Click and drag to resize a segment; hold Ctrl as well to rescale its contents"
 msgstr ""
 "Hacer clic y arrastrar para cambiar tamaño de un segmento; pulsar Ctrl para "
 "escalar el contenido"
@@ -6458,7 +6473,8 @@ msgstr ""
 "+clic y arrastrar para dibujar sobre un segmento que ya existe"
 
 #: ../src/gui/editors/segment/TrackLabel.cpp:70
-msgid "Click and hold with left mouse button to assign this Track to an Instrument."
+msgid ""
+"Click and hold with left mouse button to assign this Track to an Instrument."
 msgstr ""
 "Pulsar y mantener el botón izquierdo del ratón para asignar esta pista a un "
 "instrumento"
@@ -6980,7 +6996,7 @@ msgstr "[ Pista %1 - %2 ]"
 msgid "The instrument preset database is corrupt.  Check your installation."
 msgstr "Hay un problema catastrófico con los parametros preprogramados."
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:166
+#: ../src/gui/editors/matrix/MatrixView.cpp:168
 #: ../src/gui/editors/parameters/InstrumentParameterBox.cpp:47
 msgid "Instrument Parameters"
 msgstr "Parámetros de Instrumento"
@@ -7001,7 +7017,9 @@ msgstr "Canal de salida"
 msgid ""
 "<qt>use program changes from an external source to manipulate these controls "
 "(only valid for the currently-active track)</qt>"
-msgstr "<qt> utilizar cambios de programa desde fuente externa para manipular estos controles (sólo por la pista actual)</qt>"
+msgstr ""
+"<qt> utilizar cambios de programa desde fuente externa para manipular estos "
+"controles (sólo por la pista actual)</qt>"
 
 #: ../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp:101
 msgid "Receive external program changes"
@@ -7015,14 +7033,16 @@ msgstr "[ %1 ]"
 #: ../src/gui/editors/matrix/MatrixEraser.cpp:51
 #: ../src/gui/editors/matrix/MatrixMover.cpp:64
 #: ../src/gui/editors/matrix/MatrixResizer.cpp:60
-#: ../src/gui/editors/matrix/MatrixSelector.cpp:70
+#: ../src/gui/editors/matrix/MatrixSelector.cpp:71
+#: ../src/gui/editors/matrix/MatrixVelocity.cpp:63
 msgid "Switch to Draw Tool"
 msgstr "Cambiar a Herramienta de Dibujo"
 
 #: ../src/gui/editors/matrix/MatrixMover.cpp:68
 #: ../src/gui/editors/matrix/MatrixPainter.cpp:62
 #: ../src/gui/editors/matrix/MatrixResizer.cpp:64
-#: ../src/gui/editors/matrix/MatrixSelector.cpp:74
+#: ../src/gui/editors/matrix/MatrixSelector.cpp:75
+#: ../src/gui/editors/matrix/MatrixVelocity.cpp:67
 #: ../src/gui/editors/notation/ClefInserter.cpp:50
 #: ../src/gui/editors/notation/GuitarChordInserter.cpp:56
 #: ../src/gui/editors/notation/NotationSelector.cpp:80
@@ -7035,50 +7055,54 @@ msgstr "Cambiar a herramienta de borrado"
 #: ../src/gui/editors/matrix/MatrixEraser.cpp:55
 #: ../src/gui/editors/matrix/MatrixPainter.cpp:66
 #: ../src/gui/editors/matrix/MatrixResizer.cpp:68
-#: ../src/gui/editors/matrix/MatrixSelector.cpp:78
+#: ../src/gui/editors/matrix/MatrixSelector.cpp:79
+#: ../src/gui/editors/matrix/MatrixVelocity.cpp:71
 msgid "Switch to Move Tool"
 msgstr "Cambiar a Herramienta de Movimiento"
 
 #: ../src/gui/editors/matrix/MatrixEraser.cpp:61
 #: ../src/gui/editors/matrix/MatrixMover.cpp:74
 #: ../src/gui/editors/matrix/MatrixPainter.cpp:72
-#: ../src/gui/editors/matrix/MatrixSelector.cpp:86
+#: ../src/gui/editors/matrix/MatrixSelector.cpp:87
+#: ../src/gui/editors/matrix/MatrixVelocity.cpp:75
 msgid "Switch to Resize Tool"
 msgstr "Cambiar a Herramienta de Redimensionamiento"
 
-#: ../src/gui/editors/matrix/MatrixSelector.cpp:446
-#: ../src/gui/editors/matrix/MatrixSelector.cpp:579
+#: ../src/gui/editors/matrix/MatrixSelector.cpp:447
+#: ../src/gui/editors/matrix/MatrixSelector.cpp:580
 msgid "Click and drag to select; middle-click and drag to draw new note"
 msgstr ""
 "Hacer clic y arrastrar para seleccionar; botón medio del ratón y arrastrar "
 "para dibujar una nueva nota"
 
 #: ../src/gui/editors/matrix/MatrixResizer.cpp:317
-#: ../src/gui/editors/matrix/MatrixSelector.cpp:597
+#: ../src/gui/editors/matrix/MatrixSelector.cpp:598
 msgid "Click and drag to resize selected notes"
-msgstr "Hacer clic y arrastrar para ajustar el tamaño de las notas seleccionadas"
+msgstr ""
+"Hacer clic y arrastrar para ajustar el tamaño de las notas seleccionadas"
 
-#: ../src/gui/editors/matrix/MatrixSelector.cpp:599
+#: ../src/gui/editors/matrix/MatrixSelector.cpp:600
 msgid "Click and drag to resize note"
 msgstr "Hacer clic y arrastrar para redimensionar nota"
 
 #: ../src/gui/editors/matrix/MatrixMover.cpp:464
-#: ../src/gui/editors/matrix/MatrixSelector.cpp:604
+#: ../src/gui/editors/matrix/MatrixSelector.cpp:605
 msgid "Click and drag to move selected notes; hold Ctrl as well to copy"
 msgstr ""
 "Hacer clic y arrastrar para mover las notas seleccionadas; pulsar Ctrl a la "
 "vez para copiar"
 
 #: ../src/gui/editors/matrix/MatrixMover.cpp:466
-#: ../src/gui/editors/matrix/MatrixSelector.cpp:606
+#: ../src/gui/editors/matrix/MatrixSelector.cpp:607
 msgid "Click and drag to copy selected notes"
 msgstr "Hacer clic y arrastrar para copiar las notas seleccionadas"
 
-#: ../src/gui/editors/matrix/MatrixSelector.cpp:610
+#: ../src/gui/editors/matrix/MatrixSelector.cpp:611
 msgid "Click and drag to move note; hold Ctrl as well to copy"
-msgstr "Hacer clic y arrastrar para mover notas; pulsar Ctrl a la vez para copiar"
+msgstr ""
+"Hacer clic y arrastrar para mover notas; pulsar Ctrl a la vez para copiar"
 
-#: ../src/gui/editors/matrix/MatrixSelector.cpp:612
+#: ../src/gui/editors/matrix/MatrixSelector.cpp:613
 msgid "Click and drag to copy note"
 msgstr "Hacer clic y arrastrar para copiar notas"
 
@@ -7086,6 +7110,7 @@ msgstr "Hacer clic y arrastrar para copiar notas"
 #: ../src/gui/editors/matrix/MatrixMover.cpp:60
 #: ../src/gui/editors/matrix/MatrixPainter.cpp:58
 #: ../src/gui/editors/matrix/MatrixResizer.cpp:56
+#: ../src/gui/editors/matrix/MatrixVelocity.cpp:59
 #: ../src/gui/editors/notation/ClefInserter.cpp:46
 #: ../src/gui/editors/notation/GuitarChordInserter.cpp:52
 #: ../src/gui/editors/notation/NotationEraser.cpp:60
@@ -7143,173 +7168,178 @@ msgstr ""
 msgid "Click and drag to draw a note"
 msgstr "Hacer clic y arrastrar para dibujar una nota"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:430
-#: ../src/gui/editors/matrix/MatrixView.cpp:3060
+#: ../src/gui/editors/matrix/MatrixView.cpp:432
+#: ../src/gui/editors/matrix/MatrixView.cpp:3084
 msgid "Couldn't apply piano roll layout"
 msgstr "No se ha podido aplicar el formato de rollo de pianola"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:656
+#: ../src/gui/editors/matrix/MatrixView.cpp:658
 msgid "Resi&ze"
 msgstr "Redimensi&onar"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:662
-#: ../src/gui/editors/notation/NotationView.cpp:1916
+#: ../src/gui/editors/matrix/MatrixView.cpp:664
+#, fuzzy
+msgid "&Velocity"
+msgstr "Velocidad:"
+
+#: ../src/gui/editors/matrix/MatrixView.cpp:671
+#: ../src/gui/editors/notation/NotationView.cpp:1917
 msgid "C&hord Insert Mode"
 msgstr "Modo de Inserción de &Acordes"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:669
-#: ../src/gui/editors/notation/NotationView.cpp:1775
+#: ../src/gui/editors/matrix/MatrixView.cpp:678
+#: ../src/gui/editors/notation/NotationView.cpp:1776
 msgid "Ste&p Recording"
 msgstr "Grabación &Paso a Paso"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:687
+#: ../src/gui/editors/matrix/MatrixView.cpp:696
 msgid "&Legato"
 msgstr "&Ligado"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:701
+#: ../src/gui/editors/matrix/MatrixView.cpp:710
 msgid "Set to Current Velocity"
 msgstr "Establecer a la velocidad actual"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:705
-#: ../src/gui/editors/notation/NotationView.cpp:2510
+#: ../src/gui/editors/matrix/MatrixView.cpp:714
+#: ../src/gui/editors/notation/NotationView.cpp:2511
 msgid "Set Event &Velocities..."
 msgstr "Establecer &Velocidad de los Eventos..."
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:709
+#: ../src/gui/editors/matrix/MatrixView.cpp:718
 msgid "Trigger Se&gment..."
 msgstr "Activar &Segmento..."
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:713
+#: ../src/gui/editors/matrix/MatrixView.cpp:722
 msgid "Remove Triggers..."
 msgstr "Eliminar Activadores..."
 
 #: ../src/gui/editors/eventlist/EventView.cpp:1146
-#: ../src/gui/editors/matrix/MatrixView.cpp:717
+#: ../src/gui/editors/matrix/MatrixView.cpp:726
 #: ../src/gui/editors/tempo/TempoView.cpp:599
 msgid "Select &All"
 msgstr "Seleccionar &todo"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:725
-#: ../src/gui/editors/notation/NotationView.cpp:2322
+#: ../src/gui/editors/matrix/MatrixView.cpp:734
+#: ../src/gui/editors/notation/NotationView.cpp:2323
 msgid "Cursor &Back"
 msgstr "Cursor &Atrás"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:729
-#: ../src/gui/editors/notation/NotationView.cpp:2326
+#: ../src/gui/editors/matrix/MatrixView.cpp:738
+#: ../src/gui/editors/notation/NotationView.cpp:2327
 msgid "Cursor &Forward"
 msgstr "Cursor A&delante"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:733
-#: ../src/gui/editors/notation/NotationView.cpp:2330
+#: ../src/gui/editors/matrix/MatrixView.cpp:742
+#: ../src/gui/editors/notation/NotationView.cpp:2331
 msgid "Cursor Ba&ck Bar"
 msgstr "&Cursor al Compás anterior"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:737
-#: ../src/gui/editors/notation/NotationView.cpp:2334
+#: ../src/gui/editors/matrix/MatrixView.cpp:746
+#: ../src/gui/editors/notation/NotationView.cpp:2335
 msgid "Cursor For&ward Bar"
 msgstr "Cursor Siguiente &Compás"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:741
-#: ../src/gui/editors/notation/NotationView.cpp:2338
+#: ../src/gui/editors/matrix/MatrixView.cpp:750
+#: ../src/gui/editors/notation/NotationView.cpp:2339
 msgid "Cursor Back and Se&lect"
 msgstr "Cursor Atrás y &Seleccionar"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:745
-#: ../src/gui/editors/notation/NotationView.cpp:2342
+#: ../src/gui/editors/matrix/MatrixView.cpp:754
+#: ../src/gui/editors/notation/NotationView.cpp:2343
 msgid "Cursor Forward and &Select"
 msgstr "Avanzar Cursor y &Seleccionar"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:749
-#: ../src/gui/editors/notation/NotationView.cpp:2346
+#: ../src/gui/editors/matrix/MatrixView.cpp:758
+#: ../src/gui/editors/notation/NotationView.cpp:2347
 msgid "Cursor Back Bar and Select"
 msgstr "Cursor al compás anterior y Seleccionar"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:753
-#: ../src/gui/editors/notation/NotationView.cpp:2350
+#: ../src/gui/editors/matrix/MatrixView.cpp:762
+#: ../src/gui/editors/notation/NotationView.cpp:2351
 msgid "Cursor Forward Bar and Select"
 msgstr "Cursor al compás siguiente y Seleccionar"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:757
-#: ../src/gui/editors/notation/NotationView.cpp:2360
+#: ../src/gui/editors/matrix/MatrixView.cpp:766
+#: ../src/gui/editors/notation/NotationView.cpp:2361
 msgid "Cursor to St&art"
 msgstr "Cursor &al Comienzo"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:763
-#: ../src/gui/editors/notation/NotationView.cpp:2366
+#: ../src/gui/editors/matrix/MatrixView.cpp:772
+#: ../src/gui/editors/notation/NotationView.cpp:2367
 msgid "Cursor to &End"
 msgstr "Cursor al &Final"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:769
-#: ../src/gui/editors/notation/NotationView.cpp:2388
+#: ../src/gui/editors/matrix/MatrixView.cpp:778
+#: ../src/gui/editors/notation/NotationView.cpp:2389
 msgid "Cursor to &Playback Pointer"
 msgstr "Cursor al Punto de &Ejecución"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:813
-#: ../src/gui/editors/notation/NotationView.cpp:2432
+#: ../src/gui/editors/matrix/MatrixView.cpp:822
+#: ../src/gui/editors/notation/NotationView.cpp:2433
 msgid "Playback Pointer to &Cursor"
 msgstr "Posición de Ejecución al &Cursor"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:819
-#: ../src/gui/editors/notation/NotationView.cpp:2438
+#: ../src/gui/editors/matrix/MatrixView.cpp:828
+#: ../src/gui/editors/notation/NotationView.cpp:2439
 msgid "&Solo"
 msgstr "&Solo"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:834
-#: ../src/gui/editors/notation/NotationView.cpp:2453
+#: ../src/gui/editors/matrix/MatrixView.cpp:843
+#: ../src/gui/editors/notation/NotationView.cpp:2454
 msgid "Set Loop to Selection"
 msgstr "Establecer repetición en la Selección"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:838
-#: ../src/gui/editors/notation/NotationView.cpp:2457
+#: ../src/gui/editors/matrix/MatrixView.cpp:847
+#: ../src/gui/editors/notation/NotationView.cpp:2458
 msgid "Clear L&oop"
 msgstr "Limpiar &Repetición"
 
 #: ../src/gui/editors/eventlist/EventView.cpp:1150
-#: ../src/gui/editors/matrix/MatrixView.cpp:842
-#: ../src/gui/editors/notation/NotationView.cpp:2461
+#: ../src/gui/editors/matrix/MatrixView.cpp:851
+#: ../src/gui/editors/notation/NotationView.cpp:2462
 #: ../src/gui/editors/tempo/TempoView.cpp:603
 msgid "Clear Selection"
 msgstr "Limpiar selección"
 
 #: ../src/gui/editors/eventlist/EventView.cpp:1142
-#: ../src/gui/editors/matrix/MatrixView.cpp:847
-#: ../src/gui/editors/notation/NotationView.cpp:2468
+#: ../src/gui/editors/matrix/MatrixView.cpp:856
+#: ../src/gui/editors/notation/NotationView.cpp:2469
 msgid "&Filter Selection"
 msgstr "&Filtrar Selección"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:873
+#: ../src/gui/editors/matrix/MatrixView.cpp:882
 msgid "&No Snap"
 msgstr "&No Ajustar"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:878
+#: ../src/gui/editors/matrix/MatrixView.cpp:887
 msgid "Snap to Bea&t"
 msgstr "Ajuste a la Par&te"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:882
+#: ../src/gui/editors/matrix/MatrixView.cpp:891
 msgid "Snap to &Bar"
 msgstr "Ajuste al &Compás"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:903
+#: ../src/gui/editors/matrix/MatrixView.cpp:912
 #, c-format
 msgid "Snap to %1"
 msgstr "Ajuste a %1"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:912
+#: ../src/gui/editors/matrix/MatrixView.cpp:921
 msgid "Show Instrument Parameters"
 msgstr "Mostrar Parámetros de Instrumento"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:917
-#: ../src/gui/editors/notation/NotationView.cpp:1847
+#: ../src/gui/editors/matrix/MatrixView.cpp:926
+#: ../src/gui/editors/notation/NotationView.cpp:1848
 msgid "Show Ch&ord Name Ruler"
 msgstr "M&ostrar regla de Nombres de Acorde"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:921
-#: ../src/gui/editors/notation/NotationView.cpp:1855
+#: ../src/gui/editors/matrix/MatrixView.cpp:930
+#: ../src/gui/editors/notation/NotationView.cpp:1856
 msgid "Show &Tempo Ruler"
 msgstr "Mostrar regla de &Tempo"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:1233
-#: ../src/gui/editors/notation/NotationView.cpp:3258
+#: ../src/gui/editors/matrix/MatrixView.cpp:1248
+#: ../src/gui/editors/notation/NotationView.cpp:3263
 #, c-format
 msgid ""
 "_n:   1 event selected \n"
@@ -7318,126 +7348,126 @@ msgstr ""
 "  1 evento seleccionado \n"
 "  %n eventos seleccionados "
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:1236
-#: ../src/gui/editors/notation/NotationView.cpp:3260
+#: ../src/gui/editors/matrix/MatrixView.cpp:1251
+#: ../src/gui/editors/notation/NotationView.cpp:3265
 msgid "  No selection "
 msgstr "  Sin selección "
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:1343
-#: ../src/gui/editors/matrix/MatrixView.cpp:1355
-#: ../src/gui/editors/matrix/MatrixView.cpp:2086
-#: ../src/gui/editors/notation/NotationView.cpp:5960
+#: ../src/gui/editors/matrix/MatrixView.cpp:1367
+#: ../src/gui/editors/matrix/MatrixView.cpp:1379
+#: ../src/gui/editors/matrix/MatrixView.cpp:2110
+#: ../src/gui/editors/notation/NotationView.cpp:5965
 msgid "Quantizing..."
 msgstr "Cuantificando   "
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:1365
-#: ../src/gui/editors/notation/NotationView.cpp:5497
+#: ../src/gui/editors/matrix/MatrixView.cpp:1389
+#: ../src/gui/editors/notation/NotationView.cpp:5502
 msgid "Collapsing notes..."
 msgstr "Fusionando notas..."
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:1376
+#: ../src/gui/editors/matrix/MatrixView.cpp:1400
 msgid "Making legato..."
 msgstr "Haciendo legato..."
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:1471
+#: ../src/gui/editors/matrix/MatrixView.cpp:1495
 msgid "Note: %1 (%2.%3s)"
 msgstr "Nota: %1 (%2,%3s)"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:1526
-#: ../src/gui/editors/notation/NotationView.cpp:7343
+#: ../src/gui/editors/matrix/MatrixView.cpp:1550
+#: ../src/gui/editors/notation/NotationView.cpp:7348
 msgid "Time: %1 (%2.%3s)"
 msgstr "Tiempo: %1 (%2.%3s)"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:1604
-#: ../src/gui/editors/notation/NotationView.cpp:4770
-#: ../src/gui/editors/notation/NotationView.cpp:4799
+#: ../src/gui/editors/matrix/MatrixView.cpp:1628
+#: ../src/gui/editors/notation/NotationView.cpp:4775
+#: ../src/gui/editors/notation/NotationView.cpp:4804
 msgid "Cutting selection to clipboard..."
 msgstr "Cortando la selección al portapapeles..."
 
 #: ../src/gui/editors/eventlist/EventView.cpp:905
-#: ../src/gui/editors/matrix/MatrixView.cpp:1636
+#: ../src/gui/editors/matrix/MatrixView.cpp:1660
 #: ../src/gui/editors/notation/NotationSelectionPaster.cpp:75
 msgid "Couldn't paste at this point"
 msgstr "No se puede pegar en este punto"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:1647
-#: ../src/gui/editors/notation/NotationView.cpp:4780
+#: ../src/gui/editors/matrix/MatrixView.cpp:1671
+#: ../src/gui/editors/notation/NotationView.cpp:4785
 msgid "Deleting selection..."
 msgstr "Eliminando selección..."
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:1837
-#: ../src/gui/editors/notation/NotationView.cpp:5707
+#: ../src/gui/editors/matrix/MatrixView.cpp:1861
+#: ../src/gui/editors/notation/NotationView.cpp:5712
 #, c-format
 msgid "Unknown note insert action %1"
 msgstr "Acción de insertar nota desconocida: %1"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:1841
-#: ../src/gui/editors/matrix/MatrixView.cpp:2864
-#: ../src/gui/editors/notation/NotationView.cpp:5711
+#: ../src/gui/editors/matrix/MatrixView.cpp:1865
+#: ../src/gui/editors/matrix/MatrixView.cpp:2888
+#: ../src/gui/editors/notation/NotationView.cpp:5716
 msgid "Inserting note"
 msgstr "Insertando nota"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2098
+#: ../src/gui/editors/matrix/MatrixView.cpp:2122
 msgid "Unquantizing..."
 msgstr "Descuantificando..."
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2127
+#: ../src/gui/editors/matrix/MatrixView.cpp:2151
 msgid " Grid: "
 msgstr " Rejilla: "
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2141
+#: ../src/gui/editors/matrix/MatrixView.cpp:2165
 msgid "Unit"
 msgstr "Unidad"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2143
+#: ../src/gui/editors/matrix/MatrixView.cpp:2167
 msgid "Beat"
 msgstr "Parte"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2145
+#: ../src/gui/editors/matrix/MatrixView.cpp:2169
 msgid "Bar"
 msgstr "Compás"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2166
+#: ../src/gui/editors/matrix/MatrixView.cpp:2190
 msgid " Velocity: "
 msgstr " Velocidad: "
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2177
+#: ../src/gui/editors/matrix/MatrixView.cpp:2201
 msgid " Quantize: "
 msgstr " Cuantificación: "
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2591
-#: ../src/gui/editors/notation/NotationView.cpp:5133
+#: ../src/gui/editors/matrix/MatrixView.cpp:2615
+#: ../src/gui/editors/notation/NotationView.cpp:5138
 msgid "Raising velocities..."
 msgstr "Subiendo velocidades..."
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2603
-#: ../src/gui/editors/notation/NotationView.cpp:5143
+#: ../src/gui/editors/matrix/MatrixView.cpp:2627
+#: ../src/gui/editors/notation/NotationView.cpp:5148
 msgid "Lowering velocities..."
 msgstr "Bajando velocidades..."
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2618
-#: ../src/gui/editors/notation/NotationView.cpp:5178
+#: ../src/gui/editors/matrix/MatrixView.cpp:2642
+#: ../src/gui/editors/notation/NotationView.cpp:5183
 msgid "Set Event Velocities"
 msgstr "Establecer Velocidades de los Eventos"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2623
-#: ../src/gui/editors/notation/NotationView.cpp:5183
+#: ../src/gui/editors/matrix/MatrixView.cpp:2647
+#: ../src/gui/editors/notation/NotationView.cpp:5188
 msgid "Setting Velocities..."
 msgstr "Estableciendo Velocidades..."
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2672
+#: ../src/gui/editors/matrix/MatrixView.cpp:2696
 msgid "Remove Triggers"
 msgstr "Eliminar Activadores"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2730
+#: ../src/gui/editors/matrix/MatrixView.cpp:2754
 msgid "%1 - Segment Track #%2 - %3"
 msgstr "%1 - Segmento Pista #%2 - %3"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2737
+#: ../src/gui/editors/matrix/MatrixView.cpp:2761
 msgid "%1 - All Segments - %2"
 msgstr "%1 - Todos los segmentos - %2"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2744
+#: ../src/gui/editors/matrix/MatrixView.cpp:2768
 msgid ""
 "_n: %1 - 1 Segment - %2\n"
 "%1 - %n Segments - %2"
@@ -7445,17 +7475,43 @@ msgstr ""
 "%1 - 1 Segmento - %2\n"
 "%1 - %n Segmentos - %2"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2892
+#: ../src/gui/editors/matrix/MatrixView.cpp:2916
 msgid "Can't insert note: No grid duration selected"
-msgstr "No es posible insertar nota: No hay una duración de rejilla seleccionada"
+msgstr ""
+"No es posible insertar nota: No hay una duración de rejilla seleccionada"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2942
+#: ../src/gui/editors/matrix/MatrixView.cpp:2966
 msgid " Chord "
 msgstr " Acorde "
 
 #: ../src/gui/editors/matrix/MatrixEraser.cpp:98
 msgid "Click on a note to delete it"
 msgstr "Hacer clic en una nota para borrarla"
+
+#: ../src/gui/editors/matrix/MatrixVelocity.cpp:174
+#, fuzzy, c-format
+msgid "Velocity change: %1"
+msgstr "Velocidad  "
+
+#: ../src/gui/editors/matrix/MatrixVelocity.cpp:210
+#, fuzzy
+msgid "Change Velocity"
+msgstr "Velocidad base"
+
+#: ../src/gui/editors/matrix/MatrixVelocity.cpp:213
+#, fuzzy
+msgid "Change Velocities"
+msgstr "Velocidades"
+
+#: ../src/gui/editors/matrix/MatrixVelocity.cpp:270
+#, fuzzy
+msgid "Click and drag to scale velocity of selected notes"
+msgstr "Hacer clic y arrastrar para copiar las notas seleccionadas"
+
+#: ../src/gui/editors/matrix/MatrixVelocity.cpp:272
+#, fuzzy
+msgid "Click and drag to scale velocity of note"
+msgstr "Hacer clic y arrastrar para copiar una nota"
 
 #: ../src/gui/editors/tempo/TempoView.cpp:82
 msgid "Filter"
@@ -7605,279 +7661,279 @@ msgstr "  Página: "
 msgid "Switch to Inserting Notes"
 msgstr "Cambiar a inserción de notas"
 
-#: ../src/gui/editors/notation/NotationView.cpp:519
+#: ../src/gui/editors/notation/NotationView.cpp:520
 msgid "Close track headers"
 msgstr "Cerrar cabeceras de pista"
 
-#: ../src/gui/editors/notation/NotationView.cpp:914
+#: ../src/gui/editors/notation/NotationView.cpp:915
 msgid "Preparing to print..."
 msgstr "Preparación para imprimir..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:1513
+#: ../src/gui/editors/notation/NotationView.cpp:1514
 msgid "Note &Font"
 msgstr "&Fuente tipográfica de Nota"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1536
+#: ../src/gui/editors/notation/NotationView.cpp:1537
 msgid "Si&ze"
 msgstr "&Tamaño"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1542
+#: ../src/gui/editors/notation/NotationView.cpp:1543
 msgid "Show Track Headers"
 msgstr "Mostrar &Cabeceras de Pista"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1547
+#: ../src/gui/editors/notation/NotationView.cpp:1548
 msgid "S&pacing"
 msgstr "Espa&ciado"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1569
+#: ../src/gui/editors/notation/NotationView.cpp:1570
 msgid "Du&ration Factor"
 msgstr "Factor de Du&ración"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1595
+#: ../src/gui/editors/notation/NotationView.cpp:1596
 msgid "Note &Style"
 msgstr "&Estilo de Nota"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1621
+#: ../src/gui/editors/notation/NotationView.cpp:1622
 msgid "Insert Rest"
 msgstr "Insertar Silencio"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1625
+#: ../src/gui/editors/notation/NotationView.cpp:1626
 msgid "Switch from Note to Rest"
 msgstr "Cambiar de nota a Silencio"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1630
+#: ../src/gui/editors/notation/NotationView.cpp:1631
 msgid "Switch from Rest to Note"
 msgstr "Cambiar de Silencio a Nota"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1687
+#: ../src/gui/editors/notation/NotationView.cpp:1688
 msgid "No accidental"
 msgstr "Sin alteraciones"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1688
+#: ../src/gui/editors/notation/NotationView.cpp:1689
 msgid "Follow previous accidental"
 msgstr "Seguir alteración anterior"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1689
+#: ../src/gui/editors/notation/NotationView.cpp:1690
 msgid "Sharp"
 msgstr "Sostenido"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1690
+#: ../src/gui/editors/notation/NotationView.cpp:1691
 msgid "Flat"
 msgstr "Bemol"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1691
+#: ../src/gui/editors/notation/NotationView.cpp:1692
 msgid "Natural"
 msgstr "Becuadro"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1692
+#: ../src/gui/editors/notation/NotationView.cpp:1693
 msgid "Double sharp"
 msgstr "Doble sostenido"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1693
+#: ../src/gui/editors/notation/NotationView.cpp:1694
 msgid "Double flat"
 msgstr "Doble bemol"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1714
+#: ../src/gui/editors/notation/NotationView.cpp:1715
 msgid "&Treble Clef"
 msgstr "Clave de &Soprano"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1721
+#: ../src/gui/editors/notation/NotationView.cpp:1722
 msgid "&Alto Clef"
 msgstr "Clave de &Contralto"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1728
+#: ../src/gui/editors/notation/NotationView.cpp:1729
 msgid "Te&nor Clef"
 msgstr "Clave de &Tenor"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1735
+#: ../src/gui/editors/notation/NotationView.cpp:1736
 msgid "&Bass Clef"
 msgstr "Clave de &Bajo"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1742
+#: ../src/gui/editors/notation/NotationView.cpp:1743
 msgid "&Text"
 msgstr "&Texto"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1748
+#: ../src/gui/editors/notation/NotationView.cpp:1749
 msgid "&Guitar Chord"
 msgstr "Acorde de guitarra"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1781
+#: ../src/gui/editors/notation/NotationView.cpp:1782
 msgid "Select from Sta&rt"
 msgstr "Selecciona&r desde el Comienzo"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1785
+#: ../src/gui/editors/notation/NotationView.cpp:1786
 msgid "Select to &End"
 msgstr "S&eleccionar hasta el final"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1789
+#: ../src/gui/editors/notation/NotationView.cpp:1790
 msgid "Select Whole St&aff"
 msgstr "Seleccion&ar todo el pentagrama"
 
 #: ../src/commands/edit/CutAndCloseCommand.h:46
-#: ../src/gui/editors/notation/NotationView.cpp:1793
+#: ../src/gui/editors/notation/NotationView.cpp:1794
 msgid "C&ut and Close"
 msgstr "C&ortar y cerrar"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1797
+#: ../src/gui/editors/notation/NotationView.cpp:1798
 msgid "Pa&ste..."
 msgstr "&Pegar..."
 
 #: ../src/gui/editors/notation/NotationSelector.cpp:115
-#: ../src/gui/editors/notation/NotationView.cpp:1805
+#: ../src/gui/editors/notation/NotationView.cpp:1806
 msgid "Move to Staff Above"
 msgstr "Mudar hacia pentagrama arriba"
 
 #: ../src/gui/editors/notation/NotationSelector.cpp:119
-#: ../src/gui/editors/notation/NotationView.cpp:1809
+#: ../src/gui/editors/notation/NotationView.cpp:1810
 msgid "Move to Staff Below"
 msgstr "Mudar hacia pentagrama abajo"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1823
+#: ../src/gui/editors/notation/NotationView.cpp:1824
 msgid "&Linear Layout"
 msgstr "Formato &Lineal"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1832
+#: ../src/gui/editors/notation/NotationView.cpp:1833
 msgid "&Continuous Page Layout"
 msgstr "Formato de Página &Continuo"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1841
+#: ../src/gui/editors/notation/NotationView.cpp:1842
 msgid "&Multiple Page Layout"
 msgstr "Formato de Página &Múltiple"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1851
+#: ../src/gui/editors/notation/NotationView.cpp:1852
 msgid "Show Ra&w Note Ruler"
 msgstr "Mostrar &regla de Nota Cruda"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1859
+#: ../src/gui/editors/notation/NotationView.cpp:1860
 msgid "Show &Annotations"
 msgstr "Mostrar &Anotaciones"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1863
+#: ../src/gui/editors/notation/NotationView.cpp:1864
 msgid "Show Lily&Pond Directives"
 msgstr "Mostrar Directivos para &LilyPond"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1867
+#: ../src/gui/editors/notation/NotationView.cpp:1868
 msgid "Open L&yric Editor"
 msgstr "Abrir Editor de &Letra"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1909
+#: ../src/gui/editors/notation/NotationView.cpp:1910
 msgid "Trip&let Insert Mode"
 msgstr "Modo de Inserción de &Tresillos"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1923
+#: ../src/gui/editors/notation/NotationView.cpp:1924
 msgid "Grace Insert Mode"
 msgstr "Modo de Inserción de &Apoyatura"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2177
+#: ../src/gui/editors/notation/NotationView.cpp:2178
 msgid "&Dump selected events to stderr"
 msgstr "&Volcar eventos seleccionados a stderr"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2245
+#: ../src/gui/editors/notation/NotationView.cpp:2246
 msgid "Ma&ke Ornament..."
 msgstr "&Hacer Ornamento..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:2249
+#: ../src/gui/editors/notation/NotationView.cpp:2250
 msgid "Trigger &Ornament..."
 msgstr "&Ornamento activador..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:2253
+#: ../src/gui/editors/notation/NotationView.cpp:2254
 msgid "Remove Ornament..."
 msgstr "Eliminar Ornamento..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:2258
+#: ../src/gui/editors/notation/NotationView.cpp:2259
 msgid "&None"
 msgstr "&Nada"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2286
+#: ../src/gui/editors/notation/NotationView.cpp:2287
 msgid "Convert Notation For..."
 msgstr "Convertir partitura para..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:2295
+#: ../src/gui/editors/notation/NotationView.cpp:2296
 msgid "Show &Notes Toolbar"
 msgstr "Mostrar barra de herramientas de &Notas"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2296
+#: ../src/gui/editors/notation/NotationView.cpp:2297
 msgid "Show &Rests Toolbar"
 msgstr "Mostrar barra de herramientas de &Silencios"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2297
+#: ../src/gui/editors/notation/NotationView.cpp:2298
 msgid "Show &Accidentals Toolbar"
 msgstr "Mostrar barra de herramientas de &Alteraciones"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2298
+#: ../src/gui/editors/notation/NotationView.cpp:2299
 msgid "Show Cle&fs Toolbar"
 msgstr "Mostrar barra de herramientas de Cla&ves"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2300
+#: ../src/gui/editors/notation/NotationView.cpp:2301
 msgid "Show &Marks Toolbar"
 msgstr "Mostrar barra de herramientas de &Marcadores"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2302
+#: ../src/gui/editors/notation/NotationView.cpp:2303
 msgid "Show &Group Toolbar"
 msgstr "Mostrar barra de herramientas de &Grupo"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2304
+#: ../src/gui/editors/notation/NotationView.cpp:2305
 msgid "Show &Layout Toolbar"
 msgstr "Mostrar barra de herramientas de &Formato"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2308
+#: ../src/gui/editors/notation/NotationView.cpp:2309
 msgid "Show M&eta Toolbar"
 msgstr "Mostrar barra de herramientas M&eta"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2370
+#: ../src/gui/editors/notation/NotationView.cpp:2371
 msgid "Cursor &Up Staff"
 msgstr "Subir C&ursor un pentagrama"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2374
+#: ../src/gui/editors/notation/NotationView.cpp:2375
 msgid "Cursor &Down Staff"
 msgstr "Cursor &Pentagrama Abajo"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2378
+#: ../src/gui/editors/notation/NotationView.cpp:2379
 msgid "Cursor Pre&vious Segment"
 msgstr "Cursor al segmento anterior"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2382
+#: ../src/gui/editors/notation/NotationView.cpp:2383
 msgid "Cursor Ne&xt Segment"
 msgstr "Cursor al siguiente segmento"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2472
+#: ../src/gui/editors/notation/NotationView.cpp:2473
 msgid "Push &Left"
 msgstr "Empujar a la &Izquierda"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2476
+#: ../src/gui/editors/notation/NotationView.cpp:2477
 msgid "Push &Right"
 msgstr "Empujar a la De&recha"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2480
+#: ../src/gui/editors/notation/NotationView.cpp:2481
 msgid "Push &Up"
 msgstr "Empujar hacia &Arriba"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2484
+#: ../src/gui/editors/notation/NotationView.cpp:2485
 msgid "Push &Down"
 msgstr "Empujar hacia A&bajo"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2488
+#: ../src/gui/editors/notation/NotationView.cpp:2489
 msgid "&Restore Positions"
 msgstr "Restablecer posiciones"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2492
+#: ../src/gui/editors/notation/NotationView.cpp:2493
 msgid "Make &Invisible"
 msgstr "Hacer &Invisible"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2496
+#: ../src/gui/editors/notation/NotationView.cpp:2497
 msgid "Make &Visible"
 msgstr "Hacer &Visible"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2514
+#: ../src/gui/editors/notation/NotationView.cpp:2515
 msgid "Toggle Dot"
 msgstr "Conmutar puntillo"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2518
-#: ../src/gui/editors/notation/NotationView.cpp:2522
+#: ../src/gui/editors/notation/NotationView.cpp:2519
+#: ../src/gui/editors/notation/NotationView.cpp:2523
 msgid "Add Dot"
 msgstr "Añadir Puntillo"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2581
+#: ../src/gui/editors/notation/NotationView.cpp:2582
 #, c-format
 msgid ""
 "_n: 1 pixel\n"
@@ -7886,60 +7942,60 @@ msgstr ""
 "1 pixel\n"
 "%n pixeles"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2630
+#: ../src/gui/editors/notation/NotationView.cpp:2631
 msgid "  Font:  "
 msgstr "  Tipografía:  "
 
-#: ../src/gui/editors/notation/NotationView.cpp:2658
+#: ../src/gui/editors/notation/NotationView.cpp:2659
 msgid "Unknown font \"%1\", using default"
 msgstr "Tipografía \"%1\" desconocida, usando predeterminada"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2666
+#: ../src/gui/editors/notation/NotationView.cpp:2667
 msgid "  Size:  "
 msgstr "  Tamaño:  "
 
-#: ../src/gui/editors/notation/NotationView.cpp:2688
+#: ../src/gui/editors/notation/NotationView.cpp:2689
 msgid "  Spacing:  "
 msgstr "  Espaciado:  "
 
-#: ../src/gui/editors/notation/NotationView.cpp:3004
-#: ../src/gui/editors/notation/NotationView.cpp:3844
+#: ../src/gui/editors/notation/NotationView.cpp:3005
+#: ../src/gui/editors/notation/NotationView.cpp:3849
 msgid "  Ready."
 msgstr "  Listo."
 
-#: ../src/gui/editors/notation/NotationView.cpp:3009
+#: ../src/gui/editors/notation/NotationView.cpp:3010
 msgid "Laying out score..."
 msgstr "Dando formato a la partitura..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:3022
+#: ../src/gui/editors/notation/NotationView.cpp:3023
 msgid "Laying out staff %1..."
 msgstr "Dando formato al pentagrama %1..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:3031
+#: ../src/gui/editors/notation/NotationView.cpp:3032
 msgid "Reconciling staffs..."
 msgstr "Reconciliando pentagramas..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:3911
+#: ../src/gui/editors/notation/NotationView.cpp:3916
 msgid "Sizing and allocating canvas..."
 msgstr "Creando y dimensionando lienzo..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:4076
+#: ../src/gui/editors/notation/NotationView.cpp:4081
 msgid "note"
 msgstr "nota"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4076
+#: ../src/gui/editors/notation/NotationView.cpp:4081
 msgid "rest"
 msgstr "silencio"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4237
+#: ../src/gui/editors/notation/NotationView.cpp:4242
 msgid "%1 - Segment Track #%2 - Notation"
 msgstr "%1 - Segmento Pista #%2 - Partitura"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4243
+#: ../src/gui/editors/notation/NotationView.cpp:4248
 msgid "%1 - All Segments - Notation"
 msgstr "%1 - Todos los segmentos - Partitura"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4248
+#: ../src/gui/editors/notation/NotationView.cpp:4253
 msgid ""
 "_n: %1 - Segment - Notation\n"
 "%1 - %n Segments - Notation"
@@ -7947,50 +8003,50 @@ msgstr ""
 "%1 - Segmento - Notación\n"
 "%1 - %n Segmentos - Notación"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4269
+#: ../src/gui/editors/notation/NotationView.cpp:4274
 msgid "Grace"
 msgstr "Apoyatura"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4273
-#: ../src/gui/editors/notation/NotationView.cpp:4277
-#: ../src/gui/editors/notation/NotationView.cpp:4281
+#: ../src/gui/editors/notation/NotationView.cpp:4278
+#: ../src/gui/editors/notation/NotationView.cpp:4282
+#: ../src/gui/editors/notation/NotationView.cpp:4286
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4297
+#: ../src/gui/editors/notation/NotationView.cpp:4302
 msgid "Hidden annotations"
 msgstr "Anotaciones ocultas"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4319
+#: ../src/gui/editors/notation/NotationView.cpp:4324
 msgid "Hidden LilyPond directives"
 msgstr "Directivas LilyPond ocultas"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4352
+#: ../src/gui/editors/notation/NotationView.cpp:4357
 #, c-format
 msgid "Unknown spacing action %1"
 msgstr "Acción de espaciado desconocida %1"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4410
+#: ../src/gui/editors/notation/NotationView.cpp:4415
 #, c-format
 msgid "Unknown proportion action %1"
 msgstr "Acción de proporción desconocida %1"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4457
+#: ../src/gui/editors/notation/NotationView.cpp:4462
 #, c-format
 msgid "Unknown font action %1"
 msgstr "Acción de tipografía desconocida %1"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4475
+#: ../src/gui/editors/notation/NotationView.cpp:4480
 #, c-format
 msgid "Unknown font size %1"
 msgstr "Tamaño de tipografía desconocido %1"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4479
+#: ../src/gui/editors/notation/NotationView.cpp:4484
 #, c-format
 msgid "Unknown font size action %1"
 msgstr "Acción de tamaño de tipografía desconocido %1"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4806
+#: ../src/gui/editors/notation/NotationView.cpp:4811
 msgid ""
 "The Restricted paste type requires enough empty space (containing only "
 "rests) at the paste position to hold all of the events to be pasted.\n"
@@ -8010,277 +8066,277 @@ msgstr ""
 "pegado por defecto a otro distinto del Restringido si\n"
 "así lo desea."
 
-#: ../src/gui/editors/notation/NotationView.cpp:4826
+#: ../src/gui/editors/notation/NotationView.cpp:4831
 msgid "Can't paste multiple Segments into one"
 msgstr "No es posible pegar múltiples segmentos en uno"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4854
-#: ../src/gui/editors/notation/NotationView.cpp:4903
+#: ../src/gui/editors/notation/NotationView.cpp:4859
+#: ../src/gui/editors/notation/NotationView.cpp:4908
 msgid "Couldn't paste at this point."
 msgstr "No se puede pegar en este punto."
 
-#: ../src/gui/editors/notation/NotationView.cpp:4922
+#: ../src/gui/editors/notation/NotationView.cpp:4927
 msgid "Move Events to Staff Above"
 msgstr "&Mover eventos hacia pentagrama arriba"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4950
+#: ../src/gui/editors/notation/NotationView.cpp:4955
 msgid "Move Events to Staff Below"
 msgstr "&Mover Eventos hacia pentagrama abajo"
 
-#: ../src/gui/editors/notation/NotationView.cpp:5062
+#: ../src/gui/editors/notation/NotationView.cpp:5067
 msgid "Pushing selection left..."
 msgstr "Empujando selección a la izquierda..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5073
+#: ../src/gui/editors/notation/NotationView.cpp:5078
 msgid "Pushing selection right..."
 msgstr "Empujando selección a la derecha..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5084
+#: ../src/gui/editors/notation/NotationView.cpp:5089
 msgid "Pushing selection up..."
 msgstr "Empujando selección hacia arriba..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5095
+#: ../src/gui/editors/notation/NotationView.cpp:5100
 msgid "Pushing selection down..."
 msgstr "Empujando selección hacia abajo..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5106
+#: ../src/gui/editors/notation/NotationView.cpp:5111
 msgid "Restoring computed positions..."
 msgstr "Restaurando las posiciones calculadas..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5115
+#: ../src/gui/editors/notation/NotationView.cpp:5120
 msgid "Making visible..."
 msgstr "Haciendo visible..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5124
+#: ../src/gui/editors/notation/NotationView.cpp:5129
 msgid "Making invisible..."
 msgstr "Haciendo invisible..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5275
+#: ../src/gui/editors/notation/NotationView.cpp:5280
 msgid "Beaming group..."
 msgstr "Uniendo plicas..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5285
+#: ../src/gui/editors/notation/NotationView.cpp:5290
 msgid "Auto-beaming selection..."
 msgstr "Uniendo automáticamente las plicas de la selección..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5295
+#: ../src/gui/editors/notation/NotationView.cpp:5300
 msgid "Breaking groups..."
 msgstr "Desagrupando..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5383
+#: ../src/gui/editors/notation/NotationView.cpp:5388
 msgid "Untupleting..."
 msgstr "Dividiendo grupos irregulares..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5391
+#: ../src/gui/editors/notation/NotationView.cpp:5396
 msgid "Adding slur..."
 msgstr "Añadiendo ligadura..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5392
+#: ../src/gui/editors/notation/NotationView.cpp:5397
 msgid "slur"
 msgstr "ligadura"
 
-#: ../src/gui/editors/notation/NotationView.cpp:5397
+#: ../src/gui/editors/notation/NotationView.cpp:5402
 msgid "Adding phrasing slur..."
 msgstr "Añadiendo ligadura de fraseo..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5398
+#: ../src/gui/editors/notation/NotationView.cpp:5403
 msgid "phrasing slur"
 msgstr "ligadura de fraseo"
 
-#: ../src/gui/editors/notation/NotationView.cpp:5403
+#: ../src/gui/editors/notation/NotationView.cpp:5408
 msgid "Adding glissando..."
 msgstr "Añadiendo glissando..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5404
+#: ../src/gui/editors/notation/NotationView.cpp:5409
 msgid "glissando"
 msgstr "glissando"
 
-#: ../src/gui/editors/notation/NotationView.cpp:5409
+#: ../src/gui/editors/notation/NotationView.cpp:5414
 msgid "Adding crescendo..."
 msgstr "Añadiendo crescendo..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5410
-#: ../src/gui/editors/notation/NotationView.cpp:5416
+#: ../src/gui/editors/notation/NotationView.cpp:5415
+#: ../src/gui/editors/notation/NotationView.cpp:5421
 msgid "dynamic"
 msgstr "dinámica"
 
-#: ../src/gui/editors/notation/NotationView.cpp:5415
+#: ../src/gui/editors/notation/NotationView.cpp:5420
 msgid "Adding decrescendo..."
 msgstr "Añadiendo decrescendo..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5421
-#: ../src/gui/editors/notation/NotationView.cpp:5427
-#: ../src/gui/editors/notation/NotationView.cpp:5433
-#: ../src/gui/editors/notation/NotationView.cpp:5439
+#: ../src/gui/editors/notation/NotationView.cpp:5426
+#: ../src/gui/editors/notation/NotationView.cpp:5432
+#: ../src/gui/editors/notation/NotationView.cpp:5438
+#: ../src/gui/editors/notation/NotationView.cpp:5444
 msgid "Adding octave..."
 msgstr "Añadiendo octava..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5422
-#: ../src/gui/editors/notation/NotationView.cpp:5428
-#: ../src/gui/editors/notation/NotationView.cpp:5434
-#: ../src/gui/editors/notation/NotationView.cpp:5440
+#: ../src/gui/editors/notation/NotationView.cpp:5427
+#: ../src/gui/editors/notation/NotationView.cpp:5433
+#: ../src/gui/editors/notation/NotationView.cpp:5439
+#: ../src/gui/editors/notation/NotationView.cpp:5445
 msgid "ottava"
 msgstr "octava"
 
-#: ../src/gui/editors/notation/NotationView.cpp:5456
+#: ../src/gui/editors/notation/NotationView.cpp:5461
 msgid "Can't add overlapping %1 indications"
 msgstr "No se pueden añadir %1 indicaciones superpuestas"
 
-#: ../src/gui/editors/notation/NotationView.cpp:5465
+#: ../src/gui/editors/notation/NotationView.cpp:5470
 msgid "Making chord..."
 msgstr "Creando acorde..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5477
+#: ../src/gui/editors/notation/NotationView.cpp:5482
 msgid "Normalizing rests..."
 msgstr "Normalizando silencios..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5487
+#: ../src/gui/editors/notation/NotationView.cpp:5492
 msgid "Collapsing rests..."
 msgstr "Fusionando silencios..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5507
+#: ../src/gui/editors/notation/NotationView.cpp:5512
 msgid "Tying notes..."
 msgstr "Enlazando notas..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5517
+#: ../src/gui/editors/notation/NotationView.cpp:5522
 msgid "Untying notes..."
 msgstr "Desenlazando notas..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5527
+#: ../src/gui/editors/notation/NotationView.cpp:5532
 msgid "Making notes viable..."
 msgstr "Haciendo notas viables..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5537
+#: ../src/gui/editors/notation/NotationView.cpp:5542
 msgid "Removing counterpoint..."
 msgstr "eliminando contrapunto..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5547
+#: ../src/gui/editors/notation/NotationView.cpp:5552
 msgid "Pointing stems up..."
 msgstr "Apuntando plicas hacia arriba..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5557
+#: ../src/gui/editors/notation/NotationView.cpp:5562
 msgid "Pointing stems down..."
 msgstr "Apuntando plicas hacia abajo..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5568
+#: ../src/gui/editors/notation/NotationView.cpp:5573
 msgid "Restoring computed stem directions..."
 msgstr "Restaurando la dirección calculada de las plicas..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5578
-#: ../src/gui/editors/notation/NotationView.cpp:5588
+#: ../src/gui/editors/notation/NotationView.cpp:5583
+#: ../src/gui/editors/notation/NotationView.cpp:5593
 msgid "Positioning slurs..."
 msgstr "Posicionando ligaduras..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5599
+#: ../src/gui/editors/notation/NotationView.cpp:5604
 msgid "Restoring slur positions..."
 msgstr "Restaurando las posiciones de las ligaduras..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5609
-#: ../src/gui/editors/notation/NotationView.cpp:5619
+#: ../src/gui/editors/notation/NotationView.cpp:5614
+#: ../src/gui/editors/notation/NotationView.cpp:5624
 msgid "Positioning ties..."
 msgstr "Posicionando ligaduras..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5630
+#: ../src/gui/editors/notation/NotationView.cpp:5635
 msgid "Restoring tie positions..."
 msgstr "Restaurando las posiciones calculadas..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5640
+#: ../src/gui/editors/notation/NotationView.cpp:5645
 msgid "Fixing notation quantization..."
 msgstr "Fijando cuantificación de partitura..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5650
+#: ../src/gui/editors/notation/NotationView.cpp:5655
 msgid "Removing notation quantization..."
 msgstr "Eliminando cuantificación de partitura..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5667
+#: ../src/gui/editors/notation/NotationView.cpp:5672
 msgid "Changing to %1 style..."
 msgstr "Cambiando al estilo %1..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5675
+#: ../src/gui/editors/notation/NotationView.cpp:5680
 #, c-format
 msgid "Unknown style action %1"
 msgstr "Acción de estilo desconocida: %1"
 
-#: ../src/gui/editors/notation/NotationView.cpp:5688
-#: ../src/gui/editors/notation/NotationView.cpp:5729
-#: ../src/gui/editors/notation/NotationView.cpp:5785
+#: ../src/gui/editors/notation/NotationView.cpp:5693
+#: ../src/gui/editors/notation/NotationView.cpp:5734
+#: ../src/gui/editors/notation/NotationView.cpp:5790
 msgid "No note duration selected"
 msgstr "No se ha seleccionado duración de la nota"
 
-#: ../src/gui/editors/notation/NotationView.cpp:5750
+#: ../src/gui/editors/notation/NotationView.cpp:5755
 msgid "No rest duration selected"
 msgstr "No se ha seleccionado duración del silencio"
 
-#: ../src/gui/editors/notation/NotationView.cpp:5837
+#: ../src/gui/editors/notation/NotationView.cpp:5842
 msgid "No note or rest duration selected"
 msgstr "No se ha seleccionado duración de nota o silencio"
 
-#: ../src/gui/editors/notation/NotationView.cpp:5848
-#: ../src/gui/editors/notation/NotationView.cpp:5859
-#: ../src/gui/editors/notation/NotationView.cpp:5870
-#: ../src/gui/editors/notation/NotationView.cpp:5881
-#: ../src/gui/editors/notation/NotationView.cpp:5892
-#: ../src/gui/editors/notation/NotationView.cpp:5903
-#: ../src/gui/editors/notation/NotationView.cpp:5914
+#: ../src/gui/editors/notation/NotationView.cpp:5853
+#: ../src/gui/editors/notation/NotationView.cpp:5864
+#: ../src/gui/editors/notation/NotationView.cpp:5875
+#: ../src/gui/editors/notation/NotationView.cpp:5886
+#: ../src/gui/editors/notation/NotationView.cpp:5897
+#: ../src/gui/editors/notation/NotationView.cpp:5908
+#: ../src/gui/editors/notation/NotationView.cpp:5919
 msgid "Forcing accidentals..."
 msgstr "Forzando alteraciones"
 
-#: ../src/gui/editors/notation/NotationView.cpp:5925
+#: ../src/gui/editors/notation/NotationView.cpp:5930
 msgid "Restoring accidentals..."
 msgstr "Restaurando alteraciones"
 
-#: ../src/gui/editors/notation/NotationView.cpp:5936
+#: ../src/gui/editors/notation/NotationView.cpp:5941
 msgid "Showing cautionary accidentals..."
 msgstr "Mostrando alteraciones precautorias..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5946
+#: ../src/gui/editors/notation/NotationView.cpp:5951
 msgid "Cancelling cautionary accidentals..."
 msgstr "Cancelando alteraciones precautorias..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5975
+#: ../src/gui/editors/notation/NotationView.cpp:5980
 msgid "Interpreting selection..."
 msgstr "Interpretando selección..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5987
+#: ../src/gui/editors/notation/NotationView.cpp:5992
 msgid "Setting note durations..."
 msgstr "Estableciendo duración de notas..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5995
-#: ../src/gui/editors/notation/NotationView.cpp:6003
+#: ../src/gui/editors/notation/NotationView.cpp:6000
+#: ../src/gui/editors/notation/NotationView.cpp:6008
 msgid "Adding dot..."
 msgstr "Añadiendo puntillo..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:6025
+#: ../src/gui/editors/notation/NotationView.cpp:6030
 msgid "Text: "
 msgstr "Texto: "
 
-#: ../src/gui/editors/notation/NotationView.cpp:6039
+#: ../src/gui/editors/notation/NotationView.cpp:6044
 msgid "Fingering: "
 msgstr "Digitación: "
 
-#: ../src/gui/editors/notation/NotationView.cpp:6127
+#: ../src/gui/editors/notation/NotationView.cpp:6132
 msgid "Ornament track %1 bar %2"
 msgstr "Pista de ornamento %1 compás %2"
 
-#: ../src/gui/editors/notation/NotationView.cpp:6129
+#: ../src/gui/editors/notation/NotationView.cpp:6134
 #, c-format
 msgid "Ornament bar %1"
 msgstr "Ornamento compás %1"
 
-#: ../src/gui/editors/notation/NotationView.cpp:6189
+#: ../src/gui/editors/notation/NotationView.cpp:6194
 msgid "Remove Ornaments"
 msgstr "Eliminar Ornamentos"
 
-#: ../src/gui/editors/notation/NotationView.cpp:6236
+#: ../src/gui/editors/notation/NotationView.cpp:6241
 msgid "Estimated key signature shown"
 msgstr "Se muestra la armadura estimada"
 
 #: ../src/gui/editors/notation/NotationStaff.cpp:1242
-#: ../src/gui/editors/notation/NotationView.cpp:6293
+#: ../src/gui/editors/notation/NotationView.cpp:6298
 msgid "Sustain"
 msgstr "Sostenido"
 
-#: ../src/gui/editors/notation/NotationView.cpp:6309
+#: ../src/gui/editors/notation/NotationView.cpp:6314
 msgid ""
 "There is no sustain controller defined for this device.\n"
 "Please ensure the device is configured correctly in the Manage MIDI Devices "
@@ -8290,7 +8346,7 @@ msgstr ""
 "Por favor, asegúrese de que está correctamente configurado en el cuadro de "
 "diálogo \"Gestionar Dispositivos MIDI\". "
 
-#: ../src/gui/editors/notation/NotationView.cpp:7387
+#: ../src/gui/editors/notation/NotationView.cpp:7392
 msgid "Can't insert note: No note duration selected"
 msgstr "No es posible insertar nota: No hay una duración seleccionada"
 
@@ -8621,7 +8677,8 @@ msgid "global element must precede note elements"
 msgstr "elemento global debe preceder a elementos de nota"
 
 #: ../src/gui/editors/notation/NoteStyleFileReader.cpp:130
-msgid "global and note elements may have shape or charname attribute, but not both"
+msgid ""
+"global and note elements may have shape or charname attribute, but not both"
 msgstr ""
 "elementos globales y notas pueden tener forma o nombre de carácter, pero no "
 "ambos"
@@ -8877,19 +8934,19 @@ msgid "Erase Controller Event(s)"
 msgstr "Borrar Evento(s) de Controlador(es)"
 
 #: ../src/gui/general/EditView.cpp:895
-#: ../src/gui/rulers/ControllerEventsRuler.cpp:181
+#: ../src/gui/rulers/ControllerEventsRuler.cpp:182
 msgid "Unsupported Event Type"
 msgstr "Tipo de Evento no Soportado"
 
-#: ../src/gui/rulers/ControllerEventsRuler.cpp:196
+#: ../src/gui/rulers/ControllerEventsRuler.cpp:197
 msgid "Controller Events"
 msgstr "Eventos de Controlador"
 
-#: ../src/gui/rulers/ControllerEventsRuler.cpp:271
+#: ../src/gui/rulers/ControllerEventsRuler.cpp:274
 msgid "Controller Event Number"
 msgstr "Numero de Evento de Controlador"
 
-#: ../src/gui/rulers/ControllerEventsRuler.cpp:464
+#: ../src/gui/rulers/ControllerEventsRuler.cpp:467
 msgid "Add line of controllers"
 msgstr "Añadir línea de controladores"
 
@@ -9505,7 +9562,8 @@ msgstr "Solapar notas, enlazando con las preexistentes [\"solapamiento\"]"
 
 #: ../src/commands/edit/PasteEventsCommand.cpp:99
 msgid "Overlay notes, ignoring present notes [\"matrix-overlay\"]"
-msgstr "Solapar notas, ignorando notas preexistentes [\"solapamiento en matriz\"]"
+msgstr ""
+"Solapar notas, ignorando notas preexistentes [\"solapamiento en matriz\"]"
 
 #: ../src/commands/edit/AddDotCommand.h:45
 msgid "&Add Dot"
@@ -10025,7 +10083,7 @@ msgstr "Añadir Digitación &%1"
 msgid " imported from Hydrogen "
 msgstr " importado desde Hydrogen "
 
-#: ../src/document/io/LilyPondExporter.cpp:533
+#: ../src/document/io/LilyPondExporter.cpp:566
 msgid ""
 "LilyPond does not allow spaces or backslashes in filenames.\n"
 "\n"
@@ -10043,9 +10101,13 @@ msgstr ""
 "\n"
 "en su lugar? "
 
-#: ../src/document/io/LilyPondExporter.cpp:2360
+#: ../src/document/io/LilyPondExporter.cpp:2372
 msgid "warning: overlong bar truncated here"
 msgstr "aviso: compás demasiado largo truncado aquí"
+
+#: ../src/document/io/LilyPondExporter.cpp:2383
+msgid "warning: bar too short, padding with rests"
+msgstr ""
 
 #: ../src/document/MultiViewCommandHistory.cpp:311
 msgid "Nothing to undo"
@@ -10142,11 +10204,11 @@ msgstr "Generando previsualizaciones de audio..."
 msgid "Merge"
 msgstr "Mezclar"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1606
+#: ../src/document/RosegardenGUIDoc.cpp:1613
 msgid "File load cancelled"
 msgstr "Carga de Archivo Cancelada"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1626
+#: ../src/document/RosegardenGUIDoc.cpp:1633
 msgid ""
 "<h3>Audio and plugins not available</h3><p>This composition uses audio files "
 "or plugins, but Rosegarden is currently running without audio because the "
@@ -10163,7 +10225,7 @@ msgstr ""
 "b> Si usted guarda esta composición, todos los datos de audio y \"plugins\" "
 "se perderán.</p>"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1629
+#: ../src/document/RosegardenGUIDoc.cpp:1636
 msgid ""
 "<h3>Audio and plugins not available</h3><p>This composition uses audio files "
 "or plugins, but you are running a version of Rosegarden that was compiled "
@@ -10177,7 +10239,7 @@ msgstr ""
 "Si usted guarda esta composición desde esta versión de Rosegarden, todos los "
 "datos de audio y \"plugins\" se perderán.</p>"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1666
+#: ../src/document/RosegardenGUIDoc.cpp:1673
 msgid ""
 "<h3>Incorrect audio sample rate</h3><p>This composition contains audio files "
 "that were recorded or imported with the audio server running at a different "
@@ -10196,7 +10258,7 @@ msgstr ""
 "considere reiniciar el servidor JACK con la frecuencia correcta (%3 Hz) y "
 "recargue esta composición antes de seguir trabajando con ella.</p>"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1676
+#: ../src/document/RosegardenGUIDoc.cpp:1683
 msgid ""
 "<h3>Inconsistent audio sample rates</h3><p>This composition contains audio "
 "files at more than one sample rate.</p><p>Rosegarden will play them at the "
@@ -10214,11 +10276,11 @@ msgstr ""
 "detalles, y considere convertir la frecuencia de muestreo de los archivos "
 "con la frecuencia incorrecta.</p>"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1677
+#: ../src/document/RosegardenGUIDoc.cpp:1684
 msgid "Inconsistent sample rates"
 msgstr "Frecuencias de muestreo inconsistentes"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1691
+#: ../src/document/RosegardenGUIDoc.cpp:1698
 msgid ""
 "<h3>Plugins not found</h3><p>The following audio plugins could not be loaded:"
 "</p><ul>"
@@ -10226,11 +10288,11 @@ msgstr ""
 "<h3>\"Plugins\" no encontrados</h3> <p>Los siguientes \"plugins\" de audio "
 "no han podido ser cargados: </p><ul>"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1699
+#: ../src/document/RosegardenGUIDoc.cpp:1706
 msgid "<li>%1 (from %2)</li>"
 msgstr "<li>%1 (desde %2)</li>"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1713
+#: ../src/document/RosegardenGUIDoc.cpp:1720
 msgid ""
 "This file contains one or more old element types that are now deprecated.\n"
 "Support for these elements may disappear in future versions of Rosegarden.\n"
@@ -10243,12 +10305,12 @@ msgstr ""
 "Rosegarden. Se recomienda guardar este archivo con la versión actual de\n"
 "Rosegarden para garantizar que podrá ser reconocida por futuras versiones."
 
-#: ../src/document/RosegardenGUIDoc.cpp:2241
+#: ../src/document/RosegardenGUIDoc.cpp:2248
 msgid "Insert Recorded MIDI"
 msgstr "Insertar MIDI Grabado"
 
-#: ../src/document/RosegardenGUIDoc.cpp:2607
-#: ../src/document/RosegardenGUIDoc.cpp:2687
+#: ../src/document/RosegardenGUIDoc.cpp:2614
+#: ../src/document/RosegardenGUIDoc.cpp:2694
 msgid "(recorded)"
 msgstr "(grabado)"
 
@@ -11500,7 +11562,8 @@ msgstr "Maestro"
 
 #: ../data/fonts/mappings/fonts.cpp:22
 msgid "Maestro is part of Finale, but other fonts use the same mappings."
-msgstr "Maestro es parte de Finale, pero otras tipografías pueden usar el mismo mapa."
+msgstr ""
+"Maestro es parte de Finale, pero otras tipografías pueden usar el mismo mapa."
 
 #: ../data/fonts/mappings/fonts.cpp:23 ../data/fonts/mappings/fonts.cpp:33
 msgid "Copyright Coda Inc"
@@ -11508,7 +11571,8 @@ msgstr "Copyright Coda Inc"
 
 #: ../data/fonts/mappings/fonts.cpp:27
 msgid "Opus is part of Sibelius, but other fonts may use the same mappings."
-msgstr "Opus es parte de Sibelius, pero otras tipografías pueden usar el mismo mapa."
+msgstr ""
+"Opus es parte de Sibelius, pero otras tipografías pueden usar el mismo mapa."
 
 #: ../data/fonts/mappings/fonts.cpp:31
 msgid "Petrucci"
@@ -11581,4 +11645,3 @@ msgstr "Mensural"
 #: ../data/styles/styles.cpp:4
 msgid "Triangle"
 msgstr "Triangle"
-
