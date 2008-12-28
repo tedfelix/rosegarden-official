@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-14 09:43-0400\n"
+"POT-Creation-Date: 2008-12-27 19:18-0500\n"
 "PO-Revision-Date: 2007-07-21 00:06+0100\n"
 "Last-Translator: David García-Abad\n"
 "Language-Team: \n"
@@ -74,7 +74,7 @@ msgid "Document Properties"
 msgstr "Dokumentuaren Propietateak"
 
 #: ../src/gui/dialogs/MakeOrnamentDialog.cpp:38
-#: ../src/gui/editors/notation/NotationView.cpp:6139
+#: ../src/gui/editors/notation/NotationView.cpp:6144
 msgid "Make Ornament"
 msgstr "Apaindura Sortu"
 
@@ -156,7 +156,7 @@ msgid "Lyric"
 msgstr "Letra"
 
 #: ../src/gui/dialogs/TextEventDialog.cpp:101
-#: ../src/gui/editors/notation/NotationView.cpp:4268
+#: ../src/gui/editors/notation/NotationView.cpp:4273
 msgid "Chord"
 msgstr "Akordea"
 
@@ -507,8 +507,8 @@ msgid "Highest pitch"
 msgstr "Altuerarik handiena:"
 
 #: ../src/gui/dialogs/UseOrnamentDialog.cpp:49
-#: ../src/gui/editors/notation/NotationView.cpp:1616
-#: ../src/gui/editors/notation/NotationView.cpp:6179
+#: ../src/gui/editors/notation/NotationView.cpp:1617
+#: ../src/gui/editors/notation/NotationView.cpp:6184
 msgid "Use Ornament"
 msgstr "Apaindura Erabili"
 
@@ -718,8 +718,8 @@ msgstr "Bereizmena"
 #: ../src/gui/configuration/NotationConfigurationPage.cpp:132
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:198
 #: ../src/gui/dialogs/ManageMetronomeDialog.cpp:121
-#: ../src/gui/editors/matrix/MatrixView.cpp:2139
-#: ../src/gui/editors/notation/NotationView.cpp:1579
+#: ../src/gui/editors/matrix/MatrixView.cpp:2163
+#: ../src/gui/editors/notation/NotationView.cpp:1580
 #: ../src/gui/widgets/QuantizeParameters.cpp:121
 #: ../src/gui/widgets/QuantizeParameters.cpp:294
 msgid "None"
@@ -785,7 +785,7 @@ msgstr "Sintetizagailu pluginak"
 
 #: ../src/gui/dialogs/IdentifyTextCodecDialog.cpp:116
 #: ../src/gui/dialogs/ManageMetronomeDialog.cpp:281
-#: ../src/gui/editors/matrix/MatrixView.cpp:1485
+#: ../src/gui/editors/matrix/MatrixView.cpp:1509
 msgid "%1 (%2)"
 msgstr "%1 (%2)"
 
@@ -2048,7 +2048,7 @@ msgstr "Audio artxiboa esportatzen..."
 msgid "Failed to add audio file. "
 msgstr "Sekuentziadoreak huts egin du audio artxiboa gehitzerakoan"
 
-#: ../src/document/RosegardenGUIDoc.cpp:2831
+#: ../src/document/RosegardenGUIDoc.cpp:2838
 #: ../src/gui/application/RosegardenGUIApp.cpp:2739
 #: ../src/gui/application/RosegardenGUIView.cpp:1573
 #: ../src/gui/dialogs/AudioManagerDialog.cpp:1115
@@ -2618,7 +2618,7 @@ msgid "Playing audio file \"%1\""
 msgstr "\"%1\" audio artxiboa jotzen"
 
 #: ../src/gui/dialogs/TriggerSegmentDialog.cpp:45
-#: ../src/gui/editors/matrix/MatrixView.cpp:2662
+#: ../src/gui/editors/matrix/MatrixView.cpp:2686
 msgid "Trigger Segment"
 msgstr "Segmentua Aktibatu"
 
@@ -2762,7 +2762,7 @@ msgid "Clearing studio data..."
 msgstr "Estudioaren datuak garbitzen..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:478
-#: ../src/gui/editors/notation/NotationView.cpp:555
+#: ../src/gui/editors/notation/NotationView.cpp:556
 msgid "Starting..."
 msgstr "Hasieratzen..."
 
@@ -2824,13 +2824,13 @@ msgid "Export M&up file..."
 msgstr "M&up artxiboa esportatu..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:615
-#: ../src/gui/editors/notation/NotationView.cpp:1497
+#: ../src/gui/editors/notation/NotationView.cpp:1498
 #, fuzzy
 msgid "Print &with LilyPond..."
 msgstr "Aurrebista Lil&ypondekin..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:619
-#: ../src/gui/editors/notation/NotationView.cpp:1501
+#: ../src/gui/editors/notation/NotationView.cpp:1502
 msgid "Preview with Lil&yPond..."
 msgstr "Aurrebista Lil&ypondekin..."
 
@@ -2867,7 +2867,7 @@ msgid "Re&do"
 msgstr "Ber&regin"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:668
-#: ../src/gui/editors/notation/NotationView.cpp:2294
+#: ../src/gui/editors/notation/NotationView.cpp:2295
 msgid "Show T&ools Toolbar"
 msgstr "&Lanabesen Barra Erakutsi"
 
@@ -2880,7 +2880,7 @@ msgid "Show &Editors Toolbar"
 msgstr "&Edizioaren Tresna-Barra Erakutsi"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:680
-#: ../src/gui/editors/notation/NotationView.cpp:2306
+#: ../src/gui/editors/notation/NotationView.cpp:2307
 msgid "Show Trans&port Toolbar"
 msgstr "&Transportearen Tresna-Barra Erakutsi"
 
@@ -2917,26 +2917,26 @@ msgid "Show Special &Parameters"
 msgstr "&Parametro Bereziak Erakutsi"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:756
-#: ../src/gui/editors/matrix/MatrixView.cpp:634
-#: ../src/gui/editors/notation/NotationView.cpp:1769
+#: ../src/gui/editors/matrix/MatrixView.cpp:636
+#: ../src/gui/editors/notation/NotationView.cpp:1770
 #, fuzzy
 msgid "&Select and Edit"
 msgstr "A&ukeratu eta Editatu"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:761
-#: ../src/gui/editors/matrix/MatrixView.cpp:639
+#: ../src/gui/editors/matrix/MatrixView.cpp:641
 msgid "&Draw"
 msgstr "&Marraztu"
 
 #: ../src/commands/edit/EraseCommand.h:43
 #: ../src/gui/application/RosegardenGUIApp.cpp:766
-#: ../src/gui/editors/matrix/MatrixView.cpp:644
-#: ../src/gui/editors/notation/NotationView.cpp:1763
+#: ../src/gui/editors/matrix/MatrixView.cpp:646
+#: ../src/gui/editors/notation/NotationView.cpp:1764
 msgid "&Erase"
 msgstr "E&zabatu"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:771
-#: ../src/gui/editors/matrix/MatrixView.cpp:649
+#: ../src/gui/editors/matrix/MatrixView.cpp:651
 msgid "&Move"
 msgstr "&Mugitu"
 
@@ -2984,7 +2984,7 @@ msgid "Insert Range..."
 msgstr "Tartea Txertatu..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:835
-#: ../src/gui/editors/notation/NotationView.cpp:1801
+#: ../src/gui/editors/notation/NotationView.cpp:1802
 msgid "De&lete"
 msgstr "E&zabatu "
 
@@ -3031,7 +3031,7 @@ msgid "&Quantize..."
 msgstr "&Kuantifikatu..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:911
-#: ../src/gui/editors/matrix/MatrixView.cpp:679
+#: ../src/gui/editors/matrix/MatrixView.cpp:688
 msgid "Repeat Last Quantize"
 msgstr "Azkenengo Kuantifikazioa Errepikatu"
 
@@ -3186,32 +3186,32 @@ msgid "Jump to Quick Marker"
 msgstr ""
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:1145
-#: ../src/gui/editors/matrix/MatrixView.cpp:775
-#: ../src/gui/editors/notation/NotationView.cpp:2394
+#: ../src/gui/editors/matrix/MatrixView.cpp:784
+#: ../src/gui/editors/notation/NotationView.cpp:2395
 #: ../src/gui/studio/AudioMixerWindow.cpp:98
 #: ../src/gui/studio/MidiMixerWindow.cpp:74
 msgid "&Play"
 msgstr "&Jo"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:1156
-#: ../src/gui/editors/matrix/MatrixView.cpp:784
-#: ../src/gui/editors/notation/NotationView.cpp:2403
+#: ../src/gui/editors/matrix/MatrixView.cpp:793
+#: ../src/gui/editors/notation/NotationView.cpp:2404
 #: ../src/gui/studio/AudioMixerWindow.cpp:107
 #: ../src/gui/studio/MidiMixerWindow.cpp:83
 msgid "&Stop"
 msgstr "&Gelditu"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:1163
-#: ../src/gui/editors/matrix/MatrixView.cpp:795
-#: ../src/gui/editors/notation/NotationView.cpp:2414
+#: ../src/gui/editors/matrix/MatrixView.cpp:804
+#: ../src/gui/editors/notation/NotationView.cpp:2415
 #: ../src/gui/studio/AudioMixerWindow.cpp:118
 #: ../src/gui/studio/MidiMixerWindow.cpp:94
 msgid "&Fast Forward"
 msgstr "&Bizkor Aurreratu"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:1171
-#: ../src/gui/editors/matrix/MatrixView.cpp:789
-#: ../src/gui/editors/notation/NotationView.cpp:2408
+#: ../src/gui/editors/matrix/MatrixView.cpp:798
+#: ../src/gui/editors/notation/NotationView.cpp:2409
 #: ../src/gui/studio/AudioMixerWindow.cpp:112
 #: ../src/gui/studio/MidiMixerWindow.cpp:88
 msgid "Re&wind"
@@ -3228,30 +3228,30 @@ msgid "&Record"
 msgstr "G&rabatu"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:1192
-#: ../src/gui/editors/matrix/MatrixView.cpp:801
-#: ../src/gui/editors/notation/NotationView.cpp:2420
+#: ../src/gui/editors/matrix/MatrixView.cpp:810
+#: ../src/gui/editors/notation/NotationView.cpp:2421
 #: ../src/gui/studio/AudioMixerWindow.cpp:124
 #: ../src/gui/studio/MidiMixerWindow.cpp:100
 msgid "Rewind to &Beginning"
 msgstr "Birbobinatu &Hasierara"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:1199
-#: ../src/gui/editors/matrix/MatrixView.cpp:807
-#: ../src/gui/editors/notation/NotationView.cpp:2426
+#: ../src/gui/editors/matrix/MatrixView.cpp:816
+#: ../src/gui/editors/notation/NotationView.cpp:2427
 #: ../src/gui/studio/AudioMixerWindow.cpp:130
 #: ../src/gui/studio/MidiMixerWindow.cpp:106
 msgid "Fast Forward to &End"
 msgstr "Bizkor Aurreratu &Bukaerara"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:1206
-#: ../src/gui/editors/matrix/MatrixView.cpp:825
-#: ../src/gui/editors/notation/NotationView.cpp:2444
+#: ../src/gui/editors/matrix/MatrixView.cpp:834
+#: ../src/gui/editors/notation/NotationView.cpp:2445
 msgid "Scro&ll to Follow Playback"
 msgstr "Erreprodukzioarekin Batera &Mugitu"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:1212
-#: ../src/gui/editors/matrix/MatrixView.cpp:831
-#: ../src/gui/editors/notation/NotationView.cpp:2450
+#: ../src/gui/editors/matrix/MatrixView.cpp:840
+#: ../src/gui/editors/notation/NotationView.cpp:2451
 #: ../src/gui/studio/AudioMixerWindow.cpp:142
 #: ../src/gui/studio/MidiMixerWindow.cpp:118
 msgid "Panic"
@@ -3369,12 +3369,12 @@ msgid "Closing file..."
 msgstr "Artxiboa ixten..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:2424
-#: ../src/gui/editors/notation/NotationView.cpp:4644
+#: ../src/gui/editors/notation/NotationView.cpp:4649
 msgid "Printing..."
 msgstr "Inprimatzen..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:2436
-#: ../src/gui/editors/notation/NotationView.cpp:4661
+#: ../src/gui/editors/notation/NotationView.cpp:4666
 msgid "Previewing..."
 msgstr "Aurrebista egiten..."
 
@@ -3387,25 +3387,25 @@ msgid "Cutting selection..."
 msgstr "Hautatutakoa ebakitzen..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:2477
-#: ../src/gui/editors/matrix/MatrixView.cpp:1614
-#: ../src/gui/editors/notation/NotationView.cpp:4789
+#: ../src/gui/editors/matrix/MatrixView.cpp:1638
+#: ../src/gui/editors/notation/NotationView.cpp:4794
 msgid "Copying selection to clipboard..."
 msgstr "Hautatutakoa arbelera kopiatzen..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:2487
 #: ../src/gui/editors/eventlist/EventView.cpp:871
-#: ../src/gui/editors/matrix/MatrixView.cpp:1625
-#: ../src/gui/editors/notation/NotationView.cpp:4822
-#: ../src/gui/editors/notation/NotationView.cpp:4867
+#: ../src/gui/editors/matrix/MatrixView.cpp:1649
+#: ../src/gui/editors/notation/NotationView.cpp:4827
+#: ../src/gui/editors/notation/NotationView.cpp:4872
 #: ../src/gui/editors/segment/TriggerSegmentManager.cpp:345
 msgid "Clipboard is empty"
 msgstr "Arbela hutsik"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:2490
 #: ../src/gui/editors/eventlist/EventView.cpp:875
-#: ../src/gui/editors/matrix/MatrixView.cpp:1629
-#: ../src/gui/editors/notation/NotationView.cpp:4830
-#: ../src/gui/editors/notation/NotationView.cpp:4871
+#: ../src/gui/editors/matrix/MatrixView.cpp:1653
+#: ../src/gui/editors/notation/NotationView.cpp:4835
+#: ../src/gui/editors/notation/NotationView.cpp:4876
 msgid "Inserting clipboard contents..."
 msgstr "Arbelaren edukia txertatzen..."
 
@@ -3786,7 +3786,7 @@ msgstr "Standard MIDI artxiboak\n"
 #: ../src/gui/application/RosegardenGUIApp.cpp:5002
 #: ../src/gui/application/RosegardenGUIApp.cpp:5106
 #: ../src/gui/application/RosegardenGUIApp.cpp:5143
-#: ../src/gui/editors/notation/NotationView.cpp:4759
+#: ../src/gui/editors/notation/NotationView.cpp:4764
 msgid "Export failed.  The file could not be opened for writing."
 msgstr "Esportatzeak huts egin du. Artxiboa ezin izan da ireki idazteko."
 
@@ -3806,7 +3806,7 @@ msgstr "Mup artxiboak\n"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5008
 #: ../src/gui/application/RosegardenGUIApp.cpp:5092
-#: ../src/gui/editors/notation/NotationView.cpp:4745
+#: ../src/gui/editors/notation/NotationView.cpp:4750
 #, fuzzy
 msgid "Exporting LilyPond file..."
 msgstr "Lilypond artxiboa esportatzen..."
@@ -3817,34 +3817,34 @@ msgid "LilyPond files"
 msgstr "LilyPond artxiboak"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5026
-#: ../src/gui/editors/notation/NotationView.cpp:4679
+#: ../src/gui/editors/notation/NotationView.cpp:4684
 #, fuzzy
 msgid "Printing LilyPond file..."
 msgstr "Lilypond artxiboaren aurrebista..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5031
 #: ../src/gui/application/RosegardenGUIApp.cpp:5055
-#: ../src/gui/editors/notation/NotationView.cpp:4684
-#: ../src/gui/editors/notation/NotationView.cpp:4708
+#: ../src/gui/editors/notation/NotationView.cpp:4689
+#: ../src/gui/editors/notation/NotationView.cpp:4713
 #, fuzzy
 msgid "Failed to open a temporary file for LilyPond export."
 msgstr ""
 "Lilypondera esportatzeko behin-behineko artxibo bat irekitzerakoan errorea."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5050
-#: ../src/gui/editors/notation/NotationView.cpp:4703
+#: ../src/gui/editors/notation/NotationView.cpp:4708
 #, fuzzy
 msgid "Previewing LilyPond file..."
 msgstr "Lilypond artxiboaren aurrebista..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5083
-#: ../src/gui/editors/notation/NotationView.cpp:4736
+#: ../src/gui/editors/notation/NotationView.cpp:4741
 #, fuzzy
 msgid "LilyPond Preview Options"
 msgstr "Lilypond Aurrebista Opzioak"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5084
-#: ../src/gui/editors/notation/NotationView.cpp:4737
+#: ../src/gui/editors/notation/NotationView.cpp:4742
 #, fuzzy
 msgid "LilyPond preview options"
 msgstr "Lilypond aurrebista opzioak"
@@ -3888,7 +3888,7 @@ msgid "Move playback pointer to time"
 msgstr "Mugitu erreprodukzioaren punteroa denborara"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:5796
-#: ../src/gui/editors/matrix/MatrixView.cpp:2247
+#: ../src/gui/editors/matrix/MatrixView.cpp:2271
 msgid "%1%"
 msgstr "%1%"
 
@@ -4529,7 +4529,7 @@ msgstr "Kanalaren Presioa"
 
 #: ../src/gui/editors/eventlist/EventView.cpp:127
 #: ../src/gui/general/EditView.cpp:893
-#: ../src/gui/rulers/ControllerEventsRuler.cpp:191
+#: ../src/gui/rulers/ControllerEventsRuler.cpp:192
 #: ../src/gui/seqmanager/MidiFilterDialog.cpp:57
 #: ../src/gui/seqmanager/MidiFilterDialog.cpp:93
 msgid "Pitch Bend"
@@ -4928,7 +4928,7 @@ msgstr "Multzo ezregularraren maila:"
 msgid "2-in-the-time-of-3"
 msgstr "2-3ren-denboran"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4267
+#: ../src/gui/editors/notation/NotationView.cpp:4272
 #: ../src/gui/widgets/QuantizeParameters.cpp:123
 msgid "Triplet"
 msgstr "Hirukotxoa"
@@ -4996,7 +4996,7 @@ msgstr "Opzio Aurreratuak Ezkutatu"
 #: ../src/gui/configuration/GeneralConfigurationPage.cpp:259
 #: ../src/gui/configuration/MatrixConfigurationPage.h:49
 #: ../src/gui/configuration/MatrixConfigurationPage.h:50
-#: ../src/gui/editors/matrix/MatrixView.cpp:2716
+#: ../src/gui/editors/matrix/MatrixView.cpp:2740
 msgid "Matrix"
 msgstr "Matriza"
 
@@ -5996,7 +5996,7 @@ msgstr "Inportatu Dispositiboaren Bankuak Artxibora"
 msgid "Export Device as..."
 msgstr "Honela Esportatu Dispositiboa..."
 
-#: ../src/gui/studio/BankEditorDialog.cpp:1687
+#: ../src/gui/studio/BankEditorDialog.cpp:1696
 msgid ""
 "There are unsaved changes.\n"
 "Do you want to apply the changes before exiting the Bank Editor or discard "
@@ -6006,7 +6006,7 @@ msgstr ""
 "Aplikatu nahi dituzu aldaketak Bankuen Editoretik irten baino lehenago "
 "edobaztertu aldaketak?"
 
-#: ../src/gui/studio/BankEditorDialog.cpp:1690
+#: ../src/gui/studio/BankEditorDialog.cpp:1699
 msgid "Unsaved Changes"
 msgstr "Gorde ez diren Aldaketak"
 
@@ -6279,7 +6279,7 @@ msgstr "Bankuen eta Programen xehetasunak"
 msgid "Programs"
 msgstr "Programak"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2718
+#: ../src/gui/editors/matrix/MatrixView.cpp:2742
 #: ../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp:83
 #: ../src/gui/studio/MidiProgramsEditor.cpp:86
 msgid "Percussion"
@@ -7048,7 +7048,7 @@ msgstr ""
 "Instrumentuaren preset-en datubasea hondatuta dago Egiaztatu zure "
 "instalazioa."
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:166
+#: ../src/gui/editors/matrix/MatrixView.cpp:168
 #: ../src/gui/editors/parameters/InstrumentParameterBox.cpp:47
 msgid "Instrument Parameters"
 msgstr "Instrumentuaren Parametroak"
@@ -7083,14 +7083,16 @@ msgstr "[ %1 ]"
 #: ../src/gui/editors/matrix/MatrixEraser.cpp:51
 #: ../src/gui/editors/matrix/MatrixMover.cpp:64
 #: ../src/gui/editors/matrix/MatrixResizer.cpp:60
-#: ../src/gui/editors/matrix/MatrixSelector.cpp:70
+#: ../src/gui/editors/matrix/MatrixSelector.cpp:71
+#: ../src/gui/editors/matrix/MatrixVelocity.cpp:63
 msgid "Switch to Draw Tool"
 msgstr "Marrazketa Lanabesera Aldatu"
 
 #: ../src/gui/editors/matrix/MatrixMover.cpp:68
 #: ../src/gui/editors/matrix/MatrixPainter.cpp:62
 #: ../src/gui/editors/matrix/MatrixResizer.cpp:64
-#: ../src/gui/editors/matrix/MatrixSelector.cpp:74
+#: ../src/gui/editors/matrix/MatrixSelector.cpp:75
+#: ../src/gui/editors/matrix/MatrixVelocity.cpp:67
 #: ../src/gui/editors/notation/ClefInserter.cpp:50
 #: ../src/gui/editors/notation/GuitarChordInserter.cpp:56
 #: ../src/gui/editors/notation/NotationSelector.cpp:80
@@ -7103,48 +7105,50 @@ msgstr "Ezabaketa Lanabesera Aldatu"
 #: ../src/gui/editors/matrix/MatrixEraser.cpp:55
 #: ../src/gui/editors/matrix/MatrixPainter.cpp:66
 #: ../src/gui/editors/matrix/MatrixResizer.cpp:68
-#: ../src/gui/editors/matrix/MatrixSelector.cpp:78
+#: ../src/gui/editors/matrix/MatrixSelector.cpp:79
+#: ../src/gui/editors/matrix/MatrixVelocity.cpp:71
 msgid "Switch to Move Tool"
 msgstr "Mugimendu Lanabesera Aldatu"
 
 #: ../src/gui/editors/matrix/MatrixEraser.cpp:61
 #: ../src/gui/editors/matrix/MatrixMover.cpp:74
 #: ../src/gui/editors/matrix/MatrixPainter.cpp:72
-#: ../src/gui/editors/matrix/MatrixSelector.cpp:86
+#: ../src/gui/editors/matrix/MatrixSelector.cpp:87
+#: ../src/gui/editors/matrix/MatrixVelocity.cpp:75
 msgid "Switch to Resize Tool"
 msgstr "Tamaina Aldatzeko Lanabesera Aldatu"
 
-#: ../src/gui/editors/matrix/MatrixSelector.cpp:446
-#: ../src/gui/editors/matrix/MatrixSelector.cpp:579
+#: ../src/gui/editors/matrix/MatrixSelector.cpp:447
+#: ../src/gui/editors/matrix/MatrixSelector.cpp:580
 msgid "Click and drag to select; middle-click and drag to draw new note"
 msgstr ""
 "Klik egin eta arrastatu hautatzeko; erdiko-klika eta arrastatu nota berri "
 "bat marrazteko"
 
 #: ../src/gui/editors/matrix/MatrixResizer.cpp:317
-#: ../src/gui/editors/matrix/MatrixSelector.cpp:597
+#: ../src/gui/editors/matrix/MatrixSelector.cpp:598
 msgid "Click and drag to resize selected notes"
 msgstr "Klik egin eta arrastatu hautatutako noten tamaina aldatzeko"
 
-#: ../src/gui/editors/matrix/MatrixSelector.cpp:599
+#: ../src/gui/editors/matrix/MatrixSelector.cpp:600
 msgid "Click and drag to resize note"
 msgstr ""
 
 #: ../src/gui/editors/matrix/MatrixMover.cpp:464
-#: ../src/gui/editors/matrix/MatrixSelector.cpp:604
+#: ../src/gui/editors/matrix/MatrixSelector.cpp:605
 msgid "Click and drag to move selected notes; hold Ctrl as well to copy"
 msgstr ""
 
 #: ../src/gui/editors/matrix/MatrixMover.cpp:466
-#: ../src/gui/editors/matrix/MatrixSelector.cpp:606
+#: ../src/gui/editors/matrix/MatrixSelector.cpp:607
 msgid "Click and drag to copy selected notes"
 msgstr ""
 
-#: ../src/gui/editors/matrix/MatrixSelector.cpp:610
+#: ../src/gui/editors/matrix/MatrixSelector.cpp:611
 msgid "Click and drag to move note; hold Ctrl as well to copy"
 msgstr ""
 
-#: ../src/gui/editors/matrix/MatrixSelector.cpp:612
+#: ../src/gui/editors/matrix/MatrixSelector.cpp:613
 msgid "Click and drag to copy note"
 msgstr ""
 
@@ -7152,6 +7156,7 @@ msgstr ""
 #: ../src/gui/editors/matrix/MatrixMover.cpp:60
 #: ../src/gui/editors/matrix/MatrixPainter.cpp:58
 #: ../src/gui/editors/matrix/MatrixResizer.cpp:56
+#: ../src/gui/editors/matrix/MatrixVelocity.cpp:59
 #: ../src/gui/editors/notation/ClefInserter.cpp:46
 #: ../src/gui/editors/notation/GuitarChordInserter.cpp:52
 #: ../src/gui/editors/notation/NotationEraser.cpp:60
@@ -7207,174 +7212,178 @@ msgstr ""
 msgid "Click and drag to draw a note"
 msgstr ""
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:430
-#: ../src/gui/editors/matrix/MatrixView.cpp:3060
+#: ../src/gui/editors/matrix/MatrixView.cpp:432
+#: ../src/gui/editors/matrix/MatrixView.cpp:3084
 msgid "Couldn't apply piano roll layout"
 msgstr "Ezin izan da piano-roll formatoa aplikatu"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:656
+#: ../src/gui/editors/matrix/MatrixView.cpp:658
 msgid "Resi&ze"
 msgstr "&Tamaina Aldatu"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:662
-#: ../src/gui/editors/notation/NotationView.cpp:1916
+#: ../src/gui/editors/matrix/MatrixView.cpp:664
+msgid "&Velocity"
+msgstr "&Abiadura"
+
+#: ../src/gui/editors/matrix/MatrixView.cpp:671
+#: ../src/gui/editors/notation/NotationView.cpp:1917
 msgid "C&hord Insert Mode"
 msgstr "&Akordeak Txertatzeko Modua"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:669
-#: ../src/gui/editors/notation/NotationView.cpp:1775
+#: ../src/gui/editors/matrix/MatrixView.cpp:678
+#: ../src/gui/editors/notation/NotationView.cpp:1776
 msgid "Ste&p Recording"
 msgstr "&Pausuz pausuko Grabaketa"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:687
+#: ../src/gui/editors/matrix/MatrixView.cpp:696
 msgid "&Legato"
 msgstr ""
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:701
+#: ../src/gui/editors/matrix/MatrixView.cpp:710
 #, fuzzy
 msgid "Set to Current Velocity"
 msgstr "Oinarrizko Abiadura Ezarri"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:705
-#: ../src/gui/editors/notation/NotationView.cpp:2510
+#: ../src/gui/editors/matrix/MatrixView.cpp:714
+#: ../src/gui/editors/notation/NotationView.cpp:2511
 msgid "Set Event &Velocities..."
 msgstr "Gertaeren &Abiadurak Ezarri..."
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:709
+#: ../src/gui/editors/matrix/MatrixView.cpp:718
 msgid "Trigger Se&gment..."
 msgstr "&Segmentua Aktibatu..."
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:713
+#: ../src/gui/editors/matrix/MatrixView.cpp:722
 msgid "Remove Triggers..."
 msgstr "Aktibatzaileak Ezabatu..."
 
 #: ../src/gui/editors/eventlist/EventView.cpp:1146
-#: ../src/gui/editors/matrix/MatrixView.cpp:717
+#: ../src/gui/editors/matrix/MatrixView.cpp:726
 #: ../src/gui/editors/tempo/TempoView.cpp:599
 msgid "Select &All"
 msgstr "&Dena Hautatu"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:725
-#: ../src/gui/editors/notation/NotationView.cpp:2322
+#: ../src/gui/editors/matrix/MatrixView.cpp:734
+#: ../src/gui/editors/notation/NotationView.cpp:2323
 msgid "Cursor &Back"
 msgstr "Kurtsorea &Atzera"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:729
-#: ../src/gui/editors/notation/NotationView.cpp:2326
+#: ../src/gui/editors/matrix/MatrixView.cpp:738
+#: ../src/gui/editors/notation/NotationView.cpp:2327
 msgid "Cursor &Forward"
 msgstr "Kurtsorea A&urrera"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:733
-#: ../src/gui/editors/notation/NotationView.cpp:2330
+#: ../src/gui/editors/matrix/MatrixView.cpp:742
+#: ../src/gui/editors/notation/NotationView.cpp:2331
 msgid "Cursor Ba&ck Bar"
 msgstr "Kurtsorea Au&rreko Konpasera"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:737
-#: ../src/gui/editors/notation/NotationView.cpp:2334
+#: ../src/gui/editors/matrix/MatrixView.cpp:746
+#: ../src/gui/editors/notation/NotationView.cpp:2335
 msgid "Cursor For&ward Bar"
 msgstr "Kurtsorea &Hurrengo Konpasera"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:741
-#: ../src/gui/editors/notation/NotationView.cpp:2338
+#: ../src/gui/editors/matrix/MatrixView.cpp:750
+#: ../src/gui/editors/notation/NotationView.cpp:2339
 msgid "Cursor Back and Se&lect"
 msgstr "Kurtsorea Atzera eta Hau&tatu"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:745
-#: ../src/gui/editors/notation/NotationView.cpp:2342
+#: ../src/gui/editors/matrix/MatrixView.cpp:754
+#: ../src/gui/editors/notation/NotationView.cpp:2343
 msgid "Cursor Forward and &Select"
 msgstr "Kurtsorea Aurrera eta &Hautatu"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:749
-#: ../src/gui/editors/notation/NotationView.cpp:2346
+#: ../src/gui/editors/matrix/MatrixView.cpp:758
+#: ../src/gui/editors/notation/NotationView.cpp:2347
 msgid "Cursor Back Bar and Select"
 msgstr "Kurtsorea Aurreko Konpasera eta Hautatu"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:753
-#: ../src/gui/editors/notation/NotationView.cpp:2350
+#: ../src/gui/editors/matrix/MatrixView.cpp:762
+#: ../src/gui/editors/notation/NotationView.cpp:2351
 msgid "Cursor Forward Bar and Select"
 msgstr "Kurtsorea Hurrengo Konpasera eta Hautatu"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:757
-#: ../src/gui/editors/notation/NotationView.cpp:2360
+#: ../src/gui/editors/matrix/MatrixView.cpp:766
+#: ../src/gui/editors/notation/NotationView.cpp:2361
 msgid "Cursor to St&art"
 msgstr "&Kurtsoera Hasierara"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:763
-#: ../src/gui/editors/notation/NotationView.cpp:2366
+#: ../src/gui/editors/matrix/MatrixView.cpp:772
+#: ../src/gui/editors/notation/NotationView.cpp:2367
 msgid "Cursor to &End"
 msgstr "Kurtsorea &Bukaerara"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:769
-#: ../src/gui/editors/notation/NotationView.cpp:2388
+#: ../src/gui/editors/matrix/MatrixView.cpp:778
+#: ../src/gui/editors/notation/NotationView.cpp:2389
 msgid "Cursor to &Playback Pointer"
 msgstr "Kurtsorea &Erreprodukzio Puntura"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:813
-#: ../src/gui/editors/notation/NotationView.cpp:2432
+#: ../src/gui/editors/matrix/MatrixView.cpp:822
+#: ../src/gui/editors/notation/NotationView.cpp:2433
 msgid "Playback Pointer to &Cursor"
 msgstr "Erreprodukzio Puntua &Kurtsorera"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:819
-#: ../src/gui/editors/notation/NotationView.cpp:2438
+#: ../src/gui/editors/matrix/MatrixView.cpp:828
+#: ../src/gui/editors/notation/NotationView.cpp:2439
 msgid "&Solo"
 msgstr "&Solo"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:834
-#: ../src/gui/editors/notation/NotationView.cpp:2453
+#: ../src/gui/editors/matrix/MatrixView.cpp:843
+#: ../src/gui/editors/notation/NotationView.cpp:2454
 msgid "Set Loop to Selection"
 msgstr "Hautatutakoan Errepikapena Ezarri"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:838
-#: ../src/gui/editors/notation/NotationView.cpp:2457
+#: ../src/gui/editors/matrix/MatrixView.cpp:847
+#: ../src/gui/editors/notation/NotationView.cpp:2458
 msgid "Clear L&oop"
 msgstr "Errepikapena &Kendu"
 
 #: ../src/gui/editors/eventlist/EventView.cpp:1150
-#: ../src/gui/editors/matrix/MatrixView.cpp:842
-#: ../src/gui/editors/notation/NotationView.cpp:2461
+#: ../src/gui/editors/matrix/MatrixView.cpp:851
+#: ../src/gui/editors/notation/NotationView.cpp:2462
 #: ../src/gui/editors/tempo/TempoView.cpp:603
 msgid "Clear Selection"
 msgstr "Hautatutakoa Ezabatu"
 
 #: ../src/gui/editors/eventlist/EventView.cpp:1142
-#: ../src/gui/editors/matrix/MatrixView.cpp:847
-#: ../src/gui/editors/notation/NotationView.cpp:2468
+#: ../src/gui/editors/matrix/MatrixView.cpp:856
+#: ../src/gui/editors/notation/NotationView.cpp:2469
 msgid "&Filter Selection"
 msgstr "Hautatutakoa &Iragazi"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:873
+#: ../src/gui/editors/matrix/MatrixView.cpp:882
 msgid "&No Snap"
 msgstr "&Ez Doitu"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:878
+#: ../src/gui/editors/matrix/MatrixView.cpp:887
 msgid "Snap to Bea&t"
 msgstr "&Pultsora Doitu"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:882
+#: ../src/gui/editors/matrix/MatrixView.cpp:891
 msgid "Snap to &Bar"
 msgstr "&Konpasera Doitu"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:903
+#: ../src/gui/editors/matrix/MatrixView.cpp:912
 #, fuzzy, c-format
 msgid "Snap to %1"
 msgstr "%1 era doitu"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:912
+#: ../src/gui/editors/matrix/MatrixView.cpp:921
 msgid "Show Instrument Parameters"
 msgstr "Instrumentuaren Parametroak Erakutsi"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:917
-#: ../src/gui/editors/notation/NotationView.cpp:1847
+#: ../src/gui/editors/matrix/MatrixView.cpp:926
+#: ../src/gui/editors/notation/NotationView.cpp:1848
 msgid "Show Ch&ord Name Ruler"
 msgstr "A&korde Izenen Erregela Erakutsi"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:921
-#: ../src/gui/editors/notation/NotationView.cpp:1855
+#: ../src/gui/editors/matrix/MatrixView.cpp:930
+#: ../src/gui/editors/notation/NotationView.cpp:1856
 msgid "Show &Tempo Ruler"
 msgstr "&Tenpoaren Erregela Erakutsi"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:1233
-#: ../src/gui/editors/notation/NotationView.cpp:3258
+#: ../src/gui/editors/matrix/MatrixView.cpp:1248
+#: ../src/gui/editors/notation/NotationView.cpp:3263
 #, c-format
 msgid ""
 "_n:   1 event selected \n"
@@ -7383,128 +7392,128 @@ msgstr ""
 "_n:   gertaera 1 hautatua \n"
 "  %n gertaera hautatua(k) "
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:1236
-#: ../src/gui/editors/notation/NotationView.cpp:3260
+#: ../src/gui/editors/matrix/MatrixView.cpp:1251
+#: ../src/gui/editors/notation/NotationView.cpp:3265
 msgid "  No selection "
 msgstr "  Hautaketarik ez "
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:1343
-#: ../src/gui/editors/matrix/MatrixView.cpp:1355
-#: ../src/gui/editors/matrix/MatrixView.cpp:2086
-#: ../src/gui/editors/notation/NotationView.cpp:5960
+#: ../src/gui/editors/matrix/MatrixView.cpp:1367
+#: ../src/gui/editors/matrix/MatrixView.cpp:1379
+#: ../src/gui/editors/matrix/MatrixView.cpp:2110
+#: ../src/gui/editors/notation/NotationView.cpp:5965
 msgid "Quantizing..."
 msgstr "Kuantifikatzen   "
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:1365
-#: ../src/gui/editors/notation/NotationView.cpp:5497
+#: ../src/gui/editors/matrix/MatrixView.cpp:1389
+#: ../src/gui/editors/notation/NotationView.cpp:5502
 msgid "Collapsing notes..."
 msgstr "Notak batzen..."
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:1376
+#: ../src/gui/editors/matrix/MatrixView.cpp:1400
 msgid "Making legato..."
 msgstr "Legatoa egiten..."
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:1471
+#: ../src/gui/editors/matrix/MatrixView.cpp:1495
 #, fuzzy
 msgid "Note: %1 (%2.%3s)"
 msgstr "Nota: %1 (%2.%3s)"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:1526
-#: ../src/gui/editors/notation/NotationView.cpp:7343
+#: ../src/gui/editors/matrix/MatrixView.cpp:1550
+#: ../src/gui/editors/notation/NotationView.cpp:7348
 msgid "Time: %1 (%2.%3s)"
 msgstr "Denbora: %1 (%2.%3s)"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:1604
-#: ../src/gui/editors/notation/NotationView.cpp:4770
-#: ../src/gui/editors/notation/NotationView.cpp:4799
+#: ../src/gui/editors/matrix/MatrixView.cpp:1628
+#: ../src/gui/editors/notation/NotationView.cpp:4775
+#: ../src/gui/editors/notation/NotationView.cpp:4804
 msgid "Cutting selection to clipboard..."
 msgstr "Hautatutakoa arbelera mozten..."
 
 #: ../src/gui/editors/eventlist/EventView.cpp:905
-#: ../src/gui/editors/matrix/MatrixView.cpp:1636
+#: ../src/gui/editors/matrix/MatrixView.cpp:1660
 #: ../src/gui/editors/notation/NotationSelectionPaster.cpp:75
 msgid "Couldn't paste at this point"
 msgstr "Ezin da itsatsi puntu honetan"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:1647
-#: ../src/gui/editors/notation/NotationView.cpp:4780
+#: ../src/gui/editors/matrix/MatrixView.cpp:1671
+#: ../src/gui/editors/notation/NotationView.cpp:4785
 msgid "Deleting selection..."
 msgstr "Hautatutakoa ezabatzen..."
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:1837
-#: ../src/gui/editors/notation/NotationView.cpp:5707
+#: ../src/gui/editors/matrix/MatrixView.cpp:1861
+#: ../src/gui/editors/notation/NotationView.cpp:5712
 #, c-format
 msgid "Unknown note insert action %1"
 msgstr "Nota ezezaguna txertatzeko eragiketa: %1"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:1841
-#: ../src/gui/editors/matrix/MatrixView.cpp:2864
-#: ../src/gui/editors/notation/NotationView.cpp:5711
+#: ../src/gui/editors/matrix/MatrixView.cpp:1865
+#: ../src/gui/editors/matrix/MatrixView.cpp:2888
+#: ../src/gui/editors/notation/NotationView.cpp:5716
 msgid "Inserting note"
 msgstr "Nota txertatzen"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2098
+#: ../src/gui/editors/matrix/MatrixView.cpp:2122
 msgid "Unquantizing..."
 msgstr "Deskuantifikatzen..."
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2127
+#: ../src/gui/editors/matrix/MatrixView.cpp:2151
 msgid " Grid: "
 msgstr " Sareta: "
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2141
+#: ../src/gui/editors/matrix/MatrixView.cpp:2165
 msgid "Unit"
 msgstr "Unitatea"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2143
+#: ../src/gui/editors/matrix/MatrixView.cpp:2167
 msgid "Beat"
 msgstr "Pultsua"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2145
+#: ../src/gui/editors/matrix/MatrixView.cpp:2169
 msgid "Bar"
 msgstr "Konpasa"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2166
+#: ../src/gui/editors/matrix/MatrixView.cpp:2190
 #, fuzzy
 msgid " Velocity: "
 msgstr "Abiadura:"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2177
+#: ../src/gui/editors/matrix/MatrixView.cpp:2201
 msgid " Quantize: "
 msgstr " Kuantifikazioa: "
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2591
-#: ../src/gui/editors/notation/NotationView.cpp:5133
+#: ../src/gui/editors/matrix/MatrixView.cpp:2615
+#: ../src/gui/editors/notation/NotationView.cpp:5138
 msgid "Raising velocities..."
 msgstr "Abiadurak igotzen..."
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2603
-#: ../src/gui/editors/notation/NotationView.cpp:5143
+#: ../src/gui/editors/matrix/MatrixView.cpp:2627
+#: ../src/gui/editors/notation/NotationView.cpp:5148
 msgid "Lowering velocities..."
 msgstr "Abiadurak jaisten..."
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2618
-#: ../src/gui/editors/notation/NotationView.cpp:5178
+#: ../src/gui/editors/matrix/MatrixView.cpp:2642
+#: ../src/gui/editors/notation/NotationView.cpp:5183
 msgid "Set Event Velocities"
 msgstr "Gertaeren Abiadurak Ezarri"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2623
-#: ../src/gui/editors/notation/NotationView.cpp:5183
+#: ../src/gui/editors/matrix/MatrixView.cpp:2647
+#: ../src/gui/editors/notation/NotationView.cpp:5188
 msgid "Setting Velocities..."
 msgstr "Abiadurak Ezartzen..."
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2672
+#: ../src/gui/editors/matrix/MatrixView.cpp:2696
 msgid "Remove Triggers"
 msgstr "Aktibatzaileak Ezabatu"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2730
+#: ../src/gui/editors/matrix/MatrixView.cpp:2754
 msgid "%1 - Segment Track #%2 - %3"
 msgstr "%1 - Segmentu Pista #%2 - %3"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2737
+#: ../src/gui/editors/matrix/MatrixView.cpp:2761
 msgid "%1 - All Segments - %2"
 msgstr "%1 - Segmentu Guztiak - %2"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2744
+#: ../src/gui/editors/matrix/MatrixView.cpp:2768
 msgid ""
 "_n: %1 - 1 Segment - %2\n"
 "%1 - %n Segments - %2"
@@ -7512,11 +7521,11 @@ msgstr ""
 "_n: %1 - 1 Segmentu - %2\n"
 "%1 - %n Segmentu - %2"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2892
+#: ../src/gui/editors/matrix/MatrixView.cpp:2916
 msgid "Can't insert note: No grid duration selected"
 msgstr "Ezin da nota txertatu: ez da hautatu saretaren iraupena"
 
-#: ../src/gui/editors/matrix/MatrixView.cpp:2942
+#: ../src/gui/editors/matrix/MatrixView.cpp:2966
 #, fuzzy
 msgid " Chord "
 msgstr " Akordea"
@@ -7524,6 +7533,31 @@ msgstr " Akordea"
 #: ../src/gui/editors/matrix/MatrixEraser.cpp:98
 msgid "Click on a note to delete it"
 msgstr ""
+
+#: ../src/gui/editors/matrix/MatrixVelocity.cpp:174
+#, fuzzy, c-format
+msgid "Velocity change: %1"
+msgstr "Abiadura  "
+
+#: ../src/gui/editors/matrix/MatrixVelocity.cpp:210
+#, fuzzy
+msgid "Change Velocity"
+msgstr "Oinarrizko abiadura"
+
+#: ../src/gui/editors/matrix/MatrixVelocity.cpp:213
+#, fuzzy
+msgid "Change Velocities"
+msgstr "Abiadura:"
+
+#: ../src/gui/editors/matrix/MatrixVelocity.cpp:270
+#, fuzzy
+msgid "Click and drag to scale velocity of selected notes"
+msgstr "Klik egin eta arrastatu hautatutako noten tamaina aldatzeko"
+
+#: ../src/gui/editors/matrix/MatrixVelocity.cpp:272
+#, fuzzy
+msgid "Click and drag to scale velocity of note"
+msgstr "Klik egin eta arrastatu hautatutako noten tamaina aldatzeko"
 
 #: ../src/gui/editors/tempo/TempoView.cpp:82
 msgid "Filter"
@@ -7681,286 +7715,286 @@ msgstr "  Orria: "
 msgid "Switch to Inserting Notes"
 msgstr "Notak Txertatzera Aldatu"
 
-#: ../src/gui/editors/notation/NotationView.cpp:519
+#: ../src/gui/editors/notation/NotationView.cpp:520
 #, fuzzy
 msgid "Close track headers"
 msgstr "Pistaren izena aldatu"
 
-#: ../src/gui/editors/notation/NotationView.cpp:914
+#: ../src/gui/editors/notation/NotationView.cpp:915
 msgid "Preparing to print..."
 msgstr "Inprimatzeko prestatzen..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:1513
+#: ../src/gui/editors/notation/NotationView.cpp:1514
 msgid "Note &Font"
 msgstr "Notaren &Letra-Tipoa"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1536
+#: ../src/gui/editors/notation/NotationView.cpp:1537
 msgid "Si&ze"
 msgstr "&Tamaina"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1542
+#: ../src/gui/editors/notation/NotationView.cpp:1543
 #, fuzzy
 msgid "Show Track Headers"
 msgstr "Pistaren &Etiketak  Erakutsi"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1547
+#: ../src/gui/editors/notation/NotationView.cpp:1548
 msgid "S&pacing"
 msgstr "&Hutsuneen Tartekatzea"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1569
+#: ../src/gui/editors/notation/NotationView.cpp:1570
 msgid "Du&ration Factor"
 msgstr "&Iraupen Faktorea"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1595
+#: ../src/gui/editors/notation/NotationView.cpp:1596
 msgid "Note &Style"
 msgstr "Notaren &Estiloa"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1621
+#: ../src/gui/editors/notation/NotationView.cpp:1622
 msgid "Insert Rest"
 msgstr "Isilunea Txertatu"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1625
+#: ../src/gui/editors/notation/NotationView.cpp:1626
 msgid "Switch from Note to Rest"
 msgstr "Notatik isilunera Aldatu"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1630
+#: ../src/gui/editors/notation/NotationView.cpp:1631
 msgid "Switch from Rest to Note"
 msgstr "Isilunetik Notara Aldatu"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1687
+#: ../src/gui/editors/notation/NotationView.cpp:1688
 msgid "No accidental"
 msgstr "Alteraziorik gabe"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1688
+#: ../src/gui/editors/notation/NotationView.cpp:1689
 msgid "Follow previous accidental"
 msgstr "Jarraitu aurreko alterazioa"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1689
+#: ../src/gui/editors/notation/NotationView.cpp:1690
 msgid "Sharp"
 msgstr "Diesea"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1690
+#: ../src/gui/editors/notation/NotationView.cpp:1691
 msgid "Flat"
 msgstr "Bemola"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1691
+#: ../src/gui/editors/notation/NotationView.cpp:1692
 msgid "Natural"
 msgstr "Bekoadroa"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1692
+#: ../src/gui/editors/notation/NotationView.cpp:1693
 msgid "Double sharp"
 msgstr "Diese bikoitza"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1693
+#: ../src/gui/editors/notation/NotationView.cpp:1694
 msgid "Double flat"
 msgstr "Bemol bikoitza"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1714
+#: ../src/gui/editors/notation/NotationView.cpp:1715
 msgid "&Treble Clef"
 msgstr "&Soprano Klabea"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1721
+#: ../src/gui/editors/notation/NotationView.cpp:1722
 msgid "&Alto Clef"
 msgstr "&Alto Klabea"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1728
+#: ../src/gui/editors/notation/NotationView.cpp:1729
 msgid "Te&nor Clef"
 msgstr "&Tenore Klabea"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1735
+#: ../src/gui/editors/notation/NotationView.cpp:1736
 msgid "&Bass Clef"
 msgstr "&Baxu Klabea"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1742
+#: ../src/gui/editors/notation/NotationView.cpp:1743
 msgid "&Text"
 msgstr "&Testua"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1748
+#: ../src/gui/editors/notation/NotationView.cpp:1749
 #, fuzzy
 msgid "&Guitar Chord"
 msgstr " Akordea"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1781
+#: ../src/gui/editors/notation/NotationView.cpp:1782
 msgid "Select from Sta&rt"
 msgstr "&Hasieratik Hautatu"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1785
+#: ../src/gui/editors/notation/NotationView.cpp:1786
 msgid "Select to &End"
 msgstr "B&ukaeraraino Hautatu"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1789
+#: ../src/gui/editors/notation/NotationView.cpp:1790
 msgid "Select Whole St&aff"
 msgstr "&Pentagrama Osoa Hautatu"
 
 #: ../src/commands/edit/CutAndCloseCommand.h:46
-#: ../src/gui/editors/notation/NotationView.cpp:1793
+#: ../src/gui/editors/notation/NotationView.cpp:1794
 msgid "C&ut and Close"
 msgstr "E&baki eta Itxi"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1797
+#: ../src/gui/editors/notation/NotationView.cpp:1798
 msgid "Pa&ste..."
 msgstr "&Itsatsi..."
 
 #: ../src/gui/editors/notation/NotationSelector.cpp:115
-#: ../src/gui/editors/notation/NotationView.cpp:1805
+#: ../src/gui/editors/notation/NotationView.cpp:1806
 msgid "Move to Staff Above"
 msgstr ""
 
 #: ../src/gui/editors/notation/NotationSelector.cpp:119
-#: ../src/gui/editors/notation/NotationView.cpp:1809
+#: ../src/gui/editors/notation/NotationView.cpp:1810
 msgid "Move to Staff Below"
 msgstr ""
 
-#: ../src/gui/editors/notation/NotationView.cpp:1823
+#: ../src/gui/editors/notation/NotationView.cpp:1824
 msgid "&Linear Layout"
 msgstr "Formato &Lineala"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1832
+#: ../src/gui/editors/notation/NotationView.cpp:1833
 msgid "&Continuous Page Layout"
 msgstr "Orri &Jarraiaren Formatoa"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1841
+#: ../src/gui/editors/notation/NotationView.cpp:1842
 msgid "&Multiple Page Layout"
 msgstr "Orri &Anitzaren Formatoa"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1851
+#: ../src/gui/editors/notation/NotationView.cpp:1852
 msgid "Show Ra&w Note Ruler"
 msgstr "Nota G&ordinaren Erregela Erakutsi"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1859
+#: ../src/gui/editors/notation/NotationView.cpp:1860
 msgid "Show &Annotations"
 msgstr "Oharrak &Erakutsi"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1863
+#: ../src/gui/editors/notation/NotationView.cpp:1864
 msgid "Show Lily&Pond Directives"
 msgstr "&LilyPonderako Direktibak Erakutsi"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1867
+#: ../src/gui/editors/notation/NotationView.cpp:1868
 msgid "Open L&yric Editor"
 msgstr "L&etraren Editorea Ireki"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1909
+#: ../src/gui/editors/notation/NotationView.cpp:1910
 msgid "Trip&let Insert Mode"
 msgstr "&Hirukotxoak Txertatzeko Modua"
 
-#: ../src/gui/editors/notation/NotationView.cpp:1923
+#: ../src/gui/editors/notation/NotationView.cpp:1924
 #, fuzzy
 msgid "Grace Insert Mode"
 msgstr "&Hirukotxoak Txertatzeko Modua"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2177
+#: ../src/gui/editors/notation/NotationView.cpp:2178
 msgid "&Dump selected events to stderr"
 msgstr "Hautatutako gertaerak stderrera irauli"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2245
+#: ../src/gui/editors/notation/NotationView.cpp:2246
 msgid "Ma&ke Ornament..."
 msgstr "Apaindura &Egin..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:2249
+#: ../src/gui/editors/notation/NotationView.cpp:2250
 msgid "Trigger &Ornament..."
 msgstr "&Apaindura aktibatzailea..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:2253
+#: ../src/gui/editors/notation/NotationView.cpp:2254
 msgid "Remove Ornament..."
 msgstr "Apaindura Ezabatu..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:2258
+#: ../src/gui/editors/notation/NotationView.cpp:2259
 msgid "&None"
 msgstr "&Ezer ez"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2286
+#: ../src/gui/editors/notation/NotationView.cpp:2287
 #, fuzzy
 msgid "Convert Notation For..."
 msgstr "Audio artxiboa bihurtzen..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:2295
+#: ../src/gui/editors/notation/NotationView.cpp:2296
 msgid "Show &Notes Toolbar"
 msgstr "Erakutsi &Noten Tresna-Barra"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2296
+#: ../src/gui/editors/notation/NotationView.cpp:2297
 msgid "Show &Rests Toolbar"
 msgstr "Erakutsi &Isiluneen Tresna-Barra"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2297
+#: ../src/gui/editors/notation/NotationView.cpp:2298
 msgid "Show &Accidentals Toolbar"
 msgstr "Erakutsi &Alterazioen Tresna-Barra"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2298
+#: ../src/gui/editors/notation/NotationView.cpp:2299
 msgid "Show Cle&fs Toolbar"
 msgstr "Erakutsi &Klabeen Tresna-Barra"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2300
+#: ../src/gui/editors/notation/NotationView.cpp:2301
 msgid "Show &Marks Toolbar"
 msgstr "Erakutsi &Markatzaileen Tresna-Barra"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2302
+#: ../src/gui/editors/notation/NotationView.cpp:2303
 msgid "Show &Group Toolbar"
 msgstr "Erakutsi M&ultzoen Tresna-Barra"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2304
+#: ../src/gui/editors/notation/NotationView.cpp:2305
 msgid "Show &Layout Toolbar"
 msgstr "Erakutsi &Formatoaren Tresna-Barra"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2308
+#: ../src/gui/editors/notation/NotationView.cpp:2309
 msgid "Show M&eta Toolbar"
 msgstr "Erakutsi M&eta Tresna-Barra"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2370
+#: ../src/gui/editors/notation/NotationView.cpp:2371
 msgid "Cursor &Up Staff"
 msgstr "Kurtsorea Pentagrama bat I&go"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2374
+#: ../src/gui/editors/notation/NotationView.cpp:2375
 msgid "Cursor &Down Staff"
 msgstr "Kurtsorea Pentagrama bat Jai&tsi"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2378
+#: ../src/gui/editors/notation/NotationView.cpp:2379
 msgid "Cursor Pre&vious Segment"
 msgstr ""
 
-#: ../src/gui/editors/notation/NotationView.cpp:2382
+#: ../src/gui/editors/notation/NotationView.cpp:2383
 #, fuzzy
 msgid "Cursor Ne&xt Segment"
 msgstr "Sortu segmentua"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2472
+#: ../src/gui/editors/notation/NotationView.cpp:2473
 msgid "Push &Left"
 msgstr "E&zkerrera Bultzatu"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2476
+#: ../src/gui/editors/notation/NotationView.cpp:2477
 msgid "Push &Right"
 msgstr "E&skuinera Bultzatu"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2480
+#: ../src/gui/editors/notation/NotationView.cpp:2481
 msgid "Push &Up"
 msgstr "&Gora Bultzatu"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2484
+#: ../src/gui/editors/notation/NotationView.cpp:2485
 msgid "Push &Down"
 msgstr "&Behera Bultzatu"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2488
+#: ../src/gui/editors/notation/NotationView.cpp:2489
 #, fuzzy
 msgid "&Restore Positions"
 msgstr "Berjarri Kalkulatutako Kokapenak"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2492
+#: ../src/gui/editors/notation/NotationView.cpp:2493
 msgid "Make &Invisible"
 msgstr "&Ikustezina Bihurtu"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2496
+#: ../src/gui/editors/notation/NotationView.cpp:2497
 msgid "Make &Visible"
 msgstr "Ikusga&rria Bihurtu"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2514
+#: ../src/gui/editors/notation/NotationView.cpp:2515
 msgid "Toggle Dot"
 msgstr "Puntutxoa Jarri/Kendu"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2518
-#: ../src/gui/editors/notation/NotationView.cpp:2522
+#: ../src/gui/editors/notation/NotationView.cpp:2519
+#: ../src/gui/editors/notation/NotationView.cpp:2523
 msgid "Add Dot"
 msgstr "Puntutxoa Gehitu"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2581
+#: ../src/gui/editors/notation/NotationView.cpp:2582
 #, c-format
 msgid ""
 "_n: 1 pixel\n"
@@ -7969,60 +8003,60 @@ msgstr ""
 "_n: pixel 1\n"
 "%n pixel"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2630
+#: ../src/gui/editors/notation/NotationView.cpp:2631
 msgid "  Font:  "
 msgstr "  Letra-Tipoa:  "
 
-#: ../src/gui/editors/notation/NotationView.cpp:2658
+#: ../src/gui/editors/notation/NotationView.cpp:2659
 msgid "Unknown font \"%1\", using default"
 msgstr "\"%1\" Letra-Tipo ezezaguna, lehenetsia erabiliko da"
 
-#: ../src/gui/editors/notation/NotationView.cpp:2666
+#: ../src/gui/editors/notation/NotationView.cpp:2667
 msgid "  Size:  "
 msgstr "  Tamaina:  "
 
-#: ../src/gui/editors/notation/NotationView.cpp:2688
+#: ../src/gui/editors/notation/NotationView.cpp:2689
 msgid "  Spacing:  "
 msgstr "  Hutsuneen Tartekatzea:  "
 
-#: ../src/gui/editors/notation/NotationView.cpp:3004
-#: ../src/gui/editors/notation/NotationView.cpp:3844
+#: ../src/gui/editors/notation/NotationView.cpp:3005
+#: ../src/gui/editors/notation/NotationView.cpp:3849
 msgid "  Ready."
 msgstr "  Prest."
 
-#: ../src/gui/editors/notation/NotationView.cpp:3009
+#: ../src/gui/editors/notation/NotationView.cpp:3010
 msgid "Laying out score..."
 msgstr "Formato ematen partiturari..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:3022
+#: ../src/gui/editors/notation/NotationView.cpp:3023
 msgid "Laying out staff %1..."
 msgstr "%1 pentagramari formatoa ematen..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:3031
+#: ../src/gui/editors/notation/NotationView.cpp:3032
 msgid "Reconciling staffs..."
 msgstr "Pentagramak adosten..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:3911
+#: ../src/gui/editors/notation/NotationView.cpp:3916
 msgid "Sizing and allocating canvas..."
 msgstr "Mihiseari tamaina aldatzen eta kokatzen..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:4076
+#: ../src/gui/editors/notation/NotationView.cpp:4081
 msgid "note"
 msgstr "nota"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4076
+#: ../src/gui/editors/notation/NotationView.cpp:4081
 msgid "rest"
 msgstr "isilunea"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4237
+#: ../src/gui/editors/notation/NotationView.cpp:4242
 msgid "%1 - Segment Track #%2 - Notation"
 msgstr "%1 - Segmentu Pista #%2 - Partitura"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4243
+#: ../src/gui/editors/notation/NotationView.cpp:4248
 msgid "%1 - All Segments - Notation"
 msgstr "%1 - Segmentu Guztiak - Partitura"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4248
+#: ../src/gui/editors/notation/NotationView.cpp:4253
 #, fuzzy
 msgid ""
 "_n: %1 - Segment - Notation\n"
@@ -8031,52 +8065,52 @@ msgstr ""
 "_n: %1 - Segmentu - Notazioa\n"
 "%1 - %n Segmentu - Notazioa"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4269
+#: ../src/gui/editors/notation/NotationView.cpp:4274
 #, fuzzy
 msgid "Grace"
 msgstr "Grave"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4273
-#: ../src/gui/editors/notation/NotationView.cpp:4277
-#: ../src/gui/editors/notation/NotationView.cpp:4281
+#: ../src/gui/editors/notation/NotationView.cpp:4278
+#: ../src/gui/editors/notation/NotationView.cpp:4282
+#: ../src/gui/editors/notation/NotationView.cpp:4286
 #, fuzzy
 msgid "%1 %2"
 msgstr "%1 (%2)"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4297
+#: ../src/gui/editors/notation/NotationView.cpp:4302
 msgid "Hidden annotations"
 msgstr "Ezkutuko oharrak"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4319
+#: ../src/gui/editors/notation/NotationView.cpp:4324
 msgid "Hidden LilyPond directives"
 msgstr "Ezkutuko LilyPond Direktibak"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4352
+#: ../src/gui/editors/notation/NotationView.cpp:4357
 #, c-format
 msgid "Unknown spacing action %1"
 msgstr "Hutsuneak tartekatzeko eragiketa ezezaguna %1"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4410
+#: ../src/gui/editors/notation/NotationView.cpp:4415
 #, c-format
 msgid "Unknown proportion action %1"
 msgstr "Proporzio eragiketa ezezaguna %1"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4457
+#: ../src/gui/editors/notation/NotationView.cpp:4462
 #, c-format
 msgid "Unknown font action %1"
 msgstr "Letra tiporako akzio ezezaguna %1"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4475
+#: ../src/gui/editors/notation/NotationView.cpp:4480
 #, c-format
 msgid "Unknown font size %1"
 msgstr "Letra tipoaren tamaina ezezaguna %1"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4479
+#: ../src/gui/editors/notation/NotationView.cpp:4484
 #, c-format
 msgid "Unknown font size action %1"
 msgstr "Letra-Tiporako tamaina eragiketa ezezaguna %1"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4806
+#: ../src/gui/editors/notation/NotationView.cpp:4811
 #, fuzzy
 msgid ""
 "The Restricted paste type requires enough empty space (containing only "
@@ -8095,281 +8129,281 @@ msgstr ""
 "menuan. Era berean, lehenetsitako itsasketa mota Mugatutakoa\n"
 "ez den beste batera alda dezakezu, nahi baduzu"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4826
+#: ../src/gui/editors/notation/NotationView.cpp:4831
 msgid "Can't paste multiple Segments into one"
 msgstr "Ezin dira segmentu asko batean itsatsi"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4854
-#: ../src/gui/editors/notation/NotationView.cpp:4903
+#: ../src/gui/editors/notation/NotationView.cpp:4859
+#: ../src/gui/editors/notation/NotationView.cpp:4908
 msgid "Couldn't paste at this point."
 msgstr "Ezin da puntu honetan itsatsi."
 
-#: ../src/gui/editors/notation/NotationView.cpp:4922
+#: ../src/gui/editors/notation/NotationView.cpp:4927
 #, fuzzy
 msgid "Move Events to Staff Above"
 msgstr "Gertaerak &Mugitu Beste Segmentu Batera"
 
-#: ../src/gui/editors/notation/NotationView.cpp:4950
+#: ../src/gui/editors/notation/NotationView.cpp:4955
 #, fuzzy
 msgid "Move Events to Staff Below"
 msgstr "Gertaerak &Mugitu Beste Segmentu Batera"
 
-#: ../src/gui/editors/notation/NotationView.cpp:5062
+#: ../src/gui/editors/notation/NotationView.cpp:5067
 msgid "Pushing selection left..."
 msgstr "Hautatutakoa ezkerrerantz bultzatzen..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5073
+#: ../src/gui/editors/notation/NotationView.cpp:5078
 msgid "Pushing selection right..."
 msgstr "Hautatutakoa eskuinerantz bultzatzen..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5084
+#: ../src/gui/editors/notation/NotationView.cpp:5089
 msgid "Pushing selection up..."
 msgstr "Hautatutakoa gorantz bultzatzen..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5095
+#: ../src/gui/editors/notation/NotationView.cpp:5100
 msgid "Pushing selection down..."
 msgstr "Hautatutakoa beherantz bultzatzen..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5106
+#: ../src/gui/editors/notation/NotationView.cpp:5111
 msgid "Restoring computed positions..."
 msgstr "Kalkulatutako posizioak berjartzen..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5115
+#: ../src/gui/editors/notation/NotationView.cpp:5120
 msgid "Making visible..."
 msgstr "Ikusgarri bihurtzen..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5124
+#: ../src/gui/editors/notation/NotationView.cpp:5129
 msgid "Making invisible..."
 msgstr "Ikustezin bihurtzen..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5275
+#: ../src/gui/editors/notation/NotationView.cpp:5280
 msgid "Beaming group..."
 msgstr "Plikak batzen..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5285
+#: ../src/gui/editors/notation/NotationView.cpp:5290
 msgid "Auto-beaming selection..."
 msgstr "Hautatutakoaren pliak automatikoki batzen..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5295
+#: ../src/gui/editors/notation/NotationView.cpp:5300
 msgid "Breaking groups..."
 msgstr "Multzoak apurtzen..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5383
+#: ../src/gui/editors/notation/NotationView.cpp:5388
 msgid "Untupleting..."
 msgstr "Multzo irregularrak zatitzen..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5391
+#: ../src/gui/editors/notation/NotationView.cpp:5396
 msgid "Adding slur..."
 msgstr "Ligatura gehitzen..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5392
+#: ../src/gui/editors/notation/NotationView.cpp:5397
 msgid "slur"
 msgstr "ligatura"
 
-#: ../src/gui/editors/notation/NotationView.cpp:5397
+#: ../src/gui/editors/notation/NotationView.cpp:5402
 msgid "Adding phrasing slur..."
 msgstr "Fraseatze-ligatura gehitzen..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5398
+#: ../src/gui/editors/notation/NotationView.cpp:5403
 msgid "phrasing slur"
 msgstr "fraseatze-ligatura"
 
-#: ../src/gui/editors/notation/NotationView.cpp:5403
+#: ../src/gui/editors/notation/NotationView.cpp:5408
 msgid "Adding glissando..."
 msgstr "Glissandoa gehitzen..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5404
+#: ../src/gui/editors/notation/NotationView.cpp:5409
 msgid "glissando"
 msgstr "glissandoa"
 
-#: ../src/gui/editors/notation/NotationView.cpp:5409
+#: ../src/gui/editors/notation/NotationView.cpp:5414
 msgid "Adding crescendo..."
 msgstr "Crescendoa gehitzen..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5410
-#: ../src/gui/editors/notation/NotationView.cpp:5416
+#: ../src/gui/editors/notation/NotationView.cpp:5415
+#: ../src/gui/editors/notation/NotationView.cpp:5421
 msgid "dynamic"
 msgstr "dinamika"
 
-#: ../src/gui/editors/notation/NotationView.cpp:5415
+#: ../src/gui/editors/notation/NotationView.cpp:5420
 msgid "Adding decrescendo..."
 msgstr "Decrescendoa gehitzen..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5421
-#: ../src/gui/editors/notation/NotationView.cpp:5427
-#: ../src/gui/editors/notation/NotationView.cpp:5433
-#: ../src/gui/editors/notation/NotationView.cpp:5439
+#: ../src/gui/editors/notation/NotationView.cpp:5426
+#: ../src/gui/editors/notation/NotationView.cpp:5432
+#: ../src/gui/editors/notation/NotationView.cpp:5438
+#: ../src/gui/editors/notation/NotationView.cpp:5444
 msgid "Adding octave..."
 msgstr "Oktaba gehitzen..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5422
-#: ../src/gui/editors/notation/NotationView.cpp:5428
-#: ../src/gui/editors/notation/NotationView.cpp:5434
-#: ../src/gui/editors/notation/NotationView.cpp:5440
+#: ../src/gui/editors/notation/NotationView.cpp:5427
+#: ../src/gui/editors/notation/NotationView.cpp:5433
+#: ../src/gui/editors/notation/NotationView.cpp:5439
+#: ../src/gui/editors/notation/NotationView.cpp:5445
 msgid "ottava"
 msgstr ""
 
-#: ../src/gui/editors/notation/NotationView.cpp:5456
+#: ../src/gui/editors/notation/NotationView.cpp:5461
 msgid "Can't add overlapping %1 indications"
 msgstr "Ezin dira %1 adierazpen gainjarri gehitu"
 
-#: ../src/gui/editors/notation/NotationView.cpp:5465
+#: ../src/gui/editors/notation/NotationView.cpp:5470
 msgid "Making chord..."
 msgstr "Akordea sortzen..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5477
+#: ../src/gui/editors/notation/NotationView.cpp:5482
 msgid "Normalizing rests..."
 msgstr "Isiluneak normalizatzen..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5487
+#: ../src/gui/editors/notation/NotationView.cpp:5492
 msgid "Collapsing rests..."
 msgstr "Isiluneak batzen..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5507
+#: ../src/gui/editors/notation/NotationView.cpp:5512
 msgid "Tying notes..."
 msgstr "Notak lotzen..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5517
+#: ../src/gui/editors/notation/NotationView.cpp:5522
 msgid "Untying notes..."
 msgstr "Notak askatzen..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5527
+#: ../src/gui/editors/notation/NotationView.cpp:5532
 msgid "Making notes viable..."
 msgstr "Notak ikusgarri bihurtzen..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5537
+#: ../src/gui/editors/notation/NotationView.cpp:5542
 msgid "Removing counterpoint..."
 msgstr "Kontrapuntua ezabatzen..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5547
+#: ../src/gui/editors/notation/NotationView.cpp:5552
 msgid "Pointing stems up..."
 msgstr "Plikak gora begira..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5557
+#: ../src/gui/editors/notation/NotationView.cpp:5562
 msgid "Pointing stems down..."
 msgstr "Plikak behera begira..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5568
+#: ../src/gui/editors/notation/NotationView.cpp:5573
 msgid "Restoring computed stem directions..."
 msgstr "Pliken kalkulatutako norabidea berjartzen..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5578
-#: ../src/gui/editors/notation/NotationView.cpp:5588
+#: ../src/gui/editors/notation/NotationView.cpp:5583
+#: ../src/gui/editors/notation/NotationView.cpp:5593
 msgid "Positioning slurs..."
 msgstr "Ligaturak kokatzen..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5599
+#: ../src/gui/editors/notation/NotationView.cpp:5604
 msgid "Restoring slur positions..."
 msgstr "Ligaturen kokapenak berjartzen..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5609
-#: ../src/gui/editors/notation/NotationView.cpp:5619
+#: ../src/gui/editors/notation/NotationView.cpp:5614
+#: ../src/gui/editors/notation/NotationView.cpp:5624
 #, fuzzy
 msgid "Positioning ties..."
 msgstr "Ligaturak kokatzen..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5630
+#: ../src/gui/editors/notation/NotationView.cpp:5635
 #, fuzzy
 msgid "Restoring tie positions..."
 msgstr "Kalkulatutako posizioak berjartzen..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5640
+#: ../src/gui/editors/notation/NotationView.cpp:5645
 msgid "Fixing notation quantization..."
 msgstr "Partituraren kuantifikazioa finkatzen..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5650
+#: ../src/gui/editors/notation/NotationView.cpp:5655
 msgid "Removing notation quantization..."
 msgstr "Partituraren kuantifikazioa ezabatzen..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5667
+#: ../src/gui/editors/notation/NotationView.cpp:5672
 msgid "Changing to %1 style..."
 msgstr "%1 estilora aldatzen..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5675
+#: ../src/gui/editors/notation/NotationView.cpp:5680
 #, c-format
 msgid "Unknown style action %1"
 msgstr "Estilo eragiketa ezezaguna: %1"
 
-#: ../src/gui/editors/notation/NotationView.cpp:5688
-#: ../src/gui/editors/notation/NotationView.cpp:5729
-#: ../src/gui/editors/notation/NotationView.cpp:5785
+#: ../src/gui/editors/notation/NotationView.cpp:5693
+#: ../src/gui/editors/notation/NotationView.cpp:5734
+#: ../src/gui/editors/notation/NotationView.cpp:5790
 msgid "No note duration selected"
 msgstr "Ez da hautatu notaren iraupena"
 
-#: ../src/gui/editors/notation/NotationView.cpp:5750
+#: ../src/gui/editors/notation/NotationView.cpp:5755
 msgid "No rest duration selected"
 msgstr "Ez da hautatu isilunearen iraupena"
 
-#: ../src/gui/editors/notation/NotationView.cpp:5837
+#: ../src/gui/editors/notation/NotationView.cpp:5842
 msgid "No note or rest duration selected"
 msgstr "Ez da hautatu notaren edo isilunearen iraupena"
 
-#: ../src/gui/editors/notation/NotationView.cpp:5848
-#: ../src/gui/editors/notation/NotationView.cpp:5859
-#: ../src/gui/editors/notation/NotationView.cpp:5870
-#: ../src/gui/editors/notation/NotationView.cpp:5881
-#: ../src/gui/editors/notation/NotationView.cpp:5892
-#: ../src/gui/editors/notation/NotationView.cpp:5903
-#: ../src/gui/editors/notation/NotationView.cpp:5914
+#: ../src/gui/editors/notation/NotationView.cpp:5853
+#: ../src/gui/editors/notation/NotationView.cpp:5864
+#: ../src/gui/editors/notation/NotationView.cpp:5875
+#: ../src/gui/editors/notation/NotationView.cpp:5886
+#: ../src/gui/editors/notation/NotationView.cpp:5897
+#: ../src/gui/editors/notation/NotationView.cpp:5908
+#: ../src/gui/editors/notation/NotationView.cpp:5919
 msgid "Forcing accidentals..."
 msgstr "Alterazioak derrigortzen"
 
-#: ../src/gui/editors/notation/NotationView.cpp:5925
+#: ../src/gui/editors/notation/NotationView.cpp:5930
 msgid "Restoring accidentals..."
 msgstr "Alterazioak berjartzen"
 
-#: ../src/gui/editors/notation/NotationView.cpp:5936
+#: ../src/gui/editors/notation/NotationView.cpp:5941
 msgid "Showing cautionary accidentals..."
 msgstr "Zuhurtziazko alterazioak erakusten..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5946
+#: ../src/gui/editors/notation/NotationView.cpp:5951
 msgid "Cancelling cautionary accidentals..."
 msgstr "Zuhurtziazko alterazioak ezeztatzen..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5975
+#: ../src/gui/editors/notation/NotationView.cpp:5980
 msgid "Interpreting selection..."
 msgstr "Hautatutakoa interpretatzen..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5987
+#: ../src/gui/editors/notation/NotationView.cpp:5992
 msgid "Setting note durations..."
 msgstr "Noten iraupena ezartzen..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:5995
-#: ../src/gui/editors/notation/NotationView.cpp:6003
+#: ../src/gui/editors/notation/NotationView.cpp:6000
+#: ../src/gui/editors/notation/NotationView.cpp:6008
 msgid "Adding dot..."
 msgstr "Puntutxoa gehitzen..."
 
-#: ../src/gui/editors/notation/NotationView.cpp:6025
+#: ../src/gui/editors/notation/NotationView.cpp:6030
 msgid "Text: "
 msgstr "Testua: "
 
-#: ../src/gui/editors/notation/NotationView.cpp:6039
+#: ../src/gui/editors/notation/NotationView.cpp:6044
 msgid "Fingering: "
 msgstr "Hatz-jokoa: "
 
-#: ../src/gui/editors/notation/NotationView.cpp:6127
+#: ../src/gui/editors/notation/NotationView.cpp:6132
 msgid "Ornament track %1 bar %2"
 msgstr "%1 Apaindura Pista konpas %2"
 
-#: ../src/gui/editors/notation/NotationView.cpp:6129
+#: ../src/gui/editors/notation/NotationView.cpp:6134
 #, c-format
 msgid "Ornament bar %1"
 msgstr "Apaindura konpasa %1"
 
-#: ../src/gui/editors/notation/NotationView.cpp:6189
+#: ../src/gui/editors/notation/NotationView.cpp:6194
 msgid "Remove Ornaments"
 msgstr "Apaindurak Ezabatu"
 
-#: ../src/gui/editors/notation/NotationView.cpp:6236
+#: ../src/gui/editors/notation/NotationView.cpp:6241
 msgid "Estimated key signature shown"
 msgstr "Estimatutako armadura erakusten da"
 
 #: ../src/gui/editors/notation/NotationStaff.cpp:1242
-#: ../src/gui/editors/notation/NotationView.cpp:6293
+#: ../src/gui/editors/notation/NotationView.cpp:6298
 msgid "Sustain"
 msgstr "Diesea"
 
-#: ../src/gui/editors/notation/NotationView.cpp:6309
+#: ../src/gui/editors/notation/NotationView.cpp:6314
 msgid ""
 "There is no sustain controller defined for this device.\n"
 "Please ensure the device is configured correctly in the Manage MIDI Devices "
@@ -8379,7 +8413,7 @@ msgstr ""
 "Mesdez, egiaztatu dispositiboa modu egokian konfiguratuta dagoela \"MIDI "
 "Dispositiboak Kudeatu\" dialogoan, leiho nagusian. "
 
-#: ../src/gui/editors/notation/NotationView.cpp:7387
+#: ../src/gui/editors/notation/NotationView.cpp:7392
 msgid "Can't insert note: No note duration selected"
 msgstr "Ezin da nota txertatu: notaren iraupena ez dago hautatuta"
 
@@ -8967,19 +9001,19 @@ msgid "Erase Controller Event(s)"
 msgstr "Kontroladorearen Gertaerak Ezabatu"
 
 #: ../src/gui/general/EditView.cpp:895
-#: ../src/gui/rulers/ControllerEventsRuler.cpp:181
+#: ../src/gui/rulers/ControllerEventsRuler.cpp:182
 msgid "Unsupported Event Type"
 msgstr "Kontroladorearen Gertaera ez jasota"
 
-#: ../src/gui/rulers/ControllerEventsRuler.cpp:196
+#: ../src/gui/rulers/ControllerEventsRuler.cpp:197
 msgid "Controller Events"
 msgstr "Kontroladorearen Gertaerak"
 
-#: ../src/gui/rulers/ControllerEventsRuler.cpp:271
+#: ../src/gui/rulers/ControllerEventsRuler.cpp:274
 msgid "Controller Event Number"
 msgstr "Kontroladorearen Gertaera Zenbakia"
 
-#: ../src/gui/rulers/ControllerEventsRuler.cpp:464
+#: ../src/gui/rulers/ControllerEventsRuler.cpp:467
 msgid "Add line of controllers"
 msgstr "Gehitu Kontroladoreen Lerroa"
 
@@ -10149,7 +10183,7 @@ msgstr "&%1 Hatz-Jokoa Gehitu"
 msgid " imported from Hydrogen "
 msgstr "hydrogenetik inportatua"
 
-#: ../src/document/io/LilyPondExporter.cpp:533
+#: ../src/document/io/LilyPondExporter.cpp:566
 #, fuzzy
 msgid ""
 "LilyPond does not allow spaces or backslashes in filenames.\n"
@@ -10168,9 +10202,13 @@ msgstr ""
 "\n"
 "bere ordezr? "
 
-#: ../src/document/io/LilyPondExporter.cpp:2360
+#: ../src/document/io/LilyPondExporter.cpp:2372
 msgid "warning: overlong bar truncated here"
 msgstr "oharra: konpas luzeegia, hemen moztua"
+
+#: ../src/document/io/LilyPondExporter.cpp:2383
+msgid "warning: bar too short, padding with rests"
+msgstr "oharra: konpas laburregia, isiluneekin betea"
 
 #: ../src/document/MultiViewCommandHistory.cpp:311
 msgid "Nothing to undo"
@@ -10268,11 +10306,11 @@ msgstr "Audio aurrebistak sortzen..."
 msgid "Merge"
 msgstr "Nahasi"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1606
+#: ../src/document/RosegardenGUIDoc.cpp:1613
 msgid "File load cancelled"
 msgstr "Artxiboaren karga ezezatatua"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1626
+#: ../src/document/RosegardenGUIDoc.cpp:1633
 msgid ""
 "<h3>Audio and plugins not available</h3><p>This composition uses audio files "
 "or plugins, but Rosegarden is currently running without audio because the "
@@ -10282,7 +10320,7 @@ msgid ""
 "composition, all audio and plugin data and settings in it will be lost.</p>"
 msgstr ""
 
-#: ../src/document/RosegardenGUIDoc.cpp:1629
+#: ../src/document/RosegardenGUIDoc.cpp:1636
 msgid ""
 "<h3>Audio and plugins not available</h3><p>This composition uses audio files "
 "or plugins, but you are running a version of Rosegarden that was compiled "
@@ -10291,7 +10329,7 @@ msgid ""
 "it will be lost.</p>"
 msgstr ""
 
-#: ../src/document/RosegardenGUIDoc.cpp:1666
+#: ../src/document/RosegardenGUIDoc.cpp:1673
 msgid ""
 "<h3>Incorrect audio sample rate</h3><p>This composition contains audio files "
 "that were recorded or imported with the audio server running at a different "
@@ -10302,7 +10340,7 @@ msgid ""
 "composition before you do any more work with it.</p>"
 msgstr ""
 
-#: ../src/document/RosegardenGUIDoc.cpp:1676
+#: ../src/document/RosegardenGUIDoc.cpp:1683
 msgid ""
 "<h3>Inconsistent audio sample rates</h3><p>This composition contains audio "
 "files at more than one sample rate.</p><p>Rosegarden will play them at the "
@@ -10312,11 +10350,11 @@ msgid ""
 "details, and consider resampling any files that are at the wrong rate.</p>"
 msgstr ""
 
-#: ../src/document/RosegardenGUIDoc.cpp:1677
+#: ../src/document/RosegardenGUIDoc.cpp:1684
 msgid "Inconsistent sample rates"
 msgstr "Laginketa maiztasun ez-iraunkorrak"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1691
+#: ../src/document/RosegardenGUIDoc.cpp:1698
 msgid ""
 "<h3>Plugins not found</h3><p>The following audio plugins could not be loaded:"
 "</p><ul>"
@@ -10324,11 +10362,11 @@ msgstr ""
 "<h3>Puglin ez aurkituak</h3><p>Ondoko audio pluginak ezin izan dira kargatu:"
 "</p><ul>"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1699
+#: ../src/document/RosegardenGUIDoc.cpp:1706
 msgid "<li>%1 (from %2)</li>"
 msgstr "<li> %1 %2 -tik)</li>"
 
-#: ../src/document/RosegardenGUIDoc.cpp:1713
+#: ../src/document/RosegardenGUIDoc.cpp:1720
 msgid ""
 "This file contains one or more old element types that are now deprecated.\n"
 "Support for these elements may disappear in future versions of Rosegarden.\n"
@@ -10341,12 +10379,12 @@ msgstr ""
 "Gomendatzen dugu Rosegarden bertsio honen artxibo hau birgrabatzea,  "
 "etorkizuneko bertsioetan kargatu ahal izango dela ziurtatzeko."
 
-#: ../src/document/RosegardenGUIDoc.cpp:2241
+#: ../src/document/RosegardenGUIDoc.cpp:2248
 msgid "Insert Recorded MIDI"
 msgstr "Grabatutako MIDIa txertatu"
 
-#: ../src/document/RosegardenGUIDoc.cpp:2607
-#: ../src/document/RosegardenGUIDoc.cpp:2687
+#: ../src/document/RosegardenGUIDoc.cpp:2614
+#: ../src/document/RosegardenGUIDoc.cpp:2694
 #, fuzzy
 msgid "(recorded)"
 msgstr "%1 (grabatua)"
@@ -11625,9 +11663,6 @@ msgstr "Mensural"
 msgid "Triangle"
 msgstr "Triangle"
 
-#~ msgid "warning: bar too short, padding with rests"
-#~ msgstr "oharra: konpas laburregia, isiluneekin betea"
-
 #~ msgid "%1 (rescaled)"
 #~ msgstr "%1 (birreskalatuta)"
 
@@ -12106,6 +12141,3 @@ msgstr "Triangle"
 
 #~ msgid "[+]"
 #~ msgstr "[+]"
-
-#~ msgid "&Velocity"
-#~ msgstr "&Abiadura"

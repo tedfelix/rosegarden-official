@@ -1322,11 +1322,13 @@ LilyPondExporter::write()
                     // Check for a partial measure beginning in the middle of a
                     // theoretical bar
                     if (barStart < currentSegmentStartTime) {
+                        str << " \% invoking the partial start check \n";
                         barStart = currentSegmentStartTime;
                     }
                     // Check for a partial measure ending in the middle of a
                     // theoretical bar
                     if (barEnd > currentSegmentEndTime) {
+                        str << " \% invoking the partial end check \n";
                         barEnd = currentSegmentEndTime;
                     }
 
@@ -1727,12 +1729,13 @@ LilyPondExporter::writeBar(Segment *s,
     std::pair<int,int> durationRatioSum(0,1);
     static std::pair<int,int> durationRatio(0,1);
 
+    str << "\n\% absTime = " << absTime << " barStart = " << barStart << "\n";
     if (absTime > barStart) {
         Note note(Note::getNearestNote(absTime - barStart, MAX_DOTS));
         writtenDuration += note.getDuration();
-        durationRatio = writeSkip(timeSignature, 0, note.getDuration(), false, str);
+        durationRatio = writeSkip(timeSignature, (barEnd - barStart) - writtenDuration, note.getDuration(), false, str);
 	durationRatioSum = fractionSum(durationRatioSum,durationRatio);
-        // str << qstrtostr(QString(" %{ %1/%2 %} ").arg(durationRatio.first).arg(durationRatio.second)); // DEBUG
+        str << qstrtostr(QString(" %{ %1/%2 %} ").arg(durationRatio.first).arg(durationRatio.second)); // DEBUG
     }
 
     timeT prevDuration = -1;
