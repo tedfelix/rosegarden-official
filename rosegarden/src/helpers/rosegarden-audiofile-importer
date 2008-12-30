@@ -54,7 +54,15 @@ conftest() {
     if [ -x "`type -path sndfile-resample`" ]; then
 	return 0
     fi
-    if [ -x "`type -path sox`" ] && sox -h 2>&1 | grep -q polyphase; then
+    # note by em-rumpf:
+    # `type -path sox` caused errors
+    # I replacaed with 'whereis' command and 'awk'
+    if [ -x "`whereis sox | awk '{print $2}'`" ] ; then
+        # note: I also removed the grep for "polyphase"
+        # the syntax seemed wrong too
+        # I don't know the reason for the grep - does anyone?
+        # 
+        ### && sox -h 2>&1 | grep -q polyphase; then
 	return 0
     fi
     echo "Required: sox OR sndfile-resample"
