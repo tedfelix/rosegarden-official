@@ -51,21 +51,15 @@ echo "rosegarden-audiofile-importer: $@" 1>&2
 conftest() {
     # ssrc is our favourite resampler, but it only works for certain
     # samplerates, so we have to have at least one other just in case
-    if [ -x "`type -path sndfile-resample`" ]; then
+    if [ -x "`which sndfile-resample`" ]; then
 	return 0
     fi
-    # note by em-rumpf:
-    # `type -path sox` caused errors
-    # I replacaed with 'whereis' command and 'awk'
-    if [ -x "`whereis sox | awk '{print $2}'`" ] ; then
-        # note: I also removed the grep for "polyphase"
-        # the syntax seemed wrong too
-        # I don't know the reason for the grep - does anyone?
-        # 
-        ### && sox -h 2>&1 | grep -q polyphase; then
-	return 0
+    if [ -x "`which sox`" ]; then
+	if sox -h 2>&1 | egrep -q '(polyphase|rabbit)'; then
+	    return 0
+	fi
     fi
-    echo "Required: sox OR sndfile-resample"
+    echo "Required: sox with polyphase or rabbit resampler OR sndfile-resample"
     echo "rosegarden-audiofile-importer: ERROR: No resampler available, failing configuration test" 1>&2
     return 1
 }
@@ -211,7 +205,11 @@ resample() {
 	    sndfile-resample -to "$rate" -c 0 "$_source" "$_target" || return 4
 	else
 	    echo "Resampling using sox..." 1>&2
-	    sox "$_source" -r "$rate" "$_target" polyphase || return 4
+	    if sox -h | grep -q rabbit ; then
+	        sox "$_source" -r "$rate" "$_target" rabbit || return 4
+	    else
+		sox "$_source" -r "$rate" "$_target" polyphase || return 4
+	    fi
 	fi
     fi
     return 0
