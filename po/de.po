@@ -687,9 +687,8 @@ msgid "Device"
 msgstr "Gerät"
 
 #: ../src/gui/dialogs/ManageMetronomeDialog.cpp:97
-#, fuzzy
 msgid "%1 - %2"
-msgstr "%1 (%2)"
+msgstr "%1 - %2"
 
 #: ../src/gui/dialogs/ManageMetronomeDialog.cpp:99
 msgid "%1 - No connection"
@@ -1481,9 +1480,8 @@ msgid "a major"
 msgstr "eine große (major)"
 
 #: ../src/gui/dialogs/IntervalDialog.cpp:232
-#, fuzzy
 msgid "an (unknown)"
-msgstr "Unbekannt"
+msgstr "ein Unbekannter"
 
 #: ../src/gui/dialogs/IntervalDialog.cpp:241
 #: ../src/gui/dialogs/IntervalDialog.cpp:244
@@ -1913,11 +1911,12 @@ msgstr ""
 "Wirklich die Audiodatei \"%1\" und alle zugehörigen Audiosegmente löschen?"
 
 #: ../src/gui/dialogs/AudioManagerDialog.cpp:685
-#, fuzzy
 msgid ""
 "*.wav|WAV files (*.wav)\n"
 "*.*|All files"
-msgstr "*.wav|WAV-Dateien (*.wav)"
+msgstr ""
+"*.wav|WAV Dateien (*.wav)\n"
+"*.*|Alle Dateien"
 
 #: ../src/gui/dialogs/AudioManagerDialog.cpp:690
 msgid ""
@@ -2145,9 +2144,8 @@ msgid "Basic options"
 msgstr ""
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:106
-#, fuzzy
 msgid "Compatibility level"
-msgstr "LilyPond Kompatibilität"
+msgstr "LilyPond Kompatibilitätsstufe"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:110
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:111
@@ -2208,9 +2206,8 @@ msgid "Staff level options"
 msgstr "Experteneinstellungen"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:169
-#, fuzzy
 msgid "Export content"
-msgstr "Geräte exportieren"
+msgstr "Inhalt exportieren"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:172
 msgid "All tracks"
@@ -2251,9 +2248,8 @@ msgid "Export tempo marks "
 msgstr "Exportiere Tempo-Markierungen"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:208
-#, fuzzy
 msgid "Export lyrics"
-msgstr "\\Text - Blöcke exportieren"
+msgstr "Songtexte (Lyrics) exportieren"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:218
 msgid "Export beamings"
@@ -2294,14 +2290,12 @@ msgid "Export \\midi block"
 msgstr "\\midi-Block exportieren"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:282
-#, fuzzy
 msgid "No markers"
-msgstr "Keine Gruppenfader"
+msgstr "Keine Markierungen"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:283
-#, fuzzy
 msgid "Rehearsal marks"
-msgstr "Alle Marker entfernen"
+msgstr "Probe Markierungen (rehearsal)"
 
 #: ../src/gui/dialogs/LilyPondOptionsDialog.cpp:284
 msgid "Marker text"
@@ -3393,17 +3387,15 @@ msgid "Rescaling audio file..."
 msgstr "Länge einer Audiodatei verändern (neu-skalieren)..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:2770
-#, fuzzy
 msgid ""
 "The audio file path does not exist or is not writable.\n"
 "You must set the audio file path to a valid directory in Document Properties "
 "before %1.\n"
 "Would you like to set it now?"
 msgstr ""
-"Der angegebene Audio-Dateipfad existiert entweder nicht oder ist nicht "
-"schreibbar.\n"
-"Bitte setzen Sie den Audio-Dateipfad auf ein gültiges Verzeichnis in dem\n"
-"Dokumenteigenschaften bevor Sie Audio aufnehmen.\n"
+"Der angegebene Audio-Dateipfad existiert entweder nicht oder ist nicht schreibbar.\n"
+"Bitte setzen Sie den Audio-Dateipfad auf ein gültiges Verzeichnis - in den\n"
+"Dokumenteigenschaften - bevor %1 .\n"
 "Möchten Sie den Pfad jetzt setzen?"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:2772
@@ -3419,13 +3411,13 @@ msgid "Jog Selection"
 msgstr "Auswahl joggen"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:2981
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "_n: Split Segment at Time\n"
 "Split %n Segments at Time"
 msgstr ""
-"%1 - Segment - Notation\n"
-"%1 - %n Segmente - Notation"
+"_n: Teile Segment am Zeitpunkt\n"
+"Teile %n Segmente am Zeitpunkt"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:3016
 #: ../src/gui/general/EditViewBase.cpp:612
@@ -3603,9 +3595,8 @@ msgid "Export and import of Rosegarden Project files"
 msgstr "Export und Import von Rosegarden Projektdateien..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:4532
-#, fuzzy
 msgid "The Rosegarden Project Packager helper script"
-msgstr "Rosegarde Projekt Dateien\n"
+msgstr "Das Rosegarden Projekt-Packer Hilfs-Script \n"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:4536
 msgid "%1 - for project file support"
@@ -3620,13 +3611,12 @@ msgid "The Rosegarden LilyPondView helper script"
 msgstr ""
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:4557
-#, fuzzy
 msgid "%1 - for LilyPond preview support"
-msgstr "LilyPond-Vorschau Einstellungen"
+msgstr "%1 - für LilyPond-Vorschau Unterstützung"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:4571
 msgid "General audio file import and conversion"
-msgstr ""
+msgstr "Allgemeiner Audiodatei-Import und -Konvertierung"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:4573
 msgid "The Rosegarden Audio File Importer helper script"
@@ -3648,15 +3638,13 @@ msgstr ""
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:4589
 #: ../src/gui/application/RosegardenGUIApp.cpp:4595
-#, fuzzy
 msgid "<ul>"
-msgstr "<Standard>"
+msgstr "<ul>"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:4591
 #: ../src/gui/application/RosegardenGUIApp.cpp:4597
-#, fuzzy
 msgid "<li>%1</li>"
-msgstr "--  %1 (von %2)\n"
+msgstr "<li>%1</li>"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:4593
 #: ../src/gui/application/RosegardenGUIApp.cpp:4599
@@ -3994,7 +3982,6 @@ msgid "Installation contains the wrong version of Rosegarden."
 msgstr "Die Installation enthält die falsche Rosegarden-Version."
 
 #: ../src/gui/application/main.cpp:365
-#, fuzzy
 msgid ""
 " The wrong versions of Rosegarden's data files were\n"
 " found in the standard KDE installation directories.\n"
@@ -4023,8 +4010,7 @@ msgstr ""
 "\n"
 " 2. Die neue Version wurde nicht im Standardverzeichnis installiert,\n"
 "    und eine alte Version wurde im Standardverzeichnis gefunden.\n"
-"    In diesem Fall müssen Sie das korrekte Verzeichnis zur "
-"Umgebungsvariablen\n"
+"    In diesem Fall müssen Sie das korrekte Verzeichnis zur Umgebungsvariablen\n"
 "    KDEDIRS hinzufügen, damit Rosegarden funktioniert."
 
 #: ../src/gui/application/main.cpp:377 ../src/gui/application/main.cpp:395
@@ -4036,7 +4022,6 @@ msgid "Rosegarden does not appear to have been installed."
 msgstr "Rosegarden scheint nicht installiert worden zu sein."
 
 #: ../src/gui/application/main.cpp:384
-#, fuzzy
 msgid ""
 " One or more of Rosegarden's data files could not be\n"
 " found in the standard KDE installation directories.\n"
@@ -4094,7 +4079,6 @@ msgid "Chord labelling code"
 msgstr ""
 
 #: ../src/gui/application/main.cpp:423
-#, fuzzy
 msgid ""
 "LilyPond output\n"
 "assorted other patches\n"
@@ -4141,11 +4125,12 @@ msgid "French translation"
 msgstr "Französische Übersetzung"
 
 #: ../src/gui/application/main.cpp:431
-#, fuzzy
 msgid ""
 "French translation\n"
 "Bug fixes"
-msgstr "Französische Übersetzung"
+msgstr ""
+"Französische Übersetzung\n"
+"Bug fixes"
 
 #: ../src/gui/application/main.cpp:432 ../src/gui/application/main.cpp:433
 msgid "Italian translation"
@@ -4284,7 +4269,7 @@ msgid ""
 msgstr ""
 "<h2>Willkommen bei Rosegarden!</h2><p>Dem Audio- und MIDI- Sequenzer und "
 "musikalischen Notationseditor.</p><ul><li>Wenn Sie es nicht bereits getan "
-"haben, dann sollten Sie einige 'DSSI synth plugins' installieren, oder ein "
+"haben, dann sollten Sie einige 'DSSI Synth-Plugins' installieren, oder ein "
 "eigenständiges Synthese-Program wie z.B. QSynth.  Rosegarden hat selbst kein "
 "solches Synthese-/Klangmodul für MIDI, so dass Sie ohne ein Zusätzliches "
 "nichts hören werden ! </li><br><br><li>Rosegarden verwendet den 'JACK audio "
@@ -4313,14 +4298,13 @@ msgid "No non-audio segments selected"
 msgstr "Keine Nichtaudiosegmente ausgeählt"
 
 #: ../src/gui/application/RosegardenGUIView.cpp:845
-#, fuzzy
 msgid ""
 "You've not yet defined an audio editor for Rosegarden to use.\n"
 "See Settings -> Configure Rosegarden -> Audio."
 msgstr ""
 "Sie haben bisher noch keinen Audioeditor für Rosegarden festgelegt.\n"
-"Siehe Einstellungen -> Konfiguriere Rosegarden -> Allgemein -> Externe "
-"Editoren."
+"Siehe: Einstellungen -> Konfiguriere Rosegarden -> Audio -> Allgemein\n"
+"-> Externer Audio-Editor."
 
 #: ../src/gui/application/RosegardenGUIView.cpp:1558
 #: ../src/gui/application/RosegardenGUIView.cpp:1563
@@ -4408,7 +4392,6 @@ msgid "Unknown sequencer failure mode!"
 msgstr "Unbekannter Sequenzer Fehlermodus!"
 
 #: ../src/gui/seqmanager/SequenceManager.cpp:1195
-#, fuzzy
 msgid ""
 "<h3>System timer resolution is too low</h3><p>Rosegarden was unable to find "
 "a high-resolution timing source for MIDI performance.</p><p>This may mean "
@@ -4419,10 +4402,13 @@ msgid ""
 "sourceforge.net/Low+latency+kernels</a> for instructions.</p>"
 msgstr ""
 "<h3>Die System-Timer Auflösung ist zu niedrig</h3><p>Rosegarden war nicht in "
-"der Lage eine hochauflösende Zeitquelle für die MIDI Performance zu finden.</"
+"der Lage eine hochauflösende Zeitquelle für die MIDI-Wiedergabe zu finden.</"
 "p><p>Das kann bedeuten, dass bei Ihrem Linux System die \"Kernel timer "
 "resolution\" zu niedrig eingestellt ist. Bitte erfragen Sie nähere "
-"Informationen bei Ihrem Linux Distributor.</p>"
+"Informationen bei Ihrem Linux-Vertrieb.</p><p>Einige Linux- "
+"Vertriebe stellen bereits Niedriglatenz-Kernel (low latency) bereit. Siehe <a href=\"http://"
+"rosegarden.wiki.sourceforge.net/Low+latency+kernels\">http://rosegarden.wiki."
+"sourceforge.net/Low+latency+kernels</a> für weiteren Rat.</p>"
 
 #: ../src/gui/seqmanager/SequenceManager.cpp:1213
 #, fuzzy
@@ -4483,8 +4469,8 @@ msgstr ""
 "<h3>Konnte nicht zum 'JACK audio server' verbinden.</h3><p>Rosegarden konnte "
 "sich nicht mit dem 'JACK audio server' verbinden. Das bedeutet vermutlich, "
 "dass der 'JACK server' nicht läuft.</p><p>Wenn Sie Audiodateien aufnehmen "
-"oder wiedergeben, oder plugins verwenden möchten, dann sollten Sie "
-"Rosegarden schliessen und den 'JACK server' starten, bevor Sie Rosegarden "
+"oder wiedergeben, oder Plugins verwenden möchten, dann sollten Sie "
+"Rosegarden schließen und den 'JACK server' starten, bevor Sie Rosegarden "
 "erneut starten.</p>"
 
 #: ../src/gui/seqmanager/SequenceManager.cpp:1356
@@ -4622,14 +4608,13 @@ msgstr ""
 
 #: ../src/gui/editors/notation/TrackHeader.cpp:234
 #: ../src/gui/widgets/DiatonicPitchChooser.cpp:54
-#, fuzzy
 msgid "D"
-msgstr "ID"
+msgstr "D"
 
 #: ../src/gui/editors/notation/TrackHeader.cpp:236
 #: ../src/gui/widgets/DiatonicPitchChooser.cpp:55
 msgid "E"
-msgstr ""
+msgstr "E"
 
 #: ../src/gui/editors/notation/TrackHeader.cpp:237
 #: ../src/gui/widgets/DiatonicPitchChooser.cpp:56
@@ -4643,9 +4628,8 @@ msgstr ""
 
 #: ../src/gui/editors/notation/TrackHeader.cpp:241
 #: ../src/gui/widgets/DiatonicPitchChooser.cpp:58
-#, fuzzy
 msgid "A"
-msgstr "A4"
+msgstr "A"
 
 #: ../src/gui/editors/notation/TrackHeader.cpp:243
 #: ../src/gui/widgets/DiatonicPitchChooser.cpp:59
@@ -4665,9 +4649,8 @@ msgid "0"
 msgstr "0"
 
 #: ../src/gui/widgets/DiatonicPitchChooser.cpp:66
-#, fuzzy
 msgid "1"
-msgstr "%1"
+msgstr "1"
 
 #: ../src/gui/widgets/DiatonicPitchChooser.cpp:67
 msgid "2"
@@ -4678,9 +4661,8 @@ msgid "3"
 msgstr ""
 
 #: ../src/gui/widgets/DiatonicPitchChooser.cpp:69
-#, fuzzy
 msgid "4"
-msgstr "A4"
+msgstr "4"
 
 #: ../src/gui/widgets/DiatonicPitchChooser.cpp:70
 msgid "5"
@@ -4695,29 +4677,24 @@ msgid "7"
 msgstr ""
 
 #: ../src/gui/widgets/DiatonicPitchChooser.cpp:76
-#, fuzzy
 msgid "double flat"
-msgstr "Doppel-B"
+msgstr "Doppel-b"
 
 #: ../src/gui/widgets/DiatonicPitchChooser.cpp:77
-#, fuzzy
 msgid "flat"
-msgstr "B"
+msgstr "b (flat)"
 
 #: ../src/gui/widgets/DiatonicPitchChooser.cpp:78
-#, fuzzy
 msgid "natural"
-msgstr "l"
+msgstr "natürliches"
 
 #: ../src/gui/widgets/DiatonicPitchChooser.cpp:79
-#, fuzzy
 msgid "sharp"
 msgstr "Kreuz"
 
 #: ../src/gui/widgets/DiatonicPitchChooser.cpp:80
-#, fuzzy
 msgid "double sharp"
-msgstr "Doppelkreuz"
+msgstr "Doppel-Kreuz"
 
 #: ../src/gui/widgets/AudioRouteMenu.cpp:227
 #, c-format
@@ -5014,9 +4991,8 @@ msgid "Subtitle"
 msgstr "Untertitel"
 
 #: ../src/gui/configuration/HeadersConfigurationPage.cpp:97
-#, fuzzy
 msgid "Subsubtitle"
-msgstr "Untertitel"
+msgstr "Unter-Untertitel"
 
 #: ../src/gui/configuration/HeadersConfigurationPage.cpp:101
 #, fuzzy
@@ -5028,9 +5004,8 @@ msgid "Composer"
 msgstr "Komponist"
 
 #: ../src/gui/configuration/HeadersConfigurationPage.cpp:113
-#, fuzzy
 msgid "Meter"
-msgstr "Master"
+msgstr "Meter"
 
 #: ../src/gui/configuration/HeadersConfigurationPage.cpp:117
 msgid "Arranger"
@@ -5056,9 +5031,8 @@ msgid "Tagline"
 msgstr "Dreieck"
 
 #: ../src/gui/configuration/HeadersConfigurationPage.cpp:148
-#, fuzzy
 msgid "The composition comes here."
-msgstr "Länge des Stücks verändern"
+msgstr "Die Komposition kommt hier."
 
 #: ../src/gui/configuration/HeadersConfigurationPage.cpp:165
 msgid "Non-printable headers"
@@ -5105,7 +5079,6 @@ msgid "Number of count-in measures when recording"
 msgstr "Anzahl vorzuzählender Takte bei Aufnahmen"
 
 #: ../src/gui/configuration/GeneralConfigurationPage.cpp:103
-#, fuzzy
 msgid "Auto-save interval"
 msgstr "Abstand für automatisches Speichern (in Sekunden)"
 
@@ -5194,7 +5167,6 @@ msgid "Localized (where available)"
 msgstr "Lokalisiert (soweit verfügbar, sonst UK)"
 
 #: ../src/gui/configuration/GeneralConfigurationPage.cpp:254
-#, fuzzy
 msgid "Show textured background on"
 msgstr "Gemusterte Hintergründe auf freien Flächen"
 
@@ -5236,10 +5208,9 @@ msgid "Always use default studio when loading files"
 msgstr "Beim laden von Dateien immer \"default\"-Studio benutzen"
 
 #: ../src/gui/configuration/MIDIConfigurationPage.cpp:112
-#, fuzzy
 msgid "Send all MIDI Controllers at start of each playback"
 msgstr ""
-"MIDI-Controller zum Start der Wiedergabe senden\\n\n"
+"MIDI-Controller beim Start jeder Wiedergabe senden\\n\n"
 "    (führt zu deutlicher Verzögerung am Beginn)"
 
 #: ../src/gui/configuration/MIDIConfigurationPage.cpp:114
@@ -5493,9 +5464,8 @@ msgstr "Standard-Abstände"
 
 #: ../src/gui/configuration/NotationConfigurationPage.cpp:106
 #: ../src/gui/configuration/NotationConfigurationPage.cpp:130
-#, fuzzy
 msgid "%1 % (normal)"
-msgstr "Normal"
+msgstr "%1 % (Normal)"
 
 #: ../src/gui/configuration/NotationConfigurationPage.cpp:118
 msgid "Default duration factor"
@@ -5615,7 +5585,6 @@ msgid "Require explicit resets in following bar"
 msgstr "Verlange ausdrückliche Auflösungszeichen im folgenden Takt"
 
 #: ../src/gui/configuration/NotationConfigurationPage.cpp:379
-#, fuzzy
 msgid "Key signature cancellation style"
 msgstr "Tonart Auflösungsstil:"
 
@@ -5760,16 +5729,15 @@ msgstr "32-bit float WAV Format (höhere Qualität)"
 
 #: ../src/gui/configuration/AudioConfigurationPage.cpp:110
 msgid "External audio editor"
-msgstr "Erterner Audioeditor"
+msgstr "Externer Audioeditor"
 
 #: ../src/gui/configuration/AudioConfigurationPage.cpp:138
 msgid "Create JACK outputs"
 msgstr ""
 
 #: ../src/gui/configuration/AudioConfigurationPage.cpp:143
-#, fuzzy
 msgid "for individual audio instruments"
-msgstr "je Audio Instrument"
+msgstr "für die jeweiligen Audio-Instrumente"
 
 #: ../src/gui/configuration/AudioConfigurationPage.cpp:150
 #, fuzzy
@@ -5812,13 +5780,12 @@ msgid "JACK command"
 msgstr "JACK-Startanweisung"
 
 #: ../src/gui/configuration/AudioConfigurationPage.cpp:207
-#, fuzzy
 msgid "JACK Startup"
-msgstr "Start"
+msgstr "Jack Startverhalten"
 
 #: ../src/gui/configuration/AudioConfigurationPage.cpp:217
 msgid "External audio editor path"
-msgstr "Erterner Audioeditor"
+msgstr "Externer Audioeditor"
 
 #: ../src/gui/configuration/AudioConfigurationPage.cpp:255
 msgid "External audio editor \"%1\" not found or not executable"
@@ -7058,8 +7025,8 @@ msgid ""
 "<qt>use program changes from an external source to manipulate these controls "
 "(only valid for the currently-active track)</qt>"
 msgstr ""
-"Empfange \"Program Changes\" von einem externen Gerät, um Bänke oder "
-"Programme zu wählen. (SHIFT+P)(Nur gültig für den momentan gewählten Track)"
+"<qt>Empfange \"Program Changes\" von einem externen Gerät, um Bänke oder "
+"Programme zu wählen. (Nur gültig für den momentan gewählten Track) [Shift+P]</qt>"
 
 #: ../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp:101
 msgid "Receive external program changes"
