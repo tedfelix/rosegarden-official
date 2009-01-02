@@ -104,7 +104,7 @@ AudioPluginOSCGUI::getGUIFilePath(QString identifier)
         throw Exception("No GUI subdir available");
     }
 
-    const QFileInfoList list = dir.entryInfoList();
+    QFileInfoList list = dir.entryInfoList();
 
     // in order of preference:
     const char *suffixes[] = { "_rg", "_kde", "_qt", "_gtk2", "_gtk", "_x11", "_gui"
@@ -115,15 +115,11 @@ AudioPluginOSCGUI::getGUIFilePath(QString identifier)
 
         for (int fuzzy = 0; fuzzy <= 1; ++fuzzy) {
 
-            QFileInfoListIterator i(*list);
-            QFileInfo *info;
+            QFileInfoList::iterator info;
 
-            while ((info = i.current()) != 0) {
-
+            for (info = list.begin(); info != list.end(); ++info) { //### JAS Check for errors
                 RG_DEBUG << "Looking at " << info->fileName() << " in path "
                 << info->filePath() << " for suffix " << (k == nsuffixes ? "(none)" : suffixes[k]) << ", fuzzy " << fuzzy << endl;
-
-                ++i;
 
                 if (!(info->isFile() || info->isSymLink())
                         || !info->isExecutable()) {
