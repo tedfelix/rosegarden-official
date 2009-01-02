@@ -31,7 +31,6 @@
 #include "document/RosegardenGUIDoc.h"
 #include "document/ConfigGroups.h"
 #include "misc/Strings.h"
-#include "gui/general/EditViewBase.h"
 
 
 #include <QAction>

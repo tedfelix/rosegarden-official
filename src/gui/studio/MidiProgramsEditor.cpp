@@ -33,7 +33,6 @@
 #include "base/MidiProgram.h"
 #include "gui/widgets/RosegardenPopupMenu.h"
 #include "gui/general/IconLoader.h"
-#include "gui/general/EditViewBase.h"
 #include <algorithm>
 
 #include <QCheckBox>

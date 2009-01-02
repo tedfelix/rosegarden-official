@@ -39,7 +39,6 @@
 #include "gui/widgets/VUMeter.h"
 #include "gui/general/IconLoader.h"
 #include "gui/kdeext/KTmpStatusMsg.h"
-#include "gui/general/EditViewBase.h"
 #include "MidiMixerVUMeter.h"
 #include "MixerWindow.h"
 #include "sound/MappedEvent.h"

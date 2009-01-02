@@ -38,7 +38,6 @@
 #include "gui/dialogs/ExportDeviceDialog.h"
 #include "gui/dialogs/ImportDeviceDialog.h"
 #include "gui/general/IconLoader.h"
-#include "gui/general/EditViewBase.h"
 #include "gui/kdeext/KTmpStatusMsg.h"
 
 #include <QApplication>
