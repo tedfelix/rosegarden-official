@@ -360,7 +360,7 @@ BankEditorDialog::setupActions()
 	createAction( "edit_undo" );
 	createAction( "edit_redo" );
 	
-    rgTempQtIV->createGUI("bankeditor.rc", 0);
+        createGUI("bankeditor.rc"); //@@@ JAS orig. 0
 }
 
 void
