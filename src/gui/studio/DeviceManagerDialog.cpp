@@ -274,8 +274,7 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
 	createAction( "edit_undo" );
 	createAction( "edit_redo" );
 	
-	
-	rgTempQtIV->createGUI("devicemanager.rc",0);
+        createGUI("devicemanager.rc"); //@@@JAS orig. 0
 
 //     m_document->getCommandHistory()->attachView(actionCollection());	//&&&
 //     connect(m_document->getCommandHistory(), SIGNAL(commandExecuted()),//&&&
