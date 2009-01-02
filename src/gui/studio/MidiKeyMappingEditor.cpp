@@ -178,13 +178,13 @@ MidiKeyMappingEditor::slotEntryButtonPressed()
 
 void MidiKeyMappingEditor::blockAllSignals(bool block)
 {
-    const QObjectList allChildren = queryList("QLineEdit", "[0-9]+");
-    QObjectListIterator it(*allChildren);
+    QObjectList allChildren = queryList("QLineEdit", "[0-9]+");
+    QObjectList::iterator it;
     QObject *obj;
 
-    while ( (obj = it.current()) != 0 ) {
+    for (it = allChildren.begin(); it != allChildren.end(); ++it) { //### JAS Check for errors
+        obj = *it;
         obj->blockSignals(block);
-        ++it;
     }
 }
 
