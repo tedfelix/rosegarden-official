@@ -249,7 +249,7 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
 	connect( this, SIGNAL(close()), this,
                       SLOT(slotClose()) );
 
-	rgTempQtIV->createGUI( "audiomanager.rc", 0 );
+    createGUI( "audiomanager.rc"); //@@@ JAS orig. 0
 
     updateActionState(false);
 }
@@ -755,31 +755,31 @@ AudioManagerDialog::updateActionState(bool haveSelection)
 {
     if (m_doc->getAudioFileManager().begin() ==
             m_doc->getAudioFileManager().end()) {
-		rgTempQtIV->stateChanged("have_audio_files", KXMLGUIClient::StateReverse);
+        leaveActionState("have_audio_files"); //@@@ JAS orig. KXMLGUIClient::StateReverse
     } else {
-		rgTempQtIV->stateChanged("have_audio_files", KXMLGUIClient::StateNoReverse);
+        enterActionState("have_audio_files"); //@@@ JAS orig. KXMLGUIClient::StateNoReverse
     }
 
     if (haveSelection) {
 
-		rgTempQtIV->stateChanged("have_audio_selected", KXMLGUIClient::StateNoReverse);
+        enterActionState("have_audio_selected"); //@@@ JAS orig. KXMLGUIClient::StateNoReverse
 
         if (m_audiblePreview) {
-			rgTempQtIV->stateChanged("have_audible_preview", KXMLGUIClient::StateNoReverse);
+            enterActionState("have_audible_preview"); //@@@ JAS orig. KXMLGUIClient::StateNoReverse
         } else {
-			rgTempQtIV->stateChanged("have_audible_preview", KXMLGUIClient::StateReverse);
+            leaveActionState("have_audible_preview"); //@@@ JAS orig. KXMLGUIClient::StateReverse
         }
 
         if (isSelectedTrackAudio()) {
-			rgTempQtIV->stateChanged("have_audio_insertable", KXMLGUIClient::StateNoReverse);
+            enterActionState("have_audio_insertable"); //@@@ JAS orig. KXMLGUIClient::StateNoReverse
         } else {
-			rgTempQtIV->stateChanged("have_audio_insertable", KXMLGUIClient::StateReverse);
+            leaveActionState("have_audio_insertable"); //@@@ JAS orig. KXMLGUIClient::StateReverse
         }
 
     } else {
-		rgTempQtIV->stateChanged("have_audio_selected", KXMLGUIClient::StateReverse);
-		rgTempQtIV->stateChanged("have_audio_insertable", KXMLGUIClient::StateReverse);
-		rgTempQtIV->stateChanged("have_audible_preview", KXMLGUIClient::StateReverse);
+        leaveActionState("have_audio_selected"); //@@@ JAS orig. KXMLGUIClient::StateReverse
+        leaveActionState("have_audio_insertable"); //@@@ JAS orig. KXMLGUIClient::StateReverse
+        leaveActionState("have_audible_preview"); //@@@ JAS orig. KXMLGUIClient::StateReverse
     }
 }
 
