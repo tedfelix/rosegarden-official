@@ -190,7 +190,7 @@ SynthPluginManagerDialog::SynthPluginManagerDialog(QWidget *parent,
 
         mainLayout->addWidget(btnBox);
 
-        rgTempQtIV->createGUI("synthpluginmanager.rc");
+        createGUI("synthpluginmanager.rc");
 
 //         setAutoSaveSettings(SynthPluginManagerConfigGroup, true);	//&&&
     }
