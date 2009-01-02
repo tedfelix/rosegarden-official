@@ -317,18 +317,15 @@ void EditView::setBottomStandardRuler(StandardRuler* w)
 void EditView::setRewFFwdToAutoRepeat()
 {
     QWidget* transportToolbar = factory()->container("Transport Toolbar", this);
-	QObjectList obl;
-	QObjectList *l = &obl;
 	
     if (transportToolbar) {
-        obl = transportToolbar->queryList();
-		l = &obl;
-        QObjectListIterator it(*l); // iterate over the buttons
+        QObjectList obl = transportToolbar->queryList();
+        QObjectList::iterator it; // iterate over the buttons
         QObject *obj;
 
-        while ( (obj = it.current()) != 0 ) {
+        for (it = obl.begin(); it != obl.end(); ++it) { //### JAS Check for errors
+            obj = *it;
             // for each found object...
-            ++it;
             //             RG_DEBUG << "EditView::setRewFFwdToAutoRepeat() : obj name : " << obj->objectName() << endl;
             QString objName = obj->objectName();
 
@@ -344,7 +341,6 @@ void EditView::setRewFFwdToAutoRepeat()
 
 
         }
-        delete l;
 
     } else {
         RG_DEBUG << "transportToolbar == 0\n";
