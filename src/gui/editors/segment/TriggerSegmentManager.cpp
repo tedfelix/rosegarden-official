@@ -508,7 +508,7 @@ TriggerSegmentManager::setupActions()
     if (timeMode == 2)
 		qa_time_raw->setChecked(true);
 
-    rgTempQtIV->createGUI("triggermanager.rc", 0);
+    createGUI("triggermanager.rc"); //@@@ JAS orig. 0
 
     settings.endGroup();
 }
