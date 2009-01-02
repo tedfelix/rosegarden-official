@@ -141,7 +141,7 @@ MidiMixerWindow::MidiMixerWindow(QWidget *parent,
 			qa_panic->setIcon(icon); 
 			connect( qa_panic, SIGNAL(triggered()), this, SIGNAL(panic())  );
 
-    rgTempQtIV->createGUI("midimixer.rc");
+    createGUI("midimixer.rc");
 
 }
 
