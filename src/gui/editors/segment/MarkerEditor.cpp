@@ -503,7 +503,7 @@ MarkerEditor::setupActions()
     if (timeMode == 2)
 		qa_time_raw->setChecked(true);
 
-    rgTempQtIV->createGUI("markereditor.rc", 0);
+    createGUI("markereditor.rc"); //@@@ JAS orig 0
 
     settings.endGroup();
 }
