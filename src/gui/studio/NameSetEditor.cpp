@@ -20,7 +20,7 @@
 #include "BankEditorDialog.h"
 
 #include <klocale.h>
-#include <kcompletion.h>
+// #include <kcompletion.h>
 // #include <kglobalsettings.h>
 // #include <klineedit.h>
 
@@ -145,7 +145,7 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
                     m_entryButtons.push_back(button);
                 }
 
-				QLineEdit* lineEdit = new QLineEdit(numberText, numBox );
+                QLineEdit* lineEdit = new QLineEdit(numberText, numBox );
                 numBoxLayout->addWidget(lineEdit);
                 numBox->setLayout(numBoxLayout);
                 lineEdit->setMinimumWidth(110);
@@ -155,7 +155,7 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
 // 				completer->setCompletitionMode( QCompleter::InlineCompletion );
 				
 //                 lineEdit->setCompletionObject(&m_completion);
-				lineEdit->setCompleter( &m_completion );
+				lineEdit->setCompleter( m_completion );
 				
                 m_names.push_back(lineEdit);
 

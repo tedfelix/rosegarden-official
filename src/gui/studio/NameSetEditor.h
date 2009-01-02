@@ -19,7 +19,7 @@
 #ifndef _RG_NAMESETEDITOR_H_
 #define _RG_NAMESETEDITOR_H_
 
-#include <kcompletion.h>
+#include <QCompleter>
 #include <QString>
 #include <QGroupBox>
 #include <vector>
@@ -67,7 +67,7 @@ protected:
 
     QGridLayout             *m_mainLayout;
     BankEditorDialog*        m_bankEditor;
-    KCompletion              m_completion;
+    QCompleter              *m_completion;
     QPushButton             *m_initialLabel;
     std::vector<QLabel*>     m_labels;
     std::vector<QLineEdit*>  m_names;
