@@ -531,10 +531,10 @@ MidiProgramsEditor::slotEntryMenuItemSelected(int i)
 
     m_device->setKeyMappingForProgram(*program, newMapping);
 //     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-	IconLoader il;
-	QIcon icon;
-	QString pixmapDir = il.getResourcePath( "" );
-	
+    IconLoader il;
+    QIcon icon;
+    QString pixmapDir = il.getResourcePath( "" );
+    bool haveKeyMappings = (m_device->getKeyMappings().size() > 0);  //@@@ JAS restored from before port/
     QPushButton *btn = getEntryButton(m_currentMenuProgram);
 
     if (newMapping.empty()) {
@@ -627,13 +627,13 @@ MidiProgramsEditor::setBankName(const QString& s)
 
 void MidiProgramsEditor::blockAllSignals(bool block)
 {
-    const QObjectList allChildren = queryList("QLineEdit", "[0-9]+");
-    QObjectListIterator it(*allChildren);
+    QObjectList allChildren = queryList("QLineEdit", "[0-9]+");
+    QObjectList::iterator it;
     QObject *obj;
 
-    while ( (obj = it.current()) != 0 ) {
+    for (it = allChildren.begin(); it != allChildren.end(); ++it) { //### JAS Check for errors
+        obj = *it;
         obj->blockSignals(block);
-        ++it;
     }
 
     m_msb->blockSignals(block);
