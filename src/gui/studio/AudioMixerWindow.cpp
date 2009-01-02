@@ -262,7 +262,7 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
             action->setChecked(true);
     }
 
-    rgTempQtIV->createGUI("mixer.rc");
+    createGUI("mixer.rc");
 }
 
 AudioMixerWindow::~AudioMixerWindow()
