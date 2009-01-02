@@ -155,7 +155,7 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
 // 				completer->setCompletitionMode( QCompleter::InlineCompletion );
 				
 //                 lineEdit->setCompletionObject(&m_completion);
-				lineEdit->setCompleter( &m_completion )
+				lineEdit->setCompleter( &m_completion );
 				
                 m_names.push_back(lineEdit);
 
