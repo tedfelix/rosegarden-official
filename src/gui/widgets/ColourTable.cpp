@@ -44,7 +44,7 @@ ColourTable::ColourTable
 	this->setObjectName( "RColourTable" );
 	
     //### JAS Deactivated next line 
-    //### setSorting(FALSE);
+    //&&& setSorting(FALSE);
 
     //@@@ JAS in Qt4 use QTableWidget()::sortItems(), but only options are ascending
     //@@@ JAS or descendings.  There is no "unsorted" option.
