@@ -56,7 +56,7 @@
 namespace Rosegarden
 {
 
-ManageMetronomeDialog::ManageMetronomeDialog(QDialogButtonBox::QWidget *parent,
+ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
         RosegardenGUIDoc *doc) :
         QDialog(parent),
         m_doc(doc)

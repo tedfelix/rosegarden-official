@@ -21,7 +21,6 @@
 
 #include "base/MidiMetronome.h"
 #include <QDialog>
-#include <QDialogButtonBox>
 
 
 class QWidget;
@@ -43,7 +42,7 @@ class ManageMetronomeDialog : public QDialog
     Q_OBJECT
 
 public:
-    ManageMetronomeDialog(QDialogButtonBox::QWidget *parent, RosegardenGUIDoc *doc);
+    ManageMetronomeDialog(QWidget *parent, RosegardenGUIDoc *doc);
 
     void setModified(bool value);
 

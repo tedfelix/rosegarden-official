@@ -34,7 +34,7 @@
 namespace Rosegarden
 {
 
-MakeOrnamentDialog::MakeOrnamentDialog(QDialogButtonBox::QWidget *parent,
+MakeOrnamentDialog::MakeOrnamentDialog(QWidget *parent,
                                        QString defaultName,
                                        int defaultBasePitch) :
         QDialog(parent)

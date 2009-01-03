@@ -20,7 +20,6 @@
 #define _RG_RESCALEDIALOG_H_
 
 #include <QDialog>
-#include <QDialogButtonBox>
 #include "base/Event.h"
 
 
@@ -40,7 +39,7 @@ class RescaleDialog : public QDialog
     Q_OBJECT
 
 public:
-    RescaleDialog(QDialogButtonBox::QWidget *parent,
+    RescaleDialog(QWidget *parent,
                   Composition *composition, // for TimeWidget calculations
                   timeT startTime,
                   timeT originalDuration,

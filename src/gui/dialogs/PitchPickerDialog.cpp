@@ -30,7 +30,7 @@
 namespace Rosegarden
 {
 
-PitchPickerDialog::PitchPickerDialog(QDialogButtonBox::QWidget *parent, int initialPitch, QString text) :
+PitchPickerDialog::PitchPickerDialog(QWidget *parent, int initialPitch, QString text) :
         QDialog(parent)
 {
     setModal(true);

@@ -50,7 +50,7 @@
 namespace Rosegarden
 {
 
-SimpleEventEditDialog::SimpleEventEditDialog(QDialogButtonBox::QWidget *parent,
+SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
         RosegardenGUIDoc *doc,
         const Event &event,
         bool inserting) :

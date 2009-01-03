@@ -45,7 +45,7 @@
 namespace Rosegarden
 {
 
-TempoDialog::TempoDialog(QDialogButtonBox::QWidget *parent, RosegardenGUIDoc *doc,
+TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc,
                          bool timeEditable):
         QDialog(parent),
         m_doc(doc),

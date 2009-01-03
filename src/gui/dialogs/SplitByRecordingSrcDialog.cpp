@@ -38,7 +38,7 @@
 namespace Rosegarden
 {
 
-SplitByRecordingSrcDialog::SplitByRecordingSrcDialog(QDialogButtonBox::QWidget *parent, RosegardenGUIDoc *doc) :
+SplitByRecordingSrcDialog::SplitByRecordingSrcDialog(QWidget *parent, RosegardenGUIDoc *doc) :
         QDialog(parent)
 {
     setModal(true);

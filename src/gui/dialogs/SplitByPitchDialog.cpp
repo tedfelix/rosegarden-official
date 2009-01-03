@@ -36,7 +36,7 @@
 namespace Rosegarden
 {
 
-SplitByPitchDialog::SplitByPitchDialog(QDialogButtonBox::QWidget *parent) :
+SplitByPitchDialog::SplitByPitchDialog(QWidget *parent) :
         QDialog(parent)
 {
     setModal(true);

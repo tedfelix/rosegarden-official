@@ -44,7 +44,7 @@
 namespace Rosegarden
 {
 
-LyricEditDialog::LyricEditDialog(QDialogButtonBox::QWidget *parent,
+LyricEditDialog::LyricEditDialog(QWidget *parent,
                                  Segment *segment) :
     QDialog(parent),
     m_segment(segment),

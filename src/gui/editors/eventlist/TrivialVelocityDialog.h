@@ -19,7 +19,6 @@
 #define _RG_TRIVIALVELOCITYDIALOG_H_
 
 #include <QDialog>
-#include <QDialogButtonBox>
 
 class QSpinBox;
 class QGridLayout;
@@ -29,7 +28,7 @@ namespace Rosegarden {
 class TrivialVelocityDialog : public QDialog
 {
 public:
-    TrivialVelocityDialog(QDialogButtonBox::QWidget *parent, QString label, int deft);
+    TrivialVelocityDialog(QWidget *parent, QString label, int deft);
 
     int getVelocity();
 

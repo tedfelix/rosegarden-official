@@ -21,7 +21,6 @@
 
 #include <string>
 #include <QDialog>
-#include <QDialogButtonBox>
 #include <deque>
 
 
@@ -39,7 +38,7 @@ class IdentifyTextCodecDialog : public QDialog
     Q_OBJECT
     
 public:
-    IdentifyTextCodecDialog(QDialogButtonBox::QWidget *parent, std::string text);
+    IdentifyTextCodecDialog(QWidget *parent, std::string text);
 
     std::string getCodec() const { return m_codec; }
 

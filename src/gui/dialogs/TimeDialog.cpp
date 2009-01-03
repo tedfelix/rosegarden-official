@@ -31,7 +31,7 @@
 namespace Rosegarden
 {
 
-TimeDialog::TimeDialog(QDialogButtonBox::QWidget *parent, QString title,
+TimeDialog::TimeDialog(QWidget *parent, QString title,
                        Composition *composition,
                        timeT defaultTime,
                        bool constrainToCompositionDuration) :

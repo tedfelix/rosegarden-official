@@ -35,7 +35,7 @@
 namespace Rosegarden
 {
 
-InterpretDialog::InterpretDialog(QDialogButtonBox::QWidget *parent) :
+InterpretDialog::InterpretDialog(QWidget *parent) :
         QDialog(parent)
 {
     //setHelp("nv-interpret");

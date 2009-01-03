@@ -21,7 +21,6 @@
 
 #include "gui/widgets/PitchChooser.h"
 #include <QDialog>
-#include <QDialogButtonBox>
 
 
 class QWidget;

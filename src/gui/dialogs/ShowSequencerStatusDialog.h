@@ -20,7 +20,6 @@
 #define _RG_SHOWSEQUENCERSTATUSDIALOG_H_
 
 #include <QDialog>
-#include <QDialogButtonBox>
 
 
 class QWidget;
@@ -35,7 +34,7 @@ class ShowSequencerStatusDialog : public QDialog
 {
     Q_OBJECT
 public:
-    ShowSequencerStatusDialog(QDialogButtonBox::QWidget *parent);
+    ShowSequencerStatusDialog(QWidget *parent);
 };
 
 

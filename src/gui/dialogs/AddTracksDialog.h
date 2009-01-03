@@ -19,7 +19,6 @@
 #define _RG_ADDTRACKSDIALOG_H_
 
 #include <QDialog>
-#include <QDialogButtonBox>
 
 class QWidget;
 class QSpinBox;
@@ -33,7 +32,7 @@ class AddTracksDialog : public QDialog
     Q_OBJECT
 
 public:
-    AddTracksDialog(QDialogButtonBox::QWidget *parent, int currentTrack = -1);
+    AddTracksDialog(QWidget *parent, int currentTrack = -1);
     
     int getTracks();
     int getInsertPosition();

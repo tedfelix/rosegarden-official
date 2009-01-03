@@ -20,7 +20,6 @@
 #define _RG_TIMEDIALOG_H_
 
 #include <QDialog>
-#include <QDialogButtonBox>
 #include <QString>
 #include "base/Event.h"
 
@@ -40,7 +39,7 @@ class TimeDialog : public QDialog
     Q_OBJECT
 public:
     /// for absolute times
-    TimeDialog(QDialogButtonBox::QWidget *parent, QString title, Composition *composition,
+    TimeDialog(QWidget *parent, QString title, Composition *composition,
                timeT defaultTime, bool constrainToCompositionDuration);
 
     /// for durations

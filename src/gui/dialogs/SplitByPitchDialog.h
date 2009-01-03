@@ -20,7 +20,6 @@
 #define _RG_SPLITBYPITCHDIALOG_H_
 
 #include <QDialog>
-#include <QDialogButtonBox>
 
 
 class QWidget;
@@ -38,7 +37,7 @@ class SplitByPitchDialog : public QDialog
 {
     Q_OBJECT
 public:
-    SplitByPitchDialog(QDialogButtonBox::QWidget *parent);
+    SplitByPitchDialog(QWidget *parent);
 
     int getPitch();
 

@@ -20,7 +20,6 @@
 #define _RG_COMPOSITIONLENGTHDIALOG_H_
 
 #include <QDialog>
-#include <QDialogButtonBox>
 #include "base/Event.h"
 
 
@@ -38,7 +37,7 @@ class CompositionLengthDialog : public QDialog
 {
     Q_OBJECT
 public:
-    CompositionLengthDialog(QDialogButtonBox::QWidget *parent,
+    CompositionLengthDialog(QWidget *parent,
                             Composition *composition);
 
     timeT getStartMarker();

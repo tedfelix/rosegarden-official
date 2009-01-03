@@ -20,7 +20,6 @@
 #define _RG_FILEMERGEDIALOG_H_
 
 #include <QDialog>
-#include <QDialogButtonBox>
 #include <QString>
 
 
@@ -39,7 +38,7 @@ class FileMergeDialog : public QDialog
     Q_OBJECT
 
 public:
-    FileMergeDialog(QDialogButtonBox::QWidget *parent, QString fileName, bool timingsDiffer);
+    FileMergeDialog(QWidget *parent, QString fileName, bool timingsDiffer);
 
     int getMergeOptions();
     

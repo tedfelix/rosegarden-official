@@ -35,7 +35,7 @@
 namespace Rosegarden
 {
 
-IdentifyTextCodecDialog::IdentifyTextCodecDialog(QDialogButtonBox::QWidget *parent,
+IdentifyTextCodecDialog::IdentifyTextCodecDialog(QWidget *parent,
         std::string text) :
         QDialog(parent),
         m_text(text)

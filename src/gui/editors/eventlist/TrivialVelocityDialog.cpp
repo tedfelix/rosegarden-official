@@ -21,6 +21,7 @@
 #include <QLabel>
 #include <QWidget>
 #include <QHBoxLayout>
+#include <QDialogButtonBox>
 
 namespace Rosegarden {
  

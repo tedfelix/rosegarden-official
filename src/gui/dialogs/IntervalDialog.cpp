@@ -41,7 +41,7 @@
 namespace Rosegarden
 {
 
-IntervalDialog::IntervalDialog(QDialogButtonBox::QWidget *parent, bool askChangeKey, bool askTransposeSegmentBack) :
+IntervalDialog::IntervalDialog(QWidget *parent, bool askChangeKey, bool askTransposeSegmentBack) :
         QDialog(parent)
 {
     setModal(true);

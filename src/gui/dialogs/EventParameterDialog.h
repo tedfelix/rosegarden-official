@@ -21,7 +21,6 @@
 
 #include "base/PropertyName.h"
 #include <QDialog>
-#include <QDialogButtonBox>
 #include "commands/edit/SelectionPropertyCommand.h"
 
 class QWidget;
@@ -40,7 +39,7 @@ class EventParameterDialog : public QDialog
     Q_OBJECT
 
 public:
-    EventParameterDialog(QDialogButtonBox::QWidget *parent,
+    EventParameterDialog(QWidget *parent,
                          const QString &name,                      // name
                          const PropertyName &property, // property
                          int startValue);                          // start

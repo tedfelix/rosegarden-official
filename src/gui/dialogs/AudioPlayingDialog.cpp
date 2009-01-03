@@ -30,7 +30,7 @@
 namespace Rosegarden
 {
 
-AudioPlayingDialog::AudioPlayingDialog(QDialogButtonBox::QWidget *parent,
+AudioPlayingDialog::AudioPlayingDialog(QWidget *parent,
                                        const QString &name):
         QDialog(parent)
 {

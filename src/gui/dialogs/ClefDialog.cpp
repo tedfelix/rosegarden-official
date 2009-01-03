@@ -39,7 +39,7 @@
 namespace Rosegarden
 {
 
-ClefDialog::ClefDialog(QDialogButtonBox::QWidget *parent,
+ClefDialog::ClefDialog(QWidget *parent,
                        NotePixmapFactory *npf,
                        Clef defaultClef,
                        bool showConversionOptions) :

@@ -45,7 +45,7 @@
 namespace Rosegarden
 {
 
-PresetHandlerDialog::PresetHandlerDialog(QDialogButtonBox::QWidget *parent,
+PresetHandlerDialog::PresetHandlerDialog(QWidget *parent,
                                          bool fromNotation)
         : QDialog(parent),
         m_fromNotation(fromNotation)

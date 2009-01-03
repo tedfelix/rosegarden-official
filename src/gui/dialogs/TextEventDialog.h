@@ -22,7 +22,6 @@
 #include "base/NotationTypes.h"
 #include <string>
 #include <QDialog>
-#include <QDialogButtonBox>
 #include <QString>
 #include <vector>
 
@@ -45,7 +44,7 @@ class TextEventDialog : public QDialog
     Q_OBJECT
 
 public:
-    TextEventDialog(QDialogButtonBox::QWidget *parent,
+    TextEventDialog(QWidget *parent,
                     NotePixmapFactory *npf,
                     Text defaultText,
                     int maxLength = -1); // for Qt default

@@ -42,7 +42,7 @@
 namespace Rosegarden
 {
 
-KeySignatureDialog::KeySignatureDialog(QDialogButtonBox::QWidget *parent,
+KeySignatureDialog::KeySignatureDialog(QWidget *parent,
                                        NotePixmapFactory *npf,
                                        Clef clef,
                                        Rosegarden::Key defaultKey,

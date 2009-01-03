@@ -21,7 +21,6 @@
 
 #include "base/NotationTypes.h"
 #include <QDialog>
-#include <QDialogButtonBox>
 
 
 class QWidget;
@@ -47,7 +46,7 @@ public:
         Transpose,
     };
 
-    ClefDialog(QDialogButtonBox::QWidget *parent,
+    ClefDialog(QWidget *parent,
                NotePixmapFactory *npf,
                Clef defaultClef,
                bool showConversionOptions = true);

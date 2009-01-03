@@ -20,7 +20,6 @@
 #define _RG_TEMPODIALOG_H_
 
 #include <QDialog>
-#include <QDialogButtonBox>
 #include "base/Event.h"
 #include "base/Composition.h"
 #include <QPushButton>
@@ -54,7 +53,7 @@ public:
         GlobalTempoWithDefault
     };
 
-    TempoDialog(QDialogButtonBox::QWidget *parent, RosegardenGUIDoc *doc,
+    TempoDialog(QWidget *parent, RosegardenGUIDoc *doc,
                 bool timeEditable = false);
     ~TempoDialog();
 

@@ -33,7 +33,7 @@ namespace Rosegarden
 {
 
 CompositionLengthDialog::CompositionLengthDialog(
-    QDialogButtonBox::QWidget *parent,
+    QWidget *parent,
     Composition *composition):
         QDialog(parent),
         m_composition(composition)

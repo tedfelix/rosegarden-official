@@ -21,7 +21,7 @@
 #include <klocale.h>
 #include "gui/configuration/ConfigurationPage.h"
 #include <QDialog>
-#include <QDialogButtonBox>
+//#include <QDialogButtonBox>
 #include <QString>
 #include <QWidget>
 #include <QTabWidget>
@@ -34,7 +34,7 @@
 namespace Rosegarden
 {
 /*
-ConfigureDialogBase::ConfigureDialogBase(QDialogButtonBox::QWidget *parent,
+ConfigureDialogBase::ConfigureDialogBase(QWidget *parent,
         QString label,
         const char *name):
         KDialogBase(IconList, !label.isEmpty() ? label : i18n("Configure"), Help | Apply | Ok | Cancel,

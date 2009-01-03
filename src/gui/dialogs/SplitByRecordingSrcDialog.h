@@ -20,7 +20,6 @@
 #define _RG_SPLITBYRECORDINGSRCDIALOG_H_
 
 #include <QDialog>
-#include <QDialogButtonBox>
 #include <vector>
 
 class QWidget;
@@ -37,7 +36,7 @@ class SplitByRecordingSrcDialog : public QDialog
 {
     Q_OBJECT
 public:
-    SplitByRecordingSrcDialog(QDialogButtonBox::QWidget *parent, RosegardenGUIDoc *doc);
+    SplitByRecordingSrcDialog(QWidget *parent, RosegardenGUIDoc *doc);
     
     int getChannel();
     int getDevice();

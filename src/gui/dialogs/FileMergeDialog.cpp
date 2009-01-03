@@ -34,7 +34,7 @@
 namespace Rosegarden
 {
 
-FileMergeDialog::FileMergeDialog(QDialogButtonBox::QWidget *parent,
+FileMergeDialog::FileMergeDialog(QWidget *parent,
                                  QString /*fileName*/,
                                  bool timingsDiffer) :
         QDialog(parent)

@@ -21,7 +21,6 @@
 
 #include "commands/edit/PasteEventsCommand.h"
 #include <QDialog>
-#include <QDialogButtonBox>
 #include <vector>
 
 
@@ -40,7 +39,7 @@ class PasteNotationDialog : public QDialog
     Q_OBJECT
 
 public:
-    PasteNotationDialog(QDialogButtonBox::QWidget *parent,
+    PasteNotationDialog(QWidget *parent,
                         PasteEventsCommand::PasteType defaultType);
 
     PasteEventsCommand::PasteType getPasteType() const;

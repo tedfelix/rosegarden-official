@@ -23,7 +23,6 @@
 #include <Q3CanvasRectangle>
 #include <Q3CanvasView>
 #include <QDialog>
-#include <QDialogButtonBox>
 #include <vector>
 #include <QSpinBox>
 
@@ -45,7 +44,7 @@ class AudioSplitDialog : public QDialog
 {
     Q_OBJECT
 public:
-    AudioSplitDialog(QDialogButtonBox::QWidget *parent,
+    AudioSplitDialog(QWidget *parent,
                      Segment *segment,
                      RosegardenGUIDoc *doc);
 

@@ -50,7 +50,7 @@
 namespace Rosegarden
 {
 
-AudioSplitDialog::AudioSplitDialog(QDialogButtonBox::QWidget *parent,
+AudioSplitDialog::AudioSplitDialog(QWidget *parent,
                                    Segment *segment,
                                    RosegardenGUIDoc *doc):
         QDialog(parent),

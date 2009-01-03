@@ -33,7 +33,7 @@
 namespace Rosegarden
 {
 
-PasteNotationDialog::PasteNotationDialog(QDialogButtonBox::QWidget *parent,
+PasteNotationDialog::PasteNotationDialog(QWidget *parent,
         PasteEventsCommand::PasteType defaultType) :
         QDialog(parent),
         m_defaultType(defaultType)

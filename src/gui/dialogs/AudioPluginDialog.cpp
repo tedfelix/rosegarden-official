@@ -55,7 +55,7 @@
 namespace Rosegarden
 {
 
-AudioPluginDialog::AudioPluginDialog(QDialogButtonBox::QWidget *parent,
+AudioPluginDialog::AudioPluginDialog(QWidget *parent,
                                      AudioPluginManager *aPM,
 #ifdef HAVE_LIBLO
                                      AudioPluginOSCGUIManager *aGM,

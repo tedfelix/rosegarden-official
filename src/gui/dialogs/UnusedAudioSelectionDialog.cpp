@@ -36,7 +36,7 @@
 namespace Rosegarden
 {
 
-UnusedAudioSelectionDialog::UnusedAudioSelectionDialog( QDialogButtonBox::QWidget *parent,
+UnusedAudioSelectionDialog::UnusedAudioSelectionDialog(QWidget *parent,
         QString introductoryText,
         std::vector<QString> fileNames,
         bool offerCancel 

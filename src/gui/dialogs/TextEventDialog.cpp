@@ -46,7 +46,7 @@
 namespace Rosegarden
 {
 
-TextEventDialog::TextEventDialog(QDialogButtonBox::QWidget *parent,
+TextEventDialog::TextEventDialog(QWidget *parent,
                                  NotePixmapFactory *npf,
                                  Text defaultText,
                                  int maxLength) :

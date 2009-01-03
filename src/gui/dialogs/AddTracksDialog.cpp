@@ -35,7 +35,7 @@
 namespace Rosegarden
 {
 
-AddTracksDialog::AddTracksDialog(QDialogButtonBox::QWidget *parent, int currentTrack) :
+AddTracksDialog::AddTracksDialog(QWidget *parent, int currentTrack) :
     QDialog(parent),
     m_currentTrack(currentTrack)
 {

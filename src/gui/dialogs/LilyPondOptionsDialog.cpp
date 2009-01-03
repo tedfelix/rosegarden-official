@@ -50,7 +50,7 @@
 namespace Rosegarden
 {
 
-LilyPondOptionsDialog::LilyPondOptionsDialog(QDialogButtonBox::QWidget *parent,
+LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
 	RosegardenGUIDoc *doc,
         QString windowCaption,
         QString heading) :

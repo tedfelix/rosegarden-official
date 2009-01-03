@@ -35,7 +35,7 @@
 namespace Rosegarden
 {
 
-FileLocateDialog::FileLocateDialog(QDialogButtonBox::QWidget *parent,
+FileLocateDialog::FileLocateDialog(QWidget *parent,
                                    const QString &file,
                                    const QString & /*path*/):
         QDialog(parent),

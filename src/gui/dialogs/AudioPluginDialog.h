@@ -22,7 +22,6 @@
 #include "base/Instrument.h"
 #include "base/MidiProgram.h"
 #include <QDialog>
-#include <QDialogButtonBox>
 #include <QString>
 #include <QStringList>
 #include <vector>
@@ -54,7 +53,7 @@ class AudioPluginDialog : public QDialog
     Q_OBJECT
 
 public:
-    AudioPluginDialog(QDialogButtonBox::QWidget *parent,
+    AudioPluginDialog(QWidget *parent,
                       AudioPluginManager *aPM,
 #ifdef HAVE_LIBLO
                       AudioPluginOSCGUIManager *aGM,

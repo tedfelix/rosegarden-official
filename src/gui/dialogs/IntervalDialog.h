@@ -20,7 +20,6 @@
 #define _RG_INTERVALDIALOG_H_
 
 #include <QDialog>
-#include <QDialogButtonBox>
 #include <vector>
 #include "gui/widgets/DiatonicPitchChooser.h"
 
@@ -41,7 +40,7 @@ class IntervalDialog : public QDialog
 {
     Q_OBJECT
 public:
-    IntervalDialog(QDialogButtonBox::QWidget *parent, bool askChangeKey = false, bool askTransposeSegmentBack = false);
+    IntervalDialog(QWidget *parent, bool askChangeKey = false, bool askTransposeSegmentBack = false);
     
     // Distance in semitones
     int getChromaticDistance();

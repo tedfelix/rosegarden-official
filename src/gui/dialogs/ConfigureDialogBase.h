@@ -21,7 +21,6 @@
 
 #include <QMessageBox>
 #include <QDialog>
-#include <QDialogButtonBox>
 #include <QString>
 #include <vector>
 
@@ -39,7 +38,7 @@ class ConfigureDialogBase : public QDialog
 {
     Q_OBJECT
 public:
-//	ConfigureDialogBase(QDialogButtonBox::QWidget *parent=0,
+//	ConfigureDialogBase(QWidget *parent=0,
 //						QString label = 0,
 //	  const char *name=0);
 	ConfigureDialogBase( QWidget *parent=0, QString label = 0, const char *name=0 );

@@ -20,7 +20,6 @@
 #define _RG_INTERPRETDIALOG_H_
 
 #include <QDialog>
-#include <QDialogButtonBox>
 
 
 class QWidget;
@@ -36,7 +35,7 @@ class InterpretDialog : public QDialog
 {
     Q_OBJECT
 public:
-    InterpretDialog(QDialogButtonBox::QWidget *parent);
+    InterpretDialog(QWidget *parent);
 
     // an OR from InterpretCommand's constants
     int getInterpretations();

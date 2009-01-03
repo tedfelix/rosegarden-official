@@ -34,7 +34,7 @@
 namespace Rosegarden
 {
 
-ShowSequencerStatusDialog::ShowSequencerStatusDialog(QDialogButtonBox::QWidget *parent) :
+ShowSequencerStatusDialog::ShowSequencerStatusDialog(QWidget *parent) :
         QDialog(parent)
 {
     setModal(true);

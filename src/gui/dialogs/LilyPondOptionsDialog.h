@@ -19,7 +19,6 @@
 #define _RG_LILYPONDOPTIONSDIALOG_H_
 
 #include <QDialog>
-#include <QDialogButtonBox>
 #include <QString>
 
 #include "gui/configuration/HeadersConfigurationPage.h"
@@ -41,7 +40,7 @@ class LilyPondOptionsDialog : public QDialog
     Q_OBJECT
 
 public:
-    LilyPondOptionsDialog(QDialogButtonBox::QWidget *parent,
+    LilyPondOptionsDialog(QWidget *parent,
 			  RosegardenGUIDoc *doc,
                           QString windowCaption = "",
                           QString heading = "");

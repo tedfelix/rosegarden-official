@@ -40,7 +40,7 @@
 namespace Rosegarden
 {
 
-MarkerModifyDialog::MarkerModifyDialog(QDialogButtonBox::QWidget *parent,
+MarkerModifyDialog::MarkerModifyDialog(QWidget *parent,
                                        Composition *composition,
                                        int time,
                                        const QString &name,

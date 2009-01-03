@@ -20,7 +20,6 @@
 #define _RG_QUANTIZEDIALOG_H_
 
 #include <QDialog>
-#include <QDialogButtonBox>
 
 
 class QWidget;
@@ -38,7 +37,7 @@ class QuantizeDialog : public QDialog
     Q_OBJECT
 
 public:
-    QuantizeDialog(QDialogButtonBox::QWidget *parent, bool inNotation = false);
+    QuantizeDialog(QWidget *parent, bool inNotation = false);
     
     /// Returned quantizer object is on heap -- caller must delete
     Quantizer *getQuantizer() const;

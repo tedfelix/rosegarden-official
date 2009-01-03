@@ -37,7 +37,7 @@
 namespace Rosegarden
 {
 
-RescaleDialog::RescaleDialog(QDialogButtonBox::QWidget *parent,
+RescaleDialog::RescaleDialog(QWidget *parent,
                              Composition *composition,
                              timeT startTime,
                              timeT originalDuration,

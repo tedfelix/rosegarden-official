@@ -36,7 +36,7 @@ namespace Rosegarden
 {
 
 EventParameterDialog::EventParameterDialog(
-    QDialogButtonBox::QWidget *parent,
+    QWidget *parent,
     const QString &name,
     const PropertyName &property,
     int startValue):

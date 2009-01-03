@@ -22,7 +22,6 @@
 #include "base/Event.h"
 #include <string>
 #include <QDialog>
-#include <QDialogButtonBox>
 
 
 class QWidget;
@@ -46,7 +45,7 @@ class SimpleEventEditDialog : public QDialog
 {
     Q_OBJECT
 public:
-    SimpleEventEditDialog(QDialogButtonBox::QWidget *parent,
+    SimpleEventEditDialog(QWidget *parent,
                           RosegardenGUIDoc *doc,
                           const Event &event,
                           bool inserting = false); // inserting or editing

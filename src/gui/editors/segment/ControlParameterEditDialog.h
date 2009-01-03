@@ -21,7 +21,6 @@
 
 #include "base/ControlParameter.h"
 #include <QDialog>
-#include <QDialogButtonBox>
 
 
 class QWidget;
@@ -42,7 +41,7 @@ class ControlParameterEditDialog : public QDialog
 {
     Q_OBJECT
 public:
-    ControlParameterEditDialog(QDialogButtonBox::QWidget *parent,
+    ControlParameterEditDialog(QWidget *parent,
                                ControlParameter *control,
                                RosegardenGUIDoc *doc);
 

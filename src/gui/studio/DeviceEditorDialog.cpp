@@ -56,7 +56,7 @@
 namespace Rosegarden
 {
 
-DeviceEditorDialog::DeviceEditorDialog(QDialogButtonBox::QWidget *parent,
+DeviceEditorDialog::DeviceEditorDialog(QWidget *parent,
                                        RosegardenGUIDoc *document) :
         QDialog(parent),
         m_document(document),

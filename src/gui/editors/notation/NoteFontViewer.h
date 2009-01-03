@@ -20,7 +20,6 @@
 #define _RG_NOTEFONTVIEWER_H_
 
 #include <QDialog>
-#include <QDialogButtonBox>
 #include <QString>
 #include <QStringList>
 
@@ -40,7 +39,7 @@ class NoteFontViewer : public QDialog
     Q_OBJECT
 
 public:
-    NoteFontViewer(QDialogButtonBox::QWidget *parent, QString noteFontName,
+    NoteFontViewer(QWidget *parent, QString noteFontName,
                    QStringList systemFontNames, int pixelSize);
 
 protected slots:

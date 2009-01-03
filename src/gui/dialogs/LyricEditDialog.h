@@ -20,7 +20,6 @@
 #define _RG_LYRICEDITDIALOG_H_
 
 #include <QDialog>
-#include <QDialogButtonBox>
 #include <QString>
 #include <vector>
 
@@ -42,7 +41,7 @@ class LyricEditDialog : public QDialog
     Q_OBJECT
 
 public:
-    LyricEditDialog(QDialogButtonBox::QWidget *parent, Segment *segment);
+    LyricEditDialog(QWidget *parent, Segment *segment);
 
     int getVerseCount() const;
     QString getLyricData(int verse) const;

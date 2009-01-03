@@ -22,7 +22,6 @@
 #include "base/NotationTypes.h"
 #include <string>
 #include <QDialog>
-#include <QDialogButtonBox>
 #include <QString>
 #include <QCheckBox>
 
@@ -51,7 +50,7 @@ public:
         Transpose
     };
 
-    KeySignatureDialog(QDialogButtonBox::QWidget *parent,
+    KeySignatureDialog(QWidget *parent,
                        NotePixmapFactory *npf,
                        Clef clef,
                        Rosegarden::Key defaultKey =
