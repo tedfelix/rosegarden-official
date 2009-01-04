@@ -37,7 +37,7 @@ namespace Rosegarden
 {
 
 SegmentTool::SegmentTool(CompositionView* canvas, RosegardenGUIDoc *doc)
-        : BaseTool("segment_tool_menu", dynamic_cast<QMainWindow*>(doc->parent())->factory(), canvas),
+        : BaseTool("segment_tool_menu", canvas),
         m_canvas(canvas),
         m_doc(doc),
         m_changeMade(false)
@@ -84,6 +84,10 @@ SegmentTool::createMenu()
         dynamic_cast<RosegardenGUIApp*>(m_doc->parent());
 
     if (app) {
+        
+        //!!!
+        //### sort this out
+
 		/*
         m_menu = static_cast<QMenu*>
                  //(app->factory()->container("segment_tool_menu", app));

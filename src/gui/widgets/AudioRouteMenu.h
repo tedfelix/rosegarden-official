@@ -25,6 +25,7 @@
 
 class QWidget;
 class QComboBox;
+class QAction;
 
 
 namespace Rosegarden
@@ -59,6 +60,7 @@ protected slots:
     void slotWheel(bool up);
     void slotShowMenu();
     void slotEntrySelected(int);
+    void slotEntrySelected(QAction *);
 
 signals:
     // The menu writes changes directly to the instrument, but it

@@ -32,6 +32,7 @@
 #include <QPoint>
 #include <QString>
 #include <QWidget>
+#include <QAction>
 
 
 namespace Rosegarden
@@ -130,11 +131,11 @@ AudioRouteMenu::slotShowMenu()
 
     for (int i = 0; i < getNumEntries(); ++i) {
 
-// 		menu->addItem(getEntryText(i), this, SLOT(slotEntrySelected(int)), 0, i);
-		menu->addAction( createAction( getEntryText(i), SLOT(slotEntrySelected(int)))  );	//@@@
-		
-		menu->setItemParameter(i, i);
+        QAction *a = menu->addAction(getEntryText(i));
+        a->setObjectName(QString("%1").arg(i));
     }
+
+    connect(menu, SIGNAL(triggered(QAction *)), this, SLOT(slotEntrySelected(QAction *)));
 
     int itemHeight = menu->itemHeight(0) + 2;
     QPoint pos = QCursor::pos();
@@ -256,6 +257,12 @@ AudioRouteMenu::getEntryText(int entry)
     }
 
     return QString();
+}
+
+void
+AudioRouteMenu::slotEntrySelected(QAction *a)
+{
+    slotEntrySelected(a->objectName().toInt());
 }
 
 void

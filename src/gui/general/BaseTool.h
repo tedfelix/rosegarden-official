@@ -24,13 +24,10 @@
 
 
 class QMenu;
-class KXMLGUIFactory;
 
 
 namespace Rosegarden
 {
-
-
 
 /**
  * BaseTool : base tool class, just handles RMB menu creation and
@@ -80,7 +77,7 @@ protected:
      *
      * \a menuName : the name of the menu defined in the XML rc file
      */
-    BaseTool(const QString& menuName, KXMLGUIFactory*, QObject* parent);
+    BaseTool(const QString& menuName, QObject* parent);
 
     virtual void createMenu() = 0;
     virtual bool hasMenu() { return false; }
@@ -91,9 +88,7 @@ protected:
     //--------------- Data members ---------------------------------
 
     QString 	m_menuName;
-    QMenu*		m_menu;
-
-    KXMLGUIFactory* m_parentFactory;
+    QMenu*      m_menu;
 
     QString m_contextHelp;
 };
