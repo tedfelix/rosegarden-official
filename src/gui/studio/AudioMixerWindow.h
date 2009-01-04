@@ -22,6 +22,7 @@
 #include "base/MidiProgram.h"
 #include <map>
 #include "MixerWindow.h"
+#include "gui/general/ActionFileClient.h"
 #include <QPixmap>
 #include <vector>
 
@@ -44,7 +45,7 @@ class AudioVUMeter;
 class AudioRouteMenu;
 
 
-class AudioMixerWindow : public MixerWindow
+class AudioMixerWindow : public MixerWindow, public ActionFileClient
 {
     Q_OBJECT
 
