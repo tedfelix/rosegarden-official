@@ -325,8 +325,8 @@ SET(document_SRCS
 	document/io/MusicXmlExporter.h
 	document/io/RG21Loader.cpp
 	document/io/RG21Loader.h
-	document/MultiViewCommandHistory.cpp
-	document/MultiViewCommandHistory.h
+	document/CommandHistory.cpp
+	document/CommandHistory.h
 	document/RosegardenGUIDoc.cpp
 	document/RosegardenGUIDoc.h
 	document/RoseXmlHandler.cpp
