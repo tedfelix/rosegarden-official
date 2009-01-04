@@ -22,6 +22,7 @@
 #include "sound/AudioFile.h"
 #include <QMainWindow>
 #include "document/ConfigGroups.h"
+#include "gui/general/ActionFileClient.h"
 
 
 class QWidget;
@@ -51,7 +52,7 @@ class AudioFile;
 class Command;
 
 
-class AudioManagerDialog : public QMainWindow
+class AudioManagerDialog : public QMainWindow, public ActionFileClient
 {
     Q_OBJECT
 

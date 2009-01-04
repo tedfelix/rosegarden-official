@@ -79,12 +79,7 @@
 #include <Q3UriDrag>
 
 #include <klocale.h>
-//#include <kstandarddirs.h>
-//#include <kglobal.h>
-//#include <kstandardaction.h>
 #include <kurl.h>
-#include <kxmlguiclient.h>
-#include <kio/netaccess.h>
 
 
 namespace Rosegarden
@@ -130,50 +125,19 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
     QIcon icon(QPixmap(pixmapDir + "/toolbar/transport-play.xpm"));
 
-    QAction *qa_add_audio = new QAction( "&Add Audio File...", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_add_audio->setIconText("fileopen"); 
-			connect( qa_add_audio, SIGNAL(triggered()), this, SLOT(slotAdd())  );
+    createAction("add_audio", SLOT(slotAdd()));
+    createAction("export_audio", SLOT(slotExportAudio()));
+    createAction("remove_audio", SLOT(slotRemove()));
+    createAction("remove_all_audio", SLOT(slotRemoveAll()));
+    createAction("remove_all_unused_audio", SLOT(slotRemoveAllUnused()));
+    createAction("delete_unused_audio", SLOT(slotDeleteUnused()));
+    createAction("preview_audio", SLOT(slotPlayPreview()));
+    createAction("insert_audio", SLOT(slotInsert()));
+    createAction("preview_audio", SLOT(slotPlayPreview()));
 
-    QAction *qa_remove_audio = new QAction( "&Unload Audio File", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_remove_audio->setIconText("editdelete"); 
-			connect( qa_remove_audio, SIGNAL(triggered()), this, SLOT(slotRemove())  );
+    //!!! oh now hang on, does this one work?
+    createAction("distribute_audio", SLOT(slotDistributeOnMidiSegment()));
 
-    icon = QIcon(QPixmap(pixmapDir + "/toolbar/transport-play.xpm"));
-    QAction *qa_preview_audio = new QAction( "&Play Preview", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_preview_audio->setIcon(icon); 
-			connect( qa_preview_audio, SIGNAL(triggered()), this, SLOT(slotPlayPreview())  );
-
-    /*!!! Not actually implemented -- this never worked right!
-        QAction *qa_rename_audio = new QAction( "Re&label", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_rename_audio->setIconText(0); 
-			connect( qa_rename_audio, SIGNAL(triggered()), this, SLOT(slotRename())  );
-    */
-
-    icon = QIcon(QPixmap(pixmapDir + "/toolbar/insert_audio_into_track.xpm"));
-    QAction *qa_insert_audio = new QAction( "&Insert into Selected Audio Track", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_insert_audio->setIcon(icon); 
-			connect( qa_insert_audio, SIGNAL(triggered()), this, SLOT(slotInsert())  );
-
-    QAction *qa_remove_all_audio = new QAction( "Unload &all Audio Files", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_remove_all_audio->setIconText(0); 
-			connect( qa_remove_all_audio, SIGNAL(triggered()), this, SLOT(slotRemoveAll())  );
-
-    QAction *qa_remove_all_unused_audio = new QAction( "Unload all &Unused Audio Files", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_remove_all_unused_audio->setIconText(0); 
-			connect( qa_remove_all_unused_audio, SIGNAL(triggered()), this, SLOT(slotRemoveAllUnused())  );
-
-    QAction *qa_delete_unused_audio = new QAction( "&Delete Unused Audio Files...", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_delete_unused_audio->setIconText(0); 
-			connect( qa_delete_unused_audio, SIGNAL(triggered()), this, SLOT(slotDeleteUnused())  );
-
-    QAction *qa_export_audio = new QAction( "&Export Audio File...", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_export_audio->setIconText("fileexport"); 
-			connect( qa_export_audio, SIGNAL(triggered()), this, SLOT(slotExportAudio())  );
-/*
-    QAction *qa_distribute_audio = new QAction( "Distribute Audio on &MIDI", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_distribute_audio->setIconText(0); 
-			connect( qa_distribute_audio, SIGNAL(triggered()), this, SLOT(slotDistributeOnMidiSegment())  );
-*/
     // Set the column names
     //
 	//

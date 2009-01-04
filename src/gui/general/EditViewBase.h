@@ -23,6 +23,7 @@
 #include <vector>
 #include "base/Event.h"
 #include "document/CommandRegistry.h"
+#include "ActionFileClient.h"
 
 #include <QDockWidget>
 #include <QMainWindow>
@@ -51,12 +52,10 @@ class MultiViewCommandHistory;
 class Event;
 class EditToolBox;
 class EditTool;
-class ActionFileParser;
 
  
-class EditViewBase : public QMainWindow
+class EditViewBase : public QMainWindow, public ActionFileClient
 {
-
     Q_OBJECT
 
 public:
@@ -347,12 +346,6 @@ protected:
     void setConfigDialogPageIndex(int p) { m_configDialogPageIndex = p; }
     int getConfigDialogPageIndex()       { return m_configDialogPageIndex; }
 
-    QAction *createAction(QString actionName, QString connection);
-    QAction *findAction(QString actionName);
-    void enterActionState(QString stateName);
-    void leaveActionState(QString stateName);
-    bool createGUI(QString rcname);
-
     //--------------- Data members ---------------------------------
     QString m_rcFileName;
 
@@ -389,8 +382,6 @@ protected:
     bool         m_inCtor;
 
     EditViewTimeSigNotifier *m_timeSigNotifier;
-
-    ActionFileParser *m_actionFileParser;
 };
 
 

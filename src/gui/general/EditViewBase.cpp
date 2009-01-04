@@ -34,7 +34,6 @@
 #include "misc/Strings.h"
 #include "gui/kdeext/KTmpStatusMsg.h"
 #include "document/Command.h"
-#include "ActionFileParser.h"
 
 #include <QSettings>
 #include <QDockWidget>
@@ -101,8 +100,7 @@ EditViewBase::EditViewBase(RosegardenGUIDoc *doc,
     m_shortcuts(0),
     m_configDialogPageIndex(0),
     m_inCtor(true),
-    m_timeSigNotifier(new EditViewTimeSigNotifier(doc)),
-    m_actionFileParser(0)
+    m_timeSigNotifier(new EditViewTimeSigNotifier(doc))
 {
     QPixmap dummyPixmap; // any icon will do
     
@@ -741,48 +739,6 @@ EditViewBase::handleEventRemoved(Event *event)
 MultiViewCommandHistory* EditViewBase::getCommandHistory()
 {
     return getDocument()->getCommandHistory();
-}
-
-QAction *
-EditViewBase::createAction(QString actionName, QString connection)
-{
-    QAction *action = new QAction(this);
-    action->setObjectName(actionName);
-    connect(action, SIGNAL(triggered()), this, qStrToCharPtrUtf8(connection) );
-    return action;
-}
-
-QAction *
-EditViewBase::findAction(QString actionName)
-{
-    return findChild<QAction *>(actionName);
-}
-
-void
-EditViewBase::enterActionState(QString stateName)
-{
-    //&&& implement
-#pragma warning("Implement enterActionState");
-    std::cerr << "ERROR: enterActionState not implemented" << std::endl;
-}
-
-void
-EditViewBase::leaveActionState(QString stateName)
-{
-    //&&& implement
-#pragma warning("Implement leaveActionState");
-    std::cerr << "ERROR: leaveActionState not implemented" << std::endl;
-}
-
-bool
-EditViewBase::createGUI(QString rcFileName)
-{
-    if (!m_actionFileParser) m_actionFileParser = new ActionFileParser(this);
-    if (!m_actionFileParser->load(rcFileName)) {
-        std::cerr << "EditViewBase::createGUI: ERROR: Failed to load action file" << std::endl;
-        return false;
-    }
-    return true;
 }
 
 
