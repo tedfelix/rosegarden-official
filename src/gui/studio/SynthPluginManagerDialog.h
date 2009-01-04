@@ -20,6 +20,7 @@
 #define _RG_SYNTHPLUGINMANAGERDIALOG_H_
 
 #include "base/MidiProgram.h"
+#include "gui/general/ActionFileClient.h"
 #include <QMainWindow>
 #include <vector>
 
@@ -39,7 +40,7 @@ class AudioPluginOSCGUIManager;
 class AudioPluginManager;
 
 
-class SynthPluginManagerDialog : public QMainWindow
+class SynthPluginManagerDialog : public QMainWindow, public ActionFileClient
 {
     Q_OBJECT
 

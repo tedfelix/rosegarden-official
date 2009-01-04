@@ -23,6 +23,7 @@
 #include "base/ViewElement.h"
 #include "EditView.h"
 #include "RosegardenCanvasView.h"
+#include "misc/Strings.h"
 
 #include <QEvent>
 #include <QMouseEvent>
@@ -36,7 +37,7 @@ namespace Rosegarden
 {
 
 EditTool::EditTool(const QString& menuName, EditView* view)
-        : BaseTool(menuName, view->factory(), view),
+        : BaseTool(menuName, view),
         m_parentView(view)
 {}
 
@@ -117,17 +118,20 @@ void EditTool::createMenu()
 {
     RG_DEBUG << "BaseTool::createMenu() " << m_rcFileName << " - " << m_menuName << endl;
 
-    setXMLFile(m_rcFileName);
-    m_parentFactory->addClient(this);
+    if (!createGUI(m_rcFileName)) {
+        std::cerr << "EditTool::createMenu(" << m_rcFileName << "): menu creation failed" << std::endl;
+        return;
+    }
 
-    QWidget* tmp = m_parentFactory->container(m_menuName, this);
+    QMenu *menu = findChild<QMenu *>(m_menuName);
+    if (!menu) {
+        std::cerr << "BaseTool::createMenu(" << m_rcFileName
+                  << "): menu name "
+                  << m_menuName << " not created by RC file\n";
+        return;
+    }
 
-    if (!tmp)
-        RG_DEBUG << "BaseTool::createMenu(" << m_rcFileName
-        << ") : menu creation failed (name : "
-        << m_menuName << ")\n";
-
-    m_menu = dynamic_cast<QMenu*>(tmp);
+    m_menu = menu;
 }
 
 bool EditTool::hasMenu()

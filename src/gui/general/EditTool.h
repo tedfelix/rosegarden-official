@@ -20,9 +20,9 @@
 #define _RG_EDITTOOL_H_
 
 #include "BaseTool.h"
-#include <kxmlguiclient.h>
 #include <QString>
 #include "base/Event.h"
+#include "ActionFileClient.h"
 
 
 #include <QMouseEvent>
@@ -58,7 +58,7 @@ class EditView;
  * @see EditView#setTool()
  * @see EditToolBox
  */
-class EditTool : public BaseTool, public KXMLGUIClient
+class EditTool : public BaseTool, public ActionFileClient
 {
     friend class EditToolBox;
 

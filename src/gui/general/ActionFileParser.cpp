@@ -23,6 +23,8 @@
 #include <QMenu>
 #include <QToolBar>
 #include <QFileInfo>
+#include <QMainWindow>
+#include <QMenuBar>
 
 #include "IconLoader.h"
 #include "misc/Strings.h"
@@ -293,6 +295,10 @@ ActionFileParser::findMenu(QString menuName)
     if (!menu) {
         menu = new QMenu(m_actionOwner);
         menu->setObjectName(menuName);
+        QMainWindow *mw = dynamic_cast<QMainWindow *>(m_actionOwner);
+        if (mw) {
+            mw->menuBar()->addMenu(menu);
+        }
     }
     return menu;
 }
@@ -360,7 +366,7 @@ ActionFileParser::setActionGroup(QString actionName, QString groupName)
 bool
 ActionFileParser::setActionChecked(QString actionName, bool checked)
 {
-    if (actionName == "" || groupName == "") return false;
+    if (actionName == "") return false;
     QAction *action = findAction(actionName);
     if (!action) return false;
     action->setCheckable(true);

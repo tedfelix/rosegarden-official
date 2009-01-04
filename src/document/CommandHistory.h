@@ -182,6 +182,7 @@ signals:
 
 
 protected:
+    CommandHistory();
     static CommandHistory *m_instance;
 
     QAction *m_undoAction;
