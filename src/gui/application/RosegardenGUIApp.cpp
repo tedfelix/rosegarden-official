@@ -440,7 +440,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 //            this, SLOT(slotParametersDockedBack(QDockWidget*, QDockWidget::DockPosition)));
 	
 	
-    leaveActionState("parametersbox_closed") //@@@JAS orig. KXMLGUIClient::StateReverse
+    leaveActionState("parametersbox_closed"); //@@@JAS orig. KXMLGUIClient::StateReverse
 
     RosegardenGUIDoc* doc = new RosegardenGUIDoc(this, m_pluginManager);
 
@@ -565,7 +565,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     readOptions();
 
     // All toolbars should be created before this is called
-	rgTempQtIV->setAutoSaveSettings(MainWindowConfigGroup, true);
+    //### implement or find alternative : rgTempQtIV->setAutoSaveSettings(MainWindowConfigGroup, true);
 
 #ifdef HAVE_LIRC
 
@@ -2219,7 +2219,7 @@ void RosegardenGUIApp::initStatusBar()
 
 QToolBar* RosegardenGUIApp::toolBar( const char* name ){
 	/* convenience method qt3 -> qt4 */
-	if( name == "" ){
+        if( QString(name) == "" ){
 		return m_toolBarMain;
 	}
 	return this->findChild<QToolBar*>( name );
@@ -2556,7 +2556,7 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
     m_doc->clearModifiedStatus();
 
     if (newDocument->getStudio().haveMidiDevices()) {
-        enterActionState"got_midi_devices"); //@@@ JAS orig. 0
+        enterActionState("got_midi_devices"); //@@@ JAS orig. 0
     } else {
         leaveActionState("got_midi_devices"); //@@@ JAS orig KXMLGUIClient::StateReverse
     }
@@ -2715,7 +2715,9 @@ RosegardenGUIApp::createDocumentFromRGFile(QString filePath)
     // Check for an autosaved file to recover
     QString effectiveFilePath = filePath;
     bool canRecover = false;
-	QString autoSaveFileName = rgTempQtIV->checkRecoverFile(filePath, canRecover);
+
+    //### implement this! (but not in rgTempQtIV) -- was in KApplication
+    QString autoSaveFileName = rgTempQtIV->checkRecoverFile(filePath, canRecover);
 
     if (canRecover) {
         // First check if the auto-save file is more recent than the doc
@@ -2942,7 +2944,8 @@ void RosegardenGUIApp::saveGlobalProperties()
         settings.setValue("filename", filename);
         settings.setValue("modified", m_doc->isModified());
 
-		QString tempname = rgTempQtIV->tempSaveName(filename);
+        //### implement (was in KApplication?)
+        QString tempname = rgTempQtIV->tempSaveName(filename);
         QString errMsg;
         bool res = m_doc->saveDocument(tempname, errMsg);
         if (!res) {
@@ -2964,7 +2967,8 @@ void RosegardenGUIApp::readGlobalProperties()
 
     if (modified) {
         bool canRecover;
-		QString tempname = rgTempQtIV->checkRecoverFile(filename, canRecover);
+        //### implement (was in KApplication)
+        QString tempname = rgTempQtIV->checkRecoverFile(filename, canRecover);
 
         if (canRecover) {
             slotEnableTransport(false);
@@ -6682,7 +6686,7 @@ void RosegardenGUIApp::slotEditToolbars()
 
 void RosegardenGUIApp::slotUpdateToolbars()
 {
-	rgTempQtIV->createGUI("rosegardenui.rc",0);
+    createGUI("rosegardenui.rc");
     m_viewToolBar->setChecked(!toolBar()->isHidden());
 }
 
@@ -9071,51 +9075,6 @@ RosegardenGUIApp::slotJumpToQuickMarker()
 
     m_doc->jumpToQuickMarker();
 }
-
-
-
-QAction *
-RosegardenGUIApp::createAction(QString actionName, QString connection)
-{
-    QAction *action = new QAction(this);
-    action->setObjectName(actionName);
-//	connect(action, SIGNAL(triggered()), this, SLOT(connection) );
- 	connect(action, SIGNAL(triggered()), this, qStrToCharPtrUtf8(connection) );
-	return action;
-}
-
-QAction *
-RosegardenGUIApp::findAction(QString actionName)
-{
-    return findChild<QAction *>(actionName);
-}
-
-void
-RosegardenGUIApp::enterActionState(QString stateName)
-{
-    //&&& implement
-#pragma warning("Implement enterActionState");
-    std::cerr << "ERROR: enterActionState not implemented" << std::endl;
-}
-
-void
-RosegardenGUIApp::leaveActionState(QString stateName)
-{
-    //&&& implement
-#pragma warning("Implement leaveActionState");
-    std::cerr << "ERROR: leaveActionState not implemented" << std::endl;
-}
-
-bool
-RosegardenGUIApp::createGUI(QString rcFileName)
-{
-    //&&& implement
-#pragma warning("Implement createGUI");
-    std::cerr << "ERROR: createGUI not implemented" << std::endl;
-    return false;
-}
-
-
 
 RosegardenGUIApp *RosegardenGUIApp::m_myself = 0;
 
