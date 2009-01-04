@@ -41,7 +41,7 @@
 #include "commands/segment/AddTriggerSegmentCommand.h"
 #include "commands/segment/DeleteTriggerSegmentCommand.h"
 #include "commands/segment/PasteToTriggerSegmentCommand.h"
-#include "document/MultiViewCommandHistory.h"
+#include "document/CommandHistory.h"
 #include "document/RosegardenGUIDoc.h"
 #include "document/ConfigGroups.h"
 #include "gui/dialogs/TimeDialog.h"
@@ -167,9 +167,9 @@ TriggerSegmentManager::TriggerSegmentManager(QWidget *parent,
 
     setupActions();
 
-//     m_doc->getCommandHistory()->attachView(actionCollection());	//&&&
+//     CommandHistory::getInstance()->attachView(actionCollection());	//&&&
 	
-    connect(m_doc->getCommandHistory(), SIGNAL(commandExecuted()),
+    connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             this, SLOT(slotUpdate()));
 
     connect(m_listView, SIGNAL(doubleClicked(QTreeWidgetItem *)),
@@ -201,7 +201,7 @@ TriggerSegmentManager::~TriggerSegmentManager()
 //     m_listView->saveLayout(TriggerManagerConfigGroup);	//&&&
 
 //     if (m_doc)
-//         m_doc->getCommandHistory()->detachView(actionCollection());
+//         CommandHistory::getInstance()->detachView(actionCollection());
 }
 
 void
@@ -402,7 +402,7 @@ TriggerSegmentManager::slotClose()
     RG_DEBUG << "TriggerSegmentManager::slotClose" << endl;
 
 //     if (m_doc)
-//         m_doc->getCommandHistory()->detachView(actionCollection());	//&&&
+//         CommandHistory::getInstance()->detachView(actionCollection());	//&&&
     m_doc = 0;
 
     close();
@@ -515,14 +515,8 @@ TriggerSegmentManager::setupActions()
 void
 TriggerSegmentManager::addCommandToHistory(Command *command)
 {
-    getCommandHistory()->addCommand(command);
+    CommandHistory::getInstance()->addCommand(command);
     setModified(false);
-}
-
-MultiViewCommandHistory*
-TriggerSegmentManager::getCommandHistory()
-{
-    return m_doc->getCommandHistory();
 }
 
 void

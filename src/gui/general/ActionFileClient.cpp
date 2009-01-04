@@ -46,8 +46,10 @@ ActionFileClient::createAction(QString actionName, QString connection)
     }
     QAction *action = new QAction(obj);
     action->setObjectName(actionName);
-    QObject::connect(action, SIGNAL(triggered()),
-                     obj, qStrToCharPtrUtf8(connection) );
+    if (connection != "") {
+        QObject::connect(action, SIGNAL(triggered()),
+                         obj, qStrToCharPtrUtf8(connection) );
+    }
     return action;
 }
 

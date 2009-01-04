@@ -31,7 +31,7 @@
 #include "gui/general/IconLoader.h"
 #include "gui/dialogs/MarkerModifyDialog.h"
 #include "commands/edit/ModifyMarkerCommand.h"
-#include "document/MultiViewCommandHistory.h"
+#include "document/CommandHistory.h"
 
 #include <QMouseEvent>
 #include <QBrush>
@@ -236,7 +236,7 @@ MarkerRuler::slotEditMarker()
                                     dialog.getTime(),
                                     qstrtostr(dialog.getName()),
                                     qstrtostr(dialog.getDescription()));
-        m_doc->getCommandHistory()->addCommand(command);
+        CommandHistory::getInstance()->addCommand(command);
     }
 }
 

@@ -41,7 +41,7 @@
 #include "segmentcanvas/CompositionModel.h"
 #include "segmentcanvas/CompositionModelImpl.h"
 #include "segmentcanvas/CompositionView.h"
-#include "document/MultiViewCommandHistory.h"
+#include "document/CommandHistory.h"
 #include "document/RosegardenGUIDoc.h"
 #include "gui/application/RosegardenGUIApp.h"
 #include "gui/rulers/ChordNameRuler.h"
@@ -324,7 +324,7 @@ TrackEditor::init(QWidget* rosegardenguiview)
     connect(m_segmentCanvas, SIGNAL(zoomOut()),
             RosegardenGUIApp::self(), SLOT(slotZoomOut()));
 
-    connect(getCommandHistory(), SIGNAL(commandExecuted()),
+    connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             this, SLOT(update()));
 
     connect(m_doc, SIGNAL(pointerPositionChanged(timeT)),
@@ -604,16 +604,10 @@ TrackEditor::slotSetLoop(timeT start, timeT end)
     getBottomStandardRuler()->getLoopRuler()->slotSetLoopMarker(start, end);
 }
 
-MultiViewCommandHistory*
-TrackEditor::getCommandHistory()
-{
-    return m_doc->getCommandHistory();
-}
-
 void
 TrackEditor::addCommandToHistory(Command *command)
 {
-    getCommandHistory()->addCommand(command);
+    CommandHistory::getInstance()->addCommand(command);
 }
 
 void

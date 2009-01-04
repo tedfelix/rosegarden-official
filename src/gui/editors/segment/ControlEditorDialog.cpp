@@ -38,11 +38,10 @@
 #include "commands/studio/RemoveControlParameterCommand.h"
 #include "ControlParameterEditDialog.h"
 #include "ControlParameterItem.h"
-#include "document/MultiViewCommandHistory.h"
 #include "document/RosegardenGUIDoc.h"
 #include "document/ConfigGroups.h"
 #include "document/Command.h"
-#include "gui/kdeext/KTmpStatusMsg.h"
+#include "document/CommandHistory.h"
 
 #include <QShortcut>
 #include <QMainWindow>
@@ -179,9 +178,7 @@ ControlEditorDialog::ControlEditorDialog
 
     setupActions();
 
-//     m_doc->getCommandHistory()->attachView( actionCollection() );	//&&&
-	
-    connect(m_doc->getCommandHistory(), SIGNAL(commandExecuted()),
+    connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             this, SLOT(slotUpdate()));
 
     connect(m_listView, SIGNAL(doubleClicked(QTreeWidgetItem *)),
@@ -204,9 +201,6 @@ ControlEditorDialog::~ControlEditorDialog()
     RG_DEBUG << "\n*** ControlEditorDialog::~ControlEditorDialog\n" << endl;
 
 //     m_listView->saveLayout(ControlEditorConfigGroup);	//&&&
-
-//     if (m_doc)
-//         m_doc->getCommandHistory()->detachView( actionCollection() );	//&&&
 	
 }
 
@@ -360,8 +354,6 @@ ControlEditorDialog::slotClose()
 {
     RG_DEBUG << "ControlEditorDialog::slotClose" << endl;
 
-//     if (m_doc)
-//         m_doc->getCommandHistory()->detachView(actionCollection());	//&&&
     m_doc = 0;
 
     close();
@@ -370,52 +362,18 @@ ControlEditorDialog::slotClose()
 void
 ControlEditorDialog::setupActions()
 {
-//     KAction* close = KStandardAction::close(this,
-//                                        SLOT(slotClose()),
-//                                        actionCollection());
-	
- 	QAction* close = new QAction( i18n("&Close"), this );
-//  	connect( close, SIGNAL(close()), this, SLOT(slotClose()) );
-	
-    m_closeButton->setText( close->text() );
+    createAction("file_close", SLOT(slotClose()));
+    m_closeButton->setText(i18n("Close"));
     connect(m_closeButton, SIGNAL(released()), this, SLOT(slotClose()));
-	
-	
-	QAction *tac;
-	
-    // some adjustments
-//     new KToolBarPopupAction(i18n("Und&o"),
-//                             "undo",
-//                             KStandardShortcut::key(KStandardShortcut::Undo),
-//                             actionCollection(),
-//                             KStandardAction::stdName(KStandardAction::Undo));
-	tac = new QAction( i18n("Und&o"), this );
-	tac->setObjectName( "undo" );
-	tac->setShortcut( QKeySequence::Undo );
 
-//     new KToolBarPopupAction(i18n("Re&do"),
-//                             "redo",
-//                             KStandardShortcut::key(KStandardShortcut::Redo),
-//                             actionCollection(),
-//                             KStandardAction::stdName(KStandardAction::Redo));
-	tac = new QAction( i18n("Re&do"), this );
-	tac->setObjectName( "redo" );
-	tac->setShortcut( QKeySequence::Redo );
-
-    rgTempQtIV->createGUI("controleditor.rc", 0);
+    createGUI("controleditor.rc");
 }
 
 void
 ControlEditorDialog::addCommandToHistory(Command *command)
 {
-    getCommandHistory()->addCommand(command);
+    CommandHistory::getInstance()->addCommand(command);
     setModified(false);
-}
-
-MultiViewCommandHistory*
-ControlEditorDialog::getCommandHistory()
-{
-    return m_doc->getCommandHistory();
 }
 
 void

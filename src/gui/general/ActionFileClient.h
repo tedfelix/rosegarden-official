@@ -32,7 +32,7 @@ class ActionFileClient // base class for users of the ActionFileParser
 protected:
     ActionFileClient();
     virtual ~ActionFileClient();
-    
+
     virtual QAction *createAction(QString actionName, QString connection);
     virtual QAction *findAction(QString actionName);
     virtual void enterActionState(QString stateName);

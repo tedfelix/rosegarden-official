@@ -45,7 +45,6 @@ class TristateCheckBox;
 class SegmentSelection;
 class Segment;
 class RosegardenGUIDoc;
-class MultiViewCommandHistory;
 class Composition;
 
 
@@ -73,8 +72,6 @@ public:
     void useSegment(Segment *segment);
     void useSegments(const SegmentSelection &segments);
 
-    // Command history stuff
-    MultiViewCommandHistory* getCommandHistory();
     void addCommandToHistory(Command *command);
 
     void setDocument(RosegardenGUIDoc*);

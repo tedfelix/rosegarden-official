@@ -31,7 +31,7 @@
 #include "commands/studio/ModifyDeviceCommand.h"
 #include "commands/studio/ReconnectDeviceCommand.h"
 #include "commands/studio/RenameDeviceCommand.h"
-#include "document/MultiViewCommandHistory.h"
+#include "document/CommandHistory.h"
 #include "document/RosegardenGUIDoc.h"
 #include "document/ConfigGroups.h"
 #include "sequencer/RosegardenSequencer.h"
@@ -275,8 +275,8 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
 	
         createGUI("devicemanager.rc"); //@@@JAS orig. 0
 
-//     m_document->getCommandHistory()->attachView(actionCollection());	//&&&
-//     connect(m_document->getCommandHistory(), SIGNAL(commandExecuted()),//&&&
+//     CommandHistory::getInstance()->attachView(actionCollection());	//&&&
+//     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),//&&&
 //             this, SLOT(populate()));
 
     m_playTable->setCurrentCell( -1, 0);
@@ -292,7 +292,7 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
 DeviceManagerDialog::~DeviceManagerDialog()
 {
     if (m_document) {
-//         m_document->getCommandHistory()->detachView(actionCollection());		//&&&
+//         CommandHistory::getInstance()->detachView(actionCollection());		//&&&
         m_document = 0;
     }
     
@@ -303,7 +303,7 @@ void
 DeviceManagerDialog::slotClose()
 {
     if (m_document) {
-//         m_document->getCommandHistory()->detachView(actionCollection());	//&&&
+//         CommandHistory::getInstance()->detachView(actionCollection());	//&&&
         m_document = 0;
     }
 
@@ -516,7 +516,7 @@ DeviceManagerDialog::slotAddPlayDevice()
          Device::Midi,
          MidiDevice::Play,
          qstrtostr(connection));
-    m_document->getCommandHistory()->addCommand(command);
+    CommandHistory::getInstance()->addCommand(command);
 }
 
 void
@@ -531,7 +531,7 @@ DeviceManagerDialog::slotAddRecordDevice()
          Device::Midi,
          MidiDevice::Record,
          qstrtostr(connection));
-    m_document->getCommandHistory()->addCommand(command);
+    CommandHistory::getInstance()->addCommand(command);
 }
 
 void
@@ -543,7 +543,7 @@ DeviceManagerDialog::slotDeletePlayDevice()
         return ;
     CreateOrDeleteDeviceCommand *command = new CreateOrDeleteDeviceCommand
         (m_studio, id);
-    m_document->getCommandHistory()->addCommand(command);
+    CommandHistory::getInstance()->addCommand(command);
 
     RosegardenSequencer::getInstance()->removeDevice(id);
 }
@@ -556,7 +556,7 @@ DeviceManagerDialog::slotDeleteRecordDevice()
         return ;
     CreateOrDeleteDeviceCommand *command = new CreateOrDeleteDeviceCommand
         (m_studio, id);
-    m_document->getCommandHistory()->addCommand(command);
+    CommandHistory::getInstance()->addCommand(command);
 }
 
 void
@@ -582,7 +582,7 @@ DeviceManagerDialog::slotPlayValueChanged(int row, int col)
         std::string name = qstrtostr(m_playTable->item(row, col)->text() );
         if (device->getName() != name) {
 
-            m_document->getCommandHistory()->addCommand
+            CommandHistory::getInstance()->addCommand
                 (new RenameDeviceCommand(m_studio, id, name));
             emit deviceNamesChanged();
 
@@ -597,7 +597,7 @@ DeviceManagerDialog::slotPlayValueChanged(int row, int col)
         if (connection == qstrtostr(m_noConnectionString))
             connection = "";
         if (device->getConnection() != connection) {
-            m_document->getCommandHistory()->addCommand
+            CommandHistory::getInstance()->addCommand
                 (new ReconnectDeviceCommand(m_studio, id, connection));
         }
     }
@@ -628,7 +628,7 @@ DeviceManagerDialog::slotRecordValueChanged(int row, int col)
 		std::string name = qstrtostr(m_recordTable->item(row, col)->text() );
         if (device->getName() != name) {
 
-            m_document->getCommandHistory()->addCommand
+            CommandHistory::getInstance()->addCommand
                 (new RenameDeviceCommand(m_studio, id, name));
             emit deviceNamesChanged();
 
@@ -641,7 +641,7 @@ DeviceManagerDialog::slotRecordValueChanged(int row, int col)
     case RECORD_CONNECTION_COL: {
 		std::string connection = qstrtostr(m_recordTable->item(row, col)->text() );
         if (device->getConnection() != connection) {
-            m_document->getCommandHistory()->addCommand
+            CommandHistory::getInstance()->addCommand
                 (new ReconnectDeviceCommand(m_studio, id, connection));
         }
     }
@@ -669,7 +669,7 @@ DeviceManagerDialog::slotRecordValueChanged(int row, int col)
 
         m_recordTable->setCurrentCell(row, 0);
 
-        m_document->getCommandHistory()->addCommand
+        CommandHistory::getInstance()->addCommand
             (new ChangeRecordDeviceCommand(id, actionConnect));
 
         m_recordTable->blockSignals(false);
@@ -777,7 +777,7 @@ DeviceManagerDialog::slotImport()
         command->setOverwrite(dialog->shouldOverwriteBanks());
         command->setRename(dialog->shouldRename());
 
-        m_document->getCommandHistory()->addCommand(command);
+        CommandHistory::getInstance()->addCommand(command);
 
         if (dialog->shouldRename())
             emit deviceNamesChanged();

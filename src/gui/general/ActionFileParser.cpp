@@ -27,6 +27,8 @@
 #include "IconLoader.h"
 #include "misc/Strings.h"
 
+#include "document/CommandHistory.h"
+
 using std::cerr;
 using std::endl;
 
@@ -135,12 +137,15 @@ ActionFileParser::startElement(const QString& namespaceURI,
         QString icon = atts.value("icon");
         QString shortcut = atts.value("shortcut");
         QString group = atts.value("group");
+        QString checked = atts.value("checked");
 
         //!!! return values
         if (text != "") setActionText(actionName, text);
         if (icon != "") setActionIcon(actionName, icon);
         if (shortcut != "") setActionShortcut(actionName, shortcut);
         if (group != "") setActionGroup(actionName, group);
+        if (checked != "") setActionChecked(actionName,
+                                            checked.toLower() == "true");
         
         //!!! can appear in menu, toolbar, state/enable, state/disable
 
@@ -262,6 +267,14 @@ ActionFileParser::findAction(QString actionName)
     return m_actionOwner->findChild<QAction *>(actionName);
 }
 
+QAction *
+ActionFileParser::findStandardAction(QString actionName)
+{
+    CommandHistory *history = CommandHistory::getInstance();
+    if (!history) return 0;
+    return history->findChild<QAction *>(actionName);
+}
+
 QActionGroup *
 ActionFileParser::findGroup(QString groupName)
 {
@@ -345,6 +358,17 @@ ActionFileParser::setActionGroup(QString actionName, QString groupName)
 }
 
 bool
+ActionFileParser::setActionChecked(QString actionName, bool checked)
+{
+    if (actionName == "" || groupName == "") return false;
+    QAction *action = findAction(actionName);
+    if (!action) return false;
+    action->setCheckable(true);
+    action->setChecked(checked);
+    return true;
+}
+
+bool
 ActionFileParser::setMenuText(QString name, QString text)
 {
     if (name == "" || text == "") return false;
@@ -370,6 +394,7 @@ ActionFileParser::addActionToMenu(QString menuName, QString actionName)
 {
     if (menuName == "" || actionName == "") return false;
     QAction *action = findAction(actionName);
+    if (!action) action = findStandardAction(actionName);
     if (!action) return false;
     QMenu *menu = findMenu(menuName);
     if (!menu) return false;
@@ -402,6 +427,7 @@ ActionFileParser::addActionToToolbar(QString toolbarName, QString actionName)
 {
     if (toolbarName == "" || actionName == "") return false;
     QAction *action = findAction(actionName);
+    if (!action) action = findStandardAction(actionName);
     if (!action) return false;
     QToolBar *toolbar = findToolbar(toolbarName);
     if (!toolbar) return false;

@@ -26,7 +26,7 @@
 #include "base/NotationTypes.h"
 #include "base/Studio.h"
 #include "commands/studio/ModifyDeviceCommand.h"
-#include "document/MultiViewCommandHistory.h"
+#include "document/CommandHistory.h"
 #include "document/RosegardenGUIDoc.h"
 #include "document/ConfigGroups.h"
 #include "gui/dialogs/ExportDeviceDialog.h"
@@ -278,9 +278,9 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 
     setupActions();
 
-//     m_doc->getCommandHistory()->attachView(actionCollection());	//&&&
+//     CommandHistory::getInstance()->attachView(actionCollection());	//&&&
 	
-    connect(m_doc->getCommandHistory(), SIGNAL(commandExecuted()),
+    connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             this, SLOT(slotUpdate()));
 
     // Initialise the dialog
@@ -322,7 +322,7 @@ BankEditorDialog::~BankEditorDialog()
 //     m_listView->saveLayout(BankEditorConfigGroup);	//&&&
 
 //     if (m_doc) // see slotFileClose() for an explanation on why we need to test m_doc
-//         m_doc->getCommandHistory()->detachView(actionCollection());
+//         CommandHistory::getInstance()->detachView(actionCollection());
 }
 
 void
@@ -1534,14 +1534,8 @@ BankEditorDialog::setModified(bool modified)
 void
 BankEditorDialog::addCommandToHistory(Command *command)
 {
-    getCommandHistory()->addCommand(command);
+    CommandHistory::getInstance()->addCommand(command);
     setModified(false);
-}
-
-MultiViewCommandHistory*
-BankEditorDialog::getCommandHistory()
-{
-    return m_doc->getCommandHistory();
 }
 
 void
@@ -1654,7 +1648,7 @@ BankEditorDialog::slotImport()
         addCommandToHistory(command);
 
         // No need to redraw the dialog, this is done by
-        // slotUpdate, signalled by the MultiViewCommandHistory
+        // slotUpdate, signalled by the CommandHistory
         MidiDevice *device = getMidiDevice(deviceItem);
         if (device)
             selectDeviceItem(device);
@@ -1826,7 +1820,7 @@ BankEditorDialog::slotFileClose()
     // be valid by the time we reach the dtor, since it will be
     // triggered when the closeEvent is actually processed.
     //
-//     m_doc->getCommandHistory()->detachView(actionCollection());	//&&&
+//     CommandHistory::getInstance()->detachView(actionCollection());	//&&&
     m_doc = 0;
     close();
 }

@@ -71,7 +71,7 @@
 #include "gui/studio/StudioControl.h"
 #include "gui/widgets/CurrentProgressDialog.h"
 #include "gui/widgets/ProgressDialog.h"
-#include "MultiViewCommandHistory.h"
+#include "CommandHistory.h"
 #include "RoseXmlHandler.h"
 #include "sequencer/RosegardenSequencer.h"
 #include "sound/AudioFile.h"
@@ -121,7 +121,6 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
         m_modified(false),
         m_autoSaved(false),
         m_audioPreviewThread(&m_audioFileManager),
-        m_commandHistory(new MultiViewCommandHistory()),
         m_pluginManager(pluginManager),
         m_audioRecordLatency(0, 0),
         m_autoSavePeriod(0),
@@ -130,14 +129,14 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
 {
     syncDevices();
 
-// FIX-qt4-removed: 
+//### FIX-qt4-removed: 
 //    m_viewList.setAutoDelete(false);
 //    m_editViewList.setAutoDelete(false);
 
-    connect(m_commandHistory, SIGNAL(commandExecuted(Command *)),
+    connect(CommandHistory::getInstance(), SIGNAL(commandExecuted(Command *)),
             this, SLOT(slotDocumentModified()));
 
-    connect(m_commandHistory, SIGNAL(documentRestored()),
+    connect(CommandHistory::getInstance(), SIGNAL(documentRestored()),
             this, SLOT(slotDocumentRestored()));
 
     // autoload a new document
@@ -160,7 +159,7 @@ RosegardenGUIDoc::~RosegardenGUIDoc()
 
     //     ControlRulerCanvasRepository::clear();
 
-    delete m_commandHistory; // must be deleted before the Composition is
+    CommandHistory::getInstance()->clear(); // before Composition is deleted
 }
 
 unsigned int
@@ -545,7 +544,7 @@ void RosegardenGUIDoc::newDocument()
     setModified(false);
     setAbsFilePath(QString::null);
     setTitle(i18n("Untitled"));
-    m_commandHistory->clear();
+    CommandHistory::getInstance()->clear();
 }
 
 void RosegardenGUIDoc::performAutoload()
@@ -830,7 +829,7 @@ RosegardenGUIDoc::mergeDocument(RosegardenGUIDoc *doc,
                              lastSegmentEndTime));
     }
 
-    m_commandHistory->addCommand(command);
+    CommandHistory::getInstance()->addCommand(command);
 
     emit makeTrackVisible(firstAlteredTrack + yrNrTracks/2 + 1);
 }
@@ -1378,7 +1377,7 @@ bool RosegardenGUIDoc::saveDocumentActual(const QString& filename,
     if (!autosave) {
         emit documentModified(false);
         setModified(false);
-        m_commandHistory->documentSaved();
+        CommandHistory::getInstance()->documentSaved();
         delete progressDlg;
     } else {
         progress->setValue(0);
@@ -2278,7 +2277,7 @@ RosegardenGUIDoc::stopRecordingMidi()
 
         command->addCommand(new SegmentRecordCommand(s));
 
-        m_commandHistory->addCommand(command);
+        CommandHistory::getInstance()->addCommand(command);
     }
 
     emit stoppedMIDIRecording();
@@ -2805,8 +2804,8 @@ RosegardenGUIDoc::finalizeAudioFile(InstrumentId iid)
         getComposition().addSegment(recordSegment);
     }
 
-    m_commandHistory->addCommand
-    (new SegmentRecordCommand(recordSegment));
+    CommandHistory::getInstance()->addCommand
+        (new SegmentRecordCommand(recordSegment));
 
     // update views
     slotUpdateAllViews(0);

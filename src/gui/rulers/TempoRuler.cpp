@@ -25,7 +25,7 @@
 #include "base/RulerScale.h"
 #include "base/SnapGrid.h"
 #include "document/RosegardenGUIDoc.h"
-#include "document/MultiViewCommandHistory.h"
+#include "document/CommandHistory.h"
 #include "gui/application/RosegardenGUIApp.h"
 #include "gui/dialogs/TempoDialog.h"
 #include "gui/general/GUIPalette.h"
@@ -119,7 +119,7 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
     setBackgroundMode(Qt::NoBackground);
 
     QObject::connect
-    (doc->getCommandHistory(), SIGNAL(commandExecuted()),
+    (CommandHistory::getInstance(), SIGNAL(commandExecuted()),
      this, SLOT(update()));
 
 //     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");

@@ -63,6 +63,7 @@ protected:
     bool setActionIcon(QString actionName, QString icon);
     bool setActionShortcut(QString actionName, QString shortcut);
     bool setActionGroup(QString actionName, QString group);
+    bool setActionChecked(QString actionName, bool);
 
     bool setMenuText(QString name, QString text);
     bool addMenuToMenu(QString parent, QString child);
@@ -82,6 +83,7 @@ protected:
     QString findRcFile(QString name);
 
     QAction *findAction(QString name);
+    QAction *findStandardAction(QString name);
     QActionGroup *findGroup(QString name);
     QMenu *findMenu(QString name);
     QToolBar *findToolbar(QString name);

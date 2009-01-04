@@ -29,7 +29,7 @@
 #include "commands/studio/ReconnectDeviceCommand.h"
 #include "commands/studio/RenameDeviceCommand.h"
 #include "document/RosegardenGUIDoc.h"
-#include "document/MultiViewCommandHistory.h"
+#include "document/CommandHistory.h"
 #include "sequencer/RosegardenSequencer.h"
 #include <algorithm>
 
@@ -366,7 +366,7 @@ DeviceEditorDialog::slotApply()
         }
     }
 
-    m_document->getCommandHistory()->addCommand(command);
+    CommandHistory::getInstance()->addCommand(command);
 
     m_deletedDevices.clear();
 

@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -36,28 +35,27 @@ namespace Rosegarden
 
 class Command;
 class MacroCommand;
+class ActionFileClient;
 
 /**
- * The MultiViewCommandHistory class stores a list of executed
+ * The CommandHistory class stores a list of executed
  * commands and maintains Undo and Redo actions synchronised with
  * those commands.
  *
- * MultiViewCommandHistory allows you to associate more than one Undo
+ * CommandHistory allows you to associate more than one Undo
  * and Redo menu or toolbar with the same command history, and it
  * keeps them all up-to-date at once.  This makes it effective in
  * systems where multiple views may be editing the same data.
  */
 
-class MultiViewCommandHistory : public QObject
+class CommandHistory : public QObject
 {
     Q_OBJECT
 
 public:
-    virtual ~MultiViewCommandHistory();
+    virtual ~CommandHistory();
 
-	MultiViewCommandHistory();	//### made unprotected (public)
-	
-	static MultiViewCommandHistory *getInstance();
+    static CommandHistory *getInstance();
 
     void clear();
     
@@ -184,7 +182,7 @@ signals:
 
 
 protected:
-    static MultiViewCommandHistory *m_instance;
+    static CommandHistory *m_instance;
 
     QAction *m_undoAction;
     QAction *m_redoAction;

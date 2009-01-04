@@ -49,7 +49,6 @@ namespace Rosegarden
 class SequenceManager;
 class RosegardenGUIView;
 class ProgressDialog;
-class MultiViewCommandHistory;
 class MappedComposition;
 class Event;
 class EditViewBase;
@@ -229,13 +228,6 @@ public:
     void setQuickMarker();
     void jumpToQuickMarker();    
     timeT getQuickMarkerTime() { return m_quickMarkerTime; }
-
-    /**
-     * returns the global command history
-     */
-    MultiViewCommandHistory *getCommandHistory() {
-        return m_commandHistory;
-    }
 
     /**
      * returns the composition (the principal constituent of the document)
@@ -678,9 +670,6 @@ protected:
      * in here
      */
     NoteOnMap m_noteOnEvents;
-
-
-    MultiViewCommandHistory *m_commandHistory;
 
     /**
      * the Studio

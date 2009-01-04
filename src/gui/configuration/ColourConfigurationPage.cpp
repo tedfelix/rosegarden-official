@@ -25,7 +25,7 @@
 #include "commands/segment/SegmentColourMapCommand.h"
 #include "ConfigurationPage.h"
 #include "document/RosegardenGUIDoc.h"
-#include "document/MultiViewCommandHistory.h"
+#include "document/CommandHistory.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/widgets/ColourTable.h"
 #include "TabbedConfigurationPage.h"
@@ -109,7 +109,7 @@ void
 ColourConfigurationPage::apply()
 {
     SegmentColourMapCommand *command = new SegmentColourMapCommand(m_doc, m_map);
-    m_doc->getCommandHistory()->addCommand(command);
+    CommandHistory::getInstance()->addCommand(command);
 
     RG_DEBUG << "ColourConfigurationPage::apply() emitting docColoursChanged()" << endl;
     emit docColoursChanged();

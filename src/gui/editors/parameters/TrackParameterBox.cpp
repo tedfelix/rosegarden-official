@@ -972,7 +972,7 @@ TrackParameterBox::slotPresetPressed()
             			dialog.getTranspose(), dialog.getLowRange(), 
             			dialog.getHighRange(),
             			clefIndexToClef(dialog.getClef()));
-                m_doc->getCommandHistory()->addCommand(command);
+                CommandHistory::getInstance()->addCommand(command);
             }
             m_defClef->setCurrentIndex(dialog.getClef());
 // 			m_defTranspose->setCurrentIndex(QString("%1").arg

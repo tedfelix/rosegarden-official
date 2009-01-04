@@ -42,7 +42,6 @@ class Segment;
 class RulerScale;
 class RosegardenGUIDoc;
 class QDeferScrollView;
-class MultiViewCommandHistory;
 class CompositionView;
 class CompositionModel;
 class ChordNameRuler;
@@ -93,7 +92,6 @@ public:
     /**
      * Manage command history
      */
-    MultiViewCommandHistory *getCommandHistory();
     void addCommandToHistory(Command *command);
 
     void updateRulers();

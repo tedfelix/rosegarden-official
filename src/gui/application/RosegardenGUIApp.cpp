@@ -83,7 +83,7 @@
 #include "document/io/CsoundExporter.h"
 #include "document/io/HydrogenLoader.h"
 #include "document/io/LilyPondExporter.h"
-#include "document/MultiViewCommandHistory.h"
+#include "document/CommandHistory.h"
 #include "document/io/RG21Loader.h"
 #include "document/io/MupExporter.h"
 #include "document/io/MusicXmlExporter.h"
@@ -738,7 +738,7 @@ void RosegardenGUIApp::setupActions()
     createAction("tutorial", SLOT(slotTutorial()));
     createAction("guidelines", SLOT(slotBugGuidelines()));
 
-    //&&& Connect MultiViewCommandHistory to the edit menu and toolbar
+    //&&& Connect CommandHistory to the edit menu and toolbar
     // (looking up the menu & toolbar by name)
 //    new KToolBarPopupAction(i18n("Und&o"), "undo", KStdAccel::shortcut(KStdAccel::Undo), actionCollection(), KStdAction::stdName(KStdAction::Undo));
 //    new KToolBarPopupAction(i18n("Re&do"), "redo", KStdAccel::shortcut(KStdAccel::Redo), actionCollection(), KStdAction::stdName(KStdAction::Redo));
@@ -1063,7 +1063,7 @@ void RosegardenGUIApp::setupActions()
     //
     // undo/redo actions are special in that they are connected to
     // slots later on, when the current document is set up - see
-    // MultiViewCommandHistory::attachView
+    // CommandHistory::attachView
     //
 	QString tmp_name;
 	//
@@ -2521,11 +2521,11 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
     connect(m_doc, SIGNAL(loopChanged(timeT, timeT)),
             this, SLOT(slotSetLoop(timeT, timeT)));
 
-//    m_doc->getCommandHistory()->attachView( actionCollection() );		//&&& needed ? how to ?
+//    CommandHistory::getInstance()->attachView( actionCollection() );		//&&& needed ? how to ?
 
-    connect(m_doc->getCommandHistory(), SIGNAL(commandExecuted()),
+    connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             SLOT(update()));
-    connect(m_doc->getCommandHistory(), SIGNAL(commandExecuted()),
+    connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             SLOT(slotTestClipboard()));
 
     // connect and start the autosave timer
@@ -3471,7 +3471,7 @@ void RosegardenGUIApp::slotEditCut()
     KTmpStatusMsg msg(i18n("Cutting selection..."), this);
 
     SegmentSelection selection(m_view->getSelection());
-    m_doc->getCommandHistory()->addCommand
+    CommandHistory::getInstance()->addCommand
     (new CutCommand(selection, m_clipboard));
 }
 
@@ -3482,7 +3482,7 @@ void RosegardenGUIApp::slotEditCopy()
     KTmpStatusMsg msg(i18n("Copying selection to clipboard..."), this);
 
     SegmentSelection selection(m_view->getSelection());
-    m_doc->getCommandHistory()->addCommand
+    CommandHistory::getInstance()->addCommand
     (new CopyCommand(selection, m_clipboard));
 }
 
@@ -3497,7 +3497,7 @@ void RosegardenGUIApp::slotEditPaste()
     // for now, but we could paste at the time of the first copied
     // segment and then do ghosting drag or something
     timeT insertionTime = m_doc->getComposition().getPosition();
-    m_doc->getCommandHistory()->addCommand
+    CommandHistory::getInstance()->addCommand
     (new PasteSegmentsCommand(&m_doc->getComposition(),
                               m_clipboard, insertionTime,
                               m_doc->getComposition().getSelectedTrack(),
@@ -3515,7 +3515,7 @@ void RosegardenGUIApp::slotCutRange()
     if (t0 == t1)
         return ;
 
-    m_doc->getCommandHistory()->addCommand
+    CommandHistory::getInstance()->addCommand
     (new CutRangeCommand(&m_doc->getComposition(), t0, t1, m_clipboard));
 }
 
@@ -3527,7 +3527,7 @@ void RosegardenGUIApp::slotCopyRange()
     if (t0 == t1)
         return ;
 
-    m_doc->getCommandHistory()->addCommand
+    CommandHistory::getInstance()->addCommand
     (new CopyCommand(&m_doc->getComposition(), t0, t1, m_clipboard));
 }
 
@@ -3536,7 +3536,7 @@ void RosegardenGUIApp::slotPasteRange()
     if (m_clipboard->isEmpty())
         return ;
 
-    m_doc->getCommandHistory()->addCommand
+    CommandHistory::getInstance()->addCommand
     (new PasteRangeCommand(&m_doc->getComposition(), m_clipboard,
                            m_doc->getComposition().getPosition()));
 
@@ -3551,7 +3551,7 @@ void RosegardenGUIApp::slotDeleteRange()
     if (t0 == t1)
         return ;
 
-    m_doc->getCommandHistory()->addCommand
+    CommandHistory::getInstance()->addCommand
     (new DeleteRangeCommand(&m_doc->getComposition(), t0, t1));
 
     m_doc->setLoop(0, 0);
@@ -3564,7 +3564,7 @@ void RosegardenGUIApp::slotInsertRange()
     TimeDialog dialog(m_view, i18n("Duration of empty range to insert"),
                       &m_doc->getComposition(), t0, r.second - r.first, false);
     if (dialog.exec() == QDialog::Accepted) {
-        m_doc->getCommandHistory()->addCommand
+        CommandHistory::getInstance()->addCommand
             (new InsertRangeCommand(&m_doc->getComposition(), t0, dialog.getTime()));
         m_doc->setLoop(0, 0);
     }
@@ -4209,7 +4209,7 @@ void RosegardenGUIApp::slotTempoToSegmentLength(QWidget* parent)
         macro->addCommand(new AddTempoChangeCommand(&comp, 0, newTempo));
 
         // execute
-        m_doc->getCommandHistory()->addCommand(macro);
+        CommandHistory::getInstance()->addCommand(macro);
     }
 }
 
@@ -4653,7 +4653,7 @@ void RosegardenGUIApp::slotMoveTrackDown()
     MoveTracksCommand *command =
         new MoveTracksCommand(&comp, srcTrack->getId(), destTrack->getId());
 
-    m_doc->getCommandHistory()->addCommand(command);
+    CommandHistory::getInstance()->addCommand(command);
 
     // make sure we're showing the right selection
     m_view->slotSelectTrackSegments(comp.getSelectedTrack());
@@ -4688,7 +4688,7 @@ void RosegardenGUIApp::slotMoveTrackUp()
     MoveTracksCommand *command =
         new MoveTracksCommand(&comp, srcTrack->getId(), destTrack->getId());
 
-    m_doc->getCommandHistory()->addCommand(command);
+    CommandHistory::getInstance()->addCommand(command);
 
     // make sure we're showing the right selection
     m_view->slotSelectTrackSegments(comp.getSelectedTrack());
@@ -5016,7 +5016,7 @@ RosegardenGUIApp::createDocumentFromMIDIFile(QString file)
         command->addCommand(subCommand);
     }
 
-    newDoc->getCommandHistory()->addCommand(command);
+    CommandHistory::getInstance()->addCommand(command);
 
     if (comp->getTimeSignatureCount() == 0) {
         CompositionTimeSliceAdapter adapter(comp);
@@ -6754,11 +6754,11 @@ void RosegardenGUIApp::slotEditTimeSignature(QWidget *parent,
         time = dialog.getTime();
 
         if (dialog.shouldNormalizeRests()) {
-            m_doc->getCommandHistory()->addCommand
+            CommandHistory::getInstance()->addCommand
             (new AddTimeSignatureAndNormalizeCommand
              (&composition, time, dialog.getTimeSignature()));
         } else {
-            m_doc->getCommandHistory()->addCommand
+            CommandHistory::getInstance()->addCommand
             (new AddTimeSignatureCommand
              (&composition, time, dialog.getTimeSignature()));
         }
@@ -6836,7 +6836,7 @@ RosegardenGUIApp::slotChangeTempo(timeT time,
     // label as we add commands on.
     //
     if (action == TempoDialog::AddTempo) {
-        m_doc->getCommandHistory()->addCommand
+        CommandHistory::getInstance()->addCommand
         (new AddTempoChangeCommand(&comp, time, value, target));
     } else if (action == TempoDialog::ReplaceTempo) {
         int index = comp.getTempoChangeNumberAt(time);
@@ -6844,7 +6844,7 @@ RosegardenGUIApp::slotChangeTempo(timeT time,
         // if there's no previous tempo change then just set globally
         //
         if (index == -1) {
-            m_doc->getCommandHistory()->addCommand
+            CommandHistory::getInstance()->addCommand
             (new AddTempoChangeCommand(&comp, 0, value, target));
             return ;
         }
@@ -6859,10 +6859,10 @@ RosegardenGUIApp::slotChangeTempo(timeT time,
         macro->addCommand(new AddTempoChangeCommand(&comp, prevTime, value,
                           target));
 
-        m_doc->getCommandHistory()->addCommand(macro);
+        CommandHistory::getInstance()->addCommand(macro);
 
     } else if (action == TempoDialog::AddTempoAtBarStart) {
-        m_doc->getCommandHistory()->addCommand(new
+        CommandHistory::getInstance()->addCommand(new
                                                AddTempoChangeCommand(&comp, comp.getBarStartForTime(time),
                                                                      value, target));
     } else if (action == TempoDialog::GlobalTempo ||
@@ -6887,7 +6887,7 @@ RosegardenGUIApp::slotChangeTempo(timeT time,
             macro->addCommand(new ModifyDefaultTempoCommand(&comp, value));
         }
 
-        m_doc->getCommandHistory()->addCommand(macro);
+        CommandHistory::getInstance()->addCommand(macro);
 
     } else {
         RG_DEBUG << "RosegardenGUIApp::slotChangeTempo() - "
@@ -6919,7 +6919,7 @@ RosegardenGUIApp::slotMoveTempo(timeT oldTime,
                       tc.second,
                       tr.first ? tr.second : -1));
 
-    m_doc->getCommandHistory()->addCommand(macro);
+    CommandHistory::getInstance()->addCommand(macro);
 }
 
 void
@@ -6931,7 +6931,7 @@ RosegardenGUIApp::slotDeleteTempo(timeT t)
     if (index < 0)
         return ;
 
-    m_doc->getCommandHistory()->addCommand(new RemoveTempoChangeCommand
+    CommandHistory::getInstance()->addCommand(new RemoveTempoChangeCommand
                                            (&comp, index));
 }
 
@@ -6944,7 +6944,7 @@ RosegardenGUIApp::slotAddMarker(timeT time)
                             qStrToStrUtf8( i18n("new marker")),
                             qStrToStrUtf8( i18n("no description"))  );
 
-    m_doc->getCommandHistory()->addCommand(command);    
+    CommandHistory::getInstance()->addCommand(command);    
 }
 
 void
@@ -6957,7 +6957,7 @@ RosegardenGUIApp::slotDeleteMarker(int id, timeT time, QString name, QString des
                                 qstrtostr(name),
                                 qstrtostr(description));
 
-    m_doc->getCommandHistory()->addCommand(command);
+    CommandHistory::getInstance()->addCommand(command);
 }
 
 void
@@ -7445,7 +7445,7 @@ RosegardenGUIApp::slotRelabelSegments()
 	QString newLabel = QInputDialog::getText( dynamic_cast<QWidget*>(this), QString("Input"), i18n("Enter new label") );
 
     if (ok) {
-        m_doc->getCommandHistory()->addCommand
+        CommandHistory::getInstance()->addCommand
         (new SegmentLabelCommand(selection, newLabel));
         m_view->getTrackEditor()->getSegmentCanvas()->slotUpdateSegmentsDrawBuffer();
     }
@@ -7465,7 +7465,7 @@ RosegardenGUIApp::slotTransposeSegments()
 	
     if (!ok || (semitones == 0 && steps == 0)) return;
     
-    m_doc->getCommandHistory()->addCommand
+    CommandHistory::getInstance()->addCommand
         	(new SegmentTransposeCommand(m_view->getSelection(), intervalDialog.getChangeKey(), steps, semitones, intervalDialog.getTransposeSegmentBack()));
 }
 
@@ -7482,7 +7482,7 @@ RosegardenGUIApp::slotChangeCompositionLength()
               dialog.getEndMarker());
 
         m_view->getTrackEditor()->getSegmentCanvas()->clearSegmentRectsCache(true);
-        m_doc->getCommandHistory()->addCommand(command);
+        CommandHistory::getInstance()->addCommand(command);
     }
 }
 
@@ -8888,7 +8888,7 @@ RosegardenGUIApp::slotImportStudioFromFile(const QString &file)
         oldStudio.setMIDIThruFilter(newStudio.getMIDIThruFilter());
         oldStudio.setMIDIRecordFilter(newStudio.getMIDIRecordFilter());
 
-        m_doc->getCommandHistory()->addCommand(command);
+        CommandHistory::getInstance()->addCommand(command);
         m_doc->syncDevices();
         m_doc->initialiseStudio(); // The other document will have reset it
     }

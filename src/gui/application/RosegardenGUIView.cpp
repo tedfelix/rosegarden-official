@@ -42,7 +42,7 @@
 #include "commands/segment/AudioSegmentAutoSplitCommand.h"
 #include "commands/segment/AudioSegmentInsertCommand.h"
 #include "commands/segment/SegmentSingleRepeatToCopyCommand.h"
-#include "document/MultiViewCommandHistory.h"
+#include "document/CommandHistory.h"
 #include "document/RosegardenGUIDoc.h"
 #include "RosegardenApplication.h"
 #include "gui/configuration/GeneralConfigurationPage.h"
@@ -222,7 +222,7 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
         */
 
         QObject::connect
-        (getCommandHistory(), SIGNAL(commandExecuted()),
+        (CommandHistory::getInstance(), SIGNAL(commandExecuted()),
          m_trackEditor->getSegmentCanvas(), SLOT(slotUpdateSegmentsDrawBuffer()));
     }
 }
@@ -1363,16 +1363,10 @@ void RosegardenGUIView::slotDeleteTracks(
     m_trackEditor->slotDeleteTracks(tracks);
 }
 
-MultiViewCommandHistory*
-RosegardenGUIView::getCommandHistory()
-{
-    return getDocument()->getCommandHistory();
-}
-
 void
 RosegardenGUIView::slotAddCommandToHistory(Command *command)
 {
-    getCommandHistory()->addCommand(command);
+    CommandHistory::getInstance()->addCommand(command);
 }
 
 void

@@ -21,6 +21,7 @@
 
 #include "base/Device.h"
 #include "base/MidiDevice.h"
+#include "gui/general/ActionFileClient.h"
 
 #include <QMainWindow>
 
@@ -38,10 +39,10 @@ namespace Rosegarden
 class Command;
 class Studio;
 class RosegardenGUIDoc;
-class MultiViewCommandHistory;
+class CommandHistory;
 
 
-class ControlEditorDialog : public QMainWindow
+class ControlEditorDialog : public QMainWindow, public ActionFileClient
 {
     Q_OBJECT
 
@@ -55,7 +56,7 @@ public:
     void initDialog();
 
     void addCommandToHistory(Command *command);
-    MultiViewCommandHistory* getCommandHistory();
+    CommandHistory* getCommandHistory();
 
     void setModified(bool value);
     void checkModified();

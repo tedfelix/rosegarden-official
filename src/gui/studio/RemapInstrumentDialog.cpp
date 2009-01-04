@@ -26,7 +26,7 @@
 #include "base/Studio.h"
 #include "commands/studio/ModifyDeviceMappingCommand.h"
 #include "commands/studio/ModifyInstrumentMappingCommand.h"
-#include "document/MultiViewCommandHistory.h"
+#include "document/CommandHistory.h"
 #include "document/RosegardenGUIDoc.h"
 #include <QComboBox>
 #include "document/Command.h"
@@ -172,7 +172,7 @@ RemapInstrumentDialog::slotApply()
             (m_doc,
              m_devices[m_fromCombo->currentIndex()]->getId(),
              m_devices[m_toCombo->currentIndex()]->getId());
-        addCommandToHistory(command);
+        CommandHistory::getInstance()->addCommandToHistory(command);
     } else // instruments
     {
         ModifyInstrumentMappingCommand *command =
@@ -180,22 +180,10 @@ RemapInstrumentDialog::slotApply()
             (m_doc,
              m_instruments[m_fromCombo->currentIndex()]->getId(),
              m_instruments[m_toCombo->currentIndex()]->getId());
-        addCommandToHistory(command);
+        CommandHistory::getInstance()->addCommandToHistory(command);
     }
 
     emit applyClicked();
-}
-
-void
-RemapInstrumentDialog::addCommandToHistory(Command *command)
-{
-    getCommandHistory()->addCommand(command);
-}
-
-MultiViewCommandHistory*
-RemapInstrumentDialog::getCommandHistory()
-{
-    return m_doc->getCommandHistory();
 }
 
 }

@@ -34,7 +34,6 @@ namespace Rosegarden
 class Command;
 
 class RosegardenGUIDoc;
-class MultiViewCommandHistory;
 
 
 class RemapInstrumentDialog : public QDialog
@@ -45,9 +44,6 @@ public:
                           RosegardenGUIDoc *doc);
 
     void populateCombo();
-
-    void addCommandToHistory(Command *command);
-    MultiViewCommandHistory* getCommandHistory();
 
 public slots:
     void slotRemapReleased();

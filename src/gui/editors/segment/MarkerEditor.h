@@ -39,7 +39,6 @@ namespace Rosegarden
 
 class Command;
 class RosegardenGUIDoc;
-class MultiViewCommandHistory;
 
 
 class MarkerEditor : public QMainWindow
@@ -54,7 +53,6 @@ public:
     void initDialog();
 
     void addCommandToHistory(Command *command);
-    MultiViewCommandHistory* getCommandHistory();
 
     void setModified(bool value);
     void checkModified();

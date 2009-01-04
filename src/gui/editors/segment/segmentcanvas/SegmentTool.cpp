@@ -21,7 +21,7 @@
 #include "misc/Debug.h"
 #include "CompositionView.h"
 #include "document/RosegardenGUIDoc.h"
-#include "document/MultiViewCommandHistory.h"
+#include "document/CommandHistory.h"
 #include "gui/application/RosegardenGUIApp.h"
 #include "gui/general/BaseTool.h"
 #include "SegmentToolBox.h"
@@ -103,7 +103,7 @@ SegmentTool::createMenu()
 void
 SegmentTool::addCommandToHistory(Command *command)
 {
-    m_doc->getCommandHistory()->addCommand(command);
+    CommandHistory::getInstance()->addCommand(command);
 }
 
 SegmentToolBox* SegmentTool::getToolBox()

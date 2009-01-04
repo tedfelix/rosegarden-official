@@ -37,7 +37,7 @@
 #include "base/TriggerSegment.h"
 #include "CompositionMmapper.h"
 #include "document/RosegardenGUIDoc.h"
-#include "document/MultiViewCommandHistory.h"
+#include "document/CommandHistory.h"
 #include "gui/application/RosegardenApplication.h"
 #include "gui/application/RosegardenGUIApp.h"
 #include "gui/application/RosegardenGUIView.h"
@@ -123,7 +123,7 @@ SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
             this, SLOT(slotScheduledCompositionMmapperReset()));
 
 
-    connect(doc->getCommandHistory(), SIGNAL(commandExecuted()),
+    connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             this, SLOT(update()));
 
     m_doc->getComposition().addObserver(this);
@@ -160,7 +160,7 @@ void SequenceManager::setDocument(RosegardenGUIDoc* doc)
     DataBlockRepository::clear();
 
     m_doc->getComposition().removeObserver(this);
-    disconnect(m_doc->getCommandHistory(), SIGNAL(commandExecuted()));
+    disconnect(CommandHistory::getInstance(), SIGNAL(commandExecuted()));
 
     m_segments.clear();
     m_triggerSegments.clear();
@@ -192,7 +192,7 @@ void SequenceManager::setDocument(RosegardenGUIDoc* doc)
     m_compositionRefreshStatusId = comp.getNewRefreshStatusId();
     comp.addObserver(this);
 
-    connect(m_doc->getCommandHistory(), SIGNAL(commandExecuted()),
+    connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             this, SLOT(update()));
 
     for (Composition::iterator i = comp.begin(); i != comp.end(); ++i) {

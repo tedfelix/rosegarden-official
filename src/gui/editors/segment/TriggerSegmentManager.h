@@ -40,8 +40,6 @@ namespace Rosegarden
 
 class Command;
 class RosegardenGUIDoc;
-class MultiViewCommandHistory;
-
 
 class TriggerSegmentManager : public QMainWindow
 {
@@ -55,7 +53,6 @@ public:
     void initDialog();
 
     void addCommandToHistory(Command *command);
-    MultiViewCommandHistory* getCommandHistory();
 
     void setModified(bool value);
     void checkModified();

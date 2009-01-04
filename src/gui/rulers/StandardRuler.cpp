@@ -23,7 +23,7 @@
 #include "MarkerRuler.h"
 #include "base/RulerScale.h"
 #include "document/RosegardenGUIDoc.h"
-#include "document/MultiViewCommandHistory.h"
+#include "document/CommandHistory.h"
 #include "gui/application/RosegardenGUIApp.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/rulers/LoopRuler.h"
@@ -77,7 +77,7 @@ StandardRuler::StandardRuler(RosegardenGUIDoc *doc,
 
 
     QObject::connect
-        (doc->getCommandHistory(), SIGNAL(commandExecuted()),
+        (CommandHistory::getInstance(), SIGNAL(commandExecuted()),
          this, SLOT(update()));
 
 }

@@ -46,7 +46,6 @@ class SegmentSelection;
 class Segment;
 class RosegardenGUIDoc;
 class RealTime;
-class MultiViewCommandHistory;
 class AudioPlayingDialog;
 class AudioFile;
 class Command;
@@ -74,8 +73,6 @@ public:
     void setSelected(AudioFileId id,
                      const Segment *segment,
                      bool propagate); // if true then we tell the segmentcanvas
-
-    MultiViewCommandHistory *getCommandHistory();
 
     // Pop down playing dialog if it's currently up
     //

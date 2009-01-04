@@ -37,7 +37,7 @@
 #include "commands/segment/SegmentColourMapCommand.h"
 #include "commands/segment/SegmentCommandRepeat.h"
 #include "commands/segment/SegmentLabelCommand.h"
-#include "document/MultiViewCommandHistory.h"
+#include "document/CommandHistory.h"
 #include "document/RosegardenGUIDoc.h"
 #include "gui/dialogs/PitchPickerDialog.h"
 #include "gui/editors/notation/NotationStrings.h"
@@ -96,7 +96,7 @@ SegmentParameterBox::SegmentParameterBox(RosegardenGUIDoc* doc,
 
     m_doc->getComposition().addObserver(this);
 
-    connect(getCommandHistory(), SIGNAL(commandExecuted()),
+    connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             this, SLOT(update()));
 }
 
@@ -1075,16 +1075,10 @@ SegmentParameterBox::slotLowestPressed()
     }
 }
 
-MultiViewCommandHistory*
-SegmentParameterBox::getCommandHistory()
-{
-    return m_doc->getCommandHistory();
-}
-
 void
 SegmentParameterBox::addCommandToHistory(Command *command)
 {
-    m_doc->getCommandHistory()->addCommand(command);
+    CommandHistory::getInstance()->addCommand(command);
 }
 
 void

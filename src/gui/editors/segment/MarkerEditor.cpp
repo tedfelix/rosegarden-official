@@ -38,7 +38,7 @@
 #include "commands/edit/AddMarkerCommand.h"
 #include "commands/edit/ModifyMarkerCommand.h"
 #include "commands/edit/RemoveMarkerCommand.h"
-#include "document/MultiViewCommandHistory.h"
+#include "document/CommandHistory.h"
 #include "document/RosegardenGUIDoc.h"
 #include "document/ConfigGroups.h"
 #include "document/Command.h"
@@ -178,9 +178,9 @@ MarkerEditor::MarkerEditor(QWidget *parent,
 
     setupActions();
 
-//     m_doc->getCommandHistory()->attachView(actionCollection());	//&&&
+//     CommandHistory::getInstance()->attachView(actionCollection());	//&&&
 	
-    connect(m_doc->getCommandHistory(), SIGNAL(commandExecuted()),
+    connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             this, SLOT(slotUpdate()));
 
     connect(m_listView, SIGNAL(doubleClicked(QTreeWidgetItem *)),
@@ -259,7 +259,7 @@ MarkerEditor::~MarkerEditor()
 //     m_listView->saveLayout(MarkerEditorConfigGroup);	//&&&
 
 //     if (m_doc)
-//         m_doc->getCommandHistory()->detachView(actionCollection());	//&&&
+//         CommandHistory::getInstance()->detachView(actionCollection());	//&&&
 }
 
 void
@@ -400,7 +400,7 @@ MarkerEditor::slotClose()
     RG_DEBUG << "MarkerEditor::slotClose" << endl;
 
 //     if (m_doc)
-//         m_doc->getCommandHistory()->detachView(actionCollection());	//&&&
+//         CommandHistory::getInstance()->detachView(actionCollection());	//&&&
     m_doc = 0;
 
     close();
@@ -511,14 +511,8 @@ MarkerEditor::setupActions()
 void
 MarkerEditor::addCommandToHistory(Command *command)
 {
-    getCommandHistory()->addCommand(command);
+    CommandHistory::getInstance()->addCommand(command);
     setModified(false);
-}
-
-MultiViewCommandHistory*
-MarkerEditor::getCommandHistory()
-{
-    return m_doc->getCommandHistory();
 }
 
 void

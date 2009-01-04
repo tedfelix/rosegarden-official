@@ -45,7 +45,6 @@ namespace Rosegarden
 class Command;
 class Studio;
 class RosegardenGUIDoc;
-class MultiViewCommandHistory;
 class MidiProgramsEditor;
 class MidiKeyMappingEditor;
 class MidiDeviceListViewItem;
@@ -71,7 +70,6 @@ public:
     std::pair<int, int> getFirstFreeBank(QTreeWidgetItem*);
 
     void addCommandToHistory(Command *command);
-    MultiViewCommandHistory* getCommandHistory();
 
     void setCurrentDevice(DeviceId device);
 

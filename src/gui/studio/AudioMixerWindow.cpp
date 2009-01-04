@@ -115,106 +115,37 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
     createAction("record", SIGNAL(record()));
     createAction("panic", SIGNAL(panic()));
 
-    createAction("show_audio_faders", SLOT(slotToggleFaders()));
-    createAction("show_synth_faders", SLOT(slotToggleSynthFaders()));
-    createAction("show_audio_submasters", SLOT(slotToggleSubmasters()));
-    createAction("show_plugin_buttons", SLOT(slotTogglePluginButtons()));
-
-    //###
-    //!!! cc -- I've only got this far with this one but I have to
-    //go out.  Reminder to handle rest of actions and setting checked
-    //state for above four!
-
     unsigned int mixerOptions = m_studio->getMixerDisplayOptions();
 
-    QAction* qa_show_audio_faders = new QAction(  i18n("Show Audio &Faders"), dynamic_cast<QObject*>(this) );
-	connect( qa_show_audio_faders, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleFaders()) );
-	qa_show_audio_faders->setObjectName( "show_audio_faders" );	//### FIX: deallocate QAction ptr
-	qa_show_audio_faders->setCheckable( true );	//
-	qa_show_audio_faders->setAutoRepeat( false );	//
-	//qa_show_audio_faders->setActionGroup( 0 );	// QActionGroup*
-	qa_show_audio_faders->setChecked( false );	//
-	// )->setChecked
-    (!(mixerOptions & MIXER_OMIT_FADERS));
+    createAction("show_audio_faders", SLOT(slotToggleFaders()))
+        ->setChecked(!(mixerOptions & MIXER_OMIT_FADERS));
 
-    QAction* qa_show_synth_faders = new QAction(  i18n("Show Synth &Faders"), dynamic_cast<QObject*>(this) );
-	connect( qa_show_synth_faders, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleSynthFaders()) );
-	qa_show_synth_faders->setObjectName( "show_synth_faders" );	//### FIX: deallocate QAction ptr
-	qa_show_synth_faders->setCheckable( true );	//
-	qa_show_synth_faders->setAutoRepeat( false );	//
-	//qa_show_synth_faders->setActionGroup( 0 );	// QActionGroup*
-	qa_show_synth_faders->setChecked( false );	//
-	// )->setChecked
-    (!(mixerOptions & MIXER_OMIT_SYNTH_FADERS));
+    createAction("show_synth_faders", SLOT(slotToggleSynthFaders()))
+        ->setChecked(!(mixerOptions & MIXER_OMIT_SYNTH_FADERS));
 
-    QAction* qa_show_audio_submasters = new QAction(  i18n("Show &Submasters"), dynamic_cast<QObject*>(this) );
-	connect( qa_show_audio_submasters, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleSubmasters()) );
-	qa_show_audio_submasters->setObjectName( "show_audio_submasters" );	//### FIX: deallocate QAction ptr
-	qa_show_audio_submasters->setCheckable( true );	//
-	qa_show_audio_submasters->setAutoRepeat( false );	//
-	//qa_show_audio_submasters->setActionGroup( 0 );	// QActionGroup*
-	qa_show_audio_submasters->setChecked( false );	//
-	// )->setChecked
-    (!(mixerOptions & MIXER_OMIT_SUBMASTERS));
+    createAction("show_audio_submasters", SLOT(slotToggleSubmasters()))
+        ->setChecked(!(mixerOptions & MIXER_OMIT_SUBMASTERS));
 
-    QAction* qa_show_plugin_buttons = new QAction(  i18n("Show &Plugin Buttons"), dynamic_cast<QObject*>(this) );
-	connect( qa_show_plugin_buttons, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotTogglePluginButtons()) );
-	qa_show_plugin_buttons->setObjectName( "show_plugin_buttons" );	//### FIX: deallocate QAction ptr
-	qa_show_plugin_buttons->setCheckable( true );	//
-	qa_show_plugin_buttons->setAutoRepeat( false );	//
-	//qa_show_plugin_buttons->setActionGroup( 0 );	// QActionGroup*
-	qa_show_plugin_buttons->setChecked( false );	//
-	// )->setChecked
-    (!(mixerOptions & MIXER_OMIT_PLUGINS));
+    createAction("show_plugin_buttons", SLOT(slotTogglePluginButtons()))
+        ->setChecked(!(mixerOptions & MIXER_OMIT_PLUGINS));
 
-    QAction* qa_show_unassigned_faders = new QAction(  i18n("Show &Unassigned Faders"), dynamic_cast<QObject*>(this) );
-	connect( qa_show_unassigned_faders, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleUnassignedFaders()) );
-	qa_show_unassigned_faders->setObjectName( "show_unassigned_faders" );	//### FIX: deallocate QAction ptr
-	qa_show_unassigned_faders->setCheckable( true );	//
-	qa_show_unassigned_faders->setAutoRepeat( false );	//
-	//qa_show_unassigned_faders->setActionGroup( 0 );	// QActionGroup*
-	qa_show_unassigned_faders->setChecked( false );	//
-	// )->setChecked
-    (mixerOptions & MIXER_SHOW_UNASSIGNED_FADERS);
+    createAction("show_unassigned_faders", SLOT(slotToggleUnassignedFaders()))
+        ->setChecked(mixerOptions & MIXER_SHOW_UNASSIGNED_FADERS);
 
     QAction *action = 0;
 
     for (int i = 1; i <= 16; i *= 2) {
-		/*
-        action =
-            new KRadioAction(i18np("1 Input", "%1 Inputs", i),
-                             0, this,
-                             SLOT(slotSetInputCountFromAction()), actionCollection(),
-                             QString("inputs_%1").arg(i));
-		*/
-		action = createAction( QString("inputs_%1").arg(i), SLOT(slotSetInputCountFromAction()) );
-// 		action->setExclusiveGroup("inputs");
-		
+        action = createAction
+            ( QString("inputs_%1").arg(i), SLOT(slotSetInputCountFromAction()) );
         if (i == int(m_studio->getRecordIns().size()))
             action->setChecked(true);
     }
 
-	/*
-    action = new KRadioAction
-             (i18n("No Submasters"),
-              0, this,
-              SLOT(slotSetSubmasterCountFromAction()), actionCollection(),
-              QString("submasters_0"));
-    action->setExclusiveGroup("submasters");
-    action->setChecked(true);
-	*/
-	createAction( "submasters_0", SLOT(slotSetSubmasterCountFromAction()) );
+    createAction( "submasters_0", SLOT(slotSetSubmasterCountFromAction()) );
 	
     for (int i = 2; i <= 8; i *= 2) {
-		/*
-        action = new KRadioAction
-                 (i18np("1 Submaster", "%1 Submasters", i),
-                  0, this,
-                  SLOT(slotSetSubmasterCountFromAction()), actionCollection(),
-                  QString("submasters_%1").arg(i));
-        action->setExclusiveGroup("submasters");
-		*/
-		action = createAction( QString("submasters_%1").arg(i), SLOT(slotSetSubmasterCountFromAction()) );
+        action = createAction
+            ( QString("submasters_%1").arg(i), SLOT(slotSetSubmasterCountFromAction()) );
 		
         if (i == int(m_studio->getBusses().size()) - 1)
             action->setChecked(true);

@@ -48,7 +48,6 @@ namespace Rosegarden
 class Command;
 class Segment;
 class RosegardenGUIDoc;
-class MultiViewCommandHistory;
 class Event;
 class EditToolBox;
 class EditTool;
@@ -92,11 +91,6 @@ public:
     virtual void refreshSegment(Segment *segment,
                                 timeT startTime = 0,
                                 timeT endTime = 0) = 0;
-
-    /**
-     * Get the document's global command history
-     */
-    virtual MultiViewCommandHistory *getCommandHistory();
 
     /**
      * Add a Command to the history

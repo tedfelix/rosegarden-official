@@ -16,7 +16,7 @@
 */
 
 
-#include "MultiViewCommandHistory.h"
+#include "CommandHistory.h"
 
 #include "Command.h"
 
@@ -34,9 +34,9 @@
 namespace Rosegarden
 {
 
-MultiViewCommandHistory *MultiViewCommandHistory::m_instance = 0;
+CommandHistory *CommandHistory::m_instance = 0;
 
-MultiViewCommandHistory::MultiViewCommandHistory() :
+CommandHistory::CommandHistory() :
     m_undoLimit(50),
     m_redoLimit(50),
     m_menuLimit(15),
@@ -48,11 +48,13 @@ MultiViewCommandHistory::MultiViewCommandHistory() :
     m_bundleTimeout(5000)
 {
     m_undoAction = new QAction(QIcon(":/icons/undo.png"), tr("&Undo"), this);
+    m_undoAction->setObjectName("edit_undo");
     m_undoAction->setShortcut(tr("Ctrl+Z"));
     m_undoAction->setStatusTip(tr("Undo the last editing operation"));
     connect(m_undoAction, SIGNAL(triggered()), this, SLOT(undo()));
     
     m_undoMenuAction = new QAction(QIcon(":/icons/undo.png"), tr("&Undo"), this);
+    m_undoMenuAction->setObjectName("edit_toolbar_undo");
     connect(m_undoMenuAction, SIGNAL(triggered()), this, SLOT(undo()));
     
     m_undoMenu = new QMenu(tr("&Undo"));
@@ -61,11 +63,13 @@ MultiViewCommandHistory::MultiViewCommandHistory() :
 	    this, SLOT(undoActivated(QAction*)));
 
     m_redoAction = new QAction(QIcon(":/icons/redo.png"), tr("Re&do"), this);
+    m_redoAction->setObjectName("edit_redo");
     m_redoAction->setShortcut(tr("Ctrl+Shift+Z"));
     m_redoAction->setStatusTip(tr("Redo the last operation that was undone"));
     connect(m_redoAction, SIGNAL(triggered()), this, SLOT(redo()));
     
     m_redoMenuAction = new QAction(QIcon(":/icons/redo.png"), tr("Re&do"), this);
+    m_redoMenuAction->setObjectName("edit_toolbar_redo");
     connect(m_redoMenuAction, SIGNAL(triggered()), this, SLOT(redo()));
 
     m_redoMenu = new QMenu(tr("Re&do"));
@@ -74,7 +78,7 @@ MultiViewCommandHistory::MultiViewCommandHistory() :
 	    this, SLOT(redoActivated(QAction*)));
 }
 
-MultiViewCommandHistory::~MultiViewCommandHistory()
+CommandHistory::~CommandHistory()
 {
     m_savedAt = -1;
     clearStack(m_undoStack);
@@ -84,18 +88,18 @@ MultiViewCommandHistory::~MultiViewCommandHistory()
     delete m_redoMenu;
 }
 
-MultiViewCommandHistory *
-MultiViewCommandHistory::getInstance()
+CommandHistory *
+CommandHistory::getInstance()
 {
-    if (!m_instance) m_instance = new MultiViewCommandHistory();
+    if (!m_instance) m_instance = new CommandHistory();
     return m_instance;
 }
 
 void
-MultiViewCommandHistory::clear()
+CommandHistory::clear()
 {
 #ifdef DEBUG_COMMAND_HISTORY
-    std::cerr << "MultiViewCommandHistory::clear()" << std::endl;
+    std::cerr << "CommandHistory::clear()" << std::endl;
 #endif
     closeBundle();
     m_savedAt = -1;
@@ -105,21 +109,21 @@ MultiViewCommandHistory::clear()
 }
 
 void
-MultiViewCommandHistory::registerMenu(QMenu *menu)
+CommandHistory::registerMenu(QMenu *menu)
 {
     menu->addAction(m_undoAction);
     menu->addAction(m_redoAction);
 }
 
 void
-MultiViewCommandHistory::registerToolbar(QToolBar *toolbar)
+CommandHistory::registerToolbar(QToolBar *toolbar)
 {
     toolbar->addAction(m_undoMenuAction);
     toolbar->addAction(m_redoMenuAction);
 }
 
 void
-MultiViewCommandHistory::addCommand(Command *command)
+CommandHistory::addCommand(Command *command)
 {
     if (!command) return;
 
@@ -132,12 +136,12 @@ MultiViewCommandHistory::addCommand(Command *command)
 }
 
 void
-MultiViewCommandHistory::addCommand(Command *command, bool execute, bool bundle)
+CommandHistory::addCommand(Command *command, bool execute, bool bundle)
 {
     if (!command) return;
 
 #ifdef DEBUG_COMMAND_HISTORY
-    std::cerr << "MultiViewCommandHistory::addCommand: " << command->getName().toLocal8Bit().data() << " at " << command << ": execute = " << execute << ", bundle = " << bundle << " (m_currentCompound = " << m_currentCompound << ", m_currentBundle = " << m_currentBundle << ")" << std::endl;
+    std::cerr << "CommandHistory::addCommand: " << command->getName().toLocal8Bit().data() << " at " << command << ": execute = " << execute << ", bundle = " << bundle << " (m_currentCompound = " << m_currentCompound << ", m_currentBundle = " << m_currentBundle << ")" << std::endl;
 #endif
 
     if (m_currentCompound) {
@@ -154,7 +158,7 @@ MultiViewCommandHistory::addCommand(Command *command, bool execute, bool bundle)
 
 #ifdef DEBUG_COMMAND_HISTORY
     if (!m_redoStack.empty()) {
-        std::cerr << "MultiViewCommandHistory::clearing redo stack" << std::endl;
+        std::cerr << "CommandHistory::clearing redo stack" << std::endl;
     }
 #endif
 
@@ -180,12 +184,12 @@ MultiViewCommandHistory::addCommand(Command *command, bool execute, bool bundle)
 }
 
 void
-MultiViewCommandHistory::addToBundle(Command *command, bool execute)
+CommandHistory::addToBundle(Command *command, bool execute)
 {
     if (m_currentBundle) {
 	if (!command || (command->getName() != m_currentBundleName)) {
 #ifdef DEBUG_COMMAND_HISTORY
-            std::cerr << "MultiViewCommandHistory::addToBundle: "
+            std::cerr << "CommandHistory::addToBundle: "
                       << command->getName().toStdString()
                       << ": closing current bundle" << std::endl;
 #endif
@@ -198,7 +202,7 @@ MultiViewCommandHistory::addToBundle(Command *command, bool execute)
     if (!m_currentBundle) {
 
 #ifdef DEBUG_COMMAND_HISTORY
-        std::cerr << "MultiViewCommandHistory::addToBundle: "
+        std::cerr << "CommandHistory::addToBundle: "
                   << command->getName().toStdString()
                   << ": creating new bundle" << std::endl;
 #endif
@@ -212,7 +216,7 @@ MultiViewCommandHistory::addToBundle(Command *command, bool execute)
     }
 
 #ifdef DEBUG_COMMAND_HISTORY
-    std::cerr << "MultiViewCommandHistory::addToBundle: "
+    std::cerr << "CommandHistory::addToBundle: "
               << command->getName().toStdString()
               << ": adding to bundle" << std::endl;
 #endif
@@ -234,10 +238,10 @@ MultiViewCommandHistory::addToBundle(Command *command, bool execute)
 }
 
 void
-MultiViewCommandHistory::closeBundle()
+CommandHistory::closeBundle()
 {
 #ifdef DEBUG_COMMAND_HISTORY
-    std::cerr << "MultiViewCommandHistory::closeBundle" << std::endl;
+    std::cerr << "CommandHistory::closeBundle" << std::endl;
 #endif
 
     m_currentBundle = 0;
@@ -245,23 +249,23 @@ MultiViewCommandHistory::closeBundle()
 }
 
 void
-MultiViewCommandHistory::bundleTimerTimeout()
+CommandHistory::bundleTimerTimeout()
 {
 #ifdef DEBUG_COMMAND_HISTORY
-    std::cerr << "MultiViewCommandHistory::bundleTimerTimeout: bundle is " << m_currentBundle << std::endl;
+    std::cerr << "CommandHistory::bundleTimerTimeout: bundle is " << m_currentBundle << std::endl;
 #endif
 
     closeBundle();
 }
 
 void
-MultiViewCommandHistory::addToCompound(Command *command, bool execute)
+CommandHistory::addToCompound(Command *command, bool execute)
 {
 #ifdef DEBUG_COMMAND_HISTORY
-    std::cerr << "MultiViewCommandHistory::addToCompound: " << command->getName().toLocal8Bit().data() << std::endl;
+    std::cerr << "CommandHistory::addToCompound: " << command->getName().toLocal8Bit().data() << std::endl;
 #endif
     if (!m_currentCompound) {
-	std::cerr << "MultiViewCommandHistory::addToCompound: ERROR: no compound operation in value()!" << std::endl;
+	std::cerr << "CommandHistory::addToCompound: ERROR: no compound operation in value()!" << std::endl;
         return;
     }
 
@@ -270,10 +274,10 @@ MultiViewCommandHistory::addToCompound(Command *command, bool execute)
 }
 
 void
-MultiViewCommandHistory::startCompoundOperation(QString name, bool execute)
+CommandHistory::startCompoundOperation(QString name, bool execute)
 {
     if (m_currentCompound) {
-	std::cerr << "MultiViewCommandHistory::startCompoundOperation: ERROR: compound operation already in value()!" << std::endl;
+	std::cerr << "CommandHistory::startCompoundOperation: ERROR: compound operation already in value()!" << std::endl;
 	std::cerr << "(name is " << m_currentCompound->getName().toLocal8Bit().data() << ")" << std::endl;
         return;
     }
@@ -285,10 +289,10 @@ MultiViewCommandHistory::startCompoundOperation(QString name, bool execute)
 }
 
 void
-MultiViewCommandHistory::endCompoundOperation()
+CommandHistory::endCompoundOperation()
 {
     if (!m_currentCompound) {
-	std::cerr << "MultiViewCommandHistory::endCompoundOperation: ERROR: no compound operation in value()!" << std::endl;
+	std::cerr << "CommandHistory::endCompoundOperation: ERROR: no compound operation in value()!" << std::endl;
         return;
     }
 
@@ -305,24 +309,24 @@ MultiViewCommandHistory::endCompoundOperation()
 }    
 
 void
-MultiViewCommandHistory::addExecutedCommand(Command *command)
+CommandHistory::addExecutedCommand(Command *command)
 {
     addCommand(command, false);
 }
 
 void
-MultiViewCommandHistory::addCommandAndExecute(Command *command)
+CommandHistory::addCommandAndExecute(Command *command)
 {
     addCommand(command, true);
 }
 
 void
-MultiViewCommandHistory::undo()
+CommandHistory::undo()
 {
     if (m_undoStack.empty()) return;
 
 #ifdef DEBUG_COMMAND_HISTORY
-    std::cerr << "MultiViewCommandHistory::undo()" << std::endl;
+    std::cerr << "CommandHistory::undo()" << std::endl;
 #endif
 
     closeBundle();
@@ -342,12 +346,12 @@ MultiViewCommandHistory::undo()
 }
 
 void
-MultiViewCommandHistory::redo()
+CommandHistory::redo()
 {
     if (m_redoStack.empty()) return;
 
 #ifdef DEBUG_COMMAND_HISTORY
-    std::cerr << "MultiViewCommandHistory::redo()" << std::endl;
+    std::cerr << "CommandHistory::redo()" << std::endl;
 #endif
 
     closeBundle();
@@ -367,7 +371,7 @@ MultiViewCommandHistory::redo()
 }
 
 void
-MultiViewCommandHistory::setUndoLimit(int limit)
+CommandHistory::setUndoLimit(int limit)
 {
     if (limit > 0 && limit != m_undoLimit) {
         m_undoLimit = limit;
@@ -376,7 +380,7 @@ MultiViewCommandHistory::setUndoLimit(int limit)
 }
 
 void
-MultiViewCommandHistory::setRedoLimit(int limit)
+CommandHistory::setRedoLimit(int limit)
 {
     if (limit > 0 && limit != m_redoLimit) {
         m_redoLimit = limit;
@@ -385,27 +389,27 @@ MultiViewCommandHistory::setRedoLimit(int limit)
 }
 
 void
-MultiViewCommandHistory::setMenuLimit(int limit)
+CommandHistory::setMenuLimit(int limit)
 {
     m_menuLimit = limit;
     updateActions();
 }
 
 void
-MultiViewCommandHistory::setBundleTimeout(int ms)
+CommandHistory::setBundleTimeout(int ms)
 {
     m_bundleTimeout = ms;
 }
 
 void
-MultiViewCommandHistory::documentSaved()
+CommandHistory::documentSaved()
 {
     closeBundle();
     m_savedAt = m_undoStack.size();
 }
 
 void
-MultiViewCommandHistory::clipCommands()
+CommandHistory::clipCommands()
 {
     if ((int)m_undoStack.size() > m_undoLimit) {
 	m_savedAt -= (m_undoStack.size() - m_undoLimit);
@@ -416,7 +420,7 @@ MultiViewCommandHistory::clipCommands()
 }
 
 void
-MultiViewCommandHistory::clipStack(CommandStack &stack, int limit)
+CommandHistory::clipStack(CommandStack &stack, int limit)
 {
     int i;
 
@@ -427,7 +431,7 @@ MultiViewCommandHistory::clipStack(CommandStack &stack, int limit)
 	for (i = 0; i < limit; ++i) {
 #ifdef DEBUG_COMMAND_HISTORY
 	    Command *command = stack.top();
-	    std::cerr << "MultiViewCommandHistory::clipStack: Saving recent command: " << command->getName().toLocal8Bit().data() << " at " << command << std::endl;
+	    std::cerr << "CommandHistory::clipStack: Saving recent command: " << command->getName().toLocal8Bit().data() << " at " << command << std::endl;
 #endif
 	    tempStack.push(stack.top());
 	    stack.pop();
@@ -443,13 +447,13 @@ MultiViewCommandHistory::clipStack(CommandStack &stack, int limit)
 }
 
 void
-MultiViewCommandHistory::clearStack(CommandStack &stack)
+CommandHistory::clearStack(CommandStack &stack)
 {
     while (!stack.empty()) {
 	Command *command = stack.top();
 	// Not safe to call getName() on a command about to be deleted
 #ifdef DEBUG_COMMAND_HISTORY
-	std::cerr << "MultiViewCommandHistory::clearStack: About to delete command " << command << std::endl;
+	std::cerr << "CommandHistory::clearStack: About to delete command " << command << std::endl;
 #endif
 	delete command;
 	stack.pop();
@@ -457,7 +461,7 @@ MultiViewCommandHistory::clearStack(CommandStack &stack)
 }
 
 void
-MultiViewCommandHistory::undoActivated(QAction *action)
+CommandHistory::undoActivated(QAction *action)
 {
     int pos = m_actionCounts[action];
     for (int i = 0; i <= pos; ++i) {
@@ -466,7 +470,7 @@ MultiViewCommandHistory::undoActivated(QAction *action)
 }
 
 void
-MultiViewCommandHistory::redoActivated(QAction *action)
+CommandHistory::redoActivated(QAction *action)
 {
     int pos = m_actionCounts[action];
     for (int i = 0; i <= pos; ++i) {
@@ -475,7 +479,7 @@ MultiViewCommandHistory::redoActivated(QAction *action)
 }
 
 void
-MultiViewCommandHistory::updateActions()
+CommandHistory::updateActions()
 {
     m_actionCounts.clear();
 

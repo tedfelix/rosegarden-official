@@ -32,7 +32,7 @@
 #include "base/Selection.h"
 #include "base/Studio.h"
 #include "base/Track.h"
-#include "document/MultiViewCommandHistory.h"
+#include "document/CommandHistory.h"
 #include "document/RosegardenGUIDoc.h"
 #include "document/ConfigGroups.h"
 #include "gui/application/RosegardenGUIView.h"
@@ -199,7 +199,7 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
 
     // Connect command history for updates
     //
-    connect(getCommandHistory(), SIGNAL(commandExecuted(Command *)),
+    connect(CommandHistory::getInstance(), SIGNAL(commandExecuted(Command *)),
             this, SLOT(slotCommandExecuted(Command *)));
 
     //setInitialSize(configDialogSize(AudioManagerDialogConfigGroup));
@@ -1022,12 +1022,6 @@ AudioManagerDialog::selectFileListItemNoSignal(QTreeWidgetItem* it)
     }
 
     m_fileList->blockSignals(false);
-}
-
-MultiViewCommandHistory*
-AudioManagerDialog::getCommandHistory()
-{
-    return m_doc->getCommandHistory();
 }
 
 void

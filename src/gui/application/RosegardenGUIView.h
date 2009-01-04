@@ -48,7 +48,6 @@ class Segment;
 class RosegardenGUIDoc;
 class RealTime;
 class NotationView;
-class MultiViewCommandHistory;
 class MatrixView;
 class MappedEvent;
 class InstrumentParameterBox;
@@ -97,11 +96,6 @@ public:
      * @see RosegardenGUIApp#getDocument
      */
     RosegardenGUIDoc* getDocument() const;
-
-    /**
-     * Command history
-     */
-    MultiViewCommandHistory* getCommandHistory();
 
     TrackEditor* getTrackEditor() { return m_trackEditor; }
     

@@ -37,7 +37,7 @@
 #include "base/Studio.h"
 #include "base/Track.h"
 #include "document/RosegardenGUIDoc.h"
-#include "document/MultiViewCommandHistory.h"
+#include "document/CommandHistory.h"
 #include "gui/general/GUIPalette.h"
 #include <QFont>
 #include <QFontMetrics>
@@ -84,7 +84,7 @@ ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
 
     m_compositionRefreshStatusId = m_composition->getNewRefreshStatusId();
 
-    QObject::connect(doc->getCommandHistory(), SIGNAL(commandExecuted()),
+    QObject::connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
                      this, SLOT(update()));
 
     this->setToolTip(i18n("Chord name ruler.\nTurn it on and off from the Settings->Rulers menu."));
@@ -124,7 +124,7 @@ ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
 
     m_compositionRefreshStatusId = m_composition->getNewRefreshStatusId();
 
-    QObject::connect(doc->getCommandHistory(), SIGNAL(commandExecuted()),
+    QObject::connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
                      this, SLOT(update()));
 
     for (std::vector<Segment *>::iterator i = segments.begin();

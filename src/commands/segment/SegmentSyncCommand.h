@@ -23,7 +23,7 @@
 #include "base/Composition.h"
 #include "base/Event.h"
 #include "base/NotationTypes.h"
-#include "document/MultiViewCommandHistory.h"
+#include "document/CommandHistory.h"
 #include <klocale.h>
 
 namespace Rosegarden

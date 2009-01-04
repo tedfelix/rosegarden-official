@@ -23,7 +23,7 @@
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
 #include "commands/segment/SegmentReconfigureCommand.h"
-#include "document/MultiViewCommandHistory.h"
+#include "document/CommandHistory.h"
 #include "document/RosegardenGUIDoc.h"
 #include "EditToolBox.h"
 #include "EditTool.h"
@@ -137,11 +137,11 @@ EditViewBase::EditViewBase(RosegardenGUIDoc *doc,
     m_doc->attachEditView(this);
 
     QObject::connect
-    (getCommandHistory(), SIGNAL(commandExecuted()),
+    (CommandHistory::getInstance(), SIGNAL(commandExecuted()),
      this, SLOT(update()));
 
     QObject::connect
-    (getCommandHistory(), SIGNAL(commandExecuted()),
+    (CommandHistory::getInstance(), SIGNAL(commandExecuted()),
      this, SLOT(slotTestClipboard()));
 
     // create shortcuts
@@ -155,8 +155,8 @@ EditViewBase::~EditViewBase()
 
     m_doc->detachEditView(this);
 
-//&&& Detact MultiViewCommandHistory
-//    getCommandHistory()->detachView(actionCollection());
+//&&& Detact CommandHistory
+//    CommandHistory::getInstance()->detachView(actionCollection());
     m_viewNumberPool.erase(m_viewNumber);
     slotSaveOptions();
 }
@@ -196,7 +196,7 @@ void EditViewBase::setupActions(QString rcFileName, bool haveClipboard)
     }
 
 /*&&&
-  Connect up MultiViewCommandHistory appropriately
+  Connect up CommandHistory appropriately
 
     new KToolBarPopupAction(i18n("Und&o"),
                             "undo",
@@ -268,7 +268,7 @@ void EditViewBase::setupActions(QString rcFileName, bool haveClipboard)
 			
 
     // add undo and redo to edit menu and toolbar
-    getCommandHistory()->attachView(actionCollection());
+    CommandHistory::getInstance()->attachView(actionCollection());
 */
 }
 
@@ -492,7 +492,7 @@ void EditViewBase::closeEvent(QCloseEvent* e)
 
 void EditViewBase::addCommandToHistory(Command *command)
 {
-    getCommandHistory()->addCommand(command);
+    CommandHistory::getInstance()->addCommand(command);
 }
 
 void EditViewBase::setTool(EditTool* tool)
@@ -735,12 +735,6 @@ EditViewBase::handleEventRemoved(Event *event)
     if (m_tool)
         m_tool->handleEventRemoved(event);
 }
-
-MultiViewCommandHistory* EditViewBase::getCommandHistory()
-{
-    return getDocument()->getCommandHistory();
-}
-
 
 }
 #include "EditViewBase.moc"
