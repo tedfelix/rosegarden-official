@@ -20,9 +20,9 @@
 #define _RG_MARKERRULER_H_
 
 #include "gui/general/HZoomable.h"
+#include "gui/general/ActionFileClient.h"
 #include <QSize>
 #include <QWidget>
-#include <kxmlguiclient.h>
 #include "base/Event.h"
 
 
@@ -40,7 +40,7 @@ class RulerScale;
 class RosegardenGUIDoc;
 
 
-class MarkerRuler : public QWidget, public HZoomable, public KXMLGUIClient
+class MarkerRuler : public QWidget, public HZoomable, public ActionFileClient
 {
     Q_OBJECT
 

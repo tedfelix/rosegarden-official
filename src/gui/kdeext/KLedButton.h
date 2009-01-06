@@ -33,8 +33,6 @@ class QColor;
 namespace Rosegarden
 {
 
-
-
 /**
  * @author Stefan Schimanski
  * Taken from KMix code,
@@ -54,15 +52,6 @@ class KLedButton : public KLed  {
   protected:    
    void mousePressEvent ( QMouseEvent *e );
 };
-
-
-// This class creates a list of mute and record buttons
-// based on the rosegarden document and a specialisation
-// of the Vertical Box widget.
-//
-//
-// 
-
 
 }
 

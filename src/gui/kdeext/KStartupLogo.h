@@ -22,6 +22,9 @@
 #include <QWidget>
 #include <QPixmap>
 
+namespace Rosegarden
+{
+
 class KStartupLogo : public QWidget
 {
     Q_OBJECT
@@ -56,9 +59,6 @@ protected:
     QString m_statusMessage;
 };
 
+}
+
 #endif
-
-
-
-
-

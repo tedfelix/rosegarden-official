@@ -19,7 +19,6 @@
 #include "MarkerRuler.h"
 
 #include <klocale.h>
-// #include <kxmlguifactory.h>
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"
@@ -97,32 +96,12 @@ MarkerRuler::MarkerRuler(RosegardenGUIDoc *doc,
     // don't become more event-specific in future...
 
 //     icon = QIcon(QPixmap(pixmapDir + "/toolbar/event-insert.png"));
-	icon = il.load( "event-insert" );
-    QAction *qa_insert_marker_here = new QAction( "Insert Marker", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_insert_marker_here->setIcon(icon); 
-			connect( qa_insert_marker_here, SIGNAL(triggered()), this, SLOT(slotInsertMarkerHere())  );
-    
-    QAction* qa_insert_marker_at_pointer = new QAction(  i18n("Insert Marker at Playback Position"), dynamic_cast<QObject*>(this) );
-			connect( qa_insert_marker_at_pointer, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotInsertMarkerAtPointer()) );
-			qa_insert_marker_at_pointer->setObjectName( "insert_marker_at_pointer" );		//
-			//qa_insert_marker_at_pointer->setCheckable( true );		//
-			qa_insert_marker_at_pointer->setAutoRepeat( false );	//
-			//qa_insert_marker_at_pointer->setActionGroup( 0 );		// QActionGroup*
-			//qa_insert_marker_at_pointer->setChecked( false );		//
-			//### FIX: deallocate QAction ptr
-			
+    icon = il.load( "event-insert" );
 
-//     icon = QIcon(QPixmap(pixmapDir + "/toolbar/event-delete.png"));
-	icon = il.load( "event-delete" );
-	QAction *qa_delete_marker = new QAction( "Delete Marker", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_delete_marker->setIcon(icon); 
-			connect( qa_delete_marker, SIGNAL(triggered()), this, SLOT(slotDeleteMarker())  );
-    
-//     icon = QIcon(QPixmap(pixmapDir + "/toolbar/event-edit.png"));
-	icon = il.load( "event-edit" );
-	QAction *qa_edit_marker = new QAction( "Edit Marker...", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_edit_marker->setIcon(icon); 
-			connect( qa_edit_marker, SIGNAL(triggered()), this, SLOT(slotEditMarker())  );
+    createAction("insert_marker_here", SLOT(slotInsertMarkerHere()));
+    createAction("insert_marker_at_pointer", SLOT(slotInsertMarkerAtPointer()));
+    createAction("delete_marker", SLOT(slotDeleteMarker()));
+    createAction("edit_marker", SLOT(slotEditMarker()));
 
     this->setToolTip(i18n("Click on a marker to move the playback pointer.\nShift-click to set a range between markers.\nDouble-click to open the marker editor."));
 }
@@ -130,29 +109,28 @@ MarkerRuler::MarkerRuler(RosegardenGUIDoc *doc,
 MarkerRuler::~MarkerRuler()
 {
     delete m_barFont;
+
+/*!!! comment retained for reference, in case of problems later.  I think this should no longer be necessary, but I am only a simple carbon-based life form
+
     // we have to do this so that the menu is re-created properly
     // when the main window is itself recreated (on a File->New for instance)
     KXMLGUIFactory* factory = m_parentMainWindow->factory();
     if (factory)
         factory->removeClient(this);
+*/
 }
 
 void
 MarkerRuler::createMenu()
 {             
-    setXMLFile("markerruler.rc");
+    createGUI("markerruler.rc");
     
-    KXMLGUIFactory* factory = m_parentMainWindow->factory();
-    factory->addClient(this);
-
-    QWidget* tmp = factory->container("marker_ruler_menu", this);
+    m_menu = findChild<QMenu *>("marker_ruler_menu");
 
 //    if (!tmp) {
 //        RG_DEBUG << "MarkerRuler::createMenu() menu not found\n"
 //                 << domDocument().toString(4) << endl;
 //    }
-    
-    m_menu = dynamic_cast<QMenu*>(tmp);
     
     if (!m_menu) {
         RG_DEBUG << "MarkerRuler::createMenu() failed\n";

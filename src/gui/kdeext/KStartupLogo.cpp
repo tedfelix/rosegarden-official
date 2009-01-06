@@ -25,12 +25,16 @@
 #include "misc/Debug.h"
 #include "gui/general/IconLoader.h"
 
+#include <ktip.h>
+
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QPainter>
 #include <QFontMetrics>
 #include <QSettings>
 
+namespace Rosegarden
+{
 
 // NOTE: use QSplashScreen instead ??
 
@@ -47,11 +51,9 @@ KStartupLogo::KStartupLogo(QWidget * parent, const char *name)
 	  m_showTip(true)
 {
 //     QString pixmapFile = locate("appdata", "pixmaps/splash.png");
-	IconLoader il;
-	QString pixmapFile = il.getResourcePath( "splash.png" );
-	
-    if (!pixmapFile)
-        return ;
+    IconLoader il;
+    QString pixmapFile = il.getResourcePath("splash.png");
+    if (pixmapFile == "") return;
     m_pixmap.load(pixmapFile);
     setBackgroundPixmap(m_pixmap);
     setGeometry(QApplication::desktop()->width() / 2 - m_pixmap.width() / 2,
@@ -158,3 +160,6 @@ KStartupLogo* KStartupLogo::m_instance = 0;
 bool KStartupLogo::m_wasClosed = false;
 
 #include "KStartupLogo.moc"
+
+}
+
