@@ -7,7 +7,7 @@
   <Action name="erase" text="Switch to Erase Tool" icon="eraser" />
   <Action name="rests" text="Switch to Inserting Rests" icon="rest-crotchet" />
 <Separator/>
-  <Action name="toggle_auto_beam" text="Auto-Beam when appropriate"" checked="true" />
+  <Action name="toggle_auto_beam" text="Auto-Beam when appropriate" checked="true" />
   <Separator/>
   <Action name="toggle_dot" text="Dotted Note" icon="menu-dotted-crotchet" checked="false" />
 <Separator/>
