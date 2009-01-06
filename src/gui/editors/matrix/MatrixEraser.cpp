@@ -42,27 +42,10 @@ MatrixEraser::MatrixEraser(MatrixView* parent)
         : MatrixTool("MatrixEraser", parent),
         m_currentStaff(0)
 {
-    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    Q3CanvasPixmap pixmap(pixmapDir + "/toolbar/select.xpm");
-    QIcon icon = QIcon(pixmap);
-
-    QAction *qa_select = new QAction( "Switch to Select Tool", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_select->setIcon(icon); 
-			connect( qa_select, SIGNAL(triggered()), this, SLOT(slotSelectSelected())  );
-
-    QAction *qa_draw = new QAction( "Switch to Draw Tool", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_draw->setIconText("pencil"); 
-			connect( qa_draw, SIGNAL(triggered()), this, SLOT(slotDrawSelected())  );
-
-    QAction *qa_move = new QAction( "Switch to Move Tool", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_move->setIconText("move"); 
-			connect( qa_move, SIGNAL(triggered()), this, SLOT(slotMoveSelected())  );
-
-    pixmap.load(pixmapDir + "/toolbar/resize.xpm");
-    icon = QIcon(pixmap);
-    QAction *qa_resize = new QAction( "Switch to Resize Tool", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_resize->setIcon(icon); 
-			connect( qa_resize, SIGNAL(triggered()), this, SLOT(slotResizeSelected())  );
+    createAction("resize", SLOT(slotResizeSelected()));
+    createAction("draw", SLOT(slotDrawSelected()));
+    createAction("select", SLOT(slotSelectSelected()));
+    createAction("move", SLOT(slotMoveSelected()));
 
     createMenu("matrixeraser.rc");
 }

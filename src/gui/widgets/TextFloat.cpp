@@ -34,9 +34,8 @@ namespace Rosegarden
 {
 
 TextFloat::TextFloat(QWidget *parent):
-        QWidget(parent, "TextFloat",
-                WStyle_Customize | WStyle_NoBorder | WStyle_StaysOnTop),
-        m_text("")
+    QWidget(parent, "TextFloat", Qt::ToolTip),
+    m_text("")
 {
     reparent(parentWidget());
     resize(20, 20);
@@ -59,9 +58,8 @@ TextFloat::reparent(QWidget *newParent)
     //
     //move(pos + QPoint(parent->width() + 5, 5));
 
-    QWidget::reparent(newParent,
-                      WStyle_Customize | WStyle_NoBorder | WStyle_StaysOnTop,
-                      position + QPoint(20, 5));
+    setParent(newParent, Qt::ToolTip);
+    move(position + QPoint(20, 5));
 	
 // 	newParent->setWindowFlags( Qt::WindowStaysOnTopHint );	// qt4
 }

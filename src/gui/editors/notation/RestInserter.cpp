@@ -50,36 +50,10 @@ using namespace BaseProperties;
 RestInserter::RestInserter(NotationView* view)
     : NoteInserter("RestInserter", view)
 {
-    QIcon icon;
-    
-    icon = QIcon
-        (NotePixmapFactory::toQPixmap(NotePixmapFactory::
-                                      makeToolbarPixmap("dotted-rest-crotchet")));
-    QAction* qa_toggle_dot = new QAction( icon, i18n("Dotted rest"), dynamic_cast<QObject*>(this) );
-	connect( qa_toggle_dot, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleDot()) );
-	qa_toggle_dot->setObjectName( "toggle_dot" );	//### FIX: deallocate QAction ptr
-	qa_toggle_dot->setCheckable( true );	//
-	qa_toggle_dot->setAutoRepeat( false );	//
-	//qa_toggle_dot->setActionGroup( 0 );	// QActionGroup*
-	qa_toggle_dot->setChecked( false );	//
-	// ;
-    
-    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::
-                                                 makeToolbarPixmap("select")));
-    QAction *qa_select = new QAction( "Switch to Select Tool", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_select->setIcon(icon); 
-			connect( qa_select, SIGNAL(triggered()), this, SLOT(slotSelectSelected())  );
-
-    QAction *qa_erase = new QAction( "Switch to Erase Tool", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_erase->setIconText("eraser"); 
-			connect( qa_erase, SIGNAL(triggered()), this, SLOT(slotEraseSelected())  );
-
-    icon = QIcon
-        (NotePixmapFactory::toQPixmap(NotePixmapFactory::
-                                      makeToolbarPixmap("crotchet")));
-    QAction *qa_notes = new QAction( "Switch to Inserting Notes", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_notes->setIcon(icon); 
-			connect( qa_notes, SIGNAL(triggered()), this, SLOT(slotNotesSelected())  );
+    createAction("toggle_dot", SLOT(slotToggleDot()));
+    createAction("select", SLOT(slotSelectSelected()));
+    createAction("erase", SLOT(slotEraseSelected()));
+    createAction("notes", SLOT(slotNotesSelected()));
 
     createMenu("restinserter.rc");
 }
@@ -110,10 +84,8 @@ RestInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
         if (i != segment.end() &&
             !(*i)->has(BEAMED_GROUP_TUPLET_BASE)) {
 
-// 			MacroCommand *command = new MacroCommand(insertionCommand->objectName());
-			MacroCommand *command = new MacroCommand( "insertion_command_242" );	//@@@
-			
-			command->addCommand(new TupletCommand
+            MacroCommand *command = new MacroCommand(insertionCommand->getName());
+            command->addCommand(new TupletCommand
                                 (segment, time, note.getDuration()));
             command->addCommand(insertionCommand);
             activeCommand = command;
@@ -127,10 +99,7 @@ RestInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
 
 void RestInserter::slotSetDots(unsigned int dots)
 {
-    /* was toggle */ 
-// 	QAction *dotsAction = dynamic_cast<QAction*>
-//                                 (actionCollection()->action("toggle_dot"));
-	QAction *dotsAction = findChild<QAction*>( "toggle_dot" );
+    QAction *dotsAction = findAction( "toggle_dot" );
 	
     if (dotsAction && m_noteDots != dots) {
         dotsAction->setChecked(dots > 0);
@@ -146,8 +115,7 @@ void RestInserter::slotToggleDot()
     QString actionName(NotationStrings::getReferenceName(note, true));
     actionName.replace(QRegExp("-"), "_");
 	
-//     KAction *action = m_parentView->actionCollection()->action(actionName);
-	QAction *action = findChild<QAction*>( actionName );
+    QAction *action = findAction( actionName );
 	
 	
     if (!action) {
@@ -163,9 +131,8 @@ void RestInserter::slotNotesSelected()
     QString actionName(NotationStrings::getReferenceName(note));
     actionName.replace(QRegExp("-"), "_");
 	
-//     m_parentView->actionCollection()->action(actionName)->activate();
-	QAction *action = findChild<QAction*>( actionName );
-	action->setEnabled(true);
+    QAction *action = findAction( actionName );
+    action->setEnabled(true);
 }
 
 const QString RestInserter::ToolName     = "restinserter";

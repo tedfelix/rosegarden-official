@@ -15,37 +15,31 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ACTIONFILECLIENT_H_
-#define _RG_ACTIONFILECLIENT_H_
+#include "DecoyAction.h"
 
-#include <QString>
+#include <iostream>
 
-class QAction;
+namespace Rosegarden {
 
-namespace Rosegarden
+DecoyAction *
+DecoyAction::m_instance = 0;
+
+DecoyAction *
+DecoyAction::getInstance()
+{ 
+    if (!m_instance) m_instance = new DecoyAction();
+    std::cerr << "WARNING: Using decoy action" << std::endl;
+    return m_instance;
+}
+
+DecoyAction::~DecoyAction()
 {
+    std::cerr << "ERROR: Deleting the global DecoyAction -- some class has looked up an action that did not exist, and deleted it -- a crash is highly likely now" << std::endl;
+}
 
-class ActionFileParser;
-
-class ActionFileClient // base class for users of the ActionFileParser
-{
-public:
-    virtual QAction *findAction(QString actionName);
-    virtual void enterActionState(QString stateName);
-    virtual void leaveActionState(QString stateName);
-
-protected:
-    ActionFileClient();
-    virtual ~ActionFileClient();
-
-    virtual QAction *createAction(QString actionName, QString connection);
-    virtual bool createGUI(QString rcname);
-
-private:
-    ActionFileParser *m_actionFileParser;
-};
+    DecoyAction::DecoyAction() : QAction("Decoy Action", 0) { }
 
 }
 
-#endif
 
+    

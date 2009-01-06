@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -142,6 +141,8 @@ protected:
     EditTool(const QString& menuName, EditView*);
 
     void setRCFileName(QString rcfilename) { m_rcFileName = rcfilename; }
+
+    void invokeInParentView(QString actionName);
 
     virtual void createMenu();
     virtual void createMenu(QString rcFileName);

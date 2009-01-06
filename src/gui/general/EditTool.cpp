@@ -108,6 +108,18 @@ int EditTool::handleMouseMove(timeT, int, QMouseEvent*)
 void EditTool::handleMouseRelease(timeT, int, QMouseEvent*)
 {}
 
+void EditTool::invokeInParentView(QString actionName)
+{
+    if (!m_parentView) return;
+    QAction *a = m_parentView->findAction(actionName);
+    if (!a) {
+        std::cerr << "EditTool::invokeInParentView: No action \"" << actionName
+                  << "\" found in parent view" << std::endl;
+    } else {
+        a->trigger();
+    }
+}
+
 void EditTool::createMenu(QString rcFileName)
 {
     setRCFileName(rcFileName);
@@ -116,7 +128,7 @@ void EditTool::createMenu(QString rcFileName)
 
 void EditTool::createMenu()
 {
-    RG_DEBUG << "BaseTool::createMenu() " << m_rcFileName << " - " << m_menuName << endl;
+    RG_DEBUG << "EditTool::createMenu() " << m_rcFileName << " - " << m_menuName << endl;
 
     if (!createGUI(m_rcFileName)) {
         std::cerr << "EditTool::createMenu(" << m_rcFileName << "): menu creation failed" << std::endl;
@@ -125,7 +137,7 @@ void EditTool::createMenu()
 
     QMenu *menu = findChild<QMenu *>(m_menuName);
     if (!menu) {
-        std::cerr << "BaseTool::createMenu(" << m_rcFileName
+        std::cerr << "EditTool::createMenu(" << m_rcFileName
                   << "): menu name "
                   << m_menuName << " not created by RC file\n";
         return;

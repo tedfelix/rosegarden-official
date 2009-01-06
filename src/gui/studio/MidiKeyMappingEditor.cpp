@@ -15,7 +15,6 @@
     COPYING included with this distribution for more information.
 */
 
-#include <kcompletion.h>
 #include <klocale.h>
 
 #include "MidiKeyMappingEditor.h"
@@ -140,7 +139,7 @@ MidiKeyMappingEditor::reset()
         }
 
         QString name = strtoqstr(it->second);
-        m_completion.addItem(name);
+        m_completions << name;
         m_names[i]->setText(name);
         m_names[i]->setCursorPosition(0);
     }

@@ -72,21 +72,19 @@ NotationSelector::NotationSelector(NotationView* view)
     connect(this, SIGNAL(editElement(NotationStaff *, NotationElement *, bool)),
             m_parentView, SLOT(slotEditElement(NotationStaff *, NotationElement *, bool)));
 
-    QIcon icon
-    (NotePixmapFactory::toQPixmap(NotePixmapFactory::
-                                  makeToolbarPixmap("crotchet")));
-    QAction* qa_insert = new QAction( icon, i18n("Switch to Insert Tool"), dynamic_cast<QObject*>(view) );
-	connect( qa_insert, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT() );	//@@@ //### slot unknown
-	qa_insert->setObjectName( "insert" );	//### FIX: deallocate QAction ptr
-	qa_insert->setCheckable( true );	//
-	qa_insert->setAutoRepeat( false );	//
-	//qa_insert->setActionGroup( 0 );	// QActionGroup*
-	qa_insert->setChecked( false );	//
-	// ;
+    createAction("insert", SLOT(slotInsertSelected()));
+    createAction("erase", SLOT(slotEraseSelected()));
+    createAction("collapse_rests_aggressively", SLOT(slotCollapseRestsHard()));
+    createAction("respell_flat", SLOT(slotRespellFlat()));
+    createAction("respell_sharp", SLOT(slotRespellSharp()));
+    createAction("respell_natural", SLOT(slotRespellNatural()));
+    createAction("collapse_notes", SLOT(slotCollapseNotes()));
+    createAction("interpret", SLOT(slotInterpret()));
+    createAction("move_events_up_staff", SLOT(slotStaffAbove()));
+    createAction("move_events_down_staff", SLOT(slotStaffBelow()));
+    createAction("make_invisible", SLOT(slotMakeInvisible()));
+    createAction("make_visible", SLOT(slotMakeVisible()));
 
-    QAction *qa_erase = new QAction( "Switch to Erase Tool", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_erase->setIconText("eraser"); 
-			connect( qa_erase, SIGNAL(triggered()), this, SLOT(slotEraseSelected())  );
 
     // (this crashed, and it might be superfluous with ^N anyway, so I'm
     // commenting it out, but leaving it here in case I change my mind about
@@ -94,46 +92,6 @@ NotationSelector::NotationSelector(NotationView* view)
     //    new KAction(i18n("Normalize Rests"), 0, 0, this,
     //                SLOT(slotCollapseRests()), actionCollection(),
     //                "collapse_rests");
-
-    QAction *qa_collapse_rests_aggressively = new QAction( "Collapse Rests", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_collapse_rests_aggressively->setIconText(0); 
-			connect( qa_collapse_rests_aggressively, SIGNAL(triggered()), this, SLOT(slotCollapseRestsHard())  );
-
-    QAction *qa_respell_flat = new QAction( "Respell as Flat", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_respell_flat->setIconText(0); 
-			connect( qa_respell_flat, SIGNAL(triggered()), this, SLOT(slotRespellFlat())  );
-
-    QAction *qa_respell_sharp = new QAction( "Respell as Sharp", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_respell_sharp->setIconText(0); 
-			connect( qa_respell_sharp, SIGNAL(triggered()), this, SLOT(slotRespellSharp())  );
-
-    QAction *qa_respell_natural = new QAction( "Respell as Natural", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_respell_natural->setIconText(0); 
-			connect( qa_respell_natural, SIGNAL(triggered()), this, SLOT(slotRespellNatural())  );
-
-    QAction *qa_collapse_notes = new QAction( "Collapse Notes", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_collapse_notes->setIconText(0); 
-			connect( qa_collapse_notes, SIGNAL(triggered()), this, SLOT(slotCollapseNotes())  );
-
-    QAction *qa_interpret = new QAction( "Interpret", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_interpret->setIconText(0); 
-			connect( qa_interpret, SIGNAL(triggered()), this, SLOT(slotInterpret())  );
-
-    QAction *qa_move_events_up_staff = new QAction( "Move to Staff Above", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_move_events_up_staff->setIconText(0); 
-			connect( qa_move_events_up_staff, SIGNAL(triggered()), this, SLOT(slotStaffAbove())  );
-
-    QAction *qa_move_events_down_staff = new QAction( "Move to Staff TicksBelow", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_move_events_down_staff->setIconText(0); 
-			connect( qa_move_events_down_staff, SIGNAL(triggered()), this, SLOT(slotStaffBelow())  );
-
-    QAction *qa_make_invisible = new QAction( "Make Invisible", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_make_invisible->setIconText(0); 
-			connect( qa_make_invisible, SIGNAL(triggered()), this, SLOT(slotMakeInvisible())  );
-
-    QAction *qa_make_visible = new QAction( "Make Visible", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_make_visible->setIconText(0); 
-			connect( qa_make_visible, SIGNAL(triggered()), this, SLOT(slotMakeVisible())  );
 
     createMenu("notationselector.rc");
 }
@@ -738,79 +696,57 @@ void NotationSelector::slotInsertSelected()
 
 void NotationSelector::slotEraseSelected()
 {
-//     m_parentView->actionCollection()->action("erase")->activate();
-	QAction* tac = this->findChild<QAction*>( "erase" );
-	tac->setEnabled( true );
+    invokeInParentView("erase");
 }
 
 void NotationSelector::slotCollapseRestsHard()
 {
-//     m_parentView->actionCollection()->action("collapse_rests_aggressively")->activate();
-	QAction* tac = this->findChild<QAction*>( "collapse_rests_aggressively" );
-	tac->setEnabled( true );
+    invokeInParentView("collapse_rests_aggressively");
 }
 
 void NotationSelector::slotRespellFlat()
 {
-//     m_parentView->actionCollection()->action("respell_flat")->activate();
-	QAction* tac = this->findChild<QAction*>( "respell_flat" );
-	tac->setEnabled( true );
+    invokeInParentView("respell_flat");
 }
 
 void NotationSelector::slotRespellSharp()
 {
-//     m_parentView->actionCollection()->action("respell_sharp")->activate();
-	QAction* tac = this->findChild<QAction*>( "respell_sharp" );
-	tac->setEnabled( true );
+    invokeInParentView("respell_sharp");
 }
 
 void NotationSelector::slotRespellNatural()
 {
-//     m_parentView->actionCollection()->action("respell_natural")->activate();
-	QAction* tac = this->findChild<QAction*>( "respell_natural" );
-	tac->setEnabled( true );
+    invokeInParentView("respell_natural");
 }
 
 void NotationSelector::slotCollapseNotes()
 {
-//     m_parentView->actionCollection()->action("collapse_notes")->activate();
-	QAction* tac = this->findChild<QAction*>( "collapse_notes" );
-	tac->setEnabled( true );
+    invokeInParentView("collapse_notes");
 }
 
 void NotationSelector::slotInterpret()
 {
-//     m_parentView->actionCollection()->action("interpret")->activate();
-	QAction* tac = this->findChild<QAction*>( "interpret" );
-	tac->setEnabled( true );
+    invokeInParentView("interpret");
 }
 
 void NotationSelector::slotStaffAbove()
 {
-//     m_parentView->actionCollection()->action("move_events_up_staff")->activate();
-	QAction* tac = this->findChild<QAction*>( "move_events_up_staff" );
-	tac->setEnabled( true );
+    invokeInParentView("move_events_up_staff");
 }
 
 void NotationSelector::slotStaffBelow()
 {
-//     m_parentView->actionCollection()->action("move_events_down_staff")->activate();
-	QAction* tac = this->findChild<QAction*>( "move_events_down_staff" );
-	tac->setEnabled( true );
+    invokeInParentView("move_events_down_staff");
 }
 
 void NotationSelector::slotMakeInvisible()
 {
-//     m_parentView->actionCollection()->action("make_invisible")->activate();
-	QAction* tac = this->findChild<QAction*>( "make_invisible" );
-	tac->setEnabled( true );
+    invokeInParentView("make_invisible");
 }
 
 void NotationSelector::slotMakeVisible()
 {
-//     m_parentView->actionCollection()->action("make_visible")->activate();
-	QAction* tac = this->findChild<QAction*>( "make_visible" );
-	tac->setEnabled( true );
+    invokeInParentView("make_visible");
 }
 
 void NotationSelector::setViewCurrentSelection(bool preview)

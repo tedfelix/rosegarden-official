@@ -48,28 +48,18 @@ GuitarChordInserter::GuitarChordInserter(NotationView* view)
         : NotationTool("GuitarChordInserter", view),
         m_guitarChordSelector(0)
 {
-    QIcon icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::
-                             makeToolbarPixmap("select")));
-
-    QAction *qa_select = new QAction( "Switch to Select Tool", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_select->setIcon(icon); 
-			connect( qa_select, SIGNAL(triggered()), this, SLOT(slotSelectSelected())  );
-
-    QAction *qa_erase = new QAction( "Switch to Erase Tool", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_erase->setIconText("eraser"); 
-			connect( qa_erase, SIGNAL(triggered()), this, SLOT(slotEraseSelected())  );
-
-    icon = QIcon
-           (NotePixmapFactory::toQPixmap(NotePixmapFactory::
-                                         makeToolbarPixmap("crotchet")));
-
-    QAction *qa_notes = new QAction( "Switch to Inserting Notes", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_notes->setIcon(icon); 
-			connect( qa_notes, SIGNAL(triggered()), this, SLOT(slotNoteSelected())  );
+    createAction("select", SLOT(slotSelectSelected()));
+    createAction("erase", SLOT(slotEraseSelected()));
+    createAction("notes", SLOT(slotNotesSelected()));
 
     m_guitarChordSelector = new GuitarChordSelectorDialog(m_nParentView);
     m_guitarChordSelector->init();
     createMenu("guitarchordinserter.rc");
+}
+
+void GuitarChordInserter::slotNotesSelected()
+{
+    m_nParentView->slotLastNoteAction();
 }
 
 void GuitarChordInserter::slotGuitarChordSelected()
@@ -80,16 +70,12 @@ void GuitarChordInserter::slotGuitarChordSelected()
 
 void GuitarChordInserter::slotEraseSelected()
 {
-//     m_parentView->actionCollection()->action("erase")->activate();
-	QAction* tac = this->findChild<QAction*>( "erase" );
-	tac->setEnabled( true );
+    invokeInParentView("erase");
 }
 
 void GuitarChordInserter::slotSelectSelected()
 {
-//     m_parentView->actionCollection()->action("select")->activate();
-	QAction* tac = this->findChild<QAction*>( "select" );
-	tac->setEnabled( true );
+    invokeInParentView("select");
 }
 
 void GuitarChordInserter::handleLeftButtonPress(timeT,

@@ -65,6 +65,7 @@ protected slots:
     void slotGuitarChordSelected();
     void slotEraseSelected();
     void slotSelectSelected();
+    void slotNotesSelected();
 
 protected:
     GuitarChordSelectorDialog* m_guitarChordSelector;

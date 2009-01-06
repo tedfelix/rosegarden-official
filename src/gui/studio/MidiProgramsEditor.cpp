@@ -231,13 +231,6 @@ MidiProgramsEditor::populate(QTreeWidgetItem* item)
     bool haveKeyMappings = m_currentBank->isPercussion()
                            && (m_device->getKeyMappings().size() > 0);
 
-    if (m_completer) {
-        delete m_completer;
-        m_completer = 0;
-    }
-
-    QStringList completions;
-
     for (unsigned int i = 0; i < m_names.size(); i++) {
 
         m_names[i]->clear();
@@ -251,7 +244,7 @@ MidiProgramsEditor::populate(QTreeWidgetItem* item)
             if (it->getProgram() == i) {
 
                 QString programName = strtoqstr(it->getName());
-                completions << programName;
+                m_completions << programName;
                 m_names[i]->setText(programName);
 
                 if (m_device->getKeyMappingForProgram(*it)) {
@@ -268,9 +261,6 @@ MidiProgramsEditor::populate(QTreeWidgetItem* item)
         // show start of label
         m_names[i]->setCursorPosition(0);
     }
-
-    m_completer = new QCompleter(completions, this);
-    m_completer->setCaseSensitivity(Qt::CaseInsensitive);
 
     blockAllSignals(false);
 }

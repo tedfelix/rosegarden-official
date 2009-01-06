@@ -46,27 +46,12 @@ NotationEraser::NotationEraser(NotationView* view)
 
     m_collapseRest = qStrToBool( settings.value("collapse", "false" ) ) ;
 
-    QAction* qa_toggle_rest_collapse = new QAction( i18n("Collapse rests after erase"), dynamic_cast<QObject*>(this) );
-	connect( qa_toggle_rest_collapse, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotToggleRestCollapse()) );
-	qa_toggle_rest_collapse->setObjectName( "toggle_rest_collapse" );	//### FIX: deallocate QAction ptr
-	qa_toggle_rest_collapse->setCheckable( true );	//
-	qa_toggle_rest_collapse->setAutoRepeat( false );	//
-	//qa_toggle_rest_collapse->setActionGroup( 0 );	// QActionGroup*
-	qa_toggle_rest_collapse->setChecked( false );	//
-	// ;
+    QAction *a = createAction("toggle_rest_collapse", SLOT(slotToggleRestCollapse()));
+    a->setCheckable(true);
+    a->setChecked(m_collapseRest);
 
-    QIcon icon
-    (NotePixmapFactory::toQPixmap(NotePixmapFactory::
-                                  makeToolbarPixmap("crotchet")));
-    QAction *qa_insert = new QAction( "Switch to Insert Tool", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_insert->setIcon(icon); 
-			connect( qa_insert, SIGNAL(triggered()), this, SLOT(slotInsertSelected())  );
-
-    icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::
-                    makeToolbarPixmap("select")));
-    QAction *qa_select = new QAction( "Switch to Select Tool", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_select->setIcon(icon); 
-			connect( qa_select, SIGNAL(triggered()), this, SLOT(slotSelectSelected())  );
+    createAction("select", SLOT(slotSelectSelected()));
+    createAction("insert", SLOT(slotInsertSelected()));
 
     createMenu("notationeraser.rc");
 
@@ -108,9 +93,7 @@ void NotationEraser::slotInsertSelected()
 
 void NotationEraser::slotSelectSelected()
 {
-//     m_parentView->actionCollection()->action("select")->activate();
-	QAction* tac = this->findChild<QAction*>( "select" );
-	tac->setEnabled( true );
+    invokeInParentView("select");
 }
 
 const QString NotationEraser::ToolName   = "notationeraser";

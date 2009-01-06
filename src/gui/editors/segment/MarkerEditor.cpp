@@ -409,99 +409,25 @@ MarkerEditor::slotClose()
 void
 MarkerEditor::setupActions()
 {
-//     KAction* close = KStandardAction::close(this,
-//                                        SLOT(slotClose()),
-//                                        actionCollection());
-	QAction *close = new QAction( i18n("&Close"), this );
-// 	connect( close, SIGNAL(), this, SLOT(slotClose()) );
+    createAction("file_close", SLOT(slotClose())); //!!! uh-oh, file_close_discard in rc file
 	
-    m_closeButton->setText( close->text() );
+    m_closeButton->setText(i18n("Close"));
     connect(m_closeButton, SIGNAL(released()), this, SLOT(slotClose()));
-	
-    // some adjustments
-//     new KToolBarPopupAction(i18n("Und&o"),
-//                             "undo",
-//                             KStandardShortcut::key(KStandardShortcut::Undo),
-//                             actionCollection(),
-//                             KStandardAction::stdName(KStandardAction::Undo));
-	QAction* tac;
-	tac = new QAction( i18n("Und&o"), this );
-	tac->setObjectName( "undo" );
-	tac->setShortcut( QKeySequence::Undo );
-	
-//     new KToolBarPopupAction(i18n("Re&do"),
-//                             "redo",
-//                             KStandardShortcut::key(KStandardShortcut::Redo),
-//                             actionCollection(),
-//                             KStandardAction::stdName(KStandardAction::Redo));
-	tac = new QAction( i18n("Re&do"), this );
-	tac->setObjectName( "redo" );
-	tac->setShortcut( QKeySequence::Redo );
-
 
     QSettings settings;
     settings.beginGroup( MarkerEditorConfigGroup );
 
     int timeMode = settings.value("timemode", 0).toInt() ;
+    
+    QAction *a;
+    a = createAction("time_musical", SLOT(slotMusicalTime()));
+    if (timeMode == 0) { a->setCheckable(true); a->setChecked(true); }
 
-//     KRadioAction *action;
+    a = createAction("time_real", SLOT(slotRealTime()));
+    if (timeMode == 1) { a->setCheckable(true); a->setChecked(true); }
 
-// 	QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-// 	Q3CanvasPixmap pixmap(pixmapDir + "/toolbar/time-musical.png");
-//     QIcon icon(pixmap);
-	
-	QWidget* qa_parent = this;
-	QActionGroup *qag_timeMode	= new QActionGroup( this );
-	
-	IconLoader il;
-	QIcon icon;
-	icon = il.load( "time-musical" );
-	
-//     action = 
-	QAction* qa_time_musical = new QAction( icon, i18n("&Musical Times"), qa_parent );
-			connect( qa_time_musical, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotMusicalTime()) );
-			qa_time_musical->setObjectName( "time_musical" );
-			qa_time_musical->setCheckable( true );		//
-			qa_time_musical->setChecked( false );			//
-			qa_time_musical->setAutoRepeat( false );		//
-			qa_time_musical->setActionGroup( qag_timeMode );	// QActionGroup*
-			//### FIX: deallocate QAction ptr
-
-    if (timeMode == 0)
-		qa_time_musical->setChecked(true);
-
-//     pixmap.load(pixmapDir + "/toolbar/time-real.png");
-//     icon = QIcon(pixmap);
-	icon = il.load( "real-musical" );	
-
-//     action = 
-	QAction* qa_time_real = new QAction( icon, i18n("&Real Times"), qa_parent );
-			connect( qa_time_real, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotRealTime()) );
-			qa_time_real->setObjectName( "time_real" );
-			qa_time_real->setCheckable( true );		//
-			qa_time_real->setChecked( false );			//
-			qa_time_real->setAutoRepeat( false );		//
-			qa_time_real->setActionGroup( qag_timeMode );	// QActionGroup*
-			//### FIX: deallocate QAction ptr
-
-    if (timeMode == 1)
-		qa_time_real->setChecked(true);
-
-//     pixmap.load(pixmapDir + "/toolbar/time-raw.png");
-//     icon = QIcon(pixmap);
-	icon = il.load( "time-raw" );
-
-	QAction* qa_time_raw = new QAction( icon, i18n("Ra&w Times"), qa_parent );
-			connect( qa_time_raw, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotRawTime()) );
-			qa_time_raw->setObjectName( "time_raw" );
-			qa_time_raw->setCheckable( true );		//
-			qa_time_raw->setChecked( false );			//
-			qa_time_raw->setAutoRepeat( false );		//
-			qa_time_raw->setActionGroup( qag_timeMode );	// QActionGroup*
-			//### FIX: deallocate QAction ptr
-
-    if (timeMode == 2)
-		qa_time_raw->setChecked(true);
+    a = createAction("time_raw", SLOT(slotRawTime()));
+    if (timeMode == 2) { a->setCheckable(true); a->setChecked(true); }
 
     createGUI("markereditor.rc"); //@@@ JAS orig 0
 

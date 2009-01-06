@@ -38,17 +38,10 @@ namespace Rosegarden
 
 // NOTE: use QSplashScreen instead ??
 
-KStartupLogo::KStartupLogo(QWidget * parent, const char *name)
-        : QWidget(parent, name,
-                  WStyle_Customize |
-#if QT_VERSION >= 0x030100
-                  WStyle_Splash
-#else
-                  WStyle_NoBorder | WStyle_StaysOnTop | WStyle_Tool | WX11BypassWM | WWinOwnDC
-#endif
-                 ),
-	  m_readyToHide(false),
-	  m_showTip(true)
+KStartupLogo::KStartupLogo(QWidget * parent, const char *name) :
+    QWidget(parent, name, Qt::SplashScreen),
+    m_readyToHide(false),
+    m_showTip(true)
 {
 //     QString pixmapFile = locate("appdata", "pixmaps/splash.png");
     IconLoader il;

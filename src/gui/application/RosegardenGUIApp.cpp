@@ -2381,11 +2381,9 @@ void RosegardenGUIApp::initView()
     /* was toggle */ 
 	// old. QAction *trackingAction = dynamic_cast<QAction*>
 	//                                (actionCollection()->action("toggle_tracking"));
-	QAction *trackingAction = findChild<QAction*>( QString("toggle_tracking") );
-	// note: findChild not avail. in MSVC_6 (ms-windows), use qFindChild() instead 
+    QAction *trackingAction = findAction( QString("toggle_tracking") );
 	
-	
-	if (trackingAction && !trackingAction->isChecked()) {
+    if (trackingAction && !trackingAction->isChecked()) {
         m_view->getTrackEditor()->slotToggleTracking();
     }
 
@@ -2404,19 +2402,16 @@ void RosegardenGUIApp::initView()
     // created but its tool won't be set, even though it will appear
     // to be selected.
     //
-    // old: actionCollection()->action("move")->activate();
-	QAction *actionx = this->findChild<QAction*>( QString("move") );
-	actionx->setEnabled(true);
+    QAction *actionx = this->findAction( QString("move") );
+    actionx->trigger();
 	
-	if (m_doc->getComposition().getNbSegments() > 0){
-		//actionCollection()->action("select")->activate();
-		QAction *actionx = this->findChild<QAction*>( QString("select") );
-		actionx->setEnabled(true);
-	}else {
-		//actionCollection()->action("draw")->activate();
-		QAction *actionx = this->findChild<QAction*>( QString("draw") );
-		actionx->setEnabled(true);
-	}
+    if (m_doc->getComposition().getNbSegments() > 0){
+        QAction *actionx = this->findAction( QString("select") );
+        actionx->trigger();
+    } else {
+        QAction *actionx = this->findAction( QString("draw") );
+        actionx->trigger();
+    }
 	
 	
 /*    int zoomLevel = m_doc->getConfiguration().
@@ -4214,11 +4209,9 @@ void RosegardenGUIApp::slotTempoToSegmentLength(QWidget* parent)
 
 void RosegardenGUIApp::slotToggleSegmentLabels()
 {
-    /* was toggle */ 
-	//QAction* act = dynamic_cast<QAction*>(actionCollection()->action("show_segment_labels"));
-	QAction* act = this->findChild<QAction*>("show_segment_labels");
+    QAction* act = this->findAction("show_segment_labels");
 	
-	if (act) {
+    if (act) {
         m_view->slotShowSegmentLabels(act->isChecked());
     }
 }
@@ -6166,9 +6159,8 @@ void
 RosegardenGUIApp::slotActivateTool(QString toolName)
 {
     if (toolName == SegmentSelector::ToolName) {
-		//actionCollection()->action("select")->activate();
-		(this->findChild<QAction*>("select"))->setEnabled( true );
-	}
+        findAction("select")->trigger();
+    }
 }
 
 void

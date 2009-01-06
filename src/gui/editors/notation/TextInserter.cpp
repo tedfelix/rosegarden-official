@@ -45,22 +45,9 @@ TextInserter::TextInserter(NotationView* view)
         : NotationTool("TextInserter", view),
         m_text("", Text::Dynamic)
 {
-    QIcon icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::
-                             makeToolbarPixmap("select")));
-    QAction *qa_select = new QAction( "Switch to Select Tool", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_select->setIcon(icon); 
-			connect( qa_select, SIGNAL(triggered()), this, SLOT(slotSelectSelected())  );
-
-    QAction *qa_erase = new QAction( "Switch to Erase Tool", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_erase->setIconText("eraser"); 
-			connect( qa_erase, SIGNAL(triggered()), this, SLOT(slotEraseSelected())  );
-
-    icon = QIcon
-           (NotePixmapFactory::toQPixmap(NotePixmapFactory::
-                                         makeToolbarPixmap("crotchet")));
-    QAction *qa_notes = new QAction( "Switch to Inserting Notes", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_notes->setIcon(icon); 
-			connect( qa_notes, SIGNAL(triggered()), this, SLOT(slotNotesSelected())  );
+    createAction("select", SLOT(slotSelectSelected()));
+    createAction("erase", SLOT(slotEraseSelected()));
+    createAction("notes", SLOT(slotNotesSelected()));
 
     createMenu("textinserter.rc");
 }
@@ -72,16 +59,12 @@ void TextInserter::slotNotesSelected()
 
 void TextInserter::slotEraseSelected()
 {
-//     m_parentView->actionCollection()->action("erase")->activate();
-	QAction *tac = findChild<QAction*>( "erase" );
-	tac->setEnabled(true);
+    invokeInParentView("erase");
 }
 
 void TextInserter::slotSelectSelected()
 {
-//     m_parentView->actionCollection()->action("select")->activate();
-	QAction *tac = findChild<QAction*>( "select" );
-	tac->setEnabled(true);
+    invokeInParentView("select");
 }
 
 void TextInserter::ready()
@@ -143,10 +126,8 @@ void TextInserter::handleLeftButtonPress(timeT,
             (staff->getSegment(), insertionTime, m_text);
 
         if (eraseEvent) {
-// 			MacroCommand *macroCommand = new MacroCommand(command->objectName());
-			MacroCommand *macroCommand = new MacroCommand( "macro_command_29533" );	//@@@
-			
-			macroCommand->addCommand(new EraseEventCommand(staff->getSegment(),
+            MacroCommand *macroCommand = new MacroCommand(command->getName());
+            macroCommand->addCommand(new EraseEventCommand(staff->getSegment(),
                                      eraseEvent, false));
             macroCommand->addCommand(command);
             m_nParentView->addCommandToHistory(macroCommand);

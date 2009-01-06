@@ -20,6 +20,7 @@
 #define _RG_TEMPORULER_H_
 
 #include "gui/dialogs/TempoDialog.h"
+#include "gui/general/ActionFileClient.h"
 
 #include "base/Event.h"
 
@@ -28,8 +29,6 @@
 #include <QPixmap>
 #include <QSize>
 #include <QWidget>
-
-#include <kxmlguiclient.h>
 
 
 class QWheelEvent;
@@ -54,7 +53,7 @@ class Composition;
  * x-coordinates corresponding to tempo changes in a Composition.
  */
 
-class TempoRuler : public QWidget, public KXMLGUIClient
+class TempoRuler : public QWidget, public ActionFileClient
 {
     Q_OBJECT
 

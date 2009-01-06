@@ -55,6 +55,8 @@ EditViewCommandRegistry::addAction(QString title,
                                    QString menuTitle,
                                    QString menuName)
 {
+    //&&&
+    //###
 //!!! Trim this drastically (to just actionName and menuName) if the dynamic
 //!!! gui stuff pans out OK
 

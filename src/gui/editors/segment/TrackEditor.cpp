@@ -693,18 +693,47 @@ TrackEditor::slotVerticalScrollTrackButtons(int y)
 	m_trackButtonScroll->ensureVisible ( 0, y, 50, 20 );
 }
 
-void TrackEditor::dragEnterEvent(QDragEnterEvent *event)
+void TrackEditor::dragEnterEvent(QDragEnterEvent *e)
 {
-    event->accept(Q3UriDrag::canDecode(event) ||
-                  Q3TextDrag::canDecode(event));
+    QStringList formats(e->mimeData()->formats());
+
+    if (e->provides("text/uri-list") || e->provides("text/plain")) {
+
+        if (e->proposedAction() & Qt::CopyAction) {
+            e->acceptProposedAction();
+        } else {
+            e->setDropAction(Qt::CopyAction);
+            e->accept();
+        }
+    }
 }
 
-void TrackEditor::dropEvent(QDropEvent* event)
+void TrackEditor::dropEvent(QDropEvent* e)
 {
-// 	QStringList uri;		// qt4
-	QList<QByteArray> uri;	// for Q3StrList
-	
-	QString text;
+    QStringList uriList;
+    QString text;
+
+    if (e->provides("text/uri-list") || e->provides("text/plain")) {
+
+        if (e->proposedAction() & Qt::CopyAction) {
+            e->acceptProposedAction();
+        } else {
+            e->setDropAction(Qt::CopyAction);
+            e->accept();
+        }
+
+        if (e->provides("text/uri-list")) {
+            uriList =
+                QString::fromLocal8Bit(e->encodedData("text/uri-list").data())
+                .split(QRegExp("[\\r\\n]+"), QString::SkipEmptyParts);
+        } else {
+            text = QString::fromLocal8Bit(e->encodedData("text/plain").data());
+        }
+    }
+
+    if (uriList.empty() && text == "") {
+        RG_DEBUG << "TrackEditor::dropEvent: Nothing dropped" << endl;
+    }
 
     int heightAdjust = 0;
     //int widthAdjust = 0;
@@ -727,7 +756,7 @@ void TrackEditor::dropEvent(QDropEvent* event)
 	QPoint posInSegmentCanvas;
 	QPoint pt;
 	
-	pt = this->mapToGlobal( event->pos() );			//@@@
+	pt = this->mapToGlobal( e->pos() );			//@@@
 	pt = m_segmentCanvas->mapFromGlobal( pt );
 	posInSegmentCanvas = pt;
 	// note: Base of m_segmentCanvas is CompositionView, RosegardenScrollView, [[QScrollArea]]
@@ -742,21 +771,14 @@ void TrackEditor::dropEvent(QDropEvent* event)
         m_segmentCanvas->grid().snapX(posInSegmentCanvas.x());
 
 
-    if (Q3UriDrag::decode(event, Q3StrList(uri)) ){
-        RG_DEBUG << "TrackEditor::dropEvent() : got URI :"
-        << uri.first() << endl;
-        QString uriPath = uri.first();
+    if (!uriList.empty()) {
 
-        if (uriPath.endsWith(".rg")) {
-            emit droppedDocument(uriPath);
+        RG_DEBUG << "TrackEditor::dropEvent() : got URI :" << uriList.first() << endl;
+        QString uri = uriList.first();
+
+        if (uri.endsWith(".rg")) {
+            emit droppedDocument(uri);
         } else {
-
-//             QStringList uris;	// qt4
-			QList<QByteArray>	uris;	// for Q3StrList
-            QString uri;
-            if (Q3UriDrag::decode(event, Q3StrList(uris))) uri = uris.first();
-//            QUriDrag::decodeLocalFiles(event, files);
-//            QString filePath = files.first();
 
             RG_DEBUG << "TrackEditor::dropEvent() : got URI: "
             << uri << endl;
@@ -766,7 +788,7 @@ void TrackEditor::dropEvent(QDropEvent* event)
             << ", time = "
             << time
             << ", x = "
-            << event->pos().x()
+            << e->pos().x()
             << ", mapped x = "
             << posInSegmentCanvas.x()
             << endl;
@@ -785,7 +807,8 @@ void TrackEditor::dropEvent(QDropEvent* event)
 
         }
 
-    } else if (Q3TextDrag::decode(event, text)) {
+    } else if (text != "") {
+
         RG_DEBUG << "TrackEditor::dropEvent() : got text info " << endl;
         //<< text << endl;
 
@@ -828,7 +851,7 @@ void TrackEditor::dropEvent(QDropEvent* event)
                     << ", time = "
                     << time
                     << ", x = "
-                    << event->pos().x()
+                    << e->pos().x()
                     << ", map = "
                     << posInSegmentCanvas.x()
                     << endl;

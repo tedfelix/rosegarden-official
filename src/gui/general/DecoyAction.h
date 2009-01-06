@@ -15,37 +15,34 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ACTIONFILECLIENT_H_
-#define _RG_ACTIONFILECLIENT_H_
+#ifndef _RG_DECOYACTION_H_
+#define _RG_DECOYACTION_H_
 
-#include <QString>
+#include <QAction>
 
-class QAction;
+namespace Rosegarden {
 
-namespace Rosegarden
-{
-
-class ActionFileParser;
-
-class ActionFileClient // base class for users of the ActionFileParser
+/**
+ * A "fake" action class.  This is returned when a method such as
+ * ActionFileClient::findAction() fails to find the expected action.
+ * A lot of antique code calls functions such as this and then
+ * dereferences the returned pointer without testing its validity;
+ * this class is just to avoid those blowing up.
+ */
+class DecoyAction : public QAction
 {
 public:
-    virtual QAction *findAction(QString actionName);
-    virtual void enterActionState(QString stateName);
-    virtual void leaveActionState(QString stateName);
-
-protected:
-    ActionFileClient();
-    virtual ~ActionFileClient();
-
-    virtual QAction *createAction(QString actionName, QString connection);
-    virtual bool createGUI(QString rcname);
+    virtual ~DecoyAction();
+    static DecoyAction *getInstance();
 
 private:
-    ActionFileParser *m_actionFileParser;
+    DecoyAction();
+
+    static DecoyAction *m_instance;
 };
 
 }
 
 #endif
 
+    

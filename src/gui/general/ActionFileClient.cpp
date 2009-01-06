@@ -17,6 +17,7 @@
 
 #include "ActionFileClient.h"
 #include "ActionFileParser.h"
+#include "DecoyAction.h"
 
 #include "misc/Strings.h"
 
@@ -56,14 +57,18 @@ ActionFileClient::createAction(QString actionName, QString connection)
 QAction *
 ActionFileClient::findAction(QString actionName)
 {
-    //!!! NB this is often called and the result dereferenced without checking for NULL -- fix these cases!
-
     QObject *obj = dynamic_cast<QObject *>(this);
     if (!obj) {
         std::cerr << "ERROR: ActionFileClient::findAction: ActionFileClient subclass is not a QObject" << std::endl;
-        return 0;
+        return DecoyAction::getInstance();
     }
-    return obj->findChild<QAction *>(actionName);
+    QAction *a = obj->findChild<QAction *>(actionName);
+    if (!a) {
+        std::cerr << "WARNING: ActionFileClient(\"" << obj->objectName()
+                  << "\"::findAction: No such action as \"" << actionName << "\"" << std::endl;
+        return DecoyAction::getInstance();
+    }
+    return a;
 }
 
 void

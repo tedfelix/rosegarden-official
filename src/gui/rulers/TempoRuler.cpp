@@ -57,10 +57,6 @@
 
 
 #include <klocale.h>
-//#include <kstandarddirs.h>
-//#include <kglobal.h>
-// #include <kxmlguiclient.h>
-// #include <kxmlguifactory.h>
 
 
 namespace Rosegarden
@@ -169,11 +165,15 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
 
 TempoRuler::~TempoRuler()
 {
+/*!!! comment retained for reference, in case of problems later.  I think this should no longer be necessary, but I am only a simple carbon-based life form
+
     // we have to do this so that the menu is re-created properly
     // when the main window is itself recreated (on a File->New for instance)
+
     KXMLGUIFactory* factory = m_parentMainWindow->factory();
     if (factory)
         factory->removeClient(this);
+*/
 }
 
 void
@@ -1080,18 +1080,17 @@ TempoRuler::slotEditTempos()
 void
 TempoRuler::createMenu()
 {
-    setXMLFile("temporuler.rc");
+    createGUI("temporuler.rc");
     
-//     KXMLGUIFactory* factory = m_parentMainWindow->factory();	//&&&
-//     factory->addClient(this);
+    m_menu = findChild<QMenu *>("tempo_ruler_menu");
 
-//     QWidget* tmp = factory->container("tempo_ruler_menu", this);
-	QWidget* tmp = this->findChild<QWidget*>( "tempo_ruler_menu" );
-
-    m_menu = dynamic_cast<QMenu*>(tmp);
-        
+//    if (!tmp) {
+//        RG_DEBUG << "MarkerRuler::createMenu() menu not found\n"
+//                 << domDocument().toString(4) << endl;
+//    }
+    
     if (!m_menu) {
-        RG_DEBUG << "MarkerRuler::createMenu() failed\n";
+        RG_DEBUG << "TempoRuler::createMenu() failed\n";
     }
 }
 

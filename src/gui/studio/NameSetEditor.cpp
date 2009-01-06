@@ -20,9 +20,6 @@
 #include "BankEditorDialog.h"
 
 #include <klocale.h>
-// #include <kcompletion.h>
-// #include <kglobalsettings.h>
-// #include <klineedit.h>
 
 #include <QFrame>
 #include <QGroupBox>
@@ -34,6 +31,7 @@
 #include <QTabWidget>
 #include <QToolTip>
 #include <QWidget>
+#include <QCompleter>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QVBoxLayout>
@@ -52,7 +50,6 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
                              bool showEntryButtons) :
     QGroupBox(title, parent),
     m_bankEditor(bankEditor),
-    m_completer(0),
     m_mainFrame(new QFrame(this))
 {
     QVBoxLayout *layout = new QVBoxLayout;
@@ -157,7 +154,7 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
 				
 //                 lineEdit->setCompletionObject(&m_completion);
 
-                lineEdit->setCompleter(m_completer);
+                lineEdit->setCompleter(new QCompleter(m_completions));
 				
                 m_names.push_back(lineEdit);
 
