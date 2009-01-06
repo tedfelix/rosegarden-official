@@ -140,8 +140,15 @@ EditView::EditView(RosegardenGUIDoc *doc,
     //@@@         getBottomWidget()->layout()->addWidget(widgetPtr);
     //@@@ All widgets added or some of them forgotten ?
 
+    //###&&&@@@ (I can never remember which of these symbols is
+    //###&&&@@@ supposed to represent what) -- QTabWidget doesn't
+    // seem to have a close button, so we'll need to invent an
+    // actual replacement for this (whether a KDE class or a
+    // separate button).  That can wait until after the Great Compile
+/*
     m_controlRulers->setHoverCloseButton(true);
     m_controlRulers->setHoverCloseButtonDelayed(false);
+*/
     connect(m_controlRulers, SIGNAL(closeRequest(QWidget*)),
             this, SLOT(slotRemoveControlRuler(QWidget*)));
 
@@ -316,7 +323,7 @@ void EditView::setBottomStandardRuler(StandardRuler* w)
 
 void EditView::setRewFFwdToAutoRepeat()
 {
-    QWidget* transportToolbar = factory()->container("Transport Toolbar", this);
+    QWidget* transportToolbar = findChild<QWidget *>("Transport Toolbar");
 	
     if (transportToolbar) {
         QObjectList obl = transportToolbar->queryList();
@@ -1041,8 +1048,7 @@ EditView::setupAddControlRulerMenu()
 {
     RG_DEBUG << "EditView::setupAddControlRulerMenu" << endl;
 
-    QMenu* addControlRulerMenu = dynamic_cast<QMenu*>
-        (factory()->container("add_control_ruler", this));
+    QMenu* addControlRulerMenu = findChild<QMenu *>("add_control_ruler");
 
     if (addControlRulerMenu) {
 

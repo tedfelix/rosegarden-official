@@ -219,7 +219,6 @@
 #include <QFontDialog>
 #include <QPageSetupDialog>
 
-#include <ui_RosegardenTransport.h>
 #include <gui/kdeext/KTmpStatusMsg.h>
 
 //#include <kmimetype.h>

@@ -55,15 +55,15 @@ SOURCES		= $(QRCSOURCES) $(filter-out templates/template.cpp, $(wildcard src/*.c
 QHEADERS	= $(shell fgrep -l Q_OBJECT $(HEADERS))
 OBJECTS		= $(patsubst %.cpp,%.o,$(SOURCES))
 QSOURCES	= $(patsubst %.h,%.moc,$(QHEADERS))
-UI		= $(wildcard gui/ui/*.ui)
-RC		= $(wildcard gui/ui/*.rc)
+UI		= $(wildcard src/gui/ui/*.ui)
+RC		= $(wildcard src/gui/ui/*.rc)
 UIHEADERS	= $(patsubst %.ui,%.h,$(UI))
-UISOURCES	= $(patsubst %.ui,%.cpp,$(UI))
-UIMOC		= $(patsubst %.ui,%.moc,$(UI))
+#UISOURCES	= $(patsubst %.ui,%.cpp,$(UI))
+#UIMOC		= $(patsubst %.ui,%.moc,$(UI))
 
-GUISOURCES	= $(filter-out sequencer/%.cpp, $(SOURCES))
+GUISOURCES	= $(filter-out src/sequencer/%.cpp, $(SOURCES))
 GUIOBJECTS	= $(patsubst %.cpp,%.o,$(GUISOURCES))
-SEQSOURCES	= $(wildcard base/*.cpp misc/*.cpp sound/*.cpp sequencer/*.cpp)
+SEQSOURCES	= $(wildcard src/base/*.cpp src/misc/*.cpp src/sound/*.cpp src/sequencer/*.cpp)
 SEQOBJECTS	= $(patsubst %.cpp,%.o,$(SEQSOURCES))
 
 all:	$(QSOURCES) $(UIHEADERS) $(UISOURCES) $(UIMOC) $(OBJECTS) $(LIBRARIES) $(EXECUTABLES) rosegardensequencer rosegarden
