@@ -4258,7 +4258,7 @@ msgstr ""
 "käytössä vain jos JACK-palvelin on päällä.</li><br><br><li>Rosegardenilla on "
 "kattavahko ohjekirja: katse Ohje-valikosta käsikirja, oppaat ja muu "
 "informaatio!</li></ul><p>Rosegardenin on tuonut käyttöösi ryhmä "
-"vapaaehtoisia ympäri maailman.  Oppiaksesi lisää käy sivulla <a href="
+"vapaaehtoisia ympäri maailman.  Lisää oppiaksesi käy sivulla <a href="
 "\"http://www.rosegardenmusic.com/\">http://www.rosegardenmusic.com/</a>.</p>"
 
 #: ../src/gui/application/RosegardenGUIView.cpp:251
@@ -7147,9 +7147,8 @@ msgid "Resi&ze"
 msgstr "Määritä &koko uudelleen"
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:664
-#, fuzzy
 msgid "&Velocity"
-msgstr "Nopeus:"
+msgstr "&Nopeus"
 
 #: ../src/gui/editors/matrix/MatrixView.cpp:671
 #: ../src/gui/editors/notation/NotationView.cpp:1917
@@ -7457,29 +7456,24 @@ msgid "Click on a note to delete it"
 msgstr "Klikkaa nuotin päällä poistaaksesi sen"
 
 #: ../src/gui/editors/matrix/MatrixVelocity.cpp:174
-#, fuzzy, c-format
 msgid "Velocity change: %1"
-msgstr "Nopeus  "
+msgstr "Nopeuden muutos: %1"
 
 #: ../src/gui/editors/matrix/MatrixVelocity.cpp:210
-#, fuzzy
 msgid "Change Velocity"
-msgstr "Perusnopeus"
+msgstr "Muuta nopeutta"
 
 #: ../src/gui/editors/matrix/MatrixVelocity.cpp:213
-#, fuzzy
 msgid "Change Velocities"
-msgstr "Nopeudet"
+msgstr "Muuta nopeudet"
 
 #: ../src/gui/editors/matrix/MatrixVelocity.cpp:270
-#, fuzzy
 msgid "Click and drag to scale velocity of selected notes"
-msgstr "Klikkaa ja vedä kopioidaksesi valitut nuotit"
+msgstr "Klikkaa ja vedä skaalataksesi nopeudet valituille nuoteille"
 
 #: ../src/gui/editors/matrix/MatrixVelocity.cpp:272
-#, fuzzy
 msgid "Click and drag to scale velocity of note"
-msgstr "Klikkaa ja vedä kopioidaksesi nuotin"
+msgstr "Klikkaa ja vedä skaalataksesi nuotin nopeuden"
 
 #: ../src/gui/editors/tempo/TempoView.cpp:82
 msgid "Filter"
