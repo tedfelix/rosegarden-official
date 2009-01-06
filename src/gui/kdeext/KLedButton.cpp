@@ -31,12 +31,12 @@ namespace Rosegarden
 {
 
 KLedButton::KLedButton(const QColor &col, QWidget *parent, const char *name)
-        : KLed( col, parent, name )
+        : KLed( col, parent )
 {}
 
 KLedButton::KLedButton(const QColor& col, KLed::State st, KLed::Look look,
                        KLed::Shape shape, QWidget *parent, const char *name)
-        : KLed( col, st, look, shape, parent, name )
+        : KLed( col, st, look, shape, parent )
 {}
 
 KLedButton::~KLedButton()

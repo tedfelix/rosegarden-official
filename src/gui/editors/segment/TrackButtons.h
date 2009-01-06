@@ -44,6 +44,12 @@ class KLedButton;
 class Instrument;
 
 
+
+// This class creates a list of mute and record buttons
+// based on the rosegarden document and a specialisation
+// of the Vertical Box widget.
+//
+
 class TrackButtons : public QFrame
 {
     Q_OBJECT
