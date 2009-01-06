@@ -49,10 +49,11 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
                              QWidget* parent,
                              const char* name,
                              QString headingPrefix,
-                             bool showEntryButtons)
-        : QGroupBox(title, parent),
-        m_bankEditor(bankEditor),
-        m_mainFrame(new QFrame(this))
+                             bool showEntryButtons) :
+    QGroupBox(title, parent),
+    m_bankEditor(bankEditor),
+    m_completer(0),
+    m_mainFrame(new QFrame(this))
 {
     QVBoxLayout *layout = new QVBoxLayout;
 
@@ -135,8 +136,8 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
 
                 if (showEntryButtons) {
 // 					QPushButton *button = new QPushButton("", numBox, numberText);
-					QPushButton *button = new QPushButton(numberText, numBox);
-					numBoxLayout->addWidget(button);
+                    QPushButton *button = new QPushButton(numberText, numBox);
+                    numBoxLayout->addWidget(button);
                     button->setMaximumWidth(40);
                     button->setMaximumHeight(20);
                     button->setFlat(true);
@@ -155,7 +156,8 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
 // 				completer->setCompletitionMode( QCompleter::InlineCompletion );
 				
 //                 lineEdit->setCompletionObject(&m_completion);
-				lineEdit->setCompleter( m_completion );
+
+                lineEdit->setCompleter(m_completer);
 				
                 m_names.push_back(lineEdit);
 

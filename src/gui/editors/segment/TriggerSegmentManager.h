@@ -20,6 +20,7 @@
 #define _RG_TRIGGERSEGMENTMANAGER_H_
 
 #include "base/Event.h"
+#include "gui/general/ActionFileClient.h"
 
 #include <QMainWindow>
 #include <QString>
@@ -41,7 +42,7 @@ namespace Rosegarden
 class Command;
 class RosegardenGUIDoc;
 
-class TriggerSegmentManager : public QMainWindow
+class TriggerSegmentManager : public QMainWindow, public ActionFileClient
 {
     Q_OBJECT
 

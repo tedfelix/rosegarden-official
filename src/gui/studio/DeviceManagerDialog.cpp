@@ -249,7 +249,7 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
                                        SLOT(slotClose()),
                                        actionCollection());
 	*/
-	QAction *close = createAction("file_close", SLOT(slotClose()) );
+    QAction *close = createAction("file_close", SLOT(slotClose()) );
 
     closeButton->setText(close->text());
     connect(closeButton, SIGNAL(clicked()), this, SLOT(slotClose()));
@@ -270,10 +270,8 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
                             actionCollection(),
                             KStandardAction::stdName(KStandardAction::Redo));
 	*/
-	createAction( "edit_undo" );
-	createAction( "edit_redo" );
 	
-        createGUI("devicemanager.rc"); //@@@JAS orig. 0
+    createGUI("devicemanager.rc"); //@@@JAS orig. 0
 
 //     CommandHistory::getInstance()->attachView(actionCollection());	//&&&
 //     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),//&&&

@@ -67,7 +67,7 @@ protected:
 
     QGridLayout             *m_mainLayout;
     BankEditorDialog*        m_bankEditor;
-    QCompleter              *m_completion;
+    QCompleter              *m_completer;
     QPushButton             *m_initialLabel;
     std::vector<QLabel*>     m_labels;
     std::vector<QLineEdit*>  m_names;

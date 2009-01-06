@@ -20,11 +20,11 @@
 
 #include "base/Device.h"
 #include "base/MidiDevice.h"
+#include "gui/general/ActionFileClient.h"
 
 #include <QMainWindow>
 #include <QString>
 #include <QStringList>
-// #include <QTableWidget>
 
 #include <vector>
 
@@ -44,7 +44,7 @@ class RosegardenGUIDoc;
 class MidiDevice;
 
 
-class DeviceManagerDialog : public QMainWindow
+class DeviceManagerDialog : public QMainWindow, public ActionFileClient
 {
     Q_OBJECT
 public:

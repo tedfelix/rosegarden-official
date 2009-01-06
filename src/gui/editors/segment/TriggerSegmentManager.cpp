@@ -414,98 +414,29 @@ TriggerSegmentManager::setupActions()
 //     KAction* close = KStandardAction::close(this,
 //                                        SLOT(slotClose()),
 //                                        actionCollection());
-	createAction( "file_close", SLOT(slotClose()) );
-	createAction( "edit_undo" );
-	createAction( "edit_redo" );
-	
-	QActionGroup *qag_timeMode = new QActionGroup(this);
-	qag_timeMode->setExclusive( true );
+    createAction( "file_close", SLOT(slotClose()) );
 
+    //!!! will not work right -- need to do this after createGUI call or just use hardcoded i18n("Close")
     m_closeButton->setText( findAction("file_close")->text() );
+
     connect(m_closeButton, SIGNAL(released()), this, SLOT(slotClose()));
 
-//     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-	IconLoader il;
-	QString pixmapDir = il.getResourcePath("");
-
-    // some adjustments
-//     new KToolBarPopupAction(i18n("Und&o"),
-//                             "undo",
-//                             KStandardShortcut::key(KStandardShortcut::Undo),
-//                             actionCollection(),
-//                             KStandardAction::stdName(KStandardAction::Undo));
-
-
-//     new KToolBarPopupAction(i18n("Re&do"),
-//                             "redo",
-//                             KStandardShortcut::key(KStandardShortcut::Redo),
-//                             actionCollection(),
-//                             KStandardAction::stdName(KStandardAction::Redo));
-
-	
-	
-    QAction* qa_paste_to_trigger_segment = new QAction(  i18n("Pa&ste as New Triggered Segment"), dynamic_cast<QObject*>(this) );
-			connect( qa_paste_to_trigger_segment, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotPasteAsNew()) );
-			qa_paste_to_trigger_segment->setObjectName( "paste_to_trigger_segment" );		//
-			//qa_paste_to_trigger_segment->setCheckable( true );		//
-			qa_paste_to_trigger_segment->setAutoRepeat( false );	//
-			//qa_paste_to_trigger_segment->setActionGroup( 0 );		// QActionGroup*
-			//qa_paste_to_trigger_segment->setChecked( false );		//
-			//### FIX: deallocate QAction ptr
-			
+    createAction("paste_to_trigger_segment", SLOT(slotPasteAsNew()));
 
     QSettings settings;
-
     settings.beginGroup( TriggerManagerConfigGroup );
 
     int timeMode = settings.value("timemode", 0).toInt() ;
+    
+    QAction *a;
+    a = createAction("time_musical", SLOT(slotMusicalTime()));
+    if (timeMode == 0) { a->setCheckable(true); a->setChecked(true); }
 
-//     KRadioAction *action;
+    a = createAction("time_real", SLOT(slotRealTime()));
+    if (timeMode == 1) { a->setCheckable(true); a->setChecked(true); }
 
-    Q3CanvasPixmap pixmap(pixmapDir + "/toolbar/time-musical.png");
-    QIcon icon(pixmap);
-
-    QAction* qa_time_musical = new QAction( icon, i18n("&Musical Times"), this );
-			connect( qa_time_musical, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotMusicalTime()) );
-			qa_time_musical->setObjectName( "time_musical" );
-			qa_time_musical->setCheckable( true );		//
-			qa_time_musical->setChecked( false );			//
-			qa_time_musical->setAutoRepeat( false );		//
-			qa_time_musical->setActionGroup( qag_timeMode );	// QActionGroup*
-			//### FIX: deallocate QAction ptr
-
-    if (timeMode == 0)
-		qa_time_musical->setChecked(true);
-
-    pixmap.load(pixmapDir + "/toolbar/time-real.png");
-    icon = QIcon(pixmap);
-
-    QAction* qa_time_real = new QAction( icon, i18n("&Real Times"), this );
-			connect( qa_time_real, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotRealTime()) );
-			qa_time_real->setObjectName( "time_real" );
-			qa_time_real->setCheckable( true );		//
-			qa_time_real->setChecked( false );			//
-			qa_time_real->setAutoRepeat( false );		//
-			qa_time_real->setActionGroup( qag_timeMode );	// QActionGroup*
-			//### FIX: deallocate QAction ptr
-
-    if (timeMode == 1)
-		qa_time_real->setChecked(true);
-
-    pixmap.load(pixmapDir + "/toolbar/time-raw.png");
-    icon = QIcon(pixmap);
-
-    QAction* qa_time_raw = new QAction( icon, i18n("Ra&w Times"), this );
-			connect( qa_time_raw, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotRawTime()) );
-			qa_time_raw->setObjectName( "time_raw" );
-			qa_time_raw->setCheckable( true );		//
-			qa_time_raw->setChecked( false );			//
-			qa_time_raw->setAutoRepeat( false );		//
-			qa_time_raw->setActionGroup( qag_timeMode );	// QActionGroup*
-			//### FIX: deallocate QAction ptr
-
-    if (timeMode == 2)
-		qa_time_raw->setChecked(true);
+    a = createAction("time_raw", SLOT(slotRawTime()));
+    if (timeMode == 2) { a->setCheckable(true); a->setChecked(true); }
 
     createGUI("triggermanager.rc"); //@@@ JAS orig. 0
 

@@ -21,9 +21,9 @@
 
   <Menu name="view">
     <text>&amp;View</text>
-    <Action name="time_musical" text="&amp;Musical Times" icon="time-musical"  />
-    <Action name="time_real" text="&amp;real Times" icon="time-real" />
-    <Action name="time_raw" text="Ra&amp;w Times" icon="time-raw" />
+    <Action name="time_musical" group="time_mode" checked="true" text="&amp;Musical Times" icon="time-musical"  />
+    <Action name="time_real" group="time_mode" checked="false" text="&amp;real Times" icon="time-real" />
+    <Action name="time_raw" group="time_mode" checked="false" text="Ra&amp;w Times" icon="time-raw" />
   </Menu>
 
   <Menu name="help" append="about_merge">

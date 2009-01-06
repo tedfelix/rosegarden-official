@@ -61,6 +61,7 @@ public slots:
 
     virtual void slotNameChanged(const QString &);
     virtual void slotEntryButtonPressed();
+    void slotEntryMenuItemSelected(QAction *);
     void slotEntryMenuItemSelected(int);
 
 protected:

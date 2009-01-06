@@ -172,7 +172,7 @@ RemapInstrumentDialog::slotApply()
             (m_doc,
              m_devices[m_fromCombo->currentIndex()]->getId(),
              m_devices[m_toCombo->currentIndex()]->getId());
-        CommandHistory::getInstance()->addCommandToHistory(command);
+        CommandHistory::getInstance()->addCommand(command);
     } else // instruments
     {
         ModifyInstrumentMappingCommand *command =
@@ -180,7 +180,7 @@ RemapInstrumentDialog::slotApply()
             (m_doc,
              m_instruments[m_fromCombo->currentIndex()]->getId(),
              m_instruments[m_toCombo->currentIndex()]->getId());
-        CommandHistory::getInstance()->addCommandToHistory(command);
+        CommandHistory::getInstance()->addCommand(command);
     }
 
     emit applyClicked();

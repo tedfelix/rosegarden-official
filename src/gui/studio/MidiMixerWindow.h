@@ -20,6 +20,7 @@
 #define _RG_MIDIMIXERWINDOW_H_
 
 #include "base/MidiProgram.h"
+#include "gui/general/ActionFileClient.h"
 #include "MixerWindow.h"
 #include <vector>
 
@@ -41,7 +42,7 @@ class MappedEvent;
 class Fader;
 
 
-class MidiMixerWindow : public MixerWindow
+class MidiMixerWindow : public MixerWindow, public ActionFileClient
 {
     Q_OBJECT
 

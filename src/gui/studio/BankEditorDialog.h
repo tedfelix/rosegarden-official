@@ -20,6 +20,7 @@
 
 #include "base/Device.h"
 #include "base/MidiProgram.h"
+#include "gui/general/ActionFileClient.h"
 
 #include <QMainWindow>
 
@@ -51,7 +52,7 @@ class MidiDeviceListViewItem;
 class MidiDevice;
 
 
-class BankEditorDialog : public QMainWindow
+class BankEditorDialog : public QMainWindow, public ActionFileClient
 {
     Q_OBJECT
 

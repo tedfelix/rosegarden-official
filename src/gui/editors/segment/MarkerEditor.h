@@ -19,6 +19,8 @@
 #ifndef _RG_MARKEREDITOR_H_
 #define _RG_MARKEREDITOR_H_
 
+#include "gui/general/ActionFileClient.h"
+
 #include <QMainWindow>
 #include <QString>
 
@@ -41,7 +43,7 @@ class Command;
 class RosegardenGUIDoc;
 
 
-class MarkerEditor : public QMainWindow
+class MarkerEditor : public QMainWindow, public ActionFileClient
 {
     Q_OBJECT
 

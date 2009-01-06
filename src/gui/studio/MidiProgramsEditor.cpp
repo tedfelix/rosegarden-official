@@ -17,10 +17,6 @@
 
 
 #include <klocale.h>
-#include <kcompletion.h>
-// #include <kglobal.h>
-// #include <klineedit.h>
-// #include <kstandarddirs.h>
 
 #include "MidiProgramsEditor.h"
 #include "MidiBankListViewItem.h"
@@ -235,25 +231,34 @@ MidiProgramsEditor::populate(QTreeWidgetItem* item)
     bool haveKeyMappings = m_currentBank->isPercussion()
                            && (m_device->getKeyMappings().size() > 0);
 
+    if (m_completer) {
+        delete m_completer;
+        m_completer = 0;
+    }
+
+    QStringList completions;
+
     for (unsigned int i = 0; i < m_names.size(); i++) {
+
         m_names[i]->clear();
         getEntryButton(i)->setEnabled(haveKeyMappings);
         getEntryButton(i)->setIcon(QIcon(noKeyPixmap));
         // QToolTip::remove
         //    ( getEntryButton(i) );
-        getEntryButton(i)->setToolTip(QString(""));  //@@@ Usefull ?
+//        getEntryButton(i)->setToolTip(QString(""));  //@@@ Usefull ?
 
         for (it = programSubset.begin(); it != programSubset.end(); it++) {
             if (it->getProgram() == i) {
 
                 QString programName = strtoqstr(it->getName());
-                m_completion.addItem(programName);
+                completions << programName;
                 m_names[i]->setText(programName);
 
                 if (m_device->getKeyMappingForProgram(*it)) {
                     getEntryButton(i)->setIcon(QIcon(keyPixmap));
-                    getEntryButton(i)->setToolTip(i18n("Key Mapping: %1", 
-                                    strtoqstr(m_device->getKeyMappingForProgram(*it)->getName())));
+                    getEntryButton(i)->setToolTip
+                        (i18n("Key Mapping: %1", 
+                              strtoqstr(m_device->getKeyMappingForProgram(*it)->getName())));
                 }
 
                 break;
@@ -263,6 +268,9 @@ MidiProgramsEditor::populate(QTreeWidgetItem* item)
         // show start of label
         m_names[i]->setCursorPosition(0);
     }
+
+    m_completer = new QCompleter(completions, this);
+    m_completer->setCaseSensitivity(Qt::CaseInsensitive);
 
     blockAllSignals(false);
 }
@@ -472,27 +480,20 @@ MidiProgramsEditor::slotEntryButtonPressed()
 
     const MidiKeyMapping *currentMapping =
         m_device->getKeyMappingForProgram(*program);
+
     int currentEntry = 0;
 
-//     menu->addItem( i18n("<no key mapping>"), this,
-//                      SLOT(slotEntryMenuItemSelected(int)), 0, 0);
-	QAction *act = createAction( "no_key_mapping", SLOT(slotEntryMenuItemSelected(int)) );
-	menu->addAction( act );	//@@@
-	
-    menu->setItemParameter(0, 0);
+    QAction *a = menu->addAction(i18n("<no key mapping>"));
+    a->setObjectName("0");
 
     for (int i = 0; i < kml.size(); ++i) {
-//         menu->addItem(strtoqstr(kml[i].getName()),
-//                          this, SLOT(slotEntryMenuItemSelected(int)),
-//                          0, i + 1);
-		act = createAction( "key_mapping_" + strtoqstr(kml[i].getName()), SLOT(slotEntryMenuItemSelected(int)) );
-		menu->addAction( act );	//@@@
-		
-		
-        menu->setItemParameter(i + 1, i + 1);
-        if (currentMapping && (kml[i] == *currentMapping))
-            currentEntry = i + 1;
+        a = menu->addAction(strtoqstr(kml[i].getName()));
+        a->setObjectName(QString("%1").arg(i+1));
+        if (currentMapping && (kml[i] == *currentMapping)) currentEntry = i + 1;
     }
+
+    connect(menu, SIGNAL(triggered(QAction *)),
+            this, SLOT(slotEntryMenuItemSelected(QAction *)));
 
     int itemHeight = menu->itemHeight(0) + 2;
     QPoint pos = QCursor::pos();
@@ -501,6 +502,12 @@ MidiProgramsEditor::slotEntryButtonPressed()
     pos.ry() -= (itemHeight / 2 + currentEntry * itemHeight);
 
     menu->popup(pos);
+}
+
+void
+MidiProgramsEditor::slotEntryMenuItemSelected(QAction *a)
+{
+    slotEntryMenuItemSelected(a->objectName().toInt());
 }
 
 void

@@ -356,8 +356,6 @@ BankEditorDialog::setupActions()
                             actionCollection(),
                             KStandardAction::stdName(KStandardAction::Redo));
 	*/
-	createAction( "edit_undo" );
-	createAction( "edit_redo" );
 	
         createGUI("bankeditor.rc"); //@@@ JAS orig. 0
 }

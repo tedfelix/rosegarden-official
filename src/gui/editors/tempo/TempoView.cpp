@@ -633,142 +633,29 @@ TempoView::setupActions()
 {
     EditViewBase::setupActions("tempoview.rc", false);
 
-	IconLoader il;
-	QIcon icon;
-	
-//     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-// 	QIcon icon(QPixmap(pixmapDir + "/toolbar/event-insert-tempo.png"));
-	icon = il.load( "event-insert-tempo" );
-
-    QAction* qa_insert_tempo = new QAction(  AddTempoChangeCommand::getGlobalName(), dynamic_cast<QObject*>(this) );
-			connect( qa_insert_tempo, SIGNAL(toggled()), this, SLOT(slotEditInsertTempo()) );
-			qa_insert_tempo->setShortcut( QKeySequence(Qt::Key_I) );
-			qa_insert_tempo->setObjectName( "insert_tempo" );		//
-			//qa_insert_tempo->setCheckable( true );		//
-			qa_insert_tempo->setAutoRepeat( false );	//
-			//qa_insert_tempo->setActionGroup( 0 );		// QActionGroup*
-			//qa_insert_tempo->setChecked( false );		//
-			//### FIX: deallocate QAction ptr
-			
-
-//     Q3CanvasPixmap pixmap(pixmapDir + "/toolbar/event-insert-timesig.png");
-//     icon = QIcon(pixmap);
-	icon = il.load( "event-insert-timesig" );
-
-    QAction* qa_insert_timesig = new QAction(  AddTimeSignatureCommand::getGlobalName(), dynamic_cast<QObject*>(this) );
-			connect( qa_insert_timesig, SIGNAL(toggled()), this, SLOT(slotEditInsertTimeSignature()) );
-			qa_insert_timesig->setShortcut( QKeySequence(Qt::Key_G) );
-			qa_insert_timesig->setObjectName( "insert_timesig" );		//
-			//qa_insert_timesig->setCheckable( true );		//
-			qa_insert_timesig->setAutoRepeat( false );	//
-			//qa_insert_timesig->setActionGroup( 0 );		// QActionGroup*
-			//qa_insert_timesig->setChecked( false );		//
-			//### FIX: deallocate QAction ptr
-			
-
-//     pixmap.load(pixmapDir + "/toolbar/event-delete.png");
-//     icon = QIcon(pixmap);
-	icon = il.load( "event-delete" );
-
-
-    QAction *qa_delete = new QAction( "&Delete", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_delete->setIcon(icon); 
-			connect( qa_delete, SIGNAL(triggered()), this, SLOT(slotEditDelete())  );
-	
-	
-//     pixmap.load(pixmapDir + "/toolbar/event-edit.png");
-//     icon = QIcon(pixmap);
-	icon = il.load( "event-edit" );
-
-    QAction *qa_edit = new QAction( "&Edit Item", dynamic_cast<QObject*>(this) ); //### deallocate action ptr 
-			qa_edit->setIcon(icon); 
-			connect( qa_edit, SIGNAL(triggered()), this, SLOT(slotEdit())  );
-
-    QAction* qa_select_all = new QAction(  i18n("Select &All"), dynamic_cast<QObject*>(this) );
-			connect( qa_select_all, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotSelectAll()) );
-			qa_select_all->setObjectName( "select_all" );		//
-			//qa_select_all->setCheckable( true );		//
-			qa_select_all->setAutoRepeat( false );	//
-			//qa_select_all->setActionGroup( 0 );		// QActionGroup*
-			//qa_select_all->setChecked( false );		//
-			//### FIX: deallocate QAction ptr
-			
-
-    QAction* qa_clear_selection = new QAction(  i18n("Clear Selection"), dynamic_cast<QObject*>(this) );
-			connect( qa_clear_selection, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotClearSelection()) );
-			qa_clear_selection->setObjectName( "clear_selection" );		//
-			//qa_clear_selection->setCheckable( true );		//
-			qa_clear_selection->setAutoRepeat( false );	//
-			//qa_clear_selection->setActionGroup( 0 );		// QActionGroup*
-			//qa_clear_selection->setChecked( false );		//
-			//### FIX: deallocate QAction ptr
-			
+    createAction("insert_tempo", SLOT(slotEditInsertTempo()));
+    createAction("insert_timesig", SLOT(slotEditInsertTimeSignature()));
+    createAction("delete", SLOT(slotEditDelete()));
+    createAction("edit", SLOT(slotEdit()));
+    createAction("select_all", SLOT(slotSelectAll()));
+    createAction("clear_selection", SLOT(slotClearSelection()));
 
     QSettings settings;
     settings.beginGroup( TempoViewConfigGroup );
-
     int timeMode = settings.value("timemode", 0).toInt() ;
     settings.endGroup();
 
-	
-	
-	//### //@@@  FIX: this should use a global QActionGroup !!!
-	// (in editors/segment/TriggerSegmentManager.cpp too )
-	//
-	// QActionGroup for the Time Mode
-	QActionGroup *qag_timeMode = new QActionGroup(this);
-	qag_timeMode->setExclusive( true );
-	
-//     KRadioAction *action;
-//     pixmap.load(pixmapDir + "/toolbar/time-musical.png");
-//     icon = QIcon(pixmap);
-	icon = il.load( "time-musical" );
-	
-    QAction* qa_time_musical = new QAction( icon, i18n("&Musical Times"), this );
-			connect( qa_time_musical, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotMusicalTime()) );
-			qa_time_musical->setObjectName( "time_musical" );
-			qa_time_musical->setCheckable( true );		//
-			qa_time_musical->setChecked( false );			//
-			qa_time_musical->setAutoRepeat( false );		//
-			qa_time_musical->setActionGroup( qag_timeMode );	// QActionGroup*
-			//### FIX: deallocate QAction ptr
+    QAction *a;
+    a = createAction("time_musical", SLOT(slotMusicalTime()));
+    if (timeMode == 0) { a->setCheckable(true); a->setChecked(true); }
 
-    if (timeMode == 0)
-		qa_time_musical->setChecked(true);
+    a = createAction("time_real", SLOT(slotRealTime()));
+    if (timeMode == 1) { a->setCheckable(true); a->setChecked(true); }
 
-//     pixmap.load(pixmapDir + "/toolbar/time-real.png");
-//     icon = QIcon(pixmap);
-	icon = il.load( "time-real" );
+    a = createAction("time_raw", SLOT(slotRawTime()));
+    if (timeMode == 2) { a->setCheckable(true); a->setChecked(true); }
 
-    QAction* qa_time_real = new QAction( icon, i18n("&Real Times"), this );
-			connect( qa_time_real, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotRealTime()) );
-			qa_time_real->setObjectName( "time_real" );
-			qa_time_real->setCheckable( true );		//
-			qa_time_real->setChecked( false );			//
-			qa_time_real->setAutoRepeat( false );		//
-			qa_time_real->setActionGroup( qag_timeMode );	// QActionGroup*
-			//### FIX: deallocate QAction ptr
-
-    if (timeMode == 1)
-		qa_time_real->setChecked(true);
-
-//     pixmap.load(pixmapDir + "/toolbar/time-raw.png");
-//     icon = QIcon(pixmap);
-	icon = il.load( "time-raw" );
-
-    QAction* qa_time_raw = new QAction( icon, i18n("Ra&w Times"), this );
-			connect( qa_time_raw, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotRawTime()) );
-			qa_time_raw->setObjectName( "time_raw" );
-			qa_time_raw->setCheckable( true );		//
-			qa_time_raw->setChecked( false );			//
-			qa_time_raw->setAutoRepeat( false );		//
-			qa_time_raw->setActionGroup( qag_timeMode );	// QActionGroup*
-			//### FIX: deallocate QAction ptr
-
-    if (timeMode == 2)
-		qa_time_raw->setChecked(true);
-
-    rgTempQtIV->createGUI( qStrToCharPtrUtf8(getRCFileName()), 0);
+    createGUI(getRCFileName());
 }
 
 void
