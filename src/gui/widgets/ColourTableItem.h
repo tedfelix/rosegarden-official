@@ -22,41 +22,20 @@
 #include <QTableWidget>
 #include <QTableWidgetItem>
 
-// class QTableWidget;
-// class QTableWidgetItem;
-class QRect;
-class QPainter;
-class QColorGroup;
-
-
 namespace Rosegarden
 {
-
 
 
 class ColourTableItem : public QTableWidgetItem
 {
 public:
-    ColourTableItem(
-					QTableWidget *t, 
-	 				const QColor &input
-				   )
-	: QTableWidgetItem( 
-// 					   t, QTableWidgetItem::Never, ""	//### investigate - validate
-						
-					  ),
-	currentColour(input) {
-	
-// 		t->setItem( 0,0, this );
-		
-	}
+    ColourTableItem(QTableWidget *t, const QColor &input);
+
     void setColor(QColor &input);
-    void paint(QPainter *p, const QColorGroup &cg, const QRect &cr, bool selected);
 
 protected:
     QColor currentColour;
 };
-
 
 
 }
