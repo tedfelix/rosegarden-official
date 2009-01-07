@@ -35,6 +35,7 @@ public:
 
 protected:
     QColor currentColour;
+    QTableWidgetItem *m_ti;
 };
 
 

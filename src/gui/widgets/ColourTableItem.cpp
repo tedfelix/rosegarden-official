@@ -35,28 +35,27 @@ ColourTableItem::ColourTableItem(QTableWidget *t, const QColor &input)
     // this is no longer recognizeable; not that anyone is left who would have
     // recognized it anyway (Mark Hymers?  That was so long ago.)
 
-    // try doing this in the ctor to replace what used to be the paint() method,
-    // which never seems to have been called explicitly, so I assume the whole
-    // mechanism this used to rely on no longer exists, and am trying to
-    // guesstimate what all of this was supposed to do (fill cells in a table
-    // with rectangles of color, presumably) and try to recreate it
-
-    QTableWidgetItem *ti = new QTableWidgetItem();
+    // not sure how we inherit t; maybe t is now redundant?  maybe I'm just too
+    // stupid to be allowed to touch the code
+    m_ti = new QTableWidgetItem();
 
     // default state appears to be with no flags set, thus should not be
     // editable, etc. by default, so no need for old QTableItem::Never it seems
 
-    QBrush b (input);     // create brush with current color
-    ti->setBackground(b); // set background to brush (will this be enough?  no more QRect?
-                          // I really have no clue, because I've never done any
-                          // manual drawing stuff in any flavor of Qt new or
-                          // old, and this all amounts to a wild ass guess)
 }
 
 void
 ColourTableItem::setColor(QColor &input)
 {
     currentColour = input;
+
+    // move the painty bits directly in here.  why not?
+
+    QBrush b (input);       // create brush with current color
+    m_ti->setBackground(b); // set background to brush (will this be enough?  no more QRect?
+                            // I really have no clue, because I've never done any
+                            // manual drawing stuff in any flavor of Qt new or
+                            // old, and this all amounts to a wild ass guess)
 }
 
 }
