@@ -98,7 +98,7 @@ ProgressDialog::ProgressDialog(
 //                         modal),
 		
 // 		QProgressDialog( i18n("Processing..."), QString("Cancel"), creator ),	//modal),
-		QProgressDialog( creator, Qt:Dialog ),	//modal),
+		QProgressDialog( creator, Qt::Dialog ),	//modal),
 		
 		m_wasVisible(false),
         m_frozen(false),
@@ -152,16 +152,19 @@ ProgressDialog::polish()
 {
     QProgressDialog::polish();
 
-    if (allowCancel())
-        setCursor(Qt::ArrowCursor);
-    else
-        QApplication::setOverrideCursor(QCursor(Qt::waitCursor));
+//@@@ JAS I don't think this is necassary now deactivating
+//@@@ might want to remove ProgressDialog::polish(), later.
+//&&&    if (allowCancel())
+//&&&        setCursor(Qt::ArrowCursor);
+//&&&    else
+//&&&        QApplication::setOverrideCursor(QCursor(Qt::waitCursor));
 }
 
 void ProgressDialog::hideEvent(QHideEvent* e)
 {
-    if (!allowCancel())
-        QApplication::restoreOverrideCursor();
+//@@@ JAS I don't think this is necassary now deactivating
+//&&&    if (!allowCancel())
+//&&&        QApplication::restoreOverrideCursor();
 
     QProgressDialog::hideEvent(e);
     m_modalVisible = false;
@@ -184,7 +187,7 @@ ProgressDialog::slotSetOperationName(QString name)
 void ProgressDialog::slotCancel()
 {
     RG_DEBUG << "ProgressDialog::slotCancel()\n";
-    QProgressDialog::slotCancel();
+    QProgressDialog::cancel();
     slotFreeze();
 }
 
@@ -220,7 +223,9 @@ void ProgressDialog::slotFreeze()
     // the user can respond to whatever's freezing the progress dialog
     QApplication::restoreOverrideCursor();
 
-    mShowTimer->stop();
+    //### JAS Is mShowTimer a KDE thing.  I can't find this member.
+    //### JAS Disabling this code, probably not needed.
+    //&&&    mShowTimer->stop();
     m_frozen = true;
 }
 
@@ -235,7 +240,9 @@ void ProgressDialog::slotThaw()
     }
 
     // Restart timer
-    mShowTimer->start(minimumDuration());
+    //### JAS Is mShowTimer a KDE thing.  I can't find this member.
+    //### JAS Disabling this code, probably not needed.
+    //&&& mShowTimer->start(minimumDuration());
     m_frozen = false;
     m_chrono.restart();
 }
@@ -245,7 +252,7 @@ void ProgressDialog::processEvents()
     //    RG_DEBUG << "ProgressDialog::processEvents: modalVisible is "
     //	     << m_modalVisible << endl;
     if (m_modalVisible) {
-        qApp->processEvents(50);
+        qApp->processEvents(QEventLoop::AllEvents, 50); //@@@ JAS added AllEvents
     } else {
         rgapp->refreshGUI(50);
     }
