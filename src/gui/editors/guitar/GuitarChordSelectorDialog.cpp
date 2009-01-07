@@ -21,7 +21,7 @@
 #include "FingeringBox.h"
 #include "FingeringListBoxItem.h"
 #include "misc/Debug.h"
-#include "gui/general/IconLoader.h"
+#include "gui/general/ResourceFinder.h"
 #include "misc/Strings.h"
 
 #include <QListWidget>
@@ -474,8 +474,8 @@ GuitarChordSelectorDialog::getAvailableChordFiles()
 //    QStringList chordDictFiles = KGlobal::dirs()->findAllResources("appdata", "chords/*.xml");
 	
 	QString dicFile;
-	IconLoader il;
-	QStringList chordDictFiles = il.getResourceFiles( "chords", "xml" );
+	ResourceFinder rf;
+	QStringList chordDictFiles = rf.getResourceFiles( "chords", "xml" );
 	
 // 	for(QStringList::iterator i = chordDictFiles.begin(); i != chordDictFiles.end(); ++i) {
 	for( int i=0; i< chordDictFiles.count(); i++ ){
@@ -495,10 +495,9 @@ GuitarChordSelectorDialog::saveUserChordMap()
 //     QString userDir = KGlobal::dirs()->saveLocation("appdata", "chords/");
 //     QString userChordDictPath = userDir + "/user_chords.xml";
     
-	IconLoader il;
-    
-	QString userChordDictPath = il.getResourcePath("chords/user_chords.xml");
-	
+	ResourceFinder rf;
+	QString userChordDictPath = rf.getResourceSaveDir("chords");
+        userChordDictPath += "/user_chords.xml";
 	
     NOTATION_DEBUG << "GuitarChordSelectorDialog::saveUserChordMap() : saving user chord map to " << userChordDictPath << endl;
     QString errMsg;

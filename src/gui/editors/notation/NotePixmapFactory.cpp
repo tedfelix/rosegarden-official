@@ -38,7 +38,7 @@
 #include "gui/general/GUIPalette.h"
 #include "gui/general/PixmapFunctions.h"
 #include "gui/general/Spline.h"
-#include "gui/general/IconLoader.h"
+#include "gui/general/ResourceFinder.h"
 #include "gui/kdeext/KStartupLogo.h"
 #include "NotationStrings.h"
 #include "NotationView.h"
@@ -229,40 +229,40 @@ NotePixmapFactory::init(std::string fontName, int size)
     QSettings settings;
     settings.beginGroup( NotationViewConfigGroup );
 
-    m_timeSigFont = settings.value("timesigfont", &timeSigFont).toString();
+    m_timeSigFont = settings.value("timesigfont", timeSigFont).toString();
     m_timeSigFont.setBold(true);
     m_timeSigFont.setPixelSize(size * 5 / 2);
     m_timeSigFontMetrics = QFontMetrics(m_timeSigFont);
 
-    m_bigTimeSigFont = settings.value("timesigfont", &timeSigFont).toString();
+    m_bigTimeSigFont = settings.value("timesigfont", timeSigFont).toString();
     m_bigTimeSigFont.setPixelSize(size * 4 + 2);
     m_bigTimeSigFontMetrics = QFontMetrics(m_bigTimeSigFont);
 
-    m_tupletCountFont = settings.value("textfont", &textFont).toString();
+    m_tupletCountFont = settings.value("textfont", textFont).toString();
     m_tupletCountFont.setBold(true);
     m_tupletCountFont.setPixelSize(size * 2);
     m_tupletCountFontMetrics = QFontMetrics(m_tupletCountFont);
 
-    m_textMarkFont = settings.value("textfont", &textFont).toString();
+    m_textMarkFont = settings.value("textfont", textFont).toString();
     m_textMarkFont.setBold(true);
     m_textMarkFont.setItalic(true);
     m_textMarkFont.setPixelSize(size * 2);
     m_textMarkFontMetrics = QFontMetrics(m_textMarkFont);
 
-    m_fingeringFont = settings.value("textfont", &textFont).toString();
+    m_fingeringFont = settings.value("textfont", textFont).toString();
     m_fingeringFont.setBold(true);
     m_fingeringFont.setPixelSize(size * 5 / 3);
     m_fingeringFontMetrics = QFontMetrics(m_fingeringFont);
 
-    m_ottavaFont = settings.value("textfont", &textFont).toString();
+    m_ottavaFont = settings.value("textfont", textFont).toString();
     m_ottavaFont.setPixelSize(size * 2);
     m_ottavaFontMetrics = QFontMetrics(m_ottavaFont);
 
-    m_clefOttavaFont = settings.value("textfont", &textFont).toString();
+    m_clefOttavaFont = settings.value("textfont", textFont).toString();
     m_clefOttavaFont.setPixelSize(getLineSpacing() * 3 / 2);
     m_clefOttavaFontMetrics = QFontMetrics(m_clefOttavaFont);
 
-    m_trackHeaderFont = settings.value("sansfont", &m_trackHeaderFont).toString();
+    m_trackHeaderFont = settings.value("sansfont", m_trackHeaderFont).toString();
     m_trackHeaderFont.setPixelSize(12);
     m_trackHeaderFontMetrics = QFontMetrics(m_trackHeaderFont);
 
@@ -1935,11 +1935,14 @@ NotePixmapFactory::makeToolbarPixmap(const char *name, bool menuSize)
 {
 //     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
 //     QString fileBase = pixmapDir + "/toolbar/";
+
+    //!!! This is not the recommended way to load icons any more, but
+    //!!! it should probably stay this way to avoid disturbing things
+    //!!! until we can convert away from Q3Canvas
 	
-	IconLoader il;
-	QString fileBase = il.getResourcePath( "toolbar" );
+    QString fileBase = ResourceFinder().getResourceDir( "toolbar" );
 	
-	if (menuSize) fileBase += "menu-";
+    if (menuSize) fileBase += "menu-";
     fileBase += name;
     if (QFile(fileBase + ".png").exists()) {
         return new Q3CanvasPixmap(fileBase + ".png");
@@ -3234,10 +3237,10 @@ NotePixmapFactory::getTextFont(const Text &text) const
 
     if (serif) {
         textFont = QFont(defaultSerifFontFamily);
-        textFont = settings.value("textfont", &textFont).toString();
+        textFont = settings.value("textfont", textFont).toString();
     } else {
         textFont = QFont(defaultSansSerifFontFamily);
-        textFont = settings.value("sansfont", &textFont).toString();
+        textFont = settings.value("sansfont", textFont).toString();
     }
     settings.endGroup();
 

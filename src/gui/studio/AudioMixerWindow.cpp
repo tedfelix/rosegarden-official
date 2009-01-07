@@ -100,11 +100,7 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
 //                       actionCollection());
     createAction( "file_close", SLOT(slotClose()) );
 	
-    IconLoader il;
-    QIcon icon;
-	
 //     QIcon icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-    icon = il.load("transport-play");
 
     createAction("play", SIGNAL(play()));
     createAction("stop", SIGNAL(stop()));
@@ -216,11 +212,10 @@ AudioMixerWindow::populate()
     BussList busses = m_studio->getBusses();
 
 //     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-	IconLoader il;
-	QString pixmapDir = il.getResourcePath("");
+    IconLoader il;
 	
-    m_monoPixmap.load(QString("%1/misc/mono.xpm").arg(pixmapDir));
-    m_stereoPixmap.load(QString("%1/misc/stereo.xpm").arg(pixmapDir));
+    m_monoPixmap = il.loadPixmap("mono");
+    m_stereoPixmap = il.loadPixmap("stereo");
 
     // Total cols: is 2 for each fader, submaster or master, plus 1
     // for each spacer.

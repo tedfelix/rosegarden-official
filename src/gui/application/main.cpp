@@ -45,6 +45,8 @@
 #include "gui/widgets/CurrentProgressDialog.h"
 #include "document/RosegardenGUIDoc.h"
 #include "gui/kdeext/KStartupLogo.h"
+#include "gui/general/ResourceFinder.h"
+#include "gui/general/IconLoader.h"
 
 #include "gui/application/RosegardenApplication.h"
 
@@ -345,7 +347,10 @@ static int _x_errhandler( Display *dpy, XErrorEvent *err )
 
 void testInstalledVersion()
 {
-    QString versionLocation = locate("appdata", "version.txt");
+    //###!!! This should no longer be necessary... should it?
+
+    QString versionLocation =
+	ResourceFinder().getResourcePath("appdata", "version.txt");
     QString installedVersion;
 
     if (!versionLocation.isEmpty()) {
@@ -423,52 +428,53 @@ int main(int argc, char *argv[])
                           "http://www.rosegardenmusic.com/",
                           "rosegarden-devel@lists.sourceforge.net");
 
-    aboutData.addAuthor("Guillaume Laurent (lead)", 0, "glaurent@telegraph-road.org", "http://telegraph-road.org");
-    aboutData.addAuthor("Chris Cannam (lead)", 0, "cannam@all-day-breakfast.com", "http://all-day-breakfast.com");
-    aboutData.addAuthor("Richard Bown (lead)", 0, "richard.bown@ferventsoftware.com");
-    aboutData.addAuthor("D. Michael McIntyre", 0, "dmmcintyr@users.sourceforge.net");
-    aboutData.addAuthor("Pedro Lopez-Cabanillas", 0, "plcl@users.sourceforge.net");
-    aboutData.addAuthor("Heikki Johannes Junes", 0, "hjunes@users.sourceforge.net");
+    aboutData.addAuthor(ki18n("Guillaume Laurent (lead)"), KLocalizedString(), "glaurent@telegraph-road.org", "http://telegraph-road.org");
+    aboutData.addAuthor(ki18n("Chris Cannam (lead)"), KLocalizedString(), "cannam@all-day-breakfast.com", "http://all-day-breakfast.com");
+    aboutData.addAuthor(ki18n("Richard Bown (lead)"), KLocalizedString(), "richard.bown@ferventsoftware.com");
+    aboutData.addAuthor(ki18n("D. Michael McIntyre"), KLocalizedString(), "dmmcintyr@users.sourceforge.net");
+    aboutData.addAuthor(ki18n("Pedro Lopez-Cabanillas"), KLocalizedString(), "plcl@users.sourceforge.net");
+    aboutData.addAuthor(ki18n("Heikki Johannes Junes"), KLocalizedString(), "hjunes@users.sourceforge.net");
 
-    aboutData.addCredit("Randall Farmer", I18N_NOOP("Chord labelling code"), " rfarme@simons-rock.edu");
-    aboutData.addCredit("Hans  Kieserman", I18N_NOOP("LilyPond output\nassorted other patches\ni18n-ization"), "hkieserman@mail.com");
-    aboutData.addCredit("Levi Burton", I18N_NOOP("UI improvements\nbug fixes"), "donburton@sbcglobal.net");
-    aboutData.addCredit("Mark Hymers", I18N_NOOP("Segment colours\nOther UI and bug fixes"), "<markh@linuxfromscratch.org>");
-    aboutData.addCredit("Alexandre Prokoudine", I18N_NOOP("Russian translation\ni18n-ization"), "avp@altlinux.ru");
-    aboutData.addCredit("Jörg Schumann", I18N_NOOP("German translation"), "jrschumann@gmx.de");
-    aboutData.addCredit("Eckhard Jokisch", I18N_NOOP("German translation"), "e.jokisch@u-code.de");
-    aboutData.addCredit("Kevin Donnelly", I18N_NOOP("Welsh translation"));
-    aboutData.addCredit("Didier Burli", I18N_NOOP("French translation"), "didierburli@bluewin.ch");
-    aboutData.addCredit("Yves Guillemot", I18N_NOOP("French translation\nBug fixes"), "yc.guillemot@wanadoo.fr");
-    aboutData.addCredit("Daniele Medri", I18N_NOOP("Italian translation"), "madrid@linuxmeeting.net");
-    aboutData.addCredit("Alessandro Musesti", I18N_NOOP("Italian translation"), "a.musesti@dmf.unicatt.it");
-    aboutData.addCredit("Stefan Asserhäll", I18N_NOOP("Swedish translation"), "stefan.asserhall@comhem.se");
-    aboutData.addCredit("Erik Magnus Johansson", I18N_NOOP("Swedish translation"), "erik.magnus.johansson@telia.com");
-    aboutData.addCredit("Hasso Tepper", I18N_NOOP("Estonian translation"), "hasso@estpak.ee");
-    aboutData.addCredit("Jelmer Vernooij", I18N_NOOP("Dutch translation"), "jelmer@samba.org");
-    aboutData.addCredit("Jasper Stein", I18N_NOOP("Dutch translation"), "jasper.stein@12move.nl");
-    aboutData.addCredit("Arnout Engelen", I18N_NOOP("Transposition by interval"));
-    aboutData.addCredit("Thorsten Wilms", I18N_NOOP("Original designs for rotary controllers"), "t_w_@freenet.de");
-    aboutData.addCredit("Oota Toshiya", I18N_NOOP("Japanese translation"), "ribbon@users.sourceforge.net");
-    aboutData.addCredit("William", I18N_NOOP("Auto-scroll deceleration\nRests outside staves and other bug fixes"), "rosegarden4p AT orthoset.com");
-    aboutData.addCredit("Liu Songhe", I18N_NOOP("Simplified Chinese translation"), "jackliu9999@msn.com");
-    aboutData.addCredit("Toni Arnold", I18N_NOOP("LIRC infrared remote-controller support"), "<toni__arnold@bluewin.ch>");
-    aboutData.addCredit("Vince Negri", I18N_NOOP("MTC slave timing implementation"), "vince.negri@gmail.com");
-    aboutData.addCredit("Jan Bína", I18N_NOOP("Czech translation"), "jbina@sky.cz");
-    aboutData.addCredit("Thomas Nagy", I18N_NOOP("SCons/bksys building system"), "tnagy256@yahoo.fr");
-    aboutData.addCredit("Vladimir Savic", I18N_NOOP("icons, icons, icons"), "vladimir@vladimirsavic.net");
-    aboutData.addCredit("Marcos Germán Guglielmetti", I18N_NOOP("Spanish translation"), "marcospcmusica@yahoo.com.ar");
-    aboutData.addCredit("Lisandro Damián Nicanor Pérez Meyer", I18N_NOOP("Spanish translation"), "perezmeyer@infovia.com.ar");
-    aboutData.addCredit("Javier Castrillo", I18N_NOOP("Spanish translation"), "riverplatense@gmail.com");
-    aboutData.addCredit("Lucas Godoy", I18N_NOOP("Spanish translation"), "godoy.lucas@gmail.com");
-    aboutData.addCredit("Feliu Ferrer", I18N_NOOP("Catalan translation"), "mverge2@pie.xtec.es");
-    aboutData.addCredit("Quim Perez i Noguer", I18N_NOOP("Catalan translation"), "noguer@osona.com");
-    aboutData.addCredit("Carolyn McIntyre", I18N_NOOP("1.2.3 splash screen photo\nGave birth to D. Michael McIntyre, bought him a good flute once\nupon a time, and always humored him when he came over to play her\nsome new instrument, even though she really hated his playing.\nBorn October 19, 1951, died September 21, 2007, R. I. P."), "DECEASED");
-    aboutData.addCredit("Stephen Torri", I18N_NOOP("Initial guitar chord editing code"), "storri@torri.org");
-    aboutData.addCredit("Piotr Sawicki", I18N_NOOP("Polish translation"), "pelle@plusnet.pl");
-    aboutData.addCredit("David García-Abad", I18N_NOOP("Basque translation"), "davidgarciabad@telefonica.net");
+    aboutData.addCredit(ki18n("Randall Farmer"), ki18n("Chord labelling code"), " rfarme@simons-rock.edu");
+    aboutData.addCredit(ki18n("Hans  Kieserman"), ki18n("LilyPond output\nassorted other patches\ni18n-ization"), "hkieserman@mail.com");
+    aboutData.addCredit(ki18n("Levi Burton"), ki18n("UI improvements\nbug fixes"), "donburton@sbcglobal.net");
+    aboutData.addCredit(ki18n("Mark Hymers"), ki18n("Segment colours\nOther UI and bug fixes"), "<markh@linuxfromscratch.org>");
+    aboutData.addCredit(ki18n("Alexandre Prokoudine"), ki18n("Russian translation\ni18n-ization"), "avp@altlinux.ru");
+    aboutData.addCredit(ki18n("Jörg Schumann"), ki18n("German translation"), "jrschumann@gmx.de");
+    aboutData.addCredit(ki18n("Eckhard Jokisch"), ki18n("German translation"), "e.jokisch@u-code.de");
+    aboutData.addCredit(ki18n("Kevin Donnelly"), ki18n("Welsh translation"));
+    aboutData.addCredit(ki18n("Didier Burli"), ki18n("French translation"), "didierburli@bluewin.ch");
+    aboutData.addCredit(ki18n("Yves Guillemot"), ki18n("French translation\nBug fixes"), "yc.guillemot@wanadoo.fr");
+    aboutData.addCredit(ki18n("Daniele Medri"), ki18n("Italian translation"), "madrid@linuxmeeting.net");
+    aboutData.addCredit(ki18n("Alessandro Musesti"), ki18n("Italian translation"), "a.musesti@dmf.unicatt.it");
+    aboutData.addCredit(ki18n("Stefan Asserhäll"), ki18n("Swedish translation"), "stefan.asserhall@comhem.se");
+    aboutData.addCredit(ki18n("Erik Magnus Johansson"), ki18n("Swedish translation"), "erik.magnus.johansson@telia.com");
+    aboutData.addCredit(ki18n("Hasso Tepper"), ki18n("Estonian translation"), "hasso@estpak.ee");
+    aboutData.addCredit(ki18n("Jelmer Vernooij"), ki18n("Dutch translation"), "jelmer@samba.org");
+    aboutData.addCredit(ki18n("Jasper Stein"), ki18n("Dutch translation"), "jasper.stein@12move.nl");
+    aboutData.addCredit(ki18n("Arnout Engelen"), ki18n("Transposition by interval"));
+    aboutData.addCredit(ki18n("Thorsten Wilms"), ki18n("Original designs for rotary controllers"), "t_w_@freenet.de");
+    aboutData.addCredit(ki18n("Oota Toshiya"), ki18n("Japanese translation"), "ribbon@users.sourceforge.net");
+    aboutData.addCredit(ki18n("William"), ki18n("Auto-scroll deceleration\nRests outside staves and other bug fixes"), "rosegarden4p AT orthoset.com");
+    aboutData.addCredit(ki18n("Liu Songhe"), ki18n("Simplified Chinese translation"), "jackliu9999@msn.com");
+    aboutData.addCredit(ki18n("Toni Arnold"), ki18n("LIRC infrared remote-controller support"), "<toni__arnold@bluewin.ch>");
+    aboutData.addCredit(ki18n("Vince Negri"), ki18n("MTC slave timing implementation"), "vince.negri@gmail.com");
+    aboutData.addCredit(ki18n("Jan Bína"), ki18n("Czech translation"), "jbina@sky.cz");
+    aboutData.addCredit(ki18n("Thomas Nagy"), ki18n("SCons/bksys building system"), "tnagy256@yahoo.fr");
+    aboutData.addCredit(ki18n("Vladimir Savic"), ki18n("icons, icons, icons"), "vladimir@vladimirsavic.net");
+    aboutData.addCredit(ki18n("Marcos Germán Guglielmetti"), ki18n("Spanish translation"), "marcospcmusica@yahoo.com.ar");
+    aboutData.addCredit(ki18n("Lisandro Damián Nicanor Pérez Meyer"), ki18n("Spanish translation"), "perezmeyer@infovia.com.ar");
+    aboutData.addCredit(ki18n("Javier Castrillo"), ki18n("Spanish translation"), "riverplatense@gmail.com");
+    aboutData.addCredit(ki18n("Lucas Godoy"), ki18n("Spanish translation"), "godoy.lucas@gmail.com");
+    aboutData.addCredit(ki18n("Feliu Ferrer"), ki18n("Catalan translation"), "mverge2@pie.xtec.es");
+    aboutData.addCredit(ki18n("Quim Perez i Noguer"), ki18n("Catalan translation"), "noguer@osona.com");
+    aboutData.addCredit(ki18n("Carolyn McIntyre"), ki18n("1.2.3 splash screen photo\nGave birth to D. Michael McIntyre, bought him a good flute once\nupon a time, and always humored him when he came over to play her\nsome new instrument, even though she really hated his playing.\nBorn October 19, 1951, died September 21, 2007, R. I. P."), "DECEASED");
+    aboutData.addCredit(ki18n("Stephen Torri"), ki18n("Initial guitar chord editing code"), "storri@torri.org");
+    aboutData.addCredit(ki18n("Piotr Sawicki"), ki18n("Polish translation"), "pelle@plusnet.pl");
+    aboutData.addCredit(ki18n("David García-Abad"), ki18n("Basque translation"), "davidgarciabad@telefonica.net");
 
-    aboutData.setTranslator(I18N_NOOP("_: NAME OF TRANSLATORS\nYour names") , I18N_NOOP("_: EMAIL OF TRANSLATORS\nYour emails"));
+    aboutData.setTranslator(ki18nc("NAME OF TRANSLATORS", "Your names"),
+			    ki18nc("EMAIL OF TRANSLATORS", "Your emails"));
 
     KCmdLineArgs::init( argc, argv, &aboutData );
     KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
@@ -705,7 +711,10 @@ int main(int argc, char *argv[])
 
 	if (!newVersion) {
 	    RosegardenGUIApp::self()->awaitDialogClearance();
-	    KTipDialog::showTip(locate("data", "rosegarden/tips"));
+	    QString tipResource = ResourceFinder().getResourcePath("", "tips");
+	    if (tipResource != "") {
+		KTipDialog::showTip(tipResource);
+	    }
 	}
     }
 
@@ -726,10 +735,8 @@ int main(int argc, char *argv[])
         QLabel *image = new QLabel;
         hbLayout->addWidget(image);
         image->setAlignment(Qt::AlignTop);
-        QString iconFile = locate("appdata", "pixmaps/misc/welcome-icon.png");
-        if (!iconFile.isEmpty()) {
-            image->setPixmap(QPixmap(iconFile));
-        }
+
+	image->setPixmap(IconLoader().loadPixmap("welcome-icon"));
 
         QLabel *label = new QLabel;
         hbLayout->addWidget(label);
@@ -741,8 +748,8 @@ int main(int argc, char *argv[])
         QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok);
         metagrid->addWidget(buttonBox, 1, 0);
         metagrid->setRowStretch(0, 10);
-        connect(buttonBox, SIGNAL(accepted()), dialog, SLOT(accept()));
-        connect(buttonBox, SIGNAL(rejected()), dialog, SLOT(reject()));
+	QObject::connect(buttonBox, SIGNAL(accepted()), dialog, SLOT(accept()));
+	QObject::connect(buttonBox, SIGNAL(rejected()), dialog, SLOT(reject()));
 
         rosegardengui->awaitDialogClearance();
         dialog->exec();

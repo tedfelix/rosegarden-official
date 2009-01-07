@@ -26,7 +26,7 @@
 #include "SystemFontXft.h"
 
 #include "misc/Debug.h"
-#include "gui/general/IconLoader.h"
+#include "gui/general/ResourceFinder.h"
 #include "NoteFontMap.h"
 
 #include <QFont>
@@ -58,7 +58,6 @@ SystemFont::loadSystemFont(const SystemFontSpec &spec)
     FcResult result;
     FcChar8 *matchFamily;
     XftFont *xfont = 0;
-	IconLoader il;
 
     Display *dpy = QPaintDevice::x11AppDisplay();
     static bool haveFcDirectory = false;
@@ -69,9 +68,8 @@ SystemFont::loadSystemFont(const SystemFontSpec &spec)
     }
 	
     if (!haveFcDirectory) {
-// 		QString fontDir = KGlobal::dirs()->findResource("appdata", "fonts/");
- 		QString fontDir = il.getResourcePath( "fonts" );
-		
+        //!!! We will need to be able to "unpack" fonts from Qt4 resources
+        QString fontDir = ResourceFinder().getResourceDir("fonts");
 		
         if (!FcConfigAppFontAddDir(FcConfigGetCurrent(),
                                    (const FcChar8 *)fontDir.toLatin1().data())) {

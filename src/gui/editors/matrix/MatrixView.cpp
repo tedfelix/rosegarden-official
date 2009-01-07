@@ -77,6 +77,7 @@
 #include "gui/general/GUIPalette.h"
 #include "gui/general/MidiPitchLabel.h"
 #include "gui/general/IconLoader.h"
+#include "gui/general/ResourceFinder.h"
 #include "gui/kdeext/KTmpStatusMsg.h"
 #include "gui/rulers/ChordNameRuler.h"
 #include "gui/rulers/LoopRuler.h"
@@ -234,19 +235,11 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 // 	IconLoader il;
 
     if ( qStrToBool( settings.value("backgroundtextures-1.6-plus", "true" ) ) ) {
-        QPixmap background;
-//         QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-		QString pixmapDir = il.getResourcePath( "pixmaps" );
-		
 	// We now use a lined background for the non-percussion matrix,
 	// suggested and supplied by Alessandro Preziosi
-	QString backgroundPixmap = isDrumMode() ? "bg-paper-white.xpm" : "bg-matrix-lines.xpm";
-        if (
-			background.load(QString("%1/misc/%2").arg(pixmapDir, backgroundPixmap))
-		){
-			
-            tCanvas->setBackgroundPixmap(background);
-        }
+	QString backgroundPixmap = isDrumMode() ? "bg-paper-white" : "bg-matrix-lines";
+        QPixmap background = il.loadPixmap(backgroundPixmap);
+        tCanvas->setBackgroundPixmap(background);
     }
 
     MATRIX_DEBUG << "MatrixView : creating staff\n";

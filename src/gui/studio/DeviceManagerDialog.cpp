@@ -37,7 +37,7 @@
 #include "sequencer/RosegardenSequencer.h"
 #include "gui/dialogs/ExportDeviceDialog.h"
 #include "gui/dialogs/ImportDeviceDialog.h"
-#include "gui/general/IconLoader.h"
+#include "gui/general/ResourceFinder.h"
 #include "gui/kdeext/KTmpStatusMsg.h"
 
 #include <QApplication>
@@ -705,16 +705,17 @@ DeviceManagerDialog::slotImport()
     if (id == Device::NO_DEVICE)
         return ;
 
-//     QString deviceDir = KGlobal::dirs()->findResource("appdata", "library/");
-	IconLoader il;
-	QString deviceDir = il.getResourcePath( "library" );
-	
+    ResourceFinder rf;
+    QString deviceDir = rf.getResourceDir( "library" );
+
+/*### what does this mean?
     QDir dir(deviceDir);
     if (!dir.exists()) {
         deviceDir = ":ROSEGARDENDEVICE";
     } else {
         deviceDir = "file://" + deviceDir;
     }
+*/
 
 	/*
     KURL url = KFileDialog::getOpenURL

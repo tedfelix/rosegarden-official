@@ -32,13 +32,8 @@ public:
 
     QIcon load(QString name);
     QPixmap loadPixmap(QString name);
-    
-    QString 	getResourcePath( QString res );
-    QStringList getResourceFiles(QString resourceCat, QString fileExt);
 
 protected:
-    QString _getResourceDir(QString subDir);
-    
     QPixmap loadPixmap(QString dir, QString name);
 };
 

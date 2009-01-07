@@ -490,15 +490,12 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 	
 //     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
 //     Q3CanvasPixmap pixmap(pixmapDir + "/misc/close.xpm");
-	IconLoader il;
-	QPixmap qp = il.loadPixmap( "close" );
-	Q3CanvasPixmap pixmap( qp );
 	
-	QPushButton * hideHeadersButton
+    QPushButton * hideHeadersButton
         = new QPushButton(m_headersTopFrame);
     headersTopGrid->addWidget(hideHeadersButton, 1, 1,
                                         Qt::AlignRight | Qt::AlignBottom);
-    hideHeadersButton->setIcon(QIcon(pixmap));
+    hideHeadersButton->setIcon(IconLoader().load("close"));
     hideHeadersButton->setFlat(true);
     hideHeadersButton->setToolTip(i18n("Close track headers"));
     headersTopGrid->setMargin(4);
@@ -1328,22 +1325,18 @@ void NotationView::positionPages()
 
     QSettings settings;
     settings.beginGroup( NotationViewConfigGroup );
-	QString pixmapDir = "";
-	IconLoader il;
+
+    IconLoader il;
+
     if ( qStrToBool( settings.value("backgroundtextures", "true" ) ) ) {
 //         QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-		pixmapDir = il.getResourcePath("bg-paper-cream.xpm");
-		
-// 		if (background.load(QString("%1/misc/bg-paper-cream.xpm").
-// 				  arg(pixmapDir))) {
-		if (background.load( pixmapDir )) {
-				haveBackground = true;
-        }
+        background = il.loadPixmap("bg-paper-cream");
+        if (!background.isNull()) haveBackground = true;
+        
         // we're happy to ignore errors from this one:
-		pixmapDir = il.getResourcePath("misc/bg-desktop-cream.xpm");
-        deskBackground.load( pixmapDir );
+        deskBackground = il.loadPixmap("bg-desktop-cream");
 //         deskBackground.load(QString("%1/misc/bg-desktop.xpm").arg(pixmapDir));
-	}
+    }
     settings.endGroup();
 
     int pageWidth = getPageWidth();

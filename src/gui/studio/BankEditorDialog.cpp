@@ -32,7 +32,7 @@
 #include "gui/dialogs/ExportDeviceDialog.h"
 #include "gui/dialogs/ImportDeviceDialog.h"
 #include "gui/kdeext/KTmpStatusMsg.h"
-#include "gui/general/IconLoader.h"
+#include "gui/general/ResourceFinder.h"
 #include "MidiBankListViewItem.h"
 #include "MidiDeviceListViewItem.h"
 #include "MidiKeyMapListViewItem.h"
@@ -1540,15 +1540,16 @@ void
 BankEditorDialog::slotImport()
 {
 //     QString deviceDir = KGlobal::dirs()->findResource("appdata", "library/");
-	IconLoader il;
-	QString deviceDir = il.getResourcePath("library");
-	
+    QString deviceDir = ResourceFinder().getResourceDir("library");
+
+/*### huh?	
     QDir dir(deviceDir);
     if (!dir.exists()) {
         deviceDir = ":ROSEGARDENDEVICE";
     } else {
         deviceDir = "file://" + deviceDir;
     }
+*/
 
 /* //###
  * 

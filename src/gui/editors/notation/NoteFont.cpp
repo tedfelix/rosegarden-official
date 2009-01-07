@@ -346,10 +346,10 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
 
         bool success;
         found = new QPixmap(systemFont->renderChar(charName,
-                            glyph,
-                            code + charBase,
-                            strategy,
-                            success));
+                                                   glyph,
+                                                   code + charBase,
+                                                   strategy,
+                                                   success));
 
         if (success) {
             add(charName, inverted, found);

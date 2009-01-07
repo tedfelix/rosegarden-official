@@ -642,26 +642,16 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
     connectedSelectedPixmap, unconnectedSelectedPixmap;
     static bool havePixmaps = false;
 	
-	IconLoader il;
-	
     if (!havePixmaps) {
 
-//         QString pixmapDir =
-//             KGlobal::dirs()->findResource("appdata", "pixmaps/");
-		QString pixmapDir = il.getResourcePath( "" );
-
-        connectedPixmap.load
-            (QString("%1/misc/connected.xpm").arg(pixmapDir));
-        connectedUsedPixmap.load
-            (QString("%1/misc/connected-used.xpm").arg(pixmapDir));
-        connectedSelectedPixmap.load
-            (QString("%1/misc/connected-selected.xpm").arg(pixmapDir));
-        unconnectedPixmap.load
-            (QString("%1/misc/unconnected.xpm").arg(pixmapDir));
-        unconnectedUsedPixmap.load
-            (QString("%1/misc/unconnected-used.xpm").arg(pixmapDir));
-        unconnectedSelectedPixmap.load
-            (QString("%1/misc/unconnected-selected.xpm").arg(pixmapDir));
+	IconLoader il;
+	
+        connectedPixmap = il.loadPixmap("connected");
+        connectedUsedPixmap = il.loadPixmap("connected-used");
+        connectedSelectedPixmap = il.loadPixmap("connected-selected");
+        unconnectedPixmap = il.loadPixmap("connected");
+        unconnectedUsedPixmap = il.loadPixmap("connected-used");
+        unconnectedSelectedPixmap = il.loadPixmap("connected-selected");
 
         havePixmaps = true;
     }

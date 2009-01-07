@@ -24,6 +24,7 @@
 #include "KStartupLogo.h"
 #include "misc/Debug.h"
 #include "gui/general/IconLoader.h"
+#include "gui/general/ResourceFinder.h"
 
 #include <ktip.h>
 
@@ -44,10 +45,7 @@ KStartupLogo::KStartupLogo(QWidget * parent, const char *name) :
     m_showTip(true)
 {
 //     QString pixmapFile = locate("appdata", "pixmaps/splash.png");
-    IconLoader il;
-    QString pixmapFile = il.getResourcePath("splash.png");
-    if (pixmapFile == "") return;
-    m_pixmap.load(pixmapFile);
+    m_pixmap = IconLoader().loadPixmap("splash");
     setBackgroundPixmap(m_pixmap);
     setGeometry(QApplication::desktop()->width() / 2 - m_pixmap.width() / 2,
                 QApplication::desktop()->height() / 2 - m_pixmap.height() / 2,
@@ -114,8 +112,11 @@ void KStartupLogo::close()
     if (!m_wasClosed && isVisible()) {
 
 	if (m_showTip) {
-	    RG_DEBUG << "KStartupLogo::close: Showing Tips\n";
-	    KTipDialog::showTip(locate("data", "rosegarden/tips"));
+	    QString tipResource = ResourceFinder().getResourcePath("", "tips");
+	    if (tipResource != "") {
+		RG_DEBUG << "KStartupLogo::close: Showing Tips\n";
+		KTipDialog::showTip(tipResource);
+	    }
 	}
     }
 

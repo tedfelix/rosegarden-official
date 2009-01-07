@@ -215,18 +215,10 @@ MidiProgramsEditor::populate(QTreeWidgetItem* item)
     ProgramList::iterator it;
 
     QPixmap noKeyPixmap, keyPixmap;
-//     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-	IconLoader il;
-	QString pixmapDir = il.getResourcePath( "" );
-	
-    QString file = pixmapDir + "/toolbar/key-white.png";
-	
-	
-    if (QFile(file).exists())
-        noKeyPixmap = QPixmap(file);
-    file = pixmapDir + "/toolbar/key-green.png";
-    if (QFile(file).exists())
-        keyPixmap = QPixmap(file);
+
+    IconLoader il;
+    noKeyPixmap = il.loadPixmap("key-white");
+    keyPixmap = il.loadPixmap("key-green");
 
     bool haveKeyMappings = m_currentBank->isPercussion()
                            && (m_device->getKeyMappings().size() > 0);
@@ -238,7 +230,7 @@ MidiProgramsEditor::populate(QTreeWidgetItem* item)
         getEntryButton(i)->setIcon(QIcon(noKeyPixmap));
         // QToolTip::remove
         //    ( getEntryButton(i) );
-//        getEntryButton(i)->setToolTip(QString(""));  //@@@ Usefull ?
+        getEntryButton(i)->setToolTip(QString(""));  //@@@ Usefull ?
 
         for (it = programSubset.begin(); it != programSubset.end(); it++) {
             if (it->getProgram() == i) {
@@ -529,23 +521,21 @@ MidiProgramsEditor::slotEntryMenuItemSelected(int i)
 //     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
     IconLoader il;
     QIcon icon;
-    QString pixmapDir = il.getResourcePath( "" );
+
     bool haveKeyMappings = (m_device->getKeyMappings().size() > 0);  //@@@ JAS restored from before port/
     QPushButton *btn = getEntryButton(m_currentMenuProgram);
 
     if (newMapping.empty()) {
-//         QString file = pixmapDir + "/toolbar/key-white.png";
-		icon = il.load( "key-white" );
-		if( ! icon.isNull() ){
+        icon = il.load( "key-white" );
+        if( ! icon.isNull() ) {
             btn->setIcon( icon );
         }
         // QToolTip::remove(btn);
         btn->setToolTip(QString(""));       //@@@ Usefull ?
     } else {
-//         QString file = pixmapDir + "/toolbar/key-green.png";
-		icon = il.load( "key-green" );
-		if( ! icon.isNull() ){
-			btn->setIcon( icon );
+        icon = il.load( "key-green" );
+        if( ! icon.isNull() ){
+            btn->setIcon( icon );
         }
         btn->setToolTip(i18n("Key Mapping: %1", strtoqstr(newMapping)));
     }

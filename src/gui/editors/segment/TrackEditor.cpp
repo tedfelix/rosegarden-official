@@ -178,19 +178,16 @@ TrackEditor::init(QWidget* rosegardenguiview)
 
     m_segmentCanvas = new CompositionView(m_doc, m_compositionModel, this);
 
-	IconLoader il;
+    IconLoader il;
 	
     QSettings settings;
     settings.beginGroup( GeneralOptionsConfigGroup );
 
     if ( qStrToBool( settings.value("backgroundtextures", "true" ) ) ) {
-        QPixmap background;
-		
-//         QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-		QString pixmapDir = il.getResourcePath( "" );
-		
-        if (background.load(QString("%1/misc/bg-segmentcanvas.xpm").
-                            arg(pixmapDir))) {
+
+        QPixmap background = il.loadPixmap("bg-segmentcanvas");
+
+        if (!background.isNull()) {
             m_segmentCanvas->setBackgroundPixmap(background);
             m_segmentCanvas->viewport()->setBackgroundPixmap(background);
         }

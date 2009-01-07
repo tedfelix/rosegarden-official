@@ -27,7 +27,6 @@
 #include "document/RosegardenGUIDoc.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/HZoomable.h"
-#include "gui/general/IconLoader.h"
 #include "gui/dialogs/MarkerModifyDialog.h"
 #include "commands/edit/ModifyMarkerCommand.h"
 #include "document/CommandHistory.h"
@@ -85,18 +84,6 @@ MarkerRuler::MarkerRuler(RosegardenGUIDoc *doc,
     //    m_barFont->setPixelSize(12);
     m_barFont = new QFont();
     m_barFont->setPointSize(10);
-
-//     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-	IconLoader il;
-    QIcon icon;
-// 	QString pixmapDir = il.getResourcePath( "" );
-	
-    // Use the event insert, delete, edit icons because they are
-    // actually generic enough to serve for anything.  Let's hope they
-    // don't become more event-specific in future...
-
-//     icon = QIcon(QPixmap(pixmapDir + "/toolbar/event-insert.png"));
-    icon = il.load( "event-insert" );
 
     createAction("insert_marker_here", SLOT(slotInsertMarkerHere()));
     createAction("insert_marker_at_pointer", SLOT(slotInsertMarkerAtPointer()));

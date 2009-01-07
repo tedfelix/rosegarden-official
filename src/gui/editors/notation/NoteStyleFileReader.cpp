@@ -21,14 +21,12 @@
 #include "misc/Strings.h"
 #include "NotationStrings.h"
 #include "misc/Debug.h"
-#include "gui/general/IconLoader.h"
+#include "gui/general/ResourceFinder.h"
 #include "NoteStyle.h"
 
 #include <QFileInfo>
 #include <QDir>
 
-//#include <kglobal.h>
-//#include <kstandarddirs.h>
 #include <klocale.h>
 
 
@@ -39,6 +37,7 @@ NoteStyleFileReader::NoteStyleFileReader(std::string name) :
     m_style(new NoteStyle(name)),
     m_haveNote(false)
 {
+/*!!!
 	IconLoader il;
 //     QString styleDirectory =
 //	KGlobal::dirs()->findResource("appdata", "styles/");
@@ -46,10 +45,13 @@ NoteStyleFileReader::NoteStyleFileReader(std::string name) :
 	
     QString styleFileName =
 	QString("%1/%2.xml").arg(styleDirectory).arg(strtoqstr(name));
+*/
+    QString styleFileName = ResourceFinder().getResourcePath
+        ("styles", QString("%1.xml").arg(strtoqstr(name)));
 
     QFileInfo fileInfo(styleFileName);
 
-    if (!fileInfo.isReadable()) {
+    if (styleFileName == "" || !fileInfo.isReadable()) {
         throw StyleFileReadFailed
 	    (qstrtostr(i18n("Can't open style file %1", styleFileName)));
     }
